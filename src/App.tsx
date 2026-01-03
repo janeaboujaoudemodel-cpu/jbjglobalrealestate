@@ -27,8 +27,8 @@ const App = () => (
       <TooltipProvider>
         <Toaster />
         <Sonner />
-        <WelcomeModal />
         <BrowserRouter>
+          <WelcomeModal />
           <Routes>
             <Route path="/" element={<Index />} />
             <Route path="/communities" element={<Communities />} />
