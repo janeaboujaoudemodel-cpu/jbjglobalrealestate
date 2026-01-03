@@ -2,7 +2,7 @@ import { useState, useMemo } from "react";
 import { useNavigate } from "react-router-dom";
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/ui/dialog";
 import { Input } from "@/components/ui/input";
-import { Search, Building2, ChevronRight } from "lucide-react";
+import { Search, Building2, ChevronRight, Crown, Award, Star } from "lucide-react";
 import { useDevelopers } from "@/hooks/useProjects";
 
 interface DeveloperSearchModalProps {
@@ -31,15 +31,26 @@ const DeveloperSearchModal = ({ isOpen, onClose }: DeveloperSearchModalProps) =>
     navigate(`/developer/${slug}`);
   };
 
+  // Get tier badge based on rank
+  const getTierBadge = (rank: number | null) => {
+    if (!rank) return null;
+    if (rank <= 3) return { icon: Crown, label: "Elite", color: "text-gold bg-gold/10 border-gold/30" };
+    if (rank <= 10) return { icon: Award, label: "Premier", color: "text-amber-400 bg-amber-400/10 border-amber-400/30" };
+    if (rank <= 20) return { icon: Star, label: "Established", color: "text-zinc-300 bg-zinc-300/10 border-zinc-300/30" };
+    return null;
+  };
+
   return (
     <Dialog open={isOpen} onOpenChange={(open) => !open && onClose()}>
-      <DialogContent className="bg-zinc-950 border-zinc-800 text-white max-w-2xl max-h-[80vh] overflow-hidden">
+      <DialogContent className="bg-zinc-950 border-zinc-800 text-white max-w-3xl max-h-[85vh] overflow-hidden">
         <DialogHeader>
-          <DialogTitle className="text-xl font-semibold flex items-center gap-2" style={{ fontFamily: "Poppins, sans-serif" }}>
-            <Building2 className="w-5 h-5 text-gold" />
+          <DialogTitle className="text-2xl font-semibold flex items-center gap-2" style={{ fontFamily: "Poppins, sans-serif" }}>
+            <Building2 className="w-6 h-6 text-gold" />
             Search by Developer
           </DialogTitle>
-          <p className="text-zinc-400 text-sm mt-1">Browse all UAE property developers</p>
+          <p className="text-zinc-400 text-sm mt-1">
+            Browse {developers?.length || 0} premium UAE property developers ranked by market standing
+          </p>
         </DialogHeader>
 
         <div className="relative mb-4">
@@ -47,43 +58,78 @@ const DeveloperSearchModal = ({ isOpen, onClose }: DeveloperSearchModalProps) =>
           <Input
             value={searchQuery}
             onChange={(e) => setSearchQuery(e.target.value)}
-            placeholder="Search developers by name or location..."
-            className="pl-10 bg-zinc-900 border-zinc-700 text-white placeholder:text-zinc-500 focus:border-gold"
+            placeholder="Search developers by name or headquarters..."
+            className="pl-10 bg-zinc-900 border-zinc-700 text-white placeholder:text-zinc-500 focus:border-gold h-12"
             autoFocus
           />
         </div>
 
-        <div className="overflow-y-auto max-h-[50vh] space-y-1">
+        <div className="overflow-y-auto max-h-[55vh] space-y-2 pr-1">
           {isLoading ? (
-            <div className="text-center py-8 text-zinc-500">Loading developers...</div>
+            <div className="text-center py-12 text-zinc-500">Loading developers...</div>
           ) : filteredDevelopers.length === 0 ? (
-            <div className="text-center py-8 text-zinc-500">No developers found</div>
+            <div className="text-center py-12 text-zinc-500">No developers found</div>
           ) : (
-            filteredDevelopers.map((developer) => (
-              <button
-                key={developer.id}
-                onClick={() => handleSelectDeveloper(developer.slug)}
-                className="w-full flex items-center gap-4 p-4 rounded-lg bg-zinc-900/50 hover:bg-zinc-800 border border-transparent hover:border-gold/30 transition-all group text-left"
-              >
-                <div className="w-12 h-12 rounded-lg bg-zinc-800 flex items-center justify-center overflow-hidden">
-                  {developer.logo_url ? (
-                    <img src={developer.logo_url} alt={developer.name} className="w-full h-full object-cover" />
-                  ) : (
-                    <Building2 className="w-6 h-6 text-gold" />
-                  )}
-                </div>
-                <div className="flex-1 min-w-0">
-                  <h4 className="text-white font-medium truncate" style={{ fontFamily: "Poppins, sans-serif" }}>
-                    {developer.name}
-                  </h4>
-                  <p className="text-zinc-500 text-sm truncate">
-                    {developer.headquarters && `📍 ${developer.headquarters}`}
-                    {developer.offplan_projects && ` • ${developer.offplan_projects} Active Projects`}
-                  </p>
-                </div>
-                <ChevronRight className="w-5 h-5 text-zinc-600 group-hover:text-gold transition-colors" />
-              </button>
-            ))
+            filteredDevelopers.map((developer, index) => {
+              const tier = getTierBadge(developer.rank);
+              const isTopTier = developer.rank && developer.rank <= 3;
+              
+              return (
+                <button
+                  key={developer.id}
+                  onClick={() => handleSelectDeveloper(developer.slug)}
+                  className={`w-full flex items-center gap-4 p-4 rounded-xl transition-all group text-left border ${
+                    isTopTier 
+                      ? "bg-gradient-to-r from-zinc-900 via-zinc-900/95 to-gold/5 border-gold/20 hover:border-gold/40" 
+                      : "bg-zinc-900/50 hover:bg-zinc-800 border-zinc-800 hover:border-zinc-700"
+                  }`}
+                >
+                  {/* Rank Number */}
+                  <div className={`w-8 text-center font-bold text-lg ${isTopTier ? "text-gold" : "text-zinc-600"}`}>
+                    #{developer.rank || index + 1}
+                  </div>
+                  
+                  {/* Logo */}
+                  <div className={`w-14 h-14 rounded-xl flex items-center justify-center overflow-hidden ${
+                    isTopTier ? "bg-gradient-to-br from-gold/20 to-gold/5 border border-gold/20" : "bg-zinc-800"
+                  }`}>
+                    {developer.logo_url ? (
+                      <img src={developer.logo_url} alt={developer.name} className="w-full h-full object-cover" />
+                    ) : (
+                      <Building2 className={`w-7 h-7 ${isTopTier ? "text-gold" : "text-zinc-500"}`} />
+                    )}
+                  </div>
+                  
+                  {/* Developer Info */}
+                  <div className="flex-1 min-w-0">
+                    <div className="flex items-center gap-2 mb-1">
+                      <h4 className="text-white font-semibold truncate text-base" style={{ fontFamily: "Poppins, sans-serif" }}>
+                        {developer.name}
+                      </h4>
+                      {tier && (
+                        <span className={`inline-flex items-center gap-1 px-2 py-0.5 text-xs font-medium rounded-full border ${tier.color}`}>
+                          <tier.icon className="w-3 h-3" />
+                          {tier.label}
+                        </span>
+                      )}
+                    </div>
+                    <div className="flex items-center gap-3 text-sm text-zinc-400">
+                      {developer.headquarters && (
+                        <span>📍 {developer.headquarters}</span>
+                      )}
+                      {developer.completed_projects && (
+                        <span>✓ {developer.completed_projects.toLocaleString()} completed</span>
+                      )}
+                      {developer.offplan_projects && (
+                        <span className="text-gold">🏗️ {developer.offplan_projects} active</span>
+                      )}
+                    </div>
+                  </div>
+                  
+                  <ChevronRight className={`w-5 h-5 transition-colors ${isTopTier ? "text-gold/60 group-hover:text-gold" : "text-zinc-600 group-hover:text-white"}`} />
+                </button>
+              );
+            })
           )}
         </div>
       </DialogContent>
