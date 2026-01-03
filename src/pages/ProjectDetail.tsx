@@ -2,6 +2,8 @@ import { useParams, Link } from "react-router-dom";
 import { useProject } from "@/hooks/useProjects";
 import ImageCarousel from "@/components/ImageCarousel";
 import DocumentDownloads from "@/components/DocumentDownloads";
+import ShareButton from "@/components/ShareButton";
+import FavoriteButton from "@/components/FavoriteButton";
 import { Skeleton } from "@/components/ui/skeleton";
 import { ChevronLeft, MapPin, Building, Calendar, DollarSign, Layers, Users } from "lucide-react";
 
@@ -105,22 +107,28 @@ const ProjectDetail = () => {
                     </p>
                   )}
                 </div>
-                {project.price_from && (
-                  <div className="text-right">
-                    <p className="text-gray-400 text-sm">Starting from</p>
-                    <p
-                      className="text-gold font-bold text-2xl"
-                      style={{ fontFamily: "Poppins, sans-serif" }}
-                    >
-                      {formatPrice(project.price_from)}
-                    </p>
-                    {project.price_to && project.price_to !== project.price_from && (
-                      <p className="text-gray-500 text-sm">
-                        up to {formatPrice(project.price_to)}
+                <div className="flex flex-col items-end gap-3">
+                  {project.price_from && (
+                    <div className="text-right">
+                      <p className="text-gray-400 text-sm">Starting from</p>
+                      <p
+                        className="text-gold font-bold text-2xl"
+                        style={{ fontFamily: "Poppins, sans-serif" }}
+                      >
+                        {formatPrice(project.price_from)}
                       </p>
-                    )}
+                      {project.price_to && project.price_to !== project.price_from && (
+                        <p className="text-gray-500 text-sm">
+                          up to {formatPrice(project.price_to)}
+                        </p>
+                      )}
+                    </div>
+                  )}
+                  <div className="flex items-center gap-2">
+                    <FavoriteButton projectId={project.id} />
+                    <ShareButton projectName={project.name} projectSlug={project.slug} />
                   </div>
-                )}
+                </div>
               </div>
 
               {project.description && (

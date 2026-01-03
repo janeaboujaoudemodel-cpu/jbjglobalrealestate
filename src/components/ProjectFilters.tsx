@@ -57,6 +57,7 @@ interface ProjectFiltersProps {
   trendingAreas?: TrendingArea[];
   showDeveloperFilter?: boolean;
   showCommunityFilter?: boolean;
+  hideQuickFilters?: boolean;
 }
 
 const PRICE_MIN = 0;
@@ -214,6 +215,7 @@ const ProjectFilters = ({
   trendingAreas,
   showDeveloperFilter = true,
   showCommunityFilter = true,
+  hideQuickFilters = false,
 }: ProjectFiltersProps) => {
   const [isFiltersOpen, setIsFiltersOpen] = useState(false);
 
@@ -842,129 +844,131 @@ const ProjectFilters = ({
         </Sheet>
       </div>
 
-      {/* Quick Filter Chips */}
-      <div className="flex flex-wrap gap-2">
-        <QuickFilterChip
-          label="Ready to Move"
-          active={filters.handoverStatus === "ready"}
-          onClick={() =>
-            updateFilter(
-              "handoverStatus",
-              filters.handoverStatus === "ready" ? null : "ready"
-            )
-          }
-        />
-        <QuickFilterChip
-          label="Off-Plan"
-          active={filters.handoverStatus === "off-plan"}
-          onClick={() =>
-            updateFilter(
-              "handoverStatus",
-              filters.handoverStatus === "off-plan" ? null : "off-plan"
-            )
-          }
-        />
-        <QuickFilterChip
-          label="Close to Handover"
-          active={filters.handoverStatus === "close-to-handover"}
-          onClick={() =>
-            updateFilter(
-              "handoverStatus",
-              filters.handoverStatus === "close-to-handover" ? null : "close-to-handover"
-            )
-          }
-        />
-        <Popover>
-          <PopoverTrigger asChild>
-            <button
-              className={`px-4 py-2 rounded-full text-sm font-medium transition-all flex items-center gap-1 ${
-                filters.priceMin > 0 || filters.priceMax < PRICE_MAX
-                  ? "bg-white text-black"
-                  : "bg-[#1a1a1a] text-gray-300 hover:bg-[#2a2a2a] border border-[#2a2a2a]"
-              }`}
-            >
-              Price
-              <ChevronDown className="w-4 h-4" />
-            </button>
-          </PopoverTrigger>
-          <PopoverContent className="w-80 p-4 bg-[#1a1a1a] border-[#2a2a2a]" align="start">
-            <div className="space-y-4">
-              <p className="text-white font-medium">Price Range</p>
-              <Slider
-                value={[filters.priceMin, filters.priceMax]}
-                min={PRICE_MIN}
-                max={PRICE_MAX}
-                step={1000000}
-                onValueChange={([min, max]) => {
-                  onFiltersChange({
-                    ...filters,
-                    priceMin: min,
-                    priceMax: max,
-                  });
-                }}
-                className="mb-2"
-              />
-              <div className="flex justify-between text-gray-400 text-sm">
-                <span>AED {formatPrice(filters.priceMin)}</span>
-                <span>AED {formatPrice(filters.priceMax)}</span>
-              </div>
-            </div>
-          </PopoverContent>
-        </Popover>
-        <Popover>
-          <PopoverTrigger asChild>
-            <button
-              className={`px-4 py-2 rounded-full text-sm font-medium transition-all flex items-center gap-1 ${
-                filters.bedroomsMin !== null
-                  ? "bg-white text-black"
-                  : "bg-[#1a1a1a] text-gray-300 hover:bg-[#2a2a2a] border border-[#2a2a2a]"
-              }`}
-            >
-              Beds
-              <ChevronDown className="w-4 h-4" />
-            </button>
-          </PopoverTrigger>
-          <PopoverContent className="w-64 p-4 bg-[#1a1a1a] border-[#2a2a2a]" align="start">
-            <div className="flex flex-wrap gap-2">
-              {BEDROOM_OPTIONS.map((option) => (
-                <button
-                  key={option.value}
-                  onClick={() =>
-                    updateFilter(
-                      "bedroomsMin",
-                      option.value === "all" ? null :
-                      option.value === "studio" ? 0 :
-                      parseInt(option.value)
-                    )
-                  }
-                  className={`px-3 py-1.5 rounded-full text-sm font-medium transition-all ${
-                    (option.value === "all" && filters.bedroomsMin === null) ||
-                    (option.value === "studio" && filters.bedroomsMin === 0) ||
-                    filters.bedroomsMin === parseInt(option.value)
-                      ? "bg-white text-black"
-                      : "bg-[#0d0d0d] text-gray-300 hover:bg-[#2a2a2a]"
-                  }`}
-                >
-                  {option.label}
-                </button>
-              ))}
-            </div>
-          </PopoverContent>
-        </Popover>
-        {EMIRATES.slice(1, 5).map((emirate) => (
+      {/* Quick Filter Chips - Only show if not hidden */}
+      {!hideQuickFilters && (
+        <div className="flex flex-wrap gap-2">
           <QuickFilterChip
-            key={emirate.value}
-            label={emirate.label}
-            active={filters.emirate === emirate.value}
+            label="Ready to Move"
+            active={filters.handoverStatus === "ready"}
             onClick={() =>
               updateFilter(
-                "emirate",
-                filters.emirate === emirate.value ? null : emirate.value
+                "handoverStatus",
+                filters.handoverStatus === "ready" ? null : "ready"
               )
             }
           />
-        ))}
-      </div>
+          <QuickFilterChip
+            label="Off-Plan"
+            active={filters.handoverStatus === "off-plan"}
+            onClick={() =>
+              updateFilter(
+                "handoverStatus",
+                filters.handoverStatus === "off-plan" ? null : "off-plan"
+              )
+            }
+          />
+          <QuickFilterChip
+            label="Close to Handover"
+            active={filters.handoverStatus === "close-to-handover"}
+            onClick={() =>
+              updateFilter(
+                "handoverStatus",
+                filters.handoverStatus === "close-to-handover" ? null : "close-to-handover"
+              )
+            }
+          />
+          <Popover>
+            <PopoverTrigger asChild>
+              <button
+                className={`px-4 py-2 rounded-full text-sm font-medium transition-all flex items-center gap-1 ${
+                  filters.priceMin > 0 || filters.priceMax < PRICE_MAX
+                    ? "bg-white text-black"
+                    : "bg-[#1a1a1a] text-gray-300 hover:bg-[#2a2a2a] border border-[#2a2a2a]"
+                }`}
+              >
+                Price
+                <ChevronDown className="w-4 h-4" />
+              </button>
+            </PopoverTrigger>
+            <PopoverContent className="w-80 p-4 bg-[#1a1a1a] border-[#2a2a2a]" align="start">
+              <div className="space-y-4">
+                <p className="text-white font-medium">Price Range</p>
+                <Slider
+                  value={[filters.priceMin, filters.priceMax]}
+                  min={PRICE_MIN}
+                  max={PRICE_MAX}
+                  step={1000000}
+                  onValueChange={([min, max]) => {
+                    onFiltersChange({
+                      ...filters,
+                      priceMin: min,
+                      priceMax: max,
+                    });
+                  }}
+                  className="mb-2"
+                />
+                <div className="flex justify-between text-gray-400 text-sm">
+                  <span>AED {formatPrice(filters.priceMin)}</span>
+                  <span>AED {formatPrice(filters.priceMax)}</span>
+                </div>
+              </div>
+            </PopoverContent>
+          </Popover>
+          <Popover>
+            <PopoverTrigger asChild>
+              <button
+                className={`px-4 py-2 rounded-full text-sm font-medium transition-all flex items-center gap-1 ${
+                  filters.bedroomsMin !== null
+                    ? "bg-white text-black"
+                    : "bg-[#1a1a1a] text-gray-300 hover:bg-[#2a2a2a] border border-[#2a2a2a]"
+                }`}
+              >
+                Beds
+                <ChevronDown className="w-4 h-4" />
+              </button>
+            </PopoverTrigger>
+            <PopoverContent className="w-64 p-4 bg-[#1a1a1a] border-[#2a2a2a]" align="start">
+              <div className="flex flex-wrap gap-2">
+                {BEDROOM_OPTIONS.map((option) => (
+                  <button
+                    key={option.value}
+                    onClick={() =>
+                      updateFilter(
+                        "bedroomsMin",
+                        option.value === "all" ? null :
+                        option.value === "studio" ? 0 :
+                        parseInt(option.value)
+                      )
+                    }
+                    className={`px-3 py-1.5 rounded-full text-sm font-medium transition-all ${
+                      (option.value === "all" && filters.bedroomsMin === null) ||
+                      (option.value === "studio" && filters.bedroomsMin === 0) ||
+                      filters.bedroomsMin === parseInt(option.value)
+                        ? "bg-white text-black"
+                        : "bg-[#0d0d0d] text-gray-300 hover:bg-[#2a2a2a]"
+                    }`}
+                  >
+                    {option.label}
+                  </button>
+                ))}
+              </div>
+            </PopoverContent>
+          </Popover>
+          {EMIRATES.slice(1, 5).map((emirate) => (
+            <QuickFilterChip
+              key={emirate.value}
+              label={emirate.label}
+              active={filters.emirate === emirate.value}
+              onClick={() =>
+                updateFilter(
+                  "emirate",
+                  filters.emirate === emirate.value ? null : emirate.value
+                )
+              }
+            />
+          ))}
+        </div>
+      )}
 
       {/* Active Filter Pills */}
       {activeFilterCount > 0 && (
