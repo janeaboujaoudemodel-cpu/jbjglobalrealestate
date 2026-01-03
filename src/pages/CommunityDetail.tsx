@@ -1,5 +1,8 @@
+import { useState } from "react";
 import { useParams, Link } from "react-router-dom";
-import { useCommunity, useProjectsByCommunity } from "@/hooks/useProjects";
+import { useCommunity, useProjectsByCommunity, useDevelopers } from "@/hooks/useProjects";
+import { useFilteredProjects, defaultFilters } from "@/hooks/useProjectFilters";
+import ProjectFilters, { type FilterState } from "@/components/ProjectFilters";
 import ProjectCard from "@/components/ProjectCard";
 import { Skeleton } from "@/components/ui/skeleton";
 import { ChevronLeft } from "lucide-react";
@@ -8,6 +11,10 @@ const CommunityDetail = () => {
   const { slug } = useParams<{ slug: string }>();
   const { data: community, isLoading: loadingCommunity } = useCommunity(slug || "");
   const { data: projects, isLoading: loadingProjects } = useProjectsByCommunity(slug || "");
+  const { data: developers } = useDevelopers();
+  const [filters, setFilters] = useState<FilterState>(defaultFilters);
+
+  const filteredProjects = useFilteredProjects(projects, filters);
 
   if (loadingCommunity) {
     return (
@@ -43,6 +50,14 @@ const CommunityDetail = () => {
       </section>
     );
   }
+
+  const hasFiltersApplied = 
+    filters.search || 
+    filters.priceMin > 0 || 
+    filters.priceMax < 50000000 ||
+    filters.bedroomsMin !== null ||
+    filters.developerId !== null ||
+    filters.handoverYear !== null;
 
   return (
     <section
@@ -102,21 +117,46 @@ const CommunityDetail = () => {
           Projects in {community.name}
         </h2>
 
+        <ProjectFilters
+          filters={filters}
+          onFiltersChange={setFilters}
+          developers={developers}
+          showCommunityFilter={false}
+        />
+
+        {hasFiltersApplied && (
+          <p className="text-gray-400 mb-6">
+            Found {filteredProjects.length} project{filteredProjects.length !== 1 ? "s" : ""}
+          </p>
+        )}
+
         {loadingProjects ? (
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
             {[...Array(4)].map((_, i) => (
               <Skeleton key={i} className="aspect-[4/3] rounded-lg bg-[#1a1a1a]" />
             ))}
           </div>
-        ) : projects && projects.length > 0 ? (
+        ) : filteredProjects.length > 0 ? (
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
-            {projects.map((project) => (
+            {filteredProjects.map((project) => (
               <ProjectCard key={project.id} project={project} />
             ))}
           </div>
         ) : (
           <div className="text-center py-12 bg-[#1a1a1a] rounded-lg">
-            <p className="text-gray-500">No projects available in this community yet.</p>
+            <p className="text-gray-400 mb-2">
+              {hasFiltersApplied
+                ? "No projects match your filters"
+                : "No projects available in this community yet."}
+            </p>
+            {hasFiltersApplied && (
+              <button
+                onClick={() => setFilters(defaultFilters)}
+                className="text-[#D4A017] hover:underline"
+              >
+                Clear all filters
+              </button>
+            )}
           </div>
         )}
       </div>
