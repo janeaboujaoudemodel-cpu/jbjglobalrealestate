@@ -37,8 +37,9 @@ const DeveloperSearchModal = ({ isOpen, onClose }: DeveloperSearchModalProps) =>
         <DialogHeader>
           <DialogTitle className="text-xl font-semibold flex items-center gap-2" style={{ fontFamily: "Poppins, sans-serif" }}>
             <Building2 className="w-5 h-5 text-gold" />
-            Search Developer
+            Search by Developer
           </DialogTitle>
+          <p className="text-zinc-400 text-sm mt-1">Browse all UAE property developers</p>
         </DialogHeader>
 
         <div className="relative mb-4">

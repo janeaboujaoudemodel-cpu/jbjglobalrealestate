@@ -1,8 +1,9 @@
 import { Heart, ListPlus, Check } from "lucide-react";
 import { useAuth } from "@/contexts/AuthContext";
 import { useFavorites, useShortlist, useToggleFavorite, useToggleShortlist } from "@/hooks/useFavorites";
-import { useNavigate } from "react-router-dom";
+import { useGuestFavorites, useGuestShortlist } from "@/hooks/useGuestFavorites";
 import { Tooltip, TooltipContent, TooltipTrigger } from "@/components/ui/tooltip";
+import { toast } from "sonner";
 
 interface FavoriteButtonProps {
   projectId: string;
@@ -18,15 +19,29 @@ const FavoriteButton = ({
   className = "" 
 }: FavoriteButtonProps) => {
   const { user } = useAuth();
-  const navigate = useNavigate();
-  const { data: favorites } = useFavorites();
-  const { data: shortlist } = useShortlist();
-  const toggleFavorite = useToggleFavorite();
-  const toggleShortlist = useToggleShortlist();
+  
+  // Authenticated user hooks
+  const { data: userFavorites } = useFavorites();
+  const { data: userShortlist } = useShortlist();
+  const toggleUserFavorite = useToggleFavorite();
+  const toggleUserShortlist = useToggleShortlist();
+  
+  // Guest user hooks
+  const { favorites: guestFavorites, toggleFavorite: toggleGuestFavorite, isFavorite: isGuestFavorite } = useGuestFavorites();
+  const { shortlist: guestShortlist, toggleShortlist: toggleGuestShortlist, isShortlisted: isGuestShortlisted, count: guestShortlistCount } = useGuestShortlist();
 
-  const isFavorite = favorites?.some((f) => f.project_id === projectId) || false;
-  const isShortlisted = shortlist?.some((s) => s.project_id === projectId) || false;
-  const shortlistCount = shortlist?.length || 0;
+  // Determine favorite/shortlist status based on auth state
+  const isFavorite = user 
+    ? userFavorites?.some((f) => f.project_id === projectId) || false
+    : isGuestFavorite(projectId);
+    
+  const isShortlisted = user 
+    ? userShortlist?.some((s) => s.project_id === projectId) || false
+    : isGuestShortlisted(projectId);
+    
+  const shortlistCount = user 
+    ? userShortlist?.length || 0
+    : guestShortlistCount;
 
   const sizeClasses = {
     sm: "w-8 h-8",
@@ -44,24 +59,30 @@ const FavoriteButton = ({
     e.preventDefault();
     e.stopPropagation();
     
-    if (!user) {
-      navigate("/auth", { state: { returnTo: window.location.pathname } });
-      return;
+    if (user) {
+      toggleUserFavorite.mutate({ projectId, isFavorite });
+    } else {
+      toggleGuestFavorite(projectId);
+      toast.success(isFavorite ? "Removed from favorites" : "Added to favorites");
     }
-    
-    toggleFavorite.mutate({ projectId, isFavorite });
   };
 
   const handleShortlistClick = (e: React.MouseEvent) => {
     e.preventDefault();
     e.stopPropagation();
     
-    if (!user) {
-      navigate("/auth", { state: { returnTo: window.location.pathname } });
-      return;
+    if (user) {
+      toggleUserShortlist.mutate({ projectId, isShortlisted, currentCount: shortlistCount });
+    } else {
+      if (!isShortlisted && shortlistCount >= 3) {
+        toast.error("Maximum 3 projects can be shortlisted for comparison");
+        return;
+      }
+      const success = toggleGuestShortlist(projectId);
+      if (success) {
+        toast.success(isShortlisted ? "Removed from comparison" : "Added to comparison");
+      }
     }
-    
-    toggleShortlist.mutate({ projectId, isShortlisted, currentCount: shortlistCount });
   };
 
   return (
@@ -70,7 +91,7 @@ const FavoriteButton = ({
         <TooltipTrigger asChild>
           <button
             onClick={handleFavoriteClick}
-            disabled={toggleFavorite.isPending}
+            disabled={toggleUserFavorite.isPending}
             className={`${sizeClasses[size]} flex items-center justify-center rounded-full bg-black/60 backdrop-blur-sm hover:bg-black/80 transition-all duration-200 border border-white/10`}
           >
             <Heart
@@ -92,10 +113,10 @@ const FavoriteButton = ({
           <TooltipTrigger asChild>
             <button
               onClick={handleShortlistClick}
-              disabled={toggleShortlist.isPending || (!isShortlisted && shortlistCount >= 3)}
+              disabled={toggleUserShortlist.isPending || (!isShortlisted && shortlistCount >= 3)}
               className={`${sizeClasses[size]} flex items-center justify-center rounded-full transition-all duration-200 border ${
                 isShortlisted
-                  ? "bg-white text-zinc-900 border-white"
+                  ? "bg-gold text-black border-gold"
                   : shortlistCount >= 3
                   ? "bg-zinc-800/60 text-zinc-500 border-zinc-700 cursor-not-allowed"
                   : "bg-black/60 backdrop-blur-sm hover:bg-black/80 text-white border-white/10"
