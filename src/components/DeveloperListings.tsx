@@ -2,6 +2,7 @@ import * as React from "react";
 
 // ============================================================
 // EDITABLE DATA - Edit the arrays below to add/change listings
+// Developers ordered from top UAE developers to newest
 // ============================================================
 
 interface Listing {
@@ -17,109 +18,42 @@ interface Listing {
 interface Developer {
   id: string;
   name: string;
-  logo: string; // URL or imported image path
   listings: Listing[];
 }
 
-// Edit this array to add developers and their listings
-// Empty fields (image="", title="") will be automatically hidden from viewers
+// Create 12 empty listing slots
+const createEmptyListings = (): Listing[] => [
+  { id: 1, image: "", title: "", location: "", price: "", bedrooms: "", description: "" },
+  { id: 2, image: "", title: "", location: "", price: "", bedrooms: "", description: "" },
+  { id: 3, image: "", title: "", location: "", price: "", bedrooms: "", description: "" },
+  { id: 4, image: "", title: "", location: "", price: "", bedrooms: "", description: "" },
+  { id: 5, image: "", title: "", location: "", price: "", bedrooms: "", description: "" },
+  { id: 6, image: "", title: "", location: "", price: "", bedrooms: "", description: "" },
+  { id: 7, image: "", title: "", location: "", price: "", bedrooms: "", description: "" },
+  { id: 8, image: "", title: "", location: "", price: "", bedrooms: "", description: "" },
+  { id: 9, image: "", title: "", location: "", price: "", bedrooms: "", description: "" },
+  { id: 10, image: "", title: "", location: "", price: "", bedrooms: "", description: "" },
+  { id: 11, image: "", title: "", location: "", price: "", bedrooms: "", description: "" },
+  { id: 12, image: "", title: "", location: "", price: "", bedrooms: "", description: "" },
+];
+
+// Developers ordered from top UAE developers to newest
 const developersData: Developer[] = [
-  {
-    id: "emaar",
-    name: "EMAAR",
-    logo: "", // Add logo URL here
-    listings: [
-      { id: 1, image: "", title: "", location: "", price: "", bedrooms: "", description: "" },
-      { id: 2, image: "", title: "", location: "", price: "", bedrooms: "", description: "" },
-      { id: 3, image: "", title: "", location: "", price: "", bedrooms: "", description: "" },
-      { id: 4, image: "", title: "", location: "", price: "", bedrooms: "", description: "" },
-      { id: 5, image: "", title: "", location: "", price: "", bedrooms: "", description: "" },
-      { id: 6, image: "", title: "", location: "", price: "", bedrooms: "", description: "" },
-      { id: 7, image: "", title: "", location: "", price: "", bedrooms: "", description: "" },
-      { id: 8, image: "", title: "", location: "", price: "", bedrooms: "", description: "" },
-      { id: 9, image: "", title: "", location: "", price: "", bedrooms: "", description: "" },
-    ],
-  },
-  {
-    id: "damac",
-    name: "DAMAC",
-    logo: "", // Add logo URL here
-    listings: [
-      { id: 1, image: "", title: "", location: "", price: "", bedrooms: "", description: "" },
-      { id: 2, image: "", title: "", location: "", price: "", bedrooms: "", description: "" },
-      { id: 3, image: "", title: "", location: "", price: "", bedrooms: "", description: "" },
-      { id: 4, image: "", title: "", location: "", price: "", bedrooms: "", description: "" },
-      { id: 5, image: "", title: "", location: "", price: "", bedrooms: "", description: "" },
-      { id: 6, image: "", title: "", location: "", price: "", bedrooms: "", description: "" },
-      { id: 7, image: "", title: "", location: "", price: "", bedrooms: "", description: "" },
-      { id: 8, image: "", title: "", location: "", price: "", bedrooms: "", description: "" },
-      { id: 9, image: "", title: "", location: "", price: "", bedrooms: "", description: "" },
-    ],
-  },
-  {
-    id: "meraas",
-    name: "MERAAS",
-    logo: "", // Add logo URL here
-    listings: [
-      { id: 1, image: "", title: "", location: "", price: "", bedrooms: "", description: "" },
-      { id: 2, image: "", title: "", location: "", price: "", bedrooms: "", description: "" },
-      { id: 3, image: "", title: "", location: "", price: "", bedrooms: "", description: "" },
-      { id: 4, image: "", title: "", location: "", price: "", bedrooms: "", description: "" },
-      { id: 5, image: "", title: "", location: "", price: "", bedrooms: "", description: "" },
-      { id: 6, image: "", title: "", location: "", price: "", bedrooms: "", description: "" },
-      { id: 7, image: "", title: "", location: "", price: "", bedrooms: "", description: "" },
-      { id: 8, image: "", title: "", location: "", price: "", bedrooms: "", description: "" },
-      { id: 9, image: "", title: "", location: "", price: "", bedrooms: "", description: "" },
-    ],
-  },
-  {
-    id: "sobha",
-    name: "SOBHA",
-    logo: "", // Add logo URL here
-    listings: [
-      { id: 1, image: "", title: "", location: "", price: "", bedrooms: "", description: "" },
-      { id: 2, image: "", title: "", location: "", price: "", bedrooms: "", description: "" },
-      { id: 3, image: "", title: "", location: "", price: "", bedrooms: "", description: "" },
-      { id: 4, image: "", title: "", location: "", price: "", bedrooms: "", description: "" },
-      { id: 5, image: "", title: "", location: "", price: "", bedrooms: "", description: "" },
-      { id: 6, image: "", title: "", location: "", price: "", bedrooms: "", description: "" },
-      { id: 7, image: "", title: "", location: "", price: "", bedrooms: "", description: "" },
-      { id: 8, image: "", title: "", location: "", price: "", bedrooms: "", description: "" },
-      { id: 9, image: "", title: "", location: "", price: "", bedrooms: "", description: "" },
-    ],
-  },
-  {
-    id: "nakheel",
-    name: "NAKHEEL",
-    logo: "", // Add logo URL here
-    listings: [
-      { id: 1, image: "", title: "", location: "", price: "", bedrooms: "", description: "" },
-      { id: 2, image: "", title: "", location: "", price: "", bedrooms: "", description: "" },
-      { id: 3, image: "", title: "", location: "", price: "", bedrooms: "", description: "" },
-      { id: 4, image: "", title: "", location: "", price: "", bedrooms: "", description: "" },
-      { id: 5, image: "", title: "", location: "", price: "", bedrooms: "", description: "" },
-      { id: 6, image: "", title: "", location: "", price: "", bedrooms: "", description: "" },
-      { id: 7, image: "", title: "", location: "", price: "", bedrooms: "", description: "" },
-      { id: 8, image: "", title: "", location: "", price: "", bedrooms: "", description: "" },
-      { id: 9, image: "", title: "", location: "", price: "", bedrooms: "", description: "" },
-    ],
-  },
-  {
-    id: "aldar",
-    name: "ALDAR",
-    logo: "", // Add logo URL here
-    listings: [
-      { id: 1, image: "", title: "", location: "", price: "", bedrooms: "", description: "" },
-      { id: 2, image: "", title: "", location: "", price: "", bedrooms: "", description: "" },
-      { id: 3, image: "", title: "", location: "", price: "", bedrooms: "", description: "" },
-      { id: 4, image: "", title: "", location: "", price: "", bedrooms: "", description: "" },
-      { id: 5, image: "", title: "", location: "", price: "", bedrooms: "", description: "" },
-      { id: 6, image: "", title: "", location: "", price: "", bedrooms: "", description: "" },
-      { id: 7, image: "", title: "", location: "", price: "", bedrooms: "", description: "" },
-      { id: 8, image: "", title: "", location: "", price: "", bedrooms: "", description: "" },
-      { id: 9, image: "", title: "", location: "", price: "", bedrooms: "", description: "" },
-    ],
-  },
+  { id: "emaar", name: "EMAAR", listings: createEmptyListings() },
+  { id: "nakheel", name: "NAKHEEL", listings: createEmptyListings() },
+  { id: "dubai-holding", name: "DUBAI HOLDING", listings: createEmptyListings() },
+  { id: "damac", name: "DAMAC", listings: createEmptyListings() },
+  { id: "meraas", name: "MERAAS", listings: createEmptyListings() },
+  { id: "sobha", name: "SOBHA", listings: createEmptyListings() },
+  { id: "aldar", name: "ALDAR", listings: createEmptyListings() },
+  { id: "deyaar", name: "DEYAAR", listings: createEmptyListings() },
+  { id: "azizi", name: "AZIZI", listings: createEmptyListings() },
+  { id: "danube", name: "DANUBE", listings: createEmptyListings() },
+  { id: "binghatti", name: "BINGHATTI", listings: createEmptyListings() },
+  { id: "omniyat", name: "OMNIYAT", listings: createEmptyListings() },
+  { id: "ellington", name: "ELLINGTON", listings: createEmptyListings() },
+  { id: "select-group", name: "SELECT GROUP", listings: createEmptyListings() },
+  { id: "samana", name: "SAMANA", listings: createEmptyListings() },
 ];
 
 // ============================================================
@@ -132,7 +66,6 @@ const isListingComplete = (listing: Listing): boolean => {
 
 const ListingCard = ({ listing }: { listing: Listing }) => (
   <div className="group relative overflow-hidden rounded-lg bg-[#1a1a1a] border border-[#2a2a2a] hover:border-[#D4A017]/50 transition-all duration-300">
-    {/* Image */}
     <div className="aspect-[4/3] overflow-hidden">
       <img
         src={listing.image}
@@ -140,8 +73,6 @@ const ListingCard = ({ listing }: { listing: Listing }) => (
         className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
       />
     </div>
-
-    {/* Content */}
     <div className="p-4">
       <h4
         className="text-white text-lg font-semibold mb-1 line-clamp-1"
@@ -149,7 +80,6 @@ const ListingCard = ({ listing }: { listing: Listing }) => (
       >
         {listing.title}
       </h4>
-
       {listing.location && (
         <p className="text-gray-400 text-sm mb-2 flex items-center gap-1">
           <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -159,27 +89,16 @@ const ListingCard = ({ listing }: { listing: Listing }) => (
           {listing.location}
         </p>
       )}
-
       {listing.bedrooms && (
-        <p className="text-gray-500 text-sm mb-2">
-          {listing.bedrooms}
-        </p>
+        <p className="text-gray-500 text-sm mb-2">{listing.bedrooms}</p>
       )}
-
       {listing.description && (
-        <p className="text-gray-500 text-sm line-clamp-2 mb-3">
-          {listing.description}
-        </p>
+        <p className="text-gray-500 text-sm line-clamp-2 mb-3">{listing.description}</p>
       )}
-
       {listing.price && (
-        <p className="text-[#D4A017] font-semibold text-lg">
-          {listing.price}
-        </p>
+        <p className="text-[#D4A017] font-semibold text-lg">{listing.price}</p>
       )}
     </div>
-
-    {/* Hover overlay */}
     <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300 pointer-events-none" />
   </div>
 );
@@ -187,33 +106,26 @@ const ListingCard = ({ listing }: { listing: Listing }) => (
 const DeveloperSection = ({ developer }: { developer: Developer }) => {
   const visibleListings = developer.listings.filter(isListingComplete);
 
-  // Don't render section if no listings are complete
   if (visibleListings.length === 0) {
     return null;
   }
 
   return (
-    <div className="mb-16">
-      {/* Developer Header */}
-      <div className="flex items-center gap-4 mb-8">
-        {developer.logo && (
-          <img
-            src={developer.logo}
-            alt={developer.name}
-            className="h-12 w-auto object-contain"
-          />
-        )}
-        <h3
-          className="text-[#D4A017] text-2xl md:text-3xl font-semibold"
-          style={{ fontFamily: "Poppins, sans-serif" }}
-        >
-          {developer.name}
-        </h3>
-        <div className="flex-1 h-px bg-gradient-to-r from-[#D4A017]/50 to-transparent" />
-      </div>
+    <div className="mb-20">
+      {/* Developer Name - H2, Poppins, 56px, line-height 1.2 */}
+      <h2
+        className="text-white font-semibold mb-10"
+        style={{
+          fontFamily: "Poppins, sans-serif",
+          fontSize: "56px",
+          lineHeight: "1.2",
+        }}
+      >
+        {developer.name}
+      </h2>
 
-      {/* Listings Grid - 3x3 responsive */}
-      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+      {/* Listings Grid - 4 columns on desktop, 2 on tablet, 1 on mobile */}
+      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
         {visibleListings.map((listing) => (
           <ListingCard key={listing.id} listing={listing} />
         ))}
@@ -234,7 +146,6 @@ const DeveloperListings = () => {
         background: "linear-gradient(180deg, #0a0a0a 0%, #0d0d0d 50%, #080808 100%)",
       }}
     >
-      {/* Ambient glow */}
       <div
         className="absolute top-0 left-0 right-0 h-[40%] pointer-events-none"
         style={{
@@ -243,29 +154,6 @@ const DeveloperListings = () => {
       />
 
       <div className="relative z-10 container mx-auto px-4">
-        {/* Section Header */}
-        <div className="text-center mb-12 md:mb-16">
-          <p
-            className="text-[#D4A017] text-sm tracking-[0.2em] uppercase mb-3"
-            style={{ fontFamily: "Poppins, sans-serif" }}
-          >
-            PROPERTIES
-          </p>
-          <h2
-            className="text-white text-3xl md:text-4xl lg:text-5xl font-semibold mb-4"
-            style={{ fontFamily: "Poppins, sans-serif" }}
-          >
-            Curated Listings. Global Standard.
-          </h2>
-          <p
-            className="text-gray-400 text-base md:text-lg max-w-2xl mx-auto"
-            style={{ fontFamily: "Poppins, sans-serif" }}
-          >
-            Exclusive investment-grade properties with trusted advisory.
-          </p>
-        </div>
-
-        {/* Developer Sections */}
         {developersWithListings.length > 0 ? (
           developersWithListings.map((developer) => (
             <DeveloperSection key={developer.id} developer={developer} />
