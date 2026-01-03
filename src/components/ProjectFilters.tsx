@@ -99,10 +99,13 @@ const FURNISHED_OPTIONS = [
 
 const VIEW_OPTIONS = [
   "Sea View",
+  "Partial Sea View",
+  "Full Sea View",
   "Golf View",
   "City View",
   "Marina View",
   "Garden View",
+  "Boulevard View",
   "Pool View",
   "Skyline View",
   "Creek View",
@@ -112,6 +115,10 @@ const VIEW_OPTIONS = [
   "Mountain View",
   "Canal View",
   "Community View",
+  "Park View",
+  "Beach View",
+  "Desert View",
+  "Courtyard View",
 ];
 
 const AMENITY_OPTIONS = [

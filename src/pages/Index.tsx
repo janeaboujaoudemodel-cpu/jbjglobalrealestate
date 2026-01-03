@@ -1,7 +1,12 @@
+import { Link } from "react-router-dom";
+import { useAuth } from "@/contexts/AuthContext";
 import NavigationTabs from "@/components/NavigationTabs";
 import DeveloperGrid from "@/components/DeveloperGrid";
+import { Settings } from "lucide-react";
 
 const Index = () => {
+  const { user, isAdmin } = useAuth();
+
   return (
     <section
       className="relative w-full min-h-screen py-16 md:py-24"
@@ -15,6 +20,27 @@ const Index = () => {
           background: "radial-gradient(ellipse at 50% 0%, rgba(212, 160, 23, 0.08) 0%, transparent 60%)",
         }}
       />
+
+      {/* Admin Link */}
+      <div className="absolute top-4 right-4 z-20 flex items-center gap-3">
+        {isAdmin && (
+          <Link
+            to="/admin"
+            className="flex items-center gap-2 px-4 py-2 bg-[#D4A017]/20 text-[#D4A017] rounded-lg hover:bg-[#D4A017]/30 transition-colors"
+          >
+            <Settings className="w-4 h-4" />
+            Admin Panel
+          </Link>
+        )}
+        {!user && (
+          <Link
+            to="/auth"
+            className="px-4 py-2 text-gray-400 hover:text-white transition-colors"
+          >
+            Sign In
+          </Link>
+        )}
+      </div>
 
       <div className="relative z-10 container mx-auto px-4">
         <h1
