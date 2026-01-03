@@ -3,9 +3,21 @@ import { useNavigate } from "react-router-dom";
 import { useQuery } from "@tanstack/react-query";
 import { supabase } from "@/integrations/supabase/client";
 import { useAuth } from "@/contexts/AuthContext";
-import { ChevronRight, ChevronLeft, Clock, Sparkles, Loader2, CheckCircle2 } from "lucide-react";
+import { 
+  ChevronRight, ChevronLeft, Clock, Sparkles, Loader2, CheckCircle2,
+  Wand2, ArrowRight
+} from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Progress } from "@/components/ui/progress";
+import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
 
 const QUIZ_QUESTIONS = [
   {
@@ -107,12 +119,28 @@ const QUIZ_QUESTIONS = [
   },
 ];
 
+const LANGUAGES = [
+  "English", "Arabic", "French", "Russian", "Chinese", "Hindi", "Urdu", "Spanish", "German", "Other"
+];
+
+const NATIONALITIES = [
+  "UAE", "Saudi Arabia", "India", "Pakistan", "UK", "USA", "Russia", "China", "France", "Germany", "Other"
+];
+
 const Quiz = () => {
   const navigate = useNavigate();
   const { user } = useAuth();
   const [currentStep, setCurrentStep] = useState(0);
   const [answers, setAnswers] = useState<Record<string, string | string[]>>({});
   const [isSubmitting, setIsSubmitting] = useState(false);
+  const [showForm, setShowForm] = useState(false);
+  const [formData, setFormData] = useState({
+    fullName: "",
+    email: "",
+    phone: "",
+    nationality: "",
+    preferredLanguage: "",
+  });
   const estimatedTime = 30;
 
   const { data: allProjects } = useQuery({
@@ -122,7 +150,7 @@ const Quiz = () => {
         .from("projects")
         .select(`
           *,
-          developer:developers(name, slug),
+          developer:developers(name, slug, description),
           images:project_images(image_url)
         `);
       if (error) throw error;
@@ -176,30 +204,20 @@ const Quiz = () => {
     return current.length === currentQuestion.options.length;
   };
 
-  const handleNext = async () => {
+  const isFormValid = () => {
+    return formData.fullName.trim() !== "" && 
+           formData.email.trim() !== "" && 
+           formData.phone.trim() !== "" &&
+           formData.nationality !== "" &&
+           formData.preferredLanguage !== "";
+  };
+
+  const handleNext = () => {
     if (currentStep < QUIZ_QUESTIONS.length - 1) {
       setCurrentStep(currentStep + 1);
     } else {
-      setIsSubmitting(true);
-      try {
-        const recommendations = getRecommendations();
-        const sessionId = `quiz-${Date.now()}`;
-
-        await supabase.from("quiz_responses").insert({
-          user_id: user?.id || null,
-          session_id: sessionId,
-          answers: answers,
-          recommended_project_ids: recommendations.slice(0, 5).map((p) => p.id),
-        });
-
-        const slugs = recommendations.slice(0, 5).map((p) => p.slug).join(",");
-        navigate(`/quiz-results?projects=${slugs}`);
-      } catch (error) {
-        console.error("Error saving quiz:", error);
-        const recommendations = getRecommendations();
-        const slugs = recommendations.slice(0, 5).map((p) => p.slug).join(",");
-        navigate(`/quiz-results?projects=${slugs}`);
-      }
+      // Show the form after completing all questions
+      setShowForm(true);
     }
   };
 
@@ -223,16 +241,12 @@ const Quiz = () => {
       const maxBr = project.bedrooms_max || minBr;
       
       if (bedrooms === "studio-1") {
-        // Must have studio (0) or 1 bedroom
         if (minBr > 1) return false;
       } else if (bedrooms === "2-3") {
-        // Must have 2 or 3 bedrooms within range
         if (maxBr < 2 || minBr > 3) return false;
       } else if (bedrooms === "4-5") {
-        // Must have 4 or 5 bedrooms within range
         if (maxBr < 4 || minBr > 5) return false;
       } else if (bedrooms === "6-plus") {
-        // Must have 6+ bedrooms
         if (maxBr < 6) return false;
       }
 
@@ -253,7 +267,7 @@ const Quiz = () => {
     // Then score the filtered projects by preferences
     return filteredProjects
       .map((project) => {
-        let score = 100; // Base score for matching hard requirements
+        let score = 100;
 
         const location = answers.location;
         const projectViews = project.views || [];
@@ -285,6 +299,256 @@ const Quiz = () => {
       .sort((a, b) => b.matchScore - a.matchScore);
   };
 
+  const handleSubmitForm = async () => {
+    if (!isFormValid()) return;
+
+    setIsSubmitting(true);
+    try {
+      const recommendations = getRecommendations();
+      const sessionId = `quiz-${Date.now()}`;
+
+      // Save to database
+      await supabase.from("quiz_responses").insert({
+        user_id: user?.id || null,
+        session_id: sessionId,
+        answers: {
+          ...answers,
+          userInfo: formData
+        },
+        recommended_project_ids: recommendations.slice(0, 5).map((p) => p.id),
+      });
+
+      const slugs = recommendations.slice(0, 5).map((p) => p.slug).join(",");
+      navigate(`/quiz-results?projects=${slugs}&session=${sessionId}`);
+    } catch (error) {
+      console.error("Error saving quiz:", error);
+      const recommendations = getRecommendations();
+      const slugs = recommendations.slice(0, 5).map((p) => p.slug).join(",");
+      navigate(`/quiz-results?projects=${slugs}`);
+    }
+  };
+
+  // Intro screen before starting
+  if (currentStep === 0 && Object.keys(answers).length === 0 && !showForm) {
+    return (
+      <section className="min-h-screen bg-zinc-950 flex flex-col">
+        {/* Header */}
+        <div className="border-b border-zinc-800 bg-zinc-900/50 backdrop-blur-sm">
+          <div className="container mx-auto px-4 py-4">
+            <div className="flex items-center justify-between">
+              <button
+                onClick={() => navigate(-1)}
+                className="text-zinc-400 hover:text-white transition-colors flex items-center gap-2"
+              >
+                <ChevronLeft className="w-5 h-5" />
+                Exit
+              </button>
+              <div className="flex items-center gap-3 text-zinc-400">
+                <Clock className="w-4 h-4" />
+                <span className="text-sm">~{estimatedTime} seconds</span>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        {/* Intro Content */}
+        <div className="flex-1 flex items-center justify-center px-4 py-12">
+          <div className="w-full max-w-2xl text-center">
+            {/* Exclusive Badge */}
+            <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-gradient-to-r from-gold/20 to-gold-dark/20 border border-gold/30 mb-8">
+              <Sparkles className="w-4 h-4 text-gold" />
+              <span className="text-gold text-sm font-medium">#1 AI Property Matcher in the World</span>
+            </div>
+
+            <div className="w-20 h-20 rounded-full bg-gradient-to-br from-gold via-gold-dark to-gold mx-auto mb-8 flex items-center justify-center shadow-2xl shadow-gold/30">
+              <Wand2 className="w-10 h-10 text-black" />
+            </div>
+
+            <h1 className="text-white text-4xl md:text-5xl font-bold mb-4">
+              Let AI Find Your Perfect Home
+            </h1>
+            
+            <p className="text-zinc-400 text-lg mb-6 max-w-lg mx-auto">
+              Your complimentary AI assistant will analyze your preferences and recommend the best properties — saving you hours of research.
+            </p>
+
+            <div className="flex items-center justify-center gap-6 text-sm text-zinc-500 mb-10">
+              <div className="flex items-center gap-2">
+                <CheckCircle2 className="w-4 h-4 text-gold" />
+                <span>100% Free</span>
+              </div>
+              <div className="flex items-center gap-2">
+                <Clock className="w-4 h-4 text-gold" />
+                <span>Less than 30 seconds</span>
+              </div>
+              <div className="flex items-center gap-2">
+                <Sparkles className="w-4 h-4 text-gold" />
+                <span>AI-Powered</span>
+              </div>
+            </div>
+
+            <Button
+              onClick={() => setAnswers({})} // This triggers the quiz to start
+              className="bg-gradient-to-r from-gold to-gold-dark text-black font-semibold px-10 py-6 text-lg hover:opacity-90 shadow-lg shadow-gold/20"
+            >
+              Start Your Free Assessment
+              <ArrowRight className="w-5 h-5 ml-2" />
+            </Button>
+
+            <p className="text-zinc-600 text-xs mt-8">
+              Exclusive service by JJ Global Capital — The only agency offering AI-powered property matching worldwide
+            </p>
+          </div>
+        </div>
+      </section>
+    );
+  }
+
+  // Form Screen after completing questions
+  if (showForm) {
+    return (
+      <section className="min-h-screen bg-zinc-950 flex flex-col">
+        {/* Header */}
+        <div className="border-b border-zinc-800 bg-zinc-900/50 backdrop-blur-sm">
+          <div className="container mx-auto px-4 py-4">
+            <div className="flex items-center justify-between">
+              <button
+                onClick={() => setShowForm(false)}
+                className="text-zinc-400 hover:text-white transition-colors flex items-center gap-2"
+              >
+                <ChevronLeft className="w-5 h-5" />
+                Back to Questions
+              </button>
+              <div className="flex items-center gap-3 text-gold">
+                <CheckCircle2 className="w-4 h-4" />
+                <span className="text-sm">Almost there!</span>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        {/* Form Content */}
+        <div className="flex-1 flex items-center justify-center px-4 py-12">
+          <div className="w-full max-w-lg">
+            <div className="text-center mb-8">
+              <div className="w-16 h-16 rounded-full bg-gradient-to-br from-gold to-gold-dark mx-auto mb-4 flex items-center justify-center">
+                <Sparkles className="w-8 h-8 text-black" />
+              </div>
+              <h2 className="text-white text-3xl font-bold mb-2">
+                Get Your Personalized Results
+              </h2>
+              <p className="text-zinc-400">
+                Complete your details to receive your AI-curated property recommendations
+              </p>
+            </div>
+
+            <div className="bg-zinc-900 rounded-2xl p-6 border border-zinc-800 space-y-5">
+              <div>
+                <Label htmlFor="fullName" className="text-zinc-300">Full Name *</Label>
+                <Input
+                  id="fullName"
+                  placeholder="Your full name"
+                  value={formData.fullName}
+                  onChange={(e) => setFormData({ ...formData, fullName: e.target.value })}
+                  className="mt-1.5 bg-zinc-800 border-zinc-700 text-white h-12"
+                />
+              </div>
+
+              <div>
+                <Label htmlFor="email" className="text-zinc-300">Email Address *</Label>
+                <Input
+                  id="email"
+                  type="email"
+                  placeholder="your.email@example.com"
+                  value={formData.email}
+                  onChange={(e) => setFormData({ ...formData, email: e.target.value })}
+                  className="mt-1.5 bg-zinc-800 border-zinc-700 text-white h-12"
+                />
+              </div>
+
+              <div>
+                <Label htmlFor="phone" className="text-zinc-300">Phone Number *</Label>
+                <Input
+                  id="phone"
+                  type="tel"
+                  placeholder="+971..."
+                  value={formData.phone}
+                  onChange={(e) => setFormData({ ...formData, phone: e.target.value })}
+                  className="mt-1.5 bg-zinc-800 border-zinc-700 text-white h-12"
+                />
+              </div>
+
+              <div>
+                <Label htmlFor="nationality" className="text-zinc-300">Nationality *</Label>
+                <Select
+                  value={formData.nationality}
+                  onValueChange={(val) => setFormData({ ...formData, nationality: val })}
+                >
+                  <SelectTrigger className="mt-1.5 bg-zinc-800 border-zinc-700 text-white h-12">
+                    <SelectValue placeholder="Select your nationality" />
+                  </SelectTrigger>
+                  <SelectContent className="bg-zinc-800 border-zinc-700">
+                    {NATIONALITIES.map((nat) => (
+                      <SelectItem key={nat} value={nat} className="text-white hover:bg-zinc-700">
+                        {nat}
+                      </SelectItem>
+                    ))}
+                  </SelectContent>
+                </Select>
+              </div>
+
+              <div>
+                <Label htmlFor="language" className="text-zinc-300">Preferred Language *</Label>
+                <Select
+                  value={formData.preferredLanguage}
+                  onValueChange={(val) => setFormData({ ...formData, preferredLanguage: val })}
+                >
+                  <SelectTrigger className="mt-1.5 bg-zinc-800 border-zinc-700 text-white h-12">
+                    <SelectValue placeholder="Select your preferred language" />
+                  </SelectTrigger>
+                  <SelectContent className="bg-zinc-800 border-zinc-700">
+                    {LANGUAGES.map((lang) => (
+                      <SelectItem key={lang} value={lang} className="text-white hover:bg-zinc-700">
+                        {lang}
+                      </SelectItem>
+                    ))}
+                  </SelectContent>
+                </Select>
+              </div>
+
+              <Button
+                onClick={handleSubmitForm}
+                disabled={!isFormValid() || isSubmitting}
+                className="w-full bg-gradient-to-r from-gold to-gold-dark text-black font-semibold h-14 text-lg hover:opacity-90 shadow-lg shadow-gold/20 mt-4"
+              >
+                {isSubmitting ? (
+                  <>
+                    <Loader2 className="w-5 h-5 mr-2 animate-spin" />
+                    Finding Your Matches...
+                  </>
+                ) : (
+                  <>
+                    <Sparkles className="w-5 h-5 mr-2" />
+                    Get My Free Results
+                  </>
+                )}
+              </Button>
+
+              <p className="text-zinc-600 text-xs text-center">
+                Your information is secure and will only be used to provide personalized recommendations
+              </p>
+            </div>
+
+            <div className="flex items-center justify-center gap-2 mt-6 text-gold text-sm">
+              <Sparkles className="w-4 h-4" />
+              <span>Exclusive AI service — Free for a limited time</span>
+            </div>
+          </div>
+        </div>
+      </section>
+    );
+  }
+
   return (
     <section className="min-h-screen bg-zinc-950 flex flex-col">
       {/* Header */}
@@ -292,11 +556,11 @@ const Quiz = () => {
         <div className="container mx-auto px-4 py-4">
           <div className="flex items-center justify-between">
             <button
-              onClick={() => navigate(-1)}
+              onClick={() => currentStep > 0 ? setCurrentStep(0) : navigate(-1)}
               className="text-zinc-400 hover:text-white transition-colors flex items-center gap-2"
             >
               <ChevronLeft className="w-5 h-5" />
-              Exit Quiz
+              Exit
             </button>
             <div className="flex items-center gap-3 text-zinc-400">
               <Clock className="w-4 h-4" />
@@ -391,18 +655,13 @@ const Quiz = () => {
 
             <Button
               onClick={handleNext}
-              disabled={!isAnswered() || isSubmitting}
+              disabled={!isAnswered()}
               className="bg-gradient-to-r from-gold to-gold-dark text-gold-foreground hover:from-gold-light hover:to-gold px-8 shadow-lg shadow-gold/20"
             >
-              {isSubmitting ? (
+              {currentStep === QUIZ_QUESTIONS.length - 1 ? (
                 <>
-                  <Loader2 className="w-4 h-4 mr-2 animate-spin" />
-                  Finding matches...
-                </>
-              ) : currentStep === QUIZ_QUESTIONS.length - 1 ? (
-                <>
-                  <Sparkles className="w-4 h-4 mr-2" />
-                  See Recommendations
+                  Continue
+                  <ChevronRight className="w-4 h-4 ml-2" />
                 </>
               ) : (
                 <>
