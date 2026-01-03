@@ -1,9 +1,18 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
+import { Star, Building2, Calendar, Briefcase } from "lucide-react";
 import { useDevelopers, useProjects, useCommunities, useTrendingAreas } from "@/hooks/useProjects";
 import { useFilteredProjects, defaultFilters } from "@/hooks/useProjectFilters";
 import ProjectFilters, { type FilterState } from "@/components/ProjectFilters";
 import { Skeleton } from "@/components/ui/skeleton";
+
+const formatPortfolioWorth = (value: number | null) => {
+  if (!value) return null;
+  if (value >= 1000000000) {
+    return `AED ${(value / 1000000000).toFixed(0)}B`;
+  }
+  return `AED ${(value / 1000000).toFixed(0)}M`;
+};
 
 const DeveloperGrid = () => {
   const { data: developers, isLoading: loadingDevelopers } = useDevelopers();
@@ -13,6 +22,13 @@ const DeveloperGrid = () => {
   const [filters, setFilters] = useState<FilterState>(defaultFilters);
   
   const filteredProjects = useFilteredProjects(projects, filters);
+
+  // Smart filter fallback: if no results, suggest clearing closest filter
+  useEffect(() => {
+    if (filteredProjects.length === 0 && projects && projects.length > 0) {
+      // Could implement smart suggestions here
+    }
+  }, [filteredProjects, projects]);
 
   if (loadingDevelopers || loadingProjects) {
     return (
@@ -51,7 +67,8 @@ const DeveloperGrid = () => {
     filters.furnishedStatus !== null ||
     filters.views.length > 0 ||
     filters.amenities.length > 0 ||
-    filters.facilities.length > 0;
+    filters.facilities.length > 0 ||
+    filters.premiumOnly;
 
   return (
     <div>
@@ -69,25 +86,70 @@ const DeveloperGrid = () => {
         </p>
       )}
 
-      <div className="space-y-20">
+      <div className="space-y-24">
         {projectsByDeveloper?.map(({ developer, projects: devProjects }) => (
-          <div key={developer.id}>
-            <Link
-              to={`/developer/${developer.slug}`}
-              className="inline-block group"
-            >
-              <h2
-                className="text-white font-semibold mb-10 group-hover:text-[#D4A017] transition-colors"
-                style={{
-                  fontFamily: "Poppins, sans-serif",
-                  fontSize: "56px",
-                  lineHeight: "1.2",
-                }}
+          <div key={developer.id} className="scroll-mt-24" id={`developer-${developer.slug}`}>
+            {/* Developer Header Section */}
+            <div className="mb-10">
+              <Link
+                to={`/developer/${developer.slug}`}
+                className="inline-block group"
               >
-                {developer.name}
-              </h2>
-            </Link>
+                <h2
+                  className="text-white font-semibold mb-4 group-hover:text-[#D4A017] transition-colors"
+                  style={{
+                    fontFamily: "Poppins, sans-serif",
+                    fontSize: "56px",
+                    lineHeight: "1.2",
+                  }}
+                >
+                  {developer.name}
+                </h2>
+              </Link>
 
+              {/* Developer Description */}
+              {developer.description && (
+                <p className="text-gray-400 text-lg max-w-4xl mb-6 leading-relaxed">
+                  {developer.description}
+                </p>
+              )}
+
+              {/* Developer Stats */}
+              <div className="flex flex-wrap gap-6 text-sm">
+                {developer.founded_year && (
+                  <div className="flex items-center gap-2 text-gray-500">
+                    <Calendar className="w-4 h-4 text-[#D4A017]" />
+                    <span>Est. {developer.founded_year}</span>
+                  </div>
+                )}
+                {developer.completed_projects && (
+                  <div className="flex items-center gap-2 text-gray-500">
+                    <Building2 className="w-4 h-4 text-[#D4A017]" />
+                    <span>{developer.completed_projects.toLocaleString()}+ Units Delivered</span>
+                  </div>
+                )}
+                {developer.offplan_projects && (
+                  <div className="flex items-center gap-2 text-gray-500">
+                    <Briefcase className="w-4 h-4 text-[#D4A017]" />
+                    <span>{developer.offplan_projects} Active Projects</span>
+                  </div>
+                )}
+                {developer.portfolio_worth && (
+                  <div className="flex items-center gap-2 text-gray-500">
+                    <Star className="w-4 h-4 text-[#D4A017]" />
+                    <span>Portfolio: {formatPortfolioWorth(developer.portfolio_worth)}</span>
+                  </div>
+                )}
+                {developer.headquarters && (
+                  <div className="flex items-center gap-2 text-gray-500">
+                    <span className="text-[#D4A017]">📍</span>
+                    <span>{developer.headquarters}</span>
+                  </div>
+                )}
+              </div>
+            </div>
+
+            {/* Projects Grid */}
             <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
               {devProjects.slice(0, 12).map((project) => (
                 <Link
@@ -101,6 +163,17 @@ const DeveloperGrid = () => {
                       alt={project.name}
                       className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
                     />
+                    
+                    {/* Premium Star */}
+                    {project.is_featured && (
+                      <div className="absolute top-3 right-3 z-10">
+                        <div className="bg-black/60 backdrop-blur-sm rounded-full p-2">
+                          <Star className="w-5 h-5 fill-[#D4A017] text-[#D4A017]" />
+                        </div>
+                      </div>
+                    )}
+
+                    {/* Handover Badge */}
                     {project.handover_date && (
                       <span className={`absolute top-3 left-3 px-2 py-1 rounded text-xs font-medium ${
                         project.handover_date.toLowerCase().includes("ready")
@@ -143,6 +216,21 @@ const DeveloperGrid = () => {
                 </Link>
               ))}
             </div>
+
+            {/* View All Link */}
+            {devProjects.length > 12 && (
+              <div className="mt-6 text-center">
+                <Link
+                  to={`/developer/${developer.slug}`}
+                  className="inline-flex items-center gap-2 text-[#D4A017] hover:underline"
+                >
+                  View all {devProjects.length} projects from {developer.name}
+                  <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
+                  </svg>
+                </Link>
+              </div>
+            )}
           </div>
         ))}
 

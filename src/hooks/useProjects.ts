@@ -62,6 +62,11 @@ export interface Developer {
   description: string | null;
   logo_url: string | null;
   rank: number;
+  founded_year: number | null;
+  completed_projects: number | null;
+  offplan_projects: number | null;
+  portfolio_worth: number | null;
+  headquarters: string | null;
 }
 
 export interface TrendingArea {
@@ -98,7 +103,7 @@ export function useDevelopers() {
         .order("rank");
       
       if (error) throw error;
-      return data as Developer[];
+      return data as unknown as Developer[];
     },
   });
 }
@@ -237,7 +242,7 @@ export function useDeveloper(developerSlug: string) {
         .maybeSingle();
       
       if (error) throw error;
-      return data as Developer | null;
+      return data as unknown as Developer | null;
     },
     enabled: !!developerSlug,
   });
