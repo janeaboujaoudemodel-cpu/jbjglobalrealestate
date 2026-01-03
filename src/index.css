@@ -47,11 +47,12 @@ All colors MUST be HSL.
     --sidebar-border: 220 13% 91%;
     --sidebar-ring: 217.2 91.2% 59.8%;
 
-    /* Luxury Gold Theme - Refined & Elegant (HSL) */
-    --gold: 43 80% 46%;
-    --gold-light: 45 90% 62%;
-    --gold-dark: 36 95% 30%;
-    --gold-foreground: 0 0% 100%;
+    /* Luxury Gold Theme - Premium Champagne Gold (HSL) */
+    --gold: 42 52% 60%;
+    --gold-light: 45 50% 72%;
+    --gold-dark: 38 55% 42%;
+    --gold-muted: 40 30% 50%;
+    --gold-foreground: 0 0% 8%;
 
     /* Premium surfaces */
     --premium-bg: 0 0% 5%;
@@ -132,6 +133,15 @@ All colors MUST be HSL.
 }
 
 @layer components {
+  /* Filter chip active state */
+  .filter-chip-active {
+    @apply bg-gradient-to-r from-gold to-gold-dark text-gold-foreground shadow-sm;
+  }
+  
+  .filter-chip-inactive {
+    @apply bg-zinc-900 text-zinc-300 hover:bg-zinc-800 border border-zinc-800;
+  }
+
   /* Services section background (cinematic + warm bokeh) */
   .jj-services {
     background-color: hsl(var(--premium-bg));

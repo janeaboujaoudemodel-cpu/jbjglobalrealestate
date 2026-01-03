@@ -830,10 +830,10 @@ const ProjectFilters = ({
             </ScrollArea>
 
             {/* Apply Button */}
-            <div className="absolute bottom-0 left-0 right-0 p-4 bg-[#0d0d0d] border-t border-[#2a2a2a]">
+            <div className="absolute bottom-0 left-0 right-0 p-4 bg-zinc-950 border-t border-zinc-800">
               <Button
                 onClick={() => setIsFiltersOpen(false)}
-                className="w-full h-12 bg-[#D4A017] text-black hover:bg-[#b8890f] font-semibold text-base"
+                className="w-full h-12 bg-gradient-to-r from-gold to-gold-dark text-gold-foreground hover:from-gold-light hover:to-gold font-semibold text-base shadow-lg shadow-gold/20"
               >
                 Show Results
               </Button>
@@ -1069,7 +1069,7 @@ const ProjectFilters = ({
           )}
           <button
             onClick={clearFilters}
-            className="text-[#D4A017] text-sm hover:underline ml-2"
+            className="text-gold text-sm hover:underline ml-2"
           >
             Clear all
           </button>
@@ -1090,7 +1090,7 @@ const FilterSection = ({
 }) => (
   <div>
     <div className="flex items-center gap-2 text-white mb-3">
-      <span className="text-[#D4A017]">{icon}</span>
+      <span className="text-gold">{icon}</span>
       <h3 className="font-medium">{title}</h3>
     </div>
     {children}
@@ -1110,8 +1110,8 @@ const QuickFilterChip = ({
     onClick={onClick}
     className={`px-4 py-2 rounded-full text-sm font-medium transition-all ${
       active
-        ? "bg-[#D4A017] text-black"
-        : "bg-[#1a1a1a] text-gray-300 hover:bg-[#2a2a2a] border border-[#2a2a2a]"
+        ? "bg-gradient-to-r from-gold to-gold-dark text-gold-foreground shadow-sm shadow-gold/20"
+        : "bg-zinc-900 text-zinc-300 hover:bg-zinc-800 border border-zinc-800 hover:border-zinc-700"
     }`}
   >
     {label}
@@ -1125,11 +1125,11 @@ const FilterPill = ({
   label: string;
   onRemove: () => void;
 }) => (
-  <span className="inline-flex items-center gap-1 px-3 py-1 bg-[#D4A017]/10 border border-[#D4A017]/30 rounded-full text-[#D4A017] text-sm">
+  <span className="inline-flex items-center gap-1 px-3 py-1 bg-gold/10 border border-gold/30 rounded-full text-gold text-sm">
     {label}
     <button
       onClick={onRemove}
-      className="ml-1 hover:bg-[#D4A017]/20 rounded-full p-0.5"
+      className="ml-1 hover:bg-gold/20 rounded-full p-0.5"
     >
       <X className="w-3 h-3" />
     </button>

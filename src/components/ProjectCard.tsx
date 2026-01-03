@@ -14,12 +14,12 @@ const ProjectCard = ({ project, showFavorite = true }: ProjectCardProps) => {
       to={`/project/${project.slug}`}
       className="group relative overflow-hidden rounded-2xl bg-zinc-900 border border-zinc-800 hover:border-zinc-700 transition-all duration-300"
     >
-      {/* Premium Star Badge */}
+      {/* Premium Star Badge - Only shows for featured/premium properties */}
       {project.is_featured && (
         <div className="absolute top-3 left-3 z-10">
-          <div className="bg-gradient-to-r from-amber-500 to-yellow-500 text-black text-xs font-bold px-3 py-1 rounded-full flex items-center gap-1">
+          <div className="bg-gradient-to-r from-gold to-gold-dark text-gold-foreground text-xs font-bold px-3 py-1.5 rounded-full flex items-center gap-1.5 shadow-lg shadow-gold/20 border border-gold-light/20">
             <Star className="w-3 h-3 fill-current" />
-            Premium
+            <span className="tracking-wide">PREMIUM</span>
           </div>
         </div>
       )}
