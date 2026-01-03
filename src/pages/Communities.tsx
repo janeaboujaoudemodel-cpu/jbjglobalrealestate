@@ -1,20 +1,14 @@
+import React from "react";
 import NavigationTabs from "@/components/NavigationTabs";
 import CommunityGrid from "@/components/CommunityGrid";
 
-const Communities = () => {
+const Communities = React.forwardRef<HTMLElement>((_, ref) => {
   return (
     <section
-      className="relative w-full min-h-screen py-16 md:py-24"
-      style={{
-        background: "linear-gradient(180deg, #0a0a0a 0%, #0d0d0d 50%, #080808 100%)",
-      }}
+      ref={ref}
+      className="relative w-full min-h-screen py-16 md:py-24 bg-zinc-950"
     >
-      <div
-        className="absolute top-0 left-0 right-0 h-[40%] pointer-events-none"
-        style={{
-          background: "radial-gradient(ellipse at 50% 0%, rgba(212, 160, 23, 0.08) 0%, transparent 60%)",
-        }}
-      />
+      <div className="absolute top-0 left-0 right-0 h-[400px] pointer-events-none bg-gradient-to-b from-zinc-900/50 to-transparent" />
 
       <div className="relative z-10 container mx-auto px-4">
         <h1
@@ -27,8 +21,8 @@ const Communities = () => {
         >
           UAE Communities
         </h1>
-        <p className="text-gray-400 text-lg mb-10 max-w-2xl" style={{ fontFamily: "Poppins, sans-serif" }}>
-          Explore Dubai's most prestigious communities and find your perfect home
+        <p className="text-zinc-400 text-lg mb-10 max-w-2xl" style={{ fontFamily: "Poppins, sans-serif" }}>
+          Explore the UAE's most prestigious communities and find your perfect home
         </p>
 
         <NavigationTabs />
@@ -36,6 +30,8 @@ const Communities = () => {
       </div>
     </section>
   );
-};
+});
+
+Communities.displayName = "Communities";
 
 export default Communities;

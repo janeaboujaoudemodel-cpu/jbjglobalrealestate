@@ -17,9 +17,9 @@ const ProjectCard = ({ project, showFavorite = true }: ProjectCardProps) => {
       {/* Premium Star Badge - Only shows for featured/premium properties */}
       {project.is_featured && (
         <div className="absolute top-3 left-3 z-10">
-          <div className="bg-gradient-to-r from-gold to-gold-dark text-gold-foreground text-xs font-bold px-3 py-1.5 rounded-full flex items-center gap-1.5 shadow-lg shadow-gold/20 border border-gold-light/20">
-            <Star className="w-3 h-3 fill-current" />
-            <span className="tracking-wide">PREMIUM</span>
+          <div className="bg-black/90 backdrop-blur-sm text-white text-xs font-bold px-3 py-1.5 rounded-full flex items-center gap-1.5 shadow-lg border border-gold/30">
+            <Star className="w-3 h-3 fill-gold text-gold" />
+            <span className="tracking-wide text-gold-light">PREMIUM</span>
           </div>
         </div>
       )}
