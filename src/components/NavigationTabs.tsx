@@ -40,22 +40,8 @@ const NavigationTabs = React.forwardRef<HTMLDivElement>((_, ref) => {
         By Community
       </Link>
       
-      {/* Search Developer Button - Only show when on communities page */}
-      {isCommunityActive && (
-        <Link to="/">
-          <Button
-            variant="outline"
-            className="px-6 py-3 h-auto rounded-full border-zinc-700 text-zinc-300 hover:bg-zinc-800 hover:text-white bg-transparent"
-            style={{ fontFamily: "Poppins, sans-serif" }}
-          >
-            <Search className="w-4 h-4 mr-2" />
-            Search Developer
-          </Button>
-        </Link>
-      )}
-
-      {/* Search Community Button - Only show when on developer page */}
-      {isDeveloperActive && (
+      {/* Search Button - Dynamic based on current view */}
+      {isDeveloperActive ? (
         <Link to="/communities">
           <Button
             variant="outline"
@@ -64,6 +50,17 @@ const NavigationTabs = React.forwardRef<HTMLDivElement>((_, ref) => {
           >
             <Search className="w-4 h-4 mr-2" />
             Search Community
+          </Button>
+        </Link>
+      ) : (
+        <Link to="/">
+          <Button
+            variant="outline"
+            className="px-6 py-3 h-auto rounded-full border-zinc-700 text-zinc-300 hover:bg-zinc-800 hover:text-white bg-transparent"
+            style={{ fontFamily: "Poppins, sans-serif" }}
+          >
+            <Search className="w-4 h-4 mr-2" />
+            Search Developer
           </Button>
         </Link>
       )}

@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import React, { useState, useEffect, forwardRef } from "react";
 import { useNavigate } from "react-router-dom";
 import { useAuth } from "@/contexts/AuthContext";
 import { Button } from "@/components/ui/button";
@@ -11,7 +11,7 @@ import { z } from "zod";
 const emailSchema = z.string().email("Please enter a valid email address");
 const passwordSchema = z.string().min(6, "Password must be at least 6 characters");
 
-const Auth = () => {
+const Auth = forwardRef<HTMLDivElement>((_, ref) => {
   const navigate = useNavigate();
   const { user, signIn, signUp, loading } = useAuth();
   const [isSignUp, setIsSignUp] = useState(false);
@@ -98,6 +98,7 @@ const Auth = () => {
 
   return (
     <div
+      ref={ref}
       className="min-h-screen flex items-center justify-center py-12 px-4"
       style={{
         background: "linear-gradient(180deg, #0a0a0a 0%, #0d0d0d 50%, #080808 100%)",
@@ -203,18 +204,23 @@ const Auth = () => {
             </button>
           </div>
 
-          <div className="mt-4 text-center">
+          <div className="mt-6 pt-6 border-t border-zinc-800">
             <button
               onClick={() => navigate("/")}
-              className="text-gray-500 hover:text-gray-300 text-sm"
+              className="w-full py-3 text-zinc-400 hover:text-white border border-zinc-700 rounded-xl hover:bg-zinc-800 transition-colors flex items-center justify-center gap-2"
             >
-              ← Back to home
+              Continue as Guest
             </button>
+            <p className="text-center text-zinc-600 text-xs mt-3">
+              You can save favorites and shortlist properties without an account
+            </p>
           </div>
         </div>
       </div>
     </div>
   );
-};
+});
+
+Auth.displayName = "Auth";
 
 export default Auth;

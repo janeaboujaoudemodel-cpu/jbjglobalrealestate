@@ -131,7 +131,8 @@ const Quiz = () => {
   });
 
   const currentQuestion = QUIZ_QUESTIONS[currentStep];
-  const progress = ((currentStep + 1) / QUIZ_QUESTIONS.length) * 100;
+  // Progress starts at 0 and fills as questions are answered
+  const progress = (currentStep / QUIZ_QUESTIONS.length) * 100;
 
   const handleSelectAll = () => {
     const allValues = currentQuestion.options.map(o => o.value);

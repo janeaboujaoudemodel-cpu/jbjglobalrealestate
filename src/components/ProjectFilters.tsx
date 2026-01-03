@@ -1,4 +1,4 @@
-import { useState } from "react";
+import React, { useState, forwardRef } from "react";
 import { Search, SlidersHorizontal, X, ChevronDown, MapPin, Building2, Eye, Sofa, Sparkles, Star } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -548,7 +548,7 @@ const ProjectFilters = ({
                         className={`px-4 py-2 rounded-full text-sm font-medium transition-all ${
                           (option.value === "all" && filters.handoverStatus === null) ||
                           filters.handoverStatus === option.value
-                            ? "bg-[#D4A017] text-black"
+                            ? "bg-white text-black"
                             : "bg-[#1a1a1a] text-gray-300 hover:bg-[#2a2a2a]"
                         }`}
                       >
@@ -576,7 +576,7 @@ const ProjectFilters = ({
                           (option.value === "all" && filters.bedroomsMin === null) ||
                           (option.value === "studio" && filters.bedroomsMin === 0) ||
                           filters.bedroomsMin === parseInt(option.value)
-                            ? "bg-[#D4A017] text-black"
+                            ? "bg-white text-black"
                             : "bg-[#1a1a1a] text-gray-300 hover:bg-[#2a2a2a]"
                         }`}
                       >
@@ -602,7 +602,7 @@ const ProjectFilters = ({
                         className={`px-4 py-2 rounded-full text-sm font-medium transition-all ${
                           (emirate.value === "all" && filters.emirate === null) ||
                           filters.emirate === emirate.value
-                            ? "bg-[#D4A017] text-black"
+                            ? "bg-white text-black"
                             : "bg-[#1a1a1a] text-gray-300 hover:bg-[#2a2a2a]"
                         }`}
                       >
@@ -620,7 +620,7 @@ const ProjectFilters = ({
                         onClick={() => updateFilter("trendingArea", null)}
                         className={`px-4 py-2 rounded-full text-sm font-medium transition-all ${
                           filters.trendingArea === null
-                            ? "bg-[#D4A017] text-black"
+                            ? "bg-white text-black"
                             : "bg-[#1a1a1a] text-gray-300 hover:bg-[#2a2a2a]"
                         }`}
                       >
@@ -637,7 +637,7 @@ const ProjectFilters = ({
                           }
                           className={`px-4 py-2 rounded-full text-sm font-medium transition-all ${
                             filters.trendingArea === area.slug
-                              ? "bg-[#D4A017] text-black"
+                              ? "bg-white text-black"
                               : "bg-[#1a1a1a] text-gray-300 hover:bg-[#2a2a2a]"
                           }`}
                         >
@@ -730,7 +730,7 @@ const ProjectFilters = ({
                         className={`px-4 py-2 rounded-full text-sm font-medium transition-all ${
                           (option.value === "all" && filters.furnishedStatus === null) ||
                           filters.furnishedStatus === option.value
-                            ? "bg-[#D4A017] text-black"
+                            ? "bg-white text-black"
                             : "bg-[#1a1a1a] text-gray-300 hover:bg-[#2a2a2a]"
                         }`}
                       >
@@ -747,7 +747,7 @@ const ProjectFilters = ({
                       onClick={() => updateFilter("views", [])}
                       className={`px-4 py-2 rounded-full text-sm font-medium transition-all ${
                         filters.views.length === 0
-                          ? "bg-[#D4A017] text-black"
+                          ? "bg-white text-black"
                           : "bg-[#1a1a1a] text-gray-300 hover:bg-[#2a2a2a]"
                       }`}
                     >
@@ -759,7 +759,7 @@ const ProjectFilters = ({
                         onClick={() => toggleArrayFilter("views", view)}
                         className={`px-4 py-2 rounded-full text-sm font-medium transition-all ${
                           filters.views.includes(view)
-                            ? "bg-[#D4A017] text-black"
+                            ? "bg-white text-black"
                             : "bg-[#1a1a1a] text-gray-300 hover:bg-[#2a2a2a]"
                         }`}
                       >
@@ -776,7 +776,7 @@ const ProjectFilters = ({
                       onClick={() => updateFilter("amenities", [])}
                       className={`px-4 py-2 rounded-full text-sm font-medium transition-all ${
                         filters.amenities.length === 0
-                          ? "bg-[#D4A017] text-black"
+                          ? "bg-white text-black"
                           : "bg-[#1a1a1a] text-gray-300 hover:bg-[#2a2a2a]"
                       }`}
                     >
@@ -788,7 +788,7 @@ const ProjectFilters = ({
                         onClick={() => toggleArrayFilter("amenities", amenity)}
                         className={`px-4 py-2 rounded-full text-sm font-medium transition-all ${
                           filters.amenities.includes(amenity)
-                            ? "bg-[#D4A017] text-black"
+                            ? "bg-white text-black"
                             : "bg-[#1a1a1a] text-gray-300 hover:bg-[#2a2a2a]"
                         }`}
                       >
@@ -805,7 +805,7 @@ const ProjectFilters = ({
                       onClick={() => updateFilter("facilities", [])}
                       className={`px-4 py-2 rounded-full text-sm font-medium transition-all ${
                         filters.facilities.length === 0
-                          ? "bg-[#D4A017] text-black"
+                          ? "bg-white text-black"
                           : "bg-[#1a1a1a] text-gray-300 hover:bg-[#2a2a2a]"
                       }`}
                     >
@@ -817,7 +817,7 @@ const ProjectFilters = ({
                         onClick={() => toggleArrayFilter("facilities", facility)}
                         className={`px-4 py-2 rounded-full text-sm font-medium transition-all ${
                           filters.facilities.includes(facility)
-                            ? "bg-[#D4A017] text-black"
+                            ? "bg-white text-black"
                             : "bg-[#1a1a1a] text-gray-300 hover:bg-[#2a2a2a]"
                         }`}
                       >
@@ -879,7 +879,7 @@ const ProjectFilters = ({
             <button
               className={`px-4 py-2 rounded-full text-sm font-medium transition-all flex items-center gap-1 ${
                 filters.priceMin > 0 || filters.priceMax < PRICE_MAX
-                  ? "bg-[#D4A017] text-black"
+                  ? "bg-white text-black"
                   : "bg-[#1a1a1a] text-gray-300 hover:bg-[#2a2a2a] border border-[#2a2a2a]"
               }`}
             >
@@ -916,7 +916,7 @@ const ProjectFilters = ({
             <button
               className={`px-4 py-2 rounded-full text-sm font-medium transition-all flex items-center gap-1 ${
                 filters.bedroomsMin !== null
-                  ? "bg-[#D4A017] text-black"
+                  ? "bg-white text-black"
                   : "bg-[#1a1a1a] text-gray-300 hover:bg-[#2a2a2a] border border-[#2a2a2a]"
               }`}
             >
@@ -941,7 +941,7 @@ const ProjectFilters = ({
                     (option.value === "all" && filters.bedroomsMin === null) ||
                     (option.value === "studio" && filters.bedroomsMin === 0) ||
                     filters.bedroomsMin === parseInt(option.value)
-                      ? "bg-[#D4A017] text-black"
+                      ? "bg-white text-black"
                       : "bg-[#0d0d0d] text-gray-300 hover:bg-[#2a2a2a]"
                   }`}
                 >
@@ -1097,16 +1097,13 @@ const FilterSection = ({
   </div>
 );
 
-const QuickFilterChip = ({
-  label,
-  active,
-  onClick,
-}: {
+const QuickFilterChip = forwardRef<HTMLButtonElement, {
   label: string;
   active: boolean;
   onClick: () => void;
-}) => (
+}>(({ label, active, onClick }, ref) => (
   <button
+    ref={ref}
     onClick={onClick}
     className={`px-4 py-2 rounded-full text-sm font-medium transition-all ${
       active
@@ -1116,7 +1113,9 @@ const QuickFilterChip = ({
   >
     {label}
   </button>
-);
+));
+
+QuickFilterChip.displayName = "QuickFilterChip";
 
 const FilterPill = ({
   label,
