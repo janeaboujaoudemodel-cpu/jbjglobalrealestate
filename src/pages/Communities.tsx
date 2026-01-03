@@ -1,7 +1,7 @@
 import NavigationTabs from "@/components/NavigationTabs";
-import DeveloperGrid from "@/components/DeveloperGrid";
+import CommunityGrid from "@/components/CommunityGrid";
 
-const Index = () => {
+const Communities = () => {
   return (
     <section
       className="relative w-full min-h-screen py-16 md:py-24"
@@ -25,17 +25,17 @@ const Index = () => {
             lineHeight: "1.1",
           }}
         >
-          UAE Real Estate
+          UAE Communities
         </h1>
         <p className="text-gray-400 text-lg mb-10 max-w-2xl" style={{ fontFamily: "Poppins, sans-serif" }}>
-          Discover premium properties from the UAE's top developers across exclusive communities
+          Explore Dubai's most prestigious communities and find your perfect home
         </p>
 
         <NavigationTabs />
-        <DeveloperGrid />
+        <CommunityGrid />
       </div>
     </section>
   );
 };
 
-export default Index;
+export default Communities;
