@@ -490,32 +490,19 @@ Best regards`);
               Share Your Shortlist
             </DialogTitle>
             <DialogDescription className="text-zinc-400">
-              Send your shortlisted properties to yourself or your consultant via email.
+              Send your shortlisted properties to yourself or our team for consultation
             </DialogDescription>
           </DialogHeader>
 
           <div className="space-y-4 mt-4">
-            <div>
-              <Label htmlFor="email" className="text-zinc-300">Recipient Email (optional)</Label>
-              <Input
-                id="email"
-                type="email"
-                placeholder="consultant@example.com"
-                value={shareEmail}
-                onChange={(e) => setShareEmail(e.target.value)}
-                className="mt-1 bg-zinc-800 border-zinc-700 text-white"
-              />
-              <p className="text-zinc-500 text-xs mt-1">Leave empty to compose in your email client</p>
-            </div>
-
             {shortlistedProjects && shortlistedProjects.length > 0 && (
-              <div className="bg-zinc-800 rounded-lg p-4 max-h-[200px] overflow-y-auto">
-                <p className="text-zinc-400 text-xs mb-2">Properties to share:</p>
+              <div className="bg-zinc-800 rounded-lg p-4 max-h-[150px] overflow-y-auto">
+                <p className="text-zinc-400 text-xs mb-2">Properties to share ({shortlistedProjects.length}/5):</p>
                 {shortlistedProjects.map((p, i) => {
                   const badge = getProjectBadge(p.id);
                   return (
                     <div key={p.id} className="flex items-center gap-2 text-sm py-1">
-                      <span className="text-zinc-500">{i + 1}.</span>
+                      <span className="text-gold">#{i + 1}</span>
                       {badge && (
                         <span className={`text-xs ${badge === 'top1' ? 'text-yellow-400' : badge === 'top2' ? 'text-gray-300' : 'text-amber-500'}`}>
                           {badge === 'top1' ? '🥇' : badge === 'top2' ? '🥈' : '🥉'}
@@ -528,22 +515,49 @@ Best regards`);
               </div>
             )}
 
-            <div className="flex gap-3 pt-2">
-              <Button
-                variant="outline"
-                onClick={() => setShareModalOpen(false)}
-                className="flex-1 border-zinc-700 text-zinc-300 hover:bg-zinc-800"
-              >
-                Cancel
-              </Button>
-              <Button
-                onClick={handleShareShortlist}
-                className="flex-1 bg-gradient-to-r from-gold to-gold-dark text-black hover:opacity-90"
-              >
-                <Mail className="w-4 h-4 mr-2" />
-                Share via Email
-              </Button>
+            {/* Option 1: Share to own email */}
+            <div>
+              <Label htmlFor="email" className="text-zinc-300">Share to your email</Label>
+              <div className="flex gap-2 mt-1">
+                <Input
+                  id="email"
+                  type="email"
+                  placeholder="your.email@example.com"
+                  value={shareEmail}
+                  onChange={(e) => setShareEmail(e.target.value)}
+                  className="bg-zinc-800 border-zinc-700 text-white"
+                />
+                <Button
+                  onClick={handleShareShortlist}
+                  variant="outline"
+                  className="border-zinc-700 text-zinc-300 hover:bg-zinc-800 shrink-0"
+                >
+                  <Mail className="w-4 h-4" />
+                </Button>
+              </div>
             </div>
+
+            <div className="flex items-center gap-4">
+              <div className="flex-1 h-px bg-zinc-800" />
+              <span className="text-zinc-500 text-xs">OR</span>
+              <div className="flex-1 h-px bg-zinc-800" />
+            </div>
+
+            {/* Option 2: Share to company */}
+            <Button
+              onClick={() => {
+                setShareEmail("invest@jjglobalcapital.com");
+                handleShareShortlist();
+              }}
+              className="w-full bg-gradient-to-r from-gold to-gold-dark text-black hover:opacity-90"
+            >
+              <Users className="w-4 h-4 mr-2" />
+              Send to JJ Global Capital Team
+            </Button>
+
+            <p className="text-zinc-500 text-xs text-center">
+              Our property consultants will contact you within 24 hours to discuss your selection
+            </p>
           </div>
         </DialogContent>
       </Dialog>

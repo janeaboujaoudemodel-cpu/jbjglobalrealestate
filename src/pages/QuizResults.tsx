@@ -1,14 +1,34 @@
+import { useState } from "react";
 import { Link, useSearchParams } from "react-router-dom";
 import { useQuery } from "@tanstack/react-query";
 import { supabase } from "@/integrations/supabase/client";
-import { Sparkles, ArrowRight, Heart, RefreshCw } from "lucide-react";
+import { Sparkles, ArrowRight, RefreshCw, Download, Award, Share2, Users, X, Mail } from "lucide-react";
 import { Button } from "@/components/ui/button";
+import { Badge } from "@/components/ui/badge";
 import ProjectCard from "@/components/ProjectCard";
 import FavoriteButton from "@/components/FavoriteButton";
+import { toast } from "sonner";
+import {
+  Dialog,
+  DialogContent,
+  DialogHeader,
+  DialogTitle,
+  DialogDescription,
+} from "@/components/ui/dialog";
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuTrigger,
+} from "@/components/ui/dropdown-menu";
+
+const INQUIRY_FORM_URL = "https://jjglobalcapital.com/form/property-investment-inquiry-form/";
 
 const QuizResults = () => {
   const [searchParams] = useSearchParams();
   const projectSlugs = searchParams.get("projects")?.split(",") || [];
+  const [badges, setBadges] = useState<Record<string, 'top1' | 'top2' | 'top3' | null>>({});
+  const [shareModalOpen, setShareModalOpen] = useState(false);
 
   const { data: projects, isLoading } = useQuery({
     queryKey: ["quiz-results", projectSlugs],
@@ -18,7 +38,7 @@ const QuizResults = () => {
         .from("projects")
         .select(`
           *,
-          developer:developers(id, name, slug),
+          developer:developers(id, name, slug, description),
           images:project_images(id, image_url, alt_text, display_order),
           community:communities(id, name, slug),
           documents:project_documents(id, file_url, file_name, document_type)
@@ -35,11 +55,160 @@ const QuizResults = () => {
     enabled: projectSlugs.length > 0,
   });
 
+  const handleSetBadge = (projectId: string, badge: 'top1' | 'top2' | 'top3' | null) => {
+    setBadges(prev => ({ ...prev, [projectId]: badge }));
+  };
+
+  const badgeLabels = {
+    top1: { label: "Top 1", color: "bg-gradient-to-r from-yellow-400 to-yellow-600", emoji: "🥇" },
+    top2: { label: "Top 2", color: "bg-gradient-to-r from-gray-300 to-gray-400", emoji: "🥈" },
+    top3: { label: "Top 3", color: "bg-gradient-to-r from-amber-600 to-amber-700", emoji: "🥉" },
+  };
+
+  const handleDownloadReport = () => {
+    if (!projects?.length) return;
+
+    // Create HTML report
+    const reportHTML = `
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="UTF-8">
+  <title>JJ Global Capital - AI Property Recommendations</title>
+  <style>
+    body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; margin: 0; padding: 40px; background: #0a0a0a; color: #fff; }
+    .header { text-align: center; margin-bottom: 40px; border-bottom: 2px solid #A8925A; padding-bottom: 30px; }
+    .logo { font-size: 24px; font-weight: bold; margin-bottom: 10px; }
+    .logo span { color: #A8925A; }
+    .title { font-size: 32px; margin: 20px 0 10px; }
+    .subtitle { color: #888; font-size: 16px; }
+    .badge { display: inline-block; padding: 4px 12px; border-radius: 20px; font-size: 12px; font-weight: bold; margin-right: 8px; }
+    .badge-gold { background: linear-gradient(to right, #fbbf24, #d97706); color: #000; }
+    .badge-silver { background: linear-gradient(to right, #d1d5db, #9ca3af); color: #000; }
+    .badge-bronze { background: linear-gradient(to right, #d97706, #b45309); color: #fff; }
+    .project { background: #18181b; border-radius: 16px; padding: 24px; margin-bottom: 24px; border: 1px solid #27272a; }
+    .project-header { display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 16px; }
+    .project-name { font-size: 20px; font-weight: bold; margin-bottom: 4px; }
+    .developer { color: #A8925A; font-size: 14px; }
+    .rank { font-size: 28px; font-weight: bold; color: #A8925A; }
+    .details { display: grid; grid-template-columns: repeat(3, 1fr); gap: 16px; margin-top: 16px; }
+    .detail-item { background: #27272a; padding: 12px; border-radius: 8px; }
+    .detail-label { color: #71717a; font-size: 12px; margin-bottom: 4px; }
+    .detail-value { font-size: 14px; font-weight: 500; }
+    .footer { text-align: center; margin-top: 40px; padding-top: 30px; border-top: 1px solid #27272a; color: #71717a; }
+    .exclusive { background: linear-gradient(to right, rgba(168,146,90,0.2), rgba(168,146,90,0.1)); border: 1px solid rgba(168,146,90,0.3); padding: 12px 20px; border-radius: 8px; text-align: center; margin-bottom: 30px; }
+    .exclusive span { color: #A8925A; }
+  </style>
+</head>
+<body>
+  <div class="header">
+    <div class="logo"><span>J | J</span> GLOBAL CAPITAL</div>
+    <h1 class="title">Your AI Property Recommendations</h1>
+    <p class="subtitle">Personalized selection based on your preferences</p>
+  </div>
+
+  <div class="exclusive">
+    <span>★</span> Exclusive AI-Powered Property Matching — #1 in the World <span>★</span>
+  </div>
+
+  ${projects.map((project, index) => {
+    const badge = badges[project.id];
+    return `
+    <div class="project">
+      <div class="project-header">
+        <div>
+          ${badge ? `<span class="badge badge-${badge === 'top1' ? 'gold' : badge === 'top2' ? 'silver' : 'bronze'}">${badgeLabels[badge].emoji} ${badgeLabels[badge].label}</span>` : ''}
+          <h2 class="project-name">${project.name}</h2>
+          <p class="developer">${project.developer?.name || 'Developer'}</p>
+        </div>
+        <div class="rank">#${index + 1}</div>
+      </div>
+      <div class="details">
+        <div class="detail-item">
+          <div class="detail-label">Location</div>
+          <div class="detail-value">${project.location || 'N/A'}, ${project.emirate || 'UAE'}</div>
+        </div>
+        <div class="detail-item">
+          <div class="detail-label">Price From</div>
+          <div class="detail-value">AED ${((project.price_from || 0) / 1000000).toFixed(1)}M</div>
+        </div>
+        <div class="detail-item">
+          <div class="detail-label">Bedrooms</div>
+          <div class="detail-value">${project.bedrooms_min || 0} - ${project.bedrooms_max || 0} BR</div>
+        </div>
+        <div class="detail-item">
+          <div class="detail-label">Handover</div>
+          <div class="detail-value">${project.handover_date || 'TBA'}</div>
+        </div>
+        <div class="detail-item">
+          <div class="detail-label">Size Range</div>
+          <div class="detail-value">${project.size_min?.toLocaleString() || 'N/A'} - ${project.size_max?.toLocaleString() || 'N/A'} sqft</div>
+        </div>
+        <div class="detail-item">
+          <div class="detail-label">Payment Plan</div>
+          <div class="detail-value">${project.payment_plan || 'Contact Us'}</div>
+        </div>
+      </div>
+      ${project.developer?.description ? `<p style="color: #a1a1aa; font-size: 13px; margin-top: 16px; line-height: 1.6;">${project.developer.description.substring(0, 200)}...</p>` : ''}
+    </div>
+    `;
+  }).join('')}
+
+  <div class="footer">
+    <p>Generated by JJ Global Capital AI Property Matcher</p>
+    <p>Contact: invest@jjglobalcapital.com | www.jjglobalcapital.com</p>
+  </div>
+</body>
+</html>
+    `;
+
+    const blob = new Blob([reportHTML], { type: 'text/html' });
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement('a');
+    a.href = url;
+    a.download = 'JJ-Global-Capital-AI-Recommendations.html';
+    document.body.appendChild(a);
+    a.click();
+    document.body.removeChild(a);
+    URL.revokeObjectURL(url);
+    toast.success("Report downloaded!");
+  };
+
+  const handleShareToCompany = () => {
+    if (!projects?.length) return;
+
+    const projectList = projects.map((p, i) => {
+      const badge = badges[p.id];
+      const badgeStr = badge ? ` [${badgeLabels[badge].emoji} ${badgeLabels[badge].label}]` : '';
+      return `${i + 1}. ${p.name}${badgeStr}
+   Developer: ${p.developer?.name || 'N/A'}
+   Location: ${p.location}, ${p.emirate}
+   Price: AED ${((p.price_from || 0) / 1000000).toFixed(1)}M - ${((p.price_to || 0) / 1000000).toFixed(1)}M
+   Bedrooms: ${p.bedrooms_min} - ${p.bedrooms_max} BR
+   Handover: ${p.handover_date || 'TBA'}`;
+    }).join('\n\n');
+
+    const subject = encodeURIComponent("AI Property Recommendations - Request for Consultation");
+    const body = encodeURIComponent(`Dear JJ Global Capital Team,
+
+I have completed the AI Property Assessment and would like to request a consultation regarding the following recommendations:
+
+${projectList}
+
+Please contact me to discuss these options further.
+
+Best regards`);
+
+    window.location.href = `mailto:invest@jjglobalcapital.com?subject=${subject}&body=${body}`;
+    setShareModalOpen(false);
+    toast.success("Opening email client...");
+  };
+
   if (isLoading) {
     return (
       <section className="min-h-screen bg-zinc-950 flex items-center justify-center">
         <div className="text-center">
-          <Sparkles className="w-12 h-12 text-violet-500 mx-auto mb-4 animate-pulse" />
+          <Sparkles className="w-12 h-12 text-gold mx-auto mb-4 animate-pulse" />
           <p className="text-white text-xl">Finding your perfect matches...</p>
         </div>
       </section>
@@ -51,27 +220,52 @@ const QuizResults = () => {
       <div className="container mx-auto px-4">
         {/* Header */}
         <div className="text-center mb-12">
-          <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-gradient-to-r from-violet-500/20 to-fuchsia-500/20 border border-violet-500/30 mb-6">
-            <Sparkles className="w-4 h-4 text-violet-400" />
-            <span className="text-violet-300 text-sm font-medium">AI-Powered Recommendations</span>
+          <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-gradient-to-r from-gold/20 to-gold-dark/20 border border-gold/30 mb-6">
+            <Sparkles className="w-4 h-4 text-gold" />
+            <span className="text-gold text-sm font-medium">#1 AI Property Matcher — Exclusive to JJ Global Capital</span>
           </div>
           
           <h1 className="text-white text-4xl md:text-5xl font-bold mb-4">
-            Your Perfect Matches
+            Your AI-Selected Properties
           </h1>
-          <p className="text-zinc-400 text-lg max-w-2xl mx-auto">
-            Based on your preferences, we've found these properties that best match your criteria
+          <p className="text-zinc-400 text-lg max-w-2xl mx-auto mb-6">
+            Based on your preferences, our AI has selected these properties that best match your criteria
           </p>
+
+          {/* Action Buttons */}
+          <div className="flex flex-wrap items-center justify-center gap-3">
+            <Button
+              onClick={handleDownloadReport}
+              variant="outline"
+              className="border-gold/50 text-gold hover:bg-gold/10"
+            >
+              <Download className="w-4 h-4 mr-2" />
+              Download Report
+            </Button>
+            <Button
+              onClick={() => setShareModalOpen(true)}
+              className="bg-gradient-to-r from-gold to-gold-dark text-black hover:opacity-90"
+            >
+              <Share2 className="w-4 h-4 mr-2" />
+              Share with Consultant
+            </Button>
+          </div>
         </div>
 
         {/* Top Recommendation */}
         {projects && projects.length > 0 && (
           <div className="mb-12">
             <div className="relative bg-gradient-to-br from-zinc-900 to-zinc-950 rounded-3xl overflow-hidden border border-zinc-800">
-              <div className="absolute top-4 left-4 z-10">
-                <div className="bg-gradient-to-r from-violet-600 to-fuchsia-600 text-white text-sm font-semibold px-4 py-1.5 rounded-full">
+              <div className="absolute top-4 left-4 z-10 flex items-center gap-2">
+                <div className="bg-gradient-to-r from-gold to-gold-dark text-black text-sm font-semibold px-4 py-1.5 rounded-full">
                   #1 Best Match
                 </div>
+                {badges[projects[0].id] && (
+                  <Badge className={`${badgeLabels[badges[projects[0].id]!].color} text-white font-semibold px-3 py-1`}>
+                    <Award className="w-3 h-3 mr-1" />
+                    {badgeLabels[badges[projects[0].id]!].label}
+                  </Badge>
+                )}
               </div>
               <div className="absolute top-4 right-4 z-10">
                 <FavoriteButton projectId={projects[0].id} size="lg" />
@@ -91,7 +285,7 @@ const QuizResults = () => {
                   <h2 className="text-white text-3xl font-bold mb-3">{projects[0].name}</h2>
                   <p className="text-zinc-400 mb-6">{projects[0].location}, {projects[0].emirate}</p>
                   
-                  <div className="grid grid-cols-2 gap-4 mb-8">
+                  <div className="grid grid-cols-2 gap-4 mb-6">
                     <div className="bg-zinc-800/50 rounded-xl p-4">
                       <p className="text-zinc-500 text-sm">Price From</p>
                       <p className="text-white text-xl font-semibold">
@@ -104,6 +298,34 @@ const QuizResults = () => {
                         {projects[0].bedrooms_min} - {projects[0].bedrooms_max} BR
                       </p>
                     </div>
+                  </div>
+
+                  {/* Badge Assignment for #1 */}
+                  <div className="flex items-center gap-3 mb-6">
+                    <DropdownMenu>
+                      <DropdownMenuTrigger asChild>
+                        <Button variant="outline" size="sm" className="border-zinc-700 text-zinc-400 hover:bg-zinc-800">
+                          <Award className="w-4 h-4 mr-2" />
+                          {badges[projects[0].id] ? 'Change Badge' : 'Add Badge'}
+                        </Button>
+                      </DropdownMenuTrigger>
+                      <DropdownMenuContent className="bg-zinc-900 border-zinc-800">
+                        <DropdownMenuItem onClick={() => handleSetBadge(projects[0].id, 'top1')} className="text-yellow-400 hover:bg-zinc-800">
+                          🥇 Top 1 (Gold)
+                        </DropdownMenuItem>
+                        <DropdownMenuItem onClick={() => handleSetBadge(projects[0].id, 'top2')} className="text-gray-300 hover:bg-zinc-800">
+                          🥈 Top 2 (Silver)
+                        </DropdownMenuItem>
+                        <DropdownMenuItem onClick={() => handleSetBadge(projects[0].id, 'top3')} className="text-amber-500 hover:bg-zinc-800">
+                          🥉 Top 3 (Bronze)
+                        </DropdownMenuItem>
+                        {badges[projects[0].id] && (
+                          <DropdownMenuItem onClick={() => handleSetBadge(projects[0].id, null)} className="text-zinc-400 hover:bg-zinc-800">
+                            <X className="w-4 h-4 mr-2" /> Remove Badge
+                          </DropdownMenuItem>
+                        )}
+                      </DropdownMenuContent>
+                    </DropdownMenu>
                   </div>
                   
                   <Link to={`/project/${projects[0].slug}`}>
@@ -120,26 +342,110 @@ const QuizResults = () => {
 
         {/* Other Recommendations */}
         {projects && projects.length > 1 && (
-          <div>
+          <div className="mb-12">
             <h3 className="text-white text-xl font-semibold mb-6">More Great Options</h3>
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
-              {projects.slice(1).map((project, index) => (
-                <div key={project.id} className="relative group">
-                  <div className="absolute -top-2 -left-2 z-10 w-8 h-8 bg-zinc-800 rounded-full flex items-center justify-center border border-zinc-700">
-                    <span className="text-white text-sm font-bold">#{index + 2}</span>
+              {projects.slice(1).map((project, index) => {
+                const badge = badges[project.id];
+                return (
+                  <div key={project.id} className="relative group">
+                    <div className="absolute -top-2 -left-2 z-10 w-8 h-8 bg-zinc-800 rounded-full flex items-center justify-center border border-zinc-700">
+                      <span className="text-white text-sm font-bold">#{index + 2}</span>
+                    </div>
+                    {badge && (
+                      <div className="absolute top-2 left-8 z-10">
+                        <Badge className={`${badgeLabels[badge].color} text-white font-semibold px-2 py-0.5 text-xs`}>
+                          {badgeLabels[badge].emoji}
+                        </Badge>
+                      </div>
+                    )}
+                    <div className="absolute top-3 right-3 z-10 opacity-0 group-hover:opacity-100 transition-opacity">
+                      <FavoriteButton projectId={project.id} size="sm" showShortlist={false} />
+                    </div>
+                    <ProjectCard project={project} />
+                    {/* Badge Assignment */}
+                    <div className="mt-2">
+                      <DropdownMenu>
+                        <DropdownMenuTrigger asChild>
+                          <Button variant="outline" size="sm" className="w-full border-zinc-700 text-zinc-400 hover:bg-zinc-800 text-xs">
+                            <Award className="w-3 h-3 mr-1" />
+                            {badge ? 'Change Badge' : 'Add Badge'}
+                          </Button>
+                        </DropdownMenuTrigger>
+                        <DropdownMenuContent className="bg-zinc-900 border-zinc-800">
+                          <DropdownMenuItem onClick={() => handleSetBadge(project.id, 'top1')} className="text-yellow-400 hover:bg-zinc-800">
+                            🥇 Top 1
+                          </DropdownMenuItem>
+                          <DropdownMenuItem onClick={() => handleSetBadge(project.id, 'top2')} className="text-gray-300 hover:bg-zinc-800">
+                            🥈 Top 2
+                          </DropdownMenuItem>
+                          <DropdownMenuItem onClick={() => handleSetBadge(project.id, 'top3')} className="text-amber-500 hover:bg-zinc-800">
+                            🥉 Top 3
+                          </DropdownMenuItem>
+                          {badge && (
+                            <DropdownMenuItem onClick={() => handleSetBadge(project.id, null)} className="text-zinc-400 hover:bg-zinc-800">
+                              <X className="w-3 h-3 mr-1" /> Remove
+                            </DropdownMenuItem>
+                          )}
+                        </DropdownMenuContent>
+                      </DropdownMenu>
+                    </div>
                   </div>
-                  <div className="absolute top-3 right-3 z-10 opacity-0 group-hover:opacity-100 transition-opacity">
-                    <FavoriteButton projectId={project.id} size="sm" showShortlist={false} />
-                  </div>
-                  <ProjectCard project={project} />
-                </div>
-              ))}
+                );
+              })}
             </div>
           </div>
         )}
 
+        {/* Action Cards */}
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-12">
+          {/* AI Comparison Card */}
+          <div className="bg-zinc-900 rounded-2xl p-6 border border-zinc-800">
+            <div className="flex items-center gap-3 mb-4">
+              <div className="w-12 h-12 rounded-full bg-gradient-to-br from-violet-500 to-fuchsia-500 flex items-center justify-center">
+                <Sparkles className="w-6 h-6 text-white" />
+              </div>
+              <div>
+                <h3 className="text-white font-semibold">AI Comparison</h3>
+                <p className="text-zinc-500 text-sm">Instant analysis</p>
+              </div>
+            </div>
+            <p className="text-zinc-400 text-sm mb-4">
+              Generate an AI-powered comparison table with star ratings, price analysis, and recommendations.
+            </p>
+            <Link to="/compare">
+              <Button className="w-full bg-gradient-to-r from-violet-600 to-fuchsia-600 hover:from-violet-500 hover:to-fuchsia-500 text-white">
+                Compare with AI
+                <ArrowRight className="w-4 h-4 ml-2" />
+              </Button>
+            </Link>
+          </div>
+
+          {/* Professional Evaluation Card */}
+          <div className="bg-zinc-900 rounded-2xl p-6 border border-zinc-800">
+            <div className="flex items-center gap-3 mb-4">
+              <div className="w-12 h-12 rounded-full bg-gradient-to-br from-gold to-gold-dark flex items-center justify-center">
+                <Users className="w-6 h-6 text-black" />
+              </div>
+              <div>
+                <h3 className="text-white font-semibold">Property Consultant</h3>
+                <p className="text-zinc-500 text-sm">Expert consultation</p>
+              </div>
+            </div>
+            <p className="text-zinc-400 text-sm mb-4">
+              Request a personalized evaluation from our property consultants with detailed market insights.
+            </p>
+            <a href={INQUIRY_FORM_URL} target="_blank" rel="noopener noreferrer">
+              <Button className="w-full bg-gradient-to-r from-gold to-gold-dark text-black hover:opacity-90">
+                Request Evaluation
+                <ArrowRight className="w-4 h-4 ml-2" />
+              </Button>
+            </a>
+          </div>
+        </div>
+
         {/* Actions */}
-        <div className="mt-16 text-center">
+        <div className="text-center">
           <div className="flex flex-col sm:flex-row items-center justify-center gap-4">
             <Link to="/quiz">
               <Button variant="outline" className="border-zinc-700 text-zinc-300 hover:bg-zinc-800">
@@ -156,6 +462,49 @@ const QuizResults = () => {
           </div>
         </div>
       </div>
+
+      {/* Share Modal */}
+      <Dialog open={shareModalOpen} onOpenChange={setShareModalOpen}>
+        <DialogContent className="bg-zinc-900 border-zinc-800 text-white">
+          <DialogHeader>
+            <DialogTitle className="flex items-center gap-2">
+              <Share2 className="w-5 h-5 text-gold" />
+              Share Your Results
+            </DialogTitle>
+            <DialogDescription className="text-zinc-400">
+              Send your AI recommendations to our team for a personalized consultation
+            </DialogDescription>
+          </DialogHeader>
+
+          <div className="space-y-4 mt-4">
+            <div className="bg-zinc-800 rounded-lg p-4">
+              <p className="text-zinc-400 text-xs mb-3">Properties to share:</p>
+              {projects?.map((p, i) => {
+                const badge = badges[p.id];
+                return (
+                  <div key={p.id} className="flex items-center gap-2 text-sm py-1">
+                    <span className="text-gold">#{i + 1}</span>
+                    {badge && <span>{badgeLabels[badge].emoji}</span>}
+                    <span className="text-white">{p.name}</span>
+                  </div>
+                );
+              })}
+            </div>
+
+            <Button
+              onClick={handleShareToCompany}
+              className="w-full bg-gradient-to-r from-gold to-gold-dark text-black hover:opacity-90"
+            >
+              <Mail className="w-4 h-4 mr-2" />
+              Send to invest@jjglobalcapital.com
+            </Button>
+
+            <p className="text-zinc-500 text-xs text-center">
+              Our property consultants will contact you within 24 hours
+            </p>
+          </div>
+        </DialogContent>
+      </Dialog>
     </section>
   );
 };

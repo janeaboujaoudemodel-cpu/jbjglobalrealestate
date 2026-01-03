@@ -30,7 +30,7 @@ const INQUIRY_FORM_URL = "https://jjglobalcapital.com/form/property-investment-i
 const JJLogo = ({ className = "" }: { className?: string }) => (
   <span className={`font-bold tracking-wide ${className}`} style={{ fontFamily: "Poppins, sans-serif" }}>
     <span className="text-gold">J</span>
-    <span className="text-zinc-500 mx-1">|</span>
+    <span className="text-gold mx-1">|</span>
     <span className="text-gold">J</span>
     <span className="text-white ml-2">GLOBAL CAPITAL</span>
   </span>
@@ -67,7 +67,7 @@ const GlobalHeader = () => {
   const isActive = (path: string) => location.pathname === path;
 
   return (
-    <header className="fixed top-0 left-0 right-0 z-50 bg-black border-b border-zinc-800/50">
+    <header className="fixed top-0 left-0 right-0 z-50 bg-black">
       <div className="container mx-auto px-4">
         <div className="flex items-center justify-between h-16">
           {/* Logo */}
