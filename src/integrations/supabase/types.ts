@@ -95,6 +95,71 @@ export type Database = {
         }
         Relationships: []
       }
+      evaluation_requests: {
+        Row: {
+          ai_comparison: string | null
+          created_at: string
+          id: string
+          project_ids: string[]
+          status: string
+          user_email: string
+          user_id: string | null
+          user_name: string | null
+          user_phone: string | null
+        }
+        Insert: {
+          ai_comparison?: string | null
+          created_at?: string
+          id?: string
+          project_ids: string[]
+          status?: string
+          user_email: string
+          user_id?: string | null
+          user_name?: string | null
+          user_phone?: string | null
+        }
+        Update: {
+          ai_comparison?: string | null
+          created_at?: string
+          id?: string
+          project_ids?: string[]
+          status?: string
+          user_email?: string
+          user_id?: string | null
+          user_name?: string | null
+          user_phone?: string | null
+        }
+        Relationships: []
+      }
+      favorites: {
+        Row: {
+          created_at: string
+          id: string
+          project_id: string
+          user_id: string
+        }
+        Insert: {
+          created_at?: string
+          id?: string
+          project_id: string
+          user_id: string
+        }
+        Update: {
+          created_at?: string
+          id?: string
+          project_id?: string
+          user_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "favorites_project_id_fkey"
+            columns: ["project_id"]
+            isOneToOne: false
+            referencedRelation: "projects"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       profiles: {
         Row: {
           created_at: string
@@ -290,6 +355,62 @@ export type Database = {
             columns: ["developer_id"]
             isOneToOne: false
             referencedRelation: "developers"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      quiz_responses: {
+        Row: {
+          answers: Json
+          created_at: string
+          id: string
+          recommended_project_ids: string[] | null
+          session_id: string
+          user_id: string | null
+        }
+        Insert: {
+          answers: Json
+          created_at?: string
+          id?: string
+          recommended_project_ids?: string[] | null
+          session_id: string
+          user_id?: string | null
+        }
+        Update: {
+          answers?: Json
+          created_at?: string
+          id?: string
+          recommended_project_ids?: string[] | null
+          session_id?: string
+          user_id?: string | null
+        }
+        Relationships: []
+      }
+      shortlists: {
+        Row: {
+          created_at: string
+          id: string
+          project_id: string
+          user_id: string
+        }
+        Insert: {
+          created_at?: string
+          id?: string
+          project_id: string
+          user_id: string
+        }
+        Update: {
+          created_at?: string
+          id?: string
+          project_id?: string
+          user_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "shortlists_project_id_fkey"
+            columns: ["project_id"]
+            isOneToOne: false
+            referencedRelation: "projects"
             referencedColumns: ["id"]
           },
         ]
