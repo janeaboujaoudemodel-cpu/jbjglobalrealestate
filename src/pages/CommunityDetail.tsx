@@ -19,16 +19,11 @@ const CommunityDetail = () => {
 
   if (loadingCommunity) {
     return (
-      <section
-        className="relative w-full min-h-screen py-16 md:py-24"
-        style={{
-          background: "linear-gradient(180deg, #0a0a0a 0%, #0d0d0d 50%, #080808 100%)",
-        }}
-      >
+      <section className="relative w-full min-h-screen py-16 md:py-24 bg-zinc-950">
         <div className="container mx-auto px-4">
-          <Skeleton className="h-64 w-full rounded-lg bg-[#1a1a1a] mb-8" />
-          <Skeleton className="h-12 w-64 bg-[#1a1a1a] mb-4" />
-          <Skeleton className="h-6 w-96 bg-[#1a1a1a]" />
+          <Skeleton className="h-64 w-full rounded-lg bg-zinc-800 mb-8" />
+          <Skeleton className="h-12 w-64 bg-zinc-800 mb-4" />
+          <Skeleton className="h-6 w-96 bg-zinc-800" />
         </div>
       </section>
     );
@@ -36,15 +31,10 @@ const CommunityDetail = () => {
 
   if (!community) {
     return (
-      <section
-        className="relative w-full min-h-screen py-16 md:py-24 flex items-center justify-center"
-        style={{
-          background: "linear-gradient(180deg, #0a0a0a 0%, #0d0d0d 50%, #080808 100%)",
-        }}
-      >
+      <section className="relative w-full min-h-screen py-16 md:py-24 flex items-center justify-center bg-zinc-950">
         <div className="text-center">
           <h1 className="text-white text-2xl mb-4">Community not found</h1>
-          <Link to="/communities" className="text-[#D4A017] hover:underline">
+          <Link to="/communities" className="text-gold hover:underline">
             Back to Communities
           </Link>
         </div>
@@ -66,12 +56,7 @@ const CommunityDetail = () => {
     filters.facilities.length > 0;
 
   return (
-    <section
-      className="relative w-full min-h-screen"
-      style={{
-        background: "linear-gradient(180deg, #0a0a0a 0%, #0d0d0d 50%, #080808 100%)",
-      }}
-    >
+    <section className="relative w-full min-h-screen bg-zinc-950">
       {/* Hero Image */}
       <div className="relative h-[40vh] md:h-[50vh]">
         <img
@@ -79,7 +64,7 @@ const CommunityDetail = () => {
           alt={community.name}
           className="w-full h-full object-cover"
         />
-        <div className="absolute inset-0 bg-gradient-to-t from-[#0a0a0a] via-black/50 to-transparent" />
+        <div className="absolute inset-0 bg-gradient-to-t from-zinc-950 via-black/50 to-transparent" />
         
         <Link
           to="/communities"
@@ -103,7 +88,7 @@ const CommunityDetail = () => {
           {community.name}
         </h1>
         {community.location && (
-          <p className="text-[#D4A017] text-lg mb-4" style={{ fontFamily: "Poppins, sans-serif" }}>
+          <p className="text-gold text-lg mb-4" style={{ fontFamily: "Poppins, sans-serif" }}>
             {community.location}
           </p>
         )}
@@ -140,7 +125,7 @@ const CommunityDetail = () => {
         {loadingProjects ? (
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
             {[...Array(4)].map((_, i) => (
-              <Skeleton key={i} className="aspect-[4/3] rounded-lg bg-[#1a1a1a]" />
+              <Skeleton key={i} className="aspect-[4/3] rounded-lg bg-zinc-800" />
             ))}
           </div>
         ) : filteredProjects.length > 0 ? (
@@ -150,7 +135,7 @@ const CommunityDetail = () => {
             ))}
           </div>
         ) : (
-          <div className="text-center py-12 bg-[#1a1a1a] rounded-lg">
+          <div className="text-center py-12 bg-zinc-900 rounded-lg">
             <p className="text-gray-400 mb-2">
               {hasFiltersApplied
                 ? "No projects match your filters"
@@ -159,7 +144,7 @@ const CommunityDetail = () => {
             {hasFiltersApplied && (
               <button
                 onClick={() => setFilters(defaultFilters)}
-                className="text-[#D4A017] hover:underline"
+                className="text-gold hover:underline"
               >
                 Clear all filters
               </button>
