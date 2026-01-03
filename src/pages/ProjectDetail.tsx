@@ -96,7 +96,7 @@ const ProjectDetail = () => {
           {/* Main Content */}
           <div className="lg:col-span-2 space-y-8">
             {/* Image Carousel */}
-            <ImageCarousel images={project.images || []} />
+            <ImageCarousel images={project.images || []} projectName={project.name} />
 
             {/* Project Title & Description */}
             <div>

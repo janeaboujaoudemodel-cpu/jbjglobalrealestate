@@ -6,6 +6,8 @@ export const defaultFilters: FilterState = {
   search: "",
   priceMin: 0,
   priceMax: 500000000,
+  sizeMin: 0,
+  sizeMax: 50000,
   bedroomsMin: null,
   bedroomsMax: null,
   communityId: null,
@@ -19,6 +21,9 @@ export const defaultFilters: FilterState = {
   facilities: [],
   sortBy: null,
   premiumOnly: false,
+  currency: 'AED',
+  sizeUnit: 'sqft',
+  language: 'en',
 };
 
 // Get handover year from string
@@ -62,6 +67,15 @@ export function useFilteredProjects(
       if (project.price_from) {
         if (project.price_from < filters.priceMin) return false;
         if (project.price_from > filters.priceMax) return false;
+      }
+
+      // Size range filter
+      if (filters.sizeMin > 0 || filters.sizeMax < 50000) {
+        const projectSize = project.size_min || project.size_max;
+        if (projectSize) {
+          if (projectSize < filters.sizeMin) return false;
+          if (projectSize > filters.sizeMax) return false;
+        }
       }
 
       // Bedrooms filter
