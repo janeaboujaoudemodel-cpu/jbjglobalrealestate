@@ -1,8 +1,8 @@
 import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { Button } from "@/components/ui/button";
-import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogDescription } from "@/components/ui/dialog";
-import { User, UserCheck, ArrowRight, Heart, ListPlus } from "lucide-react";
+import { Dialog, DialogContent } from "@/components/ui/dialog";
+import { User, ArrowRight, Heart, ListPlus, Sparkles, Crown } from "lucide-react";
 
 const WELCOME_MODAL_KEY = "jj_welcome_shown";
 const RETURNING_USER_KEY = "jj_returning_user";
@@ -52,65 +52,104 @@ const WelcomeModal = () => {
       if (!open) handleClose();
       setIsOpen(open);
     }}>
-      <DialogContent className="bg-zinc-950 border-zinc-800 text-white max-w-md">
-        <DialogHeader className="text-center pb-2">
-          <div className="mx-auto w-16 h-16 rounded-full bg-gradient-to-br from-gold to-gold-dark flex items-center justify-center mb-4">
-            <User className="w-8 h-8 text-black" />
-          </div>
-          <DialogTitle className="text-2xl font-semibold" style={{ fontFamily: "Poppins, sans-serif" }}>
-            {isReturningUser ? "Welcome Back!" : "Welcome to JJ Global Capital"}
-          </DialogTitle>
-          <DialogDescription className="text-zinc-400 text-base">
-            {isReturningUser 
-              ? "Great to see you again. Continue exploring premium properties."
-              : "Discover premium real estate opportunities across the UAE"
-            }
-          </DialogDescription>
-        </DialogHeader>
-
-        {/* Feature Guide */}
-        <div className="bg-zinc-900 rounded-lg p-4 border border-zinc-800 mb-4">
-          <p className="text-zinc-300 text-sm font-medium mb-3">Save your favorite properties:</p>
-          <div className="space-y-2">
-            <div className="flex items-center gap-3">
-              <div className="w-8 h-8 rounded-full bg-black/60 border border-white/10 flex items-center justify-center">
-                <Heart className="w-4 h-4 text-red-500" />
+      <DialogContent className="bg-black border border-zinc-800 text-white max-w-md p-0 overflow-hidden">
+        {/* Premium top gradient glow */}
+        <div 
+          className="absolute top-0 left-0 right-0 h-32 pointer-events-none"
+          style={{
+            background: "radial-gradient(ellipse at 50% 0%, hsl(40 32% 51% / 0.25) 0%, transparent 70%)",
+          }}
+        />
+        
+        {/* Gold accent line at top */}
+        <div className="absolute top-0 left-0 right-0 h-1 bg-gradient-to-r from-transparent via-gold to-transparent" />
+        
+        <div className="relative px-8 pt-10 pb-8">
+          {/* Premium Icon */}
+          <div className="text-center mb-6">
+            <div className="relative inline-flex">
+              <div className="w-20 h-20 rounded-full bg-gradient-to-br from-gold via-gold-light to-gold-dark flex items-center justify-center shadow-2xl shadow-gold/30">
+                <Crown className="w-10 h-10 text-black" />
               </div>
-              <span className="text-zinc-400 text-sm">Tap heart to add to <strong className="text-white">Favorites</strong></span>
-            </div>
-            <div className="flex items-center gap-3">
-              <div className="w-8 h-8 rounded-full bg-black/60 border border-white/10 flex items-center justify-center">
-                <ListPlus className="w-4 h-4 text-gold" />
-              </div>
-              <span className="text-zinc-400 text-sm">Tap list to add to <strong className="text-white">Shortlist</strong> for comparison</span>
+              {/* Sparkle decorations */}
+              <Sparkles className="absolute -top-2 -right-2 w-6 h-6 text-gold animate-pulse" />
+              <Sparkles className="absolute -bottom-1 -left-3 w-4 h-4 text-gold-light animate-pulse" style={{ animationDelay: "0.5s" }} />
             </div>
           </div>
+
+          {/* Title and Description */}
+          <div className="text-center mb-8">
+            <h2 
+              className="text-3xl font-bold mb-3"
+              style={{ 
+                fontFamily: "Poppins, sans-serif",
+                background: "linear-gradient(135deg, #ffffff 0%, hsl(40 32% 51%) 50%, #ffffff 100%)",
+                WebkitBackgroundClip: "text",
+                WebkitTextFillColor: "transparent",
+                backgroundClip: "text",
+              }}
+            >
+              {isReturningUser ? "Welcome Back!" : "Welcome to JJ Global Capital"}
+            </h2>
+            <p className="text-zinc-400 text-base leading-relaxed">
+              {isReturningUser 
+                ? "We're glad you're back. Continue exploring premium properties."
+                : "Discover exclusive real estate opportunities across the UAE"
+              }
+            </p>
+          </div>
+
+          {/* Ornamental divider */}
+          <div className="flex items-center justify-center gap-3 mb-6">
+            <div className="w-12 h-px bg-gradient-to-r from-transparent to-gold/60" />
+            <div className="w-2 h-2 rounded-full bg-gold shadow-lg shadow-gold/50" />
+            <div className="w-12 h-px bg-gradient-to-l from-transparent to-gold/60" />
+          </div>
+
+          {/* Feature Guide */}
+          <div className="bg-zinc-900/80 rounded-xl p-5 border border-zinc-800/50 mb-6 backdrop-blur-sm">
+            <p className="text-zinc-300 text-sm font-medium mb-4">Save your favorite properties:</p>
+            <div className="space-y-3">
+              <div className="flex items-center gap-4">
+                <div className="w-10 h-10 rounded-full bg-black/80 border border-zinc-700 flex items-center justify-center shadow-inner">
+                  <Heart className="w-5 h-5 text-red-500" />
+                </div>
+                <span className="text-zinc-400 text-sm">Tap heart to add to <span className="text-white font-medium">Favorites</span></span>
+              </div>
+              <div className="flex items-center gap-4">
+                <div className="w-10 h-10 rounded-full bg-black/80 border border-zinc-700 flex items-center justify-center shadow-inner">
+                  <ListPlus className="w-5 h-5 text-gold" />
+                </div>
+                <span className="text-zinc-400 text-sm">Tap list to add to <span className="text-white font-medium">Shortlist</span> for comparison</span>
+              </div>
+            </div>
+          </div>
+
+          {/* Action Buttons */}
+          <div className="space-y-3">
+            <Button
+              onClick={handleLogin}
+              className="w-full py-6 bg-gradient-to-r from-gold via-gold-light to-gold text-black hover:opacity-90 font-semibold text-base shadow-xl shadow-gold/20 rounded-xl group"
+            >
+              <User className="w-5 h-5 mr-3" />
+              <span className="flex-1 text-left">Sign In / Create Account</span>
+              <ArrowRight className="w-5 h-5 group-hover:translate-x-1 transition-transform" />
+            </Button>
+
+            <Button
+              onClick={handleContinueAsGuest}
+              variant="outline"
+              className="w-full py-6 border-zinc-700 bg-zinc-900/50 text-white hover:bg-zinc-800 hover:border-gold/40 group rounded-xl"
+            >
+              <span className="flex-1 text-left">Continue as Guest</span>
+              <ArrowRight className="w-4 h-4 text-zinc-500 group-hover:text-gold transition-colors" />
+            </Button>
+          </div>
+
+          <p className="text-center text-zinc-600 text-xs mt-5">
+            Favorites & shortlist work even as a guest
+          </p>
         </div>
-
-        <div className="space-y-3">
-          <Button
-            onClick={handleContinueAsGuest}
-            variant="outline"
-            className="w-full py-6 border-zinc-700 bg-zinc-900 text-white hover:bg-zinc-800 hover:border-gold/50 group"
-          >
-            <UserCheck className="w-5 h-5 mr-3 text-gold" />
-            <span className="flex-1 text-left">Continue as Guest</span>
-            <ArrowRight className="w-4 h-4 text-zinc-500 group-hover:text-gold transition-colors" />
-          </Button>
-
-          <Button
-            onClick={handleLogin}
-            className="w-full py-6 bg-gradient-to-r from-gold to-gold-dark text-black hover:opacity-90 font-semibold"
-          >
-            <User className="w-5 h-5 mr-3" />
-            <span className="flex-1 text-left">Sign In / Create Account</span>
-            <ArrowRight className="w-4 h-4" />
-          </Button>
-        </div>
-
-        <p className="text-center text-zinc-500 text-sm mt-4">
-          Favorites & shortlist work even as a guest!
-        </p>
       </DialogContent>
     </Dialog>
   );
