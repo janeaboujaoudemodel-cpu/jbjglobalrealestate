@@ -280,8 +280,8 @@ const Admin = () => {
 
   if (loading) {
     return (
-      <div className="min-h-screen bg-[#0a0a0a] flex items-center justify-center">
-        <div className="animate-spin rounded-full h-8 w-8 border-t-2 border-[#D4A017]" />
+      <div className="min-h-screen bg-zinc-950 flex items-center justify-center">
+        <div className="animate-spin rounded-full h-8 w-8 border-t-2 border-gold" />
       </div>
     );
   }
@@ -291,14 +291,9 @@ const Admin = () => {
   }
 
   return (
-    <div
-      className="min-h-screen"
-      style={{
-        background: "linear-gradient(180deg, #0a0a0a 0%, #0d0d0d 50%, #080808 100%)",
-      }}
-    >
+    <div className="min-h-screen bg-zinc-950">
       {/* Header */}
-      <header className="border-b border-[#2a2a2a] bg-[#0d0d0d]/80 backdrop-blur-sm sticky top-0 z-50">
+      <header className="border-b border-zinc-800 bg-zinc-950/80 backdrop-blur-sm sticky top-0 z-50">
         <div className="container mx-auto px-4 py-4 flex items-center justify-between">
           <div className="flex items-center gap-4">
             <h1
@@ -307,7 +302,7 @@ const Admin = () => {
             >
               Admin Panel
             </h1>
-            <span className="px-3 py-1 bg-[#D4A017]/20 text-[#D4A017] text-sm rounded-full">
+            <span className="px-3 py-1 bg-gold/20 text-gold text-sm rounded-full">
               {user?.email}
             </span>
           </div>
@@ -322,7 +317,7 @@ const Admin = () => {
             <Button
               variant="outline"
               onClick={handleSignOut}
-              className="border-[#2a2a2a] text-white hover:bg-[#2a2a2a]"
+              className="border-zinc-700 text-white hover:bg-zinc-800"
             >
               <LogOut className="w-4 h-4 mr-2" />
               Sign Out
@@ -335,32 +330,32 @@ const Admin = () => {
       <main className="container mx-auto px-4 py-8">
         {/* Stats */}
         <div className="grid grid-cols-1 md:grid-cols-4 gap-4 mb-8">
-          <div className="bg-[#1a1a1a] border border-[#2a2a2a] rounded-xl p-6">
+          <div className="bg-zinc-900 border border-zinc-800 rounded-xl p-6">
             <div className="flex items-center gap-3 mb-2">
-              <Building2 className="w-5 h-5 text-[#D4A017]" />
+              <Building2 className="w-5 h-5 text-gold" />
               <span className="text-gray-400">Total Projects</span>
             </div>
             <p className="text-white text-3xl font-bold">{projects?.length || 0}</p>
           </div>
-          <div className="bg-[#1a1a1a] border border-[#2a2a2a] rounded-xl p-6">
+          <div className="bg-zinc-900 border border-zinc-800 rounded-xl p-6">
             <div className="flex items-center gap-3 mb-2">
-              <Star className="w-5 h-5 text-[#D4A017]" />
+              <Star className="w-5 h-5 text-gold" />
               <span className="text-gray-400">Premium Properties</span>
             </div>
             <p className="text-white text-3xl font-bold">
               {projects?.filter((p) => p.is_featured).length || 0}
             </p>
           </div>
-          <div className="bg-[#1a1a1a] border border-[#2a2a2a] rounded-xl p-6">
+          <div className="bg-zinc-900 border border-zinc-800 rounded-xl p-6">
             <div className="flex items-center gap-3 mb-2">
-              <Building2 className="w-5 h-5 text-[#D4A017]" />
+              <Building2 className="w-5 h-5 text-gold" />
               <span className="text-gray-400">Developers</span>
             </div>
             <p className="text-white text-3xl font-bold">{developers?.length || 0}</p>
           </div>
-          <div className="bg-[#1a1a1a] border border-[#2a2a2a] rounded-xl p-6">
+          <div className="bg-zinc-900 border border-zinc-800 rounded-xl p-6">
             <div className="flex items-center gap-3 mb-2">
-              <FileText className="w-5 h-5 text-[#D4A017]" />
+              <FileText className="w-5 h-5 text-gold" />
               <span className="text-gray-400">Communities</span>
             </div>
             <p className="text-white text-3xl font-bold">{communities?.length || 0}</p>
@@ -368,8 +363,8 @@ const Admin = () => {
         </div>
 
         {/* Projects Table */}
-        <div className="bg-[#1a1a1a] border border-[#2a2a2a] rounded-xl overflow-hidden">
-          <div className="p-6 border-b border-[#2a2a2a] flex items-center justify-between">
+        <div className="bg-zinc-900 border border-zinc-800 rounded-xl overflow-hidden">
+          <div className="p-6 border-b border-zinc-800 flex items-center justify-between">
             <h2
               className="text-white text-xl font-semibold"
               style={{ fontFamily: "Poppins, sans-serif" }}
@@ -383,7 +378,7 @@ const Admin = () => {
                   placeholder="Search projects..."
                   value={searchQuery}
                   onChange={(e) => setSearchQuery(e.target.value)}
-                  className="pl-9 w-64 bg-[#0d0d0d] border-[#2a2a2a] text-white placeholder:text-gray-500"
+                  className="pl-9 w-64 bg-zinc-950 border-zinc-700 text-white placeholder:text-gray-500"
                 />
               </div>
             </div>
@@ -391,7 +386,7 @@ const Admin = () => {
 
           <ScrollArea className="h-[600px]">
             <table className="w-full">
-              <thead className="bg-[#0d0d0d] sticky top-0">
+              <thead className="bg-zinc-950 sticky top-0">
                 <tr>
                   <th className="text-left text-gray-400 font-medium px-6 py-4">Project</th>
                   <th className="text-left text-gray-400 font-medium px-6 py-4">Developer</th>
@@ -405,7 +400,7 @@ const Admin = () => {
                 {filteredProjects?.map((project) => (
                   <tr
                     key={project.id}
-                    className="border-t border-[#2a2a2a] hover:bg-[#0d0d0d]/50"
+                    className="border-t border-zinc-800 hover:bg-zinc-950/50"
                   >
                     <td className="px-6 py-4">
                       <div className="flex items-center gap-3">
@@ -426,7 +421,7 @@ const Admin = () => {
                     <td className="px-6 py-4 text-gray-300">
                       {project.developer?.name || "—"}
                     </td>
-                    <td className="px-6 py-4 text-[#D4A017]">
+                    <td className="px-6 py-4 text-gold">
                       {project.price_from
                         ? `AED ${(project.price_from / 1000000).toFixed(1)}M`
                         : "—"}
@@ -442,7 +437,7 @@ const Admin = () => {
                         <Star
                           className={`w-5 h-5 transition-colors ${
                             project.is_featured
-                              ? "fill-[#D4A017] text-[#D4A017]"
+                              ? "fill-gold text-gold"
                               : "text-gray-600 hover:text-gray-400"
                           }`}
                         />
@@ -468,7 +463,7 @@ const Admin = () => {
 
       {/* Edit Dialog */}
       <Dialog open={isEditing} onOpenChange={setIsEditing}>
-        <DialogContent className="bg-[#1a1a1a] border-[#2a2a2a] text-white max-w-2xl max-h-[90vh] overflow-y-auto">
+        <DialogContent className="bg-zinc-900 border-zinc-800 text-white max-w-2xl max-h-[90vh] overflow-y-auto">
           <DialogHeader>
             <DialogTitle style={{ fontFamily: "Poppins, sans-serif" }}>
               Edit Property
@@ -482,7 +477,7 @@ const Admin = () => {
                 <Input
                   value={formData.name}
                   onChange={(e) => setFormData({ ...formData, name: e.target.value })}
-                  className="bg-[#0d0d0d] border-[#2a2a2a] text-white"
+                  className="bg-zinc-950 border-zinc-700 text-white"
                 />
               </div>
               <div className="space-y-2">
@@ -490,7 +485,7 @@ const Admin = () => {
                 <Input
                   value={formData.slug}
                   onChange={(e) => setFormData({ ...formData, slug: e.target.value })}
-                  className="bg-[#0d0d0d] border-[#2a2a2a] text-white"
+                  className="bg-zinc-950 border-zinc-700 text-white"
                 />
               </div>
             </div>
@@ -500,7 +495,7 @@ const Admin = () => {
               <Textarea
                 value={formData.description}
                 onChange={(e) => setFormData({ ...formData, description: e.target.value })}
-                className="bg-[#0d0d0d] border-[#2a2a2a] text-white min-h-[100px]"
+                className="bg-zinc-950 border-zinc-700 text-white min-h-[100px]"
               />
             </div>
 
@@ -510,7 +505,7 @@ const Admin = () => {
                 <Input
                   value={formData.location}
                   onChange={(e) => setFormData({ ...formData, location: e.target.value })}
-                  className="bg-[#0d0d0d] border-[#2a2a2a] text-white"
+                  className="bg-zinc-950 border-zinc-700 text-white"
                 />
               </div>
               <div className="space-y-2">
@@ -519,12 +514,12 @@ const Admin = () => {
                   value={formData.emirate}
                   onValueChange={(value) => setFormData({ ...formData, emirate: value })}
                 >
-                  <SelectTrigger className="bg-[#0d0d0d] border-[#2a2a2a] text-white">
+                  <SelectTrigger className="bg-zinc-950 border-zinc-700 text-white">
                     <SelectValue />
                   </SelectTrigger>
-                  <SelectContent className="bg-[#1a1a1a] border-[#2a2a2a]">
+                  <SelectContent className="bg-zinc-900 border-zinc-700">
                     {["Dubai", "Abu Dhabi", "Sharjah", "Ras Al Khaimah", "Ajman", "Fujairah", "Umm Al Quwain"].map((e) => (
-                      <SelectItem key={e} value={e} className="text-white hover:bg-[#2a2a2a]">
+                      <SelectItem key={e} value={e} className="text-white hover:bg-zinc-800">
                         {e}
                       </SelectItem>
                     ))}
@@ -540,7 +535,7 @@ const Admin = () => {
                   type="number"
                   value={formData.price_from}
                   onChange={(e) => setFormData({ ...formData, price_from: e.target.value })}
-                  className="bg-[#0d0d0d] border-[#2a2a2a] text-white"
+                  className="bg-zinc-950 border-zinc-700 text-white"
                 />
               </div>
               <div className="space-y-2">
@@ -549,7 +544,7 @@ const Admin = () => {
                   type="number"
                   value={formData.price_to}
                   onChange={(e) => setFormData({ ...formData, price_to: e.target.value })}
-                  className="bg-[#0d0d0d] border-[#2a2a2a] text-white"
+                  className="bg-zinc-950 border-zinc-700 text-white"
                 />
               </div>
             </div>
@@ -561,7 +556,7 @@ const Admin = () => {
                   type="number"
                   value={formData.bedrooms_min}
                   onChange={(e) => setFormData({ ...formData, bedrooms_min: e.target.value })}
-                  className="bg-[#0d0d0d] border-[#2a2a2a] text-white"
+                  className="bg-zinc-950 border-zinc-700 text-white"
                 />
               </div>
               <div className="space-y-2">
@@ -570,7 +565,7 @@ const Admin = () => {
                   type="number"
                   value={formData.bedrooms_max}
                   onChange={(e) => setFormData({ ...formData, bedrooms_max: e.target.value })}
-                  className="bg-[#0d0d0d] border-[#2a2a2a] text-white"
+                  className="bg-zinc-950 border-zinc-700 text-white"
                 />
               </div>
             </div>
@@ -582,12 +577,12 @@ const Admin = () => {
                   value={formData.developer_id}
                   onValueChange={(value) => setFormData({ ...formData, developer_id: value })}
                 >
-                  <SelectTrigger className="bg-[#0d0d0d] border-[#2a2a2a] text-white">
+                  <SelectTrigger className="bg-zinc-950 border-zinc-700 text-white">
                     <SelectValue placeholder="Select developer" />
                   </SelectTrigger>
-                  <SelectContent className="bg-[#1a1a1a] border-[#2a2a2a] max-h-60">
+                  <SelectContent className="bg-zinc-900 border-zinc-700 max-h-60">
                     {developers?.map((dev) => (
-                      <SelectItem key={dev.id} value={dev.id} className="text-white hover:bg-[#2a2a2a]">
+                      <SelectItem key={dev.id} value={dev.id} className="text-white hover:bg-zinc-800">
                         {dev.name}
                       </SelectItem>
                     ))}
@@ -600,12 +595,12 @@ const Admin = () => {
                   value={formData.community_id}
                   onValueChange={(value) => setFormData({ ...formData, community_id: value })}
                 >
-                  <SelectTrigger className="bg-[#0d0d0d] border-[#2a2a2a] text-white">
+                  <SelectTrigger className="bg-zinc-950 border-zinc-700 text-white">
                     <SelectValue placeholder="Select community" />
                   </SelectTrigger>
-                  <SelectContent className="bg-[#1a1a1a] border-[#2a2a2a] max-h-60">
+                  <SelectContent className="bg-zinc-900 border-zinc-700 max-h-60">
                     {communities?.map((comm) => (
-                      <SelectItem key={comm.id} value={comm.id} className="text-white hover:bg-[#2a2a2a]">
+                      <SelectItem key={comm.id} value={comm.id} className="text-white hover:bg-zinc-800">
                         {comm.name}
                       </SelectItem>
                     ))}
@@ -621,7 +616,7 @@ const Admin = () => {
                   value={formData.handover_date}
                   onChange={(e) => setFormData({ ...formData, handover_date: e.target.value })}
                   placeholder="e.g., Q4 2026"
-                  className="bg-[#0d0d0d] border-[#2a2a2a] text-white"
+                  className="bg-zinc-950 border-zinc-700 text-white"
                 />
               </div>
               <div className="space-y-2">
@@ -630,17 +625,17 @@ const Admin = () => {
                   value={formData.furnished_status}
                   onValueChange={(value) => setFormData({ ...formData, furnished_status: value })}
                 >
-                  <SelectTrigger className="bg-[#0d0d0d] border-[#2a2a2a] text-white">
+                  <SelectTrigger className="bg-zinc-950 border-zinc-700 text-white">
                     <SelectValue />
                   </SelectTrigger>
-                  <SelectContent className="bg-[#1a1a1a] border-[#2a2a2a]">
-                    <SelectItem value="unfurnished" className="text-white hover:bg-[#2a2a2a]">
+                  <SelectContent className="bg-zinc-900 border-zinc-700">
+                    <SelectItem value="unfurnished" className="text-white hover:bg-zinc-800">
                       Unfurnished
                     </SelectItem>
-                    <SelectItem value="semi-furnished" className="text-white hover:bg-[#2a2a2a]">
+                    <SelectItem value="semi-furnished" className="text-white hover:bg-zinc-800">
                       Semi-Furnished
                     </SelectItem>
-                    <SelectItem value="furnished" className="text-white hover:bg-[#2a2a2a]">
+                    <SelectItem value="furnished" className="text-white hover:bg-zinc-800">
                       Furnished
                     </SelectItem>
                   </SelectContent>
@@ -648,7 +643,7 @@ const Admin = () => {
               </div>
             </div>
 
-            <div className="flex items-center justify-between p-4 bg-[#0d0d0d] rounded-xl">
+            <div className="flex items-center justify-between p-4 bg-zinc-950 rounded-xl">
               <div>
                 <Label className="text-white font-medium">Premium Property</Label>
                 <p className="text-gray-500 text-sm">
@@ -662,7 +657,7 @@ const Admin = () => {
             </div>
 
             {/* Document Upload Section */}
-            <div className="space-y-4 border-t border-[#2a2a2a] pt-6">
+            <div className="space-y-4 border-t border-zinc-800 pt-6">
               <div className="flex items-center justify-between">
                 <div>
                   <Label className="text-white font-medium text-lg">Documents</Label>
@@ -675,23 +670,23 @@ const Admin = () => {
                   value={selectedDocType}
                   onValueChange={setSelectedDocType}
                 >
-                  <SelectTrigger className="w-40 bg-[#0d0d0d] border-[#2a2a2a] text-white">
+                  <SelectTrigger className="w-40 bg-zinc-950 border-zinc-700 text-white">
                     <SelectValue />
                   </SelectTrigger>
-                  <SelectContent className="bg-[#1a1a1a] border-[#2a2a2a]">
-                    <SelectItem value="brochure" className="text-white hover:bg-[#2a2a2a]">
+                  <SelectContent className="bg-zinc-900 border-zinc-700">
+                    <SelectItem value="brochure" className="text-white hover:bg-zinc-800">
                       Brochure
                     </SelectItem>
-                    <SelectItem value="floor_plan" className="text-white hover:bg-[#2a2a2a]">
+                    <SelectItem value="floor_plan" className="text-white hover:bg-zinc-800">
                       Floor Plan
                     </SelectItem>
-                    <SelectItem value="payment_plan" className="text-white hover:bg-[#2a2a2a]">
+                    <SelectItem value="payment_plan" className="text-white hover:bg-zinc-800">
                       Payment Plan
                     </SelectItem>
-                    <SelectItem value="renders" className="text-white hover:bg-[#2a2a2a]">
+                    <SelectItem value="renders" className="text-white hover:bg-zinc-800">
                       Renders
                     </SelectItem>
-                    <SelectItem value="other" className="text-white hover:bg-[#2a2a2a]">
+                    <SelectItem value="other" className="text-white hover:bg-zinc-800">
                       Other
                     </SelectItem>
                   </SelectContent>
@@ -707,7 +702,7 @@ const Admin = () => {
                 <Button
                   onClick={() => fileInputRef.current?.click()}
                   disabled={isUploadingDocument}
-                  className="bg-[#D4A017] hover:bg-[#B8860B] text-black"
+                  className="bg-gradient-to-r from-gold to-gold-dark hover:opacity-90 text-black"
                 >
                   <Upload className="w-4 h-4 mr-2" />
                   {isUploadingDocument ? "Uploading..." : "Upload Document"}
@@ -719,11 +714,11 @@ const Admin = () => {
                   {projectDocuments.map((doc) => (
                     <div
                       key={doc.id}
-                      className="flex items-center justify-between p-3 bg-[#0d0d0d] rounded-lg border border-[#2a2a2a]"
+                      className="flex items-center justify-between p-3 bg-zinc-950 rounded-lg border border-zinc-800"
                     >
                       <div className="flex items-center gap-3">
-                        <div className="w-10 h-10 bg-[#2a2a2a] rounded-lg flex items-center justify-center">
-                          <File className="w-5 h-5 text-[#D4A017]" />
+                        <div className="w-10 h-10 bg-zinc-800 rounded-lg flex items-center justify-center">
+                          <File className="w-5 h-5 text-gold" />
                         </div>
                         <div>
                           <p className="text-white text-sm font-medium">{doc.file_name}</p>
@@ -763,14 +758,14 @@ const Admin = () => {
               <Button
                 variant="outline"
                 onClick={() => setIsEditing(false)}
-                className="border-[#2a2a2a] text-white hover:bg-[#2a2a2a]"
+                className="border-zinc-700 text-white hover:bg-zinc-800"
               >
                 Cancel
               </Button>
               <Button
                 onClick={handleSaveProject}
                 disabled={isSaving}
-                className="bg-gradient-to-r from-[#D4A017] to-[#B8860B] text-black"
+                className="bg-gradient-to-r from-gold to-gold-dark text-black"
               >
                 {isSaving ? "Saving..." : "Save Changes"}
               </Button>

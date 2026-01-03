@@ -90,8 +90,8 @@ const Auth = forwardRef<HTMLDivElement>((_, ref) => {
 
   if (loading) {
     return (
-      <div className="min-h-screen bg-[#0a0a0a] flex items-center justify-center">
-        <div className="animate-spin rounded-full h-8 w-8 border-t-2 border-[#D4A017]" />
+      <div className="min-h-screen bg-zinc-950 flex items-center justify-center">
+        <div className="animate-spin rounded-full h-8 w-8 border-t-2 border-gold" />
       </div>
     );
   }
@@ -99,20 +99,17 @@ const Auth = forwardRef<HTMLDivElement>((_, ref) => {
   return (
     <div
       ref={ref}
-      className="min-h-screen flex items-center justify-center py-12 px-4"
-      style={{
-        background: "linear-gradient(180deg, #0a0a0a 0%, #0d0d0d 50%, #080808 100%)",
-      }}
+      className="min-h-screen flex items-center justify-center py-12 px-4 bg-zinc-950"
     >
       <div
         className="absolute top-0 left-0 right-0 h-[40%] pointer-events-none"
         style={{
-          background: "radial-gradient(ellipse at 50% 0%, rgba(212, 160, 23, 0.08) 0%, transparent 60%)",
+          background: "radial-gradient(ellipse at 50% 0%, hsl(40 32% 51% / 0.08) 0%, transparent 60%)",
         }}
       />
 
       <div className="relative z-10 w-full max-w-md">
-        <div className="bg-[#1a1a1a] border border-[#2a2a2a] rounded-2xl p-8">
+        <div className="bg-zinc-900 border border-zinc-800 rounded-2xl p-8">
           <div className="text-center mb-8">
             <h1
               className="text-white text-3xl font-bold mb-2"
@@ -140,7 +137,7 @@ const Auth = forwardRef<HTMLDivElement>((_, ref) => {
                   value={email}
                   onChange={(e) => setEmail(e.target.value)}
                   placeholder="you@example.com"
-                  className="pl-10 h-12 bg-[#0d0d0d] border-[#2a2a2a] text-white placeholder:text-gray-500 focus:border-[#D4A017]"
+                  className="pl-10 h-12 bg-zinc-950 border-zinc-700 text-white placeholder:text-gray-500 focus:border-gold"
                 />
               </div>
               {errors.email && (
@@ -160,7 +157,7 @@ const Auth = forwardRef<HTMLDivElement>((_, ref) => {
                   value={password}
                   onChange={(e) => setPassword(e.target.value)}
                   placeholder="••••••••"
-                  className="pl-10 pr-10 h-12 bg-[#0d0d0d] border-[#2a2a2a] text-white placeholder:text-gray-500 focus:border-[#D4A017]"
+                  className="pl-10 pr-10 h-12 bg-zinc-950 border-zinc-700 text-white placeholder:text-gray-500 focus:border-gold"
                 />
                 <button
                   type="button"
@@ -178,7 +175,7 @@ const Auth = forwardRef<HTMLDivElement>((_, ref) => {
             <Button
               type="submit"
               disabled={isSubmitting}
-              className="w-full h-12 bg-gradient-to-r from-[#D4A017] to-[#B8860B] hover:from-[#B8860B] hover:to-[#D4A017] text-black font-semibold rounded-xl"
+              className="w-full h-12 bg-gradient-to-r from-gold to-gold-dark hover:opacity-90 text-black font-semibold rounded-xl"
             >
               {isSubmitting ? (
                 <div className="animate-spin rounded-full h-5 w-5 border-t-2 border-black" />
@@ -196,7 +193,7 @@ const Auth = forwardRef<HTMLDivElement>((_, ref) => {
                 setIsSignUp(!isSignUp);
                 setErrors({});
               }}
-              className="text-[#D4A017] hover:underline"
+              className="text-gold hover:underline"
             >
               {isSignUp
                 ? "Already have an account? Sign in"

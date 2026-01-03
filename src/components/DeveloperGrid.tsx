@@ -96,7 +96,7 @@ const DeveloperGrid = () => {
                 className="inline-block group"
               >
                 <h2
-                  className="text-white font-semibold mb-4 group-hover:text-[#D4A017] transition-colors"
+                  className="text-white font-semibold mb-4 group-hover:text-gold transition-colors"
                   style={{
                     fontFamily: "Poppins, sans-serif",
                     fontSize: "56px",
@@ -118,31 +118,31 @@ const DeveloperGrid = () => {
               <div className="flex flex-wrap gap-6 text-sm">
                 {developer.founded_year && (
                   <div className="flex items-center gap-2 text-gray-500">
-                    <Calendar className="w-4 h-4 text-[#D4A017]" />
+                    <Calendar className="w-4 h-4 text-gold" />
                     <span>Est. {developer.founded_year}</span>
                   </div>
                 )}
                 {developer.completed_projects && (
                   <div className="flex items-center gap-2 text-gray-500">
-                    <Building2 className="w-4 h-4 text-[#D4A017]" />
+                    <Building2 className="w-4 h-4 text-gold" />
                     <span>{developer.completed_projects.toLocaleString()}+ Units Delivered</span>
                   </div>
                 )}
                 {developer.offplan_projects && (
                   <div className="flex items-center gap-2 text-gray-500">
-                    <Briefcase className="w-4 h-4 text-[#D4A017]" />
+                    <Briefcase className="w-4 h-4 text-gold" />
                     <span>{developer.offplan_projects} Active Projects</span>
                   </div>
                 )}
                 {developer.portfolio_worth && (
                   <div className="flex items-center gap-2 text-gray-500">
-                    <Star className="w-4 h-4 text-[#D4A017]" />
+                    <Star className="w-4 h-4 text-gold" />
                     <span>Portfolio: {formatPortfolioWorth(developer.portfolio_worth)}</span>
                   </div>
                 )}
                 {developer.headquarters && (
                   <div className="flex items-center gap-2 text-gray-500">
-                    <span className="text-[#D4A017]">📍</span>
+                    <span className="text-gold">📍</span>
                     <span>{developer.headquarters}</span>
                   </div>
                 )}
@@ -155,7 +155,7 @@ const DeveloperGrid = () => {
                 <Link
                   key={project.id}
                   to={`/project/${project.slug}`}
-                  className="group relative overflow-hidden rounded-lg bg-[#1a1a1a] border border-[#2a2a2a] hover:border-[#D4A017]/50 transition-all duration-300"
+                  className="group relative overflow-hidden rounded-lg bg-zinc-900 border border-zinc-800 hover:border-gold/50 transition-all duration-300"
                 >
                   <div className="aspect-[4/3] overflow-hidden relative">
                     <img
@@ -168,7 +168,7 @@ const DeveloperGrid = () => {
                     {project.is_featured && (
                       <div className="absolute top-3 right-3 z-10">
                         <div className="bg-black/60 backdrop-blur-sm rounded-full p-2">
-                          <Star className="w-5 h-5 fill-[#D4A017] text-[#D4A017]" />
+                          <Star className="w-5 h-5 fill-gold text-gold" />
                         </div>
                       </div>
                     )}
@@ -178,7 +178,7 @@ const DeveloperGrid = () => {
                       <span className={`absolute top-3 left-3 px-2 py-1 rounded text-xs font-medium ${
                         project.handover_date.toLowerCase().includes("ready")
                           ? "bg-green-500/90 text-white"
-                          : "bg-[#D4A017]/90 text-black"
+                          : "bg-gold text-black"
                       }`}>
                         {project.handover_date.toLowerCase().includes("ready") ? "Ready" : project.handover_date}
                       </span>
@@ -208,7 +208,7 @@ const DeveloperGrid = () => {
                       </p>
                     )}
                     {project.price_from && (
-                      <p className="text-[#D4A017] font-semibold text-lg">
+                      <p className="text-gold font-semibold text-lg">
                         From AED {(project.price_from / 1000000).toFixed(1)}M
                       </p>
                     )}
@@ -222,7 +222,7 @@ const DeveloperGrid = () => {
               <div className="mt-6 text-center">
                 <Link
                   to={`/developer/${developer.slug}`}
-                  className="inline-flex items-center gap-2 text-[#D4A017] hover:underline"
+                  className="inline-flex items-center gap-2 text-gold hover:underline"
                 >
                   View all {devProjects.length} projects from {developer.name}
                   <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -235,14 +235,14 @@ const DeveloperGrid = () => {
         ))}
 
         {(!projectsByDeveloper || projectsByDeveloper.length === 0) && (
-          <div className="text-center py-20 bg-[#1a1a1a] rounded-lg">
+          <div className="text-center py-20 bg-zinc-900 rounded-lg">
             <p className="text-gray-400 text-lg mb-2" style={{ fontFamily: "Poppins, sans-serif" }}>
               {hasFiltersApplied ? "No projects match your filters" : "No projects available yet"}
             </p>
             {hasFiltersApplied && (
               <button
                 onClick={() => setFilters(defaultFilters)}
-                className="text-[#D4A017] hover:underline"
+                className="text-gold hover:underline"
               >
                 Clear all filters
               </button>

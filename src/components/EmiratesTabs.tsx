@@ -46,7 +46,7 @@ const EmiratesTabs = ({ projects, selectedEmirate, onEmirateSelect }: EmiratesTa
           onClick={() => onEmirateSelect(null)}
           className={`px-5 py-2.5 rounded-full text-sm font-medium transition-all duration-200 ${
             selectedEmirate === null
-              ? "bg-white text-zinc-900"
+              ? "bg-gold text-black"
               : "bg-zinc-800/50 text-zinc-400 hover:bg-zinc-800 hover:text-zinc-300 border border-zinc-700/50"
           }`}
         >
@@ -60,14 +60,14 @@ const EmiratesTabs = ({ projects, selectedEmirate, onEmirateSelect }: EmiratesTa
               onClick={() => onEmirateSelect(emirate)}
               className={`px-5 py-2.5 rounded-full text-sm font-medium transition-all duration-200 flex items-center gap-2 ${
                 selectedEmirate === emirate
-                  ? "bg-white text-zinc-900"
+                  ? "bg-gold text-black"
                   : "bg-zinc-800/50 text-zinc-400 hover:bg-zinc-800 hover:text-zinc-300 border border-zinc-700/50"
               }`}
             >
               {emirate}
               <span className={`text-xs px-1.5 py-0.5 rounded-full ${
                 selectedEmirate === emirate
-                  ? "bg-zinc-200 text-zinc-700"
+                  ? "bg-black/20 text-black"
                   : "bg-zinc-700 text-zinc-400"
               }`}>
                 {projectCount}

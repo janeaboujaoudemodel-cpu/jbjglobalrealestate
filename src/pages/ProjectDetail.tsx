@@ -5,23 +5,20 @@ import DocumentDownloads from "@/components/DocumentDownloads";
 import { Skeleton } from "@/components/ui/skeleton";
 import { ChevronLeft, MapPin, Building, Calendar, DollarSign, Layers, Users } from "lucide-react";
 
+const INQUIRY_FORM_URL = "https://jjglobalcapital.com/form/property-investment-inquiry-form/";
+
 const ProjectDetail = () => {
   const { slug } = useParams<{ slug: string }>();
   const { data: project, isLoading } = useProject(slug || "");
 
   if (isLoading) {
     return (
-      <section
-        className="relative w-full min-h-screen py-16 md:py-24"
-        style={{
-          background: "linear-gradient(180deg, #0a0a0a 0%, #0d0d0d 50%, #080808 100%)",
-        }}
-      >
+      <section className="relative w-full min-h-screen py-16 md:py-24 bg-zinc-950">
         <div className="container mx-auto px-4">
-          <Skeleton className="h-8 w-48 bg-[#1a1a1a] mb-8" />
-          <Skeleton className="aspect-[16/9] w-full rounded-lg bg-[#1a1a1a] mb-8" />
-          <Skeleton className="h-12 w-64 bg-[#1a1a1a] mb-4" />
-          <Skeleton className="h-6 w-full max-w-2xl bg-[#1a1a1a]" />
+          <Skeleton className="h-8 w-48 bg-zinc-800 mb-8" />
+          <Skeleton className="aspect-[16/9] w-full rounded-lg bg-zinc-800 mb-8" />
+          <Skeleton className="h-12 w-64 bg-zinc-800 mb-4" />
+          <Skeleton className="h-6 w-full max-w-2xl bg-zinc-800" />
         </div>
       </section>
     );
@@ -29,15 +26,10 @@ const ProjectDetail = () => {
 
   if (!project) {
     return (
-      <section
-        className="relative w-full min-h-screen py-16 md:py-24 flex items-center justify-center"
-        style={{
-          background: "linear-gradient(180deg, #0a0a0a 0%, #0d0d0d 50%, #080808 100%)",
-        }}
-      >
+      <section className="relative w-full min-h-screen py-16 md:py-24 flex items-center justify-center bg-zinc-950">
         <div className="text-center">
           <h1 className="text-white text-2xl mb-4">Project not found</h1>
-          <Link to="/" className="text-[#D4A017] hover:underline">
+          <Link to="/" className="text-gold hover:underline">
             Back to Home
           </Link>
         </div>
@@ -53,12 +45,7 @@ const ProjectDetail = () => {
   };
 
   return (
-    <section
-      className="relative w-full min-h-screen py-8 md:py-16"
-      style={{
-        background: "linear-gradient(180deg, #0a0a0a 0%, #0d0d0d 50%, #080808 100%)",
-      }}
-    >
+    <section className="relative w-full min-h-screen py-8 md:py-16 bg-zinc-950">
       <div className="container mx-auto px-4">
         {/* Breadcrumb */}
         <div className="flex items-center gap-2 text-sm mb-8 flex-wrap">
@@ -113,7 +100,7 @@ const ProjectDetail = () => {
                     {project.name}
                   </h1>
                   {project.developer && (
-                    <p className="text-[#D4A017]" style={{ fontFamily: "Poppins, sans-serif" }}>
+                    <p className="text-gold" style={{ fontFamily: "Poppins, sans-serif" }}>
                       by {project.developer.name}
                     </p>
                   )}
@@ -122,7 +109,7 @@ const ProjectDetail = () => {
                   <div className="text-right">
                     <p className="text-gray-400 text-sm">Starting from</p>
                     <p
-                      className="text-[#D4A017] font-bold text-2xl"
+                      className="text-gold font-bold text-2xl"
                       style={{ fontFamily: "Poppins, sans-serif" }}
                     >
                       {formatPrice(project.price_from)}
@@ -146,8 +133,8 @@ const ProjectDetail = () => {
             {/* Project Details Grid */}
             <div className="grid grid-cols-2 md:grid-cols-3 gap-4">
               {project.location && (
-                <div className="bg-[#1a1a1a] p-4 rounded-lg border border-[#2a2a2a]">
-                  <div className="flex items-center gap-2 text-[#D4A017] mb-2">
+                <div className="bg-zinc-900 p-4 rounded-lg border border-zinc-800">
+                  <div className="flex items-center gap-2 text-gold mb-2">
                     <MapPin className="w-5 h-5" />
                     <span className="text-sm font-medium">Location</span>
                   </div>
@@ -156,8 +143,8 @@ const ProjectDetail = () => {
               )}
 
               {project.bedrooms_min && (
-                <div className="bg-[#1a1a1a] p-4 rounded-lg border border-[#2a2a2a]">
-                  <div className="flex items-center gap-2 text-[#D4A017] mb-2">
+                <div className="bg-zinc-900 p-4 rounded-lg border border-zinc-800">
+                  <div className="flex items-center gap-2 text-gold mb-2">
                     <Users className="w-5 h-5" />
                     <span className="text-sm font-medium">Bedrooms</span>
                   </div>
@@ -170,8 +157,8 @@ const ProjectDetail = () => {
               )}
 
               {project.floors && (
-                <div className="bg-[#1a1a1a] p-4 rounded-lg border border-[#2a2a2a]">
-                  <div className="flex items-center gap-2 text-[#D4A017] mb-2">
+                <div className="bg-zinc-900 p-4 rounded-lg border border-zinc-800">
+                  <div className="flex items-center gap-2 text-gold mb-2">
                     <Building className="w-5 h-5" />
                     <span className="text-sm font-medium">Floors</span>
                   </div>
@@ -180,8 +167,8 @@ const ProjectDetail = () => {
               )}
 
               {project.handover_date && (
-                <div className="bg-[#1a1a1a] p-4 rounded-lg border border-[#2a2a2a]">
-                  <div className="flex items-center gap-2 text-[#D4A017] mb-2">
+                <div className="bg-zinc-900 p-4 rounded-lg border border-zinc-800">
+                  <div className="flex items-center gap-2 text-gold mb-2">
                     <Calendar className="w-5 h-5" />
                     <span className="text-sm font-medium">Handover</span>
                   </div>
@@ -190,8 +177,8 @@ const ProjectDetail = () => {
               )}
 
               {project.service_charge && (
-                <div className="bg-[#1a1a1a] p-4 rounded-lg border border-[#2a2a2a]">
-                  <div className="flex items-center gap-2 text-[#D4A017] mb-2">
+                <div className="bg-zinc-900 p-4 rounded-lg border border-zinc-800">
+                  <div className="flex items-center gap-2 text-gold mb-2">
                     <DollarSign className="w-5 h-5" />
                     <span className="text-sm font-medium">Service Charge</span>
                   </div>
@@ -200,8 +187,8 @@ const ProjectDetail = () => {
               )}
 
               {project.payment_plan && (
-                <div className="bg-[#1a1a1a] p-4 rounded-lg border border-[#2a2a2a]">
-                  <div className="flex items-center gap-2 text-[#D4A017] mb-2">
+                <div className="bg-zinc-900 p-4 rounded-lg border border-zinc-800">
+                  <div className="flex items-center gap-2 text-gold mb-2">
                     <Layers className="w-5 h-5" />
                     <span className="text-sm font-medium">Payment Plan</span>
                   </div>
@@ -223,7 +210,7 @@ const ProjectDetail = () => {
                   {project.amenities.map((amenity, index) => (
                     <span
                       key={index}
-                      className="px-4 py-2 bg-[#1a1a1a] border border-[#2a2a2a] rounded-full text-gray-300 text-sm"
+                      className="px-4 py-2 bg-zinc-900 border border-zinc-800 rounded-full text-gray-300 text-sm"
                     >
                       {amenity}
                     </span>
@@ -239,7 +226,7 @@ const ProjectDetail = () => {
             <DocumentDownloads documents={project.documents || []} />
 
             {/* Contact Card */}
-            <div className="bg-[#1a1a1a] rounded-lg p-6 border border-[#2a2a2a]">
+            <div className="bg-zinc-900 rounded-lg p-6 border border-zinc-800">
               <h3
                 className="text-white text-xl font-semibold mb-4"
                 style={{ fontFamily: "Poppins, sans-serif" }}
@@ -249,12 +236,15 @@ const ProjectDetail = () => {
               <p className="text-gray-400 mb-6">
                 Get in touch with our team for more information, pricing, and availability.
               </p>
-              <button
-                className="w-full py-3 px-6 bg-[#D4A017] text-black font-semibold rounded-lg hover:bg-[#b8890f] transition-colors"
+              <a 
+                href={INQUIRY_FORM_URL}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="block w-full py-3 px-6 bg-gradient-to-r from-gold to-gold-dark text-black font-semibold rounded-lg hover:opacity-90 transition-opacity text-center"
                 style={{ fontFamily: "Poppins, sans-serif" }}
               >
                 Contact Us
-              </button>
+              </a>
             </div>
           </div>
         </div>

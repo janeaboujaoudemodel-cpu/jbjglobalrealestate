@@ -47,11 +47,11 @@ All colors MUST be HSL.
     --sidebar-border: 220 13% 91%;
     --sidebar-ring: 217.2 91.2% 59.8%;
 
-    /* Premium Champagne Gold Theme (HSL) - Elegant & Subtle */
-    --gold: 40 35% 65%;
-    --gold-light: 43 40% 78%;
-    --gold-dark: 38 30% 55%;
-    --gold-muted: 40 20% 60%;
+    /* Premium Champagne Gold Theme - #A8925A (HSL: 40 32% 51%) */
+    --gold: 40 32% 51%;
+    --gold-light: 42 35% 62%;
+    --gold-dark: 38 30% 42%;
+    --gold-muted: 40 25% 55%;
     --gold-foreground: 0 0% 5%;
 
     /* Premium surfaces */
