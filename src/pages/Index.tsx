@@ -2,36 +2,59 @@ import { Link } from "react-router-dom";
 import NavigationTabs from "@/components/NavigationTabs";
 import DeveloperGrid from "@/components/DeveloperGrid";
 import WhyDubaiSection from "@/components/WhyDubaiSection";
-import { Sparkles, ArrowDown } from "lucide-react";
+import ServicesSection from "@/components/ServicesSection";
+import { Sparkles, ArrowDown, Building2, ClipboardCheck, FileText } from "lucide-react";
 import { Button } from "@/components/ui/button";
 
 const INQUIRY_FORM_URL = "https://jjglobalcapital.com/form/property-investment-inquiry-form/";
+
+// Property shortcut buttons
+const propertyShortcuts = [
+  { href: "/?status=off-plan", label: "Off-Plan Properties", icon: Building2 },
+  { href: "/?status=ready", label: "Ready to Move", icon: ClipboardCheck },
+  { href: "/quiz", label: "Take the Quiz", icon: Sparkles, highlight: true },
+];
 
 const Index = () => {
   return (
     <section className="relative w-full min-h-screen bg-zinc-950">
       {/* Hero Section */}
-      <div className="py-16 md:py-24 relative">
+      <div className="py-12 md:py-20 relative">
         {/* Subtle gradient */}
-        <div className="absolute top-0 left-0 right-0 h-[400px] pointer-events-none bg-gradient-to-b from-zinc-900/50 to-transparent" />
+        <div className="absolute top-0 left-0 right-0 h-[400px] pointer-events-none bg-gradient-to-b from-black/80 to-transparent" />
 
         <div className="relative z-10 container mx-auto px-4">
-          <h1 className="text-white text-4xl md:text-6xl font-bold mb-4">
-            UAE Real Estate
+          <h1 
+            className="text-white text-4xl md:text-6xl font-bold mb-4"
+            style={{ fontFamily: "Poppins, sans-serif" }}
+          >
+            <span className="text-gold">J</span>
+            <span className="text-zinc-500 mx-1">|</span>
+            <span className="text-gold">J</span>
+            <span className="text-white ml-3">Real Estate</span>
           </h1>
           <p className="text-zinc-400 text-lg mb-8 max-w-2xl">
-            Discover premium properties from the UAE's top developers across exclusive communities
+            Your trusted partner for premium properties across the UAE's most exclusive communities
           </p>
 
-          {/* Quiz CTA - Purple/Violet theme with arrow */}
-          <Link to="/quiz">
-            <Button className="mb-10 bg-gradient-to-r from-violet-600 to-purple-600 hover:from-violet-500 hover:to-purple-500 text-white px-6 py-3 h-auto shadow-lg shadow-purple-500/30 group">
-              <Sparkles className="w-5 h-5 mr-2" />
-              Take the Property Quiz
-              <ArrowDown className="w-4 h-4 ml-2 group-hover:translate-y-0.5 transition-transform" />
-              <span className="ml-2 text-xs opacity-70">~30 sec</span>
-            </Button>
-          </Link>
+          {/* Quick Access Shortcuts */}
+          <div className="flex flex-wrap gap-3 mb-10">
+            {propertyShortcuts.map((shortcut) => (
+              <Link key={shortcut.href} to={shortcut.href}>
+                <Button 
+                  variant={shortcut.highlight ? "default" : "outline"}
+                  className={shortcut.highlight 
+                    ? "bg-gradient-to-r from-violet-600 to-purple-600 hover:from-violet-500 hover:to-purple-500 text-white border-0 shadow-lg shadow-purple-500/30" 
+                    : "bg-zinc-900 border-zinc-700 text-zinc-300 hover:bg-zinc-800 hover:text-white hover:border-gold/50"
+                  }
+                >
+                  <shortcut.icon className="w-4 h-4 mr-2" />
+                  {shortcut.label}
+                  {shortcut.highlight && <ArrowDown className="w-4 h-4 ml-2" />}
+                </Button>
+              </Link>
+            ))}
+          </div>
 
           <NavigationTabs />
           <DeveloperGrid />
@@ -40,6 +63,9 @@ const Index = () => {
 
       {/* Why Dubai Section */}
       <WhyDubaiSection />
+
+      {/* Services Section */}
+      <ServicesSection />
 
       {/* Contact CTA Section */}
       <div className="container mx-auto px-4">
