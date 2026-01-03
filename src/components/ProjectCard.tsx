@@ -14,8 +14,8 @@ const ProjectCard = ({ project, showFavorite = true }: ProjectCardProps) => {
       to={`/project/${project.slug}`}
       className="group relative overflow-hidden rounded-2xl bg-zinc-900 border border-zinc-800 hover:border-zinc-700 transition-all duration-300"
     >
-      {/* Premium Star Badge - Only shows for featured/premium properties */}
-      {project.is_featured && (
+      {/* Premium Star Badge - Only shows for featured/premium properties when is_featured=true */}
+      {project.is_featured === true && (
         <div className="absolute top-3 left-3 z-10">
           <div className="bg-black/90 backdrop-blur-sm text-white text-xs font-bold px-3 py-1.5 rounded-full flex items-center gap-1.5 shadow-lg border border-gold/30">
             <Star className="w-3 h-3 fill-gold text-gold" />
