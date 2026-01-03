@@ -14,7 +14,226 @@ export type Database = {
   }
   public: {
     Tables: {
-      [_ in never]: never
+      communities: {
+        Row: {
+          created_at: string
+          description: string | null
+          id: string
+          image_url: string | null
+          location: string | null
+          name: string
+          slug: string
+          updated_at: string
+        }
+        Insert: {
+          created_at?: string
+          description?: string | null
+          id?: string
+          image_url?: string | null
+          location?: string | null
+          name: string
+          slug: string
+          updated_at?: string
+        }
+        Update: {
+          created_at?: string
+          description?: string | null
+          id?: string
+          image_url?: string | null
+          location?: string | null
+          name?: string
+          slug?: string
+          updated_at?: string
+        }
+        Relationships: []
+      }
+      developers: {
+        Row: {
+          created_at: string
+          description: string | null
+          id: string
+          logo_url: string | null
+          name: string
+          rank: number | null
+          slug: string
+          updated_at: string
+        }
+        Insert: {
+          created_at?: string
+          description?: string | null
+          id?: string
+          logo_url?: string | null
+          name: string
+          rank?: number | null
+          slug: string
+          updated_at?: string
+        }
+        Update: {
+          created_at?: string
+          description?: string | null
+          id?: string
+          logo_url?: string | null
+          name?: string
+          rank?: number | null
+          slug?: string
+          updated_at?: string
+        }
+        Relationships: []
+      }
+      project_documents: {
+        Row: {
+          created_at: string
+          document_type: string
+          file_name: string
+          file_size: number | null
+          file_url: string
+          id: string
+          project_id: string
+        }
+        Insert: {
+          created_at?: string
+          document_type: string
+          file_name: string
+          file_size?: number | null
+          file_url: string
+          id?: string
+          project_id: string
+        }
+        Update: {
+          created_at?: string
+          document_type?: string
+          file_name?: string
+          file_size?: number | null
+          file_url?: string
+          id?: string
+          project_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "project_documents_project_id_fkey"
+            columns: ["project_id"]
+            isOneToOne: false
+            referencedRelation: "projects"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      project_images: {
+        Row: {
+          alt_text: string | null
+          created_at: string
+          display_order: number | null
+          id: string
+          image_url: string
+          project_id: string
+        }
+        Insert: {
+          alt_text?: string | null
+          created_at?: string
+          display_order?: number | null
+          id?: string
+          image_url: string
+          project_id: string
+        }
+        Update: {
+          alt_text?: string | null
+          created_at?: string
+          display_order?: number | null
+          id?: string
+          image_url?: string
+          project_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "project_images_project_id_fkey"
+            columns: ["project_id"]
+            isOneToOne: false
+            referencedRelation: "projects"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      projects: {
+        Row: {
+          amenities: string[] | null
+          bedrooms_max: number | null
+          bedrooms_min: number | null
+          community_id: string | null
+          created_at: string
+          description: string | null
+          developer_id: string | null
+          floors: number | null
+          handover_date: string | null
+          id: string
+          location: string | null
+          name: string
+          payment_plan: string | null
+          price_from: number | null
+          price_to: number | null
+          service_charge: string | null
+          slug: string
+          status: string | null
+          updated_at: string
+        }
+        Insert: {
+          amenities?: string[] | null
+          bedrooms_max?: number | null
+          bedrooms_min?: number | null
+          community_id?: string | null
+          created_at?: string
+          description?: string | null
+          developer_id?: string | null
+          floors?: number | null
+          handover_date?: string | null
+          id?: string
+          location?: string | null
+          name: string
+          payment_plan?: string | null
+          price_from?: number | null
+          price_to?: number | null
+          service_charge?: string | null
+          slug: string
+          status?: string | null
+          updated_at?: string
+        }
+        Update: {
+          amenities?: string[] | null
+          bedrooms_max?: number | null
+          bedrooms_min?: number | null
+          community_id?: string | null
+          created_at?: string
+          description?: string | null
+          developer_id?: string | null
+          floors?: number | null
+          handover_date?: string | null
+          id?: string
+          location?: string | null
+          name?: string
+          payment_plan?: string | null
+          price_from?: number | null
+          price_to?: number | null
+          service_charge?: string | null
+          slug?: string
+          status?: string | null
+          updated_at?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "projects_community_id_fkey"
+            columns: ["community_id"]
+            isOneToOne: false
+            referencedRelation: "communities"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "projects_developer_id_fkey"
+            columns: ["developer_id"]
+            isOneToOne: false
+            referencedRelation: "developers"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
     }
     Views: {
       [_ in never]: never
