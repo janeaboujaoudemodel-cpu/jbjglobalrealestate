@@ -57,6 +57,17 @@ export default {
           border: "hsl(var(--sidebar-border))",
           ring: "hsl(var(--sidebar-ring))",
         },
+        gold: {
+          DEFAULT: "hsl(var(--gold))",
+          light: "hsl(var(--gold-light))",
+          dark: "hsl(var(--gold-dark))",
+          foreground: "hsl(var(--gold-foreground))",
+        },
+        premium: {
+          bg: "hsl(var(--premium-bg))",
+          card: "hsl(var(--premium-card))",
+          "card-border": "hsl(var(--premium-card-border))",
+        },
       },
       borderRadius: {
         lg: "var(--radius)",
