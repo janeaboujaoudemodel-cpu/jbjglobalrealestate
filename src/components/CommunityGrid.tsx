@@ -1,6 +1,7 @@
 import { Link } from "react-router-dom";
 import { useCommunities } from "@/hooks/useProjects";
 import { Skeleton } from "@/components/ui/skeleton";
+import { MapPin, TrendingUp } from "lucide-react";
 
 const CommunityGrid = () => {
   const { data: communities, isLoading } = useCommunities();
@@ -9,40 +10,62 @@ const CommunityGrid = () => {
     return (
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
         {[...Array(8)].map((_, i) => (
-          <Skeleton key={i} className="aspect-[4/3] rounded-lg bg-[#1a1a1a]" />
+          <Skeleton key={i} className="aspect-[4/3] rounded-xl bg-zinc-900" />
         ))}
       </div>
     );
   }
 
+  // Premium communities list for highlighting
+  const premiumCommunities = [
+    "palm-jumeirah", "dubai-marina", "downtown-dubai", "dubai-hills-estate",
+    "emirates-hills", "jumeirah-bay-island", "dubai-creek-harbour", "bluewaters-island"
+  ];
+
   return (
     <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
-      {communities?.map((community) => (
-        <Link
-          key={community.id}
-          to={`/community/${community.slug}`}
-          className="group relative overflow-hidden rounded-lg aspect-[4/3]"
-        >
-          <img
-            src={community.image_url || "https://images.unsplash.com/photo-1512917774080-9991f1c4c750?w=800"}
-            alt={community.name}
-            className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500"
-          />
-          <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/30 to-transparent" />
-          <div className="absolute bottom-0 left-0 right-0 p-4">
-            <h3
-              className="text-white font-semibold text-xl mb-1"
-              style={{ fontFamily: "Poppins, sans-serif" }}
-            >
-              {community.name}
-            </h3>
-            {community.location && (
-              <p className="text-gray-300 text-sm">{community.location}</p>
+      {communities?.map((community) => {
+        const isPremium = premiumCommunities.includes(community.slug);
+        
+        return (
+          <Link
+            key={community.id}
+            to={`/community/${community.slug}`}
+            className="group relative overflow-hidden rounded-xl aspect-[4/3] border border-zinc-800 hover:border-gold/30 transition-all duration-300"
+          >
+            <img
+              src={community.image_url || "https://images.unsplash.com/photo-1512917774080-9991f1c4c750?w=800"}
+              alt={community.name}
+              className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500"
+            />
+            <div className="absolute inset-0 bg-gradient-to-t from-black/90 via-black/40 to-transparent" />
+            
+            {/* Premium badge */}
+            {isPremium && (
+              <div className="absolute top-3 right-3 bg-gradient-to-r from-gold to-gold-dark text-gold-foreground text-xs font-bold px-2 py-1 rounded-full flex items-center gap-1">
+                <TrendingUp className="w-3 h-3" />
+                Trending
+              </div>
             )}
-          </div>
-          <div className="absolute inset-0 border-2 border-transparent group-hover:border-[#D4A017]/50 rounded-lg transition-colors duration-300" />
-        </Link>
-      ))}
+            
+            <div className="absolute bottom-0 left-0 right-0 p-4">
+              <h3
+                className="text-white font-semibold text-xl mb-1"
+                style={{ fontFamily: "Poppins, sans-serif" }}
+              >
+                {community.name}
+              </h3>
+              {community.location && (
+                <p className="text-zinc-400 text-sm flex items-center gap-1">
+                  <MapPin className="w-3 h-3" />
+                  {community.location}
+                </p>
+              )}
+            </div>
+            <div className="absolute inset-0 border-2 border-transparent group-hover:border-gold/30 rounded-xl transition-colors duration-300" />
+          </Link>
+        );
+      })}
     </div>
   );
 };

@@ -71,10 +71,10 @@ const Index = () => {
 
         {/* Quiz CTA */}
         <Link to="/quiz">
-          <Button className="mb-10 bg-gradient-to-r from-violet-600 to-fuchsia-600 hover:from-violet-500 hover:to-fuchsia-500 text-white px-6 py-3 h-auto">
+          <Button className="mb-10 bg-gradient-to-r from-gold to-gold-dark hover:from-gold-light hover:to-gold text-gold-foreground px-6 py-3 h-auto shadow-lg shadow-gold/20">
             <Sparkles className="w-5 h-5 mr-2" />
             Take the Property Quiz
-            <span className="ml-2 text-xs opacity-70">~25 sec</span>
+            <span className="ml-2 text-xs opacity-70">~30 sec</span>
           </Button>
         </Link>
 

@@ -130,7 +130,7 @@ const ImageCarousel = ({ images, projectName = "project" }: ImageCarouselProps) 
                 key={index}
                 onClick={() => setCurrentIndex(index)}
                 className={`w-2 h-2 rounded-full transition-colors ${
-                  index === currentIndex ? "bg-[#D4A017]" : "bg-white/50"
+                  index === currentIndex ? "bg-gold" : "bg-white/50"
                 }`}
               />
             ))}
@@ -147,10 +147,10 @@ const ImageCarousel = ({ images, projectName = "project" }: ImageCarouselProps) 
                   variant="ghost"
                   size="sm"
                   onClick={handleDownloadAll}
-                  className="text-[#D4A017] hover:text-[#D4A017] hover:bg-[#D4A017]/10 text-sm"
+                  className="text-gold hover:text-gold-light hover:bg-gold/10 text-sm"
                 >
                   <Download className="w-4 h-4 mr-1" />
-                  Download All
+                  Download All Photos
                 </Button>
               )}
             </div>
@@ -160,7 +160,7 @@ const ImageCarousel = ({ images, projectName = "project" }: ImageCarouselProps) 
                   key={image.id}
                   onClick={() => setCurrentIndex(index)}
                   className={`aspect-[4/3] rounded overflow-hidden border-2 transition-colors relative ${
-                    index === currentIndex ? "border-[#D4A017]" : "border-transparent"
+                    index === currentIndex ? "border-gold" : "border-transparent hover:border-gold/50"
                   }`}
                 >
                   <img

@@ -71,23 +71,23 @@ const DocumentDownloads = ({ documents }: DocumentDownloadsProps) => {
   }, {} as Record<string, Document[]>);
 
   return (
-    <div className="bg-[#1a1a1a] rounded-lg p-6 border border-[#2a2a2a]">
+    <div className="bg-zinc-900 rounded-xl p-6 border border-zinc-800">
       <div className="flex items-center justify-between mb-6">
         <h3
           className="text-white text-xl font-semibold"
           style={{ fontFamily: "Poppins, sans-serif" }}
         >
-          Downloads
+          Project Materials
         </h3>
         {documents.length > 1 && (
           <Button
             variant="outline"
             size="sm"
             onClick={handleDownloadAll}
-            className="border-[#D4A017] text-[#D4A017] hover:bg-[#D4A017] hover:text-black"
+            className="border-gold/40 text-gold hover:bg-gold/10 hover:text-gold-light bg-transparent"
           >
             <Download className="w-4 h-4 mr-2" />
-            Download All
+            Download All Materials
           </Button>
         )}
       </div>
@@ -99,16 +99,16 @@ const DocumentDownloads = ({ documents }: DocumentDownloadsProps) => {
               <button
                 key={doc.id}
                 onClick={() => handleDownload(doc)}
-                className="w-full flex items-center gap-3 p-3 rounded-lg bg-[#0d0d0d] hover:bg-[#252525] transition-colors group"
+                className="w-full flex items-center gap-3 p-4 rounded-xl bg-zinc-950 hover:bg-zinc-800 transition-colors group border border-zinc-800 hover:border-gold/30"
               >
-                <div className="w-10 h-10 rounded-lg bg-[#D4A017]/10 flex items-center justify-center text-[#D4A017]">
+                <div className="w-10 h-10 rounded-lg bg-gold/10 flex items-center justify-center text-gold">
                   {getDocumentIcon(type)}
                 </div>
                 <div className="flex-1 text-left">
                   <p className="text-white font-medium">{getDocumentLabel(type)}</p>
-                  <p className="text-gray-500 text-sm truncate">{doc.file_name}</p>
+                  <p className="text-zinc-500 text-sm truncate">{doc.file_name}</p>
                 </div>
-                <Download className="w-5 h-5 text-gray-500 group-hover:text-[#D4A017] transition-colors" />
+                <Download className="w-5 h-5 text-zinc-500 group-hover:text-gold transition-colors" />
               </button>
             ))}
           </div>

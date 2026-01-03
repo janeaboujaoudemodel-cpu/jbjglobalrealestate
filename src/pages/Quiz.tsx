@@ -1,22 +1,17 @@
-import { useState, useEffect } from "react";
+import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { useQuery } from "@tanstack/react-query";
 import { supabase } from "@/integrations/supabase/client";
 import { useAuth } from "@/contexts/AuthContext";
-import { ChevronRight, ChevronLeft, Clock, Sparkles, Loader2 } from "lucide-react";
+import { ChevronRight, ChevronLeft, Clock, Sparkles, Loader2, CheckCircle2 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Progress } from "@/components/ui/progress";
-
-interface QuizAnswer {
-  question: string;
-  answer: string | string[];
-}
 
 const QUIZ_QUESTIONS = [
   {
     id: "purpose",
     question: "What's your primary purpose for this property?",
-    type: "single",
+    type: "single" as const,
     options: [
       { value: "investment", label: "Investment & ROI", icon: "📈" },
       { value: "living", label: "Personal Residence", icon: "🏠" },
@@ -27,7 +22,7 @@ const QUIZ_QUESTIONS = [
   {
     id: "budget",
     question: "What's your budget range?",
-    type: "single",
+    type: "single" as const,
     options: [
       { value: "under-2m", label: "Under AED 2M", icon: "💰" },
       { value: "2m-5m", label: "AED 2M - 5M", icon: "💎" },
@@ -38,7 +33,7 @@ const QUIZ_QUESTIONS = [
   {
     id: "bedrooms",
     question: "How many bedrooms do you need?",
-    type: "single",
+    type: "single" as const,
     options: [
       { value: "studio-1", label: "Studio or 1 BR", icon: "1️⃣" },
       { value: "2-3", label: "2-3 Bedrooms", icon: "2️⃣" },
@@ -49,7 +44,7 @@ const QUIZ_QUESTIONS = [
   {
     id: "location",
     question: "What type of location do you prefer?",
-    type: "single",
+    type: "single" as const,
     options: [
       { value: "beachfront", label: "Beachfront / Waterfront", icon: "🌊" },
       { value: "city-center", label: "City Center / Downtown", icon: "🌆" },
@@ -60,7 +55,7 @@ const QUIZ_QUESTIONS = [
   {
     id: "timeline",
     question: "When do you need the property?",
-    type: "single",
+    type: "single" as const,
     options: [
       { value: "ready", label: "Ready to Move", icon: "✅" },
       { value: "2025-2026", label: "2025-2026", icon: "📅" },
@@ -71,37 +66,42 @@ const QUIZ_QUESTIONS = [
   {
     id: "views",
     question: "What views are most important to you?",
-    type: "multiple",
+    type: "multiple" as const,
+    hasSelectAll: true,
     options: [
       { value: "sea", label: "Sea View", icon: "🌊" },
       { value: "city", label: "City / Skyline", icon: "🏙️" },
       { value: "golf", label: "Golf Course", icon: "⛳" },
       { value: "garden", label: "Garden / Park", icon: "🌳" },
       { value: "marina", label: "Marina", icon: "⛵" },
-      { value: "any", label: "No Preference", icon: "👀" },
+      { value: "burj", label: "Burj Khalifa", icon: "🗼" },
     ],
   },
   {
     id: "amenities",
     question: "Which amenities are must-haves?",
-    type: "multiple",
+    type: "multiple" as const,
+    hasSelectAll: true,
     options: [
       { value: "pool", label: "Swimming Pool", icon: "🏊" },
       { value: "gym", label: "Fitness Center", icon: "💪" },
       { value: "beach", label: "Private Beach", icon: "🏖️" },
       { value: "spa", label: "Spa & Wellness", icon: "🧖" },
-      { value: "concierge", label: "Concierge", icon: "🛎️" },
+      { value: "concierge", label: "24/7 Concierge", icon: "🛎️" },
       { value: "parking", label: "Valet Parking", icon: "🚗" },
+      { value: "security", label: "24/7 Security", icon: "🔐" },
+      { value: "kids", label: "Kids Play Area", icon: "🎠" },
     ],
   },
   {
     id: "emirate",
     question: "Which emirate do you prefer?",
-    type: "single",
+    type: "single" as const,
     options: [
       { value: "dubai", label: "Dubai", icon: "🌴" },
       { value: "abu-dhabi", label: "Abu Dhabi", icon: "🕌" },
       { value: "rak", label: "Ras Al Khaimah", icon: "⛰️" },
+      { value: "sharjah", label: "Sharjah", icon: "🏛️" },
       { value: "any", label: "Open to All", icon: "🗺️" },
     ],
   },
@@ -113,8 +113,7 @@ const Quiz = () => {
   const [currentStep, setCurrentStep] = useState(0);
   const [answers, setAnswers] = useState<Record<string, string | string[]>>({});
   const [isSubmitting, setIsSubmitting] = useState(false);
-  const [timeStarted] = useState(Date.now());
-  const [estimatedTime] = useState(25); // seconds
+  const estimatedTime = 30;
 
   const { data: allProjects } = useQuery({
     queryKey: ["all-projects-quiz"],
@@ -134,20 +133,27 @@ const Quiz = () => {
   const currentQuestion = QUIZ_QUESTIONS[currentStep];
   const progress = ((currentStep + 1) / QUIZ_QUESTIONS.length) * 100;
 
+  const handleSelectAll = () => {
+    const allValues = currentQuestion.options.map(o => o.value);
+    setAnswers({ ...answers, [currentQuestion.id]: allValues });
+  };
+
+  const handleClearAll = () => {
+    setAnswers({ ...answers, [currentQuestion.id]: [] });
+  };
+
   const handleAnswer = (value: string) => {
     if (currentQuestion.type === "multiple") {
       const current = (answers[currentQuestion.id] as string[]) || [];
-      if (value === "any" || value === "no-preference") {
-        setAnswers({ ...answers, [currentQuestion.id]: [value] });
-      } else if (current.includes(value)) {
+      if (current.includes(value)) {
         setAnswers({
           ...answers,
-          [currentQuestion.id]: current.filter((v) => v !== value && v !== "any"),
+          [currentQuestion.id]: current.filter((v) => v !== value),
         });
       } else {
         setAnswers({
           ...answers,
-          [currentQuestion.id]: [...current.filter((v) => v !== "any"), value],
+          [currentQuestion.id]: [...current, value],
         });
       }
     } else {
@@ -163,17 +169,21 @@ const Quiz = () => {
     return !!answer;
   };
 
+  const allSelected = () => {
+    if (currentQuestion.type !== "multiple") return false;
+    const current = (answers[currentQuestion.id] as string[]) || [];
+    return current.length === currentQuestion.options.length;
+  };
+
   const handleNext = async () => {
     if (currentStep < QUIZ_QUESTIONS.length - 1) {
       setCurrentStep(currentStep + 1);
     } else {
-      // Submit and get recommendations
       setIsSubmitting(true);
       try {
         const recommendations = getRecommendations();
         const sessionId = `quiz-${Date.now()}`;
 
-        // Save quiz response
         await supabase.from("quiz_responses").insert({
           user_id: user?.id || null,
           session_id: sessionId,
@@ -181,12 +191,10 @@ const Quiz = () => {
           recommended_project_ids: recommendations.slice(0, 5).map((p) => p.id),
         });
 
-        // Navigate to results with recommended project slugs
         const slugs = recommendations.slice(0, 5).map((p) => p.slug).join(",");
         navigate(`/quiz-results?projects=${slugs}`);
       } catch (error) {
         console.error("Error saving quiz:", error);
-        // Still navigate even if save fails
         const recommendations = getRecommendations();
         const slugs = recommendations.slice(0, 5).map((p) => p.slug).join(",");
         navigate(`/quiz-results?projects=${slugs}`);
@@ -201,7 +209,6 @@ const Quiz = () => {
       .map((project) => {
         let score = 0;
 
-        // Budget matching
         const budget = answers.budget;
         const priceFrom = project.price_from || 0;
         if (budget === "under-2m" && priceFrom < 2000000) score += 20;
@@ -209,7 +216,6 @@ const Quiz = () => {
         if (budget === "5m-15m" && priceFrom >= 5000000 && priceFrom < 15000000) score += 20;
         if (budget === "15m-plus" && priceFrom >= 15000000) score += 20;
 
-        // Bedroom matching
         const bedrooms = answers.bedrooms;
         const minBr = project.bedrooms_min || 0;
         if (bedrooms === "studio-1" && minBr <= 1) score += 15;
@@ -217,35 +223,30 @@ const Quiz = () => {
         if (bedrooms === "4-5" && minBr >= 4 && minBr <= 5) score += 15;
         if (bedrooms === "6-plus" && minBr >= 6) score += 15;
 
-        // Location preference
         const location = answers.location;
         const projectViews = project.views || [];
         if (location === "beachfront" && projectViews.some((v: string) => v.toLowerCase().includes("sea"))) score += 15;
         if (location === "city-center" && projectViews.some((v: string) => v.toLowerCase().includes("city") || v.toLowerCase().includes("skyline"))) score += 15;
         if (location === "golf-community" && projectViews.some((v: string) => v.toLowerCase().includes("golf"))) score += 15;
 
-        // Timeline matching
         const timeline = answers.timeline;
         const handover = project.handover_date?.toLowerCase() || "";
         if (timeline === "ready" && (handover === "" || handover.includes("ready"))) score += 10;
         if (timeline === "2025-2026" && (handover.includes("2025") || handover.includes("2026"))) score += 10;
         if (timeline === "2027-plus" && (handover.includes("2027") || handover.includes("2028") || handover.includes("2029"))) score += 10;
 
-        // Emirate matching
         const emirate = answers.emirate;
         const projectEmirate = project.emirate?.toLowerCase() || "";
         if (emirate === "dubai" && projectEmirate === "dubai") score += 10;
         if (emirate === "abu-dhabi" && projectEmirate === "abu dhabi") score += 10;
         if (emirate === "rak" && projectEmirate === "ras al khaimah") score += 10;
+        if (emirate === "sharjah" && projectEmirate === "sharjah") score += 10;
         if (emirate === "any") score += 5;
 
-        // Views matching
         const preferredViews = answers.views as string[] || [];
-        if (!preferredViews.includes("any")) {
-          preferredViews.forEach((pv) => {
-            if (projectViews.some((v: string) => v.toLowerCase().includes(pv))) score += 5;
-          });
-        }
+        preferredViews.forEach((pv) => {
+          if (projectViews.some((v: string) => v.toLowerCase().includes(pv))) score += 5;
+        });
 
         return { ...project, matchScore: score };
       })
@@ -275,14 +276,14 @@ const Quiz = () => {
               <span>Question {currentStep + 1} of {QUIZ_QUESTIONS.length}</span>
               <span>{Math.round(progress)}% complete</span>
             </div>
-            <Progress value={progress} className="h-1 bg-zinc-800" />
+            <Progress value={progress} className="h-1.5 bg-zinc-800" />
           </div>
         </div>
       </div>
 
       {/* Question Content */}
       <div className="flex-1 flex items-center justify-center px-4 py-12">
-        <div className="w-full max-w-2xl">
+        <div className="w-full max-w-3xl">
           <div className="text-center mb-10">
             <h2 className="text-white text-3xl md:text-4xl font-bold mb-3">
               {currentQuestion.question}
@@ -292,7 +293,32 @@ const Quiz = () => {
             )}
           </div>
 
-          <div className={`grid gap-3 ${currentQuestion.options.length > 4 ? "grid-cols-2 md:grid-cols-3" : "grid-cols-1 md:grid-cols-2"}`}>
+          {/* Select All / Clear All for multiple choice */}
+          {currentQuestion.type === "multiple" && "hasSelectAll" in currentQuestion && currentQuestion.hasSelectAll && (
+            <div className="flex justify-center gap-3 mb-6">
+              <Button
+                variant="outline"
+                size="sm"
+                onClick={handleSelectAll}
+                disabled={allSelected()}
+                className="border-gold/40 text-gold hover:bg-gold/10 hover:text-gold-light bg-transparent"
+              >
+                <CheckCircle2 className="w-4 h-4 mr-2" />
+                Select All
+              </Button>
+              <Button
+                variant="outline"
+                size="sm"
+                onClick={handleClearAll}
+                disabled={!(answers[currentQuestion.id] as string[])?.length}
+                className="border-zinc-700 text-zinc-400 hover:bg-zinc-800 hover:text-white bg-transparent"
+              >
+                Clear Selection
+              </Button>
+            </div>
+          )}
+
+          <div className={`grid gap-3 ${currentQuestion.options.length > 4 ? "grid-cols-2 md:grid-cols-3 lg:grid-cols-4" : "grid-cols-1 md:grid-cols-2"}`}>
             {currentQuestion.options.map((option) => {
               const currentAnswer = answers[currentQuestion.id];
               const isSelected = currentQuestion.type === "multiple"
@@ -305,12 +331,15 @@ const Quiz = () => {
                   onClick={() => handleAnswer(option.value)}
                   className={`flex items-center gap-4 p-5 rounded-xl text-left transition-all duration-200 border ${
                     isSelected
-                      ? "bg-white text-zinc-900 border-white"
+                      ? "bg-gradient-to-br from-gold/20 to-gold-dark/10 text-white border-gold/50 shadow-lg shadow-gold/10"
                       : "bg-zinc-900 text-white border-zinc-800 hover:border-zinc-700 hover:bg-zinc-800/50"
                   }`}
                 >
                   <span className="text-2xl">{option.icon}</span>
                   <span className="font-medium">{option.label}</span>
+                  {isSelected && (
+                    <CheckCircle2 className="w-5 h-5 text-gold ml-auto" />
+                  )}
                 </button>
               );
             })}
@@ -331,7 +360,7 @@ const Quiz = () => {
             <Button
               onClick={handleNext}
               disabled={!isAnswered() || isSubmitting}
-              className="bg-white text-zinc-900 hover:bg-zinc-100 px-8"
+              className="bg-gradient-to-r from-gold to-gold-dark text-gold-foreground hover:from-gold-light hover:to-gold px-8 shadow-lg shadow-gold/20"
             >
               {isSubmitting ? (
                 <>
