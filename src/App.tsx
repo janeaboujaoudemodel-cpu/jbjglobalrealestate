@@ -15,6 +15,7 @@ import Quiz from "./pages/Quiz";
 import QuizResults from "./pages/QuizResults";
 import Favorites from "./pages/Favorites";
 import Compare from "./pages/Compare";
+import News from "./pages/News";
 import NotFound from "./pages/NotFound";
 import ComparisonBar from "./components/ComparisonBar";
 import WelcomeModal from "./components/WelcomeModal";
@@ -31,7 +32,7 @@ const AppLayout = ({ children }: { children: React.ReactNode }) => {
   return (
     <>
       {!hideHeader && <GlobalHeader />}
-      <div className={!hideHeader ? "pt-16" : ""}>
+      <div className={!hideHeader ? "pt-20 lg:pt-24" : ""}>
         {children}
       </div>
     </>
@@ -59,6 +60,7 @@ const App = () => (
               <Route path="/quiz-results" element={<QuizResults />} />
               <Route path="/favorites" element={<Favorites />} />
               <Route path="/compare" element={<Compare />} />
+              <Route path="/news" element={<News />} />
               {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
               <Route path="*" element={<NotFound />} />
             </Routes>

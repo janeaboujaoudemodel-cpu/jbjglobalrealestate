@@ -2,7 +2,11 @@ import { Link, useLocation } from "react-router-dom";
 import { useAuth } from "@/contexts/AuthContext";
 import { useFavorites, useShortlist } from "@/hooks/useFavorites";
 import { useGuestFavorites, useGuestShortlist } from "@/hooks/useGuestFavorites";
-import { Home, Heart, ListPlus, User, LogOut, Settings, Menu, X, Phone, Info, Building2 } from "lucide-react";
+import { 
+  Home, Heart, ListPlus, User, LogOut, Settings, Menu, 
+  Phone, Building2, Newspaper, ClipboardCheck, FileText,
+  Sparkles
+} from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { useState } from "react";
 import {
@@ -22,6 +26,16 @@ import {
 
 const INQUIRY_FORM_URL = "https://jjglobalcapital.com/form/property-investment-inquiry-form/";
 
+// Premium Logo Component
+const JJLogo = ({ className = "" }: { className?: string }) => (
+  <span className={`font-bold tracking-wide ${className}`} style={{ fontFamily: "Poppins, sans-serif" }}>
+    <span className="text-gold">J</span>
+    <span className="text-zinc-500 mx-1">|</span>
+    <span className="text-gold">J</span>
+    <span className="text-white ml-2">GLOBAL CAPITAL</span>
+  </span>
+);
+
 const GlobalHeader = () => {
   const { user, isAdmin, signOut } = useAuth();
   const location = useLocation();
@@ -35,35 +49,42 @@ const GlobalHeader = () => {
   const favCount = user ? (favorites?.length || 0) : guestFavorites.length;
   const shortlistCount = user ? (shortlist?.length || 0) : guestShortlist.length;
 
-  const navLinks = [
+  const mainNavLinks = [
     { href: "/", label: "Home", icon: Home },
-    { href: "/#properties", label: "Browse Properties", icon: Building2 },
-    { href: INQUIRY_FORM_URL, label: "Contact Us", icon: Phone, external: true },
+    { href: "/#properties", label: "Properties", icon: Building2 },
+    { href: "/news", label: "News & Insights", icon: Newspaper },
+    { href: INQUIRY_FORM_URL, label: "Contact", icon: Phone, external: true },
+  ];
+
+  // Property shortcuts for quick access
+  const propertyShortcuts = [
+    { href: "/?status=off-plan", label: "Off-Plan", icon: Building2 },
+    { href: "/?status=ready", label: "Ready to Move", icon: ClipboardCheck },
+    { href: "/quiz", label: "Take the Quiz", icon: Sparkles },
+    { href: "/market-report", label: "Market Report", icon: FileText },
   ];
 
   const isActive = (path: string) => location.pathname === path;
 
   return (
-    <header className="fixed top-0 left-0 right-0 z-50 bg-black/90 backdrop-blur-md border-b border-zinc-800/50">
+    <header className="fixed top-0 left-0 right-0 z-50 bg-black border-b border-zinc-800/50">
       <div className="container mx-auto px-4">
         <div className="flex items-center justify-between h-16">
           {/* Logo */}
-          <Link to="/" className="flex items-center gap-2">
-            <span className="text-xl font-bold text-white" style={{ fontFamily: "Poppins, sans-serif" }}>
-              JJ <span className="text-gold">Global Capital</span>
-            </span>
+          <Link to="/" className="flex items-center">
+            <JJLogo className="text-lg md:text-xl" />
           </Link>
 
           {/* Desktop Navigation */}
-          <nav className="hidden md:flex items-center gap-1">
-            {navLinks.map((link) => (
+          <nav className="hidden lg:flex items-center gap-1">
+            {mainNavLinks.map((link) => (
               link.external ? (
                 <a
                   key={link.href}
                   href={link.href}
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="px-4 py-2 text-sm text-zinc-400 hover:text-white transition-colors rounded-lg hover:bg-zinc-800/50"
+                  className="px-4 py-2 text-sm text-zinc-400 hover:text-white transition-colors"
                 >
                   {link.label}
                 </a>
@@ -71,10 +92,10 @@ const GlobalHeader = () => {
                 <Link
                   key={link.href}
                   to={link.href}
-                  className={`px-4 py-2 text-sm rounded-lg transition-colors ${
+                  className={`px-4 py-2 text-sm transition-colors ${
                     isActive(link.href) 
-                      ? "text-gold bg-gold/10" 
-                      : "text-zinc-400 hover:text-white hover:bg-zinc-800/50"
+                      ? "text-white bg-zinc-800" 
+                      : "text-zinc-400 hover:text-white hover:bg-zinc-900"
                   }`}
                 >
                   {link.label}
@@ -84,7 +105,7 @@ const GlobalHeader = () => {
           </nav>
 
           {/* Right Side Actions */}
-          <div className="flex items-center gap-2">
+          <div className="flex items-center gap-1">
             {/* Favorites */}
             <Link to="/favorites">
               <Button variant="ghost" size="sm" className="text-zinc-400 hover:text-white hover:bg-zinc-800 relative">
@@ -110,7 +131,7 @@ const GlobalHeader = () => {
             </Link>
 
             {/* User Menu - Desktop */}
-            <div className="hidden md:block">
+            <div className="hidden lg:block">
               {user ? (
                 <DropdownMenu>
                   <DropdownMenuTrigger asChild>
@@ -119,7 +140,7 @@ const GlobalHeader = () => {
                       {user.email?.split("@")[0]}
                     </Button>
                   </DropdownMenuTrigger>
-                  <DropdownMenuContent align="end" className="bg-zinc-900 border-zinc-800">
+                  <DropdownMenuContent align="end" className="bg-black border-zinc-800">
                     <DropdownMenuItem asChild>
                       <Link to="/favorites" className="flex items-center gap-2 text-zinc-300">
                         <Heart className="w-4 h-4" />
@@ -152,20 +173,20 @@ const GlobalHeader = () => {
 
             {/* Mobile Menu Trigger */}
             <Sheet open={mobileMenuOpen} onOpenChange={setMobileMenuOpen}>
-              <SheetTrigger asChild className="md:hidden">
-                <Button variant="ghost" size="sm" className="text-zinc-400 hover:text-white">
+              <SheetTrigger asChild className="lg:hidden">
+                <Button variant="ghost" size="sm" className="text-zinc-400 hover:text-white ml-1">
                   <Menu className="w-5 h-5" />
                 </Button>
               </SheetTrigger>
-              <SheetContent side="right" className="bg-zinc-950 border-zinc-800 w-[280px]">
-                <SheetHeader>
-                  <SheetTitle className="text-white text-left">
-                    JJ <span className="text-gold">Global Capital</span>
-                  </SheetTitle>
-                </SheetHeader>
+              <SheetContent side="right" className="bg-black border-zinc-800 w-[300px] p-0">
+                {/* Menu Header with logo background */}
+                <div className="relative h-32 bg-gradient-to-b from-zinc-900 to-black border-b border-zinc-800 flex items-end p-6">
+                  <JJLogo className="text-lg" />
+                </div>
                 
-                <nav className="flex flex-col gap-2 mt-8">
-                  {navLinks.map((link) => (
+                <nav className="flex flex-col p-4">
+                  {/* Main Navigation */}
+                  {mainNavLinks.map((link) => (
                     link.external ? (
                       <a
                         key={link.href}
@@ -173,9 +194,8 @@ const GlobalHeader = () => {
                         target="_blank"
                         rel="noopener noreferrer"
                         onClick={() => setMobileMenuOpen(false)}
-                        className="flex items-center gap-3 px-4 py-3 text-zinc-300 hover:text-white hover:bg-zinc-800/50 rounded-lg transition-colors"
+                        className="flex items-center gap-3 px-4 py-3 text-zinc-300 hover:text-white hover:bg-zinc-900 border-l-2 border-transparent hover:border-gold transition-all"
                       >
-                        <link.icon className="w-5 h-5" />
                         {link.label}
                       </a>
                     ) : (
@@ -183,13 +203,12 @@ const GlobalHeader = () => {
                         key={link.href}
                         to={link.href}
                         onClick={() => setMobileMenuOpen(false)}
-                        className={`flex items-center gap-3 px-4 py-3 rounded-lg transition-colors ${
+                        className={`flex items-center gap-3 px-4 py-3 border-l-2 transition-all ${
                           isActive(link.href)
-                            ? "text-gold bg-gold/10"
-                            : "text-zinc-300 hover:text-white hover:bg-zinc-800/50"
+                            ? "text-gold border-gold bg-gold/5"
+                            : "text-zinc-300 border-transparent hover:text-white hover:bg-zinc-900 hover:border-gold"
                         }`}
                       >
-                        <link.icon className="w-5 h-5" />
                         {link.label}
                       </Link>
                     )
@@ -197,10 +216,27 @@ const GlobalHeader = () => {
 
                   <div className="h-px bg-zinc-800 my-4" />
 
+                  {/* Property Shortcuts */}
+                  <p className="px-4 py-2 text-xs text-zinc-500 uppercase tracking-wider">Quick Access</p>
+                  {propertyShortcuts.map((shortcut) => (
+                    <Link
+                      key={shortcut.href}
+                      to={shortcut.href}
+                      onClick={() => setMobileMenuOpen(false)}
+                      className="flex items-center gap-3 px-4 py-2.5 text-sm text-zinc-400 hover:text-white hover:bg-zinc-900 transition-colors"
+                    >
+                      <shortcut.icon className="w-4 h-4 text-gold/70" />
+                      {shortcut.label}
+                    </Link>
+                  ))}
+
+                  <div className="h-px bg-zinc-800 my-4" />
+
+                  {/* User Actions */}
                   <Link
                     to="/favorites"
                     onClick={() => setMobileMenuOpen(false)}
-                    className="flex items-center gap-3 px-4 py-3 text-zinc-300 hover:text-white hover:bg-zinc-800/50 rounded-lg transition-colors"
+                    className="flex items-center gap-3 px-4 py-3 text-zinc-300 hover:text-white hover:bg-zinc-900 transition-colors"
                   >
                     <Heart className="w-5 h-5" />
                     Favorites
@@ -214,7 +250,7 @@ const GlobalHeader = () => {
                   <Link
                     to="/favorites?tab=shortlist"
                     onClick={() => setMobileMenuOpen(false)}
-                    className="flex items-center gap-3 px-4 py-3 text-zinc-300 hover:text-white hover:bg-zinc-800/50 rounded-lg transition-colors"
+                    className="flex items-center gap-3 px-4 py-3 text-zinc-300 hover:text-white hover:bg-zinc-900 transition-colors"
                   >
                     <ListPlus className="w-5 h-5" />
                     Shortlist
@@ -236,7 +272,7 @@ const GlobalHeader = () => {
                         <Link
                           to="/admin"
                           onClick={() => setMobileMenuOpen(false)}
-                          className="flex items-center gap-3 px-4 py-3 text-zinc-300 hover:text-white hover:bg-zinc-800/50 rounded-lg transition-colors"
+                          className="flex items-center gap-3 px-4 py-3 text-zinc-300 hover:text-white hover:bg-zinc-900 transition-colors"
                         >
                           <Settings className="w-5 h-5" />
                           Admin Panel
@@ -247,7 +283,7 @@ const GlobalHeader = () => {
                           signOut();
                           setMobileMenuOpen(false);
                         }}
-                        className="flex items-center gap-3 px-4 py-3 text-zinc-300 hover:text-white hover:bg-zinc-800/50 rounded-lg transition-colors w-full text-left"
+                        className="flex items-center gap-3 px-4 py-3 text-zinc-300 hover:text-white hover:bg-zinc-900 transition-colors w-full text-left"
                       >
                         <LogOut className="w-5 h-5" />
                         Sign Out
@@ -257,7 +293,7 @@ const GlobalHeader = () => {
                     <Link
                       to="/auth"
                       onClick={() => setMobileMenuOpen(false)}
-                      className="flex items-center gap-3 px-4 py-3 text-gold hover:text-gold-light hover:bg-gold/10 rounded-lg transition-colors"
+                      className="flex items-center gap-3 px-4 py-3 text-gold hover:text-gold-light hover:bg-gold/10 transition-colors"
                     >
                       <User className="w-5 h-5" />
                       Sign In / Create Account
@@ -267,6 +303,20 @@ const GlobalHeader = () => {
               </SheetContent>
             </Sheet>
           </div>
+        </div>
+
+        {/* Desktop Property Shortcuts Bar */}
+        <div className="hidden lg:flex items-center gap-4 pb-3 border-t border-zinc-900 pt-2 -mt-1">
+          {propertyShortcuts.map((shortcut) => (
+            <Link
+              key={shortcut.href}
+              to={shortcut.href}
+              className="flex items-center gap-2 text-xs text-zinc-500 hover:text-gold transition-colors"
+            >
+              <shortcut.icon className="w-3.5 h-3.5" />
+              {shortcut.label}
+            </Link>
+          ))}
         </div>
       </div>
     </header>
