@@ -39,7 +39,24 @@ const createEmptyListings = (): Listing[] => [
 
 // Developers ordered from top UAE developers to newest
 const developersData: Developer[] = [
-  { id: "emaar", name: "EMAAR", listings: createEmptyListings() },
+  { 
+    id: "emaar", 
+    name: "EMAAR", 
+    listings: [
+      { id: 1, image: "https://images.unsplash.com/photo-1512917774080-9991f1c4c750?w=800", title: "The Valley Phase 2", location: "Dubai Land", price: "AED 1,200,000", bedrooms: "3 Bedrooms", description: "Modern townhouses with premium finishes and community amenities" },
+      { id: 2, image: "https://images.unsplash.com/photo-1600596542815-ffad4c1539a9?w=800", title: "Dubai Hills Estate", location: "Dubai Hills", price: "AED 2,500,000", bedrooms: "4 Bedrooms", description: "Luxury villas overlooking the championship golf course" },
+      { id: 3, image: "https://images.unsplash.com/photo-1600607687939-ce8a6c25118c?w=800", title: "Creek Harbour Residences", location: "Dubai Creek", price: "AED 1,800,000", bedrooms: "2 Bedrooms", description: "Waterfront apartments with stunning creek views" },
+      { id: 4, image: "https://images.unsplash.com/photo-1600585154340-be6161a56a0c?w=800", title: "Arabian Ranches III", location: "Arabian Ranches", price: "AED 3,200,000", bedrooms: "5 Bedrooms", description: "Exclusive family homes in a gated community" },
+      { id: 5, image: "", title: "", location: "", price: "", bedrooms: "", description: "" },
+      { id: 6, image: "", title: "", location: "", price: "", bedrooms: "", description: "" },
+      { id: 7, image: "", title: "", location: "", price: "", bedrooms: "", description: "" },
+      { id: 8, image: "", title: "", location: "", price: "", bedrooms: "", description: "" },
+      { id: 9, image: "", title: "", location: "", price: "", bedrooms: "", description: "" },
+      { id: 10, image: "", title: "", location: "", price: "", bedrooms: "", description: "" },
+      { id: 11, image: "", title: "", location: "", price: "", bedrooms: "", description: "" },
+      { id: 12, image: "", title: "", location: "", price: "", bedrooms: "", description: "" },
+    ]
+  },
   { id: "nakheel", name: "NAKHEEL", listings: createEmptyListings() },
   { id: "dubai-holding", name: "DUBAI HOLDING", listings: createEmptyListings() },
   { id: "damac", name: "DAMAC", listings: createEmptyListings() },
