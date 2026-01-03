@@ -357,7 +357,7 @@ const ProjectFilters = ({
                 )}
               </div>
             </SheetHeader>
-            <ScrollArea className="h-[calc(100vh-140px)]">
+            <ScrollArea className="h-[calc(100vh-200px)] pb-20">
               <div className="p-6 space-y-8">
                 {/* Premium Properties */}
                 <FilterSection title="Premium Properties" icon={<Star className="w-5 h-5" />}>
@@ -435,10 +435,10 @@ const ProjectFilters = ({
                       <div>
                         <label className="text-gray-500 text-xs mb-1 block">From</label>
                         <Input
-                          type="number"
-                          value={Math.round(filters.priceMin * CURRENCY_RATES[filters.currency])}
+                          type="text"
+                          value={Math.round(filters.priceMin * CURRENCY_RATES[filters.currency]).toLocaleString()}
                           onChange={(e) => {
-                            const value = parseInt(e.target.value) || 0;
+                            const value = parseInt(e.target.value.replace(/,/g, '')) || 0;
                             updateFilter("priceMin", Math.round(value / CURRENCY_RATES[filters.currency]));
                           }}
                           className="bg-[#1a1a1a] border-[#2a2a2a] text-white h-10"
@@ -448,10 +448,10 @@ const ProjectFilters = ({
                       <div>
                         <label className="text-gray-500 text-xs mb-1 block">To</label>
                         <Input
-                          type="number"
-                          value={Math.round(filters.priceMax * CURRENCY_RATES[filters.currency])}
+                          type="text"
+                          value={Math.round(filters.priceMax * CURRENCY_RATES[filters.currency]).toLocaleString()}
                           onChange={(e) => {
-                            const value = parseInt(e.target.value) || PRICE_MAX;
+                            const value = parseInt(e.target.value.replace(/,/g, '')) || PRICE_MAX;
                             updateFilter("priceMax", Math.round(value / CURRENCY_RATES[filters.currency]));
                           }}
                           className="bg-[#1a1a1a] border-[#2a2a2a] text-white h-10"

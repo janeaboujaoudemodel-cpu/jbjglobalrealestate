@@ -206,47 +206,75 @@ const Quiz = () => {
   const getRecommendations = () => {
     if (!allProjects?.length) return [];
 
-    return allProjects
+    // First, filter projects that match HARD requirements (budget and bedrooms)
+    const filteredProjects = allProjects.filter((project) => {
+      const priceFrom = project.price_from || 0;
+      const budget = answers.budget;
+      
+      // STRICT budget filtering - must match selected range
+      if (budget === "under-2m" && priceFrom >= 2000000) return false;
+      if (budget === "2m-5m" && (priceFrom < 2000000 || priceFrom >= 5000000)) return false;
+      if (budget === "5m-15m" && (priceFrom < 5000000 || priceFrom >= 15000000)) return false;
+      if (budget === "15m-plus" && priceFrom < 15000000) return false;
+
+      // STRICT bedroom filtering
+      const bedrooms = answers.bedrooms;
+      const minBr = project.bedrooms_min || 0;
+      const maxBr = project.bedrooms_max || minBr;
+      
+      if (bedrooms === "studio-1") {
+        // Must have studio (0) or 1 bedroom
+        if (minBr > 1) return false;
+      } else if (bedrooms === "2-3") {
+        // Must have 2 or 3 bedrooms within range
+        if (maxBr < 2 || minBr > 3) return false;
+      } else if (bedrooms === "4-5") {
+        // Must have 4 or 5 bedrooms within range
+        if (maxBr < 4 || minBr > 5) return false;
+      } else if (bedrooms === "6-plus") {
+        // Must have 6+ bedrooms
+        if (maxBr < 6) return false;
+      }
+
+      return true;
+    });
+
+    // Then score the filtered projects by preferences
+    return filteredProjects
       .map((project) => {
-        let score = 0;
-
-        const budget = answers.budget;
-        const priceFrom = project.price_from || 0;
-        if (budget === "under-2m" && priceFrom < 2000000) score += 20;
-        if (budget === "2m-5m" && priceFrom >= 2000000 && priceFrom < 5000000) score += 20;
-        if (budget === "5m-15m" && priceFrom >= 5000000 && priceFrom < 15000000) score += 20;
-        if (budget === "15m-plus" && priceFrom >= 15000000) score += 20;
-
-        const bedrooms = answers.bedrooms;
-        const minBr = project.bedrooms_min || 0;
-        if (bedrooms === "studio-1" && minBr <= 1) score += 15;
-        if (bedrooms === "2-3" && minBr >= 2 && minBr <= 3) score += 15;
-        if (bedrooms === "4-5" && minBr >= 4 && minBr <= 5) score += 15;
-        if (bedrooms === "6-plus" && minBr >= 6) score += 15;
+        let score = 100; // Base score for matching hard requirements
 
         const location = answers.location;
         const projectViews = project.views || [];
-        if (location === "beachfront" && projectViews.some((v: string) => v.toLowerCase().includes("sea"))) score += 15;
-        if (location === "city-center" && projectViews.some((v: string) => v.toLowerCase().includes("city") || v.toLowerCase().includes("skyline"))) score += 15;
-        if (location === "golf-community" && projectViews.some((v: string) => v.toLowerCase().includes("golf"))) score += 15;
+        if (location === "beachfront" && projectViews.some((v: string) => v.toLowerCase().includes("sea") || v.toLowerCase().includes("beach"))) score += 20;
+        if (location === "city-center" && projectViews.some((v: string) => v.toLowerCase().includes("city") || v.toLowerCase().includes("skyline") || v.toLowerCase().includes("burj"))) score += 20;
+        if (location === "golf-community" && projectViews.some((v: string) => v.toLowerCase().includes("golf"))) score += 20;
+        if (location === "suburban" && projectViews.some((v: string) => v.toLowerCase().includes("garden") || v.toLowerCase().includes("park"))) score += 20;
 
         const timeline = answers.timeline;
         const handover = project.handover_date?.toLowerCase() || "";
-        if (timeline === "ready" && (handover === "" || handover.includes("ready"))) score += 10;
-        if (timeline === "2025-2026" && (handover.includes("2025") || handover.includes("2026"))) score += 10;
-        if (timeline === "2027-plus" && (handover.includes("2027") || handover.includes("2028") || handover.includes("2029"))) score += 10;
+        if (timeline === "ready" && handover.includes("ready")) score += 15;
+        if (timeline === "2025-2026" && (handover.includes("2025") || handover.includes("2026"))) score += 15;
+        if (timeline === "2027-plus" && (handover.includes("2027") || handover.includes("2028") || handover.includes("2029"))) score += 15;
+        if (timeline === "flexible") score += 10;
 
         const emirate = answers.emirate;
         const projectEmirate = project.emirate?.toLowerCase() || "";
-        if (emirate === "dubai" && projectEmirate === "dubai") score += 10;
-        if (emirate === "abu-dhabi" && projectEmirate === "abu dhabi") score += 10;
-        if (emirate === "rak" && projectEmirate === "ras al khaimah") score += 10;
-        if (emirate === "sharjah" && projectEmirate === "sharjah") score += 10;
-        if (emirate === "any") score += 5;
+        if (emirate === "dubai" && projectEmirate === "dubai") score += 15;
+        if (emirate === "abu-dhabi" && projectEmirate === "abu dhabi") score += 15;
+        if (emirate === "rak" && projectEmirate === "ras al khaimah") score += 15;
+        if (emirate === "sharjah" && projectEmirate === "sharjah") score += 15;
+        if (emirate === "any") score += 10;
 
         const preferredViews = answers.views as string[] || [];
         preferredViews.forEach((pv) => {
           if (projectViews.some((v: string) => v.toLowerCase().includes(pv))) score += 5;
+        });
+
+        const preferredAmenities = answers.amenities as string[] || [];
+        const projectAmenities = project.amenities || [];
+        preferredAmenities.forEach((pa) => {
+          if (projectAmenities.some((a: string) => a.toLowerCase().includes(pa))) score += 3;
         });
 
         return { ...project, matchScore: score };

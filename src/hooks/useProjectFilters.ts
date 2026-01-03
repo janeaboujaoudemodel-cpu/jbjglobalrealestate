@@ -26,6 +26,19 @@ export const defaultFilters: FilterState = {
   language: 'en',
 };
 
+// Keywords that indicate premium/luxury properties
+const PREMIUM_KEYWORDS = [
+  'villa', 'penthouse', 'mansion', 'duplex', 'townhouse', 
+  'premium', 'luxury', 'exclusive', 'sky villa', 'garden villa',
+  'beach villa', 'palace', 'estate', 'signature'
+];
+
+// Check if a project is premium based on keywords in name/description
+const isPremiumProperty = (project: Project): boolean => {
+  const searchText = `${project.name} ${project.description || ''}`.toLowerCase();
+  return PREMIUM_KEYWORDS.some(keyword => searchText.includes(keyword));
+};
+
 // Get handover year from string
 const getHandoverYear = (handoverDate: string | null): number | null => {
   if (!handoverDate) return null;
@@ -169,9 +182,11 @@ export function useFilteredProjects(
         if (!hasAllFacilities) return false;
       }
 
-      // Premium filter
-      if (filters.premiumOnly && !project.is_featured) {
-        return false;
+      // Premium filter - checks for keywords in name/description
+      if (filters.premiumOnly) {
+        if (!isPremiumProperty(project)) {
+          return false;
+        }
       }
 
       return true;
