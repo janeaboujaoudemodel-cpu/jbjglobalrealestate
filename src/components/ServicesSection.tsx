@@ -240,19 +240,16 @@ const ServicesSection = () => {
       
       <div className="relative z-10 container mx-auto px-6 py-24">
         <div className="text-center mb-20">
-          <div className="flex items-center justify-center gap-6 mb-8">
-            <div className="w-32 h-px bg-gradient-to-r from-transparent via-[#D4AF37] to-transparent" />
-            <span className="text-[#D4AF37] text-xs tracking-[0.4em] uppercase font-light">
-              Our Services
-            </span>
-            <div className="w-32 h-px bg-gradient-to-r from-transparent via-[#D4AF37] to-transparent" />
-          </div>
-          <h2 className="text-4xl md:text-5xl font-extralight text-white mb-6 tracking-wide">
-            Premium <span className="text-[#D4AF37] font-light">Financial</span> Excellence
+          <h2 
+            className="text-4xl md:text-5xl lg:text-6xl font-light text-white mb-6 tracking-wide"
+            style={{ fontFamily: "'Poppins', sans-serif" }}
+          >
+            Why <span className="text-[#D4AF37]">JJ Global Capital</span>
           </h2>
-          <p className="text-[#666666] max-w-2xl mx-auto font-light tracking-wide">
-            Delivering world-class investment solutions through our four pillars of exceptional service
+          <p className="text-[#999999] text-lg md:text-xl font-light tracking-wide mb-8">
+            Where property, lifestyle, and expertise converge.
           </p>
+          <div className="w-16 h-0.5 bg-[#D4AF37] mx-auto" />
         </div>
         
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4 max-w-7xl mx-auto">
