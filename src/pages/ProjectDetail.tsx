@@ -5,7 +5,8 @@ import DocumentDownloads from "@/components/DocumentDownloads";
 import ShareButton from "@/components/ShareButton";
 import FavoriteButton from "@/components/FavoriteButton";
 import { Skeleton } from "@/components/ui/skeleton";
-import { ChevronLeft, MapPin, Building, Calendar, DollarSign, Layers, Users } from "lucide-react";
+import { Button } from "@/components/ui/button";
+import { ChevronLeft, MapPin, Building, Calendar, DollarSign, Layers, Users, Map } from "lucide-react";
 
 const INQUIRY_FORM_URL = "https://jjglobalcapital.com/form/property-investment-inquiry-form/";
 
@@ -90,7 +91,7 @@ const ProjectDetail = () => {
             {/* Project Title & Description */}
             <div>
               <div className="flex items-start justify-between flex-wrap gap-4 mb-4">
-                <div>
+                <div className="flex-1">
                   <h1
                     className="text-white font-bold mb-2"
                     style={{
@@ -107,6 +108,8 @@ const ProjectDetail = () => {
                     </p>
                   )}
                 </div>
+                
+                {/* Right side - Price, Actions, Map */}
                 <div className="flex flex-col items-end gap-3">
                   {project.price_from && (
                     <div className="text-right">
@@ -124,10 +127,30 @@ const ProjectDetail = () => {
                       )}
                     </div>
                   )}
+                  
+                  {/* Action Buttons - Right Aligned */}
                   <div className="flex items-center gap-2">
-                    <FavoriteButton projectId={project.id} />
+                    <FavoriteButton projectId={project.id} showShortlist={true} />
                     <ShareButton projectName={project.name} projectSlug={project.slug} />
                   </div>
+
+                  {/* Google Maps Link */}
+                  {project.location && (
+                    <a
+                      href={`https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(project.location + ", Dubai, UAE")}&basemap=satellite`}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                    >
+                      <Button
+                        variant="outline"
+                        size="sm"
+                        className="border-zinc-700 text-zinc-300 hover:bg-zinc-800 hover:text-white"
+                      >
+                        <Map className="w-4 h-4 mr-2" />
+                        View on Map
+                      </Button>
+                    </a>
+                  )}
                 </div>
               </div>
 

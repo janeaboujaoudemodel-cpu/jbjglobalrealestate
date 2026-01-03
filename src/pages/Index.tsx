@@ -3,8 +3,10 @@ import { useAuth } from "@/contexts/AuthContext";
 import NavigationTabs from "@/components/NavigationTabs";
 import DeveloperGrid from "@/components/DeveloperGrid";
 import WelcomeModal from "@/components/WelcomeModal";
-import { Settings, Heart, Sparkles, User, LogOut, ArrowDown } from "lucide-react";
+import { Settings, Heart, ListPlus, Sparkles, User, LogOut, ArrowDown } from "lucide-react";
 import { Button } from "@/components/ui/button";
+import { useFavorites, useShortlist } from "@/hooks/useFavorites";
+import { useGuestFavorites, useGuestShortlist } from "@/hooks/useGuestFavorites";
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -17,6 +19,13 @@ const INQUIRY_FORM_URL = "https://jjglobalcapital.com/form/property-investment-i
 
 const Index = () => {
   const { user, isAdmin, signOut } = useAuth();
+  const { data: favorites } = useFavorites();
+  const { data: shortlist } = useShortlist();
+  const { favorites: guestFavorites } = useGuestFavorites();
+  const { shortlist: guestShortlist } = useGuestShortlist();
+
+  const favCount = user ? (favorites?.length || 0) : guestFavorites.length;
+  const shortlistCount = user ? (shortlist?.length || 0) : guestShortlist.length;
 
   return (
     <section className="relative w-full min-h-screen py-16 md:py-24 bg-zinc-950">
@@ -26,8 +35,32 @@ const Index = () => {
       {/* Subtle gradient */}
       <div className="absolute top-0 left-0 right-0 h-[400px] pointer-events-none bg-gradient-to-b from-zinc-900/50 to-transparent" />
 
-      {/* Header */}
-      <div className="absolute top-4 right-4 z-20 flex items-center gap-3">
+      {/* Header with Favorites & Shortlist shortcuts */}
+      <div className="absolute top-4 right-4 z-20 flex items-center gap-2">
+        {/* Favorites Shortcut */}
+        <Link to="/favorites">
+          <Button variant="ghost" size="sm" className="text-zinc-400 hover:text-white hover:bg-zinc-800 relative">
+            <Heart className="w-4 h-4" />
+            {favCount > 0 && (
+              <span className="absolute -top-1 -right-1 w-4 h-4 bg-red-500 rounded-full text-[10px] text-white flex items-center justify-center">
+                {favCount}
+              </span>
+            )}
+          </Button>
+        </Link>
+
+        {/* Shortlist Shortcut */}
+        <Link to="/favorites?tab=shortlist">
+          <Button variant="ghost" size="sm" className="text-zinc-400 hover:text-white hover:bg-zinc-800 relative">
+            <ListPlus className="w-4 h-4" />
+            {shortlistCount > 0 && (
+              <span className="absolute -top-1 -right-1 w-4 h-4 bg-gold rounded-full text-[10px] text-black flex items-center justify-center">
+                {shortlistCount}
+              </span>
+            )}
+          </Button>
+        </Link>
+
         {user ? (
           <DropdownMenu>
             <DropdownMenuTrigger asChild>
