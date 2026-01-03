@@ -84,7 +84,7 @@ const DocumentDownloads = ({ documents }: DocumentDownloadsProps) => {
             variant="outline"
             size="sm"
             onClick={handleDownloadAll}
-            className="border-gold/40 text-gold hover:bg-gold/10 hover:text-gold-light bg-transparent"
+            className="border-zinc-700 text-zinc-300 hover:bg-zinc-800 hover:text-white bg-transparent"
           >
             <Download className="w-4 h-4 mr-2" />
             Download All Materials
@@ -99,16 +99,16 @@ const DocumentDownloads = ({ documents }: DocumentDownloadsProps) => {
               <button
                 key={doc.id}
                 onClick={() => handleDownload(doc)}
-                className="w-full flex items-center gap-3 p-4 rounded-xl bg-zinc-950 hover:bg-zinc-800 transition-colors group border border-zinc-800 hover:border-gold/30"
+                className="w-full flex items-center gap-3 p-4 rounded-xl bg-zinc-950 hover:bg-zinc-800 transition-colors group border border-zinc-800 hover:border-zinc-600"
               >
-                <div className="w-10 h-10 rounded-lg bg-gold/10 flex items-center justify-center text-gold">
+                <div className="w-10 h-10 rounded-lg bg-zinc-800 flex items-center justify-center text-zinc-300">
                   {getDocumentIcon(type)}
                 </div>
                 <div className="flex-1 text-left">
                   <p className="text-white font-medium">{getDocumentLabel(type)}</p>
                   <p className="text-zinc-500 text-sm truncate">{doc.file_name}</p>
                 </div>
-                <Download className="w-5 h-5 text-zinc-500 group-hover:text-gold transition-colors" />
+                <Download className="w-5 h-5 text-zinc-500 group-hover:text-white transition-colors" />
               </button>
             ))}
           </div>

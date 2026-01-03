@@ -2,13 +2,14 @@ import { Link } from "react-router-dom";
 import { useCommunities } from "@/hooks/useProjects";
 import { Skeleton } from "@/components/ui/skeleton";
 import { MapPin, TrendingUp } from "lucide-react";
+import React from "react";
 
-const CommunityGrid = () => {
+const CommunityGrid = React.forwardRef<HTMLDivElement>((_, ref) => {
   const { data: communities, isLoading } = useCommunities();
 
   if (isLoading) {
     return (
-      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
+      <div ref={ref} className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
         {[...Array(8)].map((_, i) => (
           <Skeleton key={i} className="aspect-[4/3] rounded-xl bg-zinc-900" />
         ))}
@@ -23,7 +24,7 @@ const CommunityGrid = () => {
   ];
 
   return (
-    <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
+    <div ref={ref} className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
       {communities?.map((community) => {
         const isPremium = premiumCommunities.includes(community.slug);
         
@@ -31,7 +32,7 @@ const CommunityGrid = () => {
           <Link
             key={community.id}
             to={`/community/${community.slug}`}
-            className="group relative overflow-hidden rounded-xl aspect-[4/3] border border-zinc-800 hover:border-gold/30 transition-all duration-300"
+            className="group relative overflow-hidden rounded-xl aspect-[4/3] border border-zinc-800 hover:border-zinc-600 transition-all duration-300"
           >
             <img
               src={community.image_url || "https://images.unsplash.com/photo-1512917774080-9991f1c4c750?w=800"}
@@ -40,11 +41,11 @@ const CommunityGrid = () => {
             />
             <div className="absolute inset-0 bg-gradient-to-t from-black/90 via-black/40 to-transparent" />
             
-            {/* Premium badge */}
+            {/* Premium badge - Black with gold accent */}
             {isPremium && (
-              <div className="absolute top-3 right-3 bg-gradient-to-r from-gold to-gold-dark text-gold-foreground text-xs font-bold px-2 py-1 rounded-full flex items-center gap-1">
-                <TrendingUp className="w-3 h-3" />
-                Trending
+              <div className="absolute top-3 right-3 bg-black/90 backdrop-blur-sm text-xs font-bold px-2.5 py-1 rounded-full flex items-center gap-1.5 border border-gold/30">
+                <TrendingUp className="w-3 h-3 text-gold" />
+                <span className="text-gold-light">Trending</span>
               </div>
             )}
             
@@ -62,12 +63,14 @@ const CommunityGrid = () => {
                 </p>
               )}
             </div>
-            <div className="absolute inset-0 border-2 border-transparent group-hover:border-gold/30 rounded-xl transition-colors duration-300" />
+            <div className="absolute inset-0 border-2 border-transparent group-hover:border-zinc-600 rounded-xl transition-colors duration-300" />
           </Link>
         );
       })}
     </div>
   );
-};
+});
+
+CommunityGrid.displayName = "CommunityGrid";
 
 export default CommunityGrid;

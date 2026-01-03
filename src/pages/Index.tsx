@@ -69,9 +69,9 @@ const Index = () => {
           Discover premium properties from the UAE's top developers across exclusive communities
         </p>
 
-        {/* Quiz CTA */}
+        {/* Quiz CTA - Purple/Violet theme */}
         <Link to="/quiz">
-          <Button className="mb-10 bg-gradient-to-r from-gold to-gold-dark hover:from-gold-light hover:to-gold text-gold-foreground px-6 py-3 h-auto shadow-lg shadow-gold/20">
+          <Button className="mb-10 bg-gradient-to-r from-violet-600 to-purple-600 hover:from-violet-500 hover:to-purple-500 text-white px-6 py-3 h-auto shadow-lg shadow-purple-500/30">
             <Sparkles className="w-5 h-5 mr-2" />
             Take the Property Quiz
             <span className="ml-2 text-xs opacity-70">~30 sec</span>

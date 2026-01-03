@@ -331,7 +331,7 @@ const ProjectFilters = ({
               <SlidersHorizontal className="w-5 h-5 mr-2" />
               Filters
               {activeFilterCount > 0 && (
-                <span className="ml-2 px-2 py-0.5 bg-[#D4A017] text-black text-xs font-bold rounded-full">
+                <span className="ml-2 px-2 py-0.5 bg-white text-black text-xs font-bold rounded-full">
                   {activeFilterCount}
                 </span>
               )}
@@ -348,7 +348,7 @@ const ProjectFilters = ({
                     variant="ghost"
                     size="sm"
                     onClick={clearFilters}
-                    className="text-[#D4A017] hover:text-[#D4A017] hover:bg-[#D4A017]/10"
+                    className="text-zinc-400 hover:text-white hover:bg-zinc-800"
                   >
                     Clear All
                   </Button>
@@ -363,11 +363,11 @@ const ProjectFilters = ({
                     onClick={() => updateFilter("premiumOnly", !filters.premiumOnly)}
                     className={`flex items-center gap-3 px-4 py-3 rounded-xl text-sm font-medium transition-all w-full ${
                       filters.premiumOnly
-                        ? "bg-gradient-to-r from-[#D4A017] to-[#B8860B] text-black"
-                        : "bg-[#1a1a1a] text-gray-300 hover:bg-[#2a2a2a]"
+                        ? "bg-white text-black"
+                        : "bg-[#1a1a1a] text-gray-300 hover:bg-[#2a2a2a] border border-zinc-800"
                     }`}
                   >
-                    <Star className={`w-5 h-5 ${filters.premiumOnly ? "fill-black" : ""}`} />
+                    <Star className={`w-5 h-5 ${filters.premiumOnly ? "fill-black text-black" : "text-gold"}`} />
                     <span>Show Exclusive Residences Only</span>
                     <span className="ml-auto text-xs opacity-70">Penthouses, Villas & Mansions</span>
                   </button>
@@ -1069,7 +1069,7 @@ const ProjectFilters = ({
           )}
           <button
             onClick={clearFilters}
-            className="text-gold text-sm hover:underline ml-2"
+            className="text-zinc-400 text-sm hover:text-white hover:underline ml-2"
           >
             Clear all
           </button>
@@ -1090,7 +1090,7 @@ const FilterSection = ({
 }) => (
   <div>
     <div className="flex items-center gap-2 text-white mb-3">
-      <span className="text-gold">{icon}</span>
+      <span className="text-zinc-400">{icon}</span>
       <h3 className="font-medium">{title}</h3>
     </div>
     {children}
@@ -1110,7 +1110,7 @@ const QuickFilterChip = ({
     onClick={onClick}
     className={`px-4 py-2 rounded-full text-sm font-medium transition-all ${
       active
-        ? "bg-gradient-to-r from-gold to-gold-dark text-gold-foreground shadow-sm shadow-gold/20"
+        ? "bg-white text-black shadow-sm"
         : "bg-zinc-900 text-zinc-300 hover:bg-zinc-800 border border-zinc-800 hover:border-zinc-700"
     }`}
   >
@@ -1125,11 +1125,11 @@ const FilterPill = ({
   label: string;
   onRemove: () => void;
 }) => (
-  <span className="inline-flex items-center gap-1 px-3 py-1 bg-gold/10 border border-gold/30 rounded-full text-gold text-sm">
+  <span className="inline-flex items-center gap-1 px-3 py-1 bg-zinc-800 border border-zinc-700 rounded-full text-white text-sm">
     {label}
     <button
       onClick={onRemove}
-      className="ml-1 hover:bg-gold/20 rounded-full p-0.5"
+      className="ml-1 hover:bg-zinc-700 rounded-full p-0.5"
     >
       <X className="w-3 h-3" />
     </button>
