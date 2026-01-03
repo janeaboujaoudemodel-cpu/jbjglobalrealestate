@@ -99,28 +99,6 @@ const WelcomeModal = () => {
             </p>
           </div>
 
-          {/* Why UAE & Why Dubai Section */}
-          <div className="grid grid-cols-2 gap-3 mb-6">
-            <div className="bg-zinc-900/80 rounded-xl p-4 border border-zinc-800/50 backdrop-blur-sm">
-              <h3 className="text-gold font-semibold text-sm mb-2">Why UAE?</h3>
-              <ul className="text-zinc-400 text-xs space-y-1">
-                <li>• Tax-free investment returns</li>
-                <li>• World-class infrastructure</li>
-                <li>• Golden Visa opportunities</li>
-                <li>• Strong rental yields</li>
-              </ul>
-            </div>
-            <div className="bg-zinc-900/80 rounded-xl p-4 border border-zinc-800/50 backdrop-blur-sm">
-              <h3 className="text-gold font-semibold text-sm mb-2">Why Dubai?</h3>
-              <ul className="text-zinc-400 text-xs space-y-1">
-                <li>• Global business hub</li>
-                <li>• Luxury lifestyle destination</li>
-                <li>• Safe & stable economy</li>
-                <li>• 100% foreign ownership</li>
-              </ul>
-            </div>
-          </div>
-
           {/* Ornamental divider */}
           <div className="flex items-center justify-center gap-3 mb-4">
             <div className="w-12 h-px bg-gradient-to-r from-transparent to-gold/60" />

@@ -2,7 +2,7 @@ import { Toaster } from "@/components/ui/toaster";
 import { Toaster as Sonner } from "@/components/ui/sonner";
 import { TooltipProvider } from "@/components/ui/tooltip";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
-import { BrowserRouter, Routes, Route } from "react-router-dom";
+import { BrowserRouter, Routes, Route, useLocation } from "react-router-dom";
 import { AuthProvider } from "@/contexts/AuthContext";
 import Index from "./pages/Index";
 import Communities from "./pages/Communities";
@@ -18,8 +18,25 @@ import Compare from "./pages/Compare";
 import NotFound from "./pages/NotFound";
 import ComparisonBar from "./components/ComparisonBar";
 import WelcomeModal from "./components/WelcomeModal";
+import GlobalHeader from "./components/GlobalHeader";
 
 const queryClient = new QueryClient();
+
+// Layout wrapper that conditionally shows the header
+const AppLayout = ({ children }: { children: React.ReactNode }) => {
+  const location = useLocation();
+  // Hide header on quiz page for cleaner UX
+  const hideHeader = location.pathname === "/quiz";
+  
+  return (
+    <>
+      {!hideHeader && <GlobalHeader />}
+      <div className={!hideHeader ? "pt-16" : ""}>
+        {children}
+      </div>
+    </>
+  );
+};
 
 const App = () => (
   <QueryClientProvider client={queryClient}>
@@ -29,21 +46,23 @@ const App = () => (
         <Sonner />
         <BrowserRouter>
           <WelcomeModal />
-          <Routes>
-            <Route path="/" element={<Index />} />
-            <Route path="/communities" element={<Communities />} />
-            <Route path="/community/:slug" element={<CommunityDetail />} />
-            <Route path="/developer/:slug" element={<DeveloperDetail />} />
-            <Route path="/project/:slug" element={<ProjectDetail />} />
-            <Route path="/auth" element={<Auth />} />
-            <Route path="/admin" element={<Admin />} />
-            <Route path="/quiz" element={<Quiz />} />
-            <Route path="/quiz-results" element={<QuizResults />} />
-            <Route path="/favorites" element={<Favorites />} />
-            <Route path="/compare" element={<Compare />} />
-            {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
-            <Route path="*" element={<NotFound />} />
-          </Routes>
+          <AppLayout>
+            <Routes>
+              <Route path="/" element={<Index />} />
+              <Route path="/communities" element={<Communities />} />
+              <Route path="/community/:slug" element={<CommunityDetail />} />
+              <Route path="/developer/:slug" element={<DeveloperDetail />} />
+              <Route path="/project/:slug" element={<ProjectDetail />} />
+              <Route path="/auth" element={<Auth />} />
+              <Route path="/admin" element={<Admin />} />
+              <Route path="/quiz" element={<Quiz />} />
+              <Route path="/quiz-results" element={<QuizResults />} />
+              <Route path="/favorites" element={<Favorites />} />
+              <Route path="/compare" element={<Compare />} />
+              {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
+              <Route path="*" element={<NotFound />} />
+            </Routes>
+          </AppLayout>
           <ComparisonBar />
         </BrowserRouter>
       </TooltipProvider>

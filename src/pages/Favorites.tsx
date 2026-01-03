@@ -1,30 +1,48 @@
+import { useState } from "react";
 import { Link, useSearchParams } from "react-router-dom";
 import { useQuery } from "@tanstack/react-query";
 import { supabase } from "@/integrations/supabase/client";
 import { useAuth } from "@/contexts/AuthContext";
-import { useFavorites, useShortlist } from "@/hooks/useFavorites";
+import { useFavorites, useShortlist, useToggleShortlist } from "@/hooks/useFavorites";
 import { useGuestFavorites, useGuestShortlist } from "@/hooks/useGuestFavorites";
-import { ChevronLeft, Heart, ListPlus, ArrowRight, Award, X } from "lucide-react";
+import { ChevronLeft, Heart, ListPlus, ArrowRight, Award, X, Mail, Share2, Sparkles, Users, CheckSquare } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Badge } from "@/components/ui/badge";
+import { Checkbox } from "@/components/ui/checkbox";
 import ProjectCard from "@/components/ProjectCard";
+import { toast } from "sonner";
 import {
   DropdownMenu,
   DropdownMenuContent,
   DropdownMenuItem,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
+import {
+  Dialog,
+  DialogContent,
+  DialogHeader,
+  DialogTitle,
+  DialogDescription,
+} from "@/components/ui/dialog";
+import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
+
+const INQUIRY_FORM_URL = "https://jjglobalcapital.com/form/property-investment-inquiry-form/";
 
 const Favorites = () => {
   const { user } = useAuth();
   const [searchParams] = useSearchParams();
   const defaultTab = searchParams.get("tab") === "shortlist" ? "shortlist" : "favorites";
+  const [selectedFavorites, setSelectedFavorites] = useState<string[]>([]);
+  const [shareModalOpen, setShareModalOpen] = useState(false);
+  const [shareEmail, setShareEmail] = useState("");
   
   const { data: userFavorites, isLoading: loadingFavorites } = useFavorites();
   const { data: userShortlist, isLoading: loadingShortlist } = useShortlist();
-  const { favorites: guestFavorites } = useGuestFavorites();
-  const { shortlist: guestShortlist, setBadge, getBadge } = useGuestShortlist();
+  const { favorites: guestFavorites, toggleFavorite } = useGuestFavorites();
+  const { shortlist: guestShortlist, setBadge, getBadge, toggleShortlist: toggleGuestShortlist } = useGuestShortlist();
+  const toggleShortlistMutation = useToggleShortlist();
 
   // Determine which data to use based on auth status
   const favoriteIds = user 
@@ -88,7 +106,7 @@ const Favorites = () => {
     if (!user) {
       return getBadge(projectId);
     }
-    return null; // TODO: implement for authenticated users
+    return null;
   };
 
   // Set badge for a project
@@ -96,7 +114,73 @@ const Favorites = () => {
     if (!user) {
       setBadge(projectId, badge);
     }
-    // TODO: implement for authenticated users
+  };
+
+  // Move selected favorites to shortlist
+  const handleMoveToShortlist = () => {
+    if (selectedFavorites.length === 0) {
+      toast.error("Please select properties to move");
+      return;
+    }
+
+    selectedFavorites.forEach((projectId) => {
+      if (!shortlistIds.includes(projectId)) {
+        if (user) {
+          toggleShortlistMutation.mutate({ projectId, isShortlisted: false });
+        } else {
+          toggleGuestShortlist(projectId);
+        }
+      }
+    });
+
+    toast.success(`Moved ${selectedFavorites.length} properties to shortlist`);
+    setSelectedFavorites([]);
+  };
+
+  // Toggle favorite selection
+  const toggleFavoriteSelection = (projectId: string) => {
+    setSelectedFavorites(prev => 
+      prev.includes(projectId) 
+        ? prev.filter(id => id !== projectId)
+        : [...prev, projectId]
+    );
+  };
+
+  // Select all favorites
+  const selectAllFavorites = () => {
+    if (favoriteProjects) {
+      setSelectedFavorites(favoriteProjects.map(p => p.id));
+    }
+  };
+
+  // Share shortlist via email
+  const handleShareShortlist = () => {
+    if (!shortlistedProjects?.length) return;
+
+    const projectList = shortlistedProjects.map((p, i) => {
+      const badge = getProjectBadge(p.id);
+      const badgeStr = badge ? ` [${badge === 'top1' ? '🥇 Top 1' : badge === 'top2' ? '🥈 Top 2' : '🥉 Top 3'}]` : '';
+      return `${i + 1}. ${p.name}${badgeStr} - ${p.developer?.name || 'Unknown Developer'} - AED ${((p.price_from || 0) / 1000000).toFixed(1)}M+`;
+    }).join('\n');
+
+    const subject = encodeURIComponent("My Property Shortlist - JJ Global Capital");
+    const body = encodeURIComponent(`Hi,
+
+Here is my shortlisted properties for your review:
+
+${projectList}
+
+I would like to request a professional evaluation and consultation.
+
+Best regards`);
+
+    const mailtoLink = shareEmail 
+      ? `mailto:${shareEmail}?subject=${subject}&body=${body}`
+      : `mailto:?subject=${subject}&body=${body}`;
+
+    window.location.href = mailtoLink;
+    setShareModalOpen(false);
+    toast.success("Opening email client...");
   };
 
   const badgeLabels = {
@@ -158,11 +242,62 @@ const Favorites = () => {
                 ))}
               </div>
             ) : favoriteProjects?.length ? (
-              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
-                {favoriteProjects.map((project) => (
-                  <ProjectCard key={project.id} project={project} />
-                ))}
-              </div>
+              <>
+                {/* Actions Bar for Favorites */}
+                <div className="flex items-center justify-between mb-6 bg-zinc-900 rounded-lg p-4 border border-zinc-800">
+                  <div className="flex items-center gap-4">
+                    <Button
+                      variant="outline"
+                      size="sm"
+                      onClick={selectAllFavorites}
+                      className="border-zinc-700 text-zinc-300 hover:bg-zinc-800"
+                    >
+                      <CheckSquare className="w-4 h-4 mr-2" />
+                      Select All
+                    </Button>
+                    <span className="text-zinc-500 text-sm">
+                      {selectedFavorites.length} selected
+                    </span>
+                  </div>
+                  <Button
+                    onClick={handleMoveToShortlist}
+                    disabled={selectedFavorites.length === 0}
+                    className="bg-gradient-to-r from-gold to-gold-dark text-black hover:opacity-90"
+                  >
+                    <ListPlus className="w-4 h-4 mr-2" />
+                    Move to Shortlist
+                  </Button>
+                </div>
+
+                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+                  {favoriteProjects.map((project) => (
+                    <div key={project.id} className="relative">
+                      {/* Selection Checkbox */}
+                      <div className="absolute top-2 left-2 z-20">
+                        <div 
+                          className={`w-6 h-6 rounded-md flex items-center justify-center cursor-pointer transition-all ${
+                            selectedFavorites.includes(project.id)
+                              ? "bg-gold text-black"
+                              : "bg-black/60 border border-zinc-600 hover:border-gold"
+                          }`}
+                          onClick={(e) => {
+                            e.preventDefault();
+                            e.stopPropagation();
+                            toggleFavoriteSelection(project.id);
+                          }}
+                        >
+                          {selectedFavorites.includes(project.id) && (
+                            <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
+                            </svg>
+                          )}
+                        </div>
+                      </div>
+                      <ProjectCard project={project} />
+                    </div>
+                  ))}
+                </div>
+              </>
             ) : (
               <div className="text-center py-16 bg-zinc-900 rounded-2xl border border-zinc-800">
                 <Heart className="w-12 h-12 text-zinc-700 mx-auto mb-4" />
@@ -186,11 +321,19 @@ const Favorites = () => {
               </div>
             ) : shortlistedProjects?.length ? (
               <>
-                {/* Shortlist description */}
-                <div className="mb-6">
+                {/* Shortlist Actions Bar */}
+                <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 mb-6 bg-zinc-900 rounded-lg p-4 border border-zinc-800">
                   <p className="text-zinc-400 text-sm">
-                    Add badges to rank your top properties. You can assign <span className="text-yellow-400">Top 1</span>, <span className="text-gray-300">Top 2</span>, and <span className="text-amber-500">Top 3</span> to your favorites.
+                    Rank your top properties with badges: <span className="text-yellow-400">🥇 Top 1</span>, <span className="text-gray-300">🥈 Top 2</span>, <span className="text-amber-500">🥉 Top 3</span>
                   </p>
+                  <Button
+                    onClick={() => setShareModalOpen(true)}
+                    variant="outline"
+                    className="border-zinc-700 text-zinc-300 hover:bg-zinc-800"
+                  >
+                    <Share2 className="w-4 h-4 mr-2" />
+                    Share My Shortlist
+                  </Button>
                 </div>
 
                 <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 mb-8">
@@ -272,33 +415,59 @@ const Favorites = () => {
                   })}
                 </div>
 
-                {shortlistedProjects.length >= 2 && (
-                  <div className="text-center space-y-4">
+                {/* Action Cards */}
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                  {/* AI Comparison Card */}
+                  <div className="bg-zinc-900 rounded-2xl p-6 border border-zinc-800">
+                    <div className="flex items-center gap-3 mb-4">
+                      <div className="w-12 h-12 rounded-full bg-gradient-to-br from-violet-500 to-fuchsia-500 flex items-center justify-center">
+                        <Sparkles className="w-6 h-6 text-white" />
+                      </div>
+                      <div>
+                        <h3 className="text-white font-semibold">AI Comparison</h3>
+                        <p className="text-zinc-500 text-sm">Get instant analysis</p>
+                      </div>
+                    </div>
+                    <p className="text-zinc-400 text-sm mb-4">
+                      Generate an AI-powered comparison table with star ratings, price analysis, and recommendations.
+                    </p>
                     <Link to="/compare">
-                      <Button className="bg-gradient-to-r from-gold to-gold-dark text-black hover:opacity-90 px-8">
+                      <Button className="w-full bg-gradient-to-r from-violet-600 to-fuchsia-600 hover:from-violet-500 hover:to-fuchsia-500 text-white">
                         Compare with AI
                         <ArrowRight className="w-4 h-4 ml-2" />
                       </Button>
                     </Link>
-                    <p className="text-zinc-500 text-sm">or</p>
-                    <a
-                      href="https://jjglobalcapital.com/form/property-investment-inquiry-form/"
-                      target="_blank"
-                      rel="noopener noreferrer"
-                    >
-                      <Button variant="outline" className="border-zinc-700 text-zinc-300 hover:bg-zinc-800">
-                        Request Professional Evaluation
+                  </div>
+
+                  {/* Professional Evaluation Card */}
+                  <div className="bg-zinc-900 rounded-2xl p-6 border border-zinc-800">
+                    <div className="flex items-center gap-3 mb-4">
+                      <div className="w-12 h-12 rounded-full bg-gradient-to-br from-gold to-gold-dark flex items-center justify-center">
+                        <Users className="w-6 h-6 text-black" />
+                      </div>
+                      <div>
+                        <h3 className="text-white font-semibold">Professional Evaluation</h3>
+                        <p className="text-zinc-500 text-sm">Expert consultation</p>
+                      </div>
+                    </div>
+                    <p className="text-zinc-400 text-sm mb-4">
+                      Request a personalized evaluation from our property consultants with detailed market insights.
+                    </p>
+                    <a href={INQUIRY_FORM_URL} target="_blank" rel="noopener noreferrer">
+                      <Button className="w-full bg-gradient-to-r from-gold to-gold-dark text-black hover:opacity-90">
+                        Request Evaluation
+                        <ArrowRight className="w-4 h-4 ml-2" />
                       </Button>
                     </a>
                   </div>
-                )}
+                </div>
               </>
             ) : (
               <div className="text-center py-16 bg-zinc-900 rounded-2xl border border-zinc-800">
                 <ListPlus className="w-12 h-12 text-zinc-700 mx-auto mb-4" />
                 <p className="text-zinc-400 mb-2">No properties in your shortlist</p>
                 <p className="text-zinc-500 text-sm mb-6">
-                  Add properties to compare them side by side and get AI-powered insights
+                  Add properties from your favorites or browse to compare them
                 </p>
                 <Link to="/">
                   <Button className="bg-white text-zinc-900 hover:bg-zinc-100">
@@ -311,6 +480,73 @@ const Favorites = () => {
           </TabsContent>
         </Tabs>
       </div>
+
+      {/* Share Shortlist Modal */}
+      <Dialog open={shareModalOpen} onOpenChange={setShareModalOpen}>
+        <DialogContent className="bg-zinc-900 border-zinc-800 text-white">
+          <DialogHeader>
+            <DialogTitle className="flex items-center gap-2">
+              <Share2 className="w-5 h-5 text-gold" />
+              Share Your Shortlist
+            </DialogTitle>
+            <DialogDescription className="text-zinc-400">
+              Send your shortlisted properties to yourself or your consultant via email.
+            </DialogDescription>
+          </DialogHeader>
+
+          <div className="space-y-4 mt-4">
+            <div>
+              <Label htmlFor="email" className="text-zinc-300">Recipient Email (optional)</Label>
+              <Input
+                id="email"
+                type="email"
+                placeholder="consultant@example.com"
+                value={shareEmail}
+                onChange={(e) => setShareEmail(e.target.value)}
+                className="mt-1 bg-zinc-800 border-zinc-700 text-white"
+              />
+              <p className="text-zinc-500 text-xs mt-1">Leave empty to compose in your email client</p>
+            </div>
+
+            {shortlistedProjects && shortlistedProjects.length > 0 && (
+              <div className="bg-zinc-800 rounded-lg p-4 max-h-[200px] overflow-y-auto">
+                <p className="text-zinc-400 text-xs mb-2">Properties to share:</p>
+                {shortlistedProjects.map((p, i) => {
+                  const badge = getProjectBadge(p.id);
+                  return (
+                    <div key={p.id} className="flex items-center gap-2 text-sm py-1">
+                      <span className="text-zinc-500">{i + 1}.</span>
+                      {badge && (
+                        <span className={`text-xs ${badge === 'top1' ? 'text-yellow-400' : badge === 'top2' ? 'text-gray-300' : 'text-amber-500'}`}>
+                          {badge === 'top1' ? '🥇' : badge === 'top2' ? '🥈' : '🥉'}
+                        </span>
+                      )}
+                      <span className="text-white">{p.name}</span>
+                    </div>
+                  );
+                })}
+              </div>
+            )}
+
+            <div className="flex gap-3 pt-2">
+              <Button
+                variant="outline"
+                onClick={() => setShareModalOpen(false)}
+                className="flex-1 border-zinc-700 text-zinc-300 hover:bg-zinc-800"
+              >
+                Cancel
+              </Button>
+              <Button
+                onClick={handleShareShortlist}
+                className="flex-1 bg-gradient-to-r from-gold to-gold-dark text-black hover:opacity-90"
+              >
+                <Mail className="w-4 h-4 mr-2" />
+                Share via Email
+              </Button>
+            </div>
+          </div>
+        </DialogContent>
+      </Dialog>
     </section>
   );
 };
