@@ -17,6 +17,7 @@ import Favorites from "./pages/Favorites";
 import Compare from "./pages/Compare";
 import NotFound from "./pages/NotFound";
 import ComparisonBar from "./components/ComparisonBar";
+import WelcomeModal from "./components/WelcomeModal";
 
 const queryClient = new QueryClient();
 
@@ -26,6 +27,7 @@ const App = () => (
       <TooltipProvider>
         <Toaster />
         <Sonner />
+        <WelcomeModal />
         <BrowserRouter>
           <Routes>
             <Route path="/" element={<Index />} />

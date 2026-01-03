@@ -134,23 +134,21 @@ const ProjectDetail = () => {
                     <ShareButton projectName={project.name} projectSlug={project.slug} />
                   </div>
 
-                  {/* Google Maps Link */}
-                  {project.location && (
-                    <a
-                      href={`https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(project.location + ", Dubai, UAE")}&basemap=satellite`}
-                      target="_blank"
-                      rel="noopener noreferrer"
+                  {/* Google Maps Link - Uses project name for accurate search */}
+                  <a
+                    href={`https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(project.name + (project.location ? ", " + project.location : "") + ", Dubai, UAE")}&basemap=satellite`}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                  >
+                    <Button
+                      variant="outline"
+                      size="sm"
+                      className="border-zinc-700 text-zinc-300 hover:bg-zinc-800 hover:text-white"
                     >
-                      <Button
-                        variant="outline"
-                        size="sm"
-                        className="border-zinc-700 text-zinc-300 hover:bg-zinc-800 hover:text-white"
-                      >
-                        <Map className="w-4 h-4 mr-2" />
-                        View on Map
-                      </Button>
-                    </a>
-                  )}
+                      <Map className="w-4 h-4 mr-2" />
+                      View on Map
+                    </Button>
+                  </a>
                 </div>
               </div>
 
