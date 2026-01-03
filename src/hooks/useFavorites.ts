@@ -98,11 +98,10 @@ export function useToggleShortlist() {
     mutationFn: async ({ 
       projectId, 
       isShortlisted, 
-      currentCount 
     }: { 
       projectId: string; 
       isShortlisted: boolean;
-      currentCount: number;
+      currentCount?: number;
     }) => {
       if (!user) throw new Error("Must be logged in");
 
@@ -114,9 +113,7 @@ export function useToggleShortlist() {
           .eq("project_id", projectId);
         if (error) throw error;
       } else {
-        if (currentCount >= 3) {
-          throw new Error("Maximum 3 projects can be shortlisted for comparison");
-        }
+        // No limit - users can shortlist as many as they want
         const { error } = await supabase
           .from("shortlists")
           .insert({ user_id: user.id, project_id: projectId });
@@ -125,7 +122,7 @@ export function useToggleShortlist() {
     },
     onSuccess: (_, { isShortlisted }) => {
       queryClient.invalidateQueries({ queryKey: ["shortlist"] });
-      toast.success(isShortlisted ? "Removed from comparison" : "Added to comparison");
+      toast.success(isShortlisted ? "Removed from shortlist" : "Added to shortlist");
     },
     onError: (error: Error) => {
       toast.error(error.message || "Failed to update shortlist");

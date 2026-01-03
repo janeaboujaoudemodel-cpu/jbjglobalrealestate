@@ -78,6 +78,7 @@ const DeveloperGrid = () => {
         communities={communities}
         developers={developers}
         trendingAreas={trendingAreas}
+        hideQuickFilters
       />
 
       {hasFiltersApplied && (

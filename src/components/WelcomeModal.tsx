@@ -82,7 +82,7 @@ const WelcomeModal = () => {
               <div className="w-8 h-8 rounded-full bg-black/60 border border-white/10 flex items-center justify-center">
                 <ListPlus className="w-4 h-4 text-gold" />
               </div>
-              <span className="text-zinc-400 text-sm">Tap list to add to <strong className="text-white">Shortlist</strong> (compare up to 3)</span>
+              <span className="text-zinc-400 text-sm">Tap list to add to <strong className="text-white">Shortlist</strong> for comparison</span>
             </div>
           </div>
         </div>

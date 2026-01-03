@@ -1,7 +1,9 @@
 import { useState } from "react";
 import { Link } from "react-router-dom";
-import { X, ArrowRight, Scale, Sparkles } from "lucide-react";
+import { X, ArrowRight, Scale, Sparkles, Trophy, Users, Download } from "lucide-react";
 import { useShortlist, useToggleShortlist } from "@/hooks/useFavorites";
+import { useGuestShortlist } from "@/hooks/useGuestFavorites";
+import { useAuth } from "@/contexts/AuthContext";
 import { useQuery } from "@tanstack/react-query";
 import { supabase } from "@/integrations/supabase/client";
 import { Button } from "@/components/ui/button";
@@ -12,18 +14,37 @@ import {
   SheetTitle,
   SheetTrigger,
 } from "@/components/ui/sheet";
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuTrigger,
+} from "@/components/ui/dropdown-menu";
+
+const INQUIRY_FORM_URL = "https://jjglobalcapital.com/form/property-investment-inquiry-form/";
+
+const badgeLabels: Record<string, { label: string; color: string }> = {
+  top1: { label: "🥇 Top 1", color: "bg-yellow-500/20 border-yellow-500/50 text-yellow-400" },
+  top2: { label: "🥈 Top 2", color: "bg-gray-400/20 border-gray-400/50 text-gray-300" },
+  top3: { label: "🥉 Top 3", color: "bg-orange-600/20 border-orange-600/50 text-orange-400" },
+};
 
 const ComparisonBar = () => {
-  const { data: shortlist } = useShortlist();
-  const toggleShortlist = useToggleShortlist();
+  const { user } = useAuth();
+  const { data: authShortlist } = useShortlist();
+  const toggleAuthShortlist = useToggleShortlist();
+  const { shortlist: guestShortlist, toggleShortlist: toggleGuestShortlist, setBadge, getBadge } = useGuestShortlist();
   const [isOpen, setIsOpen] = useState(false);
+
+  // Use auth shortlist if logged in, otherwise guest shortlist
+  const shortlist = user ? authShortlist : guestShortlist;
+  const shortlistIds = shortlist?.map((s) => s.project_id) || [];
 
   // Fetch project details for shortlisted items
   const { data: shortlistedProjects } = useQuery({
-    queryKey: ["shortlisted-projects", shortlist?.map((s) => s.project_id)],
+    queryKey: ["shortlisted-projects", shortlistIds],
     queryFn: async () => {
-      if (!shortlist?.length) return [];
-      const projectIds = shortlist.map((s) => s.project_id);
+      if (!shortlistIds.length) return [];
       const { data, error } = await supabase
         .from("projects")
         .select(`
@@ -31,22 +52,40 @@ const ComparisonBar = () => {
           developer:developers(name, slug),
           images:project_images(image_url, alt_text, display_order)
         `)
-        .in("id", projectIds);
+        .in("id", shortlistIds);
 
       if (error) throw error;
       return data;
     },
-    enabled: !!shortlist?.length,
+    enabled: shortlistIds.length > 0,
   });
 
   if (!shortlist?.length) return null;
 
   const handleRemove = (projectId: string) => {
-    toggleShortlist.mutate({ 
-      projectId, 
-      isShortlisted: true, 
-      currentCount: shortlist.length 
-    });
+    if (user) {
+      toggleAuthShortlist.mutate({ 
+        projectId, 
+        isShortlisted: true, 
+      });
+    } else {
+      toggleGuestShortlist(projectId);
+    }
+  };
+
+  const handleSetBadge = (projectId: string, badge: 'top1' | 'top2' | 'top3' | null) => {
+    if (!user) {
+      setBadge(projectId, badge);
+    }
+    // For authenticated users, we'd need to store badges in the database
+    // For now, badges work for guest users via localStorage
+  };
+
+  const currentBadge = (projectId: string) => {
+    if (!user) {
+      return getBadge(projectId);
+    }
+    return null;
   };
 
   return (
@@ -70,6 +109,11 @@ const ComparisonBar = () => {
                     />
                   </div>
                 ))}
+                {shortlist.length > 3 && (
+                  <div className="w-8 h-8 rounded-full bg-zinc-200 -ml-2 flex items-center justify-center text-xs font-bold">
+                    +{shortlist.length - 3}
+                  </div>
+                )}
               </div>
               <span className="font-semibold">
                 {shortlist.length} {shortlist.length === 1 ? "Property" : "Properties"}
@@ -82,97 +126,128 @@ const ComparisonBar = () => {
           
           <SheetContent 
             side="bottom" 
-            className="h-[85vh] bg-zinc-950 border-t border-zinc-800 rounded-t-3xl"
+            className="h-[90vh] bg-zinc-950 border-t border-zinc-800 rounded-t-3xl"
           >
             <SheetHeader className="pb-4 border-b border-zinc-800">
               <SheetTitle className="text-white text-2xl flex items-center gap-3">
-                <Scale className="w-6 h-6 text-zinc-400" />
-                Property Comparison
+                <Scale className="w-6 h-6 text-gold" />
+                Property Shortlist & Comparison
                 <span className="text-sm font-normal text-zinc-500">
-                  ({shortlist.length}/3 selected)
+                  ({shortlist.length} selected)
                 </span>
               </SheetTitle>
+              <p className="text-zinc-400 text-sm">
+                Assign badges to mark your top choices, then compare with AI or request expert evaluation
+              </p>
             </SheetHeader>
 
-            <div className="py-6 overflow-y-auto h-[calc(100%-180px)]">
+            <div className="py-6 overflow-y-auto h-[calc(100%-220px)]">
               {shortlistedProjects && shortlistedProjects.length > 0 ? (
-                <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-                  {shortlistedProjects.map((project) => (
-                    <div
-                      key={project.id}
-                      className="relative bg-zinc-900 rounded-2xl overflow-hidden border border-zinc-800"
-                    >
-                      <button
-                        onClick={() => handleRemove(project.id)}
-                        className="absolute top-3 right-3 z-10 w-8 h-8 bg-black/60 rounded-full flex items-center justify-center hover:bg-black transition-colors"
+                <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4">
+                  {shortlistedProjects.map((project) => {
+                    const badge = currentBadge(project.id);
+                    const badgeInfo = badge ? badgeLabels[badge] : null;
+                    
+                    return (
+                      <div
+                        key={project.id}
+                        className={`relative bg-zinc-900 rounded-2xl overflow-hidden border transition-all ${
+                          badgeInfo ? badgeInfo.color.replace('text-', 'border-').replace('/50', '/30') : 'border-zinc-800'
+                        }`}
                       >
-                        <X className="w-4 h-4 text-white" />
-                      </button>
-                      
-                      <div className="aspect-video overflow-hidden">
-                        <img
-                          src={project.images?.[0]?.image_url || "/placeholder.svg"}
-                          alt={project.name}
-                          className="w-full h-full object-cover"
-                        />
-                      </div>
-                      
-                      <div className="p-4 space-y-3">
-                        <h3 className="text-white font-semibold text-lg line-clamp-1">
-                          {project.name}
-                        </h3>
-                        <p className="text-zinc-500 text-sm">
-                          {project.developer?.name}
-                        </p>
-                        
-                        <div className="grid grid-cols-2 gap-2 text-sm">
-                          <div className="bg-zinc-800/50 rounded-lg p-2">
-                            <p className="text-zinc-500 text-xs">Price From</p>
-                            <p className="text-white font-medium">
-                              AED {((project.price_from || 0) / 1000000).toFixed(1)}M
-                            </p>
-                          </div>
-                          <div className="bg-zinc-800/50 rounded-lg p-2">
-                            <p className="text-zinc-500 text-xs">Bedrooms</p>
-                            <p className="text-white font-medium">
-                              {project.bedrooms_min} - {project.bedrooms_max} BR
-                            </p>
-                          </div>
-                          <div className="bg-zinc-800/50 rounded-lg p-2">
-                            <p className="text-zinc-500 text-xs">Location</p>
-                            <p className="text-white font-medium line-clamp-1">
-                              {project.location || project.emirate}
-                            </p>
-                          </div>
-                          <div className="bg-zinc-800/50 rounded-lg p-2">
-                            <p className="text-zinc-500 text-xs">Status</p>
-                            <p className="text-white font-medium">
-                              {project.handover_date || "Ready"}
-                            </p>
-                          </div>
+                        {/* Badge Selector */}
+                        <div className="absolute top-3 left-3 z-10">
+                          <DropdownMenu>
+                            <DropdownMenuTrigger asChild>
+                              <button className={`px-3 py-1.5 rounded-full text-xs font-bold transition-all ${
+                                badgeInfo 
+                                  ? `${badgeInfo.color} border` 
+                                  : 'bg-black/60 text-white hover:bg-black/80'
+                              }`}>
+                                {badgeInfo ? badgeInfo.label : <Trophy className="w-3 h-3" />}
+                              </button>
+                            </DropdownMenuTrigger>
+                            <DropdownMenuContent className="bg-zinc-900 border-zinc-800">
+                              <DropdownMenuItem 
+                                onClick={() => handleSetBadge(project.id, 'top1')}
+                                className="text-yellow-400 hover:bg-zinc-800 cursor-pointer"
+                              >
+                                🥇 Set as Top 1
+                              </DropdownMenuItem>
+                              <DropdownMenuItem 
+                                onClick={() => handleSetBadge(project.id, 'top2')}
+                                className="text-gray-300 hover:bg-zinc-800 cursor-pointer"
+                              >
+                                🥈 Set as Top 2
+                              </DropdownMenuItem>
+                              <DropdownMenuItem 
+                                onClick={() => handleSetBadge(project.id, 'top3')}
+                                className="text-orange-400 hover:bg-zinc-800 cursor-pointer"
+                              >
+                                🥉 Set as Top 3
+                              </DropdownMenuItem>
+                              {badge && (
+                                <DropdownMenuItem 
+                                  onClick={() => handleSetBadge(project.id, null)}
+                                  className="text-zinc-400 hover:bg-zinc-800 cursor-pointer"
+                                >
+                                  Remove Badge
+                                </DropdownMenuItem>
+                              )}
+                            </DropdownMenuContent>
+                          </DropdownMenu>
                         </div>
 
-                        <Link
-                          to={`/project/${project.slug}`}
-                          className="block text-center py-2 text-sm text-zinc-400 hover:text-white transition-colors"
+                        {/* Remove Button */}
+                        <button
+                          onClick={() => handleRemove(project.id)}
+                          className="absolute top-3 right-3 z-10 w-8 h-8 bg-black/60 rounded-full flex items-center justify-center hover:bg-red-600 transition-colors"
                         >
-                          View Details →
-                        </Link>
+                          <X className="w-4 h-4 text-white" />
+                        </button>
+                        
+                        <div className="aspect-video overflow-hidden">
+                          <img
+                            src={project.images?.[0]?.image_url || "/placeholder.svg"}
+                            alt={project.name}
+                            className="w-full h-full object-cover"
+                          />
+                        </div>
+                        
+                        <div className="p-4 space-y-3">
+                          <h3 className="text-white font-semibold text-lg line-clamp-1">
+                            {project.name}
+                          </h3>
+                          <p className="text-zinc-500 text-sm">
+                            {project.developer?.name}
+                          </p>
+                          
+                          <div className="grid grid-cols-2 gap-2 text-sm">
+                            <div className="bg-zinc-800/50 rounded-lg p-2">
+                              <p className="text-zinc-500 text-xs">Price From</p>
+                              <p className="text-white font-medium">
+                                AED {((project.price_from || 0) / 1000000).toFixed(1)}M
+                              </p>
+                            </div>
+                            <div className="bg-zinc-800/50 rounded-lg p-2">
+                              <p className="text-zinc-500 text-xs">Bedrooms</p>
+                              <p className="text-white font-medium">
+                                {project.bedrooms_min} - {project.bedrooms_max} BR
+                              </p>
+                            </div>
+                          </div>
+
+                          <Link
+                            to={`/project/${project.slug}`}
+                            onClick={() => setIsOpen(false)}
+                            className="block text-center py-2 text-sm text-gold hover:text-gold-light transition-colors"
+                          >
+                            View Details →
+                          </Link>
+                        </div>
                       </div>
-                    </div>
-                  ))}
-                  
-                  {/* Empty slots */}
-                  {Array.from({ length: 3 - (shortlistedProjects?.length || 0) }).map((_, i) => (
-                    <div
-                      key={`empty-${i}`}
-                      className="border-2 border-dashed border-zinc-800 rounded-2xl flex items-center justify-center min-h-[300px]"
-                    >
-                      <p className="text-zinc-600 text-center px-4">
-                        Add {i === 0 && shortlistedProjects?.length === 0 ? "" : "another "}property to compare
-                      </p>
-                    </div>
-                  ))}
+                    );
+                  })}
                 </div>
               ) : (
                 <div className="text-center py-12">
@@ -184,19 +259,27 @@ const ComparisonBar = () => {
             {/* Action buttons */}
             <div className="absolute bottom-0 left-0 right-0 p-6 bg-zinc-950 border-t border-zinc-800">
               <div className="flex flex-col sm:flex-row gap-3">
-                <Link to="/compare" className="flex-1">
+                <Link to="/compare" className="flex-1" onClick={() => setIsOpen(false)}>
                   <Button 
-                    className="w-full bg-white text-zinc-900 hover:bg-zinc-100 h-12 text-base font-semibold"
+                    className="w-full bg-gradient-to-r from-violet-600 to-purple-600 hover:from-violet-500 hover:to-purple-500 text-white h-12 text-base font-semibold"
                     disabled={shortlist.length < 2}
                   >
                     <Sparkles className="w-5 h-5 mr-2" />
-                    AI Comparison & Request Evaluation
+                    AI Comparison
                   </Button>
                 </Link>
+                <a href={INQUIRY_FORM_URL} target="_blank" rel="noopener noreferrer" className="flex-1">
+                  <Button 
+                    className="w-full bg-white text-zinc-900 hover:bg-zinc-100 h-12 text-base font-semibold"
+                  >
+                    <Users className="w-5 h-5 mr-2" />
+                    Expert Consultation
+                  </Button>
+                </a>
               </div>
               {shortlist.length < 2 && (
                 <p className="text-zinc-500 text-sm text-center mt-3">
-                  Add at least 2 properties to compare
+                  Add at least 2 properties for AI comparison
                 </p>
               )}
             </div>
