@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { Link } from "react-router-dom";
-import { useDevelopers, useProjects, useCommunities } from "@/hooks/useProjects";
+import { useDevelopers, useProjects, useCommunities, useTrendingAreas } from "@/hooks/useProjects";
 import { useFilteredProjects, defaultFilters } from "@/hooks/useProjectFilters";
 import ProjectFilters, { type FilterState } from "@/components/ProjectFilters";
 import { Skeleton } from "@/components/ui/skeleton";
@@ -9,6 +9,7 @@ const DeveloperGrid = () => {
   const { data: developers, isLoading: loadingDevelopers } = useDevelopers();
   const { data: projects, isLoading: loadingProjects } = useProjects();
   const { data: communities } = useCommunities();
+  const { data: trendingAreas } = useTrendingAreas();
   const [filters, setFilters] = useState<FilterState>(defaultFilters);
   
   const filteredProjects = useFilteredProjects(projects, filters);
@@ -16,6 +17,7 @@ const DeveloperGrid = () => {
   if (loadingDevelopers || loadingProjects) {
     return (
       <div className="space-y-16">
+        <Skeleton className="h-14 w-full mb-4 bg-[#1a1a1a] rounded-xl" />
         {[...Array(3)].map((_, i) => (
           <div key={i}>
             <Skeleton className="h-14 w-48 mb-8 bg-[#1a1a1a]" />
@@ -39,11 +41,17 @@ const DeveloperGrid = () => {
   const hasFiltersApplied = 
     filters.search || 
     filters.priceMin > 0 || 
-    filters.priceMax < 50000000 ||
+    filters.priceMax < 500000000 ||
     filters.bedroomsMin !== null ||
     filters.communityId !== null ||
     filters.developerId !== null ||
-    filters.handoverYear !== null;
+    filters.handoverStatus !== null ||
+    filters.emirate !== null ||
+    filters.trendingArea !== null ||
+    filters.furnishedStatus !== null ||
+    filters.views.length > 0 ||
+    filters.amenities.length > 0 ||
+    filters.facilities.length > 0;
 
   return (
     <div>
@@ -52,11 +60,12 @@ const DeveloperGrid = () => {
         onFiltersChange={setFilters}
         communities={communities}
         developers={developers}
+        trendingAreas={trendingAreas}
       />
 
       {hasFiltersApplied && (
         <p className="text-gray-400 mb-8">
-          Found {filteredProjects.length} project{filteredProjects.length !== 1 ? "s" : ""}
+          Found <span className="text-white font-semibold">{filteredProjects.length}</span> project{filteredProjects.length !== 1 ? "s" : ""}
         </p>
       )}
 
@@ -86,12 +95,21 @@ const DeveloperGrid = () => {
                   to={`/project/${project.slug}`}
                   className="group relative overflow-hidden rounded-lg bg-[#1a1a1a] border border-[#2a2a2a] hover:border-[#D4A017]/50 transition-all duration-300"
                 >
-                  <div className="aspect-[4/3] overflow-hidden">
+                  <div className="aspect-[4/3] overflow-hidden relative">
                     <img
                       src={project.images?.[0]?.image_url || "https://images.unsplash.com/photo-1512917774080-9991f1c4c750?w=800"}
                       alt={project.name}
                       className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
                     />
+                    {project.handover_date && (
+                      <span className={`absolute top-3 left-3 px-2 py-1 rounded text-xs font-medium ${
+                        project.handover_date.toLowerCase().includes("ready")
+                          ? "bg-green-500/90 text-white"
+                          : "bg-[#D4A017]/90 text-black"
+                      }`}>
+                        {project.handover_date.toLowerCase().includes("ready") ? "Ready" : project.handover_date}
+                      </span>
+                    )}
                   </div>
                   <div className="p-4">
                     <h4

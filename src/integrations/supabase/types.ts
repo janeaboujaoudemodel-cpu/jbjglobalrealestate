@@ -162,7 +162,10 @@ export type Database = {
           created_at: string
           description: string | null
           developer_id: string | null
+          emirate: string | null
+          facilities: string[] | null
           floors: number | null
+          furnished_status: string | null
           handover_date: string | null
           id: string
           location: string | null
@@ -174,6 +177,7 @@ export type Database = {
           slug: string
           status: string | null
           updated_at: string
+          views: string[] | null
         }
         Insert: {
           amenities?: string[] | null
@@ -183,7 +187,10 @@ export type Database = {
           created_at?: string
           description?: string | null
           developer_id?: string | null
+          emirate?: string | null
+          facilities?: string[] | null
           floors?: number | null
+          furnished_status?: string | null
           handover_date?: string | null
           id?: string
           location?: string | null
@@ -195,6 +202,7 @@ export type Database = {
           slug: string
           status?: string | null
           updated_at?: string
+          views?: string[] | null
         }
         Update: {
           amenities?: string[] | null
@@ -204,7 +212,10 @@ export type Database = {
           created_at?: string
           description?: string | null
           developer_id?: string | null
+          emirate?: string | null
+          facilities?: string[] | null
           floors?: number | null
+          furnished_status?: string | null
           handover_date?: string | null
           id?: string
           location?: string | null
@@ -216,6 +227,7 @@ export type Database = {
           slug?: string
           status?: string | null
           updated_at?: string
+          views?: string[] | null
         }
         Relationships: [
           {
@@ -233,6 +245,36 @@ export type Database = {
             referencedColumns: ["id"]
           },
         ]
+      }
+      trending_areas: {
+        Row: {
+          created_at: string
+          emirate: string
+          id: string
+          image_url: string | null
+          is_trending: boolean | null
+          name: string
+          slug: string
+        }
+        Insert: {
+          created_at?: string
+          emirate?: string
+          id?: string
+          image_url?: string | null
+          is_trending?: boolean | null
+          name: string
+          slug: string
+        }
+        Update: {
+          created_at?: string
+          emirate?: string
+          id?: string
+          image_url?: string | null
+          is_trending?: boolean | null
+          name?: string
+          slug?: string
+        }
+        Relationships: []
       }
     }
     Views: {
