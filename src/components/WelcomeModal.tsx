@@ -78,7 +78,7 @@ const WelcomeModal = () => {
           </div>
 
           {/* Title and Description */}
-          <div className="text-center mb-8">
+          <div className="text-center mb-6">
             <h2 
               className="text-3xl font-bold mb-3"
               style={{ 
@@ -91,36 +91,58 @@ const WelcomeModal = () => {
             >
               {isReturningUser ? "Welcome Back!" : "Welcome to JJ Global Capital"}
             </h2>
-            <p className="text-zinc-400 text-base leading-relaxed">
+            <p className="text-zinc-400 text-sm leading-relaxed">
               {isReturningUser 
                 ? "We're glad you're back. Continue exploring premium properties."
-                : "Discover exclusive real estate opportunities across the UAE"
+                : "Your gateway to global real estate investments with expertise in the UAE market"
               }
             </p>
           </div>
 
+          {/* Why UAE & Why Dubai Section */}
+          <div className="grid grid-cols-2 gap-3 mb-6">
+            <div className="bg-zinc-900/80 rounded-xl p-4 border border-zinc-800/50 backdrop-blur-sm">
+              <h3 className="text-gold font-semibold text-sm mb-2">Why UAE?</h3>
+              <ul className="text-zinc-400 text-xs space-y-1">
+                <li>• Tax-free investment returns</li>
+                <li>• World-class infrastructure</li>
+                <li>• Golden Visa opportunities</li>
+                <li>• Strong rental yields</li>
+              </ul>
+            </div>
+            <div className="bg-zinc-900/80 rounded-xl p-4 border border-zinc-800/50 backdrop-blur-sm">
+              <h3 className="text-gold font-semibold text-sm mb-2">Why Dubai?</h3>
+              <ul className="text-zinc-400 text-xs space-y-1">
+                <li>• Global business hub</li>
+                <li>• Luxury lifestyle destination</li>
+                <li>• Safe & stable economy</li>
+                <li>• 100% foreign ownership</li>
+              </ul>
+            </div>
+          </div>
+
           {/* Ornamental divider */}
-          <div className="flex items-center justify-center gap-3 mb-6">
+          <div className="flex items-center justify-center gap-3 mb-4">
             <div className="w-12 h-px bg-gradient-to-r from-transparent to-gold/60" />
             <div className="w-2 h-2 rounded-full bg-gold shadow-lg shadow-gold/50" />
             <div className="w-12 h-px bg-gradient-to-l from-transparent to-gold/60" />
           </div>
 
           {/* Feature Guide */}
-          <div className="bg-zinc-900/80 rounded-xl p-5 border border-zinc-800/50 mb-6 backdrop-blur-sm">
-            <p className="text-zinc-300 text-sm font-medium mb-4">Save your favorite properties:</p>
-            <div className="space-y-3">
-              <div className="flex items-center gap-4">
-                <div className="w-10 h-10 rounded-full bg-black/80 border border-zinc-700 flex items-center justify-center shadow-inner">
-                  <Heart className="w-5 h-5 text-red-500" />
+          <div className="bg-zinc-900/80 rounded-xl p-4 border border-zinc-800/50 mb-5 backdrop-blur-sm">
+            <p className="text-zinc-300 text-sm font-medium mb-3">Save your favorite properties:</p>
+            <div className="space-y-2">
+              <div className="flex items-center gap-3">
+                <div className="w-9 h-9 rounded-full bg-black/80 border border-zinc-700 flex items-center justify-center shadow-inner">
+                  <Heart className="w-4 h-4 text-red-500" />
                 </div>
-                <span className="text-zinc-400 text-sm">Tap heart to add to <span className="text-white font-medium">Favorites</span></span>
+                <span className="text-zinc-400 text-xs">Tap heart to add to <span className="text-white font-medium">Favorites</span></span>
               </div>
-              <div className="flex items-center gap-4">
-                <div className="w-10 h-10 rounded-full bg-black/80 border border-zinc-700 flex items-center justify-center shadow-inner">
-                  <ListPlus className="w-5 h-5 text-gold" />
+              <div className="flex items-center gap-3">
+                <div className="w-9 h-9 rounded-full bg-black/80 border border-zinc-700 flex items-center justify-center shadow-inner">
+                  <ListPlus className="w-4 h-4 text-gold" />
                 </div>
-                <span className="text-zinc-400 text-sm">Tap list to add to <span className="text-white font-medium">Shortlist</span> for comparison</span>
+                <span className="text-zinc-400 text-xs">Tap list to add to <span className="text-white font-medium">Shortlist</span> for comparison</span>
               </div>
             </div>
           </div>
@@ -129,7 +151,7 @@ const WelcomeModal = () => {
           <div className="space-y-3">
             <Button
               onClick={handleLogin}
-              className="w-full py-6 bg-gradient-to-r from-gold via-gold-light to-gold text-black hover:opacity-90 font-semibold text-base shadow-xl shadow-gold/20 rounded-xl group"
+              className="w-full py-5 bg-gradient-to-r from-gold via-gold-light to-gold text-black hover:opacity-90 font-semibold text-base shadow-xl shadow-gold/20 rounded-xl group"
             >
               <User className="w-5 h-5 mr-3" />
               <span className="flex-1 text-left">Sign In / Create Account</span>
@@ -139,14 +161,14 @@ const WelcomeModal = () => {
             <Button
               onClick={handleContinueAsGuest}
               variant="outline"
-              className="w-full py-6 border-zinc-700 bg-zinc-900/50 text-white hover:bg-zinc-800 hover:border-gold/40 group rounded-xl"
+              className="w-full py-5 border-zinc-700 bg-zinc-900/50 text-white hover:bg-zinc-800 hover:border-gold/40 group rounded-xl"
             >
               <span className="flex-1 text-left">Continue as Guest</span>
               <ArrowRight className="w-4 h-4 text-zinc-500 group-hover:text-gold transition-colors" />
             </Button>
           </div>
 
-          <p className="text-center text-zinc-600 text-xs mt-5">
+          <p className="text-center text-zinc-600 text-xs mt-4">
             Favorites & shortlist work even as a guest
           </p>
         </div>

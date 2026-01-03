@@ -42,9 +42,9 @@ const ShareButton = ({ projectName, projectSlug }: ShareButtonProps) => {
         <Button
           variant="outline"
           size="sm"
-          className="border-zinc-700 text-zinc-300 hover:bg-zinc-800 hover:text-white"
+          className="bg-black border-[#A8925A] text-white hover:bg-[#A8925A]/20 hover:text-white font-medium"
         >
-          <Share2 className="w-4 h-4 mr-2" />
+          <Share2 className="w-4 h-4 mr-2 text-[#A8925A]" />
           Share
         </Button>
       </DropdownMenuTrigger>
