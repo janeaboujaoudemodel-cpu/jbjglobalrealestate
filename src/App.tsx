@@ -11,7 +11,12 @@ import DeveloperDetail from "./pages/DeveloperDetail";
 import ProjectDetail from "./pages/ProjectDetail";
 import Auth from "./pages/Auth";
 import Admin from "./pages/Admin";
+import Quiz from "./pages/Quiz";
+import QuizResults from "./pages/QuizResults";
+import Favorites from "./pages/Favorites";
+import Compare from "./pages/Compare";
 import NotFound from "./pages/NotFound";
+import ComparisonBar from "./components/ComparisonBar";
 
 const queryClient = new QueryClient();
 
@@ -30,9 +35,14 @@ const App = () => (
             <Route path="/project/:slug" element={<ProjectDetail />} />
             <Route path="/auth" element={<Auth />} />
             <Route path="/admin" element={<Admin />} />
+            <Route path="/quiz" element={<Quiz />} />
+            <Route path="/quiz-results" element={<QuizResults />} />
+            <Route path="/favorites" element={<Favorites />} />
+            <Route path="/compare" element={<Compare />} />
             {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
             <Route path="*" element={<NotFound />} />
           </Routes>
+          <ComparisonBar />
         </BrowserRouter>
       </TooltipProvider>
     </AuthProvider>
