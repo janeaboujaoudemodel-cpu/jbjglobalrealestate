@@ -206,7 +206,7 @@ const Quiz = () => {
   const getRecommendations = () => {
     if (!allProjects?.length) return [];
 
-    // First, filter projects that match HARD requirements (budget and bedrooms)
+    // First, filter projects that match HARD requirements (budget, bedrooms, AND emirate)
     const filteredProjects = allProjects.filter((project) => {
       const priceFrom = project.price_from || 0;
       const budget = answers.budget;
@@ -236,6 +236,17 @@ const Quiz = () => {
         if (maxBr < 6) return false;
       }
 
+      // STRICT emirate filtering - MUST match selected emirate (unless "any")
+      const emirate = answers.emirate;
+      const projectEmirate = project.emirate?.toLowerCase().trim() || "";
+      
+      if (emirate && emirate !== "any") {
+        if (emirate === "dubai" && projectEmirate !== "dubai") return false;
+        if (emirate === "abu-dhabi" && !projectEmirate.includes("abu dhabi") && projectEmirate !== "abu dhabi") return false;
+        if (emirate === "rak" && !projectEmirate.includes("ras al khaimah") && projectEmirate !== "ras al khaimah") return false;
+        if (emirate === "sharjah" && projectEmirate !== "sharjah") return false;
+      }
+
       return true;
     });
 
@@ -257,14 +268,6 @@ const Quiz = () => {
         if (timeline === "2025-2026" && (handover.includes("2025") || handover.includes("2026"))) score += 15;
         if (timeline === "2027-plus" && (handover.includes("2027") || handover.includes("2028") || handover.includes("2029"))) score += 15;
         if (timeline === "flexible") score += 10;
-
-        const emirate = answers.emirate;
-        const projectEmirate = project.emirate?.toLowerCase() || "";
-        if (emirate === "dubai" && projectEmirate === "dubai") score += 15;
-        if (emirate === "abu-dhabi" && projectEmirate === "abu dhabi") score += 15;
-        if (emirate === "rak" && projectEmirate === "ras al khaimah") score += 15;
-        if (emirate === "sharjah" && projectEmirate === "sharjah") score += 15;
-        if (emirate === "any") score += 10;
 
         const preferredViews = answers.views as string[] || [];
         preferredViews.forEach((pv) => {
