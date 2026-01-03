@@ -1,19 +1,20 @@
 import { cn } from "@/lib/utils";
 
 const GlobeIcon = () => (
-  <svg viewBox="0 0 100 100" className="w-20 h-20">
+  <svg viewBox="0 0 100 100" className="w-24 h-24">
     <defs>
-      <linearGradient id="goldGradient" x1="0%" y1="0%" x2="100%" y2="100%">
-        <stop offset="0%" stopColor="hsl(43, 89%, 65%)" />
-        <stop offset="50%" stopColor="hsl(43, 74%, 49%)" />
-        <stop offset="100%" stopColor="hsl(36, 77%, 35%)" />
+      <linearGradient id="luxuryGold" x1="0%" y1="0%" x2="100%" y2="100%">
+        <stop offset="0%" stopColor="#D4AF37" />
+        <stop offset="30%" stopColor="#C5A028" />
+        <stop offset="70%" stopColor="#B8960F" />
+        <stop offset="100%" stopColor="#9A7B0A" />
       </linearGradient>
-      <linearGradient id="goldShine" x1="0%" y1="0%" x2="100%" y2="0%">
-        <stop offset="0%" stopColor="hsl(43, 89%, 75%)" stopOpacity="0.8" />
-        <stop offset="50%" stopColor="hsl(43, 74%, 49%)" stopOpacity="0.3" />
-        <stop offset="100%" stopColor="hsl(36, 77%, 35%)" stopOpacity="0.8" />
+      <linearGradient id="goldShine" x1="0%" y1="0%" x2="100%" y2="100%">
+        <stop offset="0%" stopColor="#E8D48B" stopOpacity="0.9" />
+        <stop offset="50%" stopColor="#D4AF37" stopOpacity="0.5" />
+        <stop offset="100%" stopColor="#9A7B0A" stopOpacity="0.9" />
       </linearGradient>
-      <filter id="glow">
+      <filter id="luxuryGlow">
         <feGaussianBlur stdDeviation="2" result="coloredBlur"/>
         <feMerge>
           <feMergeNode in="coloredBlur"/>
@@ -21,29 +22,24 @@ const GlobeIcon = () => (
         </feMerge>
       </filter>
     </defs>
-    {/* Globe base */}
-    <circle cx="50" cy="50" r="35" fill="none" stroke="url(#goldGradient)" strokeWidth="3" filter="url(#glow)" />
-    {/* Latitude lines */}
-    <ellipse cx="50" cy="50" rx="35" ry="12" fill="none" stroke="url(#goldGradient)" strokeWidth="2" />
-    <ellipse cx="50" cy="50" rx="35" ry="25" fill="none" stroke="url(#goldGradient)" strokeWidth="1.5" opacity="0.7" />
-    {/* Longitude line */}
-    <ellipse cx="50" cy="50" rx="12" ry="35" fill="none" stroke="url(#goldGradient)" strokeWidth="2" />
-    {/* Center vertical line */}
-    <line x1="50" y1="15" x2="50" y2="85" stroke="url(#goldGradient)" strokeWidth="1.5" opacity="0.5" />
-    {/* Shine effect */}
-    <circle cx="35" cy="35" r="8" fill="url(#goldShine)" opacity="0.4" />
+    <circle cx="50" cy="50" r="36" fill="none" stroke="url(#luxuryGold)" strokeWidth="2.5" filter="url(#luxuryGlow)" />
+    <ellipse cx="50" cy="50" rx="36" ry="14" fill="none" stroke="url(#luxuryGold)" strokeWidth="1.8" />
+    <ellipse cx="50" cy="50" rx="36" ry="26" fill="none" stroke="url(#luxuryGold)" strokeWidth="1.2" opacity="0.6" />
+    <ellipse cx="50" cy="50" rx="14" ry="36" fill="none" stroke="url(#luxuryGold)" strokeWidth="1.8" />
+    <line x1="50" y1="14" x2="50" y2="86" stroke="url(#luxuryGold)" strokeWidth="1" opacity="0.4" />
+    <circle cx="38" cy="35" r="6" fill="url(#goldShine)" opacity="0.3" />
   </svg>
 );
 
 const HandshakeIcon = () => (
-  <svg viewBox="0 0 100 100" className="w-20 h-20">
+  <svg viewBox="0 0 100 100" className="w-24 h-24">
     <defs>
-      <linearGradient id="goldGradient2" x1="0%" y1="0%" x2="100%" y2="100%">
-        <stop offset="0%" stopColor="hsl(43, 89%, 65%)" />
-        <stop offset="50%" stopColor="hsl(43, 74%, 49%)" />
-        <stop offset="100%" stopColor="hsl(36, 77%, 35%)" />
+      <linearGradient id="luxuryGold2" x1="0%" y1="0%" x2="100%" y2="100%">
+        <stop offset="0%" stopColor="#D4AF37" />
+        <stop offset="50%" stopColor="#C5A028" />
+        <stop offset="100%" stopColor="#9A7B0A" />
       </linearGradient>
-      <filter id="glow2">
+      <filter id="luxuryGlow2">
         <feGaussianBlur stdDeviation="1.5" result="coloredBlur"/>
         <feMerge>
           <feMergeNode in="coloredBlur"/>
@@ -51,72 +47,52 @@ const HandshakeIcon = () => (
         </feMerge>
       </filter>
     </defs>
-    {/* Left hand */}
     <path
-      d="M15 55 L25 50 L35 52 L45 48 L50 50"
+      d="M12 52 L24 48 L36 50 L46 46 L50 48"
       fill="none"
-      stroke="url(#goldGradient2)"
-      strokeWidth="4"
+      stroke="url(#luxuryGold2)"
+      strokeWidth="3.5"
       strokeLinecap="round"
       strokeLinejoin="round"
-      filter="url(#glow2)"
+      filter="url(#luxuryGlow2)"
     />
-    {/* Right hand */}
     <path
-      d="M85 55 L75 50 L65 52 L55 48 L50 50"
+      d="M88 52 L76 48 L64 50 L54 46 L50 48"
       fill="none"
-      stroke="url(#goldGradient2)"
-      strokeWidth="4"
+      stroke="url(#luxuryGold2)"
+      strokeWidth="3.5"
       strokeLinecap="round"
       strokeLinejoin="round"
-      filter="url(#glow2)"
+      filter="url(#luxuryGlow2)"
     />
-    {/* Handshake center */}
     <path
-      d="M45 48 Q50 44 55 48"
+      d="M46 46 Q50 42 54 46"
       fill="none"
-      stroke="url(#goldGradient2)"
-      strokeWidth="4"
+      stroke="url(#luxuryGold2)"
+      strokeWidth="3.5"
       strokeLinecap="round"
-      filter="url(#glow2)"
+      filter="url(#luxuryGlow2)"
     />
-    {/* Sleeve left */}
-    <path
-      d="M10 60 L10 45 L20 42"
-      fill="none"
-      stroke="url(#goldGradient2)"
-      strokeWidth="3"
-      strokeLinecap="round"
-      opacity="0.8"
-    />
-    {/* Sleeve right */}
-    <path
-      d="M90 60 L90 45 L80 42"
-      fill="none"
-      stroke="url(#goldGradient2)"
-      strokeWidth="3"
-      strokeLinecap="round"
-      opacity="0.8"
-    />
-    {/* Decorative circles */}
-    <circle cx="50" cy="35" r="5" fill="none" stroke="url(#goldGradient2)" strokeWidth="2" opacity="0.5" />
-    <circle cx="50" cy="65" r="5" fill="none" stroke="url(#goldGradient2)" strokeWidth="2" opacity="0.5" />
+    <path d="M8 56 L8 44 L18 40" fill="none" stroke="url(#luxuryGold2)" strokeWidth="2.5" strokeLinecap="round" opacity="0.7" />
+    <path d="M92 56 L92 44 L82 40" fill="none" stroke="url(#luxuryGold2)" strokeWidth="2.5" strokeLinecap="round" opacity="0.7" />
+    <circle cx="50" cy="32" r="4" fill="none" stroke="url(#luxuryGold2)" strokeWidth="1.5" opacity="0.4" />
+    <circle cx="50" cy="66" r="4" fill="none" stroke="url(#luxuryGold2)" strokeWidth="1.5" opacity="0.4" />
   </svg>
 );
 
 const CoinsIcon = () => (
-  <svg viewBox="0 0 100 100" className="w-20 h-20">
+  <svg viewBox="0 0 100 100" className="w-24 h-24">
     <defs>
-      <linearGradient id="goldGradient3" x1="0%" y1="0%" x2="100%" y2="100%">
-        <stop offset="0%" stopColor="hsl(43, 89%, 65%)" />
-        <stop offset="50%" stopColor="hsl(43, 74%, 49%)" />
-        <stop offset="100%" stopColor="hsl(36, 77%, 35%)" />
+      <linearGradient id="luxuryGold3" x1="0%" y1="0%" x2="100%" y2="100%">
+        <stop offset="0%" stopColor="#D4AF37" />
+        <stop offset="50%" stopColor="#C5A028" />
+        <stop offset="100%" stopColor="#9A7B0A" />
       </linearGradient>
       <linearGradient id="coinFace" x1="0%" y1="0%" x2="0%" y2="100%">
-        <stop offset="0%" stopColor="hsl(43, 89%, 70%)" />
-        <stop offset="100%" stopColor="hsl(36, 77%, 40%)" />
+        <stop offset="0%" stopColor="#D4AF37" stopOpacity="0.3" />
+        <stop offset="100%" stopColor="#9A7B0A" stopOpacity="0.15" />
       </linearGradient>
-      <filter id="glow3">
+      <filter id="luxuryGlow3">
         <feGaussianBlur stdDeviation="1.5" result="coloredBlur"/>
         <feMerge>
           <feMergeNode in="coloredBlur"/>
@@ -124,35 +100,31 @@ const CoinsIcon = () => (
         </feMerge>
       </filter>
     </defs>
-    {/* Back coin */}
-    <ellipse cx="55" cy="35" rx="25" ry="10" fill="url(#coinFace)" opacity="0.6" />
-    <ellipse cx="55" cy="35" rx="25" ry="10" fill="none" stroke="url(#goldGradient3)" strokeWidth="2" />
-    <ellipse cx="55" cy="40" rx="25" ry="10" fill="none" stroke="url(#goldGradient3)" strokeWidth="2" opacity="0.4" />
+    <ellipse cx="56" cy="32" rx="26" ry="11" fill="url(#coinFace)" />
+    <ellipse cx="56" cy="32" rx="26" ry="11" fill="none" stroke="url(#luxuryGold3)" strokeWidth="2" opacity="0.5" />
+    <ellipse cx="56" cy="38" rx="26" ry="11" fill="none" stroke="url(#luxuryGold3)" strokeWidth="1.5" opacity="0.3" />
     
-    {/* Middle coin */}
-    <ellipse cx="50" cy="50" rx="25" ry="10" fill="url(#coinFace)" opacity="0.7" />
-    <ellipse cx="50" cy="50" rx="25" ry="10" fill="none" stroke="url(#goldGradient3)" strokeWidth="2" filter="url(#glow3)" />
-    <ellipse cx="50" cy="55" rx="25" ry="10" fill="none" stroke="url(#goldGradient3)" strokeWidth="2" opacity="0.5" />
+    <ellipse cx="50" cy="50" rx="26" ry="11" fill="url(#coinFace)" />
+    <ellipse cx="50" cy="50" rx="26" ry="11" fill="none" stroke="url(#luxuryGold3)" strokeWidth="2" filter="url(#luxuryGlow3)" opacity="0.7" />
+    <ellipse cx="50" cy="56" rx="26" ry="11" fill="none" stroke="url(#luxuryGold3)" strokeWidth="1.5" opacity="0.4" />
     
-    {/* Front coin */}
-    <ellipse cx="45" cy="65" rx="25" ry="10" fill="url(#coinFace)" opacity="0.9" />
-    <ellipse cx="45" cy="65" rx="25" ry="10" fill="none" stroke="url(#goldGradient3)" strokeWidth="2.5" filter="url(#glow3)" />
-    <ellipse cx="45" cy="70" rx="25" ry="10" fill="none" stroke="url(#goldGradient3)" strokeWidth="2" opacity="0.6" />
+    <ellipse cx="44" cy="68" rx="26" ry="11" fill="url(#coinFace)" />
+    <ellipse cx="44" cy="68" rx="26" ry="11" fill="none" stroke="url(#luxuryGold3)" strokeWidth="2.5" filter="url(#luxuryGlow3)" />
+    <ellipse cx="44" cy="74" rx="26" ry="11" fill="none" stroke="url(#luxuryGold3)" strokeWidth="1.5" opacity="0.5" />
     
-    {/* Dollar symbol on front coin */}
-    <text x="45" y="68" textAnchor="middle" fill="url(#goldGradient3)" fontSize="12" fontWeight="bold">$</text>
+    <text x="44" y="72" textAnchor="middle" fill="#D4AF37" fontSize="14" fontWeight="600" fontFamily="serif">$</text>
   </svg>
 );
 
 const NetworkIcon = () => (
-  <svg viewBox="0 0 100 100" className="w-20 h-20">
+  <svg viewBox="0 0 100 100" className="w-24 h-24">
     <defs>
-      <linearGradient id="goldGradient4" x1="0%" y1="0%" x2="100%" y2="100%">
-        <stop offset="0%" stopColor="hsl(43, 89%, 65%)" />
-        <stop offset="50%" stopColor="hsl(43, 74%, 49%)" />
-        <stop offset="100%" stopColor="hsl(36, 77%, 35%)" />
+      <linearGradient id="luxuryGold4" x1="0%" y1="0%" x2="100%" y2="100%">
+        <stop offset="0%" stopColor="#D4AF37" />
+        <stop offset="50%" stopColor="#C5A028" />
+        <stop offset="100%" stopColor="#9A7B0A" />
       </linearGradient>
-      <filter id="glow4">
+      <filter id="luxuryGlow4">
         <feGaussianBlur stdDeviation="1.5" result="coloredBlur"/>
         <feMerge>
           <feMergeNode in="coloredBlur"/>
@@ -160,28 +132,25 @@ const NetworkIcon = () => (
         </feMerge>
       </filter>
     </defs>
-    {/* Connection lines */}
-    <line x1="50" y1="50" x2="25" y2="25" stroke="url(#goldGradient4)" strokeWidth="2" opacity="0.6" />
-    <line x1="50" y1="50" x2="75" y2="25" stroke="url(#goldGradient4)" strokeWidth="2" opacity="0.6" />
-    <line x1="50" y1="50" x2="25" y2="75" stroke="url(#goldGradient4)" strokeWidth="2" opacity="0.6" />
-    <line x1="50" y1="50" x2="75" y2="75" stroke="url(#goldGradient4)" strokeWidth="2" opacity="0.6" />
-    <line x1="50" y1="50" x2="50" y2="15" stroke="url(#goldGradient4)" strokeWidth="2" opacity="0.6" />
-    <line x1="50" y1="50" x2="50" y2="85" stroke="url(#goldGradient4)" strokeWidth="2" opacity="0.6" />
-    <line x1="50" y1="50" x2="15" y2="50" stroke="url(#goldGradient4)" strokeWidth="2" opacity="0.6" />
-    <line x1="50" y1="50" x2="85" y2="50" stroke="url(#goldGradient4)" strokeWidth="2" opacity="0.6" />
+    <line x1="50" y1="50" x2="24" y2="24" stroke="url(#luxuryGold4)" strokeWidth="1.5" opacity="0.5" />
+    <line x1="50" y1="50" x2="76" y2="24" stroke="url(#luxuryGold4)" strokeWidth="1.5" opacity="0.5" />
+    <line x1="50" y1="50" x2="24" y2="76" stroke="url(#luxuryGold4)" strokeWidth="1.5" opacity="0.5" />
+    <line x1="50" y1="50" x2="76" y2="76" stroke="url(#luxuryGold4)" strokeWidth="1.5" opacity="0.5" />
+    <line x1="50" y1="50" x2="50" y2="14" stroke="url(#luxuryGold4)" strokeWidth="1.5" opacity="0.5" />
+    <line x1="50" y1="50" x2="50" y2="86" stroke="url(#luxuryGold4)" strokeWidth="1.5" opacity="0.5" />
+    <line x1="50" y1="50" x2="14" y2="50" stroke="url(#luxuryGold4)" strokeWidth="1.5" opacity="0.5" />
+    <line x1="50" y1="50" x2="86" y2="50" stroke="url(#luxuryGold4)" strokeWidth="1.5" opacity="0.5" />
     
-    {/* Center node */}
-    <circle cx="50" cy="50" r="10" fill="url(#goldGradient4)" filter="url(#glow4)" />
+    <circle cx="50" cy="50" r="11" fill="url(#luxuryGold4)" filter="url(#luxuryGlow4)" />
     
-    {/* Outer nodes */}
-    <circle cx="25" cy="25" r="6" fill="url(#goldGradient4)" filter="url(#glow4)" opacity="0.9" />
-    <circle cx="75" cy="25" r="6" fill="url(#goldGradient4)" filter="url(#glow4)" opacity="0.9" />
-    <circle cx="25" cy="75" r="6" fill="url(#goldGradient4)" filter="url(#glow4)" opacity="0.9" />
-    <circle cx="75" cy="75" r="6" fill="url(#goldGradient4)" filter="url(#glow4)" opacity="0.9" />
-    <circle cx="50" cy="15" r="5" fill="url(#goldGradient4)" filter="url(#glow4)" opacity="0.8" />
-    <circle cx="50" cy="85" r="5" fill="url(#goldGradient4)" filter="url(#glow4)" opacity="0.8" />
-    <circle cx="15" cy="50" r="5" fill="url(#goldGradient4)" filter="url(#glow4)" opacity="0.8" />
-    <circle cx="85" cy="50" r="5" fill="url(#goldGradient4)" filter="url(#glow4)" opacity="0.8" />
+    <circle cx="24" cy="24" r="7" fill="url(#luxuryGold4)" filter="url(#luxuryGlow4)" opacity="0.85" />
+    <circle cx="76" cy="24" r="7" fill="url(#luxuryGold4)" filter="url(#luxuryGlow4)" opacity="0.85" />
+    <circle cx="24" cy="76" r="7" fill="url(#luxuryGold4)" filter="url(#luxuryGlow4)" opacity="0.85" />
+    <circle cx="76" cy="76" r="7" fill="url(#luxuryGold4)" filter="url(#luxuryGlow4)" opacity="0.85" />
+    <circle cx="50" cy="14" r="5" fill="url(#luxuryGold4)" filter="url(#luxuryGlow4)" opacity="0.7" />
+    <circle cx="50" cy="86" r="5" fill="url(#luxuryGold4)" filter="url(#luxuryGlow4)" opacity="0.7" />
+    <circle cx="14" cy="50" r="5" fill="url(#luxuryGold4)" filter="url(#luxuryGlow4)" opacity="0.7" />
+    <circle cx="86" cy="50" r="5" fill="url(#luxuryGold4)" filter="url(#luxuryGlow4)" opacity="0.7" />
   </svg>
 );
 
@@ -195,40 +164,34 @@ interface ServiceCardProps {
 const ServiceCard = ({ icon, title, description, className }: ServiceCardProps) => (
   <div
     className={cn(
-      "relative flex flex-col items-center p-8 rounded-xl",
-      "bg-premium-card border border-premium-card-border",
-      "hover:border-gold/30 transition-all duration-300",
+      "relative flex flex-col items-center p-10 rounded-sm",
+      "bg-[#0a0a0a] border border-[#1a1a1a]",
+      "hover:border-[#D4AF37]/20 transition-all duration-500",
       "group",
       className
     )}
   >
-    {/* Icon container with float animation */}
-    <div className="mb-6 animate-float">
+    <div className="mb-8 transition-transform duration-500 group-hover:scale-105">
       {icon}
     </div>
     
-    {/* Gold accent line */}
-    <div className="w-16 h-0.5 bg-gradient-to-r from-transparent via-gold to-transparent mb-4" />
+    <div className="w-20 h-px bg-gradient-to-r from-transparent via-[#D4AF37] to-transparent mb-5" />
     
-    {/* Title */}
-    <h3 className="text-xl font-semibold text-gold mb-4 text-center tracking-wide">
+    <h3 className="text-lg font-light text-[#D4AF37] mb-5 text-center tracking-[0.2em] uppercase">
       {title}
     </h3>
     
-    {/* Description */}
-    <p className="text-gray-400 text-center text-sm leading-relaxed">
+    <p className="text-[#888888] text-center text-sm leading-relaxed font-light tracking-wide">
       {description}
     </p>
     
-    {/* Bottom accent line */}
-    <div className="w-12 h-0.5 bg-gradient-to-r from-transparent via-gold/50 to-transparent mt-6 opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
+    <div className="w-10 h-px bg-gradient-to-r from-transparent via-[#D4AF37]/40 to-transparent mt-8 opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
   </div>
 );
 
-// Sparkle particle component
 const Sparkle = ({ style }: { style: React.CSSProperties }) => (
   <div
-    className="absolute w-1 h-1 bg-gold rounded-full animate-sparkle"
+    className="absolute w-0.5 h-0.5 bg-[#D4AF37] rounded-full animate-sparkle"
     style={style}
   />
 );
@@ -257,48 +220,42 @@ const ServicesSection = () => {
     },
   ];
 
-  // Generate random sparkle positions
-  const sparkles = Array.from({ length: 30 }, (_, i) => ({
+  const sparkles = Array.from({ length: 20 }, (_, i) => ({
     left: `${Math.random() * 100}%`,
     top: `${Math.random() * 100}%`,
-    animationDelay: `${Math.random() * 3}s`,
-    opacity: 0.3 + Math.random() * 0.4,
+    animationDelay: `${Math.random() * 4}s`,
+    opacity: 0.2 + Math.random() * 0.3,
   }));
 
   return (
-    <section className="relative w-full min-h-screen bg-premium-bg overflow-hidden">
-      {/* Sparkle background */}
+    <section className="relative w-full min-h-screen bg-black overflow-hidden">
       <div className="absolute inset-0 pointer-events-none">
         {sparkles.map((sparkle, i) => (
           <Sparkle key={i} style={sparkle} />
         ))}
       </div>
       
-      {/* Gradient overlays */}
-      <div className="absolute inset-0 bg-gradient-to-b from-black/20 via-transparent to-black/30 pointer-events-none" />
-      <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_center,_transparent_0%,_hsl(220,25%,8%)_70%)] pointer-events-none" />
+      <div className="absolute inset-0 bg-gradient-to-b from-black via-transparent to-black pointer-events-none" />
+      <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_center,_transparent_0%,_black_80%)] pointer-events-none" />
       
-      {/* Content */}
-      <div className="relative z-10 container mx-auto px-4 py-20">
-        {/* Section header */}
-        <div className="text-center mb-16">
-          <div className="flex items-center justify-center gap-4 mb-6">
-            <div className="w-24 h-px bg-gradient-to-r from-transparent via-gold to-transparent" />
-            <span className="text-gold text-sm tracking-[0.3em] uppercase font-medium">
+      <div className="relative z-10 container mx-auto px-6 py-24">
+        <div className="text-center mb-20">
+          <div className="flex items-center justify-center gap-6 mb-8">
+            <div className="w-32 h-px bg-gradient-to-r from-transparent via-[#D4AF37] to-transparent" />
+            <span className="text-[#D4AF37] text-xs tracking-[0.4em] uppercase font-light">
               Our Services
             </span>
-            <div className="w-24 h-px bg-gradient-to-r from-transparent via-gold to-transparent" />
+            <div className="w-32 h-px bg-gradient-to-r from-transparent via-[#D4AF37] to-transparent" />
           </div>
-          <h2 className="text-4xl md:text-5xl font-bold text-white mb-4">
-            Premium <span className="text-gold">Financial</span> Excellence
+          <h2 className="text-4xl md:text-5xl font-extralight text-white mb-6 tracking-wide">
+            Premium <span className="text-[#D4AF37] font-light">Financial</span> Excellence
           </h2>
-          <p className="text-gray-400 max-w-2xl mx-auto">
+          <p className="text-[#666666] max-w-2xl mx-auto font-light tracking-wide">
             Delivering world-class investment solutions through our four pillars of exceptional service
           </p>
         </div>
         
-        {/* Service cards grid */}
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 max-w-7xl mx-auto">
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4 max-w-7xl mx-auto">
           {services.map((service, index) => (
             <ServiceCard
               key={index}
