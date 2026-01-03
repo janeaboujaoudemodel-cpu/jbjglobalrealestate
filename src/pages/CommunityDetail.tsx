@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { useParams, Link } from "react-router-dom";
-import { useCommunity, useProjectsByCommunity, useDevelopers } from "@/hooks/useProjects";
+import { useCommunity, useProjectsByCommunity, useDevelopers, useTrendingAreas } from "@/hooks/useProjects";
 import { useFilteredProjects, defaultFilters } from "@/hooks/useProjectFilters";
 import ProjectFilters, { type FilterState } from "@/components/ProjectFilters";
 import ProjectCard from "@/components/ProjectCard";
@@ -12,6 +12,7 @@ const CommunityDetail = () => {
   const { data: community, isLoading: loadingCommunity } = useCommunity(slug || "");
   const { data: projects, isLoading: loadingProjects } = useProjectsByCommunity(slug || "");
   const { data: developers } = useDevelopers();
+  const { data: trendingAreas } = useTrendingAreas();
   const [filters, setFilters] = useState<FilterState>(defaultFilters);
 
   const filteredProjects = useFilteredProjects(projects, filters);
@@ -54,10 +55,15 @@ const CommunityDetail = () => {
   const hasFiltersApplied = 
     filters.search || 
     filters.priceMin > 0 || 
-    filters.priceMax < 50000000 ||
+    filters.priceMax < 500000000 ||
     filters.bedroomsMin !== null ||
     filters.developerId !== null ||
-    filters.handoverYear !== null;
+    filters.handoverStatus !== null ||
+    filters.emirate !== null ||
+    filters.furnishedStatus !== null ||
+    filters.views.length > 0 ||
+    filters.amenities.length > 0 ||
+    filters.facilities.length > 0;
 
   return (
     <section
@@ -121,12 +127,13 @@ const CommunityDetail = () => {
           filters={filters}
           onFiltersChange={setFilters}
           developers={developers}
+          trendingAreas={trendingAreas}
           showCommunityFilter={false}
         />
 
         {hasFiltersApplied && (
           <p className="text-gray-400 mb-6">
-            Found {filteredProjects.length} project{filteredProjects.length !== 1 ? "s" : ""}
+            Found <span className="text-white font-semibold">{filteredProjects.length}</span> project{filteredProjects.length !== 1 ? "s" : ""}
           </p>
         )}
 

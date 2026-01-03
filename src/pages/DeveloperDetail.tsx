@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { useParams, Link } from "react-router-dom";
-import { useDeveloper, useProjectsByDeveloper, useCommunities } from "@/hooks/useProjects";
+import { useDeveloper, useProjectsByDeveloper, useCommunities, useTrendingAreas } from "@/hooks/useProjects";
 import { useFilteredProjects, defaultFilters } from "@/hooks/useProjectFilters";
 import ProjectFilters, { type FilterState } from "@/components/ProjectFilters";
 import ProjectCard from "@/components/ProjectCard";
@@ -12,6 +12,7 @@ const DeveloperDetail = () => {
   const { data: developer, isLoading: loadingDeveloper } = useDeveloper(slug || "");
   const { data: projects, isLoading: loadingProjects } = useProjectsByDeveloper(slug || "");
   const { data: communities } = useCommunities();
+  const { data: trendingAreas } = useTrendingAreas();
   const [filters, setFilters] = useState<FilterState>(defaultFilters);
 
   const filteredProjects = useFilteredProjects(projects, filters);
@@ -53,10 +54,15 @@ const DeveloperDetail = () => {
   const hasFiltersApplied = 
     filters.search || 
     filters.priceMin > 0 || 
-    filters.priceMax < 50000000 ||
+    filters.priceMax < 500000000 ||
     filters.bedroomsMin !== null ||
     filters.communityId !== null ||
-    filters.handoverYear !== null;
+    filters.handoverStatus !== null ||
+    filters.emirate !== null ||
+    filters.furnishedStatus !== null ||
+    filters.views.length > 0 ||
+    filters.amenities.length > 0 ||
+    filters.facilities.length > 0;
 
   return (
     <section
@@ -111,12 +117,13 @@ const DeveloperDetail = () => {
           filters={filters}
           onFiltersChange={setFilters}
           communities={communities}
+          trendingAreas={trendingAreas}
           showDeveloperFilter={false}
         />
 
         {hasFiltersApplied && (
           <p className="text-gray-400 mb-6">
-            Found {filteredProjects.length} project{filteredProjects.length !== 1 ? "s" : ""}
+            Found <span className="text-white font-semibold">{filteredProjects.length}</span> project{filteredProjects.length !== 1 ? "s" : ""}
           </p>
         )}
 

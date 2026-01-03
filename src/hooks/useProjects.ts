@@ -16,6 +16,10 @@ export interface Project {
   service_charge: string | null;
   payment_plan: string | null;
   amenities: string[] | null;
+  facilities: string[] | null;
+  views: string[] | null;
+  furnished_status: string | null;
+  emirate: string | null;
   status: string | null;
   developer: {
     id: string;
@@ -59,6 +63,15 @@ export interface Developer {
   rank: number;
 }
 
+export interface TrendingArea {
+  id: string;
+  name: string;
+  slug: string;
+  emirate: string;
+  image_url: string | null;
+  is_trending: boolean;
+}
+
 export function useCommunities() {
   return useQuery({
     queryKey: ["communities"],
@@ -85,6 +98,22 @@ export function useDevelopers() {
       
       if (error) throw error;
       return data as Developer[];
+    },
+  });
+}
+
+export function useTrendingAreas() {
+  return useQuery({
+    queryKey: ["trending-areas"],
+    queryFn: async () => {
+      const { data, error } = await supabase
+        .from("trending_areas")
+        .select("*")
+        .eq("is_trending", true)
+        .order("name");
+      
+      if (error) throw error;
+      return data as TrendingArea[];
     },
   });
 }
