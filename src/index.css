@@ -47,15 +47,20 @@ All colors MUST be HSL.
     --sidebar-border: 220 13% 91%;
     --sidebar-ring: 217.2 91.2% 59.8%;
 
-    /* Luxury Gold Theme - Refined & Elegant */
-    --gold: 38 65% 50%;
-    --gold-light: 40 55% 65%;
-    --gold-dark: 35 70% 38%;
+    /* Luxury Gold Theme - Refined & Elegant (HSL) */
+    --gold: 43 80% 46%;
+    --gold-light: 45 90% 62%;
+    --gold-dark: 36 95% 30%;
     --gold-foreground: 0 0% 100%;
-    
+
+    /* Premium surfaces */
     --premium-bg: 0 0% 5%;
     --premium-card: 0 0% 9%;
     --premium-card-border: 0 0% 18%;
+
+    /* Accent suit green used in icons */
+    --jj-suit: 155 18% 18%;
+    --jj-suit-dark: 155 22% 12%;
   }
 
   .dark {
@@ -125,3 +130,171 @@ All colors MUST be HSL.
 .animate-float {
   animation: float 6s ease-in-out infinite;
 }
+
+@layer components {
+  /* Services section background (cinematic + warm bokeh) */
+  .jj-services {
+    background-color: hsl(var(--premium-bg));
+    background-image:
+      radial-gradient(900px 420px at 50% 92%, hsl(var(--gold) / 0.16) 0%, transparent 55%),
+      radial-gradient(520px 360px at 18% 46%, hsl(var(--gold-dark) / 0.22) 0%, transparent 62%),
+      radial-gradient(640px 420px at 86% 48%, hsl(var(--gold-dark) / 0.20) 0%, transparent 60%),
+      radial-gradient(380px 240px at 36% 58%, hsl(var(--gold) / 0.18) 0%, transparent 58%),
+      radial-gradient(420px 260px at 68% 60%, hsl(var(--gold) / 0.16) 0%, transparent 60%),
+      linear-gradient(180deg, hsl(0 0% 2% / 1) 0%, hsl(var(--premium-bg)) 45%, hsl(0 0% 2% / 1) 100%);
+  }
+
+  .jj-services::before {
+    content: "";
+    position: absolute;
+    inset: 0;
+    pointer-events: none;
+    opacity: 0.9;
+    background-image:
+      radial-gradient(10px 10px at 16% 58%, hsl(var(--gold-light) / 0.22) 0%, transparent 60%),
+      radial-gradient(12px 12px at 22% 44%, hsl(var(--gold) / 0.20) 0%, transparent 62%),
+      radial-gradient(9px 9px at 32% 66%, hsl(var(--gold) / 0.16) 0%, transparent 62%),
+      radial-gradient(14px 14px at 48% 54%, hsl(var(--gold-light) / 0.16) 0%, transparent 62%),
+      radial-gradient(10px 10px at 60% 62%, hsl(var(--gold) / 0.18) 0%, transparent 62%),
+      radial-gradient(13px 13px at 72% 46%, hsl(var(--gold-light) / 0.18) 0%, transparent 62%),
+      radial-gradient(10px 10px at 84% 60%, hsl(var(--gold) / 0.16) 0%, transparent 62%),
+      radial-gradient(12px 12px at 90% 44%, hsl(var(--gold-light) / 0.14) 0%, transparent 62%);
+    filter: blur(0.6px);
+  }
+
+  .jj-services::after {
+    content: "";
+    position: absolute;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    height: 34%;
+    pointer-events: none;
+    background:
+      radial-gradient(1200px 220px at 50% 120%, hsl(var(--gold) / 0.10) 0%, transparent 55%),
+      linear-gradient(180deg, transparent 0%, hsl(0 0% 0% / 0.55) 90%, hsl(0 0% 0% / 0.8) 100%);
+    opacity: 0.95;
+  }
+
+  /* Icon slot to align baselines like the reference */
+  .jj-icon-slot {
+    height: 128px;
+    display: flex;
+    align-items: flex-end;
+    justify-content: center;
+    margin-bottom: -42px;
+  }
+
+  /* 3D pedestal cube */
+  .jj-cube {
+    position: relative;
+    width: 100%;
+    min-height: 230px;
+    border: 1px solid hsl(var(--premium-card-border) / 0.55);
+    background:
+      linear-gradient(180deg,
+        hsl(0 0% 18% / 0.95) 0%,
+        hsl(0 0% 10% / 1) 55%,
+        hsl(0 0% 6% / 1) 100%
+      );
+    box-shadow:
+      0 30px 65px hsl(0 0% 0% / 0.78),
+      0 16px 26px hsl(0 0% 0% / 0.55),
+      inset 0 1px 0 hsl(0 0% 100% / 0.08),
+      inset 0 -1px 0 hsl(0 0% 0% / 0.55);
+  }
+
+  .jj-cube::before {
+    /* top face */
+    content: "";
+    position: absolute;
+    left: 10px;
+    right: 10px;
+    top: -26px;
+    height: 28px;
+    clip-path: polygon(6% 100%, 94% 100%, 100% 0%, 0% 0%);
+    background:
+      linear-gradient(180deg,
+        hsl(0 0% 26% / 0.9) 0%,
+        hsl(0 0% 16% / 0.9) 55%,
+        hsl(0 0% 10% / 0.95) 100%
+      );
+    box-shadow:
+      0 10px 20px hsl(0 0% 0% / 0.55),
+      inset 0 1px 0 hsl(0 0% 100% / 0.08);
+  }
+
+  .jj-cube::after {
+    /* right side face */
+    content: "";
+    position: absolute;
+    top: 0;
+    right: -16px;
+    width: 16px;
+    height: 100%;
+    clip-path: polygon(0 0, 100% 12%, 100% 100%, 0% 88%);
+    background:
+      linear-gradient(180deg,
+        hsl(0 0% 14% / 1) 0%,
+        hsl(0 0% 8% / 1) 100%
+      );
+    box-shadow: 14px 0 26px hsl(0 0% 0% / 0.55);
+  }
+
+  .jj-cube-topline {
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 2px;
+    background: linear-gradient(90deg, transparent 0%, hsl(0 0% 60% / 0.22) 30%, hsl(0 0% 85% / 0.22) 50%, hsl(0 0% 60% / 0.22) 70%, transparent 100%);
+  }
+
+  .jj-gold-text {
+    color: hsl(var(--gold));
+    text-shadow:
+      0 1px 0 hsl(0 0% 0% / 0.6),
+      0 8px 18px hsl(var(--gold-dark) / 0.28);
+  }
+
+  .jj-ornament {
+    margin-top: 10px;
+    margin-bottom: 12px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 6px;
+  }
+
+  .jj-ornament::before,
+  .jj-ornament::after {
+    content: "";
+    width: 34px;
+    height: 1px;
+    background: linear-gradient(90deg, transparent, hsl(var(--gold) / 0.85));
+    opacity: 0.9;
+  }
+
+  .jj-ornament::after {
+    background: linear-gradient(90deg, hsl(var(--gold) / 0.85), transparent);
+  }
+
+  .jj-ornament span {
+    display: inline-block;
+    border-radius: 999px;
+    background: hsl(var(--gold));
+    box-shadow: 0 0 10px hsl(var(--gold) / 0.35);
+  }
+
+  .jj-ornament .dot-lg {
+    width: 6px;
+    height: 6px;
+  }
+
+  .jj-ornament .dot-sm {
+    width: 4px;
+    height: 4px;
+    opacity: 0.7;
+  }
+}
+
