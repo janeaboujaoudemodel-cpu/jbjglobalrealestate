@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { Search, SlidersHorizontal, X, ChevronDown, MapPin, Building2, Eye, Sofa, Sparkles } from "lucide-react";
+import { Search, SlidersHorizontal, X, ChevronDown, MapPin, Building2, Eye, Sofa, Sparkles, Star } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import {
@@ -41,6 +41,7 @@ export interface FilterState {
   amenities: string[];
   facilities: string[];
   sortBy: string | null;
+  premiumOnly: boolean;
 }
 
 interface ProjectFiltersProps {
@@ -220,6 +221,7 @@ const ProjectFilters = ({
       amenities: [],
       facilities: [],
       sortBy: null,
+      premiumOnly: false,
     });
   };
 
@@ -236,6 +238,7 @@ const ProjectFilters = ({
     filters.views.length > 0,
     filters.amenities.length > 0,
     filters.facilities.length > 0,
+    filters.premiumOnly,
   ].filter(Boolean).length;
 
   // Filter developers by selected emirate
@@ -300,6 +303,22 @@ const ProjectFilters = ({
             </SheetHeader>
             <ScrollArea className="h-[calc(100vh-140px)]">
               <div className="p-6 space-y-8">
+                {/* Premium Properties */}
+                <FilterSection title="Premium Properties" icon={<Star className="w-5 h-5" />}>
+                  <button
+                    onClick={() => updateFilter("premiumOnly", !filters.premiumOnly)}
+                    className={`flex items-center gap-3 px-4 py-3 rounded-xl text-sm font-medium transition-all w-full ${
+                      filters.premiumOnly
+                        ? "bg-gradient-to-r from-[#D4A017] to-[#B8860B] text-black"
+                        : "bg-[#1a1a1a] text-gray-300 hover:bg-[#2a2a2a]"
+                    }`}
+                  >
+                    <Star className={`w-5 h-5 ${filters.premiumOnly ? "fill-black" : ""}`} />
+                    <span>Show Exclusive Residences Only</span>
+                    <span className="ml-auto text-xs opacity-70">Penthouses, Villas & Mansions</span>
+                  </button>
+                </FilterSection>
+
                 {/* Price Range */}
                 <FilterSection title="Price Range" icon={<span className="text-lg">💰</span>}>
                   <div className="px-2 pt-2">

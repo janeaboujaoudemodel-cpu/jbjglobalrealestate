@@ -21,6 +21,7 @@ export interface Project {
   furnished_status: string | null;
   emirate: string | null;
   status: string | null;
+  is_featured: boolean | null;
   developer: {
     id: string;
     name: string;

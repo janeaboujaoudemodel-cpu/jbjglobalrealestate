@@ -18,6 +18,7 @@ export const defaultFilters: FilterState = {
   amenities: [],
   facilities: [],
   sortBy: null,
+  premiumOnly: false,
 };
 
 // Get handover year from string
@@ -152,6 +153,11 @@ export function useFilteredProjects(
           projectFacilities.some((pf) => pf.toLowerCase().includes(facility.toLowerCase()))
         );
         if (!hasAllFacilities) return false;
+      }
+
+      // Premium filter
+      if (filters.premiumOnly && !project.is_featured) {
+        return false;
       }
 
       return true;

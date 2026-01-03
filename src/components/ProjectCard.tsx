@@ -1,4 +1,5 @@
 import { Link } from "react-router-dom";
+import { Star } from "lucide-react";
 import type { Project } from "@/hooks/useProjects";
 
 interface ProjectCardProps {
@@ -11,6 +12,14 @@ const ProjectCard = ({ project }: ProjectCardProps) => {
       to={`/project/${project.slug}`}
       className="group relative overflow-hidden rounded-lg bg-[#1a1a1a] border border-[#2a2a2a] hover:border-[#D4A017]/50 transition-all duration-300"
     >
+      {/* Premium Star Badge - Only visible when is_featured is true */}
+      {project.is_featured && (
+        <div className="absolute top-3 right-3 z-10">
+          <div className="bg-black/60 backdrop-blur-sm rounded-full p-2">
+            <Star className="w-5 h-5 fill-[#D4A017] text-[#D4A017]" />
+          </div>
+        </div>
+      )}
       <div className="aspect-[4/3] overflow-hidden">
         <img
           src={project.images?.[0]?.image_url || "https://images.unsplash.com/photo-1512917774080-9991f1c4c750?w=800"}

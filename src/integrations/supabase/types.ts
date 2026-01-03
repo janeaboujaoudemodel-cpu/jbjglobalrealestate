@@ -168,6 +168,7 @@ export type Database = {
           furnished_status: string | null
           handover_date: string | null
           id: string
+          is_featured: boolean | null
           location: string | null
           name: string
           payment_plan: string | null
@@ -193,6 +194,7 @@ export type Database = {
           furnished_status?: string | null
           handover_date?: string | null
           id?: string
+          is_featured?: boolean | null
           location?: string | null
           name: string
           payment_plan?: string | null
@@ -218,6 +220,7 @@ export type Database = {
           furnished_status?: string | null
           handover_date?: string | null
           id?: string
+          is_featured?: boolean | null
           location?: string | null
           name?: string
           payment_plan?: string | null
