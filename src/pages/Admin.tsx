@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useEffect, useState, useRef } from "react";
 import { useNavigate } from "react-router-dom";
 import { useAuth } from "@/contexts/AuthContext";
 import { useProjects, useDevelopers, useCommunities } from "@/hooks/useProjects";
@@ -34,7 +34,20 @@ import {
   Upload,
   Search,
   Trash2,
+  Download,
+  File,
+  X,
 } from "lucide-react";
+
+interface ProjectDocument {
+  id: string;
+  project_id: string;
+  file_name: string;
+  file_url: string;
+  document_type: string;
+  file_size: number | null;
+  created_at: string;
+}
 
 const Admin = () => {
   const navigate = useNavigate();
@@ -47,6 +60,12 @@ const Admin = () => {
   const [selectedProject, setSelectedProject] = useState<any>(null);
   const [isEditing, setIsEditing] = useState(false);
   const [isSaving, setIsSaving] = useState(false);
+  
+  // Document upload state
+  const [projectDocuments, setProjectDocuments] = useState<ProjectDocument[]>([]);
+  const [isUploadingDocument, setIsUploadingDocument] = useState(false);
+  const [selectedDocType, setSelectedDocType] = useState("brochure");
+  const fileInputRef = useRef<HTMLInputElement>(null);
 
   // Form state
   const [formData, setFormData] = useState({
@@ -82,7 +101,7 @@ const Admin = () => {
     project.developer?.name.toLowerCase().includes(searchQuery.toLowerCase())
   );
 
-  const handleEditProject = (project: any) => {
+  const handleEditProject = async (project: any) => {
     setSelectedProject(project);
     setFormData({
       name: project.name || "",
@@ -103,6 +122,97 @@ const Admin = () => {
       service_charge: project.service_charge || "",
     });
     setIsEditing(true);
+    
+    // Fetch documents for this project
+    const { data: docs } = await supabase
+      .from("project_documents")
+      .select("*")
+      .eq("project_id", project.id)
+      .order("created_at", { ascending: false });
+    
+    setProjectDocuments(docs || []);
+  };
+
+  const handleFileUpload = async (event: React.ChangeEvent<HTMLInputElement>) => {
+    const file = event.target.files?.[0];
+    if (!file || !selectedProject) return;
+    
+    setIsUploadingDocument(true);
+    
+    try {
+      const fileExt = file.name.split('.').pop();
+      const fileName = `${selectedProject.id}/${Date.now()}-${file.name}`;
+      
+      const { error: uploadError } = await supabase.storage
+        .from("project-files")
+        .upload(fileName, file);
+      
+      if (uploadError) throw uploadError;
+      
+      const { data: urlData } = supabase.storage
+        .from("project-files")
+        .getPublicUrl(fileName);
+      
+      const { error: dbError } = await supabase
+        .from("project_documents")
+        .insert({
+          project_id: selectedProject.id,
+          file_name: file.name,
+          file_url: urlData.publicUrl,
+          document_type: selectedDocType,
+          file_size: file.size,
+        });
+      
+      if (dbError) throw dbError;
+      
+      // Refresh documents
+      const { data: docs } = await supabase
+        .from("project_documents")
+        .select("*")
+        .eq("project_id", selectedProject.id)
+        .order("created_at", { ascending: false });
+      
+      setProjectDocuments(docs || []);
+      toast.success("Document uploaded successfully");
+    } catch (error: any) {
+      toast.error(error.message || "Failed to upload document");
+    } finally {
+      setIsUploadingDocument(false);
+      if (fileInputRef.current) {
+        fileInputRef.current.value = "";
+      }
+    }
+  };
+
+  const handleDeleteDocument = async (doc: ProjectDocument) => {
+    try {
+      // Extract path from URL
+      const urlParts = doc.file_url.split('/project-files/');
+      const filePath = urlParts[1];
+      
+      if (filePath) {
+        await supabase.storage.from("project-files").remove([filePath]);
+      }
+      
+      const { error } = await supabase
+        .from("project_documents")
+        .delete()
+        .eq("id", doc.id);
+      
+      if (error) throw error;
+      
+      setProjectDocuments(prev => prev.filter(d => d.id !== doc.id));
+      toast.success("Document deleted");
+    } catch (error: any) {
+      toast.error(error.message || "Failed to delete document");
+    }
+  };
+
+  const formatFileSize = (bytes: number | null) => {
+    if (!bytes) return "—";
+    if (bytes < 1024) return `${bytes} B`;
+    if (bytes < 1024 * 1024) return `${(bytes / 1024).toFixed(1)} KB`;
+    return `${(bytes / (1024 * 1024)).toFixed(1)} MB`;
   };
 
   const handleToggleFeatured = async (projectId: string, currentValue: boolean) => {
@@ -549,6 +659,104 @@ const Admin = () => {
                 checked={formData.is_featured}
                 onCheckedChange={(checked) => setFormData({ ...formData, is_featured: checked })}
               />
+            </div>
+
+            {/* Document Upload Section */}
+            <div className="space-y-4 border-t border-[#2a2a2a] pt-6">
+              <div className="flex items-center justify-between">
+                <div>
+                  <Label className="text-white font-medium text-lg">Documents</Label>
+                  <p className="text-gray-500 text-sm">Upload brochures, floor plans, and payment plans</p>
+                </div>
+              </div>
+
+              <div className="flex gap-4">
+                <Select
+                  value={selectedDocType}
+                  onValueChange={setSelectedDocType}
+                >
+                  <SelectTrigger className="w-40 bg-[#0d0d0d] border-[#2a2a2a] text-white">
+                    <SelectValue />
+                  </SelectTrigger>
+                  <SelectContent className="bg-[#1a1a1a] border-[#2a2a2a]">
+                    <SelectItem value="brochure" className="text-white hover:bg-[#2a2a2a]">
+                      Brochure
+                    </SelectItem>
+                    <SelectItem value="floor_plan" className="text-white hover:bg-[#2a2a2a]">
+                      Floor Plan
+                    </SelectItem>
+                    <SelectItem value="payment_plan" className="text-white hover:bg-[#2a2a2a]">
+                      Payment Plan
+                    </SelectItem>
+                    <SelectItem value="renders" className="text-white hover:bg-[#2a2a2a]">
+                      Renders
+                    </SelectItem>
+                    <SelectItem value="other" className="text-white hover:bg-[#2a2a2a]">
+                      Other
+                    </SelectItem>
+                  </SelectContent>
+                </Select>
+                
+                <input
+                  type="file"
+                  ref={fileInputRef}
+                  onChange={handleFileUpload}
+                  accept=".pdf,.doc,.docx,.png,.jpg,.jpeg"
+                  className="hidden"
+                />
+                <Button
+                  onClick={() => fileInputRef.current?.click()}
+                  disabled={isUploadingDocument}
+                  className="bg-[#D4A017] hover:bg-[#B8860B] text-black"
+                >
+                  <Upload className="w-4 h-4 mr-2" />
+                  {isUploadingDocument ? "Uploading..." : "Upload Document"}
+                </Button>
+              </div>
+
+              {projectDocuments.length > 0 ? (
+                <div className="space-y-2">
+                  {projectDocuments.map((doc) => (
+                    <div
+                      key={doc.id}
+                      className="flex items-center justify-between p-3 bg-[#0d0d0d] rounded-lg border border-[#2a2a2a]"
+                    >
+                      <div className="flex items-center gap-3">
+                        <div className="w-10 h-10 bg-[#2a2a2a] rounded-lg flex items-center justify-center">
+                          <File className="w-5 h-5 text-[#D4A017]" />
+                        </div>
+                        <div>
+                          <p className="text-white text-sm font-medium">{doc.file_name}</p>
+                          <p className="text-gray-500 text-xs">
+                            {doc.document_type.replace('_', ' ')} • {formatFileSize(doc.file_size)}
+                          </p>
+                        </div>
+                      </div>
+                      <div className="flex items-center gap-2">
+                        <a
+                          href={doc.file_url}
+                          target="_blank"
+                          rel="noopener noreferrer"
+                          className="p-2 text-gray-400 hover:text-white transition-colors"
+                        >
+                          <Download className="w-4 h-4" />
+                        </a>
+                        <button
+                          onClick={() => handleDeleteDocument(doc)}
+                          className="p-2 text-gray-400 hover:text-red-500 transition-colors"
+                        >
+                          <Trash2 className="w-4 h-4" />
+                        </button>
+                      </div>
+                    </div>
+                  ))}
+                </div>
+              ) : (
+                <div className="text-center py-8 text-gray-500">
+                  <FileText className="w-12 h-12 mx-auto mb-2 opacity-50" />
+                  <p>No documents uploaded yet</p>
+                </div>
+              )}
             </div>
 
             <div className="flex justify-end gap-4 pt-4">
