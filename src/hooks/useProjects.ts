@@ -11,6 +11,8 @@ export interface Project {
   price_to: number | null;
   bedrooms_min: number | null;
   bedrooms_max: number | null;
+  size_min: number | null;
+  size_max: number | null;
   floors: number | null;
   handover_date: string | null;
   service_charge: string | null;

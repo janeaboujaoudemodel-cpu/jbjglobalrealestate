@@ -29,6 +29,8 @@ export interface FilterState {
   search: string;
   priceMin: number;
   priceMax: number;
+  sizeMin: number;
+  sizeMax: number;
   bedroomsMin: number | null;
   bedroomsMax: number | null;
   communityId: string | null;
@@ -42,6 +44,9 @@ export interface FilterState {
   facilities: string[];
   sortBy: string | null;
   premiumOnly: boolean;
+  currency: 'AED' | 'USD' | 'EUR' | 'GBP';
+  sizeUnit: 'sqft' | 'sqm';
+  language: 'en' | 'ar';
 }
 
 interface ProjectFiltersProps {
@@ -56,6 +61,22 @@ interface ProjectFiltersProps {
 
 const PRICE_MIN = 0;
 const PRICE_MAX = 500000000;
+const SIZE_MIN = 0;
+const SIZE_MAX = 50000; // sq ft
+
+const CURRENCY_RATES: Record<string, number> = {
+  AED: 1,
+  USD: 0.27,
+  EUR: 0.25,
+  GBP: 0.21,
+};
+
+const CURRENCY_SYMBOLS: Record<string, string> = {
+  AED: 'AED',
+  USD: '$',
+  EUR: '€',
+  GBP: '£',
+};
 
 const EMIRATES = [
   { value: "all", label: "All Emirates" },
@@ -216,6 +237,8 @@ const ProjectFilters = ({
       search: "",
       priceMin: PRICE_MIN,
       priceMax: PRICE_MAX,
+      sizeMin: SIZE_MIN,
+      sizeMax: SIZE_MAX,
       bedroomsMin: null,
       bedroomsMax: null,
       communityId: null,
@@ -229,7 +252,31 @@ const ProjectFilters = ({
       facilities: [],
       sortBy: null,
       premiumOnly: false,
+      currency: filters.currency,
+      sizeUnit: filters.sizeUnit,
+      language: filters.language,
     });
+  };
+
+  // Convert size based on unit
+  const convertSize = (sqft: number, toUnit: 'sqft' | 'sqm'): number => {
+    return toUnit === 'sqm' ? Math.round(sqft * 0.0929) : sqft;
+  };
+
+  // Format price with currency
+  const formatPriceWithCurrency = (value: number) => {
+    const converted = value * CURRENCY_RATES[filters.currency];
+    const symbol = CURRENCY_SYMBOLS[filters.currency];
+    if (converted >= 1000000000) {
+      return `${symbol} ${(converted / 1000000000).toFixed(1)}B`;
+    }
+    if (converted >= 1000000) {
+      return `${symbol} ${(converted / 1000000).toFixed(0)}M`;
+    }
+    if (converted >= 1000) {
+      return `${symbol} ${(converted / 1000).toFixed(0)}K`;
+    }
+    return `${symbol} ${converted.toFixed(0)}`;
   };
 
   const activeFilterCount = [
@@ -326,9 +373,90 @@ const ProjectFilters = ({
                   </button>
                 </FilterSection>
 
+                {/* Currency & Display Options */}
+                <FilterSection title="Display Settings" icon={<span className="text-lg">⚙️</span>}>
+                  <div className="grid grid-cols-3 gap-3">
+                    <div>
+                      <label className="text-gray-500 text-xs mb-1 block">Currency</label>
+                      <Select
+                        value={filters.currency}
+                        onValueChange={(value) => updateFilter("currency", value as FilterState['currency'])}
+                      >
+                        <SelectTrigger className="bg-[#1a1a1a] border-[#2a2a2a] text-white h-10">
+                          <SelectValue />
+                        </SelectTrigger>
+                        <SelectContent className="bg-[#1a1a1a] border-[#2a2a2a]">
+                          <SelectItem value="AED" className="text-white hover:bg-[#2a2a2a]">AED</SelectItem>
+                          <SelectItem value="USD" className="text-white hover:bg-[#2a2a2a]">USD</SelectItem>
+                          <SelectItem value="EUR" className="text-white hover:bg-[#2a2a2a]">EUR</SelectItem>
+                          <SelectItem value="GBP" className="text-white hover:bg-[#2a2a2a]">GBP</SelectItem>
+                        </SelectContent>
+                      </Select>
+                    </div>
+                    <div>
+                      <label className="text-gray-500 text-xs mb-1 block">Size Unit</label>
+                      <Select
+                        value={filters.sizeUnit}
+                        onValueChange={(value) => updateFilter("sizeUnit", value as FilterState['sizeUnit'])}
+                      >
+                        <SelectTrigger className="bg-[#1a1a1a] border-[#2a2a2a] text-white h-10">
+                          <SelectValue />
+                        </SelectTrigger>
+                        <SelectContent className="bg-[#1a1a1a] border-[#2a2a2a]">
+                          <SelectItem value="sqft" className="text-white hover:bg-[#2a2a2a]">sq ft</SelectItem>
+                          <SelectItem value="sqm" className="text-white hover:bg-[#2a2a2a]">sq m</SelectItem>
+                        </SelectContent>
+                      </Select>
+                    </div>
+                    <div>
+                      <label className="text-gray-500 text-xs mb-1 block">Language</label>
+                      <Select
+                        value={filters.language}
+                        onValueChange={(value) => updateFilter("language", value as FilterState['language'])}
+                      >
+                        <SelectTrigger className="bg-[#1a1a1a] border-[#2a2a2a] text-white h-10">
+                          <SelectValue />
+                        </SelectTrigger>
+                        <SelectContent className="bg-[#1a1a1a] border-[#2a2a2a]">
+                          <SelectItem value="en" className="text-white hover:bg-[#2a2a2a]">English</SelectItem>
+                          <SelectItem value="ar" className="text-white hover:bg-[#2a2a2a]">العربية</SelectItem>
+                        </SelectContent>
+                      </Select>
+                    </div>
+                  </div>
+                </FilterSection>
+
                 {/* Price Range */}
                 <FilterSection title="Price Range" icon={<span className="text-lg">💰</span>}>
                   <div className="px-2 pt-2">
+                    <div className="grid grid-cols-2 gap-4 mb-4">
+                      <div>
+                        <label className="text-gray-500 text-xs mb-1 block">From</label>
+                        <Input
+                          type="number"
+                          value={Math.round(filters.priceMin * CURRENCY_RATES[filters.currency])}
+                          onChange={(e) => {
+                            const value = parseInt(e.target.value) || 0;
+                            updateFilter("priceMin", Math.round(value / CURRENCY_RATES[filters.currency]));
+                          }}
+                          className="bg-[#1a1a1a] border-[#2a2a2a] text-white h-10"
+                          placeholder="Min"
+                        />
+                      </div>
+                      <div>
+                        <label className="text-gray-500 text-xs mb-1 block">To</label>
+                        <Input
+                          type="number"
+                          value={Math.round(filters.priceMax * CURRENCY_RATES[filters.currency])}
+                          onChange={(e) => {
+                            const value = parseInt(e.target.value) || PRICE_MAX;
+                            updateFilter("priceMax", Math.round(value / CURRENCY_RATES[filters.currency]));
+                          }}
+                          className="bg-[#1a1a1a] border-[#2a2a2a] text-white h-10"
+                          placeholder="Max"
+                        />
+                      </div>
+                    </div>
                     <Slider
                       value={[filters.priceMin, filters.priceMax]}
                       min={PRICE_MIN}
@@ -344,8 +472,62 @@ const ProjectFilters = ({
                       className="mb-4"
                     />
                     <div className="flex justify-between text-gray-400 text-sm">
-                      <span>AED {formatPrice(filters.priceMin)}</span>
-                      <span>AED {formatPrice(filters.priceMax)}</span>
+                      <span>{formatPriceWithCurrency(filters.priceMin)}</span>
+                      <span>{formatPriceWithCurrency(filters.priceMax)}</span>
+                    </div>
+                  </div>
+                </FilterSection>
+
+                {/* Size Range */}
+                <FilterSection title={`Size Range (${filters.sizeUnit})`} icon={<span className="text-lg">📐</span>}>
+                  <div className="px-2 pt-2">
+                    <div className="grid grid-cols-2 gap-4 mb-4">
+                      <div>
+                        <label className="text-gray-500 text-xs mb-1 block">From</label>
+                        <Input
+                          type="number"
+                          value={convertSize(filters.sizeMin, filters.sizeUnit)}
+                          onChange={(e) => {
+                            const value = parseInt(e.target.value) || 0;
+                            const sqft = filters.sizeUnit === 'sqm' ? Math.round(value / 0.0929) : value;
+                            updateFilter("sizeMin", sqft);
+                          }}
+                          className="bg-[#1a1a1a] border-[#2a2a2a] text-white h-10"
+                          placeholder="Min"
+                        />
+                      </div>
+                      <div>
+                        <label className="text-gray-500 text-xs mb-1 block">To</label>
+                        <Input
+                          type="number"
+                          value={convertSize(filters.sizeMax, filters.sizeUnit)}
+                          onChange={(e) => {
+                            const value = parseInt(e.target.value) || SIZE_MAX;
+                            const sqft = filters.sizeUnit === 'sqm' ? Math.round(value / 0.0929) : value;
+                            updateFilter("sizeMax", sqft);
+                          }}
+                          className="bg-[#1a1a1a] border-[#2a2a2a] text-white h-10"
+                          placeholder="Max"
+                        />
+                      </div>
+                    </div>
+                    <Slider
+                      value={[filters.sizeMin, filters.sizeMax]}
+                      min={SIZE_MIN}
+                      max={SIZE_MAX}
+                      step={100}
+                      onValueChange={([min, max]) => {
+                        onFiltersChange({
+                          ...filters,
+                          sizeMin: min,
+                          sizeMax: max,
+                        });
+                      }}
+                      className="mb-4"
+                    />
+                    <div className="flex justify-between text-gray-400 text-sm">
+                      <span>{convertSize(filters.sizeMin, filters.sizeUnit).toLocaleString()} {filters.sizeUnit}</span>
+                      <span>{convertSize(filters.sizeMax, filters.sizeUnit).toLocaleString()} {filters.sizeUnit}</span>
                     </div>
                   </div>
                 </FilterSection>
