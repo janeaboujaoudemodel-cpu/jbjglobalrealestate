@@ -25,13 +25,30 @@ import { ScrollArea } from "@/components/ui/scroll-area";
 
 const INQUIRY_FORM_URL = "https://jjglobalcapital.com/form/property-investment-inquiry-form/";
 
-// Premium Logo Component - Thinner divider, closer J letters, improved GLOBAL CAPITAL visibility
+// Premium Logo Component — centered stroke, GLOBAL • CAPITAL split, improved readability
 const JJLogo = ({ className = "" }: { className?: string }) => (
-  <span className={`tracking-wide flex items-center ${className}`} style={{ fontFamily: "Poppins, sans-serif" }}>
-    <span className="text-[#A8925A] font-extralight text-xl md:text-2xl">J</span>
-    <span className="text-white/95 mx-1.5 font-thin text-2xl md:text-3xl leading-none" style={{ transform: 'scaleY(1.35)' }}>|</span>
-    <span className="text-[#A8925A] font-extralight text-xl md:text-2xl">J</span>
-    <span className="text-white font-medium tracking-[0.12em] ml-2.5 text-[11px] md:text-xs">GLOBAL CAPITAL</span>
+  <span
+    className={`tracking-wide flex items-center ${className}`}
+    style={{ fontFamily: "Poppins, sans-serif" }}
+  >
+    <span className="text-gold font-extralight text-xl md:text-2xl">J</span>
+    <span
+      className="text-white/95 mx-1.5 font-thin text-2xl md:text-3xl leading-none"
+      style={{ transform: "scaleY(1.34)" }}
+    >
+      |
+    </span>
+    <span className="text-gold font-extralight text-xl md:text-2xl">J</span>
+
+    <span className="ml-2.5 flex items-center text-white">
+      <span className="font-semibold text-xs md:text-sm tracking-[0.22em]">
+        GLOBAL
+      </span>
+      <span className="mx-2 w-1.5 h-1.5 rounded-full bg-white/70" />
+      <span className="font-semibold text-xs md:text-sm tracking-[0.22em]">
+        CAPITAL
+      </span>
+    </span>
   </span>
 );
 
