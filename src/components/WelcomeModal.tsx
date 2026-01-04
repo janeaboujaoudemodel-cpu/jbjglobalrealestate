@@ -37,26 +37,37 @@ const WelcomeModal = () => {
   }, [location.pathname]);
 
   const handleClose = () => {
+    setIsOpen(false);
     localStorage.setItem(WELCOME_MODAL_KEY, "true");
     localStorage.setItem(RETURNING_USER_KEY, "true");
-    setIsOpen(false);
   };
 
   const handleContinueAsGuest = () => {
-    handleClose();
+    // Immediately close the modal
+    setIsOpen(false);
+    localStorage.setItem(WELCOME_MODAL_KEY, "true");
+    localStorage.setItem(RETURNING_USER_KEY, "true");
   };
 
   const handleLogin = () => {
-    handleClose();
+    setIsOpen(false);
+    localStorage.setItem(WELCOME_MODAL_KEY, "true");
+    localStorage.setItem(RETURNING_USER_KEY, "true");
     navigate("/auth");
   };
+
+  // Prevent reopening if already closed
+  if (!isOpen) return null;
 
   return (
     <Dialog
       open={isOpen}
       onOpenChange={(open) => {
-        if (!open) handleClose();
-        setIsOpen(open);
+        if (!open) {
+          setIsOpen(false);
+          localStorage.setItem(WELCOME_MODAL_KEY, "true");
+          localStorage.setItem(RETURNING_USER_KEY, "true");
+        }
       }}
     >
       <DialogContent className="bg-black border border-zinc-800 text-white max-w-md p-0 overflow-hidden">

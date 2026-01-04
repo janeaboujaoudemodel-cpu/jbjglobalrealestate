@@ -74,9 +74,9 @@ const Index = () => {
             </div>
           </motion.div>
 
-          {/* Main Tagline */}
+          {/* Main Tagline - Smaller, single line */}
           <motion.h1 
-            className="text-white text-3xl md:text-5xl lg:text-6xl font-bold tracking-wide mb-4 leading-tight"
+            className="text-white text-2xl md:text-3xl lg:text-4xl font-bold tracking-wide mb-4 leading-tight"
             variants={fadeInUp}
             style={{ fontFamily: "Poppins, sans-serif" }}
           >
