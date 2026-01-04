@@ -600,18 +600,10 @@ const Founder = () => {
         </div>
       </section>
 
-      {/* PULL-QUOTE BLOCK - CINEMATIC */}
-      <section className="py-24 md:py-40 relative overflow-hidden">
-        {/* Background Image */}
-        <div className="absolute inset-0">
-          <SafeImage 
-            src={founderDark} 
-            fallbackSrc={founderHero}
-            alt="Jane Abou Jaoude" 
-            className="w-full h-full object-cover object-top opacity-25"
-          />
-          <div className="absolute inset-0 bg-gradient-to-r from-black via-black/98 to-black" />
-        </div>
+      {/* PULL-QUOTE BLOCK - PREMIUM CINEMATIC */}
+      <section className="py-20 md:py-32 relative overflow-hidden">
+        {/* Elegant gradient background */}
+        <div className="absolute inset-0 bg-gradient-to-b from-black via-zinc-950 to-black" />
         
         <div className="container mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
           <motion.div 
@@ -621,21 +613,46 @@ const Founder = () => {
             viewport={{ once: true, margin: "-100px" }}
             variants={fadeInUp}
           >
-            <div className="flex items-start gap-8 md:gap-12">
-              <div className="w-1.5 md:w-2 h-40 md:h-48 bg-gradient-to-b from-gold via-gold/60 to-transparent flex-shrink-0 rounded-full" />
-              <div>
-                <blockquote className="text-white text-2xl md:text-4xl lg:text-5xl italic leading-relaxed font-light mb-10">
-                  "We Create | We Elevate | We Lead"
+            {/* Premium Quote Card */}
+            <div className="bg-gradient-to-br from-zinc-900/80 via-zinc-900/60 to-black border border-gold/20 rounded-3xl p-10 md:p-16 relative overflow-hidden">
+              {/* Decorative gold corner accents */}
+              <div className="absolute top-0 left-0 w-24 h-24 border-l-2 border-t-2 border-gold/40 rounded-tl-3xl" />
+              <div className="absolute bottom-0 right-0 w-24 h-24 border-r-2 border-b-2 border-gold/40 rounded-br-3xl" />
+              <div className="absolute top-1/4 right-0 w-64 h-64 bg-gold/5 rounded-full blur-3xl" />
+              
+              <div className="text-center relative z-10">
+                {/* Quote Icon */}
+                <div className="w-16 h-16 mx-auto mb-8 bg-gradient-to-br from-gold/20 to-gold/5 rounded-2xl flex items-center justify-center border border-gold/30">
+                  <span className="text-gold text-4xl font-serif">"</span>
+                </div>
+                
+                {/* Quote Text */}
+                <blockquote 
+                  className="text-white text-3xl md:text-5xl lg:text-6xl font-light mb-12 leading-tight"
+                  style={{ fontFamily: "Poppins, sans-serif" }}
+                >
+                  We <span className="text-gold font-medium">Create</span> | We <span className="text-gold font-medium">Elevate</span> | We <span className="text-gold font-medium">Lead</span>
                 </blockquote>
-                <footer className="flex items-center gap-5">
-                  <div className="w-20 h-20 rounded-full overflow-hidden border-2 border-gold/60 shadow-lg shadow-gold/20">
-                    <SafeImage src={founderProfessional} fallbackSrc={founderHero} alt="Jane Abou Jaoude" className="w-full h-full object-cover object-[center_15%] scale-125" />
+                
+                {/* Divider */}
+                <div className="w-32 h-px bg-gradient-to-r from-transparent via-gold/50 to-transparent mx-auto mb-8" />
+                
+                {/* Founder Attribution - Premium Layout */}
+                <div className="flex flex-col items-center gap-4">
+                  <div className="w-24 h-24 rounded-full overflow-hidden border-2 border-gold/50 shadow-xl shadow-gold/20 p-1 bg-gradient-to-br from-gold/20 to-transparent">
+                    <SafeImage 
+                      src={founderProfessional} 
+                      fallbackSrc={founderHero} 
+                      alt="Jane Abou Jaoude" 
+                      className="w-full h-full object-cover object-[center_20%] rounded-full"
+                    />
                   </div>
-                  <div>
-                    <p className="text-gold text-lg font-medium">Jane Abou Jaoude</p>
-                    <p className="text-zinc-500">Founder & Chairwoman</p>
+                  <div className="text-center">
+                    <p className="text-gold text-xl font-semibold tracking-wide" style={{ fontFamily: "Poppins, sans-serif" }}>Jane Abou Jaoude</p>
+                    <p className="text-zinc-400 text-sm uppercase tracking-[0.2em] mt-1">Founder & Chairwoman</p>
+                    <p className="text-zinc-500 text-xs uppercase tracking-[0.15em] mt-1">JJ Holding Group</p>
                   </div>
-                </footer>
+                </div>
               </div>
             </div>
           </motion.div>
@@ -663,110 +680,75 @@ const Founder = () => {
           </motion.div>
           
           <motion.div 
-            className="grid grid-cols-2 md:grid-cols-4 gap-4 md:gap-6"
+            className="grid grid-cols-2 md:grid-cols-3 gap-4 md:gap-6"
             initial="hidden"
             whileInView="visible"
             viewport={{ once: true, margin: "-100px" }}
             variants={staggerContainer}
           >
+            {/* Large featured image */}
             <motion.div 
-              className="col-span-2 row-span-2 aspect-square md:aspect-auto rounded-3xl overflow-hidden border border-zinc-800 shadow-2xl group"
+              className="col-span-2 md:col-span-1 md:row-span-2 aspect-[3/4] rounded-3xl overflow-hidden border border-zinc-800 shadow-2xl group"
               variants={scaleIn}
             >
               <SafeImage 
                 src={founderJetInterior} 
                 fallbackSrc={founderHero}
                 alt="Private Aviation" 
-                className="w-full h-full object-cover object-top group-hover:scale-105 transition-transform duration-1000"
+                className="w-full h-full object-cover object-[center_25%] group-hover:scale-105 transition-transform duration-1000"
               />
             </motion.div>
-            {[founderOffice, founderProfessional, founderJetBoarding, founderJetInterior].map((img, i) => (
-              <motion.div 
-                key={i}
-                className="aspect-square rounded-2xl overflow-hidden border border-zinc-800 group"
-                variants={scaleIn}
-              >
-                <SafeImage 
-                  src={img} 
-                  fallbackSrc={founderHero}
-                  alt="Lifestyle" 
-                  className="w-full h-full object-cover object-top group-hover:scale-105 transition-transform duration-1000"
-                />
-              </motion.div>
-            ))}
-          </motion.div>
-        </div>
-      </section>
-
-      {/* LOOKING AHEAD */}
-      <section className="py-24 md:py-40 bg-gradient-to-b from-zinc-950/50 via-black to-zinc-950/50 relative">
-        <div className="container mx-auto px-4 sm:px-6 lg:px-8">
-          <motion.div 
-            className="grid lg:grid-cols-2 gap-16 lg:gap-24 items-center"
-            initial="hidden"
-            whileInView="visible"
-            viewport={{ once: true, margin: "-100px" }}
-            variants={staggerContainer}
-          >
-            <motion.div variants={fadeInUp}>
-              <div className="mb-10">
-                <span className="text-gold text-sm uppercase tracking-[0.4em]">Vision</span>
-                <GoldLine className="w-24 mt-4" />
-              </div>
-              
-              <h2 
-                className="text-white text-4xl md:text-5xl lg:text-6xl font-bold mb-10"
-                style={{ fontFamily: "Poppins, sans-serif" }}
-              >
-                Looking <span className="text-transparent bg-clip-text bg-gradient-to-r from-gold to-[#C4A962]">Ahead</span>
-              </h2>
-              
-              <div className="space-y-6 text-zinc-400 leading-relaxed text-lg md:text-xl">
-                <p>
-                  JJ Holding Group continues to expand its presence across strategic sectors, guided by the same principles that established its foundation.
-                </p>
-                <p className="text-zinc-500 text-base md:text-lg">
-                  Future initiatives will deepen existing capabilities while exploring complementary opportunities in emerging markets.
-                </p>
-                <p className="text-zinc-500 text-base md:text-lg">
-                  JJ Global Capital remains committed to serving discerning investors with access to the UAE's most compelling real estate opportunities.
-                </p>
-              </div>
-            </motion.div>
-            
+            {/* Smaller images - no duplicates */}
             <motion.div 
-              className="grid grid-cols-2 gap-4 md:gap-6"
-              variants={staggerContainer}
+              className="aspect-square rounded-2xl overflow-hidden border border-zinc-800 group"
+              variants={scaleIn}
             >
-              <motion.div 
-                className="aspect-[3/4] rounded-2xl overflow-hidden border border-zinc-800 shadow-xl group"
-                variants={scaleIn}
-              >
-                <SafeImage 
-                  src={founderOffice} 
-                  fallbackSrc={founderHero}
-                  alt="Leadership" 
-                  className="w-full h-full object-cover object-top group-hover:scale-105 transition-transform duration-1000"
-                />
-              </motion.div>
-              <motion.div 
-                className="aspect-[3/4] rounded-2xl overflow-hidden border border-zinc-800 shadow-xl mt-8 group"
-                variants={scaleIn}
-              >
-                <SafeImage 
-                  src={founderProfessional} 
-                  fallbackSrc={founderHero}
-                  alt="Future Vision" 
-                  className="w-full h-full object-cover object-top group-hover:scale-105 transition-transform duration-1000"
-                />
-              </motion.div>
+              <SafeImage 
+                src={founderOffice} 
+                fallbackSrc={founderHero}
+                alt="Office Leadership" 
+                className="w-full h-full object-cover object-[center_20%] group-hover:scale-105 transition-transform duration-1000"
+              />
+            </motion.div>
+            <motion.div 
+              className="aspect-square rounded-2xl overflow-hidden border border-zinc-800 group"
+              variants={scaleIn}
+            >
+              <SafeImage 
+                src={founderProfessional} 
+                fallbackSrc={founderHero}
+                alt="Professional Portrait" 
+                className="w-full h-full object-cover object-[center_15%] group-hover:scale-105 transition-transform duration-1000"
+              />
+            </motion.div>
+            <motion.div 
+              className="aspect-square rounded-2xl overflow-hidden border border-zinc-800 group"
+              variants={scaleIn}
+            >
+              <SafeImage 
+                src={founderJetBoarding} 
+                fallbackSrc={founderHero}
+                alt="International Travel" 
+                className="w-full h-full object-cover object-[center_25%] group-hover:scale-105 transition-transform duration-1000"
+              />
+            </motion.div>
+            <motion.div 
+              className="aspect-square rounded-2xl overflow-hidden border border-zinc-800 group"
+              variants={scaleIn}
+            >
+              <SafeImage 
+                src={founderYacht} 
+                fallbackSrc={founderHero}
+                alt="Luxury Lifestyle" 
+                className="w-full h-full object-cover object-[center_20%] group-hover:scale-105 transition-transform duration-1000"
+              />
             </motion.div>
           </motion.div>
         </div>
       </section>
 
-      {/* FINAL CTA - JJ GLOBAL CAPITAL */}
-      <section className="py-20 md:py-28 bg-gradient-to-b from-black via-zinc-950/50 to-black border-t border-gold/10 relative overflow-hidden">
+      {/* FINAL CTA - JJ GLOBAL CAPITAL - Reduced gap */}
+      <section className="py-16 md:py-24 bg-gradient-to-b from-black via-zinc-950/50 to-black border-t border-gold/10 relative overflow-hidden">
         {/* Decorative elements */}
         <div className="absolute top-0 left-1/2 -translate-x-1/2 w-px h-24 bg-gradient-to-b from-gold to-transparent" />
         <div className="absolute top-1/4 left-1/4 w-64 h-64 bg-gold/5 rounded-full blur-3xl" />
