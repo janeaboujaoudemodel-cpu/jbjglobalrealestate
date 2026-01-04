@@ -394,18 +394,19 @@ const Index = () => {
           </p>
           <div className="flex flex-wrap justify-center gap-4">
             <Button 
-              className="bg-gold hover:bg-gold-light text-black font-semibold px-8 py-6 text-base"
+              className="bg-gold hover:bg-gold-light text-black font-semibold px-8 py-6 text-base shadow-lg shadow-gold/20 transition-all duration-300 hover:shadow-gold/30 hover:scale-[1.02]"
               onClick={() => setIsInquiryOpen(true)}
             >
               {t('home.cta.contact')}
-              <ArrowUpRight className="w-5 h-5 ml-2" />
+              <ArrowUpRight className="w-5 h-5 ml-2 -mr-1" />
             </Button>
             <Link to="/properties">
               <Button 
                 variant="outline"
-                className="border-gold/50 text-gold hover:bg-gold/10 hover:border-gold px-8 py-6 text-base"
+                className="border-gold/50 text-gold hover:bg-gold/10 hover:border-gold px-8 py-6 text-base transition-all duration-300 hover:shadow-lg hover:shadow-gold/10"
               >
                 Browse Properties
+                <ArrowUpRight className="w-5 h-5 ml-2 -mr-1" />
               </Button>
             </Link>
           </div>
