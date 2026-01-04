@@ -106,25 +106,13 @@ const GlobalHeader = () => {
 
           {/* Right Side Actions */}
           <div className="flex items-center gap-1">
-            {/* Favorites */}
+            {/* Favorites - links to both favorites & shortlist page */}
             <Link to="/favorites">
               <Button variant="ghost" size="sm" className="text-zinc-400 hover:text-white hover:bg-zinc-800 relative">
                 <Heart className="w-4 h-4" />
-                {favCount > 0 && (
+                {(favCount + shortlistCount) > 0 && (
                   <span className="absolute -top-1 -right-1 w-4 h-4 bg-red-500 rounded-full text-[10px] text-white flex items-center justify-center">
-                    {favCount}
-                  </span>
-                )}
-              </Button>
-            </Link>
-
-            {/* Shortlist */}
-            <Link to="/favorites?tab=shortlist">
-              <Button variant="ghost" size="sm" className="text-zinc-400 hover:text-white hover:bg-zinc-800 relative">
-                <ListPlus className="w-4 h-4" />
-                {shortlistCount > 0 && (
-                  <span className="absolute -top-1 -right-1 w-4 h-4 bg-gold rounded-full text-[10px] text-black flex items-center justify-center">
-                    {shortlistCount}
+                    {favCount + shortlistCount}
                   </span>
                 )}
               </Button>
