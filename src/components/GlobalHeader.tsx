@@ -51,9 +51,10 @@ const GlobalHeader = () => {
 
   const mainNavLinks = [
     { href: "/", label: "Home", icon: Home },
-    { href: "/#properties", label: "Properties", icon: Building2 },
+    { href: "/about", label: "About Us", icon: Building2 },
+    { href: "/awards", label: "Awards", icon: Building2 },
     { href: "/news", label: "News & Insights", icon: Newspaper },
-    { href: INQUIRY_FORM_URL, label: "Contact", icon: Phone, external: true },
+    { href: "/contact", label: "Contact", icon: Phone },
   ];
 
   // Property shortcuts for quick access
@@ -78,29 +79,17 @@ const GlobalHeader = () => {
           {/* Desktop Navigation */}
           <nav className="hidden lg:flex items-center gap-1">
             {mainNavLinks.map((link) => (
-              link.external ? (
-                <a
-                  key={link.href}
-                  href={link.href}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="px-4 py-2 text-sm text-zinc-400 hover:text-white transition-colors"
-                >
-                  {link.label}
-                </a>
-              ) : (
-                <Link
-                  key={link.href}
-                  to={link.href}
-                  className={`px-4 py-2 text-sm transition-colors ${
-                    isActive(link.href) 
-                      ? "text-white bg-zinc-800" 
-                      : "text-zinc-400 hover:text-white hover:bg-zinc-900"
-                  }`}
-                >
-                  {link.label}
-                </Link>
-              )
+              <Link
+                key={link.href}
+                to={link.href}
+                className={`px-4 py-2 text-sm transition-colors ${
+                  isActive(link.href) 
+                    ? "text-white bg-zinc-800" 
+                    : "text-zinc-400 hover:text-white hover:bg-zinc-900"
+                }`}
+              >
+                {link.label}
+              </Link>
             ))}
           </nav>
 
@@ -175,31 +164,18 @@ const GlobalHeader = () => {
                 <nav className="flex flex-col p-4">
                   {/* Main Navigation */}
                   {mainNavLinks.map((link) => (
-                    link.external ? (
-                      <a
-                        key={link.href}
-                        href={link.href}
-                        target="_blank"
-                        rel="noopener noreferrer"
-                        onClick={() => setMobileMenuOpen(false)}
-                        className="flex items-center gap-3 px-4 py-3 text-zinc-300 hover:text-white hover:bg-zinc-900 border-l-2 border-transparent hover:border-gold transition-all"
-                      >
-                        {link.label}
-                      </a>
-                    ) : (
-                      <Link
-                        key={link.href}
-                        to={link.href}
-                        onClick={() => setMobileMenuOpen(false)}
-                        className={`flex items-center gap-3 px-4 py-3 border-l-2 transition-all ${
-                          isActive(link.href)
-                            ? "text-gold border-gold bg-gold/5"
-                            : "text-zinc-300 border-transparent hover:text-white hover:bg-zinc-900 hover:border-gold"
-                        }`}
-                      >
-                        {link.label}
-                      </Link>
-                    )
+                    <Link
+                      key={link.href}
+                      to={link.href}
+                      onClick={() => setMobileMenuOpen(false)}
+                      className={`flex items-center gap-3 px-4 py-3 border-l-2 transition-all ${
+                        isActive(link.href)
+                          ? "text-gold border-gold bg-gold/5"
+                          : "text-zinc-300 border-transparent hover:text-white hover:bg-zinc-900 hover:border-gold"
+                      }`}
+                    >
+                      {link.label}
+                    </Link>
                   ))}
 
                   <div className="h-px bg-zinc-800 my-4" />

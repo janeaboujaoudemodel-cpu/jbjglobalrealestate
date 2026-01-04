@@ -16,6 +16,9 @@ import QuizResults from "./pages/QuizResults";
 import Favorites from "./pages/Favorites";
 import Compare from "./pages/Compare";
 import News from "./pages/News";
+import About from "./pages/About";
+import Awards from "./pages/Awards";
+import Contact from "./pages/Contact";
 import NotFound from "./pages/NotFound";
 import WelcomeModal from "./components/WelcomeModal";
 import GlobalHeader from "./components/GlobalHeader";
@@ -64,6 +67,9 @@ const App = () => (
               <Route path="/favorites" element={<Favorites />} />
               <Route path="/compare" element={<Compare />} />
               <Route path="/news" element={<News />} />
+              <Route path="/about" element={<About />} />
+              <Route path="/awards" element={<Awards />} />
+              <Route path="/contact" element={<Contact />} />
               {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
               <Route path="*" element={<NotFound />} />
             </Routes>
