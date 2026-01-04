@@ -14,13 +14,17 @@ import {
 import { CONTACT_INFO } from "@/constants/stats";
 import { getCountryList, getLanguageList } from "@/constants/localeOptions";
 import founderProfessional from "@/assets/founder-professional.jpeg";
+import luxuryVilla1 from "@/assets/luxury-villa-1.jpeg";
 import { motion } from "framer-motion";
-import { ArrowUpRight, BookOpen, CheckCircle, Download, FileText, Shield, Star, TrendingUp } from "lucide-react";
+import { ArrowUpRight, BookOpen, CheckCircle, Download, FileText, Lock, Shield, Sparkles, Star, TrendingUp, Unlock } from "lucide-react";
+import { supabase } from "@/integrations/supabase/client";
+import { toast } from "sonner";
 
 const MarketReport = () => {
   const countries = useMemo(() => getCountryList(), []);
   const languages = useMemo(() => getLanguageList(), []);
   const [downloaded, setDownloaded] = useState(false);
+  const [isSubmitting, setIsSubmitting] = useState(false);
 
   const [form, setForm] = useState({
     fullName: "",
@@ -332,10 +336,37 @@ const MarketReport = () => {
     setDownloaded(true);
   };
 
-  const handleSubmit = () => {
-    if (!isValid) return;
-    window.open(buildInquiryUrl(), "_blank", "noopener,noreferrer");
-    downloadBook();
+  const handleSubmit = async () => {
+    if (!isValid || isSubmitting) return;
+    
+    setIsSubmitting(true);
+    
+    try {
+      // Send email notifications via edge function
+      const { error } = await supabase.functions.invoke('send-market-report-email', {
+        body: {
+          fullName: form.fullName,
+          email: form.email,
+          phone: form.phone,
+          nationality: form.nationality,
+          language: form.language,
+        },
+      });
+      
+      if (error) {
+        console.error('Email error:', error);
+      }
+      
+      // Download the book
+      downloadBook();
+      toast.success('Your book is downloading!');
+    } catch (err) {
+      console.error('Submit error:', err);
+      // Still download the book even if email fails
+      downloadBook();
+    } finally {
+      setIsSubmitting(false);
+    }
   };
 
   const features = [
@@ -349,7 +380,7 @@ const MarketReport = () => {
     <div className="min-h-screen bg-black">
       <GlobalHeader />
       
-      {/* Hero Section */}
+      {/* Hero Section with 3D Book Visual */}
       <section className="relative pt-32 pb-20 overflow-hidden">
         <div className="absolute inset-0 bg-gradient-to-b from-zinc-900/50 via-black to-black" />
         <div className="absolute inset-0 opacity-30">
@@ -358,49 +389,149 @@ const MarketReport = () => {
         </div>
         
         <div className="container mx-auto px-4 relative z-10">
-          <motion.div 
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.6 }}
-            className="max-w-4xl mx-auto text-center"
-          >
-            <div className="inline-flex items-center gap-2 px-5 py-2.5 rounded-full bg-gold/10 border border-gold/30 text-gold text-xs uppercase tracking-[0.25em] mb-8">
-              <FileText className="w-4 h-4" />
-              Exclusive Market Report
-            </div>
+          <div className="grid lg:grid-cols-2 gap-12 items-center">
+            {/* Left: Book Visual */}
+            <motion.div 
+              initial={{ opacity: 0, x: -30, rotateY: -15 }}
+              animate={{ opacity: 1, x: 0, rotateY: 0 }}
+              transition={{ duration: 0.8 }}
+              className="relative perspective-1000"
+            >
+              {/* 3D Book Container */}
+              <div className="relative mx-auto w-[280px] md:w-[320px] transform-gpu" style={{ perspective: '1000px' }}>
+                <div 
+                  className="relative transform-gpu transition-transform duration-500 hover:rotate-y-6"
+                  style={{ transformStyle: 'preserve-3d', transform: 'rotateY(-12deg) rotateX(5deg)' }}
+                >
+                  {/* Book Cover */}
+                  <div className="relative bg-gradient-to-br from-zinc-900 via-black to-zinc-900 rounded-lg overflow-hidden shadow-2xl border border-gold/30" style={{ boxShadow: '20px 20px 60px rgba(0,0,0,0.8), -5px -5px 20px rgba(168, 146, 90, 0.1)' }}>
+                    {/* Book Spine Effect */}
+                    <div className="absolute left-0 top-0 bottom-0 w-4 bg-gradient-to-r from-gold/30 via-gold/10 to-transparent" />
+                    
+                    {/* Cover Image */}
+                    <img 
+                      src={luxuryVilla1}
+                      alt="UAE Luxury Real Estate"
+                      className="w-full h-48 md:h-56 object-cover opacity-60"
+                    />
+                    
+                    {/* Cover Content */}
+                    <div className="p-6 md:p-8 relative">
+                      {/* Gold Line */}
+                      <div className="w-16 h-1 bg-gradient-to-r from-gold to-gold-dark mb-4" />
+                      
+                      <div className="inline-flex items-center gap-2 px-3 py-1.5 rounded-full bg-gold/10 border border-gold/30 text-gold text-[10px] uppercase tracking-[0.2em] mb-4">
+                        <Sparkles className="w-3 h-3" />
+                        2025-2026 Edition
+                      </div>
+                      
+                      <h3 className="text-white text-xl md:text-2xl font-bold leading-tight mb-2" style={{ fontFamily: "Poppins, sans-serif" }}>
+                        UAE Real Estate
+                        <span className="block text-gold">Market Intelligence</span>
+                      </h3>
+                      
+                      <p className="text-zinc-500 text-xs mt-4">By Jane Abou Jaoude</p>
+                      
+                      {/* JJ Logo */}
+                      <div className="mt-6 pt-4 border-t border-zinc-800">
+                        <p className="text-zinc-400 text-[10px] tracking-[0.3em] uppercase">JJ Global Capital</p>
+                      </div>
+                    </div>
+                    
+                    {/* Book Pages Effect */}
+                    <div className="absolute right-0 top-0 bottom-0 w-2">
+                      <div className="h-full bg-gradient-to-l from-zinc-100/5 via-zinc-200/10 to-transparent" style={{ clipPath: 'polygon(100% 0, 100% 100%, 0 95%, 0 5%)' }} />
+                    </div>
+                  </div>
+                  
+                  {/* Shadow */}
+                  <div className="absolute -bottom-4 left-4 right-4 h-8 bg-black/60 blur-xl rounded-full" />
+                </div>
+              </div>
+              
+              {/* Floating Badge */}
+              <motion.div 
+                initial={{ opacity: 0, scale: 0.8 }}
+                animate={{ opacity: 1, scale: 1 }}
+                transition={{ duration: 0.5, delay: 0.4 }}
+                className="absolute -bottom-2 -right-4 md:right-8 bg-gradient-to-br from-gold to-gold-dark text-black px-4 py-2 rounded-full shadow-lg"
+              >
+                <span className="text-xs font-bold uppercase tracking-wider">Free Download</span>
+              </motion.div>
+            </motion.div>
             
-            <h1 className="text-white text-4xl md:text-6xl lg:text-7xl font-bold leading-tight mb-6" style={{ fontFamily: "Poppins, sans-serif" }}>
-              UAE Real Estate
-              <span className="block text-gold">Market Intelligence</span>
-            </h1>
-            
-            <p className="text-zinc-400 text-lg md:text-xl max-w-2xl mx-auto leading-relaxed">
-              An educational, founder-led overview designed around government-led sources and structured decision frameworks—created exclusively for investors of JJ Global Capital.
-            </p>
-          </motion.div>
+            {/* Right: Content */}
+            <motion.div 
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.6, delay: 0.2 }}
+              className="text-center lg:text-left"
+            >
+              <div className="inline-flex items-center gap-2 px-5 py-2.5 rounded-full bg-gold/10 border border-gold/30 text-gold text-xs uppercase tracking-[0.25em] mb-6">
+                <FileText className="w-4 h-4" />
+                Exclusive Market Report
+              </div>
+              
+              <h1 className="text-white text-3xl md:text-5xl lg:text-6xl font-bold leading-tight mb-6" style={{ fontFamily: "Poppins, sans-serif" }}>
+                Unlock Your
+                <span className="block text-gold">Investment Edge</span>
+              </h1>
+              
+              <p className="text-zinc-400 text-lg md:text-xl leading-relaxed mb-8">
+                An educational, founder-led overview designed around government-led sources and structured decision frameworks—created exclusively for investors of JJ Global Capital.
+              </p>
+              
+              {/* What You Get */}
+              <div className="grid grid-cols-2 gap-4 mb-8">
+                {[
+                  { icon: TrendingUp, text: "Market Analysis" },
+                  { icon: Shield, text: "Due Diligence" },
+                  { icon: Star, text: "AI Matchmaker Access" },
+                  { icon: BookOpen, text: "Expert Insights" },
+                ].map((item, i) => (
+                  <div key={i} className="flex items-center gap-3 text-zinc-300 text-sm">
+                    <div className="w-8 h-8 rounded-lg bg-gold/10 border border-gold/20 flex items-center justify-center">
+                      <item.icon className="w-4 h-4 text-gold" />
+                    </div>
+                    <span>{item.text}</span>
+                  </div>
+                ))}
+              </div>
+              
+              {/* Scroll Indicator */}
+              <a href="#unlock-form" className="inline-flex items-center gap-2 text-gold hover:text-gold-light transition-colors">
+                <Lock className="w-5 h-5" />
+                <span className="font-medium">Register to Unlock Your Copy</span>
+                <ArrowUpRight className="w-4 h-4" />
+              </a>
+            </motion.div>
+          </div>
         </div>
       </section>
 
-      {/* Features Grid */}
-      <section className="py-12 border-y border-zinc-800/50">
+      {/* Founder Quote Section */}
+      <section className="py-16 border-y border-zinc-800/50 bg-gradient-to-r from-gold/5 via-transparent to-gold/5">
         <div className="container mx-auto px-4">
-          <div className="grid grid-cols-2 md:grid-cols-4 gap-6">
-            {features.map((feature, index) => (
-              <motion.div
-                key={feature.title}
-                initial={{ opacity: 0, y: 20 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ duration: 0.5, delay: index * 0.1 }}
-                className="text-center p-6"
-              >
-                <div className="w-14 h-14 mx-auto mb-4 rounded-2xl bg-gradient-to-br from-gold/20 to-gold/5 border border-gold/20 flex items-center justify-center">
-                  <feature.icon className="w-6 h-6 text-gold" />
-                </div>
-                <h3 className="text-white font-semibold mb-1">{feature.title}</h3>
-                <p className="text-zinc-500 text-sm">{feature.desc}</p>
-              </motion.div>
-            ))}
-          </div>
+          <motion.div 
+            initial={{ opacity: 0, y: 20 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+            transition={{ duration: 0.6 }}
+            className="max-w-4xl mx-auto text-center"
+          >
+            <img 
+              src={founderProfessional} 
+              alt="Jane Abou Jaoude"
+              className="w-20 h-20 md:w-24 md:h-24 rounded-full object-cover object-top border-2 border-gold/50 mx-auto mb-6"
+            />
+            <blockquote className="text-white text-xl md:text-2xl lg:text-3xl font-light leading-relaxed mb-6 italic" style={{ fontFamily: "Poppins, sans-serif" }}>
+              "This book represents years of experience in UAE real estate, distilled into actionable frameworks. I created it so investors can make informed decisions with confidence."
+            </blockquote>
+            <div>
+              <p className="text-gold font-semibold text-lg">Jane Abou Jaoude</p>
+              <p className="text-zinc-500 text-sm">Founder & Chairwoman, JJ Global Capital</p>
+            </div>
+          </motion.div>
         </div>
       </section>
 
@@ -409,19 +540,21 @@ const MarketReport = () => {
         <div className="grid lg:grid-cols-5 gap-10 items-start">
           {/* Form Section */}
           <motion.section 
+            id="unlock-form"
             initial={{ opacity: 0, x: -20 }}
-            animate={{ opacity: 1, x: 0 }}
+            whileInView={{ opacity: 1, x: 0 }}
+            viewport={{ once: true }}
             transition={{ duration: 0.6, delay: 0.2 }}
             className="lg:col-span-3 bg-gradient-to-br from-zinc-900/80 to-zinc-950 border border-zinc-800 rounded-3xl p-8 md:p-10"
           >
             <div className="flex items-start gap-4 mb-8">
               <div className="w-14 h-14 rounded-2xl bg-gradient-to-br from-gold/20 to-gold/5 border border-gold/30 flex items-center justify-center flex-shrink-0">
-                <Download className="w-6 h-6 text-gold" />
+                <Unlock className="w-6 h-6 text-gold" />
               </div>
               <div>
-                <h2 className="text-white text-2xl font-bold">Download Your Copy</h2>
+                <h2 className="text-white text-2xl font-bold">Unlock Your Book</h2>
                 <p className="text-zinc-400 mt-1">
-                  Complete the form below to receive instant access to the market intelligence book.
+                  Complete the form below to unlock instant access to the UAE Market Intelligence book.
                 </p>
               </div>
             </div>
@@ -503,18 +636,23 @@ const MarketReport = () => {
               <div className="pt-4">
                 <Button
                   onClick={handleSubmit}
-                  disabled={!isValid}
+                  disabled={!isValid || isSubmitting}
                   className="w-full h-14 bg-gradient-to-r from-gold to-gold-dark hover:from-gold-light hover:to-gold text-black font-semibold text-base rounded-xl transition-all duration-300 disabled:opacity-40 disabled:cursor-not-allowed"
                 >
-                  {downloaded ? (
+                  {isSubmitting ? (
+                    <>
+                      <div className="w-5 h-5 mr-2 border-2 border-black/30 border-t-black rounded-full animate-spin" />
+                      Processing...
+                    </>
+                  ) : downloaded ? (
                     <>
                       <CheckCircle className="w-5 h-5 mr-2" />
-                      Downloaded Successfully
+                      Book Unlocked!
                     </>
                   ) : (
                     <>
-                      <Download className="w-5 h-5 mr-2" />
-                      Download Book Now
+                      <Unlock className="w-5 h-5 mr-2" />
+                      Unlock & Download Now
                       <ArrowUpRight className="w-5 h-5 ml-2" />
                     </>
                   )}
