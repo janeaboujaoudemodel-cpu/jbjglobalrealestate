@@ -5,7 +5,7 @@ import { useGuestFavorites, useGuestShortlist } from "@/hooks/useGuestFavorites"
 import { 
   Home, Heart, User, LogOut, Settings, Menu, 
   Phone, Building2, Newspaper, ClipboardCheck, FileText,
-  Sparkles
+  Sparkles, Search
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { useState } from "react";
@@ -63,14 +63,14 @@ const GlobalHeader = () => {
   return (
     <header className="fixed top-0 left-0 right-0 z-50 bg-black/95 backdrop-blur-sm border-b border-white/5">
       <div className="container mx-auto px-4">
-        <div className="flex items-center justify-between h-18 lg:h-20">
-          {/* Logo - Premium with separation from menu */}
-          <Link to="/" className="flex items-center pr-8 lg:pr-12">
+        <div className="flex items-center justify-between h-16 lg:h-18">
+          {/* Logo - Premium with separation from menu, clickable to home */}
+          <Link to="/" className="flex items-center pr-8 lg:pr-12 hover:opacity-90 transition-opacity">
             <JJLogoHeader />
           </Link>
 
           {/* Desktop Navigation - Tighter spacing between items */}
-          <nav className="hidden lg:flex items-center">
+          <nav className="hidden lg:flex items-center flex-1 justify-center">
             {mainNavLinks.map((link) => (
               <Link
                 key={link.href}
@@ -86,14 +86,21 @@ const GlobalHeader = () => {
             ))}
           </nav>
 
-          {/* Right Side Actions */}
-          <div className="flex items-center gap-1">
-            {/* Favorites - combined count for fav + shortlist, single destination */}
+          {/* Right Side Actions - Gold icons */}
+          <div className="flex items-center gap-2">
+            {/* Search Icon - Gold */}
+            <Link to="/properties">
+              <Button variant="ghost" size="sm" className="text-gold hover:text-gold/80 hover:bg-gold/10">
+                <Search className="w-5 h-5" />
+              </Button>
+            </Link>
+
+            {/* Favorites - Gold icon */}
             <Link to="/favorites">
-              <Button variant="ghost" size="sm" className="text-zinc-400 hover:text-white hover:bg-zinc-800 relative">
-                <Heart className="w-4 h-4" />
+              <Button variant="ghost" size="sm" className="text-gold hover:text-gold/80 hover:bg-gold/10 relative">
+                <Heart className="w-5 h-5" />
                 {totalCount > 0 && (
-                  <span className="absolute -top-1 -right-1 w-4 h-4 bg-red-500 rounded-full text-[10px] text-white flex items-center justify-center">
+                  <span className="absolute -top-1 -right-1 w-4 h-4 bg-gold text-black rounded-full text-[10px] font-semibold flex items-center justify-center">
                     {totalCount}
                   </span>
                 )}
@@ -268,19 +275,6 @@ const GlobalHeader = () => {
           </div>
         </div>
 
-        {/* Desktop Property Shortcuts Bar */}
-        <div className="hidden lg:flex items-center gap-4 pb-3 pt-1">
-          {propertyShortcuts.filter(s => s.href !== '/quiz').map((shortcut) => (
-            <Link
-              key={shortcut.href}
-              to={shortcut.href}
-              className="flex items-center gap-2 text-xs text-zinc-500 hover:text-gold transition-colors"
-            >
-              <shortcut.icon className="w-3.5 h-3.5" />
-              {shortcut.label}
-            </Link>
-          ))}
-        </div>
       </div>
     </header>
   );
