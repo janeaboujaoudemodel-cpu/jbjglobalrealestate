@@ -17,6 +17,7 @@ import founderProfessional from "@/assets/founder-professional.jpeg";
 import founderYacht from "@/assets/founder-yacht.jpeg";
 import founderAwardStage from "@/assets/founder-award-stage.jpeg";
 import founderRedCarpet from "@/assets/founder-red-carpet.jpeg";
+import founderPremium from "@/assets/founder-premium.png";
 
 // Animation variants
 const fadeInUp = {
@@ -222,98 +223,163 @@ const Founder = () => {
         </motion.div>
       </section>
 
-      {/* THE FOUNDER - EDITORIAL LAYOUT (moved here, Leadership section removed) */}
-
-      {/* THE FOUNDER - EDITORIAL LAYOUT */}
-      <section className="py-24 md:py-40 relative">
-        <div className="container mx-auto px-4 sm:px-6 lg:px-8">
+      {/* THE FOUNDER - PREMIUM EDITORIAL LAYOUT */}
+      <section className="py-24 md:py-40 relative overflow-hidden">
+        {/* Subtle background elements */}
+        <div className="absolute top-0 right-0 w-1/2 h-full bg-gradient-to-l from-gold/3 to-transparent" />
+        <div className="absolute bottom-0 left-0 w-96 h-96 bg-gold/5 rounded-full blur-3xl" />
+        
+        <div className="container mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
           <motion.div 
-            className="grid lg:grid-cols-12 gap-12 lg:gap-20 items-start"
+            className="grid lg:grid-cols-12 gap-12 lg:gap-20 items-center"
             initial="hidden"
             whileInView="visible"
             viewport={{ once: true, margin: "-100px" }}
             variants={staggerContainer}
           >
-            {/* Text Content */}
-            <motion.div className="lg:col-span-5 lg:sticky lg:top-32" variants={fadeInUp}>
-              <div className="mb-10">
-                <span className="text-gold text-sm uppercase tracking-[0.4em]">The Founder</span>
-                <GoldLine className="w-24 mt-4" />
+            {/* Premium Single Photo - Left */}
+            <motion.div className="lg:col-span-5 order-2 lg:order-1" variants={scaleIn}>
+              <div className="relative">
+                {/* Gold frame accent */}
+                <div className="absolute -inset-4 bg-gradient-to-br from-gold/20 via-transparent to-gold/10 rounded-3xl" />
+                <div className="absolute -top-2 -left-2 w-20 h-20 border-l-2 border-t-2 border-gold/50 rounded-tl-3xl" />
+                <div className="absolute -bottom-2 -right-2 w-20 h-20 border-r-2 border-b-2 border-gold/50 rounded-br-3xl" />
+                
+                {/* Main photo container */}
+                <div className="relative aspect-[3/4] rounded-3xl overflow-hidden border border-gold/20 shadow-2xl shadow-gold/10 bg-gradient-to-b from-white to-zinc-100">
+                  <SafeImage 
+                    src={founderPremium} 
+                    fallbackSrc={founderProfessional}
+                    alt="Jane Abou Jaoude - Founder & Chairwoman" 
+                    className="w-full h-full object-cover object-top"
+                  />
+                  {/* Subtle vignette */}
+                  <div className="absolute inset-0 bg-gradient-to-t from-black/20 via-transparent to-transparent" />
+                </div>
+                
+                {/* Floating badge */}
+                <motion.div 
+                  className="absolute -bottom-6 -right-6 bg-gradient-to-br from-gold to-[#C4A962] p-4 rounded-2xl shadow-xl shadow-gold/30"
+                  initial={{ scale: 0 }}
+                  whileInView={{ scale: 1 }}
+                  transition={{ delay: 0.5, type: "spring" }}
+                >
+                  <Award className="w-8 h-8 text-black" />
+                </motion.div>
+              </div>
+            </motion.div>
+            
+            {/* Text Content - Right */}
+            <motion.div className="lg:col-span-7 order-1 lg:order-2" variants={fadeInUp}>
+              <div className="mb-8">
+                <span className="inline-flex items-center gap-2 text-gold text-sm uppercase tracking-[0.4em]">
+                  <Star className="w-4 h-4 fill-gold" />
+                  The Visionary
+                </span>
+                <GoldLine className="w-32 mt-4" />
               </div>
               
               <h2 
-                className="text-white text-4xl md:text-5xl lg:text-6xl font-bold mb-10"
+                className="text-white text-4xl md:text-5xl lg:text-7xl font-bold mb-8"
                 style={{ fontFamily: "Poppins, sans-serif" }}
               >
                 Jane Abou
                 <br />
-                <span className="text-transparent bg-clip-text bg-gradient-to-r from-gold to-[#C4A962]">Jaoude</span>
+                <span className="text-transparent bg-clip-text bg-gradient-to-r from-gold via-[#D4B96A] to-gold">Jaoude</span>
               </h2>
               
-              <div className="space-y-6 text-zinc-400 leading-relaxed">
-                <p className="text-lg md:text-xl text-zinc-300">
-                  Jane Abou Jaoude serves as Founder and Chairwoman of JJ Holding Group. Her leadership is characterized by a composed, deliberate approach—where decisions are made with long-term positioning in mind.
+              <p className="text-gold text-sm uppercase tracking-[0.3em] mb-8 font-medium">
+                Founder & Chairwoman · JJ Holding Group
+              </p>
+              
+              <div className="space-y-6 text-zinc-300 leading-relaxed max-w-2xl">
+                <p className="text-xl md:text-2xl font-light text-white/90">
+                  A distinguished business architect whose vision has shaped a diversified portfolio spanning real estate investment, luxury lifestyle, media communications, and haute couture.
                 </p>
-                <p className="text-base md:text-lg">
-                  With experience spanning business advisory, media, and luxury sectors, she has built a group of companies that reflect her standards: institutional in governance, refined in execution, and international in scope.
+                <p className="text-lg">
+                  As the driving force behind JJ Holding Group, Jane has cultivated an ecosystem of excellence—where each venture is defined by uncompromising standards, strategic precision, and an unwavering commitment to institutional integrity.
                 </p>
-                <p className="text-base md:text-lg">
-                  Based in Dubai, UAE, Jane leads with a philosophy rooted in accountability and discretion. Her approach prioritizes substance over visibility, building organizations designed to endure rather than simply expand.
+                <p className="text-lg text-zinc-400">
+                  Her leadership philosophy transcends conventional metrics. Every decision is calibrated for generational impact, balancing calculated ambition with refined discretion. From the boardrooms of Dubai to international stages, she exemplifies a new paradigm of entrepreneurial sophistication.
                 </p>
               </div>
               
-              <div className="mt-10 flex items-center gap-4">
-                <div className="w-12 h-12 bg-gradient-to-br from-gold to-[#C4A962] rounded-full flex items-center justify-center">
-                  <Award className="w-5 h-5 text-black" />
+              {/* Accolades row */}
+              <div className="mt-12 flex flex-wrap items-center gap-6 md:gap-10">
+                <div className="flex items-center gap-3">
+                  <div className="w-12 h-12 bg-gradient-to-br from-gold/20 to-gold/5 rounded-xl flex items-center justify-center border border-gold/30">
+                    <Globe className="w-5 h-5 text-gold" />
+                  </div>
+                  <div>
+                    <p className="text-white font-medium text-sm">Global Presence</p>
+                    <p className="text-zinc-500 text-xs">International Operations</p>
+                  </div>
                 </div>
-                <div>
-                  <p className="text-white font-medium">Award-Winning Leadership</p>
-                  <p className="text-zinc-500 text-sm">Recognized Excellence</p>
+                <div className="flex items-center gap-3">
+                  <div className="w-12 h-12 bg-gradient-to-br from-gold/20 to-gold/5 rounded-xl flex items-center justify-center border border-gold/30">
+                    <Award className="w-5 h-5 text-gold" />
+                  </div>
+                  <div>
+                    <p className="text-white font-medium text-sm">Award-Winning</p>
+                    <p className="text-zinc-500 text-xs">Recognized Excellence</p>
+                  </div>
+                </div>
+                <div className="flex items-center gap-3">
+                  <div className="w-12 h-12 bg-gradient-to-br from-gold/20 to-gold/5 rounded-xl flex items-center justify-center border border-gold/30">
+                    <TrendingUp className="w-5 h-5 text-gold" />
+                  </div>
+                  <div>
+                    <p className="text-white font-medium text-sm">Proven Track Record</p>
+                    <p className="text-zinc-500 text-xs">Consistent Growth</p>
+                  </div>
                 </div>
               </div>
             </motion.div>
+          </motion.div>
+        </div>
+      </section>
+
+      {/* FOUNDER QUOTE - "AS PER JANE" */}
+      <section className="py-16 md:py-24 relative">
+        <div className="container mx-auto px-4 sm:px-6 lg:px-8">
+          <motion.div 
+            className="max-w-4xl mx-auto text-center"
+            initial="hidden"
+            whileInView="visible"
+            viewport={{ once: true, margin: "-100px" }}
+            variants={fadeInUp}
+          >
+            {/* Elegant quote marks */}
+            <div className="flex justify-center mb-8">
+              <div className="w-16 h-16 bg-gradient-to-br from-gold/30 to-gold/10 rounded-full flex items-center justify-center border border-gold/40">
+                <span className="text-gold text-4xl font-serif leading-none">"</span>
+              </div>
+            </div>
             
-            {/* Photo Gallery */}
-            <motion.div className="lg:col-span-7" variants={fadeInUp}>
-              <div className="grid grid-cols-2 gap-4 md:gap-6">
-                {/* Main large photo - smart crop from top */}
-                <motion.div 
-                  className="col-span-2 aspect-[16/10] rounded-3xl overflow-hidden border border-zinc-800 shadow-2xl shadow-black/80 group"
-                  variants={scaleIn}
-                >
-                  <SafeImage 
-                    src={founderProfessional} 
-                    fallbackSrc={founderHero}
-                    alt="Jane Abou Jaoude - Professional Portrait" 
-                    className="w-full h-full object-cover object-top group-hover:scale-105 transition-transform duration-1000"
-                  />
-                </motion.div>
-                
-                {/* Two smaller photos - smart crop from top */}
-                <motion.div 
-                  className="aspect-[3/4] rounded-2xl overflow-hidden border border-zinc-800 shadow-xl group"
-                  variants={scaleIn}
-                >
-                  <SafeImage 
-                    src={founderJetBoarding} 
-                    fallbackSrc={founderHero}
-                    alt="Jane Abou Jaoude - International Travel" 
-                    className="w-full h-full object-cover object-top group-hover:scale-105 transition-transform duration-1000"
-                  />
-                </motion.div>
-                <motion.div 
-                  className="aspect-[3/4] rounded-2xl overflow-hidden border border-zinc-800 shadow-xl group"
-                  variants={scaleIn}
-                >
-                  <SafeImage 
-                    src={founderOffice} 
-                    fallbackSrc={founderHero}
-                    alt="Jane Abou Jaoude - Office" 
-                    className="w-full h-full object-cover object-top group-hover:scale-105 transition-transform duration-1000"
-                  />
-                </motion.div>
-              </div>
-            </motion.div>
+            <blockquote 
+              className="text-white text-2xl md:text-3xl lg:text-4xl font-light leading-relaxed mb-10 italic"
+              style={{ fontFamily: "Poppins, sans-serif" }}
+            >
+              Excellence is not a destination—it is the standard by which every decision is measured. 
+              We do not chase trends; we establish precedents.
+            </blockquote>
+            
+            {/* Divider */}
+            <div className="flex items-center justify-center gap-3 mb-8">
+              <div className="w-16 h-px bg-gradient-to-r from-transparent to-gold/50" />
+              <Star className="w-4 h-4 text-gold fill-gold/50" />
+              <div className="w-16 h-px bg-gradient-to-l from-transparent to-gold/50" />
+            </div>
+            
+            {/* Attribution */}
+            <div className="flex flex-col items-center gap-2">
+              <p className="text-gold text-lg font-semibold tracking-wide" style={{ fontFamily: "Poppins, sans-serif" }}>
+                — As per JANE
+              </p>
+              <p className="text-zinc-500 text-sm uppercase tracking-[0.2em]">
+                Jane Abou Jaoude, Founder
+              </p>
+            </div>
           </motion.div>
         </div>
       </section>
