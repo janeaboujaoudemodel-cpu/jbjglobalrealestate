@@ -261,14 +261,12 @@ export const LanguageProvider = ({ children }: { children: ReactNode }) => {
   const setLanguage = (lang: Language) => {
     setLanguageState(lang);
     localStorage.setItem(LANGUAGE_KEY, lang);
-    // Update HTML dir attribute for RTL support
-    document.documentElement.dir = lang === 'ar' ? 'rtl' : 'ltr';
+    // Keep layout stable (no mirroring); only change language.
     document.documentElement.lang = lang;
   };
 
   useEffect(() => {
-    // Set initial direction
-    document.documentElement.dir = language === 'ar' ? 'rtl' : 'ltr';
+    // Set initial language only (keep LTR layout)
     document.documentElement.lang = language;
   }, [language]);
 
@@ -276,7 +274,7 @@ export const LanguageProvider = ({ children }: { children: ReactNode }) => {
     return translations[language][key] || translations.en[key] || key;
   };
 
-  const isRTL = language === 'ar';
+  const isRTL = false;
 
   return (
     <LanguageContext.Provider value={{ language, setLanguage, t, isRTL }}>

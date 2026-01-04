@@ -3,6 +3,7 @@ import { Link } from "react-router-dom";
 import { X, ArrowRight, Scale, Sparkles, Trophy, Users, Download } from "lucide-react";
 import { useShortlist, useToggleShortlist } from "@/hooks/useFavorites";
 import { useGuestShortlist } from "@/hooks/useGuestFavorites";
+import { useShortlistBadges } from "@/hooks/useShortlistBadges";
 import { useAuth } from "@/contexts/AuthContext";
 import { useQuery } from "@tanstack/react-query";
 import { supabase } from "@/integrations/supabase/client";
@@ -25,15 +26,16 @@ const INQUIRY_FORM_URL = "https://jjglobalcapital.com/form/property-investment-i
 
 const badgeLabels: Record<string, { label: string; color: string }> = {
   top1: { label: "🥇 Top 1", color: "bg-yellow-500/20 border-yellow-500/50 text-yellow-400" },
-  top2: { label: "🥈 Top 2", color: "bg-gray-400/20 border-gray-400/50 text-gray-300" },
-  top3: { label: "🥉 Top 3", color: "bg-orange-600/20 border-orange-600/50 text-orange-400" },
+  top2: { label: "🥉 Top 2", color: "bg-orange-600/20 border-orange-600/50 text-orange-400" },
+  top3: { label: "🥈 Top 3", color: "bg-gray-400/20 border-gray-400/50 text-gray-300" },
 };
 
 const ComparisonBar = () => {
   const { user } = useAuth();
   const { data: authShortlist } = useShortlist();
   const toggleAuthShortlist = useToggleShortlist();
-  const { shortlist: guestShortlist, toggleShortlist: toggleGuestShortlist, setBadge, getBadge } = useGuestShortlist();
+  const { shortlist: guestShortlist, toggleShortlist: toggleGuestShortlist } = useGuestShortlist();
+  const { setBadge, getBadge } = useShortlistBadges();
   const [isOpen, setIsOpen] = useState(false);
 
   // Use auth shortlist if logged in, otherwise guest shortlist
@@ -74,18 +76,11 @@ const ComparisonBar = () => {
   };
 
   const handleSetBadge = (projectId: string, badge: 'top1' | 'top2' | 'top3' | null) => {
-    if (!user) {
-      setBadge(projectId, badge);
-    }
-    // For authenticated users, we'd need to store badges in the database
-    // For now, badges work for guest users via localStorage
+    setBadge(projectId, badge);
   };
 
   const currentBadge = (projectId: string) => {
-    if (!user) {
-      return getBadge(projectId);
-    }
-    return null;
+    return getBadge(projectId);
   };
 
   return (
@@ -176,15 +171,15 @@ const ComparisonBar = () => {
                               </DropdownMenuItem>
                               <DropdownMenuItem 
                                 onClick={() => handleSetBadge(project.id, 'top2')}
-                                className="text-gray-300 hover:bg-zinc-800 cursor-pointer"
+                                className="text-orange-400 hover:bg-zinc-800 cursor-pointer"
                               >
-                                🥈 Set as Top 2
+                                🥉 Set as Top 2
                               </DropdownMenuItem>
                               <DropdownMenuItem 
                                 onClick={() => handleSetBadge(project.id, 'top3')}
-                                className="text-orange-400 hover:bg-zinc-800 cursor-pointer"
+                                className="text-gray-300 hover:bg-zinc-800 cursor-pointer"
                               >
-                                🥉 Set as Top 3
+                                🥈 Set as Top 3
                               </DropdownMenuItem>
                               {badge && (
                                 <DropdownMenuItem 

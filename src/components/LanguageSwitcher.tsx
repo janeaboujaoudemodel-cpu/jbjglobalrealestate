@@ -17,7 +17,7 @@ const LanguageSwitcher = () => {
         <Button
           variant="ghost"
           size="sm"
-          className="h-9 px-2.5 text-white/70 hover:text-gold hover:bg-transparent"
+          className="h-9 px-3 text-white/70 hover:text-gold hover:bg-transparent"
         >
           <Globe className="w-4 h-4 mr-1.5" />
           <span className="text-sm font-medium">{language === 'en' ? 'EN' : 'عربي'}</span>
