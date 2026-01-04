@@ -28,6 +28,7 @@ import MarketReport from "./pages/MarketReport";
 import NotFound from "./pages/NotFound";
 import WelcomeModal from "./components/WelcomeModal";
 import GlobalHeader from "./components/GlobalHeader";
+import { ScrollToTopOnMount, ScrollToTopButton } from "./components/ScrollToTop";
 
 const queryClient = new QueryClient();
 
@@ -58,6 +59,8 @@ const App = () => (
         <Toaster />
         <Sonner />
         <BrowserRouter>
+          <ScrollToTopOnMount />
+          <ScrollToTopButton />
           <WelcomeModal />
           <AppLayout>
             <Routes>
