@@ -8,3 +8,6 @@ verify_jwt = false
 
 [functions.rental-index-analysis]
 verify_jwt = false
+
+[functions.property-evaluation]
+verify_jwt = false

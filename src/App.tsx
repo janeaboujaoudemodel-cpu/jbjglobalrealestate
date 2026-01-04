@@ -33,6 +33,8 @@ import InteriorDesign from "./pages/services/InteriorDesign";
 import FitOut from "./pages/services/FitOut";
 import LawFirm from "./pages/services/LawFirm";
 import RentalIndex from "./pages/RentalIndex";
+import DocumentScanner from "./pages/DocumentScanner";
+import PropertyEvaluator from "./pages/PropertyEvaluator";
 import NotFound from "./pages/NotFound";
 import WelcomeModal from "./components/WelcomeModal";
 import GlobalHeader from "./components/GlobalHeader";
@@ -102,6 +104,8 @@ const App = () => (
                 <Route path="/services/design-build/fit-out" element={<FitOut />} />
                 <Route path="/services/law-firm" element={<LawFirm />} />
                 <Route path="/rental-index" element={<RentalIndex />} />
+                <Route path="/document-scanner" element={<DocumentScanner />} />
+                <Route path="/property-evaluator" element={<PropertyEvaluator />} />
                 {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
                 <Route path="*" element={<NotFound />} />
               </Routes>
