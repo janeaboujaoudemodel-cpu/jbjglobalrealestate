@@ -1,5 +1,5 @@
 import { Link } from "react-router-dom";
-import { ArrowUpRight, Building2, Gem, Film, Shirt, Mail, Phone, ExternalLink, Award, Globe, Users, TrendingUp, Star, MessageCircle } from "lucide-react";
+import { ArrowUpRight, Building2, Gem, Film, Mail, Phone, ExternalLink, Award, Globe, Users, TrendingUp, Star, MessageCircle } from "lucide-react";
 import { motion } from "framer-motion";
 import Footer from "@/components/Footer";
 import { useCountUp } from "@/hooks/useCountUp";
@@ -76,30 +76,34 @@ const Founder = () => {
     {
       icon: Building2,
       name: "JJ Global Capital",
-      description: "The core advisory and investment arm of the group. JJ Global Capital provides structured guidance for real estate investment, with a primary focus on the UAE and Dubai markets.",
+      description: "The principal investment and advisory arm of the JJ Holding Group. Specializing in UAE real estate with a structured approach to wealth preservation and capital growth for discerning investors worldwide.",
       image: founderOffice,
-      tagline: "Real Estate Investment"
+      tagline: "Real Estate Investment",
+      url: "https://jjglobalcapital.com"
     },
     {
       icon: Gem,
       name: "Maison Jane",
-      description: "A luxury lifestyle, beauty, and wellness brand reflecting the founder's personal philosophy. Delivering curated, experience-driven services with an emphasis on quality.",
+      description: "A private luxury lifestyle brand rooted in the founder's philosophy of refined living. Curating exclusive experiences in beauty, wellness, and personal services for select clientele.",
       image: founderJetInterior,
-      tagline: "Luxury Lifestyle"
+      tagline: "Luxury Lifestyle",
+      url: "https://maisonjane.com"
     },
     {
       icon: Film,
       name: "JJ Media Group",
-      description: "The strategic media and communications division. Handling brand storytelling, digital presence, and influence strategy—structured for visibility.",
+      description: "The strategic communications and media division overseeing brand identity, digital presence, and influence architecture across the group's portfolio of ventures.",
       image: founderRedCarpet,
-      tagline: "Media & Communications"
+      tagline: "Media & Communications",
+      url: "https://jjmediagroup.com"
     },
     {
-      icon: Shirt,
+      icon: Award,
       name: "JJ Fashion House",
-      description: "A creative direction and fashion division driven by taste and identity. Extending the founder's aesthetic into selective, design-focused projects.",
+      description: "A creative atelier extending the founder's aesthetic vision into fashion and design. Developing exclusive collections and collaborations that reflect institutional taste and timeless elegance.",
       image: founderAwardStage,
-      tagline: "Fashion & Design"
+      tagline: "Fashion & Design",
+      url: "https://jjfashionhouse.com"
     },
   ];
 
@@ -470,6 +474,17 @@ const Founder = () => {
                   />
                   <div className="absolute inset-0 bg-gradient-to-t from-black via-black/95 to-black/80" />
                 </div>
+                
+                {/* Visit Website Button */}
+                <a 
+                  href={division.url}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="absolute top-4 right-4 z-20 flex items-center gap-1.5 bg-black/60 backdrop-blur-sm border border-gold/30 text-gold text-xs px-3 py-1.5 rounded-full opacity-0 group-hover:opacity-100 transition-all duration-300 hover:bg-gold hover:text-black"
+                >
+                  Visit Website
+                  <ArrowUpRight className="w-3 h-3" />
+                </a>
                 
                 {/* Content */}
                 <div className="relative z-10 p-8 md:p-12">

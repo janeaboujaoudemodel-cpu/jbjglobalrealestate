@@ -19,21 +19,19 @@ import {
 import {
   Sheet,
   SheetContent,
-  SheetHeader,
-  SheetTitle,
   SheetTrigger,
 } from "@/components/ui/sheet";
 import { ScrollArea } from "@/components/ui/scroll-area";
 
 const INQUIRY_FORM_URL = "https://jjglobalcapital.com/form/property-investment-inquiry-form/";
 
-// Premium Logo Component - Thin white divider, elegant J lettering
+// Premium Logo Component - Thinner divider, closer J letters, improved GLOBAL CAPITAL visibility
 const JJLogo = ({ className = "" }: { className?: string }) => (
   <span className={`tracking-wide flex items-center ${className}`} style={{ fontFamily: "Poppins, sans-serif" }}>
-    <span className="text-gold font-light text-2xl md:text-3xl">J</span>
-    <span className="text-white/90 mx-2 font-extralight text-3xl md:text-4xl leading-none" style={{ transform: 'scaleY(1.4)' }}>|</span>
-    <span className="text-gold font-light text-2xl md:text-3xl">J</span>
-    <span className="text-white font-light tracking-[0.15em] ml-3 text-sm md:text-base">GLOBAL CAPITAL</span>
+    <span className="text-[#A8925A] font-extralight text-xl md:text-2xl">J</span>
+    <span className="text-white/95 mx-1.5 font-thin text-2xl md:text-3xl leading-none" style={{ transform: 'scaleY(1.35)' }}>|</span>
+    <span className="text-[#A8925A] font-extralight text-xl md:text-2xl">J</span>
+    <span className="text-white font-medium tracking-[0.12em] ml-2.5 text-[11px] md:text-xs">GLOBAL CAPITAL</span>
   </span>
 );
 
@@ -51,11 +49,12 @@ const GlobalHeader = () => {
   const shortlistCount = user ? (shortlist?.length || 0) : guestShortlist.length;
   const totalCount = favCount + shortlistCount;
 
+  // Updated navigation order as per task
   const mainNavLinks = [
     { href: "/", label: "Home", icon: Home },
-    { href: "/properties", label: "Properties", icon: Building2 },
-    { href: "/about", label: "About Us", icon: Building2 },
     { href: "/founder", label: "Founder & Leadership", icon: User },
+    { href: "/about", label: "About Us", icon: Building2 },
+    { href: "/properties", label: "Properties", icon: Building2 },
     { href: "/awards", label: "Awards", icon: Building2 },
     { href: "/news", label: "News & Insights", icon: Newspaper },
     { href: "/contact", label: "Contact", icon: Phone },
@@ -86,7 +85,7 @@ const GlobalHeader = () => {
               <Link
                 key={link.href}
                 to={link.href}
-                className={`px-4 py-2 text-sm transition-colors ${
+                className={`px-3 py-2 text-sm transition-colors ${
                   isActive(link.href) 
                     ? "text-white bg-zinc-800" 
                     : "text-zinc-400 hover:text-white hover:bg-zinc-900"
@@ -161,7 +160,7 @@ const GlobalHeader = () => {
               </SheetTrigger>
               <SheetContent side="right" className="bg-black/95 backdrop-blur-xl border-zinc-800/50 w-[300px] p-0 flex flex-col h-full">
                 {/* Menu Header with glassmorphism */}
-                <div className="relative h-32 bg-gradient-to-b from-zinc-900/80 to-black/90 border-b border-gold/20 flex items-end p-6 shrink-0 backdrop-blur-sm">
+                <div className="relative h-28 bg-gradient-to-b from-zinc-900/80 to-black/90 border-b border-[#A8925A]/20 flex items-end p-5 shrink-0 backdrop-blur-sm">
                   <JJLogo className="text-lg" />
                 </div>
                 
@@ -176,8 +175,8 @@ const GlobalHeader = () => {
                         onClick={() => setMobileMenuOpen(false)}
                         className={`flex items-center gap-3 px-4 py-3 border-l-2 transition-all ${
                           isActive(link.href)
-                            ? "text-gold border-gold bg-gold/10"
-                            : "text-zinc-300 border-transparent hover:text-white hover:bg-zinc-900/80 hover:border-gold/50"
+                            ? "text-[#A8925A] border-[#A8925A] bg-[#A8925A]/10"
+                            : "text-zinc-300 border-transparent hover:text-white hover:bg-zinc-900/80 hover:border-[#A8925A]/50"
                         }`}
                       >
                         {link.label}
@@ -190,19 +189,19 @@ const GlobalHeader = () => {
                     <Link
                       to="/quiz"
                       onClick={() => setMobileMenuOpen(false)}
-                      className="flex items-center gap-3 px-4 py-4 bg-gradient-to-r from-gold/10 to-gold/5 border border-gold/30 rounded-lg mb-4 text-white hover:from-gold/15 transition-all backdrop-blur-sm"
+                      className="flex items-center gap-3 px-4 py-4 bg-gradient-to-r from-[#A8925A]/10 to-[#A8925A]/5 border border-[#A8925A]/30 rounded-lg mb-4 text-white hover:from-[#A8925A]/15 transition-all backdrop-blur-sm"
                     >
-                      <div className="w-8 h-8 bg-gradient-to-br from-gold to-[#C4A962] rounded-lg flex items-center justify-center">
+                      <div className="w-8 h-8 bg-gradient-to-br from-[#A8925A] to-[#C4A962] rounded-lg flex items-center justify-center">
                         <Sparkles className="w-4 h-4 text-black" />
                       </div>
                       <div>
                         <p className="font-semibold text-sm">AI Home Finder</p>
-                        <p className="text-gold/80 text-xs">Complimentary</p>
+                        <p className="text-[#A8925A]/80 text-xs">Complimentary</p>
                       </div>
                     </Link>
 
                     {/* Property Shortcuts */}
-                    <p className="px-4 py-2 text-xs text-gold/60 uppercase tracking-wider">Quick Access</p>
+                    <p className="px-4 py-2 text-xs text-[#A8925A]/60 uppercase tracking-wider">Quick Access</p>
                     {propertyShortcuts.filter(s => s.href !== '/quiz').map((shortcut) => (
                       <Link
                         key={shortcut.href}
@@ -210,14 +209,14 @@ const GlobalHeader = () => {
                         onClick={() => setMobileMenuOpen(false)}
                         className="flex items-center gap-3 px-4 py-2.5 text-sm text-zinc-400 hover:text-white hover:bg-zinc-900/80 transition-colors"
                       >
-                        <shortcut.icon className="w-4 h-4 text-gold/70" />
+                        <shortcut.icon className="w-4 h-4 text-[#A8925A]/70" />
                         {shortcut.label}
                       </Link>
                     ))}
 
                     <div className="h-px bg-zinc-800 my-4" />
 
-                    {/* Favorites & Shortlist - Combined into one line */}
+                    {/* Favorites & Shortlist */}
                     <Link
                       to="/favorites"
                       onClick={() => setMobileMenuOpen(false)}
@@ -228,7 +227,7 @@ const GlobalHeader = () => {
                       <span className="text-zinc-600">|</span>
                       <span>Shortlist</span>
                       {totalCount > 0 && (
-                        <span className="ml-auto bg-gold text-black text-xs px-2 py-0.5 rounded-full font-medium">
+                        <span className="ml-auto bg-[#A8925A] text-black text-xs px-2 py-0.5 rounded-full font-medium">
                           {totalCount}
                         </span>
                       )}
@@ -266,7 +265,7 @@ const GlobalHeader = () => {
                       <Link
                         to="/auth"
                         onClick={() => setMobileMenuOpen(false)}
-                        className="flex items-center gap-3 px-4 py-3 text-gold hover:text-gold/80 hover:bg-gold/10 transition-colors"
+                        className="flex items-center gap-3 px-4 py-3 text-[#A8925A] hover:text-[#A8925A]/80 hover:bg-[#A8925A]/10 transition-colors"
                       >
                         <User className="w-5 h-5" />
                         Sign In / Create Account
@@ -279,13 +278,13 @@ const GlobalHeader = () => {
           </div>
         </div>
 
-        {/* Desktop Property Shortcuts Bar - No border/divider */}
+        {/* Desktop Property Shortcuts Bar */}
         <div className="hidden lg:flex items-center gap-4 pb-3 pt-1">
           {propertyShortcuts.filter(s => s.href !== '/quiz').map((shortcut) => (
             <Link
               key={shortcut.href}
               to={shortcut.href}
-              className="flex items-center gap-2 text-xs text-zinc-500 hover:text-purple-400 transition-colors"
+              className="flex items-center gap-2 text-xs text-zinc-500 hover:text-[#A8925A] transition-colors"
             >
               <shortcut.icon className="w-3.5 h-3.5" />
               {shortcut.label}
