@@ -8,17 +8,46 @@ import { CONTACT_INFO, getWhatsAppUrl, getCallUrl } from "@/constants/stats";
 interface ProjectCardProps {
   project: Project;
   showFavorite?: boolean;
+  currency?: 'AED' | 'USD' | 'EUR' | 'GBP' | 'INR';
+  sizeUnit?: 'sqft' | 'sqm';
 }
 
-// Helper to format price with commas
-const formatPriceWithCommas = (price: number): string => {
-  if (price >= 1000000) {
-    return `${(price / 1000000).toFixed(1)}M`;
-  }
-  return price.toLocaleString();
+// Currency conversion rates
+const CURRENCY_RATES: Record<string, number> = {
+  AED: 1,
+  USD: 0.27,
+  EUR: 0.25,
+  GBP: 0.21,
+  INR: 22.5,
 };
 
-const ProjectCard = ({ project, showFavorite = true }: ProjectCardProps) => {
+const CURRENCY_SYMBOLS: Record<string, string> = {
+  AED: 'AED',
+  USD: '$',
+  EUR: '€',
+  GBP: '£',
+  INR: '₹',
+};
+
+// Helper to format price with currency conversion
+const formatPriceWithCurrency = (price: number, currency: string = 'AED'): string => {
+  const converted = price * CURRENCY_RATES[currency];
+  const symbol = CURRENCY_SYMBOLS[currency];
+  if (converted >= 1000000) {
+    return `${symbol} ${(converted / 1000000).toFixed(1)}M`;
+  }
+  if (converted >= 1000) {
+    return `${symbol} ${(converted / 1000).toFixed(0)}K`;
+  }
+  return `${symbol} ${converted.toLocaleString()}`;
+};
+
+// Helper to convert size
+const convertSize = (sqft: number, unit: 'sqft' | 'sqm'): number => {
+  return unit === 'sqm' ? Math.round(sqft * 0.0929) : sqft;
+};
+
+const ProjectCard = ({ project, showFavorite = true, currency = 'AED', sizeUnit = 'sqft' }: ProjectCardProps) => {
   const handleDownloadBrochure = (e: React.MouseEvent) => {
     e.preventDefault();
     e.stopPropagation();
@@ -108,10 +137,19 @@ const ProjectCard = ({ project, showFavorite = true }: ProjectCardProps) => {
             </p>
           )}
           
+          {/* Size */}
+          {project.size_min && (
+            <p className="text-zinc-500 text-sm mb-2">
+              {convertSize(project.size_min, sizeUnit).toLocaleString()} {sizeUnit}
+              {project.size_max && project.size_max !== project.size_min && 
+                ` - ${convertSize(project.size_max, sizeUnit).toLocaleString()} ${sizeUnit}`}
+            </p>
+          )}
+          
           {/* Price */}
           {project.price_from && (
             <p className="text-gold font-semibold text-lg">
-              From AED {formatPriceWithCommas(project.price_from)}
+              From {formatPriceWithCurrency(project.price_from, currency)}
             </p>
           )}
         </div>
