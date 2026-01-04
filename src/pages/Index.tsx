@@ -3,6 +3,7 @@ import NavigationTabs from "@/components/NavigationTabs";
 import DeveloperGrid from "@/components/DeveloperGrid";
 import WhyDubaiSection from "@/components/WhyDubaiSection";
 import ServicesSection from "@/components/ServicesSection";
+import Footer from "@/components/Footer";
 import { Sparkles, ArrowUpRight, Building2, ClipboardCheck } from "lucide-react";
 import { Button } from "@/components/ui/button";
 
@@ -101,6 +102,8 @@ const Index = () => {
           </a>
         </div>
       </div>
+
+      <Footer />
     </section>
   );
 };
