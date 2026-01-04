@@ -1,6 +1,7 @@
 import { Award, Users, Building2, Globe, Target, Shield } from "lucide-react";
 import Footer from "@/components/Footer";
 import { useCountUp } from "@/hooks/useCountUp";
+import { COMPANY_STATS } from "@/constants/stats";
 
 const CounterStat = ({ end, suffix, prefix, label }: { end: number; suffix: string; prefix: string; label: string }) => {
   const { ref, formattedValue } = useCountUp({ end, suffix, prefix, duration: 2500 });
@@ -19,11 +20,12 @@ const CounterStat = ({ end, suffix, prefix, label }: { end: number; suffix: stri
 };
 
 const About = () => {
+  // Use centralized stats
   const stats = [
-    { end: 2, suffix: "B+", prefix: "AED ", label: "Portfolio Value" },
-    { end: 12, suffix: "+", prefix: "", label: "Years Experience" },
-    { end: 3900, suffix: "+", prefix: "", label: "Properties Sold" },
-    { end: 4200, suffix: "+", prefix: "", label: "Properties Managed" },
+    COMPANY_STATS.portfolioValue,
+    COMPANY_STATS.yearsExperience,
+    COMPANY_STATS.propertiesSold,
+    COMPANY_STATS.propertiesManaged,
   ];
 
   const values = [

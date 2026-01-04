@@ -27,13 +27,13 @@ import { ScrollArea } from "@/components/ui/scroll-area";
 
 const INQUIRY_FORM_URL = "https://jjglobalcapital.com/form/property-investment-inquiry-form/";
 
-// Premium Logo Component - White divider between gold J's
+// Premium Logo Component - Thin white divider, elegant J lettering
 const JJLogo = ({ className = "" }: { className?: string }) => (
-  <span className={`font-bold tracking-wide ${className}`} style={{ fontFamily: "Poppins, sans-serif" }}>
-    <span className="text-gold">J</span>
-    <span className="text-white mx-1">|</span>
-    <span className="text-gold">J</span>
-    <span className="text-white ml-2">GLOBAL CAPITAL</span>
+  <span className={`tracking-wide flex items-center ${className}`} style={{ fontFamily: "Poppins, sans-serif" }}>
+    <span className="text-gold font-light text-2xl md:text-3xl">J</span>
+    <span className="text-white/90 mx-2 font-extralight text-3xl md:text-4xl leading-none" style={{ transform: 'scaleY(1.4)' }}>|</span>
+    <span className="text-gold font-light text-2xl md:text-3xl">J</span>
+    <span className="text-white font-light tracking-[0.15em] ml-3 text-sm md:text-base">GLOBAL CAPITAL</span>
   </span>
 );
 

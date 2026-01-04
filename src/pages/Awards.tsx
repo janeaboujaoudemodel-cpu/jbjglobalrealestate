@@ -1,6 +1,7 @@
 import { Trophy, Star, Award, Medal } from "lucide-react";
 import Footer from "@/components/Footer";
 import { useCountUp } from "@/hooks/useCountUp";
+import { COMPANY_STATS, CONTACT_INFO } from "@/constants/stats";
 
 const CounterStat = ({ end, suffix, prefix, label }: { end: number; suffix: string; prefix: string; label: string }) => {
   const { ref, formattedValue } = useCountUp({ end, suffix, prefix, duration: 2500 });
@@ -58,11 +59,12 @@ const Awards = () => {
     },
   ];
 
+  // Use centralized stats - matching years experience from company stats
   const recognitions = [
-    { end: 25, suffix: "+", prefix: "", label: "Industry Awards" },
-    { end: 12, suffix: "+", prefix: "", label: "Years of Excellence" },
-    { end: 98, suffix: "%", prefix: "", label: "Client Satisfaction" },
-    { end: 92, suffix: "+", prefix: "", label: "Countries Served" },
+    COMPANY_STATS.industryAwards,
+    COMPANY_STATS.yearsExperience,
+    COMPANY_STATS.clientSatisfaction,
+    COMPANY_STATS.countriesServed,
   ];
 
   return (
@@ -139,7 +141,7 @@ const Awards = () => {
             with their most important investment decisions.
           </p>
           <a 
-            href="https://jjglobalcapital.com/form/property-investment-inquiry-form/"
+            href={CONTACT_INFO.inquiryFormUrl}
             target="_blank"
             rel="noopener noreferrer"
             className="inline-flex items-center gap-2 bg-gradient-to-r from-gold to-gold-dark text-black font-semibold px-8 py-4 rounded-lg hover:opacity-90 transition-opacity"

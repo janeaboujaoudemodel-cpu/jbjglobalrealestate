@@ -4,22 +4,20 @@ import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { Checkbox } from "@/components/ui/checkbox";
 import { 
-  MapPin, Phone, Mail, ArrowRight, Building2
+  MapPin, Phone, Mail, ArrowRight, MessageCircle
 } from "lucide-react";
 import { toast } from "sonner";
+import { CONTACT_INFO, getWhatsAppUrl, getCallUrl, getEmailUrl } from "@/constants/stats";
 
-const INQUIRY_FORM_URL = "https://jjglobalcapital.com/form/property-investment-inquiry-form/";
-const JJ_HOLDING_URL = "https://jjholdinggroup.com";
-
-// Premium centered logo - larger and more prominent
+// Premium centered logo - larger and more prominent with thin elegant divider
 const JJLogoLarge = () => (
   <div className="flex flex-col items-center">
-    <span className="font-bold tracking-widest text-4xl md:text-5xl lg:text-6xl" style={{ fontFamily: "Poppins, sans-serif" }}>
-      <span className="text-gold">J</span>
-      <span className="text-white mx-2">|</span>
-      <span className="text-gold">J</span>
-    </span>
-    <span className="text-white text-lg md:text-xl lg:text-2xl tracking-[0.4em] mt-2" style={{ fontFamily: "Poppins, sans-serif" }}>
+    <div className="flex items-center justify-center">
+      <span className="text-gold font-light text-6xl md:text-7xl lg:text-8xl" style={{ fontFamily: "Poppins, sans-serif" }}>J</span>
+      <span className="text-white/80 mx-3 md:mx-4 font-extralight text-7xl md:text-8xl lg:text-9xl leading-none" style={{ transform: 'scaleY(1.5)' }}>|</span>
+      <span className="text-gold font-light text-6xl md:text-7xl lg:text-8xl" style={{ fontFamily: "Poppins, sans-serif" }}>J</span>
+    </div>
+    <span className="text-white font-light text-lg md:text-xl lg:text-2xl tracking-[0.5em] mt-4" style={{ fontFamily: "Poppins, sans-serif" }}>
       GLOBAL CAPITAL
     </span>
   </div>
@@ -149,21 +147,30 @@ const Footer = () => {
             <div className="space-y-4">
               <div className="flex items-center justify-center gap-3 text-white text-sm">
                 <MapPin className="w-4 h-4 text-gold flex-shrink-0" />
-                <span>Downtown Dubai, UAE</span>
+                <span>{CONTACT_INFO.address}</span>
               </div>
               <a 
-                href="tel:+971565911000" 
-                className="flex items-center justify-center gap-3 text-white hover:text-gold transition-colors text-sm"
+                href={getCallUrl()} 
+                className="flex items-center justify-center gap-3 text-white hover:text-gold hover:shadow-lg hover:shadow-gold/20 transition-all text-sm group"
               >
-                <Phone className="w-4 h-4 text-gold flex-shrink-0" />
-                <span>+971 56 591 1000</span>
+                <Phone className="w-4 h-4 text-gold flex-shrink-0 group-hover:scale-110 transition-transform" />
+                <span>{CONTACT_INFO.phone}</span>
               </a>
               <a 
-                href="mailto:Invest@JJGlobalCapital.com" 
-                className="flex items-center justify-center gap-3 text-white hover:text-gold transition-colors text-sm"
+                href={getEmailUrl()} 
+                className="flex items-center justify-center gap-3 text-white hover:text-gold hover:shadow-lg hover:shadow-gold/20 transition-all text-sm group"
               >
-                <Mail className="w-4 h-4 text-gold flex-shrink-0" />
-                <span>Invest@JJGlobalCapital.com</span>
+                <Mail className="w-4 h-4 text-gold flex-shrink-0 group-hover:scale-110 transition-transform" />
+                <span>{CONTACT_INFO.emailCapitalized}</span>
+              </a>
+              <a 
+                href={getWhatsAppUrl()} 
+                target="_blank"
+                rel="noopener noreferrer"
+                className="flex items-center justify-center gap-3 text-white hover:text-green-400 hover:shadow-lg hover:shadow-green-400/20 transition-all text-sm group"
+              >
+                <MessageCircle className="w-4 h-4 text-green-500 flex-shrink-0 group-hover:scale-110 transition-transform" />
+                <span>WhatsApp Us</span>
               </a>
             </div>
           </div>
@@ -217,7 +224,7 @@ const Footer = () => {
             <p className="text-xs mt-1">
               Part of{" "}
               <a 
-                href={JJ_HOLDING_URL} 
+                href={CONTACT_INFO.holdingGroupUrl} 
                 target="_blank" 
                 rel="noopener noreferrer" 
                 className="text-gold hover:underline"
