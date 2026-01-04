@@ -120,24 +120,38 @@ const Index = () => {
 
           {/* CTA Buttons */}
           <motion.div 
-            className="flex flex-wrap justify-center gap-4"
+            className="flex flex-col items-center gap-4"
             variants={fadeInUp}
           >
-            <Link to="/properties">
-              <Button 
-                className="bg-[#A8925A] hover:bg-[#A8925A]/90 text-black font-semibold px-8 py-6 text-base shadow-lg shadow-[#A8925A]/20"
-              >
-                Explore Properties
-                <ArrowUpRight className="w-5 h-5 ml-2" />
-              </Button>
-            </Link>
-            <Link to="/founder">
-              <Button 
-                variant="outline"
-                className="border-white/30 text-white hover:bg-white/10 hover:border-white/50 px-8 py-6 text-base backdrop-blur-sm"
-              >
-                Meet the Founder
-              </Button>
+            <div className="flex flex-wrap justify-center gap-4">
+              <Link to="/properties">
+                <Button 
+                  className="bg-[#A8925A] hover:bg-[#A8925A]/90 text-black font-semibold px-8 py-6 text-base shadow-lg shadow-[#A8925A]/20"
+                >
+                  Explore Properties
+                  <ArrowUpRight className="w-5 h-5 ml-2" />
+                </Button>
+              </Link>
+              <Link to="/founder">
+                <Button 
+                  variant="outline"
+                  className="border-white/30 text-white hover:bg-white/10 hover:border-white/50 px-8 py-6 text-base backdrop-blur-sm"
+                >
+                  Meet the Founder
+                </Button>
+              </Link>
+            </div>
+            
+            {/* AI Home Finder CTA */}
+            <Link to="/quiz" className="mt-4">
+              <div className="flex items-center gap-3 bg-gradient-to-r from-purple-700 to-purple-900 hover:from-purple-600 hover:to-purple-800 border border-purple-500/40 rounded-xl px-6 py-3 transition-all shadow-lg shadow-purple-500/20 group">
+                <Sparkles className="w-5 h-5 text-white" />
+                <div className="text-left">
+                  <p className="text-white font-semibold text-sm">Let AI Find Your Home</p>
+                  <p className="text-purple-200/80 text-xs">Get Your Free Test Now</p>
+                </div>
+                <ArrowUpRight className="w-5 h-5 text-white group-hover:translate-x-0.5 group-hover:-translate-y-0.5 transition-transform" />
+              </div>
             </Link>
           </motion.div>
         </motion.div>

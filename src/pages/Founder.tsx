@@ -88,7 +88,7 @@ const Founder = () => {
       description: "A private luxury lifestyle brand rooted in the founder's philosophy of refined living. Curating exclusive experiences in beauty, wellness, and personal services for select clientele.",
       image: founderJetInterior,
       tagline: "Luxury Lifestyle",
-      url: "https://maisonjane.com"
+      url: "https://maisonjane.ae"
     },
     {
       icon: Film,
@@ -96,7 +96,7 @@ const Founder = () => {
       description: "The strategic communications and media division overseeing brand identity, digital presence, and influence architecture across the group's portfolio of ventures.",
       image: founderRedCarpet,
       tagline: "Media & Communications",
-      url: "https://jjmediagroup.com"
+      url: "https://jjmediagroup.ae"
     },
     {
       icon: Award,
@@ -142,8 +142,9 @@ const Founder = () => {
           animate={{ scale: 1 }}
           transition={{ duration: 1.5, ease: "easeOut" }}
         >
-          <img 
+          <SafeImage 
             src={founderHero} 
+            fallbackSrc={founderDark}
             alt="Jane Abou Jaoude - Founder & Chairwoman" 
             className="w-full h-full object-cover object-top"
           />
@@ -312,8 +313,9 @@ const Founder = () => {
                   className="col-span-2 aspect-[16/10] rounded-3xl overflow-hidden border border-zinc-800 shadow-2xl shadow-black/80 group"
                   variants={scaleIn}
                 >
-                  <img 
+                  <SafeImage 
                     src={founderProfessional} 
+                    fallbackSrc={founderHero}
                     alt="Jane Abou Jaoude - Professional Portrait" 
                     className="w-full h-full object-cover object-top group-hover:scale-105 transition-transform duration-1000"
                   />
@@ -324,8 +326,9 @@ const Founder = () => {
                   className="aspect-[3/4] rounded-2xl overflow-hidden border border-zinc-800 shadow-xl group"
                   variants={scaleIn}
                 >
-                  <img 
+                  <SafeImage 
                     src={founderJetBoarding} 
+                    fallbackSrc={founderHero}
                     alt="Jane Abou Jaoude - International Travel" 
                     className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-1000"
                   />
@@ -334,8 +337,9 @@ const Founder = () => {
                   className="aspect-[3/4] rounded-2xl overflow-hidden border border-zinc-800 shadow-xl group"
                   variants={scaleIn}
                 >
-                  <img 
+                  <SafeImage 
                     src={founderOffice} 
+                    fallbackSrc={founderHero}
                     alt="Jane Abou Jaoude - Office" 
                     className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-1000"
                   />
@@ -368,8 +372,9 @@ const Founder = () => {
             {/* Flags Image */}
             <motion.div className="order-2 lg:order-1" variants={scaleIn}>
               <div className="aspect-[16/9] rounded-3xl overflow-hidden border border-gold/20 shadow-2xl shadow-gold/10">
-                <img 
+                <SafeImage 
                   src={jjFlags} 
+                  fallbackSrc={founderHero}
                   alt="JJ Holding Group & JJ Global Capital" 
                   className="w-full h-full object-cover"
                 />
@@ -468,8 +473,9 @@ const Founder = () => {
               >
                 {/* Background Image with better overlay */}
                 <div className="absolute inset-0 opacity-15 group-hover:opacity-25 transition-opacity duration-700">
-                  <img 
+                  <SafeImage 
                     src={division.image} 
+                    fallbackSrc={founderHero}
                     alt={division.name}
                     className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-1000"
                   />
@@ -570,8 +576,9 @@ const Founder = () => {
       <section className="py-24 md:py-40 relative overflow-hidden">
         {/* Background Image */}
         <div className="absolute inset-0">
-          <img 
+          <SafeImage 
             src={founderDark} 
+            fallbackSrc={founderHero}
             alt="Jane Abou Jaoude" 
             className="w-full h-full object-cover object-top opacity-25"
           />
@@ -594,7 +601,7 @@ const Founder = () => {
                 </blockquote>
                 <footer className="flex items-center gap-5">
                   <div className="w-16 h-16 rounded-full overflow-hidden border-2 border-gold/60 shadow-lg shadow-gold/20">
-                    <img src={founderProfessional} alt="Jane Abou Jaoude" className="w-full h-full object-cover" />
+                    <SafeImage src={founderProfessional} fallbackSrc={founderHero} alt="Jane Abou Jaoude" className="w-full h-full object-cover" />
                   </div>
                   <div>
                     <p className="text-gold text-lg font-medium">Jane Abou Jaoude</p>
@@ -638,8 +645,9 @@ const Founder = () => {
               className="col-span-2 row-span-2 aspect-square md:aspect-auto rounded-3xl overflow-hidden border border-zinc-800 shadow-2xl group"
               variants={scaleIn}
             >
-              <img 
+              <SafeImage 
                 src={founderJetInterior} 
+                fallbackSrc={founderHero}
                 alt="Private Aviation" 
                 className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-1000"
               />
@@ -650,8 +658,9 @@ const Founder = () => {
                 className="aspect-square rounded-2xl overflow-hidden border border-zinc-800 group"
                 variants={scaleIn}
               >
-                <img 
+                <SafeImage 
                   src={img} 
+                  fallbackSrc={founderHero}
                   alt="Lifestyle" 
                   className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-1000"
                 />
@@ -705,8 +714,9 @@ const Founder = () => {
                 className="aspect-[3/4] rounded-2xl overflow-hidden border border-zinc-800 shadow-xl group"
                 variants={scaleIn}
               >
-                <img 
+                <SafeImage 
                   src={founderOffice} 
+                  fallbackSrc={founderHero}
                   alt="Leadership" 
                   className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-1000"
                 />
@@ -715,8 +725,9 @@ const Founder = () => {
                 className="aspect-[3/4] rounded-2xl overflow-hidden border border-zinc-800 shadow-xl mt-8 group"
                 variants={scaleIn}
               >
-                <img 
+                <SafeImage 
                   src={founderProfessional} 
+                  fallbackSrc={founderHero}
                   alt="Future Vision" 
                   className="w-full h-full object-cover object-top group-hover:scale-105 transition-transform duration-1000"
                 />

@@ -31,21 +31,21 @@ const JJLogo = ({ className = "" }: { className?: string }) => (
     className={`tracking-wide flex items-center ${className}`}
     style={{ fontFamily: "Poppins, sans-serif" }}
   >
-    <span className="text-gold font-extralight text-xl md:text-2xl leading-none">J</span>
+    <span className="text-[#A8925A] font-extralight text-2xl md:text-3xl leading-none">J</span>
     <span
-      className="text-white/95 mx-1.5 font-thin text-2xl md:text-3xl leading-none"
-      style={{ transform: "scaleY(1.33)" }}
+      className="text-white/95 mx-2 font-thin text-3xl md:text-4xl leading-none"
+      style={{ transform: "scaleY(1.4)" }}
     >
       |
     </span>
-    <span className="text-gold font-extralight text-xl md:text-2xl leading-none">J</span>
+    <span className="text-[#A8925A] font-extralight text-2xl md:text-3xl leading-none">J</span>
 
     <span className="ml-3 flex items-center text-white">
-      <span className="font-semibold text-[11px] sm:text-xs md:text-sm tracking-[0.28em]">
+      <span className="font-semibold text-xs sm:text-sm md:text-base tracking-[0.25em]">
         GLOBAL
       </span>
-      <span className="mx-2.5 w-1.5 h-1.5 rounded-full bg-white/75" />
-      <span className="font-semibold text-[11px] sm:text-xs md:text-sm tracking-[0.28em]">
+      <span className="mx-2 w-1.5 h-1.5 rounded-full bg-white/80" />
+      <span className="font-semibold text-xs sm:text-sm md:text-base tracking-[0.25em]">
         CAPITAL
       </span>
     </span>
