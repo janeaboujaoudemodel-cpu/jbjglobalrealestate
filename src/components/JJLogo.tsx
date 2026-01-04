@@ -102,26 +102,26 @@ export const JJLogo = ({ size = 'md', showText = true, className = '' }: JJLogoP
   );
 };
 
-// Header-specific logo with horizontal layout
+// Header-specific logo with horizontal layout - Premium VIP aesthetic
 export const JJLogoHeader = ({ className = '' }: { className?: string }) => (
   <div 
     className={`flex items-center ${className}`}
     style={{ fontFamily: "Poppins, sans-serif" }}
   >
-    {/* J | J Monogram */}
-    <span className="text-gold font-extralight text-2xl md:text-3xl lg:text-4xl leading-none">J</span>
-    <div className="mx-1.5 flex items-center justify-center">
-      <div className="w-[1.5px] bg-white/90 h-5 md:h-7 lg:h-8" />
+    {/* J | J Monogram - Larger and more prominent */}
+    <span className="text-gold font-extralight text-3xl md:text-4xl lg:text-5xl leading-none drop-shadow-[0_0_8px_rgba(168,146,90,0.3)]">J</span>
+    <div className="mx-2 flex items-center justify-center">
+      <div className="w-[1.5px] bg-white h-6 md:h-8 lg:h-10" />
     </div>
-    <span className="text-gold font-extralight text-2xl md:text-3xl lg:text-4xl leading-none">J</span>
+    <span className="text-gold font-extralight text-3xl md:text-4xl lg:text-5xl leading-none drop-shadow-[0_0_8px_rgba(168,146,90,0.3)]">J</span>
     
-    {/* GLOBAL CAPITAL - reduced gap between words */}
-    <div className="ml-2.5 md:ml-3 flex items-center text-white">
-      <span className="font-semibold text-sm sm:text-base md:text-lg tracking-[0.15em]">
+    {/* GLOBAL CAPITAL - tighter spacing, elegant */}
+    <div className="ml-3 md:ml-4 flex items-center text-white/95">
+      <span className="font-medium text-xs sm:text-sm md:text-base tracking-[0.12em]">
         GLOBAL
       </span>
-      <span className="mx-1.5" />
-      <span className="font-semibold text-sm sm:text-base md:text-lg tracking-[0.15em]">
+      <span className="mx-0.5" />
+      <span className="font-medium text-xs sm:text-sm md:text-base tracking-[0.12em]">
         CAPITAL
       </span>
     </div>

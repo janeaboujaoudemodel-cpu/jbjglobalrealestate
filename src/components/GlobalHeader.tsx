@@ -61,24 +61,24 @@ const GlobalHeader = () => {
   const isActive = (path: string) => location.pathname === path;
 
   return (
-    <header className="fixed top-0 left-0 right-0 z-50 bg-black">
+    <header className="fixed top-0 left-0 right-0 z-50 bg-black/95 backdrop-blur-sm border-b border-white/5">
       <div className="container mx-auto px-4">
-        <div className="flex items-center justify-between h-16">
-          {/* Logo */}
-          <Link to="/" className="flex items-center">
+        <div className="flex items-center justify-between h-18 lg:h-20">
+          {/* Logo - Premium with separation from menu */}
+          <Link to="/" className="flex items-center pr-8 lg:pr-12">
             <JJLogoHeader />
           </Link>
 
-          {/* Desktop Navigation */}
-          <nav className="hidden lg:flex items-center gap-1">
+          {/* Desktop Navigation - Tighter spacing between items */}
+          <nav className="hidden lg:flex items-center">
             {mainNavLinks.map((link) => (
               <Link
                 key={link.href}
                 to={link.href}
-                className={`px-3 py-2 text-sm transition-colors ${
+                className={`px-2.5 py-2 text-[13px] transition-colors ${
                   isActive(link.href) 
-                    ? "text-white bg-zinc-800" 
-                    : "text-zinc-400 hover:text-white hover:bg-zinc-900"
+                    ? "text-white" 
+                    : "text-zinc-400 hover:text-white"
                 }`}
               >
                 {link.label}
