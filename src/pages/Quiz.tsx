@@ -420,17 +420,20 @@ const Quiz = () => {
     setIsSubmitting(true);
     try {
       const recommendations = getRecommendations();
-      const sessionId = `quiz-${Date.now()}`;
+      const sessionId = `quiz-${(crypto as any)?.randomUUID ? (crypto as any).randomUUID() : `${Date.now()}-${Math.random().toString(16).slice(2)}`}`;
 
-      await supabase.from("quiz_responses").insert({
-        user_id: user?.id || null,
-        session_id: sessionId,
-        answers: {
-          ...answers,
-          userInfo: formData
-        },
-        recommended_project_ids: recommendations.slice(0, 5).map((p) => p.id),
-      });
+      // Persist quiz responses only for authenticated users
+      if (user?.id) {
+        await supabase.from("quiz_responses").insert({
+          user_id: user.id,
+          session_id: sessionId,
+          answers: {
+            ...answers,
+            userInfo: formData,
+          },
+          recommended_project_ids: recommendations.slice(0, 5).map((p) => p.id),
+        });
+      }
 
       // Mark free usage
       markFreeUsed();
