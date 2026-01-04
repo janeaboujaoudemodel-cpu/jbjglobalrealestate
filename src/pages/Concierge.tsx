@@ -6,7 +6,14 @@ import { ArrowUpRight, Search, Plane, Car, Hotel, Sparkles, Gem, Ship, Utensils,
 import { CONTACT_INFO } from "@/constants/stats";
 import { useState } from "react";
 import { Input } from "@/components/ui/input";
-import conciergeHero from "@/assets/concierge-hero.jpeg";
+import coupleJetRolls from "@/assets/couple-jet-rolls.png";
+import luxuryJetCar from "@/assets/luxury-jet-car.png";
+import coupleJetInterior from "@/assets/couple-jet-interior.png";
+import dubaiPlaneView from "@/assets/dubai-plane-view.png";
+import coupleYachtSunset from "@/assets/couple-yacht-sunset.png";
+import yachtDeckChampagne from "@/assets/yacht-deck-champagne.png";
+import coupleYachtDubai from "@/assets/couple-yacht-dubai.png";
+import propertyConsultation from "@/assets/property-consultation.png";
 
 const fadeInUp = {
   hidden: { opacity: 0, y: 30 },
@@ -37,7 +44,7 @@ const conciergeCategories: ServiceCategory[] = [
     description: "Exclusive private jet and helicopter charter services for seamless global travel",
     icon: Plane,
     services: ["Private Jet Charter", "Helicopter Transfers", "VIP Airport Services", "Aircraft Management"],
-    image: "https://images.unsplash.com/photo-1540962351504-03099e0a754b?w=800&q=80"
+    image: coupleJetInterior
   },
   {
     id: "automotive",
@@ -45,7 +52,7 @@ const conciergeCategories: ServiceCategory[] = [
     description: "Premium limousine services and exotic car rentals for discerning clients",
     icon: Car,
     services: ["Limousine Service", "Exotic Car Rental", "Chauffeur Services", "Luxury Fleet Management"],
-    image: "https://images.unsplash.com/photo-1503376780353-7e6692767b70?w=800&q=80"
+    image: luxuryJetCar
   },
   {
     id: "hospitality",
@@ -69,7 +76,7 @@ const conciergeCategories: ServiceCategory[] = [
     description: "Luxury yacht charters and exclusive marine experiences",
     icon: Ship,
     services: ["Yacht Charter", "Superyacht Experiences", "Island Hopping", "Crew Services"],
-    image: "https://images.unsplash.com/photo-1567899378494-47b22a2ae96a?w=800&q=80"
+    image: coupleYachtDubai
   },
   {
     id: "dining",
@@ -77,7 +84,7 @@ const conciergeCategories: ServiceCategory[] = [
     description: "Priority reservations at Michelin-starred restaurants and private dining experiences",
     icon: Utensils,
     services: ["Restaurant Reservations", "Private Chef Services", "Wine Experiences", "Culinary Tours"],
-    image: "https://images.unsplash.com/photo-1414235077428-338989a2e8c0?w=800&q=80"
+    image: yachtDeckChampagne
   },
   {
     id: "entertainment",
@@ -101,7 +108,7 @@ const conciergeCategories: ServiceCategory[] = [
     description: "Bespoke experiences and once-in-a-lifetime adventures",
     icon: Star,
     services: ["Desert Safari VIP", "Hot Air Balloon", "Cultural Tours", "Adventure Expeditions"],
-    image: "https://images.unsplash.com/photo-1451337516015-6b6e9a44a8a3?w=800&q=80"
+    image: dubaiPlaneView
   }
 ];
 
@@ -126,7 +133,7 @@ const Concierge = () => {
         {/* Background Video/Image */}
         <div className="absolute inset-0">
           <img 
-            src={conciergeHero}
+            src={coupleJetRolls}
             alt="Luxury Concierge"
             className="w-full h-full object-cover"
           />
