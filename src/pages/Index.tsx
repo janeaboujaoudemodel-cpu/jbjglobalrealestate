@@ -32,7 +32,7 @@ const Index = () => {
       {/* Welcome Modal - AI Assistant Popup on first load */}
       <WelcomeModal />
 
-      {/* HERO SECTION - LUXURY VILLA FULL-BLEED */}
+      {/* HERO SECTION - CLEAN LUXURY VILLA */}
       <div className="relative h-screen flex items-center justify-center">
         {/* Villa Background Image */}
         <div className="absolute inset-0 overflow-hidden">
@@ -42,31 +42,30 @@ const Index = () => {
             className="w-full h-full object-cover"
           />
           {/* Enhanced gradient overlay for better text readability */}
-          <div className="absolute inset-0 bg-gradient-to-t from-black via-black/60 to-black/30" />
-          <div className="absolute inset-0 bg-gradient-to-r from-black/50 via-transparent to-black/50" />
-          <div className="absolute inset-0 bg-black/30" />
+          <div className="absolute inset-0 bg-gradient-to-t from-black via-black/50 to-black/20" />
+          <div className="absolute inset-0 bg-gradient-to-r from-black/30 via-transparent to-black/30" />
         </div>
 
-        {/* Hero Content - Centered */}
+        {/* Hero Content - Clean and Minimal */}
         <motion.div 
-          className="relative z-10 text-center px-4 max-w-5xl mx-auto"
+          className="relative z-10 text-center px-4 max-w-4xl mx-auto"
           initial="hidden"
           animate="visible"
           variants={staggerContainer}
         >
           {/* Welcome Text */}
-          <motion.div className="mb-8" variants={fadeInUp}>
-            <span className="inline-block text-gold text-xs md:text-sm uppercase tracking-[0.4em] mb-4">
+          <motion.div variants={fadeInUp}>
+            <span className="inline-block text-gold text-xs md:text-sm uppercase tracking-[0.4em] mb-6">
               Exclusive Properties
             </span>
             <h2 
-              className="text-white text-lg md:text-xl lg:text-2xl font-light tracking-wide mb-6"
+              className="text-white text-xl md:text-2xl lg:text-3xl font-light tracking-wide mb-4"
               style={{ fontFamily: "Poppins, sans-serif" }}
             >
               Welcome to JJ Global Capital
             </h2>
             {/* We Create | We Elevate | We Lead */}
-            <div className="flex flex-wrap items-center justify-center gap-3 md:gap-6 text-zinc-300 text-sm md:text-base lg:text-lg">
+            <div className="flex flex-wrap items-center justify-center gap-4 md:gap-8 text-zinc-300 text-base md:text-lg mb-8">
               <span className="font-light">We Create</span>
               <span className="text-gold/60">|</span>
               <span className="font-light">We Elevate</span>
@@ -77,28 +76,46 @@ const Index = () => {
 
           {/* Main Tagline */}
           <motion.h1 
-            className="text-white text-3xl md:text-4xl lg:text-5xl xl:text-6xl font-bold tracking-wide mb-6 max-w-4xl mx-auto leading-tight"
+            className="text-white text-3xl md:text-5xl lg:text-6xl font-bold tracking-wide mb-4 leading-tight"
             variants={fadeInUp}
             style={{ fontFamily: "Poppins, sans-serif" }}
           >
-            Your Gateway to Global Real Estate{" "}
+            Your Gateway to UAE{" "}
             <span className="text-transparent bg-clip-text bg-gradient-to-r from-gold to-gold-light">
-              Investments & Concierge
+              Real Estate Investments
             </span>
           </motion.h1>
 
           {/* Sub-tagline */}
           <motion.p 
-            className="text-zinc-400 text-sm md:text-base lg:text-lg max-w-2xl mx-auto mb-10"
+            className="text-zinc-400 text-sm md:text-base max-w-xl mx-auto"
             variants={fadeInUp}
           >
             A founder-led advisory specializing in UAE and Dubai real estate
           </motion.p>
+        </motion.div>
+        
+        {/* Scroll indicator - Centered at bottom */}
+        <motion.div 
+          className="absolute bottom-8 left-0 right-0 flex flex-col items-center gap-2 text-white/50 z-10"
+          initial={{ opacity: 0, y: -20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ delay: 1.5, duration: 0.8 }}
+        >
+          <span className="text-xs uppercase tracking-[0.3em]">Discover</span>
+          <ChevronDown className="w-5 h-5 animate-bounce" />
+        </motion.div>
+      </div>
 
-          {/* CTA Buttons */}
+      {/* CTA SECTION - Below Hero */}
+      <section className="py-12 md:py-16 bg-black">
+        <div className="container mx-auto px-4">
           <motion.div 
-            className="flex flex-col items-center gap-4"
-            variants={fadeInUp}
+            className="flex flex-col items-center gap-6"
+            initial={{ opacity: 0, y: 20 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+            transition={{ duration: 0.6 }}
           >
             <div className="flex flex-wrap justify-center gap-4">
               <Link to="/properties">
@@ -112,7 +129,7 @@ const Index = () => {
               <a href={CONTACT_INFO.inquiryFormUrl} target="_blank" rel="noopener noreferrer">
                 <Button 
                   variant="outline"
-                  className="border-gold/50 text-gold hover:bg-gold/10 hover:border-gold px-8 py-6 text-base backdrop-blur-sm bg-black/30"
+                  className="border-gold/50 text-gold hover:bg-gold/10 hover:border-gold px-8 py-6 text-base"
                 >
                   Contact Us
                   <ArrowUpRight className="w-5 h-5 ml-2" />
@@ -121,7 +138,7 @@ const Index = () => {
             </div>
             
             {/* AI Home Finder CTA */}
-            <Link to="/quiz" className="mt-4">
+            <Link to="/quiz">
               <div className="flex items-center gap-3 bg-gradient-to-r from-purple-700 to-purple-900 hover:from-purple-600 hover:to-purple-800 border border-purple-500/40 rounded-xl px-6 py-3 transition-all shadow-lg shadow-purple-500/20 group">
                 <Sparkles className="w-5 h-5 text-white" />
                 <div className="text-left">
@@ -132,19 +149,8 @@ const Index = () => {
               </div>
             </Link>
           </motion.div>
-        </motion.div>
-        
-        {/* Scroll indicator */}
-        <motion.div 
-          className="absolute bottom-10 left-1/2 -translate-x-1/2 flex flex-col items-center gap-3 text-white/40 z-10"
-          initial={{ opacity: 0, y: -20 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ delay: 1.5, duration: 0.8 }}
-        >
-          <span className="text-xs uppercase tracking-[0.3em]">Discover</span>
-          <ChevronDown className="w-5 h-5 animate-bounce" />
-        </motion.div>
-      </div>
+        </div>
+      </section>
 
       {/* FOUNDER SECTION - Meet The Leadership */}
       <section className="py-20 md:py-28 bg-gradient-to-b from-black via-zinc-950 to-black">
