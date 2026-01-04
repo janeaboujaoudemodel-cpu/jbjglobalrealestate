@@ -222,43 +222,7 @@ const Founder = () => {
         </motion.div>
       </section>
 
-      {/* INTRODUCTION - FOUNDER POSITIONING */}
-      <section className="py-24 md:py-40 border-t border-gold/10 relative overflow-hidden">
-        <div className="absolute inset-0 bg-gradient-to-b from-black via-zinc-950/50 to-black" />
-        
-        {/* Decorative corner accents */}
-        <div className="absolute top-0 left-0 w-64 h-64 bg-gradient-to-br from-gold/5 to-transparent" />
-        <div className="absolute bottom-0 right-0 w-64 h-64 bg-gradient-to-tl from-gold/5 to-transparent" />
-        
-        <div className="container mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
-          <motion.div 
-            className="max-w-5xl mx-auto text-center"
-            initial="hidden"
-            whileInView="visible"
-            viewport={{ once: true, margin: "-100px" }}
-            variants={staggerContainer}
-          >
-            <motion.div className="mb-10" variants={fadeInUp}>
-              <span className="inline-block text-gold text-sm uppercase tracking-[0.4em] mb-4">Leadership</span>
-              <GoldLine className="w-32 mx-auto" />
-            </motion.div>
-            
-            <motion.p 
-              className="text-white text-2xl md:text-4xl lg:text-5xl leading-relaxed mb-10 font-light"
-              variants={fadeInUp}
-            >
-              JJ Holding Group is a <span className="text-gold font-medium">founder-led</span>, multi-division holding built on unwavering standards, discretion, and long-term vision.
-            </motion.p>
-            
-            <motion.p 
-              className="text-zinc-400 text-lg md:text-xl lg:text-2xl leading-relaxed max-w-4xl mx-auto"
-              variants={fadeInUp}
-            >
-              Every entity within the group reflects a deliberate approach to business—where quality supersedes quantity, and reputation is earned through consistent excellence.
-            </motion.p>
-          </motion.div>
-        </div>
-      </section>
+      {/* THE FOUNDER - EDITORIAL LAYOUT (moved here, Leadership section removed) */}
 
       {/* THE FOUNDER - EDITORIAL LAYOUT */}
       <section className="py-24 md:py-40 relative">
@@ -393,7 +357,7 @@ const Founder = () => {
               </div>
               
               <h2 
-                className="text-white text-4xl md:text-5xl lg:text-6xl font-bold mb-10"
+                className="text-white text-4xl md:text-5xl lg:text-6xl font-bold mb-8"
                 style={{ fontFamily: "Poppins, sans-serif" }}
               >
                 JJ Holding
@@ -401,12 +365,29 @@ const Founder = () => {
                 <span className="text-transparent bg-clip-text bg-gradient-to-r from-gold to-[#C4A962]">Group</span>
               </h2>
               
-              <p className="text-zinc-300 text-lg md:text-xl leading-relaxed mb-6">
-                JJ Holding Group serves as the strategic umbrella for all entities under the founder's direction. Established to create a cohesive structure for ventures across distinct but complementary sectors.
+              {/* Moved founder-led text here */}
+              <p className="text-white text-xl md:text-2xl leading-relaxed mb-6 font-light">
+                A <span className="text-gold font-medium">founder-led</span>, multi-division holding built on unwavering standards, discretion, and long-term vision.
               </p>
-              <p className="text-zinc-500 leading-relaxed">
+              
+              <p className="text-zinc-400 text-lg md:text-xl leading-relaxed mb-6">
+                Every entity within the group reflects a deliberate approach to business—where quality supersedes quantity, and reputation is earned through consistent excellence.
+              </p>
+              
+              <p className="text-zinc-500 leading-relaxed mb-8">
                 The group's governance remains founder-led, ensuring that strategic decisions align with the long-term vision rather than short-term market pressures.
               </p>
+              
+              {/* Explore JJ Holding Group Button */}
+              <a 
+                href="https://jjholdinggroup.com" 
+                target="_blank" 
+                rel="noopener noreferrer"
+                className="inline-flex items-center gap-2 bg-gradient-to-r from-gold to-[#C4A962] hover:from-gold-light hover:to-gold text-black font-semibold px-8 py-4 rounded-xl transition-all duration-300 hover:shadow-lg hover:shadow-gold/30 hover:scale-[1.02]"
+              >
+                Explore JJ Holding Group
+                <ArrowUpRight className="w-5 h-5" />
+              </a>
             </motion.div>
           </motion.div>
 
@@ -445,8 +426,50 @@ const Founder = () => {
       {/* THE GROUP DIVISIONS - PREMIUM CARDS */}
       <section className="py-24 md:py-40 relative">
         <div className="container mx-auto px-4 sm:px-6 lg:px-8">
+          {/* JJ Holding Group Header Card */}
           <motion.div 
-            className="text-center mb-20 md:mb-24"
+            className="mb-12"
+            initial="hidden"
+            whileInView="visible"
+            viewport={{ once: true, margin: "-100px" }}
+            variants={fadeInUp}
+          >
+            <div className="bg-gradient-to-r from-zinc-900 via-zinc-800/80 to-zinc-900 border border-gold/40 rounded-3xl p-8 md:p-10 relative overflow-hidden">
+              {/* Decorative background elements */}
+              <div className="absolute inset-0 opacity-10">
+                <div className="absolute inset-0" style={{ backgroundImage: 'radial-gradient(circle at 2px 2px, #A8925A 1px, transparent 0)', backgroundSize: '32px 32px' }} />
+              </div>
+              <div className="absolute top-0 right-0 w-64 h-64 bg-gold/10 rounded-full blur-3xl -translate-y-1/2 translate-x-1/2" />
+              
+              <div className="relative z-10 flex flex-col md:flex-row items-center justify-between gap-6">
+                <div className="flex items-center gap-6">
+                  {/* JJ Logo Icon */}
+                  <div className="w-20 h-20 bg-gradient-to-br from-gold/30 to-gold/10 rounded-2xl flex items-center justify-center border-2 border-gold/50 shadow-xl shadow-gold/20">
+                    <span className="text-gold text-3xl font-light tracking-wide" style={{ fontFamily: "Poppins, sans-serif" }}>J | J</span>
+                  </div>
+                  <div>
+                    <p className="text-gold/70 text-xs uppercase tracking-[0.3em] mb-1">Parent Company</p>
+                    <h3 className="text-white text-2xl md:text-3xl font-bold" style={{ fontFamily: "Poppins, sans-serif" }}>
+                      JJ Holding Group
+                    </h3>
+                    <p className="text-zinc-400 text-sm mt-1">Four Divisions • Global Presence</p>
+                  </div>
+                </div>
+                <a 
+                  href="https://jjholdinggroup.com" 
+                  target="_blank" 
+                  rel="noopener noreferrer"
+                  className="flex items-center gap-2 bg-gold hover:bg-gold-light text-black font-semibold px-6 py-3 rounded-xl transition-all duration-300 hover:shadow-lg hover:shadow-gold/30"
+                >
+                  Visit Website
+                  <ArrowUpRight className="w-4 h-4" />
+                </a>
+              </div>
+            </div>
+          </motion.div>
+
+          <motion.div 
+            className="text-center mb-16"
             initial="hidden"
             whileInView="visible"
             viewport={{ once: true, margin: "-100px" }}
@@ -475,37 +498,38 @@ const Founder = () => {
                 className="group relative bg-gradient-to-br from-zinc-900 via-zinc-900/95 to-black border border-zinc-800 rounded-3xl overflow-hidden hover:border-gold/50 transition-all duration-700"
                 variants={fadeInUp}
               >
-                {/* Background Image with better overlay */}
-                <div className="absolute inset-0 opacity-15 group-hover:opacity-25 transition-opacity duration-700">
+                {/* Background Image with cinematic overlay */}
+                <div className="absolute inset-0 opacity-20 group-hover:opacity-30 transition-opacity duration-700">
                   <SafeImage 
                     src={division.image} 
                     fallbackSrc={founderHero}
                     alt={division.name}
-                    className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-1000"
+                    className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-1000"
                   />
-                  <div className="absolute inset-0 bg-gradient-to-t from-black via-black/95 to-black/80" />
+                  <div className="absolute inset-0 bg-gradient-to-t from-black via-black/90 to-black/70" />
                 </div>
                 
-                {/* Visit Website Button */}
+                {/* Visit Website Button - Always visible */}
                 <a 
                   href={division.url}
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="absolute top-4 right-4 z-20 flex items-center gap-1.5 bg-black/60 backdrop-blur-sm border border-gold/30 text-gold text-xs px-3 py-1.5 rounded-full opacity-0 group-hover:opacity-100 transition-all duration-300 hover:bg-gold hover:text-black"
+                  className="absolute top-4 right-4 z-20 flex items-center gap-1.5 bg-gold/20 backdrop-blur-md border border-gold/40 text-gold text-xs px-3 py-2 rounded-full hover:bg-gold hover:text-black transition-all duration-300"
                 >
-                  Visit Website
-                  <ArrowUpRight className="w-3 h-3" />
+                  Visit
+                  <ArrowUpRight className="w-3.5 h-3.5" />
                 </a>
                 
                 {/* Content */}
                 <div className="relative z-10 p-8 md:p-12">
                   <div className="flex items-start gap-6 mb-6">
-                    <div className="w-16 h-16 md:w-20 md:h-20 bg-gradient-to-br from-gold/20 to-gold/5 rounded-2xl flex items-center justify-center border border-gold/30 group-hover:border-gold/60 group-hover:scale-110 transition-all duration-500 flex-shrink-0 shadow-lg shadow-gold/10">
-                      <division.icon className="w-8 h-8 md:w-10 md:h-10 text-gold" />
+                    {/* Premium Icon with gradient border */}
+                    <div className="w-18 h-18 md:w-20 md:h-20 bg-gradient-to-br from-gold/25 to-gold/5 rounded-2xl flex items-center justify-center border-2 border-gold/40 group-hover:border-gold/70 group-hover:scale-110 group-hover:shadow-xl group-hover:shadow-gold/20 transition-all duration-500 flex-shrink-0">
+                      <division.icon className="w-9 h-9 md:w-10 md:h-10 text-gold drop-shadow-[0_0_8px_rgba(168,146,90,0.4)]" strokeWidth={1.5} />
                     </div>
                     <div>
-                      <span className="text-gold/70 text-xs uppercase tracking-[0.2em] mb-1 block">{division.tagline}</span>
-                      <h3 className="text-white text-2xl md:text-3xl font-bold group-hover:text-gold transition-colors duration-300">
+                      <span className="text-gold/80 text-xs uppercase tracking-[0.25em] mb-2 block font-medium">{division.tagline}</span>
+                      <h3 className="text-white text-2xl md:text-3xl font-bold group-hover:text-gold transition-colors duration-300" style={{ fontFamily: "Poppins, sans-serif" }}>
                         {division.name}
                       </h3>
                     </div>
@@ -515,9 +539,9 @@ const Founder = () => {
                   </p>
                 </div>
                 
-                {/* Decorative corner */}
-                <div className="absolute top-0 right-0 w-32 h-32 bg-gradient-to-bl from-gold/10 to-transparent" />
-                <div className="absolute bottom-0 left-0 w-24 h-24 bg-gradient-to-tr from-gold/5 to-transparent" />
+                {/* Decorative gold corners */}
+                <div className="absolute top-0 right-0 w-40 h-40 bg-gradient-to-bl from-gold/15 to-transparent opacity-50 group-hover:opacity-100 transition-opacity duration-500" />
+                <div className="absolute bottom-0 left-0 w-32 h-32 bg-gradient-to-tr from-gold/10 to-transparent opacity-50 group-hover:opacity-100 transition-opacity duration-500" />
               </motion.div>
             ))}
           </motion.div>
