@@ -1,5 +1,6 @@
 import { useMemo, useState } from "react";
 import Footer from "@/components/Footer";
+import GlobalHeader from "@/components/GlobalHeader";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
@@ -13,11 +14,13 @@ import {
 import { CONTACT_INFO } from "@/constants/stats";
 import { getCountryList, getLanguageList } from "@/constants/localeOptions";
 import founderProfessional from "@/assets/founder-professional.jpeg";
-import { ArrowUpRight, Download, FileText, ShieldCheck } from "lucide-react";
+import { motion } from "framer-motion";
+import { ArrowUpRight, BookOpen, CheckCircle, Download, FileText, Shield, Star, TrendingUp } from "lucide-react";
 
 const MarketReport = () => {
   const countries = useMemo(() => getCountryList(), []);
   const languages = useMemo(() => getLanguageList(), []);
+  const [downloaded, setDownloaded] = useState(false);
 
   const [form, setForm] = useState({
     fullName: "",
@@ -48,98 +51,271 @@ const MarketReport = () => {
 
   const downloadBook = () => {
     const websiteUrl = "https://jjglobalcapital.com";
-    const qrUrl = `https://api.qrserver.com/v1/create-qr-code/?size=180x180&data=${encodeURIComponent(
-      websiteUrl
-    )}`;
+    const qrUrl = `https://api.qrserver.com/v1/create-qr-code/?size=180x180&data=${encodeURIComponent(websiteUrl)}`;
 
     const html = `<!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
 <meta charset="UTF-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1" />
-<title>JJ Global Capital — UAE Market Intelligence (Educational)</title>
+<title>JJ Global Capital — UAE Market Intelligence Book</title>
 <style>
-  body { margin:0; padding:32px; background:#0b0b0c; color:#fff; font-family: ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, Arial; }
-  .page { max-width: 980px; margin: 0 auto; }
-  .card { background:#141417; border:1px solid #27272a; border-radius:18px; padding:24px; }
-  .gold { color:#A8925A; }
-  .muted { color:#a1a1aa; }
-  .hr { height:1px; background: linear-gradient(to right, transparent, rgba(168,146,90,.55), transparent); margin: 22px 0; }
-  h1 { font-size: 34px; margin: 0 0 8px; }
-  h2 { font-size: 18px; letter-spacing:.18em; text-transform: uppercase; margin: 0 0 10px; }
-  .grid { display:grid; grid-template-columns: 1.2fr .8fr; gap: 18px; }
-  .cover { display:flex; gap: 18px; align-items:center; }
-  .photo { width: 110px; height: 110px; border-radius: 999px; object-fit: cover; border: 2px solid rgba(168,146,90,.55); }
-  .pill { display:inline-block; padding:6px 12px; border-radius:999px; border:1px solid rgba(168,146,90,.35); background: rgba(168,146,90,.08); font-size: 12px; letter-spacing:.16em; text-transform: uppercase; }
-  ul { margin: 10px 0 0; padding-left: 18px; }
-  li { margin: 8px 0; }
-  .box { background:#0f0f12; border:1px solid #27272a; border-radius:14px; padding:14px; }
-  .qr { width: 180px; height: 180px; border-radius: 12px; background:#fff; padding:10px; }
+  @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap');
+  
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  
+  body { 
+    font-family: 'Poppins', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+    background: linear-gradient(135deg, #0a0a0a 0%, #1a1a1a 50%, #0a0a0a 100%);
+    color: #fff;
+    min-height: 100vh;
+    padding: 40px 20px;
+  }
+  
+  .container { max-width: 900px; margin: 0 auto; }
+  
+  .header {
+    text-align: center;
+    margin-bottom: 50px;
+    padding-bottom: 40px;
+    border-bottom: 1px solid rgba(168, 146, 90, 0.3);
+  }
+  
+  .logo {
+    font-size: 28px;
+    font-weight: 700;
+    letter-spacing: 0.1em;
+    margin-bottom: 8px;
+  }
+  
+  .logo span { color: #A8925A; }
+  
+  .subtitle {
+    color: #888;
+    font-size: 12px;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+  }
+  
+  .hero {
+    display: flex;
+    align-items: center;
+    gap: 30px;
+    margin-bottom: 50px;
+    padding: 40px;
+    background: linear-gradient(145deg, rgba(168, 146, 90, 0.1) 0%, rgba(0,0,0,0.5) 100%);
+    border: 1px solid rgba(168, 146, 90, 0.2);
+    border-radius: 20px;
+  }
+  
+  .founder-photo {
+    width: 140px;
+    height: 140px;
+    border-radius: 50%;
+    object-fit: cover;
+    border: 3px solid #A8925A;
+    box-shadow: 0 10px 40px rgba(168, 146, 90, 0.3);
+  }
+  
+  .hero-content h1 {
+    font-size: 32px;
+    font-weight: 600;
+    margin-bottom: 10px;
+    background: linear-gradient(135deg, #fff 0%, #A8925A 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+  }
+  
+  .hero-content p {
+    color: #aaa;
+    font-size: 16px;
+    line-height: 1.6;
+  }
+  
+  .badge {
+    display: inline-block;
+    padding: 8px 16px;
+    background: rgba(168, 146, 90, 0.15);
+    border: 1px solid rgba(168, 146, 90, 0.4);
+    border-radius: 50px;
+    font-size: 11px;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    color: #A8925A;
+    margin-bottom: 15px;
+  }
+  
+  .section {
+    margin-bottom: 40px;
+    padding: 30px;
+    background: rgba(255,255,255,0.02);
+    border: 1px solid rgba(255,255,255,0.08);
+    border-radius: 16px;
+  }
+  
+  .section h2 {
+    font-size: 20px;
+    font-weight: 600;
+    color: #A8925A;
+    margin-bottom: 20px;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+  }
+  
+  .section h2::before {
+    content: '';
+    width: 4px;
+    height: 24px;
+    background: linear-gradient(180deg, #A8925A, transparent);
+    border-radius: 2px;
+  }
+  
+  .section ul {
+    list-style: none;
+    padding: 0;
+  }
+  
+  .section li {
+    padding: 12px 0;
+    padding-left: 30px;
+    position: relative;
+    color: #ccc;
+    font-size: 15px;
+    line-height: 1.6;
+    border-bottom: 1px solid rgba(255,255,255,0.05);
+  }
+  
+  .section li:last-child { border-bottom: none; }
+  
+  .section li::before {
+    content: '✓';
+    position: absolute;
+    left: 0;
+    color: #A8925A;
+    font-weight: bold;
+  }
+  
+  .grid { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; }
+  
+  @media (max-width: 700px) {
+    .grid { grid-template-columns: 1fr; }
+    .hero { flex-direction: column; text-align: center; }
+  }
+  
+  .cta-box {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 20px;
+    padding: 30px;
+    background: linear-gradient(135deg, rgba(168, 146, 90, 0.15) 0%, rgba(168, 146, 90, 0.05) 100%);
+    border: 1px solid rgba(168, 146, 90, 0.3);
+    border-radius: 16px;
+    margin-top: 40px;
+  }
+  
+  .cta-box .text h3 {
+    font-size: 18px;
+    margin-bottom: 5px;
+  }
+  
+  .cta-box .text p {
+    color: #888;
+    font-size: 14px;
+  }
+  
+  .qr-code {
+    width: 120px;
+    height: 120px;
+    background: #fff;
+    padding: 8px;
+    border-radius: 12px;
+  }
+  
+  .footer {
+    margin-top: 50px;
+    padding-top: 30px;
+    border-top: 1px solid rgba(255,255,255,0.1);
+    text-align: center;
+    color: #666;
+    font-size: 12px;
+    line-height: 1.8;
+  }
+  
+  .footer a { color: #A8925A; text-decoration: none; }
 </style>
 </head>
 <body>
-  <div class="page">
-    <div class="card">
-      <div class="cover">
-        <img class="photo" src="${founderProfessional}" alt="Founder portrait" />
-        <div>
-          <div class="pill">Educational Market Book</div>
-          <h1>UAE Real Estate Market Intelligence</h1>
-          <div class="muted">Prepared for investors of <span class="gold">JJ Global Capital</span>.</div>
-          <div class="muted" style="margin-top:6px;">Lead author: Jane Abou Jaoude (Founder & Chairwoman)</div>
-        </div>
-      </div>
-
-      <div class="hr"></div>
-
-      <div class="grid">
-        <div class="box">
-          <h2 class="gold">What this book covers</h2>
-          <ul>
-            <li>How to read official market indicators (transactions, supply, segments)</li>
-            <li>Developer comparison framework (delivery, product, pricing logic)</li>
-            <li>Community comparison framework (liquidity, rentability, long-term demand)</li>
-            <li>Investment checklist for off-plan vs ready assets</li>
-            <li>Risk controls, due diligence, and decision structure</li>
-          </ul>
-        </div>
-        <div class="box">
-          <h2 class="gold">Official sources</h2>
-          <div class="muted">This is an educational overview designed around public, government-led publications and portals such as:</div>
-          <ul>
-            <li>Dubai Land Department (DLD) publications & portals</li>
-            <li>Dubai REST platform</li>
-            <li>RERA-related guidance where applicable</li>
-            <li>Other UAE government economic sources where relevant</li>
-          </ul>
-        </div>
-      </div>
-
-      <div class="hr"></div>
-
-      <div class="grid">
-        <div class="box">
-          <h2 class="gold">AI Property Matchmaker (Complimentary)</h2>
-          <div class="muted">Our AI Property Matchmaker was created and developed by our founder, Jane Abou Jaoude, exclusively for JJ Global Capital investors—so you can shortlist opportunities faster and with clearer structure.</div>
-          <div class="muted" style="margin-top:10px;"><strong>Powered by JJ Global Capital</strong> — Part of <a class="gold" href="${CONTACT_INFO.holdingGroupUrl}" target="_blank" rel="noopener">JJ Holding Group</a></div>
-        </div>
-        <div class="box" style="display:flex; align-items:center; justify-content:space-between; gap:12px;">
-          <div>
-            <h2 class="gold">Visit Website</h2>
-            <div class="muted">Scan to explore and take the complimentary AI assessment.</div>
-            <div class="muted" style="margin-top:10px;">${websiteUrl}</div>
-          </div>
-          <img class="qr" src="${qrUrl}" alt="Website QR code" />
-        </div>
-      </div>
-
-      <div class="hr"></div>
-
-      <div class="muted" style="font-size:12px; line-height:1.6;">
-        Disclaimer: This document is educational and does not constitute brokerage advice. For an official consultation, please contact JJ Global Capital.
-        <br />Contact: ${CONTACT_INFO.emailCapitalized} • ${CONTACT_INFO.phone}
+  <div class="container">
+    <header class="header">
+      <div class="logo">JJ <span>|</span> GLOBAL CAPITAL</div>
+      <div class="subtitle">UAE Real Estate Intelligence</div>
+    </header>
+    
+    <div class="hero">
+      <img class="founder-photo" src="https://images.unsplash.com/photo-1573496359142-b8d87734a5a2?w=300&h=300&fit=crop&crop=face" alt="Jane Abou Jaoude" />
+      <div class="hero-content">
+        <div class="badge">Educational Market Book</div>
+        <h1>UAE Real Estate Market Intelligence</h1>
+        <p>Prepared for investors of JJ Global Capital by Jane Abou Jaoude, Founder & Chairwoman</p>
       </div>
     </div>
+    
+    <div class="grid">
+      <div class="section">
+        <h2>What This Book Covers</h2>
+        <ul>
+          <li>How to read official market indicators (transactions, supply, segments)</li>
+          <li>Developer comparison framework (delivery, product, pricing logic)</li>
+          <li>Community comparison framework (liquidity, rentability, long-term demand)</li>
+          <li>Investment checklist for off-plan vs ready assets</li>
+          <li>Risk controls, due diligence, and decision structure</li>
+        </ul>
+      </div>
+      
+      <div class="section">
+        <h2>Official Data Sources</h2>
+        <ul>
+          <li>Dubai Land Department (DLD) publications & portals</li>
+          <li>Dubai REST platform official data</li>
+          <li>RERA-related guidance where applicable</li>
+          <li>Other UAE government economic sources</li>
+          <li>Property Monitor & DXB Interact analytics</li>
+        </ul>
+      </div>
+    </div>
+    
+    <div class="section">
+      <h2>AI Property Matchmaker (Complimentary)</h2>
+      <p style="color: #aaa; line-height: 1.8;">
+        Our AI Property Matchmaker was created and developed by our founder, Jane Abou Jaoude, 
+        exclusively for JJ Global Capital investors—so you can shortlist opportunities faster 
+        and with clearer structure. Take the complimentary assessment on our website.
+      </p>
+    </div>
+    
+    <div class="cta-box">
+      <div class="text">
+        <h3>Visit Our Website</h3>
+        <p>Scan to explore and take the complimentary AI assessment</p>
+        <p style="margin-top: 10px; color: #A8925A;">${websiteUrl}</p>
+      </div>
+      <img class="qr-code" src="${qrUrl}" alt="Website QR code" />
+    </div>
+    
+    <footer class="footer">
+      <p><strong>Disclaimer:</strong> This document is educational and does not constitute brokerage advice.</p>
+      <p>For an official consultation, please contact JJ Global Capital.</p>
+      <p style="margin-top: 15px;">
+        Email: <a href="mailto:${CONTACT_INFO.email}">${CONTACT_INFO.emailCapitalized}</a> • 
+        Phone: ${CONTACT_INFO.phone}
+      </p>
+      <p style="margin-top: 10px;">
+        Part of <a href="${CONTACT_INFO.holdingGroupUrl}" target="_blank">JJ Holding Group</a>
+      </p>
+    </footer>
   </div>
 </body>
 </html>`;
@@ -153,6 +329,7 @@ const MarketReport = () => {
     a.click();
     document.body.removeChild(a);
     URL.revokeObjectURL(url);
+    setDownloaded(true);
   };
 
   const handleSubmit = () => {
@@ -161,83 +338,137 @@ const MarketReport = () => {
     downloadBook();
   };
 
+  const features = [
+    { icon: TrendingUp, title: "Market Analysis", desc: "Official government data & trends" },
+    { icon: Shield, title: "Due Diligence", desc: "Investment checklist framework" },
+    { icon: Star, title: "AI Matchmaker", desc: "Complimentary property assessment" },
+    { icon: BookOpen, title: "Educational", desc: "Founder-led expert insights" },
+  ];
+
   return (
     <div className="min-h-screen bg-black">
-      <header className="relative pt-28 pb-14 border-b border-zinc-800 overflow-hidden">
-        <div className="absolute inset-0 bg-gradient-to-b from-zinc-900/50 to-black" />
+      <GlobalHeader />
+      
+      {/* Hero Section */}
+      <section className="relative pt-32 pb-20 overflow-hidden">
+        <div className="absolute inset-0 bg-gradient-to-b from-zinc-900/50 via-black to-black" />
+        <div className="absolute inset-0 opacity-30">
+          <div className="absolute top-1/4 left-1/4 w-96 h-96 bg-gold/10 rounded-full blur-3xl" />
+          <div className="absolute bottom-1/4 right-1/4 w-96 h-96 bg-gold/5 rounded-full blur-3xl" />
+        </div>
+        
         <div className="container mx-auto px-4 relative z-10">
-          <div className="max-w-3xl">
-            <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-zinc-900/60 border border-zinc-700 text-zinc-200 text-xs uppercase tracking-[0.25em]">
+          <motion.div 
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.6 }}
+            className="max-w-4xl mx-auto text-center"
+          >
+            <div className="inline-flex items-center gap-2 px-5 py-2.5 rounded-full bg-gold/10 border border-gold/30 text-gold text-xs uppercase tracking-[0.25em] mb-8">
               <FileText className="w-4 h-4" />
-              Market Report
+              Exclusive Market Report
             </div>
-            <h1
-              className="text-white text-4xl md:text-6xl font-bold mt-6"
-              style={{ fontFamily: "Poppins, sans-serif" }}
-            >
-              Download Your UAE Market Intelligence Book
+            
+            <h1 className="text-white text-4xl md:text-6xl lg:text-7xl font-bold leading-tight mb-6" style={{ fontFamily: "Poppins, sans-serif" }}>
+              UAE Real Estate
+              <span className="block text-gold">Market Intelligence</span>
             </h1>
-            <p className="text-zinc-400 text-lg mt-4 leading-relaxed">
-              An educational, founder-led overview designed around government-led sources and structured decision frameworks—created for investors of JJ Global Capital.
+            
+            <p className="text-zinc-400 text-lg md:text-xl max-w-2xl mx-auto leading-relaxed">
+              An educational, founder-led overview designed around government-led sources and structured decision frameworks—created exclusively for investors of JJ Global Capital.
             </p>
+          </motion.div>
+        </div>
+      </section>
+
+      {/* Features Grid */}
+      <section className="py-12 border-y border-zinc-800/50">
+        <div className="container mx-auto px-4">
+          <div className="grid grid-cols-2 md:grid-cols-4 gap-6">
+            {features.map((feature, index) => (
+              <motion.div
+                key={feature.title}
+                initial={{ opacity: 0, y: 20 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ duration: 0.5, delay: index * 0.1 }}
+                className="text-center p-6"
+              >
+                <div className="w-14 h-14 mx-auto mb-4 rounded-2xl bg-gradient-to-br from-gold/20 to-gold/5 border border-gold/20 flex items-center justify-center">
+                  <feature.icon className="w-6 h-6 text-gold" />
+                </div>
+                <h3 className="text-white font-semibold mb-1">{feature.title}</h3>
+                <p className="text-zinc-500 text-sm">{feature.desc}</p>
+              </motion.div>
+            ))}
           </div>
         </div>
-      </header>
+      </section>
 
-      <main className="container mx-auto px-4 py-12">
-        <div className="grid lg:grid-cols-2 gap-10 items-start">
-          <section className="bg-zinc-950 border border-zinc-800 rounded-2xl p-8">
-            <div className="flex items-start gap-4">
-              <div className="w-12 h-12 rounded-xl bg-zinc-900 border border-zinc-800 flex items-center justify-center">
-                <ShieldCheck className="w-6 h-6 text-zinc-200" />
+      {/* Main Content */}
+      <main className="container mx-auto px-4 py-16">
+        <div className="grid lg:grid-cols-5 gap-10 items-start">
+          {/* Form Section */}
+          <motion.section 
+            initial={{ opacity: 0, x: -20 }}
+            animate={{ opacity: 1, x: 0 }}
+            transition={{ duration: 0.6, delay: 0.2 }}
+            className="lg:col-span-3 bg-gradient-to-br from-zinc-900/80 to-zinc-950 border border-zinc-800 rounded-3xl p-8 md:p-10"
+          >
+            <div className="flex items-start gap-4 mb-8">
+              <div className="w-14 h-14 rounded-2xl bg-gradient-to-br from-gold/20 to-gold/5 border border-gold/30 flex items-center justify-center flex-shrink-0">
+                <Download className="w-6 h-6 text-gold" />
               </div>
               <div>
-                <h2 className="text-white text-xl font-semibold">Lead Capture</h2>
-                <p className="text-zinc-500 mt-1">
-                  Submit your details to unlock the download (opens our official form for record-keeping).
+                <h2 className="text-white text-2xl font-bold">Download Your Copy</h2>
+                <p className="text-zinc-400 mt-1">
+                  Complete the form below to receive instant access to the market intelligence book.
                 </p>
               </div>
             </div>
 
-            <div className="mt-8 space-y-5">
+            <div className="space-y-5">
               <div>
-                <Label className="text-zinc-300">Full Name *</Label>
+                <Label className="text-zinc-300 text-sm font-medium">Full Name *</Label>
                 <Input
                   value={form.fullName}
                   onChange={(e) => setForm((p) => ({ ...p, fullName: e.target.value }))}
-                  className="mt-2 bg-zinc-900 border-zinc-700 text-white h-12"
-                />
-              </div>
-
-              <div>
-                <Label className="text-zinc-300">Email *</Label>
-                <Input
-                  type="email"
-                  value={form.email}
-                  onChange={(e) => setForm((p) => ({ ...p, email: e.target.value }))}
-                  className="mt-2 bg-zinc-900 border-zinc-700 text-white h-12"
-                />
-              </div>
-
-              <div>
-                <Label className="text-zinc-300">Phone *</Label>
-                <Input
-                  type="tel"
-                  value={form.phone}
-                  onChange={(e) => setForm((p) => ({ ...p, phone: e.target.value }))}
-                  className="mt-2 bg-zinc-900 border-zinc-700 text-white h-12"
+                  placeholder="Enter your full name"
+                  className="mt-2 bg-zinc-900/50 border-zinc-700 text-white h-12 rounded-xl focus:border-gold/50 focus:ring-gold/20"
                 />
               </div>
 
               <div className="grid sm:grid-cols-2 gap-4">
                 <div>
-                  <Label className="text-zinc-300">Nationality *</Label>
+                  <Label className="text-zinc-300 text-sm font-medium">Email *</Label>
+                  <Input
+                    type="email"
+                    value={form.email}
+                    onChange={(e) => setForm((p) => ({ ...p, email: e.target.value }))}
+                    placeholder="your@email.com"
+                    className="mt-2 bg-zinc-900/50 border-zinc-700 text-white h-12 rounded-xl focus:border-gold/50 focus:ring-gold/20"
+                  />
+                </div>
+                <div>
+                  <Label className="text-zinc-300 text-sm font-medium">Phone *</Label>
+                  <Input
+                    type="tel"
+                    value={form.phone}
+                    onChange={(e) => setForm((p) => ({ ...p, phone: e.target.value }))}
+                    placeholder="+971 50 123 4567"
+                    className="mt-2 bg-zinc-900/50 border-zinc-700 text-white h-12 rounded-xl focus:border-gold/50 focus:ring-gold/20"
+                  />
+                </div>
+              </div>
+
+              <div className="grid sm:grid-cols-2 gap-4">
+                <div>
+                  <Label className="text-zinc-300 text-sm font-medium">Nationality *</Label>
                   <Select
                     value={form.nationality}
                     onValueChange={(v) => setForm((p) => ({ ...p, nationality: v }))}
                   >
-                    <SelectTrigger className="mt-2 bg-zinc-900 border-zinc-700 text-white h-12">
-                      <SelectValue placeholder="Select" />
+                    <SelectTrigger className="mt-2 bg-zinc-900/50 border-zinc-700 text-white h-12 rounded-xl">
+                      <SelectValue placeholder="Select nationality" />
                     </SelectTrigger>
                     <SelectContent className="bg-zinc-900 border-zinc-700 max-h-72">
                       {countries.map((c) => (
@@ -250,13 +481,13 @@ const MarketReport = () => {
                 </div>
 
                 <div>
-                  <Label className="text-zinc-300">Language *</Label>
+                  <Label className="text-zinc-300 text-sm font-medium">Preferred Language *</Label>
                   <Select
                     value={form.language}
                     onValueChange={(v) => setForm((p) => ({ ...p, language: v }))}
                   >
-                    <SelectTrigger className="mt-2 bg-zinc-900 border-zinc-700 text-white h-12">
-                      <SelectValue placeholder="Select" />
+                    <SelectTrigger className="mt-2 bg-zinc-900/50 border-zinc-700 text-white h-12 rounded-xl">
+                      <SelectValue placeholder="Select language" />
                     </SelectTrigger>
                     <SelectContent className="bg-zinc-900 border-zinc-700 max-h-72">
                       {languages.map((l) => (
@@ -269,47 +500,95 @@ const MarketReport = () => {
                 </div>
               </div>
 
-              <Button
-                onClick={handleSubmit}
-                disabled={!isValid}
-                className="w-full h-12 bg-zinc-50 text-zinc-900 hover:bg-white font-semibold"
-              >
-                <Download className="w-4 h-4 mr-2" />
-                Download Book Now
-                <ArrowUpRight className="w-4 h-4 ml-2" />
-              </Button>
+              <div className="pt-4">
+                <Button
+                  onClick={handleSubmit}
+                  disabled={!isValid}
+                  className="w-full h-14 bg-gradient-to-r from-gold to-gold-dark hover:from-gold-light hover:to-gold text-black font-semibold text-base rounded-xl transition-all duration-300 disabled:opacity-40 disabled:cursor-not-allowed"
+                >
+                  {downloaded ? (
+                    <>
+                      <CheckCircle className="w-5 h-5 mr-2" />
+                      Downloaded Successfully
+                    </>
+                  ) : (
+                    <>
+                      <Download className="w-5 h-5 mr-2" />
+                      Download Book Now
+                      <ArrowUpRight className="w-5 h-5 ml-2" />
+                    </>
+                  )}
+                </Button>
+              </div>
 
-              <p className="text-zinc-600 text-xs leading-relaxed">
-                By downloading, you agree your details may be used to contact you about UAE real estate opportunities. For privacy, see the site policies.
+              <p className="text-zinc-600 text-xs leading-relaxed text-center">
+                By downloading, you agree your details may be used to contact you about UAE real estate opportunities.
               </p>
             </div>
-          </section>
+          </motion.section>
 
-          <aside className="bg-zinc-950 border border-zinc-800 rounded-2xl p-8">
-            <h2 className="text-white text-xl font-semibold">What you’ll receive</h2>
-            <ul className="mt-4 space-y-3 text-zinc-400">
-              <li>• A structured market overview (educational)</li>
-              <li>• Developer and community comparison frameworks</li>
-              <li>• A due diligence checklist for investors</li>
-              <li>
-                • Complimentary access to the AI Home Finder (exclusive by JJ Global Capital)
-              </li>
-            </ul>
-            <div className="mt-8 p-5 rounded-xl bg-zinc-900/60 border border-zinc-800">
-              <p className="text-zinc-300 text-sm">
-                Powered by <span className="text-white font-semibold">JJ Global Capital</span> — Part of{" "}
+          {/* Sidebar */}
+          <motion.aside 
+            initial={{ opacity: 0, x: 20 }}
+            animate={{ opacity: 1, x: 0 }}
+            transition={{ duration: 0.6, delay: 0.3 }}
+            className="lg:col-span-2 space-y-6"
+          >
+            {/* What You'll Receive */}
+            <div className="bg-gradient-to-br from-zinc-900/80 to-zinc-950 border border-zinc-800 rounded-3xl p-8">
+              <h2 className="text-white text-xl font-bold mb-6">What You'll Receive</h2>
+              <ul className="space-y-4">
+                {[
+                  "Structured market overview (educational)",
+                  "Developer & community comparison frameworks",
+                  "Investment due diligence checklist",
+                  "Complimentary AI Home Finder access",
+                  "Expert insights from our founder",
+                ].map((item, i) => (
+                  <li key={i} className="flex items-start gap-3">
+                    <CheckCircle className="w-5 h-5 text-gold flex-shrink-0 mt-0.5" />
+                    <span className="text-zinc-300 text-sm">{item}</span>
+                  </li>
+                ))}
+              </ul>
+            </div>
+
+            {/* Founder Card */}
+            <div className="bg-gradient-to-br from-gold/10 to-zinc-950 border border-gold/20 rounded-3xl p-8">
+              <div className="flex items-center gap-4 mb-4">
+                <img 
+                  src={founderProfessional} 
+                  alt="Jane Abou Jaoude"
+                  className="w-16 h-16 rounded-full object-cover object-top border-2 border-gold/50"
+                />
+                <div>
+                  <h3 className="text-white font-semibold">Jane Abou Jaoude</h3>
+                  <p className="text-gold text-sm">Founder & Chairwoman</p>
+                </div>
+              </div>
+              <p className="text-zinc-400 text-sm leading-relaxed">
+                "This book represents years of experience in UAE real estate, distilled into actionable frameworks for investors."
+              </p>
+            </div>
+
+            {/* Brand Box */}
+            <div className="bg-zinc-900/50 border border-zinc-800 rounded-2xl p-6 text-center">
+              <p className="text-zinc-400 text-sm">
+                Powered by <span className="text-white font-semibold">JJ Global Capital</span>
+              </p>
+              <p className="text-zinc-500 text-xs mt-1">
+                Part of{" "}
                 <a
-                  className="text-white underline"
+                  className="text-gold hover:underline"
                   href={CONTACT_INFO.holdingGroupUrl}
                   target="_blank"
                   rel="noopener noreferrer"
                 >
                   JJ Holding Group
                 </a>
-                .
               </p>
             </div>
-          </aside>
+          </motion.aside>
         </div>
       </main>
 
