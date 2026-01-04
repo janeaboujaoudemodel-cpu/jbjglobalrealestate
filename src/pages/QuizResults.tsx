@@ -435,9 +435,10 @@ Best regards`);
               Request a personalized evaluation from our property consultants with detailed market insights.
             </p>
             <a href={INQUIRY_FORM_URL} target="_blank" rel="noopener noreferrer">
-              <Button className="w-full bg-gradient-to-r from-gold to-gold-dark text-black hover:opacity-90 shadow-lg shadow-gold/20">
+              <Button className="w-full bg-gradient-to-r from-purple-600 to-purple-700 text-white hover:from-purple-500 hover:to-purple-600 shadow-lg shadow-purple-500/20 flex items-center justify-center gap-2">
+                <Users className="w-4 h-4 text-white" />
                 Request Evaluation
-                <ArrowRight className="w-4 h-4 ml-2" />
+                <ArrowRight className="w-4 h-4" />
               </Button>
             </a>
           </div>
@@ -447,7 +448,7 @@ Best regards`);
         <div className="text-center">
           <div className="flex flex-col sm:flex-row items-center justify-center gap-4 mb-6">
             <Link to="/quiz">
-              <Button variant="outline" className="border-purple-500/40 text-white hover:bg-purple-500/10">
+              <Button variant="outline" className="border-purple-400 text-white hover:bg-purple-500/20 font-semibold">
                 <RefreshCw className="w-4 h-4 mr-2" />
                 Retake Quiz
               </Button>
