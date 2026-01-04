@@ -132,14 +132,16 @@ const Properties = () => {
   const { data: developers } = useDevelopers();
   
   const [filters, setFilters] = useState<ExtendedFilterState>(defaultExtendedFilters);
+  const [appliedFilters, setAppliedFilters] = useState<ExtendedFilterState>(defaultExtendedFilters);
   const [sortBy, setSortBy] = useState<string>("newest");
   const [isAdvancedOpen, setIsAdvancedOpen] = useState(false);
   const [isRequestFormOpen, setIsRequestFormOpen] = useState(false);
   
   // Convert extended filters to standard FilterState for useFilteredProjects
+  // Use appliedFilters instead of filters for actual filtering
   const standardFilters: FilterState = {
-    ...filters,
-    currency: filters.currency as FilterState['currency'],
+    ...appliedFilters,
+    currency: appliedFilters.currency as FilterState['currency'],
   };
   
   const filteredProjects = useFilteredProjects(projects, standardFilters);
@@ -165,8 +167,14 @@ const Properties = () => {
     setFilters(prev => ({ ...prev, [key]: value }));
   };
 
+  // Apply filters when search button is clicked
+  const handleSearch = () => {
+    setAppliedFilters({ ...filters });
+  };
+
   const clearFilters = () => {
     setFilters(defaultExtendedFilters);
+    setAppliedFilters(defaultExtendedFilters);
     setSortBy("newest");
   };
 
@@ -386,6 +394,14 @@ const Properties = () => {
                   )}
                 </Button>
               </DialogTrigger>
+
+            {/* SEARCH Button - Manual trigger */}
+            <Button 
+              onClick={handleSearch}
+              className="h-12 px-8 bg-gold text-black hover:bg-gold-light font-semibold rounded-lg"
+            >
+              SEARCH
+            </Button>
               <DialogContent className="max-w-2xl bg-zinc-950 border-zinc-800 text-white p-0">
                 <DialogHeader className="p-6 border-b border-zinc-800">
                   <DialogTitle className="text-xl font-semibold" style={{ fontFamily: "Poppins, sans-serif" }}>
