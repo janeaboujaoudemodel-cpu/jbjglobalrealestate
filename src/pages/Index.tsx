@@ -148,6 +148,28 @@ const Index = () => {
               </a>
             </div>
             
+            {/* Second Row - List Your Property & Concierge */}
+            <div className="flex flex-wrap justify-center gap-3">
+              <a href={CONTACT_INFO.inquiryFormUrl} target="_blank" rel="noopener noreferrer">
+                <Button 
+                  variant="outline"
+                  className="border-white/30 bg-white/5 text-white hover:bg-white/10 hover:border-white/50 px-6 py-5 text-sm backdrop-blur-sm"
+                >
+                  List Your Property
+                  <ArrowUpRight className="w-4 h-4 ml-2" />
+                </Button>
+              </a>
+              <Link to="/concierge">
+                <Button 
+                  variant="outline"
+                  className="border-gold/30 bg-gold/5 text-gold hover:bg-gold/10 hover:border-gold/50 px-6 py-5 text-sm backdrop-blur-sm"
+                >
+                  Luxury Concierge
+                  <Sparkles className="w-4 h-4 ml-2" />
+                </Button>
+              </Link>
+            </div>
+            
             {/* AI Home Finder CTA */}
             <Link to="/quiz">
               <div className="flex items-center gap-3 bg-gradient-to-r from-purple-700 to-purple-900 hover:from-purple-600 hover:to-purple-800 border border-purple-500/40 rounded-xl px-6 py-3 transition-all shadow-lg shadow-purple-500/20 group">
