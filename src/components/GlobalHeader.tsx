@@ -22,35 +22,7 @@ import {
   SheetTrigger,
 } from "@/components/ui/sheet";
 import { ScrollArea } from "@/components/ui/scroll-area";
-
-const INQUIRY_FORM_URL = "https://jjglobalcapital.com/form/property-investment-inquiry-form/";
-
-// Premium Logo Component — centered stroke, GLOBAL • CAPITAL split, improved readability
-const JJLogo = ({ className = "" }: { className?: string }) => (
-  <span
-    className={`tracking-wide flex items-center ${className}`}
-    style={{ fontFamily: "Poppins, sans-serif" }}
-  >
-    <span className="text-[#A8925A] font-extralight text-2xl md:text-3xl leading-none">J</span>
-    <span
-      className="text-white/95 mx-2 font-thin text-3xl md:text-4xl leading-none"
-      style={{ transform: "scaleY(1.4)" }}
-    >
-      |
-    </span>
-    <span className="text-[#A8925A] font-extralight text-2xl md:text-3xl leading-none">J</span>
-
-    <span className="ml-3 flex items-center text-white">
-      <span className="font-semibold text-xs sm:text-sm md:text-base tracking-[0.25em]">
-        GLOBAL
-      </span>
-      <span className="mx-2 w-1.5 h-1.5 rounded-full bg-white/80" />
-      <span className="font-semibold text-xs sm:text-sm md:text-base tracking-[0.25em]">
-        CAPITAL
-      </span>
-    </span>
-  </span>
-);
+import { JJLogoHeader } from "@/components/JJLogo";
 
 const GlobalHeader = () => {
   const { user, isAdmin, signOut } = useAuth();
@@ -94,7 +66,7 @@ const GlobalHeader = () => {
         <div className="flex items-center justify-between h-16">
           {/* Logo */}
           <Link to="/" className="flex items-center">
-            <JJLogo className="text-lg md:text-xl" />
+            <JJLogoHeader />
           </Link>
 
           {/* Desktop Navigation */}
@@ -179,7 +151,7 @@ const GlobalHeader = () => {
               <SheetContent side="right" className="bg-black/95 backdrop-blur-xl border-zinc-800/50 w-[300px] p-0 flex flex-col h-full">
                 {/* Menu Header with glassmorphism */}
                 <div className="relative h-28 bg-gradient-to-b from-zinc-900/80 to-black/90 border-b border-[#A8925A]/20 flex items-end p-5 shrink-0 backdrop-blur-sm">
-                  <JJLogo className="text-lg" />
+                  <JJLogoHeader />
                 </div>
                 
                 {/* Scrollable Navigation */}

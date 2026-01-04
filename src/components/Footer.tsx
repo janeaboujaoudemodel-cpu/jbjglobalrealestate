@@ -9,46 +9,12 @@ import {
   ExternalLink,
 } from "lucide-react";
 import { CONTACT_INFO, getWhatsAppUrl, getCallUrl, getEmailUrl } from "@/constants/stats";
+import { JJLogo } from "@/components/JJLogo";
 import {
   Collapsible,
   CollapsibleContent,
   CollapsibleTrigger,
 } from "@/components/ui/collapsible";
-
-// Premium centered logo (text-based fallback). Replace with provided image asset when available.
-const JJLogoLarge = () => (
-  <div className="flex flex-col items-center">
-    <div className="flex items-center justify-center">
-      <span
-        className="text-gold font-extralight text-7xl md:text-8xl lg:text-9xl"
-        style={{ fontFamily: "Poppins, sans-serif" }}
-      >
-        J
-      </span>
-      <span
-        className="text-white/90 mx-3 md:mx-4 font-thin text-8xl md:text-9xl lg:text-[10rem] leading-none"
-        style={{ transform: "scaleY(1.58)" }}
-      >
-        |
-      </span>
-      <span
-        className="text-gold font-extralight text-7xl md:text-8xl lg:text-9xl"
-        style={{ fontFamily: "Poppins, sans-serif" }}
-      >
-        J
-      </span>
-    </div>
-
-    <div
-      className="mt-5 flex items-center justify-center gap-3 text-white"
-      style={{ fontFamily: "Poppins, sans-serif" }}
-    >
-      <span className="font-medium text-base md:text-lg tracking-[0.35em]">GLOBAL</span>
-      <span className="w-1.5 h-1.5 rounded-full bg-white/70" />
-      <span className="font-medium text-base md:text-lg tracking-[0.35em]">CAPITAL</span>
-    </div>
-  </div>
-);
 
 const DivisionAccordion = ({
   title,
@@ -121,7 +87,7 @@ const Footer = () => {
         {/* Logo + Description (compact) */}
         <div className="text-center mb-6">
           <Link to="/" className="inline-block">
-            <JJLogoLarge />
+            <JJLogo size="lg" />
           </Link>
           <p className="text-zinc-400 text-sm md:text-base mt-4 max-w-2xl mx-auto leading-relaxed">
             A founder-led advisory group specializing in UAE and Dubai real estate,
