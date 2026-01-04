@@ -5,7 +5,7 @@ import { supabase } from "@/integrations/supabase/client";
 import { useAuth } from "@/contexts/AuthContext";
 import { 
   ChevronRight, ChevronLeft, Clock, Sparkles, Loader2, CheckCircle2,
-  Wand2, ArrowRight
+  Wand2, ArrowUpRight
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Progress } from "@/components/ui/progress";
@@ -18,6 +18,8 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
+
+const JJ_HOLDING_URL = "https://jjholdinggroup.com";
 
 const QUIZ_QUESTIONS = [
   {
@@ -159,7 +161,6 @@ const Quiz = () => {
   });
 
   const currentQuestion = QUIZ_QUESTIONS[currentStep];
-  // Progress starts at 0 and fills as questions are answered
   const progress = (currentStep / QUIZ_QUESTIONS.length) * 100;
 
   const handleSelectAll = () => {
@@ -216,7 +217,6 @@ const Quiz = () => {
     if (currentStep < QUIZ_QUESTIONS.length - 1) {
       setCurrentStep(currentStep + 1);
     } else {
-      // Show the form after completing all questions
       setShowForm(true);
     }
   };
@@ -224,18 +224,15 @@ const Quiz = () => {
   const getRecommendations = () => {
     if (!allProjects?.length) return [];
 
-    // First, filter projects that match HARD requirements (budget, bedrooms, AND emirate)
     const filteredProjects = allProjects.filter((project) => {
       const priceFrom = project.price_from || 0;
       const budget = answers.budget;
       
-      // STRICT budget filtering - must match selected range
       if (budget === "under-2m" && priceFrom >= 2000000) return false;
       if (budget === "2m-5m" && (priceFrom < 2000000 || priceFrom >= 5000000)) return false;
       if (budget === "5m-15m" && (priceFrom < 5000000 || priceFrom >= 15000000)) return false;
       if (budget === "15m-plus" && priceFrom < 15000000) return false;
 
-      // STRICT bedroom filtering
       const bedrooms = answers.bedrooms;
       const minBr = project.bedrooms_min || 0;
       const maxBr = project.bedrooms_max || minBr;
@@ -250,7 +247,6 @@ const Quiz = () => {
         if (maxBr < 6) return false;
       }
 
-      // STRICT emirate filtering - MUST match selected emirate (unless "any")
       const emirate = answers.emirate;
       const projectEmirate = project.emirate?.toLowerCase().trim() || "";
       
@@ -264,7 +260,6 @@ const Quiz = () => {
       return true;
     });
 
-    // Then score the filtered projects by preferences
     return filteredProjects
       .map((project) => {
         let score = 100;
@@ -307,7 +302,6 @@ const Quiz = () => {
       const recommendations = getRecommendations();
       const sessionId = `quiz-${Date.now()}`;
 
-      // Save to database
       await supabase.from("quiz_responses").insert({
         user_id: user?.id || null,
         session_id: sessionId,
@@ -358,12 +352,12 @@ const Quiz = () => {
           <div className="w-full max-w-2xl text-center">
             {/* Exclusive Badge */}
             <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-gradient-to-r from-purple-600/30 to-purple-800/30 border border-purple-500/40 mb-8">
-              <Sparkles className="w-4 h-4 text-purple-300" />
-              <span className="text-purple-200 text-sm font-medium">#1 AI Property Matcher in the World</span>
+              <Sparkles className="w-4 h-4 text-white" />
+              <span className="text-white text-sm font-medium">Exclusive by JJ Global Capital</span>
             </div>
 
-            <div className="w-20 h-20 rounded-full bg-gradient-to-br from-gold via-gold-dark to-gold mx-auto mb-8 flex items-center justify-center shadow-2xl shadow-gold/30">
-              <Wand2 className="w-10 h-10 text-black" />
+            <div className="w-20 h-20 rounded-full bg-gradient-to-br from-purple-500 via-purple-600 to-purple-800 mx-auto mb-8 flex items-center justify-center shadow-2xl shadow-purple-500/30">
+              <Wand2 className="w-10 h-10 text-white" />
             </div>
 
             <h1 className="text-white text-4xl md:text-5xl font-bold mb-4" style={{ fontFamily: "Poppins, sans-serif" }}>
@@ -376,29 +370,40 @@ const Quiz = () => {
 
             <div className="flex flex-wrap items-center justify-center gap-6 text-sm text-zinc-400 mb-10">
               <div className="flex items-center gap-2">
-                <CheckCircle2 className="w-4 h-4 text-gold" />
-                <span>100% Free</span>
+                <div className="w-5 h-5 rounded-full bg-purple-600/30 flex items-center justify-center">
+                  <CheckCircle2 className="w-3 h-3 text-white" />
+                </div>
+                <span className="text-white">100% Free</span>
               </div>
               <div className="flex items-center gap-2">
-                <Clock className="w-4 h-4 text-gold" />
-                <span>Less than 30 seconds</span>
+                <div className="w-5 h-5 rounded-full bg-purple-600/30 flex items-center justify-center">
+                  <Clock className="w-3 h-3 text-white" />
+                </div>
+                <span className="text-white">Less than 30 seconds</span>
               </div>
               <div className="flex items-center gap-2">
-                <Sparkles className="w-4 h-4 text-gold" />
-                <span>AI-Powered</span>
+                <div className="w-5 h-5 rounded-full bg-purple-600/30 flex items-center justify-center">
+                  <Sparkles className="w-3 h-3 text-white" />
+                </div>
+                <span className="text-white">AI-Powered</span>
               </div>
             </div>
 
             <Button
               onClick={() => setStarted(true)}
-              className="bg-gradient-to-r from-gold to-gold-dark text-black font-semibold px-10 py-6 text-lg hover:opacity-90 shadow-lg shadow-gold/30 transition-all hover:shadow-xl hover:shadow-gold/40"
+              className="bg-gradient-to-r from-purple-600 to-purple-800 text-white font-semibold px-10 py-6 text-lg hover:from-purple-500 hover:to-purple-700 shadow-lg shadow-purple-500/30 transition-all hover:shadow-xl hover:shadow-purple-500/40"
             >
               Start Your Free Assessment
-              <ArrowRight className="w-5 h-5 ml-2" />
+              <ArrowUpRight className="w-5 h-5 ml-2" />
             </Button>
 
-            <p className="text-zinc-500 text-xs mt-8">
-              Exclusive service by JJ Global Capital — The only agency offering AI-powered property matching worldwide
+            <p className="text-purple-300/80 text-xs mt-8">
+              Powered & Made by{" "}
+              <span className="text-white font-medium">JJ Global Capital</span>
+              {" "}• Part of{" "}
+              <a href={JJ_HOLDING_URL} target="_blank" rel="noopener noreferrer" className="text-white hover:underline">
+                JJ Holding Group
+              </a>
             </p>
           </div>
         </div>
@@ -452,7 +457,7 @@ const Quiz = () => {
                   placeholder="Your full name"
                   value={formData.fullName}
                   onChange={(e) => setFormData({ ...formData, fullName: e.target.value })}
-                  className="mt-1.5 bg-zinc-800 border-zinc-700 text-white h-12"
+                  className="mt-1.5 bg-zinc-800 border-zinc-700 text-white h-12 focus:border-purple-500"
                 />
               </div>
 
@@ -464,7 +469,7 @@ const Quiz = () => {
                   placeholder="your.email@example.com"
                   value={formData.email}
                   onChange={(e) => setFormData({ ...formData, email: e.target.value })}
-                  className="mt-1.5 bg-zinc-800 border-zinc-700 text-white h-12"
+                  className="mt-1.5 bg-zinc-800 border-zinc-700 text-white h-12 focus:border-purple-500"
                 />
               </div>
 
@@ -476,7 +481,7 @@ const Quiz = () => {
                   placeholder="+971..."
                   value={formData.phone}
                   onChange={(e) => setFormData({ ...formData, phone: e.target.value })}
-                  className="mt-1.5 bg-zinc-800 border-zinc-700 text-white h-12"
+                  className="mt-1.5 bg-zinc-800 border-zinc-700 text-white h-12 focus:border-purple-500"
                 />
               </div>
 
@@ -486,7 +491,7 @@ const Quiz = () => {
                   value={formData.nationality}
                   onValueChange={(val) => setFormData({ ...formData, nationality: val })}
                 >
-                  <SelectTrigger className="mt-1.5 bg-zinc-800 border-zinc-700 text-white h-12">
+                  <SelectTrigger className="mt-1.5 bg-zinc-800 border-zinc-700 text-white h-12 focus:border-purple-500">
                     <SelectValue placeholder="Select your nationality" />
                   </SelectTrigger>
                   <SelectContent className="bg-zinc-800 border-zinc-700">
@@ -505,7 +510,7 @@ const Quiz = () => {
                   value={formData.preferredLanguage}
                   onValueChange={(val) => setFormData({ ...formData, preferredLanguage: val })}
                 >
-                  <SelectTrigger className="mt-1.5 bg-zinc-800 border-zinc-700 text-white h-12">
+                  <SelectTrigger className="mt-1.5 bg-zinc-800 border-zinc-700 text-white h-12 focus:border-purple-500">
                     <SelectValue placeholder="Select your preferred language" />
                   </SelectTrigger>
                   <SelectContent className="bg-zinc-800 border-zinc-700">
@@ -521,7 +526,7 @@ const Quiz = () => {
               <Button
                 onClick={handleSubmitForm}
                 disabled={!isFormValid() || isSubmitting}
-                className="w-full bg-gradient-to-r from-gold to-gold-dark text-black font-semibold h-14 text-lg hover:opacity-90 shadow-lg shadow-gold/30 mt-4 transition-all hover:shadow-xl hover:shadow-gold/40"
+                className="w-full bg-gradient-to-r from-purple-600 to-purple-800 text-white font-semibold h-14 text-lg hover:from-purple-500 hover:to-purple-700 shadow-lg shadow-purple-500/30 mt-4 transition-all hover:shadow-xl hover:shadow-purple-500/40"
               >
                 {isSubmitting ? (
                   <>
@@ -541,10 +546,14 @@ const Quiz = () => {
               </p>
             </div>
 
-            <div className="flex items-center justify-center gap-2 mt-6 text-purple-300 text-sm">
-              <Sparkles className="w-4 h-4" />
-              <span>Exclusive AI service — Free for a limited time</span>
-            </div>
+            <p className="text-purple-300/80 text-xs text-center mt-6">
+              Powered & Made by{" "}
+              <span className="text-white font-medium">JJ Global Capital</span>
+              {" "}• Part of{" "}
+              <a href={JJ_HOLDING_URL} target="_blank" rel="noopener noreferrer" className="text-white hover:underline">
+                JJ Holding Group
+              </a>
+            </p>
           </div>
         </div>
       </section>
@@ -658,7 +667,7 @@ const Quiz = () => {
             <Button
               onClick={handleNext}
               disabled={!isAnswered()}
-              className="bg-gradient-to-r from-gold to-gold-dark text-black font-semibold px-8 shadow-lg shadow-gold/30 hover:opacity-90"
+              className="bg-gradient-to-r from-purple-600 to-purple-800 text-white font-semibold px-8 shadow-lg shadow-purple-500/30 hover:from-purple-500 hover:to-purple-700"
             >
               {currentStep === QUIZ_QUESTIONS.length - 1 ? (
                 <>

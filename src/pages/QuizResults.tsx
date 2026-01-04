@@ -23,6 +23,7 @@ import {
 } from "@/components/ui/dropdown-menu";
 
 const INQUIRY_FORM_URL = "https://jjglobalcapital.com/form/property-investment-inquiry-form/";
+const JJ_HOLDING_URL = "https://jjholdinggroup.com";
 
 const QuizResults = () => {
   const [searchParams] = useSearchParams();
@@ -47,7 +48,6 @@ const QuizResults = () => {
 
       if (error) throw error;
       
-      // Sort by original order
       return data.sort((a, b) => {
         return projectSlugs.indexOf(a.slug) - projectSlugs.indexOf(b.slug);
       });
@@ -60,15 +60,14 @@ const QuizResults = () => {
   };
 
   const badgeLabels = {
-    top1: { label: "🥇 Top 1", color: "bg-gradient-to-r from-yellow-400 via-yellow-500 to-amber-500 shadow-lg shadow-yellow-500/30", textColor: "text-black", emoji: "🥇" },
-    top2: { label: "🥈 Top 2", color: "bg-gradient-to-r from-zinc-300 via-slate-400 to-zinc-400 shadow-lg shadow-zinc-400/30", textColor: "text-black", emoji: "🥈" },
-    top3: { label: "🥉 Top 3", color: "bg-gradient-to-r from-amber-600 via-orange-600 to-amber-700 shadow-lg shadow-amber-600/30", textColor: "text-white", emoji: "🥉" },
+    top1: { label: "Top 1", sublabel: "Gold", color: "bg-gradient-to-r from-yellow-400 via-yellow-500 to-amber-500 shadow-lg shadow-yellow-500/30", textColor: "text-white", medalColor: "text-yellow-400" },
+    top2: { label: "Top 2", sublabel: "Silver", color: "bg-gradient-to-r from-zinc-300 via-slate-400 to-zinc-400 shadow-lg shadow-zinc-400/30", textColor: "text-white", medalColor: "text-zinc-300" },
+    top3: { label: "Top 3", sublabel: "Bronze", color: "bg-gradient-to-r from-amber-600 via-orange-600 to-amber-700 shadow-lg shadow-amber-600/30", textColor: "text-white", medalColor: "text-amber-500" },
   };
 
   const handleDownloadReport = () => {
     if (!projects?.length) return;
 
-    // Create HTML report
     const reportHTML = `
 <!DOCTYPE html>
 <html>
@@ -77,7 +76,7 @@ const QuizResults = () => {
   <title>JJ Global Capital - AI Property Recommendations</title>
   <style>
     body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; margin: 0; padding: 40px; background: #0a0a0a; color: #fff; }
-    .header { text-align: center; margin-bottom: 40px; border-bottom: 2px solid #A8925A; padding-bottom: 30px; }
+    .header { text-align: center; margin-bottom: 40px; border-bottom: 2px solid #9333ea; padding-bottom: 30px; }
     .logo { font-size: 24px; font-weight: bold; margin-bottom: 10px; }
     .logo span { color: #A8925A; }
     .title { font-size: 32px; margin: 20px 0 10px; }
@@ -86,18 +85,18 @@ const QuizResults = () => {
     .badge-gold { background: linear-gradient(to right, #fbbf24, #d97706); color: #000; }
     .badge-silver { background: linear-gradient(to right, #d1d5db, #9ca3af); color: #000; }
     .badge-bronze { background: linear-gradient(to right, #d97706, #b45309); color: #fff; }
-    .project { background: #18181b; border-radius: 16px; padding: 24px; margin-bottom: 24px; border: 1px solid #27272a; }
+    .project { background: #18181b; border-radius: 16px; padding: 24px; margin-bottom: 24px; border: 1px solid #581c87; }
     .project-header { display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 16px; }
     .project-name { font-size: 20px; font-weight: bold; margin-bottom: 4px; }
-    .developer { color: #A8925A; font-size: 14px; }
-    .rank { font-size: 28px; font-weight: bold; color: #A8925A; }
+    .developer { color: #9333ea; font-size: 14px; }
+    .rank { font-size: 28px; font-weight: bold; color: #9333ea; }
     .details { display: grid; grid-template-columns: repeat(3, 1fr); gap: 16px; margin-top: 16px; }
     .detail-item { background: #27272a; padding: 12px; border-radius: 8px; }
     .detail-label { color: #71717a; font-size: 12px; margin-bottom: 4px; }
     .detail-value { font-size: 14px; font-weight: 500; }
     .footer { text-align: center; margin-top: 40px; padding-top: 30px; border-top: 1px solid #27272a; color: #71717a; }
-    .exclusive { background: linear-gradient(to right, rgba(168,146,90,0.2), rgba(168,146,90,0.1)); border: 1px solid rgba(168,146,90,0.3); padding: 12px 20px; border-radius: 8px; text-align: center; margin-bottom: 30px; }
-    .exclusive span { color: #A8925A; }
+    .exclusive { background: linear-gradient(to right, rgba(147,51,234,0.2), rgba(147,51,234,0.1)); border: 1px solid rgba(147,51,234,0.3); padding: 12px 20px; border-radius: 8px; text-align: center; margin-bottom: 30px; }
+    .exclusive span { color: #9333ea; }
   </style>
 </head>
 <body>
@@ -108,7 +107,7 @@ const QuizResults = () => {
   </div>
 
   <div class="exclusive">
-    <span>★</span> Exclusive AI-Powered Property Matching — #1 in the World <span>★</span>
+    <span>★</span> #1 AI Property Matchmaker — Exclusive by JJ Global Capital <span>★</span>
   </div>
 
   ${projects.map((project, index) => {
@@ -117,7 +116,7 @@ const QuizResults = () => {
     <div class="project">
       <div class="project-header">
         <div>
-          ${badge ? `<span class="badge badge-${badge === 'top1' ? 'gold' : badge === 'top2' ? 'silver' : 'bronze'}">${badgeLabels[badge].emoji} ${badgeLabels[badge].label}</span>` : ''}
+          ${badge ? `<span class="badge badge-${badge === 'top1' ? 'gold' : badge === 'top2' ? 'silver' : 'bronze'}">${badgeLabels[badge].label} (${badgeLabels[badge].sublabel})</span>` : ''}
           <h2 class="project-name">${project.name}</h2>
           <p class="developer">${project.developer?.name || 'Developer'}</p>
         </div>
@@ -149,13 +148,13 @@ const QuizResults = () => {
           <div class="detail-value">${project.payment_plan || 'Contact Us'}</div>
         </div>
       </div>
-      ${project.developer?.description ? `<p style="color: #a1a1aa; font-size: 13px; margin-top: 16px; line-height: 1.6;">${project.developer.description.substring(0, 200)}...</p>` : ''}
     </div>
     `;
   }).join('')}
 
   <div class="footer">
     <p>Generated by JJ Global Capital AI Property Matcher</p>
+    <p>Powered & Made by JJ Global Capital — Part of JJ Holding Group</p>
     <p>Contact: invest@jjglobalcapital.com | www.jjglobalcapital.com</p>
   </div>
 </body>
@@ -179,7 +178,7 @@ const QuizResults = () => {
 
     const projectList = projects.map((p, i) => {
       const badge = badges[p.id];
-      const badgeStr = badge ? ` [${badgeLabels[badge].emoji} ${badgeLabels[badge].label}]` : '';
+      const badgeStr = badge ? ` [${badgeLabels[badge].label} - ${badgeLabels[badge].sublabel}]` : '';
       return `${i + 1}. ${p.name}${badgeStr}
    Developer: ${p.developer?.name || 'N/A'}
    Location: ${p.location}, ${p.emirate}
@@ -221,8 +220,8 @@ Best regards`);
         {/* Header */}
         <div className="text-center mb-12">
           <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-gradient-to-r from-purple-600/30 to-purple-800/30 border border-purple-500/40 mb-6">
-            <Sparkles className="w-4 h-4 text-purple-300" />
-            <span className="text-purple-200 text-sm font-medium">#1 AI Property Matchmaker — Exclusive by JJ Global Capital</span>
+            <Sparkles className="w-4 h-4 text-white" />
+            <span className="text-white text-sm font-medium">#1 AI Property Matchmaker — Exclusive by JJ Global Capital</span>
           </div>
           
           <h1 className="text-white text-4xl md:text-5xl font-bold mb-4" style={{ fontFamily: "Poppins, sans-serif" }}>
@@ -237,14 +236,14 @@ Best regards`);
             <Button
               onClick={handleDownloadReport}
               variant="outline"
-              className="border-gold/50 text-gold hover:bg-gold/10"
+              className="border-purple-500/50 text-white hover:bg-purple-500/10"
             >
               <Download className="w-4 h-4 mr-2" />
               Download Report
             </Button>
             <Button
               onClick={() => setShareModalOpen(true)}
-              className="bg-gradient-to-r from-gold to-gold-dark text-black hover:opacity-90"
+              className="bg-gradient-to-r from-purple-600 to-purple-800 text-white hover:from-purple-500 hover:to-purple-700"
             >
               <Share2 className="w-4 h-4 mr-2" />
               Share with Consultant
@@ -257,11 +256,11 @@ Best regards`);
           <div className="mb-12">
             <div className="relative bg-gradient-to-br from-purple-950/80 via-zinc-900 to-zinc-950 rounded-3xl overflow-hidden border border-purple-900/30">
               <div className="absolute top-4 left-4 z-10 flex items-center gap-2">
-                <div className="bg-gradient-to-r from-gold to-gold-dark text-black text-sm font-semibold px-4 py-1.5 rounded-full">
+                <div className="bg-gradient-to-r from-purple-600 to-purple-800 text-white text-sm font-semibold px-4 py-1.5 rounded-full">
                   #1 Best Match
                 </div>
                 {badges[projects[0].id] && (
-                  <Badge className={`${badgeLabels[badges[projects[0].id]!].color} text-white font-semibold px-3 py-1`}>
+                  <Badge className={`${badgeLabels[badges[projects[0].id]!].color} ${badgeLabels[badges[projects[0].id]!].textColor} font-semibold px-3 py-1`}>
                     <Award className="w-3 h-3 mr-1" />
                     {badgeLabels[badges[projects[0].id]!].label}
                   </Badge>
@@ -304,23 +303,23 @@ Best regards`);
                   <div className="flex items-center gap-3 mb-6">
                     <DropdownMenu>
                       <DropdownMenuTrigger asChild>
-                        <Button variant="outline" size="sm" className="border-zinc-700 text-zinc-400 hover:bg-zinc-800">
+                        <Button variant="outline" size="sm" className="border-purple-500/40 text-white hover:bg-purple-500/10">
                           <Award className="w-4 h-4 mr-2" />
                           {badges[projects[0].id] ? 'Change Badge' : 'Add Badge'}
                         </Button>
                       </DropdownMenuTrigger>
-                      <DropdownMenuContent className="bg-zinc-900 border-zinc-800">
-                        <DropdownMenuItem onClick={() => handleSetBadge(projects[0].id, 'top1')} className="text-yellow-400 hover:bg-zinc-800">
-                          🥇 Top 1 (Gold)
+                      <DropdownMenuContent className="bg-zinc-900 border-purple-900/30">
+                        <DropdownMenuItem onClick={() => handleSetBadge(projects[0].id, 'top1')} className="text-yellow-400 hover:bg-purple-900/30">
+                          🥇 Top 1 — Gold
                         </DropdownMenuItem>
-                        <DropdownMenuItem onClick={() => handleSetBadge(projects[0].id, 'top2')} className="text-gray-300 hover:bg-zinc-800">
-                          🥈 Top 2 (Silver)
+                        <DropdownMenuItem onClick={() => handleSetBadge(projects[0].id, 'top2')} className="text-gray-300 hover:bg-purple-900/30">
+                          🥈 Top 2 — Silver
                         </DropdownMenuItem>
-                        <DropdownMenuItem onClick={() => handleSetBadge(projects[0].id, 'top3')} className="text-amber-500 hover:bg-zinc-800">
-                          🥉 Top 3 (Bronze)
+                        <DropdownMenuItem onClick={() => handleSetBadge(projects[0].id, 'top3')} className="text-amber-500 hover:bg-purple-900/30">
+                          🥉 Top 3 — Bronze
                         </DropdownMenuItem>
                         {badges[projects[0].id] && (
-                          <DropdownMenuItem onClick={() => handleSetBadge(projects[0].id, null)} className="text-zinc-400 hover:bg-zinc-800">
+                          <DropdownMenuItem onClick={() => handleSetBadge(projects[0].id, null)} className="text-zinc-400 hover:bg-purple-900/30">
                             <X className="w-4 h-4 mr-2" /> Remove Badge
                           </DropdownMenuItem>
                         )}
@@ -349,13 +348,13 @@ Best regards`);
                 const badge = badges[project.id];
                 return (
                   <div key={project.id} className="relative group">
-                    <div className="absolute -top-2 -left-2 z-10 w-8 h-8 bg-zinc-800 rounded-full flex items-center justify-center border border-zinc-700">
+                    <div className="absolute -top-2 -left-2 z-10 w-8 h-8 bg-purple-900 rounded-full flex items-center justify-center border border-purple-700">
                       <span className="text-white text-sm font-bold">#{index + 2}</span>
                     </div>
                     {badge && (
                       <div className="absolute top-2 left-8 z-10">
-                        <Badge className={`${badgeLabels[badge].color} text-white font-semibold px-2 py-0.5 text-xs`}>
-                          {badgeLabels[badge].emoji}
+                        <Badge className={`${badgeLabels[badge].color} ${badgeLabels[badge].textColor} font-semibold px-2 py-0.5 text-xs`}>
+                          {badgeLabels[badge].label}
                         </Badge>
                       </div>
                     )}
@@ -367,23 +366,23 @@ Best regards`);
                     <div className="mt-2">
                       <DropdownMenu>
                         <DropdownMenuTrigger asChild>
-                          <Button variant="outline" size="sm" className="w-full border-zinc-700 text-zinc-400 hover:bg-zinc-800 text-xs">
+                          <Button variant="outline" size="sm" className="w-full border-purple-500/30 text-white hover:bg-purple-500/10 text-xs">
                             <Award className="w-3 h-3 mr-1" />
                             {badge ? 'Change Badge' : 'Add Badge'}
                           </Button>
                         </DropdownMenuTrigger>
-                        <DropdownMenuContent className="bg-zinc-900 border-zinc-800">
-                          <DropdownMenuItem onClick={() => handleSetBadge(project.id, 'top1')} className="text-yellow-400 hover:bg-zinc-800">
-                            🥇 Top 1
+                        <DropdownMenuContent className="bg-zinc-900 border-purple-900/30">
+                          <DropdownMenuItem onClick={() => handleSetBadge(project.id, 'top1')} className="text-yellow-400 hover:bg-purple-900/30">
+                            🥇 Top 1 — Gold
                           </DropdownMenuItem>
-                          <DropdownMenuItem onClick={() => handleSetBadge(project.id, 'top2')} className="text-gray-300 hover:bg-zinc-800">
-                            🥈 Top 2
+                          <DropdownMenuItem onClick={() => handleSetBadge(project.id, 'top2')} className="text-gray-300 hover:bg-purple-900/30">
+                            🥈 Top 2 — Silver
                           </DropdownMenuItem>
-                          <DropdownMenuItem onClick={() => handleSetBadge(project.id, 'top3')} className="text-amber-500 hover:bg-zinc-800">
-                            🥉 Top 3
+                          <DropdownMenuItem onClick={() => handleSetBadge(project.id, 'top3')} className="text-amber-500 hover:bg-purple-900/30">
+                            🥉 Top 3 — Bronze
                           </DropdownMenuItem>
                           {badge && (
-                            <DropdownMenuItem onClick={() => handleSetBadge(project.id, null)} className="text-zinc-400 hover:bg-zinc-800">
+                            <DropdownMenuItem onClick={() => handleSetBadge(project.id, null)} className="text-zinc-400 hover:bg-purple-900/30">
                               <X className="w-3 h-3 mr-1" /> Remove
                             </DropdownMenuItem>
                           )}
@@ -446,9 +445,9 @@ Best regards`);
 
         {/* Actions */}
         <div className="text-center">
-          <div className="flex flex-col sm:flex-row items-center justify-center gap-4">
+          <div className="flex flex-col sm:flex-row items-center justify-center gap-4 mb-6">
             <Link to="/quiz">
-              <Button variant="outline" className="border-zinc-700 text-zinc-300 hover:bg-zinc-800">
+              <Button variant="outline" className="border-purple-500/40 text-white hover:bg-purple-500/10">
                 <RefreshCw className="w-4 h-4 mr-2" />
                 Retake Quiz
               </Button>
@@ -460,6 +459,15 @@ Best regards`);
               </Button>
             </Link>
           </div>
+          
+          <p className="text-purple-300/80 text-xs">
+            Powered & Made by{" "}
+            <span className="text-white font-medium">JJ Global Capital</span>
+            {" "}• Part of{" "}
+            <a href={JJ_HOLDING_URL} target="_blank" rel="noopener noreferrer" className="text-white hover:underline">
+              JJ Holding Group
+            </a>
+          </p>
         </div>
       </div>
 
@@ -483,8 +491,12 @@ Best regards`);
                 const badge = badges[p.id];
                 return (
                   <div key={p.id} className="flex items-center gap-2 text-sm py-1">
-                    <span className="text-gold">#{i + 1}</span>
-                    {badge && <span>{badgeLabels[badge].emoji}</span>}
+                    <span className="text-purple-400">#{i + 1}</span>
+                    {badge && (
+                      <span className={badgeLabels[badge].medalColor}>
+                        {badge === 'top1' ? '🥇' : badge === 'top2' ? '🥈' : '🥉'}
+                      </span>
+                    )}
                     <span className="text-white">{p.name}</span>
                   </div>
                 );
@@ -493,10 +505,10 @@ Best regards`);
 
             <Button
               onClick={handleShareToCompany}
-              className="w-full bg-gradient-to-r from-gold to-gold-dark text-black hover:opacity-90"
+              className="w-full bg-gradient-to-r from-purple-600 to-purple-800 text-white hover:from-purple-500 hover:to-purple-700"
             >
               <Mail className="w-4 h-4 mr-2" />
-              Send to invest@jjglobalcapital.com
+              Send to Invest@JJGlobalCapital.com
             </Button>
 
             <p className="text-zinc-500 text-xs text-center">

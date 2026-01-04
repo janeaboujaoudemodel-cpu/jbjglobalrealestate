@@ -1,7 +1,7 @@
 import { Link } from "react-router-dom";
 import type { Project } from "@/hooks/useProjects";
 import FavoriteButton from "./FavoriteButton";
-import { FileText, Download } from "lucide-react";
+import { FileText, Download, Phone, MessageCircle } from "lucide-react";
 import { Button } from "./ui/button";
 
 interface ProjectCardProps {
@@ -16,6 +16,9 @@ const formatPriceWithCommas = (price: number): string => {
   }
   return price.toLocaleString();
 };
+
+const WHATSAPP_NUMBER = "+971565911000";
+const PHONE_NUMBER = "+971565911000";
 
 const ProjectCard = ({ project, showFavorite = true }: ProjectCardProps) => {
   const handleDownloadBrochure = (e: React.MouseEvent) => {
@@ -43,6 +46,21 @@ const ProjectCard = ({ project, showFavorite = true }: ProjectCardProps) => {
       // Redirect to project detail page if no documents
       window.location.href = `/project/${project.slug}`;
     }
+  };
+
+  const handleWhatsApp = (e: React.MouseEvent) => {
+    e.preventDefault();
+    e.stopPropagation();
+    const message = encodeURIComponent(
+      `Hello JJ Global Capital,\n\nI am interested in ${project.name} located in ${project.location || 'UAE'}.\n\nPlease provide more details about this property.\n\nThank you.`
+    );
+    window.open(`https://wa.me/${WHATSAPP_NUMBER.replace(/[^0-9]/g, '')}?text=${message}`, '_blank');
+  };
+
+  const handleCall = (e: React.MouseEvent) => {
+    e.preventDefault();
+    e.stopPropagation();
+    window.location.href = `tel:${PHONE_NUMBER}`;
   };
 
   return (
@@ -93,26 +111,51 @@ const ProjectCard = ({ project, showFavorite = true }: ProjectCardProps) => {
         </div>
       </Link>
 
-      {/* Download Buttons */}
-      <div className="px-4 pb-4 flex flex-col gap-2">
-        <Button
-          variant="outline"
-          size="sm"
-          onClick={handleDownloadBrochure}
-          className="w-full bg-zinc-800/50 border-zinc-700 hover:bg-zinc-700 hover:border-zinc-600 text-zinc-300 hover:text-white text-xs"
-        >
-          <FileText className="w-3.5 h-3.5 mr-2" />
-          Download Brochure
-        </Button>
-        <Button
-          variant="outline"
-          size="sm"
-          onClick={handleDownloadAll}
-          className="w-full bg-zinc-800/50 border-zinc-700 hover:bg-zinc-700 hover:border-zinc-600 text-zinc-300 hover:text-white text-xs"
-        >
-          <Download className="w-3.5 h-3.5 mr-2" />
-          Download All Materials
-        </Button>
+      {/* Action Buttons */}
+      <div className="px-4 pb-4 space-y-2">
+        {/* Download Buttons */}
+        <div className="flex gap-2">
+          <Button
+            variant="outline"
+            size="sm"
+            onClick={handleDownloadBrochure}
+            className="flex-1 bg-zinc-800/50 border-zinc-700 hover:bg-zinc-700 hover:border-zinc-600 text-zinc-300 hover:text-white text-xs"
+          >
+            <FileText className="w-3.5 h-3.5 mr-1.5" />
+            Brochure
+          </Button>
+          <Button
+            variant="outline"
+            size="sm"
+            onClick={handleDownloadAll}
+            className="flex-1 bg-zinc-800/50 border-zinc-700 hover:bg-zinc-700 hover:border-zinc-600 text-zinc-300 hover:text-white text-xs"
+          >
+            <Download className="w-3.5 h-3.5 mr-1.5" />
+            All Materials
+          </Button>
+        </div>
+
+        {/* Contact Buttons */}
+        <div className="flex gap-2">
+          <Button
+            variant="outline"
+            size="sm"
+            onClick={handleWhatsApp}
+            className="flex-1 bg-green-950/30 border-green-800/50 hover:bg-green-900/40 hover:border-green-700 text-green-400 hover:text-green-300 text-xs"
+          >
+            <MessageCircle className="w-3.5 h-3.5 mr-1.5" />
+            WhatsApp
+          </Button>
+          <Button
+            variant="outline"
+            size="sm"
+            onClick={handleCall}
+            className="flex-1 bg-purple-950/30 border-purple-800/50 hover:bg-purple-900/40 hover:border-purple-700 text-purple-400 hover:text-purple-300 text-xs"
+          >
+            <Phone className="w-3.5 h-3.5 mr-1.5" />
+            Call
+          </Button>
+        </div>
       </div>
     </div>
   );
