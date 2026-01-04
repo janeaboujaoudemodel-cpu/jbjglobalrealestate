@@ -243,25 +243,25 @@ const Index = () => {
               </Link>
             </div>
             
-            {/* Fourth Row - Secondary Tools */}
+            {/* Fourth Row - Secondary Tools - Match middle row glass style */}
             <div className="flex flex-wrap justify-center gap-3">
               {/* News & Insights */}
               <Link to="/news">
                 <Button 
-                  className="bg-white/10 backdrop-blur-md border border-gold/30 text-gold hover:bg-gold/20 hover:border-gold/50 hover:shadow-lg hover:shadow-gold/10 font-semibold px-5 py-4 text-xs transition-all duration-300 group"
+                  className="bg-black/40 backdrop-blur-xl border border-white/20 text-white/90 hover:bg-white/10 hover:border-white/40 hover:shadow-lg hover:shadow-white/5 font-medium px-5 py-4 text-xs transition-all duration-300"
                 >
                   News & Insights
-                  <ArrowUpRight className="w-3 h-3 ml-1 group-hover:translate-x-0.5 group-hover:-translate-y-0.5 transition-transform" />
+                  <ArrowUpRight className="w-3 h-3 ml-1" />
                 </Button>
               </Link>
               
               {/* Favorites */}
               <Link to="/favorites">
                 <Button 
-                  className="bg-white/10 backdrop-blur-md border border-gold/30 text-gold hover:bg-gold/20 hover:border-gold/50 hover:shadow-lg hover:shadow-gold/10 font-semibold px-5 py-4 text-xs transition-all duration-300 group"
+                  className="bg-black/40 backdrop-blur-xl border border-white/20 text-white/90 hover:bg-white/10 hover:border-white/40 hover:shadow-lg hover:shadow-white/5 font-medium px-5 py-4 text-xs transition-all duration-300"
                 >
                   Favorites & Shortlist
-                  <ArrowUpRight className="w-3 h-3 ml-1 group-hover:translate-x-0.5 group-hover:-translate-y-0.5 transition-transform" />
+                  <ArrowUpRight className="w-3 h-3 ml-1" />
                 </Button>
               </Link>
             </div>
@@ -388,15 +388,37 @@ const Index = () => {
         </div>
       </section>
 
-      {/* MARKET REPORT CTA */}
-      <section className="py-16 md:py-20 bg-gradient-to-b from-black to-zinc-950">
+      {/* MARKET REPORT CTA - Premium White Frame */}
+      <section className="py-20 md:py-28 bg-black">
         <div className="container mx-auto px-4">
+          <motion.div
+            className="text-center mb-10"
+            initial={{ opacity: 0, y: 20 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+          >
+            <span className="inline-block text-gold text-xs uppercase tracking-[0.3em] mb-4">Exclusive Publication</span>
+            <h2 className="text-white text-3xl md:text-4xl font-bold" style={{ fontFamily: "Poppins, sans-serif" }}>
+              Free Market <span className="text-transparent bg-clip-text bg-gradient-to-r from-gold to-gold-light">Intelligence Book</span>
+            </h2>
+          </motion.div>
           <MarketReportCTA />
         </div>
       </section>
 
+      {/* BLACK SEPARATOR SECTION */}
+      <section className="py-12 md:py-16 bg-gradient-to-b from-black via-zinc-950 to-black">
+        <div className="container mx-auto px-4">
+          <div className="flex items-center justify-center gap-6">
+            <div className="flex-1 h-px bg-gradient-to-r from-transparent via-gold/30 to-transparent" />
+            <Sparkles className="w-5 h-5 text-gold/50" />
+            <div className="flex-1 h-px bg-gradient-to-r from-transparent via-gold/30 to-transparent" />
+          </div>
+        </div>
+      </section>
+
       {/* MORTGAGE CALCULATOR SECTION - Premium White Style */}
-      <section className="py-16 md:py-20 bg-gradient-to-b from-zinc-950 to-black">
+      <section className="py-20 md:py-28 bg-black">
         <div className="container mx-auto px-4">
           <div className="bg-gradient-to-br from-white via-zinc-50 to-white border border-gold/30 rounded-3xl p-8 md:p-12 shadow-2xl relative overflow-hidden">
             {/* Decorative glow elements */}
