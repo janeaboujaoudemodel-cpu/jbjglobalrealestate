@@ -40,40 +40,23 @@ export const useLeadCapture = (): UseLeadCaptureResult => {
     setIsLoading(false);
   }, []);
 
-  // Check if email exists in database
+  // Check if lead exists in localStorage (database queries restricted to admins for security)
   const checkLead = useCallback(async (email: string): Promise<LeadData | null> => {
-    try {
-      const { data, error } = await supabase
-        .from('leads')
-        .select('email, full_name, phone, nationality, language')
-        .ilike('email', email)
-        .maybeSingle();
-
-      if (error) {
-        console.error('Error checking lead:', error);
-        return null;
+    // Check local storage for existing lead data
+    const storedLead = localStorage.getItem(LEAD_STORAGE_KEY);
+    if (storedLead) {
+      try {
+        const parsed = JSON.parse(storedLead);
+        if (parsed.email?.toLowerCase() === email.toLowerCase()) {
+          setLeadData(parsed);
+          setIsLeadCaptured(true);
+          return parsed;
+        }
+      } catch {
+        // Invalid stored data
       }
-
-      if (data) {
-        const lead: LeadData = {
-          email: data.email,
-          fullName: data.full_name || undefined,
-          phone: data.phone || undefined,
-          nationality: data.nationality || undefined,
-          language: data.language || undefined,
-        };
-        // Update local storage
-        localStorage.setItem(LEAD_STORAGE_KEY, JSON.stringify(lead));
-        setLeadData(lead);
-        setIsLeadCaptured(true);
-        return lead;
-      }
-
-      return null;
-    } catch (error) {
-      console.error('Error checking lead:', error);
-      return null;
     }
+    return null;
   }, []);
 
   // Capture new lead
