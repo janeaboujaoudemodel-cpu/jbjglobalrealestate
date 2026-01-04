@@ -60,7 +60,7 @@ const GlobalHeader = () => {
   const propertyShortcuts = [
     { href: "/?status=off-plan", label: "Off-Plan", icon: Building2 },
     { href: "/?status=ready", label: "Ready to Move", icon: ClipboardCheck },
-    { href: "/quiz", label: "Take the Quiz", icon: Sparkles },
+    { href: "/quiz", label: "AI Home Finder", icon: Sparkles },
     { href: "/market-report", label: "Market Report", icon: FileText },
   ];
 

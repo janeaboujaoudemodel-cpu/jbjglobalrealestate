@@ -17,7 +17,6 @@ import Favorites from "./pages/Favorites";
 import Compare from "./pages/Compare";
 import News from "./pages/News";
 import NotFound from "./pages/NotFound";
-import ComparisonBar from "./components/ComparisonBar";
 import WelcomeModal from "./components/WelcomeModal";
 import GlobalHeader from "./components/GlobalHeader";
 
@@ -28,11 +27,15 @@ const AppLayout = ({ children }: { children: React.ReactNode }) => {
   const location = useLocation();
   // Hide header on quiz page for cleaner UX
   const hideHeader = location.pathname === "/quiz";
-  
+
   return (
     <>
       {!hideHeader && <GlobalHeader />}
-      <div className={!hideHeader ? "pt-20 lg:pt-24" : ""}>
+      <div
+        className={`min-h-screen bg-[hsl(var(--premium-bg))] ${
+          !hideHeader ? "pt-20 lg:pt-24" : ""
+        }`}
+      >
         {children}
       </div>
     </>
@@ -65,7 +68,6 @@ const App = () => (
               <Route path="*" element={<NotFound />} />
             </Routes>
           </AppLayout>
-          <ComparisonBar />
         </BrowserRouter>
       </TooltipProvider>
     </AuthProvider>

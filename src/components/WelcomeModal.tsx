@@ -1,5 +1,5 @@
 import { useState, useEffect } from "react";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useLocation } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 import { Dialog, DialogContent } from "@/components/ui/dialog";
 import { User, ArrowRight, Heart, ListPlus, Sparkles, Crown } from "lucide-react";
@@ -11,11 +11,15 @@ const WelcomeModal = () => {
   const [isOpen, setIsOpen] = useState(false);
   const [isReturningUser, setIsReturningUser] = useState(false);
   const navigate = useNavigate();
+  const location = useLocation();
 
   useEffect(() => {
+    // Show this only on the homepage
+    if (location.pathname !== "/") return;
+
     const hasSeenWelcome = localStorage.getItem(WELCOME_MODAL_KEY);
     const isReturning = localStorage.getItem(RETURNING_USER_KEY);
-    
+
     if (hasSeenWelcome) {
       // User has been here before, mark as returning
       if (!isReturning) {
@@ -23,14 +27,14 @@ const WelcomeModal = () => {
       }
       return;
     }
-    
+
     // First-time visitor
     setIsReturningUser(!!isReturning);
     const timer = setTimeout(() => {
       setIsOpen(true);
     }, 500);
     return () => clearTimeout(timer);
-  }, []);
+  }, [location.pathname]);
 
   const handleClose = () => {
     localStorage.setItem(WELCOME_MODAL_KEY, "true");
@@ -48,22 +52,26 @@ const WelcomeModal = () => {
   };
 
   return (
-    <Dialog open={isOpen} onOpenChange={(open) => {
-      if (!open) handleClose();
-      setIsOpen(open);
-    }}>
+    <Dialog
+      open={isOpen}
+      onOpenChange={(open) => {
+        if (!open) handleClose();
+        setIsOpen(open);
+      }}
+    >
       <DialogContent className="bg-black border border-zinc-800 text-white max-w-md p-0 overflow-hidden">
         {/* Premium top gradient glow */}
-        <div 
+        <div
           className="absolute top-0 left-0 right-0 h-32 pointer-events-none"
           style={{
-            background: "radial-gradient(ellipse at 50% 0%, hsl(40 32% 51% / 0.25) 0%, transparent 70%)",
+            background:
+              "radial-gradient(ellipse at 50% 0%, hsl(40 32% 51% / 0.25) 0%, transparent 70%)",
           }}
         />
-        
+
         {/* Gold accent line at top */}
         <div className="absolute top-0 left-0 right-0 h-1 bg-gradient-to-r from-transparent via-gold to-transparent" />
-        
+
         <div className="relative px-8 pt-10 pb-8">
           {/* Premium Icon */}
           <div className="text-center mb-6">
@@ -73,17 +81,21 @@ const WelcomeModal = () => {
               </div>
               {/* Sparkle decorations */}
               <Sparkles className="absolute -top-2 -right-2 w-6 h-6 text-gold animate-pulse" />
-              <Sparkles className="absolute -bottom-1 -left-3 w-4 h-4 text-gold-light animate-pulse" style={{ animationDelay: "0.5s" }} />
+              <Sparkles
+                className="absolute -bottom-1 -left-3 w-4 h-4 text-gold-light animate-pulse"
+                style={{ animationDelay: "0.5s" }}
+              />
             </div>
           </div>
 
           {/* Title and Description */}
           <div className="text-center mb-6">
-            <h2 
+            <h2
               className="text-3xl font-bold mb-3"
-              style={{ 
+              style={{
                 fontFamily: "Poppins, sans-serif",
-                background: "linear-gradient(135deg, #ffffff 0%, hsl(40 32% 51%) 50%, #ffffff 100%)",
+                background:
+                  "linear-gradient(135deg, #ffffff 0%, hsl(40 32% 51%) 50%, #ffffff 100%)",
                 WebkitBackgroundClip: "text",
                 WebkitTextFillColor: "transparent",
                 backgroundClip: "text",
@@ -92,19 +104,14 @@ const WelcomeModal = () => {
               {isReturningUser ? "Welcome Back!" : "Welcome to JJ Global Capital"}
             </h2>
             <p className="text-zinc-400 text-sm leading-relaxed">
-              {isReturningUser 
+              {isReturningUser
                 ? "We're glad you're back. Continue exploring premium properties."
-                : "Your gateway to global real estate investments with expertise in the UAE market"
-              }
+                : "Your gateway to global real estate investments with expertise in the UAE market"}
             </p>
           </div>
 
-          {/* Ornamental divider */}
-          <div className="flex items-center justify-center gap-3 mb-4">
-            <div className="w-12 h-px bg-gradient-to-r from-transparent to-gold/60" />
-            <div className="w-2 h-2 rounded-full bg-gold shadow-lg shadow-gold/50" />
-            <div className="w-12 h-px bg-gradient-to-l from-transparent to-gold/60" />
-          </div>
+          {/* Divider (no dot) */}
+          <div className="h-px bg-gradient-to-r from-transparent via-gold/40 to-transparent mb-6" />
 
           {/* Feature Guide */}
           <div className="bg-zinc-900/80 rounded-xl p-4 border border-zinc-800/50 mb-5 backdrop-blur-sm">
@@ -114,13 +121,17 @@ const WelcomeModal = () => {
                 <div className="w-9 h-9 rounded-full bg-black/80 border border-zinc-700 flex items-center justify-center shadow-inner">
                   <Heart className="w-4 h-4 text-red-500" />
                 </div>
-                <span className="text-zinc-400 text-xs">Tap heart to add to <span className="text-white font-medium">Favorites</span></span>
+                <span className="text-zinc-400 text-xs">
+                  Tap heart to add to <span className="text-white font-medium">Favorites</span>
+                </span>
               </div>
               <div className="flex items-center gap-3">
                 <div className="w-9 h-9 rounded-full bg-black/80 border border-zinc-700 flex items-center justify-center shadow-inner">
                   <ListPlus className="w-4 h-4 text-gold" />
                 </div>
-                <span className="text-zinc-400 text-xs">Tap list to add to <span className="text-white font-medium">Shortlist</span> for comparison</span>
+                <span className="text-zinc-400 text-xs">
+                  Tap list to add to <span className="text-white font-medium">Shortlist</span> for comparison
+                </span>
               </div>
             </div>
           </div>
