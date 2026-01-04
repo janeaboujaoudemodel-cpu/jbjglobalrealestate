@@ -629,16 +629,17 @@ const MarketReport = () => {
     <h2>Table of Contents</h2>
     <div class="toc">
       <div class="toc-item"><span class="title">1. From the Founder</span><span class="page-num">2</span></div>
-      <div class="toc-item"><span class="title">2. UAE Market Overview 2025-2026</span><span class="page-num">4</span></div>
-      <div class="toc-item"><span class="title">3. Dubai Real Estate Fundamentals</span><span class="page-num">5</span></div>
-      <div class="toc-item"><span class="title">4. Key Investment Indicators</span><span class="page-num">6</span></div>
-      <div class="toc-item"><span class="title">5. Developer Analysis Framework</span><span class="page-num">7</span></div>
-      <div class="toc-item"><span class="title">6. Community Comparison Guide</span><span class="page-num">8</span></div>
-      <div class="toc-item"><span class="title">7. Off-Plan vs Ready Properties</span><span class="page-num">9</span></div>
-      <div class="toc-item"><span class="title">8. Due Diligence Checklist</span><span class="page-num">10</span></div>
-      <div class="toc-item"><span class="title">9. Market Outlook 2026</span><span class="page-num">11</span></div>
-      <div class="toc-item"><span class="title">10. Risk Management</span><span class="page-num">12</span></div>
-      <div class="toc-item"><span class="title">11. AI Property Matchmaker</span><span class="page-num">13</span></div>
+      <div class="toc-item"><span class="title">2. 2025 Market Review: Setting the Stage</span><span class="page-num">4</span></div>
+      <div class="toc-item"><span class="title">3. UAE Market Fundamentals</span><span class="page-num">5</span></div>
+      <div class="toc-item"><span class="title">4. Dubai Real Estate Basics</span><span class="page-num">6</span></div>
+      <div class="toc-item"><span class="title">5. Key Investment Indicators</span><span class="page-num">7</span></div>
+      <div class="toc-item"><span class="title">6. Developer Analysis Framework</span><span class="page-num">8</span></div>
+      <div class="toc-item"><span class="title">7. Community Comparison Guide</span><span class="page-num">9</span></div>
+      <div class="toc-item"><span class="title">8. Off-Plan vs Ready Properties</span><span class="page-num">10</span></div>
+      <div class="toc-item"><span class="title">9. Due Diligence Checklist</span><span class="page-num">11</span></div>
+      <div class="toc-item"><span class="title">10. Market Outlook 2026</span><span class="page-num">12</span></div>
+      <div class="toc-item"><span class="title">11. Risk Management</span><span class="page-num">13</span></div>
+      <div class="toc-item"><span class="title">12. AI Property Matchmaker</span><span class="page-num">14</span></div>
     </div>
     <div class="highlight-box">
       <h4 style="margin-top: 0;">About This Book</h4>
@@ -647,25 +648,89 @@ const MarketReport = () => {
     <span class="page-number">3</span>
   </div>
 
-  <!-- UAE MARKET OVERVIEW -->
+  <!-- 2025 MARKET REVIEW -->
   <div class="page">
-    <h2>UAE Market Overview 2025-2026</h2>
-    <p>The UAE real estate sector continues to demonstrate remarkable resilience and growth, driven by economic diversification, infrastructure investment, and favorable government policies.</p>
+    <h2>2025 Market Review: Setting the Stage</h2>
+    <p>Before looking ahead to 2026, it is essential to understand Dubai's exceptional performance in 2025. Q3 2025 data reveals a market that continues to break records, providing the foundation for informed 2026 expectations.</p>
     
     <div class="stat-grid">
       <div class="stat-box">
-        <div class="number">528B+</div>
-        <div class="label">AED Transactions 2024</div>
+        <div class="number">52,853</div>
+        <div class="label">Q3 2025 Transactions</div>
       </div>
       <div class="stat-box">
-        <div class="number">180K+</div>
-        <div class="label">Properties Sold</div>
+        <div class="number">132.76B</div>
+        <div class="label">AED Total Sales Value</div>
       </div>
       <div class="stat-box">
-        <div class="number">7.5%</div>
-        <div class="label">Average Yield</div>
+        <div class="number">60.8%</div>
+        <div class="label">Transaction Growth (vs Q3 2023)</div>
       </div>
     </div>
+    
+    <h3>Q3 2025 Key Highlights</h3>
+    <div class="two-col">
+      <div class="info-card">
+        <h4>Price Performance</h4>
+        <ul>
+          <li>Average Sale Price: AED 2.5M</li>
+          <li>Average Price/Sq Ft: AED 1,913</li>
+          <li>Price Growth: +17.4% (vs Q3 2023)</li>
+          <li>Luxury segment: +90% YoY transactions</li>
+        </ul>
+      </div>
+      <div class="info-card">
+        <h4>Population & Demand</h4>
+        <ul>
+          <li>Population surpassed 4 million</li>
+          <li>9,800 new millionaires in 2025</li>
+          <li>D33 Agenda: Double economy by 2033</li>
+          <li>Strong East-West buyer mix</li>
+        </ul>
+      </div>
+    </div>
+    
+    <h3>Residential Market Performance</h3>
+    <div class="table-wrapper">
+      <table>
+        <tr>
+          <th>Period</th>
+          <th>Total Sales Value</th>
+          <th>Avg. Sale</th>
+          <th>Price/Sq Ft</th>
+        </tr>
+        <tr>
+          <td>Q3 2023</td>
+          <td>AED 88.95B</td>
+          <td>AED 2.73M</td>
+          <td>AED 1,629</td>
+        </tr>
+        <tr>
+          <td>Q3 2024</td>
+          <td>AED 117.34B</td>
+          <td>AED 2.49M</td>
+          <td>AED 1,734</td>
+        </tr>
+        <tr>
+          <td>Q3 2025</td>
+          <td>AED 132.76B</td>
+          <td>AED 2.51M</td>
+          <td>AED 1,913</td>
+        </tr>
+      </table>
+    </div>
+    
+    <div class="highlight-box">
+      <h4 style="margin-top: 0;">Why This Matters for 2026</h4>
+      <p style="margin-bottom: 0;">The consistent YoY growth demonstrates market maturity and sustained demand. Understanding 2025's trajectory helps investors calibrate expectations and identify emerging opportunities for 2026.</p>
+    </div>
+    <span class="page-number">4</span>
+  </div>
+
+  <!-- UAE MARKET OVERVIEW -->
+  <div class="page">
+    <h2>UAE Market Fundamentals</h2>
+    <p>The UAE real estate sector continues to demonstrate remarkable resilience and growth, driven by economic diversification, infrastructure investment, and favorable government policies.</p>
     
     <h3>Key Market Drivers</h3>
     <div class="two-col">
@@ -682,11 +747,41 @@ const MarketReport = () => {
         <h4>Market Dynamics</h4>
         <ul>
           <li>Population growth 2% annually</li>
-          <li>Limited prime land supply</li>
+          <li>Urban Master Plan 2040</li>
           <li>Infrastructure megaprojects</li>
           <li>Expo 2020 legacy developments</li>
         </ul>
       </div>
+    </div>
+    
+    <h3>Property Segment Analysis (Q3 2025)</h3>
+    <div class="table-wrapper">
+      <table>
+        <tr>
+          <th>Segment</th>
+          <th>Avg. Price</th>
+          <th>Avg. Size</th>
+          <th>Top Unit Type</th>
+        </tr>
+        <tr>
+          <td>Apartments</td>
+          <td>AED 1.77M</td>
+          <td>1,031 sq ft</td>
+          <td>1-Bedroom</td>
+        </tr>
+        <tr>
+          <td>Townhouses</td>
+          <td>AED 2.86M</td>
+          <td>2,460 sq ft</td>
+          <td>4-Bedroom (59%)</td>
+        </tr>
+        <tr>
+          <td>Villas</td>
+          <td>AED 8.53M</td>
+          <td>4,626 sq ft</td>
+          <td>4-Bedroom (47%)</td>
+        </tr>
+      </table>
     </div>
     
     <div class="villa-gallery">
@@ -695,13 +790,13 @@ const MarketReport = () => {
     </div>
     
     <h3>Investor Demographics</h3>
-    <p>The UAE continues to attract diverse international investors, with notable growth from European, Asian, and CIS markets. In 2024, overseas buyers accounted for approximately 45% of all property transactions.</p>
+    <p>The UAE attracts diverse international investors. European and North American buyers seek stability and lifestyle, while Chinese buyers channel capital amid domestic headwinds. This east-west mix strengthens liquidity.</p>
     
     <div class="highlight-box">
-      <h4 style="margin-top: 0;">Top 10 Investor Nationalities (2024)</h4>
+      <h4 style="margin-top: 0;">Top Investor Nationalities</h4>
       <p style="margin-bottom: 0;">Indians, British, Russians, Chinese, Pakistanis, French, Egyptians, Canadians, Italians, Germans</p>
     </div>
-    <span class="page-number">4</span>
+    <span class="page-number">5</span>
   </div>
 
   <!-- DUBAI FUNDAMENTALS -->
@@ -1081,42 +1176,75 @@ const MarketReport = () => {
   <!-- MARKET OUTLOOK 2026 -->
   <div class="page">
     <h2>Market Outlook 2026</h2>
-    <p>Looking ahead to 2026, the UAE real estate market is positioned for continued growth, supported by strong fundamentals and government initiatives.</p>
+    <p>Based on 2025's exceptional performance and market fundamentals, here is what we anticipate for 2026.</p>
+    
+    <h3>Supply Forecast 2025-2028</h3>
+    <div class="table-wrapper">
+      <table>
+        <tr>
+          <th>Year</th>
+          <th>Expected Units</th>
+          <th>Key Areas</th>
+        </tr>
+        <tr>
+          <td>2025</td>
+          <td>81,084</td>
+          <td>JVC, Al Furjan, Arabian Ranches 3, The Valley, Business Bay</td>
+        </tr>
+        <tr>
+          <td>2026</td>
+          <td>96,500</td>
+          <td>Arjan, Business Bay, City Walk, Dubai Creek Harbour, Dubai Hills</td>
+        </tr>
+        <tr>
+          <td>2027</td>
+          <td>84,979</td>
+          <td>Damac Lagoons, Damac Hills 2, Nad Al Sheba, The Valley</td>
+        </tr>
+        <tr>
+          <td>2028</td>
+          <td>45,480</td>
+          <td>Dubai Harbour, Maritime City, Al Sufouh, Dubai Hills Estate</td>
+        </tr>
+      </table>
+    </div>
     
     <h3>2026 Market Expectations</h3>
     <div class="stat-grid">
       <div class="stat-box">
         <div class="number">600B+</div>
-        <div class="label">Projected Transactions</div>
+        <div class="label">Projected AED Transactions</div>
       </div>
       <div class="stat-box">
-        <div class="number">5-8%</div>
+        <div class="number">5-10%</div>
         <div class="label">Expected Price Growth</div>
       </div>
       <div class="stat-box">
-        <div class="number">200K+</div>
+        <div class="number">96,500</div>
         <div class="label">New Units Delivery</div>
       </div>
     </div>
     
-    <h3>Key Trends to Watch</h3>
+    <h3>Top Areas by Buyer Search (2025 Data)</h3>
     <div class="two-col">
       <div class="info-card">
-        <h4>Growth Drivers</h4>
+        <h4>Apartments</h4>
         <ul>
-          <li>Golden Visa expansion continues</li>
-          <li>Corporate relocations to Dubai</li>
-          <li>Infrastructure investments (Al Maktoum Airport)</li>
-          <li>Tourism sector recovery</li>
+          <li>Dubai Marina: 9.8%</li>
+          <li>Downtown Dubai: 9.1%</li>
+          <li>Business Bay: 8.5%</li>
+          <li>Jumeirah: 7.6%</li>
+          <li>JVC: 4.6%</li>
         </ul>
       </div>
       <div class="info-card">
-        <h4>Areas of Caution</h4>
+        <h4>Villas & Townhouses</h4>
         <ul>
-          <li>Oversupply in certain segments</li>
-          <li>Global economic uncertainty</li>
-          <li>Interest rate environment</li>
-          <li>Off-plan delivery delays</li>
+          <li>Dubai Hills Estate: 6.6%</li>
+          <li>Palm Jumeirah: 5.7%</li>
+          <li>Dubai Land: 5.1%</li>
+          <li>Al Furjan: 5.0%</li>
+          <li>Akoya: 4.5%</li>
         </ul>
       </div>
     </div>
@@ -1126,15 +1254,14 @@ const MarketReport = () => {
       <li><strong>Focus on fundamentals:</strong> Prioritize locations with strong rental demand and infrastructure</li>
       <li><strong>Developer selection:</strong> Stick to Tier 1-2 developers for off-plan investments</li>
       <li><strong>Diversification:</strong> Balance between apartments and villas, ready and off-plan</li>
-      <li><strong>Cash flow priority:</strong> Ensure positive cash flow from day one for ready properties</li>
-      <li><strong>Exit planning:</strong> Define clear exit criteria before purchase</li>
+      <li><strong>Monitor supply:</strong> 96,500 units expected—focus on areas with balanced demand</li>
     </ul>
     
     <div class="highlight-box">
       <h4 style="margin-top: 0;">Our Perspective</h4>
-      <p style="margin-bottom: 0;">At JJ Global Capital, we believe 2026 presents selective opportunities for investors who do proper due diligence. The key is to focus on quality over quantity and align investments with your personal risk tolerance and timeline.</p>
+      <p style="margin-bottom: 0;">At JJ Global Capital, we believe 2026 presents selective opportunities for investors who do proper due diligence. With Q3 2025 showing 60.8% transaction growth and 17.4% price appreciation versus 2023, the trajectory remains strong—but smart investors focus on quality over quantity.</p>
     </div>
-    <span class="page-number">11</span>
+    <span class="page-number">12</span>
   </div>
 
   <!-- RISK MANAGEMENT -->
