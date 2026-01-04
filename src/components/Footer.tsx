@@ -86,6 +86,7 @@ const Footer = () => {
   const quickLinks = [
     { href: "/", label: "Home" },
     { href: "/about", label: "About Us" },
+    { href: "/founder", label: "Founder & Leadership" },
     { href: "/awards", label: "Awards" },
     { href: "/news", label: "UAE News & Economics" },
     { href: INQUIRY_FORM_URL, label: "Contact", external: true },

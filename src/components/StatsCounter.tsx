@@ -1,5 +1,6 @@
 import { useCountUp } from '@/hooks/useCountUp';
 import { Briefcase, Clock, Home, Building2 } from 'lucide-react';
+import { useRef, useEffect, useState } from 'react';
 
 const stats = [
   {
@@ -32,14 +33,57 @@ const stats = [
   },
 ];
 
-const StatItem = ({ end, suffix, prefix, label, icon: Icon }: typeof stats[0]) => {
-  const { ref, formattedValue } = useCountUp({ end, suffix, prefix, duration: 2500 });
+interface StatItemProps {
+  end: number;
+  suffix: string;
+  prefix: string;
+  label: string;
+  icon: React.ComponentType<{ className?: string }>;
+  isVisible: boolean;
+}
+
+const StatItem = ({ end, suffix, prefix, label, icon: Icon, isVisible }: StatItemProps) => {
+  const [count, setCount] = useState(0);
+  const [hasAnimated, setHasAnimated] = useState(false);
+
+  useEffect(() => {
+    if (!isVisible || hasAnimated) return;
+    
+    setHasAnimated(true);
+    let startTime: number;
+    let animationFrame: number;
+    const duration = 2500;
+
+    const animate = (currentTime: number) => {
+      if (!startTime) startTime = currentTime;
+      const progress = Math.min((currentTime - startTime) / duration, 1);
+      
+      // Easing function for smooth deceleration
+      const easeOutQuart = 1 - Math.pow(1 - progress, 4);
+      const currentCount = Math.floor(easeOutQuart * end);
+      
+      setCount(currentCount);
+
+      if (progress < 1) {
+        animationFrame = requestAnimationFrame(animate);
+      } else {
+        setCount(end);
+      }
+    };
+
+    animationFrame = requestAnimationFrame(animate);
+
+    return () => {
+      if (animationFrame) {
+        cancelAnimationFrame(animationFrame);
+      }
+    };
+  }, [isVisible, end, hasAnimated]);
+
+  const formattedValue = `${prefix}${count.toLocaleString()}${suffix}`;
 
   return (
-    <div 
-      ref={ref}
-      className="relative group"
-    >
+    <div className="relative group">
       <div className="bg-gradient-to-br from-zinc-900/80 to-black border border-zinc-800 rounded-2xl p-6 md:p-8 text-center hover:border-gold/40 transition-all duration-500 hover:shadow-xl hover:shadow-gold/10">
         {/* Icon */}
         <div className="w-14 h-14 mx-auto mb-4 rounded-xl bg-gradient-to-br from-gold/20 to-gold-dark/20 flex items-center justify-center group-hover:scale-110 transition-transform duration-300">
@@ -67,8 +111,28 @@ const StatItem = ({ end, suffix, prefix, label, icon: Icon }: typeof stats[0]) =
 };
 
 const StatsCounter = () => {
+  const sectionRef = useRef<HTMLDivElement>(null);
+  const [isVisible, setIsVisible] = useState(false);
+
+  useEffect(() => {
+    const observer = new IntersectionObserver(
+      ([entry]) => {
+        if (entry.isIntersecting) {
+          setIsVisible(true);
+        }
+      },
+      { threshold: 0.2 }
+    );
+
+    if (sectionRef.current) {
+      observer.observe(sectionRef.current);
+    }
+
+    return () => observer.disconnect();
+  }, []);
+
   return (
-    <section className="py-16 md:py-24 bg-gradient-to-b from-zinc-950 to-zinc-900 relative overflow-hidden">
+    <section ref={sectionRef} className="py-16 md:py-24 bg-gradient-to-b from-zinc-950 to-zinc-900 relative overflow-hidden">
       {/* Background glow */}
       <div 
         className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[600px] h-[600px] pointer-events-none"
@@ -94,7 +158,7 @@ const StatsCounter = () => {
         {/* Stats Grid */}
         <div className="grid grid-cols-2 lg:grid-cols-4 gap-4 md:gap-6">
           {stats.map((stat, index) => (
-            <StatItem key={index} {...stat} />
+            <StatItem key={index} {...stat} isVisible={isVisible} />
           ))}
         </div>
       </div>
