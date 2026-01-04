@@ -184,9 +184,9 @@ Best regards`);
   };
 
   const badgeLabels = {
-    top1: { label: "Top 1", color: "bg-gradient-to-r from-yellow-400 to-yellow-600" },
-    top2: { label: "Top 2", color: "bg-gradient-to-r from-gray-300 to-gray-400" },
-    top3: { label: "Top 3", color: "bg-gradient-to-r from-amber-600 to-amber-700" },
+    top1: { label: "🥇 Top 1", color: "bg-gradient-to-r from-yellow-400 via-yellow-500 to-amber-500 shadow-lg shadow-yellow-500/30", textColor: "text-black" },
+    top2: { label: "🥈 Top 2", color: "bg-gradient-to-r from-zinc-300 via-slate-400 to-zinc-400 shadow-lg shadow-zinc-400/30", textColor: "text-black" },
+    top3: { label: "🥉 Top 3", color: "bg-gradient-to-r from-amber-600 via-orange-600 to-amber-700 shadow-lg shadow-amber-600/30", textColor: "text-white" },
   };
 
   return (
@@ -343,8 +343,7 @@ Best regards`);
                         {/* Badge indicator */}
                         {badge && (
                           <div className="absolute top-2 left-2 z-10">
-                            <Badge className={`${badgeLabels[badge].color} text-white font-semibold px-3 py-1 flex items-center gap-1`}>
-                              <Award className="w-3 h-3" />
+                            <Badge className={`${badgeLabels[badge].color} ${badgeLabels[badge].textColor} font-bold px-4 py-1.5 flex items-center gap-1.5 text-sm`}>
                               {badgeLabels[badge].label}
                               <button
                                 onClick={(e) => {
@@ -354,7 +353,7 @@ Best regards`);
                                 }}
                                 className="ml-1 hover:opacity-70"
                               >
-                                <X className="w-3 h-3" />
+                                <X className="w-3.5 h-3.5" />
                               </button>
                             </Badge>
                           </div>
@@ -378,24 +377,21 @@ Best regards`);
                             <DropdownMenuContent className="bg-zinc-900 border-zinc-800">
                               <DropdownMenuItem
                                 onClick={() => handleSetBadge(project.id, 'top1')}
-                                className="text-yellow-400 hover:bg-zinc-800 cursor-pointer"
+                                className="text-yellow-400 hover:bg-zinc-800 cursor-pointer font-medium"
                               >
-                                <Award className="w-4 h-4 mr-2" />
-                                Top 1 (Gold)
+                                🥇 Top 1 (Gold)
                               </DropdownMenuItem>
                               <DropdownMenuItem
                                 onClick={() => handleSetBadge(project.id, 'top2')}
-                                className="text-gray-300 hover:bg-zinc-800 cursor-pointer"
+                                className="text-zinc-300 hover:bg-zinc-800 cursor-pointer font-medium"
                               >
-                                <Award className="w-4 h-4 mr-2" />
-                                Top 2 (Silver)
+                                🥈 Top 2 (Silver)
                               </DropdownMenuItem>
                               <DropdownMenuItem
                                 onClick={() => handleSetBadge(project.id, 'top3')}
-                                className="text-amber-500 hover:bg-zinc-800 cursor-pointer"
+                                className="text-amber-500 hover:bg-zinc-800 cursor-pointer font-medium"
                               >
-                                <Award className="w-4 h-4 mr-2" />
-                                Top 3 (Bronze)
+                                🥉 Top 3 (Bronze)
                               </DropdownMenuItem>
                               {badge && (
                                 <DropdownMenuItem

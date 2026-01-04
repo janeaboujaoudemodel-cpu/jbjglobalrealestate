@@ -90,22 +90,29 @@ const DeveloperGrid = () => {
       <div className="space-y-24">
         {projectsByDeveloper?.map(({ developer, projects: devProjects }) => (
           <div key={developer.id} className="scroll-mt-24" id={`developer-${developer.slug}`}>
-            {/* Developer Header Section */}
+            {/* Developer Header Section with Logo */}
             <div className="mb-10">
               <Link
                 to={`/developer/${developer.slug}`}
-                className="inline-block group"
+                className="inline-block group mb-6"
               >
-                <h2
-                  className="text-white font-semibold mb-4 group-hover:text-gold transition-colors"
-                  style={{
-                    fontFamily: "Poppins, sans-serif",
-                    fontSize: "56px",
-                    lineHeight: "1.2",
-                  }}
-                >
-                  {developer.name}
-                </h2>
+                {/* Developer Logo Tile - White background, uniform size */}
+                <div className="bg-white rounded-2xl p-6 md:p-8 inline-flex items-center justify-center min-w-[280px] md:min-w-[350px] h-24 md:h-32 shadow-xl group-hover:shadow-2xl transition-all duration-300 group-hover:scale-[1.02]">
+                  {developer.logo_url ? (
+                    <img 
+                      src={developer.logo_url} 
+                      alt={`${developer.name} logo`}
+                      className="max-h-16 md:max-h-20 max-w-[240px] md:max-w-[300px] object-contain"
+                    />
+                  ) : (
+                    <h2
+                      className="text-zinc-900 font-bold text-2xl md:text-3xl text-center"
+                      style={{ fontFamily: "Poppins, sans-serif" }}
+                    >
+                      {developer.name}
+                    </h2>
+                  )}
+                </div>
               </Link>
 
               {/* Developer Description */}
