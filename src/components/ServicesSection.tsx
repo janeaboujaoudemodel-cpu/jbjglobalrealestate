@@ -1,6 +1,7 @@
-import { ChevronRight, Play, Volume2, VolumeX, ExternalLink } from "lucide-react";
+import { ChevronRight, Play, Volume2, VolumeX, ExternalLink, Check } from "lucide-react";
 import { useState, useRef } from "react";
 import dubaiHeroVideo from "@/assets/dubai-hero-video.mp4";
+import { CONTACT_INFO } from "@/constants/stats";
 
 const INQUIRY_FORM_URL = "https://jjglobalcapital.com/property-investment-inquiry-form/";
 
@@ -8,28 +9,33 @@ const INQUIRY_FORM_URL = "https://jjglobalcapital.com/property-investment-inquir
 const divisions = [
   {
     title: "JJ Global Capital",
-    description: "A founder-led investment advisory firm specializing in UAE real estate, offering institutional-grade asset selection, due diligence, and portfolio management.",
+    description:
+      "A founder-led investment advisory firm specializing in UAE real estate, offering institutional-grade asset selection, due diligence, and portfolio management.",
     gradient: "from-[#A8925A]/20 via-amber-500/10 to-[#A8925A]/20",
     iconGradient: "from-[#A8925A] to-[#C4A962]",
     url: "https://jjglobalcapital.com",
+    isCurrent: true,
   },
   {
     title: "Maison Jane",
-    description: "A luxury interior design and fit-out atelier crafting bespoke living environments for discerning clients across the UAE and beyond.",
+    description:
+      "A luxury interior design and fit-out atelier crafting bespoke living environments for discerning clients across the UAE and beyond.",
     gradient: "from-rose-500/20 via-pink-500/10 to-rose-600/20",
     iconGradient: "from-rose-400 to-pink-400",
-    url: "https://maisonjane.com",
+    url: "https://maisonjane.ae",
   },
   {
     title: "JJ Media Group",
-    description: "A full-service creative and media production agency delivering premium content, branding, and digital experiences for luxury brands.",
+    description:
+      "A full-service creative and media production agency delivering premium content, branding, and digital experiences for luxury brands.",
     gradient: "from-purple-500/20 via-violet-500/10 to-purple-600/20",
     iconGradient: "from-purple-400 to-violet-400",
-    url: "https://jjmediagroup.com",
+    url: "https://jjmediagroup.ae",
   },
   {
     title: "JJ Fashion House",
-    description: "An exclusive couture and ready-to-wear fashion house blending timeless elegance with contemporary design for the modern connoisseur.",
+    description:
+      "An exclusive couture and ready-to-wear fashion house blending timeless elegance with contemporary design for the modern connoisseur.",
     gradient: "from-emerald-500/20 via-green-500/10 to-emerald-600/20",
     iconGradient: "from-emerald-400 to-green-400",
     url: "https://jjfashionhouse.com",

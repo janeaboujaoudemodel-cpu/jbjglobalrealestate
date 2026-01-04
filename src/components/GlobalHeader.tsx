@@ -31,21 +31,21 @@ const JJLogo = ({ className = "" }: { className?: string }) => (
     className={`tracking-wide flex items-center ${className}`}
     style={{ fontFamily: "Poppins, sans-serif" }}
   >
-    <span className="text-gold font-extralight text-xl md:text-2xl">J</span>
+    <span className="text-gold font-extralight text-xl md:text-2xl leading-none">J</span>
     <span
       className="text-white/95 mx-1.5 font-thin text-2xl md:text-3xl leading-none"
-      style={{ transform: "scaleY(1.34)" }}
+      style={{ transform: "scaleY(1.33)" }}
     >
       |
     </span>
-    <span className="text-gold font-extralight text-xl md:text-2xl">J</span>
+    <span className="text-gold font-extralight text-xl md:text-2xl leading-none">J</span>
 
-    <span className="ml-2.5 flex items-center text-white">
-      <span className="font-semibold text-xs md:text-sm tracking-[0.22em]">
+    <span className="ml-3 flex items-center text-white">
+      <span className="font-semibold text-[11px] sm:text-xs md:text-sm tracking-[0.28em]">
         GLOBAL
       </span>
-      <span className="mx-2 w-1.5 h-1.5 rounded-full bg-white/70" />
-      <span className="font-semibold text-xs md:text-sm tracking-[0.22em]">
+      <span className="mx-2.5 w-1.5 h-1.5 rounded-full bg-white/75" />
+      <span className="font-semibold text-[11px] sm:text-xs md:text-sm tracking-[0.28em]">
         CAPITAL
       </span>
     </span>
