@@ -1,5 +1,22 @@
 import { Trophy, Star, Award, Medal } from "lucide-react";
 import Footer from "@/components/Footer";
+import { useCountUp } from "@/hooks/useCountUp";
+
+const CounterStat = ({ end, suffix, prefix, label }: { end: number; suffix: string; prefix: string; label: string }) => {
+  const { ref, formattedValue } = useCountUp({ end, suffix, prefix, duration: 2500 });
+
+  return (
+    <div ref={ref} className="text-center">
+      <p 
+        className="text-transparent bg-clip-text bg-gradient-to-r from-gold via-gold-dark to-gold text-4xl md:text-5xl font-bold mb-2" 
+        style={{ fontFamily: "Poppins, sans-serif" }}
+      >
+        {formattedValue}
+      </p>
+      <p className="text-zinc-400 text-sm uppercase tracking-wider">{label}</p>
+    </div>
+  );
+};
 
 const Awards = () => {
   const awards = [
@@ -42,10 +59,10 @@ const Awards = () => {
   ];
 
   const recognitions = [
-    { label: "Industry Awards", value: "25+" },
-    { label: "Years of Excellence", value: "15+" },
-    { label: "Client Satisfaction", value: "98%" },
-    { label: "Global Recognition", value: "50+" },
+    { end: 25, suffix: "+", prefix: "", label: "Industry Awards" },
+    { end: 12, suffix: "+", prefix: "", label: "Years of Excellence" },
+    { end: 98, suffix: "%", prefix: "", label: "Client Satisfaction" },
+    { end: 92, suffix: "+", prefix: "", label: "Countries Served" },
   ];
 
   return (
@@ -68,17 +85,18 @@ const Awards = () => {
         </div>
       </section>
 
-      {/* Stats */}
-      <section className="py-16 border-y border-zinc-800">
-        <div className="container mx-auto px-4">
+      {/* Stats with Counter Animation */}
+      <section className="py-16 border-y border-zinc-800 relative overflow-hidden">
+        <div 
+          className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[600px] h-[600px] pointer-events-none"
+          style={{
+            background: "radial-gradient(ellipse at center, hsl(40 32% 51% / 0.06) 0%, transparent 60%)",
+          }}
+        />
+        <div className="container mx-auto px-4 relative z-10">
           <div className="grid grid-cols-2 md:grid-cols-4 gap-8">
             {recognitions.map((item) => (
-              <div key={item.label} className="text-center">
-                <p className="text-gold text-4xl md:text-5xl font-bold mb-2" style={{ fontFamily: "Poppins, sans-serif" }}>
-                  {item.value}
-                </p>
-                <p className="text-zinc-400 text-sm uppercase tracking-wider">{item.label}</p>
-              </div>
+              <CounterStat key={item.label} {...item} />
             ))}
           </div>
         </div>

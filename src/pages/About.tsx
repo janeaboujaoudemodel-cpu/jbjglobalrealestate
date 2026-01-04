@@ -1,12 +1,29 @@
 import { Award, Users, Building2, Globe, Target, Shield } from "lucide-react";
 import Footer from "@/components/Footer";
+import { useCountUp } from "@/hooks/useCountUp";
+
+const CounterStat = ({ end, suffix, prefix, label }: { end: number; suffix: string; prefix: string; label: string }) => {
+  const { ref, formattedValue } = useCountUp({ end, suffix, prefix, duration: 2500 });
+
+  return (
+    <div ref={ref} className="text-center">
+      <p 
+        className="text-transparent bg-clip-text bg-gradient-to-r from-gold via-gold-dark to-gold text-4xl md:text-5xl font-bold mb-2" 
+        style={{ fontFamily: "Poppins, sans-serif" }}
+      >
+        {formattedValue}
+      </p>
+      <p className="text-zinc-400 text-sm uppercase tracking-wider">{label}</p>
+    </div>
+  );
+};
 
 const About = () => {
   const stats = [
-    { value: "$2B+", label: "Portfolio Value" },
-    { value: "15+", label: "Years Experience" },
-    { value: "500+", label: "Properties Sold" },
-    { value: "50+", label: "Countries Served" },
+    { end: 2, suffix: "B+", prefix: "AED ", label: "Portfolio Value" },
+    { end: 12, suffix: "+", prefix: "", label: "Years Experience" },
+    { end: 3900, suffix: "+", prefix: "", label: "Properties Sold" },
+    { end: 4200, suffix: "+", prefix: "", label: "Properties Managed" },
   ];
 
   const values = [
@@ -47,17 +64,18 @@ const About = () => {
         </div>
       </section>
 
-      {/* Stats */}
-      <section className="py-16 border-y border-zinc-800">
-        <div className="container mx-auto px-4">
+      {/* Stats with Counter Animation */}
+      <section className="py-16 border-y border-zinc-800 relative overflow-hidden">
+        <div 
+          className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[600px] h-[600px] pointer-events-none"
+          style={{
+            background: "radial-gradient(ellipse at center, hsl(40 32% 51% / 0.06) 0%, transparent 60%)",
+          }}
+        />
+        <div className="container mx-auto px-4 relative z-10">
           <div className="grid grid-cols-2 md:grid-cols-4 gap-8">
             {stats.map((stat) => (
-              <div key={stat.label} className="text-center">
-                <p className="text-gold text-4xl md:text-5xl font-bold mb-2" style={{ fontFamily: "Poppins, sans-serif" }}>
-                  {stat.value}
-                </p>
-                <p className="text-zinc-400 text-sm uppercase tracking-wider">{stat.label}</p>
-              </div>
+              <CounterStat key={stat.label} {...stat} />
             ))}
           </div>
         </div>
@@ -87,7 +105,7 @@ const About = () => {
                 </p>
                 <p>
                   Today, we are proud to be recognized as the region's most trusted investment advisory, 
-                  serving clients from over 50 countries who entrust us with their most significant financial decisions.
+                  serving clients from over 92 countries who entrust us with their most significant financial decisions.
                 </p>
               </div>
             </div>
