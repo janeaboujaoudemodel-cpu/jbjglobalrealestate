@@ -1,8 +1,8 @@
 import { useState } from "react";
-import { Link, useSearchParams } from "react-router-dom";
+import { Link, useSearchParams, useNavigate } from "react-router-dom";
 import { useQuery } from "@tanstack/react-query";
 import { supabase } from "@/integrations/supabase/client";
-import { Sparkles, ArrowRight, RefreshCw, Download, Award, Share2, Users, X, Mail } from "lucide-react";
+import { Sparkles, ArrowRight, RefreshCw, Download, Award, Share2, Users, X, Mail, Crown, Gift } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import ProjectCard from "@/components/ProjectCard";
@@ -21,15 +21,23 @@ import {
   DropdownMenuItem,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
+import { PaymentModal } from "@/components/PaymentModal";
+import { useMembership } from "@/hooks/useMembership";
+import { useAuth } from "@/contexts/AuthContext";
 
 const INQUIRY_FORM_URL = "https://jjglobalcapital.com/form/property-investment-inquiry-form/";
 const JJ_HOLDING_URL = "https://jjholdinggroup.com";
 
 const QuizResults = () => {
+  const navigate = useNavigate();
+  const { user } = useAuth();
+  const { hasActiveMembership } = useMembership();
   const [searchParams] = useSearchParams();
   const projectSlugs = searchParams.get("projects")?.split(",") || [];
+  const isFreeUse = searchParams.get("free") === "true";
   const [badges, setBadges] = useState<Record<string, 'top1' | 'top2' | 'top3' | null>>({});
   const [shareModalOpen, setShareModalOpen] = useState(false);
+  const [showVipModal, setShowVipModal] = useState(false);
 
   const { data: projects, isLoading } = useQuery({
     queryKey: ["quiz-results", projectSlugs],
@@ -446,13 +454,54 @@ Best regards`);
 
         {/* Actions */}
         <div className="text-center">
-          <div className="flex flex-col sm:flex-row items-center justify-center gap-4 mb-6">
-            <Link to="/quiz">
-              <Button variant="outline" className="border-purple-400 bg-purple-900/30 text-white hover:bg-purple-500/30 hover:text-white font-semibold px-6 py-3">
-                <RefreshCw className="w-5 h-5 mr-2" />
-                <span className="text-base">Retake Quiz</span>
+          {/* Free Use Banner */}
+          {isFreeUse && !hasActiveMembership && (
+            <div className="bg-gradient-to-r from-gold/20 to-gold/10 border border-gold/40 rounded-2xl p-6 mb-8 max-w-2xl mx-auto">
+              <div className="flex items-center justify-center gap-3 mb-3">
+                <Crown className="w-6 h-6 text-gold" />
+                <h3 className="text-white text-xl font-semibold">Want More AI Power?</h3>
+              </div>
+              <p className="text-zinc-400 mb-4">
+                You've used your free property match. Upgrade to VIP for unlimited regenerations and AI analysis!
+              </p>
+              <Button 
+                onClick={() => setShowVipModal(true)}
+                className="bg-gradient-to-r from-gold via-gold to-gold-dark text-black font-semibold hover:brightness-110 px-8 py-3"
+              >
+                <Crown className="w-5 h-5 mr-2" />
+                Upgrade to VIP — $100/year
               </Button>
-            </Link>
+            </div>
+          )}
+
+          <div className="flex flex-col sm:flex-row items-center justify-center gap-4 mb-6">
+            <Button 
+              onClick={() => {
+                if (hasActiveMembership) {
+                  navigate("/quiz");
+                } else {
+                  setShowVipModal(true);
+                }
+              }}
+              variant="outline" 
+              className={`font-semibold px-6 py-3 ${
+                hasActiveMembership
+                  ? "border-purple-400 bg-purple-900/30 text-white hover:bg-purple-500/30 hover:text-white"
+                  : "border-gold/50 bg-gold/10 text-gold hover:bg-gold/20 hover:text-gold"
+              }`}
+            >
+              {hasActiveMembership ? (
+                <>
+                  <RefreshCw className="w-5 h-5 mr-2" />
+                  <span className="text-base">Regenerate with AI</span>
+                </>
+              ) : (
+                <>
+                  <Crown className="w-5 h-5 mr-2" />
+                  <span className="text-base">Regenerate (VIP)</span>
+                </>
+              )}
+            </Button>
             <Link to="/">
               <Button className="bg-white text-zinc-900 hover:bg-zinc-100">
                 Browse All Properties
@@ -518,6 +567,22 @@ Best regards`);
           </div>
         </DialogContent>
       </Dialog>
+
+      {/* VIP Upgrade Modal */}
+      <PaymentModal
+        open={showVipModal}
+        onOpenChange={setShowVipModal}
+        onSuccess={() => {
+          setShowVipModal(false);
+          navigate("/quiz");
+        }}
+        userInfo={{
+          fullName: user?.email?.split("@")[0] || "",
+          email: user?.email || "",
+          phone: "",
+        }}
+        mode="regenerate"
+      />
     </section>
   );
 };
