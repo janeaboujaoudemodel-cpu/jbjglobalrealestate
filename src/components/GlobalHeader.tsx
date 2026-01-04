@@ -25,11 +25,13 @@ import {
 import { ScrollArea } from "@/components/ui/scroll-area";
 import { JJLogoHeader } from "@/components/JJLogo";
 import LanguageSwitcher from "@/components/LanguageSwitcher";
+import GlobalSearchModal from "@/components/GlobalSearchModal";
 
 const GlobalHeader = () => {
   const { user, isAdmin, signOut } = useAuth();
   const location = useLocation();
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
+  const [searchOpen, setSearchOpen] = useState(false);
   const { t } = useLanguage();
   
   const { data: favorites } = useFavorites();
@@ -95,12 +97,15 @@ const GlobalHeader = () => {
 
           {/* Right Side Actions - Gold icons */}
           <div className="flex items-center gap-2">
-            {/* Search Icon - Gold */}
-            <Link to="/properties">
-              <Button variant="ghost" size="sm" className="text-gold hover:text-gold/80 hover:bg-gold/10">
-                <Search className="w-5 h-5" />
-              </Button>
-            </Link>
+            {/* Search Icon - Opens Global Search Modal */}
+            <Button 
+              variant="ghost" 
+              size="sm" 
+              className="text-gold hover:text-gold/80 hover:bg-gold/10"
+              onClick={() => setSearchOpen(true)}
+            >
+              <Search className="w-5 h-5" />
+            </Button>
 
             {/* Favorites - Gold icon */}
             <Link to="/favorites">
@@ -286,6 +291,9 @@ const GlobalHeader = () => {
         </div>
 
       </div>
+
+      {/* Global Search Modal */}
+      <GlobalSearchModal isOpen={searchOpen} onClose={() => setSearchOpen(false)} />
     </header>
   );
 };

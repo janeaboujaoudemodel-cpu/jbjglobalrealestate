@@ -394,14 +394,6 @@ const Properties = () => {
                   )}
                 </Button>
               </DialogTrigger>
-
-            {/* SEARCH Button - Manual trigger */}
-            <Button 
-              onClick={handleSearch}
-              className="h-12 px-8 bg-gold text-black hover:bg-gold-light font-semibold rounded-lg"
-            >
-              SEARCH
-            </Button>
               <DialogContent className="max-w-2xl bg-zinc-950 border-zinc-800 text-white p-0">
                 <DialogHeader className="p-6 border-b border-zinc-800">
                   <DialogTitle className="text-xl font-semibold" style={{ fontFamily: "Poppins, sans-serif" }}>
@@ -601,8 +593,11 @@ const Properties = () => {
               </DialogContent>
             </Dialog>
 
-            {/* Search Button */}
-            <Button className="h-12 px-8 bg-gold text-black hover:bg-gold-light font-semibold rounded-lg">
+            {/* SEARCH Button - Manual trigger */}
+            <Button 
+              onClick={handleSearch}
+              className="h-12 px-8 bg-gold text-black hover:bg-gold-light font-semibold rounded-lg"
+            >
               SEARCH
             </Button>
           </div>
