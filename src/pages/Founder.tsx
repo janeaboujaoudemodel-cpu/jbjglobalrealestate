@@ -2,6 +2,7 @@ import { Link } from "react-router-dom";
 import { ArrowUpRight, Building2, Gem, Film, Mail, Phone, ExternalLink, Award, Globe, Users, TrendingUp, Star, MessageCircle } from "lucide-react";
 import { motion } from "framer-motion";
 import Footer from "@/components/Footer";
+import { SafeImage } from "@/components/SafeImage";
 import { useCountUp } from "@/hooks/useCountUp";
 import { COMPANY_STATS, CONTACT_INFO, getWhatsAppUrl, getCallUrl, getEmailUrl } from "@/constants/stats";
 
