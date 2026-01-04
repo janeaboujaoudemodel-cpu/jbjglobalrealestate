@@ -160,6 +160,33 @@ export type Database = {
           },
         ]
       }
+      function_rate_limits: {
+        Row: {
+          created_at: string
+          function_name: string
+          id: string
+          rate_key: string
+          request_count: number
+          window_start: string
+        }
+        Insert: {
+          created_at?: string
+          function_name: string
+          id?: string
+          rate_key: string
+          request_count?: number
+          window_start: string
+        }
+        Update: {
+          created_at?: string
+          function_name?: string
+          id?: string
+          rate_key?: string
+          request_count?: number
+          window_start?: string
+        }
+        Relationships: []
+      }
       memberships: {
         Row: {
           created_at: string
