@@ -69,19 +69,23 @@ const GlobalHeader = () => {
             <JJLogoHeader />
           </Link>
 
-          {/* Desktop Navigation - Tighter spacing between items */}
+          {/* Desktop Navigation - Single line items with gold underline hover */}
           <nav className="hidden lg:flex items-center flex-1 justify-center">
             {mainNavLinks.map((link) => (
               <Link
                 key={link.href}
                 to={link.href}
-                className={`px-2.5 py-2 text-[13px] transition-colors ${
+                className={`px-3 py-2 text-[13px] whitespace-nowrap transition-all relative group ${
                   isActive(link.href) 
-                    ? "text-white" 
+                    ? "text-gold" 
                     : "text-zinc-400 hover:text-white"
                 }`}
               >
                 {link.label}
+                {/* Gold underline for active/hover */}
+                <span className={`absolute bottom-0 left-3 right-3 h-[2px] bg-gold transition-transform origin-left ${
+                  isActive(link.href) ? "scale-x-100" : "scale-x-0 group-hover:scale-x-100"
+                }`} />
               </Link>
             ))}
           </nav>
