@@ -3,7 +3,7 @@
 // Symmetric spacing, no text touching the divider line
 
 interface JJLogoProps {
-  size?: 'sm' | 'md' | 'lg' | 'xl';
+  size?: 'sm' | 'md' | 'lg' | 'xl' | 'footer';
   showText?: boolean;
   className?: string;
 }
@@ -15,7 +15,8 @@ const sizeConfig = {
     text: 'text-[8px] md:text-[10px]',
     gap: 'mx-1.5',
     textGap: 'mt-1.5',
-    textSpacing: 'tracking-[0.2em]',
+    textSpacing: 'tracking-[0.15em]',
+    wordGap: 'mx-2',
   },
   md: {
     j: 'text-2xl md:text-3xl',
@@ -23,23 +24,35 @@ const sizeConfig = {
     text: 'text-[10px] md:text-xs',
     gap: 'mx-2',
     textGap: 'mt-2',
-    textSpacing: 'tracking-[0.25em]',
+    textSpacing: 'tracking-[0.2em]',
+    wordGap: 'mx-2',
   },
   lg: {
     j: 'text-5xl md:text-6xl lg:text-7xl',
     dividerHeight: 'h-10 md:h-12 lg:h-14',
-    text: 'text-xs md:text-sm lg:text-base',
-    gap: 'mx-2.5 md:mx-3',
-    textGap: 'mt-4',
-    textSpacing: 'tracking-[0.35em]',
+    text: 'text-sm md:text-base lg:text-lg',
+    gap: 'mx-2 md:mx-2.5',
+    textGap: 'mt-3',
+    textSpacing: 'tracking-[0.25em]',
+    wordGap: 'mx-2',
   },
   xl: {
     j: 'text-7xl md:text-8xl lg:text-9xl',
     dividerHeight: 'h-14 md:h-16 lg:h-20',
-    text: 'text-sm md:text-base lg:text-lg',
+    text: 'text-base md:text-lg lg:text-xl',
+    gap: 'mx-2.5 md:mx-3',
+    textGap: 'mt-4',
+    textSpacing: 'tracking-[0.25em]',
+    wordGap: 'mx-2',
+  },
+  footer: {
+    j: 'text-7xl md:text-8xl lg:text-[10rem]',
+    dividerHeight: 'h-14 md:h-20 lg:h-28',
+    text: 'text-xl md:text-2xl lg:text-3xl',
     gap: 'mx-3 md:mx-4',
-    textGap: 'mt-5',
-    textSpacing: 'tracking-[0.35em]',
+    textGap: 'mt-4 md:mt-5',
+    textSpacing: 'tracking-[0.2em]',
+    wordGap: 'mx-3',
   },
 };
 
@@ -76,11 +89,11 @@ export const JJLogo = ({ size = 'md', showText = true, className = '' }: JJLogoP
           className={`${config.textGap} flex items-center justify-center text-white`}
           style={{ fontFamily: "Poppins, sans-serif" }}
         >
-          <span className={`font-medium ${config.text} ${config.textSpacing}`}>
+          <span className={`font-semibold ${config.text} ${config.textSpacing}`}>
             GLOBAL
           </span>
-          <span className="mx-4" />
-          <span className={`font-medium ${config.text} ${config.textSpacing}`}>
+          <span className={config.wordGap} />
+          <span className={`font-semibold ${config.text} ${config.textSpacing}`}>
             CAPITAL
           </span>
         </div>
@@ -96,19 +109,19 @@ export const JJLogoHeader = ({ className = '' }: { className?: string }) => (
     style={{ fontFamily: "Poppins, sans-serif" }}
   >
     {/* J | J Monogram */}
-    <span className="text-gold font-extralight text-2xl md:text-3xl leading-none">J</span>
+    <span className="text-gold font-extralight text-2xl md:text-3xl lg:text-4xl leading-none">J</span>
     <div className="mx-1.5 flex items-center justify-center">
-      <div className="w-[1.5px] bg-white/90 h-5 md:h-6" />
+      <div className="w-[1.5px] bg-white/90 h-5 md:h-7 lg:h-8" />
     </div>
-    <span className="text-gold font-extralight text-2xl md:text-3xl leading-none">J</span>
+    <span className="text-gold font-extralight text-2xl md:text-3xl lg:text-4xl leading-none">J</span>
     
-    {/* GLOBAL CAPITAL - NO DOT between words */}
-    <div className="ml-3 flex items-center text-white">
-      <span className="font-semibold text-xs sm:text-sm md:text-base tracking-[0.2em]">
+    {/* GLOBAL CAPITAL - reduced gap between words */}
+    <div className="ml-2.5 md:ml-3 flex items-center text-white">
+      <span className="font-semibold text-sm sm:text-base md:text-lg tracking-[0.15em]">
         GLOBAL
       </span>
-      <span className="mx-3" />
-      <span className="font-semibold text-xs sm:text-sm md:text-base tracking-[0.2em]">
+      <span className="mx-1.5" />
+      <span className="font-semibold text-sm sm:text-base md:text-lg tracking-[0.15em]">
         CAPITAL
       </span>
     </div>

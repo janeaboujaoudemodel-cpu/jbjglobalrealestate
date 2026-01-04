@@ -85,11 +85,11 @@ const Footer = () => {
     <footer className="bg-black border-t border-zinc-800">
       <div className="container mx-auto px-4 py-6 md:py-8">
         {/* Logo + Description (compact) */}
-        <div className="text-center mb-6">
+        <div className="text-center mb-8 md:mb-10">
           <Link to="/" className="inline-block">
-            <JJLogo size="lg" />
+            <JJLogo size="footer" />
           </Link>
-          <p className="text-zinc-400 text-sm md:text-base mt-4 max-w-2xl mx-auto leading-relaxed">
+          <p className="text-zinc-400 text-base md:text-lg mt-6 max-w-2xl mx-auto leading-relaxed">
             A founder-led advisory group specializing in UAE and Dubai real estate,
             supported by a global platform of investment, advisory, legal, design,
             and concierge services.
