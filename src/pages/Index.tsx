@@ -2,17 +2,15 @@ import { Link } from "react-router-dom";
 import { motion } from "framer-motion";
 import Footer from "@/components/Footer";
 import StatsCounter from "@/components/StatsCounter";
-import WhyDubaiSection from "@/components/WhyDubaiSection";
-import ServicesSection from "@/components/ServicesSection";
 import AIComparisonWidget from "@/components/AIComparisonWidget";
 import MarketReportCTA from "@/components/MarketReportCTA";
 import WelcomeModal from "@/components/WelcomeModal";
-import { Sparkles, ArrowUpRight, Building2, ClipboardCheck, Volume2, VolumeX, MessageCircle, Phone, ChevronDown, User, Award, BarChart3, Calculator } from "lucide-react";
+import { Sparkles, ArrowUpRight, Volume2, VolumeX, ChevronDown, User } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { useState, useRef } from "react";
 import dubaiHeroVideo from "@/assets/dubai-hero-video.mp4";
 import founderProfessional from "@/assets/founder-professional.jpeg";
-import { CONTACT_INFO, getWhatsAppUrl, getCallUrl } from "@/constants/stats";
+import { CONTACT_INFO } from "@/constants/stats";
 import { JJLogo } from "@/components/JJLogo";
 
 // Animation variants
@@ -39,18 +37,6 @@ const Index = () => {
       setIsMuted(!isMuted);
     }
   };
-
-  const quickLinks = [
-    { href: "/properties?status=off-plan", label: "Off-Plan Properties", icon: Building2, description: "New launches & pre-construction" },
-    { href: "/properties?status=ready", label: "Ready to Move", icon: ClipboardCheck, description: "Immediate handover properties" },
-    { href: "/quiz", label: "AI Home Finder", icon: Sparkles, description: "Personalized recommendations" },
-  ];
-
-  const aiTools = [
-    { href: "/quiz", label: "AI Property Matchmaker", icon: Sparkles, description: "Get personalized recommendations in 30 seconds", color: "purple" },
-    { href: "/compare", label: "AI Comparison Table", icon: BarChart3, description: "Compare 2-5 projects side by side", color: "gold" },
-    { href: "/mortgage-calculator", label: "Mortgage Calculator", icon: Calculator, description: "Calculate payments & financing options", color: "blue" },
-  ];
 
   return (
     <section className="relative w-full min-h-screen bg-black">
@@ -136,9 +122,10 @@ const Index = () => {
               <a href={CONTACT_INFO.inquiryFormUrl} target="_blank" rel="noopener noreferrer">
                 <Button 
                   variant="outline"
-                  className="border-white/30 text-white hover:bg-white/10 hover:border-white/50 px-8 py-6 text-base backdrop-blur-sm"
+                  className="border-gold/50 text-gold hover:bg-gold/10 hover:border-gold px-8 py-6 text-base backdrop-blur-sm bg-black/30"
                 >
                   Contact Us
+                  <ArrowUpRight className="w-5 h-5 ml-2" />
                 </Button>
               </a>
             </div>
@@ -169,80 +156,8 @@ const Index = () => {
         </motion.div>
       </div>
 
-      {/* AI TOOLS SECTION */}
-      <section className="py-20 bg-gradient-to-b from-black to-zinc-950">
-        <div className="container mx-auto px-4">
-          <motion.div
-            initial="hidden"
-            whileInView="visible"
-            viewport={{ once: true, margin: "-100px" }}
-            variants={staggerContainer}
-            className="text-center mb-12"
-          >
-            <motion.span 
-              className="inline-block text-gold text-sm uppercase tracking-[0.3em] mb-4"
-              variants={fadeInUp}
-            >
-              AI-Powered Tools
-            </motion.span>
-            <motion.h2 
-              className="text-white text-3xl md:text-4xl lg:text-5xl font-bold mb-4"
-              style={{ fontFamily: "Poppins, sans-serif" }}
-              variants={fadeInUp}
-            >
-              Smarter Investment Decisions
-            </motion.h2>
-            <motion.p 
-              className="text-zinc-400 max-w-2xl mx-auto"
-              variants={fadeInUp}
-            >
-              Leverage our exclusive AI tools for property matching, comparison analysis, and mortgage calculations
-            </motion.p>
-          </motion.div>
-
-          <motion.div 
-            className="grid md:grid-cols-3 gap-6"
-            initial="hidden"
-            whileInView="visible"
-            viewport={{ once: true, margin: "-100px" }}
-            variants={staggerContainer}
-          >
-            {aiTools.map((tool) => (
-              <motion.div key={tool.href} variants={fadeInUp}>
-                <Link to={tool.href}>
-                  <div className={`group h-full bg-zinc-900/50 hover:bg-zinc-800/80 border border-zinc-800 hover:border-gold/30 rounded-2xl p-8 transition-all duration-300 ${
-                    tool.color === "purple" ? "hover:shadow-lg hover:shadow-purple-500/10" :
-                    tool.color === "gold" ? "hover:shadow-lg hover:shadow-gold/10" :
-                    "hover:shadow-lg hover:shadow-blue-500/10"
-                  }`}>
-                    <div className={`w-14 h-14 rounded-xl flex items-center justify-center mb-6 transition-colors ${
-                      tool.color === "purple" ? "bg-purple-500/10 group-hover:bg-purple-500/20" :
-                      tool.color === "gold" ? "bg-gold/10 group-hover:bg-gold/20" :
-                      "bg-blue-500/10 group-hover:bg-blue-500/20"
-                    }`}>
-                      <tool.icon className={`w-7 h-7 ${
-                        tool.color === "purple" ? "text-purple-400" :
-                        tool.color === "gold" ? "text-gold" :
-                        "text-blue-400"
-                      }`} />
-                    </div>
-                    <h3 className="text-white text-xl font-semibold mb-2 group-hover:text-gold transition-colors">
-                      {tool.label}
-                    </h3>
-                    <p className="text-zinc-500 text-sm">{tool.description}</p>
-                    <div className="mt-4 flex items-center text-gold text-sm font-medium opacity-0 group-hover:opacity-100 transition-opacity">
-                      Try Now <ArrowUpRight className="w-4 h-4 ml-1" />
-                    </div>
-                  </div>
-                </Link>
-              </motion.div>
-            ))}
-          </motion.div>
-        </div>
-      </section>
-
       {/* FOUNDER SECTION - Meet The Leadership */}
-      <section className="py-20 md:py-28 bg-gradient-to-b from-zinc-950 via-black to-zinc-950">
+      <section className="py-20 md:py-28 bg-gradient-to-b from-black via-zinc-950 to-black">
         <div className="container mx-auto px-4">
           <motion.div
             className="grid lg:grid-cols-2 gap-12 lg:gap-20 items-center"
@@ -334,57 +249,24 @@ const Index = () => {
       </section>
 
       {/* AI COMPARISON & ANALYZER PREVIEW */}
-      <section className="py-16 md:py-20">
+      <section className="py-16 md:py-20 bg-black">
         <div className="container mx-auto px-4">
           <AIComparisonWidget />
         </div>
       </section>
 
       {/* MARKET REPORT CTA */}
-      <section className="py-16 md:py-20">
+      <section className="py-16 md:py-20 bg-gradient-to-b from-black to-zinc-950">
         <div className="container mx-auto px-4">
           <MarketReportCTA />
         </div>
       </section>
 
-      {/* QUICK LINKS - Property Search Entry Points */}
-      <div className="container mx-auto px-4 py-16">
-        <motion.div 
-          className="grid md:grid-cols-3 gap-6"
-          initial="hidden"
-          whileInView="visible"
-          viewport={{ once: true, margin: "-100px" }}
-          variants={staggerContainer}
-        >
-          {quickLinks.map((link) => (
-            <motion.div key={link.href} variants={fadeInUp}>
-              <Link to={link.href}>
-                <div className="group bg-zinc-900/50 hover:bg-zinc-800/80 border border-zinc-800 hover:border-gold/30 rounded-2xl p-8 transition-all duration-300">
-                  <div className="w-14 h-14 bg-gold/10 rounded-xl flex items-center justify-center mb-6 group-hover:bg-gold/20 transition-colors">
-                    <link.icon className="w-7 h-7 text-gold" />
-                  </div>
-                  <h3 className="text-white text-xl font-semibold mb-2 group-hover:text-gold transition-colors">
-                    {link.label}
-                  </h3>
-                  <p className="text-zinc-500 text-sm">{link.description}</p>
-                </div>
-              </Link>
-            </motion.div>
-          ))}
-        </motion.div>
-      </div>
-
       {/* Stats Counter Section */}
       <StatsCounter />
 
-      {/* Why Dubai Section */}
-      <WhyDubaiSection />
-
-      {/* Services Section */}
-      <ServicesSection />
-
       {/* Contact CTA Section */}
-      <div className="container mx-auto px-4">
+      <div className="container mx-auto px-4 bg-black">
         <motion.div 
           className="text-center py-20 border-t border-zinc-800"
           initial="hidden"
@@ -396,32 +278,29 @@ const Index = () => {
           <h3 className="text-3xl md:text-4xl font-bold text-white mb-4" style={{ fontFamily: "Poppins, sans-serif" }}>
             Ready to Invest?
           </h3>
-          <p className="text-zinc-400 mb-10 max-w-xl mx-auto">
-            Connect with our investment advisors for personalized guidance on UAE real estate opportunities
+          <p className="text-zinc-400 max-w-xl mx-auto mb-8">
+            Connect with our team to discover exclusive off-plan opportunities and start your UAE investment journey today.
           </p>
           <div className="flex flex-wrap justify-center gap-4">
             <a href={CONTACT_INFO.inquiryFormUrl} target="_blank" rel="noopener noreferrer">
-              <Button className="bg-gold hover:bg-gold-light text-black font-semibold px-8 py-6 h-auto text-base">
-                <ArrowUpRight className="w-5 h-5 mr-2" />
+              <Button className="bg-gold hover:bg-gold-light text-black font-semibold px-8 py-6 text-base">
                 Contact Us
+                <ArrowUpRight className="w-5 h-5 ml-2" />
               </Button>
             </a>
-            <a href={getWhatsAppUrl()} target="_blank" rel="noopener noreferrer">
-              <Button variant="outline" className="border-green-600 text-green-500 hover:bg-green-600 hover:text-white px-8 py-6 h-auto text-base">
-                <MessageCircle className="w-5 h-5 mr-2" />
-                WhatsApp
+            <Link to="/properties">
+              <Button 
+                variant="outline"
+                className="border-gold/50 text-gold hover:bg-gold/10 hover:border-gold px-8 py-6 text-base"
+              >
+                Browse Properties
               </Button>
-            </a>
-            <a href={getCallUrl()}>
-              <Button variant="outline" className="border-gold/50 text-gold hover:bg-gold hover:text-black px-8 py-6 h-auto text-base">
-                <Phone className="w-5 h-5 mr-2" />
-                Call Now
-              </Button>
-            </a>
+            </Link>
           </div>
         </motion.div>
       </div>
 
+      {/* Footer */}
       <Footer />
     </section>
   );
