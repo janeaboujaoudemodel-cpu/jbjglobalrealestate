@@ -56,13 +56,22 @@ const MarketReport = () => {
   const downloadBook = () => {
     const websiteUrl = "https://jjglobalcapital.com";
     const qrUrl = `https://api.qrserver.com/v1/create-qr-code/?size=200x200&data=${encodeURIComponent(websiteUrl + "/quiz")}`;
+    
+    // Villa images for visual enhancement
+    const villaImages = [
+      "https://images.unsplash.com/photo-1613490493576-7fde63acd811?w=1200&q=80",
+      "https://images.unsplash.com/photo-1600596542815-ffad4c1539a9?w=1200&q=80",
+      "https://images.unsplash.com/photo-1600585154340-be6161a56a0c?w=1200&q=80",
+      "https://images.unsplash.com/photo-1512917774080-9991f1c4c750?w=1200&q=80",
+    ];
 
     const html = `<!DOCTYPE html>
 <html lang="en">
 <head>
 <meta charset="UTF-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1" />
-<title>UAE Real Estate Market Intelligence 2025-2026 | JJ Global Capital</title>
+<title>UAE Real Estate Market Intelligence 2026 | JJ Global Capital</title>
+<meta name="description" content="Comprehensive UAE Real Estate Market Intelligence Report by JJ Global Capital - Your guide to investing in UAE property market 2026" />
 <style>
   @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800&display=swap');
   @import url('https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;500;600;700&display=swap');
@@ -118,6 +127,24 @@ const MarketReport = () => {
     text-align: center;
     min-height: 100vh;
     background: radial-gradient(ellipse at center, #1a1814 0%, #0a0a0a 70%);
+    position: relative;
+  }
+  
+  .cover-image {
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-image: url('${villaImages[0]}');
+    background-size: cover;
+    background-position: center;
+    opacity: 0.15;
+  }
+  
+  .cover-content {
+    position: relative;
+    z-index: 1;
   }
   
   .cover .logo-large {
@@ -396,82 +423,233 @@ const MarketReport = () => {
     color: #666;
   }
   
+  .founder-image {
+    width: 200px;
+    height: 200px;
+    border-radius: 50%;
+    object-fit: cover;
+    object-position: center;
+    border: 4px solid #A8925A;
+    margin: 0 auto 30px;
+    display: block;
+  }
+  
+  .founder-section {
+    text-align: center;
+    padding: 40px 0;
+  }
+  
+  .villa-gallery {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 20px;
+    margin: 30px 0;
+  }
+  
+  .villa-gallery img {
+    width: 100%;
+    height: 180px;
+    object-fit: cover;
+    border-radius: 12px;
+    border: 1px solid rgba(168, 146, 90, 0.3);
+  }
+  
+  .disclaimer {
+    background: rgba(255, 255, 255, 0.02);
+    border: 1px solid rgba(255,255,255,0.1);
+    border-radius: 12px;
+    padding: 20px;
+    margin: 30px 0;
+    font-size: 11px;
+    color: #666;
+    line-height: 1.6;
+  }
+  
+  .share-bar {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    background: linear-gradient(180deg, rgba(0,0,0,0.95) 0%, rgba(0,0,0,0.8) 100%);
+    padding: 15px 30px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    z-index: 1000;
+    backdrop-filter: blur(10px);
+    border-bottom: 1px solid rgba(168, 146, 90, 0.3);
+  }
+  
+  .share-bar .brand {
+    color: #A8925A;
+    font-size: 12px;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+  }
+  
+  .share-bar .actions {
+    display: flex;
+    gap: 10px;
+  }
+  
+  .share-bar button {
+    padding: 10px 20px;
+    border-radius: 8px;
+    font-size: 12px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.2s;
+    border: none;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+  
+  .share-bar .btn-download {
+    background: linear-gradient(135deg, #A8925A 0%, #8a7648 100%);
+    color: #000;
+  }
+  
+  .share-bar .btn-download:hover {
+    background: linear-gradient(135deg, #c4aa6a 0%, #A8925A 100%);
+  }
+  
+  .share-bar .btn-share {
+    background: rgba(255,255,255,0.1);
+    color: #fff;
+    border: 1px solid rgba(255,255,255,0.2);
+  }
+  
+  .share-bar .btn-share:hover {
+    background: rgba(255,255,255,0.2);
+  }
+  
+  .share-bar .btn-close {
+    background: transparent;
+    color: #888;
+    padding: 10px;
+  }
+  
+  .share-bar .btn-close:hover {
+    color: #fff;
+  }
+  
   @media print {
     .page { page-break-after: always; }
     body { background: #000; }
+    .share-bar { display: none; }
+  }
+  
+  @media (max-width: 768px) {
+    .page { padding: 40px 25px; }
+    .cover h1 { font-size: 36px; }
+    h2 { font-size: 24px; }
+    .stat-grid { grid-template-columns: 1fr; }
+    .two-col { grid-template-columns: 1fr; }
+    .qr-section { flex-direction: column; text-align: center; }
+    .villa-gallery { grid-template-columns: 1fr; }
+    .share-bar { padding: 10px 15px; }
+    .share-bar .brand { display: none; }
   }
 </style>
 </head>
 <body>
-  <!-- COVER PAGE -->
-  <div class="page cover">
-    <div class="logo-large">JJ | Global Capital</div>
-    <h1>UAE Real Estate<br/>Market Intelligence</h1>
-    <div class="subtitle">Investor Education & Decision Framework</div>
-    <div class="edition">2025 – 2026 Edition</div>
-    <div class="author-box">
-      <div class="author-name">Jane Abou Jaoude</div>
-      <div class="author-title">Founder & Chairwoman • JJ Global Capital</div>
+  <!-- Share/Download Bar -->
+  <div class="share-bar">
+    <div class="brand">JJ | GLOBAL CAPITAL</div>
+    <div class="actions">
+      <button class="btn-share" onclick="shareBook()">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <circle cx="18" cy="5" r="3"/><circle cx="6" cy="12" r="3"/><circle cx="18" cy="19" r="3"/>
+          <line x1="8.59" y1="13.51" x2="15.42" y2="17.49"/><line x1="15.41" y1="6.51" x2="8.59" y2="10.49"/>
+        </svg>
+        Share
+      </button>
+      <button class="btn-download" onclick="downloadPDF()">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/>
+        </svg>
+        Download
+      </button>
+      <button class="btn-close" onclick="window.close()">✕</button>
     </div>
+  </div>
+
+  <!-- COVER PAGE -->
+  <div class="page cover" style="padding-top: 80px;">
+    <div class="cover-image"></div>
+    <div class="cover-content">
+      <div class="logo-large">JJ | Global Capital</div>
+      <h1>UAE Real Estate<br/>Market Intelligence</h1>
+      <div class="subtitle">Investor Education & Decision Framework</div>
+      <div class="edition">2026 Edition</div>
+      <div class="author-box">
+        <div class="author-name">Jane Abou Jaoude</div>
+        <div class="author-title">Founder & Chairwoman • JJ Global Capital</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- FOUNDER PAGE -->
+  <div class="page">
+    <div class="founder-section">
+      <h2 style="text-align: center; border-bottom: none; margin-bottom: 40px;">From the Founder</h2>
+      <div style="max-width: 120px; height: 120px; border-radius: 50%; background: linear-gradient(135deg, #A8925A, #8a7648); margin: 0 auto 30px; display: flex; align-items: center; justify-content: center;">
+        <span style="font-size: 36px; color: #000; font-weight: 700;">JJ</span>
+      </div>
+      <h3 style="color: #A8925A; text-align: center; margin-bottom: 10px;">Jane Abou Jaoude</h3>
+      <p style="color: #888; text-align: center; font-size: 13px; margin-bottom: 30px;">Founder & Chairwoman, JJ Global Capital</p>
+    </div>
+    
+    <div class="highlight-box">
+      <h4 style="margin-top: 0; color: #A8925A;">Why I Created This Book</h4>
+      <p style="font-style: italic; font-size: 15px;">After years of guiding investors through UAE real estate transactions, I recognized a critical gap: there was no single, comprehensive resource that combined official market data with practical decision-making frameworks.</p>
+      <p style="font-size: 14px;">Too many investors were making decisions based on incomplete information, marketing hype, or unreliable sources. I wanted to change that.</p>
+      <p style="font-size: 14px; margin-bottom: 0;">This book distills my experience into structured frameworks that help you evaluate opportunities objectively—whether you are a first-time buyer or an experienced portfolio investor. It is designed to give you the confidence to make informed decisions in one of the world is most dynamic real estate markets.</p>
+    </div>
+    
+    <h3>What You Will Learn</h3>
+    <ul>
+      <li>How to analyze market trends using official Dubai Land Department data</li>
+      <li>Frameworks for comparing developers, communities, and property types</li>
+      <li>Investment checklists designed for both off-plan and ready properties</li>
+      <li>Risk management strategies and due diligence best practices</li>
+      <li>Access to our complimentary AI Property Matchmaker tool</li>
+    </ul>
+    
+    <div class="villa-gallery">
+      <img src="${villaImages[1]}" alt="Luxury Villa" />
+      <img src="${villaImages[2]}" alt="Premium Property" />
+    </div>
+    <span class="page-number">2</span>
   </div>
 
   <!-- TABLE OF CONTENTS -->
   <div class="page">
     <h2>Table of Contents</h2>
     <div class="toc">
-      <div class="toc-item"><span class="title">1. Introduction: Why This Book</span><span class="page-num">3</span></div>
-      <div class="toc-item"><span class="title">2. UAE Market Overview 2024-2025</span><span class="page-num">4</span></div>
+      <div class="toc-item"><span class="title">1. From the Founder</span><span class="page-num">2</span></div>
+      <div class="toc-item"><span class="title">2. UAE Market Overview 2025-2026</span><span class="page-num">4</span></div>
       <div class="toc-item"><span class="title">3. Dubai Real Estate Fundamentals</span><span class="page-num">5</span></div>
       <div class="toc-item"><span class="title">4. Key Investment Indicators</span><span class="page-num">6</span></div>
       <div class="toc-item"><span class="title">5. Developer Analysis Framework</span><span class="page-num">7</span></div>
       <div class="toc-item"><span class="title">6. Community Comparison Guide</span><span class="page-num">8</span></div>
       <div class="toc-item"><span class="title">7. Off-Plan vs Ready Properties</span><span class="page-num">9</span></div>
       <div class="toc-item"><span class="title">8. Due Diligence Checklist</span><span class="page-num">10</span></div>
-      <div class="toc-item"><span class="title">9. Risk Management</span><span class="page-num">11</span></div>
-      <div class="toc-item"><span class="title">10. AI Property Matchmaker</span><span class="page-num">12</span></div>
+      <div class="toc-item"><span class="title">9. Market Outlook 2026</span><span class="page-num">11</span></div>
+      <div class="toc-item"><span class="title">10. Risk Management</span><span class="page-num">12</span></div>
+      <div class="toc-item"><span class="title">11. AI Property Matchmaker</span><span class="page-num">13</span></div>
     </div>
     <div class="highlight-box">
       <h4 style="margin-top: 0;">About This Book</h4>
       <p style="margin-bottom: 0;">This educational guide is designed to help investors understand the UAE real estate market using government data, structured frameworks, and expert insights. It does not constitute financial or brokerage advice.</p>
     </div>
-    <span class="page-number">2</span>
-  </div>
-
-  <!-- INTRODUCTION -->
-  <div class="page">
-    <h2>1. Introduction: Why This Book</h2>
-    <p>The UAE real estate market has evolved into one of the world's most dynamic investment destinations. With transaction volumes exceeding AED 500 billion in 2024 and continued infrastructure development, the opportunity is clear—but so is the need for informed decision-making.</p>
-    
-    <h3>A Message from the Founder</h3>
-    <div class="highlight-box">
-      <p style="font-style: italic; font-size: 15px; margin-bottom: 0;">"After years of guiding investors through UAE real estate transactions, I created this book to distill the essential knowledge every investor needs. My goal is to help you make confident, data-driven decisions—whether you're purchasing your first property or expanding your portfolio."</p>
-      <p style="color: #A8925A; font-weight: 600; margin-top: 15px; margin-bottom: 0;">— Jane Abou Jaoude, Founder & Chairwoman</p>
-    </div>
-    
-    <h3>What You Will Learn</h3>
-    <ul>
-      <li>How to read and interpret official market data from Dubai Land Department</li>
-      <li>Frameworks for comparing developers, communities, and property types</li>
-      <li>Investment checklists for both off-plan and ready properties</li>
-      <li>Risk management strategies and due diligence best practices</li>
-      <li>How to use our complimentary AI Property Matchmaker tool</li>
-    </ul>
-    
-    <h3>Data Sources & Methodology</h3>
-    <p>All market data in this book is sourced from official government publications and trusted industry platforms:</p>
-    <ul>
-      <li>Dubai Land Department (DLD) — Official transaction records</li>
-      <li>Dubai REST Platform — Real estate statistics portal</li>
-      <li>RERA — Regulatory guidelines and developer ratings</li>
-      <li>Property Monitor — Market analytics and trends</li>
-      <li>DXB Interact — Real-time transaction data</li>
-    </ul>
     <span class="page-number">3</span>
   </div>
 
   <!-- UAE MARKET OVERVIEW -->
   <div class="page">
-    <h2>2. UAE Market Overview 2024-2025</h2>
+    <h2>UAE Market Overview 2025-2026</h2>
     <p>The UAE real estate sector continues to demonstrate remarkable resilience and growth, driven by economic diversification, infrastructure investment, and favorable government policies.</p>
     
     <div class="stat-grid">
@@ -511,6 +689,11 @@ const MarketReport = () => {
       </div>
     </div>
     
+    <div class="villa-gallery">
+      <img src="${villaImages[0]}" alt="Luxury Real Estate" />
+      <img src="${villaImages[3]}" alt="Premium Development" />
+    </div>
+    
     <h3>Investor Demographics</h3>
     <p>The UAE continues to attract diverse international investors, with notable growth from European, Asian, and CIS markets. In 2024, overseas buyers accounted for approximately 45% of all property transactions.</p>
     
@@ -523,7 +706,7 @@ const MarketReport = () => {
 
   <!-- DUBAI FUNDAMENTALS -->
   <div class="page">
-    <h2>3. Dubai Real Estate Fundamentals</h2>
+    <h2>Dubai Real Estate Fundamentals</h2>
     <p>Understanding the structure of Dubai's property market is essential for making informed investment decisions.</p>
     
     <h3>Property Types</h3>
@@ -590,8 +773,8 @@ const MarketReport = () => {
 
   <!-- KEY INDICATORS -->
   <div class="page">
-    <h2>4. Key Investment Indicators</h2>
-    <p>Successful real estate investment requires understanding and monitoring key market indicators. Here's what to track:</p>
+    <h2>Key Investment Indicators</h2>
+    <p>Successful real estate investment requires understanding and monitoring key market indicators. Here is what to track:</p>
     
     <h3>Primary Indicators</h3>
     <div class="two-col">
@@ -609,7 +792,7 @@ const MarketReport = () => {
       </div>
       <div class="info-card">
         <h4>Days on Market</h4>
-        <p>Properties selling quickly (< 30 days) indicate strong demand. Extended listings (> 90 days) may suggest overpricing.</p>
+        <p>Properties selling quickly (under 30 days) indicate strong demand. Extended listings (over 90 days) may suggest overpricing.</p>
       </div>
     </div>
     
@@ -624,22 +807,22 @@ const MarketReport = () => {
         <tr>
           <td>Transaction Growth YoY</td>
           <td>5-15% increase</td>
-          <td>>25% or negative</td>
+          <td>Over 25% or negative</td>
         </tr>
         <tr>
           <td>Price Growth YoY</td>
           <td>3-10% increase</td>
-          <td>>20% (bubble risk)</td>
+          <td>Over 20% (bubble risk)</td>
         </tr>
         <tr>
           <td>Rental Yield</td>
           <td>6-8%</td>
-          <td><4% (overvalued)</td>
+          <td>Under 4% (overvalued)</td>
         </tr>
         <tr>
           <td>Supply Pipeline</td>
           <td>Moderate (2-3% of stock)</td>
-          <td>>5% of existing stock</td>
+          <td>Over 5% of existing stock</td>
         </tr>
       </table>
     </div>
@@ -653,7 +836,7 @@ const MarketReport = () => {
 
   <!-- DEVELOPER ANALYSIS -->
   <div class="page">
-    <h2>5. Developer Analysis Framework</h2>
+    <h2>Developer Analysis Framework</h2>
     <p>Choosing the right developer is crucial, especially for off-plan purchases. Use this framework to evaluate developers objectively.</p>
     
     <h3>Developer Evaluation Criteria</h3>
@@ -723,7 +906,7 @@ const MarketReport = () => {
 
   <!-- COMMUNITY COMPARISON -->
   <div class="page">
-    <h2>6. Community Comparison Guide</h2>
+    <h2>Community Comparison Guide</h2>
     <p>Location drives long-term value. Use this framework to compare communities based on investment fundamentals.</p>
     
     <h3>Community Assessment Matrix</h3>
@@ -784,7 +967,7 @@ const MarketReport = () => {
     </ul>
     
     <div class="highlight-box">
-      <h4 style="margin-top: 0;">Emerging Areas to Watch</h4>
+      <h4 style="margin-top: 0;">Emerging Areas to Watch in 2026</h4>
       <p style="margin-bottom: 0;">Dubai South, Mohammed Bin Rashid City, Dubai Islands (formerly Deira Islands), and areas along the new metro extensions offer potential for early-stage capital appreciation.</p>
     </div>
     <span class="page-number">8</span>
@@ -792,7 +975,7 @@ const MarketReport = () => {
 
   <!-- OFF-PLAN VS READY -->
   <div class="page">
-    <h2>7. Off-Plan vs Ready Properties</h2>
+    <h2>Off-Plan vs Ready Properties</h2>
     <p>Understanding the trade-offs between off-plan and ready properties is essential for aligning investments with your goals.</p>
     
     <h3>Comparison Overview</h3>
@@ -842,23 +1025,23 @@ const MarketReport = () => {
       <li>Developer has strong delivery track record</li>
       <li>Location has proven demand drivers</li>
       <li>Payment plan suits your cash flow</li>
-      <li>You're comfortable with construction risk</li>
+      <li>You are comfortable with construction risk</li>
     </ul>
     
     <h3>When to Choose Ready</h3>
     <ul class="checklist">
       <li>You need immediate rental income</li>
       <li>You want to physically inspect before buying</li>
-      <li>You're financing with a mortgage</li>
+      <li>You are financing with a mortgage</li>
       <li>You prefer lower uncertainty</li>
-      <li>You're buying for personal use</li>
+      <li>You are buying for personal use</li>
     </ul>
     <span class="page-number">9</span>
   </div>
 
   <!-- DUE DILIGENCE -->
   <div class="page">
-    <h2>8. Due Diligence Checklist</h2>
+    <h2>Due Diligence Checklist</h2>
     <p>Thorough due diligence protects your investment. Use this comprehensive checklist before any purchase.</p>
     
     <h3>For All Properties</h3>
@@ -876,8 +1059,8 @@ const MarketReport = () => {
     <ul class="checklist">
       <li>Verify RERA registration and project number</li>
       <li>Confirm escrow account details</li>
-      <li>Review Sales & Purchase Agreement carefully</li>
-      <li>Check developer's completion track record</li>
+      <li>Review Sales and Purchase Agreement carefully</li>
+      <li>Check developer completion track record</li>
       <li>Understand cancellation and refund policies</li>
       <li>Visit completed projects by same developer</li>
       <li>Verify handover timeline and delay provisions</li>
@@ -895,9 +1078,68 @@ const MarketReport = () => {
     <span class="page-number">10</span>
   </div>
 
+  <!-- MARKET OUTLOOK 2026 -->
+  <div class="page">
+    <h2>Market Outlook 2026</h2>
+    <p>Looking ahead to 2026, the UAE real estate market is positioned for continued growth, supported by strong fundamentals and government initiatives.</p>
+    
+    <h3>2026 Market Expectations</h3>
+    <div class="stat-grid">
+      <div class="stat-box">
+        <div class="number">600B+</div>
+        <div class="label">Projected Transactions</div>
+      </div>
+      <div class="stat-box">
+        <div class="number">5-8%</div>
+        <div class="label">Expected Price Growth</div>
+      </div>
+      <div class="stat-box">
+        <div class="number">200K+</div>
+        <div class="label">New Units Delivery</div>
+      </div>
+    </div>
+    
+    <h3>Key Trends to Watch</h3>
+    <div class="two-col">
+      <div class="info-card">
+        <h4>Growth Drivers</h4>
+        <ul>
+          <li>Golden Visa expansion continues</li>
+          <li>Corporate relocations to Dubai</li>
+          <li>Infrastructure investments (Al Maktoum Airport)</li>
+          <li>Tourism sector recovery</li>
+        </ul>
+      </div>
+      <div class="info-card">
+        <h4>Areas of Caution</h4>
+        <ul>
+          <li>Oversupply in certain segments</li>
+          <li>Global economic uncertainty</li>
+          <li>Interest rate environment</li>
+          <li>Off-plan delivery delays</li>
+        </ul>
+      </div>
+    </div>
+    
+    <h3>Investment Strategy for 2026</h3>
+    <ul>
+      <li><strong>Focus on fundamentals:</strong> Prioritize locations with strong rental demand and infrastructure</li>
+      <li><strong>Developer selection:</strong> Stick to Tier 1-2 developers for off-plan investments</li>
+      <li><strong>Diversification:</strong> Balance between apartments and villas, ready and off-plan</li>
+      <li><strong>Cash flow priority:</strong> Ensure positive cash flow from day one for ready properties</li>
+      <li><strong>Exit planning:</strong> Define clear exit criteria before purchase</li>
+    </ul>
+    
+    <div class="highlight-box">
+      <h4 style="margin-top: 0;">Our Perspective</h4>
+      <p style="margin-bottom: 0;">At JJ Global Capital, we believe 2026 presents selective opportunities for investors who do proper due diligence. The key is to focus on quality over quantity and align investments with your personal risk tolerance and timeline.</p>
+    </div>
+    <span class="page-number">11</span>
+  </div>
+
   <!-- RISK MANAGEMENT -->
   <div class="page">
-    <h2>9. Risk Management</h2>
+    <h2>Risk Management</h2>
     <p>Every investment carries risk. Smart investors identify, assess, and mitigate risks proactively.</p>
     
     <h3>Key Risk Categories</h3>
@@ -935,18 +1177,18 @@ const MarketReport = () => {
     <div class="warning-box">
       <h4>Common Investor Mistakes</h4>
       <ul style="margin-bottom: 0;">
-        <li>Chasing "hot tips" without independent research</li>
+        <li>Chasing hot tips without independent research</li>
         <li>Over-leveraging with multiple off-plan commitments</li>
         <li>Ignoring service charges and maintenance costs</li>
         <li>Buying based on renders instead of visiting sites</li>
       </ul>
     </div>
-    <span class="page-number">11</span>
+    <span class="page-number">12</span>
   </div>
 
   <!-- AI MATCHMAKER -->
   <div class="page">
-    <h2>10. AI Property Matchmaker</h2>
+    <h2>AI Property Matchmaker</h2>
     <p>JJ Global Capital has developed an exclusive AI-powered Property Matchmaker to help investors identify opportunities that align with their specific criteria.</p>
     
     <h3>How It Works</h3>
@@ -992,22 +1234,46 @@ const MarketReport = () => {
       <div class="logo">JJ | GLOBAL CAPITAL</div>
       <p>Part of JJ Holding Group • jjholdinggroup.com</p>
       <p style="margin-top: 10px;">Email: ${CONTACT_INFO.emailCapitalized} • Phone: ${CONTACT_INFO.phone}</p>
-      <p style="margin-top: 20px; color: #888; font-size: 10px;">© 2025 JJ Global Capital. This document is for educational purposes only and does not constitute investment advice.</p>
+      <p style="margin-top: 20px; font-size: 10px; color: #555;">© 2026 JJ Global Capital. All Rights Reserved.</p>
     </div>
-    <span class="page-number">12</span>
+    
+    <div class="disclaimer">
+      <strong>Disclaimer:</strong> This document is for educational purposes only and does not constitute investment, financial, or legal advice. The information contained herein has been compiled from official government sources (Dubai Land Department, RERA), industry publications (Property Monitor, DXB Interact), and our own research. While we strive for accuracy, readers are encouraged to verify information independently through official government sources and conduct their own due diligence. Real estate investments involve risks, including potential loss of capital. Past performance is not indicative of future results. Always consult with qualified professionals before making investment decisions.
+    </div>
+    <span class="page-number">13</span>
   </div>
+
+  <script>
+    function downloadPDF() {
+      window.print();
+    }
+    
+    function shareBook() {
+      if (navigator.share) {
+        navigator.share({
+          title: 'UAE Real Estate Market Intelligence 2026 - JJ Global Capital',
+          text: 'Download your free copy of the UAE Real Estate Market Intelligence Report by JJ Global Capital',
+          url: 'https://jjglobalcapital.com/market-report'
+        }).catch(console.error);
+      } else {
+        // Fallback: copy link to clipboard
+        navigator.clipboard.writeText('https://jjglobalcapital.com/market-report').then(() => {
+          alert('Link copied to clipboard! Share it with others.');
+        }).catch(() => {
+          alert('Visit jjglobalcapital.com/market-report to share this book');
+        });
+      }
+    }
+  </script>
 </body>
 </html>`;
 
-    const blob = new Blob([html], { type: "text/html" });
-    const url = URL.createObjectURL(blob);
-    const a = document.createElement("a");
-    a.href = url;
-    a.download = "JJ-Global-Capital-UAE-Market-Intelligence-2025.html";
-    document.body.appendChild(a);
-    a.click();
-    document.body.removeChild(a);
-    URL.revokeObjectURL(url);
+    // Open in new window instead of downloading
+    const newWindow = window.open('', '_blank');
+    if (newWindow) {
+      newWindow.document.write(html);
+      newWindow.document.close();
+    }
     setDownloaded(true);
   };
 
@@ -1097,7 +1363,7 @@ const MarketReport = () => {
                       
                       <div className="inline-flex items-center gap-2 px-3 py-1.5 rounded-full bg-gold/10 border border-gold/30 text-gold text-[10px] uppercase tracking-[0.2em] mb-4">
                         <Sparkles className="w-3 h-3" />
-                        2025-2026 Edition
+                        2026 Edition
                       </div>
                       
                       <h3 className="text-white text-xl md:text-2xl font-bold leading-tight mb-2" style={{ fontFamily: "Poppins, sans-serif" }}>
