@@ -10,6 +10,7 @@ import { Button } from "@/components/ui/button";
 import { useState, useRef } from "react";
 import dubaiHeroVideo from "@/assets/dubai-hero-video.mp4";
 import founderProfessional from "@/assets/founder-professional.jpeg";
+import luxuryVillaHero from "@/assets/luxury-villa-hero.jpeg";
 import { CONTACT_INFO } from "@/constants/stats";
 import { JJLogo } from "@/components/JJLogo";
 
@@ -155,6 +156,51 @@ const Index = () => {
           <ChevronDown className="w-5 h-5 animate-bounce" />
         </motion.div>
       </div>
+
+      {/* FULL-BLEED LUXURY VILLA SECTION */}
+      <section className="relative w-full h-screen min-h-[600px]">
+        {/* Full edge-to-edge image - no padding, no margin */}
+        <div className="absolute inset-0 w-full h-full">
+          <img 
+            src={luxuryVillaHero} 
+            alt="Luxury Villa in Dubai" 
+            className="w-full h-full object-cover"
+          />
+          {/* Subtle gradient overlay for text readability */}
+          <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-black/20 to-transparent" />
+          <div className="absolute inset-0 bg-gradient-to-r from-black/40 via-transparent to-black/40" />
+        </div>
+        
+        {/* Content overlay */}
+        <div className="absolute inset-0 flex flex-col items-center justify-end pb-16 md:pb-24 px-4">
+          <motion.div
+            className="text-center max-w-4xl"
+            initial={{ opacity: 0, y: 30 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+            transition={{ duration: 0.8 }}
+          >
+            <span className="inline-block text-gold text-xs uppercase tracking-[0.3em] mb-4">
+              Exclusive Properties
+            </span>
+            <h2 
+              className="text-white text-3xl md:text-5xl lg:text-6xl font-bold mb-6"
+              style={{ fontFamily: "Poppins, sans-serif" }}
+            >
+              Live Beyond <span className="text-transparent bg-clip-text bg-gradient-to-r from-gold to-gold-light">Ordinary</span>
+            </h2>
+            <p className="text-zinc-300 text-base md:text-lg max-w-2xl mx-auto mb-8">
+              Discover ultra-luxury residences crafted for those who demand excellence
+            </p>
+            <Link to="/properties">
+              <Button className="bg-gold hover:bg-gold-light text-black font-semibold px-8 py-6 text-base">
+                View Properties
+                <ArrowUpRight className="w-5 h-5 ml-2" />
+              </Button>
+            </Link>
+          </motion.div>
+        </div>
+      </section>
 
       {/* FOUNDER SECTION - Meet The Leadership */}
       <section className="py-20 md:py-28 bg-gradient-to-b from-black via-zinc-950 to-black">
