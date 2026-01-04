@@ -54,6 +54,7 @@ const GlobalHeader = () => {
   const mainNavLinks = [
     { href: "/", label: "Home", icon: Home },
     { href: "/about", label: "About Us", icon: Building2 },
+    { href: "/founder", label: "Founder & Leadership", icon: User },
     { href: "/awards", label: "Awards", icon: Building2 },
     { href: "/news", label: "News & Insights", icon: Newspaper },
     { href: "/contact", label: "Contact", icon: Phone },
