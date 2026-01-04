@@ -194,7 +194,7 @@ const Concierge = () => {
             viewport={{ once: true }}
             transition={{ duration: 0.6 }}
           >
-            {/* Search Bar */}
+            {/* Search Bar - Rectangular */}
             <div className="relative mb-8">
               <Search className="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-zinc-500" />
               <Input
@@ -202,15 +202,15 @@ const Concierge = () => {
                 placeholder="Search luxury services (e.g., private jet, spa, yacht...)"
                 value={searchQuery}
                 onChange={(e) => setSearchQuery(e.target.value)}
-                className="pl-12 py-6 bg-zinc-900/50 border-zinc-800 text-white placeholder:text-zinc-500 text-lg rounded-xl focus:border-gold/50 focus:ring-gold/20"
+                className="pl-12 py-6 bg-zinc-900/50 border-zinc-800 text-white placeholder:text-zinc-500 text-lg rounded-none focus:border-gold/50 focus:ring-gold/20"
               />
             </div>
 
-            {/* Category Pills */}
+            {/* Category Pills - Rectangular */}
             <div className="flex flex-wrap justify-center gap-2">
               <button
                 onClick={() => setSelectedCategory(null)}
-                className={`px-4 py-2 rounded-full text-sm font-medium transition-all ${
+                className={`px-4 py-2 text-sm font-medium transition-all ${
                   !selectedCategory 
                     ? "bg-gold text-black" 
                     : "bg-zinc-800/50 text-zinc-400 hover:bg-zinc-800 hover:text-white"
@@ -222,7 +222,7 @@ const Concierge = () => {
                 <button
                   key={category.id}
                   onClick={() => setSelectedCategory(category.id === selectedCategory ? null : category.id)}
-                  className={`px-4 py-2 rounded-full text-sm font-medium transition-all flex items-center gap-2 ${
+                  className={`px-4 py-2 text-sm font-medium transition-all flex items-center gap-2 ${
                     selectedCategory === category.id 
                       ? "bg-gold text-black" 
                       : "bg-zinc-800/50 text-zinc-400 hover:bg-zinc-800 hover:text-white"
