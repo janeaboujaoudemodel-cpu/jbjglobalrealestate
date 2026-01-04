@@ -96,21 +96,9 @@ const Footer = () => {
           </p>
         </div>
 
-        {/* Divisions + Menu on the same line (desktop) */}
+        {/* Menu (LEFT) + Divisions (RIGHT) on the same line (desktop) */}
         <div className="grid grid-cols-1 md:grid-cols-2 gap-8 md:gap-10">
-          {/* Our Divisions */}
-          <div className="text-center md:text-left">
-            <h4 className="text-gold font-semibold mb-3 text-sm uppercase tracking-[0.2em]">
-              Our Divisions
-            </h4>
-            <div className="space-y-2.5">
-              {divisions.map((div) => (
-                <DivisionAccordion key={div.title} title={div.title} items={div.items} />
-              ))}
-            </div>
-          </div>
-
-          {/* Menu */}
+          {/* Menu - LEFT */}
           <div className="text-center md:text-left">
             <h4 className="text-gold font-semibold mb-3 text-sm uppercase tracking-[0.2em]">
               Menu
@@ -127,6 +115,18 @@ const Footer = () => {
                 </li>
               ))}
             </ul>
+          </div>
+
+          {/* Our Divisions - RIGHT */}
+          <div className="text-center md:text-left">
+            <h4 className="text-gold font-semibold mb-3 text-sm uppercase tracking-[0.2em]">
+              Our Divisions
+            </h4>
+            <div className="space-y-2.5">
+              {divisions.map((div) => (
+                <DivisionAccordion key={div.title} title={div.title} items={div.items} />
+              ))}
+            </div>
           </div>
         </div>
 
