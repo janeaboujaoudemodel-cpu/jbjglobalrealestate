@@ -236,7 +236,7 @@ const Properties = () => {
             className="text-center max-w-3xl mx-auto"
           >
             {/* Label */}
-            <span className="inline-block text-[#A8925A] text-sm tracking-[0.3em] uppercase mb-4 font-medium">
+            <span className="inline-block text-gold text-sm tracking-[0.3em] uppercase mb-4 font-medium">
               PROPERTIES
             </span>
             
@@ -267,7 +267,7 @@ const Properties = () => {
                 placeholder="Keyword"
                 value={filters.search}
                 onChange={(e) => updateFilter("search", e.target.value)}
-                className="pl-10 h-12 bg-zinc-900/80 border-zinc-700/50 text-white placeholder:text-zinc-500 focus:border-[#A8925A] rounded-lg"
+                className="pl-10 h-12 bg-zinc-900/80 border-zinc-700/50 text-white placeholder:text-zinc-500 focus:border-gold rounded-lg"
               />
             </div>
 
@@ -380,7 +380,7 @@ const Properties = () => {
                 >
                   <Filter className="w-4 h-4 mr-2" />
                   {activeFilterCount > 0 && (
-                    <span className="mr-2 px-1.5 py-0.5 bg-[#A8925A] text-black text-xs font-bold rounded">
+                    <span className="mr-2 px-1.5 py-0.5 bg-gold text-black text-xs font-bold rounded">
                       {activeFilterCount}
                     </span>
                   )}
@@ -577,7 +577,7 @@ const Properties = () => {
                   </Button>
                   <Button
                     onClick={() => setIsAdvancedOpen(false)}
-                    className="bg-[#A8925A] text-black hover:bg-[#C4A962] px-8"
+                    className="bg-gold text-black hover:bg-gold-light px-8"
                   >
                     Apply Filters
                   </Button>
@@ -586,7 +586,7 @@ const Properties = () => {
             </Dialog>
 
             {/* Search Button */}
-            <Button className="h-12 px-8 bg-[#A8925A] text-black hover:bg-[#C4A962] font-semibold rounded-lg">
+            <Button className="h-12 px-8 bg-gold text-black hover:bg-gold-light font-semibold rounded-lg">
               SEARCH
             </Button>
           </div>
@@ -710,17 +710,17 @@ const Properties = () => {
                 <textarea
                   placeholder="Message"
                   rows={4}
-                  className="w-full px-4 py-3 bg-zinc-900/80 border border-zinc-700 text-white placeholder:text-zinc-500 rounded-lg resize-none focus:outline-none focus:border-[#A8925A]"
+                  className="w-full px-4 py-3 bg-zinc-900/80 border border-zinc-700 text-white placeholder:text-zinc-500 rounded-lg resize-none focus:outline-none focus:border-gold"
                 />
                 <div className="flex items-center gap-3">
-                  <Checkbox id="consent" className="border-zinc-600 data-[state=checked]:bg-[#A8925A] data-[state=checked]:border-[#A8925A]" />
+                  <Checkbox id="consent" className="border-zinc-600 data-[state=checked]:bg-gold data-[state=checked]:border-gold" />
                   <label htmlFor="consent" className="text-zinc-400 text-sm">
                     I agree to be contacted
                   </label>
                 </div>
                 <Button 
                   onClick={handleInquirySubmit}
-                  className="w-full h-14 bg-[#A8925A] text-black hover:bg-[#C4A962] font-semibold text-lg rounded-lg mt-4"
+                  className="w-full h-14 bg-gold text-black hover:bg-gold-light font-semibold text-lg rounded-lg mt-4"
                 >
                   SUBMIT
                 </Button>
@@ -759,7 +759,7 @@ const Properties = () => {
         <div className="container mx-auto px-4">
           <div className="flex flex-wrap items-center justify-center gap-4">
             <a href={buildSureFormsUrl()} target="_blank" rel="noopener noreferrer">
-              <Button className="bg-[#A8925A] text-black hover:bg-[#C4A962] h-12 px-8 font-semibold">
+              <Button className="bg-gold text-black hover:bg-gold-light h-12 px-8 font-semibold">
                 <ArrowUpRight className="w-4 h-4 mr-2" />
                 Register Interest
               </Button>
@@ -771,7 +771,7 @@ const Properties = () => {
               </Button>
             </a>
             <a href={`tel:${CONTACT_INFO.phoneRaw}`}>
-              <Button variant="outline" className="border-[#A8925A]/50 text-[#A8925A] hover:bg-[#A8925A] hover:text-black h-12 px-8">
+              <Button variant="outline" className="border-gold/50 text-gold hover:bg-gold hover:text-black h-12 px-8">
                 <Phone className="w-4 h-4 mr-2" />
                 Call Now
               </Button>
