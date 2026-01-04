@@ -598,11 +598,11 @@ const Founder = () => {
               <div className="w-1.5 md:w-2 h-40 md:h-48 bg-gradient-to-b from-gold via-gold/60 to-transparent flex-shrink-0 rounded-full" />
               <div>
                 <blockquote className="text-white text-2xl md:text-4xl lg:text-5xl italic leading-relaxed font-light mb-10">
-                  "True value is built quietly. The work speaks. The results compound. The institutions remain."
+                  "We Create | We Elevate | We Lead"
                 </blockquote>
                 <footer className="flex items-center gap-5">
-                  <div className="w-16 h-16 rounded-full overflow-hidden border-2 border-gold/60 shadow-lg shadow-gold/20">
-                    <SafeImage src={founderProfessional} fallbackSrc={founderHero} alt="Jane Abou Jaoude" className="w-full h-full object-cover" />
+                  <div className="w-20 h-20 rounded-full overflow-hidden border-2 border-gold/60 shadow-lg shadow-gold/20">
+                    <SafeImage src={founderProfessional} fallbackSrc={founderHero} alt="Jane Abou Jaoude" className="w-full h-full object-cover object-[center_15%] scale-125" />
                   </div>
                   <div>
                     <p className="text-gold text-lg font-medium">Jane Abou Jaoude</p>
@@ -653,7 +653,7 @@ const Founder = () => {
                 className="w-full h-full object-cover object-top group-hover:scale-105 transition-transform duration-1000"
               />
             </motion.div>
-            {[founderYacht, founderRedCarpet, founderAwardStage, founderJetBoarding].map((img, i) => (
+            {[founderOffice, founderProfessional, founderJetBoarding, founderJetInterior].map((img, i) => (
               <motion.div 
                 key={i}
                 className="aspect-square rounded-2xl overflow-hidden border border-zinc-800 group"
@@ -738,8 +738,8 @@ const Founder = () => {
         </div>
       </section>
 
-      {/* FINAL CTA - CONNECTION */}
-      <section className="py-24 md:py-40 bg-gradient-to-b from-black via-zinc-950/50 to-black border-t border-gold/10 relative overflow-hidden">
+      {/* FINAL CTA - JJ GLOBAL CAPITAL */}
+      <section className="py-20 md:py-28 bg-gradient-to-b from-black via-zinc-950/50 to-black border-t border-gold/10 relative overflow-hidden">
         {/* Decorative elements */}
         <div className="absolute top-0 left-1/2 -translate-x-1/2 w-px h-24 bg-gradient-to-b from-gold to-transparent" />
         <div className="absolute top-1/4 left-1/4 w-64 h-64 bg-gold/5 rounded-full blur-3xl" />
@@ -753,71 +753,86 @@ const Founder = () => {
             viewport={{ once: true, margin: "-100px" }}
             variants={staggerContainer}
           >
-            <motion.div className="mb-10" variants={fadeInUp}>
+            <motion.div className="mb-8" variants={fadeInUp}>
               <span className="text-gold text-sm uppercase tracking-[0.4em]">Get in Touch</span>
               <GoldLine className="w-32 mx-auto mt-4" />
             </motion.div>
             
             <motion.h2 
-              className="text-white text-4xl md:text-5xl lg:text-6xl font-bold mb-8"
+              className="text-white text-4xl md:text-5xl lg:text-6xl font-bold mb-6"
               style={{ fontFamily: "Poppins, sans-serif" }}
               variants={fadeInUp}
             >
-              Connect with <span className="text-transparent bg-clip-text bg-gradient-to-r from-gold to-[#C4A962]">JJ Holding Group</span>
+              Connect with <span className="text-transparent bg-clip-text bg-gradient-to-r from-gold to-[#C4A962]">JJ Global Capital</span>
             </motion.h2>
             
             <motion.p 
-              className="text-zinc-400 text-lg md:text-xl mb-14 max-w-3xl mx-auto"
+              className="text-zinc-400 text-lg md:text-xl mb-10 max-w-3xl mx-auto"
               variants={fadeInUp}
             >
-              For investment inquiries, media requests, or partnership discussions, we welcome your correspondence.
+              For daily requests, partnership discussions, collaboration in our divisions, or investment inquiries, we welcome your correspondence.
             </motion.p>
 
             <motion.div 
-              className="flex flex-wrap justify-center gap-4 md:gap-6 mb-14"
+              className="flex flex-wrap justify-center gap-4 md:gap-5 mb-10"
               variants={fadeInUp}
             >
               <Link 
                 to="/contact"
-                className="inline-flex items-center gap-3 bg-gradient-to-r from-gold to-[#C4A962] text-black font-semibold px-8 md:px-10 py-4 md:py-5 rounded-xl hover:opacity-90 transition-all duration-300 shadow-lg shadow-gold/30 hover:shadow-gold/40 hover:scale-105 text-base md:text-lg"
+                className="inline-flex items-center gap-3 bg-gradient-to-r from-gold to-[#C4A962] text-black font-semibold px-8 py-4 rounded-xl hover:opacity-90 transition-all duration-300 shadow-lg shadow-gold/30 hover:shadow-gold/40 hover:scale-105"
               >
                 Connect <ArrowUpRight className="w-5 h-5" />
               </Link>
               <a 
                 href="mailto:media@jjglobalcapital.com"
-                className="inline-flex items-center gap-3 bg-zinc-900 border border-zinc-700 text-white font-semibold px-8 md:px-10 py-4 md:py-5 rounded-xl hover:bg-zinc-800 hover:border-gold/30 transition-all duration-300 text-base md:text-lg"
+                className="inline-flex items-center gap-3 bg-zinc-900 border border-zinc-700 text-white font-semibold px-8 py-4 rounded-xl hover:bg-zinc-800 hover:border-gold/30 transition-all"
               >
                 Media <Mail className="w-5 h-5" />
               </a>
               <a 
                 href="mailto:partnerships@jjglobalcapital.com"
-                className="inline-flex items-center gap-3 border border-zinc-700 text-white font-semibold px-8 md:px-10 py-4 md:py-5 rounded-xl hover:bg-zinc-900 hover:border-gold/30 transition-all duration-300 text-base md:text-lg"
+                className="inline-flex items-center gap-3 border border-zinc-700 text-white font-semibold px-8 py-4 rounded-xl hover:bg-zinc-900 hover:border-gold/30 transition-all"
               >
                 Partnership <ExternalLink className="w-5 h-5" />
+              </a>
+              <a 
+                href="mailto:careers@jjglobalcapital.com"
+                className="inline-flex items-center gap-3 border border-zinc-700 text-white font-semibold px-8 py-4 rounded-xl hover:bg-zinc-900 hover:border-gold/30 transition-all"
+              >
+                Careers <Mail className="w-5 h-5" />
               </a>
             </motion.div>
 
             <motion.div 
-              className="flex flex-col sm:flex-row items-center justify-center gap-6 mb-12"
+              className="flex flex-col sm:flex-row items-center justify-center gap-6 mb-10"
               variants={fadeInUp}
             >
               <a 
                 href={getEmailUrl()} 
                 className="hover:text-gold transition-colors flex items-center gap-3 group"
               >
-                <div className="w-12 h-12 bg-zinc-900 border border-zinc-800 rounded-full flex items-center justify-center group-hover:border-gold/50 group-hover:scale-110 transition-all">
+                <div className="w-11 h-11 bg-zinc-900 border border-zinc-800 rounded-full flex items-center justify-center group-hover:border-gold/50 group-hover:scale-110 transition-all">
                   <Mail className="w-5 h-5 text-gold" />
                 </div>
-                <span className="text-lg text-zinc-300">{CONTACT_INFO.emailCapitalized}</span>
+                <span className="text-zinc-300">{CONTACT_INFO.emailCapitalized}</span>
+              </a>
+              <a 
+                href="mailto:support@jjglobalcapital.com" 
+                className="hover:text-gold transition-colors flex items-center gap-3 group"
+              >
+                <div className="w-11 h-11 bg-zinc-900 border border-zinc-800 rounded-full flex items-center justify-center group-hover:border-gold/50 group-hover:scale-110 transition-all">
+                  <Mail className="w-5 h-5 text-gold" />
+                </div>
+                <span className="text-zinc-300">Support@JJGlobalCapital.com</span>
               </a>
               <a 
                 href={getCallUrl()} 
                 className="hover:text-gold transition-colors flex items-center gap-3 group"
               >
-                <div className="w-12 h-12 bg-zinc-900 border border-zinc-800 rounded-full flex items-center justify-center group-hover:border-gold/50 group-hover:scale-110 transition-all">
+                <div className="w-11 h-11 bg-zinc-900 border border-zinc-800 rounded-full flex items-center justify-center group-hover:border-gold/50 group-hover:scale-110 transition-all">
                   <Phone className="w-5 h-5 text-gold" />
                 </div>
-                <span className="text-lg text-zinc-300">{CONTACT_INFO.phone}</span>
+                <span className="text-zinc-300">{CONTACT_INFO.phone}</span>
               </a>
               <a 
                 href={getWhatsAppUrl()} 
@@ -825,15 +840,102 @@ const Founder = () => {
                 rel="noopener noreferrer"
                 className="hover:text-green-400 transition-colors flex items-center gap-3 group"
               >
-                <div className="w-12 h-12 bg-zinc-900 border border-zinc-800 rounded-full flex items-center justify-center group-hover:border-green-500/50 group-hover:scale-110 transition-all">
+                <div className="w-11 h-11 bg-zinc-900 border border-zinc-800 rounded-full flex items-center justify-center group-hover:border-green-500/50 group-hover:scale-110 transition-all">
                   <MessageCircle className="w-5 h-5 text-green-500" />
                 </div>
-                <span className="text-lg text-zinc-300">WhatsApp</span>
+                <span className="text-zinc-300">WhatsApp</span>
+              </a>
+            </motion.div>
+          </motion.div>
+        </div>
+      </section>
+
+      {/* FINAL CTA - JJ HOLDING GROUP */}
+      <section className="py-20 md:py-28 bg-gradient-to-b from-zinc-950/50 via-black to-zinc-950/50 border-t border-zinc-800 relative overflow-hidden">
+        <div className="container mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
+          <motion.div 
+            className="max-w-5xl mx-auto text-center"
+            initial="hidden"
+            whileInView="visible"
+            viewport={{ once: true, margin: "-100px" }}
+            variants={staggerContainer}
+          >
+            <motion.div className="mb-8" variants={fadeInUp}>
+              <span className="text-zinc-400 text-sm uppercase tracking-[0.4em]">The Group</span>
+              <GoldLine className="w-32 mx-auto mt-4" />
+            </motion.div>
+            
+            <motion.h2 
+              className="text-white text-4xl md:text-5xl lg:text-6xl font-bold mb-6"
+              style={{ fontFamily: "Poppins, sans-serif" }}
+              variants={fadeInUp}
+            >
+              Connect with <span className="text-transparent bg-clip-text bg-gradient-to-r from-gold to-[#C4A962]">JJ Holding Group</span>
+            </motion.h2>
+            
+            <motion.p 
+              className="text-zinc-400 text-lg md:text-xl mb-10 max-w-3xl mx-auto"
+              variants={fadeInUp}
+            >
+              For media requests, partnership discussions, collaboration in our divisions, or general inquiries, we welcome your correspondence.
+            </motion.p>
+
+            <motion.div 
+              className="flex flex-wrap justify-center gap-4 md:gap-5 mb-10"
+              variants={fadeInUp}
+            >
+              <a 
+                href="mailto:inquiries@jjholdinggroup.com"
+                className="inline-flex items-center gap-3 bg-gradient-to-r from-gold to-[#C4A962] text-black font-semibold px-8 py-4 rounded-xl hover:opacity-90 transition-all duration-300 shadow-lg shadow-gold/30 hover:shadow-gold/40 hover:scale-105"
+              >
+                Connect <ArrowUpRight className="w-5 h-5" />
+              </a>
+              <a 
+                href="mailto:media@jjholdinggroup.com"
+                className="inline-flex items-center gap-3 bg-zinc-900 border border-zinc-700 text-white font-semibold px-8 py-4 rounded-xl hover:bg-zinc-800 hover:border-gold/30 transition-all"
+              >
+                Media <Mail className="w-5 h-5" />
+              </a>
+              <a 
+                href="mailto:partnerships@jjholdinggroup.com"
+                className="inline-flex items-center gap-3 border border-zinc-700 text-white font-semibold px-8 py-4 rounded-xl hover:bg-zinc-900 hover:border-gold/30 transition-all"
+              >
+                Partnership <ExternalLink className="w-5 h-5" />
+              </a>
+              <a 
+                href="mailto:careers@jjholdinggroup.com"
+                className="inline-flex items-center gap-3 border border-zinc-700 text-white font-semibold px-8 py-4 rounded-xl hover:bg-zinc-900 hover:border-gold/30 transition-all"
+              >
+                Careers <Mail className="w-5 h-5" />
               </a>
             </motion.div>
 
             <motion.div 
-              className="pt-12 border-t border-zinc-800"
+              className="flex flex-wrap items-center justify-center gap-6"
+              variants={fadeInUp}
+            >
+              <a 
+                href="mailto:inquiries@jjholdinggroup.com" 
+                className="hover:text-gold transition-colors flex items-center gap-3 group"
+              >
+                <div className="w-11 h-11 bg-zinc-900 border border-zinc-800 rounded-full flex items-center justify-center group-hover:border-gold/50 group-hover:scale-110 transition-all">
+                  <Mail className="w-5 h-5 text-gold" />
+                </div>
+                <span className="text-zinc-300">Inquiries@JJHoldingGroup.com</span>
+              </a>
+              <a 
+                href="mailto:support@jjholdinggroup.com" 
+                className="hover:text-gold transition-colors flex items-center gap-3 group"
+              >
+                <div className="w-11 h-11 bg-zinc-900 border border-zinc-800 rounded-full flex items-center justify-center group-hover:border-gold/50 group-hover:scale-110 transition-all">
+                  <Mail className="w-5 h-5 text-gold" />
+                </div>
+                <span className="text-zinc-300">Support@JJHoldingGroup.com</span>
+              </a>
+            </motion.div>
+
+            <motion.div 
+              className="pt-10 mt-10 border-t border-zinc-800"
               variants={fadeInUp}
             >
               <a 

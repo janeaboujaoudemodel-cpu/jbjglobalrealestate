@@ -9,7 +9,7 @@ import MortgageCalculator from "@/components/MortgageCalculator";
 import WelcomeModal from "@/components/WelcomeModal";
 import InquiryFormModal from "@/components/InquiryFormModal";
 import { useLanguage } from "@/contexts/LanguageContext";
-import { Sparkles, ArrowUpRight, ChevronDown, User, Scale, Layers, Calculator, Building2, Phone, FileText, Home, Briefcase } from "lucide-react";
+import { Sparkles, ArrowUpRight, ChevronDown, User, Scale, Layers, Calculator, FileText } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import founderProfessional from "@/assets/founder-professional.jpeg";
 import luxuryVillaHero from "@/assets/luxury-villa-hero.jpeg";
@@ -192,68 +192,56 @@ const Index = () => {
               </Link>
             </div>
             
-            {/* AI Home Finder CTA */}
-            <Link to="/quiz">
-              <div className="flex items-center gap-3 bg-gradient-to-r from-purple-700 to-purple-900 hover:from-purple-600 hover:to-purple-800 border border-purple-500/40 rounded-xl px-6 py-3 transition-all shadow-lg shadow-purple-500/20 group">
-                <Sparkles className="w-5 h-5 text-white" />
-                <div className="text-left">
-                  <p className="text-white font-semibold text-sm">{t('home.cta.aiFinder')}</p>
-                  <p className="text-purple-200/80 text-xs">Get Your Free Test Now</p>
-                </div>
-                <ArrowUpRight className="w-5 h-5 text-white group-hover:translate-x-0.5 group-hover:-translate-y-0.5 transition-transform" />
-              </div>
-            </Link>
-          </motion.div>
-        </div>
-      </section>
-
-      {/* QUICK NAVIGATION SHORTCUTS */}
-      <section className="py-12 bg-gradient-to-b from-black to-zinc-950">
-        <div className="container mx-auto px-4">
-          <motion.div
-            className="text-center mb-8"
-            initial={{ opacity: 0, y: 20 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true }}
-          >
-            <span className="text-gold text-xs uppercase tracking-[0.3em]">Quick Access</span>
-            <h3 className="text-white text-xl md:text-2xl font-bold mt-2" style={{ fontFamily: "Poppins, sans-serif" }}>
-              What Are You Looking For?
-            </h3>
-          </motion.div>
-          
-          <motion.div 
-            className="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-7 gap-4"
-            initial={{ opacity: 0, y: 20 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true }}
-            transition={{ delay: 0.1 }}
-          >
-            {[
-              { href: "/properties", icon: Building2, label: "Properties", desc: "Browse Listings" },
-              { href: "/mortgage-advisory", icon: Calculator, label: "Mortgage", desc: "Advisory" },
-              { href: "/quiz", icon: Sparkles, label: "AI Finder", desc: "Match Properties" },
-              { href: "/market-report", icon: FileText, label: "Market Report", desc: "UAE Insights" },
-              { href: "/services/law-firm", icon: Scale, label: "Legal Advisory", desc: "Law Firm" },
-              { href: "/news", icon: FileText, label: "News & Insights", desc: "Market Updates" },
-              { href: "/concierge", icon: Briefcase, label: "All Services", desc: "View Services" },
-            ].map((item, index) => (
-              <Link key={item.href + index} to={item.href}>
-                <motion.div
-                  className="bg-zinc-900/50 border border-zinc-800 hover:border-gold/50 rounded-xl p-4 text-center group transition-all hover:bg-zinc-900"
-                  initial={{ opacity: 0, y: 20 }}
-                  whileInView={{ opacity: 1, y: 0 }}
-                  viewport={{ once: true }}
-                  transition={{ delay: index * 0.05 }}
-                >
-                  <div className="w-12 h-12 mx-auto mb-3 rounded-xl bg-gold/10 flex items-center justify-center group-hover:bg-gold/20 transition-colors">
-                    <item.icon className="w-6 h-6 text-gold" />
+            {/* Third Row - AI & Premium Tools */}
+            <div className="flex flex-wrap justify-center gap-3">
+              {/* AI Home Finder CTA - Purple */}
+              <Link to="/quiz">
+                <div className="flex items-center gap-3 bg-gradient-to-r from-purple-700 to-purple-900 hover:from-purple-600 hover:to-purple-800 border border-purple-500/40 rounded-xl px-5 py-3 transition-all shadow-lg shadow-purple-500/20 group">
+                  <Sparkles className="w-4 h-4 text-white" />
+                  <div className="text-left">
+                    <p className="text-white font-semibold text-sm">{t('home.cta.aiFinder')}</p>
+                    <p className="text-purple-200/80 text-xs">Match Properties</p>
                   </div>
-                  <p className="text-white font-semibold text-sm">{item.label}</p>
-                  <p className="text-zinc-500 text-xs">{item.desc}</p>
-                </motion.div>
+                  <ArrowUpRight className="w-4 h-4 text-white group-hover:translate-x-0.5 group-hover:-translate-y-0.5 transition-transform" />
+                </div>
               </Link>
-            ))}
+              
+              {/* Market Report */}
+              <Link to="/market-report">
+                <div className="flex items-center gap-3 bg-zinc-900/80 border border-gold/30 hover:border-gold/60 rounded-xl px-5 py-3 transition-all group">
+                  <FileText className="w-4 h-4 text-gold" />
+                  <div className="text-left">
+                    <p className="text-white font-semibold text-sm">Market Report</p>
+                    <p className="text-zinc-400 text-xs">UAE Insights</p>
+                  </div>
+                  <ArrowUpRight className="w-4 h-4 text-gold group-hover:translate-x-0.5 group-hover:-translate-y-0.5 transition-transform" />
+                </div>
+              </Link>
+              
+              {/* Mortgage Advisory */}
+              <Link to="/mortgage-advisory">
+                <div className="flex items-center gap-3 bg-zinc-900/80 border border-zinc-700 hover:border-gold/40 rounded-xl px-5 py-3 transition-all group">
+                  <Calculator className="w-4 h-4 text-gold" />
+                  <div className="text-left">
+                    <p className="text-white font-semibold text-sm">Mortgage</p>
+                    <p className="text-zinc-400 text-xs">Advisory</p>
+                  </div>
+                  <ArrowUpRight className="w-4 h-4 text-zinc-400 group-hover:text-gold group-hover:translate-x-0.5 group-hover:-translate-y-0.5 transition-all" />
+                </div>
+              </Link>
+              
+              {/* News & Insights */}
+              <Link to="/news">
+                <div className="flex items-center gap-3 bg-zinc-900/80 border border-zinc-700 hover:border-gold/40 rounded-xl px-5 py-3 transition-all group">
+                  <FileText className="w-4 h-4 text-gold" />
+                  <div className="text-left">
+                    <p className="text-white font-semibold text-sm">News</p>
+                    <p className="text-zinc-400 text-xs">Insights</p>
+                  </div>
+                  <ArrowUpRight className="w-4 h-4 text-zinc-400 group-hover:text-gold group-hover:translate-x-0.5 group-hover:-translate-y-0.5 transition-all" />
+                </div>
+              </Link>
+            </div>
           </motion.div>
         </div>
       </section>
