@@ -176,19 +176,19 @@ const Footer = () => {
         {/* Divider */}
         <div className="h-px bg-gradient-to-r from-transparent via-zinc-700 to-transparent mb-10" />
 
-        {/* Menu + Divisions Grid */}
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-8 md:gap-16 mb-10">
+        {/* Menu + Divisions Grid - Premium Layout */}
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-10 md:gap-20 mb-10 max-w-4xl mx-auto">
           {/* Menu - LEFT */}
           <div className="text-center md:text-left">
-            <h4 className="text-gold font-semibold mb-4 text-sm uppercase tracking-[0.2em]">
+            <h4 className="text-gold font-semibold mb-5 text-sm uppercase tracking-[0.2em]">
               Menu
             </h4>
-            <ul className="space-y-2">
+            <ul className="space-y-2.5">
               {menuLinks.map((link) => (
                 <li key={link.href}>
                   <Link
                     to={link.href}
-                    className="text-white hover:text-gold transition-colors text-base"
+                    className="text-white hover:text-gold transition-colors text-base inline-block"
                   >
                     {link.label}
                   </Link>
@@ -199,10 +199,10 @@ const Footer = () => {
 
           {/* Our Divisions - RIGHT */}
           <div className="text-center md:text-left">
-            <h4 className="text-gold font-semibold mb-4 text-sm uppercase tracking-[0.2em]">
+            <h4 className="text-gold font-semibold mb-5 text-sm uppercase tracking-[0.2em]">
               Our Divisions
             </h4>
-            <div className="space-y-3">
+            <div className="space-y-2.5">
               {divisions.map((div) => (
                 <DivisionAccordion key={div.title} title={div.title} items={div.items} href={div.href} />
               ))}
