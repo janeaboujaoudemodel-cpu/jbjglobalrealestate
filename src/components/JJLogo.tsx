@@ -83,17 +83,17 @@ export const JJLogo = ({ size = 'md', showText = true, className = '' }: JJLogoP
         </span>
       </div>
 
-      {/* GLOBAL CAPITAL - Tighter spacing */}
+      {/* GLOBAL CAPITAL - Centered relative to stroke */}
       {showText && (
         <div 
           className={`${config.textGap} flex items-center justify-center text-white`}
           style={{ fontFamily: "Poppins, sans-serif" }}
         >
-          <span className={`font-semibold ${config.text} ${config.textSpacing}`}>
+          <span className={`font-semibold ${config.text} ${config.textSpacing}`} style={{ marginRight: '-0.15em' }}>
             GLOBAL
           </span>
           <span className={config.wordGap} />
-          <span className={`font-semibold ${config.text} ${config.textSpacing}`}>
+          <span className={`font-semibold ${config.text} ${config.textSpacing}`} style={{ marginLeft: '-0.15em' }}>
             CAPITAL
           </span>
         </div>
@@ -115,13 +115,13 @@ export const JJLogoHeader = ({ className = '' }: { className?: string }) => (
     </div>
     <span className="text-gold font-extralight text-2xl md:text-3xl leading-none drop-shadow-[0_0_8px_rgba(168,146,90,0.3)]">J</span>
     
-    {/* GLOBAL CAPITAL - Tighter spacing */}
+    {/* GLOBAL CAPITAL - Centered relative to stroke */}
     <div className="ml-3 md:ml-4 flex items-center text-white/95">
-      <span className="font-semibold text-sm md:text-base lg:text-lg tracking-[0.15em]">
+      <span className="font-semibold text-sm md:text-base lg:text-lg tracking-[0.15em]" style={{ marginRight: '-0.1em' }}>
         GLOBAL
       </span>
       <span className="mx-1 md:mx-1.5" />
-      <span className="font-semibold text-sm md:text-base lg:text-lg tracking-[0.15em]">
+      <span className="font-semibold text-sm md:text-base lg:text-lg tracking-[0.15em]" style={{ marginLeft: '-0.1em' }}>
         CAPITAL
       </span>
     </div>
