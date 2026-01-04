@@ -196,11 +196,19 @@ const Founder = () => {
             </motion.h1>
             
             <motion.div variants={fadeInUp}>
-              <p className="text-zinc-300 text-xl md:text-2xl lg:text-3xl mb-1 font-light">
-                JJ Holding Group
-              </p>
-              <p className="text-gold text-sm md:text-base uppercase tracking-[0.25em] mb-8">
+              <p className="text-white text-xl md:text-2xl lg:text-3xl mb-1 font-semibold tracking-wide">
                 JJ Global Capital
+              </p>
+              <p className="text-zinc-400 text-sm md:text-base mb-8">
+                Powered by{" "}
+                <a 
+                  href="https://jjholdinggroup.com" 
+                  target="_blank" 
+                  rel="noopener noreferrer"
+                  className="text-gold hover:text-gold/80 transition-colors underline underline-offset-4 decoration-gold/50"
+                >
+                  JJ Holding Group
+                </a>
               </p>
             </motion.div>
             
