@@ -614,43 +614,55 @@ const Founder = () => {
             variants={fadeInUp}
           >
             {/* Premium Quote Card */}
-            <div className="bg-gradient-to-br from-zinc-900/80 via-zinc-900/60 to-black border border-gold/20 rounded-3xl p-10 md:p-16 relative overflow-hidden">
+            <div className="bg-gradient-to-br from-zinc-900/90 via-zinc-900/70 to-black/95 border border-gold/30 rounded-3xl p-12 md:p-20 relative overflow-hidden shadow-2xl shadow-gold/5">
               {/* Decorative gold corner accents */}
-              <div className="absolute top-0 left-0 w-24 h-24 border-l-2 border-t-2 border-gold/40 rounded-tl-3xl" />
-              <div className="absolute bottom-0 right-0 w-24 h-24 border-r-2 border-b-2 border-gold/40 rounded-br-3xl" />
-              <div className="absolute top-1/4 right-0 w-64 h-64 bg-gold/5 rounded-full blur-3xl" />
+              <div className="absolute top-0 left-0 w-32 h-32 border-l-2 border-t-2 border-gold/50 rounded-tl-3xl" />
+              <div className="absolute bottom-0 right-0 w-32 h-32 border-r-2 border-b-2 border-gold/50 rounded-br-3xl" />
+              <div className="absolute top-1/4 right-0 w-96 h-96 bg-gold/5 rounded-full blur-3xl" />
+              <div className="absolute bottom-1/4 left-0 w-64 h-64 bg-gold/3 rounded-full blur-3xl" />
               
               <div className="text-center relative z-10">
                 {/* Quote Icon */}
-                <div className="w-16 h-16 mx-auto mb-8 bg-gradient-to-br from-gold/20 to-gold/5 rounded-2xl flex items-center justify-center border border-gold/30">
-                  <span className="text-gold text-4xl font-serif">"</span>
+                <div className="w-20 h-20 mx-auto mb-10 bg-gradient-to-br from-gold/30 to-gold/10 rounded-2xl flex items-center justify-center border border-gold/40 shadow-lg shadow-gold/10">
+                  <span className="text-gold text-5xl font-serif leading-none">"</span>
                 </div>
                 
                 {/* Quote Text */}
                 <blockquote 
-                  className="text-white text-3xl md:text-5xl lg:text-6xl font-light mb-12 leading-tight"
+                  className="text-white text-3xl md:text-5xl lg:text-7xl font-light mb-14 leading-tight tracking-tight"
                   style={{ fontFamily: "Poppins, sans-serif" }}
                 >
-                  We <span className="text-gold font-medium">Create</span> | We <span className="text-gold font-medium">Elevate</span> | We <span className="text-gold font-medium">Lead</span>
+                  We <span className="text-transparent bg-clip-text bg-gradient-to-r from-gold via-[#D4B96A] to-gold font-medium">Create</span> | We <span className="text-transparent bg-clip-text bg-gradient-to-r from-gold via-[#D4B96A] to-gold font-medium">Elevate</span> | We <span className="text-transparent bg-clip-text bg-gradient-to-r from-gold via-[#D4B96A] to-gold font-medium">Lead</span>
                 </blockquote>
                 
-                {/* Divider */}
-                <div className="w-32 h-px bg-gradient-to-r from-transparent via-gold/50 to-transparent mx-auto mb-8" />
+                {/* Elegant Divider */}
+                <div className="flex items-center justify-center gap-4 mb-10">
+                  <div className="w-24 h-px bg-gradient-to-r from-transparent to-gold/50" />
+                  <div className="w-2 h-2 bg-gold/60 rounded-full" />
+                  <div className="w-24 h-px bg-gradient-to-l from-transparent to-gold/50" />
+                </div>
                 
                 {/* Founder Attribution - Premium Layout */}
-                <div className="flex flex-col items-center gap-4">
-                  <div className="w-24 h-24 rounded-full overflow-hidden border-2 border-gold/50 shadow-xl shadow-gold/20 p-1 bg-gradient-to-br from-gold/20 to-transparent">
-                    <SafeImage 
-                      src={founderProfessional} 
-                      fallbackSrc={founderHero} 
-                      alt="Jane Abou Jaoude" 
-                      className="w-full h-full object-cover object-[center_20%] rounded-full"
-                    />
+                <div className="flex flex-col items-center gap-5">
+                  {/* Larger avatar with premium ring */}
+                  <div className="relative">
+                    <div className="w-32 h-32 md:w-36 md:h-36 rounded-full p-1.5 bg-gradient-to-br from-gold via-[#C4A962] to-gold shadow-2xl shadow-gold/30">
+                      <div className="w-full h-full rounded-full overflow-hidden bg-black">
+                        <SafeImage 
+                          src={founderProfessional} 
+                          fallbackSrc={founderHero} 
+                          alt="Jane Abou Jaoude" 
+                          className="w-full h-full object-cover object-[center_15%] scale-125"
+                        />
+                      </div>
+                    </div>
+                    {/* Decorative glow ring */}
+                    <div className="absolute inset-0 rounded-full border border-gold/20 scale-125 animate-pulse" />
                   </div>
-                  <div className="text-center">
-                    <p className="text-gold text-xl font-semibold tracking-wide" style={{ fontFamily: "Poppins, sans-serif" }}>Jane Abou Jaoude</p>
-                    <p className="text-zinc-400 text-sm uppercase tracking-[0.2em] mt-1">Founder & Chairwoman</p>
-                    <p className="text-zinc-500 text-xs uppercase tracking-[0.15em] mt-1">JJ Holding Group</p>
+                  <div className="text-center mt-2">
+                    <p className="text-transparent bg-clip-text bg-gradient-to-r from-gold via-[#D4B96A] to-gold text-2xl md:text-3xl font-semibold tracking-wide mb-2" style={{ fontFamily: "Poppins, sans-serif" }}>Jane Abou Jaoude</p>
+                    <p className="text-zinc-300 text-sm uppercase tracking-[0.25em] font-medium">Founder & Chairwoman</p>
+                    <p className="text-zinc-500 text-xs uppercase tracking-[0.2em] mt-1.5">JJ Holding Group</p>
                   </div>
                 </div>
               </div>
