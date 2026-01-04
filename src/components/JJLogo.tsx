@@ -70,7 +70,7 @@ export const JJLogo = ({ size = 'md', showText = true, className = '' }: JJLogoP
         </span>
       </div>
 
-      {/* GLOBAL • CAPITAL - Symmetric, not touching divider */}
+      {/* GLOBAL CAPITAL - Symmetric, centered under the divider */}
       {showText && (
         <div 
           className={`${config.textGap} flex items-center justify-center text-white`}
@@ -79,7 +79,7 @@ export const JJLogo = ({ size = 'md', showText = true, className = '' }: JJLogoP
           <span className={`font-medium ${config.text} ${config.textSpacing}`}>
             GLOBAL
           </span>
-          <span className="mx-2 w-1 h-1 md:w-1.5 md:h-1.5 rounded-full bg-white/80" />
+          <span className="mx-3" />
           <span className={`font-medium ${config.text} ${config.textSpacing}`}>
             CAPITAL
           </span>
@@ -102,12 +102,12 @@ export const JJLogoHeader = ({ className = '' }: { className?: string }) => (
     </div>
     <span className="text-gold font-extralight text-2xl md:text-3xl leading-none">J</span>
     
-    {/* GLOBAL • CAPITAL */}
+    {/* GLOBAL CAPITAL - centered under the stroke */}
     <div className="ml-3 flex items-center text-white">
       <span className="font-semibold text-xs sm:text-sm md:text-base tracking-[0.2em]">
         GLOBAL
       </span>
-      <span className="mx-2 w-1 h-1 md:w-1.5 md:h-1.5 rounded-full bg-white/80" />
+      <span className="mx-2" />
       <span className="font-semibold text-xs sm:text-sm md:text-base tracking-[0.2em]">
         CAPITAL
       </span>
