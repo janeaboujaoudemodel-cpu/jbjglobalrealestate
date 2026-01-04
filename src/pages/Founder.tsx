@@ -78,33 +78,33 @@ const Founder = () => {
     {
       icon: Building2,
       name: "JJ Global Capital",
-      description: "The principal investment and advisory arm of the JJ Holding Group. Specializing in UAE real estate with a structured approach to wealth preservation and capital growth for discerning investors worldwide.",
+      description: "The flagship investment and advisory division of JJ Holding Group. Orchestrating premium UAE real estate portfolios with institutional precision, delivering bespoke wealth preservation strategies and capital appreciation for a distinguished global clientele.",
       image: founderOffice,
-      tagline: "Real Estate Investment",
+      tagline: "Real Estate Investment & Advisory",
       url: "https://jjglobalcapital.com"
     },
     {
       icon: Gem,
       name: "Maison Jane",
-      description: "A private luxury lifestyle brand rooted in the founder's philosophy of refined living. Curating exclusive experiences in beauty, wellness, and personal services for select clientele.",
+      description: "An exclusive luxury lifestyle atelier embodying the founder's vision of refined living. Curating transformative experiences across beauty, wellness, and personal concierge services for the world's most discerning individuals.",
       image: founderJetInterior,
-      tagline: "Luxury Lifestyle",
+      tagline: "Luxury Lifestyle & Concierge",
       url: "https://maisonjane.ae"
     },
     {
       icon: Film,
       name: "JJ Media Group",
-      description: "The strategic communications and media division overseeing brand identity, digital presence, and influence architecture across the group's portfolio of ventures.",
+      description: "The strategic communications powerhouse shaping narrative excellence across the group's ventures. Architecting brand identities, digital ecosystems, and influence frameworks that command attention on the global stage.",
       image: founderRedCarpet,
-      tagline: "Media & Communications",
+      tagline: "Media & Strategic Communications",
       url: "https://jjmediagroup.ae"
     },
     {
       icon: Award,
       name: "JJ Fashion House",
-      description: "A creative atelier extending the founder's aesthetic vision into fashion and design. Developing exclusive collections and collaborations that reflect institutional taste and timeless elegance.",
+      description: "A distinguished creative atelier translating the founder's aesthetic philosophy into haute couture and bespoke design. Crafting exclusive collections that epitomize institutional elegance and timeless sophistication.",
       image: founderAwardStage,
-      tagline: "Fashion & Design",
+      tagline: "Haute Couture & Design",
       url: "https://jjfashionhouse.com"
     },
   ];
@@ -514,11 +514,11 @@ const Founder = () => {
                     <span className="text-gold text-3xl font-light tracking-wide" style={{ fontFamily: "Poppins, sans-serif" }}>J | J</span>
                   </div>
                   <div>
-                    <p className="text-gold/70 text-xs uppercase tracking-[0.3em] mb-1">Parent Company</p>
+                    <p className="text-gold/70 text-xs uppercase tracking-[0.3em] mb-1">Head Company</p>
                     <h3 className="text-white text-2xl md:text-3xl font-bold" style={{ fontFamily: "Poppins, sans-serif" }}>
                       JJ Holding Group
                     </h3>
-                    <p className="text-zinc-400 text-sm mt-1">Four Divisions • Global Presence</p>
+                    <p className="text-zinc-400 text-sm mt-1">Four Divisions • International Excellence</p>
                   </div>
                 </div>
                 <a 
@@ -728,7 +728,20 @@ const Founder = () => {
                   <div className="text-center mt-2">
                     <p className="text-transparent bg-clip-text bg-gradient-to-r from-gold via-[#D4B96A] to-gold text-2xl md:text-3xl font-semibold tracking-wide mb-2" style={{ fontFamily: "Poppins, sans-serif" }}>Jane Abou Jaoude</p>
                     <p className="text-zinc-300 text-sm uppercase tracking-[0.25em] font-medium">Founder & Chairwoman</p>
-                    <p className="text-zinc-500 text-xs uppercase tracking-[0.2em] mt-1.5">JJ Holding Group</p>
+                    <div className="mt-3 space-y-1">
+                      <p className="text-white text-base font-semibold tracking-wide">JJ Global Capital</p>
+                      <p className="text-zinc-400 text-xs">
+                        Powered by{" "}
+                        <a 
+                          href="https://jjholdinggroup.com" 
+                          target="_blank" 
+                          rel="noopener noreferrer"
+                          className="text-gold hover:text-gold-light transition-colors underline underline-offset-2"
+                        >
+                          JJ Holding Group
+                        </a>
+                      </p>
+                    </div>
                   </div>
                 </div>
               </div>
