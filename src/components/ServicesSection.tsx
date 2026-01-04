@@ -1,8 +1,40 @@
-import { ChevronRight, Play, Volume2, VolumeX } from "lucide-react";
+import { ChevronRight, Play, Volume2, VolumeX, ExternalLink } from "lucide-react";
 import { useState, useRef } from "react";
 import dubaiHeroVideo from "@/assets/dubai-hero-video.mp4";
 
-const INQUIRY_FORM_URL = "https://jjglobalcapital.com/form/property-investment-inquiry-form/";
+const INQUIRY_FORM_URL = "https://jjglobalcapital.com/property-investment-inquiry-form/";
+
+// Division cards with professional descriptions and external links
+const divisions = [
+  {
+    title: "JJ Global Capital",
+    description: "A founder-led investment advisory firm specializing in UAE real estate, offering institutional-grade asset selection, due diligence, and portfolio management.",
+    gradient: "from-[#A8925A]/20 via-amber-500/10 to-[#A8925A]/20",
+    iconGradient: "from-[#A8925A] to-[#C4A962]",
+    url: "https://jjglobalcapital.com",
+  },
+  {
+    title: "Maison Jane",
+    description: "A luxury interior design and fit-out atelier crafting bespoke living environments for discerning clients across the UAE and beyond.",
+    gradient: "from-rose-500/20 via-pink-500/10 to-rose-600/20",
+    iconGradient: "from-rose-400 to-pink-400",
+    url: "https://maisonjane.com",
+  },
+  {
+    title: "JJ Media Group",
+    description: "A full-service creative and media production agency delivering premium content, branding, and digital experiences for luxury brands.",
+    gradient: "from-purple-500/20 via-violet-500/10 to-purple-600/20",
+    iconGradient: "from-purple-400 to-violet-400",
+    url: "https://jjmediagroup.com",
+  },
+  {
+    title: "JJ Fashion House",
+    description: "An exclusive couture and ready-to-wear fashion house blending timeless elegance with contemporary design for the modern connoisseur.",
+    gradient: "from-emerald-500/20 via-green-500/10 to-emerald-600/20",
+    iconGradient: "from-emerald-400 to-green-400",
+    url: "https://jjfashionhouse.com",
+  },
+];
 
 const services = [
   {
@@ -43,7 +75,7 @@ const services = [
   },
 ];
 
-// Premium 3D icon component
+// Premium 3D icon component for services
 const Premium3DIcon = ({ title, gradient }: { title: string; gradient: string }) => {
   const getIconPath = () => {
     switch (title) {
@@ -116,18 +148,79 @@ const Premium3DIcon = ({ title, gradient }: { title: string; gradient: string })
 
   return (
     <div className="relative w-16 h-16 md:w-20 md:h-20">
-      {/* 3D Shadow layers */}
       <div className="absolute inset-0 translate-x-1 translate-y-1 rounded-2xl bg-black/40 blur-sm" />
       <div className="absolute inset-0 translate-x-0.5 translate-y-0.5 rounded-2xl bg-black/20" />
-      
-      {/* Main icon container */}
       <div className={`relative w-full h-full rounded-2xl bg-gradient-to-br ${gradient} border border-white/10 flex items-center justify-center overflow-hidden backdrop-blur-sm`}>
-        {/* Inner glow */}
         <div className="absolute inset-0 bg-gradient-to-br from-white/10 to-transparent" />
-        
         <svg viewBox="0 0 40 40" className="w-10 h-10 md:w-12 md:h-12 relative z-10">
           <defs>
             <linearGradient id="iconGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+              <stop offset="0%" stopColor="#D4AF37" />
+              <stop offset="100%" stopColor="#A8925A" />
+            </linearGradient>
+          </defs>
+          {getIconPath()}
+        </svg>
+      </div>
+    </div>
+  );
+};
+
+// Premium division icon for JJ Holding Group cards
+const DivisionIcon = ({ title, gradient }: { title: string; gradient: string }) => {
+  const getIconPath = () => {
+    switch (title) {
+      case "JJ Global Capital":
+        return (
+          <g>
+            <circle cx="20" cy="20" r="14" fill="url(#divGrad)" opacity="0.3"/>
+            <path d="M12 10 L12 30 Q12 30 16 26" stroke="url(#divGrad)" strokeWidth="2.5" fill="none"/>
+            <path d="M28 10 L28 30 Q28 30 24 26" stroke="url(#divGrad)" strokeWidth="2.5" fill="none"/>
+            <rect x="14" y="18" width="12" height="2" fill="white" opacity="0.8"/>
+          </g>
+        );
+      case "Maison Jane":
+        return (
+          <g>
+            <rect x="8" y="12" width="24" height="16" rx="2" fill="url(#divGrad)" opacity="0.6"/>
+            <rect x="12" y="28" width="16" height="6" fill="url(#divGrad)"/>
+            <ellipse cx="20" cy="20" rx="6" ry="4" fill="white" opacity="0.8"/>
+            <path d="M6 16 Q20 4 34 16" stroke="url(#divGrad)" strokeWidth="3" fill="none"/>
+          </g>
+        );
+      case "JJ Media Group":
+        return (
+          <g>
+            <polygon points="10,8 10,32 32,20" fill="url(#divGrad)" opacity="0.9"/>
+            <circle cx="20" cy="20" r="12" stroke="url(#divGrad)" strokeWidth="2" fill="none"/>
+            <circle cx="16" cy="18" r="2" fill="white" opacity="0.8"/>
+          </g>
+        );
+      case "JJ Fashion House":
+        // Elegant couture/dress icon
+        return (
+          <g>
+            <path d="M20 6 L20 10" stroke="url(#divGrad)" strokeWidth="2"/>
+            <ellipse cx="20" cy="8" rx="4" ry="2" fill="url(#divGrad)" opacity="0.8"/>
+            <path d="M14 10 L12 14 L10 34 L20 32 L30 34 L28 14 L26 10 Z" fill="url(#divGrad)" opacity="0.9"/>
+            <path d="M14 10 Q20 16 26 10" stroke="white" strokeWidth="1" fill="none" opacity="0.6"/>
+            <path d="M12 20 L28 20" stroke="white" strokeWidth="0.5" opacity="0.4"/>
+            <path d="M11 26 L29 26" stroke="white" strokeWidth="0.5" opacity="0.4"/>
+          </g>
+        );
+      default:
+        return null;
+    }
+  };
+
+  return (
+    <div className="relative w-14 h-14 md:w-16 md:h-16">
+      <div className="absolute inset-0 translate-x-1 translate-y-1 rounded-xl bg-black/40 blur-sm" />
+      <div className={`relative w-full h-full rounded-xl bg-gradient-to-br ${gradient} border border-white/10 flex items-center justify-center overflow-hidden`}>
+        <div className="absolute inset-0 bg-gradient-to-br from-white/10 to-transparent" />
+        <svg viewBox="0 0 40 40" className="w-8 h-8 md:w-10 md:h-10 relative z-10">
+          <defs>
+            <linearGradient id="divGrad" x1="0%" y1="0%" x2="100%" y2="100%">
               <stop offset="0%" stopColor="#D4AF37" />
               <stop offset="100%" stopColor="#A8925A" />
             </linearGradient>
@@ -220,11 +313,11 @@ const ServicesSection = () => {
         }}
       />
       
-      <div className="container mx-auto px-4 relative z-10">
-        {/* Section Header */}
+      <div className="container mx-auto px-4 relative z-10" id="services">
+        {/* JJ Holding Group Section */}
         <div className="text-center mb-16">
           <span className="inline-block px-5 py-2 bg-gradient-to-r from-[#A8925A]/20 to-[#A8925A]/5 border border-[#A8925A]/30 rounded-full text-[#A8925A] text-sm font-medium mb-6 backdrop-blur-sm">
-            Complete Solutions
+            JJ Holding Group
           </span>
           <h2 
             className="text-4xl md:text-5xl lg:text-6xl font-bold text-white mb-6"
@@ -233,7 +326,67 @@ const ServicesSection = () => {
             Our <span className="text-transparent bg-clip-text bg-gradient-to-r from-[#A8925A] to-[#C4A962]">Divisions</span>
           </h2>
           <p className="text-zinc-300 max-w-2xl mx-auto text-lg leading-relaxed">
-            Beyond property sales, we offer comprehensive real estate services to support your investment journey through our specialized divisions
+            A founder-led group of specialized companies delivering excellence across real estate, design, media, and fashion
+          </p>
+        </div>
+
+        {/* Division Cards Grid */}
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-20">
+          {divisions.map((division, index) => (
+            <a
+              key={index}
+              href={division.url}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="group relative"
+            >
+              <div className="relative bg-black/50 backdrop-blur-md border border-white/10 rounded-2xl p-6 h-full transition-all duration-500 group-hover:border-[#A8925A]/40 group-hover:-translate-y-2 group-hover:shadow-2xl group-hover:shadow-[#A8925A]/10 overflow-hidden">
+                {/* Visit Website Arrow */}
+                <div className="absolute top-4 right-4 w-8 h-8 bg-[#A8925A]/10 group-hover:bg-[#A8925A]/30 border border-[#A8925A]/20 rounded-full flex items-center justify-center transition-all duration-300 group-hover:scale-110">
+                  <ExternalLink className="w-4 h-4 text-[#A8925A]" />
+                </div>
+                
+                <div className={`absolute inset-0 bg-gradient-to-br ${division.gradient} opacity-0 group-hover:opacity-100 transition-opacity duration-500 rounded-2xl`} />
+                
+                <div className="relative z-10">
+                  <div className="mb-4 group-hover:scale-110 transition-transform duration-500">
+                    <DivisionIcon title={division.title} gradient={division.gradient} />
+                  </div>
+                  
+                  <h3 
+                    className="text-lg font-bold text-white mb-2 group-hover:text-[#A8925A] transition-colors duration-300"
+                    style={{ fontFamily: "Poppins, sans-serif" }}
+                  >
+                    {division.title}
+                  </h3>
+                  
+                  <p className="text-zinc-400 text-sm leading-relaxed group-hover:text-zinc-300 transition-colors">
+                    {division.description}
+                  </p>
+                  
+                  <div className="flex items-center text-[#A8925A] text-sm font-medium mt-4 opacity-0 group-hover:opacity-100 transition-all duration-300 transform translate-y-2 group-hover:translate-y-0">
+                    <span>Visit Website</span>
+                    <ChevronRight className="w-4 h-4 ml-1 group-hover:translate-x-1 transition-transform" />
+                  </div>
+                </div>
+              </div>
+            </a>
+          ))}
+        </div>
+
+        {/* Services Section Header */}
+        <div className="text-center mb-12">
+          <span className="inline-block px-5 py-2 bg-gradient-to-r from-[#A8925A]/20 to-[#A8925A]/5 border border-[#A8925A]/30 rounded-full text-[#A8925A] text-sm font-medium mb-6 backdrop-blur-sm">
+            Complete Solutions
+          </span>
+          <h2 
+            className="text-3xl md:text-4xl font-bold text-white mb-4"
+            style={{ fontFamily: "Poppins, sans-serif" }}
+          >
+            Our <span className="text-transparent bg-clip-text bg-gradient-to-r from-[#A8925A] to-[#C4A962]">Services</span>
+          </h2>
+          <p className="text-zinc-300 max-w-2xl mx-auto leading-relaxed">
+            Beyond property sales, we offer comprehensive real estate services to support your investment journey
           </p>
         </div>
 
@@ -247,22 +400,15 @@ const ServicesSection = () => {
               rel="noopener noreferrer"
               className="group relative"
             >
-              {/* Card with 3D effect and glassmorphism */}
               <div className="relative bg-black/40 backdrop-blur-md border border-white/10 rounded-2xl p-8 h-full transition-all duration-500 group-hover:border-[#A8925A]/40 group-hover:-translate-y-2 group-hover:shadow-2xl group-hover:shadow-[#A8925A]/10 overflow-hidden">
-                {/* Gradient overlay on hover */}
                 <div className={`absolute inset-0 bg-gradient-to-br ${service.gradient} opacity-0 group-hover:opacity-100 transition-opacity duration-500 rounded-2xl`} />
-                
-                {/* Top accent line */}
                 <div className="absolute top-0 left-0 right-0 h-px bg-gradient-to-r from-transparent via-[#A8925A]/50 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
                 
-                {/* Content */}
                 <div className="relative z-10">
-                  {/* 3D Icon */}
                   <div className="mb-6 group-hover:scale-110 transition-transform duration-500">
                     <Premium3DIcon title={service.title} gradient={service.gradient} />
                   </div>
 
-                  {/* Title */}
                   <h3 
                     className="text-xl font-bold text-white mb-3 group-hover:text-[#A8925A] transition-colors duration-300"
                     style={{ fontFamily: "Poppins, sans-serif" }}
@@ -270,19 +416,16 @@ const ServicesSection = () => {
                     {service.title}
                   </h3>
                   
-                  {/* Description */}
                   <p className="text-zinc-400 text-sm leading-relaxed mb-6 group-hover:text-zinc-300 transition-colors">
                     {service.description}
                   </p>
 
-                  {/* CTA */}
                   <div className="flex items-center text-[#A8925A] text-sm font-medium opacity-0 group-hover:opacity-100 transition-all duration-300 transform translate-y-2 group-hover:translate-y-0">
                     <span>Inquire Now</span>
                     <ChevronRight className="w-4 h-4 ml-1 group-hover:translate-x-1 transition-transform" />
                   </div>
                 </div>
 
-                {/* Bottom glow */}
                 <div className="absolute bottom-0 left-1/2 -translate-x-1/2 w-3/4 h-24 bg-gradient-to-t from-[#A8925A]/10 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500 pointer-events-none" />
               </div>
             </a>
