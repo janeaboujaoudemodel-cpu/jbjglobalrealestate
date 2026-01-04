@@ -1818,7 +1818,7 @@ const MarketReport = () => {
             <img 
               src={founderProfessional} 
               alt="Jane Abou Jaoude"
-              className="w-24 h-24 md:w-28 md:h-28 rounded-full object-cover object-[center_15%] scale-110 border-2 border-gold/50 mx-auto mb-6"
+              className="w-24 h-24 md:w-28 md:h-28 rounded-full object-cover object-[center_25%] scale-125 border-2 border-gold/50 mx-auto mb-6"
             />
             <blockquote className="text-white text-xl md:text-2xl lg:text-3xl font-light leading-relaxed mb-6 italic" style={{ fontFamily: "Poppins, sans-serif" }}>
               "This book represents years of experience in UAE real estate, distilled into actionable frameworks. I created it so investors can make informed decisions with confidence."
