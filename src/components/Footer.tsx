@@ -260,7 +260,7 @@ const Footer = () => {
           <div className="text-center">
             <p>© {currentYear} JJ Global Capital. All rights reserved.</p>
             <p className="mt-1">
-              Part of{" "}
+              Powered by{" "}
               <a
                 href={CONTACT_INFO.holdingGroupUrl}
                 target="_blank"
