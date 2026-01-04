@@ -3,6 +3,7 @@ import NavigationTabs from "@/components/NavigationTabs";
 import DeveloperGrid from "@/components/DeveloperGrid";
 import WhyDubaiSection from "@/components/WhyDubaiSection";
 import ServicesSection from "@/components/ServicesSection";
+import StatsCounter from "@/components/StatsCounter";
 import Footer from "@/components/Footer";
 import { Sparkles, ArrowUpRight, Building2, ClipboardCheck } from "lucide-react";
 import { Button } from "@/components/ui/button";
@@ -79,6 +80,9 @@ const Index = () => {
           <DeveloperGrid />
         </div>
       </div>
+
+      {/* Stats Counter Section */}
+      <StatsCounter />
 
       {/* Why Dubai Section */}
       <WhyDubaiSection />
