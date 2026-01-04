@@ -51,7 +51,7 @@ const Footer = () => {
       label: "Advisory", 
       href: "/services/advisory",
       children: [
-        { label: "Mortgages", href: "/services/mortgages" },
+        { label: "Mortgages", href: "/mortgage-calculator" },
         { label: "Investment Advisory", href: "/services/investment" },
         { label: "Property Management", href: "/services/management" },
         { label: "Commercial", href: "/services/commercial" },

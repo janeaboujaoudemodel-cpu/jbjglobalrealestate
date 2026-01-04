@@ -22,6 +22,7 @@ import Contact from "./pages/Contact";
 import Privacy from "./pages/Privacy";
 import Terms from "./pages/Terms";
 import Founder from "./pages/Founder";
+import MortgageCalculatorPage from "./pages/MortgageCalculator";
 import NotFound from "./pages/NotFound";
 import WelcomeModal from "./components/WelcomeModal";
 import GlobalHeader from "./components/GlobalHeader";
@@ -76,6 +77,7 @@ const App = () => (
               <Route path="/privacy" element={<Privacy />} />
               <Route path="/terms" element={<Terms />} />
               <Route path="/founder" element={<Founder />} />
+              <Route path="/mortgage-calculator" element={<MortgageCalculatorPage />} />
               {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
               <Route path="*" element={<NotFound />} />
             </Routes>
