@@ -5,21 +5,26 @@ import { supabase } from "@/integrations/supabase/client";
 import { useAuth } from "@/contexts/AuthContext";
 import { useShortlist } from "@/hooks/useFavorites";
 import { useGuestShortlist } from "@/hooks/useGuestFavorites";
-import { ChevronLeft, Sparkles, Send, Loader2, CheckCircle, Download, Star, Users } from "lucide-react";
+import { useMembership } from "@/hooks/useMembership";
+import { ChevronLeft, Sparkles, Send, Loader2, CheckCircle, Download, Star, Users, Crown, Gift } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { toast } from "sonner";
+import { PaymentModal } from "@/components/PaymentModal";
 
 const INQUIRY_FORM_URL = "https://jjglobalcapital.com/form/property-investment-inquiry-form/";
+const COMPARE_FREE_KEY = "jj_compare_free_used";
 
 const Compare = () => {
   const { user } = useAuth();
   const navigate = useNavigate();
+  const { hasActiveMembership } = useMembership();
   const { data: authShortlist } = useShortlist();
   const { shortlist: guestShortlist, getBadge } = useGuestShortlist();
   const [aiComparison, setAiComparison] = useState<string | null>(null);
   const [isGenerating, setIsGenerating] = useState(false);
   const [showRequestForm, setShowRequestForm] = useState(false);
+  const [showVipModal, setShowVipModal] = useState(false);
   const [formData, setFormData] = useState({
     name: "",
     email: user?.email || "",
@@ -27,6 +32,19 @@ const Compare = () => {
   });
   const [requestSent, setRequestSent] = useState(false);
   const tableRef = useRef<HTMLDivElement>(null);
+
+  // Track free comparison usage
+  const [hasUsedFreeCompare, setHasUsedFreeCompare] = useState(() => {
+    if (typeof window !== "undefined") {
+      return localStorage.getItem(COMPARE_FREE_KEY) === "true";
+    }
+    return false;
+  });
+
+  const markFreeCompareUsed = () => {
+    localStorage.setItem(COMPARE_FREE_KEY, "true");
+    setHasUsedFreeCompare(true);
+  };
 
   // Use auth shortlist if logged in, otherwise guest shortlist
   const shortlist = user ? authShortlist : guestShortlist;
@@ -53,9 +71,18 @@ const Compare = () => {
     enabled: shortlistIds.length > 0,
   });
 
+  // Check if user can use free or needs VIP
+  const needsVipForCompare = hasUsedFreeCompare && !hasActiveMembership;
+
   // Generate AI comparison
   const generateComparison = async () => {
     if (!projects?.length) return;
+    
+    // If already used free and no VIP, show payment modal
+    if (needsVipForCompare) {
+      setShowVipModal(true);
+      return;
+    }
     
     setIsGenerating(true);
     try {
@@ -80,6 +107,11 @@ const Compare = () => {
 
       if (response.error) throw response.error;
       setAiComparison(response.data.comparison);
+      
+      // Mark free compare as used
+      if (!hasActiveMembership) {
+        markFreeCompareUsed();
+      }
     } catch (error) {
       console.error("Failed to generate comparison:", error);
       toast.error("Failed to generate AI comparison. Please try again.");
@@ -363,29 +395,62 @@ const Compare = () => {
                   <div className="text-zinc-300 whitespace-pre-wrap text-sm leading-relaxed max-h-[300px] overflow-y-auto">
                     {aiComparison}
                   </div>
+                  {!hasActiveMembership && (
+                    <div className="mt-4 bg-gold/10 border border-gold/30 rounded-lg p-3 text-center">
+                      <p className="text-gold text-sm">
+                        <Crown className="w-4 h-4 inline mr-1" />
+                        Upgrade to VIP for unlimited regenerations
+                      </p>
+                    </div>
+                  )}
                 </div>
               ) : (
                 <div className="text-center py-6">
-                  <p className="text-zinc-400 text-sm mb-4">
-                    Get an AI-powered analysis comparing these properties with star ratings and recommendations
-                  </p>
-                  <Button
-                    onClick={generateComparison}
-                    disabled={isGenerating || projects.length < 2}
-                    className="bg-gradient-to-r from-violet-600 to-fuchsia-600 hover:from-violet-500 hover:to-fuchsia-500 text-white"
-                  >
-                    {isGenerating ? (
-                      <>
-                        <Loader2 className="w-4 h-4 mr-2 animate-spin" />
-                        Analyzing...
-                      </>
-                    ) : (
-                      <>
-                        <Sparkles className="w-4 h-4 mr-2" />
-                        Generate AI Analysis
-                      </>
-                    )}
-                  </Button>
+                  {needsVipForCompare ? (
+                    <>
+                      <div className="mb-4 bg-gold/10 border border-gold/30 rounded-lg p-4">
+                        <Crown className="w-8 h-8 text-gold mx-auto mb-2" />
+                        <p className="text-gold text-sm font-medium mb-1">VIP Access Required</p>
+                        <p className="text-zinc-400 text-xs">
+                          You've used your free AI comparison. Upgrade to VIP for unlimited access.
+                        </p>
+                      </div>
+                      <Button
+                        onClick={() => setShowVipModal(true)}
+                        className="bg-gradient-to-r from-gold via-gold to-gold-dark text-black hover:brightness-110"
+                      >
+                        <Crown className="w-4 h-4 mr-2" />
+                        Upgrade to VIP ($100/year)
+                      </Button>
+                    </>
+                  ) : (
+                    <>
+                      <div className="mb-4 bg-green-500/10 border border-green-500/30 rounded-lg p-3">
+                        <Gift className="w-5 h-5 text-green-400 mx-auto mb-1" />
+                        <p className="text-green-400 text-xs font-medium">First AI Comparison FREE!</p>
+                      </div>
+                      <p className="text-zinc-400 text-sm mb-4">
+                        Get an AI-powered analysis comparing these properties with star ratings and recommendations
+                      </p>
+                      <Button
+                        onClick={generateComparison}
+                        disabled={isGenerating || projects.length < 2}
+                        className="bg-gradient-to-r from-violet-600 to-fuchsia-600 hover:from-violet-500 hover:to-fuchsia-500 text-white"
+                      >
+                        {isGenerating ? (
+                          <>
+                            <Loader2 className="w-4 h-4 mr-2 animate-spin" />
+                            Analyzing...
+                          </>
+                        ) : (
+                          <>
+                            <Sparkles className="w-4 h-4 mr-2" />
+                            Generate Free AI Analysis
+                          </>
+                        )}
+                      </Button>
+                    </>
+                  )}
                 </div>
               )}
             </div>
@@ -485,6 +550,22 @@ const Compare = () => {
           </div>
         </div>
       </div>
+
+      {/* VIP Upgrade Modal */}
+      <PaymentModal
+        open={showVipModal}
+        onOpenChange={setShowVipModal}
+        onSuccess={() => {
+          setShowVipModal(false);
+          toast.success("VIP upgrade submitted! Generate AI analysis after payment verification.");
+        }}
+        userInfo={{
+          fullName: formData.name || user?.email?.split("@")[0] || "",
+          email: formData.email || user?.email || "",
+          phone: formData.phone || "",
+        }}
+        mode="regenerate"
+      />
     </section>
   );
 };

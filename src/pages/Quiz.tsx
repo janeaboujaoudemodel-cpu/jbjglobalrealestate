@@ -5,7 +5,7 @@ import { supabase } from "@/integrations/supabase/client";
 import { useAuth } from "@/contexts/AuthContext";
 import { 
   ChevronRight, ChevronLeft, Clock, Sparkles, Loader2, CheckCircle2,
-  Wand2, ArrowUpRight, Building2, Home, Landmark, TreePine
+  Wand2, ArrowUpRight, Building2, Home, Landmark, TreePine, Gift, Crown
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Progress } from "@/components/ui/progress";
@@ -21,6 +21,8 @@ import {
 } from "@/components/ui/select";
 import { getCountryList, getLanguageList } from "@/constants/localeOptions";
 import { PaymentModal } from "@/components/PaymentModal";
+import { useQuizUsage } from "@/hooks/useQuizUsage";
+import { useMembership } from "@/hooks/useMembership";
 
 const JJ_HOLDING_URL = "https://jjholdinggroup.com";
 
@@ -229,6 +231,9 @@ const NATIONALITIES = getCountryList();
 const Quiz = () => {
   const navigate = useNavigate();
   const { user } = useAuth();
+  const { hasUsedFreeQuiz, markFreeUsed } = useQuizUsage();
+  const { hasActiveMembership } = useMembership();
+  
   const [currentStep, setCurrentStep] = useState(0);
   const [answers, setAnswers] = useState<Record<string, string | string[]>>({});
   const [isSubmitting, setIsSubmitting] = useState(false);
@@ -395,14 +400,23 @@ const Quiz = () => {
       .sort((a, b) => b.matchScore - a.matchScore);
   };
 
+  // Check if user needs to pay (has used free and no VIP membership)
+  const needsPayment = hasUsedFreeQuiz && !hasActiveMembership;
+
   const handleSubmitForm = async () => {
     if (!isFormValid()) return;
     
-    // Show payment modal after form completion
-    setShowPayment(true);
+    // If user has already used free trial and doesn't have VIP, show payment
+    if (needsPayment) {
+      setShowPayment(true);
+      return;
+    }
+    
+    // Otherwise, proceed directly (FREE one-time use)
+    await proceedToResults();
   };
 
-  const handlePaymentSuccess = async () => {
+  const proceedToResults = async () => {
     setIsSubmitting(true);
     try {
       const recommendations = getRecommendations();
@@ -418,14 +432,24 @@ const Quiz = () => {
         recommended_project_ids: recommendations.slice(0, 5).map((p) => p.id),
       });
 
+      // Mark free usage
+      markFreeUsed();
+
       const slugs = recommendations.slice(0, 5).map((p) => p.slug).join(",");
-      navigate(`/quiz-results?projects=${slugs}&session=${sessionId}`);
+      navigate(`/quiz-results?projects=${slugs}&session=${sessionId}&free=true`);
     } catch (error) {
       console.error("Error saving quiz:", error);
       const recommendations = getRecommendations();
       const slugs = recommendations.slice(0, 5).map((p) => p.slug).join(",");
-      navigate(`/quiz-results?projects=${slugs}`);
+      markFreeUsed();
+      navigate(`/quiz-results?projects=${slugs}&free=true`);
+    } finally {
+      setIsSubmitting(false);
     }
+  };
+
+  const handlePaymentSuccess = async () => {
+    await proceedToResults();
   };
 
   const [started, setStarted] = useState(false);
@@ -458,8 +482,10 @@ const Quiz = () => {
           <div className="w-full max-w-2xl text-center">
             {/* Exclusive Badge */}
             <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-gradient-to-r from-purple-600/30 to-purple-800/30 border border-purple-500/40 mb-8">
-              <Sparkles className="w-4 h-4 text-white" />
-              <span className="text-white text-sm font-medium">Premium AI Service by JJ Global Capital</span>
+              <Gift className="w-4 h-4 text-white" />
+              <span className="text-white text-sm font-medium">
+                {hasUsedFreeQuiz ? "VIP Package Required" : "Complimentary First Use"}
+              </span>
             </div>
 
             <div className="w-20 h-20 rounded-full bg-gradient-to-br from-purple-500 via-purple-600 to-purple-800 mx-auto mb-8 flex items-center justify-center shadow-2xl shadow-purple-500/30">
@@ -471,30 +497,62 @@ const Quiz = () => {
             </h1>
             
             <p className="text-zinc-400 text-lg mb-6 max-w-lg mx-auto">
-              Our AI will analyze your preferences against government data sources to find your perfect property match and provide a detailed comparison report.
+              {hasUsedFreeQuiz 
+                ? "Upgrade to VIP for unlimited AI-powered property matching and analysis."
+                : "Try our AI Property Matchmaker and Analysis completely FREE for your first use!"
+              }
             </p>
 
-            {/* Value Proposition */}
-            <div className="bg-purple-900/20 border border-purple-500/30 rounded-2xl p-6 mb-8 text-left max-w-md mx-auto">
-              <h3 className="text-white font-semibold mb-4 text-center">What You'll Get:</h3>
-              <ul className="space-y-3 text-sm">
-                <li className="flex items-start gap-3 text-zinc-300">
-                  <CheckCircle2 className="w-5 h-5 text-purple-400 flex-shrink-0 mt-0.5" />
-                  <span>AI analysis based on official government resources</span>
-                </li>
-                <li className="flex items-start gap-3 text-zinc-300">
-                  <CheckCircle2 className="w-5 h-5 text-purple-400 flex-shrink-0 mt-0.5" />
-                  <span>Top 3 recommended properties with detailed comparison</span>
-                </li>
-                <li className="flex items-start gap-3 text-zinc-300">
-                  <CheckCircle2 className="w-5 h-5 text-purple-400 flex-shrink-0 mt-0.5" />
-                  <span>Excel report with complete property analysis</span>
-                </li>
-                <li className="flex items-start gap-3 text-zinc-300">
-                  <CheckCircle2 className="w-5 h-5 text-purple-400 flex-shrink-0 mt-0.5" />
-                  <span>Direct connection with our expert advisors</span>
-                </li>
-              </ul>
+            {/* Free vs VIP Comparison Cards */}
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-8 max-w-lg mx-auto">
+              {/* Free Tier */}
+              <div className={`rounded-2xl p-5 text-left transition-all ${!hasUsedFreeQuiz ? "bg-gradient-to-br from-green-500/20 to-emerald-500/10 border-2 border-green-500/50" : "bg-zinc-800/50 border border-zinc-700/50 opacity-60"}`}>
+                <div className="flex items-center gap-2 mb-3">
+                  <Gift className={`w-5 h-5 ${!hasUsedFreeQuiz ? "text-green-400" : "text-zinc-500"}`} />
+                  <span className={`font-semibold ${!hasUsedFreeQuiz ? "text-green-400" : "text-zinc-500"}`}>
+                    {hasUsedFreeQuiz ? "Free Trial Used" : "FREE Trial"}
+                  </span>
+                </div>
+                <ul className="space-y-2 text-sm">
+                  <li className="flex items-center gap-2 text-zinc-300">
+                    <CheckCircle2 className="w-4 h-4 text-green-400 flex-shrink-0" />
+                    <span>1 AI Property Match</span>
+                  </li>
+                  <li className="flex items-center gap-2 text-zinc-300">
+                    <CheckCircle2 className="w-4 h-4 text-green-400 flex-shrink-0" />
+                    <span>1 AI Comparison Report</span>
+                  </li>
+                  <li className="flex items-center gap-2 text-zinc-300">
+                    <CheckCircle2 className="w-4 h-4 text-green-400 flex-shrink-0" />
+                    <span>Download Excel Report</span>
+                  </li>
+                </ul>
+              </div>
+
+              {/* VIP Tier */}
+              <div className="bg-gradient-to-br from-gold/20 to-gold/5 border-2 border-gold/50 rounded-2xl p-5 text-left relative overflow-hidden">
+                <div className="absolute -top-1 -right-1 bg-gold text-black text-xs font-bold px-2 py-1 rounded-bl-lg">
+                  $100/yr
+                </div>
+                <div className="flex items-center gap-2 mb-3">
+                  <Crown className="w-5 h-5 text-gold" />
+                  <span className="font-semibold text-gold">VIP Package</span>
+                </div>
+                <ul className="space-y-2 text-sm">
+                  <li className="flex items-center gap-2 text-zinc-300">
+                    <CheckCircle2 className="w-4 h-4 text-gold flex-shrink-0" />
+                    <span>Unlimited Matches</span>
+                  </li>
+                  <li className="flex items-center gap-2 text-zinc-300">
+                    <CheckCircle2 className="w-4 h-4 text-gold flex-shrink-0" />
+                    <span>Unlimited AI Analysis</span>
+                  </li>
+                  <li className="flex items-center gap-2 text-zinc-300">
+                    <CheckCircle2 className="w-4 h-4 text-gold flex-shrink-0" />
+                    <span>Priority Expert Support</span>
+                  </li>
+                </ul>
+              </div>
             </div>
 
             <div className="flex flex-wrap items-center justify-center gap-6 text-sm text-zinc-400 mb-10">
@@ -508,22 +566,35 @@ const Quiz = () => {
                 <div className="w-5 h-5 rounded-full bg-purple-600/30 flex items-center justify-center">
                   <Sparkles className="w-3 h-3 text-white" />
                 </div>
-                <span className="text-white">AI-Powered Analysis</span>
+                <span className="text-white">AI-Powered</span>
               </div>
               <div className="flex items-center gap-2">
                 <div className="w-5 h-5 rounded-full bg-purple-600/30 flex items-center justify-center">
                   <CheckCircle2 className="w-3 h-3 text-white" />
                 </div>
-                <span className="text-white">$100/Year Access</span>
+                <span className="text-white">{hasUsedFreeQuiz ? "VIP Required" : "First Use FREE"}</span>
               </div>
             </div>
 
             <Button
               onClick={() => setStarted(true)}
-              className="bg-gradient-to-r from-purple-600 to-purple-800 text-white font-semibold px-10 py-6 text-lg hover:from-purple-500 hover:to-purple-700 shadow-lg shadow-purple-500/30 transition-all hover:shadow-xl hover:shadow-purple-500/40"
+              className={`font-semibold px-10 py-6 text-lg shadow-lg transition-all hover:shadow-xl ${
+                hasUsedFreeQuiz 
+                  ? "bg-gradient-to-r from-gold via-gold to-gold-dark text-black hover:brightness-110 shadow-gold/30 hover:shadow-gold/40"
+                  : "bg-gradient-to-r from-purple-600 to-purple-800 text-white hover:from-purple-500 hover:to-purple-700 shadow-purple-500/30 hover:shadow-purple-500/40"
+              }`}
             >
-              Start Assessment
-              <ArrowUpRight className="w-5 h-5 ml-2" />
+              {hasUsedFreeQuiz ? (
+                <>
+                  <Crown className="w-5 h-5 mr-2" />
+                  Continue with VIP
+                </>
+              ) : (
+                <>
+                  Get Free Property Match
+                  <ArrowUpRight className="w-5 h-5 ml-2" />
+                </>
+              )}
             </Button>
 
             <p className="text-zinc-500 text-xs mt-6">
@@ -655,20 +726,45 @@ const Quiz = () => {
               <Button
                 onClick={handleSubmitForm}
                 disabled={!isFormValid() || isSubmitting}
-                className="w-full mt-6 bg-gradient-to-r from-purple-600 to-purple-800 text-white font-semibold py-6 text-lg hover:from-purple-500 hover:to-purple-700 disabled:opacity-50"
+                className={`w-full mt-6 font-semibold py-6 text-lg disabled:opacity-50 ${
+                  needsPayment
+                    ? "bg-gradient-to-r from-gold via-gold to-gold-dark text-black hover:brightness-110"
+                    : "bg-gradient-to-r from-purple-600 to-purple-800 text-white hover:from-purple-500 hover:to-purple-700"
+                }`}
               >
                 {isSubmitting ? (
                   <>
                     <Loader2 className="w-5 h-5 mr-2 animate-spin" />
                     Processing...
                   </>
+                ) : needsPayment ? (
+                  <>
+                    <Crown className="w-5 h-5 mr-2" />
+                    Upgrade to VIP ($100/year)
+                  </>
                 ) : (
                   <>
-                    <Sparkles className="w-5 h-5 mr-2" />
-                    Unlock AI Analysis
+                    <Gift className="w-5 h-5 mr-2" />
+                    Get Free AI Analysis
                   </>
                 )}
               </Button>
+
+              {!needsPayment && (
+                <div className="bg-green-500/10 border border-green-500/30 rounded-lg p-3 mt-4 text-center">
+                  <p className="text-green-400 text-sm font-medium">
+                    ✨ Your first AI Property Match & Analysis is FREE!
+                  </p>
+                </div>
+              )}
+
+              {needsPayment && (
+                <div className="bg-gold/10 border border-gold/30 rounded-lg p-3 mt-4 text-center">
+                  <p className="text-gold text-sm">
+                    You've used your free trial. Upgrade to VIP for unlimited access.
+                  </p>
+                </div>
+              )}
 
               <p className="text-purple-300/60 text-xs text-center mt-6">
                 Software developed by <span className="text-white">Jane Abou Jaoude</span><br />
@@ -687,6 +783,7 @@ const Quiz = () => {
           onOpenChange={setShowPayment}
           onSuccess={handlePaymentSuccess}
           userInfo={formData}
+          mode="regenerate"
         />
       </section>
     );
