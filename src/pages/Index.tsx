@@ -1,11 +1,15 @@
+import { useState } from "react";
 import { Link } from "react-router-dom";
 import { motion } from "framer-motion";
 import Footer from "@/components/Footer";
 import StatsCounter from "@/components/StatsCounter";
 import AIComparisonWidget from "@/components/AIComparisonWidget";
 import MarketReportCTA from "@/components/MarketReportCTA";
+import MortgageCalculator from "@/components/MortgageCalculator";
 import WelcomeModal from "@/components/WelcomeModal";
-import { Sparkles, ArrowUpRight, ChevronDown, User, Scale, Layers } from "lucide-react";
+import InquiryFormModal from "@/components/InquiryFormModal";
+import { useLanguage } from "@/contexts/LanguageContext";
+import { Sparkles, ArrowUpRight, ChevronDown, User, Scale, Layers, Calculator, Building2, Phone, FileText, Home, Briefcase } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import founderProfessional from "@/assets/founder-professional.jpeg";
 import luxuryVillaHero from "@/assets/luxury-villa-hero.jpeg";
@@ -26,6 +30,8 @@ const staggerContainer = {
 };
 
 const Index = () => {
+  const [isInquiryOpen, setIsInquiryOpen] = useState(false);
+  const { t } = useLanguage();
 
   return (
     <section className="relative w-full min-h-screen bg-black">
@@ -123,7 +129,7 @@ const Index = () => {
                 <Button 
                   className="bg-white hover:bg-zinc-100 text-gold font-semibold px-6 py-5 text-sm shadow-lg"
                 >
-                  Explore Our Services
+                  {t('home.cta.explore')}
                   <ArrowUpRight className="w-4 h-4 ml-2" />
                 </Button>
               </Link>
@@ -132,33 +138,31 @@ const Index = () => {
                 <Button 
                   className="bg-gold hover:bg-gold-light text-black font-semibold px-6 py-5 text-sm shadow-lg shadow-gold/20"
                 >
-                  Explore Properties
+                  {t('home.cta.properties')}
                   <ArrowUpRight className="w-4 h-4 ml-2" />
                 </Button>
               </Link>
-              {/* Contact Us - Same style */}
-              <a href={CONTACT_INFO.inquiryFormUrl} target="_blank" rel="noopener noreferrer">
-                <Button 
-                  variant="outline"
-                  className="border-gold/50 text-gold hover:bg-gold/10 hover:border-gold px-6 py-5 text-sm"
-                >
-                  Contact Us
-                  <ArrowUpRight className="w-4 h-4 ml-2" />
-                </Button>
-              </a>
+              {/* Contact Us - Opens Inquiry Form */}
+              <Button 
+                variant="outline"
+                className="border-gold/50 text-gold hover:bg-gold/10 hover:border-gold px-6 py-5 text-sm"
+                onClick={() => setIsInquiryOpen(true)}
+              >
+                {t('home.cta.contact')}
+                <ArrowUpRight className="w-4 h-4 ml-2" />
+              </Button>
             </div>
             
             {/* Second Row - Service Shortcuts */}
             <div className="flex flex-wrap justify-center gap-3">
-              <a href={CONTACT_INFO.inquiryFormUrl} target="_blank" rel="noopener noreferrer">
-                <Button 
-                  variant="outline"
-                  className="border-white/30 bg-white/5 text-white hover:bg-white/10 hover:border-white/50 px-5 py-4 text-xs backdrop-blur-sm"
-                >
-                  List Your Property
-                  <ArrowUpRight className="w-3 h-3 ml-1" />
-                </Button>
-              </a>
+              <Button 
+                variant="outline"
+                className="border-white/30 bg-white/5 text-white hover:bg-white/10 hover:border-white/50 px-5 py-4 text-xs backdrop-blur-sm"
+                onClick={() => setIsInquiryOpen(true)}
+              >
+                List Your Property
+                <ArrowUpRight className="w-3 h-3 ml-1" />
+              </Button>
               <Link to="/concierge">
                 <Button 
                   variant="outline"
@@ -193,12 +197,62 @@ const Index = () => {
               <div className="flex items-center gap-3 bg-gradient-to-r from-purple-700 to-purple-900 hover:from-purple-600 hover:to-purple-800 border border-purple-500/40 rounded-xl px-6 py-3 transition-all shadow-lg shadow-purple-500/20 group">
                 <Sparkles className="w-5 h-5 text-white" />
                 <div className="text-left">
-                  <p className="text-white font-semibold text-sm">Let AI Find Your Home</p>
+                  <p className="text-white font-semibold text-sm">{t('home.cta.aiFinder')}</p>
                   <p className="text-purple-200/80 text-xs">Get Your Free Test Now</p>
                 </div>
                 <ArrowUpRight className="w-5 h-5 text-white group-hover:translate-x-0.5 group-hover:-translate-y-0.5 transition-transform" />
               </div>
             </Link>
+          </motion.div>
+        </div>
+      </section>
+
+      {/* QUICK NAVIGATION SHORTCUTS */}
+      <section className="py-12 bg-gradient-to-b from-black to-zinc-950">
+        <div className="container mx-auto px-4">
+          <motion.div
+            className="text-center mb-8"
+            initial={{ opacity: 0, y: 20 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+          >
+            <span className="text-gold text-xs uppercase tracking-[0.3em]">Quick Access</span>
+            <h3 className="text-white text-xl md:text-2xl font-bold mt-2" style={{ fontFamily: "Poppins, sans-serif" }}>
+              What Are You Looking For?
+            </h3>
+          </motion.div>
+          
+          <motion.div 
+            className="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-6 gap-4"
+            initial={{ opacity: 0, y: 20 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+            transition={{ delay: 0.1 }}
+          >
+            {[
+              { href: "/properties", icon: Building2, label: "Properties", desc: "Browse Listings" },
+              { href: "/mortgage-advisory", icon: Calculator, label: "Mortgage", desc: "Advisory" },
+              { href: "/quiz", icon: Sparkles, label: "AI Finder", desc: "Match Properties" },
+              { href: "/market-report", icon: FileText, label: "Market Report", desc: "UAE Insights" },
+              { href: "/concierge", icon: Briefcase, label: "Concierge", desc: "Luxury Services" },
+              { href: "/contact", icon: Phone, label: "Contact", desc: "Get In Touch" },
+            ].map((item, index) => (
+              <Link key={item.href} to={item.href}>
+                <motion.div
+                  className="bg-zinc-900/50 border border-zinc-800 hover:border-gold/50 rounded-xl p-4 text-center group transition-all hover:bg-zinc-900"
+                  initial={{ opacity: 0, y: 20 }}
+                  whileInView={{ opacity: 1, y: 0 }}
+                  viewport={{ once: true }}
+                  transition={{ delay: index * 0.05 }}
+                >
+                  <div className="w-12 h-12 mx-auto mb-3 rounded-xl bg-gold/10 flex items-center justify-center group-hover:bg-gold/20 transition-colors">
+                    <item.icon className="w-6 h-6 text-gold" />
+                  </div>
+                  <p className="text-white font-semibold text-sm">{item.label}</p>
+                  <p className="text-zinc-500 text-xs">{item.desc}</p>
+                </motion.div>
+              </Link>
+            ))}
           </motion.div>
         </div>
       </section>
@@ -309,6 +363,27 @@ const Index = () => {
         </div>
       </section>
 
+      {/* MORTGAGE CALCULATOR SECTION */}
+      <section className="py-16 md:py-20 bg-black">
+        <div className="container mx-auto px-4">
+          <motion.div
+            className="text-center mb-10"
+            initial={{ opacity: 0, y: 20 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+          >
+            <span className="text-gold text-xs uppercase tracking-[0.3em]">Financial Planning</span>
+            <h3 className="text-white text-3xl md:text-4xl font-bold mt-2" style={{ fontFamily: "Poppins, sans-serif" }}>
+              Mortgage Calculator
+            </h3>
+            <p className="text-zinc-400 mt-2 max-w-lg mx-auto">
+              Estimate your monthly payments and plan your investment with our comprehensive calculator
+            </p>
+          </motion.div>
+          <MortgageCalculator compact />
+        </div>
+      </section>
+
       {/* Stats Counter Section */}
       <StatsCounter />
 
@@ -329,12 +404,13 @@ const Index = () => {
             Connect with our team to discover exclusive off-plan opportunities and start your UAE investment journey today.
           </p>
           <div className="flex flex-wrap justify-center gap-4">
-            <a href={CONTACT_INFO.inquiryFormUrl} target="_blank" rel="noopener noreferrer">
-              <Button className="bg-gold hover:bg-gold-light text-black font-semibold px-8 py-6 text-base">
-                Contact Us
-                <ArrowUpRight className="w-5 h-5 ml-2" />
-              </Button>
-            </a>
+            <Button 
+              className="bg-gold hover:bg-gold-light text-black font-semibold px-8 py-6 text-base"
+              onClick={() => setIsInquiryOpen(true)}
+            >
+              {t('home.cta.contact')}
+              <ArrowUpRight className="w-5 h-5 ml-2" />
+            </Button>
             <Link to="/properties">
               <Button 
                 variant="outline"
@@ -349,6 +425,13 @@ const Index = () => {
 
       {/* Footer */}
       <Footer />
+
+      {/* Inquiry Form Modal */}
+      <InquiryFormModal 
+        isOpen={isInquiryOpen} 
+        onClose={() => setIsInquiryOpen(false)} 
+        source="homepage"
+      />
     </section>
   );
 };

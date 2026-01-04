@@ -1,9 +1,11 @@
+import { useState } from "react";
 import { Link } from "react-router-dom";
-import { ArrowLeft, Shield, CheckCircle, Building2, Users } from "lucide-react";
+import { ArrowLeft, Shield, CheckCircle, Building2, Users, ArrowUpRight } from "lucide-react";
 import MortgageCalculator from "@/components/MortgageCalculator";
+import InquiryFormModal from "@/components/InquiryFormModal";
 import Footer from "@/components/Footer";
-
-const INQUIRY_FORM_URL = "https://jjglobalcapital.com/form/property-investment-inquiry-form/";
+import { Button } from "@/components/ui/button";
+import { useLanguage } from "@/contexts/LanguageContext";
 
 const benefits = [
   {
@@ -29,6 +31,9 @@ const benefits = [
 ];
 
 const MortgageCalculatorPage = () => {
+  const [isInquiryOpen, setIsInquiryOpen] = useState(false);
+  const { t } = useLanguage();
+
   return (
     <section className="min-h-screen bg-zinc-950">
       {/* Hero Section */}
@@ -42,21 +47,21 @@ const MortgageCalculatorPage = () => {
         <div className="container mx-auto px-4 relative z-10">
           <Link to="/" className="inline-flex items-center gap-2 text-zinc-400 hover:text-gold mb-8 transition-colors group">
             <ArrowLeft className="w-4 h-4 group-hover:-translate-x-1 transition-transform" />
-            Back to Properties
+            Back to Home
           </Link>
           
           <div className="max-w-3xl mb-12">
             <span className="inline-block px-4 py-1.5 bg-gold/10 border border-gold/30 rounded-full text-gold text-sm font-medium mb-6">
-              Mortgage Advisory
+              {t('mortgage.title')}
             </span>
             <h1 
               className="text-4xl md:text-5xl lg:text-6xl font-bold text-white mb-6"
               style={{ fontFamily: "Poppins, sans-serif" }}
             >
-              Calculate Your <span className="text-gold">Mortgage</span>
+              {t('mortgage.title')}
             </h1>
             <p className="text-zinc-400 text-lg md:text-xl leading-relaxed">
-              Plan your property investment with our advanced mortgage calculator. Get accurate estimates for monthly payments, total interest, and find the perfect financing option for your UAE property purchase.
+              {t('mortgage.subtitle')}. Plan your property investment with our advanced mortgage calculator. Get accurate estimates for monthly payments, total interest, and find the perfect financing option for your UAE property purchase.
             </p>
           </div>
 
@@ -73,7 +78,7 @@ const MortgageCalculatorPage = () => {
               className="text-3xl md:text-4xl font-bold text-white mb-4"
               style={{ fontFamily: "Poppins, sans-serif" }}
             >
-              Why Choose Our <span className="text-gold">Mortgage Advisory</span>
+              Why Choose Our <span className="text-gold">{t('mortgage.title')}</span>
             </h2>
             <p className="text-zinc-400 max-w-2xl mx-auto">
               Our dedicated mortgage team partners with leading UAE banks to secure the best rates and terms for your property investment
@@ -131,16 +136,25 @@ const MortgageCalculatorPage = () => {
             <p className="text-zinc-400 text-lg mb-8">
               Speak with our mortgage advisors today and get personalized guidance for your property investment financing needs.
             </p>
-            <a href={INQUIRY_FORM_URL} target="_blank" rel="noopener noreferrer">
-              <button className="bg-gradient-to-r from-gold to-gold-dark text-black px-8 py-4 rounded-lg font-semibold text-lg hover:opacity-90 transition-opacity">
-                Schedule a Consultation
-              </button>
-            </a>
+            <Button 
+              onClick={() => setIsInquiryOpen(true)}
+              className="bg-gradient-to-r from-gold to-gold-dark text-black px-8 py-6 h-auto font-semibold text-lg hover:opacity-90 transition-opacity"
+            >
+              {t('mortgage.contactAdvisor')}
+              <ArrowUpRight className="w-5 h-5 ml-2" />
+            </Button>
           </div>
         </div>
       </div>
 
       <Footer />
+
+      {/* Inquiry Form Modal */}
+      <InquiryFormModal 
+        isOpen={isInquiryOpen} 
+        onClose={() => setIsInquiryOpen(false)} 
+        source="mortgage-advisory"
+      />
     </section>
   );
 };
