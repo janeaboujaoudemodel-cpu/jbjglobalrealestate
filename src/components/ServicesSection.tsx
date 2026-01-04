@@ -1,5 +1,6 @@
-import { Link } from "react-router-dom";
-import { ChevronRight } from "lucide-react";
+import { ChevronRight, Play, Volume2, VolumeX } from "lucide-react";
+import { useState, useRef } from "react";
+import dubaiHeroVideo from "@/assets/dubai-hero-video.mp4";
 
 const INQUIRY_FORM_URL = "https://jjglobalcapital.com/form/property-investment-inquiry-form/";
 
@@ -139,17 +140,80 @@ const Premium3DIcon = ({ title, gradient }: { title: string; gradient: string })
 };
 
 const ServicesSection = () => {
+  const [isVideoPlaying, setIsVideoPlaying] = useState(true);
+  const [isMuted, setIsMuted] = useState(true);
+  const videoRef = useRef<HTMLVideoElement>(null);
+
+  const togglePlay = () => {
+    if (videoRef.current) {
+      if (isVideoPlaying) {
+        videoRef.current.pause();
+      } else {
+        videoRef.current.play();
+      }
+      setIsVideoPlaying(!isVideoPlaying);
+    }
+  };
+
+  const toggleMute = () => {
+    if (videoRef.current) {
+      videoRef.current.muted = !videoRef.current.muted;
+      setIsMuted(!isMuted);
+    }
+  };
+
   return (
-    <section className="relative py-24 overflow-hidden bg-gradient-to-b from-zinc-900 to-black">
-      {/* Premium background effects */}
+    <section className="relative py-24 overflow-hidden">
+      {/* Video Background */}
       <div className="absolute inset-0">
-        <div className="absolute top-0 left-1/4 w-96 h-96 bg-gold/5 rounded-full blur-[120px] pointer-events-none" />
-        <div className="absolute bottom-0 right-1/4 w-96 h-96 bg-purple-500/5 rounded-full blur-[120px] pointer-events-none" />
+        <video
+          ref={videoRef}
+          autoPlay
+          muted
+          loop
+          playsInline
+          className="w-full h-full object-cover"
+        >
+          <source src={dubaiHeroVideo} type="video/mp4" />
+        </video>
+        {/* Dark overlay */}
+        <div className="absolute inset-0 bg-black/80" />
+        {/* Gradient overlays */}
+        <div className="absolute inset-0 bg-gradient-to-b from-black via-transparent to-black" />
+      </div>
+
+      {/* Video Controls */}
+      <div className="absolute top-6 right-6 flex gap-2 z-20">
+        <button
+          onClick={togglePlay}
+          className="w-10 h-10 bg-black/50 hover:bg-black/70 backdrop-blur-sm border border-white/20 rounded-full flex items-center justify-center transition-colors"
+          aria-label={isVideoPlaying ? "Pause video" : "Play video"}
+        >
+          {isVideoPlaying ? (
+            <div className="flex gap-1">
+              <div className="w-1 h-4 bg-white rounded-full" />
+              <div className="w-1 h-4 bg-white rounded-full" />
+            </div>
+          ) : (
+            <Play className="w-4 h-4 text-white ml-0.5" />
+          )}
+        </button>
+        <button
+          onClick={toggleMute}
+          className="w-10 h-10 bg-black/50 hover:bg-black/70 backdrop-blur-sm border border-white/20 rounded-full flex items-center justify-center transition-colors"
+          aria-label={isMuted ? "Unmute video" : "Mute video"}
+        >
+          {isMuted ? (
+            <VolumeX className="w-4 h-4 text-white" />
+          ) : (
+            <Volume2 className="w-4 h-4 text-white" />
+          )}
+        </button>
       </div>
       
       {/* Grid pattern overlay */}
       <div 
-        className="absolute inset-0 opacity-[0.02]"
+        className="absolute inset-0 opacity-[0.02] z-10"
         style={{
           backgroundImage: `linear-gradient(rgba(255,255,255,0.1) 1px, transparent 1px), linear-gradient(90deg, rgba(255,255,255,0.1) 1px, transparent 1px)`,
           backgroundSize: '60px 60px'
@@ -159,16 +223,16 @@ const ServicesSection = () => {
       <div className="container mx-auto px-4 relative z-10">
         {/* Section Header */}
         <div className="text-center mb-16">
-          <span className="inline-block px-5 py-2 bg-gradient-to-r from-gold/20 to-gold/5 border border-gold/30 rounded-full text-gold text-sm font-medium mb-6 backdrop-blur-sm">
+          <span className="inline-block px-5 py-2 bg-gradient-to-r from-[#A8925A]/20 to-[#A8925A]/5 border border-[#A8925A]/30 rounded-full text-[#A8925A] text-sm font-medium mb-6 backdrop-blur-sm">
             Complete Solutions
           </span>
           <h2 
-            className="text-4xl md:text-5xl font-bold text-white mb-6"
+            className="text-4xl md:text-5xl lg:text-6xl font-bold text-white mb-6"
             style={{ fontFamily: "Poppins, sans-serif" }}
           >
-            Our <span className="text-transparent bg-clip-text bg-gradient-to-r from-gold to-gold-dark">Divisions</span>
+            Our <span className="text-transparent bg-clip-text bg-gradient-to-r from-[#A8925A] to-[#C4A962]">Divisions</span>
           </h2>
-          <p className="text-zinc-400 max-w-2xl mx-auto text-lg leading-relaxed">
+          <p className="text-zinc-300 max-w-2xl mx-auto text-lg leading-relaxed">
             Beyond property sales, we offer comprehensive real estate services to support your investment journey through our specialized divisions
           </p>
         </div>
@@ -183,13 +247,13 @@ const ServicesSection = () => {
               rel="noopener noreferrer"
               className="group relative"
             >
-              {/* Card with 3D effect */}
-              <div className="relative bg-gradient-to-br from-zinc-900/90 via-zinc-900/80 to-zinc-950/90 border border-zinc-800/50 rounded-2xl p-8 h-full transition-all duration-500 group-hover:border-gold/30 group-hover:-translate-y-2 group-hover:shadow-2xl group-hover:shadow-gold/10 overflow-hidden">
+              {/* Card with 3D effect and glassmorphism */}
+              <div className="relative bg-black/40 backdrop-blur-md border border-white/10 rounded-2xl p-8 h-full transition-all duration-500 group-hover:border-[#A8925A]/40 group-hover:-translate-y-2 group-hover:shadow-2xl group-hover:shadow-[#A8925A]/10 overflow-hidden">
                 {/* Gradient overlay on hover */}
                 <div className={`absolute inset-0 bg-gradient-to-br ${service.gradient} opacity-0 group-hover:opacity-100 transition-opacity duration-500 rounded-2xl`} />
                 
                 {/* Top accent line */}
-                <div className="absolute top-0 left-0 right-0 h-px bg-gradient-to-r from-transparent via-gold/50 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
+                <div className="absolute top-0 left-0 right-0 h-px bg-gradient-to-r from-transparent via-[#A8925A]/50 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
                 
                 {/* Content */}
                 <div className="relative z-10">
@@ -200,7 +264,7 @@ const ServicesSection = () => {
 
                   {/* Title */}
                   <h3 
-                    className="text-xl font-bold text-white mb-3 group-hover:text-gold transition-colors duration-300"
+                    className="text-xl font-bold text-white mb-3 group-hover:text-[#A8925A] transition-colors duration-300"
                     style={{ fontFamily: "Poppins, sans-serif" }}
                   >
                     {service.title}
@@ -212,14 +276,14 @@ const ServicesSection = () => {
                   </p>
 
                   {/* CTA */}
-                  <div className="flex items-center text-gold text-sm font-medium opacity-0 group-hover:opacity-100 transition-all duration-300 transform translate-y-2 group-hover:translate-y-0">
+                  <div className="flex items-center text-[#A8925A] text-sm font-medium opacity-0 group-hover:opacity-100 transition-all duration-300 transform translate-y-2 group-hover:translate-y-0">
                     <span>Inquire Now</span>
                     <ChevronRight className="w-4 h-4 ml-1 group-hover:translate-x-1 transition-transform" />
                   </div>
                 </div>
 
                 {/* Bottom glow */}
-                <div className="absolute bottom-0 left-1/2 -translate-x-1/2 w-3/4 h-24 bg-gradient-to-t from-gold/5 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500 pointer-events-none" />
+                <div className="absolute bottom-0 left-1/2 -translate-x-1/2 w-3/4 h-24 bg-gradient-to-t from-[#A8925A]/10 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500 pointer-events-none" />
               </div>
             </a>
           ))}
