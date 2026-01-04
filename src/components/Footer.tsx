@@ -132,12 +132,13 @@ const Footer = () => {
     },
   ];
 
-  // About links - Updated order
+  // About links - Updated order: Home, Founder, About, Properties, Services, Awards, News, Contact
   const aboutLinks = [
     { href: "/", label: "Home" },
     { href: "/founder", label: "Founder & Leadership" },
     { href: "/about", label: "About Us" },
     { href: "/properties", label: "Properties" },
+    { href: "/#services", label: "Services" },
     { href: "/awards", label: "Awards" },
     { href: "/news", label: "News & Insights" },
     { href: "/contact", label: "Contact" },

@@ -49,12 +49,13 @@ const GlobalHeader = () => {
   const shortlistCount = user ? (shortlist?.length || 0) : guestShortlist.length;
   const totalCount = favCount + shortlistCount;
 
-  // Updated navigation order as per task
+  // Updated navigation order: Home, Founder, About, Properties, Services, Awards, News, Contact
   const mainNavLinks = [
     { href: "/", label: "Home", icon: Home },
     { href: "/founder", label: "Founder & Leadership", icon: User },
     { href: "/about", label: "About Us", icon: Building2 },
     { href: "/properties", label: "Properties", icon: Building2 },
+    { href: "/#services", label: "Services", icon: Building2 },
     { href: "/awards", label: "Awards", icon: Building2 },
     { href: "/news", label: "News & Insights", icon: Newspaper },
     { href: "/contact", label: "Contact", icon: Phone },
