@@ -117,22 +117,33 @@ const Index = () => {
             viewport={{ once: true }}
             transition={{ duration: 0.6 }}
           >
-            <div className="flex flex-wrap justify-center gap-4">
-              <Link to="/properties">
+            <div className="flex flex-wrap justify-center gap-3">
+              {/* Explore Our Services - White background, gold text */}
+              <Link to="/about">
                 <Button 
-                  className="bg-gold hover:bg-gold-light text-black font-semibold px-8 py-6 text-base shadow-lg shadow-gold/20"
+                  className="bg-white hover:bg-zinc-100 text-gold font-semibold px-6 py-5 text-sm shadow-lg"
                 >
-                  Explore Properties
-                  <ArrowUpRight className="w-5 h-5 ml-2" />
+                  Explore Our Services
+                  <ArrowUpRight className="w-4 h-4 ml-2" />
                 </Button>
               </Link>
+              {/* Explore Properties - Gold, slightly smaller */}
+              <Link to="/properties">
+                <Button 
+                  className="bg-gold hover:bg-gold-light text-black font-semibold px-6 py-5 text-sm shadow-lg shadow-gold/20"
+                >
+                  Explore Properties
+                  <ArrowUpRight className="w-4 h-4 ml-2" />
+                </Button>
+              </Link>
+              {/* Contact Us - Same style */}
               <a href={CONTACT_INFO.inquiryFormUrl} target="_blank" rel="noopener noreferrer">
                 <Button 
                   variant="outline"
-                  className="border-gold/50 text-gold hover:bg-gold/10 hover:border-gold px-8 py-6 text-base"
+                  className="border-gold/50 text-gold hover:bg-gold/10 hover:border-gold px-6 py-5 text-sm"
                 >
                   Contact Us
-                  <ArrowUpRight className="w-5 h-5 ml-2" />
+                  <ArrowUpRight className="w-4 h-4 ml-2" />
                 </Button>
               </a>
             </div>
