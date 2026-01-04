@@ -27,11 +27,11 @@ import { ScrollArea } from "@/components/ui/scroll-area";
 
 const INQUIRY_FORM_URL = "https://jjglobalcapital.com/form/property-investment-inquiry-form/";
 
-// Premium Logo Component
+// Premium Logo Component - White divider between gold J's
 const JJLogo = ({ className = "" }: { className?: string }) => (
   <span className={`font-bold tracking-wide ${className}`} style={{ fontFamily: "Poppins, sans-serif" }}>
     <span className="text-gold">J</span>
-    <span className="text-gold mx-1">|</span>
+    <span className="text-white mx-1">|</span>
     <span className="text-gold">J</span>
     <span className="text-white ml-2">GLOBAL CAPITAL</span>
   </span>
@@ -158,9 +158,9 @@ const GlobalHeader = () => {
                   <Menu className="w-5 h-5" />
                 </Button>
               </SheetTrigger>
-              <SheetContent side="right" className="bg-black border-zinc-800 w-[300px] p-0 flex flex-col h-full">
-                {/* Menu Header with logo background */}
-                <div className="relative h-32 bg-gradient-to-b from-purple-950/50 to-black border-b border-purple-900/30 flex items-end p-6 shrink-0">
+              <SheetContent side="right" className="bg-black/95 backdrop-blur-xl border-zinc-800/50 w-[300px] p-0 flex flex-col h-full">
+                {/* Menu Header with glassmorphism */}
+                <div className="relative h-32 bg-gradient-to-b from-zinc-900/80 to-black/90 border-b border-gold/20 flex items-end p-6 shrink-0 backdrop-blur-sm">
                   <JJLogo className="text-lg" />
                 </div>
                 
@@ -175,8 +175,8 @@ const GlobalHeader = () => {
                         onClick={() => setMobileMenuOpen(false)}
                         className={`flex items-center gap-3 px-4 py-3 border-l-2 transition-all ${
                           isActive(link.href)
-                            ? "text-purple-300 border-purple-500 bg-purple-950/30"
-                            : "text-zinc-300 border-transparent hover:text-white hover:bg-zinc-900 hover:border-purple-500/50"
+                            ? "text-gold border-gold bg-gold/10"
+                            : "text-zinc-300 border-transparent hover:text-white hover:bg-zinc-900/80 hover:border-gold/50"
                         }`}
                       >
                         {link.label}
@@ -189,27 +189,27 @@ const GlobalHeader = () => {
                     <Link
                       to="/quiz"
                       onClick={() => setMobileMenuOpen(false)}
-                      className="flex items-center gap-3 px-4 py-4 bg-gradient-to-r from-purple-900/60 to-purple-950/40 border border-purple-700/30 rounded-lg mb-4 text-white hover:from-purple-800/60 transition-all"
+                      className="flex items-center gap-3 px-4 py-4 bg-gradient-to-r from-gold/10 to-gold/5 border border-gold/30 rounded-lg mb-4 text-white hover:from-gold/15 transition-all backdrop-blur-sm"
                     >
-                      <div className="w-8 h-8 bg-gradient-to-br from-purple-500 to-purple-700 rounded-lg flex items-center justify-center">
-                        <Sparkles className="w-4 h-4 text-white" />
+                      <div className="w-8 h-8 bg-gradient-to-br from-gold to-[#C4A962] rounded-lg flex items-center justify-center">
+                        <Sparkles className="w-4 h-4 text-black" />
                       </div>
                       <div>
                         <p className="font-semibold text-sm">AI Home Finder</p>
-                        <p className="text-purple-300 text-xs">Complimentary</p>
+                        <p className="text-gold/80 text-xs">Complimentary</p>
                       </div>
                     </Link>
 
                     {/* Property Shortcuts */}
-                    <p className="px-4 py-2 text-xs text-zinc-500 uppercase tracking-wider">Quick Access</p>
+                    <p className="px-4 py-2 text-xs text-gold/60 uppercase tracking-wider">Quick Access</p>
                     {propertyShortcuts.filter(s => s.href !== '/quiz').map((shortcut) => (
                       <Link
                         key={shortcut.href}
                         to={shortcut.href}
                         onClick={() => setMobileMenuOpen(false)}
-                        className="flex items-center gap-3 px-4 py-2.5 text-sm text-zinc-400 hover:text-white hover:bg-zinc-900 transition-colors"
+                        className="flex items-center gap-3 px-4 py-2.5 text-sm text-zinc-400 hover:text-white hover:bg-zinc-900/80 transition-colors"
                       >
-                        <shortcut.icon className="w-4 h-4 text-purple-400/70" />
+                        <shortcut.icon className="w-4 h-4 text-gold/70" />
                         {shortcut.label}
                       </Link>
                     ))}
@@ -220,14 +220,14 @@ const GlobalHeader = () => {
                     <Link
                       to="/favorites"
                       onClick={() => setMobileMenuOpen(false)}
-                      className="flex items-center gap-3 px-4 py-3 text-zinc-300 hover:text-white hover:bg-zinc-900 transition-colors"
+                      className="flex items-center gap-3 px-4 py-3 text-zinc-300 hover:text-white hover:bg-zinc-900/80 transition-colors"
                     >
                       <Heart className="w-5 h-5" />
                       <span>Favorites</span>
                       <span className="text-zinc-600">|</span>
                       <span>Shortlist</span>
                       {totalCount > 0 && (
-                        <span className="ml-auto bg-purple-600 text-white text-xs px-2 py-0.5 rounded-full">
+                        <span className="ml-auto bg-gold text-black text-xs px-2 py-0.5 rounded-full font-medium">
                           {totalCount}
                         </span>
                       )}
@@ -265,7 +265,7 @@ const GlobalHeader = () => {
                       <Link
                         to="/auth"
                         onClick={() => setMobileMenuOpen(false)}
-                        className="flex items-center gap-3 px-4 py-3 text-purple-300 hover:text-purple-200 hover:bg-purple-900/20 transition-colors"
+                        className="flex items-center gap-3 px-4 py-3 text-gold hover:text-gold/80 hover:bg-gold/10 transition-colors"
                       >
                         <User className="w-5 h-5" />
                         Sign In / Create Account

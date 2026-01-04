@@ -1,5 +1,6 @@
 import { Link } from "react-router-dom";
-import { ArrowUpRight, Building2, Gem, Film, Shirt, Mail, Phone, ExternalLink, Award, Globe, Users, TrendingUp } from "lucide-react";
+import { ArrowUpRight, Building2, Gem, Film, Shirt, Mail, Phone, ExternalLink, Award, Globe, Users, TrendingUp, Play, Star } from "lucide-react";
+import { motion } from "framer-motion";
 import Footer from "@/components/Footer";
 import { useCountUp } from "@/hooks/useCountUp";
 
@@ -15,74 +16,111 @@ import founderYacht from "@/assets/founder-yacht.jpeg";
 import founderAwardStage from "@/assets/founder-award-stage.jpeg";
 import founderRedCarpet from "@/assets/founder-red-carpet.jpeg";
 
+// Animation variants
+const fadeInUp = {
+  hidden: { opacity: 0, y: 40 },
+  visible: { opacity: 1, y: 0, transition: { duration: 0.8, ease: [0.25, 0.46, 0.45, 0.94] } }
+};
+
+const fadeIn = {
+  hidden: { opacity: 0 },
+  visible: { opacity: 1, transition: { duration: 1 } }
+};
+
+const staggerContainer = {
+  hidden: { opacity: 0 },
+  visible: {
+    opacity: 1,
+    transition: { staggerChildren: 0.15, delayChildren: 0.2 }
+  }
+};
+
+const scaleIn = {
+  hidden: { opacity: 0, scale: 0.9 },
+  visible: { opacity: 1, scale: 1, transition: { duration: 0.6, ease: "easeOut" } }
+};
+
 const CounterStat = ({ end, suffix, prefix, label, icon: Icon }: { end: number; suffix: string; prefix: string; label: string; icon?: any }) => {
   const { ref, formattedValue } = useCountUp({ end, suffix, prefix, duration: 2500 });
 
   return (
-    <div ref={ref} className="text-center group">
+    <motion.div 
+      ref={ref} 
+      className="text-center group"
+      variants={fadeInUp}
+    >
       {Icon && (
-        <div className="w-12 h-12 mx-auto mb-4 bg-gradient-to-br from-[#A8925A]/20 to-[#A8925A]/5 rounded-xl flex items-center justify-center border border-[#A8925A]/20 group-hover:border-[#A8925A]/40 transition-colors">
-          <Icon className="w-5 h-5 text-[#A8925A]" />
+        <div className="w-14 h-14 mx-auto mb-4 bg-gradient-to-br from-gold/20 to-gold/5 rounded-2xl flex items-center justify-center border border-gold/20 group-hover:border-gold/50 group-hover:scale-110 transition-all duration-500 shadow-lg shadow-gold/5">
+          <Icon className="w-6 h-6 text-gold" />
         </div>
       )}
       <p 
-        className="text-transparent bg-clip-text bg-gradient-to-r from-[#A8925A] via-[#C4A962] to-[#A8925A] text-3xl md:text-4xl lg:text-5xl font-bold mb-2" 
+        className="text-transparent bg-clip-text bg-gradient-to-r from-gold via-[#C4A962] to-gold text-4xl md:text-5xl lg:text-6xl font-bold mb-3" 
         style={{ fontFamily: "Poppins, sans-serif" }}
       >
         {formattedValue}
       </p>
-      <p className="text-zinc-400 text-xs md:text-sm uppercase tracking-widest">{label}</p>
-    </div>
+      <p className="text-zinc-400 text-xs md:text-sm uppercase tracking-[0.2em]">{label}</p>
+    </motion.div>
   );
 };
+
+// Decorative gold line component
+const GoldLine = ({ className = "" }: { className?: string }) => (
+  <div className={`h-px bg-gradient-to-r from-transparent via-gold/50 to-transparent ${className}`} />
+);
 
 const Founder = () => {
   const divisions = [
     {
       icon: Building2,
       name: "JJ Global Capital",
-      description: "The core advisory and investment arm of the group. JJ Global Capital provides structured guidance for real estate investment, with a primary focus on the UAE and Dubai markets. Built on discretion, standards, and an international client approach.",
+      description: "The core advisory and investment arm of the group. JJ Global Capital provides structured guidance for real estate investment, with a primary focus on the UAE and Dubai markets.",
       image: founderOffice,
+      tagline: "Real Estate Investment"
     },
     {
       icon: Gem,
       name: "Maison Jane",
-      description: "A luxury lifestyle, beauty, and wellness brand reflecting the founder's personal philosophy. Maison Jane delivers curated, experience-driven services with an emphasis on quality and authenticity.",
+      description: "A luxury lifestyle, beauty, and wellness brand reflecting the founder's personal philosophy. Delivering curated, experience-driven services with an emphasis on quality.",
       image: founderJetInterior,
+      tagline: "Luxury Lifestyle"
     },
     {
       icon: Film,
       name: "JJ Media Group",
-      description: "The strategic media and communications division. JJ Media Group handles brand storytelling, digital presence, and influence strategy—structured for visibility, not mass exposure.",
+      description: "The strategic media and communications division. Handling brand storytelling, digital presence, and influence strategy—structured for visibility.",
       image: founderRedCarpet,
+      tagline: "Media & Communications"
     },
     {
       icon: Shirt,
       name: "JJ Fashion House",
-      description: "A creative direction and fashion division driven by taste and identity. JJ Fashion House extends the founder's aesthetic and standards into selective, design-focused projects.",
+      description: "A creative direction and fashion division driven by taste and identity. Extending the founder's aesthetic into selective, design-focused projects.",
       image: founderAwardStage,
+      tagline: "Fashion & Design"
     },
   ];
 
   const philosophyItems = [
     {
-      title: "Founder-Led Decision Making",
-      description: "Strategic direction flows from the founder, ensuring consistency and alignment with core values across all divisions.",
+      title: "Founder-Led",
+      description: "Strategic direction flows from the founder, ensuring consistency and alignment with core values.",
       icon: Users,
     },
     {
       title: "Accountability",
-      description: "Every entity operates with clear responsibility structures. Performance is measured, and standards are non-negotiable.",
+      description: "Every entity operates with clear responsibility structures and non-negotiable standards.",
       icon: Award,
     },
     {
       title: "Discretion",
-      description: "Privacy and professionalism define client relationships. Visibility is earned through results, not promotion.",
+      description: "Privacy and professionalism define relationships. Visibility earned through results.",
       icon: Globe,
     },
     {
-      title: "Standards Over Scale",
-      description: "Growth is deliberate. The group prioritizes quality of service and depth of expertise over rapid expansion.",
+      title: "Quality First",
+      description: "Growth is deliberate. Quality of service and depth of expertise over rapid expansion.",
       icon: TrendingUp,
     },
   ];
@@ -92,492 +130,680 @@ const Founder = () => {
       {/* HERO - CINEMATIC FULL BLEED */}
       <section className="relative min-h-screen flex items-end">
         {/* Background with parallax effect */}
-        <div className="absolute inset-0">
+        <motion.div 
+          className="absolute inset-0"
+          initial={{ scale: 1.1 }}
+          animate={{ scale: 1 }}
+          transition={{ duration: 1.5, ease: "easeOut" }}
+        >
           <img 
             src={founderHero} 
             alt="Jane Abou Jaoude - Founder & Chairwoman" 
             className="w-full h-full object-cover object-top"
           />
           {/* Multi-layer gradient overlay */}
-          <div className="absolute inset-0 bg-gradient-to-t from-black via-black/50 to-transparent" />
-          <div className="absolute inset-0 bg-gradient-to-r from-black/70 via-transparent to-transparent" />
-          <div className="absolute inset-0 bg-black/20" />
-        </div>
+          <div className="absolute inset-0 bg-gradient-to-t from-black via-black/60 to-transparent" />
+          <div className="absolute inset-0 bg-gradient-to-r from-black/80 via-transparent to-transparent" />
+          <div className="absolute inset-0 bg-black/10" />
+        </motion.div>
         
         {/* Decorative elements */}
-        <div className="absolute top-8 right-8 md:top-16 md:right-16 opacity-30">
-          <div className="w-24 h-24 md:w-32 md:h-32 border border-[#A8925A]/40 rounded-full" />
+        <div className="absolute top-8 right-8 md:top-16 md:right-16 opacity-20">
+          <div className="w-32 h-32 md:w-48 md:h-48 border border-gold/40 rounded-full animate-pulse" />
+          <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-20 h-20 md:w-32 md:h-32 border border-gold/20 rounded-full" />
         </div>
+        
+        {/* Gold accent lines */}
+        <div className="absolute left-0 top-1/3 w-32 md:w-64 h-px bg-gradient-to-r from-gold/50 to-transparent" />
+        <div className="absolute right-0 bottom-1/3 w-32 md:w-64 h-px bg-gradient-to-l from-gold/50 to-transparent" />
         
         {/* Hero Content */}
         <div className="relative z-10 container mx-auto px-4 sm:px-6 lg:px-8 pb-16 md:pb-24 lg:pb-32">
-          <div className="max-w-3xl">
-            <div className="mb-6">
-              <span className="inline-block bg-[#A8925A]/10 border border-[#A8925A]/30 text-[#A8925A] text-xs uppercase tracking-[0.3em] px-4 py-2 rounded-full backdrop-blur-sm">
+          <motion.div 
+            className="max-w-4xl"
+            initial="hidden"
+            animate="visible"
+            variants={staggerContainer}
+          >
+            <motion.div className="mb-6" variants={fadeInUp}>
+              <span className="inline-flex items-center gap-2 bg-black/40 backdrop-blur-md border border-gold/40 text-gold text-xs uppercase tracking-[0.3em] px-5 py-2.5 rounded-full shadow-lg shadow-gold/10">
+                <Star className="w-3.5 h-3.5 fill-gold" />
                 Founder & Chairwoman
               </span>
-            </div>
-            <h1 
-              className="text-white text-4xl sm:text-5xl md:text-6xl lg:text-7xl xl:text-8xl font-bold tracking-tight mb-6"
+            </motion.div>
+            
+            <motion.h1 
+              className="text-white text-5xl sm:text-6xl md:text-7xl lg:text-8xl xl:text-9xl font-bold tracking-tight mb-6"
               style={{ fontFamily: "Poppins, sans-serif" }}
+              variants={fadeInUp}
             >
               JANE ABOU
               <br />
-              <span className="text-transparent bg-clip-text bg-gradient-to-r from-[#A8925A] to-[#C4A962]">
+              <span className="text-transparent bg-clip-text bg-gradient-to-r from-gold via-[#D4B96A] to-gold">
                 JAOUDE
               </span>
-            </h1>
-            <p className="text-zinc-400 text-lg md:text-xl lg:text-2xl mb-8 max-w-xl">
-              JJ Holding Group
-            </p>
-            <p className="text-zinc-500 text-base md:text-lg italic max-w-lg border-l-2 border-[#A8925A]/50 pl-4">
+            </motion.h1>
+            
+            <motion.div variants={fadeInUp}>
+              <p className="text-zinc-300 text-xl md:text-2xl lg:text-3xl mb-8 font-light">
+                JJ Holding Group
+              </p>
+            </motion.div>
+            
+            <motion.p 
+              className="text-zinc-400 text-lg md:text-xl italic max-w-xl border-l-4 border-gold/60 pl-6 py-2"
+              variants={fadeInUp}
+            >
               "Building institutions that outlast trends. Creating value through standards, not scale."
-            </p>
-          </div>
+            </motion.p>
+          </motion.div>
         </div>
         
         {/* Scroll indicator */}
-        <div className="absolute bottom-8 left-1/2 -translate-x-1/2 hidden md:flex flex-col items-center gap-2 text-zinc-500">
-          <span className="text-xs uppercase tracking-widest">Scroll</span>
-          <div className="w-px h-12 bg-gradient-to-b from-[#A8925A] to-transparent animate-pulse" />
-        </div>
+        <motion.div 
+          className="absolute bottom-8 left-1/2 -translate-x-1/2 hidden md:flex flex-col items-center gap-3 text-zinc-400"
+          initial={{ opacity: 0, y: -20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ delay: 1.5, duration: 0.8 }}
+        >
+          <span className="text-xs uppercase tracking-[0.3em]">Discover</span>
+          <div className="w-px h-16 bg-gradient-to-b from-gold to-transparent" />
+        </motion.div>
       </section>
 
       {/* INTRODUCTION - FOUNDER POSITIONING */}
-      <section className="py-20 md:py-32 border-t border-zinc-800/50 relative">
-        <div className="absolute inset-0 bg-gradient-to-b from-black via-zinc-900/20 to-black" />
+      <section className="py-24 md:py-40 border-t border-gold/10 relative overflow-hidden">
+        <div className="absolute inset-0 bg-gradient-to-b from-black via-zinc-950/50 to-black" />
+        
+        {/* Decorative corner accents */}
+        <div className="absolute top-0 left-0 w-64 h-64 bg-gradient-to-br from-gold/5 to-transparent" />
+        <div className="absolute bottom-0 right-0 w-64 h-64 bg-gradient-to-tl from-gold/5 to-transparent" />
+        
         <div className="container mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
-          <div className="max-w-4xl mx-auto text-center">
-            <div className="mb-8">
-              <span className="text-[#A8925A] text-sm uppercase tracking-[0.3em]">Leadership</span>
-            </div>
-            <p className="text-white text-2xl md:text-3xl lg:text-4xl leading-relaxed mb-8 font-light">
-              JJ Holding Group is a <span className="text-[#A8925A]">founder-led</span>, multi-division holding built on unwavering standards, discretion, and long-term vision.
-            </p>
-            <p className="text-zinc-400 text-lg md:text-xl leading-relaxed max-w-3xl mx-auto">
+          <motion.div 
+            className="max-w-5xl mx-auto text-center"
+            initial="hidden"
+            whileInView="visible"
+            viewport={{ once: true, margin: "-100px" }}
+            variants={staggerContainer}
+          >
+            <motion.div className="mb-10" variants={fadeInUp}>
+              <span className="inline-block text-gold text-sm uppercase tracking-[0.4em] mb-4">Leadership</span>
+              <GoldLine className="w-32 mx-auto" />
+            </motion.div>
+            
+            <motion.p 
+              className="text-white text-2xl md:text-4xl lg:text-5xl leading-relaxed mb-10 font-light"
+              variants={fadeInUp}
+            >
+              JJ Holding Group is a <span className="text-gold font-medium">founder-led</span>, multi-division holding built on unwavering standards, discretion, and long-term vision.
+            </motion.p>
+            
+            <motion.p 
+              className="text-zinc-400 text-lg md:text-xl lg:text-2xl leading-relaxed max-w-4xl mx-auto"
+              variants={fadeInUp}
+            >
               Every entity within the group reflects a deliberate approach to business—where quality supersedes quantity, and reputation is earned through consistent excellence.
-            </p>
-          </div>
+            </motion.p>
+          </motion.div>
         </div>
       </section>
 
       {/* THE FOUNDER - EDITORIAL LAYOUT */}
-      <section className="py-20 md:py-32 relative">
+      <section className="py-24 md:py-40 relative">
         <div className="container mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="grid lg:grid-cols-12 gap-8 lg:gap-16 items-start">
+          <motion.div 
+            className="grid lg:grid-cols-12 gap-12 lg:gap-20 items-start"
+            initial="hidden"
+            whileInView="visible"
+            viewport={{ once: true, margin: "-100px" }}
+            variants={staggerContainer}
+          >
             {/* Text Content */}
-            <div className="lg:col-span-5 lg:sticky lg:top-24">
-              <div className="mb-8">
-                <span className="text-[#A8925A] text-sm uppercase tracking-[0.3em]">The Founder</span>
+            <motion.div className="lg:col-span-5 lg:sticky lg:top-32" variants={fadeInUp}>
+              <div className="mb-10">
+                <span className="text-gold text-sm uppercase tracking-[0.4em]">The Founder</span>
+                <GoldLine className="w-24 mt-4" />
               </div>
+              
               <h2 
-                className="text-white text-3xl md:text-4xl lg:text-5xl font-bold mb-8"
+                className="text-white text-4xl md:text-5xl lg:text-6xl font-bold mb-10"
                 style={{ fontFamily: "Poppins, sans-serif" }}
               >
                 Jane Abou
                 <br />
-                <span className="text-[#A8925A]">Jaoude</span>
+                <span className="text-transparent bg-clip-text bg-gradient-to-r from-gold to-[#C4A962]">Jaoude</span>
               </h2>
+              
               <div className="space-y-6 text-zinc-400 leading-relaxed">
-                <p className="text-lg">
+                <p className="text-lg md:text-xl text-zinc-300">
                   Jane Abou Jaoude serves as Founder and Chairwoman of JJ Holding Group. Her leadership is characterized by a composed, deliberate approach—where decisions are made with long-term positioning in mind.
                 </p>
-                <p>
+                <p className="text-base md:text-lg">
                   With experience spanning business advisory, media, and luxury sectors, she has built a group of companies that reflect her standards: institutional in governance, refined in execution, and international in scope.
                 </p>
-                <p>
-                  Based in Dubai, UAE, Jane leads with a philosophy rooted in accountability and discretion. Her approach to leadership prioritizes substance over visibility, building organizations designed to endure rather than simply expand.
+                <p className="text-base md:text-lg">
+                  Based in Dubai, UAE, Jane leads with a philosophy rooted in accountability and discretion. Her approach prioritizes substance over visibility, building organizations designed to endure rather than simply expand.
                 </p>
               </div>
-            </div>
+              
+              <div className="mt-10 flex items-center gap-4">
+                <div className="w-12 h-12 bg-gradient-to-br from-gold to-[#C4A962] rounded-full flex items-center justify-center">
+                  <Award className="w-5 h-5 text-black" />
+                </div>
+                <div>
+                  <p className="text-white font-medium">Award-Winning Leadership</p>
+                  <p className="text-zinc-500 text-sm">Recognized Excellence</p>
+                </div>
+              </div>
+            </motion.div>
             
             {/* Photo Gallery */}
-            <div className="lg:col-span-7">
+            <motion.div className="lg:col-span-7" variants={fadeInUp}>
               <div className="grid grid-cols-2 gap-4 md:gap-6">
                 {/* Main large photo */}
-                <div className="col-span-2 aspect-[16/10] rounded-2xl overflow-hidden border border-zinc-800 shadow-2xl shadow-black/50">
+                <motion.div 
+                  className="col-span-2 aspect-[16/10] rounded-3xl overflow-hidden border border-zinc-800 shadow-2xl shadow-black/80 group"
+                  variants={scaleIn}
+                >
                   <img 
                     src={founderProfessional} 
                     alt="Jane Abou Jaoude - Professional Portrait" 
-                    className="w-full h-full object-cover object-top hover:scale-105 transition-transform duration-700"
+                    className="w-full h-full object-cover object-top group-hover:scale-105 transition-transform duration-1000"
                   />
-                </div>
+                </motion.div>
+                
                 {/* Two smaller photos */}
-                <div className="aspect-[3/4] rounded-xl overflow-hidden border border-zinc-800 shadow-xl">
+                <motion.div 
+                  className="aspect-[3/4] rounded-2xl overflow-hidden border border-zinc-800 shadow-xl group"
+                  variants={scaleIn}
+                >
                   <img 
                     src={founderJetBoarding} 
                     alt="Jane Abou Jaoude - International Travel" 
-                    className="w-full h-full object-cover hover:scale-105 transition-transform duration-700"
+                    className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-1000"
                   />
-                </div>
-                <div className="aspect-[3/4] rounded-xl overflow-hidden border border-zinc-800 shadow-xl">
+                </motion.div>
+                <motion.div 
+                  className="aspect-[3/4] rounded-2xl overflow-hidden border border-zinc-800 shadow-xl group"
+                  variants={scaleIn}
+                >
                   <img 
                     src={founderOffice} 
                     alt="Jane Abou Jaoude - Office" 
-                    className="w-full h-full object-cover hover:scale-105 transition-transform duration-700"
+                    className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-1000"
                   />
-                </div>
+                </motion.div>
               </div>
-            </div>
-          </div>
+            </motion.div>
+          </motion.div>
         </div>
       </section>
 
       {/* JJ HOLDING GROUP - FLAGS VISUAL */}
-      <section className="py-20 md:py-32 bg-gradient-to-b from-zinc-900/50 via-black to-zinc-900/50 relative overflow-hidden">
-        {/* Background pattern */}
-        <div className="absolute inset-0 opacity-5">
-          <div className="absolute inset-0" style={{ backgroundImage: 'radial-gradient(circle at 2px 2px, #A8925A 1px, transparent 0)', backgroundSize: '40px 40px' }} />
+      <section className="py-24 md:py-40 bg-gradient-to-b from-zinc-950 via-black to-zinc-950 relative overflow-hidden">
+        {/* Premium pattern background */}
+        <div className="absolute inset-0 opacity-[0.03]">
+          <div className="absolute inset-0" style={{ backgroundImage: 'radial-gradient(circle at 2px 2px, #A8925A 1px, transparent 0)', backgroundSize: '48px 48px' }} />
         </div>
         
+        {/* Gold gradient orbs */}
+        <div className="absolute top-1/4 left-1/4 w-96 h-96 bg-gold/5 rounded-full blur-3xl" />
+        <div className="absolute bottom-1/4 right-1/4 w-96 h-96 bg-gold/5 rounded-full blur-3xl" />
+        
         <div className="container mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
-          <div className="grid lg:grid-cols-2 gap-12 lg:gap-20 items-center">
+          <motion.div 
+            className="grid lg:grid-cols-2 gap-16 lg:gap-24 items-center"
+            initial="hidden"
+            whileInView="visible"
+            viewport={{ once: true, margin: "-100px" }}
+            variants={staggerContainer}
+          >
             {/* Flags Image */}
-            <div className="order-2 lg:order-1">
-              <div className="aspect-[16/9] rounded-2xl overflow-hidden border border-zinc-800 shadow-2xl">
+            <motion.div className="order-2 lg:order-1" variants={scaleIn}>
+              <div className="aspect-[16/9] rounded-3xl overflow-hidden border border-gold/20 shadow-2xl shadow-gold/10">
                 <img 
                   src={jjFlags} 
                   alt="JJ Holding Group & JJ Global Capital" 
                   className="w-full h-full object-cover"
                 />
               </div>
-            </div>
+            </motion.div>
             
             {/* Content */}
-            <div className="order-1 lg:order-2">
-              <div className="mb-8">
-                <span className="text-[#A8925A] text-sm uppercase tracking-[0.3em]">The Group</span>
+            <motion.div className="order-1 lg:order-2" variants={fadeInUp}>
+              <div className="mb-10">
+                <span className="text-gold text-sm uppercase tracking-[0.4em]">The Group</span>
+                <GoldLine className="w-24 mt-4" />
               </div>
+              
               <h2 
-                className="text-white text-3xl md:text-4xl lg:text-5xl font-bold mb-8"
+                className="text-white text-4xl md:text-5xl lg:text-6xl font-bold mb-10"
                 style={{ fontFamily: "Poppins, sans-serif" }}
               >
                 JJ Holding
                 <br />
-                <span className="text-[#A8925A]">Group</span>
+                <span className="text-transparent bg-clip-text bg-gradient-to-r from-gold to-[#C4A962]">Group</span>
               </h2>
-              <p className="text-zinc-400 text-lg leading-relaxed mb-8">
-                JJ Holding Group serves as the strategic umbrella for all entities under the founder's direction. Established to create a cohesive structure for ventures across distinct but complementary sectors, the group ensures that each brand operates with autonomy while sharing a unified standard of excellence.
+              
+              <p className="text-zinc-300 text-lg md:text-xl leading-relaxed mb-6">
+                JJ Holding Group serves as the strategic umbrella for all entities under the founder's direction. Established to create a cohesive structure for ventures across distinct but complementary sectors.
               </p>
               <p className="text-zinc-500 leading-relaxed">
                 The group's governance remains founder-led, ensuring that strategic decisions align with the long-term vision rather than short-term market pressures.
               </p>
-            </div>
-          </div>
+            </motion.div>
+          </motion.div>
 
-          {/* Stats - Elevated Design */}
-          <div className="mt-20 md:mt-32">
+          {/* Stats - Ultra Premium Design */}
+          <motion.div 
+            className="mt-24 md:mt-40"
+            initial="hidden"
+            whileInView="visible"
+            viewport={{ once: true, margin: "-100px" }}
+            variants={staggerContainer}
+          >
             <div className="grid grid-cols-2 md:grid-cols-4 gap-6 md:gap-8">
-              <div className="bg-gradient-to-br from-zinc-900 to-black border border-zinc-800 rounded-2xl p-6 md:p-8 hover:border-[#A8925A]/30 transition-colors">
-                <CounterStat end={4} suffix="" prefix="" label="Divisions" icon={Building2} />
-              </div>
-              <div className="bg-gradient-to-br from-zinc-900 to-black border border-zinc-800 rounded-2xl p-6 md:p-8 hover:border-[#A8925A]/30 transition-colors">
-                <CounterStat end={12} suffix="+" prefix="" label="Years Experience" icon={Award} />
-              </div>
-              <div className="bg-gradient-to-br from-zinc-900 to-black border border-zinc-800 rounded-2xl p-6 md:p-8 hover:border-[#A8925A]/30 transition-colors">
-                <CounterStat end={92} suffix="+" prefix="" label="Countries Served" icon={Globe} />
-              </div>
-              <div className="bg-gradient-to-br from-zinc-900 to-black border border-zinc-800 rounded-2xl p-6 md:p-8 hover:border-[#A8925A]/30 transition-colors">
-                <CounterStat end={2} suffix="B+" prefix="AED " label="Portfolio Value" icon={TrendingUp} />
-              </div>
+              {[
+                { end: 4, suffix: "", prefix: "", label: "Divisions", icon: Building2 },
+                { end: 12, suffix: "+", prefix: "", label: "Years Experience", icon: Award },
+                { end: 92, suffix: "+", prefix: "", label: "Countries Served", icon: Globe },
+                { end: 2, suffix: "B+", prefix: "AED ", label: "Portfolio Value", icon: TrendingUp },
+              ].map((stat, index) => (
+                <motion.div 
+                  key={stat.label}
+                  className="bg-gradient-to-br from-zinc-900 via-zinc-900/95 to-black border border-zinc-800 rounded-3xl p-8 md:p-10 hover:border-gold/40 transition-all duration-500 group relative overflow-hidden"
+                  variants={fadeInUp}
+                >
+                  {/* Glow effect on hover */}
+                  <div className="absolute inset-0 bg-gradient-to-br from-gold/0 to-gold/0 group-hover:from-gold/5 group-hover:to-transparent transition-all duration-500 rounded-3xl" />
+                  <div className="relative z-10">
+                    <CounterStat {...stat} />
+                  </div>
+                </motion.div>
+              ))}
             </div>
-          </div>
+          </motion.div>
         </div>
       </section>
 
       {/* THE GROUP DIVISIONS - PREMIUM CARDS */}
-      <section className="py-20 md:py-32">
+      <section className="py-24 md:py-40 relative">
         <div className="container mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="text-center mb-16 md:mb-20">
-            <span className="text-[#A8925A] text-sm uppercase tracking-[0.3em]">Our Portfolio</span>
+          <motion.div 
+            className="text-center mb-20 md:mb-24"
+            initial="hidden"
+            whileInView="visible"
+            viewport={{ once: true, margin: "-100px" }}
+            variants={fadeInUp}
+          >
+            <span className="text-gold text-sm uppercase tracking-[0.4em]">Our Portfolio</span>
+            <GoldLine className="w-32 mx-auto mt-4 mb-8" />
             <h2 
-              className="text-white text-3xl md:text-4xl lg:text-5xl font-bold mt-4"
+              className="text-white text-4xl md:text-5xl lg:text-6xl font-bold"
               style={{ fontFamily: "Poppins, sans-serif" }}
             >
-              The Group <span className="text-[#A8925A]">Divisions</span>
+              The Group <span className="text-transparent bg-clip-text bg-gradient-to-r from-gold to-[#C4A962]">Divisions</span>
             </h2>
-          </div>
+          </motion.div>
 
-          <div className="grid md:grid-cols-2 gap-6 lg:gap-8">
+          <motion.div 
+            className="grid md:grid-cols-2 gap-8 lg:gap-10"
+            initial="hidden"
+            whileInView="visible"
+            viewport={{ once: true, margin: "-100px" }}
+            variants={staggerContainer}
+          >
             {divisions.map((division, index) => (
-              <div 
+              <motion.div 
                 key={division.name}
-                className="group relative bg-gradient-to-br from-zinc-900 via-zinc-900/95 to-black border border-zinc-800 rounded-2xl overflow-hidden hover:border-[#A8925A]/40 transition-all duration-500"
+                className="group relative bg-gradient-to-br from-zinc-900 via-zinc-900/95 to-black border border-zinc-800 rounded-3xl overflow-hidden hover:border-gold/50 transition-all duration-700"
+                variants={fadeInUp}
               >
-                {/* Background Image */}
-                <div className="absolute inset-0 opacity-20 group-hover:opacity-30 transition-opacity duration-500">
+                {/* Background Image with better overlay */}
+                <div className="absolute inset-0 opacity-15 group-hover:opacity-25 transition-opacity duration-700">
                   <img 
                     src={division.image} 
                     alt={division.name}
-                    className="w-full h-full object-cover"
+                    className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-1000"
                   />
-                  <div className="absolute inset-0 bg-gradient-to-t from-black via-black/90 to-black/70" />
+                  <div className="absolute inset-0 bg-gradient-to-t from-black via-black/95 to-black/80" />
                 </div>
                 
                 {/* Content */}
-                <div className="relative z-10 p-8 md:p-10">
-                  <div className="flex items-start gap-6">
-                    <div className="w-16 h-16 bg-gradient-to-br from-[#A8925A]/20 to-[#A8925A]/5 rounded-xl flex items-center justify-center border border-[#A8925A]/30 group-hover:border-[#A8925A]/50 group-hover:scale-110 transition-all duration-300 flex-shrink-0">
-                      <division.icon className="w-8 h-8 text-[#A8925A]" />
+                <div className="relative z-10 p-8 md:p-12">
+                  <div className="flex items-start gap-6 mb-6">
+                    <div className="w-16 h-16 md:w-20 md:h-20 bg-gradient-to-br from-gold/20 to-gold/5 rounded-2xl flex items-center justify-center border border-gold/30 group-hover:border-gold/60 group-hover:scale-110 transition-all duration-500 flex-shrink-0 shadow-lg shadow-gold/10">
+                      <division.icon className="w-8 h-8 md:w-10 md:h-10 text-gold" />
                     </div>
                     <div>
-                      <h3 className="text-white text-xl md:text-2xl font-semibold mb-4 group-hover:text-[#A8925A] transition-colors">
+                      <span className="text-gold/70 text-xs uppercase tracking-[0.2em] mb-1 block">{division.tagline}</span>
+                      <h3 className="text-white text-2xl md:text-3xl font-bold group-hover:text-gold transition-colors duration-300">
                         {division.name}
                       </h3>
-                      <p className="text-zinc-400 leading-relaxed">
-                        {division.description}
-                      </p>
                     </div>
                   </div>
+                  <p className="text-zinc-400 text-base md:text-lg leading-relaxed">
+                    {division.description}
+                  </p>
                 </div>
                 
                 {/* Decorative corner */}
-                <div className="absolute top-0 right-0 w-20 h-20 bg-gradient-to-bl from-[#A8925A]/10 to-transparent" />
-              </div>
+                <div className="absolute top-0 right-0 w-32 h-32 bg-gradient-to-bl from-gold/10 to-transparent" />
+                <div className="absolute bottom-0 left-0 w-24 h-24 bg-gradient-to-tr from-gold/5 to-transparent" />
+              </motion.div>
             ))}
-          </div>
+          </motion.div>
         </div>
       </section>
 
       {/* LEADERSHIP PHILOSOPHY */}
-      <section className="py-20 md:py-32 bg-gradient-to-b from-black via-zinc-900/30 to-black">
+      <section className="py-24 md:py-40 bg-gradient-to-b from-black via-zinc-950/50 to-black relative">
         <div className="container mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="text-center mb-16 md:mb-20">
-            <span className="text-[#A8925A] text-sm uppercase tracking-[0.3em]">Philosophy</span>
+          <motion.div 
+            className="text-center mb-20 md:mb-24"
+            initial="hidden"
+            whileInView="visible"
+            viewport={{ once: true, margin: "-100px" }}
+            variants={fadeInUp}
+          >
+            <span className="text-gold text-sm uppercase tracking-[0.4em]">Philosophy</span>
+            <GoldLine className="w-32 mx-auto mt-4 mb-8" />
             <h2 
-              className="text-white text-3xl md:text-4xl lg:text-5xl font-bold mt-4"
+              className="text-white text-4xl md:text-5xl lg:text-6xl font-bold"
               style={{ fontFamily: "Poppins, sans-serif" }}
             >
-              Leadership <span className="text-[#A8925A]">Philosophy</span>
+              Leadership <span className="text-transparent bg-clip-text bg-gradient-to-r from-gold to-[#C4A962]">Philosophy</span>
             </h2>
-          </div>
+          </motion.div>
 
-          <div className="grid sm:grid-cols-2 lg:grid-cols-4 gap-6">
+          <motion.div 
+            className="grid sm:grid-cols-2 lg:grid-cols-4 gap-6 md:gap-8"
+            initial="hidden"
+            whileInView="visible"
+            viewport={{ once: true, margin: "-100px" }}
+            variants={staggerContainer}
+          >
             {philosophyItems.map((item, index) => (
-              <div 
+              <motion.div 
                 key={item.title}
-                className="group bg-gradient-to-b from-zinc-900 to-black border border-zinc-800 rounded-2xl p-6 md:p-8 hover:border-[#A8925A]/30 transition-all duration-300 text-center"
+                className="group bg-gradient-to-b from-zinc-900/80 to-black border border-zinc-800 rounded-3xl p-8 md:p-10 hover:border-gold/40 transition-all duration-500 text-center relative overflow-hidden"
+                variants={fadeInUp}
               >
-                <div className="w-14 h-14 mx-auto mb-6 bg-gradient-to-br from-[#A8925A]/20 to-[#A8925A]/5 rounded-full flex items-center justify-center border border-[#A8925A]/20 group-hover:border-[#A8925A]/40 group-hover:scale-110 transition-all duration-300">
-                  <item.icon className="w-6 h-6 text-[#A8925A]" />
+                <div className="absolute inset-0 bg-gradient-to-b from-gold/0 to-gold/0 group-hover:from-gold/5 group-hover:to-transparent transition-all duration-500 rounded-3xl" />
+                
+                <div className="relative z-10">
+                  <div className="w-16 h-16 mx-auto mb-8 bg-gradient-to-br from-gold/20 to-gold/5 rounded-full flex items-center justify-center border border-gold/30 group-hover:border-gold/60 group-hover:scale-110 transition-all duration-500 shadow-lg shadow-gold/10">
+                    <item.icon className="w-7 h-7 text-gold" />
+                  </div>
+                  <h4 className="text-gold text-lg font-semibold uppercase tracking-wider mb-4">
+                    {item.title}
+                  </h4>
+                  <p className="text-zinc-400 text-sm md:text-base leading-relaxed">
+                    {item.description}
+                  </p>
                 </div>
-                <h4 className="text-[#A8925A] text-sm uppercase tracking-wider mb-3 font-medium">
-                  {item.title}
-                </h4>
-                <p className="text-zinc-400 text-sm leading-relaxed">
-                  {item.description}
-                </p>
-              </div>
+              </motion.div>
             ))}
-          </div>
+          </motion.div>
         </div>
       </section>
 
       {/* PULL-QUOTE BLOCK - CINEMATIC */}
-      <section className="py-20 md:py-32 relative overflow-hidden">
+      <section className="py-24 md:py-40 relative overflow-hidden">
         {/* Background Image */}
         <div className="absolute inset-0">
           <img 
             src={founderDark} 
             alt="Jane Abou Jaoude" 
-            className="w-full h-full object-cover object-top opacity-30"
+            className="w-full h-full object-cover object-top opacity-25"
           />
-          <div className="absolute inset-0 bg-gradient-to-r from-black via-black/95 to-black" />
+          <div className="absolute inset-0 bg-gradient-to-r from-black via-black/98 to-black" />
         </div>
         
         <div className="container mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
-          <div className="max-w-4xl mx-auto">
-            <div className="flex items-start gap-6 md:gap-8">
-              <div className="w-1 md:w-2 h-32 md:h-40 bg-gradient-to-b from-[#A8925A] via-[#A8925A]/50 to-transparent flex-shrink-0 rounded-full" />
+          <motion.div 
+            className="max-w-5xl mx-auto"
+            initial="hidden"
+            whileInView="visible"
+            viewport={{ once: true, margin: "-100px" }}
+            variants={fadeInUp}
+          >
+            <div className="flex items-start gap-8 md:gap-12">
+              <div className="w-1.5 md:w-2 h-40 md:h-48 bg-gradient-to-b from-gold via-gold/60 to-transparent flex-shrink-0 rounded-full" />
               <div>
-                <blockquote className="text-white text-2xl md:text-3xl lg:text-4xl italic leading-relaxed font-light">
+                <blockquote className="text-white text-2xl md:text-4xl lg:text-5xl italic leading-relaxed font-light mb-10">
                   "True value is built quietly. The work speaks. The results compound. The institutions remain."
                 </blockquote>
-                <footer className="mt-8 flex items-center gap-4">
-                  <div className="w-12 h-12 rounded-full overflow-hidden border-2 border-[#A8925A]/50">
+                <footer className="flex items-center gap-5">
+                  <div className="w-16 h-16 rounded-full overflow-hidden border-2 border-gold/60 shadow-lg shadow-gold/20">
                     <img src={founderProfessional} alt="Jane Abou Jaoude" className="w-full h-full object-cover" />
                   </div>
                   <div>
-                    <p className="text-[#A8925A] font-medium">Jane Abou Jaoude</p>
-                    <p className="text-zinc-500 text-sm">Founder & Chairwoman</p>
+                    <p className="text-gold text-lg font-medium">Jane Abou Jaoude</p>
+                    <p className="text-zinc-500">Founder & Chairwoman</p>
                   </div>
                 </footer>
               </div>
             </div>
-          </div>
+          </motion.div>
         </div>
       </section>
 
       {/* LIFESTYLE GALLERY */}
-      <section className="py-20 md:py-32">
+      <section className="py-24 md:py-40">
         <div className="container mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="text-center mb-12 md:mb-16">
-            <span className="text-[#A8925A] text-sm uppercase tracking-[0.3em]">International</span>
+          <motion.div 
+            className="text-center mb-16 md:mb-20"
+            initial="hidden"
+            whileInView="visible"
+            viewport={{ once: true, margin: "-100px" }}
+            variants={fadeInUp}
+          >
+            <span className="text-gold text-sm uppercase tracking-[0.4em]">International</span>
+            <GoldLine className="w-32 mx-auto mt-4 mb-8" />
             <h2 
-              className="text-white text-3xl md:text-4xl lg:text-5xl font-bold mt-4"
+              className="text-white text-4xl md:text-5xl lg:text-6xl font-bold"
               style={{ fontFamily: "Poppins, sans-serif" }}
             >
-              Global <span className="text-[#A8925A]">Presence</span>
+              Global <span className="text-transparent bg-clip-text bg-gradient-to-r from-gold to-[#C4A962]">Presence</span>
             </h2>
-          </div>
+          </motion.div>
           
-          <div className="grid grid-cols-2 md:grid-cols-4 gap-4 md:gap-6">
-            <div className="col-span-2 row-span-2 aspect-square md:aspect-auto rounded-2xl overflow-hidden border border-zinc-800 shadow-2xl">
+          <motion.div 
+            className="grid grid-cols-2 md:grid-cols-4 gap-4 md:gap-6"
+            initial="hidden"
+            whileInView="visible"
+            viewport={{ once: true, margin: "-100px" }}
+            variants={staggerContainer}
+          >
+            <motion.div 
+              className="col-span-2 row-span-2 aspect-square md:aspect-auto rounded-3xl overflow-hidden border border-zinc-800 shadow-2xl group"
+              variants={scaleIn}
+            >
               <img 
                 src={founderJetInterior} 
                 alt="Private Aviation" 
-                className="w-full h-full object-cover hover:scale-105 transition-transform duration-700"
+                className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-1000"
               />
-            </div>
-            <div className="aspect-square rounded-xl overflow-hidden border border-zinc-800">
-              <img 
-                src={founderYacht} 
-                alt="Luxury Lifestyle" 
-                className="w-full h-full object-cover hover:scale-105 transition-transform duration-700"
-              />
-            </div>
-            <div className="aspect-square rounded-xl overflow-hidden border border-zinc-800">
-              <img 
-                src={founderRedCarpet} 
-                alt="Red Carpet Events" 
-                className="w-full h-full object-cover hover:scale-105 transition-transform duration-700"
-              />
-            </div>
-            <div className="aspect-square rounded-xl overflow-hidden border border-zinc-800">
-              <img 
-                src={founderAwardStage} 
-                alt="Award Ceremonies" 
-                className="w-full h-full object-cover hover:scale-105 transition-transform duration-700"
-              />
-            </div>
-            <div className="aspect-square rounded-xl overflow-hidden border border-zinc-800">
-              <img 
-                src={founderJetBoarding} 
-                alt="International Travel" 
-                className="w-full h-full object-cover hover:scale-105 transition-transform duration-700"
-              />
-            </div>
-          </div>
+            </motion.div>
+            {[founderYacht, founderRedCarpet, founderAwardStage, founderJetBoarding].map((img, i) => (
+              <motion.div 
+                key={i}
+                className="aspect-square rounded-2xl overflow-hidden border border-zinc-800 group"
+                variants={scaleIn}
+              >
+                <img 
+                  src={img} 
+                  alt="Lifestyle" 
+                  className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-1000"
+                />
+              </motion.div>
+            ))}
+          </motion.div>
         </div>
       </section>
 
       {/* LOOKING AHEAD */}
-      <section className="py-20 md:py-32 bg-gradient-to-b from-zinc-900/50 via-black to-zinc-900/50">
+      <section className="py-24 md:py-40 bg-gradient-to-b from-zinc-950/50 via-black to-zinc-950/50 relative">
         <div className="container mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="grid lg:grid-cols-2 gap-12 lg:gap-20 items-center">
-            <div>
-              <div className="mb-8">
-                <span className="text-[#A8925A] text-sm uppercase tracking-[0.3em]">Vision</span>
+          <motion.div 
+            className="grid lg:grid-cols-2 gap-16 lg:gap-24 items-center"
+            initial="hidden"
+            whileInView="visible"
+            viewport={{ once: true, margin: "-100px" }}
+            variants={staggerContainer}
+          >
+            <motion.div variants={fadeInUp}>
+              <div className="mb-10">
+                <span className="text-gold text-sm uppercase tracking-[0.4em]">Vision</span>
+                <GoldLine className="w-24 mt-4" />
               </div>
+              
               <h2 
-                className="text-white text-3xl md:text-4xl lg:text-5xl font-bold mb-8"
+                className="text-white text-4xl md:text-5xl lg:text-6xl font-bold mb-10"
                 style={{ fontFamily: "Poppins, sans-serif" }}
               >
-                Looking <span className="text-[#A8925A]">Ahead</span>
+                Looking <span className="text-transparent bg-clip-text bg-gradient-to-r from-gold to-[#C4A962]">Ahead</span>
               </h2>
-              <div className="space-y-6 text-zinc-400 leading-relaxed text-lg">
+              
+              <div className="space-y-6 text-zinc-400 leading-relaxed text-lg md:text-xl">
                 <p>
                   JJ Holding Group continues to expand its presence across strategic sectors, guided by the same principles that established its foundation.
                 </p>
-                <p>
+                <p className="text-zinc-500 text-base md:text-lg">
                   Future initiatives will deepen existing capabilities while exploring complementary opportunities in emerging markets.
                 </p>
-                <p>
-                  JJ Global Capital remains committed to serving discerning investors with access to the UAE's most compelling real estate opportunities, with expanded advisory services planned for select international markets.
+                <p className="text-zinc-500 text-base md:text-lg">
+                  JJ Global Capital remains committed to serving discerning investors with access to the UAE's most compelling real estate opportunities.
                 </p>
               </div>
-            </div>
-            <div className="grid grid-cols-2 gap-4">
-              <div className="aspect-[3/4] rounded-xl overflow-hidden border border-zinc-800 shadow-xl">
+            </motion.div>
+            
+            <motion.div 
+              className="grid grid-cols-2 gap-4 md:gap-6"
+              variants={staggerContainer}
+            >
+              <motion.div 
+                className="aspect-[3/4] rounded-2xl overflow-hidden border border-zinc-800 shadow-xl group"
+                variants={scaleIn}
+              >
                 <img 
                   src={founderOffice} 
                   alt="Leadership" 
-                  className="w-full h-full object-cover hover:scale-105 transition-transform duration-700"
+                  className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-1000"
                 />
-              </div>
-              <div className="aspect-[3/4] rounded-xl overflow-hidden border border-zinc-800 shadow-xl mt-8">
+              </motion.div>
+              <motion.div 
+                className="aspect-[3/4] rounded-2xl overflow-hidden border border-zinc-800 shadow-xl mt-8 group"
+                variants={scaleIn}
+              >
                 <img 
                   src={founderProfessional} 
                   alt="Future Vision" 
-                  className="w-full h-full object-cover object-top hover:scale-105 transition-transform duration-700"
+                  className="w-full h-full object-cover object-top group-hover:scale-105 transition-transform duration-1000"
                 />
-              </div>
-            </div>
-          </div>
+              </motion.div>
+            </motion.div>
+          </motion.div>
         </div>
       </section>
 
       {/* FINAL CTA - CONNECTION */}
-      <section className="py-20 md:py-32 bg-gradient-to-b from-black via-zinc-900/50 to-black border-t border-zinc-800/50 relative overflow-hidden">
+      <section className="py-24 md:py-40 bg-gradient-to-b from-black via-zinc-950/50 to-black border-t border-gold/10 relative overflow-hidden">
         {/* Decorative elements */}
-        <div className="absolute top-0 left-1/2 -translate-x-1/2 w-px h-20 bg-gradient-to-b from-[#A8925A] to-transparent" />
+        <div className="absolute top-0 left-1/2 -translate-x-1/2 w-px h-24 bg-gradient-to-b from-gold to-transparent" />
+        <div className="absolute top-1/4 left-1/4 w-64 h-64 bg-gold/5 rounded-full blur-3xl" />
+        <div className="absolute bottom-1/4 right-1/4 w-64 h-64 bg-gold/5 rounded-full blur-3xl" />
         
         <div className="container mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
-          <div className="max-w-4xl mx-auto text-center">
-            <div className="mb-8">
-              <span className="text-[#A8925A] text-sm uppercase tracking-[0.3em]">Get in Touch</span>
-            </div>
-            <h2 
-              className="text-white text-3xl md:text-4xl lg:text-5xl font-bold mb-6"
+          <motion.div 
+            className="max-w-5xl mx-auto text-center"
+            initial="hidden"
+            whileInView="visible"
+            viewport={{ once: true, margin: "-100px" }}
+            variants={staggerContainer}
+          >
+            <motion.div className="mb-10" variants={fadeInUp}>
+              <span className="text-gold text-sm uppercase tracking-[0.4em]">Get in Touch</span>
+              <GoldLine className="w-32 mx-auto mt-4" />
+            </motion.div>
+            
+            <motion.h2 
+              className="text-white text-4xl md:text-5xl lg:text-6xl font-bold mb-8"
               style={{ fontFamily: "Poppins, sans-serif" }}
+              variants={fadeInUp}
             >
-              Connect with <span className="text-[#A8925A]">JJ Holding Group</span>
-            </h2>
-            <p className="text-zinc-400 text-lg mb-12 max-w-2xl mx-auto">
+              Connect with <span className="text-transparent bg-clip-text bg-gradient-to-r from-gold to-[#C4A962]">JJ Holding Group</span>
+            </motion.h2>
+            
+            <motion.p 
+              className="text-zinc-400 text-lg md:text-xl mb-14 max-w-3xl mx-auto"
+              variants={fadeInUp}
+            >
               For investment inquiries, media requests, or partnership discussions, we welcome your correspondence.
-            </p>
+            </motion.p>
 
-            <div className="flex flex-wrap justify-center gap-4 mb-12">
+            <motion.div 
+              className="flex flex-wrap justify-center gap-4 md:gap-6 mb-14"
+              variants={fadeInUp}
+            >
               <Link 
                 to="/contact"
-                className="inline-flex items-center gap-2 bg-gradient-to-r from-[#A8925A] to-[#C4A962] text-black font-semibold px-8 py-4 rounded-xl hover:opacity-90 transition-all duration-300 shadow-lg shadow-[#A8925A]/20 hover:shadow-[#A8925A]/30 hover:scale-105"
+                className="inline-flex items-center gap-3 bg-gradient-to-r from-gold to-[#C4A962] text-black font-semibold px-8 md:px-10 py-4 md:py-5 rounded-xl hover:opacity-90 transition-all duration-300 shadow-lg shadow-gold/30 hover:shadow-gold/40 hover:scale-105 text-base md:text-lg"
               >
                 Connect <ArrowUpRight className="w-5 h-5" />
               </Link>
               <a 
                 href="mailto:media@jjglobalcapital.com"
-                className="inline-flex items-center gap-2 bg-zinc-900 border border-zinc-700 text-white font-semibold px-8 py-4 rounded-xl hover:bg-zinc-800 hover:border-zinc-600 transition-all duration-300"
+                className="inline-flex items-center gap-3 bg-zinc-900 border border-zinc-700 text-white font-semibold px-8 md:px-10 py-4 md:py-5 rounded-xl hover:bg-zinc-800 hover:border-gold/30 transition-all duration-300 text-base md:text-lg"
               >
                 Media <Mail className="w-5 h-5" />
               </a>
               <a 
                 href="mailto:partnerships@jjglobalcapital.com"
-                className="inline-flex items-center gap-2 border border-zinc-700 text-white font-semibold px-8 py-4 rounded-xl hover:bg-zinc-900 transition-all duration-300"
+                className="inline-flex items-center gap-3 border border-zinc-700 text-white font-semibold px-8 md:px-10 py-4 md:py-5 rounded-xl hover:bg-zinc-900 hover:border-gold/30 transition-all duration-300 text-base md:text-lg"
               >
                 Partnership <ExternalLink className="w-5 h-5" />
               </a>
-            </div>
+            </motion.div>
 
-            <div className="flex flex-col sm:flex-row items-center justify-center gap-6 text-zinc-400">
+            <motion.div 
+              className="flex flex-col sm:flex-row items-center justify-center gap-8 text-zinc-400 mb-12"
+              variants={fadeInUp}
+            >
               <a 
                 href="mailto:invest@jjglobalcapital.com" 
-                className="hover:text-[#A8925A] transition-colors flex items-center gap-2 group"
+                className="hover:text-gold transition-colors flex items-center gap-3 group"
               >
-                <div className="w-10 h-10 bg-zinc-900 border border-zinc-800 rounded-full flex items-center justify-center group-hover:border-[#A8925A]/50 transition-colors">
-                  <Mail className="w-4 h-4" />
+                <div className="w-12 h-12 bg-zinc-900 border border-zinc-800 rounded-full flex items-center justify-center group-hover:border-gold/50 transition-colors">
+                  <Mail className="w-5 h-5" />
                 </div>
-                invest@JJglobalcapital.com
+                <span className="text-lg">invest@JJglobalcapital.com</span>
               </a>
               <a 
                 href="tel:+97144586845" 
-                className="hover:text-[#A8925A] transition-colors flex items-center gap-2 group"
+                className="hover:text-gold transition-colors flex items-center gap-3 group"
               >
-                <div className="w-10 h-10 bg-zinc-900 border border-zinc-800 rounded-full flex items-center justify-center group-hover:border-[#A8925A]/50 transition-colors">
-                  <Phone className="w-4 h-4" />
+                <div className="w-12 h-12 bg-zinc-900 border border-zinc-800 rounded-full flex items-center justify-center group-hover:border-gold/50 transition-colors">
+                  <Phone className="w-5 h-5" />
                 </div>
-                +971 4 458 6845
+                <span className="text-lg">+971 4 458 6845</span>
               </a>
-            </div>
+            </motion.div>
 
-            <div className="mt-12 pt-12 border-t border-zinc-800">
+            <motion.div 
+              className="pt-12 border-t border-zinc-800"
+              variants={fadeInUp}
+            >
               <a 
                 href="https://jjholdinggroup.com" 
-                className="text-[#A8925A] hover:underline inline-flex items-center gap-2 text-sm"
+                className="text-gold hover:underline inline-flex items-center gap-2 text-sm tracking-wide"
               >
                 Visit JJ Holding Group <ExternalLink className="w-4 h-4" />
               </a>
-            </div>
-          </div>
+            </motion.div>
+          </motion.div>
         </div>
       </section>
 
