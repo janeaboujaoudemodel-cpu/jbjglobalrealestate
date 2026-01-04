@@ -153,10 +153,10 @@ const Index = () => {
               </Button>
             </div>
             
-            {/* Second Row - Service Shortcuts */}
+            {/* Second Row - Service Shortcuts - Glass style */}
             <div className="flex flex-wrap justify-center gap-3">
               <Button 
-                className="bg-white hover:bg-zinc-100 text-gold font-semibold px-5 py-4 text-xs shadow-md hover:shadow-lg transition-all duration-300"
+                className="bg-white/10 backdrop-blur-md border border-gold/30 text-gold hover:bg-gold/20 hover:border-gold/50 hover:shadow-lg hover:shadow-gold/10 font-semibold px-5 py-4 text-xs transition-all duration-300"
                 onClick={() => setIsInquiryOpen(true)}
               >
                 List Your Property
@@ -164,7 +164,7 @@ const Index = () => {
               </Button>
               <Link to="/concierge">
                 <Button 
-                  className="bg-white hover:bg-zinc-100 text-gold font-semibold px-5 py-4 text-xs shadow-md hover:shadow-lg transition-all duration-300"
+                  className="bg-white/10 backdrop-blur-md border border-gold/30 text-gold hover:bg-gold/20 hover:border-gold/50 hover:shadow-lg hover:shadow-gold/10 font-semibold px-5 py-4 text-xs transition-all duration-300"
                 >
                   Luxury Concierge
                   <Sparkles className="w-3 h-3 ml-1" />
@@ -172,7 +172,7 @@ const Index = () => {
               </Link>
               <Link to="/services/design-build">
                 <Button 
-                  className="bg-white hover:bg-zinc-100 text-gold font-semibold px-5 py-4 text-xs shadow-md hover:shadow-lg transition-all duration-300"
+                  className="bg-white/10 backdrop-blur-md border border-gold/30 text-gold hover:bg-gold/20 hover:border-gold/50 hover:shadow-lg hover:shadow-gold/10 font-semibold px-5 py-4 text-xs transition-all duration-300"
                 >
                   Design & Build
                   <Layers className="w-3 h-3 ml-1" />
@@ -180,7 +180,7 @@ const Index = () => {
               </Link>
               <Link to="/services/law-firm">
                 <Button 
-                  className="bg-white hover:bg-zinc-100 text-gold font-semibold px-5 py-4 text-xs shadow-md hover:shadow-lg transition-all duration-300"
+                  className="bg-white/10 backdrop-blur-md border border-gold/30 text-gold hover:bg-gold/20 hover:border-gold/50 hover:shadow-lg hover:shadow-gold/10 font-semibold px-5 py-4 text-xs transition-all duration-300"
                 >
                   Law Firm
                   <Scale className="w-3 h-3 ml-1" />
@@ -188,12 +188,12 @@ const Index = () => {
               </Link>
             </div>
             
-            {/* Third Row - Tools */}
+            {/* Third Row - Tools - Glass style */}
             <div className="flex flex-wrap justify-center gap-3">
               {/* Market Report */}
               <Link to="/market-report">
                 <Button 
-                  className="bg-white hover:bg-zinc-100 text-gold font-semibold px-5 py-4 text-xs shadow-md hover:shadow-lg transition-all duration-300 group"
+                  className="bg-white/10 backdrop-blur-md border border-gold/30 text-gold hover:bg-gold/20 hover:border-gold/50 hover:shadow-lg hover:shadow-gold/10 font-semibold px-5 py-4 text-xs transition-all duration-300 group"
                 >
                   <FileText className="w-3 h-3 mr-1" />
                   Market Report
@@ -204,7 +204,7 @@ const Index = () => {
               {/* Mortgage Advisory */}
               <Link to="/mortgage-advisory">
                 <Button 
-                  className="bg-white hover:bg-zinc-100 text-gold font-semibold px-5 py-4 text-xs shadow-md hover:shadow-lg transition-all duration-300 group"
+                  className="bg-white/10 backdrop-blur-md border border-gold/30 text-gold hover:bg-gold/20 hover:border-gold/50 hover:shadow-lg hover:shadow-gold/10 font-semibold px-5 py-4 text-xs transition-all duration-300 group"
                 >
                   <Calculator className="w-3 h-3 mr-1" />
                   Mortgage Advisory
@@ -215,7 +215,7 @@ const Index = () => {
               {/* News & Insights */}
               <Link to="/news">
                 <Button 
-                  className="bg-white hover:bg-zinc-100 text-gold font-semibold px-5 py-4 text-xs shadow-md hover:shadow-lg transition-all duration-300 group"
+                  className="bg-white/10 backdrop-blur-md border border-gold/30 text-gold hover:bg-gold/20 hover:border-gold/50 hover:shadow-lg hover:shadow-gold/10 font-semibold px-5 py-4 text-xs transition-all duration-300 group"
                 >
                   <FileText className="w-3 h-3 mr-1" />
                   News & Insights
@@ -226,7 +226,7 @@ const Index = () => {
               {/* Favorites */}
               <Link to="/favorites">
                 <Button 
-                  className="bg-white hover:bg-zinc-100 text-gold font-semibold px-5 py-4 text-xs shadow-md hover:shadow-lg transition-all duration-300 group"
+                  className="bg-white/10 backdrop-blur-md border border-gold/30 text-gold hover:bg-gold/20 hover:border-gold/50 hover:shadow-lg hover:shadow-gold/10 font-semibold px-5 py-4 text-xs transition-all duration-300 group"
                 >
                   <Heart className="w-3 h-3 mr-1" />
                   Favorites & Shortlist
@@ -364,24 +364,35 @@ const Index = () => {
         </div>
       </section>
 
-      {/* MORTGAGE CALCULATOR SECTION */}
-      <section className="py-16 md:py-20 bg-black">
+      {/* MORTGAGE CALCULATOR SECTION - Premium White Style */}
+      <section className="py-16 md:py-20 bg-gradient-to-b from-zinc-950 to-black">
         <div className="container mx-auto px-4">
-          <motion.div
-            className="text-center mb-10"
-            initial={{ opacity: 0, y: 20 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true }}
-          >
-            <span className="text-gold text-xs uppercase tracking-[0.3em]">Financial Planning</span>
-            <h3 className="text-white text-3xl md:text-4xl font-bold mt-2" style={{ fontFamily: "Poppins, sans-serif" }}>
-              Mortgage Calculator
-            </h3>
-            <p className="text-zinc-400 mt-2 max-w-lg mx-auto">
-              Estimate your monthly payments and plan your investment with our comprehensive calculator
-            </p>
-          </motion.div>
-          <MortgageCalculator compact />
+          <div className="bg-gradient-to-br from-white via-zinc-50 to-white border border-gold/30 rounded-3xl p-8 md:p-12 shadow-2xl relative overflow-hidden">
+            {/* Decorative glow elements */}
+            <div className="absolute top-0 right-0 w-64 h-64 bg-gold/10 rounded-full blur-3xl -translate-y-1/2 translate-x-1/2" />
+            <div className="absolute bottom-0 left-0 w-48 h-48 bg-gold/5 rounded-full blur-2xl translate-y-1/2 -translate-x-1/2" />
+            
+            <motion.div
+              className="text-center mb-8 relative z-10"
+              initial={{ opacity: 0, y: 20 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true }}
+            >
+              <span className="inline-flex items-center gap-2 px-4 py-2 bg-gold/10 border border-gold/40 rounded-full mb-4">
+                <Calculator className="w-4 h-4 text-gold" />
+                <span className="text-zinc-700 text-xs font-semibold uppercase tracking-wider">Financial Planning</span>
+              </span>
+              <h3 className="text-zinc-900 text-3xl md:text-4xl font-bold" style={{ fontFamily: "Poppins, sans-serif" }}>
+                Mortgage <span className="text-transparent bg-clip-text bg-gradient-to-r from-gold via-[#C4A962] to-gold">Calculator</span>
+              </h3>
+              <p className="text-zinc-600 mt-3 max-w-lg mx-auto">
+                Estimate your monthly payments and plan your investment with precision
+              </p>
+            </motion.div>
+            <div className="relative z-10">
+              <MortgageCalculator compact />
+            </div>
+          </div>
         </div>
       </section>
 
@@ -406,7 +417,7 @@ const Index = () => {
           </p>
           <div className="flex flex-wrap justify-center gap-4">
             <Button 
-              className="bg-gold hover:bg-gold-light text-black font-semibold px-8 py-6 text-base shadow-lg shadow-gold/20 transition-all duration-300 hover:shadow-gold/30 hover:scale-[1.02]"
+              className="bg-gold hover:bg-gold-light text-black font-semibold px-8 py-6 text-base shadow-lg shadow-gold/20 transition-all duration-300 hover:shadow-xl hover:shadow-gold/30 hover:scale-105"
               onClick={() => setIsInquiryOpen(true)}
             >
               {t('home.cta.contact')}
@@ -414,8 +425,7 @@ const Index = () => {
             </Button>
             <Link to="/properties">
               <Button 
-                variant="outline"
-                className="border-gold/50 text-gold hover:bg-gold/10 hover:border-gold px-8 py-6 text-base transition-all duration-300 hover:shadow-lg hover:shadow-gold/10"
+                className="bg-white/10 backdrop-blur-md border border-white/30 text-white hover:bg-white/20 hover:border-white/50 hover:shadow-lg hover:shadow-white/10 hover:scale-105 px-8 py-6 text-base transition-all duration-300"
               >
                 Browse Properties
                 <ArrowUpRight className="w-5 h-5 ml-2 -mr-1" />

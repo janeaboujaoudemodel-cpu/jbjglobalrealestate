@@ -62,9 +62,9 @@ const MarketReportCTA = () => {
             </ul>
             
             <Link to="/market-report">
-              <Button className="bg-gradient-to-r from-purple-600 to-purple-700 hover:from-purple-500 hover:to-purple-600 text-white font-semibold px-8 py-6 text-base shadow-lg shadow-purple-500/30 transition-all duration-300 hover:shadow-purple-500/40 hover:scale-[1.02]">
+              <Button className="bg-gradient-to-r from-zinc-900 to-black border border-gold/40 text-gold font-semibold px-8 py-6 text-base shadow-lg shadow-black/30 transition-all duration-300 hover:shadow-xl hover:shadow-gold/20 hover:scale-[1.02] hover:border-gold/60">
                 <Download className="w-5 h-5 mr-2" />
-                Download Free Report
+                Download Your Free Book Now
                 <ArrowUpRight className="w-5 h-5 ml-2 -mr-1" />
               </Button>
             </Link>
@@ -73,8 +73,8 @@ const MarketReportCTA = () => {
           {/* Premium 3D Book Visual */}
           <div className="flex items-center justify-center">
             <div className="relative">
-              {/* Glow effect behind book */}
-              <div className="absolute inset-0 bg-gradient-to-br from-purple-500/20 to-gold/10 blur-3xl rounded-full scale-150" />
+              {/* Glow effect behind book - Gold themed */}
+              <div className="absolute inset-0 bg-gradient-to-br from-gold/20 to-gold/5 blur-3xl rounded-full scale-150" />
               
               {/* Premium Book Visual with flip effect */}
               <motion.div
