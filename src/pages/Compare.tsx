@@ -3,6 +3,7 @@ import { Link, useNavigate } from "react-router-dom";
 import { useQuery, useMutation } from "@tanstack/react-query";
 import { supabase } from "@/integrations/supabase/client";
 import { useAuth } from "@/contexts/AuthContext";
+import { useMembership } from "@/hooks/useMembership";
 import { useShortlist } from "@/hooks/useFavorites";
 import { useGuestShortlist } from "@/hooks/useGuestFavorites";
 import { useShortlistBadges } from "@/hooks/useShortlistBadges";
