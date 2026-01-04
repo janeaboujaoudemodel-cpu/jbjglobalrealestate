@@ -305,9 +305,9 @@ const GlobalHeader = () => {
           </div>
         </div>
 
-        {/* Desktop Property Shortcuts Bar */}
-        <div className="hidden lg:flex items-center gap-4 pb-3 border-t border-zinc-900 pt-2 -mt-1">
-          {propertyShortcuts.map((shortcut) => (
+        {/* Desktop Property Shortcuts Bar - No border/divider */}
+        <div className="hidden lg:flex items-center gap-4 pb-3 pt-1">
+          {propertyShortcuts.filter(s => s.href !== '/quiz').map((shortcut) => (
             <Link
               key={shortcut.href}
               to={shortcut.href}
