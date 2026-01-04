@@ -5,7 +5,7 @@ import StatsCounter from "@/components/StatsCounter";
 import AIComparisonWidget from "@/components/AIComparisonWidget";
 import MarketReportCTA from "@/components/MarketReportCTA";
 import WelcomeModal from "@/components/WelcomeModal";
-import { Sparkles, ArrowUpRight, ChevronDown, User } from "lucide-react";
+import { Sparkles, ArrowUpRight, ChevronDown, User, Scale, Layers } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import founderProfessional from "@/assets/founder-professional.jpeg";
 import luxuryVillaHero from "@/assets/luxury-villa-hero.jpeg";
@@ -148,24 +148,42 @@ const Index = () => {
               </a>
             </div>
             
-            {/* Second Row - List Your Property & Concierge */}
+            {/* Second Row - Service Shortcuts */}
             <div className="flex flex-wrap justify-center gap-3">
               <a href={CONTACT_INFO.inquiryFormUrl} target="_blank" rel="noopener noreferrer">
                 <Button 
                   variant="outline"
-                  className="border-white/30 bg-white/5 text-white hover:bg-white/10 hover:border-white/50 px-6 py-5 text-sm backdrop-blur-sm"
+                  className="border-white/30 bg-white/5 text-white hover:bg-white/10 hover:border-white/50 px-5 py-4 text-xs backdrop-blur-sm"
                 >
                   List Your Property
-                  <ArrowUpRight className="w-4 h-4 ml-2" />
+                  <ArrowUpRight className="w-3 h-3 ml-1" />
                 </Button>
               </a>
               <Link to="/concierge">
                 <Button 
                   variant="outline"
-                  className="border-gold/30 bg-gold/5 text-gold hover:bg-gold/10 hover:border-gold/50 px-6 py-5 text-sm backdrop-blur-sm"
+                  className="border-gold/30 bg-gold/5 text-gold hover:bg-gold/10 hover:border-gold/50 px-5 py-4 text-xs backdrop-blur-sm"
                 >
                   Luxury Concierge
-                  <Sparkles className="w-4 h-4 ml-2" />
+                  <Sparkles className="w-3 h-3 ml-1" />
+                </Button>
+              </Link>
+              <Link to="/services/design-build">
+                <Button 
+                  variant="outline"
+                  className="border-zinc-600/50 bg-zinc-800/30 text-zinc-300 hover:bg-zinc-800/50 hover:text-white px-5 py-4 text-xs backdrop-blur-sm"
+                >
+                  Design & Build
+                  <Layers className="w-3 h-3 ml-1" />
+                </Button>
+              </Link>
+              <Link to="/services/law-firm">
+                <Button 
+                  variant="outline"
+                  className="border-zinc-600/50 bg-zinc-800/30 text-zinc-300 hover:bg-zinc-800/50 hover:text-white px-5 py-4 text-xs backdrop-blur-sm"
+                >
+                  Law Firm
+                  <Scale className="w-3 h-3 ml-1" />
                 </Button>
               </Link>
             </div>

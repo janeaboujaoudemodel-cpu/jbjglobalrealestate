@@ -26,6 +26,11 @@ import Founder from "./pages/Founder";
 import MortgageCalculatorPage from "./pages/MortgageCalculator";
 import MarketReport from "./pages/MarketReport";
 import Concierge from "./pages/Concierge";
+import DesignBuild from "./pages/services/DesignBuild";
+import Architecture from "./pages/services/Architecture";
+import InteriorDesign from "./pages/services/InteriorDesign";
+import FitOut from "./pages/services/FitOut";
+import LawFirm from "./pages/services/LawFirm";
 import NotFound from "./pages/NotFound";
 import WelcomeModal from "./components/WelcomeModal";
 import GlobalHeader from "./components/GlobalHeader";
@@ -87,6 +92,11 @@ const App = () => (
               <Route path="/mortgage-calculator" element={<MortgageCalculatorPage />} />
               <Route path="/market-report" element={<MarketReport />} />
               <Route path="/concierge" element={<Concierge />} />
+              <Route path="/services/design-build" element={<DesignBuild />} />
+              <Route path="/services/design-build/architecture" element={<Architecture />} />
+              <Route path="/services/design-build/interior-design" element={<InteriorDesign />} />
+              <Route path="/services/design-build/fit-out" element={<FitOut />} />
+              <Route path="/services/law-firm" element={<LawFirm />} />
               {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
               <Route path="*" element={<NotFound />} />
             </Routes>

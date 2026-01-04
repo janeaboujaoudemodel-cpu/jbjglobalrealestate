@@ -99,12 +99,23 @@ const Book3D = ({ size = "md", className = "" }: Book3DProps) => {
             `,
           }}
         >
+          {/* Background Villa Image */}
+          <div 
+            className="absolute inset-0 opacity-30"
+            style={{
+              backgroundImage: "url('https://images.unsplash.com/photo-1600596542815-ffad4c1539a9?w=400&q=80')",
+              backgroundSize: "cover",
+              backgroundPosition: "center",
+            }}
+          />
+          <div className="absolute inset-0 bg-gradient-to-b from-black/70 via-black/50 to-black/80" />
+
           {/* Gold corner accents */}
           <div className="absolute top-0 left-0 w-12 h-12 border-l-2 border-t-2 border-gold/60 rounded-tl-sm" />
           <div className="absolute bottom-0 right-0 w-12 h-12 border-r-2 border-b-2 border-gold/60 rounded-br-sm" />
           
           {/* Cover content */}
-          <div className="h-full flex flex-col items-center justify-center p-4 text-center">
+          <div className="relative h-full flex flex-col items-center justify-center p-4 text-center z-10">
             {/* Small logo */}
             <div className="mb-4">
               <span className="text-gold/80 text-[10px] tracking-[0.3em] uppercase">
@@ -127,7 +138,7 @@ const Book3D = ({ size = "md", className = "" }: Book3DProps) => {
             <div className="w-16 h-[2px] bg-gradient-to-r from-transparent via-gold to-transparent my-4" />
 
             {/* Year */}
-            <div className="px-4 py-1.5 border border-gold/50 rounded-sm">
+            <div className="px-4 py-1.5 border border-gold/50 rounded-sm bg-black/40 backdrop-blur-sm">
               <span className="text-gold text-xs font-medium tracking-wider">
                 2025–2026 EDITION
               </span>
