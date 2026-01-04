@@ -210,7 +210,7 @@ const Index = () => {
                 </Button>
               </Link>
               
-              {/* Rental Index - NEW */}
+              {/* Rental Index */}
               <Link to="/rental-index">
                 <Button 
                   className="bg-white/10 backdrop-blur-md border border-gold/30 text-gold hover:bg-gold/20 hover:border-gold/50 hover:shadow-lg hover:shadow-gold/10 font-semibold px-5 py-4 text-xs transition-all duration-300 group"
@@ -220,6 +220,31 @@ const Index = () => {
                 </Button>
               </Link>
               
+              {/* Document Scanner */}
+              <Link to="/document-scanner">
+                <Button 
+                  className="bg-white/10 backdrop-blur-md border border-emerald-500/30 text-emerald-400 hover:bg-emerald-500/20 hover:border-emerald-500/50 hover:shadow-lg hover:shadow-emerald-500/10 font-semibold px-5 py-4 text-xs transition-all duration-300 group"
+                >
+                  <FileText className="w-3 h-3 mr-1" />
+                  Scan & Sign
+                  <ArrowUpRight className="w-3 h-3 ml-1 group-hover:translate-x-0.5 group-hover:-translate-y-0.5 transition-transform" />
+                </Button>
+              </Link>
+              
+              {/* Property Evaluator */}
+              <Link to="/property-evaluator">
+                <Button 
+                  className="bg-white/10 backdrop-blur-md border border-blue-500/30 text-blue-400 hover:bg-blue-500/20 hover:border-blue-500/50 hover:shadow-lg hover:shadow-blue-500/10 font-semibold px-5 py-4 text-xs transition-all duration-300 group"
+                >
+                  <Calculator className="w-3 h-3 mr-1" />
+                  Property Evaluator
+                  <ArrowUpRight className="w-3 h-3 ml-1 group-hover:translate-x-0.5 group-hover:-translate-y-0.5 transition-transform" />
+                </Button>
+              </Link>
+            </div>
+            
+            {/* Fourth Row - Secondary Tools */}
+            <div className="flex flex-wrap justify-center gap-3">
               {/* News & Insights */}
               <Link to="/news">
                 <Button 
