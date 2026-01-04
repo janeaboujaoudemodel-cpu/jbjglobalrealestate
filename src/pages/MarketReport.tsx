@@ -53,7 +53,7 @@ const MarketReport = () => {
     return `${base}?${params.toString()}`;
   };
 
-  const downloadBook = () => {
+  const downloadBook = (existingWindow?: Window | null) => {
     const websiteUrl = "https://jjglobalcapital.com";
     const qrUrl = `https://api.qrserver.com/v1/create-qr-code/?size=200x200&data=${encodeURIComponent(websiteUrl + "/quiz")}`;
     
@@ -1396,22 +1396,40 @@ const MarketReport = () => {
 </html>`;
 
     // Open in new window instead of downloading
-    const newWindow = window.open('', '_blank');
-    if (newWindow) {
-      newWindow.document.write(html);
-      newWindow.document.close();
-    }
+    const targetWindow = existingWindow ?? window.open("", "_blank");
+    if (!targetWindow) return false;
+
+    targetWindow.document.open();
+    targetWindow.document.write(html);
+    targetWindow.document.close();
+
     setDownloaded(true);
+    return true;
   };
 
-  const handleSubmit = async () => {
+  const handleSubmit = () => {
     if (!isValid || isSubmitting) return;
-    
+
     setIsSubmitting(true);
-    
-    try {
-      // Send email notifications via edge function
-      const { error } = await supabase.functions.invoke('send-market-report-email', {
+
+    // Open tab synchronously to avoid popup blockers (especially on iOS/Safari)
+    const bookWindow = window.open("", "_blank");
+    if (!bookWindow) {
+      setIsSubmitting(false);
+      toast.error("Please allow pop-ups to open your book.");
+      return;
+    }
+
+    const opened = downloadBook(bookWindow);
+    if (opened) {
+      toast.success("Your book is ready (opened in a new tab). ");
+    } else {
+      toast.error("Couldn’t open the book. Please try again.");
+    }
+
+    // Send email notification in the background (does not block opening the book)
+    void supabase.functions
+      .invoke("send-market-report-email", {
         body: {
           fullName: form.fullName,
           email: form.email,
@@ -1419,22 +1437,12 @@ const MarketReport = () => {
           nationality: form.nationality,
           language: form.language,
         },
-      });
-      
-      if (error) {
-        console.error('Email error:', error);
-      }
-      
-      // Download the book
-      downloadBook();
-      toast.success('Your book is downloading!');
-    } catch (err) {
-      console.error('Submit error:', err);
-      // Still download the book even if email fails
-      downloadBook();
-    } finally {
-      setIsSubmitting(false);
-    }
+      })
+      .then(({ error }) => {
+        if (error) console.error("Email error:", error);
+      })
+      .catch((err) => console.error("Submit error:", err))
+      .finally(() => setIsSubmitting(false));
   };
 
   const features = [
