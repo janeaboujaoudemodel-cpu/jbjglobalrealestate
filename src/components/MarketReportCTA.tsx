@@ -2,6 +2,7 @@ import { Link } from "react-router-dom";
 import { motion } from "framer-motion";
 import { FileText, Download, ArrowUpRight, CheckCircle } from "lucide-react";
 import { Button } from "@/components/ui/button";
+import Book3D from "@/components/Book3D";
 
 const fadeInUp = {
   hidden: { opacity: 0, y: 20 },
@@ -27,6 +28,7 @@ const MarketReportCTA = () => {
       <div className="bg-gradient-to-r from-gold/10 via-gold/5 to-transparent border border-gold/20 rounded-3xl p-8 md:p-12">
         {/* Decorative elements */}
         <div className="absolute top-0 right-0 w-96 h-96 bg-gold/5 rounded-full blur-3xl -translate-y-1/2 translate-x-1/2" />
+        <div className="absolute bottom-0 left-1/4 w-64 h-64 bg-gold/3 rounded-full blur-2xl translate-y-1/2" />
         
         <div className="relative z-10 grid lg:grid-cols-2 gap-10 items-center">
           {/* Content */}
@@ -67,26 +69,22 @@ const MarketReportCTA = () => {
             </Link>
           </div>
           
-          {/* Visual preview */}
-          <div className="hidden lg:block">
+          {/* 3D Book Visual - Always visible */}
+          <div className="flex items-center justify-center">
             <div className="relative">
-              {/* Book mockup */}
-              <div className="bg-zinc-900 border border-zinc-700 rounded-xl p-6 shadow-2xl transform rotate-3 hover:rotate-0 transition-transform duration-500">
-                <div className="aspect-[3/4] bg-gradient-to-br from-gold/20 to-gold/5 rounded-lg flex flex-col items-center justify-center p-6 text-center">
-                  <FileText className="w-16 h-16 text-gold mb-4" />
-                  <h4 className="text-white text-xl font-bold mb-2" style={{ fontFamily: "Poppins, sans-serif" }}>
-                    UAE Real Estate
-                  </h4>
-                  <p className="text-gold text-sm font-medium">Market Intelligence</p>
-                  <p className="text-zinc-500 text-xs mt-4">2025–2026 Edition</p>
-                  <div className="mt-4 pt-4 border-t border-zinc-700 w-full">
-                    <p className="text-zinc-400 text-xs">By Jane Abou Jaoude</p>
-                    <p className="text-zinc-500 text-xs">JJ Global Capital</p>
-                  </div>
-                </div>
+              {/* Glow effect behind book */}
+              <div className="absolute inset-0 bg-gold/10 blur-3xl rounded-full scale-150" />
+              
+              {/* 3D Book component - responsive sizes */}
+              <div className="hidden lg:block">
+                <Book3D size="lg" />
               </div>
-              {/* Shadow card behind */}
-              <div className="absolute inset-0 bg-zinc-800 rounded-xl -z-10 transform -rotate-3 translate-x-4 translate-y-4" />
+              <div className="hidden md:block lg:hidden">
+                <Book3D size="md" />
+              </div>
+              <div className="block md:hidden">
+                <Book3D size="sm" />
+              </div>
             </div>
           </div>
         </div>

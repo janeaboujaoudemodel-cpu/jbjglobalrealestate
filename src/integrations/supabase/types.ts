@@ -187,6 +187,42 @@ export type Database = {
         }
         Relationships: []
       }
+      leads: {
+        Row: {
+          created_at: string
+          email: string
+          full_name: string | null
+          id: string
+          language: string | null
+          nationality: string | null
+          phone: string | null
+          source: string
+          updated_at: string
+        }
+        Insert: {
+          created_at?: string
+          email: string
+          full_name?: string | null
+          id?: string
+          language?: string | null
+          nationality?: string | null
+          phone?: string | null
+          source: string
+          updated_at?: string
+        }
+        Update: {
+          created_at?: string
+          email?: string
+          full_name?: string | null
+          id?: string
+          language?: string | null
+          nationality?: string | null
+          phone?: string | null
+          source?: string
+          updated_at?: string
+        }
+        Relationships: []
+      }
       memberships: {
         Row: {
           created_at: string

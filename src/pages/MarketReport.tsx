@@ -1,4 +1,4 @@
-import { useMemo, useState } from "react";
+import { useMemo, useState, useEffect } from "react";
 import Footer from "@/components/Footer";
 import GlobalHeader from "@/components/GlobalHeader";
 import { Button } from "@/components/ui/button";
@@ -19,12 +19,14 @@ import { motion } from "framer-motion";
 import { ArrowUpRight, BookOpen, CheckCircle, Download, FileText, Lock, Shield, Sparkles, Star, TrendingUp, Unlock } from "lucide-react";
 import { supabase } from "@/integrations/supabase/client";
 import { toast } from "sonner";
+import { useLeadCapture } from "@/hooks/useLeadCapture";
 
 const MarketReport = () => {
   const countries = useMemo(() => getCountryList(), []);
   const languages = useMemo(() => getLanguageList(), []);
   const [downloaded, setDownloaded] = useState(false);
   const [isSubmitting, setIsSubmitting] = useState(false);
+  const { isLeadCaptured, leadData, captureLead } = useLeadCapture();
 
   const [form, setForm] = useState({
     fullName: "",
@@ -34,12 +36,29 @@ const MarketReport = () => {
     language: "",
   });
 
-  const isValid =
+  // Pre-fill form with captured lead data
+  useEffect(() => {
+    if (isLeadCaptured && leadData) {
+      setForm({
+        fullName: leadData.fullName || "",
+        email: leadData.email || "",
+        phone: leadData.phone || "",
+        nationality: leadData.nationality || "",
+        language: leadData.language || "",
+      });
+    }
+  }, [isLeadCaptured, leadData]);
+
+  // If lead is already captured, allow direct download
+  const canDirectDownload = isLeadCaptured && leadData?.email;
+
+  const isValid = canDirectDownload || (
     form.fullName.trim().length > 1 &&
     form.email.trim().includes("@") &&
     form.phone.trim().length >= 6 &&
     form.nationality.trim().length > 0 &&
-    form.language.trim().length > 0;
+    form.language.trim().length > 0
+  );
 
   const buildInquiryUrl = () => {
     const base = CONTACT_INFO.inquiryFormUrl;
@@ -1407,7 +1426,7 @@ const MarketReport = () => {
     return true;
   };
 
-  const handleSubmit = () => {
+  const handleSubmit = async () => {
     if (!isValid || isSubmitting) return;
 
     setIsSubmitting(true);
@@ -1424,18 +1443,29 @@ const MarketReport = () => {
     if (opened) {
       toast.success("Your book is ready (opened in a new tab). ");
     } else {
-      toast.error("Couldn’t open the book. Please try again.");
+      toast.error("Couldn't open the book. Please try again.");
+    }
+
+    // Capture lead if this is a new submission
+    if (!isLeadCaptured && form.email) {
+      await captureLead({
+        email: form.email,
+        fullName: form.fullName,
+        phone: form.phone,
+        nationality: form.nationality,
+        language: form.language,
+      }, 'market_report');
     }
 
     // Send email notification in the background (does not block opening the book)
     void supabase.functions
       .invoke("send-market-report-email", {
         body: {
-          fullName: form.fullName,
-          email: form.email,
-          phone: form.phone,
-          nationality: form.nationality,
-          language: form.language,
+          fullName: form.fullName || leadData?.fullName,
+          email: form.email || leadData?.email,
+          phone: form.phone || leadData?.phone,
+          nationality: form.nationality || leadData?.nationality,
+          language: form.language || leadData?.language,
         },
       })
       .then(({ error }) => {
@@ -1623,122 +1653,148 @@ const MarketReport = () => {
             transition={{ duration: 0.6, delay: 0.2 }}
             className="lg:col-span-3 bg-gradient-to-br from-zinc-900/80 to-zinc-950 border border-zinc-800 rounded-3xl p-8 md:p-10"
           >
-            <div className="flex items-start gap-4 mb-8">
-              <div className="w-14 h-14 rounded-2xl bg-gradient-to-br from-gold/20 to-gold/5 border border-gold/30 flex items-center justify-center flex-shrink-0">
-                <Unlock className="w-6 h-6 text-gold" />
-              </div>
-              <div>
-                <h2 className="text-white text-2xl font-bold">Unlock Your Book</h2>
-                <p className="text-zinc-400 mt-1">
-                  Complete the form below to unlock instant access to the UAE Market Intelligence book.
+            {/* Show streamlined view for returning users */}
+            {canDirectDownload ? (
+              <div className="text-center py-8">
+                <div className="w-20 h-20 rounded-full bg-gradient-to-br from-gold/20 to-gold/5 border border-gold/30 flex items-center justify-center mx-auto mb-6">
+                  <CheckCircle className="w-10 h-10 text-gold" />
+                </div>
+                <h2 className="text-white text-2xl font-bold mb-3">Welcome Back!</h2>
+                <p className="text-zinc-400 mb-2">
+                  We recognize you, <span className="text-gold font-medium">{leadData?.fullName || leadData?.email}</span>
+                </p>
+                <p className="text-zinc-500 text-sm mb-8">
+                  Click below to instantly access your Market Intelligence book.
                 </p>
               </div>
+            ) : (
+              <>
+                <div className="flex items-start gap-4 mb-8">
+                  <div className="w-14 h-14 rounded-2xl bg-gradient-to-br from-gold/20 to-gold/5 border border-gold/30 flex items-center justify-center flex-shrink-0">
+                    <Unlock className="w-6 h-6 text-gold" />
+                  </div>
+                  <div>
+                    <h2 className="text-white text-2xl font-bold">Unlock Your Book</h2>
+                    <p className="text-zinc-400 mt-1">
+                      Complete the form below to unlock instant access to the UAE Market Intelligence book.
+                    </p>
+                  </div>
+                </div>
+
+                <div className="space-y-5">
+                  <div>
+                    <Label className="text-zinc-300 text-sm font-medium">Full Name *</Label>
+                    <Input
+                      value={form.fullName}
+                      onChange={(e) => setForm((p) => ({ ...p, fullName: e.target.value }))}
+                      placeholder="Enter your full name"
+                      className="mt-2 bg-zinc-900/50 border-zinc-700 text-white h-12 rounded-xl focus:border-gold/50 focus:ring-gold/20"
+                    />
+                  </div>
+
+                  <div className="grid sm:grid-cols-2 gap-4">
+                    <div>
+                      <Label className="text-zinc-300 text-sm font-medium">Email *</Label>
+                      <Input
+                        type="email"
+                        value={form.email}
+                        onChange={(e) => setForm((p) => ({ ...p, email: e.target.value }))}
+                        placeholder="your@email.com"
+                        className="mt-2 bg-zinc-900/50 border-zinc-700 text-white h-12 rounded-xl focus:border-gold/50 focus:ring-gold/20"
+                      />
+                    </div>
+                    <div>
+                      <Label className="text-zinc-300 text-sm font-medium">Phone *</Label>
+                      <Input
+                        type="tel"
+                        value={form.phone}
+                        onChange={(e) => setForm((p) => ({ ...p, phone: e.target.value }))}
+                        placeholder="+971 50 123 4567"
+                        className="mt-2 bg-zinc-900/50 border-zinc-700 text-white h-12 rounded-xl focus:border-gold/50 focus:ring-gold/20"
+                      />
+                    </div>
+                  </div>
+
+                  <div className="grid sm:grid-cols-2 gap-4">
+                    <div>
+                      <Label className="text-zinc-300 text-sm font-medium">Nationality *</Label>
+                      <Select
+                        value={form.nationality}
+                        onValueChange={(v) => setForm((p) => ({ ...p, nationality: v }))}
+                      >
+                        <SelectTrigger className="mt-2 bg-zinc-900/50 border-zinc-700 text-white h-12 rounded-xl">
+                          <SelectValue placeholder="Select nationality" />
+                        </SelectTrigger>
+                        <SelectContent className="bg-zinc-900 border-zinc-700 max-h-72">
+                          {countries.map((c) => (
+                            <SelectItem key={c} value={c} className="text-white hover:bg-zinc-800">
+                              {c}
+                            </SelectItem>
+                          ))}
+                        </SelectContent>
+                      </Select>
+                    </div>
+
+                    <div>
+                      <Label className="text-zinc-300 text-sm font-medium">Preferred Language *</Label>
+                      <Select
+                        value={form.language}
+                        onValueChange={(v) => setForm((p) => ({ ...p, language: v }))}
+                      >
+                        <SelectTrigger className="mt-2 bg-zinc-900/50 border-zinc-700 text-white h-12 rounded-xl">
+                          <SelectValue placeholder="Select language" />
+                        </SelectTrigger>
+                        <SelectContent className="bg-zinc-900 border-zinc-700 max-h-72">
+                          {languages.map((l) => (
+                            <SelectItem key={l} value={l} className="text-white hover:bg-zinc-800">
+                              {l}
+                            </SelectItem>
+                          ))}
+                        </SelectContent>
+                      </Select>
+                    </div>
+                  </div>
+                </div>
+              </>
+            )}
+
+            <div className="pt-4">
+              <Button
+                onClick={handleSubmit}
+                disabled={!isValid || isSubmitting}
+                className="w-full h-14 bg-gradient-to-r from-gold to-gold-dark hover:from-gold-light hover:to-gold text-black font-semibold text-base rounded-xl transition-all duration-300 disabled:opacity-40 disabled:cursor-not-allowed"
+              >
+                {isSubmitting ? (
+                  <>
+                    <div className="w-5 h-5 mr-2 border-2 border-black/30 border-t-black rounded-full animate-spin" />
+                    Processing...
+                  </>
+                ) : downloaded ? (
+                  <>
+                    <CheckCircle className="w-5 h-5 mr-2" />
+                    Book Unlocked!
+                  </>
+                ) : canDirectDownload ? (
+                  <>
+                    <Download className="w-5 h-5 mr-2" />
+                    Download Book Now
+                    <ArrowUpRight className="w-5 h-5 ml-2" />
+                  </>
+                ) : (
+                  <>
+                    <Unlock className="w-5 h-5 mr-2" />
+                    Unlock & Download Now
+                    <ArrowUpRight className="w-5 h-5 ml-2" />
+                  </>
+                )}
+              </Button>
             </div>
 
-            <div className="space-y-5">
-              <div>
-                <Label className="text-zinc-300 text-sm font-medium">Full Name *</Label>
-                <Input
-                  value={form.fullName}
-                  onChange={(e) => setForm((p) => ({ ...p, fullName: e.target.value }))}
-                  placeholder="Enter your full name"
-                  className="mt-2 bg-zinc-900/50 border-zinc-700 text-white h-12 rounded-xl focus:border-gold/50 focus:ring-gold/20"
-                />
-              </div>
-
-              <div className="grid sm:grid-cols-2 gap-4">
-                <div>
-                  <Label className="text-zinc-300 text-sm font-medium">Email *</Label>
-                  <Input
-                    type="email"
-                    value={form.email}
-                    onChange={(e) => setForm((p) => ({ ...p, email: e.target.value }))}
-                    placeholder="your@email.com"
-                    className="mt-2 bg-zinc-900/50 border-zinc-700 text-white h-12 rounded-xl focus:border-gold/50 focus:ring-gold/20"
-                  />
-                </div>
-                <div>
-                  <Label className="text-zinc-300 text-sm font-medium">Phone *</Label>
-                  <Input
-                    type="tel"
-                    value={form.phone}
-                    onChange={(e) => setForm((p) => ({ ...p, phone: e.target.value }))}
-                    placeholder="+971 50 123 4567"
-                    className="mt-2 bg-zinc-900/50 border-zinc-700 text-white h-12 rounded-xl focus:border-gold/50 focus:ring-gold/20"
-                  />
-                </div>
-              </div>
-
-              <div className="grid sm:grid-cols-2 gap-4">
-                <div>
-                  <Label className="text-zinc-300 text-sm font-medium">Nationality *</Label>
-                  <Select
-                    value={form.nationality}
-                    onValueChange={(v) => setForm((p) => ({ ...p, nationality: v }))}
-                  >
-                    <SelectTrigger className="mt-2 bg-zinc-900/50 border-zinc-700 text-white h-12 rounded-xl">
-                      <SelectValue placeholder="Select nationality" />
-                    </SelectTrigger>
-                    <SelectContent className="bg-zinc-900 border-zinc-700 max-h-72">
-                      {countries.map((c) => (
-                        <SelectItem key={c} value={c} className="text-white hover:bg-zinc-800">
-                          {c}
-                        </SelectItem>
-                      ))}
-                    </SelectContent>
-                  </Select>
-                </div>
-
-                <div>
-                  <Label className="text-zinc-300 text-sm font-medium">Preferred Language *</Label>
-                  <Select
-                    value={form.language}
-                    onValueChange={(v) => setForm((p) => ({ ...p, language: v }))}
-                  >
-                    <SelectTrigger className="mt-2 bg-zinc-900/50 border-zinc-700 text-white h-12 rounded-xl">
-                      <SelectValue placeholder="Select language" />
-                    </SelectTrigger>
-                    <SelectContent className="bg-zinc-900 border-zinc-700 max-h-72">
-                      {languages.map((l) => (
-                        <SelectItem key={l} value={l} className="text-white hover:bg-zinc-800">
-                          {l}
-                        </SelectItem>
-                      ))}
-                    </SelectContent>
-                  </Select>
-                </div>
-              </div>
-
-              <div className="pt-4">
-                <Button
-                  onClick={handleSubmit}
-                  disabled={!isValid || isSubmitting}
-                  className="w-full h-14 bg-gradient-to-r from-gold to-gold-dark hover:from-gold-light hover:to-gold text-black font-semibold text-base rounded-xl transition-all duration-300 disabled:opacity-40 disabled:cursor-not-allowed"
-                >
-                  {isSubmitting ? (
-                    <>
-                      <div className="w-5 h-5 mr-2 border-2 border-black/30 border-t-black rounded-full animate-spin" />
-                      Processing...
-                    </>
-                  ) : downloaded ? (
-                    <>
-                      <CheckCircle className="w-5 h-5 mr-2" />
-                      Book Unlocked!
-                    </>
-                  ) : (
-                    <>
-                      <Unlock className="w-5 h-5 mr-2" />
-                      Unlock & Download Now
-                      <ArrowUpRight className="w-5 h-5 ml-2" />
-                    </>
-                  )}
-                </Button>
-              </div>
-
-              <p className="text-zinc-600 text-xs leading-relaxed text-center">
+            {!canDirectDownload && (
+              <p className="text-zinc-600 text-xs leading-relaxed text-center mt-4">
                 By downloading, you agree your details may be used to contact you about UAE real estate opportunities.
               </p>
-            </div>
+            )}
           </motion.section>
 
           {/* Sidebar */}
