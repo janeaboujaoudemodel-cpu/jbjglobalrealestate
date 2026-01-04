@@ -143,6 +143,13 @@ const Compare = () => {
       toast.error("Please add at least 2 properties to compare");
       return;
     }
+
+    // Requires authentication (backend enforces JWT)
+    if (!user) {
+      toast.error("Please sign in to generate AI analysis.");
+      navigate("/auth");
+      return;
+    }
     
     if (needsVipForCompare) {
       setShowVipModal(true);
@@ -383,9 +390,14 @@ const Compare = () => {
   const submitRequest = useMutation({
     mutationFn: async () => {
       if (!projects?.length) throw new Error("No projects to compare");
+      if (!user?.id) {
+        toast.error("Please sign in to request a consultation.");
+        navigate("/auth");
+        return;
+      }
 
       const { error } = await supabase.from("evaluation_requests").insert({
-        user_id: user?.id || null,
+        user_id: user.id,
         project_ids: projects.map((p) => p.id),
         user_email: formData.email,
         user_name: formData.name,
