@@ -53,6 +53,7 @@ const GlobalHeader = () => {
 
   const mainNavLinks = [
     { href: "/", label: "Home", icon: Home },
+    { href: "/properties", label: "Properties", icon: Building2 },
     { href: "/about", label: "About Us", icon: Building2 },
     { href: "/founder", label: "Founder & Leadership", icon: User },
     { href: "/awards", label: "Awards", icon: Building2 },
@@ -62,8 +63,8 @@ const GlobalHeader = () => {
 
   // Property shortcuts for quick access
   const propertyShortcuts = [
-    { href: "/?status=off-plan", label: "Off-Plan", icon: Building2 },
-    { href: "/?status=ready", label: "Ready to Move", icon: ClipboardCheck },
+    { href: "/properties?status=off-plan", label: "Off-Plan", icon: Building2 },
+    { href: "/properties?status=ready", label: "Ready to Move", icon: ClipboardCheck },
     { href: "/quiz", label: "AI Home Finder", icon: Sparkles },
     { href: "/market-report", label: "Market Report", icon: FileText },
   ];

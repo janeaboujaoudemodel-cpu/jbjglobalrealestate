@@ -5,6 +5,7 @@ import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { BrowserRouter, Routes, Route, useLocation } from "react-router-dom";
 import { AuthProvider } from "@/contexts/AuthContext";
 import Index from "./pages/Index";
+import Properties from "./pages/Properties";
 import Communities from "./pages/Communities";
 import CommunityDetail from "./pages/CommunityDetail";
 import DeveloperDetail from "./pages/DeveloperDetail";
@@ -60,6 +61,7 @@ const App = () => (
           <AppLayout>
             <Routes>
               <Route path="/" element={<Index />} />
+              <Route path="/properties" element={<Properties />} />
               <Route path="/communities" element={<Communities />} />
               <Route path="/community/:slug" element={<CommunityDetail />} />
               <Route path="/developer/:slug" element={<DeveloperDetail />} />

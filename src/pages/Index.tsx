@@ -5,14 +5,16 @@ import WhyDubaiSection from "@/components/WhyDubaiSection";
 import ServicesSection from "@/components/ServicesSection";
 import StatsCounter from "@/components/StatsCounter";
 import Footer from "@/components/Footer";
+import PropertySearchBar from "@/components/PropertySearchBar";
 import { Sparkles, ArrowUpRight, Building2, ClipboardCheck, Volume2, VolumeX, MessageCircle, Phone } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { useState, useRef } from "react";
 import dubaiHeroVideo from "@/assets/dubai-hero-video.mp4";
 import { CONTACT_INFO, getWhatsAppUrl, getCallUrl } from "@/constants/stats";
+
 const propertyShortcuts = [
-  { href: "/?status=off-plan", label: "Off-Plan Properties", icon: Building2 },
-  { href: "/?status=ready", label: "Ready to Move", icon: ClipboardCheck },
+  { href: "/properties?status=off-plan", label: "Off-Plan Properties", icon: Building2 },
+  { href: "/properties?status=ready", label: "Ready to Move", icon: ClipboardCheck },
 ];
 
 const Index = () => {
@@ -104,7 +106,7 @@ const Index = () => {
 
       {/* AI Property Matchmaker CTA */}
       <div className="container mx-auto px-4 -mt-8 md:-mt-12 relative z-20">
-        <Link to="/quiz" className="block mb-10">
+        <Link to="/quiz" className="block mb-8">
           <div className="w-full bg-gradient-to-r from-purple-900 via-purple-800 to-black hover:from-purple-800 hover:via-purple-700 hover:to-zinc-900 rounded-xl p-6 md:p-8 transition-all duration-300 shadow-2xl shadow-purple-900/40 hover:shadow-purple-700/50 group cursor-pointer border border-purple-700/30">
             <div className="flex items-center justify-between">
               <div className="flex items-center gap-4">
@@ -128,6 +130,9 @@ const Index = () => {
             </div>
           </div>
         </Link>
+        
+        {/* Property Search Bar */}
+        <PropertySearchBar className="mb-10" />
       </div>
 
       {/* Navigation and Developer Grid */}

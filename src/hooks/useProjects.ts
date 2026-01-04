@@ -24,6 +24,8 @@ export interface Project {
   emirate: string | null;
   status: string | null;
   is_featured: boolean | null;
+  created_at: string;
+  updated_at: string;
   developer: {
     id: string;
     name: string;
