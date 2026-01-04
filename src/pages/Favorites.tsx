@@ -328,8 +328,7 @@ Best regards`);
                   </p>
                   <Button
                     onClick={() => setShareModalOpen(true)}
-                    variant="outline"
-                    className="border-zinc-700 text-zinc-300 hover:bg-zinc-800"
+                    className="bg-gradient-to-r from-gold to-gold-dark text-black hover:opacity-90"
                   >
                     <Share2 className="w-4 h-4 mr-2" />
                     Share My Shortlist

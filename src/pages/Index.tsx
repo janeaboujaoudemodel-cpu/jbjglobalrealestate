@@ -12,12 +12,12 @@ const INQUIRY_FORM_URL = "https://jjglobalcapital.com/form/property-investment-i
 const propertyShortcuts = [
   { href: "/?status=off-plan", label: "Off-Plan Properties", icon: Building2 },
   { href: "/?status=ready", label: "Ready to Move", icon: ClipboardCheck },
-  { href: "/quiz", label: "Take the Quiz", icon: Sparkles, highlight: true },
+  { href: "/quiz", label: "Find your best home with AI", icon: Sparkles, highlight: true },
 ];
 
 const Index = () => {
   return (
-    <section className="relative w-full min-h-screen bg-zinc-950">
+    <section className="relative w-full min-h-screen bg-[hsl(var(--premium-bg))]">
       {/* Hero Section */}
       <div className="py-12 md:py-20 relative">
         {/* Subtle gradient */}
@@ -28,10 +28,7 @@ const Index = () => {
             className="text-white text-4xl md:text-6xl font-bold mb-4"
             style={{ fontFamily: "Poppins, sans-serif" }}
           >
-            <span className="text-gold">J</span>
-            <span className="text-zinc-500 mx-1">|</span>
-            <span className="text-gold">J</span>
-            <span className="text-white ml-3">Real Estate</span>
+            UAE Real Estate
           </h1>
           <p className="text-zinc-400 text-lg mb-8 max-w-2xl">
             Your trusted partner for premium properties across the UAE's most exclusive communities
@@ -44,8 +41,8 @@ const Index = () => {
                 <Button 
                   variant={shortcut.highlight ? "default" : "outline"}
                   className={shortcut.highlight 
-                    ? "bg-gradient-to-r from-violet-600 to-purple-600 hover:from-violet-500 hover:to-purple-500 text-white border-0 shadow-lg shadow-purple-500/30" 
-                    : "bg-zinc-900 border-zinc-700 text-zinc-300 hover:bg-zinc-800 hover:text-white hover:border-gold/50"
+                    ? "bg-gradient-to-r from-gold to-gold-dark text-black border-0 shadow-lg shadow-gold/20 h-12 px-6" 
+                    : "bg-zinc-900/60 border-zinc-700 text-zinc-300 hover:bg-zinc-800 hover:text-white hover:border-gold/50 h-12 px-6"
                   }
                 >
                   <shortcut.icon className="w-4 h-4 mr-2" />
