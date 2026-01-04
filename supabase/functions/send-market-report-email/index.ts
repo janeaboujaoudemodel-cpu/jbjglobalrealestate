@@ -1,19 +1,66 @@
 import { serve } from "https://deno.land/std@0.190.0/http/server.ts";
+import { z } from "https://deno.land/x/zod@v3.22.4/mod.ts";
 
 const RESEND_API_KEY = Deno.env.get("RESEND_API_KEY");
 
-const corsHeaders = {
-  "Access-Control-Allow-Origin": "*",
-  "Access-Control-Allow-Headers":
-    "authorization, x-client-info, apikey, content-type",
-};
+// Allowed origins - restrict CORS to trusted domains
+const ALLOWED_ORIGINS = [
+  "https://jjglobalcapital.com",
+  "https://www.jjglobalcapital.com",
+  "http://localhost:5173",
+  "http://localhost:8080",
+];
 
-interface MarketReportRequest {
-  fullName: string;
-  email: string;
-  phone: string;
-  nationality: string;
-  language: string;
+function getCorsHeaders(req: Request) {
+  const origin = req.headers.get("origin") || "";
+  const isAllowed = ALLOWED_ORIGINS.some(allowed => 
+    origin === allowed || origin.endsWith(".lovableproject.com") || origin.endsWith(".lovable.app")
+  );
+  
+  return {
+    "Access-Control-Allow-Origin": isAllowed ? origin : ALLOWED_ORIGINS[0],
+    "Access-Control-Allow-Headers": "authorization, x-client-info, apikey, content-type",
+    "Access-Control-Allow-Methods": "POST, OPTIONS",
+  };
+}
+
+// Input validation schema
+const MarketReportRequestSchema = z.object({
+  fullName: z.string()
+    .min(1, "Full name is required")
+    .max(100, "Full name must be less than 100 characters")
+    .trim()
+    .regex(/^[a-zA-Z\s\-'.]+$/, "Full name contains invalid characters"),
+  email: z.string()
+    .email("Invalid email address")
+    .max(200, "Email must be less than 200 characters")
+    .trim()
+    .toLowerCase(),
+  phone: z.string()
+    .min(1, "Phone number is required")
+    .max(30, "Phone number must be less than 30 characters")
+    .trim()
+    .regex(/^[\d\s\-+().]+$/, "Phone number contains invalid characters"),
+  nationality: z.string()
+    .min(1, "Nationality is required")
+    .max(100, "Nationality must be less than 100 characters")
+    .trim(),
+  language: z.string()
+    .min(1, "Language is required")
+    .max(50, "Language must be less than 50 characters")
+    .trim(),
+});
+
+// HTML escape function to prevent XSS in email templates
+function escapeHtml(str: string): string {
+  const htmlEscapes: Record<string, string> = {
+    "&": "&amp;",
+    "<": "&lt;",
+    ">": "&gt;",
+    '"': "&quot;",
+    "'": "&#39;",
+  };
+  return str.replace(/[&<>"']/g, (char) => htmlEscapes[char] || char);
 }
 
 const sendEmail = async (to: string, subject: string, html: string) => {
@@ -40,15 +87,49 @@ const sendEmail = async (to: string, subject: string, html: string) => {
 };
 
 const handler = async (req: Request): Promise<Response> => {
+  const corsHeaders = getCorsHeaders(req);
+
   // Handle CORS preflight requests
   if (req.method === "OPTIONS") {
     return new Response(null, { headers: corsHeaders });
   }
 
-  try {
-    const { fullName, email, phone, nationality, language }: MarketReportRequest = await req.json();
+  // Only allow POST requests
+  if (req.method !== "POST") {
+    return new Response(
+      JSON.stringify({ error: "Method not allowed" }),
+      { status: 405, headers: { ...corsHeaders, "Content-Type": "application/json" } }
+    );
+  }
 
-    // Send email to company (invest@jjglobalcapital.com and jane@jjglobalcapital.com)
+  try {
+    // Parse and validate input
+    const rawBody = await req.json();
+    const parseResult = MarketReportRequestSchema.safeParse(rawBody);
+    
+    if (!parseResult.success) {
+      console.error("Validation error:", parseResult.error.errors);
+      return new Response(
+        JSON.stringify({ 
+          error: "Invalid request data", 
+          details: parseResult.error.errors.map(e => `${e.path.join(".")}: ${e.message}`).join(", ")
+        }),
+        { status: 400, headers: { ...corsHeaders, "Content-Type": "application/json" } }
+      );
+    }
+
+    const { fullName, email, phone, nationality, language } = parseResult.data;
+
+    // Escape all user inputs for HTML email template
+    const safeFullName = escapeHtml(fullName);
+    const safeEmail = escapeHtml(email);
+    const safePhone = escapeHtml(phone);
+    const safeNationality = escapeHtml(nationality);
+    const safeLanguage = escapeHtml(language);
+
+    console.log("Processing market report request for:", safeEmail);
+
+    // Build email template with escaped content
     const companyEmailHtml = `
       <!DOCTYPE html>
       <html>
@@ -78,27 +159,27 @@ const handler = async (req: Request): Promise<Response> => {
           
           <div class="field">
             <div class="label">Full Name</div>
-            <div class="value">${fullName}</div>
+            <div class="value">${safeFullName}</div>
           </div>
           
           <div class="field">
             <div class="label">Email</div>
-            <div class="value"><a href="mailto:${email}" style="color: #A8925A;">${email}</a></div>
+            <div class="value"><a href="mailto:${safeEmail}" style="color: #A8925A;">${safeEmail}</a></div>
           </div>
           
           <div class="field">
             <div class="label">Phone</div>
-            <div class="value"><a href="tel:${phone}" style="color: #A8925A;">${phone}</a></div>
+            <div class="value"><a href="tel:${safePhone}" style="color: #A8925A;">${safePhone}</a></div>
           </div>
           
           <div class="field">
             <div class="label">Nationality</div>
-            <div class="value">${nationality}</div>
+            <div class="value">${safeNationality}</div>
           </div>
           
           <div class="field">
             <div class="label">Preferred Language</div>
-            <div class="value">${language}</div>
+            <div class="value">${safeLanguage}</div>
           </div>
           
           <div class="footer">
@@ -110,7 +191,7 @@ const handler = async (req: Request): Promise<Response> => {
       </html>
     `;
 
-    const subject = `New Market Report Download: ${fullName}`;
+    const subject = `New Market Report Download: ${safeFullName}`;
 
     // Send to both email addresses
     await Promise.all([
@@ -118,23 +199,18 @@ const handler = async (req: Request): Promise<Response> => {
       sendEmail("jane@jjglobalcapital.com", subject, companyEmailHtml),
     ]);
 
-    console.log("Emails sent successfully to company addresses");
+    console.log("Emails sent successfully for:", safeEmail);
 
     return new Response(JSON.stringify({ success: true }), {
       status: 200,
-      headers: {
-        "Content-Type": "application/json",
-        ...corsHeaders,
-      },
+      headers: { ...corsHeaders, "Content-Type": "application/json" },
     });
-  } catch (error: any) {
-    console.error("Error in send-market-report-email function:", error);
+  } catch (error: unknown) {
+    const errorMessage = error instanceof Error ? error.message : "Unknown error";
+    console.error("Error in send-market-report-email function:", errorMessage);
     return new Response(
-      JSON.stringify({ error: error.message }),
-      {
-        status: 500,
-        headers: { "Content-Type": "application/json", ...corsHeaders },
-      }
+      JSON.stringify({ error: "Failed to process request" }),
+      { status: 500, headers: { ...corsHeaders, "Content-Type": "application/json" } }
     );
   }
 };

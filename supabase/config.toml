@@ -1,1 +1,7 @@
 project_id = "mdafrewypkkrildjgtey"
+
+[functions.compare-projects]
+verify_jwt = true
+
+[functions.send-market-report-email]
+verify_jwt = false
