@@ -6,6 +6,7 @@ import { ArrowUpRight, Search, Plane, Car, Hotel, Sparkles, Gem, Ship, Utensils,
 import { CONTACT_INFO } from "@/constants/stats";
 import { useState } from "react";
 import { Input } from "@/components/ui/input";
+import conciergeHero from "@/assets/concierge-hero.jpeg";
 
 const fadeInUp = {
   hidden: { opacity: 0, y: 30 },
@@ -125,7 +126,7 @@ const Concierge = () => {
         {/* Background Video/Image */}
         <div className="absolute inset-0">
           <img 
-            src="https://images.unsplash.com/photo-1600596542815-ffad4c1539a9?w=1920&q=80"
+            src={conciergeHero}
             alt="Luxury Concierge"
             className="w-full h-full object-cover"
           />
