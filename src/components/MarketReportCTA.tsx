@@ -76,22 +76,27 @@ const MarketReportCTA = () => {
               {/* Glow effect behind book - Gold themed */}
               <div className="absolute inset-0 bg-gradient-to-br from-gold/20 to-gold/5 blur-3xl rounded-full scale-150" />
               
-              {/* Premium Book Visual with flip effect */}
+              {/* Interactive 3D Book with drag-to-rotate */}
               <motion.div
-                className="relative"
+                className="relative cursor-grab active:cursor-grabbing"
                 style={{ perspective: "1200px" }}
-                initial={{ rotateY: -10 }}
-                animate={{ rotateY: [-10, 10, -10] }}
-                transition={{ duration: 8, repeat: Infinity, ease: "easeInOut" }}
-                whileHover={{ rotateY: 25, scale: 1.05 }}
+                drag="x"
+                dragConstraints={{ left: 0, right: 0 }}
+                dragElastic={0.1}
+                whileHover={{ scale: 1.02 }}
+                whileTap={{ scale: 0.98 }}
+                animate={{ rotateY: [-8, 8, -8] }}
+                transition={{ duration: 6, repeat: Infinity, ease: "easeInOut" }}
               >
-                <div 
+                <motion.div 
                   className="relative"
-                  style={{ transformStyle: "preserve-3d", transform: "rotateY(-15deg)" }}
+                  style={{ transformStyle: "preserve-3d", transform: "rotateY(-10deg)" }}
+                  whileHover={{ rotateY: 15 }}
+                  transition={{ duration: 0.4 }}
                 >
                   {/* Book Shadow */}
                   <div 
-                    className="absolute -bottom-4 left-1/2 -translate-x-1/2 w-48 h-8 bg-black/40 blur-xl rounded-full"
+                    className="absolute -bottom-6 left-1/2 -translate-x-1/2 w-52 h-10 bg-black/50 blur-2xl rounded-full"
                     style={{ transform: "translateZ(-50px)" }}
                   />
                   
@@ -99,17 +104,17 @@ const MarketReportCTA = () => {
                   <div
                     className="absolute left-0 top-0 h-full hidden md:block"
                     style={{
-                      width: 24,
-                      background: "linear-gradient(90deg, #A8925A 0%, #C4A962 50%, #A8925A 100%)",
-                      transform: "translateX(-24px) rotateY(-90deg)",
+                      width: 28,
+                      background: "linear-gradient(90deg, #8B7355 0%, #A8925A 30%, #C4A962 50%, #A8925A 70%, #8B7355 100%)",
+                      transform: "translateX(-28px) rotateY(-90deg)",
                       transformOrigin: "right center",
-                      boxShadow: "inset -2px 0 10px rgba(0,0,0,0.4)",
+                      boxShadow: "inset -3px 0 12px rgba(0,0,0,0.5), inset 2px 0 4px rgba(255,255,255,0.1)",
                     }}
                   >
                     <div className="h-full flex items-center justify-center">
                       <span 
                         className="text-black font-bold"
-                        style={{ writingMode: "vertical-rl", fontSize: "10px", letterSpacing: "0.25em" }}
+                        style={{ writingMode: "vertical-rl", fontSize: "10px", letterSpacing: "0.2em" }}
                       >
                         JJ GLOBAL CAPITAL • 2026
                       </span>
@@ -118,87 +123,104 @@ const MarketReportCTA = () => {
 
                   {/* Book Front Cover */}
                   <div
-                    className="w-52 h-72 md:w-64 md:h-80 rounded-r-lg overflow-hidden border border-gold/40"
+                    className="w-56 h-80 md:w-72 md:h-96 rounded-r-lg overflow-hidden border-2 border-gold/50"
                     style={{
-                      background: "linear-gradient(145deg, #1c1c1c 0%, #0a0a0a 100%)",
-                      boxShadow: "8px 8px 30px rgba(0,0,0,0.5), inset 0 0 80px rgba(168,146,90,0.05)",
+                      background: "linear-gradient(145deg, #2a2a2a 0%, #1a1a1a 50%, #0f0f0f 100%)",
+                      boxShadow: "12px 12px 40px rgba(0,0,0,0.6), inset 0 0 100px rgba(168,146,90,0.08), 0 0 60px rgba(168,146,90,0.1)",
                     }}
                   >
-                    {/* Background image */}
+                    {/* Background subtle pattern */}
                     <div 
-                      className="absolute inset-0 opacity-25"
+                      className="absolute inset-0 opacity-20"
                       style={{
                         backgroundImage: "url('https://images.unsplash.com/photo-1600596542815-ffad4c1539a9?w=400&q=80')",
                         backgroundSize: "cover",
                         backgroundPosition: "center",
                       }}
                     />
-                    <div className="absolute inset-0 bg-gradient-to-b from-zinc-900/50 via-black/60 to-black/80" />
+                    <div className="absolute inset-0 bg-gradient-to-b from-zinc-900/40 via-black/70 to-black/90" />
 
-                    {/* Corner accents - Gold */}
-                    <div className="absolute top-0 left-0 w-14 h-14 border-l-2 border-t-2 border-gold/50" />
-                    <div className="absolute bottom-0 right-0 w-14 h-14 border-r-2 border-b-2 border-gold/50" />
+                    {/* Premium corner accents */}
+                    <div className="absolute top-0 left-0 w-16 h-16 border-l-2 border-t-2 border-gold/60" />
+                    <div className="absolute bottom-0 right-0 w-16 h-16 border-r-2 border-b-2 border-gold/60" />
+                    <div className="absolute top-0 right-0 w-8 h-8 border-r border-t border-gold/30" />
+                    <div className="absolute bottom-0 left-0 w-8 h-8 border-l border-b border-gold/30" />
                     
-                    {/* Cover content */}
-                    <div className="relative h-full flex flex-col items-center justify-center p-6 text-center z-10">
-                      <span className="text-gold/80 text-[10px] tracking-[0.3em] uppercase mb-4">
-                        J | J Global Capital
-                      </span>
-                      
-                      <h3 className="text-white font-bold text-base md:text-lg mb-2" style={{ fontFamily: "Poppins, sans-serif" }}>
-                        UAE Real Estate
-                      </h3>
-                      <p className="text-transparent bg-clip-text bg-gradient-to-r from-gold via-[#C4A962] to-gold font-semibold text-sm">
-                        Market Intelligence
-                      </p>
-
-                      <div className="w-20 h-[2px] bg-gradient-to-r from-transparent via-gold to-transparent my-4" />
-
-                      <div className="px-4 py-2 border border-gold/50 rounded bg-black/40 backdrop-blur-sm">
-                        <span className="text-gold text-xs font-medium tracking-wider">
-                          LATEST EDITION 2026
+                    {/* Cover content - improved readability */}
+                    <div className="relative h-full flex flex-col items-center justify-between p-6 md:p-8 text-center z-10">
+                      {/* Top: Logo */}
+                      <div className="w-full">
+                        <div className="flex items-center justify-center gap-0.5 mb-1">
+                          <span className="text-gold font-light text-sm tracking-wide">J</span>
+                          <span className="text-white/80 mx-0.5">|</span>
+                          <span className="text-gold font-light text-sm tracking-wide">J</span>
+                        </div>
+                        <span className="text-gold/90 text-[11px] md:text-xs tracking-[0.2em] uppercase font-medium">
+                          GLOBAL CAPITAL
                         </span>
                       </div>
+                      
+                      {/* Center: Main Title */}
+                      <div className="flex-1 flex flex-col items-center justify-center">
+                        <h3 className="text-white font-bold text-xl md:text-2xl mb-2 drop-shadow-lg" style={{ fontFamily: "Poppins, sans-serif" }}>
+                          UAE Real Estate
+                        </h3>
+                        <p className="text-transparent bg-clip-text bg-gradient-to-r from-gold via-[#D4B970] to-gold font-semibold text-base md:text-lg">
+                          Market Intelligence
+                        </p>
 
-                      <div className="mt-auto pt-4 border-t border-zinc-800/50 w-full">
-                        <p className="text-gold/60 text-[10px] uppercase tracking-wider">
+                        <div className="w-24 h-[2px] bg-gradient-to-r from-transparent via-gold to-transparent my-5" />
+
+                        <div className="px-5 py-2.5 border-2 border-gold/60 rounded-md bg-black/50 backdrop-blur-sm shadow-lg">
+                          <span className="text-gold text-sm md:text-base font-semibold tracking-wider">
+                            LATEST EDITION 2026
+                          </span>
+                        </div>
+                      </div>
+
+                      {/* Bottom: Author & Powered by */}
+                      <div className="w-full pt-4 border-t border-gold/30">
+                        <p className="text-gold text-xs md:text-sm uppercase tracking-wider font-medium mb-1">
                           By Jane Abou Jaoude
                         </p>
-                        <p className="text-zinc-500 text-[8px] uppercase tracking-wider mt-1">
-                          Powered by JJ Holding Group
+                        <p className="text-gold/70 text-[10px] md:text-xs uppercase tracking-wider">
+                          Powered by JJ Global Capital
                         </p>
                       </div>
                     </div>
 
-                    {/* Glossy effect */}
+                    {/* Glossy reflection effect */}
                     <div 
                       className="absolute inset-0 pointer-events-none"
-                      style={{ background: "linear-gradient(135deg, rgba(255,255,255,0.08) 0%, transparent 50%, rgba(0,0,0,0.15) 100%)" }}
+                      style={{ 
+                        background: "linear-gradient(135deg, rgba(255,255,255,0.12) 0%, transparent 40%, rgba(0,0,0,0.2) 100%)" 
+                      }}
                     />
                   </div>
 
-                  {/* Pages edge */}
+                  {/* Pages edge - more realistic */}
                   <div
-                    className="absolute right-0 top-[3px] h-[calc(100%-6px)] hidden md:block"
+                    className="absolute right-0 top-[4px] h-[calc(100%-8px)] hidden md:block"
                     style={{
-                      width: 10,
-                      background: "repeating-linear-gradient(to bottom, #f5f5f0 0px, #f5f5f0 1px, #eae8e0 1px, #eae8e0 2px)",
+                      width: 14,
+                      background: "repeating-linear-gradient(to bottom, #f8f8f5 0px, #f8f8f5 1px, #f0efe8 1px, #f0efe8 2px)",
                       transform: "translateX(100%) rotateY(90deg)",
                       transformOrigin: "left center",
-                      boxShadow: "inset -2px 0 4px rgba(0,0,0,0.1)",
+                      boxShadow: "inset -3px 0 6px rgba(0,0,0,0.15), inset 1px 0 2px rgba(255,255,255,0.5)",
                     }}
                   />
 
-                  {/* Back cover hint */}
+                  {/* Back cover - deeper 3D */}
                   <div
                     className="absolute top-0 left-0 w-full h-full hidden md:block"
                     style={{
-                      background: "linear-gradient(145deg, #151520 0%, #0a0a10 100%)",
-                      transform: "translateZ(-10px)",
+                      background: "linear-gradient(145deg, #1a1a1f 0%, #0a0a0f 100%)",
+                      transform: "translateZ(-14px)",
                       borderRadius: "0 6px 6px 0",
+                      boxShadow: "inset 0 0 20px rgba(0,0,0,0.5)",
                     }}
                   />
-                </div>
+                </motion.div>
               </motion.div>
             </div>
           </div>

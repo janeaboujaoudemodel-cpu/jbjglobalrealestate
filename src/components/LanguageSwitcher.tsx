@@ -17,27 +17,28 @@ const LanguageSwitcher = () => {
         <Button
           variant="ghost"
           size="sm"
-          className="h-9 px-3 text-white/70 hover:text-gold hover:bg-transparent"
+          className="h-8 px-2.5 text-white/70 hover:text-gold hover:bg-transparent border border-transparent hover:border-gold/30 rounded-md transition-all"
         >
-          <Globe className="w-4 h-4 mr-1.5" />
-          <span className="text-sm font-medium">{language === 'en' ? 'EN' : 'عربي'}</span>
+          <Globe className="w-4 h-4 mr-1" />
+          <span className="text-xs font-medium">{language === 'en' ? 'EN' : 'عربي'}</span>
         </Button>
       </DropdownMenuTrigger>
       <DropdownMenuContent 
         align="end" 
-        className="bg-zinc-900 border-zinc-700 min-w-[120px]"
+        sideOffset={8}
+        className="bg-zinc-900/95 backdrop-blur-md border border-gold/30 min-w-[140px] rounded-lg shadow-xl shadow-black/40"
       >
         <DropdownMenuItem 
           onClick={() => setLanguage('en')}
-          className={`text-white hover:bg-zinc-800 cursor-pointer ${language === 'en' ? 'bg-zinc-800 text-gold' : ''}`}
+          className={`text-white hover:bg-gold/20 cursor-pointer transition-colors rounded-md ${language === 'en' ? 'bg-gold/10 text-gold' : ''}`}
         >
-          🇬🇧 English
+          <span className="mr-2">🇬🇧</span> English
         </DropdownMenuItem>
         <DropdownMenuItem 
           onClick={() => setLanguage('ar')}
-          className={`text-white hover:bg-zinc-800 cursor-pointer ${language === 'ar' ? 'bg-zinc-800 text-gold' : ''}`}
+          className={`text-white hover:bg-gold/20 cursor-pointer transition-colors rounded-md ${language === 'ar' ? 'bg-gold/10 text-gold' : ''}`}
         >
-          🇦🇪 العربية
+          <span className="mr-2">🇦🇪</span> العربية
         </DropdownMenuItem>
       </DropdownMenuContent>
     </DropdownMenu>
