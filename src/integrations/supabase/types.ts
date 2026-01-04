@@ -160,6 +160,57 @@ export type Database = {
           },
         ]
       }
+      memberships: {
+        Row: {
+          created_at: string
+          currency: string
+          email: string
+          expires_at: string | null
+          full_name: string | null
+          id: string
+          payment_method: string | null
+          payment_reference: string | null
+          phone: string | null
+          plan_type: string
+          price_usd: number
+          status: string
+          updated_at: string
+          user_id: string
+        }
+        Insert: {
+          created_at?: string
+          currency?: string
+          email: string
+          expires_at?: string | null
+          full_name?: string | null
+          id?: string
+          payment_method?: string | null
+          payment_reference?: string | null
+          phone?: string | null
+          plan_type?: string
+          price_usd?: number
+          status?: string
+          updated_at?: string
+          user_id: string
+        }
+        Update: {
+          created_at?: string
+          currency?: string
+          email?: string
+          expires_at?: string | null
+          full_name?: string | null
+          id?: string
+          payment_method?: string | null
+          payment_reference?: string | null
+          phone?: string | null
+          plan_type?: string
+          price_usd?: number
+          status?: string
+          updated_at?: string
+          user_id?: string
+        }
+        Relationships: []
+      }
       profiles: {
         Row: {
           created_at: string
