@@ -5,7 +5,7 @@ import { supabase } from "@/integrations/supabase/client";
 import { useAuth } from "@/contexts/AuthContext";
 import { useShortlist } from "@/hooks/useFavorites";
 import { useGuestShortlist } from "@/hooks/useGuestFavorites";
-import { useMembership } from "@/hooks/useMembership";
+import { useShortlistBadges } from "@/hooks/useShortlistBadges";
 import { 
   ChevronLeft, Sparkles, Send, Loader2, CheckCircle, Download, Star, 
   Users, Crown, Gift, TrendingUp, MapPin, Building, Home, 
@@ -82,7 +82,8 @@ const Compare = () => {
   const navigate = useNavigate();
   const { hasActiveMembership } = useMembership();
   const { data: authShortlist } = useShortlist();
-  const { shortlist: guestShortlist, getBadge } = useGuestShortlist();
+  const { shortlist: guestShortlist } = useGuestShortlist();
+  const { getBadge } = useShortlistBadges();
   const [aiAnalysis, setAiAnalysis] = useState<AIAnalysis | null>(null);
   const [isGenerating, setIsGenerating] = useState(false);
   const [showRequestForm, setShowRequestForm] = useState(false);
@@ -481,6 +482,9 @@ const Compare = () => {
               <p className="text-zinc-400">
                 Compare {projects.length} properties with intelligent AI analysis
               </p>
+              <p className="text-zinc-500 text-sm mt-1">
+                Developed by Founder Jane Abou Jaoude • Powered by JJ Global Capital
+              </p>
             </div>
             <div className="flex gap-3">
               {aiAnalysis && (
@@ -521,24 +525,24 @@ const Compare = () => {
                   <th className="text-left py-4 px-4 text-zinc-500 font-medium border-b border-zinc-800 sticky left-0 bg-zinc-900 z-10">
                     Feature
                   </th>
-                  {projects.map((project) => {
-                    const badge = !user ? getBadge(project.id) : null;
-                    return (
-                      <th
-                        key={project.id}
-                        className="text-left py-4 px-4 border-b border-zinc-800 min-w-[250px]"
-                      >
-                        <div className="flex flex-col gap-2">
-                          {badge && (
-                            <span className={`inline-flex items-center gap-1 px-2 py-1 rounded text-xs font-bold w-fit ${
-                              badge === 'top1' ? 'bg-yellow-500/20 text-yellow-400' :
-                              badge === 'top2' ? 'bg-gray-400/20 text-gray-300' :
-                              'bg-orange-600/20 text-orange-400'
-                            }`}>
-                              {badge === 'top1' ? '🥇 Top 1' : badge === 'top2' ? '🥈 Top 2' : '🥉 Top 3'}
-                            </span>
-                          )}
-                          <img
+                    {projects.map((project) => {
+                      const badge = getBadge(project.id);
+                      return (
+                        <th
+                          key={project.id}
+                          className="text-left py-4 px-4 border-b border-zinc-800 min-w-[250px]"
+                        >
+                          <div className="flex flex-col gap-2">
+                            {badge && (
+                              <span className={`inline-flex items-center gap-1 px-2 py-1 rounded text-xs font-bold w-fit ${
+                                badge === 'top1' ? 'bg-yellow-500/20 text-yellow-400' :
+                                badge === 'top2' ? 'bg-orange-600/20 text-orange-400' :
+                                'bg-gray-400/20 text-gray-300'
+                              }`}>
+                                {badge === 'top1' ? '🥇 Top 1' : badge === 'top2' ? '🥉 Top 2' : '🥈 Top 3'}
+                              </span>
+                            )}
+                            <img
                             src={project.images?.[0]?.image_url || "/placeholder.svg"}
                             alt={project.name}
                             className="w-full aspect-video object-cover rounded-lg"
@@ -840,14 +844,20 @@ const Compare = () => {
                   <Mail className="w-4 h-4 mr-2" />
                   Request Callback
                 </Button>
-                <a href="tel:+971565911000">
-                  <Button variant="outline" className="w-full border-zinc-700 text-white hover:bg-zinc-800">
+                <a href="tel:+971565911000" className="w-full">
+                  <Button
+                    variant="outline"
+                    className="w-full border-zinc-700 text-white bg-transparent hover:bg-zinc-900 hover:text-white"
+                  >
                     <Phone className="w-4 h-4 mr-2" />
                     Call Now
                   </Button>
                 </a>
-                <a href={INQUIRY_FORM_URL} target="_blank" rel="noopener noreferrer">
-                  <Button variant="outline" className="w-full border-zinc-700 text-white hover:bg-zinc-800">
+                <a href={INQUIRY_FORM_URL} target="_blank" rel="noopener noreferrer" className="w-full">
+                  <Button
+                    variant="outline"
+                    className="w-full border-zinc-700 text-white bg-transparent hover:bg-zinc-900 hover:text-white"
+                  >
                     <BadgeCheck className="w-4 h-4 mr-2" />
                     Full Inquiry Form
                   </Button>

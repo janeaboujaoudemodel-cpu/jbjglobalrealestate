@@ -74,13 +74,9 @@ const FavoriteButton = ({
     if (user) {
       toggleUserShortlist.mutate({ projectId, isShortlisted, currentCount: shortlistCount });
     } else {
-      if (!isShortlisted && shortlistCount >= 3) {
-        toast.error("Maximum 3 projects can be shortlisted for comparison");
-        return;
-      }
       const success = toggleGuestShortlist(projectId);
       if (success) {
-        toast.success(isShortlisted ? "Removed from comparison" : "Added to comparison");
+        toast.success(isShortlisted ? "Removed from shortlist" : "Added to shortlist");
       }
     }
   };
@@ -113,12 +109,10 @@ const FavoriteButton = ({
           <TooltipTrigger asChild>
             <button
               onClick={handleShortlistClick}
-              disabled={toggleUserShortlist.isPending || (!isShortlisted && shortlistCount >= 3)}
+              disabled={toggleUserShortlist.isPending}
               className={`${sizeClasses[size]} flex items-center justify-center rounded-full transition-all duration-200 border ${
                 isShortlisted
                   ? "bg-gold text-black border-gold"
-                  : shortlistCount >= 3
-                  ? "bg-zinc-800/60 text-zinc-500 border-zinc-700 cursor-not-allowed"
                   : "bg-black/60 backdrop-blur-sm hover:bg-black/80 text-white border-white/10"
               }`}
             >
@@ -130,13 +124,7 @@ const FavoriteButton = ({
             </button>
           </TooltipTrigger>
           <TooltipContent>
-            <p>
-              {isShortlisted 
-                ? "Remove from comparison" 
-                : shortlistCount >= 3 
-                ? "Max 3 properties for comparison" 
-                : "Add to comparison (max 3)"}
-            </p>
+            <p>{isShortlisted ? "Remove from shortlist" : "Add to shortlist"}</p>
           </TooltipContent>
         </Tooltip>
       )}

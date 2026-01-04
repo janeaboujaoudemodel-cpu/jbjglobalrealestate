@@ -5,7 +5,9 @@ import { supabase } from "@/integrations/supabase/client";
 import { useAuth } from "@/contexts/AuthContext";
 import { useFavorites, useShortlist, useToggleShortlist } from "@/hooks/useFavorites";
 import { useGuestFavorites, useGuestShortlist } from "@/hooks/useGuestFavorites";
-import { ChevronLeft, Heart, ListPlus, ArrowRight, Award, X, Mail, Share2, Sparkles, Users, CheckSquare } from "lucide-react";
+import { useShortlistBadges } from "@/hooks/useShortlistBadges";
+import { CONTACT_INFO, getWhatsAppUrl } from "@/constants/stats";
+import { ChevronLeft, Heart, ListPlus, ArrowRight, Award, X, Mail, Share2, Sparkles, Users, CheckSquare, Download, MessageCircle, Copy } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Badge } from "@/components/ui/badge";
@@ -41,7 +43,8 @@ const Favorites = () => {
   const { data: userFavorites, isLoading: loadingFavorites } = useFavorites();
   const { data: userShortlist, isLoading: loadingShortlist } = useShortlist();
   const { favorites: guestFavorites, toggleFavorite } = useGuestFavorites();
-  const { shortlist: guestShortlist, setBadge, getBadge, toggleShortlist: toggleGuestShortlist } = useGuestShortlist();
+  const { shortlist: guestShortlist, toggleShortlist: toggleGuestShortlist } = useGuestShortlist();
+  const { setBadge, getBadge } = useShortlistBadges();
   const toggleShortlistMutation = useToggleShortlist();
 
   // Determine which data to use based on auth status
@@ -101,19 +104,12 @@ const Favorites = () => {
   const favCount = favoriteIds.length;
   const shortlistCount = shortlistIds.length;
 
-  // Get badge for a project (guest only for now)
-  const getProjectBadge = (projectId: string) => {
-    if (!user) {
-      return getBadge(projectId);
-    }
-    return null;
-  };
+  // Get badge for a project
+  const getProjectBadge = (projectId: string) => getBadge(projectId);
 
   // Set badge for a project
   const handleSetBadge = (projectId: string, badge: 'top1' | 'top2' | 'top3' | null) => {
-    if (!user) {
-      setBadge(projectId, badge);
-    }
+    setBadge(projectId, badge);
   };
 
   // Move selected favorites to shortlist
@@ -153,40 +149,159 @@ const Favorites = () => {
     }
   };
 
-  // Share shortlist via email
-  const handleShareShortlist = () => {
-    if (!shortlistedProjects?.length) return;
-
-    const projectList = shortlistedProjects.map((p, i) => {
+  const buildShortlistShareText = () => {
+    const list = (shortlistedProjects || []).map((p, i) => {
       const badge = getProjectBadge(p.id);
-      const badgeStr = badge ? ` [${badge === 'top1' ? '🥇 Top 1' : badge === 'top2' ? '🥈 Top 2' : '🥉 Top 3'}]` : '';
-      return `${i + 1}. ${p.name}${badgeStr} - ${p.developer?.name || 'Unknown Developer'} - AED ${((p.price_from || 0) / 1000000).toFixed(1)}M+`;
-    }).join('\n');
+      const badgeStr = badge
+        ? badge === 'top1'
+          ? " (Top 1 — Gold)"
+          : badge === 'top2'
+          ? " (Top 2 — Bronze)"
+          : " (Top 3 — Silver)"
+        : "";
+      const url = `${window.location.origin}/project/${p.slug}`;
+      return `${i + 1}. ${p.name}${badgeStr} — ${p.developer?.name || 'Developer'} — ${url}`;
+    });
 
-    const subject = encodeURIComponent("My Property Shortlist - JJ Global Capital");
-    const body = encodeURIComponent(`Hi,
+    const subject = "My Property Shortlist — JJ Global Capital";
+    const body = `Hi,\n\nHere is my shortlisted properties for review:\n\n${list.join("\n")}\n\nI would like a consultation and tailored advisory on my shortlist.\n\nBest regards`;
+    const whatsapp = `My JJ Global Capital shortlist:\n\n${list.join("\n")}`;
 
-Here is my shortlisted properties for your review:
+    return { subject, body, whatsapp, plain: list.join("\n") };
+  };
 
-${projectList}
-
-I would like to request a professional evaluation and consultation.
-
-Best regards`);
-
-    const mailtoLink = shareEmail 
-      ? `mailto:${shareEmail}?subject=${subject}&body=${body}`
-      : `mailto:?subject=${subject}&body=${body}`;
+  const openMailto = (to?: string) => {
+    const { subject, body } = buildShortlistShareText();
+    const mailtoLink = to
+      ? `mailto:${to}?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(body)}`
+      : `mailto:?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(body)}`;
 
     window.location.href = mailtoLink;
+  };
+
+  // Email a copy (to yourself)
+  const handleEmailShare = () => {
+    if (!shortlistedProjects?.length) return;
+    openMailto(shareEmail || undefined);
     setShareModalOpen(false);
     toast.success("Opening email client...");
   };
 
+  // Send to JJ team for consultation
+  const handleSendToTeam = () => {
+    if (!shortlistedProjects?.length) return;
+    openMailto(CONTACT_INFO.email);
+    setShareModalOpen(false);
+    toast.success("Opening email to JJ Global Capital team...");
+  };
+
+  const handleShareWhatsApp = () => {
+    if (!shortlistedProjects?.length) return;
+    const { whatsapp } = buildShortlistShareText();
+    window.open(getWhatsAppUrl(whatsapp), "_blank");
+  };
+
+  const handleCopyShortlist = async () => {
+    if (!shortlistedProjects?.length) return;
+    try {
+      const { plain } = buildShortlistShareText();
+      await navigator.clipboard.writeText(plain);
+      toast.success("Shortlist copied");
+    } catch {
+      toast.error("Could not copy shortlist");
+    }
+  };
+
+  const handleDownloadShortlist = () => {
+    if (!shortlistedProjects?.length) return;
+
+    const dateStr = new Date().toLocaleDateString("en-US", { year: "numeric", month: "long", day: "numeric" });
+    const html = `<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Shortlist — JJ Global Capital</title>
+  <style>
+    *{box-sizing:border-box;margin:0;padding:0}
+    body{font-family: ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, Arial; background:#0a0a0a; color:#fff; padding:32px}
+    .container{max-width:1100px;margin:0 auto}
+    .header{border-bottom:1px solid rgba(168,146,90,.35); padding-bottom:18px; margin-bottom:22px; text-align:center}
+    .logo{letter-spacing:.18em; font-weight:700}
+    .gold{color:#A8925A}
+    .sub{color:#9a9a9a; margin-top:10px; font-size:13px}
+    .grid{display:grid; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); gap:16px}
+    .card{background:#141414; border:1px solid #2a2a2a; border-radius:14px; overflow:hidden}
+    .img{width:100%; height:160px; object-fit:cover; display:block}
+    .content{padding:14px}
+    .title{font-size:16px; font-weight:700; margin-bottom:6px}
+    .meta{color:#b4b4b4; font-size:12px; margin-bottom:10px}
+    .badge{display:inline-block; padding:6px 10px; border-radius:999px; font-size:12px; font-weight:700; background:rgba(168,146,90,.15); border:1px solid rgba(168,146,90,.35); color:#fff}
+    .links a{color:#A8925A; text-decoration:none}
+    .links a:hover{text-decoration:underline}
+    .footer{margin-top:26px; padding-top:16px; border-top:1px solid #222; color:#888; text-align:center; font-size:12px}
+  </style>
+</head>
+<body>
+  <div class="container">
+    <div class="header">
+      <div class="logo"><span class="gold">J | J</span> GLOBAL CAPITAL</div>
+      <div class="sub">Shortlist prepared on ${dateStr} • For consultation & tailored advisory</div>
+      <div class="sub">Powered by JJ Global Capital • Founder-led by Jane Abou Jaoude</div>
+    </div>
+
+    <div class="grid">
+      ${shortlistedProjects.map((p, i) => {
+        const badge = getProjectBadge(p.id);
+        const badgeStr = badge
+          ? badge === 'top1'
+            ? 'Top 1 — Gold'
+            : badge === 'top2'
+            ? 'Top 2 — Bronze'
+            : 'Top 3 — Silver'
+          : null;
+        const img = p.images?.[0]?.image_url || "https://images.unsplash.com/photo-1512917774080-9991f1c4c750?w=800";
+        const url = `${window.location.origin}/project/${p.slug}`;
+        return `
+          <div class="card">
+            <img class="img" src="${img}" alt="${p.name}" />
+            <div class="content">
+              <div class="title">${i + 1}. ${p.name}</div>
+              <div class="meta">${p.developer?.name || 'Developer'} • ${p.location || 'UAE'}</div>
+              ${badgeStr ? `<div class="badge">${badgeStr}</div>` : ''}
+              <div class="links" style="margin-top:10px; font-size:12px;">
+                View: <a href="${url}">${url}</a>
+              </div>
+            </div>
+          </div>
+        `;
+      }).join('')}
+    </div>
+
+    <div class="footer">
+      <div>invest@jjglobalcapital.com • +971 56 591 1000 • jjglobalcapital.com</div>
+    </div>
+  </div>
+</body>
+</html>`;
+
+    const blob = new Blob([html], { type: "text/html" });
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement("a");
+    a.href = url;
+    a.download = `JJ-Global-Capital-Shortlist-${dateStr.replace(/\s+/g, '-')}.html`;
+    document.body.appendChild(a);
+    a.click();
+    document.body.removeChild(a);
+    URL.revokeObjectURL(url);
+
+    toast.success("Shortlist downloaded");
+  };
+
   const badgeLabels = {
     top1: { label: "Top 1 — Gold", color: "bg-gradient-to-r from-yellow-400 via-yellow-500 to-amber-500 shadow-lg shadow-yellow-500/30", textColor: "text-white" },
-    top2: { label: "Top 2 — Silver", color: "bg-gradient-to-r from-zinc-300 via-slate-400 to-zinc-400 shadow-lg shadow-zinc-400/30", textColor: "text-white" },
-    top3: { label: "Top 3 — Bronze", color: "bg-gradient-to-r from-amber-600 via-orange-600 to-amber-700 shadow-lg shadow-amber-600/30", textColor: "text-white" },
+    top2: { label: "Top 2 — Bronze", color: "bg-gradient-to-r from-amber-600 via-orange-600 to-amber-700 shadow-lg shadow-amber-600/30", textColor: "text-white" },
+    top3: { label: "Top 3 — Silver", color: "bg-gradient-to-r from-zinc-300 via-slate-400 to-zinc-400 shadow-lg shadow-zinc-400/30", textColor: "text-white" },
   };
 
   return (
@@ -324,7 +439,7 @@ Best regards`);
                 {/* Shortlist Actions Bar */}
                 <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 mb-6 bg-zinc-900 rounded-lg p-4 border border-zinc-800">
                   <p className="text-zinc-400 text-sm">
-                    Rank your top properties with badges: <span className="text-yellow-400">🥇 Top 1</span>, <span className="text-gray-300">🥈 Top 2</span>, <span className="text-amber-500">🥉 Top 3</span>
+                    Rank your top properties with badges: <span className="text-yellow-400">🥇 Top 1</span>, <span className="text-amber-500">🥉 Top 2</span>, <span className="text-zinc-300">🥈 Top 3</span>
                   </p>
                   <Button
                     onClick={() => setShareModalOpen(true)}
@@ -383,15 +498,15 @@ Best regards`);
                               </DropdownMenuItem>
                               <DropdownMenuItem
                                 onClick={() => handleSetBadge(project.id, 'top2')}
-                                className="text-zinc-300 hover:bg-zinc-800 cursor-pointer font-medium"
+                                className="text-amber-500 hover:bg-zinc-800 cursor-pointer font-medium"
                               >
-                                🥈 Top 2 (Silver)
+                                🥉 Top 2 (Bronze)
                               </DropdownMenuItem>
                               <DropdownMenuItem
                                 onClick={() => handleSetBadge(project.id, 'top3')}
-                                className="text-amber-500 hover:bg-zinc-800 cursor-pointer font-medium"
+                                className="text-zinc-300 hover:bg-zinc-800 cursor-pointer font-medium"
                               >
-                                🥉 Top 3 (Bronze)
+                                🥈 Top 3 (Silver)
                               </DropdownMenuItem>
                               {badge && (
                                 <DropdownMenuItem
@@ -482,25 +597,33 @@ Best regards`);
           <DialogHeader>
             <DialogTitle className="flex items-center gap-2">
               <Share2 className="w-5 h-5 text-gold" />
-              Share Your Shortlist
+              Shortlist Consultation & Copy
             </DialogTitle>
             <DialogDescription className="text-zinc-400">
-              Send your shortlisted properties to yourself or our team for consultation
+              Send your shortlist to the JJ Global Capital team for consultation, or download/share a copy.
             </DialogDescription>
           </DialogHeader>
 
           <div className="space-y-4 mt-4">
             {shortlistedProjects && shortlistedProjects.length > 0 && (
               <div className="bg-zinc-800 rounded-lg p-4 max-h-[150px] overflow-y-auto">
-                <p className="text-zinc-400 text-xs mb-2">Properties to share ({shortlistedProjects.length}/5):</p>
+                <p className="text-zinc-400 text-xs mb-2">Properties in shortlist:</p>
                 {shortlistedProjects.map((p, i) => {
                   const badge = getProjectBadge(p.id);
                   return (
                     <div key={p.id} className="flex items-center gap-2 text-sm py-1">
                       <span className="text-gold">#{i + 1}</span>
                       {badge && (
-                        <span className={`text-xs ${badge === 'top1' ? 'text-yellow-400' : badge === 'top2' ? 'text-gray-300' : 'text-amber-500'}`}>
-                          {badge === 'top1' ? '🥇' : badge === 'top2' ? '🥈' : '🥉'}
+                        <span
+                          className={`text-xs ${
+                            badge === "top1"
+                              ? "text-yellow-400"
+                              : badge === "top2"
+                              ? "text-amber-500"
+                              : "text-zinc-300"
+                          }`}
+                        >
+                          {badge === "top1" ? "🥇" : badge === "top2" ? "🥉" : "🥈"}
                         </span>
                       )}
                       <span className="text-white">{p.name}</span>
@@ -510,9 +633,52 @@ Best regards`);
               </div>
             )}
 
-            {/* Option 1: Share to own email */}
+            {/* Primary: Send to team */}
+            <Button
+              onClick={handleSendToTeam}
+              className="w-full bg-gradient-to-r from-gold to-gold-dark text-black hover:opacity-90"
+            >
+              <Users className="w-4 h-4 mr-2" />
+              Send to JJ Global Capital Team (Consultation)
+            </Button>
+
+            <div className="flex items-center gap-4">
+              <div className="flex-1 h-px bg-zinc-800" />
+              <span className="text-zinc-500 text-xs">SAVE A COPY</span>
+              <div className="flex-1 h-px bg-zinc-800" />
+            </div>
+
+            {/* Download / WhatsApp / Copy */}
+            <div className="grid grid-cols-1 sm:grid-cols-3 gap-2">
+              <Button
+                onClick={handleDownloadShortlist}
+                variant="outline"
+                className="border-zinc-700 text-zinc-200 hover:bg-zinc-800 bg-transparent"
+              >
+                <Download className="w-4 h-4 mr-2" />
+                Download HTML
+              </Button>
+              <Button
+                onClick={handleShareWhatsApp}
+                variant="outline"
+                className="border-zinc-700 text-zinc-200 hover:bg-zinc-800 bg-transparent"
+              >
+                <MessageCircle className="w-4 h-4 mr-2 text-green-500" />
+                WhatsApp
+              </Button>
+              <Button
+                onClick={handleCopyShortlist}
+                variant="outline"
+                className="border-zinc-700 text-zinc-200 hover:bg-zinc-800 bg-transparent"
+              >
+                <Copy className="w-4 h-4 mr-2" />
+                Copy Text
+              </Button>
+            </div>
+
+            {/* Email yourself */}
             <div>
-              <Label htmlFor="email" className="text-zinc-300">Share to your email</Label>
+              <Label htmlFor="email" className="text-zinc-300">Email a copy to yourself</Label>
               <div className="flex gap-2 mt-1">
                 <Input
                   id="email"
@@ -523,35 +689,17 @@ Best regards`);
                   className="bg-zinc-800 border-zinc-700 text-white"
                 />
                 <Button
-                  onClick={handleShareShortlist}
+                  onClick={handleEmailShare}
                   variant="outline"
-                  className="border-zinc-700 text-zinc-300 hover:bg-zinc-800 shrink-0"
+                  className="border-zinc-700 text-zinc-200 hover:bg-zinc-800 bg-transparent shrink-0"
                 >
                   <Mail className="w-4 h-4" />
                 </Button>
               </div>
             </div>
 
-            <div className="flex items-center gap-4">
-              <div className="flex-1 h-px bg-zinc-800" />
-              <span className="text-zinc-500 text-xs">OR</span>
-              <div className="flex-1 h-px bg-zinc-800" />
-            </div>
-
-            {/* Option 2: Share to company */}
-            <Button
-              onClick={() => {
-                setShareEmail("invest@jjglobalcapital.com");
-                handleShareShortlist();
-              }}
-              className="w-full bg-gradient-to-r from-gold to-gold-dark text-black hover:opacity-90"
-            >
-              <Users className="w-4 h-4 mr-2" />
-              Send to JJ Global Capital Team
-            </Button>
-
             <p className="text-zinc-500 text-xs text-center">
-              Our property consultants will contact you within 24 hours to discuss your selection
+              Powered by JJ Global Capital • Founder-led by Jane Abou Jaoude
             </p>
           </div>
         </DialogContent>

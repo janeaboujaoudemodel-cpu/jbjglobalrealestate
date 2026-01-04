@@ -30,7 +30,7 @@ const GlobalHeader = () => {
   const { user, isAdmin, signOut } = useAuth();
   const location = useLocation();
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
-  const { t, isRTL } = useLanguage();
+  const { t } = useLanguage();
   
   const { data: favorites } = useFavorites();
   const { data: shortlist } = useShortlist();
@@ -64,7 +64,7 @@ const GlobalHeader = () => {
   const isActive = (path: string) => location.pathname === path;
 
   return (
-    <header className="fixed top-0 left-0 right-0 z-50 bg-black/95 backdrop-blur-sm border-b border-white/5" dir={isRTL ? 'rtl' : 'ltr'}>
+    <header className="fixed top-0 left-0 right-0 z-50 bg-black/95 backdrop-blur-sm border-b border-white/5">
       <div className="container mx-auto px-4">
         <div className="flex items-center justify-between h-16 lg:h-18">
           {/* Logo - Premium with separation from menu, clickable to home */}
