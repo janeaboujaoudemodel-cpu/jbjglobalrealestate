@@ -322,14 +322,14 @@ const ServicesSection = () => {
       <div className="container mx-auto px-4 relative z-10" id="services">
         {/* JJ Holding Group Section */}
         <div className="text-center mb-16">
-          <span className="inline-block px-5 py-2 bg-gradient-to-r from-[#A8925A]/20 to-[#A8925A]/5 border border-[#A8925A]/30 rounded-full text-[#A8925A] text-sm font-medium mb-6 backdrop-blur-sm">
+          <span className="inline-block px-5 py-2 bg-gradient-to-r from-gold/20 to-gold/5 border border-gold/30 rounded-full text-gold text-sm font-medium mb-6 backdrop-blur-sm">
             JJ Holding Group
           </span>
           <h2 
             className="text-4xl md:text-5xl lg:text-6xl font-bold text-white mb-6"
             style={{ fontFamily: "Poppins, sans-serif" }}
           >
-            Our <span className="text-transparent bg-clip-text bg-gradient-to-r from-[#A8925A] to-[#C4A962]">Divisions</span>
+            Our <span className="text-transparent bg-clip-text bg-gradient-to-r from-gold to-gold-light">Divisions</span>
           </h2>
           <p className="text-zinc-300 max-w-2xl mx-auto text-lg leading-relaxed">
             A founder-led group of specialized companies delivering excellence across real estate, design, media, and fashion
@@ -346,10 +346,10 @@ const ServicesSection = () => {
               rel="noopener noreferrer"
               className="group relative"
             >
-              <div className="relative bg-black/50 backdrop-blur-md border border-white/10 rounded-2xl p-6 h-full transition-all duration-500 group-hover:border-[#A8925A]/40 group-hover:-translate-y-2 group-hover:shadow-2xl group-hover:shadow-[#A8925A]/10 overflow-hidden">
+              <div className="relative bg-black/50 backdrop-blur-md border border-white/10 rounded-2xl p-6 h-full transition-all duration-500 group-hover:border-gold/40 group-hover:-translate-y-2 group-hover:shadow-2xl group-hover:shadow-gold/10 overflow-hidden">
                 {/* Visit Website Arrow */}
-                <div className="absolute top-4 right-4 w-8 h-8 bg-[#A8925A]/10 group-hover:bg-[#A8925A]/30 border border-[#A8925A]/20 rounded-full flex items-center justify-center transition-all duration-300 group-hover:scale-110">
-                  <ExternalLink className="w-4 h-4 text-[#A8925A]" />
+                <div className="absolute top-4 right-4 w-8 h-8 bg-gold/10 group-hover:bg-gold/30 border border-gold/20 rounded-full flex items-center justify-center transition-all duration-300 group-hover:scale-110">
+                  <ExternalLink className="w-4 h-4 text-gold" />
                 </div>
                 
                 <div className={`absolute inset-0 bg-gradient-to-br ${division.gradient} opacity-0 group-hover:opacity-100 transition-opacity duration-500 rounded-2xl`} />
@@ -360,7 +360,7 @@ const ServicesSection = () => {
                   </div>
                   
                   <h3 
-                    className="text-lg font-bold text-white mb-2 group-hover:text-[#A8925A] transition-colors duration-300"
+                    className="text-lg font-bold text-white mb-2 group-hover:text-gold transition-colors duration-300"
                     style={{ fontFamily: "Poppins, sans-serif" }}
                   >
                     {division.title}
@@ -370,7 +370,7 @@ const ServicesSection = () => {
                     {division.description}
                   </p>
                   
-                  <div className="flex items-center text-[#A8925A] text-sm font-medium mt-4 opacity-0 group-hover:opacity-100 transition-all duration-300 transform translate-y-2 group-hover:translate-y-0">
+                  <div className="flex items-center text-gold text-sm font-medium mt-4 opacity-0 group-hover:opacity-100 transition-all duration-300 transform translate-y-2 group-hover:translate-y-0">
                     <span>Visit Website</span>
                     <ChevronRight className="w-4 h-4 ml-1 group-hover:translate-x-1 transition-transform" />
                   </div>
@@ -382,14 +382,14 @@ const ServicesSection = () => {
 
         {/* Services Section Header */}
         <div className="text-center mb-12">
-          <span className="inline-block px-5 py-2 bg-gradient-to-r from-[#A8925A]/20 to-[#A8925A]/5 border border-[#A8925A]/30 rounded-full text-[#A8925A] text-sm font-medium mb-6 backdrop-blur-sm">
+          <span className="inline-block px-5 py-2 bg-gradient-to-r from-gold/20 to-gold/5 border border-gold/30 rounded-full text-gold text-sm font-medium mb-6 backdrop-blur-sm">
             Complete Solutions
           </span>
           <h2 
             className="text-3xl md:text-4xl font-bold text-white mb-4"
             style={{ fontFamily: "Poppins, sans-serif" }}
           >
-            Our <span className="text-transparent bg-clip-text bg-gradient-to-r from-[#A8925A] to-[#C4A962]">Services</span>
+            Our <span className="text-transparent bg-clip-text bg-gradient-to-r from-gold to-gold-light">Services</span>
           </h2>
           <p className="text-zinc-300 max-w-2xl mx-auto leading-relaxed">
             Beyond property sales, we offer comprehensive real estate services to support your investment journey
@@ -406,9 +406,9 @@ const ServicesSection = () => {
               rel="noopener noreferrer"
               className="group relative"
             >
-              <div className="relative bg-black/40 backdrop-blur-md border border-white/10 rounded-2xl p-8 h-full transition-all duration-500 group-hover:border-[#A8925A]/40 group-hover:-translate-y-2 group-hover:shadow-2xl group-hover:shadow-[#A8925A]/10 overflow-hidden">
+              <div className="relative bg-black/40 backdrop-blur-md border border-white/10 rounded-2xl p-8 h-full transition-all duration-500 group-hover:border-gold/40 group-hover:-translate-y-2 group-hover:shadow-2xl group-hover:shadow-gold/10 overflow-hidden">
                 <div className={`absolute inset-0 bg-gradient-to-br ${service.gradient} opacity-0 group-hover:opacity-100 transition-opacity duration-500 rounded-2xl`} />
-                <div className="absolute top-0 left-0 right-0 h-px bg-gradient-to-r from-transparent via-[#A8925A]/50 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
+                <div className="absolute top-0 left-0 right-0 h-px bg-gradient-to-r from-transparent via-gold/50 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
                 
                 <div className="relative z-10">
                   <div className="mb-6 group-hover:scale-110 transition-transform duration-500">
@@ -416,7 +416,7 @@ const ServicesSection = () => {
                   </div>
 
                   <h3 
-                    className="text-xl font-bold text-white mb-3 group-hover:text-[#A8925A] transition-colors duration-300"
+                    className="text-xl font-bold text-white mb-3 group-hover:text-gold transition-colors duration-300"
                     style={{ fontFamily: "Poppins, sans-serif" }}
                   >
                     {service.title}
@@ -426,13 +426,13 @@ const ServicesSection = () => {
                     {service.description}
                   </p>
 
-                  <div className="flex items-center text-[#A8925A] text-sm font-medium opacity-0 group-hover:opacity-100 transition-all duration-300 transform translate-y-2 group-hover:translate-y-0">
+                  <div className="flex items-center text-gold text-sm font-medium opacity-0 group-hover:opacity-100 transition-all duration-300 transform translate-y-2 group-hover:translate-y-0">
                     <span>Inquire Now</span>
                     <ChevronRight className="w-4 h-4 ml-1 group-hover:translate-x-1 transition-transform" />
                   </div>
                 </div>
 
-                <div className="absolute bottom-0 left-1/2 -translate-x-1/2 w-3/4 h-24 bg-gradient-to-t from-[#A8925A]/10 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500 pointer-events-none" />
+                <div className="absolute bottom-0 left-1/2 -translate-x-1/2 w-3/4 h-24 bg-gradient-to-t from-gold/10 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500 pointer-events-none" />
               </div>
             </a>
           ))}

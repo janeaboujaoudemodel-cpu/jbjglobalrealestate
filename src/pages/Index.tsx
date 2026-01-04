@@ -4,7 +4,10 @@ import Footer from "@/components/Footer";
 import StatsCounter from "@/components/StatsCounter";
 import WhyDubaiSection from "@/components/WhyDubaiSection";
 import ServicesSection from "@/components/ServicesSection";
-import { Sparkles, ArrowUpRight, Building2, ClipboardCheck, Volume2, VolumeX, MessageCircle, Phone, ChevronDown, User, Award } from "lucide-react";
+import AIComparisonWidget from "@/components/AIComparisonWidget";
+import MarketReportCTA from "@/components/MarketReportCTA";
+import WelcomeModal from "@/components/WelcomeModal";
+import { Sparkles, ArrowUpRight, Building2, ClipboardCheck, Volume2, VolumeX, MessageCircle, Phone, ChevronDown, User, Award, BarChart3, Calculator } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { useState, useRef } from "react";
 import dubaiHeroVideo from "@/assets/dubai-hero-video.mp4";
@@ -43,8 +46,17 @@ const Index = () => {
     { href: "/quiz", label: "AI Home Finder", icon: Sparkles, description: "Personalized recommendations" },
   ];
 
+  const aiTools = [
+    { href: "/quiz", label: "AI Property Matchmaker", icon: Sparkles, description: "Get personalized recommendations in 30 seconds", color: "purple" },
+    { href: "/compare", label: "AI Comparison Table", icon: BarChart3, description: "Compare 2-5 projects side by side", color: "gold" },
+    { href: "/mortgage-calculator", label: "Mortgage Calculator", icon: Calculator, description: "Calculate payments & financing options", color: "blue" },
+  ];
+
   return (
     <section className="relative w-full min-h-screen bg-black">
+      {/* Welcome Modal - AI Assistant Popup on first load */}
+      <WelcomeModal />
+
       {/* HERO SECTION - FULL CINEMATIC */}
       <div className="relative h-screen flex items-center justify-center">
         {/* Video Background */}
@@ -72,9 +84,9 @@ const Index = () => {
           aria-label={isMuted ? "Unmute video" : "Mute video"}
         >
           {isMuted ? (
-            <VolumeX className="w-5 h-5 text-white/70 group-hover:text-[#A8925A] transition-colors" />
+            <VolumeX className="w-5 h-5 text-white/70 group-hover:text-gold transition-colors" />
           ) : (
-            <Volume2 className="w-5 h-5 text-white/70 group-hover:text-[#A8925A] transition-colors" />
+            <Volume2 className="w-5 h-5 text-white/70 group-hover:text-gold transition-colors" />
           )}
         </button>
 
@@ -91,19 +103,20 @@ const Index = () => {
           </motion.div>
 
           {/* Main Tagline */}
-          <motion.p 
-            className="text-zinc-300 text-lg md:text-xl lg:text-2xl font-light tracking-wide mb-6 max-w-3xl mx-auto"
+          <motion.h1 
+            className="text-zinc-200 text-2xl md:text-3xl lg:text-4xl font-light tracking-wide mb-6 max-w-3xl mx-auto"
             variants={fadeInUp}
+            style={{ fontFamily: "Poppins, sans-serif" }}
           >
-            A founder-led advisory group specializing in UAE and Dubai real estate
-          </motion.p>
+            Your gateway to global real-estate investments
+          </motion.h1>
 
           {/* Sub-tagline */}
           <motion.p 
             className="text-zinc-500 text-sm md:text-base max-w-2xl mx-auto mb-10"
             variants={fadeInUp}
           >
-            Investment advisory • Legal services • Design & Build • Luxury concierge
+            A founder-led advisory specializing in UAE and Dubai real estate
           </motion.p>
 
           {/* CTA Buttons */}
@@ -114,7 +127,7 @@ const Index = () => {
             <div className="flex flex-wrap justify-center gap-4">
               <Link to="/properties">
                 <Button 
-                  className="bg-[#A8925A] hover:bg-[#A8925A]/90 text-black font-semibold px-8 py-6 text-base shadow-lg shadow-[#A8925A]/20"
+                  className="bg-gold hover:bg-gold-light text-black font-semibold px-8 py-6 text-base shadow-lg shadow-gold/20"
                 >
                   Explore Properties
                   <ArrowUpRight className="w-5 h-5 ml-2" />
@@ -156,8 +169,80 @@ const Index = () => {
         </motion.div>
       </div>
 
+      {/* AI TOOLS SECTION */}
+      <section className="py-20 bg-gradient-to-b from-black to-zinc-950">
+        <div className="container mx-auto px-4">
+          <motion.div
+            initial="hidden"
+            whileInView="visible"
+            viewport={{ once: true, margin: "-100px" }}
+            variants={staggerContainer}
+            className="text-center mb-12"
+          >
+            <motion.span 
+              className="inline-block text-gold text-sm uppercase tracking-[0.3em] mb-4"
+              variants={fadeInUp}
+            >
+              AI-Powered Tools
+            </motion.span>
+            <motion.h2 
+              className="text-white text-3xl md:text-4xl lg:text-5xl font-bold mb-4"
+              style={{ fontFamily: "Poppins, sans-serif" }}
+              variants={fadeInUp}
+            >
+              Smarter Investment Decisions
+            </motion.h2>
+            <motion.p 
+              className="text-zinc-400 max-w-2xl mx-auto"
+              variants={fadeInUp}
+            >
+              Leverage our exclusive AI tools for property matching, comparison analysis, and mortgage calculations
+            </motion.p>
+          </motion.div>
+
+          <motion.div 
+            className="grid md:grid-cols-3 gap-6"
+            initial="hidden"
+            whileInView="visible"
+            viewport={{ once: true, margin: "-100px" }}
+            variants={staggerContainer}
+          >
+            {aiTools.map((tool) => (
+              <motion.div key={tool.href} variants={fadeInUp}>
+                <Link to={tool.href}>
+                  <div className={`group h-full bg-zinc-900/50 hover:bg-zinc-800/80 border border-zinc-800 hover:border-gold/30 rounded-2xl p-8 transition-all duration-300 ${
+                    tool.color === "purple" ? "hover:shadow-lg hover:shadow-purple-500/10" :
+                    tool.color === "gold" ? "hover:shadow-lg hover:shadow-gold/10" :
+                    "hover:shadow-lg hover:shadow-blue-500/10"
+                  }`}>
+                    <div className={`w-14 h-14 rounded-xl flex items-center justify-center mb-6 transition-colors ${
+                      tool.color === "purple" ? "bg-purple-500/10 group-hover:bg-purple-500/20" :
+                      tool.color === "gold" ? "bg-gold/10 group-hover:bg-gold/20" :
+                      "bg-blue-500/10 group-hover:bg-blue-500/20"
+                    }`}>
+                      <tool.icon className={`w-7 h-7 ${
+                        tool.color === "purple" ? "text-purple-400" :
+                        tool.color === "gold" ? "text-gold" :
+                        "text-blue-400"
+                      }`} />
+                    </div>
+                    <h3 className="text-white text-xl font-semibold mb-2 group-hover:text-gold transition-colors">
+                      {tool.label}
+                    </h3>
+                    <p className="text-zinc-500 text-sm">{tool.description}</p>
+                    <div className="mt-4 flex items-center text-gold text-sm font-medium opacity-0 group-hover:opacity-100 transition-opacity">
+                      Try Now <ArrowUpRight className="w-4 h-4 ml-1" />
+                    </div>
+                  </div>
+                </Link>
+              </motion.div>
+            ))}
+          </motion.div>
+        </div>
+      </section>
+
       {/* FOUNDER SECTION - Meet The Leadership */}
-      <section className="py-20 md:py-28 bg-gradient-to-b from-black via-zinc-950 to-black">
+      <section className="py-20 md:py-28 bg-gradient-to-b from-zinc-950 via-black to-zinc-950">
         <div className="container mx-auto px-4">
           <motion.div
             className="grid lg:grid-cols-2 gap-12 lg:gap-20 items-center"
@@ -173,8 +258,8 @@ const Index = () => {
             >
               <div className="relative aspect-[3/4] max-w-md mx-auto lg:max-w-none">
                 {/* Decorative frame */}
-                <div className="absolute -inset-4 border border-[#A8925A]/20 rounded-3xl" />
-                <div className="absolute -inset-2 bg-gradient-to-br from-[#A8925A]/10 to-transparent rounded-2xl" />
+                <div className="absolute -inset-4 border border-gold/20 rounded-3xl" />
+                <div className="absolute -inset-2 bg-gradient-to-br from-gold/10 to-transparent rounded-2xl" />
                 
                 {/* Image container with smart crop - show from top */}
                 <div className="relative rounded-2xl overflow-hidden border border-zinc-800 shadow-2xl shadow-black/80">
@@ -188,8 +273,8 @@ const Index = () => {
                 </div>
                 
                 {/* Name badge */}
-                <div className="absolute bottom-6 left-6 right-6 bg-black/60 backdrop-blur-md border border-[#A8925A]/30 rounded-xl p-4">
-                  <p className="text-[#A8925A] text-xs uppercase tracking-[0.2em] mb-1">Founder & Chairwoman</p>
+                <div className="absolute bottom-6 left-6 right-6 bg-black/60 backdrop-blur-md border border-gold/30 rounded-xl p-4">
+                  <p className="text-gold text-xs uppercase tracking-[0.2em] mb-1">Founder & Chairwoman</p>
                   <h3 className="text-white text-xl font-bold" style={{ fontFamily: "Poppins, sans-serif" }}>
                     Jane Abou Jaoude
                   </h3>
@@ -200,7 +285,7 @@ const Index = () => {
             {/* Content */}
             <motion.div className="order-1 lg:order-2" variants={fadeInUp}>
               <div className="mb-6">
-                <span className="inline-flex items-center gap-2 text-[#A8925A] text-sm uppercase tracking-[0.3em]">
+                <span className="inline-flex items-center gap-2 text-gold text-sm uppercase tracking-[0.3em]">
                   <User className="w-4 h-4" />
                   Leadership
                 </span>
@@ -210,7 +295,7 @@ const Index = () => {
                 className="text-white text-4xl md:text-5xl lg:text-6xl font-bold mb-8"
                 style={{ fontFamily: "Poppins, sans-serif" }}
               >
-                Meet the <span className="text-transparent bg-clip-text bg-gradient-to-r from-[#A8925A] to-[#C4A962]">Founder</span>
+                Meet the <span className="text-transparent bg-clip-text bg-gradient-to-r from-gold to-gold-light">Founder</span>
               </h2>
               
               <p className="text-zinc-300 text-lg md:text-xl leading-relaxed mb-6">
@@ -224,21 +309,21 @@ const Index = () => {
               {/* Stats */}
               <div className="grid grid-cols-3 gap-6 mb-8">
                 <div className="text-center">
-                  <p className="text-[#A8925A] text-3xl md:text-4xl font-bold" style={{ fontFamily: "Poppins, sans-serif" }}>4</p>
+                  <p className="text-gold text-3xl md:text-4xl font-bold" style={{ fontFamily: "Poppins, sans-serif" }}>4</p>
                   <p className="text-zinc-500 text-xs uppercase tracking-wider">Divisions</p>
                 </div>
                 <div className="text-center">
-                  <p className="text-[#A8925A] text-3xl md:text-4xl font-bold" style={{ fontFamily: "Poppins, sans-serif" }}>12+</p>
+                  <p className="text-gold text-3xl md:text-4xl font-bold" style={{ fontFamily: "Poppins, sans-serif" }}>12+</p>
                   <p className="text-zinc-500 text-xs uppercase tracking-wider">Years</p>
                 </div>
                 <div className="text-center">
-                  <p className="text-[#A8925A] text-3xl md:text-4xl font-bold" style={{ fontFamily: "Poppins, sans-serif" }}>92+</p>
+                  <p className="text-gold text-3xl md:text-4xl font-bold" style={{ fontFamily: "Poppins, sans-serif" }}>92+</p>
                   <p className="text-zinc-500 text-xs uppercase tracking-wider">Countries</p>
                 </div>
               </div>
               
               <Link to="/founder">
-                <Button className="bg-[#A8925A] hover:bg-[#A8925A]/90 text-black font-semibold px-8 py-6 text-base">
+                <Button className="bg-gold hover:bg-gold-light text-black font-semibold px-8 py-6 text-base">
                   Learn More About Our Founder
                   <ArrowUpRight className="w-5 h-5 ml-2" />
                 </Button>
@@ -248,43 +333,22 @@ const Index = () => {
         </div>
       </section>
 
-      {/* AI PROPERTY MATCHMAKER CTA */}
-      <div className="container mx-auto px-4 py-16 md:py-20">
-        <motion.div
-          initial="hidden"
-          whileInView="visible"
-          viewport={{ once: true, margin: "-100px" }}
-          variants={fadeInUp}
-        >
-          <Link to="/quiz" className="block">
-            <div className="w-full bg-gradient-to-r from-purple-950 via-purple-900 to-black hover:from-purple-900 hover:via-purple-800 hover:to-zinc-900 rounded-3xl p-8 md:p-12 transition-all duration-500 shadow-2xl shadow-purple-900/30 hover:shadow-purple-800/40 group cursor-pointer border border-purple-800/30">
-              <div className="flex flex-col md:flex-row items-center justify-between gap-8">
-                <div className="flex items-center gap-6">
-                  <div className="w-20 h-20 bg-gradient-to-br from-purple-500 to-purple-700 rounded-2xl flex items-center justify-center shadow-lg shadow-purple-500/30 group-hover:scale-110 transition-transform duration-300">
-                    <Sparkles className="w-10 h-10 text-white" />
-                  </div>
-                  <div className="text-center md:text-left">
-                    <p className="text-purple-300 text-xs uppercase tracking-[0.2em] mb-2">Exclusive by JJ Global Capital</p>
-                    <h3 className="text-white text-2xl md:text-3xl font-bold mb-1" style={{ fontFamily: "Poppins, sans-serif" }}>
-                      Let AI Choose Your Home
-                    </h3>
-                    <p className="text-purple-200/70 text-base">
-                      Complimentary • #1 AI Property Matchmaker in the World
-                    </p>
-                  </div>
-                </div>
-                <div className="flex items-center gap-3 bg-purple-600 hover:bg-purple-500 rounded-xl px-8 py-4 transition-colors shadow-lg group-hover:scale-105">
-                  <span className="text-white font-semibold text-lg">Start Free</span>
-                  <ArrowUpRight className="w-6 h-6 text-white" />
-                </div>
-              </div>
-            </div>
-          </Link>
-        </motion.div>
-      </div>
+      {/* AI COMPARISON & ANALYZER PREVIEW */}
+      <section className="py-16 md:py-20">
+        <div className="container mx-auto px-4">
+          <AIComparisonWidget />
+        </div>
+      </section>
+
+      {/* MARKET REPORT CTA */}
+      <section className="py-16 md:py-20">
+        <div className="container mx-auto px-4">
+          <MarketReportCTA />
+        </div>
+      </section>
 
       {/* QUICK LINKS - Property Search Entry Points */}
-      <div className="container mx-auto px-4 pb-16">
+      <div className="container mx-auto px-4 py-16">
         <motion.div 
           className="grid md:grid-cols-3 gap-6"
           initial="hidden"
@@ -295,11 +359,11 @@ const Index = () => {
           {quickLinks.map((link) => (
             <motion.div key={link.href} variants={fadeInUp}>
               <Link to={link.href}>
-                <div className="group bg-zinc-900/50 hover:bg-zinc-800/80 border border-zinc-800 hover:border-[#A8925A]/30 rounded-2xl p-8 transition-all duration-300">
-                  <div className="w-14 h-14 bg-[#A8925A]/10 rounded-xl flex items-center justify-center mb-6 group-hover:bg-[#A8925A]/20 transition-colors">
-                    <link.icon className="w-7 h-7 text-[#A8925A]" />
+                <div className="group bg-zinc-900/50 hover:bg-zinc-800/80 border border-zinc-800 hover:border-gold/30 rounded-2xl p-8 transition-all duration-300">
+                  <div className="w-14 h-14 bg-gold/10 rounded-xl flex items-center justify-center mb-6 group-hover:bg-gold/20 transition-colors">
+                    <link.icon className="w-7 h-7 text-gold" />
                   </div>
-                  <h3 className="text-white text-xl font-semibold mb-2 group-hover:text-[#A8925A] transition-colors">
+                  <h3 className="text-white text-xl font-semibold mb-2 group-hover:text-gold transition-colors">
                     {link.label}
                   </h3>
                   <p className="text-zinc-500 text-sm">{link.description}</p>
@@ -328,7 +392,7 @@ const Index = () => {
           viewport={{ once: true, margin: "-100px" }}
           variants={fadeInUp}
         >
-          <span className="inline-block text-[#A8925A] text-xs uppercase tracking-[0.3em] mb-4">Get Started</span>
+          <span className="inline-block text-gold text-xs uppercase tracking-[0.3em] mb-4">Get Started</span>
           <h3 className="text-3xl md:text-4xl font-bold text-white mb-4" style={{ fontFamily: "Poppins, sans-serif" }}>
             Ready to Invest?
           </h3>
@@ -337,7 +401,7 @@ const Index = () => {
           </p>
           <div className="flex flex-wrap justify-center gap-4">
             <a href={CONTACT_INFO.inquiryFormUrl} target="_blank" rel="noopener noreferrer">
-              <Button className="bg-[#A8925A] hover:bg-[#A8925A]/90 text-black font-semibold px-8 py-6 h-auto text-base">
+              <Button className="bg-gold hover:bg-gold-light text-black font-semibold px-8 py-6 h-auto text-base">
                 <ArrowUpRight className="w-5 h-5 mr-2" />
                 Contact Us
               </Button>
@@ -349,7 +413,7 @@ const Index = () => {
               </Button>
             </a>
             <a href={getCallUrl()}>
-              <Button variant="outline" className="border-[#A8925A]/50 text-[#A8925A] hover:bg-[#A8925A] hover:text-black px-8 py-6 h-auto text-base">
+              <Button variant="outline" className="border-gold/50 text-gold hover:bg-gold hover:text-black px-8 py-6 h-auto text-base">
                 <Phone className="w-5 h-5 mr-2" />
                 Call Now
               </Button>

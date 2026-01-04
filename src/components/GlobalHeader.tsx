@@ -150,7 +150,7 @@ const GlobalHeader = () => {
               </SheetTrigger>
               <SheetContent side="right" className="bg-black/95 backdrop-blur-xl border-zinc-800/50 w-[300px] p-0 flex flex-col h-full">
                 {/* Menu Header with glassmorphism */}
-                <div className="relative h-28 bg-gradient-to-b from-zinc-900/80 to-black/90 border-b border-[#A8925A]/20 flex items-end p-5 shrink-0 backdrop-blur-sm">
+                <div className="relative h-28 bg-gradient-to-b from-zinc-900/80 to-black/90 border-b border-gold/20 flex items-end p-5 shrink-0 backdrop-blur-sm">
                   <JJLogoHeader />
                 </div>
                 
@@ -165,8 +165,8 @@ const GlobalHeader = () => {
                         onClick={() => setMobileMenuOpen(false)}
                         className={`flex items-center gap-3 px-4 py-3 border-l-2 transition-all ${
                           isActive(link.href)
-                            ? "text-[#A8925A] border-[#A8925A] bg-[#A8925A]/10"
-                            : "text-zinc-300 border-transparent hover:text-white hover:bg-zinc-900/80 hover:border-[#A8925A]/50"
+                            ? "text-gold border-gold bg-gold/10"
+                            : "text-zinc-300 border-transparent hover:text-white hover:bg-zinc-900/80 hover:border-gold/50"
                         }`}
                       >
                         {link.label}
@@ -179,19 +179,19 @@ const GlobalHeader = () => {
                     <Link
                       to="/quiz"
                       onClick={() => setMobileMenuOpen(false)}
-                      className="flex items-center gap-3 px-4 py-4 bg-gradient-to-r from-[#A8925A]/10 to-[#A8925A]/5 border border-[#A8925A]/30 rounded-lg mb-4 text-white hover:from-[#A8925A]/15 transition-all backdrop-blur-sm"
+                      className="flex items-center gap-3 px-4 py-4 bg-gradient-to-r from-gold/10 to-gold/5 border border-gold/30 rounded-lg mb-4 text-white hover:from-gold/15 transition-all backdrop-blur-sm"
                     >
-                      <div className="w-8 h-8 bg-gradient-to-br from-[#A8925A] to-[#C4A962] rounded-lg flex items-center justify-center">
+                      <div className="w-8 h-8 bg-gradient-to-br from-gold to-gold-light rounded-lg flex items-center justify-center">
                         <Sparkles className="w-4 h-4 text-black" />
                       </div>
                       <div>
                         <p className="font-semibold text-sm">AI Home Finder</p>
-                        <p className="text-[#A8925A]/80 text-xs">Complimentary</p>
+                        <p className="text-gold/80 text-xs">Complimentary</p>
                       </div>
                     </Link>
 
                     {/* Property Shortcuts */}
-                    <p className="px-4 py-2 text-xs text-[#A8925A]/60 uppercase tracking-wider">Quick Access</p>
+                    <p className="px-4 py-2 text-xs text-gold/60 uppercase tracking-wider">Quick Access</p>
                     {propertyShortcuts.filter(s => s.href !== '/quiz').map((shortcut) => (
                       <Link
                         key={shortcut.href}
@@ -199,7 +199,7 @@ const GlobalHeader = () => {
                         onClick={() => setMobileMenuOpen(false)}
                         className="flex items-center gap-3 px-4 py-2.5 text-sm text-zinc-400 hover:text-white hover:bg-zinc-900/80 transition-colors"
                       >
-                        <shortcut.icon className="w-4 h-4 text-[#A8925A]/70" />
+                        <shortcut.icon className="w-4 h-4 text-gold/70" />
                         {shortcut.label}
                       </Link>
                     ))}
@@ -217,7 +217,7 @@ const GlobalHeader = () => {
                       <span className="text-zinc-600">|</span>
                       <span>Shortlist</span>
                       {totalCount > 0 && (
-                        <span className="ml-auto bg-[#A8925A] text-black text-xs px-2 py-0.5 rounded-full font-medium">
+                        <span className="ml-auto bg-gold text-black text-xs px-2 py-0.5 rounded-full font-medium">
                           {totalCount}
                         </span>
                       )}
@@ -255,7 +255,7 @@ const GlobalHeader = () => {
                       <Link
                         to="/auth"
                         onClick={() => setMobileMenuOpen(false)}
-                        className="flex items-center gap-3 px-4 py-3 text-[#A8925A] hover:text-[#A8925A]/80 hover:bg-[#A8925A]/10 transition-colors"
+                        className="flex items-center gap-3 px-4 py-3 text-gold hover:text-gold/80 hover:bg-gold/10 transition-colors"
                       >
                         <User className="w-5 h-5" />
                         Sign In / Create Account
@@ -274,7 +274,7 @@ const GlobalHeader = () => {
             <Link
               key={shortcut.href}
               to={shortcut.href}
-              className="flex items-center gap-2 text-xs text-zinc-500 hover:text-[#A8925A] transition-colors"
+              className="flex items-center gap-2 text-xs text-zinc-500 hover:text-gold transition-colors"
             >
               <shortcut.icon className="w-3.5 h-3.5" />
               {shortcut.label}
