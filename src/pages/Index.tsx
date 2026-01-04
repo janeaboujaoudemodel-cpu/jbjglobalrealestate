@@ -80,9 +80,9 @@ const Index = () => {
             variants={fadeInUp}
             style={{ fontFamily: "Poppins, sans-serif" }}
           >
-            Your Gateway to UAE{" "}
+            Your Gateway to Global{" "}
             <span className="text-transparent bg-clip-text bg-gradient-to-r from-gold to-gold-light">
-              Real Estate Investments
+              Real Estate Investments & Concierge
             </span>
           </motion.h1>
 
