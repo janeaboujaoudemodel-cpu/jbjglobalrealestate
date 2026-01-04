@@ -57,12 +57,12 @@ const Index = () => {
                     <Sparkles className="w-7 h-7 md:w-8 md:h-8 text-white" />
                   </div>
                   <div>
-                    <p className="text-purple-300 text-xs uppercase tracking-wider mb-1">Exclusive to JJ Global Capital</p>
+                    <p className="text-purple-300 text-xs uppercase tracking-wider mb-1">Exclusive by JJ Global Capital</p>
                     <h3 className="text-white text-xl md:text-2xl font-bold" style={{ fontFamily: "Poppins, sans-serif" }}>
                       Let AI Choose Your Home
                     </h3>
                     <p className="text-purple-200/80 text-sm md:text-base mt-1">
-                      Complimentary • #1 AI Property Matcher in the World
+                      Complimentary • #1 AI Property Matchmaker in the World
                     </p>
                   </div>
                 </div>

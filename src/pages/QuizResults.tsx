@@ -222,7 +222,7 @@ Best regards`);
         <div className="text-center mb-12">
           <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-gradient-to-r from-gold/20 to-gold-dark/20 border border-gold/30 mb-6">
             <Sparkles className="w-4 h-4 text-gold" />
-            <span className="text-gold text-sm font-medium">#1 AI Property Matcher — Exclusive to JJ Global Capital</span>
+            <span className="text-gold text-sm font-medium">#1 AI Property Matchmaker — Exclusive by JJ Global Capital</span>
           </div>
           
           <h1 className="text-white text-4xl md:text-5xl font-bold mb-4">
