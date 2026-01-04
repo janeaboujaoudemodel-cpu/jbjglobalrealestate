@@ -4,11 +4,13 @@ import Footer from "@/components/Footer";
 import StatsCounter from "@/components/StatsCounter";
 import WhyDubaiSection from "@/components/WhyDubaiSection";
 import ServicesSection from "@/components/ServicesSection";
-import { Sparkles, ArrowUpRight, Building2, ClipboardCheck, Volume2, VolumeX, MessageCircle, Phone, ChevronDown, Play } from "lucide-react";
+import { Sparkles, ArrowUpRight, Building2, ClipboardCheck, Volume2, VolumeX, MessageCircle, Phone, ChevronDown, User, Award } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { useState, useRef } from "react";
 import dubaiHeroVideo from "@/assets/dubai-hero-video.mp4";
+import founderProfessional from "@/assets/founder-professional.jpeg";
 import { CONTACT_INFO, getWhatsAppUrl, getCallUrl } from "@/constants/stats";
+import { JJLogo } from "@/components/JJLogo";
 
 // Animation variants
 const fadeInUp = {
@@ -23,20 +25,6 @@ const staggerContainer = {
     transition: { staggerChildren: 0.15, delayChildren: 0.2 }
   }
 };
-
-// Premium logo component
-const JJLogoHero = () => (
-  <div className="flex flex-col items-center">
-    <div className="flex items-center justify-center">
-      <span className="text-[#A8925A] font-extralight text-5xl md:text-6xl lg:text-7xl" style={{ fontFamily: "Poppins, sans-serif" }}>J</span>
-      <span className="text-white/90 mx-3 md:mx-4 font-thin text-6xl md:text-7xl lg:text-8xl leading-none" style={{ transform: 'scaleY(1.5)' }}>|</span>
-      <span className="text-[#A8925A] font-extralight text-5xl md:text-6xl lg:text-7xl" style={{ fontFamily: "Poppins, sans-serif" }}>J</span>
-    </div>
-    <span className="text-white font-light text-sm md:text-base lg:text-lg tracking-[0.4em] mt-3" style={{ fontFamily: "Poppins, sans-serif" }}>
-      GLOBAL CAPITAL
-    </span>
-  </div>
-);
 
 const Index = () => {
   const [isMuted, setIsMuted] = useState(true);
@@ -99,7 +87,7 @@ const Index = () => {
         >
           {/* Premium Logo */}
           <motion.div className="mb-8" variants={fadeInUp}>
-            <JJLogoHero />
+            <JJLogo size="lg" />
           </motion.div>
 
           {/* Main Tagline */}
@@ -132,14 +120,14 @@ const Index = () => {
                   <ArrowUpRight className="w-5 h-5 ml-2" />
                 </Button>
               </Link>
-              <Link to="/founder">
+              <a href={CONTACT_INFO.inquiryFormUrl} target="_blank" rel="noopener noreferrer">
                 <Button 
                   variant="outline"
                   className="border-white/30 text-white hover:bg-white/10 hover:border-white/50 px-8 py-6 text-base backdrop-blur-sm"
                 >
-                  Meet the Founder
+                  Contact Us
                 </Button>
-              </Link>
+              </a>
             </div>
             
             {/* AI Home Finder CTA */}
@@ -167,6 +155,98 @@ const Index = () => {
           <ChevronDown className="w-5 h-5 animate-bounce" />
         </motion.div>
       </div>
+
+      {/* FOUNDER SECTION - Meet The Leadership */}
+      <section className="py-20 md:py-28 bg-gradient-to-b from-black via-zinc-950 to-black">
+        <div className="container mx-auto px-4">
+          <motion.div
+            className="grid lg:grid-cols-2 gap-12 lg:gap-20 items-center"
+            initial="hidden"
+            whileInView="visible"
+            viewport={{ once: true, margin: "-100px" }}
+            variants={staggerContainer}
+          >
+            {/* Founder Image */}
+            <motion.div 
+              className="relative order-2 lg:order-1"
+              variants={fadeInUp}
+            >
+              <div className="relative aspect-[3/4] max-w-md mx-auto lg:max-w-none">
+                {/* Decorative frame */}
+                <div className="absolute -inset-4 border border-[#A8925A]/20 rounded-3xl" />
+                <div className="absolute -inset-2 bg-gradient-to-br from-[#A8925A]/10 to-transparent rounded-2xl" />
+                
+                {/* Image container with smart crop - show from top */}
+                <div className="relative rounded-2xl overflow-hidden border border-zinc-800 shadow-2xl shadow-black/80">
+                  <img 
+                    src={founderProfessional} 
+                    alt="Jane Abou Jaoude - Founder & Chairwoman" 
+                    className="w-full h-full object-cover object-top"
+                  />
+                  {/* Gradient overlay at bottom */}
+                  <div className="absolute inset-x-0 bottom-0 h-1/3 bg-gradient-to-t from-black/80 to-transparent" />
+                </div>
+                
+                {/* Name badge */}
+                <div className="absolute bottom-6 left-6 right-6 bg-black/60 backdrop-blur-md border border-[#A8925A]/30 rounded-xl p-4">
+                  <p className="text-[#A8925A] text-xs uppercase tracking-[0.2em] mb-1">Founder & Chairwoman</p>
+                  <h3 className="text-white text-xl font-bold" style={{ fontFamily: "Poppins, sans-serif" }}>
+                    Jane Abou Jaoude
+                  </h3>
+                </div>
+              </div>
+            </motion.div>
+
+            {/* Content */}
+            <motion.div className="order-1 lg:order-2" variants={fadeInUp}>
+              <div className="mb-6">
+                <span className="inline-flex items-center gap-2 text-[#A8925A] text-sm uppercase tracking-[0.3em]">
+                  <User className="w-4 h-4" />
+                  Leadership
+                </span>
+              </div>
+              
+              <h2 
+                className="text-white text-4xl md:text-5xl lg:text-6xl font-bold mb-8"
+                style={{ fontFamily: "Poppins, sans-serif" }}
+              >
+                Meet the <span className="text-transparent bg-clip-text bg-gradient-to-r from-[#A8925A] to-[#C4A962]">Founder</span>
+              </h2>
+              
+              <p className="text-zinc-300 text-lg md:text-xl leading-relaxed mb-6">
+                JJ Holding Group is a founder-led, multi-division holding built on unwavering standards, discretion, and long-term vision.
+              </p>
+              
+              <p className="text-zinc-500 text-base md:text-lg leading-relaxed mb-8">
+                Jane Abou Jaoude leads with a philosophy rooted in accountability and discretion, building organizations designed to endure rather than simply expand.
+              </p>
+              
+              {/* Stats */}
+              <div className="grid grid-cols-3 gap-6 mb-8">
+                <div className="text-center">
+                  <p className="text-[#A8925A] text-3xl md:text-4xl font-bold" style={{ fontFamily: "Poppins, sans-serif" }}>4</p>
+                  <p className="text-zinc-500 text-xs uppercase tracking-wider">Divisions</p>
+                </div>
+                <div className="text-center">
+                  <p className="text-[#A8925A] text-3xl md:text-4xl font-bold" style={{ fontFamily: "Poppins, sans-serif" }}>12+</p>
+                  <p className="text-zinc-500 text-xs uppercase tracking-wider">Years</p>
+                </div>
+                <div className="text-center">
+                  <p className="text-[#A8925A] text-3xl md:text-4xl font-bold" style={{ fontFamily: "Poppins, sans-serif" }}>92+</p>
+                  <p className="text-zinc-500 text-xs uppercase tracking-wider">Countries</p>
+                </div>
+              </div>
+              
+              <Link to="/founder">
+                <Button className="bg-[#A8925A] hover:bg-[#A8925A]/90 text-black font-semibold px-8 py-6 text-base">
+                  Learn More About Our Founder
+                  <ArrowUpRight className="w-5 h-5 ml-2" />
+                </Button>
+              </Link>
+            </motion.div>
+          </motion.div>
+        </div>
+      </section>
 
       {/* AI PROPERTY MATCHMAKER CTA */}
       <div className="container mx-auto px-4 py-16 md:py-20">

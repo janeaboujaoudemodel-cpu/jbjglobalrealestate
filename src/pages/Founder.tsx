@@ -142,9 +142,10 @@ const Founder = () => {
           animate={{ scale: 1 }}
           transition={{ duration: 1.5, ease: "easeOut" }}
         >
+          {/* Hero image - smart crop from top (head first) */}
           <SafeImage 
-            src={founderHero} 
-            fallbackSrc={founderDark}
+            src={founderProfessional} 
+            fallbackSrc={founderHero}
             alt="Jane Abou Jaoude - Founder & Chairwoman" 
             className="w-full h-full object-cover object-top"
           />
@@ -308,40 +309,40 @@ const Founder = () => {
             {/* Photo Gallery */}
             <motion.div className="lg:col-span-7" variants={fadeInUp}>
               <div className="grid grid-cols-2 gap-4 md:gap-6">
-                {/* Main large photo */}
+                {/* Main large photo - smart crop from top */}
                 <motion.div 
-                  className="col-span-2 aspect-[16/10] rounded-3xl overflow-hidden border border-zinc-800 shadow-2xl shadow-black/80 group bg-zinc-900"
+                  className="col-span-2 aspect-[16/10] rounded-3xl overflow-hidden border border-zinc-800 shadow-2xl shadow-black/80 group"
                   variants={scaleIn}
                 >
                   <SafeImage 
                     src={founderProfessional} 
                     fallbackSrc={founderHero}
                     alt="Jane Abou Jaoude - Professional Portrait" 
-                    className="w-full h-full object-contain group-hover:scale-105 transition-transform duration-1000"
+                    className="w-full h-full object-cover object-top group-hover:scale-105 transition-transform duration-1000"
                   />
                 </motion.div>
                 
-                {/* Two smaller photos */}
+                {/* Two smaller photos - smart crop from top */}
                 <motion.div 
-                  className="aspect-[3/4] rounded-2xl overflow-hidden border border-zinc-800 shadow-xl group bg-zinc-900"
+                  className="aspect-[3/4] rounded-2xl overflow-hidden border border-zinc-800 shadow-xl group"
                   variants={scaleIn}
                 >
                   <SafeImage 
                     src={founderJetBoarding} 
                     fallbackSrc={founderHero}
                     alt="Jane Abou Jaoude - International Travel" 
-                    className="w-full h-full object-contain group-hover:scale-105 transition-transform duration-1000"
+                    className="w-full h-full object-cover object-top group-hover:scale-105 transition-transform duration-1000"
                   />
                 </motion.div>
                 <motion.div 
-                  className="aspect-[3/4] rounded-2xl overflow-hidden border border-zinc-800 shadow-xl group bg-zinc-900"
+                  className="aspect-[3/4] rounded-2xl overflow-hidden border border-zinc-800 shadow-xl group"
                   variants={scaleIn}
                 >
                   <SafeImage 
                     src={founderOffice} 
                     fallbackSrc={founderHero}
                     alt="Jane Abou Jaoude - Office" 
-                    className="w-full h-full object-contain group-hover:scale-105 transition-transform duration-1000"
+                    className="w-full h-full object-cover object-top group-hover:scale-105 transition-transform duration-1000"
                   />
                 </motion.div>
               </div>
@@ -642,27 +643,27 @@ const Founder = () => {
             variants={staggerContainer}
           >
             <motion.div 
-              className="col-span-2 row-span-2 aspect-square md:aspect-auto rounded-3xl overflow-hidden border border-zinc-800 shadow-2xl group bg-zinc-900"
+              className="col-span-2 row-span-2 aspect-square md:aspect-auto rounded-3xl overflow-hidden border border-zinc-800 shadow-2xl group"
               variants={scaleIn}
             >
               <SafeImage 
                 src={founderJetInterior} 
                 fallbackSrc={founderHero}
                 alt="Private Aviation" 
-                className="w-full h-full object-contain group-hover:scale-105 transition-transform duration-1000"
+                className="w-full h-full object-cover object-top group-hover:scale-105 transition-transform duration-1000"
               />
             </motion.div>
             {[founderYacht, founderRedCarpet, founderAwardStage, founderJetBoarding].map((img, i) => (
               <motion.div 
                 key={i}
-                className="aspect-square rounded-2xl overflow-hidden border border-zinc-800 group bg-zinc-900"
+                className="aspect-square rounded-2xl overflow-hidden border border-zinc-800 group"
                 variants={scaleIn}
               >
                 <SafeImage 
                   src={img} 
                   fallbackSrc={founderHero}
                   alt="Lifestyle" 
-                  className="w-full h-full object-contain group-hover:scale-105 transition-transform duration-1000"
+                  className="w-full h-full object-cover object-top group-hover:scale-105 transition-transform duration-1000"
                 />
               </motion.div>
             ))}
@@ -711,25 +712,25 @@ const Founder = () => {
               variants={staggerContainer}
             >
               <motion.div 
-                className="aspect-[3/4] rounded-2xl overflow-hidden border border-zinc-800 shadow-xl group bg-zinc-900"
+                className="aspect-[3/4] rounded-2xl overflow-hidden border border-zinc-800 shadow-xl group"
                 variants={scaleIn}
               >
                 <SafeImage 
                   src={founderOffice} 
                   fallbackSrc={founderHero}
                   alt="Leadership" 
-                  className="w-full h-full object-contain group-hover:scale-105 transition-transform duration-1000"
+                  className="w-full h-full object-cover object-top group-hover:scale-105 transition-transform duration-1000"
                 />
               </motion.div>
               <motion.div 
-                className="aspect-[3/4] rounded-2xl overflow-hidden border border-zinc-800 shadow-xl mt-8 group bg-zinc-900"
+                className="aspect-[3/4] rounded-2xl overflow-hidden border border-zinc-800 shadow-xl mt-8 group"
                 variants={scaleIn}
               >
                 <SafeImage 
                   src={founderProfessional} 
                   fallbackSrc={founderHero}
                   alt="Future Vision" 
-                  className="w-full h-full object-contain group-hover:scale-105 transition-transform duration-1000"
+                  className="w-full h-full object-cover object-top group-hover:scale-105 transition-transform duration-1000"
                 />
               </motion.div>
             </motion.div>
