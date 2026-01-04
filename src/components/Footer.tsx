@@ -85,20 +85,28 @@ const Footer = () => {
     }, 1000);
   };
 
-  // Our Divisions — required hierarchy
+  // Our Divisions — required hierarchy with working pages
   const divisions = [
     {
       title: "Real Estate",
       href: "/properties",
       items: [
-        { label: "Advisory", href: CONTACT_INFO.inquiryFormUrl },
-        { label: "Investment Advisory", href: CONTACT_INFO.inquiryFormUrl },
-        { label: "Mortgage Advisory", href: "/mortgage-calculator" },
-        { label: "Golden Visa", href: CONTACT_INFO.inquiryFormUrl },
+        { label: "Property Advisory", href: "/properties" },
+        { label: "Investment Advisory", href: "/about" },
+        { label: "Mortgage Advisory", href: "/mortgage-advisory" },
+        { label: "Golden Visa", href: "/concierge" },
       ],
     },
     { title: "Law Firm", href: "/services/law-firm", items: [] },
-    { title: "Design & Build", href: "/services/design-build", items: [] },
+    { 
+      title: "Design & Build", 
+      href: "/services/design-build", 
+      items: [
+        { label: "Architecture", href: "/services/architecture" },
+        { label: "Interior Design", href: "/services/interior-design" },
+        { label: "Fit-Out", href: "/services/fit-out" },
+      ],
+    },
     { title: "Luxury Concierge", href: "/concierge", items: [] },
   ];
 

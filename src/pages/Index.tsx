@@ -223,7 +223,7 @@ const Index = () => {
           </motion.div>
           
           <motion.div 
-            className="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-6 gap-4"
+            className="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-7 gap-4"
             initial={{ opacity: 0, y: 20 }}
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true }}
@@ -234,10 +234,11 @@ const Index = () => {
               { href: "/mortgage-advisory", icon: Calculator, label: "Mortgage", desc: "Advisory" },
               { href: "/quiz", icon: Sparkles, label: "AI Finder", desc: "Match Properties" },
               { href: "/market-report", icon: FileText, label: "Market Report", desc: "UAE Insights" },
-              { href: "/concierge", icon: Briefcase, label: "Concierge", desc: "Luxury Services" },
-              { href: "/contact", icon: Phone, label: "Contact", desc: "Get In Touch" },
+              { href: "/services/law-firm", icon: Scale, label: "Legal Advisory", desc: "Law Firm" },
+              { href: "/news", icon: FileText, label: "News & Insights", desc: "Market Updates" },
+              { href: "/concierge", icon: Briefcase, label: "All Services", desc: "View Services" },
             ].map((item, index) => (
-              <Link key={item.href} to={item.href}>
+              <Link key={item.href + index} to={item.href}>
                 <motion.div
                   className="bg-zinc-900/50 border border-zinc-800 hover:border-gold/50 rounded-xl p-4 text-center group transition-all hover:bg-zinc-900"
                   initial={{ opacity: 0, y: 20 }}

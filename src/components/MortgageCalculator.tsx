@@ -95,18 +95,18 @@ const MortgageCalculator = ({ defaultPrice = 2000000, compact = false }: Mortgag
   }
 
   return (
-    <div className="bg-gradient-to-br from-zinc-900 via-zinc-900/95 to-zinc-950 border border-zinc-800 rounded-2xl overflow-hidden">
-      {/* Header */}
-      <div className="bg-gradient-to-r from-gold/10 via-gold/5 to-transparent border-b border-zinc-800 p-6">
+    <div className="bg-gradient-to-br from-purple-900/30 via-zinc-900/95 to-purple-950/30 border border-purple-500/30 rounded-2xl overflow-hidden">
+      {/* Header - Purple Premium Style */}
+      <div className="bg-gradient-to-r from-purple-600/20 via-purple-500/15 to-purple-600/20 border-b border-purple-500/30 p-6">
         <div className="flex items-center gap-3">
-          <div className="w-12 h-12 rounded-xl bg-gradient-to-br from-gold/20 to-gold/5 border border-gold/20 flex items-center justify-center">
-            <Calculator className="w-6 h-6 text-gold" />
+          <div className="w-12 h-12 rounded-xl bg-gradient-to-br from-purple-500/30 to-purple-600/20 border border-purple-400/30 flex items-center justify-center">
+            <Calculator className="w-6 h-6 text-purple-300" />
           </div>
           <div>
             <h3 className="text-xl font-bold text-white" style={{ fontFamily: "Poppins, sans-serif" }}>
               Mortgage Calculator
             </h3>
-            <p className="text-zinc-400 text-sm">Estimate your monthly payments</p>
+            <p className="text-purple-200/70 text-sm">Estimate your monthly payments</p>
           </div>
         </div>
       </div>
@@ -227,66 +227,66 @@ const MortgageCalculator = ({ defaultPrice = 2000000, compact = false }: Mortgag
 
           {/* Results Section */}
           <div className="space-y-6">
-            {/* Monthly Payment - Featured */}
-            <div className="bg-gradient-to-br from-gold/10 via-gold/5 to-transparent border border-gold/20 rounded-xl p-6 text-center">
-              <p className="text-zinc-400 text-sm mb-2">Estimated Monthly Payment</p>
+            {/* Monthly Payment - Featured Purple Style */}
+            <div className="bg-gradient-to-br from-purple-500/20 via-purple-600/10 to-transparent border border-purple-400/30 rounded-xl p-6 text-center">
+              <p className="text-purple-200/70 text-sm mb-2">Estimated Monthly Payment</p>
               <p 
-                className="text-4xl md:text-5xl font-bold text-transparent bg-clip-text bg-gradient-to-r from-gold to-gold-dark"
+                className="text-4xl md:text-5xl font-bold text-transparent bg-clip-text bg-gradient-to-r from-purple-300 via-white to-purple-300"
                 style={{ fontFamily: "Poppins, sans-serif" }}
               >
                 {formatCurrency(calculations.monthlyPayment)}
               </p>
-              <p className="text-zinc-500 text-xs mt-2">per month for {loanTermYears} years</p>
+              <p className="text-purple-300/50 text-xs mt-2">per month for {loanTermYears} years</p>
             </div>
 
-            {/* Breakdown Cards */}
+            {/* Breakdown Cards - Purple style */}
             <div className="grid grid-cols-2 gap-4">
-              <div className="bg-zinc-900/50 border border-zinc-800 rounded-xl p-4">
-                <p className="text-zinc-500 text-xs mb-1">Loan Amount</p>
+              <div className="bg-purple-900/20 border border-purple-500/20 rounded-xl p-4">
+                <p className="text-purple-300/60 text-xs mb-1">Loan Amount</p>
                 <p className="text-white font-bold text-lg">{formatCurrency(calculations.loanAmount)}</p>
               </div>
-              <div className="bg-zinc-900/50 border border-zinc-800 rounded-xl p-4">
-                <p className="text-zinc-500 text-xs mb-1">Down Payment</p>
+              <div className="bg-purple-900/20 border border-purple-500/20 rounded-xl p-4">
+                <p className="text-purple-300/60 text-xs mb-1">Down Payment</p>
                 <p className="text-white font-bold text-lg">{formatCurrency(calculations.downPayment)}</p>
               </div>
-              <div className="bg-zinc-900/50 border border-zinc-800 rounded-xl p-4">
-                <p className="text-zinc-500 text-xs mb-1">Total Interest</p>
-                <p className="text-amber-400 font-bold text-lg">{formatCurrency(calculations.totalInterest)}</p>
+              <div className="bg-purple-900/20 border border-purple-500/20 rounded-xl p-4">
+                <p className="text-purple-300/60 text-xs mb-1">Total Interest</p>
+                <p className="text-purple-300 font-bold text-lg">{formatCurrency(calculations.totalInterest)}</p>
               </div>
-              <div className="bg-zinc-900/50 border border-zinc-800 rounded-xl p-4">
-                <p className="text-zinc-500 text-xs mb-1">Total Payment</p>
+              <div className="bg-purple-900/20 border border-purple-500/20 rounded-xl p-4">
+                <p className="text-purple-300/60 text-xs mb-1">Total Payment</p>
                 <p className="text-white font-bold text-lg">{formatCurrency(calculations.totalPayment)}</p>
               </div>
             </div>
 
-            {/* Payment Visualization */}
+            {/* Payment Visualization - Purple theme */}
             <div className="space-y-2">
-              <p className="text-zinc-400 text-sm">Payment Breakdown</p>
-              <div className="h-4 rounded-full overflow-hidden bg-zinc-800 flex">
+              <p className="text-purple-200/70 text-sm">Payment Breakdown</p>
+              <div className="h-4 rounded-full overflow-hidden bg-zinc-800/50 flex">
                 <div 
-                  className="bg-gradient-to-r from-gold to-gold-dark transition-all duration-500"
+                  className="bg-gradient-to-r from-purple-500 to-purple-400 transition-all duration-500"
                   style={{ width: `${(calculations.loanAmount / calculations.totalPayment) * 100}%` }}
                 />
                 <div 
-                  className="bg-gradient-to-r from-amber-500 to-orange-500 transition-all duration-500"
+                  className="bg-gradient-to-r from-gold to-gold-light transition-all duration-500"
                   style={{ width: `${(calculations.totalInterest / calculations.totalPayment) * 100}%` }}
                 />
               </div>
               <div className="flex justify-between text-xs">
                 <span className="flex items-center gap-1.5">
-                  <span className="w-2.5 h-2.5 rounded-full bg-gold" />
+                  <span className="w-2.5 h-2.5 rounded-full bg-purple-500" />
                   <span className="text-zinc-400">Principal</span>
                 </span>
                 <span className="flex items-center gap-1.5">
-                  <span className="w-2.5 h-2.5 rounded-full bg-amber-500" />
+                  <span className="w-2.5 h-2.5 rounded-full bg-gold" />
                   <span className="text-zinc-400">Interest</span>
                 </span>
               </div>
             </div>
 
-            {/* CTA */}
+            {/* CTA - Purple gradient */}
             <a href={INQUIRY_FORM_URL} target="_blank" rel="noopener noreferrer" className="block">
-              <Button className="w-full bg-gradient-to-r from-gold to-gold-dark text-black hover:opacity-90 h-12 text-base font-semibold group">
+              <Button className="w-full bg-gradient-to-r from-purple-600 to-purple-700 hover:from-purple-500 hover:to-purple-600 text-white h-12 text-base font-semibold group border border-purple-400/30">
                 Get Professional Mortgage Advisory
                 <ArrowRight className="w-4 h-4 ml-2 group-hover:translate-x-1 transition-transform" />
               </Button>
