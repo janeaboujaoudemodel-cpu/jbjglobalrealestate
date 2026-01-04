@@ -1,34 +1,22 @@
-import { useCountUp } from '@/hooks/useCountUp';
 import { Briefcase, Clock, Home, Building2 } from 'lucide-react';
 import { useRef, useEffect, useState } from 'react';
+import { COMPANY_STATS } from '@/constants/stats';
 
 const stats = [
   {
-    end: 2,
-    suffix: 'B+',
-    prefix: 'AED ',
-    label: 'Portfolio Value',
+    ...COMPANY_STATS.portfolioValue,
     icon: Briefcase,
   },
   {
-    end: 12,
-    suffix: '+',
-    prefix: '',
-    label: 'Years of Experience',
+    ...COMPANY_STATS.yearsExperience,
     icon: Clock,
   },
   {
-    end: 3900,
-    suffix: '+',
-    prefix: '',
-    label: 'Properties Sold',
+    ...COMPANY_STATS.propertiesSold,
     icon: Home,
   },
   {
-    end: 4200,
-    suffix: '+',
-    prefix: '',
-    label: 'Properties Managed',
+    ...COMPANY_STATS.propertiesManaged,
     icon: Building2,
   },
 ];

@@ -5,14 +5,11 @@ import WhyDubaiSection from "@/components/WhyDubaiSection";
 import ServicesSection from "@/components/ServicesSection";
 import StatsCounter from "@/components/StatsCounter";
 import Footer from "@/components/Footer";
-import { Sparkles, ArrowUpRight, Building2, ClipboardCheck, Volume2, VolumeX } from "lucide-react";
+import { Sparkles, ArrowUpRight, Building2, ClipboardCheck, Volume2, VolumeX, MessageCircle, Phone } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { useState, useRef } from "react";
 import dubaiHeroVideo from "@/assets/dubai-hero-video.mp4";
-
-const INQUIRY_FORM_URL = "https://jjglobalcapital.com/form/property-investment-inquiry-form/";
-
-// Property shortcut buttons (excluding AI CTA which is separate)
+import { CONTACT_INFO, getWhatsAppUrl, getCallUrl } from "@/constants/stats";
 const propertyShortcuts = [
   { href: "/?status=off-plan", label: "Off-Plan Properties", icon: Building2 },
   { href: "/?status=ready", label: "Ready to Move", icon: ClipboardCheck },
@@ -148,20 +145,35 @@ const Index = () => {
       {/* Services Section */}
       <ServicesSection />
 
-      {/* Contact CTA Section */}
+      {/* Contact CTA Section with Direct Links */}
       <div className="container mx-auto px-4">
         <div className="text-center py-16 border-t border-zinc-800">
           <h3 className="text-2xl font-semibold text-white mb-4" style={{ fontFamily: "Poppins, sans-serif" }}>
             Ready to Invest?
           </h3>
-          <p className="text-zinc-400 mb-6 max-w-xl mx-auto">
+          <p className="text-zinc-400 mb-8 max-w-xl mx-auto">
             Get personalized investment advice from our expert team
           </p>
-          <a href={INQUIRY_FORM_URL} target="_blank" rel="noopener noreferrer">
-            <Button className="bg-gradient-to-r from-gold to-gold-dark text-black hover:opacity-90 px-8 py-3 h-auto font-semibold">
-              Contact Us
-            </Button>
-          </a>
+          <div className="flex flex-wrap justify-center gap-4">
+            <a href={CONTACT_INFO.inquiryFormUrl} target="_blank" rel="noopener noreferrer">
+              <Button className="bg-gradient-to-r from-gold to-gold-dark text-black hover:opacity-90 px-8 py-3 h-auto font-semibold">
+                <ArrowUpRight className="w-4 h-4 mr-2" />
+                Contact Us
+              </Button>
+            </a>
+            <a href={getWhatsAppUrl()} target="_blank" rel="noopener noreferrer">
+              <Button variant="outline" className="border-green-600 text-green-500 hover:bg-green-600 hover:text-white px-8 py-3 h-auto">
+                <MessageCircle className="w-4 h-4 mr-2" />
+                WhatsApp
+              </Button>
+            </a>
+            <a href={getCallUrl()}>
+              <Button variant="outline" className="border-gold/50 text-gold hover:bg-gold hover:text-black px-8 py-3 h-auto">
+                <Phone className="w-4 h-4 mr-2" />
+                Call Now
+              </Button>
+            </a>
+          </div>
         </div>
       </div>
 

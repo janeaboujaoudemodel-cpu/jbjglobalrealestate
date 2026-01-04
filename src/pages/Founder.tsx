@@ -1,8 +1,9 @@
 import { Link } from "react-router-dom";
-import { ArrowUpRight, Building2, Gem, Film, Shirt, Mail, Phone, ExternalLink, Award, Globe, Users, TrendingUp, Play, Star } from "lucide-react";
+import { ArrowUpRight, Building2, Gem, Film, Shirt, Mail, Phone, ExternalLink, Award, Globe, Users, TrendingUp, Star, MessageCircle } from "lucide-react";
 import { motion } from "framer-motion";
 import Footer from "@/components/Footer";
 import { useCountUp } from "@/hooks/useCountUp";
+import { COMPANY_STATS, CONTACT_INFO, getWhatsAppUrl, getCallUrl, getEmailUrl } from "@/constants/stats";
 
 // Import all founder images
 import founderHero from "@/assets/founder-hero.png";
@@ -406,9 +407,9 @@ const Founder = () => {
             <div className="grid grid-cols-2 md:grid-cols-4 gap-6 md:gap-8">
               {[
                 { end: 4, suffix: "", prefix: "", label: "Divisions", icon: Building2 },
-                { end: 12, suffix: "+", prefix: "", label: "Years Experience", icon: Award },
-                { end: 92, suffix: "+", prefix: "", label: "Countries Served", icon: Globe },
-                { end: 2, suffix: "B+", prefix: "AED ", label: "Portfolio Value", icon: TrendingUp },
+                { ...COMPANY_STATS.yearsExperience, icon: Award },
+                { ...COMPANY_STATS.countriesServed, icon: Globe },
+                { ...COMPANY_STATS.portfolioValue, icon: TrendingUp },
               ].map((stat, index) => (
                 <motion.div 
                   key={stat.label}
@@ -769,26 +770,37 @@ const Founder = () => {
             </motion.div>
 
             <motion.div 
-              className="flex flex-col sm:flex-row items-center justify-center gap-8 text-zinc-400 mb-12"
+              className="flex flex-col sm:flex-row items-center justify-center gap-6 mb-12"
               variants={fadeInUp}
             >
               <a 
-                href="mailto:invest@jjglobalcapital.com" 
+                href={getEmailUrl()} 
                 className="hover:text-gold transition-colors flex items-center gap-3 group"
               >
-                <div className="w-12 h-12 bg-zinc-900 border border-zinc-800 rounded-full flex items-center justify-center group-hover:border-gold/50 transition-colors">
-                  <Mail className="w-5 h-5" />
+                <div className="w-12 h-12 bg-zinc-900 border border-zinc-800 rounded-full flex items-center justify-center group-hover:border-gold/50 group-hover:scale-110 transition-all">
+                  <Mail className="w-5 h-5 text-gold" />
                 </div>
-                <span className="text-lg">invest@JJglobalcapital.com</span>
+                <span className="text-lg text-zinc-300">{CONTACT_INFO.emailCapitalized}</span>
               </a>
               <a 
-                href="tel:+97144586845" 
+                href={getCallUrl()} 
                 className="hover:text-gold transition-colors flex items-center gap-3 group"
               >
-                <div className="w-12 h-12 bg-zinc-900 border border-zinc-800 rounded-full flex items-center justify-center group-hover:border-gold/50 transition-colors">
-                  <Phone className="w-5 h-5" />
+                <div className="w-12 h-12 bg-zinc-900 border border-zinc-800 rounded-full flex items-center justify-center group-hover:border-gold/50 group-hover:scale-110 transition-all">
+                  <Phone className="w-5 h-5 text-gold" />
                 </div>
-                <span className="text-lg">+971 4 458 6845</span>
+                <span className="text-lg text-zinc-300">{CONTACT_INFO.phone}</span>
+              </a>
+              <a 
+                href={getWhatsAppUrl()} 
+                target="_blank"
+                rel="noopener noreferrer"
+                className="hover:text-green-400 transition-colors flex items-center gap-3 group"
+              >
+                <div className="w-12 h-12 bg-zinc-900 border border-zinc-800 rounded-full flex items-center justify-center group-hover:border-green-500/50 group-hover:scale-110 transition-all">
+                  <MessageCircle className="w-5 h-5 text-green-500" />
+                </div>
+                <span className="text-lg text-zinc-300">WhatsApp</span>
               </a>
             </motion.div>
 
