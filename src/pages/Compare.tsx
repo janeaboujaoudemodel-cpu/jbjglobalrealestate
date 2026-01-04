@@ -6,14 +6,76 @@ import { useAuth } from "@/contexts/AuthContext";
 import { useShortlist } from "@/hooks/useFavorites";
 import { useGuestShortlist } from "@/hooks/useGuestFavorites";
 import { useMembership } from "@/hooks/useMembership";
-import { ChevronLeft, Sparkles, Send, Loader2, CheckCircle, Download, Star, Users, Crown, Gift } from "lucide-react";
+import { 
+  ChevronLeft, Sparkles, Send, Loader2, CheckCircle, Download, Star, 
+  Users, Crown, Gift, TrendingUp, MapPin, Building, Home, 
+  BadgeCheck, AlertTriangle, Zap, Award, Phone, Mail
+} from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { toast } from "sonner";
 import { PaymentModal } from "@/components/PaymentModal";
+import { Badge } from "@/components/ui/badge";
 
 const INQUIRY_FORM_URL = "https://jjglobalcapital.com/form/property-investment-inquiry-form/";
 const COMPARE_FREE_KEY = "jj_compare_free_used";
+
+interface AIAnalysis {
+  projectDetailsTable: Array<{
+    projectName: string;
+    developer: string;
+    developerTier: string;
+    location: string;
+    areaType: string;
+    trafficLevel: string;
+    priceRange: string;
+    pricePerSqft: number;
+    bedrooms: string;
+    sizeRange: string;
+    handover: string;
+    paymentPlan: string;
+    furnishedStatus: string;
+    views: string[];
+    keyAmenities: string[];
+    keyFacilities: string[];
+    uniqueSellingPoints: string[];
+    investmentType: string;
+    targetBuyer: string;
+  }>;
+  comparisonTable: {
+    categories: Array<{
+      name: string;
+      metrics: Array<{
+        metric: string;
+        values: Record<string, string>;
+      }>;
+    }>;
+  };
+  ratings: Array<{
+    projectName: string;
+    overallRating: number;
+    locationRating: number;
+    valueRating: number;
+    amenitiesRating: number;
+    investmentRating: number;
+    developerRating: number;
+    pros: string[];
+    cons: string[];
+  }>;
+  recommendation: {
+    topChoice: string;
+    reasoning: string;
+    bestFor: {
+      investors: string;
+      families: string;
+      firstTimeBuyers: string;
+      luxuryBuyers: string;
+    };
+    investmentAdvice: string;
+    riskFactors: string[];
+  };
+  summary: string;
+}
 
 const Compare = () => {
   const { user } = useAuth();
@@ -21,7 +83,7 @@ const Compare = () => {
   const { hasActiveMembership } = useMembership();
   const { data: authShortlist } = useShortlist();
   const { shortlist: guestShortlist, getBadge } = useGuestShortlist();
-  const [aiComparison, setAiComparison] = useState<string | null>(null);
+  const [aiAnalysis, setAiAnalysis] = useState<AIAnalysis | null>(null);
   const [isGenerating, setIsGenerating] = useState(false);
   const [showRequestForm, setShowRequestForm] = useState(false);
   const [showVipModal, setShowVipModal] = useState(false);
@@ -61,7 +123,8 @@ const Compare = () => {
           *,
           developer:developers(name, slug),
           images:project_images(image_url, alt_text, display_order),
-          community:communities(name, slug)
+          community:communities(name, slug),
+          documents:project_documents(file_url, file_name, document_type)
         `)
         .in("id", shortlistIds);
 
@@ -74,11 +137,13 @@ const Compare = () => {
   // Check if user can use free or needs VIP
   const needsVipForCompare = hasUsedFreeCompare && !hasActiveMembership;
 
-  // Generate AI comparison
-  const generateComparison = async () => {
-    if (!projects?.length) return;
+  // Generate Smart AI Analysis
+  const generateSmartAnalysis = async () => {
+    if (!projects?.length || projects.length < 2) {
+      toast.error("Please add at least 2 properties to compare");
+      return;
+    }
     
-    // If already used free and no VIP, show payment modal
     if (needsVipForCompare) {
       setShowVipModal(true);
       return;
@@ -86,45 +151,60 @@ const Compare = () => {
     
     setIsGenerating(true);
     try {
-      const projectSummaries = projects.map((p) => ({
+      const projectData = projects.map((p) => ({
+        id: p.id,
         name: p.name,
-        developer: p.developer?.name,
-        location: p.location,
-        emirate: p.emirate,
-        priceFrom: p.price_from,
+        developer: p.developer?.name || "Unknown",
+        location: p.location || "",
+        emirate: p.emirate || "Dubai",
+        community: p.community?.name || "",
+        priceFrom: p.price_from || 0,
         priceTo: p.price_to,
-        bedrooms: `${p.bedrooms_min}-${p.bedrooms_max}`,
-        sizeRange: `${p.size_min}-${p.size_max} sqft`,
+        bedroomsMin: p.bedrooms_min || 0,
+        bedroomsMax: p.bedrooms_max || 0,
+        sizeMin: p.size_min || 0,
+        sizeMax: p.size_max || 0,
         handover: p.handover_date,
-        amenities: p.amenities,
-        views: p.views,
         paymentPlan: p.payment_plan,
+        amenities: p.amenities || [],
+        facilities: p.facilities || [],
+        views: p.views || [],
+        furnishedStatus: p.furnished_status,
+        floors: p.floors,
+        serviceCharge: p.service_charge,
+        description: p.description,
       }));
 
-      const response = await supabase.functions.invoke("compare-projects", {
-        body: { projects: projectSummaries },
+      const response = await supabase.functions.invoke("smart-ai-analysis", {
+        body: { projects: projectData },
       });
 
-      if (response.error) throw response.error;
-      setAiComparison(response.data.comparison);
+      if (response.error) {
+        if (response.error.message?.includes("429")) {
+          toast.error("Too many requests. Please wait a moment and try again.");
+          return;
+        }
+        throw response.error;
+      }
       
-      // Mark free compare as used
+      setAiAnalysis(response.data.analysis);
+      toast.success("AI Analysis generated successfully!");
+      
       if (!hasActiveMembership) {
         markFreeCompareUsed();
       }
     } catch (error) {
-      console.error("Failed to generate comparison:", error);
-      toast.error("Failed to generate AI comparison. Please try again.");
+      console.error("Failed to generate analysis:", error);
+      toast.error("Failed to generate AI analysis. Please try again.");
     } finally {
       setIsGenerating(false);
     }
   };
 
-  // Download comparison table as image
-  const downloadTable = async () => {
-    if (!tableRef.current || !projects?.length) return;
+  // Download comprehensive report
+  const downloadComprehensiveReport = async () => {
+    if (!projects?.length || !aiAnalysis) return;
     
-    // Create a styled HTML table for download
     const userName = formData.name || user?.email?.split("@")[0] || "Investor";
     const dateStr = new Date().toLocaleDateString("en-US", { 
       year: 'numeric', 
@@ -132,82 +212,171 @@ const Compare = () => {
       day: 'numeric' 
     });
 
-    const tableHtml = `
-      <!DOCTYPE html>
-      <html>
-      <head>
-        <meta charset="UTF-8">
-        <title>Property Comparison - JJ Global Capital</title>
-        <style>
-          body { font-family: 'Arial', sans-serif; padding: 40px; background: #fff; }
-          .header { text-align: center; margin-bottom: 30px; border-bottom: 2px solid #A8925A; padding-bottom: 20px; }
-          .logo { font-size: 28px; font-weight: bold; color: #1a1a1a; }
-          .gold { color: #A8925A; }
-          .subtitle { color: #666; margin-top: 10px; }
-          .user-info { margin-top: 15px; font-size: 14px; color: #333; }
-          table { width: 100%; border-collapse: collapse; margin-top: 20px; }
-          th, td { padding: 12px; text-align: left; border: 1px solid #ddd; }
-          th { background: #1a1a1a; color: #fff; }
-          .badge { padding: 2px 8px; border-radius: 4px; font-size: 12px; font-weight: bold; }
-          .top1 { background: #fef3c7; color: #92400e; }
-          .top2 { background: #e5e7eb; color: #374151; }
-          .top3 { background: #fed7aa; color: #9a3412; }
-          .rating { color: #A8925A; }
-          .footer { margin-top: 30px; text-align: center; font-size: 12px; color: #666; border-top: 1px solid #ddd; padding-top: 20px; }
-        </style>
-      </head>
-      <body>
-        <div class="header">
-          <div class="logo">JJ <span class="gold">Global Capital</span></div>
-          <p class="subtitle">Premium Property Investment Advisory</p>
-          <p class="user-info">Prepared for: <strong>${userName}</strong> | Date: ${dateStr}</p>
-        </div>
-        <table>
-          <thead>
-            <tr>
-              <th>Property</th>
-              ${projects.map(p => {
-                const badge = !user ? getBadge(p.id) : null;
-                const badgeHtml = badge ? `<span class="badge ${badge}">${badge === 'top1' ? '🥇 Top 1' : badge === 'top2' ? '🥈 Top 2' : '🥉 Top 3'}</span>` : '';
-                return `<th>${p.name} ${badgeHtml}</th>`;
-              }).join('')}
-            </tr>
-          </thead>
-          <tbody>
-            <tr><td>Developer</td>${projects.map(p => `<td>${p.developer?.name || '-'}</td>`).join('')}</tr>
-            <tr><td>Location</td>${projects.map(p => `<td>${p.location || '-'}</td>`).join('')}</tr>
-            <tr><td>Emirate</td>${projects.map(p => `<td>${p.emirate || '-'}</td>`).join('')}</tr>
-            <tr><td>Price From</td>${projects.map(p => `<td>AED ${((p.price_from || 0) / 1000000).toFixed(1)}M</td>`).join('')}</tr>
-            <tr><td>Price To</td>${projects.map(p => `<td>${p.price_to ? `AED ${(p.price_to / 1000000).toFixed(1)}M` : '-'}</td>`).join('')}</tr>
-            <tr><td>Bedrooms</td>${projects.map(p => `<td>${p.bedrooms_min} - ${p.bedrooms_max} BR</td>`).join('')}</tr>
-            <tr><td>Size Range</td>${projects.map(p => `<td>${p.size_min?.toLocaleString() || '-'} - ${p.size_max?.toLocaleString() || '-'} sqft</td>`).join('')}</tr>
-            <tr><td>Handover</td>${projects.map(p => `<td>${p.handover_date || 'Ready'}</td>`).join('')}</tr>
-            <tr><td>Payment Plan</td>${projects.map(p => `<td>${p.payment_plan || '-'}</td>`).join('')}</tr>
-            <tr><td>Views</td>${projects.map(p => `<td>${p.views?.join(', ') || '-'}</td>`).join('')}</tr>
-            <tr><td>Rating</td>${projects.map(p => `<td class="rating">${'★'.repeat(Math.min(5, Math.ceil((p.price_from || 0) / 10000000)))}</td>`).join('')}</tr>
-          </tbody>
-        </table>
-        ${aiComparison ? `<div style="margin-top: 30px;"><h3>AI Analysis</h3><p style="white-space: pre-wrap; color: #333; line-height: 1.6;">${aiComparison}</p></div>` : ''}
-        <div class="footer">
-          <p>© ${new Date().getFullYear()} JJ Global Capital | Premium Property Investment Advisory</p>
-          <p>Contact: investor@jjglobalcapital.com | www.jjglobalcapital.com</p>
-        </div>
-      </body>
-      </html>
-    `;
+    const renderStars = (rating: number) => "★".repeat(rating) + "☆".repeat(5 - rating);
 
-    // Create blob and download
-    const blob = new Blob([tableHtml], { type: 'text/html' });
+    const reportHTML = `<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Property Comparison Report - JJ Global Capital</title>
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; background: #0a0a0a; color: #fff; padding: 40px; }
+    .container { max-width: 1200px; margin: 0 auto; }
+    .header { text-align: center; border-bottom: 2px solid #A8925A; padding-bottom: 30px; margin-bottom: 40px; }
+    .logo { font-size: 28px; font-weight: bold; }
+    .gold { color: #A8925A; }
+    .subtitle { color: #888; margin-top: 10px; }
+    .user-info { margin-top: 15px; font-size: 14px; color: #666; }
+    
+    h2 { color: #A8925A; font-size: 20px; margin: 30px 0 20px; border-bottom: 1px solid #333; padding-bottom: 10px; }
+    
+    .summary-box { background: linear-gradient(135deg, rgba(168,146,90,0.15), transparent); border: 1px solid rgba(168,146,90,0.3); border-radius: 12px; padding: 25px; margin-bottom: 30px; }
+    .summary-text { font-size: 16px; line-height: 1.8; color: #ccc; }
+    
+    table { width: 100%; border-collapse: collapse; margin-bottom: 30px; background: #1a1a1a; border-radius: 12px; overflow: hidden; }
+    th { background: #252525; color: #A8925A; padding: 15px; text-align: left; font-weight: 600; }
+    td { padding: 12px 15px; border-bottom: 1px solid #333; color: #ddd; }
+    tr:last-child td { border-bottom: none; }
+    
+    .rating-card { background: #1a1a1a; border: 1px solid #333; border-radius: 12px; padding: 20px; margin-bottom: 20px; }
+    .rating-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 15px; }
+    .rating-name { font-size: 18px; font-weight: 600; }
+    .rating-stars { color: #A8925A; font-size: 24px; }
+    .rating-grid { display: grid; grid-template-columns: repeat(5, 1fr); gap: 10px; margin-bottom: 15px; }
+    .rating-item { text-align: center; background: #252525; padding: 10px; border-radius: 8px; }
+    .rating-item-label { font-size: 11px; color: #888; }
+    .rating-item-value { color: #A8925A; margin-top: 5px; }
+    .pros-cons { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; }
+    .pros, .cons { padding: 15px; border-radius: 8px; }
+    .pros { background: rgba(34,197,94,0.1); border: 1px solid rgba(34,197,94,0.3); }
+    .cons { background: rgba(239,68,68,0.1); border: 1px solid rgba(239,68,68,0.3); }
+    .pros h4 { color: #22c55e; } .cons h4 { color: #ef4444; }
+    .pros li, .cons li { margin: 5px 0; font-size: 14px; color: #ccc; }
+    
+    .recommendation-box { background: linear-gradient(135deg, #A8925A, #8B7744); border-radius: 12px; padding: 30px; margin: 30px 0; }
+    .recommendation-box h3 { color: #000; font-size: 22px; margin-bottom: 10px; }
+    .recommendation-box p { color: #222; font-size: 16px; line-height: 1.6; }
+    .best-for { display: grid; grid-template-columns: repeat(2, 1fr); gap: 15px; margin-top: 20px; }
+    .best-for-item { background: rgba(0,0,0,0.2); padding: 12px; border-radius: 8px; }
+    .best-for-label { font-size: 12px; color: #333; font-weight: 600; }
+    .best-for-value { color: #000; margin-top: 5px; }
+    
+    .risk-section { background: rgba(239,68,68,0.1); border: 1px solid rgba(239,68,68,0.3); border-radius: 12px; padding: 20px; margin: 30px 0; }
+    .risk-section h4 { color: #ef4444; margin-bottom: 15px; }
+    .risk-section li { color: #ccc; margin: 8px 0; }
+    
+    .footer { text-align: center; margin-top: 50px; padding-top: 30px; border-top: 1px solid #333; color: #666; }
+    .footer p { margin: 5px 0; }
+    
+    .tag { display: inline-block; background: #252525; color: #A8925A; padding: 4px 10px; border-radius: 15px; font-size: 12px; margin: 3px; }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <div class="header">
+      <div class="logo"><span class="gold">J | J</span> GLOBAL CAPITAL</div>
+      <p class="subtitle">Premium Property Investment Advisory • AI-Powered Comparison Report</p>
+      <p class="user-info">Prepared for: <strong>${userName}</strong> | Date: ${dateStr}</p>
+    </div>
+
+    <div class="summary-box">
+      <p class="summary-text">${aiAnalysis.summary}</p>
+    </div>
+
+    <h2>📊 Property Details Comparison</h2>
+    <table>
+      <thead>
+        <tr>
+          <th>Feature</th>
+          ${aiAnalysis.projectDetailsTable.map(p => `<th>${p.projectName}</th>`).join('')}
+        </tr>
+      </thead>
+      <tbody>
+        <tr><td><strong>Developer</strong></td>${aiAnalysis.projectDetailsTable.map(p => `<td>${p.developer}<br><small style="color:#888">${p.developerTier}</small></td>`).join('')}</tr>
+        <tr><td><strong>Location</strong></td>${aiAnalysis.projectDetailsTable.map(p => `<td>${p.location}</td>`).join('')}</tr>
+        <tr><td><strong>Area Type</strong></td>${aiAnalysis.projectDetailsTable.map(p => `<td>${p.areaType}</td>`).join('')}</tr>
+        <tr><td><strong>Traffic Level</strong></td>${aiAnalysis.projectDetailsTable.map(p => `<td>${p.trafficLevel}</td>`).join('')}</tr>
+        <tr><td><strong>Price Range</strong></td>${aiAnalysis.projectDetailsTable.map(p => `<td>${p.priceRange}</td>`).join('')}</tr>
+        <tr><td><strong>Price/sqft</strong></td>${aiAnalysis.projectDetailsTable.map(p => `<td>AED ${p.pricePerSqft?.toLocaleString() || 'N/A'}</td>`).join('')}</tr>
+        <tr><td><strong>Bedrooms</strong></td>${aiAnalysis.projectDetailsTable.map(p => `<td>${p.bedrooms}</td>`).join('')}</tr>
+        <tr><td><strong>Size Range</strong></td>${aiAnalysis.projectDetailsTable.map(p => `<td>${p.sizeRange}</td>`).join('')}</tr>
+        <tr><td><strong>Handover</strong></td>${aiAnalysis.projectDetailsTable.map(p => `<td>${p.handover}</td>`).join('')}</tr>
+        <tr><td><strong>Payment Plan</strong></td>${aiAnalysis.projectDetailsTable.map(p => `<td>${p.paymentPlan}</td>`).join('')}</tr>
+        <tr><td><strong>Investment Type</strong></td>${aiAnalysis.projectDetailsTable.map(p => `<td>${p.investmentType}</td>`).join('')}</tr>
+        <tr><td><strong>Target Buyer</strong></td>${aiAnalysis.projectDetailsTable.map(p => `<td>${p.targetBuyer}</td>`).join('')}</tr>
+        <tr><td><strong>Views</strong></td>${aiAnalysis.projectDetailsTable.map(p => `<td>${p.views?.join(', ') || '-'}</td>`).join('')}</tr>
+        <tr><td><strong>Key Amenities</strong></td>${aiAnalysis.projectDetailsTable.map(p => `<td>${p.keyAmenities?.slice(0,5).join(', ') || '-'}</td>`).join('')}</tr>
+        <tr><td><strong>Unique Selling Points</strong></td>${aiAnalysis.projectDetailsTable.map(p => `<td>${p.uniqueSellingPoints?.join(', ') || '-'}</td>`).join('')}</tr>
+      </tbody>
+    </table>
+
+    <h2>⭐ Ratings & Analysis</h2>
+    ${aiAnalysis.ratings.map(r => `
+    <div class="rating-card">
+      <div class="rating-header">
+        <span class="rating-name">${r.projectName}</span>
+        <span class="rating-stars">${renderStars(r.overallRating)}</span>
+      </div>
+      <div class="rating-grid">
+        <div class="rating-item"><div class="rating-item-label">Location</div><div class="rating-item-value">${renderStars(r.locationRating)}</div></div>
+        <div class="rating-item"><div class="rating-item-label">Value</div><div class="rating-item-value">${renderStars(r.valueRating)}</div></div>
+        <div class="rating-item"><div class="rating-item-label">Amenities</div><div class="rating-item-value">${renderStars(r.amenitiesRating)}</div></div>
+        <div class="rating-item"><div class="rating-item-label">Investment</div><div class="rating-item-value">${renderStars(r.investmentRating)}</div></div>
+        <div class="rating-item"><div class="rating-item-label">Developer</div><div class="rating-item-value">${renderStars(r.developerRating)}</div></div>
+      </div>
+      <div class="pros-cons">
+        <div class="pros"><h4>✅ Pros</h4><ul>${r.pros?.map(p => `<li>${p}</li>`).join('') || ''}</ul></div>
+        <div class="cons"><h4>⚠️ Cons</h4><ul>${r.cons?.map(c => `<li>${c}</li>`).join('') || ''}</ul></div>
+      </div>
+    </div>
+    `).join('')}
+
+    <div class="recommendation-box">
+      <h3>🏆 Our Recommendation: ${aiAnalysis.recommendation.topChoice}</h3>
+      <p>${aiAnalysis.recommendation.reasoning}</p>
+      <div class="best-for">
+        <div class="best-for-item"><div class="best-for-label">Best for Investors</div><div class="best-for-value">${aiAnalysis.recommendation.bestFor.investors}</div></div>
+        <div class="best-for-item"><div class="best-for-label">Best for Families</div><div class="best-for-value">${aiAnalysis.recommendation.bestFor.families}</div></div>
+        <div class="best-for-item"><div class="best-for-label">Best for First-Time Buyers</div><div class="best-for-value">${aiAnalysis.recommendation.bestFor.firstTimeBuyers}</div></div>
+        <div class="best-for-item"><div class="best-for-label">Best for Luxury Buyers</div><div class="best-for-value">${aiAnalysis.recommendation.bestFor.luxuryBuyers}</div></div>
+      </div>
+      <p style="margin-top:20px; background:rgba(0,0,0,0.2); padding:15px; border-radius:8px;">
+        <strong>💡 Investment Advice:</strong> ${aiAnalysis.recommendation.investmentAdvice}
+      </p>
+    </div>
+
+    ${aiAnalysis.recommendation.riskFactors?.length ? `
+    <div class="risk-section">
+      <h4>⚠️ Risk Factors to Consider</h4>
+      <ul>${aiAnalysis.recommendation.riskFactors.map(r => `<li>${r}</li>`).join('')}</ul>
+    </div>
+    ` : ''}
+
+    <div class="footer">
+      <p><strong>JJ Global Capital</strong> - Premium Property Investment Advisory</p>
+      <p>📧 invest@jjglobalcapital.com | 📞 +971 56 591 1000</p>
+      <p>🌐 www.jjglobalcapital.com</p>
+      <p style="margin-top:15px; font-size:12px;">Powered & Made by JJ Global Capital — Part of JJ Holding Group</p>
+      <p style="margin-top:10px; font-size:11px; font-style:italic;">
+        This report is for informational purposes only. Investment decisions should be made after consulting with our advisors.
+      </p>
+    </div>
+  </div>
+</body>
+</html>`;
+
+    const blob = new Blob([reportHTML], { type: 'text/html' });
     const url = URL.createObjectURL(blob);
     const a = document.createElement('a');
     a.href = url;
-    a.download = `JJ-Global-Capital-Comparison-${userName.replace(/\s+/g, '-')}-${dateStr.replace(/\s+/g, '-')}.html`;
+    a.download = `JJ-Global-Capital-AI-Comparison-${userName.replace(/\s+/g, '-')}-${dateStr.replace(/\s+/g, '-')}.html`;
     document.body.appendChild(a);
     a.click();
     document.body.removeChild(a);
     URL.revokeObjectURL(url);
     
-    toast.success("Comparison table downloaded!");
+    toast.success("AI Comparison Report downloaded!");
   };
 
   // Submit evaluation request
@@ -221,7 +390,7 @@ const Compare = () => {
         user_email: formData.email,
         user_name: formData.name,
         user_phone: formData.phone,
-        ai_comparison: aiComparison,
+        ai_comparison: aiAnalysis ? JSON.stringify(aiAnalysis) : null,
         status: "pending",
       });
 
@@ -229,13 +398,22 @@ const Compare = () => {
     },
     onSuccess: () => {
       setRequestSent(true);
-      toast.success("Evaluation request sent! Our team will contact you shortly.");
+      toast.success("Consultation request sent! Our advisor will contact you shortly.");
     },
     onError: (error) => {
       console.error(error);
       toast.error("Failed to submit request. Please try again.");
     },
   });
+
+  const renderStars = (rating: number) => {
+    return (
+      <span className="text-gold">
+        {"★".repeat(rating)}
+        <span className="text-zinc-600">{"☆".repeat(5 - rating)}</span>
+      </span>
+    );
+  };
 
   if (isLoading) {
     return (
@@ -251,10 +429,10 @@ const Compare = () => {
         <div className="container mx-auto px-4 text-center">
           <h1 className="text-white text-3xl font-bold mb-4">No Properties to Compare</h1>
           <p className="text-zinc-400 mb-8">
-            Add properties to your shortlist to compare them.
+            Add 2-5 properties to your shortlist to compare them with AI analysis.
           </p>
-          <Link to="/">
-            <Button className="bg-white text-zinc-900 hover:bg-zinc-100">
+          <Link to="/properties">
+            <Button className="bg-gold text-black hover:bg-gold-light">
               Browse Properties
             </Button>
           </Link>
@@ -276,29 +454,54 @@ const Compare = () => {
         </Link>
 
         <div className="flex flex-col gap-8">
-          {/* Title and Actions */}
+          {/* Title */}
           <div className="flex flex-col md:flex-row justify-between items-start md:items-center gap-4">
             <div>
-              <h1 className="text-white text-3xl font-bold mb-2">
-                Property Comparison
-              </h1>
+              <div className="flex items-center gap-3 mb-2">
+                <h1 className="text-white text-3xl font-bold">
+                  Smart Property Comparison
+                </h1>
+                <Badge className="bg-gradient-to-r from-purple-600 to-purple-800 text-white">
+                  <Sparkles className="w-3 h-3 mr-1" />
+                  AI Powered
+                </Badge>
+              </div>
               <p className="text-zinc-400">
-                Compare {projects.length} properties side by side
+                Compare {projects.length} properties with intelligent AI analysis
               </p>
             </div>
             <div className="flex gap-3">
+              {aiAnalysis && (
+                <Button
+                  onClick={downloadComprehensiveReport}
+                  variant="outline"
+                  className="border-gold text-gold hover:bg-gold/10"
+                >
+                  <Download className="w-4 h-4 mr-2" />
+                  Download Report
+                </Button>
+              )}
               <Button
-                onClick={downloadTable}
-                variant="outline"
-                className="border-zinc-700 text-zinc-300 hover:bg-zinc-800"
+                onClick={generateSmartAnalysis}
+                disabled={isGenerating || projects.length < 2}
+                className="bg-gradient-to-r from-purple-600 to-purple-800 text-white hover:from-purple-500 hover:to-purple-700"
               >
-                <Download className="w-4 h-4 mr-2" />
-                Download Comparison
+                {isGenerating ? (
+                  <>
+                    <Loader2 className="w-4 h-4 mr-2 animate-spin" />
+                    Analyzing...
+                  </>
+                ) : (
+                  <>
+                    <Sparkles className="w-4 h-4 mr-2" />
+                    {aiAnalysis ? "Regenerate Analysis" : "Generate AI Analysis"}
+                  </>
+                )}
               </Button>
             </div>
           </div>
 
-          {/* Comparison Table */}
+          {/* Basic Comparison Table */}
           <div ref={tableRef} className="overflow-x-auto bg-zinc-900 rounded-2xl border border-zinc-800">
             <table className="w-full">
               <thead>
@@ -338,34 +541,31 @@ const Compare = () => {
               </thead>
               <tbody>
                 {[
-                  { label: "Location", key: "location" },
+                  { label: "Location", icon: MapPin, key: "location" },
+                  { label: "Community", key: "community", format: (_: any, p: any) => p.community?.name || "-" },
                   { label: "Emirate", key: "emirate" },
-                  { label: "Price From", key: "price_from", format: (v: number) => `AED ${(v / 1000000).toFixed(1)}M` },
-                  { label: "Price To", key: "price_to", format: (v: number) => v ? `AED ${(v / 1000000).toFixed(1)}M` : "-" },
+                  { label: "Price From", key: "price_from", format: (v: number) => `AED ${(v / 1000000).toFixed(2)}M` },
+                  { label: "Price To", key: "price_to", format: (v: number) => v ? `AED ${(v / 1000000).toFixed(2)}M` : "-" },
                   { label: "Bedrooms", key: "bedrooms", format: (_: any, p: any) => `${p.bedrooms_min} - ${p.bedrooms_max} BR` },
                   { label: "Size Range", key: "size", format: (_: any, p: any) => `${p.size_min?.toLocaleString() || "-"} - ${p.size_max?.toLocaleString() || "-"} sqft` },
-                  { label: "Handover", key: "handover_date", format: (v: string) => v || "Ready" },
+                  { label: "Price/sqft", key: "pricesqft", format: (_: any, p: any) => p.size_min && p.price_from ? `AED ${Math.round(p.price_from / p.size_min).toLocaleString()}` : "-" },
+                  { label: "Handover", key: "handover_date", format: (v: string) => v || "Ready/TBD" },
                   { label: "Payment Plan", key: "payment_plan", format: (v: string) => v || "-" },
                   { label: "Furnished", key: "furnished_status" },
                   { label: "Views", key: "views", format: (v: string[]) => v?.join(", ") || "-" },
-                  { label: "Rating", key: "rating", format: (_: any, p: any) => {
-                    const stars = Math.min(5, Math.ceil((p.price_from || 0) / 10000000));
-                    return (
-                      <span className="text-gold">
-                        {"★".repeat(stars)}{"☆".repeat(5 - stars)}
-                      </span>
-                    );
-                  }},
+                  { label: "Key Amenities", key: "amenities", format: (v: string[]) => v?.slice(0, 5).join(", ") || "-" },
                 ].map((row) => (
-                  <tr key={row.label} className="border-b border-zinc-800/50">
-                    <td className="py-4 px-4 text-zinc-500 sticky left-0 bg-zinc-900">{row.label}</td>
+                  <tr key={row.label} className="border-b border-zinc-800/50 hover:bg-zinc-800/30">
+                    <td className="py-4 px-4 text-zinc-400 sticky left-0 bg-zinc-900 font-medium">
+                      {row.label}
+                    </td>
                     {projects.map((project) => {
                       const value = project[row.key as keyof typeof project];
                       const displayValue = row.format 
                         ? row.format(value as any, project)
                         : (value as string) || "-";
                       return (
-                        <td key={project.id} className="py-4 px-4 text-white">
+                        <td key={project.id} className="py-4 px-4 text-white text-sm">
                           {displayValue}
                         </td>
                       );
@@ -376,195 +576,295 @@ const Compare = () => {
             </table>
           </div>
 
-          {/* Action Cards */}
-          <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
-            {/* AI Comparison */}
-            <div className="bg-zinc-900 rounded-2xl p-6 border border-zinc-800">
-              <div className="flex items-center gap-3 mb-4">
-                <div className="w-10 h-10 rounded-full bg-gradient-to-br from-violet-500 to-fuchsia-500 flex items-center justify-center">
-                  <Sparkles className="w-5 h-5 text-white" />
+          {/* AI Analysis Section */}
+          {aiAnalysis ? (
+            <div className="space-y-8">
+              {/* Summary */}
+              <div className="bg-gradient-to-br from-purple-950/50 to-zinc-900 rounded-2xl border border-purple-800/30 p-6">
+                <div className="flex items-center gap-3 mb-4">
+                  <div className="w-10 h-10 rounded-full bg-gradient-to-br from-purple-500 to-purple-700 flex items-center justify-center">
+                    <Sparkles className="w-5 h-5 text-white" />
+                  </div>
+                  <div>
+                    <h3 className="text-white font-semibold text-lg">Executive Summary</h3>
+                    <p className="text-purple-400 text-sm">AI-Generated Analysis</p>
+                  </div>
                 </div>
-                <div>
-                  <h3 className="text-white font-semibold">AI Comparison</h3>
-                  <p className="text-zinc-500 text-sm">Powered by Advanced AI</p>
+                <p className="text-zinc-300 leading-relaxed">{aiAnalysis.summary}</p>
+              </div>
+
+              {/* Ratings Cards */}
+              <div>
+                <h2 className="text-white text-xl font-semibold mb-4 flex items-center gap-2">
+                  <Star className="w-5 h-5 text-gold" />
+                  Property Ratings
+                </h2>
+                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+                  {aiAnalysis.ratings.map((rating, index) => (
+                    <div key={index} className="bg-zinc-900 rounded-xl border border-zinc-800 p-5">
+                      <div className="flex justify-between items-start mb-4">
+                        <h4 className="text-white font-semibold">{rating.projectName}</h4>
+                        <div className="text-2xl">{renderStars(rating.overallRating)}</div>
+                      </div>
+                      
+                      <div className="grid grid-cols-5 gap-2 mb-4">
+                        <div className="text-center">
+                          <div className="text-xs text-zinc-500 mb-1">Location</div>
+                          <div className="text-gold text-sm">{renderStars(rating.locationRating)}</div>
+                        </div>
+                        <div className="text-center">
+                          <div className="text-xs text-zinc-500 mb-1">Value</div>
+                          <div className="text-gold text-sm">{renderStars(rating.valueRating)}</div>
+                        </div>
+                        <div className="text-center">
+                          <div className="text-xs text-zinc-500 mb-1">Amenities</div>
+                          <div className="text-gold text-sm">{renderStars(rating.amenitiesRating)}</div>
+                        </div>
+                        <div className="text-center">
+                          <div className="text-xs text-zinc-500 mb-1">Invest</div>
+                          <div className="text-gold text-sm">{renderStars(rating.investmentRating)}</div>
+                        </div>
+                        <div className="text-center">
+                          <div className="text-xs text-zinc-500 mb-1">Developer</div>
+                          <div className="text-gold text-sm">{renderStars(rating.developerRating)}</div>
+                        </div>
+                      </div>
+
+                      <div className="grid grid-cols-2 gap-3">
+                        <div className="bg-green-950/30 border border-green-900/30 rounded-lg p-3">
+                          <div className="text-green-400 text-xs font-semibold mb-2 flex items-center gap-1">
+                            <CheckCircle className="w-3 h-3" /> Pros
+                          </div>
+                          <ul className="text-xs text-zinc-400 space-y-1">
+                            {rating.pros?.slice(0, 3).map((pro, i) => (
+                              <li key={i}>• {pro}</li>
+                            ))}
+                          </ul>
+                        </div>
+                        <div className="bg-red-950/30 border border-red-900/30 rounded-lg p-3">
+                          <div className="text-red-400 text-xs font-semibold mb-2 flex items-center gap-1">
+                            <AlertTriangle className="w-3 h-3" /> Cons
+                          </div>
+                          <ul className="text-xs text-zinc-400 space-y-1">
+                            {rating.cons?.slice(0, 3).map((con, i) => (
+                              <li key={i}>• {con}</li>
+                            ))}
+                          </ul>
+                        </div>
+                      </div>
+                    </div>
+                  ))}
                 </div>
               </div>
 
-              {aiComparison ? (
-                <div className="prose prose-invert prose-sm max-w-none">
-                  <div className="text-zinc-300 whitespace-pre-wrap text-sm leading-relaxed max-h-[300px] overflow-y-auto">
-                    {aiComparison}
+              {/* Recommendation */}
+              <div className="bg-gradient-to-r from-gold/20 to-gold-light/10 rounded-2xl border border-gold/30 p-6">
+                <div className="flex items-center gap-3 mb-4">
+                  <Award className="w-8 h-8 text-gold" />
+                  <div>
+                    <h3 className="text-white font-bold text-xl">Our Recommendation</h3>
+                    <p className="text-gold text-lg">{aiAnalysis.recommendation.topChoice}</p>
                   </div>
-                  {!hasActiveMembership && (
-                    <div className="mt-4 bg-gold/10 border border-gold/30 rounded-lg p-3 text-center">
-                      <p className="text-gold text-sm">
-                        <Crown className="w-4 h-4 inline mr-1" />
-                        Upgrade to VIP for unlimited regenerations
-                      </p>
+                </div>
+                <p className="text-zinc-300 mb-6">{aiAnalysis.recommendation.reasoning}</p>
+                
+                <div className="grid grid-cols-2 md:grid-cols-4 gap-4 mb-6">
+                  <div className="bg-zinc-900/50 rounded-lg p-4">
+                    <div className="flex items-center gap-2 text-zinc-400 text-sm mb-2">
+                      <TrendingUp className="w-4 h-4" /> For Investors
                     </div>
-                  )}
+                    <p className="text-white text-sm">{aiAnalysis.recommendation.bestFor.investors}</p>
+                  </div>
+                  <div className="bg-zinc-900/50 rounded-lg p-4">
+                    <div className="flex items-center gap-2 text-zinc-400 text-sm mb-2">
+                      <Home className="w-4 h-4" /> For Families
+                    </div>
+                    <p className="text-white text-sm">{aiAnalysis.recommendation.bestFor.families}</p>
+                  </div>
+                  <div className="bg-zinc-900/50 rounded-lg p-4">
+                    <div className="flex items-center gap-2 text-zinc-400 text-sm mb-2">
+                      <Users className="w-4 h-4" /> First-Time Buyers
+                    </div>
+                    <p className="text-white text-sm">{aiAnalysis.recommendation.bestFor.firstTimeBuyers}</p>
+                  </div>
+                  <div className="bg-zinc-900/50 rounded-lg p-4">
+                    <div className="flex items-center gap-2 text-zinc-400 text-sm mb-2">
+                      <Crown className="w-4 h-4" /> Luxury Buyers
+                    </div>
+                    <p className="text-white text-sm">{aiAnalysis.recommendation.bestFor.luxuryBuyers}</p>
+                  </div>
                 </div>
-              ) : (
-                <div className="text-center py-6">
-                  {needsVipForCompare ? (
-                    <>
-                      <div className="mb-4 bg-gold/10 border border-gold/30 rounded-lg p-4">
-                        <Crown className="w-8 h-8 text-gold mx-auto mb-2" />
-                        <p className="text-gold text-sm font-medium mb-1">VIP Access Required</p>
-                        <p className="text-zinc-400 text-xs">
-                          You've used your free AI comparison. Upgrade to VIP for unlimited access.
-                        </p>
-                      </div>
-                      <Button
-                        onClick={() => setShowVipModal(true)}
-                        className="bg-gradient-to-r from-gold via-gold to-gold-dark text-black hover:brightness-110"
-                      >
-                        <Crown className="w-4 h-4 mr-2" />
-                        Upgrade to VIP ($100/year)
-                      </Button>
-                    </>
-                  ) : (
-                    <>
-                      <div className="mb-4 bg-green-500/10 border border-green-500/30 rounded-lg p-3">
-                        <Gift className="w-5 h-5 text-green-400 mx-auto mb-1" />
-                        <p className="text-green-400 text-xs font-medium">First AI Comparison FREE!</p>
-                      </div>
-                      <p className="text-zinc-400 text-sm mb-4">
-                        Get an AI-powered analysis comparing these properties with star ratings and recommendations
-                      </p>
-                      <Button
-                        onClick={generateComparison}
-                        disabled={isGenerating || projects.length < 2}
-                        className="bg-gradient-to-r from-violet-600 to-fuchsia-600 hover:from-violet-500 hover:to-fuchsia-500 text-white"
-                      >
-                        {isGenerating ? (
-                          <>
-                            <Loader2 className="w-4 h-4 mr-2 animate-spin" />
-                            Analyzing...
-                          </>
-                        ) : (
-                          <>
-                            <Sparkles className="w-4 h-4 mr-2" />
-                            Generate Free AI Analysis
-                          </>
-                        )}
-                      </Button>
-                    </>
-                  )}
+
+                <div className="bg-zinc-900/70 rounded-lg p-4 border border-zinc-700">
+                  <div className="flex items-center gap-2 text-gold mb-2">
+                    <Zap className="w-4 h-4" />
+                    <span className="font-semibold">Investment Advice</span>
+                  </div>
+                  <p className="text-zinc-300 text-sm">{aiAnalysis.recommendation.investmentAdvice}</p>
                 </div>
+
+                {aiAnalysis.recommendation.riskFactors?.length > 0 && (
+                  <div className="mt-4 bg-red-950/20 border border-red-900/30 rounded-lg p-4">
+                    <div className="flex items-center gap-2 text-red-400 mb-2">
+                      <AlertTriangle className="w-4 h-4" />
+                      <span className="font-semibold">Risk Factors to Consider</span>
+                    </div>
+                    <ul className="text-zinc-400 text-sm space-y-1">
+                      {aiAnalysis.recommendation.riskFactors.map((risk, i) => (
+                        <li key={i}>• {risk}</li>
+                      ))}
+                    </ul>
+                  </div>
+                )}
+              </div>
+            </div>
+          ) : (
+            /* CTA to Generate Analysis */
+            <div className="bg-gradient-to-br from-purple-950/50 to-zinc-900 rounded-2xl border border-purple-800/30 p-8 text-center">
+              <div className="w-16 h-16 rounded-full bg-gradient-to-br from-purple-500 to-purple-700 flex items-center justify-center mx-auto mb-4">
+                <Sparkles className="w-8 h-8 text-white" />
+              </div>
+              <h3 className="text-white text-2xl font-bold mb-2">Unlock AI Analysis</h3>
+              <p className="text-zinc-400 max-w-md mx-auto mb-6">
+                Get detailed property comparisons, ratings, investment recommendations, and personalized advice powered by advanced AI.
+              </p>
+              <Button
+                onClick={generateSmartAnalysis}
+                disabled={isGenerating || projects.length < 2}
+                size="lg"
+                className="bg-gradient-to-r from-purple-600 to-purple-800 text-white hover:from-purple-500 hover:to-purple-700"
+              >
+                {isGenerating ? (
+                  <>
+                    <Loader2 className="w-5 h-5 mr-2 animate-spin" />
+                    Generating Analysis...
+                  </>
+                ) : (
+                  <>
+                    <Sparkles className="w-5 h-5 mr-2" />
+                    Generate AI Analysis
+                    {!hasActiveMembership && !hasUsedFreeCompare && (
+                      <Badge className="ml-2 bg-green-500 text-white text-xs">FREE</Badge>
+                    )}
+                  </>
+                )}
+              </Button>
+              {projects.length < 2 && (
+                <p className="text-zinc-500 text-sm mt-4">Add at least 2 properties to enable AI comparison</p>
               )}
             </div>
+          )}
 
-            {/* Expert Consultation */}
-            <div className="bg-zinc-900 rounded-2xl p-6 border border-zinc-800">
-              <div className="flex items-center gap-3 mb-4">
-                <div className="w-10 h-10 rounded-full bg-gradient-to-br from-gold to-gold-dark flex items-center justify-center">
-                  <Users className="w-5 h-5 text-black" />
-                </div>
-                <div>
-                  <h3 className="text-white font-semibold">Expert Consultation</h3>
-                  <p className="text-zinc-500 text-sm">Complimentary Professional Evaluation</p>
-                </div>
+          {/* Contact Advisor Section */}
+          <div className="bg-zinc-900 rounded-2xl border border-zinc-800 p-6">
+            <div className="flex items-center gap-3 mb-6">
+              <div className="w-10 h-10 rounded-full bg-gold flex items-center justify-center">
+                <Users className="w-5 h-5 text-black" />
               </div>
+              <div>
+                <h3 className="text-white font-semibold text-lg">Need Expert Guidance?</h3>
+                <p className="text-zinc-400 text-sm">Speak with our investment advisors</p>
+              </div>
+            </div>
 
-              {requestSent ? (
-                <div className="text-center py-6">
-                  <CheckCircle className="w-12 h-12 text-green-500 mx-auto mb-3" />
-                  <p className="text-white font-medium">Request Submitted!</p>
-                  <p className="text-zinc-400 text-sm mt-2">
-                    Our investment specialists will contact you within 24 hours
-                  </p>
-                </div>
-              ) : showRequestForm ? (
-                <form
-                  onSubmit={(e) => {
-                    e.preventDefault();
-                    submitRequest.mutate();
-                  }}
-                  className="space-y-4"
-                >
-                  <div>
-                    <label className="text-zinc-400 text-sm mb-1 block">Name</label>
-                    <Input
-                      value={formData.name}
-                      onChange={(e) => setFormData({ ...formData, name: e.target.value })}
-                      className="bg-zinc-800 border-zinc-700 text-white"
-                      placeholder="Your name"
-                      required
-                    />
-                  </div>
-                  <div>
-                    <label className="text-zinc-400 text-sm mb-1 block">Email</label>
-                    <Input
-                      type="email"
-                      value={formData.email}
-                      onChange={(e) => setFormData({ ...formData, email: e.target.value })}
-                      className="bg-zinc-800 border-zinc-700 text-white"
-                      placeholder="your@email.com"
-                      required
-                    />
-                  </div>
-                  <div>
-                    <label className="text-zinc-400 text-sm mb-1 block">Phone (optional)</label>
-                    <Input
-                      value={formData.phone}
-                      onChange={(e) => setFormData({ ...formData, phone: e.target.value })}
-                      className="bg-zinc-800 border-zinc-700 text-white"
-                      placeholder="+971..."
-                    />
-                  </div>
+            {requestSent ? (
+              <div className="text-center py-8">
+                <CheckCircle className="w-12 h-12 text-green-500 mx-auto mb-4" />
+                <h4 className="text-white text-lg font-semibold mb-2">Request Sent!</h4>
+                <p className="text-zinc-400">Our advisor will contact you within 24 hours.</p>
+              </div>
+            ) : showRequestForm ? (
+              <div className="space-y-4">
+                <Input
+                  placeholder="Your Name"
+                  value={formData.name}
+                  onChange={(e) => setFormData(prev => ({ ...prev, name: e.target.value }))}
+                  className="bg-zinc-800 border-zinc-700 text-white"
+                />
+                <Input
+                  type="email"
+                  placeholder="Email Address"
+                  value={formData.email}
+                  onChange={(e) => setFormData(prev => ({ ...prev, email: e.target.value }))}
+                  className="bg-zinc-800 border-zinc-700 text-white"
+                />
+                <Input
+                  type="tel"
+                  placeholder="Phone Number"
+                  value={formData.phone}
+                  onChange={(e) => setFormData(prev => ({ ...prev, phone: e.target.value }))}
+                  className="bg-zinc-800 border-zinc-700 text-white"
+                />
+                <div className="flex gap-3">
                   <Button
-                    type="submit"
-                    disabled={submitRequest.isPending}
-                    className="w-full bg-gradient-to-r from-gold to-gold-dark text-black hover:opacity-90"
+                    onClick={() => submitRequest.mutate()}
+                    disabled={!formData.email || submitRequest.isPending}
+                    className="flex-1 bg-gold text-black hover:bg-gold-light"
                   >
                     {submitRequest.isPending ? (
-                      <Loader2 className="w-4 h-4 mr-2 animate-spin" />
+                      <Loader2 className="w-4 h-4 animate-spin" />
                     ) : (
-                      <Send className="w-4 h-4 mr-2" />
+                      <>
+                        <Send className="w-4 h-4 mr-2" />
+                        Request Consultation
+                      </>
                     )}
-                    Request Expert Evaluation
                   </Button>
-                </form>
-              ) : (
-                <div className="text-center py-6">
-                  <p className="text-zinc-400 text-sm mb-4">
-                    Our investment specialists will provide a detailed analysis and personalized recommendations
-                  </p>
                   <Button
-                    onClick={() => setShowRequestForm(true)}
-                    className="bg-gradient-to-r from-gold to-gold-dark text-black hover:opacity-90"
+                    variant="outline"
+                    onClick={() => setShowRequestForm(false)}
+                    className="border-zinc-700 text-zinc-400"
                   >
-                    <Users className="w-4 h-4 mr-2" />
-                    Request Free Consultation
+                    Cancel
                   </Button>
-                  <p className="text-zinc-600 text-xs mt-3">
-                    Or contact us directly via our{" "}
-                    <a href={INQUIRY_FORM_URL} target="_blank" rel="noopener noreferrer" className="text-gold hover:underline">
-                      inquiry form
-                    </a>
-                  </p>
                 </div>
-              )}
-            </div>
+              </div>
+            ) : (
+              <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+                <Button
+                  onClick={() => setShowRequestForm(true)}
+                  className="bg-gold text-black hover:bg-gold-light"
+                >
+                  <Mail className="w-4 h-4 mr-2" />
+                  Request Callback
+                </Button>
+                <a href="tel:+971565911000">
+                  <Button variant="outline" className="w-full border-zinc-700 text-white hover:bg-zinc-800">
+                    <Phone className="w-4 h-4 mr-2" />
+                    Call Now
+                  </Button>
+                </a>
+                <a href={INQUIRY_FORM_URL} target="_blank" rel="noopener noreferrer">
+                  <Button variant="outline" className="w-full border-zinc-700 text-white hover:bg-zinc-800">
+                    <BadgeCheck className="w-4 h-4 mr-2" />
+                    Full Inquiry Form
+                  </Button>
+                </a>
+              </div>
+            )}
+          </div>
+
+          {/* Footer Branding */}
+          <div className="text-center text-zinc-600 text-sm py-4">
+            Powered & Made by <span className="text-gold">JJ Global Capital</span> — Part of JJ Holding Group
           </div>
         </div>
       </div>
 
-      {/* VIP Upgrade Modal */}
+      {/* VIP Modal */}
       <PaymentModal
         open={showVipModal}
         onOpenChange={setShowVipModal}
         onSuccess={() => {
           setShowVipModal(false);
-          toast.success("VIP upgrade submitted! Generate AI analysis after payment verification.");
+          generateSmartAnalysis();
         }}
         userInfo={{
           fullName: formData.name || user?.email?.split("@")[0] || "",
           email: formData.email || user?.email || "",
           phone: formData.phone || "",
         }}
-        mode="regenerate"
+        mode="vip"
       />
     </section>
   );

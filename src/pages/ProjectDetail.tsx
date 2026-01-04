@@ -1,3 +1,4 @@
+import { useState } from "react";
 import { useParams, Link } from "react-router-dom";
 import { useProject } from "@/hooks/useProjects";
 import ImageCarousel from "@/components/ImageCarousel";
@@ -6,14 +7,16 @@ import ShareButton from "@/components/ShareButton";
 import FavoriteButton from "@/components/FavoriteButton";
 import { Skeleton } from "@/components/ui/skeleton";
 import { Button } from "@/components/ui/button";
-import { ChevronLeft, MapPin, Building, Calendar, DollarSign, Layers, Users, Map } from "lucide-react";
+import { ChevronLeft, MapPin, Building, Calendar, DollarSign, Layers, Users, Map, Download, Loader2, FileText } from "lucide-react";
+import { supabase } from "@/integrations/supabase/client";
+import { toast } from "sonner";
 
 const INQUIRY_FORM_URL = "https://jjglobalcapital.com/form/property-investment-inquiry-form/";
 
 const ProjectDetail = () => {
   const { slug } = useParams<{ slug: string }>();
   const { data: project, isLoading } = useProject(slug || "");
-
+  const [isGeneratingReport, setIsGeneratingReport] = useState(false);
   if (isLoading) {
     return (
       <section className="relative w-full min-h-screen py-16 md:py-24 bg-zinc-950">
@@ -45,6 +48,64 @@ const ProjectDetail = () => {
       return `AED ${(price / 1000000).toFixed(1)}M`;
     }
     return `AED ${price.toLocaleString()}`;
+  };
+
+  // Download exclusive property report
+  const downloadExclusiveReport = async () => {
+    if (!project) return;
+    
+    setIsGeneratingReport(true);
+    try {
+      const projectData = {
+        id: project.id,
+        name: project.name,
+        developer: project.developer?.name,
+        location: project.location,
+        emirate: project.emirate,
+        community: project.community?.name,
+        description: project.description,
+        priceFrom: project.price_from,
+        priceTo: project.price_to,
+        bedroomsMin: project.bedrooms_min,
+        bedroomsMax: project.bedrooms_max,
+        sizeMin: project.size_min,
+        sizeMax: project.size_max,
+        handover: project.handover_date,
+        paymentPlan: project.payment_plan,
+        amenities: project.amenities,
+        facilities: project.facilities,
+        views: project.views,
+        furnishedStatus: project.furnished_status,
+        floors: project.floors,
+        serviceCharge: project.service_charge,
+        images: project.images?.map(img => ({ image_url: img.image_url, alt_text: img.alt_text })),
+        documents: project.documents?.map(doc => ({ file_url: doc.file_url, file_name: doc.file_name, document_type: doc.document_type })),
+      };
+
+      const response = await supabase.functions.invoke("generate-property-report", {
+        body: { project: projectData },
+      });
+
+      if (response.error) throw response.error;
+
+      // Download the HTML report
+      const blob = new Blob([response.data.html], { type: 'text/html' });
+      const url = URL.createObjectURL(blob);
+      const a = document.createElement('a');
+      a.href = url;
+      a.download = `JJ-Global-Capital-${project.name.replace(/\s+/g, '-')}-Report.html`;
+      document.body.appendChild(a);
+      a.click();
+      document.body.removeChild(a);
+      URL.revokeObjectURL(url);
+      
+      toast.success("Exclusive property report downloaded!");
+    } catch (error) {
+      console.error("Failed to generate report:", error);
+      toast.error("Failed to generate report. Please try again.");
+    } finally {
+      setIsGeneratingReport(false);
+    }
   };
 
   return (
@@ -251,6 +312,39 @@ const ProjectDetail = () => {
 
           {/* Sidebar */}
           <div className="space-y-6">
+            {/* Exclusive Report Download */}
+            <div className="bg-gradient-to-br from-gold/10 to-gold/5 rounded-lg p-6 border border-gold/30">
+              <div className="flex items-center gap-3 mb-4">
+                <div className="w-10 h-10 rounded-full bg-gold flex items-center justify-center">
+                  <FileText className="w-5 h-5 text-black" />
+                </div>
+                <div>
+                  <h3 className="text-white font-semibold">Exclusive Report</h3>
+                  <p className="text-zinc-400 text-sm">All details in one document</p>
+                </div>
+              </div>
+              <p className="text-zinc-400 text-sm mb-4">
+                Download a comprehensive report with all property details, payment plans, amenities, and investment info.
+              </p>
+              <Button
+                onClick={downloadExclusiveReport}
+                disabled={isGeneratingReport}
+                className="w-full bg-gold text-black hover:bg-gold-light font-semibold"
+              >
+                {isGeneratingReport ? (
+                  <>
+                    <Loader2 className="w-4 h-4 mr-2 animate-spin" />
+                    Generating Report...
+                  </>
+                ) : (
+                  <>
+                    <Download className="w-4 h-4 mr-2" />
+                    Download Full Report
+                  </>
+                )}
+              </Button>
+            </div>
+
             {/* Downloads */}
             <DocumentDownloads documents={project.documents || []} />
 
