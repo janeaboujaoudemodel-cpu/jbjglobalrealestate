@@ -1,5 +1,5 @@
-// JJ Logo Component - Text version for header, Image for footer
-import jjLogoImage from "@/assets/jj-flags.png";
+// JJ Logo Component - Text version for both header and footer
+// Reduced spacing between GLOBAL and CAPITAL
 
 interface JJLogoProps {
   size?: 'sm' | 'md' | 'lg' | 'xl' | 'footer';
@@ -14,8 +14,8 @@ const sizeConfig = {
     text: 'text-[9px] md:text-[11px]',
     gap: 'mx-1',
     textGap: 'mt-1',
-    textSpacing: 'tracking-[0.25em]',
-    wordGap: 'mx-3',
+    textSpacing: 'tracking-[0.2em]',
+    wordGap: 'mx-1.5',
   },
   md: {
     j: 'text-xl md:text-2xl',
@@ -23,8 +23,8 @@ const sizeConfig = {
     text: 'text-[11px] md:text-sm',
     gap: 'mx-1.5',
     textGap: 'mt-1.5',
-    textSpacing: 'tracking-[0.3em]',
-    wordGap: 'mx-4',
+    textSpacing: 'tracking-[0.2em]',
+    wordGap: 'mx-2',
   },
   lg: {
     j: 'text-4xl md:text-5xl lg:text-6xl',
@@ -32,8 +32,8 @@ const sizeConfig = {
     text: 'text-base md:text-lg lg:text-xl',
     gap: 'mx-1.5 md:mx-2',
     textGap: 'mt-2',
-    textSpacing: 'tracking-[0.35em]',
-    wordGap: 'mx-5',
+    textSpacing: 'tracking-[0.25em]',
+    wordGap: 'mx-3',
   },
   xl: {
     j: 'text-5xl md:text-6xl lg:text-7xl',
@@ -41,34 +41,22 @@ const sizeConfig = {
     text: 'text-lg md:text-xl lg:text-2xl',
     gap: 'mx-2 md:mx-2.5',
     textGap: 'mt-3',
-    textSpacing: 'tracking-[0.4em]',
-    wordGap: 'mx-6',
+    textSpacing: 'tracking-[0.25em]',
+    wordGap: 'mx-3',
   },
   footer: {
     j: 'text-5xl md:text-6xl lg:text-7xl',
     dividerHeight: 'h-10 md:h-14 lg:h-16',
-    text: 'text-2xl md:text-3xl lg:text-4xl',
+    text: 'text-xl md:text-2xl lg:text-3xl',
     gap: 'mx-2 md:mx-3',
     textGap: 'mt-3 md:mt-4',
-    textSpacing: 'tracking-[0.4em] md:tracking-[0.5em]',
-    wordGap: 'mx-6 md:mx-8',
+    textSpacing: 'tracking-[0.25em] md:tracking-[0.3em]',
+    wordGap: 'mx-3 md:mx-4',
   },
 };
 
-// Footer logo uses the image
+// Main logo component - TEXT version (no image)
 export const JJLogo = ({ size = 'md', showText = true, className = '' }: JJLogoProps) => {
-  // Footer size uses the image
-  if (size === 'footer') {
-    return (
-      <img 
-        src={jjLogoImage} 
-        alt="JJ Global Capital" 
-        className={`h-24 md:h-32 lg:h-40 w-auto object-contain ${className}`}
-      />
-    );
-  }
-
-  // Other sizes use text version
   const config = sizeConfig[size];
 
   return (
@@ -76,7 +64,7 @@ export const JJLogo = ({ size = 'md', showText = true, className = '' }: JJLogoP
       {/* J | J Monogram */}
       <div className="flex items-center justify-center">
         <span 
-          className={`text-gold font-extralight ${config.j} leading-none`}
+          className={`text-gold font-extralight ${config.j} leading-none drop-shadow-[0_0_8px_rgba(168,146,90,0.3)]`}
           style={{ fontFamily: "Poppins, sans-serif" }}
         >
           J
@@ -88,14 +76,14 @@ export const JJLogo = ({ size = 'md', showText = true, className = '' }: JJLogoP
         </div>
         
         <span 
-          className={`text-gold font-extralight ${config.j} leading-none`}
+          className={`text-gold font-extralight ${config.j} leading-none drop-shadow-[0_0_8px_rgba(168,146,90,0.3)]`}
           style={{ fontFamily: "Poppins, sans-serif" }}
         >
           J
         </span>
       </div>
 
-      {/* GLOBAL CAPITAL */}
+      {/* GLOBAL CAPITAL - Tighter spacing */}
       {showText && (
         <div 
           className={`${config.textGap} flex items-center justify-center text-white`}
@@ -114,7 +102,7 @@ export const JJLogo = ({ size = 'md', showText = true, className = '' }: JJLogoP
   );
 };
 
-// Header-specific logo - TEXT version (not image)
+// Header-specific logo - TEXT version with tighter GLOBAL CAPITAL spacing
 export const JJLogoHeader = ({ className = '' }: { className?: string }) => (
   <div 
     className={`flex items-center ${className}`}
@@ -127,13 +115,13 @@ export const JJLogoHeader = ({ className = '' }: { className?: string }) => (
     </div>
     <span className="text-gold font-extralight text-2xl md:text-3xl leading-none drop-shadow-[0_0_8px_rgba(168,146,90,0.3)]">J</span>
     
-    {/* GLOBAL CAPITAL - Closer spacing */}
+    {/* GLOBAL CAPITAL - Tighter spacing */}
     <div className="ml-3 md:ml-4 flex items-center text-white/95">
-      <span className="font-semibold text-sm md:text-base lg:text-lg tracking-[0.15em] md:tracking-[0.2em]">
+      <span className="font-semibold text-sm md:text-base lg:text-lg tracking-[0.15em]">
         GLOBAL
       </span>
-      <span className="mx-1.5 md:mx-2" />
-      <span className="font-semibold text-sm md:text-base lg:text-lg tracking-[0.15em] md:tracking-[0.2em]">
+      <span className="mx-1 md:mx-1.5" />
+      <span className="font-semibold text-sm md:text-base lg:text-lg tracking-[0.15em]">
         CAPITAL
       </span>
     </div>
