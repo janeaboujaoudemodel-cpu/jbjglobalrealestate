@@ -62,34 +62,53 @@ const MortgageCalculator = ({ defaultPrice = 2000000, compact = false }: Mortgag
 
   if (compact) {
     return (
-      <div className="bg-gradient-to-br from-zinc-900/90 to-zinc-950 border border-zinc-800 rounded-xl p-5">
-        <div className="flex items-center gap-2 mb-4">
-          <div className="w-8 h-8 rounded-lg bg-gradient-to-br from-gold/20 to-gold/5 flex items-center justify-center">
-            <Calculator className="w-4 h-4 text-gold" />
+      <div className="max-w-xl mx-auto">
+        <div className="grid grid-cols-3 gap-4">
+          {/* Monthly Payment */}
+          <div className="bg-white/80 border border-gold/30 rounded-xl p-5 text-center shadow-md">
+            <div className="w-10 h-10 mx-auto mb-3 rounded-lg bg-gradient-to-br from-gold/20 to-gold/10 flex items-center justify-center">
+              <Calculator className="w-5 h-5 text-gold" />
+            </div>
+            <p className="text-zinc-500 text-xs mb-1 uppercase tracking-wider">Monthly Payment</p>
+            <p className="text-zinc-900 font-bold text-lg" style={{ fontFamily: "Poppins, sans-serif" }}>
+              {formatCurrency(calculations.monthlyPayment)}
+            </p>
           </div>
-          <h4 className="text-white font-semibold">Quick Estimate</h4>
-        </div>
-        
-        <div className="space-y-3 text-sm">
-          <div className="flex justify-between">
-            <span className="text-zinc-400">Monthly Payment</span>
-            <span className="text-gold font-bold">{formatCurrency(calculations.monthlyPayment)}</span>
+          
+          {/* Loan Amount */}
+          <div className="bg-white/80 border border-gold/30 rounded-xl p-5 text-center shadow-md">
+            <div className="w-10 h-10 mx-auto mb-3 rounded-lg bg-gradient-to-br from-gold/20 to-gold/10 flex items-center justify-center">
+              <DollarSign className="w-5 h-5 text-gold" />
+            </div>
+            <p className="text-zinc-500 text-xs mb-1 uppercase tracking-wider">Loan Amount</p>
+            <p className="text-zinc-900 font-bold text-lg" style={{ fontFamily: "Poppins, sans-serif" }}>
+              {formatCurrency(calculations.loanAmount)}
+            </p>
           </div>
-          <div className="flex justify-between">
-            <span className="text-zinc-400">Loan Amount</span>
-            <span className="text-white">{formatCurrency(calculations.loanAmount)}</span>
-          </div>
-          <div className="flex justify-between">
-            <span className="text-zinc-400">Total Interest</span>
-            <span className="text-zinc-300">{formatCurrency(calculations.totalInterest)}</span>
+          
+          {/* Total Interest */}
+          <div className="bg-white/80 border border-gold/30 rounded-xl p-5 text-center shadow-md">
+            <div className="w-10 h-10 mx-auto mb-3 rounded-lg bg-gradient-to-br from-gold/20 to-gold/10 flex items-center justify-center">
+              <TrendingUp className="w-5 h-5 text-gold" />
+            </div>
+            <p className="text-zinc-500 text-xs mb-1 uppercase tracking-wider">Total Interest</p>
+            <p className="text-zinc-900 font-bold text-lg" style={{ fontFamily: "Poppins, sans-serif" }}>
+              {formatCurrency(calculations.totalInterest)}
+            </p>
           </div>
         </div>
 
-        <a href={INQUIRY_FORM_URL} target="_blank" rel="noopener noreferrer" className="block mt-4">
-          <Button size="sm" className="w-full bg-gradient-to-r from-gold to-gold-dark text-black hover:opacity-90">
-            Get Mortgage Advisory
-          </Button>
-        </a>
+        <div className="mt-6 text-center">
+          <a href={INQUIRY_FORM_URL} target="_blank" rel="noopener noreferrer">
+            <Button className="bg-gradient-to-r from-zinc-900 to-black border border-gold/40 text-gold font-semibold px-8 py-5 text-base shadow-lg shadow-black/20 transition-all duration-300 hover:shadow-xl hover:shadow-gold/20 hover:scale-[1.02] hover:border-gold/60">
+              Get Mortgage Advisory
+              <ArrowRight className="w-4 h-4 ml-2" />
+            </Button>
+          </a>
+          <p className="text-zinc-500 text-xs mt-3">
+            *Estimates based on AED 2M property, 20% down, 4.5% rate, 25 years
+          </p>
+        </div>
       </div>
     );
   }
