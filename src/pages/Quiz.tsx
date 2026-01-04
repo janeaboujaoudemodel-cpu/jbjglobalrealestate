@@ -18,6 +18,7 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
+import { getCountryList, getLanguageList } from "@/constants/localeOptions";
 
 const JJ_HOLDING_URL = "https://jjholdinggroup.com";
 
@@ -121,13 +122,9 @@ const QUIZ_QUESTIONS = [
   },
 ];
 
-const LANGUAGES = [
-  "English", "Arabic", "French", "Russian", "Chinese", "Hindi", "Urdu", "Spanish", "German", "Other"
-];
+const LANGUAGES = getLanguageList();
 
-const NATIONALITIES = [
-  "UAE", "Saudi Arabia", "India", "Pakistan", "UK", "USA", "Russia", "China", "France", "Germany", "Other"
-];
+const NATIONALITIES = getCountryList();
 
 const Quiz = () => {
   const navigate = useNavigate();

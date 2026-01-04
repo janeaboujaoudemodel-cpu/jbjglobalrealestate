@@ -117,13 +117,13 @@ const Footer = () => {
 
   return (
     <footer className="bg-black border-t border-zinc-800">
-      <div className="container mx-auto px-4 py-8 md:py-10">
+      <div className="container mx-auto px-4 py-6 md:py-8">
         {/* Logo + Description (compact) */}
-        <div className="text-center mb-8">
+        <div className="text-center mb-6">
           <Link to="/" className="inline-block">
             <JJLogoLarge />
           </Link>
-          <p className="text-zinc-400 text-sm md:text-base mt-5 max-w-2xl mx-auto leading-relaxed">
+          <p className="text-zinc-400 text-sm md:text-base mt-4 max-w-2xl mx-auto leading-relaxed">
             A founder-led advisory group specializing in UAE and Dubai real estate,
             supported by a global platform of investment, advisory, legal, design,
             and concierge services.
@@ -131,34 +131,30 @@ const Footer = () => {
         </div>
 
         {/* Divisions + Menu on the same line (desktop) */}
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-10 md:gap-12">
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-8 md:gap-10">
           {/* Our Divisions */}
           <div className="text-center md:text-left">
-            <h4 className="text-gold font-semibold mb-4 text-sm uppercase tracking-[0.2em]">
+            <h4 className="text-gold font-semibold mb-3 text-sm uppercase tracking-[0.2em]">
               Our Divisions
             </h4>
-            <div className="space-y-3">
-              {divisions.map((div) =>
-                div.items.length ? (
-                  <DivisionAccordion key={div.title} title={div.title} items={div.items} />
-                ) : (
-                  <DivisionAccordion key={div.title} title={div.title} items={[]} />
-                )
-              )}
+            <div className="space-y-2.5">
+              {divisions.map((div) => (
+                <DivisionAccordion key={div.title} title={div.title} items={div.items} />
+              ))}
             </div>
           </div>
 
           {/* Menu */}
           <div className="text-center md:text-left">
-            <h4 className="text-gold font-semibold mb-4 text-sm uppercase tracking-[0.2em]">
+            <h4 className="text-gold font-semibold mb-3 text-sm uppercase tracking-[0.2em]">
               Menu
             </h4>
-            <ul className="space-y-2.5">
+            <ul className="space-y-2">
               {menuLinks.map((link) => (
                 <li key={link.href}>
                   <Link
                     to={link.href}
-                    className="text-white hover:text-gold transition-colors text-base"
+                    className="text-white hover:text-gold transition-colors text-base md:text-lg"
                   >
                     {link.label}
                   </Link>
@@ -169,26 +165,26 @@ const Footer = () => {
         </div>
 
         {/* Contact details under Divisions + Menu */}
-        <div className="mt-8 pt-8 border-t border-zinc-800">
+        <div className="mt-7 pt-7 border-t border-zinc-800">
           <div className="text-center md:text-left">
-            <h4 className="text-gold font-semibold mb-4 text-sm uppercase tracking-[0.2em]">
+            <h4 className="text-gold font-semibold mb-3 text-sm uppercase tracking-[0.2em]">
               Get in Touch
             </h4>
             <div className="grid grid-cols-1 md:grid-cols-3 gap-4 md:gap-6">
-              <div className="flex items-center justify-center md:justify-start gap-3 text-white text-base">
+              <div className="flex items-center justify-center md:justify-start gap-3 text-white text-base md:text-lg">
                 <MapPin className="w-5 h-5 text-gold flex-shrink-0" />
                 <span>{CONTACT_INFO.address}</span>
               </div>
               <a
                 href={getCallUrl()}
-                className="flex items-center justify-center md:justify-start gap-3 text-white hover:text-gold transition-colors text-base"
+                className="flex items-center justify-center md:justify-start gap-3 text-white hover:text-gold transition-colors text-base md:text-lg"
               >
                 <Phone className="w-5 h-5 text-gold flex-shrink-0" />
                 <span>{CONTACT_INFO.phone}</span>
               </a>
               <a
                 href={getEmailUrl()}
-                className="flex items-center justify-center md:justify-start gap-3 text-white hover:text-gold transition-colors text-base"
+                className="flex items-center justify-center md:justify-start gap-3 text-white hover:text-gold transition-colors text-base md:text-lg"
               >
                 <Mail className="w-5 h-5 text-gold flex-shrink-0" />
                 <span>{CONTACT_INFO.emailCapitalized}</span>
@@ -197,7 +193,7 @@ const Footer = () => {
                 href={getWhatsAppUrl()}
                 target="_blank"
                 rel="noopener noreferrer"
-                className="md:col-span-3 flex items-center justify-center md:justify-start gap-3 text-white hover:text-gold transition-colors text-base"
+                className="md:col-span-3 flex items-center justify-center md:justify-start gap-3 text-white hover:text-gold transition-colors text-base md:text-lg"
               >
                 <MessageCircle className="w-5 h-5 text-gold flex-shrink-0" />
                 <span>WhatsApp Us</span>
