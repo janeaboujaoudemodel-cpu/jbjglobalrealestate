@@ -18,6 +18,8 @@ import founderYacht from "@/assets/founder-yacht.jpeg";
 import founderAwardStage from "@/assets/founder-award-stage.jpeg";
 import founderRedCarpet from "@/assets/founder-red-carpet.jpeg";
 import founderPremium from "@/assets/founder-premium.png";
+import founderJetWhite from "@/assets/founder-jet-white.jpg";
+import founderYachtDubai from "@/assets/founder-yacht-dubai.jpg";
 
 // Animation variants
 const fadeInUp = {
@@ -771,68 +773,46 @@ const Founder = () => {
           </motion.div>
           
           <motion.div 
-            className="grid grid-cols-2 md:grid-cols-3 gap-4 md:gap-6"
+            className="grid grid-cols-1 md:grid-cols-2 gap-6 md:gap-8"
             initial="hidden"
             whileInView="visible"
             viewport={{ once: true, margin: "-100px" }}
             variants={staggerContainer}
           >
-            {/* Large featured image */}
+            {/* White jet outfit - Full height premium display */}
             <motion.div 
-              className="col-span-2 md:col-span-1 md:row-span-2 aspect-[3/4] rounded-3xl overflow-hidden border border-zinc-800 shadow-2xl group"
+              className="aspect-[3/4] rounded-3xl overflow-hidden border border-gold/20 shadow-2xl shadow-gold/10 group relative"
               variants={scaleIn}
             >
               <SafeImage 
-                src={founderJetInterior} 
+                src={founderJetWhite} 
                 fallbackSrc={founderHero}
-                alt="Private Aviation" 
-                className="w-full h-full object-cover object-[center_25%] group-hover:scale-105 transition-transform duration-1000"
+                alt="Jane Abou Jaoude - Private Aviation" 
+                className="w-full h-full object-cover object-top group-hover:scale-105 transition-transform duration-1000"
               />
+              {/* Premium overlay gradient */}
+              <div className="absolute inset-0 bg-gradient-to-t from-black/40 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
+              {/* Gold corner accents */}
+              <div className="absolute top-4 left-4 w-12 h-12 border-l-2 border-t-2 border-gold/50 rounded-tl-xl" />
+              <div className="absolute bottom-4 right-4 w-12 h-12 border-r-2 border-b-2 border-gold/50 rounded-br-xl" />
             </motion.div>
-            {/* Smaller images - no duplicates */}
+            
+            {/* Yacht with Dubai skyline at night - Full height premium display */}
             <motion.div 
-              className="aspect-square rounded-2xl overflow-hidden border border-zinc-800 group"
+              className="aspect-[3/4] rounded-3xl overflow-hidden border border-gold/20 shadow-2xl shadow-gold/10 group relative"
               variants={scaleIn}
             >
               <SafeImage 
-                src={founderOffice} 
+                src={founderYachtDubai} 
                 fallbackSrc={founderHero}
-                alt="Office Leadership" 
-                className="w-full h-full object-cover object-[center_20%] group-hover:scale-105 transition-transform duration-1000"
+                alt="Jane Abou Jaoude - Dubai Marina Lifestyle" 
+                className="w-full h-full object-cover object-center group-hover:scale-105 transition-transform duration-1000"
               />
-            </motion.div>
-            <motion.div 
-              className="aspect-square rounded-2xl overflow-hidden border border-zinc-800 group"
-              variants={scaleIn}
-            >
-              <SafeImage 
-                src={founderProfessional} 
-                fallbackSrc={founderHero}
-                alt="Professional Portrait" 
-                className="w-full h-full object-cover object-[center_15%] group-hover:scale-105 transition-transform duration-1000"
-              />
-            </motion.div>
-            <motion.div 
-              className="aspect-square rounded-2xl overflow-hidden border border-zinc-800 group"
-              variants={scaleIn}
-            >
-              <SafeImage 
-                src={founderJetBoarding} 
-                fallbackSrc={founderHero}
-                alt="International Travel" 
-                className="w-full h-full object-cover object-[center_25%] group-hover:scale-105 transition-transform duration-1000"
-              />
-            </motion.div>
-            <motion.div 
-              className="aspect-square rounded-2xl overflow-hidden border border-zinc-800 group"
-              variants={scaleIn}
-            >
-              <SafeImage 
-                src={founderYacht} 
-                fallbackSrc={founderHero}
-                alt="Luxury Lifestyle" 
-                className="w-full h-full object-cover object-[center_20%] group-hover:scale-105 transition-transform duration-1000"
-              />
+              {/* Premium overlay gradient */}
+              <div className="absolute inset-0 bg-gradient-to-t from-black/40 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
+              {/* Gold corner accents */}
+              <div className="absolute top-4 left-4 w-12 h-12 border-l-2 border-t-2 border-gold/50 rounded-tl-xl" />
+              <div className="absolute bottom-4 right-4 w-12 h-12 border-r-2 border-b-2 border-gold/50 rounded-br-xl" />
             </motion.div>
           </motion.div>
         </div>
@@ -874,32 +854,32 @@ const Founder = () => {
             </motion.p>
 
             <motion.div 
-              className="flex flex-wrap justify-center gap-4 md:gap-5 mb-10"
+              className="flex flex-wrap justify-center gap-4 md:gap-5 mb-12"
               variants={fadeInUp}
             >
               <a 
                 href="https://www.instagram.com/jjglobalcapital"
                 target="_blank"
                 rel="noopener noreferrer"
-                className="inline-flex items-center gap-3 bg-gradient-to-r from-gold to-[#C4A962] text-black font-semibold px-8 py-4 rounded-xl hover:opacity-90 transition-all duration-300 shadow-lg shadow-gold/30 hover:shadow-gold/40 hover:scale-105"
+                className="inline-flex items-center gap-3 bg-gradient-to-r from-gold via-[#D4B96A] to-gold text-black font-semibold px-10 py-4 rounded-2xl hover:opacity-90 transition-all duration-300 shadow-xl shadow-gold/40 hover:shadow-gold/50 hover:scale-[1.03]"
               >
                 Connect <ArrowUpRight className="w-5 h-5" />
               </a>
               <a 
-                href="mailto:media@jjglobalcapital.com"
-                className="inline-flex items-center gap-3 bg-zinc-900 border border-zinc-700 text-white font-semibold px-8 py-4 rounded-xl hover:bg-zinc-800 hover:border-gold/30 transition-all"
-              >
-                Media <Mail className="w-5 h-5" />
-              </a>
-              <a 
                 href="mailto:partnerships@jjglobalcapital.com"
-                className="inline-flex items-center gap-3 border border-zinc-700 text-white font-semibold px-8 py-4 rounded-xl hover:bg-zinc-900 hover:border-gold/30 transition-all"
+                className="inline-flex items-center gap-3 bg-zinc-900/80 backdrop-blur-sm border-2 border-zinc-700 text-white font-semibold px-10 py-4 rounded-2xl hover:bg-zinc-800 hover:border-gold/50 transition-all duration-300"
               >
                 Partnership <ExternalLink className="w-5 h-5" />
               </a>
               <a 
+                href="mailto:collaboration@jjglobalcapital.com"
+                className="inline-flex items-center gap-3 bg-zinc-900/80 backdrop-blur-sm border-2 border-zinc-700 text-white font-semibold px-10 py-4 rounded-2xl hover:bg-zinc-800 hover:border-gold/50 transition-all duration-300"
+              >
+                Collaboration <ExternalLink className="w-5 h-5" />
+              </a>
+              <a 
                 href="mailto:careers@jjglobalcapital.com"
-                className="inline-flex items-center gap-3 border border-zinc-700 text-white font-semibold px-8 py-4 rounded-xl hover:bg-zinc-900 hover:border-gold/30 transition-all"
+                className="inline-flex items-center gap-3 bg-zinc-900/80 backdrop-blur-sm border-2 border-zinc-700 text-white font-semibold px-10 py-4 rounded-2xl hover:bg-zinc-800 hover:border-gold/50 transition-all duration-300"
               >
                 Careers <Mail className="w-5 h-5" />
               </a>
@@ -983,32 +963,32 @@ const Founder = () => {
             </motion.p>
 
             <motion.div 
-              className="flex flex-wrap justify-center gap-4 md:gap-5 mb-10"
+              className="flex flex-wrap justify-center gap-4 md:gap-5 mb-12"
               variants={fadeInUp}
             >
               <a 
                 href="https://jjholdinggroup.com"
                 target="_blank"
                 rel="noopener noreferrer"
-                className="inline-flex items-center gap-3 bg-gradient-to-r from-gold to-[#C4A962] text-black font-semibold px-8 py-4 rounded-xl hover:opacity-90 transition-all duration-300 shadow-lg shadow-gold/30 hover:shadow-gold/40 hover:scale-105"
+                className="inline-flex items-center gap-3 bg-gradient-to-r from-gold via-[#D4B96A] to-gold text-black font-semibold px-10 py-4 rounded-2xl hover:opacity-90 transition-all duration-300 shadow-xl shadow-gold/40 hover:shadow-gold/50 hover:scale-[1.03]"
               >
-                Connect <ArrowUpRight className="w-5 h-5" />
-              </a>
-              <a 
-                href="mailto:media@jjholdinggroup.com"
-                className="inline-flex items-center gap-3 bg-zinc-900 border border-zinc-700 text-white font-semibold px-8 py-4 rounded-xl hover:bg-zinc-800 hover:border-gold/30 transition-all"
-              >
-                Media <Mail className="w-5 h-5" />
+                Explore the Group <ArrowUpRight className="w-5 h-5" />
               </a>
               <a 
                 href="mailto:partnerships@jjholdinggroup.com"
-                className="inline-flex items-center gap-3 border border-zinc-700 text-white font-semibold px-8 py-4 rounded-xl hover:bg-zinc-900 hover:border-gold/30 transition-all"
+                className="inline-flex items-center gap-3 bg-zinc-900/80 backdrop-blur-sm border-2 border-zinc-700 text-white font-semibold px-10 py-4 rounded-2xl hover:bg-zinc-800 hover:border-gold/50 transition-all duration-300"
               >
                 Partnership <ExternalLink className="w-5 h-5" />
               </a>
               <a 
+                href="mailto:collaboration@jjholdinggroup.com"
+                className="inline-flex items-center gap-3 bg-zinc-900/80 backdrop-blur-sm border-2 border-zinc-700 text-white font-semibold px-10 py-4 rounded-2xl hover:bg-zinc-800 hover:border-gold/50 transition-all duration-300"
+              >
+                Collaboration <ExternalLink className="w-5 h-5" />
+              </a>
+              <a 
                 href="mailto:careers@jjholdinggroup.com"
-                className="inline-flex items-center gap-3 border border-zinc-700 text-white font-semibold px-8 py-4 rounded-xl hover:bg-zinc-900 hover:border-gold/30 transition-all"
+                className="inline-flex items-center gap-3 bg-zinc-900/80 backdrop-blur-sm border-2 border-zinc-700 text-white font-semibold px-10 py-4 rounded-2xl hover:bg-zinc-800 hover:border-gold/50 transition-all duration-300"
               >
                 Careers <Mail className="w-5 h-5" />
               </a>
