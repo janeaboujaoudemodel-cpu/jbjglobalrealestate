@@ -153,10 +153,10 @@ const Index = () => {
               </Button>
             </div>
             
-            {/* Second Row - Service Shortcuts - Glass style */}
+            {/* Second Row - Service Shortcuts - Glass style with contrast */}
             <div className="flex flex-wrap justify-center gap-3">
               <Button 
-                className="bg-white/10 backdrop-blur-md border border-gold/30 text-gold hover:bg-gold/20 hover:border-gold/50 hover:shadow-lg hover:shadow-gold/10 font-semibold px-5 py-4 text-xs transition-all duration-300"
+                className="bg-black/40 backdrop-blur-xl border border-white/20 text-white/90 hover:bg-white/10 hover:border-white/40 hover:shadow-lg hover:shadow-white/5 font-medium px-5 py-4 text-xs transition-all duration-300"
                 onClick={() => setIsInquiryOpen(true)}
               >
                 List Your Property
@@ -164,26 +164,26 @@ const Index = () => {
               </Button>
               <Link to="/concierge">
                 <Button 
-                  className="bg-white/10 backdrop-blur-md border border-gold/30 text-gold hover:bg-gold/20 hover:border-gold/50 hover:shadow-lg hover:shadow-gold/10 font-semibold px-5 py-4 text-xs transition-all duration-300"
+                  className="bg-black/40 backdrop-blur-xl border border-white/20 text-white/90 hover:bg-white/10 hover:border-white/40 hover:shadow-lg hover:shadow-white/5 font-medium px-5 py-4 text-xs transition-all duration-300"
                 >
                   Luxury Concierge
-                  <Sparkles className="w-3 h-3 ml-1" />
+                  <ArrowUpRight className="w-3 h-3 ml-1" />
                 </Button>
               </Link>
               <Link to="/services/design-build">
                 <Button 
-                  className="bg-white/10 backdrop-blur-md border border-gold/30 text-gold hover:bg-gold/20 hover:border-gold/50 hover:shadow-lg hover:shadow-gold/10 font-semibold px-5 py-4 text-xs transition-all duration-300"
+                  className="bg-black/40 backdrop-blur-xl border border-white/20 text-white/90 hover:bg-white/10 hover:border-white/40 hover:shadow-lg hover:shadow-white/5 font-medium px-5 py-4 text-xs transition-all duration-300"
                 >
                   Design & Build
-                  <Layers className="w-3 h-3 ml-1" />
+                  <ArrowUpRight className="w-3 h-3 ml-1" />
                 </Button>
               </Link>
               <Link to="/services/law-firm">
                 <Button 
-                  className="bg-white/10 backdrop-blur-md border border-gold/30 text-gold hover:bg-gold/20 hover:border-gold/50 hover:shadow-lg hover:shadow-gold/10 font-semibold px-5 py-4 text-xs transition-all duration-300"
+                  className="bg-black/40 backdrop-blur-xl border border-white/20 text-white/90 hover:bg-white/10 hover:border-white/40 hover:shadow-lg hover:shadow-white/5 font-medium px-5 py-4 text-xs transition-all duration-300"
                 >
                   Law Firm
-                  <Scale className="w-3 h-3 ml-1" />
+                  <ArrowUpRight className="w-3 h-3 ml-1" />
                 </Button>
               </Link>
             </div>
@@ -195,7 +195,6 @@ const Index = () => {
                 <Button 
                   className="bg-white/10 backdrop-blur-md border border-gold/30 text-gold hover:bg-gold/20 hover:border-gold/50 hover:shadow-lg hover:shadow-gold/10 font-semibold px-5 py-4 text-xs transition-all duration-300 group"
                 >
-                  <FileText className="w-3 h-3 mr-1" />
                   Market Report
                   <ArrowUpRight className="w-3 h-3 ml-1 group-hover:translate-x-0.5 group-hover:-translate-y-0.5 transition-transform" />
                 </Button>
@@ -206,8 +205,17 @@ const Index = () => {
                 <Button 
                   className="bg-white/10 backdrop-blur-md border border-gold/30 text-gold hover:bg-gold/20 hover:border-gold/50 hover:shadow-lg hover:shadow-gold/10 font-semibold px-5 py-4 text-xs transition-all duration-300 group"
                 >
-                  <Calculator className="w-3 h-3 mr-1" />
                   Mortgage Advisory
+                  <ArrowUpRight className="w-3 h-3 ml-1 group-hover:translate-x-0.5 group-hover:-translate-y-0.5 transition-transform" />
+                </Button>
+              </Link>
+              
+              {/* Rental Index - NEW */}
+              <Link to="/rental-index">
+                <Button 
+                  className="bg-white/10 backdrop-blur-md border border-gold/30 text-gold hover:bg-gold/20 hover:border-gold/50 hover:shadow-lg hover:shadow-gold/10 font-semibold px-5 py-4 text-xs transition-all duration-300 group"
+                >
+                  Rental Index
                   <ArrowUpRight className="w-3 h-3 ml-1 group-hover:translate-x-0.5 group-hover:-translate-y-0.5 transition-transform" />
                 </Button>
               </Link>
@@ -217,7 +225,6 @@ const Index = () => {
                 <Button 
                   className="bg-white/10 backdrop-blur-md border border-gold/30 text-gold hover:bg-gold/20 hover:border-gold/50 hover:shadow-lg hover:shadow-gold/10 font-semibold px-5 py-4 text-xs transition-all duration-300 group"
                 >
-                  <FileText className="w-3 h-3 mr-1" />
                   News & Insights
                   <ArrowUpRight className="w-3 h-3 ml-1 group-hover:translate-x-0.5 group-hover:-translate-y-0.5 transition-transform" />
                 </Button>
@@ -228,7 +235,6 @@ const Index = () => {
                 <Button 
                   className="bg-white/10 backdrop-blur-md border border-gold/30 text-gold hover:bg-gold/20 hover:border-gold/50 hover:shadow-lg hover:shadow-gold/10 font-semibold px-5 py-4 text-xs transition-all duration-300 group"
                 >
-                  <Heart className="w-3 h-3 mr-1" />
                   Favorites & Shortlist
                   <ArrowUpRight className="w-3 h-3 ml-1 group-hover:translate-x-0.5 group-hover:-translate-y-0.5 transition-transform" />
                 </Button>
