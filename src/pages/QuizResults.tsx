@@ -206,9 +206,9 @@ Best regards`);
 
   if (isLoading) {
     return (
-      <section className="min-h-screen bg-zinc-950 flex items-center justify-center">
+      <section className="min-h-screen bg-gradient-to-b from-purple-950 via-zinc-950 to-black flex items-center justify-center">
         <div className="text-center">
-          <Sparkles className="w-12 h-12 text-gold mx-auto mb-4 animate-pulse" />
+          <Sparkles className="w-12 h-12 text-purple-400 mx-auto mb-4 animate-pulse" />
           <p className="text-white text-xl">Finding your perfect matches...</p>
         </div>
       </section>
@@ -216,16 +216,16 @@ Best regards`);
   }
 
   return (
-    <section className="min-h-screen bg-zinc-950 py-12 md:py-20">
+    <section className="min-h-screen bg-gradient-to-b from-purple-950 via-zinc-950 to-black py-12 md:py-20">
       <div className="container mx-auto px-4">
         {/* Header */}
         <div className="text-center mb-12">
-          <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-gradient-to-r from-gold/20 to-gold-dark/20 border border-gold/30 mb-6">
-            <Sparkles className="w-4 h-4 text-gold" />
-            <span className="text-gold text-sm font-medium">#1 AI Property Matchmaker — Exclusive by JJ Global Capital</span>
+          <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-gradient-to-r from-purple-600/30 to-purple-800/30 border border-purple-500/40 mb-6">
+            <Sparkles className="w-4 h-4 text-purple-300" />
+            <span className="text-purple-200 text-sm font-medium">#1 AI Property Matchmaker — Exclusive by JJ Global Capital</span>
           </div>
           
-          <h1 className="text-white text-4xl md:text-5xl font-bold mb-4">
+          <h1 className="text-white text-4xl md:text-5xl font-bold mb-4" style={{ fontFamily: "Poppins, sans-serif" }}>
             Your AI-Selected Properties
           </h1>
           <p className="text-zinc-400 text-lg max-w-2xl mx-auto mb-6">
@@ -255,7 +255,7 @@ Best regards`);
         {/* Top Recommendation */}
         {projects && projects.length > 0 && (
           <div className="mb-12">
-            <div className="relative bg-gradient-to-br from-zinc-900 to-zinc-950 rounded-3xl overflow-hidden border border-zinc-800">
+            <div className="relative bg-gradient-to-br from-purple-950/80 via-zinc-900 to-zinc-950 rounded-3xl overflow-hidden border border-purple-900/30">
               <div className="absolute top-4 left-4 z-10 flex items-center gap-2">
                 <div className="bg-gradient-to-r from-gold to-gold-dark text-black text-sm font-semibold px-4 py-1.5 rounded-full">
                   #1 Best Match
@@ -400,9 +400,9 @@ Best regards`);
         {/* Action Cards */}
         <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-12">
           {/* AI Comparison Card */}
-          <div className="bg-zinc-900 rounded-2xl p-6 border border-zinc-800">
+          <div className="bg-zinc-900/80 rounded-2xl p-6 border border-purple-900/30 backdrop-blur-sm">
             <div className="flex items-center gap-3 mb-4">
-              <div className="w-12 h-12 rounded-full bg-gradient-to-br from-violet-500 to-fuchsia-500 flex items-center justify-center">
+              <div className="w-12 h-12 rounded-full bg-gradient-to-br from-purple-500 to-purple-700 flex items-center justify-center shadow-lg shadow-purple-500/30">
                 <Sparkles className="w-6 h-6 text-white" />
               </div>
               <div>
@@ -414,7 +414,7 @@ Best regards`);
               Generate an AI-powered comparison table with star ratings, price analysis, and recommendations.
             </p>
             <Link to="/compare">
-              <Button className="w-full bg-gradient-to-r from-violet-600 to-fuchsia-600 hover:from-violet-500 hover:to-fuchsia-500 text-white">
+              <Button className="w-full bg-gradient-to-r from-purple-600 to-purple-700 hover:from-purple-500 hover:to-purple-600 text-white shadow-lg shadow-purple-500/20">
                 Compare with AI
                 <ArrowRight className="w-4 h-4 ml-2" />
               </Button>
@@ -422,9 +422,9 @@ Best regards`);
           </div>
 
           {/* Professional Evaluation Card */}
-          <div className="bg-zinc-900 rounded-2xl p-6 border border-zinc-800">
+          <div className="bg-zinc-900/80 rounded-2xl p-6 border border-purple-900/30 backdrop-blur-sm">
             <div className="flex items-center gap-3 mb-4">
-              <div className="w-12 h-12 rounded-full bg-gradient-to-br from-gold to-gold-dark flex items-center justify-center">
+              <div className="w-12 h-12 rounded-full bg-gradient-to-br from-gold to-gold-dark flex items-center justify-center shadow-lg shadow-gold/30">
                 <Users className="w-6 h-6 text-black" />
               </div>
               <div>
@@ -436,7 +436,7 @@ Best regards`);
               Request a personalized evaluation from our property consultants with detailed market insights.
             </p>
             <a href={INQUIRY_FORM_URL} target="_blank" rel="noopener noreferrer">
-              <Button className="w-full bg-gradient-to-r from-gold to-gold-dark text-black hover:opacity-90">
+              <Button className="w-full bg-gradient-to-r from-gold to-gold-dark text-black hover:opacity-90 shadow-lg shadow-gold/20">
                 Request Evaluation
                 <ArrowRight className="w-4 h-4 ml-2" />
               </Button>
@@ -465,10 +465,10 @@ Best regards`);
 
       {/* Share Modal */}
       <Dialog open={shareModalOpen} onOpenChange={setShareModalOpen}>
-        <DialogContent className="bg-zinc-900 border-zinc-800 text-white">
+        <DialogContent className="bg-zinc-900 border-purple-900/30 text-white">
           <DialogHeader>
             <DialogTitle className="flex items-center gap-2">
-              <Share2 className="w-5 h-5 text-gold" />
+              <Share2 className="w-5 h-5 text-purple-400" />
               Share Your Results
             </DialogTitle>
             <DialogDescription className="text-zinc-400">

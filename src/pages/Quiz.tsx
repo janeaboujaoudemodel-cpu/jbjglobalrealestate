@@ -328,12 +328,14 @@ const Quiz = () => {
     }
   };
 
+  const [started, setStarted] = useState(false);
+
   // Intro screen before starting
-  if (currentStep === 0 && Object.keys(answers).length === 0 && !showForm) {
+  if (!started && currentStep === 0 && Object.keys(answers).length === 0 && !showForm) {
     return (
-      <section className="min-h-screen bg-zinc-950 flex flex-col">
+      <section className="min-h-screen bg-gradient-to-b from-purple-950 via-zinc-950 to-black flex flex-col">
         {/* Header */}
-        <div className="border-b border-zinc-800 bg-zinc-900/50 backdrop-blur-sm">
+        <div className="border-b border-purple-900/30 bg-purple-950/50 backdrop-blur-sm">
           <div className="container mx-auto px-4 py-4">
             <div className="flex items-center justify-between">
               <button
@@ -355,16 +357,16 @@ const Quiz = () => {
         <div className="flex-1 flex items-center justify-center px-4 py-12">
           <div className="w-full max-w-2xl text-center">
             {/* Exclusive Badge */}
-            <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-gradient-to-r from-gold/20 to-gold-dark/20 border border-gold/30 mb-8">
-              <Sparkles className="w-4 h-4 text-gold" />
-              <span className="text-gold text-sm font-medium">#1 AI Property Matcher in the World</span>
+            <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-gradient-to-r from-purple-600/30 to-purple-800/30 border border-purple-500/40 mb-8">
+              <Sparkles className="w-4 h-4 text-purple-300" />
+              <span className="text-purple-200 text-sm font-medium">#1 AI Property Matcher in the World</span>
             </div>
 
             <div className="w-20 h-20 rounded-full bg-gradient-to-br from-gold via-gold-dark to-gold mx-auto mb-8 flex items-center justify-center shadow-2xl shadow-gold/30">
               <Wand2 className="w-10 h-10 text-black" />
             </div>
 
-            <h1 className="text-white text-4xl md:text-5xl font-bold mb-4">
+            <h1 className="text-white text-4xl md:text-5xl font-bold mb-4" style={{ fontFamily: "Poppins, sans-serif" }}>
               Let AI Find Your Perfect Home
             </h1>
             
@@ -372,7 +374,7 @@ const Quiz = () => {
               Your complimentary AI assistant will analyze your preferences and recommend the best properties — saving you hours of research.
             </p>
 
-            <div className="flex items-center justify-center gap-6 text-sm text-zinc-500 mb-10">
+            <div className="flex flex-wrap items-center justify-center gap-6 text-sm text-zinc-400 mb-10">
               <div className="flex items-center gap-2">
                 <CheckCircle2 className="w-4 h-4 text-gold" />
                 <span>100% Free</span>
@@ -388,14 +390,14 @@ const Quiz = () => {
             </div>
 
             <Button
-              onClick={() => setAnswers({})} // This triggers the quiz to start
-              className="bg-gradient-to-r from-gold to-gold-dark text-black font-semibold px-10 py-6 text-lg hover:opacity-90 shadow-lg shadow-gold/20"
+              onClick={() => setStarted(true)}
+              className="bg-gradient-to-r from-gold to-gold-dark text-black font-semibold px-10 py-6 text-lg hover:opacity-90 shadow-lg shadow-gold/30 transition-all hover:shadow-xl hover:shadow-gold/40"
             >
               Start Your Free Assessment
               <ArrowRight className="w-5 h-5 ml-2" />
             </Button>
 
-            <p className="text-zinc-600 text-xs mt-8">
+            <p className="text-zinc-500 text-xs mt-8">
               Exclusive service by JJ Global Capital — The only agency offering AI-powered property matching worldwide
             </p>
           </div>
@@ -407,9 +409,9 @@ const Quiz = () => {
   // Form Screen after completing questions
   if (showForm) {
     return (
-      <section className="min-h-screen bg-zinc-950 flex flex-col">
+      <section className="min-h-screen bg-gradient-to-b from-purple-950 via-zinc-950 to-black flex flex-col">
         {/* Header */}
-        <div className="border-b border-zinc-800 bg-zinc-900/50 backdrop-blur-sm">
+        <div className="border-b border-purple-900/30 bg-purple-950/50 backdrop-blur-sm">
           <div className="container mx-auto px-4 py-4">
             <div className="flex items-center justify-between">
               <button
@@ -419,7 +421,7 @@ const Quiz = () => {
                 <ChevronLeft className="w-5 h-5" />
                 Back to Questions
               </button>
-              <div className="flex items-center gap-3 text-gold">
+              <div className="flex items-center gap-3 text-purple-300">
                 <CheckCircle2 className="w-4 h-4" />
                 <span className="text-sm">Almost there!</span>
               </div>
@@ -431,10 +433,10 @@ const Quiz = () => {
         <div className="flex-1 flex items-center justify-center px-4 py-12">
           <div className="w-full max-w-lg">
             <div className="text-center mb-8">
-              <div className="w-16 h-16 rounded-full bg-gradient-to-br from-gold to-gold-dark mx-auto mb-4 flex items-center justify-center">
-                <Sparkles className="w-8 h-8 text-black" />
+              <div className="w-16 h-16 rounded-full bg-gradient-to-br from-purple-500 to-purple-700 mx-auto mb-4 flex items-center justify-center shadow-lg shadow-purple-500/30">
+                <Sparkles className="w-8 h-8 text-white" />
               </div>
-              <h2 className="text-white text-3xl font-bold mb-2">
+              <h2 className="text-white text-3xl font-bold mb-2" style={{ fontFamily: "Poppins, sans-serif" }}>
                 Get Your Personalized Results
               </h2>
               <p className="text-zinc-400">
@@ -442,7 +444,7 @@ const Quiz = () => {
               </p>
             </div>
 
-            <div className="bg-zinc-900 rounded-2xl p-6 border border-zinc-800 space-y-5">
+            <div className="bg-zinc-900/80 rounded-2xl p-6 border border-purple-900/30 space-y-5 backdrop-blur-sm">
               <div>
                 <Label htmlFor="fullName" className="text-zinc-300">Full Name *</Label>
                 <Input
@@ -519,7 +521,7 @@ const Quiz = () => {
               <Button
                 onClick={handleSubmitForm}
                 disabled={!isFormValid() || isSubmitting}
-                className="w-full bg-gradient-to-r from-gold to-gold-dark text-black font-semibold h-14 text-lg hover:opacity-90 shadow-lg shadow-gold/20 mt-4"
+                className="w-full bg-gradient-to-r from-gold to-gold-dark text-black font-semibold h-14 text-lg hover:opacity-90 shadow-lg shadow-gold/30 mt-4 transition-all hover:shadow-xl hover:shadow-gold/40"
               >
                 {isSubmitting ? (
                   <>
@@ -534,12 +536,12 @@ const Quiz = () => {
                 )}
               </Button>
 
-              <p className="text-zinc-600 text-xs text-center">
+              <p className="text-zinc-500 text-xs text-center">
                 Your information is secure and will only be used to provide personalized recommendations
               </p>
             </div>
 
-            <div className="flex items-center justify-center gap-2 mt-6 text-gold text-sm">
+            <div className="flex items-center justify-center gap-2 mt-6 text-purple-300 text-sm">
               <Sparkles className="w-4 h-4" />
               <span>Exclusive AI service — Free for a limited time</span>
             </div>
@@ -550,17 +552,17 @@ const Quiz = () => {
   }
 
   return (
-    <section className="min-h-screen bg-zinc-950 flex flex-col">
+    <section className="min-h-screen bg-gradient-to-b from-purple-950 via-zinc-950 to-black flex flex-col">
       {/* Header */}
-      <div className="border-b border-zinc-800 bg-zinc-900/50 backdrop-blur-sm sticky top-0 z-10">
+      <div className="border-b border-purple-900/30 bg-purple-950/50 backdrop-blur-sm sticky top-0 z-10">
         <div className="container mx-auto px-4 py-4">
           <div className="flex items-center justify-between">
             <button
-              onClick={() => currentStep > 0 ? setCurrentStep(0) : navigate(-1)}
+              onClick={() => currentStep > 0 ? setCurrentStep(currentStep - 1) : navigate(-1)}
               className="text-zinc-400 hover:text-white transition-colors flex items-center gap-2"
             >
               <ChevronLeft className="w-5 h-5" />
-              Exit
+              {currentStep > 0 ? "Back" : "Exit"}
             </button>
             <div className="flex items-center gap-3 text-zinc-400">
               <Clock className="w-4 h-4" />
@@ -572,7 +574,7 @@ const Quiz = () => {
               <span>Question {currentStep + 1} of {QUIZ_QUESTIONS.length}</span>
               <span>{Math.round(progress)}% complete</span>
             </div>
-            <Progress value={progress} className="h-1.5 bg-zinc-800" />
+            <Progress value={progress} className="h-1.5 bg-zinc-800 [&>div]:bg-gradient-to-r [&>div]:from-purple-500 [&>div]:to-purple-700" />
           </div>
         </div>
       </div>
@@ -581,7 +583,7 @@ const Quiz = () => {
       <div className="flex-1 flex items-center justify-center px-4 py-12">
         <div className="w-full max-w-3xl">
           <div className="text-center mb-10">
-            <h2 className="text-white text-3xl md:text-4xl font-bold mb-3">
+            <h2 className="text-white text-3xl md:text-4xl font-bold mb-3" style={{ fontFamily: "Poppins, sans-serif" }}>
               {currentQuestion.question}
             </h2>
             {currentQuestion.type === "multiple" && (
@@ -597,7 +599,7 @@ const Quiz = () => {
                 size="sm"
                 onClick={handleSelectAll}
                 disabled={allSelected()}
-                className="border-gold/40 text-gold hover:bg-gold/10 hover:text-gold-light bg-transparent"
+                className="border-purple-500/40 text-purple-300 hover:bg-purple-500/10 hover:text-purple-200 bg-transparent"
               >
                 <CheckCircle2 className="w-4 h-4 mr-2" />
                 Select All
@@ -627,14 +629,14 @@ const Quiz = () => {
                   onClick={() => handleAnswer(option.value)}
                   className={`flex items-center gap-4 p-5 rounded-xl text-left transition-all duration-200 border ${
                     isSelected
-                      ? "bg-gradient-to-br from-gold/20 to-gold-dark/10 text-white border-gold/50 shadow-lg shadow-gold/10"
-                      : "bg-zinc-900 text-white border-zinc-800 hover:border-zinc-700 hover:bg-zinc-800/50"
+                      ? "bg-gradient-to-br from-purple-600/30 to-purple-800/20 text-white border-purple-500/50 shadow-lg shadow-purple-500/20"
+                      : "bg-zinc-900/80 text-white border-zinc-800 hover:border-purple-700/50 hover:bg-zinc-800/50"
                   }`}
                 >
                   <span className="text-2xl">{option.icon}</span>
                   <span className="font-medium">{option.label}</span>
                   {isSelected && (
-                    <CheckCircle2 className="w-5 h-5 text-gold ml-auto" />
+                    <CheckCircle2 className="w-5 h-5 text-purple-400 ml-auto" />
                   )}
                 </button>
               );
@@ -656,7 +658,7 @@ const Quiz = () => {
             <Button
               onClick={handleNext}
               disabled={!isAnswered()}
-              className="bg-gradient-to-r from-gold to-gold-dark text-gold-foreground hover:from-gold-light hover:to-gold px-8 shadow-lg shadow-gold/20"
+              className="bg-gradient-to-r from-gold to-gold-dark text-black font-semibold px-8 shadow-lg shadow-gold/30 hover:opacity-90"
             >
               {currentStep === QUIZ_QUESTIONS.length - 1 ? (
                 <>
