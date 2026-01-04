@@ -786,12 +786,14 @@ const Founder = () => {
               className="flex flex-wrap justify-center gap-4 md:gap-5 mb-10"
               variants={fadeInUp}
             >
-              <Link 
-                to="/contact"
+              <a 
+                href="https://www.instagram.com/jjglobalcapital"
+                target="_blank"
+                rel="noopener noreferrer"
                 className="inline-flex items-center gap-3 bg-gradient-to-r from-gold to-[#C4A962] text-black font-semibold px-8 py-4 rounded-xl hover:opacity-90 transition-all duration-300 shadow-lg shadow-gold/30 hover:shadow-gold/40 hover:scale-105"
               >
                 Connect <ArrowUpRight className="w-5 h-5" />
-              </Link>
+              </a>
               <a 
                 href="mailto:media@jjglobalcapital.com"
                 className="inline-flex items-center gap-3 bg-zinc-900 border border-zinc-700 text-white font-semibold px-8 py-4 rounded-xl hover:bg-zinc-800 hover:border-gold/30 transition-all"
@@ -894,7 +896,9 @@ const Founder = () => {
               variants={fadeInUp}
             >
               <a 
-                href="mailto:inquiries@jjholdinggroup.com"
+                href="https://jjholdinggroup.com"
+                target="_blank"
+                rel="noopener noreferrer"
                 className="inline-flex items-center gap-3 bg-gradient-to-r from-gold to-[#C4A962] text-black font-semibold px-8 py-4 rounded-xl hover:opacity-90 transition-all duration-300 shadow-lg shadow-gold/30 hover:shadow-gold/40 hover:scale-105"
               >
                 Connect <ArrowUpRight className="w-5 h-5" />
