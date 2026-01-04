@@ -9,7 +9,7 @@ import MortgageCalculator from "@/components/MortgageCalculator";
 import WelcomeModal from "@/components/WelcomeModal";
 import InquiryFormModal from "@/components/InquiryFormModal";
 import { useLanguage } from "@/contexts/LanguageContext";
-import { Sparkles, ArrowUpRight, ChevronDown, User, Scale, Layers, Calculator, FileText } from "lucide-react";
+import { Sparkles, ArrowUpRight, ChevronDown, User, Scale, Layers, Calculator, FileText, Heart } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import founderProfessional from "@/assets/founder-professional.jpeg";
 import luxuryVillaHero from "@/assets/luxury-villa-hero.jpeg";
@@ -123,29 +123,29 @@ const Index = () => {
             viewport={{ once: true }}
             transition={{ duration: 0.6 }}
           >
+            {/* Primary Row - Main CTAs */}
             <div className="flex flex-wrap justify-center gap-3">
               {/* Explore Our Services - White background, gold text */}
               <Link to="/about">
                 <Button 
-                  className="bg-white hover:bg-zinc-100 text-gold font-semibold px-6 py-5 text-sm shadow-lg"
+                  className="bg-white hover:bg-zinc-100 text-gold font-semibold px-6 py-5 text-sm shadow-lg hover:shadow-xl transition-all duration-300"
                 >
                   {t('home.cta.explore')}
                   <ArrowUpRight className="w-4 h-4 ml-2" />
                 </Button>
               </Link>
-              {/* Explore Properties - Gold, slightly smaller */}
+              {/* Explore Properties - Gold */}
               <Link to="/properties">
                 <Button 
-                  className="bg-gold hover:bg-gold-light text-black font-semibold px-6 py-5 text-sm shadow-lg shadow-gold/20"
+                  className="bg-gold hover:bg-gold-light text-black font-semibold px-6 py-5 text-sm shadow-lg shadow-gold/20 hover:shadow-xl hover:shadow-gold/30 transition-all duration-300"
                 >
                   {t('home.cta.properties')}
                   <ArrowUpRight className="w-4 h-4 ml-2" />
                 </Button>
               </Link>
-              {/* Contact Us - Opens Inquiry Form */}
+              {/* Contact Us - White/Gold style */}
               <Button 
-                variant="outline"
-                className="border-gold/50 text-gold hover:bg-gold/10 hover:border-gold px-6 py-5 text-sm"
+                className="bg-white hover:bg-zinc-100 text-gold font-semibold px-6 py-5 text-sm shadow-lg hover:shadow-xl transition-all duration-300"
                 onClick={() => setIsInquiryOpen(true)}
               >
                 {t('home.cta.contact')}
@@ -156,8 +156,7 @@ const Index = () => {
             {/* Second Row - Service Shortcuts */}
             <div className="flex flex-wrap justify-center gap-3">
               <Button 
-                variant="outline"
-                className="border-white/30 bg-white/5 text-white hover:bg-white/10 hover:border-white/50 px-5 py-4 text-xs backdrop-blur-sm"
+                className="bg-white hover:bg-zinc-100 text-gold font-semibold px-5 py-4 text-xs shadow-md hover:shadow-lg transition-all duration-300"
                 onClick={() => setIsInquiryOpen(true)}
               >
                 List Your Property
@@ -165,8 +164,7 @@ const Index = () => {
               </Button>
               <Link to="/concierge">
                 <Button 
-                  variant="outline"
-                  className="border-gold/30 bg-gold/5 text-gold hover:bg-gold/10 hover:border-gold/50 px-5 py-4 text-xs backdrop-blur-sm"
+                  className="bg-white hover:bg-zinc-100 text-gold font-semibold px-5 py-4 text-xs shadow-md hover:shadow-lg transition-all duration-300"
                 >
                   Luxury Concierge
                   <Sparkles className="w-3 h-3 ml-1" />
@@ -174,8 +172,7 @@ const Index = () => {
               </Link>
               <Link to="/services/design-build">
                 <Button 
-                  variant="outline"
-                  className="border-zinc-600/50 bg-zinc-800/30 text-zinc-300 hover:bg-zinc-800/50 hover:text-white px-5 py-4 text-xs backdrop-blur-sm"
+                  className="bg-white hover:bg-zinc-100 text-gold font-semibold px-5 py-4 text-xs shadow-md hover:shadow-lg transition-all duration-300"
                 >
                   Design & Build
                   <Layers className="w-3 h-3 ml-1" />
@@ -183,8 +180,7 @@ const Index = () => {
               </Link>
               <Link to="/services/law-firm">
                 <Button 
-                  variant="outline"
-                  className="border-zinc-600/50 bg-zinc-800/30 text-zinc-300 hover:bg-zinc-800/50 hover:text-white px-5 py-4 text-xs backdrop-blur-sm"
+                  className="bg-white hover:bg-zinc-100 text-gold font-semibold px-5 py-4 text-xs shadow-md hover:shadow-lg transition-all duration-300"
                 >
                   Law Firm
                   <Scale className="w-3 h-3 ml-1" />
@@ -192,56 +188,72 @@ const Index = () => {
               </Link>
             </div>
             
-            {/* Third Row - AI & Premium Tools */}
+            {/* Third Row - Tools */}
             <div className="flex flex-wrap justify-center gap-3">
-              {/* AI Home Finder CTA - Purple */}
-              <Link to="/quiz">
-                <div className="flex items-center gap-3 bg-gradient-to-r from-purple-700 to-purple-900 hover:from-purple-600 hover:to-purple-800 border border-purple-500/40 rounded-xl px-5 py-3 transition-all shadow-lg shadow-purple-500/20 group">
-                  <Sparkles className="w-4 h-4 text-white" />
-                  <div className="text-left">
-                    <p className="text-white font-semibold text-sm">{t('home.cta.aiFinder')}</p>
-                    <p className="text-purple-200/80 text-xs">Match Properties</p>
-                  </div>
-                  <ArrowUpRight className="w-4 h-4 text-white group-hover:translate-x-0.5 group-hover:-translate-y-0.5 transition-transform" />
-                </div>
-              </Link>
-              
               {/* Market Report */}
               <Link to="/market-report">
-                <div className="flex items-center gap-3 bg-zinc-900/80 border border-gold/30 hover:border-gold/60 rounded-xl px-5 py-3 transition-all group">
-                  <FileText className="w-4 h-4 text-gold" />
-                  <div className="text-left">
-                    <p className="text-white font-semibold text-sm">Market Report</p>
-                    <p className="text-zinc-400 text-xs">UAE Insights</p>
-                  </div>
-                  <ArrowUpRight className="w-4 h-4 text-gold group-hover:translate-x-0.5 group-hover:-translate-y-0.5 transition-transform" />
-                </div>
+                <Button 
+                  className="bg-white hover:bg-zinc-100 text-gold font-semibold px-5 py-4 text-xs shadow-md hover:shadow-lg transition-all duration-300 group"
+                >
+                  <FileText className="w-3 h-3 mr-1" />
+                  Market Report
+                  <ArrowUpRight className="w-3 h-3 ml-1 group-hover:translate-x-0.5 group-hover:-translate-y-0.5 transition-transform" />
+                </Button>
               </Link>
               
               {/* Mortgage Advisory */}
               <Link to="/mortgage-advisory">
-                <div className="flex items-center gap-3 bg-zinc-900/80 border border-zinc-700 hover:border-gold/40 rounded-xl px-5 py-3 transition-all group">
-                  <Calculator className="w-4 h-4 text-gold" />
-                  <div className="text-left">
-                    <p className="text-white font-semibold text-sm">Mortgage</p>
-                    <p className="text-zinc-400 text-xs">Advisory</p>
-                  </div>
-                  <ArrowUpRight className="w-4 h-4 text-zinc-400 group-hover:text-gold group-hover:translate-x-0.5 group-hover:-translate-y-0.5 transition-all" />
-                </div>
+                <Button 
+                  className="bg-white hover:bg-zinc-100 text-gold font-semibold px-5 py-4 text-xs shadow-md hover:shadow-lg transition-all duration-300 group"
+                >
+                  <Calculator className="w-3 h-3 mr-1" />
+                  Mortgage Advisory
+                  <ArrowUpRight className="w-3 h-3 ml-1 group-hover:translate-x-0.5 group-hover:-translate-y-0.5 transition-transform" />
+                </Button>
               </Link>
               
               {/* News & Insights */}
               <Link to="/news">
-                <div className="flex items-center gap-3 bg-zinc-900/80 border border-zinc-700 hover:border-gold/40 rounded-xl px-5 py-3 transition-all group">
-                  <FileText className="w-4 h-4 text-gold" />
-                  <div className="text-left">
-                    <p className="text-white font-semibold text-sm">News</p>
-                    <p className="text-zinc-400 text-xs">Insights</p>
-                  </div>
-                  <ArrowUpRight className="w-4 h-4 text-zinc-400 group-hover:text-gold group-hover:translate-x-0.5 group-hover:-translate-y-0.5 transition-all" />
-                </div>
+                <Button 
+                  className="bg-white hover:bg-zinc-100 text-gold font-semibold px-5 py-4 text-xs shadow-md hover:shadow-lg transition-all duration-300 group"
+                >
+                  <FileText className="w-3 h-3 mr-1" />
+                  News & Insights
+                  <ArrowUpRight className="w-3 h-3 ml-1 group-hover:translate-x-0.5 group-hover:-translate-y-0.5 transition-transform" />
+                </Button>
+              </Link>
+              
+              {/* Favorites */}
+              <Link to="/favorites">
+                <Button 
+                  className="bg-white hover:bg-zinc-100 text-gold font-semibold px-5 py-4 text-xs shadow-md hover:shadow-lg transition-all duration-300 group"
+                >
+                  <Heart className="w-3 h-3 mr-1" />
+                  Favorites & Shortlist
+                  <ArrowUpRight className="w-3 h-3 ml-1 group-hover:translate-x-0.5 group-hover:-translate-y-0.5 transition-transform" />
+                </Button>
               </Link>
             </div>
+            
+            {/* AI Home Finder - Full Width Purple Glowing Bar */}
+            <Link to="/quiz" className="w-full max-w-2xl mt-4">
+              <div className="relative overflow-hidden rounded-xl bg-gradient-to-r from-purple-600 via-purple-700 to-purple-800 p-[1px] shadow-2xl shadow-purple-500/30 hover:shadow-purple-500/50 transition-all duration-500 group">
+                {/* Animated glow border */}
+                <div className="absolute inset-0 bg-gradient-to-r from-purple-400 via-fuchsia-400 to-purple-400 opacity-60 blur-sm group-hover:opacity-100 transition-opacity duration-500" />
+                
+                {/* Inner content */}
+                <div className="relative flex items-center justify-center gap-4 bg-gradient-to-r from-purple-700 via-purple-800 to-purple-700 rounded-xl px-8 py-4 group-hover:from-purple-600 group-hover:via-purple-700 group-hover:to-purple-600 transition-all duration-500">
+                  <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white/5 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
+                  
+                  <Sparkles className="w-5 h-5 text-purple-200 group-hover:text-white transition-colors relative z-10" />
+                  <div className="text-center relative z-10">
+                    <p className="text-white font-bold text-base tracking-wide">{t('home.cta.aiFinder')}</p>
+                    <p className="text-purple-200/80 text-xs">AI-Powered Property Matching</p>
+                  </div>
+                  <ArrowUpRight className="w-5 h-5 text-purple-200 group-hover:text-white group-hover:translate-x-1 group-hover:-translate-y-1 transition-all relative z-10" />
+                </div>
+              </div>
+            </Link>
           </motion.div>
         </div>
       </section>
