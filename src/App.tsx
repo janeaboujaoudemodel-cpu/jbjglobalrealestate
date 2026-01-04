@@ -4,6 +4,7 @@ import { TooltipProvider } from "@/components/ui/tooltip";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { BrowserRouter, Routes, Route, useLocation } from "react-router-dom";
 import { AuthProvider } from "@/contexts/AuthContext";
+import { LanguageProvider } from "@/contexts/LanguageContext";
 import Index from "./pages/Index";
 import Properties from "./pages/Properties";
 import Communities from "./pages/Communities";
@@ -61,48 +62,51 @@ const AppLayout = ({ children }: { children: React.ReactNode }) => {
 const App = () => (
   <QueryClientProvider client={queryClient}>
     <AuthProvider>
-      <TooltipProvider>
-        <Toaster />
-        <Sonner />
-        <BrowserRouter>
-          <ScrollToTopOnMount />
-          <ScrollToTopButton />
-          <WelcomeModal />
-          <AppLayout>
-            <Routes>
-              <Route path="/" element={<Index />} />
-              <Route path="/properties" element={<Properties />} />
-              <Route path="/communities" element={<Communities />} />
-              <Route path="/community/:slug" element={<CommunityDetail />} />
-              <Route path="/developer/:slug" element={<DeveloperDetail />} />
-              <Route path="/project/:slug" element={<ProjectDetail />} />
-              <Route path="/auth" element={<Auth />} />
-              <Route path="/admin" element={<Admin />} />
-              <Route path="/quiz" element={<Quiz />} />
-              <Route path="/quiz-results" element={<QuizResults />} />
-              <Route path="/favorites" element={<Favorites />} />
-              <Route path="/compare" element={<Compare />} />
-              <Route path="/news" element={<News />} />
-              <Route path="/about" element={<About />} />
-              <Route path="/awards" element={<Awards />} />
-              <Route path="/contact" element={<Contact />} />
-              <Route path="/privacy" element={<Privacy />} />
-              <Route path="/terms" element={<Terms />} />
-              <Route path="/founder" element={<Founder />} />
-              <Route path="/mortgage-calculator" element={<MortgageCalculatorPage />} />
-              <Route path="/market-report" element={<MarketReport />} />
-              <Route path="/concierge" element={<Concierge />} />
-              <Route path="/services/design-build" element={<DesignBuild />} />
-              <Route path="/services/design-build/architecture" element={<Architecture />} />
-              <Route path="/services/design-build/interior-design" element={<InteriorDesign />} />
-              <Route path="/services/design-build/fit-out" element={<FitOut />} />
-              <Route path="/services/law-firm" element={<LawFirm />} />
-              {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
-              <Route path="*" element={<NotFound />} />
-            </Routes>
-          </AppLayout>
-        </BrowserRouter>
-      </TooltipProvider>
+      <LanguageProvider>
+        <TooltipProvider>
+          <Toaster />
+          <Sonner />
+          <BrowserRouter>
+            <ScrollToTopOnMount />
+            <ScrollToTopButton />
+            <WelcomeModal />
+            <AppLayout>
+              <Routes>
+                <Route path="/" element={<Index />} />
+                <Route path="/properties" element={<Properties />} />
+                <Route path="/communities" element={<Communities />} />
+                <Route path="/community/:slug" element={<CommunityDetail />} />
+                <Route path="/developer/:slug" element={<DeveloperDetail />} />
+                <Route path="/project/:slug" element={<ProjectDetail />} />
+                <Route path="/auth" element={<Auth />} />
+                <Route path="/admin" element={<Admin />} />
+                <Route path="/quiz" element={<Quiz />} />
+                <Route path="/quiz-results" element={<QuizResults />} />
+                <Route path="/favorites" element={<Favorites />} />
+                <Route path="/compare" element={<Compare />} />
+                <Route path="/news" element={<News />} />
+                <Route path="/about" element={<About />} />
+                <Route path="/awards" element={<Awards />} />
+                <Route path="/contact" element={<Contact />} />
+                <Route path="/privacy" element={<Privacy />} />
+                <Route path="/terms" element={<Terms />} />
+                <Route path="/founder" element={<Founder />} />
+                <Route path="/mortgage-advisory" element={<MortgageCalculatorPage />} />
+                <Route path="/mortgage-calculator" element={<MortgageCalculatorPage />} />
+                <Route path="/market-report" element={<MarketReport />} />
+                <Route path="/concierge" element={<Concierge />} />
+                <Route path="/services/design-build" element={<DesignBuild />} />
+                <Route path="/services/design-build/architecture" element={<Architecture />} />
+                <Route path="/services/design-build/interior-design" element={<InteriorDesign />} />
+                <Route path="/services/design-build/fit-out" element={<FitOut />} />
+                <Route path="/services/law-firm" element={<LawFirm />} />
+                {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
+                <Route path="*" element={<NotFound />} />
+              </Routes>
+            </AppLayout>
+          </BrowserRouter>
+        </TooltipProvider>
+      </LanguageProvider>
     </AuthProvider>
   </QueryClientProvider>
 );

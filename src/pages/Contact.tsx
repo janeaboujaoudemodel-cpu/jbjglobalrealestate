@@ -1,31 +1,37 @@
+import { useState } from "react";
 import { MapPin, Phone, Mail, Clock, ArrowUpRight, MessageCircle } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import Footer from "@/components/Footer";
+import InquiryFormModal from "@/components/InquiryFormModal";
+import { useLanguage } from "@/contexts/LanguageContext";
 import { CONTACT_INFO, getWhatsAppUrl, getCallUrl, getEmailUrl } from "@/constants/stats";
 
 const Contact = () => {
+  const [isInquiryOpen, setIsInquiryOpen] = useState(false);
+  const { t } = useLanguage();
+
   const contactInfo = [
     {
       icon: MapPin,
-      title: "Visit Us",
+      title: t('contact.location'),
       lines: ["Downtown Dubai", "United Arab Emirates"],
       action: null,
     },
     {
       icon: Phone,
-      title: "Call Us",
+      title: t('contact.phone'),
       lines: [CONTACT_INFO.phone],
       action: { type: "call", url: getCallUrl() },
     },
     {
       icon: Mail,
-      title: "Email Us",
+      title: t('contact.email'),
       lines: [CONTACT_INFO.emailCapitalized],
       action: { type: "email", url: getEmailUrl() },
     },
     {
       icon: Clock,
-      title: "Business Hours",
+      title: t('contact.hours'),
       lines: ["Sun - Thu: 9:00 AM - 6:00 PM", "Fri - Sat: By Appointment"],
       action: null,
     },
@@ -37,7 +43,7 @@ const Contact = () => {
       <section className="relative py-24 md:py-32">
         <div className="absolute inset-0 bg-gradient-to-b from-zinc-900/50 to-black" />
         <div className="relative container mx-auto px-4">
-          <p className="text-gold text-sm uppercase tracking-widest mb-4">Contact Us</p>
+          <p className="text-gold text-sm uppercase tracking-widest mb-4">{t('contact.title')}</p>
           <h1 
             className="text-white text-4xl md:text-6xl font-bold mb-6 max-w-3xl"
             style={{ fontFamily: "Poppins, sans-serif" }}
@@ -45,7 +51,7 @@ const Contact = () => {
             Let's Start Your Journey
           </h1>
           <p className="text-zinc-400 text-lg max-w-2xl leading-relaxed">
-            Our team of expert advisors is ready to guide you through your next investment. 
+            {t('contact.subtitle')}. Our team of expert advisors is ready to guide you through your next investment. 
             Reach out today for a confidential consultation.
           </p>
         </div>
@@ -84,7 +90,7 @@ const Contact = () => {
         </div>
       </section>
 
-      {/* Main CTA */}
+      {/* Main CTA - Opens Inquiry Form */}
       <section className="py-20">
         <div className="container mx-auto px-4">
           <div className="max-w-3xl mx-auto text-center">
@@ -98,16 +104,13 @@ const Contact = () => {
               Complete our investment inquiry form and one of our senior advisors will 
               contact you within 24 hours to discuss your goals and opportunities.
             </p>
-            <a 
-              href={CONTACT_INFO.inquiryFormUrl}
-              target="_blank"
-              rel="noopener noreferrer"
+            <Button 
+              onClick={() => setIsInquiryOpen(true)}
+              className="bg-gradient-to-r from-gold to-gold-dark text-black hover:opacity-90 px-10 py-6 h-auto text-lg font-semibold"
             >
-              <Button className="bg-gradient-to-r from-gold to-gold-dark text-black hover:opacity-90 px-10 py-6 h-auto text-lg font-semibold">
-                Start Your Inquiry
-                <ArrowUpRight className="w-5 h-5 ml-2" />
-              </Button>
-            </a>
+              Start Your Inquiry
+              <ArrowUpRight className="w-5 h-5 ml-2" />
+            </Button>
           </div>
         </div>
       </section>
@@ -128,7 +131,7 @@ const Contact = () => {
               </div>
               <div>
                 <h3 className="text-white text-xl font-bold mb-1" style={{ fontFamily: "Poppins, sans-serif" }}>
-                  WhatsApp Us
+                  {t('contact.whatsapp')}
                 </h3>
                 <p className="text-zinc-400 text-sm">
                   Connect instantly for immediate assistance
@@ -146,7 +149,7 @@ const Contact = () => {
               </div>
               <div>
                 <h3 className="text-white text-xl font-bold mb-1" style={{ fontFamily: "Poppins, sans-serif" }}>
-                  Call Us Directly
+                  {t('contact.callNow')}
                 </h3>
                 <p className="text-zinc-400 text-sm">
                   {CONTACT_INFO.phone}
@@ -158,6 +161,13 @@ const Contact = () => {
       </section>
 
       <Footer />
+
+      {/* Inquiry Form Modal */}
+      <InquiryFormModal 
+        isOpen={isInquiryOpen} 
+        onClose={() => setIsInquiryOpen(false)} 
+        source="contact-page"
+      />
     </div>
   );
 };

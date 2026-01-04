@@ -2,6 +2,7 @@ import { Link, useLocation } from "react-router-dom";
 import { useAuth } from "@/contexts/AuthContext";
 import { useFavorites, useShortlist } from "@/hooks/useFavorites";
 import { useGuestFavorites, useGuestShortlist } from "@/hooks/useGuestFavorites";
+import { useLanguage } from "@/contexts/LanguageContext";
 import { 
   Home, Heart, User, LogOut, Settings, Menu, 
   Phone, Building2, Newspaper, ClipboardCheck, FileText,
@@ -23,11 +24,13 @@ import {
 } from "@/components/ui/sheet";
 import { ScrollArea } from "@/components/ui/scroll-area";
 import { JJLogoHeader } from "@/components/JJLogo";
+import LanguageSwitcher from "@/components/LanguageSwitcher";
 
 const GlobalHeader = () => {
   const { user, isAdmin, signOut } = useAuth();
   const location = useLocation();
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
+  const { t, isRTL } = useLanguage();
   
   const { data: favorites } = useFavorites();
   const { data: shortlist } = useShortlist();
@@ -40,14 +43,14 @@ const GlobalHeader = () => {
 
   // Updated navigation order: Home, Founder, About, Properties, Services, Awards, News, Contact
   const mainNavLinks = [
-    { href: "/", label: "Home", icon: Home },
-    { href: "/founder", label: "Founder & Leadership", icon: User },
-    { href: "/about", label: "About Us", icon: Building2 },
-    { href: "/properties", label: "Properties", icon: Building2 },
-    { href: "/#services", label: "Services", icon: Building2 },
-    { href: "/awards", label: "Awards", icon: Building2 },
-    { href: "/news", label: "News & Insights", icon: Newspaper },
-    { href: "/contact", label: "Contact", icon: Phone },
+    { href: "/", label: t('nav.home'), icon: Home },
+    { href: "/founder", label: t('nav.founder'), icon: User },
+    { href: "/about", label: t('nav.about'), icon: Building2 },
+    { href: "/properties", label: t('nav.properties'), icon: Building2 },
+    { href: "/#services", label: t('nav.services'), icon: Building2 },
+    { href: "/awards", label: t('nav.awards'), icon: Building2 },
+    { href: "/news", label: t('nav.news'), icon: Newspaper },
+    { href: "/contact", label: t('nav.contact'), icon: Phone },
   ];
 
   // Property shortcuts for quick access
@@ -61,7 +64,7 @@ const GlobalHeader = () => {
   const isActive = (path: string) => location.pathname === path;
 
   return (
-    <header className="fixed top-0 left-0 right-0 z-50 bg-black/95 backdrop-blur-sm border-b border-white/5">
+    <header className="fixed top-0 left-0 right-0 z-50 bg-black/95 backdrop-blur-sm border-b border-white/5" dir={isRTL ? 'rtl' : 'ltr'}>
       <div className="container mx-auto px-4">
         <div className="flex items-center justify-between h-16 lg:h-18">
           {/* Logo - Premium with separation from menu, clickable to home */}
@@ -110,6 +113,9 @@ const GlobalHeader = () => {
                 )}
               </Button>
             </Link>
+
+            {/* Language Switcher */}
+            <LanguageSwitcher />
 
             {/* User Menu - Desktop */}
             <div className="hidden lg:block">
