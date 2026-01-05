@@ -5,8 +5,9 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { toast } from "sonner";
-import { Eye, EyeOff, Mail, Lock, ArrowLeft, Sparkles } from "lucide-react";
+import { Eye, EyeOff, Mail, Lock, ArrowLeft } from "lucide-react";
 import { z } from "zod";
+import JJLogo from "@/components/JJLogo";
 
 const emailSchema = z.string().email("Please enter a valid email address");
 const passwordSchema = z.string().min(6, "Password must be at least 6 characters");
@@ -27,13 +28,11 @@ const Auth = forwardRef<HTMLDivElement>((_, ref) => {
   const [errors, setErrors] = useState<{ email?: string; password?: string; confirmPassword?: string }>({});
 
   useEffect(() => {
-    // Check if user is coming from password reset link
     const modeParam = searchParams.get("mode");
     if (modeParam === "reset") {
       setMode("reset");
     }
   }, [searchParams]);
-
 
   const validateForm = () => {
     const newErrors: { email?: string; password?: string; confirmPassword?: string } = {};
@@ -134,7 +133,7 @@ const Auth = forwardRef<HTMLDivElement>((_, ref) => {
 
   if (loading) {
     return (
-      <div className="min-h-screen bg-zinc-950 flex items-center justify-center">
+      <div className="min-h-screen bg-white flex items-center justify-center">
         <div className="animate-spin rounded-full h-8 w-8 border-t-2 border-gold" />
       </div>
     );
@@ -142,67 +141,60 @@ const Auth = forwardRef<HTMLDivElement>((_, ref) => {
 
   const getTitle = () => {
     switch (mode) {
-      case "signup": return "Create Account";
-      case "forgot": return "Reset Password";
-      case "reset": return "Set New Password";
+      case "signup": return "Join Our Network";
+      case "forgot": return "Reset Your Password";
+      case "reset": return "Create New Password";
       default: return "Welcome Back";
     }
   };
 
   const getSubtitle = () => {
     switch (mode) {
-      case "signup": return "Join JJ Global Capital's exclusive network";
-      case "forgot": return "Enter your email to receive a reset link";
-      case "reset": return "Enter your new password below";
-      default: return "Sign in to access your account";
+      case "signup": return "Create your account to access exclusive UAE real estate opportunities";
+      case "forgot": return "Enter your email address and we'll send you a secure reset link";
+      case "reset": return "Please enter your new password below";
+      default: return "Greetings from JJ Global Capital. We're delighted to have you back.";
     }
   };
 
-  // If already signed in, let the user explicitly continue, sign out, or switch accounts.
+  // If already signed in
   if (user && mode !== "reset") {
     return (
       <div
         ref={ref}
-        className="min-h-screen flex items-center justify-center py-12 px-4 bg-zinc-950"
+        className="min-h-screen flex items-center justify-center py-12 px-4 bg-gradient-to-br from-white via-gray-50 to-white"
       >
-        {/* Premium gradient background */}
+        {/* Decorative gold accent */}
         <div
-          className="absolute top-0 left-0 right-0 h-[50%] pointer-events-none"
-          style={{
-            background: "radial-gradient(ellipse at 50% 0%, hsl(40 32% 51% / 0.12) 0%, transparent 60%)",
-          }}
-        />
-        <div
-          className="absolute bottom-0 left-0 right-0 h-[30%] pointer-events-none"
-          style={{
-            background: "radial-gradient(ellipse at 50% 100%, hsl(40 32% 51% / 0.06) 0%, transparent 60%)",
-          }}
+          className="absolute top-0 left-0 right-0 h-1 bg-gradient-to-r from-transparent via-gold to-transparent"
         />
 
         <div className="relative z-10 w-full max-w-md">
-          <div className="bg-zinc-900/90 backdrop-blur-sm border border-zinc-800 rounded-2xl p-8 shadow-2xl shadow-black/50">
-            <div className="text-center mb-6">
-              <div className="mx-auto w-16 h-16 rounded-full bg-gradient-to-br from-gold to-gold-dark flex items-center justify-center mb-4 shadow-lg shadow-gold/20">
-                <Sparkles className="w-8 h-8 text-black" />
-              </div>
+          <div className="bg-white border border-gray-200 rounded-2xl p-10 shadow-xl">
+            {/* Logo */}
+            <div className="flex justify-center mb-8">
+              <JJLogo size="md" />
+            </div>
+
+            <div className="text-center mb-8">
               <h1
-                className="text-white text-3xl font-bold mb-2"
+                className="text-black text-2xl font-semibold mb-3"
                 style={{ fontFamily: "Poppins, sans-serif" }}
               >
-                You’re signed in
+                You're Signed In
               </h1>
-              <p className="text-zinc-400">
-                Signed in as <span className="text-white">{user.email}</span>
+              <p className="text-gray-600 text-sm">
+                Welcome back, <span className="text-gold font-medium">{user.email}</span>
               </p>
             </div>
 
-            <div className="space-y-3">
+            <div className="space-y-4">
               <Button
                 type="button"
                 onClick={() => navigate("/")}
-                className="w-full h-12 bg-gradient-to-r from-gold to-gold-dark hover:opacity-90 text-black font-semibold rounded-xl shadow-lg shadow-gold/20"
+                className="w-full h-12 bg-gradient-to-r from-gold to-gold-dark hover:opacity-90 text-black font-semibold rounded-xl shadow-lg shadow-gold/20 transition-all duration-300 hover:shadow-gold/40 hover:scale-[1.02]"
               >
-                Continue
+                Continue to Dashboard
               </Button>
               <Button
                 type="button"
@@ -210,7 +202,7 @@ const Auth = forwardRef<HTMLDivElement>((_, ref) => {
                 onClick={async () => {
                   try {
                     await signOut();
-                    toast.success("Signed out.");
+                    toast.success("Signed out successfully.");
                     setEmail("");
                     setPassword("");
                     setConfirmPassword("");
@@ -219,19 +211,15 @@ const Auth = forwardRef<HTMLDivElement>((_, ref) => {
                     toast.error("Could not sign out. Please try again.");
                   }
                 }}
-                className="w-full h-12 border-zinc-700 text-white hover:bg-zinc-800 hover:border-gold/30 rounded-xl"
+                className="w-full h-12 border-gray-300 text-black hover:bg-gray-50 hover:border-gold/50 rounded-xl transition-all duration-300"
               >
-                Sign out
+                Sign Out
               </Button>
             </div>
-
-            <p className="mt-6 text-center text-zinc-500 text-sm">
-              If you still see “Coming Soon” after signing in, that account doesn’t have admin access yet.
-            </p>
           </div>
 
-          <p className="text-center text-zinc-600 text-sm mt-6">
-            © {new Date().getFullYear()} JJ Global Capital. All rights reserved.
+          <p className="text-center text-gray-400 text-xs mt-8">
+            © {new Date().getFullYear()} JJ Global Capital. All Rights Reserved.
           </p>
         </div>
       </div>
@@ -241,59 +229,51 @@ const Auth = forwardRef<HTMLDivElement>((_, ref) => {
   return (
     <div
       ref={ref}
-      className="min-h-screen flex items-center justify-center py-12 px-4 bg-zinc-950"
+      className="min-h-screen flex items-center justify-center py-12 px-4 bg-gradient-to-br from-white via-gray-50 to-white"
     >
-      {/* Premium gradient background */}
+      {/* Decorative gold accent line at top */}
       <div
-        className="absolute top-0 left-0 right-0 h-[50%] pointer-events-none"
-        style={{
-          background: "radial-gradient(ellipse at 50% 0%, hsl(40 32% 51% / 0.12) 0%, transparent 60%)",
-        }}
-      />
-      <div
-        className="absolute bottom-0 left-0 right-0 h-[30%] pointer-events-none"
-        style={{
-          background: "radial-gradient(ellipse at 50% 100%, hsl(40 32% 51% / 0.06) 0%, transparent 60%)",
-        }}
+        className="absolute top-0 left-0 right-0 h-1 bg-gradient-to-r from-transparent via-gold to-transparent"
       />
 
       <div className="relative z-10 w-full max-w-md">
-        <div className="bg-zinc-900/90 backdrop-blur-sm border border-zinc-800 rounded-2xl p-8 shadow-2xl shadow-black/50">
+        <div className="bg-white border border-gray-200 rounded-2xl p-10 shadow-xl">
           {/* Back button for forgot/reset modes */}
           {(mode === "forgot" || mode === "reset") && (
             <button
               onClick={() => setMode("signin")}
-              className="flex items-center gap-2 text-zinc-400 hover:text-white mb-6 transition-colors"
+              className="flex items-center gap-2 text-gray-500 hover:text-gold mb-6 transition-colors"
             >
               <ArrowLeft className="w-4 h-4" />
               <span className="text-sm">Back to Sign In</span>
             </button>
           )}
 
+          {/* Logo */}
+          <div className="flex justify-center mb-8">
+            <JJLogo size="md" />
+          </div>
+
           <div className="text-center mb-8">
-            {/* Premium logo/icon */}
-            <div className="mx-auto w-16 h-16 rounded-full bg-gradient-to-br from-gold to-gold-dark flex items-center justify-center mb-4 shadow-lg shadow-gold/20">
-              <Sparkles className="w-8 h-8 text-black" />
-            </div>
             <h1
-              className="text-white text-3xl font-bold mb-2"
+              className="text-black text-2xl font-semibold mb-3"
               style={{ fontFamily: "Poppins, sans-serif" }}
             >
               {getTitle()}
             </h1>
-            <p className="text-zinc-400">
+            <p className="text-gray-600 text-sm leading-relaxed">
               {getSubtitle()}
             </p>
           </div>
 
-          {/* Google Sign In - only for signin/signup modes */}
+          {/* Google Sign In */}
           {(mode === "signin" || mode === "signup") && (
             <>
               <Button
                 type="button"
                 onClick={handleGoogleSignIn}
                 disabled={isSubmitting}
-                className="w-full h-12 bg-white hover:bg-gray-100 text-gray-800 font-medium rounded-xl flex items-center justify-center gap-3 mb-6"
+                className="w-full h-12 bg-white hover:bg-gray-50 text-black font-medium rounded-xl flex items-center justify-center gap-3 mb-6 border border-gray-300 hover:border-gold/50 transition-all duration-300 shadow-sm"
               >
                 <svg className="w-5 h-5" viewBox="0 0 24 24">
                   <path
@@ -318,31 +298,31 @@ const Auth = forwardRef<HTMLDivElement>((_, ref) => {
 
               <div className="relative mb-6">
                 <div className="absolute inset-0 flex items-center">
-                  <div className="w-full border-t border-zinc-700"></div>
+                  <div className="w-full border-t border-gray-200"></div>
                 </div>
                 <div className="relative flex justify-center text-sm">
-                  <span className="px-4 bg-zinc-900 text-zinc-500">or continue with email</span>
+                  <span className="px-4 bg-white text-gray-400">or continue with email</span>
                 </div>
               </div>
             </>
           )}
 
           <form onSubmit={handleSubmit} className="space-y-5">
-            {/* Email field - not shown in reset mode */}
+            {/* Email field */}
             {mode !== "reset" && (
               <div className="space-y-2">
-                <Label htmlFor="email" className="text-gray-300">
-                  Email
+                <Label htmlFor="email" className="text-black font-medium">
+                  Email Address
                 </Label>
                 <div className="relative">
-                  <Mail className="absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5 text-zinc-500" />
+                  <Mail className="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-gray-400" />
                   <Input
                     id="email"
                     type="email"
                     value={email}
                     onChange={(e) => setEmail(e.target.value)}
                     placeholder="you@example.com"
-                    className="pl-10 h-12 bg-zinc-950 border-zinc-700 text-white placeholder:text-zinc-500 focus:border-gold focus:ring-gold/20"
+                    className="pl-12 h-12 bg-gray-50 border-gray-200 text-black placeholder:text-gray-400 focus:border-gold focus:ring-gold/20 rounded-xl transition-all duration-300"
                   />
                 </div>
                 {errors.email && (
@@ -351,26 +331,26 @@ const Auth = forwardRef<HTMLDivElement>((_, ref) => {
               </div>
             )}
 
-            {/* Password field - not shown in forgot mode */}
+            {/* Password field */}
             {mode !== "forgot" && (
               <div className="space-y-2">
-                <Label htmlFor="password" className="text-gray-300">
+                <Label htmlFor="password" className="text-black font-medium">
                   {mode === "reset" ? "New Password" : "Password"}
                 </Label>
                 <div className="relative">
-                  <Lock className="absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5 text-zinc-500" />
+                  <Lock className="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-gray-400" />
                   <Input
                     id="password"
                     type={showPassword ? "text" : "password"}
                     value={password}
                     onChange={(e) => setPassword(e.target.value)}
                     placeholder="••••••••"
-                    className="pl-10 pr-10 h-12 bg-zinc-950 border-zinc-700 text-white placeholder:text-zinc-500 focus:border-gold focus:ring-gold/20"
+                    className="pl-12 pr-12 h-12 bg-gray-50 border-gray-200 text-black placeholder:text-gray-400 focus:border-gold focus:ring-gold/20 rounded-xl transition-all duration-300"
                   />
                   <button
                     type="button"
                     onClick={() => setShowPassword(!showPassword)}
-                    className="absolute right-3 top-1/2 -translate-y-1/2 text-zinc-500 hover:text-white transition-colors"
+                    className="absolute right-4 top-1/2 -translate-y-1/2 text-gray-400 hover:text-gold transition-colors"
                   >
                     {showPassword ? <EyeOff className="w-5 h-5" /> : <Eye className="w-5 h-5" />}
                   </button>
@@ -381,21 +361,21 @@ const Auth = forwardRef<HTMLDivElement>((_, ref) => {
               </div>
             )}
 
-            {/* Confirm Password field - only in reset mode */}
+            {/* Confirm Password */}
             {mode === "reset" && (
               <div className="space-y-2">
-                <Label htmlFor="confirmPassword" className="text-gray-300">
+                <Label htmlFor="confirmPassword" className="text-black font-medium">
                   Confirm New Password
                 </Label>
                 <div className="relative">
-                  <Lock className="absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5 text-zinc-500" />
+                  <Lock className="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-gray-400" />
                   <Input
                     id="confirmPassword"
                     type={showPassword ? "text" : "password"}
                     value={confirmPassword}
                     onChange={(e) => setConfirmPassword(e.target.value)}
                     placeholder="••••••••"
-                    className="pl-10 h-12 bg-zinc-950 border-zinc-700 text-white placeholder:text-zinc-500 focus:border-gold focus:ring-gold/20"
+                    className="pl-12 h-12 bg-gray-50 border-gray-200 text-black placeholder:text-gray-400 focus:border-gold focus:ring-gold/20 rounded-xl transition-all duration-300"
                   />
                 </div>
                 {errors.confirmPassword && (
@@ -404,13 +384,13 @@ const Auth = forwardRef<HTMLDivElement>((_, ref) => {
               </div>
             )}
 
-            {/* Forgot Password link - only in signin mode */}
+            {/* Forgot Password link */}
             {mode === "signin" && (
               <div className="text-right">
                 <button
                   type="button"
                   onClick={() => setMode("forgot")}
-                  className="text-sm text-gold hover:underline"
+                  className="text-sm text-gold hover:text-gold-dark hover:underline transition-colors"
                 >
                   Forgot password?
                 </button>
@@ -420,7 +400,7 @@ const Auth = forwardRef<HTMLDivElement>((_, ref) => {
             <Button
               type="submit"
               disabled={isSubmitting}
-              className="w-full h-12 bg-gradient-to-r from-gold to-gold-dark hover:opacity-90 text-black font-semibold rounded-xl shadow-lg shadow-gold/20"
+              className="w-full h-12 bg-gradient-to-r from-gold to-gold-dark hover:opacity-90 text-black font-semibold rounded-xl shadow-lg shadow-gold/20 transition-all duration-300 hover:shadow-gold/40 hover:scale-[1.02]"
             >
               {isSubmitting ? (
                 <div className="animate-spin rounded-full h-5 w-5 border-t-2 border-black" />
@@ -444,7 +424,7 @@ const Auth = forwardRef<HTMLDivElement>((_, ref) => {
                   setMode(mode === "signin" ? "signup" : "signin");
                   setErrors({});
                 }}
-                className="text-gold hover:underline"
+                className="text-gold hover:text-gold-dark hover:underline transition-colors"
               >
                 {mode === "signin"
                   ? "Don't have an account? Sign up"
@@ -454,22 +434,21 @@ const Auth = forwardRef<HTMLDivElement>((_, ref) => {
           )}
 
           {/* Continue as Guest */}
-          <div className="mt-6 pt-6 border-t border-zinc-800">
+          <div className="mt-6 pt-6 border-t border-gray-100">
             <button
               onClick={() => navigate("/")}
-              className="w-full py-3 text-zinc-400 hover:text-white border border-zinc-700 rounded-xl hover:bg-zinc-800 hover:border-gold/30 transition-all flex items-center justify-center gap-2"
+              className="w-full h-12 border border-gray-200 hover:border-gold/50 rounded-xl text-black font-medium hover:bg-gray-50 transition-all duration-300"
             >
               Continue as Guest
             </button>
-            <p className="text-center text-zinc-600 text-xs mt-3">
+            <p className="text-center text-gray-400 text-xs mt-3">
               Save favorites and shortlist properties without an account
             </p>
           </div>
         </div>
 
-        {/* JJ Global Capital branding */}
-        <p className="text-center text-zinc-600 text-sm mt-6">
-          © {new Date().getFullYear()} JJ Global Capital. All rights reserved.
+        <p className="text-center text-gray-400 text-xs mt-8">
+          © {new Date().getFullYear()} JJ Global Capital. All Rights Reserved.
         </p>
       </div>
     </div>
