@@ -61,9 +61,9 @@ export const JJLogo = ({ size = 'md', showText = true, className = '' }: JJLogoP
   const config = sizeConfig[size];
   const isFooter = size === 'footer';
   
-  // Footer uses black, others use gold/white
+  // All versions now use black divider and gold J's (footer uses all black)
   const jColor = isFooter ? 'text-black' : 'text-gold';
-  const dividerColor = isFooter ? 'bg-black' : 'bg-white/90';
+  const dividerColor = 'bg-black';
 
   return (
     <div className={`flex flex-col items-center ${className}`}>
@@ -117,7 +117,7 @@ export const JJLogoHeader = ({ className = '' }: { className?: string }) => (
     {/* J | J Monogram */}
     <span className="text-gold font-extralight text-2xl md:text-3xl leading-none drop-shadow-[0_0_8px_rgba(168,146,90,0.3)]">J</span>
     <div className="mx-1 flex items-center justify-center">
-      <div className="w-[1.5px] bg-white/90 h-5 md:h-6" />
+      <div className="w-[1.5px] bg-black h-5 md:h-6" />
     </div>
     <span className="text-gold font-extralight text-2xl md:text-3xl leading-none drop-shadow-[0_0_8px_rgba(168,146,90,0.3)]">J</span>
     
