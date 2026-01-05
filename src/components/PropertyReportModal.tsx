@@ -3,7 +3,7 @@ import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogDescription } f
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import { Download, Mail, Send, MessageCircle, FileText, Loader2, Check, Phone } from "lucide-react";
+import { Download, Mail, Send, MessageCircle, FileText, Loader2, Check, Phone, Eye, X, ArrowLeft } from "lucide-react";
 import { toast } from "sonner";
 import { supabase } from "@/integrations/supabase/client";
 
@@ -45,6 +45,8 @@ const PropertyReportModal = ({ open, onOpenChange, project }: PropertyReportModa
   const [isGenerating, setIsGenerating] = useState(false);
   const [userEmail, setUserEmail] = useState("");
   const [activeAction, setActiveAction] = useState<string | null>(null);
+  const [showReportViewer, setShowReportViewer] = useState(false);
+  const [reportHtml, setReportHtml] = useState<string | null>(null);
 
   const generateReport = async () => {
     const projectData = {
@@ -81,11 +83,28 @@ const PropertyReportModal = ({ open, onOpenChange, project }: PropertyReportModa
     return response.data.html;
   };
 
+  const handleViewReport = async () => {
+    setIsGenerating(true);
+    setActiveAction("view");
+    try {
+      const html = await generateReport();
+      setReportHtml(html);
+      setShowReportViewer(true);
+      toast.success("Report generated successfully!");
+    } catch (error) {
+      console.error("Failed to generate report:", error);
+      toast.error("Failed to generate report. Please try again.");
+    } finally {
+      setIsGenerating(false);
+      setActiveAction(null);
+    }
+  };
+
   const handleDownload = async () => {
     setIsGenerating(true);
     setActiveAction("download");
     try {
-      const html = await generateReport();
+      const html = reportHtml || await generateReport();
       const blob = new Blob([html], { type: 'text/html' });
       const url = URL.createObjectURL(blob);
       const a = document.createElement('a');
@@ -162,6 +181,68 @@ const PropertyReportModal = ({ open, onOpenChange, project }: PropertyReportModa
     window.open(`tel:+${WHATSAPP_NUMBER}`, "_self");
   };
 
+  // Report Viewer Dialog
+  if (showReportViewer && reportHtml) {
+    return (
+      <Dialog open={open} onOpenChange={(isOpen) => {
+        if (!isOpen) {
+          setShowReportViewer(false);
+          setReportHtml(null);
+        }
+        onOpenChange(isOpen);
+      }}>
+        <DialogContent className="bg-white border-zinc-200 max-w-4xl max-h-[90vh] p-0 overflow-hidden">
+          {/* Report Viewer Header */}
+          <div className="sticky top-0 z-10 bg-white border-b border-zinc-200 px-4 py-3 flex items-center justify-between">
+            <div className="flex items-center gap-3">
+              <Button
+                variant="ghost"
+                size="sm"
+                onClick={() => {
+                  setShowReportViewer(false);
+                  setReportHtml(null);
+                }}
+                className="text-zinc-600 hover:text-zinc-900"
+              >
+                <ArrowLeft className="w-4 h-4 mr-1" />
+                Back
+              </Button>
+              <span className="text-zinc-900 font-semibold">{project.name} - Report</span>
+            </div>
+            <div className="flex items-center gap-2">
+              <Button
+                onClick={handleShareWhatsApp}
+                size="sm"
+                variant="outline"
+                className="border-green-500/30 text-green-600 hover:bg-green-50"
+              >
+                <MessageCircle className="w-4 h-4 mr-1" />
+                Share
+              </Button>
+              <Button
+                onClick={handleDownload}
+                size="sm"
+                className="bg-gold text-black hover:bg-gold-light"
+              >
+                <Download className="w-4 h-4 mr-1" />
+                Download
+              </Button>
+            </div>
+          </div>
+          
+          {/* Report Content */}
+          <div className="overflow-y-auto max-h-[calc(90vh-60px)]">
+            <iframe
+              srcDoc={reportHtml}
+              className="w-full min-h-[80vh] border-0"
+              title="Property Report"
+            />
+          </div>
+        </DialogContent>
+      </Dialog>
+    );
+  }
+
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
       <DialogContent className="bg-zinc-900 border-zinc-800 text-white max-w-lg">
@@ -173,7 +254,7 @@ const PropertyReportModal = ({ open, onOpenChange, project }: PropertyReportModa
             Property Report & Share
           </DialogTitle>
           <DialogDescription className="text-zinc-400">
-            Download the complete property report or share it with others.
+            View the complete property report or share it with others.
           </DialogDescription>
         </DialogHeader>
 
@@ -189,21 +270,21 @@ const PropertyReportModal = ({ open, onOpenChange, project }: PropertyReportModa
             </p>
           </div>
 
-          {/* Download Report */}
+          {/* View Report Button - Primary */}
           <Button
-            onClick={handleDownload}
+            onClick={handleViewReport}
             disabled={isGenerating}
             className="w-full bg-gold text-black hover:bg-gold-light font-semibold h-12"
           >
-            {isGenerating && activeAction === "download" ? (
+            {isGenerating && activeAction === "view" ? (
               <>
                 <Loader2 className="w-5 h-5 mr-2 animate-spin" />
                 Generating Report...
               </>
             ) : (
               <>
-                <Download className="w-5 h-5 mr-2" />
-                Download Full Property Report
+                <Eye className="w-5 h-5 mr-2" />
+                View Full Property Report
               </>
             )}
           </Button>

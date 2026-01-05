@@ -416,14 +416,33 @@ const Favorites = () => {
               </>
             ) : (
               <div className="text-center py-16 bg-zinc-900 rounded-2xl border border-zinc-800">
-                <Heart className="w-12 h-12 text-zinc-700 mx-auto mb-4" />
-                <p className="text-zinc-400 mb-6">No favorite properties yet</p>
-                <Link to="/">
-                  <Button className="bg-white text-zinc-900 hover:bg-zinc-100">
-                    Browse Properties
-                    <ArrowRight className="w-4 h-4 ml-2" />
-                  </Button>
-                </Link>
+                <div className="max-w-md mx-auto">
+                  <div className="w-20 h-20 rounded-full bg-gradient-to-br from-pink-500/20 to-pink-600/10 border border-pink-500/20 flex items-center justify-center mx-auto mb-6">
+                    <Heart className="w-10 h-10 text-pink-500/70" />
+                  </div>
+                  <h3 className="text-white text-xl font-semibold mb-3">Your Favorites List is Empty</h3>
+                  <p className="text-zinc-400 mb-3">
+                    Save properties you love by clicking the heart icon on any listing. 
+                    Your favorites will appear here for easy access and comparison.
+                  </p>
+                  <p className="text-zinc-500 text-sm mb-8">
+                    Tip: Add properties to your favorites, then move your top picks to your shortlist for final evaluation.
+                  </p>
+                  <div className="flex flex-col sm:flex-row gap-3 justify-center">
+                    <Link to="/properties">
+                      <Button className="bg-gradient-to-r from-gold to-gold-dark text-black hover:opacity-90">
+                        Explore Properties
+                        <ArrowRight className="w-4 h-4 ml-2" />
+                      </Button>
+                    </Link>
+                    <Link to="/quiz">
+                      <Button variant="outline" className="border-pink-500/30 text-pink-400 hover:bg-pink-500/10">
+                        <Sparkles className="w-4 h-4 mr-2" />
+                        AI Home Finder
+                      </Button>
+                    </Link>
+                  </div>
+                </div>
               </div>
             )}
           </TabsContent>
@@ -575,17 +594,39 @@ const Favorites = () => {
               </>
             ) : (
               <div className="text-center py-16 bg-zinc-900 rounded-2xl border border-zinc-800">
-                <ListPlus className="w-12 h-12 text-zinc-700 mx-auto mb-4" />
-                <p className="text-zinc-400 mb-2">No properties in your shortlist</p>
-                <p className="text-zinc-500 text-sm mb-6">
-                  Add properties from your favorites or browse to compare them
-                </p>
-                <Link to="/">
-                  <Button className="bg-white text-zinc-900 hover:bg-zinc-100">
-                    Browse Properties
-                    <ArrowRight className="w-4 h-4 ml-2" />
-                  </Button>
-                </Link>
+                <div className="max-w-md mx-auto">
+                  <div className="w-20 h-20 rounded-full bg-gradient-to-br from-gold/20 to-gold/10 border border-gold/20 flex items-center justify-center mx-auto mb-6">
+                    <ListPlus className="w-10 h-10 text-gold/70" />
+                  </div>
+                  <h3 className="text-white text-xl font-semibold mb-3">Your Shortlist is Empty</h3>
+                  <p className="text-zinc-400 mb-3">
+                    Move your top property picks from Favorites to your Shortlist. 
+                    Assign medals (🥇🥈🥉) to rank your best choices for consultation.
+                  </p>
+                  <p className="text-zinc-500 text-sm mb-8">
+                    Tip: Your shortlist can be shared with our advisors for professional evaluation and tailored recommendations.
+                  </p>
+                  <div className="flex flex-col sm:flex-row gap-3 justify-center">
+                    <Link to="/properties">
+                      <Button className="bg-gradient-to-r from-gold to-gold-dark text-black hover:opacity-90">
+                        Explore Properties
+                        <ArrowRight className="w-4 h-4 ml-2" />
+                      </Button>
+                    </Link>
+                    {favCount > 0 && (
+                      <Button 
+                        variant="outline" 
+                        className="border-gold/30 text-gold hover:bg-gold/10"
+                        onClick={() => {
+                          const tabs = document.querySelector('[value="favorites"]');
+                          if (tabs) (tabs as HTMLElement).click();
+                        }}
+                      >
+                        View Favorites ({favCount})
+                      </Button>
+                    )}
+                  </div>
+                </div>
               </div>
             )}
           </TabsContent>
