@@ -37,7 +37,9 @@ import {
   Download,
   File,
   X,
+  Sparkles,
 } from "lucide-react";
+import { SmartDocumentUploader } from "@/components/SmartDocumentUploader";
 
 interface ProjectDocument {
   id: string;
@@ -360,6 +362,23 @@ const Admin = () => {
             </div>
             <p className="text-white text-3xl font-bold">{communities?.length || 0}</p>
           </div>
+        </div>
+
+        {/* Smart Document Uploader */}
+        <div className="mb-8">
+          <SmartDocumentUploader 
+            projects={projects?.map(p => ({
+              id: p.id,
+              name: p.name,
+              slug: p.slug,
+              developer: p.developer ? {
+                id: p.developer.id,
+                name: p.developer.name,
+                slug: p.developer.slug
+              } : null
+            }))}
+            onUploadComplete={() => refetchProjects()}
+          />
         </div>
 
         {/* Projects Table */}
