@@ -156,8 +156,8 @@ const Favorites = () => {
         ? badge === 'top1'
           ? " (Top 1 — Gold)"
           : badge === 'top2'
-          ? " (Top 2 — Bronze)"
-          : " (Top 3 — Silver)"
+          ? " (Top 2 — Silver)"
+          : " (Top 3 — Bronze)"
         : "";
       const url = `${window.location.origin}/project/${p.slug}`;
       return `${i + 1}. ${p.name}${badgeStr} — ${p.developer?.name || 'Developer'} — ${url}`;
@@ -257,8 +257,8 @@ const Favorites = () => {
           ? badge === 'top1'
             ? 'Top 1 — Gold'
             : badge === 'top2'
-            ? 'Top 2 — Bronze'
-            : 'Top 3 — Silver'
+            ? 'Top 2 — Silver'
+            : 'Top 3 — Bronze'
           : null;
         const img = p.images?.[0]?.image_url || "https://images.unsplash.com/photo-1512917774080-9991f1c4c750?w=800";
         const url = `${window.location.origin}/project/${p.slug}`;
@@ -300,8 +300,8 @@ const Favorites = () => {
 
   const badgeLabels = {
     top1: { label: "Top 1 — Gold", color: "bg-gradient-to-r from-yellow-400 via-yellow-500 to-amber-500 shadow-lg shadow-yellow-500/30", textColor: "text-white" },
-    top2: { label: "Top 2 — Bronze", color: "bg-gradient-to-r from-amber-600 via-orange-600 to-amber-700 shadow-lg shadow-amber-600/30", textColor: "text-white" },
-    top3: { label: "Top 3 — Silver", color: "bg-gradient-to-r from-zinc-300 via-slate-400 to-zinc-400 shadow-lg shadow-zinc-400/30", textColor: "text-white" },
+    top2: { label: "Top 2 — Silver", color: "bg-gradient-to-r from-zinc-300 via-slate-400 to-zinc-400 shadow-lg shadow-zinc-400/30", textColor: "text-zinc-900" },
+    top3: { label: "Top 3 — Bronze", color: "bg-gradient-to-r from-amber-600 via-orange-600 to-amber-700 shadow-lg shadow-amber-600/30", textColor: "text-white" },
   };
 
   return (
@@ -459,7 +459,7 @@ const Favorites = () => {
                 {/* Shortlist Actions Bar */}
                 <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 mb-6 bg-zinc-900 rounded-lg p-4 border border-zinc-800">
                   <p className="text-zinc-400 text-sm">
-                    Rank your top properties with badges: <span className="text-yellow-400">🥇 Top 1</span>, <span className="text-amber-500">🥉 Top 2</span>, <span className="text-zinc-300">🥈 Top 3</span>
+                    Rank your top properties with badges: <span className="text-yellow-400">🥇 Gold</span>, <span className="text-zinc-300">🥈 Silver</span>, <span className="text-amber-500">🥉 Bronze</span>
                   </p>
                   <Button
                     onClick={() => setShareModalOpen(true)}
@@ -518,15 +518,15 @@ const Favorites = () => {
                               </DropdownMenuItem>
                               <DropdownMenuItem
                                 onClick={() => handleSetBadge(project.id, 'top2')}
-                                className="text-amber-500 hover:bg-zinc-800 cursor-pointer font-medium"
+                                className="text-zinc-300 hover:bg-zinc-800 cursor-pointer font-medium"
                               >
-                                🥉 Top 2 (Bronze)
+                                🥈 Top 2 (Silver)
                               </DropdownMenuItem>
                               <DropdownMenuItem
                                 onClick={() => handleSetBadge(project.id, 'top3')}
-                                className="text-zinc-300 hover:bg-zinc-800 cursor-pointer font-medium"
+                                className="text-amber-500 hover:bg-zinc-800 cursor-pointer font-medium"
                               >
-                                🥈 Top 3 (Silver)
+                                🥉 Top 3 (Bronze)
                               </DropdownMenuItem>
                               {badge && (
                                 <DropdownMenuItem
