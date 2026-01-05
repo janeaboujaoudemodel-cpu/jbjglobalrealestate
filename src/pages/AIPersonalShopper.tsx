@@ -1,9 +1,9 @@
-import { useState, useEffect } from "react";
-import { motion } from "framer-motion";
+import { useState, useEffect, useRef } from "react";
+import { motion, AnimatePresence } from "framer-motion";
 import { 
-  ShoppingBag, Search, Heart, MapPin, Home, Building2, Bed, Bath, 
-  Maximize, DollarSign, Save, FolderOpen, Plus, Loader2, Sparkles,
-  Filter, SlidersHorizontal, ArrowRight
+  Plane, MapPin, Calendar, Building2, Send, Loader2, Sparkles,
+  Save, FolderOpen, Plus, Hotel, Car, Utensils, Clock, Star,
+  Compass, Users, Briefcase, Download, Mail, MessageSquare
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
@@ -12,293 +12,348 @@ import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
-import { Slider } from "@/components/ui/slider";
 import { Badge } from "@/components/ui/badge";
+import { ScrollArea } from "@/components/ui/scroll-area";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { toast } from "sonner";
-import { Link } from "react-router-dom";
 import Footer from "@/components/Footer";
+import { supabase } from "@/integrations/supabase/client";
 
-interface PropertyPreferences {
-  purpose: 'investment' | 'living' | 'both';
-  budget: { min: number; max: number };
-  propertyType: string[];
-  bedrooms: { min: number; max: number };
-  locations: string[];
-  amenities: string[];
-  lifestyle: string;
-  timeline: string;
-  additionalNotes: string;
-}
-
-interface PropertyMatch {
+interface TripPlan {
   id: string;
   name: string;
-  location: string;
-  price: string;
-  bedrooms: string;
-  size: string;
-  developer: string;
-  matchScore: number;
-  highlights: string[];
-  image: string;
-}
-
-interface SavedProject {
-  id: string;
-  name: string;
-  preferences: PropertyPreferences;
-  matches: PropertyMatch[];
+  request: string;
+  plan: string;
   createdAt: Date;
-  updatedAt: Date;
+  status: 'draft' | 'submitted';
 }
 
-const locations = [
-  "Dubai Marina", "Downtown Dubai", "Palm Jumeirah", "Business Bay", 
-  "JVC", "Dubai Hills", "MBR City", "Dubai South", "JLT", "Creek Harbour"
-];
+interface Message {
+  role: 'user' | 'assistant';
+  content: string;
+}
 
-const amenities = [
-  "Pool", "Gym", "Beach Access", "Golf Course", "Kids Play Area", 
-  "Concierge", "Spa", "Cinema", "Tennis Court", "Pet Friendly"
-];
-
-const propertyTypes = [
-  "Studio", "Apartment", "Penthouse", "Villa", "Townhouse", "Duplex"
+const quickPrompts = [
+  {
+    icon: Building2,
+    title: "Property Investor Tour",
+    prompt: "I'm coming to Dubai for 5 days as a property investor. Budget $2M. I want to see luxury apartments in Dubai Marina and Downtown. Schedule viewings, recommend hotels, and plan some leisure activities."
+  },
+  {
+    icon: Briefcase,
+    title: "Business & Property",
+    prompt: "I'm visiting UAE for 7 days combining business meetings with property exploration. I need a schedule that includes morning meetings in DIFC, afternoon property viewings, and evening entertainment."
+  },
+  {
+    icon: Users,
+    title: "Family Relocation",
+    prompt: "We're a family of 4 relocating to Dubai. We need to see family-friendly communities, international schools, and healthcare facilities. We have 10 days and want to explore different areas."
+  },
+  {
+    icon: Star,
+    title: "Luxury Experience",
+    prompt: "I want the ultimate luxury Dubai experience for 4 days - 5-star hotels, penthouse viewings on Palm Jumeirah, yacht trips, fine dining, and exclusive property tours."
+  },
+  {
+    icon: Compass,
+    title: "First-Time Explorer",
+    prompt: "I'm visiting Dubai for the first time for 6 days. I want to explore investment opportunities while experiencing the city. Suggest a balanced itinerary with sightseeing and property viewings."
+  }
 ];
 
 const AIPersonalShopper = () => {
-  const [preferences, setPreferences] = useState<PropertyPreferences>({
-    purpose: 'living',
-    budget: { min: 500000, max: 2000000 },
-    propertyType: [],
-    bedrooms: { min: 1, max: 3 },
-    locations: [],
-    amenities: [],
-    lifestyle: '',
-    timeline: '',
-    additionalNotes: ''
-  });
+  const [messages, setMessages] = useState<Message[]>([]);
+  const [inputMessage, setInputMessage] = useState('');
+  const [isLoading, setIsLoading] = useState(false);
+  const [savedPlans, setSavedPlans] = useState<TripPlan[]>([]);
+  const [currentPlan, setCurrentPlan] = useState<TripPlan | null>(null);
+  const [showSaveModal, setShowSaveModal] = useState(false);
+  const [planName, setPlanName] = useState('');
+  const [showInquiryModal, setShowInquiryModal] = useState(false);
+  const [inquiryForm, setInquiryForm] = useState({ name: '', email: '', phone: '' });
+  const messagesEndRef = useRef<HTMLDivElement>(null);
 
-  const [matches, setMatches] = useState<PropertyMatch[]>([]);
-  const [isSearching, setIsSearching] = useState(false);
-  const [projects, setProjects] = useState<SavedProject[]>([]);
-  const [currentProject, setCurrentProject] = useState<SavedProject | null>(null);
-  const [showProjectModal, setShowProjectModal] = useState(false);
-  const [newProjectName, setNewProjectName] = useState('');
-
-  // Load projects
+  // Load saved plans
   useEffect(() => {
-    const saved = localStorage.getItem('ai_shopper_projects');
+    const saved = localStorage.getItem('ai_concierge_plans');
     if (saved) {
       const parsed = JSON.parse(saved);
-      setProjects(parsed.map((p: any) => ({
+      setSavedPlans(parsed.map((p: any) => ({
         ...p,
-        createdAt: new Date(p.createdAt),
-        updatedAt: new Date(p.updatedAt)
+        createdAt: new Date(p.createdAt)
       })));
     }
   }, []);
 
-  const saveProjects = (updated: SavedProject[]) => {
-    localStorage.setItem('ai_shopper_projects', JSON.stringify(updated));
-    setProjects(updated);
+  // Scroll to bottom on new messages
+  useEffect(() => {
+    messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' });
+  }, [messages]);
+
+  const savePlans = (updated: TripPlan[]) => {
+    localStorage.setItem('ai_concierge_plans', JSON.stringify(updated));
+    setSavedPlans(updated);
   };
 
-  const toggleArrayItem = (array: string[], item: string) => {
-    return array.includes(item) 
-      ? array.filter(i => i !== item)
-      : [...array, item];
+  const sendMessage = async (message: string) => {
+    if (!message.trim() || isLoading) return;
+
+    const userMessage: Message = { role: 'user', content: message };
+    setMessages(prev => [...prev, userMessage]);
+    setInputMessage('');
+    setIsLoading(true);
+
+    try {
+      const response = await supabase.functions.invoke('ai-travel-concierge', {
+        body: { 
+          messages: [...messages, userMessage],
+          context: currentPlan ? `Current plan: ${currentPlan.name}` : 'New trip planning session'
+        }
+      });
+
+      if (response.error) {
+        throw new Error(response.error.message);
+      }
+
+      const assistantMessage: Message = { 
+        role: 'assistant', 
+        content: response.data.response 
+      };
+      setMessages(prev => [...prev, assistantMessage]);
+    } catch (error) {
+      console.error('AI Error:', error);
+      toast.error('Failed to get AI response. Please try again.');
+      
+      // Fallback response
+      const fallbackMessage: Message = {
+        role: 'assistant',
+        content: `I apologize for the technical difficulty. Let me help you plan your UAE trip!\n\nBased on your request, here's what I can assist with:\n\n**Services Available:**\n- 🏠 Property viewing schedules\n- 🏨 Hotel recommendations & bookings\n- 🚗 Private transfers & chauffeur services\n- 🍽️ Restaurant reservations\n- 🎯 Activity & experience planning\n- 📋 Complete daily itineraries\n\nPlease share more details about your trip:\n- **Duration**: How many days?\n- **Purpose**: Investment, relocation, or leisure?\n- **Budget**: Your comfortable range\n- **Interests**: Specific areas or activities?\n\nOur team at JJ Global Capital will ensure your UAE experience is exceptional! 📞 +971 56 591 1000`
+      };
+      setMessages(prev => [...prev, fallbackMessage]);
+    }
+
+    setIsLoading(false);
   };
 
-  const findMatches = async () => {
-    if (preferences.locations.length === 0) {
-      toast.error("Please select at least one location");
+  const savePlan = () => {
+    if (!planName.trim()) {
+      toast.error("Please enter a plan name");
       return;
     }
 
-    setIsSearching(true);
-    toast.loading("AI finding your perfect properties...");
-
-    await new Promise(resolve => setTimeout(resolve, 2500));
-
-    // Generate mock matches based on preferences
-    const mockMatches: PropertyMatch[] = [
-      {
-        id: '1',
-        name: 'Marina Heights Residences',
-        location: preferences.locations[0] || 'Dubai Marina',
-        price: `AED ${(preferences.budget.min + (preferences.budget.max - preferences.budget.min) * 0.7).toLocaleString()}`,
-        bedrooms: `${preferences.bedrooms.min}-${preferences.bedrooms.max} BR`,
-        size: '1,200 - 2,500 sqft',
-        developer: 'Emaar Properties',
-        matchScore: 95,
-        highlights: ['Sea View', 'Walk to Metro', 'Premium Finishes'],
-        image: '/placeholder.svg'
-      },
-      {
-        id: '2',
-        name: 'Creek Vista Tower',
-        location: preferences.locations[1] || 'Creek Harbour',
-        price: `AED ${(preferences.budget.min + (preferences.budget.max - preferences.budget.min) * 0.5).toLocaleString()}`,
-        bedrooms: `${preferences.bedrooms.min} BR`,
-        size: '850 - 1,800 sqft',
-        developer: 'Emaar Properties',
-        matchScore: 88,
-        highlights: ['Creek View', 'Smart Home', 'Investment Ready'],
-        image: '/placeholder.svg'
-      },
-      {
-        id: '3',
-        name: 'Golf Estate Villas',
-        location: 'Dubai Hills',
-        price: `AED ${preferences.budget.max.toLocaleString()}`,
-        bedrooms: `${preferences.bedrooms.max} BR`,
-        size: '3,500 - 5,000 sqft',
-        developer: 'Meraas',
-        matchScore: 82,
-        highlights: ['Golf Course View', 'Private Garden', 'Premium Community'],
-        image: '/placeholder.svg'
-      },
-      {
-        id: '4',
-        name: 'Business Bay Executive',
-        location: 'Business Bay',
-        price: `AED ${(preferences.budget.min * 1.2).toLocaleString()}`,
-        bedrooms: `${preferences.bedrooms.min} BR`,
-        size: '600 - 1,200 sqft',
-        developer: 'DAMAC',
-        matchScore: 78,
-        highlights: ['High ROI', 'Canal View', 'Furnished Options'],
-        image: '/placeholder.svg'
-      },
-    ];
-
-    setMatches(mockMatches);
-    toast.dismiss();
-    toast.success(`Found ${mockMatches.length} matching properties!`);
-    setIsSearching(false);
-  };
-
-  const createProject = () => {
-    if (!newProjectName.trim()) {
-      toast.error("Please enter a project name");
-      return;
-    }
-
-    const newProject: SavedProject = {
+    const fullPlan = messages.map(m => `${m.role === 'user' ? 'You' : 'Concierge'}: ${m.content}`).join('\n\n');
+    
+    const newPlan: TripPlan = {
       id: Date.now().toString(),
-      name: newProjectName,
-      preferences,
-      matches,
+      name: planName,
+      request: messages.find(m => m.role === 'user')?.content || '',
+      plan: fullPlan,
       createdAt: new Date(),
-      updatedAt: new Date()
+      status: 'draft'
     };
 
-    const updated = [...projects, newProject];
-    saveProjects(updated);
-    setCurrentProject(newProject);
-    setNewProjectName('');
-    setShowProjectModal(false);
-    toast.success(`Project "${newProjectName}" created!`);
+    const updated = [...savedPlans, newPlan];
+    savePlans(updated);
+    setCurrentPlan(newPlan);
+    setPlanName('');
+    setShowSaveModal(false);
+    toast.success(`Plan "${planName}" saved!`);
   };
 
-  const saveCurrentProject = () => {
-    if (!currentProject) {
-      setShowProjectModal(true);
+  const loadPlan = (plan: TripPlan) => {
+    setCurrentPlan(plan);
+    // Parse the saved conversation
+    const lines = plan.plan.split('\n\n');
+    const loadedMessages: Message[] = lines
+      .filter(line => line.startsWith('You:') || line.startsWith('Concierge:'))
+      .map(line => ({
+        role: line.startsWith('You:') ? 'user' : 'assistant',
+        content: line.replace(/^(You|Concierge): /, '')
+      }));
+    setMessages(loadedMessages);
+    toast.success(`Plan "${plan.name}" loaded!`);
+  };
+
+  const submitInquiry = async () => {
+    if (!inquiryForm.email) {
+      toast.error("Please enter your email");
       return;
     }
 
-    const updated = projects.map(p =>
-      p.id === currentProject.id
-        ? { ...p, preferences, matches, updatedAt: new Date() }
-        : p
-    );
-    saveProjects(updated);
-    toast.success("Project saved!");
+    try {
+      const fullPlan = messages.map(m => `${m.role === 'user' ? 'Client' : 'AI Concierge'}: ${m.content}`).join('\n\n');
+      
+      await supabase.functions.invoke('send-inquiry-email', {
+        body: {
+          name: inquiryForm.name,
+          email: inquiryForm.email,
+          phone: inquiryForm.phone,
+          source: 'AI Travel Concierge',
+          context: fullPlan
+        }
+      });
+
+      // Update plan status
+      if (currentPlan) {
+        const updated = savedPlans.map(p => 
+          p.id === currentPlan.id ? { ...p, status: 'submitted' as const } : p
+        );
+        savePlans(updated);
+      }
+
+      setShowInquiryModal(false);
+      setInquiryForm({ name: '', email: '', phone: '' });
+      toast.success("Your trip plan has been sent to our team! We'll contact you shortly.");
+    } catch (error) {
+      console.error('Submit error:', error);
+      toast.error("Failed to submit. Please try again.");
+    }
   };
 
-  const loadProject = (project: SavedProject) => {
-    setCurrentProject(project);
-    setPreferences(project.preferences);
-    setMatches(project.matches);
-    toast.success(`Project "${project.name}" loaded!`);
+  const startNewConversation = () => {
+    setMessages([]);
+    setCurrentPlan(null);
+    toast.success("Started new trip planning session");
+  };
+
+  const useQuickPrompt = (prompt: string) => {
+    setInputMessage(prompt);
   };
 
   return (
     <section className="min-h-screen bg-gradient-to-br from-zinc-950 via-black to-zinc-950">
       {/* Header */}
-      <div className="bg-gradient-to-r from-purple-900/30 via-purple-800/20 to-purple-900/30 border-b border-purple-500/20">
-        <div className="container mx-auto px-4 py-12">
+      <div className="bg-gradient-to-r from-emerald-900/30 via-teal-800/20 to-emerald-900/30 border-b border-emerald-500/20">
+        <div className="container mx-auto px-4 py-8 md:py-12">
           <motion.div
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             className="text-center"
           >
-            <div className="inline-flex items-center gap-2 bg-purple-500/20 border border-purple-500/30 rounded-full px-4 py-1 mb-4">
-              <ShoppingBag className="w-4 h-4 text-purple-400" />
-              <span className="text-purple-300 text-sm font-medium">AI-Powered Property Matching</span>
+            <div className="inline-flex items-center gap-2 bg-emerald-500/20 border border-emerald-500/30 rounded-full px-4 py-1 mb-4">
+              <Plane className="w-4 h-4 text-emerald-400" />
+              <span className="text-emerald-300 text-sm font-medium">AI Travel & Property Concierge</span>
             </div>
-            <h1 className="text-4xl md:text-5xl font-bold text-white mb-4">
-              AI Personal <span className="text-transparent bg-clip-text bg-gradient-to-r from-purple-400 to-pink-400">Shopper</span>
+            <h1 className="text-3xl md:text-5xl font-bold text-white mb-4">
+              Your Personal <span className="text-transparent bg-clip-text bg-gradient-to-r from-emerald-400 to-teal-400">UAE Concierge</span>
             </h1>
-            <p className="text-zinc-400 max-w-2xl mx-auto">
-              Tell us your dream property preferences and let AI find the perfect matches for you.
+            <p className="text-zinc-400 max-w-2xl mx-auto text-sm md:text-base">
+              Tell me about your trip to UAE and I'll create a complete personalized itinerary — 
+              property viewings, hotels, activities, dining, and everything in between.
             </p>
-            <p className="text-xs text-gold mt-2">Developed by Founder Jane Abou Jaoude</p>
+            <p className="text-xs text-gold mt-2">Developed by Founder Jane Abou Jaoude • Powered by JJ Global Capital</p>
           </motion.div>
         </div>
       </div>
 
-      <div className="container mx-auto px-4 py-8">
-        {/* Project Bar */}
-        <div className="mb-6 flex flex-wrap items-center gap-4 p-4 bg-zinc-900/50 border border-zinc-800 rounded-xl">
+      <div className="container mx-auto px-4 py-6">
+        {/* Action Bar */}
+        <div className="mb-4 flex flex-wrap items-center gap-3 p-3 bg-zinc-900/50 border border-zinc-800 rounded-xl">
           <div className="flex items-center gap-2">
-            <FolderOpen className="w-5 h-5 text-purple-400" />
-            <span className="text-white font-medium">
-              {currentProject ? currentProject.name : "New Property Search"}
+            <FolderOpen className="w-5 h-5 text-emerald-400" />
+            <span className="text-white font-medium text-sm">
+              {currentPlan ? currentPlan.name : "New Trip Plan"}
             </span>
+            {currentPlan?.status === 'submitted' && (
+              <Badge className="bg-emerald-600 text-xs">Submitted</Badge>
+            )}
           </div>
           <div className="flex-1" />
-          <Button size="sm" variant="outline" onClick={saveCurrentProject} className="text-xs">
-            <Save className="w-3 h-3 mr-1" /> Save Search
+          
+          <Button size="sm" variant="outline" onClick={startNewConversation} className="text-xs">
+            <Plus className="w-3 h-3 mr-1" /> New Plan
           </Button>
-          <Dialog open={showProjectModal} onOpenChange={setShowProjectModal}>
-            <DialogTrigger asChild>
-              <Button size="sm" variant="outline" className="text-xs">
-                <Plus className="w-3 h-3 mr-1" /> New Search
-              </Button>
-            </DialogTrigger>
-            <DialogContent className="bg-zinc-900 border-zinc-700">
-              <DialogHeader>
-                <DialogTitle className="text-white">Save Property Search</DialogTitle>
-              </DialogHeader>
-              <div className="space-y-4">
-                <div>
-                  <Label className="text-zinc-400">Search Name</Label>
-                  <Input
-                    value={newProjectName}
-                    onChange={(e) => setNewProjectName(e.target.value)}
-                    placeholder="My Dream Home Search"
-                    className="bg-zinc-800 border-zinc-700"
-                  />
-                </div>
-                <Button onClick={createProject} className="w-full bg-purple-600">
-                  Save Search
-                </Button>
-              </div>
-            </DialogContent>
-          </Dialog>
+          
+          {messages.length > 0 && (
+            <>
+              <Dialog open={showSaveModal} onOpenChange={setShowSaveModal}>
+                <DialogTrigger asChild>
+                  <Button size="sm" variant="outline" className="text-xs">
+                    <Save className="w-3 h-3 mr-1" /> Save Plan
+                  </Button>
+                </DialogTrigger>
+                <DialogContent className="bg-zinc-900 border-zinc-700">
+                  <DialogHeader>
+                    <DialogTitle className="text-white">Save Trip Plan</DialogTitle>
+                  </DialogHeader>
+                  <div className="space-y-4">
+                    <div>
+                      <Label className="text-zinc-400">Plan Name</Label>
+                      <Input
+                        value={planName}
+                        onChange={(e) => setPlanName(e.target.value)}
+                        placeholder="My Dubai Investment Trip"
+                        className="bg-zinc-800 border-zinc-700 text-white"
+                      />
+                    </div>
+                    <Button onClick={savePlan} className="w-full bg-emerald-600 hover:bg-emerald-700">
+                      Save Plan
+                    </Button>
+                  </div>
+                </DialogContent>
+              </Dialog>
 
-          {projects.length > 0 && (
+              <Dialog open={showInquiryModal} onOpenChange={setShowInquiryModal}>
+                <DialogTrigger asChild>
+                  <Button size="sm" className="bg-gold hover:bg-gold/90 text-black text-xs">
+                    <Mail className="w-3 h-3 mr-1" /> Submit to Team
+                  </Button>
+                </DialogTrigger>
+                <DialogContent className="bg-zinc-900 border-zinc-700">
+                  <DialogHeader>
+                    <DialogTitle className="text-white">Submit Your Trip Plan</DialogTitle>
+                  </DialogHeader>
+                  <p className="text-zinc-400 text-sm">
+                    Our concierge team will review your plan and contact you to finalize all arrangements.
+                  </p>
+                  <div className="space-y-4 mt-4">
+                    <div>
+                      <Label className="text-zinc-400">Full Name</Label>
+                      <Input
+                        value={inquiryForm.name}
+                        onChange={(e) => setInquiryForm(prev => ({ ...prev, name: e.target.value }))}
+                        placeholder="John Smith"
+                        className="bg-zinc-800 border-zinc-700 text-white"
+                      />
+                    </div>
+                    <div>
+                      <Label className="text-zinc-400">Email *</Label>
+                      <Input
+                        type="email"
+                        value={inquiryForm.email}
+                        onChange={(e) => setInquiryForm(prev => ({ ...prev, email: e.target.value }))}
+                        placeholder="john@example.com"
+                        className="bg-zinc-800 border-zinc-700 text-white"
+                      />
+                    </div>
+                    <div>
+                      <Label className="text-zinc-400">Phone (WhatsApp preferred)</Label>
+                      <Input
+                        value={inquiryForm.phone}
+                        onChange={(e) => setInquiryForm(prev => ({ ...prev, phone: e.target.value }))}
+                        placeholder="+1 234 567 8900"
+                        className="bg-zinc-800 border-zinc-700 text-white"
+                      />
+                    </div>
+                    <Button onClick={submitInquiry} className="w-full bg-gold hover:bg-gold/90 text-black">
+                      Submit to Concierge Team
+                    </Button>
+                  </div>
+                </DialogContent>
+              </Dialog>
+            </>
+          )}
+
+          {savedPlans.length > 0 && (
             <Select onValueChange={(id) => {
-              const project = projects.find(p => p.id === id);
-              if (project) loadProject(project);
+              const plan = savedPlans.find(p => p.id === id);
+              if (plan) loadPlan(plan);
             }}>
-              <SelectTrigger className="w-40 bg-zinc-800 border-zinc-700 text-sm">
-                <SelectValue placeholder="Load Search" />
+              <SelectTrigger className="w-36 bg-zinc-800 border-zinc-700 text-sm text-white">
+                <SelectValue placeholder="Load Plan" />
               </SelectTrigger>
               <SelectContent className="bg-zinc-800 border-zinc-700">
-                {projects.map(p => (
+                {savedPlans.map(p => (
                   <SelectItem key={p.id} value={p.id} className="text-white">
                     {p.name}
                   </SelectItem>
@@ -308,269 +363,186 @@ const AIPersonalShopper = () => {
           )}
         </div>
 
-        <div className="grid lg:grid-cols-3 gap-8">
-          {/* Preferences Panel */}
-          <div className="space-y-6">
+        <div className="grid lg:grid-cols-4 gap-6">
+          {/* Quick Prompts Sidebar */}
+          <div className="lg:col-span-1 space-y-4">
             <Card className="bg-zinc-900/50 border-zinc-800">
-              <CardHeader>
-                <CardTitle className="text-white flex items-center gap-2">
-                  <SlidersHorizontal className="w-5 h-5 text-purple-400" />
-                  Your Preferences
+              <CardHeader className="pb-3">
+                <CardTitle className="text-white text-sm flex items-center gap-2">
+                  <Sparkles className="w-4 h-4 text-emerald-400" />
+                  Quick Start
                 </CardTitle>
               </CardHeader>
-              <CardContent className="space-y-6">
-                {/* Purpose */}
-                <div>
-                  <Label className="text-zinc-400 mb-2 block">Purpose</Label>
-                  <div className="grid grid-cols-3 gap-2">
-                    {(['living', 'investment', 'both'] as const).map(purpose => (
-                      <Button
-                        key={purpose}
-                        size="sm"
-                        variant={preferences.purpose === purpose ? 'default' : 'outline'}
-                        className={preferences.purpose === purpose ? 'bg-purple-600' : ''}
-                        onClick={() => setPreferences(prev => ({ ...prev, purpose }))}
-                      >
-                        {purpose.charAt(0).toUpperCase() + purpose.slice(1)}
-                      </Button>
-                    ))}
-                  </div>
-                </div>
-
-                {/* Budget */}
-                <div>
-                  <Label className="text-zinc-400 mb-2 block">
-                    Budget: AED {preferences.budget.min.toLocaleString()} - {preferences.budget.max.toLocaleString()}
-                  </Label>
-                  <Slider
-                    value={[preferences.budget.min, preferences.budget.max]}
-                    min={300000}
-                    max={10000000}
-                    step={100000}
-                    onValueChange={([min, max]) => setPreferences(prev => ({ ...prev, budget: { min, max } }))}
-                    className="mt-4"
-                  />
-                </div>
-
-                {/* Property Types */}
-                <div>
-                  <Label className="text-zinc-400 mb-2 block">Property Type</Label>
-                  <div className="flex flex-wrap gap-2">
-                    {propertyTypes.map(type => (
-                      <Badge
-                        key={type}
-                        variant={preferences.propertyType.includes(type) ? 'default' : 'outline'}
-                        className={`cursor-pointer ${preferences.propertyType.includes(type) ? 'bg-purple-600' : ''}`}
-                        onClick={() => setPreferences(prev => ({ 
-                          ...prev, 
-                          propertyType: toggleArrayItem(prev.propertyType, type) 
-                        }))}
-                      >
-                        {type}
-                      </Badge>
-                    ))}
-                  </div>
-                </div>
-
-                {/* Bedrooms */}
-                <div>
-                  <Label className="text-zinc-400 mb-2 block">
-                    Bedrooms: {preferences.bedrooms.min} - {preferences.bedrooms.max}
-                  </Label>
-                  <Slider
-                    value={[preferences.bedrooms.min, preferences.bedrooms.max]}
-                    min={0}
-                    max={6}
-                    step={1}
-                    onValueChange={([min, max]) => setPreferences(prev => ({ ...prev, bedrooms: { min, max } }))}
-                    className="mt-4"
-                  />
-                </div>
-
-                {/* Locations */}
-                <div>
-                  <Label className="text-zinc-400 mb-2 block">Preferred Locations</Label>
-                  <div className="flex flex-wrap gap-2">
-                    {locations.map(loc => (
-                      <Badge
-                        key={loc}
-                        variant={preferences.locations.includes(loc) ? 'default' : 'outline'}
-                        className={`cursor-pointer text-xs ${preferences.locations.includes(loc) ? 'bg-purple-600' : ''}`}
-                        onClick={() => setPreferences(prev => ({ 
-                          ...prev, 
-                          locations: toggleArrayItem(prev.locations, loc) 
-                        }))}
-                      >
-                        {loc}
-                      </Badge>
-                    ))}
-                  </div>
-                </div>
-
-                {/* Amenities */}
-                <div>
-                  <Label className="text-zinc-400 mb-2 block">Must-Have Amenities</Label>
-                  <div className="flex flex-wrap gap-2">
-                    {amenities.map(amenity => (
-                      <Badge
-                        key={amenity}
-                        variant={preferences.amenities.includes(amenity) ? 'default' : 'outline'}
-                        className={`cursor-pointer text-xs ${preferences.amenities.includes(amenity) ? 'bg-emerald-600' : ''}`}
-                        onClick={() => setPreferences(prev => ({ 
-                          ...prev, 
-                          amenities: toggleArrayItem(prev.amenities, amenity) 
-                        }))}
-                      >
-                        {amenity}
-                      </Badge>
-                    ))}
-                  </div>
-                </div>
-
-                {/* Lifestyle */}
-                <div>
-                  <Label className="text-zinc-400 mb-2 block">Describe Your Lifestyle</Label>
-                  <Textarea
-                    value={preferences.lifestyle}
-                    onChange={(e) => setPreferences(prev => ({ ...prev, lifestyle: e.target.value }))}
-                    placeholder="E.g., Work from home, love morning beach runs, need proximity to schools..."
-                    className="bg-zinc-800 border-zinc-700 text-sm"
-                  />
-                </div>
-
-                {/* Timeline */}
-                <div>
-                  <Label className="text-zinc-400 mb-2 block">Purchase Timeline</Label>
-                  <Select 
-                    value={preferences.timeline} 
-                    onValueChange={(v) => setPreferences(prev => ({ ...prev, timeline: v }))}
+              <CardContent className="space-y-2">
+                {quickPrompts.map((prompt, index) => (
+                  <motion.button
+                    key={index}
+                    whileHover={{ scale: 1.02 }}
+                    whileTap={{ scale: 0.98 }}
+                    onClick={() => useQuickPrompt(prompt.prompt)}
+                    className="w-full p-3 text-left bg-zinc-800/50 hover:bg-zinc-800 border border-zinc-700 hover:border-emerald-500/50 rounded-lg transition-all group"
                   >
-                    <SelectTrigger className="bg-zinc-800 border-zinc-700">
-                      <SelectValue placeholder="Select timeline" />
-                    </SelectTrigger>
-                    <SelectContent className="bg-zinc-800 border-zinc-700">
-                      <SelectItem value="immediate">Ready to buy now</SelectItem>
-                      <SelectItem value="3months">Within 3 months</SelectItem>
-                      <SelectItem value="6months">Within 6 months</SelectItem>
-                      <SelectItem value="1year">Within 1 year</SelectItem>
-                      <SelectItem value="exploring">Just exploring</SelectItem>
-                    </SelectContent>
-                  </Select>
-                </div>
+                    <div className="flex items-center gap-2 mb-1">
+                      <prompt.icon className="w-4 h-4 text-emerald-400" />
+                      <span className="text-white text-sm font-medium">{prompt.title}</span>
+                    </div>
+                    <p className="text-zinc-500 text-xs line-clamp-2 group-hover:text-zinc-400">
+                      {prompt.prompt.substring(0, 80)}...
+                    </p>
+                  </motion.button>
+                ))}
+              </CardContent>
+            </Card>
 
-                <Button 
-                  onClick={findMatches} 
-                  disabled={isSearching}
-                  className="w-full bg-gradient-to-r from-purple-600 to-pink-600"
-                >
-                  {isSearching ? (
-                    <>
-                      <Loader2 className="w-4 h-4 mr-2 animate-spin" /> Finding Matches...
-                    </>
-                  ) : (
-                    <>
-                      <Sparkles className="w-4 h-4 mr-2" /> Find My Perfect Property
-                    </>
-                  )}
-                </Button>
+            {/* What I Can Do */}
+            <Card className="bg-zinc-900/50 border-zinc-800">
+              <CardHeader className="pb-3">
+                <CardTitle className="text-white text-sm">What I Can Plan</CardTitle>
+              </CardHeader>
+              <CardContent className="space-y-2">
+                {[
+                  { icon: Building2, text: "Property Viewings" },
+                  { icon: Hotel, text: "Hotel Bookings" },
+                  { icon: Car, text: "Private Transfers" },
+                  { icon: Utensils, text: "Restaurant Reservations" },
+                  { icon: Calendar, text: "Daily Itineraries" },
+                  { icon: Compass, text: "Activities & Experiences" }
+                ].map((item, i) => (
+                  <div key={i} className="flex items-center gap-2 text-zinc-400 text-sm">
+                    <item.icon className="w-4 h-4 text-emerald-400" />
+                    {item.text}
+                  </div>
+                ))}
               </CardContent>
             </Card>
           </div>
 
-          {/* Results */}
-          <div className="lg:col-span-2">
-            {matches.length > 0 ? (
-              <div className="space-y-6">
-                <div className="flex items-center justify-between">
-                  <h2 className="text-white text-xl font-semibold">
-                    Your Matches ({matches.length})
-                  </h2>
-                  <Link to="/properties">
-                    <Button variant="outline" size="sm">
-                      View All Properties <ArrowRight className="w-4 h-4 ml-1" />
-                    </Button>
-                  </Link>
-                </div>
-
-                <div className="grid gap-6">
-                  {matches.map(property => (
-                    <Card key={property.id} className="bg-zinc-900/50 border-zinc-800 overflow-hidden">
-                      <div className="flex flex-col md:flex-row">
-                        <div className="w-full md:w-48 h-48 md:h-auto bg-zinc-800 flex items-center justify-center">
-                          <Building2 className="w-16 h-16 text-zinc-600" />
-                        </div>
-                        <CardContent className="flex-1 p-6">
-                          <div className="flex items-start justify-between mb-4">
-                            <div>
-                              <h3 className="text-white text-lg font-semibold">{property.name}</h3>
-                              <p className="text-zinc-400 text-sm flex items-center gap-1">
-                                <MapPin className="w-3 h-3" /> {property.location}
-                              </p>
-                            </div>
-                            <div className="text-right">
-                              <div className={`inline-flex items-center gap-1 px-2 py-1 rounded-full text-xs font-medium ${
-                                property.matchScore >= 90 ? 'bg-emerald-500/20 text-emerald-400' :
-                                property.matchScore >= 80 ? 'bg-blue-500/20 text-blue-400' :
-                                'bg-yellow-500/20 text-yellow-400'
-                              }`}>
-                                {property.matchScore}% Match
-                              </div>
-                            </div>
-                          </div>
-
-                          <div className="grid grid-cols-2 md:grid-cols-4 gap-4 mb-4">
-                            <div className="flex items-center gap-2 text-sm text-zinc-300">
-                              <DollarSign className="w-4 h-4 text-emerald-400" />
-                              {property.price}
-                            </div>
-                            <div className="flex items-center gap-2 text-sm text-zinc-300">
-                              <Bed className="w-4 h-4 text-blue-400" />
-                              {property.bedrooms}
-                            </div>
-                            <div className="flex items-center gap-2 text-sm text-zinc-300">
-                              <Maximize className="w-4 h-4 text-purple-400" />
-                              {property.size}
-                            </div>
-                            <div className="flex items-center gap-2 text-sm text-zinc-300">
-                              <Building2 className="w-4 h-4 text-gold" />
-                              {property.developer}
-                            </div>
-                          </div>
-
-                          <div className="flex flex-wrap gap-2 mb-4">
-                            {property.highlights.map((highlight, i) => (
-                              <Badge key={i} variant="outline" className="text-xs">
-                                {highlight}
-                              </Badge>
-                            ))}
-                          </div>
-
-                          <div className="flex gap-2">
-                            <Button size="sm" className="bg-purple-600 hover:bg-purple-700">
-                              View Details
-                            </Button>
-                            <Button size="sm" variant="outline">
-                              <Heart className="w-4 h-4 mr-1" /> Save
-                            </Button>
-                          </div>
-                        </CardContent>
+          {/* Chat Area */}
+          <div className="lg:col-span-3">
+            <Card className="bg-zinc-900/50 border-zinc-800 h-[600px] flex flex-col">
+              <CardHeader className="border-b border-zinc-800 pb-3">
+                <CardTitle className="text-white flex items-center gap-2">
+                  <MessageSquare className="w-5 h-5 text-emerald-400" />
+                  Plan Your UAE Journey
+                </CardTitle>
+              </CardHeader>
+              
+              <ScrollArea className="flex-1 p-4">
+                {messages.length === 0 ? (
+                  <div className="h-full flex flex-col items-center justify-center text-center p-8">
+                    <motion.div
+                      initial={{ opacity: 0, scale: 0.9 }}
+                      animate={{ opacity: 1, scale: 1 }}
+                      className="space-y-4"
+                    >
+                      <div className="w-20 h-20 mx-auto bg-gradient-to-br from-emerald-500 to-teal-500 rounded-2xl flex items-center justify-center">
+                        <Plane className="w-10 h-10 text-white" />
                       </div>
-                    </Card>
-                  ))}
+                      <h3 className="text-xl font-semibold text-white">Welcome to Your Personal Concierge</h3>
+                      <p className="text-zinc-400 max-w-md">
+                        Tell me about your upcoming trip to the UAE. Whether you're an investor, 
+                        relocating family, or luxury traveler — I'll create a complete personalized itinerary for you.
+                      </p>
+                      <div className="flex flex-wrap justify-center gap-2 mt-4">
+                        <Badge variant="outline" className="border-emerald-500/50 text-emerald-400">
+                          <Clock className="w-3 h-3 mr-1" /> Full Schedules
+                        </Badge>
+                        <Badge variant="outline" className="border-emerald-500/50 text-emerald-400">
+                          <Hotel className="w-3 h-3 mr-1" /> Hotels
+                        </Badge>
+                        <Badge variant="outline" className="border-emerald-500/50 text-emerald-400">
+                          <Building2 className="w-3 h-3 mr-1" /> Properties
+                        </Badge>
+                        <Badge variant="outline" className="border-emerald-500/50 text-emerald-400">
+                          <Star className="w-3 h-3 mr-1" /> Experiences
+                        </Badge>
+                      </div>
+                    </motion.div>
+                  </div>
+                ) : (
+                  <div className="space-y-4">
+                    <AnimatePresence>
+                      {messages.map((message, index) => (
+                        <motion.div
+                          key={index}
+                          initial={{ opacity: 0, y: 10 }}
+                          animate={{ opacity: 1, y: 0 }}
+                          exit={{ opacity: 0 }}
+                          className={`flex ${message.role === 'user' ? 'justify-end' : 'justify-start'}`}
+                        >
+                          <div
+                            className={`max-w-[85%] p-4 rounded-2xl ${
+                              message.role === 'user'
+                                ? 'bg-emerald-600 text-white'
+                                : 'bg-zinc-800 text-zinc-100 border border-zinc-700'
+                            }`}
+                          >
+                            {message.role === 'assistant' && (
+                              <div className="flex items-center gap-2 mb-2 text-emerald-400 text-xs font-medium">
+                                <Sparkles className="w-3 h-3" />
+                                AI Concierge
+                              </div>
+                            )}
+                            <div className="whitespace-pre-wrap text-sm leading-relaxed">
+                              {message.content}
+                            </div>
+                          </div>
+                        </motion.div>
+                      ))}
+                    </AnimatePresence>
+                    
+                    {isLoading && (
+                      <motion.div
+                        initial={{ opacity: 0 }}
+                        animate={{ opacity: 1 }}
+                        className="flex justify-start"
+                      >
+                        <div className="bg-zinc-800 border border-zinc-700 p-4 rounded-2xl">
+                          <div className="flex items-center gap-2 text-emerald-400">
+                            <Loader2 className="w-4 h-4 animate-spin" />
+                            <span className="text-sm">Creating your personalized plan...</span>
+                          </div>
+                        </div>
+                      </motion.div>
+                    )}
+                    <div ref={messagesEndRef} />
+                  </div>
+                )}
+              </ScrollArea>
+
+              {/* Input Area */}
+              <div className="p-4 border-t border-zinc-800">
+                <div className="flex gap-2">
+                  <Textarea
+                    value={inputMessage}
+                    onChange={(e) => setInputMessage(e.target.value)}
+                    onKeyDown={(e) => {
+                      if (e.key === 'Enter' && !e.shiftKey) {
+                        e.preventDefault();
+                        sendMessage(inputMessage);
+                      }
+                    }}
+                    placeholder="Describe your ideal UAE trip... (e.g., I'm visiting Dubai for 7 days as a property investor looking at luxury penthouses...)"
+                    className="flex-1 bg-zinc-800 border-zinc-700 text-white resize-none min-h-[60px]"
+                    rows={2}
+                  />
+                  <Button
+                    onClick={() => sendMessage(inputMessage)}
+                    disabled={!inputMessage.trim() || isLoading}
+                    className="bg-emerald-600 hover:bg-emerald-700 self-end"
+                  >
+                    {isLoading ? (
+                      <Loader2 className="w-5 h-5 animate-spin" />
+                    ) : (
+                      <Send className="w-5 h-5" />
+                    )}
+                  </Button>
                 </div>
+                <p className="text-xs text-zinc-500 mt-2 text-center">
+                  Press Enter to send • Your plan can be saved and submitted to our concierge team
+                </p>
               </div>
-            ) : (
-              <Card className="bg-zinc-900/50 border-zinc-800 h-full min-h-[600px] flex items-center justify-center">
-                <CardContent className="text-center">
-                  <ShoppingBag className="w-16 h-16 text-zinc-700 mx-auto mb-4" />
-                  <h3 className="text-white text-lg font-medium mb-2">Set Your Preferences</h3>
-                  <p className="text-zinc-500 text-sm max-w-md">
-                    Tell us what you're looking for by selecting your preferences on the left. 
-                    Our AI will find the perfect properties that match your criteria.
-                  </p>
-                </CardContent>
-              </Card>
-            )}
+            </Card>
           </div>
         </div>
       </div>
