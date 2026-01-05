@@ -188,13 +188,14 @@ const Index = () => {
               </Link>
             </div>
             
-            {/* Third Row - Tools - Glass style */}
+            {/* Third Row - Tools - Premium Glass style with glow */}
             <div className="flex flex-wrap justify-center gap-3">
               {/* Market Report */}
               <Link to="/market-report">
                 <Button 
-                  className="bg-white/10 backdrop-blur-md border border-gold/30 text-gold hover:bg-gold/20 hover:border-gold/50 hover:shadow-lg hover:shadow-gold/10 font-semibold px-5 py-4 text-xs transition-all duration-300 group"
+                  className="bg-white/10 backdrop-blur-md border border-amber-500/30 text-amber-400 hover:bg-amber-500/20 hover:border-amber-500/50 hover:shadow-lg hover:shadow-amber-500/10 font-semibold px-5 py-4 text-xs transition-all duration-300 group"
                 >
+                  <FileText className="w-3 h-3 mr-1" />
                   Market Report
                   <ArrowUpRight className="w-3 h-3 ml-1 group-hover:translate-x-0.5 group-hover:-translate-y-0.5 transition-transform" />
                 </Button>
@@ -203,8 +204,9 @@ const Index = () => {
               {/* Mortgage Advisory */}
               <Link to="/mortgage-advisory">
                 <Button 
-                  className="bg-white/10 backdrop-blur-md border border-gold/30 text-gold hover:bg-gold/20 hover:border-gold/50 hover:shadow-lg hover:shadow-gold/10 font-semibold px-5 py-4 text-xs transition-all duration-300 group"
+                  className="bg-white/10 backdrop-blur-md border border-cyan-500/30 text-cyan-400 hover:bg-cyan-500/20 hover:border-cyan-500/50 hover:shadow-lg hover:shadow-cyan-500/10 font-semibold px-5 py-4 text-xs transition-all duration-300 group"
                 >
+                  <Calculator className="w-3 h-3 mr-1" />
                   Mortgage Advisory
                   <ArrowUpRight className="w-3 h-3 ml-1 group-hover:translate-x-0.5 group-hover:-translate-y-0.5 transition-transform" />
                 </Button>
@@ -213,8 +215,9 @@ const Index = () => {
               {/* Rental Index */}
               <Link to="/rental-index">
                 <Button 
-                  className="bg-white/10 backdrop-blur-md border border-gold/30 text-gold hover:bg-gold/20 hover:border-gold/50 hover:shadow-lg hover:shadow-gold/10 font-semibold px-5 py-4 text-xs transition-all duration-300 group"
+                  className="bg-white/10 backdrop-blur-md border border-violet-500/30 text-violet-400 hover:bg-violet-500/20 hover:border-violet-500/50 hover:shadow-lg hover:shadow-violet-500/10 font-semibold px-5 py-4 text-xs transition-all duration-300 group"
                 >
+                  <Layers className="w-3 h-3 mr-1" />
                   Rental Index
                   <ArrowUpRight className="w-3 h-3 ml-1 group-hover:translate-x-0.5 group-hover:-translate-y-0.5 transition-transform" />
                 </Button>
@@ -243,25 +246,27 @@ const Index = () => {
               </Link>
             </div>
             
-            {/* Fourth Row - Secondary Tools - Match middle row glass style */}
+            {/* Fourth Row - Secondary Tools - Premium Glass style with glow */}
             <div className="flex flex-wrap justify-center gap-3">
               {/* News & Insights */}
               <Link to="/news">
                 <Button 
-                  className="bg-black/40 backdrop-blur-xl border border-white/20 text-white/90 hover:bg-white/10 hover:border-white/40 hover:shadow-lg hover:shadow-white/5 font-medium px-5 py-4 text-xs transition-all duration-300"
+                  className="bg-white/10 backdrop-blur-md border border-rose-500/30 text-rose-400 hover:bg-rose-500/20 hover:border-rose-500/50 hover:shadow-lg hover:shadow-rose-500/10 font-semibold px-5 py-4 text-xs transition-all duration-300 group"
                 >
+                  <FileText className="w-3 h-3 mr-1" />
                   News & Insights
-                  <ArrowUpRight className="w-3 h-3 ml-1" />
+                  <ArrowUpRight className="w-3 h-3 ml-1 group-hover:translate-x-0.5 group-hover:-translate-y-0.5 transition-transform" />
                 </Button>
               </Link>
               
               {/* Favorites */}
               <Link to="/favorites">
                 <Button 
-                  className="bg-black/40 backdrop-blur-xl border border-white/20 text-white/90 hover:bg-white/10 hover:border-white/40 hover:shadow-lg hover:shadow-white/5 font-medium px-5 py-4 text-xs transition-all duration-300"
+                  className="bg-white/10 backdrop-blur-md border border-pink-500/30 text-pink-400 hover:bg-pink-500/20 hover:border-pink-500/50 hover:shadow-lg hover:shadow-pink-500/10 font-semibold px-5 py-4 text-xs transition-all duration-300 group"
                 >
+                  <Heart className="w-3 h-3 mr-1" />
                   Favorites & Shortlist
-                  <ArrowUpRight className="w-3 h-3 ml-1" />
+                  <ArrowUpRight className="w-3 h-3 ml-1 group-hover:translate-x-0.5 group-hover:-translate-y-0.5 transition-transform" />
                 </Button>
               </Link>
             </div>
