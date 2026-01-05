@@ -1,4 +1,4 @@
-import { useMemo, useState, useEffect } from "react";
+import { useMemo, useState, useEffect, useRef } from "react";
 import Footer from "@/components/Footer";
 import GlobalHeader from "@/components/GlobalHeader";
 import { Button } from "@/components/ui/button";
@@ -16,7 +16,21 @@ import { getCountryList, getLanguageList } from "@/constants/localeOptions";
 import founderProfessional from "@/assets/founder-professional.jpeg";
 import luxuryVilla1 from "@/assets/luxury-villa-1.jpeg";
 import { motion } from "framer-motion";
-import { ArrowUpRight, BookOpen, CheckCircle, Download, FileText, Lock, Shield, Sparkles, Star, TrendingUp, Unlock } from "lucide-react";
+import {
+  ArrowUpRight,
+  BookOpen,
+  CheckCircle,
+  Download,
+  FileText,
+  Lock,
+  Shield,
+  Sparkles,
+  Star,
+  TrendingUp,
+  Unlock,
+  Printer,
+  X,
+} from "lucide-react";
 import { supabase } from "@/integrations/supabase/client";
 import { toast } from "sonner";
 import { useLeadCapture } from "@/hooks/useLeadCapture";
@@ -28,6 +42,9 @@ const MarketReport = () => {
   const [downloaded, setDownloaded] = useState(false);
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [showThankYou, setShowThankYou] = useState(false);
+  const [bookHtml, setBookHtml] = useState<string | null>(null);
+  const [showBookPreview, setShowBookPreview] = useState(false);
+  const bookFrameRef = useRef<HTMLIFrameElement>(null);
   const { isLeadCaptured, leadData, captureLead } = useLeadCapture();
   const navigate = useNavigate();
 
@@ -1571,13 +1588,30 @@ const MarketReport = () => {
 </body>
 </html>`;
 
-    // Open in new window instead of downloading
-    const targetWindow = existingWindow ?? window.open("", "_blank");
-    if (!targetWindow) return false;
+    const openInApp = () => {
+      setBookHtml(html);
+      setShowBookPreview(true);
+      setDownloaded(true);
+      return true;
+    };
 
-    targetWindow.document.open();
-    targetWindow.document.write(html);
-    targetWindow.document.close();
+    // Try a new tab first (best UX for Print → Save as PDF), fallback to in-page viewer if blocked
+    const targetWindow = existingWindow ?? window.open("", "_blank");
+    if (!targetWindow) return openInApp();
+
+    try {
+      targetWindow.document.open();
+      targetWindow.document.write(html);
+      targetWindow.document.close();
+    } catch (e) {
+      console.error("book render error:", e);
+      try {
+        targetWindow.close();
+      } catch {
+        // ignore
+      }
+      return openInApp();
+    }
 
     setDownloaded(true);
     return true;
@@ -1586,18 +1620,25 @@ const MarketReport = () => {
   const handleSubmit = async () => {
     if (!isValid || isSubmitting) return;
 
+    // Open immediately on user click to avoid pop-up blockers (fallback handled inside downloadBook)
+    const bookWindow = window.open("", "_blank");
+
     setIsSubmitting(true);
+    setShowThankYou(true);
 
     try {
       // Capture lead first if this is a new submission
       if (!isLeadCaptured && form.email) {
-        await captureLead({
-          email: form.email,
-          fullName: form.fullName,
-          phone: form.phone,
-          nationality: form.nationality,
-          language: form.language,
-        }, 'market_report');
+        await captureLead(
+          {
+            email: form.email,
+            fullName: form.fullName,
+            phone: form.phone,
+            nationality: form.nationality,
+            language: form.language,
+          },
+          "market_report",
+        );
       }
 
       // Send email notification in the background
@@ -1613,27 +1654,19 @@ const MarketReport = () => {
         })
         .catch(console.error);
 
-      // Show thank you message
-      setShowThankYou(true);
-      
-      // After 2 seconds, open the book
-      setTimeout(() => {
-        const bookWindow = window.open("", "_blank");
-        if (bookWindow) {
-          downloadBook(bookWindow);
-          toast.success("Your book is ready!");
-        } else {
-          toast.error("Please allow pop-ups to open your book.");
-          // Fallback: try to download directly
-          downloadBook();
-        }
-        setShowThankYou(false);
-      }, 2000);
-      
+      const opened = downloadBook(bookWindow);
+      if (opened) toast.success("Your book is ready!");
+      else toast.error("Couldn't open the book. Please try again.");
     } catch (error) {
       console.error("Error during submission:", error);
       toast.error("Something went wrong. Please try again.");
+      try {
+        bookWindow?.close();
+      } catch {
+        // ignore
+      }
     } finally {
+      setShowThankYou(false);
       setIsSubmitting(false);
     }
   };
@@ -1641,12 +1674,9 @@ const MarketReport = () => {
   // Direct download for returning users
   const handleDirectDownload = () => {
     const bookWindow = window.open("", "_blank");
-    if (bookWindow) {
-      downloadBook(bookWindow);
-      toast.success("Your book is ready!");
-    } else {
-      toast.error("Please allow pop-ups to open your book.");
-    }
+    const opened = downloadBook(bookWindow);
+    if (opened) toast.success("Your book is ready!");
+    else toast.error("Couldn't open the book. Please try again.");
   };
 
   return (
@@ -1674,6 +1704,52 @@ const MarketReport = () => {
               <span className="text-sm">Preparing your book...</span>
             </div>
           </motion.div>
+        </div>
+      )}
+
+      {/* In-page Book Viewer (fallback when pop-ups are blocked) */}
+      {showBookPreview && bookHtml && (
+        <div className="fixed inset-0 z-[60] bg-black/85 backdrop-blur-sm">
+          <div className="container mx-auto px-4 py-6 h-full flex items-center justify-center">
+            <div className="w-full max-w-6xl h-[88vh] bg-zinc-950 border border-gold/30 rounded-2xl overflow-hidden shadow-2xl">
+              <div className="flex items-center justify-between gap-3 px-4 py-3 border-b border-zinc-800">
+                <div className="min-w-0">
+                  <p className="text-xs text-zinc-400">JJ Global Capital</p>
+                  <h2 className="text-white font-semibold truncate">UAE Real Estate Market Intelligence 2026</h2>
+                </div>
+                <div className="flex items-center gap-2">
+                  <Button
+                    variant="outline"
+                    size="sm"
+                    onClick={() => bookFrameRef.current?.contentWindow?.print()}
+                    className="border-gold/30 text-gold hover:bg-gold/10"
+                  >
+                    <Printer className="w-4 h-4 mr-2" />
+                    Save as PDF
+                  </Button>
+                  <Button
+                    variant="outline"
+                    size="sm"
+                    onClick={() => {
+                      setShowBookPreview(false);
+                      setBookHtml(null);
+                    }}
+                    className="border-zinc-700 text-zinc-200 hover:bg-zinc-900"
+                  >
+                    <X className="w-4 h-4 mr-2" />
+                    Close
+                  </Button>
+                </div>
+              </div>
+              <iframe
+                ref={bookFrameRef}
+                title="UAE Real Estate Market Intelligence 2026"
+                srcDoc={bookHtml}
+                className="w-full h-[calc(88vh-52px)] bg-white"
+                sandbox="allow-same-origin allow-scripts"
+              />
+            </div>
+          </div>
         </div>
       )}
 
