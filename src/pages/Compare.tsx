@@ -10,7 +10,8 @@ import { useShortlistBadges } from "@/hooks/useShortlistBadges";
 import { 
   ChevronLeft, Sparkles, Send, Loader2, CheckCircle, Download, Star, 
   Users, Crown, Gift, TrendingUp, MapPin, Building, Home, 
-  BadgeCheck, AlertTriangle, Zap, Award, Phone, Mail, BarChart3
+  BadgeCheck, AlertTriangle, Zap, Award, Phone, Mail, BarChart3,
+  ArrowLeft, Heart, ListChecks, Layers
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import LegalDisclaimer from "@/components/LegalDisclaimer";
@@ -18,6 +19,7 @@ import { Input } from "@/components/ui/input";
 import { toast } from "sonner";
 import { PaymentModal } from "@/components/PaymentModal";
 import { Badge } from "@/components/ui/badge";
+import BackNavButton from "@/components/BackNavButton";
 
 const INQUIRY_FORM_URL = "https://jjglobalcapital.com/form/property-investment-inquiry-form/";
 const COMPARE_FREE_KEY = "jj_compare_free_used";
@@ -452,17 +454,141 @@ const Compare = () => {
 
   if (!projects?.length) {
     return (
-      <section className="min-h-screen bg-gradient-to-br from-purple-950/30 via-zinc-950 to-zinc-950 py-16">
-        <div className="container mx-auto px-4 text-center">
-          <h1 className="text-white text-3xl font-bold mb-4">No Properties to Compare</h1>
-          <p className="text-zinc-400 mb-8">
-            Add 2-5 properties to your shortlist to compare them with AI analysis.
-          </p>
-          <Link to="/properties">
-            <Button className="bg-gradient-to-r from-purple-600 to-purple-700 text-white hover:from-purple-500 hover:to-purple-600 shadow-lg shadow-purple-500/30">
-              Browse Properties
-            </Button>
-          </Link>
+      <section className="min-h-screen bg-gradient-to-br from-purple-950/30 via-zinc-950 to-zinc-950">
+        {/* Back Button */}
+        <BackNavButton />
+        
+        {/* Decorative elements */}
+        <div className="absolute top-0 right-0 w-[600px] h-[600px] bg-purple-500/10 rounded-full blur-3xl pointer-events-none" />
+        <div className="absolute bottom-0 left-0 w-[400px] h-[400px] bg-purple-600/5 rounded-full blur-3xl pointer-events-none" />
+        
+        <div className="container mx-auto px-4 py-16 relative z-10">
+          {/* Back link */}
+          <button
+            onClick={() => navigate(-1)}
+            className="inline-flex items-center gap-2 text-zinc-400 hover:text-purple-400 transition-colors mb-12"
+          >
+            <ArrowLeft className="w-5 h-5" />
+            <span>Back to Previous Page</span>
+          </button>
+
+          <div className="max-w-4xl mx-auto text-center">
+            {/* Badge */}
+            <div className="inline-flex items-center gap-2 px-4 py-2 bg-purple-500/20 border border-purple-500/30 rounded-full mb-8">
+              <BarChart3 className="w-4 h-4 text-purple-400" />
+              <span className="text-purple-400 text-sm font-medium">AI-Powered Comparison</span>
+            </div>
+
+            {/* Welcome Title */}
+            <h1 className="text-white text-4xl md:text-5xl lg:text-6xl font-bold mb-6">
+              Welcome to{" "}
+              <span className="text-transparent bg-clip-text bg-gradient-to-r from-purple-400 to-fuchsia-400">
+                Property Comparison
+              </span>
+            </h1>
+            
+            <p className="text-zinc-300 text-lg md:text-xl mb-4 max-w-2xl mx-auto">
+              Thank you for exploring our exclusive AI-powered property comparison tool.
+              Get detailed insights, ROI projections, and expert recommendations.
+            </p>
+            <p className="text-zinc-500 text-sm mb-12">
+              Developed by Founder Jane Abou Jaoude • Powered by JJ Global Capital
+            </p>
+
+            {/* Steps Guide */}
+            <div className="bg-zinc-900/80 backdrop-blur-sm border border-purple-500/20 rounded-3xl p-8 md:p-10 mb-10">
+              <h2 className="text-white text-2xl font-semibold mb-8 flex items-center justify-center gap-3">
+                <Sparkles className="w-6 h-6 text-purple-400" />
+                How to Compare Properties
+              </h2>
+              
+              <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+                {/* Step 1 */}
+                <div className="relative group">
+                  <div className="bg-gradient-to-br from-purple-950/60 to-zinc-900 border border-purple-500/30 rounded-2xl p-6 h-full transition-all duration-300 group-hover:border-purple-400/50 group-hover:shadow-lg group-hover:shadow-purple-500/10">
+                    <div className="w-14 h-14 rounded-2xl bg-gradient-to-br from-purple-500 to-purple-700 flex items-center justify-center mb-4 mx-auto shadow-lg shadow-purple-500/30">
+                      <Building className="w-7 h-7 text-white" />
+                    </div>
+                    <div className="absolute -top-3 -left-3 w-8 h-8 rounded-full bg-purple-500 flex items-center justify-center text-white font-bold text-sm shadow-lg">
+                      1
+                    </div>
+                    <h3 className="text-white font-semibold text-lg mb-2">Browse Properties</h3>
+                    <p className="text-zinc-400 text-sm">
+                      Explore our curated collection of premium off-plan properties across Dubai and UAE.
+                    </p>
+                  </div>
+                </div>
+
+                {/* Step 2 */}
+                <div className="relative group">
+                  <div className="bg-gradient-to-br from-purple-950/60 to-zinc-900 border border-purple-500/30 rounded-2xl p-6 h-full transition-all duration-300 group-hover:border-purple-400/50 group-hover:shadow-lg group-hover:shadow-purple-500/10">
+                    <div className="w-14 h-14 rounded-2xl bg-gradient-to-br from-purple-500 to-purple-700 flex items-center justify-center mb-4 mx-auto shadow-lg shadow-purple-500/30">
+                      <Heart className="w-7 h-7 text-white" />
+                    </div>
+                    <div className="absolute -top-3 -left-3 w-8 h-8 rounded-full bg-purple-500 flex items-center justify-center text-white font-bold text-sm shadow-lg">
+                      2
+                    </div>
+                    <h3 className="text-white font-semibold text-lg mb-2">Add to Shortlist</h3>
+                    <p className="text-zinc-400 text-sm">
+                      Click the shortlist button on any property to save 2-5 projects for comparison.
+                    </p>
+                  </div>
+                </div>
+
+                {/* Step 3 */}
+                <div className="relative group">
+                  <div className="bg-gradient-to-br from-purple-950/60 to-zinc-900 border border-purple-500/30 rounded-2xl p-6 h-full transition-all duration-300 group-hover:border-purple-400/50 group-hover:shadow-lg group-hover:shadow-purple-500/10">
+                    <div className="w-14 h-14 rounded-2xl bg-gradient-to-br from-purple-500 to-purple-700 flex items-center justify-center mb-4 mx-auto shadow-lg shadow-purple-500/30">
+                      <Layers className="w-7 h-7 text-white" />
+                    </div>
+                    <div className="absolute -top-3 -left-3 w-8 h-8 rounded-full bg-purple-500 flex items-center justify-center text-white font-bold text-sm shadow-lg">
+                      3
+                    </div>
+                    <h3 className="text-white font-semibold text-lg mb-2">Generate Comparison</h3>
+                    <p className="text-zinc-400 text-sm">
+                      Return here and let our AI analyze all projects with detailed insights and recommendations.
+                    </p>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            {/* Feature Highlights */}
+            <div className="grid grid-cols-2 md:grid-cols-4 gap-4 mb-10">
+              <div className="bg-zinc-900/50 border border-zinc-800 rounded-xl p-4 text-center">
+                <BarChart3 className="w-6 h-6 text-purple-400 mx-auto mb-2" />
+                <p className="text-white text-sm font-medium">Side-by-Side</p>
+                <p className="text-zinc-500 text-xs">Analysis</p>
+              </div>
+              <div className="bg-zinc-900/50 border border-zinc-800 rounded-xl p-4 text-center">
+                <TrendingUp className="w-6 h-6 text-purple-400 mx-auto mb-2" />
+                <p className="text-white text-sm font-medium">ROI</p>
+                <p className="text-zinc-500 text-xs">Projections</p>
+              </div>
+              <div className="bg-zinc-900/50 border border-zinc-800 rounded-xl p-4 text-center">
+                <Star className="w-6 h-6 text-purple-400 mx-auto mb-2" />
+                <p className="text-white text-sm font-medium">Smart</p>
+                <p className="text-zinc-500 text-xs">Ratings</p>
+              </div>
+              <div className="bg-zinc-900/50 border border-zinc-800 rounded-xl p-4 text-center">
+                <Award className="w-6 h-6 text-purple-400 mx-auto mb-2" />
+                <p className="text-white text-sm font-medium">Expert</p>
+                <p className="text-zinc-500 text-xs">Recommendations</p>
+              </div>
+            </div>
+
+            {/* CTA */}
+            <Link to="/properties">
+              <Button className="bg-gradient-to-r from-purple-600 to-purple-700 text-white hover:from-purple-500 hover:to-purple-600 shadow-lg shadow-purple-500/30 hover:shadow-purple-500/50 transition-all duration-300 px-8 py-6 text-lg">
+                <Building className="w-5 h-5 mr-2" />
+                Browse Properties
+              </Button>
+            </Link>
+            
+            <p className="text-zinc-500 text-sm mt-6">
+              Need help? Our advisors are available 24/7 to assist you.
+            </p>
+          </div>
         </div>
       </section>
     );
@@ -470,6 +596,9 @@ const Compare = () => {
 
   return (
     <section className="min-h-screen bg-zinc-950">
+      {/* Back Navigation Button */}
+      <BackNavButton />
+      
       {/* Hero Section - Purple Theme Matching Homepage Button */}
       <div className="relative py-16 md:py-20 overflow-hidden">
         {/* Purple gradient background */}
@@ -478,13 +607,13 @@ const Compare = () => {
         <div className="absolute bottom-0 left-0 w-64 h-64 bg-purple-600/5 rounded-full blur-2xl" />
         
         <div className="container mx-auto px-4 relative z-10">
-          <Link
-            to="/"
+          <button
+            onClick={() => navigate(-1)}
             className="inline-flex items-center gap-2 text-zinc-400 hover:text-purple-400 transition-colors mb-8"
           >
-            <ChevronLeft className="w-5 h-5" />
-            <span>Back to Home</span>
-          </Link>
+            <ArrowLeft className="w-5 h-5" />
+            <span>Back to Previous Page</span>
+          </button>
 
           <div className="max-w-3xl">
             {/* Badge */}
