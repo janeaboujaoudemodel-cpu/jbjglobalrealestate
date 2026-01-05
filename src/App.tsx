@@ -51,6 +51,7 @@ import InteriorDesign from "./pages/services/InteriorDesign";
 import FitOut from "./pages/services/FitOut";
 import DesignBuild from "./pages/services/DesignBuild";
 import LawFirm from "./pages/services/LawFirm";
+import Install from "./pages/Install";
 
 const queryClient = new QueryClient();
 
@@ -111,6 +112,7 @@ const App = () => (
                     <Route path="/services/fit-out" element={<FitOut />} />
                     <Route path="/services/design-build" element={<DesignBuild />} />
                     <Route path="/services/law-firm" element={<LawFirm />} />
+                    <Route path="/install" element={<Install />} />
                     <Route path="*" element={<NotFound />} />
                   </Routes>
                 </AdminBypass>
