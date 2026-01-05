@@ -469,17 +469,17 @@ const Compare = () => {
 
   return (
     <section className="min-h-screen bg-zinc-950">
-      {/* Hero Section - Orange Theme Matching Homepage Button */}
+      {/* Hero Section - Purple Theme Matching Homepage Button */}
       <div className="relative py-16 md:py-20 overflow-hidden">
-        {/* Orange gradient background */}
-        <div className="absolute inset-0 bg-gradient-to-br from-orange-950/40 via-zinc-950 to-zinc-950" />
-        <div className="absolute top-0 right-0 w-96 h-96 bg-orange-500/10 rounded-full blur-3xl" />
-        <div className="absolute bottom-0 left-0 w-64 h-64 bg-orange-600/5 rounded-full blur-2xl" />
+        {/* Purple gradient background */}
+        <div className="absolute inset-0 bg-gradient-to-br from-purple-950/40 via-zinc-950 to-zinc-950" />
+        <div className="absolute top-0 right-0 w-96 h-96 bg-purple-500/10 rounded-full blur-3xl" />
+        <div className="absolute bottom-0 left-0 w-64 h-64 bg-purple-600/5 rounded-full blur-2xl" />
         
         <div className="container mx-auto px-4 relative z-10">
           <Link
             to="/"
-            className="inline-flex items-center gap-2 text-zinc-400 hover:text-white transition-colors mb-8"
+            className="inline-flex items-center gap-2 text-zinc-400 hover:text-purple-400 transition-colors mb-8"
           >
             <ChevronLeft className="w-5 h-5" />
             <span>Back to Home</span>
@@ -487,13 +487,13 @@ const Compare = () => {
 
           <div className="max-w-3xl">
             {/* Badge */}
-            <div className="inline-flex items-center gap-2 px-4 py-2 bg-orange-500/20 border border-orange-500/30 rounded-full mb-6">
-              <BarChart3 className="w-4 h-4 text-orange-400" />
-              <span className="text-orange-400 text-sm font-medium">AI-Powered</span>
+            <div className="inline-flex items-center gap-2 px-4 py-2 bg-purple-500/20 border border-purple-500/30 rounded-full mb-6">
+              <BarChart3 className="w-4 h-4 text-purple-400" />
+              <span className="text-purple-400 text-sm font-medium">AI-Powered</span>
             </div>
             
             <h1 className="text-white text-4xl md:text-5xl font-bold mb-4">
-              AI Property Comparison
+              <span className="text-transparent bg-clip-text bg-gradient-to-r from-purple-400 to-fuchsia-400">Property Comparison</span>
             </h1>
             <p className="text-zinc-300 text-lg md:text-xl mb-4 max-w-2xl">
               Compare projects dynamically with AI-powered analysis including valuation, ROI, and market insights.

@@ -156,7 +156,7 @@ const RentalIndex = () => {
       <GlobalHeader />
       
       {/* Hero Section */}
-      <section className="pt-32 pb-16 bg-gradient-to-b from-black via-zinc-950 to-black">
+      <section className="pt-32 pb-16 bg-gradient-to-b from-emerald-950/50 via-zinc-950 to-black">
         <div className="container mx-auto px-4">
           <motion.div
             initial="hidden"
@@ -164,16 +164,16 @@ const RentalIndex = () => {
             variants={fadeInUp}
             className="text-center max-w-3xl mx-auto"
           >
-            <div className="inline-flex items-center gap-2 px-4 py-2 bg-gold/10 border border-gold/30 rounded-full mb-6">
-              <TrendingUp className="w-4 h-4 text-gold" />
-              <span className="text-gold text-xs font-semibold uppercase tracking-wider">AI Rental Index</span>
+            <div className="inline-flex items-center gap-2 px-4 py-2 bg-emerald-500/10 border border-emerald-500/30 rounded-full mb-6">
+              <TrendingUp className="w-4 h-4 text-emerald-400" />
+              <span className="text-emerald-400 text-xs font-semibold uppercase tracking-wider">AI Rental Index</span>
             </div>
             
             <h1 
               className="text-white text-4xl md:text-5xl lg:text-6xl font-bold mb-6"
               style={{ fontFamily: "Poppins, sans-serif" }}
             >
-              Dubai <span className="text-transparent bg-clip-text bg-gradient-to-r from-gold to-gold-light">Rental Index</span> Evaluator
+              Dubai <span className="text-transparent bg-clip-text bg-gradient-to-r from-emerald-400 to-green-400">Rental Index</span> Evaluator
             </h1>
             
             <p className="text-zinc-400 text-lg md:text-xl mb-4">

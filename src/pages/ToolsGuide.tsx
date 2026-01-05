@@ -147,7 +147,7 @@ const ToolsGuide = () => {
   return (
     <section className="relative w-full min-h-screen bg-black">
       {/* Hero Section */}
-      <div className="relative py-24 md:py-32 bg-gradient-to-b from-black via-zinc-950 to-black">
+      <div className="relative py-24 md:py-32 bg-gradient-to-b from-violet-950/50 via-zinc-950 to-black">
         <div className="container mx-auto px-4">
           <motion.div
             initial="hidden"
@@ -156,7 +156,7 @@ const ToolsGuide = () => {
             className="text-center max-w-4xl mx-auto"
           >
             <motion.div variants={fadeInUp}>
-              <span className="inline-flex items-center gap-2 text-gold text-xs md:text-sm uppercase tracking-[0.4em] mb-6">
+              <span className="inline-flex items-center gap-2 px-4 py-2 bg-violet-500/10 border border-violet-500/30 rounded-full text-violet-400 text-xs md:text-sm uppercase tracking-[0.4em] mb-6">
                 <Sparkles className="w-4 h-4" />
                 Investor Tools
               </span>
@@ -168,7 +168,7 @@ const ToolsGuide = () => {
               style={{ fontFamily: "Poppins, sans-serif" }}
             >
               AI-Powered{" "}
-              <span className="text-transparent bg-clip-text bg-gradient-to-r from-gold to-gold-light">
+              <span className="text-transparent bg-clip-text bg-gradient-to-r from-violet-400 to-purple-400">
                 Investment Tools
               </span>
             </motion.h1>
