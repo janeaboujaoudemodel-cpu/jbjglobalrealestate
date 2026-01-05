@@ -75,7 +75,7 @@ const GlobalHeader = () => {
           </Link>
 
           {/* Desktop Navigation - Single line items with gold underline hover */}
-          <nav className="hidden lg:flex items-center flex-1 justify-center">
+          <nav className="hidden md:flex items-center flex-1 justify-center">
             {mainNavLinks.map((link) => (
               <Link
                 key={link.href}
@@ -123,7 +123,7 @@ const GlobalHeader = () => {
             <LanguageSwitcher />
 
             {/* User Menu - Desktop */}
-            <div className="hidden lg:block">
+            <div className="hidden md:block">
               {user ? (
                 <DropdownMenu>
                   <DropdownMenuTrigger asChild>
@@ -165,7 +165,7 @@ const GlobalHeader = () => {
 
             {/* Mobile Menu Trigger */}
             <Sheet open={mobileMenuOpen} onOpenChange={setMobileMenuOpen}>
-              <SheetTrigger asChild className="lg:hidden">
+              <SheetTrigger asChild className="md:hidden">
                 <Button variant="ghost" size="sm" className="text-zinc-400 hover:text-white ml-1">
                   <Menu className="w-5 h-5" />
                 </Button>
