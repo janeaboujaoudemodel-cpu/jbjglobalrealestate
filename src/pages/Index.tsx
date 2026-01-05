@@ -213,7 +213,7 @@ const Index = () => {
                   className="bg-transparent backdrop-blur-md border-2 border-purple-500/50 text-purple-400 hover:bg-purple-500/20 hover:border-purple-400 hover:shadow-lg hover:shadow-purple-500/20 font-semibold px-5 py-4 text-xs transition-all duration-300 hover:scale-105 group"
                 >
                   <BarChart3 className="w-3 h-3 mr-1" />
-                  AI Property Comparison
+                  Property Comparison
                   <ArrowUpRight className="w-3 h-3 ml-1 group-hover:translate-x-0.5 group-hover:-translate-y-0.5 transition-transform" />
                 </Button>
               </Link>
@@ -223,7 +223,7 @@ const Index = () => {
                   className="bg-transparent backdrop-blur-md border-2 border-fuchsia-500/50 text-fuchsia-400 hover:bg-fuchsia-500/20 hover:border-fuchsia-400 hover:shadow-lg hover:shadow-fuchsia-500/20 font-semibold px-5 py-4 text-xs transition-all duration-300 hover:scale-105 group"
                 >
                   <Palette className="w-3 h-3 mr-1" />
-                  AI Interior Design
+                  AI Interior Design Studio
                   <ArrowUpRight className="w-3 h-3 ml-1 group-hover:translate-x-0.5 group-hover:-translate-y-0.5 transition-transform" />
                 </Button>
               </Link>
@@ -233,7 +233,7 @@ const Index = () => {
                   className="bg-transparent backdrop-blur-md border-2 border-teal-500/50 text-teal-400 hover:bg-teal-500/20 hover:border-teal-400 hover:shadow-lg hover:shadow-teal-500/20 font-semibold px-5 py-4 text-xs transition-all duration-300 hover:scale-105 group"
                 >
                   <Ruler className="w-3 h-3 mr-1" />
-                  AI Measurement
+                  Property Measurement
                   <ArrowUpRight className="w-3 h-3 ml-1 group-hover:translate-x-0.5 group-hover:-translate-y-0.5 transition-transform" />
                 </Button>
               </Link>
