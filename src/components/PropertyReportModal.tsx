@@ -1,0 +1,292 @@
+import { useState } from "react";
+import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogDescription } from "@/components/ui/dialog";
+import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
+import { Download, Mail, Send, MessageCircle, FileText, Loader2, Check, Phone } from "lucide-react";
+import { toast } from "sonner";
+import { supabase } from "@/integrations/supabase/client";
+
+interface PropertyReportModalProps {
+  open: boolean;
+  onOpenChange: (open: boolean) => void;
+  project: {
+    id: string;
+    name: string;
+    slug: string;
+    developer?: { name: string } | null;
+    location?: string | null;
+    emirate?: string | null;
+    community?: { name: string } | null;
+    description?: string | null;
+    price_from?: number | null;
+    price_to?: number | null;
+    bedrooms_min?: number | null;
+    bedrooms_max?: number | null;
+    size_min?: number | null;
+    size_max?: number | null;
+    handover_date?: string | null;
+    payment_plan?: string | null;
+    amenities?: string[] | null;
+    facilities?: string[] | null;
+    views?: string[] | null;
+    furnished_status?: string | null;
+    floors?: number | null;
+    service_charge?: string | null;
+    images?: Array<{ image_url: string; alt_text?: string | null }> | null;
+    documents?: Array<{ file_url: string; file_name: string; document_type: string }> | null;
+  };
+}
+
+const WHATSAPP_NUMBER = "97156591100";
+const JJ_EMAIL = "invest@JJGlobalCapital.com";
+
+const PropertyReportModal = ({ open, onOpenChange, project }: PropertyReportModalProps) => {
+  const [isGenerating, setIsGenerating] = useState(false);
+  const [userEmail, setUserEmail] = useState("");
+  const [activeAction, setActiveAction] = useState<string | null>(null);
+
+  const generateReport = async () => {
+    const projectData = {
+      id: project.id,
+      name: project.name,
+      developer: project.developer?.name,
+      location: project.location,
+      emirate: project.emirate,
+      community: project.community?.name,
+      description: project.description,
+      priceFrom: project.price_from,
+      priceTo: project.price_to,
+      bedroomsMin: project.bedrooms_min,
+      bedroomsMax: project.bedrooms_max,
+      sizeMin: project.size_min,
+      sizeMax: project.size_max,
+      handover: project.handover_date,
+      paymentPlan: project.payment_plan,
+      amenities: project.amenities,
+      facilities: project.facilities,
+      views: project.views,
+      furnishedStatus: project.furnished_status,
+      floors: project.floors,
+      serviceCharge: project.service_charge,
+      images: project.images?.map(img => ({ image_url: img.image_url, alt_text: img.alt_text })),
+      documents: project.documents?.map(doc => ({ file_url: doc.file_url, file_name: doc.file_name, document_type: doc.document_type })),
+    };
+
+    const response = await supabase.functions.invoke("generate-property-report", {
+      body: { project: projectData },
+    });
+
+    if (response.error) throw response.error;
+    return response.data.html;
+  };
+
+  const handleDownload = async () => {
+    setIsGenerating(true);
+    setActiveAction("download");
+    try {
+      const html = await generateReport();
+      const blob = new Blob([html], { type: 'text/html' });
+      const url = URL.createObjectURL(blob);
+      const a = document.createElement('a');
+      a.href = url;
+      a.download = `JJ-Global-Capital-${project.name.replace(/\s+/g, '-')}-Report.html`;
+      document.body.appendChild(a);
+      a.click();
+      document.body.removeChild(a);
+      URL.revokeObjectURL(url);
+      toast.success("Property report downloaded successfully!");
+    } catch (error) {
+      console.error("Failed to generate report:", error);
+      toast.error("Failed to generate report. Please try again.");
+    } finally {
+      setIsGenerating(false);
+      setActiveAction(null);
+    }
+  };
+
+  const handleShareWhatsApp = () => {
+    const projectUrl = `${window.location.origin}/project/${project.slug}`;
+    const message = encodeURIComponent(
+      `Hi, I'm interested in *${project.name}*\n\n` +
+      `📍 Location: ${project.location || 'Dubai'}\n` +
+      `💰 Price: From AED ${project.price_from ? (project.price_from / 1000000).toFixed(2) + 'M' : 'Contact for pricing'}\n` +
+      `🏠 Bedrooms: ${project.bedrooms_min || 0} - ${project.bedrooms_max || 0}\n\n` +
+      `View full details: ${projectUrl}\n\n` +
+      `Please share more information about this property.`
+    );
+    window.open(`https://wa.me/${WHATSAPP_NUMBER}?text=${message}`, "_blank");
+    toast.success("Opening WhatsApp...");
+  };
+
+  const handleSendToJJ = () => {
+    const projectUrl = `${window.location.origin}/project/${project.slug}`;
+    const subject = encodeURIComponent(`Property Inquiry: ${project.name}`);
+    const body = encodeURIComponent(
+      `Hi JJ Global Capital Team,\n\n` +
+      `I am interested in the following property:\n\n` +
+      `Property: ${project.name}\n` +
+      `Location: ${project.location || 'Dubai'}\n` +
+      `Developer: ${project.developer?.name || 'N/A'}\n` +
+      `Starting Price: AED ${project.price_from ? (project.price_from / 1000000).toFixed(2) + 'M' : 'Contact for pricing'}\n\n` +
+      `View details: ${projectUrl}\n\n` +
+      `Please contact me with more information.\n\n` +
+      `Best regards`
+    );
+    window.open(`mailto:${JJ_EMAIL}?subject=${subject}&body=${body}`, "_blank");
+    toast.success("Opening email client...");
+  };
+
+  const handleShareToEmail = () => {
+    if (!userEmail || !userEmail.includes("@")) {
+      toast.error("Please enter a valid email address");
+      return;
+    }
+    const projectUrl = `${window.location.origin}/project/${project.slug}`;
+    const subject = encodeURIComponent(`Check out this property: ${project.name}`);
+    const body = encodeURIComponent(
+      `Hi,\n\n` +
+      `I thought you might be interested in this property:\n\n` +
+      `${project.name}\n` +
+      `Location: ${project.location || 'Dubai'}\n` +
+      `Starting from: AED ${project.price_from ? (project.price_from / 1000000).toFixed(2) + 'M' : 'Contact for pricing'}\n\n` +
+      `View full details: ${projectUrl}\n\n` +
+      `Powered by JJ Global Capital`
+    );
+    window.open(`mailto:${userEmail}?subject=${subject}&body=${body}`, "_blank");
+    toast.success("Opening email client...");
+    setUserEmail("");
+  };
+
+  const handleCall = () => {
+    window.open(`tel:+${WHATSAPP_NUMBER}`, "_self");
+  };
+
+  return (
+    <Dialog open={open} onOpenChange={onOpenChange}>
+      <DialogContent className="bg-zinc-900 border-zinc-800 text-white max-w-lg">
+        <DialogHeader>
+          <DialogTitle className="text-xl font-semibold flex items-center gap-3">
+            <div className="w-10 h-10 rounded-full bg-gold flex items-center justify-center">
+              <FileText className="w-5 h-5 text-black" />
+            </div>
+            Property Report & Share
+          </DialogTitle>
+          <DialogDescription className="text-zinc-400">
+            Download the complete property report or share it with others.
+          </DialogDescription>
+        </DialogHeader>
+
+        <div className="space-y-4 mt-4">
+          {/* Property Info Summary */}
+          <div className="bg-zinc-800/50 rounded-lg p-4 border border-zinc-700">
+            <h3 className="font-semibold text-white mb-1">{project.name}</h3>
+            <p className="text-sm text-zinc-400">
+              {project.location || 'Dubai'} • {project.developer?.name || 'Premium Developer'}
+            </p>
+            <p className="text-gold font-medium mt-2">
+              From AED {project.price_from ? (project.price_from / 1000000).toFixed(2) + 'M' : 'Contact for pricing'}
+            </p>
+          </div>
+
+          {/* Download Report */}
+          <Button
+            onClick={handleDownload}
+            disabled={isGenerating}
+            className="w-full bg-gold text-black hover:bg-gold-light font-semibold h-12"
+          >
+            {isGenerating && activeAction === "download" ? (
+              <>
+                <Loader2 className="w-5 h-5 mr-2 animate-spin" />
+                Generating Report...
+              </>
+            ) : (
+              <>
+                <Download className="w-5 h-5 mr-2" />
+                Download Full Property Report
+              </>
+            )}
+          </Button>
+
+          {/* Share Options */}
+          <div className="grid grid-cols-2 gap-3">
+            <Button
+              onClick={handleShareWhatsApp}
+              variant="outline"
+              className="bg-green-600/10 border-green-600/30 text-green-400 hover:bg-green-600/20 hover:text-green-300 h-12"
+            >
+              <MessageCircle className="w-5 h-5 mr-2" />
+              WhatsApp
+            </Button>
+            <Button
+              onClick={handleCall}
+              variant="outline"
+              className="bg-blue-600/10 border-blue-600/30 text-blue-400 hover:bg-blue-600/20 hover:text-blue-300 h-12"
+            >
+              <Phone className="w-5 h-5 mr-2" />
+              Call Now
+            </Button>
+          </div>
+
+          {/* Send to Email */}
+          <div className="space-y-2">
+            <Label className="text-zinc-400 text-sm">Share via Email</Label>
+            <div className="flex gap-2">
+              <Input
+                type="email"
+                placeholder="Enter email address"
+                value={userEmail}
+                onChange={(e) => setUserEmail(e.target.value)}
+                className="bg-zinc-800 border-zinc-700 text-white flex-1"
+              />
+              <Button
+                onClick={handleShareToEmail}
+                variant="outline"
+                className="border-zinc-700 text-white hover:bg-zinc-800"
+              >
+                <Send className="w-4 h-4" />
+              </Button>
+            </div>
+          </div>
+
+          {/* Send to JJ Global Capital */}
+          <Button
+            onClick={handleSendToJJ}
+            variant="outline"
+            className="w-full border-gold/30 text-gold hover:bg-gold/10 h-12"
+          >
+            <Mail className="w-5 h-5 mr-2" />
+            Contact JJ Global Capital Advisor
+          </Button>
+
+          {/* Individual Documents */}
+          {project.documents && project.documents.length > 0 && (
+            <div className="pt-4 border-t border-zinc-800">
+              <Label className="text-zinc-400 text-sm mb-3 block">Individual Materials</Label>
+              <div className="space-y-2">
+                {project.documents.map((doc, idx) => (
+                  <button
+                    key={idx}
+                    onClick={() => window.open(doc.file_url, "_blank")}
+                    className="w-full flex items-center gap-3 p-3 rounded-lg bg-zinc-800/50 hover:bg-zinc-800 transition-colors text-left"
+                  >
+                    <div className="w-8 h-8 rounded bg-zinc-700 flex items-center justify-center text-xs text-zinc-300">
+                      PDF
+                    </div>
+                    <div className="flex-1 min-w-0">
+                      <p className="text-white text-sm font-medium truncate">{doc.file_name}</p>
+                      <p className="text-zinc-500 text-xs capitalize">{doc.document_type.replace(/_/g, ' ')}</p>
+                    </div>
+                    <Download className="w-4 h-4 text-zinc-500" />
+                  </button>
+                ))}
+              </div>
+            </div>
+          )}
+        </div>
+      </DialogContent>
+    </Dialog>
+  );
+};
+
+export default PropertyReportModal;
