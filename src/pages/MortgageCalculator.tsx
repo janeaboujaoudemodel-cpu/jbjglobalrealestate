@@ -37,28 +37,28 @@ const MortgageCalculatorPage = () => {
   return (
     <section className="min-h-screen bg-zinc-950">
       {/* Hero Section */}
-      <div className="relative py-16 md:py-24 bg-gradient-to-b from-black via-zinc-950 to-zinc-950">
+      <div className="relative py-16 md:py-24 bg-gradient-to-b from-cyan-950/50 via-zinc-950 to-zinc-950">
         {/* Background effects */}
         <div className="absolute inset-0">
-          <div className="absolute top-0 right-1/4 w-96 h-96 bg-gold/5 rounded-full blur-[120px] pointer-events-none" />
-          <div className="absolute bottom-0 left-1/4 w-96 h-96 bg-purple-500/5 rounded-full blur-[120px] pointer-events-none" />
+          <div className="absolute top-0 right-1/4 w-96 h-96 bg-cyan-500/10 rounded-full blur-[120px] pointer-events-none" />
+          <div className="absolute bottom-0 left-1/4 w-96 h-96 bg-cyan-500/5 rounded-full blur-[120px] pointer-events-none" />
         </div>
         
         <div className="container mx-auto px-4 relative z-10">
-          <Link to="/" className="inline-flex items-center gap-2 text-zinc-400 hover:text-gold mb-8 transition-colors group">
+          <Link to="/" className="inline-flex items-center gap-2 text-zinc-400 hover:text-cyan-400 mb-8 transition-colors group">
             <ArrowLeft className="w-4 h-4 group-hover:-translate-x-1 transition-transform" />
             Back to Home
           </Link>
           
           <div className="max-w-3xl mb-12">
-            <span className="inline-block px-4 py-1.5 bg-gold/10 border border-gold/30 rounded-full text-gold text-sm font-medium mb-6">
+            <span className="inline-block px-4 py-1.5 bg-cyan-500/10 border border-cyan-500/30 rounded-full text-cyan-400 text-sm font-medium mb-6">
               {t('mortgage.title')}
             </span>
             <h1 
               className="text-4xl md:text-5xl lg:text-6xl font-bold text-white mb-6"
               style={{ fontFamily: "Poppins, sans-serif" }}
             >
-              {t('mortgage.title')}
+              <span className="text-transparent bg-clip-text bg-gradient-to-r from-cyan-400 to-teal-400">{t('mortgage.title')}</span>
             </h1>
             <p className="text-zinc-400 text-lg md:text-xl leading-relaxed">
               {t('mortgage.subtitle')}. Plan your property investment with our advanced mortgage calculator. Get accurate estimates for monthly payments, total interest, and find the perfect financing option for your UAE property purchase.

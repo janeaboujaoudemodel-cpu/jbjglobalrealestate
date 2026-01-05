@@ -305,18 +305,19 @@ const Favorites = () => {
   };
 
   return (
-    <section className="min-h-screen bg-zinc-950 py-8 md:py-16">
+    <section className="min-h-screen bg-gradient-to-b from-pink-950/30 via-zinc-950 to-zinc-950 py-8 md:py-16">
       <div className="container mx-auto px-4">
         {/* Header */}
         <Link
           to="/"
-          className="inline-flex items-center gap-2 text-zinc-400 hover:text-white transition-colors mb-8"
+          className="inline-flex items-center gap-2 text-zinc-400 hover:text-pink-400 transition-colors mb-8"
         >
           <ChevronLeft className="w-5 h-5" />
           <span>Back to Properties</span>
         </Link>
 
-        <h1 className="text-white text-3xl font-bold mb-8">My Saved Properties</h1>
+        <h1 className="text-white text-3xl font-bold mb-2">My Saved Properties</h1>
+        <p className="text-pink-400/80 mb-8">Manage your favorites and shortlist</p>
 
         {!user && (
           <div className="bg-zinc-900 border border-zinc-800 rounded-lg p-4 mb-8 flex items-center justify-between">

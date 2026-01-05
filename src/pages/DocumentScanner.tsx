@@ -302,19 +302,19 @@ const DocumentScanner = () => {
   return (
     <section className="min-h-screen bg-gradient-to-br from-zinc-950 via-black to-zinc-950">
       {/* Header */}
-      <div className="bg-gradient-to-r from-emerald-900/30 via-teal-900/20 to-emerald-900/30 border-b border-emerald-500/20">
+      <div className="bg-gradient-to-r from-green-900/30 via-green-800/20 to-green-900/30 border-b border-green-500/20">
         <div className="container mx-auto px-4 py-12">
           <motion.div
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             className="text-center"
           >
-            <div className="inline-flex items-center gap-2 bg-emerald-500/20 border border-emerald-500/30 rounded-full px-4 py-1 mb-4">
-              <FileText className="w-4 h-4 text-emerald-400" />
-              <span className="text-emerald-300 text-sm font-medium">Professional Document Tools</span>
+            <div className="inline-flex items-center gap-2 bg-green-500/20 border border-green-500/30 rounded-full px-4 py-1 mb-4">
+              <FileText className="w-4 h-4 text-green-400" />
+              <span className="text-green-300 text-sm font-medium">Professional Document Tools</span>
             </div>
             <h1 className="text-4xl md:text-5xl font-bold text-white mb-4">
-              Document Scanner & <span className="text-transparent bg-clip-text bg-gradient-to-r from-emerald-400 to-teal-400">e-Sign</span>
+              Document Scanner & <span className="text-transparent bg-clip-text bg-gradient-to-r from-green-400 to-emerald-400">e-Sign</span>
             </h1>
             <p className="text-zinc-400 max-w-2xl mx-auto">
               Scan, edit, and sign contracts professionally. Auto-detect fields, add signatures, and fill forms with ease.
