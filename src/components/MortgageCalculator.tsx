@@ -60,6 +60,17 @@ const MortgageCalculator = ({ defaultPrice = 2000000, compact = false }: Mortgag
     }).format(value);
   };
 
+  // Format number with commas for input display
+  const formatNumberWithCommas = (value: number) => {
+    return new Intl.NumberFormat('en-US').format(value);
+  };
+
+  // Parse formatted input back to number
+  const parseFormattedNumber = (value: string) => {
+    const parsed = parseInt(value.replace(/,/g, ''), 10);
+    return isNaN(parsed) ? 0 : parsed;
+  };
+
   if (compact) {
     return (
       <div className="max-w-xl mx-auto">
@@ -144,9 +155,9 @@ const MortgageCalculator = ({ defaultPrice = 2000000, compact = false }: Mortgag
                 <span className="text-gold font-semibold">{formatCurrency(propertyPrice)}</span>
               </div>
               <Input
-                type="number"
-                value={propertyPrice}
-                onChange={(e) => setPropertyPrice(Number(e.target.value))}
+                type="text"
+                value={formatNumberWithCommas(propertyPrice)}
+                onChange={(e) => setPropertyPrice(parseFormattedNumber(e.target.value))}
                 className="bg-zinc-900/50 border-zinc-700 text-white focus:border-gold"
               />
               <Slider
