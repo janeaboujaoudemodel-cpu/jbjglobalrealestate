@@ -314,10 +314,10 @@ const Founder = () => {
                 </p>
               </div>
               
-              {/* Accolades row */}
-              <div className="mt-12 flex flex-wrap items-center gap-6 md:gap-10">
+              {/* Accolades row - All 3 on same line */}
+              <div className="mt-12 grid grid-cols-3 gap-4 md:gap-6">
                 <div className="flex items-center gap-3">
-                  <div className="w-12 h-12 bg-gradient-to-br from-gold/20 to-gold/5 rounded-xl flex items-center justify-center border border-gold/30">
+                  <div className="w-12 h-12 bg-gradient-to-br from-gold/20 to-gold/5 rounded-xl flex items-center justify-center border border-gold/30 flex-shrink-0">
                     <Globe className="w-5 h-5 text-gold" />
                   </div>
                   <div>
@@ -326,7 +326,7 @@ const Founder = () => {
                   </div>
                 </div>
                 <div className="flex items-center gap-3">
-                  <div className="w-12 h-12 bg-gradient-to-br from-gold/20 to-gold/5 rounded-xl flex items-center justify-center border border-gold/30">
+                  <div className="w-12 h-12 bg-gradient-to-br from-gold/20 to-gold/5 rounded-xl flex items-center justify-center border border-gold/30 flex-shrink-0">
                     <Award className="w-5 h-5 text-gold" />
                   </div>
                   <div>
@@ -335,7 +335,7 @@ const Founder = () => {
                   </div>
                 </div>
                 <div className="flex items-center gap-3">
-                  <div className="w-12 h-12 bg-gradient-to-br from-gold/20 to-gold/5 rounded-xl flex items-center justify-center border border-gold/30">
+                  <div className="w-12 h-12 bg-gradient-to-br from-gold/20 to-gold/5 rounded-xl flex items-center justify-center border border-gold/30 flex-shrink-0">
                     <TrendingUp className="w-5 h-5 text-gold" />
                   </div>
                   <div>
@@ -383,9 +383,6 @@ const Founder = () => {
             
             {/* Attribution */}
             <div className="flex flex-col items-center gap-2">
-              <p className="text-gold text-lg font-semibold tracking-wide" style={{ fontFamily: "Poppins, sans-serif" }}>
-                — As per JANE
-              </p>
               <p className="text-zinc-500 text-sm uppercase tracking-[0.2em]">
                 Jane Abou Jaoude, Founder
               </p>
@@ -781,7 +778,7 @@ const Founder = () => {
           </motion.div>
           
           <motion.div 
-            className="grid grid-cols-1 md:grid-cols-2 gap-6 md:gap-8"
+            className="grid grid-cols-2 gap-6 md:gap-8 max-w-5xl mx-auto"
             initial="hidden"
             whileInView="visible"
             viewport={{ once: true, margin: "-100px" }}
@@ -865,14 +862,12 @@ const Founder = () => {
               className="flex flex-wrap justify-center gap-4 md:gap-5 mb-12"
               variants={fadeInUp}
             >
-              <a 
-                href="https://www.instagram.com/jjglobalcapital"
-                target="_blank"
-                rel="noopener noreferrer"
+              <Link 
+                to="/contact"
                 className="inline-flex items-center gap-3 bg-gradient-to-r from-gold via-[#D4B96A] to-gold text-black font-semibold px-10 py-4 rounded-2xl hover:opacity-90 transition-all duration-300 shadow-xl shadow-gold/40 hover:shadow-gold/50 hover:scale-[1.03]"
               >
                 Connect <ArrowUpRight className="w-5 h-5" />
-              </a>
+              </Link>
               <a 
                 href="mailto:partnerships@jjglobalcapital.com"
                 className="inline-flex items-center gap-3 bg-zinc-900/80 backdrop-blur-sm border-2 border-zinc-700 text-white font-semibold px-10 py-4 rounded-2xl hover:bg-zinc-800 hover:border-gold/50 transition-all duration-300"
@@ -980,7 +975,7 @@ const Founder = () => {
                 rel="noopener noreferrer"
                 className="inline-flex items-center gap-3 bg-gradient-to-r from-gold via-[#D4B96A] to-gold text-black font-semibold px-10 py-4 rounded-2xl hover:opacity-90 transition-all duration-300 shadow-xl shadow-gold/40 hover:shadow-gold/50 hover:scale-[1.03]"
               >
-                Explore the Group <ArrowUpRight className="w-5 h-5" />
+                Explore JJ Holding Group <ArrowUpRight className="w-5 h-5" />
               </a>
               <a 
                 href="mailto:partnerships@jjholdinggroup.com"
@@ -1026,17 +1021,6 @@ const Founder = () => {
               </a>
             </motion.div>
 
-            <motion.div 
-              className="pt-10 mt-10 border-t border-zinc-800"
-              variants={fadeInUp}
-            >
-              <a 
-                href="https://jjholdinggroup.com" 
-                className="text-gold hover:underline inline-flex items-center gap-2 text-sm tracking-wide"
-              >
-                Visit JJ Holding Group <ExternalLink className="w-4 h-4" />
-              </a>
-            </motion.div>
           </motion.div>
         </div>
       </section>

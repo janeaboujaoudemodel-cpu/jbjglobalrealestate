@@ -158,7 +158,7 @@ const DesignBuild = () => {
                     ))}
                   </ul>
 
-                  <Link to={`/services/design-build/${service.slug}`}>
+                  <Link to={`/services/${service.slug}`}>
                     <Button 
                       className="w-full bg-gold hover:bg-gold-light text-black font-semibold"
                     >
