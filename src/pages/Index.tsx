@@ -9,7 +9,7 @@ import MortgageCalculator from "@/components/MortgageCalculator";
 import WelcomeModal from "@/components/WelcomeModal";
 import InquiryFormModal from "@/components/InquiryFormModal";
 import { useLanguage } from "@/contexts/LanguageContext";
-import { Sparkles, ArrowUpRight, ChevronDown, User, Scale, Layers, Calculator, FileText, Heart, BarChart3, Wrench, Ruler, Palette, Calendar, Wallet, ShoppingBag } from "lucide-react";
+import { Sparkles, ArrowUpRight, ChevronDown, User, Scale, Layers, Calculator, FileText, Heart, BarChart3, Wrench, Ruler, Palette, Calendar, Wallet, ShoppingBag, Brain } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import founderProfessional from "@/assets/founder-professional.jpeg";
 import luxuryVillaHero from "@/assets/luxury-villa-hero.jpeg";
@@ -297,6 +297,16 @@ const Index = () => {
                 >
                   <Wrench className="w-3 h-3 mr-1" />
                   Tools Guide
+                  <ArrowUpRight className="w-3 h-3 ml-1 group-hover:translate-x-0.5 group-hover:-translate-y-0.5 transition-transform" />
+                </Button>
+              </Link>
+              
+              <Link to="/ai-hub">
+                <Button 
+                  className="bg-transparent backdrop-blur-md border-2 border-purple-500/50 text-purple-400 hover:bg-purple-500/20 hover:border-purple-400 hover:shadow-lg hover:shadow-purple-500/20 font-semibold px-5 py-4 text-xs transition-all duration-300 hover:scale-105 group"
+                >
+                  <Brain className="w-3 h-3 mr-1" />
+                  AI Hub
                   <ArrowUpRight className="w-3 h-3 ml-1 group-hover:translate-x-0.5 group-hover:-translate-y-0.5 transition-transform" />
                 </Button>
               </Link>
