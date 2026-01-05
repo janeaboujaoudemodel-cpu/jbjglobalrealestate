@@ -4,14 +4,17 @@ import { Button } from "@/components/ui/button";
 import { 
   Heart, 
   ListPlus, 
-  Award, 
   Sparkles, 
   ArrowRight, 
   X, 
   ChevronUp,
   Trophy,
   Compass,
-  Send
+  Send,
+  FileSearch,
+  TrendingUp,
+  Calculator,
+  Brain
 } from "lucide-react";
 
 const TOUR_COMPLETED_KEY = "jj_tour_completed";
@@ -65,18 +68,42 @@ const GuidedTour = ({ isOpen, onClose }: GuidedTourProps) => {
       description: "Rank your top 3 choices with Gold, Silver, and Bronze badges. Mark your #1 choice to prioritize your investment decision."
     },
     {
-      icon: Sparkles,
+      icon: Brain,
       iconColor: "text-purple-400",
       iconBg: "from-purple-500/20 to-purple-600/10",
       iconBorder: "border-purple-500/30",
-      title: "AI Analysis",
-      description: "Select 2-3 properties and unlock AI-powered investment analysis. Get detailed comparisons on ROI, location value, and market trends."
+      title: "AI Property Matchmaker",
+      description: "Our AI analyzes your shortlisted properties and provides detailed investment comparisons on ROI, location value, and market trends."
     },
     {
-      icon: Send,
+      icon: FileSearch,
+      iconColor: "text-cyan-400",
+      iconBg: "from-cyan-500/20 to-cyan-600/10",
+      iconBorder: "border-cyan-500/30",
+      title: "Document Scanner & e-Sign",
+      description: "Upload contracts, crop edges, add digital signatures, and auto-fill form fields. Manage all your investment documents digitally."
+    },
+    {
+      icon: TrendingUp,
       iconColor: "text-emerald-400",
       iconBg: "from-emerald-500/20 to-emerald-600/10",
       iconBorder: "border-emerald-500/30",
+      title: "Rental Index Tool",
+      description: "Discover highest-performing areas for rental ROI. Compare short-term vs long-term rentals and get property valuation estimates."
+    },
+    {
+      icon: Calculator,
+      iconColor: "text-orange-400",
+      iconBg: "from-orange-500/20 to-orange-600/10",
+      iconBorder: "border-orange-500/30",
+      title: "Mortgage Calculator",
+      description: "Calculate monthly payments, down payments, and connect with our mortgage advisors for personalized financing solutions."
+    },
+    {
+      icon: Send,
+      iconColor: "text-gold",
+      iconBg: "from-gold/20 to-gold/10",
+      iconBorder: "border-gold/30",
       title: "Connect with JJ Global Capital",
       description: "Submit your curated selection directly to our investment advisors. Book consultations and finalize your UAE property investment."
     }
@@ -84,34 +111,34 @@ const GuidedTour = ({ isOpen, onClose }: GuidedTourProps) => {
 
   const shortcutItems = [
     {
-      icon: ChevronUp,
-      iconColor: "text-zinc-400",
-      title: "Scroll to Top",
-      description: "Quick navigation button to return to the top of any page"
-    },
-    {
       icon: Heart,
       iconColor: "text-red-500",
-      title: "Favorites",
-      description: "Save unlimited properties to your personal collection"
+      title: "Favorites & Shortlist",
+      description: "Save properties and compare up to 5 side by side"
     },
     {
-      icon: ListPlus,
-      iconColor: "text-gold",
-      title: "Shortlist",
-      description: "Select up to 5 properties for comparison"
-    },
-    {
-      icon: Trophy,
-      iconColor: "text-gold",
-      title: "Top 1, 2, 3 Badges",
-      description: "Rank your shortlisted properties with medal badges"
-    },
-    {
-      icon: Sparkles,
+      icon: Brain,
       iconColor: "text-purple-400",
-      title: "AI Analysis",
-      description: "Intelligent comparison of 2-3 selected properties"
+      title: "AI Property Matchmaker",
+      description: "Get AI-powered investment analysis on your selections"
+    },
+    {
+      icon: FileSearch,
+      iconColor: "text-cyan-400",
+      title: "Document Scanner",
+      description: "Scan, sign, and manage investment documents"
+    },
+    {
+      icon: TrendingUp,
+      iconColor: "text-emerald-400",
+      title: "Rental Index",
+      description: "Find highest ROI areas for rental investments"
+    },
+    {
+      icon: Calculator,
+      iconColor: "text-orange-400",
+      title: "Mortgage Calculator",
+      description: "Calculate payments and connect with advisors"
     }
   ];
 
