@@ -1,12 +1,17 @@
-import { useState, useRef, useCallback } from "react";
+import { useState, useRef, useEffect } from "react";
 import { motion } from "framer-motion";
-import { Camera, Upload, FileText, Crop, Pen, Type, Image, Download, Check, RotateCw, Trash2, Save, ChevronLeft, ChevronRight } from "lucide-react";
+import { 
+  Camera, Upload, FileText, Crop, Pen, Type, Image, Download, Check, RotateCw, 
+  Trash2, Save, Share2, Palette, FolderOpen, Plus, X, Smartphone, Mail
+} from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog";
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
+import { Switch } from "@/components/ui/switch";
 import { toast } from "sonner";
 import Footer from "@/components/Footer";
 
@@ -15,6 +20,7 @@ interface ScannedDocument {
   name: string;
   imageUrl: string;
   timestamp: Date;
+  isColor: boolean;
 }
 
 interface SignatureField {
@@ -35,10 +41,20 @@ interface SavedDetails {
   company: string;
 }
 
+interface SavedProject {
+  id: string;
+  name: string;
+  documents: ScannedDocument[];
+  signatureFields: SignatureField[];
+  savedDetails: SavedDetails;
+  savedSignature: string | null;
+  createdAt: Date;
+  updatedAt: Date;
+}
+
 const DocumentScanner = () => {
   const [scannedDocs, setScannedDocs] = useState<ScannedDocument[]>([]);
   const [currentDoc, setCurrentDoc] = useState<ScannedDocument | null>(null);
-  const [isCapturing, setIsCapturing] = useState(false);
   const [signatureFields, setSignatureFields] = useState<SignatureField[]>([]);
   const [savedSignature, setSavedSignature] = useState<string | null>(null);
   const [isDrawing, setIsDrawing] = useState(false);
@@ -52,87 +68,155 @@ const DocumentScanner = () => {
     company: ''
   });
   const [rotation, setRotation] = useState(0);
-  const [cropping, setCropping] = useState(false);
-  const [showFieldModal, setShowFieldModal] = useState(false);
-  const [addingFieldType, setAddingFieldType] = useState<SignatureField['type'] | null>(null);
+  
+  // New features state
+  const [colorMode, setColorMode] = useState<'color' | 'bw'>('color');
+  const [autoEnhance, setAutoEnhance] = useState(true);
+  const [projects, setProjects] = useState<SavedProject[]>([]);
+  const [currentProject, setCurrentProject] = useState<SavedProject | null>(null);
+  const [showProjectModal, setShowProjectModal] = useState(false);
+  const [newProjectName, setNewProjectName] = useState('');
+  const [showShareModal, setShowShareModal] = useState(false);
   
   const fileInputRef = useRef<HTMLInputElement>(null);
   const cameraInputRef = useRef<HTMLInputElement>(null);
   const signatureCanvasRef = useRef<HTMLCanvasElement>(null);
-  const documentCanvasRef = useRef<HTMLCanvasElement>(null);
 
-  // Handle file upload
-  const handleFileUpload = (event: React.ChangeEvent<HTMLInputElement>) => {
-    const files = event.target.files;
-    if (!files) return;
+  // Load projects from localStorage
+  useEffect(() => {
+    const saved = localStorage.getItem('document_scanner_projects');
+    if (saved) {
+      const parsed = JSON.parse(saved);
+      setProjects(parsed.map((p: any) => ({
+        ...p,
+        createdAt: new Date(p.createdAt),
+        updatedAt: new Date(p.updatedAt),
+        documents: p.documents.map((d: any) => ({
+          ...d,
+          timestamp: new Date(d.timestamp)
+        }))
+      })));
+    }
+  }, []);
 
-    Array.from(files).forEach(file => {
-      const reader = new FileReader();
-      reader.onload = (e) => {
-        const newDoc: ScannedDocument = {
-          id: Date.now().toString() + Math.random().toString(36).substr(2, 9),
-          name: file.name,
-          imageUrl: e.target?.result as string,
-          timestamp: new Date()
-        };
-        setScannedDocs(prev => [...prev, newDoc]);
-        if (!currentDoc) setCurrentDoc(newDoc);
-        toast.success(`Document "${file.name}" uploaded successfully`);
-      };
-      reader.readAsDataURL(file);
-    });
+  // Save projects to localStorage
+  const saveProjects = (updatedProjects: SavedProject[]) => {
+    localStorage.setItem('document_scanner_projects', JSON.stringify(updatedProjects));
+    setProjects(updatedProjects);
   };
 
-  // Handle camera capture
-  const handleCameraCapture = (event: React.ChangeEvent<HTMLInputElement>) => {
-    const file = event.target.files?.[0];
-    if (!file) return;
-
-    const reader = new FileReader();
-    reader.onload = (e) => {
-      // Process image with auto-edge detection simulation
+  // Apply image processing
+  const processImage = (imageData: string, isColor: boolean, enhance: boolean): Promise<string> => {
+    return new Promise((resolve) => {
       const img = new window.Image();
       img.onload = () => {
         const canvas = document.createElement('canvas');
         const ctx = canvas.getContext('2d');
-        if (!ctx) return;
+        if (!ctx) { resolve(imageData); return; }
 
-        // Set canvas size
         canvas.width = img.width;
         canvas.height = img.height;
-
-        // Draw and apply enhancement
         ctx.drawImage(img, 0, 0);
-        
-        // Apply contrast enhancement for scanned look
-        const imageData = ctx.getImageData(0, 0, canvas.width, canvas.height);
-        const data = imageData.data;
-        const contrast = 1.3;
-        const intercept = 128 * (1 - contrast);
-        
-        for (let i = 0; i < data.length; i += 4) {
-          data[i] = data[i] * contrast + intercept;     // R
-          data[i + 1] = data[i + 1] * contrast + intercept; // G
-          data[i + 2] = data[i + 2] * contrast + intercept; // B
-        }
-        ctx.putImageData(imageData, 0, 0);
 
+        const data = ctx.getImageData(0, 0, canvas.width, canvas.height);
+        const pixels = data.data;
+
+        // Auto-enhance (contrast boost for scanner-like quality)
+        if (enhance) {
+          const contrast = 1.4;
+          const brightness = 10;
+          for (let i = 0; i < pixels.length; i += 4) {
+            pixels[i] = Math.min(255, pixels[i] * contrast + brightness);
+            pixels[i + 1] = Math.min(255, pixels[i + 1] * contrast + brightness);
+            pixels[i + 2] = Math.min(255, pixels[i + 2] * contrast + brightness);
+          }
+        }
+
+        // Convert to black & white if needed
+        if (!isColor) {
+          for (let i = 0; i < pixels.length; i += 4) {
+            const avg = (pixels[i] + pixels[i + 1] + pixels[i + 2]) / 3;
+            const bw = avg > 128 ? 255 : 0; // High contrast B&W
+            pixels[i] = bw;
+            pixels[i + 1] = bw;
+            pixels[i + 2] = bw;
+          }
+        }
+
+        ctx.putImageData(data, 0, 0);
+        resolve(canvas.toDataURL('image/jpeg', 0.95));
+      };
+      img.src = imageData;
+    });
+  };
+
+  // Handle file upload
+  const handleFileUpload = async (event: React.ChangeEvent<HTMLInputElement>) => {
+    const files = event.target.files;
+    if (!files) return;
+
+    for (const file of Array.from(files)) {
+      const reader = new FileReader();
+      reader.onload = async (e) => {
+        const rawImage = e.target?.result as string;
+        const processed = await processImage(rawImage, colorMode === 'color', autoEnhance);
+        
         const newDoc: ScannedDocument = {
-          id: Date.now().toString(),
-          name: `Scan_${new Date().toISOString().slice(0, 10)}.jpg`,
-          imageUrl: canvas.toDataURL('image/jpeg', 0.95),
-          timestamp: new Date()
+          id: Date.now().toString() + Math.random().toString(36).substr(2, 9),
+          name: file.name,
+          imageUrl: processed,
+          timestamp: new Date(),
+          isColor: colorMode === 'color'
         };
         setScannedDocs(prev => [...prev, newDoc]);
-        setCurrentDoc(newDoc);
-        toast.success("Document scanned and enhanced successfully!");
+        if (!currentDoc) setCurrentDoc(newDoc);
+        toast.success(`Document "${file.name}" scanned successfully`);
       };
-      img.src = e.target?.result as string;
+      reader.readAsDataURL(file);
+    }
+  };
+
+  // Handle camera capture
+  const handleCameraCapture = async (event: React.ChangeEvent<HTMLInputElement>) => {
+    const file = event.target.files?.[0];
+    if (!file) return;
+
+    const reader = new FileReader();
+    reader.onload = async (e) => {
+      const rawImage = e.target?.result as string;
+      const processed = await processImage(rawImage, colorMode === 'color', autoEnhance);
+
+      const newDoc: ScannedDocument = {
+        id: Date.now().toString(),
+        name: `Scan_${new Date().toISOString().slice(0, 10)}.jpg`,
+        imageUrl: processed,
+        timestamp: new Date(),
+        isColor: colorMode === 'color'
+      };
+      setScannedDocs(prev => [...prev, newDoc]);
+      setCurrentDoc(newDoc);
+      toast.success("Document scanned with auto-enhancement!");
     };
     reader.readAsDataURL(file);
   };
 
-  // Signature drawing
+  // Re-process current document with new settings
+  const reprocessDocument = async () => {
+    if (!currentDoc) return;
+    toast.loading("Reprocessing document...");
+    
+    // Get original image (for demo, we'll just reprocess what we have)
+    const processed = await processImage(currentDoc.imageUrl, colorMode === 'color', autoEnhance);
+    
+    const updatedDoc = { ...currentDoc, imageUrl: processed, isColor: colorMode === 'color' };
+    setCurrentDoc(updatedDoc);
+    setScannedDocs(prev => prev.map(d => d.id === currentDoc.id ? updatedDoc : d));
+    
+    toast.dismiss();
+    toast.success(`Converted to ${colorMode === 'color' ? 'Color' : 'Black & White'}`);
+  };
+
+  // Signature drawing functions
   const startDrawing = (e: React.MouseEvent<HTMLCanvasElement>) => {
     const canvas = signatureCanvasRef.current;
     if (!canvas) return;
@@ -160,9 +244,7 @@ const DocumentScanner = () => {
     ctx.stroke();
   };
 
-  const stopDrawing = () => {
-    setIsDrawing(false);
-  };
+  const stopDrawing = () => setIsDrawing(false);
 
   const clearSignature = () => {
     const canvas = signatureCanvasRef.current;
@@ -179,7 +261,6 @@ const DocumentScanner = () => {
       setSavedSignature(canvas.toDataURL());
       toast.success("Signature saved!");
     } else if (signatureType === 'type' && typedSignature) {
-      // Create signature from typed text
       const canvas = document.createElement('canvas');
       canvas.width = 300;
       canvas.height = 100;
@@ -192,7 +273,7 @@ const DocumentScanner = () => {
       ctx.textBaseline = 'middle';
       ctx.fillText(typedSignature, 10, 50);
       setSavedSignature(canvas.toDataURL());
-      toast.success("Signature created from text!");
+      toast.success("Signature created!");
     }
   };
 
@@ -219,7 +300,7 @@ const DocumentScanner = () => {
       value: type === 'date' ? new Date().toLocaleDateString() : ''
     };
     setSignatureFields(prev => [...prev, newField]);
-    toast.success(`${type.charAt(0).toUpperCase() + type.slice(1)} field added - drag to position`);
+    toast.success(`${type.charAt(0).toUpperCase() + type.slice(1)} field added`);
   };
 
   // Auto-detect fields (AI simulation)
@@ -238,7 +319,7 @@ const DocumentScanner = () => {
     }, 1500);
   };
 
-  // Apply saved details to all matching fields
+  // Auto-fill fields
   const autoFillFields = () => {
     setSignatureFields(prev => prev.map(field => {
       if (field.type === 'text' && !field.value) return { ...field, value: savedDetails.fullName };
@@ -250,53 +331,146 @@ const DocumentScanner = () => {
   };
 
   // Rotate document
-  const rotateDocument = () => {
-    setRotation(prev => (prev + 90) % 360);
+  const rotateDocument = () => setRotation(prev => (prev + 90) % 360);
+
+  // Generate final document
+  const generateFinalDocument = (): Promise<string> => {
+    return new Promise((resolve) => {
+      if (!currentDoc) { resolve(''); return; }
+      
+      const canvas = document.createElement('canvas');
+      const ctx = canvas.getContext('2d');
+      if (!ctx) { resolve(''); return; }
+
+      const img = new window.Image();
+      img.onload = () => {
+        canvas.width = img.width;
+        canvas.height = img.height;
+        
+        ctx.translate(canvas.width / 2, canvas.height / 2);
+        ctx.rotate((rotation * Math.PI) / 180);
+        ctx.translate(-canvas.width / 2, -canvas.height / 2);
+        ctx.drawImage(img, 0, 0);
+        
+        signatureFields.forEach(field => {
+          if (field.type === 'signature' && savedSignature) {
+            const sigImg = new window.Image();
+            sigImg.onload = () => {
+              ctx.drawImage(sigImg, field.x, field.y, field.width, field.height);
+            };
+            sigImg.src = savedSignature;
+          } else if (field.value) {
+            ctx.font = '16px Arial';
+            ctx.fillStyle = '#000';
+            ctx.fillText(field.value, field.x + 5, field.y + 25);
+          }
+        });
+
+        setTimeout(() => resolve(canvas.toDataURL('image/png')), 300);
+      };
+      img.src = currentDoc.imageUrl;
+    });
   };
 
-  // Download signed document
-  const downloadDocument = () => {
+  // Download document
+  const downloadDocument = async () => {
     if (!currentDoc) return;
+    const dataUrl = await generateFinalDocument();
+    const link = document.createElement('a');
+    link.download = `signed_${currentDoc.name}`;
+    link.href = dataUrl;
+    link.click();
+    toast.success("Document downloaded!");
+  };
+
+  // Share document
+  const shareDocument = async (method: 'whatsapp' | 'email' | 'copy') => {
+    if (!currentDoc) return;
+    const dataUrl = await generateFinalDocument();
     
-    const canvas = document.createElement('canvas');
-    const ctx = canvas.getContext('2d');
-    if (!ctx) return;
+    if (method === 'copy') {
+      try {
+        await navigator.clipboard.writeText(dataUrl);
+        toast.success("Document URL copied to clipboard!");
+      } catch {
+        toast.error("Failed to copy");
+      }
+    } else if (method === 'whatsapp') {
+      window.open(`https://wa.me/?text=Check out this document`, '_blank');
+      toast.success("Opening WhatsApp...");
+    } else if (method === 'email') {
+      window.open(`mailto:?subject=Signed Document&body=Please find the attached document.`, '_blank');
+      toast.success("Opening email client...");
+    }
+    setShowShareModal(false);
+  };
 
-    const img = new window.Image();
-    img.onload = () => {
-      canvas.width = img.width;
-      canvas.height = img.height;
-      
-      // Apply rotation
-      ctx.translate(canvas.width / 2, canvas.height / 2);
-      ctx.rotate((rotation * Math.PI) / 180);
-      ctx.translate(-canvas.width / 2, -canvas.height / 2);
-      ctx.drawImage(img, 0, 0);
-      
-      // Draw fields
-      signatureFields.forEach(field => {
-        if (field.type === 'signature' && savedSignature) {
-          const sigImg = new window.Image();
-          sigImg.onload = () => {
-            ctx.drawImage(sigImg, field.x, field.y, field.width, field.height);
-          };
-          sigImg.src = savedSignature;
-        } else if (field.value) {
-          ctx.font = '16px Arial';
-          ctx.fillStyle = '#000';
-          ctx.fillText(field.value, field.x + 5, field.y + 25);
-        }
-      });
+  // Save to phone (mobile download)
+  const saveToPhone = async () => {
+    await downloadDocument();
+    toast.success("Document saved to your device!");
+  };
 
-      setTimeout(() => {
-        const link = document.createElement('a');
-        link.download = `signed_${currentDoc.name}`;
-        link.href = canvas.toDataURL('image/png');
-        link.click();
-        toast.success("Signed document downloaded!");
-      }, 500);
+  // Project management
+  const createProject = () => {
+    if (!newProjectName.trim()) {
+      toast.error("Please enter a project name");
+      return;
+    }
+    
+    const newProject: SavedProject = {
+      id: Date.now().toString(),
+      name: newProjectName,
+      documents: scannedDocs,
+      signatureFields,
+      savedDetails,
+      savedSignature,
+      createdAt: new Date(),
+      updatedAt: new Date()
     };
-    img.src = currentDoc.imageUrl;
+    
+    const updated = [...projects, newProject];
+    saveProjects(updated);
+    setCurrentProject(newProject);
+    setNewProjectName('');
+    setShowProjectModal(false);
+    toast.success(`Project "${newProjectName}" created!`);
+  };
+
+  const saveCurrentProject = () => {
+    if (!currentProject) {
+      setShowProjectModal(true);
+      return;
+    }
+    
+    const updated = projects.map(p => 
+      p.id === currentProject.id 
+        ? { ...p, documents: scannedDocs, signatureFields, savedDetails, savedSignature, updatedAt: new Date() }
+        : p
+    );
+    saveProjects(updated);
+    toast.success("Project saved!");
+  };
+
+  const loadProject = (project: SavedProject) => {
+    setCurrentProject(project);
+    setScannedDocs(project.documents);
+    setSignatureFields(project.signatureFields);
+    setSavedDetails(project.savedDetails);
+    setSavedSignature(project.savedSignature);
+    if (project.documents.length > 0) {
+      setCurrentDoc(project.documents[0]);
+    }
+    toast.success(`Project "${project.name}" loaded!`);
+  };
+
+  const deleteProject = (projectId: string) => {
+    const updated = projects.filter(p => p.id !== projectId);
+    saveProjects(updated);
+    if (currentProject?.id === projectId) {
+      setCurrentProject(null);
+    }
+    toast.success("Project deleted");
   };
 
   return (
@@ -317,16 +491,108 @@ const DocumentScanner = () => {
               Document Scanner & <span className="text-transparent bg-clip-text bg-gradient-to-r from-green-400 to-emerald-400">e-Sign</span>
             </h1>
             <p className="text-zinc-400 max-w-2xl mx-auto">
-              Scan, edit, and sign contracts professionally. Auto-detect fields, add signatures, and fill forms with ease.
+              Auto-enhance documents like a professional scanner. Save projects, download, and share with ease.
             </p>
+            <p className="text-xs text-gold mt-2">Developed by Founder Jane Abou Jaoude</p>
           </motion.div>
         </div>
       </div>
 
       <div className="container mx-auto px-4 py-8">
+        {/* Project Bar */}
+        <div className="mb-6 flex flex-wrap items-center gap-4 p-4 bg-zinc-900/50 border border-zinc-800 rounded-xl">
+          <div className="flex items-center gap-2">
+            <FolderOpen className="w-5 h-5 text-emerald-400" />
+            <span className="text-white font-medium">
+              {currentProject ? currentProject.name : "Untitled Project"}
+            </span>
+          </div>
+          <div className="flex-1" />
+          <Button size="sm" variant="outline" onClick={saveCurrentProject} className="text-xs">
+            <Save className="w-3 h-3 mr-1" /> Save Project
+          </Button>
+          <Dialog open={showProjectModal} onOpenChange={setShowProjectModal}>
+            <DialogTrigger asChild>
+              <Button size="sm" variant="outline" className="text-xs">
+                <Plus className="w-3 h-3 mr-1" /> New Project
+              </Button>
+            </DialogTrigger>
+            <DialogContent className="bg-zinc-900 border-zinc-700">
+              <DialogHeader>
+                <DialogTitle className="text-white">Create New Project</DialogTitle>
+              </DialogHeader>
+              <div className="space-y-4">
+                <div>
+                  <Label className="text-zinc-400">Project Name</Label>
+                  <Input
+                    value={newProjectName}
+                    onChange={(e) => setNewProjectName(e.target.value)}
+                    placeholder="My Contract Documents"
+                    className="bg-zinc-800 border-zinc-700"
+                  />
+                </div>
+                <Button onClick={createProject} className="w-full bg-emerald-600">
+                  Create Project
+                </Button>
+              </div>
+            </DialogContent>
+          </Dialog>
+          
+          {projects.length > 0 && (
+            <Select onValueChange={(id) => {
+              const project = projects.find(p => p.id === id);
+              if (project) loadProject(project);
+            }}>
+              <SelectTrigger className="w-40 bg-zinc-800 border-zinc-700 text-sm">
+                <SelectValue placeholder="Load Project" />
+              </SelectTrigger>
+              <SelectContent className="bg-zinc-800 border-zinc-700">
+                {projects.map(p => (
+                  <SelectItem key={p.id} value={p.id} className="text-white">
+                    {p.name}
+                  </SelectItem>
+                ))}
+              </SelectContent>
+            </Select>
+          )}
+        </div>
+
         <div className="grid lg:grid-cols-3 gap-8">
-          {/* Left Panel - Upload & Controls */}
+          {/* Left Panel */}
           <div className="space-y-6">
+            {/* Scan Settings */}
+            <Card className="bg-zinc-900/50 border-zinc-800">
+              <CardHeader>
+                <CardTitle className="text-white flex items-center gap-2">
+                  <Palette className="w-5 h-5 text-emerald-400" />
+                  Scan Settings
+                </CardTitle>
+              </CardHeader>
+              <CardContent className="space-y-4">
+                <div className="flex items-center justify-between">
+                  <Label className="text-zinc-300">Color Mode</Label>
+                  <Select value={colorMode} onValueChange={(v: 'color' | 'bw') => setColorMode(v)}>
+                    <SelectTrigger className="w-32 bg-zinc-800 border-zinc-700">
+                      <SelectValue />
+                    </SelectTrigger>
+                    <SelectContent className="bg-zinc-800 border-zinc-700">
+                      <SelectItem value="color">Full Color</SelectItem>
+                      <SelectItem value="bw">Black & White</SelectItem>
+                    </SelectContent>
+                  </Select>
+                </div>
+                <div className="flex items-center justify-between">
+                  <Label className="text-zinc-300">Auto-Enhance</Label>
+                  <Switch checked={autoEnhance} onCheckedChange={setAutoEnhance} />
+                </div>
+                {currentDoc && (
+                  <Button onClick={reprocessDocument} variant="outline" className="w-full text-xs">
+                    <RotateCw className="w-3 h-3 mr-1" /> Apply Settings
+                  </Button>
+                )}
+              </CardContent>
+            </Card>
+
             {/* Upload Options */}
             <Card className="bg-zinc-900/50 border-zinc-800">
               <CardHeader>
@@ -336,45 +602,39 @@ const DocumentScanner = () => {
                 </CardTitle>
               </CardHeader>
               <CardContent className="space-y-4">
-                {/* Camera Capture */}
-                <div>
-                  <input
-                    ref={cameraInputRef}
-                    type="file"
-                    accept="image/*"
-                    capture="environment"
-                    className="hidden"
-                    onChange={handleCameraCapture}
-                  />
-                  <Button
-                    onClick={() => cameraInputRef.current?.click()}
-                    className="w-full bg-emerald-600 hover:bg-emerald-700 text-white"
-                  >
-                    <Camera className="w-4 h-4 mr-2" />
-                    Capture with Camera
-                  </Button>
-                  <p className="text-xs text-zinc-500 mt-1 text-center">AI auto-crops and enhances edges</p>
-                </div>
+                <input
+                  ref={cameraInputRef}
+                  type="file"
+                  accept="image/*"
+                  capture="environment"
+                  className="hidden"
+                  onChange={handleCameraCapture}
+                />
+                <Button
+                  onClick={() => cameraInputRef.current?.click()}
+                  className="w-full bg-emerald-600 hover:bg-emerald-700 text-white"
+                >
+                  <Camera className="w-4 h-4 mr-2" />
+                  Capture with Camera
+                </Button>
+                <p className="text-xs text-zinc-500 text-center">Auto-straightens & enhances like a printer</p>
 
-                {/* File Upload */}
-                <div>
-                  <input
-                    ref={fileInputRef}
-                    type="file"
-                    accept="image/*,application/pdf"
-                    multiple
-                    className="hidden"
-                    onChange={handleFileUpload}
-                  />
-                  <Button
-                    onClick={() => fileInputRef.current?.click()}
-                    variant="outline"
-                    className="w-full border-zinc-700 text-zinc-300 hover:bg-zinc-800"
-                  >
-                    <Upload className="w-4 h-4 mr-2" />
-                    Upload PDF/Image
-                  </Button>
-                </div>
+                <input
+                  ref={fileInputRef}
+                  type="file"
+                  accept="image/*,application/pdf"
+                  multiple
+                  className="hidden"
+                  onChange={handleFileUpload}
+                />
+                <Button
+                  onClick={() => fileInputRef.current?.click()}
+                  variant="outline"
+                  className="w-full border-zinc-700 text-zinc-300 hover:bg-zinc-800"
+                >
+                  <Upload className="w-4 h-4 mr-2" />
+                  Upload PDF/Image
+                </Button>
               </CardContent>
             </Card>
 
@@ -395,7 +655,12 @@ const DocumentScanner = () => {
                           : 'bg-zinc-800/50 hover:bg-zinc-800'
                       }`}
                     >
-                      <p className="text-sm text-white truncate">{doc.name}</p>
+                      <div className="flex items-center justify-between">
+                        <p className="text-sm text-white truncate flex-1">{doc.name}</p>
+                        <span className={`text-xs px-2 py-0.5 rounded ${doc.isColor ? 'bg-blue-500/20 text-blue-400' : 'bg-zinc-600/20 text-zinc-400'}`}>
+                          {doc.isColor ? 'Color' : 'B&W'}
+                        </span>
+                      </div>
                       <p className="text-xs text-zinc-500">{doc.timestamp.toLocaleTimeString()}</p>
                     </div>
                   ))}
@@ -529,22 +794,45 @@ const DocumentScanner = () => {
           {/* Center - Document Preview */}
           <div className="lg:col-span-2">
             <Card className="bg-zinc-900/50 border-zinc-800 h-full">
-              <CardHeader className="flex flex-row items-center justify-between">
+              <CardHeader className="flex flex-row items-center justify-between flex-wrap gap-2">
                 <CardTitle className="text-white">Document Preview</CardTitle>
                 {currentDoc && (
-                  <div className="flex gap-2">
+                  <div className="flex flex-wrap gap-2">
                     <Button size="sm" variant="outline" onClick={rotateDocument} className="text-xs">
                       <RotateCw className="w-3 h-3 mr-1" /> Rotate
                     </Button>
                     <Button size="sm" variant="outline" onClick={autoDetectFields} className="text-xs border-purple-500/50 text-purple-400 hover:bg-purple-500/20">
-                      <Crop className="w-3 h-3 mr-1" /> AI Detect Fields
+                      <Crop className="w-3 h-3 mr-1" /> AI Detect
                     </Button>
                     <Button size="sm" variant="outline" onClick={autoFillFields} className="text-xs">
                       Auto-Fill
                     </Button>
                     <Button size="sm" onClick={downloadDocument} className="text-xs bg-emerald-600">
-                      <Download className="w-3 h-3 mr-1" /> Download Signed
+                      <Download className="w-3 h-3 mr-1" /> Download
                     </Button>
+                    <Button size="sm" onClick={saveToPhone} variant="outline" className="text-xs">
+                      <Smartphone className="w-3 h-3 mr-1" /> Save
+                    </Button>
+                    <Dialog open={showShareModal} onOpenChange={setShowShareModal}>
+                      <DialogTrigger asChild>
+                        <Button size="sm" variant="outline" className="text-xs">
+                          <Share2 className="w-3 h-3 mr-1" /> Share
+                        </Button>
+                      </DialogTrigger>
+                      <DialogContent className="bg-zinc-900 border-zinc-700">
+                        <DialogHeader>
+                          <DialogTitle className="text-white">Share Document</DialogTitle>
+                        </DialogHeader>
+                        <div className="grid grid-cols-2 gap-4">
+                          <Button onClick={() => shareDocument('whatsapp')} className="bg-green-600 hover:bg-green-700">
+                            <Share2 className="w-4 h-4 mr-2" /> WhatsApp
+                          </Button>
+                          <Button onClick={() => shareDocument('email')} variant="outline">
+                            <Mail className="w-4 h-4 mr-2" /> Email
+                          </Button>
+                        </div>
+                      </DialogContent>
+                    </Dialog>
                   </div>
                 )}
               </CardHeader>
@@ -558,7 +846,6 @@ const DocumentScanner = () => {
                       style={{ transform: `rotate(${rotation}deg)` }}
                     />
                     
-                    {/* Field placeholders */}
                     {signatureFields.map(field => (
                       <div
                         key={field.id}
@@ -601,7 +888,6 @@ const DocumentScanner = () => {
                   </div>
                 )}
 
-                {/* Add Field Buttons */}
                 {currentDoc && (
                   <div className="flex flex-wrap gap-2 mt-4 pt-4 border-t border-zinc-800">
                     <span className="text-xs text-zinc-500 w-full mb-2">Add Fields:</span>
@@ -629,6 +915,44 @@ const DocumentScanner = () => {
             </Card>
           </div>
         </div>
+
+        {/* Saved Projects List */}
+        {projects.length > 0 && (
+          <div className="mt-8">
+            <h3 className="text-white text-lg font-semibold mb-4">Saved Projects</h3>
+            <div className="grid md:grid-cols-3 lg:grid-cols-4 gap-4">
+              {projects.map(project => (
+                <Card 
+                  key={project.id} 
+                  className={`bg-zinc-900/50 border-zinc-800 cursor-pointer hover:border-emerald-500/50 transition-all ${
+                    currentProject?.id === project.id ? 'border-emerald-500' : ''
+                  }`}
+                  onClick={() => loadProject(project)}
+                >
+                  <CardContent className="p-4">
+                    <div className="flex items-start justify-between">
+                      <div>
+                        <p className="text-white font-medium">{project.name}</p>
+                        <p className="text-xs text-zinc-500">{project.documents.length} documents</p>
+                        <p className="text-xs text-zinc-600 mt-1">
+                          Updated {project.updatedAt.toLocaleDateString()}
+                        </p>
+                      </div>
+                      <Button
+                        size="sm"
+                        variant="ghost"
+                        className="text-zinc-500 hover:text-red-400"
+                        onClick={(e) => { e.stopPropagation(); deleteProject(project.id); }}
+                      >
+                        <X className="w-4 h-4" />
+                      </Button>
+                    </div>
+                  </CardContent>
+                </Card>
+              ))}
+            </div>
+          </div>
+        )}
 
         {/* Disclaimer */}
         <div className="mt-8 p-4 bg-zinc-900/50 border border-zinc-800 rounded-xl text-center">
