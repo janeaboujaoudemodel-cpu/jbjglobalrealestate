@@ -9,7 +9,7 @@ import MortgageCalculator from "@/components/MortgageCalculator";
 import WelcomeModal from "@/components/WelcomeModal";
 import InquiryFormModal from "@/components/InquiryFormModal";
 import { useLanguage } from "@/contexts/LanguageContext";
-import { Sparkles, ArrowUpRight, ChevronDown, User, Scale, Layers, Calculator, FileText, Heart } from "lucide-react";
+import { Sparkles, ArrowUpRight, ChevronDown, User, Scale, Layers, Calculator, FileText, Heart, BarChart3, Wrench } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import founderProfessional from "@/assets/founder-professional.jpeg";
 import luxuryVillaHero from "@/assets/luxury-villa-hero.jpeg";
@@ -248,6 +248,17 @@ const Index = () => {
             
             {/* Fourth Row - Secondary Tools - Premium Glass style with glow */}
             <div className="flex flex-wrap justify-center gap-3">
+              {/* Property Comparison - Orange glow */}
+              <Link to="/compare">
+                <Button 
+                  className="bg-white/10 backdrop-blur-md border border-orange-500/30 text-orange-400 hover:bg-orange-500/20 hover:border-orange-500/50 hover:shadow-lg hover:shadow-orange-500/10 font-semibold px-5 py-4 text-xs transition-all duration-300 group"
+                >
+                  <BarChart3 className="w-3 h-3 mr-1" />
+                  AI Property Comparison
+                  <ArrowUpRight className="w-3 h-3 ml-1 group-hover:translate-x-0.5 group-hover:-translate-y-0.5 transition-transform" />
+                </Button>
+              </Link>
+              
               {/* News & Insights */}
               <Link to="/news">
                 <Button 
@@ -266,6 +277,17 @@ const Index = () => {
                 >
                   <Heart className="w-3 h-3 mr-1" />
                   Favorites & Shortlist
+                  <ArrowUpRight className="w-3 h-3 ml-1 group-hover:translate-x-0.5 group-hover:-translate-y-0.5 transition-transform" />
+                </Button>
+              </Link>
+              
+              {/* Tools Guide */}
+              <Link to="/tools-guide">
+                <Button 
+                  className="bg-white/10 backdrop-blur-md border border-teal-500/30 text-teal-400 hover:bg-teal-500/20 hover:border-teal-500/50 hover:shadow-lg hover:shadow-teal-500/10 font-semibold px-5 py-4 text-xs transition-all duration-300 group"
+                >
+                  <Wrench className="w-3 h-3 mr-1" />
+                  Tools Guide
                   <ArrowUpRight className="w-3 h-3 ml-1 group-hover:translate-x-0.5 group-hover:-translate-y-0.5 transition-transform" />
                 </Button>
               </Link>

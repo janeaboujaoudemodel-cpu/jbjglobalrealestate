@@ -35,6 +35,7 @@ import LawFirm from "./pages/services/LawFirm";
 import RentalIndex from "./pages/RentalIndex";
 import DocumentScanner from "./pages/DocumentScanner";
 import PropertyEvaluator from "./pages/PropertyEvaluator";
+import ToolsGuide from "./pages/ToolsGuide";
 import NotFound from "./pages/NotFound";
 import WelcomeModal from "./components/WelcomeModal";
 import GlobalHeader from "./components/GlobalHeader";
@@ -99,13 +100,14 @@ const App = () => (
                 <Route path="/market-report" element={<MarketReport />} />
                 <Route path="/concierge" element={<Concierge />} />
                 <Route path="/services/design-build" element={<DesignBuild />} />
-                <Route path="/services/design-build/architecture" element={<Architecture />} />
-                <Route path="/services/design-build/interior-design" element={<InteriorDesign />} />
-                <Route path="/services/design-build/fit-out" element={<FitOut />} />
+                <Route path="/services/architecture" element={<Architecture />} />
+                <Route path="/services/interior-design" element={<InteriorDesign />} />
+                <Route path="/services/fit-out" element={<FitOut />} />
                 <Route path="/services/law-firm" element={<LawFirm />} />
                 <Route path="/rental-index" element={<RentalIndex />} />
                 <Route path="/document-scanner" element={<DocumentScanner />} />
                 <Route path="/property-evaluator" element={<PropertyEvaluator />} />
+                <Route path="/tools-guide" element={<ToolsGuide />} />
                 {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
                 <Route path="*" element={<NotFound />} />
               </Routes>
