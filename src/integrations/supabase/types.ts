@@ -14,6 +14,42 @@ export type Database = {
   }
   public: {
     Tables: {
+      addon_tools: {
+        Row: {
+          category: string
+          created_at: string
+          description: string | null
+          id: string
+          included_in_tiers: string[] | null
+          is_active: boolean | null
+          name: string
+          price_aed: number
+          price_usd: number
+        }
+        Insert: {
+          category: string
+          created_at?: string
+          description?: string | null
+          id: string
+          included_in_tiers?: string[] | null
+          is_active?: boolean | null
+          name: string
+          price_aed?: number
+          price_usd?: number
+        }
+        Update: {
+          category?: string
+          created_at?: string
+          description?: string | null
+          id?: string
+          included_in_tiers?: string[] | null
+          is_active?: boolean | null
+          name?: string
+          price_aed?: number
+          price_usd?: number
+        }
+        Relationships: []
+      }
       broker_course_progress: {
         Row: {
           completed: boolean | null
@@ -130,22 +166,28 @@ export type Database = {
           company_name: string | null
           created_at: string
           currency: string
+          device_fingerprints: string[] | null
           email: string
           expires_at: string | null
           full_name: string | null
           id: string
+          last_device_fingerprint: string | null
           payment_method: string | null
           payment_reference: string | null
           pdf_downloads: number
           phone: string | null
           price_usd: number
+          registered_ips: string[] | null
           rera_number: string | null
+          selected_addons: string[] | null
           starts_at: string | null
           status: string
+          terms_accepted_at: string | null
           tier: string
           trial_ends_at: string | null
           updated_at: string
           user_id: string
+          user_role: string | null
         }
         Insert: {
           ai_credits_limit?: number | null
@@ -153,22 +195,28 @@ export type Database = {
           company_name?: string | null
           created_at?: string
           currency?: string
+          device_fingerprints?: string[] | null
           email: string
           expires_at?: string | null
           full_name?: string | null
           id?: string
+          last_device_fingerprint?: string | null
           payment_method?: string | null
           payment_reference?: string | null
           pdf_downloads?: number
           phone?: string | null
           price_usd?: number
+          registered_ips?: string[] | null
           rera_number?: string | null
+          selected_addons?: string[] | null
           starts_at?: string | null
           status?: string
+          terms_accepted_at?: string | null
           tier?: string
           trial_ends_at?: string | null
           updated_at?: string
           user_id: string
+          user_role?: string | null
         }
         Update: {
           ai_credits_limit?: number | null
@@ -176,22 +224,28 @@ export type Database = {
           company_name?: string | null
           created_at?: string
           currency?: string
+          device_fingerprints?: string[] | null
           email?: string
           expires_at?: string | null
           full_name?: string | null
           id?: string
+          last_device_fingerprint?: string | null
           payment_method?: string | null
           payment_reference?: string | null
           pdf_downloads?: number
           phone?: string | null
           price_usd?: number
+          registered_ips?: string[] | null
           rera_number?: string | null
+          selected_addons?: string[] | null
           starts_at?: string | null
           status?: string
+          terms_accepted_at?: string | null
           tier?: string
           trial_ends_at?: string | null
           updated_at?: string
           user_id?: string
+          user_role?: string | null
         }
         Relationships: []
       }
@@ -269,6 +323,115 @@ export type Database = {
           updated_at?: string
         }
         Relationships: []
+      }
+      content_access_logs: {
+        Row: {
+          accessed_at: string
+          completed: boolean | null
+          content_id: string
+          content_type: string
+          device_fingerprint: string | null
+          duration_seconds: number | null
+          id: string
+          ip_address: string | null
+          subscription_id: string | null
+          user_id: string
+          watermark_id: string
+        }
+        Insert: {
+          accessed_at?: string
+          completed?: boolean | null
+          content_id: string
+          content_type: string
+          device_fingerprint?: string | null
+          duration_seconds?: number | null
+          id?: string
+          ip_address?: string | null
+          subscription_id?: string | null
+          user_id: string
+          watermark_id: string
+        }
+        Update: {
+          accessed_at?: string
+          completed?: boolean | null
+          content_id?: string
+          content_type?: string
+          device_fingerprint?: string | null
+          duration_seconds?: number | null
+          id?: string
+          ip_address?: string | null
+          subscription_id?: string | null
+          user_id?: string
+          watermark_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "content_access_logs_subscription_id_fkey"
+            columns: ["subscription_id"]
+            isOneToOne: false
+            referencedRelation: "broker_subscriptions"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      course_sessions: {
+        Row: {
+          content_accessed: string[] | null
+          created_at: string
+          device_fingerprint: string
+          expires_at: string
+          id: string
+          ip_address: string | null
+          is_active: boolean
+          last_activity_at: string
+          session_token: string
+          started_at: string
+          subscription_id: string | null
+          suspicious_activity: boolean | null
+          suspicious_reason: string | null
+          user_id: string
+        }
+        Insert: {
+          content_accessed?: string[] | null
+          created_at?: string
+          device_fingerprint: string
+          expires_at: string
+          id?: string
+          ip_address?: string | null
+          is_active?: boolean
+          last_activity_at?: string
+          session_token: string
+          started_at?: string
+          subscription_id?: string | null
+          suspicious_activity?: boolean | null
+          suspicious_reason?: string | null
+          user_id: string
+        }
+        Update: {
+          content_accessed?: string[] | null
+          created_at?: string
+          device_fingerprint?: string
+          expires_at?: string
+          id?: string
+          ip_address?: string | null
+          is_active?: boolean
+          last_activity_at?: string
+          session_token?: string
+          started_at?: string
+          subscription_id?: string | null
+          suspicious_activity?: boolean | null
+          suspicious_reason?: string | null
+          user_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "course_sessions_subscription_id_fkey"
+            columns: ["subscription_id"]
+            isOneToOne: false
+            referencedRelation: "broker_subscriptions"
+            referencedColumns: ["id"]
+          },
+        ]
       }
       developers: {
         Row: {

@@ -4,10 +4,13 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
-import { Loader2, Crown, CheckCircle2, Phone, Mail, Shield, AlertCircle, Tag, X } from "lucide-react";
+import { Loader2, Crown, CheckCircle2, Phone, Mail, Shield, AlertCircle, Tag, X, ArrowRight, ArrowLeft } from "lucide-react";
 import { supabase } from "@/integrations/supabase/client";
 import { useAuth } from "@/contexts/AuthContext";
 import { toast } from "sonner";
+import RoleSelector, { type UserRole } from "./RoleSelector";
+import AddonSelector from "./AddonSelector";
+import ContentTermsAcceptance from "./ContentTermsAcceptance";
 
 interface TierData {
   id: string;
@@ -36,6 +39,8 @@ interface DiscountInfo {
   codeId?: string;
 }
 
+type SignupStep = "role" | "info" | "addons" | "terms" | "confirmation";
+
 export default function BrokerPaymentModal({
   open,
   onOpenChange,
@@ -44,9 +49,18 @@ export default function BrokerPaymentModal({
   onSuccess,
 }: BrokerPaymentModalProps) {
   const { user } = useAuth();
-  const [step, setStep] = useState<"info" | "payment" | "confirmation">("info");
+  const [step, setStep] = useState<SignupStep>("role");
   const [isProcessing, setIsProcessing] = useState(false);
   const [currency, setCurrency] = useState<"USD" | "AED">("USD");
+  
+  // Role selection
+  const [selectedRole, setSelectedRole] = useState<UserRole>("broker");
+  
+  // Add-on selection
+  const [selectedAddons, setSelectedAddons] = useState<string[]>([]);
+  
+  // Terms acceptance
+  const [termsAccepted, setTermsAccepted] = useState(false);
   
   // Discount code state
   const [discountCode, setDiscountCode] = useState("");
@@ -177,6 +191,9 @@ export default function BrokerPaymentModal({
         starts_at: appliedDiscount?.discountType === "free" ? new Date().toISOString() : null,
         expires_at: expiresAt.toISOString(),
         ai_credits_limit: tier.aiCredits === -1 ? null : tier.aiCredits,
+        user_role: selectedRole,
+        selected_addons: selectedAddons,
+        terms_accepted_at: new Date().toISOString(),
       }).select().single();
 
       if (error) throw error;
@@ -236,14 +253,82 @@ export default function BrokerPaymentModal({
   const handleComplete = () => {
     onSuccess();
     onOpenChange(false);
-    setStep("info");
+    setStep("role");
     setAppliedDiscount(null);
     setDiscountCode("");
+    setSelectedRole("broker");
+    setSelectedAddons([]);
+    setTermsAccepted(false);
+  };
+
+  const goToNextStep = () => {
+    if (step === "role") setStep("info");
+    else if (step === "info") setStep("addons");
+    else if (step === "addons") setStep("terms");
+  };
+
+  const goToPreviousStep = () => {
+    if (step === "info") setStep("role");
+    else if (step === "addons") setStep("info");
+    else if (step === "terms") setStep("addons");
+  };
+
+  const getStepNumber = () => {
+    const steps: SignupStep[] = ["role", "info", "addons", "terms"];
+    return steps.indexOf(step) + 1;
   };
 
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
       <DialogContent className="bg-gradient-to-b from-zinc-950 via-zinc-900 to-black border-gold/30 text-white max-w-lg max-h-[90vh] overflow-y-auto">
+        {/* Step indicator */}
+        {step !== "confirmation" && (
+          <div className="flex items-center justify-center gap-2 mb-4">
+            {[1, 2, 3, 4].map((num) => (
+              <div
+                key={num}
+                className={`w-2 h-2 rounded-full transition-all ${
+                  num === getStepNumber()
+                    ? "w-8 bg-gold"
+                    : num < getStepNumber()
+                    ? "bg-green-500"
+                    : "bg-zinc-700"
+                }`}
+              />
+            ))}
+          </div>
+        )}
+
+        {/* Step 1: Role Selection */}
+        {step === "role" && (
+          <>
+            <DialogHeader>
+              <DialogTitle className="text-2xl text-center">
+                Welcome to Broker Toolkit
+              </DialogTitle>
+              <DialogDescription className="text-center text-zinc-400">
+                {tier.name} Plan • Step 1 of 4
+              </DialogDescription>
+            </DialogHeader>
+
+            <div className="py-4">
+              <RoleSelector 
+                selectedRole={selectedRole} 
+                onRoleChange={setSelectedRole} 
+              />
+            </div>
+
+            <Button
+              onClick={goToNextStep}
+              className="w-full bg-gradient-to-r from-gold via-gold to-gold-dark text-black py-6 text-lg hover:brightness-110 font-semibold"
+            >
+              Continue
+              <ArrowRight className="w-5 h-5 ml-2" />
+            </Button>
+          </>
+        )}
+
+        {/* Step 2: Personal Info */}
         {step === "info" && (
           <>
             <DialogHeader>
@@ -267,7 +352,7 @@ export default function BrokerPaymentModal({
                 ) : (
                   <>{currencySymbol}{basePrice}</>
                 )}
-                /{billingPeriod === "yearly" ? "year" : "month"}
+                /{billingPeriod === "yearly" ? "year" : "month"} • Step 2 of 4
               </DialogDescription>
             </DialogHeader>
 
@@ -416,10 +501,101 @@ export default function BrokerPaymentModal({
                 </RadioGroup>
               </div>
 
+              <div className="flex gap-3">
+                <Button
+                  onClick={goToPreviousStep}
+                  variant="outline"
+                  className="border-zinc-700 text-white hover:bg-zinc-800"
+                >
+                  <ArrowLeft className="w-4 h-4 mr-2" />
+                  Back
+                </Button>
+                <Button
+                  onClick={goToNextStep}
+                  disabled={!formData.fullName || !formData.email || !formData.phone}
+                  className="flex-1 bg-gradient-to-r from-gold via-gold to-gold-dark text-black py-6 text-lg hover:brightness-110 font-semibold"
+                >
+                  Continue
+                  <ArrowRight className="w-5 h-5 ml-2" />
+                </Button>
+              </div>
+            </div>
+          </>
+        )}
+
+        {/* Step 3: Add-ons Selection */}
+        {step === "addons" && (
+          <>
+            <DialogHeader>
+              <DialogTitle className="text-2xl text-center">
+                Customize Your Package
+              </DialogTitle>
+              <DialogDescription className="text-center text-zinc-400">
+                Add extra tools or courses • Step 3 of 4
+              </DialogDescription>
+            </DialogHeader>
+
+            <div className="py-4 max-h-[50vh] overflow-y-auto">
+              <AddonSelector
+                selectedTier={tier.id}
+                selectedAddons={selectedAddons}
+                onAddonsChange={setSelectedAddons}
+                currency={currency}
+              />
+            </div>
+
+            <div className="flex gap-3">
+              <Button
+                onClick={goToPreviousStep}
+                variant="outline"
+                className="border-zinc-700 text-white hover:bg-zinc-800"
+              >
+                <ArrowLeft className="w-4 h-4 mr-2" />
+                Back
+              </Button>
+              <Button
+                onClick={goToNextStep}
+                className="flex-1 bg-gradient-to-r from-gold via-gold to-gold-dark text-black py-6 text-lg hover:brightness-110 font-semibold"
+              >
+                Continue
+                <ArrowRight className="w-5 h-5 ml-2" />
+              </Button>
+            </div>
+          </>
+        )}
+
+        {/* Step 4: Terms & Confirmation */}
+        {step === "terms" && (
+          <>
+            <DialogHeader>
+              <DialogTitle className="text-2xl text-center">
+                Review & Accept Terms
+              </DialogTitle>
+              <DialogDescription className="text-center text-zinc-400">
+                Final step • Step 4 of 4
+              </DialogDescription>
+            </DialogHeader>
+
+            <div className="py-4">
+              <ContentTermsAcceptance
+                isAccepted={termsAccepted}
+                onAcceptanceChange={setTermsAccepted}
+              />
+            </div>
+
+            <div className="flex gap-3">
+              <Button
+                onClick={goToPreviousStep}
+                variant="outline"
+                className="border-zinc-700 text-white hover:bg-zinc-800"
+              >
+                <ArrowLeft className="w-4 h-4 mr-2" />
+                Back
+              </Button>
               <Button
                 onClick={handleSubmit}
-                disabled={isProcessing || !formData.fullName || !formData.email || !formData.phone}
-                className="w-full bg-gradient-to-r from-gold via-gold to-gold-dark text-black py-6 text-lg hover:brightness-110 font-semibold"
+                disabled={isProcessing || !termsAccepted}
+                className="flex-1 bg-gradient-to-r from-gold via-gold to-gold-dark text-black py-6 text-lg hover:brightness-110 font-semibold"
               >
                 {isProcessing ? (
                   <>
@@ -438,15 +614,14 @@ export default function BrokerPaymentModal({
                   </>
                 )}
               </Button>
-
-              <p className="text-zinc-500 text-xs text-center">
-                By starting your trial, you agree to our terms of service. 
-                {!appliedDiscount?.valid && " You will be contacted for payment setup before the trial ends."}
-              </p>
             </div>
+
+            <p className="text-zinc-500 text-xs text-center">
+              By starting your trial, you agree to our terms of service. 
+              {!appliedDiscount?.valid && " You will be contacted for payment setup before the trial ends."}
+            </p>
           </>
         )}
-
         {step === "confirmation" && (
           <>
             <DialogHeader className="text-center">

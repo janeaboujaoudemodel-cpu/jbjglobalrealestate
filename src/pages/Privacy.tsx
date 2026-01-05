@@ -62,10 +62,33 @@ const Privacy = () => {
               </section>
 
               <section>
-                <h2 className="text-gold text-xl font-semibold mb-4">4. Data Protection</h2>
+                <h2 className="text-gold text-xl font-semibold mb-4">4. Data Protection & Encryption</h2>
                 <p>
-                  We implement appropriate technical and organizational security measures to protect your personal information in accordance with UAE Federal Law No. 45 of 2021 on Personal Data Protection and international best practices.
+                  We implement enterprise-grade security measures to protect your personal information:
                 </p>
+                <ul className="list-disc pl-6 mt-2 space-y-2">
+                  <li><strong>End-to-End Encryption:</strong> All data transmissions are encrypted using TLS 1.3 or higher.</li>
+                  <li><strong>Database Encryption:</strong> Personal data is encrypted at rest using AES-256 encryption.</li>
+                  <li><strong>Access Controls:</strong> Strict role-based access controls limit data access to authorized personnel only.</li>
+                  <li><strong>Audit Logging:</strong> All data access is logged and monitored for security compliance.</li>
+                  <li><strong>Developer Isolation:</strong> Your personal data is not accessible to web developers or third-party contractors.</li>
+                </ul>
+                <p className="mt-4">
+                  These measures comply with UAE Federal Law No. 45 of 2021 on Personal Data Protection and international best practices including GDPR standards.
+                </p>
+              </section>
+
+              <section>
+                <h2 className="text-gold text-xl font-semibold mb-4">5. Broker Toolkit Security</h2>
+                <p>
+                  For Broker Toolkit subscribers, we implement additional security measures:
+                </p>
+                <ul className="list-disc pl-6 mt-2 space-y-2">
+                  <li><strong>Device Fingerprinting:</strong> Your session is linked to a specific device to prevent unauthorized access.</li>
+                  <li><strong>Session Management:</strong> Active sessions are monitored and suspicious activity triggers automatic security alerts.</li>
+                  <li><strong>Content Watermarking:</strong> Educational materials are watermarked with your unique identifier for traceability.</li>
+                  <li><strong>IP Address Logging:</strong> Login locations are recorded for security verification.</li>
+                </ul>
               </section>
 
               <section>
@@ -92,7 +115,20 @@ const Privacy = () => {
               </section>
 
               <section>
-                <h2 className="text-gold text-xl font-semibold mb-4">7. Contact Us</h2>
+                <h2 className="text-gold text-xl font-semibold mb-4">8. Confidentiality Commitment</h2>
+                <p>
+                  JJ Global Capital is committed to maintaining the highest standards of data confidentiality. Your personal information, investment inquiries, and financial details are treated with strict confidentiality and are:
+                </p>
+                <ul className="list-disc pl-6 mt-2 space-y-2">
+                  <li>Never sold to third parties</li>
+                  <li>Encrypted and secured from unauthorized access</li>
+                  <li>Accessible only to authorized personnel on a need-to-know basis</li>
+                  <li>Protected by legal non-disclosure agreements</li>
+                </ul>
+              </section>
+
+              <section>
+                <h2 className="text-gold text-xl font-semibold mb-4">9. Contact Us</h2>
                 <p>
                   If you have questions about this Privacy Policy, please contact us at:
                 </p>
@@ -100,7 +136,12 @@ const Privacy = () => {
                   <strong>JJ Global Capital</strong><br />
                   Downtown Dubai, United Arab Emirates<br />
                   Email: <a href="mailto:Invest@JJGlobalCapital.com" className="text-gold hover:underline">Invest@JJGlobalCapital.com</a><br />
-                  Phone: <a href="tel:+971565911000" className="text-gold hover:underline">+971 56 591 1000</a>
+                  Phone: <a href="tel:+971565911000" className="text-gold hover:underline">+971 56 591 1000</a><br />
+                  Data Protection: <a href="mailto:privacy@jjglobalcapital.com" className="text-gold hover:underline">privacy@jjglobalcapital.com</a>
+                </p>
+                <p className="mt-4 text-zinc-500 text-sm">
+                  © {new Date().getFullYear()} JJ Global Capital. All Rights Reserved.<br />
+                  Your data is encrypted and strictly confidential.
                 </p>
               </section>
             </div>
