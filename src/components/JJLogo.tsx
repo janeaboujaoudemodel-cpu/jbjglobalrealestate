@@ -45,27 +45,32 @@ const sizeConfig = {
     wordGap: 'mx-3',
   },
   footer: {
-    j: 'text-5xl md:text-6xl lg:text-7xl',
-    dividerHeight: 'h-10 md:h-14 lg:h-16',
-    text: 'text-xl md:text-2xl lg:text-3xl',
-    gap: 'mx-2 md:mx-3',
-    textGap: 'mt-3 md:mt-4',
+    j: 'text-6xl md:text-7xl lg:text-8xl',
+    dividerHeight: 'h-12 md:h-16 lg:h-20',
+    text: 'text-2xl md:text-3xl lg:text-4xl',
+    gap: 'mx-3 md:mx-4',
+    textGap: 'mt-4 md:mt-5',
     textSpacing: 'tracking-[0.25em] md:tracking-[0.3em]',
     // Symmetric spacing: GLOBAL and CAPITAL equidistant from center divider position
-    wordGap: 'mx-3 md:mx-4',
+    wordGap: 'mx-4 md:mx-5',
   },
 };
 
 // Main logo component - TEXT version (no image)
 export const JJLogo = ({ size = 'md', showText = true, className = '' }: JJLogoProps) => {
   const config = sizeConfig[size];
+  const isFooter = size === 'footer';
+  
+  // Footer uses black, others use gold/white
+  const jColor = isFooter ? 'text-black' : 'text-gold';
+  const dividerColor = isFooter ? 'bg-black' : 'bg-white/90';
 
   return (
     <div className={`flex flex-col items-center ${className}`}>
       {/* J | J Monogram */}
       <div className="flex items-center justify-center">
         <span 
-          className={`text-gold font-extralight ${config.j} leading-none drop-shadow-[0_0_8px_rgba(168,146,90,0.3)]`}
+          className={`${jColor} font-extralight ${config.j} leading-none ${!isFooter ? 'drop-shadow-[0_0_8px_rgba(168,146,90,0.3)]' : ''}`}
           style={{ fontFamily: "Poppins, sans-serif" }}
         >
           J
@@ -73,11 +78,11 @@ export const JJLogo = ({ size = 'md', showText = true, className = '' }: JJLogoP
         
         {/* Centered Divider */}
         <div className={`${config.gap} flex items-center justify-center`}>
-          <div className={`w-[1.5px] bg-white/90 ${config.dividerHeight}`} />
+          <div className={`w-[2px] ${dividerColor} ${config.dividerHeight}`} />
         </div>
         
         <span 
-          className={`text-gold font-extralight ${config.j} leading-none drop-shadow-[0_0_8px_rgba(168,146,90,0.3)]`}
+          className={`${jColor} font-extralight ${config.j} leading-none ${!isFooter ? 'drop-shadow-[0_0_8px_rgba(168,146,90,0.3)]' : ''}`}
           style={{ fontFamily: "Poppins, sans-serif" }}
         >
           J
