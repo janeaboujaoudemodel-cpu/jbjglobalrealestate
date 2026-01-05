@@ -41,6 +41,9 @@ import PropertyMeasurement from "./pages/PropertyMeasurement";
 import InteriorDesignAI from "./pages/InteriorDesignAI";
 import CompanyProfile from "./pages/CompanyProfile";
 import PressKit from "./pages/PressKit";
+import AICalendar from "./pages/AICalendar";
+import AIFinancialAdvisor from "./pages/AIFinancialAdvisor";
+import AIPersonalShopper from "./pages/AIPersonalShopper";
 import NotFound from "./pages/NotFound";
 import WelcomeModal from "./components/WelcomeModal";
 import GlobalHeader from "./components/GlobalHeader";
@@ -122,6 +125,9 @@ const App = () => (
                 <Route path="/interior-design-ai" element={<InteriorDesignAI />} />
                 <Route path="/company-profile" element={<CompanyProfile />} />
                 <Route path="/press-kit" element={<PressKit />} />
+                <Route path="/ai-calendar" element={<AICalendar />} />
+                <Route path="/ai-financial-advisor" element={<AIFinancialAdvisor />} />
+                <Route path="/ai-personal-shopper" element={<AIPersonalShopper />} />
                 {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
                 <Route path="*" element={<NotFound />} />
               </Routes>
