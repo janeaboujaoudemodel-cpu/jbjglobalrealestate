@@ -6,6 +6,7 @@ import { BrowserRouter, Routes, Route } from "react-router-dom";
 import { AuthProvider } from "@/contexts/AuthContext";
 import { LanguageProvider } from "@/contexts/LanguageContext";
 import ScrollToTop from "@/components/ScrollToTop";
+import AdminBypass from "@/components/AdminBypass";
 import Index from "./pages/Index";
 import Properties from "./pages/Properties";
 import ProjectDetail from "./pages/ProjectDetail";
@@ -62,51 +63,58 @@ const App = () => (
         <BrowserRouter>
           <AuthProvider>
             <ScrollToTop />
+            {/* Auth route is always accessible for admin login */}
             <Routes>
-              <Route path="/" element={<Index />} />
-              <Route path="/properties" element={<Properties />} />
-              <Route path="/project/:slug" element={<ProjectDetail />} />
-              <Route path="/communities" element={<Communities />} />
-              <Route path="/community/:slug" element={<CommunityDetail />} />
-              <Route path="/developer/:slug" element={<DeveloperDetail />} />
-              <Route path="/quiz" element={<Quiz />} />
-              <Route path="/quiz-results" element={<QuizResults />} />
-              <Route path="/contact" element={<Contact />} />
-              <Route path="/about" element={<About />} />
-              <Route path="/services" element={<Services />} />
-              <Route path="/concierge" element={<Concierge />} />
-              <Route path="/mortgage-calculator" element={<MortgageCalculator />} />
-              <Route path="/market-report" element={<MarketReport />} />
-              <Route path="/favorites" element={<Favorites />} />
-              <Route path="/compare" element={<Compare />} />
               <Route path="/auth" element={<Auth />} />
-              <Route path="/admin" element={<Admin />} />
-              <Route path="/terms" element={<Terms />} />
-              <Route path="/privacy" element={<Privacy />} />
-              <Route path="/founder" element={<Founder />} />
-              <Route path="/awards" element={<Awards />} />
-              <Route path="/press-kit" element={<PressKit />} />
-              <Route path="/company-profile" element={<CompanyProfile />} />
-              <Route path="/news" element={<News />} />
-              <Route path="/broker-toolkit" element={<BrokerToolkit />} />
-              <Route path="/broker-dashboard" element={<BrokerDashboard />} />
-              <Route path="/ai-hub" element={<AIHub />} />
-              <Route path="/interior-design-ai" element={<InteriorDesignAI />} />
-              <Route path="/property-evaluator" element={<PropertyEvaluator />} />
-              <Route path="/document-scanner" element={<DocumentScanner />} />
-              <Route path="/property-measurement" element={<PropertyMeasurement />} />
-              <Route path="/rental-index" element={<RentalIndex />} />
-              <Route path="/ai-calendar" element={<AICalendar />} />
-              <Route path="/ai-financial-advisor" element={<AIFinancialAdvisor />} />
-              <Route path="/ai-personal-shopper" element={<AIPersonalShopper />} />
-              <Route path="/tools-guide" element={<ToolsGuide />} />
-              <Route path="/intellectual-property" element={<IntellectualProperty />} />
-              <Route path="/services/architecture" element={<Architecture />} />
-              <Route path="/services/interior-design" element={<InteriorDesign />} />
-              <Route path="/services/fit-out" element={<FitOut />} />
-              <Route path="/services/design-build" element={<DesignBuild />} />
-              <Route path="/services/law-firm" element={<LawFirm />} />
-              <Route path="*" element={<NotFound />} />
+              <Route path="*" element={
+                <AdminBypass>
+                  <Routes>
+                    <Route path="/" element={<Index />} />
+                    <Route path="/properties" element={<Properties />} />
+                    <Route path="/project/:slug" element={<ProjectDetail />} />
+                    <Route path="/communities" element={<Communities />} />
+                    <Route path="/community/:slug" element={<CommunityDetail />} />
+                    <Route path="/developer/:slug" element={<DeveloperDetail />} />
+                    <Route path="/quiz" element={<Quiz />} />
+                    <Route path="/quiz-results" element={<QuizResults />} />
+                    <Route path="/contact" element={<Contact />} />
+                    <Route path="/about" element={<About />} />
+                    <Route path="/services" element={<Services />} />
+                    <Route path="/concierge" element={<Concierge />} />
+                    <Route path="/mortgage-calculator" element={<MortgageCalculator />} />
+                    <Route path="/market-report" element={<MarketReport />} />
+                    <Route path="/favorites" element={<Favorites />} />
+                    <Route path="/compare" element={<Compare />} />
+                    <Route path="/admin" element={<Admin />} />
+                    <Route path="/terms" element={<Terms />} />
+                    <Route path="/privacy" element={<Privacy />} />
+                    <Route path="/founder" element={<Founder />} />
+                    <Route path="/awards" element={<Awards />} />
+                    <Route path="/press-kit" element={<PressKit />} />
+                    <Route path="/company-profile" element={<CompanyProfile />} />
+                    <Route path="/news" element={<News />} />
+                    <Route path="/broker-toolkit" element={<BrokerToolkit />} />
+                    <Route path="/broker-dashboard" element={<BrokerDashboard />} />
+                    <Route path="/ai-hub" element={<AIHub />} />
+                    <Route path="/interior-design-ai" element={<InteriorDesignAI />} />
+                    <Route path="/property-evaluator" element={<PropertyEvaluator />} />
+                    <Route path="/document-scanner" element={<DocumentScanner />} />
+                    <Route path="/property-measurement" element={<PropertyMeasurement />} />
+                    <Route path="/rental-index" element={<RentalIndex />} />
+                    <Route path="/ai-calendar" element={<AICalendar />} />
+                    <Route path="/ai-financial-advisor" element={<AIFinancialAdvisor />} />
+                    <Route path="/ai-personal-shopper" element={<AIPersonalShopper />} />
+                    <Route path="/tools-guide" element={<ToolsGuide />} />
+                    <Route path="/intellectual-property" element={<IntellectualProperty />} />
+                    <Route path="/services/architecture" element={<Architecture />} />
+                    <Route path="/services/interior-design" element={<InteriorDesign />} />
+                    <Route path="/services/fit-out" element={<FitOut />} />
+                    <Route path="/services/design-build" element={<DesignBuild />} />
+                    <Route path="/services/law-firm" element={<LawFirm />} />
+                    <Route path="*" element={<NotFound />} />
+                  </Routes>
+                </AdminBypass>
+              } />
             </Routes>
           </AuthProvider>
         </BrowserRouter>
