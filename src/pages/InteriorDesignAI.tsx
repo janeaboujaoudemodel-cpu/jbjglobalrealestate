@@ -1,6 +1,7 @@
 import { useState, useEffect, useRef } from "react";
 import { motion } from "framer-motion";
 import { Link, useNavigate } from "react-router-dom";
+import { PDFDocument, StandardFonts } from "pdf-lib";
 import Footer from "@/components/Footer";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -52,6 +53,12 @@ interface PackagePricing {
   sizeRange: string;
   recommended?: boolean;
 }
+
+type DesignResult = {
+  images: string[];
+  notes: string;
+  createdAt: string;
+};
 
 const packages: PackagePricing[] = [
   {
@@ -120,6 +127,71 @@ const colorOptions = [
   { id: "monochrome", name: "Monochrome Elegance", colors: ["#2C2C2C", "#808080", "#F0F0F0"] },
   { id: "luxury", name: "Luxury Gold", colors: ["#A8925A", "#1C1C1C", "#F5F5F5"] },
 ];
+
+const fileToDataUrl = (file: File): Promise<string> =>
+  new Promise((resolve, reject) => {
+    const reader = new FileReader();
+    reader.onload = () => resolve(reader.result as string);
+    reader.onerror = reject;
+    reader.readAsDataURL(file);
+  });
+
+const getMimeFromDataUrl = (dataUrl: string) => {
+  const match = dataUrl.match(/^data:(.*?);base64,/);
+  return match?.[1] || "application/octet-stream";
+};
+
+const dataUrlToUint8Array = (dataUrl: string) => {
+  const commaIndex = dataUrl.indexOf(",");
+  if (commaIndex === -1) throw new Error("Invalid data URL");
+  const header = dataUrl.slice(0, commaIndex);
+  const base64 = dataUrl.slice(commaIndex + 1);
+  const mime = getMimeFromDataUrl(header + ",");
+  const binary = atob(base64);
+  const bytes = new Uint8Array(binary.length);
+  for (let i = 0; i < binary.length; i++) bytes[i] = binary.charCodeAt(i);
+  return { bytes, mime };
+};
+
+const downloadBlob = (blob: Blob, filename: string) => {
+  const url = URL.createObjectURL(blob);
+  const a = document.createElement("a");
+  a.href = url;
+  a.download = filename;
+  a.click();
+  URL.revokeObjectURL(url);
+};
+
+const inferExtension = (mime: string) => {
+  if (mime.includes("png")) return "png";
+  if (mime.includes("webp")) return "webp";
+  if (mime.includes("jpeg") || mime.includes("jpg")) return "jpg";
+  return "bin";
+};
+
+const notesToBullets = (notes: string) =>
+  notes
+    .split("\n")
+    .map((l) => l.trim())
+    .filter(Boolean)
+    .map((l) => l.replace(/^[-•\u2022]\s*/, ""));
+
+const wrapText = (text: string, maxChars: number) => {
+  const words = text.split(/\s+/).filter(Boolean);
+  const lines: string[] = [];
+  let current = "";
+  for (const w of words) {
+    const next = current ? `${current} ${w}` : w;
+    if (next.length > maxChars) {
+      if (current) lines.push(current);
+      current = w;
+    } else {
+      current = next;
+    }
+  }
+  if (current) lines.push(current);
+  return lines;
+};
 
 const InteriorDesignAI = () => {
   const navigate = useNavigate();
@@ -234,24 +306,142 @@ const InteriorDesignAI = () => {
 
   const generateDesign = async () => {
     setIsProcessing(true);
-    setProgress(0);
+    setProgress(5);
 
     try {
-      // Simulate AI processing
-      for (let i = 0; i <= 100; i += 2) {
-        await new Promise(resolve => setTimeout(resolve, 100));
-        setProgress(i);
-      }
+      const photosData = await Promise.all(photos.slice(0, 4).map(fileToDataUrl));
+      const floorPlanData = floorPlan ? await fileToDataUrl(floorPlan) : undefined;
 
-      // Mock result - in production this would call an edge function with image generation
-      setDesignResult("generated");
+      setProgress(20);
+
+      const { data, error } = await supabase.functions.invoke("interior-design-generate", {
+        body: {
+          propertyType,
+          propertyName,
+          propertySize,
+          designStyle,
+          colorPalette,
+          purpose,
+          customNotes,
+          photos: photosData,
+          floorPlan: floorPlanData,
+        },
+      });
+
+      if (error) throw error;
+      if (!data?.success) throw new Error(data?.error || "Design generation failed");
+
+      setProgress(95);
+      setDesignResult(data.result as DesignResult);
       setStep(6);
       toast.success("Your AI-generated design is ready!");
     } catch (error) {
-      toast.error("Error generating design. Please try again.");
+      console.error("interior-design generate error:", error);
+      toast.error(error instanceof Error ? error.message : "Error generating design. Please try again.");
     } finally {
       setIsProcessing(false);
+      setProgress(0);
     }
+  };
+
+  const downloadImages = () => {
+    if (!designResult?.images?.length) return;
+    try {
+      const first = designResult.images[0];
+      const { bytes, mime } = dataUrlToUint8Array(first);
+      const ext = inferExtension(mime);
+      downloadBlob(
+        new Blob([bytes], { type: mime }),
+        `interior-design-${propertyName || "design"}.${ext}`,
+      );
+      toast.success("Image downloaded!");
+    } catch (e) {
+      console.error(e);
+      toast.error("Couldn't download the image.");
+    }
+  };
+
+  const downloadPdf = async () => {
+    if (!designResult) return;
+
+    try {
+      const pdfDoc = await PDFDocument.create();
+      const page = pdfDoc.addPage([595.28, 841.89]); // A4
+      const { width, height } = page.getSize();
+      const margin = 40;
+
+      const titleFont = await pdfDoc.embedFont(StandardFonts.HelveticaBold);
+      const bodyFont = await pdfDoc.embedFont(StandardFonts.Helvetica);
+
+      let y = height - margin;
+
+      page.drawText("JJ Global Capital — AI Interior Design", {
+        x: margin,
+        y,
+        size: 16,
+        font: titleFont,
+      });
+      y -= 22;
+
+      const meta = `Property: ${propertyName || "Your Property"}   •   Created: ${new Date(
+        designResult.createdAt,
+      ).toLocaleString()}`;
+      page.drawText(meta, { x: margin, y, size: 10, font: bodyFont });
+      y -= 18;
+
+      const imgUrl = designResult.images?.[0];
+      if (imgUrl) {
+        const { bytes, mime } = dataUrlToUint8Array(imgUrl);
+        const embedded = mime.includes("png") ? await pdfDoc.embedPng(bytes) : await pdfDoc.embedJpg(bytes);
+
+        const maxW = width - margin * 2;
+        const maxH = 360;
+        const scale = Math.min(maxW / embedded.width, maxH / embedded.height);
+        const imgW = embedded.width * scale;
+        const imgH = embedded.height * scale;
+
+        y -= imgH;
+        page.drawImage(embedded, {
+          x: margin + (maxW - imgW) / 2,
+          y,
+          width: imgW,
+          height: imgH,
+        });
+        y -= 20;
+      }
+
+      const bullets = notesToBullets(designResult.notes).slice(0, 6);
+      if (bullets.length) {
+        page.drawText("Key design choices", { x: margin, y, size: 12, font: titleFont });
+        y -= 18;
+
+        for (const b of bullets) {
+          const lines = wrapText(b, 90);
+          for (const line of lines) {
+            page.drawText(`• ${line}`, { x: margin, y, size: 10, font: bodyFont });
+            y -= 14;
+            if (y < margin + 20) break;
+          }
+          if (y < margin + 20) break;
+        }
+      }
+
+      const pdfBytes = await pdfDoc.save();
+      downloadBlob(
+        new Blob([pdfBytes], { type: "application/pdf" }),
+        `interior-design-${propertyName || "design"}.pdf`,
+      );
+      toast.success("PDF downloaded!");
+    } catch (e) {
+      console.error(e);
+      toast.error("Couldn't generate the PDF.");
+    }
+  };
+
+  const requestRevision = () => {
+    if (!designResult) return;
+    setIsInquiryOpen(true);
+    toast.info("Tell us what you'd like to change, and we'll handle the revision.");
   };
 
   const handlePackageSelect = (packageId: string) => {
@@ -1012,33 +1202,47 @@ const InteriorDesignAI = () => {
                   </div>
                 </CardHeader>
                 <CardContent className="pt-6 space-y-6">
-                  {/* Mock 3D Render Preview */}
-                  <div className="aspect-video bg-gradient-to-br from-fuchsia-900/30 to-purple-900/30 rounded-xl flex items-center justify-center border border-fuchsia-500/20">
-                    <div className="text-center">
-                      <Sparkles className="w-16 h-16 text-fuchsia-400 mx-auto mb-4" />
-                      <p className="text-white font-medium text-lg">3D Design Preview</p>
-                      <p className="text-zinc-500 text-sm mt-2">
-                        Your AI-generated interior design for {propertyName || "Your Property"}
-                      </p>
-                    </div>
+                  {/* Design Render Preview */}
+                  <div className="rounded-xl overflow-hidden border border-fuchsia-500/20 bg-zinc-950">
+                    {designResult.images?.[0] ? (
+                      <img
+                        src={designResult.images[0]}
+                        alt={`AI interior design render for ${propertyName || "your property"}`}
+                        className="w-full aspect-video object-cover"
+                        loading="lazy"
+                      />
+                    ) : (
+                      <div className="aspect-video bg-gradient-to-br from-fuchsia-900/30 to-purple-900/30 flex items-center justify-center">
+                        <div className="text-center">
+                          <Sparkles className="w-16 h-16 text-fuchsia-400 mx-auto mb-4" />
+                          <p className="text-white font-medium text-lg">Design Preview</p>
+                          <p className="text-zinc-500 text-sm mt-2">
+                            Your AI-generated interior design for {propertyName || "Your Property"}
+                          </p>
+                        </div>
+                      </div>
+                    )}
                   </div>
 
                   <div className="grid md:grid-cols-3 gap-4">
-                    <Button 
+                    <Button
                       variant="outline"
+                      onClick={downloadPdf}
                       className="border-fuchsia-500/50 text-fuchsia-300 hover:bg-fuchsia-500/20"
                     >
                       <Download className="w-4 h-4 mr-2" />
                       Download PDF
                     </Button>
-                    <Button 
+                    <Button
                       variant="outline"
+                      onClick={downloadImages}
                       className="border-fuchsia-500/50 text-fuchsia-300 hover:bg-fuchsia-500/20"
                     >
                       <Download className="w-4 h-4 mr-2" />
                       Download Images
                     </Button>
-                    <Button 
+                    <Button
+                      onClick={requestRevision}
                       className="bg-gradient-to-r from-fuchsia-500 to-purple-600 hover:from-fuchsia-600 hover:to-purple-700 text-white"
                     >
                       Request Revision
