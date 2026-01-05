@@ -21,15 +21,13 @@ const AdminBypass = ({ children }: AdminBypassProps) => {
           return;
         }
 
-        // Check if user has admin role
-        const { data: roleData } = await supabase
-          .from('user_roles')
-          .select('role')
-          .eq('user_id', session.user.id)
-          .eq('role', 'admin')
-          .maybeSingle();
+        // Check if user has admin role (uses backend function to avoid RLS blocking)
+        const { data: hasAdminRole, error: roleError } = await supabase
+          .rpc("has_role", { _user_id: session.user.id, _role: "admin" });
 
-        setIsAdmin(!!roleData);
+        if (roleError) throw roleError;
+
+        setIsAdmin(Boolean(hasAdminRole));
       } catch (error) {
         console.error('Error checking admin status:', error);
         setIsAdmin(false);

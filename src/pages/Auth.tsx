@@ -16,7 +16,7 @@ type AuthMode = "signin" | "signup" | "forgot" | "reset";
 const Auth = forwardRef<HTMLDivElement>((_, ref) => {
   const navigate = useNavigate();
   const [searchParams] = useSearchParams();
-  const { user, signIn, signUp, signInWithGoogle, resetPassword, updatePassword, loading } = useAuth();
+  const { user, signIn, signUp, signInWithGoogle, resetPassword, updatePassword, signOut, loading } = useAuth();
   
   const [mode, setMode] = useState<AuthMode>("signin");
   const [email, setEmail] = useState("");
@@ -34,11 +34,6 @@ const Auth = forwardRef<HTMLDivElement>((_, ref) => {
     }
   }, [searchParams]);
 
-  useEffect(() => {
-    if (user && !loading && mode !== "reset") {
-      navigate("/");
-    }
-  }, [user, loading, navigate, mode]);
 
   const validateForm = () => {
     const newErrors: { email?: string; password?: string; confirmPassword?: string } = {};
@@ -162,6 +157,86 @@ const Auth = forwardRef<HTMLDivElement>((_, ref) => {
       default: return "Sign in to access your account";
     }
   };
+
+  // If already signed in, let the user explicitly continue, sign out, or switch accounts.
+  if (user && mode !== "reset") {
+    return (
+      <div
+        ref={ref}
+        className="min-h-screen flex items-center justify-center py-12 px-4 bg-zinc-950"
+      >
+        {/* Premium gradient background */}
+        <div
+          className="absolute top-0 left-0 right-0 h-[50%] pointer-events-none"
+          style={{
+            background: "radial-gradient(ellipse at 50% 0%, hsl(40 32% 51% / 0.12) 0%, transparent 60%)",
+          }}
+        />
+        <div
+          className="absolute bottom-0 left-0 right-0 h-[30%] pointer-events-none"
+          style={{
+            background: "radial-gradient(ellipse at 50% 100%, hsl(40 32% 51% / 0.06) 0%, transparent 60%)",
+          }}
+        />
+
+        <div className="relative z-10 w-full max-w-md">
+          <div className="bg-zinc-900/90 backdrop-blur-sm border border-zinc-800 rounded-2xl p-8 shadow-2xl shadow-black/50">
+            <div className="text-center mb-6">
+              <div className="mx-auto w-16 h-16 rounded-full bg-gradient-to-br from-gold to-gold-dark flex items-center justify-center mb-4 shadow-lg shadow-gold/20">
+                <Sparkles className="w-8 h-8 text-black" />
+              </div>
+              <h1
+                className="text-white text-3xl font-bold mb-2"
+                style={{ fontFamily: "Poppins, sans-serif" }}
+              >
+                You’re signed in
+              </h1>
+              <p className="text-zinc-400">
+                Signed in as <span className="text-white">{user.email}</span>
+              </p>
+            </div>
+
+            <div className="space-y-3">
+              <Button
+                type="button"
+                onClick={() => navigate("/")}
+                className="w-full h-12 bg-gradient-to-r from-gold to-gold-dark hover:opacity-90 text-black font-semibold rounded-xl shadow-lg shadow-gold/20"
+              >
+                Continue
+              </Button>
+              <Button
+                type="button"
+                variant="outline"
+                onClick={async () => {
+                  try {
+                    await signOut();
+                    toast.success("Signed out.");
+                    setEmail("");
+                    setPassword("");
+                    setConfirmPassword("");
+                    setMode("signin");
+                  } catch (e) {
+                    toast.error("Could not sign out. Please try again.");
+                  }
+                }}
+                className="w-full h-12 border-zinc-700 text-white hover:bg-zinc-800 hover:border-gold/30 rounded-xl"
+              >
+                Sign out
+              </Button>
+            </div>
+
+            <p className="mt-6 text-center text-zinc-500 text-sm">
+              If you still see “Coming Soon” after signing in, that account doesn’t have admin access yet.
+            </p>
+          </div>
+
+          <p className="text-center text-zinc-600 text-sm mt-6">
+            © {new Date().getFullYear()} JJ Global Capital. All rights reserved.
+          </p>
+        </div>
+      </div>
+    );
+  }
 
   return (
     <div
