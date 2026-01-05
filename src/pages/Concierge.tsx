@@ -6,6 +6,7 @@ import { ArrowUpRight, Search, Plane, Car, Hotel, Sparkles, Gem, Ship, Utensils,
 import { CONTACT_INFO } from "@/constants/stats";
 import { useState } from "react";
 import { Input } from "@/components/ui/input";
+import InquiryFormModal from "@/components/InquiryFormModal";
 import coupleJetRolls from "@/assets/couple-jet-rolls.png";
 import luxuryJetCar from "@/assets/luxury-jet-car.png";
 import coupleJetInterior from "@/assets/couple-jet-interior.png";
@@ -115,6 +116,16 @@ const conciergeCategories: ServiceCategory[] = [
 const Concierge = () => {
   const [searchQuery, setSearchQuery] = useState("");
   const [selectedCategory, setSelectedCategory] = useState<string | null>(null);
+  const [isInquiryOpen, setIsInquiryOpen] = useState(false);
+  const [inquiryContext, setInquiryContext] = useState<{ source: string; context?: Record<string, string> }>({ source: 'concierge' });
+
+  const openInquiry = (serviceName?: string) => {
+    setInquiryContext({
+      source: 'concierge',
+      context: serviceName ? { service: serviceName } : undefined
+    });
+    setIsInquiryOpen(true);
+  };
 
   const filteredCategories = conciergeCategories.filter(category => {
     const matchesSearch = category.title.toLowerCase().includes(searchQuery.toLowerCase()) ||
@@ -174,12 +185,13 @@ const Concierge = () => {
           </motion.p>
 
           <motion.div variants={fadeInUp}>
-            <a href={CONTACT_INFO.inquiryFormUrl} target="_blank" rel="noopener noreferrer">
-              <Button className="bg-gold hover:bg-gold-light text-black font-semibold px-8 py-6 text-base">
-                Request Concierge Services
-                <ArrowUpRight className="w-5 h-5 ml-2" />
-              </Button>
-            </a>
+            <Button 
+              onClick={() => openInquiry('Concierge Services')}
+              className="bg-gold hover:bg-gold-light text-black font-semibold px-8 py-6 text-base"
+            >
+              Request Concierge Services
+              <ArrowUpRight className="w-5 h-5 ml-2" />
+            </Button>
           </motion.div>
         </motion.div>
       </div>
@@ -291,15 +303,14 @@ const Concierge = () => {
                   </ul>
 
                   {/* CTA */}
-                  <a href={CONTACT_INFO.inquiryFormUrl} target="_blank" rel="noopener noreferrer">
-                    <Button 
-                      variant="outline" 
-                      className="w-full border-gold/30 text-gold hover:bg-gold hover:text-black hover:border-gold transition-all"
-                    >
-                      Request Service
-                      <ArrowUpRight className="w-4 h-4 ml-2" />
-                    </Button>
-                  </a>
+                  <Button 
+                    variant="outline" 
+                    onClick={() => openInquiry(category.title)}
+                    className="w-full border-gold/30 text-gold hover:bg-gold hover:text-black hover:border-gold transition-all"
+                  >
+                    Request Service
+                    <ArrowUpRight className="w-4 h-4 ml-2" />
+                  </Button>
                 </div>
               </motion.div>
             ))}
@@ -389,12 +400,13 @@ const Concierge = () => {
               Our dedicated concierge team is ready to curate your perfect experience. Let us handle the extraordinary.
             </p>
             <div className="flex flex-wrap justify-center gap-4">
-              <a href={CONTACT_INFO.inquiryFormUrl} target="_blank" rel="noopener noreferrer">
-                <Button className="bg-gold hover:bg-gold-light text-black font-semibold px-8 py-6 text-base">
-                  Contact Concierge
-                  <ArrowUpRight className="w-5 h-5 ml-2" />
-                </Button>
-              </a>
+              <Button 
+                onClick={() => openInquiry('Concierge Services')}
+                className="bg-gold hover:bg-gold-light text-black font-semibold px-8 py-6 text-base"
+              >
+                Contact Concierge
+                <ArrowUpRight className="w-5 h-5 ml-2" />
+              </Button>
               <a href={`tel:${CONTACT_INFO.phone}`}>
                 <Button 
                   variant="outline"
@@ -409,6 +421,14 @@ const Concierge = () => {
       </section>
 
       <Footer />
+      
+      {/* Inquiry Form Modal */}
+      <InquiryFormModal
+        isOpen={isInquiryOpen}
+        onClose={() => setIsInquiryOpen(false)}
+        source={inquiryContext.source}
+        context={inquiryContext.context}
+      />
     </section>
   );
 };
