@@ -54,6 +54,7 @@ import RouteResume from "./components/RouteResume";
 import BackNavButton from "./components/BackNavButton";
 import { ScrollToTopOnMount, ScrollToTopButton } from "./components/ScrollToTop";
 import AIChatWidget from "./components/AIChatWidget";
+import CopyrightNotice from "./components/CopyrightNotice";
 
 const queryClient = new QueryClient();
 
@@ -91,6 +92,7 @@ const App = () => (
               <RouteResume />
               <WelcomeModal />
               <AIChatWidget />
+              <CopyrightNotice variant="floating" />
               <AppLayout>
                 <Routes>
                 <Route path="/" element={<Index />} />

@@ -314,19 +314,47 @@ const Footer = () => {
         {/* Divider */}
         <div className="h-px bg-gradient-to-r from-transparent via-zinc-700 to-transparent mb-6" />
 
+        {/* Comprehensive Copyright & Legal Section */}
+        <div className="max-w-4xl mx-auto mb-8">
+          <div className="bg-zinc-900/50 border border-zinc-800 rounded-xl p-6 text-center">
+            <div className="flex items-center justify-center gap-2 mb-4">
+              <div className="w-8 h-8 bg-gold/10 border border-gold/30 rounded-lg flex items-center justify-center">
+                <span className="text-gold text-lg font-bold">©</span>
+              </div>
+              <h4 className="text-white font-semibold">Intellectual Property Notice</h4>
+            </div>
+            <p className="text-zinc-400 text-sm leading-relaxed mb-4">
+              This website, all its content, design, AI-powered tools, algorithms, code, and technology are the 
+              <span className="text-gold font-semibold"> exclusive intellectual property</span> of{" "}
+              <span className="text-white font-medium">Jane Abou Jaoude</span> and{" "}
+              <span className="text-white font-medium">JJ Global Capital</span>.
+            </p>
+            <p className="text-zinc-500 text-xs leading-relaxed mb-4">
+              Unauthorized reproduction, duplication, copying, modification, distribution, or commercial use of 
+              this platform or any of its features is <span className="text-red-400">strictly prohibited</span> and 
+              protected under international copyright, trademark, and intellectual property laws. Violators will be 
+              prosecuted to the fullest extent of the law.
+            </p>
+            <div className="flex flex-wrap items-center justify-center gap-2 text-xs text-zinc-600">
+              <span>Patent Pending</span>
+              <span className="text-gold">•</span>
+              <span>All Rights Reserved</span>
+              <span className="text-gold">•</span>
+              <span>© {currentYear}</span>
+            </div>
+          </div>
+        </div>
+
         {/* Bottom - Copyright & Legal */}
         <div className="flex flex-col items-center gap-4 text-sm text-zinc-500">
           <div className="text-center space-y-2">
-            <p className="font-medium">
-              © {currentYear} JJ Global Capital. All Rights Reserved.
+            <p className="font-medium text-white">
+              © {currentYear} JJ Global Capital. All Rights Reserved Worldwide.
             </p>
             <p className="text-xs text-zinc-600">
-              This website and all its content, design, AI tools, and technology are the exclusive intellectual property of{" "}
-              <span className="text-gold">Jane Abou Jaoude</span> and{" "}
-              <span className="text-gold">JJ Global Capital</span>.
-            </p>
-            <p className="text-xs text-zinc-600">
-              Unauthorized reproduction, duplication, or distribution of this platform or any of its features is strictly prohibited and protected under international copyright law.
+              Created and Developed by{" "}
+              <span className="text-gold font-medium">Jane Abou Jaoude</span> | Exclusive for{" "}
+              <span className="text-gold font-medium">JJ Global Capital</span>
             </p>
             <p className="mt-2">
               Powered by{" "}
