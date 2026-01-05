@@ -373,9 +373,12 @@ const downloadImages = async () => {
     const first = designResult.images[0];
     const { bytes, mime } = await getImageBytes(first);
     const ext = inferExtension(mime);
+    // Copy buffer to ensure it's a standard ArrayBuffer (not SharedArrayBuffer)
+    const safeBuffer = new ArrayBuffer(bytes.length);
+    new Uint8Array(safeBuffer).set(bytes);
 
     downloadBlob(
-      new Blob([bytes], { type: mime }),
+      new Blob([safeBuffer], { type: mime }),
       `interior-design-${propertyName || "design"}.${ext}`,
     );
 

@@ -18,8 +18,6 @@ import founderYacht from "@/assets/founder-yacht.jpeg";
 import founderAwardStage from "@/assets/founder-award-stage.jpeg";
 import founderRedCarpet from "@/assets/founder-red-carpet.jpeg";
 import founderPremium from "@/assets/founder-premium.png";
-import founderJetWhite from "@/assets/founder-jet-white.jpg";
-import founderYachtDubai from "@/assets/founder-yacht-dubai.jpg";
 
 // Animation variants
 const fadeInUp = {
@@ -787,15 +785,15 @@ const Founder = () => {
             viewport={{ once: true, margin: "-100px" }}
             variants={staggerContainer}
           >
-            {/* White jet outfit - Full height premium display */}
+            {/* Award stage photo - Full height premium display */}
             <motion.div 
               className="aspect-[3/4] rounded-3xl overflow-hidden border border-gold/20 shadow-2xl shadow-gold/10 group relative"
               variants={scaleIn}
             >
               <SafeImage 
-                src={founderJetWhite} 
+                src={founderAwardStage} 
                 fallbackSrc={founderHero}
-                alt="Jane Abou Jaoude - Private Aviation" 
+                alt="Jane Abou Jaoude - Industry Recognition" 
                 className="w-full h-full object-cover object-top group-hover:scale-105 transition-transform duration-1000"
               />
               {/* Premium overlay gradient */}
@@ -805,15 +803,15 @@ const Founder = () => {
               <div className="absolute bottom-4 right-4 w-12 h-12 border-r-2 border-b-2 border-gold/50 rounded-br-xl" />
             </motion.div>
             
-            {/* Yacht with Dubai skyline at night - Full height premium display */}
+            {/* Red carpet photo - Full height premium display */}
             <motion.div 
               className="aspect-[3/4] rounded-3xl overflow-hidden border border-gold/20 shadow-2xl shadow-gold/10 group relative"
               variants={scaleIn}
             >
               <SafeImage 
-                src={founderYachtDubai} 
+                src={founderRedCarpet} 
                 fallbackSrc={founderHero}
-                alt="Jane Abou Jaoude - Dubai Marina Lifestyle" 
+                alt="Jane Abou Jaoude - Red Carpet Event" 
                 className="w-full h-full object-cover object-center group-hover:scale-105 transition-transform duration-1000"
               />
               {/* Premium overlay gradient */}
@@ -875,19 +873,19 @@ const Founder = () => {
                 href="mailto:partnerships@jjglobalcapital.com"
                 className="inline-flex items-center gap-3 bg-zinc-900/80 backdrop-blur-sm border-2 border-zinc-700 text-white font-semibold px-10 py-4 rounded-2xl hover:bg-zinc-800 hover:border-gold/50 transition-all duration-300"
               >
-                Partnership <ExternalLink className="w-5 h-5" />
+                Partnership <ArrowUpRight className="w-5 h-5" />
               </a>
               <a 
                 href="mailto:collaboration@jjglobalcapital.com"
                 className="inline-flex items-center gap-3 bg-zinc-900/80 backdrop-blur-sm border-2 border-zinc-700 text-white font-semibold px-10 py-4 rounded-2xl hover:bg-zinc-800 hover:border-gold/50 transition-all duration-300"
               >
-                Collaboration <ExternalLink className="w-5 h-5" />
+                Collaboration <ArrowUpRight className="w-5 h-5" />
               </a>
               <a 
                 href="mailto:careers@jjglobalcapital.com"
                 className="inline-flex items-center gap-3 bg-zinc-900/80 backdrop-blur-sm border-2 border-zinc-700 text-white font-semibold px-10 py-4 rounded-2xl hover:bg-zinc-800 hover:border-gold/50 transition-all duration-300"
               >
-                Careers <Mail className="w-5 h-5" />
+                Careers <ArrowUpRight className="w-5 h-5" />
               </a>
             </motion.div>
 
@@ -984,19 +982,19 @@ const Founder = () => {
                 href="mailto:partnerships@jjholdinggroup.com"
                 className="inline-flex items-center gap-3 bg-zinc-900/80 backdrop-blur-sm border-2 border-zinc-700 text-white font-semibold px-10 py-4 rounded-2xl hover:bg-zinc-800 hover:border-gold/50 transition-all duration-300"
               >
-                Partnership <ExternalLink className="w-5 h-5" />
+                Partnership <ArrowUpRight className="w-5 h-5" />
               </a>
               <a 
                 href="mailto:collaboration@jjholdinggroup.com"
                 className="inline-flex items-center gap-3 bg-zinc-900/80 backdrop-blur-sm border-2 border-zinc-700 text-white font-semibold px-10 py-4 rounded-2xl hover:bg-zinc-800 hover:border-gold/50 transition-all duration-300"
               >
-                Collaboration <ExternalLink className="w-5 h-5" />
+                Collaboration <ArrowUpRight className="w-5 h-5" />
               </a>
               <a 
                 href="mailto:careers@jjholdinggroup.com"
                 className="inline-flex items-center gap-3 bg-zinc-900/80 backdrop-blur-sm border-2 border-zinc-700 text-white font-semibold px-10 py-4 rounded-2xl hover:bg-zinc-800 hover:border-gold/50 transition-all duration-300"
               >
-                Careers <Mail className="w-5 h-5" />
+                Careers <ArrowUpRight className="w-5 h-5" />
               </a>
             </motion.div>
 

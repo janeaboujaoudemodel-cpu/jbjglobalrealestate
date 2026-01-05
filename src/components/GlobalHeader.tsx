@@ -66,7 +66,7 @@ const GlobalHeader = () => {
   const isActive = (path: string) => location.pathname === path;
 
   return (
-    <header className="fixed top-0 left-0 right-0 z-50 bg-black/95 backdrop-blur-sm border-b border-white/5">
+    <header className="fixed top-0 left-0 right-0 z-50 bg-gradient-to-b from-black/98 via-black/95 to-black/90 backdrop-blur-md border-b border-gold/10">
       <div className="container mx-auto px-4">
         <div className="flex items-center justify-between h-16 lg:h-18">
           {/* Logo - Premium with separation from menu, clickable to home */}
@@ -80,15 +80,15 @@ const GlobalHeader = () => {
               <Link
                 key={link.href}
                 to={link.href}
-                className={`px-3 py-2 text-[13px] whitespace-nowrap transition-all relative group ${
+                className={`px-3 xl:px-4 py-2 text-[13px] xl:text-[14px] font-medium whitespace-nowrap transition-all relative group ${
                   isActive(link.href) 
                     ? "text-gold" 
-                    : "text-zinc-400 hover:text-white"
+                    : "text-zinc-300 hover:text-gold"
                 }`}
               >
                 {link.label}
                 {/* Gold underline for active/hover */}
-                <span className={`absolute bottom-0 left-3 right-3 h-[2px] bg-gold transition-transform origin-left ${
+                <span className={`absolute bottom-0 left-3 right-3 h-[2px] bg-gradient-to-r from-gold/80 to-gold transition-transform origin-left ${
                   isActive(link.href) ? "scale-x-100" : "scale-x-0 group-hover:scale-x-100"
                 }`} />
               </Link>

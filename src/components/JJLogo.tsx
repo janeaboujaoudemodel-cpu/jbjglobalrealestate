@@ -116,12 +116,12 @@ export const JJLogoHeader = ({ className = '' }: { className?: string }) => (
     </div>
     <span className="text-gold font-extralight text-2xl md:text-3xl leading-none drop-shadow-[0_0_8px_rgba(168,146,90,0.3)]">J</span>
     
-    {/* GLOBAL CAPITAL - Tight spacing, no extra gap */}
+    {/* GLOBAL CAPITAL - Tight spacing, reduced gap */}
     <div className="ml-2 md:ml-3 flex items-center text-white/95">
       <span className="font-semibold text-sm md:text-base lg:text-lg tracking-[0.12em]">
         GLOBAL
       </span>
-      <span className="mx-1.5 md:mx-2" />
+      <span className="mx-0.5 md:mx-1" />
       <span className="font-semibold text-sm md:text-base lg:text-lg tracking-[0.12em]">
         CAPITAL
       </span>
