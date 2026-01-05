@@ -255,11 +255,21 @@ const Footer = () => {
         {/* Divider */}
         <div className="h-px bg-gradient-to-r from-transparent via-zinc-700 to-transparent mb-6" />
 
-        {/* Bottom */}
-        <div className="flex flex-col items-center gap-3 text-sm text-zinc-500">
-          <div className="text-center">
-            <p>© {currentYear} JJ Global Capital. All rights reserved.</p>
-            <p className="mt-1">
+        {/* Bottom - Copyright & Legal */}
+        <div className="flex flex-col items-center gap-4 text-sm text-zinc-500">
+          <div className="text-center space-y-2">
+            <p className="font-medium">
+              © {currentYear} JJ Global Capital. All Rights Reserved.
+            </p>
+            <p className="text-xs text-zinc-600">
+              This website and all its content, design, AI tools, and technology are the exclusive intellectual property of{" "}
+              <span className="text-gold">Jane Abou Jaoude</span> and{" "}
+              <span className="text-gold">JJ Global Capital</span>.
+            </p>
+            <p className="text-xs text-zinc-600">
+              Unauthorized reproduction, duplication, or distribution of this platform or any of its features is strictly prohibited and protected under international copyright law.
+            </p>
+            <p className="mt-2">
               Powered by{" "}
               <a
                 href={CONTACT_INFO.holdingGroupUrl}

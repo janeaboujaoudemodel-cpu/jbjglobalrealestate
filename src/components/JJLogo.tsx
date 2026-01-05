@@ -51,7 +51,8 @@ const sizeConfig = {
     gap: 'mx-2 md:mx-3',
     textGap: 'mt-3 md:mt-4',
     textSpacing: 'tracking-[0.25em] md:tracking-[0.3em]',
-    wordGap: 'mx-4 md:mx-5 lg:mx-6',
+    // Symmetric spacing: GLOBAL and CAPITAL equidistant from center divider position
+    wordGap: 'mx-3 md:mx-4',
   },
 };
 
