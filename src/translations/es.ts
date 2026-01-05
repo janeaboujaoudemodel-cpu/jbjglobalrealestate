@@ -518,4 +518,22 @@ export const es = {
   'error.unauthorizedDesc': 'Por favor inicia sesión para acceder a esta página.',
   'error.goHome': 'Ir a Inicio',
   'error.tryAgain': 'Intentar de Nuevo',
+  
+  // AI Chat Support
+  'chat.title': 'Soporte IA',
+  'chat.subtitle': 'En línea 24/7',
+  'chat.welcome': '¡Hola! Soy tu asistente de IA de JJ Global Capital. ¿Cómo puedo ayudarte hoy con la inversión inmobiliaria en Dubái?',
+  'chat.placeholder': 'Escribe tu mensaje...',
+  'chat.error': 'Lo siento, encontré un error. Por favor intenta de nuevo o contacta a nuestro equipo directamente.',
+  'chat.askMe': '¡Pregúntame lo que sea!',
+  
+  // AI Tools
+  'aiTools.calendar': 'Calendario y Notas IA',
+  'aiTools.calendarDesc': 'Gestiona reuniones, eventos y notas con asistencia de IA',
+  'aiTools.financial': 'Asesor Financiero IA',
+  'aiTools.financialDesc': 'Obtén planificación financiera personalizada y consejos de inversión',
+  'aiTools.shopper': 'Comprador Personal IA',
+  'aiTools.shopperDesc': 'Encuentra tu propiedad perfecta con recomendaciones impulsadas por IA',
+  'aiTools.hub': 'Centro de IA',
+  'aiTools.hubDesc': 'Accede a todas las herramientas de IA en un solo lugar',
 };

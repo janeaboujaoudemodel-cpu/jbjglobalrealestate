@@ -205,4 +205,22 @@ export const it = {
   // Language Selector
   'lang.select': 'Seleziona Lingua',
   'lang.current': 'Attuale',
+  
+  // AI Chat Support
+  'chat.title': 'Supporto IA',
+  'chat.subtitle': 'Online 24/7',
+  'chat.welcome': 'Ciao! Sono il tuo assistente IA di JJ Global Capital. Come posso aiutarti oggi con gli investimenti immobiliari a Dubai?',
+  'chat.placeholder': 'Scrivi il tuo messaggio...',
+  'chat.error': 'Spiacente, si è verificato un errore. Riprova o contatta direttamente il nostro team.',
+  'chat.askMe': 'Chiedimi qualsiasi cosa!',
+  
+  // AI Tools
+  'aiTools.calendar': 'Calendario e Note IA',
+  'aiTools.calendarDesc': 'Gestisci riunioni, eventi e note con l\'assistenza IA',
+  'aiTools.financial': 'Consulente Finanziario IA',
+  'aiTools.financialDesc': 'Ottieni pianificazione finanziaria personalizzata e consigli di investimento',
+  'aiTools.shopper': 'Personal Shopper IA',
+  'aiTools.shopperDesc': 'Trova la tua proprietà ideale con raccomandazioni basate su IA',
+  'aiTools.hub': 'Hub IA',
+  'aiTools.hubDesc': 'Accedi a tutti gli strumenti IA in un unico posto',
 };

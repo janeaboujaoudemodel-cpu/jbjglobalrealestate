@@ -518,4 +518,22 @@ export const en = {
   'error.unauthorizedDesc': 'Please sign in to access this page.',
   'error.goHome': 'Go to Homepage',
   'error.tryAgain': 'Try Again',
+  
+  // AI Chat Support
+  'chat.title': 'AI Support',
+  'chat.subtitle': 'Online 24/7',
+  'chat.welcome': 'Hello! I\'m your JJ Global Capital AI assistant. How can I help you today with real estate investment in Dubai?',
+  'chat.placeholder': 'Type your message...',
+  'chat.error': 'Sorry, I encountered an error. Please try again or contact our team directly.',
+  'chat.askMe': 'Ask me anything!',
+  
+  // AI Tools
+  'aiTools.calendar': 'AI Calendar & Notes',
+  'aiTools.calendarDesc': 'Manage meetings, events, and notes with AI assistance',
+  'aiTools.financial': 'AI Financial Advisor',
+  'aiTools.financialDesc': 'Get personalized financial planning and investment advice',
+  'aiTools.shopper': 'AI Personal Shopper',
+  'aiTools.shopperDesc': 'Find your perfect property with AI-powered recommendations',
+  'aiTools.hub': 'AI Hub',
+  'aiTools.hubDesc': 'Access all AI-powered tools in one place',
 };

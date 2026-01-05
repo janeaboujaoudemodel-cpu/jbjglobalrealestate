@@ -205,4 +205,22 @@ export const zh = {
   // Language Selector
   'lang.select': '选择语言',
   'lang.current': '当前',
+  
+  // AI Chat Support
+  'chat.title': 'AI 支持',
+  'chat.subtitle': '全天候在线',
+  'chat.welcome': '您好！我是JJ Global Capital的AI助手。今天有什么关于迪拜房地产投资的问题需要帮助吗？',
+  'chat.placeholder': '输入您的消息...',
+  'chat.error': '抱歉，发生了错误。请重试或直接联系我们的团队。',
+  'chat.askMe': '随时问我！',
+  
+  // AI Tools
+  'aiTools.calendar': 'AI 日历和笔记',
+  'aiTools.calendarDesc': '借助AI管理会议、活动和笔记',
+  'aiTools.financial': 'AI 财务顾问',
+  'aiTools.financialDesc': '获取个性化财务规划和投资建议',
+  'aiTools.shopper': 'AI 个人购房助手',
+  'aiTools.shopperDesc': '借助AI推荐找到您理想的房产',
+  'aiTools.hub': 'AI 中心',
+  'aiTools.hubDesc': '在一个地方访问所有AI工具',
 };

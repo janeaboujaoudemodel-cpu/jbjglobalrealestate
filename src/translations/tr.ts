@@ -205,4 +205,22 @@ export const tr = {
   // Language Selector
   'lang.select': 'Dil Seçin',
   'lang.current': 'Mevcut',
+  
+  // AI Chat Support
+  'chat.title': 'AI Destek',
+  'chat.subtitle': '7/24 Çevrimiçi',
+  'chat.welcome': 'Merhaba! Ben JJ Global Capital AI asistanınızım. Bugün Dubai\'deki emlak yatırımları konusunda size nasıl yardımcı olabilirim?',
+  'chat.placeholder': 'Mesajınızı yazın...',
+  'chat.error': 'Üzgünüm, bir hata oluştu. Lütfen tekrar deneyin veya ekibimizle doğrudan iletişime geçin.',
+  'chat.askMe': 'Bana her şeyi sorun!',
+  
+  // AI Tools
+  'aiTools.calendar': 'AI Takvim ve Notlar',
+  'aiTools.calendarDesc': 'Toplantıları, etkinlikleri ve notları AI yardımıyla yönetin',
+  'aiTools.financial': 'AI Finansal Danışman',
+  'aiTools.financialDesc': 'Kişiselleştirilmiş finansal planlama ve yatırım tavsiyesi alın',
+  'aiTools.shopper': 'AI Kişisel Alışveriş Danışmanı',
+  'aiTools.shopperDesc': 'AI destekli önerilerle mükemmel mülkünüzü bulun',
+  'aiTools.hub': 'AI Merkezi',
+  'aiTools.hubDesc': 'Tüm AI araçlarına tek bir yerden erişin',
 };

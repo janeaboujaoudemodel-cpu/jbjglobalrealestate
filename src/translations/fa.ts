@@ -205,4 +205,22 @@ export const fa = {
   // Language Selector
   'lang.select': 'انتخاب زبان',
   'lang.current': 'فعلی',
+  
+  // AI Chat Support
+  'chat.title': 'پشتیبانی هوش مصنوعی',
+  'chat.subtitle': '۲۴/۷ آنلاین',
+  'chat.welcome': 'سلام! من دستیار هوش مصنوعی JJ Global Capital هستم. امروز چگونه می‌توانم در مورد سرمایه‌گذاری املاک دبی به شما کمک کنم؟',
+  'chat.placeholder': 'پیام خود را بنویسید...',
+  'chat.error': 'متأسفم، خطایی رخ داد. لطفاً دوباره تلاش کنید یا مستقیماً با تیم ما تماس بگیرید.',
+  'chat.askMe': 'هر چیزی بپرسید!',
+  
+  // AI Tools
+  'aiTools.calendar': 'تقویم و یادداشت هوش مصنوعی',
+  'aiTools.calendarDesc': 'مدیریت جلسات، رویدادها و یادداشت‌ها با کمک هوش مصنوعی',
+  'aiTools.financial': 'مشاور مالی هوش مصنوعی',
+  'aiTools.financialDesc': 'برنامه‌ریزی مالی شخصی‌سازی شده و مشاوره سرمایه‌گذاری دریافت کنید',
+  'aiTools.shopper': 'خریدار شخصی هوش مصنوعی',
+  'aiTools.shopperDesc': 'با توصیه‌های مبتنی بر هوش مصنوعی ملک ایده‌آل خود را پیدا کنید',
+  'aiTools.hub': 'مرکز هوش مصنوعی',
+  'aiTools.hubDesc': 'دسترسی به همه ابزارهای هوش مصنوعی در یک مکان',
 };
