@@ -328,10 +328,14 @@ export default function BrokerAITools({ subscription }: BrokerAIToolsProps) {
           </div>
           
           <div className="prose prose-invert max-w-none">
-            <div 
-              className="text-zinc-300 whitespace-pre-wrap"
-              dangerouslySetInnerHTML={{ __html: analysisResult.replace(/\n/g, '<br/>') }}
-            />
+            <div className="text-zinc-300 whitespace-pre-wrap">
+              {analysisResult.split('\n').map((line, i, arr) => (
+                <span key={i}>
+                  {line}
+                  {i < arr.length - 1 && <br />}
+                </span>
+              ))}
+            </div>
           </div>
         </motion.div>
       )}
