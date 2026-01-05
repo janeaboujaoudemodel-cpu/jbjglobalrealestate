@@ -28,175 +28,162 @@ const Terms = () => {
 
             <div className="space-y-8 text-zinc-300">
               <section>
-                <h2 className="text-gold text-xl font-semibold mb-4">1. Agreement to Terms</h2>
+                <h2 className="text-gold text-xl font-semibold mb-4">1. Who We Are</h2>
                 <p>
-                  By accessing or using the JJ Global Capital website and services, you agree to be bound by these Terms of Service. JJ Global Capital is a division of{" "}
-                  <a href={JJ_HOLDING_URL} target="_blank" rel="noopener noreferrer" className="text-gold hover:underline">
-                    JJ Holding Group
-                  </a>
-                  , registered and operating in the United Arab Emirates.
+                  This website is operated by JJ Global Capital (the "Company", "we", "us", "our"). 
+                  We are a Dubai-based real estate brokerage and provide real estate brokerage support 
+                  for property sales and leasing, and (where applicable) holiday homes support subject 
+                  to relevant approvals and permits.
                 </p>
               </section>
 
               <section>
-                <h2 className="text-gold text-xl font-semibold mb-4">2. Our Services</h2>
-                <p>JJ Global Capital provides:</p>
+                <h2 className="text-gold text-xl font-semibold mb-4">2. Scope of Our Services</h2>
+                <p>We provide:</p>
                 <ul className="list-disc pl-6 mt-2 space-y-2">
-                  <li>Real estate brokerage and advisory services</li>
-                  <li>AI-powered property matching and recommendations</li>
-                  <li>Property management services</li>
-                  <li>Investment advisory services</li>
-                  <li>Mortgage advisory services</li>
-                  <li>Legal real estate services</li>
-                  <li>Design, architecture, and fit-out services</li>
-                  <li>Luxury concierge and lifestyle services</li>
+                  <li>Real estate brokerage support (property sales and leasing)</li>
+                  <li>Property search and introductions to listings/projects</li>
+                  <li>Coordination support for viewings, documentation and transaction process (as applicable)</li>
+                  <li>Holiday homes support (short-term rental support) only where permitted and subject to relevant approvals/permits</li>
+                  <li>Tools and calculators (including AI-enabled tools) for informational use</li>
+                  <li>Introductions to independent licensed third parties (for example: law firms, banks/mortgage specialists, conveyancing providers, and licensed property management providers)</li>
                 </ul>
               </section>
 
               <section>
-                <h2 className="text-gold text-xl font-semibold mb-4">3. Property Information</h2>
-                <p>
-                  While we strive to ensure accuracy, property information, prices, availability, and specifications are subject to change without notice. All property details should be verified directly with the developer or through our advisors before making any investment decisions.
+                <h2 className="text-gold text-xl font-semibold mb-4">3. What We Do NOT Do (Important)</h2>
+                <p className="mb-4">We do NOT provide:</p>
+                <ul className="list-disc pl-6 mt-2 space-y-2">
+                  <li><strong>Legal advice or legal services</strong></li>
+                  <li><strong>Mortgage advice, mortgage brokerage, or banking services</strong></li>
+                  <li><strong>Financial advice, investment advisory, portfolio management, or any regulated financial service</strong></li>
+                  <li><strong>Third-party long-term property management services</strong> unless expressly stated and licensed for that activity</li>
+                </ul>
+                <p className="mt-4 text-zinc-400">
+                  If you need legal, mortgage, financial, or other regulated services, we may introduce you to 
+                  independent licensed providers. Those providers offer services under their own licences/employers 
+                  and you contract directly with them.
                 </p>
               </section>
 
               <section>
-                <h2 className="text-gold text-xl font-semibold mb-4">4. AI Property Matcher</h2>
+                <h2 className="text-gold text-xl font-semibold mb-4">4. Third-Party Introductions and Partner Services</h2>
                 <p>
-                  Our AI Property Matcher is provided as a complimentary service to help identify potential properties based on your stated preferences. Recommendations are algorithmic suggestions and do not constitute professional investment advice. We recommend consulting with our advisors for comprehensive guidance.
+                  Any third-party professional or partner displayed on our website (including legal, mortgage, 
+                  and property management partners) is an independent party. We do not control and are not 
+                  responsible for their advice, services, fees, timelines, licensing, or outcomes. You must 
+                  conduct your own checks and agree terms directly with them.
                 </p>
               </section>
 
               <section>
-                <h2 className="text-gold text-xl font-semibold mb-4">5. Intellectual Property</h2>
-                <p>
-                  All content, trademarks, and intellectual property on this website belong to JJ Global Capital and JJ Holding Group. The AI Property Matcher technology and methodology are proprietary and exclusive to JJ Global Capital. Unauthorized reproduction, distribution, or use is prohibited.
-                </p>
-              </section>
-
-              <section>
-                <h2 className="text-gold text-xl font-semibold mb-4">6. Broker Toolkit & Educational Content License</h2>
-                <p>
-                  Access to the Broker Toolkit, training courses, and educational materials is granted on a personal, non-transferable license basis. By subscribing to or accessing these services, you agree to the following:
+                <h2 className="text-gold text-xl font-semibold mb-4">5. Tools, Calculators, and AI Features</h2>
+                <p className="mb-4">
+                  Our tools (including any AI-enabled features such as quizzes, comparisons, evaluators, 
+                  reports, and calculators) are provided for general informational purposes only.
                 </p>
                 <ul className="list-disc pl-6 mt-2 space-y-2">
-                  <li><strong>Personal Use Only:</strong> Content is licensed for your individual professional development and may not be shared, redistributed, or sublicensed.</li>
-                  <li><strong>Single Device Policy:</strong> Your subscription is limited to one active device at a time. Access from multiple devices may result in account suspension.</li>
-                  <li><strong>No Copying or Distribution:</strong> Downloading, screen recording, photographing, or redistributing course materials is strictly prohibited.</li>
-                  <li><strong>Watermarking & Tracking:</strong> All content is watermarked with your unique user ID for traceability.</li>
-                  <li><strong>Credential Security:</strong> You are responsible for maintaining the confidentiality of your login credentials. Sharing credentials with third parties is prohibited.</li>
+                  <li>Outputs are estimates and may be incomplete, outdated, or inaccurate.</li>
+                  <li>You should not rely on these tools as legal, mortgage, financial, or investment advice.</li>
+                  <li>You remain responsible for verifying all information with qualified licensed professionals and/or official sources.</li>
                 </ul>
               </section>
 
               <section>
-                <h2 className="text-gold text-xl font-semibold mb-4">7. Copyright Violations & Legal Consequences</h2>
+                <h2 className="text-gold text-xl font-semibold mb-4">6. Property Information and Listings</h2>
                 <p>
-                  Violation of the content license terms constitutes copyright infringement under UAE law. Violators may be subject to:
-                </p>
-                <ul className="list-disc pl-6 mt-2 space-y-2">
-                  <li>Immediate account termination without refund</li>
-                  <li>Civil liability for damages under UAE Federal Law No. 38 of 2021 (Copyright and Related Rights)</li>
-                  <li>Criminal prosecution under UAE Federal Decree-Law No. 5 of 2012 (Combating Cybercrimes)</li>
-                  <li>Fines up to AED 500,000 and/or imprisonment for up to 2 years</li>
-                </ul>
-                <p className="mt-4">
-                  Our systems employ advanced security monitoring including device fingerprinting, IP tracking, and content access logging. Any unauthorized sharing will be detected and traced back to the originating account.
+                  Property information, imagery, brochures, floor plans, prices, availability, and descriptions 
+                  may be provided by developers/owners or third parties and may change at any time. We do not 
+                  guarantee accuracy, completeness, or availability. Final terms are subject to official contracts 
+                  and approvals.
                 </p>
               </section>
 
               <section>
-                <h2 className="text-gold text-xl font-semibold mb-4">8. User Conduct</h2>
-                <p>You agree not to:</p>
+                <h2 className="text-gold text-xl font-semibold mb-4">7. Consultations, Booking, and Communications</h2>
+                <p className="mb-4">When you book a consultation or submit an inquiry, you agree that:</p>
                 <ul className="list-disc pl-6 mt-2 space-y-2">
-                  <li>Use our services for any unlawful purpose</li>
-                  <li>Submit false or misleading information</li>
-                  <li>Attempt to access restricted areas of our systems</li>
-                  <li>Reproduce or redistribute our proprietary content</li>
-                  <li>Interfere with the proper functioning of our website</li>
-                  <li>Share your account credentials with others</li>
-                  <li>Use automated tools to scrape or download content</li>
+                  <li>The consultation is focused on real estate brokerage guidance and introductions only</li>
+                  <li>We may contact you via phone, email, or messaging apps regarding your inquiry</li>
+                  <li>Marketing communications (if any) will be sent only where you have provided the required consent or where permitted by applicable law</li>
                 </ul>
               </section>
 
               <section>
-                <h2 className="text-gold text-xl font-semibold mb-4">9. Disclaimer of Warranties</h2>
+                <h2 className="text-gold text-xl font-semibold mb-4">8. User Accounts (Where Applicable)</h2>
                 <p>
-                  Our services are provided "as is" without warranties of any kind. We do not guarantee uninterrupted access to our website or that property transactions will be successful. Investment in real estate involves risks, and past performance does not guarantee future results.
+                  If you create an account, you are responsible for keeping your login credentials secure. 
+                  You must not use the site unlawfully or attempt to access restricted areas without authorization.
                 </p>
               </section>
 
               <section>
-                <h2 className="text-gold text-xl font-semibold mb-4">10. Limitation of Liability</h2>
+                <h2 className="text-gold text-xl font-semibold mb-4">9. Acceptable Use</h2>
+                <p className="mb-4">You agree not to:</p>
+                <ul className="list-disc pl-6 mt-2 space-y-2">
+                  <li>Misuse the site or attempt to disrupt its functionality</li>
+                  <li>Upload unlawful, misleading, or infringing content</li>
+                  <li>Copy, scrape, or republish our content without permission</li>
+                </ul>
+              </section>
+
+              <section>
+                <h2 className="text-gold text-xl font-semibold mb-4">10. Intellectual Property</h2>
                 <p>
-                  To the maximum extent permitted by UAE law, JJ Global Capital shall not be liable for any indirect, incidental, special, or consequential damages arising from your use of our services.
+                  All website content, branding, logos, design elements, and software are owned by or licensed 
+                  to us and are protected by applicable laws. You may not reproduce, modify, distribute, or 
+                  create derivative works without written permission.
                 </p>
               </section>
 
               <section>
-                <h2 className="text-gold text-xl font-semibold mb-4">11. Governing Law</h2>
+                <h2 className="text-gold text-xl font-semibold mb-4">11. Disclaimers</h2>
+                <p className="mb-4">To the fullest extent permitted by applicable law:</p>
+                <ul className="list-disc pl-6 mt-2 space-y-2">
+                  <li>The site and services are provided "as is" and "as available"</li>
+                  <li>We make no warranties regarding outcomes of any transaction</li>
+                  <li>We are not liable for third-party services, delays, losses, or indirect damages</li>
+                </ul>
+              </section>
+
+              <section>
+                <h2 className="text-gold text-xl font-semibold mb-4">12. Limitation of Liability</h2>
                 <p>
-                  These Terms shall be governed by and construed in accordance with the laws of the United Arab Emirates. Any disputes shall be subject to the exclusive jurisdiction of the courts of Dubai, UAE.
+                  Our total liability to you for any claim related to the website or services will be limited 
+                  to the maximum extent permitted by applicable law.
                 </p>
               </section>
 
               <section>
-                <h2 className="text-gold text-xl font-semibold mb-4">12. Copyright Registration</h2>
+                <h2 className="text-gold text-xl font-semibold mb-4">13. Indemnity</h2>
                 <p>
-                  All original content, training materials, and educational resources provided by JJ Global Capital are registered with the UAE Ministry of Economy under Copyright Registration. For intellectual property inquiries, contact:
-                </p>
-                <p className="mt-2">
-                  Email: <a href="mailto:legal@jjglobalcapital.com" className="text-gold hover:underline">legal@jjglobalcapital.com</a>
+                  You agree to indemnify and hold us harmless from claims arising from your misuse of the website, 
+                  violation of these Terms, or infringement of any rights.
                 </p>
               </section>
 
               <section>
-                <h2 className="text-gold text-xl font-semibold mb-4">13. Contact Us</h2>
+                <h2 className="text-gold text-xl font-semibold mb-4">14. Governing Law</h2>
                 <p>
-                  For questions about these Terms, please contact us at:
+                  These Terms are governed by the laws applicable in the United Arab Emirates. Any disputes 
+                  will be subject to the competent courts, as applicable.
+                </p>
+              </section>
+
+              <section>
+                <h2 className="text-gold text-xl font-semibold mb-4">15. Contact</h2>
+                <p>
+                  For questions about these Terms:
                 </p>
                 <p className="mt-4">
                   <strong>JJ Global Capital</strong><br />
-                  Downtown Dubai, United Arab Emirates<br />
-                  Email: <a href="mailto:Invest@JJGlobalCapital.com" className="text-gold hover:underline">Invest@JJGlobalCapital.com</a><br />
-                  Phone: <a href="tel:+971565911000" className="text-gold hover:underline">+971 56 591 1000</a>
+                  Real Estate Brokerage<br />
+                  Dubai, United Arab Emirates<br />
+                  Email: <a href="mailto:privacy@jjglobalcapital.com" className="text-gold hover:underline">privacy@jjglobalcapital.com</a>
                 </p>
-                <p className="mt-4 text-zinc-500 text-sm">
-                  © {new Date().getFullYear()} JJ Global Capital. All Rights Reserved.<br />
+                <p className="mt-6 text-zinc-500 text-sm">
+                  © {new Date().getFullYear()} JJ Global Capital Real Estate Brokerage. All Rights Reserved.<br />
                   Developed and Created by Founder Jane Abou Jaoude
-                </p>
-              </section>
-
-              <section>
-                <h2 className="text-gold text-xl font-semibold mb-4">7. Disclaimer of Warranties</h2>
-                <p>
-                  Our services are provided "as is" without warranties of any kind. We do not guarantee uninterrupted access to our website or that property transactions will be successful. Investment in real estate involves risks, and past performance does not guarantee future results.
-                </p>
-              </section>
-
-              <section>
-                <h2 className="text-gold text-xl font-semibold mb-4">8. Limitation of Liability</h2>
-                <p>
-                  To the maximum extent permitted by UAE law, JJ Global Capital shall not be liable for any indirect, incidental, special, or consequential damages arising from your use of our services.
-                </p>
-              </section>
-
-              <section>
-                <h2 className="text-gold text-xl font-semibold mb-4">9. Governing Law</h2>
-                <p>
-                  These Terms shall be governed by and construed in accordance with the laws of the United Arab Emirates. Any disputes shall be subject to the exclusive jurisdiction of the courts of Dubai, UAE.
-                </p>
-              </section>
-
-              <section>
-                <h2 className="text-gold text-xl font-semibold mb-4">10. Contact Us</h2>
-                <p>
-                  For questions about these Terms, please contact us at:
-                </p>
-                <p className="mt-4">
-                  <strong>JJ Global Capital</strong><br />
-                  Downtown Dubai, United Arab Emirates<br />
-                  Email: <a href="mailto:Invest@JJGlobalCapital.com" className="text-gold hover:underline">Invest@JJGlobalCapital.com</a><br />
-                  Phone: <a href="tel:+971565911000" className="text-gold hover:underline">+971 56 591 1000</a>
                 </p>
               </section>
             </div>
