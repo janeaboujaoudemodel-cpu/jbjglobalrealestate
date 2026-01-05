@@ -161,9 +161,9 @@ const Founder = () => {
       location: "Dubai, UAE"
     },
     {
-      year: "2020-2024",
-      title: "dnata - Quality Assurance Lead",
-      description: "Managed quality assurance and operations for Address Hotels at Dubai Airport Terminals 1 & 3. Led 495+ employees including drivers and coordinators. Implemented KPIs, training programs, and mystery shopping standards.",
+      year: "2021-2024",
+      title: "Luxury Transportation - Head of Quality & Operations",
+      description: "Led quality assurance and operations for B2B luxury pick-up and limousine services at Dubai Airport Terminals 1 & 3 and hotels. Managed 495+ employees including drivers and coordinators. Implemented KPIs, training programs, and mystery shopping standards.",
       location: "Dubai, UAE"
     },
     {
@@ -545,7 +545,7 @@ const Founder = () => {
                   Origins & Early Entrepreneurship
                 </h3>
                 <p className="text-lg mb-4">
-                  Jane Abou Jaoude was born on September 5, 1998, in Lebanon—a Virgo with an innate drive for precision and excellence. 
+                  Jane Abou Jaoude was born on August 25, 1998, in Lebanon—a Virgo with an innate drive for precision and excellence. 
                   Growing up fluent in French, English, Arabic, and Spanish, she developed a global perspective from an early age.
                 </p>
                 <p className="text-lg mb-4 text-zinc-400">
@@ -569,10 +569,10 @@ const Founder = () => {
                   This pivotal move would transform her career trajectory and expand her expertise exponentially.
                 </p>
                 <p className="text-lg mb-4 text-zinc-400">
-                  At dnata, a government-affiliated company, she rose to Head of Quality Assurance and Operations, 
-                  overseeing Address Hotels at Dubai Airport Terminals 1 and 3. Managing a team of 495+ employees—from 
-                  drivers to coordinators—she implemented comprehensive KPI systems, training programs, ministry-standard 
-                  mystery shopping protocols, and quality benchmarks that elevated service excellence.
+                  Starting in 2021, she joined the luxury transportation sector, rising to Head of Quality and Operations 
+                  for B2B pick-up and limousine services serving Dubai Airport Terminals 1 and 3, as well as hotels. 
+                  Managing a team of 495+ employees—from drivers to coordinators—she implemented comprehensive KPI systems, 
+                  training programs, ministry-standard mystery shopping protocols, and quality benchmarks that elevated service excellence.
                 </p>
                 <p className="text-lg text-zinc-400">
                   Her corporate leadership experience provided invaluable insights into operations management, team building, 

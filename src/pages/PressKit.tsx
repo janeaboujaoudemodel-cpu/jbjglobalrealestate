@@ -162,7 +162,7 @@ const PressKit = () => {
   };
 
   const handleCopyBio = async () => {
-    const bioText = `Jane Abou Jaoude is the Founder and Chairwoman of JJ Holding Group, a multi-division enterprise encompassing JJ Global Capital (real estate), JJ Group (operations), JJ Fashion House (haute couture), JJ and Serena (lifestyle), and Mrs Jane (luxury home services). Born September 5, 1998, in Lebanon, she founded her first business—James Beauty—in 2014 while still studying. Fluent in French, English, Arabic, and Spanish, Jane relocated to Dubai in 2020, where she served as Head of Quality Assurance at dnata, managing 495+ employees and implementing quality standards for Address Hotels at Dubai Airport. After training top real estate brokers and earning certifications in fitness, nutrition, and digital marketing, she established JJ Holding Group in 2025 to unite all her expertise under one institutional umbrella.`;
+    const bioText = `Jane Abou Jaoude is the Founder and Chairwoman of JJ Holding Group, a multi-division enterprise encompassing JJ Global Capital (real estate), JJ Group (operations), JJ Fashion House (haute couture), JJ and Serena (lifestyle), and Mrs Jane (luxury home services). Born August 25, 1998, in Lebanon, she founded her first business—James Beauty—in 2014 while still studying. Fluent in French, English, Arabic, and Spanish, Jane relocated to Dubai in 2020. Starting in 2021, she served as Head of Quality and Operations for B2B luxury pick-up and limousine services at Dubai Airport Terminals 1 & 3 and hotels, managing 495+ employees. After training top real estate brokers and earning certifications in fitness, nutrition, and digital marketing, she established JJ Holding Group in 2025.`;
     
     try {
       await navigator.clipboard.writeText(bioText);
@@ -251,12 +251,11 @@ const PressKit = () => {
                 <span className="text-gold font-semibold">Jane Abou Jaoude</span> is the Founder and Chairwoman of JJ Holding Group, 
                 a multi-division enterprise encompassing JJ Global Capital (real estate), JJ Group (operations), 
                 JJ Fashion House (haute couture), JJ and Serena (lifestyle), and Mrs Jane (luxury home services). 
-                Born September 5, 1998, in Lebanon, she founded her first business—James Beauty—in 2014 while still studying. 
-                Fluent in French, English, Arabic, and Spanish, Jane relocated to Dubai in 2020, where she served as 
-                Head of Quality Assurance at dnata, managing 495+ employees and implementing quality standards for 
-                Address Hotels at Dubai Airport. After training top real estate brokers and earning certifications in 
-                fitness, nutrition, and digital marketing, she established JJ Holding Group in 2025 to unite all her 
-                expertise under one institutional umbrella.
+                Born August 25, 1998, in Lebanon, she founded her first business—James Beauty—in 2014 while still studying. 
+                Fluent in French, English, Arabic, and Spanish, Jane relocated to Dubai in 2020. Starting in 2021, she served as 
+                Head of Quality and Operations for B2B luxury pick-up and limousine services at Dubai Airport Terminals 1 & 3 
+                and hotels, managing 495+ employees. After training top real estate brokers and earning certifications in 
+                fitness, nutrition, and digital marketing, she established JJ Holding Group in 2025.
               </p>
             </motion.div>
           </motion.div>
