@@ -769,7 +769,7 @@ const Founder = () => {
               variants={fadeInUp}
             >
               <Link
-                to="/company-profile"
+                to="/press-kit"
                 className="inline-flex items-center gap-3 bg-gradient-to-r from-gold to-[#C4A962] text-black font-semibold px-8 py-4 rounded-xl hover:opacity-90 transition-all duration-300 shadow-lg shadow-gold/30"
               >
                 <Download className="w-5 h-5" />
