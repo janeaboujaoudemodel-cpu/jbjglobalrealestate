@@ -1,5 +1,6 @@
 import "https://deno.land/x/xhr@0.1.0/mod.ts";
 import { serve } from "https://deno.land/std@0.168.0/http/server.ts";
+import { createClient } from "https://esm.sh/@supabase/supabase-js@2";
 
 const ALLOWED_ORIGINS = [
   "https://jjglobalcapital.com",
@@ -119,6 +120,41 @@ serve(async (req) => {
   }
 
   try {
+    // Authentication check - require valid user session
+    const authHeader = req.headers.get('Authorization');
+    if (!authHeader) {
+      console.log('AI chat request rejected: No authorization header');
+      return new Response(
+        JSON.stringify({ 
+          error: 'Authentication required',
+          response: 'Please sign in to use the AI chat assistant. If you need immediate help, contact our team:\n\n📧 Email: invest@jjglobalcapital.com\n📞 Phone: +971 50 747 9498\n💬 WhatsApp: +971 50 747 9498'
+        }),
+        { status: 401, headers: { ...corsHeaders, 'Content-Type': 'application/json' } }
+      );
+    }
+
+    const supabaseUrl = Deno.env.get('SUPABASE_URL')!;
+    const supabaseAnonKey = Deno.env.get('SUPABASE_ANON_KEY')!;
+    
+    const supabase = createClient(supabaseUrl, supabaseAnonKey, {
+      global: { headers: { Authorization: authHeader } }
+    });
+
+    const { data: { user }, error: authError } = await supabase.auth.getUser();
+    
+    if (authError || !user) {
+      console.log('AI chat request rejected: Invalid token', authError?.message);
+      return new Response(
+        JSON.stringify({ 
+          error: 'Invalid authentication token',
+          response: 'Your session has expired. Please sign in again to continue using the AI chat assistant.\n\n📧 Email: invest@jjglobalcapital.com\n📞 Phone: +971 50 747 9498\n💬 WhatsApp: +971 50 747 9498'
+        }),
+        { status: 401, headers: { ...corsHeaders, 'Content-Type': 'application/json' } }
+      );
+    }
+
+    console.log(`AI chat request from authenticated user: ${user.id}`);
+
     const { message, history = [], service, userName } = await req.json();
 
     if (!message || typeof message !== 'string') {
