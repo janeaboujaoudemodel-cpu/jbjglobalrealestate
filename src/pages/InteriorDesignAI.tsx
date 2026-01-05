@@ -283,13 +283,13 @@ const InteriorDesignAI = () => {
             
             <div className="grid md:grid-cols-2 gap-6">
               {/* AI Design */}
-              <Card className="bg-gradient-to-br from-fuchsia-900/30 to-purple-900/30 border-fuchsia-500/30 relative overflow-hidden">
+              <Card className="bg-gradient-to-br from-fuchsia-900/40 to-purple-900/40 border-fuchsia-500/50 relative overflow-hidden shadow-lg shadow-fuchsia-500/20">
                 <div className="absolute top-4 right-4">
                   <Badge className="bg-fuchsia-500 text-white">RECOMMENDED</Badge>
                 </div>
                 <CardHeader>
                   <CardTitle className="text-white flex items-center gap-3">
-                    <div className="w-12 h-12 rounded-xl bg-fuchsia-500/20 flex items-center justify-center">
+                    <div className="w-12 h-12 rounded-xl bg-gradient-to-br from-fuchsia-500/30 to-purple-500/30 flex items-center justify-center border border-fuchsia-500/30">
                       <Sparkles className="w-6 h-6 text-fuchsia-400" />
                     </div>
                     AI Design Studio
@@ -303,7 +303,7 @@ const InteriorDesignAI = () => {
                     </div>
                     <div className="flex items-center gap-3 text-zinc-300">
                       <DollarSign className="w-5 h-5 text-fuchsia-400" />
-                      <span>Starting from <span className="text-fuchsia-400 font-bold">$99</span> (90% cheaper)</span>
+                      <span>Affordable packages from <span className="text-fuchsia-400 font-bold">$99</span></span>
                     </div>
                     <div className="flex items-center gap-3 text-zinc-300">
                       <CheckCircle2 className="w-5 h-5 text-fuchsia-400" />
@@ -311,13 +311,13 @@ const InteriorDesignAI = () => {
                     </div>
                     <div className="flex items-center gap-3 text-zinc-300">
                       <Clock className="w-5 h-5 text-fuchsia-400" />
-                      <span>Unlimited revisions with instant updates</span>
+                      <span>Instant updates & multiple revisions</span>
                     </div>
                   </div>
                   
                   <Button 
                     onClick={() => setShowComparison(false)}
-                    className="w-full bg-gradient-to-r from-fuchsia-500 to-purple-600 hover:from-fuchsia-600 hover:to-purple-700 text-white py-6 mt-4"
+                    className="w-full bg-gradient-to-r from-fuchsia-500 to-purple-600 hover:from-fuchsia-600 hover:to-purple-700 text-white py-6 mt-4 shadow-lg shadow-fuchsia-500/25"
                   >
                     Design with AI
                     <Sparkles className="w-4 h-4 ml-2" />
@@ -326,45 +326,106 @@ const InteriorDesignAI = () => {
               </Card>
 
               {/* Human Designer */}
-              <Card className="bg-zinc-900/50 border-zinc-700">
+              <Card className="bg-gradient-to-br from-zinc-800/80 to-zinc-900/80 border-zinc-600 relative overflow-hidden">
                 <CardHeader>
                   <CardTitle className="text-white flex items-center gap-3">
-                    <div className="w-12 h-12 rounded-xl bg-zinc-800 flex items-center justify-center">
-                      <User className="w-6 h-6 text-zinc-400" />
+                    <div className="w-12 h-12 rounded-xl bg-zinc-700/50 flex items-center justify-center border border-zinc-600">
+                      <User className="w-6 h-6 text-zinc-300" />
                     </div>
                     Professional Designer
                   </CardTitle>
                 </CardHeader>
                 <CardContent className="space-y-4">
                   <div className="space-y-3">
-                    <div className="flex items-center gap-3 text-zinc-400">
-                      <Clock className="w-5 h-5" />
-                      <span>2-4 weeks delivery time</span>
+                    <div className="flex items-center gap-3 text-zinc-300">
+                      <Clock className="w-5 h-5 text-zinc-400" />
+                      <span>Takes more time for personalized results</span>
                     </div>
-                    <div className="flex items-center gap-3 text-zinc-400">
-                      <DollarSign className="w-5 h-5" />
-                      <span>Starting from $2,000+</span>
+                    <div className="flex items-center gap-3 text-zinc-300">
+                      <DollarSign className="w-5 h-5 text-zinc-400" />
+                      <span>Custom pricing based on project scope</span>
                     </div>
-                    <div className="flex items-center gap-3 text-zinc-400">
-                      <User className="w-5 h-5" />
-                      <span>Human touch & consultation</span>
+                    <div className="flex items-center gap-3 text-zinc-300">
+                      <User className="w-5 h-5 text-zinc-400" />
+                      <span>Personal consultation & human expertise</span>
                     </div>
-                    <div className="flex items-center gap-3 text-zinc-400">
-                      <CheckCircle2 className="w-5 h-5" />
-                      <span>Limited revisions per project</span>
+                    <div className="flex items-center gap-3 text-zinc-300">
+                      <CheckCircle2 className="w-5 h-5 text-zinc-400" />
+                      <span>Ideal for complex, large-scale projects</span>
                     </div>
                   </div>
                   
                   <Button 
                     onClick={() => setIsInquiryOpen(true)}
-                    variant="outline"
-                    className="w-full border-zinc-600 text-zinc-300 hover:bg-zinc-800 py-6 mt-4"
+                    className="w-full bg-zinc-700 hover:bg-zinc-600 text-white border border-zinc-500 py-6 mt-4"
                   >
                     Contact Designer
                     <ArrowRight className="w-4 h-4 ml-2" />
                   </Button>
                 </CardContent>
               </Card>
+            </div>
+
+            {/* Quick AI Packages Section */}
+            <div className="mt-12">
+              <h3 className="text-xl md:text-2xl font-bold text-white text-center mb-6">
+                Or Choose a Quick AI Package
+              </h3>
+              <p className="text-zinc-400 text-center mb-8 max-w-2xl mx-auto">
+                Get instant designs with our ready-to-go packages. Pay once, download immediately.
+              </p>
+              
+              <div className="grid md:grid-cols-4 gap-4">
+                {packages.map((pkg) => (
+                  <Card 
+                    key={pkg.id}
+                    className={`relative cursor-pointer transition-all hover:scale-105 ${
+                      pkg.recommended 
+                        ? "bg-gradient-to-br from-fuchsia-900/40 to-purple-900/40 border-fuchsia-500/50 shadow-lg shadow-fuchsia-500/20" 
+                        : "bg-zinc-900/50 border-zinc-700 hover:border-zinc-500"
+                    }`}
+                    onClick={() => {
+                      if (pkg.id === "enterprise") {
+                        setIsInquiryOpen(true);
+                      } else {
+                        setSelectedPackage(pkg.id);
+                        setShowComparison(false);
+                      }
+                    }}
+                  >
+                    {pkg.recommended && (
+                      <div className="absolute -top-3 left-1/2 -translate-x-1/2">
+                        <Badge className="bg-fuchsia-500 text-white text-xs">POPULAR</Badge>
+                      </div>
+                    )}
+                    <CardContent className="pt-6 text-center">
+                      <h4 className="text-white font-semibold mb-2">{pkg.name}</h4>
+                      <p className="text-zinc-500 text-xs mb-3">{pkg.sizeRange}</p>
+                      <p className="text-2xl font-bold text-fuchsia-400 mb-3">
+                        {pkg.price > 0 ? `$${pkg.price}` : "Get Quote"}
+                      </p>
+                      <ul className="text-xs text-zinc-400 space-y-1 text-left">
+                        {pkg.features.slice(0, 3).map((f, i) => (
+                          <li key={i} className="flex items-center gap-1">
+                            <CheckCircle2 className="w-3 h-3 text-fuchsia-400 flex-shrink-0" />
+                            <span>{f}</span>
+                          </li>
+                        ))}
+                      </ul>
+                      <Button 
+                        className={`w-full mt-4 ${
+                          pkg.recommended 
+                            ? "bg-fuchsia-500 hover:bg-fuchsia-600 text-white" 
+                            : "bg-zinc-800 hover:bg-zinc-700 text-white"
+                        }`}
+                        size="sm"
+                      >
+                        {pkg.price > 0 ? "Select" : "Contact Us"}
+                      </Button>
+                    </CardContent>
+                  </Card>
+                ))}
+              </div>
             </div>
           </motion.div>
         </div>
