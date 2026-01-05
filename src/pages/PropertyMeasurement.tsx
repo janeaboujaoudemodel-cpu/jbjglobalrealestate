@@ -35,10 +35,18 @@ const fadeInUp = {
 type PropertyType = "apartment" | "villa" | "office" | "land" | "retail" | "";
 type UnitType = "sqft" | "sqm" | "both";
 
+interface RoomMeasurement {
+  name: string;
+  area: number;
+  dimensions?: string;
+}
+
 interface MeasurementResult {
   totalArea: number;
-  rooms: { name: string; area: number }[];
+  rooms: RoomMeasurement[];
   unit: UnitType;
+  confidence?: string;
+  notes?: string;
 }
 
 const PropertyMeasurement = () => {
@@ -87,6 +95,18 @@ const PropertyMeasurement = () => {
     }
   };
 
+  const convertFileToBase64 = (file: File): Promise<string> => {
+    return new Promise((resolve, reject) => {
+      const reader = new FileReader();
+      reader.onload = () => {
+        const result = reader.result as string;
+        resolve(result);
+      };
+      reader.onerror = reject;
+      reader.readAsDataURL(file);
+    });
+  };
+
   const processWithAI = async () => {
     if (photos.length < 3) {
       toast.error("Please upload at least 3 photos of different rooms/areas");
@@ -97,33 +117,52 @@ const PropertyMeasurement = () => {
     setProgress(0);
 
     try {
-      // Simulate AI processing with progress
-      for (let i = 0; i <= 100; i += 5) {
-        await new Promise(resolve => setTimeout(resolve, 200));
-        setProgress(i);
+      // Convert photos to base64
+      setProgress(10);
+      toast.info("Preparing images for AI analysis...");
+      
+      const imagePromises = photos.slice(0, 10).map(file => convertFileToBase64(file));
+      const base64Images = await Promise.all(imagePromises);
+      
+      setProgress(30);
+      toast.info("Analyzing property dimensions with AI...");
+
+      // Call the edge function
+      const { data, error } = await supabase.functions.invoke('property-measurement', {
+        body: {
+          images: base64Images,
+          propertyType,
+          propertyName,
+          unitPreference,
+        }
+      });
+
+      if (error) {
+        console.error("Edge function error:", error);
+        throw new Error(error.message || "Failed to analyze property");
       }
 
-      // Mock result - in production this would call an edge function
-      const mockResult: MeasurementResult = {
-        totalArea: 1250,
-        rooms: [
-          { name: "Living Room", area: 350 },
-          { name: "Master Bedroom", area: 280 },
-          { name: "Bedroom 2", area: 180 },
-          { name: "Kitchen", area: 150 },
-          { name: "Bathroom 1", area: 80 },
-          { name: "Bathroom 2", area: 60 },
-          { name: "Balcony", area: 100 },
-          { name: "Hallway/Corridor", area: 50 },
-        ],
+      if (!data.success) {
+        throw new Error(data.error || "Measurement failed");
+      }
+
+      setProgress(90);
+
+      const aiResult: MeasurementResult = {
+        totalArea: data.result.totalArea,
+        rooms: data.result.rooms,
         unit: unitPreference,
+        confidence: data.result.confidence,
+        notes: data.result.notes,
       };
 
-      setResult(mockResult);
+      setResult(aiResult);
+      setProgress(100);
       setStep(4);
-      toast.success("Measurement complete! Your property has been analyzed.");
+      toast.success(`Measurement complete! Confidence: ${aiResult.confidence || 'medium'}`);
     } catch (error) {
-      toast.error("Error processing your images. Please try again.");
+      console.error("Processing error:", error);
+      toast.error(error instanceof Error ? error.message : "Error processing your images. Please try again.");
     } finally {
       setIsProcessing(false);
     }
@@ -548,9 +587,20 @@ www.jjglobalcapital.com
                     <CheckCircle2 className="w-6 h-6 text-teal-400" />
                     Measurement Complete!
                   </CardTitle>
-                  <Badge className="bg-teal-500/20 text-teal-300 border-teal-500/30">
-                    AI Verified
-                  </Badge>
+                  <div className="flex gap-2">
+                    <Badge className={`${
+                      result.confidence === 'high' 
+                        ? 'bg-green-500/20 text-green-300 border-green-500/30'
+                        : result.confidence === 'medium'
+                        ? 'bg-yellow-500/20 text-yellow-300 border-yellow-500/30'
+                        : 'bg-orange-500/20 text-orange-300 border-orange-500/30'
+                    }`}>
+                      {result.confidence || 'medium'} confidence
+                    </Badge>
+                    <Badge className="bg-teal-500/20 text-teal-300 border-teal-500/30">
+                      AI Verified
+                    </Badge>
+                  </div>
                 </div>
               </CardHeader>
               <CardContent className="pt-6 space-y-6">
@@ -565,19 +615,39 @@ www.jjglobalcapital.com
                   </p>
                 </div>
 
+                {/* AI Notes */}
+                {result.notes && (
+                  <div className="bg-zinc-800/50 border border-zinc-700 rounded-xl p-4">
+                    <div className="flex items-start gap-3">
+                      <Info className="w-5 h-5 text-teal-400 mt-0.5 flex-shrink-0" />
+                      <div>
+                        <p className="text-zinc-300 font-medium mb-1">AI Analysis Notes</p>
+                        <p className="text-zinc-400 text-sm">{result.notes}</p>
+                      </div>
+                    </div>
+                  </div>
+                )}
+
                 {/* Room Breakdown */}
                 <div>
                   <h3 className="text-white font-semibold mb-4">Room Breakdown</h3>
                   <div className="grid md:grid-cols-2 gap-3">
                     {result.rooms.map((room, i) => (
-                      <div key={i} className="flex justify-between items-center bg-zinc-800/50 rounded-lg p-4">
-                        <span className="text-zinc-300">{room.name}</span>
-                        <div className="text-right">
-                          <span className="text-white font-medium">{room.area} sq ft</span>
-                          <span className="text-zinc-500 text-sm ml-2">
-                            ({convertArea(room.area, "sqm")} sqm)
-                          </span>
+                      <div key={i} className="bg-zinc-800/50 rounded-lg p-4">
+                        <div className="flex justify-between items-center">
+                          <span className="text-zinc-300">{room.name}</span>
+                          <div className="text-right">
+                            <span className="text-white font-medium">{room.area} sq ft</span>
+                            <span className="text-zinc-500 text-sm ml-2">
+                              ({convertArea(room.area, "sqm")} sqm)
+                            </span>
+                          </div>
                         </div>
+                        {room.dimensions && (
+                          <p className="text-zinc-500 text-xs mt-1">
+                            Estimated: {room.dimensions}
+                          </p>
+                        )}
                       </div>
                     ))}
                   </div>
