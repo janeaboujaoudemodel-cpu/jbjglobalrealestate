@@ -117,46 +117,43 @@ const Index = () => {
       <section className="py-12 md:py-16 bg-black">
         <div className="container mx-auto px-4">
           <motion.div 
-            className="flex flex-col items-center gap-6"
+            className="flex flex-col items-center gap-5"
             initial={{ opacity: 0, y: 20 }}
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true }}
             transition={{ duration: 0.6 }}
           >
-            {/* Primary Row - Main CTAs */}
+            {/* Row 1 - White Background CTAs */}
             <div className="flex flex-wrap justify-center gap-3">
-              {/* Explore Our Services - White background, gold text */}
               <Link to="/about">
                 <Button 
-                  className="bg-white hover:bg-zinc-100 text-gold font-semibold px-6 py-5 text-sm shadow-lg hover:shadow-xl transition-all duration-300"
+                  className="bg-white hover:bg-zinc-100 text-zinc-900 font-semibold px-6 py-5 text-sm shadow-lg hover:shadow-xl transition-all duration-300 hover:scale-105"
                 >
-                  {t('home.cta.explore')}
+                  Explore Our Services
                   <ArrowUpRight className="w-4 h-4 ml-2" />
                 </Button>
               </Link>
-              {/* Explore Properties - Gold */}
-              <Link to="/properties">
-                <Button 
-                  className="bg-gold hover:bg-gold-light text-black font-semibold px-6 py-5 text-sm shadow-lg shadow-gold/20 hover:shadow-xl hover:shadow-gold/30 transition-all duration-300"
-                >
-                  {t('home.cta.properties')}
-                  <ArrowUpRight className="w-4 h-4 ml-2" />
-                </Button>
-              </Link>
-              {/* Contact Us - White/Gold style */}
               <Button 
-                className="bg-white hover:bg-zinc-100 text-gold font-semibold px-6 py-5 text-sm shadow-lg hover:shadow-xl transition-all duration-300"
+                className="bg-white hover:bg-zinc-100 text-zinc-900 font-semibold px-6 py-5 text-sm shadow-lg hover:shadow-xl transition-all duration-300 hover:scale-105"
                 onClick={() => setIsInquiryOpen(true)}
               >
-                {t('home.cta.contact')}
+                Contact Us
                 <ArrowUpRight className="w-4 h-4 ml-2" />
               </Button>
             </div>
             
-            {/* Second Row - Service Shortcuts - Glass style with contrast */}
+            {/* Row 2 - Services Row - Glass Outline Style */}
             <div className="flex flex-wrap justify-center gap-3">
+              <Link to="/properties">
+                <Button 
+                  className="bg-gold hover:bg-gold-light text-black font-semibold px-6 py-4 text-xs shadow-lg shadow-gold/20 hover:shadow-xl hover:shadow-gold/30 transition-all duration-300 hover:scale-105"
+                >
+                  Explore Properties
+                  <ArrowUpRight className="w-3 h-3 ml-1" />
+                </Button>
+              </Link>
               <Button 
-                className="bg-black/40 backdrop-blur-xl border border-white/20 text-white/90 hover:bg-white/10 hover:border-white/40 hover:shadow-lg hover:shadow-white/5 font-medium px-5 py-4 text-xs transition-all duration-300"
+                className="bg-transparent backdrop-blur-md border border-white/30 text-white hover:bg-white/10 hover:border-white/50 font-medium px-5 py-4 text-xs transition-all duration-300 hover:scale-105"
                 onClick={() => setIsInquiryOpen(true)}
               >
                 List Your Property
@@ -164,7 +161,7 @@ const Index = () => {
               </Button>
               <Link to="/concierge">
                 <Button 
-                  className="bg-black/40 backdrop-blur-xl border border-white/20 text-white/90 hover:bg-white/10 hover:border-white/40 hover:shadow-lg hover:shadow-white/5 font-medium px-5 py-4 text-xs transition-all duration-300"
+                  className="bg-transparent backdrop-blur-md border border-white/30 text-white hover:bg-white/10 hover:border-white/50 font-medium px-5 py-4 text-xs transition-all duration-300 hover:scale-105"
                 >
                   Luxury Concierge
                   <ArrowUpRight className="w-3 h-3 ml-1" />
@@ -172,7 +169,7 @@ const Index = () => {
               </Link>
               <Link to="/services/design-build">
                 <Button 
-                  className="bg-black/40 backdrop-blur-xl border border-white/20 text-white/90 hover:bg-white/10 hover:border-white/40 hover:shadow-lg hover:shadow-white/5 font-medium px-5 py-4 text-xs transition-all duration-300"
+                  className="bg-transparent backdrop-blur-md border border-white/30 text-white hover:bg-white/10 hover:border-white/50 font-medium px-5 py-4 text-xs transition-all duration-300 hover:scale-105"
                 >
                   Design & Build
                   <ArrowUpRight className="w-3 h-3 ml-1" />
@@ -180,7 +177,7 @@ const Index = () => {
               </Link>
               <Link to="/services/law-firm">
                 <Button 
-                  className="bg-black/40 backdrop-blur-xl border border-white/20 text-white/90 hover:bg-white/10 hover:border-white/40 hover:shadow-lg hover:shadow-white/5 font-medium px-5 py-4 text-xs transition-all duration-300"
+                  className="bg-transparent backdrop-blur-md border border-white/30 text-white hover:bg-white/10 hover:border-white/50 font-medium px-5 py-4 text-xs transition-all duration-300 hover:scale-105"
                 >
                   Law Firm
                   <ArrowUpRight className="w-3 h-3 ml-1" />
@@ -188,12 +185,12 @@ const Index = () => {
               </Link>
             </div>
             
-            {/* Third Row - Tools - Premium Glass style with glow */}
+            {/* Row 3 - AI Tools - Colored Glowing Borders */}
             <div className="flex flex-wrap justify-center gap-3">
-              {/* Market Report */}
+              {/* Market Report - Amber */}
               <Link to="/market-report">
                 <Button 
-                  className="bg-white/10 backdrop-blur-md border border-amber-500/30 text-amber-400 hover:bg-amber-500/20 hover:border-amber-500/50 hover:shadow-lg hover:shadow-amber-500/10 font-semibold px-5 py-4 text-xs transition-all duration-300 group"
+                  className="bg-transparent backdrop-blur-md border-2 border-amber-500/50 text-amber-400 hover:bg-amber-500/20 hover:border-amber-400 hover:shadow-lg hover:shadow-amber-500/20 font-semibold px-5 py-4 text-xs transition-all duration-300 hover:scale-105 group"
                 >
                   <FileText className="w-3 h-3 mr-1" />
                   Market Report
@@ -201,10 +198,10 @@ const Index = () => {
                 </Button>
               </Link>
               
-              {/* Mortgage Advisory */}
+              {/* Mortgage Advisory - Cyan */}
               <Link to="/mortgage-advisory">
                 <Button 
-                  className="bg-white/10 backdrop-blur-md border border-cyan-500/30 text-cyan-400 hover:bg-cyan-500/20 hover:border-cyan-500/50 hover:shadow-lg hover:shadow-cyan-500/10 font-semibold px-5 py-4 text-xs transition-all duration-300 group"
+                  className="bg-transparent backdrop-blur-md border-2 border-cyan-500/50 text-cyan-400 hover:bg-cyan-500/20 hover:border-cyan-400 hover:shadow-lg hover:shadow-cyan-500/20 font-semibold px-5 py-4 text-xs transition-all duration-300 hover:scale-105 group"
                 >
                   <Calculator className="w-3 h-3 mr-1" />
                   Mortgage Advisory
@@ -212,10 +209,10 @@ const Index = () => {
                 </Button>
               </Link>
               
-              {/* Rental Index */}
+              {/* Rental Index - Green/Emerald */}
               <Link to="/rental-index">
                 <Button 
-                  className="bg-white/10 backdrop-blur-md border border-violet-500/30 text-violet-400 hover:bg-violet-500/20 hover:border-violet-500/50 hover:shadow-lg hover:shadow-violet-500/10 font-semibold px-5 py-4 text-xs transition-all duration-300 group"
+                  className="bg-transparent backdrop-blur-md border-2 border-emerald-500/50 text-emerald-400 hover:bg-emerald-500/20 hover:border-emerald-400 hover:shadow-lg hover:shadow-emerald-500/20 font-semibold px-5 py-4 text-xs transition-all duration-300 hover:scale-105 group"
                 >
                   <Layers className="w-3 h-3 mr-1" />
                   Rental Index
@@ -223,10 +220,10 @@ const Index = () => {
                 </Button>
               </Link>
               
-              {/* Document Scanner */}
+              {/* Document Scanner - Violet */}
               <Link to="/document-scanner">
                 <Button 
-                  className="bg-white/10 backdrop-blur-md border border-emerald-500/30 text-emerald-400 hover:bg-emerald-500/20 hover:border-emerald-500/50 hover:shadow-lg hover:shadow-emerald-500/10 font-semibold px-5 py-4 text-xs transition-all duration-300 group"
+                  className="bg-transparent backdrop-blur-md border-2 border-violet-500/50 text-violet-400 hover:bg-violet-500/20 hover:border-violet-400 hover:shadow-lg hover:shadow-violet-500/20 font-semibold px-5 py-4 text-xs transition-all duration-300 hover:scale-105 group"
                 >
                   <FileText className="w-3 h-3 mr-1" />
                   Scan & Sign
@@ -234,10 +231,10 @@ const Index = () => {
                 </Button>
               </Link>
               
-              {/* Property Evaluator */}
+              {/* Property Evaluator - Blue */}
               <Link to="/property-evaluator">
                 <Button 
-                  className="bg-white/10 backdrop-blur-md border border-blue-500/30 text-blue-400 hover:bg-blue-500/20 hover:border-blue-500/50 hover:shadow-lg hover:shadow-blue-500/10 font-semibold px-5 py-4 text-xs transition-all duration-300 group"
+                  className="bg-transparent backdrop-blur-md border-2 border-blue-500/50 text-blue-400 hover:bg-blue-500/20 hover:border-blue-400 hover:shadow-lg hover:shadow-blue-500/20 font-semibold px-5 py-4 text-xs transition-all duration-300 hover:scale-105 group"
                 >
                   <Calculator className="w-3 h-3 mr-1" />
                   Property Evaluator
@@ -246,12 +243,12 @@ const Index = () => {
               </Link>
             </div>
             
-            {/* Fourth Row - Secondary Tools - Premium Glass style with glow */}
+            {/* Row 4 - Secondary Tools with Colors */}
             <div className="flex flex-wrap justify-center gap-3">
-              {/* Property Comparison - Orange glow */}
+              {/* AI Property Comparison - Orange */}
               <Link to="/compare">
                 <Button 
-                  className="bg-white/10 backdrop-blur-md border border-orange-500/30 text-orange-400 hover:bg-orange-500/20 hover:border-orange-500/50 hover:shadow-lg hover:shadow-orange-500/10 font-semibold px-5 py-4 text-xs transition-all duration-300 group"
+                  className="bg-transparent backdrop-blur-md border-2 border-orange-500/50 text-orange-400 hover:bg-orange-500/20 hover:border-orange-400 hover:shadow-lg hover:shadow-orange-500/20 font-semibold px-5 py-4 text-xs transition-all duration-300 hover:scale-105 group"
                 >
                   <BarChart3 className="w-3 h-3 mr-1" />
                   AI Property Comparison
@@ -259,10 +256,10 @@ const Index = () => {
                 </Button>
               </Link>
               
-              {/* News & Insights */}
+              {/* News & Insights - Rose */}
               <Link to="/news">
                 <Button 
-                  className="bg-white/10 backdrop-blur-md border border-rose-500/30 text-rose-400 hover:bg-rose-500/20 hover:border-rose-500/50 hover:shadow-lg hover:shadow-rose-500/10 font-semibold px-5 py-4 text-xs transition-all duration-300 group"
+                  className="bg-transparent backdrop-blur-md border-2 border-rose-500/50 text-rose-400 hover:bg-rose-500/20 hover:border-rose-400 hover:shadow-lg hover:shadow-rose-500/20 font-semibold px-5 py-4 text-xs transition-all duration-300 hover:scale-105 group"
                 >
                   <FileText className="w-3 h-3 mr-1" />
                   News & Insights
@@ -270,10 +267,10 @@ const Index = () => {
                 </Button>
               </Link>
               
-              {/* Favorites */}
+              {/* Favorites - Pink */}
               <Link to="/favorites">
                 <Button 
-                  className="bg-white/10 backdrop-blur-md border border-pink-500/30 text-pink-400 hover:bg-pink-500/20 hover:border-pink-500/50 hover:shadow-lg hover:shadow-pink-500/10 font-semibold px-5 py-4 text-xs transition-all duration-300 group"
+                  className="bg-transparent backdrop-blur-md border-2 border-pink-500/50 text-pink-400 hover:bg-pink-500/20 hover:border-pink-400 hover:shadow-lg hover:shadow-pink-500/20 font-semibold px-5 py-4 text-xs transition-all duration-300 hover:scale-105 group"
                 >
                   <Heart className="w-3 h-3 mr-1" />
                   Favorites & Shortlist
@@ -281,10 +278,10 @@ const Index = () => {
                 </Button>
               </Link>
               
-              {/* Tools Guide */}
+              {/* Tools Guide - Teal */}
               <Link to="/tools-guide">
                 <Button 
-                  className="bg-white/10 backdrop-blur-md border border-teal-500/30 text-teal-400 hover:bg-teal-500/20 hover:border-teal-500/50 hover:shadow-lg hover:shadow-teal-500/10 font-semibold px-5 py-4 text-xs transition-all duration-300 group"
+                  className="bg-transparent backdrop-blur-md border-2 border-teal-500/50 text-teal-400 hover:bg-teal-500/20 hover:border-teal-400 hover:shadow-lg hover:shadow-teal-500/20 font-semibold px-5 py-4 text-xs transition-all duration-300 hover:scale-105 group"
                 >
                   <Wrench className="w-3 h-3 mr-1" />
                   Tools Guide
@@ -295,7 +292,7 @@ const Index = () => {
             
             {/* AI Home Finder - Full Width Purple Glowing Bar */}
             <Link to="/quiz" className="w-full max-w-2xl mt-4">
-              <div className="relative overflow-hidden rounded-xl bg-gradient-to-r from-purple-600 via-purple-700 to-purple-800 p-[1px] shadow-2xl shadow-purple-500/30 hover:shadow-purple-500/50 transition-all duration-500 group">
+              <div className="relative overflow-hidden rounded-xl bg-gradient-to-r from-purple-600 via-purple-700 to-purple-800 p-[1px] shadow-2xl shadow-purple-500/30 hover:shadow-purple-500/50 transition-all duration-500 group hover:scale-[1.02]">
                 {/* Animated glow border */}
                 <div className="absolute inset-0 bg-gradient-to-r from-purple-400 via-fuchsia-400 to-purple-400 opacity-60 blur-sm group-hover:opacity-100 transition-opacity duration-500" />
                 
