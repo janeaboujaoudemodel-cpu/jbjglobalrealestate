@@ -37,27 +37,56 @@ const staggerContainer = {
 
 const services = [
   {
-    id: "real-estate",
-    title: "Real Estate Investment",
-    description: "Premier off-plan and ready property investments across UAE's most sought-after locations.",
+    id: "buy-sell",
+    title: "Buy & Sell Brokerage",
+    description: "Expert representation for property purchases and sales across UAE's most sought-after locations.",
     icon: Building2,
     image: luxuryVillaHero,
     link: "/properties",
-    features: ["Off-Plan Projects", "Ready Properties", "Investment Advisory", "Portfolio Management"]
+    features: ["Off-Plan Projects", "Ready Properties", "Price Negotiations", "Transaction Support"]
   },
   {
-    id: "law-firm",
-    title: "Legal Services",
-    description: "Comprehensive legal support for property transactions, contracts, and corporate matters.",
+    id: "leasing",
+    title: "Leasing Brokerage",
+    description: "Professional leasing services for landlords and tenants seeking quality rental properties.",
+    icon: Home,
+    image: "https://images.unsplash.com/photo-1560448204-e02f11c3d0e2?w=800&q=80",
+    link: "/properties?status=ready",
+    features: ["Tenant Sourcing", "Lease Negotiations", "Contract Coordination", "Market Analysis"]
+  },
+  {
+    id: "holiday-homes",
+    title: "Holiday Homes",
+    description: "Short-term rental support and holiday home operations for property owners in the UAE.",
+    icon: Gem,
+    image: coupleYachtDubai,
+    link: "/contact",
+    features: ["Listing Management", "Guest Services", "Revenue Optimization", "Property Marketing"]
+  },
+  {
+    id: "partner-legal",
+    title: "Legal Partners",
+    description: "We introduce you to independent, licensed law firms for property conveyancing and legal matters.",
     icon: Scale,
     image: "https://images.unsplash.com/photo-1589829545856-d10d557cf95f?w=800&q=80",
     link: "/services/law-firm",
-    features: ["Property Conveyancing", "Contract Review", "Corporate Law", "Visa Services"]
+    features: ["Partner Introductions", "Conveyancing Referrals", "Contract Review", "Visa Coordination"],
+    isPartner: true
+  },
+  {
+    id: "partner-mortgage",
+    title: "Mortgage Partners",
+    description: "We connect you with banks and licensed mortgage specialists for financing solutions.",
+    icon: Calculator,
+    image: founderJetInterior,
+    link: "/mortgage-advisory",
+    features: ["Bank Introductions", "Specialist Referrals", "Rate Comparison Tool", "Pre-Qualification Guidance"],
+    isPartner: true
   },
   {
     id: "design-build",
     title: "Design & Build",
-    description: "Bespoke architecture, interior design, and turnkey construction solutions.",
+    description: "Bespoke architecture, interior design, and turnkey construction solutions via our sister company.",
     icon: Palette,
     image: luxuryVilla1,
     link: "/services/design-build",
@@ -66,29 +95,11 @@ const services = [
   {
     id: "concierge",
     title: "Luxury Concierge",
-    description: "White-glove lifestyle management including jets, yachts, and exclusive experiences.",
+    description: "White-glove lifestyle services including jets, yachts, and exclusive experiences.",
     icon: Gem,
     image: coupleYachtDubai,
     link: "/concierge",
     features: ["Private Jets", "Yacht Charters", "Luxury Cars", "VIP Access"]
-  },
-  {
-    id: "mortgage",
-    title: "Mortgage Advisory",
-    description: "Tailored financing solutions with exclusive rates from leading UAE banks.",
-    icon: Calculator,
-    image: founderJetInterior,
-    link: "/mortgage-advisory",
-    features: ["Bank Negotiations", "Pre-Approval", "Rate Comparison", "Financial Planning"]
-  },
-  {
-    id: "property-management",
-    title: "Property Management",
-    description: "End-to-end management of your investment properties for maximum returns.",
-    icon: Home,
-    image: "https://images.unsplash.com/photo-1560448204-e02f11c3d0e2?w=800&q=80",
-    link: "/contact",
-    features: ["Tenant Sourcing", "Rent Collection", "Maintenance", "Reporting"]
   }
 ];
 
@@ -137,20 +148,20 @@ const Services = () => {
             className="inline-block text-gold text-xs uppercase tracking-[0.4em] mb-6"
             variants={fadeInUp}
           >
-            Our Divisions
+            Real Estate Brokerage
           </motion.span>
           <motion.h1 
             className="text-white text-4xl md:text-6xl lg:text-7xl font-bold mb-6"
             style={{ fontFamily: "Poppins, sans-serif" }}
             variants={fadeInUp}
           >
-            Premium Services
+            Our Services
           </motion.h1>
           <motion.p 
             className="text-zinc-400 text-lg md:text-xl max-w-2xl mx-auto"
             variants={fadeInUp}
           >
-            A comprehensive suite of luxury services designed for discerning clients and investors
+            Expert brokerage services for property sales, leasing, and holiday homes — plus trusted partner introductions
           </motion.p>
         </motion.div>
       </section>

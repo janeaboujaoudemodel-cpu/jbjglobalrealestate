@@ -69,42 +69,42 @@ const Index = () => {
           {/* Welcome Text */}
           <motion.div variants={fadeInUp}>
             <span className="inline-block text-gold text-xs md:text-sm uppercase tracking-[0.4em] mb-6">
-              Exclusive Properties
+              Real Estate Brokerage
             </span>
             <h2 
               className="text-white text-xl md:text-2xl lg:text-3xl font-light tracking-wide mb-4"
               style={{ fontFamily: "Poppins, sans-serif" }}
             >
-              Welcome to JJ Global Capital
+              JJ Global Capital | Real Estate
             </h2>
-            {/* We Create | We Elevate | We Lead */}
+            {/* We Find | We Negotiate | We Deliver */}
             <div className="flex flex-wrap items-center justify-center gap-4 md:gap-8 text-zinc-300 text-base md:text-lg mb-8">
-              <span className="font-light">We Create</span>
+              <span className="font-light">We Find</span>
               <span className="text-gold/60">|</span>
-              <span className="font-light">We Elevate</span>
+              <span className="font-light">We Negotiate</span>
               <span className="text-gold/60">|</span>
-              <span className="font-light">We Lead</span>
+              <span className="font-light">We Deliver</span>
             </div>
           </motion.div>
 
-          {/* Main Tagline - Smaller, single line */}
+          {/* Main Tagline */}
           <motion.h1 
             className="text-white text-2xl md:text-3xl lg:text-4xl font-bold tracking-wide mb-4 leading-tight"
             variants={fadeInUp}
             style={{ fontFamily: "Poppins, sans-serif" }}
           >
-            Your Gateway to Global{" "}
+            Dubai's Premier{" "}
             <span className="text-transparent bg-clip-text bg-gradient-to-r from-gold to-gold-light">
-              Real Estate Investments & Concierge
+              Real Estate Brokerage
             </span>
           </motion.h1>
 
-          {/* Sub-tagline */}
+          {/* Sub-tagline - Brokerage focused */}
           <motion.p 
             className="text-zinc-400 text-sm md:text-base max-w-xl mx-auto"
             variants={fadeInUp}
           >
-            A founder-led advisory specializing in UAE and Dubai real estate
+            Expert property sales, leasing & holiday homes across the UAE
           </motion.p>
         </motion.div>
         
@@ -204,7 +204,7 @@ const Index = () => {
                 <Button 
                   className="bg-zinc-900 border-2 border-gold/40 text-white hover:bg-zinc-800 hover:border-gold font-semibold px-5 py-4 text-xs transition-all duration-300 hover:scale-105 hover:shadow-lg hover:shadow-gold/20"
                 >
-                  Law Firm
+                  Legal Partners
                   <ArrowUpRight className="w-3 h-3 ml-1 text-gold" />
                 </Button>
               </Link>
@@ -280,7 +280,7 @@ const Index = () => {
                   className="bg-transparent backdrop-blur-md border-2 border-cyan-500/50 text-cyan-400 hover:bg-cyan-500/20 hover:border-cyan-400 hover:shadow-lg hover:shadow-cyan-500/20 font-semibold px-5 py-4 text-xs transition-all duration-300 hover:scale-105 group"
                 >
                   <Calculator className="w-3 h-3 mr-1" />
-                  Mortgage Advisory
+                  Mortgage Calculator
                   <ArrowUpRight className="w-3 h-3 ml-1 group-hover:translate-x-0.5 group-hover:-translate-y-0.5 transition-transform" />
                 </Button>
               </Link>
@@ -333,7 +333,7 @@ const Index = () => {
                   className="bg-transparent backdrop-blur-md border-2 border-amber-500/50 text-amber-400 hover:bg-amber-500/20 hover:border-amber-400 hover:shadow-lg hover:shadow-amber-500/20 font-semibold px-5 py-4 text-xs transition-all duration-300 hover:scale-105 group"
                 >
                   <Wallet className="w-3 h-3 mr-1" />
-                  AI Financial Advisor
+                  AI Budget Planner
                   <ArrowUpRight className="w-3 h-3 ml-1 group-hover:translate-x-0.5 group-hover:-translate-y-0.5 transition-transform" />
                 </Button>
               </Link>

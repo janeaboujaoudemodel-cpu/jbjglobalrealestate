@@ -88,16 +88,24 @@ const Footer = () => {
   // Our Divisions — required hierarchy with working pages
   const divisions = [
     {
-      title: "Real Estate",
+      title: "Buy & Sell",
       href: "/properties",
       items: [
-        { label: "Property Advisory", href: "/properties" },
-        { label: "Investment Advisory", href: "/about" },
-        { label: "Mortgage Advisory", href: "/mortgage-advisory" },
-        { label: "Golden Visa", href: "/concierge" },
+        { label: "Off-Plan Properties", href: "/properties?status=off-plan" },
+        { label: "Ready Properties", href: "/properties?status=ready" },
+        { label: "Property Search", href: "/quiz" },
       ],
     },
-    { title: "Law Firm", href: "/services/law-firm", items: [] },
+    {
+      title: "Leasing",
+      href: "/properties?status=ready",
+      items: [],
+    },
+    {
+      title: "Holiday Homes",
+      href: "/contact",
+      items: [],
+    },
     { 
       title: "Design & Build", 
       href: "/services/design-build", 
@@ -149,10 +157,10 @@ const Footer = () => {
           <Link to="/" className="inline-block">
             <JJLogo size="footer" />
           </Link>
-          <p className="text-zinc-400 text-base md:text-lg mt-6 max-w-2xl mx-auto leading-relaxed">
-            A founder-led advisory group specializing in UAE and Dubai real estate,
-            supported by a global platform of investment, advisory, legal, design,
-            and concierge services.
+          <p className="text-gold text-xs uppercase tracking-[0.2em] mt-3 mb-2">Real Estate Brokerage</p>
+          <p className="text-zinc-400 text-base md:text-lg max-w-2xl mx-auto leading-relaxed">
+            A licensed real estate brokerage specializing in property sales, leasing, and holiday homes 
+            across the UAE — with trusted partner introductions for legal, mortgage, and specialist services.
           </p>
         </div>
 
@@ -321,22 +329,24 @@ const Footer = () => {
               <div className="w-8 h-8 bg-gold/10 border border-gold/30 rounded-lg flex items-center justify-center">
                 <span className="text-gold text-lg font-bold">©</span>
               </div>
-              <h4 className="text-white font-semibold">Intellectual Property Notice</h4>
+              <h4 className="text-white font-semibold">Legal Disclaimer</h4>
             </div>
             <p className="text-zinc-400 text-sm leading-relaxed mb-4">
-              This website, all its content, design, AI-powered tools, algorithms, code, and technology are the 
-              <span className="text-gold font-semibold"> exclusive intellectual property</span> of{" "}
-              <span className="text-white font-medium">Jane Abou Jaoude</span> and{" "}
-              <span className="text-white font-medium">JJ Global Capital</span>.
+              <span className="text-white font-medium">JJ Global Capital</span> is a licensed real estate brokerage. 
+              We do not provide legal, mortgage, financial, or investment advice. Third-party services 
+              (legal, mortgage, property management) are provided by{" "}
+              <span className="text-gold font-semibold">independent licensed professionals</span> who contract 
+              directly with clients.
             </p>
             <p className="text-zinc-500 text-xs leading-relaxed mb-4">
-              Unauthorized reproduction, duplication, copying, modification, distribution, or commercial use of 
-              this platform or any of its features is <span className="text-red-400">strictly prohibited</span> and 
-              protected under international copyright, trademark, and intellectual property laws. Violators will be 
-              prosecuted to the fullest extent of the law.
+              All content, design, and technology on this platform are the intellectual property of 
+              Jane Abou Jaoude and JJ Global Capital. Unauthorized reproduction is strictly prohibited.
+            </p>
+            <p className="text-zinc-500 text-xs leading-relaxed mb-4" dir="rtl">
+              جي جي جلوبال كابيتال هي شركة وساطة عقارية مرخصة. نحن لا نقدم استشارات قانونية أو تمويلية أو استثمارية.
             </p>
             <div className="flex flex-wrap items-center justify-center gap-2 text-xs text-zinc-600">
-              <span>Patent Pending</span>
+              <span>Real Estate Brokerage</span>
               <span className="text-gold">•</span>
               <span>All Rights Reserved</span>
               <span className="text-gold">•</span>
@@ -349,12 +359,11 @@ const Footer = () => {
         <div className="flex flex-col items-center gap-4 text-sm text-zinc-500">
           <div className="text-center space-y-2">
             <p className="font-medium text-white">
-              © {currentYear} JJ Global Capital. All Rights Reserved Worldwide.
+              © {currentYear} JJ Global Capital Real Estate Brokerage. All Rights Reserved.
             </p>
             <p className="text-xs text-zinc-600">
               Created and Developed by{" "}
-              <span className="text-gold font-medium">Jane Abou Jaoude</span> | Exclusive for{" "}
-              <span className="text-gold font-medium">JJ Global Capital</span>
+              <span className="text-gold font-medium">Jane Abou Jaoude</span> | Licensed Brokerage Services Only
             </p>
             <p className="mt-2">
               Powered by{" "}

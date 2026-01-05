@@ -53,10 +53,11 @@ export const CONTACT_INFO = {
   email: 'invest@jjglobalcapital.com',
   emailCapitalized: 'Invest@JJGlobalCapital.com',
   whatsappNumber: '971565911000',
-  whatsappMessage: "Hi, I'm interested in learning more about investment opportunities with JJ Global Capital.",
+  whatsappMessage: "Hi, I'm interested in learning more about property brokerage services with JJ Global Capital.",
   address: 'Downtown Dubai, UAE',
   inquiryFormUrl: 'https://jjglobalcapital.com/property-investment-inquiry-form/',
   holdingGroupUrl: 'https://jjholdinggroup.com',
+  companyDescriptor: 'JJ Global Capital | Real Estate Brokerage',
 };
 
 // Generate WhatsApp URL

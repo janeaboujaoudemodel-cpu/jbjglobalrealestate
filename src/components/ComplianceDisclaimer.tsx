@@ -1,0 +1,170 @@
+import { AlertTriangle, Shield, Building2, Users, Scale, Wallet } from "lucide-react";
+import { Link } from "react-router-dom";
+
+interface ComplianceDisclaimerProps {
+  variant?: "full" | "compact" | "short" | "brokerage-cta" | "partners-intro";
+  className?: string;
+  language?: "en" | "ar";
+}
+
+/**
+ * Compliance-safe disclaimers for JJ Global Capital Real Estate Brokerage
+ * - Clarifies brokerage-only services
+ * - Distinguishes partner introductions from direct services
+ * - Meets UAE regulatory requirements
+ */
+const ComplianceDisclaimer = ({ variant = "compact", className = "", language = "en" }: ComplianceDisclaimerProps) => {
+  const currentYear = new Date().getFullYear();
+
+  // Short English Disclaimer
+  const shortDisclaimerEN = `JJ Global Capital is a licensed real estate brokerage. We do not provide legal, mortgage, financial, or investment advice. Third-party services are provided by independent licensed professionals under separate agreements.`;
+
+  // Short Arabic Disclaimer
+  const shortDisclaimerAR = `جي جي جلوبال كابيتال هي شركة وساطة عقارية مرخصة. نحن لا نقدم استشارات قانونية أو تمويلية أو استثمارية. الخدمات من الأطراف الثالثة تُقدَّم من قبل متخصصين مرخصين مستقلين بموجب اتفاقيات منفصلة.`;
+
+  // Full Disclaimer Content
+  const fullDisclaimerPoints = [
+    {
+      icon: Building2,
+      title: language === "ar" ? "خدمات الوساطة العقارية" : "Real Estate Brokerage Services",
+      content: language === "ar" 
+        ? "جي جي جلوبال كابيتال هي شركة وساطة عقارية مرخصة متخصصة في المبيعات والتأجير وتنسيق المعاملات العقارية في دولة الإمارات العربية المتحدة."
+        : "JJ Global Capital is a licensed real estate brokerage specializing in property sales, leasing, and transaction coordination within the UAE."
+    },
+    {
+      icon: Scale,
+      title: language === "ar" ? "لا نقدم استشارات قانونية" : "No Legal Advice",
+      content: language === "ar"
+        ? "نحن لا نقدم استشارات قانونية. يمكننا تقديمك إلى مكاتب محاماة مستقلة ومرخصة تتعاقد معك مباشرة."
+        : "We do not provide legal advice. We can introduce you to independent, licensed law firms who contract directly with you."
+    },
+    {
+      icon: Wallet,
+      title: language === "ar" ? "لا نقدم استشارات تمويلية" : "No Mortgage or Financial Advice",
+      content: language === "ar"
+        ? "نحن لا نقدم موافقات تمويلية أو استشارات مالية. يمكننا تقديمك إلى بنوك ومتخصصين في التمويل العقاري يعملون تحت تراخيصهم الخاصة."
+        : "We do not provide mortgage approvals or financial advice. We can introduce you to banks and mortgage specialists who operate under their own licenses."
+    },
+    {
+      icon: Users,
+      title: language === "ar" ? "خدمات الشركاء المستقلين" : "Independent Partner Services",
+      content: language === "ar"
+        ? "جميع خدمات الأطراف الثالثة (القانونية، التمويل، إدارة الممتلكات) تُقدَّم من قبل متخصصين مرخصين مستقلين. يتعاقد العملاء مباشرة مع هؤلاء المزودين."
+        : "All third-party services (legal, mortgage, property management) are provided by independent licensed professionals. Clients contract directly with these providers."
+    }
+  ];
+
+  if (variant === "full") {
+    return (
+      <div className={`bg-zinc-900/80 backdrop-blur-md border border-zinc-800 rounded-xl p-6 ${className}`}>
+        <div className="flex items-center gap-3 mb-6">
+          <div className="w-10 h-10 bg-gold/10 border border-gold/30 rounded-lg flex items-center justify-center">
+            <Shield className="w-5 h-5 text-gold" />
+          </div>
+          <div>
+            <h4 className="text-white font-semibold">
+              {language === "ar" ? "إشعار قانوني وإخلاء مسؤولية" : "Legal Notice & Disclaimer"}
+            </h4>
+            <p className="text-zinc-500 text-xs">
+              {language === "ar" ? "جي جي جلوبال كابيتال | وساطة عقارية" : "JJ Global Capital | Real Estate Brokerage"}
+            </p>
+          </div>
+        </div>
+
+        <div className="space-y-4">
+          {fullDisclaimerPoints.map((point) => (
+            <div key={point.title} className="flex items-start gap-3">
+              <point.icon className="w-4 h-4 text-gold flex-shrink-0 mt-1" />
+              <div>
+                <p className="text-white text-sm font-medium mb-1">{point.title}</p>
+                <p className="text-zinc-400 text-sm leading-relaxed">{point.content}</p>
+              </div>
+            </div>
+          ))}
+        </div>
+
+        <div className="mt-6 pt-4 border-t border-zinc-800">
+          <p className="text-zinc-600 text-xs text-center">
+            © {currentYear} JJ Global Capital Real Estate Brokerage | 
+            <Link to="/privacy" className="text-gold hover:underline ml-1">Privacy Policy</Link> | 
+            <Link to="/terms" className="text-gold hover:underline ml-1">Terms of Service</Link>
+          </p>
+        </div>
+      </div>
+    );
+  }
+
+  if (variant === "short") {
+    return (
+      <div className={`bg-amber-500/10 border border-amber-500/30 rounded-lg p-4 ${className}`}>
+        <div className="flex items-start gap-3">
+          <AlertTriangle className="w-5 h-5 text-amber-500 flex-shrink-0 mt-0.5" />
+          <p className="text-amber-200/80 text-xs leading-relaxed">
+            {language === "ar" ? shortDisclaimerAR : shortDisclaimerEN}
+          </p>
+        </div>
+      </div>
+    );
+  }
+
+  if (variant === "brokerage-cta") {
+    return (
+      <div className={`bg-zinc-900/50 border border-zinc-800 rounded-lg p-4 ${className}`}>
+        <div className="flex items-start gap-3">
+          <Building2 className="w-5 h-5 text-gold flex-shrink-0 mt-0.5" />
+          <div>
+            <p className="text-white text-sm font-medium mb-1">
+              {language === "ar" ? "استشارة وساطة عقارية" : "Real Estate Brokerage Consultation"}
+            </p>
+            <p className="text-zinc-400 text-xs leading-relaxed">
+              {language === "ar" 
+                ? "هذه الاستشارة لإرشادات الوساطة العقارية وتقديمات الشركاء فقط. لا نقدم استشارات قانونية أو تمويلية أو استثمارية."
+                : "This consultation is for real estate brokerage guidance and partner introductions only. We do not provide legal, mortgage, or investment advice."}
+            </p>
+          </div>
+        </div>
+      </div>
+    );
+  }
+
+  if (variant === "partners-intro") {
+    return (
+      <div className={`bg-blue-500/10 border border-blue-500/30 rounded-lg p-5 ${className}`}>
+        <div className="flex items-start gap-3">
+          <Users className="w-5 h-5 text-blue-400 flex-shrink-0 mt-0.5" />
+          <div>
+            <p className="text-blue-200 text-sm font-medium mb-2">
+              {language === "ar" ? "دليل الشركاء" : "Partners Directory"}
+            </p>
+            <p className="text-blue-200/70 text-xs leading-relaxed mb-3">
+              {language === "ar"
+                ? "نتعاون مع شبكة من المتخصصين المستقلين والمرخصين لتقديم خدمات شاملة. هؤلاء الشركاء يعملون بشكل مستقل عن جي جي جلوبال كابيتال ويتعاقدون مباشرة مع العملاء. نحن نسهل التقديمات فقط ولا نقدم هذه الخدمات بأنفسنا."
+                : "We collaborate with a network of independent, licensed professionals to provide comprehensive support. These partners operate independently of JJ Global Capital and contract directly with clients. We facilitate introductions only and do not provide these services ourselves."}
+            </p>
+            <div className="flex flex-wrap gap-2">
+              {["Law Firms", "Mortgage Specialists", "Property Managers", "Conveyancers"].map((partner) => (
+                <span key={partner} className="text-xs text-blue-300/80 bg-blue-500/20 px-2 py-1 rounded-full">
+                  {partner}
+                </span>
+              ))}
+            </div>
+          </div>
+        </div>
+      </div>
+    );
+  }
+
+  // Default compact variant
+  return (
+    <div className={`text-center ${className}`}>
+      <p className="text-zinc-600 text-xs leading-relaxed">
+        © {currentYear} JJ Global Capital Real Estate Brokerage. All Rights Reserved.
+        <span className="block mt-1">
+          Licensed brokerage services only. Third-party services via independent professionals.
+        </span>
+      </p>
+    </div>
+  );
+};
+
+export default ComplianceDisclaimer;

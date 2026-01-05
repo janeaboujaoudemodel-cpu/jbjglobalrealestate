@@ -43,16 +43,16 @@ const Contact = () => {
       <section className="relative py-24 md:py-32">
         <div className="absolute inset-0 bg-gradient-to-b from-zinc-900/50 to-black" />
         <div className="relative container mx-auto px-4">
-          <p className="text-gold text-sm uppercase tracking-widest mb-4">{t('contact.title')}</p>
+          <p className="text-gold text-sm uppercase tracking-widest mb-4">Real Estate Brokerage</p>
           <h1 
             className="text-white text-4xl md:text-6xl font-bold mb-6 max-w-3xl"
             style={{ fontFamily: "Poppins, sans-serif" }}
           >
-            Let's Start Your Journey
+            Book a Consultation
           </h1>
           <p className="text-zinc-400 text-lg max-w-2xl leading-relaxed">
-            {t('contact.subtitle')}. Our team of expert advisors is ready to guide you through your next investment. 
-            Reach out today for a confidential consultation.
+            Our brokerage team is ready to assist with property sales, leasing, and holiday home services. 
+            We also provide introductions to trusted legal and mortgage partners.
           </p>
         </div>
       </section>
@@ -98,11 +98,15 @@ const Contact = () => {
               className="text-white text-3xl md:text-4xl font-bold mb-6"
               style={{ fontFamily: "Poppins, sans-serif" }}
             >
-              Ready to Invest?
+              Ready to Get Started?
             </h2>
-            <p className="text-zinc-400 text-lg mb-8 leading-relaxed">
-              Complete our investment inquiry form and one of our senior advisors will 
-              contact you within 24 hours to discuss your goals and opportunities.
+            <p className="text-zinc-400 text-lg mb-4 leading-relaxed">
+              Complete our inquiry form and a member of our brokerage team will contact you 
+              within 24 hours to discuss your property requirements.
+            </p>
+            <p className="text-zinc-500 text-sm mb-8 leading-relaxed">
+              This consultation is for real estate brokerage guidance and partner introductions only. 
+              We do not provide legal, mortgage, or investment advice.
             </p>
             <Button 
               onClick={() => setIsInquiryOpen(true)}

@@ -1,8 +1,8 @@
-import { AlertTriangle, Shield, Lock, FileText } from "lucide-react";
+import { AlertTriangle, Shield, Lock, FileText, Building2 } from "lucide-react";
 import { Link } from "react-router-dom";
 
 interface LegalDisclaimerProps {
-  variant?: "full" | "compact" | "investment" | "ai-tools";
+  variant?: "full" | "compact" | "investment" | "ai-tools" | "brokerage";
   className?: string;
 }
 
@@ -18,42 +18,50 @@ const LegalDisclaimer = ({ variant = "compact", className = "" }: LegalDisclaime
           </div>
           <div>
             <h4 className="text-white font-semibold">Legal Notice & Disclaimer</h4>
-            <p className="text-zinc-500 text-xs">JJ Global Capital - Protected Platform</p>
+            <p className="text-zinc-500 text-xs">JJ Global Capital | Real Estate Brokerage</p>
           </div>
         </div>
 
         <div className="space-y-4 text-zinc-400 text-sm">
           <div className="flex items-start gap-3">
-            <Lock className="w-4 h-4 text-gold flex-shrink-0 mt-1" />
+            <Building2 className="w-4 h-4 text-gold flex-shrink-0 mt-1" />
             <p>
-              <strong className="text-white">Intellectual Property:</strong> This website, its design, AI-powered tools, 
-              algorithms, content, and all associated technologies are the exclusive intellectual property of 
-              <span className="text-gold"> Jane Abou Jaoude</span> and <span className="text-gold">JJ Global Capital</span>.
+              <strong className="text-white">Brokerage Services:</strong> JJ Global Capital is a licensed real estate 
+              brokerage providing property sales, leasing, and holiday home services within the UAE.
             </p>
           </div>
 
           <div className="flex items-start gap-3">
             <AlertTriangle className="w-4 h-4 text-gold flex-shrink-0 mt-1" />
             <p>
-              <strong className="text-white">Prohibition:</strong> Unauthorized copying, reproduction, distribution, 
-              modification, or commercial use of any part of this platform is strictly prohibited and will be 
-              prosecuted to the fullest extent of international copyright and intellectual property law.
+              <strong className="text-white">No Regulated Advice:</strong> We do not provide legal, mortgage, financial, 
+              or investment advice. For these services, we can introduce you to independent licensed professionals 
+              who contract directly with you.
+            </p>
+          </div>
+
+          <div className="flex items-start gap-3">
+            <Lock className="w-4 h-4 text-gold flex-shrink-0 mt-1" />
+            <p>
+              <strong className="text-white">Intellectual Property:</strong> This website, its design, AI-powered tools, 
+              and all associated content are the exclusive intellectual property of 
+              <span className="text-gold"> Jane Abou Jaoude</span> and <span className="text-gold">JJ Global Capital</span>.
             </p>
           </div>
 
           <div className="flex items-start gap-3">
             <FileText className="w-4 h-4 text-gold flex-shrink-0 mt-1" />
             <p>
-              <strong className="text-white">Investment Disclaimer:</strong> Information provided on this platform 
-              is for informational purposes only and does not constitute financial, legal, or investment advice. 
-              Users should seek independent professional advice before making investment decisions.
+              <strong className="text-white">Third-Party Services:</strong> Legal, mortgage, and property management 
+              services referenced on this platform are provided by independent licensed professionals. Clients 
+              contract directly with these providers.
             </p>
           </div>
         </div>
 
         <div className="mt-6 pt-4 border-t border-zinc-800">
           <p className="text-zinc-600 text-xs text-center">
-            © {currentYear} JJ Global Capital | Powered by JJ Holding Group | 
+            © {currentYear} JJ Global Capital Real Estate Brokerage | 
             <Link to="/privacy" className="text-gold hover:underline ml-1">Privacy Policy</Link> | 
             <Link to="/terms" className="text-gold hover:underline ml-1">Terms of Service</Link>
           </p>
@@ -62,17 +70,17 @@ const LegalDisclaimer = ({ variant = "compact", className = "" }: LegalDisclaime
     );
   }
 
-  if (variant === "investment") {
+  if (variant === "investment" || variant === "brokerage") {
     return (
       <div className={`bg-amber-500/10 border border-amber-500/30 rounded-lg p-4 ${className}`}>
         <div className="flex items-start gap-3">
           <AlertTriangle className="w-5 h-5 text-amber-500 flex-shrink-0 mt-0.5" />
           <div>
-            <p className="text-amber-200 text-sm font-medium mb-1">Investment Disclaimer</p>
+            <p className="text-amber-200 text-sm font-medium mb-1">Brokerage Disclaimer</p>
             <p className="text-amber-200/70 text-xs leading-relaxed">
-              The information provided is for general informational purposes only and should not be considered 
-              as financial, legal, or investment advice. Past performance is not indicative of future results. 
-              Please consult with qualified professionals before making any investment decisions.
+              JJ Global Capital is a licensed real estate brokerage. We do not provide legal, mortgage, 
+              financial, or investment advice. Third-party services are provided by independent licensed 
+              professionals who contract directly with clients.
             </p>
           </div>
         </div>
@@ -88,9 +96,8 @@ const LegalDisclaimer = ({ variant = "compact", className = "" }: LegalDisclaime
           <div>
             <p className="text-purple-200 text-sm font-medium mb-1">AI Tool Disclaimer</p>
             <p className="text-purple-200/70 text-xs leading-relaxed">
-              AI-generated analysis and recommendations are provided for informational purposes only. 
-              Results may vary and should be verified independently. These tools are proprietary to 
-              JJ Global Capital and protected under intellectual property laws.
+              AI-generated analysis is for informational purposes only and does not constitute professional advice. 
+              Results should be verified independently. These tools are proprietary to JJ Global Capital.
             </p>
           </div>
         </div>
@@ -102,10 +109,9 @@ const LegalDisclaimer = ({ variant = "compact", className = "" }: LegalDisclaime
   return (
     <div className={`text-center ${className}`}>
       <p className="text-zinc-600 text-xs leading-relaxed">
-        © {currentYear} JJ Global Capital. All Rights Reserved. 
+        © {currentYear} JJ Global Capital Real Estate Brokerage. All Rights Reserved. 
         <span className="block mt-1">
-          Developed by <span className="text-gold">Jane Abou Jaoude</span>. 
-          Unauthorized reproduction prohibited.
+          Licensed brokerage services only. Third-party services via independent professionals.
         </span>
       </p>
     </div>
