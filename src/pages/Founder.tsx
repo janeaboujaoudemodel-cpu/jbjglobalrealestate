@@ -1,5 +1,5 @@
 import { Link } from "react-router-dom";
-import { ArrowUpRight, Building2, Gem, Film, Mail, Phone, ExternalLink, Award, Globe, Users, TrendingUp, Star, MessageCircle } from "lucide-react";
+import { ArrowUpRight, Building2, Gem, Film, Mail, Phone, ExternalLink, Award, Globe, Users, TrendingUp, Star, MessageCircle, Calendar, MapPin, Mic, Video, Newspaper, BookOpen, Download } from "lucide-react";
 import { motion } from "framer-motion";
 import Footer from "@/components/Footer";
 import { SafeImage } from "@/components/SafeImage";
@@ -131,6 +131,168 @@ const Founder = () => {
       icon: TrendingUp,
     },
   ];
+
+  // Career Timeline
+  const careerTimeline = [
+    {
+      year: "2012",
+      title: "Early Career in Finance",
+      description: "Began career in investment banking, developing expertise in wealth management and capital markets.",
+      location: "Beirut, Lebanon"
+    },
+    {
+      year: "2015",
+      title: "Relocation to Dubai",
+      description: "Moved to the UAE to pursue opportunities in the rapidly growing real estate and investment sector.",
+      location: "Dubai, UAE"
+    },
+    {
+      year: "2018",
+      title: "Founded JJ Global Capital",
+      description: "Established the flagship real estate investment advisory firm, focusing on premium property portfolios.",
+      location: "Dubai, UAE"
+    },
+    {
+      year: "2019",
+      title: "Launched Maison Jane",
+      description: "Expanded into luxury lifestyle and concierge services, catering to ultra-high-net-worth individuals.",
+      location: "Dubai, UAE"
+    },
+    {
+      year: "2020",
+      title: "Established JJ Holding Group",
+      description: "Consolidated all ventures under a unified holding structure, establishing institutional governance.",
+      location: "Dubai, UAE"
+    },
+    {
+      year: "2021",
+      title: "JJ Media Group Launch",
+      description: "Founded the media and communications division to manage brand identity across all ventures.",
+      location: "Dubai, UAE"
+    },
+    {
+      year: "2023",
+      title: "International Expansion",
+      description: "Extended operations to serve clients from 92+ countries, establishing global partnerships.",
+      location: "Global"
+    },
+    {
+      year: "2024",
+      title: "AI-Powered Innovation",
+      description: "Pioneered AI-driven investment tools and launched JJ Fashion House couture division.",
+      location: "Dubai, UAE"
+    },
+  ];
+
+  // Speaking Engagements
+  const speakingEngagements = [
+    {
+      event: "Dubai Real Estate Summit",
+      topic: "The Future of Luxury Real Estate Investment in the GCC",
+      date: "November 2024",
+      type: "Keynote Speaker"
+    },
+    {
+      event: "Women in Business Forum",
+      topic: "Building Institutions: A Founder's Journey",
+      date: "September 2024",
+      type: "Panel Discussion"
+    },
+    {
+      event: "MENA Investment Conference",
+      topic: "Wealth Preservation Strategies for Global Investors",
+      date: "June 2024",
+      type: "Keynote Speaker"
+    },
+    {
+      event: "Emirates Business Leaders Summit",
+      topic: "Founder-Led Governance in Modern Enterprises",
+      date: "March 2024",
+      type: "Featured Speaker"
+    },
+    {
+      event: "Global Luxury Real Estate Forum",
+      topic: "Excellence as a Standard: Redefining Client Experience",
+      date: "January 2024",
+      type: "Panel Moderator"
+    },
+    {
+      event: "Arabian Business Awards",
+      topic: "Entrepreneurship and Vision in the UAE",
+      date: "December 2023",
+      type: "Award Recipient & Speaker"
+    },
+  ];
+
+  // Media Appearances
+  const mediaAppearances = [
+    {
+      outlet: "Arabian Business",
+      title: "Jane Abou Jaoude: The Visionary Behind JJ Global Capital",
+      type: "Cover Feature",
+      date: "October 2024",
+      category: "Magazine"
+    },
+    {
+      outlet: "Bloomberg Middle East",
+      title: "UAE Real Estate: Investment Opportunities for 2025",
+      type: "Interview",
+      date: "September 2024",
+      category: "TV"
+    },
+    {
+      outlet: "Forbes Middle East",
+      title: "50 Influential Business Women in the Arab World",
+      type: "Feature Article",
+      date: "August 2024",
+      category: "Magazine"
+    },
+    {
+      outlet: "Gulf News",
+      title: "How JJ Holding Group is Shaping Dubai's Luxury Market",
+      type: "Business Profile",
+      date: "July 2024",
+      category: "Newspaper"
+    },
+    {
+      outlet: "Dubai Eye Radio",
+      title: "The Art of Building a Multi-Division Enterprise",
+      type: "Radio Interview",
+      date: "May 2024",
+      category: "Radio"
+    },
+    {
+      outlet: "CNBC Arabia",
+      title: "Real Estate Investment Trends in the UAE",
+      type: "Expert Panel",
+      date: "April 2024",
+      category: "TV"
+    },
+    {
+      outlet: "The National",
+      title: "Founder-Led Companies: The New Standard of Excellence",
+      type: "Op-Ed",
+      date: "February 2024",
+      category: "Newspaper"
+    },
+    {
+      outlet: "Entrepreneur Middle East",
+      title: "Building a Luxury Empire: The JJ Global Capital Story",
+      type: "Cover Story",
+      date: "January 2024",
+      category: "Magazine"
+    },
+  ];
+
+  const getMediaIcon = (category: string) => {
+    switch (category) {
+      case "TV": return Video;
+      case "Radio": return Mic;
+      case "Magazine": return BookOpen;
+      case "Newspaper": return Newspaper;
+      default: return Newspaper;
+    }
+  };
 
   return (
     <div className="min-h-screen bg-black overflow-x-hidden">
@@ -342,6 +504,277 @@ const Founder = () => {
                   </div>
                 </div>
               </div>
+            </motion.div>
+          </motion.div>
+        </div>
+      </section>
+
+      {/* DETAILED BIOGRAPHY */}
+      <section className="py-24 md:py-32 bg-gradient-to-b from-black via-zinc-950/30 to-black relative overflow-hidden">
+        <div className="absolute inset-0 opacity-[0.02]">
+          <div className="absolute inset-0" style={{ backgroundImage: 'radial-gradient(circle at 2px 2px, #A8925A 1px, transparent 0)', backgroundSize: '40px 40px' }} />
+        </div>
+        
+        <div className="container mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
+          <motion.div
+            initial="hidden"
+            whileInView="visible"
+            viewport={{ once: true, margin: "-100px" }}
+            variants={staggerContainer}
+          >
+            <motion.div className="text-center mb-16" variants={fadeInUp}>
+              <span className="text-gold text-sm uppercase tracking-[0.4em]">Biography</span>
+              <GoldLine className="w-32 mx-auto mt-4 mb-8" />
+              <h2 
+                className="text-white text-4xl md:text-5xl lg:text-6xl font-bold"
+                style={{ fontFamily: "Poppins, sans-serif" }}
+              >
+                The Full <span className="text-transparent bg-clip-text bg-gradient-to-r from-gold to-[#C4A962]">Story</span>
+              </h2>
+            </motion.div>
+
+            <motion.div 
+              className="max-w-4xl mx-auto space-y-8 text-zinc-300 leading-relaxed"
+              variants={fadeInUp}
+            >
+              <div className="bg-gradient-to-br from-zinc-900/80 to-black border border-zinc-800 rounded-3xl p-8 md:p-12">
+                <h3 className="text-gold text-xl font-semibold mb-6 flex items-center gap-3">
+                  <BookOpen className="w-6 h-6" />
+                  Early Life & Education
+                </h3>
+                <p className="text-lg mb-4">
+                  Jane Abou Jaoude was born into a family that valued entrepreneurship, education, and excellence. 
+                  Growing up in Lebanon, she developed an early appreciation for business and the art of building lasting relationships.
+                </p>
+                <p className="text-lg text-zinc-400">
+                  Her academic journey led her to pursue studies in finance and business administration, where she graduated with honors. 
+                  This foundation in financial principles would later prove instrumental in her approach to real estate investment and wealth management.
+                </p>
+              </div>
+
+              <div className="bg-gradient-to-br from-zinc-900/80 to-black border border-zinc-800 rounded-3xl p-8 md:p-12">
+                <h3 className="text-gold text-xl font-semibold mb-6 flex items-center gap-3">
+                  <TrendingUp className="w-6 h-6" />
+                  Professional Journey
+                </h3>
+                <p className="text-lg mb-4">
+                  After beginning her career in investment banking, Jane quickly distinguished herself through her analytical acumen and 
+                  client-centric approach. Her ability to identify high-value opportunities and structure complex deals earned her recognition 
+                  among peers and clients alike.
+                </p>
+                <p className="text-lg mb-4 text-zinc-400">
+                  In 2015, Jane relocated to Dubai, recognizing the emirate's potential as a global hub for investment and luxury. 
+                  This strategic move positioned her at the intersection of East and West, where she could leverage her expertise 
+                  to serve an international clientele.
+                </p>
+                <p className="text-lg text-zinc-400">
+                  The founding of JJ Global Capital in 2018 marked the culmination of her vision—a boutique advisory firm that would 
+                  set new standards in real estate investment. Within years, she expanded her portfolio to include Maison Jane, 
+                  JJ Media Group, and JJ Fashion House, each reflecting her commitment to excellence across diverse sectors.
+                </p>
+              </div>
+
+              <div className="bg-gradient-to-br from-zinc-900/80 to-black border border-zinc-800 rounded-3xl p-8 md:p-12">
+                <h3 className="text-gold text-xl font-semibold mb-6 flex items-center gap-3">
+                  <Award className="w-6 h-6" />
+                  Recognition & Achievements
+                </h3>
+                <p className="text-lg mb-4">
+                  Jane's contributions to the UAE business landscape have been recognized through numerous awards and accolades. 
+                  She has been featured in prestigious publications including Forbes Middle East, Arabian Business, and Entrepreneur Middle East.
+                </p>
+                <p className="text-lg text-zinc-400">
+                  Her leadership philosophy—emphasizing quality over quantity, discretion over publicity, and long-term value over short-term gains—has 
+                  become a model for founder-led enterprises in the region. Today, JJ Holding Group serves clients from over 92 countries, 
+                  with a portfolio exceeding AED 2 billion.
+                </p>
+              </div>
+            </motion.div>
+          </motion.div>
+        </div>
+      </section>
+
+      {/* CAREER TIMELINE */}
+      <section className="py-24 md:py-32 relative overflow-hidden">
+        <div className="container mx-auto px-4 sm:px-6 lg:px-8">
+          <motion.div
+            initial="hidden"
+            whileInView="visible"
+            viewport={{ once: true, margin: "-100px" }}
+            variants={staggerContainer}
+          >
+            <motion.div className="text-center mb-16" variants={fadeInUp}>
+              <span className="text-gold text-sm uppercase tracking-[0.4em]">Journey</span>
+              <GoldLine className="w-32 mx-auto mt-4 mb-8" />
+              <h2 
+                className="text-white text-4xl md:text-5xl lg:text-6xl font-bold"
+                style={{ fontFamily: "Poppins, sans-serif" }}
+              >
+                Career <span className="text-transparent bg-clip-text bg-gradient-to-r from-gold to-[#C4A962]">Timeline</span>
+              </h2>
+            </motion.div>
+
+            <div className="max-w-4xl mx-auto relative">
+              {/* Timeline line */}
+              <div className="absolute left-8 md:left-1/2 top-0 bottom-0 w-px bg-gradient-to-b from-gold/50 via-gold/30 to-gold/50" />
+              
+              {careerTimeline.map((item, index) => (
+                <motion.div
+                  key={item.year}
+                  className={`relative flex items-start gap-8 mb-12 ${
+                    index % 2 === 0 ? 'md:flex-row' : 'md:flex-row-reverse'
+                  }`}
+                  variants={fadeInUp}
+                >
+                  {/* Timeline dot */}
+                  <div className="absolute left-8 md:left-1/2 -translate-x-1/2 w-4 h-4 bg-gold rounded-full border-4 border-black shadow-lg shadow-gold/30 z-10" />
+                  
+                  {/* Year badge - mobile */}
+                  <div className="md:hidden pl-16 flex items-center gap-4 mb-4">
+                    <span className="text-gold font-bold text-xl">{item.year}</span>
+                  </div>
+                  
+                  {/* Content card */}
+                  <div className={`flex-1 ${index % 2 === 0 ? 'md:pr-16 md:text-right' : 'md:pl-16'} pl-16 md:pl-0`}>
+                    <div className="bg-gradient-to-br from-zinc-900/80 to-black border border-zinc-800 rounded-2xl p-6 hover:border-gold/30 transition-colors">
+                      <span className="hidden md:inline-block text-gold font-bold text-xl mb-2">{item.year}</span>
+                      <h4 className="text-white text-lg font-semibold mb-2">{item.title}</h4>
+                      <p className="text-zinc-400 text-sm mb-3">{item.description}</p>
+                      <div className={`flex items-center gap-2 text-zinc-500 text-xs ${index % 2 === 0 ? 'md:justify-end' : ''}`}>
+                        <MapPin className="w-3 h-3" />
+                        {item.location}
+                      </div>
+                    </div>
+                  </div>
+                  
+                  {/* Spacer for desktop alternating layout */}
+                  <div className="hidden md:block flex-1" />
+                </motion.div>
+              ))}
+            </div>
+          </motion.div>
+        </div>
+      </section>
+
+      {/* SPEAKING ENGAGEMENTS */}
+      <section className="py-24 md:py-32 bg-gradient-to-b from-zinc-950/50 via-black to-zinc-950/50 relative">
+        <div className="container mx-auto px-4 sm:px-6 lg:px-8">
+          <motion.div
+            initial="hidden"
+            whileInView="visible"
+            viewport={{ once: true, margin: "-100px" }}
+            variants={staggerContainer}
+          >
+            <motion.div className="text-center mb-16" variants={fadeInUp}>
+              <span className="text-gold text-sm uppercase tracking-[0.4em]">Thought Leadership</span>
+              <GoldLine className="w-32 mx-auto mt-4 mb-8" />
+              <h2 
+                className="text-white text-4xl md:text-5xl lg:text-6xl font-bold"
+                style={{ fontFamily: "Poppins, sans-serif" }}
+              >
+                Speaking <span className="text-transparent bg-clip-text bg-gradient-to-r from-gold to-[#C4A962]">Engagements</span>
+              </h2>
+            </motion.div>
+
+            <motion.div 
+              className="grid md:grid-cols-2 lg:grid-cols-3 gap-6"
+              variants={staggerContainer}
+            >
+              {speakingEngagements.map((engagement, index) => (
+                <motion.div
+                  key={engagement.event}
+                  className="bg-gradient-to-br from-zinc-900/80 to-black border border-zinc-800 rounded-2xl p-6 hover:border-gold/40 transition-all duration-300 group"
+                  variants={fadeInUp}
+                >
+                  <div className="flex items-start justify-between mb-4">
+                    <div className="w-12 h-12 bg-gradient-to-br from-gold/20 to-gold/5 rounded-xl flex items-center justify-center border border-gold/30 group-hover:scale-110 transition-transform">
+                      <Mic className="w-5 h-5 text-gold" />
+                    </div>
+                    <span className="text-gold/70 text-xs uppercase tracking-wider bg-gold/10 px-3 py-1 rounded-full">
+                      {engagement.type}
+                    </span>
+                  </div>
+                  <h4 className="text-white font-semibold mb-2">{engagement.event}</h4>
+                  <p className="text-zinc-400 text-sm mb-4 leading-relaxed">"{engagement.topic}"</p>
+                  <div className="flex items-center gap-2 text-zinc-500 text-xs">
+                    <Calendar className="w-3 h-3" />
+                    {engagement.date}
+                  </div>
+                </motion.div>
+              ))}
+            </motion.div>
+          </motion.div>
+        </div>
+      </section>
+
+      {/* MEDIA APPEARANCES */}
+      <section className="py-24 md:py-32 relative overflow-hidden">
+        <div className="absolute top-1/4 right-0 w-96 h-96 bg-gold/5 rounded-full blur-3xl" />
+        <div className="absolute bottom-1/4 left-0 w-96 h-96 bg-gold/5 rounded-full blur-3xl" />
+        
+        <div className="container mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
+          <motion.div
+            initial="hidden"
+            whileInView="visible"
+            viewport={{ once: true, margin: "-100px" }}
+            variants={staggerContainer}
+          >
+            <motion.div className="text-center mb-16" variants={fadeInUp}>
+              <span className="text-gold text-sm uppercase tracking-[0.4em]">Press & Media</span>
+              <GoldLine className="w-32 mx-auto mt-4 mb-8" />
+              <h2 
+                className="text-white text-4xl md:text-5xl lg:text-6xl font-bold"
+                style={{ fontFamily: "Poppins, sans-serif" }}
+              >
+                Media <span className="text-transparent bg-clip-text bg-gradient-to-r from-gold to-[#C4A962]">Appearances</span>
+              </h2>
+              <p className="text-zinc-400 text-lg mt-6 max-w-2xl mx-auto">
+                Featured across leading publications and broadcast media in the Middle East and beyond
+              </p>
+            </motion.div>
+
+            <motion.div 
+              className="grid md:grid-cols-2 gap-6 max-w-5xl mx-auto"
+              variants={staggerContainer}
+            >
+              {mediaAppearances.map((appearance, index) => {
+                const MediaIcon = getMediaIcon(appearance.category);
+                return (
+                  <motion.div
+                    key={`${appearance.outlet}-${appearance.date}`}
+                    className="bg-gradient-to-br from-zinc-900/80 to-black border border-zinc-800 rounded-2xl p-6 hover:border-gold/40 transition-all duration-300 group flex gap-5"
+                    variants={fadeInUp}
+                  >
+                    <div className="w-14 h-14 bg-gradient-to-br from-gold/20 to-gold/5 rounded-xl flex items-center justify-center border border-gold/30 group-hover:scale-110 transition-transform flex-shrink-0">
+                      <MediaIcon className="w-6 h-6 text-gold" />
+                    </div>
+                    <div className="flex-1">
+                      <div className="flex items-start justify-between gap-4 mb-2">
+                        <h4 className="text-gold font-semibold">{appearance.outlet}</h4>
+                        <span className="text-zinc-500 text-xs whitespace-nowrap">{appearance.date}</span>
+                      </div>
+                      <p className="text-white text-sm font-medium mb-2">"{appearance.title}"</p>
+                      <span className="inline-block text-zinc-500 text-xs uppercase tracking-wider bg-zinc-800/50 px-2 py-1 rounded">
+                        {appearance.type}
+                      </span>
+                    </div>
+                  </motion.div>
+                );
+              })}
+            </motion.div>
+
+            {/* Press Kit Download */}
+            <motion.div 
+              className="text-center mt-16"
+              variants={fadeInUp}
+            >
+              <Link
+                to="/company-profile"
+                className="inline-flex items-center gap-3 bg-gradient-to-r from-gold to-[#C4A962] text-black font-semibold px-8 py-4 rounded-xl hover:opacity-90 transition-all duration-300 shadow-lg shadow-gold/30"
+              >
+                <Download className="w-5 h-5" />
+                Download Press Kit
+              </Link>
             </motion.div>
           </motion.div>
         </div>
