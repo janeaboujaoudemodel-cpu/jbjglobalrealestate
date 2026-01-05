@@ -78,26 +78,18 @@ const Founder = () => {
     {
       icon: Building2,
       name: "JJ Global Capital",
-      description: "The flagship investment and advisory division of JJ Holding Group. Orchestrating premium UAE real estate portfolios with institutional precision, delivering bespoke wealth preservation strategies and capital appreciation for a distinguished global clientele.",
+      description: "The flagship real estate investment and advisory division of JJ Holding Group. Delivering premium UAE property portfolios with institutional precision and bespoke wealth preservation strategies for a distinguished global clientele.",
       image: founderOffice,
       tagline: "Real Estate Investment & Advisory",
       url: "https://jjglobalcapital.com"
     },
     {
-      icon: Gem,
-      name: "Maison Jane",
-      description: "An exclusive luxury lifestyle atelier embodying the founder's vision of refined living. Curating transformative experiences across beauty, wellness, and personal concierge services for the world's most discerning individuals.",
+      icon: Users,
+      name: "JJ Group",
+      description: "The operational backbone of JJ Holding Group, coordinating business development, strategic partnerships, and corporate governance across all divisions.",
       image: founderJetInterior,
-      tagline: "Luxury Lifestyle & Concierge",
-      url: "https://maisonjane.ae"
-    },
-    {
-      icon: Film,
-      name: "JJ Media Group",
-      description: "The strategic communications powerhouse shaping narrative excellence across the group's ventures. Architecting brand identities, digital ecosystems, and influence frameworks that command attention on the global stage.",
-      image: founderRedCarpet,
-      tagline: "Media & Strategic Communications",
-      url: "https://jjmediagroup.ae"
+      tagline: "Business Development & Operations",
+      url: "https://jjholdinggroup.com"
     },
     {
       icon: Award,
@@ -106,6 +98,22 @@ const Founder = () => {
       image: founderAwardStage,
       tagline: "Haute Couture & Design",
       url: "https://jjfashionhouse.com"
+    },
+    {
+      icon: Star,
+      name: "JJ and Serena",
+      description: "A collaborative venture combining fashion-forward design with lifestyle excellence, bringing together complementary expertise for unique creative partnerships.",
+      image: founderRedCarpet,
+      tagline: "Fashion & Lifestyle Collaboration",
+      url: "https://jjandserena.com"
+    },
+    {
+      icon: Gem,
+      name: "Mrs Jane",
+      description: "The evolution of James Beauty - a premium luxury home services brand offering personalized beauty, wellness, and lifestyle experiences delivered directly to discerning clients.",
+      image: founderJetInterior,
+      tagline: "Luxury Home Services",
+      url: "https://mrsjane.ae"
     },
   ];
 
@@ -135,51 +143,45 @@ const Founder = () => {
   // Career Timeline
   const careerTimeline = [
     {
-      year: "2012",
-      title: "Early Career in Finance",
-      description: "Began career in investment banking, developing expertise in wealth management and capital markets.",
+      year: "2014",
+      title: "Founded James Beauty",
+      description: "While studying, launched personal beauty brand and started selling beauty products, partnering with salons across Lebanon.",
       location: "Beirut, Lebanon"
     },
     {
-      year: "2015",
-      title: "Relocation to Dubai",
-      description: "Moved to the UAE to pursue opportunities in the rapidly growing real estate and investment sector.",
-      location: "Dubai, UAE"
-    },
-    {
-      year: "2018",
-      title: "Founded JJ Global Capital",
-      description: "Established the flagship real estate investment advisory firm, focusing on premium property portfolios.",
-      location: "Dubai, UAE"
-    },
-    {
-      year: "2019",
-      title: "Launched Maison Jane",
-      description: "Expanded into luxury lifestyle and concierge services, catering to ultra-high-net-worth individuals.",
-      location: "Dubai, UAE"
+      year: "2014-2020",
+      title: "Real Estate & Beauty Business",
+      description: "Built connections in Lebanese real estate market while running James Beauty business development operations.",
+      location: "Beirut, Lebanon"
     },
     {
       year: "2020",
+      title: "Relocated to Dubai",
+      description: "During COVID, made the bold decision to relocate completely to Dubai and start from scratch in a new market.",
+      location: "Dubai, UAE"
+    },
+    {
+      year: "2020-2024",
+      title: "dnata - Quality Assurance Lead",
+      description: "Managed quality assurance and operations for Address Hotels at Dubai Airport Terminals 1 & 3. Led 495+ employees including drivers and coordinators. Implemented KPIs, training programs, and mystery shopping standards.",
+      location: "Dubai, UAE"
+    },
+    {
+      year: "2021-2024",
+      title: "Real Estate Brokerage & Training",
+      description: "Worked with multiple developers and brokerage companies. Provided intensive training programs for leading real estate brokers.",
+      location: "Dubai, UAE"
+    },
+    {
+      year: "2022",
+      title: "Professional Certifications",
+      description: "Earned Personal Trainer & Fitness Nutritionist certifications from ISSA. Completed Digital Marketing and Development studies with London Studies.",
+      location: "Dubai, UAE"
+    },
+    {
+      year: "2025",
       title: "Established JJ Holding Group",
-      description: "Consolidated all ventures under a unified holding structure, establishing institutional governance.",
-      location: "Dubai, UAE"
-    },
-    {
-      year: "2021",
-      title: "JJ Media Group Launch",
-      description: "Founded the media and communications division to manage brand identity across all ventures.",
-      location: "Dubai, UAE"
-    },
-    {
-      year: "2023",
-      title: "International Expansion",
-      description: "Extended operations to serve clients from 92+ countries, establishing global partnerships.",
-      location: "Global"
-    },
-    {
-      year: "2024",
-      title: "AI-Powered Innovation",
-      description: "Pioneered AI-driven investment tools and launched JJ Fashion House couture division.",
+      description: "After 5 years in Dubai, founded JJ Holding Group with multiple divisions: JJ Global Capital, JJ Group, JJ Fashion House, JJ and Serena, and Mrs Jane (luxury home services).",
       location: "Dubai, UAE"
     },
   ];
@@ -464,13 +466,13 @@ const Founder = () => {
               
               <div className="space-y-6 text-zinc-300 leading-relaxed max-w-2xl">
                 <p className="text-xl md:text-2xl font-light text-white/90">
-                  A distinguished business architect whose vision has shaped a diversified portfolio spanning real estate investment, luxury lifestyle, media communications, and haute couture.
+                  A self-made entrepreneur who founded her first business at 16, built a management career leading 495+ employees, and established a multi-division holding group by age 27.
                 </p>
                 <p className="text-lg">
-                  As the driving force behind JJ Holding Group, Jane has cultivated an ecosystem of excellence—where each venture is defined by uncompromising standards, strategic precision, and an unwavering commitment to institutional integrity.
+                  Born September 5, 1998, in Lebanon. Fluent in French, English, Arabic, and Spanish. Jane's journey spans from creating beauty products as a teenager to heading quality assurance for international hospitality brands—culminating in the 2025 founding of JJ Holding Group.
                 </p>
                 <p className="text-lg text-zinc-400">
-                  Her leadership philosophy transcends conventional metrics. Every decision is calibrated for generational impact, balancing calculated ambition with refined discretion. From the boardrooms of Dubai to international stages, she exemplifies a new paradigm of entrepreneurial sophistication.
+                  Her leadership philosophy is forged through diverse experience: entrepreneurship, corporate operations, real estate brokerage, and continuous professional education. From beauty salons in Beirut to Address Hotels in Dubai, every chapter prepared her for institutional excellence.
                 </p>
               </div>
               
@@ -481,17 +483,17 @@ const Founder = () => {
                     <Globe className="w-5 h-5 text-gold" />
                   </div>
                   <div>
-                    <p className="text-white font-medium text-sm">Global Presence</p>
-                    <p className="text-zinc-500 text-xs">International Operations</p>
+                    <p className="text-white font-medium text-sm">4 Languages</p>
+                    <p className="text-zinc-500 text-xs">FR · EN · AR · ES</p>
                   </div>
                 </div>
                 <div className="flex items-center gap-3">
                   <div className="w-12 h-12 bg-gradient-to-br from-gold/20 to-gold/5 rounded-xl flex items-center justify-center border border-gold/30 flex-shrink-0">
-                    <Award className="w-5 h-5 text-gold" />
+                    <Users className="w-5 h-5 text-gold" />
                   </div>
                   <div>
-                    <p className="text-white font-medium text-sm">Award-Winning</p>
-                    <p className="text-zinc-500 text-xs">Recognized Excellence</p>
+                    <p className="text-white font-medium text-sm">495+ Managed</p>
+                    <p className="text-zinc-500 text-xs">Team Leadership</p>
                   </div>
                 </div>
                 <div className="flex items-center gap-3">
@@ -499,8 +501,8 @@ const Founder = () => {
                     <TrendingUp className="w-5 h-5 text-gold" />
                   </div>
                   <div>
-                    <p className="text-white font-medium text-sm">Proven Track Record</p>
-                    <p className="text-zinc-500 text-xs">Consistent Growth</p>
+                    <p className="text-white font-medium text-sm">5 Divisions</p>
+                    <p className="text-zinc-500 text-xs">JJ Holding Group</p>
                   </div>
                 </div>
               </div>
@@ -540,37 +542,65 @@ const Founder = () => {
               <div className="bg-gradient-to-br from-zinc-900/80 to-black border border-zinc-800 rounded-3xl p-8 md:p-12">
                 <h3 className="text-gold text-xl font-semibold mb-6 flex items-center gap-3">
                   <BookOpen className="w-6 h-6" />
-                  Early Life & Education
+                  Origins & Early Entrepreneurship
                 </h3>
                 <p className="text-lg mb-4">
-                  Jane Abou Jaoude was born into a family that valued entrepreneurship, education, and excellence. 
-                  Growing up in Lebanon, she developed an early appreciation for business and the art of building lasting relationships.
+                  Jane Abou Jaoude was born on September 5, 1998, in Lebanon—a Virgo with an innate drive for precision and excellence. 
+                  Growing up fluent in French, English, Arabic, and Spanish, she developed a global perspective from an early age.
+                </p>
+                <p className="text-lg mb-4 text-zinc-400">
+                  At just 16, while still studying, Jane founded James Beauty in 2014—creating and selling her own beauty products 
+                  and partnering with salons across Lebanon. This first venture ignited her entrepreneurial spirit and taught her 
+                  the fundamentals of product development, sales, and business relationships.
                 </p>
                 <p className="text-lg text-zinc-400">
-                  Her academic journey led her to pursue studies in finance and business administration, where she graduated with honors. 
-                  This foundation in financial principles would later prove instrumental in her approach to real estate investment and wealth management.
+                  Simultaneously, she began building connections in Lebanese real estate, laying the groundwork for her future 
+                  in property investment while managing her growing beauty business.
                 </p>
               </div>
 
               <div className="bg-gradient-to-br from-zinc-900/80 to-black border border-zinc-800 rounded-3xl p-8 md:p-12">
                 <h3 className="text-gold text-xl font-semibold mb-6 flex items-center gap-3">
                   <TrendingUp className="w-6 h-6" />
-                  Professional Journey
+                  The Dubai Chapter: Corporate Leadership
                 </h3>
                 <p className="text-lg mb-4">
-                  After beginning her career in investment banking, Jane quickly distinguished herself through her analytical acumen and 
-                  client-centric approach. Her ability to identify high-value opportunities and structure complex deals earned her recognition 
-                  among peers and clients alike.
+                  In 2020, during COVID, Jane made the bold decision to relocate completely to Dubai and start from scratch. 
+                  This pivotal move would transform her career trajectory and expand her expertise exponentially.
                 </p>
                 <p className="text-lg mb-4 text-zinc-400">
-                  In 2015, Jane relocated to Dubai, recognizing the emirate's potential as a global hub for investment and luxury. 
-                  This strategic move positioned her at the intersection of East and West, where she could leverage her expertise 
-                  to serve an international clientele.
+                  At dnata, a government-affiliated company, she rose to Head of Quality Assurance and Operations, 
+                  overseeing Address Hotels at Dubai Airport Terminals 1 and 3. Managing a team of 495+ employees—from 
+                  drivers to coordinators—she implemented comprehensive KPI systems, training programs, ministry-standard 
+                  mystery shopping protocols, and quality benchmarks that elevated service excellence.
                 </p>
                 <p className="text-lg text-zinc-400">
-                  The founding of JJ Global Capital in 2018 marked the culmination of her vision—a boutique advisory firm that would 
-                  set new standards in real estate investment. Within years, she expanded her portfolio to include Maison Jane, 
-                  JJ Media Group, and JJ Fashion House, each reflecting her commitment to excellence across diverse sectors.
+                  Her corporate leadership experience provided invaluable insights into operations management, team building, 
+                  and institutional standards—skills that would later define JJ Holding Group's approach to excellence.
+                </p>
+              </div>
+
+              <div className="bg-gradient-to-br from-zinc-900/80 to-black border border-zinc-800 rounded-3xl p-8 md:p-12">
+                <h3 className="text-gold text-xl font-semibold mb-6 flex items-center gap-3">
+                  <Award className="w-6 h-6" />
+                  Real Estate Mastery & Continuous Learning
+                </h3>
+                <p className="text-lg mb-4">
+                  Direct approaches from leading real estate companies recognized Jane's potential. She transitioned into 
+                  brokerage, working with multiple developers and eventually training leading brokers through intensive 
+                  programs that shared her expertise.
+                </p>
+                <p className="text-lg mb-4 text-zinc-400">
+                  Never one to stop learning, Jane pursued additional certifications in Dubai: earning Personal Trainer 
+                  and Fitness Nutritionist credentials from ISSA, and completing Digital Marketing and Development 
+                  studies with London Studies. This commitment to continuous education reflects her belief that 
+                  excellence requires constant growth.
+                </p>
+                <p className="text-lg text-zinc-400">
+                  In 2025, after five years of building expertise in Dubai, Jane established JJ Holding Group—uniting 
+                  all her divisions under one institutional umbrella: JJ Global Capital (real estate), JJ Group (operations), 
+                  JJ Fashion House (haute couture), JJ and Serena (lifestyle), and Mrs Jane (the evolution of James Beauty, 
+                  now offering luxury home services).
                 </p>
               </div>
 
