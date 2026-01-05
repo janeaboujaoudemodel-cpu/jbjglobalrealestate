@@ -123,18 +123,18 @@ const Index = () => {
             viewport={{ once: true }}
             transition={{ duration: 0.6 }}
           >
-            {/* Row 1 - White Background CTAs */}
+            {/* Row 1 - Gold Background CTAs */}
             <div className="flex flex-wrap justify-center gap-3">
               <Link to="/about">
                 <Button 
-                  className="bg-white hover:bg-zinc-100 text-zinc-900 font-semibold px-6 py-5 text-sm shadow-lg hover:shadow-xl transition-all duration-300 hover:scale-105"
+                  className="bg-gold hover:bg-gold-light text-black font-semibold px-6 py-5 text-sm shadow-lg shadow-gold/20 hover:shadow-xl hover:shadow-gold/30 transition-all duration-300 hover:scale-105"
                 >
                   Explore Our Services
                   <ArrowUpRight className="w-4 h-4 ml-2" />
                 </Button>
               </Link>
               <Button 
-                className="bg-white hover:bg-zinc-100 text-zinc-900 font-semibold px-6 py-5 text-sm shadow-lg hover:shadow-xl transition-all duration-300 hover:scale-105"
+                className="bg-gold hover:bg-gold-light text-black font-semibold px-6 py-5 text-sm shadow-lg shadow-gold/20 hover:shadow-xl hover:shadow-gold/30 transition-all duration-300 hover:scale-105"
                 onClick={() => setIsInquiryOpen(true)}
               >
                 Contact Us
@@ -142,11 +142,11 @@ const Index = () => {
               </Button>
             </div>
             
-            {/* Row 2 - Services Row - Glass Outline Style */}
+            {/* Row 2 - Services Row - Glass Outline Style (all same) */}
             <div className="flex flex-wrap justify-center gap-3">
               <Link to="/properties">
                 <Button 
-                  className="bg-gold hover:bg-gold-light text-black font-semibold px-6 py-4 text-xs shadow-lg shadow-gold/20 hover:shadow-xl hover:shadow-gold/30 transition-all duration-300 hover:scale-105"
+                  className="bg-transparent backdrop-blur-md border border-white/30 text-white hover:bg-white/10 hover:border-white/50 font-medium px-5 py-4 text-xs transition-all duration-300 hover:scale-105"
                 >
                   Explore Properties
                   <ArrowUpRight className="w-3 h-3 ml-1" />
@@ -187,13 +187,13 @@ const Index = () => {
             
             {/* Row 3 - AI Tools - Colored Glowing Borders */}
             <div className="flex flex-wrap justify-center gap-3">
-              {/* Market Report - Amber */}
-              <Link to="/market-report">
+              {/* AI Property Comparison - Purple (matches page) */}
+              <Link to="/compare">
                 <Button 
-                  className="bg-transparent backdrop-blur-md border-2 border-amber-500/50 text-amber-400 hover:bg-amber-500/20 hover:border-amber-400 hover:shadow-lg hover:shadow-amber-500/20 font-semibold px-5 py-4 text-xs transition-all duration-300 hover:scale-105 group"
+                  className="bg-transparent backdrop-blur-md border-2 border-purple-500/50 text-purple-400 hover:bg-purple-500/20 hover:border-purple-400 hover:shadow-lg hover:shadow-purple-500/20 font-semibold px-5 py-4 text-xs transition-all duration-300 hover:scale-105 group"
                 >
-                  <FileText className="w-3 h-3 mr-1" />
-                  Market Report
+                  <BarChart3 className="w-3 h-3 mr-1" />
+                  AI Property Comparison
                   <ArrowUpRight className="w-3 h-3 ml-1 group-hover:translate-x-0.5 group-hover:-translate-y-0.5 transition-transform" />
                 </Button>
               </Link>
@@ -209,7 +209,7 @@ const Index = () => {
                 </Button>
               </Link>
               
-              {/* Rental Index - Green/Emerald */}
+              {/* Rental Index - Emerald Green */}
               <Link to="/rental-index">
                 <Button 
                   className="bg-transparent backdrop-blur-md border-2 border-emerald-500/50 text-emerald-400 hover:bg-emerald-500/20 hover:border-emerald-400 hover:shadow-lg hover:shadow-emerald-500/20 font-semibold px-5 py-4 text-xs transition-all duration-300 hover:scale-105 group"
@@ -220,10 +220,10 @@ const Index = () => {
                 </Button>
               </Link>
               
-              {/* Document Scanner - Violet */}
+              {/* Document Scanner - Green (matches page) */}
               <Link to="/document-scanner">
                 <Button 
-                  className="bg-transparent backdrop-blur-md border-2 border-violet-500/50 text-violet-400 hover:bg-violet-500/20 hover:border-violet-400 hover:shadow-lg hover:shadow-violet-500/20 font-semibold px-5 py-4 text-xs transition-all duration-300 hover:scale-105 group"
+                  className="bg-transparent backdrop-blur-md border-2 border-green-500/50 text-green-400 hover:bg-green-500/20 hover:border-green-400 hover:shadow-lg hover:shadow-green-500/20 font-semibold px-5 py-4 text-xs transition-all duration-300 hover:scale-105 group"
                 >
                   <FileText className="w-3 h-3 mr-1" />
                   Scan & Sign
@@ -243,15 +243,15 @@ const Index = () => {
               </Link>
             </div>
             
-            {/* Row 4 - Secondary Tools with Colors */}
+            {/* Row 4 - Non-AI Tools (different style) */}
             <div className="flex flex-wrap justify-center gap-3">
-              {/* AI Property Comparison - Orange */}
-              <Link to="/compare">
+              {/* Market Report - Sky Blue (different from AI tools) */}
+              <Link to="/market-report">
                 <Button 
-                  className="bg-transparent backdrop-blur-md border-2 border-orange-500/50 text-orange-400 hover:bg-orange-500/20 hover:border-orange-400 hover:shadow-lg hover:shadow-orange-500/20 font-semibold px-5 py-4 text-xs transition-all duration-300 hover:scale-105 group"
+                  className="bg-transparent backdrop-blur-md border-2 border-sky-500/50 text-sky-400 hover:bg-sky-500/20 hover:border-sky-400 hover:shadow-lg hover:shadow-sky-500/20 font-semibold px-5 py-4 text-xs transition-all duration-300 hover:scale-105 group"
                 >
-                  <BarChart3 className="w-3 h-3 mr-1" />
-                  AI Property Comparison
+                  <FileText className="w-3 h-3 mr-1" />
+                  Market Report
                   <ArrowUpRight className="w-3 h-3 ml-1 group-hover:translate-x-0.5 group-hover:-translate-y-0.5 transition-transform" />
                 </Button>
               </Link>
@@ -278,10 +278,10 @@ const Index = () => {
                 </Button>
               </Link>
               
-              {/* Tools Guide - Teal */}
+              {/* Tools Guide - Violet (purple shade) */}
               <Link to="/tools-guide">
                 <Button 
-                  className="bg-transparent backdrop-blur-md border-2 border-teal-500/50 text-teal-400 hover:bg-teal-500/20 hover:border-teal-400 hover:shadow-lg hover:shadow-teal-500/20 font-semibold px-5 py-4 text-xs transition-all duration-300 hover:scale-105 group"
+                  className="bg-transparent backdrop-blur-md border-2 border-violet-500/50 text-violet-400 hover:bg-violet-500/20 hover:border-violet-400 hover:shadow-lg hover:shadow-violet-500/20 font-semibold px-5 py-4 text-xs transition-all duration-300 hover:scale-105 group"
                 >
                   <Wrench className="w-3 h-3 mr-1" />
                   Tools Guide
