@@ -141,6 +141,24 @@ const getMimeFromDataUrl = (dataUrl: string) => {
   return match?.[1] || "application/octet-stream";
 };
 
+const isDataUrl = (value: string) => value.startsWith("data:");
+
+const getMimeFromUrlGuess = (url: string) => {
+  const clean = url.toLowerCase().split("?")[0].split("#")[0];
+  if (clean.endsWith(".png")) return "image/png";
+  if (clean.endsWith(".webp")) return "image/webp";
+  if (clean.endsWith(".jpg") || clean.endsWith(".jpeg")) return "image/jpeg";
+  return "application/octet-stream";
+};
+
+const fetchBytes = async (url: string) => {
+  const resp = await fetch(url);
+  if (!resp.ok) throw new Error(`Failed to fetch image (${resp.status})`);
+  const arrayBuffer = await resp.arrayBuffer();
+  const mime = resp.headers.get("content-type") || getMimeFromUrlGuess(url);
+  return { bytes: new Uint8Array(arrayBuffer), mime };
+};
+
 const dataUrlToUint8Array = (dataUrl: string): Uint8Array => {
   const commaIndex = dataUrl.indexOf(",");
   if (commaIndex === -1) throw new Error("Invalid data URL");
@@ -149,6 +167,13 @@ const dataUrlToUint8Array = (dataUrl: string): Uint8Array => {
   const bytes = new Uint8Array(binary.length);
   for (let i = 0; i < binary.length; i++) bytes[i] = binary.charCodeAt(i);
   return bytes;
+};
+
+const getImageBytes = async (src: string) => {
+  if (isDataUrl(src)) {
+    return { bytes: dataUrlToUint8Array(src), mime: getMimeFromDataUrl(src) };
+  }
+  return fetchBytes(src);
 };
 
 const downloadBlob = (blob: Blob, filename: string) => {
@@ -342,101 +367,106 @@ const InteriorDesignAI = () => {
     }
   };
 
-  const downloadImages = () => {
-    if (!designResult?.images?.length) return;
-    try {
-      const first = designResult.images[0];
-      const mime = getMimeFromDataUrl(first);
-      const bytes = dataUrlToUint8Array(first);
-      const ext = inferExtension(mime);
-      downloadBlob(
-        new Blob([new Uint8Array(bytes) as BlobPart], { type: mime }),
-        `interior-design-${propertyName || "design"}.${ext}`,
-      );
-      toast.success("Image downloaded!");
-    } catch (e) {
-      console.error(e);
-      toast.error("Couldn't download the image.");
-    }
-  };
+const downloadImages = async () => {
+  if (!designResult?.images?.length) return;
+  try {
+    const first = designResult.images[0];
+    const { bytes, mime } = await getImageBytes(first);
+    const ext = inferExtension(mime);
 
-  const downloadPdf = async () => {
-    if (!designResult) return;
+    downloadBlob(
+      new Blob([bytes], { type: mime }),
+      `interior-design-${propertyName || "design"}.${ext}`,
+    );
 
-    try {
-      const pdfDoc = await PDFDocument.create();
-      const page = pdfDoc.addPage([595.28, 841.89]); // A4
-      const { width, height } = page.getSize();
-      const margin = 40;
+    toast.success("Image downloaded!");
+  } catch (e) {
+    console.error(e);
+    toast.error("Couldn't download the image.");
+  }
+};
 
-      const titleFont = await pdfDoc.embedFont(StandardFonts.HelveticaBold);
-      const bodyFont = await pdfDoc.embedFont(StandardFonts.Helvetica);
+const downloadPdf = async () => {
+  if (!designResult) return;
 
-      let y = height - margin;
+  try {
+    const pdfDoc = await PDFDocument.create();
+    const page = pdfDoc.addPage([595.28, 841.89]); // A4
+    const { width, height } = page.getSize();
+    const margin = 40;
 
-      page.drawText("JJ Global Capital — AI Interior Design", {
-        x: margin,
+    const titleFont = await pdfDoc.embedFont(StandardFonts.HelveticaBold);
+    const bodyFont = await pdfDoc.embedFont(StandardFonts.Helvetica);
+
+    let y = height - margin;
+
+    page.drawText("JJ Global Capital — AI Interior Design", {
+      x: margin,
+      y,
+      size: 16,
+      font: titleFont,
+    });
+    y -= 22;
+
+    const meta = `Property: ${propertyName || "Your Property"}   •   Created: ${new Date(
+      designResult.createdAt,
+    ).toLocaleString()}`;
+    page.drawText(meta, { x: margin, y, size: 10, font: bodyFont });
+    y -= 18;
+
+    const imgSrc = designResult.images?.[0];
+    if (imgSrc) {
+      const { bytes, mime } = await getImageBytes(imgSrc);
+
+      if (mime.includes("webp")) {
+        throw new Error("This image format can't be embedded in a PDF yet. Please download the image instead.");
+      }
+
+      const embedded = mime.includes("png") ? await pdfDoc.embedPng(bytes) : await pdfDoc.embedJpg(bytes);
+
+      const maxW = width - margin * 2;
+      const maxH = 360;
+      const scale = Math.min(maxW / embedded.width, maxH / embedded.height);
+      const imgW = embedded.width * scale;
+      const imgH = embedded.height * scale;
+
+      y -= imgH;
+      page.drawImage(embedded, {
+        x: margin + (maxW - imgW) / 2,
         y,
-        size: 16,
-        font: titleFont,
+        width: imgW,
+        height: imgH,
       });
-      y -= 22;
+      y -= 20;
+    }
 
-      const meta = `Property: ${propertyName || "Your Property"}   •   Created: ${new Date(
-        designResult.createdAt,
-      ).toLocaleString()}`;
-      page.drawText(meta, { x: margin, y, size: 10, font: bodyFont });
+    const bullets = notesToBullets(designResult.notes).slice(0, 6);
+    if (bullets.length) {
+      page.drawText("Key design choices", { x: margin, y, size: 12, font: titleFont });
       y -= 18;
 
-      const imgUrl = designResult.images?.[0];
-      if (imgUrl) {
-        const mime = getMimeFromDataUrl(imgUrl);
-        const bytes = dataUrlToUint8Array(imgUrl);
-        const embedded = mime.includes("png") ? await pdfDoc.embedPng(bytes) : await pdfDoc.embedJpg(bytes);
-
-        const maxW = width - margin * 2;
-        const maxH = 360;
-        const scale = Math.min(maxW / embedded.width, maxH / embedded.height);
-        const imgW = embedded.width * scale;
-        const imgH = embedded.height * scale;
-
-        y -= imgH;
-        page.drawImage(embedded, {
-          x: margin + (maxW - imgW) / 2,
-          y,
-          width: imgW,
-          height: imgH,
-        });
-        y -= 20;
-      }
-
-      const bullets = notesToBullets(designResult.notes).slice(0, 6);
-      if (bullets.length) {
-        page.drawText("Key design choices", { x: margin, y, size: 12, font: titleFont });
-        y -= 18;
-
-        for (const b of bullets) {
-          const lines = wrapText(b, 90);
-          for (const line of lines) {
-            page.drawText(`• ${line}`, { x: margin, y, size: 10, font: bodyFont });
-            y -= 14;
-            if (y < margin + 20) break;
-          }
+      for (const b of bullets) {
+        const lines = wrapText(b, 90);
+        for (const line of lines) {
+          page.drawText(`• ${line}`, { x: margin, y, size: 10, font: bodyFont });
+          y -= 14;
           if (y < margin + 20) break;
         }
+        if (y < margin + 20) break;
       }
-
-      const pdfBytes = await pdfDoc.save();
-      downloadBlob(
-        new Blob([new Uint8Array(pdfBytes) as BlobPart], { type: "application/pdf" }),
-        `interior-design-${propertyName || "design"}.pdf`,
-      );
-      toast.success("PDF downloaded!");
-    } catch (e) {
-      console.error(e);
-      toast.error("Couldn't generate the PDF.");
     }
-  };
+
+    const pdfBytes = await pdfDoc.save();
+    downloadBlob(
+      new Blob([new Uint8Array(pdfBytes) as BlobPart], { type: "application/pdf" }),
+      `interior-design-${propertyName || "design"}.pdf`,
+    );
+    toast.success("PDF downloaded!");
+  } catch (e) {
+    console.error(e);
+    toast.error(e instanceof Error ? e.message : "Couldn't generate the PDF.");
+  }
+};
 
   const requestRevision = () => {
     if (!designResult) return;
