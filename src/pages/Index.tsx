@@ -123,22 +123,22 @@ const Index = () => {
             viewport={{ once: true }}
             transition={{ duration: 0.6 }}
           >
-            {/* Row 1 - Gold Background CTAs */}
+            {/* Row 1 - White Background CTAs with Gold Text */}
             <div className="flex flex-wrap justify-center gap-3">
               <Link to="/about">
                 <Button 
-                  className="bg-gold hover:bg-gold-light text-black font-semibold px-6 py-5 text-sm shadow-lg shadow-gold/20 hover:shadow-xl hover:shadow-gold/30 transition-all duration-300 hover:scale-105"
+                  className="bg-white hover:bg-zinc-100 text-gold font-semibold px-6 py-5 text-sm shadow-lg shadow-white/10 hover:shadow-xl transition-all duration-300 hover:scale-105"
                 >
                   Explore Our Services
-                  <ArrowUpRight className="w-4 h-4 ml-2" />
+                  <ArrowUpRight className="w-4 h-4 ml-2 text-gold" />
                 </Button>
               </Link>
               <Button 
-                className="bg-gold hover:bg-gold-light text-black font-semibold px-6 py-5 text-sm shadow-lg shadow-gold/20 hover:shadow-xl hover:shadow-gold/30 transition-all duration-300 hover:scale-105"
+                className="bg-white hover:bg-zinc-100 text-gold font-semibold px-6 py-5 text-sm shadow-lg shadow-white/10 hover:shadow-xl transition-all duration-300 hover:scale-105"
                 onClick={() => setIsInquiryOpen(true)}
               >
                 Contact Us
-                <ArrowUpRight className="w-4 h-4 ml-2" />
+                <ArrowUpRight className="w-4 h-4 ml-2 text-gold" />
               </Button>
             </div>
             

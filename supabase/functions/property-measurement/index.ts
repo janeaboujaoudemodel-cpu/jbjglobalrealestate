@@ -12,7 +12,7 @@ serve(async (req) => {
   }
 
   try {
-    const { images, propertyType, propertyName, unitPreference } = await req.json();
+    const { images, propertyType, propertyName, unitPreference, roomLabels, roomList } = await req.json();
     
     const LOVABLE_API_KEY = Deno.env.get("LOVABLE_API_KEY");
     if (!LOVABLE_API_KEY) {
@@ -28,8 +28,13 @@ serve(async (req) => {
 
     console.log(`Processing ${images.length} images for property measurement`);
     console.log(`Property type: ${propertyType}, Name: ${propertyName || 'Unnamed'}`);
+    console.log(`Rooms: ${roomList || 'Not specified'}`);
 
-    // Build the content array with images
+    // Build the content array with images and room context
+    const roomContext = roomLabels && roomLabels.length > 0 
+      ? `The user has labeled these images by room: ${roomLabels.join(', ')}.`
+      : '';
+
     const content: any[] = [
       {
         type: "text",
@@ -39,13 +44,16 @@ PROPERTY DETAILS:
 - Type: ${propertyType || 'Unknown'}
 - Name: ${propertyName || 'Unnamed Property'}
 - Unit preference: ${unitPreference || 'both'}
+- Rooms to measure: ${roomList || 'All visible rooms'}
+${roomContext}
 
 ANALYSIS INSTRUCTIONS:
-1. Examine each photo carefully to identify different rooms/spaces
+1. Examine each photo carefully to identify the specific room/space it shows
 2. Look for visual cues: doors (standard ~7ft/2.1m height), windows, furniture, tiles, fixtures
 3. Use perspective and spatial relationships to estimate dimensions
-4. Identify room types: living room, bedroom, bathroom, kitchen, balcony, corridor, etc.
-5. Estimate each room's approximate area in square feet
+4. ONLY include rooms that you can actually see photos of
+5. Do NOT guess rooms that have no photos provided
+6. Estimate each room's approximate area in square feet
 
 IMPORTANT CALIBRATION REFERENCES:
 - Standard door height: 6.8-7 feet (2.0-2.1 meters)
@@ -58,15 +66,25 @@ IMPORTANT CALIBRATION REFERENCES:
 RESPONSE FORMAT:
 Respond with ONLY a valid JSON object (no markdown, no explanation) in this exact format:
 {
-  "totalArea": <number in sq ft>,
+  "totalArea": <number in sq ft - sum of all room areas>,
   "rooms": [
     { "name": "<room name>", "area": <number in sq ft>, "dimensions": "<length x width estimate>" }
   ],
   "confidence": "<high|medium|low>",
-  "notes": "<any important observations about the measurement accuracy>"
+  "notes": "<any important observations about the measurement accuracy or rooms you couldn't measure>"
 }
 
-Be realistic and conservative with estimates. If you cannot determine a room's size, make your best educated guess based on typical ${propertyType || 'residential'} properties in Dubai/UAE.`
+CRITICAL RULES:
+- Only measure rooms you can see in the provided photos
+- Be realistic and conservative with estimates
+- If you cannot determine a room's size from the photos, note it in "notes" field
+- Sum all room areas to get the totalArea
+- For ${propertyType || 'residential'} properties in Dubai/UAE, typical sizes range from:
+  - Studio: 400-600 sq ft
+  - 1BR: 600-900 sq ft
+  - 2BR: 900-1400 sq ft
+  - 3BR: 1400-2000 sq ft
+  - Villa: 2000-5000+ sq ft`
       }
     ];
 
@@ -159,6 +177,12 @@ Be realistic and conservative with estimates. If you cannot determine a room's s
     // Validate the response structure
     if (!measurementResult.totalArea || !Array.isArray(measurementResult.rooms)) {
       throw new Error("Invalid measurement result structure");
+    }
+
+    // Recalculate total from rooms to ensure accuracy
+    const calculatedTotal = measurementResult.rooms.reduce((sum: number, room: any) => sum + (room.area || 0), 0);
+    if (Math.abs(calculatedTotal - measurementResult.totalArea) > 50) {
+      measurementResult.totalArea = calculatedTotal;
     }
 
     console.log("Measurement complete:", measurementResult);
