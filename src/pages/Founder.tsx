@@ -624,6 +624,179 @@ const Founder = () => {
         </div>
       </section>
 
+      {/* JOURNEY PHOTO GALLERY */}
+      <section className="py-24 md:py-32 bg-gradient-to-b from-zinc-950 via-black to-zinc-950 relative overflow-hidden">
+        <div className="absolute inset-0 opacity-[0.02]">
+          <div className="absolute inset-0" style={{ backgroundImage: 'radial-gradient(circle at 2px 2px, #A8925A 1px, transparent 0)', backgroundSize: '48px 48px' }} />
+        </div>
+        
+        <div className="container mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
+          <motion.div
+            initial="hidden"
+            whileInView="visible"
+            viewport={{ once: true, margin: "-100px" }}
+            variants={staggerContainer}
+          >
+            <motion.div className="text-center mb-16" variants={fadeInUp}>
+              <span className="text-gold text-sm uppercase tracking-[0.4em]">Visual Journey</span>
+              <GoldLine className="w-32 mx-auto mt-4 mb-8" />
+              <h2 
+                className="text-white text-4xl md:text-5xl lg:text-6xl font-bold"
+                style={{ fontFamily: "Poppins, sans-serif" }}
+              >
+                From Lebanon <span className="text-transparent bg-clip-text bg-gradient-to-r from-gold to-[#C4A962]">to Dubai</span>
+              </h2>
+              <p className="text-zinc-400 text-lg mt-6 max-w-2xl mx-auto">
+                A visual chronicle of entrepreneurship, leadership, and the pursuit of excellence
+              </p>
+            </motion.div>
+
+            {/* Photo Grid */}
+            <motion.div 
+              className="grid md:grid-cols-2 lg:grid-cols-3 gap-6"
+              variants={staggerContainer}
+            >
+              {/* Photo 1 - Professional Portrait */}
+              <motion.div 
+                className="group relative aspect-[4/5] rounded-2xl overflow-hidden border border-zinc-800 hover:border-gold/40 transition-all duration-500"
+                variants={scaleIn}
+              >
+                <SafeImage 
+                  src={founderProfessional} 
+                  fallbackSrc={founderHero}
+                  alt="Jane Abou Jaoude - Professional Portrait" 
+                  className="w-full h-full object-cover object-top group-hover:scale-105 transition-transform duration-700"
+                />
+                <div className="absolute inset-0 bg-gradient-to-t from-black via-black/20 to-transparent opacity-80 group-hover:opacity-90 transition-opacity" />
+                <div className="absolute bottom-0 left-0 right-0 p-6">
+                  <span className="text-gold text-xs uppercase tracking-[0.2em] mb-2 block">2025</span>
+                  <h4 className="text-white text-lg font-semibold mb-1">Founder & Chairwoman</h4>
+                  <p className="text-zinc-400 text-sm">JJ Holding Group, Dubai</p>
+                </div>
+              </motion.div>
+
+              {/* Photo 2 - Office/Business */}
+              <motion.div 
+                className="group relative aspect-[4/5] rounded-2xl overflow-hidden border border-zinc-800 hover:border-gold/40 transition-all duration-500"
+                variants={scaleIn}
+              >
+                <SafeImage 
+                  src={founderOffice} 
+                  fallbackSrc={founderHero}
+                  alt="Jane Abou Jaoude - Executive" 
+                  className="w-full h-full object-cover object-top group-hover:scale-105 transition-transform duration-700"
+                />
+                <div className="absolute inset-0 bg-gradient-to-t from-black via-black/20 to-transparent opacity-80 group-hover:opacity-90 transition-opacity" />
+                <div className="absolute bottom-0 left-0 right-0 p-6">
+                  <span className="text-gold text-xs uppercase tracking-[0.2em] mb-2 block">2021-2024</span>
+                  <h4 className="text-white text-lg font-semibold mb-1">Head of Quality & Operations</h4>
+                  <p className="text-zinc-400 text-sm">Luxury Transportation, Dubai Airport</p>
+                </div>
+              </motion.div>
+
+              {/* Photo 3 - Award Stage */}
+              <motion.div 
+                className="group relative aspect-[4/5] rounded-2xl overflow-hidden border border-zinc-800 hover:border-gold/40 transition-all duration-500"
+                variants={scaleIn}
+              >
+                <SafeImage 
+                  src={founderAwardStage} 
+                  fallbackSrc={founderHero}
+                  alt="Jane Abou Jaoude - Award Recognition" 
+                  className="w-full h-full object-cover object-center group-hover:scale-105 transition-transform duration-700"
+                />
+                <div className="absolute inset-0 bg-gradient-to-t from-black via-black/20 to-transparent opacity-80 group-hover:opacity-90 transition-opacity" />
+                <div className="absolute bottom-0 left-0 right-0 p-6">
+                  <span className="text-gold text-xs uppercase tracking-[0.2em] mb-2 block">Recognition</span>
+                  <h4 className="text-white text-lg font-semibold mb-1">Industry Excellence Award</h4>
+                  <p className="text-zinc-400 text-sm">Celebrating achievements in real estate</p>
+                </div>
+              </motion.div>
+
+              {/* Photo 4 - Premium Portrait */}
+              <motion.div 
+                className="group relative aspect-[4/5] rounded-2xl overflow-hidden border border-zinc-800 hover:border-gold/40 transition-all duration-500"
+                variants={scaleIn}
+              >
+                <SafeImage 
+                  src={founderPremium} 
+                  fallbackSrc={founderHero}
+                  alt="Jane Abou Jaoude - Premium Portrait" 
+                  className="w-full h-full object-cover object-top group-hover:scale-105 transition-transform duration-700"
+                />
+                <div className="absolute inset-0 bg-gradient-to-t from-black via-black/20 to-transparent opacity-80 group-hover:opacity-90 transition-opacity" />
+                <div className="absolute bottom-0 left-0 right-0 p-6">
+                  <span className="text-gold text-xs uppercase tracking-[0.2em] mb-2 block">2020</span>
+                  <h4 className="text-white text-lg font-semibold mb-1">New Beginnings</h4>
+                  <p className="text-zinc-400 text-sm">Relocating to Dubai during COVID</p>
+                </div>
+              </motion.div>
+
+              {/* Photo 5 - Red Carpet/Event */}
+              <motion.div 
+                className="group relative aspect-[4/5] rounded-2xl overflow-hidden border border-zinc-800 hover:border-gold/40 transition-all duration-500"
+                variants={scaleIn}
+              >
+                <SafeImage 
+                  src={founderRedCarpet} 
+                  fallbackSrc={founderHero}
+                  alt="Jane Abou Jaoude - Event" 
+                  className="w-full h-full object-cover object-center group-hover:scale-105 transition-transform duration-700"
+                />
+                <div className="absolute inset-0 bg-gradient-to-t from-black via-black/20 to-transparent opacity-80 group-hover:opacity-90 transition-opacity" />
+                <div className="absolute bottom-0 left-0 right-0 p-6">
+                  <span className="text-gold text-xs uppercase tracking-[0.2em] mb-2 block">Events</span>
+                  <h4 className="text-white text-lg font-semibold mb-1">Industry Networking</h4>
+                  <p className="text-zinc-400 text-sm">Building connections in luxury real estate</p>
+                </div>
+              </motion.div>
+
+              {/* Photo 6 - JJ Flags */}
+              <motion.div 
+                className="group relative aspect-[4/5] rounded-2xl overflow-hidden border border-zinc-800 hover:border-gold/40 transition-all duration-500"
+                variants={scaleIn}
+              >
+                <SafeImage 
+                  src={jjFlags} 
+                  fallbackSrc={founderHero}
+                  alt="JJ Holding Group & JJ Global Capital" 
+                  className="w-full h-full object-cover object-center group-hover:scale-105 transition-transform duration-700"
+                />
+                <div className="absolute inset-0 bg-gradient-to-t from-black via-black/20 to-transparent opacity-80 group-hover:opacity-90 transition-opacity" />
+                <div className="absolute bottom-0 left-0 right-0 p-6">
+                  <span className="text-gold text-xs uppercase tracking-[0.2em] mb-2 block">2014 → 2025</span>
+                  <h4 className="text-white text-lg font-semibold mb-1">The Journey Complete</h4>
+                  <p className="text-zinc-400 text-sm">From James Beauty to JJ Holding Group</p>
+                </div>
+              </motion.div>
+            </motion.div>
+
+            {/* Journey Summary */}
+            <motion.div 
+              className="mt-16 text-center max-w-3xl mx-auto"
+              variants={fadeInUp}
+            >
+              <div className="flex items-center justify-center gap-8 flex-wrap">
+                <div className="text-center">
+                  <p className="text-gold text-3xl font-bold mb-1">2014</p>
+                  <p className="text-zinc-500 text-sm">First Business</p>
+                </div>
+                <div className="hidden md:block w-16 h-px bg-gradient-to-r from-gold/50 to-gold/20" />
+                <div className="text-center">
+                  <p className="text-gold text-3xl font-bold mb-1">2020</p>
+                  <p className="text-zinc-500 text-sm">Dubai Relocation</p>
+                </div>
+                <div className="hidden md:block w-16 h-px bg-gradient-to-r from-gold/20 to-gold/50" />
+                <div className="text-center">
+                  <p className="text-gold text-3xl font-bold mb-1">2025</p>
+                  <p className="text-zinc-500 text-sm">JJ Holding Group</p>
+                </div>
+              </div>
+            </motion.div>
+          </motion.div>
+        </div>
+      </section>
+
       {/* CAREER TIMELINE */}
       <section className="py-24 md:py-32 relative overflow-hidden">
         <div className="container mx-auto px-4 sm:px-6 lg:px-8">
