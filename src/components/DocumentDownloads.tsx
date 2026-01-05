@@ -1,5 +1,8 @@
-import { Download, FileText, Image, DollarSign, ClipboardList, Layers } from "lucide-react";
+import { Download, FileText, Image, DollarSign, ClipboardList, Layers, Shield } from "lucide-react";
 import { Button } from "@/components/ui/button";
+import { useAuth } from "@/contexts/AuthContext";
+import { generateWatermarkId, logDocumentDownload } from "@/utils/pdfWatermark";
+import { toast } from "sonner";
 
 interface Document {
   id: string;
@@ -47,14 +50,47 @@ const getDocumentLabel = (type: string) => {
 };
 
 const DocumentDownloads = ({ documents }: DocumentDownloadsProps) => {
-  const handleDownload = (doc: Document) => {
+  const { user } = useAuth();
+
+  const handleDownload = async (doc: Document) => {
+    const watermarkId = generateWatermarkId();
+    
+    // Log the download with watermark tracking
+    await logDocumentDownload(
+      doc.id,
+      doc.document_type,
+      watermarkId,
+      user?.id,
+      user?.email || undefined
+    );
+
+    // Show watermark notice
+    toast.info("Document Downloaded", {
+      description: `Watermark ID: ${watermarkId} - This download is tracked for IP protection.`,
+      duration: 5000,
+    });
+
     window.open(doc.file_url, "_blank");
   };
 
-  const handleDownloadAll = () => {
-    documents.forEach((doc) => {
-      window.open(doc.file_url, "_blank");
+  const handleDownloadAll = async () => {
+    const watermarkId = generateWatermarkId();
+    
+    toast.info("Downloading All Documents", {
+      description: `Batch Watermark ID: ${watermarkId} - All downloads are tracked.`,
+      duration: 5000,
     });
+
+    for (const doc of documents) {
+      await logDocumentDownload(
+        doc.id,
+        doc.document_type,
+        watermarkId,
+        user?.id,
+        user?.email || undefined
+      );
+      window.open(doc.file_url, "_blank");
+    }
   };
 
   if (!documents || documents.length === 0) {
@@ -72,7 +108,7 @@ const DocumentDownloads = ({ documents }: DocumentDownloadsProps) => {
 
   return (
     <div className="bg-zinc-900 rounded-xl p-6 border border-zinc-800">
-      <div className="flex items-center justify-between mb-6">
+      <div className="flex items-center justify-between mb-4">
         <h3
           className="text-white text-xl font-semibold"
           style={{ fontFamily: "Poppins, sans-serif" }}
@@ -90,6 +126,14 @@ const DocumentDownloads = ({ documents }: DocumentDownloadsProps) => {
             Download All Materials
           </Button>
         )}
+      </div>
+
+      {/* Watermark Notice */}
+      <div className="flex items-center gap-2 mb-4 p-3 bg-gold/10 border border-gold/20 rounded-lg">
+        <Shield className="w-4 h-4 text-gold flex-shrink-0" />
+        <p className="text-xs text-zinc-400">
+          <span className="text-gold font-medium">Protected Content:</span> All downloads are watermarked and tracked for intellectual property protection.
+        </p>
       </div>
 
       <div className="space-y-3">

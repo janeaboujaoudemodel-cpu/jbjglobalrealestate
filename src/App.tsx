@@ -23,6 +23,7 @@ import Awards from "./pages/Awards";
 import Contact from "./pages/Contact";
 import Privacy from "./pages/Privacy";
 import Terms from "./pages/Terms";
+import IntellectualProperty from "./pages/IntellectualProperty";
 import Founder from "./pages/Founder";
 import MortgageCalculatorPage from "./pages/MortgageCalculator";
 import MarketReport from "./pages/MarketReport";
@@ -113,6 +114,7 @@ const App = () => (
                 <Route path="/contact" element={<Contact />} />
                 <Route path="/privacy" element={<Privacy />} />
                 <Route path="/terms" element={<Terms />} />
+                <Route path="/intellectual-property" element={<IntellectualProperty />} />
                 <Route path="/founder" element={<Founder />} />
                 <Route path="/mortgage-advisory" element={<MortgageCalculatorPage />} />
                 <Route path="/mortgage-calculator" element={<MortgageCalculatorPage />} />
