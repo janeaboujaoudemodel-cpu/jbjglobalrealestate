@@ -10,7 +10,7 @@ import { useShortlistBadges } from "@/hooks/useShortlistBadges";
 import { 
   ChevronLeft, Sparkles, Send, Loader2, CheckCircle, Download, Star, 
   Users, Crown, Gift, TrendingUp, MapPin, Building, Home, 
-  BadgeCheck, AlertTriangle, Zap, Award, Phone, Mail
+  BadgeCheck, AlertTriangle, Zap, Award, Phone, Mail, BarChart3
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -468,52 +468,77 @@ const Compare = () => {
   }
 
   return (
-    <section className="min-h-screen bg-zinc-950 py-8 md:py-16">
-      <div className="container mx-auto px-4">
-        {/* Header */}
-        <Link
-          to="/"
-          className="inline-flex items-center gap-2 text-zinc-400 hover:text-white transition-colors mb-8"
-        >
-          <ChevronLeft className="w-5 h-5" />
-          <span>Back to Properties</span>
-        </Link>
+    <section className="min-h-screen bg-zinc-950">
+      {/* Hero Section - Orange Theme Matching Homepage Button */}
+      <div className="relative py-16 md:py-20 overflow-hidden">
+        {/* Orange gradient background */}
+        <div className="absolute inset-0 bg-gradient-to-br from-orange-950/40 via-zinc-950 to-zinc-950" />
+        <div className="absolute top-0 right-0 w-96 h-96 bg-orange-500/10 rounded-full blur-3xl" />
+        <div className="absolute bottom-0 left-0 w-64 h-64 bg-orange-600/5 rounded-full blur-2xl" />
+        
+        <div className="container mx-auto px-4 relative z-10">
+          <Link
+            to="/"
+            className="inline-flex items-center gap-2 text-zinc-400 hover:text-white transition-colors mb-8"
+          >
+            <ChevronLeft className="w-5 h-5" />
+            <span>Back to Home</span>
+          </Link>
 
-        <div className="flex flex-col gap-8">
-          {/* Title */}
-          <div className="flex flex-col md:flex-row justify-between items-start md:items-center gap-4">
-            <div>
-              <div className="flex items-center gap-3 mb-2">
-                <h1 className="text-white text-3xl font-bold">
-                  Smart Property Comparison
-                </h1>
-                <Badge className="bg-gradient-to-r from-purple-600 to-purple-800 text-white">
-                  <Sparkles className="w-3 h-3 mr-1" />
-                  AI Powered
-                </Badge>
-              </div>
-              <p className="text-zinc-400">
-                Compare {projects.length} properties with intelligent AI analysis
-              </p>
-              <p className="text-zinc-500 text-sm mt-1">
-                Developed by Founder Jane Abou Jaoude • Powered by JJ Global Capital
-              </p>
+          <div className="max-w-3xl">
+            {/* Badge */}
+            <div className="inline-flex items-center gap-2 px-4 py-2 bg-orange-500/20 border border-orange-500/30 rounded-full mb-6">
+              <BarChart3 className="w-4 h-4 text-orange-400" />
+              <span className="text-orange-400 text-sm font-medium">AI-Powered</span>
             </div>
-            <div className="flex gap-3">
-              {aiAnalysis && (
-                <Button
-                  onClick={downloadComprehensiveReport}
-                  variant="outline"
-                  className="border-gold text-gold hover:bg-gold/10"
-                >
-                  <Download className="w-4 h-4 mr-2" />
-                  Download Report
-                </Button>
-              )}
+            
+            <h1 className="text-white text-4xl md:text-5xl font-bold mb-4">
+              AI Property Comparison
+            </h1>
+            <p className="text-zinc-300 text-lg md:text-xl mb-4 max-w-2xl">
+              Compare projects dynamically with AI-powered analysis including valuation, ROI, and market insights.
+            </p>
+            <p className="text-zinc-500 text-sm">
+              Developed by Founder Jane Abou Jaoude • Powered by JJ Global Capital
+            </p>
+
+            {/* Feature Cards */}
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mt-8">
+              <div className="flex items-center gap-3 bg-zinc-900/60 backdrop-blur-sm border border-zinc-800 rounded-xl p-4">
+                <div className="w-10 h-10 rounded-lg bg-orange-500/20 flex items-center justify-center">
+                  <BarChart3 className="w-5 h-5 text-orange-400" />
+                </div>
+                <div>
+                  <p className="text-white font-medium">Compare 2-5 Projects</p>
+                  <p className="text-zinc-500 text-sm">Side-by-side analysis</p>
+                </div>
+              </div>
+              <div className="flex items-center gap-3 bg-zinc-900/60 backdrop-blur-sm border border-zinc-800 rounded-xl p-4">
+                <div className="w-10 h-10 rounded-lg bg-orange-500/20 flex items-center justify-center">
+                  <TrendingUp className="w-5 h-5 text-orange-400" />
+                </div>
+                <div>
+                  <p className="text-white font-medium">ROI Projections</p>
+                  <p className="text-zinc-500 text-sm">Investment returns</p>
+                </div>
+              </div>
+              <div className="flex items-center gap-3 bg-zinc-900/60 backdrop-blur-sm border border-zinc-800 rounded-xl p-4">
+                <div className="w-10 h-10 rounded-lg bg-orange-500/20 flex items-center justify-center">
+                  <Award className="w-5 h-5 text-orange-400" />
+                </div>
+                <div>
+                  <p className="text-white font-medium">Smart Ratings</p>
+                  <p className="text-zinc-500 text-sm">Location, value & more</p>
+                </div>
+              </div>
+            </div>
+
+            {/* CTA Buttons */}
+            <div className="flex flex-wrap gap-4 mt-8">
               <Button
                 onClick={generateSmartAnalysis}
                 disabled={isGenerating || projects.length < 2}
-                className="bg-gradient-to-r from-purple-600 to-purple-800 text-white hover:from-purple-500 hover:to-purple-700"
+                className="bg-gradient-to-r from-orange-500 to-orange-600 text-white hover:from-orange-400 hover:to-orange-500 shadow-lg shadow-orange-500/20 hover:shadow-orange-500/40 transition-all duration-300 px-6 py-5"
               >
                 {isGenerating ? (
                   <>
@@ -523,11 +548,32 @@ const Compare = () => {
                 ) : (
                   <>
                     <Sparkles className="w-4 h-4 mr-2" />
-                    {aiAnalysis ? "Regenerate Analysis" : "Generate AI Analysis"}
+                    Start Comparing
                   </>
                 )}
               </Button>
+              {aiAnalysis && (
+                <Button
+                  onClick={downloadComprehensiveReport}
+                  variant="outline"
+                  className="border-orange-500/50 text-orange-400 hover:bg-orange-500/10"
+                >
+                  <Download className="w-4 h-4 mr-2" />
+                  Download Report
+                </Button>
+              )}
             </div>
+          </div>
+        </div>
+      </div>
+
+      {/* Main Content */}
+      <div className="container mx-auto px-4 pb-16">
+        <div className="flex flex-col gap-8">
+          {/* Properties Count */}
+          <div className="flex items-center gap-2 text-zinc-400">
+            <span className="text-lg font-medium text-white">{projects.length}</span>
+            <span>properties in comparison</span>
           </div>
 
           {/* Basic Comparison Table */}
