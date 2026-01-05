@@ -144,32 +144,32 @@ const Founder = () => {
   const careerTimeline = [
     {
       year: "2014",
-      title: "Founded James Beauty",
-      description: "While studying, launched personal beauty brand and started selling beauty products, partnering with salons across Lebanon.",
+      title: "Founded James Beauty Salon",
+      description: "At 16, while still studying, opened a full-service beauty salon in Lebanon, serving clients with personalized beauty services.",
       location: "Beirut, Lebanon"
     },
     {
       year: "2014-2020",
       title: "Real Estate & Beauty Business",
-      description: "Built connections in Lebanese real estate market while running James Beauty business development operations.",
+      description: "Built connections in Lebanese real estate market while managing James Beauty salon operations and growing client base.",
       location: "Beirut, Lebanon"
     },
     {
-      year: "2020",
+      year: "2020-2021",
       title: "Relocated to Dubai",
-      description: "During COVID, made the bold decision to relocate completely to Dubai and start from scratch in a new market.",
+      description: "After losing everything in the Beirut explosion and COVID-19 crisis, relocated to Dubai with just $100. Started rebuilding from scratch, first working at Mac Properties.",
       location: "Dubai, UAE"
     },
     {
       year: "2021-2024",
-      title: "Luxury Transportation - Head of Quality & Operations",
-      description: "Led quality assurance and operations for B2B luxury pick-up and limousine services at Dubai Airport Terminals 1 & 3 and hotels. Managed 495+ employees including drivers and coordinators. Implemented KPIs, training programs, and mystery shopping standards.",
+      title: "Head of Quality & Operations - dnata/Dubai Airport",
+      description: "Led quality control and operations for B2B luxury limousine services at Dubai Airport Terminals 1 & 3 and all Address Hotels. Managed 495+ employees including drivers and coordinators. Implemented KPIs, training programs, and quality benchmarks.",
       location: "Dubai, UAE"
     },
     {
       year: "2021-2024",
       title: "Real Estate Brokerage & Training",
-      description: "Worked with multiple developers and brokerage companies. Provided intensive training programs for leading real estate brokers.",
+      description: "Worked with Damac Properties and multiple brokerage companies. Trained 2,800+ brokers through intensive programs covering closing techniques, objection handling, and lead generation.",
       location: "Dubai, UAE"
     },
     {
@@ -181,7 +181,7 @@ const Founder = () => {
     {
       year: "2025",
       title: "Established JJ Holding Group",
-      description: "After 5 years in Dubai, founded JJ Holding Group with multiple divisions: JJ Global Capital, JJ Group, JJ Fashion House, JJ and Serena, and Mrs Jane (luxury home services).",
+      description: "After 5 years in Dubai, founded JJ Holding Group with 5 divisions: JJ Global Capital, JJ Group, JJ Fashion House, JJ and Serena, and Mrs Jane (evolution of James Beauty as luxury home services).",
       location: "Dubai, UAE"
     },
   ];
@@ -466,13 +466,13 @@ const Founder = () => {
               
               <div className="space-y-6 text-zinc-300 leading-relaxed max-w-2xl">
                 <p className="text-xl md:text-2xl font-light text-white/90">
-                  A self-made entrepreneur who founded her first business at 16, built a management career leading 495+ employees, and established a multi-division holding group by age 27.
+                  A self-made entrepreneur who founded her first business at 16, became Head of Quality & Operations managing 495+ employees, trained 2,800+ brokers, and established a multi-division holding group.
                 </p>
                 <p className="text-lg">
-                  Born September 5, 1998, in Lebanon. Fluent in French, English, Arabic, and Spanish. Jane's journey spans from creating beauty products as a teenager to heading quality assurance for international hospitality brands—culminating in the 2025 founding of JJ Holding Group.
+                  Born August 25, 1998, in Lebanon. Grew up fluent in French and Arabic, later self-taught English and Spanish. Jane's journey spans from running a beauty salon as a teenager to leading quality control for premium hospitality brands—culminating in the 2025 founding of JJ Holding Group.
                 </p>
                 <p className="text-lg text-zinc-400">
-                  Her leadership philosophy is forged through diverse experience: entrepreneurship, corporate operations, real estate brokerage, and continuous professional education. From beauty salons in Beirut to Address Hotels in Dubai, every chapter prepared her for institutional excellence.
+                  Her leadership philosophy is forged through diverse experience: entrepreneurship, corporate operations, real estate brokerage, and training over 2,800 brokers. From James Beauty salon in Beirut to Address Hotels' limousine services in Dubai, every chapter prepared her for institutional excellence.
                 </p>
               </div>
               
@@ -492,8 +492,8 @@ const Founder = () => {
                     <Users className="w-5 h-5 text-gold" />
                   </div>
                   <div>
-                    <p className="text-white font-medium text-sm">495+ Managed</p>
-                    <p className="text-zinc-500 text-xs">Team Leadership</p>
+                    <p className="text-white font-medium text-sm">2,800+ Trained</p>
+                    <p className="text-zinc-500 text-xs">Brokers Mentored</p>
                   </div>
                 </div>
                 <div className="flex items-center gap-3">
@@ -546,12 +546,12 @@ const Founder = () => {
                 </h3>
                 <p className="text-lg mb-4">
                   Jane Abou Jaoude was born on August 25, 1998, in Lebanon—a Virgo with an innate drive for precision and excellence. 
-                  Growing up fluent in French, English, Arabic, and Spanish, she developed a global perspective from an early age.
+                  Growing up fluent in French and Arabic, she later taught herself English and Spanish, developing a global perspective from an early age.
                 </p>
                 <p className="text-lg mb-4 text-zinc-400">
-                  At just 16, while still studying, Jane founded James Beauty in 2014—creating and selling her own beauty products 
-                  and partnering with salons across Lebanon. This first venture ignited her entrepreneurial spirit and taught her 
-                  the fundamentals of product development, sales, and business relationships.
+                  At just 16, while still studying, Jane founded James Beauty in 2014—a full-service beauty salon in Lebanon where she 
+                  served clients with personalized beauty services. This first venture ignited her entrepreneurial spirit and taught her 
+                  the fundamentals of service excellence, client relationships, and business operations.
                 </p>
                 <p className="text-lg text-zinc-400">
                   Simultaneously, she began building connections in Lebanese real estate, laying the groundwork for her future 
@@ -562,20 +562,22 @@ const Founder = () => {
               <div className="bg-gradient-to-br from-zinc-900/80 to-black border border-zinc-800 rounded-3xl p-8 md:p-12">
                 <h3 className="text-gold text-xl font-semibold mb-6 flex items-center gap-3">
                   <TrendingUp className="w-6 h-6" />
-                  The Dubai Chapter: Corporate Leadership
+                  The Dubai Chapter: Rising from Adversity
                 </h3>
                 <p className="text-lg mb-4">
-                  In 2020, during COVID, Jane made the bold decision to relocate completely to Dubai and start from scratch. 
-                  This pivotal move would transform her career trajectory and expand her expertise exponentially.
+                  In 2020, during COVID-19 and the devastating Beirut explosion, Jane lost everything she had built in Lebanon—her business, 
+                  her savings, everything she had worked for. Completely broken but determined, she made the bold decision to relocate to Dubai 
+                  with just $100 in her pocket.
                 </p>
                 <p className="text-lg mb-4 text-zinc-400">
-                  Starting in 2021, she joined the luxury transportation sector, rising to Head of Quality and Operations 
-                  for B2B pick-up and limousine services serving Dubai Airport Terminals 1 and 3, as well as hotels. 
-                  Managing a team of 495+ employees—from drivers to coordinators—she implemented comprehensive KPI systems, 
-                  training programs, ministry-standard mystery shopping protocols, and quality benchmarks that elevated service excellence.
+                  Upon arriving, she was amazed by Dubai—a smart city where everything is fast, efficient, and accessible. She decided 
+                  she would never go back to Lebanon and committed to rebuilding herself financially. Starting from scratch, she worked 
+                  her way up: first at Mac Properties, then joining dnata/Dubai Airport as Head of Quality & Operations for B2B luxury 
+                  limousine services serving Terminals 1 and 3, plus all Address Hotels. Managing 495+ employees—from drivers to coordinators—she 
+                  implemented comprehensive KPI systems, training programs, and quality benchmarks.
                 </p>
                 <p className="text-lg text-zinc-400">
-                  Her corporate leadership experience provided invaluable insights into operations management, team building, 
+                  This corporate leadership experience provided invaluable insights into operations management, team building, 
                   and institutional standards—skills that would later define JJ Holding Group's approach to excellence.
                 </p>
               </div>

@@ -14,3 +14,18 @@ verify_jwt = false
 
 [functions.property-measurement]
 verify_jwt = false
+
+[functions.validate-discount-code]
+verify_jwt = false
+
+[functions.interior-design-generate]
+verify_jwt = false
+
+[functions.ai-chat-support]
+verify_jwt = false
+
+[functions.ai-travel-concierge]
+verify_jwt = false
+
+[functions.smart-ai-analysis]
+verify_jwt = false

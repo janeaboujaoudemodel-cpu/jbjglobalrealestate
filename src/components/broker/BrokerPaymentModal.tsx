@@ -4,7 +4,7 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
-import { Loader2, Crown, CheckCircle2, Phone, Mail, Shield, AlertCircle } from "lucide-react";
+import { Loader2, Crown, CheckCircle2, Phone, Mail, Shield, AlertCircle, Tag, X } from "lucide-react";
 import { supabase } from "@/integrations/supabase/client";
 import { useAuth } from "@/contexts/AuthContext";
 import { toast } from "sonner";
@@ -28,6 +28,14 @@ interface BrokerPaymentModalProps {
   onSuccess: () => void;
 }
 
+interface DiscountInfo {
+  valid: boolean;
+  discountType?: "percentage" | "fixed" | "free";
+  discountValue?: number;
+  description?: string;
+  codeId?: string;
+}
+
 export default function BrokerPaymentModal({
   open,
   onOpenChange,
@@ -40,6 +48,11 @@ export default function BrokerPaymentModal({
   const [isProcessing, setIsProcessing] = useState(false);
   const [currency, setCurrency] = useState<"USD" | "AED">("USD");
   
+  // Discount code state
+  const [discountCode, setDiscountCode] = useState("");
+  const [isValidatingCode, setIsValidatingCode] = useState(false);
+  const [appliedDiscount, setAppliedDiscount] = useState<DiscountInfo | null>(null);
+  
   const [formData, setFormData] = useState({
     fullName: "",
     email: user?.email || "",
@@ -48,12 +61,76 @@ export default function BrokerPaymentModal({
     reraNumber: "",
   });
 
-  const price = currency === "USD" 
+  const basePrice = currency === "USD" 
     ? (billingPeriod === "yearly" ? tier.yearlyPrice : tier.price)
     : (billingPeriod === "yearly" ? tier.yearlyPriceAed : tier.priceAed);
   
+  // Calculate discounted price
+  const calculateFinalPrice = () => {
+    if (!appliedDiscount || !appliedDiscount.valid) return basePrice;
+    
+    if (appliedDiscount.discountType === "free") return 0;
+    if (appliedDiscount.discountType === "percentage") {
+      return Math.round(basePrice * (1 - (appliedDiscount.discountValue || 0) / 100));
+    }
+    if (appliedDiscount.discountType === "fixed") {
+      return Math.max(0, basePrice - (appliedDiscount.discountValue || 0));
+    }
+    return basePrice;
+  };
+  
+  const finalPrice = calculateFinalPrice();
   const currencySymbol = currency === "USD" ? "$" : "AED ";
   const paymentReference = `BT-${tier.id.toUpperCase()}-${Date.now().toString(36).toUpperCase()}`;
+
+  const validateDiscountCode = async () => {
+    if (!discountCode.trim()) {
+      toast.error("Please enter a discount code");
+      return;
+    }
+
+    if (!formData.email) {
+      toast.error("Please enter your email first");
+      return;
+    }
+
+    setIsValidatingCode(true);
+    try {
+      const { data, error } = await supabase.functions.invoke("validate-discount-code", {
+        body: {
+          action: "validate",
+          code: discountCode.trim(),
+          userEmail: formData.email,
+          userId: user?.id,
+          tier: tier.id,
+        },
+      });
+
+      if (error) throw error;
+
+      if (data.valid) {
+        setAppliedDiscount(data);
+        toast.success(
+          data.discountType === "free" 
+            ? "🎉 Complimentary access applied!" 
+            : `${data.discountValue}% discount applied!`
+        );
+      } else {
+        toast.error(data.error || "Invalid discount code");
+        setAppliedDiscount(null);
+      }
+    } catch (error) {
+      console.error("Error validating discount code:", error);
+      toast.error("Failed to validate code. Please try again.");
+    } finally {
+      setIsValidatingCode(false);
+    }
+  };
+
+  const removeDiscount = () => {
+    setAppliedDiscount(null);
+    setDiscountCode("");
+  };
 
   const handleSubmit = async () => {
     if (!user?.id) {
@@ -69,7 +146,9 @@ export default function BrokerPaymentModal({
     setIsProcessing(true);
     try {
       const trialEndsAt = new Date();
-      trialEndsAt.setDate(trialEndsAt.getDate() + tier.trialDays);
+      // If free access, skip trial
+      const effectiveTrialDays = appliedDiscount?.discountType === "free" ? 0 : tier.trialDays;
+      trialEndsAt.setDate(trialEndsAt.getDate() + effectiveTrialDays);
 
       const expiresAt = new Date(trialEndsAt);
       if (billingPeriod === "yearly") {
@@ -78,7 +157,10 @@ export default function BrokerPaymentModal({
         expiresAt.setMonth(expiresAt.getMonth() + 1);
       }
 
-      const { error } = await supabase.from("broker_subscriptions").insert({
+      // Status is "active" if free or fully discounted, otherwise "trial"
+      const subscriptionStatus = appliedDiscount?.discountType === "free" || finalPrice === 0 ? "active" : "trial";
+
+      const { data: subscription, error } = await supabase.from("broker_subscriptions").insert({
         user_id: user.id,
         email: formData.email,
         full_name: formData.fullName,
@@ -86,24 +168,40 @@ export default function BrokerPaymentModal({
         company_name: formData.companyName,
         rera_number: formData.reraNumber,
         tier: tier.id,
-        status: "trial",
+        status: subscriptionStatus,
         price_usd: billingPeriod === "yearly" ? tier.yearlyPrice : tier.price,
         currency,
-        payment_method: "manual",
+        payment_method: appliedDiscount?.discountType === "free" ? "complimentary" : "manual",
         payment_reference: paymentReference,
-        trial_ends_at: trialEndsAt.toISOString(),
+        trial_ends_at: effectiveTrialDays > 0 ? trialEndsAt.toISOString() : null,
+        starts_at: appliedDiscount?.discountType === "free" ? new Date().toISOString() : null,
         expires_at: expiresAt.toISOString(),
         ai_credits_limit: tier.aiCredits === -1 ? null : tier.aiCredits,
-      });
+      }).select().single();
 
       if (error) throw error;
+
+      // Record discount usage if applicable
+      if (appliedDiscount?.valid && appliedDiscount.codeId) {
+        await supabase.functions.invoke("validate-discount-code", {
+          body: {
+            action: "apply",
+            codeId: appliedDiscount.codeId,
+            userId: user.id,
+            userEmail: formData.email,
+            originalPrice: basePrice,
+            finalPrice: finalPrice,
+            subscriptionId: subscription?.id,
+          },
+        });
+      }
 
       // Send notification email
       try {
         await supabase.functions.invoke("send-market-report-email", {
           body: {
             to: "invest@jjglobalcapital.com",
-            subject: `New Broker Toolkit Subscription - ${tier.name}`,
+            subject: `New Broker Toolkit Subscription - ${tier.name}${appliedDiscount?.valid ? " (Discount Applied)" : ""}`,
             html: `
               <h2>New Broker Toolkit Subscription</h2>
               <p><strong>Plan:</strong> ${tier.name} (${billingPeriod})</p>
@@ -112,9 +210,13 @@ export default function BrokerPaymentModal({
               <p><strong>Phone:</strong> ${formData.phone}</p>
               <p><strong>Company:</strong> ${formData.companyName || "N/A"}</p>
               <p><strong>RERA:</strong> ${formData.reraNumber || "N/A"}</p>
-              <p><strong>Amount:</strong> ${currencySymbol}${price}</p>
+              <p><strong>Original Price:</strong> ${currencySymbol}${basePrice}</p>
+              ${appliedDiscount?.valid ? `
+                <p><strong>Discount:</strong> ${appliedDiscount.discountType === "free" ? "Complimentary Access" : `${appliedDiscount.discountValue}%`}</p>
+                <p><strong>Final Price:</strong> ${currencySymbol}${finalPrice}</p>
+              ` : ""}
               <p><strong>Reference:</strong> ${paymentReference}</p>
-              <p><strong>Status:</strong> Trial (${tier.trialDays} days)</p>
+              <p><strong>Status:</strong> ${subscriptionStatus === "active" ? "Active (Complimentary)" : `Trial (${tier.trialDays} days)`}</p>
             `,
           },
         });
@@ -135,6 +237,8 @@ export default function BrokerPaymentModal({
     onSuccess();
     onOpenChange(false);
     setStep("info");
+    setAppliedDiscount(null);
+    setDiscountCode("");
   };
 
   return (
@@ -149,24 +253,60 @@ export default function BrokerPaymentModal({
                 </div>
               </div>
               <DialogTitle className="text-2xl text-center">
-                Start Your {tier.trialDays}-Day Free Trial
+                {appliedDiscount?.discountType === "free" 
+                  ? "Activate Complimentary Access" 
+                  : `Start Your ${tier.trialDays}-Day Free Trial`}
               </DialogTitle>
               <DialogDescription className="text-center text-zinc-400">
-                {tier.name} Plan - {currencySymbol}{price}/{billingPeriod === "yearly" ? "year" : "month"}
+                {tier.name} Plan - {appliedDiscount?.valid && finalPrice !== basePrice ? (
+                  <>
+                    <span className="line-through text-zinc-500">{currencySymbol}{basePrice}</span>
+                    {" "}
+                    <span className="text-green-400 font-semibold">{currencySymbol}{finalPrice}</span>
+                  </>
+                ) : (
+                  <>{currencySymbol}{basePrice}</>
+                )}
+                /{billingPeriod === "yearly" ? "year" : "month"}
               </DialogDescription>
             </DialogHeader>
 
             <div className="space-y-4 py-4">
-              <div className="bg-amber-500/10 border border-amber-500/30 rounded-xl p-4 flex items-start gap-3">
-                <AlertCircle className="w-5 h-5 text-amber-500 flex-shrink-0 mt-0.5" />
-                <div className="text-sm">
-                  <p className="text-amber-200 font-medium mb-1">Payment Gateway Coming Soon</p>
-                  <p className="text-amber-200/70">
-                    Online card payments will be available soon. For now, please contact us 
-                    after registration to complete your payment via bank transfer.
-                  </p>
+              {!appliedDiscount?.valid && (
+                <div className="bg-amber-500/10 border border-amber-500/30 rounded-xl p-4 flex items-start gap-3">
+                  <AlertCircle className="w-5 h-5 text-amber-500 flex-shrink-0 mt-0.5" />
+                  <div className="text-sm">
+                    <p className="text-amber-200 font-medium mb-1">Payment Gateway Coming Soon</p>
+                    <p className="text-amber-200/70">
+                      Online card payments will be available soon. For now, please contact us 
+                      after registration to complete your payment via bank transfer.
+                    </p>
+                  </div>
                 </div>
-              </div>
+              )}
+
+              {appliedDiscount?.valid && (
+                <div className="bg-green-500/10 border border-green-500/30 rounded-xl p-4">
+                  <div className="flex items-center justify-between">
+                    <div className="flex items-center gap-2">
+                      <Tag className="w-5 h-5 text-green-400" />
+                      <div>
+                        <p className="text-green-400 font-medium">
+                          {appliedDiscount.discountType === "free" 
+                            ? "🎉 Complimentary Access" 
+                            : `${appliedDiscount.discountValue}% Discount Applied`}
+                        </p>
+                        {appliedDiscount.description && (
+                          <p className="text-green-300/70 text-xs">{appliedDiscount.description}</p>
+                        )}
+                      </div>
+                    </div>
+                    <button onClick={removeDiscount} className="text-zinc-400 hover:text-white">
+                      <X className="w-4 h-4" />
+                    </button>
+                  </div>
+                </div>
+              )}
 
               <div className="space-y-3">
                 <div>
@@ -222,6 +362,35 @@ export default function BrokerPaymentModal({
                 </div>
               </div>
 
+              {/* Discount Code Input */}
+              {!appliedDiscount?.valid && (
+                <div className="space-y-2">
+                  <Label className="text-white">Have a discount code?</Label>
+                  <div className="flex gap-2">
+                    <Input
+                      value={discountCode}
+                      onChange={(e) => setDiscountCode(e.target.value.toUpperCase())}
+                      placeholder="Enter code"
+                      className="bg-zinc-900 border-zinc-700 text-white uppercase"
+                      maxLength={20}
+                    />
+                    <Button
+                      type="button"
+                      onClick={validateDiscountCode}
+                      disabled={isValidatingCode || !discountCode.trim()}
+                      variant="outline"
+                      className="border-gold text-gold hover:bg-gold/10 shrink-0"
+                    >
+                      {isValidatingCode ? (
+                        <Loader2 className="w-4 h-4 animate-spin" />
+                      ) : (
+                        "Apply"
+                      )}
+                    </Button>
+                  </div>
+                </div>
+              )}
+
               {/* Currency Selection */}
               <div className="space-y-2">
                 <Label className="text-white">Preferred Currency</Label>
@@ -257,6 +426,11 @@ export default function BrokerPaymentModal({
                     <Loader2 className="w-5 h-5 mr-2 animate-spin" />
                     Processing...
                   </>
+                ) : appliedDiscount?.discountType === "free" ? (
+                  <>
+                    <CheckCircle2 className="w-5 h-5 mr-2" />
+                    Activate Free Access
+                  </>
                 ) : (
                   <>
                     <Shield className="w-5 h-5 mr-2" />
@@ -267,7 +441,7 @@ export default function BrokerPaymentModal({
 
               <p className="text-zinc-500 text-xs text-center">
                 By starting your trial, you agree to our terms of service. 
-                You will be contacted for payment setup before the trial ends.
+                {!appliedDiscount?.valid && " You will be contacted for payment setup before the trial ends."}
               </p>
             </div>
           </>
@@ -283,7 +457,9 @@ export default function BrokerPaymentModal({
               </div>
               <DialogTitle className="text-2xl">Welcome to Broker Toolkit!</DialogTitle>
               <DialogDescription className="text-zinc-400">
-                Your {tier.trialDays}-day free trial has started
+                {appliedDiscount?.discountType === "free" 
+                  ? "Your complimentary access is now active"
+                  : `Your ${tier.trialDays}-day free trial has started`}
               </DialogDescription>
             </DialogHeader>
 
@@ -299,31 +475,35 @@ export default function BrokerPaymentModal({
                   <li>1. Explore the Broker Toolkit dashboard</li>
                   <li>2. Start your training courses</li>
                   <li>3. Generate your first property PDF</li>
-                  <li>4. We'll contact you before trial ends for payment</li>
+                  {!appliedDiscount?.valid && (
+                    <li>4. We'll contact you before trial ends for payment</li>
+                  )}
                 </ol>
               </div>
 
-              <div className="text-zinc-400 text-sm space-y-2">
-                <p className="font-medium text-white">Need to activate immediately?</p>
-                <div className="flex flex-col sm:flex-row items-center justify-center gap-4">
-                  <a
-                    href="https://wa.me/971565911000?text=Hi%2C%20I%20want%20to%20activate%20my%20Broker%20Toolkit%20subscription.%20Reference%3A%20"
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className="flex items-center gap-2 text-gold hover:text-gold-light transition-colors"
-                  >
-                    <Phone className="w-4 h-4" />
-                    +971 56 591 1000
-                  </a>
-                  <a
-                    href="mailto:invest@JJGlobalCapital.com"
-                    className="flex items-center gap-2 text-gold hover:text-gold-light transition-colors"
-                  >
-                    <Mail className="w-4 h-4" />
-                    invest@JJGlobalCapital.com
-                  </a>
+              {!appliedDiscount?.valid && (
+                <div className="text-zinc-400 text-sm space-y-2">
+                  <p className="font-medium text-white">Need to activate immediately?</p>
+                  <div className="flex flex-col sm:flex-row items-center justify-center gap-4">
+                    <a
+                      href="https://wa.me/971565911000?text=Hi%2C%20I%20want%20to%20activate%20my%20Broker%20Toolkit%20subscription.%20Reference%3A%20"
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="flex items-center gap-2 text-gold hover:text-gold-light transition-colors"
+                    >
+                      <Phone className="w-4 h-4" />
+                      +971 56 591 1000
+                    </a>
+                    <a
+                      href="mailto:invest@JJGlobalCapital.com"
+                      className="flex items-center gap-2 text-gold hover:text-gold-light transition-colors"
+                    >
+                      <Mail className="w-4 h-4" />
+                      invest@JJGlobalCapital.com
+                    </a>
+                  </div>
                 </div>
-              </div>
+              )}
 
               <Button
                 onClick={handleComplete}

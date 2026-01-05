@@ -318,6 +318,120 @@ export type Database = {
         }
         Relationships: []
       }
+      discount_code_usages: {
+        Row: {
+          discount_applied: number
+          discount_code_id: string
+          final_price: number
+          id: string
+          original_price: number
+          subscription_id: string | null
+          used_at: string
+          user_email: string
+          user_id: string
+        }
+        Insert: {
+          discount_applied: number
+          discount_code_id: string
+          final_price: number
+          id?: string
+          original_price: number
+          subscription_id?: string | null
+          used_at?: string
+          user_email: string
+          user_id: string
+        }
+        Update: {
+          discount_applied?: number
+          discount_code_id?: string
+          final_price?: number
+          id?: string
+          original_price?: number
+          subscription_id?: string | null
+          used_at?: string
+          user_email?: string
+          user_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "discount_code_usages_discount_code_id_fkey"
+            columns: ["discount_code_id"]
+            isOneToOne: false
+            referencedRelation: "discount_codes"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "discount_code_usages_subscription_id_fkey"
+            columns: ["subscription_id"]
+            isOneToOne: false
+            referencedRelation: "broker_subscriptions"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      discount_codes: {
+        Row: {
+          applicable_tiers: string[] | null
+          assigned_to_email: string | null
+          assigned_to_user_id: string | null
+          code: string
+          code_hash: string
+          created_at: string
+          created_by: string
+          current_uses: number
+          description: string | null
+          discount_type: string
+          discount_value: number
+          id: string
+          is_active: boolean
+          is_single_use_per_user: boolean | null
+          max_uses: number | null
+          updated_at: string
+          valid_from: string | null
+          valid_until: string | null
+        }
+        Insert: {
+          applicable_tiers?: string[] | null
+          assigned_to_email?: string | null
+          assigned_to_user_id?: string | null
+          code: string
+          code_hash: string
+          created_at?: string
+          created_by: string
+          current_uses?: number
+          description?: string | null
+          discount_type: string
+          discount_value?: number
+          id?: string
+          is_active?: boolean
+          is_single_use_per_user?: boolean | null
+          max_uses?: number | null
+          updated_at?: string
+          valid_from?: string | null
+          valid_until?: string | null
+        }
+        Update: {
+          applicable_tiers?: string[] | null
+          assigned_to_email?: string | null
+          assigned_to_user_id?: string | null
+          code?: string
+          code_hash?: string
+          created_at?: string
+          created_by?: string
+          current_uses?: number
+          description?: string | null
+          discount_type?: string
+          discount_value?: number
+          id?: string
+          is_active?: boolean
+          is_single_use_per_user?: boolean | null
+          max_uses?: number | null
+          updated_at?: string
+          valid_from?: string | null
+          valid_until?: string | null
+        }
+        Relationships: []
+      }
       evaluation_requests: {
         Row: {
           ai_comparison: string | null
