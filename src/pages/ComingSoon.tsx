@@ -46,7 +46,7 @@ const ComingSoon = () => {
             We're crafting something extraordinary for you.
           </p>
           <p className="text-sm md:text-base text-muted-foreground/70">
-            Dubai's Premier Off-Plan Property Platform
+            UAE REAL ESTATE
           </p>
         </motion.div>
 
