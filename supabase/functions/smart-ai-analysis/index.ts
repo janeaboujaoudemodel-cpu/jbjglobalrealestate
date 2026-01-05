@@ -195,10 +195,7 @@ serve(async (req) => {
     if (!parseResult.success) {
       console.error("Validation error:", parseResult.error.errors);
       return new Response(
-        JSON.stringify({
-          error: "Invalid request data",
-          details: parseResult.error.errors.map((e) => e.message).join(", "),
-        }),
+        JSON.stringify({ error: "Invalid request data" }),
         { status: 400, headers: { ...corsHeaders, "Content-Type": "application/json" } }
       );
     }
@@ -420,7 +417,7 @@ Generate a comprehensive analysis with detailed tables, ratings, and recommendat
   } catch (error) {
     console.error("smart-ai-analysis error:", error);
     return new Response(
-      JSON.stringify({ error: error instanceof Error ? error.message : "Unknown error" }),
+      JSON.stringify({ error: "An error occurred while processing your request" }),
       {
         status: 500,
         headers: { ...getCorsHeaders(req), "Content-Type": "application/json" },
