@@ -132,7 +132,12 @@ const WelcomeModal = () => {
             {/* Action Buttons */}
             <div className="space-y-4">
               <Button
-                onClick={handleLogin}
+                onClick={(e) => {
+                  e.preventDefault();
+                  e.stopPropagation();
+                  handleLogin();
+                }}
+                type="button"
                 className="w-full py-6 bg-gradient-to-r from-gold via-[hsl(40_42%_52%)] to-gold text-white hover:opacity-95 font-semibold text-base shadow-lg shadow-gold/30 rounded-lg group relative overflow-hidden transition-all duration-300"
               >
                 <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white/20 to-transparent -translate-x-full group-hover:translate-x-full transition-transform duration-700" />
@@ -142,7 +147,12 @@ const WelcomeModal = () => {
               </Button>
 
               <Button
-                onClick={handleContinueAsGuest}
+                onClick={(e) => {
+                  e.preventDefault();
+                  e.stopPropagation();
+                  handleContinueAsGuest();
+                }}
+                type="button"
                 variant="outline"
                 className="w-full py-6 border-zinc-300 bg-transparent text-zinc-700 hover:bg-zinc-100 hover:text-zinc-900 hover:border-gold/50 group rounded-lg transition-all duration-300"
               >

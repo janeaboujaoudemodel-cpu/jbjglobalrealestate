@@ -66,7 +66,7 @@ const GlobalHeader = () => {
   const isActive = (path: string) => location.pathname === path;
 
   return (
-    <header className="fixed top-0 left-0 right-0 z-50 bg-gradient-to-b from-black/98 via-black/95 to-black/90 backdrop-blur-md border-b border-gold/10">
+    <header className="fixed top-0 left-0 right-0 z-[9999] bg-gradient-to-b from-black via-black/98 to-black/95 backdrop-blur-xl border-b border-gold/10 shadow-lg shadow-black/30">
       <div className="container mx-auto px-4">
         <div className="flex items-center justify-between h-16 lg:h-18">
           {/* Logo - Premium with separation from menu, clickable to home */}

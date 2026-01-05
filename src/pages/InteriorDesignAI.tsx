@@ -1127,36 +1127,31 @@ const downloadPdf = async () => {
                         </span>
                       </div>
                       
-                      {canBypassPayment && (
-                        <div className="bg-fuchsia-500/10 border border-fuchsia-500/30 rounded-lg p-3 text-center">
-                          <p className="text-fuchsia-300 text-sm font-medium">
-                            {import.meta.env.DEV ? "🔓 Preview Mode" : "🔓 Admin Preview Mode"}
-                          </p>
-                          <p className="text-zinc-400 text-xs mt-1">
-                            {import.meta.env.DEV ? "Payment bypassed for testing" : "Admin access enabled"}
-                          </p>
-                        </div>
-                      )}
                       
                       <Button 
-                        onClick={canBypassPayment ? generateDesign : () => toast.info("Payment will be enabled soon. Preview mode can generate designs without payment.")}
+                        onClick={generateDesign}
                         disabled={isProcessing}
                         className="w-full bg-gradient-to-r from-fuchsia-500 to-purple-600 hover:from-fuchsia-600 hover:to-purple-700 text-white py-6"
                       >
                         {isProcessing ? (
-                          <>Processing...</>
-                        ) : canBypassPayment ? (
+                          <>
+                            <Sparkles className="w-4 h-4 mr-2 animate-spin" />
+                            Creating Your Design...
+                          </>
+                        ) : (
                           <>
                             <Sparkles className="w-4 h-4 mr-2" />
                             Generate Design
                           </>
-                        ) : (
-                          <>
-                            <CreditCard className="w-4 h-4 mr-2" />
-                            Proceed to Payment
-                          </>
                         )}
                       </Button>
+                      
+                      {/* Payment info */}
+                      <div className="bg-blue-500/10 border border-blue-500/30 rounded-lg p-3 text-center">
+                        <p className="text-blue-300 text-sm">
+                          ℹ️ Payment will be enabled soon. Preview mode can generate designs without payment.
+                        </p>
+                      </div>
 
                       {/* Clear session button for testing */}
                       {canBypassPayment && (
