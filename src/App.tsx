@@ -42,6 +42,7 @@ import NotFound from "./pages/NotFound";
 import WelcomeModal from "./components/WelcomeModal";
 import GlobalHeader from "./components/GlobalHeader";
 import RouteResume from "./components/RouteResume";
+import BackNavButton from "./components/BackNavButton";
 import { ScrollToTopOnMount, ScrollToTopButton } from "./components/ScrollToTop";
 
 const queryClient = new QueryClient();
@@ -76,6 +77,7 @@ const App = () => (
             <BrowserRouter>
               <ScrollToTopOnMount />
               <ScrollToTopButton />
+              <BackNavButton />
               <RouteResume />
               <WelcomeModal />
               <AppLayout>

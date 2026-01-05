@@ -2,21 +2,26 @@ import { useEffect, useRef } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
 
 /**
- * Helps the Lovable preview experience: if the preview refresh drops you back on "/",
- * we automatically resume the Interior Design AI flow when there is saved progress.
+ * Helps the preview experience: some refreshes drop you back on "/".
+ * We restore the last in-app route, and also resume the Interior Design AI flow when it has saved progress.
  */
 export default function RouteResume() {
   const location = useLocation();
   const navigate = useNavigate();
   const hasCheckedRef = useRef(false);
 
-  // Persist last visited route (useful for debugging / future resume flows)
+  // Persist last visited route.
+  // Important: On initial load, if the preview incorrectly lands on "/", don't overwrite the previous route.
   useEffect(() => {
     try {
-      sessionStorage.setItem(
-        "last-route",
-        `${location.pathname}${location.search}${location.hash}`
-      );
+      const route = `${location.pathname}${location.search}${location.hash}`;
+      const existing = sessionStorage.getItem("last-route");
+
+      if (!hasCheckedRef.current && route === "/" && existing && existing !== "/") {
+        return;
+      }
+
+      sessionStorage.setItem("last-route", route);
     } catch {
       // ignore
     }
@@ -30,6 +35,7 @@ export default function RouteResume() {
     if (location.pathname !== "/") return;
 
     try {
+      // 1) Interior Design AI resume
       const step = JSON.parse(sessionStorage.getItem("interior-design-step") ?? "1");
       const showComparison = JSON.parse(
         sessionStorage.getItem("interior-design-showComparison") ?? "true"
@@ -41,14 +47,21 @@ export default function RouteResume() {
         sessionStorage.getItem("interior-design-selectedPackage") ?? '""'
       );
 
-      const hasProgress =
+      const hasInteriorProgress =
         (typeof step === "number" && step > 1) ||
         showComparison === false ||
         !!designResult ||
         (typeof selectedPackage === "string" && selectedPackage.length > 0);
 
-      if (hasProgress) {
+      if (hasInteriorProgress) {
         navigate("/interior-design-ai", { replace: true });
+        return;
+      }
+
+      // 2) Generic last-route resume
+      const lastRoute = sessionStorage.getItem("last-route") || "";
+      if (lastRoute && lastRoute !== "/") {
+        navigate(lastRoute, { replace: true });
       }
     } catch {
       // ignore
@@ -57,3 +70,4 @@ export default function RouteResume() {
 
   return null;
 }
+
