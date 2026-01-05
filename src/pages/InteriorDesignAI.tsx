@@ -141,16 +141,14 @@ const getMimeFromDataUrl = (dataUrl: string) => {
   return match?.[1] || "application/octet-stream";
 };
 
-const dataUrlToUint8Array = (dataUrl: string) => {
+const dataUrlToUint8Array = (dataUrl: string): Uint8Array => {
   const commaIndex = dataUrl.indexOf(",");
   if (commaIndex === -1) throw new Error("Invalid data URL");
-  const header = dataUrl.slice(0, commaIndex);
   const base64 = dataUrl.slice(commaIndex + 1);
-  const mime = getMimeFromDataUrl(header + ",");
   const binary = atob(base64);
   const bytes = new Uint8Array(binary.length);
   for (let i = 0; i < binary.length; i++) bytes[i] = binary.charCodeAt(i);
-  return { bytes, mime };
+  return bytes;
 };
 
 const downloadBlob = (blob: Blob, filename: string) => {
@@ -228,7 +226,7 @@ const InteriorDesignAI = () => {
   // Processing state
   const [isProcessing, setIsProcessing] = useState(false);
   const [progress, setProgress] = useState(0);
-  const [designResult, setDesignResult] = useState<string | null>(() => getSavedState("designResult", null));
+  const [designResult, setDesignResult] = useState<DesignResult | null>(() => getSavedState("designResult", null));
   
   const photoInputRef = useRef<HTMLInputElement>(null);
   const floorPlanRef = useRef<HTMLInputElement>(null);
@@ -348,10 +346,11 @@ const InteriorDesignAI = () => {
     if (!designResult?.images?.length) return;
     try {
       const first = designResult.images[0];
-      const { bytes, mime } = dataUrlToUint8Array(first);
+      const mime = getMimeFromDataUrl(first);
+      const bytes = dataUrlToUint8Array(first);
       const ext = inferExtension(mime);
       downloadBlob(
-        new Blob([bytes], { type: mime }),
+        new Blob([new Uint8Array(bytes) as BlobPart], { type: mime }),
         `interior-design-${propertyName || "design"}.${ext}`,
       );
       toast.success("Image downloaded!");
@@ -391,7 +390,8 @@ const InteriorDesignAI = () => {
 
       const imgUrl = designResult.images?.[0];
       if (imgUrl) {
-        const { bytes, mime } = dataUrlToUint8Array(imgUrl);
+        const mime = getMimeFromDataUrl(imgUrl);
+        const bytes = dataUrlToUint8Array(imgUrl);
         const embedded = mime.includes("png") ? await pdfDoc.embedPng(bytes) : await pdfDoc.embedJpg(bytes);
 
         const maxW = width - margin * 2;
@@ -428,7 +428,7 @@ const InteriorDesignAI = () => {
 
       const pdfBytes = await pdfDoc.save();
       downloadBlob(
-        new Blob([pdfBytes], { type: "application/pdf" }),
+        new Blob([new Uint8Array(pdfBytes) as BlobPart], { type: "application/pdf" }),
         `interior-design-${propertyName || "design"}.pdf`,
       );
       toast.success("PDF downloaded!");
