@@ -11,3 +11,6 @@ verify_jwt = false
 
 [functions.property-evaluation]
 verify_jwt = false
+
+[functions.property-measurement]
+verify_jwt = false
