@@ -223,10 +223,22 @@ const Compare = () => {
 
     const renderStars = (rating: number) => "★".repeat(rating) + "☆".repeat(5 - rating);
 
+    // HTML escape function to prevent XSS
+    const escapeHtml = (text: string): string => {
+      if (!text) return '';
+      return text
+        .replace(/&/g, '&amp;')
+        .replace(/</g, '&lt;')
+        .replace(/>/g, '&gt;')
+        .replace(/"/g, '&quot;')
+        .replace(/'/g, '&#039;');
+    };
+
     const reportHTML = `<!DOCTYPE html>
 <html lang="en">
 <head>
   <meta charset="UTF-8">
+  <meta http-equiv="Content-Security-Policy" content="default-src 'none'; style-src 'unsafe-inline';">
   <title>Property Comparison Report - JJ Global Capital</title>
   <style>
     * { margin: 0; padding: 0; box-sizing: border-box; }
@@ -290,7 +302,7 @@ const Compare = () => {
     </div>
 
     <div class="summary-box">
-      <p class="summary-text">${aiAnalysis.summary}</p>
+      <p class="summary-text">${escapeHtml(aiAnalysis.summary)}</p>
     </div>
 
     <h2>📊 Property Details Comparison</h2>
@@ -298,25 +310,25 @@ const Compare = () => {
       <thead>
         <tr>
           <th>Feature</th>
-          ${aiAnalysis.projectDetailsTable.map(p => `<th>${p.projectName}</th>`).join('')}
+          ${aiAnalysis.projectDetailsTable.map(p => `<th>${escapeHtml(p.projectName)}</th>`).join('')}
         </tr>
       </thead>
       <tbody>
-        <tr><td><strong>Developer</strong></td>${aiAnalysis.projectDetailsTable.map(p => `<td>${p.developer}<br><small style="color:#888">${p.developerTier}</small></td>`).join('')}</tr>
-        <tr><td><strong>Location</strong></td>${aiAnalysis.projectDetailsTable.map(p => `<td>${p.location}</td>`).join('')}</tr>
-        <tr><td><strong>Area Type</strong></td>${aiAnalysis.projectDetailsTable.map(p => `<td>${p.areaType}</td>`).join('')}</tr>
-        <tr><td><strong>Traffic Level</strong></td>${aiAnalysis.projectDetailsTable.map(p => `<td>${p.trafficLevel}</td>`).join('')}</tr>
-        <tr><td><strong>Price Range</strong></td>${aiAnalysis.projectDetailsTable.map(p => `<td>${p.priceRange}</td>`).join('')}</tr>
+        <tr><td><strong>Developer</strong></td>${aiAnalysis.projectDetailsTable.map(p => `<td>${escapeHtml(p.developer)}<br><small style="color:#888">${escapeHtml(p.developerTier)}</small></td>`).join('')}</tr>
+        <tr><td><strong>Location</strong></td>${aiAnalysis.projectDetailsTable.map(p => `<td>${escapeHtml(p.location)}</td>`).join('')}</tr>
+        <tr><td><strong>Area Type</strong></td>${aiAnalysis.projectDetailsTable.map(p => `<td>${escapeHtml(p.areaType)}</td>`).join('')}</tr>
+        <tr><td><strong>Traffic Level</strong></td>${aiAnalysis.projectDetailsTable.map(p => `<td>${escapeHtml(p.trafficLevel)}</td>`).join('')}</tr>
+        <tr><td><strong>Price Range</strong></td>${aiAnalysis.projectDetailsTable.map(p => `<td>${escapeHtml(p.priceRange)}</td>`).join('')}</tr>
         <tr><td><strong>Price/sqft</strong></td>${aiAnalysis.projectDetailsTable.map(p => `<td>AED ${p.pricePerSqft?.toLocaleString() || 'N/A'}</td>`).join('')}</tr>
-        <tr><td><strong>Bedrooms</strong></td>${aiAnalysis.projectDetailsTable.map(p => `<td>${p.bedrooms}</td>`).join('')}</tr>
-        <tr><td><strong>Size Range</strong></td>${aiAnalysis.projectDetailsTable.map(p => `<td>${p.sizeRange}</td>`).join('')}</tr>
-        <tr><td><strong>Handover</strong></td>${aiAnalysis.projectDetailsTable.map(p => `<td>${p.handover}</td>`).join('')}</tr>
-        <tr><td><strong>Payment Plan</strong></td>${aiAnalysis.projectDetailsTable.map(p => `<td>${p.paymentPlan}</td>`).join('')}</tr>
-        <tr><td><strong>Investment Type</strong></td>${aiAnalysis.projectDetailsTable.map(p => `<td>${p.investmentType}</td>`).join('')}</tr>
-        <tr><td><strong>Target Buyer</strong></td>${aiAnalysis.projectDetailsTable.map(p => `<td>${p.targetBuyer}</td>`).join('')}</tr>
-        <tr><td><strong>Views</strong></td>${aiAnalysis.projectDetailsTable.map(p => `<td>${p.views?.join(', ') || '-'}</td>`).join('')}</tr>
-        <tr><td><strong>Key Amenities</strong></td>${aiAnalysis.projectDetailsTable.map(p => `<td>${p.keyAmenities?.slice(0,5).join(', ') || '-'}</td>`).join('')}</tr>
-        <tr><td><strong>Unique Selling Points</strong></td>${aiAnalysis.projectDetailsTable.map(p => `<td>${p.uniqueSellingPoints?.join(', ') || '-'}</td>`).join('')}</tr>
+        <tr><td><strong>Bedrooms</strong></td>${aiAnalysis.projectDetailsTable.map(p => `<td>${escapeHtml(p.bedrooms)}</td>`).join('')}</tr>
+        <tr><td><strong>Size Range</strong></td>${aiAnalysis.projectDetailsTable.map(p => `<td>${escapeHtml(p.sizeRange)}</td>`).join('')}</tr>
+        <tr><td><strong>Handover</strong></td>${aiAnalysis.projectDetailsTable.map(p => `<td>${escapeHtml(p.handover)}</td>`).join('')}</tr>
+        <tr><td><strong>Payment Plan</strong></td>${aiAnalysis.projectDetailsTable.map(p => `<td>${escapeHtml(p.paymentPlan)}</td>`).join('')}</tr>
+        <tr><td><strong>Investment Type</strong></td>${aiAnalysis.projectDetailsTable.map(p => `<td>${escapeHtml(p.investmentType)}</td>`).join('')}</tr>
+        <tr><td><strong>Target Buyer</strong></td>${aiAnalysis.projectDetailsTable.map(p => `<td>${escapeHtml(p.targetBuyer)}</td>`).join('')}</tr>
+        <tr><td><strong>Views</strong></td>${aiAnalysis.projectDetailsTable.map(p => `<td>${p.views?.map(v => escapeHtml(v)).join(', ') || '-'}</td>`).join('')}</tr>
+        <tr><td><strong>Key Amenities</strong></td>${aiAnalysis.projectDetailsTable.map(p => `<td>${p.keyAmenities?.slice(0,5).map(a => escapeHtml(a)).join(', ') || '-'}</td>`).join('')}</tr>
+        <tr><td><strong>Unique Selling Points</strong></td>${aiAnalysis.projectDetailsTable.map(p => `<td>${p.uniqueSellingPoints?.map(u => escapeHtml(u)).join(', ') || '-'}</td>`).join('')}</tr>
       </tbody>
     </table>
 
@@ -324,7 +336,7 @@ const Compare = () => {
     ${aiAnalysis.ratings.map(r => `
     <div class="rating-card">
       <div class="rating-header">
-        <span class="rating-name">${r.projectName}</span>
+        <span class="rating-name">${escapeHtml(r.projectName)}</span>
         <span class="rating-stars">${renderStars(r.overallRating)}</span>
       </div>
       <div class="rating-grid">
@@ -335,30 +347,30 @@ const Compare = () => {
         <div class="rating-item"><div class="rating-item-label">Developer</div><div class="rating-item-value">${renderStars(r.developerRating)}</div></div>
       </div>
       <div class="pros-cons">
-        <div class="pros"><h4>✅ Pros</h4><ul>${r.pros?.map(p => `<li>${p}</li>`).join('') || ''}</ul></div>
-        <div class="cons"><h4>⚠️ Cons</h4><ul>${r.cons?.map(c => `<li>${c}</li>`).join('') || ''}</ul></div>
+        <div class="pros"><h4>✅ Pros</h4><ul>${r.pros?.map(p => `<li>${escapeHtml(p)}</li>`).join('') || ''}</ul></div>
+        <div class="cons"><h4>⚠️ Cons</h4><ul>${r.cons?.map(c => `<li>${escapeHtml(c)}</li>`).join('') || ''}</ul></div>
       </div>
     </div>
     `).join('')}
 
     <div class="recommendation-box">
-      <h3>🏆 Our Recommendation: ${aiAnalysis.recommendation.topChoice}</h3>
-      <p>${aiAnalysis.recommendation.reasoning}</p>
+      <h3>🏆 Our Recommendation: ${escapeHtml(aiAnalysis.recommendation.topChoice)}</h3>
+      <p>${escapeHtml(aiAnalysis.recommendation.reasoning)}</p>
       <div class="best-for">
-        <div class="best-for-item"><div class="best-for-label">Best for Investors</div><div class="best-for-value">${aiAnalysis.recommendation.bestFor.investors}</div></div>
-        <div class="best-for-item"><div class="best-for-label">Best for Families</div><div class="best-for-value">${aiAnalysis.recommendation.bestFor.families}</div></div>
-        <div class="best-for-item"><div class="best-for-label">Best for First-Time Buyers</div><div class="best-for-value">${aiAnalysis.recommendation.bestFor.firstTimeBuyers}</div></div>
-        <div class="best-for-item"><div class="best-for-label">Best for Luxury Buyers</div><div class="best-for-value">${aiAnalysis.recommendation.bestFor.luxuryBuyers}</div></div>
+        <div class="best-for-item"><div class="best-for-label">Best for Investors</div><div class="best-for-value">${escapeHtml(aiAnalysis.recommendation.bestFor.investors)}</div></div>
+        <div class="best-for-item"><div class="best-for-label">Best for Families</div><div class="best-for-value">${escapeHtml(aiAnalysis.recommendation.bestFor.families)}</div></div>
+        <div class="best-for-item"><div class="best-for-label">Best for First-Time Buyers</div><div class="best-for-value">${escapeHtml(aiAnalysis.recommendation.bestFor.firstTimeBuyers)}</div></div>
+        <div class="best-for-item"><div class="best-for-label">Best for Luxury Buyers</div><div class="best-for-value">${escapeHtml(aiAnalysis.recommendation.bestFor.luxuryBuyers)}</div></div>
       </div>
       <p style="margin-top:20px; background:rgba(0,0,0,0.2); padding:15px; border-radius:8px;">
-        <strong>💡 Investment Advice:</strong> ${aiAnalysis.recommendation.investmentAdvice}
+        <strong>💡 Investment Advice:</strong> ${escapeHtml(aiAnalysis.recommendation.investmentAdvice)}
       </p>
     </div>
 
     ${aiAnalysis.recommendation.riskFactors?.length ? `
     <div class="risk-section">
       <h4>⚠️ Risk Factors to Consider</h4>
-      <ul>${aiAnalysis.recommendation.riskFactors.map(r => `<li>${r}</li>`).join('')}</ul>
+      <ul>${aiAnalysis.recommendation.riskFactors.map(r => `<li>${escapeHtml(r)}</li>`).join('')}</ul>
     </div>
     ` : ''}
 

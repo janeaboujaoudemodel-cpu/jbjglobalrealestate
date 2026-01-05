@@ -1,4 +1,5 @@
 import { useState, useMemo } from "react";
+import { Link } from "react-router-dom";
 import { Calculator, TrendingUp, Calendar, Percent, DollarSign, ArrowRight, Info } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -110,12 +111,12 @@ const MortgageCalculator = ({ defaultPrice = 2000000, compact = false }: Mortgag
         </div>
 
         <div className="mt-6 text-center">
-          <a href={INQUIRY_FORM_URL} target="_blank" rel="noopener noreferrer">
+          <Link to="/mortgage-advisory">
             <Button className="bg-gradient-to-r from-zinc-900 to-black border border-gold/40 text-gold font-semibold px-8 py-5 text-base shadow-lg shadow-black/20 transition-all duration-300 hover:shadow-xl hover:shadow-gold/20 hover:scale-[1.02] hover:border-gold/60">
               Get Mortgage Advisory
               <ArrowRight className="w-4 h-4 ml-2" />
             </Button>
-          </a>
+          </Link>
           <p className="text-zinc-500 text-xs mt-3">
             *Estimates based on AED 2M property, 20% down, 4.5% rate, 25 years
           </p>
