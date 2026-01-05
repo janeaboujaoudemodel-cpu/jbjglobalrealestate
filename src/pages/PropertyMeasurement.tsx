@@ -5,7 +5,6 @@ import Footer from "@/components/Footer";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import { Textarea } from "@/components/ui/textarea";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Progress } from "@/components/ui/progress";
@@ -22,10 +21,14 @@ import {
   Home,
   Building2,
   Warehouse,
-  LayoutGrid
+  LayoutGrid,
+  Plus,
+  X,
+  AlertCircle
 } from "lucide-react";
 import { toast } from "sonner";
 import { supabase } from "@/integrations/supabase/client";
+import { useAuth } from "@/contexts/AuthContext";
 
 const fadeInUp = {
   hidden: { opacity: 0, y: 20 },
@@ -34,6 +37,15 @@ const fadeInUp = {
 
 type PropertyType = "apartment" | "villa" | "office" | "land" | "retail" | "";
 type UnitType = "sqft" | "sqm" | "both";
+type MediaType = "photo" | "video";
+
+interface RoomUpload {
+  id: string;
+  name: string;
+  mediaType: MediaType;
+  files: File[];
+  isComplete: boolean;
+}
 
 interface RoomMeasurement {
   name: string;
@@ -51,16 +63,16 @@ interface MeasurementResult {
 
 const PropertyMeasurement = () => {
   const navigate = useNavigate();
+  const { user } = useAuth();
   const [step, setStep] = useState(1);
   const [propertyType, setPropertyType] = useState<PropertyType>("");
   const [propertyName, setPropertyName] = useState("");
   const [unitPreference, setUnitPreference] = useState<UnitType>("both");
-  const [photos, setPhotos] = useState<File[]>([]);
-  const [video, setVideo] = useState<File | null>(null);
+  const [roomUploads, setRoomUploads] = useState<RoomUpload[]>([]);
+  const [currentRoomIndex, setCurrentRoomIndex] = useState(0);
   const [isProcessing, setIsProcessing] = useState(false);
   const [progress, setProgress] = useState(0);
   const [result, setResult] = useState<MeasurementResult | null>(null);
-  const [redirectToDesign, setRedirectToDesign] = useState(false);
   
   const photoInputRef = useRef<HTMLInputElement>(null);
   const videoInputRef = useRef<HTMLInputElement>(null);
@@ -73,43 +85,100 @@ const PropertyMeasurement = () => {
     { id: "retail", label: "Retail / Commercial", icon: Building2 },
   ];
 
-  const handlePhotoUpload = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const files = Array.from(e.target.files || []);
-    if (files.length + photos.length > 20) {
-      toast.error("Maximum 20 photos allowed");
-      return;
+  // Room presets based on property type
+  const getRoomPresets = (type: PropertyType): string[] => {
+    switch (type) {
+      case "apartment":
+        return ["Living Room", "Master Bedroom", "Bedroom 2", "Kitchen", "Bathroom 1", "Bathroom 2", "Balcony"];
+      case "villa":
+        return ["Living Room", "Master Bedroom", "Bedroom 2", "Bedroom 3", "Kitchen", "Bathroom 1", "Bathroom 2", "Garden", "Garage"];
+      case "office":
+        return ["Reception", "Main Office Area", "Meeting Room", "Manager Office", "Kitchen/Pantry", "Restroom"];
+      case "retail":
+        return ["Main Floor", "Storage Room", "Restroom", "Office Area"];
+      case "land":
+        return ["Plot Area"];
+      default:
+        return [];
     }
-    setPhotos(prev => [...prev, ...files]);
-    toast.success(`${files.length} photo(s) added`);
   };
 
-  const handleVideoUpload = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const file = e.target.files?.[0];
-    if (file) {
-      if (file.size > 500 * 1024 * 1024) {
-        toast.error("Video must be under 500MB");
-        return;
+  const initializeRooms = () => {
+    const presets = getRoomPresets(propertyType);
+    const rooms: RoomUpload[] = presets.map((name, i) => ({
+      id: `room-${i}`,
+      name,
+      mediaType: "photo",
+      files: [],
+      isComplete: false,
+    }));
+    setRoomUploads(rooms);
+    setCurrentRoomIndex(0);
+    setStep(3);
+  };
+
+  const addCustomRoom = (name: string) => {
+    if (!name.trim()) return;
+    const newRoom: RoomUpload = {
+      id: `room-${Date.now()}`,
+      name: name.trim(),
+      mediaType: "photo",
+      files: [],
+      isComplete: false,
+    };
+    setRoomUploads(prev => [...prev, newRoom]);
+    toast.success(`Added "${name}" to your property`);
+  };
+
+  const removeRoom = (id: string) => {
+    setRoomUploads(prev => prev.filter(r => r.id !== id));
+    toast.info("Room removed");
+  };
+
+  const handleRoomMediaUpload = (files: FileList | null, roomId: string) => {
+    if (!files) return;
+    const fileArray = Array.from(files);
+    
+    setRoomUploads(prev => prev.map(room => {
+      if (room.id === roomId) {
+        const newFiles = [...room.files, ...fileArray].slice(0, 10);
+        return { ...room, files: newFiles, isComplete: newFiles.length > 0 };
       }
-      setVideo(file);
-      toast.success("Video uploaded successfully");
-    }
+      return room;
+    }));
+    
+    toast.success(`${fileArray.length} file(s) added`);
+  };
+
+  const removeFileFromRoom = (roomId: string, fileIndex: number) => {
+    setRoomUploads(prev => prev.map(room => {
+      if (room.id === roomId) {
+        const newFiles = room.files.filter((_, i) => i !== fileIndex);
+        return { ...room, files: newFiles, isComplete: newFiles.length > 0 };
+      }
+      return room;
+    }));
+  };
+
+  const setRoomMediaType = (roomId: string, type: MediaType) => {
+    setRoomUploads(prev => prev.map(room => 
+      room.id === roomId ? { ...room, mediaType: type, files: [] } : room
+    ));
   };
 
   const convertFileToBase64 = (file: File): Promise<string> => {
     return new Promise((resolve, reject) => {
       const reader = new FileReader();
-      reader.onload = () => {
-        const result = reader.result as string;
-        resolve(result);
-      };
+      reader.onload = () => resolve(reader.result as string);
       reader.onerror = reject;
       reader.readAsDataURL(file);
     });
   };
 
   const processWithAI = async () => {
-    if (photos.length < 3) {
-      toast.error("Please upload at least 3 photos of different rooms/areas");
+    const roomsWithMedia = roomUploads.filter(r => r.files.length > 0);
+    if (roomsWithMedia.length < 1) {
+      toast.error("Please upload at least 1 room with photos or video");
       return;
     }
 
@@ -117,23 +186,41 @@ const PropertyMeasurement = () => {
     setProgress(0);
 
     try {
-      // Convert photos to base64
       setProgress(10);
-      toast.info("Preparing images for AI analysis...");
-      
-      const imagePromises = photos.slice(0, 10).map(file => convertFileToBase64(file));
-      const base64Images = await Promise.all(imagePromises);
-      
-      setProgress(30);
-      toast.info("Analyzing property dimensions with AI...");
+      toast.info("Preparing media for AI analysis...");
 
-      // Call the edge function
+      // Prepare all images with room labels
+      const allImages: string[] = [];
+      const roomLabels: string[] = [];
+      
+      for (const room of roomsWithMedia) {
+        for (const file of room.files.slice(0, 3)) {
+          if (file.type.startsWith("image/")) {
+            const base64 = await convertFileToBase64(file);
+            allImages.push(base64);
+            roomLabels.push(room.name);
+          }
+        }
+      }
+
+      if (allImages.length === 0) {
+        throw new Error("No valid images found. Please upload photos of each room.");
+      }
+
+      setProgress(30);
+      toast.info("Analyzing each room with AI...");
+
+      // Build enhanced prompt with room labels
+      const roomListText = roomsWithMedia.map(r => r.name).join(", ");
+      
       const { data, error } = await supabase.functions.invoke('property-measurement', {
         body: {
-          images: base64Images,
+          images: allImages,
           propertyType,
           propertyName,
           unitPreference,
+          roomLabels,
+          roomList: roomListText,
         }
       });
 
@@ -158,11 +245,11 @@ const PropertyMeasurement = () => {
 
       setResult(aiResult);
       setProgress(100);
-      setStep(4);
+      setStep(5);
       toast.success(`Measurement complete! Confidence: ${aiResult.confidence || 'medium'}`);
     } catch (error) {
       console.error("Processing error:", error);
-      toast.error(error instanceof Error ? error.message : "Error processing your images. Please try again.");
+      toast.error(error instanceof Error ? error.message : "Error processing. Please try again.");
     } finally {
       setIsProcessing(false);
     }
@@ -192,7 +279,9 @@ ${convertArea(result.totalArea, "sqm")} sq m
 
 ROOM BREAKDOWN
 --------------
-${result.rooms.map(room => `${room.name}: ${room.area} sq ft (${convertArea(room.area, "sqm")} sq m)`).join("\n")}
+${result.rooms.map(room => `${room.name}: ${room.area} sq ft (${convertArea(room.area, "sqm")} sq m)${room.dimensions ? ` - ${room.dimensions}` : ''}`).join("\n")}
+
+${result.notes ? `\nNOTES\n-----\n${result.notes}` : ''}
 
 ================================
 Powered by JJ Global Capital
@@ -211,7 +300,6 @@ www.jjglobalcapital.com
   };
 
   const proceedToInteriorDesign = () => {
-    // Store the measurement data in sessionStorage for the interior design tool
     if (result) {
       sessionStorage.setItem("propertyMeasurement", JSON.stringify({
         totalArea: result.totalArea,
@@ -222,6 +310,9 @@ www.jjglobalcapital.com
     }
     navigate("/interior-design-ai");
   };
+
+  const completedRoomsCount = roomUploads.filter(r => r.isComplete).length;
+  const currentRoom = roomUploads[currentRoomIndex];
 
   return (
     <section className="relative w-full min-h-screen bg-black">
@@ -250,26 +341,26 @@ www.jjglobalcapital.com
             </h1>
             
             <p className="text-zinc-400 text-lg md:text-xl max-w-2xl mx-auto mb-8">
-              Verify your property size with AI precision. Upload photos and videos — 
+              Verify your property size with AI precision. Upload photos room by room — 
               get accurate measurements in seconds. <span className="text-teal-400 font-semibold">100% Free.</span>
             </p>
 
-            {/* Why Use This Tool */}
-            <div className="grid md:grid-cols-3 gap-4 max-w-3xl mx-auto mt-12">
+            {/* Why Use This Tool - Enhanced */}
+            <div className="grid md:grid-cols-3 gap-4 max-w-4xl mx-auto mt-12">
               <div className="bg-zinc-900/50 border border-teal-500/20 rounded-xl p-4">
                 <CheckCircle2 className="w-8 h-8 text-teal-400 mx-auto mb-2" />
                 <p className="text-white font-medium">Verify Developer Claims</p>
-                <p className="text-zinc-500 text-sm">Check if your property matches the stated size</p>
+                <p className="text-zinc-500 text-sm">Check if the property matches the stated size before you buy</p>
+              </div>
+              <div className="bg-zinc-900/50 border border-teal-500/20 rounded-xl p-4">
+                <AlertCircle className="w-8 h-8 text-teal-400 mx-auto mb-2" />
+                <p className="text-white font-medium">Check Rental Sizes</p>
+                <p className="text-zinc-500 text-sm">Verify apartment sizes before signing a lease agreement</p>
               </div>
               <div className="bg-zinc-900/50 border border-teal-500/20 rounded-xl p-4">
                 <Sparkles className="w-8 h-8 text-teal-400 mx-auto mb-2" />
-                <p className="text-white font-medium">AI-Powered Accuracy</p>
-                <p className="text-zinc-500 text-sm">Advanced computer vision for precise measurements</p>
-              </div>
-              <div className="bg-zinc-900/50 border border-teal-500/20 rounded-xl p-4">
-                <Download className="w-8 h-8 text-teal-400 mx-auto mb-2" />
-                <p className="text-white font-medium">Instant Report</p>
-                <p className="text-zinc-500 text-sm">Download detailed breakdown in sq ft & sq m</p>
+                <p className="text-white font-medium">Secondary Market Check</p>
+                <p className="text-zinc-500 text-sm">Verify size claims before viewing a resale property</p>
               </div>
             </div>
           </motion.div>
@@ -281,7 +372,7 @@ www.jjglobalcapital.com
         {/* Progress Steps */}
         <div className="flex justify-center mb-12">
           <div className="flex items-center gap-4">
-            {[1, 2, 3, 4].map((s) => (
+            {[1, 2, 3, 4, 5].map((s) => (
               <div key={s} className="flex items-center">
                 <div className={`w-10 h-10 rounded-full flex items-center justify-center font-bold transition-all ${
                   step >= s 
@@ -290,8 +381,8 @@ www.jjglobalcapital.com
                 }`}>
                   {step > s ? <CheckCircle2 className="w-5 h-5" /> : s}
                 </div>
-                {s < 4 && (
-                  <div className={`w-12 md:w-20 h-1 ${step > s ? "bg-teal-500" : "bg-zinc-800"}`} />
+                {s < 5 && (
+                  <div className={`w-8 md:w-12 h-1 ${step > s ? "bg-teal-500" : "bg-zinc-800"}`} />
                 )}
               </div>
             ))}
@@ -380,7 +471,7 @@ www.jjglobalcapital.com
           </motion.div>
         )}
 
-        {/* Step 2: Upload Instructions */}
+        {/* Step 2: Instructions */}
         {step === 2 && (
           <motion.div 
             className="max-w-3xl mx-auto"
@@ -391,34 +482,48 @@ www.jjglobalcapital.com
               <CardHeader>
                 <CardTitle className="text-white flex items-center gap-2">
                   <Info className="w-5 h-5 text-teal-400" />
-                  Step 2: Photo & Video Guidelines
+                  Step 2: How It Works
                 </CardTitle>
               </CardHeader>
               <CardContent className="space-y-6">
                 <div className="bg-teal-500/10 border border-teal-500/30 rounded-xl p-6">
-                  <h3 className="text-teal-300 font-semibold text-lg mb-4">📸 For Best Results:</h3>
-                  <div className="grid md:grid-cols-2 gap-4 text-zinc-300">
-                    <div>
-                      <p className="font-medium text-white mb-2">Photos (Required):</p>
-                      <ul className="space-y-2 text-sm">
-                        <li>• Take photos from each corner of every room</li>
-                        <li>• Include the ceiling in some shots for height reference</li>
-                        <li>• Photograph windows and doors fully visible</li>
-                        <li>• Minimum 3 photos, recommended 10-15</li>
-                        <li>• Use good lighting, avoid dark/blurry images</li>
-                      </ul>
+                  <h3 className="text-teal-300 font-semibold text-lg mb-4">📱 Room-by-Room Guide</h3>
+                  <div className="space-y-4 text-zinc-300">
+                    <div className="flex items-start gap-3">
+                      <span className="w-8 h-8 bg-teal-500/30 rounded-full flex items-center justify-center text-teal-300 font-bold flex-shrink-0">1</span>
+                      <div>
+                        <p className="font-medium text-white">Select your rooms</p>
+                        <p className="text-sm text-zinc-400">We'll suggest rooms based on your property type. Add custom rooms if needed.</p>
+                      </div>
                     </div>
-                    <div>
-                      <p className="font-medium text-white mb-2">Video (Recommended):</p>
-                      <ul className="space-y-2 text-sm">
-                        <li>• Walk through entire property slowly</li>
-                        <li>• Pan camera to show all walls and corners</li>
-                        <li>• Keep camera steady (use both hands)</li>
-                        <li>• 2-5 minute video is ideal</li>
-                        <li>• Include balconies and outdoor areas</li>
-                      </ul>
+                    <div className="flex items-start gap-3">
+                      <span className="w-8 h-8 bg-teal-500/30 rounded-full flex items-center justify-center text-teal-300 font-bold flex-shrink-0">2</span>
+                      <div>
+                        <p className="font-medium text-white">Upload for each room</p>
+                        <p className="text-sm text-zinc-400">Choose to upload <strong>photos</strong> (2-3 per room) OR a <strong>video walkthrough</strong> of each specific room.</p>
+                      </div>
+                    </div>
+                    <div className="flex items-start gap-3">
+                      <span className="w-8 h-8 bg-teal-500/30 rounded-full flex items-center justify-center text-teal-300 font-bold flex-shrink-0">3</span>
+                      <div>
+                        <p className="font-medium text-white">Get accurate measurements</p>
+                        <p className="text-sm text-zinc-400">AI analyzes each room separately for precise individual and total area calculations.</p>
+                      </div>
                     </div>
                   </div>
+                </div>
+
+                <div className="bg-yellow-500/10 border border-yellow-500/30 rounded-xl p-4">
+                  <p className="text-yellow-300 font-medium flex items-center gap-2">
+                    <AlertCircle className="w-5 h-5" />
+                    Important Tips
+                  </p>
+                  <ul className="text-zinc-400 text-sm mt-2 space-y-1">
+                    <li>• When uploading for "Kitchen", only upload kitchen photos/video</li>
+                    <li>• Include doors and windows in shots for scale reference</li>
+                    <li>• For best accuracy, capture all corners of each room</li>
+                    <li>• Good lighting helps AI measure more accurately</li>
+                  </ul>
                 </div>
 
                 <div className="flex gap-3">
@@ -430,10 +535,10 @@ www.jjglobalcapital.com
                     Back
                   </Button>
                   <Button 
-                    onClick={() => setStep(3)}
+                    onClick={initializeRooms}
                     className="flex-1 bg-teal-500 hover:bg-teal-600 text-white py-6"
                   >
-                    I Understand, Continue to Upload
+                    Start Adding Rooms
                     <ArrowRight className="w-4 h-4 ml-2" />
                   </Button>
                 </div>
@@ -442,108 +547,222 @@ www.jjglobalcapital.com
           </motion.div>
         )}
 
-        {/* Step 3: Upload Files */}
+        {/* Step 3: Room Selection & Setup */}
         {step === 3 && (
           <motion.div 
-            className="max-w-3xl mx-auto"
+            className="max-w-4xl mx-auto"
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
           >
             <Card className="bg-zinc-900/50 border-zinc-800">
               <CardHeader>
                 <CardTitle className="text-white flex items-center gap-2">
-                  <Upload className="w-5 h-5 text-teal-400" />
-                  Step 3: Upload Your Media
+                  <LayoutGrid className="w-5 h-5 text-teal-400" />
+                  Step 3: Your Rooms ({roomUploads.length} total)
                 </CardTitle>
               </CardHeader>
               <CardContent className="space-y-6">
-                {/* Photo Upload */}
-                <div>
-                  <Label className="text-white mb-3 block">
-                    Photos <span className="text-red-400">*</span>
-                    <span className="text-zinc-500 text-sm ml-2">({photos.length}/20 uploaded)</span>
-                  </Label>
-                  <input
-                    ref={photoInputRef}
-                    type="file"
-                    accept="image/*"
-                    multiple
-                    onChange={handlePhotoUpload}
-                    className="hidden"
-                  />
-                  <button
-                    onClick={() => photoInputRef.current?.click()}
-                    className="w-full border-2 border-dashed border-zinc-700 hover:border-teal-500/50 rounded-xl p-8 transition-all bg-zinc-800/30 hover:bg-zinc-800/50"
-                  >
-                    <Camera className="w-12 h-12 text-zinc-500 mx-auto mb-3" />
-                    <p className="text-zinc-400">Click to upload photos</p>
-                    <p className="text-zinc-600 text-sm mt-1">JPG, PNG up to 20 photos</p>
-                  </button>
+                {/* Room Grid */}
+                <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-4">
+                  {roomUploads.map((room) => (
+                    <div 
+                      key={room.id}
+                      className={`relative p-4 rounded-xl border transition-all ${
+                        room.isComplete 
+                          ? "border-teal-500 bg-teal-500/10" 
+                          : "border-zinc-700 bg-zinc-800/50"
+                      }`}
+                    >
+                      <button
+                        onClick={() => removeRoom(room.id)}
+                        className="absolute top-2 right-2 w-6 h-6 bg-red-500/20 hover:bg-red-500/40 rounded-full flex items-center justify-center text-red-400 transition-colors"
+                      >
+                        <X className="w-4 h-4" />
+                      </button>
+                      
+                      <p className="text-white font-medium mb-3 pr-6">{room.name}</p>
+                      
+                      {room.isComplete ? (
+                        <div className="flex items-center gap-2 text-teal-300">
+                          <CheckCircle2 className="w-5 h-5" />
+                          <span className="text-sm">{room.files.length} file(s) added</span>
+                        </div>
+                      ) : (
+                        <p className="text-zinc-500 text-sm">No media uploaded</p>
+                      )}
+                    </div>
+                  ))}
                   
-                  {photos.length > 0 && (
-                    <div className="mt-4 grid grid-cols-4 gap-2">
-                      {photos.map((photo, i) => (
-                        <div key={i} className="relative aspect-square rounded-lg overflow-hidden bg-zinc-800">
-                          <img 
-                            src={URL.createObjectURL(photo)} 
-                            alt={`Photo ${i + 1}`}
-                            className="w-full h-full object-cover"
-                          />
+                  {/* Add Custom Room */}
+                  <button
+                    onClick={() => {
+                      const name = prompt("Enter room/area name:");
+                      if (name) addCustomRoom(name);
+                    }}
+                    className="p-4 rounded-xl border-2 border-dashed border-zinc-700 hover:border-teal-500/50 bg-zinc-800/30 hover:bg-zinc-800/50 transition-all flex flex-col items-center justify-center gap-2 min-h-[100px]"
+                  >
+                    <Plus className="w-6 h-6 text-zinc-500" />
+                    <span className="text-zinc-400 text-sm">Add Custom Room</span>
+                  </button>
+                </div>
+
+                <div className="flex gap-3">
+                  <Button 
+                    onClick={() => setStep(2)}
+                    variant="outline"
+                    className="border-zinc-700 text-zinc-300"
+                  >
+                    Back
+                  </Button>
+                  <Button 
+                    onClick={() => setStep(4)}
+                    disabled={roomUploads.length === 0}
+                    className="flex-1 bg-teal-500 hover:bg-teal-600 text-white py-6"
+                  >
+                    Continue to Upload Media
+                    <ArrowRight className="w-4 h-4 ml-2" />
+                  </Button>
+                </div>
+              </CardContent>
+            </Card>
+          </motion.div>
+        )}
+
+        {/* Step 4: Upload Media for Each Room */}
+        {step === 4 && (
+          <motion.div 
+            className="max-w-4xl mx-auto"
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+          >
+            <Card className="bg-zinc-900/50 border-zinc-800">
+              <CardHeader>
+                <div className="flex items-center justify-between">
+                  <CardTitle className="text-white flex items-center gap-2">
+                    <Upload className="w-5 h-5 text-teal-400" />
+                    Step 4: Upload Media for Each Room
+                  </CardTitle>
+                  <Badge className="bg-teal-500/20 text-teal-300 border-teal-500/30">
+                    {completedRoomsCount}/{roomUploads.length} Complete
+                  </Badge>
+                </div>
+              </CardHeader>
+              <CardContent className="space-y-6">
+                {/* Room Upload Cards */}
+                <div className="space-y-4">
+                  {roomUploads.map((room) => (
+                    <div 
+                      key={room.id}
+                      className={`p-4 rounded-xl border transition-all ${
+                        room.isComplete 
+                          ? "border-teal-500/50 bg-teal-500/5" 
+                          : "border-zinc-700 bg-zinc-800/30"
+                      }`}
+                    >
+                      <div className="flex items-center justify-between mb-4">
+                        <div className="flex items-center gap-3">
+                          {room.isComplete ? (
+                            <CheckCircle2 className="w-5 h-5 text-teal-400" />
+                          ) : (
+                            <Camera className="w-5 h-5 text-zinc-500" />
+                          )}
+                          <h4 className="text-white font-medium">{room.name}</h4>
+                        </div>
+                        
+                        {/* Media Type Toggle */}
+                        <div className="flex gap-2">
                           <button
-                            onClick={() => setPhotos(photos.filter((_, idx) => idx !== i))}
-                            className="absolute top-1 right-1 w-5 h-5 bg-red-500 rounded-full text-white text-xs flex items-center justify-center"
+                            onClick={() => setRoomMediaType(room.id, "photo")}
+                            className={`px-3 py-1 rounded-lg text-xs font-medium transition-all ${
+                              room.mediaType === "photo"
+                                ? "bg-teal-500 text-white"
+                                : "bg-zinc-800 text-zinc-400 hover:bg-zinc-700"
+                            }`}
                           >
-                            ×
+                            <Camera className="w-3 h-3 inline mr-1" />
+                            Photos
+                          </button>
+                          <button
+                            onClick={() => setRoomMediaType(room.id, "video")}
+                            className={`px-3 py-1 rounded-lg text-xs font-medium transition-all ${
+                              room.mediaType === "video"
+                                ? "bg-teal-500 text-white"
+                                : "bg-zinc-800 text-zinc-400 hover:bg-zinc-700"
+                            }`}
+                          >
+                            <Video className="w-3 h-3 inline mr-1" />
+                            Video
                           </button>
                         </div>
-                      ))}
-                    </div>
-                  )}
-                </div>
-
-                {/* Video Upload */}
-                <div>
-                  <Label className="text-white mb-3 block">
-                    Video <span className="text-zinc-500 text-sm">(Optional but recommended)</span>
-                  </Label>
-                  <input
-                    ref={videoInputRef}
-                    type="file"
-                    accept="video/*"
-                    onChange={handleVideoUpload}
-                    className="hidden"
-                  />
-                  <button
-                    onClick={() => videoInputRef.current?.click()}
-                    className="w-full border-2 border-dashed border-zinc-700 hover:border-teal-500/50 rounded-xl p-6 transition-all bg-zinc-800/30 hover:bg-zinc-800/50"
-                  >
-                    {video ? (
-                      <div className="flex items-center justify-center gap-3">
-                        <Video className="w-8 h-8 text-teal-400" />
-                        <span className="text-teal-300">{video.name}</span>
-                        <button
-                          onClick={(e) => { e.stopPropagation(); setVideo(null); }}
-                          className="text-red-400 hover:text-red-300"
-                        >
-                          Remove
-                        </button>
                       </div>
-                    ) : (
-                      <>
-                        <Video className="w-10 h-10 text-zinc-500 mx-auto mb-2" />
-                        <p className="text-zinc-400">Click to upload walkthrough video</p>
-                        <p className="text-zinc-600 text-sm mt-1">MP4, MOV up to 500MB</p>
-                      </>
-                    )}
-                  </button>
+
+                      {/* Upload Area */}
+                      <div>
+                        <input
+                          type="file"
+                          accept={room.mediaType === "photo" ? "image/*" : "video/*"}
+                          multiple={room.mediaType === "photo"}
+                          onChange={(e) => handleRoomMediaUpload(e.target.files, room.id)}
+                          className="hidden"
+                          id={`upload-${room.id}`}
+                        />
+                        
+                        {room.files.length === 0 ? (
+                          <label 
+                            htmlFor={`upload-${room.id}`}
+                            className="block w-full border-2 border-dashed border-zinc-700 hover:border-teal-500/50 rounded-lg p-4 text-center cursor-pointer transition-all hover:bg-zinc-800/30"
+                          >
+                            {room.mediaType === "photo" ? (
+                              <>
+                                <Camera className="w-8 h-8 text-zinc-500 mx-auto mb-2" />
+                                <p className="text-zinc-400 text-sm">Click to upload 2-3 photos of <strong>{room.name}</strong></p>
+                              </>
+                            ) : (
+                              <>
+                                <Video className="w-8 h-8 text-zinc-500 mx-auto mb-2" />
+                                <p className="text-zinc-400 text-sm">Click to upload video walkthrough of <strong>{room.name}</strong></p>
+                              </>
+                            )}
+                          </label>
+                        ) : (
+                          <div className="space-y-2">
+                            <div className="flex flex-wrap gap-2">
+                              {room.files.map((file, i) => (
+                                <div key={i} className="relative bg-zinc-800 rounded-lg px-3 py-2 flex items-center gap-2">
+                                  {file.type.startsWith("image/") ? (
+                                    <Camera className="w-4 h-4 text-teal-400" />
+                                  ) : (
+                                    <Video className="w-4 h-4 text-teal-400" />
+                                  )}
+                                  <span className="text-zinc-300 text-sm truncate max-w-[120px]">{file.name}</span>
+                                  <button
+                                    onClick={() => removeFileFromRoom(room.id, i)}
+                                    className="w-4 h-4 bg-red-500/20 rounded-full flex items-center justify-center text-red-400 hover:bg-red-500/40"
+                                  >
+                                    <X className="w-3 h-3" />
+                                  </button>
+                                </div>
+                              ))}
+                            </div>
+                            <label 
+                              htmlFor={`upload-${room.id}`}
+                              className="text-teal-400 text-sm cursor-pointer hover:underline"
+                            >
+                              + Add more
+                            </label>
+                          </div>
+                        )}
+                      </div>
+                    </div>
+                  ))}
                 </div>
 
-                {/* Processing */}
+                {/* Processing Indicator */}
                 {isProcessing && (
                   <div className="bg-teal-500/10 border border-teal-500/30 rounded-xl p-6">
                     <div className="flex items-center gap-3 mb-4">
                       <Sparkles className="w-6 h-6 text-teal-400 animate-pulse" />
-                      <p className="text-teal-300 font-medium">AI is analyzing your property...</p>
+                      <p className="text-teal-300 font-medium">AI is analyzing each room...</p>
                     </div>
                     <Progress value={progress} className="h-2" />
                     <p className="text-zinc-500 text-sm mt-2">{progress}% complete</p>
@@ -552,7 +771,7 @@ www.jjglobalcapital.com
 
                 <div className="flex gap-3">
                   <Button 
-                    onClick={() => setStep(2)}
+                    onClick={() => setStep(3)}
                     variant="outline"
                     className="border-zinc-700 text-zinc-300"
                     disabled={isProcessing}
@@ -561,10 +780,10 @@ www.jjglobalcapital.com
                   </Button>
                   <Button 
                     onClick={processWithAI}
-                    disabled={photos.length < 3 || isProcessing}
+                    disabled={completedRoomsCount < 1 || isProcessing}
                     className="flex-1 bg-teal-500 hover:bg-teal-600 text-white py-6"
                   >
-                    {isProcessing ? "Processing..." : "Analyze with AI"}
+                    {isProcessing ? "Analyzing..." : `Analyze ${completedRoomsCount} Room(s) with AI`}
                     <Sparkles className="w-4 h-4 ml-2" />
                   </Button>
                 </div>
@@ -573,8 +792,8 @@ www.jjglobalcapital.com
           </motion.div>
         )}
 
-        {/* Step 4: Results */}
-        {step === 4 && result && (
+        {/* Step 5: Results */}
+        {step === 5 && result && (
           <motion.div 
             className="max-w-4xl mx-auto"
             initial={{ opacity: 0, y: 20 }}
@@ -652,6 +871,19 @@ www.jjglobalcapital.com
                     ))}
                   </div>
                 </div>
+
+                {/* Save Project CTA */}
+                {!user && (
+                  <div className="bg-yellow-500/10 border border-yellow-500/30 rounded-xl p-4 text-center">
+                    <p className="text-yellow-300 font-medium">Want to save this measurement?</p>
+                    <p className="text-zinc-400 text-sm mt-1">Log in to save your projects and access them anytime.</p>
+                    <Link to="/auth">
+                      <Button className="mt-3 bg-yellow-500 hover:bg-yellow-600 text-black">
+                        Log In to Save
+                      </Button>
+                    </Link>
+                  </div>
+                )}
 
                 {/* Actions */}
                 <div className="flex flex-col sm:flex-row gap-4 pt-4">
