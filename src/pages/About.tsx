@@ -107,17 +107,17 @@ const About = () => {
             style={{ fontFamily: "Poppins, sans-serif" }}
             variants={fadeInUp}
           >
-            Redefining Luxury<br />
+            Dubai's Trusted<br />
             <span className="text-transparent bg-clip-text bg-gradient-to-r from-gold to-gold-light">
-              Investment in the UAE
+              Real Estate Brokerage
             </span>
           </motion.h1>
           <motion.p 
             className="text-zinc-400 text-lg md:text-xl max-w-2xl mx-auto"
             variants={fadeInUp}
           >
-            JJ Global Capital stands as the UAE's premier investment advisory, trusted by discerning investors 
-            worldwide to navigate the region's most lucrative opportunities.
+            JJ Global Capital is a licensed real estate brokerage serving clients worldwide 
+            with expert property sales, leasing, and holiday home services across the UAE.
           </motion.p>
         </motion.div>
       </section>
@@ -169,17 +169,17 @@ const About = () => {
               </h2>
               <div className="space-y-5 text-zinc-400 leading-relaxed">
                 <p>
-                  Founded in the heart of Dubai, JJ Global Capital emerged from a singular vision: to provide 
-                  ultra-high-net-worth individuals with unparalleled access to the UAE's most exclusive investment opportunities.
+                  Founded in Dubai, JJ Global Capital is a licensed real estate brokerage dedicated to helping 
+                  clients buy, sell, and lease premium properties across the UAE.
                 </p>
                 <p>
-                  Our team of seasoned professionals brings together decades of experience in real estate, 
-                  finance, and luxury services, creating a holistic approach to wealth management that 
-                  transcends traditional boundaries.
+                  Our team of experienced brokers brings deep market knowledge and strong negotiation skills, 
+                  ensuring our clients achieve the best outcomes in their property transactions.
                 </p>
                 <p>
-                  Today, we are proud to be recognized as the region's most trusted investment advisory, 
-                  serving clients from over 92 countries who entrust us with their most significant financial decisions.
+                  Beyond brokerage, we connect clients with trusted independent professionals — including law firms, 
+                  mortgage specialists, and licensed property managers — to provide comprehensive support throughout 
+                  their real estate journey.
                 </p>
               </div>
               
@@ -341,11 +341,11 @@ const About = () => {
               
               <div className="space-y-4 mb-8">
                 {[
-                  "Premium Real Estate Investment Advisory",
-                  "Luxury Concierge & Lifestyle Management",
-                  "Legal Services & Property Conveyancing",
-                  "Interior Design & Architecture",
-                  "Mortgage & Financial Advisory"
+                  "Property Sales & Leasing Brokerage",
+                  "Holiday Homes & Short-Term Rentals",
+                  "Partner Introductions (Legal, Mortgage, Management)",
+                  "Luxury Concierge Services",
+                  "Design & Build via Sister Companies"
                 ].map((service) => (
                   <div key={service} className="flex items-center gap-3">
                     <CheckCircle className="w-5 h-5 text-gold flex-shrink-0" />
@@ -379,10 +379,10 @@ const About = () => {
               className="text-white text-3xl md:text-4xl font-bold mb-4"
               style={{ fontFamily: "Poppins, sans-serif" }}
             >
-              Ready to Start Your Investment Journey?
+              Ready to Find Your Perfect Property?
             </h2>
             <p className="text-zinc-400 text-lg mb-8 max-w-2xl mx-auto">
-              Connect with our expert team for personalized guidance on UAE real estate investments
+              Connect with our brokerage team for expert guidance on buying, selling, or leasing in the UAE
             </p>
             <div className="flex flex-wrap justify-center gap-4">
               <Link to="/contact">
