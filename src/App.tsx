@@ -33,6 +33,7 @@ import InteriorDesign from "./pages/services/InteriorDesign";
 import FitOut from "./pages/services/FitOut";
 import LawFirm from "./pages/services/LawFirm";
 import RentalIndex from "./pages/RentalIndex";
+import Services from "./pages/Services";
 import DocumentScanner from "./pages/DocumentScanner";
 import PropertyEvaluator from "./pages/PropertyEvaluator";
 import ToolsGuide from "./pages/ToolsGuide";
@@ -105,6 +106,7 @@ const App = () => (
                 <Route path="/mortgage-calculator" element={<MortgageCalculatorPage />} />
                 <Route path="/market-report" element={<MarketReport />} />
                 <Route path="/concierge" element={<Concierge />} />
+                <Route path="/services" element={<Services />} />
                 <Route path="/services/design-build" element={<DesignBuild />} />
                 <Route path="/services/architecture" element={<Architecture />} />
                 <Route path="/services/interior-design" element={<InteriorDesign />} />
