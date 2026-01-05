@@ -124,6 +124,23 @@ const Footer = () => {
     { href: "/contact", label: "Contact" },
   ];
 
+  // Academy & Tools Sections
+  const academyLinks = [
+    { href: "/broker-toolkit", label: "Broker Academy" },
+    { href: "/broker-toolkit/dashboard", label: "My Dashboard" },
+    { href: "/tools-guide", label: "Training Center" },
+  ];
+
+  const professionalTools = [
+    { href: "/compare", label: "Property Comparison" },
+    { href: "/property-evaluator", label: "Property Evaluator" },
+    { href: "/rental-index", label: "Rental Index Analysis" },
+    { href: "/document-scanner", label: "Document Scanner" },
+    { href: "/property-measurement", label: "Property Measurement" },
+    { href: "/interior-design-ai", label: "AI Interior Design" },
+    { href: "/ai-hub", label: "AI Hub" },
+  ];
+
   return (
     <footer className="bg-black border-t border-zinc-800">
       <div className="container mx-auto px-4 py-10 md:py-14">
@@ -178,9 +195,9 @@ const Footer = () => {
         {/* Divider */}
         <div className="h-px bg-gradient-to-r from-transparent via-zinc-700 to-transparent mb-10" />
 
-        {/* Menu + Divisions Grid - Premium Layout */}
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-10 md:gap-20 mb-10 max-w-4xl mx-auto">
-          {/* Menu - LEFT */}
+        {/* Menu + Divisions + Academy Grid - Premium Layout */}
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-10 md:gap-12 mb-10 max-w-6xl mx-auto">
+          {/* Menu */}
           <div className="text-center md:text-left">
             <h4 className="text-gold font-semibold mb-5 text-sm uppercase tracking-[0.2em]">
               Menu
@@ -199,7 +216,7 @@ const Footer = () => {
             </ul>
           </div>
 
-          {/* Our Divisions - RIGHT */}
+          {/* Our Divisions */}
           <div className="text-center md:text-left">
             <h4 className="text-gold font-semibold mb-5 text-sm uppercase tracking-[0.2em]">
               Our Divisions
@@ -209,6 +226,46 @@ const Footer = () => {
                 <DivisionAccordion key={div.title} title={div.title} items={div.items} href={div.href} />
               ))}
             </div>
+          </div>
+
+          {/* JJ Global Capital Academy */}
+          <div className="text-center md:text-left">
+            <h4 className="text-gold font-semibold mb-5 text-sm uppercase tracking-[0.2em]">
+              JJ Academy
+            </h4>
+            <p className="text-zinc-500 text-xs mb-4">Professional Training & Certification</p>
+            <ul className="space-y-2.5">
+              {academyLinks.map((link) => (
+                <li key={link.href}>
+                  <Link
+                    to={link.href}
+                    className="text-white hover:text-gold transition-colors text-base inline-block"
+                  >
+                    {link.label}
+                  </Link>
+                </li>
+              ))}
+            </ul>
+          </div>
+
+          {/* Professional Tools */}
+          <div className="text-center md:text-left">
+            <h4 className="text-gold font-semibold mb-5 text-sm uppercase tracking-[0.2em]">
+              Professional Tools
+            </h4>
+            <p className="text-zinc-500 text-xs mb-4">AI-Powered Work Assistants</p>
+            <ul className="space-y-2.5">
+              {professionalTools.map((link) => (
+                <li key={link.href}>
+                  <Link
+                    to={link.href}
+                    className="text-white hover:text-gold transition-colors text-base inline-block"
+                  >
+                    {link.label}
+                  </Link>
+                </li>
+              ))}
+            </ul>
           </div>
         </div>
 

@@ -9,7 +9,7 @@ import MortgageCalculator from "@/components/MortgageCalculator";
 import WelcomeModal from "@/components/WelcomeModal";
 import InquiryFormModal from "@/components/InquiryFormModal";
 import { useLanguage } from "@/contexts/LanguageContext";
-import { Sparkles, ArrowUpRight, ChevronDown, User, Scale, Layers, Calculator, FileText, Heart, BarChart3, Wrench, Ruler, Palette, Calendar, Wallet, ShoppingBag, Brain } from "lucide-react";
+import { Sparkles, ArrowUpRight, ChevronDown, User, Scale, Layers, Calculator, FileText, Heart, BarChart3, Wrench, Ruler, Palette, Calendar, Wallet, ShoppingBag, Brain, GraduationCap, Briefcase, Target, Award } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import founderProfessional from "@/assets/founder-professional.jpeg";
 import luxuryVillaHero from "@/assets/luxury-villa-hero.jpeg";
@@ -364,6 +364,177 @@ const Index = () => {
                 </div>
               </div>
             </Link>
+          </motion.div>
+        </div>
+      </section>
+
+      {/* ACADEMY & PROFESSIONAL TOOLS SECTION - Premium Dedicated */}
+      <section className="py-20 md:py-28 bg-gradient-to-b from-black via-zinc-950 to-black relative overflow-hidden">
+        {/* Background decorative elements */}
+        <div className="absolute inset-0 pointer-events-none">
+          <div className="absolute top-20 left-10 w-72 h-72 bg-gold/5 rounded-full blur-3xl" />
+          <div className="absolute bottom-20 right-10 w-96 h-96 bg-purple-500/5 rounded-full blur-3xl" />
+        </div>
+        
+        <div className="container mx-auto px-4 relative z-10">
+          {/* Section Header */}
+          <motion.div 
+            className="text-center mb-16"
+            initial={{ opacity: 0, y: 20 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+            transition={{ duration: 0.6 }}
+          >
+            <span className="inline-flex items-center gap-2 text-gold text-xs uppercase tracking-[0.3em] mb-4">
+              <Award className="w-4 h-4" />
+              Exclusive Platform
+            </span>
+            <h2 
+              className="text-white text-3xl md:text-4xl lg:text-5xl font-bold mb-4"
+              style={{ fontFamily: "Poppins, sans-serif" }}
+            >
+              Elevate Your <span className="text-transparent bg-clip-text bg-gradient-to-r from-gold via-gold-light to-gold">Real Estate Career</span>
+            </h2>
+            <p className="text-zinc-400 text-lg max-w-2xl mx-auto">
+              Access world-class training, AI-powered tools, and professional resources designed for real estate excellence
+            </p>
+          </motion.div>
+
+          {/* Two Column Cards */}
+          <div className="grid md:grid-cols-2 gap-8 max-w-5xl mx-auto">
+            {/* Academy Card */}
+            <motion.div
+              className="relative group"
+              initial={{ opacity: 0, x: -30 }}
+              whileInView={{ opacity: 1, x: 0 }}
+              viewport={{ once: true }}
+              transition={{ duration: 0.6 }}
+            >
+              <div className="absolute inset-0 bg-gradient-to-br from-gold/20 via-gold/10 to-transparent rounded-3xl blur-xl group-hover:blur-2xl transition-all duration-500 opacity-50 group-hover:opacity-80" />
+              <div className="relative bg-zinc-900/80 backdrop-blur-xl border border-gold/30 rounded-3xl p-8 md:p-10 h-full hover:border-gold/60 transition-all duration-500 group-hover:shadow-2xl group-hover:shadow-gold/20">
+                <div className="flex items-center gap-4 mb-6">
+                  <div className="w-16 h-16 bg-gradient-to-br from-gold to-gold-light rounded-2xl flex items-center justify-center shadow-lg shadow-gold/30">
+                    <GraduationCap className="w-8 h-8 text-black" />
+                  </div>
+                  <div>
+                    <h3 className="text-white text-2xl font-bold" style={{ fontFamily: "Poppins, sans-serif" }}>
+                      JJ Global Capital Academy
+                    </h3>
+                    <p className="text-gold text-sm uppercase tracking-wider">Professional Training</p>
+                  </div>
+                </div>
+                
+                <p className="text-zinc-300 mb-6 leading-relaxed">
+                  Master the art of real estate with our comprehensive training programs. From lead generation to closing techniques, become an industry leader.
+                </p>
+                
+                <ul className="space-y-3 mb-8">
+                  <li className="flex items-center gap-3 text-zinc-400">
+                    <Target className="w-4 h-4 text-gold flex-shrink-0" />
+                    <span>Advanced Closing Techniques</span>
+                  </li>
+                  <li className="flex items-center gap-3 text-zinc-400">
+                    <Target className="w-4 h-4 text-gold flex-shrink-0" />
+                    <span>Lead Generation Mastery</span>
+                  </li>
+                  <li className="flex items-center gap-3 text-zinc-400">
+                    <Target className="w-4 h-4 text-gold flex-shrink-0" />
+                    <span>Client Relationship Management</span>
+                  </li>
+                  <li className="flex items-center gap-3 text-zinc-400">
+                    <Target className="w-4 h-4 text-gold flex-shrink-0" />
+                    <span>Market Analysis & Insights</span>
+                  </li>
+                </ul>
+                
+                <Link to="/broker-toolkit">
+                  <Button className="w-full bg-gradient-to-r from-gold to-gold-light hover:from-gold-light hover:to-gold text-black font-bold py-6 text-base shadow-lg shadow-gold/30 hover:shadow-xl hover:shadow-gold/40 transition-all duration-300 group-hover:scale-[1.02]">
+                    Explore Academy
+                    <ArrowUpRight className="w-5 h-5 ml-2" />
+                  </Button>
+                </Link>
+              </div>
+            </motion.div>
+
+            {/* Professional Tools Card */}
+            <motion.div
+              className="relative group"
+              initial={{ opacity: 0, x: 30 }}
+              whileInView={{ opacity: 1, x: 0 }}
+              viewport={{ once: true }}
+              transition={{ duration: 0.6, delay: 0.2 }}
+            >
+              <div className="absolute inset-0 bg-gradient-to-br from-purple-500/20 via-purple-500/10 to-transparent rounded-3xl blur-xl group-hover:blur-2xl transition-all duration-500 opacity-50 group-hover:opacity-80" />
+              <div className="relative bg-zinc-900/80 backdrop-blur-xl border border-purple-500/30 rounded-3xl p-8 md:p-10 h-full hover:border-purple-400/60 transition-all duration-500 group-hover:shadow-2xl group-hover:shadow-purple-500/20">
+                <div className="flex items-center gap-4 mb-6">
+                  <div className="w-16 h-16 bg-gradient-to-br from-purple-500 to-purple-600 rounded-2xl flex items-center justify-center shadow-lg shadow-purple-500/30">
+                    <Briefcase className="w-8 h-8 text-white" />
+                  </div>
+                  <div>
+                    <h3 className="text-white text-2xl font-bold" style={{ fontFamily: "Poppins, sans-serif" }}>
+                      Professional Tools
+                    </h3>
+                    <p className="text-purple-400 text-sm uppercase tracking-wider">AI-Powered Assistants</p>
+                  </div>
+                </div>
+                
+                <p className="text-zinc-300 mb-6 leading-relaxed">
+                  Supercharge your productivity with AI-powered tools designed to streamline your workflow and deliver exceptional results to clients.
+                </p>
+                
+                <ul className="space-y-3 mb-8">
+                  <li className="flex items-center gap-3 text-zinc-400">
+                    <BarChart3 className="w-4 h-4 text-purple-400 flex-shrink-0" />
+                    <span>Property Comparison & Analysis</span>
+                  </li>
+                  <li className="flex items-center gap-3 text-zinc-400">
+                    <Calculator className="w-4 h-4 text-purple-400 flex-shrink-0" />
+                    <span>Property Valuator & Evaluator</span>
+                  </li>
+                  <li className="flex items-center gap-3 text-zinc-400">
+                    <FileText className="w-4 h-4 text-purple-400 flex-shrink-0" />
+                    <span>Document Scanner & Signing</span>
+                  </li>
+                  <li className="flex items-center gap-3 text-zinc-400">
+                    <Palette className="w-4 h-4 text-purple-400 flex-shrink-0" />
+                    <span>AI Interior Design Studio</span>
+                  </li>
+                </ul>
+                
+                <Link to="/tools-guide">
+                  <Button className="w-full bg-gradient-to-r from-purple-500 to-purple-600 hover:from-purple-600 hover:to-purple-700 text-white font-bold py-6 text-base shadow-lg shadow-purple-500/30 hover:shadow-xl hover:shadow-purple-500/40 transition-all duration-300 group-hover:scale-[1.02]">
+                    Explore Tools
+                    <ArrowUpRight className="w-5 h-5 ml-2" />
+                  </Button>
+                </Link>
+              </div>
+            </motion.div>
+          </div>
+
+          {/* Quick Stats */}
+          <motion.div 
+            className="grid grid-cols-2 md:grid-cols-4 gap-6 mt-16 max-w-4xl mx-auto"
+            initial={{ opacity: 0, y: 20 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+            transition={{ duration: 0.6, delay: 0.4 }}
+          >
+            <div className="text-center p-6 bg-zinc-900/50 backdrop-blur border border-zinc-800 rounded-2xl">
+              <p className="text-gold text-3xl md:text-4xl font-bold" style={{ fontFamily: "Poppins, sans-serif" }}>10+</p>
+              <p className="text-zinc-500 text-sm mt-1">AI Tools</p>
+            </div>
+            <div className="text-center p-6 bg-zinc-900/50 backdrop-blur border border-zinc-800 rounded-2xl">
+              <p className="text-gold text-3xl md:text-4xl font-bold" style={{ fontFamily: "Poppins, sans-serif" }}>50+</p>
+              <p className="text-zinc-500 text-sm mt-1">Training Lessons</p>
+            </div>
+            <div className="text-center p-6 bg-zinc-900/50 backdrop-blur border border-zinc-800 rounded-2xl">
+              <p className="text-gold text-3xl md:text-4xl font-bold" style={{ fontFamily: "Poppins, sans-serif" }}>24/7</p>
+              <p className="text-zinc-500 text-sm mt-1">AI Assistance</p>
+            </div>
+            <div className="text-center p-6 bg-zinc-900/50 backdrop-blur border border-zinc-800 rounded-2xl">
+              <p className="text-gold text-3xl md:text-4xl font-bold" style={{ fontFamily: "Poppins, sans-serif" }}>Pro</p>
+              <p className="text-zinc-500 text-sm mt-1">Certification</p>
+            </div>
           </motion.div>
         </div>
       </section>
