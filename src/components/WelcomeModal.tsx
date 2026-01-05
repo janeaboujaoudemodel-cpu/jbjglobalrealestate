@@ -36,28 +36,28 @@ const WelcomeModal = () => {
   }, [location.pathname]);
 
   const handleClose = () => {
-    setIsOpen(false);
     localStorage.setItem(WELCOME_MODAL_KEY, "true");
     localStorage.setItem(RETURNING_USER_KEY, "true");
-    setShowTour(true);
+    setIsOpen(false);
   };
 
   const handleContinueAsGuest = () => {
-    setIsOpen(false);
     localStorage.setItem(WELCOME_MODAL_KEY, "true");
     localStorage.setItem(RETURNING_USER_KEY, "true");
+    setIsOpen(false);
     setShowTour(true);
   };
 
   const handleLogin = () => {
-    setIsOpen(false);
     localStorage.setItem(WELCOME_MODAL_KEY, "true");
     localStorage.setItem(RETURNING_USER_KEY, "true");
+    setIsOpen(false);
     navigate("/auth");
   };
 
   const handleTourClose = () => {
     setShowTour(false);
+    // Tour completed - user stays on homepage, no modal reopens
   };
 
   return (
