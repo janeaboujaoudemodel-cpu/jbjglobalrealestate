@@ -123,9 +123,9 @@ const Index = () => {
             viewport={{ once: true }}
             transition={{ duration: 0.6 }}
           >
-            {/* Row 1 - White Background CTAs with Gold Text */}
+            {/* Row 1 - Primary CTAs - White Background with Gold Text */}
             <div className="flex flex-wrap justify-center gap-3">
-              <Link to="/about">
+              <Link to="/services">
                 <Button 
                   className="bg-white hover:bg-zinc-100 text-gold font-semibold px-6 py-5 text-sm shadow-lg shadow-white/10 hover:shadow-xl transition-all duration-300 hover:scale-105"
                 >
@@ -140,54 +140,71 @@ const Index = () => {
                 Contact Us
                 <ArrowUpRight className="w-4 h-4 ml-2 text-gold" />
               </Button>
+              <Link to="/market-report">
+                <Button 
+                  className="bg-white hover:bg-zinc-100 text-gold font-semibold px-6 py-5 text-sm shadow-lg shadow-white/10 hover:shadow-xl transition-all duration-300 hover:scale-105"
+                >
+                  <FileText className="w-4 h-4 mr-2 text-gold" />
+                  Market Report
+                  <ArrowUpRight className="w-4 h-4 ml-2 text-gold" />
+                </Button>
+              </Link>
+              <Link to="/news">
+                <Button 
+                  className="bg-white hover:bg-zinc-100 text-gold font-semibold px-6 py-5 text-sm shadow-lg shadow-white/10 hover:shadow-xl transition-all duration-300 hover:scale-105"
+                >
+                  <FileText className="w-4 h-4 mr-2 text-gold" />
+                  News & Insights
+                  <ArrowUpRight className="w-4 h-4 ml-2 text-gold" />
+                </Button>
+              </Link>
             </div>
             
-            {/* Row 2 - Services Row - Glass Outline Style (all same) */}
+            {/* Row 2 - Services Row - Dark Solid with Gold Accent Border */}
             <div className="flex flex-wrap justify-center gap-3">
               <Link to="/properties">
                 <Button 
-                  className="bg-transparent backdrop-blur-md border border-white/30 text-white hover:bg-white/10 hover:border-white/50 font-medium px-5 py-4 text-xs transition-all duration-300 hover:scale-105"
+                  className="bg-zinc-900 border-2 border-gold/40 text-white hover:bg-zinc-800 hover:border-gold font-semibold px-5 py-4 text-xs transition-all duration-300 hover:scale-105 hover:shadow-lg hover:shadow-gold/20"
                 >
                   Explore Properties
-                  <ArrowUpRight className="w-3 h-3 ml-1" />
+                  <ArrowUpRight className="w-3 h-3 ml-1 text-gold" />
                 </Button>
               </Link>
               <Button 
-                className="bg-transparent backdrop-blur-md border border-white/30 text-white hover:bg-white/10 hover:border-white/50 font-medium px-5 py-4 text-xs transition-all duration-300 hover:scale-105"
+                className="bg-zinc-900 border-2 border-gold/40 text-white hover:bg-zinc-800 hover:border-gold font-semibold px-5 py-4 text-xs transition-all duration-300 hover:scale-105 hover:shadow-lg hover:shadow-gold/20"
                 onClick={() => setIsInquiryOpen(true)}
               >
                 List Your Property
-                <ArrowUpRight className="w-3 h-3 ml-1" />
+                <ArrowUpRight className="w-3 h-3 ml-1 text-gold" />
               </Button>
               <Link to="/concierge">
                 <Button 
-                  className="bg-transparent backdrop-blur-md border border-white/30 text-white hover:bg-white/10 hover:border-white/50 font-medium px-5 py-4 text-xs transition-all duration-300 hover:scale-105"
+                  className="bg-zinc-900 border-2 border-gold/40 text-white hover:bg-zinc-800 hover:border-gold font-semibold px-5 py-4 text-xs transition-all duration-300 hover:scale-105 hover:shadow-lg hover:shadow-gold/20"
                 >
                   Luxury Concierge
-                  <ArrowUpRight className="w-3 h-3 ml-1" />
+                  <ArrowUpRight className="w-3 h-3 ml-1 text-gold" />
                 </Button>
               </Link>
               <Link to="/services/design-build">
                 <Button 
-                  className="bg-transparent backdrop-blur-md border border-white/30 text-white hover:bg-white/10 hover:border-white/50 font-medium px-5 py-4 text-xs transition-all duration-300 hover:scale-105"
+                  className="bg-zinc-900 border-2 border-gold/40 text-white hover:bg-zinc-800 hover:border-gold font-semibold px-5 py-4 text-xs transition-all duration-300 hover:scale-105 hover:shadow-lg hover:shadow-gold/20"
                 >
                   Design & Build
-                  <ArrowUpRight className="w-3 h-3 ml-1" />
+                  <ArrowUpRight className="w-3 h-3 ml-1 text-gold" />
                 </Button>
               </Link>
               <Link to="/services/law-firm">
                 <Button 
-                  className="bg-transparent backdrop-blur-md border border-white/30 text-white hover:bg-white/10 hover:border-white/50 font-medium px-5 py-4 text-xs transition-all duration-300 hover:scale-105"
+                  className="bg-zinc-900 border-2 border-gold/40 text-white hover:bg-zinc-800 hover:border-gold font-semibold px-5 py-4 text-xs transition-all duration-300 hover:scale-105 hover:shadow-lg hover:shadow-gold/20"
                 >
                   Law Firm
-                  <ArrowUpRight className="w-3 h-3 ml-1" />
+                  <ArrowUpRight className="w-3 h-3 ml-1 text-gold" />
                 </Button>
               </Link>
             </div>
             
             {/* Row 3 - AI Tools - Colored Glowing Borders */}
             <div className="flex flex-wrap justify-center gap-3">
-              {/* AI Property Comparison - Purple (matches page) */}
               <Link to="/compare">
                 <Button 
                   className="bg-transparent backdrop-blur-md border-2 border-purple-500/50 text-purple-400 hover:bg-purple-500/20 hover:border-purple-400 hover:shadow-lg hover:shadow-purple-500/20 font-semibold px-5 py-4 text-xs transition-all duration-300 hover:scale-105 group"
@@ -198,7 +215,6 @@ const Index = () => {
                 </Button>
               </Link>
               
-              {/* AI Interior Design - Fuchsia (matches page) */}
               <Link to="/interior-design-ai">
                 <Button 
                   className="bg-transparent backdrop-blur-md border-2 border-fuchsia-500/50 text-fuchsia-400 hover:bg-fuchsia-500/20 hover:border-fuchsia-400 hover:shadow-lg hover:shadow-fuchsia-500/20 font-semibold px-5 py-4 text-xs transition-all duration-300 hover:scale-105 group"
@@ -209,7 +225,6 @@ const Index = () => {
                 </Button>
               </Link>
               
-              {/* Property Measurement - Teal (matches page, FREE) */}
               <Link to="/property-measurement">
                 <Button 
                   className="bg-transparent backdrop-blur-md border-2 border-teal-500/50 text-teal-400 hover:bg-teal-500/20 hover:border-teal-400 hover:shadow-lg hover:shadow-teal-500/20 font-semibold px-5 py-4 text-xs transition-all duration-300 hover:scale-105 group"
@@ -220,7 +235,6 @@ const Index = () => {
                 </Button>
               </Link>
               
-              {/* Rental Index - Emerald Green */}
               <Link to="/rental-index">
                 <Button 
                   className="bg-transparent backdrop-blur-md border-2 border-emerald-500/50 text-emerald-400 hover:bg-emerald-500/20 hover:border-emerald-400 hover:shadow-lg hover:shadow-emerald-500/20 font-semibold px-5 py-4 text-xs transition-all duration-300 hover:scale-105 group"
@@ -231,7 +245,6 @@ const Index = () => {
                 </Button>
               </Link>
               
-              {/* Document Scanner - Green (matches page) */}
               <Link to="/document-scanner">
                 <Button 
                   className="bg-transparent backdrop-blur-md border-2 border-green-500/50 text-green-400 hover:bg-green-500/20 hover:border-green-400 hover:shadow-lg hover:shadow-green-500/20 font-semibold px-5 py-4 text-xs transition-all duration-300 hover:scale-105 group"
@@ -241,8 +254,10 @@ const Index = () => {
                   <ArrowUpRight className="w-3 h-3 ml-1 group-hover:translate-x-0.5 group-hover:-translate-y-0.5 transition-transform" />
                 </Button>
               </Link>
-              
-              {/* Property Evaluator - Blue */}
+            </div>
+            
+            {/* Row 4 - More AI Tools */}
+            <div className="flex flex-wrap justify-center gap-3">
               <Link to="/property-evaluator">
                 <Button 
                   className="bg-transparent backdrop-blur-md border-2 border-blue-500/50 text-blue-400 hover:bg-blue-500/20 hover:border-blue-400 hover:shadow-lg hover:shadow-blue-500/20 font-semibold px-5 py-4 text-xs transition-all duration-300 hover:scale-105 group"
@@ -253,7 +268,6 @@ const Index = () => {
                 </Button>
               </Link>
               
-              {/* Mortgage Advisory - Cyan */}
               <Link to="/mortgage-advisory">
                 <Button 
                   className="bg-transparent backdrop-blur-md border-2 border-cyan-500/50 text-cyan-400 hover:bg-cyan-500/20 hover:border-cyan-400 hover:shadow-lg hover:shadow-cyan-500/20 font-semibold px-5 py-4 text-xs transition-all duration-300 hover:scale-105 group"
@@ -263,33 +277,7 @@ const Index = () => {
                   <ArrowUpRight className="w-3 h-3 ml-1 group-hover:translate-x-0.5 group-hover:-translate-y-0.5 transition-transform" />
                 </Button>
               </Link>
-            </div>
-            
-            {/* Row 4 - Non-AI Tools (different style) */}
-            <div className="flex flex-wrap justify-center gap-3">
-              {/* Market Report - Sky Blue (different from AI tools) */}
-              <Link to="/market-report">
-                <Button 
-                  className="bg-transparent backdrop-blur-md border-2 border-sky-500/50 text-sky-400 hover:bg-sky-500/20 hover:border-sky-400 hover:shadow-lg hover:shadow-sky-500/20 font-semibold px-5 py-4 text-xs transition-all duration-300 hover:scale-105 group"
-                >
-                  <FileText className="w-3 h-3 mr-1" />
-                  Market Report
-                  <ArrowUpRight className="w-3 h-3 ml-1 group-hover:translate-x-0.5 group-hover:-translate-y-0.5 transition-transform" />
-                </Button>
-              </Link>
               
-              {/* News & Insights - Rose */}
-              <Link to="/news">
-                <Button 
-                  className="bg-transparent backdrop-blur-md border-2 border-rose-500/50 text-rose-400 hover:bg-rose-500/20 hover:border-rose-400 hover:shadow-lg hover:shadow-rose-500/20 font-semibold px-5 py-4 text-xs transition-all duration-300 hover:scale-105 group"
-                >
-                  <FileText className="w-3 h-3 mr-1" />
-                  News & Insights
-                  <ArrowUpRight className="w-3 h-3 ml-1 group-hover:translate-x-0.5 group-hover:-translate-y-0.5 transition-transform" />
-                </Button>
-              </Link>
-              
-              {/* Favorites - Pink */}
               <Link to="/favorites">
                 <Button 
                   className="bg-transparent backdrop-blur-md border-2 border-pink-500/50 text-pink-400 hover:bg-pink-500/20 hover:border-pink-400 hover:shadow-lg hover:shadow-pink-500/20 font-semibold px-5 py-4 text-xs transition-all duration-300 hover:scale-105 group"
@@ -300,7 +288,6 @@ const Index = () => {
                 </Button>
               </Link>
               
-              {/* Tools Guide - Violet (purple shade) */}
               <Link to="/tools-guide">
                 <Button 
                   className="bg-transparent backdrop-blur-md border-2 border-violet-500/50 text-violet-400 hover:bg-violet-500/20 hover:border-violet-400 hover:shadow-lg hover:shadow-violet-500/20 font-semibold px-5 py-4 text-xs transition-all duration-300 hover:scale-105 group"
