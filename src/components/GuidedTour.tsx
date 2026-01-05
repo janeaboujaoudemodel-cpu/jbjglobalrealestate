@@ -202,7 +202,12 @@ const GuidedTour = ({ isOpen, onClose }: GuidedTourProps) => {
 
                 <div className="space-y-3">
                   <Button
-                    onClick={handleTakeTour}
+                    onClick={(e) => {
+                      e.preventDefault();
+                      e.stopPropagation();
+                      handleTakeTour();
+                    }}
+                    type="button"
                     className="w-full py-6 bg-gradient-to-r from-gold via-[hsl(40_45%_55%)] to-gold text-white hover:opacity-95 font-bold text-base shadow-xl shadow-gold/30 rounded-xl group relative overflow-hidden"
                   >
                     <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white/20 to-transparent -translate-x-full group-hover:translate-x-full transition-transform duration-700" />
@@ -212,7 +217,13 @@ const GuidedTour = ({ isOpen, onClose }: GuidedTourProps) => {
                   </Button>
 
                   <Button
-                    onClick={handleExploreAlone}
+                    onClick={(e) => {
+                      e.preventDefault();
+                      e.stopPropagation();
+                      // Skip shortcuts, go directly to homepage
+                      handleComplete();
+                    }}
+                    type="button"
                     variant="outline"
                     className="w-full py-6 border-zinc-300 bg-transparent text-zinc-700 hover:bg-zinc-100 hover:border-gold/50 group rounded-xl transition-all"
                   >

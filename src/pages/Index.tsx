@@ -40,12 +40,15 @@ const Index = () => {
 
       {/* HERO SECTION - CLEAN LUXURY VILLA */}
       <div className="relative h-screen flex items-center justify-center">
-        {/* Villa Background Image */}
-        <div className="absolute inset-0 overflow-hidden">
+        {/* Villa Background Image - Optimized for fast loading */}
+        <div className="absolute inset-0 overflow-hidden bg-black">
           <img 
             src={luxuryVillaHero} 
             alt="Luxury Villa in Dubai" 
             className="w-full h-full object-cover"
+            loading="eager"
+            fetchPriority="high"
+            decoding="async"
           />
           {/* Enhanced gradient overlay for better text readability */}
           <div className="absolute inset-0 bg-gradient-to-t from-black via-black/50 to-black/20" />
