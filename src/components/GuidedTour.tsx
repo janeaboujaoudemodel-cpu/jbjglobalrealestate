@@ -39,6 +39,7 @@ const GuidedTour = ({ isOpen, onClose }: GuidedTourProps) => {
 
   const handleComplete = () => {
     localStorage.setItem(TOUR_COMPLETED_KEY, "true");
+    setShowTour(null);
     onClose();
   };
 
@@ -156,14 +157,14 @@ const GuidedTour = ({ isOpen, onClose }: GuidedTourProps) => {
           initial={{ opacity: 0, scale: 0.95, y: 20 }}
           animate={{ opacity: 1, scale: 1, y: 0 }}
           exit={{ opacity: 0, scale: 0.95, y: 20 }}
-          className="relative w-full max-w-lg bg-gradient-to-b from-zinc-900 via-black to-zinc-950 border border-gold/30 rounded-3xl overflow-hidden shadow-2xl shadow-gold/10"
+          className="relative w-full max-w-lg bg-gradient-to-b from-white via-zinc-50 to-white border border-gold/30 rounded-3xl overflow-hidden shadow-2xl shadow-gold/10"
         >
           {/* Close button */}
           <button
             onClick={handleComplete}
-            className="absolute top-4 right-4 z-20 p-2 rounded-full bg-zinc-800/50 hover:bg-zinc-700/50 transition-colors"
+            className="absolute top-4 right-4 z-20 p-2 rounded-full bg-zinc-100 hover:bg-zinc-200 transition-colors"
           >
-            <X className="w-4 h-4 text-zinc-400" />
+            <X className="w-4 h-4 text-zinc-600" />
           </button>
 
           {/* Premium top accent */}
@@ -173,7 +174,7 @@ const GuidedTour = ({ isOpen, onClose }: GuidedTourProps) => {
           <div 
             className="absolute top-0 left-0 right-0 h-40 pointer-events-none"
             style={{
-              background: `radial-gradient(ellipse at 50% -20%, hsl(40 32% 51% / 0.3) 0%, transparent 70%)`
+              background: `radial-gradient(ellipse at 50% -20%, hsl(40 32% 51% / 0.2) 0%, transparent 70%)`
             }}
           />
 
@@ -187,22 +188,22 @@ const GuidedTour = ({ isOpen, onClose }: GuidedTourProps) => {
               >
                 <div className="relative inline-flex mb-6">
                   <div className="w-20 h-20 rounded-full bg-gradient-to-br from-gold via-[hsl(40_45%_55%)] to-gold-dark flex items-center justify-center shadow-2xl shadow-gold/40">
-                    <Compass className="w-10 h-10 text-black" />
+                    <Compass className="w-10 h-10 text-white" />
                   </div>
                   <Sparkles className="absolute -top-2 -right-2 w-6 h-6 text-gold animate-pulse" />
                 </div>
 
-                <h2 className="text-2xl md:text-3xl font-bold text-white mb-3" style={{ fontFamily: "Poppins, sans-serif" }}>
+                <h2 className="text-2xl md:text-3xl font-bold text-zinc-900 mb-3" style={{ fontFamily: "Poppins, sans-serif" }}>
                   How Would You Like to Start?
                 </h2>
-                <p className="text-zinc-400 text-sm mb-8 max-w-sm mx-auto">
+                <p className="text-zinc-600 text-sm mb-8 max-w-sm mx-auto">
                   Take a quick guided tour to master the platform, or explore on your own
                 </p>
 
                 <div className="space-y-3">
                   <Button
                     onClick={handleTakeTour}
-                    className="w-full py-6 bg-gradient-to-r from-gold via-[hsl(40_45%_55%)] to-gold text-black hover:opacity-95 font-bold text-base shadow-xl shadow-gold/30 rounded-xl group relative overflow-hidden"
+                    className="w-full py-6 bg-gradient-to-r from-gold via-[hsl(40_45%_55%)] to-gold text-white hover:opacity-95 font-bold text-base shadow-xl shadow-gold/30 rounded-xl group relative overflow-hidden"
                   >
                     <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white/20 to-transparent -translate-x-full group-hover:translate-x-full transition-transform duration-700" />
                     <Compass className="w-5 h-5 mr-3 relative z-10" />
@@ -213,10 +214,10 @@ const GuidedTour = ({ isOpen, onClose }: GuidedTourProps) => {
                   <Button
                     onClick={handleExploreAlone}
                     variant="outline"
-                    className="w-full py-6 border-zinc-700 bg-zinc-900/50 text-white hover:bg-zinc-800 hover:border-gold/50 group rounded-xl transition-all"
+                    className="w-full py-6 border-zinc-300 bg-transparent text-zinc-700 hover:bg-zinc-100 hover:border-gold/50 group rounded-xl transition-all"
                   >
                     <span className="flex-1 text-left">Explore by Myself</span>
-                    <ArrowRight className="w-4 h-4 text-zinc-500 group-hover:text-gold group-hover:translate-x-1 transition-all" />
+                    <ArrowRight className="w-4 h-4 text-zinc-400 group-hover:text-gold group-hover:translate-x-1 transition-all" />
                   </Button>
                 </div>
               </motion.div>
@@ -241,7 +242,7 @@ const GuidedTour = ({ isOpen, onClose }: GuidedTourProps) => {
                           ? 'w-8 bg-gold' 
                           : idx < currentStep 
                             ? 'w-3 bg-gold/50' 
-                            : 'w-3 bg-zinc-700'
+                            : 'w-3 bg-zinc-300'
                       }`}
                     />
                   ))}
@@ -256,10 +257,10 @@ const GuidedTour = ({ isOpen, onClose }: GuidedTourProps) => {
                   </div>
                 </div>
 
-                <h3 className="text-xl md:text-2xl font-bold text-white mb-3" style={{ fontFamily: "Poppins, sans-serif" }}>
+                <h3 className="text-xl md:text-2xl font-bold text-zinc-900 mb-3" style={{ fontFamily: "Poppins, sans-serif" }}>
                   {tourSteps[currentStep].title}
                 </h3>
-                <p className="text-zinc-400 text-sm mb-8 max-w-sm mx-auto leading-relaxed">
+                <p className="text-zinc-600 text-sm mb-8 max-w-sm mx-auto leading-relaxed">
                   {tourSteps[currentStep].description}
                 </p>
 
@@ -268,7 +269,7 @@ const GuidedTour = ({ isOpen, onClose }: GuidedTourProps) => {
                     <Button
                       onClick={() => setCurrentStep(currentStep - 1)}
                       variant="outline"
-                      className="flex-1 py-5 border-zinc-700 bg-zinc-900/50 text-white hover:bg-zinc-800 rounded-xl"
+                      className="flex-1 py-5 border-zinc-300 bg-transparent text-zinc-700 hover:bg-zinc-100 rounded-xl"
                     >
                       Back
                     </Button>
@@ -281,7 +282,7 @@ const GuidedTour = ({ isOpen, onClose }: GuidedTourProps) => {
                         handleComplete();
                       }
                     }}
-                    className="flex-1 py-5 bg-gradient-to-r from-gold to-gold-dark text-black font-bold rounded-xl group"
+                    className="flex-1 py-5 bg-gradient-to-r from-gold to-gold-dark text-white font-bold rounded-xl group"
                   >
                     {currentStep < tourSteps.length - 1 ? 'Next' : 'Start Exploring'}
                     <ArrowRight className="w-4 h-4 ml-2 group-hover:translate-x-1 transition-transform" />
@@ -297,10 +298,10 @@ const GuidedTour = ({ isOpen, onClose }: GuidedTourProps) => {
                 animate={{ opacity: 1, y: 0 }}
               >
                 <div className="text-center mb-6">
-                  <h3 className="text-xl md:text-2xl font-bold text-white mb-2" style={{ fontFamily: "Poppins, sans-serif" }}>
+                  <h3 className="text-xl md:text-2xl font-bold text-zinc-900 mb-2" style={{ fontFamily: "Poppins, sans-serif" }}>
                     Great! Quick Overview
                   </h3>
-                  <p className="text-zinc-400 text-sm">
+                  <p className="text-zinc-600 text-sm">
                     Here are the key shortcuts you'll use
                   </p>
                 </div>
@@ -312,13 +313,13 @@ const GuidedTour = ({ isOpen, onClose }: GuidedTourProps) => {
                       initial={{ opacity: 0, x: -10 }}
                       animate={{ opacity: 1, x: 0 }}
                       transition={{ delay: idx * 0.1 }}
-                      className="flex items-center gap-4 p-3 bg-zinc-900/50 border border-zinc-800 rounded-xl"
+                      className="flex items-center gap-4 p-3 bg-zinc-100 border border-zinc-200 rounded-xl"
                     >
-                      <div className="w-10 h-10 rounded-lg bg-zinc-800 flex items-center justify-center flex-shrink-0">
+                      <div className="w-10 h-10 rounded-lg bg-white border border-zinc-200 shadow-sm flex items-center justify-center flex-shrink-0">
                         <item.icon className={`w-5 h-5 ${item.iconColor}`} />
                       </div>
                       <div className="text-left">
-                        <p className="text-white text-sm font-medium">{item.title}</p>
+                        <p className="text-zinc-900 text-sm font-medium">{item.title}</p>
                         <p className="text-zinc-500 text-xs">{item.description}</p>
                       </div>
                     </motion.div>
@@ -327,7 +328,7 @@ const GuidedTour = ({ isOpen, onClose }: GuidedTourProps) => {
 
                 <Button
                   onClick={handleComplete}
-                  className="w-full py-5 bg-gradient-to-r from-gold to-gold-dark text-black font-bold rounded-xl group"
+                  className="w-full py-5 bg-gradient-to-r from-gold to-gold-dark text-white font-bold rounded-xl group"
                 >
                   Start Exploring
                   <ArrowRight className="w-4 h-4 ml-2 group-hover:translate-x-1 transition-transform" />
