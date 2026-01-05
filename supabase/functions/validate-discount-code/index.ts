@@ -23,27 +23,57 @@ serve(async (req) => {
 
   try {
     const supabaseUrl = Deno.env.get('SUPABASE_URL')!;
+    const supabaseAnonKey = Deno.env.get('SUPABASE_ANON_KEY')!;
     const supabaseServiceKey = Deno.env.get('SUPABASE_SERVICE_ROLE_KEY')!;
-    const supabase = createClient(supabaseUrl, supabaseServiceKey);
 
-    const { action, code, userEmail, userId, tier } = await req.json();
+    // Parse request body
+    const requestBody = await req.json();
+    const { action, code, userEmail, userId, tier } = requestBody;
 
     console.log(`Discount code action: ${action}, code length: ${code?.length}, tier: ${tier}`);
 
+    // For validate action - authenticate user first
     if (action === 'validate') {
-      // Validate a discount code
-      if (!code || !userEmail || !userId) {
+      // Validate a discount code - requires authentication
+      const authHeader = req.headers.get('Authorization');
+      if (!authHeader) {
         return new Response(
-          JSON.stringify({ valid: false, error: 'Missing required fields' }),
+          JSON.stringify({ valid: false, error: 'Authentication required' }),
+          { headers: { ...corsHeaders, 'Content-Type': 'application/json' }, status: 401 }
+        );
+      }
+
+      const supabaseAuth = createClient(supabaseUrl, supabaseAnonKey, {
+        global: { headers: { Authorization: authHeader } }
+      });
+
+      const { data: { user }, error: authError } = await supabaseAuth.auth.getUser();
+      if (authError || !user) {
+        return new Response(
+          JSON.stringify({ valid: false, error: 'Invalid authentication token' }),
+          { headers: { ...corsHeaders, 'Content-Type': 'application/json' }, status: 401 }
+        );
+      }
+
+      // Use verified user data, not client-supplied values
+      const verifiedUserId = user.id;
+      const verifiedEmail = user.email || '';
+
+      if (!code) {
+        return new Response(
+          JSON.stringify({ valid: false, error: 'Missing discount code' }),
           { headers: { ...corsHeaders, 'Content-Type': 'application/json' }, status: 400 }
         );
       }
 
+      // Use service role for reading discount codes (RLS blocks normal users)
+      const supabaseService = createClient(supabaseUrl, supabaseServiceKey);
+
       const codeHash = await hashCode(code);
-      console.log(`Looking up code hash: ${codeHash.substring(0, 10)}...`);
+      console.log(`Looking up code hash: ${codeHash.substring(0, 10)}... for user: ${verifiedUserId}`);
 
       // Find the discount code by hash
-      const { data: discountCode, error: lookupError } = await supabase
+      const { data: discountCode, error: lookupError } = await supabaseService
         .from('discount_codes')
         .select('*')
         .eq('code_hash', codeHash)
@@ -82,15 +112,15 @@ serve(async (req) => {
         );
       }
 
-      // Check if assigned to specific user
-      if (discountCode.assigned_to_email && discountCode.assigned_to_email.toLowerCase() !== userEmail.toLowerCase()) {
+      // Check if assigned to specific user - use verified email
+      if (discountCode.assigned_to_email && discountCode.assigned_to_email.toLowerCase() !== verifiedEmail.toLowerCase()) {
         return new Response(
           JSON.stringify({ valid: false, error: 'This code is not assigned to your account' }),
           { headers: { ...corsHeaders, 'Content-Type': 'application/json' }, status: 200 }
         );
       }
 
-      if (discountCode.assigned_to_user_id && discountCode.assigned_to_user_id !== userId) {
+      if (discountCode.assigned_to_user_id && discountCode.assigned_to_user_id !== verifiedUserId) {
         return new Response(
           JSON.stringify({ valid: false, error: 'This code is not assigned to your account' }),
           { headers: { ...corsHeaders, 'Content-Type': 'application/json' }, status: 200 }
@@ -109,11 +139,11 @@ serve(async (req) => {
 
       // Check if user already used this code (if single use per user)
       if (discountCode.is_single_use_per_user) {
-        const { data: existingUsage } = await supabase
+        const { data: existingUsage } = await supabaseService
           .from('discount_code_usages')
           .select('id')
           .eq('discount_code_id', discountCode.id)
-          .eq('user_id', userId)
+          .eq('user_id', verifiedUserId)
           .single();
 
         if (existingUsage) {
@@ -139,18 +169,44 @@ serve(async (req) => {
       );
 
     } else if (action === 'apply') {
-      // Apply the discount code (record usage)
-      const { codeId, originalPrice, finalPrice, subscriptionId } = await req.json();
-
-      if (!codeId || !userId || !userEmail) {
+      // Apply the discount code (record usage) - requires authentication
+      const authHeader = req.headers.get('Authorization');
+      if (!authHeader) {
         return new Response(
-          JSON.stringify({ success: false, error: 'Missing required fields' }),
+          JSON.stringify({ success: false, error: 'Authentication required' }),
+          { headers: { ...corsHeaders, 'Content-Type': 'application/json' }, status: 401 }
+        );
+      }
+
+      const supabaseAuth = createClient(supabaseUrl, supabaseAnonKey, {
+        global: { headers: { Authorization: authHeader } }
+      });
+
+      const { data: { user }, error: authError } = await supabaseAuth.auth.getUser();
+      if (authError || !user) {
+        return new Response(
+          JSON.stringify({ success: false, error: 'Invalid authentication token' }),
+          { headers: { ...corsHeaders, 'Content-Type': 'application/json' }, status: 401 }
+        );
+      }
+
+      // Use verified user data
+      const verifiedUserId = user.id;
+      const verifiedEmail = user.email || '';
+
+      const { codeId, originalPrice, finalPrice, subscriptionId } = requestBody;
+
+      if (!codeId) {
+        return new Response(
+          JSON.stringify({ success: false, error: 'Missing discount code ID' }),
           { headers: { ...corsHeaders, 'Content-Type': 'application/json' }, status: 400 }
         );
       }
 
+      const supabaseService = createClient(supabaseUrl, supabaseServiceKey);
+
       // Get discount code details
-      const { data: discountCode, error: lookupError } = await supabase
+      const { data: discountCode, error: lookupError } = await supabaseService
         .from('discount_codes')
         .select('*')
         .eq('id', codeId)
@@ -163,13 +219,13 @@ serve(async (req) => {
         );
       }
 
-      // Record usage
-      const { error: usageError } = await supabase
+      // Record usage with verified user data
+      const { error: usageError } = await supabaseService
         .from('discount_code_usages')
         .insert({
           discount_code_id: codeId,
-          user_id: userId,
-          user_email: userEmail,
+          user_id: verifiedUserId,
+          user_email: verifiedEmail,
           subscription_id: subscriptionId || null,
           discount_applied: originalPrice - finalPrice,
           original_price: originalPrice,
@@ -185,12 +241,12 @@ serve(async (req) => {
       }
 
       // Increment usage count
-      await supabase
+      await supabaseService
         .from('discount_codes')
         .update({ current_uses: discountCode.current_uses + 1 })
         .eq('id', codeId);
 
-      console.log(`Discount applied: ${originalPrice} -> ${finalPrice}`);
+      console.log(`Discount applied for user ${verifiedUserId}: ${originalPrice} -> ${finalPrice}`);
 
       return new Response(
         JSON.stringify({ success: true }),
@@ -198,7 +254,47 @@ serve(async (req) => {
       );
 
     } else if (action === 'create') {
-      // Create a new discount code (admin only - verified by RLS)
+      // Create a new discount code - ADMIN ONLY
+      const authHeader = req.headers.get('Authorization');
+      if (!authHeader) {
+        return new Response(
+          JSON.stringify({ success: false, error: 'Authentication required' }),
+          { headers: { ...corsHeaders, 'Content-Type': 'application/json' }, status: 401 }
+        );
+      }
+
+      const supabaseAuth = createClient(supabaseUrl, supabaseAnonKey, {
+        global: { headers: { Authorization: authHeader } }
+      });
+
+      const { data: { user }, error: authError } = await supabaseAuth.auth.getUser();
+      if (authError || !user) {
+        return new Response(
+          JSON.stringify({ success: false, error: 'Invalid authentication token' }),
+          { headers: { ...corsHeaders, 'Content-Type': 'application/json' }, status: 401 }
+        );
+      }
+
+      // Verify admin role using service key to check user_roles table
+      const supabaseService = createClient(supabaseUrl, supabaseServiceKey);
+      
+      const { data: adminRole, error: roleError } = await supabaseService
+        .from('user_roles')
+        .select('role')
+        .eq('user_id', user.id)
+        .eq('role', 'admin')
+        .single();
+
+      if (roleError || !adminRole) {
+        console.log(`Non-admin user ${user.id} attempted to create discount code`);
+        return new Response(
+          JSON.stringify({ success: false, error: 'Admin access required' }),
+          { headers: { ...corsHeaders, 'Content-Type': 'application/json' }, status: 403 }
+        );
+      }
+
+      console.log(`Admin user ${user.id} creating discount code`);
+
       const { 
         discountType, 
         discountValue, 
@@ -206,9 +302,8 @@ serve(async (req) => {
         maxUses, 
         assignedToEmail, 
         validUntil, 
-        applicableTiers,
-        createdBy 
-      } = await req.json();
+        applicableTiers
+      } = requestBody;
 
       // Generate a secure random code
       const randomBytes = new Uint8Array(6);
@@ -220,7 +315,7 @@ serve(async (req) => {
 
       const codeHash = await hashCode(generatedCode);
 
-      const { data: newCode, error: createError } = await supabase
+      const { data: newCode, error: createError } = await supabaseService
         .from('discount_codes')
         .insert({
           code: generatedCode, // Store the plain code for admin reference only
@@ -232,7 +327,7 @@ serve(async (req) => {
           assigned_to_email: assignedToEmail || null,
           valid_until: validUntil || null,
           applicable_tiers: applicableTiers || null,
-          created_by: createdBy,
+          created_by: user.id, // Use verified admin user ID
         })
         .select()
         .single();
@@ -245,7 +340,7 @@ serve(async (req) => {
         );
       }
 
-      console.log(`Created discount code: ${generatedCode}`);
+      console.log(`Admin ${user.id} created discount code: ${generatedCode}`);
 
       return new Response(
         JSON.stringify({ success: true, code: generatedCode, id: newCode.id }),
