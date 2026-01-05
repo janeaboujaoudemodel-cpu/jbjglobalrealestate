@@ -21,8 +21,8 @@ const LanguageSwitcher = () => {
           size="sm"
           className="h-8 px-2.5 text-white/70 hover:text-gold hover:bg-transparent border border-transparent hover:border-gold/30 rounded-md transition-all"
         >
-          <Globe className="w-4 h-4 mr-1" />
-          <span className="text-xs font-medium">{currentLang.flag} {currentLang.code.toUpperCase()}</span>
+          <Globe className="w-4 h-4" />
+          <span className="hidden sm:inline text-xs font-medium">{currentLang.flag} {currentLang.code.toUpperCase()}</span>
         </Button>
       </DropdownMenuTrigger>
       <DropdownMenuContent 
