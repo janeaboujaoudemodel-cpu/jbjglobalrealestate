@@ -8,6 +8,7 @@ import MarketReportCTA from "@/components/MarketReportCTA";
 import MortgageCalculator from "@/components/MortgageCalculator";
 import WelcomeModal from "@/components/WelcomeModal";
 import InquiryFormModal from "@/components/InquiryFormModal";
+import InstallAppButton from "@/components/InstallAppButton";
 import { useLanguage } from "@/contexts/LanguageContext";
 import { Sparkles, ArrowUpRight, ChevronDown, User, Scale, Layers, Calculator, FileText, Heart, BarChart3, Wrench, Ruler, Palette, Calendar, Wallet, ShoppingBag, Brain, GraduationCap, Briefcase, Target, Award } from "lucide-react";
 import { Button } from "@/components/ui/button";
@@ -37,6 +38,9 @@ const Index = () => {
     <section className="relative w-full min-h-screen bg-black">
       {/* Welcome Modal - AI Assistant Popup on first load */}
       <WelcomeModal />
+      
+      {/* Floating Install App Button */}
+      <InstallAppButton />
 
       {/* HERO SECTION - CLEAN LUXURY VILLA */}
       <div className="relative h-screen flex items-center justify-center">
