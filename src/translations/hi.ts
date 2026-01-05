@@ -205,4 +205,22 @@ export const hi = {
   // Language Selector
   'lang.select': 'भाषा चुनें',
   'lang.current': 'वर्तमान',
+  
+  // AI Chat Support
+  'chat.title': 'AI सहायता',
+  'chat.subtitle': '24/7 ऑनलाइन',
+  'chat.welcome': 'नमस्ते! मैं JJ Global Capital का AI सहायक हूं। आज दुबई में रियल एस्टेट निवेश के बारे में मैं आपकी कैसे मदद कर सकता हूं?',
+  'chat.placeholder': 'अपना संदेश लिखें...',
+  'chat.error': 'क्षमा करें, एक त्रुटि हुई। कृपया पुनः प्रयास करें या हमारी टीम से सीधे संपर्क करें।',
+  'chat.askMe': 'मुझसे कुछ भी पूछें!',
+  
+  // AI Tools
+  'aiTools.calendar': 'AI कैलेंडर और नोट्स',
+  'aiTools.calendarDesc': 'AI सहायता से मीटिंग्स, इवेंट्स और नोट्स प्रबंधित करें',
+  'aiTools.financial': 'AI वित्तीय सलाहकार',
+  'aiTools.financialDesc': 'व्यक्तिगत वित्तीय योजना और निवेश सलाह प्राप्त करें',
+  'aiTools.shopper': 'AI पर्सनल शॉपर',
+  'aiTools.shopperDesc': 'AI-संचालित सिफारिशों के साथ अपनी आदर्श संपत्ति खोजें',
+  'aiTools.hub': 'AI हब',
+  'aiTools.hubDesc': 'एक ही स्थान पर सभी AI उपकरणों तक पहुंचें',
 };

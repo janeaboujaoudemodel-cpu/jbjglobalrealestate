@@ -51,6 +51,7 @@ import GlobalHeader from "./components/GlobalHeader";
 import RouteResume from "./components/RouteResume";
 import BackNavButton from "./components/BackNavButton";
 import { ScrollToTopOnMount, ScrollToTopButton } from "./components/ScrollToTop";
+import AIChatWidget from "./components/AIChatWidget";
 
 const queryClient = new QueryClient();
 
@@ -87,6 +88,7 @@ const App = () => (
               <BackNavButton />
               <RouteResume />
               <WelcomeModal />
+              <AIChatWidget />
               <AppLayout>
                 <Routes>
                 <Route path="/" element={<Index />} />

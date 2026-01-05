@@ -518,4 +518,22 @@ export const fr = {
   'error.unauthorizedDesc': 'Veuillez vous connecter pour accéder à cette page.',
   'error.goHome': 'Aller à l\'Accueil',
   'error.tryAgain': 'Réessayer',
+  
+  // AI Chat Support
+  'chat.title': 'Support IA',
+  'chat.subtitle': 'En ligne 24/7',
+  'chat.welcome': 'Bonjour! Je suis votre assistant IA de JJ Global Capital. Comment puis-je vous aider aujourd\'hui avec l\'investissement immobilier à Dubaï?',
+  'chat.placeholder': 'Tapez votre message...',
+  'chat.error': 'Désolé, j\'ai rencontré une erreur. Veuillez réessayer ou contacter notre équipe directement.',
+  'chat.askMe': 'Demandez-moi n\'importe quoi!',
+  
+  // AI Tools
+  'aiTools.calendar': 'Calendrier et Notes IA',
+  'aiTools.calendarDesc': 'Gérez réunions, événements et notes avec l\'assistance IA',
+  'aiTools.financial': 'Conseiller Financier IA',
+  'aiTools.financialDesc': 'Obtenez une planification financière personnalisée et des conseils d\'investissement',
+  'aiTools.shopper': 'Acheteur Personnel IA',
+  'aiTools.shopperDesc': 'Trouvez votre propriété idéale avec des recommandations alimentées par l\'IA',
+  'aiTools.hub': 'Hub IA',
+  'aiTools.hubDesc': 'Accédez à tous les outils IA en un seul endroit',
 };
