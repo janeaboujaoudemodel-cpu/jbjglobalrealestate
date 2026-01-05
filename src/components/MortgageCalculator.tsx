@@ -126,18 +126,18 @@ const MortgageCalculator = ({ defaultPrice = 2000000, compact = false }: Mortgag
   }
 
   return (
-    <div className="bg-gradient-to-br from-purple-900/30 via-zinc-900/95 to-purple-950/30 border border-purple-500/30 rounded-2xl overflow-hidden">
-      {/* Header - Purple Premium Style */}
-      <div className="bg-gradient-to-r from-purple-600/20 via-purple-500/15 to-purple-600/20 border-b border-purple-500/30 p-6">
+    <div className="bg-gradient-to-br from-cyan-900/30 via-zinc-900/95 to-cyan-950/30 border border-cyan-500/30 rounded-2xl overflow-hidden">
+      {/* Header - Cyan Premium Style */}
+      <div className="bg-gradient-to-r from-cyan-600/20 via-cyan-500/15 to-cyan-600/20 border-b border-cyan-500/30 p-6">
         <div className="flex items-center gap-3">
-          <div className="w-12 h-12 rounded-xl bg-gradient-to-br from-purple-500/30 to-purple-600/20 border border-purple-400/30 flex items-center justify-center">
-            <Calculator className="w-6 h-6 text-purple-300" />
+          <div className="w-12 h-12 rounded-xl bg-gradient-to-br from-cyan-500/30 to-cyan-600/20 border border-cyan-400/30 flex items-center justify-center">
+            <Calculator className="w-6 h-6 text-cyan-300" />
           </div>
           <div>
             <h3 className="text-xl font-bold text-white" style={{ fontFamily: "Poppins, sans-serif" }}>
               Mortgage Calculator
             </h3>
-            <p className="text-purple-200/70 text-sm">Estimate your monthly payments</p>
+            <p className="text-cyan-200/70 text-sm">Estimate your monthly payments</p>
           </div>
         </div>
       </div>
@@ -258,44 +258,44 @@ const MortgageCalculator = ({ defaultPrice = 2000000, compact = false }: Mortgag
 
           {/* Results Section */}
           <div className="space-y-6">
-            {/* Monthly Payment - Featured Purple Style */}
-            <div className="bg-gradient-to-br from-purple-500/20 via-purple-600/10 to-transparent border border-purple-400/30 rounded-xl p-6 text-center">
-              <p className="text-purple-200/70 text-sm mb-2">Estimated Monthly Payment</p>
+            {/* Monthly Payment - Featured Cyan Style */}
+            <div className="bg-gradient-to-br from-cyan-500/20 via-cyan-600/10 to-transparent border border-cyan-400/30 rounded-xl p-4 md:p-6 text-center">
+              <p className="text-cyan-200/70 text-sm mb-2">Estimated Monthly Payment</p>
               <p 
-                className="text-4xl md:text-5xl font-bold text-transparent bg-clip-text bg-gradient-to-r from-purple-300 via-white to-purple-300"
+                className="text-2xl sm:text-3xl md:text-4xl lg:text-5xl font-bold text-transparent bg-clip-text bg-gradient-to-r from-cyan-300 via-white to-cyan-300 break-words"
                 style={{ fontFamily: "Poppins, sans-serif" }}
               >
                 {formatCurrency(calculations.monthlyPayment)}
               </p>
-              <p className="text-purple-300/50 text-xs mt-2">per month for {loanTermYears} years</p>
+              <p className="text-cyan-300/50 text-xs mt-2">per month for {loanTermYears} years</p>
             </div>
 
-            {/* Breakdown Cards - Purple style */}
-            <div className="grid grid-cols-2 gap-4">
-              <div className="bg-purple-900/20 border border-purple-500/20 rounded-xl p-4">
-                <p className="text-purple-300/60 text-xs mb-1">Loan Amount</p>
-                <p className="text-white font-bold text-lg">{formatCurrency(calculations.loanAmount)}</p>
+            {/* Breakdown Cards - Cyan style */}
+            <div className="grid grid-cols-2 gap-2 sm:gap-4">
+              <div className="bg-cyan-900/20 border border-cyan-500/20 rounded-xl p-3 sm:p-4">
+                <p className="text-cyan-300/60 text-[10px] sm:text-xs mb-1 truncate">Loan Amount</p>
+                <p className="text-white font-bold text-sm sm:text-base md:text-lg truncate">{formatCurrency(calculations.loanAmount)}</p>
               </div>
-              <div className="bg-purple-900/20 border border-purple-500/20 rounded-xl p-4">
-                <p className="text-purple-300/60 text-xs mb-1">Down Payment</p>
-                <p className="text-white font-bold text-lg">{formatCurrency(calculations.downPayment)}</p>
+              <div className="bg-cyan-900/20 border border-cyan-500/20 rounded-xl p-3 sm:p-4">
+                <p className="text-cyan-300/60 text-[10px] sm:text-xs mb-1 truncate">Down Payment</p>
+                <p className="text-white font-bold text-sm sm:text-base md:text-lg truncate">{formatCurrency(calculations.downPayment)}</p>
               </div>
-              <div className="bg-purple-900/20 border border-purple-500/20 rounded-xl p-4">
-                <p className="text-purple-300/60 text-xs mb-1">Total Interest</p>
-                <p className="text-purple-300 font-bold text-lg">{formatCurrency(calculations.totalInterest)}</p>
+              <div className="bg-cyan-900/20 border border-cyan-500/20 rounded-xl p-3 sm:p-4">
+                <p className="text-cyan-300/60 text-[10px] sm:text-xs mb-1 truncate">Total Interest</p>
+                <p className="text-cyan-300 font-bold text-sm sm:text-base md:text-lg truncate">{formatCurrency(calculations.totalInterest)}</p>
               </div>
-              <div className="bg-purple-900/20 border border-purple-500/20 rounded-xl p-4">
-                <p className="text-purple-300/60 text-xs mb-1">Total Payment</p>
-                <p className="text-white font-bold text-lg">{formatCurrency(calculations.totalPayment)}</p>
+              <div className="bg-cyan-900/20 border border-cyan-500/20 rounded-xl p-3 sm:p-4">
+                <p className="text-cyan-300/60 text-[10px] sm:text-xs mb-1 truncate">Total Payment</p>
+                <p className="text-white font-bold text-sm sm:text-base md:text-lg truncate">{formatCurrency(calculations.totalPayment)}</p>
               </div>
             </div>
 
-            {/* Payment Visualization - Purple theme */}
+            {/* Payment Visualization - Cyan theme */}
             <div className="space-y-2">
-              <p className="text-purple-200/70 text-sm">Payment Breakdown</p>
+              <p className="text-cyan-200/70 text-sm">Payment Breakdown</p>
               <div className="h-4 rounded-full overflow-hidden bg-zinc-800/50 flex">
                 <div 
-                  className="bg-gradient-to-r from-purple-500 to-purple-400 transition-all duration-500"
+                  className="bg-gradient-to-r from-cyan-500 to-cyan-400 transition-all duration-500"
                   style={{ width: `${(calculations.loanAmount / calculations.totalPayment) * 100}%` }}
                 />
                 <div 
@@ -305,7 +305,7 @@ const MortgageCalculator = ({ defaultPrice = 2000000, compact = false }: Mortgag
               </div>
               <div className="flex justify-between text-xs">
                 <span className="flex items-center gap-1.5">
-                  <span className="w-2.5 h-2.5 rounded-full bg-purple-500" />
+                  <span className="w-2.5 h-2.5 rounded-full bg-cyan-500" />
                   <span className="text-zinc-400">Principal</span>
                 </span>
                 <span className="flex items-center gap-1.5">
@@ -315,9 +315,9 @@ const MortgageCalculator = ({ defaultPrice = 2000000, compact = false }: Mortgag
               </div>
             </div>
 
-            {/* CTA - Purple gradient */}
+            {/* CTA - Cyan gradient */}
             <a href={INQUIRY_FORM_URL} target="_blank" rel="noopener noreferrer" className="block">
-              <Button className="w-full bg-gradient-to-r from-purple-600 to-purple-700 hover:from-purple-500 hover:to-purple-600 text-white h-12 text-base font-semibold group border border-purple-400/30">
+              <Button className="w-full bg-gradient-to-r from-cyan-600 to-cyan-700 hover:from-cyan-500 hover:to-cyan-600 text-white h-12 text-base font-semibold group border border-cyan-400/30">
                 Get Professional Mortgage Advisory
                 <ArrowRight className="w-4 h-4 ml-2 group-hover:translate-x-1 transition-transform" />
               </Button>
