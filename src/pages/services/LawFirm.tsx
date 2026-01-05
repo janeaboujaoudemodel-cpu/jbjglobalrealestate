@@ -225,7 +225,7 @@ const LawFirm = () => {
             </p>
             <div className="flex flex-wrap justify-center gap-4">
               <a href={CONTACT_INFO.inquiryFormUrl} target="_blank" rel="noopener noreferrer">
-                <Button className="bg-gold hover:bg-gold-light text-black font-semibold px-8 py-6 text-base">
+                <Button className="bg-gold hover:bg-gold-light text-black font-semibold px-8 py-6 text-base transition-all duration-300 hover:scale-105 hover:shadow-lg hover:shadow-gold/30">
                   Book Consultation
                   <ArrowUpRight className="w-5 h-5 ml-2" />
                 </Button>
@@ -233,7 +233,7 @@ const LawFirm = () => {
               <a href={`tel:${CONTACT_INFO.phoneRaw}`}>
                 <Button 
                   variant="outline"
-                  className="border-gold/50 text-gold hover:bg-gold/10 hover:border-gold px-8 py-6 text-base"
+                  className="border-gold/50 text-gold hover:bg-gold/10 hover:border-gold px-8 py-6 text-base transition-all duration-300 hover:scale-105 hover:shadow-lg hover:shadow-gold/20"
                 >
                   Call {CONTACT_INFO.phone}
                 </Button>

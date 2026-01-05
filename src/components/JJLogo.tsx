@@ -51,7 +51,7 @@ const sizeConfig = {
     gap: 'mx-2 md:mx-3',
     textGap: 'mt-3 md:mt-4',
     textSpacing: 'tracking-[0.25em] md:tracking-[0.3em]',
-    wordGap: 'mx-3 md:mx-4',
+    wordGap: 'mx-4 md:mx-5 lg:mx-6',
   },
 };
 
@@ -110,17 +110,17 @@ export const JJLogoHeader = ({ className = '' }: { className?: string }) => (
   >
     {/* J | J Monogram */}
     <span className="text-gold font-extralight text-2xl md:text-3xl leading-none drop-shadow-[0_0_8px_rgba(168,146,90,0.3)]">J</span>
-    <div className="mx-1.5 flex items-center justify-center">
-      <div className="w-[1.5px] bg-white h-5 md:h-6" />
+    <div className="mx-1 flex items-center justify-center">
+      <div className="w-[1.5px] bg-white/90 h-5 md:h-6" />
     </div>
     <span className="text-gold font-extralight text-2xl md:text-3xl leading-none drop-shadow-[0_0_8px_rgba(168,146,90,0.3)]">J</span>
     
-    {/* GLOBAL CAPITAL - Symmetric gap with divider centered */}
-    <div className="ml-3 md:ml-4 flex items-center text-white/95">
+    {/* GLOBAL CAPITAL - Tight spacing, no extra gap */}
+    <div className="ml-2 md:ml-3 flex items-center text-white/95">
       <span className="font-semibold text-sm md:text-base lg:text-lg tracking-[0.12em]">
         GLOBAL
       </span>
-      <span className="mx-2 md:mx-2.5 lg:mx-3" />
+      <span className="mx-1.5 md:mx-2" />
       <span className="font-semibold text-sm md:text-base lg:text-lg tracking-[0.12em]">
         CAPITAL
       </span>

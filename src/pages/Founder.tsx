@@ -386,6 +386,9 @@ const Founder = () => {
               <p className="text-zinc-500 text-sm uppercase tracking-[0.2em]">
                 Jane Abou Jaoude, Founder
               </p>
+              <p className="text-gold/70 text-xs uppercase tracking-[0.15em]">
+                & Visionary Woman
+              </p>
             </div>
           </motion.div>
         </div>
