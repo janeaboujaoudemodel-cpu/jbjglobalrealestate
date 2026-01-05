@@ -45,6 +45,8 @@ import AICalendar from "./pages/AICalendar";
 import AIFinancialAdvisor from "./pages/AIFinancialAdvisor";
 import AIPersonalShopper from "./pages/AIPersonalShopper";
 import AIHub from "./pages/AIHub";
+import BrokerToolkit from "./pages/BrokerToolkit";
+import BrokerDashboard from "./pages/BrokerDashboard";
 import NotFound from "./pages/NotFound";
 import WelcomeModal from "./components/WelcomeModal";
 import GlobalHeader from "./components/GlobalHeader";
@@ -132,6 +134,8 @@ const App = () => (
                 <Route path="/ai-financial-advisor" element={<AIFinancialAdvisor />} />
                 <Route path="/ai-personal-shopper" element={<AIPersonalShopper />} />
                 <Route path="/ai-hub" element={<AIHub />} />
+                <Route path="/broker-toolkit" element={<BrokerToolkit />} />
+                <Route path="/broker-toolkit/dashboard" element={<BrokerDashboard />} />
                 {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
                 <Route path="*" element={<NotFound />} />
               </Routes>

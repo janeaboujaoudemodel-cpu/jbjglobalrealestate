@@ -14,6 +14,187 @@ export type Database = {
   }
   public: {
     Tables: {
+      broker_course_progress: {
+        Row: {
+          completed: boolean | null
+          completed_at: string | null
+          created_at: string
+          id: string
+          lesson_id: string
+          module_id: string
+          progress_percent: number | null
+          subscription_id: string | null
+          updated_at: string
+          user_id: string
+        }
+        Insert: {
+          completed?: boolean | null
+          completed_at?: string | null
+          created_at?: string
+          id?: string
+          lesson_id: string
+          module_id: string
+          progress_percent?: number | null
+          subscription_id?: string | null
+          updated_at?: string
+          user_id: string
+        }
+        Update: {
+          completed?: boolean | null
+          completed_at?: string | null
+          created_at?: string
+          id?: string
+          lesson_id?: string
+          module_id?: string
+          progress_percent?: number | null
+          subscription_id?: string | null
+          updated_at?: string
+          user_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "broker_course_progress_subscription_id_fkey"
+            columns: ["subscription_id"]
+            isOneToOne: false
+            referencedRelation: "broker_subscriptions"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      broker_pdf_exports: {
+        Row: {
+          ai_recommendation: string | null
+          broker_company: string | null
+          broker_email: string | null
+          broker_logo_url: string | null
+          broker_name: string | null
+          broker_phone: string | null
+          broker_photo_url: string | null
+          created_at: string
+          custom_branding: Json | null
+          hide_prices: boolean | null
+          id: string
+          pdf_url: string | null
+          project_ids: string[]
+          subscription_id: string | null
+          user_id: string
+        }
+        Insert: {
+          ai_recommendation?: string | null
+          broker_company?: string | null
+          broker_email?: string | null
+          broker_logo_url?: string | null
+          broker_name?: string | null
+          broker_phone?: string | null
+          broker_photo_url?: string | null
+          created_at?: string
+          custom_branding?: Json | null
+          hide_prices?: boolean | null
+          id?: string
+          pdf_url?: string | null
+          project_ids: string[]
+          subscription_id?: string | null
+          user_id: string
+        }
+        Update: {
+          ai_recommendation?: string | null
+          broker_company?: string | null
+          broker_email?: string | null
+          broker_logo_url?: string | null
+          broker_name?: string | null
+          broker_phone?: string | null
+          broker_photo_url?: string | null
+          created_at?: string
+          custom_branding?: Json | null
+          hide_prices?: boolean | null
+          id?: string
+          pdf_url?: string | null
+          project_ids?: string[]
+          subscription_id?: string | null
+          user_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "broker_pdf_exports_subscription_id_fkey"
+            columns: ["subscription_id"]
+            isOneToOne: false
+            referencedRelation: "broker_subscriptions"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      broker_subscriptions: {
+        Row: {
+          ai_credits_limit: number | null
+          ai_credits_used: number
+          company_name: string | null
+          created_at: string
+          currency: string
+          email: string
+          expires_at: string | null
+          full_name: string | null
+          id: string
+          payment_method: string | null
+          payment_reference: string | null
+          pdf_downloads: number
+          phone: string | null
+          price_usd: number
+          rera_number: string | null
+          starts_at: string | null
+          status: string
+          tier: string
+          trial_ends_at: string | null
+          updated_at: string
+          user_id: string
+        }
+        Insert: {
+          ai_credits_limit?: number | null
+          ai_credits_used?: number
+          company_name?: string | null
+          created_at?: string
+          currency?: string
+          email: string
+          expires_at?: string | null
+          full_name?: string | null
+          id?: string
+          payment_method?: string | null
+          payment_reference?: string | null
+          pdf_downloads?: number
+          phone?: string | null
+          price_usd?: number
+          rera_number?: string | null
+          starts_at?: string | null
+          status?: string
+          tier?: string
+          trial_ends_at?: string | null
+          updated_at?: string
+          user_id: string
+        }
+        Update: {
+          ai_credits_limit?: number | null
+          ai_credits_used?: number
+          company_name?: string | null
+          created_at?: string
+          currency?: string
+          email?: string
+          expires_at?: string | null
+          full_name?: string | null
+          id?: string
+          payment_method?: string | null
+          payment_reference?: string | null
+          pdf_downloads?: number
+          phone?: string | null
+          price_usd?: number
+          rera_number?: string | null
+          starts_at?: string | null
+          status?: string
+          tier?: string
+          trial_ends_at?: string | null
+          updated_at?: string
+          user_id?: string
+        }
+        Relationships: []
+      }
       chat_conversations: {
         Row: {
           created_at: string
