@@ -366,8 +366,8 @@ Best regards`);
                         </Badge>
                       </div>
                     )}
-                    <div className="absolute top-3 right-3 z-10 opacity-0 group-hover:opacity-100 transition-opacity">
-                      <FavoriteButton projectId={project.id} size="sm" showShortlist={false} />
+                    <div className="absolute top-3 right-3 z-10">
+                      <FavoriteButton projectId={project.id} size="sm" showShortlist={true} />
                     </div>
                     <ProjectCard project={project} />
                     {/* Badge Assignment */}
