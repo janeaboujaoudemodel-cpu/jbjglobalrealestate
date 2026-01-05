@@ -334,6 +334,7 @@ export type Database = {
           duration_seconds: number | null
           id: string
           ip_address: string | null
+          should_delete_at: string | null
           subscription_id: string | null
           user_id: string
           watermark_id: string
@@ -347,6 +348,7 @@ export type Database = {
           duration_seconds?: number | null
           id?: string
           ip_address?: string | null
+          should_delete_at?: string | null
           subscription_id?: string | null
           user_id: string
           watermark_id: string
@@ -360,6 +362,7 @@ export type Database = {
           duration_seconds?: number | null
           id?: string
           ip_address?: string | null
+          should_delete_at?: string | null
           subscription_id?: string | null
           user_id?: string
           watermark_id?: string
@@ -385,6 +388,7 @@ export type Database = {
           is_active: boolean
           last_activity_at: string
           session_token: string
+          should_delete_at: string | null
           started_at: string
           subscription_id: string | null
           suspicious_activity: boolean | null
@@ -401,6 +405,7 @@ export type Database = {
           is_active?: boolean
           last_activity_at?: string
           session_token: string
+          should_delete_at?: string | null
           started_at?: string
           subscription_id?: string | null
           suspicious_activity?: boolean | null
@@ -417,6 +422,7 @@ export type Database = {
           is_active?: boolean
           last_activity_at?: string
           session_token?: string
+          should_delete_at?: string | null
           started_at?: string
           subscription_id?: string | null
           suspicious_activity?: boolean | null
