@@ -115,6 +115,7 @@ const Footer = () => {
     { href: "/", label: "Home" },
     { href: "/founder", label: "Founder & Leadership" },
     { href: "/about", label: "About Us" },
+    { href: "/company-profile", label: "Company Profile" },
     { href: "/properties", label: "Properties" },
     { href: "/concierge", label: "Services" },
     { href: "/awards", label: "Awards" },
