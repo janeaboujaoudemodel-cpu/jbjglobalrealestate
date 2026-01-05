@@ -14,6 +14,48 @@ export type Database = {
   }
   public: {
     Tables: {
+      chat_conversations: {
+        Row: {
+          created_at: string
+          id: string
+          messages: Json
+          rating: number | null
+          rating_feedback: string | null
+          service_type: string | null
+          status: string
+          updated_at: string
+          user_email: string
+          user_name: string | null
+          user_phone: string | null
+        }
+        Insert: {
+          created_at?: string
+          id?: string
+          messages?: Json
+          rating?: number | null
+          rating_feedback?: string | null
+          service_type?: string | null
+          status?: string
+          updated_at?: string
+          user_email: string
+          user_name?: string | null
+          user_phone?: string | null
+        }
+        Update: {
+          created_at?: string
+          id?: string
+          messages?: Json
+          rating?: number | null
+          rating_feedback?: string | null
+          service_type?: string | null
+          status?: string
+          updated_at?: string
+          user_email?: string
+          user_name?: string | null
+          user_phone?: string | null
+        }
+        Relationships: []
+      }
       communities: {
         Row: {
           created_at: string
