@@ -1,7 +1,8 @@
 import { useState, useEffect } from "react";
 import { useNavigate, useLocation } from "react-router-dom";
 import { Button } from "@/components/ui/button";
-import { Dialog, DialogContent } from "@/components/ui/dialog";
+import { Dialog, DialogContent, DialogTitle } from "@/components/ui/dialog";
+import * as VisuallyHidden from "@radix-ui/react-visually-hidden";
 import { User, ArrowRight, Crown, Sparkles } from "lucide-react";
 import { useLanguage } from "@/contexts/LanguageContext";
 import GuidedTour from "./GuidedTour";
@@ -73,7 +74,11 @@ const WelcomeModal = () => {
         <DialogContent 
           className="bg-white border-0 text-zinc-900 max-w-md p-0 overflow-hidden shadow-2xl"
           dir={isRTL ? 'rtl' : 'ltr'}
+          aria-describedby={undefined}
         >
+          <VisuallyHidden.Root>
+            <DialogTitle>Welcome to JJ Global Capital</DialogTitle>
+          </VisuallyHidden.Root>
           {/* Premium white background */}
           <div className="absolute inset-0 bg-gradient-to-b from-white via-zinc-50 to-white" />
           

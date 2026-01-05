@@ -4,7 +4,9 @@ import { Button } from "@/components/ui/button";
 import {
   Dialog,
   DialogContent,
+  DialogTitle,
 } from "@/components/ui/dialog";
+import * as VisuallyHidden from "@radix-ui/react-visually-hidden";
 
 interface ImageCarouselProps {
   images: {
@@ -182,7 +184,10 @@ const ImageCarousel = ({ images, projectName = "project" }: ImageCarouselProps) 
 
       {/* Fullscreen Dialog */}
       <Dialog open={isFullscreen} onOpenChange={setIsFullscreen}>
-        <DialogContent className="max-w-[95vw] max-h-[95vh] p-0 bg-black/95 border-none">
+        <DialogContent className="max-w-[95vw] max-h-[95vh] p-0 bg-black/95 border-none" aria-describedby={undefined}>
+          <VisuallyHidden.Root>
+            <DialogTitle>Image Gallery - {projectName}</DialogTitle>
+          </VisuallyHidden.Root>
           <div className="relative w-full h-[90vh] flex items-center justify-center">
             <img
               src={images[currentIndex].image_url}
