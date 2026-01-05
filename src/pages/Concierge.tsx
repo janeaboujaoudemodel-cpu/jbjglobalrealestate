@@ -8,8 +8,8 @@ import { useState } from "react";
 import { Input } from "@/components/ui/input";
 import InquiryFormModal from "@/components/InquiryFormModal";
 import coupleJetRolls from "@/assets/couple-jet-rolls.png";
-import luxuryJetCar from "@/assets/luxury-jet-car.png";
-import coupleJetInterior from "@/assets/couple-jet-interior.png";
+import privateJetInterior from "@/assets/private-jet-interior-luxury.jpg";
+import rollsRoyceLuxury from "@/assets/rolls-royce-luxury.jpg";
 import dubaiPlaneView from "@/assets/dubai-plane-view.png";
 import coupleYachtSunset from "@/assets/couple-yacht-sunset.png";
 import yachtDeckChampagne from "@/assets/yacht-deck-champagne.png";
@@ -45,7 +45,7 @@ const conciergeCategories: ServiceCategory[] = [
     description: "Exclusive private jet and helicopter charter services for seamless global travel",
     icon: Plane,
     services: ["Private Jet Charter", "Helicopter Transfers", "VIP Airport Services", "Aircraft Management"],
-    image: coupleJetInterior
+    image: privateJetInterior
   },
   {
     id: "automotive",
@@ -53,7 +53,7 @@ const conciergeCategories: ServiceCategory[] = [
     description: "Premium limousine services and exotic car rentals for discerning clients",
     icon: Car,
     services: ["Limousine Service", "Exotic Car Rental", "Chauffeur Services", "Luxury Fleet Management"],
-    image: luxuryJetCar
+    image: rollsRoyceLuxury
   },
   {
     id: "hospitality",
