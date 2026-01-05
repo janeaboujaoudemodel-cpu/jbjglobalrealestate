@@ -7,12 +7,12 @@ interface Book3DProps {
 
 const Book3D = ({ size = "md", className = "" }: Book3DProps) => {
   const dimensions = {
-    sm: { width: 140, height: 190, spine: 15, fontSize: "text-xs" },
-    md: { width: 200, height: 270, spine: 20, fontSize: "text-sm" },
-    lg: { width: 280, height: 380, spine: 28, fontSize: "text-base" },
+    sm: { width: 160, height: 220, spine: 18, fontSize: "text-[10px]", titleSize: "text-sm" },
+    md: { width: 220, height: 300, spine: 24, fontSize: "text-xs", titleSize: "text-base" },
+    lg: { width: 300, height: 400, spine: 30, fontSize: "text-sm", titleSize: "text-lg" },
   };
 
-  const { width, height, spine, fontSize } = dimensions[size];
+  const { width, height, spine, fontSize, titleSize } = dimensions[size];
 
   return (
     <motion.div
@@ -115,18 +115,18 @@ const Book3D = ({ size = "md", className = "" }: Book3DProps) => {
           <div className="absolute bottom-0 right-0 w-12 h-12 border-r-2 border-b-2 border-gold/60 rounded-br-sm" />
           
           {/* Cover content */}
-          <div className="relative h-full flex flex-col items-center justify-center p-4 text-center z-10">
+          <div className="relative h-full flex flex-col items-center justify-center p-3 md:p-5 text-center z-10">
             {/* Small logo */}
-            <div className="mb-4">
-              <span className="text-gold/80 text-[10px] tracking-[0.3em] uppercase">
+            <div className="mb-2">
+              <span className="text-gold/80 text-[8px] md:text-[10px] tracking-[0.2em] uppercase">
                 J | J Global Capital
               </span>
             </div>
 
             {/* Title */}
             <h3 
-              className={`text-white font-bold mb-2 ${fontSize}`}
-              style={{ fontFamily: "Poppins, sans-serif", lineHeight: 1.3 }}
+              className={`text-white font-bold mb-1 ${titleSize} leading-tight`}
+              style={{ fontFamily: "Poppins, sans-serif" }}
             >
               UAE Real Estate
             </h3>
@@ -135,18 +135,18 @@ const Book3D = ({ size = "md", className = "" }: Book3DProps) => {
             </p>
 
             {/* Decorative line */}
-            <div className="w-16 h-[2px] bg-gradient-to-r from-transparent via-gold to-transparent my-4" />
+            <div className="w-10 md:w-14 h-[1.5px] bg-gradient-to-r from-transparent via-gold to-transparent my-2 md:my-3" />
 
             {/* Year */}
-            <div className="px-4 py-1.5 border border-gold/50 rounded-sm bg-black/40 backdrop-blur-sm">
-              <span className="text-gold text-xs font-medium tracking-wider">
+            <div className="px-2 md:px-3 py-1 border border-gold/50 rounded-sm bg-black/40 backdrop-blur-sm">
+              <span className="text-gold text-[8px] md:text-[10px] font-medium tracking-wider">
                 2025–2026 EDITION
               </span>
             </div>
 
             {/* Author */}
-            <div className="mt-auto pt-4 border-t border-zinc-800/50 w-full">
-              <p className="text-zinc-400 text-[10px] uppercase tracking-wider">
+            <div className="mt-auto pt-2 md:pt-3 border-t border-zinc-800/50 w-full">
+              <p className="text-zinc-400 text-[8px] md:text-[10px] uppercase tracking-wider">
                 By Jane Abou Jaoude
               </p>
             </div>

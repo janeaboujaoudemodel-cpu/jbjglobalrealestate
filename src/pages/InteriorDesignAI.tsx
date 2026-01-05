@@ -525,33 +525,36 @@ const downloadPdf = async () => {
             
             <div className="grid md:grid-cols-2 gap-6">
               {/* AI Design */}
-              <Card className="bg-gradient-to-br from-fuchsia-900/40 to-purple-900/40 border-fuchsia-500/50 relative overflow-hidden shadow-lg shadow-fuchsia-500/20">
+              <Card className="bg-gradient-to-br from-fuchsia-950/60 to-purple-950/60 border-2 border-fuchsia-400/60 relative overflow-hidden shadow-2xl shadow-fuchsia-500/30">
                 <div className="absolute top-4 right-4">
-                  <Badge className="bg-fuchsia-500 text-white">RECOMMENDED</Badge>
+                  <Badge className="bg-gradient-to-r from-fuchsia-500 to-purple-500 text-white font-bold shadow-lg">RECOMMENDED</Badge>
                 </div>
-                <CardHeader>
-                  <CardTitle className="text-white flex items-center gap-3">
-                    <div className="w-12 h-12 rounded-xl bg-gradient-to-br from-fuchsia-500/30 to-purple-500/30 flex items-center justify-center border border-fuchsia-500/30">
-                      <Sparkles className="w-6 h-6 text-fuchsia-400" />
+                <CardHeader className="pb-4">
+                  <CardTitle className="text-white flex items-center gap-4">
+                    <div className="w-14 h-14 rounded-xl bg-gradient-to-br from-fuchsia-500 to-purple-600 flex items-center justify-center shadow-lg shadow-fuchsia-500/40">
+                      <Sparkles className="w-7 h-7 text-white" />
                     </div>
-                    AI Design Studio
+                    <div>
+                      <span className="text-xl font-bold">AI Design Studio</span>
+                      <p className="text-fuchsia-300/70 text-sm font-normal">Instant results powered by AI</p>
+                    </div>
                   </CardTitle>
                 </CardHeader>
-                <CardContent className="space-y-4">
+                <CardContent className="space-y-5">
                   <div className="space-y-3">
-                    <div className="flex items-center gap-3 text-zinc-300">
+                    <div className="flex items-center gap-3 text-white">
                       <Zap className="w-5 h-5 text-fuchsia-400" />
-                      <span>Results in <span className="text-fuchsia-400 font-bold">seconds</span>, not weeks</span>
+                      <span>Results in <span className="text-fuchsia-300 font-bold">seconds</span>, not weeks</span>
                     </div>
-                    <div className="flex items-center gap-3 text-zinc-300">
+                    <div className="flex items-center gap-3 text-white">
                       <DollarSign className="w-5 h-5 text-fuchsia-400" />
-                      <span>Affordable packages from <span className="text-fuchsia-400 font-bold">$99</span></span>
+                      <span>Affordable packages from <span className="text-fuchsia-300 font-bold">$99</span></span>
                     </div>
-                    <div className="flex items-center gap-3 text-zinc-300">
+                    <div className="flex items-center gap-3 text-white">
                       <CheckCircle2 className="w-5 h-5 text-fuchsia-400" />
-                      <span>AI trained on <span className="text-fuchsia-400 font-bold">1M+ premium designs</span></span>
+                      <span>AI trained on <span className="text-fuchsia-300 font-bold">1M+ premium designs</span></span>
                     </div>
-                    <div className="flex items-center gap-3 text-zinc-300">
+                    <div className="flex items-center gap-3 text-white">
                       <Clock className="w-5 h-5 text-fuchsia-400" />
                       <span>Instant updates & multiple revisions</span>
                     </div>
@@ -559,39 +562,42 @@ const downloadPdf = async () => {
                   
                   <Button 
                     onClick={() => setShowComparison(false)}
-                    className="w-full bg-gradient-to-r from-fuchsia-500 to-purple-600 hover:from-fuchsia-600 hover:to-purple-700 text-white py-6 mt-4 shadow-lg shadow-fuchsia-500/25"
+                    className="w-full bg-gradient-to-r from-fuchsia-500 to-purple-600 hover:from-fuchsia-400 hover:to-purple-500 text-white py-6 mt-4 shadow-xl shadow-fuchsia-500/30 font-bold text-base"
                   >
                     Design with AI
-                    <Sparkles className="w-4 h-4 ml-2" />
+                    <Sparkles className="w-5 h-5 ml-2" />
                   </Button>
                 </CardContent>
               </Card>
 
               {/* Human Designer */}
-              <Card className="bg-gradient-to-br from-zinc-800/80 to-zinc-900/80 border-zinc-600 relative overflow-hidden">
-                <CardHeader>
-                  <CardTitle className="text-white flex items-center gap-3">
-                    <div className="w-12 h-12 rounded-xl bg-zinc-700/50 flex items-center justify-center border border-zinc-600">
-                      <User className="w-6 h-6 text-zinc-300" />
+              <Card className="bg-gradient-to-br from-zinc-900/90 to-zinc-950/90 border-2 border-zinc-600/80 relative overflow-hidden shadow-xl">
+                <CardHeader className="pb-4">
+                  <CardTitle className="text-white flex items-center gap-4">
+                    <div className="w-14 h-14 rounded-xl bg-gradient-to-br from-zinc-700 to-zinc-800 flex items-center justify-center border border-zinc-500/50">
+                      <User className="w-7 h-7 text-zinc-300" />
                     </div>
-                    Professional Designer
+                    <div>
+                      <span className="text-xl font-bold">Professional Designer</span>
+                      <p className="text-zinc-400 text-sm font-normal">Human expertise & consultation</p>
+                    </div>
                   </CardTitle>
                 </CardHeader>
-                <CardContent className="space-y-4">
+                <CardContent className="space-y-5">
                   <div className="space-y-3">
-                    <div className="flex items-center gap-3 text-zinc-300">
+                    <div className="flex items-center gap-3 text-zinc-200">
                       <Clock className="w-5 h-5 text-zinc-400" />
                       <span>Takes more time for personalized results</span>
                     </div>
-                    <div className="flex items-center gap-3 text-zinc-300">
+                    <div className="flex items-center gap-3 text-zinc-200">
                       <DollarSign className="w-5 h-5 text-zinc-400" />
                       <span>Custom pricing based on project scope</span>
                     </div>
-                    <div className="flex items-center gap-3 text-zinc-300">
+                    <div className="flex items-center gap-3 text-zinc-200">
                       <User className="w-5 h-5 text-zinc-400" />
                       <span>Personal consultation & human expertise</span>
                     </div>
-                    <div className="flex items-center gap-3 text-zinc-300">
+                    <div className="flex items-center gap-3 text-zinc-200">
                       <CheckCircle2 className="w-5 h-5 text-zinc-400" />
                       <span>Ideal for complex, large-scale projects</span>
                     </div>
@@ -599,10 +605,10 @@ const downloadPdf = async () => {
                   
                   <Button 
                     onClick={() => setIsInquiryOpen(true)}
-                    className="w-full bg-zinc-700 hover:bg-zinc-600 text-white border border-zinc-500 py-6 mt-4"
+                    className="w-full bg-zinc-800 hover:bg-zinc-700 text-white border-2 border-zinc-500/50 py-6 mt-4 font-bold text-base"
                   >
                     Contact Designer
-                    <ArrowRight className="w-4 h-4 ml-2" />
+                    <ArrowRight className="w-5 h-5 ml-2" />
                   </Button>
                 </CardContent>
               </Card>

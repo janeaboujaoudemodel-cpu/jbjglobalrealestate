@@ -74,37 +74,37 @@ const MortgageCalculator = ({ defaultPrice = 2000000, compact = false }: Mortgag
 
   if (compact) {
     return (
-      <div className="max-w-xl mx-auto">
-        <div className="grid grid-cols-3 gap-4">
+      <div className="max-w-2xl mx-auto">
+        <div className="grid grid-cols-1 sm:grid-cols-3 gap-3 sm:gap-4">
           {/* Monthly Payment */}
-          <div className="bg-white/80 border border-gold/30 rounded-xl p-5 text-center shadow-md">
-            <div className="w-10 h-10 mx-auto mb-3 rounded-lg bg-gradient-to-br from-gold/20 to-gold/10 flex items-center justify-center">
-              <Calculator className="w-5 h-5 text-gold" />
+          <div className="bg-white/80 border border-gold/30 rounded-xl p-4 sm:p-5 text-center shadow-md">
+            <div className="w-9 h-9 sm:w-10 sm:h-10 mx-auto mb-2 sm:mb-3 rounded-lg bg-gradient-to-br from-gold/20 to-gold/10 flex items-center justify-center">
+              <Calculator className="w-4 h-4 sm:w-5 sm:h-5 text-gold" />
             </div>
-            <p className="text-zinc-500 text-xs mb-1 uppercase tracking-wider">Monthly Payment</p>
-            <p className="text-zinc-900 font-bold text-lg" style={{ fontFamily: "Poppins, sans-serif" }}>
+            <p className="text-zinc-500 text-[10px] sm:text-xs mb-1 uppercase tracking-wider">Monthly Payment</p>
+            <p className="text-zinc-900 font-bold text-sm sm:text-base md:text-lg truncate" style={{ fontFamily: "Poppins, sans-serif" }}>
               {formatCurrency(calculations.monthlyPayment)}
             </p>
           </div>
           
           {/* Loan Amount */}
-          <div className="bg-white/80 border border-gold/30 rounded-xl p-5 text-center shadow-md">
-            <div className="w-10 h-10 mx-auto mb-3 rounded-lg bg-gradient-to-br from-gold/20 to-gold/10 flex items-center justify-center">
-              <DollarSign className="w-5 h-5 text-gold" />
+          <div className="bg-white/80 border border-gold/30 rounded-xl p-4 sm:p-5 text-center shadow-md">
+            <div className="w-9 h-9 sm:w-10 sm:h-10 mx-auto mb-2 sm:mb-3 rounded-lg bg-gradient-to-br from-gold/20 to-gold/10 flex items-center justify-center">
+              <DollarSign className="w-4 h-4 sm:w-5 sm:h-5 text-gold" />
             </div>
-            <p className="text-zinc-500 text-xs mb-1 uppercase tracking-wider">Loan Amount</p>
-            <p className="text-zinc-900 font-bold text-lg" style={{ fontFamily: "Poppins, sans-serif" }}>
+            <p className="text-zinc-500 text-[10px] sm:text-xs mb-1 uppercase tracking-wider">Loan Amount</p>
+            <p className="text-zinc-900 font-bold text-sm sm:text-base md:text-lg truncate" style={{ fontFamily: "Poppins, sans-serif" }}>
               {formatCurrency(calculations.loanAmount)}
             </p>
           </div>
           
           {/* Total Interest */}
-          <div className="bg-white/80 border border-gold/30 rounded-xl p-5 text-center shadow-md">
-            <div className="w-10 h-10 mx-auto mb-3 rounded-lg bg-gradient-to-br from-gold/20 to-gold/10 flex items-center justify-center">
-              <TrendingUp className="w-5 h-5 text-gold" />
+          <div className="bg-white/80 border border-gold/30 rounded-xl p-4 sm:p-5 text-center shadow-md">
+            <div className="w-9 h-9 sm:w-10 sm:h-10 mx-auto mb-2 sm:mb-3 rounded-lg bg-gradient-to-br from-gold/20 to-gold/10 flex items-center justify-center">
+              <TrendingUp className="w-4 h-4 sm:w-5 sm:h-5 text-gold" />
             </div>
-            <p className="text-zinc-500 text-xs mb-1 uppercase tracking-wider">Total Interest</p>
-            <p className="text-zinc-900 font-bold text-lg" style={{ fontFamily: "Poppins, sans-serif" }}>
+            <p className="text-zinc-500 text-[10px] sm:text-xs mb-1 uppercase tracking-wider">Total Interest</p>
+            <p className="text-zinc-900 font-bold text-sm sm:text-base md:text-lg truncate" style={{ fontFamily: "Poppins, sans-serif" }}>
               {formatCurrency(calculations.totalInterest)}
             </p>
           </div>

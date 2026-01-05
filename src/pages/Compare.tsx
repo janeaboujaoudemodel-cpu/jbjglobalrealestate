@@ -451,14 +451,14 @@ const Compare = () => {
 
   if (!projects?.length) {
     return (
-      <section className="min-h-screen bg-zinc-950 py-16">
+      <section className="min-h-screen bg-gradient-to-br from-purple-950/30 via-zinc-950 to-zinc-950 py-16">
         <div className="container mx-auto px-4 text-center">
           <h1 className="text-white text-3xl font-bold mb-4">No Properties to Compare</h1>
           <p className="text-zinc-400 mb-8">
             Add 2-5 properties to your shortlist to compare them with AI analysis.
           </p>
           <Link to="/properties">
-            <Button className="bg-gold text-black hover:bg-gold-light">
+            <Button className="bg-gradient-to-r from-purple-600 to-purple-700 text-white hover:from-purple-500 hover:to-purple-600 shadow-lg shadow-purple-500/30">
               Browse Properties
             </Button>
           </Link>
@@ -502,43 +502,43 @@ const Compare = () => {
               Developed by Founder Jane Abou Jaoude • Powered by JJ Global Capital
             </p>
 
-            {/* Feature Cards */}
+            {/* Feature Cards - Purple Theme */}
             <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mt-8">
-              <div className="flex items-center gap-3 bg-zinc-900/60 backdrop-blur-sm border border-zinc-800 rounded-xl p-4">
-                <div className="w-10 h-10 rounded-lg bg-orange-500/20 flex items-center justify-center">
-                  <BarChart3 className="w-5 h-5 text-orange-400" />
+              <div className="flex items-center gap-3 bg-purple-950/40 backdrop-blur-sm border border-purple-500/30 rounded-xl p-4">
+                <div className="w-10 h-10 rounded-lg bg-purple-500/30 flex items-center justify-center">
+                  <BarChart3 className="w-5 h-5 text-purple-400" />
                 </div>
                 <div>
                   <p className="text-white font-medium">Compare 2-5 Projects</p>
-                  <p className="text-zinc-500 text-sm">Side-by-side analysis</p>
+                  <p className="text-purple-300/60 text-sm">Side-by-side analysis</p>
                 </div>
               </div>
-              <div className="flex items-center gap-3 bg-zinc-900/60 backdrop-blur-sm border border-zinc-800 rounded-xl p-4">
-                <div className="w-10 h-10 rounded-lg bg-orange-500/20 flex items-center justify-center">
-                  <TrendingUp className="w-5 h-5 text-orange-400" />
+              <div className="flex items-center gap-3 bg-purple-950/40 backdrop-blur-sm border border-purple-500/30 rounded-xl p-4">
+                <div className="w-10 h-10 rounded-lg bg-purple-500/30 flex items-center justify-center">
+                  <TrendingUp className="w-5 h-5 text-purple-400" />
                 </div>
                 <div>
                   <p className="text-white font-medium">ROI Projections</p>
-                  <p className="text-zinc-500 text-sm">Investment returns</p>
+                  <p className="text-purple-300/60 text-sm">Investment returns</p>
                 </div>
               </div>
-              <div className="flex items-center gap-3 bg-zinc-900/60 backdrop-blur-sm border border-zinc-800 rounded-xl p-4">
-                <div className="w-10 h-10 rounded-lg bg-orange-500/20 flex items-center justify-center">
-                  <Award className="w-5 h-5 text-orange-400" />
+              <div className="flex items-center gap-3 bg-purple-950/40 backdrop-blur-sm border border-purple-500/30 rounded-xl p-4">
+                <div className="w-10 h-10 rounded-lg bg-purple-500/30 flex items-center justify-center">
+                  <Award className="w-5 h-5 text-purple-400" />
                 </div>
                 <div>
                   <p className="text-white font-medium">Smart Ratings</p>
-                  <p className="text-zinc-500 text-sm">Location, value & more</p>
+                  <p className="text-purple-300/60 text-sm">Location, value & more</p>
                 </div>
               </div>
             </div>
 
-            {/* CTA Buttons */}
+            {/* CTA Buttons - Purple Theme */}
             <div className="flex flex-wrap gap-4 mt-8">
               <Button
                 onClick={generateSmartAnalysis}
                 disabled={isGenerating || projects.length < 2}
-                className="bg-gradient-to-r from-orange-500 to-orange-600 text-white hover:from-orange-400 hover:to-orange-500 shadow-lg shadow-orange-500/20 hover:shadow-orange-500/40 transition-all duration-300 px-6 py-5"
+                className="bg-gradient-to-r from-purple-600 to-purple-700 text-white hover:from-purple-500 hover:to-purple-600 shadow-lg shadow-purple-500/30 hover:shadow-purple-500/50 transition-all duration-300 px-6 py-5"
               >
                 {isGenerating ? (
                   <>
@@ -556,7 +556,7 @@ const Compare = () => {
                 <Button
                   onClick={downloadComprehensiveReport}
                   variant="outline"
-                  className="border-orange-500/50 text-orange-400 hover:bg-orange-500/10"
+                  className="border-purple-500/50 text-purple-400 hover:bg-purple-500/20 hover:border-purple-400"
                 >
                   <Download className="w-4 h-4 mr-2" />
                   Download Report
@@ -732,46 +732,46 @@ const Compare = () => {
                 </div>
               </div>
 
-              {/* Recommendation */}
-              <div className="bg-gradient-to-r from-gold/20 to-gold-light/10 rounded-2xl border border-gold/30 p-6">
+              {/* Recommendation - Purple Theme */}
+              <div className="bg-gradient-to-r from-purple-950/50 to-fuchsia-950/30 rounded-2xl border border-purple-500/40 p-6">
                 <div className="flex items-center gap-3 mb-4">
-                  <Award className="w-8 h-8 text-gold" />
+                  <Award className="w-8 h-8 text-purple-400" />
                   <div>
                     <h3 className="text-white font-bold text-xl">Our Recommendation</h3>
-                    <p className="text-gold text-lg">{aiAnalysis.recommendation.topChoice}</p>
+                    <p className="text-purple-400 text-lg">{aiAnalysis.recommendation.topChoice}</p>
                   </div>
                 </div>
                 <p className="text-zinc-300 mb-6">{aiAnalysis.recommendation.reasoning}</p>
                 
                 <div className="grid grid-cols-2 md:grid-cols-4 gap-4 mb-6">
-                  <div className="bg-zinc-900/50 rounded-lg p-4">
-                    <div className="flex items-center gap-2 text-zinc-400 text-sm mb-2">
+                  <div className="bg-purple-950/40 border border-purple-500/20 rounded-lg p-4">
+                    <div className="flex items-center gap-2 text-purple-400 text-sm mb-2">
                       <TrendingUp className="w-4 h-4" /> For Investors
                     </div>
                     <p className="text-white text-sm">{aiAnalysis.recommendation.bestFor.investors}</p>
                   </div>
-                  <div className="bg-zinc-900/50 rounded-lg p-4">
-                    <div className="flex items-center gap-2 text-zinc-400 text-sm mb-2">
+                  <div className="bg-purple-950/40 border border-purple-500/20 rounded-lg p-4">
+                    <div className="flex items-center gap-2 text-purple-400 text-sm mb-2">
                       <Home className="w-4 h-4" /> For Families
                     </div>
                     <p className="text-white text-sm">{aiAnalysis.recommendation.bestFor.families}</p>
                   </div>
-                  <div className="bg-zinc-900/50 rounded-lg p-4">
-                    <div className="flex items-center gap-2 text-zinc-400 text-sm mb-2">
+                  <div className="bg-purple-950/40 border border-purple-500/20 rounded-lg p-4">
+                    <div className="flex items-center gap-2 text-purple-400 text-sm mb-2">
                       <Users className="w-4 h-4" /> First-Time Buyers
                     </div>
                     <p className="text-white text-sm">{aiAnalysis.recommendation.bestFor.firstTimeBuyers}</p>
                   </div>
-                  <div className="bg-zinc-900/50 rounded-lg p-4">
-                    <div className="flex items-center gap-2 text-zinc-400 text-sm mb-2">
+                  <div className="bg-purple-950/40 border border-purple-500/20 rounded-lg p-4">
+                    <div className="flex items-center gap-2 text-purple-400 text-sm mb-2">
                       <Crown className="w-4 h-4" /> Luxury Buyers
                     </div>
                     <p className="text-white text-sm">{aiAnalysis.recommendation.bestFor.luxuryBuyers}</p>
                   </div>
                 </div>
 
-                <div className="bg-zinc-900/70 rounded-lg p-4 border border-zinc-700">
-                  <div className="flex items-center gap-2 text-gold mb-2">
+                <div className="bg-purple-950/60 rounded-lg p-4 border border-purple-500/30">
+                  <div className="flex items-center gap-2 text-purple-300 mb-2">
                     <Zap className="w-4 h-4" />
                     <span className="font-semibold">Investment Advice</span>
                   </div>
@@ -830,15 +830,15 @@ const Compare = () => {
             </div>
           )}
 
-          {/* Contact Advisor Section */}
-          <div className="bg-zinc-900 rounded-2xl border border-zinc-800 p-6">
+          {/* Contact Advisor Section - Purple Theme */}
+          <div className="bg-purple-950/30 rounded-2xl border border-purple-500/30 p-6">
             <div className="flex items-center gap-3 mb-6">
-              <div className="w-10 h-10 rounded-full bg-gold flex items-center justify-center">
-                <Users className="w-5 h-5 text-black" />
+              <div className="w-10 h-10 rounded-full bg-gradient-to-br from-purple-500 to-fuchsia-600 flex items-center justify-center">
+                <Users className="w-5 h-5 text-white" />
               </div>
               <div>
                 <h3 className="text-white font-semibold text-lg">Need Expert Guidance?</h3>
-                <p className="text-zinc-400 text-sm">Speak with our investment advisors</p>
+                <p className="text-purple-300/70 text-sm">Speak with our investment advisors</p>
               </div>
             </div>
 
@@ -874,7 +874,7 @@ const Compare = () => {
                   <Button
                     onClick={() => submitRequest.mutate()}
                     disabled={!formData.email || submitRequest.isPending}
-                    className="flex-1 bg-gold text-black hover:bg-gold-light"
+                    className="flex-1 bg-gradient-to-r from-purple-600 to-purple-700 text-white hover:from-purple-500 hover:to-purple-600"
                   >
                     {submitRequest.isPending ? (
                       <Loader2 className="w-4 h-4 animate-spin" />
@@ -888,7 +888,7 @@ const Compare = () => {
                   <Button
                     variant="outline"
                     onClick={() => setShowRequestForm(false)}
-                    className="border-zinc-700 text-zinc-400"
+                    className="border-purple-500/50 text-purple-300 hover:bg-purple-500/10"
                   >
                     Cancel
                   </Button>
@@ -898,7 +898,7 @@ const Compare = () => {
               <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
                 <Button
                   onClick={() => setShowRequestForm(true)}
-                  className="bg-gold text-black hover:bg-gold-light"
+                  className="bg-gradient-to-r from-purple-600 to-purple-700 text-white hover:from-purple-500 hover:to-purple-600"
                 >
                   <Mail className="w-4 h-4 mr-2" />
                   Request Callback
@@ -906,7 +906,7 @@ const Compare = () => {
                 <a href="tel:+971565911000" className="w-full">
                   <Button
                     variant="outline"
-                    className="w-full border-zinc-700 text-white bg-transparent hover:bg-zinc-900 hover:text-white"
+                    className="w-full border-purple-500/40 text-purple-300 bg-transparent hover:bg-purple-500/20"
                   >
                     <Phone className="w-4 h-4 mr-2" />
                     Call Now
@@ -915,7 +915,7 @@ const Compare = () => {
                 <a href={INQUIRY_FORM_URL} target="_blank" rel="noopener noreferrer" className="w-full">
                   <Button
                     variant="outline"
-                    className="w-full border-zinc-700 text-white bg-transparent hover:bg-zinc-900 hover:text-white"
+                    className="w-full border-purple-500/40 text-purple-300 bg-transparent hover:bg-purple-500/20"
                   >
                     <BadgeCheck className="w-4 h-4 mr-2" />
                     Full Inquiry Form
@@ -927,7 +927,7 @@ const Compare = () => {
 
           {/* Footer Branding */}
           <div className="text-center text-zinc-600 text-sm py-4">
-            Powered & Made by <span className="text-gold">JJ Global Capital</span> — Part of JJ Holding Group
+            Powered & Made by <span className="text-purple-400">JJ Global Capital</span> — Part of JJ Holding Group
           </div>
         </div>
       </div>
