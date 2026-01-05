@@ -1,5 +1,6 @@
 import { useState } from "react";
 import { motion } from "framer-motion";
+import { Link } from "react-router-dom";
 import { supabase } from "@/integrations/supabase/client";
 import GlobalHeader from "@/components/GlobalHeader";
 import Footer from "@/components/Footer";
@@ -405,18 +406,18 @@ const RentalIndex = () => {
                     Need expert guidance on your rental investment?
                   </p>
                   <div className="flex flex-wrap justify-center gap-3">
-                    <a href="/properties">
-                      <Button className="bg-gold hover:bg-gold-light text-black font-semibold">
+                    <Button asChild className="bg-gold hover:bg-gold-light text-black font-semibold">
+                      <Link to="/properties">
                         Browse Properties
                         <ArrowUpRight className="w-4 h-4 ml-2" />
-                      </Button>
-                    </a>
-                    <a href="/contact">
-                      <Button variant="outline" className="border-gold/50 text-gold hover:bg-gold/10">
+                      </Link>
+                    </Button>
+                    <Button asChild variant="outline" className="border-gold/50 text-gold hover:bg-gold/10">
+                      <Link to="/contact">
                         <FileText className="w-4 h-4 mr-2" />
                         Consult an Expert
-                      </Button>
-                    </a>
+                      </Link>
+                    </Button>
                   </div>
                 </div>
               </motion.div>

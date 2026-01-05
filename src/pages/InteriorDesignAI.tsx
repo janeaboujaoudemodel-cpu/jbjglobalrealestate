@@ -122,7 +122,8 @@ const colorOptions = [
 
 const InteriorDesignAI = () => {
   const navigate = useNavigate();
-  const { user } = useAuth();
+  const { user, isAdmin } = useAuth();
+  const canBypassPayment = isAdmin || import.meta.env.DEV;
   
   // Load saved state from sessionStorage
   const getSavedState = <T,>(key: string, defaultValue: T): T => {
@@ -158,10 +159,6 @@ const InteriorDesignAI = () => {
   
   const photoInputRef = useRef<HTMLInputElement>(null);
   const floorPlanRef = useRef<HTMLInputElement>(null);
-
-  // Check if user is admin (for preview access)
-  const isAdmin = user?.email === "jane@jjglobalcapital.com" || user?.email === "invest@jjglobalcapital.com";
-
   // Save state to sessionStorage whenever it changes
   useEffect(() => {
     sessionStorage.setItem("interior-design-step", JSON.stringify(step));
@@ -912,24 +909,28 @@ const InteriorDesignAI = () => {
                         </span>
                       </div>
                       
-                      {isAdmin && (
+                      {canBypassPayment && (
                         <div className="bg-fuchsia-500/10 border border-fuchsia-500/30 rounded-lg p-3 text-center">
-                          <p className="text-fuchsia-300 text-sm font-medium">🔓 Admin Preview Mode</p>
-                          <p className="text-zinc-400 text-xs mt-1">Payment bypassed for testing</p>
+                          <p className="text-fuchsia-300 text-sm font-medium">
+                            {import.meta.env.DEV ? "🔓 Preview Mode" : "🔓 Admin Preview Mode"}
+                          </p>
+                          <p className="text-zinc-400 text-xs mt-1">
+                            {import.meta.env.DEV ? "Payment bypassed for testing" : "Admin access enabled"}
+                          </p>
                         </div>
                       )}
                       
                       <Button 
-                        onClick={generateDesign}
+                        onClick={canBypassPayment ? generateDesign : () => toast.info("Payment will be enabled soon. Preview mode can generate designs without payment.")}
                         disabled={isProcessing}
                         className="w-full bg-gradient-to-r from-fuchsia-500 to-purple-600 hover:from-fuchsia-600 hover:to-purple-700 text-white py-6"
                       >
                         {isProcessing ? (
                           <>Processing...</>
-                        ) : isAdmin ? (
+                        ) : canBypassPayment ? (
                           <>
                             <Sparkles className="w-4 h-4 mr-2" />
-                            Generate Design (Admin)
+                            Generate Design
                           </>
                         ) : (
                           <>
@@ -940,7 +941,7 @@ const InteriorDesignAI = () => {
                       </Button>
 
                       {/* Clear session button for testing */}
-                      {isAdmin && (
+                      {canBypassPayment && (
                         <Button 
                           variant="outline"
                           onClick={() => {
