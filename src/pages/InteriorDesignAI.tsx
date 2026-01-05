@@ -123,30 +123,60 @@ const colorOptions = [
 const InteriorDesignAI = () => {
   const navigate = useNavigate();
   const { user } = useAuth();
-  const [step, setStep] = useState(1);
-  const [showComparison, setShowComparison] = useState(true);
+  
+  // Load saved state from sessionStorage
+  const getSavedState = <T,>(key: string, defaultValue: T): T => {
+    try {
+      const saved = sessionStorage.getItem(`interior-design-${key}`);
+      return saved ? JSON.parse(saved) : defaultValue;
+    } catch {
+      return defaultValue;
+    }
+  };
+
+  const [step, setStep] = useState(() => getSavedState("step", 1));
+  const [showComparison, setShowComparison] = useState(() => getSavedState("showComparison", true));
   const [isInquiryOpen, setIsInquiryOpen] = useState(false);
   
-  // Form data
-  const [propertyType, setPropertyType] = useState<PropertyType>("");
-  const [propertyName, setPropertyName] = useState("");
-  const [propertySize, setPropertySize] = useState("");
-  const [knowsSize, setKnowsSize] = useState<boolean | null>(null);
-  const [designStyle, setDesignStyle] = useState<DesignStyle>("");
-  const [colorPalette, setColorPalette] = useState("");
-  const [purpose, setPurpose] = useState<Purpose>("");
-  const [customNotes, setCustomNotes] = useState("");
-  const [selectedPackage, setSelectedPackage] = useState("");
+  // Form data - all persisted
+  const [propertyType, setPropertyType] = useState<PropertyType>(() => getSavedState("propertyType", ""));
+  const [propertyName, setPropertyName] = useState(() => getSavedState("propertyName", ""));
+  const [propertySize, setPropertySize] = useState(() => getSavedState("propertySize", ""));
+  const [knowsSize, setKnowsSize] = useState<boolean | null>(() => getSavedState("knowsSize", null));
+  const [designStyle, setDesignStyle] = useState<DesignStyle>(() => getSavedState("designStyle", ""));
+  const [colorPalette, setColorPalette] = useState(() => getSavedState("colorPalette", ""));
+  const [purpose, setPurpose] = useState<Purpose>(() => getSavedState("purpose", ""));
+  const [customNotes, setCustomNotes] = useState(() => getSavedState("customNotes", ""));
+  const [selectedPackage, setSelectedPackage] = useState(() => getSavedState("selectedPackage", ""));
   const [photos, setPhotos] = useState<File[]>([]);
   const [floorPlan, setFloorPlan] = useState<File | null>(null);
   
   // Processing state
   const [isProcessing, setIsProcessing] = useState(false);
   const [progress, setProgress] = useState(0);
-  const [designResult, setDesignResult] = useState<string | null>(null);
+  const [designResult, setDesignResult] = useState<string | null>(() => getSavedState("designResult", null));
   
   const photoInputRef = useRef<HTMLInputElement>(null);
   const floorPlanRef = useRef<HTMLInputElement>(null);
+
+  // Check if user is admin (for preview access)
+  const isAdmin = user?.email === "jane@jjglobalcapital.com" || user?.email === "invest@jjglobalcapital.com";
+
+  // Save state to sessionStorage whenever it changes
+  useEffect(() => {
+    sessionStorage.setItem("interior-design-step", JSON.stringify(step));
+    sessionStorage.setItem("interior-design-showComparison", JSON.stringify(showComparison));
+    sessionStorage.setItem("interior-design-propertyType", JSON.stringify(propertyType));
+    sessionStorage.setItem("interior-design-propertyName", JSON.stringify(propertyName));
+    sessionStorage.setItem("interior-design-propertySize", JSON.stringify(propertySize));
+    sessionStorage.setItem("interior-design-knowsSize", JSON.stringify(knowsSize));
+    sessionStorage.setItem("interior-design-designStyle", JSON.stringify(designStyle));
+    sessionStorage.setItem("interior-design-colorPalette", JSON.stringify(colorPalette));
+    sessionStorage.setItem("interior-design-purpose", JSON.stringify(purpose));
+    sessionStorage.setItem("interior-design-customNotes", JSON.stringify(customNotes));
+    sessionStorage.setItem("interior-design-selectedPackage", JSON.stringify(selectedPackage));
+    sessionStorage.setItem("interior-design-designResult", JSON.stringify(designResult));
+  }, [step, showComparison, propertyType, propertyName, propertySize, knowsSize, designStyle, colorPalette, purpose, customNotes, selectedPackage, designResult]);
 
   // Check for measurement data from the measurement tool
   useEffect(() => {
@@ -165,9 +195,6 @@ const InteriorDesignAI = () => {
       }
     }
   }, []);
-
-  // Check if user is admin (for preview access)
-  const isAdmin = user?.email === "jane@jjglobalcapital.com" || user?.email === "invest@jjglobalcapital.com";
 
   const propertyTypes = [
     { id: "apartment", label: "Apartment", icon: Building2 },
@@ -885,20 +912,60 @@ const InteriorDesignAI = () => {
                         </span>
                       </div>
                       
-                      {isAdmin ? (
+                      {isAdmin && (
+                        <div className="bg-fuchsia-500/10 border border-fuchsia-500/30 rounded-lg p-3 text-center">
+                          <p className="text-fuchsia-300 text-sm font-medium">🔓 Admin Preview Mode</p>
+                          <p className="text-zinc-400 text-xs mt-1">Payment bypassed for testing</p>
+                        </div>
+                      )}
+                      
+                      <Button 
+                        onClick={generateDesign}
+                        disabled={isProcessing}
+                        className="w-full bg-gradient-to-r from-fuchsia-500 to-purple-600 hover:from-fuchsia-600 hover:to-purple-700 text-white py-6"
+                      >
+                        {isProcessing ? (
+                          <>Processing...</>
+                        ) : isAdmin ? (
+                          <>
+                            <Sparkles className="w-4 h-4 mr-2" />
+                            Generate Design (Admin)
+                          </>
+                        ) : (
+                          <>
+                            <CreditCard className="w-4 h-4 mr-2" />
+                            Proceed to Payment
+                          </>
+                        )}
+                      </Button>
+
+                      {/* Clear session button for testing */}
+                      {isAdmin && (
                         <Button 
-                          onClick={generateDesign}
-                          className="w-full bg-gradient-to-r from-fuchsia-500 to-purple-600 hover:from-fuchsia-600 hover:to-purple-700 text-white py-6"
+                          variant="outline"
+                          onClick={() => {
+                            Object.keys(sessionStorage).forEach(key => {
+                              if (key.startsWith('interior-design-')) {
+                                sessionStorage.removeItem(key);
+                              }
+                            });
+                            setStep(1);
+                            setShowComparison(true);
+                            setPropertyType("");
+                            setPropertyName("");
+                            setPropertySize("");
+                            setKnowsSize(null);
+                            setDesignStyle("");
+                            setColorPalette("");
+                            setPurpose("");
+                            setCustomNotes("");
+                            setSelectedPackage("");
+                            setDesignResult(null);
+                            toast.success("Session cleared for fresh testing");
+                          }}
+                          className="w-full border-zinc-700 text-zinc-400 hover:text-zinc-300"
                         >
-                          <Sparkles className="w-4 h-4 mr-2" />
-                          Generate Design (Admin Preview)
-                        </Button>
-                      ) : (
-                        <Button 
-                          className="w-full bg-gradient-to-r from-fuchsia-500 to-purple-600 hover:from-fuchsia-600 hover:to-purple-700 text-white py-6"
-                        >
-                          <CreditCard className="w-4 h-4 mr-2" />
-                          Proceed to Payment
+                          Clear Session & Start Over
                         </Button>
                       )}
                     </CardContent>
