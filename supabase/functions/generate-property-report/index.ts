@@ -103,131 +103,244 @@ serve(async (req) => {
       day: 'numeric' 
     });
 
-    // Generate comprehensive HTML report
+    // Generate premium white-background HTML report
     const reportHTML = `<!DOCTYPE html>
 <html lang="en">
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>${escapeHtml(project.name)} - JJ Global Capital Property Report</title>
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;500;600;700&family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
   <style>
     * { margin: 0; padding: 0; box-sizing: border-box; }
-    body { 
-      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; 
-      background: #0a0a0a; 
-      color: #ffffff;
-      line-height: 1.6;
+    
+    :root {
+      --gold: #A8925A;
+      --gold-dark: #8B7744;
+      --black: #000000;
+      --white: #FFFFFF;
+      --gray-50: #FAFAFA;
+      --gray-100: #F5F5F5;
+      --gray-200: #E5E5E5;
+      --gray-300: #D4D4D4;
+      --gray-500: #737373;
+      --gray-700: #404040;
+      --gray-900: #171717;
     }
+    
+    body { 
+      font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif; 
+      background: var(--white); 
+      color: var(--black);
+      line-height: 1.6;
+      -webkit-font-smoothing: antialiased;
+    }
+    
     .page { 
-      max-width: 900px; 
+      max-width: 800px; 
       margin: 0 auto; 
       padding: 40px; 
-      background: linear-gradient(180deg, #1a1a1a 0%, #0d0d0d 100%);
+      background: var(--white);
     }
     
     /* Header */
     .header { 
-      text-align: center; 
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-start;
       padding-bottom: 30px;
-      border-bottom: 2px solid #A8925A;
+      border-bottom: 2px solid var(--gold);
       margin-bottom: 40px;
     }
+    
+    .header-left { }
+    
     .logo { 
-      font-size: 28px; 
+      font-size: 24px; 
       font-weight: 700;
       letter-spacing: 2px;
+      margin-bottom: 4px;
+      display: flex;
+      align-items: center;
+    }
+    .logo-jj { 
+      color: var(--gold); 
+      font-family: 'Playfair Display', serif;
+    }
+    .logo-divider { 
+      margin: 0 6px; 
+      color: var(--gold);
+      font-weight: 300;
+    }
+    .logo-text { 
+      color: var(--black);
+      font-family: 'Inter', sans-serif;
+      font-weight: 600;
+      letter-spacing: 3px;
+    }
+    
+    .tagline { 
+      color: var(--gray-500); 
+      font-size: 11px; 
+      letter-spacing: 2px;
+      text-transform: uppercase;
+      margin-top: 4px;
+    }
+    
+    .header-right {
+      text-align: right;
+    }
+    
+    .report-badge {
+      display: inline-block;
+      background: linear-gradient(135deg, var(--gold) 0%, var(--gold-dark) 100%);
+      color: var(--white);
+      padding: 6px 16px;
+      border-radius: 4px;
+      font-size: 10px;
+      font-weight: 600;
+      letter-spacing: 1px;
+      text-transform: uppercase;
       margin-bottom: 8px;
     }
-    .logo-gold { color: #A8925A; }
-    .logo-divider { margin: 0 8px; color: #A8925A; }
-    .tagline { color: #888; font-size: 14px; letter-spacing: 1px; }
-    .report-date { color: #666; font-size: 12px; margin-top: 15px; }
+    
+    .report-date { 
+      color: var(--gray-500); 
+      font-size: 12px; 
+    }
     
     /* Hero Section */
     .hero {
-      background: linear-gradient(135deg, rgba(168, 146, 90, 0.15) 0%, rgba(0,0,0,0) 70%);
-      border: 1px solid rgba(168, 146, 90, 0.3);
-      border-radius: 16px;
-      padding: 30px;
-      margin-bottom: 30px;
+      background: var(--gray-50);
+      border: 1px solid var(--gray-200);
+      border-radius: 12px;
+      padding: 32px;
+      margin-bottom: 32px;
     }
-    .property-name {
-      font-size: 32px;
-      font-weight: 700;
-      margin-bottom: 8px;
-      color: #fff;
-    }
+    
     .developer-badge {
       display: inline-block;
-      background: #A8925A;
-      color: #000;
-      padding: 4px 12px;
-      border-radius: 20px;
-      font-size: 12px;
+      background: var(--black);
+      color: var(--white);
+      padding: 6px 14px;
+      border-radius: 4px;
+      font-size: 11px;
       font-weight: 600;
-      margin-bottom: 15px;
+      letter-spacing: 1px;
+      text-transform: uppercase;
+      margin-bottom: 16px;
     }
-    .location-info { color: #999; font-size: 16px; }
+    
+    .property-name {
+      font-family: 'Playfair Display', serif;
+      font-size: 36px;
+      font-weight: 600;
+      color: var(--black);
+      margin-bottom: 12px;
+      line-height: 1.2;
+    }
+    
+    .location-info { 
+      color: var(--gray-700); 
+      font-size: 16px;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+    
+    .location-icon {
+      color: var(--gold);
+    }
     
     /* Section Styles */
     .section {
-      background: #1a1a1a;
-      border: 1px solid #333;
+      background: var(--white);
+      border: 1px solid var(--gray-200);
       border-radius: 12px;
-      padding: 25px;
-      margin-bottom: 25px;
+      padding: 28px;
+      margin-bottom: 24px;
     }
+    
     .section-title {
-      font-size: 18px;
+      font-family: 'Playfair Display', serif;
+      font-size: 20px;
       font-weight: 600;
-      color: #A8925A;
-      margin-bottom: 20px;
-      padding-bottom: 10px;
-      border-bottom: 1px solid #333;
+      color: var(--black);
+      margin-bottom: 24px;
+      padding-bottom: 12px;
+      border-bottom: 1px solid var(--gray-200);
+      position: relative;
+    }
+    
+    .section-title::after {
+      content: '';
+      position: absolute;
+      bottom: -1px;
+      left: 0;
+      width: 60px;
+      height: 2px;
+      background: var(--gold);
     }
     
     /* Key Metrics Grid */
     .metrics-grid {
       display: grid;
       grid-template-columns: repeat(3, 1fr);
-      gap: 20px;
+      gap: 16px;
     }
+    
     .metric-card {
-      background: #252525;
-      padding: 20px;
+      background: var(--gray-50);
+      padding: 24px;
       border-radius: 10px;
       text-align: center;
+      border: 1px solid var(--gray-200);
     }
+    
     .metric-value {
-      font-size: 24px;
-      font-weight: 700;
-      color: #fff;
-      margin-bottom: 5px;
+      font-family: 'Playfair Display', serif;
+      font-size: 22px;
+      font-weight: 600;
+      color: var(--black);
+      margin-bottom: 6px;
     }
+    
     .metric-label {
-      font-size: 12px;
-      color: #888;
+      font-size: 11px;
+      color: var(--gray-500);
       text-transform: uppercase;
       letter-spacing: 1px;
+      font-weight: 500;
     }
     
     /* Details Table */
-    .details-table {
-      width: 100%;
-      border-collapse: collapse;
+    .details-grid {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 16px;
     }
-    .details-table tr {
-      border-bottom: 1px solid #333;
+    
+    .detail-item {
+      display: flex;
+      flex-direction: column;
+      padding: 16px;
+      background: var(--gray-50);
+      border-radius: 8px;
+      border: 1px solid var(--gray-100);
     }
-    .details-table td {
-      padding: 12px 0;
+    
+    .detail-label {
+      font-size: 11px;
+      color: var(--gray-500);
+      text-transform: uppercase;
+      letter-spacing: 1px;
+      margin-bottom: 6px;
+      font-weight: 500;
     }
-    .details-table td:first-child {
-      color: #888;
-      width: 40%;
-    }
-    .details-table td:last-child {
-      color: #fff;
+    
+    .detail-value {
+      font-size: 15px;
+      color: var(--black);
       font-weight: 500;
     }
     
@@ -235,120 +348,264 @@ serve(async (req) => {
     .tags {
       display: flex;
       flex-wrap: wrap;
-      gap: 8px;
+      gap: 10px;
     }
+    
     .tag {
-      background: #252525;
-      color: #A8925A;
-      padding: 6px 14px;
-      border-radius: 20px;
+      background: var(--white);
+      color: var(--black);
+      padding: 8px 16px;
+      border-radius: 6px;
       font-size: 13px;
-      border: 1px solid #333;
+      border: 1px solid var(--gray-200);
+      font-weight: 500;
+    }
+    
+    .tag-gold {
+      background: linear-gradient(135deg, var(--gold) 0%, var(--gold-dark) 100%);
+      color: var(--white);
+      border: none;
     }
     
     /* Payment Plan */
     .payment-box {
-      background: linear-gradient(135deg, rgba(168, 146, 90, 0.1) 0%, rgba(0,0,0,0) 100%);
+      background: linear-gradient(135deg, rgba(168, 146, 90, 0.08) 0%, rgba(168, 146, 90, 0.02) 100%);
       border: 1px solid rgba(168, 146, 90, 0.3);
-      border-radius: 12px;
+      border-radius: 10px;
       padding: 20px;
-      margin-top: 20px;
+      margin-top: 24px;
     }
+    
     .payment-title {
-      color: #A8925A;
+      color: var(--gold-dark);
       font-weight: 600;
-      margin-bottom: 10px;
+      margin-bottom: 8px;
+      font-size: 14px;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+    
+    .payment-icon {
+      width: 20px;
+      height: 20px;
+    }
+    
+    /* Description */
+    .description {
+      color: var(--gray-700);
+      line-height: 1.9;
+      font-size: 15px;
+    }
+    
+    /* Images Gallery */
+    .images-grid {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 12px;
+    }
+    
+    .image-item {
+      border-radius: 8px;
+      overflow: hidden;
+      border: 1px solid var(--gray-200);
+    }
+    
+    .image-item img {
+      width: 100%;
+      height: 150px;
+      object-fit: cover;
+    }
+    
+    .image-item:first-child {
+      grid-column: span 2;
+    }
+    
+    .image-item:first-child img {
+      height: 250px;
     }
     
     /* Documents List */
     .doc-list {
       list-style: none;
     }
+    
     .doc-item {
       display: flex;
       align-items: center;
-      padding: 12px;
-      background: #252525;
+      padding: 14px;
+      background: var(--gray-50);
       border-radius: 8px;
       margin-bottom: 10px;
+      border: 1px solid var(--gray-200);
     }
+    
     .doc-icon {
       width: 40px;
       height: 40px;
-      background: #A8925A;
+      background: var(--gold);
       border-radius: 8px;
       display: flex;
       align-items: center;
       justify-content: center;
-      margin-right: 15px;
-      color: #000;
+      margin-right: 14px;
+      color: var(--white);
       font-weight: bold;
-    }
-    .doc-name { font-weight: 500; }
-    .doc-type { font-size: 12px; color: #888; }
-    .doc-link {
-      margin-left: auto;
-      color: #A8925A;
-      text-decoration: none;
-      font-size: 14px;
+      font-size: 12px;
     }
     
-    /* Description */
-    .description {
-      color: #ccc;
-      line-height: 1.8;
+    .doc-name { 
+      font-weight: 500; 
+      color: var(--black);
+    }
+    
+    .doc-type { 
+      font-size: 12px; 
+      color: var(--gray-500); 
+    }
+    
+    .doc-link {
+      margin-left: auto;
+      color: var(--gold);
+      text-decoration: none;
+      font-size: 13px;
+      font-weight: 500;
     }
     
     /* Footer */
     .footer {
       text-align: center;
-      margin-top: 50px;
-      padding-top: 30px;
-      border-top: 1px solid #333;
+      margin-top: 40px;
+      padding-top: 32px;
+      border-top: 2px solid var(--gold);
     }
-    .footer-logo { font-size: 20px; margin-bottom: 15px; }
-    .contact-info { color: #888; font-size: 14px; margin-bottom: 10px; }
-    .contact-info a { color: #A8925A; text-decoration: none; }
+    
+    .footer-logo { 
+      font-size: 20px; 
+      margin-bottom: 16px; 
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+    
+    .contact-grid {
+      display: flex;
+      justify-content: center;
+      gap: 32px;
+      margin-bottom: 20px;
+    }
+    
+    .contact-item {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      color: var(--gray-700);
+      font-size: 14px;
+    }
+    
+    .contact-icon {
+      width: 16px;
+      height: 16px;
+      color: var(--gold);
+    }
+    
+    .contact-link {
+      color: var(--black);
+      text-decoration: none;
+      font-weight: 500;
+    }
+    
+    .contact-link:hover {
+      color: var(--gold);
+    }
+    
+    .footer-branding {
+      margin-top: 16px;
+      padding-top: 16px;
+      border-top: 1px solid var(--gray-200);
+    }
+    
+    .footer-branding-text {
+      font-size: 12px;
+      color: var(--gray-500);
+    }
+    
+    .footer-branding-text strong {
+      color: var(--black);
+    }
+    
     .disclaimer {
-      font-size: 11px;
-      color: #666;
+      font-size: 10px;
+      color: var(--gray-500);
       margin-top: 20px;
-      font-style: italic;
+      padding: 16px;
+      background: var(--gray-50);
+      border-radius: 8px;
+      line-height: 1.6;
     }
     
     /* CTA Box */
     .cta-box {
-      background: linear-gradient(135deg, #A8925A 0%, #8B7744 100%);
+      background: linear-gradient(135deg, var(--gold) 0%, var(--gold-dark) 100%);
       border-radius: 12px;
-      padding: 30px;
+      padding: 32px;
       text-align: center;
-      margin-top: 30px;
+      margin-top: 32px;
     }
+    
     .cta-title {
-      font-size: 20px;
-      font-weight: 700;
-      color: #000;
+      font-family: 'Playfair Display', serif;
+      font-size: 22px;
+      font-weight: 600;
+      color: var(--white);
       margin-bottom: 10px;
     }
+    
     .cta-text {
-      color: #333;
-      margin-bottom: 15px;
+      color: rgba(255,255,255,0.9);
+      margin-bottom: 20px;
+      font-size: 14px;
     }
+    
+    .cta-buttons {
+      display: flex;
+      justify-content: center;
+      gap: 12px;
+      flex-wrap: wrap;
+    }
+    
     .cta-button {
-      display: inline-block;
-      background: #000;
-      color: #A8925A;
-      padding: 12px 30px;
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      background: var(--black);
+      color: var(--gold);
+      padding: 12px 24px;
       border-radius: 8px;
       text-decoration: none;
       font-weight: 600;
+      font-size: 14px;
+    }
+    
+    .cta-button-white {
+      background: var(--white);
+      color: var(--black);
     }
 
     @media print {
-      body { background: #fff; color: #000; }
+      body { background: var(--white); }
       .page { max-width: 100%; padding: 20px; }
-      .section { border-color: #ddd; }
       .cta-box { display: none; }
+      .footer { page-break-inside: avoid; }
+    }
+    
+    @media (max-width: 600px) {
+      .page { padding: 20px; }
+      .metrics-grid { grid-template-columns: 1fr; }
+      .details-grid { grid-template-columns: 1fr; }
+      .contact-grid { flex-direction: column; gap: 12px; }
+      .images-grid { grid-template-columns: 1fr; }
+      .image-item:first-child { grid-column: span 1; }
     }
   </style>
 </head>
@@ -356,19 +613,43 @@ serve(async (req) => {
   <div class="page">
     <!-- Header -->
     <div class="header">
-      <div class="logo">
-        <span class="logo-gold">J</span><span class="logo-divider">|</span><span class="logo-gold">J</span>
-        GLOBAL CAPITAL
+      <div class="header-left">
+        <div class="logo">
+          <span class="logo-jj">J</span>
+          <span class="logo-divider">|</span>
+          <span class="logo-jj">J</span>
+          <span style="margin-left: 10px;" class="logo-text">GLOBAL CAPITAL</span>
+        </div>
+        <div class="tagline">Premium Property Investment Advisory</div>
       </div>
-      <div class="tagline">PREMIUM PROPERTY INVESTMENT ADVISORY</div>
-      <div class="report-date">Exclusive Property Report • Generated ${dateStr}</div>
+      <div class="header-right">
+        <div class="report-badge">Exclusive Report</div>
+        <div class="report-date">Generated ${dateStr}</div>
+      </div>
     </div>
+
+    ${project.images && project.images.length > 0 ? `
+    <!-- Property Images -->
+    <div class="images-grid" style="margin-bottom: 32px;">
+      ${project.images.slice(0, 5).map((img, idx) => `
+        <div class="image-item">
+          <img src="${escapeHtml(img.image_url)}" alt="${escapeHtml(img.alt_text || project.name)}" />
+        </div>
+      `).join('')}
+    </div>
+    ` : ''}
 
     <!-- Hero -->
     <div class="hero">
       <div class="developer-badge">${escapeHtml(project.developer) || 'Premium Developer'}</div>
       <h1 class="property-name">${escapeHtml(project.name)}</h1>
-      <p class="location-info">📍 ${escapeHtml(project.location) || 'Dubai'}${project.community ? `, ${escapeHtml(project.community)}` : ''}${project.emirate ? ` • ${escapeHtml(project.emirate)}` : ''}</p>
+      <p class="location-info">
+        <svg class="location-icon" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0118 0z"></path>
+          <circle cx="12" cy="10" r="3"></circle>
+        </svg>
+        ${escapeHtml(project.location) || 'Dubai'}${project.community ? `, ${escapeHtml(project.community)}` : ''}${project.emirate ? ` • ${escapeHtml(project.emirate)}` : ''}
+      </p>
     </div>
 
     <!-- Key Metrics -->
@@ -393,47 +674,63 @@ serve(async (req) => {
     <!-- Property Details -->
     <div class="section">
       <h2 class="section-title">Property Details</h2>
-      <table class="details-table">
-        <tr>
-          <td>Developer</td>
-          <td>${escapeHtml(project.developer) || 'N/A'}</td>
-        </tr>
-        <tr>
-          <td>Location</td>
-          <td>${escapeHtml(project.location) || 'N/A'}${project.community ? `, ${escapeHtml(project.community)}` : ''}</td>
-        </tr>
-        <tr>
-          <td>Emirate</td>
-          <td>${escapeHtml(project.emirate) || 'Dubai'}</td>
-        </tr>
-        <tr>
-          <td>Price Range</td>
-          <td>${formatPrice(project.priceFrom)}${project.priceTo ? ` - ${formatPrice(project.priceTo)}` : ''}</td>
-        </tr>
-        <tr>
-          <td>Unit Sizes</td>
-          <td>${project.sizeMin?.toLocaleString() || 'N/A'} - ${project.sizeMax?.toLocaleString() || 'N/A'} sqft</td>
-        </tr>
-        <tr>
-          <td>Bedroom Options</td>
-          <td>${project.bedroomsMin || 0} - ${project.bedroomsMax || 0} Bedrooms</td>
-        </tr>
-        <tr>
-          <td>Handover Date</td>
-          <td>${escapeHtml(project.handover) || 'Contact for details'}</td>
-        </tr>
-        <tr>
-          <td>Furnished Status</td>
-          <td>${escapeHtml(project.furnishedStatus) || 'Contact for details'}</td>
-        </tr>
-        ${project.floors ? `<tr><td>Total Floors</td><td>${project.floors} Floors</td></tr>` : ''}
-        ${project.serviceCharge ? `<tr><td>Service Charge</td><td>${escapeHtml(project.serviceCharge)}</td></tr>` : ''}
-      </table>
+      <div class="details-grid">
+        <div class="detail-item">
+          <span class="detail-label">Developer</span>
+          <span class="detail-value">${escapeHtml(project.developer) || 'N/A'}</span>
+        </div>
+        <div class="detail-item">
+          <span class="detail-label">Location</span>
+          <span class="detail-value">${escapeHtml(project.location) || 'N/A'}${project.community ? `, ${escapeHtml(project.community)}` : ''}</span>
+        </div>
+        <div class="detail-item">
+          <span class="detail-label">Emirate</span>
+          <span class="detail-value">${escapeHtml(project.emirate) || 'Dubai'}</span>
+        </div>
+        <div class="detail-item">
+          <span class="detail-label">Price Range</span>
+          <span class="detail-value">${formatPrice(project.priceFrom)}${project.priceTo ? ` - ${formatPrice(project.priceTo)}` : ''}</span>
+        </div>
+        <div class="detail-item">
+          <span class="detail-label">Unit Sizes</span>
+          <span class="detail-value">${project.sizeMin?.toLocaleString() || 'N/A'} - ${project.sizeMax?.toLocaleString() || 'N/A'} sqft</span>
+        </div>
+        <div class="detail-item">
+          <span class="detail-label">Bedrooms</span>
+          <span class="detail-value">${project.bedroomsMin || 0} - ${project.bedroomsMax || 0} Bedrooms</span>
+        </div>
+        <div class="detail-item">
+          <span class="detail-label">Handover Date</span>
+          <span class="detail-value">${escapeHtml(project.handover) || 'Contact for details'}</span>
+        </div>
+        <div class="detail-item">
+          <span class="detail-label">Furnished Status</span>
+          <span class="detail-value">${escapeHtml(project.furnishedStatus) || 'Contact for details'}</span>
+        </div>
+        ${project.floors ? `
+        <div class="detail-item">
+          <span class="detail-label">Total Floors</span>
+          <span class="detail-value">${project.floors} Floors</span>
+        </div>
+        ` : ''}
+        ${project.serviceCharge ? `
+        <div class="detail-item">
+          <span class="detail-label">Service Charge</span>
+          <span class="detail-value">${escapeHtml(project.serviceCharge)}</span>
+        </div>
+        ` : ''}
+      </div>
 
       ${project.paymentPlan ? `
       <div class="payment-box">
-        <div class="payment-title">💰 Payment Plan</div>
-        <div>${escapeHtml(project.paymentPlan)}</div>
+        <div class="payment-title">
+          <svg class="payment-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <rect x="1" y="4" width="22" height="16" rx="2" ry="2"></rect>
+            <line x1="1" y1="10" x2="23" y2="10"></line>
+          </svg>
+          Payment Plan
+        </div>
+        <div style="color: var(--gray-700);">${escapeHtml(project.paymentPlan)}</div>
       </div>
       ` : ''}
     </div>
@@ -471,7 +768,7 @@ serve(async (req) => {
     <div class="section">
       <h2 class="section-title">Views</h2>
       <div class="tags">
-        ${project.views.map(v => `<span class="tag">🌅 ${escapeHtml(v)}</span>`).join('')}
+        ${project.views.map(v => `<span class="tag tag-gold">${escapeHtml(v)}</span>`).join('')}
       </div>
     </div>
     ` : ''}
@@ -483,10 +780,10 @@ serve(async (req) => {
       <ul class="doc-list">
         ${project.documents.map(doc => `
         <li class="doc-item">
-          <div class="doc-icon">📄</div>
+          <div class="doc-icon">PDF</div>
           <div>
             <div class="doc-name">${escapeHtml(doc.file_name)}</div>
-            <div class="doc-type">${escapeHtml(doc.document_type)}</div>
+            <div class="doc-type">${escapeHtml(doc.document_type).replace(/_/g, ' ').replace(/\b\w/g, l => l.toUpperCase())}</div>
           </div>
           <a href="${escapeHtml(doc.file_url)}" class="doc-link" target="_blank">Download →</a>
         </li>
@@ -498,45 +795,77 @@ serve(async (req) => {
     <!-- CTA -->
     <div class="cta-box">
       <div class="cta-title">Interested in This Property?</div>
-      <p class="cta-text">Our investment advisors are ready to assist you with detailed analysis, site visits, and exclusive deals.</p>
-      <a href="https://jjglobalcapital.com/form/property-investment-inquiry-form/" class="cta-button">Schedule a Consultation</a>
+      <div class="cta-text">Our investment advisors are ready to assist you with detailed analysis, site visits, and exclusive deals.</div>
+      <div class="cta-buttons">
+        <a href="https://wa.me/97156591100?text=${encodeURIComponent(`Hi, I'm interested in ${project.name}. Please share more details.`)}" class="cta-button" target="_blank">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/></svg>
+          WhatsApp
+        </a>
+        <a href="tel:+97156591100" class="cta-button cta-button-white">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 16.92v3a2 2 0 01-2.18 2 19.79 19.79 0 01-8.63-3.07 19.5 19.5 0 01-6-6 19.79 19.79 0 01-3.07-8.67A2 2 0 014.11 2h3a2 2 0 012 1.72 12.84 12.84 0 00.7 2.81 2 2 0 01-.45 2.11L8.09 9.91a16 16 0 006 6l1.27-1.27a2 2 0 012.11-.45 12.84 12.84 0 002.81.7A2 2 0 0122 16.92z"></path></svg>
+          Call Now
+        </a>
+      </div>
     </div>
 
     <!-- Footer -->
     <div class="footer">
       <div class="footer-logo">
-        <span style="color: #A8925A;">J | J</span> GLOBAL CAPITAL
+        <span class="logo-jj" style="font-size: 18px;">J</span>
+        <span class="logo-divider" style="font-size: 18px;">|</span>
+        <span class="logo-jj" style="font-size: 18px;">J</span>
+        <span style="margin-left: 8px; font-weight: 600; letter-spacing: 2px; font-size: 16px;">GLOBAL CAPITAL</span>
       </div>
-      <div class="contact-info">
-        📧 <a href="mailto:invest@jjglobalcapital.com">invest@jjglobalcapital.com</a> • 
-        📞 <a href="tel:+971565911000">+971 56 591 1000</a>
+      
+      <div class="contact-grid">
+        <div class="contact-item">
+          <svg class="contact-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"></path>
+            <polyline points="22,6 12,13 2,6"></polyline>
+          </svg>
+          <a href="mailto:invest@JJGlobalCapital.com" class="contact-link">invest@JJGlobalCapital.com</a>
+        </div>
+        <div class="contact-item">
+          <svg class="contact-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <path d="M22 16.92v3a2 2 0 01-2.18 2 19.79 19.79 0 01-8.63-3.07 19.5 19.5 0 01-6-6 19.79 19.79 0 01-3.07-8.67A2 2 0 014.11 2h3a2 2 0 012 1.72 12.84 12.84 0 00.7 2.81 2 2 0 01-.45 2.11L8.09 9.91a16 16 0 006 6l1.27-1.27a2 2 0 012.11-.45 12.84 12.84 0 002.81.7A2 2 0 0122 16.92z"></path>
+          </svg>
+          <a href="tel:+97156591100" class="contact-link">+971 56 591 1000</a>
+        </div>
+        <div class="contact-item">
+          <svg class="contact-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <circle cx="12" cy="12" r="10"></circle>
+            <line x1="2" y1="12" x2="22" y2="12"></line>
+            <path d="M12 2a15.3 15.3 0 014 10 15.3 15.3 0 01-4 10 15.3 15.3 0 01-4-10 15.3 15.3 0 014-10z"></path>
+          </svg>
+          <a href="https://www.jjglobalcapital.com" class="contact-link" target="_blank">www.jjglobalcapital.com</a>
+        </div>
       </div>
-      <div class="contact-info">
-        🌐 <a href="https://jjglobalcapital.com">www.jjglobalcapital.com</a>
+      
+      <div class="footer-branding">
+        <p class="footer-branding-text">
+          Powered & Made by <strong>JJ Global Capital</strong> — Part of <strong>JJ Holding Group</strong>
+        </p>
       </div>
-      <p class="contact-info" style="margin-top: 15px;">
-        Powered & Made by JJ Global Capital — Part of <a href="https://jjholdinggroup.com">JJ Holding Group</a>
-      </p>
-      <p class="disclaimer">
-        This report is for informational purposes only. Prices, availability, and specifications are subject to change. 
-        Please contact JJ Global Capital for the most current information and investment advice.
-      </p>
+      
+      <div class="disclaimer">
+        This report is for informational purposes only. Prices, availability, and specifications are subject to change without notice. 
+        Please contact JJ Global Capital for the most current information and investment advice. 
+        This document does not constitute an offer or solicitation to buy or sell any property.
+      </div>
     </div>
   </div>
 </body>
 </html>`;
 
-    return new Response(JSON.stringify({ html: reportHTML }), {
-      headers: { ...corsHeaders, "Content-Type": "application/json" },
-    });
-  } catch (error) {
-    console.error("generate-property-report error:", error);
     return new Response(
-      JSON.stringify({ error: error instanceof Error ? error.message : "Unknown error" }),
-      {
-        status: 500,
-        headers: { ...getCorsHeaders(req), "Content-Type": "application/json" },
-      }
+      JSON.stringify({ html: reportHTML }),
+      { headers: { ...corsHeaders, "Content-Type": "application/json" } }
+    );
+  } catch (error) {
+    console.error("Error generating report:", error);
+    return new Response(
+      JSON.stringify({ error: "Failed to generate report" }),
+      { status: 500, headers: { ...corsHeaders, "Content-Type": "application/json" } }
     );
   }
 });
