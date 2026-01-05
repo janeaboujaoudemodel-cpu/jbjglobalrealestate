@@ -23,7 +23,7 @@ const ComingSoon = () => {
           transition={{ delay: 0.2, duration: 0.6 }}
           className="mb-12"
         >
-          <JJLogo className="h-20 md:h-28 mx-auto" />
+          <JJLogo size="lg" className="mx-auto" />
         </motion.div>
 
         {/* Coming Soon Text */}
