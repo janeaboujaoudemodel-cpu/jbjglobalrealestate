@@ -1,5 +1,5 @@
-// JJ Logo Component - Text version for both header and footer
-// Reduced spacing between GLOBAL and CAPITAL
+// JJ Logo Component - Precise alignment for premium branding
+// GLOBAL ends under first J, CAPITAL starts under second J, divider centered in gap
 
 interface JJLogoProps {
   size?: 'sm' | 'md' | 'lg' | 'xl' | 'footer';
@@ -11,57 +11,51 @@ const sizeConfig = {
   sm: {
     j: 'text-lg md:text-xl',
     dividerHeight: 'h-3 md:h-4',
-    text: 'text-[9px] md:text-[11px]',
-    gap: 'mx-1',
-    textGap: 'mt-1',
-    textSpacing: 'tracking-[0.2em]',
-    wordGap: 'mx-1.5',
+    text: 'text-[8px] md:text-[9px]',
+    gap: '3px',
+    textGap: '2px',
+    wordGap: '6px',
   },
   md: {
     j: 'text-xl md:text-2xl',
     dividerHeight: 'h-4 md:h-5',
-    text: 'text-[11px] md:text-sm',
-    gap: 'mx-1.5',
-    textGap: 'mt-1.5',
-    textSpacing: 'tracking-[0.2em]',
-    wordGap: 'mx-2',
+    text: 'text-[9px] md:text-[10px]',
+    gap: '4px',
+    textGap: '4px',
+    wordGap: '8px',
   },
   lg: {
     j: 'text-4xl md:text-5xl lg:text-6xl',
     dividerHeight: 'h-8 md:h-10 lg:h-12',
-    text: 'text-base md:text-lg lg:text-xl',
-    gap: 'mx-1.5 md:mx-2',
-    textGap: 'mt-2',
-    textSpacing: 'tracking-[0.25em]',
-    wordGap: 'mx-3',
+    text: 'text-sm md:text-base lg:text-lg',
+    gap: '6px',
+    textGap: '6px',
+    wordGap: '10px',
   },
   xl: {
     j: 'text-5xl md:text-6xl lg:text-7xl',
     dividerHeight: 'h-10 md:h-12 lg:h-14',
-    text: 'text-lg md:text-xl lg:text-2xl',
-    gap: 'mx-2 md:mx-2.5',
-    textGap: 'mt-3',
-    textSpacing: 'tracking-[0.25em]',
-    wordGap: 'mx-3',
+    text: 'text-base md:text-lg lg:text-xl',
+    gap: '8px',
+    textGap: '8px',
+    wordGap: '12px',
   },
   footer: {
     j: 'text-6xl md:text-7xl lg:text-8xl',
     dividerHeight: 'h-12 md:h-16 lg:h-20',
-    text: 'text-2xl md:text-3xl lg:text-4xl',
-    gap: 'mx-3 md:mx-4',
-    textGap: 'mt-4 md:mt-5',
-    textSpacing: 'tracking-[0.25em] md:tracking-[0.3em]',
-    // Symmetric spacing: GLOBAL and CAPITAL equidistant from center divider position
-    wordGap: 'mx-4 md:mx-5',
+    text: 'text-xl md:text-2xl lg:text-3xl',
+    gap: '12px',
+    textGap: '12px',
+    wordGap: '16px',
   },
 };
 
-// Main logo component - TEXT version (no image)
+// Main logo component with precise alignment
 export const JJLogo = ({ size = 'md', showText = true, className = '' }: JJLogoProps) => {
   const config = sizeConfig[size];
   const isFooter = size === 'footer';
   
-  // All versions now use black divider and gold J's (footer uses all black)
+  // Footer uses all black, others use gold J's
   const jColor = isFooter ? 'text-black' : 'text-gold';
   const dividerColor = 'bg-black';
 
@@ -77,7 +71,10 @@ export const JJLogo = ({ size = 'md', showText = true, className = '' }: JJLogoP
         </span>
         
         {/* Centered Divider */}
-        <div className={`${config.gap} flex items-center justify-center`}>
+        <div 
+          className="flex items-center justify-center"
+          style={{ marginLeft: config.gap, marginRight: config.gap }}
+        >
           <div className={`w-[2px] ${dividerColor} ${config.dividerHeight}`} />
         </div>
         
@@ -89,17 +86,21 @@ export const JJLogo = ({ size = 'md', showText = true, className = '' }: JJLogoP
         </span>
       </div>
 
-      {/* GLOBAL CAPITAL - Symmetric centered with divider in middle */}
+      {/* GLOBAL CAPITAL - L ends under first J, C starts under second J */}
       {showText && (
         <div 
-          className={`${config.textGap} flex items-center justify-center text-black`}
-          style={{ fontFamily: "Poppins, sans-serif" }}
+          className="flex items-center justify-center text-black"
+          style={{ 
+            fontFamily: "Poppins, sans-serif",
+            marginTop: config.textGap,
+            letterSpacing: '0.08em'
+          }}
         >
-          <span className={`font-semibold ${config.text} ${config.textSpacing}`}>
+          <span className={`font-semibold ${config.text}`}>
             GLOBAL
           </span>
-          <span className={config.wordGap} />
-          <span className={`font-semibold ${config.text} ${config.textSpacing}`}>
+          <span style={{ width: config.wordGap }} />
+          <span className={`font-semibold ${config.text}`}>
             CAPITAL
           </span>
         </div>
@@ -108,7 +109,7 @@ export const JJLogo = ({ size = 'md', showText = true, className = '' }: JJLogoP
   );
 };
 
-// Header-specific logo - TEXT version with tighter GLOBAL CAPITAL spacing
+// Header-specific logo - Horizontal layout with tight spacing
 export const JJLogoHeader = ({ className = '' }: { className?: string }) => (
   <div 
     className={`flex items-center ${className}`}
@@ -121,13 +122,13 @@ export const JJLogoHeader = ({ className = '' }: { className?: string }) => (
     </div>
     <span className="text-gold font-extralight text-2xl md:text-3xl leading-none drop-shadow-[0_0_8px_rgba(168,146,90,0.3)]">J</span>
     
-    {/* GLOBAL CAPITAL - Tight spacing, reduced gap */}
+    {/* GLOBAL CAPITAL - Horizontal, tight spacing */}
     <div className="ml-2 md:ml-3 flex items-center text-black">
-      <span className="font-semibold text-sm md:text-base lg:text-lg tracking-[0.12em]">
+      <span className="font-semibold text-sm md:text-base lg:text-lg tracking-[0.08em]">
         GLOBAL
       </span>
-      <span className="mx-0.5 md:mx-1" />
-      <span className="font-semibold text-sm md:text-base lg:text-lg tracking-[0.12em]">
+      <span className="mx-1" />
+      <span className="font-semibold text-sm md:text-base lg:text-lg tracking-[0.08em]">
         CAPITAL
       </span>
     </div>
