@@ -13,6 +13,7 @@ import {
   BadgeCheck, AlertTriangle, Zap, Award, Phone, Mail, BarChart3
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
+import LegalDisclaimer from "@/components/LegalDisclaimer";
 import { Input } from "@/components/ui/input";
 import { toast } from "sonner";
 import { PaymentModal } from "@/components/PaymentModal";
@@ -925,10 +926,14 @@ const Compare = () => {
             )}
           </div>
 
+          {/* AI Tool Disclaimer */}
+          <LegalDisclaimer variant="ai-tools" className="mt-6" />
+
           {/* Footer Branding */}
           <div className="text-center text-zinc-600 text-sm py-4">
             Powered & Made by <span className="text-purple-400">JJ Global Capital</span> — Part of JJ Holding Group
           </div>
+          <LegalDisclaimer variant="compact" className="pb-4" />
         </div>
       </div>
 

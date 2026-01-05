@@ -29,6 +29,7 @@ import {
   Info
 } from "lucide-react";
 import { toast } from "sonner";
+import LegalDisclaimer from "@/components/LegalDisclaimer";
 
 const fadeInUp = {
   hidden: { opacity: 0, y: 20 },
@@ -448,6 +449,9 @@ const RentalIndex = () => {
                 </p>
               </div>
             </motion.div>
+
+            {/* Legal Disclaimer */}
+            <LegalDisclaimer variant="ai-tools" className="mt-8" />
           </div>
         </div>
       </section>
