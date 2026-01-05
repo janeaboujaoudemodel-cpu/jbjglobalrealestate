@@ -1,6 +1,7 @@
 import { Link } from "react-router-dom";
 import type { Project } from "@/hooks/useProjects";
 import FavoriteButton from "./FavoriteButton";
+import ShortlistBadgeButton from "./ShortlistBadgeButton";
 import { FileText, Download, Phone, MessageCircle } from "lucide-react";
 import { Button } from "./ui/button";
 import { CONTACT_INFO, getWhatsAppUrl, getCallUrl } from "@/constants/stats";
@@ -8,6 +9,7 @@ import { CONTACT_INFO, getWhatsAppUrl, getCallUrl } from "@/constants/stats";
 interface ProjectCardProps {
   project: Project;
   showFavorite?: boolean;
+  showBadgeButton?: boolean;
   currency?: 'AED' | 'USD' | 'EUR' | 'GBP' | 'INR';
   sizeUnit?: 'sqft' | 'sqm';
 }
@@ -47,7 +49,7 @@ const convertSize = (sqft: number, unit: 'sqft' | 'sqm'): number => {
   return unit === 'sqm' ? Math.round(sqft * 0.0929) : sqft;
 };
 
-const ProjectCard = ({ project, showFavorite = true, currency = 'AED', sizeUnit = 'sqft' }: ProjectCardProps) => {
+const ProjectCard = ({ project, showFavorite = true, showBadgeButton = true, currency = 'AED', sizeUnit = 'sqft' }: ProjectCardProps) => {
   const handleDownloadBrochure = (e: React.MouseEvent) => {
     e.preventDefault();
     e.stopPropagation();
@@ -90,6 +92,13 @@ const ProjectCard = ({ project, showFavorite = true, currency = 'AED', sizeUnit 
       {showFavorite && (
         <div className="absolute top-3 right-3 z-10 opacity-0 group-hover:opacity-100 transition-opacity">
           <FavoriteButton projectId={project.id} size="sm" />
+        </div>
+      )}
+
+      {/* Badge Button - Always visible when enabled */}
+      {showBadgeButton && (
+        <div className="absolute top-3 left-3 z-10">
+          <ShortlistBadgeButton projectId={project.id} size="sm" showBadgeIndicator={true} />
         </div>
       )}
 
