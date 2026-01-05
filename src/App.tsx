@@ -39,6 +39,7 @@ import PropertyEvaluator from "./pages/PropertyEvaluator";
 import ToolsGuide from "./pages/ToolsGuide";
 import PropertyMeasurement from "./pages/PropertyMeasurement";
 import InteriorDesignAI from "./pages/InteriorDesignAI";
+import CompanyProfile from "./pages/CompanyProfile";
 import NotFound from "./pages/NotFound";
 import WelcomeModal from "./components/WelcomeModal";
 import GlobalHeader from "./components/GlobalHeader";
@@ -118,6 +119,7 @@ const App = () => (
                 <Route path="/tools-guide" element={<ToolsGuide />} />
                 <Route path="/property-measurement" element={<PropertyMeasurement />} />
                 <Route path="/interior-design-ai" element={<InteriorDesignAI />} />
+                <Route path="/company-profile" element={<CompanyProfile />} />
                 {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
                 <Route path="*" element={<NotFound />} />
               </Routes>
