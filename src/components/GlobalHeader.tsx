@@ -67,10 +67,10 @@ const GlobalHeader = () => {
 
   return (
     <header className="fixed top-0 left-0 right-0 z-[9999] bg-gradient-to-b from-black via-black/98 to-black/95 backdrop-blur-xl border-b border-gold/10 shadow-lg shadow-black/30">
-      <div className="container mx-auto px-4">
+      <div className="container mx-auto px-3 sm:px-4">
         <div className="flex items-center justify-between h-16 lg:h-18">
           {/* Logo - Premium with separation from menu, clickable to home */}
-          <Link to="/" className="flex items-center pr-8 lg:pr-12 hover:opacity-90 transition-opacity">
+          <Link to="/" className="flex items-center pr-3 sm:pr-6 lg:pr-12 hover:opacity-90 transition-opacity">
             <JJLogoHeader />
           </Link>
 
@@ -96,20 +96,24 @@ const GlobalHeader = () => {
           </nav>
 
           {/* Right Side Actions - Gold icons */}
-          <div className="flex items-center gap-2">
+          <div className="flex items-center gap-1 sm:gap-2">
             {/* Search Icon - Opens Global Search Modal */}
-            <Button 
-              variant="ghost" 
-              size="sm" 
-              className="text-gold hover:text-gold/80 hover:bg-gold/10"
+            <Button
+              variant="ghost"
+              size="sm"
+              className="text-gold hover:text-gold/80 hover:bg-gold/10 shrink-0"
               onClick={() => setSearchOpen(true)}
             >
               <Search className="w-5 h-5" />
             </Button>
 
             {/* Favorites - Gold icon */}
-            <Link to="/favorites">
-              <Button variant="ghost" size="sm" className="text-gold hover:text-gold/80 hover:bg-gold/10 relative">
+            <Link to="/favorites" className="shrink-0">
+              <Button
+                variant="ghost"
+                size="sm"
+                className="text-gold hover:text-gold/80 hover:bg-gold/10 relative"
+              >
                 <Heart className="w-5 h-5" />
                 {totalCount > 0 && (
                   <span className="absolute -top-1 -right-1 w-4 h-4 bg-gold text-black rounded-full text-[10px] font-semibold flex items-center justify-center">
@@ -118,6 +122,137 @@ const GlobalHeader = () => {
                 )}
               </Button>
             </Link>
+
+            {/* Mobile Menu Trigger (always visible under md) */}
+            <Sheet open={mobileMenuOpen} onOpenChange={setMobileMenuOpen}>
+              <SheetTrigger asChild className="md:hidden">
+                <Button
+                  variant="ghost"
+                  size="sm"
+                  className="text-gold hover:text-gold/80 hover:bg-gold/10 shrink-0"
+                  aria-label="Open menu"
+                >
+                  <Menu className="w-5 h-5" />
+                </Button>
+              </SheetTrigger>
+              <SheetContent
+                side="right"
+                className="bg-black/95 backdrop-blur-xl border-zinc-800/50 w-[300px] p-0 flex flex-col h-full"
+              >
+                {/* Menu Header with glassmorphism */}
+                <div className="relative h-28 bg-gradient-to-b from-zinc-900/80 to-black/90 border-b border-gold/20 flex items-end p-5 shrink-0 backdrop-blur-sm">
+                  <JJLogoHeader />
+                </div>
+
+                {/* Scrollable Navigation */}
+                <ScrollArea className="flex-1">
+                  <nav className="flex flex-col p-4">
+                    {/* Main Navigation */}
+                    {mainNavLinks.map((link) => (
+                      <Link
+                        key={link.href}
+                        to={link.href}
+                        onClick={() => setMobileMenuOpen(false)}
+                        className={`flex items-center gap-3 px-4 py-3 border-l-2 transition-all ${
+                          isActive(link.href)
+                            ? "text-gold border-gold bg-gold/10"
+                            : "text-zinc-300 border-transparent hover:text-white hover:bg-zinc-900/80 hover:border-gold/50"
+                        }`}
+                      >
+                        {link.label}
+                      </Link>
+                    ))}
+
+                    <div className="h-px bg-zinc-800 my-4" />
+
+                    {/* AI Home Finder CTA */}
+                    <Link
+                      to="/quiz"
+                      onClick={() => setMobileMenuOpen(false)}
+                      className="flex items-center gap-3 px-4 py-4 bg-gradient-to-r from-gold/10 to-gold/5 border border-gold/30 rounded-lg mb-4 text-white hover:from-gold/15 transition-all backdrop-blur-sm"
+                    >
+                      <div className="w-8 h-8 bg-gradient-to-br from-gold to-gold-light rounded-lg flex items-center justify-center">
+                        <Sparkles className="w-4 h-4 text-black" />
+                      </div>
+                      <div>
+                        <p className="font-semibold text-sm">AI Home Finder</p>
+                        <p className="text-gold/80 text-xs">Complimentary</p>
+                      </div>
+                    </Link>
+
+                    {/* Property Shortcuts */}
+                    <p className="px-4 py-2 text-xs text-gold/60 uppercase tracking-wider">Quick Access</p>
+                    {propertyShortcuts.filter((s) => s.href !== "/quiz").map((shortcut) => (
+                      <Link
+                        key={shortcut.href}
+                        to={shortcut.href}
+                        onClick={() => setMobileMenuOpen(false)}
+                        className="flex items-center gap-3 px-4 py-2.5 text-sm text-zinc-400 hover:text-white hover:bg-zinc-900/80 transition-colors"
+                      >
+                        <shortcut.icon className="w-4 h-4 text-gold/70" />
+                        {shortcut.label}
+                      </Link>
+                    ))}
+
+                    <div className="h-px bg-zinc-800 my-4" />
+
+                    {/* Favorites & Shortlist */}
+                    <Link
+                      to="/favorites"
+                      onClick={() => setMobileMenuOpen(false)}
+                      className="flex items-center gap-3 px-4 py-3 text-zinc-300 hover:text-white hover:bg-zinc-900/80 transition-colors"
+                    >
+                      <Heart className="w-5 h-5" />
+                      <span>Favorites</span>
+                      <span className="text-zinc-600">|</span>
+                      <span>Shortlist</span>
+                      {totalCount > 0 && (
+                        <span className="ml-auto bg-gold text-black text-xs px-2 py-0.5 rounded-full font-medium">
+                          {totalCount}
+                        </span>
+                      )}
+                    </Link>
+
+                    <div className="h-px bg-zinc-800 my-4" />
+
+                    {user ? (
+                      <>
+                        <div className="px-4 py-2 text-zinc-500 text-sm">Signed in as {user.email?.split("@")[0]}</div>
+                        {isAdmin && (
+                          <Link
+                            to="/admin"
+                            onClick={() => setMobileMenuOpen(false)}
+                            className="flex items-center gap-3 px-4 py-3 text-zinc-300 hover:text-white hover:bg-zinc-900 transition-colors"
+                          >
+                            <Settings className="w-5 h-5" />
+                            Admin Panel
+                          </Link>
+                        )}
+                        <button
+                          onClick={() => {
+                            signOut();
+                            setMobileMenuOpen(false);
+                          }}
+                          className="flex items-center gap-3 px-4 py-3 text-zinc-300 hover:text-white hover:bg-zinc-900 transition-colors w-full text-left"
+                        >
+                          <LogOut className="w-5 h-5" />
+                          Sign Out
+                        </button>
+                      </>
+                    ) : (
+                      <Link
+                        to="/auth"
+                        onClick={() => setMobileMenuOpen(false)}
+                        className="flex items-center gap-3 px-4 py-3 text-gold hover:text-gold/80 hover:bg-gold/10 transition-colors"
+                      >
+                        <User className="w-5 h-5" />
+                        Sign In / Create Account
+                      </Link>
+                    )}
+                  </nav>
+                </ScrollArea>
+              </SheetContent>
+            </Sheet>
 
             {/* Language Switcher */}
             <LanguageSwitcher />
@@ -162,134 +297,8 @@ const GlobalHeader = () => {
                 </Link>
               )}
             </div>
-
-            {/* Mobile Menu Trigger */}
-            <Sheet open={mobileMenuOpen} onOpenChange={setMobileMenuOpen}>
-              <SheetTrigger asChild className="md:hidden">
-                <Button variant="ghost" size="sm" className="text-zinc-400 hover:text-white ml-1">
-                  <Menu className="w-5 h-5" />
-                </Button>
-              </SheetTrigger>
-              <SheetContent side="right" className="bg-black/95 backdrop-blur-xl border-zinc-800/50 w-[300px] p-0 flex flex-col h-full">
-                {/* Menu Header with glassmorphism */}
-                <div className="relative h-28 bg-gradient-to-b from-zinc-900/80 to-black/90 border-b border-gold/20 flex items-end p-5 shrink-0 backdrop-blur-sm">
-                  <JJLogoHeader />
-                </div>
-                
-                {/* Scrollable Navigation */}
-                <ScrollArea className="flex-1">
-                  <nav className="flex flex-col p-4">
-                    {/* Main Navigation */}
-                    {mainNavLinks.map((link) => (
-                      <Link
-                        key={link.href}
-                        to={link.href}
-                        onClick={() => setMobileMenuOpen(false)}
-                        className={`flex items-center gap-3 px-4 py-3 border-l-2 transition-all ${
-                          isActive(link.href)
-                            ? "text-gold border-gold bg-gold/10"
-                            : "text-zinc-300 border-transparent hover:text-white hover:bg-zinc-900/80 hover:border-gold/50"
-                        }`}
-                      >
-                        {link.label}
-                      </Link>
-                    ))}
-
-                    <div className="h-px bg-zinc-800 my-4" />
-
-                    {/* AI Home Finder CTA */}
-                    <Link
-                      to="/quiz"
-                      onClick={() => setMobileMenuOpen(false)}
-                      className="flex items-center gap-3 px-4 py-4 bg-gradient-to-r from-gold/10 to-gold/5 border border-gold/30 rounded-lg mb-4 text-white hover:from-gold/15 transition-all backdrop-blur-sm"
-                    >
-                      <div className="w-8 h-8 bg-gradient-to-br from-gold to-gold-light rounded-lg flex items-center justify-center">
-                        <Sparkles className="w-4 h-4 text-black" />
-                      </div>
-                      <div>
-                        <p className="font-semibold text-sm">AI Home Finder</p>
-                        <p className="text-gold/80 text-xs">Complimentary</p>
-                      </div>
-                    </Link>
-
-                    {/* Property Shortcuts */}
-                    <p className="px-4 py-2 text-xs text-gold/60 uppercase tracking-wider">Quick Access</p>
-                    {propertyShortcuts.filter(s => s.href !== '/quiz').map((shortcut) => (
-                      <Link
-                        key={shortcut.href}
-                        to={shortcut.href}
-                        onClick={() => setMobileMenuOpen(false)}
-                        className="flex items-center gap-3 px-4 py-2.5 text-sm text-zinc-400 hover:text-white hover:bg-zinc-900/80 transition-colors"
-                      >
-                        <shortcut.icon className="w-4 h-4 text-gold/70" />
-                        {shortcut.label}
-                      </Link>
-                    ))}
-
-                    <div className="h-px bg-zinc-800 my-4" />
-
-                    {/* Favorites & Shortlist */}
-                    <Link
-                      to="/favorites"
-                      onClick={() => setMobileMenuOpen(false)}
-                      className="flex items-center gap-3 px-4 py-3 text-zinc-300 hover:text-white hover:bg-zinc-900/80 transition-colors"
-                    >
-                      <Heart className="w-5 h-5" />
-                      <span>Favorites</span>
-                      <span className="text-zinc-600">|</span>
-                      <span>Shortlist</span>
-                      {totalCount > 0 && (
-                        <span className="ml-auto bg-gold text-black text-xs px-2 py-0.5 rounded-full font-medium">
-                          {totalCount}
-                        </span>
-                      )}
-                    </Link>
-
-                    <div className="h-px bg-zinc-800 my-4" />
-
-                    {user ? (
-                      <>
-                        <div className="px-4 py-2 text-zinc-500 text-sm">
-                          Signed in as {user.email?.split("@")[0]}
-                        </div>
-                        {isAdmin && (
-                          <Link
-                            to="/admin"
-                            onClick={() => setMobileMenuOpen(false)}
-                            className="flex items-center gap-3 px-4 py-3 text-zinc-300 hover:text-white hover:bg-zinc-900 transition-colors"
-                          >
-                            <Settings className="w-5 h-5" />
-                            Admin Panel
-                          </Link>
-                        )}
-                        <button
-                          onClick={() => {
-                            signOut();
-                            setMobileMenuOpen(false);
-                          }}
-                          className="flex items-center gap-3 px-4 py-3 text-zinc-300 hover:text-white hover:bg-zinc-900 transition-colors w-full text-left"
-                        >
-                          <LogOut className="w-5 h-5" />
-                          Sign Out
-                        </button>
-                      </>
-                    ) : (
-                      <Link
-                        to="/auth"
-                        onClick={() => setMobileMenuOpen(false)}
-                        className="flex items-center gap-3 px-4 py-3 text-gold hover:text-gold/80 hover:bg-gold/10 transition-colors"
-                      >
-                        <User className="w-5 h-5" />
-                        Sign In / Create Account
-                      </Link>
-                    )}
-                  </nav>
-                </ScrollArea>
-              </SheetContent>
-            </Sheet>
           </div>
         </div>
-
       </div>
 
       {/* Global Search Modal */}
