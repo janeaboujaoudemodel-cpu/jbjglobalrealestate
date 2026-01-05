@@ -35,6 +35,7 @@ import { supabase } from "@/integrations/supabase/client";
 import { toast } from "sonner";
 import { useLeadCapture } from "@/hooks/useLeadCapture";
 import { useNavigate } from "react-router-dom";
+import MarketReportCTAModal from "@/components/broker/MarketReportCTAModal";
 
 const MarketReport = () => {
   const countries = useMemo(() => getCountryList(), []);
@@ -44,6 +45,7 @@ const MarketReport = () => {
   const [showThankYou, setShowThankYou] = useState(false);
   const [bookHtml, setBookHtml] = useState<string | null>(null);
   const [showBookPreview, setShowBookPreview] = useState(false);
+  const [showCTAModal, setShowCTAModal] = useState(false);
   const bookFrameRef = useRef<HTMLIFrameElement>(null);
   const { isLeadCaptured, leadData, captureLead } = useLeadCapture();
   const navigate = useNavigate();
@@ -1655,8 +1657,15 @@ const MarketReport = () => {
         .catch(console.error);
 
       const opened = downloadBook(bookWindow);
-      if (opened) toast.success("Your book is ready!");
-      else toast.error("Couldn't open the book. Please try again.");
+      if (opened) {
+        toast.success("Your book is ready!");
+        // Show CTA modal after a short delay
+        setTimeout(() => {
+          setShowCTAModal(true);
+        }, 2000);
+      } else {
+        toast.error("Couldn't open the book. Please try again.");
+      }
     } catch (error) {
       console.error("Error during submission:", error);
       toast.error("Something went wrong. Please try again.");
@@ -1675,8 +1684,15 @@ const MarketReport = () => {
   const handleDirectDownload = () => {
     const bookWindow = window.open("", "_blank");
     const opened = downloadBook(bookWindow);
-    if (opened) toast.success("Your book is ready!");
-    else toast.error("Couldn't open the book. Please try again.");
+    if (opened) {
+      toast.success("Your book is ready!");
+      // Show CTA modal after a short delay
+      setTimeout(() => {
+        setShowCTAModal(true);
+      }, 2000);
+    } else {
+      toast.error("Couldn't open the book. Please try again.");
+    }
   };
 
   return (
@@ -2120,6 +2136,13 @@ const MarketReport = () => {
       </main>
 
       <Footer />
+
+      {/* CTA Modal after download */}
+      <MarketReportCTAModal
+        open={showCTAModal}
+        onOpenChange={setShowCTAModal}
+        userName={form.fullName || leadData?.fullName}
+      />
     </div>
   );
 };
