@@ -1,5 +1,5 @@
+import React, { useRef, useEffect, useState } from 'react';
 import { Briefcase, Clock, Home, Building2 } from 'lucide-react';
-import { useRef, useEffect, useState } from 'react';
 import { COMPANY_STATS } from '@/constants/stats';
 
 const stats = [
@@ -32,19 +32,20 @@ interface StatItemProps {
 
 const StatItem = ({ end, suffix, prefix, label, icon: Icon, isVisible }: StatItemProps) => {
   const [count, setCount] = useState(0);
-  const [hasAnimated, setHasAnimated] = useState(false);
+  const hasAnimatedRef = React.useRef(false);
 
   useEffect(() => {
-    if (!isVisible || hasAnimated) return;
+    if (!isVisible || hasAnimatedRef.current) return;
     
-    setHasAnimated(true);
-    let startTime: number;
+    hasAnimatedRef.current = true;
+    let startTime: number | null = null;
     let animationFrame: number;
     const duration = 2500;
 
     const animate = (currentTime: number) => {
-      if (!startTime) startTime = currentTime;
-      const progress = Math.min((currentTime - startTime) / duration, 1);
+      if (startTime === null) startTime = currentTime;
+      const elapsed = currentTime - startTime;
+      const progress = Math.min(elapsed / duration, 1);
       
       // Easing function for smooth deceleration
       const easeOutQuart = 1 - Math.pow(1 - progress, 4);
@@ -59,14 +60,18 @@ const StatItem = ({ end, suffix, prefix, label, icon: Icon, isVisible }: StatIte
       }
     };
 
-    animationFrame = requestAnimationFrame(animate);
+    // Small delay to ensure visibility trigger is reliable
+    const timeout = setTimeout(() => {
+      animationFrame = requestAnimationFrame(animate);
+    }, 100);
 
     return () => {
+      clearTimeout(timeout);
       if (animationFrame) {
         cancelAnimationFrame(animationFrame);
       }
     };
-  }, [isVisible, end, hasAnimated]);
+  }, [isVisible, end]);
 
   const formattedValue = `${prefix}${count.toLocaleString()}${suffix}`;
 
