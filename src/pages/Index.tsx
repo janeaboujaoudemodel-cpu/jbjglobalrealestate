@@ -9,7 +9,7 @@ import MortgageCalculator from "@/components/MortgageCalculator";
 import WelcomeModal from "@/components/WelcomeModal";
 import InquiryFormModal from "@/components/InquiryFormModal";
 import { useLanguage } from "@/contexts/LanguageContext";
-import { Sparkles, ArrowUpRight, ChevronDown, User, Scale, Layers, Calculator, FileText, Heart, BarChart3, Wrench, Ruler, Palette } from "lucide-react";
+import { Sparkles, ArrowUpRight, ChevronDown, User, Scale, Layers, Calculator, FileText, Heart, BarChart3, Wrench, Ruler, Palette, Calendar, Wallet, ShoppingBag } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import founderProfessional from "@/assets/founder-professional.jpeg";
 import luxuryVillaHero from "@/assets/luxury-villa-hero.jpeg";
@@ -297,6 +297,39 @@ const Index = () => {
                 >
                   <Wrench className="w-3 h-3 mr-1" />
                   Tools Guide
+                  <ArrowUpRight className="w-3 h-3 ml-1 group-hover:translate-x-0.5 group-hover:-translate-y-0.5 transition-transform" />
+                </Button>
+              </Link>
+            </div>
+            
+            {/* Row 5 - New AI Tools */}
+            <div className="flex flex-wrap justify-center gap-3">
+              <Link to="/ai-calendar">
+                <Button 
+                  className="bg-transparent backdrop-blur-md border-2 border-indigo-500/50 text-indigo-400 hover:bg-indigo-500/20 hover:border-indigo-400 hover:shadow-lg hover:shadow-indigo-500/20 font-semibold px-5 py-4 text-xs transition-all duration-300 hover:scale-105 group"
+                >
+                  <Calendar className="w-3 h-3 mr-1" />
+                  AI Calendar & Notes
+                  <ArrowUpRight className="w-3 h-3 ml-1 group-hover:translate-x-0.5 group-hover:-translate-y-0.5 transition-transform" />
+                </Button>
+              </Link>
+              
+              <Link to="/ai-financial-advisor">
+                <Button 
+                  className="bg-transparent backdrop-blur-md border-2 border-amber-500/50 text-amber-400 hover:bg-amber-500/20 hover:border-amber-400 hover:shadow-lg hover:shadow-amber-500/20 font-semibold px-5 py-4 text-xs transition-all duration-300 hover:scale-105 group"
+                >
+                  <Wallet className="w-3 h-3 mr-1" />
+                  AI Financial Advisor
+                  <ArrowUpRight className="w-3 h-3 ml-1 group-hover:translate-x-0.5 group-hover:-translate-y-0.5 transition-transform" />
+                </Button>
+              </Link>
+              
+              <Link to="/ai-personal-shopper">
+                <Button 
+                  className="bg-transparent backdrop-blur-md border-2 border-rose-500/50 text-rose-400 hover:bg-rose-500/20 hover:border-rose-400 hover:shadow-lg hover:shadow-rose-500/20 font-semibold px-5 py-4 text-xs transition-all duration-300 hover:scale-105 group"
+                >
+                  <ShoppingBag className="w-3 h-3 mr-1" />
+                  AI Personal Shopper
                   <ArrowUpRight className="w-3 h-3 ml-1 group-hover:translate-x-0.5 group-hover:-translate-y-0.5 transition-transform" />
                 </Button>
               </Link>

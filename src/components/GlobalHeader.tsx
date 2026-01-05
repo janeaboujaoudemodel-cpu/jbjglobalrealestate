@@ -49,7 +49,7 @@ const GlobalHeader = () => {
     { href: "/founder", label: t('nav.founder'), icon: User },
     { href: "/about", label: t('nav.about'), icon: Building2 },
     { href: "/properties", label: t('nav.properties'), icon: Building2 },
-    { href: "/#services", label: t('nav.services'), icon: Building2 },
+    { href: "/services", label: t('nav.services'), icon: Building2 },
     { href: "/awards", label: t('nav.awards'), icon: Building2 },
     { href: "/news", label: t('nav.news'), icon: Newspaper },
     { href: "/contact", label: t('nav.contact'), icon: Phone },

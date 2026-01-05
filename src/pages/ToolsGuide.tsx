@@ -12,7 +12,12 @@ import {
   Search,
   Heart,
   Building2,
-  TrendingUp
+  TrendingUp,
+  Calendar,
+  Wallet,
+  ShoppingBag,
+  Ruler,
+  Palette
 } from "lucide-react";
 
 const fadeInUp = {
@@ -140,6 +145,76 @@ const tools = [
     shadowColor: "shadow-pink-500/10",
     link: "/favorites",
     features: ["Save Properties", "Quick Compare", "Share List", "Export Report"]
+  },
+  {
+    id: "ai-calendar",
+    title: "AI Calendar & Notes",
+    description: "Manage your meetings, events and notes with AI-powered scheduling. Get email and phone reminders for important investor meetings.",
+    icon: Calendar,
+    color: "indigo",
+    borderColor: "border-indigo-500/30",
+    textColor: "text-indigo-400",
+    bgColor: "bg-indigo-500/10",
+    hoverBg: "hover:bg-indigo-500/20",
+    shadowColor: "shadow-indigo-500/10",
+    link: "/ai-calendar",
+    features: ["Event Scheduling", "Meeting Reminders", "AI Notes", "Project Saving"]
+  },
+  {
+    id: "ai-financial-advisor",
+    title: "AI Financial Advisor",
+    description: "Get personalized financial analysis and investment recommendations. Analyze your budget and find properties that match your financial profile.",
+    icon: Wallet,
+    color: "amber",
+    borderColor: "border-amber-500/30",
+    textColor: "text-amber-400",
+    bgColor: "bg-amber-500/10",
+    hoverBg: "hover:bg-amber-500/20",
+    shadowColor: "shadow-amber-500/10",
+    link: "/ai-financial-advisor",
+    features: ["Budget Analysis", "Investment Advice", "Property Matching", "ROI Projections"]
+  },
+  {
+    id: "ai-personal-shopper",
+    title: "AI Personal Shopper",
+    description: "Tell us your lifestyle, preferences and goals. Our AI personal shopper will curate the perfect property selections tailored just for you.",
+    icon: ShoppingBag,
+    color: "rose",
+    borderColor: "border-rose-500/30",
+    textColor: "text-rose-400",
+    bgColor: "bg-rose-500/10",
+    hoverBg: "hover:bg-rose-500/20",
+    shadowColor: "shadow-rose-500/10",
+    link: "/ai-personal-shopper",
+    features: ["Lifestyle Matching", "Curated Selections", "AI Recommendations", "Project Saving"]
+  },
+  {
+    id: "property-measurement",
+    title: "Property Measurement",
+    description: "Calculate property dimensions, areas and layouts. Get accurate measurements for floor plans and space planning.",
+    icon: Ruler,
+    color: "teal",
+    borderColor: "border-teal-500/30",
+    textColor: "text-teal-400",
+    bgColor: "bg-teal-500/10",
+    hoverBg: "hover:bg-teal-500/20",
+    shadowColor: "shadow-teal-500/10",
+    link: "/property-measurement",
+    features: ["Area Calculator", "Room Dimensions", "Floor Plans", "Export Options"]
+  },
+  {
+    id: "interior-design-ai",
+    title: "AI Interior Design Studio",
+    description: "Visualize your dream space with AI-generated interior designs. Upload a room photo and see it transformed in different styles.",
+    icon: Palette,
+    color: "fuchsia",
+    borderColor: "border-fuchsia-500/30",
+    textColor: "text-fuchsia-400",
+    bgColor: "bg-fuchsia-500/10",
+    hoverBg: "hover:bg-fuchsia-500/20",
+    shadowColor: "shadow-fuchsia-500/10",
+    link: "/interior-design-ai",
+    features: ["Style Visualization", "AI Rendering", "Before/After", "Style Options"]
   },
 ];
 
