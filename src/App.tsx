@@ -41,6 +41,7 @@ import InteriorDesignAI from "./pages/InteriorDesignAI";
 import NotFound from "./pages/NotFound";
 import WelcomeModal from "./components/WelcomeModal";
 import GlobalHeader from "./components/GlobalHeader";
+import RouteResume from "./components/RouteResume";
 import { ScrollToTopOnMount, ScrollToTopButton } from "./components/ScrollToTop";
 
 const queryClient = new QueryClient();
@@ -69,15 +70,16 @@ const App = () => (
   <QueryClientProvider client={queryClient}>
     <AuthProvider>
       <LanguageProvider>
-        <TooltipProvider>
-          <Toaster />
-          <Sonner />
-          <BrowserRouter>
-            <ScrollToTopOnMount />
-            <ScrollToTopButton />
-            <WelcomeModal />
-            <AppLayout>
-              <Routes>
+          <TooltipProvider>
+            <Toaster />
+            <Sonner />
+            <BrowserRouter>
+              <ScrollToTopOnMount />
+              <ScrollToTopButton />
+              <RouteResume />
+              <WelcomeModal />
+              <AppLayout>
+                <Routes>
                 <Route path="/" element={<Index />} />
                 <Route path="/properties" element={<Properties />} />
                 <Route path="/communities" element={<Communities />} />
