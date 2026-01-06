@@ -1,9 +1,25 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { MessageCircle, X } from "lucide-react";
 import { getWhatsAppUrl } from "@/constants/stats";
 
+const STORAGE_KEY = "jj_whatsapp_minimized";
+
 const FloatingWhatsApp = () => {
-  const [isMinimized, setIsMinimized] = useState(false);
+  const [isMinimized, setIsMinimized] = useState(() => {
+    try {
+      return localStorage.getItem(STORAGE_KEY) === "true";
+    } catch {
+      return false;
+    }
+  });
+
+  useEffect(() => {
+    try {
+      localStorage.setItem(STORAGE_KEY, String(isMinimized));
+    } catch {
+      // Silent fail if localStorage unavailable
+    }
+  }, [isMinimized]);
 
   if (isMinimized) {
     return (
