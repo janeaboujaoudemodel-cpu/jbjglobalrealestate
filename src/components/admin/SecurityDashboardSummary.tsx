@@ -1,5 +1,6 @@
 import { useEffect, useState, useMemo, useCallback } from "react";
 import { supabase } from "@/integrations/supabase/client";
+import { escapeHtml, escapeCsv } from "@/utils/htmlEscape";
 import { Card } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
@@ -273,7 +274,7 @@ export const SecurityDashboardSummary = () => {
     csvContent += "=== BLOCKED IPS ===\n";
     csvContent += "IP Address,Reason,Blocked At,Is Permanent,Block Count\n";
     blockedIPs.forEach(ip => {
-      csvContent += `"${ip.ip_address}","${ip.reason || 'N/A'}","${format(new Date(ip.blocked_at), "PPpp")}",${ip.is_permanent},${ip.block_count}\n`;
+      csvContent += `${escapeCsv(ip.ip_address)},${escapeCsv(ip.reason || 'N/A')},${escapeCsv(format(new Date(ip.blocked_at), "PPpp"))},${ip.is_permanent},${ip.block_count}\n`;
     });
     csvContent += "\n";
     
@@ -281,7 +282,7 @@ export const SecurityDashboardSummary = () => {
     csvContent += "=== RATE LIMIT ENTRIES ===\n";
     csvContent += "Function Name,Rate Key,Request Count,Window Start\n";
     rateLimits.forEach(entry => {
-      csvContent += `"${entry.function_name}","${entry.rate_key}",${entry.request_count},"${format(new Date(entry.window_start), "PPpp")}"\n`;
+      csvContent += `${escapeCsv(entry.function_name)},${escapeCsv(entry.rate_key)},${entry.request_count},${escapeCsv(format(new Date(entry.window_start), "PPpp"))}\n`;
     });
     csvContent += "\n";
     
@@ -289,7 +290,7 @@ export const SecurityDashboardSummary = () => {
     csvContent += "=== SECURITY EVENTS ===\n";
     csvContent += "Type,IP Address,Function,Reason,Severity,Timestamp\n";
     securityEvents.forEach(event => {
-      csvContent += `"${event.type}","${event.ip_address}","${event.function_name || 'N/A'}","${event.reason || 'N/A'}","${event.severity}","${format(new Date(event.timestamp), "PPpp")}"\n`;
+      csvContent += `${escapeCsv(event.type)},${escapeCsv(event.ip_address)},${escapeCsv(event.function_name || 'N/A')},${escapeCsv(event.reason || 'N/A')},${escapeCsv(event.severity)},${escapeCsv(format(new Date(event.timestamp), "PPpp"))}\n`;
     });
     
     // Create and download file
@@ -386,8 +387,8 @@ export const SecurityDashboardSummary = () => {
         ${blockedIPs.length === 0 ? '<tr><td colspan="5" style="text-align: center; color: #666;">No blocked IPs</td></tr>' : 
           blockedIPs.map(ip => `
             <tr>
-              <td><code>${ip.ip_address}</code></td>
-              <td>${ip.reason || 'N/A'}</td>
+              <td><code>${escapeHtml(ip.ip_address)}</code></td>
+              <td>${escapeHtml(ip.reason) || 'N/A'}</td>
               <td>${format(new Date(ip.blocked_at), "PPp")}</td>
               <td>${ip.is_permanent ? '✓ Yes' : 'No'}</td>
               <td>${ip.block_count}</td>
@@ -414,9 +415,9 @@ export const SecurityDashboardSummary = () => {
           securityEvents.map(event => `
             <tr>
               <td>${event.type === 'auto_blocked' ? '🤖 Auto Blocked' : event.type === 'ip_blocked' ? '🚫 Manual Block' : '⏱️ Rate Limited'}</td>
-              <td><code>${event.ip_address}</code></td>
-              <td>${event.function_name || 'N/A'}</td>
-              <td><span class="badge badge-${event.severity}">${event.severity.toUpperCase()}</span></td>
+              <td><code>${escapeHtml(event.ip_address)}</code></td>
+              <td>${escapeHtml(event.function_name) || 'N/A'}</td>
+              <td><span class="badge badge-${escapeHtml(event.severity)}">${escapeHtml(event.severity.toUpperCase())}</span></td>
               <td>${format(new Date(event.timestamp), "PPp")}</td>
             </tr>
           `).join('')}
