@@ -23,6 +23,7 @@ import {
   DialogTrigger,
 } from "@/components/ui/dialog";
 import { ScrollArea } from "@/components/ui/scroll-area";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { toast } from "sonner";
 import {
   LogOut,
@@ -38,8 +39,10 @@ import {
   File,
   X,
   Sparkles,
+  Shield,
 } from "lucide-react";
 import { SmartDocumentUploader } from "@/components/SmartDocumentUploader";
+import { RateLimitDashboard } from "@/components/admin/RateLimitDashboard";
 
 interface ProjectDocument {
   id: string;
@@ -330,154 +333,171 @@ const Admin = () => {
 
       {/* Main Content */}
       <main className="container mx-auto px-4 py-8">
-        {/* Stats */}
-        <div className="grid grid-cols-1 md:grid-cols-4 gap-4 mb-8">
-          <div className="bg-zinc-900 border border-zinc-800 rounded-xl p-6">
-            <div className="flex items-center gap-3 mb-2">
-              <Building2 className="w-5 h-5 text-gold" />
-              <span className="text-gray-400">Total Projects</span>
-            </div>
-            <p className="text-white text-3xl font-bold">{projects?.length || 0}</p>
-          </div>
-          <div className="bg-zinc-900 border border-zinc-800 rounded-xl p-6">
-            <div className="flex items-center gap-3 mb-2">
-              <Star className="w-5 h-5 text-gold" />
-              <span className="text-gray-400">Premium Properties</span>
-            </div>
-            <p className="text-white text-3xl font-bold">
-              {projects?.filter((p) => p.is_featured).length || 0}
-            </p>
-          </div>
-          <div className="bg-zinc-900 border border-zinc-800 rounded-xl p-6">
-            <div className="flex items-center gap-3 mb-2">
-              <Building2 className="w-5 h-5 text-gold" />
-              <span className="text-gray-400">Developers</span>
-            </div>
-            <p className="text-white text-3xl font-bold">{developers?.length || 0}</p>
-          </div>
-          <div className="bg-zinc-900 border border-zinc-800 rounded-xl p-6">
-            <div className="flex items-center gap-3 mb-2">
-              <FileText className="w-5 h-5 text-gold" />
-              <span className="text-gray-400">Communities</span>
-            </div>
-            <p className="text-white text-3xl font-bold">{communities?.length || 0}</p>
-          </div>
-        </div>
+        <Tabs defaultValue="properties" className="space-y-6">
+          <TabsList className="bg-zinc-900 border border-zinc-800">
+            <TabsTrigger value="properties" className="data-[state=active]:bg-gold data-[state=active]:text-black">
+              <Building2 className="w-4 h-4 mr-2" />
+              Properties
+            </TabsTrigger>
+            <TabsTrigger value="rate-limits" className="data-[state=active]:bg-gold data-[state=active]:text-black">
+              <Shield className="w-4 h-4 mr-2" />
+              Rate Limits
+            </TabsTrigger>
+          </TabsList>
 
-        {/* Smart Document Uploader */}
-        <div className="mb-8">
-          <SmartDocumentUploader 
-            projects={projects?.map(p => ({
-              id: p.id,
-              name: p.name,
-              slug: p.slug,
-              developer: p.developer ? {
-                id: p.developer.id,
-                name: p.developer.name,
-                slug: p.developer.slug
-              } : null
-            }))}
-            onUploadComplete={() => refetchProjects()}
-          />
-        </div>
-
-        {/* Projects Table */}
-        <div className="bg-zinc-900 border border-zinc-800 rounded-xl overflow-hidden">
-          <div className="p-6 border-b border-zinc-800 flex items-center justify-between">
-            <h2
-              className="text-white text-xl font-semibold"
-              style={{ fontFamily: "Poppins, sans-serif" }}
-            >
-              Property Listings
-            </h2>
-            <div className="flex items-center gap-4">
-              <div className="relative">
-                <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-500" />
-                <Input
-                  placeholder="Search projects..."
-                  value={searchQuery}
-                  onChange={(e) => setSearchQuery(e.target.value)}
-                  className="pl-9 w-64 bg-zinc-950 border-zinc-700 text-white placeholder:text-gray-500"
-                />
+          <TabsContent value="properties" className="space-y-8">
+            {/* Stats */}
+            <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
+              <div className="bg-zinc-900 border border-zinc-800 rounded-xl p-6">
+                <div className="flex items-center gap-3 mb-2">
+                  <Building2 className="w-5 h-5 text-gold" />
+                  <span className="text-gray-400">Total Projects</span>
+                </div>
+                <p className="text-white text-3xl font-bold">{projects?.length || 0}</p>
+              </div>
+              <div className="bg-zinc-900 border border-zinc-800 rounded-xl p-6">
+                <div className="flex items-center gap-3 mb-2">
+                  <Star className="w-5 h-5 text-gold" />
+                  <span className="text-gray-400">Premium Properties</span>
+                </div>
+                <p className="text-white text-3xl font-bold">
+                  {projects?.filter((p) => p.is_featured).length || 0}
+                </p>
+              </div>
+              <div className="bg-zinc-900 border border-zinc-800 rounded-xl p-6">
+                <div className="flex items-center gap-3 mb-2">
+                  <Building2 className="w-5 h-5 text-gold" />
+                  <span className="text-gray-400">Developers</span>
+                </div>
+                <p className="text-white text-3xl font-bold">{developers?.length || 0}</p>
+              </div>
+              <div className="bg-zinc-900 border border-zinc-800 rounded-xl p-6">
+                <div className="flex items-center gap-3 mb-2">
+                  <FileText className="w-5 h-5 text-gold" />
+                  <span className="text-gray-400">Communities</span>
+                </div>
+                <p className="text-white text-3xl font-bold">{communities?.length || 0}</p>
               </div>
             </div>
-          </div>
 
-          <ScrollArea className="h-[600px]">
-            <table className="w-full">
-              <thead className="bg-zinc-950 sticky top-0">
-                <tr>
-                  <th className="text-left text-gray-400 font-medium px-6 py-4">Project</th>
-                  <th className="text-left text-gray-400 font-medium px-6 py-4">Developer</th>
-                  <th className="text-left text-gray-400 font-medium px-6 py-4">Price</th>
-                  <th className="text-left text-gray-400 font-medium px-6 py-4">Handover</th>
-                  <th className="text-center text-gray-400 font-medium px-6 py-4">Premium</th>
-                  <th className="text-right text-gray-400 font-medium px-6 py-4">Actions</th>
-                </tr>
-              </thead>
-              <tbody>
-                {filteredProjects?.map((project) => (
-                  <tr
-                    key={project.id}
-                    className="border-t border-zinc-800 hover:bg-zinc-950/50"
-                  >
-                    <td className="px-6 py-4">
-                      <div className="flex items-center gap-3">
-                        <img
-                          src={
-                            project.images?.[0]?.image_url ||
-                            "https://images.unsplash.com/photo-1512917774080-9991f1c4c750?w=100"
-                          }
-                          alt={project.name}
-                          className="w-12 h-12 rounded-lg object-cover"
-                        />
-                        <div>
-                          <p className="text-white font-medium">{project.name}</p>
-                          <p className="text-gray-500 text-sm">{project.location}</p>
-                        </div>
-                      </div>
-                    </td>
-                    <td className="px-6 py-4 text-gray-300">
-                      {project.developer?.name || "—"}
-                    </td>
-                    <td className="px-6 py-4 text-gold">
-                      {project.price_from
-                        ? `AED ${(project.price_from / 1000000).toFixed(1)}M`
-                        : "—"}
-                    </td>
-                    <td className="px-6 py-4 text-gray-300">
-                      {project.handover_date || "—"}
-                    </td>
-                    <td className="px-6 py-4 text-center">
-                      <button
-                        onClick={() => handleToggleFeatured(project.id, project.is_featured || false)}
-                        className="inline-flex items-center justify-center"
+            {/* Smart Document Uploader */}
+            <SmartDocumentUploader 
+              projects={projects?.map(p => ({
+                id: p.id,
+                name: p.name,
+                slug: p.slug,
+                developer: p.developer ? {
+                  id: p.developer.id,
+                  name: p.developer.name,
+                  slug: p.developer.slug
+                } : null
+              }))}
+              onUploadComplete={() => refetchProjects()}
+            />
+
+            {/* Projects Table */}
+            <div className="bg-zinc-900 border border-zinc-800 rounded-xl overflow-hidden">
+              <div className="p-6 border-b border-zinc-800 flex items-center justify-between">
+                <h2
+                  className="text-white text-xl font-semibold"
+                  style={{ fontFamily: "Poppins, sans-serif" }}
+                >
+                  Property Listings
+                </h2>
+                <div className="flex items-center gap-4">
+                  <div className="relative">
+                    <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-500" />
+                    <Input
+                      placeholder="Search projects..."
+                      value={searchQuery}
+                      onChange={(e) => setSearchQuery(e.target.value)}
+                      className="pl-9 w-64 bg-zinc-950 border-zinc-700 text-white placeholder:text-gray-500"
+                    />
+                  </div>
+                </div>
+              </div>
+
+              <ScrollArea className="h-[600px]">
+                <table className="w-full">
+                  <thead className="bg-zinc-950 sticky top-0">
+                    <tr>
+                      <th className="text-left text-gray-400 font-medium px-6 py-4">Project</th>
+                      <th className="text-left text-gray-400 font-medium px-6 py-4">Developer</th>
+                      <th className="text-left text-gray-400 font-medium px-6 py-4">Price</th>
+                      <th className="text-left text-gray-400 font-medium px-6 py-4">Handover</th>
+                      <th className="text-center text-gray-400 font-medium px-6 py-4">Premium</th>
+                      <th className="text-right text-gray-400 font-medium px-6 py-4">Actions</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    {filteredProjects?.map((project) => (
+                      <tr
+                        key={project.id}
+                        className="border-t border-zinc-800 hover:bg-zinc-950/50"
                       >
-                        <Star
-                          className={`w-5 h-5 transition-colors ${
-                            project.is_featured
-                              ? "fill-gold text-gold"
-                              : "text-gray-600 hover:text-gray-400"
-                          }`}
-                        />
-                      </button>
-                    </td>
-                    <td className="px-6 py-4 text-right">
-                      <Button
-                        variant="ghost"
-                        size="sm"
-                        onClick={() => handleEditProject(project)}
-                        className="text-gray-400 hover:text-white"
-                      >
-                        <Edit2 className="w-4 h-4" />
-                      </Button>
-                    </td>
-                  </tr>
-                ))}
-              </tbody>
-            </table>
-          </ScrollArea>
-        </div>
+                        <td className="px-6 py-4">
+                          <div className="flex items-center gap-3">
+                            <img
+                              src={
+                                project.images?.[0]?.image_url ||
+                                "https://images.unsplash.com/photo-1512917774080-9991f1c4c750?w=100"
+                              }
+                              alt={project.name}
+                              className="w-12 h-12 rounded-lg object-cover"
+                            />
+                            <div>
+                              <p className="text-white font-medium">{project.name}</p>
+                              <p className="text-gray-500 text-sm">{project.location}</p>
+                            </div>
+                          </div>
+                        </td>
+                        <td className="px-6 py-4 text-gray-300">
+                          {project.developer?.name || "—"}
+                        </td>
+                        <td className="px-6 py-4 text-gold">
+                          {project.price_from
+                            ? `AED ${(project.price_from / 1000000).toFixed(1)}M`
+                            : "—"}
+                        </td>
+                        <td className="px-6 py-4 text-gray-300">
+                          {project.handover_date || "—"}
+                        </td>
+                        <td className="px-6 py-4 text-center">
+                          <button
+                            onClick={() => handleToggleFeatured(project.id, project.is_featured || false)}
+                            className="inline-flex items-center justify-center"
+                          >
+                            <Star
+                              className={`w-5 h-5 transition-colors ${
+                                project.is_featured
+                                  ? "fill-gold text-gold"
+                                  : "text-gray-600 hover:text-gray-400"
+                              }`}
+                            />
+                          </button>
+                        </td>
+                        <td className="px-6 py-4 text-right">
+                          <Button
+                            variant="ghost"
+                            size="sm"
+                            onClick={() => handleEditProject(project)}
+                            className="text-gray-400 hover:text-white"
+                          >
+                            <Edit2 className="w-4 h-4" />
+                          </Button>
+                        </td>
+                      </tr>
+                    ))}
+                  </tbody>
+                </table>
+              </ScrollArea>
+            </div>
+          </TabsContent>
+
+          <TabsContent value="rate-limits">
+            <RateLimitDashboard />
+          </TabsContent>
+        </Tabs>
       </main>
 
       {/* Edit Dialog */}
