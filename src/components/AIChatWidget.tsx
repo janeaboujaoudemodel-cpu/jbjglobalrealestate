@@ -230,7 +230,7 @@ const AIChatWidget = ({ isCollapsed, onToggleCollapse }: AIChatWidgetProps) => {
     }
   };
 
-  // Send message
+  // Send message with streaming
   const handleSend = async () => {
     if (!input.trim() || isLoading) return;
 
@@ -246,12 +246,88 @@ const AIChatWidget = ({ isCollapsed, onToggleCollapse }: AIChatWidgetProps) => {
     setInput('');
     setIsLoading(true);
 
+    // Create placeholder for streaming response
+    const assistantMessageId = (Date.now() + 1).toString();
+    const assistantMessage: Message = {
+      id: assistantMessageId,
+      role: 'assistant',
+      content: '',
+      timestamp: new Date(),
+    };
+    
+    setMessages([...newMessages, assistantMessage]);
+
     try {
       const conversationHistory = messages.map((msg) => ({
         role: msg.role,
         content: msg.content,
       }));
 
+      // Try streaming first, fallback to regular endpoint
+      const { data: { session } } = await supabase.auth.getSession();
+      
+      if (session?.access_token) {
+        // Use streaming endpoint
+        const response = await fetch(`${import.meta.env.VITE_SUPABASE_URL}/functions/v1/ai-chat-stream`, {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+            'Authorization': `Bearer ${session.access_token}`,
+          },
+          body: JSON.stringify({
+            message: userMessage.content,
+            history: conversationHistory,
+            service: selectedService,
+            userName: userInfo.firstName,
+          }),
+        });
+
+        if (response.ok && response.body) {
+          const reader = response.body.getReader();
+          const decoder = new TextDecoder();
+          let streamedContent = '';
+
+          while (true) {
+            const { done, value } = await reader.read();
+            if (done) break;
+
+            const chunk = decoder.decode(value, { stream: true });
+            const lines = chunk.split('\n');
+
+            for (const line of lines) {
+              if (line.startsWith('data: ') && line !== 'data: [DONE]') {
+                try {
+                  const data = JSON.parse(line.slice(6));
+                  if (data.content) {
+                    streamedContent += data.content;
+                    setMessages(prev => 
+                      prev.map(msg => 
+                        msg.id === assistantMessageId 
+                          ? { ...msg, content: streamedContent }
+                          : msg
+                      )
+                    );
+                  }
+                } catch {
+                  // Skip malformed JSON
+                }
+              }
+            }
+          }
+
+          if (streamedContent) {
+            const finalMessages = newMessages.concat({
+              ...assistantMessage,
+              content: streamedContent,
+            });
+            await saveMessagesToDb(finalMessages);
+            setIsLoading(false);
+            return;
+          }
+        }
+      }
+
+      // Fallback to non-streaming endpoint
       const { data, error } = await supabase.functions.invoke('ai-chat-support', {
         body: {
           message: userMessage.content,
@@ -263,28 +339,28 @@ const AIChatWidget = ({ isCollapsed, onToggleCollapse }: AIChatWidgetProps) => {
 
       if (error) throw error;
 
-      const assistantMessage: Message = {
-        id: (Date.now() + 1).toString(),
-        role: 'assistant',
-        content: data.response || `I apologize, but I encountered an issue. Please contact our team directly:${APPROVED_CONTACT_BLOCK}`,
-        timestamp: new Date(),
-      };
+      const finalContent = data.response || `I apologize, but I encountered an issue. Please contact our team directly:${APPROVED_CONTACT_BLOCK}`;
+      
+      setMessages(prev => 
+        prev.map(msg => 
+          msg.id === assistantMessageId 
+            ? { ...msg, content: finalContent }
+            : msg
+        )
+      );
 
-      const updatedMessages = [...newMessages, assistantMessage];
-      setMessages(updatedMessages);
+      const updatedMessages = [...newMessages, { ...assistantMessage, content: finalContent }];
       await saveMessagesToDb(updatedMessages);
 
     } catch (error) {
       console.error('Chat error:', error);
-      setMessages((prev) => [
-        ...prev,
-        {
-          id: (Date.now() + 1).toString(),
-          role: 'assistant',
-          content: `I apologize for the technical difficulty. Please contact our team directly:${APPROVED_CONTACT_BLOCK}`,
-          timestamp: new Date(),
-        },
-      ]);
+      setMessages(prev => 
+        prev.map(msg => 
+          msg.id === assistantMessageId 
+            ? { ...msg, content: `I apologize for the technical difficulty. Please contact our team directly:${APPROVED_CONTACT_BLOCK}` }
+            : msg
+        )
+      );
     } finally {
       setIsLoading(false);
     }
