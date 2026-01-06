@@ -5,7 +5,7 @@ import { Label } from '@/components/ui/label';
 import { ScrollArea } from '@/components/ui/scroll-area';
 import { Checkbox } from '@/components/ui/checkbox';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
-import { MessageCircle, X, Send, Bot, User, Loader2, Star, Building2, Plane, Scale, Paintbrush, Calculator, Home, ChevronLeft, Mail, Phone as PhoneIcon, UserCircle, MapPin, Globe, Calendar, Shield } from 'lucide-react';
+import { MessageCircle, X, Send, Bot, User, Loader2, Star, Building2, Plane, Scale, Paintbrush, Calculator, Home, ChevronLeft, Mail, Phone as PhoneIcon, UserCircle, MapPin, Globe, Calendar, Shield, History, Plus, Clock } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { useLanguage } from '@/contexts/LanguageContext';
 import { supabase } from '@/integrations/supabase/client';
@@ -18,6 +18,15 @@ interface Message {
   role: 'user' | 'assistant';
   content: string;
   timestamp: Date;
+}
+
+interface ChatHistoryItem {
+  id: string;
+  service_type: string | null;
+  status: string;
+  created_at: string;
+  updated_at: string;
+  messages: Array<{ role: string; content: string; timestamp: string }>;
 }
 
 interface UserInfo {
@@ -33,7 +42,7 @@ interface UserInfo {
   consentPrivacy: boolean;
 }
 
-type ChatStep = 'welcome_choice' | 'check_email' | 'collect_info' | 'select_service' | 'chatting' | 'rating' | 'submitted';
+type ChatStep = 'welcome_choice' | 'check_email' | 'collect_info' | 'chat_history' | 'select_service' | 'chatting' | 'rating' | 'submitted';
 
 const SERVICES = [
   { id: 'real_estate', icon: Building2, label: 'Property Sales & Leasing', description: 'Brokerage for buying, selling, leasing' },
@@ -76,6 +85,21 @@ const validateEmail = (email: string): boolean => {
   return emailRegex.test(email);
 };
 
+// Get relative time ago string
+const getTimeAgo = (date: Date): string => {
+  const now = new Date();
+  const diffMs = now.getTime() - date.getTime();
+  const diffMins = Math.floor(diffMs / 60000);
+  const diffHours = Math.floor(diffMs / 3600000);
+  const diffDays = Math.floor(diffMs / 86400000);
+
+  if (diffMins < 1) return 'Just now';
+  if (diffMins < 60) return `${diffMins}m ago`;
+  if (diffHours < 24) return `${diffHours}h ago`;
+  if (diffDays < 7) return `${diffDays}d ago`;
+  return date.toLocaleDateString('en-US', { month: 'short', day: 'numeric' });
+};
+
 // Approved contact info block for AI responses
 const APPROVED_CONTACT_BLOCK = `
 
@@ -113,6 +137,8 @@ const AIChatWidget = () => {
   const [ratingFeedback, setRatingFeedback] = useState('');
   const [hoveredRating, setHoveredRating] = useState<number>(0);
   const [formErrors, setFormErrors] = useState<Record<string, string>>({});
+  const [chatHistory, setChatHistory] = useState<ChatHistoryItem[]>([]);
+  const [isLoadingHistory, setIsLoadingHistory] = useState(false);
   const scrollRef = useRef<HTMLDivElement>(null);
   const inputRef = useRef<HTMLInputElement>(null);
 
@@ -151,9 +177,13 @@ const AIChatWidget = () => {
           consentPrivacy: true,
         });
         setIsExistingUser(true);
+        
+        // Fetch chat history for this user
+        await fetchChatHistory(data.email);
+        
         toast.success(`Welcome back! We found your profile.`);
-        // Go directly to service selection for existing users
-        setStep('select_service');
+        // Go to chat history view for existing users
+        setStep('chat_history');
       } else {
         // New user - go to collect info
         setUserInfo(prev => ({ ...prev, email: checkEmail.trim() }));
@@ -167,6 +197,53 @@ const AIChatWidget = () => {
     } finally {
       setIsCheckingEmail(false);
     }
+  };
+
+  // Fetch chat history for a user
+  const fetchChatHistory = async (email: string) => {
+    setIsLoadingHistory(true);
+    try {
+      const { data, error } = await supabase
+        .from('chat_conversations')
+        .select('id, service_type, status, created_at, updated_at, messages')
+        .eq('user_email', email.toLowerCase().trim())
+        .order('updated_at', { ascending: false })
+        .limit(10);
+
+      if (error) {
+        console.error('Error fetching chat history:', error);
+        return;
+      }
+
+      // Type assertion for messages array
+      const typedData = (data || []).map(item => ({
+        ...item,
+        messages: (item.messages as Array<{ role: string; content: string; timestamp: string }>) || []
+      }));
+      
+      setChatHistory(typedData);
+    } catch (error) {
+      console.error('Error fetching chat history:', error);
+    } finally {
+      setIsLoadingHistory(false);
+    }
+  };
+
+  // Continue an existing conversation
+  const handleContinueConversation = (conversation: ChatHistoryItem) => {
+    setConversationId(conversation.id);
+    setSelectedService(conversation.service_type);
+    
+    // Restore messages from the conversation
+    const restoredMessages: Message[] = conversation.messages.map((msg, index) => ({
+      id: `restored-${index}`,
+      role: msg.role as 'user' | 'assistant',
+      content: msg.content,
+      timestamp: new Date(msg.timestamp),
+    }));
+    
+    setMessages(restoredMessages);
+    setStep('chatting');
   };
 
   // Auto-scroll to bottom when new messages arrive
@@ -449,6 +526,7 @@ const AIChatWidget = () => {
       setRating(0);
       setRatingFeedback('');
       setFormErrors({});
+      setChatHistory([]);
     }, 300);
   };
 
@@ -508,7 +586,8 @@ const AIChatWidget = () => {
                     onClick={() => {
                       if (step === 'check_email') setStep('welcome_choice');
                       else if (step === 'collect_info') setStep('check_email');
-                      else if (step === 'select_service') setStep(isExistingUser ? 'check_email' : 'collect_info');
+                      else if (step === 'chat_history') setStep('check_email');
+                      else if (step === 'select_service') setStep(isExistingUser ? 'chat_history' : 'collect_info');
                       else if (step === 'chatting') handleEndChat();
                     }}
                     className="text-white/60 hover:text-white hover:bg-white/10 mr-1"
@@ -525,6 +604,7 @@ const AIChatWidget = () => {
                     {step === 'welcome_choice' && 'How can we help?'}
                     {step === 'check_email' && 'Enter your email'}
                     {step === 'collect_info' && 'Let\'s get started'}
+                    {step === 'chat_history' && 'Your conversations'}
                     {step === 'select_service' && 'Choose a service'}
                     {step === 'chatting' && '🟢 AI Online • Instant Answers'}
                     {step === 'rating' && 'Rate your experience'}
@@ -647,6 +727,104 @@ const AIChatWidget = () => {
                     Returning user? I'll remember you! New here? Quick registration to unlock WhatsApp access.
                   </p>
                 </div>
+              </div>
+            )}
+
+            {/* Step: Chat History (Returning Users) */}
+            {step === 'chat_history' && (
+              <div className="flex-1 p-4 overflow-y-auto">
+                <div className="text-center mb-4">
+                  <div className="w-14 h-14 mx-auto mb-3 rounded-full bg-gradient-to-r from-gold/20 to-gold/10 flex items-center justify-center">
+                    <History className="w-7 h-7 text-gold" />
+                  </div>
+                  <h4 className="text-white text-lg font-semibold mb-1">Welcome back, {userInfo.firstName}!</h4>
+                  <p className="text-zinc-400 text-sm">Continue a conversation or start fresh</p>
+                </div>
+
+                {/* New Conversation Button */}
+                <button
+                  onClick={() => setStep('select_service')}
+                  className="w-full p-4 mb-4 bg-gradient-to-r from-gold/10 to-gold/5 hover:from-gold/20 hover:to-gold/10 border border-gold/30 hover:border-gold/50 rounded-xl text-left transition-all duration-300 group flex items-center gap-3"
+                >
+                  <div className="w-10 h-10 rounded-full bg-gold/20 flex items-center justify-center">
+                    <Plus className="w-5 h-5 text-gold" />
+                  </div>
+                  <div>
+                    <h5 className="text-white text-sm font-semibold">Start New Conversation</h5>
+                    <p className="text-gold text-xs">Ask me anything about properties & services</p>
+                  </div>
+                </button>
+
+                {/* WhatsApp Quick Access */}
+                <a
+                  href={`https://wa.me/${CONTACT_INFO.whatsappNumber}?text=${encodeURIComponent(`Hi, I'm ${userInfo.firstName}. I'd like to chat about my property inquiry.`)}`}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="w-full p-3 mb-4 bg-green-500/10 hover:bg-green-500/20 border border-green-500/30 hover:border-green-500/50 rounded-xl transition-all duration-300 flex items-center gap-3"
+                >
+                  <div className="w-8 h-8 rounded-full bg-green-500 flex items-center justify-center">
+                    <MessageCircle className="w-4 h-4 text-white" />
+                  </div>
+                  <div className="flex-1">
+                    <h5 className="text-white text-sm font-medium">Chat on WhatsApp</h5>
+                    <p className="text-green-400 text-xs">Direct access • Instant response</p>
+                  </div>
+                </a>
+
+                {/* Previous Conversations */}
+                {isLoadingHistory ? (
+                  <div className="flex items-center justify-center py-8">
+                    <Loader2 className="w-6 h-6 text-gold animate-spin" />
+                  </div>
+                ) : chatHistory.length > 0 ? (
+                  <div className="space-y-2">
+                    <p className="text-zinc-500 text-xs font-medium mb-2 flex items-center gap-1">
+                      <Clock className="w-3 h-3" />
+                      Previous Conversations
+                    </p>
+                    {chatHistory.map((conv) => {
+                      const serviceName = SERVICES.find(s => s.id === conv.service_type)?.label || 'General';
+                      const messageCount = conv.messages?.length || 0;
+                      const lastMessage = conv.messages?.[conv.messages.length - 1]?.content || '';
+                      const preview = lastMessage.substring(0, 60) + (lastMessage.length > 60 ? '...' : '');
+                      const date = new Date(conv.updated_at);
+                      const timeAgo = getTimeAgo(date);
+
+                      return (
+                        <button
+                          key={conv.id}
+                          onClick={() => handleContinueConversation(conv)}
+                          className="w-full p-3 bg-white/5 hover:bg-white/10 border border-zinc-700 hover:border-gold/30 rounded-lg text-left transition-all duration-200"
+                        >
+                          <div className="flex items-start justify-between gap-2">
+                            <div className="flex-1 min-w-0">
+                              <div className="flex items-center gap-2 mb-1">
+                                <span className="text-white text-sm font-medium">{serviceName}</span>
+                                <span className={`text-[10px] px-1.5 py-0.5 rounded ${
+                                  conv.status === 'active' ? 'bg-green-500/20 text-green-400' :
+                                  conv.status === 'completed' ? 'bg-zinc-500/20 text-zinc-400' :
+                                  'bg-gold/20 text-gold'
+                                }`}>
+                                  {conv.status === 'active' ? 'Active' : conv.status === 'completed' ? 'Completed' : 'Submitted'}
+                                </span>
+                              </div>
+                              <p className="text-zinc-400 text-xs truncate">{preview || 'No messages yet'}</p>
+                            </div>
+                            <div className="text-right flex-shrink-0">
+                              <p className="text-zinc-500 text-[10px]">{timeAgo}</p>
+                              <p className="text-zinc-600 text-[10px]">{messageCount} msgs</p>
+                            </div>
+                          </div>
+                        </button>
+                      );
+                    })}
+                  </div>
+                ) : (
+                  <div className="text-center py-6">
+                    <p className="text-zinc-500 text-sm">No previous conversations found</p>
+                    <p className="text-zinc-600 text-xs mt-1">Start a new chat above!</p>
+                  </div>
+                )}
               </div>
             )}
 
