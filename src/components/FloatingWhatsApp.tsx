@@ -1,12 +1,36 @@
-import { MessageCircle } from "lucide-react";
+import { useState } from "react";
+import { MessageCircle, X } from "lucide-react";
 import { getWhatsAppUrl } from "@/constants/stats";
 
 const FloatingWhatsApp = () => {
+  const [isMinimized, setIsMinimized] = useState(false);
+
+  if (isMinimized) {
+    return (
+      <button
+        onClick={() => setIsMinimized(false)}
+        className="fixed bottom-6 right-6 z-50 w-10 h-10 bg-green-600 hover:bg-green-500 text-white rounded-full shadow-lg hover:shadow-xl transition-all duration-300 hover:scale-110 flex items-center justify-center"
+        aria-label="Show WhatsApp chat"
+      >
+        <MessageCircle className="w-5 h-5" />
+      </button>
+    );
+  }
+
   return (
     <div className="fixed bottom-6 right-6 z-50">
       {/* Pulse ring */}
       <span className="absolute inset-0 rounded-full bg-green-500/40 animate-ping" />
       <span className="absolute inset-0 rounded-full bg-green-500/20 animate-pulse" />
+      
+      {/* Close button */}
+      <button
+        onClick={() => setIsMinimized(true)}
+        className="absolute -top-2 -right-2 w-6 h-6 bg-zinc-800 hover:bg-zinc-700 text-zinc-400 hover:text-white rounded-full shadow-md flex items-center justify-center transition-colors z-10"
+        aria-label="Minimize WhatsApp button"
+      >
+        <X className="w-3.5 h-3.5" />
+      </button>
       
       <a
         href={getWhatsAppUrl()}
