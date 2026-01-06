@@ -50,6 +50,48 @@ export type Database = {
         }
         Relationships: []
       }
+      ai_usage_logs: {
+        Row: {
+          client_ip_hash: string | null
+          completion_tokens: number | null
+          created_at: string
+          error_type: string | null
+          function_name: string
+          id: string
+          model: string
+          prompt_tokens: number | null
+          response_time_ms: number | null
+          success: boolean
+          user_id: string | null
+        }
+        Insert: {
+          client_ip_hash?: string | null
+          completion_tokens?: number | null
+          created_at?: string
+          error_type?: string | null
+          function_name: string
+          id?: string
+          model?: string
+          prompt_tokens?: number | null
+          response_time_ms?: number | null
+          success?: boolean
+          user_id?: string | null
+        }
+        Update: {
+          client_ip_hash?: string | null
+          completion_tokens?: number | null
+          created_at?: string
+          error_type?: string | null
+          function_name?: string
+          id?: string
+          model?: string
+          prompt_tokens?: number | null
+          response_time_ms?: number | null
+          success?: boolean
+          user_id?: string | null
+        }
+        Relationships: []
+      }
       audit_logs: {
         Row: {
           action_type: Database["public"]["Enums"]["audit_action_type"]
