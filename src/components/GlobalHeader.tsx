@@ -64,7 +64,7 @@ const GlobalHeader = () => {
   const hasCRMAccess = crmProfile?.is_active && 
     (crmProfile?.crm_role === 'owner_admin' || crmProfile?.crm_role === 'broker_member');
 
-  // Updated navigation order: Home, Founder, About, Properties, Services, Awards, News, Contact
+  // Updated navigation order: Home, Founder, About, Properties, Services, Awards, News, Contact, Join
   const mainNavLinks = [
     { href: "/", label: t('nav.home'), icon: Home },
     { href: "/founder", label: t('nav.founder'), icon: User },
@@ -74,6 +74,7 @@ const GlobalHeader = () => {
     { href: "/awards", label: t('nav.awards'), icon: Building2 },
     { href: "/news", label: t('nav.news'), icon: Newspaper },
     { href: "/contact", label: t('nav.contact'), icon: Phone },
+    { href: "/join", label: "Join", icon: User },
   ];
 
   // Property shortcuts for quick access

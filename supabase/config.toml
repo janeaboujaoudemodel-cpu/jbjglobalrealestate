@@ -50,3 +50,9 @@ verify_jwt = false
 
 [functions.send-security-alert]
 verify_jwt = false
+
+[functions.hr-ai-tutor]
+verify_jwt = false
+
+[functions.ai-chat-stream]
+verify_jwt = false
