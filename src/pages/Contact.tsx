@@ -18,6 +18,7 @@ import { supabase } from "@/integrations/supabase/client";
 import { useLeadCapture } from "@/hooks/useLeadCapture";
 import { getCountryList, getLanguageList } from "@/constants/localeOptions";
 import { Link } from "react-router-dom";
+import { CalendlyEmbed } from "@/components/marketing/CalendlyEmbed";
 
 const consultationSchema = z.object({
   fullName: z.string().min(2, "Full name is required").max(100, "Name must be less than 100 characters"),
