@@ -326,7 +326,7 @@ const AIHub = () => {
                       Answer a few simple questions about your preferences, budget, and lifestyle. Our AI analyzes thousands of properties to find your perfect match in seconds.
                     </p>
                     <div className="flex flex-wrap gap-3 justify-center md:justify-start">
-                      {["Personalized Matching", "Investment Scoring", "Lifestyle Analysis", "Instant Results"].map((feature, idx) => (
+                      {["Personalized Matching", "Property Scoring", "Lifestyle Analysis", "Instant Results"].map((feature, idx) => (
                         <span key={idx} className="px-4 py-2 bg-purple-500/10 border border-purple-500/20 rounded-full text-purple-300 text-sm">
                           {feature}
                         </span>

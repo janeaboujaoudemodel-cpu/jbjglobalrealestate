@@ -16,11 +16,11 @@ interface ComplianceDisclaimerProps {
 const ComplianceDisclaimer = ({ variant = "compact", className = "", language = "en" }: ComplianceDisclaimerProps) => {
   const currentYear = new Date().getFullYear();
 
-  // Short English Disclaimer
-  const shortDisclaimerEN = `JJ Global Capital is a licensed real estate brokerage. We do not provide legal, mortgage, financial, or investment advice. Third-party services are provided by independent licensed professionals under separate agreements.`;
+  // Short English Disclaimer (removed "licensed" until trade license confirmed)
+  const shortDisclaimerEN = `JJ Global Capital is a real estate brokerage. We do not provide legal, mortgage, financial, or investment advice. Third-party services are provided by independent licensed professionals under separate agreements.`;
 
   // Short Arabic Disclaimer
-  const shortDisclaimerAR = `جي جي جلوبال كابيتال هي شركة وساطة عقارية مرخصة. نحن لا نقدم استشارات قانونية أو تمويلية أو استثمارية. الخدمات من الأطراف الثالثة تُقدَّم من قبل متخصصين مرخصين مستقلين بموجب اتفاقيات منفصلة.`;
+  const shortDisclaimerAR = `جي جي جلوبال كابيتال تقدم خدمات وساطة عقارية. نحن لا نقدم استشارات قانونية أو تمويلية أو استثمارية. الخدمات من الأطراف الثالثة تُقدَّم من قبل متخصصين مرخصين مستقلين بموجب اتفاقيات منفصلة.`;
 
   // Full Disclaimer Content
   const fullDisclaimerPoints = [
@@ -28,8 +28,8 @@ const ComplianceDisclaimer = ({ variant = "compact", className = "", language = 
       icon: Building2,
       title: language === "ar" ? "خدمات الوساطة العقارية" : "Real Estate Brokerage Services",
       content: language === "ar" 
-        ? "جي جي جلوبال كابيتال هي شركة وساطة عقارية مرخصة متخصصة في المبيعات والتأجير وتنسيق المعاملات العقارية في دولة الإمارات العربية المتحدة."
-        : "JJ Global Capital is a licensed real estate brokerage specializing in property sales, leasing, and transaction coordination within the UAE."
+        ? "جي جي جلوبال كابيتال متخصصة في المبيعات والتأجير وتنسيق المعاملات العقارية في دولة الإمارات العربية المتحدة."
+        : "JJ Global Capital specializes in property sales, leasing, and transaction coordination within the UAE."
     },
     {
       icon: Scale,
