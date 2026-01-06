@@ -10,7 +10,7 @@ const divisions = [
   {
     title: "JJ Global Capital",
     description:
-      "A founder-led investment advisory firm specializing in UAE real estate, offering institutional-grade asset selection, due diligence, and portfolio management.",
+      "A founder-led real estate brokerage specializing in UAE property sales, leasing, and holiday homes—with partner introductions for legal, mortgage, and specialist services.",
     gradient: "from-[#A8925A]/20 via-amber-500/10 to-[#A8925A]/20",
     iconGradient: "from-[#A8925A] to-[#C4A962]",
     url: "https://jjglobalcapital.com",
@@ -50,20 +50,20 @@ const services = [
     iconGradient: "from-blue-400 to-cyan-400",
   },
   {
-    title: "Investment Advisory",
-    description: "Expert guidance on real estate investment strategies",
+    title: "Real Estate Advisory",
+    description: "Property guidance and brokerage support (introductions only)",
     gradient: "from-emerald-500/20 via-green-500/10 to-emerald-600/20",
     iconGradient: "from-emerald-400 to-green-400",
   },
   {
-    title: "Mortgage Advisory",
-    description: "Tailored mortgage solutions for property financing",
+    title: "Mortgage Partners",
+    description: "Introductions to licensed mortgage specialists",
     gradient: "from-amber-500/20 via-orange-500/10 to-amber-600/20",
     iconGradient: "from-amber-400 to-orange-400",
   },
   {
-    title: "Legal Services",
-    description: "Real estate law firm expertise for transactions",
+    title: "Legal Partners",
+    description: "Introductions to independent law firms",
     gradient: "from-purple-500/20 via-violet-500/10 to-purple-600/20",
     iconGradient: "from-purple-400 to-violet-400",
   },
@@ -97,7 +97,7 @@ const Premium3DIcon = ({ title, gradient }: { title: string; gradient: string })
             <polygon points="18,4 4,16 32,16" fill="url(#iconGrad)"/>
           </g>
         );
-      case "Investment Advisory":
+      case "Real Estate Advisory":
         return (
           <g>
             <circle cx="20" cy="20" r="14" fill="url(#iconGrad)" opacity="0.3"/>
@@ -106,7 +106,7 @@ const Premium3DIcon = ({ title, gradient }: { title: string; gradient: string })
             <path d="M12 28 L16 24 L22 26 L28 18" stroke="white" strokeWidth="2" fill="none" opacity="0.8"/>
           </g>
         );
-      case "Mortgage Advisory":
+      case "Mortgage Partners":
         return (
           <g>
             <rect x="6" y="10" width="28" height="20" rx="3" fill="url(#iconGrad)" opacity="0.9"/>
@@ -116,7 +116,7 @@ const Premium3DIcon = ({ title, gradient }: { title: string; gradient: string })
             <text x="28" y="25" textAnchor="middle" fontSize="8" fill="url(#iconGrad)">%</text>
           </g>
         );
-      case "Legal Services":
+      case "Legal Partners":
         return (
           <g>
             <rect x="16" y="4" width="8" height="32" fill="url(#iconGrad)"/>

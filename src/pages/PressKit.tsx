@@ -512,7 +512,7 @@ const PressKit = () => {
                   </div>
                   <div className="flex justify-between border-b border-zinc-800 pb-3">
                     <span className="text-zinc-500">Industry</span>
-                    <span className="text-white font-medium">Real Estate Investment Advisory</span>
+                    <span className="text-white font-medium">Real Estate Brokerage</span>
                   </div>
                   <div className="flex justify-between">
                     <span className="text-zinc-500">Website</span>

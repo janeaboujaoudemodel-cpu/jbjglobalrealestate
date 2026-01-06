@@ -50,12 +50,13 @@ export const COMPANY_STATS = {
 export const CONTACT_INFO = {
   phone: '+971 56 591 1000',
   phoneRaw: '+971565911000',
-  email: 'invest@jjglobalcapital.com',
-  emailCapitalized: 'Invest@JJGlobalCapital.com',
+  email: 'contact@jjglobalcapital.com',
+  emailCapitalized: 'contact@jjglobalcapital.com',
+  privacyEmail: 'privacy@jjglobalcapital.com',
   whatsappNumber: '971565911000',
   whatsappMessage: "Hi, I'm interested in learning more about property brokerage services with JJ Global Capital.",
   address: 'Downtown Dubai, UAE',
-  inquiryFormUrl: 'https://jjglobalcapital.com/property-investment-inquiry-form/',
+  inquiryFormUrl: 'https://jjglobalcapital.com/property-inquiry-form/',
   holdingGroupUrl: 'https://jjholdinggroup.com',
   companyDescriptor: 'JJ Global Capital | Real Estate Brokerage',
 };

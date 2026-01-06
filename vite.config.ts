@@ -19,7 +19,7 @@ export default defineConfig(({ mode }) => ({
       manifest: {
         name: "JJ Global Capital",
         short_name: "JJ Capital",
-        description: "Premium UAE Real Estate Investment Advisory - Your Gateway to Global Real Estate",
+        description: "Premium UAE Real Estate Brokerage - Property Sales, Leasing & Holiday Homes",
         theme_color: "#0a0a0a",
         background_color: "#0a0a0a",
         display: "standalone",

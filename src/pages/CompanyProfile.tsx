@@ -57,19 +57,19 @@ const companyInfo = {
   founded: "2018",
   headquarters: "Downtown Dubai, UAE",
   ceo: "Jane Abou Jaoude",
-  about: `JJ Global Capital is the UAE's premier investment advisory firm, specializing in luxury real estate and comprehensive wealth management solutions. Founded by visionary entrepreneur Jane Abou Jaoude, we have established ourselves as the trusted partner for ultra-high-net-worth individuals seeking exceptional investment opportunities in the UAE.
+  about: `JJ Global Capital is a Dubai-based real estate brokerage specializing in property sales, leasing, and holiday homes across the UAE. Founded by entrepreneur Jane Abou Jaoude, we provide brokerage support and partner introductions for discerning clients seeking exceptional properties in the UAE.
 
-Our founder-led approach ensures that every client receives personalized attention and strategic guidance, backed by our extensive market knowledge and exclusive network of developers, legal experts, and luxury service providers.
+Our founder-led approach ensures that every client receives personalized attention and professional guidance, backed by our extensive market knowledge and exclusive network of developers, legal partners, and luxury service providers.
 
-With a portfolio exceeding AED 2 Billion and over 3,900 properties sold, we continue to set the standard for excellence in the UAE real estate market.`,
-  mission: "To provide discerning investors with unparalleled access to the UAE's most exclusive investment opportunities, delivered with the highest standards of integrity, expertise, and personalized service.",
-  vision: "To be the definitive choice for global investors seeking premium real estate and lifestyle investments in the UAE, recognized for our exceptional track record and commitment to client success.",
+With a portfolio exceeding AED 2 Billion and over 3,900 properties sold, we continue to set the standard for excellence in UAE real estate brokerage.`,
+  mission: "To provide discerning clients with professional brokerage support and access to the UAE's most exclusive properties, delivered with the highest standards of integrity, expertise, and personalized service.",
+  vision: "To be the trusted choice for clients seeking premium real estate brokerage services in the UAE, recognized for our exceptional track record and commitment to client success.",
   services: [
-    "Premium Real Estate Investment Advisory",
-    "Luxury Concierge & Lifestyle Management",
-    "Legal Services & Property Conveyancing",
-    "Interior Design & Architecture",
-    "Mortgage & Financial Advisory",
+    "Property Sales & Leasing Brokerage",
+    "Luxury Concierge & Lifestyle Support",
+    "Legal Partner Introductions",
+    "Interior Design & Architecture Partners",
+    "Mortgage Partner Introductions",
     "Golden Visa Assistance"
   ],
   values: [
@@ -248,12 +248,11 @@ const CompanyProfile = () => {
 
       // About text (wrapped)
       const aboutLines = [
-        "JJ Global Capital is the UAE's premier investment advisory firm,",
-        "specializing in luxury real estate and comprehensive wealth",
-        "management solutions. Founded by visionary entrepreneur Jane Abou",
-        "Jaoude, we have established ourselves as the trusted partner for",
-        "ultra-high-net-worth individuals seeking exceptional investment",
-        "opportunities in the UAE.",
+        "JJ Global Capital is a Dubai-based real estate brokerage",
+        "specializing in property sales, leasing, and holiday homes across",
+        "the UAE. Founded by entrepreneur Jane Abou Jaoude, we provide",
+        "brokerage support and partner introductions for discerning clients",
+        "seeking exceptional properties in the UAE.",
         "",
         "Our founder-led approach ensures that every client receives",
         "personalized attention and strategic guidance, backed by our",
@@ -441,11 +440,11 @@ const CompanyProfile = () => {
       });
 
       const services = [
-        "Premium Real Estate Investment Advisory",
-        "Luxury Concierge & Lifestyle Management",
-        "Legal Services & Property Conveyancing",
-        "Interior Design & Architecture",
-        "Mortgage & Financial Advisory",
+        "Property Sales & Leasing Brokerage",
+        "Luxury Concierge & Lifestyle Support",
+        "Legal Partner Introductions",
+        "Interior Design & Architecture Partners",
+        "Mortgage Partner Introductions",
         "Golden Visa Assistance"
       ];
 
@@ -534,7 +533,7 @@ const CompanyProfile = () => {
       const contactDetails = [
         { label: "Location", value: "Downtown Dubai, UAE" },
         { label: "Phone", value: "+971 56 591 1000" },
-        { label: "Email", value: "Invest@JJGlobalCapital.com" },
+        { label: "Email", value: "contact@jjglobalcapital.com" },
         { label: "Website", value: "www.jjglobalcapital.com" },
       ];
 
@@ -611,7 +610,7 @@ const CompanyProfile = () => {
 
   const handleShareWhatsApp = () => {
     const message = encodeURIComponent(
-      "Check out JJ Global Capital - UAE's Premier Real Estate Investment Advisory. Download their company profile at: https://jjglobalcapital.com/company-profile"
+      "Check out JJ Global Capital - UAE's Premier Real Estate Brokerage. Download their company profile at: https://jjglobalcapital.com/company-profile"
     );
     window.open(`https://wa.me/?text=${message}`, "_blank");
   };
@@ -619,7 +618,7 @@ const CompanyProfile = () => {
   const handleShareEmail = () => {
     const subject = encodeURIComponent("JJ Global Capital - Company Profile");
     const body = encodeURIComponent(
-      "I wanted to share with you the company profile of JJ Global Capital, UAE's Premier Real Estate Investment Advisory.\n\nVisit: https://jjglobalcapital.com/company-profile"
+      "I wanted to share with you the company profile of JJ Global Capital, UAE's Premier Real Estate Brokerage.\n\nVisit: https://jjglobalcapital.com/company-profile"
     );
     window.location.href = `mailto:?subject=${subject}&body=${body}`;
   };

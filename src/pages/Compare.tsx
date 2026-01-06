@@ -252,6 +252,8 @@ const Compare = () => {
     .gold { color: #A8925A; }
     .subtitle { color: #888; margin-top: 10px; }
     .user-info { margin-top: 15px; font-size: 14px; color: #666; }
+    .disclaimer-box { background: rgba(168,146,90,0.1); border: 1px solid rgba(168,146,90,0.3); border-radius: 8px; padding: 15px; margin-bottom: 30px; text-align: center; }
+    .disclaimer-text { font-size: 12px; color: #888; line-height: 1.6; }
     
     h2 { color: #A8925A; font-size: 20px; margin: 30px 0 20px; border-bottom: 1px solid #333; padding-bottom: 10px; }
     
@@ -297,11 +299,18 @@ const Compare = () => {
   </style>
 </head>
 <body>
-  <div class="container">
+    <div class="container">
     <div class="header">
       <div class="logo"><span class="gold">J | J</span> GLOBAL CAPITAL</div>
-      <p class="subtitle">Premium Property Investment Advisory • AI-Powered Comparison Report</p>
-      <p class="user-info">Prepared for: <strong>${userName}</strong> | Date: ${dateStr}</p>
+      <p class="subtitle">Real Estate Brokerage • AI-Powered Property Comparison</p>
+      <p class="user-info">Prepared for: <strong>${escapeHtml(userName)}</strong> | Date: ${dateStr}</p>
+    </div>
+
+    <div class="disclaimer-box">
+      <p class="disclaimer-text">
+        <strong>Disclaimer:</strong> This report is for informational purposes only and is not legal, mortgage, financial, or investment advice. 
+        Verify all information using official sources and/or independent licensed professionals.
+      </p>
     </div>
 
     <div class="summary-box">
@@ -378,12 +387,12 @@ const Compare = () => {
     ` : ''}
 
     <div class="footer">
-      <p><strong>JJ Global Capital</strong> - Premium Property Investment Advisory</p>
-      <p>📧 invest@jjglobalcapital.com | 📞 +971 56 591 1000</p>
+      <p><strong>JJ Global Capital</strong> — Real Estate Brokerage</p>
+      <p>📧 contact@jjglobalcapital.com | 📞 +971 56 591 1000</p>
       <p>🌐 www.jjglobalcapital.com</p>
       <p style="margin-top:15px; font-size:12px;">Powered & Made by JJ Global Capital — Part of JJ Holding Group</p>
       <p style="margin-top:10px; font-size:11px; font-style:italic;">
-        This report is for informational purposes only. Investment decisions should be made after consulting with our advisors.
+        This report is for informational purposes only and is not legal, mortgage, financial, or investment advice.
       </p>
     </div>
   </div>
@@ -586,7 +595,7 @@ const Compare = () => {
             </Link>
             
             <p className="text-zinc-500 text-sm mt-6">
-              Need help? Our advisors are available 24/7 to assist you.
+              Need help? Our team is available 24/7 to assist you.
             </p>
           </div>
         </div>

@@ -28,6 +28,7 @@ import Admin from "./pages/Admin";
 import NotFound from "./pages/NotFound";
 import Terms from "./pages/Terms";
 import Privacy from "./pages/Privacy";
+import Cookies from "./pages/Cookies";
 import Founder from "./pages/Founder";
 import Awards from "./pages/Awards";
 import PressKit from "./pages/PressKit";
@@ -89,6 +90,7 @@ const App = () => (
                     <Route path="/admin" element={<Admin />} />
                     <Route path="/terms" element={<Terms />} />
                     <Route path="/privacy" element={<Privacy />} />
+                    <Route path="/cookies" element={<Cookies />} />
                     <Route path="/founder" element={<Founder />} />
                     <Route path="/awards" element={<Awards />} />
                     <Route path="/press-kit" element={<PressKit />} />

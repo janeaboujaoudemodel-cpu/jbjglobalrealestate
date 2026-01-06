@@ -34,7 +34,8 @@ const Privacy = () => {
                   <a href={JJ_HOLDING_URL} target="_blank" rel="noopener noreferrer" className="text-gold hover:underline">
                     JJ Holding Group
                   </a>
-                  , is committed to protecting your privacy. This Privacy Policy explains how we collect, use, disclose, and safeguard your information when you visit our website or use our services.
+                  , is committed to protecting your privacy. This Privacy Policy explains how we collect, 
+                  use, disclose, and safeguard your information when you visit our website or use our services.
                 </p>
               </section>
 
@@ -52,7 +53,7 @@ const Privacy = () => {
                 <h2 className="text-gold text-xl font-semibold mb-4">3. How We Use Your Information</h2>
                 <p>We use the information we collect to:</p>
                 <ul className="list-disc pl-6 mt-2 space-y-2">
-                  <li>Provide, maintain, and improve our services</li>
+                  <li>Provide, maintain, and improve our brokerage services</li>
                   <li>Send you property recommendations and market insights</li>
                   <li>Respond to your inquiries and provide customer support</li>
                   <li>Send newsletters and marketing communications (with your consent)</li>
@@ -62,37 +63,32 @@ const Privacy = () => {
               </section>
 
               <section>
-                <h2 className="text-gold text-xl font-semibold mb-4">4. Data Protection & Encryption</h2>
+                <h2 className="text-gold text-xl font-semibold mb-4">4. Data Protection</h2>
                 <p>
-                  We implement enterprise-grade security measures to protect your personal information:
+                  We use reasonable technical and organizational measures to protect your personal information 
+                  from unauthorized access, loss, or misuse. These measures include:
                 </p>
                 <ul className="list-disc pl-6 mt-2 space-y-2">
-                  <li><strong>End-to-End Encryption:</strong> All data transmissions are encrypted using TLS 1.3 or higher.</li>
-                  <li><strong>Database Encryption:</strong> Personal data is encrypted at rest using AES-256 encryption.</li>
-                  <li><strong>Access Controls:</strong> Strict role-based access controls limit data access to authorized personnel only.</li>
-                  <li><strong>Audit Logging:</strong> All data access is logged and monitored for security compliance.</li>
-                  <li><strong>Developer Isolation:</strong> Your personal data is not accessible to web developers or third-party contractors.</li>
+                  <li><strong>Encryption:</strong> Data transmissions are encrypted using industry-standard protocols.</li>
+                  <li><strong>Access Controls:</strong> Access to personal data is restricted to authorized personnel only.</li>
+                  <li><strong>Secure Storage:</strong> Personal data is stored on secure, access-controlled systems.</li>
                 </ul>
-                <p className="mt-4">
-                  These measures comply with UAE Federal Law No. 45 of 2021 on Personal Data Protection and international best practices including GDPR standards.
+                <p className="mt-4 text-zinc-400">
+                  While we strive to protect your information, no method of transmission over the Internet 
+                  or electronic storage is 100% secure. We cannot guarantee absolute security.
                 </p>
               </section>
 
               <section>
                 <h2 className="text-gold text-xl font-semibold mb-4">5. Broker Toolkit Security</h2>
                 <p>
-                  For Broker Toolkit subscribers, we implement additional security measures:
+                  For Broker Toolkit subscribers, we implement additional security measures to protect 
+                  your account and content access, including session management and activity monitoring.
                 </p>
-                <ul className="list-disc pl-6 mt-2 space-y-2">
-                  <li><strong>Device Fingerprinting:</strong> Your session is linked to a specific device to prevent unauthorized access.</li>
-                  <li><strong>Session Management:</strong> Active sessions are monitored and suspicious activity triggers automatic security alerts.</li>
-                  <li><strong>Content Watermarking:</strong> Educational materials are watermarked with your unique identifier for traceability.</li>
-                  <li><strong>IP Address Logging:</strong> Login locations are recorded for security verification.</li>
-                </ul>
               </section>
 
               <section>
-                <h2 className="text-gold text-xl font-semibold mb-4">5. Sharing Your Information</h2>
+                <h2 className="text-gold text-xl font-semibold mb-4">6. Sharing Your Information</h2>
                 <p>We may share your information with:</p>
                 <ul className="list-disc pl-6 mt-2 space-y-2">
                   <li>Our affiliated companies within JJ Holding Group</li>
@@ -100,10 +96,14 @@ const Privacy = () => {
                   <li>Service providers who assist in our operations</li>
                   <li>Legal authorities when required by law</li>
                 </ul>
+                <p className="mt-4 text-zinc-400">
+                  We do not sell your personal data to third parties. Any sharing is done in accordance 
+                  with applicable data protection laws.
+                </p>
               </section>
 
               <section>
-                <h2 className="text-gold text-xl font-semibold mb-4">6. Your Rights</h2>
+                <h2 className="text-gold text-xl font-semibold mb-4">7. Your Rights</h2>
                 <p>Under applicable UAE and international data protection laws, you have the right to:</p>
                 <ul className="list-disc pl-6 mt-2 space-y-2">
                   <li>Access your personal data</li>
@@ -117,31 +117,40 @@ const Privacy = () => {
               <section>
                 <h2 className="text-gold text-xl font-semibold mb-4">8. Confidentiality Commitment</h2>
                 <p>
-                  JJ Global Capital is committed to maintaining the highest standards of data confidentiality. Your personal information, investment inquiries, and financial details are treated with strict confidentiality and are:
+                  JJ Global Capital is committed to maintaining the highest standards of data confidentiality. 
+                  Your personal information and property inquiries are treated with strict confidentiality and are:
                 </p>
                 <ul className="list-disc pl-6 mt-2 space-y-2">
                   <li>Never sold to third parties</li>
-                  <li>Encrypted and secured from unauthorized access</li>
+                  <li>Protected from unauthorized access</li>
                   <li>Accessible only to authorized personnel on a need-to-know basis</li>
-                  <li>Protected by legal non-disclosure agreements</li>
                 </ul>
               </section>
 
               <section>
-                <h2 className="text-gold text-xl font-semibold mb-4">9. Contact Us</h2>
+                <h2 className="text-gold text-xl font-semibold mb-4">9. Cookies</h2>
+                <p>
+                  We use cookies and similar technologies to enhance your browsing experience. 
+                  For detailed information about our use of cookies, please see our{" "}
+                  <Link to="/cookies" className="text-gold hover:underline">Cookies Policy</Link>.
+                </p>
+              </section>
+
+              <section>
+                <h2 className="text-gold text-xl font-semibold mb-4">10. Contact Us</h2>
                 <p>
                   If you have questions about this Privacy Policy, please contact us at:
                 </p>
                 <p className="mt-4">
                   <strong>JJ Global Capital</strong><br />
+                  Real Estate Brokerage<br />
                   Downtown Dubai, United Arab Emirates<br />
-                  Email: <a href="mailto:Invest@JJGlobalCapital.com" className="text-gold hover:underline">Invest@JJGlobalCapital.com</a><br />
+                  General Inquiries: <a href="mailto:contact@jjglobalcapital.com" className="text-gold hover:underline">contact@jjglobalcapital.com</a><br />
                   Phone: <a href="tel:+971565911000" className="text-gold hover:underline">+971 56 591 1000</a><br />
                   Data Protection: <a href="mailto:privacy@jjglobalcapital.com" className="text-gold hover:underline">privacy@jjglobalcapital.com</a>
                 </p>
                 <p className="mt-4 text-zinc-500 text-sm">
-                  © {new Date().getFullYear()} JJ Global Capital. All Rights Reserved.<br />
-                  Your data is encrypted and strictly confidential.
+                  © {new Date().getFullYear()} JJ Global Capital Real Estate Brokerage. All Rights Reserved.
                 </p>
               </section>
             </div>
