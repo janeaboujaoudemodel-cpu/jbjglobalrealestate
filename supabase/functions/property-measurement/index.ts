@@ -1,4 +1,5 @@
 import { serve } from "https://deno.land/std@0.168.0/http/server.ts";
+import { z } from "https://deno.land/x/zod@v3.22.4/mod.ts";
 
 const ALLOWED_ORIGINS = [
   "https://jjglobalcapital.com",
@@ -19,6 +20,16 @@ function getCorsHeaders(req: Request) {
   };
 }
 
+// Input validation schema
+const RequestSchema = z.object({
+  images: z.array(z.string().max(5000000)).min(1, "At least 1 image is required").max(10, "Maximum 10 images allowed"),
+  propertyType: z.string().max(100).trim().optional(),
+  propertyName: z.string().max(200).trim().optional(),
+  unitPreference: z.enum(['metric', 'imperial', 'both']).optional(),
+  roomLabels: z.array(z.string().max(100)).max(20).optional(),
+  roomList: z.string().max(500).trim().optional(),
+});
+
 serve(async (req) => {
   const corsHeaders = getCorsHeaders(req);
   
@@ -28,18 +39,26 @@ serve(async (req) => {
   }
 
   try {
-    const { images, propertyType, propertyName, unitPreference, roomLabels, roomList } = await req.json();
+    // Parse and validate input with Zod
+    const rawBody = await req.json();
+    const parseResult = RequestSchema.safeParse(rawBody);
+
+    if (!parseResult.success) {
+      console.log('Validation failed:', parseResult.error.errors);
+      return new Response(
+        JSON.stringify({ 
+          error: parseResult.error.errors[0]?.message || "Invalid request format",
+          success: false 
+        }),
+        { status: 400, headers: { ...corsHeaders, 'Content-Type': 'application/json' } }
+      );
+    }
+
+    const { images, propertyType, propertyName, unitPreference, roomLabels, roomList } = parseResult.data;
     
     const LOVABLE_API_KEY = Deno.env.get("LOVABLE_API_KEY");
     if (!LOVABLE_API_KEY) {
       throw new Error("LOVABLE_API_KEY is not configured");
-    }
-
-    if (!images || !Array.isArray(images) || images.length < 1) {
-      return new Response(
-        JSON.stringify({ error: "At least 1 image is required for measurement" }),
-        { status: 400, headers: { ...corsHeaders, 'Content-Type': 'application/json' } }
-      );
     }
 
     console.log(`Processing ${images.length} images for property measurement`);
@@ -144,13 +163,13 @@ CRITICAL RULES:
       
       if (response.status === 429) {
         return new Response(
-          JSON.stringify({ error: "Rate limit exceeded. Please try again in a moment." }),
+          JSON.stringify({ error: "Rate limit exceeded. Please try again in a moment.", success: false }),
           { status: 429, headers: { ...corsHeaders, 'Content-Type': 'application/json' } }
         );
       }
       if (response.status === 402) {
         return new Response(
-          JSON.stringify({ error: "Service temporarily unavailable. Please try again later." }),
+          JSON.stringify({ error: "Service temporarily unavailable. Please try again later.", success: false }),
           { status: 402, headers: { ...corsHeaders, 'Content-Type': 'application/json' } }
         );
       }
@@ -225,7 +244,7 @@ CRITICAL RULES:
     console.error("Error in property-measurement function:", error);
     return new Response(
       JSON.stringify({ 
-        error: error instanceof Error ? error.message : "Unknown error occurred",
+        error: "An error occurred while processing your request. Please try again.",
         success: false 
       }),
       { status: 500, headers: { ...corsHeaders, 'Content-Type': 'application/json' } }
