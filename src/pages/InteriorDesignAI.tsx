@@ -219,7 +219,7 @@ const wrapText = (text: string, maxChars: number) => {
 const InteriorDesignAI = () => {
   const navigate = useNavigate();
   const { user, isAdmin } = useAuth();
-  const canBypassPayment = isAdmin || import.meta.env.DEV;
+  const canBypassPayment = isAdmin;
   
   // Load saved state from sessionStorage
   const getSavedState = <T,>(key: string, defaultValue: T): T => {
