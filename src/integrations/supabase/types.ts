@@ -484,6 +484,423 @@ export type Database = {
           },
         ]
       }
+      crm_activities: {
+        Row: {
+          activity_type: Database["public"]["Enums"]["crm_activity_type"]
+          created_at: string
+          id: string
+          lead_id: string
+          metadata: Json | null
+          user_id: string
+        }
+        Insert: {
+          activity_type: Database["public"]["Enums"]["crm_activity_type"]
+          created_at?: string
+          id?: string
+          lead_id: string
+          metadata?: Json | null
+          user_id: string
+        }
+        Update: {
+          activity_type?: Database["public"]["Enums"]["crm_activity_type"]
+          created_at?: string
+          id?: string
+          lead_id?: string
+          metadata?: Json | null
+          user_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "crm_activities_lead_id_fkey"
+            columns: ["lead_id"]
+            isOneToOne: false
+            referencedRelation: "crm_leads"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      crm_audit_logs: {
+        Row: {
+          action: string
+          actor_user_id: string | null
+          created_at: string
+          details: Json | null
+          entity_id: string | null
+          entity_type: string
+          id: string
+          ip_address: string | null
+        }
+        Insert: {
+          action: string
+          actor_user_id?: string | null
+          created_at?: string
+          details?: Json | null
+          entity_id?: string | null
+          entity_type: string
+          id?: string
+          ip_address?: string | null
+        }
+        Update: {
+          action?: string
+          actor_user_id?: string | null
+          created_at?: string
+          details?: Json | null
+          entity_id?: string | null
+          entity_type?: string
+          id?: string
+          ip_address?: string | null
+        }
+        Relationships: []
+      }
+      crm_calls: {
+        Row: {
+          created_at: string
+          duration_seconds: number | null
+          ended_at: string | null
+          id: string
+          lead_id: string
+          notes: string | null
+          outcome: string | null
+          started_at: string
+          user_id: string
+        }
+        Insert: {
+          created_at?: string
+          duration_seconds?: number | null
+          ended_at?: string | null
+          id?: string
+          lead_id: string
+          notes?: string | null
+          outcome?: string | null
+          started_at?: string
+          user_id: string
+        }
+        Update: {
+          created_at?: string
+          duration_seconds?: number | null
+          ended_at?: string | null
+          id?: string
+          lead_id?: string
+          notes?: string | null
+          outcome?: string | null
+          started_at?: string
+          user_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "crm_calls_lead_id_fkey"
+            columns: ["lead_id"]
+            isOneToOne: false
+            referencedRelation: "crm_leads"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      crm_imports: {
+        Row: {
+          completed_at: string | null
+          created_at: string
+          duplicates: number | null
+          error_report_url: string | null
+          failed: number | null
+          file_name: string | null
+          id: string
+          inserted: number | null
+          merged: number | null
+          source_type: Database["public"]["Enums"]["crm_import_source"]
+          status: string
+          total_rows: number | null
+          user_id: string
+        }
+        Insert: {
+          completed_at?: string | null
+          created_at?: string
+          duplicates?: number | null
+          error_report_url?: string | null
+          failed?: number | null
+          file_name?: string | null
+          id?: string
+          inserted?: number | null
+          merged?: number | null
+          source_type?: Database["public"]["Enums"]["crm_import_source"]
+          status?: string
+          total_rows?: number | null
+          user_id: string
+        }
+        Update: {
+          completed_at?: string | null
+          created_at?: string
+          duplicates?: number | null
+          error_report_url?: string | null
+          failed?: number | null
+          file_name?: string | null
+          id?: string
+          inserted?: number | null
+          merged?: number | null
+          source_type?: Database["public"]["Enums"]["crm_import_source"]
+          status?: string
+          total_rows?: number | null
+          user_id?: string
+        }
+        Relationships: []
+      }
+      crm_lead_assignments: {
+        Row: {
+          assigned_at: string
+          assigned_by_user_id: string | null
+          assigned_to_user_id: string
+          id: string
+          lead_id: string
+          unassigned_at: string | null
+        }
+        Insert: {
+          assigned_at?: string
+          assigned_by_user_id?: string | null
+          assigned_to_user_id: string
+          id?: string
+          lead_id: string
+          unassigned_at?: string | null
+        }
+        Update: {
+          assigned_at?: string
+          assigned_by_user_id?: string | null
+          assigned_to_user_id?: string
+          id?: string
+          lead_id?: string
+          unassigned_at?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "crm_lead_assignments_lead_id_fkey"
+            columns: ["lead_id"]
+            isOneToOne: false
+            referencedRelation: "crm_leads"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      crm_lead_state_per_user: {
+        Row: {
+          created_at: string
+          id: string
+          is_hidden: boolean
+          is_junk: boolean
+          junk_reason: string | null
+          last_touch_at: string | null
+          lead_id: string
+          next_followup_at: string | null
+          pipeline_status: Database["public"]["Enums"]["crm_pipeline_status"]
+          updated_at: string
+          user_id: string
+        }
+        Insert: {
+          created_at?: string
+          id?: string
+          is_hidden?: boolean
+          is_junk?: boolean
+          junk_reason?: string | null
+          last_touch_at?: string | null
+          lead_id: string
+          next_followup_at?: string | null
+          pipeline_status?: Database["public"]["Enums"]["crm_pipeline_status"]
+          updated_at?: string
+          user_id: string
+        }
+        Update: {
+          created_at?: string
+          id?: string
+          is_hidden?: boolean
+          is_junk?: boolean
+          junk_reason?: string | null
+          last_touch_at?: string | null
+          lead_id?: string
+          next_followup_at?: string | null
+          pipeline_status?: Database["public"]["Enums"]["crm_pipeline_status"]
+          updated_at?: string
+          user_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "crm_lead_state_per_user_lead_id_fkey"
+            columns: ["lead_id"]
+            isOneToOne: false
+            referencedRelation: "crm_leads"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      crm_leads: {
+        Row: {
+          age_range: string | null
+          created_at: string
+          created_by_user_id: string | null
+          current_location_city: string | null
+          current_location_country: string | null
+          email_lower: string | null
+          full_name: string
+          gender: string | null
+          id: string
+          nationality: string | null
+          owner_type: Database["public"]["Enums"]["crm_lead_owner_type"]
+          owner_user_id: string | null
+          phone_e164: string | null
+          preferred_language: string | null
+          source: string | null
+          tags: string[] | null
+          updated_at: string
+        }
+        Insert: {
+          age_range?: string | null
+          created_at?: string
+          created_by_user_id?: string | null
+          current_location_city?: string | null
+          current_location_country?: string | null
+          email_lower?: string | null
+          full_name: string
+          gender?: string | null
+          id?: string
+          nationality?: string | null
+          owner_type?: Database["public"]["Enums"]["crm_lead_owner_type"]
+          owner_user_id?: string | null
+          phone_e164?: string | null
+          preferred_language?: string | null
+          source?: string | null
+          tags?: string[] | null
+          updated_at?: string
+        }
+        Update: {
+          age_range?: string | null
+          created_at?: string
+          created_by_user_id?: string | null
+          current_location_city?: string | null
+          current_location_country?: string | null
+          email_lower?: string | null
+          full_name?: string
+          gender?: string | null
+          id?: string
+          nationality?: string | null
+          owner_type?: Database["public"]["Enums"]["crm_lead_owner_type"]
+          owner_user_id?: string | null
+          phone_e164?: string | null
+          preferred_language?: string | null
+          source?: string | null
+          tags?: string[] | null
+          updated_at?: string
+        }
+        Relationships: []
+      }
+      crm_notes: {
+        Row: {
+          body: string
+          created_at: string
+          id: string
+          lead_id: string
+          user_id: string
+        }
+        Insert: {
+          body: string
+          created_at?: string
+          id?: string
+          lead_id: string
+          user_id: string
+        }
+        Update: {
+          body?: string
+          created_at?: string
+          id?: string
+          lead_id?: string
+          user_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "crm_notes_lead_id_fkey"
+            columns: ["lead_id"]
+            isOneToOne: false
+            referencedRelation: "crm_leads"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      crm_tasks: {
+        Row: {
+          completed_at: string | null
+          created_at: string
+          due_at: string | null
+          id: string
+          lead_id: string | null
+          notes: string | null
+          status: string
+          title: string
+          updated_at: string
+          user_id: string
+        }
+        Insert: {
+          completed_at?: string | null
+          created_at?: string
+          due_at?: string | null
+          id?: string
+          lead_id?: string | null
+          notes?: string | null
+          status?: string
+          title: string
+          updated_at?: string
+          user_id: string
+        }
+        Update: {
+          completed_at?: string | null
+          created_at?: string
+          due_at?: string | null
+          id?: string
+          lead_id?: string | null
+          notes?: string | null
+          status?: string
+          title?: string
+          updated_at?: string
+          user_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "crm_tasks_lead_id_fkey"
+            columns: ["lead_id"]
+            isOneToOne: false
+            referencedRelation: "crm_leads"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      crm_users_profile: {
+        Row: {
+          created_at: string
+          crm_role: Database["public"]["Enums"]["crm_role"]
+          display_name: string | null
+          id: string
+          is_active: boolean
+          preferred_language: string | null
+          updated_at: string
+          user_id: string
+        }
+        Insert: {
+          created_at?: string
+          crm_role?: Database["public"]["Enums"]["crm_role"]
+          display_name?: string | null
+          id?: string
+          is_active?: boolean
+          preferred_language?: string | null
+          updated_at?: string
+          user_id: string
+        }
+        Update: {
+          created_at?: string
+          crm_role?: Database["public"]["Enums"]["crm_role"]
+          display_name?: string | null
+          id?: string
+          is_active?: boolean
+          preferred_language?: string | null
+          updated_at?: string
+          user_id?: string
+        }
+        Relationships: []
+      }
       developers: {
         Row: {
           completed_projects: number | null
@@ -1416,6 +1833,10 @@ export type Database = {
       [_ in never]: never
     }
     Functions: {
+      can_access_crm_lead: {
+        Args: { _lead_id: string; _user_id: string }
+        Returns: boolean
+      }
       has_role: {
         Args: {
           _role: Database["public"]["Enums"]["app_role"]
@@ -1423,6 +1844,8 @@ export type Database = {
         }
         Returns: boolean
       }
+      is_active_crm_member: { Args: { _user_id: string }; Returns: boolean }
+      is_crm_admin: { Args: { _user_id: string }; Returns: boolean }
       is_org_member: {
         Args: { _org_id: string; _user_id: string }
         Returns: boolean
@@ -1462,6 +1885,30 @@ export type Database = {
         | "document"
         | "settings"
         | "role"
+      crm_activity_type:
+        | "call"
+        | "whatsapp_click"
+        | "email_click"
+        | "note"
+        | "status_change"
+        | "followup_created"
+        | "followup_completed"
+        | "meeting"
+        | "import"
+        | "assignment"
+      crm_import_source: "csv" | "vcf" | "manual"
+      crm_lead_owner_type: "company_assigned" | "broker_owned"
+      crm_pipeline_status:
+        | "new"
+        | "contacted"
+        | "qualified"
+        | "viewing"
+        | "negotiation"
+        | "closed_won"
+        | "closed_lost"
+        | "no_answer"
+        | "junk"
+      crm_role: "owner_admin" | "broker_member"
     }
     CompositeTypes: {
       [_ in never]: never
@@ -1616,6 +2063,32 @@ export const Constants = {
         "settings",
         "role",
       ],
+      crm_activity_type: [
+        "call",
+        "whatsapp_click",
+        "email_click",
+        "note",
+        "status_change",
+        "followup_created",
+        "followup_completed",
+        "meeting",
+        "import",
+        "assignment",
+      ],
+      crm_import_source: ["csv", "vcf", "manual"],
+      crm_lead_owner_type: ["company_assigned", "broker_owned"],
+      crm_pipeline_status: [
+        "new",
+        "contacted",
+        "qualified",
+        "viewing",
+        "negotiation",
+        "closed_won",
+        "closed_lost",
+        "no_answer",
+        "junk",
+      ],
+      crm_role: ["owner_admin", "broker_member"],
     },
   },
 } as const

@@ -1,0 +1,719 @@
+import { useState, useEffect } from "react";
+import { useParams, useNavigate } from "react-router-dom";
+import { useAuth } from "@/contexts/AuthContext";
+import { supabase } from "@/integrations/supabase/client";
+import { Button } from "@/components/ui/button";
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { Badge } from "@/components/ui/badge";
+import { Input } from "@/components/ui/input";
+import { Textarea } from "@/components/ui/textarea";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
+import { toast } from "sonner";
+import { 
+  ArrowLeft, Phone, MessageSquare, Mail, User, 
+  MapPin, Globe, Clock, Plus, Play, Square
+} from "lucide-react";
+
+interface Lead {
+  id: string;
+  full_name: string;
+  email_lower: string | null;
+  phone_e164: string | null;
+  nationality: string | null;
+  preferred_language: string | null;
+  current_location_country: string | null;
+  current_location_city: string | null;
+  gender: string | null;
+  age_range: string | null;
+  source: string | null;
+  tags: string[];
+  created_at: string;
+  owner_type: string;
+}
+
+interface Activity {
+  id: string;
+  activity_type: string;
+  metadata: any;
+  created_at: string;
+}
+
+interface Note {
+  id: string;
+  body: string;
+  created_at: string;
+}
+
+interface Task {
+  id: string;
+  title: string;
+  notes: string | null;
+  due_at: string | null;
+  status: string;
+  completed_at: string | null;
+}
+
+interface CallState {
+  isActive: boolean;
+  startTime: Date | null;
+  elapsed: number;
+}
+
+const PIPELINE_STATUSES = [
+  { value: "new", label: "New", color: "bg-blue-500" },
+  { value: "contacted", label: "Contacted", color: "bg-yellow-500" },
+  { value: "qualified", label: "Qualified", color: "bg-green-500" },
+  { value: "viewing", label: "Viewing", color: "bg-purple-500" },
+  { value: "negotiation", label: "Negotiation", color: "bg-orange-500" },
+  { value: "closed_won", label: "Closed Won", color: "bg-emerald-600" },
+  { value: "closed_lost", label: "Closed Lost", color: "bg-red-500" },
+  { value: "no_answer", label: "No Answer", color: "bg-gray-500" },
+  { value: "junk", label: "Junk", color: "bg-gray-400" },
+];
+
+const CRMLeadDetail = () => {
+  const { id } = useParams<{ id: string }>();
+  const navigate = useNavigate();
+  const { user } = useAuth();
+  
+  const [lead, setLead] = useState<Lead | null>(null);
+  const [activities, setActivities] = useState<Activity[]>([]);
+  const [notes, setNotes] = useState<Note[]>([]);
+  const [tasks, setTasks] = useState<Task[]>([]);
+  const [currentStatus, setCurrentStatus] = useState("new");
+  const [loading, setLoading] = useState(true);
+  const [newNote, setNewNote] = useState("");
+  const [newTask, setNewTask] = useState({ title: "", due_at: "" });
+  
+  // Call tracking state
+  const [callState, setCallState] = useState<CallState>({
+    isActive: false,
+    startTime: null,
+    elapsed: 0
+  });
+  const [callOutcome, setCallOutcome] = useState("");
+  const [callNotes, setCallNotes] = useState("");
+
+  useEffect(() => {
+    if (!user || !id) {
+      navigate("/crm");
+      return;
+    }
+    fetchLeadData();
+  }, [user, id, navigate]);
+
+  // Call timer effect
+  useEffect(() => {
+    let interval: NodeJS.Timeout;
+    if (callState.isActive && callState.startTime) {
+      interval = setInterval(() => {
+        setCallState(prev => ({
+          ...prev,
+          elapsed: Math.floor((Date.now() - prev.startTime!.getTime()) / 1000)
+        }));
+      }, 1000);
+    }
+    return () => clearInterval(interval);
+  }, [callState.isActive, callState.startTime]);
+
+  const fetchLeadData = async () => {
+    if (!id || !user) return;
+    
+    try {
+      // Fetch lead
+      const { data: leadData, error: leadError } = await supabase
+        .from("crm_leads")
+        .select("*")
+        .eq("id", id)
+        .single();
+
+      if (leadError) throw leadError;
+      setLead(leadData);
+
+      // Fetch lead state
+      const { data: stateData } = await supabase
+        .from("crm_lead_state_per_user")
+        .select("pipeline_status")
+        .eq("lead_id", id)
+        .eq("user_id", user.id)
+        .single();
+
+      if (stateData) {
+        setCurrentStatus(stateData.pipeline_status);
+      }
+
+      // Fetch activities
+      const { data: activitiesData } = await supabase
+        .from("crm_activities")
+        .select("*")
+        .eq("lead_id", id)
+        .order("created_at", { ascending: false })
+        .limit(50);
+
+      setActivities(activitiesData || []);
+
+      // Fetch notes
+      const { data: notesData } = await supabase
+        .from("crm_notes")
+        .select("*")
+        .eq("lead_id", id)
+        .order("created_at", { ascending: false });
+
+      setNotes(notesData || []);
+
+      // Fetch tasks
+      const { data: tasksData } = await supabase
+        .from("crm_tasks")
+        .select("*")
+        .eq("lead_id", id)
+        .eq("user_id", user.id)
+        .order("due_at", { ascending: true });
+
+      setTasks(tasksData || []);
+    } catch (err) {
+      console.error("Failed to fetch lead:", err);
+      toast.error("Failed to load lead details");
+      navigate("/crm");
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  const handleStatusChange = async (newStatus: string) => {
+    if (!user || !id) return;
+    
+    try {
+      await supabase
+        .from("crm_lead_state_per_user")
+        .upsert(
+          {
+            lead_id: id,
+            user_id: user.id,
+            pipeline_status: newStatus as any,
+            is_junk: newStatus === "junk",
+            last_touch_at: new Date().toISOString()
+          },
+          { onConflict: "lead_id,user_id" }
+        );
+
+      await supabase.from("crm_activities").insert({
+        lead_id: id,
+        user_id: user.id,
+        activity_type: "status_change",
+        metadata: { from: currentStatus, to: newStatus }
+      });
+
+      setCurrentStatus(newStatus);
+      toast.success(`Status changed to ${newStatus}`);
+      fetchLeadData();
+    } catch (err) {
+      toast.error("Failed to update status");
+    }
+  };
+
+  const handleWhatsAppClick = async () => {
+    if (!lead?.phone_e164 || !user || !id) return;
+
+    await supabase.from("crm_activities").insert({
+      lead_id: id,
+      user_id: user.id,
+      activity_type: "whatsapp_click",
+      metadata: { phone: lead.phone_e164 }
+    });
+
+    await supabase
+      .from("crm_lead_state_per_user")
+      .upsert({
+        lead_id: id,
+        user_id: user.id,
+        last_touch_at: new Date().toISOString()
+      }, { onConflict: "lead_id,user_id" });
+
+    const phone = lead.phone_e164.replace("+", "");
+    window.open(`https://wa.me/${phone}`, "_blank");
+    fetchLeadData();
+  };
+
+  const handleEmailClick = async () => {
+    if (!lead?.email_lower || !user || !id) return;
+
+    await supabase.from("crm_activities").insert({
+      lead_id: id,
+      user_id: user.id,
+      activity_type: "email_click",
+      metadata: { email: lead.email_lower }
+    });
+
+    window.open(`mailto:${lead.email_lower}`, "_blank");
+    fetchLeadData();
+  };
+
+  const startCall = () => {
+    setCallState({
+      isActive: true,
+      startTime: new Date(),
+      elapsed: 0
+    });
+  };
+
+  const endCall = async () => {
+    if (!user || !id) return;
+    
+    const duration = callState.elapsed;
+    
+    // Save call record
+    await supabase.from("crm_calls").insert({
+      lead_id: id,
+      user_id: user.id,
+      started_at: callState.startTime?.toISOString(),
+      ended_at: new Date().toISOString(),
+      duration_seconds: duration,
+      outcome: callOutcome,
+      notes: callNotes
+    });
+
+    // Log activity
+    await supabase.from("crm_activities").insert({
+      lead_id: id,
+      user_id: user.id,
+      activity_type: "call",
+      metadata: { duration, outcome: callOutcome }
+    });
+
+    // Update last touch
+    await supabase
+      .from("crm_lead_state_per_user")
+      .upsert({
+        lead_id: id,
+        user_id: user.id,
+        last_touch_at: new Date().toISOString()
+      }, { onConflict: "lead_id,user_id" });
+
+    setCallState({ isActive: false, startTime: null, elapsed: 0 });
+    setCallOutcome("");
+    setCallNotes("");
+    toast.success(`Call logged: ${formatDuration(duration)}`);
+    fetchLeadData();
+  };
+
+  const addNote = async () => {
+    if (!newNote.trim() || !user || !id) return;
+
+    try {
+      await supabase.from("crm_notes").insert({
+        lead_id: id,
+        user_id: user.id,
+        body: newNote.trim()
+      });
+
+      await supabase.from("crm_activities").insert({
+        lead_id: id,
+        user_id: user.id,
+        activity_type: "note",
+        metadata: { preview: newNote.slice(0, 50) }
+      });
+
+      setNewNote("");
+      toast.success("Note added");
+      fetchLeadData();
+    } catch (err) {
+      toast.error("Failed to add note");
+    }
+  };
+
+  const addTask = async () => {
+    if (!newTask.title.trim() || !user || !id) return;
+
+    try {
+      await supabase.from("crm_tasks").insert({
+        lead_id: id,
+        user_id: user.id,
+        title: newTask.title.trim(),
+        due_at: newTask.due_at || null,
+        status: "pending"
+      });
+
+      await supabase.from("crm_activities").insert({
+        lead_id: id,
+        user_id: user.id,
+        activity_type: "followup_created",
+        metadata: { title: newTask.title }
+      });
+
+      setNewTask({ title: "", due_at: "" });
+      toast.success("Task created");
+      fetchLeadData();
+    } catch (err) {
+      toast.error("Failed to create task");
+    }
+  };
+
+  const completeTask = async (taskId: string) => {
+    if (!user || !id) return;
+
+    try {
+      await supabase
+        .from("crm_tasks")
+        .update({
+          status: "completed",
+          completed_at: new Date().toISOString()
+        })
+        .eq("id", taskId);
+
+      await supabase.from("crm_activities").insert({
+        lead_id: id,
+        user_id: user.id,
+        activity_type: "followup_completed",
+        metadata: { task_id: taskId }
+      });
+
+      toast.success("Task completed");
+      fetchLeadData();
+    } catch (err) {
+      toast.error("Failed to complete task");
+    }
+  };
+
+  const formatDuration = (seconds: number) => {
+    const mins = Math.floor(seconds / 60);
+    const secs = seconds % 60;
+    return `${mins}:${secs.toString().padStart(2, "0")}`;
+  };
+
+  const formatDate = (date: string) => {
+    return new Date(date).toLocaleString();
+  };
+
+  const getActivityIcon = (type: string) => {
+    switch (type) {
+      case "call": return <Phone className="h-4 w-4" />;
+      case "whatsapp_click": return <MessageSquare className="h-4 w-4 text-green-500" />;
+      case "email_click": return <Mail className="h-4 w-4 text-blue-500" />;
+      case "status_change": return <Clock className="h-4 w-4 text-orange-500" />;
+      default: return <Clock className="h-4 w-4" />;
+    }
+  };
+
+  if (loading) {
+    return (
+      <div className="min-h-screen bg-background p-6 flex items-center justify-center">
+        <p>Loading...</p>
+      </div>
+    );
+  }
+
+  if (!lead) {
+    return (
+      <div className="min-h-screen bg-background p-6 flex items-center justify-center">
+        <p>Lead not found</p>
+      </div>
+    );
+  }
+
+  return (
+    <div className="min-h-screen bg-background">
+      {/* Header */}
+      <header className="border-b bg-card sticky top-0 z-50">
+        <div className="max-w-5xl mx-auto px-4 py-4 flex items-center gap-4">
+          <Button variant="ghost" size="icon" onClick={() => navigate("/crm")}>
+            <ArrowLeft className="h-5 w-5" />
+          </Button>
+          <div className="flex-1">
+            <h1 className="text-xl font-bold">{lead.full_name}</h1>
+            <p className="text-sm text-muted-foreground">
+              {lead.nationality} · {lead.preferred_language?.toUpperCase()}
+            </p>
+          </div>
+          <Select value={currentStatus} onValueChange={handleStatusChange}>
+            <SelectTrigger className="w-[160px]">
+              <SelectValue />
+            </SelectTrigger>
+            <SelectContent>
+              {PIPELINE_STATUSES.map(status => (
+                <SelectItem key={status.value} value={status.value}>
+                  {status.label}
+                </SelectItem>
+              ))}
+            </SelectContent>
+          </Select>
+        </div>
+      </header>
+
+      <main className="max-w-5xl mx-auto px-4 py-6 grid grid-cols-1 lg:grid-cols-3 gap-6">
+        {/* Left Column - Lead Info & Actions */}
+        <div className="space-y-6">
+          {/* Contact Card */}
+          <Card>
+            <CardHeader>
+              <CardTitle className="text-lg">Contact Info</CardTitle>
+            </CardHeader>
+            <CardContent className="space-y-4">
+              {lead.phone_e164 && (
+                <div className="flex items-center gap-3">
+                  <Phone className="h-4 w-4 text-muted-foreground" />
+                  <span>{lead.phone_e164}</span>
+                </div>
+              )}
+              {lead.email_lower && (
+                <div className="flex items-center gap-3">
+                  <Mail className="h-4 w-4 text-muted-foreground" />
+                  <span>{lead.email_lower}</span>
+                </div>
+              )}
+              {(lead.current_location_country || lead.current_location_city) && (
+                <div className="flex items-center gap-3">
+                  <MapPin className="h-4 w-4 text-muted-foreground" />
+                  <span>
+                    {[lead.current_location_city, lead.current_location_country]
+                      .filter(Boolean)
+                      .join(", ")}
+                  </span>
+                </div>
+              )}
+              {lead.source && (
+                <div className="flex items-center gap-3">
+                  <Globe className="h-4 w-4 text-muted-foreground" />
+                  <span>Source: {lead.source}</span>
+                </div>
+              )}
+              {lead.tags?.length > 0 && (
+                <div className="flex flex-wrap gap-1">
+                  {lead.tags.map((tag, i) => (
+                    <Badge key={i} variant="secondary" className="text-xs">
+                      {tag}
+                    </Badge>
+                  ))}
+                </div>
+              )}
+            </CardContent>
+          </Card>
+
+          {/* Quick Actions */}
+          <Card>
+            <CardHeader>
+              <CardTitle className="text-lg">Quick Actions</CardTitle>
+            </CardHeader>
+            <CardContent className="space-y-3">
+              <Button
+                variant="outline"
+                className="w-full justify-start text-green-600"
+                onClick={handleWhatsAppClick}
+                disabled={!lead.phone_e164}
+              >
+                <MessageSquare className="h-4 w-4 mr-2" />
+                WhatsApp
+              </Button>
+              <Button
+                variant="outline"
+                className="w-full justify-start text-blue-600"
+                onClick={handleEmailClick}
+                disabled={!lead.email_lower}
+              >
+                <Mail className="h-4 w-4 mr-2" />
+                Send Email
+              </Button>
+            </CardContent>
+          </Card>
+
+          {/* Call Tracker */}
+          <Card>
+            <CardHeader>
+              <CardTitle className="text-lg">Log Call</CardTitle>
+            </CardHeader>
+            <CardContent className="space-y-4">
+              {!callState.isActive ? (
+                <Button onClick={startCall} className="w-full">
+                  <Play className="h-4 w-4 mr-2" />
+                  Start Call Timer
+                </Button>
+              ) : (
+                <div className="space-y-4">
+                  <div className="text-center py-4 bg-muted rounded-lg">
+                    <p className="text-3xl font-mono font-bold">
+                      {formatDuration(callState.elapsed)}
+                    </p>
+                    <p className="text-sm text-muted-foreground">Call in progress</p>
+                  </div>
+                  <Select value={callOutcome} onValueChange={setCallOutcome}>
+                    <SelectTrigger>
+                      <SelectValue placeholder="Call outcome" />
+                    </SelectTrigger>
+                    <SelectContent>
+                      <SelectItem value="answered">Answered</SelectItem>
+                      <SelectItem value="voicemail">Voicemail</SelectItem>
+                      <SelectItem value="no_answer">No Answer</SelectItem>
+                      <SelectItem value="busy">Busy</SelectItem>
+                      <SelectItem value="wrong_number">Wrong Number</SelectItem>
+                    </SelectContent>
+                  </Select>
+                  <Textarea
+                    placeholder="Call notes..."
+                    value={callNotes}
+                    onChange={(e) => setCallNotes(e.target.value)}
+                    rows={2}
+                  />
+                  <Button onClick={endCall} variant="destructive" className="w-full">
+                    <Square className="h-4 w-4 mr-2" />
+                    End Call & Save
+                  </Button>
+                </div>
+              )}
+            </CardContent>
+          </Card>
+        </div>
+
+        {/* Right Column - Tabs */}
+        <div className="lg:col-span-2">
+          <Tabs defaultValue="activity">
+            <TabsList className="mb-4">
+              <TabsTrigger value="activity">Activity</TabsTrigger>
+              <TabsTrigger value="notes">Notes</TabsTrigger>
+              <TabsTrigger value="tasks">Tasks</TabsTrigger>
+            </TabsList>
+
+            {/* Activity Tab */}
+            <TabsContent value="activity">
+              <Card>
+                <CardContent className="pt-6">
+                  {activities.length === 0 ? (
+                    <p className="text-center text-muted-foreground py-8">
+                      No activity yet
+                    </p>
+                  ) : (
+                    <div className="space-y-4">
+                      {activities.map((activity) => (
+                        <div key={activity.id} className="flex gap-3 pb-4 border-b last:border-0">
+                          <div className="p-2 bg-muted rounded-full h-fit">
+                            {getActivityIcon(activity.activity_type)}
+                          </div>
+                          <div className="flex-1">
+                            <p className="text-sm font-medium capitalize">
+                              {activity.activity_type.replace(/_/g, " ")}
+                            </p>
+                            {activity.metadata && Object.keys(activity.metadata).length > 0 && (
+                              <p className="text-xs text-muted-foreground">
+                                {JSON.stringify(activity.metadata)}
+                              </p>
+                            )}
+                            <p className="text-xs text-muted-foreground mt-1">
+                              {formatDate(activity.created_at)}
+                            </p>
+                          </div>
+                        </div>
+                      ))}
+                    </div>
+                  )}
+                </CardContent>
+              </Card>
+            </TabsContent>
+
+            {/* Notes Tab */}
+            <TabsContent value="notes">
+              <Card>
+                <CardContent className="pt-6 space-y-4">
+                  <div className="flex gap-2">
+                    <Textarea
+                      placeholder="Add a note..."
+                      value={newNote}
+                      onChange={(e) => setNewNote(e.target.value)}
+                      rows={2}
+                      className="flex-1"
+                    />
+                    <Button onClick={addNote} disabled={!newNote.trim()}>
+                      <Plus className="h-4 w-4" />
+                    </Button>
+                  </div>
+                  
+                  {notes.length === 0 ? (
+                    <p className="text-center text-muted-foreground py-8">
+                      No notes yet
+                    </p>
+                  ) : (
+                    <div className="space-y-3">
+                      {notes.map((note) => (
+                        <div key={note.id} className="p-3 bg-muted rounded-lg">
+                          <p className="text-sm">{note.body}</p>
+                          <p className="text-xs text-muted-foreground mt-2">
+                            {formatDate(note.created_at)}
+                          </p>
+                        </div>
+                      ))}
+                    </div>
+                  )}
+                </CardContent>
+              </Card>
+            </TabsContent>
+
+            {/* Tasks Tab */}
+            <TabsContent value="tasks">
+              <Card>
+                <CardContent className="pt-6 space-y-4">
+                  <div className="flex gap-2">
+                    <Input
+                      placeholder="New task title..."
+                      value={newTask.title}
+                      onChange={(e) => setNewTask({ ...newTask, title: e.target.value })}
+                      className="flex-1"
+                    />
+                    <Input
+                      type="datetime-local"
+                      value={newTask.due_at}
+                      onChange={(e) => setNewTask({ ...newTask, due_at: e.target.value })}
+                      className="w-48"
+                    />
+                    <Button onClick={addTask} disabled={!newTask.title.trim()}>
+                      <Plus className="h-4 w-4" />
+                    </Button>
+                  </div>
+                  
+                  {tasks.length === 0 ? (
+                    <p className="text-center text-muted-foreground py-8">
+                      No tasks yet
+                    </p>
+                  ) : (
+                    <div className="space-y-2">
+                      {tasks.map((task) => (
+                        <div
+                          key={task.id}
+                          className={`flex items-center gap-3 p-3 border rounded-lg ${
+                            task.status === "completed" ? "opacity-50" : ""
+                          }`}
+                        >
+                          <input
+                            type="checkbox"
+                            checked={task.status === "completed"}
+                            onChange={() => task.status !== "completed" && completeTask(task.id)}
+                            className="h-4 w-4"
+                          />
+                          <div className="flex-1">
+                            <p className={`text-sm ${task.status === "completed" ? "line-through" : ""}`}>
+                              {task.title}
+                            </p>
+                            {task.due_at && (
+                              <p className="text-xs text-muted-foreground">
+                                Due: {new Date(task.due_at).toLocaleString()}
+                              </p>
+                            )}
+                          </div>
+                        </div>
+                      ))}
+                    </div>
+                  )}
+                </CardContent>
+              </Card>
+            </TabsContent>
+          </Tabs>
+        </div>
+      </main>
+    </div>
+  );
+};
+
+export default CRMLeadDetail;
