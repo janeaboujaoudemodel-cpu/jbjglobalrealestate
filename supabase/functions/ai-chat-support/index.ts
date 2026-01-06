@@ -331,6 +331,53 @@ const APPROVED_CONTACT_INFO = {
   website: 'jjglobalcapital.com',
 };
 
+// Sanitize AI output to remove any unapproved contact information
+function sanitizeContactInfo(text: string): string {
+  // UAE phone number patterns (various formats)
+  const phonePatterns = [
+    /\+971[\s\-]?5[0-9][\s\-]?[0-9]{3}[\s\-]?[0-9]{4}/g,
+    /\+971[\s\-]?[0-9]{2}[\s\-]?[0-9]{3}[\s\-]?[0-9]{4}/g,
+    /0?5[0-9][\s\-]?[0-9]{3}[\s\-]?[0-9]{4}/g,
+    /\+971[\s\-]?[0-9]{9,10}/g,
+  ];
+  
+  // Email pattern
+  const emailPattern = /[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}/g;
+  
+  let sanitized = text;
+  
+  // Replace any phone numbers that aren't our approved one
+  phonePatterns.forEach(pattern => {
+    sanitized = sanitized.replace(pattern, (match) => {
+      // Normalize for comparison
+      const normalized = match.replace(/[\s\-]/g, '');
+      if (normalized === '+97156591 1000' || normalized === '+971565911000' || normalized === '565911000') {
+        return match; // Keep approved number
+      }
+      return APPROVED_CONTACT_INFO.phone; // Replace with approved
+    });
+  });
+  
+  // Replace any emails that aren't our approved ones
+  sanitized = sanitized.replace(emailPattern, (match) => {
+    const lowerMatch = match.toLowerCase();
+    if (
+      lowerMatch === 'contact@jjglobalcapital.com' ||
+      lowerMatch === 'privacy@jjglobalcapital.com' ||
+      lowerMatch === 'partnerships@jjglobalcapital.com' ||
+      lowerMatch === 'collaboration@jjglobalcapital.com' ||
+      lowerMatch === 'careers@jjglobalcapital.com' ||
+      lowerMatch === 'security@jjglobalcapital.com' ||
+      lowerMatch === 'jane@jjglobalcapital.com'
+    ) {
+      return match; // Keep approved emails
+    }
+    return APPROVED_CONTACT_INFO.email; // Replace with approved
+  });
+  
+  return sanitized;
+}
+
 // Input validation schema
 const MessageSchema = z.object({
   role: z.enum(['user', 'assistant', 'system']),
@@ -625,7 +672,10 @@ Contact for human assistance:
     }
 
     const data = await response.json();
-    const aiResponse = data.choices?.[0]?.message?.content || `I apologize, but I was unable to process your request. Please contact our team directly:\n\n📧 Email: ${APPROVED_CONTACT_INFO.email}\n📞 Phone: ${APPROVED_CONTACT_INFO.phone}\n💬 WhatsApp: ${APPROVED_CONTACT_INFO.phone}`;
+    let aiResponse = data.choices?.[0]?.message?.content || `I apologize, but I was unable to process your request. Please contact our team directly:\n\n📧 Email: ${APPROVED_CONTACT_INFO.email}\n📞 Phone: ${APPROVED_CONTACT_INFO.phone}\n💬 WhatsApp: ${APPROVED_CONTACT_INFO.phone}`;
+
+    // CRITICAL: Sanitize any unapproved contact info from AI output
+    aiResponse = sanitizeContactInfo(aiResponse);
 
     return new Response(JSON.stringify({ response: aiResponse }), {
       headers: { ...corsHeaders, 'Content-Type': 'application/json' },
