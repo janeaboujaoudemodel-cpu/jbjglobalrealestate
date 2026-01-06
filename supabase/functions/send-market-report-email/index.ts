@@ -184,7 +184,7 @@ const handler = async (req: Request): Promise<Response> => {
           
           <div class="footer">
             <p>This lead was captured from the Market Report download page.</p>
-            <p style="margin-top: 10px;">JJ Global Capital • Part of JJ Holding Group</p>
+            <p style="margin-top: 10px;">JJ Global Capital — Real Estate Brokerage</p>
           </div>
         </div>
       </body>

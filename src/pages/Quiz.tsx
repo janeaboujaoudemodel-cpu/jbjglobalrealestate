@@ -24,7 +24,7 @@ import { PaymentModal } from "@/components/PaymentModal";
 import { useQuizUsage } from "@/hooks/useQuizUsage";
 import { useMembership } from "@/hooks/useMembership";
 
-const JJ_HOLDING_URL = "https://jjholdinggroup.com";
+
 
 // Enhanced detailed quiz questions
 const QUIZ_QUESTIONS = [

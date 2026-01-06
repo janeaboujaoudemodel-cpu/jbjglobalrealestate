@@ -843,7 +843,7 @@ serve(async (req) => {
       
       <div class="footer-branding">
         <p class="footer-branding-text">
-          Powered & Made by <strong>JJ Global Capital</strong> — Part of <strong>JJ Holding Group</strong>
+          Powered & Made by <strong>JJ Global Capital</strong> — Real Estate Brokerage
         </p>
       </div>
       

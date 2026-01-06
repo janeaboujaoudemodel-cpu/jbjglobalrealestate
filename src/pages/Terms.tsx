@@ -2,7 +2,7 @@ import { Link } from "react-router-dom";
 import { ChevronLeft } from "lucide-react";
 import Footer from "@/components/Footer";
 
-const JJ_HOLDING_URL = "https://jjholdinggroup.com";
+
 
 const Terms = () => {
   return (
