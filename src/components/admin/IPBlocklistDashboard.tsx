@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
 import { supabase } from "@/integrations/supabase/client";
 import { useAuth } from "@/contexts/AuthContext";
+import { useAuditLog } from "@/hooks/useAuditLog";
 import { Card } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -44,6 +45,7 @@ interface BlockedIP {
 
 export const IPBlocklistDashboard = () => {
   const { user } = useAuth();
+  const { logAction } = useAuditLog();
   const [blockedIPs, setBlockedIPs] = useState<BlockedIP[]>([]);
   const [loading, setLoading] = useState(true);
   const [isLive, setIsLive] = useState(true);
@@ -161,6 +163,20 @@ export const IPBlocklistDashboard = () => {
         return;
       }
 
+      // Log the block action
+      await logAction({
+        actionType: "block",
+        resourceType: "ip_blocklist",
+        resourceId: newIP.trim(),
+        description: `Blocked IP address ${newIP.trim()}`,
+        details: {
+          ip_address: newIP.trim(),
+          reason: newReason.trim() || "Manually blocked by admin",
+          is_permanent: isPermanent,
+          expires_at: expiresAt,
+        },
+      });
+
       toast.success(`IP ${newIP} has been blocked`);
       setNewIP("");
       setNewReason("");
@@ -182,6 +198,17 @@ export const IPBlocklistDashboard = () => {
         .eq("id", id);
 
       if (error) throw error;
+
+      // Log the unblock action
+      await logAction({
+        actionType: "unblock",
+        resourceType: "ip_blocklist",
+        resourceId: ipAddress,
+        description: `Unblocked IP address ${ipAddress}`,
+        details: {
+          ip_address: ipAddress,
+        },
+      });
 
       toast.success(`IP ${ipAddress} has been unblocked`);
       fetchBlockedIPs();
