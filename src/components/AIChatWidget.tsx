@@ -5,7 +5,7 @@ import { Label } from '@/components/ui/label';
 import { ScrollArea } from '@/components/ui/scroll-area';
 import { Checkbox } from '@/components/ui/checkbox';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
-import { MessageCircle, X, Send, Bot, User, Loader2, Star, Building2, Plane, Scale, Paintbrush, Calculator, Home, ChevronLeft, Mail, Phone as PhoneIcon, UserCircle, MapPin, Globe, Calendar, Shield, History, Plus, Clock } from 'lucide-react';
+import { MessageCircle, X, Send, Bot, User, Loader2, Star, Building2, Plane, Scale, Paintbrush, Calculator, Home, ChevronLeft, Mail, Phone as PhoneIcon, UserCircle, MapPin, Globe, Calendar, Shield, History, Plus, Clock, Search } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { useLanguage } from '@/contexts/LanguageContext';
 import { supabase } from '@/integrations/supabase/client';
@@ -138,6 +138,7 @@ const AIChatWidget = () => {
   const [hoveredRating, setHoveredRating] = useState<number>(0);
   const [formErrors, setFormErrors] = useState<Record<string, string>>({});
   const [chatHistory, setChatHistory] = useState<ChatHistoryItem[]>([]);
+  const [historySearch, setHistorySearch] = useState('');
   const [isLoadingHistory, setIsLoadingHistory] = useState(false);
   const scrollRef = useRef<HTMLDivElement>(null);
   const inputRef = useRef<HTMLInputElement>(null);
@@ -527,6 +528,7 @@ const AIChatWidget = () => {
       setRatingFeedback('');
       setFormErrors({});
       setChatHistory([]);
+      setHistorySearch('');
     }, 300);
   };
 
@@ -771,6 +773,28 @@ const AIChatWidget = () => {
                   </div>
                 </a>
 
+                {/* Search Bar for Chat History */}
+                {chatHistory.length > 0 && !isLoadingHistory && (
+                  <div className="relative mb-3">
+                    <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-zinc-500" />
+                    <Input
+                      type="text"
+                      value={historySearch}
+                      onChange={(e) => setHistorySearch(e.target.value)}
+                      placeholder="Search conversations..."
+                      className="pl-9 bg-white/5 border-zinc-700 text-white placeholder:text-zinc-500 h-9 text-sm"
+                    />
+                    {historySearch && (
+                      <button
+                        onClick={() => setHistorySearch('')}
+                        className="absolute right-3 top-1/2 -translate-y-1/2 text-zinc-500 hover:text-white"
+                      >
+                        <X className="w-3.5 h-3.5" />
+                      </button>
+                    )}
+                  </div>
+                )}
+
                 {/* Previous Conversations */}
                 {isLoadingHistory ? (
                   <div className="flex items-center justify-center py-8">
@@ -781,8 +805,22 @@ const AIChatWidget = () => {
                     <p className="text-zinc-500 text-xs font-medium mb-2 flex items-center gap-1">
                       <Clock className="w-3 h-3" />
                       Previous Conversations
+                      {historySearch && ` (filtered)`}
                     </p>
-                    {chatHistory.map((conv) => {
+                    {chatHistory
+                      .filter((conv) => {
+                        if (!historySearch.trim()) return true;
+                        const search = historySearch.toLowerCase();
+                        const serviceName = SERVICES.find(s => s.id === conv.service_type)?.label || 'General';
+                        // Search in service name, status, and message content
+                        const matchesService = serviceName.toLowerCase().includes(search);
+                        const matchesStatus = conv.status.toLowerCase().includes(search);
+                        const matchesMessages = conv.messages?.some(msg => 
+                          msg.content.toLowerCase().includes(search)
+                        );
+                        return matchesService || matchesStatus || matchesMessages;
+                      })
+                      .map((conv) => {
                       const serviceName = SERVICES.find(s => s.id === conv.service_type)?.label || 'General';
                       const messageCount = conv.messages?.length || 0;
                       const lastMessage = conv.messages?.[conv.messages.length - 1]?.content || '';
@@ -818,6 +856,24 @@ const AIChatWidget = () => {
                         </button>
                       );
                     })}
+                    {/* No search results */}
+                    {historySearch && chatHistory.filter((conv) => {
+                      const search = historySearch.toLowerCase();
+                      const serviceName = SERVICES.find(s => s.id === conv.service_type)?.label || 'General';
+                      return serviceName.toLowerCase().includes(search) ||
+                        conv.status.toLowerCase().includes(search) ||
+                        conv.messages?.some(msg => msg.content.toLowerCase().includes(search));
+                    }).length === 0 && (
+                      <div className="text-center py-4">
+                        <p className="text-zinc-500 text-sm">No conversations match "{historySearch}"</p>
+                        <button
+                          onClick={() => setHistorySearch('')}
+                          className="text-gold text-xs hover:underline mt-1"
+                        >
+                          Clear search
+                        </button>
+                      </div>
+                    )}
                   </div>
                 ) : (
                   <div className="text-center py-6">
