@@ -1,4 +1,4 @@
-import { ChevronRight, Play, Volume2, VolumeX, Check } from "lucide-react";
+import { ChevronRight, Play, Volume2, VolumeX, Check, Sparkles } from "lucide-react";
 import { useState, useRef } from "react";
 import { Link } from "react-router-dom";
 import dubaiHeroVideo from "@/assets/dubai-hero-video.mp4";
@@ -33,40 +33,42 @@ const howWeHelp = [
 
 const services = [
   {
-    title: "Property Management",
-    description: "Professional property management services for your UAE investments",
+    title: "Holiday Homes",
+    description: "Short-term rental support and holiday home operations for UAE property owners.",
     gradient: "from-blue-500/20 via-cyan-500/10 to-blue-600/20",
     iconGradient: "from-blue-400 to-cyan-400",
   },
   {
-    title: "Real Estate Advisory",
-    description: "Property guidance and brokerage support (introductions only)",
-    gradient: "from-emerald-500/20 via-green-500/10 to-emerald-600/20",
-    iconGradient: "from-emerald-400 to-green-400",
-  },
-  {
     title: "Mortgage Partners",
-    description: "Introductions to mortgage specialists",
+    description: "Introductions and coordination with independent, licensed mortgage specialists.",
     gradient: "from-amber-500/20 via-orange-500/10 to-amber-600/20",
     iconGradient: "from-amber-400 to-orange-400",
   },
   {
     title: "Legal Partners",
-    description: "Introductions to independent law firms",
+    description: "Introductions to independent law firms for conveyancing and legal matters.",
     gradient: "from-purple-500/20 via-violet-500/10 to-purple-600/20",
     iconGradient: "from-purple-400 to-violet-400",
   },
   {
-    title: "Architecture",
-    description: "Innovative architectural design solutions",
+    title: "Design & Build Partners",
+    description: "Introductions to architecture, interior design, and fit-out partners.",
     gradient: "from-rose-500/20 via-pink-500/10 to-rose-600/20",
     iconGradient: "from-rose-400 to-pink-400",
+    hasAILink: true,
   },
   {
-    title: "Interior Design & Fit Out",
-    description: "Luxury interior design and complete fit-out services",
+    title: "Architecture Partners",
+    description: "Introductions to independent architectural design partners.",
+    gradient: "from-emerald-500/20 via-green-500/10 to-emerald-600/20",
+    iconGradient: "from-emerald-400 to-green-400",
+  },
+  {
+    title: "Interior Design Partners",
+    description: "Introductions to independent interior design partners.",
     gradient: "from-gold/20 via-amber-500/10 to-gold-dark/20",
     iconGradient: "from-gold to-gold-dark",
+    hasAILink: true,
   },
 ];
 
@@ -74,7 +76,7 @@ const services = [
 const Premium3DIcon = ({ title, gradient }: { title: string; gradient: string }) => {
   const getIconPath = () => {
     switch (title) {
-      case "Property Management":
+      case "Holiday Homes":
         return (
           <g>
             <rect x="8" y="12" width="28" height="20" rx="2" fill="url(#iconGrad)" opacity="0.9"/>
@@ -84,15 +86,6 @@ const Premium3DIcon = ({ title, gradient }: { title: string; gradient: string })
             <rect x="12" y="26" width="4" height="4" fill="white" opacity="0.8"/>
             <rect x="20" y="26" width="4" height="4" fill="white" opacity="0.8"/>
             <polygon points="18,4 4,16 32,16" fill="url(#iconGrad)"/>
-          </g>
-        );
-      case "Real Estate Advisory":
-        return (
-          <g>
-            <circle cx="20" cy="20" r="14" fill="url(#iconGrad)" opacity="0.3"/>
-            <path d="M20 8 L20 20 L30 20" stroke="url(#iconGrad)" strokeWidth="3" fill="none"/>
-            <circle cx="20" cy="20" r="10" stroke="url(#iconGrad)" strokeWidth="2" fill="none"/>
-            <path d="M12 28 L16 24 L22 26 L28 18" stroke="white" strokeWidth="2" fill="none" opacity="0.8"/>
           </g>
         );
       case "Mortgage Partners":
@@ -117,7 +110,7 @@ const Premium3DIcon = ({ title, gradient }: { title: string; gradient: string })
             <rect x="4" y="32" width="32" height="4" fill="url(#iconGrad)"/>
           </g>
         );
-      case "Architecture":
+      case "Design & Build Partners":
         return (
           <g>
             <polygon points="20,4 4,18 36,18" fill="url(#iconGrad)" opacity="0.8"/>
@@ -127,7 +120,17 @@ const Premium3DIcon = ({ title, gradient }: { title: string; gradient: string })
             <line x1="28" y1="18" x2="28" y2="34" stroke="white" strokeWidth="1" opacity="0.5"/>
           </g>
         );
-      case "Interior Design & Fit Out":
+      case "Architecture Partners":
+        return (
+          <g>
+            <polygon points="20,4 4,18 36,18" fill="url(#iconGrad)" opacity="0.8"/>
+            <rect x="8" y="18" width="24" height="16" fill="url(#iconGrad)"/>
+            <rect x="14" y="24" width="12" height="10" fill="white" opacity="0.3"/>
+            <line x1="12" y1="18" x2="12" y2="34" stroke="white" strokeWidth="1" opacity="0.5"/>
+            <line x1="28" y1="18" x2="28" y2="34" stroke="white" strokeWidth="1" opacity="0.5"/>
+          </g>
+        );
+      case "Interior Design Partners":
         return (
           <g>
             <rect x="8" y="12" width="24" height="16" rx="2" fill="url(#iconGrad)" opacity="0.6"/>
@@ -359,16 +362,16 @@ const ServicesSection = () => {
         {/* Services Section Header */}
         <div className="text-center mb-12">
           <span className="inline-block px-5 py-2 bg-gradient-to-r from-gold/20 to-gold/5 border border-gold/30 rounded-full text-gold text-sm font-medium mb-6 backdrop-blur-sm">
-            Complete Solutions
+            Partner Network
           </span>
           <h2 
             className="text-3xl md:text-4xl font-bold text-white mb-4"
             style={{ fontFamily: "Poppins, sans-serif" }}
           >
-            Our <span className="text-transparent bg-clip-text bg-gradient-to-r from-gold to-gold-light">Services</span>
+            Partner <span className="text-transparent bg-clip-text bg-gradient-to-r from-gold to-gold-light">Introductions</span>
           </h2>
           <p className="text-zinc-300 max-w-2xl mx-auto leading-relaxed">
-            Beyond property sales, we offer comprehensive real estate services to support your investment journey
+            We connect you with independent, licensed professionals for comprehensive support
           </p>
         </div>
 
@@ -398,9 +401,20 @@ const ServicesSection = () => {
                     {service.title}
                   </h3>
                   
-                  <p className="text-zinc-400 text-sm leading-relaxed mb-6 group-hover:text-zinc-300 transition-colors">
+                  <p className="text-zinc-400 text-sm leading-relaxed mb-4 group-hover:text-zinc-300 transition-colors">
                     {service.description}
                   </p>
+
+                  {service.hasAILink && (
+                    <Link 
+                      to="/interior-design-ai"
+                      className="inline-flex items-center text-xs text-fuchsia-400 hover:text-fuchsia-300 bg-fuchsia-500/10 border border-fuchsia-500/30 px-3 py-1.5 rounded-full mb-4 transition-all hover:bg-fuchsia-500/20"
+                      onClick={(e) => e.stopPropagation()}
+                    >
+                      <Sparkles className="w-3 h-3 mr-1.5" />
+                      Try AI Interior Design (Informational)
+                    </Link>
+                  )}
 
                   <div className="flex items-center text-gold text-sm font-medium opacity-0 group-hover:opacity-100 transition-all duration-300 transform translate-y-2 group-hover:translate-y-0">
                     <span>Inquire Now</span>

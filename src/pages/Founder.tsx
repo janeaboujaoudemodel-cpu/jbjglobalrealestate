@@ -1107,13 +1107,13 @@ const Founder = () => {
                 <span className="text-zinc-300">{CONTACT_INFO.emailCapitalized}</span>
               </a>
               <a 
-                href="mailto:support@jjglobalcapital.com" 
+                href={`mailto:${CONTACT_INFO.privacyEmail}`} 
                 className="hover:text-gold transition-colors flex items-center gap-3 group"
               >
                 <div className="w-11 h-11 bg-zinc-900 border border-zinc-800 rounded-full flex items-center justify-center group-hover:border-gold/50 group-hover:scale-110 transition-all">
                   <Mail className="w-5 h-5 text-gold" />
                 </div>
-                <span className="text-zinc-300">Support@JJGlobalCapital.com</span>
+                <span className="text-zinc-300">{CONTACT_INFO.privacyEmail}</span>
               </a>
               <a 
                 href={getCallUrl()} 

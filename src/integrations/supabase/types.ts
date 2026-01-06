@@ -296,6 +296,7 @@ export type Database = {
           created_at: string
           id: string
           messages: Json
+          page_source: string | null
           rating: number | null
           rating_feedback: string | null
           service_type: string | null
@@ -309,6 +310,7 @@ export type Database = {
           created_at?: string
           id?: string
           messages?: Json
+          page_source?: string | null
           rating?: number | null
           rating_feedback?: string | null
           service_type?: string | null
@@ -322,6 +324,7 @@ export type Database = {
           created_at?: string
           id?: string
           messages?: Json
+          page_source?: string | null
           rating?: number | null
           rating_feedback?: string | null
           service_type?: string | null
@@ -776,36 +779,54 @@ export type Database = {
       }
       leads: {
         Row: {
+          age_range: string | null
+          consent_accurate: boolean | null
+          consent_privacy: boolean | null
           created_at: string
+          current_location: string | null
           email: string
           full_name: string | null
           id: string
           language: string | null
           nationality: string | null
+          page_source: string | null
           phone: string | null
           source: string
+          status: string | null
           updated_at: string
         }
         Insert: {
+          age_range?: string | null
+          consent_accurate?: boolean | null
+          consent_privacy?: boolean | null
           created_at?: string
+          current_location?: string | null
           email: string
           full_name?: string | null
           id?: string
           language?: string | null
           nationality?: string | null
+          page_source?: string | null
           phone?: string | null
           source: string
+          status?: string | null
           updated_at?: string
         }
         Update: {
+          age_range?: string | null
+          consent_accurate?: boolean | null
+          consent_privacy?: boolean | null
           created_at?: string
+          current_location?: string | null
           email?: string
           full_name?: string | null
           id?: string
           language?: string | null
           nationality?: string | null
+          page_source?: string | null
           phone?: string | null
           source?: string
+          status?: string | null
           updated_at?: string
         }
         Relationships: []

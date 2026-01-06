@@ -332,18 +332,17 @@ const Footer = () => {
               <h4 className="text-white font-semibold">Legal Disclaimer</h4>
             </div>
             <p className="text-zinc-400 text-sm leading-relaxed mb-4">
-              <span className="text-white font-medium">JJ Global Capital</span> is a real estate brokerage. 
-              We do not provide legal, mortgage, financial, or investment advice. Third-party services 
-              (legal, mortgage, property management) are provided by{" "}
-              <span className="text-gold font-semibold">independent professionals</span> who contract 
-              directly with clients.
+              <span className="text-white font-medium">JJ Global Capital</span> provides real estate brokerage support and coordination. 
+              We can introduce you to independent, licensed partners for legal services, mortgages, and concierge support. 
+              Partner services are delivered under the partner's own licence and terms, and the client contracts directly with the partner. 
+              We do not provide legal, mortgage, financial, or investment advice.
             </p>
             <p className="text-zinc-500 text-xs leading-relaxed mb-4">
               All content, design, and technology on this platform are the intellectual property of 
               Jane Abou Jaoude and JJ Global Capital. Unauthorized reproduction is strictly prohibited.
             </p>
             <p className="text-zinc-500 text-xs leading-relaxed mb-4" dir="rtl">
-              جي جي جلوبال كابيتال تقدم خدمات وساطة عقارية وتقديم إحالات فقط. نحن لا نقدم استشارات قانونية أو تمويلية أو استثمارية. الخدمات المقدمة من الجهات الأخرى تتم عبر جهات مستقلة ومرخصة.
+              جي جي جلوبال كابيتال تقدم خدمات وساطة عقارية ودعم تنسيقي. يمكننا ربطك بشركاء مستقلين ومرخصين للخدمات القانونية والتمويل العقاري وخدمات الكونسيرج. تُقدَّم خدمات الشركاء وفق ترخيصهم وشروطهم الخاصة، ويكون التعاقد مباشرة بين العميل والشريك. نحن لا نقدم استشارات قانونية أو تمويلية أو استثمارية.
             </p>
             <div className="flex flex-wrap items-center justify-center gap-2 text-xs text-zinc-600">
               <span>Real Estate Brokerage</span>
