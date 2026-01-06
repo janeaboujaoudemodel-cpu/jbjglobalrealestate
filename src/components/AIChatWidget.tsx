@@ -100,6 +100,28 @@ const getTimeAgo = (date: Date): string => {
   return date.toLocaleDateString('en-US', { month: 'short', day: 'numeric' });
 };
 
+// Highlight matching text in search results
+const HighlightText = ({ text, search }: { text: string; search: string }) => {
+  if (!search.trim()) {
+    return <>{text}</>;
+  }
+  
+  const regex = new RegExp(`(${search.replace(/[.*+?^${}()|[\]\\]/g, '\\$&')})`, 'gi');
+  const parts = text.split(regex);
+  
+  return (
+    <>
+      {parts.map((part, i) => 
+        regex.test(part) ? (
+          <span key={i} className="bg-gold/40 text-gold font-medium rounded px-0.5">{part}</span>
+        ) : (
+          <span key={i}>{part}</span>
+        )
+      )}
+    </>
+  );
+};
+
 // Approved contact info block for AI responses
 const APPROVED_CONTACT_BLOCK = `
 
@@ -837,16 +859,23 @@ const AIChatWidget = () => {
                           <div className="flex items-start justify-between gap-2">
                             <div className="flex-1 min-w-0">
                               <div className="flex items-center gap-2 mb-1">
-                                <span className="text-white text-sm font-medium">{serviceName}</span>
+                                <span className="text-white text-sm font-medium">
+                                  <HighlightText text={serviceName} search={historySearch} />
+                                </span>
                                 <span className={`text-[10px] px-1.5 py-0.5 rounded ${
                                   conv.status === 'active' ? 'bg-green-500/20 text-green-400' :
                                   conv.status === 'completed' ? 'bg-zinc-500/20 text-zinc-400' :
                                   'bg-gold/20 text-gold'
                                 }`}>
-                                  {conv.status === 'active' ? 'Active' : conv.status === 'completed' ? 'Completed' : 'Submitted'}
+                                  <HighlightText 
+                                    text={conv.status === 'active' ? 'Active' : conv.status === 'completed' ? 'Completed' : 'Submitted'} 
+                                    search={historySearch} 
+                                  />
                                 </span>
                               </div>
-                              <p className="text-zinc-400 text-xs truncate">{preview || 'No messages yet'}</p>
+                              <p className="text-zinc-400 text-xs truncate">
+                                <HighlightText text={preview || 'No messages yet'} search={historySearch} />
+                              </p>
                             </div>
                             <div className="text-right flex-shrink-0">
                               <p className="text-zinc-500 text-[10px]">{timeAgo}</p>
