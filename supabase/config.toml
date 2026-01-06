@@ -29,3 +29,18 @@ verify_jwt = false
 
 [functions.smart-ai-analysis]
 verify_jwt = false
+
+[functions.secure-file-upload]
+verify_jwt = false
+
+[functions.send-welcome-email]
+verify_jwt = false
+
+[functions.stripe-webhook]
+verify_jwt = false
+
+[functions.send-inquiry-email]
+verify_jwt = false
+
+[functions.generate-property-report]
+verify_jwt = false
