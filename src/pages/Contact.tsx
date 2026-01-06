@@ -2,7 +2,7 @@ import { useState } from "react";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { z } from "zod";
-import { MapPin, Phone, Mail, Calendar, ArrowUpRight, MessageCircle, Send, Loader2, Shield, CheckCircle } from "lucide-react";
+import { MapPin, Phone, Mail, Calendar, ArrowUpRight, MessageCircle, Send, Loader2, Shield, CheckCircle, ExternalLink } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
@@ -317,18 +317,40 @@ const Contact = () => {
                         <FormField
                           control={form.control}
                           name="phone"
-                          render={({ field }) => (
-                            <FormItem>
-                              <FormLabel className="text-zinc-300 text-sm">Phone Number *</FormLabel>
-                              <FormControl>
-                                <PhoneInput
-                                  value={field.value}
-                                  onChange={field.onChange}
-                                />
-                              </FormControl>
-                              <FormMessage className="text-red-400 text-xs" />
-                            </FormItem>
-                          )}
+                          render={({ field }) => {
+                            const phoneValue = field.value;
+                            const cleanPhone = phoneValue.replace(/[^0-9+]/g, '');
+                            const hasValidPhone = cleanPhone.length >= 8;
+                            const whatsappUrl = hasValidPhone 
+                              ? `https://wa.me/${cleanPhone.replace('+', '')}` 
+                              : null;
+                            
+                            return (
+                              <FormItem>
+                                <FormLabel className="text-zinc-300 text-sm">Phone Number *</FormLabel>
+                                <div className="flex gap-2">
+                                  <FormControl>
+                                    <PhoneInput
+                                      value={field.value}
+                                      onChange={field.onChange}
+                                    />
+                                  </FormControl>
+                                  {whatsappUrl && (
+                                    <a
+                                      href={whatsappUrl}
+                                      target="_blank"
+                                      rel="noopener noreferrer"
+                                      className="flex-shrink-0 h-12 px-3 bg-green-600 hover:bg-green-500 text-white rounded-md flex items-center justify-center transition-colors"
+                                      title="Chat on WhatsApp"
+                                    >
+                                      <MessageCircle className="w-5 h-5" />
+                                    </a>
+                                  )}
+                                </div>
+                                <FormMessage className="text-red-400 text-xs" />
+                              </FormItem>
+                            );
+                          }}
                         />
                       </div>
 
