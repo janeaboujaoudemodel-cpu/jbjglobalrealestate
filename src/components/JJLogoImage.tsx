@@ -61,24 +61,33 @@ export const JJLogoImage = ({
   );
 };
 
-// Header-specific logo - Horizontal layout with dark logo (for dark header background)
+// Header-specific logo - Matches footer styling exactly (uses same logoDark asset)
+// Uses crisp rendering with explicit dimensions to prevent blur
 export const JJLogoHeaderImage = ({ className = '' }: { className?: string }) => (
   <div 
-    className={`flex items-center ${className}`}
+    className={`flex items-center gap-3 ${className}`}
     style={{ fontFamily: "Poppins, sans-serif" }}
   >
+    {/* Logo image - same asset as footer (logoDark), crisp at 48x48 */}
     <img 
       src={logoDark} 
       alt="JJ Global Capital" 
-      className="h-10 md:h-12 w-auto object-contain"
+      width={48}
+      height={48}
+      className="object-contain shrink-0"
+      style={{ 
+        width: 48, 
+        height: 48,
+        imageRendering: 'auto'
+      }}
     />
-    <div className="ml-2 md:ml-3 flex items-center text-white">
-      <span className="font-semibold text-sm md:text-base lg:text-lg tracking-[0.08em]">
-        GLOBAL
+    {/* Text block - styled like footer */}
+    <div className="flex flex-col justify-center leading-tight">
+      <span className="text-white font-semibold text-sm md:text-base tracking-[0.12em] uppercase">
+        Global Capital
       </span>
-      <span className="mx-1" />
-      <span className="font-semibold text-sm md:text-base lg:text-lg tracking-[0.08em]">
-        CAPITAL
+      <span className="text-gold text-[10px] md:text-xs tracking-[0.2em] uppercase mt-0.5">
+        Real Estate
       </span>
     </div>
   </div>
