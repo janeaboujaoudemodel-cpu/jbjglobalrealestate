@@ -131,7 +131,7 @@ const Founder = () => {
       location: "Dubai, UAE"
     },
     {
-      year: "2025–2026",
+      year: "2025",
       title: "Sobha Realty (Dubai)",
       description: "Supported real estate growth through structured sales and client experience systems.",
       location: "Dubai, UAE"
