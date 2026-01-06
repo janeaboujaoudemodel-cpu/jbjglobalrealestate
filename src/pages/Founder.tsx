@@ -179,115 +179,7 @@ const Founder = () => {
     },
   ];
 
-  // Speaking Engagements
-  const speakingEngagements = [
-    {
-      event: "Dubai Real Estate Summit",
-      topic: "The Future of Luxury Real Estate Investment in the GCC",
-      date: "November 2024",
-      type: "Keynote Speaker"
-    },
-    {
-      event: "Women in Business Forum",
-      topic: "Building Institutions: A Founder's Journey",
-      date: "September 2024",
-      type: "Panel Discussion"
-    },
-    {
-      event: "MENA Investment Conference",
-      topic: "Wealth Preservation Strategies for Global Investors",
-      date: "June 2024",
-      type: "Keynote Speaker"
-    },
-    {
-      event: "Emirates Business Leaders Summit",
-      topic: "Founder-Led Governance in Modern Enterprises",
-      date: "March 2024",
-      type: "Featured Speaker"
-    },
-    {
-      event: "Global Luxury Real Estate Forum",
-      topic: "Excellence as a Standard: Redefining Client Experience",
-      date: "January 2024",
-      type: "Panel Moderator"
-    },
-    {
-      event: "Arabian Business Awards",
-      topic: "Entrepreneurship and Vision in the UAE",
-      date: "December 2023",
-      type: "Award Recipient & Speaker"
-    },
-  ];
-
-  // Media Appearances
-  const mediaAppearances = [
-    {
-      outlet: "Arabian Business",
-      title: "Jane Abou Jaoude: The Visionary Behind JJ Global Capital",
-      type: "Cover Feature",
-      date: "October 2024",
-      category: "Magazine"
-    },
-    {
-      outlet: "Bloomberg Middle East",
-      title: "UAE Real Estate: Investment Opportunities for 2025",
-      type: "Interview",
-      date: "September 2024",
-      category: "TV"
-    },
-    {
-      outlet: "Forbes Middle East",
-      title: "50 Influential Business Women in the Arab World",
-      type: "Feature Article",
-      date: "August 2024",
-      category: "Magazine"
-    },
-    {
-      outlet: "Gulf News",
-      title: "How JJ Holding Group is Shaping Dubai's Luxury Market",
-      type: "Business Profile",
-      date: "July 2024",
-      category: "Newspaper"
-    },
-    {
-      outlet: "Dubai Eye Radio",
-      title: "The Art of Building a Multi-Division Enterprise",
-      type: "Radio Interview",
-      date: "May 2024",
-      category: "Radio"
-    },
-    {
-      outlet: "CNBC Arabia",
-      title: "Real Estate Investment Trends in the UAE",
-      type: "Expert Panel",
-      date: "April 2024",
-      category: "TV"
-    },
-    {
-      outlet: "The National",
-      title: "Founder-Led Companies: The New Standard of Excellence",
-      type: "Op-Ed",
-      date: "February 2024",
-      category: "Newspaper"
-    },
-    {
-      outlet: "Entrepreneur Middle East",
-      title: "Building a Luxury Empire: The JJ Global Capital Story",
-      type: "Cover Story",
-      date: "January 2024",
-      category: "Magazine"
-    },
-  ];
-
-  const getMediaIcon = (category: string) => {
-    switch (category) {
-      case "TV": return Video;
-      case "Radio": return Mic;
-      case "Magazine": return BookOpen;
-      case "Newspaper": return Newspaper;
-      default: return Newspaper;
-    }
-  };
+  // Note: Speaking engagements and media appearances are only added once verified
 
   return (
     <div className="min-h-screen bg-black overflow-x-hidden">
@@ -742,7 +634,7 @@ const Founder = () => {
                 <SafeImage 
                   src={jjFlags} 
                   fallbackSrc={founderHero}
-                  alt="JJ Holding Group & JJ Global Capital" 
+                  alt="JJ Global Capital Ventures" 
                   className="w-full h-full object-cover object-center group-hover:scale-105 transition-transform duration-700"
                 />
                 <div className="absolute inset-0 bg-gradient-to-t from-black via-black/20 to-transparent opacity-80 group-hover:opacity-90 transition-opacity" />
@@ -842,126 +734,34 @@ const Founder = () => {
         </div>
       </section>
 
-      {/* SPEAKING ENGAGEMENTS */}
-      <section className="py-24 md:py-32 bg-gradient-to-b from-zinc-950/50 via-black to-zinc-950/50 relative">
+      {/* PRESS KIT CTA - Simple verified link */}
+      <section className="py-16 md:py-24 bg-gradient-to-b from-zinc-950/50 via-black to-zinc-950/50 relative">
         <div className="container mx-auto px-4 sm:px-6 lg:px-8">
           <motion.div
             initial="hidden"
             whileInView="visible"
             viewport={{ once: true, margin: "-100px" }}
-            variants={staggerContainer}
+            variants={fadeInUp}
+            className="text-center"
           >
-            <motion.div className="text-center mb-16" variants={fadeInUp}>
-              <span className="text-gold text-sm uppercase tracking-[0.4em]">Thought Leadership</span>
-              <GoldLine className="w-32 mx-auto mt-4 mb-8" />
-              <h2 
-                className="text-white text-4xl md:text-5xl lg:text-6xl font-bold"
-                style={{ fontFamily: "Poppins, sans-serif" }}
-              >
-                Speaking <span className="text-transparent bg-clip-text bg-gradient-to-r from-gold to-[#C4A962]">Engagements</span>
-              </h2>
-            </motion.div>
-
-            <motion.div 
-              className="grid md:grid-cols-2 lg:grid-cols-3 gap-6"
-              variants={staggerContainer}
+            <span className="text-gold text-sm uppercase tracking-[0.4em] mb-6 block">Media Resources</span>
+            <GoldLine className="w-32 mx-auto mb-8" />
+            <h2 
+              className="text-white text-3xl md:text-4xl font-bold mb-6"
+              style={{ fontFamily: "Poppins, sans-serif" }}
             >
-              {speakingEngagements.map((engagement, index) => (
-                <motion.div
-                  key={engagement.event}
-                  className="bg-gradient-to-br from-zinc-900/80 to-black border border-zinc-800 rounded-2xl p-6 hover:border-gold/40 transition-all duration-300 group"
-                  variants={fadeInUp}
-                >
-                  <div className="flex items-start justify-between mb-4">
-                    <div className="w-12 h-12 bg-gradient-to-br from-gold/20 to-gold/5 rounded-xl flex items-center justify-center border border-gold/30 group-hover:scale-110 transition-transform">
-                      <Mic className="w-5 h-5 text-gold" />
-                    </div>
-                    <span className="text-gold/70 text-xs uppercase tracking-wider bg-gold/10 px-3 py-1 rounded-full">
-                      {engagement.type}
-                    </span>
-                  </div>
-                  <h4 className="text-white font-semibold mb-2">{engagement.event}</h4>
-                  <p className="text-zinc-400 text-sm mb-4 leading-relaxed">"{engagement.topic}"</p>
-                  <div className="flex items-center gap-2 text-zinc-500 text-xs">
-                    <Calendar className="w-3 h-3" />
-                    {engagement.date}
-                  </div>
-                </motion.div>
-              ))}
-            </motion.div>
-          </motion.div>
-        </div>
-      </section>
-
-      {/* MEDIA APPEARANCES */}
-      <section className="py-24 md:py-32 relative overflow-hidden">
-        <div className="absolute top-1/4 right-0 w-96 h-96 bg-gold/5 rounded-full blur-3xl" />
-        <div className="absolute bottom-1/4 left-0 w-96 h-96 bg-gold/5 rounded-full blur-3xl" />
-        
-        <div className="container mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
-          <motion.div
-            initial="hidden"
-            whileInView="visible"
-            viewport={{ once: true, margin: "-100px" }}
-            variants={staggerContainer}
-          >
-            <motion.div className="text-center mb-16" variants={fadeInUp}>
-              <span className="text-gold text-sm uppercase tracking-[0.4em]">Press & Media</span>
-              <GoldLine className="w-32 mx-auto mt-4 mb-8" />
-              <h2 
-                className="text-white text-4xl md:text-5xl lg:text-6xl font-bold"
-                style={{ fontFamily: "Poppins, sans-serif" }}
-              >
-                Media <span className="text-transparent bg-clip-text bg-gradient-to-r from-gold to-[#C4A962]">Appearances</span>
-              </h2>
-              <p className="text-zinc-400 text-lg mt-6 max-w-2xl mx-auto">
-                Featured across leading publications and broadcast media in the Middle East and beyond
-              </p>
-            </motion.div>
-
-            <motion.div 
-              className="grid md:grid-cols-2 gap-6 max-w-5xl mx-auto"
-              variants={staggerContainer}
+              Press <span className="text-transparent bg-clip-text bg-gradient-to-r from-gold to-[#C4A962]">Kit</span>
+            </h2>
+            <p className="text-zinc-400 text-lg mb-8 max-w-2xl mx-auto">
+              Download official photos, logos, and brand assets for media use
+            </p>
+            <Link
+              to="/press-kit"
+              className="inline-flex items-center gap-3 bg-gradient-to-r from-gold to-[#C4A962] text-black font-semibold px-8 py-4 rounded-xl hover:opacity-90 transition-all duration-300 shadow-lg shadow-gold/30"
             >
-              {mediaAppearances.map((appearance, index) => {
-                const MediaIcon = getMediaIcon(appearance.category);
-                return (
-                  <motion.div
-                    key={`${appearance.outlet}-${appearance.date}`}
-                    className="bg-gradient-to-br from-zinc-900/80 to-black border border-zinc-800 rounded-2xl p-6 hover:border-gold/40 transition-all duration-300 group flex gap-5"
-                    variants={fadeInUp}
-                  >
-                    <div className="w-14 h-14 bg-gradient-to-br from-gold/20 to-gold/5 rounded-xl flex items-center justify-center border border-gold/30 group-hover:scale-110 transition-transform flex-shrink-0">
-                      <MediaIcon className="w-6 h-6 text-gold" />
-                    </div>
-                    <div className="flex-1">
-                      <div className="flex items-start justify-between gap-4 mb-2">
-                        <h4 className="text-gold font-semibold">{appearance.outlet}</h4>
-                        <span className="text-zinc-500 text-xs whitespace-nowrap">{appearance.date}</span>
-                      </div>
-                      <p className="text-white text-sm font-medium mb-2">"{appearance.title}"</p>
-                      <span className="inline-block text-zinc-500 text-xs uppercase tracking-wider bg-zinc-800/50 px-2 py-1 rounded">
-                        {appearance.type}
-                      </span>
-                    </div>
-                  </motion.div>
-                );
-              })}
-            </motion.div>
-
-            {/* Press Kit Download */}
-            <motion.div 
-              className="text-center mt-16"
-              variants={fadeInUp}
-            >
-              <Link
-                to="/press-kit"
-                className="inline-flex items-center gap-3 bg-gradient-to-r from-gold to-[#C4A962] text-black font-semibold px-8 py-4 rounded-xl hover:opacity-90 transition-all duration-300 shadow-lg shadow-gold/30"
-              >
-                <Download className="w-5 h-5" />
-                Download Press Kit
-              </Link>
-            </motion.div>
+              <Download className="w-5 h-5" />
+              Download Press Kit
+            </Link>
           </motion.div>
         </div>
       </section>
@@ -1011,8 +811,8 @@ const Founder = () => {
         </div>
       </section>
 
-      {/* JJ HOLDING GROUP - FLAGS VISUAL */}
-      <section className="py-24 md:py-40 bg-gradient-to-b from-zinc-950 via-black to-zinc-950 relative overflow-hidden">
+      {/* FOUNDER STATS - Verified Metrics Only */}
+      <section className="py-24 md:py-32 bg-gradient-to-b from-zinc-950 via-black to-zinc-950 relative overflow-hidden">
         {/* Premium pattern background */}
         <div className="absolute inset-0 opacity-[0.03]">
           <div className="absolute inset-0" style={{ backgroundImage: 'radial-gradient(circle at 2px 2px, #A8925A 1px, transparent 0)', backgroundSize: '48px 48px' }} />
@@ -1024,69 +824,24 @@ const Founder = () => {
         
         <div className="container mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
           <motion.div 
-            className="grid lg:grid-cols-2 gap-16 lg:gap-24 items-center"
+            className="text-center mb-16"
             initial="hidden"
             whileInView="visible"
             viewport={{ once: true, margin: "-100px" }}
-            variants={staggerContainer}
+            variants={fadeInUp}
           >
-            {/* Flags Image */}
-            <motion.div className="order-2 lg:order-1" variants={scaleIn}>
-              <div className="aspect-[16/9] rounded-3xl overflow-hidden border border-gold/20 shadow-2xl shadow-gold/10">
-                <SafeImage 
-                  src={jjFlags} 
-                  fallbackSrc={founderHero}
-                  alt="JJ Holding Group & JJ Global Capital" 
-                  className="w-full h-full object-cover"
-                />
-              </div>
-            </motion.div>
-            
-            {/* Content */}
-            <motion.div className="order-1 lg:order-2" variants={fadeInUp}>
-              <div className="mb-10">
-                <span className="text-gold text-sm uppercase tracking-[0.4em]">The Group</span>
-                <GoldLine className="w-24 mt-4" />
-              </div>
-              
-              <h2 
-                className="text-white text-4xl md:text-5xl lg:text-6xl font-bold mb-8"
-                style={{ fontFamily: "Poppins, sans-serif" }}
-              >
-                JJ Holding
-                <br />
-                <span className="text-transparent bg-clip-text bg-gradient-to-r from-gold to-[#C4A962]">Group</span>
-              </h2>
-              
-              {/* Moved founder-led text here */}
-              <p className="text-white text-xl md:text-2xl leading-relaxed mb-6 font-light">
-                A <span className="text-gold font-medium">founder-led</span>, multi-division holding built on unwavering standards, discretion, and long-term vision.
-              </p>
-              
-              <p className="text-zinc-400 text-lg md:text-xl leading-relaxed mb-6">
-                Every entity within the group reflects a deliberate approach to business—where quality supersedes quantity, and reputation is earned through consistent excellence.
-              </p>
-              
-              <p className="text-zinc-500 leading-relaxed mb-8">
-                The group's governance remains founder-led, ensuring that strategic decisions align with the long-term vision rather than short-term market pressures.
-              </p>
-              
-              {/* Explore JJ Holding Group Button */}
-              <a 
-                href="https://jjholdinggroup.com" 
-                target="_blank" 
-                rel="noopener noreferrer"
-                className="inline-flex items-center gap-2 bg-gradient-to-r from-gold to-[#C4A962] hover:from-gold-light hover:to-gold text-black font-semibold px-8 py-4 rounded-xl transition-all duration-300 hover:shadow-lg hover:shadow-gold/30 hover:scale-[1.02]"
-              >
-                Explore JJ Holding Group
-                <ArrowUpRight className="w-5 h-5" />
-              </a>
-            </motion.div>
+            <span className="text-gold text-sm uppercase tracking-[0.4em]">Track Record</span>
+            <GoldLine className="w-32 mx-auto mt-4 mb-8" />
+            <h2 
+              className="text-white text-4xl md:text-5xl lg:text-6xl font-bold"
+              style={{ fontFamily: "Poppins, sans-serif" }}
+            >
+              Verified <span className="text-transparent bg-clip-text bg-gradient-to-r from-gold to-[#C4A962]">Metrics</span>
+            </h2>
           </motion.div>
 
           {/* Stats - Ultra Premium Design */}
           <motion.div 
-            className="mt-24 md:mt-40"
             initial="hidden"
             whileInView="visible"
             viewport={{ once: true, margin: "-100px" }}
@@ -1094,10 +849,10 @@ const Founder = () => {
           >
             <div className="grid grid-cols-2 md:grid-cols-4 gap-6 md:gap-8">
               {[
-                { end: 4, suffix: "", prefix: "", label: "Divisions", icon: Building2 },
                 { ...COMPANY_STATS.yearsExperience, icon: Award },
                 { ...COMPANY_STATS.brokersTrainedBy, icon: Users },
                 { ...COMPANY_STATS.clientSatisfaction, icon: TrendingUp },
+                { ...COMPANY_STATS.teamMembers, icon: Building2 },
               ].map((stat, index) => (
                 <motion.div 
                   key={stat.label}
@@ -1116,51 +871,9 @@ const Founder = () => {
         </div>
       </section>
 
-      {/* THE GROUP DIVISIONS - PREMIUM CARDS */}
+      {/* THE FOUNDER'S VENTURES */}
       <section className="py-24 md:py-40 relative">
         <div className="container mx-auto px-4 sm:px-6 lg:px-8">
-          {/* JJ Holding Group Header Card */}
-          <motion.div 
-            className="mb-12"
-            initial="hidden"
-            whileInView="visible"
-            viewport={{ once: true, margin: "-100px" }}
-            variants={fadeInUp}
-          >
-            <div className="bg-gradient-to-r from-zinc-900 via-zinc-800/80 to-zinc-900 border border-gold/40 rounded-3xl p-8 md:p-10 relative overflow-hidden">
-              {/* Decorative background elements */}
-              <div className="absolute inset-0 opacity-10">
-                <div className="absolute inset-0" style={{ backgroundImage: 'radial-gradient(circle at 2px 2px, #A8925A 1px, transparent 0)', backgroundSize: '32px 32px' }} />
-              </div>
-              <div className="absolute top-0 right-0 w-64 h-64 bg-gold/10 rounded-full blur-3xl -translate-y-1/2 translate-x-1/2" />
-              
-              <div className="relative z-10 flex flex-col md:flex-row items-center justify-between gap-6">
-                <div className="flex items-center gap-6">
-                  {/* JJ Logo Icon */}
-                  <div className="w-20 h-20 bg-gradient-to-br from-gold/30 to-gold/10 rounded-2xl flex items-center justify-center border-2 border-gold/50 shadow-xl shadow-gold/20">
-                    <span className="text-gold text-3xl font-light tracking-wide" style={{ fontFamily: "Poppins, sans-serif" }}>J | J</span>
-                  </div>
-                  <div>
-                    <p className="text-gold/70 text-xs uppercase tracking-[0.3em] mb-1">Head Company</p>
-                    <h3 className="text-white text-2xl md:text-3xl font-bold" style={{ fontFamily: "Poppins, sans-serif" }}>
-                      JJ Holding Group
-                    </h3>
-                    <p className="text-zinc-400 text-sm mt-1">Four Divisions • International Excellence</p>
-                  </div>
-                </div>
-                <a 
-                  href="https://jjholdinggroup.com" 
-                  target="_blank" 
-                  rel="noopener noreferrer"
-                  className="flex items-center gap-2 bg-gold hover:bg-gold-light text-black font-semibold px-6 py-3 rounded-xl transition-all duration-300 hover:shadow-lg hover:shadow-gold/30"
-                >
-                  Visit Website
-                  <ArrowUpRight className="w-4 h-4" />
-                </a>
-              </div>
-            </div>
-          </motion.div>
-
           <motion.div 
             className="text-center mb-16"
             initial="hidden"
@@ -1357,17 +1070,7 @@ const Founder = () => {
                     <p className="text-zinc-300 text-sm uppercase tracking-[0.25em] font-medium">Founder & Chairwoman</p>
                     <div className="mt-3 space-y-1">
                       <p className="text-white text-base font-semibold tracking-wide">JJ Global Capital</p>
-                      <p className="text-zinc-400 text-xs">
-                        Powered by{" "}
-                        <a 
-                          href="https://jjholdinggroup.com" 
-                          target="_blank" 
-                          rel="noopener noreferrer"
-                          className="text-gold hover:text-gold-light transition-colors underline underline-offset-2"
-                        >
-                          JJ Holding Group
-                        </a>
-                      </p>
+                      <p className="text-zinc-400 text-xs">Real Estate Brokerage | Dubai, UAE</p>
                     </div>
                   </div>
                 </div>
@@ -1555,95 +1258,6 @@ const Founder = () => {
         </div>
       </section>
 
-      {/* FINAL CTA - JJ HOLDING GROUP */}
-      <section className="py-20 md:py-28 bg-gradient-to-b from-zinc-950/50 via-black to-zinc-950/50 border-t border-zinc-800 relative overflow-hidden">
-        <div className="container mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
-          <motion.div 
-            className="max-w-5xl mx-auto text-center"
-            initial="hidden"
-            whileInView="visible"
-            viewport={{ once: true, margin: "-100px" }}
-            variants={staggerContainer}
-          >
-            <motion.div className="mb-8" variants={fadeInUp}>
-              <span className="text-zinc-400 text-sm uppercase tracking-[0.4em]">The Group</span>
-              <GoldLine className="w-32 mx-auto mt-4" />
-            </motion.div>
-            
-            <motion.h2 
-              className="text-white text-4xl md:text-5xl lg:text-6xl font-bold mb-6"
-              style={{ fontFamily: "Poppins, sans-serif" }}
-              variants={fadeInUp}
-            >
-              Connect with <span className="text-transparent bg-clip-text bg-gradient-to-r from-gold to-[#C4A962]">JJ Holding Group</span>
-            </motion.h2>
-            
-            <motion.p 
-              className="text-zinc-400 text-lg md:text-xl mb-10 max-w-3xl mx-auto"
-              variants={fadeInUp}
-            >
-              For media requests, partnership discussions, collaboration in our divisions, or general inquiries, we welcome your correspondence.
-            </motion.p>
-
-            <motion.div 
-              className="flex flex-wrap justify-center gap-4 md:gap-5 mb-12"
-              variants={fadeInUp}
-            >
-              <a 
-                href="https://jjholdinggroup.com"
-                target="_blank"
-                rel="noopener noreferrer"
-                className="inline-flex items-center gap-3 bg-gradient-to-r from-gold via-[#D4B96A] to-gold text-black font-semibold px-10 py-4 rounded-2xl hover:opacity-90 transition-all duration-300 shadow-xl shadow-gold/40 hover:shadow-gold/50 hover:scale-[1.03]"
-              >
-                Explore JJ Holding Group <ArrowUpRight className="w-5 h-5" />
-              </a>
-              <a 
-                href="mailto:partnerships@jjholdinggroup.com"
-                className="inline-flex items-center gap-3 bg-zinc-900/80 backdrop-blur-sm border-2 border-zinc-700 text-white font-semibold px-10 py-4 rounded-2xl hover:bg-zinc-800 hover:border-gold/50 transition-all duration-300"
-              >
-                Partnership <ArrowUpRight className="w-5 h-5" />
-              </a>
-              <a 
-                href="mailto:collaboration@jjholdinggroup.com"
-                className="inline-flex items-center gap-3 bg-zinc-900/80 backdrop-blur-sm border-2 border-zinc-700 text-white font-semibold px-10 py-4 rounded-2xl hover:bg-zinc-800 hover:border-gold/50 transition-all duration-300"
-              >
-                Collaboration <ArrowUpRight className="w-5 h-5" />
-              </a>
-              <a 
-                href="mailto:careers@jjholdinggroup.com"
-                className="inline-flex items-center gap-3 bg-zinc-900/80 backdrop-blur-sm border-2 border-zinc-700 text-white font-semibold px-10 py-4 rounded-2xl hover:bg-zinc-800 hover:border-gold/50 transition-all duration-300"
-              >
-                Careers <ArrowUpRight className="w-5 h-5" />
-              </a>
-            </motion.div>
-
-            <motion.div 
-              className="flex flex-wrap items-center justify-center gap-6"
-              variants={fadeInUp}
-            >
-              <a 
-                href="mailto:inquiries@jjholdinggroup.com" 
-                className="hover:text-gold transition-colors flex items-center gap-3 group"
-              >
-                <div className="w-11 h-11 bg-zinc-900 border border-zinc-800 rounded-full flex items-center justify-center group-hover:border-gold/50 group-hover:scale-110 transition-all">
-                  <Mail className="w-5 h-5 text-gold" />
-                </div>
-                <span className="text-zinc-300">Inquiries@JJHoldingGroup.com</span>
-              </a>
-              <a 
-                href="mailto:support@jjholdinggroup.com" 
-                className="hover:text-gold transition-colors flex items-center gap-3 group"
-              >
-                <div className="w-11 h-11 bg-zinc-900 border border-zinc-800 rounded-full flex items-center justify-center group-hover:border-gold/50 group-hover:scale-110 transition-all">
-                  <Mail className="w-5 h-5 text-gold" />
-                </div>
-                <span className="text-zinc-300">Support@JJHoldingGroup.com</span>
-              </a>
-            </motion.div>
-
-          </motion.div>
-        </div>
-      </section>
 
       <Footer />
     </div>

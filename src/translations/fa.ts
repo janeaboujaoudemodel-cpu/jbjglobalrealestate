@@ -59,7 +59,7 @@ export const fa = {
   'founder.countries': 'کشور',
   'founder.learnMore': 'درباره بنیانگذار ما بیشتر بدانید',
   'founder.title': 'بنیانگذار و رئیس هیئت مدیره',
-  'founder.description1': 'گروه JJ Holding یک هلدینگ چند بخشی به رهبری بنیانگذار است که بر پایه استانداردهای تزلزل‌ناپذیر، محرمانگی و چشم‌انداز بلندمدت بنا شده است.',
+  'founder.description1': 'JJ Global Capital یک شرکت کارگزاری املاک به رهبری بنیانگذار است که بر پایه استانداردهای تزلزل‌ناپذیر، محرمانگی و چشم‌انداز بلندمدت بنا شده است.',
   'founder.description2': 'جین ابو جاعوده با فلسفه‌ای ریشه‌دار در مسئولیت‌پذیری و محرمانگی رهبری می‌کند و سازمان‌هایی را می‌سازد که برای پایداری طراحی شده‌اند نه صرفاً گسترش.',
   
   // Market Report
@@ -74,7 +74,7 @@ export const fa = {
   'report.highlight4': 'رتبه‌بندی ROI مناطق',
   'report.createdBy': 'ایجاد شده توسط جین ابو جاعوده',
   'report.exclusiveFor': 'انحصاری برای JJ Global Capital',
-  'report.poweredBy': 'پشتیبانی توسط دبی | گروه JJ Holding',
+  'report.poweredBy': 'کارگزاری املاک | دبی، امارات',
   
   // Mortgage
   'mortgage.title': 'مشاوره وام مسکن',
