@@ -68,6 +68,16 @@ export default {
           card: "hsl(var(--premium-card))",
           "card-border": "hsl(var(--premium-card-border))",
         },
+        ai: {
+          purple: "hsl(var(--ai-purple))",
+          "purple-dark": "hsl(var(--ai-purple-dark))",
+          fuchsia: "hsl(var(--ai-fuchsia))",
+          cyan: "hsl(var(--ai-cyan))",
+          emerald: "hsl(var(--ai-emerald))",
+          amber: "hsl(var(--ai-amber))",
+          rose: "hsl(var(--ai-rose))",
+          glow: "hsl(var(--ai-glow))",
+        },
       },
       borderRadius: {
         lg: "var(--radius)",
