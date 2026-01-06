@@ -226,7 +226,7 @@ const handler = async (req: Request): Promise<Response> => {
 
     // Send to both email addresses
     await Promise.all([
-      sendEmail("invest@jjglobalcapital.com", subject, companyEmailHtml),
+      sendEmail("contact@jjglobalcapital.com", subject, companyEmailHtml),
       sendEmail("jane@jjglobalcapital.com", subject, companyEmailHtml),
     ]);
 

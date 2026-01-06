@@ -525,11 +525,11 @@ export default function BrokerToolkit() {
               </a>
               <span className="text-zinc-600 hidden sm:block">|</span>
               <a
-                href="mailto:invest@JJGlobalCapital.com"
+                href="mailto:contact@jjglobalcapital.com"
                 className="flex items-center gap-2 text-gold hover:text-gold-light transition-colors"
               >
                 <Mail className="w-5 h-5" />
-                invest@JJGlobalCapital.com
+                contact@jjglobalcapital.com
               </a>
             </div>
           </motion.div>

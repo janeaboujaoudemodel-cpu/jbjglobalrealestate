@@ -620,7 +620,7 @@ serve(async (req) => {
           <span class="logo-jj">J</span>
           <span style="margin-left: 10px;" class="logo-text">GLOBAL CAPITAL</span>
         </div>
-        <div class="tagline">Premium Property Investment Advisory</div>
+        <div class="tagline">Real Estate Brokerage</div>
       </div>
       <div class="header-right">
         <div class="report-badge">Exclusive Report</div>
@@ -823,7 +823,7 @@ serve(async (req) => {
             <path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"></path>
             <polyline points="22,6 12,13 2,6"></polyline>
           </svg>
-          <a href="mailto:invest@JJGlobalCapital.com" class="contact-link">invest@JJGlobalCapital.com</a>
+          <a href="mailto:contact@jjglobalcapital.com" class="contact-link">contact@jjglobalcapital.com</a>
         </div>
         <div class="contact-item">
           <svg class="contact-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">

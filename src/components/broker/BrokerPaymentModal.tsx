@@ -217,7 +217,7 @@ export default function BrokerPaymentModal({
       try {
         await supabase.functions.invoke("send-market-report-email", {
           body: {
-            to: "invest@jjglobalcapital.com",
+            to: "contact@jjglobalcapital.com",
             subject: `New Broker Toolkit Subscription - ${tier.name}${appliedDiscount?.valid ? " (Discount Applied)" : ""}`,
             html: `
               <h2>New Broker Toolkit Subscription</h2>
@@ -670,11 +670,11 @@ export default function BrokerPaymentModal({
                       +971 56 591 1000
                     </a>
                     <a
-                      href="mailto:invest@JJGlobalCapital.com"
+                      href="mailto:contact@jjglobalcapital.com"
                       className="flex items-center gap-2 text-gold hover:text-gold-light transition-colors"
                     >
                       <Mail className="w-4 h-4" />
-                      invest@JJGlobalCapital.com
+                      contact@jjglobalcapital.com
                     </a>
                   </div>
                 </div>

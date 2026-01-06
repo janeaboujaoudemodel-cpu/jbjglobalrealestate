@@ -33,19 +33,19 @@ COMPANY OVERVIEW:
 - Portfolio exceeding AED 2 billion
 
 CONTACT INFORMATION:
-- Email: invest@jjglobalcapital.com
+- Email: contact@jjglobalcapital.com
 - Phone: +971 50 747 9498
 - WhatsApp: +971 50 747 9498
 - Website: jjglobalcapital.com
 
 SERVICES:
 
-1. REAL ESTATE INVESTMENT (UAE-Wide):
+1. REAL ESTATE BROKERAGE (UAE-Wide):
    - Off-plan properties in Dubai, Abu Dhabi, Sharjah, Ras Al Khaimah
    - Ready-to-move properties
    - AI Home Finder - personalized property matching
    - Property comparison and evaluation tools
-   - Investment advisory for portfolios
+   - Real estate guidance for property goals
    - Featured communities: Dubai Marina, Downtown Dubai, Palm Jumeirah, Business Bay, JBR, Dubai Hills, Creek Harbour, Jumeirah Village Circle, Dubai South, Mohammed Bin Rashid City
    - Top developers: Emaar, DAMAC, Nakheel, Sobha, Meraas, Azizi, Danube, Ellington, Binghatti
 
@@ -127,7 +127,7 @@ serve(async (req) => {
       return new Response(
         JSON.stringify({ 
           error: 'Authentication required',
-          response: 'Please sign in to use the AI chat assistant. If you need immediate help, contact our team:\n\n📧 Email: invest@jjglobalcapital.com\n📞 Phone: +971 50 747 9498\n💬 WhatsApp: +971 50 747 9498'
+          response: 'Please sign in to use the AI chat assistant. If you need immediate help, contact our team:\n\n📧 Email: contact@jjglobalcapital.com\n📞 Phone: +971 50 747 9498\n💬 WhatsApp: +971 50 747 9498'
         }),
         { status: 401, headers: { ...corsHeaders, 'Content-Type': 'application/json' } }
       );
@@ -147,7 +147,7 @@ serve(async (req) => {
       return new Response(
         JSON.stringify({ 
           error: 'Invalid authentication token',
-          response: 'Your session has expired. Please sign in again to continue using the AI chat assistant.\n\n📧 Email: invest@jjglobalcapital.com\n📞 Phone: +971 50 747 9498\n💬 WhatsApp: +971 50 747 9498'
+          response: 'Your session has expired. Please sign in again to continue using the AI chat assistant.\n\n📧 Email: contact@jjglobalcapital.com\n📞 Phone: +971 50 747 9498\n💬 WhatsApp: +971 50 747 9498'
         }),
         { status: 401, headers: { ...corsHeaders, 'Content-Type': 'application/json' } }
       );
@@ -214,7 +214,7 @@ Response guidelines:
 - For complex inquiries, encourage scheduling a consultation
 
 Contact for human assistance:
-📧 Email: invest@jjglobalcapital.com
+📧 Email: contact@jjglobalcapital.com
 📞 Phone: +971 50 747 9498
 💬 WhatsApp: +971 50 747 9498`
       },
@@ -244,7 +244,7 @@ Contact for human assistance:
       if (response.status === 429) {
         return new Response(JSON.stringify({ 
           error: 'Rate limit exceeded',
-          response: 'I apologize, but we\'re experiencing high demand right now. Please try again in a moment, or contact our team directly:\n\n📧 Email: invest@jjglobalcapital.com\n📞 Phone: +971 50 747 9498\n💬 WhatsApp: +971 50 747 9498'
+          response: 'I apologize, but we\'re experiencing high demand right now. Please try again in a moment, or contact our team directly:\n\n📧 Email: contact@jjglobalcapital.com\n📞 Phone: +971 50 747 9498\n💬 WhatsApp: +971 50 747 9498'
         }), {
           status: 200,
           headers: { ...corsHeaders, 'Content-Type': 'application/json' },
@@ -254,7 +254,7 @@ Contact for human assistance:
       if (response.status === 402) {
         return new Response(JSON.stringify({ 
           error: 'Service temporarily unavailable',
-          response: 'I apologize, but our AI service is temporarily unavailable. Please contact our team directly for immediate assistance:\n\n📧 Email: invest@jjglobalcapital.com\n📞 Phone: +971 50 747 9498\n💬 WhatsApp: +971 50 747 9498'
+          response: 'I apologize, but our AI service is temporarily unavailable. Please contact our team directly for immediate assistance:\n\n📧 Email: contact@jjglobalcapital.com\n📞 Phone: +971 50 747 9498\n💬 WhatsApp: +971 50 747 9498'
         }), {
           status: 200,
           headers: { ...corsHeaders, 'Content-Type': 'application/json' },
@@ -265,7 +265,7 @@ Contact for human assistance:
     }
 
     const data = await response.json();
-    const aiResponse = data.choices?.[0]?.message?.content || 'I apologize, but I was unable to process your request. Please contact our team directly:\n\n📧 Email: invest@jjglobalcapital.com\n📞 Phone: +971 50 747 9498\n💬 WhatsApp: +971 50 747 9498';
+    const aiResponse = data.choices?.[0]?.message?.content || 'I apologize, but I was unable to process your request. Please contact our team directly:\n\n📧 Email: contact@jjglobalcapital.com\n📞 Phone: +971 50 747 9498\n💬 WhatsApp: +971 50 747 9498';
 
     return new Response(JSON.stringify({ response: aiResponse }), {
       headers: { ...corsHeaders, 'Content-Type': 'application/json' },
@@ -276,7 +276,7 @@ Contact for human assistance:
     return new Response(
       JSON.stringify({ 
         error: errorMessage,
-        response: 'I apologize for the technical difficulty. Please contact our team directly for assistance:\n\n📧 Email: invest@jjglobalcapital.com\n📞 Phone: +971 50 747 9498\n💬 WhatsApp: +971 50 747 9498\n\nOur team is available to help you with any questions.'
+        response: 'I apologize for the technical difficulty. Please contact our team directly for assistance:\n\n📧 Email: contact@jjglobalcapital.com\n📞 Phone: +971 50 747 9498\n💬 WhatsApp: +971 50 747 9498\n\nOur team is available to help you with any questions.'
       }),
       {
         status: 200,

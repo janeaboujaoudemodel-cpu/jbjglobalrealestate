@@ -30,11 +30,8 @@ const Privacy = () => {
               <section>
                 <h2 className="text-gold text-xl font-semibold mb-4">1. Introduction</h2>
                 <p>
-                  JJ Global Capital ("we," "our," or "us"), a division of{" "}
-                  <a href={JJ_HOLDING_URL} target="_blank" rel="noopener noreferrer" className="text-gold hover:underline">
-                    JJ Holding Group
-                  </a>
-                  , is committed to protecting your privacy. This Privacy Policy explains how we collect, 
+                  JJ Global Capital ("we," "our," or "us"), a Dubai-based real estate brokerage, 
+                  is committed to protecting your privacy. This Privacy Policy explains how we collect, 
                   use, disclose, and safeguard your information when you visit our website or use our services.
                 </p>
               </section>
