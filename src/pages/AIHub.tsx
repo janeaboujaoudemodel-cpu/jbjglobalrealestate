@@ -37,14 +37,14 @@ const aiTools = [
   {
     id: "ai-home-finder",
     title: "AI Home Finder",
-    description: "Answer a few questions about your preferences and let our AI match you with the perfect properties based on budget, location, lifestyle, and investment goals.",
+    description: "Answer a few questions about your preferences and let our AI match you with the perfect properties based on budget, location, lifestyle, and property goals.",
     icon: Sparkles,
     gradient: "from-purple-500 to-fuchsia-500",
     borderColor: "border-purple-500/30",
     textColor: "text-purple-400",
     bgColor: "bg-purple-500/10",
     link: "/quiz",
-    features: ["Personalized Matching", "Budget Analysis", "Lifestyle Fit", "Investment Scoring"],
+    features: ["Personalized Matching", "Budget Analysis", "Lifestyle Fit", "Property Scoring"],
     featured: true
   },
   {
@@ -60,21 +60,21 @@ const aiTools = [
     features: ["Style Visualization", "AI Rendering", "Before/After", "Multiple Styles"]
   },
   {
-    id: "ai-financial-advisor",
-    title: "AI Financial Advisor",
-    description: "Get personalized financial analysis and investment recommendations. Analyze your budget and find properties that match your financial profile.",
+    id: "ai-budget-planner",
+    title: "AI Budget Planner",
+    description: "Budget analysis and property affordability insights (property-only). Informational only—not financial, mortgage, or investment advice.",
     icon: Wallet,
     gradient: "from-amber-500 to-orange-500",
     borderColor: "border-amber-500/30",
     textColor: "text-amber-400",
     bgColor: "bg-amber-500/10",
     link: "/ai-financial-advisor",
-    features: ["Budget Analysis", "Investment Advice", "Property Matching", "ROI Projections"]
+    features: ["Budget Analysis", "Affordability Insights", "Property Matching", "Payment Plans"]
   },
   {
     id: "ai-personal-shopper",
     title: "AI Personal Shopper",
-    description: "Tell us your lifestyle, preferences and goals. Our AI personal shopper curates perfect property selections tailored just for you.",
+    description: "Tell us your lifestyle, preferences and property goals. Our AI personal shopper curates perfect property selections tailored just for you.",
     icon: ShoppingBag,
     gradient: "from-rose-500 to-red-500",
     borderColor: "border-rose-500/30",
@@ -86,7 +86,7 @@ const aiTools = [
   {
     id: "ai-calendar",
     title: "AI Calendar & Notes",
-    description: "Manage your meetings, events and notes with AI-powered scheduling. Get email and phone reminders for important investor meetings.",
+    description: "Manage your meetings, events and notes with AI-powered scheduling. Get email and phone reminders for important consultation meetings.",
     icon: Calendar,
     gradient: "from-indigo-500 to-blue-500",
     borderColor: "border-indigo-500/30",
@@ -98,14 +98,14 @@ const aiTools = [
   {
     id: "property-comparison",
     title: "AI Property Comparison",
-    description: "Compare 2-5 properties side by side with AI-powered analysis. Get detailed insights on value, location, developer reputation, and ROI.",
+    description: "Compare 2-5 properties side by side with AI-powered analysis. Get detailed insights on value, location, developer reputation, and potential.",
     icon: BarChart3,
     gradient: "from-violet-500 to-purple-500",
     borderColor: "border-violet-500/30",
     textColor: "text-violet-400",
     bgColor: "bg-violet-500/10",
     link: "/compare",
-    features: ["Side-by-Side View", "AI Scoring", "ROI Projections", "Recommendations"]
+    features: ["Side-by-Side View", "AI Scoring", "Potential Analysis", "Recommendations"]
   },
   {
     id: "rental-index",
@@ -166,12 +166,12 @@ const benefits = [
   {
     icon: Zap,
     title: "Instant Results",
-    description: "Get real-time insights and analysis without waiting. Make faster, smarter investment decisions."
+    description: "Get real-time insights and analysis without waiting. Make faster, smarter real estate decisions."
   },
   {
     icon: Shield,
     title: "Data Security",
-    description: "Your information is encrypted and protected. We never share your data with third parties."
+    description: "Your information is encrypted and protected with industry-standard security measures."
   },
   {
     icon: Clock,
@@ -224,11 +224,21 @@ const AIHub = () => {
             </motion.h1>
 
             <motion.p 
-              className="text-zinc-300 text-lg md:text-xl max-w-2xl mx-auto mb-10 leading-relaxed"
+              className="text-zinc-300 text-lg md:text-xl max-w-2xl mx-auto mb-6 leading-relaxed"
               variants={fadeInUp}
             >
-              Discover our comprehensive suite of AI-powered tools designed to revolutionize your property investment journey in Dubai and beyond.
+              A suite of AI-enabled tools designed to support your real estate decisions in Dubai and beyond.
             </motion.p>
+
+            {/* AI Disclaimer */}
+            <motion.div
+              variants={fadeInUp}
+              className="max-w-2xl mx-auto mb-10 p-4 bg-amber-500/10 border border-amber-500/30 rounded-xl"
+            >
+              <p className="text-amber-200 text-sm text-center">
+                <strong>Disclaimer:</strong> AI outputs are informational estimates only and not legal, mortgage, financial, or investment advice.
+              </p>
+            </motion.div>
 
             <motion.div variants={fadeInUp} className="flex flex-wrap justify-center gap-4">
               <Link to="/quiz">
@@ -349,7 +359,7 @@ const AIHub = () => {
               All AI Tools
             </h2>
             <p className="text-zinc-400 max-w-2xl mx-auto">
-              Explore our full range of AI-powered tools designed to assist every aspect of your property investment journey.
+              Explore our full range of AI-powered tools designed to assist every aspect of your property search.
             </p>
           </motion.div>
 

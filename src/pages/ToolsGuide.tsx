@@ -161,9 +161,9 @@ const tools = [
     features: ["Event Scheduling", "Meeting Reminders", "AI Notes", "Project Saving"]
   },
   {
-    id: "ai-financial-advisor",
-    title: "AI Financial Advisor",
-    description: "Get personalized financial analysis and investment recommendations. Analyze your budget and find properties that match your financial profile.",
+    id: "ai-budget-planner",
+    title: "AI Budget Planner",
+    description: "Budget analysis and property affordability insights (property-only). Informational only—not financial, mortgage, or investment advice.",
     icon: Wallet,
     color: "amber",
     borderColor: "border-amber-500/30",
@@ -172,7 +172,7 @@ const tools = [
     hoverBg: "hover:bg-amber-500/20",
     shadowColor: "shadow-amber-500/10",
     link: "/ai-financial-advisor",
-    features: ["Budget Analysis", "Investment Advice", "Property Matching", "ROI Projections"]
+    features: ["Budget Analysis", "Affordability Insights", "Property Matching", "Payment Plans"]
   },
   {
     id: "ai-personal-shopper",

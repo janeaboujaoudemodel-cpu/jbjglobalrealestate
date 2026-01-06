@@ -532,8 +532,8 @@ export const en = {
   // AI Tools
   'aiTools.calendar': 'AI Calendar & Notes',
   'aiTools.calendarDesc': 'Manage meetings, events, and notes with AI assistance',
-  'aiTools.financial': 'AI Financial Advisor',
-  'aiTools.financialDesc': 'Get personalized financial planning and investment advice',
+  'aiTools.financial': 'AI Budget Planner',
+  'aiTools.financialDesc': 'Budget analysis and property affordability insights (informational only)',
   'aiTools.shopper': 'AI Personal Shopper',
   'aiTools.shopperDesc': 'Find your perfect property with AI-powered recommendations',
   'aiTools.hub': 'AI Hub',

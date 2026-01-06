@@ -232,15 +232,20 @@ const AIFinancialAdvisor = () => {
           >
             <div className="inline-flex items-center gap-2 bg-emerald-500/20 border border-emerald-500/30 rounded-full px-4 py-1 mb-4">
               <Calculator className="w-4 h-4 text-emerald-400" />
-              <span className="text-emerald-300 text-sm font-medium">AI-Powered Investment Planning</span>
+              <span className="text-emerald-300 text-sm font-medium">AI-Powered Budget Planning</span>
             </div>
             <h1 className="text-4xl md:text-5xl font-bold text-white mb-4">
-              AI Financial <span className="text-transparent bg-clip-text bg-gradient-to-r from-emerald-400 to-green-400">Advisor</span>
+              AI Budget <span className="text-transparent bg-clip-text bg-gradient-to-r from-emerald-400 to-green-400">Planner</span>
             </h1>
             <p className="text-zinc-400 max-w-2xl mx-auto">
-              Get personalized investment strategy, property recommendations, and budget analysis based on your financial profile.
+              Budget analysis and property affordability insights based on your financial profile. Informational only.
             </p>
             <p className="text-xs text-gold mt-2">Developed by Founder Jane Abou Jaoude</p>
+            <div className="mt-4 p-3 bg-amber-500/10 border border-amber-500/30 rounded-lg max-w-xl mx-auto">
+              <p className="text-amber-200 text-xs text-center">
+                <strong>Disclaimer:</strong> AI outputs are informational estimates only and not legal, mortgage, financial, or investment advice.
+              </p>
+            </div>
           </motion.div>
         </div>
       </div>

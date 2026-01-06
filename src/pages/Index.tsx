@@ -9,6 +9,7 @@ import MortgageCalculator from "@/components/MortgageCalculator";
 import WelcomeModal from "@/components/WelcomeModal";
 import InquiryFormModal from "@/components/InquiryFormModal";
 import InstallAppButton from "@/components/InstallAppButton";
+import CookiesConsentBanner from "@/components/CookiesConsentBanner";
 import { useLanguage } from "@/contexts/LanguageContext";
 import { Sparkles, ArrowUpRight, ChevronDown, User, Scale, Layers, Calculator, FileText, Heart, BarChart3, Wrench, Ruler, Palette, Calendar, Wallet, ShoppingBag, Brain, GraduationCap, Briefcase, Target, Award } from "lucide-react";
 import { Button } from "@/components/ui/button";
@@ -38,6 +39,9 @@ const Index = () => {
     <section className="relative w-full min-h-screen bg-black">
       {/* Welcome Modal - AI Assistant Popup on first load */}
       <WelcomeModal />
+      
+      {/* Cookies Consent Banner */}
+      <CookiesConsentBanner />
       
       {/* Floating Install App Button */}
       <InstallAppButton />
@@ -331,6 +335,7 @@ const Index = () => {
               <Link to="/ai-financial-advisor">
                 <Button 
                   className="bg-transparent backdrop-blur-md border-2 border-amber-500/50 text-amber-400 hover:bg-amber-500/20 hover:border-amber-400 hover:shadow-lg hover:shadow-amber-500/20 font-semibold px-5 py-4 text-xs transition-all duration-300 hover:scale-105 group"
+                  title="Budget analysis and property affordability insights (informational only)"
                 >
                   <Wallet className="w-3 h-3 mr-1" />
                   AI Budget Planner

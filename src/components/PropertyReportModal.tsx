@@ -39,7 +39,7 @@ interface PropertyReportModalProps {
 }
 
 const WHATSAPP_NUMBER = "97156591100";
-const JJ_EMAIL = "invest@JJGlobalCapital.com";
+const JJ_EMAIL = "contact@jjglobalcapital.com";
 
 const PropertyReportModal = ({ open, onOpenChange, project }: PropertyReportModalProps) => {
   const [isGenerating, setIsGenerating] = useState(false);

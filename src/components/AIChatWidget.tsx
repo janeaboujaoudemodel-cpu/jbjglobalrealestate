@@ -186,7 +186,7 @@ const AIChatWidget = () => {
       const assistantMessage: Message = {
         id: (Date.now() + 1).toString(),
         role: 'assistant',
-        content: data.response || 'I apologize, but I encountered an issue. Please try again or contact our team directly at invest@jjglobalcapital.com or call +971 50 747 9498.',
+        content: data.response || 'I apologize, but I encountered an issue. Please try again or contact our team directly at contact@jjglobalcapital.com or call +971 56 591 1000.',
         timestamp: new Date(),
       };
 
@@ -203,7 +203,7 @@ const AIChatWidget = () => {
         {
           id: (Date.now() + 1).toString(),
           role: 'assistant',
-          content: 'I apologize for the technical difficulty. Please try again or contact our team directly:\n\n📧 Email: invest@jjglobalcapital.com\n📞 Phone: +971 50 747 9498\n💬 WhatsApp: +971 50 747 9498\n\nOur team is available to assist you.',
+          content: 'I apologize for the technical difficulty. Please try again or contact our team directly:\n\n📧 Email: contact@jjglobalcapital.com\n📞 Phone: +971 56 591 1000\n💬 WhatsApp: +971 56 591 1000\n\nOur team is available to assist you.',
           timestamp: new Date(),
         },
       ]);
@@ -560,7 +560,7 @@ const AIChatWidget = () => {
                 </Button>
 
                 <p className="text-zinc-500 text-xs mt-4 text-center">
-                  Need more help? Contact us at invest@jjglobalcapital.com
+                  Need more help? Contact us at contact@jjglobalcapital.com
                 </p>
               </div>
             )}

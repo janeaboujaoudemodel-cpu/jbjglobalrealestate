@@ -132,11 +132,11 @@ const Footer = () => {
     { href: "/contact", label: "Contact" },
   ];
 
-  // Academy & Tools Sections
+  // Broker Toolkit & Resources
   const academyLinks = [
-    { href: "/broker-toolkit", label: "Broker Academy" },
+    { href: "/broker-toolkit", label: "Broker Toolkit" },
     { href: "/broker-toolkit/dashboard", label: "My Dashboard" },
-    { href: "/tools-guide", label: "Training Center" },
+    { href: "/tools-guide", label: "Guides & Resources" },
   ];
 
   const professionalTools = [
@@ -236,12 +236,12 @@ const Footer = () => {
             </div>
           </div>
 
-          {/* JJ Global Capital Academy */}
+          {/* Broker Toolkit */}
           <div className="text-center md:text-left">
             <h4 className="text-gold font-semibold mb-5 text-sm uppercase tracking-[0.2em]">
-              JJ Academy
+              Broker Toolkit
             </h4>
-            <p className="text-zinc-500 text-xs mb-4">Professional Training & Certification</p>
+            <p className="text-zinc-500 text-xs mb-4">Guides & Resources</p>
             <ul className="space-y-2.5">
               {academyLinks.map((link) => (
                 <li key={link.href}>
@@ -332,7 +332,7 @@ const Footer = () => {
               <h4 className="text-white font-semibold">Legal Disclaimer</h4>
             </div>
             <p className="text-zinc-400 text-sm leading-relaxed mb-4">
-              <span className="text-white font-medium">JJ Global Capital</span> is a licensed real estate brokerage. 
+              <span className="text-white font-medium">JJ Global Capital</span> is a real estate brokerage. 
               We do not provide legal, mortgage, financial, or investment advice. Third-party services 
               (legal, mortgage, property management) are provided by{" "}
               <span className="text-gold font-semibold">independent licensed professionals</span> who contract 
@@ -383,6 +383,9 @@ const Footer = () => {
             </Link>
             <Link to="/terms" className="hover:text-gold transition-colors">
               Terms of Service
+            </Link>
+            <Link to="/cookies" className="hover:text-gold transition-colors">
+              Cookies
             </Link>
             <Link to="/intellectual-property" className="hover:text-gold transition-colors">
               Intellectual Property

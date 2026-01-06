@@ -279,7 +279,7 @@ const Favorites = () => {
     </div>
 
     <div class="footer">
-      <div>invest@jjglobalcapital.com • +971 56 591 1000 • jjglobalcapital.com</div>
+      <div>contact@jjglobalcapital.com • +971 56 591 1000 • jjglobalcapital.com</div>
     </div>
   </div>
 </body>
@@ -604,7 +604,7 @@ const Favorites = () => {
                     Assign medals (🥇🥈🥉) to rank your best choices for consultation.
                   </p>
                   <p className="text-zinc-500 text-sm mb-8">
-                    Tip: Your shortlist can be shared with our advisors for professional evaluation and tailored recommendations.
+                    Tip: Your shortlist can be shared with our team for professional brokerage support and tailored property recommendations.
                   </p>
                   <div className="flex flex-col sm:flex-row gap-3 justify-center">
                     <Link to="/properties">
