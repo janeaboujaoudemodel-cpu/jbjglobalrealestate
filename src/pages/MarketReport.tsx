@@ -1,6 +1,6 @@
 import { useMemo, useState, useEffect, useRef } from "react";
 import Footer from "@/components/Footer";
-import GlobalHeader from "@/components/GlobalHeader";
+
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
@@ -1697,7 +1697,7 @@ const MarketReport = () => {
 
   return (
     <div className="min-h-screen bg-black text-white">
-      <GlobalHeader />
+      
 
       {/* Thank You Modal */}
       {showThankYou && (

@@ -203,7 +203,7 @@ const Footer = () => {
         {/* Divider */}
         <div className="h-px bg-gradient-to-r from-transparent via-zinc-700 to-transparent mb-10" />
 
-        {/* Menu + Divisions + Academy Grid - Premium Layout */}
+        {/* Menu + Divisions + Toolkit Grid - Premium Layout */}
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-10 md:gap-12 mb-10 max-w-6xl mx-auto">
           {/* Menu */}
           <div className="text-center md:text-left">
@@ -335,7 +335,7 @@ const Footer = () => {
               <span className="text-white font-medium">JJ Global Capital</span> is a real estate brokerage. 
               We do not provide legal, mortgage, financial, or investment advice. Third-party services 
               (legal, mortgage, property management) are provided by{" "}
-              <span className="text-gold font-semibold">independent licensed professionals</span> who contract 
+              <span className="text-gold font-semibold">independent professionals</span> who contract 
               directly with clients.
             </p>
             <p className="text-zinc-500 text-xs leading-relaxed mb-4">

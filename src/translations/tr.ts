@@ -47,8 +47,8 @@ export const tr = {
   'home.stats.propertiesManaged': 'Yönetilen Mülk',
   'home.stats.countries': 'Hizmet Verilen Ülke',
   'home.stats.trackRecord': 'Başarı Geçmişimiz',
-  'home.stats.trusted': 'Güvenilir',
-  'home.stats.worldwide': 'Dünya Çapında',
+  'home.stats.trusted': 'Hizmet Verilen',
+  'home.stats.clients': 'BAE ve Uluslararası Müşteriler',
   
   // Founder Section
   'founder.leadership': 'Liderlik',

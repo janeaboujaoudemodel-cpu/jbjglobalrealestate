@@ -7,6 +7,7 @@ import { AuthProvider } from "@/contexts/AuthContext";
 import { LanguageProvider } from "@/contexts/LanguageContext";
 import ScrollToTop from "@/components/ScrollToTop";
 import AdminBypass from "@/components/AdminBypass";
+import MainLayout from "@/components/MainLayout";
 import Index from "./pages/Index";
 import Properties from "./pages/Properties";
 import ProjectDetail from "./pages/ProjectDetail";
@@ -52,6 +53,7 @@ import InteriorDesign from "./pages/services/InteriorDesign";
 import FitOut from "./pages/services/FitOut";
 import DesignBuild from "./pages/services/DesignBuild";
 import LawFirm from "./pages/services/LawFirm";
+import ReferralPartner from "./pages/ReferralPartner";
 import Install from "./pages/Install";
 
 const queryClient = new QueryClient();
@@ -70,7 +72,8 @@ const App = () => (
               <Route path="/auth" element={<Auth />} />
               <Route path="*" element={
                 <AdminBypass>
-                  <Routes>
+                  <MainLayout>
+                    <Routes>
                     <Route path="/" element={<Index />} />
                     <Route path="/properties" element={<Properties />} />
                     <Route path="/project/:slug" element={<ProjectDetail />} />
@@ -115,9 +118,11 @@ const App = () => (
                     <Route path="/services/fit-out" element={<FitOut />} />
                     <Route path="/services/design-build" element={<DesignBuild />} />
                     <Route path="/services/law-firm" element={<LawFirm />} />
+                    <Route path="/referral-partner" element={<ReferralPartner />} />
                     <Route path="/install" element={<Install />} />
                     <Route path="*" element={<NotFound />} />
-                  </Routes>
+                    </Routes>
+                  </MainLayout>
                 </AdminBypass>
               } />
             </Routes>

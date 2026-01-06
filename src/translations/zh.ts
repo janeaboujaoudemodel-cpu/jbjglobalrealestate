@@ -47,8 +47,8 @@ export const zh = {
   'home.stats.propertiesManaged': '管理房产',
   'home.stats.countries': '服务国家',
   'home.stats.trackRecord': '我们的业绩',
-  'home.stats.trusted': '受信任于',
-  'home.stats.worldwide': '全球范围',
+  'home.stats.trusted': '服务于',
+  'home.stats.clients': '阿联酋及国际客户',
   
   // Founder Section
   'founder.leadership': '领导层',

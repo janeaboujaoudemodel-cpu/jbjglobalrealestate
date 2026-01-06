@@ -47,11 +47,11 @@ const SEARCHABLE_ITEMS = [
     description: "UAE market insights"
   },
   { 
-    keywords: ["mortgage", "calculator", "finance", "loan", "advisory"], 
-    route: "/mortgage-advisory", 
-    label: "Mortgage Advisory", 
+    keywords: ["mortgage", "calculator", "finance", "loan"], 
+    route: "/mortgage-calculator", 
+    label: "Mortgage Calculator", 
     icon: FileText,
-    description: "Mortgage calculator & advisory"
+    description: "Mortgage estimation tool"
   },
   { 
     keywords: ["law", "legal", "firm", "lawyer", "attorney"], 

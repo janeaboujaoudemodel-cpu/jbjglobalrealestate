@@ -48,8 +48,8 @@ export const en = {
   'home.stats.clientSatisfaction': 'Client Satisfaction',
   'home.stats.teamMembers': 'Team Members',
   'home.stats.trackRecord': 'Our Track Record',
-  'home.stats.trusted': 'Trusted by',
-  'home.stats.clients': 'Clients in the UAE',
+  'home.stats.trusted': 'Serving',
+  'home.stats.clients': 'UAE & International Clients',
   
   // Founder Section
   'founder.leadership': 'Leadership',
@@ -72,7 +72,7 @@ export const en = {
   'about.title': 'About JJ Global Capital',
   'about.subtitle': 'Your trusted partner in UAE real estate brokerage',
   'about.whoWeAre': 'Who We Are',
-  'about.whoWeAreDesc': 'JJ Global Capital is a licensed real estate brokerage specializing in property sales, leasing, and holiday homes across the UAE.',
+  'about.whoWeAreDesc': 'JJ Global Capital is a real estate brokerage specializing in property sales, leasing, and holiday homes across the UAE.',
   'about.ourMission': 'Our Mission',
   'about.ourMissionDesc': 'To provide exceptional brokerage services, connecting clients with the right properties through expert negotiation and transaction support.',
   'about.ourVision': 'Our Vision',
@@ -90,7 +90,7 @@ export const en = {
   // Awards Page
   'awards.title': 'Awards & Recognition',
   'awards.subtitle': 'Excellence recognized by industry leaders',
-  'awards.description': 'Our commitment to excellence has been recognized by prestigious organizations worldwide.',
+  'awards.description': 'Our commitment to excellence continues to be recognized by industry organizations.',
   'awards.yearLabel': 'Year',
   'awards.categoryLabel': 'Category',
   'awards.awardedBy': 'Awarded By',
@@ -104,7 +104,7 @@ export const en = {
   'concierge.automotive': 'Luxury Automotive',
   'concierge.automotiveDesc': 'Premium limousine services and exotic car rentals for discerning clients',
   'concierge.hospitality': 'Premium Hospitality',
-  'concierge.hospitalityDesc': 'Access to the finest hotels, resorts, and exclusive venues worldwide',
+  'concierge.hospitalityDesc': 'Access to the finest hotels, resorts, and exclusive venues through our partners',
   'concierge.yachting': 'Yacht Charter',
   'concierge.yachtingDesc': 'Luxury yacht experiences for unforgettable maritime adventures',
   'concierge.dining': 'Fine Dining',
@@ -137,7 +137,7 @@ export const en = {
   'mortgage.subtitle': 'Estimate your financing options',
   'mortgage.calculator': 'Mortgage Calculator',
   'mortgage.financial': 'Financial Planning Tool',
-  'mortgage.estimate': 'Use this tool to estimate monthly payments. For mortgage advice, we can introduce you to licensed specialists.',
+  'mortgage.estimate': 'Use this tool to estimate monthly payments. For mortgage advice, we can introduce you to specialists.',
   'mortgage.propertyPrice': 'Property Price',
   'mortgage.downPayment': 'Down Payment',
   'mortgage.interestRate': 'Interest Rate',
@@ -150,7 +150,7 @@ export const en = {
   'mortgage.contactAdvisor': 'Request Partner Introduction',
   'mortgage.years': 'years',
   'mortgage.perMonth': 'per month',
-  'mortgage.disclaimer': 'This calculator is for estimation purposes only. JJ Global Capital does not provide mortgage advice. Contact a licensed mortgage specialist for professional guidance.',
+  'mortgage.disclaimer': 'This calculator is for estimation purposes only. JJ Global Capital does not provide mortgage advice. Contact a mortgage specialist for professional guidance.',
   
   // Properties
   'properties.title': 'Properties',
@@ -311,13 +311,13 @@ export const en = {
   'services.interiorDesign': 'Interior Design',
   'services.interiorDesignDesc': 'Luxury interior design solutions',
   'services.lawFirm': 'Legal Partners',
-  'services.lawFirmDesc': 'We introduce you to independent licensed law firms for property matters',
+  'services.lawFirmDesc': 'We introduce you to independent law firms for property matters',
   'services.learnMore': 'Learn More',
   'services.getQuote': 'Get a Quote',
   'services.ourProcess': 'Our Process',
   'services.portfolio': 'Portfolio',
   'services.testimonials': 'Testimonials',
-  'services.partnerDisclaimer': 'Third-party services are provided by independent licensed professionals',
+  'services.partnerDisclaimer': 'Third-party services are provided by independent professionals',
   
   // News Page
   'news.title': 'News & Insights',

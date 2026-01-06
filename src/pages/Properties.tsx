@@ -40,7 +40,7 @@ import {
 import { ScrollArea } from "@/components/ui/scroll-area";
 import { Slider } from "@/components/ui/slider";
 import { Checkbox } from "@/components/ui/checkbox";
-import GlobalHeader from "@/components/GlobalHeader";
+
 import Footer from "@/components/Footer";
 import ProjectCard from "@/components/ProjectCard";
 import { useProjects, useCommunities, useDevelopers } from "@/hooks/useProjects";
@@ -232,7 +232,7 @@ const Properties = () => {
 
   return (
     <div className="min-h-screen bg-[hsl(var(--premium-bg))]">
-      <GlobalHeader />
+      
       
       {/* Hero Section */}
       <section className="pt-24 pb-12 bg-gradient-to-b from-black via-zinc-950 to-[hsl(var(--premium-bg))]">

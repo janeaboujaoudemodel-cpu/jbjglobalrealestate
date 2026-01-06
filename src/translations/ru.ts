@@ -47,8 +47,8 @@ export const ru = {
   'home.stats.propertiesManaged': 'Управляемых Объектов',
   'home.stats.countries': 'Стран Обслуживания',
   'home.stats.trackRecord': 'Наши Достижения',
-  'home.stats.trusted': 'Доверяют',
-  'home.stats.worldwide': 'По Всему Миру',
+  'home.stats.trusted': 'Обслуживаем',
+  'home.stats.clients': 'Клиентов в ОАЭ и за рубежом',
   
   // Founder Section
   'founder.leadership': 'Руководство',

@@ -57,7 +57,7 @@ const services = [
   },
   {
     title: "Mortgage Partners",
-    description: "Introductions to licensed mortgage specialists",
+    description: "Introductions to mortgage specialists",
     gradient: "from-amber-500/20 via-orange-500/10 to-amber-600/20",
     iconGradient: "from-amber-400 to-orange-400",
   },

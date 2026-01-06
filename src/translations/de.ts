@@ -47,8 +47,8 @@ export const de = {
   'home.stats.propertiesManaged': 'Verwaltete Immobilien',
   'home.stats.countries': 'Bediente Länder',
   'home.stats.trackRecord': 'Unsere Erfolgsbilanz',
-  'home.stats.trusted': 'Vertraut von',
-  'home.stats.worldwide': 'Weltweit',
+  'home.stats.trusted': 'Im Dienst von',
+  'home.stats.clients': 'VAE & Internationale Kunden',
   
   // Founder Section
   'founder.leadership': 'Führung',

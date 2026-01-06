@@ -172,7 +172,7 @@ export default function BrokerCourses({ subscription }: BrokerCoursesProps) {
             <GraduationCap className="w-7 h-7 text-gold" />
           </div>
           <div>
-            <h2 className="text-xl font-bold text-white">Training Academy</h2>
+            <h2 className="text-xl font-bold text-white">Guides & Resources</h2>
             <p className="text-zinc-400">
               {subscription.tier === "enterprise" 
                 ? "You have access to all courses and future releases"

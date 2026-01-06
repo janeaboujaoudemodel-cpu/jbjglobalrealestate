@@ -178,10 +178,16 @@ const Concierge = () => {
           </motion.h1>
 
           <motion.p 
-            className="text-zinc-300 text-lg md:text-xl max-w-2xl mx-auto mb-8"
+            className="text-zinc-300 text-lg md:text-xl max-w-2xl mx-auto mb-4"
             variants={fadeInUp}
           >
-            Experience the pinnacle of luxury with our bespoke concierge services. From private aviation to exclusive experiences, we curate the extraordinary.
+            We coordinate luxury experiences through our trusted partner network. From private aviation to exclusive venues, we arrange the extraordinary on your behalf.
+          </motion.p>
+          <motion.p 
+            className="text-zinc-500 text-sm max-w-xl mx-auto mb-8"
+            variants={fadeInUp}
+          >
+            Concierge services are coordinated through trusted partners. Services are delivered by independent providers under their own terms.
           </motion.p>
 
           <motion.div variants={fadeInUp}>
@@ -358,9 +364,9 @@ const Concierge = () => {
             variants={staggerContainer}
           >
             {[
-              { icon: Star, title: "Premium Support", desc: "Dedicated service for your every need" },
-              { icon: Gem, title: "Exclusive Access", desc: "VIP access to the world's most exclusive venues" },
-              { icon: Heart, title: "Personalized Service", desc: "Tailored experiences crafted just for you" },
+              { icon: Star, title: "Premium Coordination", desc: "We arrange and follow up on your behalf" },
+              { icon: Gem, title: "Partner Network", desc: "Access to exclusive venues through trusted providers" },
+              { icon: Heart, title: "Personalized Arrangements", desc: "Tailored experiences coordinated for you" },
               { icon: Camera, title: "Discreet Service", desc: "Confidential handling assured" }
             ].map((item, idx) => (
               <motion.div
@@ -394,10 +400,13 @@ const Concierge = () => {
               className="text-white text-3xl md:text-4xl font-bold mb-6"
               style={{ fontFamily: "Poppins, sans-serif" }}
             >
-              Experience Luxury Without Limits
+              Premium Arrangements Made Simple
             </h2>
-            <p className="text-zinc-400 mb-8">
-              Our dedicated concierge team is ready to curate your perfect experience. Let us handle the extraordinary.
+            <p className="text-zinc-400 mb-4">
+              Our dedicated concierge team coordinates with trusted partners to arrange your perfect experience.
+            </p>
+            <p className="text-zinc-500 text-sm mb-8">
+              All services are provided by independent partners. Contracts and payments are directly with the service provider.
             </p>
             <div className="flex flex-wrap justify-center gap-4">
               <Button 

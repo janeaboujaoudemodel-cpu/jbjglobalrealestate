@@ -2,7 +2,7 @@ import { useState } from "react";
 import { motion } from "framer-motion";
 import { Link } from "react-router-dom";
 import { supabase } from "@/integrations/supabase/client";
-import GlobalHeader from "@/components/GlobalHeader";
+
 import Footer from "@/components/Footer";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -154,7 +154,7 @@ const RentalIndex = () => {
 
   return (
     <div className="min-h-screen bg-black">
-      <GlobalHeader />
+      
       
       {/* Hero Section */}
       <section className="pt-32 pb-16 bg-gradient-to-b from-emerald-950/50 via-zinc-950 to-black">

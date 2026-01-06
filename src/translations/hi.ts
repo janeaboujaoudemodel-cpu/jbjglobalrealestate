@@ -47,8 +47,8 @@ export const hi = {
   'home.stats.propertiesManaged': 'प्रबंधित संपत्तियाँ',
   'home.stats.countries': 'सेवित देश',
   'home.stats.trackRecord': 'हमारा ट्रैक रिकॉर्ड',
-  'home.stats.trusted': 'विश्वसनीय',
-  'home.stats.worldwide': 'विश्वव्यापी',
+  'home.stats.trusted': 'सेवा प्रदान',
+  'home.stats.clients': 'यूएई और अंतर्राष्ट्रीय ग्राहक',
   
   // Founder Section
   'founder.leadership': 'नेतृत्व',

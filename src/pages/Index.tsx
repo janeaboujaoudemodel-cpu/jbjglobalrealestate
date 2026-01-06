@@ -377,7 +377,7 @@ const Index = () => {
         </div>
       </section>
 
-      {/* ACADEMY & PROFESSIONAL TOOLS SECTION - Premium Dedicated */}
+      {/* BROKER TOOLKIT & PROFESSIONAL TOOLS SECTION - Premium Dedicated */}
       <section className="py-20 md:py-28 bg-gradient-to-b from-black via-zinc-950 to-black relative overflow-hidden">
         {/* Background decorative elements */}
         <div className="absolute inset-0 pointer-events-none">
@@ -405,13 +405,13 @@ const Index = () => {
               Elevate Your <span className="text-transparent bg-clip-text bg-gradient-to-r from-gold via-gold-light to-gold">Real Estate Career</span>
             </h2>
             <p className="text-zinc-400 text-lg max-w-2xl mx-auto">
-              Access world-class training, AI-powered tools, and professional resources designed for real estate excellence
+              Access AI-powered tools and professional resources designed for real estate excellence
             </p>
           </motion.div>
 
           {/* Two Column Cards */}
           <div className="grid md:grid-cols-2 gap-8 max-w-5xl mx-auto">
-            {/* Academy Card */}
+            {/* Broker Toolkit Card */}
             <motion.div
               className="relative group"
               initial={{ opacity: 0, x: -30 }}
@@ -427,41 +427,45 @@ const Index = () => {
                   </div>
                   <div>
                     <h3 className="text-white text-2xl font-bold" style={{ fontFamily: "Poppins, sans-serif" }}>
-                      JJ Global Capital Academy
+                      Broker Toolkit
                     </h3>
-                    <p className="text-gold text-sm uppercase tracking-wider">Professional Training</p>
+                    <p className="text-gold text-sm uppercase tracking-wider">Guides & Resources</p>
                   </div>
                 </div>
                 
                 <p className="text-zinc-300 mb-6 leading-relaxed">
-                  Master the art of real estate with our comprehensive training programs. From lead generation to closing techniques, become an industry leader.
+                  Practical guides and resources for real estate professionals. From lead generation to closing techniques, develop your expertise.
                 </p>
                 
                 <ul className="space-y-3 mb-8">
                   <li className="flex items-center gap-3 text-zinc-400">
                     <Target className="w-4 h-4 text-gold flex-shrink-0" />
-                    <span>Advanced Closing Techniques</span>
+                    <span>Closing Techniques Guide</span>
                   </li>
                   <li className="flex items-center gap-3 text-zinc-400">
                     <Target className="w-4 h-4 text-gold flex-shrink-0" />
-                    <span>Lead Generation Mastery</span>
+                    <span>Lead Generation Strategies</span>
                   </li>
                   <li className="flex items-center gap-3 text-zinc-400">
                     <Target className="w-4 h-4 text-gold flex-shrink-0" />
-                    <span>Client Relationship Management</span>
+                    <span>Client Relationship Tips</span>
                   </li>
                   <li className="flex items-center gap-3 text-zinc-400">
                     <Target className="w-4 h-4 text-gold flex-shrink-0" />
-                    <span>Market Analysis & Insights</span>
+                    <span>Market Analysis Insights</span>
                   </li>
                 </ul>
                 
                 <Link to="/broker-toolkit">
                   <Button className="w-full bg-gradient-to-r from-gold to-gold-light hover:from-gold-light hover:to-gold text-black font-bold py-6 text-base shadow-lg shadow-gold/30 hover:shadow-xl hover:shadow-gold/40 transition-all duration-300 group-hover:scale-[1.02]">
-                    Explore Academy
+                    Explore Resources
                     <ArrowUpRight className="w-5 h-5 ml-2" />
                   </Button>
                 </Link>
+                
+                <p className="text-zinc-500 text-xs text-center mt-4">
+                  Educational content only. Not an accredited training institute.
+                </p>
               </div>
             </motion.div>
 
@@ -520,9 +524,9 @@ const Index = () => {
             </motion.div>
           </div>
 
-          {/* Quick Stats */}
+          {/* Quick Stats - Simplified */}
           <motion.div 
-            className="grid grid-cols-2 md:grid-cols-4 gap-6 mt-16 max-w-4xl mx-auto"
+            className="grid grid-cols-2 md:grid-cols-3 gap-6 mt-16 max-w-3xl mx-auto"
             initial={{ opacity: 0, y: 20 }}
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true }}
@@ -533,16 +537,12 @@ const Index = () => {
               <p className="text-zinc-500 text-sm mt-1">AI Tools</p>
             </div>
             <div className="text-center p-6 bg-zinc-900/50 backdrop-blur border border-zinc-800 rounded-2xl">
-              <p className="text-gold text-3xl md:text-4xl font-bold" style={{ fontFamily: "Poppins, sans-serif" }}>50+</p>
-              <p className="text-zinc-500 text-sm mt-1">Training Lessons</p>
+              <p className="text-gold text-3xl md:text-4xl font-bold" style={{ fontFamily: "Poppins, sans-serif" }}>AI</p>
+              <p className="text-zinc-500 text-sm mt-1">Powered</p>
             </div>
-            <div className="text-center p-6 bg-zinc-900/50 backdrop-blur border border-zinc-800 rounded-2xl">
-              <p className="text-gold text-3xl md:text-4xl font-bold" style={{ fontFamily: "Poppins, sans-serif" }}>24/7</p>
-              <p className="text-zinc-500 text-sm mt-1">AI Assistance</p>
-            </div>
-            <div className="text-center p-6 bg-zinc-900/50 backdrop-blur border border-zinc-800 rounded-2xl">
-              <p className="text-gold text-3xl md:text-4xl font-bold" style={{ fontFamily: "Poppins, sans-serif" }}>Pro</p>
-              <p className="text-zinc-500 text-sm mt-1">Certification</p>
+            <div className="text-center p-6 bg-zinc-900/50 backdrop-blur border border-zinc-800 rounded-2xl col-span-2 md:col-span-1">
+              <p className="text-gold text-3xl md:text-4xl font-bold" style={{ fontFamily: "Poppins, sans-serif" }}>Free</p>
+              <p className="text-zinc-500 text-sm mt-1">Resources</p>
             </div>
           </motion.div>
         </div>

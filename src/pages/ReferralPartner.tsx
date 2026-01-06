@@ -1,0 +1,126 @@
+import { Link } from "react-router-dom";
+import { motion } from "framer-motion";
+import { Handshake, Users, Building2, ArrowRight, CheckCircle } from "lucide-react";
+import { Button } from "@/components/ui/button";
+import Footer from "@/components/Footer";
+import { CONTACT_INFO } from "@/constants/stats";
+
+const fadeInUp = {
+  hidden: { opacity: 0, y: 30 },
+  visible: { opacity: 1, y: 0, transition: { duration: 0.6 } }
+};
+
+const ReferralPartner = () => {
+  return (
+    <div className="min-h-screen bg-black">
+      {/* Hero Section */}
+      <section className="relative py-24 md:py-32 overflow-hidden">
+        <div className="absolute inset-0 bg-gradient-to-b from-zinc-900/50 to-black" />
+        <div className="absolute top-1/4 left-1/4 w-96 h-96 bg-gold/5 rounded-full blur-3xl" />
+        
+        <div className="container mx-auto px-4 relative z-10">
+          <motion.div 
+            className="text-center max-w-4xl mx-auto"
+            initial="hidden"
+            animate="visible"
+            variants={fadeInUp}
+          >
+            <span className="inline-flex items-center gap-2 text-gold text-xs uppercase tracking-[0.4em] mb-6">
+              <Handshake className="w-4 h-4" />
+              Partner Program
+            </span>
+            <h1 
+              className="text-white text-4xl md:text-6xl font-bold mb-6"
+              style={{ fontFamily: "Poppins, sans-serif" }}
+            >
+              Referral <span className="text-transparent bg-clip-text bg-gradient-to-r from-gold to-gold-light">Partner Program</span>
+            </h1>
+            <p className="text-zinc-400 text-lg md:text-xl max-w-2xl mx-auto mb-8">
+              Collaborate with JJ Global Capital by referring clients interested in UAE real estate.
+            </p>
+          </motion.div>
+        </div>
+      </section>
+
+      {/* Program Details */}
+      <section className="py-16 bg-zinc-950">
+        <div className="container mx-auto px-4">
+          <motion.div 
+            className="max-w-4xl mx-auto"
+            initial={{ opacity: 0, y: 20 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+          >
+            <div className="bg-gradient-to-br from-zinc-900 to-black border border-zinc-800 rounded-2xl p-8 md:p-12">
+              <div className="flex items-center gap-4 mb-8">
+                <div className="w-14 h-14 bg-gradient-to-br from-gold/20 to-gold/5 rounded-xl flex items-center justify-center border border-gold/30">
+                  <Users className="w-7 h-7 text-gold" />
+                </div>
+                <div>
+                  <h2 className="text-white text-2xl font-bold">How It Works</h2>
+                  <p className="text-zinc-500">Simple and straightforward</p>
+                </div>
+              </div>
+
+              <div className="space-y-6 mb-10">
+                <div className="flex items-start gap-4">
+                  <CheckCircle className="w-5 h-5 text-gold mt-1 flex-shrink-0" />
+                  <div>
+                    <h3 className="text-white font-semibold mb-1">Refer a Client</h3>
+                    <p className="text-zinc-400">
+                      Introduce us to individuals or companies interested in buying, selling, or leasing property in the UAE.
+                    </p>
+                  </div>
+                </div>
+                <div className="flex items-start gap-4">
+                  <CheckCircle className="w-5 h-5 text-gold mt-1 flex-shrink-0" />
+                  <div>
+                    <h3 className="text-white font-semibold mb-1">We Handle the Transaction</h3>
+                    <p className="text-zinc-400">
+                      Our team manages the entire brokerage process with professionalism and discretion.
+                    </p>
+                  </div>
+                </div>
+                <div className="flex items-start gap-4">
+                  <CheckCircle className="w-5 h-5 text-gold mt-1 flex-shrink-0" />
+                  <div>
+                    <h3 className="text-white font-semibold mb-1">Referral Arrangement</h3>
+                    <p className="text-zinc-400">
+                      Referral fees may apply subject to a written agreement and compliance with applicable laws.
+                    </p>
+                  </div>
+                </div>
+              </div>
+
+              {/* Compliance Notice */}
+              <div className="bg-zinc-800/50 border border-zinc-700 rounded-xl p-6 mb-8">
+                <h4 className="text-gold font-semibold text-sm uppercase tracking-wider mb-3">Important Notice</h4>
+                <p className="text-zinc-400 text-sm leading-relaxed">
+                  Partners are independent and responsible for compliance with regulations in their own jurisdictions. 
+                  This program does not constitute an employment relationship. All arrangements are subject to a formal 
+                  written agreement between parties.
+                </p>
+              </div>
+
+              <div className="text-center">
+                <a href={`mailto:${CONTACT_INFO.email}?subject=Referral Partner Inquiry`}>
+                  <Button className="bg-gradient-to-r from-gold to-gold-dark text-black font-semibold px-8 py-6 text-base">
+                    Inquire About Partnership
+                    <ArrowRight className="w-5 h-5 ml-2" />
+                  </Button>
+                </a>
+                <p className="text-zinc-500 text-sm mt-4">
+                  Contact us at {CONTACT_INFO.email}
+                </p>
+              </div>
+            </div>
+          </motion.div>
+        </div>
+      </section>
+
+      <Footer />
+    </div>
+  );
+};
+
+export default ReferralPartner;
