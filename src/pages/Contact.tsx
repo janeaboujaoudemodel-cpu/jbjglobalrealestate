@@ -18,54 +18,87 @@ import { useLeadCapture } from "@/hooks/useLeadCapture";
 import { getCountryList, getLanguageList } from "@/constants/localeOptions";
 import { Link } from "react-router-dom";
 
-// Country codes with dial codes for phone input
+// Country codes with dial codes and valid number lengths for phone input
 const COUNTRY_CODES = [
-  { code: "+971", country: "UAE", flag: "🇦🇪" },
-  { code: "+966", country: "Saudi Arabia", flag: "🇸🇦" },
-  { code: "+974", country: "Qatar", flag: "🇶🇦" },
-  { code: "+965", country: "Kuwait", flag: "🇰🇼" },
-  { code: "+973", country: "Bahrain", flag: "🇧🇭" },
-  { code: "+968", country: "Oman", flag: "🇴🇲" },
-  { code: "+44", country: "UK", flag: "🇬🇧" },
-  { code: "+1", country: "US/CA", flag: "🇺🇸" },
-  { code: "+49", country: "Germany", flag: "🇩🇪" },
-  { code: "+33", country: "France", flag: "🇫🇷" },
-  { code: "+39", country: "Italy", flag: "🇮🇹" },
-  { code: "+34", country: "Spain", flag: "🇪🇸" },
-  { code: "+41", country: "Switzerland", flag: "🇨🇭" },
-  { code: "+7", country: "Russia", flag: "🇷🇺" },
-  { code: "+86", country: "China", flag: "🇨🇳" },
-  { code: "+91", country: "India", flag: "🇮🇳" },
-  { code: "+92", country: "Pakistan", flag: "🇵🇰" },
-  { code: "+20", country: "Egypt", flag: "🇪🇬" },
-  { code: "+961", country: "Lebanon", flag: "🇱🇧" },
-  { code: "+962", country: "Jordan", flag: "🇯🇴" },
-  { code: "+90", country: "Turkey", flag: "🇹🇷" },
-  { code: "+98", country: "Iran", flag: "🇮🇷" },
-  { code: "+61", country: "Australia", flag: "🇦🇺" },
-  { code: "+65", country: "Singapore", flag: "🇸🇬" },
-  { code: "+60", country: "Malaysia", flag: "🇲🇾" },
-  { code: "+63", country: "Philippines", flag: "🇵🇭" },
-  { code: "+27", country: "South Africa", flag: "🇿🇦" },
-  { code: "+55", country: "Brazil", flag: "🇧🇷" },
-  { code: "+52", country: "Mexico", flag: "🇲🇽" },
+  { code: "+971", country: "UAE", flag: "🇦🇪", minLen: 9, maxLen: 9 },
+  { code: "+966", country: "Saudi Arabia", flag: "🇸🇦", minLen: 9, maxLen: 9 },
+  { code: "+974", country: "Qatar", flag: "🇶🇦", minLen: 8, maxLen: 8 },
+  { code: "+965", country: "Kuwait", flag: "🇰🇼", minLen: 8, maxLen: 8 },
+  { code: "+973", country: "Bahrain", flag: "🇧🇭", minLen: 8, maxLen: 8 },
+  { code: "+968", country: "Oman", flag: "🇴🇲", minLen: 8, maxLen: 8 },
+  { code: "+44", country: "UK", flag: "🇬🇧", minLen: 10, maxLen: 10 },
+  { code: "+1", country: "US/CA", flag: "🇺🇸", minLen: 10, maxLen: 10 },
+  { code: "+49", country: "Germany", flag: "🇩🇪", minLen: 10, maxLen: 11 },
+  { code: "+33", country: "France", flag: "🇫🇷", minLen: 9, maxLen: 9 },
+  { code: "+39", country: "Italy", flag: "🇮🇹", minLen: 9, maxLen: 10 },
+  { code: "+34", country: "Spain", flag: "🇪🇸", minLen: 9, maxLen: 9 },
+  { code: "+41", country: "Switzerland", flag: "🇨🇭", minLen: 9, maxLen: 9 },
+  { code: "+7", country: "Russia", flag: "🇷🇺", minLen: 10, maxLen: 10 },
+  { code: "+86", country: "China", flag: "🇨🇳", minLen: 11, maxLen: 11 },
+  { code: "+91", country: "India", flag: "🇮🇳", minLen: 10, maxLen: 10 },
+  { code: "+92", country: "Pakistan", flag: "🇵🇰", minLen: 10, maxLen: 10 },
+  { code: "+20", country: "Egypt", flag: "🇪🇬", minLen: 10, maxLen: 10 },
+  { code: "+961", country: "Lebanon", flag: "🇱🇧", minLen: 7, maxLen: 8 },
+  { code: "+962", country: "Jordan", flag: "🇯🇴", minLen: 9, maxLen: 9 },
+  { code: "+90", country: "Turkey", flag: "🇹🇷", minLen: 10, maxLen: 10 },
+  { code: "+98", country: "Iran", flag: "🇮🇷", minLen: 10, maxLen: 10 },
+  { code: "+61", country: "Australia", flag: "🇦🇺", minLen: 9, maxLen: 9 },
+  { code: "+65", country: "Singapore", flag: "🇸🇬", minLen: 8, maxLen: 8 },
+  { code: "+60", country: "Malaysia", flag: "🇲🇾", minLen: 9, maxLen: 10 },
+  { code: "+63", country: "Philippines", flag: "🇵🇭", minLen: 10, maxLen: 10 },
+  { code: "+27", country: "South Africa", flag: "🇿🇦", minLen: 9, maxLen: 9 },
+  { code: "+55", country: "Brazil", flag: "🇧🇷", minLen: 10, maxLen: 11 },
+  { code: "+52", country: "Mexico", flag: "🇲🇽", minLen: 10, maxLen: 10 },
 ];
 
+// Get validation info for a phone number
+const getPhoneValidation = (phone: string): { isValid: boolean; message: string; country?: typeof COUNTRY_CODES[0] } => {
+  if (!phone) return { isValid: false, message: "Phone number is required" };
+  
+  const countryCode = COUNTRY_CODES.find(c => phone.startsWith(c.code));
+  if (!countryCode) return { isValid: false, message: "Please select a valid country code" };
+  
+  const localNumber = phone.replace(countryCode.code, '').replace(/\D/g, '');
+  const digitCount = localNumber.length;
+  
+  if (digitCount < countryCode.minLen) {
+    return { 
+      isValid: false, 
+      message: `${countryCode.country} numbers need ${countryCode.minLen === countryCode.maxLen ? countryCode.minLen : `${countryCode.minLen}-${countryCode.maxLen}`} digits (${digitCount} entered)`,
+      country: countryCode
+    };
+  }
+  
+  if (digitCount > countryCode.maxLen) {
+    return { 
+      isValid: false, 
+      message: `${countryCode.country} numbers have max ${countryCode.maxLen} digits`,
+      country: countryCode
+    };
+  }
+  
+  return { isValid: true, message: "", country: countryCode };
+};
+
 // Format phone number for display (digits only, spaced)
-const formatLocalNumber = (value: string): string => {
-  const digits = value.replace(/\D/g, '');
+const formatLocalNumber = (value: string, maxLen: number = 10): string => {
+  const digits = value.replace(/\D/g, '').slice(0, maxLen);
   if (digits.length <= 3) return digits;
   if (digits.length <= 6) return `${digits.slice(0, 3)} ${digits.slice(3)}`;
-  return `${digits.slice(0, 3)} ${digits.slice(3, 6)} ${digits.slice(6, 10)}`;
+  return `${digits.slice(0, 3)} ${digits.slice(3, 6)} ${digits.slice(6)}`;
 };
 
 const consultationSchema = z.object({
   fullName: z.string().min(2, "Full name is required").max(100, "Name must be less than 100 characters"),
   email: z.string().email("Please enter a valid email address").max(255),
   phone: z.string()
-    .min(8, "Phone number is required")
-    .max(20, "Phone number is too long")
-    .regex(/^\+?[0-9\s\-()]+$/, "Please enter a valid phone number with country code (e.g., +971 56 591 1000)"),
+    .min(1, "Phone number is required")
+    .refine((val) => {
+      const validation = getPhoneValidation(val);
+      return validation.isValid;
+    }, (val) => ({
+      message: getPhoneValidation(val).message
+    })),
   nationality: z.string().min(1, "Please select your nationality"),
   language: z.string().min(1, "Please select your preferred language"),
   currentLocation: z.string().min(2, "Please enter your current location").max(100),
@@ -355,17 +388,20 @@ const Contact = () => {
                           name="phone"
                           render={({ field }) => {
                             // Extract country code and local number from value
-                            const currentCode = COUNTRY_CODES.find(c => field.value?.startsWith(c.code))?.code || "+971";
+                            const currentCountry = COUNTRY_CODES.find(c => field.value?.startsWith(c.code)) || COUNTRY_CODES[0];
+                            const currentCode = currentCountry.code;
                             const localNumber = field.value?.replace(currentCode, '').replace(/^\s+/, '') || '';
+                            const validation = getPhoneValidation(field.value || '');
                             
                             const handleCodeChange = (newCode: string) => {
-                              const cleanLocal = localNumber.replace(/\D/g, '');
-                              field.onChange(cleanLocal ? `${newCode} ${formatLocalNumber(cleanLocal)}` : newCode);
+                              const newCountry = COUNTRY_CODES.find(c => c.code === newCode) || COUNTRY_CODES[0];
+                              const cleanLocal = localNumber.replace(/\D/g, '').slice(0, newCountry.maxLen);
+                              field.onChange(cleanLocal ? `${newCode} ${formatLocalNumber(cleanLocal, newCountry.maxLen)}` : newCode);
                             };
                             
                             const handleNumberChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-                              const digits = e.target.value.replace(/\D/g, '').slice(0, 10);
-                              const formatted = formatLocalNumber(digits);
+                              const digits = e.target.value.replace(/\D/g, '').slice(0, currentCountry.maxLen);
+                              const formatted = formatLocalNumber(digits, currentCountry.maxLen);
                               field.onChange(digits ? `${currentCode} ${formatted}` : '');
                             };
                             
@@ -376,7 +412,7 @@ const Contact = () => {
                                   <Select value={currentCode} onValueChange={handleCodeChange}>
                                     <SelectTrigger className="w-[120px] h-12 bg-zinc-900 border-zinc-700 text-white shrink-0">
                                       <SelectValue>
-                                        {COUNTRY_CODES.find(c => c.code === currentCode)?.flag} {currentCode}
+                                        {currentCountry.flag} {currentCode}
                                       </SelectValue>
                                     </SelectTrigger>
                                     <SelectContent className="bg-zinc-900 border-zinc-700 max-h-60">
@@ -401,10 +437,13 @@ const Contact = () => {
                                       value={localNumber}
                                       onChange={handleNumberChange}
                                       className="h-12 bg-zinc-900 border-zinc-700 text-white placeholder:text-zinc-500 focus:border-gold flex-1"
-                                      placeholder="56 591 1000"
+                                      placeholder={`${currentCountry.minLen} digits`}
                                     />
                                   </FormControl>
                                 </div>
+                                {localNumber && !validation.isValid && (
+                                  <p className="text-amber-400 text-xs mt-1">{validation.message}</p>
+                                )}
                                 <FormMessage className="text-red-400 text-xs" />
                               </FormItem>
                             );
