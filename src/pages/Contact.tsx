@@ -20,38 +20,53 @@ import { useLeadCapture } from "@/hooks/useLeadCapture";
 import { getCountryList, getLanguageList } from "@/constants/localeOptions";
 import { Link } from "react-router-dom";
 
-// Country codes with dial codes and valid number lengths for phone input
-const COUNTRY_CODES = [
-  { code: "+971", country: "UAE", flag: "🇦🇪", minLen: 9, maxLen: 9 },
-  { code: "+966", country: "Saudi Arabia", flag: "🇸🇦", minLen: 9, maxLen: 9 },
-  { code: "+974", country: "Qatar", flag: "🇶🇦", minLen: 8, maxLen: 8 },
-  { code: "+965", country: "Kuwait", flag: "🇰🇼", minLen: 8, maxLen: 8 },
-  { code: "+973", country: "Bahrain", flag: "🇧🇭", minLen: 8, maxLen: 8 },
-  { code: "+968", country: "Oman", flag: "🇴🇲", minLen: 8, maxLen: 8 },
-  { code: "+44", country: "UK", flag: "🇬🇧", minLen: 10, maxLen: 10 },
-  { code: "+1", country: "US/CA", flag: "🇺🇸", minLen: 10, maxLen: 10 },
-  { code: "+49", country: "Germany", flag: "🇩🇪", minLen: 10, maxLen: 11 },
-  { code: "+33", country: "France", flag: "🇫🇷", minLen: 9, maxLen: 9 },
-  { code: "+39", country: "Italy", flag: "🇮🇹", minLen: 9, maxLen: 10 },
-  { code: "+34", country: "Spain", flag: "🇪🇸", minLen: 9, maxLen: 9 },
-  { code: "+41", country: "Switzerland", flag: "🇨🇭", minLen: 9, maxLen: 9 },
-  { code: "+7", country: "Russia", flag: "🇷🇺", minLen: 10, maxLen: 10 },
-  { code: "+86", country: "China", flag: "🇨🇳", minLen: 11, maxLen: 11 },
-  { code: "+91", country: "India", flag: "🇮🇳", minLen: 10, maxLen: 10 },
-  { code: "+92", country: "Pakistan", flag: "🇵🇰", minLen: 10, maxLen: 10 },
-  { code: "+20", country: "Egypt", flag: "🇪🇬", minLen: 10, maxLen: 10 },
-  { code: "+961", country: "Lebanon", flag: "🇱🇧", minLen: 7, maxLen: 8 },
-  { code: "+962", country: "Jordan", flag: "🇯🇴", minLen: 9, maxLen: 9 },
-  { code: "+90", country: "Turkey", flag: "🇹🇷", minLen: 10, maxLen: 10 },
-  { code: "+98", country: "Iran", flag: "🇮🇷", minLen: 10, maxLen: 10 },
-  { code: "+61", country: "Australia", flag: "🇦🇺", minLen: 9, maxLen: 9 },
-  { code: "+65", country: "Singapore", flag: "🇸🇬", minLen: 8, maxLen: 8 },
-  { code: "+60", country: "Malaysia", flag: "🇲🇾", minLen: 9, maxLen: 10 },
-  { code: "+63", country: "Philippines", flag: "🇵🇭", minLen: 10, maxLen: 10 },
-  { code: "+27", country: "South Africa", flag: "🇿🇦", minLen: 9, maxLen: 9 },
-  { code: "+55", country: "Brazil", flag: "🇧🇷", minLen: 10, maxLen: 11 },
-  { code: "+52", country: "Mexico", flag: "🇲🇽", minLen: 10, maxLen: 10 },
-];
+// Country codes grouped by region with dial codes and valid number lengths
+const COUNTRY_CODES_BY_REGION = {
+  "GCC": [
+    { code: "+971", country: "UAE", flag: "🇦🇪", minLen: 9, maxLen: 9 },
+    { code: "+966", country: "Saudi Arabia", flag: "🇸🇦", minLen: 9, maxLen: 9 },
+    { code: "+974", country: "Qatar", flag: "🇶🇦", minLen: 8, maxLen: 8 },
+    { code: "+965", country: "Kuwait", flag: "🇰🇼", minLen: 8, maxLen: 8 },
+    { code: "+973", country: "Bahrain", flag: "🇧🇭", minLen: 8, maxLen: 8 },
+    { code: "+968", country: "Oman", flag: "🇴🇲", minLen: 8, maxLen: 8 },
+  ],
+  "Middle East": [
+    { code: "+20", country: "Egypt", flag: "🇪🇬", minLen: 10, maxLen: 10 },
+    { code: "+961", country: "Lebanon", flag: "🇱🇧", minLen: 7, maxLen: 8 },
+    { code: "+962", country: "Jordan", flag: "🇯🇴", minLen: 9, maxLen: 9 },
+    { code: "+90", country: "Turkey", flag: "🇹🇷", minLen: 10, maxLen: 10 },
+    { code: "+98", country: "Iran", flag: "🇮🇷", minLen: 10, maxLen: 10 },
+  ],
+  "Europe": [
+    { code: "+44", country: "UK", flag: "🇬🇧", minLen: 10, maxLen: 10 },
+    { code: "+49", country: "Germany", flag: "🇩🇪", minLen: 10, maxLen: 11 },
+    { code: "+33", country: "France", flag: "🇫🇷", minLen: 9, maxLen: 9 },
+    { code: "+39", country: "Italy", flag: "🇮🇹", minLen: 9, maxLen: 10 },
+    { code: "+34", country: "Spain", flag: "🇪🇸", minLen: 9, maxLen: 9 },
+    { code: "+41", country: "Switzerland", flag: "🇨🇭", minLen: 9, maxLen: 9 },
+    { code: "+7", country: "Russia", flag: "🇷🇺", minLen: 10, maxLen: 10 },
+  ],
+  "Asia Pacific": [
+    { code: "+86", country: "China", flag: "🇨🇳", minLen: 11, maxLen: 11 },
+    { code: "+91", country: "India", flag: "🇮🇳", minLen: 10, maxLen: 10 },
+    { code: "+92", country: "Pakistan", flag: "🇵🇰", minLen: 10, maxLen: 10 },
+    { code: "+61", country: "Australia", flag: "🇦🇺", minLen: 9, maxLen: 9 },
+    { code: "+65", country: "Singapore", flag: "🇸🇬", minLen: 8, maxLen: 8 },
+    { code: "+60", country: "Malaysia", flag: "🇲🇾", minLen: 9, maxLen: 10 },
+    { code: "+63", country: "Philippines", flag: "🇵🇭", minLen: 10, maxLen: 10 },
+  ],
+  "Americas": [
+    { code: "+1", country: "US/Canada", flag: "🇺🇸", minLen: 10, maxLen: 10 },
+    { code: "+55", country: "Brazil", flag: "🇧🇷", minLen: 10, maxLen: 11 },
+    { code: "+52", country: "Mexico", flag: "🇲🇽", minLen: 10, maxLen: 10 },
+  ],
+  "Africa": [
+    { code: "+27", country: "South Africa", flag: "🇿🇦", minLen: 9, maxLen: 9 },
+  ],
+};
+
+// Flat list for lookups
+const COUNTRY_CODES = Object.values(COUNTRY_CODES_BY_REGION).flat();
 
 // Get validation info for a phone number
 const getPhoneValidation = (phone: string): { isValid: boolean; message: string; country?: typeof COUNTRY_CODES[0] } => {
@@ -434,26 +449,28 @@ const Contact = () => {
                                           placeholder="Search country..." 
                                           className="h-10 text-white border-zinc-700"
                                         />
-                                        <CommandList className="max-h-[200px]">
+                                        <CommandList className="max-h-[280px]">
                                           <CommandEmpty className="text-zinc-400 text-sm py-4 text-center">
                                             No country found.
                                           </CommandEmpty>
-                                          <CommandGroup>
-                                            {COUNTRY_CODES.map((country) => (
-                                              <CommandItem
-                                                key={country.code}
-                                                value={`${country.country} ${country.code}`}
-                                                onSelect={() => handleCodeChange(country.code)}
-                                                className="text-white hover:bg-zinc-800 cursor-pointer"
-                                              >
-                                                <span className="flex items-center gap-2 w-full">
-                                                  <span>{country.flag}</span>
-                                                  <span className="font-medium">{country.code}</span>
-                                                  <span className="text-zinc-400 text-xs truncate">{country.country}</span>
-                                                </span>
-                                              </CommandItem>
-                                            ))}
-                                          </CommandGroup>
+                                          {Object.entries(COUNTRY_CODES_BY_REGION).map(([region, countries]) => (
+                                            <CommandGroup key={region} heading={region} className="text-gold">
+                                              {countries.map((country) => (
+                                                <CommandItem
+                                                  key={country.code}
+                                                  value={`${region} ${country.country} ${country.code}`}
+                                                  onSelect={() => handleCodeChange(country.code)}
+                                                  className="text-white hover:bg-zinc-800 cursor-pointer"
+                                                >
+                                                  <span className="flex items-center gap-2 w-full">
+                                                    <span>{country.flag}</span>
+                                                    <span className="font-medium">{country.code}</span>
+                                                    <span className="text-zinc-400 text-xs truncate">{country.country}</span>
+                                                  </span>
+                                                </CommandItem>
+                                              ))}
+                                            </CommandGroup>
+                                          ))}
                                         </CommandList>
                                       </Command>
                                     </PopoverContent>
