@@ -35,6 +35,60 @@ interface RateLimitEntry {
   request_count: number;
 }
 
+// Get client IP from request headers
+function getClientIp(req: Request): string {
+  return (
+    req.headers.get("x-forwarded-for")?.split(",")[0]?.trim() ||
+    req.headers.get("x-real-ip") ||
+    req.headers.get("cf-connecting-ip") ||
+    "unknown"
+  );
+}
+
+// Check if IP is blocklisted
+async function checkIPBlocklist(
+  supabaseAdmin: any,
+  clientIp: string
+): Promise<{ blocked: boolean; reason?: string }> {
+  try {
+    const { data, error } = await supabaseAdmin
+      .from("ip_blocklist")
+      .select("*")
+      .eq("ip_address", clientIp)
+      .maybeSingle();
+
+    if (error) {
+      console.error("IP blocklist check error:", error);
+      return { blocked: false };
+    }
+
+    if (!data) {
+      return { blocked: false };
+    }
+
+    // Check if block has expired
+    if (data.expires_at && new Date(data.expires_at) < new Date()) {
+      await supabaseAdmin.from("ip_blocklist").delete().eq("id", data.id);
+      return { blocked: false };
+    }
+
+    // Update last attempt and block count
+    await supabaseAdmin
+      .from("ip_blocklist")
+      .update({ 
+        last_attempt_at: new Date().toISOString(),
+        block_count: (data.block_count || 1) + 1
+      })
+      .eq("id", data.id);
+
+    console.warn(`Blocked IP attempted access: ${clientIp.substring(0, 8)}***`);
+    return { blocked: true, reason: data.reason || "IP is blocked" };
+  } catch (err) {
+    console.error("IP blocklist check exception:", err);
+    return { blocked: false };
+  }
+}
+
 // Rate limiting function
 async function checkRateLimit(
   supabaseAdmin: any,
@@ -218,6 +272,21 @@ serve(async (req) => {
           response: 'Your session has expired. Please sign in again to continue using the AI chat assistant.\n\n📧 Email: contact@jjglobalcapital.com\n📞 Phone: +971 50 747 9498\n💬 WhatsApp: +971 50 747 9498'
         }),
         { status: 401, headers: { ...corsHeaders, 'Content-Type': 'application/json' } }
+      );
+    }
+
+    // Check IP blocklist first
+    const clientIp = getClientIp(req);
+    const blocklistResult = await checkIPBlocklist(supabaseService, clientIp);
+    
+    if (blocklistResult.blocked) {
+      console.warn(`Blocked IP attempted AI chat: ${clientIp.substring(0, 8)}***`);
+      return new Response(
+        JSON.stringify({ 
+          error: 'Access denied',
+          response: 'Your access has been restricted. Please contact support if you believe this is an error.'
+        }),
+        { status: 403, headers: { ...corsHeaders, 'Content-Type': 'application/json' } }
       );
     }
 

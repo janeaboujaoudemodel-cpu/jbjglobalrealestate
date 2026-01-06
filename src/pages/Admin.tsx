@@ -40,9 +40,11 @@ import {
   X,
   Sparkles,
   Shield,
+  ShieldBan,
 } from "lucide-react";
 import { SmartDocumentUploader } from "@/components/SmartDocumentUploader";
 import { RateLimitDashboard } from "@/components/admin/RateLimitDashboard";
+import { IPBlocklistDashboard } from "@/components/admin/IPBlocklistDashboard";
 
 interface ProjectDocument {
   id: string;
@@ -343,6 +345,10 @@ const Admin = () => {
               <Shield className="w-4 h-4 mr-2" />
               Rate Limits
             </TabsTrigger>
+            <TabsTrigger value="ip-blocklist" className="data-[state=active]:bg-gold data-[state=active]:text-black">
+              <ShieldBan className="w-4 h-4 mr-2" />
+              IP Blocklist
+            </TabsTrigger>
           </TabsList>
 
           <TabsContent value="properties" className="space-y-8">
@@ -496,6 +502,10 @@ const Admin = () => {
 
           <TabsContent value="rate-limits">
             <RateLimitDashboard />
+          </TabsContent>
+
+          <TabsContent value="ip-blocklist">
+            <IPBlocklistDashboard />
           </TabsContent>
         </Tabs>
       </main>
