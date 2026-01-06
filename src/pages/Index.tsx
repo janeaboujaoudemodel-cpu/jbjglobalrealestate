@@ -616,8 +616,8 @@ const Index = () => {
               {/* Stats */}
               <div className="grid grid-cols-3 gap-6 mb-8">
                 <div className="text-center">
-                  <p className="text-gold text-3xl md:text-4xl font-bold" style={{ fontFamily: "Poppins, sans-serif" }}>4</p>
-                  <p className="text-zinc-500 text-xs uppercase tracking-wider">Ventures</p>
+                  <p className="text-gold text-3xl md:text-4xl font-bold" style={{ fontFamily: "Poppins, sans-serif" }}>3</p>
+                  <p className="text-zinc-500 text-xs uppercase tracking-wider">Services</p>
                 </div>
                 <div className="text-center">
                   <p className="text-gold text-3xl md:text-4xl font-bold" style={{ fontFamily: "Poppins, sans-serif" }}>5+</p>

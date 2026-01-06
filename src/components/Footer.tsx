@@ -85,8 +85,8 @@ const Footer = () => {
     }, 1000);
   };
 
-  // Our Divisions — required hierarchy with working pages
-  const divisions = [
+  // Our Services — required hierarchy with working pages
+  const serviceLinks = [
     {
       title: "Buy & Sell",
       href: "/properties",
@@ -203,7 +203,7 @@ const Footer = () => {
         {/* Divider */}
         <div className="h-px bg-gradient-to-r from-transparent via-zinc-700 to-transparent mb-10" />
 
-        {/* Menu + Divisions + Toolkit Grid - Premium Layout */}
+        {/* Menu + Services + Toolkit Grid - Premium Layout */}
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-10 md:gap-12 mb-10 max-w-6xl mx-auto">
           {/* Menu */}
           <div className="text-center md:text-left">
@@ -224,14 +224,14 @@ const Footer = () => {
             </ul>
           </div>
 
-          {/* Our Divisions */}
+          {/* Our Services */}
           <div className="text-center md:text-left">
             <h4 className="text-gold font-semibold mb-5 text-sm uppercase tracking-[0.2em]">
-              Our Divisions
+              Our Services
             </h4>
             <div className="space-y-2.5">
-              {divisions.map((div) => (
-                <DivisionAccordion key={div.title} title={div.title} items={div.items} href={div.href} />
+              {serviceLinks.map((svc) => (
+                <DivisionAccordion key={svc.title} title={svc.title} items={svc.items} href={svc.href} />
               ))}
             </div>
           </div>

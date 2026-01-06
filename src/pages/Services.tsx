@@ -103,26 +103,6 @@ const services = [
   }
 ];
 
-const divisions = [
-  {
-    name: "Maison Jane",
-    description: "Luxury Interior Design & Architecture",
-    url: "https://maisonjane.ae",
-    color: "from-pink-500 to-rose-500"
-  },
-  {
-    name: "JJ Media Group",
-    description: "Premium Media & Marketing",
-    url: "https://jjmediagroup.ae",
-    color: "from-blue-500 to-cyan-500"
-  },
-  {
-    name: "JJ Fashion House",
-    description: "Haute Couture & Fashion",
-    url: "https://jjfashionhouse.com",
-    color: "from-purple-500 to-fuchsia-500"
-  }
-];
 
 const Services = () => {
   return (
@@ -279,51 +259,6 @@ const Services = () => {
         </div>
       </section>
 
-      {/* Founder's Ventures */}
-      <section className="py-20">
-        <div className="container mx-auto px-4">
-          <motion.div 
-            className="text-center mb-16"
-            initial={{ opacity: 0, y: 20 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true }}
-          >
-            <span className="text-gold text-xs uppercase tracking-[0.3em] mb-4 block">Founded by Jane Abou Jaoude</span>
-            <h2 
-              className="text-white text-3xl md:text-5xl font-bold mb-4"
-              style={{ fontFamily: "Poppins, sans-serif" }}
-            >
-              Our Ventures
-            </h2>
-            <p className="text-zinc-400 max-w-2xl mx-auto">
-              Explore the full ecosystem of founder ventures
-            </p>
-          </motion.div>
-
-          <div className="grid md:grid-cols-3 gap-6">
-            {divisions.map((division) => (
-              <motion.a
-                key={division.name}
-                href={division.url}
-                target="_blank"
-                rel="noopener noreferrer"
-                className="group relative overflow-hidden rounded-2xl bg-zinc-900 border border-zinc-800 p-8 hover:border-white/30 transition-all duration-300"
-                whileHover={{ scale: 1.02 }}
-              >
-                <div className={`absolute top-0 left-0 right-0 h-1 bg-gradient-to-r ${division.color}`} />
-                <h3 className="text-white text-2xl font-bold mb-2 group-hover:text-gold transition-colors">
-                  {division.name}
-                </h3>
-                <p className="text-zinc-400 mb-4">{division.description}</p>
-                <div className="flex items-center gap-2 text-gold">
-                  <span className="text-sm">Visit Website</span>
-                  <ArrowUpRight className="w-4 h-4 group-hover:translate-x-1 group-hover:-translate-y-1 transition-transform" />
-                </div>
-              </motion.a>
-            ))}
-          </div>
-        </div>
-      </section>
 
       {/* CTA Section */}
       <section className="py-20 bg-gradient-to-b from-zinc-900/50 to-black">
