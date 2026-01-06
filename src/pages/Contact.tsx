@@ -21,6 +21,45 @@ import { Link } from "react-router-dom";
 // Phone validation: E.164 format with country code (e.g., +971...)
 const phoneRegex = /^\+[1-9]\d{6,14}$/;
 
+// Phone number formatting helper - auto-adds +971 for UAE numbers
+const formatPhoneNumber = (value: string): string => {
+  // Remove all non-digit characters except +
+  let cleaned = value.replace(/[^\d+]/g, '');
+  
+  // If empty, return empty
+  if (!cleaned) return '';
+  
+  // If user starts typing without +, assume UAE number
+  if (!cleaned.startsWith('+')) {
+    // If starts with 0 (local format like 056...), remove the 0 and add +971
+    if (cleaned.startsWith('0')) {
+      cleaned = '+971' + cleaned.slice(1);
+    } 
+    // If starts with 971, just add +
+    else if (cleaned.startsWith('971')) {
+      cleaned = '+' + cleaned;
+    }
+    // Otherwise, assume UAE and add +971
+    else {
+      cleaned = '+971' + cleaned;
+    }
+  }
+  
+  // Format for display: +971 XX XXX XXXX
+  if (cleaned.startsWith('+971')) {
+    const afterCode = cleaned.slice(4);
+    if (afterCode.length <= 2) {
+      return `+971 ${afterCode}`;
+    } else if (afterCode.length <= 5) {
+      return `+971 ${afterCode.slice(0, 2)} ${afterCode.slice(2)}`;
+    } else {
+      return `+971 ${afterCode.slice(0, 2)} ${afterCode.slice(2, 5)} ${afterCode.slice(5, 9)}`;
+    }
+  }
+  
+  return cleaned;
+};
+
 const consultationSchema = z.object({
   fullName: z.string().min(2, "Full name is required").max(100, "Name must be less than 100 characters"),
   email: z.string().email("Please enter a valid email address").max(255),
@@ -324,6 +363,10 @@ const Contact = () => {
                                   type="tel"
                                   className="h-12 bg-zinc-900 border-zinc-700 text-white placeholder:text-zinc-500 focus:border-gold"
                                   placeholder="+971 56 591 1000"
+                                  onChange={(e) => {
+                                    const formatted = formatPhoneNumber(e.target.value);
+                                    field.onChange(formatted);
+                                  }}
                                 />
                               </FormControl>
                               <FormMessage className="text-red-400 text-xs" />
