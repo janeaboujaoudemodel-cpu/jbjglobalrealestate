@@ -15,6 +15,7 @@ import {
   XCircle, ChevronRight, AlertCircle, Trophy
 } from "lucide-react";
 import { toast } from "sonner";
+import { AIStudyTutor } from "@/components/onboarding/AIStudyTutor";
 
 interface Module {
   id: string;
@@ -604,6 +605,9 @@ export default function OnboardingModule() {
             )}
           </div>
         </div>
+
+        {/* AI Study Tutor */}
+        <AIStudyTutor moduleId={moduleId} moduleName={module.title} />
       </div>
     </div>
   );
