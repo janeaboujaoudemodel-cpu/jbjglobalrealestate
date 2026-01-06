@@ -7,18 +7,19 @@ import {
   MessageCircle,
   ChevronDown,
   ExternalLink,
-  Send,
 } from "lucide-react";
 import { CONTACT_INFO, getWhatsAppUrl, getCallUrl, getEmailUrl } from "@/constants/stats";
 import { JJLogoImage } from "@/components/JJLogoImage";
 import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
 import {
   Collapsible,
   CollapsibleContent,
   CollapsibleTrigger,
 } from "@/components/ui/collapsible";
-import { toast } from "sonner";
+import { SocialLinks } from "@/components/marketing/SocialLinks";
+import { NewsletterBrevo } from "@/components/marketing/NewsletterBrevo";
+import { TrustpilotWidget } from "@/components/marketing/TrustpilotWidget";
+import { GoogleMyBusinessLink } from "@/components/marketing/GoogleMyBusinessLink";
 
 const DivisionAccordion = ({
   title,
@@ -67,23 +68,6 @@ const DivisionAccordion = ({
 
 const Footer = () => {
   const currentYear = new Date().getFullYear();
-  const [email, setEmail] = useState("");
-  const [isSubmitting, setIsSubmitting] = useState(false);
-
-  const handleNewsletterSubmit = (e: React.FormEvent) => {
-    e.preventDefault();
-    if (!email) return;
-    
-    setIsSubmitting(true);
-    // Simulate submission
-    setTimeout(() => {
-      toast.success("Welcome to the JJ Global Capital inner circle!", {
-        description: "You'll receive exclusive updates and insights.",
-      });
-      setEmail("");
-      setIsSubmitting(false);
-    }, 1000);
-  };
 
   // Our Services — required hierarchy with working pages
   const serviceLinks = [
@@ -173,31 +157,13 @@ const Footer = () => {
             <p className="text-zinc-400 text-sm mb-4">
               Join our exclusive circle for market insights and premium opportunities
             </p>
-            <form onSubmit={handleNewsletterSubmit} className="flex gap-2">
-              <Input
-                type="email"
-                placeholder="Enter your email"
-                value={email}
-                onChange={(e) => setEmail(e.target.value)}
-                className="flex-1 bg-zinc-900/50 border-zinc-700 text-white placeholder:text-zinc-500 focus:border-gold/50 focus:ring-gold/20"
-                required
-              />
-              <Button 
-                type="submit" 
-                disabled={isSubmitting}
-                className="bg-gold hover:bg-gold-light text-black font-semibold px-6"
-              >
-                {isSubmitting ? (
-                  <div className="w-5 h-5 border-2 border-black/30 border-t-black rounded-full animate-spin" />
-                ) : (
-                  <>
-                    Subscribe
-                    <Send className="w-4 h-4 ml-2" />
-                  </>
-                )}
-              </Button>
-            </form>
+            <NewsletterBrevo variant="compact" source="footer" />
           </div>
+        </div>
+
+        {/* Social Links */}
+        <div className="flex justify-center mb-8">
+          <SocialLinks variant="gold" iconClassName="w-6 h-6" />
         </div>
 
         {/* Divider */}
@@ -352,6 +318,12 @@ const Footer = () => {
               <span>© {currentYear}</span>
             </div>
           </div>
+        </div>
+
+        {/* Trust Signals */}
+        <div className="flex flex-wrap justify-center gap-4 mb-8">
+          <TrustpilotWidget />
+          <GoogleMyBusinessLink variant="badge" />
         </div>
 
         {/* Bottom - Copyright & Legal */}
