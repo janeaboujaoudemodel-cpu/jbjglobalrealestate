@@ -4,10 +4,27 @@ import { z } from "https://deno.land/x/zod@v3.22.4/mod.ts";
 
 const RESEND_API_KEY = Deno.env.get("RESEND_API_KEY");
 
-const corsHeaders = {
-  "Access-Control-Allow-Origin": "*",
-  "Access-Control-Allow-Headers": "authorization, x-client-info, apikey, content-type",
-};
+// Allowed origins for CORS
+const ALLOWED_ORIGINS = [
+  "https://jjglobalcapital.com",
+  "https://www.jjglobalcapital.com",
+  "http://localhost:5173",
+  "http://localhost:8080",
+];
+
+function getCorsHeaders(req: Request) {
+  const origin = req.headers.get("origin") || "";
+  const isAllowed = ALLOWED_ORIGINS.some(allowed => 
+    origin === allowed || 
+    origin.endsWith(".lovableproject.com") || 
+    origin.endsWith(".lovable.app")
+  );
+  return {
+    "Access-Control-Allow-Origin": isAllowed ? origin : ALLOWED_ORIGINS[0],
+    "Access-Control-Allow-Headers": "authorization, x-client-info, apikey, content-type",
+    "Access-Control-Allow-Methods": "POST, OPTIONS",
+  };
+}
 
 // Input validation schema
 const RequestSchema = z.object({
@@ -17,6 +34,8 @@ const RequestSchema = z.object({
 });
 
 serve(async (req) => {
+  const corsHeaders = getCorsHeaders(req);
+  
   if (req.method === "OPTIONS") {
     return new Response(null, { headers: corsHeaders });
   }
@@ -184,6 +203,7 @@ serve(async (req) => {
 
   } catch (error: any) {
     console.error("Error in send-welcome-email function:", error);
+    const corsHeaders = getCorsHeaders(req);
     return new Response(
       JSON.stringify({ error: 'Failed to send welcome email' }),
       { status: 500, headers: { ...corsHeaders, 'Content-Type': 'application/json' } }
