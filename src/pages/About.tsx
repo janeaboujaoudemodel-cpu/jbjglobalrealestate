@@ -40,10 +40,10 @@ const CounterStat = ({ end, suffix, prefix, label }: { end: number; suffix: stri
 
 const About = () => {
   const stats = [
-    COMPANY_STATS.portfolioValue,
     COMPANY_STATS.yearsExperience,
-    COMPANY_STATS.propertiesSold,
-    COMPANY_STATS.propertiesManaged,
+    COMPANY_STATS.brokersTrainedBy,
+    COMPANY_STATS.clientSatisfaction,
+    COMPANY_STATS.teamMembers,
   ];
 
   const values = [
@@ -61,20 +61,19 @@ const About = () => {
     },
     {
       icon: Globe,
-      title: "Global Reach",
-      description: "Our international network connects investors worldwide to the UAE's most exclusive opportunities.",
+      title: "UAE Focus",
+      description: "Serving UAE-based and international clients interested in UAE real estate.",
       color: "from-gold to-gold-dark"
     },
   ];
 
   const milestones = [
-    { year: "2018", event: "JJ Global Capital Founded in Dubai" },
-    { year: "2019", event: "Expanded to Abu Dhabi Market" },
-    { year: "2020", event: "Launched Concierge Division" },
-    { year: "2021", event: "Reached $500M in Portfolio Value" },
-    { year: "2022", event: "Opened International Offices" },
-    { year: "2023", event: "Launched AI-Powered Investment Tools" },
-    { year: "2024", event: "Celebrated 1,000+ Properties Sold" },
+    { year: "2020", event: "Jane Abou Jaoude Relocated to Dubai" },
+    { year: "2021", event: "Head of Quality & Operations at dnata/Dubai Airport" },
+    { year: "2022", event: "Professional Certifications (ISSA, London Studies)" },
+    { year: "2023", event: "Real Estate Brokerage Training Programs" },
+    { year: "2024", event: "Trained 2,800+ Brokers in UAE" },
+    { year: "2025", event: "Founded JJ Global Capital Brokerage" },
   ];
 
   return (
@@ -116,7 +115,7 @@ const About = () => {
             className="text-zinc-400 text-lg md:text-xl max-w-2xl mx-auto"
             variants={fadeInUp}
           >
-            JJ Global Capital is a licensed real estate brokerage serving clients worldwide 
+            JJ Global Capital is a real estate brokerage serving UAE-based and international clients 
             with expert property sales, leasing, and holiday home services across the UAE.
           </motion.p>
         </motion.div>
@@ -169,7 +168,7 @@ const About = () => {
               </h2>
               <div className="space-y-5 text-zinc-400 leading-relaxed">
                 <p>
-                  Founded in Dubai, JJ Global Capital is a licensed real estate brokerage dedicated to helping 
+                  Founded in Dubai, JJ Global Capital is a real estate brokerage dedicated to helping 
                   clients buy, sell, and lease premium properties across the UAE.
                 </p>
                 <p>

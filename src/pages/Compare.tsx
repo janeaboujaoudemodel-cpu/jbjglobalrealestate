@@ -390,7 +390,7 @@ const Compare = () => {
       <p><strong>JJ Global Capital</strong> — Real Estate Brokerage</p>
       <p>📧 contact@jjglobalcapital.com | 📞 +971 56 591 1000</p>
       <p>🌐 www.jjglobalcapital.com</p>
-      <p style="margin-top:15px; font-size:12px;">Powered & Made by JJ Global Capital — Part of JJ Holding Group</p>
+      <p style="margin-top:15px; font-size:12px;">Powered & Made by JJ Global Capital — Real Estate Brokerage</p>
       <p style="margin-top:10px; font-size:11px; font-style:italic;">
         This report is for informational purposes only and is not legal, mortgage, financial, or investment advice.
       </p>
@@ -1069,7 +1069,7 @@ const Compare = () => {
 
           {/* Footer Branding */}
           <div className="text-center text-zinc-600 text-sm py-4">
-            Powered & Made by <span className="text-purple-400">JJ Global Capital</span> — Part of JJ Holding Group
+            Powered & Made by <span className="text-purple-400">JJ Global Capital</span> — Real Estate Brokerage
           </div>
           <LegalDisclaimer variant="compact" className="pb-4" />
         </div>

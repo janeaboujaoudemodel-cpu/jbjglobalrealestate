@@ -279,7 +279,7 @@ const Services = () => {
         </div>
       </section>
 
-      {/* JJ Holding Group Divisions */}
+      {/* Founder's Ventures */}
       <section className="py-20">
         <div className="container mx-auto px-4">
           <motion.div 
@@ -288,15 +288,15 @@ const Services = () => {
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true }}
           >
-            <span className="text-gold text-xs uppercase tracking-[0.3em] mb-4 block">JJ Holding Group</span>
+            <span className="text-gold text-xs uppercase tracking-[0.3em] mb-4 block">Founded by Jane Abou Jaoude</span>
             <h2 
               className="text-white text-3xl md:text-5xl font-bold mb-4"
               style={{ fontFamily: "Poppins, sans-serif" }}
             >
-              Our Divisions
+              Our Ventures
             </h2>
             <p className="text-zinc-400 max-w-2xl mx-auto">
-              Explore the full ecosystem of JJ Holding Group brands
+              Explore the full ecosystem of founder ventures
             </p>
           </motion.div>
 

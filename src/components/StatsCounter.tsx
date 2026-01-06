@@ -1,23 +1,23 @@
 import React, { useRef, useEffect, useState } from 'react';
-import { Briefcase, Clock, Home, Building2 } from 'lucide-react';
+import { Briefcase, Clock, Home, Users } from 'lucide-react';
 import { COMPANY_STATS } from '@/constants/stats';
 
 const stats = [
-  {
-    ...COMPANY_STATS.portfolioValue,
-    icon: Briefcase,
-  },
   {
     ...COMPANY_STATS.yearsExperience,
     icon: Clock,
   },
   {
-    ...COMPANY_STATS.propertiesSold,
-    icon: Home,
+    ...COMPANY_STATS.brokersTrainedBy,
+    icon: Users,
   },
   {
-    ...COMPANY_STATS.propertiesManaged,
-    icon: Building2,
+    ...COMPANY_STATS.clientSatisfaction,
+    icon: Briefcase,
+  },
+  {
+    ...COMPANY_STATS.teamMembers,
+    icon: Home,
   },
 ];
 
@@ -144,7 +144,7 @@ const StatsCounter = () => {
             className="text-3xl md:text-4xl font-bold text-white"
             style={{ fontFamily: "Poppins, sans-serif" }}
           >
-            Trusted by <span className="text-gold">Investors</span> Worldwide
+            Trusted by <span className="text-gold">Clients</span> in the UAE
           </h2>
         </div>
         

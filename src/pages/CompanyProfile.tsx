@@ -53,17 +53,17 @@ const staggerContainer = {
 
 const companyInfo = {
   name: "JJ Global Capital",
-  tagline: "Your Gateway to UAE's Premier Real Estate Investment",
-  founded: "2018",
+  tagline: "Your Gateway to UAE's Premier Real Estate Brokerage",
+  founded: "2025",
   headquarters: "Downtown Dubai, UAE",
   ceo: "Jane Abou Jaoude",
   about: `JJ Global Capital is a Dubai-based real estate brokerage specializing in property sales, leasing, and holiday homes across the UAE. Founded by entrepreneur Jane Abou Jaoude, we provide brokerage support and partner introductions for discerning clients seeking exceptional properties in the UAE.
 
 Our founder-led approach ensures that every client receives personalized attention and professional guidance, backed by our extensive market knowledge and exclusive network of developers, legal partners, and luxury service providers.
 
-With a portfolio exceeding AED 2 Billion and over 3,900 properties sold, we continue to set the standard for excellence in UAE real estate brokerage.`,
+We serve UAE-based and international clients interested in UAE real estate, offering expert brokerage services with a commitment to excellence.`,
   mission: "To provide discerning clients with professional brokerage support and access to the UAE's most exclusive properties, delivered with the highest standards of integrity, expertise, and personalized service.",
-  vision: "To be the trusted choice for clients seeking premium real estate brokerage services in the UAE, recognized for our exceptional track record and commitment to client success.",
+  vision: "To be the trusted choice for clients seeking premium real estate brokerage services in the UAE, recognized for our commitment to client success.",
   services: [
     "Property Sales & Leasing Brokerage",
     "Luxury Concierge & Lifestyle Support",
@@ -75,14 +75,12 @@ With a portfolio exceeding AED 2 Billion and over 3,900 properties sold, we cont
   values: [
     { title: "Trust & Integrity", description: "Building lasting relationships through transparency and honesty" },
     { title: "Excellence", description: "Delivering exceptional outcomes with meticulous attention to detail" },
-    { title: "Global Reach", description: "Connecting investors worldwide to exclusive UAE opportunities" },
+    { title: "UAE Focus", description: "Serving UAE-based and international clients interested in UAE real estate" },
   ],
   stats: {
-    portfolioValue: "AED 2B+",
-    yearsExperience: "12+",
-    propertiesSold: "3,900+",
-    propertiesManaged: "4,200+",
-    countriesServed: "92+",
+    yearsInDubai: "5+",
+    brokersTrainedBy: "2,800+",
+    teamMembers: "10+",
     clientSatisfaction: "98%"
   }
 };
@@ -255,13 +253,12 @@ const CompanyProfile = () => {
         "seeking exceptional properties in the UAE.",
         "",
         "Our founder-led approach ensures that every client receives",
-        "personalized attention and strategic guidance, backed by our",
+        "personalized attention and professional guidance, backed by our",
         "extensive market knowledge and exclusive network of developers,",
         "legal experts, and luxury service providers.",
         "",
-        "With a portfolio exceeding AED 2 Billion and over 3,900 properties",
-        "sold, we continue to set the standard for excellence in the UAE",
-        "real estate market."
+        "We serve UAE-based and international clients interested in",
+        "UAE real estate, offering expert brokerage services."
       ];
 
       let yPos = pageHeight - 160;
@@ -385,11 +382,9 @@ const CompanyProfile = () => {
 
       // Stats grid
       const statsData = [
-        { label: "Portfolio Value", value: "AED 2B+" },
-        { label: "Years Experience", value: "12+" },
-        { label: "Properties Sold", value: "3,900+" },
-        { label: "Properties Managed", value: "4,200+" },
-        { label: "Countries Served", value: "92+" },
+        { label: "Years in Dubai", value: "5+" },
+        { label: "Brokers Trained By Founder", value: "2,800+" },
+        { label: "Team Members", value: "10+" },
         { label: "Client Satisfaction", value: "98%" },
       ];
 
@@ -566,8 +561,8 @@ const CompanyProfile = () => {
       });
 
       // Bottom text
-      page4.drawText("Powered by JJ Holding Group", {
-        x: pageWidth / 2 - 75,
+      page4.drawText("Real Estate Brokerage | Dubai, UAE", {
+        x: pageWidth / 2 - 90,
         y: 50,
         size: 10,
         font: helvetica,

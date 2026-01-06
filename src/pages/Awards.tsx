@@ -59,12 +59,12 @@ const Awards = () => {
     },
   ];
 
-  // Use centralized stats - matching years experience from company stats
+  // Use centralized stats
   const recognitions = [
-    COMPANY_STATS.industryAwards,
     COMPANY_STATS.yearsExperience,
+    COMPANY_STATS.brokersTrainedBy,
     COMPANY_STATS.clientSatisfaction,
-    COMPANY_STATS.countriesServed,
+    COMPANY_STATS.teamMembers,
   ];
 
   return (

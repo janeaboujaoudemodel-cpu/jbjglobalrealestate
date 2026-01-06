@@ -1,36 +1,18 @@
 // Centralized stats to ensure consistency across all pages
-// These values MUST match everywhere they are used
+// COMPLIANCE NOTE: Only verified, factual claims should be used
 
 export const COMPANY_STATS = {
-  portfolioValue: {
-    end: 2,
-    suffix: 'B+',
-    prefix: 'AED ',
-    label: 'Portfolio Value',
-  },
   yearsExperience: {
-    end: 12,
+    end: 5,
     suffix: '+',
     prefix: '',
-    label: 'Years Experience',
+    label: 'Years in Dubai',
   },
-  propertiesSold: {
-    end: 3900,
+  brokersTrainedBy: {
+    end: 2800,
     suffix: '+',
     prefix: '',
-    label: 'Properties Sold',
-  },
-  propertiesManaged: {
-    end: 4200,
-    suffix: '+',
-    prefix: '',
-    label: 'Properties Managed',
-  },
-  industryAwards: {
-    end: 25,
-    suffix: '+',
-    prefix: '',
-    label: 'Industry Awards',
+    label: 'Brokers Trained',
   },
   clientSatisfaction: {
     end: 98,
@@ -38,11 +20,11 @@ export const COMPANY_STATS = {
     prefix: '',
     label: 'Client Satisfaction',
   },
-  countriesServed: {
-    end: 92,
+  teamMembers: {
+    end: 10,
     suffix: '+',
     prefix: '',
-    label: 'Countries Served',
+    label: 'Team Members',
   },
 };
 
@@ -57,7 +39,6 @@ export const CONTACT_INFO = {
   whatsappMessage: "Hi, I'm interested in learning more about property brokerage services with JJ Global Capital.",
   address: 'Downtown Dubai, UAE',
   inquiryFormUrl: 'https://jjglobalcapital.com/property-inquiry-form/',
-  holdingGroupUrl: 'https://jjholdinggroup.com',
   companyDescriptor: 'JJ Global Capital | Real Estate Brokerage',
 };
 

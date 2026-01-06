@@ -365,17 +365,6 @@ const Footer = () => {
               Created and Developed by{" "}
               <span className="text-gold font-medium">Jane Abou Jaoude</span> | Brokerage Services Only
             </p>
-            <p className="mt-2">
-              Powered by{" "}
-              <a
-                href={CONTACT_INFO.holdingGroupUrl}
-                target="_blank"
-                rel="noopener noreferrer"
-                className="text-gold hover:underline inline-flex items-center gap-1"
-              >
-                JJ Holding Group <ExternalLink className="w-3.5 h-3.5" />
-              </a>
-            </p>
           </div>
           <div className="flex items-center gap-5">
             <Link to="/privacy" className="hover:text-gold transition-colors">

@@ -8,8 +8,6 @@ import { supabase } from "@/integrations/supabase/client";
 import { useAuth } from "@/contexts/AuthContext";
 import { toast } from "sonner";
 
-const JJ_HOLDING_URL = "https://jjholdinggroup.com";
-
 interface PaymentModalProps {
   open: boolean;
   onOpenChange: (open: boolean) => void;
@@ -196,10 +194,7 @@ export function PaymentModal({ open, onOpenChange, onSuccess, userInfo, mode = "
 
               <p className="text-zinc-500 text-xs text-center">
                 Software developed by <span className="text-white">Jane Abou Jaoude</span><br />
-                Powered by <span className="text-white">JJ Global Capital</span> • Part of{" "}
-                <a href={JJ_HOLDING_URL} target="_blank" rel="noopener noreferrer" className="text-white hover:underline">
-                  JJ Holding Group
-                </a>
+                Powered by <span className="text-white">JJ Global Capital</span>
               </p>
             </div>
           </>

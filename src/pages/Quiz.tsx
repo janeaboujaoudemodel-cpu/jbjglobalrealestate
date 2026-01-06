@@ -608,10 +608,6 @@ const Quiz = () => {
               Software developed by <span className="text-white font-medium">Jane Abou Jaoude</span><br />
               Powered by{" "}
               <span className="text-white font-medium">JJ Global Capital</span>
-              {" "}• Part of{" "}
-              <a href={JJ_HOLDING_URL} target="_blank" rel="noopener noreferrer" className="text-white hover:underline">
-                JJ Holding Group
-              </a>
             </p>
           </div>
         </div>
@@ -771,10 +767,7 @@ const Quiz = () => {
 
               <p className="text-purple-300/60 text-xs text-center mt-6">
                 Software developed by <span className="text-white">Jane Abou Jaoude</span><br />
-                Powered by <span className="text-white">JJ Global Capital</span> • Part of{" "}
-                <a href={JJ_HOLDING_URL} target="_blank" rel="noopener noreferrer" className="text-white hover:underline">
-                  JJ Holding Group
-                </a>
+                Powered by <span className="text-white">JJ Global Capital</span>
               </p>
             </div>
           </div>
