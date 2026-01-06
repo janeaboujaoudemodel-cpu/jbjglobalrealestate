@@ -59,7 +59,7 @@ export const tr = {
   'founder.countries': 'Ülke',
   'founder.learnMore': 'Kurucumuz Hakkında Daha Fazla Bilgi',
   'founder.title': 'Kurucu ve Başkan',
-  'founder.description1': 'JJ Holding Group, sarsılmaz standartlar, gizlilik ve uzun vadeli vizyon üzerine kurulmuş, kurucu liderliğindeki çok bölümlü bir holdingdir.',
+  'founder.description1': 'JJ Global Capital, sarsılmaz standartlar, gizlilik ve uzun vadeli vizyon üzerine kurulmuş, kurucu liderliğindeki bir gayrimenkul aracı kuruluşudur.',
   'founder.description2': 'Jane Abou Jaoude, hesap verebilirlik ve gizlilik üzerine kurulu bir felsefe ile liderlik eder, sadece genişlemek yerine dayanıklılık için tasarlanmış organizasyonlar kurar.',
   
   // Market Report
@@ -74,7 +74,7 @@ export const tr = {
   'report.highlight4': 'Topluluk ROI sıralamaları',
   'report.createdBy': 'Jane Abou Jaoude tarafından oluşturuldu',
   'report.exclusiveFor': 'JJ Global Capital\'e Özel',
-  'report.poweredBy': 'Dubai | JJ Holding Group tarafından desteklenmektedir',
+  'report.poweredBy': 'Gayrimenkul Aracı Kuruluşu | Dubai, BAE',
   
   // Mortgage
   'mortgage.title': 'Mortgage Danışmanlığı',

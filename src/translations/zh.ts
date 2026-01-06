@@ -59,7 +59,7 @@ export const zh = {
   'founder.countries': '国家',
   'founder.learnMore': '了解更多关于我们的创始人',
   'founder.title': '创始人兼主席',
-  'founder.description1': 'JJ控股集团是由创始人领导的多元化控股公司，建立在坚定的标准、谨慎和长远愿景之上。',
+  'founder.description1': 'JJ环球资本是由创始人领导的房地产经纪公司，建立在坚定的标准、谨慎和长远愿景之上。',
   'founder.description2': 'Jane Abou Jaoude以责任和谨慎为根基的理念领导，建立旨在持久而非简单扩张的组织。',
   
   // Market Report
@@ -74,7 +74,7 @@ export const zh = {
   'report.highlight4': '社区投资回报率排名',
   'report.createdBy': '由Jane Abou Jaoude创作',
   'report.exclusiveFor': 'JJ环球资本独家',
-  'report.poweredBy': '由迪拜 | JJ控股集团提供支持',
+  'report.poweredBy': '房地产经纪 | 迪拜，阿联酋',
   
   // Mortgage
   'mortgage.title': '抵押贷款咨询',

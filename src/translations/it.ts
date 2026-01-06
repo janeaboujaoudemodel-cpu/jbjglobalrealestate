@@ -59,7 +59,7 @@ export const it = {
   'founder.countries': 'Paesi',
   'founder.learnMore': 'Scopri di Più sul Nostro Fondatore',
   'founder.title': 'Fondatrice e Presidente',
-  'founder.description1': 'JJ Holding Group è una holding multidivisionale guidata dal fondatore, costruita su standard incrollabili, discrezione e visione a lungo termine.',
+  'founder.description1': 'JJ Global Capital è un\'agenzia immobiliare guidata dal fondatore, costruita su standard incrollabili, discrezione e visione a lungo termine.',
   'founder.description2': 'Jane Abou Jaoude guida con una filosofia radicata nella responsabilità e nella discrezione, costruendo organizzazioni progettate per durare piuttosto che semplicemente espandersi.',
   
   // Market Report
@@ -74,7 +74,7 @@ export const it = {
   'report.highlight4': 'Classifiche ROI delle comunità',
   'report.createdBy': 'Creato da Jane Abou Jaoude',
   'report.exclusiveFor': 'Esclusivo per JJ Global Capital',
-  'report.poweredBy': 'Supportato da Dubai | JJ Holding Group',
+  'report.poweredBy': 'Agenzia Immobiliare | Dubai, EAU',
   
   // Mortgage
   'mortgage.title': 'Consulenza Mutui',
