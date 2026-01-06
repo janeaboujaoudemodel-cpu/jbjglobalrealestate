@@ -44,3 +44,6 @@ verify_jwt = false
 
 [functions.generate-property-report]
 verify_jwt = false
+
+[functions.user-registration]
+verify_jwt = false
