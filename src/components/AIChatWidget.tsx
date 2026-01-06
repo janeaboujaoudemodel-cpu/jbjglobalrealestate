@@ -44,6 +44,14 @@ interface UserInfo {
 
 type ChatStep = 'welcome_choice' | 'check_email' | 'collect_info' | 'chat_history' | 'select_service' | 'chatting' | 'rating' | 'submitted';
 
+// Agent persona for human-like experience
+const AGENT = {
+  name: 'Sara',
+  fullName: 'Sara Al Rashid',
+  title: 'Property Consultant',
+  photo: 'https://images.unsplash.com/photo-1573496359142-b8d87734a5a2?w=200&h=200&fit=crop&crop=face',
+};
+
 const SERVICES = [
   { id: 'real_estate', icon: Building2, label: 'Property Sales & Leasing', description: 'Brokerage for buying, selling, leasing' },
   { id: 'holiday_homes', icon: Home, label: 'Holiday Homes', description: 'Short-term rental support' },
@@ -363,12 +371,12 @@ const AIChatWidget = () => {
 
     const serviceName = SERVICES.find(s => s.id === serviceId)?.label || 'our services';
     
-    // Welcome message - faster and more engaging
+    // Welcome message - warm and human-like
     setMessages([
       {
         id: 'welcome',
         role: 'assistant',
-        content: `Hi ${userInfo.firstName}! 👋 Great to meet you!\n\nI'm your AI assistant for ${serviceName}. I can instantly answer questions about:\n• Dubai property prices & locations\n• Investment opportunities & ROI\n• Payment plans & buying process\n• Developer info & project details\n\nAsk me anything! If you need to speak with our team, I can connect you to WhatsApp anytime. 📱`,
+        content: `Hey ${userInfo.firstName}! 👋 I'm ${AGENT.name}, nice to meet you!\n\nI help clients with ${serviceName} here at JJ Global Capital. I know Dubai real estate inside and out, so feel free to ask me anything about properties, prices, areas, developers... whatever's on your mind!\n\nAnd if you ever need to chat with the team directly, just tap the WhatsApp button. But I'm pretty quick with answers too 😊`,
         timestamp: new Date(),
       },
     ]);
@@ -619,19 +627,23 @@ const AIChatWidget = () => {
                     <ChevronLeft className="w-5 h-5" />
                   </Button>
                 )}
-                <div className="w-10 h-10 rounded-full bg-gradient-to-r from-gold to-gold/60 flex items-center justify-center">
-                  <Bot className="w-5 h-5 text-black" />
+                <div className="w-10 h-10 rounded-full overflow-hidden border-2 border-gold/40">
+                  <img 
+                    src={AGENT.photo} 
+                    alt={AGENT.name}
+                    className="w-full h-full object-cover"
+                  />
                 </div>
                 <div>
-                  <h3 className="text-white font-semibold text-sm">JJ Global Capital</h3>
+                  <h3 className="text-white font-semibold text-sm">{AGENT.name}</h3>
                   <p className="text-white/50 text-xs">
-                    {step === 'welcome_choice' && 'How can we help?'}
-                    {step === 'check_email' && 'Enter your email'}
-                    {step === 'collect_info' && 'Let\'s get started'}
+                    {step === 'welcome_choice' && 'How can I help you?'}
+                    {step === 'check_email' && 'Just need your email'}
+                    {step === 'collect_info' && "Let's get to know you"}
                     {step === 'chat_history' && 'Your conversations'}
-                    {step === 'select_service' && 'Choose a service'}
-                    {step === 'chatting' && '🟢 AI Online • Instant Answers'}
-                    {step === 'rating' && 'Rate your experience'}
+                    {step === 'select_service' && "What can I help with?"}
+                    {step === 'chatting' && '🟢 Online • Here to help'}
+                    {step === 'rating' && 'How did I do?'}
                     {step === 'submitted' && 'Thank you!'}
                   </p>
                 </div>
@@ -650,27 +662,35 @@ const AIChatWidget = () => {
             {step === 'welcome_choice' && (
               <div className="flex-1 p-6 flex flex-col justify-center">
                 <div className="text-center mb-6">
-                  <div className="w-16 h-16 mx-auto mb-4 rounded-full bg-gradient-to-r from-gold/20 to-gold/10 flex items-center justify-center">
-                    <Bot className="w-8 h-8 text-gold" />
+                  <div className="w-16 h-16 mx-auto mb-4 rounded-full overflow-hidden border-2 border-gold/40">
+                    <img 
+                      src={AGENT.photo} 
+                      alt={AGENT.name}
+                      className="w-full h-full object-cover"
+                    />
                   </div>
-                  <h4 className="text-white text-lg font-semibold mb-2">Hi! How would you like to connect?</h4>
-                  <p className="text-zinc-400 text-sm">Choose what works best for you</p>
+                  <h4 className="text-white text-lg font-semibold mb-2">Hey there! I'm {AGENT.name} 👋</h4>
+                  <p className="text-zinc-400 text-sm">Your property consultant at JJ Global Capital</p>
                 </div>
 
                 <div className="space-y-3">
-                  {/* AI Chat Option */}
+                  {/* Chat with Sara Option */}
                   <button
                     onClick={() => setStep('check_email')}
                     className="w-full p-4 bg-gradient-to-r from-gold/10 to-gold/5 hover:from-gold/20 hover:to-gold/10 border border-gold/30 hover:border-gold/50 rounded-xl text-left transition-all duration-300 group"
                   >
                     <div className="flex items-center gap-4">
-                      <div className="w-12 h-12 rounded-full bg-gradient-to-r from-gold to-gold/60 flex items-center justify-center">
-                        <Bot className="w-6 h-6 text-black" />
+                      <div className="w-12 h-12 rounded-full overflow-hidden border-2 border-gold/40">
+                        <img 
+                          src={AGENT.photo} 
+                          alt={AGENT.name}
+                          className="w-full h-full object-cover"
+                        />
                       </div>
                       <div className="flex-1">
-                        <h5 className="text-white text-sm font-semibold mb-1">💬 Chat with AI Assistant</h5>
-                        <p className="text-gold text-xs font-medium">⚡ Instant answers • Available 24/7</p>
-                        <p className="text-zinc-400 text-xs mt-1">I can answer questions about properties, services, and Dubai real estate instantly!</p>
+                        <h5 className="text-white text-sm font-semibold mb-1">💬 Chat with me now</h5>
+                        <p className="text-gold text-xs font-medium">⚡ Quick answers • Available 24/7</p>
+                        <p className="text-zinc-400 text-xs mt-1">I know everything about Dubai properties, areas, prices & more!</p>
                       </div>
                     </div>
                   </button>
@@ -695,7 +715,7 @@ const AIChatWidget = () => {
                   </a>
 
                   <p className="text-zinc-500 text-xs text-center mt-4 px-4">
-                    💡 <strong className="text-zinc-400">Tip:</strong> Our AI can answer most questions instantly. I'll connect you to WhatsApp if you need to speak with a human!
+                    💡 <strong className="text-zinc-400">Tip:</strong> I can answer most questions right away. If it gets complex, I'll connect you to our team on WhatsApp!
                   </p>
                 </div>
               </div>
@@ -705,11 +725,15 @@ const AIChatWidget = () => {
             {step === 'check_email' && (
               <div className="flex-1 p-6 flex flex-col justify-center">
                 <div className="text-center mb-6">
-                  <div className="w-16 h-16 mx-auto mb-4 rounded-full bg-gradient-to-r from-gold/20 to-gold/10 flex items-center justify-center">
-                    <Mail className="w-8 h-8 text-gold" />
+                  <div className="w-16 h-16 mx-auto mb-4 rounded-full overflow-hidden border-2 border-gold/40">
+                    <img 
+                      src={AGENT.photo} 
+                      alt={AGENT.name}
+                      className="w-full h-full object-cover"
+                    />
                   </div>
-                  <h4 className="text-white text-lg font-semibold mb-2">Let's Get Started</h4>
-                  <p className="text-zinc-400 text-sm">Enter your email so I can give you personalized answers!</p>
+                  <h4 className="text-white text-lg font-semibold mb-2">Nice to meet you!</h4>
+                  <p className="text-zinc-400 text-sm">Just pop in your email so I can give you personalized help</p>
                 </div>
 
                 <div className="space-y-4">
@@ -748,7 +772,7 @@ const AIChatWidget = () => {
                   </Button>
 
                   <p className="text-zinc-500 text-xs text-center mt-4">
-                    Returning user? I'll remember you! New here? Quick registration to unlock WhatsApp access.
+                    Been here before? I'll remember you! New here? Quick intro and we're good to go.
                   </p>
                 </div>
               </div>
@@ -1159,19 +1183,19 @@ const AIChatWidget = () => {
                         animate={{ opacity: 1, y: 0 }}
                         className={`flex gap-2 ${message.role === 'user' ? 'flex-row-reverse' : ''}`}
                       >
-                        <div
-                          className={`w-8 h-8 rounded-full flex items-center justify-center flex-shrink-0 ${
-                            message.role === 'user'
-                              ? 'bg-gold/20 text-gold'
-                              : 'bg-gradient-to-r from-gold to-gold/60 text-black'
-                          }`}
-                        >
-                          {message.role === 'user' ? (
+                        {message.role === 'user' ? (
+                          <div className="w-8 h-8 rounded-full flex items-center justify-center flex-shrink-0 bg-gold/20 text-gold">
                             <User className="w-4 h-4" />
-                          ) : (
-                            <Bot className="w-4 h-4" />
-                          )}
-                        </div>
+                          </div>
+                        ) : (
+                          <div className="w-8 h-8 rounded-full overflow-hidden flex-shrink-0 border border-gold/30">
+                            <img 
+                              src={AGENT.photo} 
+                              alt={AGENT.name}
+                              className="w-full h-full object-cover"
+                            />
+                          </div>
+                        )}
                         <div
                           className={`max-w-[80%] p-3 rounded-xl ${
                             message.role === 'user'
@@ -1192,8 +1216,12 @@ const AIChatWidget = () => {
                         animate={{ opacity: 1, y: 0 }}
                         className="flex gap-2"
                       >
-                        <div className="w-8 h-8 rounded-full bg-gradient-to-r from-gold to-gold/60 flex items-center justify-center">
-                          <Bot className="w-4 h-4 text-black" />
+                        <div className="w-8 h-8 rounded-full overflow-hidden flex-shrink-0 border border-gold/30">
+                          <img 
+                            src={AGENT.photo} 
+                            alt={AGENT.name}
+                            className="w-full h-full object-cover"
+                          />
                         </div>
                         <div className="bg-white/10 p-3 rounded-xl flex items-center gap-1">
                           <motion.span
