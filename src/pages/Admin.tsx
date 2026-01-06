@@ -41,10 +41,12 @@ import {
   Sparkles,
   Shield,
   ShieldBan,
+  Activity,
 } from "lucide-react";
 import { SmartDocumentUploader } from "@/components/SmartDocumentUploader";
 import { RateLimitDashboard } from "@/components/admin/RateLimitDashboard";
 import { IPBlocklistDashboard } from "@/components/admin/IPBlocklistDashboard";
+import { SecurityDashboardSummary } from "@/components/admin/SecurityDashboardSummary";
 
 interface ProjectDocument {
   id: string;
@@ -335,8 +337,12 @@ const Admin = () => {
 
       {/* Main Content */}
       <main className="container mx-auto px-4 py-8">
-        <Tabs defaultValue="properties" className="space-y-6">
+        <Tabs defaultValue="security" className="space-y-6">
           <TabsList className="bg-zinc-900 border border-zinc-800">
+            <TabsTrigger value="security" className="data-[state=active]:bg-gold data-[state=active]:text-black">
+              <Activity className="w-4 h-4 mr-2" />
+              Security
+            </TabsTrigger>
             <TabsTrigger value="properties" className="data-[state=active]:bg-gold data-[state=active]:text-black">
               <Building2 className="w-4 h-4 mr-2" />
               Properties
@@ -350,6 +356,10 @@ const Admin = () => {
               IP Blocklist
             </TabsTrigger>
           </TabsList>
+
+          <TabsContent value="security" className="space-y-8">
+            <SecurityDashboardSummary />
+          </TabsContent>
 
           <TabsContent value="properties" className="space-y-8">
             {/* Stats */}
