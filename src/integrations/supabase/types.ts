@@ -50,6 +50,48 @@ export type Database = {
         }
         Relationships: []
       }
+      audit_logs: {
+        Row: {
+          action_type: Database["public"]["Enums"]["audit_action_type"]
+          created_at: string
+          description: string
+          details: Json | null
+          id: string
+          ip_address: unknown
+          resource_id: string | null
+          resource_type: Database["public"]["Enums"]["audit_resource_type"]
+          user_agent: string | null
+          user_email: string | null
+          user_id: string | null
+        }
+        Insert: {
+          action_type: Database["public"]["Enums"]["audit_action_type"]
+          created_at?: string
+          description: string
+          details?: Json | null
+          id?: string
+          ip_address?: unknown
+          resource_id?: string | null
+          resource_type: Database["public"]["Enums"]["audit_resource_type"]
+          user_agent?: string | null
+          user_email?: string | null
+          user_id?: string | null
+        }
+        Update: {
+          action_type?: Database["public"]["Enums"]["audit_action_type"]
+          created_at?: string
+          description?: string
+          details?: Json | null
+          id?: string
+          ip_address?: unknown
+          resource_id?: string | null
+          resource_type?: Database["public"]["Enums"]["audit_resource_type"]
+          user_agent?: string | null
+          user_email?: string | null
+          user_id?: string | null
+        }
+        Relationships: []
+      }
       broker_course_progress: {
         Row: {
           completed: boolean | null
@@ -1375,6 +1417,30 @@ export type Database = {
     }
     Enums: {
       app_role: "admin" | "user"
+      audit_action_type:
+        | "create"
+        | "read"
+        | "update"
+        | "delete"
+        | "login"
+        | "logout"
+        | "export"
+        | "import"
+        | "approve"
+        | "reject"
+        | "block"
+        | "unblock"
+      audit_resource_type:
+        | "user"
+        | "project"
+        | "subscription"
+        | "lead"
+        | "discount_code"
+        | "ip_blocklist"
+        | "rate_limit"
+        | "document"
+        | "settings"
+        | "role"
     }
     CompositeTypes: {
       [_ in never]: never
@@ -1503,6 +1569,32 @@ export const Constants = {
   public: {
     Enums: {
       app_role: ["admin", "user"],
+      audit_action_type: [
+        "create",
+        "read",
+        "update",
+        "delete",
+        "login",
+        "logout",
+        "export",
+        "import",
+        "approve",
+        "reject",
+        "block",
+        "unblock",
+      ],
+      audit_resource_type: [
+        "user",
+        "project",
+        "subscription",
+        "lead",
+        "discount_code",
+        "ip_blocklist",
+        "rate_limit",
+        "document",
+        "settings",
+        "role",
+      ],
     },
   },
 } as const

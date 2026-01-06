@@ -47,6 +47,8 @@ import { SmartDocumentUploader } from "@/components/SmartDocumentUploader";
 import { RateLimitDashboard } from "@/components/admin/RateLimitDashboard";
 import { IPBlocklistDashboard } from "@/components/admin/IPBlocklistDashboard";
 import { SecurityDashboardSummary } from "@/components/admin/SecurityDashboardSummary";
+import AuditLogDashboard from "@/components/admin/AuditLogDashboard";
+import { ClipboardList } from "lucide-react";
 
 interface ProjectDocument {
   id: string;
@@ -355,10 +357,18 @@ const Admin = () => {
               <ShieldBan className="w-4 h-4 mr-2" />
               IP Blocklist
             </TabsTrigger>
+            <TabsTrigger value="audit-logs" className="data-[state=active]:bg-gold data-[state=active]:text-black">
+              <ClipboardList className="w-4 h-4 mr-2" />
+              Audit Logs
+            </TabsTrigger>
           </TabsList>
 
           <TabsContent value="security" className="space-y-8">
             <SecurityDashboardSummary />
+          </TabsContent>
+
+          <TabsContent value="audit-logs" className="space-y-8">
+            <AuditLogDashboard />
           </TabsContent>
 
           <TabsContent value="properties" className="space-y-8">
