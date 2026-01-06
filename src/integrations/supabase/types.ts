@@ -1290,6 +1290,57 @@ export type Database = {
         }
         Relationships: []
       }
+      hr_certificates: {
+        Row: {
+          certificate_number: string
+          combined_score: number
+          company_score: number
+          created_at: string
+          full_name: string
+          id: string
+          is_revoked: boolean
+          issued_at: string
+          real_estate_score: number
+          revoked_at: string | null
+          revoked_reason: string | null
+          track: string
+          user_id: string
+          verification_token: string
+        }
+        Insert: {
+          certificate_number: string
+          combined_score?: number
+          company_score?: number
+          created_at?: string
+          full_name: string
+          id?: string
+          is_revoked?: boolean
+          issued_at?: string
+          real_estate_score?: number
+          revoked_at?: string | null
+          revoked_reason?: string | null
+          track: string
+          user_id: string
+          verification_token: string
+        }
+        Update: {
+          certificate_number?: string
+          combined_score?: number
+          company_score?: number
+          created_at?: string
+          full_name?: string
+          id?: string
+          is_revoked?: boolean
+          issued_at?: string
+          real_estate_score?: number
+          revoked_at?: string | null
+          revoked_reason?: string | null
+          track?: string
+          user_id?: string
+          verification_token?: string
+        }
+        Relationships: []
+      }
       hr_modules: {
         Row: {
           content: string
