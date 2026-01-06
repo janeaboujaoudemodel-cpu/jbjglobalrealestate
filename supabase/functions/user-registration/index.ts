@@ -8,6 +8,85 @@ const corsHeaders = {
     "authorization, x-client-info, apikey, content-type",
 };
 
+// Rate limiting configuration
+const RATE_LIMIT_WINDOW_MINUTES = 15;
+const MAX_REQUESTS_PER_WINDOW = 5; // Max 5 registration attempts per 15 minutes per IP
+
+// Rate limit entry type
+interface RateLimitEntry {
+  id: string;
+  function_name: string;
+  rate_key: string;
+  window_start: string;
+  request_count: number;
+}
+
+// Rate limiting function
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+async function checkRateLimit(
+  supabaseAdmin: any,
+  clientIp: string
+): Promise<{ allowed: boolean; retryAfterSeconds?: number }> {
+  const functionName = "user-registration";
+  const windowStart = new Date(Date.now() - RATE_LIMIT_WINDOW_MINUTES * 60 * 1000);
+
+  // Clean up old rate limit entries and get current count
+  const { data: existingEntry, error: fetchError } = await supabaseAdmin
+    .from("function_rate_limits")
+    .select("*")
+    .eq("function_name", functionName)
+    .eq("rate_key", clientIp)
+    .gte("window_start", windowStart.toISOString())
+    .order("window_start", { ascending: false })
+    .limit(1)
+    .maybeSingle();
+
+  if (fetchError) {
+    console.error("Rate limit check error:", fetchError);
+    // Allow on error to not block legitimate users
+    return { allowed: true };
+  }
+
+  const entry = existingEntry as RateLimitEntry | null;
+
+  if (entry) {
+    if (entry.request_count >= MAX_REQUESTS_PER_WINDOW) {
+      const windowEndTime = new Date(entry.window_start).getTime() + RATE_LIMIT_WINDOW_MINUTES * 60 * 1000;
+      const retryAfterSeconds = Math.ceil((windowEndTime - Date.now()) / 1000);
+      console.warn(`Rate limit exceeded for IP: ${clientIp.substring(0, 8)}***`);
+      return { allowed: false, retryAfterSeconds: Math.max(retryAfterSeconds, 0) };
+    }
+
+    // Increment counter
+    await supabaseAdmin
+      .from("function_rate_limits")
+      .update({ request_count: entry.request_count + 1 })
+      .eq("id", entry.id);
+  } else {
+    // Create new entry
+    await supabaseAdmin
+      .from("function_rate_limits")
+      .insert({
+        function_name: functionName,
+        rate_key: clientIp,
+        window_start: new Date().toISOString(),
+        request_count: 1,
+      });
+  }
+
+  return { allowed: true };
+}
+
+// Get client IP from request headers
+function getClientIp(req: Request): string {
+  return (
+    req.headers.get("x-forwarded-for")?.split(",")[0]?.trim() ||
+    req.headers.get("x-real-ip") ||
+    req.headers.get("cf-connecting-ip") ||
+    "unknown"
+  );
+}
+
 // Comprehensive input validation schema
 const registrationSchema = z.object({
   email: z
@@ -83,11 +162,52 @@ serve(async (req: Request) => {
     return new Response(null, { headers: corsHeaders });
   }
 
+  // Initialize Supabase client early for rate limiting
+  const supabaseUrl = Deno.env.get("SUPABASE_URL");
+  const supabaseServiceKey = Deno.env.get("SUPABASE_SERVICE_ROLE_KEY");
+
+  if (!supabaseUrl || !supabaseServiceKey) {
+    console.error("Missing Supabase configuration");
+    return new Response(
+      JSON.stringify({ error: "Server configuration error" }),
+      { status: 500, headers: { ...corsHeaders, "Content-Type": "application/json" } }
+    );
+  }
+
+  const supabaseAdmin = createClient(supabaseUrl, supabaseServiceKey, {
+    auth: {
+      autoRefreshToken: false,
+      persistSession: false,
+    },
+  });
+
   try {
     if (req.method !== "POST") {
       return new Response(
         JSON.stringify({ error: "Method not allowed" }),
         { status: 405, headers: { ...corsHeaders, "Content-Type": "application/json" } }
+      );
+    }
+
+    // Check rate limit before processing
+    const clientIp = getClientIp(req);
+    const rateLimitResult = await checkRateLimit(supabaseAdmin, clientIp);
+
+    if (!rateLimitResult.allowed) {
+      console.warn(`Rate limit blocked registration attempt from IP: ${clientIp.substring(0, 8)}***`);
+      return new Response(
+        JSON.stringify({ 
+          error: "Too many registration attempts. Please try again later.",
+          retryAfterSeconds: rateLimitResult.retryAfterSeconds
+        }),
+        { 
+          status: 429, 
+          headers: { 
+            ...corsHeaders, 
+            "Content-Type": "application/json",
+            "Retry-After": String(rateLimitResult.retryAfterSeconds || 900)
+          } 
+        }
       );
     }
 
@@ -113,21 +233,6 @@ serve(async (req: Request) => {
     // Sanitize inputs
     const sanitizedEmail = sanitizeInput(email);
     const sanitizedFullName = fullName ? sanitizeInput(fullName) : undefined;
-
-    // Initialize Supabase client with service role for user creation
-    const supabaseUrl = Deno.env.get("SUPABASE_URL");
-    const supabaseServiceKey = Deno.env.get("SUPABASE_SERVICE_ROLE_KEY");
-
-    if (!supabaseUrl || !supabaseServiceKey) {
-      throw new Error("Missing Supabase configuration");
-    }
-
-    const supabaseAdmin = createClient(supabaseUrl, supabaseServiceKey, {
-      auth: {
-        autoRefreshToken: false,
-        persistSession: false,
-      },
-    });
 
     // Check if email already exists
     const { data: existingUser } = await supabaseAdmin.auth.admin.listUsers();
