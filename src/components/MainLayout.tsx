@@ -2,6 +2,7 @@ import { useState } from "react";
 import GlobalHeader from "@/components/GlobalHeader";
 import VoiceConciergeWidget from "@/components/VoiceConciergeWidget";
 import AIChatWidget from "@/components/AIChatWidget";
+import InstallAppButton from "@/components/InstallAppButton";
 import { useLanguage } from "@/contexts/LanguageContext";
 
 interface MainLayoutProps {
@@ -19,6 +20,7 @@ const MainLayout = ({ children }: MainLayoutProps) => {
       <main className={`pt-16 lg:pt-18 transition-all duration-300 ${isChatCollapsed ? '' : isRTL ? 'pl-[380px]' : 'pr-[380px]'}`}>
         {children}
       </main>
+      <InstallAppButton />
       <VoiceConciergeWidget />
       <AIChatWidget 
         isCollapsed={isChatCollapsed} 
