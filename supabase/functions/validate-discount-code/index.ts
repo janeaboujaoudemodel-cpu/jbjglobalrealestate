@@ -162,6 +162,37 @@ async function trackRateLimitViolation(
   return violations?.length || 0;
 }
 
+// Send email notification to admins when IP is auto-blocked
+async function sendAutoBlockNotification(
+  clientIp: string,
+  functionName: string,
+  violationCount: number,
+  blockCount: number,
+  expiresAt: Date
+): Promise<void> {
+  try {
+    const resendApiKey = Deno.env.get("RESEND_API_KEY");
+    if (!resendApiKey) return;
+
+    const maskedIp = `${clientIp.substring(0, 8)}***`;
+    const expiresAtFormatted = expiresAt.toLocaleString("en-US", { timeZone: "Asia/Dubai", dateStyle: "medium", timeStyle: "short" });
+
+    await fetch("https://api.resend.com/emails", {
+      method: "POST",
+      headers: { "Content-Type": "application/json", Authorization: `Bearer ${resendApiKey}` },
+      body: JSON.stringify({
+        from: "JJ Global Capital Security <security@jjglobalcapital.com>",
+        to: ["contact@jjglobalcapital.com", "jane@jjglobalcapital.com"],
+        subject: `🚨 Security Alert: IP Auto-Blocked on ${functionName}`,
+        html: `<div style="font-family: Arial, sans-serif; max-width: 600px; margin: 0 auto;"><div style="background: linear-gradient(135deg, #1a1a2e, #16213e); padding: 20px; border-radius: 8px 8px 0 0;"><h1 style="color: #c9a962; margin: 0;">🚨 Security Alert</h1><p style="color: #fff; margin: 10px 0 0;">IP Auto-Blocked</p></div><div style="background: #f8f9fa; padding: 25px; border: 1px solid #e9ecef; border-radius: 0 0 8px 8px;"><h2 style="color: #1a1a2e; margin-top: 0;">Block Details</h2><p><strong>IP:</strong> ${maskedIp}</p><p><strong>Function:</strong> ${functionName}</p><p><strong>Violations:</strong> ${violationCount}</p><p><strong>Total Blocks:</strong> ${blockCount}</p><p><strong>Expires:</strong> ${expiresAtFormatted} (Dubai)</p><p><strong>Duration:</strong> ${AUTO_BLOCK_DURATION_HOURS} hours</p><div style="margin-top: 20px; padding: 15px; background: #fff3cd; border-left: 4px solid #ffc107;"><strong>Action Required:</strong> Review in Admin Dashboard.</div></div></div>`,
+      }),
+    });
+    console.log("Auto-block notification sent");
+  } catch (err) {
+    console.error("Error sending notification:", err);
+  }
+}
+
 // Auto-block an IP after exceeding threshold
 async function autoBlockIP(
   supabaseAdmin: any,
@@ -178,18 +209,21 @@ async function autoBlockIP(
       .eq("ip_address", clientIp)
       .maybeSingle();
 
+    let blockCount = 1;
+
     if (existing) {
+      blockCount = (existing.block_count || 1) + 1;
       await supabaseAdmin
         .from("ip_blocklist")
         .update({
           expires_at: expiresAt.toISOString(),
-          block_count: (existing.block_count || 1) + 1,
+          block_count: blockCount,
           reason: `Auto-blocked: ${violationCount} rate limit violations on ${functionName}`,
           last_attempt_at: new Date().toISOString(),
         })
         .eq("id", existing.id);
       
-      console.warn(`Extended auto-block for IP: ${clientIp.substring(0, 8)}*** (${existing.block_count + 1} blocks)`);
+      console.warn(`Extended auto-block for IP: ${clientIp.substring(0, 8)}*** (${blockCount} blocks)`);
     } else {
       await supabaseAdmin
         .from("ip_blocklist")
@@ -203,6 +237,9 @@ async function autoBlockIP(
       
       console.warn(`Auto-blocked IP: ${clientIp.substring(0, 8)}*** for ${AUTO_BLOCK_DURATION_HOURS} hours`);
     }
+
+    // Send email notification to admins
+    await sendAutoBlockNotification(clientIp, functionName, violationCount, blockCount, expiresAt);
   } catch (err) {
     console.error("Error auto-blocking IP:", err);
   }

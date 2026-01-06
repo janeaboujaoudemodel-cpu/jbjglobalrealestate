@@ -162,6 +162,100 @@ async function trackRateLimitViolation(
   return violations?.length || 0;
 }
 
+// Send email notification to admins when IP is auto-blocked
+async function sendAutoBlockNotification(
+  clientIp: string,
+  functionName: string,
+  violationCount: number,
+  blockCount: number,
+  expiresAt: Date
+): Promise<void> {
+  try {
+    const resendApiKey = Deno.env.get("RESEND_API_KEY");
+    if (!resendApiKey) {
+      console.warn("RESEND_API_KEY not configured, skipping auto-block notification");
+      return;
+    }
+
+    const maskedIp = `${clientIp.substring(0, 8)}***`;
+    const expiresAtFormatted = expiresAt.toLocaleString("en-US", { 
+      timeZone: "Asia/Dubai",
+      dateStyle: "medium",
+      timeStyle: "short"
+    });
+
+    const response = await fetch("https://api.resend.com/emails", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${resendApiKey}`,
+      },
+      body: JSON.stringify({
+        from: "JJ Global Capital Security <security@jjglobalcapital.com>",
+        to: ["contact@jjglobalcapital.com", "jane@jjglobalcapital.com"],
+        subject: `🚨 Security Alert: IP Auto-Blocked on ${functionName}`,
+        html: `
+          <div style="font-family: Arial, sans-serif; max-width: 600px; margin: 0 auto;">
+            <div style="background: linear-gradient(135deg, #1a1a2e, #16213e); padding: 20px; border-radius: 8px 8px 0 0;">
+              <h1 style="color: #c9a962; margin: 0; font-size: 24px;">🚨 Security Alert</h1>
+              <p style="color: #ffffff; margin: 10px 0 0 0;">IP Address Auto-Blocked</p>
+            </div>
+            <div style="background: #f8f9fa; padding: 25px; border: 1px solid #e9ecef; border-top: none; border-radius: 0 0 8px 8px;">
+              <h2 style="color: #1a1a2e; margin-top: 0;">Block Details</h2>
+              <table style="width: 100%; border-collapse: collapse;">
+                <tr>
+                  <td style="padding: 10px 0; border-bottom: 1px solid #e9ecef; color: #666;"><strong>IP Address:</strong></td>
+                  <td style="padding: 10px 0; border-bottom: 1px solid #e9ecef; color: #1a1a2e;">${maskedIp}</td>
+                </tr>
+                <tr>
+                  <td style="padding: 10px 0; border-bottom: 1px solid #e9ecef; color: #666;"><strong>Function:</strong></td>
+                  <td style="padding: 10px 0; border-bottom: 1px solid #e9ecef; color: #1a1a2e;">${functionName}</td>
+                </tr>
+                <tr>
+                  <td style="padding: 10px 0; border-bottom: 1px solid #e9ecef; color: #666;"><strong>Violations (24h):</strong></td>
+                  <td style="padding: 10px 0; border-bottom: 1px solid #e9ecef; color: #dc3545; font-weight: bold;">${violationCount}</td>
+                </tr>
+                <tr>
+                  <td style="padding: 10px 0; border-bottom: 1px solid #e9ecef; color: #666;"><strong>Total Blocks:</strong></td>
+                  <td style="padding: 10px 0; border-bottom: 1px solid #e9ecef; color: #1a1a2e;">${blockCount}</td>
+                </tr>
+                <tr>
+                  <td style="padding: 10px 0; border-bottom: 1px solid #e9ecef; color: #666;"><strong>Expires At:</strong></td>
+                  <td style="padding: 10px 0; border-bottom: 1px solid #e9ecef; color: #1a1a2e;">${expiresAtFormatted} (Dubai Time)</td>
+                </tr>
+                <tr>
+                  <td style="padding: 10px 0; color: #666;"><strong>Block Duration:</strong></td>
+                  <td style="padding: 10px 0; color: #1a1a2e;">${AUTO_BLOCK_DURATION_HOURS} hours</td>
+                </tr>
+              </table>
+              
+              <div style="margin-top: 20px; padding: 15px; background: #fff3cd; border-radius: 6px; border-left: 4px solid #ffc107;">
+                <p style="margin: 0; color: #856404; font-size: 14px;">
+                  <strong>Action Required:</strong> Review this IP in the Admin Dashboard. 
+                  Consider making the block permanent if the activity appears malicious.
+                </p>
+              </div>
+              
+              <p style="color: #666; font-size: 12px; margin-top: 20px; text-align: center;">
+                This is an automated security notification from JJ Global Capital.
+              </p>
+            </div>
+          </div>
+        `,
+      }),
+    });
+
+    if (!response.ok) {
+      const errorText = await response.text();
+      console.error("Failed to send auto-block notification:", errorText);
+    } else {
+      console.log("Auto-block notification sent successfully");
+    }
+  } catch (err) {
+    console.error("Error sending auto-block notification:", err);
+  }
+}
+
 // Auto-block an IP after exceeding threshold
 async function autoBlockIP(
   supabaseAdmin: any,
@@ -179,19 +273,22 @@ async function autoBlockIP(
       .eq("ip_address", clientIp)
       .maybeSingle();
 
+    let blockCount = 1;
+
     if (existing) {
+      blockCount = (existing.block_count || 1) + 1;
       // Update existing block - extend duration and increment count
       await supabaseAdmin
         .from("ip_blocklist")
         .update({
           expires_at: expiresAt.toISOString(),
-          block_count: (existing.block_count || 1) + 1,
+          block_count: blockCount,
           reason: `Auto-blocked: ${violationCount} rate limit violations on ${functionName}`,
           last_attempt_at: new Date().toISOString(),
         })
         .eq("id", existing.id);
       
-      console.warn(`Extended auto-block for IP: ${clientIp.substring(0, 8)}*** (${existing.block_count + 1} blocks)`);
+      console.warn(`Extended auto-block for IP: ${clientIp.substring(0, 8)}*** (${blockCount} blocks)`);
     } else {
       // Create new block
       await supabaseAdmin
@@ -206,6 +303,9 @@ async function autoBlockIP(
       
       console.warn(`Auto-blocked IP: ${clientIp.substring(0, 8)}*** for ${AUTO_BLOCK_DURATION_HOURS} hours`);
     }
+
+    // Send email notification to admins
+    await sendAutoBlockNotification(clientIp, functionName, violationCount, blockCount, expiresAt);
   } catch (err) {
     console.error("Error auto-blocking IP:", err);
   }
