@@ -102,44 +102,44 @@ const Founder = () => {
   const careerTimeline = [
     {
       year: "2014",
-      title: "Founded James Beauty Salon",
-      description: "At 16, while still studying, opened a full-service beauty salon in Lebanon, serving clients with personalized beauty services.",
-      location: "Beirut, Lebanon"
+      title: "Janine's Beauty — Early Business Chapter",
+      description: "Beauty services and early product selling via importing and shipping.",
+      location: "Lebanon"
     },
     {
-      year: "2014-2020",
-      title: "Real Estate & Beauty Business",
-      description: "Built connections in Lebanese real estate market while managing James Beauty salon operations and growing client base.",
-      location: "Beirut, Lebanon"
-    },
-    {
-      year: "2020-2021",
+      year: "2020",
       title: "Relocated to Dubai",
-      description: "After losing everything in the Beirut explosion and COVID-19 crisis, relocated to Dubai with just $100. Started rebuilding from scratch, first working at Mac Properties.",
+      description: "Began building career and network in the UAE.",
       location: "Dubai, UAE"
     },
     {
-      year: "2021-2024",
-      title: "Head of Quality & Operations - dnata/Dubai Airport",
-      description: "Led quality control and operations for B2B luxury limousine services at Dubai Airport Terminals 1 & 3 and all Address Hotels. Managed 495+ employees including drivers and coordinators. Implemented KPIs, training programs, and quality benchmarks.",
+      year: "2021",
+      title: "Real Estate (Dubai)",
+      description: "Worked with DAMAC and expanded UAE market exposure.",
       location: "Dubai, UAE"
     },
     {
-      year: "2021-2024",
-      title: "Real Estate Brokerage & Training",
-      description: "Worked with Damac Properties and multiple brokerage companies. Trained 2,800+ brokers through intensive programs covering closing techniques, objection handling, and lead generation.",
+      year: "2021–2022",
+      title: "Head of Quality & Operations",
+      description: "Al-Ghazal Transportation Company — led service standards, team training, and operations (495+).",
       location: "Dubai, UAE"
     },
     {
-      year: "2022",
-      title: "Professional Certifications",
-      description: "Earned Personal Trainer & Fitness Nutritionist certifications from ISSA. Completed Digital Marketing and Development studies with London Studies.",
+      year: "2022–2024",
+      title: "Brokerage Training & Business Development",
+      description: "Trained brokers and supported brokerage teams across marketing, projects, sales, and objection handling.",
+      location: "Dubai, UAE"
+    },
+    {
+      year: "2025–2026",
+      title: "Sobha Realty (Dubai)",
+      description: "Supported real estate growth through structured sales and client experience systems.",
       location: "Dubai, UAE"
     },
     {
       year: "2025",
       title: "Founded JJ Global Capital",
-      description: "After 5 years in Dubai, founded JJ Global Capital as a real estate brokerage specializing in property sales, leasing, and holiday homes across the UAE.",
+      description: "Founded JJ Global Capital as a Dubai-based real estate brokerage.",
       location: "Dubai, UAE"
     },
   ];
@@ -161,7 +161,7 @@ const Founder = () => {
           <SafeImage 
             src={founderProfessional} 
             fallbackSrc={founderHero}
-            alt="Jane Abou Jaoude - Founder & Chairwoman" 
+            alt="Jane Abou Jaoude - Founder & CEO"
             className="w-full h-full object-cover object-top"
           />
           {/* Multi-layer gradient overlay */}
@@ -191,7 +191,7 @@ const Founder = () => {
             <motion.div className="mb-6" variants={fadeInUp}>
               <span className="inline-flex items-center gap-2 bg-black/40 backdrop-blur-md border border-gold/40 text-gold text-xs uppercase tracking-[0.3em] px-5 py-2.5 rounded-full shadow-lg shadow-gold/10">
                 <Star className="w-3.5 h-3.5 fill-gold" />
-                Founder & Chairwoman
+                Founder & CEO
               </span>
             </motion.div>
             
@@ -209,7 +209,7 @@ const Founder = () => {
             
             <motion.div variants={fadeInUp}>
               <p className="text-white text-xl md:text-2xl lg:text-3xl mb-1 font-semibold tracking-wide">
-                JJ Global Capital
+                Founder & CEO • JJ Global Capital
               </p>
               <p className="text-zinc-400 text-sm md:text-base mb-8">
                 Real Estate Brokerage • Dubai, UAE
@@ -220,7 +220,7 @@ const Founder = () => {
               className="text-zinc-400 text-lg md:text-xl italic max-w-xl border-l-4 border-gold/60 pl-6 py-2"
               variants={fadeInUp}
             >
-              "Building institutions that outlast trends. Creating value through standards, not scale."
+              "Standards first. Discreet execution. Long-term trust."
             </motion.p>
           </motion.div>
         </div>
@@ -264,7 +264,7 @@ const Founder = () => {
                   <SafeImage 
                     src={founderPremium} 
                     fallbackSrc={founderProfessional}
-                    alt="Jane Abou Jaoude - Founder & Chairwoman" 
+                    alt="Jane Abou Jaoude - Founder & CEO" 
                     className="w-full h-full object-cover object-top"
                   />
                   {/* Subtle vignette */}
@@ -308,13 +308,13 @@ const Founder = () => {
               
               <div className="space-y-6 text-zinc-300 leading-relaxed max-w-2xl">
                 <p className="text-xl md:text-2xl font-light text-white/90">
-                  A self-made entrepreneur who founded her first business at 16, became Head of Quality & Operations managing 495+ employees, and trained 2,800+ brokers.
+                  Born August 25, 1998, in Lebanon. Fluent in French and Arabic, with self-taught English and Spanish. Active on social media since 2012 with 1M+ followers across platforms.
                 </p>
                 <p className="text-lg">
-                  Born August 25, 1998, in Lebanon. Grew up fluent in French and Arabic, later self-taught English and Spanish. Jane's journey spans from running a beauty salon as a teenager to leading quality control for premium hospitality brands—culminating in the 2025 founding of JJ Global Capital.
+                  At 16, Jane launched Janine's Beauty (beauty services) and began selling products via importing and shipping from China. With 12+ years of sales, customer experience, and business development expertise, she relocated to Dubai in 2020 to pursue real estate.
                 </p>
                 <p className="text-lg text-zinc-400">
-                  Her leadership philosophy is forged through diverse experience: entrepreneurship, corporate operations, real estate brokerage, and training over 2,800 brokers. From James Beauty salon in Beirut to Address Hotels' limousine services in Dubai, every chapter prepared her for institutional excellence.
+                  Her career includes working with DAMAC in 2021, leading quality and operations at Al-Ghazal Transportation Company (495+ team), and developing brokerage business divisions from 2022–2024. In 2025, she founded JJ Global Capital as a Dubai-based real estate brokerage.
                 </p>
               </div>
               
@@ -344,7 +344,7 @@ const Founder = () => {
                   </div>
                   <div>
                     <p className="text-white font-medium text-sm">495+ Managed</p>
-                    <p className="text-zinc-500 text-xs">Employees at dnata</p>
+                    <p className="text-zinc-500 text-xs">Operations Team</p>
                   </div>
                 </div>
               </div>
@@ -387,62 +387,45 @@ const Founder = () => {
                   Origins & Early Entrepreneurship
                 </h3>
                 <p className="text-lg mb-4">
-                  Jane Abou Jaoude was born on August 25, 1998, in Lebanon—a Virgo with an innate drive for precision and excellence. 
-                  Growing up fluent in French and Arabic, she later taught herself English and Spanish, developing a global perspective from an early age.
+                  Jane Abou Jaoude was born on August 25, 1998, in Lebanon. Fluent in French and Arabic from childhood, she later taught herself English and Spanish—developing a global perspective from an early age.
                 </p>
                 <p className="text-lg mb-4 text-zinc-400">
-                  At just 16, while still studying, Jane founded James Beauty in 2014—a full-service beauty salon in Lebanon where she 
-                  served clients with personalized beauty services. This first venture ignited her entrepreneurial spirit and taught her 
-                  the fundamentals of service excellence, client relationships, and business operations.
+                  At 16, Jane launched Janine's Beauty in 2014, offering beauty services while also selling products via importing and shipping from China. Active on social media since 2012, she built a following that now exceeds 1M+ across platforms.
                 </p>
                 <p className="text-lg text-zinc-400">
-                  Simultaneously, she began building connections in Lebanese real estate, laying the groundwork for her future 
-                  in property investment while managing her growing beauty business.
+                  With 12+ years of experience in sales, customer experience, and business development, these early ventures taught her the fundamentals of service excellence and client relationships.
                 </p>
               </div>
 
               <div className="bg-gradient-to-br from-zinc-900/80 to-black border border-zinc-800 rounded-3xl p-8 md:p-12">
                 <h3 className="text-gold text-xl font-semibold mb-6 flex items-center gap-3">
                   <TrendingUp className="w-6 h-6" />
-                  The Dubai Chapter: Rising from Adversity
+                  The Dubai Chapter
                 </h3>
                 <p className="text-lg mb-4">
-                  In 2020, during COVID-19 and the devastating Beirut explosion, Jane lost everything she had built in Lebanon—her business, 
-                  her savings, everything she had worked for. Completely broken but determined, she made the bold decision to relocate to Dubai 
-                  with just $100 in her pocket.
+                  In 2020, Jane relocated to Dubai and began building her career and network in the UAE. She started her real estate career with DAMAC in 2021, gaining valuable exposure to the Dubai property market.
                 </p>
                 <p className="text-lg mb-4 text-zinc-400">
-                  Upon arriving, she was amazed by Dubai—a smart city where everything is fast, efficient, and accessible. She decided 
-                  she would never go back to Lebanon and committed to rebuilding herself financially. Starting from scratch, she worked 
-                  her way up: first at Mac Properties, then joining dnata/Dubai Airport as Head of Quality & Operations for B2B luxury 
-                  limousine services serving Terminals 1 and 3, plus all Address Hotels. Managing 495+ employees—from drivers to coordinators—she 
-                  implemented comprehensive KPI systems, training programs, and quality benchmarks.
+                  From 2021–2022, she served as Head of Quality & Operations at Al-Ghazal Transportation Company, a luxury B2B transportation and hospitality services provider. Managing teams of 495+ employees, she trained coordinators and drivers while implementing service standards and KPIs.
                 </p>
                 <p className="text-lg text-zinc-400">
-                  This corporate leadership experience provided invaluable insights into operations management, team building, 
-                  and institutional standards—skills that would later define JJ Global Capital's approach to excellence.
+                  This corporate leadership experience provided invaluable insights into operations management, team building, and institutional standards—skills that would later define JJ Global Capital's approach to excellence.
                 </p>
               </div>
 
               <div className="bg-gradient-to-br from-zinc-900/80 to-black border border-zinc-800 rounded-3xl p-8 md:p-12">
                 <h3 className="text-gold text-xl font-semibold mb-6 flex items-center gap-3">
-                  <Award className="w-6 h-6" />
-                  Real Estate Mastery & Continuous Learning
+                  <Users className="w-6 h-6" />
+                  Brokerage Training & Development
                 </h3>
                 <p className="text-lg mb-4">
-                  Direct approaches from leading real estate companies recognized Jane's potential. She transitioned into 
-                  brokerage, working with multiple developers and eventually training leading brokers through intensive 
-                  programs that shared her expertise.
+                  From 2022–2024, Jane worked with a brokerage company to develop the business across divisions including marketing, projects, sales, objection handling, and training brokers and teams. She has trained 2,800+ brokers through her intensive programs.
                 </p>
                 <p className="text-lg mb-4 text-zinc-400">
-                  Never one to stop learning, Jane pursued additional certifications in Dubai: earning Personal Trainer 
-                  and Fitness Nutritionist credentials from ISSA, and completing Digital Marketing and Development 
-                  studies with London Studies. This commitment to continuous education reflects her belief that 
-                  excellence requires constant growth.
+                  In 2025–2026, she worked with Sobha Realty, supporting real estate growth through structured sales and client experience systems.
                 </p>
                 <p className="text-lg text-zinc-400">
-                  In 2025, after five years of building expertise in Dubai, Jane founded JJ Global Capital as a real estate brokerage 
-                  specializing in property sales, leasing, and holiday homes across the UAE.
+                  In 2025, Jane founded JJ Global Capital as a Dubai-based real estate brokerage specializing in property sales, leasing, and holiday homes across the UAE.
                 </p>
               </div>
 
@@ -534,7 +517,7 @@ const Founder = () => {
                 </div>
               </motion.div>
 
-              {/* Photo 3 - Award Stage */}
+              {/* Photo 3 - Industry Event */}
               <motion.div 
                 className="group relative aspect-[4/5] rounded-2xl overflow-hidden border border-zinc-800 hover:border-gold/40 transition-all duration-500"
                 variants={scaleIn}
@@ -542,14 +525,14 @@ const Founder = () => {
                 <SafeImage 
                   src={founderAwardStage} 
                   fallbackSrc={founderHero}
-                  alt="Jane Abou Jaoude - Award Recognition" 
+                  alt="Jane Abou Jaoude - Industry Event" 
                   className="w-full h-full object-cover object-center group-hover:scale-105 transition-transform duration-700"
                 />
                 <div className="absolute inset-0 bg-gradient-to-t from-black via-black/20 to-transparent opacity-80 group-hover:opacity-90 transition-opacity" />
                 <div className="absolute bottom-0 left-0 right-0 p-6">
-                  <span className="text-gold text-xs uppercase tracking-[0.2em] mb-2 block">Recognition</span>
-                  <h4 className="text-white text-lg font-semibold mb-1">Industry Excellence Award</h4>
-                  <p className="text-zinc-400 text-sm">Celebrating achievements in real estate</p>
+                  <span className="text-gold text-xs uppercase tracking-[0.2em] mb-2 block">Events</span>
+                  <h4 className="text-white text-lg font-semibold mb-1">Industry Event</h4>
+                  <p className="text-zinc-400 text-sm">Networking in real estate</p>
                 </div>
               </motion.div>
 
@@ -776,7 +759,7 @@ const Founder = () => {
         </div>
       </section>
 
-      {/* FOUNDER STATS - Verified Metrics Only */}
+      {/* FOUNDER STATS - Highlights */}
       <section className="py-24 md:py-32 bg-gradient-to-b from-zinc-950 via-black to-zinc-950 relative overflow-hidden">
         {/* Premium pattern background */}
         <div className="absolute inset-0 opacity-[0.03]">
@@ -801,11 +784,11 @@ const Founder = () => {
               className="text-white text-4xl md:text-5xl lg:text-6xl font-bold"
               style={{ fontFamily: "Poppins, sans-serif" }}
             >
-              Verified <span className="text-transparent bg-clip-text bg-gradient-to-r from-gold to-[#C4A962]">Metrics</span>
+              <span className="text-transparent bg-clip-text bg-gradient-to-r from-gold to-[#C4A962]">Highlights</span>
             </h2>
           </motion.div>
 
-          {/* Stats - Ultra Premium Design */}
+          {/* Stats - 4 Chips */}
           <motion.div 
             initial="hidden"
             whileInView="visible"
@@ -814,20 +797,23 @@ const Founder = () => {
           >
             <div className="grid grid-cols-2 md:grid-cols-4 gap-6 md:gap-8">
               {[
-                { ...COMPANY_STATS.yearsExperience, icon: Award },
-                { ...COMPANY_STATS.brokersTrainedBy, icon: Users },
-                { ...COMPANY_STATS.clientSatisfaction, icon: TrendingUp },
-                { ...COMPANY_STATS.teamMembers, icon: Building2 },
+                { label: "Active since 2012", icon: Calendar },
+                { label: "1M+ Followers (All Platforms)", icon: Users },
+                { label: "2,800+ Brokers Trained", icon: Award },
+                { label: "495+ Team Managed (Operations)", icon: Building2 },
               ].map((stat, index) => (
                 <motion.div 
                   key={stat.label}
-                  className="bg-gradient-to-br from-zinc-900 via-zinc-900/95 to-black border border-zinc-800 rounded-3xl p-8 md:p-10 hover:border-gold/40 transition-all duration-500 group relative overflow-hidden"
+                  className="bg-gradient-to-br from-zinc-900 via-zinc-900/95 to-black border border-zinc-800 rounded-3xl p-8 md:p-10 hover:border-gold/40 transition-all duration-500 group relative overflow-hidden text-center"
                   variants={fadeInUp}
                 >
                   {/* Glow effect on hover */}
                   <div className="absolute inset-0 bg-gradient-to-br from-gold/0 to-gold/0 group-hover:from-gold/5 group-hover:to-transparent transition-all duration-500 rounded-3xl" />
                   <div className="relative z-10">
-                    <CounterStat {...stat} />
+                    <div className="w-14 h-14 mx-auto mb-4 bg-gradient-to-br from-gold/20 to-gold/5 rounded-2xl flex items-center justify-center border border-gold/20 group-hover:border-gold/50 group-hover:scale-110 transition-all duration-500 shadow-lg shadow-gold/5">
+                      <stat.icon className="w-6 h-6 text-gold" />
+                    </div>
+                    <p className="text-white text-sm md:text-base font-medium">{stat.label}</p>
                   </div>
                 </motion.div>
               ))}
@@ -949,7 +935,7 @@ const Founder = () => {
                   </div>
                   <div className="text-center mt-2">
                     <p className="text-transparent bg-clip-text bg-gradient-to-r from-gold via-[#D4B96A] to-gold text-2xl md:text-3xl font-semibold tracking-wide mb-2" style={{ fontFamily: "Poppins, sans-serif" }}>Jane Abou Jaoude</p>
-                    <p className="text-zinc-300 text-sm uppercase tracking-[0.25em] font-medium">Founder & Chairwoman</p>
+                    <p className="text-zinc-300 text-sm uppercase tracking-[0.25em] font-medium">Founder & CEO</p>
                     <div className="mt-3 space-y-1">
                       <p className="text-white text-base font-semibold tracking-wide">JJ Global Capital</p>
                       <p className="text-zinc-400 text-xs">Real Estate Brokerage | Dubai, UAE</p>
@@ -989,7 +975,7 @@ const Founder = () => {
             viewport={{ once: true, margin: "-100px" }}
             variants={staggerContainer}
           >
-            {/* Award stage photo - Full height premium display */}
+            {/* Industry event photo - Full height premium display */}
             <motion.div 
               className="aspect-[3/4] rounded-3xl overflow-hidden border border-gold/20 shadow-2xl shadow-gold/10 group relative"
               variants={scaleIn}
@@ -997,7 +983,7 @@ const Founder = () => {
               <SafeImage 
                 src={founderAwardStage} 
                 fallbackSrc={founderHero}
-                alt="Jane Abou Jaoude - Industry Recognition" 
+                alt="Jane Abou Jaoude - Industry Event"
                 className="w-full h-full object-cover object-top group-hover:scale-105 transition-transform duration-1000"
               />
               {/* Premium overlay gradient */}

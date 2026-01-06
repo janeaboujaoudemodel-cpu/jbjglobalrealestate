@@ -68,11 +68,11 @@ const About = () => {
   ];
 
   const milestones = [
-    { year: "2020", event: "Jane Abou Jaoude Relocated to Dubai" },
-    { year: "2021", event: "Head of Quality & Operations at dnata/Dubai Airport" },
-    { year: "2022", event: "Professional Certifications (ISSA, London Studies)" },
-    { year: "2023", event: "Real Estate Brokerage Training Programs" },
-    { year: "2024", event: "Trained 2,800+ Brokers in UAE" },
+    { year: "2014", event: "Janine's Beauty — Early Business Chapter" },
+    { year: "2020", event: "Relocated to Dubai" },
+    { year: "2021", event: "Real Estate with DAMAC" },
+    { year: "2021–2022", event: "Head of Quality & Operations at Al-Ghazal Transportation" },
+    { year: "2022–2024", event: "Brokerage Training & Business Development" },
     { year: "2025", event: "Founded JJ Global Capital Brokerage" },
   ];
 
