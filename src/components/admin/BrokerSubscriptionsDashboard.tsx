@@ -93,6 +93,48 @@ export default function BrokerSubscriptionsDashboard() {
   const [hasLoggedPageView, setHasLoggedPageView] = useState(false);
   const [detailViewCount, setDetailViewCount] = useState(0);
   const [detailViewStartTime, setDetailViewStartTime] = useState<number | null>(null);
+  const [afterHoursAlertSent, setAfterHoursAlertSent] = useState(false);
+
+  // Check if current time is after-hours in Dubai (9 PM - 8 AM, UTC+4)
+  const isAfterHoursDubai = useCallback(() => {
+    const now = new Date();
+    // Get Dubai time (UTC+4)
+    const dubaiOffset = 4 * 60; // minutes
+    const utcMinutes = now.getUTCHours() * 60 + now.getUTCMinutes();
+    const dubaiMinutes = (utcMinutes + dubaiOffset) % (24 * 60);
+    const dubaiHour = Math.floor(dubaiMinutes / 60);
+    // After-hours: 9 PM (21:00) to 8 AM (08:00)
+    return dubaiHour >= 21 || dubaiHour < 8;
+  }, []);
+
+  // Send after-hours access alert
+  const sendAfterHoursAlert = useCallback(async (accessType: string) => {
+    if (afterHoursAlertSent) return;
+    
+    try {
+      const now = new Date();
+      const dubaiOffset = 4 * 60;
+      const dubaiTime = new Date(now.getTime() + dubaiOffset * 60 * 1000);
+      const dubaiTimeStr = dubaiTime.toISOString().replace('T', ' ').substring(0, 19) + ' (Dubai)';
+      
+      await supabase.functions.invoke("send-security-alert", {
+        body: {
+          alertType: "after_hours_access",
+          adminEmail: user?.email,
+          adminName: user?.user_metadata?.full_name || user?.email,
+          details: {
+            resourceType: "broker_subscriptions",
+            accessType,
+            dubaiTime: dubaiTimeStr,
+            additionalInfo: `Sensitive data accessed outside business hours (9 PM - 8 AM Dubai time)`,
+          },
+        },
+      });
+      setAfterHoursAlertSent(true);
+    } catch (error) {
+      console.error("Failed to send after-hours alert:", error);
+    }
+  }, [afterHoursAlertSent, user]);
 
   const fetchSubscriptions = useCallback(async () => {
     setLoading(true);
@@ -117,13 +159,18 @@ export default function BrokerSubscriptionsDashboard() {
           },
         });
         setHasLoggedPageView(true);
+
+        // Check for after-hours access
+        if (isAfterHoursDubai()) {
+          sendAfterHoursAlert("dashboard_view");
+        }
       }
     } catch (error: any) {
       toast.error(error.message || "Failed to fetch subscriptions");
     } finally {
       setLoading(false);
     }
-  }, [logAction, hasLoggedPageView]);
+  }, [logAction, hasLoggedPageView, isAfterHoursDubai, sendAfterHoursAlert]);
 
   useEffect(() => {
     fetchSubscriptions();
@@ -211,6 +258,7 @@ export default function BrokerSubscriptionsDashboard() {
     try {
       const { data: sessionData } = await supabase.auth.getSession();
       if (sessionData?.session?.access_token) {
+        const isAfterHours = isAfterHoursDubai();
         await supabase.functions.invoke("send-security-alert", {
           body: {
             alertType: "data_export",
@@ -220,10 +268,15 @@ export default function BrokerSubscriptionsDashboard() {
               recordCount: filteredSubscriptions.length,
               resourceType: "broker_subscriptions",
               filters: { status: statusFilter, tier: tierFilter, search: searchQuery },
-              additionalInfo: `Exported ${filteredSubscriptions.length} of ${subscriptions.length} total records`,
+              additionalInfo: `Exported ${filteredSubscriptions.length} of ${subscriptions.length} total records${isAfterHours ? " (AFTER-HOURS ACCESS)" : ""}`,
             },
           },
         });
+        
+        // Also send after-hours alert if applicable
+        if (isAfterHours) {
+          sendAfterHoursAlert("data_export");
+        }
       }
     } catch (alertError) {
       console.error("Failed to send security alert:", alertError);
