@@ -1,5 +1,6 @@
 import { useEffect, useState } from "react";
 import { supabase } from "@/integrations/supabase/client";
+import { useAuditLog } from "@/hooks/useAuditLog";
 import { Card } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
@@ -45,6 +46,7 @@ const RATE_LIMIT_CONFIG: RateLimitConfig = {
 };
 
 export const RateLimitDashboard = () => {
+  const { logAction } = useAuditLog();
   const [rateLimits, setRateLimits] = useState<RateLimitEntry[]>([]);
   const [loading, setLoading] = useState(true);
   const [selectedFunction, setSelectedFunction] = useState<string>("all");
@@ -138,6 +140,16 @@ export const RateLimitDashboard = () => {
     try {
       const oneHourAgo = new Date(Date.now() - 60 * 60 * 1000).toISOString();
       
+      // First count entries to be deleted
+      const { data: entriesToDelete, error: countError } = await supabase
+        .from("function_rate_limits")
+        .select("id")
+        .lt("window_start", oneHourAgo);
+
+      if (countError) throw countError;
+
+      const entriesCount = entriesToDelete?.length || 0;
+      
       const { error } = await supabase
         .from("function_rate_limits")
         .delete()
@@ -145,7 +157,18 @@ export const RateLimitDashboard = () => {
 
       if (error) throw error;
 
-      toast.success("Old entries cleared");
+      // Log the clear action
+      await logAction({
+        actionType: "delete",
+        resourceType: "rate_limit",
+        description: `Cleared ${entriesCount} old rate limit entries`,
+        details: {
+          entries_deleted: entriesCount,
+          cleared_before: oneHourAgo,
+        },
+      });
+
+      toast.success(`Cleared ${entriesCount} old entries`);
       fetchRateLimits();
     } catch (error: any) {
       toast.error("Failed to clear entries");
