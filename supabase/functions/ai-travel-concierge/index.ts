@@ -1,18 +1,30 @@
 import { serve } from "https://deno.land/std@0.168.0/http/server.ts";
+import { z } from "https://deno.land/x/zod@v3.22.4/mod.ts";
 
 const corsHeaders = {
   "Access-Control-Allow-Origin": "*",
   "Access-Control-Allow-Headers": "authorization, x-client-info, apikey, content-type",
 };
 
-const systemPrompt = `You are the AI Travel & Property Concierge for JJ Global Capital, a premium real estate investment firm in Dubai, UAE. Your role is to create comprehensive, personalized travel and property viewing itineraries for high-net-worth individuals visiting the UAE.
+// Input validation schema
+const MessageSchema = z.object({
+  role: z.enum(['user', 'assistant', 'system']),
+  content: z.string().max(10000),
+});
+
+const RequestSchema = z.object({
+  messages: z.array(MessageSchema).min(1).max(30),
+  context: z.string().max(5000).optional(),
+});
+
+const systemPrompt = `You are the AI Travel & Property Concierge for JJ Global Capital, a real estate brokerage firm in Dubai, UAE. Your role is to create comprehensive, personalized travel and property viewing itineraries for clients visiting the UAE.
 
 **Your Expertise:**
-- Dubai & UAE luxury real estate market
+- Dubai & UAE real estate market
 - Premium hotels and accommodations
 - Fine dining and exclusive restaurants
 - VIP experiences and activities
-- Property investment guidance
+- Property viewing logistics
 - Local logistics and transportation
 
 **When Creating Itineraries, Include:**
@@ -33,7 +45,7 @@ const systemPrompt = `You are the AI Travel & Property Concierge for JJ Global C
    - Specific developments and communities
    - Developer names (Emaar, DAMAC, Sobha, Meraas, Nakheel)
    - Price ranges and unit types
-   - Key features and investment potential
+   - Key features
 
 4. **Transportation:**
    - Private chauffeur services
@@ -52,9 +64,11 @@ const systemPrompt = `You are the AI Travel & Property Concierge for JJ Global C
 - End with an invitation to submit the plan to our team
 
 **Contact Information:**
-- Phone: +971 56 591 1000
+- Phone: +971 50 747 9498
 - Email: contact@jjglobalcapital.com
 - Website: jjglobalcapital.com
+
+**Important:** JJ Global Capital provides brokerage support and partner introductions only. We do not provide legal, mortgage, financial, or investment advice.
 
 Always be warm, professional, and enthusiastic about helping them discover the UAE. Tailor recommendations to their stated budget, interests, and travel style.`;
 
@@ -64,7 +78,19 @@ serve(async (req) => {
   }
 
   try {
-    const { messages, context } = await req.json();
+    // Parse and validate input
+    const rawBody = await req.json();
+    const parseResult = RequestSchema.safeParse(rawBody);
+
+    if (!parseResult.success) {
+      console.log('Validation failed:', parseResult.error.errors);
+      return new Response(
+        JSON.stringify({ error: "Invalid request format. Please check your input." }),
+        { status: 400, headers: { ...corsHeaders, "Content-Type": "application/json" } }
+      );
+    }
+
+    const { messages, context } = parseResult.data;
     const LOVABLE_API_KEY = Deno.env.get("LOVABLE_API_KEY");
 
     if (!LOVABLE_API_KEY) {
@@ -75,7 +101,7 @@ serve(async (req) => {
     const formattedMessages = [
       { role: "system", content: systemPrompt },
       ...(context ? [{ role: "system", content: `Context: ${context}` }] : []),
-      ...messages.slice(-10).map((m: any) => ({
+      ...messages.slice(-10).map((m) => ({
         role: m.role,
         content: m.content
       }))
@@ -126,8 +152,8 @@ serve(async (req) => {
     console.error("Error in ai-travel-concierge:", error);
     return new Response(
       JSON.stringify({ 
-        error: error instanceof Error ? error.message : "An unexpected error occurred",
-        response: "I apologize for the technical difficulty. Please contact our team directly at +971 56 591 1000 or contact@jjglobalcapital.com for immediate assistance with your UAE trip planning."
+        error: "An error occurred",
+        response: "I apologize for the technical difficulty. Please contact our team directly at +971 50 747 9498 or contact@jjglobalcapital.com for immediate assistance with your UAE trip planning."
       }),
       { status: 500, headers: { ...corsHeaders, "Content-Type": "application/json" } }
     );

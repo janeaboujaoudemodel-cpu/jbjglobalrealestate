@@ -1,6 +1,7 @@
 import "https://deno.land/x/xhr@0.1.0/mod.ts";
 import { serve } from "https://deno.land/std@0.168.0/http/server.ts";
 import { createClient } from "https://esm.sh/@supabase/supabase-js@2";
+import { z } from "https://deno.land/x/zod@v3.22.4/mod.ts";
 
 const ALLOWED_ORIGINS = [
   "https://jjglobalcapital.com",
@@ -21,16 +22,36 @@ function getCorsHeaders(req: Request) {
   };
 }
 
+// Input validation schema
+const MessageSchema = z.object({
+  role: z.enum(['user', 'assistant', 'system']),
+  content: z.string().max(10000),
+});
+
+const RequestSchema = z.object({
+  message: z.string().min(1, "Message is required").max(5000, "Message too long"),
+  history: z.array(MessageSchema).max(20).optional().default([]),
+  service: z.enum([
+    'real_estate', 
+    'concierge', 
+    'legal', 
+    'design_build', 
+    'mortgage', 
+    'property_management',
+    'general'
+  ]).optional(),
+  userName: z.string().max(100).optional(),
+});
+
 // Comprehensive website knowledge base
 const WEBSITE_KNOWLEDGE = `
 JJ GLOBAL CAPITAL - COMPLETE SERVICES & INFORMATION:
 
 COMPANY OVERVIEW:
-- JJ Global Capital is the flagship real estate investment and advisory division of JJ Holding Group
-- Founded by Jane Abou Jaoude, Founder & Chairwoman
+- JJ Global Capital is a Dubai-based real estate brokerage specializing in property sales, leasing, and holiday homes across the UAE
+- Founded by Jane Abou Jaoude
 - Headquarters: Dubai, UAE
-- Serving clients from 92+ countries
-- Portfolio exceeding AED 2 billion
+- Serving UAE-based and international clients interested in UAE real estate
 
 CONTACT INFORMATION:
 - Email: contact@jjglobalcapital.com
@@ -58,12 +79,11 @@ SERVICES:
    - Restaurant reservations
    - Travel itinerary planning for UAE visitors
 
-3. LEGAL ADVISORY:
-   - Property transaction documentation
-   - Contract review and negotiation
-   - Visa and residency guidance (Golden Visa through property investment)
-   - Company formation for property ownership
-   - Power of Attorney services
+3. PARTNER INTRODUCTIONS:
+   - Legal partner introductions for property transactions
+   - Mortgage partner introductions
+   - Property management partner introductions
+   Note: JJ Global Capital provides brokerage support and partner introductions only. Legal, mortgage, and property management services are provided by independent licensed professionals.
 
 4. DESIGN & BUILD:
    - Interior design services
@@ -72,24 +92,11 @@ SERVICES:
    - Furniture packages
    - Project management
 
-5. MORTGAGE ADVISORY:
-   - UAE bank mortgage options
-   - Rate comparison
-   - Pre-approval assistance
-   - Documentation support
-   - For residents and non-residents
-
-6. PROPERTY MANAGEMENT:
-   - Rental management
-   - Tenant finding
-   - Maintenance coordination
-   - Financial reporting
-
 AI TOOLS AVAILABLE ON WEBSITE:
 - AI Home Finder Quiz - Match properties to preferences
 - Property Evaluator - Get property valuations
 - Interior Design AI - Visualize room designs
-- Mortgage Calculator - Calculate payments
+- AI Budget Planner - Calculate and plan budgets
 - AI Travel Concierge - Plan UAE visits with property viewings
 - Property Comparison - Compare up to 4 properties
 - Rental Index Analysis - Check rental yields
@@ -102,13 +109,6 @@ INVESTMENT BENEFITS IN UAE:
 - Strong capital appreciation
 - Safe and regulated market
 - World-class infrastructure
-
-JJ HOLDING GROUP DIVISIONS:
-1. JJ Global Capital - Real Estate Investment & Advisory
-2. JJ Group - Business Development & Operations
-3. JJ Fashion House - Haute Couture & Design
-4. JJ and Serena - Fashion & Lifestyle Collaboration
-5. Mrs Jane - Luxury Home Services (beauty, wellness)
 `;
 
 serve(async (req) => {
@@ -155,11 +155,22 @@ serve(async (req) => {
 
     console.log(`AI chat request from authenticated user: ${user.id}`);
 
-    const { message, history = [], service, userName } = await req.json();
+    // Parse and validate input
+    const rawBody = await req.json();
+    const parseResult = RequestSchema.safeParse(rawBody);
 
-    if (!message || typeof message !== 'string') {
-      throw new Error('Message is required');
+    if (!parseResult.success) {
+      console.log('Validation failed:', parseResult.error.errors);
+      return new Response(
+        JSON.stringify({ 
+          error: 'Invalid request format',
+          response: 'I couldn\'t process your request. Please try again with a shorter message.'
+        }),
+        { status: 400, headers: { ...corsHeaders, 'Content-Type': 'application/json' } }
+      );
     }
+
+    const { message, history, service, userName } = parseResult.data;
 
     // Build service-specific context
     let serviceContext = '';
@@ -171,16 +182,16 @@ serve(async (req) => {
         serviceContext = 'The user is interested in luxury concierge services. Focus on private jets, yachts, VIP experiences, travel planning, and exclusive services.';
         break;
       case 'legal':
-        serviceContext = 'The user needs legal advisory. Focus on property transactions, documentation, Golden Visa, company formation, and legal processes.';
+        serviceContext = 'The user needs legal partner introductions. Focus on connecting them with our legal partners for property transactions, documentation, Golden Visa, and company formation. Note: We provide introductions only, not direct legal services.';
         break;
       case 'design_build':
         serviceContext = 'The user is interested in design and build services. Focus on interior design, fit-out, renovation, and smart home solutions.';
         break;
       case 'mortgage':
-        serviceContext = 'The user needs mortgage advisory. Focus on financing options, bank rates, pre-approval, and mortgage processes for residents and non-residents.';
+        serviceContext = 'The user needs mortgage partner introductions. Focus on connecting them with our mortgage partners for financing options. Note: We provide introductions only, not direct financial advice.';
         break;
       case 'property_management':
-        serviceContext = 'The user needs property management. Focus on rental management, tenant services, maintenance, and property care.';
+        serviceContext = 'The user needs property management partner introductions. Focus on connecting them with our property management partners. Note: We provide introductions only, not direct management services.';
         break;
       default:
         serviceContext = 'Help the user discover which of our services best suits their needs.';
@@ -190,7 +201,7 @@ serve(async (req) => {
     const messages = [
       {
         role: 'system',
-        content: `You are a professional, friendly AI assistant for JJ Global Capital, a premier luxury real estate advisory firm serving the entire UAE (not just Dubai).
+        content: `You are a professional, friendly AI assistant for JJ Global Capital, a real estate brokerage firm serving the entire UAE (not just Dubai).
 
 ${WEBSITE_KNOWLEDGE}
 
@@ -205,6 +216,7 @@ Your role is to:
 - Collect lead information naturally when appropriate
 - Be warm, professional, and maintain a luxury brand tone
 - Always mention we serve all UAE emirates, not just Dubai
+- Remember: We provide brokerage support and partner introductions only. We do not provide legal, mortgage, financial, or investment advice.
 
 Response guidelines:
 - Keep responses concise but helpful (2-4 sentences unless more detail is needed)
@@ -275,7 +287,7 @@ Contact for human assistance:
     console.error('Error in ai-chat-support function:', errorMessage);
     return new Response(
       JSON.stringify({ 
-        error: errorMessage,
+        error: 'An error occurred',
         response: 'I apologize for the technical difficulty. Please contact our team directly for assistance:\n\n📧 Email: contact@jjglobalcapital.com\n📞 Phone: +971 50 747 9498\n💬 WhatsApp: +971 50 747 9498\n\nOur team is available to help you with any questions.'
       }),
       {

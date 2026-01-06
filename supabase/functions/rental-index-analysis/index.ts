@@ -1,4 +1,5 @@
 import { serve } from "https://deno.land/std@0.168.0/http/server.ts";
+import { z } from "https://deno.land/x/zod@v3.22.4/mod.ts";
 
 const ALLOWED_ORIGINS = [
   "https://jjglobalcapital.com",
@@ -18,6 +19,17 @@ function getCorsHeaders(req: Request) {
     "Access-Control-Allow-Methods": "POST, OPTIONS",
   };
 }
+
+// Input validation schema
+const RequestSchema = z.object({
+  community: z.string().min(1, "Community is required").max(200).trim(),
+  propertyType: z.enum([
+    'studio', '1br', '2br', '3br', '4br', '5br+', 
+    'villa', 'townhouse', 'penthouse'
+  ]),
+  size: z.number().min(100).max(100000).optional(),
+  furnished: z.enum(['furnished', 'semi-furnished', 'unfurnished']).optional(),
+});
 
 // Dubai rental data - approximate averages by community (AED/year)
 const rentalData: Record<string, Record<string, { min: number; max: number; avgPsf: number }>> = {
@@ -159,16 +171,16 @@ function generateInsights(community: string, propertyType: string, data: { min: 
     insights.push("Properties in this area typically command 15-25% higher rents than city average.");
   } else if (growingAreas.includes(community)) {
     insights.push(`${community} is an emerging community with growing infrastructure and amenities.`);
-    insights.push("Rental yields in this area have shown 5-8% year-over-year growth.");
+    insights.push("Rental demand in this area has been increasing steadily.");
   } else if (affordableAreas.includes(community)) {
     insights.push(`${community} offers competitive rental rates attractive to budget-conscious tenants.`);
     insights.push("High occupancy rates due to affordability and accessibility.");
   }
   
   if (propertyType === "studio" || propertyType === "1br") {
-    insights.push("Smaller units tend to have higher rental yields (6-8%) compared to larger properties.");
+    insights.push("Smaller units tend to have higher rental demand compared to larger properties.");
   } else if (propertyType === "villa" || propertyType === "townhouse") {
-    insights.push("Villas and townhouses have seen increased demand post-pandemic as families prioritize space.");
+    insights.push("Villas and townhouses have seen increased demand as families prioritize space.");
   }
   
   insights.push("Dubai's rental market follows a cycle with peak demand during Q4 and Q1.");
@@ -186,16 +198,21 @@ serve(async (req) => {
   }
 
   try {
-    const { community, propertyType, size, furnished } = await req.json();
-    
-    console.log(`Rental analysis request: ${community}, ${propertyType}, size: ${size}, furnished: ${furnished}`);
-    
-    if (!community || !propertyType) {
+    // Parse and validate input
+    const rawBody = await req.json();
+    const parseResult = RequestSchema.safeParse(rawBody);
+
+    if (!parseResult.success) {
+      console.log('Validation failed:', parseResult.error.errors);
       return new Response(
-        JSON.stringify({ error: "Community and property type are required" }),
+        JSON.stringify({ error: "Invalid request. Please check community and property type." }),
         { status: 400, headers: { ...corsHeaders, "Content-Type": "application/json" } }
       );
     }
+
+    const { community, propertyType, size, furnished } = parseResult.data;
+    
+    console.log(`Rental analysis request: ${community}, ${propertyType}, size: ${size}, furnished: ${furnished}`);
     
     // Get rental data for the community
     const communityData = rentalData[community] || defaultData;
