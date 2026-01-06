@@ -209,6 +209,60 @@ async function autoBlockIP(supabaseAdmin: any, clientIp: string, functionName: s
   }
 }
 
+// Approved contact information - single source of truth for AI responses
+const APPROVED_CONTACT_INFO = {
+  phone: '+971 56 591 1000',
+  email: 'contact@jjglobalcapital.com',
+  privacyEmail: 'privacy@jjglobalcapital.com',
+  website: 'jjglobalcapital.com',
+};
+
+// Sanitize AI output to remove any unapproved contact information
+function sanitizeContactInfo(text: string): string {
+  // UAE phone number patterns (various formats)
+  const phonePatterns = [
+    /\+971[\s\-]?5[0-9][\s\-]?[0-9]{3}[\s\-]?[0-9]{4}/g,
+    /\+971[\s\-]?[0-9]{2}[\s\-]?[0-9]{3}[\s\-]?[0-9]{4}/g,
+    /0?5[0-9][\s\-]?[0-9]{3}[\s\-]?[0-9]{4}/g,
+    /\+971[\s\-]?[0-9]{9,10}/g,
+  ];
+  
+  // Email pattern
+  const emailPattern = /[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}/g;
+  
+  let sanitized = text;
+  
+  // Replace any phone numbers that aren't our approved one
+  phonePatterns.forEach(pattern => {
+    sanitized = sanitized.replace(pattern, (match) => {
+      const normalized = match.replace(/[\s\-]/g, '');
+      if (normalized === '+97156591 1000' || normalized === '+971565911000' || normalized === '565911000') {
+        return match;
+      }
+      return APPROVED_CONTACT_INFO.phone;
+    });
+  });
+  
+  // Replace any emails that aren't our approved ones
+  sanitized = sanitized.replace(emailPattern, (match) => {
+    const lowerMatch = match.toLowerCase();
+    if (
+      lowerMatch === 'contact@jjglobalcapital.com' ||
+      lowerMatch === 'privacy@jjglobalcapital.com' ||
+      lowerMatch === 'partnerships@jjglobalcapital.com' ||
+      lowerMatch === 'collaboration@jjglobalcapital.com' ||
+      lowerMatch === 'careers@jjglobalcapital.com' ||
+      lowerMatch === 'security@jjglobalcapital.com' ||
+      lowerMatch === 'jane@jjglobalcapital.com'
+    ) {
+      return match;
+    }
+    return APPROVED_CONTACT_INFO.email;
+  });
+  
+  return sanitized;
+}
+
 // Input validation schema
 const ProjectSchema = z.object({
   name: z.string().min(1).max(200).trim(),
@@ -418,11 +472,14 @@ Be specific with numbers where possible. Format with markdown for readability.`;
     }
 
     const data = await response.json();
-    const comparison = data.choices?.[0]?.message?.content;
+    let comparison = data.choices?.[0]?.message?.content;
 
     if (!comparison) {
       throw new Error("No comparison generated");
     }
+
+    // CRITICAL: Sanitize any unapproved contact info from AI output
+    comparison = sanitizeContactInfo(comparison);
 
     console.log("Comparison generated successfully for user:", user.id);
 
