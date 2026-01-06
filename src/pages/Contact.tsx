@@ -18,46 +18,45 @@ import { useLeadCapture } from "@/hooks/useLeadCapture";
 import { getCountryList, getLanguageList } from "@/constants/localeOptions";
 import { Link } from "react-router-dom";
 
-// Phone validation: E.164 format with country code (e.g., +971...)
-const phoneRegex = /^\+[1-9]\d{6,14}$/;
+// Country codes with dial codes for phone input
+const COUNTRY_CODES = [
+  { code: "+971", country: "UAE", flag: "🇦🇪" },
+  { code: "+966", country: "Saudi Arabia", flag: "🇸🇦" },
+  { code: "+974", country: "Qatar", flag: "🇶🇦" },
+  { code: "+965", country: "Kuwait", flag: "🇰🇼" },
+  { code: "+973", country: "Bahrain", flag: "🇧🇭" },
+  { code: "+968", country: "Oman", flag: "🇴🇲" },
+  { code: "+44", country: "UK", flag: "🇬🇧" },
+  { code: "+1", country: "US/CA", flag: "🇺🇸" },
+  { code: "+49", country: "Germany", flag: "🇩🇪" },
+  { code: "+33", country: "France", flag: "🇫🇷" },
+  { code: "+39", country: "Italy", flag: "🇮🇹" },
+  { code: "+34", country: "Spain", flag: "🇪🇸" },
+  { code: "+41", country: "Switzerland", flag: "🇨🇭" },
+  { code: "+7", country: "Russia", flag: "🇷🇺" },
+  { code: "+86", country: "China", flag: "🇨🇳" },
+  { code: "+91", country: "India", flag: "🇮🇳" },
+  { code: "+92", country: "Pakistan", flag: "🇵🇰" },
+  { code: "+20", country: "Egypt", flag: "🇪🇬" },
+  { code: "+961", country: "Lebanon", flag: "🇱🇧" },
+  { code: "+962", country: "Jordan", flag: "🇯🇴" },
+  { code: "+90", country: "Turkey", flag: "🇹🇷" },
+  { code: "+98", country: "Iran", flag: "🇮🇷" },
+  { code: "+61", country: "Australia", flag: "🇦🇺" },
+  { code: "+65", country: "Singapore", flag: "🇸🇬" },
+  { code: "+60", country: "Malaysia", flag: "🇲🇾" },
+  { code: "+63", country: "Philippines", flag: "🇵🇭" },
+  { code: "+27", country: "South Africa", flag: "🇿🇦" },
+  { code: "+55", country: "Brazil", flag: "🇧🇷" },
+  { code: "+52", country: "Mexico", flag: "🇲🇽" },
+];
 
-// Phone number formatting helper - auto-adds +971 for UAE numbers
-const formatPhoneNumber = (value: string): string => {
-  // Remove all non-digit characters except +
-  let cleaned = value.replace(/[^\d+]/g, '');
-  
-  // If empty, return empty
-  if (!cleaned) return '';
-  
-  // If user starts typing without +, assume UAE number
-  if (!cleaned.startsWith('+')) {
-    // If starts with 0 (local format like 056...), remove the 0 and add +971
-    if (cleaned.startsWith('0')) {
-      cleaned = '+971' + cleaned.slice(1);
-    } 
-    // If starts with 971, just add +
-    else if (cleaned.startsWith('971')) {
-      cleaned = '+' + cleaned;
-    }
-    // Otherwise, assume UAE and add +971
-    else {
-      cleaned = '+971' + cleaned;
-    }
-  }
-  
-  // Format for display: +971 XX XXX XXXX
-  if (cleaned.startsWith('+971')) {
-    const afterCode = cleaned.slice(4);
-    if (afterCode.length <= 2) {
-      return `+971 ${afterCode}`;
-    } else if (afterCode.length <= 5) {
-      return `+971 ${afterCode.slice(0, 2)} ${afterCode.slice(2)}`;
-    } else {
-      return `+971 ${afterCode.slice(0, 2)} ${afterCode.slice(2, 5)} ${afterCode.slice(5, 9)}`;
-    }
-  }
-  
-  return cleaned;
+// Format phone number for display (digits only, spaced)
+const formatLocalNumber = (value: string): string => {
+  const digits = value.replace(/\D/g, '');
+  if (digits.length <= 3) return digits;
+  if (digits.length <= 6) return `${digits.slice(0, 3)} ${digits.slice(3)}`;
+  return `${digits.slice(0, 3)} ${digits.slice(3, 6)} ${digits.slice(6, 10)}`;
 };
 
 const consultationSchema = z.object({
@@ -354,24 +353,62 @@ const Contact = () => {
                         <FormField
                           control={form.control}
                           name="phone"
-                          render={({ field }) => (
-                            <FormItem>
-                              <FormLabel className="text-zinc-300 text-sm">Phone Number *</FormLabel>
-                              <FormControl>
-                                <Input 
-                                  {...field} 
-                                  type="tel"
-                                  className="h-12 bg-zinc-900 border-zinc-700 text-white placeholder:text-zinc-500 focus:border-gold"
-                                  placeholder="+971 56 591 1000"
-                                  onChange={(e) => {
-                                    const formatted = formatPhoneNumber(e.target.value);
-                                    field.onChange(formatted);
-                                  }}
-                                />
-                              </FormControl>
-                              <FormMessage className="text-red-400 text-xs" />
-                            </FormItem>
-                          )}
+                          render={({ field }) => {
+                            // Extract country code and local number from value
+                            const currentCode = COUNTRY_CODES.find(c => field.value?.startsWith(c.code))?.code || "+971";
+                            const localNumber = field.value?.replace(currentCode, '').replace(/^\s+/, '') || '';
+                            
+                            const handleCodeChange = (newCode: string) => {
+                              const cleanLocal = localNumber.replace(/\D/g, '');
+                              field.onChange(cleanLocal ? `${newCode} ${formatLocalNumber(cleanLocal)}` : newCode);
+                            };
+                            
+                            const handleNumberChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+                              const digits = e.target.value.replace(/\D/g, '').slice(0, 10);
+                              const formatted = formatLocalNumber(digits);
+                              field.onChange(digits ? `${currentCode} ${formatted}` : '');
+                            };
+                            
+                            return (
+                              <FormItem>
+                                <FormLabel className="text-zinc-300 text-sm">Phone Number *</FormLabel>
+                                <div className="flex gap-2">
+                                  <Select value={currentCode} onValueChange={handleCodeChange}>
+                                    <SelectTrigger className="w-[120px] h-12 bg-zinc-900 border-zinc-700 text-white shrink-0">
+                                      <SelectValue>
+                                        {COUNTRY_CODES.find(c => c.code === currentCode)?.flag} {currentCode}
+                                      </SelectValue>
+                                    </SelectTrigger>
+                                    <SelectContent className="bg-zinc-900 border-zinc-700 max-h-60">
+                                      {COUNTRY_CODES.map((country) => (
+                                        <SelectItem 
+                                          key={country.code} 
+                                          value={country.code} 
+                                          className="text-white hover:bg-zinc-800"
+                                        >
+                                          <span className="flex items-center gap-2">
+                                            <span>{country.flag}</span>
+                                            <span>{country.code}</span>
+                                            <span className="text-zinc-400 text-xs">{country.country}</span>
+                                          </span>
+                                        </SelectItem>
+                                      ))}
+                                    </SelectContent>
+                                  </Select>
+                                  <FormControl>
+                                    <Input 
+                                      type="tel"
+                                      value={localNumber}
+                                      onChange={handleNumberChange}
+                                      className="h-12 bg-zinc-900 border-zinc-700 text-white placeholder:text-zinc-500 focus:border-gold flex-1"
+                                      placeholder="56 591 1000"
+                                    />
+                                  </FormControl>
+                                </div>
+                                <FormMessage className="text-red-400 text-xs" />
+                              </FormItem>
+                            );
+                          }}
                         />
                       </div>
 
