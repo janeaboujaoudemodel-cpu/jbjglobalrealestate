@@ -24,6 +24,53 @@ const APPROVED_CONTACT_INFO = {
   website: 'jjglobalcapital.com',
 };
 
+// Sanitize AI output to remove any unapproved contact information
+function sanitizeContactInfo(text: string): string {
+  // UAE phone number patterns (various formats)
+  const phonePatterns = [
+    /\+971[\s\-]?5[0-9][\s\-]?[0-9]{3}[\s\-]?[0-9]{4}/g,
+    /\+971[\s\-]?[0-9]{2}[\s\-]?[0-9]{3}[\s\-]?[0-9]{4}/g,
+    /0?5[0-9][\s\-]?[0-9]{3}[\s\-]?[0-9]{4}/g,
+    /\+971[\s\-]?[0-9]{9,10}/g,
+  ];
+  
+  // Email pattern
+  const emailPattern = /[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}/g;
+  
+  let sanitized = text;
+  
+  // Replace any phone numbers that aren't our approved one
+  phonePatterns.forEach(pattern => {
+    sanitized = sanitized.replace(pattern, (match) => {
+      // Normalize for comparison
+      const normalized = match.replace(/[\s\-]/g, '');
+      if (normalized === '+97156591 1000' || normalized === '+971565911000' || normalized === '565911000') {
+        return match; // Keep approved number
+      }
+      return APPROVED_CONTACT_INFO.phone; // Replace with approved
+    });
+  });
+  
+  // Replace any emails that aren't our approved ones
+  sanitized = sanitized.replace(emailPattern, (match) => {
+    const lowerMatch = match.toLowerCase();
+    if (
+      lowerMatch === 'contact@jjglobalcapital.com' ||
+      lowerMatch === 'privacy@jjglobalcapital.com' ||
+      lowerMatch === 'partnerships@jjglobalcapital.com' ||
+      lowerMatch === 'collaboration@jjglobalcapital.com' ||
+      lowerMatch === 'careers@jjglobalcapital.com' ||
+      lowerMatch === 'security@jjglobalcapital.com' ||
+      lowerMatch === 'jane@jjglobalcapital.com'
+    ) {
+      return match; // Keep approved emails
+    }
+    return APPROVED_CONTACT_INFO.email; // Replace with approved
+  });
+  
+  return sanitized;
+}
+
 const systemPrompt = `You are the AI Travel & Property Concierge for JJ Global Capital, a real estate brokerage firm in Dubai, UAE. Your role is to create comprehensive, personalized travel and property viewing itineraries for clients visiting the UAE.
 
 **CRITICAL CONTACT INFORMATION RULES:**
@@ -33,6 +80,7 @@ const systemPrompt = `You are the AI Travel & Property Concierge for JJ Global C
 - Website: ${APPROVED_CONTACT_INFO.website}
 - NEVER invent, generate, or use any other phone number or email address
 - If unsure, always direct users to ${APPROVED_CONTACT_INFO.email}
+- DO NOT include contact information in itinerary body - it will be appended automatically
 
 **Your Expertise:**
 - Dubai & UAE real estate market
@@ -76,16 +124,25 @@ const systemPrompt = `You are the AI Travel & Property Concierge for JJ Global C
 - Use clear headers and bullet points
 - Include specific times and locations
 - Add practical tips and notes
-- End with an invitation to submit the plan to our team
-
-**Contact Information (USE ONLY THESE):**
-- Phone: ${APPROVED_CONTACT_INFO.phone}
-- Email: ${APPROVED_CONTACT_INFO.email}
-- Website: ${APPROVED_CONTACT_INFO.website}
+- DO NOT include contact details at the end - they will be added automatically
 
 **Important:** JJ Global Capital provides brokerage support and partner introductions only. We do not provide legal, mortgage, financial, or investment advice.
 
 Always be warm, professional, and enthusiastic about helping them discover the UAE. Tailor recommendations to their stated budget, interests, and travel style.`;
+
+// Official contact block to append to all responses
+const CONTACT_BLOCK = `
+
+---
+
+**Ready to Make This Happen?**
+
+Contact JJ Global Capital to book your personalized UAE experience:
+- 📞 ${APPROVED_CONTACT_INFO.phone}
+- 📧 ${APPROVED_CONTACT_INFO.email}
+- 🌐 ${APPROVED_CONTACT_INFO.website}
+
+Our team will coordinate all arrangements through our trusted partner network.`;
 
 serve(async (req) => {
   if (req.method === "OPTIONS") {
@@ -157,7 +214,13 @@ serve(async (req) => {
     }
 
     const data = await response.json();
-    const aiResponse = data.choices?.[0]?.message?.content || "I apologize, but I couldn't generate a response. Please try again.";
+    let aiResponse = data.choices?.[0]?.message?.content || "I apologize, but I couldn't generate a response. Please try again.";
+
+    // CRITICAL: Sanitize any unapproved contact info from AI output
+    aiResponse = sanitizeContactInfo(aiResponse);
+    
+    // Append official contact block (code-controlled, not AI-generated)
+    aiResponse = aiResponse + CONTACT_BLOCK;
 
     return new Response(
       JSON.stringify({ response: aiResponse }),
