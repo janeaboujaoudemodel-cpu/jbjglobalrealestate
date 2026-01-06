@@ -11,6 +11,10 @@ const corsHeaders = {
 const RATE_LIMIT_WINDOW_MINUTES = 5;
 const MAX_REQUESTS_PER_WINDOW = 10;
 
+// Auto-block configuration
+const AUTO_BLOCK_THRESHOLD = 5; // Block after 5 rate limit violations
+const AUTO_BLOCK_DURATION_HOURS = 12; // Block for 12 hours
+
 // Rate limit entry type
 interface RateLimitEntry {
   id: string;
@@ -74,11 +78,12 @@ async function checkIPBlocklist(
   }
 }
 
-// Rate limiting function
+// Rate limiting function with auto-block capability
 async function checkRateLimit(
   supabaseAdmin: any,
-  rateKey: string
-): Promise<{ allowed: boolean; retryAfterSeconds?: number }> {
+  rateKey: string,
+  clientIp: string
+): Promise<{ allowed: boolean; retryAfterSeconds?: number; shouldAutoBlock?: boolean }> {
   const functionName = "validate-discount-code";
   const windowStart = new Date(Date.now() - RATE_LIMIT_WINDOW_MINUTES * 60 * 1000);
 
@@ -104,7 +109,16 @@ async function checkRateLimit(
       const windowEndTime = new Date(entry.window_start).getTime() + RATE_LIMIT_WINDOW_MINUTES * 60 * 1000;
       const retryAfterSeconds = Math.ceil((windowEndTime - Date.now()) / 1000);
       console.warn(`Rate limit exceeded for key: ${rateKey.substring(0, 8)}***`);
-      return { allowed: false, retryAfterSeconds: Math.max(retryAfterSeconds, 0) };
+      
+      // Check if we should auto-block this IP
+      const violationCount = await trackRateLimitViolation(supabaseAdmin, clientIp, functionName);
+      const shouldAutoBlock = violationCount >= AUTO_BLOCK_THRESHOLD;
+      
+      if (shouldAutoBlock) {
+        await autoBlockIP(supabaseAdmin, clientIp, functionName, violationCount);
+      }
+      
+      return { allowed: false, retryAfterSeconds: Math.max(retryAfterSeconds, 0), shouldAutoBlock };
     }
 
     await supabaseAdmin
@@ -123,6 +137,75 @@ async function checkRateLimit(
   }
 
   return { allowed: true };
+}
+
+// Track rate limit violations for auto-blocking
+async function trackRateLimitViolation(
+  supabaseAdmin: any,
+  clientIp: string,
+  functionName: string
+): Promise<number> {
+  const oneDayAgo = new Date(Date.now() - 24 * 60 * 60 * 1000);
+  
+  const { data: violations, error } = await supabaseAdmin
+    .from("function_rate_limits")
+    .select("*")
+    .eq("rate_key", clientIp)
+    .gte("window_start", oneDayAgo.toISOString())
+    .gte("request_count", MAX_REQUESTS_PER_WINDOW);
+
+  if (error) {
+    console.error("Error tracking violations:", error);
+    return 0;
+  }
+
+  return violations?.length || 0;
+}
+
+// Auto-block an IP after exceeding threshold
+async function autoBlockIP(
+  supabaseAdmin: any,
+  clientIp: string,
+  functionName: string,
+  violationCount: number
+): Promise<void> {
+  try {
+    const expiresAt = new Date(Date.now() + AUTO_BLOCK_DURATION_HOURS * 60 * 60 * 1000);
+    
+    const { data: existing } = await supabaseAdmin
+      .from("ip_blocklist")
+      .select("id, block_count")
+      .eq("ip_address", clientIp)
+      .maybeSingle();
+
+    if (existing) {
+      await supabaseAdmin
+        .from("ip_blocklist")
+        .update({
+          expires_at: expiresAt.toISOString(),
+          block_count: (existing.block_count || 1) + 1,
+          reason: `Auto-blocked: ${violationCount} rate limit violations on ${functionName}`,
+          last_attempt_at: new Date().toISOString(),
+        })
+        .eq("id", existing.id);
+      
+      console.warn(`Extended auto-block for IP: ${clientIp.substring(0, 8)}*** (${existing.block_count + 1} blocks)`);
+    } else {
+      await supabaseAdmin
+        .from("ip_blocklist")
+        .insert({
+          ip_address: clientIp,
+          reason: `Auto-blocked: ${violationCount} rate limit violations on ${functionName}`,
+          is_permanent: false,
+          expires_at: expiresAt.toISOString(),
+          block_count: 1,
+        });
+      
+      console.warn(`Auto-blocked IP: ${clientIp.substring(0, 8)}*** for ${AUTO_BLOCK_DURATION_HOURS} hours`);
+    }
+  } catch (err) {
+    console.error("Error auto-blocking IP:", err);
+  }
 }
 
 // Input validation schemas
@@ -231,7 +314,7 @@ serve(async (req) => {
       }
 
       // Check rate limit using user ID
-      const rateLimitResult = await checkRateLimit(supabaseService, user.id);
+      const rateLimitResult = await checkRateLimit(supabaseService, user.id, clientIp);
       if (!rateLimitResult.allowed) {
         console.warn(`Rate limit exceeded for user: ${user.id}`);
         return new Response(

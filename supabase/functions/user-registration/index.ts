@@ -12,6 +12,10 @@ const corsHeaders = {
 const RATE_LIMIT_WINDOW_MINUTES = 15;
 const MAX_REQUESTS_PER_WINDOW = 5; // Max 5 registration attempts per 15 minutes per IP
 
+// Auto-block configuration
+const AUTO_BLOCK_THRESHOLD = 3; // Block after 3 rate limit violations
+const AUTO_BLOCK_DURATION_HOURS = 24; // Block for 24 hours
+
 // Rate limit entry type
 interface RateLimitEntry {
   id: string;
@@ -69,12 +73,12 @@ async function checkIPBlocklist(
   }
 }
 
-// Rate limiting function
+// Rate limiting function with auto-block capability
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
 async function checkRateLimit(
   supabaseAdmin: any,
   clientIp: string
-): Promise<{ allowed: boolean; retryAfterSeconds?: number }> {
+): Promise<{ allowed: boolean; retryAfterSeconds?: number; shouldAutoBlock?: boolean }> {
   const functionName = "user-registration";
   const windowStart = new Date(Date.now() - RATE_LIMIT_WINDOW_MINUTES * 60 * 1000);
 
@@ -102,7 +106,16 @@ async function checkRateLimit(
       const windowEndTime = new Date(entry.window_start).getTime() + RATE_LIMIT_WINDOW_MINUTES * 60 * 1000;
       const retryAfterSeconds = Math.ceil((windowEndTime - Date.now()) / 1000);
       console.warn(`Rate limit exceeded for IP: ${clientIp.substring(0, 8)}***`);
-      return { allowed: false, retryAfterSeconds: Math.max(retryAfterSeconds, 0) };
+      
+      // Check if we should auto-block this IP
+      const violationCount = await trackRateLimitViolation(supabaseAdmin, clientIp, functionName);
+      const shouldAutoBlock = violationCount >= AUTO_BLOCK_THRESHOLD;
+      
+      if (shouldAutoBlock) {
+        await autoBlockIP(supabaseAdmin, clientIp, functionName, violationCount);
+      }
+      
+      return { allowed: false, retryAfterSeconds: Math.max(retryAfterSeconds, 0), shouldAutoBlock };
     }
 
     // Increment counter
@@ -123,6 +136,79 @@ async function checkRateLimit(
   }
 
   return { allowed: true };
+}
+
+// Track rate limit violations for auto-blocking
+async function trackRateLimitViolation(
+  supabaseAdmin: any,
+  clientIp: string,
+  functionName: string
+): Promise<number> {
+  const oneDayAgo = new Date(Date.now() - 24 * 60 * 60 * 1000);
+  
+  // Count how many times this IP has exceeded rate limits in the past 24 hours
+  const { data: violations, error } = await supabaseAdmin
+    .from("function_rate_limits")
+    .select("*")
+    .eq("rate_key", clientIp)
+    .gte("window_start", oneDayAgo.toISOString())
+    .gte("request_count", MAX_REQUESTS_PER_WINDOW);
+
+  if (error) {
+    console.error("Error tracking violations:", error);
+    return 0;
+  }
+
+  return violations?.length || 0;
+}
+
+// Auto-block an IP after exceeding threshold
+async function autoBlockIP(
+  supabaseAdmin: any,
+  clientIp: string,
+  functionName: string,
+  violationCount: number
+): Promise<void> {
+  try {
+    const expiresAt = new Date(Date.now() + AUTO_BLOCK_DURATION_HOURS * 60 * 60 * 1000);
+    
+    // Check if already blocked
+    const { data: existing } = await supabaseAdmin
+      .from("ip_blocklist")
+      .select("id, block_count")
+      .eq("ip_address", clientIp)
+      .maybeSingle();
+
+    if (existing) {
+      // Update existing block - extend duration and increment count
+      await supabaseAdmin
+        .from("ip_blocklist")
+        .update({
+          expires_at: expiresAt.toISOString(),
+          block_count: (existing.block_count || 1) + 1,
+          reason: `Auto-blocked: ${violationCount} rate limit violations on ${functionName}`,
+          last_attempt_at: new Date().toISOString(),
+        })
+        .eq("id", existing.id);
+      
+      console.warn(`Extended auto-block for IP: ${clientIp.substring(0, 8)}*** (${existing.block_count + 1} blocks)`);
+    } else {
+      // Create new block
+      await supabaseAdmin
+        .from("ip_blocklist")
+        .insert({
+          ip_address: clientIp,
+          reason: `Auto-blocked: ${violationCount} rate limit violations on ${functionName}`,
+          is_permanent: false,
+          expires_at: expiresAt.toISOString(),
+          block_count: 1,
+        });
+      
+      console.warn(`Auto-blocked IP: ${clientIp.substring(0, 8)}*** for ${AUTO_BLOCK_DURATION_HOURS} hours`);
+    }
+  } catch (err) {
+    console.error("Error auto-blocking IP:", err);
+  }
 }
 
 // Get client IP from request headers
