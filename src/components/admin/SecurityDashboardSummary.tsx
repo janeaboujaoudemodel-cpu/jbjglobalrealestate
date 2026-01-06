@@ -1,7 +1,8 @@
-import { useEffect, useState, useMemo } from "react";
+import { useEffect, useState, useMemo, useCallback } from "react";
 import { supabase } from "@/integrations/supabase/client";
 import { Card } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
+import { Button } from "@/components/ui/button";
 import { ScrollArea } from "@/components/ui/scroll-area";
 import { 
   Shield, 
@@ -13,9 +14,13 @@ import {
   Radio,
   Ban,
   Zap,
-  BarChart3
+  BarChart3,
+  Download,
+  FileText,
+  FileSpreadsheet
 } from "lucide-react";
 import { format, formatDistanceToNow, subDays, subHours, startOfDay, startOfHour } from "date-fns";
+import { toast } from "sonner";
 import {
   AreaChart,
   Area,
@@ -247,6 +252,203 @@ export const SecurityDashboardSummary = () => {
 
   const CHART_COLORS = ['#f97316', '#eab308', '#22c55e', '#3b82f6', '#8b5cf6', '#ec4899'];
 
+  // Export to CSV
+  const exportToCSV = useCallback(() => {
+    const reportDate = format(new Date(), "yyyy-MM-dd_HH-mm");
+    
+    // Build CSV content
+    let csvContent = "JJ Global Capital - Security Report\n";
+    csvContent += `Generated: ${format(new Date(), "PPpp")}\n\n`;
+    
+    // Summary stats
+    csvContent += "=== SUMMARY ===\n";
+    csvContent += `Total Blocked IPs,${totalBlocked}\n`;
+    csvContent += `Auto Blocked,${autoBlocked}\n`;
+    csvContent += `Blocked Today,${blockedToday}\n`;
+    csvContent += `Rate Limit Violations,${rateLimitViolations}\n`;
+    csvContent += `Total Requests Tracked,${totalRequests}\n`;
+    csvContent += `Unique IPs,${uniqueIPs}\n\n`;
+    
+    // Blocked IPs
+    csvContent += "=== BLOCKED IPS ===\n";
+    csvContent += "IP Address,Reason,Blocked At,Is Permanent,Block Count\n";
+    blockedIPs.forEach(ip => {
+      csvContent += `"${ip.ip_address}","${ip.reason || 'N/A'}","${format(new Date(ip.blocked_at), "PPpp")}",${ip.is_permanent},${ip.block_count}\n`;
+    });
+    csvContent += "\n";
+    
+    // Rate Limit Entries
+    csvContent += "=== RATE LIMIT ENTRIES ===\n";
+    csvContent += "Function Name,Rate Key,Request Count,Window Start\n";
+    rateLimits.forEach(entry => {
+      csvContent += `"${entry.function_name}","${entry.rate_key}",${entry.request_count},"${format(new Date(entry.window_start), "PPpp")}"\n`;
+    });
+    csvContent += "\n";
+    
+    // Security Events
+    csvContent += "=== SECURITY EVENTS ===\n";
+    csvContent += "Type,IP Address,Function,Reason,Severity,Timestamp\n";
+    securityEvents.forEach(event => {
+      csvContent += `"${event.type}","${event.ip_address}","${event.function_name || 'N/A'}","${event.reason || 'N/A'}","${event.severity}","${format(new Date(event.timestamp), "PPpp")}"\n`;
+    });
+    
+    // Create and download file
+    const blob = new Blob([csvContent], { type: 'text/csv;charset=utf-8;' });
+    const link = document.createElement('a');
+    link.href = URL.createObjectURL(blob);
+    link.download = `security-report_${reportDate}.csv`;
+    link.click();
+    URL.revokeObjectURL(link.href);
+    
+    toast.success("CSV report downloaded successfully");
+  }, [blockedIPs, rateLimits, securityEvents, totalBlocked, autoBlocked, blockedToday, rateLimitViolations, totalRequests, uniqueIPs]);
+
+  // Export to PDF (HTML-based)
+  const exportToPDF = useCallback(() => {
+    const reportDate = format(new Date(), "yyyy-MM-dd_HH-mm");
+    
+    const htmlContent = `
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="UTF-8">
+  <title>Security Report - JJ Global Capital</title>
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; background: #0a0a0a; color: #fff; padding: 40px; }
+    .header { text-align: center; margin-bottom: 40px; border-bottom: 2px solid #d4af37; padding-bottom: 20px; }
+    .header h1 { color: #d4af37; font-size: 28px; margin-bottom: 8px; }
+    .header p { color: #888; font-size: 14px; }
+    .section { margin-bottom: 32px; }
+    .section-title { color: #d4af37; font-size: 18px; margin-bottom: 16px; display: flex; align-items: center; gap: 8px; }
+    .stats-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 16px; margin-bottom: 32px; }
+    .stat-card { background: #18181b; border: 1px solid #27272a; border-radius: 8px; padding: 20px; text-align: center; }
+    .stat-value { font-size: 32px; font-weight: bold; color: #fff; }
+    .stat-label { color: #888; font-size: 12px; margin-top: 4px; }
+    table { width: 100%; border-collapse: collapse; background: #18181b; border-radius: 8px; overflow: hidden; }
+    th { background: #27272a; color: #d4af37; padding: 12px; text-align: left; font-size: 12px; text-transform: uppercase; }
+    td { padding: 12px; border-bottom: 1px solid #27272a; color: #ccc; font-size: 13px; }
+    tr:last-child td { border-bottom: none; }
+    .badge { display: inline-block; padding: 4px 8px; border-radius: 4px; font-size: 11px; font-weight: 500; }
+    .badge-critical { background: rgba(239, 68, 68, 0.2); color: #f87171; }
+    .badge-high { background: rgba(249, 115, 22, 0.2); color: #fb923c; }
+    .badge-medium { background: rgba(234, 179, 8, 0.2); color: #fbbf24; }
+    .footer { text-align: center; margin-top: 40px; padding-top: 20px; border-top: 1px solid #27272a; color: #666; font-size: 12px; }
+    @media print { body { background: #fff; color: #000; } .stat-card, table { background: #f5f5f5; } th { background: #e5e5e5; color: #000; } td { color: #333; } }
+  </style>
+</head>
+<body>
+  <div class="header">
+    <h1>🛡️ Security Report</h1>
+    <p>JJ Global Capital | Generated: ${format(new Date(), "PPpp")}</p>
+  </div>
+  
+  <div class="stats-grid">
+    <div class="stat-card">
+      <div class="stat-value">${totalBlocked}</div>
+      <div class="stat-label">Total Blocked IPs</div>
+    </div>
+    <div class="stat-card">
+      <div class="stat-value">${autoBlocked}</div>
+      <div class="stat-label">Auto Blocked</div>
+    </div>
+    <div class="stat-card">
+      <div class="stat-value">${blockedToday}</div>
+      <div class="stat-label">Blocked Today</div>
+    </div>
+    <div class="stat-card">
+      <div class="stat-value">${rateLimitViolations}</div>
+      <div class="stat-label">Rate Violations</div>
+    </div>
+    <div class="stat-card">
+      <div class="stat-value">${totalRequests}</div>
+      <div class="stat-label">Total Requests</div>
+    </div>
+    <div class="stat-card">
+      <div class="stat-value">${uniqueIPs}</div>
+      <div class="stat-label">Unique IPs</div>
+    </div>
+  </div>
+  
+  <div class="section">
+    <h2 class="section-title">🚫 Blocked IPs</h2>
+    <table>
+      <thead>
+        <tr>
+          <th>IP Address</th>
+          <th>Reason</th>
+          <th>Blocked At</th>
+          <th>Permanent</th>
+          <th>Block Count</th>
+        </tr>
+      </thead>
+      <tbody>
+        ${blockedIPs.length === 0 ? '<tr><td colspan="5" style="text-align: center; color: #666;">No blocked IPs</td></tr>' : 
+          blockedIPs.map(ip => `
+            <tr>
+              <td><code>${ip.ip_address}</code></td>
+              <td>${ip.reason || 'N/A'}</td>
+              <td>${format(new Date(ip.blocked_at), "PPp")}</td>
+              <td>${ip.is_permanent ? '✓ Yes' : 'No'}</td>
+              <td>${ip.block_count}</td>
+            </tr>
+          `).join('')}
+      </tbody>
+    </table>
+  </div>
+  
+  <div class="section">
+    <h2 class="section-title">⚡ Recent Security Events</h2>
+    <table>
+      <thead>
+        <tr>
+          <th>Type</th>
+          <th>IP Address</th>
+          <th>Function</th>
+          <th>Severity</th>
+          <th>Time</th>
+        </tr>
+      </thead>
+      <tbody>
+        ${securityEvents.length === 0 ? '<tr><td colspan="5" style="text-align: center; color: #666;">No security events</td></tr>' :
+          securityEvents.map(event => `
+            <tr>
+              <td>${event.type === 'auto_blocked' ? '🤖 Auto Blocked' : event.type === 'ip_blocked' ? '🚫 Manual Block' : '⏱️ Rate Limited'}</td>
+              <td><code>${event.ip_address}</code></td>
+              <td>${event.function_name || 'N/A'}</td>
+              <td><span class="badge badge-${event.severity}">${event.severity.toUpperCase()}</span></td>
+              <td>${format(new Date(event.timestamp), "PPp")}</td>
+            </tr>
+          `).join('')}
+      </tbody>
+    </table>
+  </div>
+  
+  <div class="footer">
+    <p>Confidential Security Report | JJ Global Capital © ${new Date().getFullYear()}</p>
+    <p style="margin-top: 4px;">Use Ctrl+P / Cmd+P to print or save as PDF</p>
+  </div>
+</body>
+</html>`;
+    
+    // Open in new window for printing
+    const printWindow = window.open('', '_blank');
+    if (printWindow) {
+      printWindow.document.write(htmlContent);
+      printWindow.document.close();
+      printWindow.focus();
+      
+      // Slight delay to ensure styles are loaded
+      setTimeout(() => {
+        printWindow.print();
+      }, 250);
+      
+      toast.success("PDF report opened - use Print dialog to save");
+    } else {
+      toast.error("Popup blocked. Please allow popups for this site.");
+    }
+  }, [blockedIPs, securityEvents, totalBlocked, autoBlocked, blockedToday, rateLimitViolations, totalRequests, uniqueIPs]);
+
   const getSeverityColor = (severity: string) => {
     switch (severity) {
       case 'critical': return 'bg-red-500/20 text-red-400 border-red-500/30';
@@ -295,14 +497,34 @@ export const SecurityDashboardSummary = () => {
             Real-time security monitoring and threat detection
           </p>
         </div>
-        <Badge 
-          className={`gap-1.5 ${isLive ? 'bg-emerald-500/20 text-emerald-400' : 'bg-zinc-700 text-gray-400'}`}
-          onClick={() => setIsLive(!isLive)}
-          style={{ cursor: 'pointer' }}
-        >
-          <Radio className={`w-3 h-3 ${isLive ? "animate-pulse" : ""}`} />
-          {isLive ? "Live Updates" : "Paused"}
-        </Badge>
+        <div className="flex items-center gap-2">
+          <Button
+            variant="outline"
+            size="sm"
+            onClick={exportToCSV}
+            className="bg-zinc-800 border-zinc-700 text-gray-300 hover:bg-zinc-700 hover:text-white"
+          >
+            <FileSpreadsheet className="w-4 h-4 mr-1.5" />
+            CSV
+          </Button>
+          <Button
+            variant="outline"
+            size="sm"
+            onClick={exportToPDF}
+            className="bg-zinc-800 border-zinc-700 text-gray-300 hover:bg-zinc-700 hover:text-white"
+          >
+            <FileText className="w-4 h-4 mr-1.5" />
+            PDF
+          </Button>
+          <Badge 
+            className={`gap-1.5 ${isLive ? 'bg-emerald-500/20 text-emerald-400' : 'bg-zinc-700 text-gray-400'}`}
+            onClick={() => setIsLive(!isLive)}
+            style={{ cursor: 'pointer' }}
+          >
+            <Radio className={`w-3 h-3 ${isLive ? "animate-pulse" : ""}`} />
+            {isLive ? "Live Updates" : "Paused"}
+          </Badge>
+        </div>
       </div>
 
       {/* Main Stats Grid */}
