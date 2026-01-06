@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useEffect, useState, useMemo } from "react";
 import { supabase } from "@/integrations/supabase/client";
 import { Card } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
@@ -12,9 +12,25 @@ import {
   Clock,
   Radio,
   Ban,
-  Zap
+  Zap,
+  BarChart3
 } from "lucide-react";
-import { format, formatDistanceToNow } from "date-fns";
+import { format, formatDistanceToNow, subDays, subHours, startOfDay, startOfHour } from "date-fns";
+import {
+  AreaChart,
+  Area,
+  BarChart,
+  Bar,
+  XAxis,
+  YAxis,
+  CartesianGrid,
+  Tooltip,
+  ResponsiveContainer,
+  PieChart,
+  Pie,
+  Cell,
+  Legend
+} from "recharts";
 
 interface SecurityEvent {
   id: string;
@@ -167,6 +183,70 @@ export const SecurityDashboardSummary = () => {
   const totalRequests = rateLimits.reduce((sum, entry) => sum + entry.request_count, 0);
   const uniqueIPs = new Set(rateLimits.map((entry) => entry.rate_key)).size;
 
+  // Chart data: Blocked IPs per day (last 7 days)
+  const blockedPerDayData = useMemo(() => {
+    const days = [];
+    for (let i = 6; i >= 0; i--) {
+      const date = startOfDay(subDays(new Date(), i));
+      const nextDate = startOfDay(subDays(new Date(), i - 1));
+      const count = blockedIPs.filter(ip => {
+        const blockedDate = new Date(ip.blocked_at);
+        return blockedDate >= date && blockedDate < nextDate;
+      }).length;
+      days.push({
+        date: format(date, "MMM d"),
+        blocked: count,
+        autoBlocked: blockedIPs.filter(ip => {
+          const blockedDate = new Date(ip.blocked_at);
+          return blockedDate >= date && blockedDate < nextDate && ip.reason?.includes("auto-blocked");
+        }).length,
+      });
+    }
+    return days;
+  }, [blockedIPs]);
+
+  // Chart data: Rate limit violations per hour (last 24 hours)
+  const violationsPerHourData = useMemo(() => {
+    const hours = [];
+    for (let i = 23; i >= 0; i--) {
+      const hour = startOfHour(subHours(new Date(), i));
+      const nextHour = startOfHour(subHours(new Date(), i - 1));
+      const violations = rateLimits.filter(entry => {
+        const config = RATE_LIMIT_CONFIG[entry.function_name];
+        const entryDate = new Date(entry.window_start);
+        return config && entry.request_count >= config.limit && entryDate >= hour && entryDate < nextHour;
+      }).length;
+      const requests = rateLimits.filter(entry => {
+        const entryDate = new Date(entry.window_start);
+        return entryDate >= hour && entryDate < nextHour;
+      }).reduce((sum, entry) => sum + entry.request_count, 0);
+      hours.push({
+        hour: format(hour, "HH:mm"),
+        violations,
+        requests: Math.min(requests, 100), // Cap for visualization
+      });
+    }
+    return hours;
+  }, [rateLimits]);
+
+  // Chart data: Violations by function
+  const violationsByFunctionData = useMemo(() => {
+    const functionViolations: { [key: string]: number } = {};
+    rateLimits.forEach(entry => {
+      const config = RATE_LIMIT_CONFIG[entry.function_name];
+      if (config && entry.request_count >= config.limit) {
+        functionViolations[entry.function_name] = (functionViolations[entry.function_name] || 0) + 1;
+      }
+    });
+    return Object.entries(functionViolations).map(([name, value]) => ({
+      name: name.replace(/-/g, ' ').replace(/\b\w/g, l => l.toUpperCase()),
+      value,
+      fullName: name,
+    }));
+  }, [rateLimits]);
+
+  const CHART_COLORS = ['#f97316', '#eab308', '#22c55e', '#3b82f6', '#8b5cf6', '#ec4899'];
+
   const getSeverityColor = (severity: string) => {
     switch (severity) {
       case 'critical': return 'bg-red-500/20 text-red-400 border-red-500/30';
@@ -275,6 +355,166 @@ export const SecurityDashboardSummary = () => {
           <p className="text-white text-2xl font-bold">{uniqueIPs}</p>
         </Card>
       </div>
+
+      {/* Charts Section */}
+      <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+        {/* Blocked IPs Over Time */}
+        <Card className="bg-zinc-900 border-zinc-800 p-6">
+          <h3 className="text-white font-medium mb-4 flex items-center gap-2">
+            <BarChart3 className="w-4 h-4 text-red-400" />
+            Blocked IPs (Last 7 Days)
+          </h3>
+          <div className="h-[240px]">
+            <ResponsiveContainer width="100%" height="100%">
+              <AreaChart data={blockedPerDayData}>
+                <defs>
+                  <linearGradient id="colorBlocked" x1="0" y1="0" x2="0" y2="1">
+                    <stop offset="5%" stopColor="#ef4444" stopOpacity={0.3}/>
+                    <stop offset="95%" stopColor="#ef4444" stopOpacity={0}/>
+                  </linearGradient>
+                  <linearGradient id="colorAutoBlocked" x1="0" y1="0" x2="0" y2="1">
+                    <stop offset="5%" stopColor="#f97316" stopOpacity={0.3}/>
+                    <stop offset="95%" stopColor="#f97316" stopOpacity={0}/>
+                  </linearGradient>
+                </defs>
+                <CartesianGrid strokeDasharray="3 3" stroke="#27272a" />
+                <XAxis 
+                  dataKey="date" 
+                  stroke="#71717a" 
+                  fontSize={12}
+                  tickLine={false}
+                />
+                <YAxis 
+                  stroke="#71717a" 
+                  fontSize={12}
+                  tickLine={false}
+                  axisLine={false}
+                />
+                <Tooltip 
+                  contentStyle={{ 
+                    backgroundColor: '#18181b', 
+                    border: '1px solid #27272a',
+                    borderRadius: '8px',
+                    color: '#fff'
+                  }}
+                />
+                <Area 
+                  type="monotone" 
+                  dataKey="blocked" 
+                  stroke="#ef4444" 
+                  fillOpacity={1} 
+                  fill="url(#colorBlocked)"
+                  name="Total Blocked"
+                />
+                <Area 
+                  type="monotone" 
+                  dataKey="autoBlocked" 
+                  stroke="#f97316" 
+                  fillOpacity={1} 
+                  fill="url(#colorAutoBlocked)"
+                  name="Auto Blocked"
+                />
+              </AreaChart>
+            </ResponsiveContainer>
+          </div>
+        </Card>
+
+        {/* Rate Limit Violations Per Hour */}
+        <Card className="bg-zinc-900 border-zinc-800 p-6">
+          <h3 className="text-white font-medium mb-4 flex items-center gap-2">
+            <Activity className="w-4 h-4 text-amber-400" />
+            Rate Limit Activity (Last 24 Hours)
+          </h3>
+          <div className="h-[240px]">
+            <ResponsiveContainer width="100%" height="100%">
+              <BarChart data={violationsPerHourData}>
+                <CartesianGrid strokeDasharray="3 3" stroke="#27272a" />
+                <XAxis 
+                  dataKey="hour" 
+                  stroke="#71717a" 
+                  fontSize={10}
+                  tickLine={false}
+                  interval={3}
+                />
+                <YAxis 
+                  stroke="#71717a" 
+                  fontSize={12}
+                  tickLine={false}
+                  axisLine={false}
+                />
+                <Tooltip 
+                  contentStyle={{ 
+                    backgroundColor: '#18181b', 
+                    border: '1px solid #27272a',
+                    borderRadius: '8px',
+                    color: '#fff'
+                  }}
+                />
+                <Bar 
+                  dataKey="violations" 
+                  fill="#f97316" 
+                  radius={[4, 4, 0, 0]}
+                  name="Violations"
+                />
+                <Bar 
+                  dataKey="requests" 
+                  fill="#3b82f6" 
+                  radius={[4, 4, 0, 0]}
+                  opacity={0.5}
+                  name="Requests (capped at 100)"
+                />
+              </BarChart>
+            </ResponsiveContainer>
+          </div>
+        </Card>
+      </div>
+
+      {/* Violations by Function Pie Chart */}
+      {violationsByFunctionData.length > 0 && (
+        <Card className="bg-zinc-900 border-zinc-800 p-6">
+          <h3 className="text-white font-medium mb-4 flex items-center gap-2">
+            <Ban className="w-4 h-4 text-orange-400" />
+            Rate Limit Violations by Function
+          </h3>
+          <div className="h-[280px]">
+            <ResponsiveContainer width="100%" height="100%">
+              <PieChart>
+                <Pie
+                  data={violationsByFunctionData}
+                  cx="50%"
+                  cy="50%"
+                  innerRadius={60}
+                  outerRadius={100}
+                  paddingAngle={2}
+                  dataKey="value"
+                  label={({ name, percent }) => `${name} (${(percent * 100).toFixed(0)}%)`}
+                  labelLine={{ stroke: '#71717a' }}
+                >
+                  {violationsByFunctionData.map((entry, index) => (
+                    <Cell 
+                      key={`cell-${index}`} 
+                      fill={CHART_COLORS[index % CHART_COLORS.length]} 
+                    />
+                  ))}
+                </Pie>
+                <Tooltip 
+                  contentStyle={{ 
+                    backgroundColor: '#18181b', 
+                    border: '1px solid #27272a',
+                    borderRadius: '8px',
+                    color: '#fff'
+                  }}
+                  formatter={(value: number) => [`${value} violations`, 'Count']}
+                />
+                <Legend 
+                  wrapperStyle={{ color: '#a1a1aa' }}
+                  formatter={(value) => <span style={{ color: '#a1a1aa' }}>{value}</span>}
+                />
+              </PieChart>
+            </ResponsiveContainer>
+          </div>
+        </Card>
+      )}
 
       {/* Alert Banner */}
       {(rateLimitViolations > 0 || blockedToday > 0) && (
