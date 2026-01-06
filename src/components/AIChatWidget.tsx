@@ -1188,15 +1188,29 @@ const AIChatWidget = () => {
                     ))}
                     {isLoading && (
                       <motion.div
-                        initial={{ opacity: 0 }}
-                        animate={{ opacity: 1 }}
+                        initial={{ opacity: 0, y: 10 }}
+                        animate={{ opacity: 1, y: 0 }}
                         className="flex gap-2"
                       >
                         <div className="w-8 h-8 rounded-full bg-gradient-to-r from-gold to-gold/60 flex items-center justify-center">
                           <Bot className="w-4 h-4 text-black" />
                         </div>
-                        <div className="bg-white/10 p-3 rounded-xl">
-                          <Loader2 className="w-4 h-4 text-gold animate-spin" />
+                        <div className="bg-white/10 p-3 rounded-xl flex items-center gap-1">
+                          <motion.span
+                            className="w-2 h-2 bg-gold rounded-full"
+                            animate={{ y: [0, -6, 0] }}
+                            transition={{ duration: 0.6, repeat: Infinity, delay: 0 }}
+                          />
+                          <motion.span
+                            className="w-2 h-2 bg-gold rounded-full"
+                            animate={{ y: [0, -6, 0] }}
+                            transition={{ duration: 0.6, repeat: Infinity, delay: 0.15 }}
+                          />
+                          <motion.span
+                            className="w-2 h-2 bg-gold rounded-full"
+                            animate={{ y: [0, -6, 0] }}
+                            transition={{ duration: 0.6, repeat: Infinity, delay: 0.3 }}
+                          />
                         </div>
                       </motion.div>
                     )}
