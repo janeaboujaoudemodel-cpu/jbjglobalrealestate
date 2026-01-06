@@ -142,7 +142,7 @@ serve(async (req) => {
                       <td style="background-color: #1a1a2e; padding: 30px; text-align: center;">
                         <p style="color: #999; font-size: 14px; margin: 0 0 10px 0;">Need assistance? We're here to help.</p>
                         <p style="color: #d4af37; font-size: 14px; margin: 0;">
-                          📧 contact@jjglobalcapital.com | 📞 +971 50 747 9498
+                          📧 contact@jjglobalcapital.com | 📞 +971 56 591 1000
                         </p>
                         <p style="color: #666; font-size: 12px; margin: 20px 0 0 0;">
                           JJ Global Capital provides brokerage support and partner introductions only.<br>

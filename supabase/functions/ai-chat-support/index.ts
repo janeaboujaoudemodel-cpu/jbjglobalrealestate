@@ -323,6 +323,14 @@ async function autoBlockIP(
   }
 }
 
+// Approved contact information - single source of truth for AI responses
+const APPROVED_CONTACT_INFO = {
+  phone: '+971 56 591 1000',
+  email: 'contact@jjglobalcapital.com',
+  privacyEmail: 'privacy@jjglobalcapital.com',
+  website: 'jjglobalcapital.com',
+};
+
 // Input validation schema
 const MessageSchema = z.object({
   role: z.enum(['user', 'assistant', 'system']),
@@ -354,11 +362,11 @@ COMPANY OVERVIEW:
 - Headquarters: Dubai, UAE
 - Serving UAE-based and international clients interested in UAE real estate
 
-CONTACT INFORMATION:
-- Email: contact@jjglobalcapital.com
-- Phone: +971 50 747 9498
-- WhatsApp: +971 50 747 9498
-- Website: jjglobalcapital.com
+CONTACT INFORMATION (USE ONLY THESE - DO NOT INVENT ANY OTHER NUMBERS):
+- Email: ${APPROVED_CONTACT_INFO.email}
+- Phone: ${APPROVED_CONTACT_INFO.phone}
+- WhatsApp: ${APPROVED_CONTACT_INFO.phone}
+- Website: ${APPROVED_CONTACT_INFO.website}
 
 SERVICES:
 
@@ -435,7 +443,7 @@ serve(async (req) => {
       return new Response(
         JSON.stringify({ 
           error: 'Authentication required',
-          response: 'Please sign in to use the AI chat assistant. If you need immediate help, contact our team:\n\n📧 Email: contact@jjglobalcapital.com\n📞 Phone: +971 50 747 9498\n💬 WhatsApp: +971 50 747 9498'
+          response: `Please sign in to use the AI chat assistant. If you need immediate help, contact our team:\n\n📧 Email: ${APPROVED_CONTACT_INFO.email}\n📞 Phone: ${APPROVED_CONTACT_INFO.phone}\n💬 WhatsApp: ${APPROVED_CONTACT_INFO.phone}`
         }),
         { status: 401, headers: { ...corsHeaders, 'Content-Type': 'application/json' } }
       );
@@ -452,7 +460,7 @@ serve(async (req) => {
       return new Response(
         JSON.stringify({ 
           error: 'Invalid authentication token',
-          response: 'Your session has expired. Please sign in again to continue using the AI chat assistant.\n\n📧 Email: contact@jjglobalcapital.com\n📞 Phone: +971 50 747 9498\n💬 WhatsApp: +971 50 747 9498'
+          response: `Your session has expired. Please sign in again to continue using the AI chat assistant.\n\n📧 Email: ${APPROVED_CONTACT_INFO.email}\n📞 Phone: ${APPROVED_CONTACT_INFO.phone}\n💬 WhatsApp: ${APPROVED_CONTACT_INFO.phone}`
         }),
         { status: 401, headers: { ...corsHeaders, 'Content-Type': 'application/json' } }
       );
@@ -480,9 +488,9 @@ serve(async (req) => {
       return new Response(
         JSON.stringify({ 
           error: 'Rate limit exceeded',
-          response: `You've sent too many messages. Please wait ${Math.ceil((rateLimitResult.retryAfterSeconds || 300) / 60)} minutes before trying again, or contact our team directly:\n\n📧 Email: contact@jjglobalcapital.com\n📞 Phone: +971 50 747 9498\n💬 WhatsApp: +971 50 747 9498`
+          response: `You've sent too many messages. Please wait ${Math.ceil((rateLimitResult.retryAfterSeconds || 300) / 60)} minutes before trying again, or contact our team directly:\n\n📧 Email: ${APPROVED_CONTACT_INFO.email}\n📞 Phone: ${APPROVED_CONTACT_INFO.phone}\n💬 WhatsApp: ${APPROVED_CONTACT_INFO.phone}`
         }),
-        { 
+        {
           status: 429, 
           headers: { 
             ...corsHeaders, 
@@ -566,9 +574,9 @@ Response guidelines:
 - For complex inquiries, encourage scheduling a consultation
 
 Contact for human assistance:
-📧 Email: contact@jjglobalcapital.com
-📞 Phone: +971 50 747 9498
-💬 WhatsApp: +971 50 747 9498`
+📧 Email: ${APPROVED_CONTACT_INFO.email}
+📞 Phone: ${APPROVED_CONTACT_INFO.phone}
+💬 WhatsApp: ${APPROVED_CONTACT_INFO.phone}`
       },
       ...history.slice(-10),
       { role: 'user', content: message }
@@ -596,7 +604,7 @@ Contact for human assistance:
       if (response.status === 429) {
         return new Response(JSON.stringify({ 
           error: 'Rate limit exceeded',
-          response: 'I apologize, but we\'re experiencing high demand right now. Please try again in a moment, or contact our team directly:\n\n📧 Email: contact@jjglobalcapital.com\n📞 Phone: +971 50 747 9498\n💬 WhatsApp: +971 50 747 9498'
+          response: `I apologize, but we're experiencing high demand right now. Please try again in a moment, or contact our team directly:\n\n📧 Email: ${APPROVED_CONTACT_INFO.email}\n📞 Phone: ${APPROVED_CONTACT_INFO.phone}\n💬 WhatsApp: ${APPROVED_CONTACT_INFO.phone}`
         }), {
           status: 200,
           headers: { ...corsHeaders, 'Content-Type': 'application/json' },
@@ -606,7 +614,7 @@ Contact for human assistance:
       if (response.status === 402) {
         return new Response(JSON.stringify({ 
           error: 'Service temporarily unavailable',
-          response: 'I apologize, but our AI service is temporarily unavailable. Please contact our team directly for immediate assistance:\n\n📧 Email: contact@jjglobalcapital.com\n📞 Phone: +971 50 747 9498\n💬 WhatsApp: +971 50 747 9498'
+          response: `I apologize, but our AI service is temporarily unavailable. Please contact our team directly for immediate assistance:\n\n📧 Email: ${APPROVED_CONTACT_INFO.email}\n📞 Phone: ${APPROVED_CONTACT_INFO.phone}\n💬 WhatsApp: ${APPROVED_CONTACT_INFO.phone}`
         }), {
           status: 200,
           headers: { ...corsHeaders, 'Content-Type': 'application/json' },
@@ -617,7 +625,7 @@ Contact for human assistance:
     }
 
     const data = await response.json();
-    const aiResponse = data.choices?.[0]?.message?.content || 'I apologize, but I was unable to process your request. Please contact our team directly:\n\n📧 Email: contact@jjglobalcapital.com\n📞 Phone: +971 50 747 9498\n💬 WhatsApp: +971 50 747 9498';
+    const aiResponse = data.choices?.[0]?.message?.content || `I apologize, but I was unable to process your request. Please contact our team directly:\n\n📧 Email: ${APPROVED_CONTACT_INFO.email}\n📞 Phone: ${APPROVED_CONTACT_INFO.phone}\n💬 WhatsApp: ${APPROVED_CONTACT_INFO.phone}`;
 
     return new Response(JSON.stringify({ response: aiResponse }), {
       headers: { ...corsHeaders, 'Content-Type': 'application/json' },
@@ -628,7 +636,7 @@ Contact for human assistance:
     return new Response(
       JSON.stringify({ 
         error: 'An error occurred',
-        response: 'I apologize for the technical difficulty. Please contact our team directly for assistance:\n\n📧 Email: contact@jjglobalcapital.com\n📞 Phone: +971 50 747 9498\n💬 WhatsApp: +971 50 747 9498\n\nOur team is available to help you with any questions.'
+        response: `I apologize for the technical difficulty. Please contact our team directly for assistance:\n\n📧 Email: ${APPROVED_CONTACT_INFO.email}\n📞 Phone: ${APPROVED_CONTACT_INFO.phone}\n💬 WhatsApp: ${APPROVED_CONTACT_INFO.phone}\n\nOur team is available to help you with any questions.`
       }),
       {
         status: 200,
