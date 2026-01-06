@@ -1,5 +1,5 @@
 import { motion } from "framer-motion";
-import JJLogo from "@/components/JJLogo";
+import { JJLogoImage } from "@/components/JJLogoImage";
 
 const ComingSoon = () => {
   return (
@@ -23,7 +23,7 @@ const ComingSoon = () => {
           transition={{ delay: 0.2, duration: 0.6 }}
           className="mb-12"
         >
-          <JJLogo size="lg" className="mx-auto" />
+          <JJLogoImage variant="light" size="xl" className="mx-auto" />
         </motion.div>
 
         {/* Coming Soon Text */}

@@ -7,7 +7,7 @@ import { Label } from "@/components/ui/label";
 import { toast } from "sonner";
 import { Eye, EyeOff, Mail, Lock, ArrowLeft } from "lucide-react";
 import { z } from "zod";
-import JJLogo from "@/components/JJLogo";
+import { JJLogoImage } from "@/components/JJLogoImage";
 
 const emailSchema = z.string().email("Please enter a valid email address");
 const passwordSchema = z.string().min(6, "Password must be at least 6 characters");
@@ -173,7 +173,7 @@ const Auth = forwardRef<HTMLDivElement>((_, ref) => {
           <div className="bg-white border border-gray-200 rounded-2xl p-10 shadow-xl">
             {/* Logo */}
             <div className="flex justify-center mb-8">
-              <JJLogo size="md" />
+              <JJLogoImage variant="light" size="md" />
             </div>
 
             <div className="text-center mb-8">
@@ -251,7 +251,7 @@ const Auth = forwardRef<HTMLDivElement>((_, ref) => {
 
           {/* Logo */}
           <div className="flex justify-center mb-8">
-            <JJLogo size="md" />
+            <JJLogoImage variant="light" size="md" />
           </div>
 
           <div className="text-center mb-8">

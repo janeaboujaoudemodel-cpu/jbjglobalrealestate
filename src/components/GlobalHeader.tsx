@@ -23,7 +23,7 @@ import {
   SheetTrigger,
 } from "@/components/ui/sheet";
 import { ScrollArea } from "@/components/ui/scroll-area";
-import { JJLogoHeader } from "@/components/JJLogo";
+import { JJLogoHeaderImage } from "@/components/JJLogoImage";
 import LanguageSwitcher from "@/components/LanguageSwitcher";
 import GlobalSearchModal from "@/components/GlobalSearchModal";
 
@@ -71,7 +71,7 @@ const GlobalHeader = () => {
         <div className="flex items-center justify-between h-16 lg:h-18">
           {/* Logo - Premium with separation from menu, clickable to home */}
           <Link to="/" className="flex items-center pr-3 sm:pr-6 lg:pr-12 hover:opacity-90 transition-opacity">
-            <JJLogoHeader />
+            <JJLogoHeaderImage />
           </Link>
 
           {/* Desktop Navigation - Single line items with gold underline hover */}
@@ -141,7 +141,7 @@ const GlobalHeader = () => {
               >
                 {/* Menu Header with glassmorphism */}
                 <div className="relative h-28 bg-gradient-to-b from-zinc-900/80 to-black/90 border-b border-gold/20 flex items-end p-5 shrink-0 backdrop-blur-sm">
-                  <JJLogoHeader />
+                  <JJLogoHeaderImage />
                 </div>
 
                 {/* Scrollable Navigation */}

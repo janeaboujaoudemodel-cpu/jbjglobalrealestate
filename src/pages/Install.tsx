@@ -7,7 +7,7 @@ import {
   Wifi, WifiOff, Zap
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
-import JJLogo from "@/components/JJLogo";
+import { JJLogoImage } from "@/components/JJLogoImage";
 
 interface BeforeInstallPromptEvent extends Event {
   prompt: () => Promise<void>;
@@ -90,7 +90,7 @@ const Install = () => {
             animate={{ opacity: 1, y: 0 }}
             className="mb-8"
           >
-            <JJLogo size="lg" />
+            <JJLogoImage variant="light" size="lg" />
           </motion.div>
 
           {/* Title */}
