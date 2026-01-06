@@ -20,7 +20,8 @@ import {
   Trash2,
   Activity,
   Ban,
-  TrendingUp
+  TrendingUp,
+  Radio
 } from "lucide-react";
 import { format, formatDistanceToNow } from "date-fns";
 
@@ -48,6 +49,7 @@ export const RateLimitDashboard = () => {
   const [loading, setLoading] = useState(true);
   const [selectedFunction, setSelectedFunction] = useState<string>("all");
   const [isRefreshing, setIsRefreshing] = useState(false);
+  const [isLive, setIsLive] = useState(true);
 
   const fetchRateLimits = async () => {
     try {
@@ -75,6 +77,55 @@ export const RateLimitDashboard = () => {
   useEffect(() => {
     fetchRateLimits();
   }, [selectedFunction]);
+
+  // Real-time subscription
+  useEffect(() => {
+    if (!isLive) return;
+
+    const channel = supabase
+      .channel('rate-limits-realtime')
+      .on(
+        'postgres_changes',
+        {
+          event: '*',
+          schema: 'public',
+          table: 'function_rate_limits'
+        },
+        (payload) => {
+          console.log('Rate limit update:', payload);
+          
+          if (payload.eventType === 'INSERT') {
+            const newEntry = payload.new as RateLimitEntry;
+            // Check if it matches the filter
+            if (selectedFunction === 'all' || newEntry.function_name === selectedFunction) {
+              setRateLimits(prev => [newEntry, ...prev.slice(0, 99)]);
+              toast.info(`New rate limit entry: ${newEntry.function_name}`, {
+                duration: 2000,
+              });
+            }
+          } else if (payload.eventType === 'UPDATE') {
+            const updatedEntry = payload.new as RateLimitEntry;
+            setRateLimits(prev => 
+              prev.map(entry => 
+                entry.id === updatedEntry.id ? updatedEntry : entry
+              )
+            );
+          } else if (payload.eventType === 'DELETE') {
+            const deletedEntry = payload.old as RateLimitEntry;
+            setRateLimits(prev => 
+              prev.filter(entry => entry.id !== deletedEntry.id)
+            );
+          }
+        }
+      )
+      .subscribe((status) => {
+        console.log('Realtime subscription status:', status);
+      });
+
+    return () => {
+      supabase.removeChannel(channel);
+    };
+  }, [isLive, selectedFunction]);
 
   const handleRefresh = async () => {
     setIsRefreshing(true);
@@ -147,6 +198,18 @@ export const RateLimitDashboard = () => {
           </p>
         </div>
         <div className="flex items-center gap-3">
+          <Button
+            variant={isLive ? "default" : "outline"}
+            size="sm"
+            onClick={() => setIsLive(!isLive)}
+            className={isLive 
+              ? "bg-emerald-600 hover:bg-emerald-700 text-white" 
+              : "border-zinc-700 text-white hover:bg-zinc-800"
+            }
+          >
+            <Radio className={`w-4 h-4 mr-2 ${isLive ? "animate-pulse" : ""}`} />
+            {isLive ? "Live" : "Paused"}
+          </Button>
           <Select value={selectedFunction} onValueChange={setSelectedFunction}>
             <SelectTrigger className="w-48 bg-zinc-950 border-zinc-700 text-white">
               <SelectValue placeholder="Filter by function" />
