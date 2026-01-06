@@ -1546,7 +1546,7 @@ const MarketReport = () => {
       <div class="logo">JJ | GLOBAL CAPITAL</div>
       <p>Part of JJ Holding Group • jjholdinggroup.com</p>
       <p style="margin-top: 10px;">
-        Email: <a href="mailto:invest@jjglobalcapital.com" class="contact-link">invest@jjglobalcapital.com</a> • 
+        Email: <a href="mailto:contact@jjglobalcapital.com" class="contact-link">contact@jjglobalcapital.com</a> • 
         Phone: <a href="tel:+971585802393" class="contact-link">+971 58 580 2393</a>
       </p>
       

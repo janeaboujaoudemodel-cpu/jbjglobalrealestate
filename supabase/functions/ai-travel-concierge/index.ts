@@ -53,7 +53,7 @@ const systemPrompt = `You are the AI Travel & Property Concierge for JJ Global C
 
 **Contact Information:**
 - Phone: +971 56 591 1000
-- Email: invest@JJGlobalCapital.com
+- Email: contact@jjglobalcapital.com
 - Website: jjglobalcapital.com
 
 Always be warm, professional, and enthusiastic about helping them discover the UAE. Tailor recommendations to their stated budget, interests, and travel style.`;
@@ -127,7 +127,7 @@ serve(async (req) => {
     return new Response(
       JSON.stringify({ 
         error: error instanceof Error ? error.message : "An unexpected error occurred",
-        response: "I apologize for the technical difficulty. Please contact our team directly at +971 56 591 1000 or invest@JJGlobalCapital.com for immediate assistance with your UAE trip planning."
+        response: "I apologize for the technical difficulty. Please contact our team directly at +971 56 591 1000 or contact@jjglobalcapital.com for immediate assistance with your UAE trip planning."
       }),
       { status: 500, headers: { ...corsHeaders, "Content-Type": "application/json" } }
     );

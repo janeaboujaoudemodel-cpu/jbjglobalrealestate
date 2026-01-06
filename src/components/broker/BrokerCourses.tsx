@@ -318,7 +318,7 @@ export default function BrokerCourses({ subscription }: BrokerCoursesProps) {
                 Contact to Upgrade
               </Button>
             </a>
-            <a href="mailto:invest@JJGlobalCapital.com">
+            <a href="mailto:contact@jjglobalcapital.com">
               <Button variant="outline" className="border-purple-500/50 text-purple-400 hover:bg-purple-500/10">
                 <Mail className="w-4 h-4 mr-2" />
                 Email Us

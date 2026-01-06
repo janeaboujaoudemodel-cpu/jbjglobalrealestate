@@ -358,10 +358,10 @@ const Concierge = () => {
             variants={staggerContainer}
           >
             {[
-              { icon: Star, title: "24/7 Availability", desc: "Round-the-clock service for your every need" },
+              { icon: Star, title: "Premium Support", desc: "Dedicated service for your every need" },
               { icon: Gem, title: "Exclusive Access", desc: "VIP access to the world's most exclusive venues" },
               { icon: Heart, title: "Personalized Service", desc: "Tailored experiences crafted just for you" },
-              { icon: Camera, title: "Discretion Guaranteed", desc: "Complete privacy and confidentiality" }
+              { icon: Camera, title: "Complete Discretion", desc: "Privacy and confidentiality assured" }
             ].map((item, idx) => (
               <motion.div
                 key={idx}
