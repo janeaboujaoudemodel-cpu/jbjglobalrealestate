@@ -1,6 +1,6 @@
 import { useState } from "react";
 import GlobalHeader from "@/components/GlobalHeader";
-import FloatingWhatsApp from "@/components/FloatingWhatsApp";
+import VoiceConciergeWidget from "@/components/VoiceConciergeWidget";
 import AIChatWidget from "@/components/AIChatWidget";
 import { useLanguage } from "@/contexts/LanguageContext";
 
@@ -19,7 +19,7 @@ const MainLayout = ({ children }: MainLayoutProps) => {
       <main className={`pt-16 lg:pt-18 transition-all duration-300 ${isChatCollapsed ? '' : isRTL ? 'pl-[380px]' : 'pr-[380px]'}`}>
         {children}
       </main>
-      <FloatingWhatsApp />
+      <VoiceConciergeWidget />
       <AIChatWidget 
         isCollapsed={isChatCollapsed} 
         onToggleCollapse={() => setIsChatCollapsed(!isChatCollapsed)} 
