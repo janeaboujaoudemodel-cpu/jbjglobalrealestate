@@ -21,6 +21,54 @@ interface RateLimitEntry {
   request_count: number;
 }
 
+// Check if IP is blocklisted
+async function checkIPBlocklist(
+  supabaseAdmin: any,
+  clientIp: string
+): Promise<{ blocked: boolean; reason?: string }> {
+  try {
+    const { data, error } = await supabaseAdmin
+      .from("ip_blocklist")
+      .select("*")
+      .eq("ip_address", clientIp)
+      .maybeSingle();
+
+    if (error) {
+      console.error("IP blocklist check error:", error);
+      return { blocked: false };
+    }
+
+    if (!data) {
+      return { blocked: false };
+    }
+
+    // Check if block has expired
+    if (data.expires_at && new Date(data.expires_at) < new Date()) {
+      // Block expired, remove it
+      await supabaseAdmin
+        .from("ip_blocklist")
+        .delete()
+        .eq("id", data.id);
+      return { blocked: false };
+    }
+
+    // Update last attempt and block count
+    await supabaseAdmin
+      .from("ip_blocklist")
+      .update({ 
+        last_attempt_at: new Date().toISOString(),
+        block_count: (data.block_count || 1) + 1
+      })
+      .eq("id", data.id);
+
+    console.warn(`Blocked IP attempted access: ${clientIp.substring(0, 8)}***`);
+    return { blocked: true, reason: data.reason || "IP is blocked" };
+  } catch (err) {
+    console.error("IP blocklist check exception:", err);
+    return { blocked: false };
+  }
+}
+
 // Rate limiting function
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
 async function checkRateLimit(
@@ -189,8 +237,22 @@ serve(async (req: Request) => {
       );
     }
 
-    // Check rate limit before processing
+    // Check IP blocklist first
     const clientIp = getClientIp(req);
+    const blocklistResult = await checkIPBlocklist(supabaseAdmin, clientIp);
+    
+    if (blocklistResult.blocked) {
+      console.warn(`Blocked IP attempted registration: ${clientIp.substring(0, 8)}***`);
+      return new Response(
+        JSON.stringify({ error: "Access denied" }),
+        { 
+          status: 403, 
+          headers: { ...corsHeaders, "Content-Type": "application/json" } 
+        }
+      );
+    }
+
+    // Check rate limit before processing
     const rateLimitResult = await checkRateLimit(supabaseAdmin, clientIp);
 
     if (!rateLimitResult.allowed) {

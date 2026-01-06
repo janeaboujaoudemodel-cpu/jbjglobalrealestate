@@ -693,6 +693,45 @@ export type Database = {
         }
         Relationships: []
       }
+      ip_blocklist: {
+        Row: {
+          block_count: number
+          blocked_at: string
+          blocked_by: string | null
+          created_at: string
+          expires_at: string | null
+          id: string
+          ip_address: string
+          is_permanent: boolean
+          last_attempt_at: string | null
+          reason: string | null
+        }
+        Insert: {
+          block_count?: number
+          blocked_at?: string
+          blocked_by?: string | null
+          created_at?: string
+          expires_at?: string | null
+          id?: string
+          ip_address: string
+          is_permanent?: boolean
+          last_attempt_at?: string | null
+          reason?: string | null
+        }
+        Update: {
+          block_count?: number
+          blocked_at?: string
+          blocked_by?: string | null
+          created_at?: string
+          expires_at?: string | null
+          id?: string
+          ip_address?: string
+          is_permanent?: boolean
+          last_attempt_at?: string | null
+          reason?: string | null
+        }
+        Relationships: []
+      }
       leads: {
         Row: {
           created_at: string
