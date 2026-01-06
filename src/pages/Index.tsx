@@ -572,7 +572,7 @@ const Index = () => {
                 <div className="relative rounded-2xl overflow-hidden border border-zinc-800 shadow-2xl shadow-black/80">
                   <img 
                     src={founderProfessional} 
-                    alt="Jane Abou Jaoude - Founder & Chairwoman" 
+                    alt="Jane Abou Jaoude - Founder & CEO" 
                     className="w-full h-full object-cover object-top"
                   />
                   {/* Gradient overlay at bottom */}
@@ -581,7 +581,7 @@ const Index = () => {
                 
                 {/* Name badge */}
                 <div className="absolute bottom-6 left-6 right-6 bg-black/60 backdrop-blur-md border border-gold/30 rounded-xl p-4">
-                  <p className="text-gold text-xs uppercase tracking-[0.2em] mb-1">Founder & Chairwoman</p>
+                  <p className="text-gold text-xs uppercase tracking-[0.2em] mb-1">Founder & CEO</p>
                   <h3 className="text-white text-xl font-bold" style={{ fontFamily: "Poppins, sans-serif" }}>
                     Jane Abou Jaoude
                   </h3>
