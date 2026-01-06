@@ -68,22 +68,20 @@ const GlobalHeader = () => {
   return (
     <header className="fixed top-0 left-0 right-0 z-[9999] bg-gradient-to-b from-black via-black/98 to-black/95 backdrop-blur-xl border-b border-gold/10 shadow-lg shadow-black/30">
       <div className="container mx-auto px-4 sm:px-6">
-        <div className="flex items-center h-16 lg:h-[72px]">
-          {/* Logo Block - Left aligned with clear boundary */}
+        <div className="flex items-center justify-between h-16 lg:h-[72px]">
+          
+          {/* LEFT: Logo Brand Block */}
           <Link to="/" className="flex items-center shrink-0 hover:opacity-90 transition-opacity">
             <JJLogoHeaderImage />
           </Link>
 
-          {/* Gold Divider Line - Separates brand from nav */}
-          <div className="hidden md:block h-8 w-px bg-gradient-to-b from-transparent via-gold/40 to-transparent mx-4 lg:mx-6 xl:mx-8 shrink-0" />
-
-          {/* Desktop Navigation - Centered with even spacing */}
-          <nav className="hidden md:flex items-center flex-1 justify-center gap-1 lg:gap-2">
+          {/* CENTER: Desktop Navigation with proper separation */}
+          <nav className="hidden md:flex items-center gap-1 lg:gap-2 ml-10 lg:ml-16 xl:ml-20">
             {mainNavLinks.map((link) => (
               <Link
                 key={link.href}
                 to={link.href}
-                className={`px-3 lg:px-4 xl:px-5 py-2 text-[13px] lg:text-[14px] font-medium whitespace-nowrap transition-all relative group ${
+                className={`px-3 lg:px-4 py-2 text-[13px] lg:text-sm font-medium whitespace-nowrap transition-all relative group ${
                   isActive(link.href) 
                     ? "text-gold" 
                     : "text-zinc-300 hover:text-gold"
@@ -98,11 +96,8 @@ const GlobalHeader = () => {
             ))}
           </nav>
 
-          {/* Right spacer for symmetry */}
-          <div className="hidden md:block w-4 lg:w-8 shrink-0" />
-
-          {/* Right Side Actions - Gold icons */}
-          <div className="flex items-center gap-1 sm:gap-2 shrink-0">
+          {/* RIGHT: Actions (search, favorites, menu, user) */}
+          <div className="flex items-center gap-1 sm:gap-2 shrink-0 ml-auto">
             {/* Search Icon - Opens Global Search Modal */}
             <Button
               variant="ghost"
