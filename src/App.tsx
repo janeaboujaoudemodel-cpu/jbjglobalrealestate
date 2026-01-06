@@ -56,6 +56,9 @@ import DesignBuild from "./pages/services/DesignBuild";
 import LawFirm from "./pages/services/LawFirm";
 import ReferralPartner from "./pages/ReferralPartner";
 import Install from "./pages/Install";
+import CRM from "./pages/CRM";
+import CRMLeadDetail from "./pages/CRMLeadDetail";
+import AdminCRM from "./pages/AdminCRM";
 
 const queryClient = new QueryClient();
 
@@ -122,6 +125,9 @@ const App = () => (
                     <Route path="/services/law-firm" element={<LawFirm />} />
                     <Route path="/referral-partner" element={<ReferralPartner />} />
                     <Route path="/install" element={<Install />} />
+                    <Route path="/crm" element={<CRM />} />
+                    <Route path="/crm/leads/:id" element={<CRMLeadDetail />} />
+                    <Route path="/admin/crm" element={<AdminCRM />} />
                     <Route path="*" element={<NotFound />} />
                     </Routes>
                   </MainLayout>
