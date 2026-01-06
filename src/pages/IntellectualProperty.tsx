@@ -72,13 +72,13 @@ const IntellectualProperty = () => {
               {[
                 { title: "AI Property Evaluator", desc: "Proprietary valuation algorithms" },
                 { title: "AI Rental Index Analyzer", desc: "Market analysis technology" },
-                { title: "AI Investment Advisor", desc: "Financial recommendation engine" },
+                { title: "AI Budget Planner", desc: "Affordability analysis engine" },
                 { title: "AI Document Scanner", desc: "Intelligent parsing system" },
                 { title: "AI Interior Designer", desc: "Design generation technology" },
                 { title: "AI Travel Concierge", desc: "Luxury travel planning system" },
                 { title: "Property Comparison Engine", desc: "Multi-property analysis tool" },
                 { title: "Broker Toolkit Platform", desc: "Professional tools suite" },
-                { title: "JJ Academy Courses", desc: "Educational content library" },
+                { title: "Guides & Resources", desc: "Educational content library" },
                 { title: "Platform UI/UX Design", desc: "Interface designs & layouts" },
               ].map((item, index) => (
                 <div key={index} className="bg-zinc-900/50 rounded-xl p-4 border border-zinc-800 hover:border-gold/30 transition-colors">
@@ -246,7 +246,7 @@ const IntellectualProperty = () => {
               For licensing requests, partnership inquiries, or to report intellectual property violations, please contact our legal department:
             </p>
             <div className="space-y-2 text-zinc-400">
-              <p><span className="text-white">Email:</span> legal@jjglobalcapital.com</p>
+              <p><span className="text-white">Email:</span> privacy@jjglobalcapital.com</p>
               <p><span className="text-white">Legal Representative:</span> Jane Abou Jaoude, Founder & CEO</p>
               <p><span className="text-white">Jurisdiction:</span> Dubai, United Arab Emirates</p>
             </div>

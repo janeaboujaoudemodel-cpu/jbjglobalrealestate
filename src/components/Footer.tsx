@@ -159,7 +159,7 @@ const Footer = () => {
           </Link>
           <p className="text-gold text-xs uppercase tracking-[0.2em] mt-3 mb-2">Real Estate Brokerage</p>
           <p className="text-zinc-400 text-base md:text-lg max-w-2xl mx-auto leading-relaxed">
-            A licensed real estate brokerage specializing in property sales, leasing, and holiday homes 
+            Real estate brokerage specializing in property sales, leasing, and holiday homes 
             across the UAE — with trusted partner introductions for legal, mortgage, and specialist services.
           </p>
         </div>
@@ -343,7 +343,7 @@ const Footer = () => {
               Jane Abou Jaoude and JJ Global Capital. Unauthorized reproduction is strictly prohibited.
             </p>
             <p className="text-zinc-500 text-xs leading-relaxed mb-4" dir="rtl">
-              جي جي جلوبال كابيتال هي شركة وساطة عقارية مرخصة. نحن لا نقدم استشارات قانونية أو تمويلية أو استثمارية.
+              جي جي جلوبال كابيتال تقدم خدمات وساطة عقارية وتقديم إحالات فقط. نحن لا نقدم استشارات قانونية أو تمويلية أو استثمارية. الخدمات المقدمة من الجهات الأخرى تتم عبر جهات مستقلة ومرخصة.
             </p>
             <div className="flex flex-wrap items-center justify-center gap-2 text-xs text-zinc-600">
               <span>Real Estate Brokerage</span>
@@ -363,7 +363,7 @@ const Footer = () => {
             </p>
             <p className="text-xs text-zinc-600">
               Created and Developed by{" "}
-              <span className="text-gold font-medium">Jane Abou Jaoude</span> | Licensed Brokerage Services Only
+              <span className="text-gold font-medium">Jane Abou Jaoude</span> | Brokerage Services Only
             </p>
             <p className="mt-2">
               Powered by{" "}
