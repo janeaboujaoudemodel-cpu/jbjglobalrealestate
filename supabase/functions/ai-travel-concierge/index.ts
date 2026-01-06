@@ -1,5 +1,12 @@
 import { serve } from "https://deno.land/std@0.168.0/http/server.ts";
+import { createClient } from "https://esm.sh/@supabase/supabase-js@2.39.3";
 import { z } from "https://deno.land/x/zod@v3.22.4/mod.ts";
+
+// Security constants
+const RATE_LIMIT_WINDOW_MINUTES = 5;
+const MAX_REQUESTS_PER_WINDOW = 15;
+const AUTO_BLOCK_THRESHOLD = 5;
+const AUTO_BLOCK_DURATION_HOURS = 12;
 
 // Allowed origins for CORS
 const ALLOWED_ORIGINS = [
@@ -21,6 +28,183 @@ function getCorsHeaders(req: Request) {
     "Access-Control-Allow-Headers": "authorization, x-client-info, apikey, content-type",
     "Access-Control-Allow-Methods": "POST, OPTIONS",
   };
+}
+
+// Get client IP from request headers
+function getClientIp(req: Request): string {
+  return req.headers.get("x-forwarded-for")?.split(",")[0]?.trim() ||
+         req.headers.get("x-real-ip") ||
+         "unknown";
+}
+
+// Check if IP is blocked
+async function checkIPBlocklist(supabaseAdmin: any, clientIp: string): Promise<{ blocked: boolean; reason?: string }> {
+  if (clientIp === "unknown") return { blocked: false };
+  
+  const { data: blockEntry } = await supabaseAdmin
+    .from("ip_blocklist")
+    .select("*")
+    .eq("ip_address", clientIp)
+    .single();
+
+  if (!blockEntry) return { blocked: false };
+
+  // Check if block has expired
+  if (blockEntry.expires_at && new Date(blockEntry.expires_at) < new Date()) {
+    // Block expired, remove it
+    await supabaseAdmin.from("ip_blocklist").delete().eq("id", blockEntry.id);
+    return { blocked: false };
+  }
+
+  // Update last attempt
+  await supabaseAdmin
+    .from("ip_blocklist")
+    .update({ last_attempt_at: new Date().toISOString() })
+    .eq("id", blockEntry.id);
+
+  return { blocked: true, reason: blockEntry.reason || "IP blocked" };
+}
+
+// Check rate limit
+async function checkRateLimit(
+  supabaseAdmin: any,
+  rateKey: string,
+  clientIp: string
+): Promise<{ allowed: boolean; remaining: number }> {
+  const windowStart = new Date(Date.now() - RATE_LIMIT_WINDOW_MINUTES * 60 * 1000).toISOString();
+  const functionName = "ai-travel-concierge";
+
+  const { data: existing } = await supabaseAdmin
+    .from("function_rate_limits")
+    .select("*")
+    .eq("rate_key", rateKey)
+    .eq("function_name", functionName)
+    .gte("window_start", windowStart)
+    .order("window_start", { ascending: false })
+    .limit(1)
+    .single();
+
+  if (existing) {
+    if (existing.request_count >= MAX_REQUESTS_PER_WINDOW) {
+      await trackRateLimitViolation(supabaseAdmin, clientIp, functionName);
+      return { allowed: false, remaining: 0 };
+    }
+
+    await supabaseAdmin
+      .from("function_rate_limits")
+      .update({ request_count: existing.request_count + 1 })
+      .eq("id", existing.id);
+
+    return { allowed: true, remaining: MAX_REQUESTS_PER_WINDOW - existing.request_count - 1 };
+  }
+
+  await supabaseAdmin.from("function_rate_limits").insert({
+    rate_key: rateKey,
+    function_name: functionName,
+    request_count: 1,
+    window_start: new Date().toISOString(),
+  });
+
+  return { allowed: true, remaining: MAX_REQUESTS_PER_WINDOW - 1 };
+}
+
+// Track rate limit violations and auto-block if threshold exceeded
+async function trackRateLimitViolation(
+  supabaseAdmin: any,
+  clientIp: string,
+  functionName: string
+): Promise<void> {
+  if (clientIp === "unknown") return;
+
+  const oneHourAgo = new Date(Date.now() - 60 * 60 * 1000).toISOString();
+  
+  const { count } = await supabaseAdmin
+    .from("function_rate_limits")
+    .select("*", { count: "exact", head: true })
+    .eq("function_name", functionName)
+    .gte("window_start", oneHourAgo);
+
+  const violationCount = (count || 0) + 1;
+
+  if (violationCount >= AUTO_BLOCK_THRESHOLD) {
+    await autoBlockIP(supabaseAdmin, clientIp, functionName, violationCount);
+  }
+}
+
+// Auto-block IP after repeated violations
+async function autoBlockIP(
+  supabaseAdmin: any,
+  clientIp: string,
+  functionName: string,
+  violationCount: number
+): Promise<void> {
+  const expiresAt = new Date(Date.now() + AUTO_BLOCK_DURATION_HOURS * 60 * 60 * 1000).toISOString();
+  const reason = `Auto-blocked: ${violationCount} rate limit violations in ${functionName}`;
+
+  const { data: existing } = await supabaseAdmin
+    .from("ip_blocklist")
+    .select("id, block_count")
+    .eq("ip_address", clientIp)
+    .single();
+
+  if (existing) {
+    await supabaseAdmin
+      .from("ip_blocklist")
+      .update({
+        expires_at: expiresAt,
+        reason,
+        block_count: existing.block_count + 1,
+        blocked_at: new Date().toISOString(),
+      })
+      .eq("id", existing.id);
+  } else {
+    await supabaseAdmin.from("ip_blocklist").insert({
+      ip_address: clientIp,
+      reason,
+      expires_at: expiresAt,
+      is_permanent: false,
+      blocked_by: "system",
+      block_count: 1,
+    });
+  }
+
+  // Send notification
+  await sendAutoBlockNotification(clientIp, functionName, violationCount);
+}
+
+// Send email notification when IP is auto-blocked
+async function sendAutoBlockNotification(
+  clientIp: string,
+  functionName: string,
+  violationCount: number
+): Promise<void> {
+  const RESEND_API_KEY = Deno.env.get("RESEND_API_KEY");
+  if (!RESEND_API_KEY) return;
+
+  try {
+    await fetch("https://api.resend.com/emails", {
+      method: "POST",
+      headers: {
+        Authorization: `Bearer ${RESEND_API_KEY}`,
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({
+        from: "JJ Global Capital Security <security@jjglobalcapital.com>",
+        to: ["security@jjglobalcapital.com"],
+        subject: `[Security Alert] IP Auto-Blocked: ${clientIp}`,
+        html: `
+          <h2>IP Auto-Block Alert</h2>
+          <p><strong>IP Address:</strong> ${clientIp}</p>
+          <p><strong>Function:</strong> ${functionName}</p>
+          <p><strong>Violations:</strong> ${violationCount}</p>
+          <p><strong>Block Duration:</strong> ${AUTO_BLOCK_DURATION_HOURS} hours</p>
+          <p><strong>Time:</strong> ${new Date().toISOString()}</p>
+        `,
+      }),
+    });
+  } catch (error) {
+    console.error("Failed to send auto-block notification:", error);
+  }
 }
 
 // Input validation schema
@@ -169,6 +353,64 @@ serve(async (req) => {
   }
 
   try {
+    // Initialize Supabase clients
+    const supabaseUrl = Deno.env.get("SUPABASE_URL")!;
+    const supabaseAnonKey = Deno.env.get("SUPABASE_ANON_KEY")!;
+    const supabaseServiceKey = Deno.env.get("SUPABASE_SERVICE_ROLE_KEY")!;
+
+    const supabaseAdmin = createClient(supabaseUrl, supabaseServiceKey);
+
+    // Get authorization header
+    const authHeader = req.headers.get("Authorization");
+    if (!authHeader?.startsWith("Bearer ")) {
+      return new Response(
+        JSON.stringify({ error: "Authentication required" }),
+        { status: 401, headers: { ...corsHeaders, "Content-Type": "application/json" } }
+      );
+    }
+
+    // Verify user authentication
+    const supabaseAuth = createClient(supabaseUrl, supabaseAnonKey, {
+      global: { headers: { Authorization: authHeader } }
+    });
+
+    const { data: { user }, error: userError } = await supabaseAuth.auth.getUser();
+
+    if (userError || !user) {
+      console.log("Authentication failed:", userError?.message);
+      return new Response(
+        JSON.stringify({ error: "Invalid or expired session" }),
+        { status: 401, headers: { ...corsHeaders, "Content-Type": "application/json" } }
+      );
+    }
+
+    const userId = user.id;
+    const userEmail = user.email || "unknown";
+    const clientIp = getClientIp(req);
+
+    console.log(`Travel concierge request from user: ${userEmail}, IP: ${clientIp}`);
+
+    // Check IP blocklist
+    const blockCheck = await checkIPBlocklist(supabaseAdmin, clientIp);
+    if (blockCheck.blocked) {
+      console.log(`Blocked IP attempted access: ${clientIp}`);
+      return new Response(
+        JSON.stringify({ error: "Access denied" }),
+        { status: 403, headers: { ...corsHeaders, "Content-Type": "application/json" } }
+      );
+    }
+
+    // Check rate limit
+    const rateKey = `user:${userId}`;
+    const rateCheck = await checkRateLimit(supabaseAdmin, rateKey, clientIp);
+    if (!rateCheck.allowed) {
+      console.log(`Rate limit exceeded for user: ${userEmail}`);
+      return new Response(
+        JSON.stringify({ error: "Too many requests. Please try again in a few minutes." }),
+        { status: 429, headers: { ...corsHeaders, "Content-Type": "application/json" } }
+      );
+    }
+
     // Parse and validate input
     const rawBody = await req.json();
     const parseResult = RequestSchema.safeParse(rawBody);
