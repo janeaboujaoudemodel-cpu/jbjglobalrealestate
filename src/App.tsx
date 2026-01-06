@@ -26,6 +26,7 @@ import Favorites from "./pages/Favorites";
 import Compare from "./pages/Compare";
 import Auth from "./pages/Auth";
 import Admin from "./pages/Admin";
+import AdminLeads from "./pages/AdminLeads";
 import NotFound from "./pages/NotFound";
 import Terms from "./pages/Terms";
 import Privacy from "./pages/Privacy";
@@ -91,6 +92,7 @@ const App = () => (
                     <Route path="/favorites" element={<Favorites />} />
                     <Route path="/compare" element={<Compare />} />
                     <Route path="/admin" element={<Admin />} />
+                    <Route path="/admin/leads" element={<AdminLeads />} />
                     <Route path="/terms" element={<Terms />} />
                     <Route path="/privacy" element={<Privacy />} />
                     <Route path="/cookies" element={<Cookies />} />
