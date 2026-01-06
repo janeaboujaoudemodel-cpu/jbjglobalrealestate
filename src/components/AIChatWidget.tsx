@@ -33,7 +33,7 @@ interface UserInfo {
   consentPrivacy: boolean;
 }
 
-type ChatStep = 'check_email' | 'collect_info' | 'select_service' | 'chatting' | 'rating' | 'submitted';
+type ChatStep = 'welcome_choice' | 'check_email' | 'collect_info' | 'select_service' | 'chatting' | 'rating' | 'submitted';
 
 const SERVICES = [
   { id: 'real_estate', icon: Building2, label: 'Property Sales & Leasing', description: 'Brokerage for buying, selling, leasing' },
@@ -88,7 +88,7 @@ Our team is available to assist you.`;
 const AIChatWidget = () => {
   const { t, isRTL } = useLanguage();
   const [isOpen, setIsOpen] = useState(false);
-  const [step, setStep] = useState<ChatStep>('check_email');
+  const [step, setStep] = useState<ChatStep>('welcome_choice');
   const [checkEmail, setCheckEmail] = useState('');
   const [isCheckingEmail, setIsCheckingEmail] = useState(false);
   const [isExistingUser, setIsExistingUser] = useState(false);
@@ -263,12 +263,12 @@ const AIChatWidget = () => {
 
     const serviceName = SERVICES.find(s => s.id === serviceId)?.label || 'our services';
     
-    // Welcome message
+    // Welcome message - faster and more engaging
     setMessages([
       {
         id: 'welcome',
         role: 'assistant',
-        content: `Welcome to JJ Global Capital, ${userInfo.firstName}! 👋\n\nI can help with property sales, leasing, holiday homes, and partner introductions.\n\nI see you're interested in ${serviceName}. How can I assist you today?\n\n*Note: I provide informational support only. For specific advice, our team will connect you with the right specialists.*`,
+        content: `Hi ${userInfo.firstName}! 👋 Great to meet you!\n\nI'm your AI assistant for ${serviceName}. I can instantly answer questions about:\n• Dubai property prices & locations\n• Investment opportunities & ROI\n• Payment plans & buying process\n• Developer info & project details\n\nAsk me anything! If you need to speak with our team, I can connect you to WhatsApp anytime. 📱`,
         timestamp: new Date(),
       },
     ]);
@@ -428,7 +428,7 @@ const AIChatWidget = () => {
   const resetChat = () => {
     setIsOpen(false);
     setTimeout(() => {
-      setStep('check_email');
+      setStep('welcome_choice');
       setCheckEmail('');
       setIsExistingUser(false);
       setUserInfo({
@@ -501,12 +501,13 @@ const AIChatWidget = () => {
             {/* Header */}
             <div className="flex items-center justify-between p-4 border-b border-gold/20 bg-gradient-to-r from-gold/10 to-transparent">
               <div className="flex items-center gap-3">
-                {step !== 'check_email' && step !== 'rating' && step !== 'submitted' && (
+                {step !== 'welcome_choice' && step !== 'rating' && step !== 'submitted' && (
                   <Button
                     variant="ghost"
                     size="icon"
                     onClick={() => {
-                      if (step === 'collect_info') setStep('check_email');
+                      if (step === 'check_email') setStep('welcome_choice');
+                      else if (step === 'collect_info') setStep('check_email');
                       else if (step === 'select_service') setStep(isExistingUser ? 'check_email' : 'collect_info');
                       else if (step === 'chatting') handleEndChat();
                     }}
@@ -521,10 +522,11 @@ const AIChatWidget = () => {
                 <div>
                   <h3 className="text-white font-semibold text-sm">JJ Global Capital</h3>
                   <p className="text-white/50 text-xs">
-                    {step === 'check_email' && 'Welcome! Enter your email'}
+                    {step === 'welcome_choice' && 'How can we help?'}
+                    {step === 'check_email' && 'Enter your email'}
                     {step === 'collect_info' && 'Let\'s get started'}
                     {step === 'select_service' && 'Choose a service'}
-                    {step === 'chatting' && 'Online now'}
+                    {step === 'chatting' && '🟢 AI Online • Instant Answers'}
                     {step === 'rating' && 'Rate your experience'}
                     {step === 'submitted' && 'Thank you!'}
                   </p>
@@ -540,15 +542,70 @@ const AIChatWidget = () => {
               </Button>
             </div>
 
-            {/* Step 0: Check Email */}
+            {/* Step 0: Welcome Choice - AI or WhatsApp */}
+            {step === 'welcome_choice' && (
+              <div className="flex-1 p-6 flex flex-col justify-center">
+                <div className="text-center mb-6">
+                  <div className="w-16 h-16 mx-auto mb-4 rounded-full bg-gradient-to-r from-gold/20 to-gold/10 flex items-center justify-center">
+                    <Bot className="w-8 h-8 text-gold" />
+                  </div>
+                  <h4 className="text-white text-lg font-semibold mb-2">Hi! How would you like to connect?</h4>
+                  <p className="text-zinc-400 text-sm">Choose what works best for you</p>
+                </div>
+
+                <div className="space-y-3">
+                  {/* AI Chat Option */}
+                  <button
+                    onClick={() => setStep('check_email')}
+                    className="w-full p-4 bg-gradient-to-r from-gold/10 to-gold/5 hover:from-gold/20 hover:to-gold/10 border border-gold/30 hover:border-gold/50 rounded-xl text-left transition-all duration-300 group"
+                  >
+                    <div className="flex items-center gap-4">
+                      <div className="w-12 h-12 rounded-full bg-gradient-to-r from-gold to-gold/60 flex items-center justify-center">
+                        <Bot className="w-6 h-6 text-black" />
+                      </div>
+                      <div className="flex-1">
+                        <h5 className="text-white text-sm font-semibold mb-1">💬 Chat with AI Assistant</h5>
+                        <p className="text-gold text-xs font-medium">⚡ Instant answers • Available 24/7</p>
+                        <p className="text-zinc-400 text-xs mt-1">I can answer questions about properties, services, and Dubai real estate instantly!</p>
+                      </div>
+                    </div>
+                  </button>
+
+                  {/* WhatsApp Option */}
+                  <a
+                    href={`https://wa.me/${CONTACT_INFO.whatsappNumber}?text=${encodeURIComponent("Hi! I'd like to speak with someone about property investment in Dubai.")}`}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="w-full p-4 bg-green-500/10 hover:bg-green-500/20 border border-green-500/30 hover:border-green-500/50 rounded-xl text-left transition-all duration-300 group block"
+                  >
+                    <div className="flex items-center gap-4">
+                      <div className="w-12 h-12 rounded-full bg-green-500 flex items-center justify-center">
+                        <MessageCircle className="w-6 h-6 text-white" />
+                      </div>
+                      <div className="flex-1">
+                        <h5 className="text-white text-sm font-semibold mb-1">📱 Chat on WhatsApp</h5>
+                        <p className="text-green-400 text-xs font-medium">Talk directly with our team</p>
+                        <p className="text-zinc-400 text-xs mt-1">For urgent matters or personalized consultation</p>
+                      </div>
+                    </div>
+                  </a>
+
+                  <p className="text-zinc-500 text-xs text-center mt-4 px-4">
+                    💡 <strong className="text-zinc-400">Tip:</strong> Our AI can answer most questions instantly. I'll connect you to WhatsApp if you need to speak with a human!
+                  </p>
+                </div>
+              </div>
+            )}
+
+            {/* Step 1: Check Email */}
             {step === 'check_email' && (
               <div className="flex-1 p-6 flex flex-col justify-center">
                 <div className="text-center mb-6">
                   <div className="w-16 h-16 mx-auto mb-4 rounded-full bg-gradient-to-r from-gold/20 to-gold/10 flex items-center justify-center">
-                    <MessageCircle className="w-8 h-8 text-gold" />
+                    <Mail className="w-8 h-8 text-gold" />
                   </div>
-                  <h4 className="text-white text-lg font-semibold mb-2">Welcome to JJ Global Capital</h4>
-                  <p className="text-zinc-400 text-sm">Enter your email to get started. Returning users get instant WhatsApp access!</p>
+                  <h4 className="text-white text-lg font-semibold mb-2">Let's Get Started</h4>
+                  <p className="text-zinc-400 text-sm">Enter your email so I can give you personalized answers!</p>
                 </div>
 
                 <div className="space-y-4">
@@ -580,14 +637,14 @@ const AIChatWidget = () => {
                       </>
                     ) : (
                       <>
-                        Continue
-                        <Send className="w-4 h-4 ml-2" />
+                        Continue to AI Chat
+                        <Bot className="w-4 h-4 ml-2" />
                       </>
                     )}
                   </Button>
 
                   <p className="text-zinc-500 text-xs text-center mt-4">
-                    New users will complete a quick registration. Existing users get direct access.
+                    Returning user? I'll remember you! New here? Quick registration to unlock WhatsApp access.
                   </p>
                 </div>
               </div>
