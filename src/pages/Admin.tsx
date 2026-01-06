@@ -49,7 +49,8 @@ import { IPBlocklistDashboard } from "@/components/admin/IPBlocklistDashboard";
 import { SecurityDashboardSummary } from "@/components/admin/SecurityDashboardSummary";
 import AuditLogDashboard from "@/components/admin/AuditLogDashboard";
 import BrokerSubscriptionsDashboard from "@/components/admin/BrokerSubscriptionsDashboard";
-import { ClipboardList, Users, Briefcase } from "lucide-react";
+import AIAnalyticsDashboard from "@/components/admin/AIAnalyticsDashboard";
+import { ClipboardList, Users, Briefcase, Brain } from "lucide-react";
 
 interface ProjectDocument {
   id: string;
@@ -366,6 +367,10 @@ const Admin = () => {
               <Briefcase className="w-4 h-4 mr-2" />
               Brokers
             </TabsTrigger>
+            <TabsTrigger value="ai-analytics" className="data-[state=active]:bg-gold data-[state=active]:text-black">
+              <Brain className="w-4 h-4 mr-2" />
+              AI Analytics
+            </TabsTrigger>
             <TabsTrigger 
               value="leads" 
               className="data-[state=active]:bg-gold data-[state=active]:text-black"
@@ -386,6 +391,10 @@ const Admin = () => {
 
           <TabsContent value="brokers" className="space-y-8">
             <BrokerSubscriptionsDashboard />
+          </TabsContent>
+
+          <TabsContent value="ai-analytics" className="space-y-8">
+            <AIAnalyticsDashboard />
           </TabsContent>
 
           <TabsContent value="properties" className="space-y-8">
