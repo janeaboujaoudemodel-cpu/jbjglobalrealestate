@@ -217,32 +217,34 @@ export default function BrokerToolkit() {
           >
             <Badge className="bg-gold/20 text-gold border-gold/30 mb-6">
               <GraduationCap className="w-3 h-3 mr-1" />
-              Exclusive for Real Estate Professionals
+              For Real Estate Professionals
             </Badge>
             <h1 className="text-4xl md:text-6xl font-bold text-white mb-6">
               Broker <span className="text-gold">Toolkit</span>
             </h1>
-            <p className="text-xl text-zinc-400 mb-8 max-w-2xl mx-auto">
-              Everything you need to close more deals: AI-powered tools, professional 
-              training courses, and customizable property marketing materials.
+            <p className="text-xl text-zinc-400 mb-4 max-w-2xl mx-auto">
+              Practical resources and AI-powered tools for real estate professionals.
+            </p>
+            <p className="text-zinc-500 text-sm mb-8 max-w-xl mx-auto">
+              Educational content only. Not an accredited training institute. No certificates issued.
             </p>
             <div className="flex flex-wrap justify-center gap-4">
               <Button 
                 size="lg"
                 className="bg-gradient-to-r from-gold to-gold-dark text-black hover:brightness-110"
-                onClick={() => document.getElementById('pricing')?.scrollIntoView({ behavior: 'smooth' })}
+                onClick={() => document.getElementById('tools')?.scrollIntoView({ behavior: 'smooth' })}
               >
-                <Crown className="w-5 h-5 mr-2" />
-                Start 7-Day Free Trial
+                <Sparkles className="w-5 h-5 mr-2" />
+                Explore Tools
               </Button>
               <Button 
                 size="lg"
                 variant="outline"
                 className="border-zinc-700 text-white hover:bg-zinc-800"
-                onClick={() => document.getElementById('courses')?.scrollIntoView({ behavior: 'smooth' })}
+                onClick={() => document.getElementById('resources')?.scrollIntoView({ behavior: 'smooth' })}
               >
-                <Video className="w-5 h-5 mr-2" />
-                Preview Courses
+                <BookOpen className="w-5 h-5 mr-2" />
+                Browse Resources
               </Button>
             </div>
           </motion.div>
@@ -252,12 +254,11 @@ export default function BrokerToolkit() {
       {/* Stats Section */}
       <section className="py-12 border-y border-zinc-800">
         <div className="container mx-auto px-4">
-          <div className="grid grid-cols-2 md:grid-cols-4 gap-8 text-center">
+          <div className="grid grid-cols-2 md:grid-cols-3 gap-8 text-center">
             {[
-              { value: "2,800+", label: "Brokers Trained" },
-              { value: "50+", label: "Course Lessons" },
-              { value: "95%", label: "Success Rate" },
-              { value: "24/7", label: "AI Assistance" },
+              { value: "10+", label: "AI Tools" },
+              { value: "Free", label: "Resources" },
+              { value: "AI", label: "Powered" },
             ].map((stat, i) => (
               <motion.div
                 key={i}
@@ -275,6 +276,7 @@ export default function BrokerToolkit() {
       </section>
 
       {/* Tools Section */}
+      <section id="tools"></section>
       <section className="py-20">
         <div className="container mx-auto px-4">
           <motion.div
@@ -317,8 +319,8 @@ export default function BrokerToolkit() {
         </div>
       </section>
 
-      {/* Courses Section */}
-      <section id="courses" className="py-20 bg-zinc-900/30">
+      {/* Resources Section */}
+      <section id="resources" className="py-20 bg-zinc-900/30">
         <div className="container mx-auto px-4">
           <motion.div
             initial={{ opacity: 0, y: 20 }}
@@ -327,14 +329,14 @@ export default function BrokerToolkit() {
             className="text-center mb-16"
           >
             <Badge className="bg-purple-500/20 text-purple-400 border-purple-500/30 mb-4">
-              <GraduationCap className="w-3 h-3 mr-1" />
-              Training Academy
+              <BookOpen className="w-3 h-3 mr-1" />
+              Guides & Resources
             </Badge>
             <h2 className="text-3xl md:text-4xl font-bold text-white mb-4">
-              Master Real Estate Sales
+              Educational Resources
             </h2>
             <p className="text-zinc-400 max-w-2xl mx-auto">
-              Comprehensive courses designed by industry experts with over 20 years of experience.
+              Practical guides and resources to support your real estate career.
             </p>
           </motion.div>
 
@@ -373,127 +375,50 @@ export default function BrokerToolkit() {
         </div>
       </section>
 
-      {/* Pricing Section */}
-      <section id="pricing" className="py-20">
+      {/* Free Resources CTA Section */}
+      <section id="cta" className="py-20">
         <div className="container mx-auto px-4">
           <motion.div
             initial={{ opacity: 0, y: 20 }}
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true }}
-            className="text-center mb-12"
+            className="text-center max-w-3xl mx-auto"
           >
             <Badge className="bg-gold/20 text-gold border-gold/30 mb-4">
-              <Crown className="w-3 h-3 mr-1" />
-              Pricing Plans
+              <Sparkles className="w-3 h-3 mr-1" />
+              Free Resources
             </Badge>
             <h2 className="text-3xl md:text-4xl font-bold text-white mb-4">
-              Choose Your Plan
+              Start Using Our Tools Today
             </h2>
             <p className="text-zinc-400 max-w-2xl mx-auto mb-8">
-              All plans include a 7-day free trial. No charges until the trial ends.
+              Access our AI-powered tools and educational resources at no cost. 
+              Designed to help real estate professionals succeed.
+            </p>
+            <p className="text-zinc-500 text-sm mb-8">
+              Educational content only. Not an accredited training institute. No certificates issued.
             </p>
 
-            {/* Billing Toggle */}
-            <div className="inline-flex items-center gap-4 bg-zinc-900 border border-zinc-800 rounded-full p-1">
-              <button
-                onClick={() => setBillingPeriod("monthly")}
-                className={`px-6 py-2 rounded-full text-sm font-medium transition-all ${
-                  billingPeriod === "monthly" 
-                    ? "bg-gold text-black" 
-                    : "text-zinc-400 hover:text-white"
-                }`}
+            <div className="flex flex-wrap justify-center gap-4">
+              <Button 
+                onClick={() => navigate('/ai-hub')}
+                className="bg-gradient-to-r from-gold to-gold-dark text-black hover:brightness-110"
+                size="lg"
               >
-                Monthly
-              </button>
-              <button
-                onClick={() => setBillingPeriod("yearly")}
-                className={`px-6 py-2 rounded-full text-sm font-medium transition-all flex items-center gap-2 ${
-                  billingPeriod === "yearly" 
-                    ? "bg-gold text-black" 
-                    : "text-zinc-400 hover:text-white"
-                }`}
+                <Sparkles className="w-5 h-5 mr-2" />
+                Explore AI Tools
+              </Button>
+              <Button 
+                onClick={() => navigate('/tools-guide')}
+                variant="outline"
+                className="border-zinc-700 text-white hover:bg-zinc-800"
+                size="lg"
               >
-                Yearly
-                <span className="bg-green-500 text-white text-xs px-2 py-0.5 rounded-full">
-                  Save 33%
-                </span>
-              </button>
+                <BookOpen className="w-5 h-5 mr-2" />
+                View Resources
+              </Button>
             </div>
           </motion.div>
-
-          <div className="grid md:grid-cols-3 gap-8 max-w-6xl mx-auto">
-            {TIERS.map((tier, i) => (
-              <motion.div
-                key={tier.id}
-                initial={{ opacity: 0, y: 20 }}
-                whileInView={{ opacity: 1, y: 0 }}
-                transition={{ delay: i * 0.1 }}
-                viewport={{ once: true }}
-                className={`relative bg-zinc-900/80 border rounded-2xl p-6 ${
-                  tier.popular 
-                    ? "border-gold shadow-lg shadow-gold/20" 
-                    : "border-zinc-800"
-                }`}
-              >
-                {tier.popular && (
-                  <div className="absolute -top-3 left-1/2 -translate-x-1/2">
-                    <Badge className="bg-gold text-black">
-                      <Star className="w-3 h-3 mr-1" />
-                      Most Popular
-                    </Badge>
-                  </div>
-                )}
-
-                <div className="text-center mb-6">
-                  <h3 className="text-xl font-bold text-white mb-2">{tier.name}</h3>
-                  <p className="text-zinc-400 text-sm mb-4">{tier.description}</p>
-                  <div className="mb-2">
-                    <span className="text-4xl font-bold text-white">
-                      ${billingPeriod === "yearly" ? tier.yearlyPrice : tier.price}
-                    </span>
-                    <span className="text-zinc-400">
-                      /{billingPeriod === "yearly" ? "year" : "month"}
-                    </span>
-                  </div>
-                  <div className="text-sm text-zinc-500">
-                    AED {billingPeriod === "yearly" ? tier.yearlyPriceAed : tier.priceAed}
-                    /{billingPeriod === "yearly" ? "year" : "month"}
-                  </div>
-                </div>
-
-                <ul className="space-y-3 mb-6">
-                  {tier.features.map((feature, j) => (
-                    <li key={j} className="flex items-start gap-3 text-sm">
-                      {feature.included ? (
-                        <CheckCircle2 className="w-4 h-4 text-green-500 mt-0.5 flex-shrink-0" />
-                      ) : (
-                        <div className="w-4 h-4 rounded-full border border-zinc-700 mt-0.5 flex-shrink-0" />
-                      )}
-                      <span className={feature.included ? "text-zinc-300" : "text-zinc-600"}>
-                        {feature.text}
-                      </span>
-                    </li>
-                  ))}
-                </ul>
-
-                <Button
-                  onClick={() => handleSelectTier(tier.id)}
-                  className={`w-full ${
-                    tier.popular
-                      ? "bg-gradient-to-r from-gold to-gold-dark text-black hover:brightness-110"
-                      : "bg-zinc-800 text-white hover:bg-zinc-700"
-                  }`}
-                >
-                  Start {tier.trialDays}-Day Free Trial
-                  <ArrowRight className="w-4 h-4 ml-2" />
-                </Button>
-
-                <p className="text-xs text-zinc-500 text-center mt-3">
-                  Cancel anytime during trial
-                </p>
-              </motion.div>
-            ))}
-          </div>
         </div>
       </section>
 

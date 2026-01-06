@@ -154,7 +154,7 @@ const PressKit = () => {
   };
 
   const handleCopyBio = async () => {
-    const bioText = `Jane Abou Jaoude is the Founder of JJ Global Capital, a Dubai-based real estate brokerage. Born August 25, 1998, in Lebanon, she founded her first business—James Beauty—in 2014 while still studying. Fluent in French, English, Arabic, and Spanish, Jane relocated to Dubai in 2020. Starting in 2021, she served as Head of Quality and Operations for B2B luxury pick-up and limousine services at Dubai Airport Terminals 1 & 3 and hotels, managing 495+ employees. After training 2,800+ real estate brokers and earning certifications in fitness, nutrition, and digital marketing, she founded JJ Global Capital in 2025.`;
+    const bioText = `Jane Abou Jaoude is the Founder of JJ Global Capital, a Dubai-based real estate brokerage. Born August 25, 1998, in Lebanon, she founded her first business—James Beauty—in 2014 while still studying. Fluent in French, English, Arabic, and Spanish, Jane relocated to Dubai in 2020. She has experience in corporate operations, hospitality quality management, and real estate brokerage. She founded JJ Global Capital in 2025.`;
     
     try {
       await navigator.clipboard.writeText(bioText);
@@ -243,10 +243,9 @@ const PressKit = () => {
                 <span className="text-gold font-semibold">Jane Abou Jaoude</span> is the Founder of JJ Global Capital, 
                 a Dubai-based real estate brokerage. 
                 Born August 25, 1998, in Lebanon, she founded her first business—James Beauty—in 2014 while still studying. 
-                Fluent in French, English, Arabic, and Spanish, Jane relocated to Dubai in 2020. Starting in 2021, she served as 
-                Head of Quality and Operations for B2B luxury pick-up and limousine services at Dubai Airport Terminals 1 & 3 
-                and hotels, managing 495+ employees. After training 2,800+ real estate brokers and earning certifications in 
-                fitness, nutrition, and digital marketing, she founded JJ Global Capital in 2025.
+                Fluent in French, English, Arabic, and Spanish, Jane relocated to Dubai in 2020. 
+                She has experience in corporate operations, hospitality quality management, and real estate brokerage. 
+                She founded JJ Global Capital in 2025.
               </p>
             </motion.div>
           </motion.div>

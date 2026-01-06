@@ -177,7 +177,7 @@ const About = () => {
                 </p>
                 <p>
                   Beyond brokerage, we connect clients with trusted independent professionals — including law firms, 
-                  mortgage specialists, and licensed property managers — to provide comprehensive support throughout 
+                  mortgage specialists, and property managers — to provide comprehensive support throughout 
                   their real estate journey.
                 </p>
               </div>

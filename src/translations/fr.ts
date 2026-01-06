@@ -49,8 +49,8 @@ export const fr = {
   'home.stats.propertiesManaged': 'Propriétés Gérées',
   'home.stats.countries': 'Pays Desservis',
   'home.stats.trackRecord': 'Notre Bilan',
-  'home.stats.trusted': 'Fait Confiance par',
-  'home.stats.worldwide': 'Mondial',
+  'home.stats.trusted': 'Au Service de',
+  'home.stats.clients': 'Clients aux EAU et Internationaux',
   
   // Founder Section
   'founder.leadership': 'Direction',

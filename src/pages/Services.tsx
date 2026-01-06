@@ -258,7 +258,7 @@ const Services = () => {
               { name: "AI Property Comparison", icon: FileSearch, link: "/compare", color: "from-purple-500 to-fuchsia-500" },
               { name: "AI Interior Design", icon: Palette, link: "/interior-design-ai", color: "from-fuchsia-500 to-pink-500" },
               { name: "AI Measurement", icon: Building2, link: "/property-measurement", color: "from-teal-500 to-cyan-500" },
-              { name: "Mortgage Advisory", icon: Calculator, link: "/mortgage-advisory", color: "from-blue-500 to-cyan-500" }
+              { name: "Mortgage Calculator", icon: Calculator, link: "/mortgage-calculator", color: "from-blue-500 to-cyan-500" }
             ].map((tool) => (
               <Link key={tool.name} to={tool.link}>
                 <motion.div 

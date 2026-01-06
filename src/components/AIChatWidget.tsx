@@ -29,7 +29,7 @@ const SERVICES = [
   { id: 'concierge', icon: Plane, label: 'Luxury Concierge', description: 'Private jets, yachts, VIP experiences' },
   { id: 'legal', icon: Scale, label: 'Legal Advisory', description: 'Property transactions, documentation' },
   { id: 'design_build', icon: Paintbrush, label: 'Design & Build', description: 'Interior design, fit-out, renovation' },
-  { id: 'mortgage', icon: Calculator, label: 'Mortgage Advisory', description: 'Financing, mortgage options' },
+  { id: 'mortgage', icon: Calculator, label: 'Mortgage Calculator', description: 'Financing estimation tools' },
   { id: 'property_management', icon: Home, label: 'Property Management', description: 'Rental, maintenance, tenant services' },
 ];
 

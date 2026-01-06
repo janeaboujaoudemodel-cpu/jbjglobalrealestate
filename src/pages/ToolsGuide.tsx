@@ -79,7 +79,7 @@ const tools = [
   {
     id: "mortgage-calculator",
     title: "Mortgage Calculator",
-    description: "Calculate your mortgage payments, affordability, and explore different financing scenarios. Get personalized mortgage advisory for UAE property purchases.",
+    description: "Calculate your mortgage payments, affordability, and explore different financing scenarios. Use this tool for estimation purposes.",
     icon: Calculator,
     color: "cyan",
     borderColor: "border-cyan-500/30",

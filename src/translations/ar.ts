@@ -49,8 +49,8 @@ export const ar = {
   'home.stats.propertiesManaged': 'العقارات المُدارة',
   'home.stats.countries': 'دول نخدمها',
   'home.stats.trackRecord': 'سجل إنجازاتنا',
-  'home.stats.trusted': 'موثوق من قبل',
-  'home.stats.worldwide': 'حول العالم',
+  'home.stats.trusted': 'خدمة',
+  'home.stats.clients': 'عملاء الإمارات والعالم',
   
   // Founder Section
   'founder.leadership': 'القيادة',

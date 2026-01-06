@@ -47,8 +47,8 @@ export const fa = {
   'home.stats.propertiesManaged': 'املاک تحت مدیریت',
   'home.stats.countries': 'کشورهای تحت پوشش',
   'home.stats.trackRecord': 'سوابق ما',
-  'home.stats.trusted': 'مورد اعتماد',
-  'home.stats.worldwide': 'در سراسر جهان',
+  'home.stats.trusted': 'خدمت به',
+  'home.stats.clients': 'مشتریان امارات و بین‌المللی',
   
   // Founder Section
   'founder.leadership': 'رهبری',

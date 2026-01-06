@@ -49,8 +49,8 @@ export const es = {
   'home.stats.propertiesManaged': 'Propiedades Administradas',
   'home.stats.countries': 'Países Atendidos',
   'home.stats.trackRecord': 'Nuestro Historial',
-  'home.stats.trusted': 'Confiado por',
-  'home.stats.worldwide': 'Mundial',
+  'home.stats.trusted': 'Sirviendo a',
+  'home.stats.clients': 'Clientes en EAU e Internacionales',
   
   // Founder Section
   'founder.leadership': 'Liderazgo',
