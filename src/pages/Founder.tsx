@@ -74,27 +74,20 @@ const GoldLine = ({ className = "" }: { className?: string }) => (
 );
 
 const Founder = () => {
-  const divisions = [
+  // Founder's personal ventures (not a corporate holding structure)
+  const ventures = [
     {
       icon: Building2,
       name: "JJ Global Capital",
-      description: "The flagship real estate investment and advisory division of JJ Holding Group. Delivering premium UAE property portfolios with institutional precision and bespoke wealth preservation strategies for a distinguished global clientele.",
+      description: "A Dubai-based real estate brokerage specializing in property sales, leasing, and holiday homes across the UAE — with trusted partner introductions for legal, mortgage, and specialist services.",
       image: founderOffice,
-      tagline: "Real Estate Investment & Advisory",
+      tagline: "Real Estate Brokerage",
       url: "https://jjglobalcapital.com"
-    },
-    {
-      icon: Users,
-      name: "JJ Group",
-      description: "The operational backbone of JJ Holding Group, coordinating business development, strategic partnerships, and corporate governance across all divisions.",
-      image: founderJetInterior,
-      tagline: "Business Development & Operations",
-      url: "https://jjholdinggroup.com"
     },
     {
       icon: Award,
       name: "JJ Fashion House",
-      description: "A distinguished creative atelier translating the founder's aesthetic philosophy into haute couture and bespoke design. Crafting exclusive collections that epitomize institutional elegance and timeless sophistication.",
+      description: "A creative atelier translating the founder's aesthetic philosophy into bespoke design. Crafting exclusive collections that epitomize elegance and timeless sophistication.",
       image: founderAwardStage,
       tagline: "Haute Couture & Design",
       url: "https://jjfashionhouse.com"
@@ -180,8 +173,8 @@ const Founder = () => {
     },
     {
       year: "2025",
-      title: "Established JJ Holding Group",
-      description: "After 5 years in Dubai, founded JJ Holding Group with 5 divisions: JJ Global Capital, JJ Group, JJ Fashion House, JJ and Serena, and Mrs Jane (evolution of James Beauty as luxury home services).",
+      title: "Founded JJ Global Capital",
+      description: "After 5 years in Dubai, founded JJ Global Capital as a real estate brokerage, along with ventures in fashion (JJ Fashion House), lifestyle (JJ and Serena), and luxury home services (Mrs Jane - evolution of James Beauty).",
       location: "Dubai, UAE"
     },
   ];
@@ -362,15 +355,7 @@ const Founder = () => {
                 JJ Global Capital
               </p>
               <p className="text-zinc-400 text-sm md:text-base mb-8">
-                Powered by{" "}
-                <a 
-                  href="https://jjholdinggroup.com" 
-                  target="_blank" 
-                  rel="noopener noreferrer"
-                  className="text-gold hover:text-gold/80 transition-colors underline underline-offset-4 decoration-gold/50"
-                >
-                  JJ Holding Group
-                </a>
+                Real Estate Brokerage • Dubai, UAE
               </p>
             </motion.div>
             
@@ -461,15 +446,15 @@ const Founder = () => {
               </h2>
               
               <p className="text-gold text-sm uppercase tracking-[0.3em] mb-8 font-medium">
-                Founder & Chairwoman · JJ Holding Group
+                Founder · JJ Global Capital
               </p>
               
               <div className="space-y-6 text-zinc-300 leading-relaxed max-w-2xl">
                 <p className="text-xl md:text-2xl font-light text-white/90">
-                  A self-made entrepreneur who founded her first business at 16, became Head of Quality & Operations managing 495+ employees, trained 2,800+ brokers, and established a multi-division holding group.
+                  A self-made entrepreneur who founded her first business at 16, became Head of Quality & Operations managing 495+ employees, and trained 2,800+ brokers.
                 </p>
                 <p className="text-lg">
-                  Born August 25, 1998, in Lebanon. Grew up fluent in French and Arabic, later self-taught English and Spanish. Jane's journey spans from running a beauty salon as a teenager to leading quality control for premium hospitality brands—culminating in the 2025 founding of JJ Holding Group.
+                  Born August 25, 1998, in Lebanon. Grew up fluent in French and Arabic, later self-taught English and Spanish. Jane's journey spans from running a beauty salon as a teenager to leading quality control for premium hospitality brands—culminating in the 2025 founding of JJ Global Capital.
                 </p>
                 <p className="text-lg text-zinc-400">
                   Her leadership philosophy is forged through diverse experience: entrepreneurship, corporate operations, real estate brokerage, and training over 2,800 brokers. From James Beauty salon in Beirut to Address Hotels' limousine services in Dubai, every chapter prepared her for institutional excellence.
@@ -501,8 +486,8 @@ const Founder = () => {
                     <TrendingUp className="w-5 h-5 text-gold" />
                   </div>
                   <div>
-                    <p className="text-white font-medium text-sm">5 Divisions</p>
-                    <p className="text-zinc-500 text-xs">JJ Holding Group</p>
+                    <p className="text-white font-medium text-sm">4 Ventures</p>
+                    <p className="text-zinc-500 text-xs">Founded by Jane</p>
                   </div>
                 </div>
               </div>
@@ -578,7 +563,7 @@ const Founder = () => {
                 </p>
                 <p className="text-lg text-zinc-400">
                   This corporate leadership experience provided invaluable insights into operations management, team building, 
-                  and institutional standards—skills that would later define JJ Holding Group's approach to excellence.
+                  and institutional standards—skills that would later define JJ Global Capital's approach to excellence.
                 </p>
               </div>
 
@@ -599,26 +584,22 @@ const Founder = () => {
                   excellence requires constant growth.
                 </p>
                 <p className="text-lg text-zinc-400">
-                  In 2025, after five years of building expertise in Dubai, Jane established JJ Holding Group—uniting 
-                  all her divisions under one institutional umbrella: JJ Global Capital (real estate), JJ Group (operations), 
-                  JJ Fashion House (haute couture), JJ and Serena (lifestyle), and Mrs Jane (the evolution of James Beauty, 
-                  now offering luxury home services).
+                  In 2025, after five years of building expertise in Dubai, Jane founded JJ Global Capital as a real estate brokerage, 
+                  along with ventures in fashion (JJ Fashion House), lifestyle (JJ and Serena), and luxury home services (Mrs Jane).
                 </p>
               </div>
 
               <div className="bg-gradient-to-br from-zinc-900/80 to-black border border-zinc-800 rounded-3xl p-8 md:p-12">
                 <h3 className="text-gold text-xl font-semibold mb-6 flex items-center gap-3">
                   <Award className="w-6 h-6" />
-                  Recognition & Achievements
+                  Leadership Philosophy
                 </h3>
                 <p className="text-lg mb-4">
-                  Jane's contributions to the UAE business landscape have been recognized through numerous awards and accolades. 
-                  She has been featured in prestigious publications including Forbes Middle East, Arabian Business, and Entrepreneur Middle East.
+                  Jane's approach to business emphasizes quality over quantity, discretion over publicity, and long-term value over short-term gains.
                 </p>
                 <p className="text-lg text-zinc-400">
-                  Her leadership philosophy—emphasizing quality over quantity, discretion over publicity, and long-term value over short-term gains—has 
-                  become a model for founder-led enterprises in the region. Today, JJ Holding Group serves clients from over 92 countries, 
-                  with a portfolio exceeding AED 2 billion.
+                  Her leadership philosophy has become a model for founder-led enterprises in the region. Today, JJ Global Capital 
+                  serves UAE-based and international clients seeking premium property solutions in the Emirates.
                 </p>
               </div>
             </motion.div>
@@ -672,8 +653,8 @@ const Founder = () => {
                 <div className="absolute inset-0 bg-gradient-to-t from-black via-black/20 to-transparent opacity-80 group-hover:opacity-90 transition-opacity" />
                 <div className="absolute bottom-0 left-0 right-0 p-6">
                   <span className="text-gold text-xs uppercase tracking-[0.2em] mb-2 block">2025</span>
-                  <h4 className="text-white text-lg font-semibold mb-1">Founder & Chairwoman</h4>
-                  <p className="text-zinc-400 text-sm">JJ Holding Group, Dubai</p>
+                  <h4 className="text-white text-lg font-semibold mb-1">Founder</h4>
+                  <p className="text-zinc-400 text-sm">JJ Global Capital, Dubai</p>
                 </div>
               </motion.div>
 
@@ -768,7 +749,7 @@ const Founder = () => {
                 <div className="absolute bottom-0 left-0 right-0 p-6">
                   <span className="text-gold text-xs uppercase tracking-[0.2em] mb-2 block">2014 → 2025</span>
                   <h4 className="text-white text-lg font-semibold mb-1">The Journey Complete</h4>
-                  <p className="text-zinc-400 text-sm">From James Beauty to JJ Holding Group</p>
+                  <p className="text-zinc-400 text-sm">From James Beauty to JJ Global Capital</p>
                 </div>
               </motion.div>
             </motion.div>
@@ -791,7 +772,7 @@ const Founder = () => {
                 <div className="hidden md:block w-16 h-px bg-gradient-to-r from-gold/20 to-gold/50" />
                 <div className="text-center">
                   <p className="text-gold text-3xl font-bold mb-1">2025</p>
-                  <p className="text-zinc-500 text-sm">JJ Holding Group</p>
+                  <p className="text-zinc-500 text-sm">JJ Global Capital</p>
                 </div>
               </div>
             </motion.div>
@@ -1115,8 +1096,8 @@ const Founder = () => {
               {[
                 { end: 4, suffix: "", prefix: "", label: "Divisions", icon: Building2 },
                 { ...COMPANY_STATS.yearsExperience, icon: Award },
-                { ...COMPANY_STATS.countriesServed, icon: Globe },
-                { ...COMPANY_STATS.portfolioValue, icon: TrendingUp },
+                { ...COMPANY_STATS.brokersTrainedBy, icon: Users },
+                { ...COMPANY_STATS.clientSatisfaction, icon: TrendingUp },
               ].map((stat, index) => (
                 <motion.div 
                   key={stat.label}
@@ -1193,7 +1174,7 @@ const Founder = () => {
               className="text-white text-4xl md:text-5xl lg:text-6xl font-bold"
               style={{ fontFamily: "Poppins, sans-serif" }}
             >
-              The Group <span className="text-transparent bg-clip-text bg-gradient-to-r from-gold to-[#C4A962]">Divisions</span>
+              The Founder's <span className="text-transparent bg-clip-text bg-gradient-to-r from-gold to-[#C4A962]">Ventures</span>
             </h2>
           </motion.div>
 
@@ -1204,7 +1185,7 @@ const Founder = () => {
             viewport={{ once: true, margin: "-100px" }}
             variants={staggerContainer}
           >
-            {divisions.map((division, index) => (
+            {ventures.map((division, index) => (
               <motion.div 
                 key={division.name}
                 className="group relative bg-gradient-to-br from-zinc-900 via-zinc-900/95 to-black border border-zinc-800 rounded-3xl overflow-hidden hover:border-gold/50 transition-all duration-700"

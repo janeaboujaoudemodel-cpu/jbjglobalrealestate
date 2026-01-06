@@ -172,7 +172,7 @@ const Premium3DIcon = ({ title, gradient }: { title: string; gradient: string })
   );
 };
 
-// Premium division icon for JJ Holding Group cards
+// Premium venture icon for founder's ventures cards
 const DivisionIcon = ({ title, gradient }: { title: string; gradient: string }) => {
   const getIconPath = () => {
     switch (title) {
@@ -320,19 +320,19 @@ const ServicesSection = () => {
       />
       
       <div className="container mx-auto px-4 relative z-10" id="services">
-        {/* JJ Holding Group Section */}
+        {/* Founder's Ventures Section */}
         <div className="text-center mb-16">
           <span className="inline-block px-5 py-2 bg-gradient-to-r from-gold/20 to-gold/5 border border-gold/30 rounded-full text-gold text-sm font-medium mb-6 backdrop-blur-sm">
-            JJ Holding Group
+            Founded by Jane Abou Jaoude
           </span>
           <h2 
             className="text-4xl md:text-5xl lg:text-6xl font-bold text-white mb-6"
             style={{ fontFamily: "Poppins, sans-serif" }}
           >
-            Our <span className="text-transparent bg-clip-text bg-gradient-to-r from-gold to-gold-light">Divisions</span>
+            Our <span className="text-transparent bg-clip-text bg-gradient-to-r from-gold to-gold-light">Ventures</span>
           </h2>
           <p className="text-zinc-300 max-w-2xl mx-auto text-lg leading-relaxed">
-            A founder-led group of specialized companies delivering excellence across real estate, design, media, and fashion
+            A collection of specialized ventures delivering excellence across real estate, design, media, and fashion
           </p>
         </div>
 

@@ -739,8 +739,8 @@ const MarketReport = () => {
       <div class="edition">Latest Edition 2026</div>
       <div class="author-box">
         <div class="author-name">Jane Abou Jaoude</div>
-        <div class="author-title">Founder & Chairwoman • JJ Global Capital</div>
-        <div style="margin-top: 8px; font-size: 11px; color: #888;">Powered by Dubai | JJ Holding Group</div>
+        <div class="author-title">Founder • JJ Global Capital</div>
+        <div style="margin-top: 8px; font-size: 11px; color: #888;">Real Estate Brokerage • Dubai, UAE</div>
       </div>
     </div>
   </div>
@@ -776,8 +776,8 @@ const MarketReport = () => {
       <h2 style="text-align: center; border-bottom: none; margin-bottom: 40px;">From the Founder</h2>
       <img src="${founderProfessional}" alt="Jane Abou Jaoude" class="founder-image" onerror="this.style.display='none'" />
       <h3 style="color: #A8925A; text-align: center; margin-bottom: 10px;">Jane Abou Jaoude</h3>
-      <p style="color: #888; text-align: center; font-size: 13px; margin-bottom: 8px;">Founder & Chairwoman, JJ Global Capital</p>
-      <p style="color: #666; text-align: center; font-size: 11px; margin-bottom: 30px;">Powered by Dubai | JJ Holding Group</p>
+      <p style="color: #888; text-align: center; font-size: 13px; margin-bottom: 8px;">Founder, JJ Global Capital</p>
+      <p style="color: #666; text-align: center; font-size: 11px; margin-bottom: 30px;">Real Estate Brokerage • Dubai, UAE</p>
     </div>
     
     <div class="highlight-box" style="text-align: center;">
@@ -1500,7 +1500,7 @@ const MarketReport = () => {
     <div style="background: linear-gradient(135deg, rgba(139, 92, 246, 0.2) 0%, rgba(168, 146, 90, 0.1) 100%); border: 1px solid rgba(139, 92, 246, 0.4); border-radius: 16px; padding: 25px; margin: 25px 0;">
       <p style="color: #a78bfa; font-size: 12px; text-transform: uppercase; letter-spacing: 0.15em; margin-bottom: 10px;">Premium AI Technology</p>
       <p style="color: #fff; font-size: 16px; margin-bottom: 5px; font-weight: 600;">Developed by the Founder, Jane Abou Jaoude</p>
-      <p style="color: #888; font-size: 13px; margin-bottom: 0;">Exclusive for JJ Global Capital • Powered by Dubai | JJ Holding Group</p>
+      <p style="color: #888; font-size: 13px; margin-bottom: 0;">Exclusive for JJ Global Capital • Real Estate Brokerage</p>
     </div>
     
     <h3>How It Works</h3>
@@ -1544,7 +1544,7 @@ const MarketReport = () => {
     
     <div class="footer-brand">
       <div class="logo">JJ | GLOBAL CAPITAL</div>
-      <p>Part of JJ Holding Group • jjholdinggroup.com</p>
+      <p>Real Estate Brokerage • Dubai, UAE</p>
       <p style="margin-top: 10px;">
         Email: <a href="mailto:contact@jjglobalcapital.com" class="contact-link">contact@jjglobalcapital.com</a> • 
         Phone: <a href="tel:+971585802393" class="contact-link">+971 58 580 2393</a>
@@ -1917,8 +1917,8 @@ const MarketReport = () => {
             </blockquote>
             <div>
               <p className="text-gold font-semibold text-lg">Jane Abou Jaoude</p>
-              <p className="text-zinc-500 text-sm">Founder & Chairwoman, JJ Global Capital</p>
-              <p className="text-zinc-600 text-xs mt-1">Powered by Dubai | JJ Holding Group</p>
+              <p className="text-zinc-500 text-sm">Founder, JJ Global Capital</p>
+              <p className="text-zinc-600 text-xs mt-1">Real Estate Brokerage • Dubai, UAE</p>
             </div>
           </motion.div>
         </div>
@@ -2128,7 +2128,7 @@ const MarketReport = () => {
                 Exclusive for <span className="text-gold font-semibold">JJ Global Capital</span>
               </p>
               <p className="text-zinc-600 text-[10px] mt-2 uppercase tracking-widest">
-                Powered by Dubai | JJ Holding Group
+                Real Estate Brokerage • Dubai, UAE
               </p>
             </div>
           </motion.aside>

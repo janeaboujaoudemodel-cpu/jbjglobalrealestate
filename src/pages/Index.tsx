@@ -606,7 +606,7 @@ const Index = () => {
               </h2>
               
               <p className="text-zinc-300 text-lg md:text-xl leading-relaxed mb-6">
-                JJ Holding Group is a founder-led, multi-division holding built on unwavering standards, discretion, and long-term vision.
+                JJ Global Capital is a founder-led real estate brokerage built on unwavering standards, discretion, and long-term vision.
               </p>
               
               <p className="text-zinc-500 text-base md:text-lg leading-relaxed mb-8">
@@ -617,15 +617,15 @@ const Index = () => {
               <div className="grid grid-cols-3 gap-6 mb-8">
                 <div className="text-center">
                   <p className="text-gold text-3xl md:text-4xl font-bold" style={{ fontFamily: "Poppins, sans-serif" }}>4</p>
-                  <p className="text-zinc-500 text-xs uppercase tracking-wider">Divisions</p>
+                  <p className="text-zinc-500 text-xs uppercase tracking-wider">Ventures</p>
                 </div>
                 <div className="text-center">
-                  <p className="text-gold text-3xl md:text-4xl font-bold" style={{ fontFamily: "Poppins, sans-serif" }}>12+</p>
-                  <p className="text-zinc-500 text-xs uppercase tracking-wider">Years</p>
+                  <p className="text-gold text-3xl md:text-4xl font-bold" style={{ fontFamily: "Poppins, sans-serif" }}>5+</p>
+                  <p className="text-zinc-500 text-xs uppercase tracking-wider">Years in Dubai</p>
                 </div>
                 <div className="text-center">
-                  <p className="text-gold text-3xl md:text-4xl font-bold" style={{ fontFamily: "Poppins, sans-serif" }}>92+</p>
-                  <p className="text-zinc-500 text-xs uppercase tracking-wider">Countries</p>
+                  <p className="text-gold text-3xl md:text-4xl font-bold" style={{ fontFamily: "Poppins, sans-serif" }}>2,800+</p>
+                  <p className="text-zinc-500 text-xs uppercase tracking-wider">Brokers Trained</p>
                 </div>
               </div>
               

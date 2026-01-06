@@ -111,14 +111,6 @@ const founderHeadshots: DownloadableAsset[] = [
 
 const brandAssets: DownloadableAsset[] = [
   {
-    id: "logo-flags",
-    name: "JJ Holding Group & JJ Global Capital",
-    description: "Official brand imagery featuring both company flags",
-    image: jjFlags,
-    category: "brand",
-    resolution: "High Resolution"
-  },
-  {
     id: "founder-award",
     name: "Award Recognition",
     description: "Jane Abou Jaoude receiving industry recognition",
@@ -162,7 +154,7 @@ const PressKit = () => {
   };
 
   const handleCopyBio = async () => {
-    const bioText = `Jane Abou Jaoude is the Founder and Chairwoman of JJ Holding Group, a multi-division enterprise encompassing JJ Global Capital (real estate), JJ Group (operations), JJ Fashion House (haute couture), JJ and Serena (lifestyle), and Mrs Jane (luxury home services). Born August 25, 1998, in Lebanon, she founded her first business—James Beauty—in 2014 while still studying. Fluent in French, English, Arabic, and Spanish, Jane relocated to Dubai in 2020. Starting in 2021, she served as Head of Quality and Operations for B2B luxury pick-up and limousine services at Dubai Airport Terminals 1 & 3 and hotels, managing 495+ employees. After training top real estate brokers and earning certifications in fitness, nutrition, and digital marketing, she established JJ Holding Group in 2025.`;
+    const bioText = `Jane Abou Jaoude is the Founder of JJ Global Capital, a Dubai-based real estate brokerage. Born August 25, 1998, in Lebanon, she founded her first business—James Beauty—in 2014 while still studying. Fluent in French, English, Arabic, and Spanish, Jane relocated to Dubai in 2020. Starting in 2021, she served as Head of Quality and Operations for B2B luxury pick-up and limousine services at Dubai Airport Terminals 1 & 3 and hotels, managing 495+ employees. After training 2,800+ real estate brokers and earning certifications in fitness, nutrition, and digital marketing, she founded JJ Global Capital in 2025.`;
     
     try {
       await navigator.clipboard.writeText(bioText);
@@ -248,14 +240,13 @@ const PressKit = () => {
               </div>
               
               <p className="text-zinc-300 leading-relaxed">
-                <span className="text-gold font-semibold">Jane Abou Jaoude</span> is the Founder and Chairwoman of JJ Holding Group, 
-                a multi-division enterprise encompassing JJ Global Capital (real estate), JJ Group (operations), 
-                JJ Fashion House (haute couture), JJ and Serena (lifestyle), and Mrs Jane (luxury home services). 
+                <span className="text-gold font-semibold">Jane Abou Jaoude</span> is the Founder of JJ Global Capital, 
+                a Dubai-based real estate brokerage. 
                 Born August 25, 1998, in Lebanon, she founded her first business—James Beauty—in 2014 while still studying. 
                 Fluent in French, English, Arabic, and Spanish, Jane relocated to Dubai in 2020. Starting in 2021, she served as 
                 Head of Quality and Operations for B2B luxury pick-up and limousine services at Dubai Airport Terminals 1 & 3 
-                and hotels, managing 495+ employees. After training top real estate brokers and earning certifications in 
-                fitness, nutrition, and digital marketing, she established JJ Holding Group in 2025.
+                and hotels, managing 495+ employees. After training 2,800+ real estate brokers and earning certifications in 
+                fitness, nutrition, and digital marketing, she founded JJ Global Capital in 2025.
               </p>
             </motion.div>
           </motion.div>
@@ -499,12 +490,8 @@ const PressKit = () => {
                     <span className="text-white font-medium">JJ Global Capital</span>
                   </div>
                   <div className="flex justify-between border-b border-zinc-800 pb-3">
-                    <span className="text-zinc-500">Parent Company</span>
-                    <span className="text-white font-medium">JJ Holding Group</span>
-                  </div>
-                  <div className="flex justify-between border-b border-zinc-800 pb-3">
                     <span className="text-zinc-500">Founded</span>
-                    <span className="text-white font-medium">2018</span>
+                    <span className="text-white font-medium">2025</span>
                   </div>
                   <div className="flex justify-between border-b border-zinc-800 pb-3">
                     <span className="text-zinc-500">Headquarters</span>
@@ -535,24 +522,16 @@ const PressKit = () => {
                 </h4>
                 <div className="space-y-4">
                   <div className="flex justify-between border-b border-zinc-800 pb-3">
-                    <span className="text-zinc-500">Portfolio Value</span>
-                    <span className="text-gold font-bold">AED 2B+</span>
+                    <span className="text-zinc-500">Years in Dubai</span>
+                    <span className="text-gold font-bold">5+</span>
                   </div>
                   <div className="flex justify-between border-b border-zinc-800 pb-3">
-                    <span className="text-zinc-500">Properties Sold</span>
-                    <span className="text-gold font-bold">3,900+</span>
+                    <span className="text-zinc-500">Brokers Trained</span>
+                    <span className="text-gold font-bold">2,800+</span>
                   </div>
                   <div className="flex justify-between border-b border-zinc-800 pb-3">
-                    <span className="text-zinc-500">Properties Managed</span>
-                    <span className="text-gold font-bold">4,200+</span>
-                  </div>
-                  <div className="flex justify-between border-b border-zinc-800 pb-3">
-                    <span className="text-zinc-500">Countries Served</span>
-                    <span className="text-gold font-bold">92+</span>
-                  </div>
-                  <div className="flex justify-between border-b border-zinc-800 pb-3">
-                    <span className="text-zinc-500">Years of Experience</span>
-                    <span className="text-gold font-bold">12+</span>
+                    <span className="text-zinc-500">Team Members</span>
+                    <span className="text-gold font-bold">10+</span>
                   </div>
                   <div className="flex justify-between">
                     <span className="text-zinc-500">Client Satisfaction</span>

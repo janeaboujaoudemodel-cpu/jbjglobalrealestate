@@ -232,7 +232,7 @@ const MarketReportCTA = () => {
                 Exclusive for <span className="text-gold font-semibold">JJ Global Capital</span>
               </p>
               <p className="text-zinc-400 text-[10px] uppercase tracking-widest">
-                Powered by Dubai | JJ Holding Group
+                Real Estate Brokerage • Dubai, UAE
               </p>
             </div>
           </div>
