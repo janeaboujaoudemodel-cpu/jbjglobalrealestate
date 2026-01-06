@@ -1,38 +1,173 @@
 import { useState } from "react";
-import { MapPin, Phone, Mail, Clock, ArrowUpRight, MessageCircle } from "lucide-react";
+import { useForm } from "react-hook-form";
+import { zodResolver } from "@hookform/resolvers/zod";
+import { z } from "zod";
+import { MapPin, Phone, Mail, Calendar, ArrowUpRight, MessageCircle, Send, Loader2, CheckCircle, Shield } from "lucide-react";
 import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
+import { Textarea } from "@/components/ui/textarea";
+import { Checkbox } from "@/components/ui/checkbox";
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
+import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from "@/components/ui/form";
 import Footer from "@/components/Footer";
-import InquiryFormModal from "@/components/InquiryFormModal";
 import { useLanguage } from "@/contexts/LanguageContext";
 import { CONTACT_INFO, getWhatsAppUrl, getCallUrl, getEmailUrl } from "@/constants/stats";
+import { toast } from "sonner";
+import { supabase } from "@/integrations/supabase/client";
+import { useLeadCapture } from "@/hooks/useLeadCapture";
+import { getCountryList, getLanguageList } from "@/constants/localeOptions";
+import { Link } from "react-router-dom";
+
+// Phone validation: E.164 format with country code (e.g., +971...)
+const phoneRegex = /^\+[1-9]\d{6,14}$/;
+
+const consultationSchema = z.object({
+  fullName: z.string().min(2, "Full name is required").max(100, "Name must be less than 100 characters"),
+  email: z.string().email("Please enter a valid email address").max(255),
+  phone: z.string()
+    .min(8, "Phone number is required")
+    .max(20, "Phone number is too long")
+    .regex(/^\+?[0-9\s\-()]+$/, "Please enter a valid phone number with country code (e.g., +971 56 591 1000)"),
+  nationality: z.string().min(1, "Please select your nationality"),
+  language: z.string().min(1, "Please select your preferred language"),
+  currentLocation: z.string().min(2, "Please enter your current location").max(100),
+  serviceNeeded: z.string().min(1, "Please select a service"),
+  budgetRange: z.string().optional(),
+  timeline: z.string().optional(),
+  message: z.string().max(1000, "Message must be less than 1000 characters").optional(),
+  confirmAccurate: z.boolean().refine((val) => val === true, {
+    message: "Please confirm the information is accurate",
+  }),
+  agreeTerms: z.boolean().refine((val) => val === true, {
+    message: "You must agree to the Terms of Service and Privacy Policy",
+  }),
+  marketingConsent: z.boolean().optional(),
+});
+
+type ConsultationFormData = z.infer<typeof consultationSchema>;
+
+const SERVICE_OPTIONS = [
+  { value: "buy-sell", label: "Buy / Sell Brokerage" },
+  { value: "leasing", label: "Leasing Brokerage" },
+  { value: "holiday-homes", label: "Holiday Homes (Short-Term)" },
+  { value: "partner-mortgage", label: "Partner Introduction: Mortgage" },
+  { value: "partner-legal", label: "Partner Introduction: Legal" },
+  { value: "partner-concierge", label: "Partner Introduction: Concierge" },
+];
+
+const BUDGET_OPTIONS = [
+  { value: "under-1m", label: "Under AED 1 Million" },
+  { value: "1m-3m", label: "AED 1 - 3 Million" },
+  { value: "3m-5m", label: "AED 3 - 5 Million" },
+  { value: "5m-10m", label: "AED 5 - 10 Million" },
+  { value: "10m-25m", label: "AED 10 - 25 Million" },
+  { value: "over-25m", label: "Over AED 25 Million" },
+  { value: "prefer-not", label: "Prefer Not to Say" },
+];
+
+const TIMELINE_OPTIONS = [
+  { value: "immediate", label: "Immediate (Within 1 Month)" },
+  { value: "1-3-months", label: "1 - 3 Months" },
+  { value: "3-6-months", label: "3 - 6 Months" },
+  { value: "6-12-months", label: "6 - 12 Months" },
+  { value: "over-12", label: "Over 12 Months" },
+  { value: "just-exploring", label: "Just Exploring" },
+];
 
 const Contact = () => {
-  const [isInquiryOpen, setIsInquiryOpen] = useState(false);
+  const [isSubmitting, setIsSubmitting] = useState(false);
+  const [isSuccess, setIsSuccess] = useState(false);
   const { t } = useLanguage();
+  const { captureLead } = useLeadCapture();
+  
+  const countries = getCountryList();
+  const languages = getLanguageList();
 
-  const contactInfo = [
+  const form = useForm<ConsultationFormData>({
+    resolver: zodResolver(consultationSchema),
+    defaultValues: {
+      fullName: "",
+      email: "",
+      phone: "",
+      nationality: "",
+      language: "",
+      currentLocation: "",
+      serviceNeeded: "",
+      budgetRange: "",
+      timeline: "",
+      message: "",
+      confirmAccurate: false,
+      agreeTerms: false,
+      marketingConsent: false,
+    },
+  });
+
+  const onSubmit = async (data: ConsultationFormData) => {
+    setIsSubmitting(true);
+    try {
+      // Capture lead
+      await captureLead({
+        email: data.email,
+        fullName: data.fullName,
+        phone: data.phone,
+        nationality: data.nationality,
+        language: data.language,
+      }, "contact-consultation");
+
+      // Send email via edge function
+      await supabase.functions.invoke("send-inquiry-email", {
+        body: {
+          fullName: data.fullName,
+          email: data.email,
+          phone: data.phone,
+          nationality: data.nationality,
+          language: data.language,
+          source: "contact-consultation",
+          context: {
+            currentLocation: data.currentLocation,
+            serviceNeeded: data.serviceNeeded,
+            budgetRange: data.budgetRange || "Not specified",
+            timeline: data.timeline || "Not specified",
+            marketingConsent: data.marketingConsent ? "Yes" : "No",
+          },
+          message: data.message,
+        },
+      });
+
+      setIsSuccess(true);
+      toast.success("Your inquiry has been submitted successfully!");
+      form.reset();
+    } catch (error) {
+      console.error("Error submitting form:", error);
+      toast.error("Something went wrong. Please try again or contact us directly.");
+    } finally {
+      setIsSubmitting(false);
+    }
+  };
+
+  const contactCards = [
     {
       icon: MapPin,
-      title: t('contact.location'),
-      lines: ["Downtown Dubai", "United Arab Emirates"],
+      title: "Location",
+      value: "Downtown Dubai, UAE",
       action: null,
     },
     {
       icon: Phone,
-      title: t('contact.phone'),
-      lines: [CONTACT_INFO.phone],
-      action: { type: "call", url: getCallUrl() },
+      title: "Phone",
+      value: CONTACT_INFO.phone,
+      action: getCallUrl(),
     },
     {
       icon: Mail,
-      title: t('contact.email'),
-      lines: [CONTACT_INFO.emailCapitalized],
-      action: { type: "email", url: getEmailUrl() },
+      title: "Email",
+      value: CONTACT_INFO.email,
+      action: getEmailUrl(),
     },
     {
-      icon: Clock,
-      title: t('contact.hours'),
-      lines: ["Sun - Thu: 9:00 AM - 6:00 PM", "Fri - Sat: By Appointment"],
+      icon: Calendar,
+      title: "Availability",
+      value: "By Appointment",
       action: null,
     },
   ];
@@ -40,49 +175,48 @@ const Contact = () => {
   return (
     <div className="min-h-screen bg-black">
       {/* Hero Section */}
-      <section className="relative py-24 md:py-32">
+      <section className="relative py-20 md:py-28">
         <div className="absolute inset-0 bg-gradient-to-b from-zinc-900/50 to-black" />
         <div className="relative container mx-auto px-4">
-          <p className="text-gold text-sm uppercase tracking-widest mb-4">Real Estate Brokerage</p>
+          <p className="text-gold text-sm uppercase tracking-[0.2em] mb-4">Real Estate Brokerage</p>
           <h1 
-            className="text-white text-4xl md:text-6xl font-bold mb-6 max-w-3xl"
+            className="text-white text-4xl md:text-5xl lg:text-6xl font-bold mb-6 max-w-4xl"
             style={{ fontFamily: "Poppins, sans-serif" }}
           >
             Book a Consultation
           </h1>
-          <p className="text-zinc-400 text-lg max-w-2xl leading-relaxed">
-            Our brokerage team is ready to assist with property sales, leasing, and holiday home services. 
-            We also provide introductions to trusted legal and mortgage partners.
+          <p className="text-zinc-300 text-lg md:text-xl max-w-3xl leading-relaxed mb-4">
+            Brokerage support for buying, selling, and leasing property in Dubai and the UAE. 
+            We also coordinate introductions to independent licensed partners for legal, mortgage, and concierge support.
+          </p>
+          <p className="text-zinc-500 text-sm max-w-2xl leading-relaxed border-l-2 border-gold/30 pl-4">
+            Introductions and coordination only — partner services are delivered under the partner's own terms and licence.
           </p>
         </div>
       </section>
 
       {/* Contact Cards */}
-      <section className="py-16 border-y border-zinc-800">
+      <section className="py-10 border-y border-zinc-800">
         <div className="container mx-auto px-4">
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
-            {contactInfo.map((item) => (
+          <div className="grid grid-cols-2 lg:grid-cols-4 gap-4 md:gap-6">
+            {contactCards.map((card) => (
               <div 
-                key={item.title}
-                className="bg-zinc-900/50 border border-zinc-800 rounded-xl p-6 hover:border-gold/30 transition-colors"
+                key={card.title}
+                className="bg-zinc-900/50 border border-zinc-800 rounded-xl p-5 hover:border-gold/30 transition-colors"
               >
-                <div className="w-12 h-12 bg-gold/10 rounded-lg flex items-center justify-center mb-4">
-                  <item.icon className="w-6 h-6 text-gold" />
+                <div className="w-10 h-10 bg-gold/10 rounded-lg flex items-center justify-center mb-3">
+                  <card.icon className="w-5 h-5 text-gold" />
                 </div>
-                <h3 className="text-white font-semibold mb-3">{item.title}</h3>
-                {item.action ? (
+                <h3 className="text-white font-semibold text-sm mb-1">{card.title}</h3>
+                {card.action ? (
                   <a 
-                    href={item.action.url}
-                    className="text-zinc-400 hover:text-gold transition-colors text-sm block"
+                    href={card.action}
+                    className="text-zinc-400 hover:text-gold transition-colors text-sm"
                   >
-                    {item.lines.map((line, i) => (
-                      <p key={i}>{line}</p>
-                    ))}
+                    {card.value}
                   </a>
                 ) : (
-                  item.lines.map((line, i) => (
-                    <p key={i} className="text-zinc-400 text-sm">{line}</p>
-                  ))
+                  <p className="text-zinc-400 text-sm">{card.value}</p>
                 )}
               </div>
             ))}
@@ -90,88 +224,453 @@ const Contact = () => {
         </div>
       </section>
 
-      {/* Main CTA - Opens Inquiry Form */}
-      <section className="py-20">
+      {/* Consultation Form Section */}
+      <section className="py-16 md:py-20">
         <div className="container mx-auto px-4">
-          <div className="max-w-3xl mx-auto text-center">
-            <h2 
-              className="text-white text-3xl md:text-4xl font-bold mb-6"
-              style={{ fontFamily: "Poppins, sans-serif" }}
-            >
-              Ready to Get Started?
-            </h2>
-            <p className="text-zinc-400 text-lg mb-4 leading-relaxed">
-              Complete our inquiry form and a member of our brokerage team will contact you 
-              within 24 hours to discuss your property requirements.
-            </p>
-            <p className="text-zinc-500 text-sm mb-8 leading-relaxed">
-              This consultation is for real estate brokerage guidance and partner introductions only. 
-              We do not provide legal, mortgage, or investment advice.
-            </p>
-            <Button 
-              onClick={() => setIsInquiryOpen(true)}
-              className="bg-gradient-to-r from-gold to-gold-dark text-black hover:opacity-90 px-10 py-6 h-auto text-lg font-semibold"
-            >
-              Start Your Inquiry
-              <ArrowUpRight className="w-5 h-5 ml-2" />
-            </Button>
+          <div className="max-w-3xl mx-auto">
+            {isSuccess ? (
+              /* Success State */
+              <div className="bg-zinc-900/50 border border-green-800/50 rounded-2xl p-8 md:p-12 text-center">
+                <div className="w-20 h-20 rounded-full bg-gradient-to-br from-green-500 to-green-600 flex items-center justify-center mx-auto mb-6 shadow-2xl shadow-green-500/30">
+                  <CheckCircle className="w-10 h-10 text-white" />
+                </div>
+                <h2 className="text-2xl md:text-3xl font-bold text-white mb-4" style={{ fontFamily: "Poppins, sans-serif" }}>
+                  Thank You for Your Inquiry
+                </h2>
+                <p className="text-zinc-400 text-lg mb-6">
+                  We have received your consultation request and will be in touch soon.
+                </p>
+                <div className="bg-zinc-900 border border-zinc-800 rounded-xl p-6 text-left max-w-md mx-auto">
+                  <h3 className="text-gold font-semibold mb-3 text-sm uppercase tracking-wider">Contact Information</h3>
+                  <div className="space-y-2 text-sm">
+                    <p className="text-zinc-300"><span className="text-zinc-500">Phone:</span> {CONTACT_INFO.phone}</p>
+                    <p className="text-zinc-300"><span className="text-zinc-500">Email:</span> {CONTACT_INFO.email}</p>
+                    <p className="text-zinc-300"><span className="text-zinc-500">WhatsApp:</span> {CONTACT_INFO.phone}</p>
+                  </div>
+                </div>
+                <Button 
+                  onClick={() => setIsSuccess(false)}
+                  className="mt-8 bg-gold hover:bg-gold-light text-black font-semibold px-8"
+                >
+                  Submit Another Inquiry
+                </Button>
+              </div>
+            ) : (
+              /* Form */
+              <div className="bg-zinc-900/30 border border-zinc-800 rounded-2xl p-6 md:p-10">
+                <div className="text-center mb-8">
+                  <div className="w-14 h-14 bg-gold/10 border border-gold/30 rounded-xl flex items-center justify-center mx-auto mb-4">
+                    <Shield className="w-7 h-7 text-gold" />
+                  </div>
+                  <h2 className="text-2xl md:text-3xl font-bold text-white mb-2" style={{ fontFamily: "Poppins, sans-serif" }}>
+                    Consultation Request
+                  </h2>
+                  <p className="text-zinc-400 text-sm">
+                    Complete the form below and our team will reach out to discuss your requirements.
+                  </p>
+                </div>
+
+                <Form {...form}>
+                  <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-6">
+                    {/* Personal Information */}
+                    <div className="space-y-4">
+                      <FormField
+                        control={form.control}
+                        name="fullName"
+                        render={({ field }) => (
+                          <FormItem>
+                            <FormLabel className="text-zinc-300 text-sm">Full Name *</FormLabel>
+                            <FormControl>
+                              <Input 
+                                {...field} 
+                                className="h-12 bg-zinc-900 border-zinc-700 text-white placeholder:text-zinc-500 focus:border-gold"
+                                placeholder="John Doe"
+                              />
+                            </FormControl>
+                            <FormMessage className="text-red-400 text-xs" />
+                          </FormItem>
+                        )}
+                      />
+
+                      <div className="grid md:grid-cols-2 gap-4">
+                        <FormField
+                          control={form.control}
+                          name="email"
+                          render={({ field }) => (
+                            <FormItem>
+                              <FormLabel className="text-zinc-300 text-sm">Email Address *</FormLabel>
+                              <FormControl>
+                                <Input 
+                                  {...field} 
+                                  type="email"
+                                  className="h-12 bg-zinc-900 border-zinc-700 text-white placeholder:text-zinc-500 focus:border-gold"
+                                  placeholder="email@example.com"
+                                />
+                              </FormControl>
+                              <FormMessage className="text-red-400 text-xs" />
+                            </FormItem>
+                          )}
+                        />
+
+                        <FormField
+                          control={form.control}
+                          name="phone"
+                          render={({ field }) => (
+                            <FormItem>
+                              <FormLabel className="text-zinc-300 text-sm">Phone Number *</FormLabel>
+                              <FormControl>
+                                <Input 
+                                  {...field} 
+                                  type="tel"
+                                  className="h-12 bg-zinc-900 border-zinc-700 text-white placeholder:text-zinc-500 focus:border-gold"
+                                  placeholder="+971 56 591 1000"
+                                />
+                              </FormControl>
+                              <FormMessage className="text-red-400 text-xs" />
+                            </FormItem>
+                          )}
+                        />
+                      </div>
+
+                      <div className="grid md:grid-cols-2 gap-4">
+                        <FormField
+                          control={form.control}
+                          name="nationality"
+                          render={({ field }) => (
+                            <FormItem>
+                              <FormLabel className="text-zinc-300 text-sm">Nationality *</FormLabel>
+                              <Select onValueChange={field.onChange} value={field.value}>
+                                <FormControl>
+                                  <SelectTrigger className="h-12 bg-zinc-900 border-zinc-700 text-white">
+                                    <SelectValue placeholder="Select nationality" />
+                                  </SelectTrigger>
+                                </FormControl>
+                                <SelectContent className="bg-zinc-900 border-zinc-700 max-h-60">
+                                  {countries.map((country) => (
+                                    <SelectItem key={country} value={country} className="text-white hover:bg-zinc-800">
+                                      {country}
+                                    </SelectItem>
+                                  ))}
+                                </SelectContent>
+                              </Select>
+                              <FormMessage className="text-red-400 text-xs" />
+                            </FormItem>
+                          )}
+                        />
+
+                        <FormField
+                          control={form.control}
+                          name="language"
+                          render={({ field }) => (
+                            <FormItem>
+                              <FormLabel className="text-zinc-300 text-sm">Preferred Language *</FormLabel>
+                              <Select onValueChange={field.onChange} value={field.value}>
+                                <FormControl>
+                                  <SelectTrigger className="h-12 bg-zinc-900 border-zinc-700 text-white">
+                                    <SelectValue placeholder="Select language" />
+                                  </SelectTrigger>
+                                </FormControl>
+                                <SelectContent className="bg-zinc-900 border-zinc-700 max-h-60">
+                                  {languages.map((lang) => (
+                                    <SelectItem key={lang} value={lang} className="text-white hover:bg-zinc-800">
+                                      {lang}
+                                    </SelectItem>
+                                  ))}
+                                </SelectContent>
+                              </Select>
+                              <FormMessage className="text-red-400 text-xs" />
+                            </FormItem>
+                          )}
+                        />
+                      </div>
+
+                      <FormField
+                        control={form.control}
+                        name="currentLocation"
+                        render={({ field }) => (
+                          <FormItem>
+                            <FormLabel className="text-zinc-300 text-sm">Current Location (Country & City) *</FormLabel>
+                            <FormControl>
+                              <Input 
+                                {...field} 
+                                className="h-12 bg-zinc-900 border-zinc-700 text-white placeholder:text-zinc-500 focus:border-gold"
+                                placeholder="e.g., Dubai, UAE or London, UK"
+                              />
+                            </FormControl>
+                            <FormMessage className="text-red-400 text-xs" />
+                          </FormItem>
+                        )}
+                      />
+                    </div>
+
+                    {/* Service Selection */}
+                    <div className="h-px bg-zinc-800 my-6" />
+                    
+                    <div className="space-y-4">
+                      <FormField
+                        control={form.control}
+                        name="serviceNeeded"
+                        render={({ field }) => (
+                          <FormItem>
+                            <FormLabel className="text-zinc-300 text-sm">Service Needed *</FormLabel>
+                            <Select onValueChange={field.onChange} value={field.value}>
+                              <FormControl>
+                                <SelectTrigger className="h-12 bg-zinc-900 border-zinc-700 text-white">
+                                  <SelectValue placeholder="Select a service" />
+                                </SelectTrigger>
+                              </FormControl>
+                              <SelectContent className="bg-zinc-900 border-zinc-700">
+                                {SERVICE_OPTIONS.map((option) => (
+                                  <SelectItem key={option.value} value={option.value} className="text-white hover:bg-zinc-800">
+                                    {option.label}
+                                  </SelectItem>
+                                ))}
+                              </SelectContent>
+                            </Select>
+                            <FormMessage className="text-red-400 text-xs" />
+                          </FormItem>
+                        )}
+                      />
+
+                      <div className="grid md:grid-cols-2 gap-4">
+                        <FormField
+                          control={form.control}
+                          name="budgetRange"
+                          render={({ field }) => (
+                            <FormItem>
+                              <FormLabel className="text-zinc-300 text-sm">Budget Range (Optional)</FormLabel>
+                              <Select onValueChange={field.onChange} value={field.value}>
+                                <FormControl>
+                                  <SelectTrigger className="h-12 bg-zinc-900 border-zinc-700 text-white">
+                                    <SelectValue placeholder="Select budget" />
+                                  </SelectTrigger>
+                                </FormControl>
+                                <SelectContent className="bg-zinc-900 border-zinc-700">
+                                  {BUDGET_OPTIONS.map((option) => (
+                                    <SelectItem key={option.value} value={option.value} className="text-white hover:bg-zinc-800">
+                                      {option.label}
+                                    </SelectItem>
+                                  ))}
+                                </SelectContent>
+                              </Select>
+                            </FormItem>
+                          )}
+                        />
+
+                        <FormField
+                          control={form.control}
+                          name="timeline"
+                          render={({ field }) => (
+                            <FormItem>
+                              <FormLabel className="text-zinc-300 text-sm">Timeline (Optional)</FormLabel>
+                              <Select onValueChange={field.onChange} value={field.value}>
+                                <FormControl>
+                                  <SelectTrigger className="h-12 bg-zinc-900 border-zinc-700 text-white">
+                                    <SelectValue placeholder="Select timeline" />
+                                  </SelectTrigger>
+                                </FormControl>
+                                <SelectContent className="bg-zinc-900 border-zinc-700">
+                                  {TIMELINE_OPTIONS.map((option) => (
+                                    <SelectItem key={option.value} value={option.value} className="text-white hover:bg-zinc-800">
+                                      {option.label}
+                                    </SelectItem>
+                                  ))}
+                                </SelectContent>
+                              </Select>
+                            </FormItem>
+                          )}
+                        />
+                      </div>
+
+                      <FormField
+                        control={form.control}
+                        name="message"
+                        render={({ field }) => (
+                          <FormItem>
+                            <FormLabel className="text-zinc-300 text-sm">Additional Message (Optional)</FormLabel>
+                            <FormControl>
+                              <Textarea 
+                                {...field} 
+                                className="min-h-[100px] bg-zinc-900 border-zinc-700 text-white placeholder:text-zinc-500 focus:border-gold resize-none"
+                                placeholder="Tell us more about your requirements..."
+                              />
+                            </FormControl>
+                            <FormMessage className="text-red-400 text-xs" />
+                          </FormItem>
+                        )}
+                      />
+                    </div>
+
+                    {/* Checkboxes */}
+                    <div className="h-px bg-zinc-800 my-6" />
+
+                    <div className="space-y-4">
+                      <FormField
+                        control={form.control}
+                        name="confirmAccurate"
+                        render={({ field }) => (
+                          <FormItem className="flex flex-row items-start space-x-3 space-y-0">
+                            <FormControl>
+                              <Checkbox 
+                                checked={field.value} 
+                                onCheckedChange={field.onChange}
+                                className="border-zinc-600 data-[state=checked]:bg-gold data-[state=checked]:border-gold mt-0.5"
+                              />
+                            </FormControl>
+                            <div className="space-y-1 leading-none">
+                              <FormLabel className="text-zinc-300 text-sm font-normal cursor-pointer">
+                                I confirm the information provided is accurate. *
+                              </FormLabel>
+                              <FormMessage className="text-red-400 text-xs" />
+                            </div>
+                          </FormItem>
+                        )}
+                      />
+
+                      <FormField
+                        control={form.control}
+                        name="agreeTerms"
+                        render={({ field }) => (
+                          <FormItem className="flex flex-row items-start space-x-3 space-y-0">
+                            <FormControl>
+                              <Checkbox 
+                                checked={field.value} 
+                                onCheckedChange={field.onChange}
+                                className="border-zinc-600 data-[state=checked]:bg-gold data-[state=checked]:border-gold mt-0.5"
+                              />
+                            </FormControl>
+                            <div className="space-y-1 leading-none">
+                              <FormLabel className="text-zinc-300 text-sm font-normal cursor-pointer">
+                                I agree to the{" "}
+                                <Link to="/terms" className="text-gold hover:underline">Terms of Service</Link>
+                                {" "}and{" "}
+                                <Link to="/privacy" className="text-gold hover:underline">Privacy Policy</Link>. *
+                              </FormLabel>
+                              <FormMessage className="text-red-400 text-xs" />
+                            </div>
+                          </FormItem>
+                        )}
+                      />
+
+                      <FormField
+                        control={form.control}
+                        name="marketingConsent"
+                        render={({ field }) => (
+                          <FormItem className="flex flex-row items-start space-x-3 space-y-0">
+                            <FormControl>
+                              <Checkbox 
+                                checked={field.value} 
+                                onCheckedChange={field.onChange}
+                                className="border-zinc-600 data-[state=checked]:bg-gold data-[state=checked]:border-gold mt-0.5"
+                              />
+                            </FormControl>
+                            <div className="space-y-1 leading-none">
+                              <FormLabel className="text-zinc-300 text-sm font-normal cursor-pointer">
+                                I would like to receive updates and market insights. (Optional)
+                              </FormLabel>
+                            </div>
+                          </FormItem>
+                        )}
+                      />
+                    </div>
+
+                    {/* Submit Button */}
+                    <Button
+                      type="submit"
+                      disabled={isSubmitting}
+                      className="w-full h-14 bg-gradient-to-r from-gold via-gold-light to-gold text-black hover:opacity-90 font-semibold text-base shadow-xl shadow-gold/20 mt-6"
+                    >
+                      {isSubmitting ? (
+                        <>
+                          <Loader2 className="w-5 h-5 mr-2 animate-spin" />
+                          Submitting...
+                        </>
+                      ) : (
+                        <>
+                          <Send className="w-5 h-5 mr-2" />
+                          Start Your Inquiry
+                        </>
+                      )}
+                    </Button>
+                  </form>
+                </Form>
+              </div>
+            )}
           </div>
         </div>
       </section>
 
       {/* Direct Contact CTAs */}
-      <section className="py-16 bg-zinc-900/30">
+      <section className="py-12 bg-zinc-900/30">
         <div className="container mx-auto px-4">
-          <div className="grid md:grid-cols-2 gap-6 max-w-4xl mx-auto">
+          <p className="text-center text-zinc-500 text-sm mb-6">Prefer to reach us directly?</p>
+          <div className="grid md:grid-cols-2 gap-4 max-w-2xl mx-auto">
             {/* WhatsApp CTA */}
             <a 
               href={getWhatsAppUrl()}
               target="_blank"
               rel="noopener noreferrer"
-              className="flex items-center gap-6 bg-black border border-green-800/50 hover:border-green-600 rounded-xl p-6 transition-all group hover:shadow-lg hover:shadow-green-600/20"
+              className="flex items-center gap-4 bg-black border border-green-800/50 hover:border-green-600 rounded-xl p-5 transition-all group hover:shadow-lg hover:shadow-green-600/20"
             >
-              <div className="w-16 h-16 bg-green-600/20 rounded-full flex items-center justify-center group-hover:scale-110 transition-transform">
-                <MessageCircle className="w-8 h-8 text-green-500" />
+              <div className="w-12 h-12 bg-green-600/20 rounded-full flex items-center justify-center group-hover:scale-110 transition-transform">
+                <MessageCircle className="w-6 h-6 text-green-500" />
               </div>
               <div>
-                <h3 className="text-white text-xl font-bold mb-1" style={{ fontFamily: "Poppins, sans-serif" }}>
-                  {t('contact.whatsapp')}
+                <h3 className="text-white font-semibold mb-0.5" style={{ fontFamily: "Poppins, sans-serif" }}>
+                  WhatsApp
                 </h3>
-                <p className="text-zinc-400 text-sm">
-                  Connect instantly for immediate assistance
-                </p>
+                <p className="text-zinc-400 text-sm">{CONTACT_INFO.phone}</p>
               </div>
             </a>
 
             {/* Call CTA */}
             <a 
               href={getCallUrl()}
-              className="flex items-center gap-6 bg-black border border-gold/30 hover:border-gold rounded-xl p-6 transition-all group hover:shadow-lg hover:shadow-gold/20"
+              className="flex items-center gap-4 bg-black border border-gold/30 hover:border-gold rounded-xl p-5 transition-all group hover:shadow-lg hover:shadow-gold/20"
             >
-              <div className="w-16 h-16 bg-gold/20 rounded-full flex items-center justify-center group-hover:scale-110 transition-transform">
-                <Phone className="w-8 h-8 text-gold" />
+              <div className="w-12 h-12 bg-gold/20 rounded-full flex items-center justify-center group-hover:scale-110 transition-transform">
+                <Phone className="w-6 h-6 text-gold" />
               </div>
               <div>
-                <h3 className="text-white text-xl font-bold mb-1" style={{ fontFamily: "Poppins, sans-serif" }}>
-                  {t('contact.callNow')}
+                <h3 className="text-white font-semibold mb-0.5" style={{ fontFamily: "Poppins, sans-serif" }}>
+                  Call Us
                 </h3>
-                <p className="text-zinc-400 text-sm">
-                  {CONTACT_INFO.phone}
-                </p>
+                <p className="text-zinc-400 text-sm">{CONTACT_INFO.phone}</p>
               </div>
             </a>
           </div>
         </div>
       </section>
 
-      <Footer />
+      {/* Compliance Disclaimer */}
+      <section className="py-10 border-t border-zinc-800">
+        <div className="container mx-auto px-4">
+          <div className="max-w-3xl mx-auto bg-zinc-900/30 border border-zinc-800 rounded-xl p-6 md:p-8">
+            <div className="flex items-center gap-2 mb-4">
+              <div className="w-8 h-8 bg-gold/10 border border-gold/30 rounded-lg flex items-center justify-center">
+                <Shield className="w-4 h-4 text-gold" />
+              </div>
+              <h3 className="text-white font-semibold">Important Notice</h3>
+            </div>
+            
+            <p className="text-zinc-400 text-sm leading-relaxed mb-4">
+              JJ Global Capital provides real estate brokerage support and coordination. 
+              We can introduce you to independent, licensed partners for legal services, mortgages, and concierge support. 
+              Partner services are delivered under the partner's own licence and terms, and the client contracts directly with the partner. 
+              We do not provide legal, mortgage, financial, or investment advice.
+            </p>
+            
+            <p className="text-zinc-500 text-sm leading-relaxed" dir="rtl">
+              جي جي جلوبال كابيتال تقدم خدمات وساطة عقارية ودعم تنسيقي. 
+              يمكننا ربطك بشركاء مستقلين ومرخصين للخدمات القانونية والتمويل العقاري وخدمات الكونسيرج. 
+              تُقدَّم خدمات الشركاء وفق ترخيصهم وشروطهم الخاصة، ويكون التعاقد مباشرة بين العميل والشريك. 
+              نحن لا نقدم استشارات قانونية أو تمويلية أو استثمارية.
+            </p>
+          </div>
+        </div>
+      </section>
 
-      {/* Inquiry Form Modal */}
-      <InquiryFormModal 
-        isOpen={isInquiryOpen} 
-        onClose={() => setIsInquiryOpen(false)} 
-        source="contact-page"
-      />
+      <Footer />
     </div>
   );
 };
