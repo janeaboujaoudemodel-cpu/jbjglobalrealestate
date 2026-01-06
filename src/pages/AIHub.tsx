@@ -184,17 +184,18 @@ const AIHub = () => {
   return (
     <section className="relative w-full min-h-screen bg-black">
       {/* Hero Section */}
-      <div className="relative py-24 md:py-32 overflow-hidden">
-        {/* Animated gradient background */}
-        <div className="absolute inset-0">
-          <div className="absolute inset-0 bg-gradient-to-b from-purple-950/50 via-zinc-950 to-black" />
+      <div className="relative py-24 md:py-32 overflow-hidden ai-hero-bg">
+        {/* Animated gradient orbs */}
+        <div className="absolute inset-0 overflow-hidden">
           <div 
-            className="absolute top-0 left-1/4 w-96 h-96 bg-purple-500/20 rounded-full blur-3xl animate-pulse"
-            style={{ animationDuration: '4s' }}
+            className="absolute top-0 left-1/4 w-[500px] h-[500px] bg-ai-purple/20 rounded-full blur-[100px] animate-pulse-glow"
           />
           <div 
-            className="absolute bottom-0 right-1/4 w-96 h-96 bg-fuchsia-500/20 rounded-full blur-3xl animate-pulse"
+            className="absolute bottom-0 right-1/4 w-[400px] h-[400px] bg-ai-fuchsia/15 rounded-full blur-[80px] animate-pulse"
             style={{ animationDuration: '6s', animationDelay: '2s' }}
+          />
+          <div 
+            className="absolute top-1/3 right-1/3 w-[300px] h-[300px] bg-ai-cyan/10 rounded-full blur-[60px] animate-float"
           />
         </div>
 
@@ -206,7 +207,7 @@ const AIHub = () => {
             className="text-center max-w-4xl mx-auto"
           >
             <motion.div variants={fadeInUp}>
-              <span className="inline-flex items-center gap-2 px-5 py-2.5 bg-gradient-to-r from-purple-500/20 to-fuchsia-500/20 border border-purple-500/30 rounded-full text-purple-300 text-xs md:text-sm uppercase tracking-[0.4em] mb-8">
+              <span className="ai-tag inline-flex items-center gap-2 mb-8">
                 <Sparkles className="w-4 h-4" />
                 AI-Powered Platform
               </span>
@@ -218,7 +219,7 @@ const AIHub = () => {
               style={{ fontFamily: "Poppins, sans-serif" }}
             >
               The Future of{" "}
-              <span className="text-transparent bg-clip-text bg-gradient-to-r from-purple-400 via-fuchsia-400 to-pink-400">
+              <span className="ai-gradient-text">
                 Real Estate Intelligence
               </span>
             </motion.h1>
@@ -242,7 +243,7 @@ const AIHub = () => {
 
             <motion.div variants={fadeInUp} className="flex flex-wrap justify-center gap-4">
               <Link to="/quiz">
-                <Button className="bg-gradient-to-r from-purple-600 to-fuchsia-600 hover:from-purple-500 hover:to-fuchsia-500 text-white font-semibold px-8 py-6 text-base shadow-xl shadow-purple-500/30">
+                <Button className="ai-button-primary text-white px-8 py-6 text-base">
                   <Sparkles className="w-5 h-5 mr-2" />
                   Start AI Home Finder
                   <ArrowUpRight className="w-5 h-5 ml-2" />
@@ -251,7 +252,7 @@ const AIHub = () => {
               <Link to="/properties">
                 <Button 
                   variant="outline"
-                  className="border-purple-500/50 text-purple-300 hover:bg-purple-500/10 hover:border-purple-400 px-8 py-6 text-base"
+                  className="border-ai-purple/50 text-ai-purple hover:bg-ai-purple/10 hover:border-ai-purple px-8 py-6 text-base"
                 >
                   Browse Properties
                 </Button>
@@ -284,8 +285,8 @@ const AIHub = () => {
                 className="text-center p-6"
                 variants={fadeInUp}
               >
-                <div className="w-14 h-14 rounded-2xl bg-gradient-to-br from-purple-500/20 to-fuchsia-500/20 border border-purple-500/20 flex items-center justify-center mx-auto mb-4">
-                  <benefit.icon className="w-7 h-7 text-purple-400" />
+                <div className="w-14 h-14 rounded-2xl bg-ai-purple/10 border border-ai-purple/20 flex items-center justify-center mx-auto mb-4 ai-icon-glow">
+                  <benefit.icon className="w-7 h-7 text-ai-purple" />
                 </div>
                 <h3 className="text-white font-semibold mb-2">{benefit.title}</h3>
                 <p className="text-zinc-500 text-sm leading-relaxed">{benefit.description}</p>
@@ -373,10 +374,7 @@ const AIHub = () => {
             {aiTools.filter(t => !t.featured).map((tool) => (
               <motion.div key={tool.id} variants={fadeInUp}>
                 <Link to={tool.link} className="block group h-full">
-                  <div className={`relative p-6 rounded-2xl bg-zinc-900/50 border ${tool.borderColor} hover:border-opacity-70 transition-all duration-500 h-full overflow-hidden group-hover:-translate-y-1`}>
-                    {/* Glow effect */}
-                    <div className={`absolute inset-0 ${tool.bgColor} opacity-0 group-hover:opacity-100 transition-opacity duration-500 rounded-2xl`} />
-                    
+                  <div className="ai-card p-6 h-full">
                     <div className="relative z-10">
                       {/* Header */}
                       <div className="flex items-start gap-4 mb-4">
