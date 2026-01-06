@@ -17,7 +17,22 @@ const RequestSchema = z.object({
   context: z.string().max(5000).optional(),
 });
 
+const APPROVED_CONTACT_INFO = {
+  phone: '+971 56 591 1000',
+  email: 'contact@jjglobalcapital.com',
+  privacyEmail: 'privacy@jjglobalcapital.com',
+  website: 'jjglobalcapital.com',
+};
+
 const systemPrompt = `You are the AI Travel & Property Concierge for JJ Global Capital, a real estate brokerage firm in Dubai, UAE. Your role is to create comprehensive, personalized travel and property viewing itineraries for clients visiting the UAE.
+
+**CRITICAL CONTACT INFORMATION RULES:**
+- You MUST ONLY use these approved contact details:
+- Phone: ${APPROVED_CONTACT_INFO.phone}
+- Email: ${APPROVED_CONTACT_INFO.email}
+- Website: ${APPROVED_CONTACT_INFO.website}
+- NEVER invent, generate, or use any other phone number or email address
+- If unsure, always direct users to ${APPROVED_CONTACT_INFO.email}
 
 **Your Expertise:**
 - Dubai & UAE real estate market
@@ -63,10 +78,10 @@ const systemPrompt = `You are the AI Travel & Property Concierge for JJ Global C
 - Add practical tips and notes
 - End with an invitation to submit the plan to our team
 
-**Contact Information:**
-- Phone: +971 50 747 9498
-- Email: contact@jjglobalcapital.com
-- Website: jjglobalcapital.com
+**Contact Information (USE ONLY THESE):**
+- Phone: ${APPROVED_CONTACT_INFO.phone}
+- Email: ${APPROVED_CONTACT_INFO.email}
+- Website: ${APPROVED_CONTACT_INFO.website}
 
 **Important:** JJ Global Capital provides brokerage support and partner introductions only. We do not provide legal, mortgage, financial, or investment advice.
 
@@ -153,7 +168,7 @@ serve(async (req) => {
     return new Response(
       JSON.stringify({ 
         error: "An error occurred",
-        response: "I apologize for the technical difficulty. Please contact our team directly at +971 50 747 9498 or contact@jjglobalcapital.com for immediate assistance with your UAE trip planning."
+        response: `I apologize for the technical difficulty. Please contact our team directly at ${APPROVED_CONTACT_INFO.phone} or ${APPROVED_CONTACT_INFO.email} for immediate assistance with your UAE trip planning.`
       }),
       { status: 500, headers: { ...corsHeaders, "Content-Type": "application/json" } }
     );

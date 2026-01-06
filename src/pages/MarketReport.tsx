@@ -1547,7 +1547,7 @@ const MarketReport = () => {
       <p>Real Estate Brokerage • Dubai, UAE</p>
       <p style="margin-top: 10px;">
         Email: <a href="mailto:contact@jjglobalcapital.com" class="contact-link">contact@jjglobalcapital.com</a> • 
-        Phone: <a href="tel:+971585802393" class="contact-link">+971 58 580 2393</a>
+        Phone: <a href="tel:+971565911000" class="contact-link">+971 56 591 1000</a>
       </p>
       
       <div class="social-links">
