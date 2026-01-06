@@ -12,6 +12,7 @@ import {
   Trophy, Lock, ChevronRight, Building2, Briefcase
 } from "lucide-react";
 import { toast } from "sonner";
+import { CertificateGenerator } from "@/components/onboarding/CertificateGenerator";
 
 interface Application {
   id: string;
@@ -44,6 +45,17 @@ interface QuizAttempt {
   attempted_at: string;
 }
 
+interface Certificate {
+  id: string;
+  certificate_number: string;
+  full_name: string;
+  company_score: number;
+  real_estate_score: number;
+  combined_score: number;
+  issued_at: string;
+  verification_token: string;
+}
+
 export default function Onboarding() {
   const { user, loading: authLoading } = useAuth();
   const navigate = useNavigate();
@@ -52,6 +64,7 @@ export default function Onboarding() {
   const [hrRole, setHrRole] = useState<HRRole | null>(null);
   const [modules, setModules] = useState<Module[]>([]);
   const [quizAttempts, setQuizAttempts] = useState<QuizAttempt[]>([]);
+  const [certificate, setCertificate] = useState<Certificate | null>(null);
   const [passThresholds, setPassThresholds] = useState({
     company: 70,
     realEstate: 70,
@@ -111,6 +124,18 @@ export default function Onboarding() {
           .order("attempted_at", { ascending: false });
 
         setQuizAttempts(attemptsData || []);
+
+        // Load existing certificate
+        const { data: certData } = await supabase
+          .from("hr_certificates")
+          .select("id, certificate_number, full_name, company_score, real_estate_score, combined_score, issued_at, verification_token")
+          .eq("user_id", user.id)
+          .eq("is_revoked", false)
+          .maybeSingle();
+
+        if (certData) {
+          setCertificate(certData as Certificate);
+        }
 
         // Load pass thresholds
         const { data: settingsData } = await supabase
@@ -472,17 +497,26 @@ export default function Onboarding() {
           </TabsContent>
         </Tabs>
 
+        {/* Certificate Section */}
+        <div className="mt-12">
+          <h2 className="text-xl font-semibold text-foreground mb-4">Your Certificate</h2>
+          <CertificateGenerator 
+            isEligible={
+              companyProgress.completed >= companyProgress.total &&
+              realEstateProgress.completed >= realEstateProgress.total &&
+              combinedAvg >= passThresholds.combined &&
+              companyProgress.total > 0 &&
+              realEstateProgress.total > 0
+            }
+            existingCertificate={certificate}
+            onCertificateGenerated={(cert) => setCertificate(cert)}
+          />
+        </div>
+
         {/* Coming Soon Section */}
         <div className="mt-12">
           <h2 className="text-xl font-semibold text-foreground mb-4">Coming Soon</h2>
-          <div className="grid md:grid-cols-3 gap-4">
-            <Card className="bg-muted/50 border-border opacity-60">
-              <CardContent className="py-6 text-center">
-                <Lock className="h-8 w-8 text-muted-foreground mx-auto mb-2" />
-                <h3 className="font-medium text-muted-foreground">Certificates</h3>
-                <p className="text-xs text-muted-foreground mt-1">Earn completion certificates</p>
-              </CardContent>
-            </Card>
+          <div className="grid md:grid-cols-2 gap-4">
             <Card className="bg-muted/50 border-border opacity-60">
               <CardContent className="py-6 text-center">
                 <Lock className="h-8 w-8 text-muted-foreground mx-auto mb-2" />

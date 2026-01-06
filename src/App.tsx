@@ -63,6 +63,7 @@ import JoinApplication from "./pages/JoinApplication";
 import Onboarding from "./pages/Onboarding";
 import OnboardingModule from "./pages/OnboardingModule";
 import AdminOnboarding from "./pages/AdminOnboarding";
+import VerifyCertificate from "./pages/VerifyCertificate";
 
 const queryClient = new QueryClient();
 
@@ -136,6 +137,7 @@ const App = () => (
                     <Route path="/onboarding" element={<Onboarding />} />
                     <Route path="/onboarding/module/:moduleId" element={<OnboardingModule />} />
                     <Route path="/admin/onboarding" element={<AdminOnboarding />} />
+                    <Route path="/verify-certificate/:token" element={<VerifyCertificate />} />
                     <Route path="*" element={<NotFound />} />
                     </Routes>
                   </MainLayout>
