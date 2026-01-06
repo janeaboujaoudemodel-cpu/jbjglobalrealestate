@@ -2,13 +2,15 @@ import { useState } from "react";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { z } from "zod";
-import { MapPin, Phone, Mail, Calendar, ArrowUpRight, MessageCircle, Send, Loader2, CheckCircle, Shield } from "lucide-react";
+import { MapPin, Phone, Mail, Calendar, ArrowUpRight, MessageCircle, Send, Loader2, CheckCircle, Shield, ChevronsUpDown, Search } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import { Checkbox } from "@/components/ui/checkbox";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from "@/components/ui/form";
+import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover";
+import { Command, CommandEmpty, CommandGroup, CommandInput, CommandItem, CommandList } from "@/components/ui/command";
 import Footer from "@/components/Footer";
 import { useLanguage } from "@/contexts/LanguageContext";
 import { CONTACT_INFO, getWhatsAppUrl, getCallUrl, getEmailUrl } from "@/constants/stats";
@@ -387,6 +389,7 @@ const Contact = () => {
                           control={form.control}
                           name="phone"
                           render={({ field }) => {
+                            const [codeOpen, setCodeOpen] = useState(false);
                             // Extract country code and local number from value
                             const currentCountry = COUNTRY_CODES.find(c => field.value?.startsWith(c.code)) || COUNTRY_CODES[0];
                             const currentCode = currentCountry.code;
@@ -397,6 +400,7 @@ const Contact = () => {
                               const newCountry = COUNTRY_CODES.find(c => c.code === newCode) || COUNTRY_CODES[0];
                               const cleanLocal = localNumber.replace(/\D/g, '').slice(0, newCountry.maxLen);
                               field.onChange(cleanLocal ? `${newCode} ${formatLocalNumber(cleanLocal, newCountry.maxLen)}` : newCode);
+                              setCodeOpen(false);
                             };
                             
                             const handleNumberChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -409,28 +413,51 @@ const Contact = () => {
                               <FormItem>
                                 <FormLabel className="text-zinc-300 text-sm">Phone Number *</FormLabel>
                                 <div className="flex gap-2">
-                                  <Select value={currentCode} onValueChange={handleCodeChange}>
-                                    <SelectTrigger className="w-[120px] h-12 bg-zinc-900 border-zinc-700 text-white shrink-0">
-                                      <SelectValue>
-                                        {currentCountry.flag} {currentCode}
-                                      </SelectValue>
-                                    </SelectTrigger>
-                                    <SelectContent className="bg-zinc-900 border-zinc-700 max-h-60">
-                                      {COUNTRY_CODES.map((country) => (
-                                        <SelectItem 
-                                          key={country.code} 
-                                          value={country.code} 
-                                          className="text-white hover:bg-zinc-800"
-                                        >
-                                          <span className="flex items-center gap-2">
-                                            <span>{country.flag}</span>
-                                            <span>{country.code}</span>
-                                            <span className="text-zinc-400 text-xs">{country.country}</span>
-                                          </span>
-                                        </SelectItem>
-                                      ))}
-                                    </SelectContent>
-                                  </Select>
+                                  <Popover open={codeOpen} onOpenChange={setCodeOpen}>
+                                    <PopoverTrigger asChild>
+                                      <Button
+                                        variant="outline"
+                                        role="combobox"
+                                        aria-expanded={codeOpen}
+                                        className="w-[130px] h-12 bg-zinc-900 border-zinc-700 text-white hover:bg-zinc-800 hover:text-white justify-between shrink-0"
+                                      >
+                                        <span className="flex items-center gap-1.5 truncate">
+                                          <span>{currentCountry.flag}</span>
+                                          <span>{currentCode}</span>
+                                        </span>
+                                        <ChevronsUpDown className="ml-1 h-4 w-4 shrink-0 opacity-50" />
+                                      </Button>
+                                    </PopoverTrigger>
+                                    <PopoverContent className="w-[220px] p-0 bg-zinc-900 border-zinc-700 z-50" align="start">
+                                      <Command className="bg-zinc-900">
+                                        <CommandInput 
+                                          placeholder="Search country..." 
+                                          className="h-10 text-white border-zinc-700"
+                                        />
+                                        <CommandList className="max-h-[200px]">
+                                          <CommandEmpty className="text-zinc-400 text-sm py-4 text-center">
+                                            No country found.
+                                          </CommandEmpty>
+                                          <CommandGroup>
+                                            {COUNTRY_CODES.map((country) => (
+                                              <CommandItem
+                                                key={country.code}
+                                                value={`${country.country} ${country.code}`}
+                                                onSelect={() => handleCodeChange(country.code)}
+                                                className="text-white hover:bg-zinc-800 cursor-pointer"
+                                              >
+                                                <span className="flex items-center gap-2 w-full">
+                                                  <span>{country.flag}</span>
+                                                  <span className="font-medium">{country.code}</span>
+                                                  <span className="text-zinc-400 text-xs truncate">{country.country}</span>
+                                                </span>
+                                              </CommandItem>
+                                            ))}
+                                          </CommandGroup>
+                                        </CommandList>
+                                      </Command>
+                                    </PopoverContent>
+                                  </Popover>
                                   <FormControl>
                                     <Input 
                                       type="tel"
