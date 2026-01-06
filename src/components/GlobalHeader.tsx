@@ -74,8 +74,8 @@ const GlobalHeader = () => {
             <JJLogoHeaderImage />
           </Link>
 
-          {/* Spacer - Creates clear separation between brand and nav */}
-          <div className="hidden md:block w-8 lg:w-12 xl:w-16 shrink-0" />
+          {/* Gold Divider Line - Separates brand from nav */}
+          <div className="hidden md:block h-8 w-px bg-gradient-to-b from-transparent via-gold/40 to-transparent mx-4 lg:mx-6 xl:mx-8 shrink-0" />
 
           {/* Desktop Navigation - Centered with even spacing */}
           <nav className="hidden md:flex items-center flex-1 justify-center gap-1 lg:gap-2">
