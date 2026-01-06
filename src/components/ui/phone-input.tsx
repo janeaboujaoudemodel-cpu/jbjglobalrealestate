@@ -1,11 +1,132 @@
 import * as React from "react";
-import { useState } from "react";
+import { useState, useEffect, useMemo } from "react";
 import { CheckCircle, ChevronsUpDown } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover";
 import { Command, CommandEmpty, CommandGroup, CommandInput, CommandItem, CommandList } from "@/components/ui/command";
 import { cn } from "@/lib/utils";
+
+// Timezone to country code mapping
+const TIMEZONE_TO_COUNTRY: Record<string, string> = {
+  // GCC
+  "Asia/Dubai": "+971",
+  "Asia/Riyadh": "+966",
+  "Asia/Qatar": "+974",
+  "Asia/Kuwait": "+965",
+  "Asia/Bahrain": "+973",
+  "Asia/Muscat": "+968",
+  // Middle East
+  "Africa/Cairo": "+20",
+  "Asia/Beirut": "+961",
+  "Asia/Amman": "+962",
+  "Europe/Istanbul": "+90",
+  "Asia/Tehran": "+98",
+  "Asia/Jerusalem": "+972",
+  "Asia/Baghdad": "+964",
+  "Africa/Casablanca": "+212",
+  "Africa/Algiers": "+213",
+  "Africa/Tunis": "+216",
+  // Europe
+  "Europe/London": "+44",
+  "Europe/Berlin": "+49",
+  "Europe/Paris": "+33",
+  "Europe/Rome": "+39",
+  "Europe/Madrid": "+34",
+  "Europe/Zurich": "+41",
+  "Europe/Moscow": "+7",
+  "Europe/Amsterdam": "+31",
+  "Europe/Brussels": "+32",
+  "Europe/Vienna": "+43",
+  "Europe/Stockholm": "+46",
+  "Europe/Oslo": "+47",
+  "Europe/Copenhagen": "+45",
+  "Europe/Helsinki": "+358",
+  "Europe/Warsaw": "+48",
+  "Europe/Lisbon": "+351",
+  "Europe/Athens": "+30",
+  "Europe/Dublin": "+353",
+  "Europe/Prague": "+420",
+  "Europe/Budapest": "+36",
+  "Europe/Bucharest": "+40",
+  "Europe/Kiev": "+380",
+  // Asia Pacific
+  "Asia/Shanghai": "+86",
+  "Asia/Hong_Kong": "+852",
+  "Asia/Kolkata": "+91",
+  "Asia/Karachi": "+92",
+  "Asia/Dhaka": "+880",
+  "Asia/Colombo": "+94",
+  "Asia/Kathmandu": "+977",
+  "Australia/Sydney": "+61",
+  "Pacific/Auckland": "+64",
+  "Asia/Singapore": "+65",
+  "Asia/Kuala_Lumpur": "+60",
+  "Asia/Manila": "+63",
+  "Asia/Jakarta": "+62",
+  "Asia/Bangkok": "+66",
+  "Asia/Ho_Chi_Minh": "+84",
+  "Asia/Tokyo": "+81",
+  "Asia/Seoul": "+82",
+  "Asia/Taipei": "+886",
+  // Americas
+  "America/New_York": "+1",
+  "America/Los_Angeles": "+1",
+  "America/Chicago": "+1",
+  "America/Toronto": "+1",
+  "America/Mexico_City": "+52",
+  "America/Sao_Paulo": "+55",
+  "America/Buenos_Aires": "+54",
+  "America/Santiago": "+56",
+  "America/Bogota": "+57",
+  "America/Caracas": "+58",
+  "America/Lima": "+51",
+  "America/Costa_Rica": "+506",
+  "America/Panama": "+507",
+  // Africa
+  "Africa/Johannesburg": "+27",
+  "Africa/Lagos": "+234",
+  "Africa/Nairobi": "+254",
+  "Africa/Accra": "+233",
+  "Africa/Addis_Ababa": "+251",
+  "Africa/Dar_es_Salaam": "+255",
+  "Africa/Kampala": "+256",
+  "Indian/Mauritius": "+230",
+};
+
+// Detect country code from browser timezone or locale
+const detectCountryCode = (): string => {
+  try {
+    // First try timezone
+    const timezone = Intl.DateTimeFormat().resolvedOptions().timeZone;
+    if (timezone && TIMEZONE_TO_COUNTRY[timezone]) {
+      return TIMEZONE_TO_COUNTRY[timezone];
+    }
+    
+    // Fallback to browser language/locale
+    const locale = navigator.language || (navigator as { userLanguage?: string }).userLanguage || '';
+    const region = locale.split('-')[1]?.toUpperCase();
+    
+    // Map common region codes to dial codes
+    const REGION_TO_DIAL: Record<string, string> = {
+      'AE': '+971', 'SA': '+966', 'QA': '+974', 'KW': '+965', 'BH': '+973', 'OM': '+968',
+      'US': '+1', 'CA': '+1', 'GB': '+44', 'UK': '+44', 'DE': '+49', 'FR': '+33',
+      'IT': '+39', 'ES': '+34', 'AU': '+61', 'NZ': '+64', 'IN': '+91', 'PK': '+92',
+      'CN': '+86', 'HK': '+852', 'SG': '+65', 'MY': '+60', 'JP': '+81', 'KR': '+82',
+      'RU': '+7', 'BR': '+55', 'MX': '+52', 'EG': '+20', 'ZA': '+27', 'NG': '+234',
+      'TR': '+90', 'IR': '+98', 'IL': '+972', 'JO': '+962', 'LB': '+961',
+    };
+    
+    if (region && REGION_TO_DIAL[region]) {
+      return REGION_TO_DIAL[region];
+    }
+  } catch {
+    // Silent fail - use default
+  }
+  
+  // Default to UAE for this platform
+  return "+971";
+};
 
 // Country codes grouped by region with dial codes and valid number lengths
 export const COUNTRY_CODES_BY_REGION = {
@@ -155,9 +276,27 @@ export interface PhoneInputProps {
 const PhoneInput = React.forwardRef<HTMLInputElement, PhoneInputProps>(
   ({ value, onChange, placeholder, className, disabled = false, showValidation = true }, ref) => {
     const [codeOpen, setCodeOpen] = useState(false);
+    const [hasInitialized, setHasInitialized] = useState(false);
+    
+    // Detect and memoize the default country code
+    const detectedCode = useMemo(() => detectCountryCode(), []);
+    const detectedCountry = useMemo(
+      () => COUNTRY_CODES.find(c => c.code === detectedCode) || COUNTRY_CODES[0],
+      [detectedCode]
+    );
+    
+    // Auto-set country code on mount if value is empty
+    useEffect(() => {
+      if (!hasInitialized && !value) {
+        onChange(detectedCode);
+        setHasInitialized(true);
+      } else if (!hasInitialized) {
+        setHasInitialized(true);
+      }
+    }, [hasInitialized, value, onChange, detectedCode]);
     
     // Extract country code and local number from value
-    const currentCountry = COUNTRY_CODES.find(c => value?.startsWith(c.code)) || COUNTRY_CODES[0];
+    const currentCountry = COUNTRY_CODES.find(c => value?.startsWith(c.code)) || detectedCountry;
     const currentCode = currentCountry.code;
     const localNumber = value?.replace(currentCode, '').replace(/^\s+/, '') || '';
     const validation = getPhoneValidation(value || '');
