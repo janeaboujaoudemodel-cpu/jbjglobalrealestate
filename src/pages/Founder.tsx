@@ -74,41 +74,6 @@ const GoldLine = ({ className = "" }: { className?: string }) => (
 );
 
 const Founder = () => {
-  // Founder's personal ventures (not a corporate holding structure)
-  const ventures = [
-    {
-      icon: Building2,
-      name: "JJ Global Capital",
-      description: "A Dubai-based real estate brokerage specializing in property sales, leasing, and holiday homes across the UAE — with trusted partner introductions for legal, mortgage, and specialist services.",
-      image: founderOffice,
-      tagline: "Real Estate Brokerage",
-      url: "https://jjglobalcapital.com"
-    },
-    {
-      icon: Award,
-      name: "JJ Fashion House",
-      description: "A creative atelier translating the founder's aesthetic philosophy into bespoke design. Crafting exclusive collections that epitomize elegance and timeless sophistication.",
-      image: founderAwardStage,
-      tagline: "Haute Couture & Design",
-      url: "https://jjfashionhouse.com"
-    },
-    {
-      icon: Star,
-      name: "JJ and Serena",
-      description: "A collaborative venture combining fashion-forward design with lifestyle excellence, bringing together complementary expertise for unique creative partnerships.",
-      image: founderRedCarpet,
-      tagline: "Fashion & Lifestyle Collaboration",
-      url: "https://jjandserena.com"
-    },
-    {
-      icon: Gem,
-      name: "Mrs Jane",
-      description: "The evolution of James Beauty - a premium luxury home services brand offering personalized beauty, wellness, and lifestyle experiences delivered directly to discerning clients.",
-      image: founderJetInterior,
-      tagline: "Luxury Home Services",
-      url: "https://mrsjane.ae"
-    },
-  ];
 
   const philosophyItems = [
     {
@@ -174,7 +139,7 @@ const Founder = () => {
     {
       year: "2025",
       title: "Founded JJ Global Capital",
-      description: "After 5 years in Dubai, founded JJ Global Capital as a real estate brokerage, along with ventures in fashion (JJ Fashion House), lifestyle (JJ and Serena), and luxury home services (Mrs Jane - evolution of James Beauty).",
+      description: "After 5 years in Dubai, founded JJ Global Capital as a real estate brokerage specializing in property sales, leasing, and holiday homes across the UAE.",
       location: "Dubai, UAE"
     },
   ];
@@ -378,8 +343,8 @@ const Founder = () => {
                     <TrendingUp className="w-5 h-5 text-gold" />
                   </div>
                   <div>
-                    <p className="text-white font-medium text-sm">4 Ventures</p>
-                    <p className="text-zinc-500 text-xs">Founded by Jane</p>
+                    <p className="text-white font-medium text-sm">495+ Managed</p>
+                    <p className="text-zinc-500 text-xs">Employees at dnata</p>
                   </div>
                 </div>
               </div>
@@ -476,8 +441,8 @@ const Founder = () => {
                   excellence requires constant growth.
                 </p>
                 <p className="text-lg text-zinc-400">
-                  In 2025, after five years of building expertise in Dubai, Jane founded JJ Global Capital as a real estate brokerage, 
-                  along with ventures in fashion (JJ Fashion House), lifestyle (JJ and Serena), and luxury home services (Mrs Jane).
+                  In 2025, after five years of building expertise in Dubai, Jane founded JJ Global Capital as a real estate brokerage 
+                  specializing in property sales, leasing, and holiday homes across the UAE.
                 </p>
               </div>
 
@@ -634,7 +599,7 @@ const Founder = () => {
                 <SafeImage 
                   src={jjFlags} 
                   fallbackSrc={founderHero}
-                  alt="JJ Global Capital Ventures" 
+                  alt="JJ Global Capital" 
                   className="w-full h-full object-cover object-center group-hover:scale-105 transition-transform duration-700"
                 />
                 <div className="absolute inset-0 bg-gradient-to-t from-black via-black/20 to-transparent opacity-80 group-hover:opacity-90 transition-opacity" />
@@ -871,89 +836,6 @@ const Founder = () => {
         </div>
       </section>
 
-      {/* THE FOUNDER'S VENTURES */}
-      <section className="py-24 md:py-40 relative">
-        <div className="container mx-auto px-4 sm:px-6 lg:px-8">
-          <motion.div 
-            className="text-center mb-16"
-            initial="hidden"
-            whileInView="visible"
-            viewport={{ once: true, margin: "-100px" }}
-            variants={fadeInUp}
-          >
-            <span className="text-gold text-sm uppercase tracking-[0.4em]">Our Portfolio</span>
-            <GoldLine className="w-32 mx-auto mt-4 mb-8" />
-            <h2 
-              className="text-white text-4xl md:text-5xl lg:text-6xl font-bold"
-              style={{ fontFamily: "Poppins, sans-serif" }}
-            >
-              The Founder's <span className="text-transparent bg-clip-text bg-gradient-to-r from-gold to-[#C4A962]">Ventures</span>
-            </h2>
-          </motion.div>
-
-          <motion.div 
-            className="grid md:grid-cols-2 gap-8 lg:gap-10"
-            initial="hidden"
-            whileInView="visible"
-            viewport={{ once: true, margin: "-100px" }}
-            variants={staggerContainer}
-          >
-            {ventures.map((division, index) => (
-              <motion.div 
-                key={division.name}
-                className="group relative bg-gradient-to-br from-zinc-900 via-zinc-900/95 to-black border border-zinc-800 rounded-3xl overflow-hidden hover:border-gold/50 transition-all duration-700"
-                variants={fadeInUp}
-              >
-                {/* Background Image with cinematic overlay */}
-                <div className="absolute inset-0 opacity-20 group-hover:opacity-30 transition-opacity duration-700">
-                  <SafeImage 
-                    src={division.image} 
-                    fallbackSrc={founderHero}
-                    alt={division.name}
-                    className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-1000"
-                  />
-                  <div className="absolute inset-0 bg-gradient-to-t from-black via-black/90 to-black/70" />
-                </div>
-                
-                {/* Visit Website Button - Always visible */}
-                <a 
-                  href={division.url}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="absolute top-4 right-4 z-20 flex items-center gap-1.5 bg-gold/20 backdrop-blur-md border border-gold/40 text-gold text-xs px-3 py-2 rounded-full hover:bg-gold hover:text-black transition-all duration-300"
-                >
-                  Visit
-                  <ArrowUpRight className="w-3.5 h-3.5" />
-                </a>
-                
-                {/* Content */}
-                <div className="relative z-10 p-8 md:p-12">
-                  <div className="flex items-start gap-6 mb-6">
-                    {/* Premium Icon with gradient border */}
-                    <div className="w-18 h-18 md:w-20 md:h-20 bg-gradient-to-br from-gold/25 to-gold/5 rounded-2xl flex items-center justify-center border-2 border-gold/40 group-hover:border-gold/70 group-hover:scale-110 group-hover:shadow-xl group-hover:shadow-gold/20 transition-all duration-500 flex-shrink-0">
-                      <division.icon className="w-9 h-9 md:w-10 md:h-10 text-gold drop-shadow-[0_0_8px_rgba(168,146,90,0.4)]" strokeWidth={1.5} />
-                    </div>
-                    <div>
-                      <span className="text-gold/80 text-xs uppercase tracking-[0.25em] mb-2 block font-medium">{division.tagline}</span>
-                      <h3 className="text-white text-2xl md:text-3xl font-bold group-hover:text-gold transition-colors duration-300" style={{ fontFamily: "Poppins, sans-serif" }}>
-                        {division.name}
-                      </h3>
-                    </div>
-                  </div>
-                  <p className="text-zinc-400 text-base md:text-lg leading-relaxed">
-                    {division.description}
-                  </p>
-                </div>
-                
-                {/* Decorative gold corners */}
-                <div className="absolute top-0 right-0 w-40 h-40 bg-gradient-to-bl from-gold/15 to-transparent opacity-50 group-hover:opacity-100 transition-opacity duration-500" />
-                <div className="absolute bottom-0 left-0 w-32 h-32 bg-gradient-to-tr from-gold/10 to-transparent opacity-50 group-hover:opacity-100 transition-opacity duration-500" />
-              </motion.div>
-            ))}
-          </motion.div>
-        </div>
-      </section>
-
       {/* LEADERSHIP PHILOSOPHY */}
       <section className="py-24 md:py-40 bg-gradient-to-b from-black via-zinc-950/50 to-black relative">
         <div className="container mx-auto px-4 sm:px-6 lg:px-8">
@@ -1178,7 +1060,7 @@ const Founder = () => {
               className="text-zinc-400 text-lg md:text-xl mb-10 max-w-3xl mx-auto"
               variants={fadeInUp}
             >
-              For daily requests, partnership discussions, collaboration in our divisions, or investment inquiries, we welcome your correspondence.
+              For daily requests, partnership discussions, collaboration, or investment inquiries, we welcome your correspondence.
             </motion.p>
 
             <motion.div 

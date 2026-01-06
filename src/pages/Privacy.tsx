@@ -86,7 +86,7 @@ const Privacy = () => {
                 <h2 className="text-gold text-xl font-semibold mb-4">6. Sharing Your Information</h2>
                 <p>We may share your information with:</p>
                 <ul className="list-disc pl-6 mt-2 space-y-2">
-                  <li>Our partner service providers and affiliated ventures</li>
+                  <li>Our partner service providers and affiliated services</li>
                   <li>Real estate developers and partners for property inquiries</li>
                   <li>Service providers who assist in our operations</li>
                   <li>Legal authorities when required by law</li>
