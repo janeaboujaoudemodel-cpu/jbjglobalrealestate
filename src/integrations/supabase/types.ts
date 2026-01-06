@@ -1155,6 +1155,274 @@ export type Database = {
         }
         Relationships: []
       }
+      hr_applications: {
+        Row: {
+          consent_accurate: boolean
+          consent_terms: boolean
+          created_at: string
+          current_location_city: string
+          current_location_country: string
+          cv_url: string | null
+          email: string
+          full_name: string
+          id: string
+          nationality: string
+          phone_e164: string
+          preferred_language: string
+          rejection_reason: string | null
+          reviewed_at: string | null
+          reviewed_by: string | null
+          status: Database["public"]["Enums"]["hr_application_status"]
+          updated_at: string
+          user_id: string
+        }
+        Insert: {
+          consent_accurate?: boolean
+          consent_terms?: boolean
+          created_at?: string
+          current_location_city: string
+          current_location_country: string
+          cv_url?: string | null
+          email: string
+          full_name: string
+          id?: string
+          nationality: string
+          phone_e164: string
+          preferred_language?: string
+          rejection_reason?: string | null
+          reviewed_at?: string | null
+          reviewed_by?: string | null
+          status?: Database["public"]["Enums"]["hr_application_status"]
+          updated_at?: string
+          user_id: string
+        }
+        Update: {
+          consent_accurate?: boolean
+          consent_terms?: boolean
+          created_at?: string
+          current_location_city?: string
+          current_location_country?: string
+          cv_url?: string | null
+          email?: string
+          full_name?: string
+          id?: string
+          nationality?: string
+          phone_e164?: string
+          preferred_language?: string
+          rejection_reason?: string | null
+          reviewed_at?: string | null
+          reviewed_by?: string | null
+          status?: Database["public"]["Enums"]["hr_application_status"]
+          updated_at?: string
+          user_id?: string
+        }
+        Relationships: []
+      }
+      hr_audit_logs: {
+        Row: {
+          action: string
+          admin_user_id: string
+          created_at: string
+          details: Json | null
+          id: string
+          resource_id: string | null
+          resource_type: string
+        }
+        Insert: {
+          action: string
+          admin_user_id: string
+          created_at?: string
+          details?: Json | null
+          id?: string
+          resource_id?: string | null
+          resource_type: string
+        }
+        Update: {
+          action?: string
+          admin_user_id?: string
+          created_at?: string
+          details?: Json | null
+          id?: string
+          resource_id?: string | null
+          resource_type?: string
+        }
+        Relationships: []
+      }
+      hr_modules: {
+        Row: {
+          content: string
+          created_at: string
+          display_order: number
+          id: string
+          is_active: boolean
+          key_points: Json | null
+          title: string
+          track: Database["public"]["Enums"]["hr_module_track"]
+          updated_at: string
+          video_url: string | null
+        }
+        Insert: {
+          content: string
+          created_at?: string
+          display_order?: number
+          id?: string
+          is_active?: boolean
+          key_points?: Json | null
+          title: string
+          track: Database["public"]["Enums"]["hr_module_track"]
+          updated_at?: string
+          video_url?: string | null
+        }
+        Update: {
+          content?: string
+          created_at?: string
+          display_order?: number
+          id?: string
+          is_active?: boolean
+          key_points?: Json | null
+          title?: string
+          track?: Database["public"]["Enums"]["hr_module_track"]
+          updated_at?: string
+          video_url?: string | null
+        }
+        Relationships: []
+      }
+      hr_quiz_attempts: {
+        Row: {
+          answers_json: Json
+          attempted_at: string
+          id: string
+          module_id: string
+          passed: boolean
+          score: number
+          user_id: string
+        }
+        Insert: {
+          answers_json?: Json
+          attempted_at?: string
+          id?: string
+          module_id: string
+          passed?: boolean
+          score?: number
+          user_id: string
+        }
+        Update: {
+          answers_json?: Json
+          attempted_at?: string
+          id?: string
+          module_id?: string
+          passed?: boolean
+          score?: number
+          user_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "hr_quiz_attempts_module_id_fkey"
+            columns: ["module_id"]
+            isOneToOne: false
+            referencedRelation: "hr_modules"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      hr_quiz_questions: {
+        Row: {
+          correct_answer: string
+          created_at: string
+          display_order: number
+          explanation: string | null
+          id: string
+          is_active: boolean
+          module_id: string
+          options: Json | null
+          question: string
+          question_type: Database["public"]["Enums"]["hr_question_type"]
+        }
+        Insert: {
+          correct_answer: string
+          created_at?: string
+          display_order?: number
+          explanation?: string | null
+          id?: string
+          is_active?: boolean
+          module_id: string
+          options?: Json | null
+          question: string
+          question_type?: Database["public"]["Enums"]["hr_question_type"]
+        }
+        Update: {
+          correct_answer?: string
+          created_at?: string
+          display_order?: number
+          explanation?: string | null
+          id?: string
+          is_active?: boolean
+          module_id?: string
+          options?: Json | null
+          question?: string
+          question_type?: Database["public"]["Enums"]["hr_question_type"]
+        }
+        Relationships: [
+          {
+            foreignKeyName: "hr_quiz_questions_module_id_fkey"
+            columns: ["module_id"]
+            isOneToOne: false
+            referencedRelation: "hr_modules"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      hr_settings: {
+        Row: {
+          id: string
+          setting_key: string
+          setting_value: Json
+          updated_at: string
+          updated_by: string | null
+        }
+        Insert: {
+          id?: string
+          setting_key: string
+          setting_value: Json
+          updated_at?: string
+          updated_by?: string | null
+        }
+        Update: {
+          id?: string
+          setting_key?: string
+          setting_value?: Json
+          updated_at?: string
+          updated_by?: string | null
+        }
+        Relationships: []
+      }
+      hr_user_roles: {
+        Row: {
+          created_at: string
+          id: string
+          is_active: boolean
+          role: Database["public"]["Enums"]["hr_role"]
+          updated_at: string
+          user_id: string
+        }
+        Insert: {
+          created_at?: string
+          id?: string
+          is_active?: boolean
+          role?: Database["public"]["Enums"]["hr_role"]
+          updated_at?: string
+          user_id: string
+        }
+        Update: {
+          created_at?: string
+          id?: string
+          is_active?: boolean
+          role?: Database["public"]["Enums"]["hr_role"]
+          updated_at?: string
+          user_id?: string
+        }
+        Relationships: []
+      }
       ip_blocklist: {
         Row: {
           block_count: number
@@ -1837,6 +2105,10 @@ export type Database = {
         Args: { _lead_id: string; _user_id: string }
         Returns: boolean
       }
+      get_hr_role: {
+        Args: { _user_id: string }
+        Returns: Database["public"]["Enums"]["hr_role"]
+      }
       has_role: {
         Args: {
           _role: Database["public"]["Enums"]["app_role"]
@@ -1846,6 +2118,8 @@ export type Database = {
       }
       is_active_crm_member: { Args: { _user_id: string }; Returns: boolean }
       is_crm_admin: { Args: { _user_id: string }; Returns: boolean }
+      is_hr_admin: { Args: { _user_id: string }; Returns: boolean }
+      is_hr_member: { Args: { _user_id: string }; Returns: boolean }
       is_org_member: {
         Args: { _org_id: string; _user_id: string }
         Returns: boolean
@@ -1909,6 +2183,10 @@ export type Database = {
         | "no_answer"
         | "junk"
       crm_role: "owner_admin" | "broker_member"
+      hr_application_status: "pending" | "approved" | "rejected"
+      hr_module_track: "company_knowledge" | "real_estate_basics"
+      hr_question_type: "mcq" | "true_false" | "short_answer"
+      hr_role: "broker_candidate" | "broker_member"
     }
     CompositeTypes: {
       [_ in never]: never
@@ -2089,6 +2367,10 @@ export const Constants = {
         "junk",
       ],
       crm_role: ["owner_admin", "broker_member"],
+      hr_application_status: ["pending", "approved", "rejected"],
+      hr_module_track: ["company_knowledge", "real_estate_basics"],
+      hr_question_type: ["mcq", "true_false", "short_answer"],
+      hr_role: ["broker_candidate", "broker_member"],
     },
   },
 } as const
