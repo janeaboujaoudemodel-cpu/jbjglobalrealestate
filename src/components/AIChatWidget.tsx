@@ -5,7 +5,7 @@ import { Label } from '@/components/ui/label';
 import { ScrollArea } from '@/components/ui/scroll-area';
 import { Checkbox } from '@/components/ui/checkbox';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
-import { MessageCircle, X, Send, Bot, User, Loader2, Star, Building2, Plane, Scale, Paintbrush, Calculator, Home, ChevronLeft, Mail, Phone as PhoneIcon, UserCircle, MapPin, Globe, Calendar, Shield, History, Plus, Clock, Search } from 'lucide-react';
+import { MessageCircle, X, Send, Bot, User, Loader2, Star, Building2, Plane, Scale, Paintbrush, Calculator, Home, ChevronLeft, ChevronRight, Mail, Phone as PhoneIcon, UserCircle, MapPin, Globe, Calendar, Shield, History, Plus, Clock, Search, PanelRightClose, PanelRightOpen } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { useLanguage } from '@/contexts/LanguageContext';
 import { supabase } from '@/integrations/supabase/client';
@@ -139,9 +139,14 @@ const APPROVED_CONTACT_BLOCK = `
 
 Our team is available to assist you.`;
 
-const AIChatWidget = () => {
+interface AIChatWidgetProps {
+  isCollapsed: boolean;
+  onToggleCollapse: () => void;
+}
+
+const AIChatWidget = ({ isCollapsed, onToggleCollapse }: AIChatWidgetProps) => {
   const { t, isRTL } = useLanguage();
-  // Panel is always visible as a side panel
+  // Panel state
   const [step, setStep] = useState<ChatStep>('welcome_choice');
   const [checkEmail, setCheckEmail] = useState('');
   const [isCheckingEmail, setIsCheckingEmail] = useState(false);
@@ -570,10 +575,45 @@ const AIChatWidget = () => {
 
   return (
     <>
-      {/* Persistent Side Panel */}
-      <div
-        className={`fixed top-0 ${isRTL ? 'left-0' : 'right-0'} z-40 w-[380px] h-screen bg-zinc-900/98 backdrop-blur-xl border-l border-gold/20 shadow-2xl shadow-black/50 flex flex-col overflow-hidden`}
-      >
+      {/* Collapsed State - Just a toggle button */}
+      {isCollapsed && (
+        <div
+          className={`fixed top-1/2 -translate-y-1/2 ${isRTL ? 'left-0' : 'right-0'} z-40`}
+        >
+          <button
+            onClick={onToggleCollapse}
+            className={`flex items-center gap-2 bg-zinc-900/95 backdrop-blur-xl border border-gold/30 ${isRTL ? 'rounded-r-xl border-l-0 pl-2 pr-3' : 'rounded-l-xl border-r-0 pr-2 pl-3'} py-4 shadow-xl hover:bg-zinc-800/95 transition-colors group`}
+          >
+            <div className="w-10 h-10 rounded-full overflow-hidden border-2 border-gold/40 flex-shrink-0">
+              <img 
+                src={AGENT.photo} 
+                alt={AGENT.name}
+                className="w-full h-full object-cover"
+              />
+            </div>
+            <div className="flex flex-col items-start">
+              <span className="text-white text-sm font-medium">{AGENT.name}</span>
+              <span className="text-gold text-xs">Chat with me</span>
+            </div>
+            {isRTL ? (
+              <ChevronRight className="w-5 h-5 text-gold group-hover:translate-x-1 transition-transform" />
+            ) : (
+              <ChevronLeft className="w-5 h-5 text-gold group-hover:-translate-x-1 transition-transform" />
+            )}
+          </button>
+        </div>
+      )}
+
+      {/* Expanded Side Panel */}
+      <AnimatePresence>
+        {!isCollapsed && (
+          <motion.div
+            initial={{ x: isRTL ? -380 : 380, opacity: 0 }}
+            animate={{ x: 0, opacity: 1 }}
+            exit={{ x: isRTL ? -380 : 380, opacity: 0 }}
+            transition={{ type: 'spring', damping: 25, stiffness: 200 }}
+            className={`fixed top-0 ${isRTL ? 'left-0' : 'right-0'} z-40 w-[380px] h-screen bg-zinc-900/98 backdrop-blur-xl border-l border-gold/20 shadow-2xl shadow-black/50 flex flex-col overflow-hidden`}
+          >
             {/* Header */}
             <div className="flex items-center justify-between p-4 border-b border-gold/20 bg-gradient-to-r from-gold/10 to-transparent">
               <div className="flex items-center gap-3">
@@ -614,6 +654,15 @@ const AIChatWidget = () => {
                   </p>
                 </div>
               </div>
+              <Button
+                variant="ghost"
+                size="icon"
+                onClick={onToggleCollapse}
+                className="text-white/60 hover:text-white hover:bg-white/10"
+                title="Minimize chat"
+              >
+                {isRTL ? <PanelRightOpen className="w-5 h-5" /> : <PanelRightClose className="w-5 h-5" />}
+              </Button>
             </div>
 
             {/* Step 0: Welcome Choice - AI or WhatsApp */}
@@ -1320,7 +1369,9 @@ const AIChatWidget = () => {
                 </Button>
               </div>
             )}
-          </div>
+          </motion.div>
+        )}
+      </AnimatePresence>
     </>
   );
 };

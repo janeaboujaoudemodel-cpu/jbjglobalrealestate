@@ -1,3 +1,4 @@
+import { useState } from "react";
 import GlobalHeader from "@/components/GlobalHeader";
 import FloatingWhatsApp from "@/components/FloatingWhatsApp";
 import AIChatWidget from "@/components/AIChatWidget";
@@ -9,16 +10,20 @@ interface MainLayoutProps {
 
 const MainLayout = ({ children }: MainLayoutProps) => {
   const { isRTL } = useLanguage();
+  const [isChatCollapsed, setIsChatCollapsed] = useState(false);
   
   return (
     <div className="min-h-screen bg-black">
       <GlobalHeader />
       {/* Add padding-top for header and padding-right/left for side chat panel */}
-      <main className={`pt-16 lg:pt-18 ${isRTL ? 'pl-[380px]' : 'pr-[380px]'}`}>
+      <main className={`pt-16 lg:pt-18 transition-all duration-300 ${isChatCollapsed ? '' : isRTL ? 'pl-[380px]' : 'pr-[380px]'}`}>
         {children}
       </main>
       <FloatingWhatsApp />
-      <AIChatWidget />
+      <AIChatWidget 
+        isCollapsed={isChatCollapsed} 
+        onToggleCollapse={() => setIsChatCollapsed(!isChatCollapsed)} 
+      />
     </div>
   );
 };
