@@ -141,7 +141,7 @@ Our team is available to assist you.`;
 
 const AIChatWidget = () => {
   const { t, isRTL } = useLanguage();
-  const [isOpen, setIsOpen] = useState(false);
+  // Panel is always visible as a side panel
   const [step, setStep] = useState<ChatStep>('welcome_choice');
   const [checkEmail, setCheckEmail] = useState('');
   const [isCheckingEmail, setIsCheckingEmail] = useState(false);
@@ -286,10 +286,10 @@ const AIChatWidget = () => {
 
   // Focus input when chat step changes
   useEffect(() => {
-    if (isOpen && step === 'chatting' && inputRef.current) {
+    if (step === 'chatting' && inputRef.current) {
       inputRef.current.focus();
     }
-  }, [isOpen, step]);
+  }, [step]);
 
   const validateForm = (): boolean => {
     const errors: Record<string, string> = {};
@@ -534,32 +534,30 @@ const AIChatWidget = () => {
   };
 
   const resetChat = () => {
-    setIsOpen(false);
-    setTimeout(() => {
-      setStep('welcome_choice');
-      setCheckEmail('');
-      setIsExistingUser(false);
-      setUserInfo({
-        firstName: '',
-        lastName: '',
-        email: '',
-        phone: '',
-        nationality: '',
-        language: 'english',
-        currentLocation: '',
-        ageRange: '',
-        consentAccurate: false,
-        consentPrivacy: false,
-      });
-      setSelectedService(null);
-      setMessages([]);
-      setConversationId(null);
-      setRating(0);
-      setRatingFeedback('');
-      setFormErrors({});
-      setChatHistory([]);
-      setHistorySearch('');
-    }, 300);
+    // Reset to welcome state
+    setStep('welcome_choice');
+    setCheckEmail('');
+    setIsExistingUser(false);
+    setUserInfo({
+      firstName: '',
+      lastName: '',
+      email: '',
+      phone: '',
+      nationality: '',
+      language: 'english',
+      currentLocation: '',
+      ageRange: '',
+      consentAccurate: false,
+      consentPrivacy: false,
+    });
+    setSelectedService(null);
+    setMessages([]);
+    setConversationId(null);
+    setRating(0);
+    setRatingFeedback('');
+    setFormErrors({});
+    setChatHistory([]);
+    setHistorySearch('');
   };
 
   const handleClose = () => {
@@ -572,42 +570,10 @@ const AIChatWidget = () => {
 
   return (
     <>
-      {/* Chat Toggle Button */}
-      <AnimatePresence>
-        {!isOpen && (
-          <motion.div
-            initial={{ scale: 0, opacity: 0 }}
-            animate={{ scale: 1, opacity: 1 }}
-            exit={{ scale: 0, opacity: 0 }}
-            className="fixed bottom-6 right-6 z-50"
-          >
-            <Button
-              onClick={() => setIsOpen(true)}
-              className="w-14 h-14 rounded-full bg-gradient-to-r from-gold to-gold/80 hover:from-gold/90 hover:to-gold/70 shadow-lg shadow-gold/30 text-black"
-            >
-              <MessageCircle className="w-6 h-6" />
-            </Button>
-            <motion.span
-              initial={{ opacity: 0, y: 10 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ delay: 1 }}
-              className="absolute -top-8 left-1/2 -translate-x-1/2 bg-zinc-900 text-white text-xs px-2 py-1 rounded whitespace-nowrap"
-            >
-              Chat with us
-            </motion.span>
-          </motion.div>
-        )}
-      </AnimatePresence>
-
-      {/* Chat Window */}
-      <AnimatePresence>
-        {isOpen && (
-          <motion.div
-            initial={{ opacity: 0, y: 20, scale: 0.95 }}
-            animate={{ opacity: 1, y: 0, scale: 1 }}
-            exit={{ opacity: 0, y: 20, scale: 0.95 }}
-            className={`fixed bottom-6 ${isRTL ? 'left-6' : 'right-6'} z-50 w-[420px] max-w-[calc(100vw-48px)] h-[600px] max-h-[calc(100vh-100px)] bg-zinc-900/95 backdrop-blur-xl border border-gold/30 rounded-2xl shadow-2xl shadow-black/50 flex flex-col overflow-hidden`}
-          >
+      {/* Persistent Side Panel */}
+      <div
+        className={`fixed top-0 ${isRTL ? 'left-0' : 'right-0'} z-40 w-[380px] h-screen bg-zinc-900/98 backdrop-blur-xl border-l border-gold/20 shadow-2xl shadow-black/50 flex flex-col overflow-hidden`}
+      >
             {/* Header */}
             <div className="flex items-center justify-between p-4 border-b border-gold/20 bg-gradient-to-r from-gold/10 to-transparent">
               <div className="flex items-center gap-3">
@@ -648,14 +614,6 @@ const AIChatWidget = () => {
                   </p>
                 </div>
               </div>
-              <Button
-                variant="ghost"
-                size="icon"
-                onClick={handleClose}
-                className="text-white/60 hover:text-white hover:bg-white/10"
-              >
-                <X className="w-5 h-5" />
-              </Button>
             </div>
 
             {/* Step 0: Welcome Choice - AI or WhatsApp */}
@@ -1362,9 +1320,7 @@ const AIChatWidget = () => {
                 </Button>
               </div>
             )}
-          </motion.div>
-        )}
-      </AnimatePresence>
+          </div>
     </>
   );
 };
