@@ -48,7 +48,8 @@ import { RateLimitDashboard } from "@/components/admin/RateLimitDashboard";
 import { IPBlocklistDashboard } from "@/components/admin/IPBlocklistDashboard";
 import { SecurityDashboardSummary } from "@/components/admin/SecurityDashboardSummary";
 import AuditLogDashboard from "@/components/admin/AuditLogDashboard";
-import { ClipboardList, Users } from "lucide-react";
+import BrokerSubscriptionsDashboard from "@/components/admin/BrokerSubscriptionsDashboard";
+import { ClipboardList, Users, Briefcase } from "lucide-react";
 
 interface ProjectDocument {
   id: string;
@@ -361,6 +362,10 @@ const Admin = () => {
               <ClipboardList className="w-4 h-4 mr-2" />
               Audit Logs
             </TabsTrigger>
+            <TabsTrigger value="brokers" className="data-[state=active]:bg-gold data-[state=active]:text-black">
+              <Briefcase className="w-4 h-4 mr-2" />
+              Brokers
+            </TabsTrigger>
             <TabsTrigger 
               value="leads" 
               className="data-[state=active]:bg-gold data-[state=active]:text-black"
@@ -377,6 +382,10 @@ const Admin = () => {
 
           <TabsContent value="audit-logs" className="space-y-8">
             <AuditLogDashboard />
+          </TabsContent>
+
+          <TabsContent value="brokers" className="space-y-8">
+            <BrokerSubscriptionsDashboard />
           </TabsContent>
 
           <TabsContent value="properties" className="space-y-8">
