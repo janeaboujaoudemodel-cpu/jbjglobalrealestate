@@ -20,7 +20,7 @@ import { PDFDocument, rgb, StandardFonts } from "pdf-lib";
 import { Link } from "react-router-dom";
 import Footer from "@/components/Footer";
 import { Button } from "@/components/ui/button";
-import { JJLogo } from "@/components/JJLogo";
+import { JJLogoImage } from "@/components/JJLogoImage";
 import { COMPANY_STATS, CONTACT_INFO, getWhatsAppUrl } from "@/constants/stats";
 import { toast } from "sonner";
 import {
@@ -912,7 +912,7 @@ const CompanyProfile = () => {
             {/* PDF Preview Card */}
             <div className="bg-black rounded-xl p-8 border border-gold/20 mb-6">
               <div className="flex items-center justify-center mb-6">
-                <JJLogo size="lg" />
+                <JJLogoImage variant="dark" size="lg" />
               </div>
               <div className="text-center">
                 <p className="text-gold text-sm uppercase tracking-[0.3em] mb-2">Company Profile</p>

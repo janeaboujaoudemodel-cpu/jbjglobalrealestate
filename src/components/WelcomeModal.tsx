@@ -6,7 +6,7 @@ import * as VisuallyHidden from "@radix-ui/react-visually-hidden";
 import { User, ArrowRight, Crown, Sparkles } from "lucide-react";
 import { useLanguage } from "@/contexts/LanguageContext";
 import GuidedTour from "./GuidedTour";
-import JJLogo from "./JJLogo";
+import { JJLogoImage } from "./JJLogoImage";
 
 const WELCOME_MODAL_KEY = "jj_welcome_shown";
 const RETURNING_USER_KEY = "jj_returning_user";
@@ -103,7 +103,7 @@ const WelcomeModal = () => {
           <div className="relative px-10 py-14">
             {/* Logo */}
             <div className="flex justify-center mb-10">
-              <JJLogo size="lg" />
+              <JJLogoImage variant="light" size="lg" />
             </div>
 
             {/* Title */}

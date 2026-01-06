@@ -16,7 +16,7 @@ import {
 import { Link } from "react-router-dom";
 import Footer from "@/components/Footer";
 import { Button } from "@/components/ui/button";
-import { JJLogo } from "@/components/JJLogo";
+import { JJLogoImage } from "@/components/JJLogoImage";
 import { CONTACT_INFO, COMPANY_STATS, getWhatsAppUrl, getCallUrl, getEmailUrl } from "@/constants/stats";
 import { toast } from "sonner";
 import BackNavButton from "@/components/BackNavButton";
@@ -381,7 +381,7 @@ const PressKit = () => {
                   <p className="text-zinc-500 text-xs uppercase tracking-wider mb-6">For Light Backgrounds</p>
                   <div className="flex justify-center mb-6">
                     <div className="transform scale-150">
-                      <JJLogo size="lg" />
+                      <JJLogoImage variant="light" size="lg" showText={false} />
                     </div>
                   </div>
                   <p className="text-zinc-400 text-sm mb-4">Primary logo with gold accents</p>

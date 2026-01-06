@@ -10,7 +10,7 @@ import {
   Send,
 } from "lucide-react";
 import { CONTACT_INFO, getWhatsAppUrl, getCallUrl, getEmailUrl } from "@/constants/stats";
-import { JJLogo } from "@/components/JJLogo";
+import { JJLogoImage } from "@/components/JJLogoImage";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import {
@@ -155,7 +155,7 @@ const Footer = () => {
         {/* Logo + Description */}
         <div className="text-center mb-10 md:mb-14">
           <Link to="/" className="inline-block">
-            <JJLogo size="footer" />
+            <JJLogoImage variant="dark" size="footer" showText={false} />
           </Link>
           <p className="text-gold text-xs uppercase tracking-[0.2em] mt-3 mb-2">Real Estate Brokerage</p>
           <p className="text-zinc-400 text-base md:text-lg max-w-2xl mx-auto leading-relaxed">

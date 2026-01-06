@@ -16,7 +16,7 @@ import {
   Calculator,
   Brain
 } from "lucide-react";
-import JJLogo from "./JJLogo";
+import { JJLogoImage } from "./JJLogoImage";
 
 const TOUR_COMPLETED_KEY = "jj_tour_completed";
 
@@ -188,7 +188,7 @@ const GuidedTour = ({ isOpen, onClose }: GuidedTourProps) => {
                 className="text-center"
               >
                 <div className="flex justify-center mb-6">
-                  <JJLogo size="md" />
+                  <JJLogoImage variant="light" size="md" />
                 </div>
 
                 <h2 className="text-2xl md:text-3xl font-semibold text-black mb-3" style={{ fontFamily: "Poppins, sans-serif" }}>
