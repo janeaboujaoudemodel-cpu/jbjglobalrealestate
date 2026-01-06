@@ -1,4 +1,5 @@
 import { serve } from "https://deno.land/std@0.168.0/http/server.ts";
+import { z } from "https://deno.land/x/zod@v3.22.4/mod.ts";
 
 const ALLOWED_ORIGINS = [
   "https://jjglobalcapital.com",
@@ -18,6 +19,25 @@ function getCorsHeaders(req: Request) {
     "Access-Control-Allow-Methods": "POST, OPTIONS",
   };
 }
+
+// Input validation schema
+const PropertySchema = z.object({
+  community: z.string().min(1).max(200).trim(),
+  subCommunity: z.string().max(200).trim().optional(),
+  buildingName: z.string().max(200).trim().optional(),
+  propertyType: z.enum(['apartment', 'villa', 'townhouse', 'penthouse', 'studio']).default('apartment'),
+  bedrooms: z.number().int().min(0).max(20).optional(),
+  sizeInternal: z.number().min(100).max(100000),
+  floor: z.number().int().min(0).max(200).default(0),
+  developer: z.string().max(200).trim().optional(),
+  views: z.array(z.string().max(100)).max(10).optional(),
+  furnishedStatus: z.enum(['furnished', 'semi-furnished', 'unfurnished']).optional(),
+  renovationCost: z.number().min(0).max(10000000).default(0),
+});
+
+const RequestSchema = z.object({
+  property: PropertySchema,
+});
 
 // Dubai community price data (AED per sq ft) - based on market research
 const communityPrices: Record<string, { avg: number; min: number; max: number }> = {
@@ -62,7 +82,19 @@ serve(async (req) => {
   }
 
   try {
-    const { property } = await req.json();
+    // Parse and validate input
+    const rawBody = await req.json();
+    const parseResult = RequestSchema.safeParse(rawBody);
+
+    if (!parseResult.success) {
+      console.log('Validation failed:', parseResult.error.errors);
+      return new Response(
+        JSON.stringify({ error: 'Invalid property data. Please check your inputs.' }),
+        { status: 400, headers: { ...corsHeaders, 'Content-Type': 'application/json' } }
+      );
+    }
+
+    const { property } = parseResult.data;
     console.log("Evaluating property:", JSON.stringify(property, null, 2));
 
     const LOVABLE_API_KEY = Deno.env.get('LOVABLE_API_KEY');
@@ -98,7 +130,7 @@ serve(async (req) => {
 
     // Location premium (based on developer reputation)
     const premiumDevelopers = ['Emaar', 'DAMAC', 'Meraas', 'Nakheel', 'Dubai Properties', 'Sobha'];
-    const locationPremium = premiumDevelopers.includes(property.developer) 
+    const locationPremium = property.developer && premiumDevelopers.includes(property.developer) 
       ? basePricePerSqFt * property.sizeInternal * 0.05 
       : 0;
 
@@ -141,10 +173,10 @@ serve(async (req) => {
     ];
 
     // Get AI market insights
-    const aiPrompt = `Provide a brief 2-3 sentence market insight for a ${property.bedrooms} bedroom ${property.propertyType} in ${property.community}, Dubai. 
+    const aiPrompt = `Provide a brief 2-3 sentence market insight for a ${property.bedrooms || 'studio'} bedroom ${property.propertyType} in ${property.community}, Dubai. 
     The property is ${property.sizeInternal} sq ft with ${property.views?.join(', ') || 'standard'} views. 
     Developer: ${property.developer || 'Unknown'}. 
-    Mention current market trends and investment potential. Be concise and professional.`;
+    Mention current market trends. Be concise and professional. This is for informational purposes only.`;
 
     const aiResponse = await fetch('https://ai.gateway.lovable.dev/v1/chat/completions', {
       method: 'POST',
@@ -155,14 +187,14 @@ serve(async (req) => {
       body: JSON.stringify({
         model: 'google/gemini-2.5-flash',
         messages: [
-          { role: 'system', content: 'You are a Dubai real estate market expert. Provide concise, data-driven insights.' },
+          { role: 'system', content: 'You are a Dubai real estate market expert. Provide concise, data-driven insights. This is for informational purposes only, not investment advice.' },
           { role: 'user', content: aiPrompt }
         ],
         max_tokens: 200
       }),
     });
 
-    let marketInsights = `${property.community} continues to show strong demand with average prices around AED ${communityData.avg}/sq ft. Properties with premium views and high floors command 10-20% premiums. The area benefits from established infrastructure and proximity to key landmarks.`;
+    let marketInsights = `${property.community} continues to show strong demand with average prices around AED ${communityData.avg}/sq ft. Properties with premium views and high floors command 10-20% premiums. The area benefits from established infrastructure and proximity to key landmarks. This information is for reference only.`;
     
     if (aiResponse.ok) {
       const aiData = await aiResponse.json();
@@ -170,7 +202,7 @@ serve(async (req) => {
     }
 
     // Determine confidence level
-    const hasCompleteInfo = property.buildingName && property.developer && property.views?.length > 0;
+    const hasCompleteInfo = property.buildingName && property.developer && property.views && property.views.length > 0;
     const confidence = hasCompleteInfo ? 'high' : property.sizeInternal > 0 ? 'medium' : 'low';
 
     const result = {
@@ -186,7 +218,8 @@ serve(async (req) => {
         viewPremium: Math.round(viewPremium),
         floorPremium: Math.round(floorPremium),
         renovationValue
-      }
+      },
+      disclaimer: "This valuation is for informational purposes only and should not be considered investment advice. Please consult with licensed professionals for accurate property valuations."
     };
 
     console.log("Evaluation result:", JSON.stringify(result, null, 2));

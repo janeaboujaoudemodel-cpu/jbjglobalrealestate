@@ -1,4 +1,5 @@
 import { serve } from "https://deno.land/std@0.168.0/http/server.ts";
+import { z } from "https://deno.land/x/zod@v3.22.4/mod.ts";
 
 const ALLOWED_ORIGINS = [
   "https://jjglobalcapital.com",
@@ -19,6 +20,19 @@ function getCorsHeaders(req: Request) {
   };
 }
 
+// Input validation schema
+const RequestSchema = z.object({
+  propertyType: z.string().max(100).trim().optional(),
+  propertyName: z.string().max(200).trim().optional(),
+  propertySize: z.string().max(100).trim().optional(),
+  designStyle: z.string().max(100).trim().optional(),
+  colorPalette: z.string().max(200).trim().optional(),
+  purpose: z.string().max(200).trim().optional(),
+  customNotes: z.string().max(1000).trim().optional(),
+  photos: z.array(z.string().max(5000000)).max(4).optional(), // Base64 images, max 5MB each
+  floorPlan: z.string().max(5000000).optional(), // Base64 image, max 5MB
+});
+
 serve(async (req) => {
   const corsHeaders = getCorsHeaders(req);
   
@@ -27,7 +41,21 @@ serve(async (req) => {
   }
 
   try {
-    const body = await req.json();
+    // Parse and validate input
+    const rawBody = await req.json();
+    const parseResult = RequestSchema.safeParse(rawBody);
+
+    if (!parseResult.success) {
+      console.log('Validation failed:', parseResult.error.errors);
+      return new Response(
+        JSON.stringify({
+          success: false,
+          error: "Invalid request format. Please check your inputs.",
+        }),
+        { status: 400, headers: { ...corsHeaders, "Content-Type": "application/json" } }
+      );
+    }
+
     const {
       propertyType,
       propertyName,
@@ -38,12 +66,12 @@ serve(async (req) => {
       customNotes,
       photos,
       floorPlan,
-    } = body ?? {};
+    } = parseResult.data;
 
     const LOVABLE_API_KEY = Deno.env.get("LOVABLE_API_KEY");
     if (!LOVABLE_API_KEY) throw new Error("LOVABLE_API_KEY is not configured");
 
-    const safe = (v: unknown) => (typeof v === "string" ? v.slice(0, 800) : "");
+    const safe = (v: string | undefined) => (v ? v.slice(0, 800) : "Not specified");
 
     const content: any[] = [
       {
@@ -51,13 +79,13 @@ serve(async (req) => {
         text: `Generate ONE premium, photorealistic interior design render (a single viewpoint) based on the inputs.
 
 CONTEXT:
-- Property type: ${safe(propertyType) || "Not specified"}
-- Property name: ${safe(propertyName) || "Not specified"}
-- Size: ${safe(propertySize) || "Not specified"}
-- Style: ${safe(designStyle) || "Not specified"}
-- Color palette: ${safe(colorPalette) || "Not specified"}
-- Purpose: ${safe(purpose) || "Not specified"}
-- Notes: ${safe(customNotes) || "None"}
+- Property type: ${safe(propertyType)}
+- Property name: ${safe(propertyName)}
+- Size: ${safe(propertySize)}
+- Style: ${safe(designStyle)}
+- Color palette: ${safe(colorPalette)}
+- Purpose: ${safe(purpose)}
+- Notes: ${safe(customNotes)}
 
 REQUIREMENTS:
 - Make it look like a high-end Dubai interior.
@@ -121,7 +149,7 @@ REQUIREMENTS:
     return new Response(
       JSON.stringify({
         success: false,
-        error: error instanceof Error ? error.message : "Unknown error",
+        error: error instanceof Error ? error.message : "An error occurred",
       }),
       { status: 500, headers: { ...corsHeaders, "Content-Type": "application/json" } }
     );

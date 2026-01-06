@@ -1,10 +1,43 @@
 import { serve } from "https://deno.land/std@0.168.0/http/server.ts";
 import { createClient } from "https://esm.sh/@supabase/supabase-js@2";
+import { z } from "https://deno.land/x/zod@v3.22.4/mod.ts";
 
 const corsHeaders = {
   'Access-Control-Allow-Origin': '*',
   'Access-Control-Allow-Headers': 'authorization, x-client-info, apikey, content-type',
 };
+
+// Input validation schemas
+const ValidateActionSchema = z.object({
+  action: z.literal('validate'),
+  code: z.string().min(1, "Code is required").max(50).trim(),
+  tier: z.string().max(50).optional(),
+});
+
+const ApplyActionSchema = z.object({
+  action: z.literal('apply'),
+  codeId: z.string().uuid("Invalid code ID"),
+  originalPrice: z.number().min(0).max(1000000),
+  finalPrice: z.number().min(0).max(1000000),
+  subscriptionId: z.string().uuid().optional().nullable(),
+});
+
+const CreateActionSchema = z.object({
+  action: z.literal('create'),
+  discountType: z.enum(['percentage', 'fixed', 'free']),
+  discountValue: z.number().min(0).max(100).optional(),
+  description: z.string().max(500).optional(),
+  maxUses: z.number().int().min(1).max(10000).optional(),
+  assignedToEmail: z.string().email().max(255).optional().nullable(),
+  validUntil: z.string().datetime().optional().nullable(),
+  applicableTiers: z.array(z.string().max(50)).max(10).optional().nullable(),
+});
+
+const RequestSchema = z.discriminatedUnion('action', [
+  ValidateActionSchema,
+  ApplyActionSchema,
+  CreateActionSchema,
+]);
 
 // SHA-256 hash function
 async function hashCode(code: string): Promise<string> {
@@ -26,15 +59,24 @@ serve(async (req) => {
     const supabaseAnonKey = Deno.env.get('SUPABASE_ANON_KEY')!;
     const supabaseServiceKey = Deno.env.get('SUPABASE_SERVICE_ROLE_KEY')!;
 
-    // Parse request body
-    const requestBody = await req.json();
-    const { action, code, userEmail, userId, tier } = requestBody;
+    // Parse and validate request body
+    const rawBody = await req.json();
+    const parseResult = RequestSchema.safeParse(rawBody);
 
-    console.log(`Discount code action: ${action}, code length: ${code?.length}, tier: ${tier}`);
+    if (!parseResult.success) {
+      console.log('Validation failed:', parseResult.error.errors);
+      return new Response(
+        JSON.stringify({ valid: false, success: false, error: 'Invalid request format' }),
+        { headers: { ...corsHeaders, 'Content-Type': 'application/json' }, status: 400 }
+      );
+    }
+
+    const validatedData = parseResult.data;
+
+    console.log(`Discount code action: ${validatedData.action}`);
 
     // For validate action - authenticate user first
-    if (action === 'validate') {
-      // Validate a discount code - requires authentication
+    if (validatedData.action === 'validate') {
       const authHeader = req.headers.get('Authorization');
       if (!authHeader) {
         return new Response(
@@ -58,13 +100,7 @@ serve(async (req) => {
       // Use verified user data, not client-supplied values
       const verifiedUserId = user.id;
       const verifiedEmail = user.email || '';
-
-      if (!code) {
-        return new Response(
-          JSON.stringify({ valid: false, error: 'Missing discount code' }),
-          { headers: { ...corsHeaders, 'Content-Type': 'application/json' }, status: 400 }
-        );
-      }
+      const { code, tier } = validatedData;
 
       // Use service role for reading discount codes (RLS blocks normal users)
       const supabaseService = createClient(supabaseUrl, supabaseServiceKey);
@@ -128,7 +164,7 @@ serve(async (req) => {
       }
 
       // Check applicable tiers
-      if (discountCode.applicable_tiers && discountCode.applicable_tiers.length > 0) {
+      if (discountCode.applicable_tiers && discountCode.applicable_tiers.length > 0 && tier) {
         if (!discountCode.applicable_tiers.includes(tier)) {
           return new Response(
             JSON.stringify({ valid: false, error: `This code is not valid for the ${tier} plan` }),
@@ -168,7 +204,7 @@ serve(async (req) => {
         { headers: { ...corsHeaders, 'Content-Type': 'application/json' }, status: 200 }
       );
 
-    } else if (action === 'apply') {
+    } else if (validatedData.action === 'apply') {
       // Apply the discount code (record usage) - requires authentication
       const authHeader = req.headers.get('Authorization');
       if (!authHeader) {
@@ -194,14 +230,7 @@ serve(async (req) => {
       const verifiedUserId = user.id;
       const verifiedEmail = user.email || '';
 
-      const { codeId, originalPrice, finalPrice, subscriptionId } = requestBody;
-
-      if (!codeId) {
-        return new Response(
-          JSON.stringify({ success: false, error: 'Missing discount code ID' }),
-          { headers: { ...corsHeaders, 'Content-Type': 'application/json' }, status: 400 }
-        );
-      }
+      const { codeId, originalPrice, finalPrice, subscriptionId } = validatedData;
 
       const supabaseService = createClient(supabaseUrl, supabaseServiceKey);
 
@@ -253,7 +282,7 @@ serve(async (req) => {
         { headers: { ...corsHeaders, 'Content-Type': 'application/json' }, status: 200 }
       );
 
-    } else if (action === 'create') {
+    } else if (validatedData.action === 'create') {
       // Create a new discount code - ADMIN ONLY
       const authHeader = req.headers.get('Authorization');
       if (!authHeader) {
@@ -303,7 +332,7 @@ serve(async (req) => {
         assignedToEmail, 
         validUntil, 
         applicableTiers
-      } = requestBody;
+      } = validatedData;
 
       // Generate a secure random code
       const randomBytes = new Uint8Array(6);
@@ -356,7 +385,7 @@ serve(async (req) => {
   } catch (error) {
     console.error('Discount code error:', error);
     return new Response(
-      JSON.stringify({ error: 'Internal server error' }),
+      JSON.stringify({ error: 'An error occurred' }),
       { headers: { ...corsHeaders, 'Content-Type': 'application/json' }, status: 500 }
     );
   }
