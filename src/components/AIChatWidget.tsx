@@ -1223,22 +1223,25 @@ const AIChatWidget = () => {
                             className="w-full h-full object-cover"
                           />
                         </div>
-                        <div className="bg-white/10 p-3 rounded-xl flex items-center gap-1">
-                          <motion.span
-                            className="w-2 h-2 bg-gold rounded-full"
-                            animate={{ y: [0, -6, 0] }}
-                            transition={{ duration: 0.6, repeat: Infinity, delay: 0 }}
-                          />
-                          <motion.span
-                            className="w-2 h-2 bg-gold rounded-full"
-                            animate={{ y: [0, -6, 0] }}
-                            transition={{ duration: 0.6, repeat: Infinity, delay: 0.15 }}
-                          />
-                          <motion.span
-                            className="w-2 h-2 bg-gold rounded-full"
-                            animate={{ y: [0, -6, 0] }}
-                            transition={{ duration: 0.6, repeat: Infinity, delay: 0.3 }}
-                          />
+                        <div className="flex flex-col gap-1">
+                          <div className="bg-white/10 p-3 rounded-xl flex items-center gap-1">
+                            <motion.span
+                              className="w-2 h-2 bg-gold rounded-full"
+                              animate={{ y: [0, -6, 0] }}
+                              transition={{ duration: 0.6, repeat: Infinity, delay: 0 }}
+                            />
+                            <motion.span
+                              className="w-2 h-2 bg-gold rounded-full"
+                              animate={{ y: [0, -6, 0] }}
+                              transition={{ duration: 0.6, repeat: Infinity, delay: 0.15 }}
+                            />
+                            <motion.span
+                              className="w-2 h-2 bg-gold rounded-full"
+                              animate={{ y: [0, -6, 0] }}
+                              transition={{ duration: 0.6, repeat: Infinity, delay: 0.3 }}
+                            />
+                          </div>
+                          <p className="text-zinc-400 text-xs italic ml-1">{AGENT.name} is typing...</p>
                         </div>
                       </motion.div>
                     )}
