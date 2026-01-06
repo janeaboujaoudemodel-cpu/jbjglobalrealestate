@@ -7,6 +7,70 @@ const corsHeaders = {
   'Access-Control-Allow-Headers': 'authorization, x-client-info, apikey, content-type',
 };
 
+// Rate limiting configuration - 10 validate attempts per 5 minutes per user
+const RATE_LIMIT_WINDOW_MINUTES = 5;
+const MAX_REQUESTS_PER_WINDOW = 10;
+
+// Rate limit entry type
+interface RateLimitEntry {
+  id: string;
+  function_name: string;
+  rate_key: string;
+  window_start: string;
+  request_count: number;
+}
+
+// Rate limiting function
+async function checkRateLimit(
+  supabaseAdmin: any,
+  rateKey: string
+): Promise<{ allowed: boolean; retryAfterSeconds?: number }> {
+  const functionName = "validate-discount-code";
+  const windowStart = new Date(Date.now() - RATE_LIMIT_WINDOW_MINUTES * 60 * 1000);
+
+  const { data: existingEntry, error: fetchError } = await supabaseAdmin
+    .from("function_rate_limits")
+    .select("*")
+    .eq("function_name", functionName)
+    .eq("rate_key", rateKey)
+    .gte("window_start", windowStart.toISOString())
+    .order("window_start", { ascending: false })
+    .limit(1)
+    .maybeSingle();
+
+  if (fetchError) {
+    console.error("Rate limit check error:", fetchError);
+    return { allowed: true };
+  }
+
+  const entry = existingEntry as RateLimitEntry | null;
+
+  if (entry) {
+    if (entry.request_count >= MAX_REQUESTS_PER_WINDOW) {
+      const windowEndTime = new Date(entry.window_start).getTime() + RATE_LIMIT_WINDOW_MINUTES * 60 * 1000;
+      const retryAfterSeconds = Math.ceil((windowEndTime - Date.now()) / 1000);
+      console.warn(`Rate limit exceeded for key: ${rateKey.substring(0, 8)}***`);
+      return { allowed: false, retryAfterSeconds: Math.max(retryAfterSeconds, 0) };
+    }
+
+    await supabaseAdmin
+      .from("function_rate_limits")
+      .update({ request_count: entry.request_count + 1 })
+      .eq("id", entry.id);
+  } else {
+    await supabaseAdmin
+      .from("function_rate_limits")
+      .insert({
+        function_name: functionName,
+        rate_key: rateKey,
+        window_start: new Date().toISOString(),
+        request_count: 1,
+      });
+  }
+
+  return { allowed: true };
+}
+
 // Input validation schemas
 const ValidateActionSchema = z.object({
   action: z.literal('validate'),
@@ -59,6 +123,9 @@ serve(async (req) => {
     const supabaseAnonKey = Deno.env.get('SUPABASE_ANON_KEY')!;
     const supabaseServiceKey = Deno.env.get('SUPABASE_SERVICE_ROLE_KEY')!;
 
+    // Create service client for rate limiting
+    const supabaseService = createClient(supabaseUrl, supabaseServiceKey);
+
     // Parse and validate request body
     const rawBody = await req.json();
     const parseResult = RequestSchema.safeParse(rawBody);
@@ -97,13 +164,30 @@ serve(async (req) => {
         );
       }
 
+      // Check rate limit using user ID
+      const rateLimitResult = await checkRateLimit(supabaseService, user.id);
+      if (!rateLimitResult.allowed) {
+        console.warn(`Rate limit exceeded for user: ${user.id}`);
+        return new Response(
+          JSON.stringify({ 
+            valid: false, 
+            error: 'Too many attempts. Please try again later.' 
+          }),
+          { 
+            status: 429, 
+            headers: { 
+              ...corsHeaders, 
+              'Content-Type': 'application/json',
+              'Retry-After': String(rateLimitResult.retryAfterSeconds || 300)
+            } 
+          }
+        );
+      }
+
       // Use verified user data, not client-supplied values
       const verifiedUserId = user.id;
       const verifiedEmail = user.email || '';
       const { code, tier } = validatedData;
-
-      // Use service role for reading discount codes (RLS blocks normal users)
-      const supabaseService = createClient(supabaseUrl, supabaseServiceKey);
 
       const codeHash = await hashCode(code);
       console.log(`Looking up code hash: ${codeHash.substring(0, 10)}... for user: ${verifiedUserId}`);
