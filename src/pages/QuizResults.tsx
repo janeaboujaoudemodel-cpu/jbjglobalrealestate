@@ -26,7 +26,7 @@ import { useMembership } from "@/hooks/useMembership";
 import { useAuth } from "@/contexts/AuthContext";
 
 const INQUIRY_FORM_URL = "https://jjglobalcapital.com/form/property-investment-inquiry-form/";
-const JJ_HOLDING_URL = "https://jjholdinggroup.com";
+
 
 const QuizResults = () => {
   const navigate = useNavigate();

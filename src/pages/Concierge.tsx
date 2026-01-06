@@ -361,7 +361,7 @@ const Concierge = () => {
               { icon: Star, title: "Premium Support", desc: "Dedicated service for your every need" },
               { icon: Gem, title: "Exclusive Access", desc: "VIP access to the world's most exclusive venues" },
               { icon: Heart, title: "Personalized Service", desc: "Tailored experiences crafted just for you" },
-              { icon: Camera, title: "Complete Discretion", desc: "Privacy and confidentiality assured" }
+              { icon: Camera, title: "Discreet Service", desc: "Confidential handling assured" }
             ].map((item, idx) => (
               <motion.div
                 key={idx}
