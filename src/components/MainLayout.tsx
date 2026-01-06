@@ -1,19 +1,24 @@
 import GlobalHeader from "@/components/GlobalHeader";
 import FloatingWhatsApp from "@/components/FloatingWhatsApp";
+import AIChatWidget from "@/components/AIChatWidget";
+import { useLanguage } from "@/contexts/LanguageContext";
 
 interface MainLayoutProps {
   children: React.ReactNode;
 }
 
 const MainLayout = ({ children }: MainLayoutProps) => {
+  const { isRTL } = useLanguage();
+  
   return (
     <div className="min-h-screen bg-black">
       <GlobalHeader />
-      {/* Add padding-top to account for fixed header */}
-      <main className="pt-16 lg:pt-18">
+      {/* Add padding-top for header and padding-right/left for side chat panel */}
+      <main className={`pt-16 lg:pt-18 ${isRTL ? 'pl-[380px]' : 'pr-[380px]'}`}>
         {children}
       </main>
       <FloatingWhatsApp />
+      <AIChatWidget />
     </div>
   );
 };
