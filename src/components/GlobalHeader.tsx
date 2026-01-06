@@ -3,10 +3,12 @@ import { useAuth } from "@/contexts/AuthContext";
 import { useFavorites, useShortlist } from "@/hooks/useFavorites";
 import { useGuestFavorites, useGuestShortlist } from "@/hooks/useGuestFavorites";
 import { useLanguage } from "@/contexts/LanguageContext";
+import { supabase } from "@/integrations/supabase/client";
+import { useQuery } from "@tanstack/react-query";
 import { 
   Home, Heart, User, LogOut, Settings, Menu, 
   Phone, Building2, Newspaper, ClipboardCheck, FileText,
-  Sparkles, Search
+  Sparkles, Search, Users
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { useState } from "react";
@@ -42,6 +44,25 @@ const GlobalHeader = () => {
   const favCount = user ? (favorites?.length || 0) : guestFavorites.length;
   const shortlistCount = user ? (shortlist?.length || 0) : guestShortlist.length;
   const totalCount = favCount + shortlistCount;
+
+  // Check if user has CRM access (owner_admin or broker_member)
+  const { data: crmProfile } = useQuery({
+    queryKey: ['crm-profile-header', user?.id],
+    queryFn: async () => {
+      if (!user?.id) return null;
+      const { data, error } = await supabase
+        .from('crm_users_profile')
+        .select('crm_role, is_active')
+        .eq('user_id', user.id)
+        .maybeSingle();
+      if (error) return null;
+      return data;
+    },
+    enabled: !!user?.id,
+  });
+
+  const hasCRMAccess = crmProfile?.is_active && 
+    (crmProfile?.crm_role === 'owner_admin' || crmProfile?.crm_role === 'broker_member');
 
   // Updated navigation order: Home, Founder, About, Properties, Services, Awards, News, Contact
   const mainNavLinks = [
@@ -219,6 +240,16 @@ const GlobalHeader = () => {
                     {user ? (
                       <>
                         <div className="px-4 py-2 text-zinc-500 text-sm">Signed in as {user.email?.split("@")[0]}</div>
+                        {hasCRMAccess && (
+                          <Link
+                            to="/crm"
+                            onClick={() => setMobileMenuOpen(false)}
+                            className="flex items-center gap-3 px-4 py-3 text-gold hover:text-gold/80 hover:bg-gold/10 transition-colors"
+                          >
+                            <Users className="w-5 h-5" />
+                            CRM Dashboard
+                          </Link>
+                        )}
                         {isAdmin && (
                           <Link
                             to="/admin"
@@ -275,6 +306,14 @@ const GlobalHeader = () => {
                         My Favorites & Shortlist
                       </Link>
                     </DropdownMenuItem>
+                    {hasCRMAccess && (
+                      <DropdownMenuItem asChild>
+                        <Link to="/crm" className="flex items-center gap-2 text-zinc-300">
+                          <Users className="w-4 h-4" />
+                          CRM Dashboard
+                        </Link>
+                      </DropdownMenuItem>
+                    )}
                     {isAdmin && (
                       <DropdownMenuItem asChild>
                         <Link to="/admin" className="flex items-center gap-2 text-zinc-300">
