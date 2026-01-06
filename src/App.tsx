@@ -59,6 +59,10 @@ import Install from "./pages/Install";
 import CRM from "./pages/CRM";
 import CRMLeadDetail from "./pages/CRMLeadDetail";
 import AdminCRM from "./pages/AdminCRM";
+import JoinApplication from "./pages/JoinApplication";
+import Onboarding from "./pages/Onboarding";
+import OnboardingModule from "./pages/OnboardingModule";
+import AdminOnboarding from "./pages/AdminOnboarding";
 
 const queryClient = new QueryClient();
 
@@ -128,6 +132,10 @@ const App = () => (
                     <Route path="/crm" element={<CRM />} />
                     <Route path="/crm/leads/:id" element={<CRMLeadDetail />} />
                     <Route path="/admin/crm" element={<AdminCRM />} />
+                    <Route path="/join" element={<JoinApplication />} />
+                    <Route path="/onboarding" element={<Onboarding />} />
+                    <Route path="/onboarding/module/:moduleId" element={<OnboardingModule />} />
+                    <Route path="/admin/onboarding" element={<AdminOnboarding />} />
                     <Route path="*" element={<NotFound />} />
                     </Routes>
                   </MainLayout>
