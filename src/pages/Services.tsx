@@ -66,7 +66,7 @@ const services = [
   {
     id: "partner-legal",
     title: "Legal Partners",
-    description: "We introduce you to independent, licensed law firms for property conveyancing and legal matters.",
+    description: "Introductions to independent law firms for conveyancing and legal matters.",
     icon: Scale,
     image: "https://images.unsplash.com/photo-1589829545856-d10d557cf95f?w=800&q=80",
     link: "/services/law-firm",
@@ -76,21 +76,22 @@ const services = [
   {
     id: "partner-mortgage",
     title: "Mortgage Partners",
-    description: "We connect you with banks and licensed mortgage specialists for financing solutions.",
+    description: "Introductions and coordination with independent, licensed mortgage specialists.",
     icon: Calculator,
-    image: founderJetInterior,
+    image: "https://images.unsplash.com/photo-1554224155-6726b3ff858f?w=800&q=80",
     link: "/mortgage-advisory",
     features: ["Bank Introductions", "Specialist Referrals", "Rate Comparison Tool", "Pre-Qualification Guidance"],
     isPartner: true
   },
   {
     id: "design-build",
-    title: "Design & Build",
-    description: "Bespoke architecture, interior design, and turnkey construction solutions via our sister company.",
+    title: "Design & Build Partners",
+    description: "Introductions to architecture, interior design, and fit-out partners.",
     icon: Palette,
     image: luxuryVilla1,
     link: "/services/design-build",
-    features: ["Architecture", "Interior Design", "Fit-Out Services", "Project Management"]
+    features: ["Architecture", "Interior Design", "Fit-Out Services", "Project Management"],
+    isPartner: true
   },
   {
     id: "concierge",
@@ -229,7 +230,7 @@ const Services = () => {
               AI-Powered Tools
             </h2>
             <p className="text-zinc-400 max-w-2xl mx-auto">
-              Cutting-edge technology to enhance your investment decisions
+              Explore our tools to enhance your property decisions
             </p>
           </motion.div>
 
@@ -276,7 +277,7 @@ const Services = () => {
               Ready to Get Started?
             </h2>
             <p className="text-zinc-400 text-lg mb-8 max-w-2xl mx-auto">
-              Connect with our team for personalized guidance on any of our services
+              Speak with our team for personalized brokerage support
             </p>
             <div className="flex flex-wrap justify-center gap-4">
               <Link to="/contact">
@@ -286,7 +287,7 @@ const Services = () => {
                 </Button>
               </Link>
               <Link to="/properties">
-                <Button variant="outline" className="border-white/30 text-white hover:bg-white/10 px-8 py-6 text-base">
+                <Button className="bg-white text-black font-bold px-8 py-6 text-base hover:bg-zinc-100 transition-all">
                   Browse Properties
                   <ArrowUpRight className="w-5 h-5 ml-2" />
                 </Button>

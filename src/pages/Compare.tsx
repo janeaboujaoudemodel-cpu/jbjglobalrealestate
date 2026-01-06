@@ -977,7 +977,7 @@ const Compare = () => {
               </div>
               <div>
                 <h3 className="text-white font-semibold text-lg">Need Expert Guidance?</h3>
-                <p className="text-purple-300/70 text-sm">Speak with our investment advisors</p>
+                <p className="text-purple-300/70 text-sm">Speak with our property consultants</p>
               </div>
             </div>
 

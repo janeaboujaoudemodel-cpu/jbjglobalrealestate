@@ -107,7 +107,7 @@ const GuidedTour = ({ isOpen, onClose }: GuidedTourProps) => {
       iconBg: "from-gold/20 to-gold/10",
       iconBorder: "border-gold/30",
       title: "Connect with JJ Global Capital",
-      description: "Submit your curated selection directly to our investment advisors. Book consultations and finalize your UAE property investment."
+      description: "Submit your curated selection directly to our property consultants. Book consultations and finalize your UAE property purchase."
     }
   ];
 

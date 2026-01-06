@@ -16,11 +16,11 @@ interface ComplianceDisclaimerProps {
 const ComplianceDisclaimer = ({ variant = "compact", className = "", language = "en" }: ComplianceDisclaimerProps) => {
   const currentYear = new Date().getFullYear();
 
-  // Short English Disclaimer (removed "licensed" until trade license confirmed)
-  const shortDisclaimerEN = `JJ Global Capital is a real estate brokerage. We do not provide legal, mortgage, financial, or investment advice. Third-party services are provided by independent licensed professionals under separate agreements.`;
+  // Short English Disclaimer - Updated compliant wording
+  const shortDisclaimerEN = `JJ Global Capital provides real estate brokerage support and coordination. We can introduce you to independent, licensed partners for legal services, mortgages, and concierge support. Partner services are delivered under the partner's own licence and terms, and the client contracts directly with the partner. We do not provide legal, mortgage, financial, or investment advice.`;
 
-  // Short Arabic Disclaimer
-  const shortDisclaimerAR = `جي جي جلوبال كابيتال تقدم خدمات وساطة عقارية. نحن لا نقدم استشارات قانونية أو تمويلية أو استثمارية. الخدمات من الأطراف الثالثة تُقدَّم من قبل متخصصين مرخصين مستقلين بموجب اتفاقيات منفصلة.`;
+  // Short Arabic Disclaimer - Updated compliant wording
+  const shortDisclaimerAR = `جي جي جلوبال كابيتال تقدم خدمات وساطة عقارية ودعم تنسيقي. يمكننا ربطك بشركاء مستقلين ومرخصين للخدمات القانونية والتمويل العقاري وخدمات الكونسيرج. تُقدَّم خدمات الشركاء وفق ترخيصهم وشروطهم الخاصة، ويكون التعاقد مباشرة بين العميل والشريك. نحن لا نقدم استشارات قانونية أو تمويلية أو استثمارية.`;
 
   // Full Disclaimer Content
   const fullDisclaimerPoints = [

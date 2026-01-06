@@ -3,11 +3,15 @@ import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { ScrollArea } from '@/components/ui/scroll-area';
-import { MessageCircle, X, Send, Bot, User, Loader2, Star, Building2, Plane, Scale, Paintbrush, Calculator, Home, ChevronLeft, Mail, Phone as PhoneIcon, UserCircle } from 'lucide-react';
+import { Checkbox } from '@/components/ui/checkbox';
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
+import { MessageCircle, X, Send, Bot, User, Loader2, Star, Building2, Plane, Scale, Paintbrush, Calculator, Home, ChevronLeft, Mail, Phone as PhoneIcon, UserCircle, MapPin, Globe, Calendar, Shield } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { useLanguage } from '@/contexts/LanguageContext';
 import { supabase } from '@/integrations/supabase/client';
 import { toast } from 'sonner';
+import { CONTACT_INFO } from '@/constants/stats';
+import { Link } from 'react-router-dom';
 
 interface Message {
   id: string;
@@ -17,27 +21,86 @@ interface Message {
 }
 
 interface UserInfo {
-  name: string;
+  firstName: string;
+  lastName: string;
   email: string;
   phone: string;
+  nationality: string;
+  language: string;
+  currentLocation: string;
+  ageRange: string;
+  consentAccurate: boolean;
+  consentPrivacy: boolean;
 }
 
-type ChatStep = 'collect_info' | 'select_service' | 'chatting' | 'rating';
+type ChatStep = 'collect_info' | 'select_service' | 'chatting' | 'rating' | 'submitted';
 
 const SERVICES = [
-  { id: 'real_estate', icon: Building2, label: 'Real Estate Investment', description: 'Properties, off-plan, ready units in UAE' },
-  { id: 'concierge', icon: Plane, label: 'Luxury Concierge', description: 'Private jets, yachts, VIP experiences' },
-  { id: 'legal', icon: Scale, label: 'Legal Advisory', description: 'Property transactions, documentation' },
-  { id: 'design_build', icon: Paintbrush, label: 'Design & Build', description: 'Interior design, fit-out, renovation' },
-  { id: 'mortgage', icon: Calculator, label: 'Mortgage Calculator', description: 'Financing estimation tools' },
-  { id: 'property_management', icon: Home, label: 'Property Management', description: 'Rental, maintenance, tenant services' },
+  { id: 'real_estate', icon: Building2, label: 'Property Sales & Leasing', description: 'Brokerage for buying, selling, leasing' },
+  { id: 'holiday_homes', icon: Home, label: 'Holiday Homes', description: 'Short-term rental support' },
+  { id: 'partner_intro', icon: Scale, label: 'Partner Introductions', description: 'Legal, mortgage, concierge partners' },
+  { id: 'design_build', icon: Paintbrush, label: 'Design & Build', description: 'Architecture, interior, fit-out partners' },
+  { id: 'concierge', icon: Plane, label: 'Luxury Concierge', description: 'Jets, yachts, VIP experiences' },
+  { id: 'general', icon: MessageCircle, label: 'General Inquiry', description: 'Other questions' },
 ];
+
+const AGE_RANGES = [
+  { value: '18-24', label: '18-24' },
+  { value: '25-34', label: '25-34' },
+  { value: '35-44', label: '35-44' },
+  { value: '45-54', label: '45-54' },
+  { value: '55+', label: '55+' },
+  { value: 'prefer_not_to_say', label: 'Prefer not to say' },
+];
+
+const LANGUAGES = [
+  { value: 'english', label: 'English' },
+  { value: 'arabic', label: 'العربية (Arabic)' },
+  { value: 'french', label: 'Français (French)' },
+  { value: 'russian', label: 'Русский (Russian)' },
+  { value: 'chinese', label: '中文 (Chinese)' },
+  { value: 'hindi', label: 'हिंदी (Hindi)' },
+  { value: 'other', label: 'Other' },
+];
+
+// E.164 phone validation
+const validateE164Phone = (phone: string): boolean => {
+  // Must start with + and have 7-15 digits
+  const e164Regex = /^\+[1-9]\d{6,14}$/;
+  return e164Regex.test(phone.replace(/[\s\-\(\)]/g, ''));
+};
+
+// Email validation
+const validateEmail = (email: string): boolean => {
+  const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+  return emailRegex.test(email);
+};
+
+// Approved contact info block for AI responses
+const APPROVED_CONTACT_BLOCK = `
+
+📧 Email: ${CONTACT_INFO.email}
+📞 Phone: ${CONTACT_INFO.phone}
+💬 WhatsApp: ${CONTACT_INFO.phone}
+
+Our team is available to assist you.`;
 
 const AIChatWidget = () => {
   const { t, isRTL } = useLanguage();
   const [isOpen, setIsOpen] = useState(false);
   const [step, setStep] = useState<ChatStep>('collect_info');
-  const [userInfo, setUserInfo] = useState<UserInfo>({ name: '', email: '', phone: '' });
+  const [userInfo, setUserInfo] = useState<UserInfo>({
+    firstName: '',
+    lastName: '',
+    email: '',
+    phone: '',
+    nationality: '',
+    language: 'english',
+    currentLocation: '',
+    ageRange: '',
+    consentAccurate: false,
+    consentPrivacy: false,
+  });
   const [selectedService, setSelectedService] = useState<string | null>(null);
   const [messages, setMessages] = useState<Message[]>([]);
   const [input, setInput] = useState('');
@@ -46,6 +109,7 @@ const AIChatWidget = () => {
   const [rating, setRating] = useState<number>(0);
   const [ratingFeedback, setRatingFeedback] = useState('');
   const [hoveredRating, setHoveredRating] = useState<number>(0);
+  const [formErrors, setFormErrors] = useState<Record<string, string>>({});
   const scrollRef = useRef<HTMLDivElement>(null);
   const inputRef = useRef<HTMLInputElement>(null);
 
@@ -63,24 +127,44 @@ const AIChatWidget = () => {
     }
   }, [isOpen, step]);
 
+  const validateForm = (): boolean => {
+    const errors: Record<string, string> = {};
+    
+    if (!userInfo.firstName.trim()) errors.firstName = 'First name is required';
+    if (!userInfo.lastName.trim()) errors.lastName = 'Last name is required';
+    if (!userInfo.email.trim()) {
+      errors.email = 'Email is required';
+    } else if (!validateEmail(userInfo.email)) {
+      errors.email = 'Please enter a valid email';
+    }
+    if (!userInfo.phone.trim()) {
+      errors.phone = 'Phone is required';
+    } else if (!validateE164Phone(userInfo.phone)) {
+      errors.phone = 'Use international format (e.g., +971501234567)';
+    }
+    if (!userInfo.nationality.trim()) errors.nationality = 'Nationality is required';
+    if (!userInfo.currentLocation.trim()) errors.currentLocation = 'Location is required';
+    if (!userInfo.ageRange) errors.ageRange = 'Age range is required';
+    if (!userInfo.consentAccurate) errors.consentAccurate = 'Please confirm information is accurate';
+    if (!userInfo.consentPrivacy) errors.consentPrivacy = 'Please agree to Privacy Policy';
+    
+    setFormErrors(errors);
+    return Object.keys(errors).length === 0;
+  };
+
   const handleStartChat = async () => {
-    if (!userInfo.name.trim() || !userInfo.email.trim()) {
-      toast.error('Please provide your name and email to continue');
+    if (!validateForm()) {
+      toast.error('Please complete all required fields');
       return;
     }
-
-    // Validate email format
-    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-    if (!emailRegex.test(userInfo.email)) {
-      toast.error('Please provide a valid email address');
-      return;
-    }
-
     setStep('select_service');
   };
 
   const handleSelectService = async (serviceId: string) => {
     setSelectedService(serviceId);
+    
+    const fullName = `${userInfo.firstName} ${userInfo.lastName}`.trim();
+    const pageSource = window.location.pathname;
     
     // Create conversation in database
     try {
@@ -88,11 +172,12 @@ const AIChatWidget = () => {
         .from('chat_conversations')
         .insert({
           user_email: userInfo.email,
-          user_name: userInfo.name,
-          user_phone: userInfo.phone || null,
+          user_name: fullName,
+          user_phone: userInfo.phone,
           service_type: serviceId,
           messages: [],
-          status: 'active'
+          status: 'active',
+          page_source: pageSource,
         })
         .select('id')
         .single();
@@ -100,27 +185,34 @@ const AIChatWidget = () => {
       if (error) throw error;
       setConversationId(data.id);
 
-      // Also save to leads table
+      // Save to leads table with full info
       await supabase.from('leads').upsert({
         email: userInfo.email,
-        full_name: userInfo.name,
-        phone: userInfo.phone || null,
-        source: 'ai_chat_support'
+        full_name: fullName,
+        phone: userInfo.phone,
+        nationality: userInfo.nationality,
+        language: userInfo.language,
+        current_location: userInfo.currentLocation,
+        age_range: userInfo.ageRange,
+        consent_accurate: userInfo.consentAccurate,
+        consent_privacy: userInfo.consentPrivacy,
+        page_source: pageSource,
+        source: 'ai_chat_support',
+        status: 'new',
       }, { onConflict: 'email' });
 
     } catch (error) {
       console.error('Error creating conversation:', error);
-      // Continue anyway - we'll try to save messages later
     }
 
     const serviceName = SERVICES.find(s => s.id === serviceId)?.label || 'our services';
     
-    // Set welcome message based on selected service
+    // Welcome message
     setMessages([
       {
         id: 'welcome',
         role: 'assistant',
-        content: `Hello ${userInfo.name}! 👋 Welcome to JJ Global Capital.\n\nI see you're interested in ${serviceName}. I'm here to help you with any questions about our services across the UAE.\n\nHow can I assist you today?`,
+        content: `Welcome to JJ Global Capital, ${userInfo.firstName}! 👋\n\nI can help with property sales, leasing, holiday homes, and partner introductions.\n\nI see you're interested in ${serviceName}. How can I assist you today?\n\n*Note: I provide informational support only. For specific advice, our team will connect you with the right specialists.*`,
         timestamp: new Date(),
       },
     ]);
@@ -166,7 +258,6 @@ const AIChatWidget = () => {
     setIsLoading(true);
 
     try {
-      // Build conversation history for context
       const conversationHistory = messages.map((msg) => ({
         role: msg.role,
         content: msg.content,
@@ -177,7 +268,7 @@ const AIChatWidget = () => {
           message: userMessage.content,
           history: conversationHistory,
           service: selectedService,
-          userName: userInfo.name,
+          userName: userInfo.firstName,
         },
       });
 
@@ -186,14 +277,12 @@ const AIChatWidget = () => {
       const assistantMessage: Message = {
         id: (Date.now() + 1).toString(),
         role: 'assistant',
-        content: data.response || 'I apologize, but I encountered an issue. Please try again or contact our team directly at contact@jjglobalcapital.com or call +971 56 591 1000.',
+        content: data.response || `I apologize, but I encountered an issue. Please contact our team directly:${APPROVED_CONTACT_BLOCK}`,
         timestamp: new Date(),
       };
 
       const updatedMessages = [...newMessages, assistantMessage];
       setMessages(updatedMessages);
-      
-      // Save to database
       await saveMessagesToDb(updatedMessages);
 
     } catch (error) {
@@ -203,7 +292,7 @@ const AIChatWidget = () => {
         {
           id: (Date.now() + 1).toString(),
           role: 'assistant',
-          content: 'I apologize for the technical difficulty. Please try again or contact our team directly:\n\n📧 Email: contact@jjglobalcapital.com\n📞 Phone: +971 56 591 1000\n💬 WhatsApp: +971 56 591 1000\n\nOur team is available to assist you.',
+          content: `I apologize for the technical difficulty. Please contact our team directly:${APPROVED_CONTACT_BLOCK}`,
           timestamp: new Date(),
         },
       ]);
@@ -216,6 +305,42 @@ const AIChatWidget = () => {
     if (e.key === 'Enter' && !e.shiftKey) {
       e.preventDefault();
       handleSend();
+    }
+  };
+
+  const handleSubmitToTeam = async () => {
+    if (!conversationId) return;
+
+    try {
+      // Update conversation status
+      await supabase
+        .from('chat_conversations')
+        .update({ status: 'submitted_to_team' })
+        .eq('id', conversationId);
+
+      // Update lead status
+      await supabase
+        .from('leads')
+        .update({ status: 'submitted' })
+        .eq('email', userInfo.email);
+
+      // Send notification email
+      await supabase.functions.invoke('send-inquiry-email', {
+        body: {
+          name: `${userInfo.firstName} ${userInfo.lastName}`,
+          email: userInfo.email,
+          phone: userInfo.phone,
+          message: `Chat inquiry from ${userInfo.nationality} - ${userInfo.currentLocation}\nService: ${selectedService}\nLanguage: ${userInfo.language}\n\nConversation transcript attached.`,
+          subject: `[Chat Lead] ${userInfo.firstName} ${userInfo.lastName} - ${selectedService}`,
+          source: 'ai_chat_widget',
+        },
+      });
+
+      setStep('submitted');
+      toast.success('Your inquiry has been submitted to our team!');
+    } catch (error) {
+      console.error('Error submitting to team:', error);
+      toast.error('Failed to submit. Please try again.');
     }
   };
 
@@ -241,16 +366,31 @@ const AIChatWidget = () => {
       }
     }
     
-    // Reset everything
+    resetChat();
+  };
+
+  const resetChat = () => {
     setIsOpen(false);
     setTimeout(() => {
       setStep('collect_info');
-      setUserInfo({ name: '', email: '', phone: '' });
+      setUserInfo({
+        firstName: '',
+        lastName: '',
+        email: '',
+        phone: '',
+        nationality: '',
+        language: 'english',
+        currentLocation: '',
+        ageRange: '',
+        consentAccurate: false,
+        consentPrivacy: false,
+      });
       setSelectedService(null);
       setMessages([]);
       setConversationId(null);
       setRating(0);
       setRatingFeedback('');
+      setFormErrors({});
     }, 300);
   };
 
@@ -258,16 +398,7 @@ const AIChatWidget = () => {
     if (step === 'chatting' && messages.length > 1) {
       handleEndChat();
     } else {
-      setIsOpen(false);
-      setTimeout(() => {
-        setStep('collect_info');
-        setUserInfo({ name: '', email: '', phone: '' });
-        setSelectedService(null);
-        setMessages([]);
-        setConversationId(null);
-        setRating(0);
-        setRatingFeedback('');
-      }, 300);
+      resetChat();
     }
   };
 
@@ -294,7 +425,7 @@ const AIChatWidget = () => {
               transition={{ delay: 1 }}
               className="absolute -top-8 left-1/2 -translate-x-1/2 bg-zinc-900 text-white text-xs px-2 py-1 rounded whitespace-nowrap"
             >
-              {t('chat.askMe')}
+              Chat with us
             </motion.span>
           </motion.div>
         )}
@@ -307,12 +438,12 @@ const AIChatWidget = () => {
             initial={{ opacity: 0, y: 20, scale: 0.95 }}
             animate={{ opacity: 1, y: 0, scale: 1 }}
             exit={{ opacity: 0, y: 20, scale: 0.95 }}
-            className={`fixed bottom-6 ${isRTL ? 'left-6' : 'right-6'} z-50 w-[400px] max-w-[calc(100vw-48px)] h-[550px] max-h-[calc(100vh-100px)] bg-zinc-900/95 backdrop-blur-xl border border-gold/30 rounded-2xl shadow-2xl shadow-black/50 flex flex-col overflow-hidden`}
+            className={`fixed bottom-6 ${isRTL ? 'left-6' : 'right-6'} z-50 w-[420px] max-w-[calc(100vw-48px)] h-[600px] max-h-[calc(100vh-100px)] bg-zinc-900/95 backdrop-blur-xl border border-gold/30 rounded-2xl shadow-2xl shadow-black/50 flex flex-col overflow-hidden`}
           >
             {/* Header */}
             <div className="flex items-center justify-between p-4 border-b border-gold/20 bg-gradient-to-r from-gold/10 to-transparent">
               <div className="flex items-center gap-3">
-                {step !== 'collect_info' && step !== 'rating' && (
+                {step !== 'collect_info' && step !== 'rating' && step !== 'submitted' && (
                   <Button
                     variant="ghost"
                     size="icon"
@@ -329,12 +460,13 @@ const AIChatWidget = () => {
                   <Bot className="w-5 h-5 text-black" />
                 </div>
                 <div>
-                  <h3 className="text-white font-semibold text-sm">{t('chat.title')}</h3>
+                  <h3 className="text-white font-semibold text-sm">JJ Global Capital</h3>
                   <p className="text-white/50 text-xs">
                     {step === 'collect_info' && 'Let\'s get started'}
                     {step === 'select_service' && 'Choose a service'}
                     {step === 'chatting' && 'Online now'}
                     {step === 'rating' && 'Rate your experience'}
+                    {step === 'submitted' && 'Thank you!'}
                   </p>
                 </div>
               </div>
@@ -350,72 +482,185 @@ const AIChatWidget = () => {
 
             {/* Step 1: Collect User Info */}
             {step === 'collect_info' && (
-              <div className="flex-1 p-6 overflow-y-auto">
-                <div className="text-center mb-6">
-                  <div className="w-16 h-16 mx-auto mb-4 rounded-full bg-gradient-to-r from-gold/20 to-gold/10 flex items-center justify-center">
-                    <MessageCircle className="w-8 h-8 text-gold" />
+              <ScrollArea className="flex-1 p-4">
+                <div className="text-center mb-4">
+                  <div className="w-14 h-14 mx-auto mb-3 rounded-full bg-gradient-to-r from-gold/20 to-gold/10 flex items-center justify-center">
+                    <MessageCircle className="w-7 h-7 text-gold" />
                   </div>
-                  <h4 className="text-white text-lg font-semibold mb-2">Welcome to JJ Global Capital</h4>
-                  <p className="text-zinc-400 text-sm">Please provide your details to start chatting with our AI assistant</p>
+                  <h4 className="text-white text-base font-semibold mb-1">Welcome to JJ Global Capital</h4>
+                  <p className="text-zinc-400 text-xs">I can help with property sales, leasing, holiday homes, and partner introductions. To assist you, I'll ask a few quick questions.</p>
                 </div>
 
-                <div className="space-y-4">
-                  <div>
-                    <Label className="text-zinc-300 text-sm flex items-center gap-2 mb-2">
-                      <UserCircle className="w-4 h-4 text-gold" />
-                      Your Name *
-                    </Label>
-                    <Input
-                      value={userInfo.name}
-                      onChange={(e) => setUserInfo(prev => ({ ...prev, name: e.target.value }))}
-                      placeholder="Enter your full name"
-                      className="bg-white/10 border-gold/20 text-white placeholder:text-white/40"
-                    />
+                <div className="space-y-3">
+                  {/* Name Row */}
+                  <div className="grid grid-cols-2 gap-2">
+                    <div>
+                      <Label className="text-zinc-300 text-xs flex items-center gap-1 mb-1">
+                        <UserCircle className="w-3 h-3 text-gold" />
+                        First Name *
+                      </Label>
+                      <Input
+                        value={userInfo.firstName}
+                        onChange={(e) => setUserInfo(prev => ({ ...prev, firstName: e.target.value }))}
+                        placeholder="First name"
+                        className={`bg-white/10 border-gold/20 text-white placeholder:text-white/40 h-9 text-sm ${formErrors.firstName ? 'border-red-500' : ''}`}
+                      />
+                      {formErrors.firstName && <p className="text-red-400 text-xs mt-0.5">{formErrors.firstName}</p>}
+                    </div>
+                    <div>
+                      <Label className="text-zinc-300 text-xs flex items-center gap-1 mb-1">
+                        Last Name *
+                      </Label>
+                      <Input
+                        value={userInfo.lastName}
+                        onChange={(e) => setUserInfo(prev => ({ ...prev, lastName: e.target.value }))}
+                        placeholder="Last name"
+                        className={`bg-white/10 border-gold/20 text-white placeholder:text-white/40 h-9 text-sm ${formErrors.lastName ? 'border-red-500' : ''}`}
+                      />
+                      {formErrors.lastName && <p className="text-red-400 text-xs mt-0.5">{formErrors.lastName}</p>}
+                    </div>
                   </div>
-                  
+
+                  {/* Email */}
                   <div>
-                    <Label className="text-zinc-300 text-sm flex items-center gap-2 mb-2">
-                      <Mail className="w-4 h-4 text-gold" />
-                      Email Address *
+                    <Label className="text-zinc-300 text-xs flex items-center gap-1 mb-1">
+                      <Mail className="w-3 h-3 text-gold" />
+                      Email *
                     </Label>
                     <Input
                       type="email"
                       value={userInfo.email}
                       onChange={(e) => setUserInfo(prev => ({ ...prev, email: e.target.value }))}
-                      placeholder="Enter your email"
-                      className="bg-white/10 border-gold/20 text-white placeholder:text-white/40"
+                      placeholder="your@email.com"
+                      className={`bg-white/10 border-gold/20 text-white placeholder:text-white/40 h-9 text-sm ${formErrors.email ? 'border-red-500' : ''}`}
                     />
+                    {formErrors.email && <p className="text-red-400 text-xs mt-0.5">{formErrors.email}</p>}
                   </div>
-                  
+
+                  {/* Phone */}
                   <div>
-                    <Label className="text-zinc-300 text-sm flex items-center gap-2 mb-2">
-                      <PhoneIcon className="w-4 h-4 text-gold" />
-                      Phone Number (Optional)
+                    <Label className="text-zinc-300 text-xs flex items-center gap-1 mb-1">
+                      <PhoneIcon className="w-3 h-3 text-gold" />
+                      Phone (with country code) *
                     </Label>
                     <Input
                       type="tel"
                       value={userInfo.phone}
                       onChange={(e) => setUserInfo(prev => ({ ...prev, phone: e.target.value }))}
-                      placeholder="+971 50 000 0000"
-                      className="bg-white/10 border-gold/20 text-white placeholder:text-white/40"
+                      placeholder="+971 50 123 4567"
+                      className={`bg-white/10 border-gold/20 text-white placeholder:text-white/40 h-9 text-sm ${formErrors.phone ? 'border-red-500' : ''}`}
                     />
+                    {formErrors.phone && <p className="text-red-400 text-xs mt-0.5">{formErrors.phone}</p>}
+                  </div>
+
+                  {/* Nationality & Location Row */}
+                  <div className="grid grid-cols-2 gap-2">
+                    <div>
+                      <Label className="text-zinc-300 text-xs flex items-center gap-1 mb-1">
+                        <Globe className="w-3 h-3 text-gold" />
+                        Nationality *
+                      </Label>
+                      <Input
+                        value={userInfo.nationality}
+                        onChange={(e) => setUserInfo(prev => ({ ...prev, nationality: e.target.value }))}
+                        placeholder="e.g., British"
+                        className={`bg-white/10 border-gold/20 text-white placeholder:text-white/40 h-9 text-sm ${formErrors.nationality ? 'border-red-500' : ''}`}
+                      />
+                      {formErrors.nationality && <p className="text-red-400 text-xs mt-0.5">{formErrors.nationality}</p>}
+                    </div>
+                    <div>
+                      <Label className="text-zinc-300 text-xs flex items-center gap-1 mb-1">
+                        <MapPin className="w-3 h-3 text-gold" />
+                        Current Location *
+                      </Label>
+                      <Input
+                        value={userInfo.currentLocation}
+                        onChange={(e) => setUserInfo(prev => ({ ...prev, currentLocation: e.target.value }))}
+                        placeholder="City, Country"
+                        className={`bg-white/10 border-gold/20 text-white placeholder:text-white/40 h-9 text-sm ${formErrors.currentLocation ? 'border-red-500' : ''}`}
+                      />
+                      {formErrors.currentLocation && <p className="text-red-400 text-xs mt-0.5">{formErrors.currentLocation}</p>}
+                    </div>
+                  </div>
+
+                  {/* Language & Age Row */}
+                  <div className="grid grid-cols-2 gap-2">
+                    <div>
+                      <Label className="text-zinc-300 text-xs mb-1 block">Preferred Language</Label>
+                      <Select value={userInfo.language} onValueChange={(v) => setUserInfo(prev => ({ ...prev, language: v }))}>
+                        <SelectTrigger className="bg-white/10 border-gold/20 text-white h-9 text-sm">
+                          <SelectValue />
+                        </SelectTrigger>
+                        <SelectContent>
+                          {LANGUAGES.map(lang => (
+                            <SelectItem key={lang.value} value={lang.value}>{lang.label}</SelectItem>
+                          ))}
+                        </SelectContent>
+                      </Select>
+                    </div>
+                    <div>
+                      <Label className="text-zinc-300 text-xs flex items-center gap-1 mb-1">
+                        <Calendar className="w-3 h-3 text-gold" />
+                        Age Range *
+                      </Label>
+                      <Select value={userInfo.ageRange} onValueChange={(v) => setUserInfo(prev => ({ ...prev, ageRange: v }))}>
+                        <SelectTrigger className={`bg-white/10 border-gold/20 text-white h-9 text-sm ${formErrors.ageRange ? 'border-red-500' : ''}`}>
+                          <SelectValue placeholder="Select" />
+                        </SelectTrigger>
+                        <SelectContent>
+                          {AGE_RANGES.map(age => (
+                            <SelectItem key={age.value} value={age.value}>{age.label}</SelectItem>
+                          ))}
+                        </SelectContent>
+                      </Select>
+                      {formErrors.ageRange && <p className="text-red-400 text-xs mt-0.5">{formErrors.ageRange}</p>}
+                    </div>
+                  </div>
+
+                  {/* Consent Checkboxes */}
+                  <div className="space-y-2 pt-2">
+                    <div className="flex items-start gap-2">
+                      <Checkbox
+                        id="consent-accurate"
+                        checked={userInfo.consentAccurate}
+                        onCheckedChange={(checked) => setUserInfo(prev => ({ ...prev, consentAccurate: checked === true }))}
+                        className="border-gold/50 data-[state=checked]:bg-gold data-[state=checked]:border-gold mt-0.5"
+                      />
+                      <label htmlFor="consent-accurate" className="text-zinc-300 text-xs leading-tight cursor-pointer">
+                        I confirm the information provided is accurate. *
+                      </label>
+                    </div>
+                    {formErrors.consentAccurate && <p className="text-red-400 text-xs ml-6">{formErrors.consentAccurate}</p>}
+                    
+                    <div className="flex items-start gap-2">
+                      <Checkbox
+                        id="consent-privacy"
+                        checked={userInfo.consentPrivacy}
+                        onCheckedChange={(checked) => setUserInfo(prev => ({ ...prev, consentPrivacy: checked === true }))}
+                        className="border-gold/50 data-[state=checked]:bg-gold data-[state=checked]:border-gold mt-0.5"
+                      />
+                      <label htmlFor="consent-privacy" className="text-zinc-300 text-xs leading-tight cursor-pointer">
+                        I agree to the <Link to="/privacy" className="text-gold hover:underline">Privacy Policy</Link> and <Link to="/terms" className="text-gold hover:underline">Terms</Link>. *
+                      </label>
+                    </div>
+                    {formErrors.consentPrivacy && <p className="text-red-400 text-xs ml-6">{formErrors.consentPrivacy}</p>}
                   </div>
 
                   <Button
                     onClick={handleStartChat}
-                    className="w-full bg-gradient-to-r from-gold to-gold/80 hover:from-gold/90 hover:to-gold/70 text-black font-semibold mt-4"
+                    className="w-full bg-gradient-to-r from-gold to-gold/80 hover:from-gold/90 hover:to-gold/70 text-black font-semibold mt-3"
                   >
                     Continue
                   </Button>
                 </div>
-              </div>
+              </ScrollArea>
             )}
 
             {/* Step 2: Select Service */}
             {step === 'select_service' && (
               <div className="flex-1 p-4 overflow-y-auto">
                 <div className="text-center mb-4">
-                  <h4 className="text-white text-lg font-semibold mb-1">Hi {userInfo.name}!</h4>
+                  <h4 className="text-white text-lg font-semibold mb-1">Hi {userInfo.firstName}!</h4>
                   <p className="text-zinc-400 text-sm">Which service are you looking for?</p>
                 </div>
 
@@ -466,13 +711,16 @@ const AIChatWidget = () => {
                           )}
                         </div>
                         <div
-                          className={`max-w-[75%] p-3 rounded-2xl text-sm whitespace-pre-wrap ${
+                          className={`max-w-[80%] p-3 rounded-xl ${
                             message.role === 'user'
-                              ? 'bg-gold/20 text-white rounded-tr-sm'
-                              : 'bg-white/10 text-white/90 rounded-tl-sm'
+                              ? 'bg-gold/20 text-white'
+                              : 'bg-white/10 text-white'
                           }`}
                         >
-                          {message.content}
+                          <p className="text-sm whitespace-pre-wrap">{message.content}</p>
+                          <p className="text-[10px] text-white/40 mt-1">
+                            {message.timestamp.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}
+                          </p>
                         </div>
                       </motion.div>
                     ))}
@@ -485,7 +733,7 @@ const AIChatWidget = () => {
                         <div className="w-8 h-8 rounded-full bg-gradient-to-r from-gold to-gold/60 flex items-center justify-center">
                           <Bot className="w-4 h-4 text-black" />
                         </div>
-                        <div className="bg-white/10 p-3 rounded-2xl rounded-tl-sm">
+                        <div className="bg-white/10 p-3 rounded-xl">
                           <Loader2 className="w-4 h-4 text-gold animate-spin" />
                         </div>
                       </motion.div>
@@ -493,16 +741,27 @@ const AIChatWidget = () => {
                   </div>
                 </ScrollArea>
 
+                {/* Submit to Team Button */}
+                <div className="px-4 py-2 border-t border-zinc-800">
+                  <Button
+                    onClick={handleSubmitToTeam}
+                    className="w-full bg-emerald-600 hover:bg-emerald-500 text-white text-sm py-2"
+                  >
+                    <Shield className="w-4 h-4 mr-2" />
+                    Submit to Team for Follow-up
+                  </Button>
+                </div>
+
                 {/* Input */}
-                <div className="p-4 border-t border-gold/20 bg-black/30">
+                <div className="p-4 border-t border-gold/20 bg-black/20">
                   <div className="flex gap-2">
                     <Input
                       ref={inputRef}
                       value={input}
                       onChange={(e) => setInput(e.target.value)}
                       onKeyPress={handleKeyPress}
-                      placeholder={t('chat.placeholder')}
-                      className="flex-1 bg-white/10 border-gold/20 text-white placeholder:text-white/40 focus:border-gold/50"
+                      placeholder="Type your message..."
+                      className="flex-1 bg-white/10 border-gold/20 text-white placeholder:text-white/40"
                       disabled={isLoading}
                     />
                     <Button
@@ -520,10 +779,11 @@ const AIChatWidget = () => {
             {/* Step 4: Rating */}
             {step === 'rating' && (
               <div className="flex-1 p-6 flex flex-col items-center justify-center">
-                <div className="text-center mb-6">
-                  <h4 className="text-white text-xl font-semibold mb-2">How was your experience?</h4>
-                  <p className="text-zinc-400 text-sm">Your feedback helps us improve</p>
+                <div className="w-16 h-16 rounded-full bg-gradient-to-r from-gold/20 to-gold/10 flex items-center justify-center mb-4">
+                  <Star className="w-8 h-8 text-gold" />
                 </div>
+                <h4 className="text-white text-lg font-semibold mb-2">How was your experience?</h4>
+                <p className="text-zinc-400 text-sm text-center mb-6">Your feedback helps us improve</p>
 
                 <div className="flex gap-2 mb-6">
                   {[1, 2, 3, 4, 5].map((star) => (
@@ -532,10 +792,10 @@ const AIChatWidget = () => {
                       onClick={() => setRating(star)}
                       onMouseEnter={() => setHoveredRating(star)}
                       onMouseLeave={() => setHoveredRating(0)}
-                      className="p-1 transition-transform hover:scale-110"
+                      className="transition-transform hover:scale-110"
                     >
                       <Star
-                        className={`w-10 h-10 transition-colors ${
+                        className={`w-8 h-8 ${
                           star <= (hoveredRating || rating)
                             ? 'text-gold fill-gold'
                             : 'text-zinc-600'
@@ -549,19 +809,39 @@ const AIChatWidget = () => {
                   value={ratingFeedback}
                   onChange={(e) => setRatingFeedback(e.target.value)}
                   placeholder="Any additional feedback? (optional)"
-                  className="w-full bg-white/10 border-gold/20 text-white placeholder:text-white/40 mb-4"
+                  className="bg-white/10 border-gold/20 text-white placeholder:text-white/40 mb-4"
                 />
 
                 <Button
                   onClick={handleSubmitRating}
                   className="w-full bg-gradient-to-r from-gold to-gold/80 hover:from-gold/90 hover:to-gold/70 text-black font-semibold"
                 >
-                  {rating > 0 ? 'Submit Rating' : 'Skip'}
+                  Submit Feedback
                 </Button>
+              </div>
+            )}
 
-                <p className="text-zinc-500 text-xs mt-4 text-center">
-                  Need more help? Contact us at contact@jjglobalcapital.com
-                </p>
+            {/* Step 5: Submitted */}
+            {step === 'submitted' && (
+              <div className="flex-1 p-6 flex flex-col items-center justify-center">
+                <div className="w-16 h-16 rounded-full bg-gradient-to-r from-emerald-500/20 to-emerald-500/10 flex items-center justify-center mb-4">
+                  <Shield className="w-8 h-8 text-emerald-500" />
+                </div>
+                <h4 className="text-white text-lg font-semibold mb-2">Submitted Successfully!</h4>
+                <p className="text-zinc-400 text-sm text-center mb-4">Our team will contact you within 24 hours.</p>
+                
+                <div className="bg-zinc-800/50 rounded-lg p-4 text-center mb-4">
+                  <p className="text-zinc-300 text-sm mb-2">Contact us directly:</p>
+                  <p className="text-gold text-sm font-medium">{CONTACT_INFO.email}</p>
+                  <p className="text-gold text-sm font-medium">{CONTACT_INFO.phone}</p>
+                </div>
+
+                <Button
+                  onClick={resetChat}
+                  className="w-full bg-gradient-to-r from-gold to-gold/80 hover:from-gold/90 hover:to-gold/70 text-black font-semibold"
+                >
+                  Start New Conversation
+                </Button>
               </div>
             )}
           </motion.div>
