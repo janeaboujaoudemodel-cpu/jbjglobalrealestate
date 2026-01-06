@@ -1,4 +1,5 @@
 import GlobalHeader from "@/components/GlobalHeader";
+import FloatingWhatsApp from "@/components/FloatingWhatsApp";
 
 interface MainLayoutProps {
   children: React.ReactNode;
@@ -12,6 +13,7 @@ const MainLayout = ({ children }: MainLayoutProps) => {
       <main className="pt-16 lg:pt-18">
         {children}
       </main>
+      <FloatingWhatsApp />
     </div>
   );
 };
