@@ -33,7 +33,7 @@ interface UserInfo {
   consentPrivacy: boolean;
 }
 
-type ChatStep = 'collect_info' | 'select_service' | 'chatting' | 'rating' | 'submitted';
+type ChatStep = 'check_email' | 'collect_info' | 'select_service' | 'chatting' | 'rating' | 'submitted';
 
 const SERVICES = [
   { id: 'real_estate', icon: Building2, label: 'Property Sales & Leasing', description: 'Brokerage for buying, selling, leasing' },
@@ -88,7 +88,10 @@ Our team is available to assist you.`;
 const AIChatWidget = () => {
   const { t, isRTL } = useLanguage();
   const [isOpen, setIsOpen] = useState(false);
-  const [step, setStep] = useState<ChatStep>('collect_info');
+  const [step, setStep] = useState<ChatStep>('check_email');
+  const [checkEmail, setCheckEmail] = useState('');
+  const [isCheckingEmail, setIsCheckingEmail] = useState(false);
+  const [isExistingUser, setIsExistingUser] = useState(false);
   const [userInfo, setUserInfo] = useState<UserInfo>({
     firstName: '',
     lastName: '',
@@ -112,6 +115,59 @@ const AIChatWidget = () => {
   const [formErrors, setFormErrors] = useState<Record<string, string>>({});
   const scrollRef = useRef<HTMLDivElement>(null);
   const inputRef = useRef<HTMLInputElement>(null);
+
+  // Check if email exists in leads database
+  const handleCheckEmail = async () => {
+    if (!checkEmail.trim() || !validateEmail(checkEmail)) {
+      toast.error('Please enter a valid email address');
+      return;
+    }
+
+    setIsCheckingEmail(true);
+    try {
+      const { data, error } = await supabase
+        .from('leads')
+        .select('*')
+        .eq('email', checkEmail.toLowerCase().trim())
+        .maybeSingle();
+
+      if (error) {
+        console.error('Error checking email:', error);
+      }
+
+      if (data) {
+        // Existing user found - pre-fill their info
+        const nameParts = (data.full_name || '').split(' ');
+        setUserInfo({
+          firstName: nameParts[0] || '',
+          lastName: nameParts.slice(1).join(' ') || '',
+          email: data.email,
+          phone: data.phone || '',
+          nationality: data.nationality || '',
+          language: data.language || 'english',
+          currentLocation: data.current_location || '',
+          ageRange: data.age_range || '',
+          consentAccurate: true,
+          consentPrivacy: true,
+        });
+        setIsExistingUser(true);
+        toast.success(`Welcome back! We found your profile.`);
+        // Go directly to service selection for existing users
+        setStep('select_service');
+      } else {
+        // New user - go to collect info
+        setUserInfo(prev => ({ ...prev, email: checkEmail.trim() }));
+        setIsExistingUser(false);
+        setStep('collect_info');
+      }
+    } catch (error) {
+      console.error('Error checking email:', error);
+      setUserInfo(prev => ({ ...prev, email: checkEmail.trim() }));
+      setStep('collect_info');
+    } finally {
+      setIsCheckingEmail(false);
+    }
+  };
 
   // Auto-scroll to bottom when new messages arrive
   useEffect(() => {
@@ -372,7 +428,9 @@ const AIChatWidget = () => {
   const resetChat = () => {
     setIsOpen(false);
     setTimeout(() => {
-      setStep('collect_info');
+      setStep('check_email');
+      setCheckEmail('');
+      setIsExistingUser(false);
       setUserInfo({
         firstName: '',
         lastName: '',
@@ -443,12 +501,13 @@ const AIChatWidget = () => {
             {/* Header */}
             <div className="flex items-center justify-between p-4 border-b border-gold/20 bg-gradient-to-r from-gold/10 to-transparent">
               <div className="flex items-center gap-3">
-                {step !== 'collect_info' && step !== 'rating' && step !== 'submitted' && (
+                {step !== 'check_email' && step !== 'rating' && step !== 'submitted' && (
                   <Button
                     variant="ghost"
                     size="icon"
                     onClick={() => {
-                      if (step === 'select_service') setStep('collect_info');
+                      if (step === 'collect_info') setStep('check_email');
+                      else if (step === 'select_service') setStep(isExistingUser ? 'check_email' : 'collect_info');
                       else if (step === 'chatting') handleEndChat();
                     }}
                     className="text-white/60 hover:text-white hover:bg-white/10 mr-1"
@@ -462,6 +521,7 @@ const AIChatWidget = () => {
                 <div>
                   <h3 className="text-white font-semibold text-sm">JJ Global Capital</h3>
                   <p className="text-white/50 text-xs">
+                    {step === 'check_email' && 'Welcome! Enter your email'}
                     {step === 'collect_info' && 'Let\'s get started'}
                     {step === 'select_service' && 'Choose a service'}
                     {step === 'chatting' && 'Online now'}
@@ -480,15 +540,68 @@ const AIChatWidget = () => {
               </Button>
             </div>
 
-            {/* Step 1: Collect User Info */}
+            {/* Step 0: Check Email */}
+            {step === 'check_email' && (
+              <div className="flex-1 p-6 flex flex-col justify-center">
+                <div className="text-center mb-6">
+                  <div className="w-16 h-16 mx-auto mb-4 rounded-full bg-gradient-to-r from-gold/20 to-gold/10 flex items-center justify-center">
+                    <MessageCircle className="w-8 h-8 text-gold" />
+                  </div>
+                  <h4 className="text-white text-lg font-semibold mb-2">Welcome to JJ Global Capital</h4>
+                  <p className="text-zinc-400 text-sm">Enter your email to get started. Returning users get instant WhatsApp access!</p>
+                </div>
+
+                <div className="space-y-4">
+                  <div>
+                    <Label className="text-zinc-300 text-sm flex items-center gap-2 mb-2">
+                      <Mail className="w-4 h-4 text-gold" />
+                      Email Address
+                    </Label>
+                    <Input
+                      type="email"
+                      value={checkEmail}
+                      onChange={(e) => setCheckEmail(e.target.value)}
+                      onKeyPress={(e) => e.key === 'Enter' && handleCheckEmail()}
+                      placeholder="your@email.com"
+                      className="bg-white/10 border-gold/20 text-white placeholder:text-white/40 h-12 text-base"
+                      autoFocus
+                    />
+                  </div>
+
+                  <Button
+                    onClick={handleCheckEmail}
+                    disabled={isCheckingEmail || !checkEmail.trim()}
+                    className="w-full h-12 bg-gradient-to-r from-gold to-gold/80 hover:from-gold/90 hover:to-gold/70 text-black font-semibold"
+                  >
+                    {isCheckingEmail ? (
+                      <>
+                        <Loader2 className="w-5 h-5 mr-2 animate-spin" />
+                        Checking...
+                      </>
+                    ) : (
+                      <>
+                        Continue
+                        <Send className="w-4 h-4 ml-2" />
+                      </>
+                    )}
+                  </Button>
+
+                  <p className="text-zinc-500 text-xs text-center mt-4">
+                    New users will complete a quick registration. Existing users get direct access.
+                  </p>
+                </div>
+              </div>
+            )}
+
+            {/* Step 1: Collect User Info (New Users Only) */}
             {step === 'collect_info' && (
               <ScrollArea className="flex-1 p-4">
                 <div className="text-center mb-4">
                   <div className="w-14 h-14 mx-auto mb-3 rounded-full bg-gradient-to-r from-gold/20 to-gold/10 flex items-center justify-center">
-                    <MessageCircle className="w-7 h-7 text-gold" />
+                    <UserCircle className="w-7 h-7 text-gold" />
                   </div>
-                  <h4 className="text-white text-base font-semibold mb-1">Welcome to JJ Global Capital</h4>
-                  <p className="text-zinc-400 text-xs">I can help with property sales, leasing, holiday homes, and partner introductions. To assist you, I'll ask a few quick questions.</p>
+                  <h4 className="text-white text-base font-semibold mb-1">Complete Your Profile</h4>
+                  <p className="text-zinc-400 text-xs">Just a few quick questions to personalize your experience.</p>
                 </div>
 
                 <div className="space-y-3">
@@ -660,9 +773,38 @@ const AIChatWidget = () => {
             {step === 'select_service' && (
               <div className="flex-1 p-4 overflow-y-auto">
                 <div className="text-center mb-4">
-                  <h4 className="text-white text-lg font-semibold mb-1">Hi {userInfo.firstName}!</h4>
-                  <p className="text-zinc-400 text-sm">Which service are you looking for?</p>
+                  <h4 className="text-white text-lg font-semibold mb-1">
+                    {isExistingUser ? `Welcome back, ${userInfo.firstName}!` : `Hi ${userInfo.firstName}!`}
+                  </h4>
+                  <p className="text-zinc-400 text-sm">
+                    {isExistingUser ? 'Great to see you again! How can we help?' : 'Which service are you looking for?'}
+                  </p>
                 </div>
+
+                {/* WhatsApp Direct Access for Existing Users */}
+                {isExistingUser && (
+                  <a
+                    href={`https://wa.me/${CONTACT_INFO.whatsappNumber}?text=${encodeURIComponent(`Hi, I'm ${userInfo.firstName}. I'd like to chat about my property inquiry.`)}`}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="flex items-center gap-3 p-4 mb-4 bg-green-500/10 hover:bg-green-500/20 border border-green-500/30 hover:border-green-500/50 rounded-xl transition-all duration-300 group"
+                  >
+                    <div className="w-12 h-12 rounded-full bg-green-500 flex items-center justify-center">
+                      <MessageCircle className="w-6 h-6 text-white" />
+                    </div>
+                    <div className="flex-1">
+                      <h5 className="text-white text-sm font-semibold">Chat on WhatsApp</h5>
+                      <p className="text-green-400 text-xs">Direct access • Instant response</p>
+                    </div>
+                    <div className="text-green-400 group-hover:translate-x-1 transition-transform">
+                      →
+                    </div>
+                  </a>
+                )}
+
+                <p className="text-zinc-500 text-xs text-center mb-3">
+                  {isExistingUser ? 'Or chat with our AI assistant:' : 'Select a topic to get started:'}
+                </p>
 
                 <div className="grid grid-cols-2 gap-3">
                   {SERVICES.map((service) => {
@@ -741,14 +883,25 @@ const AIChatWidget = () => {
                   </div>
                 </ScrollArea>
 
-                {/* Submit to Team Button */}
-                <div className="px-4 py-2 border-t border-zinc-800">
+                {/* Action Buttons */}
+                <div className="px-4 py-2 border-t border-zinc-800 flex gap-2">
+                  {isExistingUser && (
+                    <a
+                      href={`https://wa.me/${CONTACT_INFO.whatsappNumber}?text=${encodeURIComponent(`Hi, I'm ${userInfo.firstName}. I was chatting with the AI about ${SERVICES.find(s => s.id === selectedService)?.label || 'property inquiries'}.`)}`}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="flex-1 flex items-center justify-center gap-2 bg-green-600 hover:bg-green-500 text-white text-sm py-2 rounded-md transition-colors"
+                    >
+                      <MessageCircle className="w-4 h-4" />
+                      WhatsApp
+                    </a>
+                  )}
                   <Button
                     onClick={handleSubmitToTeam}
-                    className="w-full bg-emerald-600 hover:bg-emerald-500 text-white text-sm py-2"
+                    className={`${isExistingUser ? 'flex-1' : 'w-full'} bg-emerald-600 hover:bg-emerald-500 text-white text-sm py-2`}
                   >
                     <Shield className="w-4 h-4 mr-2" />
-                    Submit to Team for Follow-up
+                    Submit to Team
                   </Button>
                 </div>
 
