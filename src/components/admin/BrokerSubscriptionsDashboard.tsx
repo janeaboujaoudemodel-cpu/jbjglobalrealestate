@@ -91,6 +91,8 @@ export default function BrokerSubscriptionsDashboard() {
   const [selectedSubscription, setSelectedSubscription] = useState<BrokerSubscription | null>(null);
   const [viewDialogOpen, setViewDialogOpen] = useState(false);
   const [hasLoggedPageView, setHasLoggedPageView] = useState(false);
+  const [detailViewCount, setDetailViewCount] = useState(0);
+  const [detailViewStartTime, setDetailViewStartTime] = useState<number | null>(null);
 
   const fetchSubscriptions = useCallback(async () => {
     setLoading(true);
@@ -131,6 +133,46 @@ export default function BrokerSubscriptionsDashboard() {
     setSelectedSubscription(subscription);
     setViewDialogOpen(true);
 
+    // Track rapid detail views for unusual access detection
+    const now = Date.now();
+    if (!detailViewStartTime) {
+      setDetailViewStartTime(now);
+      setDetailViewCount(1);
+    } else {
+      const timeSinceStart = now - detailViewStartTime;
+      const newCount = detailViewCount + 1;
+      setDetailViewCount(newCount);
+
+      // If more than 10 detail views in 2 minutes, flag as unusual access
+      if (newCount >= 10 && timeSinceStart < 120000) {
+        try {
+          await supabase.functions.invoke("send-security-alert", {
+            body: {
+              alertType: "bulk_access",
+              adminEmail: user?.email,
+              adminName: user?.user_metadata?.full_name || user?.email,
+              details: {
+                recordCount: newCount,
+                resourceType: "broker_subscriptions",
+                additionalInfo: `Viewed ${newCount} records in ${Math.round(timeSinceStart / 1000)} seconds`,
+              },
+            },
+          });
+          // Reset after sending alert
+          setDetailViewStartTime(null);
+          setDetailViewCount(0);
+        } catch (alertError) {
+          console.error("Failed to send bulk access alert:", alertError);
+        }
+      }
+
+      // Reset window after 2 minutes
+      if (timeSinceStart >= 120000) {
+        setDetailViewStartTime(now);
+        setDetailViewCount(1);
+      }
+    }
+
     // Log detailed view of sensitive data
     await logAction({
       actionType: "read",
@@ -164,6 +206,29 @@ export default function BrokerSubscriptionsDashboard() {
         filters: { status: statusFilter, tier: tierFilter, search: searchQuery },
       },
     });
+
+    // Send security alert email notification
+    try {
+      const { data: sessionData } = await supabase.auth.getSession();
+      if (sessionData?.session?.access_token) {
+        await supabase.functions.invoke("send-security-alert", {
+          body: {
+            alertType: "data_export",
+            adminEmail: user?.email,
+            adminName: user?.user_metadata?.full_name || user?.email,
+            details: {
+              recordCount: filteredSubscriptions.length,
+              resourceType: "broker_subscriptions",
+              filters: { status: statusFilter, tier: tierFilter, search: searchQuery },
+              additionalInfo: `Exported ${filteredSubscriptions.length} of ${subscriptions.length} total records`,
+            },
+          },
+        });
+      }
+    } catch (alertError) {
+      console.error("Failed to send security alert:", alertError);
+      // Don't block export if alert fails
+    }
 
     let csvContent = "Name,Email,Phone,Company,RERA,Tier,Status,Price,Credits Used,PDF Downloads,Created,Expires\n";
     filteredSubscriptions.forEach((sub) => {
