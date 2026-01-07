@@ -18,10 +18,13 @@ import {
 import { toast } from "sonner";
 import { 
   ArrowLeft, Phone, MessageSquare, Mail, User, 
-  MapPin, Globe, Clock, Plus, Play, Square, Calendar
+  MapPin, Globe, Clock, Plus, Play, Square, Calendar, FileText
 } from "lucide-react";
 import LeadStatusBadge, { PIPELINE_STATUSES, getStatusInfo } from "@/components/crm/LeadStatusBadge";
 import FollowUpScheduler from "@/components/crm/FollowUpScheduler";
+import VoiceNoteRecorder from "@/components/crm/VoiceNoteRecorder";
+import CRMAIToolsPanel from "@/components/crm/CRMAIToolsPanel";
+import ClientPDFGenerator from "@/components/crm/ClientPDFGenerator";
 
 interface Lead {
   id: string;
@@ -92,6 +95,10 @@ const CRMLeadDetail = () => {
   });
   const [callOutcome, setCallOutcome] = useState("");
   const [callNotes, setCallNotes] = useState("");
+  
+  // PDF Generator state
+  const [showPDFGenerator, setShowPDFGenerator] = useState(false);
+  const [selectedPDFTools, setSelectedPDFTools] = useState<string[]>([]);
 
   useEffect(() => {
     if (!user || !id) {
@@ -590,6 +597,15 @@ const CRMLeadDetail = () => {
               )}
             </CardContent>
           </Card>
+
+          {/* AI Tools Panel */}
+          <CRMAIToolsPanel 
+            lead={lead}
+            onGeneratePDF={(toolType, data) => {
+              setSelectedPDFTools(data.tools || []);
+              setShowPDFGenerator(true);
+            }}
+          />
         </div>
 
         {/* Right Column - Tabs */}
@@ -643,15 +659,20 @@ const CRMLeadDetail = () => {
                 <CardContent className="pt-6 space-y-4">
                   <div className="flex gap-2">
                     <Textarea
-                      placeholder="Add a note..."
+                      placeholder="Add a note... (or use the microphone to dictate)"
                       value={newNote}
                       onChange={(e) => setNewNote(e.target.value)}
                       rows={2}
                       className="flex-1"
                     />
-                    <Button onClick={addNote} disabled={!newNote.trim()}>
-                      <Plus className="h-4 w-4" />
-                    </Button>
+                    <div className="flex flex-col gap-2">
+                      <VoiceNoteRecorder 
+                        onTranscript={(text) => setNewNote(prev => prev ? `${prev} ${text}` : text)}
+                      />
+                      <Button onClick={addNote} disabled={!newNote.trim()}>
+                        <Plus className="h-4 w-4" />
+                      </Button>
+                    </div>
                   </div>
                   
                   {notes.length === 0 ? (
@@ -735,6 +756,14 @@ const CRMLeadDetail = () => {
           </Tabs>
         </div>
       </main>
+
+      {/* PDF Generator Modal */}
+      <ClientPDFGenerator
+        open={showPDFGenerator}
+        onClose={() => setShowPDFGenerator(false)}
+        lead={lead}
+        selectedTools={selectedPDFTools}
+      />
     </div>
   );
 };
