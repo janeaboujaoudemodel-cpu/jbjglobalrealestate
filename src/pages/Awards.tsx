@@ -61,10 +61,10 @@ const Awards = () => {
 
   // Use centralized stats
   const recognitions = [
-    COMPANY_STATS.yearsExperience,
+    COMPANY_STATS.yearsInDubai,
     COMPANY_STATS.brokersTrainedBy,
-    COMPANY_STATS.clientSatisfaction,
-    COMPANY_STATS.teamMembers,
+    COMPANY_STATS.socialFollowers,
+    COMPANY_STATS.teamManaged,
   ];
 
   return (
