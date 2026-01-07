@@ -18,8 +18,10 @@ import {
 import { toast } from "sonner";
 import { 
   ArrowLeft, Phone, MessageSquare, Mail, User, 
-  MapPin, Globe, Clock, Plus, Play, Square
+  MapPin, Globe, Clock, Plus, Play, Square, Calendar
 } from "lucide-react";
+import LeadStatusBadge, { PIPELINE_STATUSES, getStatusInfo } from "@/components/crm/LeadStatusBadge";
+import FollowUpScheduler from "@/components/crm/FollowUpScheduler";
 
 interface Lead {
   id: string;
@@ -66,17 +68,7 @@ interface CallState {
   elapsed: number;
 }
 
-const PIPELINE_STATUSES = [
-  { value: "new", label: "New", color: "bg-blue-500" },
-  { value: "contacted", label: "Contacted", color: "bg-yellow-500" },
-  { value: "qualified", label: "Qualified", color: "bg-green-500" },
-  { value: "viewing", label: "Viewing", color: "bg-purple-500" },
-  { value: "negotiation", label: "Negotiation", color: "bg-orange-500" },
-  { value: "closed_won", label: "Closed Won", color: "bg-emerald-600" },
-  { value: "closed_lost", label: "Closed Lost", color: "bg-red-500" },
-  { value: "no_answer", label: "No Answer", color: "bg-gray-500" },
-  { value: "junk", label: "Junk", color: "bg-gray-400" },
-];
+// Removed local PIPELINE_STATUSES - now using shared from LeadStatusBadge
 
 const CRMLeadDetail = () => {
   const { id } = useParams<{ id: string }>();
@@ -432,13 +424,44 @@ const CRMLeadDetail = () => {
             </p>
           </div>
           <Select value={currentStatus} onValueChange={handleStatusChange}>
-            <SelectTrigger className="w-[160px]">
-              <SelectValue />
+            <SelectTrigger className="w-[180px]">
+              <LeadStatusBadge status={currentStatus} size="sm" />
             </SelectTrigger>
-            <SelectContent>
-              {PIPELINE_STATUSES.map(status => (
+            <SelectContent className="max-h-80">
+              <div className="px-2 py-1 text-xs font-semibold text-emerald-400 uppercase">Positive</div>
+              {PIPELINE_STATUSES.filter(s => s.category === 'positive').map(status => (
                 <SelectItem key={status.value} value={status.value}>
-                  {status.label}
+                  <div className="flex items-center gap-2">
+                    <span className={`w-2 h-2 rounded-full ${status.color}`} />
+                    {status.label}
+                  </div>
+                </SelectItem>
+              ))}
+              <div className="px-2 py-1 text-xs font-semibold text-blue-400 uppercase mt-1">Neutral</div>
+              {PIPELINE_STATUSES.filter(s => s.category === 'neutral').map(status => (
+                <SelectItem key={status.value} value={status.value}>
+                  <div className="flex items-center gap-2">
+                    <span className={`w-2 h-2 rounded-full ${status.color}`} />
+                    {status.label}
+                  </div>
+                </SelectItem>
+              ))}
+              <div className="px-2 py-1 text-xs font-semibold text-amber-400 uppercase mt-1">Follow-up</div>
+              {PIPELINE_STATUSES.filter(s => s.category === 'warning').map(status => (
+                <SelectItem key={status.value} value={status.value}>
+                  <div className="flex items-center gap-2">
+                    <span className={`w-2 h-2 rounded-full ${status.color}`} />
+                    {status.label}
+                  </div>
+                </SelectItem>
+              ))}
+              <div className="px-2 py-1 text-xs font-semibold text-red-400 uppercase mt-1">Negative</div>
+              {PIPELINE_STATUSES.filter(s => s.category === 'negative').map(status => (
+                <SelectItem key={status.value} value={status.value}>
+                  <div className="flex items-center gap-2">
+                    <span className={`w-2 h-2 rounded-full ${status.color}`} />
+                    {status.label}
+                  </div>
                 </SelectItem>
               ))}
             </SelectContent>

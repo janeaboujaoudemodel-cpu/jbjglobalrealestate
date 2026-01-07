@@ -25,8 +25,9 @@ import {
   PopoverTrigger,
 } from "@/components/ui/popover";
 import { toast } from "sonner";
-import { Search, Phone, MessageSquare, Mail, Eye, Filter, ChevronDown } from "lucide-react";
+import { Search, Phone, MessageSquare, Mail, Eye, Filter, ChevronDown, Calendar, Lock } from "lucide-react";
 import LeadStatusBadge, { PIPELINE_STATUSES, getStatusInfo } from "./LeadStatusBadge";
+import FollowUpScheduler from "./FollowUpScheduler";
 
 interface Lead {
   id: string;
@@ -48,6 +49,23 @@ interface Lead {
   };
 }
 
+// Helper to mask contact details for company-assigned leads
+const maskPhone = (phone: string | null): string => {
+  if (!phone) return "-";
+  return phone.slice(0, 4) + "****" + phone.slice(-2);
+};
+
+const maskEmail = (email: string | null): string => {
+  if (!email) return "-";
+  const [local, domain] = email.split("@");
+  if (!domain) return "****@****";
+  return local.slice(0, 2) + "****@" + domain;
+};
+
+const getFirstName = (fullName: string): string => {
+  return fullName.split(" ")[0];
+};
+
 interface CRMLeadsTableProps {
   userId: string;
   filterType: "assigned" | "own";
@@ -61,6 +79,10 @@ const CRMLeadsTable = ({ userId, filterType, onRefresh }: CRMLeadsTableProps) =>
   const [searchQuery, setSearchQuery] = useState("");
   const [statusFilter, setStatusFilter] = useState<string>("all");
   const [selectedLeads, setSelectedLeads] = useState<Set<string>>(new Set());
+  const [followUpLead, setFollowUpLead] = useState<Lead | null>(null);
+
+  // Check if contact details should be hidden (for company-assigned leads)
+  const isCompanyAssigned = filterType === "assigned";
 
   useEffect(() => {
     fetchLeads();
@@ -335,7 +357,14 @@ const CRMLeadsTable = ({ userId, filterType, onRefresh }: CRMLeadsTableProps) =>
                   </TableCell>
                   <TableCell>
                     <div>
-                      <p className="font-semibold text-foreground">{lead.full_name}</p>
+                      <p className="font-semibold text-foreground">
+                        {isCompanyAssigned ? getFirstName(lead.full_name) : lead.full_name}
+                        {isCompanyAssigned && (
+                          <span title="Contact details protected">
+                            <Lock className="inline h-3 w-3 ml-1 text-muted-foreground" />
+                          </span>
+                        )}
+                      </p>
                       <p className="text-xs text-muted-foreground">
                         {lead.nationality} · {lead.preferred_language?.toUpperCase()}
                       </p>
@@ -343,8 +372,17 @@ const CRMLeadsTable = ({ userId, filterType, onRefresh }: CRMLeadsTableProps) =>
                   </TableCell>
                   <TableCell>
                     <div className="text-sm">
-                      {lead.email_lower && <p className="text-foreground">{lead.email_lower}</p>}
-                      {lead.phone_e164 && <p className="text-muted-foreground">{lead.phone_e164}</p>}
+                      {isCompanyAssigned ? (
+                        <>
+                          <p className="text-muted-foreground italic">{maskEmail(lead.email_lower)}</p>
+                          <p className="text-muted-foreground italic">{maskPhone(lead.phone_e164)}</p>
+                        </>
+                      ) : (
+                        <>
+                          {lead.email_lower && <p className="text-foreground">{lead.email_lower}</p>}
+                          {lead.phone_e164 && <p className="text-muted-foreground">{lead.phone_e164}</p>}
+                        </>
+                      )}
                     </div>
                   </TableCell>
                   <TableCell>
@@ -434,7 +472,7 @@ const CRMLeadsTable = ({ userId, filterType, onRefresh }: CRMLeadsTableProps) =>
                         size="icon"
                         className="h-8 w-8 text-green-600"
                         onClick={() => handleWhatsAppClick(lead)}
-                        disabled={!lead.phone_e164}
+                        disabled={!lead.phone_e164 || isCompanyAssigned}
                       >
                         <MessageSquare className="h-4 w-4" />
                       </Button>
@@ -443,9 +481,17 @@ const CRMLeadsTable = ({ userId, filterType, onRefresh }: CRMLeadsTableProps) =>
                         size="icon"
                         className="h-8 w-8 text-blue-600"
                         onClick={() => handleEmailClick(lead)}
-                        disabled={!lead.email_lower}
+                        disabled={!lead.email_lower || isCompanyAssigned}
                       >
                         <Mail className="h-4 w-4" />
+                      </Button>
+                      <Button
+                        variant="ghost"
+                        size="icon"
+                        className="h-8 w-8 text-amber-600"
+                        onClick={() => setFollowUpLead(lead)}
+                      >
+                        <Calendar className="h-4 w-4" />
                       </Button>
                     </div>
                   </TableCell>
@@ -455,6 +501,21 @@ const CRMLeadsTable = ({ userId, filterType, onRefresh }: CRMLeadsTableProps) =>
           </TableBody>
         </Table>
       </div>
+
+      {/* Follow-up Scheduler Modal */}
+      {followUpLead && (
+        <FollowUpScheduler
+          open={!!followUpLead}
+          onClose={() => setFollowUpLead(null)}
+          onSuccess={() => {
+            fetchLeads();
+            onRefresh();
+          }}
+          leadId={followUpLead.id}
+          userId={userId}
+          leadName={followUpLead.full_name}
+        />
+      )}
 
       {/* Bulk Actions */}
       {selectedLeads.size > 0 && (
