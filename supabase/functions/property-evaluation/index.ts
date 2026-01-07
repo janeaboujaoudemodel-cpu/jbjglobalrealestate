@@ -197,11 +197,12 @@ serve(async (req) => {
   }
 
   try {
-    // Get Supabase service client for rate limiting
+    // Get Supabase clients
     const supabaseUrl = Deno.env.get("SUPABASE_URL");
+    const supabaseAnonKey = Deno.env.get("SUPABASE_ANON_KEY");
     const supabaseServiceKey = Deno.env.get("SUPABASE_SERVICE_ROLE_KEY");
     
-    if (!supabaseUrl || !supabaseServiceKey) {
+    if (!supabaseUrl || !supabaseAnonKey || !supabaseServiceKey) {
       throw new Error("Supabase configuration missing");
     }
 
@@ -218,10 +219,34 @@ serve(async (req) => {
       );
     }
 
-    // Check rate limit using IP (public endpoint)
-    const rateLimitResult = await checkRateLimit(supabaseService, clientIp, clientIp);
+    // Verify authentication
+    const authHeader = req.headers.get("Authorization");
+    if (!authHeader?.startsWith("Bearer ")) {
+      return new Response(
+        JSON.stringify({ error: "Authentication required. Please sign in to use the Property Evaluator." }),
+        { status: 401, headers: { ...corsHeaders, "Content-Type": "application/json" } }
+      );
+    }
+
+    const supabase = createClient(supabaseUrl, supabaseAnonKey, {
+      global: { headers: { Authorization: authHeader } }
+    });
+
+    const { data: { user }, error: authError } = await supabase.auth.getUser();
+    if (authError || !user) {
+      console.log("Authentication failed:", authError?.message);
+      return new Response(
+        JSON.stringify({ error: "Invalid or expired session. Please sign in again." }),
+        { status: 401, headers: { ...corsHeaders, "Content-Type": "application/json" } }
+      );
+    }
+
+    console.log(`Property evaluation request from user: ${user.email}, IP: ${clientIp}`);
+
+    // Check rate limit using user ID
+    const rateLimitResult = await checkRateLimit(supabaseService, user.id, clientIp);
     if (!rateLimitResult.allowed) {
-      console.warn(`Rate limit exceeded for IP: ${clientIp.substring(0, 8)}***`);
+      console.warn(`Rate limit exceeded for user: ${user.email}`);
       return new Response(
         JSON.stringify({ error: "Too many requests. Please try again later." }),
         { 
