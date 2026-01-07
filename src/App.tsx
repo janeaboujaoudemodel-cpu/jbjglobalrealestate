@@ -67,6 +67,7 @@ import VerifyCertificate from "./pages/VerifyCertificate";
 import PropertyMap from "./pages/PropertyMap";
 import AdminDevelopers from "./pages/AdminDevelopers";
 import BrokerAccount from "./pages/BrokerAccount";
+import HRAgent from "./pages/HRAgent";
 
 const queryClient = new QueryClient();
 
@@ -144,6 +145,7 @@ const App = () => (
                     <Route path="/map" element={<PropertyMap />} />
                     <Route path="/admin/developers" element={<AdminDevelopers />} />
                     <Route path="/my-account" element={<BrokerAccount />} />
+                    <Route path="/hr-agent" element={<HRAgent />} />
                     <Route path="*" element={<NotFound />} />
                     </Routes>
                   </MainLayout>
