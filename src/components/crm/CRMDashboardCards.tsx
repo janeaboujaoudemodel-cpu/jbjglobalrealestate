@@ -138,15 +138,15 @@ const CRMDashboardCards = ({ userId, isAdmin }: CRMDashboardCardsProps) => {
   return (
     <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
       {cards.map((card, index) => (
-        <Card key={index}>
+        <Card key={index} className="border-border bg-card">
           <CardHeader className="flex flex-row items-center justify-between pb-2">
-            <CardTitle className="text-sm font-medium text-muted-foreground">
+            <CardTitle className="text-sm font-semibold text-foreground">
               {card.title}
             </CardTitle>
             <card.icon className={`h-5 w-5 ${card.color}`} />
           </CardHeader>
           <CardContent>
-            <div className="text-2xl font-bold">
+            <div className="text-2xl font-bold text-foreground">
               {loading ? "..." : card.value}
             </div>
             <p className="text-xs text-muted-foreground mt-1">
