@@ -101,7 +101,7 @@ const BrokerAccount = () => {
       return;
     }
     fetchData();
-  }, [userRole, navigate, user]);
+  }, [isBroker, navigate, user]);
 
   const fetchData = async () => {
     if (!user) return;
