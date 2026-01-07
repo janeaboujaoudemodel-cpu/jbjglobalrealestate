@@ -1,31 +1,18 @@
 import { useState, useEffect, useCallback } from "react";
-import { Download, Plus, Share } from "lucide-react";
+import { Download } from "lucide-react";
 import { motion, AnimatePresence } from "framer-motion";
-import { useNavigate } from "react-router-dom";
 import logoDark from "@/assets/logo-dark.jpg";
-import { Button } from "@/components/ui/button";
-import {
-  Dialog,
-  DialogContent,
-  DialogDescription,
-  DialogFooter,
-  DialogHeader,
-  DialogTitle,
-} from "@/components/ui/dialog";
+import { toast } from "sonner";
 
 interface BeforeInstallPromptEvent extends Event {
   prompt: () => Promise<void>;
   userChoice: Promise<{ outcome: "accepted" | "dismissed" }>;
 }
 
-const DISMISS_KEY = "jj_install_popup_dismissed_at";
-const DISMISS_TTL_MS = 24 * 60 * 60 * 1000;
-
 const isIOSDevice = () => {
   try {
     const ua = navigator.userAgent;
     const isIOS = /iPad|iPhone|iPod/.test(ua);
-    // iPadOS 13+ reports as Mac, but has touch points
     const isIPadOS = navigator.platform === "MacIntel" && (navigator as any).maxTouchPoints > 1;
     return isIOS || isIPadOS;
   } catch {
@@ -43,17 +30,13 @@ const isMobileLikeDevice = () => {
 };
 
 const InstallAppButton = () => {
-  const navigate = useNavigate();
-
   const [deferredPrompt, setDeferredPrompt] = useState<BeforeInstallPromptEvent | null>(null);
   const [isInstalled, setIsInstalled] = useState(false);
-  const [fallbackOpen, setFallbackOpen] = useState(false);
-  const [isIOS, setIsIOS] = useState(false);
+  const [showSuccess, setShowSuccess] = useState(false);
 
   useEffect(() => {
     const standalone = window.matchMedia("(display-mode: standalone)").matches;
     setIsInstalled(standalone);
-    setIsIOS(isIOSDevice());
 
     const handleBeforeInstallPrompt = (e: Event) => {
       e.preventDefault();
@@ -63,7 +46,18 @@ const InstallAppButton = () => {
     const handleAppInstalled = () => {
       setIsInstalled(true);
       setDeferredPrompt(null);
-      setFallbackOpen(false);
+      setShowSuccess(true);
+      
+      // Show success message with location info
+      const isIOS = isIOSDevice();
+      const message = isIOS 
+        ? "App installed! Find it on your Home Screen" 
+        : "App installed! Find it in your app drawer or Home Screen";
+      
+      toast.success(message, {
+        duration: 5000,
+        description: "Tap the JJ icon anytime for quick access",
+      });
     };
 
     window.addEventListener("beforeinstallprompt", handleBeforeInstallPrompt);
@@ -75,134 +69,102 @@ const InstallAppButton = () => {
     };
   }, []);
 
-  // Auto-popup (mainly for iOS where beforeinstallprompt does not exist)
-  useEffect(() => {
-    if (isInstalled) return;
-    if (!isMobileLikeDevice()) return;
-    if (deferredPrompt) return; // native prompt will handle it
-
-    try {
-      const dismissedAt = localStorage.getItem(DISMISS_KEY);
-      if (dismissedAt && Date.now() - Number(dismissedAt) < DISMISS_TTL_MS) return;
-    } catch {
-      // ignore
-    }
-
-    const t = setTimeout(() => setFallbackOpen(true), 4500);
-    return () => clearTimeout(t);
-  }, [isInstalled, deferredPrompt]);
-
   const handleInstallClick = useCallback(async () => {
+    // If native prompt is available, use it directly
     if (deferredPrompt) {
-      await deferredPrompt.prompt();
-      const { outcome } = await deferredPrompt.userChoice;
-      if (outcome === "accepted") {
-        setIsInstalled(true);
+      try {
+        await deferredPrompt.prompt();
+        const { outcome } = await deferredPrompt.userChoice;
+        if (outcome === "accepted") {
+          setIsInstalled(true);
+        }
+        setDeferredPrompt(null);
+      } catch (error) {
+        console.error("Install prompt error:", error);
       }
-      setDeferredPrompt(null);
       return;
     }
 
-    setFallbackOpen(true);
-  }, [deferredPrompt]);
-
-  const handleOpenChange = (open: boolean) => {
-    setFallbackOpen(open);
-    if (!open) {
-      try {
-        localStorage.setItem(DISMISS_KEY, String(Date.now()));
-      } catch {
-        // ignore
-      }
+    // For iOS or when no prompt available, show instructions via toast
+    const isIOS = isIOSDevice();
+    if (isIOS) {
+      toast.info("To install on iOS:", {
+        duration: 8000,
+        description: "Tap the Share button (□↑) in Safari, then 'Add to Home Screen'",
+      });
+    } else {
+      toast.info("Installing...", {
+        duration: 3000,
+        description: "Look for the install prompt in your browser's address bar",
+      });
     }
-  };
+  }, [deferredPrompt]);
 
   if (isInstalled) return null;
 
-  // Show only on mobile/tablet (or when native prompt exists)
-  const shouldShowFloating = !!deferredPrompt || isMobileLikeDevice();
-  if (!shouldShowFloating) return null;
+  // Show on all devices (desktop and mobile)
+  const shouldShow = !!deferredPrompt || isMobileLikeDevice() || true;
+  if (!shouldShow) return null;
 
   return (
-    <>
-      <AnimatePresence>
-        <motion.button
-          initial={{ scale: 0, opacity: 0 }}
-          animate={{ scale: 1, opacity: 1 }}
-          exit={{ scale: 0, opacity: 0 }}
-          onClick={handleInstallClick}
-          className="fixed bottom-6 left-6 z-[9000] flex items-center gap-2 px-4 py-3 rounded-full bg-gradient-to-r from-gold to-gold-light shadow-2xl shadow-gold/30 hover:scale-105 transition-transform group"
-          aria-label="Download app"
-        >
-          <div className="w-8 h-8 rounded-full overflow-hidden border border-black/20">
-            <img
-              src={logoDark}
-              alt="JJ Global Capital"
-              className="w-full h-full object-cover"
-              loading="lazy"
-            />
-          </div>
-          <span className="text-black font-semibold text-sm">Download App</span>
-          <Download className="w-4 h-4 text-black" />
-        </motion.button>
-      </AnimatePresence>
+    <AnimatePresence>
+      <motion.button
+        initial={{ scale: 0, opacity: 0 }}
+        animate={{ 
+          scale: 1, 
+          opacity: 1,
+        }}
+        exit={{ scale: 0, opacity: 0 }}
+        onClick={handleInstallClick}
+        className="fixed bottom-6 left-6 z-[9000] flex items-center gap-2 px-4 py-3 rounded-full bg-gradient-to-r from-gold to-gold-light shadow-2xl shadow-gold/40 hover:scale-110 transition-transform group animate-bounce-glow"
+        aria-label="Download app"
+        style={{
+          animation: "bounce-glow 2s ease-in-out infinite",
+        }}
+      >
+        <div className="w-8 h-8 rounded-full overflow-hidden border-2 border-black/30 shadow-inner">
+          <img
+            src={logoDark}
+            alt="JJ Global Capital"
+            className="w-full h-full object-cover"
+            loading="lazy"
+          />
+        </div>
+        <span className="text-black font-bold text-sm tracking-wide">Download App</span>
+        <Download className="w-5 h-5 text-black animate-pulse" />
+        
+        {/* Glow ring effect */}
+        <motion.div
+          className="absolute inset-0 rounded-full bg-gold/20"
+          animate={{
+            scale: [1, 1.2, 1],
+            opacity: [0.5, 0, 0.5],
+          }}
+          transition={{
+            duration: 2,
+            repeat: Infinity,
+            ease: "easeInOut",
+          }}
+        />
+      </motion.button>
 
-      <Dialog open={fallbackOpen} onOpenChange={handleOpenChange}>
-        <DialogContent className="bg-zinc-950 border border-gold/20">
-          <DialogHeader>
-            <DialogTitle className="text-white">Install JJ Global Capital</DialogTitle>
-            <DialogDescription className="text-zinc-400">
-              Add the app to your home screen for one-tap access.
-            </DialogDescription>
-          </DialogHeader>
-
-          {isIOS ? (
-            <div className="space-y-3">
-              <div className="flex items-start gap-3">
-                <div className="w-10 h-10 rounded-xl bg-gold/10 border border-gold/20 flex items-center justify-center shrink-0">
-                  <Share className="w-5 h-5 text-gold" />
-                </div>
-                <p className="text-sm text-zinc-200">
-                  In Safari, tap <span className="text-white font-medium">Share</span>.
-                </p>
-              </div>
-              <div className="flex items-start gap-3">
-                <div className="w-10 h-10 rounded-xl bg-gold/10 border border-gold/20 flex items-center justify-center shrink-0">
-                  <Plus className="w-5 h-5 text-gold" />
-                </div>
-                <p className="text-sm text-zinc-200">
-                  Choose <span className="text-white font-medium">Add to Home Screen</span>.
-                </p>
-              </div>
-              <p className="text-xs text-zinc-500">
-                Tip: iPhone/iPad doesn’t show the one-click install popup like Chrome.
-              </p>
-            </div>
-          ) : (
-            <div className="space-y-2">
-              <p className="text-sm text-zinc-200">
-                If you don’t see the browser install popup, open the install guide and follow the steps.
-              </p>
-            </div>
-          )}
-
-          <DialogFooter className="gap-2 sm:gap-2">
-            <Button
-              variant="secondary"
-              onClick={() => {
-                handleOpenChange(false);
-                navigate("/install");
-              }}
-            >
-              Open Install Guide
-            </Button>
-            <Button variant="ghost" onClick={() => handleOpenChange(false)}>
-              Not now
-            </Button>
-          </DialogFooter>
-        </DialogContent>
-      </Dialog>
-    </>
+      {/* Add keyframes for custom animation */}
+      <style>{`
+        @keyframes bounce-glow {
+          0%, 100% {
+            transform: translateY(0) scale(1);
+            box-shadow: 0 0 20px rgba(212, 175, 55, 0.4), 0 0 40px rgba(212, 175, 55, 0.2);
+          }
+          50% {
+            transform: translateY(-8px) scale(1.05);
+            box-shadow: 0 0 30px rgba(212, 175, 55, 0.6), 0 0 60px rgba(212, 175, 55, 0.3);
+          }
+        }
+        .animate-bounce-glow {
+          animation: bounce-glow 2s ease-in-out infinite;
+        }
+      `}</style>
+    </AnimatePresence>
   );
 };
 
