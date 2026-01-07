@@ -71,9 +71,11 @@ interface CRMLeadsTableProps {
   userId: string;
   filterType: "assigned" | "own";
   onRefresh: () => void;
+  statusFilters?: string[];
+  sourceFilter?: string;
 }
 
-const CRMLeadsTable = ({ userId, filterType, onRefresh }: CRMLeadsTableProps) => {
+const CRMLeadsTable = ({ userId, filterType, onRefresh, statusFilters = [], sourceFilter }: CRMLeadsTableProps) => {
   const navigate = useNavigate();
   const [leads, setLeads] = useState<Lead[]>([]);
   const [loading, setLoading] = useState(true);
@@ -87,7 +89,7 @@ const CRMLeadsTable = ({ userId, filterType, onRefresh }: CRMLeadsTableProps) =>
 
   useEffect(() => {
     fetchLeads();
-  }, [userId, filterType, statusFilter]);
+  }, [userId, filterType, statusFilter, statusFilters, sourceFilter]);
 
   const fetchLeads = async () => {
     setLoading(true);
@@ -119,11 +121,24 @@ const CRMLeadsTable = ({ userId, filterType, onRefresh }: CRMLeadsTableProps) =>
           state: statesMap.get(lead.id)
         })) || [];
 
-        // Apply status filter
+        // Apply status filter from quick filters or dropdown
         let filteredLeads = leadsWithState;
-        if (statusFilter !== "all") {
+        
+        // Apply quick filter statuses
+        if (statusFilters.length > 0) {
+          filteredLeads = leadsWithState.filter(
+            l => statusFilters.includes(l.state?.pipeline_status || "new")
+          );
+        } else if (statusFilter !== "all") {
           filteredLeads = leadsWithState.filter(
             l => l.state?.pipeline_status === statusFilter
+          );
+        }
+        
+        // Apply source filter
+        if (sourceFilter) {
+          filteredLeads = filteredLeads.filter(
+            l => (l as any).lead_source_type === sourceFilter
           );
         }
 

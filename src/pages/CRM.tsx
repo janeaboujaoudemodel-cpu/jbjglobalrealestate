@@ -9,18 +9,20 @@ import { Badge } from "@/components/ui/badge";
 import { Skeleton } from "@/components/ui/skeleton";
 import { toast } from "sonner";
 import { 
-  Users, Phone, MessageSquare, Calendar, 
-  TrendingUp, FileText, Plus, Upload, LogOut
+  Users, FileText, Plus, Upload, LogOut, Shuffle
 } from "lucide-react";
 import CRMLeadsTable from "@/components/crm/CRMLeadsTable";
 import CRMDashboardCards from "@/components/crm/CRMDashboardCards";
 import CRMImportModal from "@/components/crm/CRMImportModal";
 import CRMLeadModal from "@/components/crm/CRMLeadModal";
+import LeadQuickFilters from "@/components/crm/LeadQuickFilters";
+import LeadSourceFilter from "@/components/crm/LeadSourceFilter";
+import BulkAssignModal from "@/components/crm/BulkAssignModal";
 
 interface CRMProfile {
   id: string;
   user_id: string;
-  crm_role: 'owner_admin' | 'broker_member';
+  crm_role: 'owner_admin' | 'broker_member' | 'admin' | 'founder';
   is_active: boolean;
   display_name: string | null;
 }
@@ -33,7 +35,14 @@ const CRM = () => {
   const [activeTab, setActiveTab] = useState("assigned");
   const [showImportModal, setShowImportModal] = useState(false);
   const [showLeadModal, setShowLeadModal] = useState(false);
+  const [showBulkAssignModal, setShowBulkAssignModal] = useState(false);
   const [refreshKey, setRefreshKey] = useState(0);
+  
+  // Smart filters
+  const [quickFilter, setQuickFilter] = useState("all");
+  const [quickFilterStatuses, setQuickFilterStatuses] = useState<string[]>([]);
+  const [sourceFilter, setSourceFilter] = useState("all");
+  const [statusCounts, setStatusCounts] = useState<Record<string, number>>({});
 
   useEffect(() => {
     if (authLoading) return;
@@ -45,6 +54,12 @@ const CRM = () => {
 
     checkCRMAccess();
   }, [authLoading, user, navigate]);
+
+  useEffect(() => {
+    if (user?.id) {
+      fetchStatusCounts();
+    }
+  }, [user?.id, refreshKey]);
 
   const checkCRMAccess = async () => {
     if (!user) return;
@@ -78,6 +93,23 @@ const CRM = () => {
     }
   };
 
+  const fetchStatusCounts = async () => {
+    try {
+      const { data } = await supabase
+        .from("crm_lead_state_per_user")
+        .select("pipeline_status");
+      
+      const counts: Record<string, number> = {};
+      data?.forEach(item => {
+        const status = item.pipeline_status || "new";
+        counts[status] = (counts[status] || 0) + 1;
+      });
+      setStatusCounts(counts);
+    } catch (err) {
+      console.error("Failed to fetch status counts:", err);
+    }
+  };
+
   const handleRefresh = () => {
     setRefreshKey(prev => prev + 1);
   };
@@ -85,6 +117,11 @@ const CRM = () => {
   const handleSignOut = async () => {
     await signOut();
     navigate("/auth");
+  };
+
+  const handleQuickFilterChange = (filter: string, statuses: string[]) => {
+    setQuickFilter(filter);
+    setQuickFilterStatuses(statuses);
   };
 
   if (loading) {
@@ -105,7 +142,21 @@ const CRM = () => {
 
   if (!profile) return null;
 
-  const isAdmin = profile.crm_role === 'owner_admin';
+  const isAdmin = profile.crm_role === 'owner_admin' || profile.crm_role === 'founder' || profile.crm_role === 'admin';
+  const isFounder = profile.crm_role === 'owner_admin' || profile.crm_role === 'founder';
+
+  // Get role label
+  const getRoleLabel = () => {
+    switch (profile.crm_role) {
+      case 'founder':
+      case 'owner_admin':
+        return 'Founder & CEO';
+      case 'admin':
+        return 'Admin';
+      default:
+        return 'Broker';
+    }
+  };
 
   return (
     <div className="min-h-screen bg-background">
@@ -113,21 +164,28 @@ const CRM = () => {
       <header className="border-b border-border bg-card sticky top-0 z-50">
         <div className="max-w-7xl mx-auto px-4 py-4 flex items-center justify-between">
           <div className="flex items-center gap-4">
-            <h1 className="text-2xl font-bold text-foreground">JJ Global Capital CRM</h1>
-            <Badge variant={isAdmin ? "default" : "secondary"} className={isAdmin ? "bg-primary text-primary-foreground" : ""}>
-              {isAdmin ? "Admin" : "Broker"}
+            <h1 className="text-2xl font-bold text-white">JJ Global Capital CRM</h1>
+            <Badge 
+              variant="default" 
+              className={
+                isFounder ? "bg-amber-600 text-white" :
+                isAdmin ? "bg-primary text-primary-foreground" : 
+                "bg-muted text-muted-foreground"
+              }
+            >
+              {getRoleLabel()}
             </Badge>
           </div>
           <div className="flex items-center gap-3">
-            <span className="text-sm text-foreground">
+            <span className="text-sm text-white font-medium">
               {profile.display_name || user?.email}
             </span>
             {isAdmin && (
-              <Button variant="outline" size="sm" onClick={() => navigate("/admin/crm")} className="text-foreground border-border">
+              <Button variant="outline" size="sm" onClick={() => navigate("/admin/crm")} className="text-white border-border hover:bg-muted">
                 Admin Dashboard
               </Button>
             )}
-            <Button variant="ghost" size="sm" onClick={handleSignOut} className="text-foreground hover:text-foreground">
+            <Button variant="ghost" size="sm" onClick={handleSignOut} className="text-white hover:text-white hover:bg-muted">
               <LogOut className="h-4 w-4 mr-2" />
               Sign Out
             </Button>
@@ -139,31 +197,60 @@ const CRM = () => {
         {/* Dashboard Cards */}
         <CRMDashboardCards userId={user?.id || ""} isAdmin={isAdmin} />
 
+        {/* Quick Filters */}
+        <div className="space-y-3">
+          <h3 className="text-sm font-semibold text-white uppercase tracking-wide">Quick Filters</h3>
+          <LeadQuickFilters 
+            activeFilter={quickFilter} 
+            onChange={handleQuickFilterChange}
+            counts={statusCounts}
+          />
+        </div>
+
         {/* Action Buttons */}
-        <div className="flex gap-3">
+        <div className="flex flex-wrap gap-3">
           <Button onClick={() => setShowLeadModal(true)} className="bg-primary text-primary-foreground hover:bg-primary/90">
             <Plus className="h-4 w-4 mr-2" />
             Add Lead
           </Button>
-          <Button variant="outline" onClick={() => setShowImportModal(true)} className="text-foreground border-border">
+          <Button variant="outline" onClick={() => setShowImportModal(true)} className="text-white border-border hover:bg-muted">
             <Upload className="h-4 w-4 mr-2" />
-            Import Contacts
+            Import Database
           </Button>
+          {isAdmin && (
+            <Button 
+              variant="outline" 
+              onClick={() => setShowBulkAssignModal(true)} 
+              className="text-amber-400 border-amber-500/50 hover:bg-amber-600/20"
+            >
+              <Shuffle className="h-4 w-4 mr-2" />
+              Bulk Assign Leads
+            </Button>
+          )}
+          <div className="ml-auto">
+            <LeadSourceFilter value={sourceFilter} onChange={setSourceFilter} />
+          </div>
         </div>
 
         {/* Leads Tabs */}
         <Card className="border-border bg-card">
           <CardHeader>
-            <CardTitle className="text-foreground">Leads</CardTitle>
+            <CardTitle className="text-white font-bold">Leads</CardTitle>
           </CardHeader>
           <CardContent>
             <Tabs value={activeTab} onValueChange={setActiveTab}>
-              <TabsList className="mb-4 bg-muted">
-                <TabsTrigger value="assigned" className="data-[state=active]:bg-card data-[state=active]:text-foreground text-muted-foreground">
+              <TabsList className="mb-4 bg-muted/50">
+                <TabsTrigger 
+                  value="assigned" 
+                  className="data-[state=active]:bg-primary data-[state=active]:text-white text-muted-foreground font-semibold"
+                >
                   <Users className="h-4 w-4 mr-2" />
-                  Assigned by JJ Global Capital
+                  Company Leads
                 </TabsTrigger>
-                <TabsTrigger value="own" className="data-[state=active]:bg-card data-[state=active]:text-foreground text-muted-foreground">
+                <TabsTrigger 
+                  value="own" 
+                  className="data-[state=active]:bg-primary data-[state=active]:text-white text-muted-foreground font-semibold"
+                >
                   <FileText className="h-4 w-4 mr-2" />
                   My Own Leads
                 </TabsTrigger>
@@ -171,19 +258,23 @@ const CRM = () => {
 
               <TabsContent value="assigned">
                 <CRMLeadsTable 
-                  key={`assigned-${refreshKey}`}
+                  key={`assigned-${refreshKey}-${quickFilter}-${sourceFilter}`}
                   userId={user?.id || ""} 
                   filterType="assigned"
                   onRefresh={handleRefresh}
+                  statusFilters={quickFilterStatuses}
+                  sourceFilter={sourceFilter !== "all" ? sourceFilter : undefined}
                 />
               </TabsContent>
 
               <TabsContent value="own">
                 <CRMLeadsTable 
-                  key={`own-${refreshKey}`}
+                  key={`own-${refreshKey}-${quickFilter}-${sourceFilter}`}
                   userId={user?.id || ""} 
                   filterType="own"
                   onRefresh={handleRefresh}
+                  statusFilters={quickFilterStatuses}
+                  sourceFilter={sourceFilter !== "all" ? sourceFilter : undefined}
                 />
               </TabsContent>
             </Tabs>
@@ -205,6 +296,17 @@ const CRM = () => {
         onSuccess={handleRefresh}
         userId={user?.id || ""}
       />
+
+      {isAdmin && (
+        <BulkAssignModal
+          open={showBulkAssignModal}
+          onClose={() => setShowBulkAssignModal(false)}
+          onSuccess={handleRefresh}
+          selectedLeadIds={[]}
+          filterStatus={quickFilter !== "all" ? quickFilterStatuses[0] : undefined}
+          totalAvailable={Object.values(statusCounts).reduce((a, b) => a + b, 0)}
+        />
+      )}
     </div>
   );
 };
