@@ -369,6 +369,62 @@ const registrationSchema = z.object({
     .optional(),
 });
 
+// ============================================================================
+// BREACHED PASSWORD CHECK (HaveIBeenPwned k-Anonymity API)
+// ============================================================================
+
+async function sha1Hash(text: string): Promise<string> {
+  const encoder = new TextEncoder();
+  const data = encoder.encode(text);
+  const hashBuffer = await crypto.subtle.digest("SHA-1", data);
+  const hashArray = Array.from(new Uint8Array(hashBuffer));
+  return hashArray.map((b) => b.toString(16).padStart(2, "0")).join("").toUpperCase();
+}
+
+/**
+ * Checks if a password has been exposed in known data breaches using HaveIBeenPwned.
+ * Uses k-anonymity: only sends first 5 chars of SHA-1 hash, checks locally.
+ * Privacy-preserving - actual password never leaves the server.
+ */
+async function isPasswordBreached(password: string): Promise<{ breached: boolean; count?: number }> {
+  try {
+    const hash = await sha1Hash(password);
+    const prefix = hash.substring(0, 5);
+    const suffix = hash.substring(5);
+
+    const response = await fetch(`https://api.pwnedpasswords.com/range/${prefix}`, {
+      headers: {
+        "User-Agent": "JJ-Global-Capital-Security-Check",
+        "Add-Padding": "true", // Adds padding to prevent response size analysis
+      },
+    });
+
+    if (!response.ok) {
+      console.error("HIBP API error:", response.status);
+      // Don't block registration if API is unavailable
+      return { breached: false };
+    }
+
+    const text = await response.text();
+    const lines = text.split("\n");
+
+    for (const line of lines) {
+      const [hashSuffix, countStr] = line.split(":");
+      if (hashSuffix?.trim() === suffix) {
+        const count = parseInt(countStr?.trim() || "0", 10);
+        console.warn(`Breached password detected: appeared ${count} times in data breaches`);
+        return { breached: true, count };
+      }
+    }
+
+    return { breached: false };
+  } catch (err) {
+    console.error("Breached password check error:", err);
+    // Don't block registration if check fails
+    return { breached: false };
+  }
+}
+
 // Magic bytes for image validation
 const MAGIC_BYTES: Record<string, number[]> = {
   "image/jpeg": [0xff, 0xd8, 0xff],
@@ -495,6 +551,22 @@ serve(async (req: Request) => {
     }
 
     const { email, password, fullName, profilePicture } = validationResult.data;
+
+    // Check if password has been exposed in data breaches (HaveIBeenPwned)
+    const breachCheck = await isPasswordBreached(password);
+    if (breachCheck.breached) {
+      const timesExposed = breachCheck.count ? ` (found ${breachCheck.count.toLocaleString()} times)` : "";
+      return new Response(
+        JSON.stringify({ 
+          error: "Password security risk",
+          details: [{
+            field: "password",
+            message: `This password has been exposed in known data breaches${timesExposed}. Please choose a different, unique password for your security.`
+          }]
+        }),
+        { status: 400, headers: { ...corsHeaders, "Content-Type": "application/json" } }
+      );
+    }
 
     // Sanitize inputs
     const sanitizedEmail = sanitizeInput(email);
