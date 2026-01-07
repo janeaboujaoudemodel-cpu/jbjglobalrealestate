@@ -104,12 +104,12 @@ const VoiceConciergeWidget = () => {
 
   const isConnected = conversation.status === "connected";
 
-  // Minimized state - small icon button
+  // Minimized state - small phone icon button (no pulse, no text)
   if (isMinimized) {
     return (
       <button
         onClick={handleRestore}
-        className="fixed bottom-6 right-6 z-50 w-10 h-10 bg-gold hover:bg-gold-light text-gold-foreground rounded-full shadow-lg hover:shadow-xl transition-all duration-300 hover:scale-110 flex items-center justify-center"
+        className="fixed bottom-6 right-6 z-50 w-12 h-12 bg-gold hover:bg-gold-light text-gold-foreground rounded-full shadow-lg hover:shadow-xl transition-all duration-300 hover:scale-110 flex items-center justify-center"
         aria-label="Show voice concierge"
       >
         <Phone className="w-5 h-5" />
@@ -119,7 +119,7 @@ const VoiceConciergeWidget = () => {
 
   return (
     <div className="fixed bottom-6 right-6 z-50">
-      {/* Pulse ring - only when not connected */}
+      {/* Pulse ring - only when not connected and not minimized */}
       {!isConnected && (
         <>
           <span className="absolute inset-0 rounded-full bg-gold/40 animate-ping" />
@@ -132,7 +132,7 @@ const VoiceConciergeWidget = () => {
         <span className="absolute inset-0 rounded-full bg-gold/60 animate-pulse" />
       )}
       
-      {/* Close/minimize button */}
+      {/* Close/minimize button - clicking X turns it into phone icon */}
       <button
         onClick={handleMinimize}
         className="absolute -top-2 -right-2 w-6 h-6 bg-zinc-800 hover:bg-zinc-700 text-zinc-400 hover:text-white rounded-full shadow-md flex items-center justify-center transition-colors z-10"
@@ -141,7 +141,7 @@ const VoiceConciergeWidget = () => {
         <X className="w-3.5 h-3.5" />
       </button>
       
-      {/* Main button */}
+      {/* Main button - shows "Speak with us" by default with pulse */}
       {!isConnected ? (
         <button
           onClick={startConversation}
@@ -152,14 +152,14 @@ const VoiceConciergeWidget = () => {
           {isConnecting ? (
             <>
               <div className="w-6 h-6 border-2 border-gold-foreground/30 border-t-gold-foreground rounded-full animate-spin" />
-              <span className="font-medium text-sm hidden sm:inline">
+              <span className="font-medium text-sm">
                 Connecting...
               </span>
             </>
           ) : (
             <>
               <Phone className="w-6 h-6" />
-              <span className="font-medium text-sm hidden sm:inline group-hover:inline">
+              <span className="font-medium text-sm">
                 Speak with us
               </span>
             </>
