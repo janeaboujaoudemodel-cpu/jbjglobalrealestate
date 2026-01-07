@@ -101,11 +101,13 @@ const MainLayout = ({ children }: MainLayoutProps) => {
       </main>
       <InstallAppButton />
       <VoiceConciergeWidget />
-      <AIChatWidget
-        isCollapsed={effectiveCollapsed}
-        onToggleCollapse={handleToggleChat}
-        showAttentionPulse={showAttentionPulse}
-      />
+      {!isAdminRoute && (
+        <AIChatWidget
+          isCollapsed={effectiveCollapsed}
+          onToggleCollapse={handleToggleChat}
+          showAttentionPulse={showAttentionPulse}
+        />
+      )}
     </div>
   );
 };
