@@ -1,4 +1,5 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
+import { useLocation } from "react-router-dom";
 import GlobalHeader from "@/components/GlobalHeader";
 import VoiceConciergeWidget from "@/components/VoiceConciergeWidget";
 import AIChatWidget from "@/components/AIChatWidget";
@@ -14,27 +15,44 @@ interface MainLayoutProps {
 const MainLayout = ({ children }: MainLayoutProps) => {
   const { isRTL } = useLanguage();
   const isMobile = useIsMobile();
+  const location = useLocation();
+  const isAdminRoute = location.pathname.startsWith("/admin");
+
   const [isChatCollapsed, setIsChatCollapsed] = useState(true);
-  
+
+  // Always keep chat collapsed on admin screens to avoid blocking controls.
+  useEffect(() => {
+    if (isAdminRoute) setIsChatCollapsed(true);
+  }, [isAdminRoute]);
+
   // On mobile, chat is always collapsed (shown as floating button)
-  const effectiveCollapsed = isMobile ? true : isChatCollapsed;
-  
+  const effectiveCollapsed = isMobile || isAdminRoute ? true : isChatCollapsed;
+
   return (
     <div className="min-h-screen bg-black">
       <MarketingScripts />
       <GlobalHeader />
       {/* Add padding-top for header and padding-right/left for side chat panel (desktop only) */}
-      <main className={`pt-16 lg:pt-18 transition-all duration-300 ${effectiveCollapsed ? '' : isRTL ? 'lg:pl-[380px]' : 'lg:pr-[380px]'}`}>
+      <main
+        className={`pt-16 lg:pt-18 transition-all duration-300 ${
+          effectiveCollapsed
+            ? ""
+            : isRTL
+              ? "lg:pl-[380px]"
+              : "lg:pr-[380px]"
+        }`}
+      >
         {children}
       </main>
       <InstallAppButton />
       <VoiceConciergeWidget />
-      <AIChatWidget 
-        isCollapsed={effectiveCollapsed} 
-        onToggleCollapse={() => setIsChatCollapsed(!isChatCollapsed)} 
+      <AIChatWidget
+        isCollapsed={effectiveCollapsed}
+        onToggleCollapse={() => setIsChatCollapsed((v) => !v)}
       />
     </div>
   );
 };
 
 export default MainLayout;
+

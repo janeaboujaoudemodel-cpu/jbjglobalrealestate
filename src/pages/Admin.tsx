@@ -343,48 +343,50 @@ const Admin = () => {
       {/* Main Content */}
       <main className="container mx-auto px-4 py-8">
         <Tabs defaultValue="security" className="space-y-6">
-          <TabsList className="bg-zinc-900 border border-zinc-800">
-            <TabsTrigger value="security" className="data-[state=active]:bg-gold data-[state=active]:text-black">
-              <Activity className="w-4 h-4 mr-2" />
-              Security
-            </TabsTrigger>
-            <TabsTrigger value="properties" className="data-[state=active]:bg-gold data-[state=active]:text-black">
-              <Building2 className="w-4 h-4 mr-2" />
-              Properties
-            </TabsTrigger>
-            <TabsTrigger value="rate-limits" className="data-[state=active]:bg-gold data-[state=active]:text-black">
-              <Shield className="w-4 h-4 mr-2" />
-              Rate Limits
-            </TabsTrigger>
-            <TabsTrigger value="ip-blocklist" className="data-[state=active]:bg-gold data-[state=active]:text-black">
-              <ShieldBan className="w-4 h-4 mr-2" />
-              IP Blocklist
-            </TabsTrigger>
-            <TabsTrigger value="audit-logs" className="data-[state=active]:bg-gold data-[state=active]:text-black">
-              <ClipboardList className="w-4 h-4 mr-2" />
-              Audit Logs
-            </TabsTrigger>
-            <TabsTrigger value="brokers" className="data-[state=active]:bg-gold data-[state=active]:text-black">
-              <Briefcase className="w-4 h-4 mr-2" />
-              Brokers
-            </TabsTrigger>
-            <TabsTrigger value="ai-analytics" className="data-[state=active]:bg-gold data-[state=active]:text-black">
-              <Brain className="w-4 h-4 mr-2" />
-              AI Analytics
-            </TabsTrigger>
-            <TabsTrigger value="marketing" className="data-[state=active]:bg-gold data-[state=active]:text-black">
-              <Megaphone className="w-4 h-4 mr-2" />
-              Marketing
-            </TabsTrigger>
-            <TabsTrigger 
-              value="leads" 
-              className="data-[state=active]:bg-gold data-[state=active]:text-black"
-              onClick={() => navigate("/admin/leads")}
-            >
-              <Users className="w-4 h-4 mr-2" />
-              Leads & Chats
-            </TabsTrigger>
-          </TabsList>
+          <div className="w-full overflow-x-auto">
+            <TabsList className="w-max min-w-full justify-start bg-zinc-900 border border-zinc-800">
+              <TabsTrigger value="security" className="data-[state=active]:bg-gold data-[state=active]:text-black">
+                <Activity className="w-4 h-4 mr-2" />
+                Security
+              </TabsTrigger>
+              <TabsTrigger value="properties" className="data-[state=active]:bg-gold data-[state=active]:text-black">
+                <Building2 className="w-4 h-4 mr-2" />
+                Properties
+              </TabsTrigger>
+              <TabsTrigger value="rate-limits" className="data-[state=active]:bg-gold data-[state=active]:text-black">
+                <Shield className="w-4 h-4 mr-2" />
+                Rate Limits
+              </TabsTrigger>
+              <TabsTrigger value="ip-blocklist" className="data-[state=active]:bg-gold data-[state=active]:text-black">
+                <ShieldBan className="w-4 h-4 mr-2" />
+                IP Blocklist
+              </TabsTrigger>
+              <TabsTrigger value="audit-logs" className="data-[state=active]:bg-gold data-[state=active]:text-black">
+                <ClipboardList className="w-4 h-4 mr-2" />
+                Audit Logs
+              </TabsTrigger>
+              <TabsTrigger value="brokers" className="data-[state=active]:bg-gold data-[state=active]:text-black">
+                <Briefcase className="w-4 h-4 mr-2" />
+                Brokers
+              </TabsTrigger>
+              <TabsTrigger value="ai-analytics" className="data-[state=active]:bg-gold data-[state=active]:text-black">
+                <Brain className="w-4 h-4 mr-2" />
+                AI Analytics
+              </TabsTrigger>
+              <TabsTrigger value="marketing" className="data-[state=active]:bg-gold data-[state=active]:text-black">
+                <Megaphone className="w-4 h-4 mr-2" />
+                Marketing
+              </TabsTrigger>
+              <TabsTrigger
+                value="leads"
+                className="data-[state=active]:bg-gold data-[state=active]:text-black"
+                onClick={() => navigate("/admin/leads")}
+              >
+                <Users className="w-4 h-4 mr-2" />
+                Leads & Chats
+              </TabsTrigger>
+            </TabsList>
+          </div>
 
           <TabsContent value="security" className="space-y-8">
             <SecurityDashboardSummary />
