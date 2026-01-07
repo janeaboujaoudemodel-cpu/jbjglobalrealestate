@@ -2950,6 +2950,197 @@ export type Database = {
         }
         Relationships: []
       }
+      referral_commissions: {
+        Row: {
+          created_at: string
+          developer_commission_aed: number
+          developer_commission_percent: number
+          id: string
+          notes: string | null
+          payment_date: string | null
+          payment_reference: string | null
+          property_name: string
+          property_value_aed: number
+          referral_commission_aed: number
+          referral_lead_id: string | null
+          referral_partner_id: string
+          referral_percent: number
+          status: string
+          updated_at: string
+        }
+        Insert: {
+          created_at?: string
+          developer_commission_aed: number
+          developer_commission_percent: number
+          id?: string
+          notes?: string | null
+          payment_date?: string | null
+          payment_reference?: string | null
+          property_name: string
+          property_value_aed: number
+          referral_commission_aed: number
+          referral_lead_id?: string | null
+          referral_partner_id: string
+          referral_percent?: number
+          status?: string
+          updated_at?: string
+        }
+        Update: {
+          created_at?: string
+          developer_commission_aed?: number
+          developer_commission_percent?: number
+          id?: string
+          notes?: string | null
+          payment_date?: string | null
+          payment_reference?: string | null
+          property_name?: string
+          property_value_aed?: number
+          referral_commission_aed?: number
+          referral_lead_id?: string | null
+          referral_partner_id?: string
+          referral_percent?: number
+          status?: string
+          updated_at?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "referral_commissions_referral_lead_id_fkey"
+            columns: ["referral_lead_id"]
+            isOneToOne: false
+            referencedRelation: "referral_leads"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "referral_commissions_referral_partner_id_fkey"
+            columns: ["referral_partner_id"]
+            isOneToOne: false
+            referencedRelation: "referral_partners"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      referral_leads: {
+        Row: {
+          budget_range: string | null
+          client_email: string | null
+          client_name: string
+          client_phone: string | null
+          created_at: string
+          id: string
+          notes: string | null
+          property_interest: string | null
+          referral_code: string
+          referral_partner_id: string
+          status: string
+          updated_at: string
+        }
+        Insert: {
+          budget_range?: string | null
+          client_email?: string | null
+          client_name: string
+          client_phone?: string | null
+          created_at?: string
+          id?: string
+          notes?: string | null
+          property_interest?: string | null
+          referral_code: string
+          referral_partner_id: string
+          status?: string
+          updated_at?: string
+        }
+        Update: {
+          budget_range?: string | null
+          client_email?: string | null
+          client_name?: string
+          client_phone?: string | null
+          created_at?: string
+          id?: string
+          notes?: string | null
+          property_interest?: string | null
+          referral_code?: string
+          referral_partner_id?: string
+          status?: string
+          updated_at?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "referral_leads_referral_partner_id_fkey"
+            columns: ["referral_partner_id"]
+            isOneToOne: false
+            referencedRelation: "referral_partners"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      referral_partners: {
+        Row: {
+          approved_at: string | null
+          approved_by: string | null
+          bank_account_number: string | null
+          bank_iban: string | null
+          bank_name: string | null
+          commission_rate: number
+          created_at: string
+          email: string
+          full_name: string
+          id: string
+          notes: string | null
+          partner_type: string
+          phone_e164: string | null
+          referral_code: string
+          status: string
+          total_conversions: number | null
+          total_earnings_aed: number | null
+          total_referrals: number | null
+          updated_at: string
+          user_id: string | null
+        }
+        Insert: {
+          approved_at?: string | null
+          approved_by?: string | null
+          bank_account_number?: string | null
+          bank_iban?: string | null
+          bank_name?: string | null
+          commission_rate?: number
+          created_at?: string
+          email: string
+          full_name: string
+          id?: string
+          notes?: string | null
+          partner_type?: string
+          phone_e164?: string | null
+          referral_code: string
+          status?: string
+          total_conversions?: number | null
+          total_earnings_aed?: number | null
+          total_referrals?: number | null
+          updated_at?: string
+          user_id?: string | null
+        }
+        Update: {
+          approved_at?: string | null
+          approved_by?: string | null
+          bank_account_number?: string | null
+          bank_iban?: string | null
+          bank_name?: string | null
+          commission_rate?: number
+          created_at?: string
+          email?: string
+          full_name?: string
+          id?: string
+          notes?: string | null
+          partner_type?: string
+          phone_e164?: string | null
+          referral_code?: string
+          status?: string
+          total_conversions?: number | null
+          total_earnings_aed?: number | null
+          total_referrals?: number | null
+          updated_at?: string
+          user_id?: string | null
+        }
+        Relationships: []
+      }
       rewards_catalog: {
         Row: {
           created_at: string | null
@@ -3374,6 +3565,7 @@ export type Database = {
         Returns: boolean
       }
       cleanup_rate_limit_records: { Args: never; Returns: number }
+      generate_referral_code: { Args: never; Returns: string }
       get_hr_role: {
         Args: { _user_id: string }
         Returns: Database["public"]["Enums"]["hr_role"]
