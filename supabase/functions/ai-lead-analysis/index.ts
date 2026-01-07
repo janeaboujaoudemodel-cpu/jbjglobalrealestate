@@ -1,4 +1,5 @@
 import { serve } from "https://deno.land/std@0.168.0/http/server.ts";
+import { createClient } from "https://esm.sh/@supabase/supabase-js@2.49.1";
 
 const corsHeaders = {
   "Access-Control-Allow-Origin": "*",
@@ -11,6 +12,44 @@ serve(async (req) => {
   }
 
   try {
+    // Authentication check
+    const authHeader = req.headers.get('Authorization');
+    if (!authHeader?.startsWith('Bearer ')) {
+      return new Response(
+        JSON.stringify({ error: 'Authentication required' }),
+        { status: 401, headers: { ...corsHeaders, "Content-Type": "application/json" } }
+      );
+    }
+
+    const supabaseUrl = Deno.env.get("SUPABASE_URL")!;
+    const supabaseAnonKey = Deno.env.get("SUPABASE_ANON_KEY")!;
+    const supabase = createClient(supabaseUrl, supabaseAnonKey, {
+      global: { headers: { Authorization: authHeader } }
+    });
+
+    const { data: { user }, error: authError } = await supabase.auth.getUser();
+    if (authError || !user) {
+      return new Response(
+        JSON.stringify({ error: 'Invalid authentication' }),
+        { status: 401, headers: { ...corsHeaders, "Content-Type": "application/json" } }
+      );
+    }
+
+    // Verify user has active CRM membership
+    const { data: crmProfile } = await supabase
+      .from('crm_users_profile')
+      .select('is_active')
+      .eq('user_id', user.id)
+      .eq('is_active', true)
+      .single();
+
+    if (!crmProfile) {
+      return new Response(
+        JSON.stringify({ error: 'Active CRM membership required' }),
+        { status: 403, headers: { ...corsHeaders, "Content-Type": "application/json" } }
+      );
+    }
+
     const { lead, activities, score } = await req.json();
     
     const LOVABLE_API_KEY = Deno.env.get("LOVABLE_API_KEY");
@@ -27,7 +66,7 @@ serve(async (req) => {
       notes: activities?.filter((a: any) => a.activity_type === 'note').length || 0,
     };
 
-    const systemPrompt = `You are an AI sales analyst for JJ Global Capital, a premium Dubai real estate brokerage.
+    const systemPrompt = `You are an AI sales analyst for JBJ Global Real Estate, a premium Dubai real estate brokerage.
 Analyze leads and provide actionable insights to help close deals.
 Be concise, specific, and focus on next steps.
 Maximum 3 sentences.`;
@@ -83,7 +122,7 @@ Provide 2-3 sentences of actionable analysis.`;
   } catch (error) {
     console.error("Lead analysis error:", error);
     return new Response(
-      JSON.stringify({ error: error instanceof Error ? error.message : "Unknown error" }),
+      JSON.stringify({ error: "Failed to analyze lead" }),
       {
         status: 500,
         headers: { ...corsHeaders, "Content-Type": "application/json" },
