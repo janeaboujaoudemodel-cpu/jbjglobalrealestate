@@ -78,6 +78,7 @@ const AIChatWidget = ({ isCollapsed, onToggleCollapse, showAttentionPulse = fals
           language: data.language || 'english',
           currentLocation: data.current_location || '',
           ageRange: data.age_range || '',
+          birthday: (data as any).birthday || '',
           consentAccurate: true,
           consentPrivacy: true,
         });

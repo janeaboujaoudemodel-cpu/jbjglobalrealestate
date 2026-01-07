@@ -7,6 +7,7 @@ interface LeadData {
   phone?: string;
   nationality?: string;
   language?: string;
+  birthday?: string;
 }
 
 interface UseLeadCaptureResult {
@@ -71,6 +72,7 @@ export const useLeadCapture = (): UseLeadCaptureResult => {
           phone: data.phone || null,
           nationality: data.nationality || null,
           language: data.language || null,
+          birthday: data.birthday || null,
           source,
         }, {
           onConflict: 'email',

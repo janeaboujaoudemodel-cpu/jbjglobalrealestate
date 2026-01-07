@@ -26,6 +26,7 @@ export interface UserInfo {
   language: string;
   currentLocation: string;
   ageRange: string;
+  birthday: string;
   consentAccurate: boolean;
   consentPrivacy: boolean;
 }
@@ -174,6 +175,7 @@ export const initialUserInfo: UserInfo = {
   language: 'english',
   currentLocation: '',
   ageRange: '',
+  birthday: '',
   consentAccurate: false,
   consentPrivacy: false,
 };

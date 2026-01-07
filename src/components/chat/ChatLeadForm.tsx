@@ -190,6 +190,21 @@ const ChatLeadForm = ({
           </div>
         </div>
 
+        {/* Birthday (Optional) */}
+        <div>
+          <Label className="text-zinc-300 text-xs flex items-center gap-1 mb-1">
+            <Calendar className="w-3 h-3 text-gold" />
+            Birthday (Optional)
+          </Label>
+          <Input
+            type="date"
+            value={userInfo.birthday}
+            onChange={(e) => updateField('birthday', e.target.value)}
+            className="bg-white/10 border-gold/20 text-white h-9 text-sm [color-scheme:dark]"
+          />
+          <p className="text-zinc-500 text-[10px] mt-0.5">🎁 We'll send you exclusive birthday offers!</p>
+        </div>
+
         {/* Consent Checkboxes */}
         <div className="space-y-2 pt-2">
           <div className="flex items-start gap-2">
