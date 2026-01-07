@@ -692,6 +692,117 @@ export type Database = {
           },
         ]
       }
+      crm_campaign_recipients: {
+        Row: {
+          campaign_id: string | null
+          created_at: string | null
+          email: string
+          error_message: string | null
+          id: string
+          lead_id: string | null
+          opened_at: string | null
+          sent_at: string | null
+          status: string | null
+        }
+        Insert: {
+          campaign_id?: string | null
+          created_at?: string | null
+          email: string
+          error_message?: string | null
+          id?: string
+          lead_id?: string | null
+          opened_at?: string | null
+          sent_at?: string | null
+          status?: string | null
+        }
+        Update: {
+          campaign_id?: string | null
+          created_at?: string | null
+          email?: string
+          error_message?: string | null
+          id?: string
+          lead_id?: string | null
+          opened_at?: string | null
+          sent_at?: string | null
+          status?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "crm_campaign_recipients_campaign_id_fkey"
+            columns: ["campaign_id"]
+            isOneToOne: false
+            referencedRelation: "crm_email_campaigns"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "crm_campaign_recipients_lead_id_fkey"
+            columns: ["lead_id"]
+            isOneToOne: false
+            referencedRelation: "crm_leads"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      crm_email_campaigns: {
+        Row: {
+          created_at: string | null
+          failed_count: number | null
+          html_content: string
+          id: string
+          name: string
+          scheduled_at: string | null
+          sent_at: string | null
+          sent_count: number | null
+          status: string | null
+          subject: string
+          target_contact_types:
+            | Database["public"]["Enums"]["crm_contact_type"][]
+            | null
+          target_lead_ids: string[] | null
+          target_tags: string[] | null
+          updated_at: string | null
+          user_id: string
+        }
+        Insert: {
+          created_at?: string | null
+          failed_count?: number | null
+          html_content: string
+          id?: string
+          name: string
+          scheduled_at?: string | null
+          sent_at?: string | null
+          sent_count?: number | null
+          status?: string | null
+          subject: string
+          target_contact_types?:
+            | Database["public"]["Enums"]["crm_contact_type"][]
+            | null
+          target_lead_ids?: string[] | null
+          target_tags?: string[] | null
+          updated_at?: string | null
+          user_id: string
+        }
+        Update: {
+          created_at?: string | null
+          failed_count?: number | null
+          html_content?: string
+          id?: string
+          name?: string
+          scheduled_at?: string | null
+          sent_at?: string | null
+          sent_count?: number | null
+          status?: string | null
+          subject?: string
+          target_contact_types?:
+            | Database["public"]["Enums"]["crm_contact_type"][]
+            | null
+          target_lead_ids?: string[] | null
+          target_tags?: string[] | null
+          updated_at?: string | null
+          user_id?: string
+        }
+        Relationships: []
+      }
       crm_imports: {
         Row: {
           completed_at: string | null
@@ -828,15 +939,22 @@ export type Database = {
       crm_leads: {
         Row: {
           age_range: string | null
+          auto_detected_type: boolean | null
           birthday: string | null
+          company_name: string | null
+          contact_type: Database["public"]["Enums"]["crm_contact_type"] | null
           created_at: string
           created_by_user_id: string | null
           current_location_city: string | null
           current_location_country: string | null
+          detection_keywords: string[] | null
           email_lower: string | null
           full_name: string
           gender: string | null
           id: string
+          import_approval_status:
+            | Database["public"]["Enums"]["crm_import_approval_status"]
+            | null
           lead_source_type: string | null
           nationality: string | null
           owner_type: Database["public"]["Enums"]["crm_lead_owner_type"]
@@ -849,15 +967,22 @@ export type Database = {
         }
         Insert: {
           age_range?: string | null
+          auto_detected_type?: boolean | null
           birthday?: string | null
+          company_name?: string | null
+          contact_type?: Database["public"]["Enums"]["crm_contact_type"] | null
           created_at?: string
           created_by_user_id?: string | null
           current_location_city?: string | null
           current_location_country?: string | null
+          detection_keywords?: string[] | null
           email_lower?: string | null
           full_name: string
           gender?: string | null
           id?: string
+          import_approval_status?:
+            | Database["public"]["Enums"]["crm_import_approval_status"]
+            | null
           lead_source_type?: string | null
           nationality?: string | null
           owner_type?: Database["public"]["Enums"]["crm_lead_owner_type"]
@@ -870,15 +995,22 @@ export type Database = {
         }
         Update: {
           age_range?: string | null
+          auto_detected_type?: boolean | null
           birthday?: string | null
+          company_name?: string | null
+          contact_type?: Database["public"]["Enums"]["crm_contact_type"] | null
           created_at?: string
           created_by_user_id?: string | null
           current_location_city?: string | null
           current_location_country?: string | null
+          detection_keywords?: string[] | null
           email_lower?: string | null
           full_name?: string
           gender?: string | null
           id?: string
+          import_approval_status?:
+            | Database["public"]["Enums"]["crm_import_approval_status"]
+            | null
           lead_source_type?: string | null
           nationality?: string | null
           owner_type?: Database["public"]["Enums"]["crm_lead_owner_type"]
@@ -2342,6 +2474,14 @@ export type Database = {
         | "meeting"
         | "import"
         | "assignment"
+      crm_contact_type:
+        | "client"
+        | "broker"
+        | "developer"
+        | "investor"
+        | "vendor"
+        | "other"
+      crm_import_approval_status: "pending" | "approved" | "rejected"
       crm_import_source: "csv" | "vcf" | "manual"
       crm_lead_owner_type: "company_assigned" | "broker_owned"
       crm_pipeline_status:
@@ -2525,6 +2665,15 @@ export const Constants = {
         "import",
         "assignment",
       ],
+      crm_contact_type: [
+        "client",
+        "broker",
+        "developer",
+        "investor",
+        "vendor",
+        "other",
+      ],
+      crm_import_approval_status: ["pending", "approved", "rejected"],
       crm_import_source: ["csv", "vcf", "manual"],
       crm_lead_owner_type: ["company_assigned", "broker_owned"],
       crm_pipeline_status: [
