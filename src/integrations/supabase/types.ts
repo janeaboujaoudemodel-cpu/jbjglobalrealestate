@@ -1898,6 +1898,47 @@ export type Database = {
         }
         Relationships: []
       }
+      hr_agent_conversations: {
+        Row: {
+          application_id: string | null
+          created_at: string
+          id: string
+          messages: Json
+          qualification_data: Json | null
+          stage: string
+          updated_at: string
+          user_id: string
+        }
+        Insert: {
+          application_id?: string | null
+          created_at?: string
+          id?: string
+          messages?: Json
+          qualification_data?: Json | null
+          stage?: string
+          updated_at?: string
+          user_id: string
+        }
+        Update: {
+          application_id?: string | null
+          created_at?: string
+          id?: string
+          messages?: Json
+          qualification_data?: Json | null
+          stage?: string
+          updated_at?: string
+          user_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "hr_agent_conversations_application_id_fkey"
+            columns: ["application_id"]
+            isOneToOne: false
+            referencedRelation: "hr_applications"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       hr_applications: {
         Row: {
           consent_accurate: boolean
@@ -2041,6 +2082,131 @@ export type Database = {
           verification_token?: string
         }
         Relationships: []
+      }
+      hr_interview_assessments: {
+        Row: {
+          ai_analysis: string | null
+          application_id: string | null
+          communication_score: number | null
+          created_at: string
+          cultural_fit_score: number | null
+          detailed_feedback: string | null
+          experience_score: number | null
+          id: string
+          interview_id: string | null
+          interview_transcript: Json | null
+          motivation_score: number | null
+          overall_score: number | null
+          recommendation: string | null
+          strengths: string[] | null
+          technical_score: number | null
+          updated_at: string
+          user_id: string
+          weaknesses: string[] | null
+        }
+        Insert: {
+          ai_analysis?: string | null
+          application_id?: string | null
+          communication_score?: number | null
+          created_at?: string
+          cultural_fit_score?: number | null
+          detailed_feedback?: string | null
+          experience_score?: number | null
+          id?: string
+          interview_id?: string | null
+          interview_transcript?: Json | null
+          motivation_score?: number | null
+          overall_score?: number | null
+          recommendation?: string | null
+          strengths?: string[] | null
+          technical_score?: number | null
+          updated_at?: string
+          user_id: string
+          weaknesses?: string[] | null
+        }
+        Update: {
+          ai_analysis?: string | null
+          application_id?: string | null
+          communication_score?: number | null
+          created_at?: string
+          cultural_fit_score?: number | null
+          detailed_feedback?: string | null
+          experience_score?: number | null
+          id?: string
+          interview_id?: string | null
+          interview_transcript?: Json | null
+          motivation_score?: number | null
+          overall_score?: number | null
+          recommendation?: string | null
+          strengths?: string[] | null
+          technical_score?: number | null
+          updated_at?: string
+          user_id?: string
+          weaknesses?: string[] | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "hr_interview_assessments_application_id_fkey"
+            columns: ["application_id"]
+            isOneToOne: false
+            referencedRelation: "hr_applications"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "hr_interview_assessments_interview_id_fkey"
+            columns: ["interview_id"]
+            isOneToOne: false
+            referencedRelation: "hr_interviews"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      hr_interviews: {
+        Row: {
+          application_id: string | null
+          created_at: string
+          id: string
+          interview_type: string
+          meeting_link: string | null
+          notes: string | null
+          scheduled_at: string | null
+          status: string
+          updated_at: string
+          user_id: string
+        }
+        Insert: {
+          application_id?: string | null
+          created_at?: string
+          id?: string
+          interview_type?: string
+          meeting_link?: string | null
+          notes?: string | null
+          scheduled_at?: string | null
+          status?: string
+          updated_at?: string
+          user_id: string
+        }
+        Update: {
+          application_id?: string | null
+          created_at?: string
+          id?: string
+          interview_type?: string
+          meeting_link?: string | null
+          notes?: string | null
+          scheduled_at?: string | null
+          status?: string
+          updated_at?: string
+          user_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "hr_interviews_application_id_fkey"
+            columns: ["application_id"]
+            isOneToOne: false
+            referencedRelation: "hr_applications"
+            referencedColumns: ["id"]
+          },
+        ]
       }
       hr_modules: {
         Row: {
