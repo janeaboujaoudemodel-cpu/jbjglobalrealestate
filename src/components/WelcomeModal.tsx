@@ -3,10 +3,10 @@ import { useNavigate, useLocation } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 import { Dialog, DialogContent, DialogTitle } from "@/components/ui/dialog";
 import * as VisuallyHidden from "@radix-ui/react-visually-hidden";
-import { User, ArrowRight, Crown, Sparkles } from "lucide-react";
+import { User, ArrowRight } from "lucide-react";
 import { useLanguage } from "@/contexts/LanguageContext";
 import GuidedTour from "./GuidedTour";
-import { JJLogoImage } from "./JJLogoImage";
+import jbjFullLogoLight from "@/assets/jbj-fulllogo-light.png";
 
 const WELCOME_MODAL_KEY = "jj_welcome_shown";
 const RETURNING_USER_KEY = "jj_returning_user";
@@ -101,9 +101,13 @@ const WelcomeModal = () => {
           <div className="absolute bottom-6 right-6 w-8 h-8 border-r border-b border-gold/20" />
 
           <div className="relative px-10 py-14">
-            {/* Logo */}
+            {/* Full Logo - Light version for welcome popup */}
             <div className="flex justify-center mb-10">
-              <JJLogoImage variant="light" size="lg" />
+              <img 
+                src={jbjFullLogoLight} 
+                alt="JBJ Global Real Estate" 
+                className="h-28 w-auto object-contain"
+              />
             </div>
 
             {/* Title */}
