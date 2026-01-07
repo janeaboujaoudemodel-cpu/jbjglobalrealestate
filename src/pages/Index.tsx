@@ -7,10 +7,13 @@ import AIComparisonWidget from "@/components/AIComparisonWidget";
 import MarketReportCTA from "@/components/MarketReportCTA";
 import MortgageCalculator from "@/components/MortgageCalculator";
 import WelcomeModal from "@/components/WelcomeModal";
+import RoleSelectionModal from "@/components/RoleSelectionModal";
+import BrokerOnboardingBanner from "@/components/BrokerOnboardingBanner";
 import InquiryFormModal from "@/components/InquiryFormModal";
 import InstallAppButton from "@/components/InstallAppButton";
 import CookiesConsentBanner from "@/components/CookiesConsentBanner";
 import { useLanguage } from "@/contexts/LanguageContext";
+import { useUserRole } from "@/hooks/useUserRole";
 import { Sparkles, ArrowUpRight, ChevronDown, User, Scale, Layers, Calculator, FileText, Heart, BarChart3, Wrench, Ruler, Palette, Calendar, Wallet, ShoppingBag, Brain, GraduationCap, Briefcase, Target, Award } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import founderProfessional from "@/assets/founder-professional.jpeg";
@@ -34,11 +37,18 @@ const staggerContainer = {
 const Index = () => {
   const [isInquiryOpen, setIsInquiryOpen] = useState(false);
   const { t } = useLanguage();
+  const { isBroker, hasSelectedRole } = useUserRole();
 
   return (
     <section className="relative w-full min-h-screen bg-black">
       {/* Welcome Modal - AI Assistant Popup on first load */}
       <WelcomeModal />
+      
+      {/* Role Selection Modal - Shows after welcome modal */}
+      <RoleSelectionModal />
+      
+      {/* Broker Onboarding Banner - Only for brokers */}
+      {isBroker && <BrokerOnboardingBanner />}
       
       {/* Cookies Consent Banner */}
       <CookiesConsentBanner />
