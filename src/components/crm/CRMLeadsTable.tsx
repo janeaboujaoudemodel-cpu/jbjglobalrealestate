@@ -1,5 +1,6 @@
 import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
+import { cn } from "@/lib/utils";
 import { supabase } from "@/integrations/supabase/client";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -25,7 +26,7 @@ import {
   PopoverTrigger,
 } from "@/components/ui/popover";
 import { toast } from "sonner";
-import { Search, Phone, MessageSquare, Mail, Eye, Filter, ChevronDown, Calendar, Lock } from "lucide-react";
+import { Search, Phone, MessageSquare, Mail, Eye, Filter, ChevronDown, Calendar, Lock, PhoneCall } from "lucide-react";
 import LeadStatusBadge, { PIPELINE_STATUSES, getStatusInfo } from "./LeadStatusBadge";
 import FollowUpScheduler from "./FollowUpScheduler";
 
@@ -301,10 +302,10 @@ const CRMLeadsTable = ({ userId, filterType, onRefresh }: CRMLeadsTableProps) =>
       </div>
 
       {/* Table */}
-      <div className="border rounded-lg overflow-hidden">
+      <div className="border border-border rounded-lg overflow-hidden bg-card/50">
         <Table>
-          <TableHeader>
-            <TableRow>
+          <TableHeader className="bg-muted/50">
+            <TableRow className="border-b border-border">
               <TableHead className="w-12">
                 <Checkbox 
                   checked={selectedLeads.size === filteredLeads.length && filteredLeads.length > 0}
@@ -317,12 +318,12 @@ const CRMLeadsTable = ({ userId, filterType, onRefresh }: CRMLeadsTableProps) =>
                   }}
                 />
               </TableHead>
-              <TableHead>Name</TableHead>
-              <TableHead>Contact</TableHead>
-              <TableHead>Location</TableHead>
-              <TableHead>Status</TableHead>
-              <TableHead>Source</TableHead>
-              <TableHead>Actions</TableHead>
+              <TableHead className="text-white font-bold">Name</TableHead>
+              <TableHead className="text-white font-bold">Contact</TableHead>
+              <TableHead className="text-white font-bold">Location</TableHead>
+              <TableHead className="text-white font-bold">Status</TableHead>
+              <TableHead className="text-white font-bold">Source</TableHead>
+              <TableHead className="text-white font-bold">Actions</TableHead>
             </TableRow>
           </TableHeader>
           <TableBody>
@@ -340,7 +341,7 @@ const CRMLeadsTable = ({ userId, filterType, onRefresh }: CRMLeadsTableProps) =>
               </TableRow>
             ) : (
               filteredLeads.map((lead) => (
-                <TableRow key={lead.id} className={lead.state?.is_hidden ? "opacity-50" : ""}>
+                <TableRow key={lead.id} className={cn("border-b border-border/50 hover:bg-muted/30", lead.state?.is_hidden && "opacity-50")}>
                   <TableCell>
                     <Checkbox
                       checked={selectedLeads.has(lead.id)}
@@ -462,34 +463,52 @@ const CRMLeadsTable = ({ userId, filterType, onRefresh }: CRMLeadsTableProps) =>
                       <Button
                         variant="ghost"
                         size="icon"
-                        className="h-8 w-8 text-foreground hover:text-primary"
+                        className="h-8 w-8 text-white hover:text-primary hover:bg-primary/10"
                         onClick={() => navigate(`/crm/leads/${lead.id}`)}
+                        title="View Lead Details"
                       >
                         <Eye className="h-4 w-4" />
                       </Button>
                       <Button
                         variant="ghost"
                         size="icon"
-                        className="h-8 w-8 text-green-600"
+                        className="h-8 w-8 bg-green-600/20 text-green-400 hover:bg-green-600/40 hover:text-green-300 disabled:opacity-30"
                         onClick={() => handleWhatsAppClick(lead)}
                         disabled={!lead.phone_e164 || isCompanyAssigned}
+                        title="WhatsApp"
                       >
                         <MessageSquare className="h-4 w-4" />
                       </Button>
                       <Button
                         variant="ghost"
                         size="icon"
-                        className="h-8 w-8 text-blue-600"
+                        className="h-8 w-8 bg-blue-600/20 text-blue-400 hover:bg-blue-600/40 hover:text-blue-300 disabled:opacity-30"
+                        onClick={() => {
+                          if (lead.phone_e164 && !isCompanyAssigned) {
+                            window.open(`tel:${lead.phone_e164}`, "_self");
+                          }
+                        }}
+                        disabled={!lead.phone_e164 || isCompanyAssigned}
+                        title="Call"
+                      >
+                        <PhoneCall className="h-4 w-4" />
+                      </Button>
+                      <Button
+                        variant="ghost"
+                        size="icon"
+                        className="h-8 w-8 bg-purple-600/20 text-purple-400 hover:bg-purple-600/40 hover:text-purple-300 disabled:opacity-30"
                         onClick={() => handleEmailClick(lead)}
                         disabled={!lead.email_lower || isCompanyAssigned}
+                        title="Email"
                       >
                         <Mail className="h-4 w-4" />
                       </Button>
                       <Button
                         variant="ghost"
                         size="icon"
-                        className="h-8 w-8 text-amber-600"
+                        className="h-8 w-8 bg-amber-600/20 text-amber-400 hover:bg-amber-600/40 hover:text-amber-300"
                         onClick={() => setFollowUpLead(lead)}
+                        title="Schedule Follow-up"
                       >
                         <Calendar className="h-4 w-4" />
                       </Button>
