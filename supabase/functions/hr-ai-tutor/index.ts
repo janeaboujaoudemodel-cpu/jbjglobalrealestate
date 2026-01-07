@@ -27,16 +27,28 @@ serve(async (req) => {
       return errorResponse(corsHeaders, "Question is required", 400);
     }
 
-    // Get auth header
+    // Authenticate user - require valid session
     const authHeader = req.headers.get("Authorization");
     if (!authHeader) {
-      return errorResponse(corsHeaders, "Unauthorized", 401);
+      return errorResponse(corsHeaders, "Authentication required", 401);
     }
 
-    // Initialize Supabase client
     const supabaseUrl = Deno.env.get("SUPABASE_URL")!;
-    const supabaseKey = Deno.env.get("SUPABASE_SERVICE_ROLE_KEY")!;
-    const supabase = createClient(supabaseUrl, supabaseKey);
+    const supabaseAnonKey = Deno.env.get("SUPABASE_ANON_KEY")!;
+    const supabaseServiceKey = Deno.env.get("SUPABASE_SERVICE_ROLE_KEY")!;
+
+    // Validate user token
+    const supabaseAuth = createClient(supabaseUrl, supabaseAnonKey, {
+      global: { headers: { Authorization: authHeader } },
+    });
+
+    const { data: { user }, error: authError } = await supabaseAuth.auth.getUser();
+    if (authError || !user) {
+      return errorResponse(corsHeaders, "Invalid or expired authentication", 401);
+    }
+
+    // Use service client for database operations
+    const supabase = createClient(supabaseUrl, supabaseServiceKey);
 
     // Fetch current module content for focused context
     let currentModuleContext = "";
