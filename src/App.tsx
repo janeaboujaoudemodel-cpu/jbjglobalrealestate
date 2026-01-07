@@ -68,6 +68,8 @@ import PropertyMap from "./pages/PropertyMap";
 import AdminDevelopers from "./pages/AdminDevelopers";
 import BrokerAccount from "./pages/BrokerAccount";
 import HRAgent from "./pages/HRAgent";
+import ReferralOnboarding from "./pages/ReferralOnboarding";
+import SignatureStudio from "./pages/SignatureStudio";
 
 const queryClient = new QueryClient();
 
@@ -146,6 +148,8 @@ const App = () => (
                     <Route path="/admin/developers" element={<AdminDevelopers />} />
                     <Route path="/my-account" element={<BrokerAccount />} />
                     <Route path="/hr-agent" element={<HRAgent />} />
+                    <Route path="/referral-onboarding" element={<ReferralOnboarding />} />
+                    <Route path="/signature-studio" element={<SignatureStudio />} />
                     <Route path="*" element={<NotFound />} />
                     </Routes>
                   </MainLayout>
