@@ -414,6 +414,69 @@ const Index = () => {
               </Link>
             </div>
             
+            {/* Row 6 - More Tools */}
+            <div className="flex flex-wrap justify-center gap-3">
+              <Link to="/crm">
+                <Button 
+                  className="bg-transparent backdrop-blur-md border-2 border-orange-500/50 text-orange-400 hover:bg-orange-500/20 hover:border-orange-400 hover:shadow-lg hover:shadow-orange-500/20 font-semibold px-5 py-4 text-xs transition-all duration-300 hover:scale-105 group"
+                >
+                  <Briefcase className="w-3 h-3 mr-1" />
+                  CRM Dashboard
+                  <ArrowUpRight className="w-3 h-3 ml-1 group-hover:translate-x-0.5 group-hover:-translate-y-0.5 transition-transform" />
+                </Button>
+              </Link>
+              
+              <Link to="/map">
+                <Button 
+                  className="bg-transparent backdrop-blur-md border-2 border-teal-500/50 text-teal-400 hover:bg-teal-500/20 hover:border-teal-400 hover:shadow-lg hover:shadow-teal-500/20 font-semibold px-5 py-4 text-xs transition-all duration-300 hover:scale-105 group"
+                >
+                  <Target className="w-3 h-3 mr-1" />
+                  Property Map
+                  <ArrowUpRight className="w-3 h-3 ml-1 group-hover:translate-x-0.5 group-hover:-translate-y-0.5 transition-transform" />
+                </Button>
+              </Link>
+              
+              <Link to="/hr-agent">
+                <Button 
+                  className="bg-transparent backdrop-blur-md border-2 border-violet-500/50 text-violet-400 hover:bg-violet-500/20 hover:border-violet-400 hover:shadow-lg hover:shadow-violet-500/20 font-semibold px-5 py-4 text-xs transition-all duration-300 hover:scale-105 group"
+                >
+                  <User className="w-3 h-3 mr-1" />
+                  HR Agent
+                  <ArrowUpRight className="w-3 h-3 ml-1 group-hover:translate-x-0.5 group-hover:-translate-y-0.5 transition-transform" />
+                </Button>
+              </Link>
+              
+              <Link to="/my-account">
+                <Button 
+                  className="bg-transparent backdrop-blur-md border-2 border-cyan-500/50 text-cyan-400 hover:bg-cyan-500/20 hover:border-cyan-400 hover:shadow-lg hover:shadow-cyan-500/20 font-semibold px-5 py-4 text-xs transition-all duration-300 hover:scale-105 group"
+                >
+                  <User className="w-3 h-3 mr-1" />
+                  My Account
+                  <ArrowUpRight className="w-3 h-3 ml-1 group-hover:translate-x-0.5 group-hover:-translate-y-0.5 transition-transform" />
+                </Button>
+              </Link>
+              
+              <Link to="/join">
+                <Button 
+                  className="bg-transparent backdrop-blur-md border-2 border-gold/50 text-gold hover:bg-gold/20 hover:border-gold hover:shadow-lg hover:shadow-gold/20 font-semibold px-5 py-4 text-xs transition-all duration-300 hover:scale-105 group"
+                >
+                  <Briefcase className="w-3 h-3 mr-1" />
+                  Join Our Team
+                  <ArrowUpRight className="w-3 h-3 ml-1 group-hover:translate-x-0.5 group-hover:-translate-y-0.5 transition-transform" />
+                </Button>
+              </Link>
+              
+              <Link to="/onboarding">
+                <Button 
+                  className="bg-transparent backdrop-blur-md border-2 border-emerald-500/50 text-emerald-400 hover:bg-emerald-500/20 hover:border-emerald-400 hover:shadow-lg hover:shadow-emerald-500/20 font-semibold px-5 py-4 text-xs transition-all duration-300 hover:scale-105 group"
+                >
+                  <GraduationCap className="w-3 h-3 mr-1" />
+                  Training Portal
+                  <ArrowUpRight className="w-3 h-3 ml-1 group-hover:translate-x-0.5 group-hover:-translate-y-0.5 transition-transform" />
+                </Button>
+              </Link>
+            </div>
+            
             {/* AI Home Finder - Full Width Purple Glowing Bar */}
             <Link to="/quiz" className="w-full max-w-2xl mt-4">
               <div className="relative overflow-hidden rounded-xl bg-gradient-to-r from-purple-600 via-purple-700 to-purple-800 p-[1px] shadow-2xl shadow-purple-500/30 hover:shadow-purple-500/50 transition-all duration-500 group hover:scale-[1.02]">
