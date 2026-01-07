@@ -181,6 +181,54 @@ export type Database = {
           },
         ]
       }
+      broker_onboarding_progress: {
+        Row: {
+          company_training_completed: boolean | null
+          contract_signed: boolean | null
+          created_at: string
+          current_step: number | null
+          hr_intro_completed: boolean | null
+          id: string
+          onboarding_complete: boolean | null
+          points_earned: number | null
+          profile_completed: boolean | null
+          rewards_claimed: string[] | null
+          role_confirmed: boolean | null
+          updated_at: string
+          user_id: string
+        }
+        Insert: {
+          company_training_completed?: boolean | null
+          contract_signed?: boolean | null
+          created_at?: string
+          current_step?: number | null
+          hr_intro_completed?: boolean | null
+          id?: string
+          onboarding_complete?: boolean | null
+          points_earned?: number | null
+          profile_completed?: boolean | null
+          rewards_claimed?: string[] | null
+          role_confirmed?: boolean | null
+          updated_at?: string
+          user_id: string
+        }
+        Update: {
+          company_training_completed?: boolean | null
+          contract_signed?: boolean | null
+          created_at?: string
+          current_step?: number | null
+          hr_intro_completed?: boolean | null
+          id?: string
+          onboarding_complete?: boolean | null
+          points_earned?: number | null
+          profile_completed?: boolean | null
+          rewards_claimed?: string[] | null
+          role_confirmed?: boolean | null
+          updated_at?: string
+          user_id?: string
+        }
+        Relationships: []
+      }
       broker_pdf_exports: {
         Row: {
           ai_recommendation: string | null
@@ -1134,6 +1182,59 @@ export type Database = {
           user_id?: string
         }
         Relationships: []
+      }
+      developer_sales_reps: {
+        Row: {
+          created_at: string
+          developer_id: string
+          email: string | null
+          full_name: string
+          id: string
+          is_active: boolean | null
+          is_primary: boolean | null
+          notes: string | null
+          phone_e164: string
+          title: string | null
+          updated_at: string
+          whatsapp_number: string | null
+        }
+        Insert: {
+          created_at?: string
+          developer_id: string
+          email?: string | null
+          full_name: string
+          id?: string
+          is_active?: boolean | null
+          is_primary?: boolean | null
+          notes?: string | null
+          phone_e164: string
+          title?: string | null
+          updated_at?: string
+          whatsapp_number?: string | null
+        }
+        Update: {
+          created_at?: string
+          developer_id?: string
+          email?: string | null
+          full_name?: string
+          id?: string
+          is_active?: boolean | null
+          is_primary?: boolean | null
+          notes?: string | null
+          phone_e164?: string
+          title?: string | null
+          updated_at?: string
+          whatsapp_number?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "developer_sales_reps_developer_id_fkey"
+            columns: ["developer_id"]
+            isOneToOne: false
+            referencedRelation: "uae_developers"
+            referencedColumns: ["id"]
+          },
+        ]
       }
       developers: {
         Row: {
@@ -2333,6 +2434,111 @@ export type Database = {
         }
         Relationships: []
       }
+      uae_developers: {
+        Row: {
+          created_at: string
+          description: string | null
+          founded_year: number | null
+          headquarters: string | null
+          id: string
+          is_active: boolean | null
+          location_city: string | null
+          location_emirate: string | null
+          logo_url: string | null
+          name: string
+          slug: string
+          updated_at: string
+          website_url: string | null
+        }
+        Insert: {
+          created_at?: string
+          description?: string | null
+          founded_year?: number | null
+          headquarters?: string | null
+          id?: string
+          is_active?: boolean | null
+          location_city?: string | null
+          location_emirate?: string | null
+          logo_url?: string | null
+          name: string
+          slug: string
+          updated_at?: string
+          website_url?: string | null
+        }
+        Update: {
+          created_at?: string
+          description?: string | null
+          founded_year?: number | null
+          headquarters?: string | null
+          id?: string
+          is_active?: boolean | null
+          location_city?: string | null
+          location_emirate?: string | null
+          logo_url?: string | null
+          name?: string
+          slug?: string
+          updated_at?: string
+          website_url?: string | null
+        }
+        Relationships: []
+      }
+      user_role_selections: {
+        Row: {
+          age_range: string | null
+          confirmed_accurate: boolean
+          created_at: string
+          current_location_city: string | null
+          current_location_country: string | null
+          date_of_birth: string | null
+          email: string | null
+          full_name: string | null
+          id: string
+          nationality: string | null
+          phone_e164: string | null
+          preferred_language: string | null
+          selected_role: Database["public"]["Enums"]["visitor_role"]
+          session_id: string | null
+          updated_at: string
+          user_id: string | null
+        }
+        Insert: {
+          age_range?: string | null
+          confirmed_accurate?: boolean
+          created_at?: string
+          current_location_city?: string | null
+          current_location_country?: string | null
+          date_of_birth?: string | null
+          email?: string | null
+          full_name?: string | null
+          id?: string
+          nationality?: string | null
+          phone_e164?: string | null
+          preferred_language?: string | null
+          selected_role: Database["public"]["Enums"]["visitor_role"]
+          session_id?: string | null
+          updated_at?: string
+          user_id?: string | null
+        }
+        Update: {
+          age_range?: string | null
+          confirmed_accurate?: boolean
+          created_at?: string
+          current_location_city?: string | null
+          current_location_country?: string | null
+          date_of_birth?: string | null
+          email?: string | null
+          full_name?: string | null
+          id?: string
+          nationality?: string | null
+          phone_e164?: string | null
+          preferred_language?: string | null
+          selected_role?: Database["public"]["Enums"]["visitor_role"]
+          session_id?: string | null
+          updated_at?: string
+          user_id?: string | null
+        }
+        Relationships: []
+      }
       user_roles: {
         Row: {
           created_at: string
@@ -2499,6 +2705,7 @@ export type Database = {
       hr_module_track: "company_knowledge" | "real_estate_basics"
       hr_question_type: "mcq" | "true_false" | "short_answer"
       hr_role: "broker_candidate" | "broker_member"
+      visitor_role: "broker" | "referral_partner" | "client" | "visitor"
     }
     CompositeTypes: {
       [_ in never]: never
@@ -2692,6 +2899,7 @@ export const Constants = {
       hr_module_track: ["company_knowledge", "real_estate_basics"],
       hr_question_type: ["mcq", "true_false", "short_answer"],
       hr_role: ["broker_candidate", "broker_member"],
+      visitor_role: ["broker", "referral_partner", "client", "visitor"],
     },
   },
 } as const
