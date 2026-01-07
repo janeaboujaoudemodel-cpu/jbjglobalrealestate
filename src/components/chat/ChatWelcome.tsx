@@ -1,6 +1,6 @@
 import { MessageCircle } from 'lucide-react';
 import { CONTACT_INFO } from '@/constants/stats';
-import { JJLogoImage } from '@/components/JJLogoImage';
+import { JJLogoTransparent } from '@/components/JJLogoImage';
 
 interface ChatWelcomeProps {
   onStartChat: () => void;
@@ -11,7 +11,8 @@ const ChatWelcome = ({ onStartChat }: ChatWelcomeProps) => {
     <div className="flex-1 p-6 flex flex-col justify-center">
       <div className="text-center mb-6">
         <div className="mx-auto mb-4">
-          <JJLogoImage variant="dark" size="lg" showText={false} />
+          {/* Transparent logo: White J's with gold divider, no background */}
+          <JJLogoTransparent size="lg" />
         </div>
         <h4 className="text-white text-lg font-semibold mb-2">Welcome to JJ Global Capital 👋</h4>
         <p className="text-zinc-400 text-sm">Your premium real estate partner in Dubai</p>

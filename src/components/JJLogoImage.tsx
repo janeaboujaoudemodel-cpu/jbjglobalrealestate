@@ -61,6 +61,47 @@ export const JJLogoImage = ({
   );
 };
 
+// CSS-based transparent logo - White J's with Gold divider on transparent background
+// Use this for chat widget and dark overlays where JPG background won't work
+interface JJLogoTransparentProps {
+  size?: 'xs' | 'sm' | 'md' | 'lg';
+  className?: string;
+}
+
+const transparentSizeConfig = {
+  xs: { j: 'text-2xl', divider: 'h-5', gap: '4px' },
+  sm: { j: 'text-3xl', divider: 'h-6', gap: '5px' },
+  md: { j: 'text-4xl', divider: 'h-8', gap: '6px' },
+  lg: { j: 'text-5xl', divider: 'h-10', gap: '8px' },
+};
+
+export const JJLogoTransparent = ({ size = 'md', className = '' }: JJLogoTransparentProps) => {
+  const config = transparentSizeConfig[size];
+  
+  return (
+    <div className={`flex items-center justify-center ${className}`}>
+      <span 
+        className={`text-white font-extralight ${config.j} leading-none`}
+        style={{ fontFamily: "Poppins, sans-serif" }}
+      >
+        J
+      </span>
+      <div 
+        className="flex items-center justify-center"
+        style={{ marginLeft: config.gap, marginRight: config.gap }}
+      >
+        <div className={`w-[2px] bg-gradient-to-b from-transparent via-gold to-transparent ${config.divider}`} />
+      </div>
+      <span 
+        className={`text-white font-extralight ${config.j} leading-none`}
+        style={{ fontFamily: "Poppins, sans-serif" }}
+      >
+        J
+      </span>
+    </div>
+  );
+};
+
 // Header-specific logo - Matches footer styling exactly (uses same logoDark asset)
 // Uses crisp rendering with explicit dimensions to prevent blur
 export const JJLogoHeaderImage = ({ className = '' }: { className?: string }) => (

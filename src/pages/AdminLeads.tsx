@@ -101,10 +101,43 @@ const AdminLeads = () => {
   const [searchQuery, setSearchQuery] = useState("");
   const [statusFilter, setStatusFilter] = useState<string>("all");
   const [sourceFilter, setSourceFilter] = useState<string>("all");
+  const [sourceTypeFilter, setSourceTypeFilter] = useState<string>("all"); // website vs database
   const [selectedLead, setSelectedLead] = useState<Lead | null>(null);
   const [selectedConversation, setSelectedConversation] = useState<ChatConversation | null>(null);
   const [activeTab, setActiveTab] = useState<"leads" | "chats">("leads");
 
+  // Source type categories
+  const WEBSITE_SOURCES = ['ai_chat_support', 'ai_matchmaker', 'contact_form', 'newsletter', 'inquiry_form', 'quiz', 'login', 'signup', 'book', 'video', 'ai_hub', 'property_inquiry'];
+  const DATABASE_SOURCES = ['csv_import', 'excel_import', 'manual_entry', 'broker_import', 'crm_import'];
+  
+  const getSourceCategory = (source: string) => {
+    if (WEBSITE_SOURCES.includes(source) || source.includes('chat') || source.includes('form') || source.includes('ai_')) return 'website';
+    if (DATABASE_SOURCES.includes(source) || source.includes('import')) return 'database';
+    return 'other';
+  };
+  
+  const getSourceDisplayName = (source: string) => {
+    const sourceMap: Record<string, string> = {
+      'ai_chat_support': '💬 Chat Widget',
+      'ai_matchmaker': '🤖 AI Matchmaker',
+      'contact_form': '📝 Contact Form',
+      'newsletter': '📧 Newsletter',
+      'inquiry_form': '📋 Inquiry Form',
+      'quiz': '🎯 Property Quiz',
+      'login': '🔑 Login',
+      'signup': '✨ Sign Up',
+      'book': '📖 Book CTA',
+      'video': '🎬 Video Lead',
+      'ai_hub': '🧠 AI Hub',
+      'property_inquiry': '🏠 Property Inquiry',
+      'csv_import': '📂 CSV Import',
+      'excel_import': '📊 Excel Import',
+      'manual_entry': '✍️ Manual Entry',
+      'broker_import': '👔 Broker Import',
+      'crm_import': '💼 CRM Import',
+    };
+    return sourceMap[source] || source;
+  };
   useEffect(() => {
     if (!loading && !user) {
       navigate("/auth");
@@ -224,7 +257,8 @@ const AdminLeads = () => {
       (lead.phone || "").includes(searchQuery);
     const matchesStatus = statusFilter === "all" || lead.status === statusFilter;
     const matchesSource = sourceFilter === "all" || lead.source === sourceFilter;
-    return matchesSearch && matchesStatus && matchesSource;
+    const matchesSourceType = sourceTypeFilter === "all" || getSourceCategory(lead.source) === sourceTypeFilter;
+    return matchesSearch && matchesStatus && matchesSource && matchesSourceType;
   });
 
   const filteredConversations = conversations.filter((chat) => {
@@ -411,19 +445,60 @@ const AdminLeads = () => {
               </Select>
             </div>
             {activeTab === "leads" && (
-              <Select value={sourceFilter} onValueChange={setSourceFilter}>
-                <SelectTrigger className="w-40 bg-zinc-950 border-zinc-700 text-white">
-                  <SelectValue placeholder="Source" />
-                </SelectTrigger>
-                <SelectContent className="bg-zinc-900 border-zinc-700">
-                  <SelectItem value="all">All Sources</SelectItem>
-                  {uniqueSources.map((source) => (
-                    <SelectItem key={source} value={source}>
-                      {source}
+              <>
+                {/* Source Type Filter (Website vs Database) */}
+                <Select value={sourceTypeFilter} onValueChange={setSourceTypeFilter}>
+                  <SelectTrigger className="w-44 bg-zinc-950 border-zinc-700 text-white">
+                    <SelectValue placeholder="Source Type" />
+                  </SelectTrigger>
+                  <SelectContent className="bg-zinc-900 border-zinc-700">
+                    <SelectItem value="all">
+                      <span className="flex items-center gap-2">📊 All Sources</span>
                     </SelectItem>
-                  ))}
-                </SelectContent>
-              </Select>
+                    <SelectItem value="website">
+                      <span className="flex items-center gap-2">🌐 Website Leads</span>
+                    </SelectItem>
+                    <SelectItem value="database">
+                      <span className="flex items-center gap-2">💾 Database/Import</span>
+                    </SelectItem>
+                    <SelectItem value="other">
+                      <span className="flex items-center gap-2">📁 Other</span>
+                    </SelectItem>
+                  </SelectContent>
+                </Select>
+                
+                {/* Specific Source Filter */}
+                <Select value={sourceFilter} onValueChange={setSourceFilter}>
+                  <SelectTrigger className="w-48 bg-zinc-950 border-zinc-700 text-white">
+                    <SelectValue placeholder="Specific Source" />
+                  </SelectTrigger>
+                  <SelectContent className="bg-zinc-900 border-zinc-700 max-h-64">
+                    <SelectItem value="all">All Specific Sources</SelectItem>
+                    <div className="px-2 py-1 text-xs font-semibold text-emerald-400 uppercase">Website</div>
+                    {uniqueSources.filter(s => getSourceCategory(s) === 'website').map((source) => (
+                      <SelectItem key={source} value={source}>
+                        {getSourceDisplayName(source)}
+                      </SelectItem>
+                    ))}
+                    <div className="px-2 py-1 text-xs font-semibold text-blue-400 uppercase mt-1">Database/Import</div>
+                    {uniqueSources.filter(s => getSourceCategory(s) === 'database').map((source) => (
+                      <SelectItem key={source} value={source}>
+                        {getSourceDisplayName(source)}
+                      </SelectItem>
+                    ))}
+                    {uniqueSources.filter(s => getSourceCategory(s) === 'other').length > 0 && (
+                      <>
+                        <div className="px-2 py-1 text-xs font-semibold text-gray-400 uppercase mt-1">Other</div>
+                        {uniqueSources.filter(s => getSourceCategory(s) === 'other').map((source) => (
+                          <SelectItem key={source} value={source}>
+                            {getSourceDisplayName(source)}
+                          </SelectItem>
+                        ))}
+                      </>
+                    )}
+                  </SelectContent>
+                </Select>
+              </>
             )}
           </div>
         </div>
