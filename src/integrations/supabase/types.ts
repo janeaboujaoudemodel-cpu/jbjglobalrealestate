@@ -92,6 +92,381 @@ export type Database = {
         }
         Relationships: []
       }
+      assistant_ai_logs: {
+        Row: {
+          action_taken: string
+          communication_id: string | null
+          confidence_score: number | null
+          correction_notes: string | null
+          created_at: string
+          id: string
+          learned_response_id: string | null
+          reasoning: string
+          user_id: string
+          was_correct: boolean | null
+        }
+        Insert: {
+          action_taken: string
+          communication_id?: string | null
+          confidence_score?: number | null
+          correction_notes?: string | null
+          created_at?: string
+          id?: string
+          learned_response_id?: string | null
+          reasoning: string
+          user_id: string
+          was_correct?: boolean | null
+        }
+        Update: {
+          action_taken?: string
+          communication_id?: string | null
+          confidence_score?: number | null
+          correction_notes?: string | null
+          created_at?: string
+          id?: string
+          learned_response_id?: string | null
+          reasoning?: string
+          user_id?: string
+          was_correct?: boolean | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "assistant_ai_logs_communication_id_fkey"
+            columns: ["communication_id"]
+            isOneToOne: false
+            referencedRelation: "assistant_communications"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "assistant_ai_logs_learned_response_id_fkey"
+            columns: ["learned_response_id"]
+            isOneToOne: false
+            referencedRelation: "assistant_learned_responses"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      assistant_communications: {
+        Row: {
+          ai_confidence_score: number | null
+          ai_reasoning: string | null
+          ai_response: string | null
+          ai_status: Database["public"]["Enums"]["ai_action_status"]
+          category: Database["public"]["Enums"]["comm_category"]
+          channel: Database["public"]["Enums"]["comm_channel"]
+          content: string
+          created_at: string
+          human_response: string | null
+          human_reviewed_at: string | null
+          id: string
+          is_archived: boolean | null
+          is_read: boolean | null
+          metadata: Json | null
+          received_at: string
+          sender_identifier: string
+          sender_name: string | null
+          subject: string | null
+          updated_at: string
+          user_id: string
+        }
+        Insert: {
+          ai_confidence_score?: number | null
+          ai_reasoning?: string | null
+          ai_response?: string | null
+          ai_status?: Database["public"]["Enums"]["ai_action_status"]
+          category?: Database["public"]["Enums"]["comm_category"]
+          channel: Database["public"]["Enums"]["comm_channel"]
+          content: string
+          created_at?: string
+          human_response?: string | null
+          human_reviewed_at?: string | null
+          id?: string
+          is_archived?: boolean | null
+          is_read?: boolean | null
+          metadata?: Json | null
+          received_at?: string
+          sender_identifier: string
+          sender_name?: string | null
+          subject?: string | null
+          updated_at?: string
+          user_id: string
+        }
+        Update: {
+          ai_confidence_score?: number | null
+          ai_reasoning?: string | null
+          ai_response?: string | null
+          ai_status?: Database["public"]["Enums"]["ai_action_status"]
+          category?: Database["public"]["Enums"]["comm_category"]
+          channel?: Database["public"]["Enums"]["comm_channel"]
+          content?: string
+          created_at?: string
+          human_response?: string | null
+          human_reviewed_at?: string | null
+          id?: string
+          is_archived?: boolean | null
+          is_read?: boolean | null
+          metadata?: Json | null
+          received_at?: string
+          sender_identifier?: string
+          sender_name?: string | null
+          subject?: string | null
+          updated_at?: string
+          user_id?: string
+        }
+        Relationships: []
+      }
+      assistant_contacts: {
+        Row: {
+          ai_summary: string | null
+          company: string | null
+          created_at: string
+          email: string | null
+          facebook: string | null
+          full_name: string
+          id: string
+          importance_level: number | null
+          instagram: string | null
+          last_contact_at: string | null
+          linkedin: string | null
+          notes: string | null
+          phone: string | null
+          relationship: string | null
+          role: string | null
+          updated_at: string
+          user_id: string
+          whatsapp: string | null
+        }
+        Insert: {
+          ai_summary?: string | null
+          company?: string | null
+          created_at?: string
+          email?: string | null
+          facebook?: string | null
+          full_name: string
+          id?: string
+          importance_level?: number | null
+          instagram?: string | null
+          last_contact_at?: string | null
+          linkedin?: string | null
+          notes?: string | null
+          phone?: string | null
+          relationship?: string | null
+          role?: string | null
+          updated_at?: string
+          user_id: string
+          whatsapp?: string | null
+        }
+        Update: {
+          ai_summary?: string | null
+          company?: string | null
+          created_at?: string
+          email?: string | null
+          facebook?: string | null
+          full_name?: string
+          id?: string
+          importance_level?: number | null
+          instagram?: string | null
+          last_contact_at?: string | null
+          linkedin?: string | null
+          notes?: string | null
+          phone?: string | null
+          relationship?: string | null
+          role?: string | null
+          updated_at?: string
+          user_id?: string
+          whatsapp?: string | null
+        }
+        Relationships: []
+      }
+      assistant_ignore_rules: {
+        Row: {
+          action: string
+          created_at: string
+          id: string
+          is_active: boolean | null
+          match_count: number | null
+          rule_name: string
+          rule_type: string
+          rule_value: string
+          target_category: Database["public"]["Enums"]["comm_category"] | null
+          user_id: string
+        }
+        Insert: {
+          action?: string
+          created_at?: string
+          id?: string
+          is_active?: boolean | null
+          match_count?: number | null
+          rule_name: string
+          rule_type: string
+          rule_value: string
+          target_category?: Database["public"]["Enums"]["comm_category"] | null
+          user_id: string
+        }
+        Update: {
+          action?: string
+          created_at?: string
+          id?: string
+          is_active?: boolean | null
+          match_count?: number | null
+          rule_name?: string
+          rule_type?: string
+          rule_value?: string
+          target_category?: Database["public"]["Enums"]["comm_category"] | null
+          user_id?: string
+        }
+        Relationships: []
+      }
+      assistant_integrations: {
+        Row: {
+          channel: Database["public"]["Enums"]["comm_channel"]
+          config: Json | null
+          created_at: string
+          error_message: string | null
+          id: string
+          is_active: boolean | null
+          last_sync_at: string | null
+          sync_status: string | null
+          updated_at: string
+          user_id: string
+        }
+        Insert: {
+          channel: Database["public"]["Enums"]["comm_channel"]
+          config?: Json | null
+          created_at?: string
+          error_message?: string | null
+          id?: string
+          is_active?: boolean | null
+          last_sync_at?: string | null
+          sync_status?: string | null
+          updated_at?: string
+          user_id: string
+        }
+        Update: {
+          channel?: Database["public"]["Enums"]["comm_channel"]
+          config?: Json | null
+          created_at?: string
+          error_message?: string | null
+          id?: string
+          is_active?: boolean | null
+          last_sync_at?: string | null
+          sync_status?: string | null
+          updated_at?: string
+          user_id?: string
+        }
+        Relationships: []
+      }
+      assistant_learned_responses: {
+        Row: {
+          created_at: string
+          id: string
+          is_active: boolean | null
+          is_auto_respond: boolean | null
+          last_used_at: string | null
+          priority: number | null
+          response_template: string
+          trigger_category: Database["public"]["Enums"]["comm_category"] | null
+          trigger_channel: Database["public"]["Enums"]["comm_channel"] | null
+          trigger_keywords: string[]
+          updated_at: string
+          use_count: number | null
+          user_id: string
+        }
+        Insert: {
+          created_at?: string
+          id?: string
+          is_active?: boolean | null
+          is_auto_respond?: boolean | null
+          last_used_at?: string | null
+          priority?: number | null
+          response_template: string
+          trigger_category?: Database["public"]["Enums"]["comm_category"] | null
+          trigger_channel?: Database["public"]["Enums"]["comm_channel"] | null
+          trigger_keywords: string[]
+          updated_at?: string
+          use_count?: number | null
+          user_id: string
+        }
+        Update: {
+          created_at?: string
+          id?: string
+          is_active?: boolean | null
+          is_auto_respond?: boolean | null
+          last_used_at?: string | null
+          priority?: number | null
+          response_template?: string
+          trigger_category?: Database["public"]["Enums"]["comm_category"] | null
+          trigger_channel?: Database["public"]["Enums"]["comm_channel"] | null
+          trigger_keywords?: string[]
+          updated_at?: string
+          use_count?: number | null
+          user_id?: string
+        }
+        Relationships: []
+      }
+      assistant_tasks: {
+        Row: {
+          ai_created: boolean | null
+          assigned_to_contact_id: string | null
+          completed_at: string | null
+          created_at: string
+          description: string | null
+          due_date: string | null
+          id: string
+          priority: string | null
+          source_communication_id: string | null
+          status: string | null
+          title: string
+          updated_at: string
+          user_id: string
+        }
+        Insert: {
+          ai_created?: boolean | null
+          assigned_to_contact_id?: string | null
+          completed_at?: string | null
+          created_at?: string
+          description?: string | null
+          due_date?: string | null
+          id?: string
+          priority?: string | null
+          source_communication_id?: string | null
+          status?: string | null
+          title: string
+          updated_at?: string
+          user_id: string
+        }
+        Update: {
+          ai_created?: boolean | null
+          assigned_to_contact_id?: string | null
+          completed_at?: string | null
+          created_at?: string
+          description?: string | null
+          due_date?: string | null
+          id?: string
+          priority?: string | null
+          source_communication_id?: string | null
+          status?: string | null
+          title?: string
+          updated_at?: string
+          user_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "assistant_tasks_assigned_to_contact_id_fkey"
+            columns: ["assigned_to_contact_id"]
+            isOneToOne: false
+            referencedRelation: "assistant_contacts"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "assistant_tasks_source_communication_id_fkey"
+            columns: ["source_communication_id"]
+            isOneToOne: false
+            referencedRelation: "assistant_communications"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       audit_logs: {
         Row: {
           action_type: Database["public"]["Enums"]["audit_action_type"]
@@ -3655,6 +4030,12 @@ export type Database = {
       }
     }
     Enums: {
+      ai_action_status:
+        | "pending"
+        | "auto_responded"
+        | "flagged_for_review"
+        | "human_responded"
+        | "ignored"
       app_role: "admin" | "user" | "owner"
       audit_action_type:
         | "create"
@@ -3688,6 +4069,20 @@ export type Database = {
         | "call"
         | "meeting"
         | "other"
+      comm_category:
+        | "important"
+        | "routine"
+        | "recruitment"
+        | "flagged"
+        | "spam"
+      comm_channel:
+        | "email"
+        | "whatsapp"
+        | "instagram"
+        | "facebook"
+        | "linkedin"
+        | "phone"
+        | "sms"
       crm_activity_type:
         | "call"
         | "whatsapp_click"
@@ -3853,6 +4248,13 @@ export type CompositeTypes<
 export const Constants = {
   public: {
     Enums: {
+      ai_action_status: [
+        "pending",
+        "auto_responded",
+        "flagged_for_review",
+        "human_responded",
+        "ignored",
+      ],
       app_role: ["admin", "user", "owner"],
       audit_action_type: [
         "create",
@@ -3888,6 +4290,16 @@ export const Constants = {
         "call",
         "meeting",
         "other",
+      ],
+      comm_category: ["important", "routine", "recruitment", "flagged", "spam"],
+      comm_channel: [
+        "email",
+        "whatsapp",
+        "instagram",
+        "facebook",
+        "linkedin",
+        "phone",
+        "sms",
       ],
       crm_activity_type: [
         "call",
