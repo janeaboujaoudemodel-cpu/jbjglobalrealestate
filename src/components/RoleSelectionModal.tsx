@@ -6,8 +6,7 @@ import { Button } from "@/components/ui/button";
 import { Checkbox } from "@/components/ui/checkbox";
 import { 
   Briefcase, 
-  Users, 
-  UserCheck, 
+  TrendingUp, 
   Eye, 
   ArrowRight, 
   Shield,
@@ -15,7 +14,11 @@ import {
   Sparkles,
   GraduationCap,
   Brain,
-  Award
+  Award,
+  CheckCircle,
+  BookOpen,
+  Settings,
+  Home
 } from "lucide-react";
 import { JJLogoImage } from "./JJLogoImage";
 import { supabase } from "@/integrations/supabase/client";
@@ -24,7 +27,7 @@ import { toast } from "sonner";
 
 const ROLE_SELECTION_KEY = "jj_role_selected";
 
-type VisitorRole = 'broker' | 'referral_partner' | 'client' | 'visitor';
+type VisitorRole = 'broker' | 'investor' | 'visitor';
 
 interface RoleOption {
   id: VisitorRole;
@@ -35,6 +38,8 @@ interface RoleOption {
   bgGradient: string;
   benefits: string[];
   showWarning?: boolean;
+  welcomeTitle: string;
+  welcomeMessage: string;
 }
 
 const ROLES: RoleOption[] = [
@@ -46,54 +51,49 @@ const ROLES: RoleOption[] = [
     color: 'text-gold',
     bgGradient: 'from-gold/20 to-amber-500/10',
     benefits: [
-      '3 AI Tools (Unlimited)',
-      'Educational Courses',
+      'AI-Powered Tools (Unlimited)',
+      'Educational Courses & Certification',
       'HR Onboarding Portal',
       'Developer Briefings',
-      'CRM Access'
+      'CRM Access',
+      'Referral Program Access'
     ],
-    showWarning: true
+    showWarning: true,
+    welcomeTitle: 'Welcome to the Broker Circle!',
+    welcomeMessage: 'Greetings from JJ Global! You now have access to our exclusive broker tools, training programs, and referral network.'
   },
   {
-    id: 'referral_partner',
-    title: 'Referral Partner',
-    subtitle: 'Earn referral commissions',
-    icon: Users,
-    color: 'text-purple-500',
-    bgGradient: 'from-purple-500/20 to-purple-600/10',
-    benefits: [
-      'Partner Dashboard',
-      'Referral Tracking',
-      'Commission Reports',
-      'Marketing Materials'
-    ]
-  },
-  {
-    id: 'client',
-    title: 'Property Buyer/Investor',
-    subtitle: 'Looking to buy or invest',
-    icon: UserCheck,
+    id: 'investor',
+    title: 'Buyer / Investor',
+    subtitle: 'Looking to buy or invest in property',
+    icon: TrendingUp,
     color: 'text-emerald-500',
     bgGradient: 'from-emerald-500/20 to-emerald-600/10',
     benefits: [
-      'Property Search',
-      'Favorites & Comparison',
-      'Market Reports',
-      'Consultation Booking'
-    ]
+      'Premium Property Search',
+      'Favorites & Comparison Tools',
+      'Market Reports & Insights',
+      'ROI Calculator',
+      'Direct Consultation Booking',
+      'Referral Program Access'
+    ],
+    welcomeTitle: 'Welcome to the Investor Circle!',
+    welcomeMessage: 'Greetings from JJ Global! As a valued investor, you have access to exclusive market insights and premium property listings.'
   },
   {
     id: 'visitor',
     title: 'Just Browsing',
-    subtitle: 'Explore our platform',
+    subtitle: 'Explore our platform first',
     icon: Eye,
     color: 'text-zinc-500',
     bgGradient: 'from-zinc-500/20 to-zinc-600/10',
     benefits: [
       'Browse Properties',
       'View Market Data',
-      'Explore Tools'
-    ]
+      'Explore Available Tools'
+    ],
+    welcomeTitle: 'Welcome to JJ Global!',
+    welcomeMessage: 'We welcome you to explore our platform. Discover Dubai\'s finest properties and our comprehensive real estate services.'
   }
 ];
 
@@ -101,21 +101,23 @@ interface RoleSelectionModalProps {
   onRoleSelected?: (role: VisitorRole) => void;
 }
 
+type ModalStep = 'selection' | 'broker-warning' | 'welcome';
+
 const RoleSelectionModal = ({ onRoleSelected }: RoleSelectionModalProps) => {
   const [isOpen, setIsOpen] = useState(false);
   const [selectedRole, setSelectedRole] = useState<VisitorRole | null>(null);
-  const [showBrokerWarning, setShowBrokerWarning] = useState(false);
+  const [currentStep, setCurrentStep] = useState<ModalStep>('selection');
   const [warningCountdown, setWarningCountdown] = useState(5);
   const [canDismissWarning, setCanDismissWarning] = useState(false);
   const [confirmedAccurate, setConfirmedAccurate] = useState(false);
   const [isSaving, setIsSaving] = useState(false);
   const { user } = useAuth();
 
+  const selectedRoleData = ROLES.find(r => r.id === selectedRole);
+
   useEffect(() => {
-    // Check if role already selected
     const hasSelectedRole = localStorage.getItem(ROLE_SELECTION_KEY);
     if (!hasSelectedRole) {
-      // Show after welcome modal closes
       const timer = setTimeout(() => {
         setIsOpen(true);
       }, 1000);
@@ -124,7 +126,7 @@ const RoleSelectionModal = ({ onRoleSelected }: RoleSelectionModalProps) => {
   }, []);
 
   useEffect(() => {
-    if (showBrokerWarning && warningCountdown > 0) {
+    if (currentStep === 'broker-warning' && warningCountdown > 0) {
       const timer = setTimeout(() => {
         setWarningCountdown(prev => prev - 1);
       }, 1000);
@@ -132,12 +134,12 @@ const RoleSelectionModal = ({ onRoleSelected }: RoleSelectionModalProps) => {
     } else if (warningCountdown === 0) {
       setCanDismissWarning(true);
     }
-  }, [showBrokerWarning, warningCountdown]);
+  }, [currentStep, warningCountdown]);
 
   const handleRoleSelect = (role: VisitorRole) => {
     setSelectedRole(role);
     if (role === 'broker') {
-      setShowBrokerWarning(true);
+      setCurrentStep('broker-warning');
       setWarningCountdown(5);
       setCanDismissWarning(false);
     }
@@ -148,24 +150,31 @@ const RoleSelectionModal = ({ onRoleSelected }: RoleSelectionModalProps) => {
     
     setIsSaving(true);
     try {
-      // Generate session ID for guests
       const sessionId = !user ? `guest_${Date.now()}_${Math.random().toString(36).substr(2, 9)}` : null;
       
-      // Save to database
+      // Use insert with proper typing
+      const insertData: {
+        user_id?: string;
+        session_id?: string;
+        selected_role: string;
+        confirmed_accurate: boolean;
+      } = {
+        selected_role: selectedRole,
+        confirmed_accurate: confirmedAccurate
+      };
+      
+      if (user?.id) {
+        insertData.user_id = user.id;
+      } else if (sessionId) {
+        insertData.session_id = sessionId;
+      }
+
       const { error } = await supabase
         .from('user_role_selections')
-        .upsert({
-          user_id: user?.id || null,
-          session_id: sessionId,
-          selected_role: selectedRole,
-          confirmed_accurate: confirmedAccurate
-        }, {
-          onConflict: user?.id ? 'user_id' : 'session_id'
-        });
+        .insert(insertData as any);
 
       if (error) {
         console.error('Error saving role:', error);
-        // Continue anyway for guests
       }
 
       localStorage.setItem(ROLE_SELECTION_KEY, selectedRole);
@@ -173,12 +182,8 @@ const RoleSelectionModal = ({ onRoleSelected }: RoleSelectionModalProps) => {
         localStorage.setItem('jj_session_id', sessionId);
       }
       
-      setIsOpen(false);
-      onRoleSelected?.(selectedRole);
-      
-      if (selectedRole === 'broker') {
-        toast.success('Welcome to the Broker Circle! Complete your onboarding to unlock all tools.');
-      }
+      // Show welcome screen
+      setCurrentStep('welcome');
     } catch (err) {
       console.error('Error:', err);
     } finally {
@@ -187,10 +192,21 @@ const RoleSelectionModal = ({ onRoleSelected }: RoleSelectionModalProps) => {
   };
 
   const handleBackFromWarning = () => {
-    setShowBrokerWarning(false);
+    setCurrentStep('selection');
     setSelectedRole(null);
     setWarningCountdown(5);
     setCanDismissWarning(false);
+  };
+
+  const handleCloseWelcome = () => {
+    setIsOpen(false);
+    onRoleSelected?.(selectedRole!);
+    
+    if (selectedRole === 'broker') {
+      toast.success('Complete your onboarding to unlock all broker tools!');
+    } else if (selectedRole === 'investor') {
+      toast.success('Explore our exclusive investment opportunities!');
+    }
   };
 
   if (!isOpen) return null;
@@ -206,19 +222,17 @@ const RoleSelectionModal = ({ onRoleSelected }: RoleSelectionModalProps) => {
           <DialogTitle>Select Your Role</DialogTitle>
         </VisuallyHidden.Root>
 
-        {/* Gold accent */}
         <div className="absolute top-0 left-0 right-0 h-1 bg-gradient-to-r from-transparent via-gold to-transparent" />
 
         <div className="relative p-8">
           <AnimatePresence mode="wait">
-            {!showBrokerWarning ? (
+            {currentStep === 'selection' && (
               <motion.div
                 key="role-selection"
                 initial={{ opacity: 0, y: 10 }}
                 animate={{ opacity: 1, y: 0 }}
                 exit={{ opacity: 0, y: -10 }}
               >
-                {/* Header */}
                 <div className="text-center mb-8">
                   <div className="flex justify-center mb-4">
                     <JJLogoImage variant="light" size="md" />
@@ -231,8 +245,7 @@ const RoleSelectionModal = ({ onRoleSelected }: RoleSelectionModalProps) => {
                   </p>
                 </div>
 
-                {/* Role Grid */}
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-6">
+                <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mb-6">
                   {ROLES.map((role) => {
                     const Icon = role.icon;
                     const isSelected = selectedRole === role.id;
@@ -249,7 +262,6 @@ const RoleSelectionModal = ({ onRoleSelected }: RoleSelectionModalProps) => {
                         whileHover={{ scale: 1.02 }}
                         whileTap={{ scale: 0.98 }}
                       >
-                        {/* Selection indicator */}
                         {isSelected && (
                           <div className="absolute top-3 right-3 w-6 h-6 bg-gold rounded-full flex items-center justify-center">
                             <svg className="w-4 h-4 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor">
@@ -262,15 +274,14 @@ const RoleSelectionModal = ({ onRoleSelected }: RoleSelectionModalProps) => {
                           <Icon className={`w-6 h-6 ${role.color}`} />
                         </div>
 
-                        <h3 className="font-semibold text-black text-lg mb-1">{role.title}</h3>
-                        <p className="text-gray-500 text-sm mb-3">{role.subtitle}</p>
+                        <h3 className="font-semibold text-black text-base mb-1">{role.title}</h3>
+                        <p className="text-gray-500 text-xs mb-3">{role.subtitle}</p>
 
-                        {/* Benefits */}
                         <div className="space-y-1">
                           {role.benefits.slice(0, 3).map((benefit, idx) => (
                             <div key={idx} className="flex items-center gap-2 text-xs text-gray-600">
-                              <Sparkles className="w-3 h-3 text-gold" />
-                              {benefit}
+                              <Sparkles className="w-3 h-3 text-gold flex-shrink-0" />
+                              <span className="truncate">{benefit}</span>
                             </div>
                           ))}
                           {role.benefits.length > 3 && (
@@ -282,7 +293,6 @@ const RoleSelectionModal = ({ onRoleSelected }: RoleSelectionModalProps) => {
                   })}
                 </div>
 
-                {/* Confirm Button */}
                 <Button
                   onClick={handleConfirmRole}
                   disabled={!selectedRole || isSaving}
@@ -292,7 +302,9 @@ const RoleSelectionModal = ({ onRoleSelected }: RoleSelectionModalProps) => {
                   <ArrowRight className="w-5 h-5 ml-2 group-hover:translate-x-1 transition-transform" />
                 </Button>
               </motion.div>
-            ) : (
+            )}
+            
+            {currentStep === 'broker-warning' && (
               <motion.div
                 key="broker-warning"
                 initial={{ opacity: 0, y: 10 }}
@@ -300,7 +312,6 @@ const RoleSelectionModal = ({ onRoleSelected }: RoleSelectionModalProps) => {
                 exit={{ opacity: 0, y: -10 }}
                 className="text-center"
               >
-                {/* Warning Icon */}
                 <div className="flex justify-center mb-6">
                   <div className="w-20 h-20 rounded-full bg-gradient-to-br from-amber-500/20 to-orange-500/10 border-2 border-amber-500/30 flex items-center justify-center">
                     <AlertTriangle className="w-10 h-10 text-amber-500" />
@@ -311,7 +322,6 @@ const RoleSelectionModal = ({ onRoleSelected }: RoleSelectionModalProps) => {
                   Important Notice for Brokers
                 </h2>
 
-                {/* Countdown or Continue */}
                 {!canDismissWarning && (
                   <div className="mb-6">
                     <div className="inline-flex items-center gap-2 px-4 py-2 bg-amber-100 text-amber-800 rounded-full text-sm font-medium">
@@ -321,7 +331,6 @@ const RoleSelectionModal = ({ onRoleSelected }: RoleSelectionModalProps) => {
                   </div>
                 )}
 
-                {/* Warning Content */}
                 <div className="bg-gray-50 border border-gray-200 rounded-xl p-6 mb-6 text-left">
                   <p className="text-gray-700 mb-4">
                     <strong className="text-black">Select your role honestly.</strong> Your selection affects the features and tools you'll access:
@@ -338,18 +347,17 @@ const RoleSelectionModal = ({ onRoleSelected }: RoleSelectionModalProps) => {
                     </li>
                     <li className="flex items-start gap-3">
                       <Award className="w-5 h-5 text-gold flex-shrink-0 mt-0.5" />
-                      <span><strong>Clients</strong> see buyer-focused features and consultation options</span>
+                      <span><strong>Investors</strong> see buyer-focused features and consultation options</span>
                     </li>
                   </ul>
 
                   <div className="mt-4 p-3 bg-amber-50 border border-amber-200 rounded-lg">
                     <p className="text-amber-800 text-sm font-medium">
-                      ⚠️ Selecting "Broker" when you're a client will limit your access to client features.
+                      ⚠️ Selecting "Broker" when you're an investor will limit your access to investor features.
                     </p>
                   </div>
                 </div>
 
-                {/* Confirmation Checkbox */}
                 <div className="flex items-start gap-3 mb-6 text-left">
                   <Checkbox
                     id="confirm-accurate"
@@ -362,7 +370,6 @@ const RoleSelectionModal = ({ onRoleSelected }: RoleSelectionModalProps) => {
                   </label>
                 </div>
 
-                {/* Actions */}
                 <div className="flex gap-3">
                   <Button
                     onClick={handleBackFromWarning}
@@ -380,6 +387,104 @@ const RoleSelectionModal = ({ onRoleSelected }: RoleSelectionModalProps) => {
                     <ArrowRight className="w-5 h-5 ml-2" />
                   </Button>
                 </div>
+              </motion.div>
+            )}
+
+            {currentStep === 'welcome' && selectedRoleData && (
+              <motion.div
+                key="welcome"
+                initial={{ opacity: 0, scale: 0.95 }}
+                animate={{ opacity: 1, scale: 1 }}
+                exit={{ opacity: 0, scale: 0.95 }}
+                className="text-center"
+              >
+                <div className="flex justify-center mb-6">
+                  <div className={`w-24 h-24 rounded-full bg-gradient-to-br ${selectedRoleData.bgGradient} border-2 border-gold/30 flex items-center justify-center`}>
+                    <CheckCircle className="w-12 h-12 text-gold" />
+                  </div>
+                </div>
+
+                <h2 className="text-2xl md:text-3xl font-bold text-black mb-3" style={{ fontFamily: "Poppins, sans-serif" }}>
+                  {selectedRoleData.welcomeTitle}
+                </h2>
+
+                <p className="text-gray-600 mb-8 max-w-md mx-auto">
+                  {selectedRoleData.welcomeMessage}
+                </p>
+
+                {/* Quick Start Guide */}
+                <div className="bg-gray-50 border border-gray-200 rounded-xl p-6 mb-6 text-left">
+                  <h3 className="font-semibold text-black mb-4 flex items-center gap-2">
+                    <BookOpen className="w-5 h-5 text-gold" />
+                    Quick Start Guide
+                  </h3>
+                  
+                  <div className="space-y-3">
+                    {selectedRole === 'broker' && (
+                      <>
+                        <div className="flex items-center gap-3 text-sm text-gray-600">
+                          <div className="w-6 h-6 rounded-full bg-gold/20 flex items-center justify-center text-xs font-bold text-gold">1</div>
+                          <span>Complete your <strong>Onboarding</strong> to access all tools</span>
+                        </div>
+                        <div className="flex items-center gap-3 text-sm text-gray-600">
+                          <div className="w-6 h-6 rounded-full bg-gold/20 flex items-center justify-center text-xs font-bold text-gold">2</div>
+                          <span>Explore <strong>AI Tools</strong> in the AI Hub</span>
+                        </div>
+                        <div className="flex items-center gap-3 text-sm text-gray-600">
+                          <div className="w-6 h-6 rounded-full bg-gold/20 flex items-center justify-center text-xs font-bold text-gold">3</div>
+                          <span>Join the <strong>Referral Program</strong> to earn commissions</span>
+                        </div>
+                      </>
+                    )}
+                    {selectedRole === 'investor' && (
+                      <>
+                        <div className="flex items-center gap-3 text-sm text-gray-600">
+                          <div className="w-6 h-6 rounded-full bg-emerald-500/20 flex items-center justify-center text-xs font-bold text-emerald-600">1</div>
+                          <span>Browse <strong>Off-Plan Properties</strong> in Properties</span>
+                        </div>
+                        <div className="flex items-center gap-3 text-sm text-gray-600">
+                          <div className="w-6 h-6 rounded-full bg-emerald-500/20 flex items-center justify-center text-xs font-bold text-emerald-600">2</div>
+                          <span>Use <strong>Compare</strong> to shortlist your favorites</span>
+                        </div>
+                        <div className="flex items-center gap-3 text-sm text-gray-600">
+                          <div className="w-6 h-6 rounded-full bg-emerald-500/20 flex items-center justify-center text-xs font-bold text-emerald-600">3</div>
+                          <span>Book a <strong>Free Consultation</strong> with our experts</span>
+                        </div>
+                      </>
+                    )}
+                    {selectedRole === 'visitor' && (
+                      <>
+                        <div className="flex items-center gap-3 text-sm text-gray-600">
+                          <div className="w-6 h-6 rounded-full bg-zinc-500/20 flex items-center justify-center text-xs font-bold text-zinc-600">1</div>
+                          <span>Explore <strong>Properties</strong> and market data</span>
+                        </div>
+                        <div className="flex items-center gap-3 text-sm text-gray-600">
+                          <div className="w-6 h-6 rounded-full bg-zinc-500/20 flex items-center justify-center text-xs font-bold text-zinc-600">2</div>
+                          <span>Learn about <strong>Dubai Real Estate</strong></span>
+                        </div>
+                        <div className="flex items-center gap-3 text-sm text-gray-600">
+                          <div className="w-6 h-6 rounded-full bg-zinc-500/20 flex items-center justify-center text-xs font-bold text-zinc-600">3</div>
+                          <span>Upgrade anytime from the menu</span>
+                        </div>
+                      </>
+                    )}
+                  </div>
+                </div>
+
+                {/* Change Role Hint */}
+                <div className="flex items-center justify-center gap-2 text-sm text-gray-500 mb-6">
+                  <Settings className="w-4 h-4" />
+                  <span>Made a mistake? Change your role anytime from the <strong>Menu → Settings</strong></span>
+                </div>
+
+                <Button
+                  onClick={handleCloseWelcome}
+                  className="w-full py-6 bg-black hover:bg-zinc-900 text-gold font-semibold text-base shadow-xl rounded-xl group border border-gold/20"
+                >
+                  <Home className="w-5 h-5 mr-2" />
+                  Start Exploring
+                  <ArrowRight className="w-5 h-5 ml-2 group-hover:translate-x-1 transition-transform" />
+                </Button>
               </motion.div>
             )}
           </AnimatePresence>
