@@ -66,6 +66,7 @@ import AdminOnboarding from "./pages/AdminOnboarding";
 import VerifyCertificate from "./pages/VerifyCertificate";
 import PropertyMap from "./pages/PropertyMap";
 import AdminDevelopers from "./pages/AdminDevelopers";
+import BrokerAccount from "./pages/BrokerAccount";
 
 const queryClient = new QueryClient();
 
@@ -142,6 +143,7 @@ const App = () => (
                     <Route path="/verify-certificate/:token" element={<VerifyCertificate />} />
                     <Route path="/map" element={<PropertyMap />} />
                     <Route path="/admin/developers" element={<AdminDevelopers />} />
+                    <Route path="/my-account" element={<BrokerAccount />} />
                     <Route path="*" element={<NotFound />} />
                     </Routes>
                   </MainLayout>

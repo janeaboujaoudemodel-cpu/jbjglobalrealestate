@@ -134,6 +134,142 @@ export type Database = {
         }
         Relationships: []
       }
+      broker_activity_stats: {
+        Row: {
+          calls_made: number | null
+          chats_sent: number | null
+          created_at: string | null
+          date: string
+          deals_closed: number | null
+          emails_sent: number | null
+          id: string
+          leads_contacted: number | null
+          points_earned: number | null
+          updated_at: string | null
+          user_id: string
+          visits_completed: number | null
+        }
+        Insert: {
+          calls_made?: number | null
+          chats_sent?: number | null
+          created_at?: string | null
+          date?: string
+          deals_closed?: number | null
+          emails_sent?: number | null
+          id?: string
+          leads_contacted?: number | null
+          points_earned?: number | null
+          updated_at?: string | null
+          user_id: string
+          visits_completed?: number | null
+        }
+        Update: {
+          calls_made?: number | null
+          chats_sent?: number | null
+          created_at?: string | null
+          date?: string
+          deals_closed?: number | null
+          emails_sent?: number | null
+          id?: string
+          leads_contacted?: number | null
+          points_earned?: number | null
+          updated_at?: string | null
+          user_id?: string
+          visits_completed?: number | null
+        }
+        Relationships: []
+      }
+      broker_call_logs: {
+        Row: {
+          call_status: string | null
+          call_type: string | null
+          created_at: string | null
+          duration_seconds: number | null
+          id: string
+          lead_id: string | null
+          notes: string | null
+          phone_number: string
+          recording_url: string | null
+          user_id: string
+        }
+        Insert: {
+          call_status?: string | null
+          call_type?: string | null
+          created_at?: string | null
+          duration_seconds?: number | null
+          id?: string
+          lead_id?: string | null
+          notes?: string | null
+          phone_number: string
+          recording_url?: string | null
+          user_id: string
+        }
+        Update: {
+          call_status?: string | null
+          call_type?: string | null
+          created_at?: string | null
+          duration_seconds?: number | null
+          id?: string
+          lead_id?: string | null
+          notes?: string | null
+          phone_number?: string
+          recording_url?: string | null
+          user_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "broker_call_logs_lead_id_fkey"
+            columns: ["lead_id"]
+            isOneToOne: false
+            referencedRelation: "crm_leads"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      broker_chat_logs: {
+        Row: {
+          contact_number: string | null
+          created_at: string | null
+          id: string
+          last_message_at: string | null
+          lead_id: string | null
+          message_count: number | null
+          notes: string | null
+          platform: string | null
+          user_id: string
+        }
+        Insert: {
+          contact_number?: string | null
+          created_at?: string | null
+          id?: string
+          last_message_at?: string | null
+          lead_id?: string | null
+          message_count?: number | null
+          notes?: string | null
+          platform?: string | null
+          user_id: string
+        }
+        Update: {
+          contact_number?: string | null
+          created_at?: string | null
+          id?: string
+          last_message_at?: string | null
+          lead_id?: string | null
+          message_count?: number | null
+          notes?: string | null
+          platform?: string | null
+          user_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "broker_chat_logs_lead_id_fkey"
+            columns: ["lead_id"]
+            isOneToOne: false
+            referencedRelation: "crm_leads"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       broker_contracts: {
         Row: {
           contract_content: string | null
@@ -2621,6 +2757,33 @@ export type Database = {
         }
         Relationships: []
       }
+      rate_limit_records: {
+        Row: {
+          action_type: string
+          created_at: string | null
+          id: string
+          identifier: string
+          request_count: number | null
+          window_start: string | null
+        }
+        Insert: {
+          action_type: string
+          created_at?: string | null
+          id?: string
+          identifier: string
+          request_count?: number | null
+          window_start?: string | null
+        }
+        Update: {
+          action_type?: string
+          created_at?: string | null
+          id?: string
+          identifier?: string
+          request_count?: number | null
+          window_start?: string | null
+        }
+        Relationships: []
+      }
       rewards_catalog: {
         Row: {
           created_at: string | null
@@ -2654,6 +2817,51 @@ export type Database = {
           points_required?: number
           quantity_available?: number | null
           reward_type?: Database["public"]["Enums"]["reward_type"] | null
+        }
+        Relationships: []
+      }
+      security_access_logs: {
+        Row: {
+          action_type: string
+          created_at: string | null
+          failure_reason: string | null
+          id: string
+          ip_address: string | null
+          metadata: Json | null
+          resource_id: string | null
+          resource_type: string
+          success: boolean | null
+          user_agent: string | null
+          user_email: string | null
+          user_id: string | null
+        }
+        Insert: {
+          action_type: string
+          created_at?: string | null
+          failure_reason?: string | null
+          id?: string
+          ip_address?: string | null
+          metadata?: Json | null
+          resource_id?: string | null
+          resource_type: string
+          success?: boolean | null
+          user_agent?: string | null
+          user_email?: string | null
+          user_id?: string | null
+        }
+        Update: {
+          action_type?: string
+          created_at?: string | null
+          failure_reason?: string | null
+          id?: string
+          ip_address?: string | null
+          metadata?: Json | null
+          resource_id?: string | null
+          resource_type?: string
+          success?: boolean | null
+          user_agent?: string | null
+          user_email?: string | null
+          user_id?: string | null
         }
         Relationships: []
       }
@@ -2990,6 +3198,16 @@ export type Database = {
         Args: { _lead_id: string; _user_id: string }
         Returns: boolean
       }
+      check_rate_limit: {
+        Args: {
+          p_action_type: string
+          p_identifier: string
+          p_max_requests?: number
+          p_window_minutes?: number
+        }
+        Returns: boolean
+      }
+      cleanup_rate_limit_records: { Args: never; Returns: number }
       get_hr_role: {
         Args: { _user_id: string }
         Returns: Database["public"]["Enums"]["hr_role"]
@@ -3024,6 +3242,17 @@ export type Database = {
       is_team_member: {
         Args: { _team_id: string; _user_id: string }
         Returns: boolean
+      }
+      log_security_event: {
+        Args: {
+          p_action_type: string
+          p_failure_reason?: string
+          p_metadata?: Json
+          p_resource_id?: string
+          p_resource_type: string
+          p_success?: boolean
+        }
+        Returns: string
       }
     }
     Enums: {
