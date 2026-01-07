@@ -59,3 +59,45 @@ verify_jwt = false
 
 [functions.newsletter-subscribe]
 verify_jwt = false
+
+[functions.ai-virtual-staging]
+verify_jwt = false
+
+[functions.ai-price-predictor]
+verify_jwt = false
+
+[functions.ai-neighborhood-insights]
+verify_jwt = false
+
+[functions.ai-lead-qualification]
+verify_jwt = false
+
+[functions.ai-followup-scheduler]
+verify_jwt = false
+
+[functions.ai-objection-handler]
+verify_jwt = false
+
+[functions.ai-market-report]
+verify_jwt = false
+
+[functions.ai-competitor-analysis]
+verify_jwt = false
+
+[functions.ai-roi-calculator]
+verify_jwt = false
+
+[functions.ai-meeting-summarizer]
+verify_jwt = false
+
+[functions.ai-translation-hub]
+verify_jwt = false
+
+[functions.ai-video-tour-script]
+verify_jwt = false
+
+[functions.ai-contract-reviewer]
+verify_jwt = false
+
+[functions.ai-document-generator]
+verify_jwt = false
