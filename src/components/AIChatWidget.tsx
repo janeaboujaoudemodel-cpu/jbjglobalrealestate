@@ -30,9 +30,10 @@ import ChatAgentJoining from './chat/ChatAgentJoining';
 interface AIChatWidgetProps {
   isCollapsed: boolean;
   onToggleCollapse: () => void;
+  showAttentionPulse?: boolean;
 }
 
-const AIChatWidget = ({ isCollapsed, onToggleCollapse }: AIChatWidgetProps) => {
+const AIChatWidget = ({ isCollapsed, onToggleCollapse, showAttentionPulse = false }: AIChatWidgetProps) => {
   const { isRTL } = useLanguage();
   
   // Get a consistent agent for this session
@@ -467,7 +468,7 @@ const AIChatWidget = ({ isCollapsed, onToggleCollapse }: AIChatWidgetProps) => {
 
   // Collapsed state
   if (isCollapsed) {
-    return <CollapsedChatButton onToggle={onToggleCollapse} />;
+    return <CollapsedChatButton onToggle={onToggleCollapse} showAttentionPulse={showAttentionPulse} />;
   }
 
   return (
