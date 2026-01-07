@@ -1,6 +1,7 @@
 import { serve } from "https://deno.land/std@0.190.0/http/server.ts";
 import { createClient } from "https://esm.sh/@supabase/supabase-js@2.49.1";
 import { Resend } from "https://esm.sh/resend@2.0.0";
+
 const corsHeaders = {
   "Access-Control-Allow-Origin": "*",
   "Access-Control-Allow-Headers": "authorization, x-client-info, apikey, content-type",
@@ -25,17 +26,86 @@ const handler = async (req: Request): Promise<Response> => {
   }
 
   try {
+    // 1. VALIDATE AUTHENTICATION
+    const authHeader = req.headers.get('Authorization');
+    if (!authHeader?.startsWith('Bearer ')) {
+      console.error("Missing or invalid Authorization header");
+      return new Response(
+        JSON.stringify({ error: 'Authentication required' }),
+        { status: 401, headers: { ...corsHeaders, 'Content-Type': 'application/json' } }
+      );
+    }
+
+    const supabaseUrl = Deno.env.get("SUPABASE_URL")!;
+    const supabaseAnonKey = Deno.env.get("SUPABASE_ANON_KEY")!;
+    const supabaseServiceKey = Deno.env.get("SUPABASE_SERVICE_ROLE_KEY")!;
+
+    // Create auth client to validate token
+    const supabaseAuth = createClient(supabaseUrl, supabaseAnonKey, {
+      global: { headers: { Authorization: authHeader } }
+    });
+
+    const { data: { user }, error: authError } = await supabaseAuth.auth.getUser();
+    if (authError || !user) {
+      console.error("Invalid authentication token:", authError);
+      return new Response(
+        JSON.stringify({ error: 'Invalid authentication' }),
+        { status: 401, headers: { ...corsHeaders, 'Content-Type': 'application/json' } }
+      );
+    }
+
+    const userId = user.id;
+    console.log(`Authenticated user: ${userId}`);
+
+    // 2. VALIDATE RESEND API KEY
     const resendApiKey = Deno.env.get("RESEND_API_KEY");
     if (!resendApiKey) {
       throw new Error("RESEND_API_KEY not configured");
     }
 
     const resend = new Resend(resendApiKey);
-    const supabaseUrl = Deno.env.get("SUPABASE_URL")!;
-    const supabaseServiceKey = Deno.env.get("SUPABASE_SERVICE_ROLE_KEY")!;
-    const supabase = createClient(supabaseUrl, supabaseServiceKey);
+    const supabaseService = createClient(supabaseUrl, supabaseServiceKey);
 
     const { campaignId, subject, htmlContent, recipients }: BulkEmailRequest = await req.json();
+
+    // 3. VERIFY CAMPAIGN OWNERSHIP BEFORE PROCESSING
+    const { data: campaign, error: campaignError } = await supabaseService
+      .from("crm_email_campaigns")
+      .select("user_id, status")
+      .eq("id", campaignId)
+      .single();
+
+    if (campaignError || !campaign) {
+      console.error("Campaign not found:", campaignId);
+      return new Response(
+        JSON.stringify({ error: 'Campaign not found' }),
+        { status: 404, headers: { ...corsHeaders, 'Content-Type': 'application/json' } }
+      );
+    }
+
+    // 4. AUTHORIZATION CHECK - User must own campaign or be CRM admin
+    if (campaign.user_id !== userId) {
+      const { data: isAdmin } = await supabaseService.rpc('is_crm_admin', {
+        _user_id: userId
+      });
+
+      if (!isAdmin) {
+        console.error(`User ${userId} unauthorized to send campaign ${campaignId}`);
+        return new Response(
+          JSON.stringify({ error: 'Unauthorized to send this campaign' }),
+          { status: 403, headers: { ...corsHeaders, 'Content-Type': 'application/json' } }
+        );
+      }
+    }
+
+    // 5. VALIDATE CAMPAIGN STATUS
+    if (campaign.status !== 'draft' && campaign.status !== 'sending') {
+      console.error(`Campaign ${campaignId} has invalid status: ${campaign.status}`);
+      return new Response(
+        JSON.stringify({ error: 'Campaign cannot be sent in current status' }),
+        { status: 400, headers: { ...corsHeaders, 'Content-Type': 'application/json' } }
+      );
+    }
 
     console.log(`Starting bulk email campaign ${campaignId} to ${recipients.length} recipients`);
 
@@ -51,19 +121,19 @@ const handler = async (req: Request): Promise<Response> => {
         try {
           // Personalize content with recipient name
           const personalizedHtml = htmlContent.replace(
-            /Greetings from JJ Global Capital,/g,
+            /Greetings from JBJ Global Real Estate,/g,
             `Dear ${recipient.name?.split(' ')[0] || 'Valued Client'},`
           );
 
           const result = await resend.emails.send({
-            from: "JJ Global Capital <contact@jjglobalcapital.com>",
+            from: "JBJ Global Real Estate <contact@jbj.ae>",
             to: [recipient.email],
             subject: subject,
             html: personalizedHtml,
           });
 
           // Log recipient
-          await supabase.from("crm_campaign_recipients").insert({
+          await supabaseService.from("crm_campaign_recipients").insert({
             campaign_id: campaignId,
             lead_id: recipient.leadId,
             email: recipient.email,
@@ -72,9 +142,9 @@ const handler = async (req: Request): Promise<Response> => {
           });
 
           // Log activity
-          await supabase.from("crm_activities").insert({
+          await supabaseService.from("crm_activities").insert({
             lead_id: recipient.leadId,
-            user_id: (await supabase.from("crm_email_campaigns").select("user_id").eq("id", campaignId).single()).data?.user_id,
+            user_id: userId,
             activity_type: "email",
             metadata: { campaign_id: campaignId, subject },
           });
@@ -84,7 +154,7 @@ const handler = async (req: Request): Promise<Response> => {
         } catch (error: any) {
           console.error(`Failed to send to ${recipient.email}:`, error);
           
-          await supabase.from("crm_campaign_recipients").insert({
+          await supabaseService.from("crm_campaign_recipients").insert({
             campaign_id: campaignId,
             lead_id: recipient.leadId,
             email: recipient.email,
@@ -106,7 +176,7 @@ const handler = async (req: Request): Promise<Response> => {
     }
 
     // Update campaign status
-    await supabase
+    await supabaseService
       .from("crm_email_campaigns")
       .update({
         status: "completed",
@@ -128,7 +198,7 @@ const handler = async (req: Request): Promise<Response> => {
   } catch (error: any) {
     console.error("Bulk email error:", error);
     return new Response(
-      JSON.stringify({ error: error.message }),
+      JSON.stringify({ error: "An error occurred processing the request" }),
       {
         status: 500,
         headers: { "Content-Type": "application/json", ...corsHeaders },

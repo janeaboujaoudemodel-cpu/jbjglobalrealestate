@@ -3540,7 +3540,48 @@ export type Database = {
       }
     }
     Views: {
-      [_ in never]: never
+      broker_profiles_public: {
+        Row: {
+          bio: string | null
+          display_name: string | null
+          id: string | null
+          is_active: boolean | null
+          is_public: boolean | null
+          languages: string[] | null
+          photo_url: string | null
+          specializations: string[] | null
+          title: string | null
+          user_id: string | null
+          years_experience: number | null
+        }
+        Insert: {
+          bio?: string | null
+          display_name?: string | null
+          id?: string | null
+          is_active?: boolean | null
+          is_public?: boolean | null
+          languages?: string[] | null
+          photo_url?: string | null
+          specializations?: string[] | null
+          title?: string | null
+          user_id?: string | null
+          years_experience?: number | null
+        }
+        Update: {
+          bio?: string | null
+          display_name?: string | null
+          id?: string | null
+          is_active?: boolean | null
+          is_public?: boolean | null
+          languages?: string[] | null
+          photo_url?: string | null
+          specializations?: string[] | null
+          title?: string | null
+          user_id?: string | null
+          years_experience?: number | null
+        }
+        Relationships: []
+      }
     }
     Functions: {
       bulk_assign_leads: {
