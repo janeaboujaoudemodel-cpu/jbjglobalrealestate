@@ -4,7 +4,7 @@ import { useAuth } from "@/contexts/AuthContext";
 
 const ROLE_SELECTION_KEY = "jj_role_selected";
 
-export type VisitorRole = 'broker' | 'referral_partner' | 'client' | 'visitor' | null;
+export type VisitorRole = 'broker' | 'investor' | 'visitor' | null;
 
 export const useUserRole = () => {
   const [role, setRole] = useState<VisitorRole>(null);
@@ -48,8 +48,7 @@ export const useUserRole = () => {
   };
 
   const isBroker = role === 'broker';
-  const isClient = role === 'client';
-  const isReferral = role === 'referral_partner';
+  const isInvestor = role === 'investor';
   const isVisitor = role === 'visitor';
 
   const clearRole = () => {
@@ -61,8 +60,7 @@ export const useUserRole = () => {
     role,
     isLoading,
     isBroker,
-    isClient,
-    isReferral,
+    isInvestor,
     isVisitor,
     hasSelectedRole: role !== null,
     clearRole,
