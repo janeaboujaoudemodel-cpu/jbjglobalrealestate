@@ -9,7 +9,7 @@ import { Badge } from "@/components/ui/badge";
 import { Skeleton } from "@/components/ui/skeleton";
 import { toast } from "sonner";
 import { 
-  Users, FileText, Plus, Upload, LogOut, Shuffle
+  Users, FileText, Plus, Upload, LogOut, Shuffle, LayoutGrid, List, Zap
 } from "lucide-react";
 import CRMLeadsTable from "@/components/crm/CRMLeadsTable";
 import CRMEnhancedDashboard from "@/components/crm/CRMEnhancedDashboard";
@@ -19,6 +19,10 @@ import LeadQuickFilters from "@/components/crm/LeadQuickFilters";
 import LeadSourceFilter from "@/components/crm/LeadSourceFilter";
 import BulkAssignModal from "@/components/crm/BulkAssignModal";
 import SmartReminders from "@/components/crm/SmartReminders";
+import KanbanPipeline from "@/components/crm/KanbanPipeline";
+import ActivityTimeline from "@/components/crm/ActivityTimeline";
+import DealValueTracker from "@/components/crm/DealValueTracker";
+import AutomationRules from "@/components/crm/AutomationRules";
 
 interface CRMProfile {
   id: string;
@@ -38,6 +42,7 @@ const CRM = () => {
   const [showLeadModal, setShowLeadModal] = useState(false);
   const [showBulkAssignModal, setShowBulkAssignModal] = useState(false);
   const [refreshKey, setRefreshKey] = useState(0);
+  const [viewMode, setViewMode] = useState<"table" | "kanban">("table");
   
   // Smart filters
   const [quickFilter, setQuickFilter] = useState("all");
@@ -195,12 +200,15 @@ const CRM = () => {
       </header>
 
       <main className="max-w-7xl mx-auto px-4 py-6 space-y-6">
+        {/* Deal Value Tracker */}
+        <DealValueTracker userId={user?.id || ""} />
+
         {/* Enhanced Dashboard with Charts */}
         <CRMEnhancedDashboard userId={user?.id || ""} isAdmin={isAdmin} />
 
-        {/* Smart Reminders */}
+        {/* Smart Reminders & Automation */}
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-4">
-          <div className="lg:col-span-2">
+          <div className="lg:col-span-2 space-y-4">
             {/* Quick Filters */}
             <div className="space-y-3">
               <h3 className="text-sm font-semibold text-white uppercase tracking-wide">Quick Filters</h3>
@@ -210,8 +218,13 @@ const CRM = () => {
                 counts={statusCounts}
               />
             </div>
+            {/* Activity Timeline */}
+            <ActivityTimeline userId={user?.id || ""} limit={10} />
           </div>
-          <SmartReminders userId={user?.id || ""} limit={4} />
+          <div className="space-y-4">
+            <SmartReminders userId={user?.id || ""} limit={4} />
+            <AutomationRules userId={user?.id || ""} />
+          </div>
         </div>
 
         {/* Action Buttons */}
@@ -234,12 +247,36 @@ const CRM = () => {
               Bulk Assign Leads
             </Button>
           )}
-          <div className="ml-auto">
+          <div className="ml-auto flex items-center gap-2">
+            <div className="flex border border-border rounded-lg overflow-hidden">
+              <Button
+                variant={viewMode === "table" ? "secondary" : "ghost"}
+                size="sm"
+                onClick={() => setViewMode("table")}
+                className="rounded-none"
+              >
+                <List className="h-4 w-4" />
+              </Button>
+              <Button
+                variant={viewMode === "kanban" ? "secondary" : "ghost"}
+                size="sm"
+                onClick={() => setViewMode("kanban")}
+                className="rounded-none"
+              >
+                <LayoutGrid className="h-4 w-4" />
+              </Button>
+            </div>
             <LeadSourceFilter value={sourceFilter} onChange={setSourceFilter} />
           </div>
         </div>
 
-        {/* Leads Tabs */}
+        {/* Kanban View */}
+        {viewMode === "kanban" && (
+          <KanbanPipeline userId={user?.id || ""} onRefresh={handleRefresh} />
+        )}
+
+        {/* Table View */}
+        {viewMode === "table" && (
         <Card className="border-border bg-card">
           <CardHeader>
             <CardTitle className="text-white font-bold">Leads</CardTitle>
@@ -287,6 +324,7 @@ const CRM = () => {
             </Tabs>
           </CardContent>
         </Card>
+        )}
       </main>
 
       {/* Modals */}
