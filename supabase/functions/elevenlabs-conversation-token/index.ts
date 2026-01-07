@@ -1,6 +1,6 @@
 import { serve } from "https://deno.land/std@0.168.0/http/server.ts";
 
-const ELEVENLABS_AGENT_ID = "2501ke949j8je8yrbn93";
+const ELEVENLABS_AGENT_ID = "agent_2501ke949j8je8eskyb1e0yr8n93";
 
 const corsHeaders = {
   "Access-Control-Allow-Origin": "*",
