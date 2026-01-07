@@ -1,8 +1,9 @@
 import { useState, useEffect, useCallback } from "react";
-import { Download, X, ChevronUp, Smartphone } from "lucide-react";
+import { Download, ChevronUp, Smartphone } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { useNavigate } from "react-router-dom";
 import { motion, AnimatePresence } from "framer-motion";
+import logoDark from "@/assets/logo-dark.jpg";
 
 interface BeforeInstallPromptEvent extends Event {
   prompt: () => Promise<void>;
@@ -115,11 +116,11 @@ const InstallAppButton = () => {
             {/* Header with close/minimize */}
             <div className="flex items-start justify-between mb-3">
               <div className="flex items-center gap-3">
-                <div className="w-12 h-12 rounded-xl bg-gradient-to-br from-gold/20 to-gold/10 border border-gold/30 flex items-center justify-center">
+                <div className="w-12 h-12 rounded-xl overflow-hidden border border-gold/30 flex items-center justify-center bg-black">
                   <img 
-                    src="/pwa-192x192.jpg" 
+                    src={logoDark} 
                     alt="JJ Global Capital" 
-                    className="w-10 h-10 rounded-lg object-contain"
+                    className="w-full h-full object-cover"
                   />
                 </div>
                 <div>
