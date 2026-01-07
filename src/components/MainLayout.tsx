@@ -18,7 +18,8 @@ const MainLayout = ({ children }: MainLayoutProps) => {
   const location = useLocation();
   const isAdminRoute = location.pathname.startsWith("/admin");
 
-  const [isChatCollapsed, setIsChatCollapsed] = useState(true);
+  // Start with chat open on desktop, collapsed on mobile
+  const [isChatCollapsed, setIsChatCollapsed] = useState(false);
 
   // Always keep chat collapsed on admin screens to avoid blocking controls.
   useEffect(() => {
