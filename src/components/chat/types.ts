@@ -30,7 +30,7 @@ export interface UserInfo {
   consentPrivacy: boolean;
 }
 
-export type ChatStep = 'welcome_choice' | 'check_email' | 'collect_info' | 'chat_history' | 'select_service' | 'chatting' | 'rating' | 'submitted';
+export type ChatStep = 'welcome_choice' | 'check_email' | 'collect_info' | 'chat_history' | 'select_service' | 'agent_joining' | 'chatting' | 'rating' | 'submitted';
 
 export interface ServiceOption {
   id: string;
@@ -39,13 +39,66 @@ export interface ServiceOption {
   description: string;
 }
 
-// Agent persona for human-like experience
-export const AGENT = {
-  name: 'Sara',
-  fullName: 'Sara Al Rashid',
-  title: 'Property Consultant',
-  photo: 'https://images.unsplash.com/photo-1573496359142-b8d87734a5a2?w=200&h=200&fit=crop&crop=face',
+// Multiple agent personas for a real team experience
+export const AGENTS = [
+  {
+    name: 'Alex',
+    fullName: 'Alex Morgan',
+    title: 'Senior Property Consultant',
+    photo: 'https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=200&h=200&fit=crop&crop=face',
+  },
+  {
+    name: 'Sarah',
+    fullName: 'Sarah Al Rashid',
+    title: 'Property Consultant',
+    photo: 'https://images.unsplash.com/photo-1573496359142-b8d87734a5a2?w=200&h=200&fit=crop&crop=face',
+  },
+  {
+    name: 'David',
+    fullName: 'David Chen',
+    title: 'Investment Advisor',
+    photo: 'https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?w=200&h=200&fit=crop&crop=face',
+  },
+  {
+    name: 'Leah',
+    fullName: 'Leah Williams',
+    title: 'Client Relations Manager',
+    photo: 'https://images.unsplash.com/photo-1580489944761-15a19d654956?w=200&h=200&fit=crop&crop=face',
+  },
+  {
+    name: 'Patrick',
+    fullName: 'Patrick O\'Brien',
+    title: 'Luxury Property Specialist',
+    photo: 'https://images.unsplash.com/photo-1500648767791-00dcc994a43e?w=200&h=200&fit=crop&crop=face',
+  },
+  {
+    name: 'Troy',
+    fullName: 'Troy Hassan',
+    title: 'Off-Plan Investment Consultant',
+    photo: 'https://images.unsplash.com/photo-1519085360753-af0119f7cbe7?w=200&h=200&fit=crop&crop=face',
+  },
+  {
+    name: 'John',
+    fullName: 'John Richardson',
+    title: 'Property Consultant',
+    photo: 'https://images.unsplash.com/photo-1560250097-0b93528c311a?w=200&h=200&fit=crop&crop=face',
+  },
+];
+
+// Get a random agent (consistent per session using sessionStorage)
+export const getRandomAgent = () => {
+  const stored = sessionStorage.getItem('jj_chat_agent');
+  if (stored) {
+    const parsed = JSON.parse(stored);
+    return AGENTS.find(a => a.name === parsed.name) || AGENTS[0];
+  }
+  const agent = AGENTS[Math.floor(Math.random() * AGENTS.length)];
+  sessionStorage.setItem('jj_chat_agent', JSON.stringify(agent));
+  return agent;
 };
+
+// Legacy export for compatibility
+export const AGENT = AGENTS[1]; // Sarah as default
 
 export const SERVICES: ServiceOption[] = [
   { id: 'real_estate', icon: Building2, label: 'Property Sales & Leasing', description: 'Brokerage for buying, selling, leasing' },
