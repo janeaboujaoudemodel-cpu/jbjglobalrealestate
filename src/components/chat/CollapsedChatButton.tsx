@@ -11,7 +11,7 @@ const CollapsedChatButton = ({ onToggle, showAttentionPulse = false }: Collapsed
   const { isRTL } = useLanguage();
 
   return (
-    <div className={`fixed bottom-24 ${isRTL ? 'left-4' : 'right-4'} z-40`}>
+    <div className={`fixed bottom-24 ${isRTL ? 'left-4' : 'right-4'} z-[9000]`}>
       {/* Attention-grabbing banner when showAttentionPulse is true */}
       <AnimatePresence>
         {showAttentionPulse && (
