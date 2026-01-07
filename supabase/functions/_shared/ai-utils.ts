@@ -10,8 +10,8 @@ import { createClient, SupabaseClient } from "https://esm.sh/@supabase/supabase-
 // ============================================================================
 
 const ALLOWED_ORIGINS = [
-  "https://jjglobalcapital.com",
-  "https://www.jjglobalcapital.com",
+  "https://jbj.ae",
+  "https://www.jbj.ae",
   "http://localhost:5173",
   "http://localhost:8080",
 ];
@@ -32,25 +32,28 @@ export function getCorsHeaders(req: Request): Record<string, string> {
 }
 
 // ============================================================================
-// APPROVED CONTACT INFO (Single Source of Truth)
+// APPROVED CONTACT INFO (Single Source of Truth) - JBJ GLOBAL REAL ESTATE
 // ============================================================================
 
 export const APPROVED_CONTACT = {
   phone: "+971 56 591 1000",
-  email: "contact@jjglobalcapital.com",
-  privacyEmail: "privacy@jjglobalcapital.com",
-  website: "jjglobalcapital.com",
+  email: "contact@jbj.ae",
+  privacyEmail: "privacy@jbj.ae",
+  website: "jbj.ae",
   whatsapp: "+971565911000",
+  companyName: "JBJ Global Real Estate",
+  companyFull: "JBJ Global Real Estate L.L.C S.O.C.",
+  founder: "Jane Abou Jaoude",
 };
 
 export const APPROVED_EMAILS = [
-  "contact@jjglobalcapital.com",
-  "privacy@jjglobalcapital.com",
-  "partnerships@jjglobalcapital.com",
-  "collaboration@jjglobalcapital.com",
-  "careers@jjglobalcapital.com",
-  "security@jjglobalcapital.com",
-  "jane@jjglobalcapital.com",
+  "contact@jbj.ae",
+  "privacy@jbj.ae",
+  "partnerships@jbj.ae",
+  "collaboration@jbj.ae",
+  "careers@jbj.ae",
+  "security@jbj.ae",
+  "jane@jbj.ae",
 ];
 
 // ============================================================================
@@ -84,6 +87,8 @@ export function sanitizeContactInfo(text: string): string {
   // Replace non-approved emails
   sanitized = sanitized.replace(emailPattern, (match) => {
     if (APPROVED_EMAILS.includes(match.toLowerCase())) return match;
+    // Allow jbj.ae emails
+    if (match.toLowerCase().endsWith("@jbj.ae")) return match;
     return APPROVED_CONTACT.email;
   });
 

@@ -6,11 +6,9 @@ import {
   Mail,
   MessageCircle,
   ChevronDown,
-  ExternalLink,
 } from "lucide-react";
 import { CONTACT_INFO, getWhatsAppUrl, getCallUrl, getEmailUrl } from "@/constants/stats";
-import { JJLogoImage } from "@/components/JJLogoImage";
-import { Button } from "@/components/ui/button";
+import { JBJLogoFooter } from "@/components/JBJLogo";
 import {
   Collapsible,
   CollapsibleContent,
@@ -72,7 +70,7 @@ const Footer = () => {
   // Our Services — required hierarchy with working pages
   const serviceLinks = [
     {
-      title: "Buy & Sell",
+      title: "Buy & Sell Brokerage",
       href: "/properties",
       items: [
         { label: "Off-Plan Properties", href: "/properties?status=off-plan" },
@@ -81,7 +79,7 @@ const Footer = () => {
       ],
     },
     {
-      title: "Leasing",
+      title: "Leasing Brokerage",
       href: "/properties?status=ready",
       items: [],
     },
@@ -99,7 +97,7 @@ const Footer = () => {
         { label: "Fit-Out", href: "/services/fit-out" },
       ],
     },
-    { title: "Luxury Concierge", href: "/concierge", items: [] },
+    { title: "Concierge Partners", href: "/concierge", items: [] },
   ];
 
   // Menu — required order
@@ -146,10 +144,9 @@ const Footer = () => {
         {/* Logo + Description */}
         <div className="text-center mb-10 md:mb-14">
           <Link to="/" className="inline-block">
-            <JJLogoImage variant="dark" size="footer" showText={false} />
+            <JBJLogoFooter />
           </Link>
-          <p className="text-gold text-xs uppercase tracking-[0.2em] mt-3 mb-2">Real Estate Brokerage</p>
-          <p className="text-zinc-400 text-base md:text-lg max-w-2xl mx-auto leading-relaxed">
+          <p className="text-zinc-400 text-base md:text-lg max-w-2xl mx-auto leading-relaxed mt-4">
             Real estate brokerage specializing in property sales, leasing, and holiday homes 
             across the UAE — with trusted partner introductions for legal, mortgage, and specialist services.
           </p>
@@ -324,19 +321,35 @@ const Footer = () => {
               </div>
               <h4 className="text-white font-semibold">Legal Disclaimer</h4>
             </div>
+            
+            {/* English Disclaimer */}
             <p className="text-zinc-400 text-sm leading-relaxed mb-4">
-              <span className="text-white font-medium">JJ Global Capital</span> provides real estate brokerage support and coordination. 
+              <span className="text-white font-medium">JBJ Global Real Estate</span> provides real estate brokerage support and coordination. 
               We can introduce you to independent, licensed partners for legal services, mortgages, and concierge support. 
               Partner services are delivered under the partner's own licence and terms, and the client contracts directly with the partner. 
-              We do not provide legal, mortgage, financial, or investment advice.
+              We do not provide legal, mortgage, financial, or advice.
             </p>
+            
+            {/* English Legal Line */}
+            <p className="text-zinc-300 text-xs leading-relaxed mb-4 font-medium">
+              Licensed Real Estate Brokerage in Dubai (Mainland). Operated by JBJ Global Real Estate L.L.C S.O.C. Owned & Led by Jane Abou Jaoude.
+            </p>
+            
+            {/* Arabic Disclaimer */}
+            <p className="text-zinc-500 text-xs leading-relaxed mb-4" dir="rtl">
+              جي بي جي العقارية العالمية تقدم خدمات وساطة عقارية ودعم تنسيقي. يمكننا ربطك بشركاء مستقلين ومرخصين للخدمات القانونية والتمويل العقاري وخدمات الكونسيرج. تُقدَّم خدمات الشركاء وفق ترخيصهم وشروطهم الخاصة، ويكون التعاقد مباشرة بين العميل والشريك. نحن لا نقدم استشارات قانونية أو تمويلية.
+            </p>
+            
+            {/* Arabic Legal Line */}
+            <p className="text-zinc-400 text-xs leading-relaxed mb-4" dir="rtl">
+              وساطة عقارية مرخصة في دبي (البر الرئيسي). يتم تشغيل الموقع من قبل JBJ Global Real Estate L.L.C S.O.C.
+            </p>
+            
             <p className="text-zinc-500 text-xs leading-relaxed mb-4">
               All content, design, and technology on this platform are the intellectual property of 
-              Jane Abou Jaoude and JJ Global Capital. Unauthorized reproduction is strictly prohibited.
+              Jane Abou Jaoude and JBJ Global Real Estate. Unauthorized reproduction is strictly prohibited.
             </p>
-            <p className="text-zinc-500 text-xs leading-relaxed mb-4" dir="rtl">
-              جي جي جلوبال كابيتال تقدم خدمات وساطة عقارية ودعم تنسيقي. يمكننا ربطك بشركاء مستقلين ومرخصين للخدمات القانونية والتمويل العقاري وخدمات الكونسيرج. تُقدَّم خدمات الشركاء وفق ترخيصهم وشروطهم الخاصة، ويكون التعاقد مباشرة بين العميل والشريك. نحن لا نقدم استشارات قانونية أو تمويلية أو استثمارية.
-            </p>
+            
             <div className="flex flex-wrap items-center justify-center gap-2 text-xs text-zinc-600">
               <span>Real Estate Brokerage</span>
               <span className="text-gold">•</span>
@@ -357,7 +370,7 @@ const Footer = () => {
         <div className="flex flex-col items-center gap-4 text-sm text-zinc-500">
           <div className="text-center space-y-2">
             <p className="font-medium text-white">
-              © {currentYear} JJ Global Capital Real Estate Brokerage. All Rights Reserved.
+              © {currentYear} JBJ Global Real Estate. All Rights Reserved.
             </p>
             <p className="text-xs text-zinc-600">
               Created and Developed by{" "}
