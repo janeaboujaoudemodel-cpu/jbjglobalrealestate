@@ -20,7 +20,8 @@ import {
   Clock,
   PenTool,
   Users,
-  Table2
+  Table2,
+  Video
 } from "lucide-react";
 
 const fadeInUp = {
@@ -205,6 +206,18 @@ const aiTools = [
     bgColor: "bg-blue-500/10",
     link: "/documents",
     features: ["Rich Text", "Formatting", "Export HTML/TXT", "Print Ready"]
+  },
+  {
+    id: "video-meeting",
+    title: "Video Meeting",
+    description: "Free unlimited video meetings like Zoom and Google Meet. Share screen, invite participants, and collaborate in real-time with no time limits.",
+    icon: Video,
+    gradient: "from-red-500 to-rose-500",
+    borderColor: "border-red-500/30",
+    textColor: "text-red-400",
+    bgColor: "bg-red-500/10",
+    link: "/video-meeting",
+    features: ["Unlimited Time", "Screen Share", "HD Video", "No Account Needed"]
   },
 ];
 

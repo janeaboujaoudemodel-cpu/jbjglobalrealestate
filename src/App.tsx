@@ -72,6 +72,7 @@ import ReferralOnboarding from "./pages/ReferralOnboarding";
 import SignatureStudio from "./pages/SignatureStudio";
 import Spreadsheet from "./pages/Spreadsheet";
 import Documents from "./pages/Documents";
+import VideoMeeting from "./pages/VideoMeeting";
 
 const queryClient = new QueryClient();
 
@@ -154,6 +155,7 @@ const App = () => (
                     <Route path="/signature-studio" element={<SignatureStudio />} />
                     <Route path="/spreadsheet" element={<Spreadsheet />} />
                     <Route path="/documents" element={<Documents />} />
+                    <Route path="/video-meeting" element={<VideoMeeting />} />
                     <Route path="*" element={<NotFound />} />
                     </Routes>
                   </MainLayout>
