@@ -1,4 +1,5 @@
 import { serve } from "https://deno.land/std@0.168.0/http/server.ts";
+import { createClient } from "https://esm.sh/@supabase/supabase-js@2.49.1";
 
 const corsHeaders = {
   "Access-Control-Allow-Origin": "*",
@@ -11,6 +12,44 @@ serve(async (req) => {
   }
 
   try {
+    // Authentication check
+    const authHeader = req.headers.get('Authorization');
+    if (!authHeader?.startsWith('Bearer ')) {
+      return new Response(
+        JSON.stringify({ error: 'Authentication required' }),
+        { status: 401, headers: { ...corsHeaders, "Content-Type": "application/json" } }
+      );
+    }
+
+    const supabaseUrl = Deno.env.get("SUPABASE_URL")!;
+    const supabaseAnonKey = Deno.env.get("SUPABASE_ANON_KEY")!;
+    const supabase = createClient(supabaseUrl, supabaseAnonKey, {
+      global: { headers: { Authorization: authHeader } }
+    });
+
+    const { data: { user }, error: authError } = await supabase.auth.getUser();
+    if (authError || !user) {
+      return new Response(
+        JSON.stringify({ error: 'Invalid authentication' }),
+        { status: 401, headers: { ...corsHeaders, "Content-Type": "application/json" } }
+      );
+    }
+
+    // Verify user has active CRM membership
+    const { data: crmProfile } = await supabase
+      .from('crm_users_profile')
+      .select('is_active')
+      .eq('user_id', user.id)
+      .eq('is_active', true)
+      .single();
+
+    if (!crmProfile) {
+      return new Response(
+        JSON.stringify({ error: 'Active CRM membership required' }),
+        { status: 403, headers: { ...corsHeaders, "Content-Type": "application/json" } }
+      );
+    }
+
     const { lead, prompt, template } = await req.json();
     
     const LOVABLE_API_KEY = Deno.env.get("LOVABLE_API_KEY");
@@ -22,7 +61,7 @@ serve(async (req) => {
     const language = lead.language || 'en';
     
     // Build system prompt
-    const systemPrompt = `You are a friendly property consultant at JJ Global Capital, Dubai's premium real estate brokerage.
+    const systemPrompt = `You are a friendly property consultant at JBJ Global Real Estate, Dubai's premium real estate brokerage.
 Write brief, engaging WhatsApp messages.
 Use emojis sparingly (1-2 max).
 Keep messages under 500 characters.
@@ -70,7 +109,7 @@ Return ONLY the message text, no JSON or formatting.`;
   } catch (error) {
     console.error("WhatsApp composer error:", error);
     return new Response(
-      JSON.stringify({ error: error instanceof Error ? error.message : "Unknown error" }),
+      JSON.stringify({ error: "Failed to generate message" }),
       {
         status: 500,
         headers: { ...corsHeaders, "Content-Type": "application/json" },
