@@ -1,34 +1,84 @@
 import { serve } from "https://deno.land/std@0.168.0/http/server.ts";
+import { createClient } from "https://esm.sh/@supabase/supabase-js@2";
+import { z } from "https://deno.land/x/zod@v3.22.4/mod.ts";
 
-const corsHeaders = {
-  "Access-Control-Allow-Origin": "*",
-  "Access-Control-Allow-Headers": "authorization, x-client-info, apikey, content-type",
+// Origin whitelist for CORS
+const ALLOWED_ORIGINS = [
+  "https://jjglobalcapital.com",
+  "https://www.jjglobalcapital.com",
+  "https://lovable.dev",
+  "https://preview--jj-global-capital.lovable.app",
+  "http://localhost:5173",
+  "http://localhost:3000",
+];
+
+const getCorsHeaders = (origin: string | null) => {
+  const allowedOrigin = origin && ALLOWED_ORIGINS.some(allowed => 
+    origin === allowed || origin.endsWith('.lovable.app') || origin.endsWith('.lovable.dev')
+  ) ? origin : ALLOWED_ORIGINS[0];
+  
+  return {
+    "Access-Control-Allow-Origin": allowedOrigin,
+    "Access-Control-Allow-Headers": "authorization, x-client-info, apikey, content-type",
+    "Access-Control-Allow-Methods": "POST, OPTIONS",
+  };
 };
 
-interface NewsletterRequest {
-  email: string;
-  name?: string;
-  listId?: number;
-  source?: string;
-  attributes?: Record<string, any>;
-}
+// Input validation schema
+const NewsletterSchema = z.object({
+  email: z.string().email().max(255).transform(val => val.toLowerCase().trim()),
+  name: z.string().max(100).optional(),
+  listId: z.number().optional(),
+  source: z.string().max(50).optional(),
+  attributes: z.record(z.string().max(500)).optional(),
+});
 
 const handler = async (req: Request): Promise<Response> => {
+  const origin = req.headers.get("origin");
+  const corsHeaders = getCorsHeaders(origin);
+
   // Handle CORS preflight
   if (req.method === "OPTIONS") {
     return new Response(null, { headers: corsHeaders });
   }
 
-  try {
-    const { email, name, listId, source, attributes }: NewsletterRequest = await req.json();
+  // Only allow POST
+  if (req.method !== "POST") {
+    return new Response(
+      JSON.stringify({ error: "Method not allowed" }),
+      { status: 405, headers: { "Content-Type": "application/json", ...corsHeaders } }
+    );
+  }
 
-    if (!email) {
+  // Validate origin
+  const isValidOrigin = origin && (
+    ALLOWED_ORIGINS.includes(origin) || 
+    origin.endsWith('.lovable.app') || 
+    origin.endsWith('.lovable.dev')
+  );
+  
+  if (!isValidOrigin) {
+    console.warn("[Newsletter] Blocked request from origin:", origin);
+    return new Response(
+      JSON.stringify({ error: "Forbidden" }),
+      { status: 403, headers: { "Content-Type": "application/json", ...corsHeaders } }
+    );
+  }
+
+  try {
+    const rawBody = await req.json();
+    
+    // Validate input
+    const parseResult = NewsletterSchema.safeParse(rawBody);
+    if (!parseResult.success) {
+      console.warn("[Newsletter] Validation failed:", parseResult.error.flatten());
       return new Response(
-        JSON.stringify({ error: "Email is required" }),
+        JSON.stringify({ error: "Invalid input" }),
         { status: 400, headers: { "Content-Type": "application/json", ...corsHeaders } }
       );
     }
 
+    const { email, name, listId, source, attributes } = parseResult.data;
     console.log("[Newsletter] Subscription received:", { email, name, source });
 
     // Try Brevo if API key exists
@@ -40,7 +90,7 @@ const handler = async (req: Request): Promise<Response> => {
         const targetListId = listId || parseInt(Deno.env.get("BREVO_DEFAULT_LIST_ID") || "1");
 
         const brevoPayload = {
-          email: email.toLowerCase(),
+          email: email,
           listIds: [targetListId],
           updateEnabled: true,
           attributes: {
@@ -93,14 +143,26 @@ const handler = async (req: Request): Promise<Response> => {
     
     if (resendApiKey) {
       try {
+        // Sanitize values for HTML to prevent XSS
+        const escapeHtml = (str: string) => str
+          .replace(/&/g, '&amp;')
+          .replace(/</g, '&lt;')
+          .replace(/>/g, '&gt;')
+          .replace(/"/g, '&quot;');
+
+        const safeEmail = escapeHtml(email);
+        const safeName = name ? escapeHtml(name) : '';
+        const safeSource = escapeHtml(source || 'website');
+        const safeSignupPage = attributes?.SIGNUP_PAGE ? escapeHtml(String(attributes.SIGNUP_PAGE)) : 'Unknown';
+
         const emailHtml = `
           <div style="font-family: Arial, sans-serif; max-width: 600px; margin: 0 auto;">
             <h2 style="color: #c9a961;">New Newsletter Subscription</h2>
             <div style="background: #f5f5f5; padding: 20px; border-radius: 8px; margin: 20px 0;">
-              <p><strong>Email:</strong> ${email}</p>
-              ${name ? `<p><strong>Name:</strong> ${name}</p>` : ''}
-              <p><strong>Source:</strong> ${source || 'website'}</p>
-              <p><strong>Signup Page:</strong> ${attributes?.SIGNUP_PAGE || 'Unknown'}</p>
+              <p><strong>Email:</strong> ${safeEmail}</p>
+              ${safeName ? `<p><strong>Name:</strong> ${safeName}</p>` : ''}
+              <p><strong>Source:</strong> ${safeSource}</p>
+              <p><strong>Signup Page:</strong> ${safeSignupPage}</p>
               <p><strong>Date:</strong> ${new Date().toLocaleString('en-AE', { timeZone: 'Asia/Dubai' })}</p>
             </div>
             <p style="color: #666; font-size: 14px;">
@@ -151,7 +213,7 @@ const handler = async (req: Request): Promise<Response> => {
   } catch (error: any) {
     console.error("[Newsletter] Error:", error.message);
     return new Response(
-      JSON.stringify({ error: error.message || "Subscription failed" }),
+      JSON.stringify({ error: "Subscription failed" }),
       { status: 500, headers: { "Content-Type": "application/json", ...corsHeaders } }
     );
   }

@@ -76,6 +76,17 @@ const CRMImportModal = ({ open, onClose, onSuccess, userId }: CRMImportModalProp
     URL.revokeObjectURL(url);
   };
 
+  // Sanitize CSV values to prevent formula injection (Excel/Google Sheets)
+  const sanitizeCSVValue = (val: string): string => {
+    if (!val) return val;
+    // Prefix formula-starting characters with single quote to force text interpretation
+    if (/^[=+\-@|%]/.test(val)) {
+      console.warn("[CRM Import] Sanitized potential formula injection:", val.substring(0, 20));
+      return "'" + val;
+    }
+    return val;
+  };
+
   const parseCSV = (text: string): any[] => {
     const lines = text.split("\n").filter(line => line.trim());
     if (lines.length < 2) return [];
@@ -84,7 +95,7 @@ const CRMImportModal = ({ open, onClose, onSuccess, userId }: CRMImportModalProp
     const rows: any[] = [];
     
     for (let i = 1; i < lines.length; i++) {
-      const values = lines[i].split(",").map(v => v.trim());
+      const values = lines[i].split(",").map(v => sanitizeCSVValue(v.trim()));
       const row: Record<string, string> = {};
       headers.forEach((header, index) => {
         row[header] = values[index] || "";
