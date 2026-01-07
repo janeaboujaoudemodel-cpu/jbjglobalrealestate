@@ -38,11 +38,52 @@ const CRMImportModal = ({ open, onClose, onSuccess, userId }: CRMImportModalProp
   const [result, setResult] = useState<ImportResult | null>(null);
   const fileInputRef = useRef<HTMLInputElement>(null);
 
+  // Smart detection keywords for categorizing contacts
+  const BROKER_KEYWORDS = ['broker', 'brokerage', 'real estate', 'agent', 'realty', 'properties', 'sales', 'consultant'];
+  const DEVELOPER_KEYWORDS = ['developer', 'development', 'construction', 'builders', 'estates', 'holdings'];
+  const INVESTOR_KEYWORDS = ['investor', 'investment', 'capital', 'fund', 'venture', 'equity'];
+  const VENDOR_KEYWORDS = ['vendor', 'supplier', 'service', 'contractor', 'maintenance'];
+
+  const detectContactType = (row: Record<string, string>): { type: string; keywords: string[] } => {
+    const searchText = [
+      row.full_name || '',
+      row.company || '',
+      row.email || '',
+      row.tags || '',
+      row.source || ''
+    ].join(' ').toLowerCase();
+
+    const foundKeywords: string[] = [];
+    
+    for (const kw of BROKER_KEYWORDS) {
+      if (searchText.includes(kw)) foundKeywords.push(kw);
+    }
+    if (foundKeywords.length > 0) return { type: 'broker', keywords: foundKeywords };
+
+    for (const kw of DEVELOPER_KEYWORDS) {
+      if (searchText.includes(kw)) foundKeywords.push(kw);
+    }
+    if (foundKeywords.length > 0) return { type: 'developer', keywords: foundKeywords };
+
+    for (const kw of INVESTOR_KEYWORDS) {
+      if (searchText.includes(kw)) foundKeywords.push(kw);
+    }
+    if (foundKeywords.length > 0) return { type: 'investor', keywords: foundKeywords };
+
+    for (const kw of VENDOR_KEYWORDS) {
+      if (searchText.includes(kw)) foundKeywords.push(kw);
+    }
+    if (foundKeywords.length > 0) return { type: 'vendor', keywords: foundKeywords };
+
+    return { type: 'client', keywords: [] };
+  };
+
   const downloadTemplate = () => {
     const headers = [
       "full_name",
       "phone",
       "email",
+      "company",
       "nationality",
       "preferred_language",
       "country",
@@ -56,6 +97,7 @@ const CRMImportModal = ({ open, onClose, onSuccess, userId }: CRMImportModalProp
       "John Doe",
       "+971501234567",
       "john@example.com",
+      "ABC Properties",
       "British",
       "en",
       "UAE",
@@ -245,13 +287,17 @@ const CRMImportModal = ({ open, onClose, onSuccess, userId }: CRMImportModalProp
             .eq("id", existingLead.id);
           result.merged++;
         } else {
-          // Insert new lead
+          // Detect contact type using smart AI
+          const { type: detectedType, keywords } = detectContactType(row);
+          
+          // Insert new lead with smart detection
           const { error: insertError } = await supabase
             .from("crm_leads")
             .insert({
               full_name: row.full_name,
               phone_e164: phone,
               email_lower: email,
+              company_name: row.company || null,
               nationality: row.nationality || null,
               preferred_language: row.preferred_language || "en",
               current_location_country: row.country || null,
@@ -262,7 +308,11 @@ const CRMImportModal = ({ open, onClose, onSuccess, userId }: CRMImportModalProp
               source: row.source || "csv_import",
               owner_type: "broker_owned",
               owner_user_id: userId,
-              created_by_user_id: userId
+              created_by_user_id: userId,
+              contact_type: detectedType as any,
+              auto_detected_type: keywords.length > 0,
+              detection_keywords: keywords.length > 0 ? keywords : null,
+              import_approval_status: "pending" as any
             });
 
           if (insertError) {
