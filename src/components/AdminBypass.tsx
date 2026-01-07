@@ -1,4 +1,5 @@
 import { useEffect, useState } from "react";
+import { useLocation } from "react-router-dom";
 import { supabase } from "@/integrations/supabase/client";
 import ComingSoon from "@/pages/ComingSoon";
 
@@ -7,14 +8,20 @@ interface AdminBypassProps {
 }
 
 const AdminBypass = ({ children }: AdminBypassProps) => {
+  const location = useLocation();
   const [isAdmin, setIsAdmin] = useState<boolean | null>(null);
   const [isLoading, setIsLoading] = useState(true);
+
+  // CRM must be accessible to CRM users (owner_admin / broker_member) even if they are not "site admins".
+  // The CRM pages perform their own auth + role checks.
+  const isCrmRoute =
+    location.pathname.startsWith("/crm") || location.pathname.startsWith("/admin/crm");
 
   useEffect(() => {
     const checkAdminStatus = async () => {
       try {
         const { data: { session } } = await supabase.auth.getSession();
-        
+
         if (!session?.user) {
           setIsAdmin(false);
           setIsLoading(false);
@@ -29,7 +36,7 @@ const AdminBypass = ({ children }: AdminBypassProps) => {
 
         setIsAdmin(Boolean(hasAdminRole));
       } catch (error) {
-        console.error('Error checking admin status:', error);
+        console.error("Error checking admin status:", error);
         setIsAdmin(false);
       } finally {
         setIsLoading(false);
@@ -44,6 +51,9 @@ const AdminBypass = ({ children }: AdminBypassProps) => {
 
     return () => subscription.unsubscribe();
   }, []);
+
+  // CRM routes bypass this gate (they are protected in their own pages).
+  if (isCrmRoute) return <>{children}</>;
 
   // Show loading briefly
   if (isLoading) {
