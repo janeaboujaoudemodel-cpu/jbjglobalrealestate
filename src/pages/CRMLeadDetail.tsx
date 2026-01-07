@@ -497,21 +497,55 @@ const CRMLeadDetail = () => {
             </CardHeader>
             <CardContent className="space-y-4">
               {lead.phone_e164 && (
-                <div className="flex items-center gap-3">
-                  <Phone className="h-4 w-4 text-muted-foreground" />
-                  <span>{lead.phone_e164}</span>
+                <div className="flex items-center justify-between gap-3 p-3 bg-muted/50 rounded-lg">
+                  <div className="flex items-center gap-3">
+                    <Phone className="h-5 w-5 text-green-500" />
+                    <a href={`tel:${lead.phone_e164}`} className="text-foreground font-medium hover:text-green-400 hover:underline">
+                      {lead.phone_e164}
+                    </a>
+                  </div>
+                  <div className="flex gap-2">
+                    <Button
+                      size="sm"
+                      className="bg-green-600 hover:bg-green-500 text-white font-bold"
+                      onClick={handleWhatsAppClick}
+                    >
+                      <MessageSquare className="h-4 w-4 mr-1" />
+                      WhatsApp
+                    </Button>
+                    <Button
+                      size="sm"
+                      className="bg-blue-600 hover:bg-blue-500 text-white font-bold"
+                      onClick={() => window.open(`tel:${lead.phone_e164}`, "_self")}
+                    >
+                      <Phone className="h-4 w-4 mr-1" />
+                      Call
+                    </Button>
+                  </div>
                 </div>
               )}
               {lead.email_lower && (
-                <div className="flex items-center gap-3">
-                  <Mail className="h-4 w-4 text-muted-foreground" />
-                  <span>{lead.email_lower}</span>
+                <div className="flex items-center justify-between gap-3 p-3 bg-muted/50 rounded-lg">
+                  <div className="flex items-center gap-3">
+                    <Mail className="h-5 w-5 text-purple-500" />
+                    <a href={`mailto:${lead.email_lower}`} onClick={handleEmailClick} className="text-foreground font-medium hover:text-purple-400 hover:underline">
+                      {lead.email_lower}
+                    </a>
+                  </div>
+                  <Button
+                    size="sm"
+                    className="bg-purple-600 hover:bg-purple-500 text-white font-bold"
+                    onClick={handleEmailClick}
+                  >
+                    <Mail className="h-4 w-4 mr-1" />
+                    Email
+                  </Button>
                 </div>
               )}
               {(lead.current_location_country || lead.current_location_city) && (
-                <div className="flex items-center gap-3">
-                  <MapPin className="h-4 w-4 text-muted-foreground" />
-                  <span>
+                <div className="flex items-center gap-3 px-3">
+                  <MapPin className="h-4 w-4 text-amber-500" />
+                  <span className="text-foreground">
                     {[lead.current_location_city, lead.current_location_country]
                       .filter(Boolean)
                       .join(", ")}
@@ -519,15 +553,15 @@ const CRMLeadDetail = () => {
                 </div>
               )}
               {lead.source && (
-                <div className="flex items-center gap-3">
-                  <Globe className="h-4 w-4 text-muted-foreground" />
-                  <span>Source: {lead.source}</span>
+                <div className="flex items-center gap-3 px-3">
+                  <Globe className="h-4 w-4 text-cyan-500" />
+                  <span className="text-foreground">Source: {lead.source}</span>
                 </div>
               )}
               {lead.tags?.length > 0 && (
-                <div className="flex flex-wrap gap-1">
+                <div className="flex flex-wrap gap-1 px-3">
                   {lead.tags.map((tag, i) => (
-                    <Badge key={i} variant="secondary" className="text-xs">
+                    <Badge key={i} variant="secondary" className="text-xs font-medium">
                       {tag}
                     </Badge>
                   ))}
@@ -543,8 +577,7 @@ const CRMLeadDetail = () => {
             </CardHeader>
             <CardContent className="space-y-3">
               <Button
-                variant="outline"
-                className="w-full justify-start text-green-600"
+                className="w-full justify-start bg-green-600 hover:bg-green-500 text-white font-bold shadow-md"
                 onClick={() => setActiveTab("whatsapp")}
                 disabled={!lead.phone_e164}
               >
@@ -552,34 +585,20 @@ const CRMLeadDetail = () => {
                 AI WhatsApp Message
               </Button>
               <Button
-                variant="outline"
-                className="w-full justify-start text-blue-600"
+                className="w-full justify-start bg-purple-600 hover:bg-purple-500 text-white font-bold shadow-md"
                 onClick={() => setActiveTab("email")}
                 disabled={!lead.email_lower}
               >
                 <Mail className="h-4 w-4 mr-2" />
                 AI Email Composer
               </Button>
-              <div className="flex gap-2">
-                <Button
-                  variant="ghost"
-                  size="sm"
-                  className="flex-1 text-green-600"
-                  onClick={handleWhatsAppClick}
-                  disabled={!lead.phone_e164}
-                >
-                  Open WhatsApp
-                </Button>
-                <Button
-                  variant="ghost"
-                  size="sm"
-                  className="flex-1 text-blue-600"
-                  onClick={handleEmailClick}
-                  disabled={!lead.email_lower}
-                >
-                  Open Mail
-                </Button>
-              </div>
+              <Button
+                className="w-full justify-start bg-amber-600 hover:bg-amber-500 text-white font-bold shadow-md"
+                onClick={() => setShowPDFGenerator(true)}
+              >
+                <FileText className="h-4 w-4 mr-2" />
+                Generate PDF Report
+              </Button>
             </CardContent>
           </Card>
 

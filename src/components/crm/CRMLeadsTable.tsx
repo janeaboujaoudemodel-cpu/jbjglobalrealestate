@@ -387,7 +387,7 @@ const CRMLeadsTable = ({ userId, filterType, onRefresh, statusFilters = [], sour
                     </div>
                   </TableCell>
                   <TableCell>
-                    <div className="text-sm">
+                    <div className="text-sm space-y-1">
                       {isCompanyAssigned ? (
                         <>
                           <p className="text-muted-foreground italic">{maskEmail(lead.email_lower)}</p>
@@ -395,8 +395,40 @@ const CRMLeadsTable = ({ userId, filterType, onRefresh, statusFilters = [], sour
                         </>
                       ) : (
                         <>
-                          {lead.email_lower && <p className="text-foreground">{lead.email_lower}</p>}
-                          {lead.phone_e164 && <p className="text-muted-foreground">{lead.phone_e164}</p>}
+                          {lead.email_lower && (
+                            <a 
+                              href={`mailto:${lead.email_lower}`}
+                              onClick={(e) => {
+                                e.stopPropagation();
+                                handleEmailClick(lead);
+                              }}
+                              className="text-blue-400 hover:text-blue-300 hover:underline flex items-center gap-1"
+                            >
+                              <Mail className="h-3 w-3" />
+                              {lead.email_lower}
+                            </a>
+                          )}
+                          {lead.phone_e164 && (
+                            <div className="flex items-center gap-2">
+                              <a 
+                                href={`tel:${lead.phone_e164}`}
+                                className="text-green-400 hover:text-green-300 hover:underline flex items-center gap-1"
+                              >
+                                <PhoneCall className="h-3 w-3" />
+                                {lead.phone_e164}
+                              </a>
+                              <button
+                                onClick={(e) => {
+                                  e.stopPropagation();
+                                  handleWhatsAppClick(lead);
+                                }}
+                                className="text-emerald-400 hover:text-emerald-300"
+                                title="Open WhatsApp"
+                              >
+                                <MessageSquare className="h-3 w-3" />
+                              </button>
+                            </div>
+                          )}
                         </>
                       )}
                     </div>
@@ -474,20 +506,19 @@ const CRMLeadsTable = ({ userId, filterType, onRefresh, statusFilters = [], sour
                     </span>
                   </TableCell>
                   <TableCell>
-                    <div className="flex gap-1">
+                    <div className="flex gap-1.5">
                       <Button
-                        variant="ghost"
-                        size="icon"
-                        className="h-8 w-8 text-white hover:text-primary hover:bg-primary/10"
+                        size="sm"
+                        className="h-8 px-3 bg-white/10 hover:bg-white/20 text-white font-semibold border border-white/20"
                         onClick={() => navigate(`/crm/leads/${lead.id}`)}
                         title="View Lead Details"
                       >
-                        <Eye className="h-4 w-4" />
+                        <Eye className="h-4 w-4 mr-1" />
+                        View
                       </Button>
                       <Button
-                        variant="ghost"
                         size="icon"
-                        className="h-8 w-8 bg-green-600/20 text-green-400 hover:bg-green-600/40 hover:text-green-300 disabled:opacity-30"
+                        className="h-8 w-8 bg-green-600 hover:bg-green-500 text-white font-bold shadow-md disabled:opacity-40 disabled:cursor-not-allowed"
                         onClick={() => handleWhatsAppClick(lead)}
                         disabled={!lead.phone_e164 || isCompanyAssigned}
                         title="WhatsApp"
@@ -495,9 +526,8 @@ const CRMLeadsTable = ({ userId, filterType, onRefresh, statusFilters = [], sour
                         <MessageSquare className="h-4 w-4" />
                       </Button>
                       <Button
-                        variant="ghost"
                         size="icon"
-                        className="h-8 w-8 bg-blue-600/20 text-blue-400 hover:bg-blue-600/40 hover:text-blue-300 disabled:opacity-30"
+                        className="h-8 w-8 bg-blue-600 hover:bg-blue-500 text-white font-bold shadow-md disabled:opacity-40 disabled:cursor-not-allowed"
                         onClick={() => {
                           if (lead.phone_e164 && !isCompanyAssigned) {
                             window.open(`tel:${lead.phone_e164}`, "_self");
@@ -509,9 +539,8 @@ const CRMLeadsTable = ({ userId, filterType, onRefresh, statusFilters = [], sour
                         <PhoneCall className="h-4 w-4" />
                       </Button>
                       <Button
-                        variant="ghost"
                         size="icon"
-                        className="h-8 w-8 bg-purple-600/20 text-purple-400 hover:bg-purple-600/40 hover:text-purple-300 disabled:opacity-30"
+                        className="h-8 w-8 bg-purple-600 hover:bg-purple-500 text-white font-bold shadow-md disabled:opacity-40 disabled:cursor-not-allowed"
                         onClick={() => handleEmailClick(lead)}
                         disabled={!lead.email_lower || isCompanyAssigned}
                         title="Email"
@@ -519,9 +548,8 @@ const CRMLeadsTable = ({ userId, filterType, onRefresh, statusFilters = [], sour
                         <Mail className="h-4 w-4" />
                       </Button>
                       <Button
-                        variant="ghost"
                         size="icon"
-                        className="h-8 w-8 bg-amber-600/20 text-amber-400 hover:bg-amber-600/40 hover:text-amber-300"
+                        className="h-8 w-8 bg-amber-600 hover:bg-amber-500 text-white font-bold shadow-md"
                         onClick={() => setFollowUpLead(lead)}
                         title="Schedule Follow-up"
                       >
