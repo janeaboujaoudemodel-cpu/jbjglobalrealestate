@@ -134,6 +134,45 @@ export type Database = {
         }
         Relationships: []
       }
+      broker_contracts: {
+        Row: {
+          contract_content: string | null
+          contract_type: string | null
+          created_at: string | null
+          id: string
+          ip_address: string | null
+          is_signed: boolean | null
+          signature_data: string | null
+          signed_at: string | null
+          user_agent: string | null
+          user_id: string
+        }
+        Insert: {
+          contract_content?: string | null
+          contract_type?: string | null
+          created_at?: string | null
+          id?: string
+          ip_address?: string | null
+          is_signed?: boolean | null
+          signature_data?: string | null
+          signed_at?: string | null
+          user_agent?: string | null
+          user_id: string
+        }
+        Update: {
+          contract_content?: string | null
+          contract_type?: string | null
+          created_at?: string | null
+          id?: string
+          ip_address?: string | null
+          is_signed?: boolean | null
+          signature_data?: string | null
+          signed_at?: string | null
+          user_agent?: string | null
+          user_id?: string
+        }
+        Relationships: []
+      }
       broker_course_progress: {
         Row: {
           completed: boolean | null
@@ -291,6 +330,36 @@ export type Database = {
           },
         ]
       }
+      broker_points: {
+        Row: {
+          created_at: string | null
+          id: string
+          level: number | null
+          points: number | null
+          total_points_earned: number | null
+          updated_at: string | null
+          user_id: string
+        }
+        Insert: {
+          created_at?: string | null
+          id?: string
+          level?: number | null
+          points?: number | null
+          total_points_earned?: number | null
+          updated_at?: string | null
+          user_id: string
+        }
+        Update: {
+          created_at?: string | null
+          id?: string
+          level?: number | null
+          points?: number | null
+          total_points_earned?: number | null
+          updated_at?: string | null
+          user_id?: string
+        }
+        Relationships: []
+      }
       broker_profiles: {
         Row: {
           bio: string | null
@@ -435,6 +504,106 @@ export type Database = {
         }
         Relationships: []
       }
+      broker_tasks: {
+        Row: {
+          assigned_by: string | null
+          completed_at: string | null
+          created_at: string | null
+          description: string | null
+          developer_id: string | null
+          due_date: string | null
+          id: string
+          points_reward: number | null
+          scheduled_time: string | null
+          status: Database["public"]["Enums"]["broker_task_status"] | null
+          task_type: Database["public"]["Enums"]["broker_task_type"]
+          title: string
+          updated_at: string | null
+          user_id: string
+        }
+        Insert: {
+          assigned_by?: string | null
+          completed_at?: string | null
+          created_at?: string | null
+          description?: string | null
+          developer_id?: string | null
+          due_date?: string | null
+          id?: string
+          points_reward?: number | null
+          scheduled_time?: string | null
+          status?: Database["public"]["Enums"]["broker_task_status"] | null
+          task_type: Database["public"]["Enums"]["broker_task_type"]
+          title: string
+          updated_at?: string | null
+          user_id: string
+        }
+        Update: {
+          assigned_by?: string | null
+          completed_at?: string | null
+          created_at?: string | null
+          description?: string | null
+          developer_id?: string | null
+          due_date?: string | null
+          id?: string
+          points_reward?: number | null
+          scheduled_time?: string | null
+          status?: Database["public"]["Enums"]["broker_task_status"] | null
+          task_type?: Database["public"]["Enums"]["broker_task_type"]
+          title?: string
+          updated_at?: string | null
+          user_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "broker_tasks_developer_id_fkey"
+            columns: ["developer_id"]
+            isOneToOne: false
+            referencedRelation: "uae_developers"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      broker_training_progress: {
+        Row: {
+          completed_at: string | null
+          created_at: string | null
+          id: string
+          is_completed: boolean | null
+          module_id: string
+          quiz_score: number | null
+          started_at: string | null
+          user_id: string
+        }
+        Insert: {
+          completed_at?: string | null
+          created_at?: string | null
+          id?: string
+          is_completed?: boolean | null
+          module_id: string
+          quiz_score?: number | null
+          started_at?: string | null
+          user_id: string
+        }
+        Update: {
+          completed_at?: string | null
+          created_at?: string | null
+          id?: string
+          is_completed?: boolean | null
+          module_id?: string
+          quiz_score?: number | null
+          started_at?: string | null
+          user_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "broker_training_progress_module_id_fkey"
+            columns: ["module_id"]
+            isOneToOne: false
+            referencedRelation: "hr_training_modules"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       chat_conversations: {
         Row: {
           created_at: string
@@ -479,6 +648,44 @@ export type Database = {
           user_phone?: string | null
         }
         Relationships: []
+      }
+      claimed_rewards: {
+        Row: {
+          claimed_at: string | null
+          fulfilled_at: string | null
+          id: string
+          points_spent: number
+          reward_id: string
+          status: string | null
+          user_id: string
+        }
+        Insert: {
+          claimed_at?: string | null
+          fulfilled_at?: string | null
+          id?: string
+          points_spent: number
+          reward_id: string
+          status?: string | null
+          user_id: string
+        }
+        Update: {
+          claimed_at?: string | null
+          fulfilled_at?: string | null
+          id?: string
+          points_spent?: number
+          reward_id?: string
+          status?: string | null
+          user_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "claimed_rewards_reward_id_fkey"
+            columns: ["reward_id"]
+            isOneToOne: false
+            referencedRelation: "rewards_catalog"
+            referencedColumns: ["id"]
+          },
+        ]
       }
       communities: {
         Row: {
@@ -1236,6 +1443,71 @@ export type Database = {
           },
         ]
       }
+      developer_visit_checkins: {
+        Row: {
+          check_in_latitude: number | null
+          check_in_longitude: number | null
+          check_in_photo_url: string | null
+          check_in_time: string
+          check_out_latitude: number | null
+          check_out_longitude: number | null
+          check_out_photo_url: string | null
+          check_out_time: string | null
+          confirmation_statement: boolean | null
+          created_at: string | null
+          developer_id: string
+          id: string
+          notes: string | null
+          signature_data: string | null
+          task_id: string | null
+          user_id: string
+        }
+        Insert: {
+          check_in_latitude?: number | null
+          check_in_longitude?: number | null
+          check_in_photo_url?: string | null
+          check_in_time?: string
+          check_out_latitude?: number | null
+          check_out_longitude?: number | null
+          check_out_photo_url?: string | null
+          check_out_time?: string | null
+          confirmation_statement?: boolean | null
+          created_at?: string | null
+          developer_id: string
+          id?: string
+          notes?: string | null
+          signature_data?: string | null
+          task_id?: string | null
+          user_id: string
+        }
+        Update: {
+          check_in_latitude?: number | null
+          check_in_longitude?: number | null
+          check_in_photo_url?: string | null
+          check_in_time?: string
+          check_out_latitude?: number | null
+          check_out_longitude?: number | null
+          check_out_photo_url?: string | null
+          check_out_time?: string | null
+          confirmation_statement?: boolean | null
+          created_at?: string | null
+          developer_id?: string
+          id?: string
+          notes?: string | null
+          signature_data?: string | null
+          task_id?: string | null
+          user_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "developer_visit_checkins_developer_id_fkey"
+            columns: ["developer_id"]
+            isOneToOne: false
+            referencedRelation: "uae_developers"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       developers: {
         Row: {
           completed_projects: number | null
@@ -1782,6 +2054,48 @@ export type Database = {
         }
         Relationships: []
       }
+      hr_training_modules: {
+        Row: {
+          category: string | null
+          content: string
+          created_at: string | null
+          description: string | null
+          display_order: number | null
+          duration_minutes: number | null
+          id: string
+          is_required: boolean | null
+          title: string
+          updated_at: string | null
+          video_url: string | null
+        }
+        Insert: {
+          category?: string | null
+          content: string
+          created_at?: string | null
+          description?: string | null
+          display_order?: number | null
+          duration_minutes?: number | null
+          id?: string
+          is_required?: boolean | null
+          title: string
+          updated_at?: string | null
+          video_url?: string | null
+        }
+        Update: {
+          category?: string | null
+          content?: string
+          created_at?: string | null
+          description?: string | null
+          display_order?: number | null
+          duration_minutes?: number | null
+          id?: string
+          is_required?: boolean | null
+          title?: string
+          updated_at?: string | null
+          video_url?: string | null
+        }
+        Relationships: []
+      }
       hr_user_roles: {
         Row: {
           created_at: string
@@ -2015,6 +2329,39 @@ export type Database = {
           settings?: Json | null
           slug?: string
           updated_at?: string
+        }
+        Relationships: []
+      }
+      points_transactions: {
+        Row: {
+          created_at: string | null
+          description: string | null
+          id: string
+          points: number
+          reference_id: string | null
+          reference_type: string | null
+          transaction_type: string
+          user_id: string
+        }
+        Insert: {
+          created_at?: string | null
+          description?: string | null
+          id?: string
+          points: number
+          reference_id?: string | null
+          reference_type?: string | null
+          transaction_type: string
+          user_id: string
+        }
+        Update: {
+          created_at?: string | null
+          description?: string | null
+          id?: string
+          points?: number
+          reference_id?: string | null
+          reference_type?: string | null
+          transaction_type?: string
+          user_id?: string
         }
         Relationships: []
       }
@@ -2271,6 +2618,42 @@ export type Database = {
           recommended_project_ids?: string[] | null
           session_id?: string
           user_id?: string | null
+        }
+        Relationships: []
+      }
+      rewards_catalog: {
+        Row: {
+          created_at: string | null
+          description: string | null
+          id: string
+          image_url: string | null
+          is_active: boolean | null
+          name: string
+          points_required: number
+          quantity_available: number | null
+          reward_type: Database["public"]["Enums"]["reward_type"] | null
+        }
+        Insert: {
+          created_at?: string | null
+          description?: string | null
+          id?: string
+          image_url?: string | null
+          is_active?: boolean | null
+          name: string
+          points_required: number
+          quantity_available?: number | null
+          reward_type?: Database["public"]["Enums"]["reward_type"] | null
+        }
+        Update: {
+          created_at?: string | null
+          description?: string | null
+          id?: string
+          image_url?: string | null
+          is_active?: boolean | null
+          name?: string
+          points_required?: number
+          quantity_available?: number | null
+          reward_type?: Database["public"]["Enums"]["reward_type"] | null
         }
         Relationships: []
       }
@@ -2669,6 +3052,14 @@ export type Database = {
         | "document"
         | "settings"
         | "role"
+      broker_task_status: "pending" | "in_progress" | "completed" | "overdue"
+      broker_task_type:
+        | "developer_visit"
+        | "training"
+        | "document"
+        | "call"
+        | "meeting"
+        | "other"
       crm_activity_type:
         | "call"
         | "whatsapp_click"
@@ -2705,6 +3096,7 @@ export type Database = {
       hr_module_track: "company_knowledge" | "real_estate_basics"
       hr_question_type: "mcq" | "true_false" | "short_answer"
       hr_role: "broker_candidate" | "broker_member"
+      reward_type: "points" | "gift" | "badge" | "certificate"
       visitor_role: "broker" | "referral_partner" | "client" | "visitor"
     }
     CompositeTypes: {
@@ -2860,6 +3252,15 @@ export const Constants = {
         "settings",
         "role",
       ],
+      broker_task_status: ["pending", "in_progress", "completed", "overdue"],
+      broker_task_type: [
+        "developer_visit",
+        "training",
+        "document",
+        "call",
+        "meeting",
+        "other",
+      ],
       crm_activity_type: [
         "call",
         "whatsapp_click",
@@ -2899,6 +3300,7 @@ export const Constants = {
       hr_module_track: ["company_knowledge", "real_estate_basics"],
       hr_question_type: ["mcq", "true_false", "short_answer"],
       hr_role: ["broker_candidate", "broker_member"],
+      reward_type: ["points", "gift", "badge", "certificate"],
       visitor_role: ["broker", "referral_partner", "client", "visitor"],
     },
   },
