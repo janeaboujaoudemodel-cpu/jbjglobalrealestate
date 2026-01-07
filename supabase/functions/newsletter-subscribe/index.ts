@@ -87,7 +87,7 @@ const handler = async (req: Request): Promise<Response> => {
 
     if (brevoApiKey) {
       try {
-        const targetListId = listId || parseInt(Deno.env.get("BREVO_DEFAULT_LIST_ID") || "1");
+        const targetListId = listId || parseInt(Deno.env.get("BREVO_LIST_ID") || "2");
 
         const brevoPayload = {
           email: email,
