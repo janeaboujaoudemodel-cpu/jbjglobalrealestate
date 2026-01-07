@@ -25,7 +25,7 @@ import {
   SheetTrigger,
 } from "@/components/ui/sheet";
 import { ScrollArea } from "@/components/ui/scroll-area";
-import { JJLogoHeaderImage } from "@/components/JJLogoImage";
+import { JBJLogoHeader } from "@/components/JBJLogo";
 import LanguageSwitcher from "@/components/LanguageSwitcher";
 import GlobalSearchModal from "@/components/GlobalSearchModal";
 
@@ -94,7 +94,7 @@ const GlobalHeader = () => {
           
           {/* LEFT: Logo Brand Block */}
           <Link to="/" className="flex items-center shrink-0 hover:opacity-90 transition-opacity">
-            <JJLogoHeaderImage />
+            <JBJLogoHeader />
           </Link>
 
           {/* CENTER: Desktop Navigation with proper separation */}
@@ -164,7 +164,7 @@ const GlobalHeader = () => {
               >
                 {/* Menu Header with glassmorphism */}
                 <div className="relative h-28 bg-gradient-to-b from-zinc-900/80 to-black/90 border-b border-gold/20 flex items-end p-5 shrink-0 backdrop-blur-sm">
-                  <JJLogoHeaderImage />
+                  <JBJLogoHeader />
                 </div>
 
                 {/* Scrollable Navigation */}
