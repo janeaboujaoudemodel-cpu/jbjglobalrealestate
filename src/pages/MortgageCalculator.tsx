@@ -35,32 +35,32 @@ const MortgageCalculatorPage = () => {
   const { t } = useLanguage();
 
   return (
-    <section className="min-h-screen bg-zinc-950">
+    <section className="min-h-screen bg-background">
       {/* Hero Section */}
-      <div className="relative py-16 md:py-24 bg-gradient-to-b from-cyan-950/50 via-zinc-950 to-zinc-950">
+      <div className="relative py-16 md:py-24 bg-gradient-to-b from-zinc-900 via-background to-background">
         {/* Background effects */}
         <div className="absolute inset-0">
-          <div className="absolute top-0 right-1/4 w-96 h-96 bg-cyan-500/10 rounded-full blur-[120px] pointer-events-none" />
-          <div className="absolute bottom-0 left-1/4 w-96 h-96 bg-cyan-500/5 rounded-full blur-[120px] pointer-events-none" />
+          <div className="absolute top-0 right-1/4 w-96 h-96 bg-gold/10 rounded-full blur-[120px] pointer-events-none" />
+          <div className="absolute bottom-0 left-1/4 w-96 h-96 bg-gold/5 rounded-full blur-[120px] pointer-events-none" />
         </div>
         
         <div className="container mx-auto px-4 relative z-10">
-          <Link to="/" className="inline-flex items-center gap-2 text-zinc-400 hover:text-cyan-400 mb-8 transition-colors group">
+          <Link to="/" className="inline-flex items-center gap-2 text-muted-foreground hover:text-gold mb-8 transition-colors group">
             <ArrowLeft className="w-4 h-4 group-hover:-translate-x-1 transition-transform" />
             Back to Home
           </Link>
           
           <div className="max-w-3xl mb-12">
-            <span className="inline-block px-4 py-1.5 bg-cyan-500/10 border border-cyan-500/30 rounded-full text-cyan-400 text-sm font-medium mb-6">
+            <span className="inline-block px-4 py-1.5 bg-gold/10 border border-gold/30 rounded-full text-gold text-sm font-medium mb-6">
               {t('mortgage.title')}
             </span>
             <h1 
-              className="text-4xl md:text-5xl lg:text-6xl font-bold text-white mb-6"
+              className="text-4xl md:text-5xl lg:text-6xl font-bold text-foreground mb-6"
               style={{ fontFamily: "Poppins, sans-serif" }}
             >
-              <span className="text-transparent bg-clip-text bg-gradient-to-r from-cyan-400 to-teal-400">{t('mortgage.title')}</span>
+              <span className="text-gold">{t('mortgage.title')}</span>
             </h1>
-            <p className="text-zinc-400 text-lg md:text-xl leading-relaxed">
+            <p className="text-muted-foreground text-lg md:text-xl leading-relaxed">
               {t('mortgage.subtitle')}. Plan your property investment with our advanced mortgage calculator. Get accurate estimates for monthly payments, total interest, and find the perfect financing option for your UAE property purchase.
             </p>
           </div>
@@ -71,16 +71,16 @@ const MortgageCalculatorPage = () => {
       </div>
 
       {/* Benefits Section */}
-      <div className="py-16 md:py-24 bg-gradient-to-b from-zinc-950 to-zinc-900">
+      <div className="py-16 md:py-24 bg-gradient-to-b from-background to-muted/20">
         <div className="container mx-auto px-4">
           <div className="text-center mb-12">
             <h2 
-              className="text-3xl md:text-4xl font-bold text-white mb-4"
+              className="text-3xl md:text-4xl font-bold text-foreground mb-4"
               style={{ fontFamily: "Poppins, sans-serif" }}
             >
               Why Choose Our <span className="text-gold">{t('mortgage.title')}</span>
             </h2>
-            <p className="text-zinc-400 max-w-2xl mx-auto">
+            <p className="text-muted-foreground max-w-2xl mx-auto">
               Our dedicated mortgage team partners with leading UAE banks to secure the best rates and terms for your property investment
             </p>
           </div>
@@ -89,15 +89,15 @@ const MortgageCalculatorPage = () => {
             {benefits.map((benefit, index) => (
               <div 
                 key={index}
-                className="group bg-gradient-to-br from-zinc-900/80 to-zinc-950 border border-zinc-800 rounded-xl p-6 hover:border-gold/30 transition-all duration-500 hover:-translate-y-1"
+                className="group bg-card border border-border rounded-xl p-6 hover:border-gold/30 transition-all duration-500 hover:-translate-y-1 hover:shadow-lg"
               >
                 <div className="w-12 h-12 rounded-xl bg-gradient-to-br from-gold/20 to-gold/5 border border-gold/20 flex items-center justify-center mb-4 group-hover:scale-110 transition-transform">
                   <benefit.icon className="w-6 h-6 text-gold" />
                 </div>
-                <h3 className="text-lg font-semibold text-white mb-2 group-hover:text-gold transition-colors">
+                <h3 className="text-lg font-semibold text-foreground mb-2 group-hover:text-gold transition-colors">
                   {benefit.title}
                 </h3>
-                <p className="text-sm text-zinc-400">
+                <p className="text-sm text-muted-foreground">
                   {benefit.description}
                 </p>
               </div>
@@ -107,15 +107,15 @@ const MortgageCalculatorPage = () => {
       </div>
 
       {/* Banks Section */}
-      <div className="py-16 border-t border-zinc-800">
+      <div className="py-16 border-t border-border">
         <div className="container mx-auto px-4">
           <div className="text-center mb-10">
-            <p className="text-zinc-400 text-sm uppercase tracking-wider mb-2">Partnered With</p>
-            <h3 className="text-xl font-semibold text-white">Leading UAE Banks</h3>
+            <p className="text-muted-foreground text-sm uppercase tracking-wider mb-2">Partnered With</p>
+            <h3 className="text-xl font-semibold text-foreground">Leading UAE Banks</h3>
           </div>
           <div className="flex flex-wrap justify-center items-center gap-8 md:gap-12 opacity-60">
             {["Emirates NBD", "ADCB", "FAB", "Mashreq", "DIB", "RAKBANK"].map((bank) => (
-              <div key={bank} className="text-zinc-500 font-semibold text-lg">
+              <div key={bank} className="text-muted-foreground font-semibold text-lg">
                 {bank}
               </div>
             ))}
@@ -124,21 +124,21 @@ const MortgageCalculatorPage = () => {
       </div>
 
       {/* CTA Section */}
-      <div className="py-16 md:py-24 bg-gradient-to-b from-zinc-900 to-black">
+      <div className="py-16 md:py-24 bg-gradient-to-b from-muted/20 to-background">
         <div className="container mx-auto px-4">
           <div className="max-w-3xl mx-auto text-center">
             <h2 
-              className="text-3xl md:text-4xl font-bold text-white mb-6"
+              className="text-3xl md:text-4xl font-bold text-foreground mb-6"
               style={{ fontFamily: "Poppins, sans-serif" }}
             >
               Ready to Secure Your <span className="text-gold">Mortgage?</span>
             </h2>
-            <p className="text-zinc-400 text-lg mb-8">
+            <p className="text-muted-foreground text-lg mb-8">
               Speak with our mortgage advisors today and get personalized guidance for your property investment financing needs.
             </p>
             <Button 
               onClick={() => setIsInquiryOpen(true)}
-              className="bg-gradient-to-r from-gold to-gold-dark text-black px-8 py-6 h-auto font-semibold text-lg hover:opacity-90 transition-opacity"
+              className="bg-gold hover:bg-gold-dark text-gold-foreground px-8 py-6 h-auto font-semibold text-lg transition-colors"
             >
               {t('mortgage.contactAdvisor')}
               <ArrowUpRight className="w-5 h-5 ml-2" />

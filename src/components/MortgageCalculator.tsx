@@ -126,18 +126,18 @@ const MortgageCalculator = ({ defaultPrice = 2000000, compact = false }: Mortgag
   }
 
   return (
-    <div className="bg-gradient-to-br from-cyan-900/30 via-zinc-900/95 to-cyan-950/30 border border-cyan-500/30 rounded-2xl overflow-hidden">
-      {/* Header - Cyan Premium Style */}
-      <div className="bg-gradient-to-r from-cyan-600/20 via-cyan-500/15 to-cyan-600/20 border-b border-cyan-500/30 p-6">
+    <div className="bg-card border border-border rounded-2xl overflow-hidden shadow-lg">
+      {/* Header - Gold Premium Style */}
+      <div className="bg-gradient-to-r from-gold/20 via-gold/10 to-gold/20 border-b border-gold/30 p-6">
         <div className="flex items-center gap-3">
-          <div className="w-12 h-12 rounded-xl bg-gradient-to-br from-cyan-500/30 to-cyan-600/20 border border-cyan-400/30 flex items-center justify-center">
-            <Calculator className="w-6 h-6 text-cyan-300" />
+          <div className="w-12 h-12 rounded-xl bg-gradient-to-br from-gold/30 to-gold/10 border border-gold/30 flex items-center justify-center">
+            <Calculator className="w-6 h-6 text-gold" />
           </div>
           <div>
-            <h3 className="text-xl font-bold text-white" style={{ fontFamily: "Poppins, sans-serif" }}>
+            <h3 className="text-xl font-bold text-foreground" style={{ fontFamily: "Poppins, sans-serif" }}>
               Mortgage Calculator
             </h3>
-            <p className="text-cyan-200/70 text-sm">Estimate your monthly payments</p>
+            <p className="text-muted-foreground text-sm">Estimate your monthly payments</p>
           </div>
         </div>
       </div>
@@ -149,7 +149,7 @@ const MortgageCalculator = ({ defaultPrice = 2000000, compact = false }: Mortgag
             {/* Property Price */}
             <div className="space-y-3">
               <div className="flex items-center justify-between">
-                <Label className="text-zinc-300 flex items-center gap-2">
+                <Label className="text-foreground flex items-center gap-2">
                   <DollarSign className="w-4 h-4 text-gold" />
                   Property Price
                 </Label>
@@ -159,7 +159,7 @@ const MortgageCalculator = ({ defaultPrice = 2000000, compact = false }: Mortgag
                 type="text"
                 value={formatNumberWithCommas(propertyPrice)}
                 onChange={(e) => setPropertyPrice(parseFormattedNumber(e.target.value))}
-                className="bg-zinc-900/50 border-zinc-700 text-white focus:border-gold"
+                className="bg-background border-border text-foreground focus:border-gold"
               />
               <Slider
                 value={[propertyPrice]}
@@ -169,7 +169,7 @@ const MortgageCalculator = ({ defaultPrice = 2000000, compact = false }: Mortgag
                 step={100000}
                 className="py-2"
               />
-              <div className="flex justify-between text-xs text-zinc-500">
+              <div className="flex justify-between text-xs text-muted-foreground">
                 <span>AED 500K</span>
                 <span>AED 50M</span>
               </div>
@@ -178,15 +178,15 @@ const MortgageCalculator = ({ defaultPrice = 2000000, compact = false }: Mortgag
             {/* Down Payment */}
             <div className="space-y-3">
               <div className="flex items-center justify-between">
-                <Label className="text-zinc-300 flex items-center gap-2">
+                <Label className="text-foreground flex items-center gap-2">
                   <Percent className="w-4 h-4 text-gold" />
                   Down Payment
                   <TooltipProvider>
                     <Tooltip>
                       <TooltipTrigger>
-                        <Info className="w-3.5 h-3.5 text-zinc-500" />
+                        <Info className="w-3.5 h-3.5 text-muted-foreground" />
                       </TooltipTrigger>
-                      <TooltipContent className="bg-zinc-900 border-zinc-700 text-zinc-300">
+                      <TooltipContent className="bg-popover border-border text-popover-foreground">
                         <p>UAE typically requires 20-25% for residents</p>
                       </TooltipContent>
                     </Tooltip>
@@ -202,7 +202,7 @@ const MortgageCalculator = ({ defaultPrice = 2000000, compact = false }: Mortgag
                 step={5}
                 className="py-2"
               />
-              <div className="flex justify-between text-xs text-zinc-500">
+              <div className="flex justify-between text-xs text-muted-foreground">
                 <span>5%</span>
                 <span>{formatCurrency(calculations.downPayment)}</span>
                 <span>80%</span>
@@ -212,7 +212,7 @@ const MortgageCalculator = ({ defaultPrice = 2000000, compact = false }: Mortgag
             {/* Interest Rate */}
             <div className="space-y-3">
               <div className="flex items-center justify-between">
-                <Label className="text-zinc-300 flex items-center gap-2">
+                <Label className="text-foreground flex items-center gap-2">
                   <TrendingUp className="w-4 h-4 text-gold" />
                   Interest Rate (Annual)
                 </Label>
@@ -226,7 +226,7 @@ const MortgageCalculator = ({ defaultPrice = 2000000, compact = false }: Mortgag
                 step={0.25}
                 className="py-2"
               />
-              <div className="flex justify-between text-xs text-zinc-500">
+              <div className="flex justify-between text-xs text-muted-foreground">
                 <span>2%</span>
                 <span>10%</span>
               </div>
@@ -235,7 +235,7 @@ const MortgageCalculator = ({ defaultPrice = 2000000, compact = false }: Mortgag
             {/* Loan Term */}
             <div className="space-y-3">
               <div className="flex items-center justify-between">
-                <Label className="text-zinc-300 flex items-center gap-2">
+                <Label className="text-foreground flex items-center gap-2">
                   <Calendar className="w-4 h-4 text-gold" />
                   Loan Term
                 </Label>
@@ -249,7 +249,7 @@ const MortgageCalculator = ({ defaultPrice = 2000000, compact = false }: Mortgag
                 step={5}
                 className="py-2"
               />
-              <div className="flex justify-between text-xs text-zinc-500">
+              <div className="flex justify-between text-xs text-muted-foreground">
                 <span>5 Years</span>
                 <span>30 Years</span>
               </div>
@@ -258,72 +258,72 @@ const MortgageCalculator = ({ defaultPrice = 2000000, compact = false }: Mortgag
 
           {/* Results Section */}
           <div className="space-y-6">
-            {/* Monthly Payment - Featured Cyan Style */}
-            <div className="bg-gradient-to-br from-cyan-500/20 via-cyan-600/10 to-transparent border border-cyan-400/30 rounded-xl p-4 md:p-6 text-center">
-              <p className="text-cyan-200/70 text-sm mb-2">Estimated Monthly Payment</p>
+            {/* Monthly Payment - Featured Gold Style */}
+            <div className="bg-gradient-to-br from-gold/20 via-gold/10 to-transparent border border-gold/30 rounded-xl p-4 md:p-6 text-center">
+              <p className="text-muted-foreground text-sm mb-2">Estimated Monthly Payment</p>
               <p 
-                className="text-2xl sm:text-3xl md:text-4xl lg:text-5xl font-bold text-transparent bg-clip-text bg-gradient-to-r from-cyan-300 via-white to-cyan-300 break-words"
+                className="text-2xl sm:text-3xl md:text-4xl lg:text-5xl font-bold text-gold break-words"
                 style={{ fontFamily: "Poppins, sans-serif" }}
               >
                 {formatCurrency(calculations.monthlyPayment)}
               </p>
-              <p className="text-cyan-300/50 text-xs mt-2">per month for {loanTermYears} years</p>
+              <p className="text-muted-foreground text-xs mt-2">per month for {loanTermYears} years</p>
             </div>
 
-            {/* Breakdown Cards - Cyan style */}
+            {/* Breakdown Cards - Gold style */}
             <div className="grid grid-cols-2 gap-2 sm:gap-4">
-              <div className="bg-cyan-900/20 border border-cyan-500/20 rounded-xl p-3 sm:p-4">
-                <p className="text-cyan-300/60 text-[10px] sm:text-xs mb-1 truncate">Loan Amount</p>
-                <p className="text-white font-bold text-sm sm:text-base md:text-lg truncate">{formatCurrency(calculations.loanAmount)}</p>
+              <div className="bg-muted/50 border border-border rounded-xl p-3 sm:p-4">
+                <p className="text-muted-foreground text-[10px] sm:text-xs mb-1 truncate">Loan Amount</p>
+                <p className="text-foreground font-bold text-sm sm:text-base md:text-lg truncate">{formatCurrency(calculations.loanAmount)}</p>
               </div>
-              <div className="bg-cyan-900/20 border border-cyan-500/20 rounded-xl p-3 sm:p-4">
-                <p className="text-cyan-300/60 text-[10px] sm:text-xs mb-1 truncate">Down Payment</p>
-                <p className="text-white font-bold text-sm sm:text-base md:text-lg truncate">{formatCurrency(calculations.downPayment)}</p>
+              <div className="bg-muted/50 border border-border rounded-xl p-3 sm:p-4">
+                <p className="text-muted-foreground text-[10px] sm:text-xs mb-1 truncate">Down Payment</p>
+                <p className="text-foreground font-bold text-sm sm:text-base md:text-lg truncate">{formatCurrency(calculations.downPayment)}</p>
               </div>
-              <div className="bg-cyan-900/20 border border-cyan-500/20 rounded-xl p-3 sm:p-4">
-                <p className="text-cyan-300/60 text-[10px] sm:text-xs mb-1 truncate">Total Interest</p>
-                <p className="text-cyan-300 font-bold text-sm sm:text-base md:text-lg truncate">{formatCurrency(calculations.totalInterest)}</p>
+              <div className="bg-muted/50 border border-border rounded-xl p-3 sm:p-4">
+                <p className="text-muted-foreground text-[10px] sm:text-xs mb-1 truncate">Total Interest</p>
+                <p className="text-gold font-bold text-sm sm:text-base md:text-lg truncate">{formatCurrency(calculations.totalInterest)}</p>
               </div>
-              <div className="bg-cyan-900/20 border border-cyan-500/20 rounded-xl p-3 sm:p-4">
-                <p className="text-cyan-300/60 text-[10px] sm:text-xs mb-1 truncate">Total Payment</p>
-                <p className="text-white font-bold text-sm sm:text-base md:text-lg truncate">{formatCurrency(calculations.totalPayment)}</p>
+              <div className="bg-muted/50 border border-border rounded-xl p-3 sm:p-4">
+                <p className="text-muted-foreground text-[10px] sm:text-xs mb-1 truncate">Total Payment</p>
+                <p className="text-foreground font-bold text-sm sm:text-base md:text-lg truncate">{formatCurrency(calculations.totalPayment)}</p>
               </div>
             </div>
 
-            {/* Payment Visualization - Cyan theme */}
+            {/* Payment Visualization - Gold theme */}
             <div className="space-y-2">
-              <p className="text-cyan-200/70 text-sm">Payment Breakdown</p>
-              <div className="h-4 rounded-full overflow-hidden bg-zinc-800/50 flex">
+              <p className="text-muted-foreground text-sm">Payment Breakdown</p>
+              <div className="h-4 rounded-full overflow-hidden bg-muted flex">
                 <div 
-                  className="bg-gradient-to-r from-cyan-500 to-cyan-400 transition-all duration-500"
+                  className="bg-primary transition-all duration-500"
                   style={{ width: `${(calculations.loanAmount / calculations.totalPayment) * 100}%` }}
                 />
                 <div 
-                  className="bg-gradient-to-r from-gold to-gold-light transition-all duration-500"
+                  className="bg-gold transition-all duration-500"
                   style={{ width: `${(calculations.totalInterest / calculations.totalPayment) * 100}%` }}
                 />
               </div>
               <div className="flex justify-between text-xs">
                 <span className="flex items-center gap-1.5">
-                  <span className="w-2.5 h-2.5 rounded-full bg-cyan-500" />
-                  <span className="text-zinc-400">Principal</span>
+                  <span className="w-2.5 h-2.5 rounded-full bg-primary" />
+                  <span className="text-muted-foreground">Principal</span>
                 </span>
                 <span className="flex items-center gap-1.5">
                   <span className="w-2.5 h-2.5 rounded-full bg-gold" />
-                  <span className="text-zinc-400">Interest</span>
+                  <span className="text-muted-foreground">Interest</span>
                 </span>
               </div>
             </div>
 
-            {/* CTA - Cyan gradient */}
+            {/* CTA - Gold gradient */}
             <a href={INQUIRY_FORM_URL} target="_blank" rel="noopener noreferrer" className="block">
-              <Button className="w-full bg-gradient-to-r from-cyan-600 to-cyan-700 hover:from-cyan-500 hover:to-cyan-600 text-white h-12 text-base font-semibold group border border-cyan-400/30">
+              <Button className="w-full bg-gold hover:bg-gold-dark text-gold-foreground h-12 text-base font-semibold group">
                 Request Mortgage Partner Introduction
                 <ArrowRight className="w-4 h-4 ml-2 group-hover:translate-x-1 transition-transform" />
               </Button>
             </a>
 
-            <p className="text-zinc-500 text-xs text-center">
+            <p className="text-muted-foreground text-xs text-center">
               *Estimates are for illustrative purposes only. Actual rates may vary based on bank policies and eligibility.
             </p>
           </div>
