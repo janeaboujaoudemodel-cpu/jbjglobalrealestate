@@ -54,7 +54,7 @@ interface AuditLog {
 }
 
 const AdminCRM = () => {
-  const { user } = useAuth();
+  const { user, loading: authLoading } = useAuth();
   const navigate = useNavigate();
   const [loading, setLoading] = useState(true);
   const [isAdmin, setIsAdmin] = useState(false);
@@ -63,12 +63,15 @@ const AdminCRM = () => {
   const [allLeads, setAllLeads] = useState<any[]>([]);
 
   useEffect(() => {
+    if (authLoading) return;
+
     if (!user) {
       navigate("/auth");
       return;
     }
+
     checkAdminAccess();
-  }, [user, navigate]);
+  }, [user, authLoading, navigate]);
 
   const checkAdminAccess = async () => {
     if (!user) return;

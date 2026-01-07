@@ -24,56 +24,58 @@ export function AuthProvider({ children }: { children: ReactNode }) {
   const [isAdmin, setIsAdmin] = useState(false);
 
   useEffect(() => {
-    // Set up auth state listener FIRST
-    const { data: { subscription } } = supabase.auth.onAuthStateChange(
-      (event, session) => {
-        setSession(session);
-        setUser(session?.user ?? null);
-        
-        // Defer admin check with setTimeout
-        if (session?.user) {
-          setTimeout(() => {
-            checkAdminRole(session.user.id);
-          }, 0);
-        } else {
-          setIsAdmin(false);
-        }
-        setLoading(false);
-      }
-    );
+    let mounted = true;
 
-    // THEN check for existing session
-    supabase.auth.getSession().then(({ data: { session } }) => {
-      setSession(session);
-      setUser(session?.user ?? null);
-      if (session?.user) {
-        checkAdminRole(session.user.id);
+    const applySession = async (nextSession: Session | null) => {
+      if (!mounted) return;
+
+      setSession(nextSession);
+      setUser(nextSession?.user ?? null);
+
+      if (nextSession?.user) {
+        await checkAdminRole(nextSession.user.id);
+      } else {
+        setIsAdmin(false);
       }
-      setLoading(false);
+
+      if (mounted) setLoading(false);
+    };
+
+    // Set up auth state listener FIRST
+    const {
+      data: { subscription },
+    } = supabase.auth.onAuthStateChange((_event, nextSession) => {
+      // Fire-and-forget; applySession handles loading state.
+      void applySession(nextSession);
     });
 
-    return () => subscription.unsubscribe();
+    // THEN check for existing session
+    supabase.auth
+      .getSession()
+      .then(({ data: { session: existingSession } }) => applySession(existingSession));
+
+    return () => {
+      mounted = false;
+      subscription.unsubscribe();
+    };
   }, []);
 
   const checkAdminRole = async (userId: string) => {
     try {
-      const { data, error } = await supabase
-        .from("user_roles")
-        .select("role")
-        .eq("user_id", userId)
-        .eq("role", "admin")
-        .maybeSingle();
+      // Use backend role check to avoid client-side RLS/permission issues.
+      const { data, error } = await supabase.rpc("has_role", {
+        _user_id: userId,
+        _role: "admin",
+      });
 
-      if (error) {
-        console.error("Error checking admin role:", error);
-        setIsAdmin(false);
-        return;
-      }
-      
-      setIsAdmin(!!data);
+      if (error) throw error;
+
+      setIsAdmin(Boolean(data));
+      return Boolean(data);
     } catch (error) {
       console.error("Error checking admin role:", error);
       setIsAdmin(false);
+      return false;
     }
   };
 

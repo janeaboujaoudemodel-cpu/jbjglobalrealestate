@@ -26,7 +26,7 @@ interface CRMProfile {
 }
 
 const CRM = () => {
-  const { user, signOut } = useAuth();
+  const { user, loading: authLoading, signOut } = useAuth();
   const navigate = useNavigate();
   const [loading, setLoading] = useState(true);
   const [profile, setProfile] = useState<CRMProfile | null>(null);
@@ -36,12 +36,15 @@ const CRM = () => {
   const [refreshKey, setRefreshKey] = useState(0);
 
   useEffect(() => {
+    if (authLoading) return;
+
     if (!user) {
       navigate("/auth");
       return;
     }
+
     checkCRMAccess();
-  }, [user, navigate]);
+  }, [authLoading, user, navigate]);
 
   const checkCRMAccess = async () => {
     if (!user) return;
