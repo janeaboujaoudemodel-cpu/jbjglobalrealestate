@@ -13,6 +13,11 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import {
+  Popover,
+  PopoverContent,
+  PopoverTrigger,
+} from "@/components/ui/popover";
+import {
   Dialog,
   DialogContent,
   DialogHeader,
@@ -46,8 +51,10 @@ import {
   Clock,
   XCircle,
   UserCheck,
+  ChevronDown,
 } from "lucide-react";
 import { format } from "date-fns";
+import LeadStatusBadge, { PIPELINE_STATUSES, getStatusInfo } from "@/components/crm/LeadStatusBadge";
 
 interface Lead {
   id: string;
@@ -82,12 +89,7 @@ interface ChatConversation {
   updated_at: string;
 }
 
-const STATUS_OPTIONS = [
-  { value: "new", label: "New", color: "bg-blue-500" },
-  { value: "contacted", label: "Contacted", color: "bg-yellow-500" },
-  { value: "qualified", label: "Qualified", color: "bg-green-500" },
-  { value: "closed", label: "Closed", color: "bg-gray-500" },
-];
+// Use PIPELINE_STATUSES from LeadStatusBadge for consistency
 
 const AdminLeads = () => {
   const navigate = useNavigate();
@@ -234,14 +236,7 @@ const AdminLeads = () => {
     return matchesSearch && matchesStatus;
   });
 
-  const getStatusBadge = (status: string | null) => {
-    const statusConfig = STATUS_OPTIONS.find((s) => s.value === status) || STATUS_OPTIONS[0];
-    return (
-      <Badge className={`${statusConfig.color} text-white`}>
-        {statusConfig.label}
-      </Badge>
-    );
-  };
+  // getStatusBadge is replaced by LeadStatusBadge component
 
   const uniqueSources = [...new Set(leads.map((l) => l.source))];
 
@@ -371,14 +366,45 @@ const AdminLeads = () => {
             <div className="flex items-center gap-2">
               <Filter className="w-4 h-4 text-gray-400" />
               <Select value={statusFilter} onValueChange={setStatusFilter}>
-                <SelectTrigger className="w-40 bg-zinc-950 border-zinc-700 text-white">
+                <SelectTrigger className="w-48 bg-zinc-950 border-zinc-700 text-white">
                   <SelectValue placeholder="Status" />
                 </SelectTrigger>
-                <SelectContent className="bg-zinc-900 border-zinc-700">
+                <SelectContent className="bg-zinc-900 border-zinc-700 max-h-80">
                   <SelectItem value="all">All Statuses</SelectItem>
-                  {STATUS_OPTIONS.map((status) => (
+                  <div className="px-2 py-1 text-xs font-semibold text-emerald-400 uppercase">Positive</div>
+                  {PIPELINE_STATUSES.filter(s => s.category === 'positive').map(status => (
                     <SelectItem key={status.value} value={status.value}>
-                      {status.label}
+                      <div className="flex items-center gap-2">
+                        <span className={`w-2 h-2 rounded-full ${status.color}`} />
+                        {status.label}
+                      </div>
+                    </SelectItem>
+                  ))}
+                  <div className="px-2 py-1 text-xs font-semibold text-blue-400 uppercase mt-1">Neutral</div>
+                  {PIPELINE_STATUSES.filter(s => s.category === 'neutral').map(status => (
+                    <SelectItem key={status.value} value={status.value}>
+                      <div className="flex items-center gap-2">
+                        <span className={`w-2 h-2 rounded-full ${status.color}`} />
+                        {status.label}
+                      </div>
+                    </SelectItem>
+                  ))}
+                  <div className="px-2 py-1 text-xs font-semibold text-amber-400 uppercase mt-1">Follow-up</div>
+                  {PIPELINE_STATUSES.filter(s => s.category === 'warning').map(status => (
+                    <SelectItem key={status.value} value={status.value}>
+                      <div className="flex items-center gap-2">
+                        <span className={`w-2 h-2 rounded-full ${status.color}`} />
+                        {status.label}
+                      </div>
+                    </SelectItem>
+                  ))}
+                  <div className="px-2 py-1 text-xs font-semibold text-red-400 uppercase mt-1">Negative</div>
+                  {PIPELINE_STATUSES.filter(s => s.category === 'negative').map(status => (
+                    <SelectItem key={status.value} value={status.value}>
+                      <div className="flex items-center gap-2">
+                        <span className={`w-2 h-2 rounded-full ${status.color}`} />
+                        {status.label}
+                      </div>
                     </SelectItem>
                   ))}
                 </SelectContent>
@@ -464,21 +490,62 @@ const AdminLeads = () => {
                           </Badge>
                         </TableCell>
                         <TableCell>
-                          <Select
-                            value={lead.status || "new"}
-                            onValueChange={(value) => updateLeadStatus(lead.id, value)}
-                          >
-                            <SelectTrigger className="w-32 h-8 bg-transparent border-zinc-700">
-                              {getStatusBadge(lead.status)}
-                            </SelectTrigger>
-                            <SelectContent className="bg-zinc-900 border-zinc-700">
-                              {STATUS_OPTIONS.map((status) => (
-                                <SelectItem key={status.value} value={status.value}>
-                                  {status.label}
-                                </SelectItem>
-                              ))}
-                            </SelectContent>
-                          </Select>
+                          <Popover>
+                            <PopoverTrigger asChild>
+                              <button className="group flex items-center gap-1">
+                                <LeadStatusBadge status={lead.status || "new"} size="sm" />
+                                <ChevronDown className="h-3 w-3 opacity-0 group-hover:opacity-100 transition-opacity text-gray-400" />
+                              </button>
+                            </PopoverTrigger>
+                            <PopoverContent className="w-56 p-2 bg-zinc-900 border-zinc-700" align="start">
+                              <div className="space-y-1">
+                                <p className="text-xs font-semibold text-emerald-400 px-2 py-1">Positive</p>
+                                {PIPELINE_STATUSES.filter(s => s.category === 'positive').map(status => (
+                                  <button
+                                    key={status.value}
+                                    onClick={() => updateLeadStatus(lead.id, status.value)}
+                                    className="w-full flex items-center gap-2 px-2 py-1.5 rounded hover:bg-zinc-800 text-left transition-colors"
+                                  >
+                                    <span className={`w-2 h-2 rounded-full ${status.color}`} />
+                                    <span className="text-sm text-white">{status.label}</span>
+                                  </button>
+                                ))}
+                                <p className="text-xs font-semibold text-blue-400 px-2 py-1 mt-2">Neutral</p>
+                                {PIPELINE_STATUSES.filter(s => s.category === 'neutral').map(status => (
+                                  <button
+                                    key={status.value}
+                                    onClick={() => updateLeadStatus(lead.id, status.value)}
+                                    className="w-full flex items-center gap-2 px-2 py-1.5 rounded hover:bg-zinc-800 text-left transition-colors"
+                                  >
+                                    <span className={`w-2 h-2 rounded-full ${status.color}`} />
+                                    <span className="text-sm text-white">{status.label}</span>
+                                  </button>
+                                ))}
+                                <p className="text-xs font-semibold text-amber-400 px-2 py-1 mt-2">Follow-up</p>
+                                {PIPELINE_STATUSES.filter(s => s.category === 'warning').map(status => (
+                                  <button
+                                    key={status.value}
+                                    onClick={() => updateLeadStatus(lead.id, status.value)}
+                                    className="w-full flex items-center gap-2 px-2 py-1.5 rounded hover:bg-zinc-800 text-left transition-colors"
+                                  >
+                                    <span className={`w-2 h-2 rounded-full ${status.color}`} />
+                                    <span className="text-sm text-white">{status.label}</span>
+                                  </button>
+                                ))}
+                                <p className="text-xs font-semibold text-red-400 px-2 py-1 mt-2">Negative</p>
+                                {PIPELINE_STATUSES.filter(s => s.category === 'negative').map(status => (
+                                  <button
+                                    key={status.value}
+                                    onClick={() => updateLeadStatus(lead.id, status.value)}
+                                    className="w-full flex items-center gap-2 px-2 py-1.5 rounded hover:bg-zinc-800 text-left transition-colors"
+                                  >
+                                    <span className={`w-2 h-2 rounded-full ${status.color}`} />
+                                    <span className="text-sm text-white">{status.label}</span>
+                                  </button>
+                                ))}
+                              </div>
+                            </PopoverContent>
+                          </Popover>
                         </TableCell>
                         <TableCell>
                           <div className="flex items-center gap-2 text-gray-400 text-sm">
@@ -554,21 +621,62 @@ const AdminLeads = () => {
                           </span>
                         </TableCell>
                         <TableCell>
-                          <Select
-                            value={chat.status}
-                            onValueChange={(value) => updateChatStatus(chat.id, value)}
-                          >
-                            <SelectTrigger className="w-32 h-8 bg-transparent border-zinc-700">
-                              {getStatusBadge(chat.status)}
-                            </SelectTrigger>
-                            <SelectContent className="bg-zinc-900 border-zinc-700">
-                              {STATUS_OPTIONS.map((status) => (
-                                <SelectItem key={status.value} value={status.value}>
-                                  {status.label}
-                                </SelectItem>
-                              ))}
-                            </SelectContent>
-                          </Select>
+                          <Popover>
+                            <PopoverTrigger asChild>
+                              <button className="group flex items-center gap-1">
+                                <LeadStatusBadge status={chat.status || "new"} size="sm" />
+                                <ChevronDown className="h-3 w-3 opacity-0 group-hover:opacity-100 transition-opacity text-gray-400" />
+                              </button>
+                            </PopoverTrigger>
+                            <PopoverContent className="w-56 p-2 bg-zinc-900 border-zinc-700" align="start">
+                              <div className="space-y-1">
+                                <p className="text-xs font-semibold text-emerald-400 px-2 py-1">Positive</p>
+                                {PIPELINE_STATUSES.filter(s => s.category === 'positive').map(status => (
+                                  <button
+                                    key={status.value}
+                                    onClick={() => updateChatStatus(chat.id, status.value)}
+                                    className="w-full flex items-center gap-2 px-2 py-1.5 rounded hover:bg-zinc-800 text-left transition-colors"
+                                  >
+                                    <span className={`w-2 h-2 rounded-full ${status.color}`} />
+                                    <span className="text-sm text-white">{status.label}</span>
+                                  </button>
+                                ))}
+                                <p className="text-xs font-semibold text-blue-400 px-2 py-1 mt-2">Neutral</p>
+                                {PIPELINE_STATUSES.filter(s => s.category === 'neutral').map(status => (
+                                  <button
+                                    key={status.value}
+                                    onClick={() => updateChatStatus(chat.id, status.value)}
+                                    className="w-full flex items-center gap-2 px-2 py-1.5 rounded hover:bg-zinc-800 text-left transition-colors"
+                                  >
+                                    <span className={`w-2 h-2 rounded-full ${status.color}`} />
+                                    <span className="text-sm text-white">{status.label}</span>
+                                  </button>
+                                ))}
+                                <p className="text-xs font-semibold text-amber-400 px-2 py-1 mt-2">Follow-up</p>
+                                {PIPELINE_STATUSES.filter(s => s.category === 'warning').map(status => (
+                                  <button
+                                    key={status.value}
+                                    onClick={() => updateChatStatus(chat.id, status.value)}
+                                    className="w-full flex items-center gap-2 px-2 py-1.5 rounded hover:bg-zinc-800 text-left transition-colors"
+                                  >
+                                    <span className={`w-2 h-2 rounded-full ${status.color}`} />
+                                    <span className="text-sm text-white">{status.label}</span>
+                                  </button>
+                                ))}
+                                <p className="text-xs font-semibold text-red-400 px-2 py-1 mt-2">Negative</p>
+                                {PIPELINE_STATUSES.filter(s => s.category === 'negative').map(status => (
+                                  <button
+                                    key={status.value}
+                                    onClick={() => updateChatStatus(chat.id, status.value)}
+                                    className="w-full flex items-center gap-2 px-2 py-1.5 rounded hover:bg-zinc-800 text-left transition-colors"
+                                  >
+                                    <span className={`w-2 h-2 rounded-full ${status.color}`} />
+                                    <span className="text-sm text-white">{status.label}</span>
+                                  </button>
+                                ))}
+                              </div>
+                            </PopoverContent>
+                          </Popover>
                         </TableCell>
                         <TableCell>
                           <div className="flex items-center gap-2 text-gray-400 text-sm">
