@@ -828,6 +828,7 @@ export type Database = {
       crm_leads: {
         Row: {
           age_range: string | null
+          birthday: string | null
           created_at: string
           created_by_user_id: string | null
           current_location_city: string | null
@@ -848,6 +849,7 @@ export type Database = {
         }
         Insert: {
           age_range?: string | null
+          birthday?: string | null
           created_at?: string
           created_by_user_id?: string | null
           current_location_city?: string | null
@@ -868,6 +870,7 @@ export type Database = {
         }
         Update: {
           age_range?: string | null
+          birthday?: string | null
           created_at?: string
           created_by_user_id?: string | null
           current_location_city?: string | null
@@ -1615,6 +1618,7 @@ export type Database = {
       leads: {
         Row: {
           age_range: string | null
+          birthday: string | null
           consent_accurate: boolean | null
           consent_privacy: boolean | null
           created_at: string
@@ -1632,6 +1636,7 @@ export type Database = {
         }
         Insert: {
           age_range?: string | null
+          birthday?: string | null
           consent_accurate?: boolean | null
           consent_privacy?: boolean | null
           created_at?: string
@@ -1649,6 +1654,7 @@ export type Database = {
         }
         Update: {
           age_range?: string | null
+          birthday?: string | null
           consent_accurate?: boolean | null
           consent_privacy?: boolean | null
           created_at?: string

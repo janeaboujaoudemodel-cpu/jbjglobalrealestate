@@ -54,6 +54,7 @@ const CRMLeadModal = ({ open, onClose, onSuccess, userId }: CRMLeadModalProps) =
     current_location_city: "",
     gender: "",
     age_range: "",
+    birthday: "",
     source: "manual",
     tags: ""
   });
@@ -118,6 +119,7 @@ const CRMLeadModal = ({ open, onClose, onSuccess, userId }: CRMLeadModalProps) =
         current_location_city: formData.current_location_city || null,
         gender: formData.gender || null,
         age_range: formData.age_range || null,
+        birthday: formData.birthday || null,
         source: formData.source || "manual",
         tags: formData.tags ? formData.tags.split(",").map(t => t.trim()) : [],
         owner_type: "broker_owned",
@@ -142,6 +144,7 @@ const CRMLeadModal = ({ open, onClose, onSuccess, userId }: CRMLeadModalProps) =
         current_location_city: "",
         gender: "",
         age_range: "",
+        birthday: "",
         source: "manual",
         tags: ""
       });
@@ -289,6 +292,20 @@ const CRMLeadModal = ({ open, onClose, onSuccess, userId }: CRMLeadModalProps) =
                 </SelectContent>
               </Select>
             </div>
+          </div>
+
+          {/* Birthday */}
+          <div>
+            <Label htmlFor="birthday" className="flex items-center gap-2">
+              Birthday (Optional)
+              <span className="text-xs text-muted-foreground">🎁 For birthday offers</span>
+            </Label>
+            <Input
+              id="birthday"
+              type="date"
+              value={formData.birthday}
+              onChange={(e) => setFormData({ ...formData, birthday: e.target.value })}
+            />
           </div>
 
           {/* Source and Tags */}
