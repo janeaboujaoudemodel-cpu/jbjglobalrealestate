@@ -1,10 +1,10 @@
-import { useRef, useEffect } from 'react';
+import { useRef, useEffect, useMemo } from 'react';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { ScrollArea } from '@/components/ui/scroll-area';
 import { User, Send, MessageCircle, Shield } from 'lucide-react';
 import { motion } from 'framer-motion';
-import { Message, AGENT, SERVICES } from './types';
+import { Message, SERVICES, getRandomAgent } from './types';
 import { CONTACT_INFO } from '@/constants/stats';
 
 interface ChatMessagesProps {
@@ -32,6 +32,7 @@ const ChatMessages = ({
 }: ChatMessagesProps) => {
   const scrollRef = useRef<HTMLDivElement>(null);
   const inputRef = useRef<HTMLInputElement>(null);
+  const agent = useMemo(() => getRandomAgent(), []);
 
   useEffect(() => {
     if (scrollRef.current) {
@@ -70,8 +71,8 @@ const ChatMessages = ({
               ) : (
                 <div className="w-8 h-8 rounded-full overflow-hidden flex-shrink-0 border border-gold/30">
                   <img 
-                    src={AGENT.photo} 
-                    alt={AGENT.name}
+                    src={agent.photo} 
+                    alt={agent.name}
                     className="w-full h-full object-cover"
                   />
                 </div>
@@ -98,8 +99,8 @@ const ChatMessages = ({
             >
               <div className="w-8 h-8 rounded-full overflow-hidden flex-shrink-0 border border-gold/30">
                 <img 
-                  src={AGENT.photo} 
-                  alt={AGENT.name}
+                  src={agent.photo} 
+                  alt={agent.name}
                   className="w-full h-full object-cover"
                 />
               </div>
@@ -121,7 +122,7 @@ const ChatMessages = ({
                     transition={{ duration: 0.6, repeat: Infinity, delay: 0.3 }}
                   />
                 </div>
-                <p className="text-zinc-400 text-xs italic ml-1">{AGENT.name} is typing...</p>
+                <p className="text-zinc-400 text-xs italic ml-1">{agent.name} is typing...</p>
               </div>
             </motion.div>
           )}

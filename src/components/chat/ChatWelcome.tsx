@@ -1,5 +1,4 @@
-import { MessageCircle } from 'lucide-react';
-import { AGENT } from './types';
+import { MessageCircle, Users } from 'lucide-react';
 import { CONTACT_INFO } from '@/constants/stats';
 
 interface ChatWelcomeProps {
@@ -10,35 +9,27 @@ const ChatWelcome = ({ onStartChat }: ChatWelcomeProps) => {
   return (
     <div className="flex-1 p-6 flex flex-col justify-center">
       <div className="text-center mb-6">
-        <div className="w-16 h-16 mx-auto mb-4 rounded-full overflow-hidden border-2 border-gold/40">
-          <img 
-            src={AGENT.photo} 
-            alt={AGENT.name}
-            className="w-full h-full object-cover"
-          />
+        <div className="w-16 h-16 mx-auto mb-4 rounded-full bg-gradient-to-br from-gold to-gold/70 flex items-center justify-center">
+          <Users className="w-8 h-8 text-black" />
         </div>
-        <h4 className="text-white text-lg font-semibold mb-2">Hey there! I'm {AGENT.name} 👋</h4>
-        <p className="text-zinc-400 text-sm">Your property consultant at JJ Global Capital</p>
+        <h4 className="text-white text-lg font-semibold mb-2">Welcome to JJ Global Capital 👋</h4>
+        <p className="text-zinc-400 text-sm">Your premium real estate partner in Dubai</p>
       </div>
 
       <div className="space-y-3">
-        {/* Chat with Sara Option */}
+        {/* Chat with Team Option */}
         <button
           onClick={onStartChat}
           className="w-full p-4 bg-gradient-to-r from-gold/10 to-gold/5 hover:from-gold/20 hover:to-gold/10 border border-gold/30 hover:border-gold/50 rounded-xl text-left transition-all duration-300 group"
         >
           <div className="flex items-center gap-4">
-            <div className="w-12 h-12 rounded-full overflow-hidden border-2 border-gold/40">
-              <img 
-                src={AGENT.photo} 
-                alt={AGENT.name}
-                className="w-full h-full object-cover"
-              />
+            <div className="w-12 h-12 rounded-full bg-gradient-to-br from-gold to-gold/70 flex items-center justify-center">
+              <MessageCircle className="w-6 h-6 text-black" />
             </div>
             <div className="flex-1">
-              <h5 className="text-white text-sm font-semibold mb-1">💬 Chat with me now</h5>
+              <h5 className="text-white text-sm font-semibold mb-1">💬 Chat with our team</h5>
               <p className="text-gold text-xs font-medium">⚡ Quick answers • Available 24/7</p>
-              <p className="text-zinc-400 text-xs mt-1">I know everything about Dubai properties, areas, prices & more!</p>
+              <p className="text-zinc-400 text-xs mt-1">One of our realty members will assist you</p>
             </div>
           </div>
         </button>
@@ -63,7 +54,7 @@ const ChatWelcome = ({ onStartChat }: ChatWelcomeProps) => {
         </a>
 
         <p className="text-zinc-500 text-xs text-center mt-4 px-4">
-          💡 <strong className="text-zinc-400">Tip:</strong> I can answer most questions right away. If it gets complex, I'll connect you to our team on WhatsApp!
+          💡 <strong className="text-zinc-400">Tip:</strong> Our team can answer most questions right away. For complex matters, we'll connect you to a specialist!
         </p>
       </div>
     </div>

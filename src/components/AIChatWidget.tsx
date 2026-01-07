@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, useMemo } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { useLanguage } from '@/contexts/LanguageContext';
 import { supabase } from '@/integrations/supabase/client';
@@ -11,9 +11,9 @@ import {
   UserInfo, 
   ChatStep, 
   SERVICES, 
-  AGENT, 
   APPROVED_CONTACT_BLOCK,
-  initialUserInfo 
+  initialUserInfo,
+  getRandomAgent
 } from './chat/types';
 import ChatHeader from './chat/ChatHeader';
 import ChatWelcome from './chat/ChatWelcome';
@@ -25,6 +25,7 @@ import ChatMessages from './chat/ChatMessages';
 import ChatRating from './chat/ChatRating';
 import ChatSubmitted from './chat/ChatSubmitted';
 import CollapsedChatButton from './chat/CollapsedChatButton';
+import ChatAgentJoining from './chat/ChatAgentJoining';
 
 interface AIChatWidgetProps {
   isCollapsed: boolean;
@@ -33,6 +34,9 @@ interface AIChatWidgetProps {
 
 const AIChatWidget = ({ isCollapsed, onToggleCollapse }: AIChatWidgetProps) => {
   const { isRTL } = useLanguage();
+  
+  // Get a consistent agent for this session
+  const currentAgent = useMemo(() => getRandomAgent(), []);
   
   // State
   const [step, setStep] = useState<ChatStep>('welcome_choice');
@@ -193,13 +197,19 @@ const AIChatWidget = ({ isCollapsed, onToggleCollapse }: AIChatWidgetProps) => {
       console.error('Error creating conversation:', error);
     }
 
-    const serviceName = SERVICES.find(s => s.id === serviceId)?.label || 'our services';
+    // Show agent joining animation
+    setStep('agent_joining');
+  };
+
+  // When agent is ready, start the chat
+  const handleAgentReady = () => {
+    const serviceName = SERVICES.find(s => s.id === selectedService)?.label || 'our services';
     
     setMessages([
       {
         id: 'welcome',
         role: 'assistant',
-        content: `Hey ${userInfo.firstName}! 👋 I'm ${AGENT.name}, nice to meet you!\n\nI help clients with ${serviceName} here at JJ Global Capital. I know Dubai real estate inside and out, so feel free to ask me anything about properties, prices, areas, developers... whatever's on your mind!\n\nAnd if you ever need to chat with the team directly, just tap the WhatsApp button. But I'm pretty quick with answers too 😊`,
+        content: `Hi ${userInfo.firstName}! 👋 Thank you for contacting JJ Global Capital.\n\nI'm ${currentAgent.name}, your ${currentAgent.title}. I'll be assisting you with ${serviceName} today.\n\nHow can I help you? Feel free to ask me anything about Dubai real estate, properties, investments, or any questions you have!`,
         timestamp: new Date(),
       },
     ]);
@@ -512,6 +522,14 @@ const AIChatWidget = ({ isCollapsed, onToggleCollapse }: AIChatWidgetProps) => {
             userFirstName={userInfo.firstName}
             isExistingUser={isExistingUser}
             onSelectService={handleSelectService}
+          />
+        )}
+
+        {step === 'agent_joining' && (
+          <ChatAgentJoining
+            agent={currentAgent}
+            userFirstName={userInfo.firstName}
+            onAgentReady={handleAgentReady}
           />
         )}
 
