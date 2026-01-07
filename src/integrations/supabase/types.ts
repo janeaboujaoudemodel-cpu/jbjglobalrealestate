@@ -243,6 +243,60 @@ export type Database = {
           },
         ]
       }
+      broker_profiles: {
+        Row: {
+          bio: string | null
+          created_at: string
+          display_name: string
+          email: string | null
+          id: string
+          is_active: boolean | null
+          is_public: boolean | null
+          languages: string[] | null
+          phone: string | null
+          photo_url: string | null
+          specializations: string[] | null
+          title: string | null
+          updated_at: string
+          user_id: string
+          years_experience: number | null
+        }
+        Insert: {
+          bio?: string | null
+          created_at?: string
+          display_name: string
+          email?: string | null
+          id?: string
+          is_active?: boolean | null
+          is_public?: boolean | null
+          languages?: string[] | null
+          phone?: string | null
+          photo_url?: string | null
+          specializations?: string[] | null
+          title?: string | null
+          updated_at?: string
+          user_id: string
+          years_experience?: number | null
+        }
+        Update: {
+          bio?: string | null
+          created_at?: string
+          display_name?: string
+          email?: string | null
+          id?: string
+          is_active?: boolean | null
+          is_public?: boolean | null
+          languages?: string[] | null
+          phone?: string | null
+          photo_url?: string | null
+          specializations?: string[] | null
+          title?: string | null
+          updated_at?: string
+          user_id?: string
+          years_experience?: number | null
+        }
+        Relationships: []
+      }
       broker_subscriptions: {
         Row: {
           ai_credits_limit: number | null
@@ -782,6 +836,7 @@ export type Database = {
           full_name: string
           gender: string | null
           id: string
+          lead_source_type: string | null
           nationality: string | null
           owner_type: Database["public"]["Enums"]["crm_lead_owner_type"]
           owner_user_id: string | null
@@ -801,6 +856,7 @@ export type Database = {
           full_name: string
           gender?: string | null
           id?: string
+          lead_source_type?: string | null
           nationality?: string | null
           owner_type?: Database["public"]["Enums"]["crm_lead_owner_type"]
           owner_user_id?: string | null
@@ -820,6 +876,7 @@ export type Database = {
           full_name?: string
           gender?: string | null
           id?: string
+          lead_source_type?: string | null
           nationality?: string | null
           owner_type?: Database["public"]["Enums"]["crm_lead_owner_type"]
           owner_user_id?: string | null
@@ -2194,6 +2251,14 @@ export type Database = {
       [_ in never]: never
     }
     Functions: {
+      bulk_assign_leads: {
+        Args: {
+          p_assigned_by_user_id: string
+          p_assignee_user_id: string
+          p_lead_ids: string[]
+        }
+        Returns: number
+      }
       can_access_crm_lead: {
         Args: { _lead_id: string; _user_id: string }
         Returns: boolean
@@ -2201,6 +2266,13 @@ export type Database = {
       get_hr_role: {
         Args: { _user_id: string }
         Returns: Database["public"]["Enums"]["hr_role"]
+      }
+      get_lead_stats_by_status: {
+        Args: never
+        Returns: {
+          count: number
+          status: string
+        }[]
       }
       has_role: {
         Args: {
@@ -2276,7 +2348,7 @@ export type Database = {
         | "closed_lost"
         | "no_answer"
         | "junk"
-      crm_role: "owner_admin" | "broker_member"
+      crm_role: "owner_admin" | "broker_member" | "admin" | "founder"
       hr_application_status: "pending" | "approved" | "rejected"
       hr_module_track: "company_knowledge" | "real_estate_basics"
       hr_question_type: "mcq" | "true_false" | "short_answer"
@@ -2460,7 +2532,7 @@ export const Constants = {
         "no_answer",
         "junk",
       ],
-      crm_role: ["owner_admin", "broker_member"],
+      crm_role: ["owner_admin", "broker_member", "admin", "founder"],
       hr_application_status: ["pending", "approved", "rejected"],
       hr_module_track: ["company_knowledge", "real_estate_basics"],
       hr_question_type: ["mcq", "true_false", "short_answer"],
