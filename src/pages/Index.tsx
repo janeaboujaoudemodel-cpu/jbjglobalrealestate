@@ -14,7 +14,7 @@ import InstallAppButton from "@/components/InstallAppButton";
 import CookiesConsentBanner from "@/components/CookiesConsentBanner";
 import { useLanguage } from "@/contexts/LanguageContext";
 import { useUserRole } from "@/hooks/useUserRole";
-import { Sparkles, ArrowUpRight, ChevronDown, User, Scale, Layers, Calculator, FileText, Heart, BarChart3, Wrench, Ruler, Palette, Calendar, Wallet, ShoppingBag, Brain, GraduationCap, Briefcase, Target, Award } from "lucide-react";
+import { Sparkles, ArrowUpRight, ChevronDown, User, Scale, Layers, Calculator, FileText, Heart, BarChart3, Wrench, Ruler, Palette, Calendar, Wallet, ShoppingBag, Brain, GraduationCap, Briefcase, Target, Award, PenTool, Users } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import founderProfessional from "@/assets/founder-professional.jpeg";
 import luxuryVillaHero from "@/assets/luxury-villa-hero.jpeg";
@@ -289,7 +289,7 @@ const Index = () => {
                 </Button>
               </Link>
               
-              <Link to="/mortgage-advisory">
+              <Link to="/mortgage-calculator">
                 <Button 
                   className="bg-transparent backdrop-blur-md border-2 border-cyan-500/50 text-cyan-400 hover:bg-cyan-500/20 hover:border-cyan-400 hover:shadow-lg hover:shadow-cyan-500/20 font-semibold px-5 py-4 text-xs transition-all duration-300 hover:scale-105 group"
                 >
@@ -342,7 +342,7 @@ const Index = () => {
                 </Button>
               </Link>
               
-              <Link to="/ai-financial-advisor">
+              <Link to="/ai-budget-planner">
                 <Button 
                   className="bg-transparent backdrop-blur-md border-2 border-amber-500/50 text-amber-400 hover:bg-amber-500/20 hover:border-amber-400 hover:shadow-lg hover:shadow-amber-500/20 font-semibold px-5 py-4 text-xs transition-all duration-300 hover:scale-105 group"
                   title="Budget analysis and property affordability insights (informational only)"
@@ -359,6 +359,26 @@ const Index = () => {
                 >
                   <ShoppingBag className="w-3 h-3 mr-1" />
                   AI Personal Shopper
+                  <ArrowUpRight className="w-3 h-3 ml-1 group-hover:translate-x-0.5 group-hover:-translate-y-0.5 transition-transform" />
+                </Button>
+              </Link>
+              
+              <Link to="/signature-studio">
+                <Button 
+                  className="bg-transparent backdrop-blur-md border-2 border-sky-500/50 text-sky-400 hover:bg-sky-500/20 hover:border-sky-400 hover:shadow-lg hover:shadow-sky-500/20 font-semibold px-5 py-4 text-xs transition-all duration-300 hover:scale-105 group"
+                >
+                  <PenTool className="w-3 h-3 mr-1" />
+                  Signature Studio
+                  <ArrowUpRight className="w-3 h-3 ml-1 group-hover:translate-x-0.5 group-hover:-translate-y-0.5 transition-transform" />
+                </Button>
+              </Link>
+              
+              <Link to="/referral-onboarding">
+                <Button 
+                  className="bg-transparent backdrop-blur-md border-2 border-lime-500/50 text-lime-400 hover:bg-lime-500/20 hover:border-lime-400 hover:shadow-lg hover:shadow-lime-500/20 font-semibold px-5 py-4 text-xs transition-all duration-300 hover:scale-105 group"
+                >
+                  <Users className="w-3 h-3 mr-1" />
+                  Join Referral Program
                   <ArrowUpRight className="w-3 h-3 ml-1 group-hover:translate-x-0.5 group-hover:-translate-y-0.5 transition-transform" />
                 </Button>
               </Link>

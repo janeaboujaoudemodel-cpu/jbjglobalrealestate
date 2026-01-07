@@ -17,7 +17,9 @@ import {
   Brain,
   Zap,
   Shield,
-  Clock
+  Clock,
+  PenTool,
+  Users
 } from "lucide-react";
 
 const fadeInUp = {
@@ -68,7 +70,7 @@ const aiTools = [
     borderColor: "border-amber-500/30",
     textColor: "text-amber-400",
     bgColor: "bg-amber-500/10",
-    link: "/ai-financial-advisor",
+    link: "/ai-budget-planner",
     features: ["Budget Analysis", "Affordability Insights", "Property Matching", "Payment Plans"]
   },
   {
@@ -154,6 +156,30 @@ const aiTools = [
     bgColor: "bg-green-500/10",
     link: "/document-scanner",
     features: ["Smart Scanning", "e-Signature", "PDF Export", "Auto-Fill Fields"]
+  },
+  {
+    id: "signature-studio",
+    title: "Signature Studio",
+    description: "Design your personal signature with AI-generated styles. Choose from 10+ elegant designs or let AI create unique signatures for your documents.",
+    icon: PenTool,
+    gradient: "from-sky-500 to-blue-500",
+    borderColor: "border-sky-500/30",
+    textColor: "text-sky-400",
+    bgColor: "bg-sky-500/10",
+    link: "/signature-studio",
+    features: ["AI Signature Design", "10+ Styles", "Personal Branding", "Export Options"]
+  },
+  {
+    id: "referral-program",
+    title: "Referral Program",
+    description: "Join our referral network and earn 5% commission on successful deals. Upload documents, sign contracts, and track your referral earnings.",
+    icon: Users,
+    gradient: "from-lime-500 to-green-500",
+    borderColor: "border-lime-500/30",
+    textColor: "text-lime-400",
+    bgColor: "bg-lime-500/10",
+    link: "/referral-onboarding",
+    features: ["5% Commission", "Easy Onboarding", "Track Earnings", "E-Contracts"]
   },
 ];
 
