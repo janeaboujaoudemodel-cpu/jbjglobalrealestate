@@ -25,6 +25,10 @@ import FollowUpScheduler from "@/components/crm/FollowUpScheduler";
 import VoiceNoteRecorder from "@/components/crm/VoiceNoteRecorder";
 import CRMAIToolsPanel from "@/components/crm/CRMAIToolsPanel";
 import ClientPDFGenerator from "@/components/crm/ClientPDFGenerator";
+import AILeadScoring from "@/components/crm/AILeadScoring";
+import DealPrediction from "@/components/crm/DealPrediction";
+import SmartEmailComposer from "@/components/crm/SmartEmailComposer";
+import SmartWhatsAppComposer from "@/components/crm/SmartWhatsAppComposer";
 
 interface Lead {
   id: string;
@@ -99,6 +103,7 @@ const CRMLeadDetail = () => {
   // PDF Generator state
   const [showPDFGenerator, setShowPDFGenerator] = useState(false);
   const [selectedPDFTools, setSelectedPDFTools] = useState<string[]>([]);
+  const [activeTab, setActiveTab] = useState("activity");
 
   useEffect(() => {
     if (!user || !id) {
@@ -476,9 +481,15 @@ const CRMLeadDetail = () => {
         </div>
       </header>
 
-      <main className="max-w-5xl mx-auto px-4 py-6 grid grid-cols-1 lg:grid-cols-3 gap-6">
+      <main className="max-w-6xl mx-auto px-4 py-6 grid grid-cols-1 lg:grid-cols-3 gap-6">
         {/* Left Column - Lead Info & Actions */}
         <div className="space-y-6">
+          {/* AI Lead Scoring */}
+          <AILeadScoring lead={lead} activities={activities} />
+          
+          {/* Deal Prediction */}
+          <DealPrediction lead={lead} currentStatus={currentStatus} activities={activities} />
+
           {/* Contact Card */}
           <Card>
             <CardHeader>
@@ -534,21 +545,41 @@ const CRMLeadDetail = () => {
               <Button
                 variant="outline"
                 className="w-full justify-start text-green-600"
-                onClick={handleWhatsAppClick}
+                onClick={() => setActiveTab("whatsapp")}
                 disabled={!lead.phone_e164}
               >
                 <MessageSquare className="h-4 w-4 mr-2" />
-                WhatsApp
+                AI WhatsApp Message
               </Button>
               <Button
                 variant="outline"
                 className="w-full justify-start text-blue-600"
-                onClick={handleEmailClick}
+                onClick={() => setActiveTab("email")}
                 disabled={!lead.email_lower}
               >
                 <Mail className="h-4 w-4 mr-2" />
-                Send Email
+                AI Email Composer
               </Button>
+              <div className="flex gap-2">
+                <Button
+                  variant="ghost"
+                  size="sm"
+                  className="flex-1 text-green-600"
+                  onClick={handleWhatsAppClick}
+                  disabled={!lead.phone_e164}
+                >
+                  Open WhatsApp
+                </Button>
+                <Button
+                  variant="ghost"
+                  size="sm"
+                  className="flex-1 text-blue-600"
+                  onClick={handleEmailClick}
+                  disabled={!lead.email_lower}
+                >
+                  Open Mail
+                </Button>
+              </div>
             </CardContent>
           </Card>
 
@@ -610,11 +641,13 @@ const CRMLeadDetail = () => {
 
         {/* Right Column - Tabs */}
         <div className="lg:col-span-2">
-          <Tabs defaultValue="activity">
-            <TabsList className="mb-4">
+          <Tabs value={activeTab} onValueChange={setActiveTab}>
+            <TabsList className="mb-4 flex-wrap h-auto gap-1">
               <TabsTrigger value="activity">Activity</TabsTrigger>
               <TabsTrigger value="notes">Notes</TabsTrigger>
               <TabsTrigger value="tasks">Tasks</TabsTrigger>
+              <TabsTrigger value="email" className="text-blue-500">AI Email</TabsTrigger>
+              <TabsTrigger value="whatsapp" className="text-green-500">AI WhatsApp</TabsTrigger>
             </TabsList>
 
             {/* Activity Tab */}
@@ -752,6 +785,16 @@ const CRMLeadDetail = () => {
                   )}
                 </CardContent>
               </Card>
+            </TabsContent>
+
+            {/* AI Email Tab */}
+            <TabsContent value="email">
+              <SmartEmailComposer lead={lead} />
+            </TabsContent>
+
+            {/* AI WhatsApp Tab */}
+            <TabsContent value="whatsapp">
+              <SmartWhatsAppComposer lead={lead} />
             </TabsContent>
           </Tabs>
         </div>
