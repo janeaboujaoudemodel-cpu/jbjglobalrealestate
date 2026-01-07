@@ -14,7 +14,7 @@ interface MainLayoutProps {
 const MainLayout = ({ children }: MainLayoutProps) => {
   const { isRTL } = useLanguage();
   const isMobile = useIsMobile();
-  const [isChatCollapsed, setIsChatCollapsed] = useState(false);
+  const [isChatCollapsed, setIsChatCollapsed] = useState(true);
   
   // On mobile, chat is always collapsed (shown as floating button)
   const effectiveCollapsed = isMobile ? true : isChatCollapsed;
