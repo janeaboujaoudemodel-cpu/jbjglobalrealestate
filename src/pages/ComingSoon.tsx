@@ -1,4 +1,5 @@
 import { motion } from "framer-motion";
+import { Link } from "react-router-dom";
 import { JJLogoImage } from "@/components/JJLogoImage";
 
 const ComingSoon = () => {
@@ -86,6 +87,17 @@ const ComingSoon = () => {
             </svg>
             contact@jjglobalcapital.com
           </a>
+
+          <Link
+            to="/auth"
+            className="flex items-center gap-2 text-sm text-muted-foreground hover:text-gold transition-colors hover:drop-shadow-[0_0_8px_hsl(var(--gold))]"
+          >
+            <svg className="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+              <rect x="3" y="11" width="18" height="11" rx="2" />
+              <path d="M7 11V7a5 5 0 0 1 10 0v4" />
+            </svg>
+            Team login
+          </Link>
         </motion.div>
 
         {/* Copyright */}
