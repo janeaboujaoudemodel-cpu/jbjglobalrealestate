@@ -67,20 +67,20 @@ const LeadStatusBadge = ({
       onClick={onClick}
       disabled={!onClick}
       className={cn(
-        "inline-flex items-center gap-1.5 rounded-full font-bold transition-all shadow-sm",
+        "inline-flex items-center gap-1.5 rounded-full font-bold transition-all shadow-lg",
         sizeClasses[size],
-        statusInfo.bgColor,
-        "border-2",
-        statusInfo.color.replace('bg-', 'border-'),
-        onClick && "hover:scale-105 hover:shadow-lg cursor-pointer",
+        statusInfo.color,
+        "text-white",
+        "border-2 border-white/30",
+        onClick && "hover:scale-105 hover:shadow-xl cursor-pointer",
         !onClick && "cursor-default",
         className
       )}
     >
       {showDot && (
-        <span className={cn("w-2.5 h-2.5 rounded-full ring-2 ring-white/30", statusInfo.color)} />
+        <span className="w-2.5 h-2.5 rounded-full bg-white/40 ring-2 ring-white/50" />
       )}
-      <span className={cn("font-bold tracking-wide", statusInfo.textColor.replace('text-', 'text-').replace('400', '300'))}>{statusInfo.label}</span>
+      <span className="font-bold tracking-wide text-white drop-shadow-sm">{statusInfo.label}</span>
     </button>
   );
 };
