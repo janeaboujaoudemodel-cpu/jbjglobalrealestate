@@ -133,6 +133,13 @@ const Footer = () => {
     { href: "/ai-hub", label: "AI Hub" },
   ];
 
+  // Career Links
+  const careerLinks = [
+    { href: "/join", label: "Apply to Join" },
+    { href: "/hr-agent", label: "Chat with HR Agent" },
+    { href: "/onboarding", label: "Training Portal" },
+  ];
+
   return (
     <footer className="bg-black border-t border-zinc-800">
       <div className="container mx-auto px-4 py-10 md:py-14">
@@ -170,7 +177,7 @@ const Footer = () => {
         <div className="h-px bg-gradient-to-r from-transparent via-zinc-700 to-transparent mb-10" />
 
         {/* Menu + Services + Toolkit Grid - Premium Layout */}
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-10 md:gap-12 mb-10 max-w-6xl mx-auto">
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-10 md:gap-8 mb-10 max-w-6xl mx-auto">
           {/* Menu */}
           <div className="text-center md:text-left">
             <h4 className="text-gold font-semibold mb-5 text-sm uppercase tracking-[0.2em]">
@@ -230,6 +237,26 @@ const Footer = () => {
             <p className="text-zinc-500 text-xs mb-4">AI-Powered Work Assistants</p>
             <ul className="space-y-2.5">
               {professionalTools.map((link) => (
+                <li key={link.href}>
+                  <Link
+                    to={link.href}
+                    className="text-white hover:text-gold transition-colors text-base inline-block"
+                  >
+                    {link.label}
+                  </Link>
+                </li>
+              ))}
+            </ul>
+          </div>
+
+          {/* Careers */}
+          <div className="text-center md:text-left">
+            <h4 className="text-gold font-semibold mb-5 text-sm uppercase tracking-[0.2em]">
+              Careers
+            </h4>
+            <p className="text-zinc-500 text-xs mb-4">Join Our Team</p>
+            <ul className="space-y-2.5">
+              {careerLinks.map((link) => (
                 <li key={link.href}>
                   <Link
                     to={link.href}

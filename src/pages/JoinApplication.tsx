@@ -9,7 +9,7 @@ import { Checkbox } from "@/components/ui/checkbox";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { toast } from "sonner";
-import { Loader2, Upload, CheckCircle, FileText } from "lucide-react";
+import { Loader2, Upload, CheckCircle, FileText, Bot, MessageCircle } from "lucide-react";
 import { PhoneInput } from "@/components/ui/phone-input";
 
 const NATIONALITIES = [
@@ -269,6 +269,29 @@ export default function JoinApplication() {
             Apply to become a broker partner. Complete the form below to start your journey.
           </p>
         </div>
+
+        {/* HR Agent CTA - Meet Sarah */}
+        <Card className="bg-gradient-to-r from-primary/10 to-gold/10 border-gold/30 mb-8">
+          <CardContent className="pt-6">
+            <div className="flex flex-col sm:flex-row items-center gap-4">
+              <div className="w-16 h-16 rounded-full bg-gold/20 flex items-center justify-center flex-shrink-0">
+                <Bot className="w-8 h-8 text-gold" />
+              </div>
+              <div className="text-center sm:text-left flex-1">
+                <h3 className="text-lg font-semibold text-foreground mb-1">Prefer a Conversation?</h3>
+                <p className="text-sm text-muted-foreground">
+                  Meet Sarah, our AI HR Agent. She'll collect your CV, qualify you, and conduct your interview — all in one chat.
+                </p>
+              </div>
+              <Button asChild className="bg-gold hover:bg-gold/90 text-black font-semibold">
+                <Link to="/hr-agent">
+                  <MessageCircle className="w-4 h-4 mr-2" />
+                  Chat with Sarah
+                </Link>
+              </Button>
+            </div>
+          </CardContent>
+        </Card>
 
         {!user && (
           <Card className="bg-card border-border mb-6">
