@@ -4,7 +4,7 @@ import { COMPANY_STATS } from '@/constants/stats';
 
 const stats = [
   {
-    ...COMPANY_STATS.yearsExperience,
+    ...COMPANY_STATS.yearsInDubai,
     icon: Clock,
   },
   {
@@ -12,11 +12,11 @@ const stats = [
     icon: Users,
   },
   {
-    ...COMPANY_STATS.clientSatisfaction,
+    ...COMPANY_STATS.socialFollowers,
     icon: Briefcase,
   },
   {
-    ...COMPANY_STATS.teamMembers,
+    ...COMPANY_STATS.teamManaged,
     icon: Home,
   },
 ];

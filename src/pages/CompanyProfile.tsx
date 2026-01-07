@@ -80,8 +80,8 @@ We serve UAE-based and international clients interested in UAE real estate, offe
   stats: {
     yearsInDubai: "5+",
     brokersTrainedBy: "2,800+",
-    teamMembers: "10+",
-    clientSatisfaction: "98%"
+    socialFollowers: "1M+",
+    teamManaged: "495+"
   }
 };
 
@@ -166,7 +166,7 @@ const CompanyProfile = () => {
         color: goldColor,
       });
 
-      page1.drawText("2024", {
+      page1.drawText("2025", {
         x: pageWidth / 2 - 25,
         y: pageHeight - 400,
         size: 18,
@@ -182,8 +182,8 @@ const CompanyProfile = () => {
         font: helvetica,
         color: whiteColor,
       });
-      page1.drawText("Real Estate Investment", {
-        x: pageWidth / 2 - 100,
+      page1.drawText("Real Estate Brokerage", {
+        x: pageWidth / 2 - 95,
         y: pageHeight - 525,
         size: 16,
         font: helvetica,
@@ -285,9 +285,9 @@ const CompanyProfile = () => {
       
       yPos -= 25;
       const missionLines = [
-        "To provide discerning investors with unparalleled access to the",
-        "UAE's most exclusive investment opportunities, delivered with the",
-        "highest standards of integrity, expertise, and personalized service."
+        "To provide discerning clients with professional brokerage support",
+        "and access to the UAE's most exclusive properties, delivered with",
+        "the highest standards of integrity, expertise, and service."
       ];
       missionLines.forEach((line) => {
         page2.drawText(line, {
@@ -311,9 +311,9 @@ const CompanyProfile = () => {
       
       yPos -= 25;
       const visionLines = [
-        "To be the definitive choice for global investors seeking premium",
-        "real estate and lifestyle investments in the UAE, recognized for",
-        "our exceptional track record and commitment to client success."
+        "To be the trusted choice for clients seeking premium real estate",
+        "brokerage services in the UAE, recognized for our commitment",
+        "to client success and exceptional service."
       ];
       visionLines.forEach((line) => {
         page2.drawText(line, {
@@ -380,12 +380,12 @@ const CompanyProfile = () => {
         color: goldColor,
       });
 
-      // Stats grid
+      // Stats grid - Verified figures only
       const statsData = [
         { label: "Years in Dubai", value: "5+" },
         { label: "Brokers Trained By Founder", value: "2,800+" },
-        { label: "Team Members", value: "10+" },
-        { label: "Client Satisfaction", value: "98%" },
+        { label: "Social Followers (All Platforms)", value: "1M+" },
+        { label: "Team Managed (Operations)", value: "495+" },
       ];
 
       let statX = margin;
@@ -575,6 +575,102 @@ const CompanyProfile = () => {
         y: 0,
         width: pageWidth,
         height: 8,
+        color: goldColor,
+      });
+
+      // === PAGE 5: Legal Disclaimer ===
+      const page5 = pdfDoc.addPage([pageWidth, pageHeight]);
+      
+      page5.drawRectangle({
+        x: 0,
+        y: 0,
+        width: pageWidth,
+        height: pageHeight,
+        color: whiteColor,
+      });
+
+      // Header
+      page5.drawRectangle({
+        x: 0,
+        y: pageHeight - 60,
+        width: pageWidth,
+        height: 60,
+        color: blackColor,
+      });
+
+      page5.drawText("J | J GLOBAL CAPITAL", {
+        x: margin,
+        y: pageHeight - 40,
+        size: 14,
+        font: helveticaBold,
+        color: goldColor,
+      });
+
+      // Section title
+      page5.drawText("LEGAL DISCLAIMER", {
+        x: margin,
+        y: pageHeight - 110,
+        size: 24,
+        font: helveticaBold,
+        color: blackColor,
+      });
+
+      page5.drawRectangle({
+        x: margin,
+        y: pageHeight - 120,
+        width: 120,
+        height: 3,
+        color: goldColor,
+      });
+
+      // Disclaimer text
+      const disclaimerLines = [
+        "IMPORTANT NOTICE:",
+        "",
+        "JJ Global Capital is a Dubai-based real estate brokerage",
+        "specializing in property sales, leasing, and holiday homes.",
+        "",
+        "We are NOT a financial institution, law firm, or investment advisory.",
+        "We do NOT provide legal, mortgage, financial, or investment advice.",
+        "",
+        "Legal, mortgage, and property management services are provided",
+        "through introductions to independent licensed third parties who",
+        "contract directly with clients.",
+        "",
+        "All information in this document is provided for general informational",
+        "purposes only and should not be relied upon as professional advice.",
+        "",
+        "Statistics and figures shown are based on founder experience and",
+        "company records. Past performance is not indicative of future results.",
+        "",
+        "For regulatory compliance, please consult with licensed professionals",
+        "in your jurisdiction before making any property decisions.",
+        "",
+        "Licensed by: Dubai Land Department (DLD)",
+        "Regulated by: Real Estate Regulatory Agency (RERA)",
+        "",
+        "© 2025 JJ Global Capital. All rights reserved.",
+      ];
+
+      yPos = pageHeight - 160;
+      disclaimerLines.forEach((line) => {
+        const isHeader = line === "IMPORTANT NOTICE:" || line.startsWith("Licensed by:") || line.startsWith("Regulated by:");
+        page5.drawText(line, {
+          x: margin,
+          y: yPos,
+          size: isHeader ? 11 : 10,
+          font: isHeader ? helveticaBold : helvetica,
+          color: isHeader ? blackColor : grayColor,
+        });
+        yPos -= line === "" ? 10 : 16;
+      });
+
+      // Footer
+      page5.drawText("www.jjglobalcapital.com", {
+        x: pageWidth / 2 - 60,
+        y: 30,
+        size: 10,
+        font: helvetica,
         color: goldColor,
       });
 
@@ -853,6 +949,33 @@ const CompanyProfile = () => {
         </div>
       </section>
 
+      {/* Legal Disclaimer Section */}
+      <section className="py-12 bg-zinc-950">
+        <div className="container mx-auto px-4">
+          <div className="max-w-4xl mx-auto p-8 bg-amber-500/5 border border-amber-500/20 rounded-2xl">
+            <div className="flex items-start gap-4">
+              <Shield className="w-8 h-8 text-amber-500 flex-shrink-0 mt-1" />
+              <div>
+                <h3 className="text-amber-400 font-bold text-lg mb-3">Important Disclaimer</h3>
+                <div className="space-y-3 text-sm text-zinc-400">
+                  <p>
+                    JJ Global Capital is a Dubai-based <strong className="text-zinc-300">real estate brokerage</strong> specializing 
+                    in property sales, leasing, and holiday homes. We are NOT a financial institution, law firm, or investment advisory.
+                  </p>
+                  <p>
+                    We do NOT provide legal, mortgage, financial, or investment advice. Legal, mortgage, and property management 
+                    services are provided through introductions to independent licensed third parties who contract directly with clients.
+                  </p>
+                  <p className="text-zinc-500 text-xs">
+                    Licensed by Dubai Land Department (DLD) • Regulated by Real Estate Regulatory Agency (RERA)
+                  </p>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
       {/* Download CTA */}
       <section className="py-20 bg-gradient-to-b from-zinc-900/50 to-black">
         <div className="container mx-auto px-4">
@@ -914,7 +1037,7 @@ const CompanyProfile = () => {
                 <p className="text-white text-2xl font-bold mb-1" style={{ fontFamily: "Poppins, sans-serif" }}>
                   JJ Global Capital
                 </p>
-                <p className="text-zinc-500 text-sm">4 Pages • PDF Document</p>
+                <p className="text-zinc-500 text-sm">5 Pages • PDF Document</p>
               </div>
             </div>
 

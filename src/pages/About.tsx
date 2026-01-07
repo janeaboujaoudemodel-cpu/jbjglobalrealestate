@@ -40,10 +40,10 @@ const CounterStat = ({ end, suffix, prefix, label }: { end: number; suffix: stri
 
 const About = () => {
   const stats = [
-    COMPANY_STATS.yearsExperience,
+    COMPANY_STATS.yearsInDubai,
     COMPANY_STATS.brokersTrainedBy,
-    COMPANY_STATS.clientSatisfaction,
-    COMPANY_STATS.teamMembers,
+    COMPANY_STATS.socialFollowers,
+    COMPANY_STATS.teamManaged,
   ];
 
   const values = [

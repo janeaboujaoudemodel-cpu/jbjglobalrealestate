@@ -1,31 +1,44 @@
 // Centralized stats to ensure consistency across all pages
 // COMPLIANCE NOTE: Only verified, factual claims should be used
+// DLD Fine Risk: AED 50,000 for false/misleading information
 
 export const COMPANY_STATS = {
-  yearsExperience: {
+  yearsInDubai: {
     end: 5,
     suffix: '+',
     prefix: '',
     label: 'Years in Dubai',
+    note: 'Founder active since 2020',
   },
   brokersTrainedBy: {
     end: 2800,
     suffix: '+',
     prefix: '',
     label: 'Brokers Trained',
+    note: 'By Founder (2022-2024)',
   },
-  clientSatisfaction: {
-    end: 98,
-    suffix: '%',
+  socialFollowers: {
+    end: 1,
+    suffix: 'M+',
     prefix: '',
-    label: 'Client Satisfaction',
+    label: 'Social Followers',
+    note: 'All Platforms Combined',
   },
-  teamMembers: {
-    end: 10,
+  teamManaged: {
+    end: 495,
     suffix: '+',
     prefix: '',
-    label: 'Team Members',
+    label: 'Team Managed',
+    note: 'Operations Experience',
   },
+};
+
+// Legacy alias for backward compatibility
+export const COMPANY_STATS_LEGACY = {
+  yearsExperience: COMPANY_STATS.yearsInDubai,
+  brokersTrainedBy: COMPANY_STATS.brokersTrainedBy,
+  clientSatisfaction: COMPANY_STATS.socialFollowers, // Replaced unverifiable stat
+  teamMembers: COMPANY_STATS.teamManaged,
 };
 
 // Contact information - use everywhere

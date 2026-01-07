@@ -61,25 +61,26 @@ const Book3D = ({ size = "md", className = "" }: Book3DProps) => {
           transform: "rotateY(-20deg)",
         }}
       >
-        {/* Book spine */}
+        {/* Book spine - Elegant gold gradient */}
         <div
           className="absolute left-0 top-0 h-full"
           style={{
             width: spine,
-            background: "linear-gradient(90deg, #8B7847 0%, #A8925A 50%, #8B7847 100%)",
+            background: "linear-gradient(90deg, #7A6A42 0%, #A8925A 30%, #C4A85C 50%, #A8925A 70%, #7A6A42 100%)",
             transform: `translateX(-${spine}px) rotateY(-90deg)`,
             transformOrigin: "right center",
-            boxShadow: "inset -2px 0 8px rgba(0,0,0,0.3)",
+            boxShadow: "inset -2px 0 8px rgba(0,0,0,0.3), inset 2px 0 4px rgba(255,255,255,0.1)",
           }}
         >
           <div className="h-full flex items-center justify-center">
             <span 
-              className="text-white font-semibold tracking-widest"
+              className="text-white font-semibold tracking-widest drop-shadow-lg"
               style={{ 
                 writingMode: "vertical-rl", 
                 textOrientation: "mixed",
                 fontSize: size === "sm" ? "8px" : size === "md" ? "10px" : "12px",
                 letterSpacing: "0.2em",
+                textShadow: "0 1px 2px rgba(0,0,0,0.5)",
               }}
             >
               JJ GLOBAL CAPITAL
@@ -87,41 +88,79 @@ const Book3D = ({ size = "md", className = "" }: Book3DProps) => {
           </div>
         </div>
 
-        {/* Book front cover */}
+        {/* Book front cover - Premium dark design */}
         <div
           className="absolute top-0 left-0 w-full h-full rounded-r-md overflow-hidden"
           style={{
-            background: "linear-gradient(145deg, #1a1a1a 0%, #0a0a0a 100%)",
-            border: "1px solid rgba(168, 146, 90, 0.4)",
+            background: "linear-gradient(145deg, #1a1a1a 0%, #0d0d0d 50%, #1a1a1a 100%)",
+            border: "1px solid rgba(168, 146, 90, 0.5)",
             boxShadow: `
               4px 4px 20px rgba(0,0,0,0.5),
-              inset 0 0 60px rgba(168, 146, 90, 0.05)
+              inset 0 0 60px rgba(168, 146, 90, 0.08),
+              inset 0 1px 0 rgba(255,255,255,0.05)
             `,
           }}
         >
-          {/* Background Villa Image */}
+          {/* Subtle gold gradient overlay */}
           <div 
-            className="absolute inset-0 opacity-30"
+            className="absolute inset-0"
             style={{
-              backgroundImage: "url('https://images.unsplash.com/photo-1600596542815-ffad4c1539a9?w=400&q=80')",
-              backgroundSize: "cover",
-              backgroundPosition: "center",
+              background: "linear-gradient(180deg, rgba(168,146,90,0.1) 0%, transparent 30%, transparent 70%, rgba(168,146,90,0.08) 100%)",
             }}
           />
-          <div className="absolute inset-0 bg-gradient-to-b from-black/70 via-black/50 to-black/80" />
 
-          {/* Gold corner accents */}
-          <div className="absolute top-0 left-0 w-12 h-12 border-l-2 border-t-2 border-gold/60 rounded-tl-sm" />
-          <div className="absolute bottom-0 right-0 w-12 h-12 border-r-2 border-b-2 border-gold/60 rounded-br-sm" />
+          {/* Decorative gold corner accents */}
+          <div className="absolute top-3 left-3 w-10 h-10">
+            <div className="absolute top-0 left-0 w-full h-[2px] bg-gradient-to-r from-gold/70 to-transparent" />
+            <div className="absolute top-0 left-0 w-[2px] h-full bg-gradient-to-b from-gold/70 to-transparent" />
+          </div>
+          <div className="absolute top-3 right-3 w-10 h-10">
+            <div className="absolute top-0 right-0 w-full h-[2px] bg-gradient-to-l from-gold/70 to-transparent" />
+            <div className="absolute top-0 right-0 w-[2px] h-full bg-gradient-to-b from-gold/70 to-transparent" />
+          </div>
+          <div className="absolute bottom-3 left-3 w-10 h-10">
+            <div className="absolute bottom-0 left-0 w-full h-[2px] bg-gradient-to-r from-gold/70 to-transparent" />
+            <div className="absolute bottom-0 left-0 w-[2px] h-full bg-gradient-to-t from-gold/70 to-transparent" />
+          </div>
+          <div className="absolute bottom-3 right-3 w-10 h-10">
+            <div className="absolute bottom-0 right-0 w-full h-[2px] bg-gradient-to-l from-gold/70 to-transparent" />
+            <div className="absolute bottom-0 right-0 w-[2px] h-full bg-gradient-to-t from-gold/70 to-transparent" />
+          </div>
           
           {/* Cover content */}
-          <div className="relative h-full flex flex-col items-center justify-center p-3 md:p-5 text-center z-10">
-            {/* Small logo */}
-            <div className="mb-2">
-              <span className="text-gold/80 text-[8px] md:text-[10px] tracking-[0.2em] uppercase">
-                J | J Global Capital
+          <div className="relative h-full flex flex-col items-center justify-center p-4 md:p-6 text-center z-10">
+            {/* JJ Logo Mark */}
+            <div className="mb-3 md:mb-4">
+              <div className="flex items-center justify-center gap-1">
+                <span 
+                  className="text-gold font-bold"
+                  style={{ 
+                    fontSize: size === "sm" ? "24px" : size === "md" ? "32px" : "40px",
+                    fontFamily: "Poppins, sans-serif",
+                    textShadow: "0 2px 4px rgba(168,146,90,0.3)",
+                  }}
+                >
+                  J
+                </span>
+                <div className="w-[2px] h-6 md:h-8 bg-gradient-to-b from-transparent via-gold/60 to-transparent mx-1" />
+                <span 
+                  className="text-gold font-bold"
+                  style={{ 
+                    fontSize: size === "sm" ? "24px" : size === "md" ? "32px" : "40px",
+                    fontFamily: "Poppins, sans-serif",
+                    textShadow: "0 2px 4px rgba(168,146,90,0.3)",
+                  }}
+                >
+                  J
+                </span>
+              </div>
+              <span className="text-gold/60 text-[7px] md:text-[8px] tracking-[0.3em] uppercase block mt-1">
+                Global Capital
               </span>
             </div>
+
+            {/* Decorative divider */}
+            <div className="w-12 md:w-16 h-[1px] bg-gradient-to-r from-transparent via-gold/50 to-transparent mb-3 md:mb-4" />
 
             {/* Title */}
             <h3 
@@ -130,46 +169,47 @@ const Book3D = ({ size = "md", className = "" }: Book3DProps) => {
             >
               UAE Real Estate
             </h3>
-            <p className={`text-gold font-semibold ${fontSize}`}>
+            <p className={`text-gold font-medium ${fontSize} tracking-wide`}>
               Market Intelligence
             </p>
 
             {/* Decorative line */}
-            <div className="w-10 md:w-14 h-[1.5px] bg-gradient-to-r from-transparent via-gold to-transparent my-2 md:my-3" />
+            <div className="w-8 md:w-10 h-[1px] bg-gradient-to-r from-transparent via-gold/40 to-transparent my-2 md:my-3" />
 
-            {/* Year */}
-            <div className="px-2 md:px-3 py-1 border border-gold/50 rounded-sm bg-black/40 backdrop-blur-sm">
-              <span className="text-gold text-[8px] md:text-[10px] font-medium tracking-wider">
-                2025–2026 EDITION
+            {/* Edition badge */}
+            <div className="px-3 md:px-4 py-1.5 border border-gold/40 rounded bg-black/60 backdrop-blur-sm">
+              <span className="text-gold text-[7px] md:text-[9px] font-medium tracking-[0.15em] uppercase">
+                2025–2026 Edition
               </span>
             </div>
 
-            {/* Author */}
-            <div className="mt-auto pt-2 md:pt-3 border-t border-zinc-800/50 w-full">
-              <p className="text-zinc-400 text-[8px] md:text-[10px] uppercase tracking-wider">
+            {/* Author footer */}
+            <div className="mt-auto pt-3 md:pt-4 w-full">
+              <div className="w-full h-[1px] bg-gradient-to-r from-transparent via-zinc-700/50 to-transparent mb-2" />
+              <p className="text-zinc-500 text-[7px] md:text-[8px] uppercase tracking-[0.2em]">
                 By Jane Abou Jaoude
               </p>
             </div>
           </div>
 
-          {/* Glossy effect */}
+          {/* Glossy effect overlay */}
           <div 
             className="absolute inset-0 pointer-events-none"
             style={{
-              background: "linear-gradient(135deg, rgba(255,255,255,0.1) 0%, transparent 50%, rgba(0,0,0,0.2) 100%)",
+              background: "linear-gradient(135deg, rgba(255,255,255,0.08) 0%, transparent 40%, transparent 60%, rgba(0,0,0,0.15) 100%)",
             }}
           />
         </div>
 
-        {/* Book pages (side) */}
+        {/* Book pages (side) - Cream colored pages */}
         <div
           className="absolute right-0 top-[2px] h-[calc(100%-4px)]"
           style={{
-            width: 8,
-            background: "repeating-linear-gradient(to bottom, #f0ead6 0px, #f0ead6 1px, #e8e0c8 1px, #e8e0c8 2px)",
+            width: 10,
+            background: "repeating-linear-gradient(to bottom, #f5f0e0 0px, #f5f0e0 1px, #ebe5d5 1px, #ebe5d5 2px)",
             transform: "translateX(100%) rotateY(90deg)",
             transformOrigin: "left center",
-            boxShadow: "inset -1px 0 3px rgba(0,0,0,0.1)",
+            boxShadow: "inset -2px 0 4px rgba(0,0,0,0.15)",
           }}
         />
 
@@ -178,7 +218,7 @@ const Book3D = ({ size = "md", className = "" }: Book3DProps) => {
           className="absolute top-0 left-0 w-full h-full"
           style={{
             background: "linear-gradient(145deg, #151515 0%, #0a0a0a 100%)",
-            transform: "translateZ(-8px)",
+            transform: "translateZ(-10px)",
             borderRadius: "0 4px 4px 0",
           }}
         />
