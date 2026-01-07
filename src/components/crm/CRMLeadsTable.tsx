@@ -3,7 +3,6 @@ import { useNavigate } from "react-router-dom";
 import { supabase } from "@/integrations/supabase/client";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
-import { Badge } from "@/components/ui/badge";
 import { Checkbox } from "@/components/ui/checkbox";
 import {
   Table,
@@ -20,8 +19,14 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
+import {
+  Popover,
+  PopoverContent,
+  PopoverTrigger,
+} from "@/components/ui/popover";
 import { toast } from "sonner";
-import { Search, Phone, MessageSquare, Mail, Eye, Trash2, Filter } from "lucide-react";
+import { Search, Phone, MessageSquare, Mail, Eye, Filter, ChevronDown } from "lucide-react";
+import LeadStatusBadge, { PIPELINE_STATUSES, getStatusInfo } from "./LeadStatusBadge";
 
 interface Lead {
   id: string;
@@ -48,18 +53,6 @@ interface CRMLeadsTableProps {
   filterType: "assigned" | "own";
   onRefresh: () => void;
 }
-
-const PIPELINE_STATUSES = [
-  { value: "new", label: "New", color: "bg-blue-500" },
-  { value: "contacted", label: "Contacted", color: "bg-yellow-500" },
-  { value: "qualified", label: "Qualified", color: "bg-green-500" },
-  { value: "viewing", label: "Viewing", color: "bg-purple-500" },
-  { value: "negotiation", label: "Negotiation", color: "bg-orange-500" },
-  { value: "closed_won", label: "Closed Won", color: "bg-emerald-600" },
-  { value: "closed_lost", label: "Closed Lost", color: "bg-red-500" },
-  { value: "no_answer", label: "No Answer", color: "bg-gray-500" },
-  { value: "junk", label: "Junk", color: "bg-gray-400" },
-];
 
 const CRMLeadsTable = ({ userId, filterType, onRefresh }: CRMLeadsTableProps) => {
   const navigate = useNavigate();
@@ -225,15 +218,6 @@ const CRMLeadsTable = ({ userId, filterType, onRefresh }: CRMLeadsTableProps) =>
     );
   });
 
-  const getStatusBadge = (status: string | undefined) => {
-    const statusInfo = PIPELINE_STATUSES.find(s => s.value === status) || PIPELINE_STATUSES[0];
-    return (
-      <Badge className={`${statusInfo.color} text-white`}>
-        {statusInfo.label}
-      </Badge>
-    );
-  };
-
   return (
     <div className="space-y-4">
       {/* Filters */}
@@ -244,19 +228,50 @@ const CRMLeadsTable = ({ userId, filterType, onRefresh }: CRMLeadsTableProps) =>
             placeholder="Search by name, email, phone, nationality..."
             value={searchQuery}
             onChange={(e) => setSearchQuery(e.target.value)}
-            className="pl-10"
+            className="pl-10 bg-card text-foreground border-border"
           />
         </div>
         <Select value={statusFilter} onValueChange={setStatusFilter}>
-          <SelectTrigger className="w-[180px]">
+          <SelectTrigger className="w-[200px] bg-card text-foreground border-border">
             <Filter className="h-4 w-4 mr-2" />
             <SelectValue placeholder="Filter by status" />
           </SelectTrigger>
-          <SelectContent>
-            <SelectItem value="all">All Statuses</SelectItem>
-            {PIPELINE_STATUSES.map(status => (
-              <SelectItem key={status.value} value={status.value}>
-                {status.label}
+          <SelectContent className="bg-card border-border max-h-80">
+            <SelectItem value="all" className="text-foreground">All Statuses</SelectItem>
+            <div className="px-2 py-1 text-xs font-semibold text-emerald-400 uppercase">Positive</div>
+            {PIPELINE_STATUSES.filter(s => s.category === 'positive').map(status => (
+              <SelectItem key={status.value} value={status.value} className="text-foreground">
+                <div className="flex items-center gap-2">
+                  <span className={`w-2 h-2 rounded-full ${status.color}`} />
+                  {status.label}
+                </div>
+              </SelectItem>
+            ))}
+            <div className="px-2 py-1 text-xs font-semibold text-blue-400 uppercase mt-1">Neutral</div>
+            {PIPELINE_STATUSES.filter(s => s.category === 'neutral').map(status => (
+              <SelectItem key={status.value} value={status.value} className="text-foreground">
+                <div className="flex items-center gap-2">
+                  <span className={`w-2 h-2 rounded-full ${status.color}`} />
+                  {status.label}
+                </div>
+              </SelectItem>
+            ))}
+            <div className="px-2 py-1 text-xs font-semibold text-amber-400 uppercase mt-1">Follow-up</div>
+            {PIPELINE_STATUSES.filter(s => s.category === 'warning').map(status => (
+              <SelectItem key={status.value} value={status.value} className="text-foreground">
+                <div className="flex items-center gap-2">
+                  <span className={`w-2 h-2 rounded-full ${status.color}`} />
+                  {status.label}
+                </div>
+              </SelectItem>
+            ))}
+            <div className="px-2 py-1 text-xs font-semibold text-red-400 uppercase mt-1">Negative</div>
+            {PIPELINE_STATUSES.filter(s => s.category === 'negative').map(status => (
+              <SelectItem key={status.value} value={status.value} className="text-foreground">
+                <div className="flex items-center gap-2">
+                  <span className={`w-2 h-2 rounded-full ${status.color}`} />
+                  {status.label}
+                </div>
               </SelectItem>
             ))}
           </SelectContent>
@@ -320,7 +335,7 @@ const CRMLeadsTable = ({ userId, filterType, onRefresh }: CRMLeadsTableProps) =>
                   </TableCell>
                   <TableCell>
                     <div>
-                      <p className="font-medium">{lead.full_name}</p>
+                      <p className="font-semibold text-foreground">{lead.full_name}</p>
                       <p className="text-xs text-muted-foreground">
                         {lead.nationality} · {lead.preferred_language?.toUpperCase()}
                       </p>
@@ -328,34 +343,79 @@ const CRMLeadsTable = ({ userId, filterType, onRefresh }: CRMLeadsTableProps) =>
                   </TableCell>
                   <TableCell>
                     <div className="text-sm">
-                      {lead.email_lower && <p>{lead.email_lower}</p>}
+                      {lead.email_lower && <p className="text-foreground">{lead.email_lower}</p>}
                       {lead.phone_e164 && <p className="text-muted-foreground">{lead.phone_e164}</p>}
                     </div>
                   </TableCell>
                   <TableCell>
-                    <span className="text-sm">
+                    <span className="text-sm text-foreground">
                       {lead.current_location_country || "-"}
                     </span>
                   </TableCell>
                   <TableCell>
-                    <Select
-                      value={lead.state?.pipeline_status || "new"}
-                      onValueChange={(value) => handleStatusChange(lead.id, value)}
-                    >
-                      <SelectTrigger className="w-[130px] h-8">
-                        <SelectValue />
-                      </SelectTrigger>
-                      <SelectContent>
-                        {PIPELINE_STATUSES.map(status => (
-                          <SelectItem key={status.value} value={status.value}>
-                            {status.label}
-                          </SelectItem>
-                        ))}
-                      </SelectContent>
-                    </Select>
+                    {/* Quick Status Badge - Click to change */}
+                    <Popover>
+                      <PopoverTrigger asChild>
+                        <button className="group flex items-center gap-1">
+                          <LeadStatusBadge 
+                            status={lead.state?.pipeline_status || "new"} 
+                            size="sm"
+                          />
+                          <ChevronDown className="h-3 w-3 opacity-0 group-hover:opacity-100 transition-opacity text-muted-foreground" />
+                        </button>
+                      </PopoverTrigger>
+                      <PopoverContent className="w-56 p-2 bg-card border-border" align="start">
+                        <div className="space-y-1">
+                          <p className="text-xs font-semibold text-emerald-400 px-2 py-1">Positive</p>
+                          {PIPELINE_STATUSES.filter(s => s.category === 'positive').map(status => (
+                            <button
+                              key={status.value}
+                              onClick={() => handleStatusChange(lead.id, status.value)}
+                              className="w-full flex items-center gap-2 px-2 py-1.5 rounded hover:bg-accent text-left transition-colors"
+                            >
+                              <span className={`w-2 h-2 rounded-full ${status.color}`} />
+                              <span className="text-sm text-foreground">{status.label}</span>
+                            </button>
+                          ))}
+                          <p className="text-xs font-semibold text-blue-400 px-2 py-1 mt-2">Neutral</p>
+                          {PIPELINE_STATUSES.filter(s => s.category === 'neutral').map(status => (
+                            <button
+                              key={status.value}
+                              onClick={() => handleStatusChange(lead.id, status.value)}
+                              className="w-full flex items-center gap-2 px-2 py-1.5 rounded hover:bg-accent text-left transition-colors"
+                            >
+                              <span className={`w-2 h-2 rounded-full ${status.color}`} />
+                              <span className="text-sm text-foreground">{status.label}</span>
+                            </button>
+                          ))}
+                          <p className="text-xs font-semibold text-amber-400 px-2 py-1 mt-2">Follow-up</p>
+                          {PIPELINE_STATUSES.filter(s => s.category === 'warning').map(status => (
+                            <button
+                              key={status.value}
+                              onClick={() => handleStatusChange(lead.id, status.value)}
+                              className="w-full flex items-center gap-2 px-2 py-1.5 rounded hover:bg-accent text-left transition-colors"
+                            >
+                              <span className={`w-2 h-2 rounded-full ${status.color}`} />
+                              <span className="text-sm text-foreground">{status.label}</span>
+                            </button>
+                          ))}
+                          <p className="text-xs font-semibold text-red-400 px-2 py-1 mt-2">Negative</p>
+                          {PIPELINE_STATUSES.filter(s => s.category === 'negative').map(status => (
+                            <button
+                              key={status.value}
+                              onClick={() => handleStatusChange(lead.id, status.value)}
+                              className="w-full flex items-center gap-2 px-2 py-1.5 rounded hover:bg-accent text-left transition-colors"
+                            >
+                              <span className={`w-2 h-2 rounded-full ${status.color}`} />
+                              <span className="text-sm text-foreground">{status.label}</span>
+                            </button>
+                          ))}
+                        </div>
+                      </PopoverContent>
+                    </Popover>
                   </TableCell>
                   <TableCell>
-                    <span className="text-sm text-muted-foreground">
+                    <span className="text-sm text-foreground">
                       {lead.source || "-"}
                     </span>
                   </TableCell>
@@ -364,7 +424,7 @@ const CRMLeadsTable = ({ userId, filterType, onRefresh }: CRMLeadsTableProps) =>
                       <Button
                         variant="ghost"
                         size="icon"
-                        className="h-8 w-8"
+                        className="h-8 w-8 text-foreground hover:text-primary"
                         onClick={() => navigate(`/crm/leads/${lead.id}`)}
                       >
                         <Eye className="h-4 w-4" />
@@ -398,24 +458,55 @@ const CRMLeadsTable = ({ userId, filterType, onRefresh }: CRMLeadsTableProps) =>
 
       {/* Bulk Actions */}
       {selectedLeads.size > 0 && (
-        <div className="fixed bottom-4 left-1/2 -translate-x-1/2 bg-card border rounded-lg shadow-lg p-4 flex items-center gap-4">
-          <span className="text-sm font-medium">{selectedLeads.size} selected</span>
+        <div className="fixed bottom-4 left-1/2 -translate-x-1/2 bg-card border border-border rounded-lg shadow-lg p-4 flex items-center gap-4 z-50">
+          <span className="text-sm font-semibold text-foreground">{selectedLeads.size} selected</span>
           <Select onValueChange={(value) => {
             selectedLeads.forEach(id => handleStatusChange(id, value));
             setSelectedLeads(new Set());
           }}>
-            <SelectTrigger className="w-[150px]">
+            <SelectTrigger className="w-[180px] bg-card text-foreground border-border">
               <SelectValue placeholder="Change status" />
             </SelectTrigger>
-            <SelectContent>
-              {PIPELINE_STATUSES.map(status => (
-                <SelectItem key={status.value} value={status.value}>
-                  {status.label}
+            <SelectContent className="bg-card border-border max-h-80">
+              <div className="px-2 py-1 text-xs font-semibold text-emerald-400 uppercase">Positive</div>
+              {PIPELINE_STATUSES.filter(s => s.category === 'positive').map(status => (
+                <SelectItem key={status.value} value={status.value} className="text-foreground">
+                  <div className="flex items-center gap-2">
+                    <span className={`w-2 h-2 rounded-full ${status.color}`} />
+                    {status.label}
+                  </div>
+                </SelectItem>
+              ))}
+              <div className="px-2 py-1 text-xs font-semibold text-blue-400 uppercase mt-1">Neutral</div>
+              {PIPELINE_STATUSES.filter(s => s.category === 'neutral').map(status => (
+                <SelectItem key={status.value} value={status.value} className="text-foreground">
+                  <div className="flex items-center gap-2">
+                    <span className={`w-2 h-2 rounded-full ${status.color}`} />
+                    {status.label}
+                  </div>
+                </SelectItem>
+              ))}
+              <div className="px-2 py-1 text-xs font-semibold text-amber-400 uppercase mt-1">Follow-up</div>
+              {PIPELINE_STATUSES.filter(s => s.category === 'warning').map(status => (
+                <SelectItem key={status.value} value={status.value} className="text-foreground">
+                  <div className="flex items-center gap-2">
+                    <span className={`w-2 h-2 rounded-full ${status.color}`} />
+                    {status.label}
+                  </div>
+                </SelectItem>
+              ))}
+              <div className="px-2 py-1 text-xs font-semibold text-red-400 uppercase mt-1">Negative</div>
+              {PIPELINE_STATUSES.filter(s => s.category === 'negative').map(status => (
+                <SelectItem key={status.value} value={status.value} className="text-foreground">
+                  <div className="flex items-center gap-2">
+                    <span className={`w-2 h-2 rounded-full ${status.color}`} />
+                    {status.label}
+                  </div>
                 </SelectItem>
               ))}
             </SelectContent>
           </Select>
-          <Button variant="outline" size="sm" onClick={() => setSelectedLeads(new Set())}>
+          <Button variant="outline" size="sm" onClick={() => setSelectedLeads(new Set())} className="text-foreground">
             Clear
           </Button>
         </div>

@@ -107,24 +107,24 @@ const CRM = () => {
   return (
     <div className="min-h-screen bg-background">
       {/* Header */}
-      <header className="border-b bg-card sticky top-0 z-50">
+      <header className="border-b border-border bg-card sticky top-0 z-50">
         <div className="max-w-7xl mx-auto px-4 py-4 flex items-center justify-between">
           <div className="flex items-center gap-4">
-            <h1 className="text-2xl font-bold">JJ Global Capital CRM</h1>
-            <Badge variant={isAdmin ? "default" : "secondary"}>
+            <h1 className="text-2xl font-bold text-foreground">JJ Global Capital CRM</h1>
+            <Badge variant={isAdmin ? "default" : "secondary"} className={isAdmin ? "bg-primary text-primary-foreground" : ""}>
               {isAdmin ? "Admin" : "Broker"}
             </Badge>
           </div>
           <div className="flex items-center gap-3">
-            <span className="text-sm text-muted-foreground">
+            <span className="text-sm text-foreground">
               {profile.display_name || user?.email}
             </span>
             {isAdmin && (
-              <Button variant="outline" size="sm" onClick={() => navigate("/admin/crm")}>
+              <Button variant="outline" size="sm" onClick={() => navigate("/admin/crm")} className="text-foreground border-border">
                 Admin Dashboard
               </Button>
             )}
-            <Button variant="ghost" size="sm" onClick={handleSignOut}>
+            <Button variant="ghost" size="sm" onClick={handleSignOut} className="text-foreground hover:text-foreground">
               <LogOut className="h-4 w-4 mr-2" />
               Sign Out
             </Button>
@@ -138,29 +138,29 @@ const CRM = () => {
 
         {/* Action Buttons */}
         <div className="flex gap-3">
-          <Button onClick={() => setShowLeadModal(true)}>
+          <Button onClick={() => setShowLeadModal(true)} className="bg-primary text-primary-foreground hover:bg-primary/90">
             <Plus className="h-4 w-4 mr-2" />
             Add Lead
           </Button>
-          <Button variant="outline" onClick={() => setShowImportModal(true)}>
+          <Button variant="outline" onClick={() => setShowImportModal(true)} className="text-foreground border-border">
             <Upload className="h-4 w-4 mr-2" />
             Import Contacts
           </Button>
         </div>
 
         {/* Leads Tabs */}
-        <Card>
+        <Card className="border-border bg-card">
           <CardHeader>
-            <CardTitle>Leads</CardTitle>
+            <CardTitle className="text-foreground">Leads</CardTitle>
           </CardHeader>
           <CardContent>
             <Tabs value={activeTab} onValueChange={setActiveTab}>
-              <TabsList className="mb-4">
-                <TabsTrigger value="assigned">
+              <TabsList className="mb-4 bg-muted">
+                <TabsTrigger value="assigned" className="data-[state=active]:bg-card data-[state=active]:text-foreground text-muted-foreground">
                   <Users className="h-4 w-4 mr-2" />
                   Assigned by JJ Global Capital
                 </TabsTrigger>
-                <TabsTrigger value="own">
+                <TabsTrigger value="own" className="data-[state=active]:bg-card data-[state=active]:text-foreground text-muted-foreground">
                   <FileText className="h-4 w-4 mr-2" />
                   My Own Leads
                 </TabsTrigger>
