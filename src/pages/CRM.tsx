@@ -12,12 +12,13 @@ import {
   Users, FileText, Plus, Upload, LogOut, Shuffle
 } from "lucide-react";
 import CRMLeadsTable from "@/components/crm/CRMLeadsTable";
-import CRMDashboardCards from "@/components/crm/CRMDashboardCards";
+import CRMEnhancedDashboard from "@/components/crm/CRMEnhancedDashboard";
 import CRMImportModal from "@/components/crm/CRMImportModal";
 import CRMLeadModal from "@/components/crm/CRMLeadModal";
 import LeadQuickFilters from "@/components/crm/LeadQuickFilters";
 import LeadSourceFilter from "@/components/crm/LeadSourceFilter";
 import BulkAssignModal from "@/components/crm/BulkAssignModal";
+import SmartReminders from "@/components/crm/SmartReminders";
 
 interface CRMProfile {
   id: string;
@@ -194,17 +195,23 @@ const CRM = () => {
       </header>
 
       <main className="max-w-7xl mx-auto px-4 py-6 space-y-6">
-        {/* Dashboard Cards */}
-        <CRMDashboardCards userId={user?.id || ""} isAdmin={isAdmin} />
+        {/* Enhanced Dashboard with Charts */}
+        <CRMEnhancedDashboard userId={user?.id || ""} isAdmin={isAdmin} />
 
-        {/* Quick Filters */}
-        <div className="space-y-3">
-          <h3 className="text-sm font-semibold text-white uppercase tracking-wide">Quick Filters</h3>
-          <LeadQuickFilters 
-            activeFilter={quickFilter} 
-            onChange={handleQuickFilterChange}
-            counts={statusCounts}
-          />
+        {/* Smart Reminders */}
+        <div className="grid grid-cols-1 lg:grid-cols-3 gap-4">
+          <div className="lg:col-span-2">
+            {/* Quick Filters */}
+            <div className="space-y-3">
+              <h3 className="text-sm font-semibold text-white uppercase tracking-wide">Quick Filters</h3>
+              <LeadQuickFilters 
+                activeFilter={quickFilter} 
+                onChange={handleQuickFilterChange}
+                counts={statusCounts}
+              />
+            </div>
+          </div>
+          <SmartReminders userId={user?.id || ""} limit={4} />
         </div>
 
         {/* Action Buttons */}
