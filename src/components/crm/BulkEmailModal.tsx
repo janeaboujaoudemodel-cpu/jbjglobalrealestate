@@ -11,6 +11,30 @@ import { supabase } from "@/integrations/supabase/client";
 import { toast } from "sonner";
 import { Mail, Send, Users, Briefcase, Building, TrendingUp, Loader2, Eye } from "lucide-react";
 
+// Security: HTML escape function to prevent XSS/injection
+const escapeHtml = (unsafe: string): string => {
+  return unsafe
+    .replace(/&/g, '&amp;')
+    .replace(/</g, '&lt;')
+    .replace(/>/g, '&gt;')
+    .replace(/"/g, '&quot;')
+    .replace(/'/g, '&#039;');
+};
+
+// Security: URL sanitization to block dangerous protocols
+const sanitizeUrl = (url: string): string => {
+  const trimmed = url.trim();
+  // Block dangerous protocols
+  if (/^(javascript|data|vbscript|file):/i.test(trimmed)) {
+    return '#';
+  }
+  // Ensure http/https only for external links
+  if (trimmed && !trimmed.match(/^https?:\/\//i)) {
+    return 'https://' + trimmed;
+  }
+  return trimmed;
+};
+
 interface BulkEmailModalProps {
   open: boolean;
   onClose: () => void;
@@ -77,6 +101,13 @@ const BulkEmailModal = ({ open, onClose, userId, preSelectedLeadIds }: BulkEmail
   };
 
   const generateEmailHtml = () => {
+    // Security: Escape all user-provided content to prevent HTML injection
+    const safeGreeting = escapeHtml(formData.greeting);
+    const safeBody = escapeHtml(formData.body);
+    const safeCtaText = escapeHtml(formData.ctaText);
+    const safeCtaUrl = sanitizeUrl(formData.ctaUrl);
+    const safeClosing = escapeHtml(formData.closing);
+
     return `
       <!DOCTYPE html>
       <html>
@@ -94,16 +125,16 @@ const BulkEmailModal = ({ open, onClose, userId, preSelectedLeadIds }: BulkEmail
           
           <!-- Content -->
           <div style="padding: 40px 30px;">
-            <p style="color: #333; font-size: 16px; line-height: 1.6; margin: 0 0 20px 0;">${formData.greeting}</p>
-            <div style="color: #333; font-size: 16px; line-height: 1.8; margin-bottom: 30px; white-space: pre-line;">${formData.body}</div>
+            <p style="color: #333; font-size: 16px; line-height: 1.6; margin: 0 0 20px 0;">${safeGreeting}</p>
+            <div style="color: #333; font-size: 16px; line-height: 1.8; margin-bottom: 30px; white-space: pre-line;">${safeBody}</div>
             
-            ${formData.ctaUrl ? `
+            ${safeCtaUrl && safeCtaUrl !== '#' ? `
             <div style="text-align: center; margin: 30px 0;">
-              <a href="${formData.ctaUrl}" style="display: inline-block; background: linear-gradient(135deg, #d4af37 0%, #b8962e 100%); color: #1a1a2e; padding: 15px 40px; text-decoration: none; font-weight: bold; border-radius: 5px; font-size: 14px; letter-spacing: 1px;">${formData.ctaText}</a>
+              <a href="${safeCtaUrl}" style="display: inline-block; background: linear-gradient(135deg, #d4af37 0%, #b8962e 100%); color: #1a1a2e; padding: 15px 40px; text-decoration: none; font-weight: bold; border-radius: 5px; font-size: 14px; letter-spacing: 1px;">${safeCtaText}</a>
             </div>
             ` : ''}
             
-            <p style="color: #666; font-size: 14px; line-height: 1.6; margin-top: 30px; white-space: pre-line;">${formData.closing}</p>
+            <p style="color: #666; font-size: 14px; line-height: 1.6; margin-top: 30px; white-space: pre-line;">${safeClosing}</p>
           </div>
           
           <!-- Footer -->
