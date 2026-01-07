@@ -19,7 +19,8 @@ import {
   Shield,
   Clock,
   PenTool,
-  Users
+  Users,
+  Table2
 } from "lucide-react";
 
 const fadeInUp = {
@@ -180,6 +181,30 @@ const aiTools = [
     bgColor: "bg-lime-500/10",
     link: "/referral-onboarding",
     features: ["5% Commission", "Easy Onboarding", "Track Earnings", "E-Contracts"]
+  },
+  {
+    id: "spreadsheet",
+    title: "Spreadsheet",
+    description: "A powerful Excel-like spreadsheet tool with formulas, formatting, import/export CSV, and real-time calculations for property analysis.",
+    icon: Table2,
+    gradient: "from-green-500 to-teal-500",
+    borderColor: "border-green-500/30",
+    textColor: "text-green-400",
+    bgColor: "bg-green-500/10",
+    link: "/spreadsheet",
+    features: ["Formulas", "CSV Import/Export", "Formatting", "Calculations"]
+  },
+  {
+    id: "documents",
+    title: "Documents",
+    description: "A Google Docs-style document editor with rich text formatting, headings, lists, links, and export options for professional documents.",
+    icon: FileText,
+    gradient: "from-blue-500 to-indigo-500",
+    borderColor: "border-blue-500/30",
+    textColor: "text-blue-400",
+    bgColor: "bg-blue-500/10",
+    link: "/documents",
+    features: ["Rich Text", "Formatting", "Export HTML/TXT", "Print Ready"]
   },
 ];
 

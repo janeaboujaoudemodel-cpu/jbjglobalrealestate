@@ -14,7 +14,7 @@ import InstallAppButton from "@/components/InstallAppButton";
 import CookiesConsentBanner from "@/components/CookiesConsentBanner";
 import { useLanguage } from "@/contexts/LanguageContext";
 import { useUserRole } from "@/hooks/useUserRole";
-import { Sparkles, ArrowUpRight, ChevronDown, User, Scale, Layers, Calculator, FileText, Heart, BarChart3, Wrench, Ruler, Palette, Calendar, Wallet, ShoppingBag, Brain, GraduationCap, Briefcase, Target, Award, PenTool, Users } from "lucide-react";
+import { Sparkles, ArrowUpRight, ChevronDown, User, Scale, Layers, Calculator, FileText, Heart, BarChart3, Wrench, Ruler, Palette, Calendar, Wallet, ShoppingBag, Brain, GraduationCap, Briefcase, Target, Award, PenTool, Users, Table2 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import founderProfessional from "@/assets/founder-professional.jpeg";
 import luxuryVillaHero from "@/assets/luxury-villa-hero.jpeg";
@@ -379,6 +379,26 @@ const Index = () => {
                 >
                   <Users className="w-3 h-3 mr-1" />
                   Join Referral Program
+                  <ArrowUpRight className="w-3 h-3 ml-1 group-hover:translate-x-0.5 group-hover:-translate-y-0.5 transition-transform" />
+                </Button>
+              </Link>
+              
+              <Link to="/spreadsheet">
+                <Button 
+                  className="bg-transparent backdrop-blur-md border-2 border-green-500/50 text-green-400 hover:bg-green-500/20 hover:border-green-400 hover:shadow-lg hover:shadow-green-500/20 font-semibold px-5 py-4 text-xs transition-all duration-300 hover:scale-105 group"
+                >
+                  <Table2 className="w-3 h-3 mr-1" />
+                  Spreadsheet
+                  <ArrowUpRight className="w-3 h-3 ml-1 group-hover:translate-x-0.5 group-hover:-translate-y-0.5 transition-transform" />
+                </Button>
+              </Link>
+              
+              <Link to="/documents">
+                <Button 
+                  className="bg-transparent backdrop-blur-md border-2 border-blue-500/50 text-blue-400 hover:bg-blue-500/20 hover:border-blue-400 hover:shadow-lg hover:shadow-blue-500/20 font-semibold px-5 py-4 text-xs transition-all duration-300 hover:scale-105 group"
+                >
+                  <FileText className="w-3 h-3 mr-1" />
+                  Documents
                   <ArrowUpRight className="w-3 h-3 ml-1 group-hover:translate-x-0.5 group-hover:-translate-y-0.5 transition-transform" />
                 </Button>
               </Link>

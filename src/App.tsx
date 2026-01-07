@@ -70,6 +70,8 @@ import BrokerAccount from "./pages/BrokerAccount";
 import HRAgent from "./pages/HRAgent";
 import ReferralOnboarding from "./pages/ReferralOnboarding";
 import SignatureStudio from "./pages/SignatureStudio";
+import Spreadsheet from "./pages/Spreadsheet";
+import Documents from "./pages/Documents";
 
 const queryClient = new QueryClient();
 
@@ -150,6 +152,8 @@ const App = () => (
                     <Route path="/hr-agent" element={<HRAgent />} />
                     <Route path="/referral-onboarding" element={<ReferralOnboarding />} />
                     <Route path="/signature-studio" element={<SignatureStudio />} />
+                    <Route path="/spreadsheet" element={<Spreadsheet />} />
+                    <Route path="/documents" element={<Documents />} />
                     <Route path="*" element={<NotFound />} />
                     </Routes>
                   </MainLayout>
