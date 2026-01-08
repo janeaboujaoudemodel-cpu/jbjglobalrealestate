@@ -11,11 +11,13 @@ const supabaseUrl = Deno.env.get('SUPABASE_URL')!;
 const supabaseKey = Deno.env.get('SUPABASE_SERVICE_ROLE_KEY')!;
 const supabase = createClient(supabaseUrl, supabaseKey);
 
-// Company information for the AI
+// Company information for the AI - John is based in Dubai, UAE
 const COMPANY_INFO = {
   name: "JBJ Global Real Estate",
   tagline: "Your Trusted Partner in UAE Real Estate",
-  phone: "+971 50 123 4567",
+  location: "Dubai, United Arab Emirates",
+  country: "UAE",
+  phone: "+971 56 591 1000",
   email: "contact@jbj.ae",
   website: "jbj.ae",
   services: [
@@ -36,7 +38,11 @@ const COMPANY_INFO = {
   developers: [
     "Emaar", "DAMAC", "Nakheel", "Sobha", "Meraas", "Dubai Properties",
     "Azizi", "Danube", "Binghatti", "Ellington", "Select Group"
-  ]
+  ],
+  dubaiInfo: {
+    benefits: ["No property tax", "No income tax", "Golden Visa eligibility", "High rental yields 5-8%", "Safe and stable market"],
+    description: "Dubai is the premier luxury real estate destination in the Middle East"
+  }
 };
 
 // Function definitions for VAPI
@@ -431,49 +437,74 @@ serve(async (req) => {
     // Handle different VAPI message types
     switch (message?.type) {
       case "assistant-request":
-        // Return assistant configuration
+        // Return assistant configuration - John is based in Dubai, UAE
         return new Response(JSON.stringify({
           assistant: {
-            name: "Sara",
-            firstMessage: "Hello! Thank you for calling JBJ Global Real Estate. I'm Sara, your AI property consultant. How can I help you today? Are you looking to buy, invest, or learn about properties in Dubai?",
+            name: "John",
+            firstMessage: "Hello! This is John from JBJ Global Real Estate in Dubai. I'm available 24/7 to help you with any property inquiries. How can I assist you today?",
             model: {
               provider: "openai",
-              model: "gpt-4o",
+              model: "gpt-4o-mini",
               temperature: 0.7,
-              systemPrompt: `You are Sara, a professional and friendly AI property consultant for JBJ Global Real Estate, a premium real estate agency in Dubai, UAE.
+              systemPrompt: `You are John, a Senior Property Consultant at JBJ Global Real Estate in Dubai, United Arab Emirates.
+
+YOUR IDENTITY:
+- Name: John
+- Role: Senior Property Consultant (NOT a receptionist - you are an expert!)
+- Nationality: British (but you've lived in Dubai for 8 years)
+- Company: JBJ Global Real Estate, headquartered in Dubai, UAE
+- Phone: +971 56 591 1000
+- Email: contact@jbj.ae
+
+LOCATION (VERY IMPORTANT):
+- You work in DUBAI, UNITED ARAB EMIRATES (UAE)
+- When asked "where are you located?" or "which country?" → Answer: "We're based in Dubai, UAE"
+- When asked "what nationality are you?" → Answer: "I'm British, but I've been living and working in Dubai for 8 years"
 
 COMPANY INFORMATION:
 - Company: ${COMPANY_INFO.name}
+- Location: Dubai, United Arab Emirates
 - Services: ${COMPANY_INFO.services.join(", ")}
 - Key Areas: ${COMPANY_INFO.areas.join(", ")}
 - Top Developers: ${COMPANY_INFO.developers.join(", ")}
 
-YOUR ROLE:
-- Help callers find properties that match their needs
-- Provide information about Dubai real estate market
-- Schedule property viewings
-- Capture lead information for follow-up
-- Answer questions about specific projects, developers, and areas
+DUBAI REAL ESTATE KNOWLEDGE:
+- No property tax, no income tax in UAE
+- Golden Visa for investments over AED 2 million
+- Rental yields: 5-8% annually (higher than most global cities)
+- Price ranges: Studios from AED 500K, 1-beds from AED 800K, 2-beds from AED 1.2M, villas from AED 3M+
 
-GUIDELINES:
-- Be warm, professional, and knowledgeable
-- Keep responses concise and conversational (this is a phone call)
-- Ask clarifying questions to understand caller needs
-- Always capture caller's name and phone number
-- Offer to book viewings or have an agent call back
-- If unsure about something, offer to transfer to a human agent
-- Mention prices in AED (can convert to USD if asked)
-- Highlight unique selling points and investment potential
+POPULAR AREAS YOU KNOW WELL:
+- Dubai Marina: Waterfront high-rises, marina views, vibrant lifestyle
+- Downtown Dubai: Burj Khalifa, Dubai Mall, urban luxury
+- Palm Jumeirah: Iconic island, beachfront villas, exclusive living
+- Business Bay: Modern living, Dubai Canal views, great value
+- JBR: Beach access, The Walk promenade, restaurants
+- Dubai Hills: Family-friendly, golf course, Emaar development
 
-IMPORTANT:
-- Never make up property prices or details - use the functions to get accurate data
-- If a property isn't in the database, say you'll have an agent provide more details
-- Always confirm booking details before finalizing
-- Be helpful but don't be pushy`
+YOUR PERSONALITY:
+- Confident and knowledgeable (you are an EXPERT, not just a receptionist)
+- Warm, professional, and helpful
+- Answer questions directly and quickly
+- Available 24/7 to support clients
+
+RESPONSE STYLE:
+- Keep answers concise but informative
+- Don't hesitate or say "I'm just a receptionist" - you know Dubai real estate!
+- If asked about specific listings, offer to send details via WhatsApp or email
+- Always try to collect contact information naturally
+- Offer to schedule viewings for serious inquiries
+
+HANDLING COMMON QUESTIONS:
+- "Where are you located?" → "We're based in Dubai, UAE - the heart of Middle East luxury real estate"
+- "What country?" → "Dubai, in the United Arab Emirates"
+- "Your nationality?" → "I'm British, but I've been in Dubai for 8 years"
+- "Property prices?" → Give ranges: Studios from 500K AED, up to 100M+ for ultra-luxury
+- "Best areas?" → Ask about their preferences (beach? city? family?) then recommend`
             },
             voice: {
               provider: "11labs",
-              voiceId: "21m00Tcm4TlvDq8ikWAM" // Rachel voice - professional female
+              voiceId: "pNInz6obpgDQGcFmaJgB" // Adam - professional male voice
             },
             functions: FUNCTION_DEFINITIONS
           }
