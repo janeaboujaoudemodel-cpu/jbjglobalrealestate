@@ -34,7 +34,7 @@ export const JJLogoImage = ({
     <div className={`flex flex-col items-center ${className}`}>
       <img 
         src={logoSrc} 
-        alt="JJ Global Capital" 
+        alt="JBJ Global Real Estate"
         width={config.width}
         height={config.height}
         className="object-contain"
@@ -42,18 +42,14 @@ export const JJLogoImage = ({
       />
       {showText && (
         <div 
-          className="flex items-center justify-center text-current mt-1"
+          className="flex flex-col items-center justify-center text-current mt-1"
           style={{ 
             fontFamily: "Poppins, sans-serif",
             letterSpacing: '0.08em'
           }}
         >
           <span className={`font-semibold ${size === 'footer' ? 'text-lg md:text-xl' : size === 'xl' ? 'text-base' : size === 'lg' ? 'text-sm' : 'text-xs'}`}>
-            GLOBAL
-          </span>
-          <span className="mx-1" />
-          <span className={`font-semibold ${size === 'footer' ? 'text-lg md:text-xl' : size === 'xl' ? 'text-base' : size === 'lg' ? 'text-sm' : 'text-xs'}`}>
-            CAPITAL
+            GLOBAL REAL ESTATE
           </span>
         </div>
       )}
@@ -112,7 +108,7 @@ export const JJLogoHeaderImage = ({ className = '' }: { className?: string }) =>
     {/* Logo image - same asset as footer (logoDark), crisp at 48x48 */}
     <img 
       src={logoDark} 
-      alt="JJ Global Capital" 
+      alt="JBJ Global Real Estate"
       width={48}
       height={48}
       className="object-contain shrink-0"
@@ -125,7 +121,7 @@ export const JJLogoHeaderImage = ({ className = '' }: { className?: string }) =>
     {/* Text block - styled like footer */}
     <div className="flex flex-col justify-center leading-tight">
       <span className="text-white font-semibold text-sm md:text-base tracking-[0.12em] uppercase">
-        Global Capital
+        Global Real Estate
       </span>
       <span className="text-gold text-[10px] md:text-xs tracking-[0.2em] uppercase mt-0.5">
         Real Estate
