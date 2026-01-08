@@ -1,44 +1,22 @@
 import { cn } from "@/lib/utils";
+import jbjMonogramDark from "@/assets/jbj-monogram-dark.png";
+import jbjMonogramTransparent from "@/assets/jbj-monogram-transparent.png";
 
-type BrandMonogramVariant = "dark" | "light";
-type BrandMonogramSize = "sm" | "md" | "lg" | "xl";
+type BrandMonogramVariant = "dark" | "light" | "transparent";
+type BrandMonogramSize = "xs" | "sm" | "md" | "lg" | "xl" | "footer";
 type BrandMonogramLayout = "horizontal" | "stacked";
 
 const sizeConfig: Record<BrandMonogramSize, {
-  j: string;
-  divider: string;
+  width: number;
+  height: number;
   wordmark: string;
-  gap: string;
-  b: string;
 }> = {
-  sm: {
-    j: "text-xl md:text-2xl",
-    divider: "h-5 md:h-6",
-    wordmark: "text-[10px] md:text-xs",
-    gap: "mx-1.5 md:mx-2",
-    b: "text-[10px] md:text-xs",
-  },
-  md: {
-    j: "text-2xl md:text-3xl",
-    divider: "h-6 md:h-7",
-    wordmark: "text-xs md:text-sm",
-    gap: "mx-2 md:mx-2.5",
-    b: "text-xs md:text-sm",
-  },
-  lg: {
-    j: "text-4xl md:text-5xl",
-    divider: "h-10 md:h-12",
-    wordmark: "text-sm md:text-base",
-    gap: "mx-3 md:mx-3.5",
-    b: "text-base md:text-lg",
-  },
-  xl: {
-    j: "text-5xl md:text-6xl lg:text-7xl",
-    divider: "h-12 md:h-14 lg:h-16",
-    wordmark: "text-base md:text-lg",
-    gap: "mx-4 md:mx-4.5",
-    b: "text-lg md:text-xl lg:text-2xl",
-  },
+  xs: { width: 32, height: 32, wordmark: "text-[9px]" },
+  sm: { width: 48, height: 48, wordmark: "text-[10px] md:text-xs" },
+  md: { width: 64, height: 64, wordmark: "text-xs md:text-sm" },
+  lg: { width: 96, height: 96, wordmark: "text-sm md:text-base" },
+  xl: { width: 120, height: 120, wordmark: "text-base md:text-lg" },
+  footer: { width: 140, height: 140, wordmark: "text-sm" },
 };
 
 export function BrandMonogram({
@@ -57,9 +35,12 @@ export function BrandMonogram({
   className?: string;
 }) {
   const cfg = sizeConfig[size];
-
-  const jColor = variant === "dark" ? "text-white" : "text-foreground";
-  const wordmarkColor = variant === "dark" ? "text-white" : "text-foreground";
+  const wordmarkColor = variant === "light" ? "text-foreground" : "text-white";
+  
+  // Use transparent version for light backgrounds, dark version for dark backgrounds
+  const logoSrc = variant === "light" || variant === "transparent" 
+    ? jbjMonogramTransparent 
+    : jbjMonogramDark;
 
   return (
     <div
@@ -72,39 +53,15 @@ export function BrandMonogram({
       )}
       style={{ fontFamily: "Poppins, sans-serif" }}
     >
-      {/* Monogram */}
-      <div className="flex items-center justify-center" aria-hidden="true">
-        <span className={cn(jColor, "font-extralight leading-none", cfg.j)}>
-          J
-        </span>
-
-        <span className={cn("flex items-center justify-center relative", cfg.gap)}>
-          <span
-            className={cn(
-              "w-px bg-gradient-to-b from-transparent via-gold to-transparent",
-              cfg.divider
-            )}
-          />
-          {/* Gold B centered on divider */}
-          <span 
-            className={cn(
-              "absolute text-gold font-semibold leading-none",
-              cfg.b
-            )}
-            style={{ 
-              top: '50%', 
-              left: '50%', 
-              transform: 'translate(-50%, -50%)',
-            }}
-          >
-            B
-          </span>
-        </span>
-
-        <span className={cn(jColor, "font-extralight leading-none", cfg.j)}>
-          J
-        </span>
-      </div>
+      {/* Monogram Image */}
+      <img 
+        src={logoSrc}
+        alt="JBJ Global Real Estate"
+        width={cfg.width}
+        height={cfg.height}
+        className="object-contain"
+        style={{ width: cfg.width, height: cfg.height }}
+      />
 
       {/* Wordmark */}
       {showWordmark && (
@@ -130,6 +87,28 @@ export function BrandMonogram({
           )}
         </div>
       )}
+    </div>
+  );
+}
+
+// Header-specific monogram - horizontal layout with image
+export function BrandMonogramHeader({ className = "" }: { className?: string }) {
+  return (
+    <div 
+      className={cn("flex items-center gap-3", className)}
+      style={{ fontFamily: "Poppins, sans-serif" }}
+    >
+      <img 
+        src={jbjMonogramDark}
+        alt="JBJ"
+        width={40}
+        height={40}
+        className="object-contain"
+        style={{ width: 40, height: 40 }}
+      />
+      <span className="text-white font-semibold text-sm md:text-base tracking-[0.12em] uppercase">
+        Global Real Estate
+      </span>
     </div>
   );
 }
