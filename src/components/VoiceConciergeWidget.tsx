@@ -29,7 +29,7 @@ const VoiceConciergeWidget = () => {
 
   const conversation = useConversation({
     onConnect: () => {
-      console.log("Connected to JJ Global Capital Concierge");
+      console.log("Connected to JBJ Global Real Estate Concierge");
       toast.success("Connected to concierge");
     },
     onDisconnect: () => {
