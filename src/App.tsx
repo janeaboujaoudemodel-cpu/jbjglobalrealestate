@@ -75,6 +75,7 @@ import Documents from "./pages/Documents";
 import VideoMeeting from "./pages/VideoMeeting";
 import ExecutiveAssistant from "./pages/ExecutiveAssistant";
 import CallReview from "./pages/CallReview";
+import VapiPrompt from "./pages/VapiPrompt";
 
 const queryClient = new QueryClient();
 
@@ -160,6 +161,7 @@ const App = () => (
                     <Route path="/video-meeting" element={<VideoMeeting />} />
                     <Route path="/executive-assistant" element={<ExecutiveAssistant />} />
                     <Route path="/call-review" element={<CallReview />} />
+                    <Route path="/vapi-prompt" element={<VapiPrompt />} />
                     <Route path="*" element={<NotFound />} />
                     </Routes>
                   </MainLayout>
