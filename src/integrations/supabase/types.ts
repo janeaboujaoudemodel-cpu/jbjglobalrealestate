@@ -3295,6 +3295,51 @@ export type Database = {
           },
         ]
       }
+      pwa_analytics: {
+        Row: {
+          browser: string | null
+          created_at: string
+          device_type: string | null
+          event_type: string
+          id: string
+          metadata: Json | null
+          page_url: string | null
+          platform: string | null
+          referrer: string | null
+          session_id: string | null
+          user_agent: string | null
+          user_id: string | null
+        }
+        Insert: {
+          browser?: string | null
+          created_at?: string
+          device_type?: string | null
+          event_type: string
+          id?: string
+          metadata?: Json | null
+          page_url?: string | null
+          platform?: string | null
+          referrer?: string | null
+          session_id?: string | null
+          user_agent?: string | null
+          user_id?: string | null
+        }
+        Update: {
+          browser?: string | null
+          created_at?: string
+          device_type?: string | null
+          event_type?: string
+          id?: string
+          metadata?: Json | null
+          page_url?: string | null
+          platform?: string | null
+          referrer?: string | null
+          session_id?: string | null
+          user_agent?: string | null
+          user_id?: string | null
+        }
+        Relationships: []
+      }
       quiz_responses: {
         Row: {
           answers: Json

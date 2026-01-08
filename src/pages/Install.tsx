@@ -8,15 +8,14 @@ import {
   Tablet,
   Check,
   ArrowLeft,
-  Share,
-  Plus,
-  MoreVertical,
   Sparkles,
   WifiOff,
   Zap,
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
-import { JJLogoImage } from "@/components/JJLogoImage";
+import { BrandMonogram } from "@/components/BrandMonogram";
+import { trackPWAEvent } from "@/hooks/usePWAAnalytics";
+import { toast } from "sonner";
 
 interface BeforeInstallPromptEvent extends Event {
   prompt: () => Promise<void>;
@@ -44,6 +43,7 @@ const Install = () => {
     const handleBeforeInstall = (e: Event) => {
       e.preventDefault();
       setDeferredPrompt(e as BeforeInstallPromptEvent);
+      trackPWAEvent('prompt_shown');
     };
 
     window.addEventListener("beforeinstallprompt", handleBeforeInstall);
@@ -52,6 +52,8 @@ const Install = () => {
     window.addEventListener("appinstalled", () => {
       setIsInstalled(true);
       setDeferredPrompt(null);
+      trackPWAEvent('install_accepted');
+      toast.success("App installed successfully! Find it on your home screen.");
     });
 
     return () => {
@@ -60,14 +62,25 @@ const Install = () => {
   }, []);
 
   const handleInstall = async () => {
+    // Track button click
+    trackPWAEvent('button_click', { hasPrompt: !!deferredPrompt, isIOS });
+    
     // For Android/Desktop with install prompt
     if (deferredPrompt) {
       setInstalling(true);
-      await deferredPrompt.prompt();
-      const { outcome } = await deferredPrompt.userChoice;
+      try {
+        await deferredPrompt.prompt();
+        const { outcome } = await deferredPrompt.userChoice;
 
-      if (outcome === "accepted") {
-        setIsInstalled(true);
+        if (outcome === "accepted") {
+          setIsInstalled(true);
+          // install_accepted is tracked via appinstalled event
+        } else {
+          trackPWAEvent('install_dismissed');
+        }
+      } catch (err) {
+        console.error('Install prompt failed:', err);
+        toast.error("Installation failed. Try using browser menu.");
       }
       setDeferredPrompt(null);
       setInstalling(false);
@@ -75,17 +88,26 @@ const Install = () => {
     }
     
     // For iOS - trigger share sheet automatically if possible
-    if (isIOS && navigator.share) {
-      try {
-        await navigator.share({
-          title: 'JBJ Global Real Estate',
-          text: 'Install the JBJ Global Real Estate app',
-          url: window.location.origin,
-        });
-      } catch {
-        // User cancelled or share failed - show instructions
+    if (isIOS) {
+      if (navigator.share) {
+        try {
+          await navigator.share({
+            title: 'JBJ Global Real Estate',
+            text: 'Install the JBJ Global Real Estate app',
+            url: window.location.origin,
+          });
+        } catch {
+          // User cancelled or share failed - show instructions
+          toast.info("Tap the Share button (⬆), then 'Add to Home Screen'");
+        }
+      } else {
+        toast.info("Tap the Share button (⬆), then 'Add to Home Screen'");
       }
+      return;
     }
+    
+    // Fallback for browsers without install prompt
+    toast.info("Use your browser menu → 'Install app' or 'Add to Home Screen'");
   };
 
   const features = [
@@ -140,7 +162,7 @@ const Install = () => {
             <h1 className="text-white text-3xl md:text-4xl lg:text-5xl font-bold mb-4">
               Install{" "}
               <span className="text-transparent bg-clip-text bg-gradient-to-r from-gold to-gold-light">
-                JJ Global Capital
+                JBJ Global Real Estate
               </span>
             </h1>
             <p className="text-zinc-400 text-lg mb-8 max-w-lg mx-auto">
@@ -160,7 +182,7 @@ const Install = () => {
               </div>
               <h2 className="text-white text-xl font-semibold mb-2">App Installed!</h2>
               <p className="text-zinc-400">
-                You're using the JJ Global Capital app. Find it on your home screen or taskbar!
+                You're using the JBJ Global Real Estate app. Find it on your home screen or taskbar!
               </p>
               <Link to="/">
                 <Button className="mt-6 bg-green-600 hover:bg-green-700 text-white">
