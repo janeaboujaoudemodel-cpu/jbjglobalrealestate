@@ -16,7 +16,7 @@ import {
 } from "@/components/ui/collapsible";
 import { SocialLinks } from "@/components/marketing/SocialLinks";
 import { NewsletterBrevo } from "@/components/marketing/NewsletterBrevo";
-import { TrustpilotWidget } from "@/components/marketing/TrustpilotWidget";
+
 import { GoogleMyBusinessLink } from "@/components/marketing/GoogleMyBusinessLink";
 
 const DivisionAccordion = ({
@@ -362,7 +362,6 @@ const Footer = () => {
 
         {/* Trust Signals */}
         <div className="flex flex-wrap justify-center gap-4 mb-8">
-          <TrustpilotWidget />
           <GoogleMyBusinessLink variant="badge" />
         </div>
 
