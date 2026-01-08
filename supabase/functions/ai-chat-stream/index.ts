@@ -4,8 +4,8 @@ import { createClient } from "https://esm.sh/@supabase/supabase-js@2";
 import { z } from "https://deno.land/x/zod@v3.22.4/mod.ts";
 
 const ALLOWED_ORIGINS = [
-  "https://jjglobalcapital.com",
-  "https://www.jjglobalcapital.com",
+  "https://jbj.ae",
+  "https://www.jbj.ae",
   "http://localhost:5173",
   "http://localhost:8080",
 ];
@@ -86,7 +86,7 @@ async function checkRateLimit(supabaseAdmin: any, rateKey: string): Promise<bool
 
 const APPROVED_CONTACT_INFO = {
   phone: '+971 56 591 1000',
-  email: 'contact@jjglobalcapital.com',
+  email: 'contact@jbj.ae',
 };
 
 function sanitizeContactInfo(text: string): string {
@@ -106,7 +106,7 @@ function sanitizeContactInfo(text: string): string {
   });
   sanitized = sanitized.replace(emailPattern, (match) => {
     const lowerMatch = match.toLowerCase();
-    if (lowerMatch.endsWith('@jjglobalcapital.com')) return match;
+    if (lowerMatch.endsWith('@jbj.ae')) return match;
     return APPROVED_CONTACT_INFO.email;
   });
   return sanitized;
@@ -123,10 +123,10 @@ const RequestSchema = z.object({
 });
 
 const WEBSITE_KNOWLEDGE = `
-JJ GLOBAL CAPITAL - DUBAI REAL ESTATE BROKERAGE
+JBJ GLOBAL REAL ESTATE - DUBAI REAL ESTATE BROKERAGE
 - Email: ${APPROVED_CONTACT_INFO.email}
 - Phone: ${APPROVED_CONTACT_INFO.phone}
-- Services: Property Sales, Leasing, Holiday Homes, Luxury Concierge, Design & Build
+- Services: Property Sales, Leasing, Holiday Homes, Design & Build, Legal Partner Introductions
 - Areas: Dubai Marina, Downtown, Palm Jumeirah, Business Bay, JBR, Dubai Hills
 - Developers: Emaar, DAMAC, Nakheel, Sobha, Meraas, Azizi
 - Benefits: 0% property tax, 0% income tax, Golden Visa eligibility
@@ -194,7 +194,7 @@ serve(async (req) => {
     const messages = [
       {
         role: 'system',
-        content: `You are Sara, a friendly property consultant at JJ Global Capital. Be conversational, warm, and helpful. Keep answers SHORT (2-3 sentences). Use emojis occasionally 😊.
+        content: `You are Sara, a friendly property specialist at JBJ Global Real Estate. Be conversational, warm, and helpful. Keep answers SHORT (2-3 sentences). Use emojis occasionally 😊.
 
 ${WEBSITE_KNOWLEDGE}
 

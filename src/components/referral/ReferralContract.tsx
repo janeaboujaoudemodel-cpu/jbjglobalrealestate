@@ -26,9 +26,9 @@ export default function ReferralContract({
     <div className="bg-white text-black p-8 max-w-3xl mx-auto font-serif" id="referral-contract">
       {/* Header */}
       <div className="text-center border-b-2 border-gold pb-6 mb-8">
-        <img src={logoLight} alt="JJ Global Capital" className="h-16 mx-auto mb-4" />
-        <h1 className="text-2xl font-bold tracking-wide">JJ GLOBAL CAPITAL</h1>
-        <p className="text-sm text-gray-600 mt-1">Real Estate Investment & Advisory</p>
+        <img src={logoLight} alt="JBJ Global Real Estate" className="h-16 mx-auto mb-4" />
+        <h1 className="text-2xl font-bold tracking-wide">JBJ GLOBAL REAL ESTATE</h1>
+        <p className="text-sm text-gray-600 mt-1">Real Estate Brokerage</p>
         <p className="text-xs text-gray-500 mt-2">Dubai, United Arab Emirates</p>
       </div>
 
@@ -51,9 +51,9 @@ export default function ReferralContract({
         <div className="grid grid-cols-2 gap-8 text-sm">
           <div>
             <p className="font-semibold mb-2">The Company:</p>
-            <p>JJ Global Capital L.L.C.</p>
+            <p>JBJ Global Real Estate L.L.C.</p>
             <p>Dubai, United Arab Emirates</p>
-            <p>Email: contact@jjglobalcapital.com</p>
+            <p>Email: contact@jbj.ae</p>
           </div>
           <div>
             <p className="font-semibold mb-2">The Referral Partner:</p>
@@ -77,7 +77,7 @@ export default function ReferralContract({
             <p className="font-semibold">1. Purpose</p>
             <p className="pl-4">
               This Agreement establishes the terms under which the Referral Partner may refer potential 
-              property buyers and investors to JJ Global Capital ("the Company") in exchange for 
+              property buyers to JBJ Global Real Estate ("the Company") in exchange for 
               referral commissions.
             </p>
           </div>
@@ -161,7 +161,7 @@ export default function ReferralContract({
       {/* Signatures */}
       <section className="grid grid-cols-2 gap-8 pt-8 border-t border-gray-300">
         <div>
-          <p className="font-semibold text-sm mb-4">For JJ Global Capital:</p>
+          <p className="font-semibold text-sm mb-4">For JBJ Global Real Estate:</p>
           <div className="h-20 border-b border-gray-400 mb-2 flex items-end justify-center pb-2">
             <span className="text-gray-400 italic text-sm">Authorized Signatory</span>
           </div>
@@ -184,8 +184,8 @@ export default function ReferralContract({
 
       {/* Footer */}
       <div className="mt-12 pt-4 border-t border-gray-200 text-center text-xs text-gray-500">
-        <p>JJ Global Capital L.L.C. | Dubai, United Arab Emirates</p>
-        <p>www.jjglobalcapital.com | contact@jjglobalcapital.com</p>
+        <p>JBJ Global Real Estate L.L.C. | Dubai, United Arab Emirates</p>
+        <p>www.jbj.ae | contact@jbj.ae</p>
         <p className="mt-2">This document is electronically generated and valid without physical stamp.</p>
       </div>
     </div>

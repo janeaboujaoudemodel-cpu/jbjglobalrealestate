@@ -52,25 +52,25 @@ const staggerContainer = {
 };
 
 const companyInfo = {
-  name: "JJ Global Capital",
+  name: "JBJ Global Real Estate",
   tagline: "Your Gateway to UAE's Premier Real Estate Brokerage",
   founded: "2025",
   headquarters: "Downtown Dubai, UAE",
   ceo: "Jane Abou Jaoude",
-  about: `JJ Global Capital is a Dubai-based real estate brokerage specializing in property sales, leasing, and holiday homes across the UAE. Founded by entrepreneur Jane Abou Jaoude, we provide brokerage support and partner introductions for discerning clients seeking exceptional properties in the UAE.
+  about: `JBJ Global Real Estate is a Dubai-based real estate brokerage specializing in property sales, leasing, and holiday homes across the UAE. Founded by entrepreneur Jane Abou Jaoude, we provide brokerage support and partner introductions for discerning clients seeking exceptional properties in the UAE.
 
-Our founder-led approach ensures that every client receives personalized attention and professional guidance, backed by our extensive market knowledge and exclusive network of developers, legal partners, and luxury service providers.
+Our founder-led approach ensures that every client receives personalized attention and professional guidance, backed by our extensive market knowledge and exclusive network of developers, legal partners, and service providers.
 
 We serve UAE-based and international clients interested in UAE real estate, offering expert brokerage services with a commitment to excellence.`,
   mission: "To provide discerning clients with professional brokerage support and access to the UAE's most exclusive properties, delivered with the highest standards of integrity, expertise, and personalized service.",
   vision: "To be the trusted choice for clients seeking premium real estate brokerage services in the UAE, recognized for our commitment to client success.",
   services: [
     "Property Sales & Leasing Brokerage",
-    "Luxury Concierge & Lifestyle Support",
     "Legal Partner Introductions",
     "Interior Design & Architecture Partners",
     "Mortgage Partner Introductions",
-    "Golden Visa Assistance"
+    "Golden Visa Assistance",
+    "Holiday Homes Management"
   ],
   values: [
     { title: "Trust & Integrity", description: "Building lasting relationships through transparency and honesty" },
@@ -327,8 +327,8 @@ const CompanyProfile = () => {
       });
 
       // Footer
-      page2.drawText("www.jjglobalcapital.com", {
-        x: pageWidth / 2 - 60,
+      page2.drawText("www.jbj.ae", {
+        x: pageWidth / 2 - 30,
         y: 30,
         size: 10,
         font: helvetica,
@@ -463,8 +463,8 @@ const CompanyProfile = () => {
       });
 
       // Footer
-      page3.drawText("www.jjglobalcapital.com", {
-        x: pageWidth / 2 - 60,
+      page3.drawText("www.jbj.ae", {
+        x: pageWidth / 2 - 30,
         y: 30,
         size: 10,
         font: helvetica,
@@ -528,8 +528,8 @@ const CompanyProfile = () => {
       const contactDetails = [
         { label: "Location", value: "Downtown Dubai, UAE" },
         { label: "Phone", value: "+971 56 591 1000" },
-        { label: "Email", value: "contact@jjglobalcapital.com" },
-        { label: "Website", value: "www.jjglobalcapital.com" },
+        { label: "Email", value: "contact@jbj.ae" },
+        { label: "Website", value: "www.jbj.ae" },
       ];
 
       yPos = pageHeight - 370;
@@ -627,11 +627,11 @@ const CompanyProfile = () => {
       const disclaimerLines = [
         "IMPORTANT NOTICE:",
         "",
-        "JJ Global Capital is a Dubai-based real estate brokerage",
+        "JBJ Global Real Estate is a Dubai-based real estate brokerage",
         "specializing in property sales, leasing, and holiday homes.",
         "",
-        "We are NOT a financial institution, law firm, or investment advisory.",
-        "We do NOT provide legal, mortgage, financial, or investment advice.",
+        "We are NOT a financial institution, law firm, or mortgage provider.",
+        "We do NOT provide legal, mortgage, or financial advice.",
         "",
         "Legal, mortgage, and property management services are provided",
         "through introductions to independent licensed third parties who",
@@ -649,7 +649,7 @@ const CompanyProfile = () => {
         "Licensed by: Dubai Land Department (DLD)",
         "Regulated by: Real Estate Regulatory Agency (RERA)",
         "",
-        "© 2025 JJ Global Capital. All rights reserved.",
+        "© 2025 JBJ Global Real Estate. All rights reserved.",
       ];
 
       yPos = pageHeight - 160;
@@ -666,8 +666,8 @@ const CompanyProfile = () => {
       });
 
       // Footer
-      page5.drawText("www.jjglobalcapital.com", {
-        x: pageWidth / 2 - 60,
+      page5.drawText("www.jbj.ae", {
+        x: pageWidth / 2 - 30,
         y: 30,
         size: 10,
         font: helvetica,
@@ -701,22 +701,22 @@ const CompanyProfile = () => {
 
   const handleShareWhatsApp = () => {
     const message = encodeURIComponent(
-      "Check out JJ Global Capital - UAE's Premier Real Estate Brokerage. Download their company profile at: https://jjglobalcapital.com/company-profile"
+      "Check out JBJ Global Real Estate - UAE's Premier Real Estate Brokerage. Download their company profile at: https://jbj.ae/company-profile"
     );
     window.open(`https://wa.me/?text=${message}`, "_blank");
   };
 
   const handleShareEmail = () => {
-    const subject = encodeURIComponent("JJ Global Capital - Company Profile");
+    const subject = encodeURIComponent("JBJ Global Real Estate - Company Profile");
     const body = encodeURIComponent(
-      "I wanted to share with you the company profile of JJ Global Capital, UAE's Premier Real Estate Brokerage.\n\nVisit: https://jjglobalcapital.com/company-profile"
+      "I wanted to share with you the company profile of JBJ Global Real Estate, UAE's Premier Real Estate Brokerage.\n\nVisit: https://jbj.ae/company-profile"
     );
     window.location.href = `mailto:?subject=${subject}&body=${body}`;
   };
 
   const handleCopyLink = async () => {
     try {
-      await navigator.clipboard.writeText("https://jjglobalcapital.com/company-profile");
+      await navigator.clipboard.writeText("https://jbj.ae/company-profile");
       setCopied(true);
       toast.success("Link copied to clipboard!");
       setTimeout(() => setCopied(false), 2000);
@@ -959,11 +959,11 @@ const CompanyProfile = () => {
                 <h3 className="text-amber-400 font-bold text-lg mb-3">Important Disclaimer</h3>
                 <div className="space-y-3 text-sm text-zinc-400">
                   <p>
-                    JJ Global Capital is a Dubai-based <strong className="text-zinc-300">real estate brokerage</strong> specializing 
-                    in property sales, leasing, and holiday homes. We are NOT a financial institution, law firm, or investment advisory.
+                    JBJ Global Real Estate is a Dubai-based <strong className="text-zinc-300">real estate brokerage</strong> specializing 
+                    in property sales, leasing, and holiday homes. We are NOT a financial institution, law firm, or mortgage provider.
                   </p>
                   <p>
-                    We do NOT provide legal, mortgage, financial, or investment advice. Legal, mortgage, and property management 
+                    We do NOT provide legal, mortgage, or financial advice. Legal, mortgage, and property management 
                     services are provided through introductions to independent licensed third parties who contract directly with clients.
                   </p>
                   <p className="text-zinc-500 text-xs">

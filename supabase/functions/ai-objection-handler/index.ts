@@ -22,7 +22,7 @@ serve(async (req) => {
       return errorResponse(corsHeaders, "Objection text is required", 400);
     }
 
-    const systemPrompt = `You are an expert real estate sales consultant for JJ Global Capital, a luxury Dubai brokerage.
+    const systemPrompt = `You are an expert real estate sales specialist for JBJ Global Real Estate, a luxury Dubai brokerage.
 Provide professional, empathetic responses to buyer objections.
 Focus on understanding concerns and providing value-based solutions.
 Never be pushy or dismissive. Build trust through knowledge and patience.
