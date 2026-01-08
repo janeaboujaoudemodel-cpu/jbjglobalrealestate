@@ -258,7 +258,7 @@ export const SecurityDashboardSummary = () => {
     const reportDate = format(new Date(), "yyyy-MM-dd_HH-mm");
     
     // Build CSV content
-    let csvContent = "JJ Global Capital - Security Report\n";
+    let csvContent = "JBJ Global Real Estate - Security Report\n";
     csvContent += `Generated: ${format(new Date(), "PPpp")}\n\n`;
     
     // Summary stats
@@ -313,7 +313,7 @@ export const SecurityDashboardSummary = () => {
 <html>
 <head>
   <meta charset="UTF-8">
-  <title>Security Report - JJ Global Capital</title>
+  <title>Security Report - JBJ Global Real Estate</title>
   <style>
     * { margin: 0; padding: 0; box-sizing: border-box; }
     body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; background: #0a0a0a; color: #fff; padding: 40px; }
@@ -341,7 +341,7 @@ export const SecurityDashboardSummary = () => {
 <body>
   <div class="header">
     <h1>🛡️ Security Report</h1>
-    <p>JJ Global Capital | Generated: ${format(new Date(), "PPpp")}</p>
+    <p>JBJ Global Real Estate | Generated: ${format(new Date(), "PPpp")}</p>
   </div>
   
   <div class="stats-grid">
@@ -426,7 +426,7 @@ export const SecurityDashboardSummary = () => {
   </div>
   
   <div class="footer">
-    <p>Confidential Security Report | JJ Global Capital © ${new Date().getFullYear()}</p>
+    <p>Confidential Security Report | JBJ Global Real Estate © ${new Date().getFullYear()}</p>
     <p style="margin-top: 4px;">Use Ctrl+P / Cmd+P to print or save as PDF</p>
   </div>
 </body>

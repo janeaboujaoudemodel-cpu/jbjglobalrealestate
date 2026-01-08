@@ -66,7 +66,7 @@ export default function SignatureStudio() {
                 </p>
                 <p className="text-amber-700 dark:text-amber-300">
                   These AI-designed signatures are for your personal documents only. 
-                  For official JJ Global Capital contracts, your signature must match your ID/passport.
+                  For official JBJ Global Real Estate contracts, your signature must match your ID/passport.
                 </p>
               </div>
             </CardContent>

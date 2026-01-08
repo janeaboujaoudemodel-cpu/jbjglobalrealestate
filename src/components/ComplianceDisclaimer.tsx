@@ -8,7 +8,7 @@ interface ComplianceDisclaimerProps {
 }
 
 /**
- * Compliance-safe disclaimers for JJ Global Capital Real Estate Brokerage
+ * Compliance-safe disclaimers for JBJ Global Real Estate Brokerage
  * - Clarifies brokerage-only services
  * - Distinguishes partner introductions from direct services
  * - Meets UAE regulatory requirements
@@ -17,7 +17,7 @@ const ComplianceDisclaimer = ({ variant = "compact", className = "", language = 
   const currentYear = new Date().getFullYear();
 
   // Short English Disclaimer - Updated compliant wording
-  const shortDisclaimerEN = `JJ Global Capital provides real estate brokerage support and coordination. We can introduce you to independent, licensed partners for legal services, mortgages, and concierge support. Partner services are delivered under the partner's own licence and terms, and the client contracts directly with the partner. We do not provide legal, mortgage, financial, or investment advice.`;
+  const shortDisclaimerEN = `JBJ Global Real Estate provides real estate brokerage support and coordination. We can introduce you to independent, licensed partners for legal services, mortgages, and concierge support. Partner services are delivered under the partner's own licence and terms, and the client contracts directly with the partner. We do not provide legal, mortgage, financial, or investment advice.`;
 
   // Short Arabic Disclaimer - Updated compliant wording
   const shortDisclaimerAR = `جي جي جلوبال كابيتال تقدم خدمات وساطة عقارية ودعم تنسيقي. يمكننا ربطك بشركاء مستقلين ومرخصين للخدمات القانونية والتمويل العقاري وخدمات الكونسيرج. تُقدَّم خدمات الشركاء وفق ترخيصهم وشروطهم الخاصة، ويكون التعاقد مباشرة بين العميل والشريك. نحن لا نقدم استشارات قانونية أو تمويلية أو استثمارية.`;
@@ -28,8 +28,8 @@ const ComplianceDisclaimer = ({ variant = "compact", className = "", language = 
       icon: Building2,
       title: language === "ar" ? "خدمات الوساطة العقارية" : "Real Estate Brokerage Services",
       content: language === "ar" 
-        ? "جي جي جلوبال كابيتال متخصصة في المبيعات والتأجير وتنسيق المعاملات العقارية في دولة الإمارات العربية المتحدة."
-        : "JJ Global Capital specializes in property sales, leasing, and transaction coordination within the UAE."
+        ? "جي بي جي جلوبال للعقارات متخصصة في المبيعات والتأجير وتنسيق المعاملات العقارية في دولة الإمارات العربية المتحدة."
+        : "JBJ Global Real Estate specializes in property sales, leasing, and transaction coordination within the UAE."
     },
     {
       icon: Scale,
@@ -66,7 +66,7 @@ const ComplianceDisclaimer = ({ variant = "compact", className = "", language = 
               {language === "ar" ? "إشعار قانوني وإخلاء مسؤولية" : "Legal Notice & Disclaimer"}
             </h4>
             <p className="text-zinc-500 text-xs">
-              {language === "ar" ? "جي جي جلوبال كابيتال | وساطة عقارية" : "JJ Global Capital | Real Estate Brokerage"}
+              {language === "ar" ? "جي بي جي جلوبال للعقارات | وساطة عقارية" : "JBJ Global Real Estate | Real Estate Brokerage"}
             </p>
           </div>
         </div>
@@ -85,7 +85,7 @@ const ComplianceDisclaimer = ({ variant = "compact", className = "", language = 
 
         <div className="mt-6 pt-4 border-t border-zinc-800">
           <p className="text-zinc-600 text-xs text-center">
-            © {currentYear} JJ Global Capital Real Estate Brokerage | 
+            © {currentYear} JBJ Global Real Estate Brokerage | 
             <Link to="/privacy" className="text-gold hover:underline ml-1">Privacy Policy</Link> | 
             <Link to="/terms" className="text-gold hover:underline ml-1">Terms of Service</Link>
           </p>
@@ -138,8 +138,8 @@ const ComplianceDisclaimer = ({ variant = "compact", className = "", language = 
             </p>
             <p className="text-blue-200/70 text-xs leading-relaxed mb-3">
               {language === "ar"
-                ? "نتعاون مع شبكة من المتخصصين المستقلين والمرخصين لتقديم خدمات شاملة. هؤلاء الشركاء يعملون بشكل مستقل عن جي جي جلوبال كابيتال ويتعاقدون مباشرة مع العملاء. نحن نسهل التقديمات فقط ولا نقدم هذه الخدمات بأنفسنا."
-                : "We collaborate with a network of independent, licensed professionals to provide comprehensive support. These partners operate independently of JJ Global Capital and contract directly with clients. We facilitate introductions only and do not provide these services ourselves."}
+                ? "نتعاون مع شبكة من المتخصصين المستقلين والمرخصين لتقديم خدمات شاملة. هؤلاء الشركاء يعملون بشكل مستقل عن جي بي جي جلوبال للعقارات ويتعاقدون مباشرة مع العملاء. نحن نسهل التقديمات فقط ولا نقدم هذه الخدمات بأنفسنا."
+                : "We collaborate with a network of independent, licensed professionals to provide comprehensive support. These partners operate independently of JBJ Global Real Estate and contract directly with clients. We facilitate introductions only and do not provide these services ourselves."}
             </p>
             <div className="flex flex-wrap gap-2">
               {["Law Firms", "Mortgage Specialists", "Property Managers", "Conveyancers"].map((partner) => (
@@ -158,7 +158,7 @@ const ComplianceDisclaimer = ({ variant = "compact", className = "", language = 
   return (
     <div className={`text-center ${className}`}>
       <p className="text-zinc-600 text-xs leading-relaxed">
-        © {currentYear} JJ Global Capital Real Estate Brokerage. All Rights Reserved.
+        © {currentYear} JBJ Global Real Estate Brokerage. All Rights Reserved.
         <span className="block mt-1">
           Licensed brokerage services only. Third-party services via independent professionals.
         </span>

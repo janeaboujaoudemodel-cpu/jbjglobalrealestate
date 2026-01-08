@@ -142,7 +142,7 @@ const PropertyReportModal = ({ open, onOpenChange, project }: PropertyReportModa
     const projectUrl = `${window.location.origin}/project/${project.slug}`;
     const subject = encodeURIComponent(`Property Inquiry: ${project.name}`);
     const body = encodeURIComponent(
-      `Hi JJ Global Capital Team,\n\n` +
+      `Hi JBJ Global Real Estate Team,\n\n` +
       `I am interested in the following property:\n\n` +
       `Property: ${project.name}\n` +
       `Location: ${project.location || 'Dubai'}\n` +
@@ -170,7 +170,7 @@ const PropertyReportModal = ({ open, onOpenChange, project }: PropertyReportModa
       `Location: ${project.location || 'Dubai'}\n` +
       `Starting from: AED ${project.price_from ? (project.price_from / 1000000).toFixed(2) + 'M' : 'Contact for pricing'}\n\n` +
       `View full details: ${projectUrl}\n\n` +
-      `Powered by JJ Global Capital`
+      `Powered by JBJ Global Real Estate`
     );
     window.open(`mailto:${userEmail}?subject=${subject}&body=${body}`, "_blank");
     toast.success("Opening email client...");
@@ -330,14 +330,14 @@ const PropertyReportModal = ({ open, onOpenChange, project }: PropertyReportModa
             </div>
           </div>
 
-          {/* Send to JJ Global Capital */}
+          {/* Send to JBJ Global Real Estate */}
           <Button
             onClick={handleSendToJJ}
             variant="outline"
             className="w-full border-gold/30 text-gold hover:bg-gold/10 h-12"
           >
             <Mail className="w-5 h-5 mr-2" />
-            Contact JJ Global Capital Advisor
+            Contact JBJ Global Real Estate Advisor
           </Button>
 
           {/* Individual Documents */}

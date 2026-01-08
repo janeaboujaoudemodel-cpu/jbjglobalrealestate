@@ -327,7 +327,7 @@ const AIHub = () => {
               className="text-zinc-500 text-sm mt-8"
               variants={fadeInUp}
             >
-              Developed by Founder Jane Abou Jaoude • Powered by JJ Global Capital
+              Developed by Founder Jane Abou Jaoude • Powered by JBJ Global Real Estate
             </motion.p>
           </motion.div>
         </div>

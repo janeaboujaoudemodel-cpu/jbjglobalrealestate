@@ -150,7 +150,7 @@ export const en = {
   'mortgage.contactAdvisor': 'Request Partner Introduction',
   'mortgage.years': 'years',
   'mortgage.perMonth': 'per month',
-  'mortgage.disclaimer': 'This calculator is for estimation purposes only. JJ Global Capital does not provide mortgage advice. Contact a mortgage specialist for professional guidance.',
+  'mortgage.disclaimer': 'This calculator is for estimation purposes only. JBJ Global Real Estate does not provide mortgage advice. Contact a mortgage specialist for professional guidance.',
   
   // Properties
   'properties.title': 'Properties',
@@ -523,7 +523,7 @@ export const en = {
   // AI Chat Support
   'chat.title': 'AI Support',
   'chat.subtitle': 'Online 24/7',
-  'chat.welcome': 'Hello! I\'m your JJ Global Capital AI assistant. How can I help you today with real estate investment in Dubai?',
+  'chat.welcome': 'Hello! I\'m your JBJ Global Real Estate AI assistant. How can I help you today with real estate in Dubai?',
   'chat.placeholder': 'Type your message...',
   'chat.error': 'Sorry, I encountered an error. Please try again or contact our team directly.',
   'chat.askMe': 'Ask me anything!',

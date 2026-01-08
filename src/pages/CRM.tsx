@@ -170,7 +170,7 @@ const CRM = () => {
       <header className="border-b border-border bg-card sticky top-0 z-50">
         <div className="max-w-7xl mx-auto px-4 py-4 flex items-center justify-between">
           <div className="flex items-center gap-4">
-            <h1 className="text-2xl font-bold text-white">JJ Global Capital CRM</h1>
+            <h1 className="text-2xl font-bold text-white">JBJ Global Real Estate CRM</h1>
             <Badge 
               variant="default" 
               className={

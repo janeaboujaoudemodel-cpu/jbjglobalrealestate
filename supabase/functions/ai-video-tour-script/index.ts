@@ -33,7 +33,7 @@ serve(async (req) => {
     const systemPrompt = `You are an expert luxury real estate video tour scriptwriter.
 Create engaging, professional narration scripts for property video tours.
 Focus on storytelling that appeals to affluent buyers in the UAE market.
-Company: JJ Global Capital | Contact: ${APPROVED_CONTACT.phone}`;
+Company: JBJ Global Real Estate | Contact: ${APPROVED_CONTACT.phone}`;
 
     const userPrompt = `Create a video tour script for this property:
 
@@ -91,7 +91,7 @@ Please create:
 [Call to action]
 - Summary of key selling points
 - Lifestyle promise
-- Contact information: JJ Global Capital at ${APPROVED_CONTACT.phone}
+- Contact information: JBJ Global Real Estate at ${APPROVED_CONTACT.phone}
 
 ---
 

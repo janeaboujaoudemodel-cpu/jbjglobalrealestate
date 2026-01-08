@@ -61,7 +61,7 @@ export const fr = {
   'founder.countries': 'Pays',
   'founder.learnMore': 'En Savoir Plus Sur Notre Fondateur',
   'founder.title': 'Fondatrice et Présidente',
-  'founder.description1': 'JJ Global Capital est une agence immobilière dirigée par le fondateur, construite sur des normes inébranlables, la discrétion et une vision à long terme.',
+  'founder.description1': 'JBJ Global Real Estate est une agence immobilière dirigée par le fondateur, construite sur des normes inébranlables, la discrétion et une vision à long terme.',
   'founder.description2': 'Jane Abou Jaoude dirige avec une philosophie ancrée dans la responsabilité et la discrétion, construisant des organisations conçues pour durer plutôt que simplement s\'étendre.',
   'founder.vision': 'Vision',
   'founder.mission': 'Mission',
@@ -70,10 +70,10 @@ export const fr = {
   'founder.achievements': 'Réalisations Clés',
   
   // About Page
-  'about.title': 'À Propos de JJ Global Capital',
-  'about.subtitle': 'Votre partenaire de confiance dans les investissements immobiliers de luxe',
+  'about.title': 'À Propos de JBJ Global Real Estate',
+  'about.subtitle': 'Votre partenaire de confiance dans l\'immobilier de luxe',
   'about.whoWeAre': 'Qui Nous Sommes',
-  'about.whoWeAreDesc': 'JJ Global Capital est une société de conseil immobilier de premier plan spécialisée dans les propriétés de luxe aux EAU et sur les marchés mondiaux.',
+  'about.whoWeAreDesc': 'JBJ Global Real Estate est une agence immobilière de premier plan spécialisée dans les propriétés de luxe aux EAU et sur les marchés mondiaux.',
   'about.ourMission': 'Notre Mission',
   'about.ourMissionDesc': 'Fournir des services de conseil immobilier inégalés, connectant des investisseurs exigeants à des opportunités immobilières exceptionnelles dans le monde entier.',
   'about.ourVision': 'Notre Vision',
@@ -121,7 +121,7 @@ export const fr = {
   
   // Market Report
   'report.exclusive': 'Téléchargement Exclusif Gratuit',
-  'report.title': 'JJ Global Capital',
+  'report.title': 'JBJ Global Real Estate',
   'report.edition': 'Dernière Édition 2026',
   'report.description': 'Un livre éducatif exclusif rédigé par Jane Abou Jaoude, couvrant le marché immobilier des EAU avec des données gouvernementales et des cadres structurés.',
   'report.download': 'Téléchargez Votre Livre Gratuit Maintenant',
@@ -130,7 +130,7 @@ export const fr = {
   'report.highlight3': 'Liste de vérification de diligence raisonnable d\'investissement',
   'report.highlight4': 'Classements ROI par communauté',
   'report.createdBy': 'Créé par Jane Abou Jaoude',
-  'report.exclusiveFor': 'Exclusif à JJ Global Capital',
+  'report.exclusiveFor': 'Exclusif à JBJ Global Real Estate',
   'report.poweredBy': 'Agence Immobilière | Dubai, EAU',
   
   // Mortgage
@@ -367,7 +367,7 @@ export const fr = {
   'footer.support': 'Support',
   
   // Welcome Modal
-  'welcome.title': 'Bienvenue chez JJ Global Capital',
+  'welcome.title': 'Bienvenue chez JBJ Global Real Estate',
   'welcome.titleReturning': 'Bon Retour!',
   'welcome.subtitle': 'Votre porte d\'entrée vers les investissements immobiliers mondiaux avec une expertise sur le marché des EAU',
   'welcome.subtitleReturning': 'Nous sommes heureux de vous revoir. Continuez à explorer les propriétés premium.',
@@ -522,7 +522,7 @@ export const fr = {
   // AI Chat Support
   'chat.title': 'Support IA',
   'chat.subtitle': 'En ligne 24/7',
-  'chat.welcome': 'Bonjour! Je suis votre assistant IA de JJ Global Capital. Comment puis-je vous aider aujourd\'hui avec l\'investissement immobilier à Dubaï?',
+  'chat.welcome': 'Bonjour! Je suis votre assistant IA de JBJ Global Real Estate. Comment puis-je vous aider aujourd\'hui avec l\'immobilier à Dubaï?',
   'chat.placeholder': 'Tapez votre message...',
   'chat.error': 'Désolé, j\'ai rencontré une erreur. Veuillez réessayer ou contacter notre équipe directement.',
   'chat.askMe': 'Demandez-moi n\'importe quoi!',

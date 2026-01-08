@@ -61,7 +61,7 @@ export const es = {
   'founder.countries': 'Países',
   'founder.learnMore': 'Conoce Más Sobre Nuestro Fundador',
   'founder.title': 'Fundador y Presidente',
-  'founder.description1': 'JJ Global Capital es una agencia inmobiliaria dirigida por el fundador, construida sobre estándares inquebrantables, discreción y visión a largo plazo.',
+  'founder.description1': 'JBJ Global Real Estate es una agencia inmobiliaria dirigida por el fundador, construida sobre estándares inquebrantables, discreción y visión a largo plazo.',
   'founder.description2': 'Jane Abou Jaoude lidera con una filosofía arraigada en la responsabilidad y discreción, construyendo organizaciones diseñadas para perdurar en lugar de simplemente expandirse.',
   'founder.vision': 'Visión',
   'founder.mission': 'Misión',
@@ -522,7 +522,7 @@ export const es = {
   // AI Chat Support
   'chat.title': 'Soporte IA',
   'chat.subtitle': 'En línea 24/7',
-  'chat.welcome': '¡Hola! Soy tu asistente de IA de JJ Global Capital. ¿Cómo puedo ayudarte hoy con la inversión inmobiliaria en Dubái?',
+  'chat.welcome': '¡Hola! Soy tu asistente de IA de JBJ Global Real Estate. ¿Cómo puedo ayudarte hoy con bienes raíces en Dubái?',
   'chat.placeholder': 'Escribe tu mensaje...',
   'chat.error': 'Lo siento, encontré un error. Por favor intenta de nuevo o contacta a nuestro equipo directamente.',
   'chat.askMe': '¡Pregúntame lo que sea!',

@@ -246,7 +246,7 @@ const CompanyProfile = () => {
 
       // About text (wrapped)
       const aboutLines = [
-        "JJ Global Capital is a Dubai-based real estate brokerage",
+        "JBJ Global Real Estate is a Dubai-based real estate brokerage",
         "specializing in property sales, leasing, and holiday homes across",
         "the UAE. Founded by entrepreneur Jane Abou Jaoude, we provide",
         "brokerage support and partner introductions for discerning clients",
@@ -732,7 +732,7 @@ const CompanyProfile = () => {
         <div className="absolute inset-0">
           <img 
             src={luxuryVillaHero} 
-            alt="JJ Global Capital" 
+            alt="JBJ Global Real Estate" 
             className="w-full h-full object-cover"
           />
           <div className="absolute inset-0 bg-gradient-to-b from-black/80 via-black/60 to-black" />
@@ -759,7 +759,7 @@ const CompanyProfile = () => {
             variants={fadeInUp}
           >
             <span className="text-transparent bg-clip-text bg-gradient-to-r from-gold to-gold-light">
-              JJ Global Capital
+              JBJ Global Real Estate
             </span>
           </motion.h1>
           <motion.p 
@@ -993,7 +993,7 @@ const CompanyProfile = () => {
               Get Our Company Profile
             </h2>
             <p className="text-zinc-400 text-lg mb-8">
-              Download our comprehensive company profile to learn more about JJ Global Capital
+              Download our comprehensive company profile to learn more about JBJ Global Real Estate
             </p>
             <Button
               onClick={generatePDF}
@@ -1022,7 +1022,7 @@ const CompanyProfile = () => {
           <DialogHeader>
             <DialogTitle className="text-white text-xl flex items-center gap-2">
               <FileText className="w-5 h-5 text-gold" />
-              JJ Global Capital - Company Profile
+              JBJ Global Real Estate - Company Profile
             </DialogTitle>
           </DialogHeader>
           
@@ -1035,7 +1035,7 @@ const CompanyProfile = () => {
               <div className="text-center">
                 <p className="text-gold text-sm uppercase tracking-[0.3em] mb-2">Company Profile</p>
                 <p className="text-white text-2xl font-bold mb-1" style={{ fontFamily: "Poppins, sans-serif" }}>
-                  JJ Global Capital
+                  JBJ Global Real Estate
                 </p>
                 <p className="text-zinc-500 text-sm">5 Pages • PDF Document</p>
               </div>
