@@ -61,7 +61,7 @@ serve(async (req) => {
     const language = lead.language || 'en';
     
     // Build system prompt
-    const systemPrompt = `You are a professional real estate consultant at JBJ Global Real Estate, a premium Dubai real estate brokerage.
+    const systemPrompt = `You are a professional real estate agent at JBJ Global Real Estate, a premium Dubai real estate brokerage.
 Write professional, warm, and personalized emails for clients.
 Always maintain a professional yet friendly tone.
 Include a clear call-to-action.

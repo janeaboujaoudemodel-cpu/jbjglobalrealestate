@@ -4,8 +4,8 @@ import { z } from "https://deno.land/x/zod@v3.22.4/mod.ts";
 
 // Allowed origins - restrict CORS to trusted domains
 const ALLOWED_ORIGINS = [
-  "https://jjglobalcapital.com",
-  "https://www.jjglobalcapital.com",
+  "https://jbj.ae",
+  "https://www.jbj.ae",
   "http://localhost:5173",
   "http://localhost:8080",
 ];
@@ -240,7 +240,7 @@ serve(async (req) => {
 
     const projectJSON = JSON.stringify(projectDetails, null, 2);
 
-    const systemPrompt = `You are an expert Dubai real estate investment advisor at JJ Global Capital, specializing in luxury property analysis.
+    const systemPrompt = `You are an expert Dubai real estate property advisor at JBJ Global Real Estate, specializing in luxury property analysis.
 
 Your task is to provide a comprehensive, structured comparison analysis that helps investors make informed decisions.
 

@@ -25,7 +25,7 @@ import { PaymentModal } from "@/components/PaymentModal";
 import { useMembership } from "@/hooks/useMembership";
 import { useAuth } from "@/contexts/AuthContext";
 
-const INQUIRY_FORM_URL = "https://jjglobalcapital.com/form/property-investment-inquiry-form/";
+const INQUIRY_FORM_URL = "https://jbj.ae/contact";
 
 
 const QuizResults = () => {

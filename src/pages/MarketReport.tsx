@@ -95,7 +95,7 @@ const MarketReport = () => {
   };
 
   const downloadBook = (existingWindow?: Window | null) => {
-    const websiteUrl = "https://jjglobalcapital.com";
+    const websiteUrl = "https://jbj.ae";
     const qrUrl = `https://api.qrserver.com/v1/create-qr-code/?size=200x200&data=${encodeURIComponent(websiteUrl + "/quiz")}`;
     
     // Villa images for visual enhancement
@@ -113,8 +113,8 @@ const MarketReport = () => {
 <head>
 <meta charset="UTF-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1" />
-<title>UAE Real Estate Market Intelligence 2026 | JJ Global Capital</title>
-<meta name="description" content="Comprehensive UAE Real Estate Market Intelligence Report by JJ Global Capital - Your guide to investing in UAE property market 2026" />
+<title>UAE Real Estate Market Intelligence 2026 | JBJ Global Real Estate</title>
+<meta name="description" content="Comprehensive UAE Real Estate Market Intelligence Report by JBJ Global Real Estate - Your guide to UAE property market 2026" />
 <style>
   @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800&display=swap');
   @import url('https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;500;600;700&display=swap');
@@ -710,7 +710,7 @@ const MarketReport = () => {
 <body>
   <!-- Share/Download Bar -->
   <div class="share-bar">
-    <div class="brand">JJ | GLOBAL CAPITAL</div>
+    <div class="brand">JBJ | GLOBAL REAL ESTATE</div>
     <div class="actions">
       <button class="btn-share" onclick="shareBook()">
         <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
@@ -733,13 +733,13 @@ const MarketReport = () => {
   <div class="page cover" style="padding-top: 80px;">
     <div class="cover-image"></div>
     <div class="cover-content">
-      <div class="logo-large">JJ | Global Capital</div>
+      <div class="logo-large">JBJ | Global Real Estate</div>
       <h1>UAE Real Estate<br/>Market Intelligence</h1>
-      <div class="subtitle">Investor Education & Decision Framework</div>
+      <div class="subtitle">Property Education & Decision Framework</div>
       <div class="edition">Latest Edition 2026</div>
       <div class="author-box">
         <div class="author-name">Jane Abou Jaoude</div>
-        <div class="author-title">Founder • JJ Global Capital</div>
+        <div class="author-title">Founder • JBJ Global Real Estate</div>
         <div style="margin-top: 8px; font-size: 11px; color: #888;">Real Estate Brokerage • Dubai, UAE</div>
       </div>
     </div>
@@ -765,7 +765,7 @@ const MarketReport = () => {
     </div>
     <div class="highlight-box">
       <h4 style="margin-top: 0;">About This Book</h4>
-      <p style="margin-bottom: 0;">This educational guide is designed to help investors understand the UAE real estate market using government data, structured frameworks, and expert insights. Data sourced from Dubai Land Department (DLD), RERA, Property Monitor, and DXB Interact.</p>
+      <p style="margin-bottom: 0;">This educational guide is designed to help property buyers understand the UAE real estate market using government data, structured frameworks, and expert insights. Data sourced from Dubai Land Department (DLD), RERA, Property Monitor, and DXB Interact.</p>
     </div>
     <span class="page-number">2</span>
   </div>
@@ -776,7 +776,7 @@ const MarketReport = () => {
       <h2 style="text-align: center; border-bottom: none; margin-bottom: 40px;">From the Founder</h2>
       <img src="${founderProfessional}" alt="Jane Abou Jaoude" class="founder-image" onerror="this.style.display='none'" />
       <h3 style="color: #A8925A; text-align: center; margin-bottom: 10px;">Jane Abou Jaoude</h3>
-      <p style="color: #888; text-align: center; font-size: 13px; margin-bottom: 8px;">Founder, JJ Global Capital</p>
+      <p style="color: #888; text-align: center; font-size: 13px; margin-bottom: 8px;">Founder, JBJ Global Real Estate</p>
       <p style="color: #666; text-align: center; font-size: 11px; margin-bottom: 30px;">Real Estate Brokerage • Dubai, UAE</p>
     </div>
     
@@ -784,7 +784,7 @@ const MarketReport = () => {
       <p style="font-style: italic; font-size: 18px; color: #fff; margin-bottom: 0;">"We Create | We Elevate | We Lead"</p>
     </div>
     
-    <p style="text-align: center; margin-top: 30px; font-size: 15px;">Welcome to the UAE Real Estate Market Intelligence Report. I am honored to share with you the insights, frameworks, and data-driven analysis that have guided thousands of successful investments in the UAE property market.</p>
+    <p style="text-align: center; margin-top: 30px; font-size: 15px;">Welcome to the UAE Real Estate Market Intelligence Report. I am honored to share with you the insights, frameworks, and data-driven analysis that have guided thousands of successful property purchases in the UAE market.</p>
     
     <p style="text-align: center; font-size: 14px;">This book represents my commitment to investor education and transparency in one of the world's most dynamic real estate markets.</p>
     
@@ -797,9 +797,9 @@ const MarketReport = () => {
     
     <div class="two-col">
       <div>
-        <p style="font-size: 15px; line-height: 1.8;">After years of guiding investors through UAE real estate transactions, I recognized a critical gap: there was no single, comprehensive resource that combined official market data with practical decision-making frameworks.</p>
+        <p style="font-size: 15px; line-height: 1.8;">After years of guiding buyers through UAE real estate transactions, I recognized a critical gap: there was no single, comprehensive resource that combined official market data with practical decision-making frameworks.</p>
         
-        <p style="font-size: 14px;">Too many investors were making decisions based on incomplete information, marketing hype, or unreliable sources. I wanted to change that.</p>
+        <p style="font-size: 14px;">Too many property buyers were making decisions based on incomplete information, marketing hype, or unreliable sources. I wanted to change that.</p>
         
         <p style="font-size: 14px;">This book distills my experience into structured frameworks that help you evaluate opportunities objectively—whether you are a first-time buyer or an experienced portfolio investor.</p>
       </div>
@@ -1439,7 +1439,7 @@ const MarketReport = () => {
     
     <div class="highlight-box">
       <h4 style="margin-top: 0;">Our Perspective</h4>
-      <p style="margin-bottom: 0;">At JJ Global Capital, we believe 2026 presents selective opportunities for investors who do proper due diligence. Focus on quality over quantity.</p>
+      <p style="margin-bottom: 0;">At JBJ Global Real Estate, we believe 2026 presents selective opportunities for buyers who do proper due diligence. Focus on quality over quantity.</p>
     </div>
     <span class="page-number">13</span>
   </div>
@@ -1495,17 +1495,17 @@ const MarketReport = () => {
   <!-- AI MATCHMAKER -->
   <div class="page">
     <h2 style="color: #8b5cf6;">AI Property Matchmaker</h2>
-    <p>JJ Global Capital has developed an exclusive AI-powered Property Matchmaker to help investors identify opportunities aligned with their criteria.</p>
+    <p>JBJ Global Real Estate has developed an exclusive AI-powered Property Matchmaker to help buyers identify properties aligned with their criteria.</p>
     
     <div style="background: linear-gradient(135deg, rgba(139, 92, 246, 0.2) 0%, rgba(168, 146, 90, 0.1) 100%); border: 1px solid rgba(139, 92, 246, 0.4); border-radius: 16px; padding: 25px; margin: 25px 0;">
       <p style="color: #a78bfa; font-size: 12px; text-transform: uppercase; letter-spacing: 0.15em; margin-bottom: 10px;">Premium AI Technology</p>
       <p style="color: #fff; font-size: 16px; margin-bottom: 5px; font-weight: 600;">Developed by the Founder, Jane Abou Jaoude</p>
-      <p style="color: #888; font-size: 13px; margin-bottom: 0;">Exclusive for JJ Global Capital • Real Estate Brokerage</p>
+      <p style="color: #888; font-size: 13px; margin-bottom: 0;">Exclusive for JBJ Global Real Estate • Real Estate Brokerage</p>
     </div>
     
     <h3>How It Works</h3>
     <ul>
-      <li><strong>Step 1:</strong> Complete a quick questionnaire about your investment goals</li>
+      <li><strong>Step 1:</strong> Complete a quick questionnaire about your property goals</li>
       <li><strong>Step 2:</strong> Our AI analyzes your preferences against available properties</li>
       <li><strong>Step 3:</strong> Receive personalized property recommendations</li>
       <li><strong>Step 4:</strong> Connect with our team for detailed consultation</li>

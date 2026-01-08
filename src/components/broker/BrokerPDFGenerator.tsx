@@ -160,7 +160,7 @@ export default function BrokerPDFGenerator({ subscription }: BrokerPDFGeneratorP
       // Send notification email
       await supabase.functions.invoke("send-market-report-email", {
         body: {
-          to: "contact@jjglobalcapital.com",
+          to: "contact@jbj.ae",
           subject: `Broker PDF Request - ${brokerInfo.name || user?.email}`,
           html: `
             <h2>New Broker PDF Generation Request</h2>
@@ -431,7 +431,7 @@ export default function BrokerPDFGenerator({ subscription }: BrokerPDFGeneratorP
               checked={hideJJBranding}
               onCheckedChange={(checked) => setHideJJBranding(!!checked)}
             />
-            <Label className="text-zinc-300">Remove JJ Global Capital branding (white-label)</Label>
+            <Label className="text-zinc-300">Remove JBJ Global Real Estate branding (white-label)</Label>
           </div>
         </motion.div>
       )}

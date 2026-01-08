@@ -131,7 +131,7 @@ const PressKit = () => {
       const a = document.createElement("a");
       a.href = url;
       const extension = asset.image.split('.').pop() || 'jpg';
-      a.download = `JJ-Global-Capital-${asset.name.replace(/\s+/g, '-')}.${extension}`;
+      a.download = `JBJ-Global-Real-Estate-${asset.name.replace(/\s+/g, '-')}.${extension}`;
       document.body.appendChild(a);
       a.click();
       document.body.removeChild(a);
@@ -383,11 +383,11 @@ const PressKit = () => {
                   <p className="text-zinc-500 text-xs uppercase tracking-wider mb-6">For Dark Backgrounds</p>
                   <div className="flex justify-center items-center mb-6 h-20">
                     <span className="text-3xl font-light tracking-[0.3em] text-[#A8925A]" style={{ fontFamily: "Poppins, sans-serif" }}>
-                      J <span className="text-zinc-800 mx-1">|</span> J
+                      JBJ
                     </span>
                     <div className="ml-4 flex flex-col items-start">
                       <span className="text-zinc-800 text-sm font-semibold tracking-[0.2em]">GLOBAL</span>
-                      <span className="text-zinc-800 text-sm font-semibold tracking-[0.2em] ml-4">CAPITAL</span>
+                      <span className="text-zinc-800 text-sm font-semibold tracking-[0.2em]">REAL ESTATE</span>
                     </div>
                   </div>
                   <p className="text-zinc-600 text-sm mb-4">Inverted logo for light backgrounds</p>
@@ -502,8 +502,8 @@ const PressKit = () => {
                   </div>
                   <div className="flex justify-between">
                     <span className="text-zinc-500">Website</span>
-                    <a href="https://jjglobalcapital.com" target="_blank" rel="noopener noreferrer" className="text-gold hover:underline flex items-center gap-1">
-                      jjglobalcapital.com
+                    <a href="https://jbj.ae" target="_blank" rel="noopener noreferrer" className="text-gold hover:underline flex items-center gap-1">
+                      jbj.ae
                       <ExternalLink className="w-3 h-3" />
                     </a>
                   </div>
@@ -571,11 +571,11 @@ const PressKit = () => {
               variants={fadeInUp}
             >
               <a 
-                href="mailto:press@jjglobalcapital.com"
+                href="mailto:contact@jbj.ae"
                 className="inline-flex items-center gap-3 bg-gradient-to-r from-gold to-[#C4A962] text-black font-semibold px-8 py-4 rounded-xl hover:opacity-90 transition-all duration-300 shadow-lg shadow-gold/30"
               >
                 <Mail className="w-5 h-5" />
-                Press@JJGlobalCapital.com
+                contact@jbj.ae
               </a>
               <a 
                 href={getCallUrl()}

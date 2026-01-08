@@ -17,9 +17,9 @@ export const es = {
   'nav.quiz': 'Cuestionario de Propiedades',
   
   // Homepage
-  'home.hero.welcome': 'Bienvenido a JJ Global Capital',
-  'home.hero.tagline': 'Tu Puerta de Entrada a Inversiones Inmobiliarias Globales y Conserjería',
-  'home.hero.subtitle': 'Una asesoría dirigida por el fundador especializada en bienes raíces de EAU y Dubái',
+  'home.hero.welcome': 'Bienvenido a JBJ Global Real Estate',
+  'home.hero.tagline': 'Tu Puerta de Entrada a Bienes Raíces de EAU y Dubái',
+  'home.hero.subtitle': 'Una agencia inmobiliaria dirigida por el fundador especializada en propiedades de EAU y Dubái',
   'home.hero.exclusive': 'Propiedades Exclusivas',
   'home.cta.explore': 'Explora Nuestros Servicios',
   'home.cta.properties': 'Explorar Propiedades',
@@ -70,10 +70,10 @@ export const es = {
   'founder.achievements': 'Logros Clave',
   
   // About Page
-  'about.title': 'Sobre JJ Global Capital',
-  'about.subtitle': 'Tu socio de confianza en inversiones inmobiliarias de lujo',
+  'about.title': 'Sobre JBJ Global Real Estate',
+  'about.subtitle': 'Tu socio de confianza en bienes raíces de lujo',
   'about.whoWeAre': 'Quiénes Somos',
-  'about.whoWeAreDesc': 'JJ Global Capital es una firma de asesoría inmobiliaria premier especializada en propiedades de lujo en EAU y mercados globales.',
+  'about.whoWeAreDesc': 'JBJ Global Real Estate es una agencia inmobiliaria premier especializada en propiedades de lujo en EAU y mercados globales.',
   'about.ourMission': 'Nuestra Misión',
   'about.ourMissionDesc': 'Proporcionar servicios de asesoría inmobiliaria sin igual, conectando inversores exigentes con oportunidades inmobiliarias excepcionales en todo el mundo.',
   'about.ourVision': 'Nuestra Visión',
@@ -121,7 +121,7 @@ export const es = {
   
   // Market Report
   'report.exclusive': 'Descarga Exclusiva Gratuita',
-  'report.title': 'JJ Global Capital',
+  'report.title': 'JBJ Global Real Estate',
   'report.edition': 'Última Edición 2026',
   'report.description': 'Un libro educativo exclusivo escrito por Jane Abou Jaoude, que cubre el mercado inmobiliario de EAU con datos respaldados por el gobierno y marcos estructurados.',
   'report.download': 'Descarga Tu Libro Gratuito Ahora',
@@ -130,7 +130,7 @@ export const es = {
   'report.highlight3': 'Lista de verificación de diligencia debida de inversión',
   'report.highlight4': 'Rankings de ROI por comunidad',
   'report.createdBy': 'Creado por Jane Abou Jaoude',
-  'report.exclusiveFor': 'Exclusivo para JJ Global Capital',
+  'report.exclusiveFor': 'Exclusivo para JBJ Global Real Estate',
   'report.poweredBy': 'Agencia Inmobiliaria | Dubai, EAU',
   
   // Mortgage
@@ -227,7 +227,7 @@ export const es = {
   'compare.generate': 'Generar Comparación',
   'compare.results': 'Resultados de Comparación',
   'compare.overallScore': 'Puntuación General',
-  'compare.investmentPotential': 'Potencial de Inversión',
+  'compare.investmentPotential': 'Potencial de Propiedad',
   'compare.valueForMoney': 'Relación Calidad-Precio',
   'compare.location': 'Calificación de Ubicación',
   'compare.developer': 'Calificación del Desarrollador',
@@ -248,7 +248,7 @@ export const es = {
   'quiz.budget': '¿Cuál es tu presupuesto?',
   'quiz.bedrooms': '¿Cuántas habitaciones necesitas?',
   'quiz.purpose': '¿Cuál es el propósito de esta propiedad?',
-  'quiz.purposeInvestment': 'Inversión',
+  'quiz.purposeInvestment': 'Compra para Alquiler',
   'quiz.purposePersonal': 'Uso Personal',
   'quiz.purposeBoth': 'Ambos',
   'quiz.location': '¿Ubicación preferida?',
@@ -330,7 +330,7 @@ export const es = {
   'news.share': 'Compartir Artículo',
   'news.relatedArticles': 'Artículos Relacionados',
   'news.marketUpdates': 'Actualizaciones del Mercado',
-  'news.investmentTips': 'Consejos de Inversión',
+  'news.investmentTips': 'Consejos de Propiedades',
   'news.propertyNews': 'Noticias de Propiedades',
   'news.companyNews': 'Noticias de la Empresa',
   
@@ -367,7 +367,7 @@ export const es = {
   'footer.support': 'Soporte',
   
   // Welcome Modal
-  'welcome.title': 'Bienvenido a JJ Global Capital',
+  'welcome.title': 'Bienvenido a JBJ Global Real Estate',
   'welcome.titleReturning': '¡Bienvenido de Nuevo!',
   'welcome.subtitle': 'Tu puerta de entrada a inversiones inmobiliarias globales con experiencia en el mercado de EAU',
   'welcome.subtitleReturning': 'Nos alegra que hayas vuelto. Continúa explorando propiedades premium.',
