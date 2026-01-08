@@ -92,9 +92,15 @@ const GlobalHeader = () => {
       <div className="container mx-auto px-4 sm:px-6">
         <div className="flex items-center justify-between h-16 lg:h-[72px]">
           
-          {/* LEFT: Brand Block (Monogram + Wordmark) */}
-          <Link to="/" className="flex items-center shrink-0 hover:opacity-90 transition-opacity">
-            <BrandMonogram variant="dark" size="sm" layout="horizontal" />
+          {/* LEFT: Brand Logo Text */}
+          <Link 
+            to="/" 
+            className="flex items-center shrink-0 hover:opacity-90 transition-opacity"
+            style={{ fontFamily: "Poppins, sans-serif" }}
+          >
+            <span className="text-white font-semibold text-base sm:text-lg md:text-xl tracking-[0.15em] uppercase whitespace-nowrap">
+              JBJ GLOBAL REAL ESTATE
+            </span>
           </Link>
 
           {/* CENTER: Desktop Navigation with proper separation */}
