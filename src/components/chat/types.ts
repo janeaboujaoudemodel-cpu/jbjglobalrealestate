@@ -45,7 +45,7 @@ export const AGENTS = [
   {
     name: 'Natalia',
     fullName: 'Natalia Petrova',
-    title: 'Client Relations Manager',
+    title: 'Available 24/7 to support you',
     photo: 'https://images.unsplash.com/photo-1580489944761-15a19d654956?w=200&h=200&fit=crop&crop=face',
   },
 ];

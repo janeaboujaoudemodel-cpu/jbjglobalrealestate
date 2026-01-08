@@ -61,14 +61,14 @@ export default function HRAgent() {
           >
             <div className="inline-flex items-center gap-2 bg-primary/10 text-primary px-4 py-2 rounded-full text-sm font-medium mb-4">
               <Bot className="w-4 h-4" />
-              AI-Powered HR Assistant
+              Available 24/7 to support you
             </div>
             <h1 className="text-4xl md:text-5xl font-bold mb-4">
-              Meet Jessica, Your HR Agent
+              Meet Jessica
             </h1>
             <p className="text-xl text-muted-foreground max-w-2xl mx-auto">
-              Complete your broker partner application with our intelligent HR assistant.
-              Jessica will guide you through CV submission, qualification, and interview.
+              Complete your broker partner application with Jessica.
+              She'll guide you through CV submission, qualification, and interview.
             </p>
           </motion.div>
 
