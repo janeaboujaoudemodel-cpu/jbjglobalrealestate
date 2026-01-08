@@ -242,7 +242,7 @@ const Compare = () => {
 <head>
   <meta charset="UTF-8">
   <meta http-equiv="Content-Security-Policy" content="default-src 'none'; style-src 'unsafe-inline';">
-  <title>Property Comparison Report - JJ Global Capital</title>
+  <title>Property Comparison Report - JBJ Global Real Estate</title>
   <style>
     * { margin: 0; padding: 0; box-sizing: border-box; }
     body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; background: #0a0a0a; color: #fff; padding: 40px; }
@@ -387,10 +387,10 @@ const Compare = () => {
     ` : ''}
 
     <div class="footer">
-      <p><strong>JJ Global Capital</strong> — Real Estate Brokerage</p>
-      <p>📧 contact@jjglobalcapital.com | 📞 +971 56 591 1000</p>
-      <p>🌐 www.jjglobalcapital.com</p>
-      <p style="margin-top:15px; font-size:12px;">Powered & Made by JJ Global Capital — Real Estate Brokerage</p>
+      <p><strong>JBJ Global Real Estate</strong> — Real Estate Brokerage</p>
+      <p>📧 contact@jbj.ae | 📞 +971 56 591 1000</p>
+      <p>🌐 www.jbj.ae</p>
+      <p style="margin-top:15px; font-size:12px;">Powered & Made by JBJ Global Real Estate — Real Estate Brokerage</p>
       <p style="margin-top:10px; font-size:11px; font-style:italic;">
         This report is for informational purposes only and is not legal, mortgage, financial, or investment advice.
       </p>
@@ -501,7 +501,7 @@ const Compare = () => {
               Get detailed insights, ROI projections, and expert recommendations.
             </p>
             <p className="text-zinc-500 text-sm mb-12">
-              Developed by Founder Jane Abou Jaoude • Powered by JJ Global Capital
+              Developed by Founder Jane Abou Jaoude • Powered by JBJ Global Real Estate
             </p>
 
             {/* Steps Guide */}
@@ -638,7 +638,7 @@ const Compare = () => {
               Compare projects dynamically with AI-powered analysis including valuation, ROI, and market insights.
             </p>
             <p className="text-zinc-500 text-sm">
-              Developed by Founder Jane Abou Jaoude • Powered by JJ Global Capital
+              Developed by Founder Jane Abou Jaoude • Powered by JBJ Global Real Estate
             </p>
 
             {/* Feature Cards - Purple Theme */}
@@ -1069,7 +1069,7 @@ const Compare = () => {
 
           {/* Footer Branding */}
           <div className="text-center text-zinc-600 text-sm py-4">
-            Powered & Made by <span className="text-purple-400">JJ Global Capital</span> — Real Estate Brokerage
+            Powered & Made by <span className="text-purple-400">JBJ Global Real Estate</span> — Real Estate Brokerage
           </div>
           <LegalDisclaimer variant="compact" className="pb-4" />
         </div>

@@ -61,7 +61,7 @@ const ChatHeader = ({ step, isExistingUser, onBack, onToggleCollapse }: ChatHead
         )}
         <div>
           <h3 className="text-white font-semibold text-sm">
-            {showAgentPhoto ? agent.name : 'JJ Global Capital'}
+            {showAgentPhoto ? agent.name : 'JBJ Global Real Estate'}
           </h3>
           <p className="text-white/50 text-xs">{getStatusText()}</p>
         </div>

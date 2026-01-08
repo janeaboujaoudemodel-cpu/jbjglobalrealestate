@@ -584,7 +584,7 @@ export default function ReferralOnboarding() {
                 Congratulations! 🎉
               </h2>
               <p className="text-muted-foreground mb-6">
-                Welcome to the JJ Global Capital Referral Circle!
+                Welcome to the JBJ Global Real Estate Referral Circle!
               </p>
 
               {referralCode && (

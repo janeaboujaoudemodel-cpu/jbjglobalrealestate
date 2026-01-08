@@ -60,7 +60,7 @@ export const en = {
   'founder.brokersTrainedBy': 'Brokers Trained',
   'founder.learnMore': 'Learn More About Our Founder',
   'founder.title': 'Founder',
-  'founder.description1': 'JJ Global Capital is a founder-led real estate brokerage built on unwavering standards, discretion, and long-term vision.',
+  'founder.description1': 'JBJ Global Real Estate is a founder-led real estate brokerage built on unwavering standards, discretion, and long-term vision.',
   'founder.description2': 'Jane Abou Jaoude leads with a philosophy rooted in accountability and discretion, building organizations designed to endure rather than simply expand.',
   'founder.vision': 'Vision',
   'founder.mission': 'Mission',
@@ -69,10 +69,10 @@ export const en = {
   'founder.achievements': 'Key Achievements',
   
   // About Page
-  'about.title': 'About JJ Global Capital',
+  'about.title': 'About JBJ Global Real Estate',
   'about.subtitle': 'Your trusted partner in UAE real estate brokerage',
   'about.whoWeAre': 'Who We Are',
-  'about.whoWeAreDesc': 'JJ Global Capital is a real estate brokerage specializing in property sales, leasing, and holiday homes across the UAE.',
+  'about.whoWeAreDesc': 'JBJ Global Real Estate is a real estate brokerage specializing in property sales, leasing, and holiday homes across the UAE.',
   'about.ourMission': 'Our Mission',
   'about.ourMissionDesc': 'To provide exceptional brokerage services, connecting clients with the right properties through expert negotiation and transaction support.',
   'about.ourVision': 'Our Vision',
@@ -120,7 +120,7 @@ export const en = {
   
   // Market Report
   'report.exclusive': 'Exclusive Free Download',
-  'report.title': 'JJ Global Capital',
+  'report.title': 'JBJ Global Real Estate',
   'report.edition': 'Latest Edition 2026',
   'report.description': 'An exclusive educational book authored by Jane Abou Jaoude, covering the UAE real estate market with government-backed data and structured frameworks.',
   'report.download': 'Download Your Free Book Now',
@@ -129,7 +129,7 @@ export const en = {
   'report.highlight3': 'Investment due diligence checklist',
   'report.highlight4': 'Community ROI rankings',
   'report.createdBy': 'Created by Jane Abou Jaoude',
-  'report.exclusiveFor': 'Exclusive for JJ Global Capital',
+  'report.exclusiveFor': 'Exclusive for JBJ Global Real Estate',
   'report.descriptor': 'Real Estate Brokerage | Dubai, UAE',
   
   // Mortgage - Now positioned as a tool/calculator, not advice
@@ -368,7 +368,7 @@ export const en = {
   'footer.support': 'Support',
   
   // Welcome Modal
-  'welcome.title': 'Welcome to JJ Global Capital',
+  'welcome.title': 'Welcome to JBJ Global Real Estate',
   'welcome.titleReturning': 'Welcome Back!',
   'welcome.subtitle': 'Your gateway to global real estate investments with expertise in the UAE market',
   'welcome.subtitleReturning': 'We are glad you are back. Continue exploring premium properties.',

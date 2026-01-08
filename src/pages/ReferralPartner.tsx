@@ -36,7 +36,7 @@ const ReferralPartner = () => {
               Referral <span className="text-transparent bg-clip-text bg-gradient-to-r from-gold to-gold-light">Partner Program</span>
             </h1>
             <p className="text-zinc-400 text-lg md:text-xl max-w-2xl mx-auto mb-8">
-              Collaborate with JJ Global Capital by referring clients interested in UAE real estate.
+              Collaborate with JBJ Global Real Estate by referring clients interested in UAE real estate.
             </p>
           </motion.div>
         </div>

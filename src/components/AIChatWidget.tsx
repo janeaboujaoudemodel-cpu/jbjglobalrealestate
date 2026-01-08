@@ -211,7 +211,7 @@ const AIChatWidget = ({ isCollapsed, onToggleCollapse, showAttentionPulse = fals
       {
         id: 'welcome',
         role: 'assistant',
-        content: `Hi ${userInfo.firstName}! 👋 Thank you for contacting JJ Global Capital.\n\nI'm ${currentAgent.name}, your ${currentAgent.title}. I'll be assisting you with ${serviceName} today.\n\nHow can I help you? Feel free to ask me anything about Dubai real estate, properties, investments, or any questions you have!`,
+        content: `Hi ${userInfo.firstName}! 👋 Thank you for contacting JBJ Global Real Estate.\n\nI'm ${currentAgent.name}, your ${currentAgent.title}. I'll be assisting you with ${serviceName} today.\n\nHow can I help you? Feel free to ask me anything about Dubai real estate, properties, investments, or any questions you have!`,
         timestamp: new Date(),
       },
     ]);

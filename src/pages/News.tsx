@@ -75,7 +75,7 @@ const newsArticles = [
     excerpt: "Dubai Hills Estate, Palm Jumeirah, and Dubai Marina lead the list of most sought-after communities. Off-plan projects in emerging areas show strong capital appreciation potential.",
     category: "Analysis",
     date: "2025-09-20",
-    source: "JJ Global Capital Research",
+    source: "JBJ Global Real Estate Research",
     image: "https://images.unsplash.com/photo-1512453979798-5ea266f8880c?w=800",
   },
   {

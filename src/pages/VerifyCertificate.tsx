@@ -110,7 +110,7 @@ export default function VerifyCertificate() {
             <JJLogoImage className="h-12 mx-auto mb-4" />
           </Link>
           <h1 className="text-2xl font-bold text-foreground">Certificate Verification</h1>
-          <p className="text-muted-foreground">Verify the authenticity of a JJ Global Capital certificate</p>
+          <p className="text-muted-foreground">Verify the authenticity of a JBJ Global Real Estate certificate</p>
         </div>
 
         {/* Status Card */}
@@ -213,7 +213,7 @@ export default function VerifyCertificate() {
           <Button asChild variant="ghost" className="text-muted-foreground">
             <Link to="/">
               <ArrowLeft className="h-4 w-4 mr-2" />
-              Return to JJ Global Capital
+              Return to JBJ Global Real Estate
             </Link>
           </Button>
         </div>
