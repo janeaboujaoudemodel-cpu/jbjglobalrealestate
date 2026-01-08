@@ -38,7 +38,7 @@ const ChatWelcome = ({ onStartChat }: ChatWelcomeProps) => {
 
         {/* WhatsApp Option */}
         <a
-          href={`https://wa.me/${CONTACT_INFO.whatsappNumber}?text=${encodeURIComponent("Hi! I'd like to speak with someone about property investment in Dubai.")}`}
+          href={`https://wa.me/${CONTACT_INFO.whatsappNumber}?text=${encodeURIComponent("Hi! I'd like to speak with someone about property in Dubai.")}`}
           target="_blank"
           rel="noopener noreferrer"
           className="w-full p-4 bg-green-500/10 hover:bg-green-500/20 border border-green-500/30 hover:border-green-500/50 rounded-xl text-left transition-all duration-300 group block"

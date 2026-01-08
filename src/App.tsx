@@ -19,7 +19,7 @@ import QuizResults from "./pages/QuizResults";
 import Contact from "./pages/Contact";
 import About from "./pages/About";
 import Services from "./pages/Services";
-import Concierge from "./pages/Concierge";
+// Concierge removed
 import MortgageCalculator from "./pages/MortgageCalculator";
 import MarketReport from "./pages/MarketReport";
 import Favorites from "./pages/Favorites";
@@ -107,7 +107,7 @@ const App = () => (
                     <Route path="/contact" element={<Contact />} />
                     <Route path="/about" element={<About />} />
                     <Route path="/services" element={<Services />} />
-                    <Route path="/concierge" element={<Concierge />} />
+                    {/* Concierge route removed */}
                     <Route path="/mortgage-calculator" element={<MortgageCalculator />} />
                     <Route path="/market-report" element={<MarketReport />} />
                     <Route path="/favorites" element={<Favorites />} />

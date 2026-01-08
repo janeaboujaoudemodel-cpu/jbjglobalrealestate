@@ -2,7 +2,7 @@ import type { CapacitorConfig } from '@capacitor/cli';
 
 const config: CapacitorConfig = {
   appId: 'app.lovable.357981e3cd4c4c0dad5ba1a379078f50',
-  appName: 'jjglobalcapital',
+  appName: 'JBJ Real Estate',
   webDir: 'dist',
   server: {
     url: 'https://357981e3-cd4c-4c0d-ad5b-a1a379078f50.lovableproject.com?forceHideBadge=true',

@@ -61,9 +61,8 @@ export const AGENT = AGENTS[0]; // Natalia as default
 export const SERVICES: ServiceOption[] = [
   { id: 'real_estate', icon: Building2, label: 'Property Sales & Leasing', description: 'Brokerage for buying, selling, leasing' },
   { id: 'holiday_homes', icon: Home, label: 'Holiday Homes', description: 'Short-term rental support' },
-  { id: 'partner_intro', icon: Scale, label: 'Partner Introductions', description: 'Legal, mortgage, concierge partners' },
+  { id: 'partner_intro', icon: Scale, label: 'Partner Introductions', description: 'Legal, mortgage, property management' },
   { id: 'design_build', icon: Paintbrush, label: 'Design & Build', description: 'Architecture, interior, fit-out partners' },
-  { id: 'concierge', icon: Plane, label: 'Luxury Concierge', description: 'Jets, yachts, VIP experiences' },
   { id: 'general', icon: MessageCircle, label: 'General Inquiry', description: 'Other questions' },
 ];
 

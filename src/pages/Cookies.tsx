@@ -137,13 +137,13 @@ const Cookies = () => {
                   If you have questions about our use of cookies, please contact us at:
                 </p>
                 <p className="mt-4">
-                  <strong>JJ Global Capital</strong><br />
+                  <strong>JBJ Global Real Estate</strong><br />
                   Real Estate Brokerage<br />
                   Dubai, United Arab Emirates<br />
-                  Email: <a href="mailto:privacy@jjglobalcapital.com" className="text-gold hover:underline">privacy@jjglobalcapital.com</a>
+                  Email: <a href="mailto:privacy@jbj.ae" className="text-gold hover:underline">privacy@jbj.ae</a>
                 </p>
                 <p className="mt-6 text-zinc-500 text-sm">
-                  © {new Date().getFullYear()} JJ Global Capital Real Estate Brokerage. All Rights Reserved.
+                  © {new Date().getFullYear()} JBJ Global Real Estate. All Rights Reserved.
                 </p>
               </section>
             </div>
