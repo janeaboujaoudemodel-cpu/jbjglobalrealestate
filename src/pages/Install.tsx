@@ -142,7 +142,7 @@ const Install = () => {
             <div className="w-24 h-24 mx-auto rounded-3xl bg-white shadow-2xl shadow-gold/20 flex items-center justify-center overflow-hidden border-2 border-gold/30">
               <img
                 src="/pwa-192x192.jpg"
-                alt="JJ Global Capital App Icon"
+                alt="JBJ Global Real Estate App Icon"
                 className="w-full h-full object-contain"
               />
             </div>

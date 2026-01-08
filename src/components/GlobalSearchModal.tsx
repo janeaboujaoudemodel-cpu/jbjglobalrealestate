@@ -79,7 +79,7 @@ const SEARCHABLE_ITEMS = [
     route: "/about", 
     label: "About Us", 
     icon: Building2,
-    description: "Learn about JJ Global Capital"
+    description: "Learn about JBJ Global Real Estate"
   },
   { 
     keywords: ["founder", "jane", "jaoude", "leadership", "ceo", "chairwoman"], 

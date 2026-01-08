@@ -4,9 +4,9 @@ import { Link } from "react-router-dom";
 import dubaiHeroVideo from "@/assets/dubai-hero-video.mp4";
 import { CONTACT_INFO } from "@/constants/stats";
 
-const INQUIRY_FORM_URL = "https://jjglobalcapital.com/property-investment-inquiry-form/";
+const INQUIRY_FORM_URL = "https://jbj.ae/contact";
 
-// "How We Help" cards - JJ Global Capital core services
+// "How We Help" cards - JBJ Global Real Estate core services
 const howWeHelp = [
   {
     title: "Buy & Sell Brokerage",
@@ -309,7 +309,7 @@ const ServicesSection = () => {
         {/* How We Help Section */}
         <div className="text-center mb-16">
           <span className="inline-block px-5 py-2 bg-gradient-to-r from-gold/20 to-gold/5 border border-gold/30 rounded-full text-gold text-sm font-medium mb-6 backdrop-blur-sm">
-            JJ Global Capital
+            JBJ Global Real Estate
           </span>
           <h2 
             className="text-4xl md:text-5xl lg:text-6xl font-bold text-white mb-6"
