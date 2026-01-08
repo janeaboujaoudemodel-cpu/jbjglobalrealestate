@@ -509,6 +509,27 @@ export type Database = {
         }
         Relationships: []
       }
+      blocked_email_domains: {
+        Row: {
+          created_at: string | null
+          domain: string
+          id: string
+          reason: string | null
+        }
+        Insert: {
+          created_at?: string | null
+          domain: string
+          id?: string
+          reason?: string | null
+        }
+        Update: {
+          created_at?: string | null
+          domain?: string
+          id?: string
+          reason?: string | null
+        }
+        Relationships: []
+      }
       broker_activity_stats: {
         Row: {
           calls_made: number | null
@@ -2849,6 +2870,7 @@ export type Database = {
           current_location: string | null
           email: string
           full_name: string | null
+          honeypot: string | null
           id: string
           language: string | null
           nationality: string | null
@@ -2867,6 +2889,7 @@ export type Database = {
           current_location?: string | null
           email: string
           full_name?: string | null
+          honeypot?: string | null
           id?: string
           language?: string | null
           nationality?: string | null
@@ -2885,6 +2908,7 @@ export type Database = {
           current_location?: string | null
           email?: string
           full_name?: string | null
+          honeypot?: string | null
           id?: string
           language?: string | null
           nationality?: string | null
@@ -4118,6 +4142,10 @@ export type Database = {
       }
       is_active_crm_member: { Args: { _user_id: string }; Returns: boolean }
       is_crm_admin: { Args: { _user_id: string }; Returns: boolean }
+      is_email_domain_blocked: {
+        Args: { email_address: string }
+        Returns: boolean
+      }
       is_hr_admin: { Args: { _user_id: string }; Returns: boolean }
       is_hr_member: { Args: { _user_id: string }; Returns: boolean }
       is_org_member: {
