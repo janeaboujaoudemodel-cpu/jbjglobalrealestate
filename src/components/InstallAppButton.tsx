@@ -91,25 +91,39 @@ const InstallAppButton = () => {
       return;
     }
 
-    // For iOS or when no prompt available, show instructions via toast
+    // If we're inside an iframe (editor preview), open the install page in a new tab.
+    const inIFrame = (() => {
+      try {
+        return window.self !== window.top;
+      } catch {
+        return true;
+      }
+    })();
+
+    const installUrl = `${window.location.origin}/install`;
+
+    // For iOS: show instructions (no native install prompt exists)
     const isIOS = isIOSDevice();
     if (isIOS) {
       toast.info("To install on iOS:", {
         duration: 8000,
         description: "Tap the Share button (□↑) in Safari, then 'Add to Home Screen'",
       });
+      return;
+    }
+
+    // For desktop/Android when prompt isn't available, send users to /install for guidance.
+    if (inIFrame) {
+      window.open(installUrl, "_blank", "noopener,noreferrer");
     } else {
-      toast.info("Installing...", {
-        duration: 3000,
-        description: "Look for the install prompt in your browser's address bar",
-      });
+      window.location.href = "/install";
     }
   }, [deferredPrompt]);
 
   if (isInstalled) return null;
 
-  // Show on all devices (desktop and mobile)
-  const shouldShow = !!deferredPrompt || isMobileLikeDevice() || true;
+  // Only show when install is likely relevant (prompt available or iOS).
+  const shouldShow = !!deferredPrompt || isIOSDevice();
   if (!shouldShow) return null;
 
   return (
