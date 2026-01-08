@@ -60,17 +60,32 @@ const Install = () => {
   }, []);
 
   const handleInstall = async () => {
-    if (!deferredPrompt) return;
+    // For Android/Desktop with install prompt
+    if (deferredPrompt) {
+      setInstalling(true);
+      await deferredPrompt.prompt();
+      const { outcome } = await deferredPrompt.userChoice;
 
-    setInstalling(true);
-    await deferredPrompt.prompt();
-    const { outcome } = await deferredPrompt.userChoice;
-
-    if (outcome === "accepted") {
-      setIsInstalled(true);
+      if (outcome === "accepted") {
+        setIsInstalled(true);
+      }
+      setDeferredPrompt(null);
+      setInstalling(false);
+      return;
     }
-    setDeferredPrompt(null);
-    setInstalling(false);
+    
+    // For iOS - trigger share sheet automatically if possible
+    if (isIOS && navigator.share) {
+      try {
+        await navigator.share({
+          title: 'JBJ Global Real Estate',
+          text: 'Install the JBJ Global Real Estate app',
+          url: window.location.origin,
+        });
+      } catch {
+        // User cancelled or share failed - show instructions
+      }
+    }
   };
 
   const features = [
@@ -155,133 +170,44 @@ const Install = () => {
             </motion.div>
           ) : (
             <>
-              {/* One-Click Install Button (Android/Desktop) */}
-              {deferredPrompt && (
-                <motion.div
-                  initial={{ opacity: 0, y: 20 }}
-                  animate={{ opacity: 1, y: 0 }}
-                  transition={{ delay: 0.2 }}
-                  className="mb-8"
+              {/* One-Click Install Button - Works for all platforms */}
+              <motion.div
+                initial={{ opacity: 0, y: 20 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ delay: 0.2 }}
+                className="mb-8"
+              >
+                <Button
+                  onClick={handleInstall}
+                  disabled={installing}
+                  className="bg-gradient-to-r from-gold to-gold-light text-black font-bold px-10 py-7 text-xl hover:shadow-lg hover:shadow-gold/40 transition-all hover:scale-105 disabled:opacity-70 animate-[bounce_2s_ease-in-out_infinite]"
+                  style={{
+                    boxShadow: '0 0 30px rgba(168, 146, 90, 0.4)',
+                  }}
                 >
-                  <Button
-                    onClick={handleInstall}
-                    disabled={installing}
-                    className="bg-gradient-to-r from-gold to-gold-light text-black font-bold px-10 py-7 text-xl hover:shadow-lg hover:shadow-gold/40 transition-all hover:scale-105 disabled:opacity-70"
-                  >
-                    {installing ? (
-                      <>
-                        <div className="w-5 h-5 mr-2 border-2 border-black border-t-transparent rounded-full animate-spin" />
-                        Installing...
-                      </>
-                    ) : (
-                      <>
-                        <Download className="w-6 h-6 mr-2" />
-                        Install Now — One Click
-                      </>
-                    )}
-                  </Button>
-                  <p className="text-zinc-500 text-sm mt-3">
-                    Click the button above and confirm. The app will appear on your home screen/taskbar.
-                  </p>
-                </motion.div>
-              )}
-
-              {/* iOS Instructions */}
-              {isIOS && (
-                <motion.div
-                  initial={{ opacity: 0, y: 20 }}
-                  animate={{ opacity: 1, y: 0 }}
-                  transition={{ delay: 0.2 }}
-                  className="bg-zinc-900 border border-zinc-800 rounded-2xl p-6 mb-8"
-                >
-                  <h3 className="text-white text-xl font-semibold mb-6">
-                    📱 Install on iPhone / iPad
-                  </h3>
-                  <div className="space-y-5 text-left">
-                    <div className="flex items-start gap-4">
-                      <div className="w-12 h-12 rounded-xl bg-blue-500/20 flex items-center justify-center flex-shrink-0 border border-blue-500/30">
-                        <Share className="w-6 h-6 text-blue-400" />
-                      </div>
-                      <div>
-                        <p className="text-white font-semibold text-lg">Step 1: Tap Share</p>
-                        <p className="text-zinc-400">
-                          Tap the <strong className="text-white">Share</strong> button (square with arrow) at the bottom of Safari
-                        </p>
-                      </div>
-                    </div>
-                    <div className="flex items-start gap-4">
-                      <div className="w-12 h-12 rounded-xl bg-gold/20 flex items-center justify-center flex-shrink-0 border border-gold/30">
-                        <Plus className="w-6 h-6 text-gold" />
-                      </div>
-                      <div>
-                        <p className="text-white font-semibold text-lg">Step 2: Add to Home Screen</p>
-                        <p className="text-zinc-400">
-                          Scroll down and tap <strong className="text-white">"Add to Home Screen"</strong>
-                        </p>
-                      </div>
-                    </div>
-                    <div className="flex items-start gap-4">
-                      <div className="w-12 h-12 rounded-xl bg-green-500/20 flex items-center justify-center flex-shrink-0 border border-green-500/30">
-                        <Check className="w-6 h-6 text-green-400" />
-                      </div>
-                      <div>
-                        <p className="text-white font-semibold text-lg">Step 3: Tap "Add"</p>
-                        <p className="text-zinc-400">
-                          Confirm by tapping <strong className="text-white">"Add"</strong> in the top right
-                        </p>
-                      </div>
-                    </div>
-                  </div>
-                  <div className="mt-6 p-4 bg-blue-500/10 border border-blue-500/20 rounded-xl">
-                    <p className="text-blue-300 text-sm">
-                      💡 <strong>Tip:</strong> Make sure you're using Safari browser for the best experience
-                    </p>
-                  </div>
-                </motion.div>
-              )}
-
-              {/* Android/Chrome Instructions (when no prompt available) */}
-              {!isIOS && !deferredPrompt && (
-                <motion.div
-                  initial={{ opacity: 0, y: 20 }}
-                  animate={{ opacity: 1, y: 0 }}
-                  transition={{ delay: 0.2 }}
-                  className="bg-zinc-900 border border-zinc-800 rounded-2xl p-6 mb-8"
-                >
-                  <h3 className="text-white text-xl font-semibold mb-6">
-                    📱 Install on Android / Desktop
-                  </h3>
-                  <div className="space-y-5 text-left">
-                    <div className="flex items-start gap-4">
-                      <div className="w-12 h-12 rounded-xl bg-gold/20 flex items-center justify-center flex-shrink-0 border border-gold/30">
-                        <MoreVertical className="w-6 h-6 text-gold" />
-                      </div>
-                      <div>
-                        <p className="text-white font-semibold text-lg">Step 1: Open Menu</p>
-                        <p className="text-zinc-400">
-                          Tap the <strong className="text-white">⋮ menu</strong> button in your browser (top right)
-                        </p>
-                      </div>
-                    </div>
-                    <div className="flex items-start gap-4">
-                      <div className="w-12 h-12 rounded-xl bg-green-500/20 flex items-center justify-center flex-shrink-0 border border-green-500/30">
-                        <Download className="w-6 h-6 text-green-400" />
-                      </div>
-                      <div>
-                        <p className="text-white font-semibold text-lg">Step 2: Install App</p>
-                        <p className="text-zinc-400">
-                          Select <strong className="text-white">"Install app"</strong> or <strong className="text-white">"Add to Home screen"</strong>
-                        </p>
-                      </div>
-                    </div>
-                  </div>
-                  <div className="mt-6 p-4 bg-gold/10 border border-gold/20 rounded-xl">
-                    <p className="text-gold text-sm">
-                      💡 <strong>Tip:</strong> Use Chrome or Edge browser for one-click install
-                    </p>
-                  </div>
-                </motion.div>
-              )}
+                  {installing ? (
+                    <>
+                      <div className="w-5 h-5 mr-2 border-2 border-black border-t-transparent rounded-full animate-spin" />
+                      Installing...
+                    </>
+                  ) : (
+                    <>
+                      <Download className="w-6 h-6 mr-2" />
+                      Download App
+                    </>
+                  )}
+                </Button>
+                
+                {/* Quick tip based on platform */}
+                <p className="text-zinc-500 text-sm mt-4">
+                  {isIOS 
+                    ? "Tap above, then select 'Add to Home Screen' from the share menu"
+                    : deferredPrompt 
+                      ? "One click install - app appears on your home screen instantly"
+                      : "Tap ⋮ menu → 'Install app' or 'Add to Home Screen'"
+                  }
+                </p>
+              </motion.div>
             </>
           )}
 
