@@ -35,8 +35,20 @@ const InstallAppButton = () => {
   const [showSuccess, setShowSuccess] = useState(false);
 
   useEffect(() => {
-    const standalone = window.matchMedia("(display-mode: standalone)").matches;
-    setIsInstalled(standalone);
+    // Check multiple ways if app is installed
+    const checkInstalled = () => {
+      const standalone = window.matchMedia("(display-mode: standalone)").matches;
+      const navigatorStandalone = (navigator as any).standalone === true;
+      const isInstalled = standalone || navigatorStandalone;
+      
+      if (isInstalled) {
+        setIsInstalled(true);
+        return true;
+      }
+      return false;
+    };
+    
+    if (checkInstalled()) return;
 
     const handleBeforeInstallPrompt = (e: Event) => {
       e.preventDefault();
@@ -48,15 +60,9 @@ const InstallAppButton = () => {
       setDeferredPrompt(null);
       setShowSuccess(true);
       
-      // Show success message with location info
-      const isIOS = isIOSDevice();
-      const message = isIOS 
-        ? "App installed! Find it on your Home Screen" 
-        : "App installed! Find it in your app drawer or Home Screen";
-      
-      toast.success(message, {
+      toast.success("App installed! Find it on your Home Screen or taskbar", {
         duration: 5000,
-        description: "Tap the JJ icon anytime for quick access",
+        description: "Tap the JBJ icon anytime for quick access",
       });
     };
 
