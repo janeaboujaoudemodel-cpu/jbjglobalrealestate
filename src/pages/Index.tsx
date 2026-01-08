@@ -436,7 +436,7 @@ const Index = () => {
                   className="bg-transparent backdrop-blur-md border-2 border-violet-500/50 text-violet-400 hover:bg-violet-500/20 hover:border-violet-400 hover:shadow-lg hover:shadow-violet-500/20 font-semibold px-5 py-4 text-xs transition-all duration-300 hover:scale-105 group"
                 >
                   <User className="w-3 h-3 mr-1" />
-                  HR Agent
+                  Chat with Jessica
                   <ArrowUpRight className="w-3 h-3 ml-1 group-hover:translate-x-0.5 group-hover:-translate-y-0.5 transition-transform" />
                 </Button>
               </Link>
