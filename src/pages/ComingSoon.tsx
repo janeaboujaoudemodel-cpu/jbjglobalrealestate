@@ -1,6 +1,6 @@
 import { motion } from "framer-motion";
 import { Link } from "react-router-dom";
-import { JJLogoImage } from "@/components/JJLogoImage";
+import { BrandMonogram } from "@/components/BrandMonogram";
 
 const ComingSoon = () => {
   return (
@@ -17,14 +17,14 @@ const ComingSoon = () => {
         transition={{ duration: 0.8 }}
         className="relative z-10 text-center max-w-2xl mx-auto"
       >
-        {/* Logo */}
+        {/* Brand Mark */}
         <motion.div
           initial={{ scale: 0.8, opacity: 0 }}
           animate={{ scale: 1, opacity: 1 }}
           transition={{ delay: 0.2, duration: 0.6 }}
           className="mb-12"
         >
-          <JJLogoImage variant="light" size="xl" className="mx-auto" />
+          <BrandMonogram variant="light" size="xl" layout="stacked" />
         </motion.div>
 
         {/* Coming Soon Text */}
