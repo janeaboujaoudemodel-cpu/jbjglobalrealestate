@@ -7,11 +7,11 @@ interface SocialLinksProps {
 }
 
 const SOCIAL_LINKS = {
-  facebook: 'https://facebook.com/jjglobalcapital',
-  instagram: 'https://instagram.com/jjglobalcapital',
-  linkedin: 'https://linkedin.com/company/jjglobalcapital',
-  youtube: 'https://youtube.com/@jjglobalcapital',
-  twitter: 'https://x.com/jjglobalcapital',
+  facebook: 'https://facebook.com/jbjglobalrealestate',
+  instagram: 'https://instagram.com/jbjglobalrealestate',
+  linkedin: 'https://linkedin.com/company/jbjglobalrealestate',
+  youtube: 'https://youtube.com/@jbjglobalrealestate',
+  twitter: 'https://x.com/jbjrealestate',
 };
 
 export const SocialLinks = ({ 

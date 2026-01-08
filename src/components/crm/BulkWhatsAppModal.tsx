@@ -39,17 +39,17 @@ const BulkWhatsAppModal = ({ open, onClose, userId, preSelectedLeadIds }: BulkWh
   const [copiedId, setCopiedId] = useState<string | null>(null);
   
   const [message, setMessage] = useState(
-    `Greetings from JJ Global Capital! 🏠✨
+    `Greetings from JBJ Global Real Estate! 🏠✨
 
 We're excited to share exclusive updates on the latest luxury properties in Dubai.
 
 Visit our website to explore:
-🔗 https://jjglobalcapital.com
+🔗 https://jbj.ae
 
 Looking forward to assisting you!
 
 Best regards,
-JJ Global Capital Team`
+JBJ Global Real Estate Team`
   );
 
   useEffect(() => {
