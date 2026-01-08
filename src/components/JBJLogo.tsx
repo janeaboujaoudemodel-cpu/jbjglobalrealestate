@@ -1,10 +1,12 @@
-// JBJ Logo Component - Uses the official monogram logo files
-// Dark version: for dark backgrounds (black bg with white J's, gold B)
-// Transparent version: for light backgrounds
+// JBJ Logo Component - Uses the official monogram and full logo files
+// Monogram (Version A): for header, favicon, app icons
+// Full Logo (Version B): for footer and PDFs/reports
 
 import jbjMonogramDark from "@/assets/jbj-monogram-dark.png";
 import jbjMonogramTransparent from "@/assets/jbj-monogram-transparent.png";
 import jbjMonogramNobuffer from "@/assets/jbj-monogram-nobuffer.png";
+import jbjFullLogoDark from "@/assets/jbj-fulllogo-dark.png";
+import jbjFullLogoLight from "@/assets/jbj-fulllogo-light.png";
 
 interface JBJLogoProps {
   variant?: 'light' | 'dark' | 'nobuffer';
@@ -83,20 +85,20 @@ export const JBJLogoHeader = ({ className = '' }: { className?: string }) => (
   </div>
 );
 
-// Footer logo - larger with full branding
-export const JBJLogoFooter = ({ className = '' }: { className?: string }) => (
+// Footer logo - Full logo with "JBJ GLOBAL REAL ESTATE" text (Version B)
+export const JBJLogoFooter = ({ 
+  className = '', 
+  variant = 'dark' 
+}: { 
+  className?: string;
+  variant?: 'dark' | 'light';
+}) => (
   <div className={`flex flex-col items-center ${className}`}>
     <img 
-      src={jbjMonogramDark} 
+      src={variant === 'light' ? jbjFullLogoLight : jbjFullLogoDark} 
       alt="JBJ Global Real Estate" 
-      width={120}
-      height={120}
-      className="object-contain"
-      style={{ width: 120, height: 120 }}
+      className="h-32 md:h-40 w-auto object-contain"
     />
-    <span className="text-gold text-xs tracking-[0.2em] uppercase mt-3">
-      Real Estate Brokerage
-    </span>
   </div>
 );
 

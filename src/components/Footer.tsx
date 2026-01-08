@@ -8,7 +8,7 @@ import {
   ChevronDown,
 } from "lucide-react";
 import { CONTACT_INFO, getWhatsAppUrl, getCallUrl, getEmailUrl } from "@/constants/stats";
-import { BrandMonogram } from "@/components/BrandMonogram";
+import jbjFullLogoDark from "@/assets/jbj-fulllogo-dark.png";
 import {
   Collapsible,
   CollapsibleContent,
@@ -143,7 +143,11 @@ const Footer = () => {
         {/* Logo + Description */}
         <div className="text-center mb-10 md:mb-14">
           <Link to="/" className="inline-block">
-            <BrandMonogram variant="dark" size="lg" layout="stacked" />
+            <img 
+              src={jbjFullLogoDark} 
+              alt="JBJ Global Real Estate" 
+              className="h-32 md:h-40 w-auto object-contain mx-auto"
+            />
           </Link>
           <p className="text-zinc-400 text-base md:text-lg max-w-2xl mx-auto leading-relaxed mt-4">
             Real estate brokerage specializing in property sales, leasing, and holiday homes 
