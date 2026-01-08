@@ -55,7 +55,7 @@ const IntellectualProperty = () => {
                 <p className="text-zinc-300 mt-4 leading-relaxed">
                   This platform, including but not limited to all software code, AI algorithms, user interface designs, 
                   branding elements, written content, graphics, and digital assets, is the exclusive intellectual property 
-                  of <span className="text-white font-medium">Jane Abou Jaoude</span>, Founder & CEO of JJ Global Capital.
+                  of <span className="text-white font-medium">Jane Abou Jaoude</span>, Founder & CEO of JBJ Global Real Estate.
                 </p>
               </div>
             </div>
@@ -75,7 +75,6 @@ const IntellectualProperty = () => {
                 { title: "AI Budget Planner", desc: "Affordability analysis engine" },
                 { title: "AI Document Scanner", desc: "Intelligent parsing system" },
                 { title: "AI Interior Designer", desc: "Design generation technology" },
-                { title: "AI Travel Concierge", desc: "Luxury travel planning system" },
                 { title: "Property Comparison Engine", desc: "Multi-property analysis tool" },
                 { title: "Broker Toolkit Platform", desc: "Professional tools suite" },
                 { title: "Guides & Resources", desc: "Educational content library" },
@@ -210,7 +209,7 @@ const IntellectualProperty = () => {
             
             <div className="bg-zinc-900 rounded-xl p-6 border border-zinc-800 space-y-4">
               <p className="text-zinc-300 leading-relaxed">
-                JJ Global Capital reserves the right to pursue all available legal remedies against infringers, including but not limited to:
+                JBJ Global Real Estate reserves the right to pursue all available legal remedies against infringers, including but not limited to:
               </p>
               <ul className="space-y-3 text-zinc-400">
                 <li className="flex items-start gap-3">
@@ -246,7 +245,7 @@ const IntellectualProperty = () => {
               For licensing requests, partnership inquiries, or to report intellectual property violations, please contact our legal department:
             </p>
             <div className="space-y-2 text-zinc-400">
-              <p><span className="text-white">Email:</span> privacy@jjglobalcapital.com</p>
+              <p><span className="text-white">Email:</span> privacy@jbj.ae</p>
               <p><span className="text-white">Legal Representative:</span> Jane Abou Jaoude, Founder & CEO</p>
               <p><span className="text-white">Jurisdiction:</span> Dubai, United Arab Emirates</p>
             </div>
@@ -258,7 +257,7 @@ const IntellectualProperty = () => {
               Last Updated: {new Date().toLocaleDateString('en-US', { month: 'long', year: 'numeric' })}
             </p>
             <p className="text-gold text-sm mt-2">
-              © {currentYear} JJ Global Capital. Developed & Created by Founder Jane Abou Jaoude.
+              © {currentYear} JBJ Global Real Estate. Developed & Created by Founder Jane Abou Jaoude.
             </p>
           </div>
         </div>

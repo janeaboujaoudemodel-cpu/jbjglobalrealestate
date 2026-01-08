@@ -30,7 +30,7 @@ const Terms = () => {
               <section>
                 <h2 className="text-gold text-xl font-semibold mb-4">1. Who We Are</h2>
                 <p>
-                  This website is operated by JJ Global Capital (the "Company", "we", "us", "our"). 
+                  This website is operated by JBJ Global Real Estate (the "Company", "we", "us", "our"). 
                   We are a Dubai-based real estate brokerage and provide real estate brokerage support 
                   for property sales and leasing, and (where applicable) holiday homes support subject 
                   to relevant approvals and permits.
@@ -56,11 +56,11 @@ const Terms = () => {
                 <ul className="list-disc pl-6 mt-2 space-y-2">
                   <li><strong>Legal advice or legal services</strong></li>
                   <li><strong>Mortgage advice, mortgage brokerage, or banking services</strong></li>
-                  <li><strong>Financial advice, investment advisory, portfolio management, or any regulated financial service</strong></li>
+                  <li><strong>Financial advice or any regulated financial service</strong></li>
                   <li><strong>Third-party long-term property management services</strong> unless expressly stated and licensed for that activity</li>
                 </ul>
                 <p className="mt-4 text-zinc-400">
-                  If you need legal, mortgage, financial, or other regulated services, we may introduce you to 
+                  If you need legal, mortgage, or other regulated services, we may introduce you to 
                   independent licensed providers. Those providers offer services under their own licences/employers 
                   and you contract directly with them.
                 </p>
@@ -84,7 +84,7 @@ const Terms = () => {
                 </p>
                 <ul className="list-disc pl-6 mt-2 space-y-2">
                   <li>Outputs are estimates and may be incomplete, outdated, or inaccurate.</li>
-                  <li>You should not rely on these tools as legal, mortgage, financial, or investment advice.</li>
+                  <li>You should not rely on these tools as legal, mortgage, or financial advice.</li>
                   <li>You remain responsible for verifying all information with qualified licensed professionals and/or official sources.</li>
                 </ul>
               </section>
@@ -176,13 +176,13 @@ const Terms = () => {
                   For questions about these Terms:
                 </p>
                 <p className="mt-4">
-                  <strong>JJ Global Capital</strong><br />
+                  <strong>JBJ Global Real Estate</strong><br />
                   Real Estate Brokerage<br />
                   Dubai, United Arab Emirates<br />
-                  Email: <a href="mailto:privacy@jjglobalcapital.com" className="text-gold hover:underline">privacy@jjglobalcapital.com</a>
+                  Email: <a href="mailto:privacy@jbj.ae" className="text-gold hover:underline">privacy@jbj.ae</a>
                 </p>
                 <p className="mt-6 text-zinc-500 text-sm">
-                  © {new Date().getFullYear()} JJ Global Capital Real Estate Brokerage. All Rights Reserved.<br />
+                  © {new Date().getFullYear()} JBJ Global Real Estate. All Rights Reserved.<br />
                   Developed and Created by Founder Jane Abou Jaoude
                 </p>
               </section>

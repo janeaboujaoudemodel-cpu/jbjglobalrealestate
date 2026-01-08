@@ -4,8 +4,8 @@ import { createClient } from "https://esm.sh/@supabase/supabase-js@2";
 import { z } from "https://deno.land/x/zod@v3.22.4/mod.ts";
 
 const ALLOWED_ORIGINS = [
-  "https://jjglobalcapital.com",
-  "https://www.jjglobalcapital.com",
+  "https://jbj.ae",
+  "https://www.jbj.ae",
   "http://localhost:5173",
   "http://localhost:8080",
 ];
@@ -206,8 +206,8 @@ async function sendAutoBlockNotification(
         Authorization: `Bearer ${resendApiKey}`,
       },
       body: JSON.stringify({
-        from: "JJ Global Capital Security <security@jjglobalcapital.com>",
-        to: ["contact@jjglobalcapital.com", "jane@jjglobalcapital.com"],
+        from: "JBJ Global Real Estate Security <security@jbj.ae>",
+        to: ["contact@jbj.ae", "jane@jbj.ae"],
         subject: `🚨 Security Alert: IP Auto-Blocked on ${functionName}`,
         html: `
           <div style="font-family: Arial, sans-serif; max-width: 600px; margin: 0 auto;">
@@ -252,7 +252,7 @@ async function sendAutoBlockNotification(
               </div>
               
               <p style="color: #666; font-size: 12px; margin-top: 20px; text-align: center;">
-                This is an automated security notification from JJ Global Capital.
+                This is an automated security notification from JBJ Global Real Estate.
               </p>
             </div>
           </div>
@@ -326,10 +326,21 @@ async function autoBlockIP(
 // Approved contact information - single source of truth for AI responses
 const APPROVED_CONTACT_INFO = {
   phone: '+971 56 591 1000',
-  email: 'contact@jjglobalcapital.com',
-  privacyEmail: 'privacy@jjglobalcapital.com',
-  website: 'jjglobalcapital.com',
+  email: 'contact@jbj.ae',
+  privacyEmail: 'privacy@jbj.ae',
+  website: 'jbj.ae',
 };
+
+// Approved emails list
+const APPROVED_EMAILS = [
+  "contact@jbj.ae",
+  "privacy@jbj.ae",
+  "partnerships@jbj.ae",
+  "collaboration@jbj.ae",
+  "careers@jbj.ae",
+  "security@jbj.ae",
+  "jane@jbj.ae",
+];
 
 // Sanitize AI output to remove any unapproved contact information
 function sanitizeContactInfo(text: string): string {
@@ -351,7 +362,7 @@ function sanitizeContactInfo(text: string): string {
     sanitized = sanitized.replace(pattern, (match) => {
       // Normalize for comparison
       const normalized = match.replace(/[\s\-]/g, '');
-      if (normalized === '+97156591 1000' || normalized === '+971565911000' || normalized === '565911000') {
+      if (normalized.includes('565911000')) {
         return match; // Keep approved number
       }
       return APPROVED_CONTACT_INFO.phone; // Replace with approved
@@ -361,15 +372,7 @@ function sanitizeContactInfo(text: string): string {
   // Replace any emails that aren't our approved ones
   sanitized = sanitized.replace(emailPattern, (match) => {
     const lowerMatch = match.toLowerCase();
-    if (
-      lowerMatch === 'contact@jjglobalcapital.com' ||
-      lowerMatch === 'privacy@jjglobalcapital.com' ||
-      lowerMatch === 'partnerships@jjglobalcapital.com' ||
-      lowerMatch === 'collaboration@jjglobalcapital.com' ||
-      lowerMatch === 'careers@jjglobalcapital.com' ||
-      lowerMatch === 'security@jjglobalcapital.com' ||
-      lowerMatch === 'jane@jjglobalcapital.com'
-    ) {
+    if (APPROVED_EMAILS.includes(lowerMatch) || lowerMatch.endsWith('@jbj.ae')) {
       return match; // Keep approved emails
     }
     return APPROVED_CONTACT_INFO.email; // Replace with approved
@@ -389,7 +392,7 @@ const RequestSchema = z.object({
   history: z.array(MessageSchema).max(20).optional().default([]),
   service: z.enum([
     'real_estate', 
-    'concierge', 
+    'partner_intro', 
     'legal', 
     'design_build', 
     'mortgage', 
@@ -401,10 +404,10 @@ const RequestSchema = z.object({
 
 // Comprehensive website knowledge base
 const WEBSITE_KNOWLEDGE = `
-JJ GLOBAL CAPITAL - COMPLETE SERVICES & INFORMATION:
+JBJ GLOBAL REAL ESTATE - COMPLETE SERVICES & INFORMATION:
 
 COMPANY OVERVIEW:
-- JJ Global Capital is a Dubai-based real estate brokerage specializing in property sales, leasing, and holiday homes across the UAE
+- JBJ Global Real Estate is a Dubai-based real estate brokerage specializing in property sales, leasing, and holiday homes across the UAE
 - Founded by Jane Abou Jaoude
 - Headquarters: Dubai, UAE
 - Serving UAE-based and international clients interested in UAE real estate
@@ -426,22 +429,13 @@ SERVICES:
    - Featured communities: Dubai Marina, Downtown Dubai, Palm Jumeirah, Business Bay, JBR, Dubai Hills, Creek Harbour, Jumeirah Village Circle, Dubai South, Mohammed Bin Rashid City
    - Top developers: Emaar, DAMAC, Nakheel, Sobha, Meraas, Azizi, Danube, Ellington, Binghatti
 
-2. LUXURY CONCIERGE SERVICES:
-   - Private jet charters
-   - Yacht rentals
-   - VIP airport transfers
-   - Exclusive event access
-   - Personal shopping assistance
-   - Restaurant reservations
-   - Travel itinerary planning for UAE visitors
-
-3. PARTNER INTRODUCTIONS:
+2. PARTNER INTRODUCTIONS:
    - Legal partner introductions for property transactions
    - Mortgage partner introductions
    - Property management partner introductions
-   Note: JJ Global Capital provides brokerage support and partner introductions only. Legal, mortgage, and property management services are provided by independent licensed professionals.
+   Note: JBJ Global Real Estate provides brokerage support and partner introductions only. Legal, mortgage, and property management services are provided by independent licensed professionals.
 
-4. DESIGN & BUILD:
+3. DESIGN & BUILD:
    - Interior design services
    - Fit-out and renovation
    - Smart home integration
@@ -453,14 +447,13 @@ AI TOOLS AVAILABLE ON WEBSITE:
 - Property Evaluator - Get property valuations
 - Interior Design AI - Visualize room designs
 - AI Budget Planner - Calculate and plan budgets
-- AI Travel Concierge - Plan UAE visits with property viewings
 - Property Comparison - Compare up to 4 properties
 - Rental Index Analysis - Check rental yields
 
-INVESTMENT BENEFITS IN UAE:
+PROPERTY BENEFITS IN UAE:
 - 0% property tax
 - 0% income tax
-- Golden Visa eligibility (AED 2M+ investment)
+- Golden Visa eligibility (AED 2M+ property)
 - High rental yields (6-10% average)
 - Strong capital appreciation
 - Safe and regulated market
@@ -571,10 +564,10 @@ serve(async (req) => {
     let serviceContext = '';
     switch(service) {
       case 'real_estate':
-        serviceContext = 'The user is interested in real estate investment. Focus on properties, developers, communities, investment benefits, and the property buying process in UAE.';
+        serviceContext = 'The user is interested in real estate. Focus on properties, developers, communities, property benefits, and the property buying process in UAE.';
         break;
-      case 'concierge':
-        serviceContext = 'The user is interested in luxury concierge services. Focus on private jets, yachts, VIP experiences, travel planning, and exclusive services.';
+      case 'partner_intro':
+        serviceContext = 'The user needs partner introductions. Focus on connecting them with our legal, mortgage, and property management partners. Note: We provide introductions only, not direct services.';
         break;
       case 'legal':
         serviceContext = 'The user needs legal partner introductions. Focus on connecting them with our legal partners for property transactions, documentation, Golden Visa, and company formation. Note: We provide introductions only, not direct legal services.';
@@ -583,7 +576,7 @@ serve(async (req) => {
         serviceContext = 'The user is interested in design and build services. Focus on interior design, fit-out, renovation, and smart home solutions.';
         break;
       case 'mortgage':
-        serviceContext = 'The user needs mortgage partner introductions. Focus on connecting them with our mortgage partners for financing options. Note: We provide introductions only, not direct financial advice.';
+        serviceContext = 'The user needs mortgage partner introductions. Focus on connecting them with our mortgage partners for financing options. Note: We provide introductions only, not financial advice.';
         break;
       case 'property_management':
         serviceContext = 'The user needs property management partner introductions. Focus on connecting them with our property management partners. Note: We provide introductions only, not direct management services.';
@@ -596,7 +589,7 @@ serve(async (req) => {
     const messages = [
       {
         role: 'system',
-        content: `You are Sara, a friendly and knowledgeable property consultant at JJ Global Capital. You're chatting with real clients about Dubai real estate.
+        content: `You are Sara, a friendly and knowledgeable property consultant at JBJ Global Real Estate. You're chatting with real clients about Dubai real estate.
 
 ## WHO YOU ARE:
 - Your name is Sara - use it naturally when introducing yourself
@@ -628,7 +621,7 @@ If they need detailed help, scheduling, or want to move forward, say something c
 📧 ${APPROVED_CONTACT_INFO.email}
 📞 ${APPROVED_CONTACT_INFO.phone}
 
-Remember: You're Sara from JJ Global Capital. Be real, be helpful, be you.`
+Remember: You're Sara from JBJ Global Real Estate. Be real, be helpful, be you.`
       },
       ...history.slice(-10),
       { role: 'user', content: message }

@@ -97,7 +97,6 @@ const Footer = () => {
         { label: "Fit-Out", href: "/services/fit-out" },
       ],
     },
-    { title: "Concierge Partners", href: "/concierge", items: [] },
   ];
 
   // Menu — required order
@@ -108,7 +107,7 @@ const Footer = () => {
     { href: "/company-profile", label: "Company Profile" },
     { href: "/press-kit", label: "Press Kit" },
     { href: "/properties", label: "Properties" },
-    { href: "/concierge", label: "Services" },
+    { href: "/services", label: "Services" },
     { href: "/awards", label: "Awards" },
     { href: "/news", label: "News & Insights" },
     { href: "/contact", label: "Contact" },
