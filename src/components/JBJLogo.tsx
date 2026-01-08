@@ -1,25 +1,25 @@
-// JBJ Logo Component - Uses the official logo files
-// Light version (black J's, gold B): for white/light backgrounds
-// Dark version (white J's, gold B): for dark backgrounds
+// JBJ Logo Component - Uses the official monogram logo files
+// Dark version: for dark backgrounds (black bg with white J's, gold B)
+// Transparent version: for light backgrounds
 
-import jbjLogoLight from "@/assets/jbj-logo-light.png";
-import jbjLogoDark from "@/assets/jbj-logo-dark.png";
-import jbjLogoDarkTransparent from "@/assets/jbj-logo-dark-transparent.png";
+import jbjMonogramDark from "@/assets/jbj-monogram-dark.png";
+import jbjMonogramTransparent from "@/assets/jbj-monogram-transparent.png";
+import jbjMonogramNobuffer from "@/assets/jbj-monogram-nobuffer.png";
 
 interface JBJLogoProps {
-  variant?: 'light' | 'dark' | 'dark-transparent';
+  variant?: 'light' | 'dark' | 'nobuffer';
   size?: 'xs' | 'sm' | 'md' | 'lg' | 'xl' | 'footer';
   className?: string;
   showText?: boolean;
 }
 
 const sizeConfig = {
-  xs: { width: 40, height: 28 },
-  sm: { width: 56, height: 40 },
-  md: { width: 80, height: 56 },
-  lg: { width: 120, height: 84 },
-  xl: { width: 160, height: 112 },
-  footer: { width: 200, height: 140 },
+  xs: { width: 32, height: 32 },
+  sm: { width: 48, height: 48 },
+  md: { width: 64, height: 64 },
+  lg: { width: 96, height: 96 },
+  xl: { width: 120, height: 120 },
+  footer: { width: 140, height: 140 },
 };
 
 export const JBJLogo = ({ 
@@ -31,10 +31,10 @@ export const JBJLogo = ({
   const config = sizeConfig[size];
   
   const logoSrc = variant === 'light' 
-    ? jbjLogoLight 
-    : variant === 'dark-transparent' 
-      ? jbjLogoDarkTransparent 
-      : jbjLogoDark;
+    ? jbjMonogramTransparent 
+    : variant === 'nobuffer' 
+      ? jbjMonogramNobuffer 
+      : jbjMonogramDark;
   
   return (
     <div className={`flex flex-col items-center ${className}`}>
@@ -47,7 +47,7 @@ export const JBJLogo = ({
         style={{ width: config.width, height: config.height }}
       />
       {showText && (
-        <span className="text-gold text-[10px] md:text-xs tracking-[0.2em] uppercase mt-1">
+        <span className="text-gold text-[10px] md:text-xs tracking-[0.2em] uppercase mt-2">
           Real Estate
         </span>
       )}
@@ -61,16 +61,16 @@ export const JBJLogoHeader = ({ className = '' }: { className?: string }) => (
     className={`flex items-center gap-3 ${className}`}
     style={{ fontFamily: "Poppins, sans-serif" }}
   >
-    {/* Logo image - dark transparent version for header */}
+    {/* Logo image - dark version for header */}
     <img 
-      src={jbjLogoDarkTransparent} 
+      src={jbjMonogramDark} 
       alt="JBJ Global Real Estate" 
-      width={56}
-      height={40}
+      width={44}
+      height={44}
       className="object-contain shrink-0"
       style={{ 
-        width: 56, 
-        height: 40,
+        width: 44, 
+        height: 44,
         imageRendering: 'auto'
       }}
     />
@@ -87,14 +87,14 @@ export const JBJLogoHeader = ({ className = '' }: { className?: string }) => (
 export const JBJLogoFooter = ({ className = '' }: { className?: string }) => (
   <div className={`flex flex-col items-center ${className}`}>
     <img 
-      src={jbjLogoDarkTransparent} 
+      src={jbjMonogramDark} 
       alt="JBJ Global Real Estate" 
-      width={140}
-      height={100}
+      width={120}
+      height={120}
       className="object-contain"
-      style={{ width: 140, height: 100 }}
+      style={{ width: 120, height: 120 }}
     />
-    <span className="text-gold text-xs tracking-[0.2em] uppercase mt-2">
+    <span className="text-gold text-xs tracking-[0.2em] uppercase mt-3">
       Real Estate Brokerage
     </span>
   </div>
