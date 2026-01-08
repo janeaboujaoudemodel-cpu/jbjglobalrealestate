@@ -10,8 +10,8 @@ const AUTO_BLOCK_DURATION_HOURS = 12;
 
 // Allowed origins
 const ALLOWED_ORIGINS = [
-  "https://jjglobalcapital.com",
-  "https://www.jjglobalcapital.com",
+  "https://jbj.ae",
+  "https://www.jbj.ae",
   "http://localhost:5173",
   "http://localhost:8080",
 ];
@@ -96,8 +96,8 @@ async function sendAutoBlockNotification(clientIp: string, functionName: string,
       method: "POST",
       headers: { "Content-Type": "application/json", Authorization: `Bearer ${resendApiKey}` },
       body: JSON.stringify({
-        from: "JJ Global Capital Security <security@jjglobalcapital.com>",
-        to: ["contact@jjglobalcapital.com", "jane@jjglobalcapital.com"],
+        from: "JBJ Global Real Estate Security <security@jbj.ae>",
+        to: ["contact@jbj.ae"],
         subject: `🚨 Security Alert: IP Auto-Blocked on ${functionName}`,
         html: `<div style="font-family: Arial, sans-serif; max-width: 600px; margin: 0 auto;"><div style="background: linear-gradient(135deg, #1a1a2e, #16213e); padding: 20px; border-radius: 8px 8px 0 0;"><h1 style="color: #c9a962; margin: 0;">🚨 Security Alert</h1><p style="color: #fff; margin: 10px 0 0;">IP Auto-Blocked</p></div><div style="background: #f8f9fa; padding: 25px; border: 1px solid #e9ecef; border-radius: 0 0 8px 8px;"><h2 style="color: #1a1a2e; margin-top: 0;">Block Details</h2><p><strong>IP:</strong> ${maskedIp}</p><p><strong>Function:</strong> ${functionName}</p><p><strong>Violations:</strong> ${violationCount}</p><p><strong>Total Blocks:</strong> ${blockCount}</p><p><strong>Expires:</strong> ${expiresAtFormatted} (Dubai)</p><p><strong>Duration:</strong> ${AUTO_BLOCK_DURATION_HOURS} hours</p><div style="margin-top: 20px; padding: 15px; background: #fff3cd; border-left: 4px solid #ffc107;"><strong>Action Required:</strong> Review in Admin Dashboard.</div></div></div>`,
       }),
@@ -273,7 +273,7 @@ serve(async (req) => {
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>${escapeHtml(project.name)} - JJ Global Capital Property Report</title>
+  <title>${escapeHtml(project.name)} - JBJ Global Real Estate Property Report</title>
   <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;500;600;700&family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
   <style>
     * { margin: 0; padding: 0; box-sizing: border-box; }
@@ -977,8 +977,8 @@ serve(async (req) => {
       <div class="footer-logo">
         <span class="logo-jj" style="font-size: 18px;">J</span>
         <span class="logo-divider" style="font-size: 18px;">|</span>
-        <span class="logo-jj" style="font-size: 18px;">J</span>
-        <span style="margin-left: 8px; font-weight: 600; letter-spacing: 2px; font-size: 16px;">GLOBAL CAPITAL</span>
+        <span class="logo-jj" style="font-size: 18px;">JBJ</span>
+        <span style="margin-left: 8px; font-weight: 600; letter-spacing: 2px; font-size: 16px;">GLOBAL REAL ESTATE</span>
       </div>
       
       <div class="contact-grid">
@@ -987,13 +987,13 @@ serve(async (req) => {
             <path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"></path>
             <polyline points="22,6 12,13 2,6"></polyline>
           </svg>
-          <a href="mailto:contact@jjglobalcapital.com" class="contact-link">contact@jjglobalcapital.com</a>
+          <a href="mailto:contact@jbj.ae" class="contact-link">contact@jbj.ae</a>
         </div>
         <div class="contact-item">
           <svg class="contact-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
             <path d="M22 16.92v3a2 2 0 01-2.18 2 19.79 19.79 0 01-8.63-3.07 19.5 19.5 0 01-6-6 19.79 19.79 0 01-3.07-8.67A2 2 0 014.11 2h3a2 2 0 012 1.72 12.84 12.84 0 00.7 2.81 2 2 0 01-.45 2.11L8.09 9.91a16 16 0 006 6l1.27-1.27a2 2 0 012.11-.45 12.84 12.84 0 002.81.7A2 2 0 0122 16.92z"></path>
           </svg>
-          <a href="tel:+97156591100" class="contact-link">+971 56 591 1000</a>
+          <a href="tel:+971565911000" class="contact-link">+971 56 591 1000</a>
         </div>
         <div class="contact-item">
           <svg class="contact-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
@@ -1001,19 +1001,19 @@ serve(async (req) => {
             <line x1="2" y1="12" x2="22" y2="12"></line>
             <path d="M12 2a15.3 15.3 0 014 10 15.3 15.3 0 01-4 10 15.3 15.3 0 01-4-10 15.3 15.3 0 014-10z"></path>
           </svg>
-          <a href="https://www.jjglobalcapital.com" class="contact-link" target="_blank">www.jjglobalcapital.com</a>
+          <a href="https://jbj.ae" class="contact-link" target="_blank">jbj.ae</a>
         </div>
       </div>
       
       <div class="footer-branding">
         <p class="footer-branding-text">
-          Powered & Made by <strong>JJ Global Capital</strong> — Real Estate Brokerage
+          Powered & Made by <strong>JBJ Global Real Estate</strong> — Real Estate Brokerage
         </p>
       </div>
       
       <div class="disclaimer">
         This report is for informational purposes only. Prices, availability, and specifications are subject to change without notice. 
-        Please contact JJ Global Capital for the most current information and investment advice. 
+        Please contact JBJ Global Real Estate for the most current information. 
         This document does not constitute an offer or solicitation to buy or sell any property.
       </div>
     </div>

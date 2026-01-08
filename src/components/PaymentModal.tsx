@@ -68,7 +68,7 @@ export function PaymentModal({ open, onOpenChange, onSuccess, userInfo, mode = "
       try {
         await supabase.functions.invoke("send-market-report-email", {
           body: {
-            to: "contact@jjglobalcapital.com",
+            to: "contact@jbj.ae",
             subject: `New VIP AI Package Subscription - ${userInfo.fullName}`,
             html: `
               <h2>New VIP AI Package Subscription</h2>
@@ -280,7 +280,7 @@ export function PaymentModal({ open, onOpenChange, onSuccess, userInfo, mode = "
               {paymentMethod === "paypal" && (
                 <div className="bg-zinc-900 border border-zinc-800 rounded-xl p-4 text-center">
                   <p className="text-zinc-300 mb-2">Send payment to:</p>
-                  <p className="text-white font-semibold">payments@jjglobalcapital.com</p>
+                  <p className="text-white font-semibold">contact@jbj.ae</p>
                   <p className="text-xs text-zinc-500 mt-2">Reference: {bankDetails.reference}</p>
                 </div>
               )}
@@ -288,7 +288,7 @@ export function PaymentModal({ open, onOpenChange, onSuccess, userInfo, mode = "
               {paymentMethod === "crypto" && (
                 <div className="bg-zinc-900 border border-zinc-800 rounded-xl p-4 text-center">
                   <p className="text-zinc-300 mb-2">Contact us for crypto payment:</p>
-                  <p className="text-white font-semibold">contact@jjglobalcapital.com</p>
+                  <p className="text-white font-semibold">contact@jbj.ae</p>
                   <p className="text-xs text-zinc-500 mt-2">Reference: {bankDetails.reference}</p>
                 </div>
               )}

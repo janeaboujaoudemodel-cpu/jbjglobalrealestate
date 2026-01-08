@@ -17,7 +17,7 @@ export const en = {
   'nav.quiz': 'Property Quiz',
   
   // Homepage
-  'home.hero.welcome': 'JJ Global Capital | Real Estate',
+  'home.hero.welcome': 'JBJ Global Real Estate',
   'home.hero.tagline': "Dubai's Premier Real Estate Brokerage",
   'home.hero.subtitle': 'Expert property sales, leasing & holiday homes across the UAE',
   'home.hero.exclusive': 'Real Estate Brokerage',

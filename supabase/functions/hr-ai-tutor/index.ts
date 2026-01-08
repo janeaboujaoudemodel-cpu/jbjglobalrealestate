@@ -136,7 +136,7 @@ Key Points to Remember:
       }).join("\n");
     }
 
-    const systemPrompt = `You are the AI Study Tutor for JJ Global Capital Real Estate's broker training program. Your name is "Training Assistant" and you help trainees understand and master the training material.
+    const systemPrompt = `You are the AI Study Tutor for JBJ Global Real Estate's broker training program. Your name is "Training Assistant" and you help trainees understand and master the training material.
 
 PERSONALITY:
 - Encouraging and supportive

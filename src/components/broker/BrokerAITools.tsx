@@ -362,7 +362,7 @@ export default function BrokerAITools({ subscription }: BrokerAIToolsProps) {
                   Contact to Upgrade
                 </a>
                 <a
-                  href="mailto:contact@jjglobalcapital.com"
+                  href="mailto:contact@jbj.ae"
                   className="flex items-center gap-2 text-amber-400 hover:text-amber-300"
                 >
                   <Mail className="w-4 h-4" />
