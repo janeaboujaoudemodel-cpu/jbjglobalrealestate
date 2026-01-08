@@ -6,8 +6,8 @@ const RESEND_API_KEY = Deno.env.get("RESEND_API_KEY");
 
 // Allowed origins for CORS
 const ALLOWED_ORIGINS = [
-  "https://jjglobalcapital.com",
-  "https://www.jjglobalcapital.com",
+  "https://jbj.ae",
+  "https://www.jbj.ae",
   "http://localhost:5173",
   "http://localhost:8080",
 ];
@@ -82,16 +82,16 @@ serve(async (req) => {
         'Content-Type': 'application/json',
       },
       body: JSON.stringify({
-        from: "JJ Global Capital <welcome@jjglobalcapital.com>",
+        from: "JBJ Global Real Estate <welcome@jbj.ae>",
         to: [email],
-        subject: "Welcome to JJ Global Capital - Your UAE Property Journey Begins!",
+        subject: "Welcome to JBJ Global Real Estate - Your UAE Property Journey Begins!",
         html: `
           <!DOCTYPE html>
           <html>
           <head>
             <meta charset="utf-8">
             <meta name="viewport" content="width=device-width, initial-scale=1.0">
-            <title>Welcome to JJ Global Capital</title>
+            <title>Welcome to JBJ Global Real Estate</title>
           </head>
           <body style="margin: 0; padding: 0; background-color: #f8f9fa; font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;">
             <table width="100%" cellpadding="0" cellspacing="0" style="background-color: #f8f9fa; padding: 40px 20px;">
@@ -101,7 +101,7 @@ serve(async (req) => {
                     <!-- Header -->
                     <tr>
                       <td style="background: linear-gradient(135deg, #1a1a2e 0%, #16213e 100%); padding: 40px; text-align: center;">
-                        <h1 style="color: #d4af37; margin: 0; font-size: 28px; font-weight: 600;">JJ Global Capital</h1>
+                        <h1 style="color: #d4af37; margin: 0; font-size: 28px; font-weight: 600;">JBJ Global Real Estate</h1>
                         <p style="color: #ffffff; margin: 10px 0 0 0; font-size: 14px; opacity: 0.9;">Real Estate Brokerage</p>
                       </td>
                     </tr>
@@ -112,7 +112,7 @@ serve(async (req) => {
                         <h2 style="color: #1a1a2e; margin: 0 0 20px 0; font-size: 24px;">Welcome, ${displayName}!</h2>
                         
                         <p style="color: #555; font-size: 16px; line-height: 1.6; margin: 0 0 20px 0;">
-                          Thank you for joining JJ Global Capital. We're thrilled to have you as part of our community of discerning property seekers.
+                          Thank you for joining JBJ Global Real Estate. We're thrilled to have you as part of our community of discerning property seekers.
                         </p>
                         
                         <p style="color: #555; font-size: 16px; line-height: 1.6; margin: 0 0 30px 0;">
@@ -147,7 +147,7 @@ serve(async (req) => {
                         <table width="100%" cellpadding="0" cellspacing="0">
                           <tr>
                             <td align="center">
-                              <a href="https://jjglobalcapital.com/properties" style="display: inline-block; background: linear-gradient(135deg, #d4af37 0%, #b8962d 100%); color: #1a1a2e; text-decoration: none; padding: 15px 40px; border-radius: 8px; font-weight: 600; font-size: 16px;">
+                              <a href="https://jbj.ae/properties" style="display: inline-block; background: linear-gradient(135deg, #d4af37 0%, #b8962d 100%); color: #1a1a2e; text-decoration: none; padding: 15px 40px; border-radius: 8px; font-weight: 600; font-size: 16px;">
                                 Explore Properties
                               </a>
                             </td>
@@ -161,11 +161,11 @@ serve(async (req) => {
                       <td style="background-color: #1a1a2e; padding: 30px; text-align: center;">
                         <p style="color: #999; font-size: 14px; margin: 0 0 10px 0;">Need assistance? We're here to help.</p>
                         <p style="color: #d4af37; font-size: 14px; margin: 0;">
-                          📧 contact@jjglobalcapital.com | 📞 +971 56 591 1000
+                          📧 contact@jbj.ae | 📞 +971 56 591 1000
                         </p>
                         <p style="color: #666; font-size: 12px; margin: 20px 0 0 0;">
-                          JJ Global Capital provides brokerage support and partner introductions only.<br>
-                          We do not provide legal, mortgage, financial, or investment advice.
+                          JBJ Global Real Estate provides brokerage support and partner introductions only.<br>
+                          We do not provide legal, mortgage, financial, or advisory services.
                         </p>
                       </td>
                     </tr>

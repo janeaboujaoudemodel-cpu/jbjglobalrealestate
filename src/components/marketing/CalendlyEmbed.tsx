@@ -11,7 +11,7 @@ interface CalendlyEmbedProps {
 }
 
 // Default Calendly URL - can be overridden via props or admin config
-const DEFAULT_CALENDLY_URL = 'https://calendly.com/jjglobalcapital/property-consultation';
+const DEFAULT_CALENDLY_URL = 'https://calendly.com/jbj-global-real-estate/property-consultation';
 
 declare global {
   interface Window {

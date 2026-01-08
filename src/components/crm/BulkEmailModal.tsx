@@ -60,11 +60,11 @@ const BulkEmailModal = ({ open, onClose, userId, preSelectedLeadIds }: BulkEmail
   const [formData, setFormData] = useState({
     campaignName: "",
     subject: "",
-    greeting: "Greetings from JJ Global Capital,",
+    greeting: "Greetings from JBJ Global Real Estate,",
     body: "",
     ctaText: "Visit Our Website",
-    ctaUrl: "https://jjglobalcapital.com",
-    closing: "Best regards,\nJJ Global Capital Team",
+    ctaUrl: "https://jbj.ae",
+    closing: "Best regards,\nJBJ Global Real Estate Team",
   });
 
   useEffect(() => {
@@ -119,7 +119,7 @@ const BulkEmailModal = ({ open, onClose, userId, preSelectedLeadIds }: BulkEmail
         <div style="max-width: 600px; margin: 0 auto; background-color: #ffffff;">
           <!-- Header -->
           <div style="background: linear-gradient(135deg, #1a1a2e 0%, #16213e 100%); padding: 30px; text-align: center;">
-            <h1 style="color: #d4af37; margin: 0; font-size: 24px; letter-spacing: 2px;">JJ GLOBAL CAPITAL</h1>
+            <h1 style="color: #d4af37; margin: 0; font-size: 24px; letter-spacing: 2px;">JBJ GLOBAL REAL ESTATE</h1>
             <p style="color: #cccccc; margin: 5px 0 0 0; font-size: 12px;">Real Estate Brokerage</p>
           </div>
           
@@ -140,11 +140,11 @@ const BulkEmailModal = ({ open, onClose, userId, preSelectedLeadIds }: BulkEmail
           <!-- Footer -->
           <div style="background-color: #1a1a2e; padding: 25px; text-align: center;">
             <p style="color: #888; font-size: 12px; margin: 0 0 10px 0;">
-              JJ Global Capital | Real Estate Brokerage<br>
+              JBJ Global Real Estate | Real Estate Brokerage<br>
               Dubai, United Arab Emirates
             </p>
             <p style="color: #666; font-size: 10px; margin: 0;">
-              © ${new Date().getFullYear()} JJ Global Capital. All rights reserved.
+              © ${new Date().getFullYear()} JBJ Global Real Estate. All rights reserved.
             </p>
           </div>
         </div>

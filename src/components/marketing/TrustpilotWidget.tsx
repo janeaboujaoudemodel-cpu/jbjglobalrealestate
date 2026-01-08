@@ -6,7 +6,7 @@ interface TrustpilotWidgetProps {
 
 export const TrustpilotWidget = ({ className = '' }: TrustpilotWidgetProps) => {
   // Placeholder widget - replace with actual Trustpilot embed when available
-  const trustpilotUrl = 'https://www.trustpilot.com/review/jjglobalcapital.com';
+  const trustpilotUrl = 'https://www.trustpilot.com/review/jbj.ae';
 
   return (
     <a
