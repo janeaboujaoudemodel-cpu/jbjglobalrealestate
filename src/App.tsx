@@ -91,6 +91,7 @@ const App = () => (
             {/* Auth route is always accessible for admin login */}
             <Routes>
               <Route path="/auth" element={<Auth />} />
+              <Route path="/vapi-prompt" element={<VapiPrompt />} />
               <Route path="*" element={
                 <AdminBypass>
                   <MainLayout>
@@ -161,7 +162,6 @@ const App = () => (
                     <Route path="/video-meeting" element={<VideoMeeting />} />
                     <Route path="/executive-assistant" element={<ExecutiveAssistant />} />
                     <Route path="/call-review" element={<CallReview />} />
-                    <Route path="/vapi-prompt" element={<VapiPrompt />} />
                     <Route path="*" element={<NotFound />} />
                     </Routes>
                   </MainLayout>
