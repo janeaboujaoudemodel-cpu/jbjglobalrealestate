@@ -14,7 +14,7 @@ const ChatWelcome = ({ onStartChat }: ChatWelcomeProps) => {
           {/* Transparent logo: White J's with gold divider, no background */}
           <JJLogoTransparent size="lg" />
         </div>
-        <h4 className="text-white text-lg font-semibold mb-2">Welcome to JJ Global Capital 👋</h4>
+        <h4 className="text-white text-lg font-semibold mb-2">Welcome to JBJ Global Real Estate 👋</h4>
         <p className="text-zinc-400 text-sm">Your premium real estate partner in Dubai</p>
       </div>
 

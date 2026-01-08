@@ -154,7 +154,7 @@ const PressKit = () => {
   };
 
   const handleCopyBio = async () => {
-    const bioText = `Jane Abou Jaoude is the Founder of JJ Global Capital, a Dubai-based real estate brokerage. Born August 25, 1998, in Lebanon, she founded her first business—James Beauty—in 2014 while still studying. Fluent in French, English, Arabic, and Spanish, Jane relocated to Dubai in 2020. She has experience in corporate operations, hospitality quality management, and real estate brokerage. She founded JJ Global Capital in 2025.`;
+    const bioText = `Jane Abou Jaoude is the Founder of JBJ Global Real Estate, a Dubai-based real estate brokerage. Born August 25, 1998, in Lebanon, she founded her first business—James Beauty—in 2014 while still studying. Fluent in French, English, Arabic, and Spanish, Jane relocated to Dubai in 2020. She has experience in corporate operations, hospitality quality management, and real estate brokerage. She founded JBJ Global Real Estate in 2025.`;
     
     try {
       await navigator.clipboard.writeText(bioText);
@@ -240,12 +240,12 @@ const PressKit = () => {
               </div>
               
               <p className="text-zinc-300 leading-relaxed">
-                <span className="text-gold font-semibold">Jane Abou Jaoude</span> is the Founder of JJ Global Capital, 
+                <span className="text-gold font-semibold">Jane Abou Jaoude</span> is the Founder of JBJ Global Real Estate, 
                 a Dubai-based real estate brokerage. 
                 Born August 25, 1998, in Lebanon, she founded her first business—James Beauty—in 2014 while still studying. 
                 Fluent in French, English, Arabic, and Spanish, Jane relocated to Dubai in 2020. 
                 She has experience in corporate operations, hospitality quality management, and real estate brokerage. 
-                She founded JJ Global Capital in 2025.
+                She founded JBJ Global Real Estate in 2025.
               </p>
             </motion.div>
           </motion.div>
@@ -486,7 +486,7 @@ const PressKit = () => {
                 <div className="space-y-4">
                   <div className="flex justify-between border-b border-zinc-800 pb-3">
                     <span className="text-zinc-500">Company Name</span>
-                    <span className="text-white font-medium">JJ Global Capital</span>
+                    <span className="text-white font-medium">JBJ Global Real Estate</span>
                   </div>
                   <div className="flex justify-between border-b border-zinc-800 pb-3">
                     <span className="text-zinc-500">Founded</span>

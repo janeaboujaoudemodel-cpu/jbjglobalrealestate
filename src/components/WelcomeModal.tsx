@@ -77,7 +77,7 @@ const WelcomeModal = () => {
           aria-describedby={undefined}
         >
           <VisuallyHidden.Root>
-            <DialogTitle>Welcome to JJ Global Capital</DialogTitle>
+            <DialogTitle>Welcome to JBJ Global Real Estate</DialogTitle>
           </VisuallyHidden.Root>
           
           {/* Premium white background */}
@@ -166,7 +166,7 @@ const WelcomeModal = () => {
 
             {/* Footer text */}
             <p className="text-center text-gray-400 text-xs mt-8">
-              © {new Date().getFullYear()} JJ Global Capital. All Rights Reserved.
+              © {new Date().getFullYear()} JBJ Global Real Estate. All Rights Reserved.
             </p>
           </div>
         </DialogContent>

@@ -83,7 +83,7 @@ const Book3D = ({ size = "md", className = "" }: Book3DProps) => {
                 textShadow: "0 1px 2px rgba(0,0,0,0.5)",
               }}
             >
-              JJ GLOBAL CAPITAL
+              JBJ GLOBAL REAL ESTATE
             </span>
           </div>
         </div>

@@ -31,7 +31,7 @@ const IntellectualProperty = () => {
           </div>
 
           <p className="text-zinc-400 max-w-3xl text-lg">
-            This page outlines the comprehensive intellectual property protections governing the JJ Global Capital platform, 
+            This page outlines the comprehensive intellectual property protections governing the JBJ Global Real Estate platform, 
             its proprietary AI tools, designs, and all associated digital assets.
           </p>
         </div>
@@ -50,7 +50,7 @@ const IntellectualProperty = () => {
                   Official Copyright Statement
                 </h2>
                 <p className="text-white text-lg leading-relaxed">
-                  © {currentYear} <span className="text-gold font-semibold">JJ Global Capital</span>. All Rights Reserved.
+                  © {currentYear} <span className="text-gold font-semibold">JBJ Global Real Estate</span>. All Rights Reserved.
                 </p>
                 <p className="text-zinc-300 mt-4 leading-relaxed">
                   This platform, including but not limited to all software code, AI algorithms, user interface designs, 

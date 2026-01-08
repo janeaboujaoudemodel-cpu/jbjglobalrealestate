@@ -397,7 +397,7 @@ const downloadPdf = async () => {
 
     let y = height - margin;
 
-    page.drawText("JJ Global Capital — AI Interior Design", {
+    page.drawText("JBJ Global Real Estate — AI Interior Design", {
       x: margin,
       y,
       size: 16,
@@ -1279,7 +1279,7 @@ const downloadPdf = async () => {
 
                   <div className="text-center pt-4 border-t border-zinc-800">
                     <p className="text-zinc-500 text-sm">
-                      Powered by JJ Global Capital AI • Developed by Founder Jane Abou Jaoude
+                      Powered by JBJ Global Real Estate AI • Developed by Founder Jane Abou Jaoude
                     </p>
                   </div>
                 </CardContent>

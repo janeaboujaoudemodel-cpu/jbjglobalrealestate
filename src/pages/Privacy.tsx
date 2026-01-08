@@ -28,7 +28,7 @@ const Privacy = () => {
               <section>
                 <h2 className="text-gold text-xl font-semibold mb-4">1. Introduction</h2>
                 <p>
-                  JJ Global Capital ("we," "our," or "us"), a Dubai-based real estate brokerage, 
+                  JBJ Global Real Estate ("we," "our," or "us"), a Dubai-based real estate brokerage, 
                   is committed to protecting your privacy. This Privacy Policy explains how we collect, 
                   use, disclose, and safeguard your information when you visit our website or use our services.
                 </p>
@@ -112,7 +112,7 @@ const Privacy = () => {
               <section>
                 <h2 className="text-gold text-xl font-semibold mb-4">8. Confidentiality Commitment</h2>
                 <p>
-                  JJ Global Capital is committed to maintaining the highest standards of data confidentiality. 
+                  JBJ Global Real Estate is committed to maintaining the highest standards of data confidentiality. 
                   Your personal information and property inquiries are treated with strict confidentiality and are:
                 </p>
                 <ul className="list-disc pl-6 mt-2 space-y-2">
@@ -137,15 +137,15 @@ const Privacy = () => {
                   If you have questions about this Privacy Policy, please contact us at:
                 </p>
                 <p className="mt-4">
-                  <strong>JJ Global Capital</strong><br />
+                  <strong>JBJ Global Real Estate</strong><br />
                   Real Estate Brokerage<br />
                   Downtown Dubai, United Arab Emirates<br />
-                  General Inquiries: <a href="mailto:contact@jjglobalcapital.com" className="text-gold hover:underline">contact@jjglobalcapital.com</a><br />
+                  General Inquiries: <a href="mailto:contact@jbj.ae" className="text-gold hover:underline">contact@jbj.ae</a><br />
                   Phone: <a href="tel:+971565911000" className="text-gold hover:underline">+971 56 591 1000</a><br />
-                  Data Protection: <a href="mailto:privacy@jjglobalcapital.com" className="text-gold hover:underline">privacy@jjglobalcapital.com</a>
+                  Data Protection: <a href="mailto:privacy@jbj.ae" className="text-gold hover:underline">privacy@jbj.ae</a>
                 </p>
                 <p className="mt-4 text-zinc-500 text-sm">
-                  © {new Date().getFullYear()} JJ Global Capital Real Estate Brokerage. All Rights Reserved.
+                  © {new Date().getFullYear()} JBJ Global Real Estate. All Rights Reserved.
                 </p>
               </section>
             </div>

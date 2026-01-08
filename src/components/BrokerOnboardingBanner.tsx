@@ -57,7 +57,7 @@ const BrokerOnboardingBanner = () => {
       {
         id: 'training',
         title: 'Company Training',
-        description: 'Learn about JJ Global Capital',
+        description: 'Learn about JBJ Global Real Estate',
         icon: GraduationCap,
         link: '/onboarding',
         completed: false

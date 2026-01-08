@@ -80,7 +80,7 @@ const SmartEmailComposer = ({ lead, onSend }: SmartEmailComposerProps) => {
         `I hope this email finds you well. I'm reaching out regarding our exclusive property opportunities in Dubai.\n\n` +
         `As a valued client, I wanted to share some exciting new developments that may interest you.\n\n` +
         `Would you be available for a quick call to discuss your investment goals?\n\n` +
-        `Best regards,\nJJ Global Capital`
+        `Best regards,\nJBJ Global Real Estate`
       );
       toast.info("Using template email");
     } finally {
