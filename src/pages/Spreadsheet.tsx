@@ -80,6 +80,79 @@ const Spreadsheet = () => {
     setHistoryIndex(newHistory.length - 1);
   }, [history, historyIndex]);
 
+  // Safe math expression evaluator - NO arbitrary code execution
+  const safeEvaluateMath = useCallback((expression: string): number => {
+    // Only allow numbers, operators, parentheses, and whitespace
+    const sanitized = expression.replace(/\s/g, '');
+    
+    // Strict validation: only digits, decimal points, and math operators
+    if (!/^[\d+\-*/().]+$/.test(sanitized)) {
+      throw new Error('Invalid characters in expression');
+    }
+    
+    // Prevent dangerous patterns
+    if (/[a-zA-Z_$]/.test(sanitized)) {
+      throw new Error('Letters not allowed');
+    }
+    
+    // Parse and evaluate safely using a simple recursive descent parser
+    let pos = 0;
+    
+    const parseNumber = (): number => {
+      let numStr = '';
+      while (pos < sanitized.length && /[\d.]/.test(sanitized[pos])) {
+        numStr += sanitized[pos++];
+      }
+      if (!numStr) throw new Error('Expected number');
+      return parseFloat(numStr);
+    };
+    
+    const parseFactor = (): number => {
+      if (sanitized[pos] === '(') {
+        pos++; // skip '('
+        const result = parseExpression();
+        if (sanitized[pos] !== ')') throw new Error('Expected )');
+        pos++; // skip ')'
+        return result;
+      }
+      if (sanitized[pos] === '-') {
+        pos++;
+        return -parseFactor();
+      }
+      if (sanitized[pos] === '+') {
+        pos++;
+        return parseFactor();
+      }
+      return parseNumber();
+    };
+    
+    const parseTerm = (): number => {
+      let result = parseFactor();
+      while (pos < sanitized.length && (sanitized[pos] === '*' || sanitized[pos] === '/')) {
+        const op = sanitized[pos++];
+        const right = parseFactor();
+        if (op === '*') result *= right;
+        else if (op === '/') result = right !== 0 ? result / right : NaN;
+      }
+      return result;
+    };
+    
+    const parseExpression = (): number => {
+      let result = parseTerm();
+      while (pos < sanitized.length && (sanitized[pos] === '+' || sanitized[pos] === '-')) {
+        const op = sanitized[pos++];
+        const right = parseTerm();
+        if (op === '+') result += right;
+        else result -= right;
+      }
+      return result;
+    };
+    
+    const result = parseExpression();
+    if (pos !== sanitized.length) throw new Error('Unexpected characters');
+    return result;
+  }, []);
+
   const evaluateFormula = useCallback((formula: string, currentData: SpreadsheetData): string => {
     if (!formula.startsWith('=')) return formula;
     
@@ -130,13 +203,13 @@ const Spreadsheet = () => {
         return isNaN(parseFloat(cellValue)) ? '0' : cellValue;
       });
       
-      // Evaluate simple math expressions
-      const result = Function(`"use strict"; return (${expression})`)();
-      return result.toString();
+      // Evaluate using safe math parser (NO Function() or eval())
+      const result = safeEvaluateMath(expression);
+      return isNaN(result) ? '#ERROR' : result.toString();
     } catch {
       return '#ERROR';
     }
-  }, []);
+  }, [safeEvaluateMath]);
 
   const updateCell = useCallback((cellId: string, value: string) => {
     const newData = { ...data };
