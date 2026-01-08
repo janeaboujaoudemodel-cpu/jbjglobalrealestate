@@ -149,8 +149,8 @@ export default function HRAgentChat() {
               <Bot className="w-6 h-6 text-primary" />
             </div>
             <div>
-              <CardTitle className="text-lg">Jessica - HR AI Agent</CardTitle>
-              <p className="text-sm text-muted-foreground">Broker Partner Program</p>
+              <CardTitle className="text-lg">Jessica</CardTitle>
+              <p className="text-sm text-muted-foreground">Available 24/7 to support you</p>
             </div>
           </div>
           <Badge className={`${currentStageBadge.color} text-white flex items-center gap-1`}>

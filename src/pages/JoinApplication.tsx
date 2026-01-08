@@ -280,7 +280,7 @@ export default function JoinApplication() {
               <div className="text-center sm:text-left flex-1">
                 <h3 className="text-lg font-semibold text-foreground mb-1">Prefer a Conversation?</h3>
                 <p className="text-sm text-muted-foreground">
-                  Meet Jessica, our AI HR Agent. She'll collect your CV, qualify you, and conduct your interview — all in one chat.
+                  Meet Jessica — available 24/7 to support you. She'll collect your CV, qualify you, and conduct your interview.
                 </p>
               </div>
               <Button asChild className="bg-gold hover:bg-gold/90 text-black font-semibold">
