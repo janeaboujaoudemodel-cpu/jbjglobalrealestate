@@ -73,7 +73,7 @@ const MarketReportCTA = () => {
                         className="text-black font-bold"
                         style={{ writingMode: "vertical-rl", fontSize: "11px", letterSpacing: "0.25em" }}
                       >
-                        JJ GLOBAL CAPITAL • 2026
+                        JBJ GLOBAL REAL ESTATE • 2026
                       </span>
                     </div>
                   </div>
@@ -142,7 +142,7 @@ const MarketReportCTA = () => {
                           By Jane Abou Jaoude
                         </p>
                         <p className="text-gold/80 text-[10px] md:text-xs uppercase tracking-[0.2em] font-medium">
-                          JJ Global Capital
+                          JBJ Global Real Estate
                         </p>
                       </div>
                     </div>
@@ -229,7 +229,7 @@ const MarketReportCTA = () => {
                 Created by <span className="text-zinc-900 font-semibold">Jane Abou Jaoude</span>
               </p>
               <p className="text-zinc-500 text-xs mb-2">
-                Exclusive for <span className="text-gold font-semibold">JJ Global Capital</span>
+                Exclusive for <span className="text-gold font-semibold">JBJ Global Real Estate</span>
               </p>
               <p className="text-zinc-400 text-[10px] uppercase tracking-widest">
                 Real Estate Brokerage • Dubai, UAE

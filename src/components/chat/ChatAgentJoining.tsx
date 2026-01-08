@@ -42,7 +42,7 @@ const ChatAgentJoining = ({ agent, userFirstName, onAgentReady }: ChatAgentJoini
           animate={{ opacity: 1, y: 0 }}
           className="text-center mb-8"
         >
-          <h3 className="text-gold text-lg font-semibold">JJ Global Capital</h3>
+          <h3 className="text-gold text-lg font-semibold">JBJ Global Real Estate</h3>
           <p className="text-zinc-400 text-sm">Chat Support</p>
         </motion.div>
 

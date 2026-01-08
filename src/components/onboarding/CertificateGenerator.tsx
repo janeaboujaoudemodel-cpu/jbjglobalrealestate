@@ -123,7 +123,7 @@ export function CertificateGenerator({
       });
 
       // Header - Company Name
-      page.drawText("JJ GLOBAL CAPITAL", {
+      page.drawText("JBJ GLOBAL REAL ESTATE", {
         x: width / 2 - 120,
         y: height - 80,
         size: 24,

@@ -163,9 +163,9 @@ const Favorites = () => {
       return `${i + 1}. ${p.name}${badgeStr} — ${p.developer?.name || 'Developer'} — ${url}`;
     });
 
-    const subject = "My Property Shortlist — JJ Global Capital";
+    const subject = "My Property Shortlist — JBJ Global Real Estate";
     const body = `Hi,\n\nHere is my shortlisted properties for review:\n\n${list.join("\n")}\n\nI would like a consultation and tailored advisory on my shortlist.\n\nBest regards`;
-    const whatsapp = `My JJ Global Capital shortlist:\n\n${list.join("\n")}`;
+    const whatsapp = `My JBJ Global Real Estate shortlist:\n\n${list.join("\n")}`;
 
     return { subject, body, whatsapp, plain: list.join("\n") };
   };
@@ -192,7 +192,7 @@ const Favorites = () => {
     if (!shortlistedProjects?.length) return;
     openMailto(CONTACT_INFO.email);
     setShareModalOpen(false);
-    toast.success("Opening email to JJ Global Capital team...");
+    toast.success("Opening email to JBJ Global Real Estate team...");
   };
 
   const handleShareWhatsApp = () => {
@@ -221,7 +221,7 @@ const Favorites = () => {
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Shortlist — JJ Global Capital</title>
+  <title>Shortlist — JBJ Global Real Estate</title>
   <style>
     *{box-sizing:border-box;margin:0;padding:0}
     body{font-family: ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, Arial; background:#0a0a0a; color:#fff; padding:32px}
@@ -245,9 +245,9 @@ const Favorites = () => {
 <body>
   <div class="container">
     <div class="header">
-      <div class="logo"><span class="gold">J | J</span> GLOBAL CAPITAL</div>
+      <div class="logo"><span class="gold">JBJ</span> GLOBAL REAL ESTATE</div>
       <div class="sub">Shortlist prepared on ${dateStr} • For consultation & tailored advisory</div>
-      <div class="sub">Powered by JJ Global Capital • Founder-led by Jane Abou Jaoude</div>
+      <div class="sub">Powered by JBJ Global Real Estate • Founder-led by Jane Abou Jaoude</div>
     </div>
 
     <div class="grid">
@@ -642,7 +642,7 @@ const Favorites = () => {
               Shortlist Consultation & Copy
             </DialogTitle>
             <DialogDescription className="text-zinc-400">
-              Send your shortlist to the JJ Global Capital team for consultation, or download/share a copy.
+              Send your shortlist to the JBJ Global Real Estate team for consultation, or download/share a copy.
             </DialogDescription>
           </DialogHeader>
 
@@ -681,7 +681,7 @@ const Favorites = () => {
               className="w-full bg-gradient-to-r from-gold to-gold-dark text-black hover:opacity-90"
             >
               <Users className="w-4 h-4 mr-2" />
-              Send to JJ Global Capital Team (Consultation)
+              Send to JBJ Global Real Estate Team (Consultation)
             </Button>
 
             <div className="flex items-center gap-4">
@@ -741,7 +741,7 @@ const Favorites = () => {
             </div>
 
             <p className="text-zinc-500 text-xs text-center">
-              Powered by JJ Global Capital • Founder-led by Jane Abou Jaoude
+              Powered by JBJ Global Real Estate • Founder-led by Jane Abou Jaoude
             </p>
           </div>
         </DialogContent>

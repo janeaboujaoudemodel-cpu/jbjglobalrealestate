@@ -170,7 +170,7 @@ const handler = async (req: Request): Promise<Response> => {
                       <tr>
                         <td>
                           <h1 style="margin: 0; color: #000; font-size: 24px; font-weight: 700;">🛡️ Security Alert</h1>
-                          <p style="margin: 8px 0 0; color: rgba(0,0,0,0.7); font-size: 14px;">JJ Global Capital Admin Dashboard</p>
+                          <p style="margin: 8px 0 0; color: rgba(0,0,0,0.7); font-size: 14px;">JBJ Global Real Estate Admin Dashboard</p>
                         </td>
                         <td align="right">
                           <span style="display: inline-block; padding: 6px 12px; background-color: ${severity.color}; color: #fff; border-radius: 4px; font-size: 12px; font-weight: 600; text-transform: uppercase;">
@@ -250,7 +250,7 @@ const handler = async (req: Request): Promise<Response> => {
                 <tr>
                   <td style="padding: 24px 32px; background-color: #0f0f0f; border-top: 1px solid #27272a;">
                     <p style="margin: 0; color: #71717a; font-size: 12px; text-align: center;">
-                      © ${new Date().getFullYear()} JJ Global Capital. All rights reserved.<br>
+                      © ${new Date().getFullYear()} JBJ Global Real Estate. All rights reserved.<br>
                       This email was sent to security administrators.
                     </p>
                   </td>
@@ -272,7 +272,7 @@ const handler = async (req: Request): Promise<Response> => {
           "Content-Type": "application/json",
         },
         body: JSON.stringify({
-          from: "JJ Global Capital Security <onboarding@resend.dev>",
+          from: "JBJ Global Real Estate Security <onboarding@resend.dev>",
           to: [recipient],
           subject: `🛡️ [${severity.label}] ${title} - ${adminEmail}`,
           html: emailHtml,

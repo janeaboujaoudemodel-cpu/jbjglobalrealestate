@@ -82,7 +82,7 @@ const Auth = forwardRef<HTMLDivElement>((_, ref) => {
             toast.error(error.message);
           }
         } else {
-          toast.success("Account created successfully! Welcome to JJ Global Capital.");
+          toast.success("Account created successfully! Welcome to JBJ Global Real Estate.");
           navigate("/");
         }
       } else if (mode === "signin") {
@@ -153,7 +153,7 @@ const Auth = forwardRef<HTMLDivElement>((_, ref) => {
       case "signup": return "Create your account to access exclusive UAE real estate opportunities";
       case "forgot": return "Enter your email address and we'll send you a secure reset link";
       case "reset": return "Please enter your new password below";
-      default: return "Greetings from JJ Global Capital. We're delighted to have you back.";
+      default: return "Greetings from JBJ Global Real Estate. We're delighted to have you back.";
     }
   };
 
@@ -219,7 +219,7 @@ const Auth = forwardRef<HTMLDivElement>((_, ref) => {
           </div>
 
           <p className="text-center text-gray-400 text-xs mt-8">
-            © {new Date().getFullYear()} JJ Global Capital. All Rights Reserved.
+            © {new Date().getFullYear()} JBJ Global Real Estate. All Rights Reserved.
           </p>
         </div>
       </div>
@@ -448,7 +448,7 @@ const Auth = forwardRef<HTMLDivElement>((_, ref) => {
         </div>
 
         <p className="text-center text-gray-400 text-xs mt-8">
-          © {new Date().getFullYear()} JJ Global Capital. All Rights Reserved.
+          © {new Date().getFullYear()} JBJ Global Real Estate. All Rights Reserved.
         </p>
       </div>
     </div>

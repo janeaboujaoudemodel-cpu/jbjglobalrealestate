@@ -264,7 +264,7 @@ export default function JoinApplication() {
     <div className="min-h-screen bg-background py-16 px-4">
       <div className="max-w-2xl mx-auto">
         <div className="text-center mb-8">
-          <h1 className="text-3xl font-bold text-foreground mb-2">Join JJ Global Capital Real Estate</h1>
+          <h1 className="text-3xl font-bold text-foreground mb-2">Join JBJ Global Real Estate</h1>
           <p className="text-muted-foreground">
             Apply to become a broker partner. Complete the form below to start your journey.
           </p>

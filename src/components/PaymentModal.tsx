@@ -32,7 +32,7 @@ export function PaymentModal({ open, onOpenChange, onSuccess, userInfo, mode = "
 
   const bankDetails = {
     bankName: "Emirates NBD",
-    accountName: "JJ Global Capital LLC",
+    accountName: "JBJ Global Real Estate L.L.C",
     iban: "AE12 0260 0010 1234 5678 901",
     swift: "EABORAC1XXX",
     reference: `AIVIP-${Date.now().toString(36).toUpperCase()}`,
@@ -194,7 +194,7 @@ export function PaymentModal({ open, onOpenChange, onSuccess, userInfo, mode = "
 
               <p className="text-zinc-500 text-xs text-center">
                 Software developed by <span className="text-white">Jane Abou Jaoude</span><br />
-                Powered by <span className="text-white">JJ Global Capital</span>
+                Powered by <span className="text-white">JBJ Global Real Estate</span>
               </p>
             </div>
           </>

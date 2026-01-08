@@ -138,8 +138,8 @@ const Founder = () => {
     },
     {
       year: "2025",
-      title: "Founded JJ Global Capital",
-      description: "Founded JJ Global Capital as a Dubai-based real estate brokerage.",
+      title: "Founded JBJ Global Real Estate",
+      description: "Founded JBJ Global Real Estate as a Dubai-based real estate brokerage.",
       location: "Dubai, UAE"
     },
   ];

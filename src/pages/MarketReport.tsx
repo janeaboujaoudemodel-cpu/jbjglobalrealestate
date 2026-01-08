@@ -1557,7 +1557,7 @@ const MarketReport = () => {
         <a href="https://facebook.com/jjglobalcapital" target="_blank">Facebook</a>
       </div>
       
-      <p style="margin-top: 20px; font-size: 10px; color: #555;">© 2026 JJ Global Capital. All Rights Reserved.</p>
+      <p style="margin-top: 20px; font-size: 10px; color: #555;">© 2026 JBJ Global Real Estate. All Rights Reserved.</p>
     </div>
     
     <div class="disclaimer">
@@ -1574,15 +1574,15 @@ const MarketReport = () => {
     function shareBook() {
       if (navigator.share) {
         navigator.share({
-          title: 'UAE Real Estate Market Intelligence 2026 - JJ Global Capital',
-          text: 'Download your free copy of the UAE Real Estate Market Intelligence Report by JJ Global Capital',
-          url: 'https://jjglobalcapital.com/market-report'
+          title: 'UAE Real Estate Market Intelligence 2026 - JBJ Global Real Estate',
+          text: 'Download your free copy of the UAE Real Estate Market Intelligence Report by JBJ Global Real Estate',
+          url: 'https://jbj.ae/market-report'
         }).catch(console.error);
       } else {
-        navigator.clipboard.writeText('https://jjglobalcapital.com/market-report').then(() => {
+        navigator.clipboard.writeText('https://jbj.ae/market-report').then(() => {
           alert('Link copied to clipboard! Share it with others.');
         }).catch(() => {
-          alert('Visit jjglobalcapital.com/market-report to share this book');
+          alert('Visit jbj.ae/market-report to share this book');
         });
       }
     }
@@ -1711,7 +1711,7 @@ const MarketReport = () => {
               <CheckCircle className="w-10 h-10 text-gold" />
             </div>
             <h2 className="text-2xl font-bold text-white mb-3">Thank You!</h2>
-            <p className="text-gold text-lg font-semibold mb-2">From JJ Global Capital</p>
+            <p className="text-gold text-lg font-semibold mb-2">From JBJ Global Real Estate</p>
             <p className="text-zinc-400 mb-6">
               You have successfully unlocked your Market Intelligence Book. Opening now...
             </p>
@@ -1730,7 +1730,7 @@ const MarketReport = () => {
             <div className="w-full max-w-6xl h-[88vh] bg-zinc-950 border border-gold/30 rounded-2xl overflow-hidden shadow-2xl">
               <div className="flex items-center justify-between gap-3 px-4 py-3 border-b border-zinc-800">
                 <div className="min-w-0">
-                  <p className="text-xs text-zinc-400">JJ Global Capital</p>
+                  <p className="text-xs text-zinc-400">JBJ Global Real Estate</p>
                   <h2 className="text-white font-semibold truncate">UAE Real Estate Market Intelligence 2026</h2>
                 </div>
                 <div className="flex items-center gap-2">
@@ -1822,7 +1822,7 @@ const MarketReport = () => {
                       
                       {/* JJ Logo */}
                       <div className="mt-6 pt-4 border-t border-zinc-800">
-                        <p className="text-zinc-400 text-[10px] tracking-[0.3em] uppercase">JJ Global Capital</p>
+                        <p className="text-zinc-400 text-[10px] tracking-[0.3em] uppercase">JBJ Global Real Estate</p>
                       </div>
                     </div>
                     
@@ -1866,7 +1866,7 @@ const MarketReport = () => {
               </h1>
               
               <p className="text-zinc-400 text-lg md:text-xl leading-relaxed mb-8">
-                An educational, founder-led overview designed around government-led sources and structured decision frameworks—created exclusively for investors of JJ Global Capital.
+                An educational, founder-led overview designed around government-led sources and structured decision frameworks—created exclusively for clients of JBJ Global Real Estate.
               </p>
               
               {/* What You Get */}
@@ -1917,7 +1917,7 @@ const MarketReport = () => {
             </blockquote>
             <div>
               <p className="text-gold font-semibold text-lg">Jane Abou Jaoude</p>
-              <p className="text-zinc-500 text-sm">Founder, JJ Global Capital</p>
+              <p className="text-zinc-500 text-sm">Founder, JBJ Global Real Estate</p>
               <p className="text-zinc-600 text-xs mt-1">Real Estate Brokerage • Dubai, UAE</p>
             </div>
           </motion.div>
@@ -2125,7 +2125,7 @@ const MarketReport = () => {
                 Created by <span className="text-white font-semibold">Jane Abou Jaoude</span>
               </p>
               <p className="text-zinc-400 text-sm">
-                Exclusive for <span className="text-gold font-semibold">JJ Global Capital</span>
+                Exclusive for <span className="text-gold font-semibold">JBJ Global Real Estate</span>
               </p>
               <p className="text-zinc-600 text-[10px] mt-2 uppercase tracking-widest">
                 Real Estate Brokerage • Dubai, UAE

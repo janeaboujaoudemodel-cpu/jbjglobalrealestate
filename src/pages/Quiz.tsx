@@ -607,7 +607,7 @@ const Quiz = () => {
             <p className="text-purple-300/80 text-xs mt-8">
               Software developed by <span className="text-white font-medium">Jane Abou Jaoude</span><br />
               Powered by{" "}
-              <span className="text-white font-medium">JJ Global Capital</span>
+              <span className="text-white font-medium">JBJ Global Real Estate</span>
             </p>
           </div>
         </div>
@@ -767,7 +767,7 @@ const Quiz = () => {
 
               <p className="text-purple-300/60 text-xs text-center mt-6">
                 Software developed by <span className="text-white">Jane Abou Jaoude</span><br />
-                Powered by <span className="text-white">JJ Global Capital</span>
+                Powered by <span className="text-white">JBJ Global Real Estate</span>
               </p>
             </div>
           </div>
