@@ -28,6 +28,7 @@ import { ScrollArea } from "@/components/ui/scroll-area";
 import { BrandMonogram } from "@/components/BrandMonogram";
 import LanguageSwitcher from "@/components/LanguageSwitcher";
 import GlobalSearchModal from "@/components/GlobalSearchModal";
+import jbjMonogramTransparent from "@/assets/jbj-monogram-transparent.png";
 
 const GlobalHeader = () => {
   const { user, isAdmin, signOut } = useAuth();
@@ -92,14 +93,19 @@ const GlobalHeader = () => {
       <div className="container mx-auto px-4 sm:px-6">
         <div className="flex items-center justify-between h-16 lg:h-[72px]">
           
-          {/* LEFT: Brand Logo Text */}
+          {/* LEFT: Brand Logo - Monogram + Text */}
           <Link 
             to="/" 
-            className="flex items-center shrink-0 hover:opacity-90 transition-opacity"
+            className="flex items-center gap-3 shrink-0 hover:opacity-90 transition-opacity"
             style={{ fontFamily: "Poppins, sans-serif" }}
           >
-            <span className="text-white font-semibold text-base sm:text-lg md:text-xl tracking-[0.15em] uppercase whitespace-nowrap">
-              JBJ GLOBAL REAL ESTATE
+            <img 
+              src={jbjMonogramTransparent} 
+              alt="JBJ" 
+              className="w-10 h-10 object-contain"
+            />
+            <span className="text-white font-semibold text-sm sm:text-base lg:text-lg tracking-[0.12em] uppercase whitespace-nowrap hidden sm:inline">
+              JBJ Global Real Estate
             </span>
           </Link>
 

@@ -146,7 +146,7 @@ const Footer = () => {
             <img 
               src={jbjFullLogoDark} 
               alt="JBJ Global Real Estate" 
-              className="h-32 md:h-40 w-auto object-contain mx-auto"
+              className="h-40 md:h-48 lg:h-56 w-auto object-contain mx-auto"
             />
           </Link>
           <p className="text-zinc-400 text-base md:text-lg max-w-2xl mx-auto leading-relaxed mt-4">
