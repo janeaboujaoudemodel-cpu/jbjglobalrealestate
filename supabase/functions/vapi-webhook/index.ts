@@ -11,7 +11,162 @@ const supabaseUrl = Deno.env.get('SUPABASE_URL')!;
 const supabaseKey = Deno.env.get('SUPABASE_SERVICE_ROLE_KEY')!;
 const supabase = createClient(supabaseUrl, supabaseKey);
 
-// Company information for the AI - John is based in Dubai, UAE
+// Helper function to extract lead info from transcript
+function extractLeadFromTranscript(transcript: string): {
+  name?: string;
+  phone?: string;
+  email?: string;
+  interest?: string;
+  budget?: string;
+} {
+  const result: { name?: string; phone?: string; email?: string; interest?: string; budget?: string } = {};
+  
+  // Extract name - look for patterns like "my name is X" or "I'm X" or "this is X"
+  const namePatterns = [
+    /my name is (\w+(?:\s+\w+)?)/i,
+    /i'm (\w+(?:\s+\w+)?)/i,
+    /this is (\w+(?:\s+\w+)?)/i,
+    /call me (\w+)/i,
+  ];
+  for (const pattern of namePatterns) {
+    const match = transcript.match(pattern);
+    if (match) {
+      result.name = match[1].trim();
+      break;
+    }
+  }
+  
+  // Extract phone number
+  const phonePattern = /(\+?\d{1,3}[\s-]?\d{2,4}[\s-]?\d{3,4}[\s-]?\d{3,4})/;
+  const phoneMatch = transcript.match(phonePattern);
+  if (phoneMatch) {
+    result.phone = phoneMatch[1].replace(/[\s-]/g, '');
+  }
+  
+  // Extract email
+  const emailPattern = /([a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,})/;
+  const emailMatch = transcript.match(emailPattern);
+  if (emailMatch) {
+    result.email = emailMatch[1].toLowerCase();
+  }
+  
+  // Extract interest - look for areas or property types
+  const areas = ['dubai marina', 'downtown', 'palm jumeirah', 'business bay', 'jbr', 'dubai hills', 'creek harbour'];
+  const lowerTranscript = transcript.toLowerCase();
+  for (const area of areas) {
+    if (lowerTranscript.includes(area)) {
+      result.interest = area.split(' ').map(w => w.charAt(0).toUpperCase() + w.slice(1)).join(' ');
+      break;
+    }
+  }
+  
+  // Extract budget
+  const budgetPatterns = [
+    /(\d+(?:\.\d+)?)\s*(?:million|mil|m)\s*(?:aed|dirham)?/i,
+    /aed\s*(\d+(?:,\d{3})*(?:\.\d+)?)/i,
+    /budget\s*(?:is|of)?\s*(?:around|about)?\s*(\d+(?:,\d{3})*)/i,
+  ];
+  for (const pattern of budgetPatterns) {
+    const match = transcript.match(pattern);
+    if (match) {
+      result.budget = match[0];
+      break;
+    }
+  }
+  
+  return result;
+}
+
+// AI Audit function to analyze call quality
+async function auditCall(transcript: string, summary?: string): Promise<{
+  score: number;
+  issues: string[];
+  highlights: string[];
+  sentiment: 'positive' | 'neutral' | 'negative' | 'mixed';
+  leadQuality: 'hot' | 'warm' | 'cold' | 'unqualified';
+  summary: string;
+  followUpRecommended: boolean;
+}> {
+  const issues: string[] = [];
+  const highlights: string[] = [];
+  let score = 80; // Start with good score
+  
+  const lowerTranscript = transcript.toLowerCase();
+  
+  // Check for negative indicators
+  if (lowerTranscript.includes("don't know") || lowerTranscript.includes("not sure")) {
+    issues.push("Agent expressed uncertainty");
+    score -= 10;
+  }
+  if (lowerTranscript.includes("just a receptionist")) {
+    issues.push("Agent downplayed expertise (critical)");
+    score -= 20;
+  }
+  if (lowerTranscript.includes("wrong number") || lowerTranscript.includes("mistake")) {
+    issues.push("Possible wrong number or confusion");
+    score -= 5;
+  }
+  if (transcript.length < 100) {
+    issues.push("Very short call - may indicate issue");
+    score -= 10;
+  }
+  
+  // Check for positive indicators
+  if (lowerTranscript.includes("thank you") || lowerTranscript.includes("thanks")) {
+    highlights.push("Polite interaction");
+    score += 5;
+  }
+  if (lowerTranscript.includes("viewing") || lowerTranscript.includes("appointment")) {
+    highlights.push("Viewing/appointment discussed");
+    score += 10;
+  }
+  if (lowerTranscript.includes("interested") || lowerTranscript.includes("looking for")) {
+    highlights.push("Caller showed interest");
+    score += 5;
+  }
+  if (lowerTranscript.includes("email") || lowerTranscript.includes("whatsapp") || lowerTranscript.includes("contact")) {
+    highlights.push("Contact information exchanged");
+    score += 10;
+  }
+  
+  // Determine sentiment
+  let sentiment: 'positive' | 'neutral' | 'negative' | 'mixed' = 'neutral';
+  const positiveWords = ['great', 'excellent', 'perfect', 'love', 'interested', 'amazing', 'wonderful'];
+  const negativeWords = ['bad', 'terrible', 'wrong', 'frustrated', 'annoyed', 'waste', 'angry'];
+  
+  const positiveCount = positiveWords.filter(w => lowerTranscript.includes(w)).length;
+  const negativeCount = negativeWords.filter(w => lowerTranscript.includes(w)).length;
+  
+  if (positiveCount > negativeCount + 1) sentiment = 'positive';
+  else if (negativeCount > positiveCount + 1) sentiment = 'negative';
+  else if (positiveCount > 0 && negativeCount > 0) sentiment = 'mixed';
+  
+  // Determine lead quality
+  let leadQuality: 'hot' | 'warm' | 'cold' | 'unqualified' = 'cold';
+  if (lowerTranscript.includes('buy') || lowerTranscript.includes('purchase') || lowerTranscript.includes('ready to')) {
+    leadQuality = 'hot';
+  } else if (lowerTranscript.includes('interested') || lowerTranscript.includes('looking for') || lowerTranscript.includes('invest')) {
+    leadQuality = 'warm';
+  } else if (lowerTranscript.includes('just browsing') || lowerTranscript.includes('just asking')) {
+    leadQuality = 'cold';
+  } else if (transcript.length < 50 || lowerTranscript.includes('wrong number')) {
+    leadQuality = 'unqualified';
+  }
+  
+  // Ensure score is within bounds
+  score = Math.max(0, Math.min(100, score));
+  
+  return {
+    score,
+    issues,
+    highlights,
+    sentiment,
+    leadQuality,
+    summary: summary || `Call duration analyzed. ${highlights.length} positive points, ${issues.length} issues found.`,
+    followUpRecommended: leadQuality === 'hot' || leadQuality === 'warm'
+  };
+}
+
 const COMPANY_INFO = {
   name: "JBJ Global Real Estate",
   tagline: "Your Trusted Partner in UAE Real Estate",
@@ -524,14 +679,92 @@ HANDLING COMMON QUESTIONS:
         });
 
       case "end-of-call-report":
-        // Log call summary
-        console.log("Call ended:", {
-          duration: message.call?.duration,
-          transcript: message.transcript,
-          summary: message.summary
+        // Save call log to database with AI auditing
+        console.log("Call ended - saving to database:", {
+          callId: message.call?.id,
+          duration: message.durationSeconds,
+          endedReason: message.endedReason
         });
         
-        // Could save call logs to database here
+        try {
+          // Extract lead info from transcript using simple parsing
+          const transcript = message.transcript || '';
+          const extractedInfo = extractLeadFromTranscript(transcript);
+          
+          // Perform AI audit of the call
+          const aiAudit = await auditCall(transcript, message.summary);
+          
+          // Save to database
+          const { data: callLog, error: saveError } = await supabase
+            .from('vapi_call_logs')
+            .insert({
+              call_id: message.call?.id || `call_${Date.now()}`,
+              caller_phone: message.call?.customer?.number,
+              duration_seconds: message.durationSeconds,
+              transcript: transcript,
+              summary: message.summary,
+              recording_url: message.recordingUrl,
+              call_status: message.call?.status,
+              ended_reason: message.endedReason,
+              assistant_name: 'John',
+              // AI Audit results
+              ai_score: aiAudit.score,
+              ai_issues: aiAudit.issues,
+              ai_highlights: aiAudit.highlights,
+              ai_sentiment: aiAudit.sentiment,
+              ai_lead_quality: aiAudit.leadQuality,
+              ai_summary: aiAudit.summary,
+              ai_follow_up_recommended: aiAudit.followUpRecommended,
+              ai_audited_at: new Date().toISOString(),
+              // Extracted lead info
+              extracted_name: extractedInfo.name,
+              extracted_phone: extractedInfo.phone || message.call?.customer?.number,
+              extracted_email: extractedInfo.email,
+              extracted_interest: extractedInfo.interest,
+              extracted_budget: extractedInfo.budget,
+              // Flags
+              needs_review: aiAudit.score < 70 || aiAudit.issues.length > 2,
+              is_flagged: aiAudit.score < 50 || aiAudit.issues.some((i: string) => i.includes('critical'))
+            })
+            .select()
+            .single();
+          
+          if (saveError) {
+            console.error("Error saving call log:", saveError);
+          } else {
+            console.log("Call log saved:", callLog?.id);
+            
+            // Create CRM lead if we have contact info and it's a qualified lead
+            if (aiAudit.leadQuality !== 'unqualified' && (extractedInfo.name || extractedInfo.phone)) {
+              const { data: lead, error: leadError } = await supabase
+                .from('crm_leads')
+                .insert({
+                  full_name: extractedInfo.name || 'Phone Lead',
+                  phone_e164: extractedInfo.phone || message.call?.customer?.number,
+                  email_lower: extractedInfo.email?.toLowerCase(),
+                  source: 'vapi_phone_call',
+                  lead_source_type: 'vapi_phone',
+                  tags: ['phone_lead', `quality_${aiAudit.leadQuality}`],
+                  owner_type: 'company_pool'
+                })
+                .select()
+                .single();
+              
+              if (!leadError && lead) {
+                // Link lead to call log
+                await supabase
+                  .from('vapi_call_logs')
+                  .update({ lead_id: lead.id })
+                  .eq('id', callLog?.id);
+                
+                console.log("Lead created and linked:", lead.id);
+              }
+            }
+          }
+        } catch (saveErr) {
+          console.error("Error in end-of-call processing:", saveErr);
+        }
+        
         return new Response(JSON.stringify({ received: true }), {
           headers: { ...corsHeaders, 'Content-Type': 'application/json' }
         });

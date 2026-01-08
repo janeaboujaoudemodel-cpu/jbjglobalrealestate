@@ -3913,6 +3913,122 @@ export type Database = {
         }
         Relationships: []
       }
+      vapi_call_logs: {
+        Row: {
+          ai_audited_at: string | null
+          ai_follow_up_recommended: boolean | null
+          ai_highlights: string[] | null
+          ai_issues: string[] | null
+          ai_lead_quality: string | null
+          ai_score: number | null
+          ai_sentiment: string | null
+          ai_summary: string | null
+          assistant_name: string | null
+          call_id: string
+          call_status: string | null
+          caller_name: string | null
+          caller_phone: string | null
+          created_at: string
+          duration_seconds: number | null
+          ended_reason: string | null
+          extracted_budget: string | null
+          extracted_email: string | null
+          extracted_interest: string | null
+          extracted_name: string | null
+          extracted_phone: string | null
+          flag_reason: string | null
+          id: string
+          is_flagged: boolean | null
+          lead_id: string | null
+          needs_review: boolean | null
+          notes: string | null
+          recording_url: string | null
+          reviewed_at: string | null
+          reviewed_by: string | null
+          summary: string | null
+          transcript: string | null
+          updated_at: string
+        }
+        Insert: {
+          ai_audited_at?: string | null
+          ai_follow_up_recommended?: boolean | null
+          ai_highlights?: string[] | null
+          ai_issues?: string[] | null
+          ai_lead_quality?: string | null
+          ai_score?: number | null
+          ai_sentiment?: string | null
+          ai_summary?: string | null
+          assistant_name?: string | null
+          call_id: string
+          call_status?: string | null
+          caller_name?: string | null
+          caller_phone?: string | null
+          created_at?: string
+          duration_seconds?: number | null
+          ended_reason?: string | null
+          extracted_budget?: string | null
+          extracted_email?: string | null
+          extracted_interest?: string | null
+          extracted_name?: string | null
+          extracted_phone?: string | null
+          flag_reason?: string | null
+          id?: string
+          is_flagged?: boolean | null
+          lead_id?: string | null
+          needs_review?: boolean | null
+          notes?: string | null
+          recording_url?: string | null
+          reviewed_at?: string | null
+          reviewed_by?: string | null
+          summary?: string | null
+          transcript?: string | null
+          updated_at?: string
+        }
+        Update: {
+          ai_audited_at?: string | null
+          ai_follow_up_recommended?: boolean | null
+          ai_highlights?: string[] | null
+          ai_issues?: string[] | null
+          ai_lead_quality?: string | null
+          ai_score?: number | null
+          ai_sentiment?: string | null
+          ai_summary?: string | null
+          assistant_name?: string | null
+          call_id?: string
+          call_status?: string | null
+          caller_name?: string | null
+          caller_phone?: string | null
+          created_at?: string
+          duration_seconds?: number | null
+          ended_reason?: string | null
+          extracted_budget?: string | null
+          extracted_email?: string | null
+          extracted_interest?: string | null
+          extracted_name?: string | null
+          extracted_phone?: string | null
+          flag_reason?: string | null
+          id?: string
+          is_flagged?: boolean | null
+          lead_id?: string | null
+          needs_review?: boolean | null
+          notes?: string | null
+          recording_url?: string | null
+          reviewed_at?: string | null
+          reviewed_by?: string | null
+          summary?: string | null
+          transcript?: string | null
+          updated_at?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "vapi_call_logs_lead_id_fkey"
+            columns: ["lead_id"]
+            isOneToOne: false
+            referencedRelation: "crm_leads"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
     }
     Views: {
       broker_profiles_public: {
