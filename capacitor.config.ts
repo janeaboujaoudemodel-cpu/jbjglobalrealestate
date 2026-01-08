@@ -11,7 +11,7 @@ const config: CapacitorConfig = {
   ios: {
     contentInset: 'automatic',
     preferredContentMode: 'mobile',
-    scheme: 'JJGlobalCapital'
+    scheme: 'JBJGlobalRealEstate'
   },
   plugins: {
     SplashScreen: {

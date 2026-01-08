@@ -137,8 +137,8 @@ const Awards = () => {
             Experience Award-Winning Service
           </h2>
           <p className="text-zinc-400 mb-8 max-w-xl mx-auto">
-            Join the thousands of satisfied clients who have trusted JJ Global Capital 
-            with their most important investment decisions.
+            Join the thousands of satisfied clients who have trusted JBJ Global Real Estate 
+            with their property decisions.
           </p>
           <a 
             href={CONTACT_INFO.inquiryFormUrl}

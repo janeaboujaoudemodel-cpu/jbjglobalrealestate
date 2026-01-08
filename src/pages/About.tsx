@@ -73,7 +73,7 @@ const About = () => {
     { year: "2021", event: "Real Estate with DAMAC" },
     { year: "2021–2022", event: "Head of Quality & Operations at Al-Ghazal Transportation" },
     { year: "2022–2024", event: "Brokerage Training & Business Development" },
-    { year: "2025", event: "Founded JJ Global Capital Brokerage" },
+    { year: "2025", event: "Founded JBJ Global Real Estate Brokerage" },
   ];
 
   return (
@@ -83,7 +83,7 @@ const About = () => {
         <div className="absolute inset-0">
           <img 
             src={luxuryVillaHero} 
-            alt="About JJ Global Capital" 
+            alt="About JBJ Global Real Estate" 
             className="w-full h-full object-cover"
           />
           <div className="absolute inset-0 bg-gradient-to-b from-black/70 via-black/50 to-black" />
@@ -115,7 +115,7 @@ const About = () => {
             className="text-zinc-400 text-lg md:text-xl max-w-2xl mx-auto"
             variants={fadeInUp}
           >
-            JJ Global Capital is a real estate brokerage serving UAE-based and international clients 
+            JBJ Global Real Estate is a real estate brokerage serving UAE-based and international clients 
             with expert property sales, leasing, and holiday home services across the UAE.
           </motion.p>
         </motion.div>
@@ -168,7 +168,7 @@ const About = () => {
               </h2>
               <div className="space-y-5 text-zinc-400 leading-relaxed">
                 <p>
-                  Founded in Dubai, JJ Global Capital is a real estate brokerage dedicated to helping 
+                  Founded in Dubai, JBJ Global Real Estate is a real estate brokerage dedicated to helping 
                   clients buy, sell, and lease premium properties across the UAE.
                 </p>
                 <p>
@@ -206,7 +206,7 @@ const About = () => {
               </div>
               <div className="absolute -bottom-6 -left-6 bg-zinc-900 border border-gold/30 rounded-xl p-6 max-w-xs">
                 <p className="text-gold font-semibold mb-1">Jane Abou Jaoude</p>
-                <p className="text-zinc-400 text-sm">Founder & CEO, JJ Global Capital</p>
+                <p className="text-zinc-400 text-sm">Founder & CEO, JBJ Global Real Estate</p>
               </div>
             </motion.div>
           </div>
