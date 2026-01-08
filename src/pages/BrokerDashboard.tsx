@@ -202,7 +202,7 @@ export default function BrokerDashboard() {
                   +971 56 591 1000
                 </a>
                 <a
-                  href="mailto:contact@jjglobalcapital.com"
+                  href="mailto:contact@jbj.ae"
                   className="flex items-center gap-2 text-amber-400 hover:text-amber-300"
                 >
                   <Mail className="w-4 h-4" />

@@ -548,8 +548,8 @@ export default function JoinApplication() {
 
         <p className="text-center text-sm text-muted-foreground mt-6">
           Questions? Contact us at{" "}
-          <a href="mailto:contact@jjglobalcapital.com" className="text-gold hover:underline">
-            contact@jjglobalcapital.com
+          <a href="mailto:contact@jbj.ae" className="text-gold hover:underline">
+            contact@jbj.ae
           </a>
         </p>
       </div>

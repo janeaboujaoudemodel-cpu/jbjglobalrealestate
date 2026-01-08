@@ -31,11 +31,11 @@ const EmailClient = () => {
   const [emails, setEmails] = useState<Email[]>([
     {
       id: "1",
-      from: "JJ Global Capital",
-      fromEmail: "info@jjglobalcapital.com",
+      from: "JBJ Global Real Estate",
+      fromEmail: "contact@jbj.ae",
       to: "you@example.com",
       subject: "Welcome to your Email Client",
-      body: "Thank you for using our email client! This is a demo email to show you how the interface works.\n\nYou can compose new emails, reply to existing ones, organize them into folders, and much more.\n\nBest regards,\nJJ Global Capital Team",
+      body: "Thank you for using our email client! This is a demo email to show you how the interface works.\n\nYou can compose new emails, reply to existing ones, organize them into folders, and much more.\n\nBest regards,\nJBJ Global Real Estate Team",
       date: new Date().toISOString(),
       read: false,
       starred: false,
@@ -46,10 +46,10 @@ const EmailClient = () => {
     {
       id: "2",
       from: "Property Alert",
-      fromEmail: "alerts@jjglobalcapital.com",
+      fromEmail: "alerts@jbj.ae",
       to: "you@example.com",
       subject: "New Property Listings in Dubai Marina",
-      body: "Dear Investor,\n\nWe have exciting new property listings available in Dubai Marina that match your preferences.\n\n• 2BR Apartment - AED 2.5M\n• 3BR Penthouse - AED 5.8M\n• 1BR Studio - AED 1.2M\n\nContact us to schedule a viewing.\n\nBest,\nProperty Team",
+      body: "Dear Client,\n\nWe have exciting new property listings available in Dubai Marina that match your preferences.\n\n• 2BR Apartment - AED 2.5M\n• 3BR Penthouse - AED 5.8M\n• 1BR Studio - AED 1.2M\n\nContact us to schedule a viewing.\n\nBest,\nProperty Team",
       date: new Date(Date.now() - 3600000).toISOString(),
       read: true,
       starred: true,

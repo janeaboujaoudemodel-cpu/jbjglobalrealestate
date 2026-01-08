@@ -4,10 +4,9 @@ import { z } from "https://deno.land/x/zod@v3.22.4/mod.ts";
 
 // Origin whitelist for CORS
 const ALLOWED_ORIGINS = [
-  "https://jjglobalcapital.com",
-  "https://www.jjglobalcapital.com",
+  "https://jbj.ae",
+  "https://www.jbj.ae",
   "https://lovable.dev",
-  "https://preview--jj-global-capital.lovable.app",
   "http://localhost:5173",
   "http://localhost:3000",
 ];
@@ -183,8 +182,8 @@ const handler = async (req: Request): Promise<Response> => {
             "Content-Type": "application/json",
           },
           body: JSON.stringify({
-            from: "JJ Global Capital <onboarding@resend.dev>",
-            to: ["contact@jjglobalcapital.com", "jane@jjglobalcapital.com"],
+            from: "JBJ Global Real Estate <onboarding@resend.dev>",
+            to: ["contact@jbj.ae"],
             subject: "📬 New Newsletter Subscriber!",
             html: emailHtml,
           }),

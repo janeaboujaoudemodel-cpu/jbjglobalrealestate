@@ -269,7 +269,7 @@ const AdminCRM = () => {
           </Button>
           <div className="flex-1">
             <h1 className="text-xl font-bold">Admin Dashboard</h1>
-            <p className="text-sm text-muted-foreground">JJ Global Capital CRM</p>
+            <p className="text-sm text-muted-foreground">JBJ Global Real Estate CRM</p>
           </div>
           <Badge className="bg-red-500">Admin</Badge>
         </div>

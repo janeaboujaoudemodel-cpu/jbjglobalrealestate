@@ -102,7 +102,7 @@ const ClientPDFGenerator = ({ open, onClose, lead, selectedTools }: ClientPDFGen
         projects: selectedProjects,
         tools: selectedTools,
         generatedAt: new Date().toISOString(),
-        companyName: "JJ Global Capital",
+        companyName: "JBJ Global Real Estate",
       };
       
       console.log("Generating PDF with data:", pdfData);
@@ -207,7 +207,7 @@ const ClientPDFGenerator = ({ open, onClose, lead, selectedTools }: ClientPDFGen
           {/* Branding Note */}
           <div className="p-4 bg-gold/10 rounded-lg border border-gold/20">
             <p className="text-sm">
-              <strong>Note:</strong> The PDF will include JJ Global Capital branding, 
+              <strong>Note:</strong> The PDF will include JBJ Global Real Estate branding, 
               the client's name ({lead.full_name}), and all selected content formatted 
               professionally for client presentation.
             </p>

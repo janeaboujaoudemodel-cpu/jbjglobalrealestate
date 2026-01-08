@@ -17,9 +17,9 @@ export const fr = {
   'nav.quiz': 'Quiz Immobilier',
   
   // Homepage
-  'home.hero.welcome': 'Bienvenue chez JJ Global Capital',
-  'home.hero.tagline': 'Votre Porte d\'Entrée vers les Investissements Immobiliers Mondiaux et la Conciergerie',
-  'home.hero.subtitle': 'Un cabinet de conseil dirigé par le fondateur spécialisé dans l\'immobilier aux EAU et à Dubaï',
+  'home.hero.welcome': 'Bienvenue chez JBJ Global Real Estate',
+  'home.hero.tagline': 'Courtage Immobilier Premium aux EAU',
+  'home.hero.subtitle': 'Vente de propriétés, location et maisons de vacances aux EAU',
   'home.hero.exclusive': 'Propriétés Exclusives',
   'home.cta.explore': 'Explorez Nos Services',
   'home.cta.properties': 'Explorer les Propriétés',
