@@ -15,10 +15,13 @@ export default defineConfig(({ mode }) => ({
     mode === "development" && componentTagger(),
     VitePWA({
       registerType: "autoUpdate",
-      includeAssets: ["favicon.jpg", "robots.txt"],
+      devOptions: {
+        enabled: true,
+      },
+      includeAssets: ["favicon.png", "favicon.svg", "robots.txt"],
       manifest: {
-        name: "JJ Global Capital",
-        short_name: "JJ Capital",
+        name: "JBJ Global Real Estate",
+        short_name: "JBJ Real Estate",
         description: "Premium UAE Real Estate Brokerage - Property Sales, Leasing & Holiday Homes",
         theme_color: "#0a0a0a",
         background_color: "#0a0a0a",
@@ -31,36 +34,22 @@ export default defineConfig(({ mode }) => ({
             src: "/pwa-192x192.jpg",
             sizes: "192x192",
             type: "image/jpeg",
-            purpose: "any"
+            purpose: "any",
           },
           {
             src: "/pwa-512x512.jpg",
             sizes: "512x512",
             type: "image/jpeg",
-            purpose: "any"
+            purpose: "any",
           },
           {
             src: "/pwa-512x512.jpg",
             sizes: "512x512",
             type: "image/jpeg",
-            purpose: "maskable"
-          }
+            purpose: "maskable",
+          },
         ],
-        categories: ["business", "finance", "lifestyle"],
-        screenshots: [
-          {
-            src: "/screenshot-wide.png",
-            sizes: "1280x720",
-            type: "image/png",
-            form_factor: "wide"
-          },
-          {
-            src: "/screenshot-mobile.png",
-            sizes: "750x1334",
-            type: "image/png",
-            form_factor: "narrow"
-          }
-        ]
+        categories: ["business", "lifestyle"],
       },
       workbox: {
         maximumFileSizeToCacheInBytes: 5 * 1024 * 1024, // 5MB limit
@@ -73,12 +62,12 @@ export default defineConfig(({ mode }) => ({
               cacheName: "google-fonts-cache",
               expiration: {
                 maxEntries: 10,
-                maxAgeSeconds: 60 * 60 * 24 * 365
+                maxAgeSeconds: 60 * 60 * 24 * 365,
               },
               cacheableResponse: {
-                statuses: [0, 200]
-              }
-            }
+                statuses: [0, 200],
+              },
+            },
           },
           {
             urlPattern: /^https:\/\/fonts\.gstatic\.com\/.*/i,
@@ -87,15 +76,15 @@ export default defineConfig(({ mode }) => ({
               cacheName: "gstatic-fonts-cache",
               expiration: {
                 maxEntries: 10,
-                maxAgeSeconds: 60 * 60 * 24 * 365
+                maxAgeSeconds: 60 * 60 * 24 * 365,
               },
               cacheableResponse: {
-                statuses: [0, 200]
-              }
-            }
-          }
-        ]
-      }
+                statuses: [0, 200],
+              },
+            },
+          },
+        ],
+      },
     })
   ].filter(Boolean),
   resolve: {
