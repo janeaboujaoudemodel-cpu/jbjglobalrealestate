@@ -22,7 +22,7 @@ import {
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 
-const INQUIRY_FORM_URL = "https://jjglobalcapital.com/form/property-investment-inquiry-form/";
+const INQUIRY_FORM_URL = "https://jbj.ae/contact";
 
 const badgeLabels: Record<string, { label: string; color: string }> = {
   top1: { label: "🥇 Top 1", color: "bg-yellow-500/20 border-yellow-500/50 text-yellow-400" },

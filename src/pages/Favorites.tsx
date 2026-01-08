@@ -30,7 +30,7 @@ import {
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 
-const INQUIRY_FORM_URL = "https://jjglobalcapital.com/form/property-investment-inquiry-form/";
+const INQUIRY_FORM_URL = "https://jbj.ae/contact";
 
 const Favorites = () => {
   const { user } = useAuth();

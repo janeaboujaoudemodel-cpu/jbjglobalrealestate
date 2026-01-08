@@ -12,7 +12,7 @@ import {
   TooltipTrigger,
 } from "@/components/ui/tooltip";
 
-const INQUIRY_FORM_URL = "https://jjglobalcapital.com/form/property-investment-inquiry-form/";
+const INQUIRY_FORM_URL = "https://jbj.ae/contact";
 
 interface MortgageCalculatorProps {
   defaultPrice?: number;

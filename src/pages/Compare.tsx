@@ -21,8 +21,8 @@ import { PaymentModal } from "@/components/PaymentModal";
 import { Badge } from "@/components/ui/badge";
 import BackNavButton from "@/components/BackNavButton";
 
-const INQUIRY_FORM_URL = "https://jjglobalcapital.com/form/property-investment-inquiry-form/";
-const COMPARE_FREE_KEY = "jj_compare_free_used";
+const INQUIRY_FORM_URL = "https://jbj.ae/contact";
+const COMPARE_FREE_KEY = "jbj_compare_free_used";
 
 interface AIAnalysis {
   projectDetailsTable: Array<{

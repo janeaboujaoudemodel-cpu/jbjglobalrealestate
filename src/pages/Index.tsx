@@ -18,6 +18,7 @@ import { Sparkles, ArrowUpRight, ChevronDown, User, Scale, Layers, Calculator, F
 import { Button } from "@/components/ui/button";
 import founderProfessional from "@/assets/founder-professional.jpeg";
 import luxuryVillaHero from "@/assets/luxury-villa-hero.jpeg";
+import jbjMonogramDark from "@/assets/jbj-monogram-dark.png";
 import { CONTACT_INFO } from "@/constants/stats";
 
 // Animation variants
@@ -56,73 +57,88 @@ const Index = () => {
       {/* Floating Install App Button */}
       <InstallAppButton />
 
-      {/* HERO SECTION - CLEAN LUXURY VILLA */}
-      <div className="relative h-screen flex items-center justify-center">
-        {/* Villa Background Image - Optimized for fast loading */}
-        <div className="absolute inset-0 overflow-hidden bg-black">
+      {/* HERO SECTION - BLACK BACKGROUND WITH WHITE CONTENT LAYER */}
+      <div className="relative min-h-screen flex items-center justify-center bg-black">
+        {/* Villa Background Image - Subtle behind white card */}
+        <div className="absolute inset-0 overflow-hidden">
           <img 
             src={luxuryVillaHero} 
             alt="Luxury Villa in Dubai" 
-            className="w-full h-full object-cover"
+            className="w-full h-full object-cover opacity-20"
             loading="eager"
             fetchPriority="high"
             decoding="async"
           />
-          {/* Enhanced gradient overlay for better text readability */}
-          <div className="absolute inset-0 bg-gradient-to-t from-black via-black/50 to-black/20" />
-          <div className="absolute inset-0 bg-gradient-to-r from-black/30 via-transparent to-black/30" />
+          <div className="absolute inset-0 bg-black/70" />
         </div>
 
-        {/* Hero Content - Clean and Minimal */}
+        {/* White Content Layer */}
         <motion.div 
-          className="relative z-10 text-center px-4 max-w-4xl mx-auto"
+          className="relative z-10 w-full max-w-4xl mx-4 md:mx-auto bg-white rounded-3xl shadow-2xl shadow-black/50 overflow-hidden"
           initial="hidden"
           animate="visible"
           variants={staggerContainer}
         >
-          {/* Welcome Text */}
-          <motion.div variants={fadeInUp}>
-            <span className="inline-block text-gold text-xs md:text-sm uppercase tracking-[0.4em] mb-6">
-              Real Estate Brokerage
-            </span>
-            <h2 
-              className="text-white text-xl md:text-2xl lg:text-3xl font-light tracking-wide mb-4"
+          {/* Main Content Area */}
+          <div className="px-8 py-12 md:px-16 md:py-16 text-center">
+            {/* Large JBJ Logo - Filling the space */}
+            <motion.div variants={fadeInUp} className="mb-8">
+              <img 
+                src={jbjMonogramDark}
+                alt="JBJ Global Real Estate"
+                className="w-40 h-40 md:w-56 md:h-56 lg:w-72 lg:h-72 mx-auto object-contain"
+              />
+            </motion.div>
+            
+            {/* Brand Name - Large and prominent */}
+            <motion.h1 
+              className="text-black text-2xl md:text-3xl lg:text-4xl font-bold tracking-[0.15em] uppercase mb-4"
+              variants={fadeInUp}
               style={{ fontFamily: "Poppins, sans-serif" }}
             >
-              JBJ Global Real Estate
-            </h2>
-            {/* We Find | We Negotiate | We Deliver */}
-            <div className="flex flex-wrap items-center justify-center gap-4 md:gap-8 text-zinc-300 text-base md:text-lg mb-8">
-              <span className="font-light">We Find</span>
-              <span className="text-gold/60">|</span>
-              <span className="font-light">We Negotiate</span>
-              <span className="text-gold/60">|</span>
-              <span className="font-light">We Deliver</span>
-            </div>
-          </motion.div>
-
-          {/* Main Tagline */}
-          <motion.h1 
-            className="text-white text-2xl md:text-3xl lg:text-4xl font-bold tracking-wide mb-4 leading-tight"
-            variants={fadeInUp}
-            style={{ fontFamily: "Poppins, sans-serif" }}
-          >
-            Dubai's Premier{" "}
-            <span className="text-transparent bg-clip-text bg-gradient-to-r from-gold to-gold-light">
+              JBJ GLOBAL REAL ESTATE
+            </motion.h1>
+            
+            {/* Gold divider */}
+            <motion.div 
+              variants={fadeInUp}
+              className="w-24 h-1 bg-gradient-to-r from-gold to-gold-light mx-auto mb-6"
+            />
+            
+            {/* Tagline */}
+            <motion.p 
+              variants={fadeInUp}
+              className="text-gold text-xs md:text-sm uppercase tracking-[0.3em] mb-6"
+            >
               Real Estate Brokerage
-            </span>
-          </motion.h1>
+            </motion.p>
 
-          {/* Sub-tagline - Brokerage focused */}
-          <motion.p 
-            className="text-zinc-400 text-sm md:text-base max-w-xl mx-auto"
-            variants={fadeInUp}
-          >
-            Expert property sales, leasing & holiday homes across the UAE
-          </motion.p>
+            {/* We Find | We Negotiate | We Deliver */}
+            <motion.div 
+              variants={fadeInUp}
+              className="flex flex-wrap items-center justify-center gap-4 md:gap-8 text-zinc-600 text-base md:text-lg mb-8"
+            >
+              <span className="font-medium">We Find</span>
+              <span className="text-gold">|</span>
+              <span className="font-medium">We Negotiate</span>
+              <span className="text-gold">|</span>
+              <span className="font-medium">We Deliver</span>
+            </motion.div>
+
+            {/* Sub-tagline */}
+            <motion.p 
+              className="text-zinc-500 text-sm md:text-base max-w-xl mx-auto"
+              variants={fadeInUp}
+            >
+              Dubai's Premier Real Estate Brokerage — Expert property sales, leasing & holiday homes across the UAE
+            </motion.p>
+          </div>
+          
+          {/* Gold accent bar at bottom */}
+          <div className="h-2 bg-gradient-to-r from-gold via-gold-light to-gold" />
         </motion.div>
         
-        {/* Scroll indicator - Centered at bottom */}
+        {/* Scroll indicator - Below white card */}
         <motion.div 
           className="absolute bottom-8 left-0 right-0 flex flex-col items-center gap-2 text-white/50 z-10"
           initial={{ opacity: 0, y: -20 }}
