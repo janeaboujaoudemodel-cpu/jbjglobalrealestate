@@ -184,7 +184,7 @@ const CRMAIToolsPanel = ({ lead, onGeneratePDF }: CRMAIToolsPanelProps) => {
               })}
             </ul>
             <p className="text-sm text-muted-foreground">
-              The PDF will include the client's name and JJ Global Capital branding.
+              The PDF will include the client's name and JBJ Global Real Estate branding.
             </p>
             <div className="flex gap-3 pt-4">
               <Button variant="outline" onClick={() => setShowPDFDialog(false)} className="flex-1">

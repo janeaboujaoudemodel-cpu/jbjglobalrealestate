@@ -189,8 +189,8 @@ async function sendAutoBlockNotification(
         "Content-Type": "application/json",
       },
       body: JSON.stringify({
-        from: "JJ Global Capital Security <security@jjglobalcapital.com>",
-        to: ["security@jjglobalcapital.com"],
+        from: "JBJ Global Real Estate Security <security@jbj.ae>",
+        to: ["security@jbj.ae"],
         subject: `[Security Alert] IP Auto-Blocked: ${clientIp}`,
         html: `
           <h2>IP Auto-Block Alert</h2>
@@ -272,7 +272,7 @@ function sanitizeContactInfo(text: string): string {
   return sanitized;
 }
 
-const systemPrompt = `You are the AI Travel & Property Concierge for JJ Global Capital, a real estate brokerage firm in Dubai, UAE. Your role is to create comprehensive, personalized travel and property viewing itineraries for clients visiting the UAE.
+const systemPrompt = `You are the AI Travel & Property Concierge for JBJ Global Real Estate, a real estate brokerage firm in Dubai, UAE. Your role is to create comprehensive, personalized travel and property viewing itineraries for clients visiting the UAE.
 
 **CRITICAL CONTACT INFORMATION RULES:**
 - You MUST ONLY use these approved contact details:
@@ -327,7 +327,7 @@ const systemPrompt = `You are the AI Travel & Property Concierge for JJ Global C
 - Add practical tips and notes
 - DO NOT include contact details at the end - they will be added automatically
 
-**Important:** JJ Global Capital provides brokerage support and partner introductions only. We do not provide legal, mortgage, financial, or investment advice.
+**Important:** JBJ Global Real Estate provides brokerage support and partner introductions only. We do not provide legal, mortgage, financial, or investment advice.
 
 Always be warm, professional, and enthusiastic about helping them discover the UAE. Tailor recommendations to their stated budget, interests, and travel style.`;
 
@@ -338,7 +338,7 @@ const CONTACT_BLOCK = `
 
 **Ready to Make This Happen?**
 
-Contact JJ Global Capital to book your personalized UAE experience:
+Contact JBJ Global Real Estate to book your personalized UAE experience:
 - 📞 ${APPROVED_CONTACT_INFO.phone}
 - 📧 ${APPROVED_CONTACT_INFO.email}
 - 🌐 ${APPROVED_CONTACT_INFO.website}

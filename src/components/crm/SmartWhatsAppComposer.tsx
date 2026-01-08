@@ -72,7 +72,7 @@ const SmartWhatsAppComposer = ({ lead, onSend }: SmartWhatsAppComposerProps) => 
       // Fallback template
       const firstName = lead.full_name.split(" ")[0];
       const templates: Record<string, string> = {
-        greeting: `Hello ${firstName}! 👋\n\nThis is your dedicated property consultant from JJ Global Capital. I noticed you're interested in Dubai real estate investments.\n\nWould you like to schedule a quick call to discuss your requirements? I'm here to help! 🏠`,
+        greeting: `Hello ${firstName}! 👋\n\nThis is your dedicated property consultant from JBJ Global Real Estate. I noticed you're interested in Dubai real estate investments.\n\nWould you like to schedule a quick call to discuss your requirements? I'm here to help! 🏠`,
         followup: `Hi ${firstName},\n\nJust following up on our previous conversation. Have you had a chance to consider the properties we discussed?\n\nLet me know if you have any questions! 📱`,
         property_alert: `Hi ${firstName}! 🏠\n\nExciting news! We have a new property listing that matches your criteria.\n\nWould you like me to send you the details?`,
         viewing: `Hello ${firstName},\n\nI'd love to invite you for a private viewing of some exclusive properties.\n\nWhen would be a convenient time for you? 🗓️`,

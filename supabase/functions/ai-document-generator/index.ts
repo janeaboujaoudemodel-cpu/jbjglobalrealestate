@@ -27,10 +27,10 @@ serve(async (req) => {
       return errorResponse(corsHeaders, "Document type is required", 400);
     }
 
-    const systemPrompt = `You are an expert real estate document generator for JJ Global Capital.
+    const systemPrompt = `You are an expert real estate document generator for JBJ Global Real Estate.
 Create professional documents for real estate transactions in the UAE.
 Use formal, professional language suitable for business communications.
-Company: JJ Global Capital | Contact: ${APPROVED_CONTACT.phone} | ${APPROVED_CONTACT.email}
+Company: JBJ Global Real Estate | Contact: ${APPROVED_CONTACT.phone} | ${APPROVED_CONTACT.email}
 IMPORTANT: Generated documents are templates and should be reviewed by professionals before use.`;
 
     const userPrompt = `Generate a ${sanitizeForPrompt(documentType)} document:
@@ -52,7 +52,7 @@ ${documentType.toLowerCase().includes("proposal") ? `
 ## PROPERTY PROPOSAL
 
 ### Cover Page
-- JJ Global Capital header
+- JBJ Global Real Estate header
 - Client name
 - Date
 - Reference number
@@ -77,7 +77,7 @@ ${documentType.toLowerCase().includes("proposal") ? `
 - Market comparison
 - Future outlook
 
-### About JJ Global Capital
+### About JBJ Global Real Estate
 - Company introduction
 - Our services
 - Why choose us
@@ -103,7 +103,7 @@ We, on behalf of our client, express formal interest in the following property..
 [Include all standard EOI components]
 
 Yours faithfully,
-JJ Global Capital
+JBJ Global Real Estate
 ${APPROVED_CONTACT.phone}
 ${APPROVED_CONTACT.email}
 ` : documentType.toLowerCase().includes("requirement") ? `
@@ -138,7 +138,7 @@ ${APPROVED_CONTACT.email}
 ## [Document Type] TEMPLATE
 
 ### Header
-JJ Global Capital
+JBJ Global Real Estate
 Professional Real Estate Services
 
 ### Document Content

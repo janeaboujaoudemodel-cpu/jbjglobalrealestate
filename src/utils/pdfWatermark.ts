@@ -16,7 +16,7 @@ export interface WatermarkOptions {
 export const generateWatermarkId = (): string => {
   const timestamp = Date.now().toString(36);
   const random = Math.random().toString(36).substring(2, 8);
-  return `JJ-${timestamp}-${random}`.toUpperCase();
+  return `JBJ-${timestamp}-${random}`.toUpperCase();
 };
 
 /**
@@ -27,7 +27,7 @@ export const createWatermarkText = (options: WatermarkOptions = {}): string => {
   const timestamp = (options.timestamp || new Date()).toISOString();
   const userInfo = options.userEmail ? ` | ${options.userEmail}` : '';
   
-  return `© JJ Global Capital | ${watermarkId}${userInfo} | ${timestamp}`;
+  return `© JBJ Global Real Estate | ${watermarkId}${userInfo} | ${timestamp}`;
 };
 
 /**
@@ -77,13 +77,13 @@ export const logDocumentDownload = async (
  */
 export const getCopyrightOverlay = (): string => {
   const year = new Date().getFullYear();
-  return `CONFIDENTIAL - © ${year} JJ Global Capital - All Rights Reserved - Unauthorized Distribution Prohibited`;
+  return `CONFIDENTIAL - © ${year} JBJ Global Real Estate - All Rights Reserved - Unauthorized Distribution Prohibited`;
 };
 
 /**
  * Validates if a watermark ID is in the correct format
  */
 export const isValidWatermarkId = (watermarkId: string): boolean => {
-  const pattern = /^JJ-[A-Z0-9]+-[A-Z0-9]+$/;
+  const pattern = /^JBJ-[A-Z0-9]+-[A-Z0-9]+$/;
   return pattern.test(watermarkId);
 };
