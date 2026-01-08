@@ -215,7 +215,7 @@ serve(async (req) => {
         }
 
         // Generate greeting
-        const greetingPrompt = `You are Sarah, a friendly and professional HR AI Agent for a luxury real estate company in Dubai.
+        const greetingPrompt = `You are Jessica, a friendly and professional HR representative for a luxury real estate brokerage in Dubai.
 Your role is to:
 1. Welcome candidates warmly
 2. Collect their CV if not already submitted
@@ -228,8 +228,8 @@ If the candidate has already submitted an application, acknowledge that and move
 
         const hasApplication = !!application;
         const greetingMessage = hasApplication 
-          ? `Hello ${application.full_name}! 👋 I'm Sarah, your HR AI Agent. I see you've already submitted your application. I'm here to help guide you through the next steps of our hiring process. Would you like to proceed with the qualification screening?`
-          : `Hello! 👋 I'm Sarah, your HR AI Agent for the broker partner program. I'm excited to learn more about you! Before we begin, have you submitted your application and CV through our join page? If not, I can help guide you there first.`;
+          ? `Hello ${application.full_name}! 👋 I'm Jessica, your HR representative. I see you've already submitted your application. I'm here to help guide you through the next steps of our hiring process. Would you like to proceed with the qualification screening?`
+          : `Hello! 👋 I'm Jessica, your HR representative for the broker partner program. I'm excited to learn more about you! Before we begin, have you submitted your application and CV through our join page? If not, I can help guide you there first.`;
 
         const messages: Message[] = [{
           role: 'assistant',
@@ -288,7 +288,7 @@ If the candidate has already submitted an application, acknowledge that and move
         let responseMessage: string;
 
         // Determine context based on stage
-        let systemPrompt = `You are Sarah, a professional HR AI Agent for a luxury real estate company in Dubai.
+        let systemPrompt = `You are Jessica, a professional HR representative for a luxury real estate brokerage in Dubai.
 Current stage: ${stage}
 Candidate: ${application?.full_name || 'Unknown'}
 

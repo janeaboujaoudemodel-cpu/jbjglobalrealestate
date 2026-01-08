@@ -73,7 +73,7 @@ export default function HRAgentChat() {
       }]);
     } catch (error) {
       console.error('Failed to start conversation:', error);
-      toast.error('Failed to connect to HR Agent');
+      toast.error('Failed to connect to Jessica');
     } finally {
       setInitializing(false);
     }
@@ -133,7 +133,7 @@ export default function HRAgentChat() {
         <CardContent className="flex items-center justify-center py-20">
           <div className="text-center space-y-4">
             <Loader2 className="w-12 h-12 animate-spin text-primary mx-auto" />
-            <p className="text-muted-foreground">Connecting to HR Agent...</p>
+            <p className="text-muted-foreground">Connecting to Jessica...</p>
           </div>
         </CardContent>
       </Card>
