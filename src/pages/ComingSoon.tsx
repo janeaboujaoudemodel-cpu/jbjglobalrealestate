@@ -107,7 +107,7 @@ const ComingSoon = () => {
           transition={{ delay: 1.2, duration: 0.6 }}
           className="mt-8 text-xs text-muted-foreground/50"
         >
-          © {new Date().getFullYear()} JJ Global Capital. All Rights Reserved.
+          © {new Date().getFullYear()} JBJ Global Real Estate. All Rights Reserved.
         </motion.p>
       </motion.div>
     </div>
