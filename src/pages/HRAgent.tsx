@@ -64,11 +64,11 @@ export default function HRAgent() {
               AI-Powered HR Assistant
             </div>
             <h1 className="text-4xl md:text-5xl font-bold mb-4">
-              Meet Sarah, Your HR Agent
+              Meet Jessica, Your HR Agent
             </h1>
             <p className="text-xl text-muted-foreground max-w-2xl mx-auto">
               Complete your broker partner application with our intelligent HR assistant.
-              Sarah will guide you through CV submission, qualification, and interview.
+              Jessica will guide you through CV submission, qualification, and interview.
             </p>
           </motion.div>
 

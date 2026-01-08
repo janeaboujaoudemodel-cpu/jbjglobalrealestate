@@ -270,7 +270,7 @@ export default function JoinApplication() {
           </p>
         </div>
 
-        {/* HR Agent CTA - Meet Sarah */}
+        {/* HR Agent CTA - Meet Jessica */}
         <Card className="bg-gradient-to-r from-primary/10 to-gold/10 border-gold/30 mb-8">
           <CardContent className="pt-6">
             <div className="flex flex-col sm:flex-row items-center gap-4">
@@ -280,13 +280,13 @@ export default function JoinApplication() {
               <div className="text-center sm:text-left flex-1">
                 <h3 className="text-lg font-semibold text-foreground mb-1">Prefer a Conversation?</h3>
                 <p className="text-sm text-muted-foreground">
-                  Meet Sarah, our AI HR Agent. She'll collect your CV, qualify you, and conduct your interview — all in one chat.
+                  Meet Jessica, our AI HR Agent. She'll collect your CV, qualify you, and conduct your interview — all in one chat.
                 </p>
               </div>
               <Button asChild className="bg-gold hover:bg-gold/90 text-black font-semibold">
                 <Link to="/hr-agent">
                   <MessageCircle className="w-4 h-4 mr-2" />
-                  Chat with Sarah
+                  Chat with Jessica
                 </Link>
               </Button>
             </div>

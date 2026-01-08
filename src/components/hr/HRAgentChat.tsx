@@ -149,7 +149,7 @@ export default function HRAgentChat() {
               <Bot className="w-6 h-6 text-primary" />
             </div>
             <div>
-              <CardTitle className="text-lg">Sarah - HR AI Agent</CardTitle>
+              <CardTitle className="text-lg">Jessica - HR AI Agent</CardTitle>
               <p className="text-sm text-muted-foreground">Broker Partner Program</p>
             </div>
           </div>
