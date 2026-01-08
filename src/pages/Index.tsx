@@ -17,8 +17,8 @@ import { useUserRole } from "@/hooks/useUserRole";
 import { Sparkles, ArrowUpRight, ChevronDown, User, Scale, Layers, Calculator, FileText, Heart, BarChart3, Wrench, Ruler, Palette, Calendar, Wallet, ShoppingBag, Brain, GraduationCap, Briefcase, Target, Award, PenTool, Users, Table2, Video } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import founderProfessional from "@/assets/founder-professional.jpeg";
-import luxuryVillaHero from "@/assets/luxury-villa-hero.jpeg";
-import jbjMonogramDark from "@/assets/jbj-monogram-dark.png";
+import luxuryVillaHero from "@/assets/luxury-villa-hero.jpeg"; // Used in other sections
+import jbjFullLogoLight from "@/assets/jbj-fulllogo-light.png";
 import { CONTACT_INFO } from "@/constants/stats";
 
 // Animation variants
@@ -57,58 +57,37 @@ const Index = () => {
       {/* Floating Install App Button */}
       <InstallAppButton />
 
-      {/* HERO SECTION - BLACK BACKGROUND WITH WHITE CONTENT LAYER */}
-      <div className="relative min-h-screen flex items-center justify-center bg-black">
-        {/* Villa Background Image - Subtle behind white card */}
-        <div className="absolute inset-0 overflow-hidden">
-          <img 
-            src={luxuryVillaHero} 
-            alt="Luxury Villa in Dubai" 
-            className="w-full h-full object-cover opacity-20"
-            loading="eager"
-            fetchPriority="high"
-            decoding="async"
-          />
-          <div className="absolute inset-0 bg-black/70" />
-        </div>
-
-        {/* White Content Layer */}
+      {/* HERO SECTION - SOLID BLACK BACKGROUND WITH CENTERED WHITE PANEL */}
+      <div className="relative min-h-screen flex items-center justify-center bg-black px-4 py-20 md:py-24">
+        
+        {/* White Content Panel - Centered, smaller than full screen */}
         <motion.div 
-          className="relative z-10 w-full max-w-4xl mx-4 md:mx-auto bg-white rounded-3xl shadow-2xl shadow-black/50 overflow-hidden"
+          className="relative z-10 w-full max-w-3xl bg-white rounded-2xl md:rounded-3xl shadow-2xl shadow-black/60 overflow-hidden"
           initial="hidden"
           animate="visible"
           variants={staggerContainer}
         >
           {/* Main Content Area */}
-          <div className="px-8 py-12 md:px-16 md:py-16 text-center">
-            {/* Large JBJ Logo - Filling the space */}
-            <motion.div variants={fadeInUp} className="mb-8">
+          <div className="px-6 py-10 sm:px-10 sm:py-14 md:px-16 md:py-16 text-center">
+            {/* Large JBJ Logo - White version on black would be outside, using dark inside white panel */}
+            <motion.div variants={fadeInUp} className="mb-6 md:mb-8">
               <img 
-                src={jbjMonogramDark}
+                src={jbjFullLogoLight}
                 alt="JBJ Global Real Estate"
-                className="w-40 h-40 md:w-56 md:h-56 lg:w-72 lg:h-72 mx-auto object-contain"
+                className="w-48 h-auto sm:w-56 md:w-72 lg:w-80 mx-auto object-contain"
               />
             </motion.div>
-            
-            {/* Brand Name - Large and prominent */}
-            <motion.h1 
-              className="text-black text-2xl md:text-3xl lg:text-4xl font-bold tracking-[0.15em] uppercase mb-4"
-              variants={fadeInUp}
-              style={{ fontFamily: "Poppins, sans-serif" }}
-            >
-              JBJ GLOBAL REAL ESTATE
-            </motion.h1>
             
             {/* Gold divider */}
             <motion.div 
               variants={fadeInUp}
-              className="w-24 h-1 bg-gradient-to-r from-gold to-gold-light mx-auto mb-6"
+              className="w-16 md:w-24 h-1 bg-gradient-to-r from-gold to-gold-light mx-auto mb-4 md:mb-6"
             />
             
             {/* Tagline */}
             <motion.p 
               variants={fadeInUp}
-              className="text-gold text-xs md:text-sm uppercase tracking-[0.3em] mb-6"
+              className="text-gold text-xs md:text-sm uppercase tracking-[0.25em] md:tracking-[0.3em] mb-6 md:mb-8 font-medium"
             >
               Real Estate Brokerage
             </motion.p>
@@ -116,7 +95,7 @@ const Index = () => {
             {/* We Find | We Negotiate | We Deliver */}
             <motion.div 
               variants={fadeInUp}
-              className="flex flex-wrap items-center justify-center gap-4 md:gap-8 text-zinc-600 text-base md:text-lg mb-8"
+              className="flex flex-wrap items-center justify-center gap-3 md:gap-6 text-zinc-600 text-sm md:text-base lg:text-lg mb-6 md:mb-8"
             >
               <span className="font-medium">We Find</span>
               <span className="text-gold">|</span>
@@ -127,7 +106,7 @@ const Index = () => {
 
             {/* Sub-tagline */}
             <motion.p 
-              className="text-zinc-500 text-sm md:text-base max-w-xl mx-auto"
+              className="text-zinc-500 text-xs sm:text-sm md:text-base max-w-lg mx-auto leading-relaxed"
               variants={fadeInUp}
             >
               Dubai's Premier Real Estate Brokerage — Expert property sales, leasing & holiday homes across the UAE
@@ -135,18 +114,18 @@ const Index = () => {
           </div>
           
           {/* Gold accent bar at bottom */}
-          <div className="h-2 bg-gradient-to-r from-gold via-gold-light to-gold" />
+          <div className="h-1.5 md:h-2 bg-gradient-to-r from-gold via-gold-light to-gold" />
         </motion.div>
         
         {/* Scroll indicator - Below white card */}
         <motion.div 
-          className="absolute bottom-8 left-0 right-0 flex flex-col items-center gap-2 text-white/50 z-10"
+          className="absolute bottom-6 md:bottom-8 left-0 right-0 flex flex-col items-center gap-2 text-white/50 z-10"
           initial={{ opacity: 0, y: -20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ delay: 1.5, duration: 0.8 }}
         >
-          <span className="text-xs uppercase tracking-[0.3em]">Discover</span>
-          <ChevronDown className="w-5 h-5 animate-bounce" />
+          <span className="text-[10px] md:text-xs uppercase tracking-[0.3em]">Discover</span>
+          <ChevronDown className="w-4 h-4 md:w-5 md:h-5 animate-bounce" />
         </motion.div>
       </div>
 
