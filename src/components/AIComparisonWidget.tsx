@@ -54,7 +54,7 @@ const AIComparisonWidget = () => {
               Compare projects dynamically with AI-powered analysis including valuation, ROI, and market insights.
             </p>
             <p className="text-zinc-500 text-sm mt-2">
-              Developed by Founder Jane Abou Jaoude • Powered by JJ Global Capital
+              Developed by Founder Jane Abou Jaoude • Powered by JBJ Global Real Estate
             </p>
           </div>
           <div className="hidden md:flex w-16 h-16 bg-gradient-to-br from-gold to-gold-dark rounded-2xl items-center justify-center shadow-lg shadow-gold/30">

@@ -677,7 +677,7 @@ const Contact = () => {
             </div>
             
             <p className="text-zinc-400 text-sm leading-relaxed mb-4">
-              JJ Global Capital provides real estate brokerage support and coordination. 
+              JBJ Global Real Estate provides real estate brokerage support and coordination. 
               We can introduce you to independent, licensed partners for legal services, mortgages, and concierge support. 
               Partner services are delivered under the partner's own licence and terms, and the client contracts directly with the partner. 
               We do not provide legal, mortgage, financial, or investment advice.

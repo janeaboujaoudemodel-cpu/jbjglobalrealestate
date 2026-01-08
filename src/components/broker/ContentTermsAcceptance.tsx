@@ -106,7 +106,7 @@ export default function ContentTermsAcceptance({
 
                 <p>
                   <strong className="text-white">6. INTELLECTUAL PROPERTY:</strong> All Content is the 
-                  exclusive property of JJ Global Capital and is protected by international copyright laws. 
+                  exclusive property of JBJ Global Real Estate and is protected by international copyright laws. 
                   The Content includes proprietary methodologies, training materials, and trade secrets.
                 </p>
 
@@ -118,11 +118,11 @@ export default function ContentTermsAcceptance({
 
                 <div className="pt-3 border-t border-zinc-700">
                   <p className="text-zinc-500">
-                    © {new Date().getFullYear()} JJ Global Capital. All Rights Reserved.
+                    © {new Date().getFullYear()} JBJ Global Real Estate. All Rights Reserved.
                     <br />
                     Developed and Created by Founder Jane Abou Jaoude
                     <br />
-                    For copyright registration inquiries: legal@jjglobalcapital.com
+                    For copyright registration inquiries: legal@jbj.ae
                   </p>
                 </div>
               </motion.div>

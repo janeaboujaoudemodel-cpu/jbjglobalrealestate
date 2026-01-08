@@ -89,7 +89,7 @@ const Index = () => {
               className="text-white text-xl md:text-2xl lg:text-3xl font-light tracking-wide mb-4"
               style={{ fontFamily: "Poppins, sans-serif" }}
             >
-              JJ Global Capital | Real Estate
+              JBJ Global Real Estate
             </h2>
             {/* We Find | We Negotiate | We Deliver */}
             <div className="flex flex-wrap items-center justify-center gap-4 md:gap-8 text-zinc-300 text-base md:text-lg mb-8">
@@ -729,7 +729,7 @@ const Index = () => {
               </h2>
               
               <p className="text-zinc-300 text-lg md:text-xl leading-relaxed mb-6">
-                JJ Global Capital is a founder-led real estate brokerage built on unwavering standards, discretion, and long-term vision.
+                JBJ Global Real Estate is a founder-led brokerage built on unwavering standards, discretion, and long-term vision.
               </p>
               
               <p className="text-zinc-500 text-base md:text-lg leading-relaxed mb-8">

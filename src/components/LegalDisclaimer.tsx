@@ -18,7 +18,7 @@ const LegalDisclaimer = ({ variant = "compact", className = "" }: LegalDisclaime
           </div>
           <div>
             <h4 className="text-white font-semibold">Legal Notice & Disclaimer</h4>
-            <p className="text-zinc-500 text-xs">JJ Global Capital | Real Estate Brokerage</p>
+            <p className="text-zinc-500 text-xs">JBJ Global Real Estate | Brokerage</p>
           </div>
         </div>
 
@@ -26,7 +26,7 @@ const LegalDisclaimer = ({ variant = "compact", className = "" }: LegalDisclaime
           <div className="flex items-start gap-3">
             <Building2 className="w-4 h-4 text-gold flex-shrink-0 mt-1" />
             <p>
-              <strong className="text-white">Brokerage Services:</strong> JJ Global Capital is a real estate 
+              <strong className="text-white">Brokerage Services:</strong> JBJ Global Real Estate is a 
               brokerage providing property sales, leasing, and holiday home services within the UAE.
             </p>
           </div>
@@ -45,7 +45,7 @@ const LegalDisclaimer = ({ variant = "compact", className = "" }: LegalDisclaime
             <p>
               <strong className="text-white">Intellectual Property:</strong> This website, its design, AI-powered tools, 
               and all associated content are the exclusive intellectual property of 
-              <span className="text-gold"> Jane Abou Jaoude</span> and <span className="text-gold">JJ Global Capital</span>.
+              <span className="text-gold"> Jane Abou Jaoude</span> and <span className="text-gold">JBJ Global Real Estate</span>.
             </p>
           </div>
 
@@ -61,7 +61,7 @@ const LegalDisclaimer = ({ variant = "compact", className = "" }: LegalDisclaime
 
         <div className="mt-6 pt-4 border-t border-zinc-800">
           <p className="text-zinc-600 text-xs text-center">
-            © {currentYear} JJ Global Capital Real Estate Brokerage | 
+            © {currentYear} JBJ Global Real Estate | 
             <Link to="/privacy" className="text-gold hover:underline ml-1">Privacy Policy</Link> | 
             <Link to="/terms" className="text-gold hover:underline ml-1">Terms of Service</Link>
           </p>
@@ -78,7 +78,7 @@ const LegalDisclaimer = ({ variant = "compact", className = "" }: LegalDisclaime
           <div>
             <p className="text-amber-200 text-sm font-medium mb-1">Brokerage Disclaimer</p>
             <p className="text-amber-200/70 text-xs leading-relaxed">
-              JJ Global Capital is a real estate brokerage. We do not provide legal, mortgage, 
+              JBJ Global Real Estate is a real estate brokerage. We do not provide legal, mortgage, 
               financial, or investment advice. Third-party services are provided by independent 
               professionals who contract directly with clients.
             </p>
@@ -97,7 +97,7 @@ const LegalDisclaimer = ({ variant = "compact", className = "" }: LegalDisclaime
             <p className="text-purple-200 text-sm font-medium mb-1">AI Tool Disclaimer</p>
             <p className="text-purple-200/70 text-xs leading-relaxed">
               AI-generated analysis is for informational purposes only and does not constitute professional advice. 
-              Results should be verified independently. These tools are proprietary to JJ Global Capital.
+              Results should be verified independently. These tools are proprietary to JBJ Global Real Estate.
             </p>
           </div>
         </div>
@@ -109,7 +109,7 @@ const LegalDisclaimer = ({ variant = "compact", className = "" }: LegalDisclaime
   return (
     <div className={`text-center ${className}`}>
       <p className="text-zinc-600 text-xs leading-relaxed">
-        © {currentYear} JJ Global Capital Real Estate Brokerage. All Rights Reserved. 
+        © {currentYear} JBJ Global Real Estate. All Rights Reserved. 
         <span className="block mt-1">
           Brokerage services only. Third-party services via independent professionals.
         </span>

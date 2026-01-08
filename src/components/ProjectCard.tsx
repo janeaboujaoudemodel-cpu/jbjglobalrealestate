@@ -76,7 +76,7 @@ const ProjectCard = ({ project, showFavorite = true, showBadgeButton = true, cur
   const handleWhatsApp = (e: React.MouseEvent) => {
     e.preventDefault();
     e.stopPropagation();
-    const message = `Hello JJ Global Capital,\n\nI am interested in ${project.name} located in ${project.location || 'UAE'}.\n\nPlease provide more details about this property.\n\nThank you.`;
+    const message = `Hello JBJ Global Real Estate,\n\nI am interested in ${project.name} located in ${project.location || 'UAE'}.\n\nPlease provide more details about this property.\n\nThank you.`;
     window.open(getWhatsAppUrl(message), '_blank');
   };
 
