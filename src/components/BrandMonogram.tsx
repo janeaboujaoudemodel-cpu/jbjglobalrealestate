@@ -102,7 +102,7 @@ export function BrandMonogram({
               cfg.wordmark
             )}
           >
-            GLOBAL REAL ESTATE
+            JBJ GLOBAL REAL ESTATE
           </span>
           {subline && layout === "stacked" && (
             <span className="mt-2 block text-gold text-xs tracking-[0.2em] uppercase">
