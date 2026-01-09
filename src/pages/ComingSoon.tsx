@@ -1,6 +1,6 @@
 import { motion } from "framer-motion";
 import { Link } from "react-router-dom";
-import jbjFullLogoLight from "@/assets/jbj-fulllogo-light.png";
+import jbjLogoDarkTransparent from "@/assets/jbj-logo-dark-transparent.png";
 import jbjMonogramTransparent from "@/assets/jbj-monogram-transparent.png";
 
 const ComingSoon = () => {
@@ -23,12 +23,12 @@ const ComingSoon = () => {
           initial={{ scale: 0.9, opacity: 0 }}
           animate={{ scale: 1, opacity: 1 }}
           transition={{ delay: 0.2, duration: 0.6 }}
-          className="mb-10"
+          className="mb-14"
         >
           <img 
-            src={jbjFullLogoLight} 
+            src={jbjLogoDarkTransparent}
             alt="JBJ Global Real Estate" 
-            className="h-16 md:h-20 w-auto mx-auto"
+            className="h-24 md:h-32 lg:h-40 w-auto mx-auto"
           />
         </motion.div>
 
@@ -37,7 +37,7 @@ const ComingSoon = () => {
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ delay: 0.4, duration: 0.6 }}
-          className="text-4xl md:text-6xl lg:text-7xl font-bold text-white mb-6 tracking-tight"
+          className="text-5xl md:text-7xl lg:text-8xl font-bold text-white mb-8 tracking-tight"
         >
           Coming Soon
         </motion.h1>
@@ -46,12 +46,12 @@ const ComingSoon = () => {
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ delay: 0.6, duration: 0.6 }}
-          className="space-y-4"
+          className="space-y-6"
         >
-          <p className="text-lg md:text-xl text-white/70">
+          <p className="text-xl md:text-2xl lg:text-3xl text-white/80 font-light">
             We're crafting something extraordinary for you.
           </p>
-          <p className="text-sm md:text-base text-white/40 tracking-widest uppercase">
+          <p className="text-base md:text-lg text-white/50 tracking-[0.3em] uppercase font-medium">
             UAE Real Estate Brokerage
           </p>
         </motion.div>
