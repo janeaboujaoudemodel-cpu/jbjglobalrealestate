@@ -1,5 +1,5 @@
 import { useState, useEffect, useCallback } from "react";
-import { Download } from "lucide-react";
+import { Download, X } from "lucide-react";
 import { motion, AnimatePresence } from "framer-motion";
 import logoDark from "@/assets/logo-dark.jpg";
 import { toast } from "sonner";
@@ -9,46 +9,40 @@ interface BeforeInstallPromptEvent extends Event {
   userChoice: Promise<{ outcome: "accepted" | "dismissed" }>;
 }
 
-const isIOSDevice = () => {
-  try {
-    const ua = navigator.userAgent;
-    const isIOS = /iPad|iPhone|iPod/.test(ua);
-    const isIPadOS = navigator.platform === "MacIntel" && (navigator as any).maxTouchPoints > 1;
-    return isIOS || isIPadOS;
-  } catch {
-    return false;
-  }
-};
-
-const isMobileLikeDevice = () => {
-  try {
-    const ua = navigator.userAgent;
-    return /Android|iPhone|iPad|iPod|Mobi/i.test(ua) || isIOSDevice();
-  } catch {
-    return false;
-  }
+const STORAGE_KEYS = {
+  INSTALLED: "pwa_installed",
+  DISMISSED: "pwa_dismissed",
 };
 
 const InstallAppButton = () => {
   const [deferredPrompt, setDeferredPrompt] = useState<BeforeInstallPromptEvent | null>(null);
   const [isInstalled, setIsInstalled] = useState(false);
-  const [showSuccess, setShowSuccess] = useState(false);
+  const [isDismissed, setIsDismissed] = useState(false);
 
   useEffect(() => {
-    // Check multiple ways if app is installed
-    const checkInstalled = () => {
-      const standalone = window.matchMedia("(display-mode: standalone)").matches;
-      const navigatorStandalone = (navigator as any).standalone === true;
-      const isInstalled = standalone || navigatorStandalone;
-      
-      if (isInstalled) {
-        setIsInstalled(true);
-        return true;
-      }
-      return false;
-    };
+    // Check localStorage for persisted states
+    const wasInstalled = localStorage.getItem(STORAGE_KEYS.INSTALLED) === "true";
+    const wasDismissed = localStorage.getItem(STORAGE_KEYS.DISMISSED) === "true";
     
-    if (checkInstalled()) return;
+    if (wasInstalled) {
+      setIsInstalled(true);
+      return;
+    }
+    
+    if (wasDismissed) {
+      setIsDismissed(true);
+      return;
+    }
+
+    // Check if already running as PWA
+    const standalone = window.matchMedia("(display-mode: standalone)").matches;
+    const navigatorStandalone = (navigator as any).standalone === true;
+    
+    if (standalone || navigatorStandalone) {
+      setIsInstalled(true);
+      localStorage.setItem(STORAGE_KEYS.INSTALLED, "true");
+      return;
+    }
 
     const handleBeforeInstallPrompt = (e: Event) => {
       e.preventDefault();
@@ -58,9 +52,9 @@ const InstallAppButton = () => {
     const handleAppInstalled = () => {
       setIsInstalled(true);
       setDeferredPrompt(null);
-      setShowSuccess(true);
+      localStorage.setItem(STORAGE_KEYS.INSTALLED, "true");
       
-      toast.success("App installed! Find it on your Home Screen or taskbar", {
+      toast.success("App installed! Find it on your Dock or taskbar", {
         duration: 5000,
         description: "Tap the JBJ icon anytime for quick access",
       });
@@ -81,11 +75,15 @@ const InstallAppButton = () => {
     try {
       await deferredPrompt.prompt();
       const { outcome } = await deferredPrompt.userChoice;
+      
       if (outcome === "accepted") {
         setIsInstalled(true);
-        toast.success("App installed successfully!", {
-          duration: 3000,
-        });
+        localStorage.setItem(STORAGE_KEYS.INSTALLED, "true");
+        toast.success("App installed successfully!");
+      } else {
+        // User dismissed the native prompt
+        setIsDismissed(true);
+        localStorage.setItem(STORAGE_KEYS.DISMISSED, "true");
       }
       setDeferredPrompt(null);
     } catch (error) {
@@ -93,39 +91,52 @@ const InstallAppButton = () => {
     }
   }, [deferredPrompt]);
 
-  // Only show when native install prompt is available (true one-click experience)
-  if (isInstalled || !deferredPrompt) return null;
+  const handleDismiss = useCallback(() => {
+    setIsDismissed(true);
+    localStorage.setItem(STORAGE_KEYS.DISMISSED, "true");
+  }, []);
+
+  // Only show when native install prompt is available and not installed/dismissed
+  if (isInstalled || isDismissed || !deferredPrompt) return null;
 
   return (
     <AnimatePresence>
-      <motion.button
+      <motion.div
         initial={{ scale: 0, opacity: 0 }}
-        animate={{ 
-          scale: 1, 
-          opacity: 1,
-        }}
+        animate={{ scale: 1, opacity: 1 }}
         exit={{ scale: 0, opacity: 0 }}
-        onClick={handleInstallClick}
-        className="fixed bottom-6 left-6 z-[9000] flex items-center gap-2 px-4 py-3 rounded-full bg-gradient-to-r from-gold to-gold-light shadow-2xl shadow-gold/40 hover:scale-110 transition-transform group animate-bounce-glow"
-        aria-label="Download app"
-        style={{
-          animation: "bounce-glow 2s ease-in-out infinite",
-        }}
+        className="fixed bottom-6 left-6 z-[9000] flex items-center gap-2 px-4 py-3 rounded-full bg-gradient-to-r from-gold to-gold-light shadow-2xl shadow-gold/40 group"
+        style={{ animation: "bounce-glow 2s ease-in-out infinite" }}
       >
-        <div className="w-8 h-8 rounded-full overflow-hidden border-2 border-black/30 shadow-inner">
-          <img
-            src={logoDark}
-            alt="JBJ Global Real Estate"
-            className="w-full h-full object-cover"
-            loading="lazy"
-          />
-        </div>
-        <span className="text-black font-bold text-sm tracking-wide">One-Click Download</span>
-        <Download className="w-5 h-5 text-black" />
+        <button
+          onClick={handleInstallClick}
+          className="flex items-center gap-2 hover:scale-105 transition-transform"
+          aria-label="Install app"
+        >
+          <div className="w-8 h-8 rounded-full overflow-hidden border-2 border-black/30 shadow-inner">
+            <img
+              src={logoDark}
+              alt="JBJ Global Real Estate"
+              className="w-full h-full object-cover"
+              loading="lazy"
+            />
+          </div>
+          <span className="text-black font-bold text-sm tracking-wide">Install App</span>
+          <Download className="w-5 h-5 text-black" />
+        </button>
+        
+        {/* Dismiss button */}
+        <button
+          onClick={handleDismiss}
+          className="ml-1 p-1 rounded-full hover:bg-black/10 transition-colors"
+          aria-label="Dismiss"
+        >
+          <X className="w-4 h-4 text-black/60" />
+        </button>
         
         {/* Glow ring effect */}
         <motion.div
-          className="absolute inset-0 rounded-full bg-gold/20"
+          className="absolute inset-0 rounded-full bg-gold/20 pointer-events-none"
           animate={{
             scale: [1, 1.2, 1],
             opacity: [0.5, 0, 0.5],
@@ -136,9 +147,8 @@ const InstallAppButton = () => {
             ease: "easeInOut",
           }}
         />
-      </motion.button>
+      </motion.div>
 
-      {/* Add keyframes for custom animation */}
       <style>{`
         @keyframes bounce-glow {
           0%, 100% {
@@ -149,9 +159,6 @@ const InstallAppButton = () => {
             transform: translateY(-8px) scale(1.05);
             box-shadow: 0 0 30px rgba(212, 175, 55, 0.6), 0 0 60px rgba(212, 175, 55, 0.3);
           }
-        }
-        .animate-bounce-glow {
-          animation: bounce-glow 2s ease-in-out infinite;
         }
       `}</style>
     </AnimatePresence>
