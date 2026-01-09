@@ -5,6 +5,7 @@ import Footer from "@/components/Footer";
 import { SafeImage } from "@/components/SafeImage";
 import { useCountUp } from "@/hooks/useCountUp";
 import { COMPANY_STATS, CONTACT_INFO, getWhatsAppUrl, getCallUrl, getEmailUrl } from "@/constants/stats";
+import { SEOHead, pagesSEO } from "@/components/SEOHead";
 
 // Import all founder images
 import founderHero from "@/assets/founder-hero.png";
@@ -148,6 +149,8 @@ const Founder = () => {
 
   return (
     <div className="min-h-screen bg-black overflow-x-hidden">
+      {/* SEO Meta Tags */}
+      <SEOHead {...pagesSEO.founder} />
       {/* HERO - CINEMATIC FULL BLEED */}
       <section className="relative min-h-screen flex items-end">
         {/* Background with parallax effect */}
@@ -209,7 +212,7 @@ const Founder = () => {
             
             <motion.div variants={fadeInUp}>
               <p className="text-white text-xl md:text-2xl lg:text-3xl mb-1 font-semibold tracking-wide">
-                Founder & CEO • JJ Global Capital
+                Founder & CEO • JBJ Global Real Estate
               </p>
               <p className="text-zinc-400 text-sm md:text-base mb-8">
                 Real Estate Brokerage • Dubai, UAE
@@ -303,7 +306,7 @@ const Founder = () => {
               </h2>
               
               <p className="text-gold text-sm uppercase tracking-[0.3em] mb-8 font-medium">
-                Founder · JJ Global Capital
+                Founder · JBJ Global Real Estate
               </p>
               
               <div className="space-y-6 text-zinc-300 leading-relaxed max-w-2xl">
@@ -314,7 +317,7 @@ const Founder = () => {
                   At 16, Jane launched Janine's Beauty (beauty services) and began selling products via importing and shipping from China. With 12+ years of sales, customer experience, and business development expertise, she relocated to Dubai in 2020 to pursue real estate.
                 </p>
                 <p className="text-lg text-zinc-400">
-                  Her career includes working with DAMAC in 2021, leading quality and operations at Al-Ghazal Transportation Company (495+ team), and developing brokerage business divisions from 2022–2024. In 2025, she founded JJ Global Capital as a Dubai-based real estate brokerage.
+                  Her career includes working with DAMAC in 2021, leading quality and operations at Al-Ghazal Transportation Company (495+ team), and developing brokerage business divisions from 2022–2024. In 2025, she founded JBJ Global Real Estate as a Dubai-based real estate brokerage.
                 </p>
               </div>
               
@@ -409,7 +412,7 @@ const Founder = () => {
                   From 2021–2022, she served as Head of Quality & Operations at Al-Ghazal Transportation Company, a luxury B2B transportation and hospitality services provider. Managing teams of 495+ employees, she trained coordinators and drivers while implementing service standards and KPIs.
                 </p>
                 <p className="text-lg text-zinc-400">
-                  This corporate leadership experience provided invaluable insights into operations management, team building, and institutional standards—skills that would later define JJ Global Capital's approach to excellence.
+                  This corporate leadership experience provided invaluable insights into operations management, team building, and institutional standards—skills that would later define JBJ Global Real Estate's approach to excellence.
                 </p>
               </div>
 
@@ -425,7 +428,7 @@ const Founder = () => {
                   In 2025–2026, she worked with Sobha Realty, supporting real estate growth through structured sales and client experience systems.
                 </p>
                 <p className="text-lg text-zinc-400">
-                  In 2025, Jane founded JJ Global Capital as a Dubai-based real estate brokerage specializing in property sales, leasing, and holiday homes across the UAE.
+                  In 2025, Jane founded JBJ Global Real Estate as a Dubai-based real estate brokerage specializing in property sales, leasing, and holiday homes across the UAE.
                 </p>
               </div>
 
@@ -438,7 +441,7 @@ const Founder = () => {
                   Jane's approach to business emphasizes quality over quantity, discretion over publicity, and long-term value over short-term gains.
                 </p>
                 <p className="text-lg text-zinc-400">
-                  Her leadership philosophy has become a model for founder-led enterprises in the region. Today, JJ Global Capital 
+                  Her leadership philosophy has become a model for founder-led enterprises in the region. Today, JBJ Global Real Estate 
                   serves UAE-based and international clients seeking premium property solutions in the Emirates.
                 </p>
               </div>
@@ -494,7 +497,7 @@ const Founder = () => {
                 <div className="absolute bottom-0 left-0 right-0 p-6">
                   <span className="text-gold text-xs uppercase tracking-[0.2em] mb-2 block">2025</span>
                   <h4 className="text-white text-lg font-semibold mb-1">Founder</h4>
-                  <p className="text-zinc-400 text-sm">JJ Global Capital, Dubai</p>
+                  <p className="text-zinc-400 text-sm">JBJ Global Real Estate, Dubai</p>
                 </div>
               </motion.div>
 
@@ -582,14 +585,14 @@ const Founder = () => {
                 <SafeImage 
                   src={jjFlags} 
                   fallbackSrc={founderHero}
-                  alt="JJ Global Capital" 
+                  alt="JBJ Global Real Estate" 
                   className="w-full h-full object-cover object-center group-hover:scale-105 transition-transform duration-700"
                 />
                 <div className="absolute inset-0 bg-gradient-to-t from-black via-black/20 to-transparent opacity-80 group-hover:opacity-90 transition-opacity" />
                 <div className="absolute bottom-0 left-0 right-0 p-6">
                   <span className="text-gold text-xs uppercase tracking-[0.2em] mb-2 block">2014 → 2025</span>
                   <h4 className="text-white text-lg font-semibold mb-1">The Journey Complete</h4>
-                  <p className="text-zinc-400 text-sm">From James Beauty to JJ Global Capital</p>
+                  <p className="text-zinc-400 text-sm">From Janine's Beauty to JBJ Global Real Estate</p>
                 </div>
               </motion.div>
             </motion.div>
@@ -612,7 +615,7 @@ const Founder = () => {
                 <div className="hidden md:block w-16 h-px bg-gradient-to-r from-gold/20 to-gold/50" />
                 <div className="text-center">
                   <p className="text-gold text-3xl font-bold mb-1">2025</p>
-                  <p className="text-zinc-500 text-sm">JJ Global Capital</p>
+                  <p className="text-zinc-500 text-sm">JBJ Global Real Estate</p>
                 </div>
               </div>
             </motion.div>
@@ -937,7 +940,7 @@ const Founder = () => {
                     <p className="text-transparent bg-clip-text bg-gradient-to-r from-gold via-[#D4B96A] to-gold text-2xl md:text-3xl font-semibold tracking-wide mb-2" style={{ fontFamily: "Poppins, sans-serif" }}>Jane Abou Jaoude</p>
                     <p className="text-zinc-300 text-sm uppercase tracking-[0.25em] font-medium">Founder & CEO</p>
                     <div className="mt-3 space-y-1">
-                      <p className="text-white text-base font-semibold tracking-wide">JJ Global Capital</p>
+                      <p className="text-white text-base font-semibold tracking-wide">JBJ Global Real Estate</p>
                       <p className="text-zinc-400 text-xs">Real Estate Brokerage | Dubai, UAE</p>
                     </div>
                   </div>
@@ -1014,7 +1017,7 @@ const Founder = () => {
         </div>
       </section>
 
-      {/* FINAL CTA - JJ GLOBAL CAPITAL - Reduced gap */}
+      {/* FINAL CTA - JBJ GLOBAL REAL ESTATE - Reduced gap */}
       <section className="py-16 md:py-24 bg-gradient-to-b from-black via-zinc-950/50 to-black border-t border-gold/10 relative overflow-hidden">
         {/* Decorative elements */}
         <div className="absolute top-0 left-1/2 -translate-x-1/2 w-px h-24 bg-gradient-to-b from-gold to-transparent" />
@@ -1039,14 +1042,14 @@ const Founder = () => {
               style={{ fontFamily: "Poppins, sans-serif" }}
               variants={fadeInUp}
             >
-              Connect with <span className="text-transparent bg-clip-text bg-gradient-to-r from-gold to-[#C4A962]">JJ Global Capital</span>
+              Connect with <span className="text-transparent bg-clip-text bg-gradient-to-r from-gold to-[#C4A962]">JBJ Global Real Estate</span>
             </motion.h2>
             
             <motion.p 
               className="text-zinc-400 text-lg md:text-xl mb-10 max-w-3xl mx-auto"
               variants={fadeInUp}
             >
-              For daily requests, partnership discussions, collaboration, or investment inquiries, we welcome your correspondence.
+              For property inquiries, partnership discussions, collaboration, or career opportunities, we welcome your correspondence.
             </motion.p>
 
             <motion.div 

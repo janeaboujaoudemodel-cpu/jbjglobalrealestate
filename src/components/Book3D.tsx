@@ -155,7 +155,7 @@ const Book3D = ({ size = "md", className = "" }: Book3DProps) => {
                 </span>
               </div>
               <span className="text-gold/60 text-[7px] md:text-[8px] tracking-[0.3em] uppercase block mt-1">
-                Global Capital
+                Global Real Estate
               </span>
             </div>
 

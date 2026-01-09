@@ -86,7 +86,7 @@ export const JJLogo = ({ size = 'md', showText = true, className = '' }: JJLogoP
         </span>
       </div>
 
-      {/* GLOBAL CAPITAL - L ends under first J, C starts under second J */}
+      {/* GLOBAL REAL ESTATE - L ends under first J, E starts under second J */}
       {showText && (
         <div 
           className="flex items-center justify-center text-black"
@@ -101,7 +101,7 @@ export const JJLogo = ({ size = 'md', showText = true, className = '' }: JJLogoP
           </span>
           <span style={{ width: config.wordGap }} />
           <span className={`font-semibold ${config.text}`}>
-            CAPITAL
+            REAL ESTATE
           </span>
         </div>
       )}
@@ -122,14 +122,14 @@ export const JJLogoHeader = ({ className = '' }: { className?: string }) => (
     </div>
     <span className="text-gold font-extralight text-2xl md:text-3xl leading-none drop-shadow-[0_0_8px_rgba(168,146,90,0.3)]">J</span>
     
-    {/* GLOBAL CAPITAL - Horizontal, tight spacing */}
+    {/* GLOBAL REAL ESTATE - Horizontal, tight spacing */}
     <div className="ml-2 md:ml-3 flex items-center text-black">
       <span className="font-semibold text-sm md:text-base lg:text-lg tracking-[0.08em]">
         GLOBAL
       </span>
       <span className="mx-1" />
       <span className="font-semibold text-sm md:text-base lg:text-lg tracking-[0.08em]">
-        CAPITAL
+        REAL ESTATE
       </span>
     </div>
   </div>

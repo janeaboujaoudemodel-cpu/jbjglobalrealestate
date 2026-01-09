@@ -12,6 +12,7 @@ import BrokerOnboardingBanner from "@/components/BrokerOnboardingBanner";
 import InquiryFormModal from "@/components/InquiryFormModal";
 import InstallAppButton from "@/components/InstallAppButton";
 import CookiesConsentBanner from "@/components/CookiesConsentBanner";
+import { SEOHead, pagesSEO } from "@/components/SEOHead";
 import { useLanguage } from "@/contexts/LanguageContext";
 import { useUserRole } from "@/hooks/useUserRole";
 import { Sparkles, ArrowUpRight, ChevronDown, User, Scale, Layers, Calculator, FileText, Heart, BarChart3, Wrench, Ruler, Palette, Calendar, Wallet, ShoppingBag, Brain, GraduationCap, Briefcase, Target, Award, PenTool, Users, Table2, Video } from "lucide-react";
@@ -42,6 +43,9 @@ const Index = () => {
 
   return (
     <section className="relative w-full min-h-screen bg-black">
+      {/* SEO Meta Tags */}
+      <SEOHead {...pagesSEO.home} />
+      
       {/* Welcome Modal - AI Assistant Popup on first load */}
       <WelcomeModal />
       

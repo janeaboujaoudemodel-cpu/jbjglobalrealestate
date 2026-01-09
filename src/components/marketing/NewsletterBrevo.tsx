@@ -85,7 +85,7 @@ export const NewsletterBrevo = ({
       }
 
       setIsSuccess(true);
-      toast.success('Welcome to the JJ Global Capital inner circle!', {
+      toast.success('Welcome to the JBJ Global Real Estate inner circle!', {
         description: "You'll receive exclusive updates and insights.",
       });
       setEmail('');

@@ -279,7 +279,7 @@ const Favorites = () => {
     </div>
 
     <div class="footer">
-      <div>contact@jjglobalcapital.com • +971 56 591 1000 • jjglobalcapital.com</div>
+      <div>contact@jbj.ae • +971 56 591 1000 • jbj.ae</div>
     </div>
   </div>
 </body>
