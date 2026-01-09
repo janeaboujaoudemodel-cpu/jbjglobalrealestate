@@ -1,7 +1,6 @@
 import { useEffect, useState, useRef, useCallback } from "react";
 import { useLocation } from "react-router-dom";
 import GlobalHeader from "@/components/GlobalHeader";
-import VoiceConciergeWidget from "@/components/VoiceConciergeWidget";
 import AIChatWidget from "@/components/AIChatWidget";
 import InstallAppButton from "@/components/InstallAppButton";
 import MarketingScripts from "@/components/marketing/MarketingScripts";
@@ -102,7 +101,6 @@ const MainLayout = ({ children }: MainLayoutProps) => {
         {children}
       </main>
       <InstallAppButton />
-      <VoiceConciergeWidget />
       <FreeToolsBanner />
       <LeadIntentModal />
       {!isAdminRoute && (
