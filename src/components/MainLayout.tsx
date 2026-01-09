@@ -5,6 +5,8 @@ import VoiceConciergeWidget from "@/components/VoiceConciergeWidget";
 import AIChatWidget from "@/components/AIChatWidget";
 import InstallAppButton from "@/components/InstallAppButton";
 import MarketingScripts from "@/components/marketing/MarketingScripts";
+import FreeToolsBanner from "@/components/FreeToolsBanner";
+import LeadIntentModal from "@/components/LeadIntentModal";
 import { useLanguage } from "@/contexts/LanguageContext";
 import { useIsMobile } from "@/hooks/use-mobile";
 
@@ -101,6 +103,8 @@ const MainLayout = ({ children }: MainLayoutProps) => {
       </main>
       <InstallAppButton />
       <VoiceConciergeWidget />
+      <FreeToolsBanner />
+      <LeadIntentModal />
       {!isAdminRoute && (
         <AIChatWidget
           isCollapsed={effectiveCollapsed}
