@@ -75,14 +75,14 @@ const Index = () => {
           animate="visible"
           variants={staggerContainer}
         >
-          {/* JBJ Logo */}
-          <motion.div variants={fadeInUp} className="mb-6 md:mb-8">
-            <img 
-              src={jbjFullLogoLight}
-              alt="JBJ Global Real Estate"
-              className="w-48 h-auto sm:w-56 md:w-72 lg:w-80 mx-auto object-contain brightness-0 invert"
-            />
-          </motion.div>
+          {/* Company Name as Text */}
+          <motion.h1 
+            variants={fadeInUp} 
+            className="text-white text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-bold tracking-wide mb-6 md:mb-8"
+            style={{ fontFamily: "'Playfair Display', serif" }}
+          >
+            JBJ GLOBAL REAL ESTATE
+          </motion.h1>
           
           {/* Gold divider */}
           <motion.div 
