@@ -57,67 +57,69 @@ const Index = () => {
       {/* Floating Install App Button */}
       <InstallAppButton />
 
-      {/* HERO SECTION - SOLID BLACK BACKGROUND WITH CENTERED WHITE PANEL */}
-      <div className="relative min-h-screen flex items-center justify-center bg-black px-4 py-20 md:py-24">
+      {/* HERO SECTION - LUXURY VILLA BACKGROUND */}
+      <div className="relative min-h-screen flex items-center justify-center">
+        {/* Background Image */}
+        <div 
+          className="absolute inset-0 bg-cover bg-center bg-no-repeat"
+          style={{ backgroundImage: `url(${luxuryVillaHero})` }}
+        />
         
-        {/* White Content Panel - Centered, smaller than full screen */}
+        {/* Dark Overlay */}
+        <div className="absolute inset-0 bg-black/50" />
+        
+        {/* Content */}
         <motion.div 
-          className="relative z-10 w-full max-w-3xl bg-white rounded-2xl md:rounded-3xl shadow-2xl shadow-black/60 overflow-hidden"
+          className="relative z-10 text-center px-4 max-w-4xl mx-auto"
           initial="hidden"
           animate="visible"
           variants={staggerContainer}
         >
-          {/* Main Content Area */}
-          <div className="px-6 py-10 sm:px-10 sm:py-14 md:px-16 md:py-16 text-center">
-            {/* Large JBJ Logo - White version on black would be outside, using dark inside white panel */}
-            <motion.div variants={fadeInUp} className="mb-6 md:mb-8">
-              <img 
-                src={jbjFullLogoLight}
-                alt="JBJ Global Real Estate"
-                className="w-48 h-auto sm:w-56 md:w-72 lg:w-80 mx-auto object-contain"
-              />
-            </motion.div>
-            
-            {/* Gold divider */}
-            <motion.div 
-              variants={fadeInUp}
-              className="w-16 md:w-24 h-1 bg-gradient-to-r from-gold to-gold-light mx-auto mb-4 md:mb-6"
+          {/* JBJ Logo */}
+          <motion.div variants={fadeInUp} className="mb-6 md:mb-8">
+            <img 
+              src={jbjFullLogoLight}
+              alt="JBJ Global Real Estate"
+              className="w-48 h-auto sm:w-56 md:w-72 lg:w-80 mx-auto object-contain brightness-0 invert"
             />
-            
-            {/* Tagline */}
-            <motion.p 
-              variants={fadeInUp}
-              className="text-gold text-xs md:text-sm uppercase tracking-[0.25em] md:tracking-[0.3em] mb-6 md:mb-8 font-medium"
-            >
-              Real Estate Brokerage
-            </motion.p>
-
-            {/* We Find | We Negotiate | We Deliver */}
-            <motion.div 
-              variants={fadeInUp}
-              className="flex flex-wrap items-center justify-center gap-3 md:gap-6 text-zinc-600 text-sm md:text-base lg:text-lg mb-6 md:mb-8"
-            >
-              <span className="font-medium">We Find</span>
-              <span className="text-gold">|</span>
-              <span className="font-medium">We Negotiate</span>
-              <span className="text-gold">|</span>
-              <span className="font-medium">We Deliver</span>
-            </motion.div>
-
-            {/* Sub-tagline */}
-            <motion.p 
-              className="text-zinc-500 text-xs sm:text-sm md:text-base max-w-lg mx-auto leading-relaxed"
-              variants={fadeInUp}
-            >
-              Dubai's Premier Real Estate Brokerage — Expert property sales, leasing & holiday homes across the UAE
-            </motion.p>
-          </div>
+          </motion.div>
           
-          {/* Gold accent bar at bottom */}
-          <div className="h-1.5 md:h-2 bg-gradient-to-r from-gold via-gold-light to-gold" />
+          {/* Gold divider */}
+          <motion.div 
+            variants={fadeInUp}
+            className="w-16 md:w-24 h-1 bg-gradient-to-r from-gold to-gold-light mx-auto mb-4 md:mb-6"
+          />
+          
+          {/* Tagline */}
+          <motion.p 
+            variants={fadeInUp}
+            className="text-gold text-xs md:text-sm uppercase tracking-[0.25em] md:tracking-[0.3em] mb-6 md:mb-8 font-medium"
+          >
+            Real Estate Brokerage
+          </motion.p>
+
+          {/* We Find | We Negotiate | We Deliver */}
+          <motion.div 
+            variants={fadeInUp}
+            className="flex flex-wrap items-center justify-center gap-3 md:gap-6 text-white/90 text-sm md:text-base lg:text-lg mb-6 md:mb-8"
+          >
+            <span className="font-medium">We Find</span>
+            <span className="text-gold">|</span>
+            <span className="font-medium">We Negotiate</span>
+            <span className="text-gold">|</span>
+            <span className="font-medium">We Deliver</span>
+          </motion.div>
+
+          {/* Sub-tagline */}
+          <motion.p 
+            className="text-white/70 text-xs sm:text-sm md:text-base max-w-lg mx-auto leading-relaxed"
+            variants={fadeInUp}
+          >
+            Dubai's Premier Real Estate Brokerage — Expert property sales, leasing & holiday homes across the UAE
+          </motion.p>
         </motion.div>
         
-        {/* Scroll indicator - Below white card */}
+        {/* Scroll indicator */}
         <motion.div 
           className="absolute bottom-6 md:bottom-8 left-0 right-0 flex flex-col items-center gap-2 text-white/50 z-10"
           initial={{ opacity: 0, y: -20 }}
