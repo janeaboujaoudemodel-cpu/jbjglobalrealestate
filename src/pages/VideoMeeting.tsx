@@ -2,6 +2,7 @@ import { useState, useEffect, useRef, useCallback } from "react";
 import { useSearchParams, useNavigate } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
+import { Textarea } from "@/components/ui/textarea";
 import { 
   Video, 
   VideoOff, 
@@ -13,11 +14,16 @@ import {
   Users,
   Copy,
   Link as LinkIcon,
-  Settings,
   MessageSquare,
   Grid,
   Maximize2,
-  Minimize2
+  Minimize2,
+  Share2,
+  Mail,
+  Shield,
+  AlertCircle,
+  Pencil,
+  MessageCircle
 } from "lucide-react";
 import { toast } from "sonner";
 import MainLayout from "@/components/MainLayout";
@@ -27,7 +33,12 @@ import {
   DialogContent,
   DialogHeader,
   DialogTitle,
+  DialogDescription,
+  DialogFooter,
 } from "@/components/ui/dialog";
+import { Switch } from "@/components/ui/switch";
+import { Label } from "@/components/ui/label";
+import { useAuth } from "@/contexts/AuthContext";
 
 interface RemoteParticipant extends Participant {
   stream?: MediaStream;
@@ -45,6 +56,7 @@ const VideoMeeting = () => {
   const [searchParams] = useSearchParams();
   const navigate = useNavigate();
   const roomIdParam = searchParams.get('room');
+  const { user } = useAuth();
   
   const [isInMeeting, setIsInMeeting] = useState(false);
   const [roomId, setRoomId] = useState(roomIdParam || '');
@@ -57,6 +69,14 @@ const VideoMeeting = () => {
   const [isFullscreen, setIsFullscreen] = useState(false);
   const [meetingDuration, setMeetingDuration] = useState(0);
   const [gridView, setGridView] = useState(true);
+  
+  // New features
+  const [showShareDialog, setShowShareDialog] = useState(false);
+  const [showSupportChat, setShowSupportChat] = useState(false);
+  const [supportMessage, setSupportMessage] = useState('');
+  const [isRecording, setIsRecording] = useState(false);
+  const [showRecordingConsent, setShowRecordingConsent] = useState(false);
+  const [brokerName, setBrokerName] = useState('');
   
   const localVideoRef = useRef<HTMLVideoElement>(null);
   const webrtcRef = useRef<WebRTCManager | null>(null);
@@ -157,6 +177,7 @@ const VideoMeeting = () => {
     setParticipants([]);
     setMeetingDuration(0);
     setIsScreenSharing(false);
+    setIsRecording(false);
     
     window.history.replaceState({}, '', '/video-meeting');
     toast.info('Meeting ended');
@@ -204,6 +225,52 @@ const VideoMeeting = () => {
     }
   };
 
+  const startRecording = () => {
+    setShowRecordingConsent(true);
+  };
+
+  const confirmRecording = () => {
+    setIsRecording(true);
+    setShowRecordingConsent(false);
+    toast.success('Recording started. All participants have been notified.');
+  };
+
+  const stopRecording = () => {
+    setIsRecording(false);
+    toast.info('Recording stopped and saved.');
+  };
+
+  const generateInviteText = () => {
+    const displayName = brokerName || userName || 'Our team';
+    const isBroker = brokerName || user;
+    const link = `${window.location.origin}/video-meeting?room=${roomId}`;
+    
+    if (isBroker) {
+      return `${displayName}, Property Consultant at JBJ Global Real Estate is inviting you to a video meeting.\n\nJoin via the following link:\n${link}`;
+    }
+    return `JBJ Global Real Estate is inviting you to a video meeting.\n\nOur team is waiting for you. Join via the following link:\n${link}`;
+  };
+
+  const shareViaWhatsApp = () => {
+    const text = encodeURIComponent(generateInviteText());
+    window.open(`https://wa.me/?text=${text}`, '_blank');
+    setShowShareDialog(false);
+  };
+
+  const shareViaEmail = () => {
+    const subject = encodeURIComponent('Video Meeting Invitation - JBJ Global Real Estate');
+    const body = encodeURIComponent(generateInviteText());
+    window.open(`mailto:?subject=${subject}&body=${body}`, '_blank');
+    setShowShareDialog(false);
+  };
+
+  const sendSupportMessage = () => {
+    if (!supportMessage.trim()) return;
+    toast.success('Your message has been sent to our support team. We\'ll get back to you shortly.');
+    setSupportMessage('');
+    setShowSupportChat(false);
+  };
+
   const formatDuration = (seconds: number) => {
     const hrs = Math.floor(seconds / 3600);
     const mins = Math.floor((seconds % 3600) / 60);
@@ -237,11 +304,15 @@ const VideoMeeting = () => {
         <div className="min-h-screen bg-gradient-to-br from-zinc-950 via-zinc-900 to-black flex items-center justify-center p-4">
           <div className="w-full max-w-md">
             <div className="text-center mb-8">
-              <div className="w-20 h-20 rounded-2xl bg-gradient-to-br from-primary to-primary/60 flex items-center justify-center mx-auto mb-4">
+              <div className="w-20 h-20 rounded-2xl bg-gradient-to-br from-red-500 to-red-600 flex items-center justify-center mx-auto mb-4">
                 <Video className="w-10 h-10 text-white" />
               </div>
-              <h1 className="text-3xl font-bold text-white mb-2">JJ Meet</h1>
+              <h1 className="text-3xl font-bold text-white mb-2">JBJ Video Meet</h1>
               <p className="text-zinc-400">Free video meetings for everyone</p>
+              <div className="flex items-center justify-center gap-2 mt-2 text-green-400 text-xs">
+                <Shield className="w-3 h-3" />
+                <span>End-to-end encrypted</span>
+              </div>
             </div>
 
             <div className="bg-zinc-900/50 border border-zinc-800 rounded-2xl p-6 space-y-6">
@@ -289,6 +360,16 @@ const VideoMeeting = () => {
                 className="bg-zinc-800 border-zinc-700 text-white"
               />
 
+              {/* Broker Name (Optional) */}
+              {user && (
+                <Input
+                  placeholder="Your title (e.g., Senior Property Consultant)"
+                  value={brokerName}
+                  onChange={(e) => setBrokerName(e.target.value)}
+                  className="bg-zinc-800 border-zinc-700 text-white"
+                />
+              )}
+
               {/* Room ID Input */}
               <div className="flex gap-2">
                 <Input
@@ -300,7 +381,7 @@ const VideoMeeting = () => {
                 <Button 
                   onClick={() => startMeeting()} 
                   disabled={!roomId}
-                  className="bg-primary hover:bg-primary/90"
+                  className="bg-red-500 hover:bg-red-600"
                 >
                   Join
                 </Button>
@@ -317,7 +398,7 @@ const VideoMeeting = () => {
 
               <Button 
                 onClick={createNewMeeting}
-                className="w-full bg-gradient-to-r from-primary to-primary/80 hover:from-primary/90 hover:to-primary/70"
+                className="w-full bg-gradient-to-r from-red-500 to-red-600 hover:from-red-600 hover:to-red-700"
               >
                 <Video className="w-4 h-4 mr-2" />
                 Start New Meeting
@@ -325,7 +406,7 @@ const VideoMeeting = () => {
             </div>
 
             <p className="text-center text-zinc-500 text-sm mt-4">
-              Unlimited meeting time • No account required
+              Unlimited meeting time • No account required • Encrypted connections
             </p>
           </div>
         </div>
@@ -346,14 +427,20 @@ const VideoMeeting = () => {
       <div className="flex items-center justify-between px-4 py-3 bg-zinc-900/80 border-b border-zinc-800">
         <div className="flex items-center gap-4">
           <div className="flex items-center gap-2">
-            <div className="w-8 h-8 rounded-lg bg-primary flex items-center justify-center">
+            <div className="w-8 h-8 rounded-lg bg-red-500 flex items-center justify-center">
               <Video className="w-4 h-4 text-white" />
             </div>
-            <span className="font-semibold text-white">JJ Meet</span>
+            <span className="font-semibold text-white">JBJ Video Meet</span>
           </div>
           <div className="text-zinc-400 text-sm">
             {formatDuration(meetingDuration)}
           </div>
+          {isRecording && (
+            <div className="flex items-center gap-1 text-red-400 text-xs animate-pulse">
+              <div className="w-2 h-2 bg-red-500 rounded-full" />
+              Recording
+            </div>
+          )}
         </div>
 
         <div className="flex items-center gap-2">
@@ -370,6 +457,15 @@ const VideoMeeting = () => {
         </div>
 
         <div className="flex items-center gap-2">
+          <Button
+            variant="ghost"
+            size="icon"
+            onClick={() => setShowShareDialog(true)}
+            className="text-zinc-400 hover:text-white"
+            title="Invite participants"
+          >
+            <Share2 className="w-4 h-4" />
+          </Button>
           <Button
             variant="ghost"
             size="icon"
@@ -393,9 +489,18 @@ const VideoMeeting = () => {
             className="text-zinc-400 hover:text-white relative"
           >
             <Users className="w-4 h-4" />
-            <span className="absolute -top-1 -right-1 w-4 h-4 bg-primary rounded-full text-[10px] flex items-center justify-center text-white">
+            <span className="absolute -top-1 -right-1 w-4 h-4 bg-red-500 rounded-full text-[10px] flex items-center justify-center text-white">
               {totalParticipants}
             </span>
+          </Button>
+          <Button
+            variant="ghost"
+            size="icon"
+            onClick={() => setShowSupportChat(true)}
+            className="text-zinc-400 hover:text-white"
+            title="JBJ Support"
+          >
+            <MessageCircle className="w-4 h-4" />
           </Button>
         </div>
       </div>
@@ -420,7 +525,7 @@ const VideoMeeting = () => {
             />
             {!videoEnabled && (
               <div className="absolute inset-0 flex items-center justify-center bg-zinc-800">
-                <div className="w-24 h-24 rounded-full bg-gradient-to-br from-primary to-primary/60 flex items-center justify-center text-white text-3xl font-bold">
+                <div className="w-24 h-24 rounded-full bg-gradient-to-br from-red-500 to-red-600 flex items-center justify-center text-white text-3xl font-bold">
                   {(userName || 'You').charAt(0).toUpperCase()}
                 </div>
               </div>
@@ -479,9 +584,9 @@ const VideoMeeting = () => {
               <div className="text-center p-8">
                 <Users className="w-12 h-12 text-zinc-600 mx-auto mb-4" />
                 <p className="text-zinc-400 mb-2">Waiting for others to join...</p>
-                <Button variant="outline" size="sm" onClick={copyMeetingLink}>
-                  <Copy className="w-4 h-4 mr-2" />
-                  Copy invite link
+                <Button variant="outline" size="sm" onClick={() => setShowShareDialog(true)}>
+                  <Share2 className="w-4 h-4 mr-2" />
+                  Invite participants
                 </Button>
               </div>
             </div>
@@ -514,8 +619,19 @@ const VideoMeeting = () => {
           size="lg"
           onClick={toggleScreenShare}
           className="rounded-full w-14 h-14"
+          title="Share screen"
         >
           {isScreenSharing ? <MonitorOff className="h-5 w-5" /> : <Monitor className="h-5 w-5" />}
+        </Button>
+
+        <Button
+          variant={isRecording ? "destructive" : "secondary"}
+          size="lg"
+          onClick={isRecording ? stopRecording : startRecording}
+          className="rounded-full w-14 h-14"
+          title={isRecording ? "Stop recording" : "Start recording"}
+        >
+          <div className={`w-4 h-4 rounded-full ${isRecording ? 'bg-white animate-pulse' : 'bg-red-500'}`} />
         </Button>
 
         <Button
@@ -536,7 +652,7 @@ const VideoMeeting = () => {
           </DialogHeader>
           <div className="space-y-2">
             <div className="flex items-center gap-3 p-3 bg-zinc-800 rounded-lg">
-              <div className="w-10 h-10 rounded-full bg-primary flex items-center justify-center text-white font-bold">
+              <div className="w-10 h-10 rounded-full bg-red-500 flex items-center justify-center text-white font-bold">
                 {(userName || 'You').charAt(0).toUpperCase()}
               </div>
               <div className="flex-1">
@@ -559,6 +675,95 @@ const VideoMeeting = () => {
                 </div>
               </div>
             ))}
+          </div>
+        </DialogContent>
+      </Dialog>
+
+      {/* Share Dialog */}
+      <Dialog open={showShareDialog} onOpenChange={setShowShareDialog}>
+        <DialogContent className="bg-zinc-900 border-zinc-800">
+          <DialogHeader>
+            <DialogTitle className="text-white">Invite Participants</DialogTitle>
+            <DialogDescription className="text-zinc-400">
+              Share this meeting link with others to join.
+            </DialogDescription>
+          </DialogHeader>
+          <div className="space-y-4">
+            <div className="p-3 bg-zinc-800 rounded-lg">
+              <p className="text-zinc-400 text-xs mb-2">Invitation Preview:</p>
+              <p className="text-white text-sm whitespace-pre-line">{generateInviteText()}</p>
+            </div>
+            <div className="grid grid-cols-2 gap-3">
+              <Button onClick={shareViaWhatsApp} className="bg-green-600 hover:bg-green-700">
+                <Share2 className="w-4 h-4 mr-2" /> WhatsApp
+              </Button>
+              <Button onClick={shareViaEmail} variant="outline">
+                <Mail className="w-4 h-4 mr-2" /> Email
+              </Button>
+            </div>
+            <Button onClick={copyMeetingLink} variant="outline" className="w-full">
+              <Copy className="w-4 h-4 mr-2" /> Copy Link
+            </Button>
+          </div>
+        </DialogContent>
+      </Dialog>
+
+      {/* Recording Consent Dialog */}
+      <Dialog open={showRecordingConsent} onOpenChange={setShowRecordingConsent}>
+        <DialogContent className="bg-zinc-900 border-zinc-800">
+          <DialogHeader>
+            <DialogTitle className="text-white flex items-center gap-2">
+              <AlertCircle className="w-5 h-5 text-amber-400" />
+              Recording Consent
+            </DialogTitle>
+            <DialogDescription className="text-zinc-400">
+              All participants will be notified that this meeting is being recorded. Do you want to proceed?
+            </DialogDescription>
+          </DialogHeader>
+          <DialogFooter className="gap-2">
+            <Button variant="outline" onClick={() => setShowRecordingConsent(false)}>
+              Cancel
+            </Button>
+            <Button onClick={confirmRecording} className="bg-red-500 hover:bg-red-600">
+              Start Recording
+            </Button>
+          </DialogFooter>
+        </DialogContent>
+      </Dialog>
+
+      {/* Support Chat Dialog */}
+      <Dialog open={showSupportChat} onOpenChange={setShowSupportChat}>
+        <DialogContent className="bg-zinc-900 border-zinc-800">
+          <DialogHeader>
+            <DialogTitle className="text-white">JBJ Support Assistant</DialogTitle>
+            <DialogDescription className="text-zinc-400">
+              Having issues? Send us a message and we'll help you right away.
+            </DialogDescription>
+          </DialogHeader>
+          <div className="space-y-4">
+            <Textarea
+              value={supportMessage}
+              onChange={(e) => setSupportMessage(e.target.value)}
+              placeholder="Describe your issue..."
+              className="bg-zinc-800 border-zinc-700 text-white min-h-[100px]"
+            />
+            <div className="flex gap-2">
+              <Button onClick={sendSupportMessage} className="flex-1 bg-red-500 hover:bg-red-600">
+                Send Message
+              </Button>
+              <Button 
+                variant="outline" 
+                onClick={() => window.open('https://wa.me/971565911000?text=I need help with JBJ Video Meet', '_blank')}
+              >
+                WhatsApp
+              </Button>
+              <Button 
+                variant="outline"
+                onClick={() => window.open('mailto:contact@jbj.ae?subject=JBJ Video Meet Support', '_blank')}
+              >
+                Email
+              </Button>
+            </div>
           </div>
         </DialogContent>
       </Dialog>

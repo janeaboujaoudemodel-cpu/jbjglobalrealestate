@@ -41,13 +41,12 @@ import BrokerDashboard from "./pages/BrokerDashboard";
 import AIHub from "./pages/AIHub";
 import InteriorDesignAI from "./pages/InteriorDesignAI";
 import PropertyEvaluator from "./pages/PropertyEvaluator";
-import DocumentScanner from "./pages/DocumentScanner";
+import ScanSignDocuments from "./pages/ScanSignDocuments";
 import PropertyMeasurement from "./pages/PropertyMeasurement";
 import RentalIndex from "./pages/RentalIndex";
 import AICalendar from "./pages/AICalendar";
 import AIFinancialAdvisor from "./pages/AIFinancialAdvisor";
 import AIPersonalShopper from "./pages/AIPersonalShopper";
-import ToolsGuide from "./pages/ToolsGuide";
 import IntellectualProperty from "./pages/IntellectualProperty";
 import Architecture from "./pages/services/Architecture";
 import InteriorDesign from "./pages/services/InteriorDesign";
@@ -69,7 +68,6 @@ import AdminDevelopers from "./pages/AdminDevelopers";
 import BrokerAccount from "./pages/BrokerAccount";
 import HRAgent from "./pages/HRAgent";
 import ReferralOnboarding from "./pages/ReferralOnboarding";
-import SignatureStudio from "./pages/SignatureStudio";
 import Spreadsheet from "./pages/Spreadsheet";
 import Documents from "./pages/Documents";
 import VideoMeeting from "./pages/VideoMeeting";
@@ -125,16 +123,18 @@ const App = () => (
                     <Route path="/broker-toolkit" element={<BrokerToolkit />} />
                     <Route path="/broker-dashboard" element={<BrokerDashboard />} />
                     <Route path="/ai-hub" element={<AIHub />} />
+                    <Route path="/assistant-hub" element={<Navigate to="/ai-hub" replace />} />
                     <Route path="/interior-design-ai" element={<InteriorDesignAI />} />
                     <Route path="/property-evaluator" element={<PropertyEvaluator />} />
-                    <Route path="/document-scanner" element={<DocumentScanner />} />
+                    <Route path="/document-scanner" element={<ScanSignDocuments />} />
+                    <Route path="/scan-sign" element={<Navigate to="/document-scanner" replace />} />
                     <Route path="/property-measurement" element={<PropertyMeasurement />} />
                     <Route path="/rental-index" element={<RentalIndex />} />
                     <Route path="/ai-calendar" element={<AICalendar />} />
                     <Route path="/ai-budget-planner" element={<AIFinancialAdvisor />} />
                     <Route path="/ai-financial-advisor" element={<Navigate to="/ai-budget-planner" replace />} />
                     <Route path="/ai-personal-shopper" element={<AIPersonalShopper />} />
-                    <Route path="/tools-guide" element={<ToolsGuide />} />
+                    <Route path="/tools-guide" element={<Navigate to="/ai-hub" replace />} />
                     <Route path="/intellectual-property" element={<IntellectualProperty />} />
                     <Route path="/services/architecture" element={<Architecture />} />
                     <Route path="/services/interior-design" element={<InteriorDesign />} />
@@ -156,7 +156,7 @@ const App = () => (
                     <Route path="/my-account" element={<BrokerAccount />} />
                     <Route path="/hr-agent" element={<HRAgent />} />
                     <Route path="/referral-onboarding" element={<ReferralOnboarding />} />
-                    <Route path="/signature-studio" element={<SignatureStudio />} />
+                    <Route path="/signature-studio" element={<Navigate to="/document-scanner" replace />} />
                     <Route path="/spreadsheet" element={<Spreadsheet />} />
                     <Route path="/documents" element={<Documents />} />
                     <Route path="/video-meeting" element={<VideoMeeting />} />
