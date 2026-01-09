@@ -84,14 +84,19 @@ export default function FreeToolsBanner() {
                 </div>
               </div>
 
+              {/* Limited time badge */}
+              <div className="inline-flex items-center gap-1.5 px-2 py-1 bg-emerald-500/20 border border-emerald-500/30 rounded-full mb-2">
+                <span className="text-emerald-400 text-xs font-semibold">LIMITED TIME OFFER</span>
+              </div>
+
               {/* Headline */}
               <h3 className="text-white font-bold text-lg mb-2" style={{ fontFamily: "Poppins, sans-serif" }}>
-                Unlock $10,000+ Worth of AI Tools
+                Unlock $10,000+ Worth of AI Tools — FREE
               </h3>
 
               {/* Description */}
               <p className="text-zinc-400 text-sm mb-4 leading-relaxed">
-                Software that costs thousands yearly — now <span className="text-gold font-semibold">completely free</span> for JBJ members. 
+                Software that costs thousands yearly — now <span className="text-emerald-400 font-semibold">completely free</span> for JBJ members. 
                 AI assistants, property tools, documents & more.
               </p>
 

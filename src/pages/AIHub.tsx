@@ -2,6 +2,7 @@ import { Link } from "react-router-dom";
 import { motion } from "framer-motion";
 import Footer from "@/components/Footer";
 import AIAccessGate from "@/components/AIAccessGate";
+import FreeAccessBadge from "@/components/FreeAccessBadge";
 import { Button } from "@/components/ui/button";
 import { 
   ArrowUpRight, 
@@ -260,8 +261,9 @@ const AIHub = () => {
             variants={staggerContainer}
             className="text-center max-w-4xl mx-auto"
           >
-            <motion.div variants={fadeInUp}>
-              <span className="ai-tag inline-flex items-center gap-2 mb-8">
+            <motion.div variants={fadeInUp} className="flex flex-col items-center gap-4 mb-8">
+              <FreeAccessBadge />
+              <span className="ai-tag inline-flex items-center gap-2">
                 <Sparkles className="w-4 h-4" />
                 JBJ AI-Powered Platform
               </span>
