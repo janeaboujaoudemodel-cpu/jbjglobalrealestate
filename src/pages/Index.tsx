@@ -57,7 +57,7 @@ const Index = () => {
       {/* Floating Install App Button */}
       <InstallAppButton />
 
-      {/* HERO SECTION - LUXURY VILLA BACKGROUND */}
+      {/* HERO SECTION - QUIET LUXURY */}
       <div className="relative min-h-screen flex items-center justify-center">
         {/* Background Image */}
         <div 
@@ -65,588 +65,233 @@ const Index = () => {
           style={{ backgroundImage: `url(${luxuryVillaHero})` }}
         />
         
-        {/* Dark Overlay */}
-        <div className="absolute inset-0 bg-black/50" />
+        {/* Refined Dark Overlay - Less heavy */}
+        <div className="absolute inset-0 bg-gradient-to-b from-black/40 via-black/50 to-black/70" />
         
         {/* Content */}
         <motion.div 
-          className="relative z-10 text-center px-4 max-w-4xl mx-auto"
+          className="relative z-10 text-center px-4 max-w-3xl mx-auto"
           initial="hidden"
           animate="visible"
           variants={staggerContainer}
         >
-          {/* Company Name as Text */}
-          <motion.h1 
-            variants={fadeInUp} 
-            className="text-white text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-bold tracking-wide mb-6 md:mb-8"
-            style={{ fontFamily: "'Playfair Display', serif" }}
-          >
-            JBJ GLOBAL REAL ESTATE
-          </motion.h1>
-          
-          {/* Gold divider */}
-          <motion.div 
+          {/* Badge */}
+          <motion.span 
             variants={fadeInUp}
-            className="w-16 md:w-24 h-1 bg-gradient-to-r from-gold to-gold-light mx-auto mb-4 md:mb-6"
-          />
-          
-          {/* Tagline */}
-          <motion.p 
-            variants={fadeInUp}
-            className="text-gold text-xs md:text-sm uppercase tracking-[0.25em] md:tracking-[0.3em] mb-6 md:mb-8 font-medium"
+            className="inline-block px-4 py-1.5 border border-gold/40 rounded-full text-gold text-[10px] md:text-xs uppercase tracking-[0.3em] mb-8"
           >
             Real Estate Brokerage
+          </motion.span>
+          
+          {/* H1 - Cleaner, tighter */}
+          <motion.h1 
+            variants={fadeInUp} 
+            className="text-white text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-semibold tracking-tight leading-[1.1] mb-6"
+            style={{ fontFamily: "Poppins, sans-serif" }}
+          >
+            Buy & Sell Brokerage<br />
+            <span className="text-gold">in Dubai</span>
+          </motion.h1>
+          
+          {/* Subline - Muted, refined */}
+          <motion.p 
+            variants={fadeInUp}
+            className="text-zinc-300 text-sm md:text-base lg:text-lg max-w-xl mx-auto leading-relaxed mb-4"
+          >
+            Client-first guidance, property search, and transaction coordination.
           </motion.p>
 
-          {/* We Find | We Negotiate | We Deliver */}
+          {/* Partner microline */}
+          <motion.p 
+            variants={fadeInUp}
+            className="text-zinc-500 text-xs md:text-sm mb-10"
+          >
+            Licensed partners available for legal and mortgage introductions.
+          </motion.p>
+
+          {/* Two CTAs Only */}
           <motion.div 
             variants={fadeInUp}
-            className="flex flex-wrap items-center justify-center gap-3 md:gap-6 text-white/90 text-sm md:text-base lg:text-lg mb-6 md:mb-8"
+            className="flex flex-col sm:flex-row items-center justify-center gap-4"
           >
-            <span className="font-medium">We Find</span>
-            <span className="text-gold">|</span>
-            <span className="font-medium">We Negotiate</span>
-            <span className="text-gold">|</span>
-            <span className="font-medium">We Deliver</span>
+            <Link to="/properties">
+              <Button className="bg-gold hover:bg-gold-light text-black font-semibold px-8 py-6 text-sm tracking-wide transition-all duration-300 hover:shadow-lg hover:shadow-gold/20">
+                Browse Properties
+                <ArrowUpRight className="w-4 h-4 ml-2" />
+              </Button>
+            </Link>
+            <Button 
+              variant="outline"
+              className="border-gold/50 text-gold hover:bg-gold/10 hover:border-gold font-medium px-8 py-6 text-sm tracking-wide transition-all duration-300"
+              onClick={() => setIsInquiryOpen(true)}
+            >
+              Book Consultation
+            </Button>
           </motion.div>
-
-          {/* Sub-tagline */}
-          <motion.p 
-            className="text-white/70 text-xs sm:text-sm md:text-base max-w-lg mx-auto leading-relaxed"
-            variants={fadeInUp}
-          >
-            Buy & Sell Properties Across the UAE — Additional Services Through Our Licensed Partners
-          </motion.p>
         </motion.div>
         
-        {/* Scroll indicator */}
+        {/* Scroll indicator - Subtle */}
         <motion.div 
-          className="absolute bottom-6 md:bottom-8 left-0 right-0 flex flex-col items-center gap-2 text-white/50 z-10"
-          initial={{ opacity: 0, y: -20 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ delay: 1.5, duration: 0.8 }}
+          className="absolute bottom-8 left-0 right-0 flex flex-col items-center gap-2 text-zinc-500 z-10"
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+          transition={{ delay: 2, duration: 1 }}
         >
-          <span className="text-[10px] md:text-xs uppercase tracking-[0.3em]">Discover</span>
-          <ChevronDown className="w-4 h-4 md:w-5 md:h-5 animate-bounce" />
+          <ChevronDown className="w-5 h-5 animate-bounce" />
         </motion.div>
       </div>
 
-      {/* CTA SECTION - Below Hero */}
-      <section className="py-12 md:py-16 bg-black">
+      {/* QUICK ACTIONS - Simplified */}
+      <section className="py-16 md:py-20 bg-black">
         <div className="container mx-auto px-4">
-          <motion.div 
-            className="flex flex-col items-center gap-5"
-            initial={{ opacity: 0, y: 20 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true }}
-            transition={{ duration: 0.6 }}
-          >
-            {/* Row 1 - Primary CTAs - White Background with Gold Text */}
-            <div className="flex flex-wrap justify-center gap-3">
-              <Link to="/services">
-                <Button 
-                  className="bg-white hover:bg-zinc-100 text-gold font-semibold px-6 py-5 text-sm shadow-lg shadow-white/10 hover:shadow-xl transition-all duration-300 hover:scale-105"
-                >
-                  Explore Our Services
-                  <ArrowUpRight className="w-4 h-4 ml-2 text-gold" />
-                </Button>
-              </Link>
-              <Button 
-                className="bg-white hover:bg-zinc-100 text-gold font-semibold px-6 py-5 text-sm shadow-lg shadow-white/10 hover:shadow-xl transition-all duration-300 hover:scale-105"
-                onClick={() => setIsInquiryOpen(true)}
-              >
-                Contact Us
-                <ArrowUpRight className="w-4 h-4 ml-2 text-gold" />
+          {/* Primary Services Row */}
+          <div className="flex flex-wrap justify-center gap-3 mb-8">
+            <Link to="/properties">
+              <Button className="bg-gold hover:bg-gold-light text-black font-semibold px-6 py-5 text-sm transition-all duration-300">
+                Explore Properties
+                <ArrowUpRight className="w-4 h-4 ml-2" />
               </Button>
-              <Link to="/market-report">
-                <Button 
-                  className="bg-white hover:bg-zinc-100 text-gold font-semibold px-6 py-5 text-sm shadow-lg shadow-white/10 hover:shadow-xl transition-all duration-300 hover:scale-105"
-                >
-                  <FileText className="w-4 h-4 mr-2 text-gold" />
-                  Market Report
-                  <ArrowUpRight className="w-4 h-4 ml-2 text-gold" />
-                </Button>
-              </Link>
-              <Link to="/news">
-                <Button 
-                  className="bg-white hover:bg-zinc-100 text-gold font-semibold px-6 py-5 text-sm shadow-lg shadow-white/10 hover:shadow-xl transition-all duration-300 hover:scale-105"
-                >
-                  <FileText className="w-4 h-4 mr-2 text-gold" />
-                  News & Insights
-                  <ArrowUpRight className="w-4 h-4 ml-2 text-gold" />
-                </Button>
-              </Link>
-            </div>
-            
-            {/* Row 2 - Services Row - Dark Solid with Gold Accent Border */}
-            <div className="flex flex-wrap justify-center gap-3">
-              <Link to="/properties">
-                <Button 
-                  className="bg-zinc-900 border-2 border-gold/40 text-white hover:bg-zinc-800 hover:border-gold font-semibold px-5 py-4 text-xs transition-all duration-300 hover:scale-105 hover:shadow-lg hover:shadow-gold/20"
-                >
-                  Explore Properties
-                  <ArrowUpRight className="w-3 h-3 ml-1 text-gold" />
-                </Button>
-              </Link>
-              <Button 
-                className="bg-zinc-900 border-2 border-gold/40 text-white hover:bg-zinc-800 hover:border-gold font-semibold px-5 py-4 text-xs transition-all duration-300 hover:scale-105 hover:shadow-lg hover:shadow-gold/20"
-                onClick={() => setIsInquiryOpen(true)}
-              >
-                List Your Property
-                <ArrowUpRight className="w-3 h-3 ml-1 text-gold" />
-              </Button>
-              <Link to="/services/design-build">
-                <Button 
-                  className="bg-zinc-900 border-2 border-gold/40 text-white hover:bg-zinc-800 hover:border-gold font-semibold px-5 py-4 text-xs transition-all duration-300 hover:scale-105 hover:shadow-lg hover:shadow-gold/20"
-                >
-                  Design & Build Partners
-                  <ArrowUpRight className="w-3 h-3 ml-1 text-gold" />
-                </Button>
-              </Link>
-              <Link to="/services/law-firm">
-                <Button 
-                  className="bg-zinc-900 border-2 border-gold/40 text-white hover:bg-zinc-800 hover:border-gold font-semibold px-5 py-4 text-xs transition-all duration-300 hover:scale-105 hover:shadow-lg hover:shadow-gold/20"
-                >
-                  Legal Partners
-                  <ArrowUpRight className="w-3 h-3 ml-1 text-gold" />
-                </Button>
-              </Link>
-            </div>
-            
-            {/* Row 3 - AI Tools - Colored Glowing Borders */}
-            <div className="flex flex-wrap justify-center gap-3">
-              <Link to="/compare">
-                <Button 
-                  className="bg-transparent backdrop-blur-md border-2 border-purple-500/50 text-purple-400 hover:bg-purple-500/20 hover:border-purple-400 hover:shadow-lg hover:shadow-purple-500/20 font-semibold px-5 py-4 text-xs transition-all duration-300 hover:scale-105 group"
-                >
-                  <BarChart3 className="w-3 h-3 mr-1" />
-                  Property Comparison
-                  <ArrowUpRight className="w-3 h-3 ml-1 group-hover:translate-x-0.5 group-hover:-translate-y-0.5 transition-transform" />
-                </Button>
-              </Link>
-              
-              <Link to="/interior-design-ai">
-                <Button 
-                  className="bg-transparent backdrop-blur-md border-2 border-fuchsia-500/50 text-fuchsia-400 hover:bg-fuchsia-500/20 hover:border-fuchsia-400 hover:shadow-lg hover:shadow-fuchsia-500/20 font-semibold px-5 py-4 text-xs transition-all duration-300 hover:scale-105 group"
-                >
-                  <Palette className="w-3 h-3 mr-1" />
-                  JBJ AI Interior Design
-                  <ArrowUpRight className="w-3 h-3 ml-1 group-hover:translate-x-0.5 group-hover:-translate-y-0.5 transition-transform" />
-                </Button>
-              </Link>
-              
-              <Link to="/property-measurement">
-                <Button 
-                  className="bg-transparent backdrop-blur-md border-2 border-teal-500/50 text-teal-400 hover:bg-teal-500/20 hover:border-teal-400 hover:shadow-lg hover:shadow-teal-500/20 font-semibold px-5 py-4 text-xs transition-all duration-300 hover:scale-105 group"
-                >
-                  <Ruler className="w-3 h-3 mr-1" />
-                  Property Measurement
-                  <ArrowUpRight className="w-3 h-3 ml-1 group-hover:translate-x-0.5 group-hover:-translate-y-0.5 transition-transform" />
-                </Button>
-              </Link>
-              
-              <Link to="/rental-index">
-                <Button 
-                  className="bg-transparent backdrop-blur-md border-2 border-emerald-500/50 text-emerald-400 hover:bg-emerald-500/20 hover:border-emerald-400 hover:shadow-lg hover:shadow-emerald-500/20 font-semibold px-5 py-4 text-xs transition-all duration-300 hover:scale-105 group"
-                >
-                  <Layers className="w-3 h-3 mr-1" />
-                  Rental Index
-                  <ArrowUpRight className="w-3 h-3 ml-1 group-hover:translate-x-0.5 group-hover:-translate-y-0.5 transition-transform" />
-                </Button>
-              </Link>
-              
-              <Link to="/document-scanner">
-                <Button 
-                  className="bg-transparent backdrop-blur-md border-2 border-green-500/50 text-green-400 hover:bg-green-500/20 hover:border-green-400 hover:shadow-lg hover:shadow-green-500/20 font-semibold px-5 py-4 text-xs transition-all duration-300 hover:scale-105 group"
-                >
-                  <FileText className="w-3 h-3 mr-1" />
-                  JBJ Scan & Sign
-                  <ArrowUpRight className="w-3 h-3 ml-1 group-hover:translate-x-0.5 group-hover:-translate-y-0.5 transition-transform" />
-                </Button>
-              </Link>
-            </div>
-            
-            {/* Row 4 - More AI Tools */}
-            <div className="flex flex-wrap justify-center gap-3">
-              <Link to="/property-evaluator">
-                <Button 
-                  className="bg-transparent backdrop-blur-md border-2 border-blue-500/50 text-blue-400 hover:bg-blue-500/20 hover:border-blue-400 hover:shadow-lg hover:shadow-blue-500/20 font-semibold px-5 py-4 text-xs transition-all duration-300 hover:scale-105 group"
-                >
-                  <Calculator className="w-3 h-3 mr-1" />
-                  Property Evaluator
-                  <ArrowUpRight className="w-3 h-3 ml-1 group-hover:translate-x-0.5 group-hover:-translate-y-0.5 transition-transform" />
-                </Button>
-              </Link>
-              
-              <Link to="/mortgage-calculator">
-                <Button 
-                  className="bg-transparent backdrop-blur-md border-2 border-cyan-500/50 text-cyan-400 hover:bg-cyan-500/20 hover:border-cyan-400 hover:shadow-lg hover:shadow-cyan-500/20 font-semibold px-5 py-4 text-xs transition-all duration-300 hover:scale-105 group"
-                >
-                  <Calculator className="w-3 h-3 mr-1" />
-                  Mortgage Calculator
-                  <ArrowUpRight className="w-3 h-3 ml-1 group-hover:translate-x-0.5 group-hover:-translate-y-0.5 transition-transform" />
-                </Button>
-              </Link>
-              
-              <Link to="/favorites">
-                <Button 
-                  className="bg-transparent backdrop-blur-md border-2 border-pink-500/50 text-pink-400 hover:bg-pink-500/20 hover:border-pink-400 hover:shadow-lg hover:shadow-pink-500/20 font-semibold px-5 py-4 text-xs transition-all duration-300 hover:scale-105 group"
-                >
-                  <Heart className="w-3 h-3 mr-1" />
-                  Favorites & Shortlist
-                  <ArrowUpRight className="w-3 h-3 ml-1 group-hover:translate-x-0.5 group-hover:-translate-y-0.5 transition-transform" />
-                </Button>
-              </Link>
-              
-              <Link to="/ai-hub">
-                <Button 
-                  className="bg-transparent backdrop-blur-md border-2 border-purple-500/50 text-purple-400 hover:bg-purple-500/20 hover:border-purple-400 hover:shadow-lg hover:shadow-purple-500/20 font-semibold px-5 py-4 text-xs transition-all duration-300 hover:scale-105 group"
-                >
-                  <Brain className="w-3 h-3 mr-1" />
-                  JBJ Assistant Hub
-                  <ArrowUpRight className="w-3 h-3 ml-1 group-hover:translate-x-0.5 group-hover:-translate-y-0.5 transition-transform" />
-                </Button>
-              </Link>
-            </div>
-            
-            {/* Row 5 - New AI Tools */}
-            <div className="flex flex-wrap justify-center gap-3">
-              <Link to="/ai-calendar">
-                <Button 
-                  className="bg-transparent backdrop-blur-md border-2 border-indigo-500/50 text-indigo-400 hover:bg-indigo-500/20 hover:border-indigo-400 hover:shadow-lg hover:shadow-indigo-500/20 font-semibold px-5 py-4 text-xs transition-all duration-300 hover:scale-105 group"
-                >
-                  <Calendar className="w-3 h-3 mr-1" />
-                  JBJ AI Calendar
-                  <ArrowUpRight className="w-3 h-3 ml-1 group-hover:translate-x-0.5 group-hover:-translate-y-0.5 transition-transform" />
-                </Button>
-              </Link>
-              
-              <Link to="/ai-budget-planner">
-                <Button 
-                  className="bg-transparent backdrop-blur-md border-2 border-amber-500/50 text-amber-400 hover:bg-amber-500/20 hover:border-amber-400 hover:shadow-lg hover:shadow-amber-500/20 font-semibold px-5 py-4 text-xs transition-all duration-300 hover:scale-105 group"
-                  title="Budget analysis and property affordability insights (informational only)"
-                >
-                  <Wallet className="w-3 h-3 mr-1" />
-                  JBJ AI Budget Planner
-                  <ArrowUpRight className="w-3 h-3 ml-1 group-hover:translate-x-0.5 group-hover:-translate-y-0.5 transition-transform" />
-                </Button>
-              </Link>
-              
-              <Link to="/ai-personal-shopper">
-                <Button 
-                  className="bg-transparent backdrop-blur-md border-2 border-rose-500/50 text-rose-400 hover:bg-rose-500/20 hover:border-rose-400 hover:shadow-lg hover:shadow-rose-500/20 font-semibold px-5 py-4 text-xs transition-all duration-300 hover:scale-105 group"
-                >
-                  <ShoppingBag className="w-3 h-3 mr-1" />
-                  JBJ AI Personal Shopper
-                  <ArrowUpRight className="w-3 h-3 ml-1 group-hover:translate-x-0.5 group-hover:-translate-y-0.5 transition-transform" />
-                </Button>
-              </Link>
-              
-              <Link to="/document-scanner">
-                <Button 
-                  className="bg-transparent backdrop-blur-md border-2 border-sky-500/50 text-sky-400 hover:bg-sky-500/20 hover:border-sky-400 hover:shadow-lg hover:shadow-sky-500/20 font-semibold px-5 py-4 text-xs transition-all duration-300 hover:scale-105 group"
-                >
-                  <PenTool className="w-3 h-3 mr-1" />
-                  JBJ Signature Designer
-                  <ArrowUpRight className="w-3 h-3 ml-1 group-hover:translate-x-0.5 group-hover:-translate-y-0.5 transition-transform" />
-                </Button>
-              </Link>
-              
-              <Link to="/referral-onboarding">
-                <Button 
-                  className="bg-transparent backdrop-blur-md border-2 border-lime-500/50 text-lime-400 hover:bg-lime-500/20 hover:border-lime-400 hover:shadow-lg hover:shadow-lime-500/20 font-semibold px-5 py-4 text-xs transition-all duration-300 hover:scale-105 group"
-                >
-                  <Users className="w-3 h-3 mr-1" />
-                  Join Referral Program
-                  <ArrowUpRight className="w-3 h-3 ml-1 group-hover:translate-x-0.5 group-hover:-translate-y-0.5 transition-transform" />
-                </Button>
-              </Link>
-              
-              <Link to="/spreadsheet">
-                <Button 
-                  className="bg-transparent backdrop-blur-md border-2 border-green-500/50 text-green-400 hover:bg-green-500/20 hover:border-green-400 hover:shadow-lg hover:shadow-green-500/20 font-semibold px-5 py-4 text-xs transition-all duration-300 hover:scale-105 group"
-                >
-                  <Table2 className="w-3 h-3 mr-1" />
-                  Spreadsheet
-                  <ArrowUpRight className="w-3 h-3 ml-1 group-hover:translate-x-0.5 group-hover:-translate-y-0.5 transition-transform" />
-                </Button>
-              </Link>
-              
-              <Link to="/documents">
-                <Button 
-                  className="bg-transparent backdrop-blur-md border-2 border-blue-500/50 text-blue-400 hover:bg-blue-500/20 hover:border-blue-400 hover:shadow-lg hover:shadow-blue-500/20 font-semibold px-5 py-4 text-xs transition-all duration-300 hover:scale-105 group"
-                >
-                  <FileText className="w-3 h-3 mr-1" />
-                  Documents
-                  <ArrowUpRight className="w-3 h-3 ml-1 group-hover:translate-x-0.5 group-hover:-translate-y-0.5 transition-transform" />
-                </Button>
-              </Link>
-              
-              <Link to="/video-meeting">
-                <Button 
-                  className="bg-transparent backdrop-blur-md border-2 border-red-500/50 text-red-400 hover:bg-red-500/20 hover:border-red-400 hover:shadow-lg hover:shadow-red-500/20 font-semibold px-5 py-4 text-xs transition-all duration-300 hover:scale-105 group"
-                >
-                  <Video className="w-3 h-3 mr-1" />
-                  JBJ Video Meet
-                  <ArrowUpRight className="w-3 h-3 ml-1 group-hover:translate-x-0.5 group-hover:-translate-y-0.5 transition-transform" />
-                </Button>
-              </Link>
-            </div>
-            
-            {/* Row 6 - More Tools */}
-            <div className="flex flex-wrap justify-center gap-3">
-              <Link to="/crm">
-                <Button 
-                  className="bg-transparent backdrop-blur-md border-2 border-orange-500/50 text-orange-400 hover:bg-orange-500/20 hover:border-orange-400 hover:shadow-lg hover:shadow-orange-500/20 font-semibold px-5 py-4 text-xs transition-all duration-300 hover:scale-105 group"
-                >
-                  <Briefcase className="w-3 h-3 mr-1" />
-                  CRM Dashboard
-                  <ArrowUpRight className="w-3 h-3 ml-1 group-hover:translate-x-0.5 group-hover:-translate-y-0.5 transition-transform" />
-                </Button>
-              </Link>
-              
-              <Link to="/map">
-                <Button 
-                  className="bg-transparent backdrop-blur-md border-2 border-teal-500/50 text-teal-400 hover:bg-teal-500/20 hover:border-teal-400 hover:shadow-lg hover:shadow-teal-500/20 font-semibold px-5 py-4 text-xs transition-all duration-300 hover:scale-105 group"
-                >
-                  <Target className="w-3 h-3 mr-1" />
-                  Property Map
-                  <ArrowUpRight className="w-3 h-3 ml-1 group-hover:translate-x-0.5 group-hover:-translate-y-0.5 transition-transform" />
-                </Button>
-              </Link>
-              
-              <Link to="/hr-agent">
-                <Button 
-                  className="bg-transparent backdrop-blur-md border-2 border-violet-500/50 text-violet-400 hover:bg-violet-500/20 hover:border-violet-400 hover:shadow-lg hover:shadow-violet-500/20 font-semibold px-5 py-4 text-xs transition-all duration-300 hover:scale-105 group"
-                >
-                  <User className="w-3 h-3 mr-1" />
-                  Chat with Jessica
-                  <ArrowUpRight className="w-3 h-3 ml-1 group-hover:translate-x-0.5 group-hover:-translate-y-0.5 transition-transform" />
-                </Button>
-              </Link>
-              
-              <Link to="/my-account">
-                <Button 
-                  className="bg-transparent backdrop-blur-md border-2 border-cyan-500/50 text-cyan-400 hover:bg-cyan-500/20 hover:border-cyan-400 hover:shadow-lg hover:shadow-cyan-500/20 font-semibold px-5 py-4 text-xs transition-all duration-300 hover:scale-105 group"
-                >
-                  <User className="w-3 h-3 mr-1" />
-                  My Account
-                  <ArrowUpRight className="w-3 h-3 ml-1 group-hover:translate-x-0.5 group-hover:-translate-y-0.5 transition-transform" />
-                </Button>
-              </Link>
-              
-              <Link to="/join">
-                <Button 
-                  className="bg-transparent backdrop-blur-md border-2 border-gold/50 text-gold hover:bg-gold/20 hover:border-gold hover:shadow-lg hover:shadow-gold/20 font-semibold px-5 py-4 text-xs transition-all duration-300 hover:scale-105 group"
-                >
-                  <Briefcase className="w-3 h-3 mr-1" />
-                  Join Our Team
-                  <ArrowUpRight className="w-3 h-3 ml-1 group-hover:translate-x-0.5 group-hover:-translate-y-0.5 transition-transform" />
-                </Button>
-              </Link>
-              
-              <Link to="/onboarding">
-                <Button 
-                  className="bg-transparent backdrop-blur-md border-2 border-emerald-500/50 text-emerald-400 hover:bg-emerald-500/20 hover:border-emerald-400 hover:shadow-lg hover:shadow-emerald-500/20 font-semibold px-5 py-4 text-xs transition-all duration-300 hover:scale-105 group"
-                >
-                  <GraduationCap className="w-3 h-3 mr-1" />
-                  Training Portal
-                  <ArrowUpRight className="w-3 h-3 ml-1 group-hover:translate-x-0.5 group-hover:-translate-y-0.5 transition-transform" />
-                </Button>
-              </Link>
-            </div>
-            
-            {/* AI Home Finder - Full Width Purple Glowing Bar */}
-            <Link to="/quiz" className="w-full max-w-2xl mt-4">
-              <div className="relative overflow-hidden rounded-xl bg-gradient-to-r from-purple-600 via-purple-700 to-purple-800 p-[1px] shadow-2xl shadow-purple-500/30 hover:shadow-purple-500/50 transition-all duration-500 group hover:scale-[1.02]">
-                {/* Animated glow border */}
-                <div className="absolute inset-0 bg-gradient-to-r from-purple-400 via-fuchsia-400 to-purple-400 opacity-60 blur-sm group-hover:opacity-100 transition-opacity duration-500" />
-                
-                {/* Inner content */}
-                <div className="relative flex items-center justify-center gap-4 bg-gradient-to-r from-purple-700 via-purple-800 to-purple-700 rounded-xl px-8 py-4 group-hover:from-purple-600 group-hover:via-purple-700 group-hover:to-purple-600 transition-all duration-500">
-                  <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white/5 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
-                  
-                  <Sparkles className="w-5 h-5 text-purple-200 group-hover:text-white transition-colors relative z-10" />
-                  <div className="text-center relative z-10">
-                    <p className="text-white font-bold text-base tracking-wide">JBJ AI Home Finder</p>
-                    <p className="text-purple-200/80 text-xs">AI-Powered Property Matching</p>
-                  </div>
-                  <ArrowUpRight className="w-5 h-5 text-purple-200 group-hover:text-white group-hover:translate-x-1 group-hover:-translate-y-1 transition-all relative z-10" />
-                </div>
-              </div>
             </Link>
-          </motion.div>
-        </div>
-      </section>
+            <Button 
+              variant="outline"
+              className="border-gold/40 text-gold hover:bg-gold/10 hover:border-gold px-6 py-5 text-sm transition-all duration-300"
+              onClick={() => setIsInquiryOpen(true)}
+            >
+              List Your Property
+            </Button>
+            <Link to="/market-report">
+              <Button 
+                variant="outline"
+                className="border-zinc-700 text-zinc-300 hover:bg-zinc-800 hover:border-zinc-600 px-6 py-5 text-sm transition-all duration-300"
+              >
+                <FileText className="w-4 h-4 mr-2" />
+                Market Report
+              </Button>
+            </Link>
+          </div>
 
-      {/* BROKER TOOLKIT & PROFESSIONAL TOOLS SECTION - Premium Dedicated */}
-      <section className="py-20 md:py-28 bg-gradient-to-b from-black via-zinc-950 to-black relative overflow-hidden">
-        {/* Background decorative elements */}
-        <div className="absolute inset-0 pointer-events-none">
-          <div className="absolute top-20 left-10 w-72 h-72 bg-gold/5 rounded-full blur-3xl" />
-          <div className="absolute bottom-20 right-10 w-96 h-96 bg-purple-500/5 rounded-full blur-3xl" />
-        </div>
-        
-        <div className="container mx-auto px-4 relative z-10">
-          {/* Section Header */}
+          {/* Licensed Partner Network */}
           <motion.div 
-            className="text-center mb-16"
+            className="max-w-2xl mx-auto text-center mb-12"
             initial={{ opacity: 0, y: 20 }}
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true }}
-            transition={{ duration: 0.6 }}
           >
-            <span className="inline-flex items-center gap-2 text-gold text-xs uppercase tracking-[0.3em] mb-4">
-              <Award className="w-4 h-4" />
-              Exclusive Platform
-            </span>
-            <h2 
-              className="text-white text-3xl md:text-4xl lg:text-5xl font-bold mb-4"
-              style={{ fontFamily: "Poppins, sans-serif" }}
-            >
-              Elevate Your <span className="text-transparent bg-clip-text bg-gradient-to-r from-gold via-gold-light to-gold">Real Estate Career</span>
-            </h2>
-            <p className="text-zinc-400 text-lg max-w-2xl mx-auto">
-              Access AI-powered tools and professional resources designed for real estate excellence
+            <h3 className="text-zinc-400 text-xs uppercase tracking-[0.2em] mb-4">Licensed Partner Network</h3>
+            <div className="flex flex-wrap justify-center gap-3">
+              <Link to="/services/law-firm">
+                <span className="inline-flex items-center gap-2 px-4 py-2 bg-zinc-900 border border-zinc-800 rounded-full text-zinc-300 text-sm hover:border-gold/40 hover:text-gold transition-all">
+                  <Scale className="w-4 h-4" />
+                  Legal Partners
+                </span>
+              </Link>
+              <Link to="/mortgage-calculator">
+                <span className="inline-flex items-center gap-2 px-4 py-2 bg-zinc-900 border border-zinc-800 rounded-full text-zinc-300 text-sm hover:border-gold/40 hover:text-gold transition-all">
+                  <Calculator className="w-4 h-4" />
+                  Mortgage Partners
+                </span>
+              </Link>
+              <Link to="/services/design-build">
+                <span className="inline-flex items-center gap-2 px-4 py-2 bg-zinc-900 border border-zinc-800 rounded-full text-zinc-300 text-sm hover:border-gold/40 hover:text-gold transition-all">
+                  <Wrench className="w-4 h-4" />
+                  Design & Build
+                </span>
+              </Link>
+            </div>
+            <p className="text-zinc-500 text-xs mt-4 max-w-md mx-auto">
+              We introduce clients to independent licensed partners. Clients contract directly with partners.
             </p>
           </motion.div>
 
-          {/* Two Column Cards */}
-          <div className="grid md:grid-cols-2 gap-8 max-w-5xl mx-auto">
-            {/* Broker Toolkit Card */}
-            <motion.div
-              className="relative group"
-              initial={{ opacity: 0, x: -30 }}
-              whileInView={{ opacity: 1, x: 0 }}
-              viewport={{ once: true }}
-              transition={{ duration: 0.6 }}
-            >
-              <div className="absolute inset-0 bg-gradient-to-br from-gold/20 via-gold/10 to-transparent rounded-3xl blur-xl group-hover:blur-2xl transition-all duration-500 opacity-50 group-hover:opacity-80" />
-              <div className="relative bg-zinc-900/80 backdrop-blur-xl border border-gold/30 rounded-3xl p-8 md:p-10 h-full hover:border-gold/60 transition-all duration-500 group-hover:shadow-2xl group-hover:shadow-gold/20">
-                <div className="flex items-center gap-4 mb-6">
-                  <div className="w-16 h-16 bg-gradient-to-br from-gold to-gold-light rounded-2xl flex items-center justify-center shadow-lg shadow-gold/30">
-                    <GraduationCap className="w-8 h-8 text-black" />
-                  </div>
-                  <div>
-                    <h3 className="text-white text-2xl font-bold" style={{ fontFamily: "Poppins, sans-serif" }}>
-                      Broker Toolkit
-                    </h3>
-                    <p className="text-gold text-sm uppercase tracking-wider">Guides & Resources</p>
-                  </div>
-                </div>
-                
-                <p className="text-zinc-300 mb-6 leading-relaxed">
-                  Practical guides and resources for real estate professionals. From lead generation to closing techniques, develop your expertise.
-                </p>
-                
-                <ul className="space-y-3 mb-8">
-                  <li className="flex items-center gap-3 text-zinc-400">
-                    <Target className="w-4 h-4 text-gold flex-shrink-0" />
-                    <span>Closing Techniques Guide</span>
-                  </li>
-                  <li className="flex items-center gap-3 text-zinc-400">
-                    <Target className="w-4 h-4 text-gold flex-shrink-0" />
-                    <span>Lead Generation Strategies</span>
-                  </li>
-                  <li className="flex items-center gap-3 text-zinc-400">
-                    <Target className="w-4 h-4 text-gold flex-shrink-0" />
-                    <span>Client Relationship Tips</span>
-                  </li>
-                  <li className="flex items-center gap-3 text-zinc-400">
-                    <Target className="w-4 h-4 text-gold flex-shrink-0" />
-                    <span>Market Analysis Insights</span>
-                  </li>
-                </ul>
-                
-                <Link to="/broker-toolkit">
-                  <Button className="w-full bg-gradient-to-r from-gold to-gold-light hover:from-gold-light hover:to-gold text-black font-bold py-6 text-base shadow-lg shadow-gold/30 hover:shadow-xl hover:shadow-gold/40 transition-all duration-300 group-hover:scale-[1.02]">
-                    Explore Resources
-                    <ArrowUpRight className="w-5 h-5 ml-2" />
-                  </Button>
-                </Link>
-                
-                <p className="text-zinc-500 text-xs text-center mt-4">
-                  Educational content only. Not an accredited training institute.
-                </p>
-              </div>
-            </motion.div>
+          {/* Tools Row - Simplified to top 4 + View All */}
+          <div className="text-center">
+            <h3 className="text-zinc-400 text-xs uppercase tracking-[0.2em] mb-4">Property Tools</h3>
+            <div className="flex flex-wrap justify-center gap-3 mb-4">
+              <Link to="/compare">
+                <Button variant="outline" className="border-zinc-800 text-zinc-400 hover:border-gold/40 hover:text-gold text-xs px-4 py-3">
+                  <BarChart3 className="w-3 h-3 mr-2" />
+                  Compare
+                </Button>
+              </Link>
+              <Link to="/property-evaluator">
+                <Button variant="outline" className="border-zinc-800 text-zinc-400 hover:border-gold/40 hover:text-gold text-xs px-4 py-3">
+                  <Calculator className="w-3 h-3 mr-2" />
+                  Evaluator
+                </Button>
+              </Link>
+              <Link to="/mortgage-calculator">
+                <Button variant="outline" className="border-zinc-800 text-zinc-400 hover:border-gold/40 hover:text-gold text-xs px-4 py-3">
+                  <Calculator className="w-3 h-3 mr-2" />
+                  Mortgage
+                </Button>
+              </Link>
+              <Link to="/quiz">
+                <Button variant="outline" className="border-zinc-800 text-zinc-400 hover:border-gold/40 hover:text-gold text-xs px-4 py-3">
+                  <Sparkles className="w-3 h-3 mr-2" />
+                  AI Home Finder
+                </Button>
+              </Link>
+            </div>
+            <Link to="/ai-hub" className="text-gold text-xs hover:underline">
+              View all tools →
+            </Link>
+          </div>
+        </div>
+      </section>
 
-            {/* Professional Tools Card */}
-            <motion.div
-              className="relative group"
-              initial={{ opacity: 0, x: 30 }}
-              whileInView={{ opacity: 1, x: 0 }}
-              viewport={{ once: true }}
-              transition={{ duration: 0.6, delay: 0.2 }}
-            >
-              <div className="absolute inset-0 bg-gradient-to-br from-purple-500/20 via-purple-500/10 to-transparent rounded-3xl blur-xl group-hover:blur-2xl transition-all duration-500 opacity-50 group-hover:opacity-80" />
-              <div className="relative bg-zinc-900/80 backdrop-blur-xl border border-purple-500/30 rounded-3xl p-8 md:p-10 h-full hover:border-purple-400/60 transition-all duration-500 group-hover:shadow-2xl group-hover:shadow-purple-500/20">
-                <div className="flex items-center gap-4 mb-6">
-                  <div className="w-16 h-16 bg-gradient-to-br from-purple-500 to-purple-600 rounded-2xl flex items-center justify-center shadow-lg shadow-purple-500/30">
-                    <Briefcase className="w-8 h-8 text-white" />
-                  </div>
-                  <div>
-                    <h3 className="text-white text-2xl font-bold" style={{ fontFamily: "Poppins, sans-serif" }}>
-                      Professional Tools
-                    </h3>
-                    <p className="text-purple-400 text-sm uppercase tracking-wider">AI-Powered Assistants</p>
-                  </div>
-                </div>
-                
-                <p className="text-zinc-300 mb-6 leading-relaxed">
-                  Supercharge your productivity with AI-powered tools designed to streamline your workflow and deliver exceptional results to clients.
-                </p>
-                
-                <ul className="space-y-3 mb-8">
-                  <li className="flex items-center gap-3 text-zinc-400">
-                    <BarChart3 className="w-4 h-4 text-purple-400 flex-shrink-0" />
-                    <span>Property Comparison & Analysis</span>
-                  </li>
-                  <li className="flex items-center gap-3 text-zinc-400">
-                    <Calculator className="w-4 h-4 text-purple-400 flex-shrink-0" />
-                    <span>Property Valuator & Evaluator</span>
-                  </li>
-                  <li className="flex items-center gap-3 text-zinc-400">
-                    <FileText className="w-4 h-4 text-purple-400 flex-shrink-0" />
-                    <span>Document Scanner & Signing</span>
-                  </li>
-                  <li className="flex items-center gap-3 text-zinc-400">
-                    <Palette className="w-4 h-4 text-purple-400 flex-shrink-0" />
-                    <span>AI Interior Design Studio</span>
-                  </li>
-                </ul>
-                
-                <Link to="/tools-guide">
-                  <Button className="w-full bg-gradient-to-r from-purple-500 to-purple-600 hover:from-purple-600 hover:to-purple-700 text-white font-bold py-6 text-base shadow-lg shadow-purple-500/30 hover:shadow-xl hover:shadow-purple-500/40 transition-all duration-300 group-hover:scale-[1.02]">
-                    Explore Tools
-                    <ArrowUpRight className="w-5 h-5 ml-2" />
-                  </Button>
-                </Link>
-              </div>
-            </motion.div>
+      {/* RESOURCES SECTION - Simplified */}
+      <section className="py-16 md:py-20 bg-zinc-950">
+        <div className="container mx-auto px-4">
+          <div className="text-center mb-10">
+            <h2 className="text-zinc-400 text-xs uppercase tracking-[0.2em] mb-2">Resources</h2>
+            <p className="text-white text-xl md:text-2xl font-medium" style={{ fontFamily: "Poppins, sans-serif" }}>
+              Tools for Real Estate Professionals
+            </p>
           </div>
 
-          {/* Quick Stats - Simplified */}
-          <motion.div 
-            className="grid grid-cols-2 md:grid-cols-3 gap-6 mt-16 max-w-3xl mx-auto"
-            initial={{ opacity: 0, y: 20 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true }}
-            transition={{ duration: 0.6, delay: 0.4 }}
-          >
-            <div className="text-center p-6 bg-zinc-900/50 backdrop-blur border border-zinc-800 rounded-2xl">
-              <p className="text-gold text-3xl md:text-4xl font-bold" style={{ fontFamily: "Poppins, sans-serif" }}>10+</p>
-              <p className="text-zinc-500 text-sm mt-1">AI Tools</p>
-            </div>
-            <div className="text-center p-6 bg-zinc-900/50 backdrop-blur border border-zinc-800 rounded-2xl">
-              <p className="text-gold text-3xl md:text-4xl font-bold" style={{ fontFamily: "Poppins, sans-serif" }}>AI</p>
-              <p className="text-zinc-500 text-sm mt-1">Powered</p>
-            </div>
-            <div className="text-center p-6 bg-zinc-900/50 backdrop-blur border border-zinc-800 rounded-2xl col-span-2 md:col-span-1">
-              <p className="text-gold text-3xl md:text-4xl font-bold" style={{ fontFamily: "Poppins, sans-serif" }}>Free</p>
-              <p className="text-zinc-500 text-sm mt-1">Resources</p>
-            </div>
-          </motion.div>
+          <div className="grid md:grid-cols-2 gap-6 max-w-4xl mx-auto">
+            {/* Broker Toolkit Card */}
+            <Link to="/broker-toolkit" className="group">
+              <div className="bg-zinc-900/60 border border-zinc-800 rounded-2xl p-6 md:p-8 hover:border-gold/40 transition-all duration-300">
+                <div className="flex items-center gap-4 mb-4">
+                  <div className="w-12 h-12 bg-gold/10 rounded-xl flex items-center justify-center">
+                    <GraduationCap className="w-6 h-6 text-gold" />
+                  </div>
+                  <div>
+                    <h3 className="text-white text-lg font-semibold">Broker Toolkit</h3>
+                    <p className="text-zinc-500 text-xs">Guides & Resources</p>
+                  </div>
+                </div>
+                <p className="text-zinc-400 text-sm mb-4">
+                  Practical guides for real estate professionals.
+                </p>
+                <span className="text-gold text-sm group-hover:underline">
+                  Explore →
+                </span>
+              </div>
+            </Link>
+
+            {/* AI Tools Card */}
+            <Link to="/ai-hub" className="group">
+              <div className="bg-zinc-900/60 border border-zinc-800 rounded-2xl p-6 md:p-8 hover:border-zinc-700 transition-all duration-300">
+                <div className="flex items-center gap-4 mb-4">
+                  <div className="w-12 h-12 bg-zinc-800 rounded-xl flex items-center justify-center">
+                    <Brain className="w-6 h-6 text-zinc-400" />
+                  </div>
+                  <div>
+                    <h3 className="text-white text-lg font-semibold">AI Assistant Hub</h3>
+                    <p className="text-zinc-500 text-xs">10+ Tools</p>
+                  </div>
+                </div>
+                <p className="text-zinc-400 text-sm mb-4">
+                  AI-powered property tools and assistants.
+                </p>
+                <span className="text-zinc-400 text-sm group-hover:text-gold group-hover:underline transition-colors">
+                  View all →
+                </span>
+              </div>
+            </Link>
+          </div>
         </div>
       </section>
 
@@ -816,41 +461,41 @@ const Index = () => {
       {/* Stats Counter Section */}
       <StatsCounter />
 
-      {/* Contact CTA Section */}
-      <div className="container mx-auto px-4 bg-black">
-        <motion.div 
-          className="text-center py-20 border-t border-zinc-800"
-          initial="hidden"
-          whileInView="visible"
-          viewport={{ once: true, margin: "-100px" }}
-          variants={fadeInUp}
-        >
-          <span className="inline-block text-gold text-xs uppercase tracking-[0.3em] mb-4">Get Started</span>
-          <h3 className="text-3xl md:text-4xl font-bold text-white mb-4" style={{ fontFamily: "Poppins, sans-serif" }}>
-            Ready to Get Started?
-          </h3>
-          <p className="text-zinc-400 max-w-xl mx-auto mb-8">
-            Connect with our team to discuss buying or selling real estate in Dubai and get introduced to licensed partners where needed.
-          </p>
-          <div className="flex flex-wrap justify-center gap-4">
-            <Button 
-              className="bg-gold hover:bg-gold-light text-black font-semibold px-8 py-6 text-base shadow-lg shadow-gold/20 transition-all duration-300 hover:shadow-xl hover:shadow-gold/30 hover:scale-105"
-              onClick={() => setIsInquiryOpen(true)}
-            >
-              {t('home.cta.contact')}
-              <ArrowUpRight className="w-5 h-5 ml-2 -mr-1" />
-            </Button>
-            <Link to="/properties">
+      {/* Contact CTA Section - Quiet Luxury */}
+      <section className="py-20 md:py-24 bg-black">
+        <div className="container mx-auto px-4">
+          <motion.div 
+            className="text-center max-w-2xl mx-auto"
+            initial={{ opacity: 0, y: 20 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+          >
+            <h3 className="text-2xl md:text-3xl font-semibold text-white mb-4" style={{ fontFamily: "Poppins, sans-serif" }}>
+              Ready to Get Started?
+            </h3>
+            <p className="text-zinc-500 text-sm md:text-base mb-8 leading-relaxed">
+              Connect with our team to discuss buying or selling real estate in Dubai.
+            </p>
+            <div className="flex flex-col sm:flex-row justify-center gap-4">
               <Button 
-                className="bg-white/10 backdrop-blur-md border border-white/30 text-white hover:bg-white/20 hover:border-white/50 hover:shadow-lg hover:shadow-white/10 hover:scale-105 px-8 py-6 text-base transition-all duration-300"
+                className="bg-gold hover:bg-gold-light text-black font-semibold px-8 py-6 text-sm transition-all duration-300"
+                onClick={() => setIsInquiryOpen(true)}
               >
-                Browse Properties
-                <ArrowUpRight className="w-5 h-5 ml-2 -mr-1" />
+                Book Consultation
+                <ArrowUpRight className="w-4 h-4 ml-2" />
               </Button>
-            </Link>
-          </div>
-        </motion.div>
-      </div>
+              <Link to="/properties">
+                <Button 
+                  variant="outline"
+                  className="border-zinc-700 text-zinc-300 hover:bg-zinc-800 hover:border-zinc-600 px-8 py-6 text-sm transition-all duration-300"
+                >
+                  Browse Properties
+                </Button>
+              </Link>
+            </div>
+          </motion.div>
+        </div>
+      </section>
 
 
       {/* Footer */}

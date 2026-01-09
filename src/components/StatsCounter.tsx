@@ -77,27 +77,24 @@ const StatItem = ({ end, suffix, prefix, label, icon: Icon, isVisible }: StatIte
 
   return (
     <div className="relative group">
-      <div className="bg-gradient-to-br from-zinc-900/80 to-black border border-zinc-800 rounded-2xl p-6 md:p-8 text-center hover:border-gold/40 transition-all duration-500 hover:shadow-xl hover:shadow-gold/10">
-        {/* Icon */}
-        <div className="w-14 h-14 mx-auto mb-4 rounded-xl bg-gradient-to-br from-gold/20 to-gold-dark/20 flex items-center justify-center group-hover:scale-110 transition-transform duration-300">
-          <Icon className="w-7 h-7 text-gold" />
+      <div className="bg-zinc-900/60 border border-zinc-800/80 rounded-2xl p-6 md:p-8 text-center hover:border-gold/30 transition-all duration-500">
+        {/* Icon - Subtle */}
+        <div className="w-12 h-12 mx-auto mb-4 rounded-xl bg-gold/10 flex items-center justify-center">
+          <Icon className="w-6 h-6 text-gold/80" />
         </div>
         
         {/* Counter Value */}
         <div 
-          className="text-3xl md:text-4xl lg:text-5xl font-bold text-transparent bg-clip-text bg-gradient-to-r from-gold via-gold-dark to-gold mb-2"
+          className="text-2xl md:text-3xl lg:text-4xl font-semibold text-gold mb-1"
           style={{ fontFamily: "Poppins, sans-serif" }}
         >
           {formattedValue}
         </div>
         
         {/* Label */}
-        <div className="text-zinc-400 text-sm md:text-base font-medium">
+        <div className="text-zinc-500 text-xs md:text-sm">
           {label}
         </div>
-        
-        {/* Glow effect on hover */}
-        <div className="absolute inset-0 rounded-2xl bg-gradient-to-br from-gold/5 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500 pointer-events-none" />
       </div>
     </div>
   );
@@ -125,31 +122,20 @@ const StatsCounter = () => {
   }, []);
 
   return (
-    <section ref={sectionRef} className="py-16 md:py-24 bg-gradient-to-b from-zinc-950 to-zinc-900 relative overflow-hidden">
-      {/* Background glow */}
-      <div 
-        className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[600px] h-[600px] pointer-events-none"
-        style={{
-          background: "radial-gradient(ellipse at center, hsl(40 32% 51% / 0.06) 0%, transparent 60%)",
-        }}
-      />
-      
-      <div className="container mx-auto px-4 relative z-10">
-        {/* Section Header */}
-        <div className="text-center mb-12">
-          <span className="inline-block px-4 py-1.5 bg-gold/10 border border-gold/30 rounded-full text-gold text-sm font-medium mb-4">
-            Our Track Record
-          </span>
+    <section ref={sectionRef} className="py-16 md:py-20 bg-zinc-950">
+      <div className="container mx-auto px-4">
+        {/* Section Header - Minimal */}
+        <div className="text-center mb-10">
           <h2 
-            className="text-3xl md:text-4xl font-bold text-white"
-            style={{ fontFamily: "Poppins, sans-serif" }}
+            className="text-zinc-400 text-xs uppercase tracking-[0.2em] mb-2"
           >
-            Trusted by <span className="text-gold">Clients</span> in the UAE
+            Track Record
           </h2>
+          <p className="text-zinc-600 text-xs">Founder experience</p>
         </div>
         
-        {/* Stats Grid */}
-        <div className="grid grid-cols-2 lg:grid-cols-4 gap-4 md:gap-6">
+        {/* Stats Grid - Clean */}
+        <div className="grid grid-cols-2 lg:grid-cols-4 gap-4 md:gap-6 max-w-4xl mx-auto">
           {stats.map((stat, index) => (
             <StatItem key={index} {...stat} isVisible={isVisible} />
           ))}
