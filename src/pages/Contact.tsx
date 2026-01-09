@@ -108,14 +108,15 @@ const Contact = () => {
   const onSubmit = async (data: ConsultationFormData) => {
     setIsSubmitting(true);
     try {
-      // Capture lead
+      // Capture lead - saves to BOTH leads AND crm_leads tables
       await captureLead({
         email: data.email,
         fullName: data.fullName,
         phone: data.phone,
         nationality: data.nationality,
         language: data.language,
-      }, "contact-consultation");
+        currentLocation: data.currentLocation,
+      }, "contact-consultation", "client");
 
       // Send email via edge function
       await supabase.functions.invoke("send-inquiry-email", {

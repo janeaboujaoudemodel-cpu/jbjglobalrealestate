@@ -30,11 +30,13 @@ export const NewsletterBrevo = ({
     setIsSubmitting(true);
 
     try {
+      const normalizedEmail = email.toLowerCase().trim();
+      
       // Save to leads table for tracking
       const { error: leadError } = await supabase
         .from('leads')
         .upsert({
-          email: email.toLowerCase(),
+          email: normalizedEmail,
           full_name: name || null,
           source: `newsletter_${source}`,
           page_source: window.location.pathname,
@@ -44,6 +46,23 @@ export const NewsletterBrevo = ({
 
       if (leadError) {
         console.error('Lead save error:', leadError);
+      }
+
+      // Also save to crm_leads for CRM dashboard tracking
+      const { error: crmError } = await supabase
+        .from('crm_leads')
+        .insert({
+          full_name: name || normalizedEmail.split('@')[0],
+          email_lower: normalizedEmail,
+          source: `newsletter_${source}`,
+          owner_type: 'company_assigned' as const,
+          lead_source_type: 'website',
+          contact_type: 'client' as const,
+          tags: ['newsletter', source.replace(/_/g, '-')],
+        });
+
+      if (crmError && crmError.code !== '23505') {
+        console.warn('CRM lead save warning:', crmError);
       }
 
       // Call Brevo integration edge function

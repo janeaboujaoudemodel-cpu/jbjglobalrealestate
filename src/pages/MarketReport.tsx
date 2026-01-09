@@ -1629,7 +1629,7 @@ const MarketReport = () => {
     setShowThankYou(true);
 
     try {
-      // Capture lead first if this is a new submission
+      // Capture lead first if this is a new submission - saves to BOTH leads AND crm_leads
       if (!isLeadCaptured && form.email) {
         await captureLead(
           {
@@ -1639,7 +1639,8 @@ const MarketReport = () => {
             nationality: form.nationality,
             language: form.language,
           },
-          "market_report",
+          "market_report_download",
+          "client"
         );
       }
 
