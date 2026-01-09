@@ -123,16 +123,6 @@ const ComingSoon = () => {
         >
           © {new Date().getFullYear()} JBJ Global Real Estate. All Rights Reserved.
         </motion.p>
-
-        {/* Copyright */}
-        <motion.p
-          initial={{ opacity: 0 }}
-          animate={{ opacity: 1 }}
-          transition={{ delay: 1.2, duration: 0.6 }}
-          className="mt-12 text-xs text-white/30"
-        >
-          © {new Date().getFullYear()} JBJ Global Real Estate. All Rights Reserved.
-        </motion.p>
       </motion.div>
     </div>
   );
