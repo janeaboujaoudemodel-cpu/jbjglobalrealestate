@@ -82,7 +82,7 @@ const GlobalHeader = () => {
   const propertyShortcuts = [
     { href: "/properties?status=off-plan", label: "Off-Plan", icon: Building2 },
     { href: "/properties?status=ready", label: "Ready to Move", icon: ClipboardCheck },
-    { href: "/quiz", label: "AI Home Finder", icon: Sparkles },
+    { href: "/quiz", label: "JBJ AI Home Finder", icon: Sparkles },
     { href: "/market-report", label: "Market Report", icon: FileText },
   ];
 

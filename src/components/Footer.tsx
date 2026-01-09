@@ -122,12 +122,12 @@ const Footer = () => {
 
   const professionalTools = [
     { href: "/compare", label: "Property Comparison" },
-    { href: "/property-evaluator", label: "Property Evaluator" },
-    { href: "/rental-index", label: "Rental Index Analysis" },
-    { href: "/document-scanner", label: "Document Scanner" },
-    { href: "/property-measurement", label: "Property Measurement" },
-    { href: "/interior-design-ai", label: "AI Interior Design" },
-    { href: "/ai-hub", label: "AI Hub" },
+    { href: "/property-evaluator", label: "JBJ Property Evaluator" },
+    { href: "/rental-index", label: "JBJ Rental Index" },
+    { href: "/document-scanner", label: "JBJ Scan & Sign" },
+    { href: "/property-measurement", label: "JBJ Property Measurement" },
+    { href: "/interior-design-ai", label: "JBJ AI Interior Design" },
+    { href: "/ai-hub", label: "JBJ Assistant Hub" },
   ];
 
   // Career Links

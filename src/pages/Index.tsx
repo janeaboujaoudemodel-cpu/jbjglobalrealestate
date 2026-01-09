@@ -236,7 +236,7 @@ const Index = () => {
                   className="bg-transparent backdrop-blur-md border-2 border-fuchsia-500/50 text-fuchsia-400 hover:bg-fuchsia-500/20 hover:border-fuchsia-400 hover:shadow-lg hover:shadow-fuchsia-500/20 font-semibold px-5 py-4 text-xs transition-all duration-300 hover:scale-105 group"
                 >
                   <Palette className="w-3 h-3 mr-1" />
-                  AI Interior Design Studio
+                  JBJ AI Interior Design
                   <ArrowUpRight className="w-3 h-3 ml-1 group-hover:translate-x-0.5 group-hover:-translate-y-0.5 transition-transform" />
                 </Button>
               </Link>
@@ -266,7 +266,7 @@ const Index = () => {
                   className="bg-transparent backdrop-blur-md border-2 border-green-500/50 text-green-400 hover:bg-green-500/20 hover:border-green-400 hover:shadow-lg hover:shadow-green-500/20 font-semibold px-5 py-4 text-xs transition-all duration-300 hover:scale-105 group"
                 >
                   <FileText className="w-3 h-3 mr-1" />
-                  Scan & Sign
+                  JBJ Scan & Sign
                   <ArrowUpRight className="w-3 h-3 ml-1 group-hover:translate-x-0.5 group-hover:-translate-y-0.5 transition-transform" />
                 </Button>
               </Link>
@@ -304,22 +304,12 @@ const Index = () => {
                 </Button>
               </Link>
               
-              <Link to="/tools-guide">
-                <Button 
-                  className="bg-transparent backdrop-blur-md border-2 border-violet-500/50 text-violet-400 hover:bg-violet-500/20 hover:border-violet-400 hover:shadow-lg hover:shadow-violet-500/20 font-semibold px-5 py-4 text-xs transition-all duration-300 hover:scale-105 group"
-                >
-                  <Wrench className="w-3 h-3 mr-1" />
-                  Tools Guide
-                  <ArrowUpRight className="w-3 h-3 ml-1 group-hover:translate-x-0.5 group-hover:-translate-y-0.5 transition-transform" />
-                </Button>
-              </Link>
-              
               <Link to="/ai-hub">
                 <Button 
                   className="bg-transparent backdrop-blur-md border-2 border-purple-500/50 text-purple-400 hover:bg-purple-500/20 hover:border-purple-400 hover:shadow-lg hover:shadow-purple-500/20 font-semibold px-5 py-4 text-xs transition-all duration-300 hover:scale-105 group"
                 >
                   <Brain className="w-3 h-3 mr-1" />
-                  AI Hub
+                  JBJ Assistant Hub
                   <ArrowUpRight className="w-3 h-3 ml-1 group-hover:translate-x-0.5 group-hover:-translate-y-0.5 transition-transform" />
                 </Button>
               </Link>
@@ -332,7 +322,7 @@ const Index = () => {
                   className="bg-transparent backdrop-blur-md border-2 border-indigo-500/50 text-indigo-400 hover:bg-indigo-500/20 hover:border-indigo-400 hover:shadow-lg hover:shadow-indigo-500/20 font-semibold px-5 py-4 text-xs transition-all duration-300 hover:scale-105 group"
                 >
                   <Calendar className="w-3 h-3 mr-1" />
-                  AI Calendar & Notes
+                  JBJ AI Calendar
                   <ArrowUpRight className="w-3 h-3 ml-1 group-hover:translate-x-0.5 group-hover:-translate-y-0.5 transition-transform" />
                 </Button>
               </Link>
@@ -343,7 +333,7 @@ const Index = () => {
                   title="Budget analysis and property affordability insights (informational only)"
                 >
                   <Wallet className="w-3 h-3 mr-1" />
-                  AI Budget Planner
+                  JBJ AI Budget Planner
                   <ArrowUpRight className="w-3 h-3 ml-1 group-hover:translate-x-0.5 group-hover:-translate-y-0.5 transition-transform" />
                 </Button>
               </Link>
@@ -353,17 +343,17 @@ const Index = () => {
                   className="bg-transparent backdrop-blur-md border-2 border-rose-500/50 text-rose-400 hover:bg-rose-500/20 hover:border-rose-400 hover:shadow-lg hover:shadow-rose-500/20 font-semibold px-5 py-4 text-xs transition-all duration-300 hover:scale-105 group"
                 >
                   <ShoppingBag className="w-3 h-3 mr-1" />
-                  AI Personal Shopper
+                  JBJ AI Personal Shopper
                   <ArrowUpRight className="w-3 h-3 ml-1 group-hover:translate-x-0.5 group-hover:-translate-y-0.5 transition-transform" />
                 </Button>
               </Link>
               
-              <Link to="/signature-studio">
+              <Link to="/document-scanner">
                 <Button 
                   className="bg-transparent backdrop-blur-md border-2 border-sky-500/50 text-sky-400 hover:bg-sky-500/20 hover:border-sky-400 hover:shadow-lg hover:shadow-sky-500/20 font-semibold px-5 py-4 text-xs transition-all duration-300 hover:scale-105 group"
                 >
                   <PenTool className="w-3 h-3 mr-1" />
-                  Signature Studio
+                  JBJ Signature Designer
                   <ArrowUpRight className="w-3 h-3 ml-1 group-hover:translate-x-0.5 group-hover:-translate-y-0.5 transition-transform" />
                 </Button>
               </Link>
@@ -403,7 +393,7 @@ const Index = () => {
                   className="bg-transparent backdrop-blur-md border-2 border-red-500/50 text-red-400 hover:bg-red-500/20 hover:border-red-400 hover:shadow-lg hover:shadow-red-500/20 font-semibold px-5 py-4 text-xs transition-all duration-300 hover:scale-105 group"
                 >
                   <Video className="w-3 h-3 mr-1" />
-                  Video Meeting
+                  JBJ Video Meet
                   <ArrowUpRight className="w-3 h-3 ml-1 group-hover:translate-x-0.5 group-hover:-translate-y-0.5 transition-transform" />
                 </Button>
               </Link>
@@ -484,7 +474,7 @@ const Index = () => {
                   
                   <Sparkles className="w-5 h-5 text-purple-200 group-hover:text-white transition-colors relative z-10" />
                   <div className="text-center relative z-10">
-                    <p className="text-white font-bold text-base tracking-wide">{t('home.cta.aiFinder')}</p>
+                    <p className="text-white font-bold text-base tracking-wide">JBJ AI Home Finder</p>
                     <p className="text-purple-200/80 text-xs">AI-Powered Property Matching</p>
                   </div>
                   <ArrowUpRight className="w-5 h-5 text-purple-200 group-hover:text-white group-hover:translate-x-1 group-hover:-translate-y-1 transition-all relative z-10" />

@@ -74,7 +74,7 @@ const GuidedTour = ({ isOpen, onClose }: GuidedTourProps) => {
       iconColor: "text-purple-500",
       iconBg: "from-purple-500/20 to-purple-600/10",
       iconBorder: "border-purple-500/30",
-      title: "AI Property Matchmaker",
+      title: "JBJ AI Property Matchmaker",
       description: "Our AI analyzes your shortlisted properties and provides detailed investment comparisons on ROI, location value, and market trends."
     },
     {
@@ -82,7 +82,7 @@ const GuidedTour = ({ isOpen, onClose }: GuidedTourProps) => {
       iconColor: "text-cyan-500",
       iconBg: "from-cyan-500/20 to-cyan-600/10",
       iconBorder: "border-cyan-500/30",
-      title: "Document Scanner & e-Sign",
+      title: "JBJ Scan & Sign Documents",
       description: "Upload contracts, crop edges, add digital signatures, and auto-fill form fields. Manage all your investment documents digitally."
     },
     {
@@ -90,7 +90,7 @@ const GuidedTour = ({ isOpen, onClose }: GuidedTourProps) => {
       iconColor: "text-emerald-500",
       iconBg: "from-emerald-500/20 to-emerald-600/10",
       iconBorder: "border-emerald-500/30",
-      title: "Rental Index Tool",
+      title: "JBJ Rental Index Tool",
       description: "Discover highest-performing areas for rental ROI. Compare short-term vs long-term rentals and get property valuation estimates."
     },
     {
@@ -121,13 +121,13 @@ const GuidedTour = ({ isOpen, onClose }: GuidedTourProps) => {
     {
       icon: Brain,
       iconColor: "text-purple-500",
-      title: "AI Property Matchmaker",
+      title: "JBJ AI Property Matchmaker",
       description: "Get AI-powered investment analysis on your selections"
     },
     {
       icon: FileSearch,
       iconColor: "text-cyan-500",
-      title: "Document Scanner",
+      title: "JBJ Scan & Sign",
       description: "Scan, sign, and manage investment documents"
     },
     {
