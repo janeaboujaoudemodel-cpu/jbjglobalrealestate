@@ -2,6 +2,7 @@ import { useNavigate } from "react-router-dom";
 import { motion } from "framer-motion";
 import { useAuth } from "@/contexts/AuthContext";
 import { Button } from "@/components/ui/button";
+import FreeAccessBadge from "@/components/FreeAccessBadge";
 import { 
   Sparkles, 
   Star, 
@@ -10,7 +11,9 @@ import {
   Building2, 
   Headphones,
   ArrowRight,
-  LogIn
+  LogIn,
+  Clock,
+  Gift
 } from "lucide-react";
 import { JJLogoImage } from "./JJLogoImage";
 
@@ -78,8 +81,13 @@ export default function AIAccessGate({ children, toolName }: AIAccessGateProps) 
           className="max-w-2xl mx-auto text-center"
         >
           {/* Logo */}
-          <div className="flex justify-center mb-8">
+          <div className="flex justify-center mb-6">
             <JJLogoImage variant="light" size="md" />
+          </div>
+
+          {/* Free Access Badge */}
+          <div className="flex justify-center mb-6">
+            <FreeAccessBadge />
           </div>
 
           {/* Title */}
@@ -88,7 +96,7 @@ export default function AIAccessGate({ children, toolName }: AIAccessGateProps) 
           </h1>
 
           <p className="text-zinc-400 text-lg mb-8">
-            Sign in to unlock free access to all JBJ AI tools and resources.
+            Sign in to unlock <span className="text-emerald-400 font-semibold">free access</span> to all JBJ AI tools and resources.
           </p>
 
           {/* Benefits Grid */}
@@ -112,12 +120,18 @@ export default function AIAccessGate({ children, toolName }: AIAccessGateProps) 
 
           {/* Broker Circle CTA */}
           <div className="bg-gradient-to-br from-gold/10 via-gold/5 to-transparent border border-gold/30 rounded-2xl p-6 mb-6">
-            <Star className="w-8 h-8 text-gold mx-auto mb-3" />
+            <div className="flex items-center justify-center gap-2 mb-3">
+              <Gift className="w-6 h-6 text-gold" />
+              <div className="flex items-center gap-1 px-2 py-1 bg-emerald-500/20 border border-emerald-500/30 rounded-full">
+                <Clock className="w-3 h-3 text-emerald-400 animate-pulse" />
+                <span className="text-emerald-400 text-xs font-semibold">LIMITED TIME</span>
+              </div>
+            </div>
             <h2 className="text-white text-xl font-semibold mb-2">
-              Join JBJ Global Real Estate Broker Circle
+              Join JBJ Global Real Estate Circle
             </h2>
             <p className="text-zinc-400 text-sm mb-4">
-              Get free courses, free AI tools, dedicated HR support, and a personal property coach.
+              Get free courses, free AI tools, dedicated HR support, and a personal property coach — <span className="text-emerald-400">all completely free</span>.
             </p>
             <p className="text-gold text-sm font-medium">
               100% Free • No Credit Card Required
