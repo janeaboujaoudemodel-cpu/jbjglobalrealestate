@@ -162,6 +162,7 @@ const App = () => (
                     <Route path="/video-meeting" element={<VideoMeeting />} />
                     <Route path="/executive-assistant" element={<ExecutiveAssistant />} />
                     <Route path="/call-review" element={<CallReview />} />
+                    <Route path="/video-builder" element={<VideoBuilder />} />
                     <Route path="*" element={<NotFound />} />
                     </Routes>
                   </MainLayout>
