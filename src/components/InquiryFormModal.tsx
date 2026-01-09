@@ -116,37 +116,17 @@ const InquiryFormModal = ({ isOpen, onClose, source = 'general', propertyName, c
       const normalizedPhone = normalizePhone(data.phone);
       const normalizedEmail = data.email.toLowerCase().trim();
 
-      // 1. Capture lead to leads table (existing behavior)
+      // Determine contact type from role
+      const contactType = context?.role === 'broker' ? 'broker' : 'client';
+
+      // Capture lead to BOTH leads table AND crm_leads (handled by useLeadCapture hook)
       await captureLead({
         email: normalizedEmail,
         fullName: data.fullName,
         phone: normalizedPhone,
         nationality: data.nationality,
         language: data.language,
-      }, source);
-
-      // 2. Also save to crm_leads table for CRM dashboard access
-      const { error: crmError } = await supabase
-        .from('crm_leads')
-        .insert({
-          full_name: data.fullName,
-          email_lower: normalizedEmail,
-          phone_e164: normalizedPhone,
-          nationality: data.nationality,
-          preferred_language: data.language,
-          source: source,
-          owner_type: 'company_assigned' as const,
-          lead_source_type: 'website',
-          contact_type: (context?.role === 'broker' ? 'broker' : 'client') as 'broker' | 'client',
-          tags: context?.role ? [context.role] : [],
-        });
-
-      if (crmError) {
-        // If duplicate, that's okay - lead already exists
-        if (crmError.code !== '23505') {
-          console.warn('CRM lead save warning:', crmError);
-        }
-      }
+      }, source, contactType);
 
       // 3. Send email notification via edge function
       const { error } = await supabase.functions.invoke('send-inquiry-email', {

@@ -180,10 +180,13 @@ const AIChatWidget = ({ isCollapsed, onToggleCollapse, showAttentionPulse = fals
       setConversationId(data.id);
 
       // Save to leads table
+      const normalizedEmail = userInfo.email.toLowerCase().trim();
+      const normalizedPhone = userInfo.phone?.replace(/[\s\-\(\)]/g, '') || null;
+      
       await supabase.from('leads').upsert({
-        email: userInfo.email,
+        email: normalizedEmail,
         full_name: fullName,
-        phone: userInfo.phone,
+        phone: normalizedPhone,
         nationality: userInfo.nationality,
         language: userInfo.language,
         current_location: userInfo.currentLocation,
@@ -194,6 +197,28 @@ const AIChatWidget = ({ isCollapsed, onToggleCollapse, showAttentionPulse = fals
         source: 'ai_chat_support',
         status: 'new',
       }, { onConflict: 'email' });
+
+      // Also save to crm_leads for CRM dashboard tracking
+      const { error: crmError } = await supabase
+        .from('crm_leads')
+        .insert({
+          full_name: fullName,
+          email_lower: normalizedEmail,
+          phone_e164: normalizedPhone,
+          nationality: userInfo.nationality,
+          preferred_language: userInfo.language,
+          current_location_country: userInfo.currentLocation,
+          age_range: userInfo.ageRange,
+          source: 'ai_chat_support',
+          owner_type: 'company_assigned' as const,
+          lead_source_type: 'website',
+          contact_type: 'client' as const,
+          tags: ['ai-chat', pageSource.replace(/\//g, '-').replace(/^-/, '')],
+        });
+
+      if (crmError && crmError.code !== '23505') {
+        console.warn('CRM lead save warning:', crmError);
+      }
 
     } catch (error) {
       console.error('Error creating conversation:', error);
