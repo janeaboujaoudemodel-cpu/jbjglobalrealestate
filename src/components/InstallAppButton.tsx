@@ -16,7 +16,20 @@ const STORAGE_KEYS = {
 
 const isIOSDevice = () => {
   const ua = navigator.userAgent;
-  return /iPad|iPhone|iPod/.test(ua) || (navigator.platform === "MacIntel" && (navigator as any).maxTouchPoints > 1);
+  // Detect iOS devices (iPhone, iPad, iPod) - exclude desktop Safari on Mac
+  const isIOS = /iPad|iPhone|iPod/.test(ua) && !(window as any).MSStream;
+  // Detect iPadOS 13+ which reports as "MacIntel" but has touch support
+  const isIPadOS = navigator.platform === "MacIntel" && (navigator as any).maxTouchPoints > 1 && !ua.includes("Macintosh");
+  return isIOS || isIPadOS;
+};
+
+const isSafariBrowser = () => {
+  const ua = navigator.userAgent;
+  return /Safari/.test(ua) && !/Chrome/.test(ua) && !/CriOS/.test(ua);
+};
+
+const isMacDesktop = () => {
+  return navigator.platform === "MacIntel" && (navigator as any).maxTouchPoints <= 1;
 };
 
 const InstallAppButton = () => {
@@ -24,6 +37,7 @@ const InstallAppButton = () => {
   const [isInstalled, setIsInstalled] = useState(false);
   const [isDismissed, setIsDismissed] = useState(false);
   const [isIOS, setIsIOS] = useState(false);
+  const [isMacSafari, setIsMacSafari] = useState(false);
   const [showIOSGuide, setShowIOSGuide] = useState(false);
 
   useEffect(() => {
@@ -51,8 +65,17 @@ const InstallAppButton = () => {
       return;
     }
 
-    // Check if iOS
-    setIsIOS(isIOSDevice());
+    // Check platform
+    const iosDevice = isIOSDevice();
+    const macDesktopSafari = isMacDesktop() && isSafariBrowser();
+    
+    setIsIOS(iosDevice);
+    setIsMacSafari(macDesktopSafari);
+    
+    // Hide on Mac Safari (no PWA support on desktop Safari)
+    if (macDesktopSafari) {
+      return;
+    }
 
     const handleBeforeInstallPrompt = (e: Event) => {
       e.preventDefault();
@@ -112,8 +135,8 @@ const InstallAppButton = () => {
     localStorage.setItem(STORAGE_KEYS.DISMISSED, "true");
   }, []);
 
-  // Hide if installed or dismissed
-  if (isInstalled || isDismissed) return null;
+  // Hide if installed, dismissed, or on Mac Safari (not supported)
+  if (isInstalled || isDismissed || isMacSafari) return null;
 
   // Show only if native prompt available OR if iOS (for fallback)
   if (!deferredPrompt && !isIOS) return null;
