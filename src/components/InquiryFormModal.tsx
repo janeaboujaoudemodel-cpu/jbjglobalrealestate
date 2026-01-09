@@ -8,17 +8,37 @@ import { Input } from '@/components/ui/input';
 import { Textarea } from '@/components/ui/textarea';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from '@/components/ui/form';
-import { Loader2, Send, CheckCircle, Crown, Sparkles } from 'lucide-react';
+import { Loader2, Send, CheckCircle, Crown, Sparkles, CheckCircle2, XCircle } from 'lucide-react';
 import { toast } from 'sonner';
 import { supabase } from '@/integrations/supabase/client';
 import { useLeadCapture } from '@/hooks/useLeadCapture';
 import { getCountryList, getLanguageList } from '@/constants/localeOptions';
 import { useLanguage } from '@/contexts/LanguageContext';
 
+// E.164 phone validation: must start with + and have 7-15 digits
+const phoneRegex = /^\+[1-9]\d{6,14}$/;
+
+// Stricter email validation
+const emailRegex = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
+
 const inquirySchema = z.object({
-  fullName: z.string().min(2, 'Name must be at least 2 characters').max(100),
-  email: z.string().email('Invalid email address'),
-  phone: z.string().min(5, 'Phone number is required').max(30),
+  fullName: z.string()
+    .min(2, 'Name must be at least 2 characters')
+    .max(100, 'Name is too long')
+    .regex(/^[a-zA-Z\s\-'\.]+$/, 'Name can only contain letters, spaces, hyphens, and apostrophes'),
+  email: z.string()
+    .min(1, 'Email is required')
+    .max(255, 'Email is too long')
+    .regex(emailRegex, 'Please enter a valid email address'),
+  phone: z.string()
+    .min(8, 'Phone number is too short')
+    .max(20, 'Phone number is too long')
+    .refine((val) => {
+      // Remove spaces and dashes for validation
+      const cleaned = val.replace(/[\s\-\(\)]/g, '');
+      // Must start with + and country code
+      return phoneRegex.test(cleaned) || /^\+\d{7,15}$/.test(cleaned);
+    }, 'Please enter a valid phone number with country code (e.g., +971 50 123 4567)'),
   nationality: z.string().min(1, 'Please select your nationality'),
   language: z.string().min(1, 'Please select your preferred language'),
   message: z.string().max(1000).optional(),
@@ -34,9 +54,16 @@ interface InquiryFormModalProps {
   context?: Record<string, string>;
 }
 
+// Normalize phone to E.164 format
+const normalizePhone = (phone: string): string => {
+  return phone.replace(/[\s\-\(\)]/g, '');
+};
+
 const InquiryFormModal = ({ isOpen, onClose, source = 'general', propertyName, context }: InquiryFormModalProps) => {
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [isSuccess, setIsSuccess] = useState(false);
+  const [emailStatus, setEmailStatus] = useState<'idle' | 'valid' | 'invalid'>('idle');
+  const [phoneStatus, setPhoneStatus] = useState<'idle' | 'valid' | 'invalid'>('idle');
   const { captureLead, leadData } = useLeadCapture();
   const { t, isRTL } = useLanguage();
   
@@ -53,24 +80,80 @@ const InquiryFormModal = ({ isOpen, onClose, source = 'general', propertyName, c
       language: leadData?.language || '',
       message: '',
     },
+    mode: 'onChange', // Enable real-time validation
   });
+
+  // Real-time email validation
+  const validateEmailRealtime = (email: string) => {
+    if (!email) {
+      setEmailStatus('idle');
+      return;
+    }
+    if (emailRegex.test(email)) {
+      setEmailStatus('valid');
+    } else {
+      setEmailStatus('invalid');
+    }
+  };
+
+  // Real-time phone validation
+  const validatePhoneRealtime = (phone: string) => {
+    if (!phone) {
+      setPhoneStatus('idle');
+      return;
+    }
+    const cleaned = phone.replace(/[\s\-\(\)]/g, '');
+    if (phoneRegex.test(cleaned) || /^\+\d{7,15}$/.test(cleaned)) {
+      setPhoneStatus('valid');
+    } else {
+      setPhoneStatus('invalid');
+    }
+  };
 
   const onSubmit = async (data: InquiryFormData) => {
     setIsSubmitting(true);
     try {
-      // Capture lead locally
+      const normalizedPhone = normalizePhone(data.phone);
+      const normalizedEmail = data.email.toLowerCase().trim();
+
+      // 1. Capture lead to leads table (existing behavior)
       await captureLead({
-        email: data.email,
+        email: normalizedEmail,
         fullName: data.fullName,
-        phone: data.phone,
+        phone: normalizedPhone,
         nationality: data.nationality,
         language: data.language,
       }, source);
 
-      // Send email via edge function
+      // 2. Also save to crm_leads table for CRM dashboard access
+      const { error: crmError } = await supabase
+        .from('crm_leads')
+        .insert({
+          full_name: data.fullName,
+          email_lower: normalizedEmail,
+          phone_e164: normalizedPhone,
+          nationality: data.nationality,
+          preferred_language: data.language,
+          source: source,
+          owner_type: 'company_assigned' as const,
+          lead_source_type: 'website',
+          contact_type: (context?.role === 'broker' ? 'broker' : 'client') as 'broker' | 'client',
+          tags: context?.role ? [context.role] : [],
+        });
+
+      if (crmError) {
+        // If duplicate, that's okay - lead already exists
+        if (crmError.code !== '23505') {
+          console.warn('CRM lead save warning:', crmError);
+        }
+      }
+
+      // 3. Send email notification via edge function
       const { error } = await supabase.functions.invoke('send-inquiry-email', {
         body: {
           ...data,
+          phone: normalizedPhone,
+          email: normalizedEmail,
           source,
           propertyName,
           context,
@@ -86,6 +169,8 @@ const InquiryFormModal = ({ isOpen, onClose, source = 'general', propertyName, c
         setIsSuccess(false);
         onClose();
         form.reset();
+        setEmailStatus('idle');
+        setPhoneStatus('idle');
       }, 2000);
     } catch (error) {
       console.error('Error submitting inquiry:', error);
@@ -174,14 +259,28 @@ const InquiryFormModal = ({ isOpen, onClose, source = 'general', propertyName, c
                     name="email"
                     render={({ field }) => (
                       <FormItem>
-                        <FormLabel className="text-zinc-400 text-sm">{t('inquiry.email')}</FormLabel>
+                        <FormLabel className="text-zinc-400 text-sm flex items-center gap-2">
+                          {t('inquiry.email')}
+                          {emailStatus === 'valid' && <CheckCircle2 className="w-4 h-4 text-green-500" />}
+                          {emailStatus === 'invalid' && <XCircle className="w-4 h-4 text-red-500" />}
+                        </FormLabel>
                         <FormControl>
-                          <Input 
-                            {...field} 
-                            type="email"
-                            className="h-12 bg-zinc-900/80 border-zinc-700/50 text-white placeholder:text-zinc-500 focus:border-gold rounded-lg"
-                            placeholder="email@example.com"
-                          />
+                          <div className="relative">
+                            <Input 
+                              {...field} 
+                              type="email"
+                              onChange={(e) => {
+                                field.onChange(e);
+                                validateEmailRealtime(e.target.value);
+                              }}
+                              className={`h-12 bg-zinc-900/80 text-white placeholder:text-zinc-500 rounded-lg pr-10 ${
+                                emailStatus === 'valid' ? 'border-green-500/50 focus:border-green-500' :
+                                emailStatus === 'invalid' ? 'border-red-500/50 focus:border-red-500' :
+                                'border-zinc-700/50 focus:border-gold'
+                              }`}
+                              placeholder="email@example.com"
+                            />
+                          </div>
                         </FormControl>
                         <FormMessage className="text-red-400" />
                       </FormItem>
@@ -193,15 +292,30 @@ const InquiryFormModal = ({ isOpen, onClose, source = 'general', propertyName, c
                     name="phone"
                     render={({ field }) => (
                       <FormItem>
-                        <FormLabel className="text-zinc-400 text-sm">{t('inquiry.phone')}</FormLabel>
+                        <FormLabel className="text-zinc-400 text-sm flex items-center gap-2">
+                          {t('inquiry.phone')}
+                          {phoneStatus === 'valid' && <CheckCircle2 className="w-4 h-4 text-green-500" />}
+                          {phoneStatus === 'invalid' && <XCircle className="w-4 h-4 text-red-500" />}
+                        </FormLabel>
                         <FormControl>
-                          <Input 
-                            {...field} 
-                            type="tel"
-                            className="h-12 bg-zinc-900/80 border-zinc-700/50 text-white placeholder:text-zinc-500 focus:border-gold rounded-lg"
-                            placeholder="+971 50 000 0000"
-                          />
+                          <div className="relative">
+                            <Input 
+                              {...field} 
+                              type="tel"
+                              onChange={(e) => {
+                                field.onChange(e);
+                                validatePhoneRealtime(e.target.value);
+                              }}
+                              className={`h-12 bg-zinc-900/80 text-white placeholder:text-zinc-500 rounded-lg ${
+                                phoneStatus === 'valid' ? 'border-green-500/50 focus:border-green-500' :
+                                phoneStatus === 'invalid' ? 'border-red-500/50 focus:border-red-500' :
+                                'border-zinc-700/50 focus:border-gold'
+                              }`}
+                              placeholder="+971 50 123 4567"
+                            />
+                          </div>
                         </FormControl>
+                        <p className="text-xs text-zinc-500 mt-1">Include country code (e.g., +971)</p>
                         <FormMessage className="text-red-400" />
                       </FormItem>
                     )}
