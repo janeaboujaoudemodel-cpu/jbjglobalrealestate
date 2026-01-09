@@ -14,8 +14,10 @@ const AdminBypass = ({ children }: AdminBypassProps) => {
 
   // CRM must be accessible to CRM users (owner_admin / broker_member) even if they are not "site admins".
   // The CRM pages perform their own auth + role checks.
+  // Video Builder has its own exclusive access gate for JBJ brokers.
   const isCrmRoute =
     location.pathname.startsWith("/crm") || location.pathname.startsWith("/admin/crm");
+  const isVideoBuilderRoute = location.pathname === "/video-builder";
 
   useEffect(() => {
     const checkAdminStatus = async () => {
@@ -52,8 +54,8 @@ const AdminBypass = ({ children }: AdminBypassProps) => {
     return () => subscription.unsubscribe();
   }, []);
 
-  // CRM routes bypass this gate (they are protected in their own pages).
-  if (isCrmRoute) return <>{children}</>;
+  // CRM routes and Video Builder bypass this gate (they have their own access controls).
+  if (isCrmRoute || isVideoBuilderRoute) return <>{children}</>;
 
   // Show loading briefly
   if (isLoading) {

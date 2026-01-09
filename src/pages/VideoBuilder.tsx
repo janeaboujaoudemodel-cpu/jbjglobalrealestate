@@ -1,4 +1,4 @@
-import { useState, useRef, useCallback } from "react";
+import { useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { 
   Video, Upload, Wand2, Music, Languages, Play, Pause, 
@@ -14,6 +14,7 @@ import { Badge } from "@/components/ui/badge";
 import { Progress } from "@/components/ui/progress";
 import { toast } from "sonner";
 import BackNavButton from "@/components/BackNavButton";
+import VideoBuilderAccessGate from "@/components/video-builder/VideoBuilderAccessGate";
 import VideoProjectSelector from "@/components/video-builder/VideoProjectSelector";
 import VideoMediaUploader from "@/components/video-builder/VideoMediaUploader";
 import VideoScriptGenerator from "@/components/video-builder/VideoScriptGenerator";
@@ -153,6 +154,7 @@ const VideoBuilder = () => {
   };
 
   return (
+    <VideoBuilderAccessGate>
     <div className="min-h-screen bg-background">
       {/* Header */}
       <div className="border-b border-border/50 bg-card/50 backdrop-blur-sm sticky top-0 z-40">
@@ -427,6 +429,7 @@ const VideoBuilder = () => {
         </div>
       </div>
     </div>
+    </VideoBuilderAccessGate>
   );
 };
 
