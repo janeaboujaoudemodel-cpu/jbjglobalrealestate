@@ -74,6 +74,7 @@ import VideoMeeting from "./pages/VideoMeeting";
 import ExecutiveAssistant from "./pages/ExecutiveAssistant";
 import CallReview from "./pages/CallReview";
 import VapiPrompt from "./pages/VapiPrompt";
+import VideoBuilder from "./pages/VideoBuilder";
 
 const queryClient = new QueryClient();
 
