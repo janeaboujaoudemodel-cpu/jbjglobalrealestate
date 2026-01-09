@@ -1,5 +1,5 @@
 import { useState, useEffect, useCallback } from "react";
-import { Download, X } from "lucide-react";
+import { Download, X, Share } from "lucide-react";
 import { motion, AnimatePresence } from "framer-motion";
 import logoDark from "@/assets/logo-dark.jpg";
 import { toast } from "sonner";
@@ -10,14 +10,21 @@ interface BeforeInstallPromptEvent extends Event {
 }
 
 const STORAGE_KEYS = {
-  INSTALLED: "pwa_installed",
-  DISMISSED: "pwa_dismissed",
+  INSTALLED: "jbj_pwa_installed",
+  DISMISSED: "jbj_pwa_dismissed",
+};
+
+const isIOSDevice = () => {
+  const ua = navigator.userAgent;
+  return /iPad|iPhone|iPod/.test(ua) || (navigator.platform === "MacIntel" && (navigator as any).maxTouchPoints > 1);
 };
 
 const InstallAppButton = () => {
   const [deferredPrompt, setDeferredPrompt] = useState<BeforeInstallPromptEvent | null>(null);
   const [isInstalled, setIsInstalled] = useState(false);
   const [isDismissed, setIsDismissed] = useState(false);
+  const [isIOS, setIsIOS] = useState(false);
+  const [showIOSGuide, setShowIOSGuide] = useState(false);
 
   useEffect(() => {
     // Check localStorage for persisted states
@@ -43,6 +50,9 @@ const InstallAppButton = () => {
       localStorage.setItem(STORAGE_KEYS.INSTALLED, "true");
       return;
     }
+
+    // Check if iOS
+    setIsIOS(isIOSDevice());
 
     const handleBeforeInstallPrompt = (e: Event) => {
       e.preventDefault();
@@ -70,6 +80,12 @@ const InstallAppButton = () => {
   }, []);
 
   const handleInstallClick = useCallback(async () => {
+    // iOS fallback - show instructions
+    if (isIOS) {
+      setShowIOSGuide(true);
+      return;
+    }
+
     if (!deferredPrompt) return;
     
     try {
@@ -81,7 +97,6 @@ const InstallAppButton = () => {
         localStorage.setItem(STORAGE_KEYS.INSTALLED, "true");
         toast.success("App installed successfully!");
       } else {
-        // User dismissed the native prompt
         setIsDismissed(true);
         localStorage.setItem(STORAGE_KEYS.DISMISSED, "true");
       }
@@ -89,18 +104,64 @@ const InstallAppButton = () => {
     } catch (error) {
       console.error("Install prompt error:", error);
     }
-  }, [deferredPrompt]);
+  }, [deferredPrompt, isIOS]);
 
   const handleDismiss = useCallback(() => {
     setIsDismissed(true);
+    setShowIOSGuide(false);
     localStorage.setItem(STORAGE_KEYS.DISMISSED, "true");
   }, []);
 
-  // Only show when native install prompt is available and not installed/dismissed
-  if (isInstalled || isDismissed || !deferredPrompt) return null;
+  // Hide if installed or dismissed
+  if (isInstalled || isDismissed) return null;
+
+  // Show only if native prompt available OR if iOS (for fallback)
+  if (!deferredPrompt && !isIOS) return null;
 
   return (
     <AnimatePresence>
+      {/* iOS Instructions Modal */}
+      {showIOSGuide && (
+        <motion.div
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+          exit={{ opacity: 0 }}
+          className="fixed inset-0 z-[9999] bg-black/70 flex items-center justify-center p-4"
+          onClick={() => setShowIOSGuide(false)}
+        >
+          <motion.div
+            initial={{ scale: 0.9, opacity: 0 }}
+            animate={{ scale: 1, opacity: 1 }}
+            exit={{ scale: 0.9, opacity: 0 }}
+            className="bg-background rounded-2xl p-6 max-w-sm w-full shadow-2xl"
+            onClick={(e) => e.stopPropagation()}
+          >
+            <h3 className="text-lg font-bold text-foreground mb-4">Add to Home Screen</h3>
+            <div className="space-y-3 text-sm text-muted-foreground">
+              <div className="flex items-start gap-3">
+                <span className="bg-gold/20 text-gold rounded-full w-6 h-6 flex items-center justify-center shrink-0 font-bold">1</span>
+                <p>Tap the <Share className="inline w-4 h-4" /> Share button in Safari</p>
+              </div>
+              <div className="flex items-start gap-3">
+                <span className="bg-gold/20 text-gold rounded-full w-6 h-6 flex items-center justify-center shrink-0 font-bold">2</span>
+                <p>Scroll down and tap "Add to Home Screen"</p>
+              </div>
+              <div className="flex items-start gap-3">
+                <span className="bg-gold/20 text-gold rounded-full w-6 h-6 flex items-center justify-center shrink-0 font-bold">3</span>
+                <p>Tap "Add" to install the app</p>
+              </div>
+            </div>
+            <button
+              onClick={handleDismiss}
+              className="mt-6 w-full py-3 bg-gold text-black font-bold rounded-lg hover:bg-gold-light transition-colors"
+            >
+              Got it
+            </button>
+          </motion.div>
+        </motion.div>
+      )}
+
+      {/* Install Button */}
       <motion.div
         initial={{ scale: 0, opacity: 0 }}
         animate={{ scale: 1, opacity: 1 }}
@@ -121,11 +182,12 @@ const InstallAppButton = () => {
               loading="lazy"
             />
           </div>
-          <span className="text-black font-bold text-sm tracking-wide">Install App</span>
+          <span className="text-black font-bold text-sm tracking-wide">
+            {isIOS ? "Add to Home" : "Install App"}
+          </span>
           <Download className="w-5 h-5 text-black" />
         </button>
         
-        {/* Dismiss button */}
         <button
           onClick={handleDismiss}
           className="ml-1 p-1 rounded-full hover:bg-black/10 transition-colors"
@@ -134,31 +196,17 @@ const InstallAppButton = () => {
           <X className="w-4 h-4 text-black/60" />
         </button>
         
-        {/* Glow ring effect */}
         <motion.div
           className="absolute inset-0 rounded-full bg-gold/20 pointer-events-none"
-          animate={{
-            scale: [1, 1.2, 1],
-            opacity: [0.5, 0, 0.5],
-          }}
-          transition={{
-            duration: 2,
-            repeat: Infinity,
-            ease: "easeInOut",
-          }}
+          animate={{ scale: [1, 1.2, 1], opacity: [0.5, 0, 0.5] }}
+          transition={{ duration: 2, repeat: Infinity, ease: "easeInOut" }}
         />
       </motion.div>
 
       <style>{`
         @keyframes bounce-glow {
-          0%, 100% {
-            transform: translateY(0) scale(1);
-            box-shadow: 0 0 20px rgba(212, 175, 55, 0.4), 0 0 40px rgba(212, 175, 55, 0.2);
-          }
-          50% {
-            transform: translateY(-8px) scale(1.05);
-            box-shadow: 0 0 30px rgba(212, 175, 55, 0.6), 0 0 60px rgba(212, 175, 55, 0.3);
-          }
+          0%, 100% { transform: translateY(0) scale(1); box-shadow: 0 0 20px rgba(212, 175, 55, 0.4), 0 0 40px rgba(212, 175, 55, 0.2); }
+          50% { transform: translateY(-8px) scale(1.05); box-shadow: 0 0 30px rgba(212, 175, 55, 0.6), 0 0 60px rgba(212, 175, 55, 0.3); }
         }
       `}</style>
     </AnimatePresence>
