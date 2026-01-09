@@ -161,12 +161,12 @@ const TOOLS = [
   },
   {
     icon: Bot,
-    title: "AI Property Comparison",
+    title: "JBJ AI Property Comparison",
     description: "Generate detailed comparison tables for multiple properties",
   },
   {
     icon: Sparkles,
-    title: "AI Recommendation Engine",
+    title: "JBJ AI Recommendation Engine",
     description: "Let AI recommend the best property for your client",
   },
   {

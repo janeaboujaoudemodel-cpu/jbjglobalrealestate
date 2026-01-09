@@ -70,15 +70,15 @@ const IntellectualProperty = () => {
             
             <div className="grid md:grid-cols-2 gap-4">
               {[
-                { title: "AI Property Evaluator", desc: "Proprietary valuation algorithms" },
-                { title: "AI Rental Index Analyzer", desc: "Market analysis technology" },
-                { title: "AI Budget Planner", desc: "Affordability analysis engine" },
-                { title: "AI Document Scanner", desc: "Intelligent parsing system" },
-                { title: "AI Interior Designer", desc: "Design generation technology" },
-                { title: "Property Comparison Engine", desc: "Multi-property analysis tool" },
-                { title: "Broker Toolkit Platform", desc: "Professional tools suite" },
-                { title: "Guides & Resources", desc: "Educational content library" },
-                { title: "Platform UI/UX Design", desc: "Interface designs & layouts" },
+                { title: "JBJ AI Property Evaluator", desc: "Proprietary valuation algorithms" },
+                { title: "JBJ AI Rental Index", desc: "Market analysis technology" },
+                { title: "JBJ AI Budget Planner", desc: "Affordability analysis engine" },
+                { title: "JBJ Scan & Sign Documents", desc: "Intelligent parsing system" },
+                { title: "JBJ AI Interior Designer", desc: "Design generation technology" },
+                { title: "JBJ Property Comparison", desc: "Multi-property analysis tool" },
+                { title: "JBJ Broker Toolkit", desc: "Professional tools suite" },
+                { title: "JBJ Guides & Resources", desc: "Educational content library" },
+                { title: "JBJ Platform UI/UX Design", desc: "Interface designs & layouts" },
               ].map((item, index) => (
                 <div key={index} className="bg-zinc-900/50 rounded-xl p-4 border border-zinc-800 hover:border-gold/30 transition-colors">
                   <h3 className="text-white font-medium">{item.title}</h3>

@@ -61,7 +61,7 @@ export const AI_TOOLS_CONFIG = {
   // Property Intelligence
   virtualStaging: {
     id: "virtual-staging",
-    name: "AI Virtual Staging",
+    name: "JBJ AI Virtual Staging",
     description: "Transform empty rooms with AI-generated furniture and décor",
     function: "ai-virtual-staging",
     category: "Property Intelligence",
@@ -69,7 +69,7 @@ export const AI_TOOLS_CONFIG = {
   },
   pricePredictor: {
     id: "price-predictor",
-    name: "AI Price Predictor",
+    name: "JBJ AI Price Predictor",
     description: "Predict property prices based on market data and trends",
     function: "ai-price-predictor",
     category: "Property Intelligence",
@@ -77,7 +77,7 @@ export const AI_TOOLS_CONFIG = {
   },
   neighborhoodInsights: {
     id: "neighborhood-insights",
-    name: "AI Neighborhood Insights",
+    name: "JBJ AI Neighborhood Insights",
     description: "Get detailed analysis of neighborhoods and areas",
     function: "ai-neighborhood-insights",
     category: "Property Intelligence",
@@ -87,7 +87,7 @@ export const AI_TOOLS_CONFIG = {
   // Lead & Sales Automation
   leadQualification: {
     id: "lead-qualification",
-    name: "AI Lead Qualification",
+    name: "JBJ AI Lead Qualification",
     description: "Automatically qualify and score leads",
     function: "ai-lead-qualification",
     category: "Lead & Sales",
@@ -95,7 +95,7 @@ export const AI_TOOLS_CONFIG = {
   },
   followupScheduler: {
     id: "followup-scheduler",
-    name: "AI Follow-up Scheduler",
+    name: "JBJ AI Follow-up Scheduler",
     description: "Smart scheduling for lead follow-ups",
     function: "ai-followup-scheduler",
     category: "Lead & Sales",
@@ -103,7 +103,7 @@ export const AI_TOOLS_CONFIG = {
   },
   objectionHandler: {
     id: "objection-handler",
-    name: "AI Objection Handler",
+    name: "JBJ AI Objection Handler",
     description: "Get expert responses to buyer objections",
     function: "ai-objection-handler",
     category: "Lead & Sales",
@@ -113,7 +113,7 @@ export const AI_TOOLS_CONFIG = {
   // Analytics & Insights
   marketReport: {
     id: "market-report",
-    name: "AI Market Report",
+    name: "JBJ AI Market Report",
     description: "Generate comprehensive market analysis reports",
     function: "ai-market-report",
     category: "Analytics",
@@ -121,7 +121,7 @@ export const AI_TOOLS_CONFIG = {
   },
   competitorAnalysis: {
     id: "competitor-analysis",
-    name: "AI Competitor Analysis",
+    name: "JBJ AI Competitor Analysis",
     description: "Analyze competitor properties and pricing",
     function: "ai-competitor-analysis",
     category: "Analytics",
@@ -129,7 +129,7 @@ export const AI_TOOLS_CONFIG = {
   },
   roiCalculator: {
     id: "roi-calculator",
-    name: "AI ROI Calculator",
+    name: "JBJ AI ROI Calculator",
     description: "Calculate investment returns and projections",
     function: "ai-roi-calculator",
     category: "Analytics",
@@ -139,7 +139,7 @@ export const AI_TOOLS_CONFIG = {
   // Communication
   meetingSummarizer: {
     id: "meeting-summarizer",
-    name: "AI Meeting Summarizer",
+    name: "JBJ AI Meeting Summarizer",
     description: "Summarize meetings and extract action items",
     function: "ai-meeting-summarizer",
     category: "Communication",
@@ -147,7 +147,7 @@ export const AI_TOOLS_CONFIG = {
   },
   translationHub: {
     id: "translation-hub",
-    name: "AI Translation Hub",
+    name: "JBJ AI Translation Hub",
     description: "Translate content into multiple languages",
     function: "ai-translation-hub",
     category: "Communication",
@@ -155,7 +155,7 @@ export const AI_TOOLS_CONFIG = {
   },
   videoTourScript: {
     id: "video-tour-script",
-    name: "AI Video Tour Script",
+    name: "JBJ AI Video Tour Script",
     description: "Generate engaging property tour scripts",
     function: "ai-video-tour-script",
     category: "Communication",
@@ -165,7 +165,7 @@ export const AI_TOOLS_CONFIG = {
   // Document Intelligence
   contractReviewer: {
     id: "contract-reviewer",
-    name: "AI Contract Reviewer",
+    name: "JBJ AI Contract Reviewer",
     description: "Review contracts and highlight key terms",
     function: "ai-contract-reviewer",
     category: "Documents",
@@ -173,7 +173,7 @@ export const AI_TOOLS_CONFIG = {
   },
   documentGenerator: {
     id: "document-generator",
-    name: "AI Document Generator",
+    name: "JBJ AI Document Generator",
     description: "Generate professional real estate documents",
     function: "ai-document-generator",
     category: "Documents",

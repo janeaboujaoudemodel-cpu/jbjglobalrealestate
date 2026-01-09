@@ -428,7 +428,7 @@ const RoleSelectionModal = ({ onRoleSelected }: RoleSelectionModalProps) => {
                         </div>
                         <div className="flex items-center gap-3 text-sm text-gray-600">
                           <div className="w-6 h-6 rounded-full bg-gold/20 flex items-center justify-center text-xs font-bold text-gold">2</div>
-                          <span>Explore <strong>AI Tools</strong> in the AI Hub</span>
+                          <span>Explore <strong>JBJ AI Tools</strong> in the JBJ Assistant Hub</span>
                         </div>
                         <div className="flex items-center gap-3 text-sm text-gray-600">
                           <div className="w-6 h-6 rounded-full bg-gold/20 flex items-center justify-center text-xs font-bold text-gold">3</div>
