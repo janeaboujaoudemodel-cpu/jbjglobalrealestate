@@ -5,7 +5,7 @@ import jbjMonogramDarkBg from "@/assets/jbj-monogram-dark-bg.png"; // Monogram o
 
 const ComingSoon = () => {
   return (
-    <div className="min-h-screen bg-black flex flex-col items-center justify-center px-4 pt-12 md:pt-16 relative overflow-hidden">
+    <div className="min-h-screen bg-black flex flex-col items-center justify-center px-4 py-12 md:py-16 relative overflow-hidden">
       {/* Subtle gradient overlays for depth */}
       <div className="absolute inset-0 pointer-events-none">
         <div className="absolute top-0 left-0 w-full h-1/3 bg-gradient-to-b from-white/[0.02] to-transparent" />
@@ -166,14 +166,14 @@ const ComingSoon = () => {
             +971 56 591 1000
           </a>
           <a
-            href="mailto:contact@jbj.ae"
+            href="mailto:Contact@JBJ.ae"
             className="flex items-center gap-2 text-sm text-white/60 hover:text-gold transition-colors hover:drop-shadow-[0_0_8px_hsl(var(--gold))]"
           >
             <svg className="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
               <rect width="20" height="16" x="2" y="4" rx="2"/>
               <path d="m22 7-8.97 5.7a1.94 1.94 0 0 1-2.06 0L2 7"/>
             </svg>
-            contact@jbj.ae
+            Contact@JBJ.ae
           </a>
           <Link
             to="/auth"
