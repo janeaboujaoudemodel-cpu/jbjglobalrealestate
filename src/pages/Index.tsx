@@ -195,19 +195,11 @@ const Index = () => {
                 List Your Property
                 <ArrowUpRight className="w-3 h-3 ml-1 text-gold" />
               </Button>
-              <Link to="/concierge">
-                <Button 
-                  className="bg-zinc-900 border-2 border-gold/40 text-white hover:bg-zinc-800 hover:border-gold font-semibold px-5 py-4 text-xs transition-all duration-300 hover:scale-105 hover:shadow-lg hover:shadow-gold/20"
-                >
-                  Luxury Concierge
-                  <ArrowUpRight className="w-3 h-3 ml-1 text-gold" />
-                </Button>
-              </Link>
               <Link to="/services/design-build">
                 <Button 
                   className="bg-zinc-900 border-2 border-gold/40 text-white hover:bg-zinc-800 hover:border-gold font-semibold px-5 py-4 text-xs transition-all duration-300 hover:scale-105 hover:shadow-lg hover:shadow-gold/20"
                 >
-                  Design & Build
+                  Design & Build Partners
                   <ArrowUpRight className="w-3 h-3 ml-1 text-gold" />
                 </Button>
               </Link>
@@ -802,17 +794,20 @@ const Index = () => {
             >
               <span className="inline-flex items-center gap-2 px-4 py-2 bg-gold/10 border border-gold/40 rounded-full mb-4">
                 <Calculator className="w-4 h-4 text-gold" />
-                <span className="text-zinc-700 text-xs font-semibold uppercase tracking-wider">Financial Planning</span>
+                <span className="text-zinc-700 text-xs font-semibold uppercase tracking-wider">Mortgage Estimate</span>
               </span>
               <h3 className="text-zinc-900 text-3xl md:text-4xl font-bold" style={{ fontFamily: "Poppins, sans-serif" }}>
                 Mortgage <span className="text-transparent bg-clip-text bg-gradient-to-r from-gold via-[#C4A962] to-gold">Calculator</span>
               </h3>
               <p className="text-zinc-600 mt-3 max-w-lg mx-auto">
-                Estimate your monthly payments and plan your investment with precision
+                Estimate your monthly payments and explore financing options with licensed mortgage partners.
               </p>
             </motion.div>
             <div className="relative z-10">
               <MortgageCalculator compact />
+              <p className="text-zinc-500 text-xs text-center mt-4">
+                Estimates only. Introductions to independent licensed mortgage partners.
+              </p>
             </div>
           </div>
         </div>
@@ -832,10 +827,10 @@ const Index = () => {
         >
           <span className="inline-block text-gold text-xs uppercase tracking-[0.3em] mb-4">Get Started</span>
           <h3 className="text-3xl md:text-4xl font-bold text-white mb-4" style={{ fontFamily: "Poppins, sans-serif" }}>
-            Ready to Invest?
+            Ready to Get Started?
           </h3>
           <p className="text-zinc-400 max-w-xl mx-auto mb-8">
-            Connect with our team to discover exclusive off-plan opportunities and start your UAE investment journey today.
+            Connect with our team to discuss buying or selling real estate in Dubai and get introduced to licensed partners where needed.
           </p>
           <div className="flex flex-wrap justify-center gap-4">
             <Button 
