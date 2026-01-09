@@ -1,6 +1,7 @@
 import { Link } from "react-router-dom";
 import { motion } from "framer-motion";
 import Footer from "@/components/Footer";
+import AIAccessGate from "@/components/AIAccessGate";
 import { Button } from "@/components/ui/button";
 import { 
   ArrowUpRight, 
@@ -234,6 +235,7 @@ const benefits = [
 
 const AIHub = () => {
   return (
+    <AIAccessGate toolName="JBJ Assistant Hub">
     <section className="relative w-full min-h-screen bg-black">
       {/* Hero Section */}
       <div className="relative py-24 md:py-32 overflow-hidden ai-hero-bg">
@@ -513,6 +515,7 @@ const AIHub = () => {
 
       <Footer />
     </section>
+    </AIAccessGate>
   );
 };
 

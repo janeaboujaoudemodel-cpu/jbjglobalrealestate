@@ -1,14 +1,10 @@
-import { useState } from "react";
 import { motion } from "framer-motion";
 import { useNavigate } from "react-router-dom";
 import { useAuth } from "@/contexts/AuthContext";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import Footer from "@/components/Footer";
-import BrokerPaymentModal from "@/components/broker/BrokerPaymentModal";
 import { 
-  Crown, 
-  FileText, 
   GraduationCap, 
   Sparkles, 
   CheckCircle2, 
@@ -27,86 +23,12 @@ import {
   FileSpreadsheet,
   Palette,
   Download,
+  FileText,
+  Headphones,
+  UserCheck,
+  Building2,
   Star
 } from "lucide-react";
-
-const TIERS = [
-  {
-    id: "starter",
-    name: "Starter",
-    price: 49,
-    priceAed: 180,
-    period: "month",
-    yearlyPrice: 399,
-    yearlyPriceAed: 1465,
-    description: "Perfect for new brokers starting their journey",
-    trialDays: 7,
-    features: [
-      { text: "5 AI Property Reports / month", included: true },
-      { text: "Basic PDF Generator (JJ Branding)", included: true },
-      { text: "Access to Video Course Library", included: true },
-      { text: "Closing Techniques Module", included: true },
-      { text: "Email Support", included: true },
-      { text: "Custom Branding on PDFs", included: false },
-      { text: "AI Comparison Reports", included: false },
-      { text: "Live Training Sessions", included: false },
-      { text: "1-on-1 Mentorship", included: false },
-    ],
-    aiCredits: 5,
-    popular: false,
-    color: "from-zinc-600 to-zinc-800",
-  },
-  {
-    id: "professional",
-    name: "Professional",
-    price: 149,
-    priceAed: 547,
-    period: "month",
-    yearlyPrice: 1199,
-    yearlyPriceAed: 4403,
-    description: "For serious brokers ready to scale",
-    trialDays: 7,
-    features: [
-      { text: "50 AI Property Reports / month", included: true },
-      { text: "Custom Branded PDFs", included: true },
-      { text: "Full Course Library Access", included: true },
-      { text: "AI Comparison & Recommendations", included: true },
-      { text: "Objection Handling Masterclass", included: true },
-      { text: "Lead Generation Strategies", included: true },
-      { text: "Priority Email & Chat Support", included: true },
-      { text: "Monthly Live Q&A Sessions", included: true },
-      { text: "1-on-1 Mentorship", included: false },
-    ],
-    aiCredits: 50,
-    popular: true,
-    color: "from-gold to-gold-dark",
-  },
-  {
-    id: "enterprise",
-    name: "Enterprise",
-    price: 399,
-    priceAed: 1465,
-    period: "month",
-    yearlyPrice: 3199,
-    yearlyPriceAed: 11747,
-    description: "Unlimited power for top performers",
-    trialDays: 7,
-    features: [
-      { text: "Unlimited AI Property Reports", included: true },
-      { text: "White-Label PDF Exports", included: true },
-      { text: "All Courses + New Releases", included: true },
-      { text: "Unlimited AI Analysis & Comparison", included: true },
-      { text: "Advanced Lead Management System", included: true },
-      { text: "Prospecting & CRM Integration", included: true },
-      { text: "24/7 Priority Support", included: true },
-      { text: "Weekly Live Training", included: true },
-      { text: "Monthly 1-on-1 Mentorship Calls", included: true },
-    ],
-    aiCredits: -1, // unlimited
-    popular: false,
-    color: "from-purple-600 to-purple-900",
-  },
-];
 
 const COURSE_MODULES = [
   {
@@ -186,23 +108,42 @@ const TOOLS = [
   },
 ];
 
+const BROKER_CIRCLE_BENEFITS = [
+  {
+    icon: Sparkles,
+    title: "Free AI Tools",
+    description: "Unlimited access to all AI-powered property tools",
+  },
+  {
+    icon: GraduationCap,
+    title: "Free Courses & Videos",
+    description: "Complete training library with tutorials and guides",
+  },
+  {
+    icon: UserCheck,
+    title: "Dedicated HR Admin",
+    description: "One dedicated assistant to handle all your inquiries",
+  },
+  {
+    icon: Building2,
+    title: "Property Coach",
+    description: "Direct access to a property coach for your listings",
+  },
+  {
+    icon: Headphones,
+    title: "Priority Support",
+    description: "Get help whenever you need it from our team",
+  },
+  {
+    icon: Award,
+    title: "Developer Briefings",
+    description: "Exclusive access to developer meetings and updates",
+  },
+];
+
 export default function BrokerToolkit() {
   const navigate = useNavigate();
   const { user } = useAuth();
-  const [billingPeriod, setBillingPeriod] = useState<"monthly" | "yearly">("yearly");
-  const [selectedTier, setSelectedTier] = useState<string | null>(null);
-  const [paymentModalOpen, setPaymentModalOpen] = useState(false);
-
-  const handleSelectTier = (tierId: string) => {
-    if (!user) {
-      navigate("/auth?redirect=/broker-toolkit");
-      return;
-    }
-    setSelectedTier(tierId);
-    setPaymentModalOpen(true);
-  };
-
-  const selectedTierData = TIERS.find(t => t.id === selectedTier);
 
   return (
     <div className="min-h-screen bg-[hsl(var(--premium-bg))]">
@@ -223,28 +164,39 @@ export default function BrokerToolkit() {
               Broker <span className="text-gold">Toolkit</span>
             </h1>
             <p className="text-xl text-zinc-400 mb-4 max-w-2xl mx-auto">
-              Practical resources and AI-powered tools for real estate professionals.
+              Free resources and AI-powered tools for real estate professionals.
             </p>
             <p className="text-zinc-500 text-sm mb-8 max-w-xl mx-auto">
               Educational content only. Not an accredited training institute. No certificates issued.
             </p>
             <div className="flex flex-wrap justify-center gap-4">
-              <Button 
-                size="lg"
-                className="bg-gradient-to-r from-gold to-gold-dark text-black hover:brightness-110"
-                onClick={() => document.getElementById('tools')?.scrollIntoView({ behavior: 'smooth' })}
-              >
-                <Sparkles className="w-5 h-5 mr-2" />
-                Explore Tools
-              </Button>
+              {!user ? (
+                <Button 
+                  size="lg"
+                  className="bg-gradient-to-r from-gold to-gold-dark text-black hover:brightness-110"
+                  onClick={() => navigate("/auth?redirect=/broker-toolkit")}
+                >
+                  <Star className="w-5 h-5 mr-2" />
+                  Join Broker Circle - Free
+                </Button>
+              ) : (
+                <Button 
+                  size="lg"
+                  className="bg-gradient-to-r from-gold to-gold-dark text-black hover:brightness-110"
+                  onClick={() => navigate('/ai-hub')}
+                >
+                  <Sparkles className="w-5 h-5 mr-2" />
+                  Access AI Tools
+                </Button>
+              )}
               <Button 
                 size="lg"
                 variant="outline"
                 className="border-zinc-700 text-white hover:bg-zinc-800"
-                onClick={() => document.getElementById('resources')?.scrollIntoView({ behavior: 'smooth' })}
+                onClick={() => document.getElementById('benefits')?.scrollIntoView({ behavior: 'smooth' })}
               >
                 <BookOpen className="w-5 h-5 mr-2" />
-                Browse Resources
+                See Benefits
               </Button>
             </div>
           </motion.div>
@@ -254,11 +206,12 @@ export default function BrokerToolkit() {
       {/* Stats Section */}
       <section className="py-12 border-y border-zinc-800">
         <div className="container mx-auto px-4">
-          <div className="grid grid-cols-2 md:grid-cols-3 gap-8 text-center">
+          <div className="grid grid-cols-2 md:grid-cols-4 gap-8 text-center">
             {[
-              { value: "10+", label: "AI Tools" },
-              { value: "Free", label: "Resources" },
-              { value: "AI", label: "Powered" },
+              { value: "Free", label: "AI Tools" },
+              { value: "Free", label: "Courses" },
+              { value: "Dedicated", label: "HR Support" },
+              { value: "Direct", label: "Property Coach" },
             ].map((stat, i) => (
               <motion.div
                 key={i}
@@ -267,17 +220,77 @@ export default function BrokerToolkit() {
                 transition={{ delay: i * 0.1 }}
                 viewport={{ once: true }}
               >
-                <div className="text-3xl md:text-4xl font-bold text-gold mb-2">{stat.value}</div>
-                <div className="text-zinc-400">{stat.label}</div>
+                <div className="text-2xl md:text-3xl font-bold text-gold mb-2">{stat.value}</div>
+                <div className="text-zinc-400 text-sm">{stat.label}</div>
               </motion.div>
             ))}
           </div>
         </div>
       </section>
 
+      {/* Broker Circle Benefits Section */}
+      <section id="benefits" className="py-20">
+        <div className="container mx-auto px-4">
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+            className="text-center mb-16"
+          >
+            <Badge className="bg-emerald-500/20 text-emerald-400 border-emerald-500/30 mb-4">
+              <Star className="w-3 h-3 mr-1" />
+              JBJ Global Real Estate Broker Circle
+            </Badge>
+            <h2 className="text-3xl md:text-4xl font-bold text-white mb-4">
+              Everything You Need, <span className="text-gold">Completely Free</span>
+            </h2>
+            <p className="text-zinc-400 max-w-2xl mx-auto">
+              Join the JBJ Global Real Estate Broker Circle to unlock free courses, 
+              free AI tools, dedicated HR support, and a personal property coach.
+            </p>
+          </motion.div>
+
+          <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
+            {BROKER_CIRCLE_BENEFITS.map((benefit, i) => (
+              <motion.div
+                key={i}
+                initial={{ opacity: 0, y: 20 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                transition={{ delay: i * 0.1 }}
+                viewport={{ once: true }}
+                className="bg-gradient-to-br from-zinc-900/80 to-zinc-900/40 border border-zinc-800 rounded-xl p-6 hover:border-gold/50 transition-colors"
+              >
+                <div className="w-12 h-12 rounded-xl bg-gradient-to-br from-gold/20 to-gold/5 flex items-center justify-center mb-4">
+                  <benefit.icon className="w-6 h-6 text-gold" />
+                </div>
+                <h3 className="text-lg font-semibold text-white mb-2">{benefit.title}</h3>
+                <p className="text-zinc-400 text-sm">{benefit.description}</p>
+              </motion.div>
+            ))}
+          </div>
+
+          {!user && (
+            <motion.div
+              initial={{ opacity: 0, y: 20 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true }}
+              className="text-center mt-12"
+            >
+              <Button 
+                size="lg"
+                className="bg-gradient-to-r from-gold to-gold-dark text-black hover:brightness-110"
+                onClick={() => navigate("/auth?redirect=/broker-toolkit")}
+              >
+                <ArrowRight className="w-5 h-5 mr-2" />
+                Join Broker Circle - It's Free
+              </Button>
+            </motion.div>
+          )}
+        </div>
+      </section>
+
       {/* Tools Section */}
-      <section id="tools"></section>
-      <section className="py-20">
+      <section id="tools" className="py-20 bg-zinc-900/30">
         <div className="container mx-auto px-4">
           <motion.div
             initial={{ opacity: 0, y: 20 }}
@@ -294,7 +307,7 @@ export default function BrokerToolkit() {
             </h2>
             <p className="text-zinc-400 max-w-2xl mx-auto">
               Generate stunning property presentations, AI comparisons, and custom-branded 
-              materials in seconds.
+              materials in seconds. <span className="text-gold font-medium">Free for Broker Circle members.</span>
             </p>
           </motion.div>
 
@@ -320,7 +333,7 @@ export default function BrokerToolkit() {
       </section>
 
       {/* Resources Section */}
-      <section id="resources" className="py-20 bg-zinc-900/30">
+      <section id="resources" className="py-20">
         <div className="container mx-auto px-4">
           <motion.div
             initial={{ opacity: 0, y: 20 }}
@@ -330,13 +343,14 @@ export default function BrokerToolkit() {
           >
             <Badge className="bg-purple-500/20 text-purple-400 border-purple-500/30 mb-4">
               <BookOpen className="w-3 h-3 mr-1" />
-              Guides & Resources
+              Free Training Resources
             </Badge>
             <h2 className="text-3xl md:text-4xl font-bold text-white mb-4">
               Educational Resources
             </h2>
             <p className="text-zinc-400 max-w-2xl mx-auto">
-              Practical guides and resources to support your real estate career.
+              Practical guides and resources to support your real estate career. 
+              <span className="text-gold font-medium"> All free for Broker Circle members.</span>
             </p>
           </motion.div>
 
@@ -375,53 +389,6 @@ export default function BrokerToolkit() {
         </div>
       </section>
 
-      {/* Free Resources CTA Section */}
-      <section id="cta" className="py-20">
-        <div className="container mx-auto px-4">
-          <motion.div
-            initial={{ opacity: 0, y: 20 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true }}
-            className="text-center max-w-3xl mx-auto"
-          >
-            <Badge className="bg-gold/20 text-gold border-gold/30 mb-4">
-              <Sparkles className="w-3 h-3 mr-1" />
-              Free Resources
-            </Badge>
-            <h2 className="text-3xl md:text-4xl font-bold text-white mb-4">
-              Start Using Our Tools Today
-            </h2>
-            <p className="text-zinc-400 max-w-2xl mx-auto mb-8">
-              Access our AI-powered tools and educational resources at no cost. 
-              Designed to help real estate professionals succeed.
-            </p>
-            <p className="text-zinc-500 text-sm mb-8">
-              Educational content only. Not an accredited training institute. No certificates issued.
-            </p>
-
-            <div className="flex flex-wrap justify-center gap-4">
-              <Button 
-                onClick={() => navigate('/ai-hub')}
-                className="bg-gradient-to-r from-gold to-gold-dark text-black hover:brightness-110"
-                size="lg"
-              >
-                <Sparkles className="w-5 h-5 mr-2" />
-                Explore AI Tools
-              </Button>
-              <Button 
-                onClick={() => navigate('/tools-guide')}
-                variant="outline"
-                className="border-zinc-700 text-white hover:bg-zinc-800"
-                size="lg"
-              >
-                <BookOpen className="w-5 h-5 mr-2" />
-                View Resources
-              </Button>
-            </div>
-          </motion.div>
-        </div>
-      </section>
-
       {/* CTA Section */}
       <section className="py-20 bg-gradient-to-b from-zinc-900/50 to-transparent">
         <div className="container mx-auto px-4">
@@ -433,14 +400,35 @@ export default function BrokerToolkit() {
           >
             <Shield className="w-12 h-12 text-gold mx-auto mb-4" />
             <h2 className="text-2xl md:text-3xl font-bold text-white mb-4">
-              Questions? Need a Custom Plan?
+              Ready to Join the Broker Circle?
             </h2>
             <p className="text-zinc-400 mb-6">
-              Contact us for enterprise solutions, team plans, or any questions about the Broker Toolkit.
+              Get free access to all AI tools, courses, dedicated HR support, and a personal property coach.
             </p>
+
+            {!user ? (
+              <Button 
+                size="lg"
+                className="bg-gradient-to-r from-gold to-gold-dark text-black hover:brightness-110 mb-6"
+                onClick={() => navigate("/auth?redirect=/broker-toolkit")}
+              >
+                <Star className="w-5 h-5 mr-2" />
+                Join Now - Completely Free
+              </Button>
+            ) : (
+              <Button 
+                size="lg"
+                className="bg-gradient-to-r from-gold to-gold-dark text-black hover:brightness-110 mb-6"
+                onClick={() => navigate("/ai-hub")}
+              >
+                <Sparkles className="w-5 h-5 mr-2" />
+                Access Your Tools
+              </Button>
+            )}
+
             <div className="flex flex-col sm:flex-row items-center justify-center gap-4">
               <a
-                href="https://wa.me/971565911000?text=Hi%2C%20I%27m%20interested%20in%20the%20Broker%20Toolkit"
+                href="https://wa.me/971565911000?text=Hi%2C%20I%27m%20interested%20in%20joining%20the%20Broker%20Circle"
                 target="_blank"
                 rel="noopener noreferrer"
                 className="flex items-center gap-2 text-gold hover:text-gold-light transition-colors"
@@ -450,11 +438,11 @@ export default function BrokerToolkit() {
               </a>
               <span className="text-zinc-600 hidden sm:block">|</span>
               <a
-                href="mailto:contact@jjglobalcapital.com"
+                href="mailto:contact@jbj.ae"
                 className="flex items-center gap-2 text-gold hover:text-gold-light transition-colors"
               >
                 <Mail className="w-5 h-5" />
-                contact@jjglobalcapital.com
+                contact@jbj.ae
               </a>
             </div>
           </motion.div>
@@ -462,19 +450,6 @@ export default function BrokerToolkit() {
       </section>
 
       <Footer />
-
-      {selectedTierData && (
-        <BrokerPaymentModal
-          open={paymentModalOpen}
-          onOpenChange={setPaymentModalOpen}
-          tier={selectedTierData}
-          billingPeriod={billingPeriod}
-          onSuccess={() => {
-            setPaymentModalOpen(false);
-            navigate("/broker-toolkit/dashboard");
-          }}
-        />
-      )}
     </div>
   );
 }
