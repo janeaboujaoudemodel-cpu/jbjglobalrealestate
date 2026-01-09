@@ -74,6 +74,79 @@ const ComingSoon = () => {
           className="mt-12 h-px w-32 mx-auto bg-gradient-to-r from-transparent via-gold to-transparent"
         />
 
+        {/* JOIN THE CIRCLE - Lead Capture Section */}
+        <motion.div
+          initial={{ opacity: 0, y: 30 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ delay: 1, duration: 0.8 }}
+          className="mt-16 max-w-3xl mx-auto"
+        >
+          <h3 className="text-2xl md:text-3xl font-semibold text-white mb-4">
+            Join the Circle
+          </h3>
+          
+          <p className="text-white/50 text-sm md:text-base mb-8 max-w-xl mx-auto">
+            Be the first to access exclusive properties, market insights, and personalized real estate services.
+          </p>
+          
+          {/* Role Selection Cards */}
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+            {/* Buyer Card */}
+            <Link 
+              to="/auth?role=investor"
+              className="block p-5 md:p-6 bg-zinc-900/50 border border-white/10 rounded-lg hover:border-gold/50 hover:bg-zinc-900 transition-all duration-300 group"
+            >
+              <div className="w-12 h-12 rounded-full bg-gold/10 flex items-center justify-center mx-auto mb-3 group-hover:bg-gold/20 transition-colors">
+                <svg className="w-6 h-6 text-gold" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                  <circle cx="12" cy="12" r="10"/>
+                  <circle cx="12" cy="12" r="6"/>
+                  <circle cx="12" cy="12" r="2"/>
+                </svg>
+              </div>
+              <h4 className="text-lg font-semibold text-white mb-1">Buyer</h4>
+              <p className="text-xs text-white/40">
+                Looking for your dream property
+              </p>
+            </Link>
+            
+            {/* Broker Card */}
+            <Link 
+              to="/auth?role=broker"
+              className="block p-5 md:p-6 bg-zinc-900/50 border border-white/10 rounded-lg hover:border-gold/50 hover:bg-zinc-900 transition-all duration-300 group"
+            >
+              <div className="w-12 h-12 rounded-full bg-gold/10 flex items-center justify-center mx-auto mb-3 group-hover:bg-gold/20 transition-colors">
+                <svg className="w-6 h-6 text-gold" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                  <rect x="2" y="7" width="20" height="14" rx="2"/>
+                  <path d="M16 21V5a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v16"/>
+                </svg>
+              </div>
+              <h4 className="text-lg font-semibold text-white mb-1">Broker</h4>
+              <p className="text-xs text-white/40">
+                Join our exclusive network
+              </p>
+            </Link>
+            
+            {/* Visitor Card */}
+            <Link 
+              to="/auth?role=visitor"
+              className="block p-5 md:p-6 bg-zinc-900/50 border border-white/10 rounded-lg hover:border-gold/50 hover:bg-zinc-900 transition-all duration-300 group"
+            >
+              <div className="w-12 h-12 rounded-full bg-gold/10 flex items-center justify-center mx-auto mb-3 group-hover:bg-gold/20 transition-colors">
+                <svg className="w-6 h-6 text-gold" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                  <path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"/>
+                  <circle cx="9" cy="7" r="4"/>
+                  <path d="M22 21v-2a4 4 0 0 0-3-3.87"/>
+                  <path d="M16 3.13a4 4 0 0 1 0 7.75"/>
+                </svg>
+              </div>
+              <h4 className="text-lg font-semibold text-white mb-1">Visitor</h4>
+              <p className="text-xs text-white/40">
+                Explore UAE real estate
+              </p>
+            </Link>
+          </div>
+        </motion.div>
+
         {/* Contact Information */}
         <motion.div
           initial={{ opacity: 0, y: 20 }}
