@@ -1,7 +1,8 @@
 import { motion } from "framer-motion";
 import { Link } from "react-router-dom";
-import jbjLogoDarkTransparent from "@/assets/jbj-logo-dark-transparent.png";
-import jbjMonogramTransparent from "@/assets/jbj-monogram-transparent.png";
+// Official JBJ logos - USE ONLY THESE
+import jbjMonogramDarkBg from "@/assets/jbj-monogram-dark-bg.png"; // White J's for dark backgrounds
+import jbjMonogramLightBg from "@/assets/jbj-monogram-light-bg.png"; // Black J's for light backgrounds
 
 const ComingSoon = () => {
   return (
@@ -26,7 +27,7 @@ const ComingSoon = () => {
           className="mb-14"
         >
           <img 
-            src={jbjLogoDarkTransparent}
+            src={jbjMonogramDarkBg}
             alt="JBJ Global Real Estate" 
             className="h-24 md:h-32 lg:h-40 w-auto mx-auto"
           />
@@ -112,7 +113,7 @@ const ComingSoon = () => {
           className="mt-12"
         >
           <img 
-            src={jbjMonogramTransparent} 
+            src={jbjMonogramDarkBg} 
             alt="" 
             className="h-8 w-auto mx-auto opacity-30"
           />
