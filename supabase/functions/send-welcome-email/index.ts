@@ -31,6 +31,7 @@ const RequestSchema = z.object({
   userId: z.string().uuid(),
   email: z.string().email().max(255),
   fullName: z.string().max(200).optional(),
+  userRole: z.enum(["broker", "investor", "visitor"]).optional(),
 });
 
 serve(async (req) => {
@@ -69,10 +70,100 @@ serve(async (req) => {
       );
     }
 
-    const { userId, email, fullName } = parseResult.data;
+    const { userId, email, fullName, userRole } = parseResult.data;
     const displayName = fullName || email.split('@')[0];
+    const role = userRole || "visitor";
 
-    console.log(`Sending welcome email to: ${email} (user: ${userId})`);
+    console.log(`Sending welcome email to: ${email} (user: ${userId}, role: ${role})`);
+
+    // Role-based email subject and content
+    const subjectByRole = {
+      broker: "Welcome to the JBJ Broker Circle! 🎉",
+      investor: "Welcome to JBJ Global Real Estate - Your Investment Journey Begins! 🏠",
+      visitor: "Welcome to JBJ Global Real Estate!",
+    };
+
+    const ctaByRole = {
+      broker: { text: "Access Broker Toolkit", url: "https://jbj.ae/broker-toolkit" },
+      investor: { text: "Explore Properties", url: "https://jbj.ae/properties" },
+      visitor: { text: "Start Browsing", url: "https://jbj.ae/properties" },
+    };
+
+    const benefitsByRole = {
+      broker: `
+        <tr>
+          <td style="padding: 15px; background-color: #f8f9fa; border-radius: 8px; margin-bottom: 10px;">
+            <strong style="color: #1a1a2e;">🎯 Free AI Tools</strong>
+            <p style="color: #666; margin: 5px 0 0 0; font-size: 14px;">Unlimited access to property analysis, market reports, and smart recommendations.</p>
+          </td>
+        </tr>
+        <tr><td style="height: 10px;"></td></tr>
+        <tr>
+          <td style="padding: 15px; background-color: #f8f9fa; border-radius: 8px;">
+            <strong style="color: #1a1a2e;">📚 Free Training Academy</strong>
+            <p style="color: #666; margin: 5px 0 0 0; font-size: 14px;">Complete courses and videos to boost your real estate career.</p>
+          </td>
+        </tr>
+        <tr><td style="height: 10px;"></td></tr>
+        <tr>
+          <td style="padding: 15px; background-color: #f8f9fa; border-radius: 8px;">
+            <strong style="color: #1a1a2e;">👩‍💼 Dedicated HR Admin</strong>
+            <p style="color: #666; margin: 5px 0 0 0; font-size: 14px;">Jessica is your dedicated assistant for all inquiries and support.</p>
+          </td>
+        </tr>
+        <tr><td style="height: 10px;"></td></tr>
+        <tr>
+          <td style="padding: 15px; background-color: #f8f9fa; border-radius: 8px;">
+            <strong style="color: #1a1a2e;">🏆 Property Coach</strong>
+            <p style="color: #666; margin: 5px 0 0 0; font-size: 14px;">Direct access to expert guidance for your property deals.</p>
+          </td>
+        </tr>
+      `,
+      investor: `
+        <tr>
+          <td style="padding: 15px; background-color: #f8f9fa; border-radius: 8px; margin-bottom: 10px;">
+            <strong style="color: #1a1a2e;">🏠 Premium Properties</strong>
+            <p style="color: #666; margin: 5px 0 0 0; font-size: 14px;">Browse exclusive listings across Dubai and the UAE.</p>
+          </td>
+        </tr>
+        <tr><td style="height: 10px;"></td></tr>
+        <tr>
+          <td style="padding: 15px; background-color: #f8f9fa; border-radius: 8px;">
+            <strong style="color: #1a1a2e;">📊 AI Property Analysis</strong>
+            <p style="color: #666; margin: 5px 0 0 0; font-size: 14px;">Smart insights and ROI calculations for better investment decisions.</p>
+          </td>
+        </tr>
+        <tr><td style="height: 10px;"></td></tr>
+        <tr>
+          <td style="padding: 15px; background-color: #f8f9fa; border-radius: 8px;">
+            <strong style="color: #1a1a2e;">📈 Market Reports</strong>
+            <p style="color: #666; margin: 5px 0 0 0; font-size: 14px;">Stay informed with the latest UAE real estate trends.</p>
+          </td>
+        </tr>
+      `,
+      visitor: `
+        <tr>
+          <td style="padding: 15px; background-color: #f8f9fa; border-radius: 8px; margin-bottom: 10px;">
+            <strong style="color: #1a1a2e;">🏠 Browse Properties</strong>
+            <p style="color: #666; margin: 5px 0 0 0; font-size: 14px;">Explore our curated selection of UAE properties.</p>
+          </td>
+        </tr>
+        <tr><td style="height: 10px;"></td></tr>
+        <tr>
+          <td style="padding: 15px; background-color: #f8f9fa; border-radius: 8px;">
+            <strong style="color: #1a1a2e;">❤️ Save Favorites</strong>
+            <p style="color: #666; margin: 5px 0 0 0; font-size: 14px;">Shortlist properties you love for easy access.</p>
+          </td>
+        </tr>
+        <tr><td style="height: 10px;"></td></tr>
+        <tr>
+          <td style="padding: 15px; background-color: #f8f9fa; border-radius: 8px;">
+            <strong style="color: #1a1a2e;">💬 Expert Support</strong>
+            <p style="color: #666; margin: 5px 0 0 0; font-size: 14px;">Our team is ready to answer your questions.</p>
+          </td>
+        </tr>
+      `,
+    };
 
     // Send welcome email using Resend API
     const emailResponse = await fetch('https://api.resend.com/emails', {
@@ -84,7 +175,7 @@ serve(async (req) => {
       body: JSON.stringify({
         from: "JBJ Global Real Estate <welcome@jbj.ae>",
         to: [email],
-        subject: "Welcome to JBJ Global Real Estate - Your UAE Property Journey Begins!",
+        subject: subjectByRole[role],
         html: `
           <!DOCTYPE html>
           <html>
@@ -121,34 +212,15 @@ serve(async (req) => {
                         
                         <!-- Features -->
                         <table width="100%" cellpadding="0" cellspacing="0" style="margin-bottom: 30px;">
-                          <tr>
-                            <td style="padding: 15px; background-color: #f8f9fa; border-radius: 8px; margin-bottom: 10px;">
-                              <strong style="color: #1a1a2e;">🏠 AI Property Finder</strong>
-                              <p style="color: #666; margin: 5px 0 0 0; font-size: 14px;">Get personalized property recommendations tailored to your preferences.</p>
-                            </td>
-                          </tr>
-                          <tr><td style="height: 10px;"></td></tr>
-                          <tr>
-                            <td style="padding: 15px; background-color: #f8f9fa; border-radius: 8px;">
-                              <strong style="color: #1a1a2e;">📊 Market Insights</strong>
-                              <p style="color: #666; margin: 5px 0 0 0; font-size: 14px;">Access real-time market data and property valuations.</p>
-                            </td>
-                          </tr>
-                          <tr><td style="height: 10px;"></td></tr>
-                          <tr>
-                            <td style="padding: 15px; background-color: #f8f9fa; border-radius: 8px;">
-                              <strong style="color: #1a1a2e;">✨ Concierge Services</strong>
-                              <p style="color: #666; margin: 5px 0 0 0; font-size: 14px;">Luxury travel and property viewing arrangements.</p>
-                            </td>
-                          </tr>
+                          ${benefitsByRole[role]}
                         </table>
                         
                         <!-- CTA Button -->
                         <table width="100%" cellpadding="0" cellspacing="0">
                           <tr>
                             <td align="center">
-                              <a href="https://jbj.ae/properties" style="display: inline-block; background: linear-gradient(135deg, #d4af37 0%, #b8962d 100%); color: #1a1a2e; text-decoration: none; padding: 15px 40px; border-radius: 8px; font-weight: 600; font-size: 16px;">
-                                Explore Properties
+                              <a href="${ctaByRole[role].url}" style="display: inline-block; background: linear-gradient(135deg, #d4af37 0%, #b8962d 100%); color: #1a1a2e; text-decoration: none; padding: 15px 40px; border-radius: 8px; font-weight: 600; font-size: 16px;">
+                                ${ctaByRole[role].text}
                               </a>
                             </td>
                           </tr>

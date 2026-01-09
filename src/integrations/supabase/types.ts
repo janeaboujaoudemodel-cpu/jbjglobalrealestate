@@ -3033,6 +3033,39 @@ export type Database = {
         }
         Relationships: []
       }
+      phone_verifications: {
+        Row: {
+          attempts: number | null
+          created_at: string | null
+          expires_at: string
+          id: string
+          otp_code: string
+          phone_number: string
+          user_id: string | null
+          verified_at: string | null
+        }
+        Insert: {
+          attempts?: number | null
+          created_at?: string | null
+          expires_at: string
+          id?: string
+          otp_code: string
+          phone_number: string
+          user_id?: string | null
+          verified_at?: string | null
+        }
+        Update: {
+          attempts?: number | null
+          created_at?: string | null
+          expires_at?: string
+          id?: string
+          otp_code?: string
+          phone_number?: string
+          user_id?: string | null
+          verified_at?: string | null
+        }
+        Relationships: []
+      }
       points_transactions: {
         Row: {
           created_at: string | null
@@ -3098,25 +3131,40 @@ export type Database = {
       }
       profiles: {
         Row: {
+          consent_timestamp: string | null
           created_at: string
           email: string | null
           full_name: string | null
           id: string
+          marketing_consent: boolean | null
+          phone_number: string | null
+          phone_verified: boolean | null
           updated_at: string
+          user_role: string | null
         }
         Insert: {
+          consent_timestamp?: string | null
           created_at?: string
           email?: string | null
           full_name?: string | null
           id: string
+          marketing_consent?: boolean | null
+          phone_number?: string | null
+          phone_verified?: boolean | null
           updated_at?: string
+          user_role?: string | null
         }
         Update: {
+          consent_timestamp?: string | null
           created_at?: string
           email?: string | null
           full_name?: string | null
           id?: string
+          marketing_consent?: boolean | null
+          phone_number?: string | null
+          phone_verified?: boolean | null
           updated_at?: string
+          user_role?: string | null
         }
         Relationships: []
       }
@@ -3871,6 +3919,42 @@ export type Database = {
           slug?: string
           updated_at?: string
           website_url?: string | null
+        }
+        Relationships: []
+      }
+      user_journey_events: {
+        Row: {
+          created_at: string | null
+          device_type: string | null
+          event_data: Json | null
+          event_type: string
+          id: string
+          page_path: string
+          referrer: string | null
+          session_id: string
+          user_id: string | null
+        }
+        Insert: {
+          created_at?: string | null
+          device_type?: string | null
+          event_data?: Json | null
+          event_type: string
+          id?: string
+          page_path: string
+          referrer?: string | null
+          session_id: string
+          user_id?: string | null
+        }
+        Update: {
+          created_at?: string | null
+          device_type?: string | null
+          event_data?: Json | null
+          event_type?: string
+          id?: string
+          page_path?: string
+          referrer?: string | null
+          session_id?: string
+          user_id?: string | null
         }
         Relationships: []
       }
