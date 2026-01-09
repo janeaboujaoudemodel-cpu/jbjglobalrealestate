@@ -78,24 +78,24 @@ const Footer = () => {
         { label: "Property Search", href: "/quiz" },
       ],
     },
-    {
-      title: "Leasing Brokerage",
-      href: "/properties?status=ready",
-      items: [],
-    },
-    {
-      title: "Holiday Homes",
-      href: "/contact",
-      items: [],
-    },
     { 
-      title: "Design & Build", 
+      title: "Design & Build Partners", 
       href: "/services/design-build", 
       items: [
         { label: "Architecture", href: "/services/architecture" },
         { label: "Interior Design", href: "/services/interior-design" },
         { label: "Fit-Out", href: "/services/fit-out" },
       ],
+    },
+    {
+      title: "Legal Partners",
+      href: "/services/law-firm",
+      items: [],
+    },
+    {
+      title: "Mortgage Partners",
+      href: "/mortgage-calculator",
+      items: [],
     },
   ];
 
@@ -153,8 +153,7 @@ const Footer = () => {
             JBJ GLOBAL REAL ESTATE
           </h2>
           <p className="text-zinc-400 text-base md:text-lg max-w-2xl mx-auto leading-relaxed">
-            Real estate brokerage specializing in property sales, leasing, and holiday homes 
-            across the UAE — with trusted partner introductions for legal, mortgage, and specialist services.
+            Dubai mainland real estate brokerage — with trusted partner introductions for legal, mortgage, and specialist services.
           </p>
         </div>
 
@@ -165,7 +164,7 @@ const Footer = () => {
               Stay in the Loop
             </h4>
             <p className="text-zinc-400 text-sm mb-4">
-              Join our exclusive circle for market insights and premium opportunities
+              Be the first to access new listings, market updates, and personalized brokerage guidance.
             </p>
             <NewsletterBrevo variant="compact" source="footer" />
           </div>
@@ -330,10 +329,9 @@ const Footer = () => {
             
             {/* English Disclaimer */}
             <p className="text-zinc-400 text-sm leading-relaxed mb-4">
-              <span className="text-white font-medium">JBJ Global Real Estate</span> provides real estate brokerage support and coordination. 
-              We can introduce you to independent, licensed partners for legal services, mortgages, and concierge support. 
-              Partner services are delivered under the partner's own licence and terms, and the client contracts directly with the partner. 
-              We do not provide legal, mortgage, financial, or advice.
+              <span className="text-white font-medium">JBJ Global Real Estate</span> is a Dubai mainland real estate brokerage. 
+              For legal services and mortgage support, we can connect you with independent licensed partners. 
+              Clients contract and transact directly with the partner under the partner's own terms.
             </p>
             
             {/* English Legal Line */}
@@ -343,7 +341,7 @@ const Footer = () => {
             
             {/* Arabic Disclaimer */}
             <p className="text-zinc-500 text-xs leading-relaxed mb-4" dir="rtl">
-              جي بي جي العقارية العالمية تقدم خدمات وساطة عقارية ودعم تنسيقي. يمكننا ربطك بشركاء مستقلين ومرخصين للخدمات القانونية والتمويل العقاري وخدمات الكونسيرج. تُقدَّم خدمات الشركاء وفق ترخيصهم وشروطهم الخاصة، ويكون التعاقد مباشرة بين العميل والشريك. نحن لا نقدم استشارات قانونية أو تمويلية.
+              جي بي جي العقارية العالمية هي وساطة عقارية مرخصة في دبي. للخدمات القانونية والتمويل العقاري، يمكننا ربطك بشركاء مستقلين ومرخصين. يكون التعاقد مباشرة بين العميل والشريك وفق شروط الشريك.
             </p>
             
             {/* Arabic Legal Line */}
