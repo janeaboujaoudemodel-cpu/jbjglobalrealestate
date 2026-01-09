@@ -301,7 +301,7 @@ const Compare = () => {
 <body>
     <div class="container">
     <div class="header">
-      <div class="logo"><span class="gold">J | J</span> GLOBAL CAPITAL</div>
+      <div class="logo"><span class="gold">JBJ</span> GLOBAL REAL ESTATE</div>
       <p class="subtitle">Real Estate Brokerage • AI-Powered Property Comparison</p>
       <p class="user-info">Prepared for: <strong>${escapeHtml(userName)}</strong> | Date: ${dateStr}</p>
     </div>

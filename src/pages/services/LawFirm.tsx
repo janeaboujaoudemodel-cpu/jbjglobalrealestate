@@ -176,7 +176,7 @@ const LawFirm = () => {
               className="text-white text-3xl md:text-4xl font-bold"
               style={{ fontFamily: "Poppins, sans-serif" }}
             >
-              The JJ Legal Difference
+              The JBJ Legal Difference
             </h2>
           </motion.div>
 

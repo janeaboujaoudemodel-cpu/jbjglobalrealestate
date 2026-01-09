@@ -357,7 +357,7 @@ export function PaymentModal({ open, onOpenChange, onSuccess, userInfo, mode = "
               </Button>
 
               <p className="text-zinc-500 text-xs">
-                Questions? Contact <a href="mailto:contact@jjglobalcapital.com" className="text-gold hover:underline">contact@jjglobalcapital.com</a>
+                Questions? Contact <a href="mailto:contact@jbj.ae" className="text-gold hover:underline">contact@jbj.ae</a>
               </p>
             </div>
           </>

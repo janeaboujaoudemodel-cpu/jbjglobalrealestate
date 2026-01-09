@@ -1543,18 +1543,18 @@ const MarketReport = () => {
     </div>
     
     <div class="footer-brand">
-      <div class="logo">JJ | GLOBAL CAPITAL</div>
+      <div class="logo">JBJ | GLOBAL REAL ESTATE</div>
       <p>Real Estate Brokerage • Dubai, UAE</p>
       <p style="margin-top: 10px;">
-        Email: <a href="mailto:contact@jjglobalcapital.com" class="contact-link">contact@jjglobalcapital.com</a> • 
+        Email: <a href="mailto:contact@jbj.ae" class="contact-link">contact@jbj.ae</a> • 
         Phone: <a href="tel:+971565911000" class="contact-link">+971 56 591 1000</a>
       </p>
       
       <div class="social-links">
-        <a href="https://instagram.com/jjglobalcapital" target="_blank">Instagram</a>
-        <a href="https://tiktok.com/@jjglobalcapital" target="_blank">TikTok</a>
-        <a href="https://youtube.com/@jjglobalcapital" target="_blank">YouTube</a>
-        <a href="https://facebook.com/jjglobalcapital" target="_blank">Facebook</a>
+        <a href="https://instagram.com/jbjglobalrealestate" target="_blank">Instagram</a>
+        <a href="https://tiktok.com/@jbjglobalrealestate" target="_blank">TikTok</a>
+        <a href="https://youtube.com/@jbjglobalrealestate" target="_blank">YouTube</a>
+        <a href="https://facebook.com/jbjglobalrealestate" target="_blank">Facebook</a>
       </div>
       
       <p style="margin-top: 20px; font-size: 10px; color: #555;">© 2026 JBJ Global Real Estate. All Rights Reserved.</p>

@@ -555,7 +555,7 @@ Best regards`);
               className="w-full bg-gradient-to-r from-purple-600 to-purple-800 text-white hover:from-purple-500 hover:to-purple-700"
             >
               <Mail className="w-4 h-4 mr-2" />
-              Send to contact@jjglobalcapital.com
+              Send to contact@jbj.ae
             </Button>
 
             <p className="text-zinc-500 text-xs text-center">

@@ -6,7 +6,7 @@ interface GoogleMyBusinessLinkProps {
 }
 
 // Replace with actual Google Business Profile link when verified
-const GMB_URL = 'https://g.page/jjglobalcapital';
+const GMB_URL = 'https://g.page/jbjglobalrealestate';
 
 export const GoogleMyBusinessLink = ({
   className = '',

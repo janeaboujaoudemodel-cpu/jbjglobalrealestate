@@ -219,7 +219,7 @@ const CompanyProfile = () => {
         color: blackColor,
       });
 
-      page2.drawText("J | J GLOBAL CAPITAL", {
+      page2.drawText("JBJ GLOBAL REAL ESTATE", {
         x: margin,
         y: pageHeight - 40,
         size: 14,
@@ -355,7 +355,7 @@ const CompanyProfile = () => {
         color: blackColor,
       });
 
-      page3.drawText("J | J GLOBAL CAPITAL", {
+      page3.drawText("JBJ GLOBAL REAL ESTATE", {
         x: margin,
         y: pageHeight - 40,
         size: 14,
@@ -598,7 +598,7 @@ const CompanyProfile = () => {
         color: blackColor,
       });
 
-      page5.drawText("J | J GLOBAL CAPITAL", {
+      page5.drawText("JBJ GLOBAL REAL ESTATE", {
         x: margin,
         y: pageHeight - 40,
         size: 14,
