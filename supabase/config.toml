@@ -125,3 +125,9 @@ verify_jwt = false
 
 [functions.ai-whatsapp-composer]
 verify_jwt = false
+
+[functions.elevenlabs-video-voice]
+verify_jwt = false
+
+[functions.elevenlabs-video-music]
+verify_jwt = false
