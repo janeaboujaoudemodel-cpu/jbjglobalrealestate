@@ -40,7 +40,7 @@ const staggerContainer = {
 const aiTools = [
   {
     id: "ai-home-finder",
-    title: "AI Home Finder",
+    title: "JBJ AI Home Finder",
     description: "Answer a few questions about your preferences and let our AI match you with the perfect properties based on budget, location, lifestyle, and property goals.",
     icon: Sparkles,
     gradient: "from-purple-500 to-fuchsia-500",
@@ -53,7 +53,7 @@ const aiTools = [
   },
   {
     id: "ai-interior-design",
-    title: "AI Interior Design Studio",
+    title: "JBJ AI Interior Design Studio",
     description: "Visualize your dream space with AI-generated interior designs. Upload a room photo and see it transformed in different luxury styles.",
     icon: Palette,
     gradient: "from-fuchsia-500 to-pink-500",
@@ -65,7 +65,7 @@ const aiTools = [
   },
   {
     id: "ai-budget-planner",
-    title: "AI Budget Planner",
+    title: "JBJ AI Budget Planner",
     description: "Budget analysis and property affordability insights (property-only). Informational only—not financial, mortgage, or investment advice.",
     icon: Wallet,
     gradient: "from-amber-500 to-orange-500",
@@ -77,7 +77,7 @@ const aiTools = [
   },
   {
     id: "ai-personal-shopper",
-    title: "AI Personal Shopper",
+    title: "JBJ AI Personal Shopper",
     description: "Tell us your lifestyle, preferences and property goals. Our AI personal shopper curates perfect property selections tailored just for you.",
     icon: ShoppingBag,
     gradient: "from-rose-500 to-red-500",
@@ -89,7 +89,7 @@ const aiTools = [
   },
   {
     id: "ai-calendar",
-    title: "AI Calendar & Notes",
+    title: "JBJ AI Calendar & Notes",
     description: "Manage your meetings, events and notes with AI-powered scheduling. Get email and phone reminders for important consultation meetings.",
     icon: Calendar,
     gradient: "from-indigo-500 to-blue-500",
@@ -101,7 +101,7 @@ const aiTools = [
   },
   {
     id: "property-comparison",
-    title: "AI Property Comparison",
+    title: "JBJ AI Property Comparison",
     description: "Compare 2-5 properties side by side with AI-powered analysis. Get detailed insights on value, location, developer reputation, and potential.",
     icon: BarChart3,
     gradient: "from-violet-500 to-purple-500",
@@ -113,7 +113,7 @@ const aiTools = [
   },
   {
     id: "rental-index",
-    title: "Rental Index Evaluator",
+    title: "JBJ Rental Index Evaluator",
     description: "Get AI-powered rental estimates for any Dubai property. Understand market rates, trends, demand levels, and ROI potential.",
     icon: Layers,
     gradient: "from-emerald-500 to-green-500",
@@ -125,7 +125,7 @@ const aiTools = [
   },
   {
     id: "property-evaluator",
-    title: "Property Evaluator",
+    title: "JBJ Property Evaluator",
     description: "Get an AI-powered valuation for any property based on market data and comparable sales. Understand fair market value and appreciation.",
     icon: Calculator,
     gradient: "from-blue-500 to-cyan-500",
@@ -137,7 +137,7 @@ const aiTools = [
   },
   {
     id: "property-measurement",
-    title: "Property Measurement",
+    title: "JBJ Property Measurement",
     description: "Calculate property dimensions, areas and layouts with precision. Get accurate measurements for floor plans and space planning.",
     icon: Ruler,
     gradient: "from-teal-500 to-cyan-500",
@@ -149,31 +149,19 @@ const aiTools = [
   },
   {
     id: "document-scanner",
-    title: "Smart Document Scanner",
-    description: "Scan, crop, and digitally sign real estate contracts. Add auto-fill fields, export as PDF, and streamline your paperwork with AI.",
+    title: "JBJ Scan & Sign Documents",
+    description: "Scan, crop, design signatures, and digitally sign real estate contracts. Add auto-fill fields, export as PDF, and streamline your paperwork.",
     icon: FileText,
     gradient: "from-green-500 to-emerald-500",
     borderColor: "border-green-500/30",
     textColor: "text-green-400",
     bgColor: "bg-green-500/10",
     link: "/document-scanner",
-    features: ["Smart Scanning", "e-Signature", "PDF Export", "Auto-Fill Fields"]
-  },
-  {
-    id: "signature-studio",
-    title: "Signature Studio",
-    description: "Design your personal signature with AI-generated styles. Choose from 10+ elegant designs or let AI create unique signatures for your documents.",
-    icon: PenTool,
-    gradient: "from-sky-500 to-blue-500",
-    borderColor: "border-sky-500/30",
-    textColor: "text-sky-400",
-    bgColor: "bg-sky-500/10",
-    link: "/signature-studio",
-    features: ["AI Signature Design", "10+ Styles", "Personal Branding", "Export Options"]
+    features: ["Smart Scanning", "Signature Design", "e-Signature", "PDF Export"]
   },
   {
     id: "referral-program",
-    title: "Referral Program",
+    title: "JBJ Referral Program",
     description: "Join our referral network and earn 5% commission on successful deals. Upload documents, sign contracts, and track your referral earnings.",
     icon: Users,
     gradient: "from-lime-500 to-green-500",
@@ -185,7 +173,7 @@ const aiTools = [
   },
   {
     id: "spreadsheet",
-    title: "Spreadsheet",
+    title: "JBJ Spreadsheet",
     description: "A powerful Excel-like spreadsheet tool with formulas, formatting, import/export CSV, and real-time calculations for property analysis.",
     icon: Table2,
     gradient: "from-green-500 to-teal-500",
@@ -197,7 +185,7 @@ const aiTools = [
   },
   {
     id: "documents",
-    title: "Documents",
+    title: "JBJ Documents",
     description: "A Google Docs-style document editor with rich text formatting, headings, lists, links, and export options for professional documents.",
     icon: FileText,
     gradient: "from-blue-500 to-indigo-500",
@@ -209,15 +197,15 @@ const aiTools = [
   },
   {
     id: "video-meeting",
-    title: "Video Meeting",
-    description: "Free unlimited video meetings like Zoom and Google Meet. Share screen, invite participants, and collaborate in real-time with no time limits.",
+    title: "JBJ Video Meet",
+    description: "Free unlimited video meetings with screen sharing, recording, and real-time collaboration. Perfect for property consultations and client meetings.",
     icon: Video,
     gradient: "from-red-500 to-rose-500",
     borderColor: "border-red-500/30",
     textColor: "text-red-400",
     bgColor: "bg-red-500/10",
     link: "/video-meeting",
-    features: ["Unlimited Time", "Screen Share", "HD Video", "No Account Needed"]
+    features: ["Unlimited Time", "Screen Share", "Recording", "No Account Needed"]
   },
 ];
 
@@ -273,7 +261,7 @@ const AIHub = () => {
             <motion.div variants={fadeInUp}>
               <span className="ai-tag inline-flex items-center gap-2 mb-8">
                 <Sparkles className="w-4 h-4" />
-                AI-Powered Platform
+                JBJ AI-Powered Platform
               </span>
             </motion.div>
 
@@ -282,9 +270,9 @@ const AIHub = () => {
               variants={fadeInUp}
               style={{ fontFamily: "Poppins, sans-serif" }}
             >
-              The Future of{" "}
+              JBJ{" "}
               <span className="ai-gradient-text">
-                Real Estate Intelligence
+                Assistant Hub
               </span>
             </motion.h1>
 
@@ -309,7 +297,7 @@ const AIHub = () => {
               <Link to="/quiz">
                 <Button className="ai-button-primary text-white px-8 py-6 text-base">
                   <Sparkles className="w-5 h-5 mr-2" />
-                  Start AI Home Finder
+                  Start JBJ AI Home Finder
                   <ArrowUpRight className="w-5 h-5 ml-2" />
                 </Button>
               </Link>
@@ -385,7 +373,7 @@ const AIHub = () => {
                       Most Popular
                     </div>
                     <h2 className="text-white text-3xl md:text-4xl font-bold mb-4" style={{ fontFamily: "Poppins, sans-serif" }}>
-                      AI Home Finder
+                      JBJ AI Home Finder
                     </h2>
                     <p className="text-zinc-300 text-lg mb-6 max-w-2xl">
                       Answer a few simple questions about your preferences, budget, and lifestyle. Our AI analyzes thousands of properties to find your perfect match in seconds.
@@ -421,10 +409,10 @@ const AIHub = () => {
               className="text-white text-3xl md:text-5xl font-bold mb-6"
               style={{ fontFamily: "Poppins, sans-serif" }}
             >
-              All AI Tools
+              All JBJ Tools
             </h2>
             <p className="text-zinc-400 max-w-2xl mx-auto">
-              Explore our full range of AI-powered tools designed to assist every aspect of your property search.
+              Explore our full range of JBJ-powered tools designed to assist every aspect of your property search.
             </p>
           </motion.div>
 
