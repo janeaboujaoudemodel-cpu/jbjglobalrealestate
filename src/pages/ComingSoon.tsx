@@ -5,7 +5,7 @@ import jbjMonogramDarkBg from "@/assets/jbj-monogram-dark-bg.png"; // Monogram o
 
 const ComingSoon = () => {
   return (
-    <div className="min-h-screen bg-black flex flex-col items-center justify-center px-4 relative overflow-hidden">
+    <div className="min-h-screen bg-black flex flex-col items-center justify-center px-4 pt-12 md:pt-16 relative overflow-hidden">
       {/* Subtle gradient overlays for depth */}
       <div className="absolute inset-0 pointer-events-none">
         <div className="absolute top-0 left-0 w-full h-1/3 bg-gradient-to-b from-white/[0.02] to-transparent" />
