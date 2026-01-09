@@ -76,55 +76,25 @@ const InstallAppButton = () => {
   }, []);
 
   const handleInstallClick = useCallback(async () => {
-    // If native prompt is available, use it directly
-    if (deferredPrompt) {
-      try {
-        await deferredPrompt.prompt();
-        const { outcome } = await deferredPrompt.userChoice;
-        if (outcome === "accepted") {
-          setIsInstalled(true);
-        }
-        setDeferredPrompt(null);
-      } catch (error) {
-        console.error("Install prompt error:", error);
+    if (!deferredPrompt) return;
+    
+    try {
+      await deferredPrompt.prompt();
+      const { outcome } = await deferredPrompt.userChoice;
+      if (outcome === "accepted") {
+        setIsInstalled(true);
+        toast.success("App installed successfully!", {
+          duration: 3000,
+        });
       }
-      return;
-    }
-
-    // If we're inside an iframe (editor preview), open the install page in a new tab.
-    const inIFrame = (() => {
-      try {
-        return window.self !== window.top;
-      } catch {
-        return true;
-      }
-    })();
-
-    const installUrl = `${window.location.origin}/install`;
-
-    // For iOS: show instructions (no native install prompt exists)
-    const isIOS = isIOSDevice();
-    if (isIOS) {
-      toast.info("To install on iOS:", {
-        duration: 8000,
-        description: "Tap the Share button (□↑) in Safari, then 'Add to Home Screen'",
-      });
-      return;
-    }
-
-    // For desktop/Android when prompt isn't available, send users to /install for guidance.
-    if (inIFrame) {
-      window.open(installUrl, "_blank", "noopener,noreferrer");
-    } else {
-      window.location.href = "/install";
+      setDeferredPrompt(null);
+    } catch (error) {
+      console.error("Install prompt error:", error);
     }
   }, [deferredPrompt]);
 
-  if (isInstalled) return null;
-
-  // Only show when install is likely relevant (prompt available or iOS).
-  const shouldShow = !!deferredPrompt || isIOSDevice();
-  if (!shouldShow) return null;
+  // Only show when native install prompt is available (true one-click experience)
+  if (isInstalled || !deferredPrompt) return null;
 
   return (
     <AnimatePresence>
@@ -150,8 +120,8 @@ const InstallAppButton = () => {
             loading="lazy"
           />
         </div>
-        <span className="text-black font-bold text-sm tracking-wide">Download App</span>
-        <Download className="w-5 h-5 text-black animate-pulse" />
+        <span className="text-black font-bold text-sm tracking-wide">One-Click Download</span>
+        <Download className="w-5 h-5 text-black" />
         
         {/* Glow ring effect */}
         <motion.div
