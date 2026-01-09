@@ -8,7 +8,7 @@ import {
   ChevronDown,
 } from "lucide-react";
 import { CONTACT_INFO, getWhatsAppUrl, getCallUrl, getEmailUrl } from "@/constants/stats";
-import jbjFullLogoDark from "@/assets/jbj-fulllogo-dark.png";
+import jbjMonogramDark from "@/assets/jbj-monogram-dark-bg.png";
 import {
   Collapsible,
   CollapsibleContent,
@@ -140,16 +140,19 @@ const Footer = () => {
   return (
     <footer className="bg-black border-t border-zinc-800">
       <div className="container mx-auto px-4 py-10 md:py-14">
-        {/* Logo + Description */}
+        {/* Logo + Company Name - Matching Coming Soon Style */}
         <div className="text-center mb-10 md:mb-14">
           <Link to="/" className="inline-block">
             <img 
-              src={jbjFullLogoDark} 
+              src={jbjMonogramDark} 
               alt="JBJ Global Real Estate" 
-              className="h-40 md:h-48 lg:h-56 w-auto object-contain mx-auto"
+              className="h-24 md:h-32 lg:h-40 w-auto object-contain mx-auto mb-6"
             />
           </Link>
-          <p className="text-zinc-400 text-base md:text-lg max-w-2xl mx-auto leading-relaxed mt-4">
+          <h2 className="text-2xl md:text-3xl lg:text-4xl font-light tracking-[0.3em] text-gold mb-4">
+            JBJ GLOBAL REAL ESTATE
+          </h2>
+          <p className="text-zinc-400 text-base md:text-lg max-w-2xl mx-auto leading-relaxed">
             Real estate brokerage specializing in property sales, leasing, and holiday homes 
             across the UAE — with trusted partner introductions for legal, mortgage, and specialist services.
           </p>
