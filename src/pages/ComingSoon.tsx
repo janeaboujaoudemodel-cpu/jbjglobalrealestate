@@ -1,8 +1,7 @@
 import { motion } from "framer-motion";
 import { Link } from "react-router-dom";
 // Official JBJ logos - USE ONLY THESE
-import jbjFulllogoDarkBg from "@/assets/jbj-fulllogo-dark-bg.png"; // Full logo with company name for dark backgrounds
-import jbjMonogramDarkBg from "@/assets/jbj-monogram-dark-bg.png"; // White J's monogram for dark backgrounds
+import jbjMonogramDarkBg from "@/assets/jbj-monogram-dark-bg.png"; // Monogram only for dark backgrounds
 
 const ComingSoon = () => {
   return (
@@ -19,17 +18,17 @@ const ComingSoon = () => {
         transition={{ duration: 0.8 }}
         className="relative z-10 text-center max-w-2xl mx-auto"
       >
-        {/* Logo */}
+        {/* Monogram Logo */}
         <motion.div
           initial={{ scale: 0.9, opacity: 0 }}
           animate={{ scale: 1, opacity: 1 }}
           transition={{ delay: 0.2, duration: 0.6 }}
-          className="mb-6"
+          className="mb-10"
         >
           <img 
-            src={jbjFulllogoDarkBg}
-            alt="JBJ Global Real Estate" 
-            className="h-40 md:h-56 lg:h-72 w-auto mx-auto"
+            src={jbjMonogramDarkBg}
+            alt="JBJ" 
+            className="h-32 md:h-44 lg:h-56 w-auto mx-auto"
           />
         </motion.div>
 
@@ -38,21 +37,31 @@ const ComingSoon = () => {
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ delay: 0.4, duration: 0.6 }}
-          className="text-5xl md:text-7xl lg:text-8xl font-bold text-white mb-8 tracking-tight"
+          className="text-5xl md:text-7xl lg:text-8xl font-bold text-white mb-6 tracking-tight"
         >
           Coming Soon
         </motion.h1>
+
+        {/* Company Name */}
+        <motion.p
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ delay: 0.5, duration: 0.6 }}
+          className="text-lg md:text-xl lg:text-2xl text-gold tracking-[0.4em] uppercase font-medium mb-8"
+        >
+          JBJ Global Real Estate
+        </motion.p>
 
         <motion.div
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ delay: 0.6, duration: 0.6 }}
-          className="space-y-6"
+          className="space-y-4"
         >
-          <p className="text-xl md:text-2xl lg:text-3xl text-white/80 font-light">
+          <p className="text-lg md:text-xl text-white/60 font-light">
             We're crafting something extraordinary for you.
           </p>
-          <p className="text-base md:text-lg text-white/50 tracking-[0.3em] uppercase font-medium">
+          <p className="text-sm md:text-base text-white/40 tracking-[0.2em] uppercase">
             UAE Real Estate Brokerage
           </p>
         </motion.div>
@@ -105,26 +114,22 @@ const ComingSoon = () => {
           </Link>
         </motion.div>
 
-        {/* Monogram at bottom */}
-        <motion.div
+        {/* Copyright */}
+        <motion.p
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
           transition={{ delay: 1.2, duration: 0.6 }}
-          className="mt-12"
+          className="mt-12 text-xs text-white/30"
         >
-          <img 
-            src={jbjMonogramDarkBg} 
-            alt="" 
-            className="h-8 w-auto mx-auto opacity-30"
-          />
-        </motion.div>
+          © {new Date().getFullYear()} JBJ Global Real Estate. All Rights Reserved.
+        </motion.p>
 
         {/* Copyright */}
         <motion.p
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
-          transition={{ delay: 1.4, duration: 0.6 }}
-          className="mt-6 text-xs text-white/30"
+          transition={{ delay: 1.2, duration: 0.6 }}
+          className="mt-12 text-xs text-white/30"
         >
           © {new Date().getFullYear()} JBJ Global Real Estate. All Rights Reserved.
         </motion.p>
