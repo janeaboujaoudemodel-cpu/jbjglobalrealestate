@@ -2,7 +2,7 @@ import { useState, useRef, useEffect } from "react";
 import { motion } from "framer-motion";
 import { 
   Camera, Upload, FileText, Crop, Pen, Type, Image, Download, Check, RotateCw, 
-  Trash2, Save, Share2, Palette, FolderOpen, Plus, X, Smartphone, Mail
+  Trash2, Save, Share2, Palette, FolderOpen, Plus, X, Smartphone, Mail, Sparkles, PenTool, Info
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
@@ -14,6 +14,7 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@
 import { Switch } from "@/components/ui/switch";
 import { toast } from "sonner";
 import Footer from "@/components/Footer";
+import SignatureDesigner from "@/components/referral/SignatureDesigner";
 
 interface ScannedDocument {
   id: string;
@@ -52,13 +53,13 @@ interface SavedProject {
   updatedAt: Date;
 }
 
-const DocumentScanner = () => {
+const ScanSignDocuments = () => {
   const [scannedDocs, setScannedDocs] = useState<ScannedDocument[]>([]);
   const [currentDoc, setCurrentDoc] = useState<ScannedDocument | null>(null);
   const [signatureFields, setSignatureFields] = useState<SignatureField[]>([]);
   const [savedSignature, setSavedSignature] = useState<string | null>(null);
   const [isDrawing, setIsDrawing] = useState(false);
-  const [signatureType, setSignatureType] = useState<'draw' | 'type' | 'upload'>('draw');
+  const [signatureType, setSignatureType] = useState<'draw' | 'type' | 'upload' | 'design'>('design');
   const [typedSignature, setTypedSignature] = useState('');
   const [savedDetails, setSavedDetails] = useState<SavedDetails>({
     fullName: '',
@@ -81,6 +82,14 @@ const DocumentScanner = () => {
   const fileInputRef = useRef<HTMLInputElement>(null);
   const cameraInputRef = useRef<HTMLInputElement>(null);
   const signatureCanvasRef = useRef<HTMLCanvasElement>(null);
+
+  // Load saved signature from localStorage
+  useEffect(() => {
+    const saved = localStorage.getItem('jbj_user_signature');
+    if (saved) {
+      setSavedSignature(saved);
+    }
+  }, []);
 
   // Load projects from localStorage
   useEffect(() => {
@@ -136,7 +145,7 @@ const DocumentScanner = () => {
         if (!isColor) {
           for (let i = 0; i < pixels.length; i += 4) {
             const avg = (pixels[i] + pixels[i + 1] + pixels[i + 2]) / 3;
-            const bw = avg > 128 ? 255 : 0; // High contrast B&W
+            const bw = avg > 128 ? 255 : 0;
             pixels[i] = bw;
             pixels[i + 1] = bw;
             pixels[i + 2] = bw;
@@ -205,7 +214,6 @@ const DocumentScanner = () => {
     if (!currentDoc) return;
     toast.loading("Reprocessing document...");
     
-    // Get original image (for demo, we'll just reprocess what we have)
     const processed = await processImage(currentDoc.imageUrl, colorMode === 'color', autoEnhance);
     
     const updatedDoc = { ...currentDoc, imageUrl: processed, isColor: colorMode === 'color' };
@@ -254,27 +262,32 @@ const DocumentScanner = () => {
     ctx.clearRect(0, 0, canvas.width, canvas.height);
   };
 
-  const saveSignature = () => {
-    if (signatureType === 'draw') {
-      const canvas = signatureCanvasRef.current;
-      if (!canvas) return;
-      setSavedSignature(canvas.toDataURL());
-      toast.success("Signature saved!");
-    } else if (signatureType === 'type' && typedSignature) {
-      const canvas = document.createElement('canvas');
-      canvas.width = 300;
-      canvas.height = 100;
-      const ctx = canvas.getContext('2d');
-      if (!ctx) return;
-      ctx.fillStyle = 'transparent';
-      ctx.fillRect(0, 0, canvas.width, canvas.height);
-      ctx.font = 'italic 36px "Brush Script MT", cursive';
-      ctx.fillStyle = '#000';
-      ctx.textBaseline = 'middle';
-      ctx.fillText(typedSignature, 10, 50);
-      setSavedSignature(canvas.toDataURL());
-      toast.success("Signature created!");
-    }
+  const saveDrawnSignature = () => {
+    const canvas = signatureCanvasRef.current;
+    if (!canvas) return;
+    const sigData = canvas.toDataURL();
+    setSavedSignature(sigData);
+    localStorage.setItem('jbj_user_signature', sigData);
+    toast.success("Signature saved!");
+  };
+
+  const saveTypedSignature = () => {
+    if (!typedSignature) return;
+    const canvas = document.createElement('canvas');
+    canvas.width = 300;
+    canvas.height = 100;
+    const ctx = canvas.getContext('2d');
+    if (!ctx) return;
+    ctx.fillStyle = 'transparent';
+    ctx.fillRect(0, 0, canvas.width, canvas.height);
+    ctx.font = 'italic 36px "Brush Script MT", cursive';
+    ctx.fillStyle = '#000';
+    ctx.textBaseline = 'middle';
+    ctx.fillText(typedSignature, 10, 50);
+    const sigData = canvas.toDataURL();
+    setSavedSignature(sigData);
+    localStorage.setItem('jbj_user_signature', sigData);
+    toast.success("Signature created!");
   };
 
   const handleSignatureUpload = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -282,10 +295,18 @@ const DocumentScanner = () => {
     if (!file) return;
     const reader = new FileReader();
     reader.onload = (ev) => {
-      setSavedSignature(ev.target?.result as string);
+      const sigData = ev.target?.result as string;
+      setSavedSignature(sigData);
+      localStorage.setItem('jbj_user_signature', sigData);
       toast.success("Signature uploaded!");
     };
     reader.readAsDataURL(file);
+  };
+
+  const handleDesignedSignature = (signatureUrl: string) => {
+    setSavedSignature(signatureUrl);
+    localStorage.setItem('jbj_user_signature', signatureUrl);
+    toast.success("Designed signature saved!");
   };
 
   // Add field to document
@@ -305,7 +326,7 @@ const DocumentScanner = () => {
 
   // Auto-detect fields (AI simulation)
   const autoDetectFields = () => {
-    toast.loading("AI analyzing document...");
+    toast.loading("Analyzing document...");
     setTimeout(() => {
       const detectedFields: SignatureField[] = [
         { id: '1', x: 150, y: 600, width: 200, height: 50, type: 'signature' },
@@ -315,7 +336,7 @@ const DocumentScanner = () => {
       ];
       setSignatureFields(detectedFields);
       toast.dismiss();
-      toast.success("AI detected 4 fillable fields!");
+      toast.success("Detected 4 fillable fields!");
     }, 1500);
   };
 
@@ -386,20 +407,12 @@ const DocumentScanner = () => {
   // Share document
   const shareDocument = async (method: 'whatsapp' | 'email' | 'copy') => {
     if (!currentDoc) return;
-    const dataUrl = await generateFinalDocument();
     
-    if (method === 'copy') {
-      try {
-        await navigator.clipboard.writeText(dataUrl);
-        toast.success("Document URL copied to clipboard!");
-      } catch {
-        toast.error("Failed to copy");
-      }
-    } else if (method === 'whatsapp') {
-      window.open(`https://wa.me/?text=Check out this document`, '_blank');
+    if (method === 'whatsapp') {
+      window.open(`https://wa.me/?text=Check out this signed document from JBJ Global Real Estate`, '_blank');
       toast.success("Opening WhatsApp...");
     } else if (method === 'email') {
-      window.open(`mailto:?subject=Signed Document&body=Please find the attached document.`, '_blank');
+      window.open(`mailto:?subject=Signed Document from JBJ Global Real Estate&body=Please find the attached document.`, '_blank');
       toast.success("Opening email client...");
     }
     setShowShareModal(false);
@@ -464,15 +477,6 @@ const DocumentScanner = () => {
     toast.success(`Project "${project.name}" loaded!`);
   };
 
-  const deleteProject = (projectId: string) => {
-    const updated = projects.filter(p => p.id !== projectId);
-    saveProjects(updated);
-    if (currentProject?.id === projectId) {
-      setCurrentProject(null);
-    }
-    toast.success("Project deleted");
-  };
-
   return (
     <section className="min-h-screen bg-gradient-to-br from-zinc-950 via-black to-zinc-950">
       {/* Header */}
@@ -485,13 +489,13 @@ const DocumentScanner = () => {
           >
             <div className="inline-flex items-center gap-2 bg-green-500/20 border border-green-500/30 rounded-full px-4 py-1 mb-4">
               <FileText className="w-4 h-4 text-green-400" />
-              <span className="text-green-300 text-sm font-medium">Professional Document Tools</span>
+              <span className="text-green-300 text-sm font-medium">Document Assistant</span>
             </div>
             <h1 className="text-4xl md:text-5xl font-bold text-white mb-4">
-              Document Scanner & <span className="text-transparent bg-clip-text bg-gradient-to-r from-green-400 to-emerald-400">e-Sign</span>
+              Scan & Sign <span className="text-transparent bg-clip-text bg-gradient-to-r from-green-400 to-emerald-400">Documents</span>
             </h1>
             <p className="text-zinc-400 max-w-2xl mx-auto">
-              Auto-enhance documents like a professional scanner. Save projects, download, and share with ease.
+              Use this assistant to scan, sign, and manage your documents easily. Design your signature or upload one to get started.
             </p>
             <p className="text-xs text-gold mt-2">Developed by Founder Jane Abou Jaoude</p>
           </motion.div>
@@ -560,12 +564,108 @@ const DocumentScanner = () => {
         <div className="grid lg:grid-cols-3 gap-8">
           {/* Left Panel */}
           <div className="space-y-6">
+            {/* Signature Panel - First Step */}
+            <Card className="bg-zinc-900/50 border-zinc-800 border-2 border-green-500/30">
+              <CardHeader>
+                <CardTitle className="text-white flex items-center gap-2">
+                  <PenTool className="w-5 h-5 text-green-400" />
+                  Step 1: Design / Upload Signature
+                </CardTitle>
+              </CardHeader>
+              <CardContent>
+                {/* Info Banner */}
+                <div className="flex items-start gap-3 p-3 bg-amber-50 dark:bg-amber-950/20 border border-amber-200 dark:border-amber-800 rounded-lg mb-4">
+                  <Info className="w-4 h-4 text-amber-600 flex-shrink-0 mt-0.5" />
+                  <p className="text-xs text-amber-700 dark:text-amber-300">
+                    Design a personal signature or draw/upload one. Your signature will be used for signing documents.
+                  </p>
+                </div>
+
+                <Tabs value={signatureType} onValueChange={(v) => setSignatureType(v as any)}>
+                  <TabsList className="grid grid-cols-4 bg-zinc-800">
+                    <TabsTrigger value="design" className="text-xs gap-1">
+                      <Sparkles className="w-3 h-3" />
+                      Design
+                    </TabsTrigger>
+                    <TabsTrigger value="draw" className="text-xs">Draw</TabsTrigger>
+                    <TabsTrigger value="type" className="text-xs">Type</TabsTrigger>
+                    <TabsTrigger value="upload" className="text-xs">Upload</TabsTrigger>
+                  </TabsList>
+                  
+                  <TabsContent value="design" className="mt-4">
+                    <SignatureDesigner
+                      onSelectSignature={handleDesignedSignature}
+                      onSaveSignature={handleDesignedSignature}
+                    />
+                  </TabsContent>
+                  
+                  <TabsContent value="draw" className="mt-4">
+                    <canvas
+                      ref={signatureCanvasRef}
+                      width={250}
+                      height={80}
+                      className="w-full bg-white rounded-lg cursor-crosshair"
+                      onMouseDown={startDrawing}
+                      onMouseMove={draw}
+                      onMouseUp={stopDrawing}
+                      onMouseLeave={stopDrawing}
+                    />
+                    <div className="flex gap-2 mt-2">
+                      <Button size="sm" variant="outline" onClick={clearSignature} className="flex-1 text-xs">
+                        <Trash2 className="w-3 h-3 mr-1" /> Clear
+                      </Button>
+                      <Button size="sm" onClick={saveDrawnSignature} className="flex-1 bg-emerald-600 text-xs">
+                        <Save className="w-3 h-3 mr-1" /> Save
+                      </Button>
+                    </div>
+                  </TabsContent>
+
+                  <TabsContent value="type" className="mt-4">
+                    <Input
+                      placeholder="Type your name..."
+                      value={typedSignature}
+                      onChange={(e) => setTypedSignature(e.target.value)}
+                      className="bg-white text-black font-signature text-2xl italic text-center h-16"
+                      style={{ fontFamily: '"Brush Script MT", cursive' }}
+                    />
+                    <Button size="sm" onClick={saveTypedSignature} className="w-full mt-2 bg-emerald-600 text-xs">
+                      Create Signature
+                    </Button>
+                  </TabsContent>
+
+                  <TabsContent value="upload" className="mt-4">
+                    <input
+                      type="file"
+                      accept="image/png,image/jpeg"
+                      className="hidden"
+                      id="sig-upload"
+                      onChange={handleSignatureUpload}
+                    />
+                    <label
+                      htmlFor="sig-upload"
+                      className="flex flex-col items-center justify-center h-20 border-2 border-dashed border-zinc-600 rounded-lg cursor-pointer hover:border-emerald-500 transition-colors"
+                    >
+                      <Image className="w-6 h-6 text-zinc-500 mb-1" />
+                      <span className="text-xs text-zinc-500">Upload PNG signature</span>
+                    </label>
+                  </TabsContent>
+                </Tabs>
+
+                {savedSignature && (
+                  <div className="mt-4 p-3 bg-emerald-900/20 border border-emerald-500/30 rounded-lg">
+                    <p className="text-xs text-emerald-400 mb-2">✓ Saved Signature:</p>
+                    <img src={savedSignature} alt="Signature" className="h-12 object-contain bg-white rounded p-1" />
+                  </div>
+                )}
+              </CardContent>
+            </Card>
+
             {/* Scan Settings */}
             <Card className="bg-zinc-900/50 border-zinc-800">
               <CardHeader>
                 <CardTitle className="text-white flex items-center gap-2">
                   <Palette className="w-5 h-5 text-emerald-400" />
-                  Scan Settings
+                  Step 2: Scan Settings
                 </CardTitle>
               </CardHeader>
               <CardContent className="space-y-4">
@@ -598,7 +698,7 @@ const DocumentScanner = () => {
               <CardHeader>
                 <CardTitle className="text-white flex items-center gap-2">
                   <Upload className="w-5 h-5 text-emerald-400" />
-                  Scan Document
+                  Step 3: Scan Document
                 </CardTitle>
               </CardHeader>
               <CardContent className="space-y-4">
@@ -617,7 +717,7 @@ const DocumentScanner = () => {
                   <Camera className="w-4 h-4 mr-2" />
                   Capture with Camera
                 </Button>
-                <p className="text-xs text-zinc-500 text-center">Auto-straightens & enhances like a printer</p>
+                <p className="text-xs text-zinc-500 text-center">Auto-straightens & enhances like a scanner</p>
 
                 <input
                   ref={fileInputRef}
@@ -668,83 +768,6 @@ const DocumentScanner = () => {
               </Card>
             )}
 
-            {/* Signature Panel */}
-            <Card className="bg-zinc-900/50 border-zinc-800">
-              <CardHeader>
-                <CardTitle className="text-white flex items-center gap-2">
-                  <Pen className="w-5 h-5 text-emerald-400" />
-                  Your Signature
-                </CardTitle>
-              </CardHeader>
-              <CardContent>
-                <Tabs value={signatureType} onValueChange={(v) => setSignatureType(v as any)}>
-                  <TabsList className="grid grid-cols-3 bg-zinc-800">
-                    <TabsTrigger value="draw" className="text-xs">Draw</TabsTrigger>
-                    <TabsTrigger value="type" className="text-xs">Type</TabsTrigger>
-                    <TabsTrigger value="upload" className="text-xs">Upload</TabsTrigger>
-                  </TabsList>
-                  
-                  <TabsContent value="draw" className="mt-4">
-                    <canvas
-                      ref={signatureCanvasRef}
-                      width={250}
-                      height={80}
-                      className="w-full bg-white rounded-lg cursor-crosshair"
-                      onMouseDown={startDrawing}
-                      onMouseMove={draw}
-                      onMouseUp={stopDrawing}
-                      onMouseLeave={stopDrawing}
-                    />
-                    <div className="flex gap-2 mt-2">
-                      <Button size="sm" variant="outline" onClick={clearSignature} className="flex-1 text-xs">
-                        <Trash2 className="w-3 h-3 mr-1" /> Clear
-                      </Button>
-                      <Button size="sm" onClick={saveSignature} className="flex-1 bg-emerald-600 text-xs">
-                        <Save className="w-3 h-3 mr-1" /> Save
-                      </Button>
-                    </div>
-                  </TabsContent>
-
-                  <TabsContent value="type" className="mt-4">
-                    <Input
-                      placeholder="Type your name..."
-                      value={typedSignature}
-                      onChange={(e) => setTypedSignature(e.target.value)}
-                      className="bg-white text-black font-signature text-2xl italic text-center h-16"
-                      style={{ fontFamily: '"Brush Script MT", cursive' }}
-                    />
-                    <Button size="sm" onClick={saveSignature} className="w-full mt-2 bg-emerald-600 text-xs">
-                      Create Signature
-                    </Button>
-                  </TabsContent>
-
-                  <TabsContent value="upload" className="mt-4">
-                    <input
-                      type="file"
-                      accept="image/png,image/jpeg"
-                      className="hidden"
-                      id="sig-upload"
-                      onChange={handleSignatureUpload}
-                    />
-                    <label
-                      htmlFor="sig-upload"
-                      className="flex flex-col items-center justify-center h-20 border-2 border-dashed border-zinc-600 rounded-lg cursor-pointer hover:border-emerald-500 transition-colors"
-                    >
-                      <Image className="w-6 h-6 text-zinc-500 mb-1" />
-                      <span className="text-xs text-zinc-500">Upload PNG signature</span>
-                    </label>
-                  </TabsContent>
-                </Tabs>
-
-                {savedSignature && (
-                  <div className="mt-4 p-3 bg-emerald-900/20 border border-emerald-500/30 rounded-lg">
-                    <p className="text-xs text-emerald-400 mb-2">Saved Signature:</p>
-                    <img src={savedSignature} alt="Signature" className="h-12 object-contain" />
-                  </div>
-                )}
-              </CardContent>
-            </Card>
-
             {/* Saved Details */}
             <Card className="bg-zinc-900/50 border-zinc-800">
               <CardHeader>
@@ -775,7 +798,7 @@ const DocumentScanner = () => {
                     value={savedDetails.phone}
                     onChange={(e) => setSavedDetails(prev => ({ ...prev, phone: e.target.value }))}
                     className="h-8 text-sm bg-zinc-800 border-zinc-700"
-                    placeholder="+971 50 123 4567"
+                    placeholder="+971 56 591 1000"
                   />
                 </div>
                 <div>
@@ -795,14 +818,14 @@ const DocumentScanner = () => {
           <div className="lg:col-span-2">
             <Card className="bg-zinc-900/50 border-zinc-800 h-full">
               <CardHeader className="flex flex-row items-center justify-between flex-wrap gap-2">
-                <CardTitle className="text-white">Document Preview</CardTitle>
+                <CardTitle className="text-white">Step 4: Sign & Export</CardTitle>
                 {currentDoc && (
                   <div className="flex flex-wrap gap-2">
                     <Button size="sm" variant="outline" onClick={rotateDocument} className="text-xs">
                       <RotateCw className="w-3 h-3 mr-1" /> Rotate
                     </Button>
                     <Button size="sm" variant="outline" onClick={autoDetectFields} className="text-xs border-purple-500/50 text-purple-400 hover:bg-purple-500/20">
-                      <Crop className="w-3 h-3 mr-1" /> AI Detect
+                      <Crop className="w-3 h-3 mr-1" /> Detect Fields
                     </Button>
                     <Button size="sm" variant="outline" onClick={autoFillFields} className="text-xs">
                       Auto-Fill
@@ -872,25 +895,31 @@ const DocumentScanner = () => {
                                 prev.map(f => f.id === field.id ? { ...f, value: e.target.value } : f)
                               );
                             }}
-                            className="w-full h-full bg-transparent text-black text-sm px-1 focus:outline-none"
-                            placeholder={field.type.charAt(0).toUpperCase() + field.type.slice(1)}
+                            className="w-full h-full bg-transparent text-black text-sm px-2 focus:outline-none"
+                            placeholder={field.type}
                           />
                         )}
-                        <span className="absolute -top-5 left-0 text-xs text-emerald-400 capitalize">{field.type}</span>
+                        <button
+                          onClick={() => setSignatureFields(prev => prev.filter(f => f.id !== field.id))}
+                          className="absolute -top-2 -right-2 w-5 h-5 bg-red-500 rounded-full flex items-center justify-center text-white text-xs"
+                        >
+                          <X className="w-3 h-3" />
+                        </button>
                       </div>
                     ))}
                   </div>
                 ) : (
-                  <div className="flex flex-col items-center justify-center min-h-[600px] text-zinc-500">
-                    <FileText className="w-16 h-16 mb-4 opacity-30" />
-                    <p className="text-lg">No document selected</p>
-                    <p className="text-sm">Upload or capture a document to get started</p>
+                  <div className="min-h-[600px] flex flex-col items-center justify-center text-zinc-500 border-2 border-dashed border-zinc-700 rounded-lg">
+                    <FileText className="w-16 h-16 mb-4 opacity-50" />
+                    <p className="text-lg mb-2">No document selected</p>
+                    <p className="text-sm">Upload or scan a document to get started</p>
                   </div>
                 )}
 
+                {/* Field Adding Toolbar */}
                 {currentDoc && (
-                  <div className="flex flex-wrap gap-2 mt-4 pt-4 border-t border-zinc-800">
-                    <span className="text-xs text-zinc-500 w-full mb-2">Add Fields:</span>
+                  <div className="mt-4 flex flex-wrap gap-2 p-4 bg-zinc-800/50 rounded-lg">
+                    <span className="text-zinc-400 text-sm mr-2">Add Field:</span>
                     <Button size="sm" variant="outline" onClick={() => addField('signature')} className="text-xs">
                       <Pen className="w-3 h-3 mr-1" /> Signature
                     </Button>
@@ -900,65 +929,17 @@ const DocumentScanner = () => {
                     <Button size="sm" variant="outline" onClick={() => addField('date')} className="text-xs">
                       Date
                     </Button>
-                    <Button size="sm" variant="outline" onClick={() => addField('checkbox')} className="text-xs">
-                      Checkbox
-                    </Button>
-                    <Button size="sm" variant="outline" onClick={() => addField('email')} className="text-xs">
-                      Email
-                    </Button>
                     <Button size="sm" variant="outline" onClick={() => addField('initial')} className="text-xs">
                       Initial
+                    </Button>
+                    <Button size="sm" variant="outline" onClick={() => addField('checkbox')} className="text-xs">
+                      <Check className="w-3 h-3 mr-1" /> Checkbox
                     </Button>
                   </div>
                 )}
               </CardContent>
             </Card>
           </div>
-        </div>
-
-        {/* Saved Projects List */}
-        {projects.length > 0 && (
-          <div className="mt-8">
-            <h3 className="text-white text-lg font-semibold mb-4">Saved Projects</h3>
-            <div className="grid md:grid-cols-3 lg:grid-cols-4 gap-4">
-              {projects.map(project => (
-                <Card 
-                  key={project.id} 
-                  className={`bg-zinc-900/50 border-zinc-800 cursor-pointer hover:border-emerald-500/50 transition-all ${
-                    currentProject?.id === project.id ? 'border-emerald-500' : ''
-                  }`}
-                  onClick={() => loadProject(project)}
-                >
-                  <CardContent className="p-4">
-                    <div className="flex items-start justify-between">
-                      <div>
-                        <p className="text-white font-medium">{project.name}</p>
-                        <p className="text-xs text-zinc-500">{project.documents.length} documents</p>
-                        <p className="text-xs text-zinc-600 mt-1">
-                          Updated {project.updatedAt.toLocaleDateString()}
-                        </p>
-                      </div>
-                      <Button
-                        size="sm"
-                        variant="ghost"
-                        className="text-zinc-500 hover:text-red-400"
-                        onClick={(e) => { e.stopPropagation(); deleteProject(project.id); }}
-                      >
-                        <X className="w-4 h-4" />
-                      </Button>
-                    </div>
-                  </CardContent>
-                </Card>
-              ))}
-            </div>
-          </div>
-        )}
-
-        {/* Disclaimer */}
-        <div className="mt-8 p-4 bg-zinc-900/50 border border-zinc-800 rounded-xl text-center">
-          <p className="text-xs text-zinc-500">
-            ⚠️ This tool is for document preparation purposes. For legally binding contracts, please consult with our Law Firm division or use certified e-signature services.
-          </p>
         </div>
       </div>
 
@@ -967,4 +948,4 @@ const DocumentScanner = () => {
   );
 };
 
-export default DocumentScanner;
+export default ScanSignDocuments;
