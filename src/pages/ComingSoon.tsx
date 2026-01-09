@@ -24,7 +24,7 @@ const ComingSoon = () => {
           initial={{ scale: 0.9, opacity: 0 }}
           animate={{ scale: 1, opacity: 1 }}
           transition={{ delay: 0.2, duration: 0.6 }}
-          className="mb-14"
+          className="mb-6"
         >
           <img 
             src={jbjFulllogoDarkBg}
