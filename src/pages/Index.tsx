@@ -115,7 +115,7 @@ const Index = () => {
             className="text-white/70 text-xs sm:text-sm md:text-base max-w-lg mx-auto leading-relaxed"
             variants={fadeInUp}
           >
-            Dubai's Premier Real Estate Brokerage — Expert property sales, leasing & holiday homes across the UAE
+            Buy & Sell Properties Across the UAE — Additional Services Through Our Licensed Partners
           </motion.p>
         </motion.div>
         
