@@ -46,21 +46,21 @@ const ROLES: RoleOption[] = [
   {
     id: 'broker',
     title: 'Real Estate Broker',
-    subtitle: 'Licensed professional or agency',
+    subtitle: 'Join the JBJ Broker Circle',
     icon: Briefcase,
     color: 'text-gold',
     bgGradient: 'from-gold/20 to-amber-500/10',
     benefits: [
-      'AI-Powered Tools (Unlimited)',
-      'Educational Courses & Certification',
-      'HR Onboarding Portal',
-      'Developer Briefings',
-      'CRM Access',
-      'Referral Program Access'
+      'Free AI-Powered Tools (Unlimited)',
+      'Free Courses & Video Tutorials',
+      'Dedicated HR Admin & Assistant',
+      'Personal Property Coach',
+      'Developer Briefings Access',
+      'Priority Support'
     ],
     showWarning: true,
     welcomeTitle: 'Welcome to the Broker Circle!',
-    welcomeMessage: 'Greetings from JJ Global! You now have access to our exclusive broker tools, training programs, and referral network.'
+    welcomeMessage: 'You now have free access to all AI tools, courses, and a dedicated team to support your success.'
   },
   {
     id: 'investor',
@@ -74,11 +74,10 @@ const ROLES: RoleOption[] = [
       'Favorites & Comparison Tools',
       'Market Reports & Insights',
       'ROI Calculator',
-      'Direct Consultation Booking',
-      'Referral Program Access'
+      'Direct Consultation Booking'
     ],
-    welcomeTitle: 'Welcome to the Investor Circle!',
-    welcomeMessage: 'Greetings from JJ Global! As a valued investor, you have access to exclusive market insights and premium property listings.'
+    welcomeTitle: 'Welcome to JBJ Global!',
+    welcomeMessage: 'As a valued buyer, you have access to exclusive market insights and premium property listings.'
   },
   {
     id: 'visitor',
@@ -90,10 +89,10 @@ const ROLES: RoleOption[] = [
     benefits: [
       'Browse Properties',
       'View Market Data',
-      'Explore Available Tools'
+      'Explore Available Features'
     ],
-    welcomeTitle: 'Welcome to JJ Global!',
-    welcomeMessage: 'We welcome you to explore our platform. Discover Dubai\'s finest properties and our comprehensive real estate services.'
+    welcomeTitle: 'Welcome to JBJ Global!',
+    welcomeMessage: 'We welcome you to explore our platform. Sign up to unlock AI tools and exclusive features.'
   }
 ];
 
@@ -333,27 +332,27 @@ const RoleSelectionModal = ({ onRoleSelected }: RoleSelectionModalProps) => {
 
                 <div className="bg-gray-50 border border-gray-200 rounded-xl p-6 mb-6 text-left">
                   <p className="text-gray-700 mb-4">
-                    <strong className="text-black">Select your role honestly.</strong> Your selection affects the features and tools you'll access:
+                    <strong className="text-black">Select your role honestly.</strong> As a Broker Circle member, you get:
                   </p>
                   
                   <ul className="space-y-3 text-sm text-gray-600">
                     <li className="flex items-start gap-3">
                       <Brain className="w-5 h-5 text-purple-500 flex-shrink-0 mt-0.5" />
-                      <span><strong>Brokers</strong> get unlimited AI tools, CRM access, and HR onboarding</span>
+                      <span><strong>Free AI Tools</strong> – Unlimited access to all AI-powered property tools</span>
                     </li>
                     <li className="flex items-start gap-3">
                       <GraduationCap className="w-5 h-5 text-blue-500 flex-shrink-0 mt-0.5" />
-                      <span><strong>Brokers</strong> must complete training and verification</span>
+                      <span><strong>Free Courses</strong> – Complete training library with videos & tutorials</span>
                     </li>
                     <li className="flex items-start gap-3">
                       <Award className="w-5 h-5 text-gold flex-shrink-0 mt-0.5" />
-                      <span><strong>Investors</strong> see buyer-focused features and consultation options</span>
+                      <span><strong>Dedicated Support</strong> – HR admin, assistant, and property coach just for you</span>
                     </li>
                   </ul>
 
-                  <div className="mt-4 p-3 bg-amber-50 border border-amber-200 rounded-lg">
-                    <p className="text-amber-800 text-sm font-medium">
-                      ⚠️ Selecting "Broker" when you're an investor will limit your access to investor features.
+                  <div className="mt-4 p-3 bg-emerald-50 border border-emerald-200 rounded-lg">
+                    <p className="text-emerald-800 text-sm font-medium">
+                      ✓ All benefits are completely free for JBJ Broker Circle members.
                     </p>
                   </div>
                 </div>
@@ -424,15 +423,15 @@ const RoleSelectionModal = ({ onRoleSelected }: RoleSelectionModalProps) => {
                       <>
                         <div className="flex items-center gap-3 text-sm text-gray-600">
                           <div className="w-6 h-6 rounded-full bg-gold/20 flex items-center justify-center text-xs font-bold text-gold">1</div>
-                          <span>Complete your <strong>Onboarding</strong> to access all tools</span>
+                          <span>Explore <strong>Free AI Tools</strong> in the JBJ Assistant Hub</span>
                         </div>
                         <div className="flex items-center gap-3 text-sm text-gray-600">
                           <div className="w-6 h-6 rounded-full bg-gold/20 flex items-center justify-center text-xs font-bold text-gold">2</div>
-                          <span>Explore <strong>JBJ AI Tools</strong> in the JBJ Assistant Hub</span>
+                          <span>Access <strong>Free Courses</strong> in the Broker Toolkit</span>
                         </div>
                         <div className="flex items-center gap-3 text-sm text-gray-600">
                           <div className="w-6 h-6 rounded-full bg-gold/20 flex items-center justify-center text-xs font-bold text-gold">3</div>
-                          <span>Join the <strong>Referral Program</strong> to earn commissions</span>
+                          <span>Your <strong>Dedicated HR & Coach</strong> will be in touch</span>
                         </div>
                       </>
                     )}
