@@ -80,6 +80,8 @@ import AreaGuides from "./pages/AreaGuides";
 import AreaDetail from "./pages/AreaDetail";
 import BusinessCardScanner from "./pages/BusinessCardScanner";
 import BuyerGuide from "./pages/BuyerGuide";
+import JBJAnalyticsDashboard from "./pages/JBJAnalyticsDashboard";
+import JBJDesignStudio from "./pages/JBJDesignStudio";
 
 const queryClient = new QueryClient();
 
@@ -174,6 +176,8 @@ const App = () => (
                     <Route path="/call-review" element={<CallReview />} />
                     <Route path="/video-builder" element={<VideoBuilder />} />
                     <Route path="/business-card-scanner" element={<BusinessCardScanner />} />
+                    <Route path="/jbj-analytics" element={<JBJAnalyticsDashboard />} />
+                    <Route path="/jbj-design-studio" element={<JBJDesignStudio />} />
                     <Route path="*" element={<NotFound />} />
                     </Routes>
                   </MainLayout>

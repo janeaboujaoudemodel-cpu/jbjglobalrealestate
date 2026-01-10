@@ -1,0 +1,362 @@
+import React, { useState, useRef, useEffect } from 'react';
+import { motion, AnimatePresence } from 'framer-motion';
+import { 
+  MessageCircle, 
+  X, 
+  Send, 
+  Phone, 
+  Mic, 
+  MicOff,
+  ChevronDown,
+  User,
+  Sparkles,
+  AlertCircle
+} from 'lucide-react';
+import { Button } from '@/components/ui/button';
+import { Input } from '@/components/ui/input';
+import { ScrollArea } from '@/components/ui/scroll-area';
+import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
+import { useJBJAssistant, AIAgent } from './JBJAssistantProvider';
+import { supabase } from '@/integrations/supabase/client';
+import { toast } from 'sonner';
+
+interface Message {
+  id: string;
+  role: 'user' | 'assistant';
+  content: string;
+  timestamp: Date;
+  isTyping?: boolean;
+}
+
+const FloatingAssistantPanel: React.FC = () => {
+  const { 
+    agents, 
+    activeAgent, 
+    setActiveAgent, 
+    isAssistantOpen, 
+    setIsAssistantOpen,
+    addLog,
+    currentTool 
+  } = useJBJAssistant();
+  
+  const [messages, setMessages] = useState<Message[]>([]);
+  const [input, setInput] = useState('');
+  const [isLoading, setIsLoading] = useState(false);
+  const [showAgentPicker, setShowAgentPicker] = useState(false);
+  const [sessionId] = useState(() => crypto.randomUUID());
+  const scrollRef = useRef<HTMLDivElement>(null);
+  const inputRef = useRef<HTMLInputElement>(null);
+
+  // Welcome message when assistant opens
+  useEffect(() => {
+    if (isAssistantOpen && activeAgent && messages.length === 0) {
+      const welcomeMessage: Message = {
+        id: 'welcome',
+        role: 'assistant',
+        content: getWelcomeMessage(activeAgent),
+        timestamp: new Date(),
+      };
+      setMessages([welcomeMessage]);
+    }
+  }, [isAssistantOpen, activeAgent]);
+
+  // Auto-scroll to bottom
+  useEffect(() => {
+    if (scrollRef.current) {
+      scrollRef.current.scrollTop = scrollRef.current.scrollHeight;
+    }
+  }, [messages]);
+
+  const getWelcomeMessage = (agent: AIAgent): string => {
+    const toolContext = currentTool ? ` I see you're using ${currentTool}. ` : ' ';
+    
+    switch (agent.role) {
+      case 'admin':
+        return `Hello! I'm ${agent.name}, your Administrative Director.${toolContext}How can I assist you with property listings, documents, or system administration today?`;
+      case 'hr':
+        return `Hi there! I'm ${agent.name}, your HR Manager.${toolContext}I'm here to help with onboarding, training, and any workplace questions you might have.`;
+      case 'receptionist':
+        return `Welcome to JBJ Global Real Estate! I'm ${agent.name}.${toolContext}How may I direct your inquiry today?`;
+      case 'broker':
+        return `Good day! I'm ${agent.name}, your Senior Property Advisor.${toolContext}Whether you're looking to buy, sell, or invest in Dubai real estate, I'm here to guide you.`;
+      case 'property_manager':
+        return `Hello! I'm ${agent.name}, your Property Management Specialist.${toolContext}Need help with maintenance, tenant matters, or property inspections?`;
+      case 'marketing_coordinator':
+        return `Hi! I'm ${agent.name}, your Marketing Director.${toolContext}Let's create something amazing for your brand and properties!`;
+      case 'graphic_designer':
+        return `Hey! I'm ${agent.name}, your Creative Design Lead.${toolContext}Ready to bring your visual ideas to life. What shall we create?`;
+      default:
+        return `Hello! I'm ${agent.name}, and I'm here to help you.${toolContext}What can I assist you with today?`;
+    }
+  };
+
+  const handleSendMessage = async () => {
+    if (!input.trim() || isLoading || !activeAgent) return;
+
+    const userMessage: Message = {
+      id: Date.now().toString(),
+      role: 'user',
+      content: input.trim(),
+      timestamp: new Date(),
+    };
+
+    setMessages(prev => [...prev, userMessage]);
+    setInput('');
+    setIsLoading(true);
+
+    // Add typing indicator
+    const typingId = 'typing-' + Date.now();
+    setMessages(prev => [...prev, {
+      id: typingId,
+      role: 'assistant',
+      content: '',
+      timestamp: new Date(),
+      isTyping: true,
+    }]);
+
+    try {
+      // Build context for AI
+      const conversationHistory = messages.map(m => ({
+        role: m.role,
+        content: m.content,
+      }));
+
+      const systemPrompt = buildAgentPrompt(activeAgent, currentTool);
+
+      const { data, error } = await supabase.functions.invoke('ai-chat-support', {
+        body: {
+          message: userMessage.content,
+          history: conversationHistory,
+          systemPrompt,
+          agentName: activeAgent.name,
+          agentRole: activeAgent.role,
+          tool: currentTool,
+        },
+      });
+
+      if (error) throw error;
+
+      const assistantResponse = data.response || "I apologize, but I'm having trouble processing your request. Please try again.";
+
+      // Remove typing indicator and add real response
+      setMessages(prev => {
+        const filtered = prev.filter(m => m.id !== typingId);
+        return [...filtered, {
+          id: Date.now().toString(),
+          role: 'assistant',
+          content: assistantResponse,
+          timestamp: new Date(),
+        }];
+      });
+
+      // Log interaction
+      addLog({
+        agentId: activeAgent.id,
+        agentName: activeAgent.name,
+        message: userMessage.content,
+        response: assistantResponse,
+        tool: currentTool || undefined,
+        sessionId,
+      });
+
+    } catch (error) {
+      console.error('Assistant error:', error);
+      setMessages(prev => {
+        const filtered = prev.filter(m => m.id !== typingId);
+        return [...filtered, {
+          id: Date.now().toString(),
+          role: 'assistant',
+          content: "I apologize for the technical difficulty. Our team has been notified. Please try again shortly.",
+          timestamp: new Date(),
+        }];
+      });
+    } finally {
+      setIsLoading(false);
+    }
+  };
+
+  const buildAgentPrompt = (agent: AIAgent, tool: string | null): string => {
+    let prompt = `You are ${agent.name}, ${agent.title} at JBJ Global Real Estate in Dubai. 
+${agent.personality}
+
+Your capabilities include: ${agent.capabilities.join(', ')}.
+
+CRITICAL RULES:
+- Never reveal that you are an AI. You are a human team member.
+- Always respond naturally with a British accent tone in writing.
+- Add realistic pauses in your responses using ellipses (...)
+- Remember the user's name if they mention it
+- Be helpful, professional, and personable
+- If asked about something outside your expertise, offer to connect them with the right team member
+
+JBJ Contact Information:
+📧 Email: contact@jbj.ae
+📞 Phone: +971 56 591 1000
+🌐 Website: www.jbj.ae
+`;
+
+    if (tool) {
+      prompt += `\n\nThe user is currently using: ${tool}. Provide contextual help related to this tool when appropriate.`;
+    }
+
+    return prompt;
+  };
+
+  const handleKeyPress = (e: React.KeyboardEvent) => {
+    if (e.key === 'Enter' && !e.shiftKey) {
+      e.preventDefault();
+      handleSendMessage();
+    }
+  };
+
+  if (!isAssistantOpen) {
+    return (
+      <motion.button
+        initial={{ scale: 0 }}
+        animate={{ scale: 1 }}
+        className="fixed bottom-24 right-6 z-[8000] w-14 h-14 bg-gradient-to-br from-purple-600 to-fuchsia-600 text-white rounded-full shadow-lg hover:shadow-xl transition-all duration-300 hover:scale-110 flex items-center justify-center"
+        onClick={() => setIsAssistantOpen(true)}
+      >
+        <MessageCircle className="w-6 h-6" />
+        <span className="absolute -top-1 -right-1 w-4 h-4 bg-gold rounded-full animate-pulse" />
+      </motion.button>
+    );
+  }
+
+  return (
+    <AnimatePresence>
+      <motion.div
+        initial={{ opacity: 0, y: 50, scale: 0.95 }}
+        animate={{ opacity: 1, y: 0, scale: 1 }}
+        exit={{ opacity: 0, y: 50, scale: 0.95 }}
+        className="fixed bottom-6 right-6 z-[9000] w-[380px] h-[550px] bg-zinc-900 border border-zinc-700 rounded-2xl shadow-2xl flex flex-col overflow-hidden"
+      >
+        {/* Header */}
+        <div className="bg-gradient-to-r from-purple-600 to-fuchsia-600 p-4 flex items-center justify-between">
+          <div className="flex items-center gap-3">
+            <div className="relative">
+              <Avatar className="w-10 h-10 border-2 border-white/20">
+                <AvatarImage src={activeAgent?.avatar} alt={activeAgent?.name} />
+                <AvatarFallback>{activeAgent?.name?.[0]}</AvatarFallback>
+              </Avatar>
+              <span className="absolute bottom-0 right-0 w-3 h-3 bg-green-500 border-2 border-zinc-900 rounded-full" />
+            </div>
+            <div>
+              <button 
+                onClick={() => setShowAgentPicker(!showAgentPicker)}
+                className="flex items-center gap-1 text-white font-medium hover:text-white/80 transition-colors"
+              >
+                {activeAgent?.name}
+                <ChevronDown className="w-4 h-4" />
+              </button>
+              <p className="text-white/70 text-xs">{activeAgent?.title}</p>
+            </div>
+          </div>
+          <button
+            onClick={() => setIsAssistantOpen(false)}
+            className="w-8 h-8 rounded-full bg-white/10 hover:bg-white/20 flex items-center justify-center transition-colors"
+          >
+            <X className="w-4 h-4 text-white" />
+          </button>
+        </div>
+
+        {/* Agent Picker Dropdown */}
+        <AnimatePresence>
+          {showAgentPicker && (
+            <motion.div
+              initial={{ opacity: 0, y: -10 }}
+              animate={{ opacity: 1, y: 0 }}
+              exit={{ opacity: 0, y: -10 }}
+              className="absolute top-16 left-4 right-4 bg-zinc-800 border border-zinc-700 rounded-xl shadow-xl z-10 max-h-64 overflow-y-auto"
+            >
+              {agents.map(agent => (
+                <button
+                  key={agent.id}
+                  onClick={() => {
+                    setActiveAgent(agent);
+                    setShowAgentPicker(false);
+                    setMessages([{
+                      id: 'welcome-new',
+                      role: 'assistant',
+                      content: getWelcomeMessage(agent),
+                      timestamp: new Date(),
+                    }]);
+                  }}
+                  className={`w-full flex items-center gap-3 p-3 hover:bg-zinc-700 transition-colors ${
+                    activeAgent?.id === agent.id ? 'bg-zinc-700' : ''
+                  }`}
+                >
+                  <Avatar className="w-8 h-8">
+                    <AvatarImage src={agent.avatar} alt={agent.name} />
+                    <AvatarFallback>{agent.name[0]}</AvatarFallback>
+                  </Avatar>
+                  <div className="text-left">
+                    <p className="text-white text-sm font-medium">{agent.name}</p>
+                    <p className="text-zinc-400 text-xs">{agent.title}</p>
+                  </div>
+                </button>
+              ))}
+            </motion.div>
+          )}
+        </AnimatePresence>
+
+        {/* Messages */}
+        <ScrollArea className="flex-1 p-4" ref={scrollRef}>
+          <div className="space-y-4">
+            {messages.map(message => (
+              <motion.div
+                key={message.id}
+                initial={{ opacity: 0, y: 10 }}
+                animate={{ opacity: 1, y: 0 }}
+                className={`flex ${message.role === 'user' ? 'justify-end' : 'justify-start'}`}
+              >
+                <div className={`max-w-[85%] ${
+                  message.role === 'user' 
+                    ? 'bg-gradient-to-r from-purple-600 to-fuchsia-600 text-white' 
+                    : 'bg-zinc-800 text-zinc-100'
+                } rounded-2xl px-4 py-3`}>
+                  {message.isTyping ? (
+                    <div className="flex gap-1">
+                      <span className="w-2 h-2 bg-zinc-400 rounded-full animate-bounce" style={{ animationDelay: '0ms' }} />
+                      <span className="w-2 h-2 bg-zinc-400 rounded-full animate-bounce" style={{ animationDelay: '150ms' }} />
+                      <span className="w-2 h-2 bg-zinc-400 rounded-full animate-bounce" style={{ animationDelay: '300ms' }} />
+                    </div>
+                  ) : (
+                    <p className="text-sm leading-relaxed whitespace-pre-wrap">{message.content}</p>
+                  )}
+                </div>
+              </motion.div>
+            ))}
+          </div>
+        </ScrollArea>
+
+        {/* Input */}
+        <div className="p-4 border-t border-zinc-800">
+          <div className="flex items-center gap-2">
+            <Input
+              ref={inputRef}
+              value={input}
+              onChange={(e) => setInput(e.target.value)}
+              onKeyPress={handleKeyPress}
+              placeholder="Type your message..."
+              className="flex-1 bg-zinc-800 border-zinc-700 text-white placeholder:text-zinc-500"
+              disabled={isLoading}
+            />
+            <Button
+              onClick={handleSendMessage}
+              disabled={!input.trim() || isLoading}
+              className="bg-gradient-to-r from-purple-600 to-fuchsia-600 hover:from-purple-500 hover:to-fuchsia-500"
+            >
+              <Send className="w-4 h-4" />
+            </Button>
+          </div>
+          <p className="text-zinc-500 text-xs text-center mt-2">
+            Powered by JBJ AI • Available 24/7
+          </p>
+        </div>
+      </motion.div>
+    </AnimatePresence>
+  );
+};
+
+export default FloatingAssistantPanel;
