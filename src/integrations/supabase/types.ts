@@ -2202,6 +2202,47 @@ export type Database = {
         }
         Relationships: []
       }
+      email_verifications: {
+        Row: {
+          attempts: number | null
+          created_at: string | null
+          email: string
+          expires_at: string
+          id: string
+          lead_id: string | null
+          otp_code: string
+          verified_at: string | null
+        }
+        Insert: {
+          attempts?: number | null
+          created_at?: string | null
+          email: string
+          expires_at: string
+          id?: string
+          lead_id?: string | null
+          otp_code: string
+          verified_at?: string | null
+        }
+        Update: {
+          attempts?: number | null
+          created_at?: string | null
+          email?: string
+          expires_at?: string
+          id?: string
+          lead_id?: string | null
+          otp_code?: string
+          verified_at?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "email_verifications_lead_id_fkey"
+            columns: ["lead_id"]
+            isOneToOne: false
+            referencedRelation: "leads"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       evaluation_requests: {
         Row: {
           ai_comparison: string | null
@@ -2869,6 +2910,7 @@ export type Database = {
           created_at: string
           current_location: string | null
           email: string
+          email_verified: boolean | null
           full_name: string | null
           honeypot: string | null
           id: string
@@ -2876,6 +2918,7 @@ export type Database = {
           nationality: string | null
           page_source: string | null
           phone: string | null
+          phone_verified: boolean | null
           source: string
           status: string | null
           updated_at: string
@@ -2888,6 +2931,7 @@ export type Database = {
           created_at?: string
           current_location?: string | null
           email: string
+          email_verified?: boolean | null
           full_name?: string | null
           honeypot?: string | null
           id?: string
@@ -2895,6 +2939,7 @@ export type Database = {
           nationality?: string | null
           page_source?: string | null
           phone?: string | null
+          phone_verified?: boolean | null
           source: string
           status?: string | null
           updated_at?: string
@@ -2907,6 +2952,7 @@ export type Database = {
           created_at?: string
           current_location?: string | null
           email?: string
+          email_verified?: boolean | null
           full_name?: string | null
           honeypot?: string | null
           id?: string
@@ -2914,6 +2960,7 @@ export type Database = {
           nationality?: string | null
           page_source?: string | null
           phone?: string | null
+          phone_verified?: boolean | null
           source?: string
           status?: string | null
           updated_at?: string
@@ -3037,8 +3084,10 @@ export type Database = {
         Row: {
           attempts: number | null
           created_at: string | null
+          email: string | null
           expires_at: string
           id: string
+          lead_id: string | null
           otp_code: string
           phone_number: string
           user_id: string | null
@@ -3047,8 +3096,10 @@ export type Database = {
         Insert: {
           attempts?: number | null
           created_at?: string | null
+          email?: string | null
           expires_at: string
           id?: string
+          lead_id?: string | null
           otp_code: string
           phone_number: string
           user_id?: string | null
@@ -3057,14 +3108,24 @@ export type Database = {
         Update: {
           attempts?: number | null
           created_at?: string | null
+          email?: string | null
           expires_at?: string
           id?: string
+          lead_id?: string | null
           otp_code?: string
           phone_number?: string
           user_id?: string | null
           verified_at?: string | null
         }
-        Relationships: []
+        Relationships: [
+          {
+            foreignKeyName: "phone_verifications_lead_id_fkey"
+            columns: ["lead_id"]
+            isOneToOne: false
+            referencedRelation: "leads"
+            referencedColumns: ["id"]
+          },
+        ]
       }
       points_transactions: {
         Row: {
