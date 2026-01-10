@@ -132,16 +132,16 @@ const CompanyProfile = () => {
       });
 
       // Logo text
-      page1.drawText("J | J", {
-        x: pageWidth / 2 - 60,
+      page1.drawText("JBJ", {
+        x: pageWidth / 2 - 45,
         y: pageHeight - 200,
         size: 72,
         font: helveticaBold,
         color: goldColor,
       });
 
-      page1.drawText("GLOBAL     CAPITAL", {
-        x: pageWidth / 2 - 115,
+      page1.drawText("GLOBAL REAL ESTATE", {
+        x: pageWidth / 2 - 130,
         y: pageHeight - 250,
         size: 20,
         font: helveticaBold,
@@ -492,16 +492,16 @@ const CompanyProfile = () => {
       });
 
       // Logo
-      page4.drawText("J | J", {
-        x: pageWidth / 2 - 50,
+      page4.drawText("JBJ", {
+        x: pageWidth / 2 - 35,
         y: pageHeight - 150,
         size: 56,
         font: helveticaBold,
         color: goldColor,
       });
 
-      page4.drawText("GLOBAL     CAPITAL", {
-        x: pageWidth / 2 - 100,
+      page4.drawText("GLOBAL REAL ESTATE", {
+        x: pageWidth / 2 - 110,
         y: pageHeight - 195,
         size: 18,
         font: helveticaBold,

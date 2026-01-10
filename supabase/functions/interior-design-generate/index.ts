@@ -254,8 +254,8 @@ async function sendAutoBlockNotification(
         Authorization: `Bearer ${resendApiKey}`,
       },
       body: JSON.stringify({
-        from: "JJ Global Capital Security <security@jjglobalcapital.com>",
-        to: ["contact@jjglobalcapital.com", "jane@jjglobalcapital.com"],
+        from: "JBJ Global Real Estate Security <security@jbj.ae>",
+        to: ["contact@jbj.ae"],
         subject: `🚨 Security Alert: IP Auto-Blocked on ${functionName}`,
         html: `
           <div style="font-family: Arial, sans-serif; max-width: 600px; margin: 0 auto;">
@@ -292,7 +292,7 @@ async function sendAutoBlockNotification(
                 </tr>
               </table>
               <p style="color: #666; font-size: 12px; margin-top: 20px; text-align: center;">
-                This is an automated security notification from JJ Global Capital.
+                This is an automated security notification from JBJ Global Real Estate.
               </p>
             </div>
           </div>

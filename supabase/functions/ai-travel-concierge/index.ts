@@ -10,8 +10,8 @@ const AUTO_BLOCK_DURATION_HOURS = 12;
 
 // Allowed origins for CORS
 const ALLOWED_ORIGINS = [
-  "https://jjglobalcapital.com",
-  "https://www.jjglobalcapital.com",
+  "https://jbj.ae",
+  "https://www.jbj.ae",
   "http://localhost:5173",
   "http://localhost:8080",
 ];
@@ -220,9 +220,9 @@ const RequestSchema = z.object({
 
 const APPROVED_CONTACT_INFO = {
   phone: '+971 56 591 1000',
-  email: 'contact@jjglobalcapital.com',
-  privacyEmail: 'privacy@jjglobalcapital.com',
-  website: 'jjglobalcapital.com',
+  email: 'contact@jbj.ae',
+  privacyEmail: 'privacy@jbj.ae',
+  website: 'jbj.ae',
 };
 
 // Sanitize AI output to remove any unapproved contact information
@@ -256,13 +256,12 @@ function sanitizeContactInfo(text: string): string {
   sanitized = sanitized.replace(emailPattern, (match) => {
     const lowerMatch = match.toLowerCase();
     if (
-      lowerMatch === 'contact@jjglobalcapital.com' ||
-      lowerMatch === 'privacy@jjglobalcapital.com' ||
-      lowerMatch === 'partnerships@jjglobalcapital.com' ||
-      lowerMatch === 'collaboration@jjglobalcapital.com' ||
-      lowerMatch === 'careers@jjglobalcapital.com' ||
-      lowerMatch === 'security@jjglobalcapital.com' ||
-      lowerMatch === 'jane@jjglobalcapital.com'
+      lowerMatch === 'contact@jbj.ae' ||
+      lowerMatch === 'privacy@jbj.ae' ||
+      lowerMatch === 'partnerships@jbj.ae' ||
+      lowerMatch === 'collaboration@jbj.ae' ||
+      lowerMatch === 'careers@jbj.ae' ||
+      lowerMatch === 'security@jbj.ae'
     ) {
       return match; // Keep approved emails
     }
@@ -272,7 +271,7 @@ function sanitizeContactInfo(text: string): string {
   return sanitized;
 }
 
-const systemPrompt = `You are the AI Travel & Property Concierge for JBJ Global Real Estate, a real estate brokerage firm in Dubai, UAE. Your role is to create comprehensive, personalized travel and property viewing itineraries for clients visiting the UAE.
+const systemPrompt = `You are the AI Travel & Property Assistant for JBJ Global Real Estate, a real estate brokerage firm in Dubai, UAE. Your role is to create comprehensive, personalized travel and property viewing itineraries for clients visiting the UAE.
 
 **CRITICAL CONTACT INFORMATION RULES:**
 - You MUST ONLY use these approved contact details:
@@ -301,7 +300,7 @@ const systemPrompt = `You are the AI Travel & Property Concierge for JBJ Global 
    - Dinner reservations (7:30 PM - 10:00 PM)
 
 2. **Hotel Recommendations** based on their purpose:
-   - For investors: Address Downtown, Armani Hotel, Four Seasons DIFC
+   - For clients: Address Downtown, Armani Hotel, Four Seasons DIFC
    - For families: Atlantis, JA Resort, Jumeirah Beach Hotel
    - For luxury: Burj Al Arab, One&Only, Bulgari Resort
 
@@ -388,7 +387,7 @@ serve(async (req) => {
     const userEmail = user.email || "unknown";
     const clientIp = getClientIp(req);
 
-    console.log(`Travel concierge request from user: ${userEmail}, IP: ${clientIp}`);
+    console.log(`Travel assistant request from user: ${userEmail}, IP: ${clientIp}`);
 
     // Check IP blocklist
     const blockCheck = await checkIPBlocklist(supabaseAdmin, clientIp);

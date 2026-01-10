@@ -4,8 +4,8 @@ import { z } from "https://deno.land/x/zod@v3.22.4/mod.ts";
 
 // Allowed origins - restrict CORS to trusted domains
 const ALLOWED_ORIGINS = [
-  "https://jjglobalcapital.com",
-  "https://www.jjglobalcapital.com",
+  "https://jbj.ae",
+  "https://www.jbj.ae",
   "http://localhost:5173",
   "http://localhost:8080",
 ];
@@ -167,8 +167,8 @@ async function sendAutoBlockNotification(
       method: "POST",
       headers: { "Content-Type": "application/json", Authorization: `Bearer ${resendApiKey}` },
       body: JSON.stringify({
-        from: "JJ Global Capital Security <security@jjglobalcapital.com>",
-        to: ["contact@jjglobalcapital.com", "jane@jjglobalcapital.com"],
+        from: "JBJ Global Real Estate Security <security@jbj.ae>",
+        to: ["contact@jbj.ae"],
         subject: `🚨 Security Alert: IP Auto-Blocked on ${functionName}`,
         html: `<div style="font-family: Arial, sans-serif; max-width: 600px; margin: 0 auto;"><div style="background: linear-gradient(135deg, #1a1a2e, #16213e); padding: 20px; border-radius: 8px 8px 0 0;"><h1 style="color: #c9a962; margin: 0;">🚨 Security Alert</h1><p style="color: #fff; margin: 10px 0 0;">IP Auto-Blocked</p></div><div style="background: #f8f9fa; padding: 25px; border: 1px solid #e9ecef; border-radius: 0 0 8px 8px;"><h2 style="color: #1a1a2e; margin-top: 0;">Block Details</h2><p><strong>IP:</strong> ${maskedIp}</p><p><strong>Function:</strong> ${functionName}</p><p><strong>Violations:</strong> ${violationCount}</p><p><strong>Total Blocks:</strong> ${blockCount}</p><p><strong>Expires:</strong> ${expiresAtFormatted} (Dubai)</p><p><strong>Duration:</strong> ${AUTO_BLOCK_DURATION_HOURS} hours</p><div style="margin-top: 20px; padding: 15px; background: #fff3cd; border-left: 4px solid #ffc107;"><strong>Action Required:</strong> Review in Admin Dashboard.</div></div></div>`,
       }),
@@ -212,9 +212,9 @@ async function autoBlockIP(supabaseAdmin: any, clientIp: string, functionName: s
 // Approved contact information - single source of truth for AI responses
 const APPROVED_CONTACT_INFO = {
   phone: '+971 56 591 1000',
-  email: 'contact@jjglobalcapital.com',
-  privacyEmail: 'privacy@jjglobalcapital.com',
-  website: 'jjglobalcapital.com',
+  email: 'contact@jbj.ae',
+  privacyEmail: 'privacy@jbj.ae',
+  website: 'jbj.ae',
 };
 
 // Sanitize AI output to remove any unapproved contact information
@@ -247,13 +247,12 @@ function sanitizeContactInfo(text: string): string {
   sanitized = sanitized.replace(emailPattern, (match) => {
     const lowerMatch = match.toLowerCase();
     if (
-      lowerMatch === 'contact@jjglobalcapital.com' ||
-      lowerMatch === 'privacy@jjglobalcapital.com' ||
-      lowerMatch === 'partnerships@jjglobalcapital.com' ||
-      lowerMatch === 'collaboration@jjglobalcapital.com' ||
-      lowerMatch === 'careers@jjglobalcapital.com' ||
-      lowerMatch === 'security@jjglobalcapital.com' ||
-      lowerMatch === 'jane@jjglobalcapital.com'
+      lowerMatch === 'contact@jbj.ae' ||
+      lowerMatch === 'privacy@jbj.ae' ||
+      lowerMatch === 'partnerships@jbj.ae' ||
+      lowerMatch === 'collaboration@jbj.ae' ||
+      lowerMatch === 'careers@jbj.ae' ||
+      lowerMatch === 'security@jbj.ae'
     ) {
       return match;
     }
@@ -411,23 +410,23 @@ Property ${i + 1}: ${name}
 `;
     }).join("\n");
 
-    const systemPrompt = `You are a luxury real estate investment advisor specializing in UAE properties. You provide concise, professional comparisons to help investors make informed decisions.
+    const systemPrompt = `You are a luxury real estate advisor specializing in UAE properties. You provide concise, professional comparisons to help clients make informed decisions.
 
 Your analysis should:
 - Be objective and balanced
-- Highlight investment potential and ROI considerations
+- Highlight potential and lifestyle considerations
 - Note lifestyle factors for end-users
 - Be formatted with clear sections
 - Be approximately 300-400 words
 - Use professional but accessible language`;
 
-    const userPrompt = `Compare these ${projects.length} UAE properties and provide an investment-focused analysis:
+    const userPrompt = `Compare these ${projects.length} UAE properties and provide an analysis:
 
 ${projectDetails}
 
 Please provide:
 1. **Quick Summary** - 1-2 sentences on the best choice for different buyer types
-2. **Investment Potential** - Which offers better ROI, rental yield potential, capital appreciation
+2. **Potential** - Which offers better value and appreciation potential
 3. **Lifestyle & Location** - Which suits different lifestyle preferences
 4. **Value Analysis** - Price per sqft comparison, what you get for the price
 5. **Recommendation** - Clear guidance based on buyer priorities
@@ -462,38 +461,32 @@ Be specific with numbers where possible. Format with markdown for readability.`;
         });
       }
       if (response.status === 402) {
-        return new Response(JSON.stringify({ error: "AI credits exhausted. Please add credits." }), {
+        return new Response(JSON.stringify({ error: "Service unavailable. Please try again later." }), {
           status: 402,
           headers: { ...corsHeaders, "Content-Type": "application/json" },
         });
       }
       
-      throw new Error("AI Gateway error");
+      throw new Error(`AI Gateway error: ${response.status}`);
     }
 
     const data = await response.json();
-    let comparison = data.choices?.[0]?.message?.content;
-
-    if (!comparison) {
-      throw new Error("No comparison generated");
-    }
+    let analysis = data.choices?.[0]?.message?.content || "Unable to generate analysis.";
 
     // CRITICAL: Sanitize any unapproved contact info from AI output
-    comparison = sanitizeContactInfo(comparison);
+    analysis = sanitizeContactInfo(analysis);
 
-    console.log("Comparison generated successfully for user:", user.id);
+    console.log("AI analysis generated successfully");
 
-    return new Response(JSON.stringify({ comparison }), {
+    return new Response(JSON.stringify({ analysis }), {
       headers: { ...corsHeaders, "Content-Type": "application/json" },
     });
   } catch (error) {
-    console.error("compare-projects error:", error);
+    console.error("Error in compare-projects:", error);
+    const corsHeaders = getCorsHeaders(req);
     return new Response(
-      JSON.stringify({ error: "An error occurred while processing your request" }),
-      {
-        status: 500,
-        headers: { ...getCorsHeaders(req), "Content-Type": "application/json" },
-      }
+      JSON.stringify({ error: "An error occurred while generating the comparison." }),
+      { status: 500, headers: { ...corsHeaders, "Content-Type": "application/json" } }
     );
   }
 });

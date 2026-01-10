@@ -289,7 +289,7 @@ const Favorites = () => {
     const url = URL.createObjectURL(blob);
     const a = document.createElement("a");
     a.href = url;
-    a.download = `JJ-Global-Capital-Shortlist-${dateStr.replace(/\s+/g, '-')}.html`;
+    a.download = `JBJ-Global-Real-Estate-Shortlist-${dateStr.replace(/\s+/g, '-')}.html`;
     document.body.appendChild(a);
     a.click();
     document.body.removeChild(a);
