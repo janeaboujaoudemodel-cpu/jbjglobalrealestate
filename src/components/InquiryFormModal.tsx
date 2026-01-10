@@ -209,14 +209,7 @@ const InquiryFormModal = ({
       
       toast.success(`✅ Thank you, ${firstName}! Our team will contact you shortly.`);
       
-      setTimeout(() => {
-        setIsSuccess(false);
-        onClose();
-        form.reset();
-        setEmailStatus('idle');
-        setEmailVerified(false);
-        setPendingFormData(null);
-      }, 3000);
+      // DO NOT auto-close - let user manually close the success modal
     } catch (error) {
       console.error('Error submitting inquiry:', error);
       toast.error(
@@ -279,11 +272,42 @@ const InquiryFormModal = ({
 
           {isSuccess ? (
             <div className="relative px-8 py-16 text-center">
+              {/* Close button for success screen */}
+              <button
+                type="button"
+                onClick={() => {
+                  setIsSuccess(false);
+                  onClose();
+                  form.reset();
+                  setEmailStatus('idle');
+                  setEmailVerified(false);
+                  setPendingFormData(null);
+                }}
+                className="absolute top-4 right-4 w-8 h-8 rounded-full bg-zinc-800 hover:bg-zinc-700 flex items-center justify-center text-zinc-400 hover:text-white transition-colors"
+                aria-label="Close"
+              >
+                ✕
+              </button>
               <div className="w-20 h-20 rounded-full bg-gradient-to-br from-green-500 to-green-600 flex items-center justify-center mx-auto mb-6 shadow-2xl">
                 <CheckCircle className="w-10 h-10 text-white" />
               </div>
               <h3 className="text-2xl font-bold text-white mb-3">Welcome to the Community!</h3>
-              <p className="text-zinc-400 mb-4">You've successfully registered. We'll be in touch via WhatsApp shortly.</p>
+              <p className="text-zinc-400 mb-6">You've successfully registered. We'll be in touch via WhatsApp shortly.</p>
+              
+              {/* Manual close button */}
+              <Button
+                onClick={() => {
+                  setIsSuccess(false);
+                  onClose();
+                  form.reset();
+                  setEmailStatus('idle');
+                  setEmailVerified(false);
+                  setPendingFormData(null);
+                }}
+                className="bg-gradient-to-r from-gold via-gold-light to-gold text-black hover:opacity-90 font-semibold px-8 py-2 rounded-lg"
+              >
+                Close
+              </Button>
             </div>
           ) : (
             <div className="relative px-6 pt-8 pb-6">
@@ -571,17 +595,17 @@ const InquiryFormModal = ({
                   <Button
                     type="submit"
                     disabled={isSubmitting}
-                    className="w-full h-12 bg-gradient-to-r from-gold via-gold-light to-gold text-black hover:opacity-90 font-semibold text-base shadow-xl shadow-gold/20 rounded-lg mt-4"
+                    className="w-full h-14 bg-gradient-to-r from-gold via-gold-light to-gold text-black hover:opacity-90 font-bold text-base shadow-xl shadow-gold/20 rounded-lg mt-4 border-2 border-gold-dark flex items-center justify-center gap-2"
                   >
                     {isSubmitting ? (
                       <>
-                        <Loader2 className="w-5 h-5 mr-2 animate-spin" />
-                        Submitting...
+                        <Loader2 className="w-5 h-5 animate-spin" />
+                        <span>Submitting...</span>
                       </>
                     ) : (
                       <>
-                        <Send className="w-5 h-5 mr-2" />
-                        {!skipVerification && !emailVerified ? 'Verify & Submit' : t('inquiry.submit')}
+                        <Crown className="w-5 h-5" />
+                        <span>{!skipVerification && !emailVerified ? 'Verify & Submit' : t('inquiry.submit')}</span>
                       </>
                     )}
                   </Button>
