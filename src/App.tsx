@@ -75,6 +75,8 @@ import ExecutiveAssistant from "./pages/ExecutiveAssistant";
 import CallReview from "./pages/CallReview";
 import VapiPrompt from "./pages/VapiPrompt";
 import VideoBuilder from "./pages/VideoBuilder";
+import AreaGuides from "./pages/AreaGuides";
+import AreaDetail from "./pages/AreaDetail";
 
 const queryClient = new QueryClient();
 
@@ -101,6 +103,8 @@ const App = () => (
                     <Route path="/communities" element={<Communities />} />
                     <Route path="/community/:slug" element={<CommunityDetail />} />
                     <Route path="/developer/:slug" element={<DeveloperDetail />} />
+                    <Route path="/areas" element={<AreaGuides />} />
+                    <Route path="/area/:slug" element={<AreaDetail />} />
                     <Route path="/quiz" element={<Quiz />} />
                     <Route path="/quiz-results" element={<QuizResults />} />
                     <Route path="/contact" element={<Contact />} />

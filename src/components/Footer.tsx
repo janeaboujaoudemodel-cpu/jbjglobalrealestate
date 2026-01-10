@@ -107,6 +107,7 @@ const Footer = () => {
     { href: "/company-profile", label: "Company Profile" },
     { href: "/press-kit", label: "Press Kit" },
     { href: "/properties", label: "Properties" },
+    { href: "/areas", label: "Area Guides" },
     { href: "/services", label: "Services" },
     { href: "/awards", label: "Awards" },
     { href: "/news", label: "News & Insights" },
