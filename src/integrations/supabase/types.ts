@@ -2943,6 +2943,90 @@ export type Database = {
         }
         Relationships: []
       }
+      jbj_analytics: {
+        Row: {
+          action_type: string
+          created_at: string
+          id: string
+          metadata: Json | null
+          tool_category: string | null
+          tool_name: string
+          user_email: string | null
+          user_id: string | null
+        }
+        Insert: {
+          action_type?: string
+          created_at?: string
+          id?: string
+          metadata?: Json | null
+          tool_category?: string | null
+          tool_name: string
+          user_email?: string | null
+          user_id?: string | null
+        }
+        Update: {
+          action_type?: string
+          created_at?: string
+          id?: string
+          metadata?: Json | null
+          tool_category?: string | null
+          tool_name?: string
+          user_email?: string | null
+          user_id?: string | null
+        }
+        Relationships: []
+      }
+      jbj_issue_reports: {
+        Row: {
+          admin_notes: string | null
+          created_at: string
+          id: string
+          issue_category: string | null
+          issue_description: string
+          resolved_at: string | null
+          resolved_by: string | null
+          status: string | null
+          tool_name: string
+          updated_at: string
+          user_email: string | null
+          user_id: string | null
+          user_name: string | null
+          user_phone: string | null
+        }
+        Insert: {
+          admin_notes?: string | null
+          created_at?: string
+          id?: string
+          issue_category?: string | null
+          issue_description: string
+          resolved_at?: string | null
+          resolved_by?: string | null
+          status?: string | null
+          tool_name: string
+          updated_at?: string
+          user_email?: string | null
+          user_id?: string | null
+          user_name?: string | null
+          user_phone?: string | null
+        }
+        Update: {
+          admin_notes?: string | null
+          created_at?: string
+          id?: string
+          issue_category?: string | null
+          issue_description?: string
+          resolved_at?: string | null
+          resolved_by?: string | null
+          status?: string | null
+          tool_name?: string
+          updated_at?: string
+          user_email?: string | null
+          user_id?: string | null
+          user_name?: string | null
+          user_phone?: string | null
+        }
+        Relationships: []
+      }
       leads: {
         Row: {
           age_range: string | null
