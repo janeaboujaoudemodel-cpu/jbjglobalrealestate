@@ -89,8 +89,36 @@
     <meta name="format-detection" content="telephone=no" />
   </head>
 
-  <body>
+  <body oncontextmenu="return false" onselectstart="return false" ondragstart="return false">
     <div id="root"></div>
     <script type="module" src="/src/main.tsx"></script>
+    <!-- Security Protection Script - Runs before React -->
+    <script>
+      (function() {
+        // Disable right-click
+        document.addEventListener('contextmenu', function(e) { e.preventDefault(); });
+        
+        // Disable keyboard shortcuts
+        document.addEventListener('keydown', function(e) {
+          if (e.key === 'F12' || 
+              (e.ctrlKey && e.shiftKey && ['I','i','J','j','C','c'].includes(e.key)) ||
+              (e.ctrlKey && ['U','u','S','s'].includes(e.key)) ||
+              (e.metaKey && e.altKey && ['I','i','J','j'].includes(e.key)) ||
+              (e.metaKey && ['U','u','S','s'].includes(e.key))) {
+            e.preventDefault();
+            e.stopPropagation();
+            return false;
+          }
+        });
+        
+        // Clear console on load
+        if (typeof console.clear === 'function') { console.clear(); }
+        
+        // Anti-debugging measure
+        setInterval(function() {
+          if (typeof console.clear === 'function') { console.clear(); }
+        }, 3000);
+      })();
+    </script>
   </body>
 </html>
