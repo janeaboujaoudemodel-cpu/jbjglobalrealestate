@@ -8,7 +8,7 @@ import { Input } from '@/components/ui/input';
 import { Textarea } from '@/components/ui/textarea';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from '@/components/ui/form';
-import { Loader2, Send, CheckCircle, Crown, Sparkles, CheckCircle2, XCircle, Shield, MessageCircle, Target, Briefcase, Users, Home, TrendingUp } from 'lucide-react';
+import { Loader2, Send, CheckCircle, Crown, Sparkles, CheckCircle2, XCircle, Shield, Target, Briefcase, Users, Home, TrendingUp } from 'lucide-react';
 import { toast } from 'sonner';
 import { supabase } from '@/integrations/supabase/client';
 import { getCountryList, getLanguageList } from '@/constants/localeOptions';
@@ -16,6 +16,7 @@ import { useLanguage } from '@/contexts/LanguageContext';
 import OTPVerificationModal from '@/components/OTPVerificationModal';
 import { PhoneInput, getPhoneValidation } from '@/components/ui/phone-input';
 import { CONTACT_INFO } from '@/constants/stats';
+import { useFormAutoSave } from '@/hooks/useFormAutoSave';
 
 // Stricter email validation
 const emailRegex = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
@@ -85,26 +86,25 @@ const InquiryFormModal = ({
     mode: 'onChange',
   });
 
+  // Auto-save form progress with encryption - prevents data loss on crash/refresh
+  const { clearDraft } = useFormAutoSave(form, {
+    formId: `inquiry_${source}`,
+    debounceMs: 500,
+    excludeFields: [], // Save all fields for user convenience
+    expiryHours: 24, // Drafts expire after 24 hours
+  });
+
   const watchRole = form.watch('role');
 
-  // Reset verification state when modal closes
+  // Reset verification state when modal closes (but keep draft for next time)
   useEffect(() => {
     if (!isOpen) {
       setEmailVerified(false);
       setPendingFormData(null);
       setEmailStatus('idle');
-      form.reset({
-        fullName: '',
-        email: '',
-        phone: '',
-        nationality: '',
-        language: '',
-        role: preselectedRole,
-        buyerType: undefined,
-        message: '',
-      });
+      // Don't reset form - keep draft for next time
     }
-  }, [isOpen, form, preselectedRole]);
+  }, [isOpen]);
 
   // Update role when preselectedRole changes
   useEffect(() => {
@@ -203,6 +203,10 @@ const InquiryFormModal = ({
 
       const firstName = data.fullName.split(' ')[0];
       setIsSuccess(true);
+      
+      // Clear the saved draft ONLY after successful submission
+      clearDraft();
+      
       toast.success(`✅ Thank you, ${firstName}! Our team will contact you shortly.`);
       
       setTimeout(() => {
