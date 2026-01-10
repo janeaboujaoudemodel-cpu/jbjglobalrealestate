@@ -61,20 +61,38 @@ const Index = () => {
       {/* Floating Install App Button */}
       <InstallAppButton />
 
-      {/* HERO SECTION - QUIET LUXURY */}
-      <div className="relative min-h-screen flex items-center justify-center">
-        {/* Background Image */}
-        <div 
-          className="absolute inset-0 bg-cover bg-center bg-no-repeat"
-          style={{ backgroundImage: `url(${luxuryVillaHero})` }}
-        />
+      {/* HERO SECTION - LUXURY CINEMATIC VIDEO */}
+      <div className="relative min-h-screen flex items-center justify-center overflow-hidden">
+        {/* Video Background - Luxury Dubai Drone Footage Concept */}
+        <div className="absolute inset-0">
+          {/* Using villa hero as fallback - Video would show: Burj Khalifa, JBR coastline, Palm Jumeirah, Burj Al Arab */}
+          <div 
+            className="absolute inset-0 bg-cover bg-center bg-no-repeat"
+            style={{ backgroundImage: `url(${luxuryVillaHero})` }}
+          />
+          {/* Video overlay gradient */}
+          <div className="absolute inset-0 bg-gradient-to-b from-black/50 via-black/40 to-black/80" />
+          {/* Additional cinematic vignette */}
+          <div className="absolute inset-0 bg-gradient-to-r from-black/60 via-transparent to-black/60" />
+        </div>
         
-        {/* Refined Dark Overlay - Less heavy */}
-        <div className="absolute inset-0 bg-gradient-to-b from-black/40 via-black/50 to-black/70" />
+        {/* Animated gold accent lines */}
+        <motion.div 
+          className="absolute left-0 top-1/3 w-48 md:w-96 h-px bg-gradient-to-r from-gold/60 to-transparent"
+          initial={{ x: -100, opacity: 0 }}
+          animate={{ x: 0, opacity: 1 }}
+          transition={{ duration: 1.5, delay: 0.5 }}
+        />
+        <motion.div 
+          className="absolute right-0 bottom-1/3 w-48 md:w-96 h-px bg-gradient-to-l from-gold/60 to-transparent"
+          initial={{ x: 100, opacity: 0 }}
+          animate={{ x: 0, opacity: 1 }}
+          transition={{ duration: 1.5, delay: 0.7 }}
+        />
         
         {/* Content */}
         <motion.div 
-          className="relative z-10 text-center px-4 max-w-3xl mx-auto"
+          className="relative z-10 text-center px-4 max-w-4xl mx-auto"
           initial="hidden"
           animate="visible"
           variants={staggerContainer}
@@ -82,27 +100,28 @@ const Index = () => {
           {/* Badge */}
           <motion.span 
             variants={fadeInUp}
-            className="inline-block px-4 py-1.5 border border-gold/40 rounded-full text-gold text-[10px] md:text-xs uppercase tracking-[0.3em] mb-8"
+            className="inline-flex items-center gap-2 px-5 py-2 bg-black/30 backdrop-blur-md border border-gold/40 rounded-full text-gold text-[10px] md:text-xs uppercase tracking-[0.3em] mb-8 shadow-lg shadow-gold/10"
           >
+            <span className="w-2 h-2 bg-gold rounded-full animate-pulse" />
             Real Estate Brokerage
           </motion.span>
           
-          {/* H1 - Cleaner, tighter */}
+          {/* H1 - Premium Typography */}
           <motion.h1 
             variants={fadeInUp} 
-            className="text-white text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-semibold tracking-tight leading-[1.1] mb-6"
+            className="text-white text-4xl sm:text-5xl md:text-6xl lg:text-7xl font-bold tracking-tight leading-[1.1] mb-6"
             style={{ fontFamily: "Poppins, sans-serif" }}
           >
             Buy & Sell Brokerage<br />
-            <span className="text-gold">in Dubai</span>
+            <span className="text-transparent bg-clip-text bg-gradient-to-r from-gold via-[#C4A962] to-gold">in Dubai</span>
           </motion.h1>
           
           {/* Subline - Muted, refined */}
           <motion.p 
             variants={fadeInUp}
-            className="text-zinc-300 text-sm md:text-base lg:text-lg max-w-xl mx-auto leading-relaxed mb-4"
+            className="text-zinc-300 text-base md:text-lg lg:text-xl max-w-2xl mx-auto leading-relaxed mb-4"
           >
-            Client-first guidance, property search, and transaction coordination.
+            Client-first guidance, property search, and transaction coordination for discerning buyers and sellers.
           </motion.p>
 
           {/* Partner microline */}
@@ -113,20 +132,20 @@ const Index = () => {
             Licensed partners available for legal and mortgage introductions.
           </motion.p>
 
-          {/* Two CTAs Only */}
+          {/* Two CTAs Only - Gold Buttons */}
           <motion.div 
             variants={fadeInUp}
             className="flex flex-col sm:flex-row items-center justify-center gap-4"
           >
             <Link to="/properties">
-              <Button className="bg-gold hover:bg-gold-light text-black font-semibold px-8 py-6 text-sm tracking-wide transition-all duration-300 hover:shadow-lg hover:shadow-gold/20">
+              <Button className="bg-gold hover:bg-gold-light text-black font-semibold px-10 py-6 text-sm tracking-wide transition-all duration-300 hover:shadow-xl hover:shadow-gold/30 hover:scale-105">
                 Browse Properties
                 <ArrowUpRight className="w-4 h-4 ml-2" />
               </Button>
             </Link>
             <Button 
               variant="outline"
-              className="border-gold/50 text-gold hover:bg-gold/10 hover:border-gold font-medium px-8 py-6 text-sm tracking-wide transition-all duration-300"
+              className="border-gold/60 text-gold hover:bg-gold/10 hover:border-gold font-medium px-10 py-6 text-sm tracking-wide transition-all duration-300 hover:shadow-lg hover:shadow-gold/20"
               onClick={() => setIsInquiryOpen(true)}
             >
               Book Consultation
@@ -134,13 +153,14 @@ const Index = () => {
           </motion.div>
         </motion.div>
         
-        {/* Scroll indicator - Subtle */}
+        {/* Scroll indicator - Animated */}
         <motion.div 
-          className="absolute bottom-8 left-0 right-0 flex flex-col items-center gap-2 text-zinc-500 z-10"
-          initial={{ opacity: 0 }}
-          animate={{ opacity: 1 }}
+          className="absolute bottom-8 left-0 right-0 flex flex-col items-center gap-2 text-gold/60 z-10"
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
           transition={{ delay: 2, duration: 1 }}
         >
+          <span className="text-[10px] uppercase tracking-[0.3em]">Explore</span>
           <ChevronDown className="w-5 h-5 animate-bounce" />
         </motion.div>
       </div>

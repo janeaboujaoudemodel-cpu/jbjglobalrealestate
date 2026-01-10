@@ -39,7 +39,8 @@ const staggerContainer = {
   }
 };
 
-const aiTools = [
+// Free AI Tools - Available to all users
+const freeTools = [
   {
     id: "ai-home-finder",
     title: "JBJ AI Home Finder",
@@ -51,55 +52,8 @@ const aiTools = [
     bgColor: "bg-purple-500/10",
     link: "/quiz",
     features: ["Personalized Matching", "Budget Analysis", "Lifestyle Fit", "Property Scoring"],
-    featured: true
-  },
-  {
-    id: "ai-interior-design",
-    title: "JBJ AI Interior Design Studio",
-    description: "Visualize your dream space with AI-generated interior designs. Upload a room photo and see it transformed in different luxury styles.",
-    icon: Palette,
-    gradient: "from-fuchsia-500 to-pink-500",
-    borderColor: "border-fuchsia-500/30",
-    textColor: "text-fuchsia-400",
-    bgColor: "bg-fuchsia-500/10",
-    link: "/interior-design-ai",
-    features: ["Style Visualization", "AI Rendering", "Before/After", "Multiple Styles"]
-  },
-  {
-    id: "ai-budget-planner",
-    title: "JBJ AI Budget Planner",
-    description: "Budget analysis and property affordability insights (property-only). Informational only—not financial, mortgage, or investment advice.",
-    icon: Wallet,
-    gradient: "from-amber-500 to-orange-500",
-    borderColor: "border-amber-500/30",
-    textColor: "text-amber-400",
-    bgColor: "bg-amber-500/10",
-    link: "/ai-budget-planner",
-    features: ["Budget Analysis", "Affordability Insights", "Property Matching", "Payment Plans"]
-  },
-  {
-    id: "ai-personal-shopper",
-    title: "JBJ AI Personal Shopper",
-    description: "Tell us your lifestyle, preferences and property goals. Our AI personal shopper curates perfect property selections tailored just for you.",
-    icon: ShoppingBag,
-    gradient: "from-rose-500 to-red-500",
-    borderColor: "border-rose-500/30",
-    textColor: "text-rose-400",
-    bgColor: "bg-rose-500/10",
-    link: "/ai-personal-shopper",
-    features: ["Lifestyle Matching", "Curated Selections", "AI Recommendations", "Project Saving"]
-  },
-  {
-    id: "ai-calendar",
-    title: "JBJ AI Calendar & Notes",
-    description: "Manage your meetings, events and notes with AI-powered scheduling. Get email and phone reminders for important consultation meetings.",
-    icon: Calendar,
-    gradient: "from-indigo-500 to-blue-500",
-    borderColor: "border-indigo-500/30",
-    textColor: "text-indigo-400",
-    bgColor: "bg-indigo-500/10",
-    link: "/ai-calendar",
-    features: ["Event Scheduling", "Meeting Reminders", "AI Notes", "Project Saving"]
+    featured: true,
+    audience: ["Buyers", "Visitors", "Brokers"]
   },
   {
     id: "property-comparison",
@@ -111,19 +65,8 @@ const aiTools = [
     textColor: "text-violet-400",
     bgColor: "bg-violet-500/10",
     link: "/compare",
-    features: ["Side-by-Side View", "AI Scoring", "Potential Analysis", "Recommendations"]
-  },
-  {
-    id: "rental-index",
-    title: "JBJ Rental Index Evaluator",
-    description: "Get AI-powered rental estimates for any Dubai property. Understand market rates, trends, demand levels, and ROI potential.",
-    icon: Layers,
-    gradient: "from-emerald-500 to-green-500",
-    borderColor: "border-emerald-500/30",
-    textColor: "text-emerald-400",
-    bgColor: "bg-emerald-500/10",
-    link: "/rental-index",
-    features: ["Rent Estimates", "Market Trends", "ROI Analysis", "Area Comparison"]
+    features: ["Side-by-Side View", "AI Scoring", "Potential Analysis", "Recommendations"],
+    audience: ["Buyers", "Brokers"]
   },
   {
     id: "property-evaluator",
@@ -135,19 +78,21 @@ const aiTools = [
     textColor: "text-blue-400",
     bgColor: "bg-blue-500/10",
     link: "/property-evaluator",
-    features: ["Instant Valuation", "Market Comparables", "Price Trends", "Investment Score"]
+    features: ["Instant Valuation", "Market Comparables", "Price Trends"],
+    audience: ["Buyers", "Sellers", "Brokers"]
   },
   {
-    id: "property-measurement",
-    title: "JBJ Property Measurement",
-    description: "Calculate property dimensions, areas and layouts with precision. Get accurate measurements for floor plans and space planning.",
-    icon: Ruler,
-    gradient: "from-teal-500 to-cyan-500",
-    borderColor: "border-teal-500/30",
-    textColor: "text-teal-400",
-    bgColor: "bg-teal-500/10",
-    link: "/property-measurement",
-    features: ["Area Calculator", "Room Dimensions", "Floor Plans", "Export Options"]
+    id: "mortgage-calculator",
+    title: "JBJ Mortgage Calculator",
+    description: "Estimate your monthly payments and explore financing options. Get connected with licensed mortgage partners for professional guidance.",
+    icon: Calculator,
+    gradient: "from-emerald-500 to-green-500",
+    borderColor: "border-emerald-500/30",
+    textColor: "text-emerald-400",
+    bgColor: "bg-emerald-500/10",
+    link: "/mortgage-calculator",
+    features: ["Payment Estimates", "Rate Comparison", "Partner Intros"],
+    audience: ["Buyers", "Visitors"]
   },
   {
     id: "document-scanner",
@@ -159,19 +104,8 @@ const aiTools = [
     textColor: "text-green-400",
     bgColor: "bg-green-500/10",
     link: "/document-scanner",
-    features: ["Smart Scanning", "Signature Design", "e-Signature", "PDF Export"]
-  },
-  {
-    id: "referral-program",
-    title: "JBJ Referral Program",
-    description: "Join our referral network and earn 5% commission on successful deals. Upload documents, sign contracts, and track your referral earnings.",
-    icon: Users,
-    gradient: "from-lime-500 to-green-500",
-    borderColor: "border-lime-500/30",
-    textColor: "text-lime-400",
-    bgColor: "bg-lime-500/10",
-    link: "/referral-onboarding",
-    features: ["5% Commission", "Easy Onboarding", "Track Earnings", "E-Contracts"]
+    features: ["Smart Scanning", "Signature Design", "e-Signature", "PDF Export"],
+    audience: ["Buyers", "Sellers", "Brokers"]
   },
   {
     id: "spreadsheet",
@@ -183,7 +117,8 @@ const aiTools = [
     textColor: "text-green-400",
     bgColor: "bg-green-500/10",
     link: "/spreadsheet",
-    features: ["Formulas", "CSV Import/Export", "Formatting", "Calculations"]
+    features: ["Formulas", "CSV Import/Export", "Formatting"],
+    audience: ["Brokers", "Visitors"]
   },
   {
     id: "documents",
@@ -195,7 +130,8 @@ const aiTools = [
     textColor: "text-blue-400",
     bgColor: "bg-blue-500/10",
     link: "/documents",
-    features: ["Rich Text", "Formatting", "Export HTML/TXT", "Print Ready"]
+    features: ["Rich Text", "Formatting", "Export HTML/TXT"],
+    audience: ["Brokers", "Visitors"]
   },
   {
     id: "video-meeting",
@@ -207,7 +143,103 @@ const aiTools = [
     textColor: "text-red-400",
     bgColor: "bg-red-500/10",
     link: "/video-meeting",
-    features: ["Unlimited Time", "Screen Share", "Recording", "No Account Needed"]
+    features: ["Unlimited Time", "Screen Share", "Recording"],
+    audience: ["Brokers", "Buyers", "Visitors"]
+  },
+];
+
+// Advanced Broker Tools - Premium features for registered brokers
+const advancedTools = [
+  {
+    id: "ai-interior-design",
+    title: "JBJ AI Interior Design Studio",
+    description: "Visualize your dream space with AI-generated interior designs. Upload a room photo and see it transformed in different luxury styles.",
+    icon: Palette,
+    gradient: "from-fuchsia-500 to-pink-500",
+    borderColor: "border-fuchsia-500/30",
+    textColor: "text-fuchsia-400",
+    bgColor: "bg-fuchsia-500/10",
+    link: "/interior-design-ai",
+    features: ["Style Visualization", "AI Rendering", "Before/After", "Multiple Styles"],
+    audience: ["Brokers", "Buyers"]
+  },
+  {
+    id: "ai-budget-planner",
+    title: "JBJ AI Budget Planner",
+    description: "Budget analysis and property affordability insights (property-only). Informational only—not financial or mortgage advice.",
+    icon: Wallet,
+    gradient: "from-amber-500 to-orange-500",
+    borderColor: "border-amber-500/30",
+    textColor: "text-amber-400",
+    bgColor: "bg-amber-500/10",
+    link: "/ai-budget-planner",
+    features: ["Budget Analysis", "Affordability Insights", "Property Matching"],
+    audience: ["Buyers"]
+  },
+  {
+    id: "ai-personal-shopper",
+    title: "JBJ AI Personal Shopper",
+    description: "Tell us your lifestyle, preferences and property goals. Our AI personal shopper curates perfect property selections tailored just for you.",
+    icon: ShoppingBag,
+    gradient: "from-rose-500 to-red-500",
+    borderColor: "border-rose-500/30",
+    textColor: "text-rose-400",
+    bgColor: "bg-rose-500/10",
+    link: "/ai-personal-shopper",
+    features: ["Lifestyle Matching", "Curated Selections", "AI Recommendations"],
+    audience: ["Buyers"]
+  },
+  {
+    id: "ai-calendar",
+    title: "JBJ AI Calendar & Notes",
+    description: "Manage your meetings, events and notes with AI-powered scheduling. Get email and phone reminders for important consultation meetings.",
+    icon: Calendar,
+    gradient: "from-indigo-500 to-blue-500",
+    borderColor: "border-indigo-500/30",
+    textColor: "text-indigo-400",
+    bgColor: "bg-indigo-500/10",
+    link: "/ai-calendar",
+    features: ["Event Scheduling", "Meeting Reminders", "AI Notes"],
+    audience: ["Brokers"]
+  },
+  {
+    id: "rental-index",
+    title: "JBJ Rental Index Evaluator",
+    description: "Get AI-powered rental estimates for any Dubai property. Understand market rates, trends, and demand levels.",
+    icon: Layers,
+    gradient: "from-emerald-500 to-green-500",
+    borderColor: "border-emerald-500/30",
+    textColor: "text-emerald-400",
+    bgColor: "bg-emerald-500/10",
+    link: "/rental-index",
+    features: ["Rent Estimates", "Market Trends", "Area Comparison"],
+    audience: ["Brokers", "Landlords"]
+  },
+  {
+    id: "property-measurement",
+    title: "JBJ Property Measurement",
+    description: "Calculate property dimensions, areas and layouts with precision. Get accurate measurements for floor plans and space planning.",
+    icon: Ruler,
+    gradient: "from-teal-500 to-cyan-500",
+    borderColor: "border-teal-500/30",
+    textColor: "text-teal-400",
+    bgColor: "bg-teal-500/10",
+    link: "/property-measurement",
+    features: ["Area Calculator", "Room Dimensions", "Floor Plans"],
+    audience: ["Brokers"]
+  },
+  {
+    id: "referral-program",
+    title: "JBJ Referral Program",
+    description: "Join our referral network and earn 5% commission on successful deals. Upload documents, sign contracts, and track your referral earnings.",
+    icon: Users,
+    gradient: "from-lime-500 to-green-500",
+    borderColor: "border-lime-500/30",
+    textColor: "text-lime-400",
+    bgColor: "bg-lime-500/10",
+    link: "/referral-onboarding",
+    features: ["5% Commission", "Easy Onboarding", "Track Earnings"],
+    audience: ["Brokers", "Partners"]
   },
 ];
 
@@ -399,7 +431,7 @@ const AIHub = () => {
         </div>
       </section>
 
-      {/* All AI Tools Grid */}
+      {/* FREE AI TOOLS SECTION */}
       <section className="py-20 bg-gradient-to-b from-black to-zinc-950">
         <div className="container mx-auto px-4">
           <motion.div
@@ -408,15 +440,18 @@ const AIHub = () => {
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true }}
           >
-            <span className="text-gold text-xs uppercase tracking-[0.3em] mb-4 block">Complete Suite</span>
+            <span className="inline-flex items-center gap-2 px-4 py-2 bg-emerald-500/10 border border-emerald-500/30 rounded-full text-emerald-400 text-xs uppercase tracking-wider mb-4">
+              <Sparkles className="w-3 h-3" />
+              Free for Everyone
+            </span>
             <h2 
               className="text-white text-3xl md:text-5xl font-bold mb-6"
               style={{ fontFamily: "Poppins, sans-serif" }}
             >
-              All JBJ Tools
+              ✅ Free AI Tools
             </h2>
             <p className="text-zinc-400 max-w-2xl mx-auto">
-              Explore our full range of JBJ-powered tools designed to assist every aspect of your property search.
+              Available to all visitors — buyers, sellers, and real estate professionals.
             </p>
           </motion.div>
 
@@ -427,7 +462,7 @@ const AIHub = () => {
             viewport={{ once: true }}
             variants={staggerContainer}
           >
-            {aiTools.filter(t => !t.featured).map((tool) => (
+            {freeTools.filter(t => !t.featured).map((tool) => (
               <motion.div key={tool.id} variants={fadeInUp}>
                 <Link to={tool.link} className="block group h-full">
                   <div className="ai-card p-6 h-full">
@@ -441,9 +476,9 @@ const AIHub = () => {
                           <h3 className="text-white text-lg font-bold mb-1" style={{ fontFamily: "Poppins, sans-serif" }}>
                             {tool.title}
                           </h3>
-                          <div className={`inline-flex items-center gap-1 ${tool.textColor} text-xs font-medium uppercase tracking-wider`}>
-                            <Sparkles className="w-3 h-3" />
-                            AI Powered
+                          <div className="inline-flex items-center gap-1 text-emerald-400 text-xs font-medium uppercase tracking-wider">
+                            <span className="w-2 h-2 bg-emerald-400 rounded-full" />
+                            Free
                           </div>
                         </div>
                         <ArrowUpRight className={`w-5 h-5 ${tool.textColor} opacity-0 group-hover:opacity-100 group-hover:translate-x-1 group-hover:-translate-y-1 transition-all`} />
@@ -454,11 +489,86 @@ const AIHub = () => {
                         {tool.description}
                       </p>
 
-                      {/* Features */}
+                      {/* Audience Tags */}
                       <div className="flex flex-wrap gap-2">
-                        {tool.features.slice(0, 3).map((feature, idx) => (
-                          <span key={idx} className={`px-2 py-1 ${tool.bgColor} border ${tool.borderColor} rounded-full ${tool.textColor} text-xs`}>
-                            {feature}
+                        {tool.audience.map((aud, idx) => (
+                          <span key={idx} className="px-2 py-1 bg-zinc-800 border border-zinc-700 rounded-full text-zinc-400 text-xs">
+                            {aud}
+                          </span>
+                        ))}
+                      </div>
+                    </div>
+                  </div>
+                </Link>
+              </motion.div>
+            ))}
+          </motion.div>
+        </div>
+      </section>
+
+      {/* ADVANCED BROKER TOOLS SECTION */}
+      <section className="py-20 bg-gradient-to-b from-zinc-950 to-black">
+        <div className="container mx-auto px-4">
+          <motion.div
+            className="text-center mb-16"
+            initial={{ opacity: 0, y: 20 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+          >
+            <span className="inline-flex items-center gap-2 px-4 py-2 bg-gold/10 border border-gold/30 rounded-full text-gold text-xs uppercase tracking-wider mb-4">
+              <Zap className="w-3 h-3" />
+              Broker Circle Members
+            </span>
+            <h2 
+              className="text-white text-3xl md:text-5xl font-bold mb-6"
+              style={{ fontFamily: "Poppins, sans-serif" }}
+            >
+              🔒 Advanced Broker Tools
+            </h2>
+            <p className="text-zinc-400 max-w-2xl mx-auto">
+              Premium features for registered JBJ Broker Circle members. Join free to unlock.
+            </p>
+          </motion.div>
+
+          <motion.div 
+            className="grid md:grid-cols-2 lg:grid-cols-3 gap-6"
+            initial="hidden"
+            whileInView="visible"
+            viewport={{ once: true }}
+            variants={staggerContainer}
+          >
+            {advancedTools.map((tool) => (
+              <motion.div key={tool.id} variants={fadeInUp}>
+                <Link to={tool.link} className="block group h-full">
+                  <div className="ai-card p-6 h-full border-gold/20 hover:border-gold/40">
+                    <div className="relative z-10">
+                      {/* Header */}
+                      <div className="flex items-start gap-4 mb-4">
+                        <div className={`w-14 h-14 rounded-xl ${tool.bgColor} border ${tool.borderColor} flex items-center justify-center flex-shrink-0 group-hover:scale-110 transition-transform duration-300`}>
+                          <tool.icon className={`w-7 h-7 ${tool.textColor}`} />
+                        </div>
+                        <div className="flex-1">
+                          <h3 className="text-white text-lg font-bold mb-1" style={{ fontFamily: "Poppins, sans-serif" }}>
+                            {tool.title}
+                          </h3>
+                          <div className="inline-flex items-center gap-1 text-gold text-xs font-medium uppercase tracking-wider">
+                            <Zap className="w-3 h-3" />
+                            Broker Circle
+                          </div>
+                        </div>
+                        <ArrowUpRight className={`w-5 h-5 ${tool.textColor} opacity-0 group-hover:opacity-100 group-hover:translate-x-1 group-hover:-translate-y-1 transition-all`} />
+                      </div>
+
+                      {/* Description */}
+                      <p className="text-zinc-400 text-sm mb-4 leading-relaxed line-clamp-2">
+                        {tool.description}
+                      </p>
+
+                      {/* Audience Tags */}
+                      <div className="flex flex-wrap gap-2">
+                        {tool.audience.map((aud, idx) => (
+                          <span key={idx} className="px-2 py-1 bg-gold/10 border border-gold/20 rounded-full text-gold/80 text-xs">
+                            {aud}
                           </span>
                         ))}
                       </div>
@@ -489,10 +599,10 @@ const AIHub = () => {
               className="text-white text-3xl md:text-5xl font-bold mb-6"
               style={{ fontFamily: "Poppins, sans-serif" }}
             >
-              Ready to Transform Your Investment Journey?
+              Ready to Start Your Property Search?
             </h2>
             <p className="text-zinc-400 text-lg mb-10">
-              Start using our AI-powered tools today and make smarter, data-driven real estate decisions.
+              Use our AI-powered tools to make smarter, data-driven real estate decisions.
             </p>
             <div className="flex flex-wrap justify-center gap-4">
               <Link to="/quiz">

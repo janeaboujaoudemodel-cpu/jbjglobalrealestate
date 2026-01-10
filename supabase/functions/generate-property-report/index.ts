@@ -780,9 +780,9 @@ serve(async (req) => {
       <div class="header-left">
         <div class="logo">
           <span class="logo-jj">J</span>
-          <span class="logo-divider">|</span>
+          <span class="logo-divider">B</span>
           <span class="logo-jj">J</span>
-          <span style="margin-left: 10px;" class="logo-text">GLOBAL CAPITAL</span>
+          <span style="margin-left: 10px;" class="logo-text">GLOBAL REAL ESTATE</span>
         </div>
         <div class="tagline">Real Estate Brokerage</div>
       </div>
