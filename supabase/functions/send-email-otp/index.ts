@@ -19,9 +19,8 @@ async function sendEmailWithResend(to: string, otp: string, fullName?: string): 
     return true;
   }
   
-  // Use verified domain - jbj.ae must be verified in Resend dashboard
-  // Fallback to resend.dev for testing with owner's email only
-  const fromAddress = "JBJ Global Real Estate <noreply@jbj.ae>";
+  // Use Resend's default sandbox domain (works without domain verification)
+  const fromAddress = "JBJ Global Real Estate <onboarding@resend.dev>";
 
   const response = await fetch("https://api.resend.com/emails", {
     method: "POST",
