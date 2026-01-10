@@ -8,17 +8,14 @@ import { Input } from '@/components/ui/input';
 import { Textarea } from '@/components/ui/textarea';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from '@/components/ui/form';
-import { Loader2, Send, CheckCircle, Crown, Sparkles, CheckCircle2, XCircle, Shield, MessageCircle } from 'lucide-react';
+import { Loader2, Send, CheckCircle, Crown, Sparkles, CheckCircle2, XCircle, Shield, MessageCircle, Target, Briefcase, Users, Home, TrendingUp } from 'lucide-react';
 import { toast } from 'sonner';
 import { supabase } from '@/integrations/supabase/client';
-import { useLeadCapture } from '@/hooks/useLeadCapture';
 import { getCountryList, getLanguageList } from '@/constants/localeOptions';
 import { useLanguage } from '@/contexts/LanguageContext';
 import OTPVerificationModal from '@/components/OTPVerificationModal';
+import { PhoneInput, getPhoneValidation } from '@/components/ui/phone-input';
 import { CONTACT_INFO } from '@/constants/stats';
-
-// E.164 phone validation: must start with + and have 7-15 digits
-const phoneRegex = /^\+[1-9]\d{6,14}$/;
 
 // Stricter email validation
 const emailRegex = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
@@ -33,14 +30,11 @@ const inquirySchema = z.object({
     .max(255, 'Email is too long')
     .regex(emailRegex, 'Please enter a valid email address'),
   phone: z.string()
-    .min(8, 'Please enter a valid phone number including country code')
-    .max(20, 'Phone number is too long')
-    .refine((val) => {
-      const cleaned = val.replace(/[\s\-\(\)]/g, '');
-      return phoneRegex.test(cleaned) || /^\+\d{7,15}$/.test(cleaned);
-    }, 'Please enter a valid phone number including country code (e.g., +971 50 123 4567)'),
+    .min(8, 'Please enter a valid phone number'),
   nationality: z.string().min(1, 'Please select your nationality'),
   language: z.string().min(1, 'Please select your preferred language'),
+  role: z.enum(['buyer', 'broker', 'visitor'], { required_error: 'Please select your role' }),
+  buyerType: z.enum(['homeowner', 'investor']).optional(),
   message: z.string().max(1000).optional(),
 });
 
@@ -53,12 +47,8 @@ interface InquiryFormModalProps {
   propertyName?: string;
   context?: Record<string, string>;
   requireVerification?: boolean;
+  preselectedRole?: 'buyer' | 'broker' | 'visitor';
 }
-
-// Normalize phone to E.164 format
-const normalizePhone = (phone: string): string => {
-  return phone.replace(/[\s\-\(\)]/g, '');
-};
 
 const InquiryFormModal = ({ 
   isOpen, 
@@ -66,16 +56,15 @@ const InquiryFormModal = ({
   source = 'general', 
   propertyName, 
   context,
-  requireVerification = false 
+  requireVerification = false,
+  preselectedRole
 }: InquiryFormModalProps) => {
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [isSuccess, setIsSuccess] = useState(false);
   const [emailStatus, setEmailStatus] = useState<'idle' | 'valid' | 'invalid'>('idle');
-  const [phoneStatus, setPhoneStatus] = useState<'idle' | 'valid' | 'invalid'>('idle');
   const [showEmailOTP, setShowEmailOTP] = useState(false);
   const [emailVerified, setEmailVerified] = useState(false);
   const [pendingFormData, setPendingFormData] = useState<InquiryFormData | null>(null);
-  const { captureLead, leadData } = useLeadCapture();
   const { t, isRTL } = useLanguage();
   
   const countries = getCountryList();
@@ -84,15 +73,19 @@ const InquiryFormModal = ({
   const form = useForm<InquiryFormData>({
     resolver: zodResolver(inquirySchema),
     defaultValues: {
-      fullName: leadData?.fullName || '',
-      email: leadData?.email || '',
-      phone: leadData?.phone || '',
-      nationality: leadData?.nationality || '',
-      language: leadData?.language || '',
+      fullName: '',
+      email: '',
+      phone: '',
+      nationality: '',
+      language: '',
+      role: preselectedRole,
+      buyerType: undefined,
       message: '',
     },
     mode: 'onChange',
   });
+
+  const watchRole = form.watch('role');
 
   // Reset verification state when modal closes
   useEffect(() => {
@@ -100,9 +93,25 @@ const InquiryFormModal = ({
       setEmailVerified(false);
       setPendingFormData(null);
       setEmailStatus('idle');
-      setPhoneStatus('idle');
+      form.reset({
+        fullName: '',
+        email: '',
+        phone: '',
+        nationality: '',
+        language: '',
+        role: preselectedRole,
+        buyerType: undefined,
+        message: '',
+      });
     }
-  }, [isOpen]);
+  }, [isOpen, form, preselectedRole]);
+
+  // Update role when preselectedRole changes
+  useEffect(() => {
+    if (preselectedRole && isOpen) {
+      form.setValue('role', preselectedRole);
+    }
+  }, [preselectedRole, isOpen, form]);
 
   // Real-time email validation
   const validateEmailRealtime = (email: string) => {
@@ -114,20 +123,6 @@ const InquiryFormModal = ({
       setEmailStatus('valid');
     } else {
       setEmailStatus('invalid');
-    }
-  };
-
-  // Real-time phone validation
-  const validatePhoneRealtime = (phone: string) => {
-    if (!phone) {
-      setPhoneStatus('idle');
-      return;
-    }
-    const cleaned = phone.replace(/[\s\-\(\)]/g, '');
-    if (phoneRegex.test(cleaned) || /^\+\d{7,15}$/.test(cleaned)) {
-      setPhoneStatus('valid');
-    } else {
-      setPhoneStatus('invalid');
     }
   };
 
@@ -144,28 +139,40 @@ const InquiryFormModal = ({
   const completeSubmission = async (data: InquiryFormData) => {
     setIsSubmitting(true);
     try {
-      const normalizedPhone = normalizePhone(data.phone);
-      const normalizedEmail = data.email.toLowerCase().trim();
-
-      // Determine contact type from role
-      const contactType = context?.role === 'broker' ? 'broker' : 'client';
-
-      // 1) Save lead to CRM immediately (non-negotiable)
-      const leadCaptured = await captureLead({
-        email: normalizedEmail,
-        fullName: data.fullName,
-        phone: normalizedPhone,
-        nationality: data.nationality,
-        language: data.language,
-      }, source, contactType);
-
-      if (!leadCaptured) {
-        throw new Error('Lead capture failed');
+      // Validate phone using PhoneInput validation
+      const phoneValidation = getPhoneValidation(data.phone);
+      if (!phoneValidation.isValid) {
+        toast.error(phoneValidation.message);
+        setIsSubmitting(false);
+        return;
       }
 
-      // 2) Best-effort admin notification (must NOT block the user submission)
+      const normalizedPhone = data.phone.replace(/[\s\-\(\)]/g, '');
+      const normalizedEmail = data.email.toLowerCase().trim();
+
+      // Call backend edge function to capture lead
+      const { data: captureResult, error: captureError } = await supabase.functions.invoke('capture-lead', {
+        body: {
+          email: normalizedEmail,
+          fullName: data.fullName,
+          phone: normalizedPhone,
+          nationality: data.nationality,
+          language: data.language,
+          source: source,
+          pageSource: typeof window !== 'undefined' ? window.location.pathname : null,
+          role: data.role,
+          buyerType: data.buyerType,
+          message: data.message,
+        },
+      });
+
+      if (captureError || (captureResult as any)?.error) {
+        throw new Error((captureResult as any)?.error || captureError?.message || 'Failed to save lead');
+      }
+
+      // Best-effort admin notification (must NOT block the user submission)
       try {
-        const { data: notifyData, error: notifyError } = await supabase.functions.invoke('send-inquiry-email', {
+        await supabase.functions.invoke('send-inquiry-email', {
           body: {
             ...data,
             phone: normalizedPhone,
@@ -174,17 +181,24 @@ const InquiryFormModal = ({
             propertyName,
             context: {
               ...context,
+              role: data.role,
+              buyerType: data.buyerType || '',
               emailVerified: emailVerified ? 'Yes' : 'No',
             },
           },
         });
-
-        if (notifyError || (notifyData as any)?.error) {
-          console.warn('Inquiry notification failed (lead still saved):', notifyError || (notifyData as any)?.error);
-        }
       } catch (notifyErr) {
         console.warn('Inquiry notification exception (lead still saved):', notifyErr);
       }
+
+      // Save to localStorage for future forms
+      localStorage.setItem('jj_captured_lead', JSON.stringify({
+        email: normalizedEmail,
+        fullName: data.fullName,
+        phone: normalizedPhone,
+        nationality: data.nationality,
+        language: data.language,
+      }));
 
       setIsSuccess(true);
       toast.success('✅ Thank you! Our team will contact you shortly.');
@@ -194,7 +208,6 @@ const InquiryFormModal = ({
         onClose();
         form.reset();
         setEmailStatus('idle');
-        setPhoneStatus('idle');
         setEmailVerified(false);
         setPendingFormData(null);
       }, 3000);
@@ -215,6 +228,19 @@ const InquiryFormModal = ({
   };
 
   const onSubmit = async (data: InquiryFormData) => {
+    // Validate phone before proceeding
+    const phoneValidation = getPhoneValidation(data.phone);
+    if (!phoneValidation.isValid) {
+      form.setError('phone', { message: phoneValidation.message });
+      return;
+    }
+
+    // If buyer role but no buyer type selected
+    if (data.role === 'buyer' && !data.buyerType) {
+      form.setError('buyerType', { message: 'Please select if you are a Homeowner or Investor' });
+      return;
+    }
+
     // If verification is required and email not verified, show OTP modal
     if (requireVerification && !emailVerified) {
       setPendingFormData(data);
@@ -230,7 +256,7 @@ const InquiryFormModal = ({
     <>
       <Dialog open={isOpen} onOpenChange={(open) => !open && onClose()}>
         <DialogContent 
-          className="bg-black border border-zinc-800 text-white max-w-lg p-0 overflow-hidden"
+          className="bg-black border border-zinc-800 text-white max-w-lg p-0 overflow-hidden max-h-[90vh] overflow-y-auto"
           dir={isRTL ? 'rtl' : 'ltr'}
         >
           {/* Premium top gradient glow */}
@@ -286,6 +312,107 @@ const InquiryFormModal = ({
 
               <Form {...form}>
                 <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-4">
+                  {/* ROLE SELECTION - Mandatory */}
+                  <FormField
+                    control={form.control}
+                    name="role"
+                    render={({ field }) => (
+                      <FormItem>
+                        <FormLabel className="text-zinc-400 text-sm">I am a... *</FormLabel>
+                        <div className="grid grid-cols-3 gap-2">
+                          <button
+                            type="button"
+                            onClick={() => {
+                              field.onChange('buyer');
+                              if (form.getValues('buyerType')) {
+                                // Keep existing buyer type
+                              }
+                            }}
+                            className={`p-3 rounded-lg border transition-all duration-200 flex flex-col items-center gap-1 ${
+                              field.value === 'buyer' 
+                                ? 'border-gold bg-gold/10 text-gold' 
+                                : 'border-zinc-700 bg-zinc-900/50 text-zinc-400 hover:border-zinc-600'
+                            }`}
+                          >
+                            <Target className="w-5 h-5" />
+                            <span className="text-xs font-medium">Buyer</span>
+                          </button>
+                          <button
+                            type="button"
+                            onClick={() => {
+                              field.onChange('broker');
+                              form.setValue('buyerType', undefined);
+                            }}
+                            className={`p-3 rounded-lg border transition-all duration-200 flex flex-col items-center gap-1 ${
+                              field.value === 'broker' 
+                                ? 'border-gold bg-gold/10 text-gold' 
+                                : 'border-zinc-700 bg-zinc-900/50 text-zinc-400 hover:border-zinc-600'
+                            }`}
+                          >
+                            <Briefcase className="w-5 h-5" />
+                            <span className="text-xs font-medium">Broker</span>
+                          </button>
+                          <button
+                            type="button"
+                            onClick={() => {
+                              field.onChange('visitor');
+                              form.setValue('buyerType', undefined);
+                            }}
+                            className={`p-3 rounded-lg border transition-all duration-200 flex flex-col items-center gap-1 ${
+                              field.value === 'visitor' 
+                                ? 'border-gold bg-gold/10 text-gold' 
+                                : 'border-zinc-700 bg-zinc-900/50 text-zinc-400 hover:border-zinc-600'
+                            }`}
+                          >
+                            <Users className="w-5 h-5" />
+                            <span className="text-xs font-medium">Visitor</span>
+                          </button>
+                        </div>
+                        <FormMessage className="text-red-400 text-xs" />
+                      </FormItem>
+                    )}
+                  />
+
+                  {/* BUYER TYPE - Only shown when Buyer is selected */}
+                  {watchRole === 'buyer' && (
+                    <FormField
+                      control={form.control}
+                      name="buyerType"
+                      render={({ field }) => (
+                        <FormItem>
+                          <FormLabel className="text-zinc-400 text-sm">Looking to... *</FormLabel>
+                          <div className="grid grid-cols-2 gap-2">
+                            <button
+                              type="button"
+                              onClick={() => field.onChange('homeowner')}
+                              className={`p-3 rounded-lg border transition-all duration-200 flex items-center justify-center gap-2 ${
+                                field.value === 'homeowner' 
+                                  ? 'border-gold bg-gold/10 text-gold' 
+                                  : 'border-zinc-700 bg-zinc-900/50 text-zinc-400 hover:border-zinc-600'
+                              }`}
+                            >
+                              <Home className="w-4 h-4" />
+                              <span className="text-sm font-medium">Buy a Home</span>
+                            </button>
+                            <button
+                              type="button"
+                              onClick={() => field.onChange('investor')}
+                              className={`p-3 rounded-lg border transition-all duration-200 flex items-center justify-center gap-2 ${
+                                field.value === 'investor' 
+                                  ? 'border-gold bg-gold/10 text-gold' 
+                                  : 'border-zinc-700 bg-zinc-900/50 text-zinc-400 hover:border-zinc-600'
+                              }`}
+                            >
+                              <TrendingUp className="w-4 h-4" />
+                              <span className="text-sm font-medium">Invest</span>
+                            </button>
+                          </div>
+                          <FormMessage className="text-red-400 text-xs" />
+                        </FormItem>
+                      )}
+                    />
+                  )}
+
                   <FormField
                     control={form.control}
                     name="fullName"
@@ -344,33 +471,14 @@ const InquiryFormModal = ({
                       name="phone"
                       render={({ field }) => (
                         <FormItem>
-                          <FormLabel className="text-zinc-400 text-sm flex items-center gap-2">
-                            {t('inquiry.phone')} *
-                            {phoneStatus === 'valid' && <CheckCircle2 className="w-4 h-4 text-green-500" />}
-                            {phoneStatus === 'invalid' && <XCircle className="w-4 h-4 text-red-500" />}
-                          </FormLabel>
+                          <FormLabel className="text-zinc-400 text-sm">{t('inquiry.phone')} *</FormLabel>
                           <FormControl>
-                            <Input 
-                              {...field} 
-                              type="tel"
-                              onChange={(e) => {
-                                field.onChange(e);
-                                validatePhoneRealtime(e.target.value);
-                              }}
-                              className={`h-12 bg-zinc-900/80 text-white placeholder:text-zinc-500 rounded-lg ${
-                                phoneStatus === 'valid' ? 'border-green-500/50 focus:border-green-500' :
-                                phoneStatus === 'invalid' ? 'border-red-500/50 focus:border-red-500' :
-                                'border-zinc-700/50 focus:border-gold'
-                              }`}
-                              placeholder="+971 50 123 4567"
+                            <PhoneInput 
+                              value={field.value}
+                              onChange={field.onChange}
+                              showValidation={true}
                             />
                           </FormControl>
-                          {phoneStatus === 'invalid' && (
-                            <p className="text-red-400 text-xs mt-1">Please enter a valid phone number including country code</p>
-                          )}
-                          {phoneStatus === 'idle' && (
-                            <p className="text-xs text-zinc-500 mt-1">Include country code (e.g., +971)</p>
-                          )}
                           <FormMessage className="text-red-400 text-xs" />
                         </FormItem>
                       )}

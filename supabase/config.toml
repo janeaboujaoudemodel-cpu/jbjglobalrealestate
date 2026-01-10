@@ -1,5 +1,8 @@
 project_id = "mdafrewypkkrildjgtey"
 
+[functions.capture-lead]
+verify_jwt = false
+
 [functions.compare-projects]
 verify_jwt = true
 

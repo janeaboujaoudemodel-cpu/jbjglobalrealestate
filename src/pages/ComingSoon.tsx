@@ -7,9 +7,9 @@ import jbjMonogramDarkBg from "@/assets/jbj-monogram-dark-bg.png"; // Monogram o
 
 const ComingSoon = () => {
   const [isFormOpen, setIsFormOpen] = useState(false);
-  const [selectedRole, setSelectedRole] = useState<string>("");
+  const [selectedRole, setSelectedRole] = useState<'buyer' | 'broker' | 'visitor' | undefined>(undefined);
 
-  const openForm = (role: string) => {
+  const openForm = (role?: 'buyer' | 'broker' | 'visitor') => {
     setSelectedRole(role);
     setIsFormOpen(true);
   };
@@ -102,7 +102,7 @@ const ComingSoon = () => {
 
             {/* Fill the Form Button */}
             <button
-              onClick={() => openForm("general")}
+              onClick={() => openForm()}
               className="mb-8 px-8 py-3 bg-gradient-to-r from-gold via-gold-light to-gold text-black font-semibold rounded-lg hover:opacity-90 transition-opacity shadow-xl shadow-gold/20"
             >
               Fill the Form
@@ -222,8 +222,8 @@ const ComingSoon = () => {
       <InquiryFormModal
         isOpen={isFormOpen}
         onClose={() => setIsFormOpen(false)}
-        source={`coming-soon-${selectedRole}`}
-        context={{ role: selectedRole }}
+        source={selectedRole ? `coming-soon-${selectedRole}` : 'coming-soon'}
+        preselectedRole={selectedRole}
       />
     </>
   );
