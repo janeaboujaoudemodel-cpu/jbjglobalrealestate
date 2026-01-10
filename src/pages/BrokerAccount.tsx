@@ -11,6 +11,7 @@ import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { supabase } from "@/integrations/supabase/client";
 import { useAuth } from "@/contexts/AuthContext";
 import { useUserRole } from "@/hooks/useUserRole";
+import { AdminTasksPanel } from "@/components/crm/AdminTasksPanel";
 import {
   User,
   GraduationCap,
@@ -30,7 +31,8 @@ import {
   Award,
   Gift,
   Building2,
-  FileSignature
+  FileSignature,
+  ListTodo
 } from "lucide-react";
 import { toast } from "sonner";
 import { format, startOfWeek, endOfWeek, startOfMonth, endOfMonth, subDays } from "date-fns";
@@ -269,8 +271,12 @@ const BrokerAccount = () => {
           </div>
 
           <Tabs defaultValue="overview" className="space-y-6">
-            <TabsList className="grid w-full grid-cols-5">
+            <TabsList className="grid w-full grid-cols-6">
               <TabsTrigger value="overview">Overview</TabsTrigger>
+              <TabsTrigger value="tasks" className="flex items-center gap-1">
+                <ListTodo className="h-3 w-3" />
+                My Tasks
+              </TabsTrigger>
               <TabsTrigger value="courses">Courses</TabsTrigger>
               <TabsTrigger value="calls">Calls</TabsTrigger>
               <TabsTrigger value="chats">Chats</TabsTrigger>
@@ -392,6 +398,10 @@ const BrokerAccount = () => {
                   </div>
                 </CardContent>
               </Card>
+            </TabsContent>
+
+            <TabsContent value="tasks">
+              <AdminTasksPanel />
             </TabsContent>
 
             <TabsContent value="courses">
