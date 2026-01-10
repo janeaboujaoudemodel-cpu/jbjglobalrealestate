@@ -35,7 +35,10 @@ import {
   Eye,
   Send,
   RefreshCw,
-  Loader2
+  Loader2,
+  Sparkles,
+  Search,
+  LayoutDashboard
 } from "lucide-react";
 import {
   Dialog,
@@ -43,7 +46,6 @@ import {
   DialogDescription,
   DialogHeader,
   DialogTitle,
-  DialogTrigger,
 } from "@/components/ui/dialog";
 import {
   Select,
@@ -54,6 +56,9 @@ import {
 } from "@/components/ui/select";
 import { Switch } from "@/components/ui/switch";
 import { Label } from "@/components/ui/label";
+import ExecutiveChatPanel from "@/components/executive/ExecutiveChatPanel";
+import IntegrationWizard from "@/components/executive/IntegrationWizard";
+import SocialMediaGrid from "@/components/executive/SocialMediaGrid";
 
 type CommCategory = 'important' | 'routine' | 'recruitment' | 'flagged' | 'spam';
 type CommChannel = 'email' | 'whatsapp' | 'instagram' | 'facebook' | 'linkedin' | 'phone' | 'sms';
@@ -135,6 +140,12 @@ export default function ExecutiveAssistant() {
   const [loading, setLoading] = useState(true);
   const [selectedComm, setSelectedComm] = useState<Communication | null>(null);
   const [humanResponse, setHumanResponse] = useState("");
+  const [isChatOpen, setIsChatOpen] = useState(false);
+  const [integrationWizard, setIntegrationWizard] = useState<{
+    isOpen: boolean;
+    type: 'email' | 'phone' | 'whatsapp' | 'social';
+  }>({ isOpen: false, type: 'email' });
+  const [globalSearch, setGlobalSearch] = useState("");
   
   // New response form
   const [newResponseKeywords, setNewResponseKeywords] = useState("");
@@ -344,37 +355,109 @@ export default function ExecutiveAssistant() {
 
   return (
     <MainLayout>
-      <div className="container mx-auto px-4 py-8 max-w-7xl">
-        {/* Header */}
-        <motion.div 
-          initial={{ opacity: 0, y: -20 }}
-          animate={{ opacity: 1, y: 0 }}
-          className="mb-8"
-        >
-          <div className="flex items-center gap-3 mb-2">
-            <div className="p-3 rounded-full bg-gradient-to-br from-primary/20 to-primary/5">
-              <Brain className="h-8 w-8 text-primary" />
-            </div>
-            <div>
-              <h1 className="text-3xl font-bold">AI Executive Assistant</h1>
-              <p className="text-muted-foreground">Your intelligent communication command center</p>
-            </div>
-          </div>
-        </motion.div>
-
-        {/* Stats Cards */}
-        <div className="grid grid-cols-2 md:grid-cols-5 gap-4 mb-8">
-          <Card className="bg-gradient-to-br from-background to-muted/30">
-            <CardContent className="p-4">
-              <div className="flex items-center justify-between">
-                <div>
-                  <p className="text-sm text-muted-foreground">Total</p>
-                  <p className="text-2xl font-bold">{stats.total}</p>
+      <div className="min-h-screen bg-[#0A0A0A]">
+        <div className="container mx-auto px-4 py-8 max-w-7xl">
+          {/* Premium Header */}
+          <motion.div 
+            initial={{ opacity: 0, y: -20 }}
+            animate={{ opacity: 1, y: 0 }}
+            className="mb-8"
+          >
+            <div className="flex items-center justify-between flex-wrap gap-4">
+              <div className="flex items-center gap-4">
+                <div className="p-4 rounded-2xl bg-gradient-to-br from-gold/20 to-gold/5 border border-gold/30">
+                  <Sparkles className="h-8 w-8 text-gold" />
                 </div>
-                <Mail className="h-8 w-8 text-muted-foreground/50" />
+                <div>
+                  <h1 className="text-3xl font-bold text-white">JBJ Executive AI</h1>
+                  <p className="text-gray-400">Your intelligent command center</p>
+                </div>
               </div>
-            </CardContent>
-          </Card>
+              
+              {/* Global Search */}
+              <div className="flex items-center gap-3">
+                <div className="relative">
+                  <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-gray-500" />
+                  <Input
+                    placeholder="Search across all tools..."
+                    value={globalSearch}
+                    onChange={(e) => setGlobalSearch(e.target.value)}
+                    className="w-64 pl-10 bg-[#1A1A1A] border-gold/20 text-white placeholder:text-gray-500"
+                  />
+                </div>
+                <Button
+                  onClick={() => setIsChatOpen(true)}
+                  className="bg-gold hover:bg-gold/90 text-black"
+                >
+                  <MessageSquare className="h-4 w-4 mr-2" />
+                  Chat with AI
+                </Button>
+              </div>
+            </div>
+          </motion.div>
+
+          {/* Stats Cards - Premium Dark Theme */}
+          <div className="grid grid-cols-2 md:grid-cols-5 gap-4 mb-8">
+            <Card className="bg-[#0E0E0E] border-gold/20">
+              <CardContent className="p-4">
+                <div className="flex items-center justify-between">
+                  <div>
+                    <p className="text-sm text-gray-400">Total</p>
+                    <p className="text-2xl font-bold text-white">{stats.total}</p>
+                  </div>
+                  <Mail className="h-8 w-8 text-gold/50" />
+                </div>
+              </CardContent>
+            </Card>
+            
+            <Card className="bg-[#0E0E0E] border-red-500/30">
+              <CardContent className="p-4">
+                <div className="flex items-center justify-between">
+                  <div>
+                    <p className="text-sm text-red-400">Important</p>
+                    <p className="text-2xl font-bold text-red-400">{stats.important}</p>
+                  </div>
+                  <Bell className="h-8 w-8 text-red-500/50" />
+                </div>
+              </CardContent>
+            </Card>
+            
+            <Card className="bg-[#0E0E0E] border-yellow-500/30">
+              <CardContent className="p-4">
+                <div className="flex items-center justify-between">
+                  <div>
+                    <p className="text-sm text-yellow-400">Needs Review</p>
+                    <p className="text-2xl font-bold text-yellow-400">{stats.flagged}</p>
+                  </div>
+                  <AlertTriangle className="h-8 w-8 text-yellow-500/50" />
+                </div>
+              </CardContent>
+            </Card>
+            
+            <Card className="bg-[#0E0E0E] border-green-500/30">
+              <CardContent className="p-4">
+                <div className="flex items-center justify-between">
+                  <div>
+                    <p className="text-sm text-green-400">Auto Handled</p>
+                    <p className="text-2xl font-bold text-green-400">{stats.autoResponded}</p>
+                  </div>
+                  <Zap className="h-8 w-8 text-green-500/50" />
+                </div>
+              </CardContent>
+            </Card>
+            
+            <Card className="bg-[#0E0E0E] border-blue-500/30">
+              <CardContent className="p-4">
+                <div className="flex items-center justify-between">
+                  <div>
+                    <p className="text-sm text-blue-400">HR Requests</p>
+                    <p className="text-2xl font-bold text-blue-400">{stats.recruitment}</p>
+                  </div>
+                  <Users className="h-8 w-8 text-blue-500/50" />
+                </div>
+              </CardContent>
+            </Card>
+          </div>
           
           <Card className="bg-gradient-to-br from-red-500/10 to-red-500/5 border-red-500/20">
             <CardContent className="p-4">
