@@ -3,7 +3,7 @@ import { createClient } from "https://esm.sh/@supabase/supabase-js@2";
 
 const corsHeaders = {
   "Access-Control-Allow-Origin": "*",
-  "Access-Control-Allow-Headers": "authorization, x-client-info, apikey, content-type",
+  "Access-Control-Allow-Headers": "authorization, x-client-info, apikey, content-type, cf-connecting-ip, x-forwarded-for, x-real-ip",
 };
 
 interface LeadCaptureRequest {
@@ -17,15 +17,44 @@ interface LeadCaptureRequest {
   ageRange?: string;
   source: string;
   pageSource?: string;
-  subSource?: string; // Specific form name (e.g., "Market Report Download", "Property Inquiry")
+  subSource?: string;
   contactType?: 'client' | 'broker' | 'investor' | 'visitor';
   role?: 'buyer' | 'broker' | 'visitor';
   buyerType?: 'homeowner' | 'investor';
   message?: string;
+  detectedCity?: string;
+  detectedCountry?: string;
+}
+
+// Get location from IP using free ipapi.co service
+async function getLocationFromIP(ip: string): Promise<{ city: string | null; country: string | null }> {
+  try {
+    // Skip private/local IPs
+    if (ip === '127.0.0.1' || ip.startsWith('192.168.') || ip.startsWith('10.') || ip === '::1') {
+      return { city: null, country: null };
+    }
+    
+    const response = await fetch(`https://ipapi.co/${ip}/json/`, {
+      headers: { 'User-Agent': 'JBJ-Global-Real-Estate/1.0' }
+    });
+    
+    if (!response.ok) {
+      console.log('IP geolocation failed:', response.status);
+      return { city: null, country: null };
+    }
+    
+    const data = await response.json();
+    return {
+      city: data.city || null,
+      country: data.country_name || null
+    };
+  } catch (error) {
+    console.error('IP geolocation error:', error);
+    return { city: null, country: null };
+  }
 }
 
 serve(async (req: Request): Promise<Response> => {
-  // Handle CORS preflight
   if (req.method === "OPTIONS") {
     return new Response(null, { headers: corsHeaders });
   }
@@ -33,7 +62,6 @@ serve(async (req: Request): Promise<Response> => {
   try {
     const data: LeadCaptureRequest = await req.json();
 
-    // Validate required fields
     if (!data.email || !data.source) {
       return new Response(
         JSON.stringify({ error: "Email and source are required" }),
@@ -41,13 +69,25 @@ serve(async (req: Request): Promise<Response> => {
       );
     }
 
-    // Validate email format
     const emailRegex = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
     if (!emailRegex.test(data.email)) {
       return new Response(
         JSON.stringify({ error: "Invalid email format" }),
         { status: 400, headers: { ...corsHeaders, "Content-Type": "application/json" } }
       );
+    }
+
+    // Get client IP for geolocation
+    const clientIP = req.headers.get('cf-connecting-ip') || 
+                     req.headers.get('x-forwarded-for')?.split(',')[0]?.trim() || 
+                     req.headers.get('x-real-ip') || 
+                     '';
+    
+    // Auto-detect location from IP if not provided
+    let detectedLocation = { city: data.detectedCity || null, country: data.detectedCountry || null };
+    if (!data.currentLocation && clientIP) {
+      detectedLocation = await getLocationFromIP(clientIP);
+      console.log('Detected location from IP:', detectedLocation);
     }
 
     const supabaseUrl = Deno.env.get("SUPABASE_URL")!;
@@ -62,7 +102,7 @@ serve(async (req: Request): Promise<Response> => {
     if (data.role === 'broker') {
       contactType = 'broker';
     } else if (data.role === 'visitor') {
-      contactType = 'client'; // Visitors are potential clients
+      contactType = 'client';
     } else if (data.buyerType === 'investor') {
       contactType = 'investor';
     }
@@ -74,6 +114,10 @@ serve(async (req: Request): Promise<Response> => {
     if (data.buyerType) tags.push(`buyer-type-${data.buyerType}`);
     if (data.pageSource) tags.push(`page-${data.pageSource.replace(/\//g, '-').replace(/^-/, '')}`);
 
+    // Use provided location or detected location
+    const locationCity = data.currentLocation || detectedLocation.city;
+    const locationCountry = detectedLocation.country;
+
     // 1. Upsert to leads table
     const { error: leadsError } = await supabase
       .from('leads')
@@ -84,9 +128,9 @@ serve(async (req: Request): Promise<Response> => {
         nationality: data.nationality || null,
         language: data.language || null,
         birthday: data.birthday || null,
-        current_location: data.currentLocation || null,
+        current_location: locationCity || null,
         age_range: data.ageRange || null,
-        source: 'website', // Must match allowed sources in RLS
+        source: 'website',
         page_source: data.pageSource || null,
       }, {
         onConflict: 'email',
@@ -95,7 +139,6 @@ serve(async (req: Request): Promise<Response> => {
 
     if (leadsError) {
       console.error('Error saving to leads table:', leadsError);
-      // Don't fail - continue to CRM
     }
 
     // 2. Check if lead already exists in crm_leads
@@ -106,7 +149,6 @@ serve(async (req: Request): Promise<Response> => {
       .maybeSingle();
 
     if (existingLead) {
-      // Update existing lead
       const { error: updateError } = await supabase
         .from('crm_leads')
         .update({
@@ -114,7 +156,8 @@ serve(async (req: Request): Promise<Response> => {
           phone_e164: normalizedPhone,
           nationality: data.nationality || null,
           preferred_language: data.language || null,
-          current_location_country: data.currentLocation || null,
+          current_location_country: locationCountry || null,
+          current_location_city: locationCity || null,
           age_range: data.ageRange || null,
           updated_at: new Date().toISOString(),
         })
@@ -126,7 +169,6 @@ serve(async (req: Request): Promise<Response> => {
 
       console.log('Updated existing CRM lead:', existingLead.id);
     } else {
-      // Insert new lead to crm_leads
       const { data: newLead, error: crmError } = await supabase
         .from('crm_leads')
         .insert({
@@ -135,7 +177,8 @@ serve(async (req: Request): Promise<Response> => {
           phone_e164: normalizedPhone,
           nationality: data.nationality || null,
           preferred_language: data.language || null,
-          current_location_country: data.currentLocation || null,
+          current_location_country: locationCountry || null,
+          current_location_city: locationCity || null,
           age_range: data.ageRange || null,
           source: data.source,
           owner_type: 'company_assigned',

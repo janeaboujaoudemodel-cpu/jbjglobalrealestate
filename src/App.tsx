@@ -5,6 +5,7 @@ import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { BrowserRouter, Routes, Route, Navigate } from "react-router-dom";
 import { AuthProvider } from "@/contexts/AuthContext";
 import { LanguageProvider } from "@/contexts/LanguageContext";
+import { ActiveLeadProvider } from "@/contexts/ActiveLeadContext";
 import ScrollToTop from "@/components/ScrollToTop";
 import AdminBypass from "@/components/AdminBypass";
 import MainLayout from "@/components/MainLayout";
@@ -89,6 +90,7 @@ const App = () => (
         <Sonner />
         <BrowserRouter>
           <AuthProvider>
+            <ActiveLeadProvider>
             <ScrollToTop />
             {/* Auth route is always accessible for admin login */}
             <Routes>
@@ -176,6 +178,7 @@ const App = () => (
                 </AdminBypass>
               } />
             </Routes>
+            </ActiveLeadProvider>
           </AuthProvider>
         </BrowserRouter>
       </LanguageProvider>
