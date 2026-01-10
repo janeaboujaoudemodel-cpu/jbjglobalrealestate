@@ -2321,6 +2321,410 @@ export type Database = {
         }
         Relationships: []
       }
+      executive_assistant_settings: {
+        Row: {
+          assistant_name: string | null
+          auto_reply_enabled: boolean | null
+          created_at: string | null
+          daily_report_time: string | null
+          encryption_key_hash: string | null
+          id: string
+          report_delivery_method: string | null
+          response_speed: string | null
+          updated_at: string | null
+          user_id: string
+          voice_style: string | null
+        }
+        Insert: {
+          assistant_name?: string | null
+          auto_reply_enabled?: boolean | null
+          created_at?: string | null
+          daily_report_time?: string | null
+          encryption_key_hash?: string | null
+          id?: string
+          report_delivery_method?: string | null
+          response_speed?: string | null
+          updated_at?: string | null
+          user_id: string
+          voice_style?: string | null
+        }
+        Update: {
+          assistant_name?: string | null
+          auto_reply_enabled?: boolean | null
+          created_at?: string | null
+          daily_report_time?: string | null
+          encryption_key_hash?: string | null
+          id?: string
+          report_delivery_method?: string | null
+          response_speed?: string | null
+          updated_at?: string | null
+          user_id?: string
+          voice_style?: string | null
+        }
+        Relationships: []
+      }
+      executive_audit_logs: {
+        Row: {
+          action: string
+          audit_type: string
+          audited_at: string | null
+          compliance_status: string | null
+          entity_id: string | null
+          entity_type: string | null
+          id: string
+          issues_found: string[] | null
+          new_state: Json | null
+          previous_state: Json | null
+          severity: string | null
+          user_id: string
+        }
+        Insert: {
+          action: string
+          audit_type: string
+          audited_at?: string | null
+          compliance_status?: string | null
+          entity_id?: string | null
+          entity_type?: string | null
+          id?: string
+          issues_found?: string[] | null
+          new_state?: Json | null
+          previous_state?: Json | null
+          severity?: string | null
+          user_id: string
+        }
+        Update: {
+          action?: string
+          audit_type?: string
+          audited_at?: string | null
+          compliance_status?: string | null
+          entity_id?: string | null
+          entity_type?: string | null
+          id?: string
+          issues_found?: string[] | null
+          new_state?: Json | null
+          previous_state?: Json | null
+          severity?: string | null
+          user_id?: string
+        }
+        Relationships: []
+      }
+      executive_budget_categories: {
+        Row: {
+          category_name: string
+          color_code: string | null
+          created_at: string | null
+          current_spent: number | null
+          icon_name: string | null
+          id: string
+          is_active: boolean | null
+          monthly_limit: number | null
+          priority_level: number | null
+          updated_at: string | null
+          user_id: string
+        }
+        Insert: {
+          category_name: string
+          color_code?: string | null
+          created_at?: string | null
+          current_spent?: number | null
+          icon_name?: string | null
+          id?: string
+          is_active?: boolean | null
+          monthly_limit?: number | null
+          priority_level?: number | null
+          updated_at?: string | null
+          user_id: string
+        }
+        Update: {
+          category_name?: string
+          color_code?: string | null
+          created_at?: string | null
+          current_spent?: number | null
+          icon_name?: string | null
+          id?: string
+          is_active?: boolean | null
+          monthly_limit?: number | null
+          priority_level?: number | null
+          updated_at?: string | null
+          user_id?: string
+        }
+        Relationships: []
+      }
+      executive_communications: {
+        Row: {
+          ai_response_encrypted: string | null
+          channel: string
+          confidence_score: number | null
+          contact_identifier: string
+          contact_name: string | null
+          created_at: string | null
+          direction: string
+          flagged_reason: string | null
+          handled_by: string | null
+          id: string
+          message_content_encrypted: string
+          phone_line: string | null
+          responded_at: string | null
+          status: string | null
+          subject: string | null
+          user_id: string
+        }
+        Insert: {
+          ai_response_encrypted?: string | null
+          channel: string
+          confidence_score?: number | null
+          contact_identifier: string
+          contact_name?: string | null
+          created_at?: string | null
+          direction: string
+          flagged_reason?: string | null
+          handled_by?: string | null
+          id?: string
+          message_content_encrypted: string
+          phone_line?: string | null
+          responded_at?: string | null
+          status?: string | null
+          subject?: string | null
+          user_id: string
+        }
+        Update: {
+          ai_response_encrypted?: string | null
+          channel?: string
+          confidence_score?: number | null
+          contact_identifier?: string
+          contact_name?: string | null
+          created_at?: string | null
+          direction?: string
+          flagged_reason?: string | null
+          handled_by?: string | null
+          id?: string
+          message_content_encrypted?: string
+          phone_line?: string | null
+          responded_at?: string | null
+          status?: string | null
+          subject?: string | null
+          user_id?: string
+        }
+        Relationships: []
+      }
+      executive_daily_reports: {
+        Row: {
+          broker_summary: Json | null
+          communications_flagged: number | null
+          communications_handled: number | null
+          created_at: string | null
+          delivered_at: string | null
+          delivered_via: string | null
+          department_breakdown: Json | null
+          financial_summary: Json | null
+          id: string
+          marketing_summary: Json | null
+          recommendations: string[] | null
+          report_date: string
+          report_excel_url: string | null
+          report_pdf_url: string | null
+          summary_text: string
+          tasks_completed: number | null
+          tasks_in_progress: number | null
+          tasks_pending: number | null
+          user_id: string
+        }
+        Insert: {
+          broker_summary?: Json | null
+          communications_flagged?: number | null
+          communications_handled?: number | null
+          created_at?: string | null
+          delivered_at?: string | null
+          delivered_via?: string | null
+          department_breakdown?: Json | null
+          financial_summary?: Json | null
+          id?: string
+          marketing_summary?: Json | null
+          recommendations?: string[] | null
+          report_date: string
+          report_excel_url?: string | null
+          report_pdf_url?: string | null
+          summary_text: string
+          tasks_completed?: number | null
+          tasks_in_progress?: number | null
+          tasks_pending?: number | null
+          user_id: string
+        }
+        Update: {
+          broker_summary?: Json | null
+          communications_flagged?: number | null
+          communications_handled?: number | null
+          created_at?: string | null
+          delivered_at?: string | null
+          delivered_via?: string | null
+          department_breakdown?: Json | null
+          financial_summary?: Json | null
+          id?: string
+          marketing_summary?: Json | null
+          recommendations?: string[] | null
+          report_date?: string
+          report_excel_url?: string | null
+          report_pdf_url?: string | null
+          summary_text?: string
+          tasks_completed?: number | null
+          tasks_in_progress?: number | null
+          tasks_pending?: number | null
+          user_id?: string
+        }
+        Relationships: []
+      }
+      executive_department_tasks: {
+        Row: {
+          assigned_ai: string | null
+          completed_at: string | null
+          created_at: string | null
+          department: string
+          id: string
+          input_data: Json | null
+          output_data: Json | null
+          parent_task_id: string | null
+          priority: string | null
+          request_id: string | null
+          status: string | null
+          task_description: string
+          user_id: string
+        }
+        Insert: {
+          assigned_ai?: string | null
+          completed_at?: string | null
+          created_at?: string | null
+          department: string
+          id?: string
+          input_data?: Json | null
+          output_data?: Json | null
+          parent_task_id?: string | null
+          priority?: string | null
+          request_id?: string | null
+          status?: string | null
+          task_description: string
+          user_id: string
+        }
+        Update: {
+          assigned_ai?: string | null
+          completed_at?: string | null
+          created_at?: string | null
+          department?: string
+          id?: string
+          input_data?: Json | null
+          output_data?: Json | null
+          parent_task_id?: string | null
+          priority?: string | null
+          request_id?: string | null
+          status?: string | null
+          task_description?: string
+          user_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "executive_department_tasks_parent_task_id_fkey"
+            columns: ["parent_task_id"]
+            isOneToOne: false
+            referencedRelation: "executive_department_tasks"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      executive_financial_transactions: {
+        Row: {
+          ai_recommendation: string | null
+          amount: number
+          category: string
+          created_at: string | null
+          currency: string | null
+          description: string
+          flag_reason: string | null
+          id: string
+          is_flagged: boolean | null
+          is_recurring: boolean | null
+          merchant_name: string | null
+          payment_method: string | null
+          recurrence_pattern: string | null
+          source_file: string | null
+          subcategory: string | null
+          transaction_date: string
+          user_id: string
+        }
+        Insert: {
+          ai_recommendation?: string | null
+          amount: number
+          category: string
+          created_at?: string | null
+          currency?: string | null
+          description: string
+          flag_reason?: string | null
+          id?: string
+          is_flagged?: boolean | null
+          is_recurring?: boolean | null
+          merchant_name?: string | null
+          payment_method?: string | null
+          recurrence_pattern?: string | null
+          source_file?: string | null
+          subcategory?: string | null
+          transaction_date: string
+          user_id: string
+        }
+        Update: {
+          ai_recommendation?: string | null
+          amount?: number
+          category?: string
+          created_at?: string | null
+          currency?: string | null
+          description?: string
+          flag_reason?: string | null
+          id?: string
+          is_flagged?: boolean | null
+          is_recurring?: boolean | null
+          merchant_name?: string | null
+          payment_method?: string | null
+          recurrence_pattern?: string | null
+          source_file?: string | null
+          subcategory?: string | null
+          transaction_date?: string
+          user_id?: string
+        }
+        Relationships: []
+      }
+      executive_training_samples: {
+        Row: {
+          context_notes: string | null
+          created_at: string | null
+          id: string
+          is_active: boolean | null
+          original_message: string
+          response_example: string
+          sample_type: string
+          tone_tags: string[] | null
+          user_id: string
+        }
+        Insert: {
+          context_notes?: string | null
+          created_at?: string | null
+          id?: string
+          is_active?: boolean | null
+          original_message: string
+          response_example: string
+          sample_type: string
+          tone_tags?: string[] | null
+          user_id: string
+        }
+        Update: {
+          context_notes?: string | null
+          created_at?: string | null
+          id?: string
+          is_active?: boolean | null
+          original_message?: string
+          response_example?: string
+          sample_type?: string
+          tone_tags?: string[] | null
+          user_id?: string
+        }
+        Relationships: []
+      }
       favorites: {
         Row: {
           created_at: string
