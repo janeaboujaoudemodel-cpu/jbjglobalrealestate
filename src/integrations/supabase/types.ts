@@ -2408,6 +2408,48 @@ export type Database = {
         }
         Relationships: []
       }
+      executive_automation_rules: {
+        Row: {
+          action_config: Json
+          created_at: string
+          execution_count: number | null
+          id: string
+          is_active: boolean | null
+          last_executed_at: string | null
+          rule_name: string
+          rule_type: string
+          trigger_conditions: Json
+          updated_at: string
+          user_id: string
+        }
+        Insert: {
+          action_config?: Json
+          created_at?: string
+          execution_count?: number | null
+          id?: string
+          is_active?: boolean | null
+          last_executed_at?: string | null
+          rule_name: string
+          rule_type: string
+          trigger_conditions?: Json
+          updated_at?: string
+          user_id: string
+        }
+        Update: {
+          action_config?: Json
+          created_at?: string
+          execution_count?: number | null
+          id?: string
+          is_active?: boolean | null
+          last_executed_at?: string | null
+          rule_name?: string
+          rule_type?: string
+          trigger_conditions?: Json
+          updated_at?: string
+          user_id?: string
+        }
+        Relationships: []
+      }
       executive_budget_categories: {
         Row: {
           category_name: string
@@ -2503,6 +2545,51 @@ export type Database = {
           responded_at?: string | null
           status?: string | null
           subject?: string | null
+          user_id?: string
+        }
+        Relationships: []
+      }
+      executive_conversation_memory: {
+        Row: {
+          confidence_score: number | null
+          created_at: string
+          expires_at: string | null
+          id: string
+          is_active: boolean | null
+          last_referenced_at: string | null
+          memory_key: string
+          memory_type: string
+          memory_value: string
+          reference_count: number | null
+          source: string | null
+          user_id: string
+        }
+        Insert: {
+          confidence_score?: number | null
+          created_at?: string
+          expires_at?: string | null
+          id?: string
+          is_active?: boolean | null
+          last_referenced_at?: string | null
+          memory_key: string
+          memory_type: string
+          memory_value: string
+          reference_count?: number | null
+          source?: string | null
+          user_id: string
+        }
+        Update: {
+          confidence_score?: number | null
+          created_at?: string
+          expires_at?: string | null
+          id?: string
+          is_active?: boolean | null
+          last_referenced_at?: string | null
+          memory_key?: string
+          memory_type?: string
+          memory_value?: string
+          reference_count?: number | null
+          source?: string | null
           user_id?: string
         }
         Relationships: []
@@ -2686,6 +2773,129 @@ export type Database = {
           subcategory?: string | null
           transaction_date?: string
           user_id?: string
+        }
+        Relationships: []
+      }
+      executive_integrations: {
+        Row: {
+          config: Json | null
+          created_at: string
+          credentials_encrypted: string | null
+          error_message: string | null
+          id: string
+          is_active: boolean | null
+          last_sync_at: string | null
+          service_name: string
+          service_type: string
+          sync_status: string | null
+          updated_at: string
+          user_id: string
+        }
+        Insert: {
+          config?: Json | null
+          created_at?: string
+          credentials_encrypted?: string | null
+          error_message?: string | null
+          id?: string
+          is_active?: boolean | null
+          last_sync_at?: string | null
+          service_name: string
+          service_type: string
+          sync_status?: string | null
+          updated_at?: string
+          user_id: string
+        }
+        Update: {
+          config?: Json | null
+          created_at?: string
+          credentials_encrypted?: string | null
+          error_message?: string | null
+          id?: string
+          is_active?: boolean | null
+          last_sync_at?: string | null
+          service_name?: string
+          service_type?: string
+          sync_status?: string | null
+          updated_at?: string
+          user_id?: string
+        }
+        Relationships: []
+      }
+      executive_knowledge_base: {
+        Row: {
+          access_count: number | null
+          category: string
+          content: string
+          created_at: string
+          id: string
+          importance_score: number | null
+          is_active: boolean | null
+          keywords: string[] | null
+          last_accessed_at: string | null
+          title: string
+          updated_at: string
+          user_id: string
+        }
+        Insert: {
+          access_count?: number | null
+          category: string
+          content: string
+          created_at?: string
+          id?: string
+          importance_score?: number | null
+          is_active?: boolean | null
+          keywords?: string[] | null
+          last_accessed_at?: string | null
+          title: string
+          updated_at?: string
+          user_id: string
+        }
+        Update: {
+          access_count?: number | null
+          category?: string
+          content?: string
+          created_at?: string
+          id?: string
+          importance_score?: number | null
+          is_active?: boolean | null
+          keywords?: string[] | null
+          last_accessed_at?: string | null
+          title?: string
+          updated_at?: string
+          user_id?: string
+        }
+        Relationships: []
+      }
+      executive_response_templates: {
+        Row: {
+          category: string
+          created_at: string
+          id: string
+          is_active: boolean | null
+          priority: number | null
+          response_template: string
+          tone: string | null
+          trigger_patterns: string[]
+        }
+        Insert: {
+          category: string
+          created_at?: string
+          id?: string
+          is_active?: boolean | null
+          priority?: number | null
+          response_template: string
+          tone?: string | null
+          trigger_patterns?: string[]
+        }
+        Update: {
+          category?: string
+          created_at?: string
+          id?: string
+          is_active?: boolean | null
+          priority?: number | null
+          response_template?: string
+          tone?: string | null
+          trigger_patterns?: string[]
         }
         Relationships: []
       }
