@@ -113,8 +113,9 @@ const VideoMeeting = () => {
   const [isInMeeting, setIsInMeeting] = useState(false);
   const [roomId, setRoomId] = useState(roomIdParam || '');
   const [userName, setUserName] = useState('');
-  const [videoEnabled, setVideoEnabled] = useState(true);
-  const [audioEnabled, setAudioEnabled] = useState(true);
+  const [videoEnabled, setVideoEnabled] = useState(false);
+  const [audioEnabled, setAudioEnabled] = useState(false);
+  const [showMediaPrompt, setShowMediaPrompt] = useState(false);
   const [isScreenSharing, setIsScreenSharing] = useState(false);
   const [participants, setParticipants] = useState<RemoteParticipant[]>([]);
   const [showParticipants, setShowParticipants] = useState(false);
@@ -260,7 +261,8 @@ const VideoMeeting = () => {
         handleRemoteStream
       );
 
-      const stream = await webrtcRef.current.initialize(videoEnabled, audioEnabled);
+      // Always start with camera/mic off for privacy
+      const stream = await webrtcRef.current.initialize(false, false);
       
       if (localVideoRef.current) {
         localVideoRef.current.srcObject = stream;
@@ -269,6 +271,9 @@ const VideoMeeting = () => {
       setRoomId(room);
       setIsInMeeting(true);
       setIsHost(!existingRoom || existingRoom === room);
+      
+      // Show media prompt to user
+      setShowMediaPrompt(true);
       
       // Update URL with room ID
       window.history.replaceState({}, '', `/video-meeting?room=${room}`);
@@ -1370,6 +1375,63 @@ const VideoMeeting = () => {
               </Button>
             </div>
           </div>
+        </DialogContent>
+      </Dialog>
+
+      {/* Media Prompt Dialog - Shows when joining meeting */}
+      <Dialog open={showMediaPrompt} onOpenChange={setShowMediaPrompt}>
+        <DialogContent className="bg-zinc-900 border-zinc-800 max-w-md">
+          <DialogHeader>
+            <DialogTitle className="text-white flex items-center gap-2">
+              <Shield className="w-5 h-5 text-green-400" />
+              Privacy First
+            </DialogTitle>
+            <DialogDescription className="text-zinc-400">
+              Your camera and microphone are OFF by default for your privacy. Enable them when you're ready to participate.
+            </DialogDescription>
+          </DialogHeader>
+          <div className="space-y-4 py-4">
+            <div className="p-4 bg-zinc-800/50 rounded-xl border border-zinc-700">
+              <p className="text-white text-sm mb-4 text-center">
+                Click the buttons below to enable your devices:
+              </p>
+              <div className="flex justify-center gap-4">
+                <Button
+                  variant={audioEnabled ? "default" : "outline"}
+                  onClick={() => {
+                    setAudioEnabled(true);
+                    webrtcRef.current?.toggleAudio(true);
+                    toast.success('Microphone enabled');
+                  }}
+                  className={audioEnabled ? "bg-green-600 hover:bg-green-700" : "border-zinc-600"}
+                >
+                  <Mic className="w-4 h-4 mr-2" />
+                  {audioEnabled ? 'Mic On' : 'Enable Mic'}
+                </Button>
+                <Button
+                  variant={videoEnabled ? "default" : "outline"}
+                  onClick={() => {
+                    setVideoEnabled(true);
+                    webrtcRef.current?.toggleVideo(true);
+                    toast.success('Camera enabled');
+                  }}
+                  className={videoEnabled ? "bg-green-600 hover:bg-green-700" : "border-zinc-600"}
+                >
+                  <Video className="w-4 h-4 mr-2" />
+                  {videoEnabled ? 'Camera On' : 'Enable Camera'}
+                </Button>
+              </div>
+            </div>
+            <Button
+              onClick={() => setShowMediaPrompt(false)}
+              className="w-full bg-red-500 hover:bg-red-600"
+            >
+              Continue to Meeting
+            </Button>
+          </div>
+          <p className="text-zinc-500 text-xs text-center">
+            🔒 End-to-end encrypted • No data shared without your permission
+          </p>
         </DialogContent>
       </Dialog>
     </div>

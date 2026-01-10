@@ -268,7 +268,7 @@ const benefits = [
 
 const AIHub = () => {
   return (
-    <AIAccessGate toolName="JBJ Assistant Hub">
+    <AIAccessGate toolName="JBJ Hub">
     <section className="relative w-full min-h-screen bg-black">
       {/* Hero Section */}
       <div className="relative py-24 md:py-32 overflow-hidden ai-hero-bg">
@@ -297,7 +297,7 @@ const AIHub = () => {
               <FreeAccessBadge />
               <span className="ai-tag inline-flex items-center gap-2">
                 <Sparkles className="w-4 h-4" />
-                JBJ AI-Powered Platform
+                All-in-One Platform
               </span>
             </motion.div>
 
@@ -306,9 +306,8 @@ const AIHub = () => {
               variants={fadeInUp}
               style={{ fontFamily: "Poppins, sans-serif" }}
             >
-              JBJ{" "}
               <span className="ai-gradient-text">
-                Assistant Hub
+                JBJ Hub
               </span>
             </motion.h1>
 
@@ -316,7 +315,7 @@ const AIHub = () => {
               className="text-zinc-300 text-lg md:text-xl max-w-2xl mx-auto mb-6 leading-relaxed"
               variants={fadeInUp}
             >
-              A suite of AI-enabled tools designed to support your real estate decisions in Dubai and beyond.
+              Your centralized dashboard for AI-powered real estate tools, business productivity, and professional communication.
             </motion.p>
 
             {/* AI Disclaimer */}
