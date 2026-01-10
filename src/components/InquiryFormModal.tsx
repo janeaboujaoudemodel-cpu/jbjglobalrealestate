@@ -150,7 +150,7 @@ const InquiryFormModal = ({
       const normalizedPhone = data.phone.replace(/[\s\-\(\)]/g, '');
       const normalizedEmail = data.email.toLowerCase().trim();
 
-      // Call backend edge function to capture lead
+      // Call backend edge function to capture lead with detailed source tracking
       const { data: captureResult, error: captureError } = await supabase.functions.invoke('capture-lead', {
         body: {
           email: normalizedEmail,
@@ -158,7 +158,8 @@ const InquiryFormModal = ({
           phone: normalizedPhone,
           nationality: data.nationality,
           language: data.language,
-          source: source,
+          source: 'website',
+          subSource: propertyName ? `Property Inquiry - ${propertyName}` : source.replace(/_/g, ' ').replace(/\b\w/g, l => l.toUpperCase()),
           pageSource: typeof window !== 'undefined' ? window.location.pathname : null,
           role: data.role,
           buyerType: data.buyerType,

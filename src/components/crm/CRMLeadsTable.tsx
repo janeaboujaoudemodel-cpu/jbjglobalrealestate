@@ -26,7 +26,7 @@ import {
   PopoverTrigger,
 } from "@/components/ui/popover";
 import { toast } from "sonner";
-import { Search, Phone, MessageSquare, Mail, Eye, Filter, ChevronDown, Calendar, Lock, PhoneCall } from "lucide-react";
+import { Search, Phone, MessageSquare, Mail, Eye, Filter, ChevronDown, Calendar, Lock, PhoneCall, Trash2 } from "lucide-react";
 import LeadStatusBadge, { PIPELINE_STATUSES, getStatusInfo } from "./LeadStatusBadge";
 import FollowUpScheduler from "./FollowUpScheduler";
 
@@ -69,7 +69,7 @@ const getFirstName = (fullName: string): string => {
 
 interface CRMLeadsTableProps {
   userId: string;
-  filterType: "assigned" | "own";
+  filterType: "assigned" | "own" | "all" | "website";
   onRefresh: () => void;
   statusFilters?: string[];
   sourceFilter?: string;
@@ -98,8 +98,11 @@ const CRMLeadsTable = ({ userId, filterType, onRefresh, statusFilters = [], sour
 
       if (filterType === "own") {
         query = query.eq("owner_type", "broker_owned").eq("owner_user_id", userId);
+      } else if (filterType === "website") {
+        // Website leads - leads from website forms
+        query = query.eq("lead_source_type", "website");
       }
-      // For "assigned", RLS will handle filtering
+      // For "all" and "assigned", show all leads (RLS will handle filtering)
 
       const { data: leadsData, error: leadsError } = await query.order("created_at", { ascending: false });
 
@@ -163,6 +166,31 @@ const CRMLeadsTable = ({ userId, filterType, onRefresh, statusFilters = [], sour
       toast.error("Failed to load leads");
     } finally {
       setLoading(false);
+    }
+  };
+
+  const handleDeleteLead = async (leadId: string) => {
+    if (!confirm("Are you sure you want to delete this lead? This action cannot be undone.")) {
+      return;
+    }
+    
+    try {
+      // Delete related records first
+      await supabase.from("crm_lead_state_per_user").delete().eq("lead_id", leadId);
+      await supabase.from("crm_activities").delete().eq("lead_id", leadId);
+      await supabase.from("crm_lead_assignments").delete().eq("lead_id", leadId);
+      
+      // Delete the lead
+      const { error } = await supabase.from("crm_leads").delete().eq("id", leadId);
+      
+      if (error) throw error;
+      
+      toast.success("Lead deleted successfully");
+      fetchLeads();
+      onRefresh();
+    } catch (err) {
+      console.error("Failed to delete lead:", err);
+      toast.error("Failed to delete lead");
     }
   };
 
@@ -554,6 +582,14 @@ const CRMLeadsTable = ({ userId, filterType, onRefresh, statusFilters = [], sour
                         title="Schedule Follow-up"
                       >
                         <Calendar className="h-4 w-4" />
+                      </Button>
+                      <Button
+                        size="icon"
+                        className="h-8 w-8 bg-red-600 hover:bg-red-500 text-white font-bold shadow-md"
+                        onClick={() => handleDeleteLead(lead.id)}
+                        title="Delete Lead"
+                      >
+                        <Trash2 className="h-4 w-4" />
                       </Button>
                     </div>
                   </TableCell>
