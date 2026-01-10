@@ -150,8 +150,8 @@ const InquiryFormModal = ({
       // Determine contact type from role
       const contactType = context?.role === 'broker' ? 'broker' : 'client';
 
-      // Capture lead to BOTH leads table AND crm_leads
-      await captureLead({
+      // 1) Save lead to CRM immediately (non-negotiable)
+      const leadCaptured = await captureLead({
         email: normalizedEmail,
         fullName: data.fullName,
         phone: normalizedPhone,
@@ -159,22 +159,32 @@ const InquiryFormModal = ({
         language: data.language,
       }, source, contactType);
 
-      // Send email notification via edge function
-      const { error } = await supabase.functions.invoke('send-inquiry-email', {
-        body: {
-          ...data,
-          phone: normalizedPhone,
-          email: normalizedEmail,
-          source,
-          propertyName,
-          context: {
-            ...context,
-            emailVerified: emailVerified ? 'Yes' : 'No',
-          },
-        },
-      });
+      if (!leadCaptured) {
+        throw new Error('Lead capture failed');
+      }
 
-      if (error) throw error;
+      // 2) Best-effort admin notification (must NOT block the user submission)
+      try {
+        const { data: notifyData, error: notifyError } = await supabase.functions.invoke('send-inquiry-email', {
+          body: {
+            ...data,
+            phone: normalizedPhone,
+            email: normalizedEmail,
+            source,
+            propertyName,
+            context: {
+              ...context,
+              emailVerified: emailVerified ? 'Yes' : 'No',
+            },
+          },
+        });
+
+        if (notifyError || (notifyData as any)?.error) {
+          console.warn('Inquiry notification failed (lead still saved):', notifyError || (notifyData as any)?.error);
+        }
+      } catch (notifyErr) {
+        console.warn('Inquiry notification exception (lead still saved):', notifyErr);
+      }
 
       setIsSuccess(true);
       toast.success('✅ Thank you! Our team will contact you shortly.');

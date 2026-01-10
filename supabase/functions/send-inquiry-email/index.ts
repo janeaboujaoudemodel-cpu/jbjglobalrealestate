@@ -153,7 +153,9 @@ const InquiryRequestSchema = z.object({
   phone: z.string()
     .min(1, "Phone number is required")
     .max(30, "Phone number must be less than 30 characters")
-    .trim(),
+    .trim()
+    // E.164 (+ and 7-15 digits)
+    .regex(/^\+[1-9]\d{6,14}$/, "Invalid phone number. Include country code (e.g., +971...)"),
   nationality: z.string()
     .min(1, "Nationality is required")
     .max(100, "Nationality must be less than 100 characters")
@@ -377,12 +379,18 @@ const handler = async (req: Request): Promise<Response> => {
       ? `Property Inquiry: ${safePropertyName} - ${safeFullName}`
       : `New Website Inquiry: ${safeFullName}`;
 
-    // Send to company email
-    await sendEmail("contact@jbj.ae", subject, companyEmailHtml);
+    // Send to company email (best-effort)
+    let emailSent = false;
+    try {
+      await sendEmail("contact@jbj.ae", subject, companyEmailHtml);
+      emailSent = true;
+      console.log("Inquiry email sent successfully for:", safeEmail);
+    } catch (sendErr) {
+      // IMPORTANT: Do not fail the entire request if email delivery is blocked by provider settings.
+      console.error("Inquiry email delivery failed (lead may still be saved elsewhere):", sendErr);
+    }
 
-    console.log("Inquiry emails sent successfully for:", safeEmail);
-
-    return new Response(JSON.stringify({ success: true }), {
+    return new Response(JSON.stringify({ success: true, emailSent }), {
       status: 200,
       headers: { ...corsHeaders, "Content-Type": "application/json" },
     });
