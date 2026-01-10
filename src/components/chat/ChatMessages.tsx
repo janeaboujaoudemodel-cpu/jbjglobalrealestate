@@ -55,21 +55,21 @@ const ChatMessages = ({
 
   return (
     <>
-      <ScrollArea className="flex-1 p-4" ref={scrollRef}>
+      <ScrollArea className="flex-1 p-4 bg-[#0E0E0E]" ref={scrollRef}>
         <div className="space-y-4">
           {messages.map((message) => (
             <motion.div
               key={message.id}
               initial={{ opacity: 0, y: 10 }}
               animate={{ opacity: 1, y: 0 }}
-              className={`flex gap-2 ${message.role === 'user' ? 'flex-row-reverse' : ''}`}
+              className={`flex gap-3 ${message.role === 'user' ? 'flex-row-reverse' : ''}`}
             >
               {message.role === 'user' ? (
-                <div className="w-8 h-8 rounded-full flex items-center justify-center flex-shrink-0 bg-gold/20 text-gold">
+                <div className="w-9 h-9 rounded-full flex items-center justify-center flex-shrink-0 bg-gold text-black shadow-lg shadow-gold/20">
                   <User className="w-4 h-4" />
                 </div>
               ) : (
-                <div className="w-8 h-8 rounded-full overflow-hidden flex-shrink-0 border border-gold/30">
+                <div className="w-9 h-9 rounded-full overflow-hidden flex-shrink-0 border-2 border-gold shadow-lg shadow-gold/20">
                   <img 
                     src={agent.photo} 
                     alt={agent.name}
@@ -78,14 +78,14 @@ const ChatMessages = ({
                 </div>
               )}
               <div
-                className={`max-w-[80%] p-3 rounded-xl ${
+                className={`max-w-[80%] p-3.5 rounded-2xl shadow-md ${
                   message.role === 'user'
-                    ? 'bg-gold/20 text-white'
-                    : 'bg-white/10 text-white'
+                    ? 'bg-gold text-black rounded-tr-sm'
+                    : 'bg-zinc-800 text-white rounded-tl-sm border border-zinc-700'
                 }`}
               >
-                <p className="text-sm whitespace-pre-wrap">{message.content}</p>
-                <p className="text-[10px] text-white/40 mt-1">
+                <p className="text-sm leading-relaxed whitespace-pre-wrap font-medium">{message.content}</p>
+                <p className={`text-[10px] mt-1.5 ${message.role === 'user' ? 'text-black/60' : 'text-zinc-400'}`}>
                   {message.timestamp.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}
                 </p>
               </div>
@@ -95,9 +95,9 @@ const ChatMessages = ({
             <motion.div
               initial={{ opacity: 0, y: 10 }}
               animate={{ opacity: 1, y: 0 }}
-              className="flex gap-2"
+              className="flex gap-3"
             >
-              <div className="w-8 h-8 rounded-full overflow-hidden flex-shrink-0 border border-gold/30">
+              <div className="w-9 h-9 rounded-full overflow-hidden flex-shrink-0 border-2 border-gold shadow-lg shadow-gold/20">
                 <img 
                   src={agent.photo} 
                   alt={agent.name}
@@ -105,38 +105,38 @@ const ChatMessages = ({
                 />
               </div>
               <div className="flex flex-col gap-1">
-                <div className="bg-white/10 p-3 rounded-xl flex items-center gap-1">
+                <div className="bg-zinc-800 p-4 rounded-2xl rounded-tl-sm flex items-center gap-1.5 border border-zinc-700">
                   <motion.span
-                    className="w-2 h-2 bg-gold rounded-full"
-                    animate={{ y: [0, -6, 0] }}
+                    className="w-2.5 h-2.5 bg-gold rounded-full"
+                    animate={{ y: [0, -8, 0] }}
                     transition={{ duration: 0.6, repeat: Infinity, delay: 0 }}
                   />
                   <motion.span
-                    className="w-2 h-2 bg-gold rounded-full"
-                    animate={{ y: [0, -6, 0] }}
+                    className="w-2.5 h-2.5 bg-gold rounded-full"
+                    animate={{ y: [0, -8, 0] }}
                     transition={{ duration: 0.6, repeat: Infinity, delay: 0.15 }}
                   />
                   <motion.span
-                    className="w-2 h-2 bg-gold rounded-full"
-                    animate={{ y: [0, -6, 0] }}
+                    className="w-2.5 h-2.5 bg-gold rounded-full"
+                    animate={{ y: [0, -8, 0] }}
                     transition={{ duration: 0.6, repeat: Infinity, delay: 0.3 }}
                   />
                 </div>
-                <p className="text-zinc-400 text-xs italic ml-1">{agent.name} is typing...</p>
+                <p className="text-gold/80 text-xs font-medium ml-1">{agent.name} is typing...</p>
               </div>
             </motion.div>
           )}
         </div>
       </ScrollArea>
 
-      {/* Action Buttons */}
-      <div className="px-4 py-2 border-t border-zinc-800 flex gap-2">
+      {/* Action Buttons - Premium styling */}
+      <div className="px-4 py-3 border-t border-gold/20 bg-[#0A0A0A] flex gap-2">
         {isExistingUser && (
           <a
             href={`https://wa.me/${CONTACT_INFO.whatsappNumber}?text=${encodeURIComponent(`Hi, I'm ${userFirstName}. I was chatting with the AI about ${serviceName}.`)}`}
             target="_blank"
             rel="noopener noreferrer"
-            className="flex-1 flex items-center justify-center gap-2 bg-green-600 hover:bg-green-500 text-white text-sm py-2 rounded-md transition-colors"
+            className="flex-1 flex items-center justify-center gap-2 bg-green-600 hover:bg-green-500 text-white text-sm py-2.5 rounded-lg transition-colors font-semibold shadow-lg"
           >
             <MessageCircle className="w-4 h-4" />
             WhatsApp
@@ -144,31 +144,31 @@ const ChatMessages = ({
         )}
         <Button
           onClick={onSubmitToTeam}
-          className={`${isExistingUser ? 'flex-1' : 'w-full'} bg-emerald-600 hover:bg-emerald-500 text-white text-sm py-2`}
+          className={`${isExistingUser ? 'flex-1' : 'w-full'} bg-gold hover:bg-gold-light text-black text-sm py-2.5 font-bold shadow-lg shadow-gold/20`}
         >
           <Shield className="w-4 h-4 mr-2" />
           Submit to Team
         </Button>
       </div>
 
-      {/* Input */}
-      <div className="p-4 border-t border-gold/20 bg-black/20">
-        <div className="flex gap-2">
+      {/* Input - Premium dark styling */}
+      <div className="p-4 border-t border-gold/30 bg-[#0A0A0A]">
+        <div className="flex gap-3">
           <Input
             ref={inputRef}
             value={input}
             onChange={(e) => onInputChange(e.target.value)}
             onKeyPress={handleKeyPress}
             placeholder="Type your message..."
-            className="flex-1 bg-white/10 border-gold/20 text-white placeholder:text-white/40"
+            className="flex-1 bg-zinc-900 border-gold/30 text-white placeholder:text-zinc-500 focus:border-gold focus:ring-gold/30 h-12 rounded-xl text-sm"
             disabled={isLoading}
           />
           <Button
             onClick={onSend}
             disabled={!input.trim() || isLoading}
-            className="bg-gold hover:bg-gold/90 text-black"
+            className="bg-gold hover:bg-gold-light text-black h-12 w-12 rounded-xl shadow-lg shadow-gold/30"
           >
-            <Send className="w-4 h-4" />
+            <Send className="w-5 h-5" />
           </Button>
         </div>
       </div>
