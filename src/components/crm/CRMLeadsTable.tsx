@@ -33,7 +33,7 @@ import {
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 import { toast } from "sonner";
-import { Search, Phone, MessageSquare, Mail, Eye, Filter, ChevronDown, Calendar, Lock, PhoneCall, Trash2, MoreHorizontal, FileText, Building2, Sparkles } from "lucide-react";
+import { Search, Phone, MessageSquare, Mail, Eye, Filter, ChevronDown, Calendar, Lock, PhoneCall, Trash2, MoreHorizontal, FileText, Building2, Sparkles, Calculator, TrendingUp, BarChart3, Palette, FileSignature } from "lucide-react";
 import LeadStatusBadge, { PIPELINE_STATUSES, getStatusInfo } from "./LeadStatusBadge";
 import FollowUpScheduler from "./FollowUpScheduler";
 import { useActiveLead } from "@/contexts/ActiveLeadContext";
@@ -635,32 +635,94 @@ const CRMLeadsTable = ({ userId, filterType, onRefresh, statusFilters = [], sour
                             title="Actions & AI Tools"
                           >
                             <Sparkles className="h-4 w-4 mr-1" />
-                            Actions
+                            AI Tools
                             <ChevronDown className="h-3 w-3 ml-1" />
                           </Button>
                         </DropdownMenuTrigger>
-                        <DropdownMenuContent align="end" className="w-56 bg-card border-border">
+                        <DropdownMenuContent align="end" className="w-64 bg-card border-border max-h-[400px] overflow-y-auto">
+                          <div className="px-2 py-1.5 text-xs font-semibold text-gold uppercase tracking-wide">Communication</div>
+                          <DropdownMenuItem 
+                            onClick={() => handleSelectForTool(lead, `/crm/leads/${lead.id}?tab=email`)}
+                            className="cursor-pointer"
+                          >
+                            <Mail className="h-4 w-4 mr-2 text-blue-400" />
+                            AI Email Composer
+                          </DropdownMenuItem>
+                          <DropdownMenuItem 
+                            onClick={() => handleSelectForTool(lead, `/crm/leads/${lead.id}?tab=whatsapp`)}
+                            className="cursor-pointer"
+                          >
+                            <MessageSquare className="h-4 w-4 mr-2 text-green-400" />
+                            AI WhatsApp Message
+                          </DropdownMenuItem>
+                          <DropdownMenuSeparator />
+                          <div className="px-2 py-1.5 text-xs font-semibold text-purple-400 uppercase tracking-wide">Property Tools</div>
                           <DropdownMenuItem 
                             onClick={() => handleSelectForTool(lead, '/properties')}
                             className="cursor-pointer"
                           >
                             <Building2 className="h-4 w-4 mr-2 text-blue-400" />
-                            Select Properties for Client
+                            Select Properties
                           </DropdownMenuItem>
                           <DropdownMenuItem 
                             onClick={() => handleSelectForTool(lead, '/compare')}
                             className="cursor-pointer"
                           >
                             <FileText className="h-4 w-4 mr-2 text-purple-400" />
-                            Create Comparison PDF
+                            Property Comparison PDF
+                          </DropdownMenuItem>
+                          <DropdownMenuItem 
+                            onClick={() => handleSelectForTool(lead, '/mortgage-calculator')}
+                            className="cursor-pointer"
+                          >
+                            <Calculator className="h-4 w-4 mr-2 text-cyan-400" />
+                            Mortgage Calculator
+                          </DropdownMenuItem>
+                          <DropdownMenuItem 
+                            onClick={() => handleSelectForTool(lead, '/rental-index')}
+                            className="cursor-pointer"
+                          >
+                            <TrendingUp className="h-4 w-4 mr-2 text-green-400" />
+                            Rental Yield Analysis
                           </DropdownMenuItem>
                           <DropdownMenuSeparator />
+                          <div className="px-2 py-1.5 text-xs font-semibold text-emerald-400 uppercase tracking-wide">AI Analysis</div>
                           <DropdownMenuItem 
                             onClick={() => handleSelectForTool(lead, '/ai-hub')}
                             className="cursor-pointer"
                           >
                             <Sparkles className="h-4 w-4 mr-2 text-gold" />
-                            AI Tools Hub
+                            AI Tools Hub (All Tools)
+                          </DropdownMenuItem>
+                          <DropdownMenuItem 
+                            onClick={() => handleSelectForTool(lead, '/property-evaluator')}
+                            className="cursor-pointer"
+                          >
+                            <BarChart3 className="h-4 w-4 mr-2 text-amber-400" />
+                            Property Evaluator
+                          </DropdownMenuItem>
+                          <DropdownMenuItem 
+                            onClick={() => handleSelectForTool(lead, '/interior-design-ai')}
+                            className="cursor-pointer"
+                          >
+                            <Palette className="h-4 w-4 mr-2 text-pink-400" />
+                            Interior Design AI
+                          </DropdownMenuItem>
+                          <DropdownMenuSeparator />
+                          <div className="px-2 py-1.5 text-xs font-semibold text-amber-400 uppercase tracking-wide">Documents</div>
+                          <DropdownMenuItem 
+                            onClick={() => handleSelectForTool(lead, '/documents')}
+                            className="cursor-pointer"
+                          >
+                            <FileText className="h-4 w-4 mr-2 text-orange-400" />
+                            Document Generator
+                          </DropdownMenuItem>
+                          <DropdownMenuItem 
+                            onClick={() => handleSelectForTool(lead, '/scan-sign-documents')}
+                            className="cursor-pointer"
+                          >
+                            <FileSignature className="h-4 w-4 mr-2 text-indigo-400" />
+                            Scan & Sign Documents
                           </DropdownMenuItem>
                           <DropdownMenuSeparator />
                           <DropdownMenuItem 
