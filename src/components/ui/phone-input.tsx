@@ -533,24 +533,31 @@ const PhoneInput = React.forwardRef<HTMLInputElement, PhoneInputProps>(
                 <ChevronsUpDown className="ml-1 h-4 w-4 shrink-0 opacity-50" />
               </Button>
             </PopoverTrigger>
-            <PopoverContent className="w-[320px] p-0 bg-zinc-900 border-zinc-700 z-50" align="start">
+            <PopoverContent 
+              className="w-[340px] p-0 bg-zinc-900 border-zinc-700 z-[100]" 
+              align="start"
+              side="bottom"
+              sideOffset={4}
+              avoidCollisions={true}
+              onOpenAutoFocus={(e) => e.preventDefault()}
+            >
               <Command className="bg-zinc-900">
                 <CommandInput 
                   placeholder="Search country name or code..." 
                   className="h-12 text-white border-zinc-700 text-base"
                 />
-                <CommandList className="max-h-[400px]">
+                <CommandList className="max-h-[350px] overflow-y-auto overscroll-contain">
                   <CommandEmpty className="text-zinc-400 text-sm py-6 text-center">
                     No country found. Try searching by name or code.
                   </CommandEmpty>
                   {Object.entries(COUNTRY_CODES_BY_REGION).map(([region, countries]) => (
-                    <CommandGroup key={region} heading={region} className="text-gold text-xs font-semibold">
+                    <CommandGroup key={region} heading={region} className="text-gold text-xs font-semibold px-2 py-1">
                       {countries.map((country) => (
                         <CommandItem
                           key={`${country.code}-${country.country}`}
                           value={`${region} ${country.country} ${country.code} ${country.flag}`}
                           onSelect={() => handleCodeChange(country.code)}
-                          className="text-white hover:bg-zinc-800 cursor-pointer py-2.5"
+                          className="text-white hover:bg-zinc-800 cursor-pointer py-2.5 px-2 rounded-md"
                         >
                           <span className="flex items-center gap-3 w-full">
                             <span className="text-xl">{country.flag}</span>

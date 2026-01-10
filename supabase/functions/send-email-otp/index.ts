@@ -45,37 +45,43 @@ async function sendEmailWithResend(to: string, otp: string, fullName?: string): 
               <tr>
                 <td style="padding: 40px 20px;">
                   <table role="presentation" style="max-width: 600px; margin: 0 auto; background-color: #000000; border-radius: 16px; overflow: hidden;">
-                    <!-- Header with Logo -->
+                    <!-- Header with JBJ Monogram on Solid Black Background -->
                     <tr>
-                      <td style="padding: 40px 40px 20px; text-align: center; border-bottom: 1px solid #333;">
-                        <!-- JBJ Monogram Logo -->
-                        <div style="width: 80px; height: 80px; margin: 0 auto 16px; background: linear-gradient(135deg, #A8925A 0%, #C9B77D 50%, #A8925A 100%); border-radius: 50%; display: flex; align-items: center; justify-content: center;">
-                          <span style="font-size: 32px; font-weight: bold; color: #000000; font-family: Georgia, serif;">JBJ</span>
-                        </div>
-                        <h1 style="margin: 0; color: #A8925A; font-size: 24px; font-weight: bold;">JBJ Global Real Estate</h1>
-                        <p style="margin: 8px 0 0; color: #666666; font-size: 12px; letter-spacing: 2px; text-transform: uppercase;">UAE Real Estate Brokerage</p>
+                      <td style="padding: 40px 40px 20px; text-align: center; background-color: #000000; border-bottom: 1px solid #333;">
+                        <!-- JBJ Monogram Logo - Centered on Black -->
+                        <table role="presentation" style="margin: 0 auto;">
+                          <tr>
+                            <td style="text-align: center;">
+                              <div style="width: 100px; height: 100px; margin: 0 auto 16px; background-color: #000000; border: 2px solid #A8925A; border-radius: 50%; display: inline-block; line-height: 96px; text-align: center;">
+                                <span style="font-size: 36px; font-weight: bold; color: #A8925A; font-family: Georgia, 'Times New Roman', serif; letter-spacing: 2px;">JBJ</span>
+                              </div>
+                            </td>
+                          </tr>
+                        </table>
+                        <h1 style="margin: 0; color: #A8925A; font-size: 22px; font-weight: bold; font-family: Georgia, 'Times New Roman', serif; letter-spacing: 1px;">JBJ GLOBAL REAL ESTATE</h1>
+                        <p style="margin: 8px 0 0; color: #666666; font-size: 11px; letter-spacing: 3px; text-transform: uppercase;">UAE Real Estate Brokerage</p>
                       </td>
                     </tr>
                     
                     <!-- Content -->
                     <tr>
                       <td style="padding: 40px;">
-                        <h2 style="margin: 0 0 20px; color: #ffffff; font-size: 20px;">Email Verification</h2>
-                        <p style="margin: 0 0 30px; color: #999999; font-size: 16px; line-height: 1.6;">
+                        <h2 style="margin: 0 0 20px; color: #ffffff; font-size: 20px; font-family: Arial, sans-serif;">Email Verification</h2>
+                        <p style="margin: 0 0 30px; color: #999999; font-size: 16px; line-height: 1.6; font-family: Arial, sans-serif;">
                           ${fullName ? `Hello ${fullName},` : 'Hello,'}<br><br>
                           Please use the following code to verify your email address:
                         </p>
                         
                         <!-- OTP Code -->
                         <div style="background-color: #1a1a1a; border: 2px solid #A8925A; border-radius: 12px; padding: 24px; text-align: center; margin-bottom: 30px;">
-                          <span style="font-size: 36px; font-weight: bold; color: #A8925A; letter-spacing: 8px;">${otp}</span>
+                          <span style="font-size: 36px; font-weight: bold; color: #A8925A; letter-spacing: 8px; font-family: 'Courier New', monospace;">${otp}</span>
                         </div>
                         
-                        <p style="margin: 0 0 20px; color: #666666; font-size: 14px;">
+                        <p style="margin: 0 0 20px; color: #666666; font-size: 14px; font-family: Arial, sans-serif;">
                           This code is valid for <strong style="color: #999;">10 minutes</strong>.
                         </p>
                         
-                        <p style="margin: 0; color: #666666; font-size: 14px;">
+                        <p style="margin: 0; color: #666666; font-size: 14px; font-family: Arial, sans-serif;">
                           If you didn't request this code, please ignore this email.
                         </p>
                       </td>
@@ -83,19 +89,19 @@ async function sendEmailWithResend(to: string, otp: string, fullName?: string): 
                     
                     <!-- Footer -->
                     <tr>
-                      <td style="padding: 20px 40px 30px; border-top: 1px solid #333; text-align: center;">
-                        <p style="margin: 0 0 8px; color: #999999; font-size: 13px;">
+                      <td style="padding: 20px 40px 30px; background-color: #000000; border-top: 1px solid #333; text-align: center;">
+                        <p style="margin: 0 0 8px; color: #999999; font-size: 13px; font-family: Arial, sans-serif;">
                           This is an automated message. Please do not reply directly to this email.
                         </p>
-                        <p style="margin: 0 0 12px; color: #A8925A; font-size: 14px; font-weight: bold;">
+                        <p style="margin: 0 0 12px; color: #A8925A; font-size: 14px; font-weight: bold; font-family: Arial, sans-serif;">
                           Questions? Contact us at:
                         </p>
-                        <p style="margin: 0 0 8px; color: #ffffff; font-size: 14px;">
+                        <p style="margin: 0 0 8px; color: #ffffff; font-size: 14px; font-family: Arial, sans-serif;">
                           <a href="mailto:contact@jbj.ae" style="color: #A8925A; text-decoration: none;">contact@jbj.ae</a> 
                           &nbsp;|&nbsp; 
                           <a href="https://wa.me/971565911000" style="color: #A8925A; text-decoration: none;">+971 56 591 1000</a>
                         </p>
-                        <p style="margin: 16px 0 0; color: #666666; font-size: 12px;">
+                        <p style="margin: 16px 0 0; color: #666666; font-size: 12px; font-family: Arial, sans-serif;">
                           © ${new Date().getFullYear()} JBJ Global Real Estate. All rights reserved.<br>
                           Downtown Dubai, UAE
                         </p>
