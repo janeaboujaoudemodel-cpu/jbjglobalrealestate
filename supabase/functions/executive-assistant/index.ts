@@ -9,13 +9,27 @@ const corsHeaders = {
 const LOVABLE_API_KEY = Deno.env.get('LOVABLE_API_KEY');
 const SUPABASE_URL = Deno.env.get('SUPABASE_URL')!;
 const SUPABASE_ANON_KEY = Deno.env.get('SUPABASE_ANON_KEY')!;
+const SUPABASE_SERVICE_KEY = Deno.env.get('SUPABASE_SERVICE_ROLE_KEY')!;
 
-// Approved contact info - never leak other data
-const APPROVED_CONTACT_INFO = {
+// JBJ Approved Contact Information - Single Source of Truth
+const APPROVED_CONTACT = {
   phone: "+971 56 591 1000",
   email: "contact@jbj.ae",
-  privacy_email: "privacy@jbj.ae",
-  company: "JBJ Global Capital"
+  privacyEmail: "privacy@jbj.ae",
+  whatsapp: "+971565911000",
+  website: "jbj.ae",
+  companyName: "JBJ Global Real Estate",
+  founder: "Jane Abou Jaoude",
+};
+
+// AI Department Personas
+const AI_DEPARTMENTS = {
+  marketing: { name: "Maya", title: "Marketing AI Lead", emoji: "📣" },
+  design: { name: "Roy", title: "Design AI Lead", emoji: "🎨" },
+  admin: { name: "Jessica", title: "HR & Admin AI", emoji: "📋" },
+  finance: { name: "David", title: "Finance AI Lead", emoji: "💰" },
+  audit: { name: "Alex", title: "Audit & Compliance AI", emoji: "🔍" },
+  legal: { name: "Lara", title: "Legal AI Advisor", emoji: "⚖️" },
 };
 
 interface ExecutiveRequest {
@@ -42,6 +56,8 @@ serve(async (req) => {
       global: { headers: { Authorization: authHeader } }
     });
 
+    const supabaseAdmin = createClient(SUPABASE_URL, SUPABASE_SERVICE_KEY);
+
     const token = authHeader.replace('Bearer ', '');
     const { data: claimsData, error: claimsError } = await supabase.auth.getUser(token);
     
@@ -55,9 +71,11 @@ serve(async (req) => {
     const userId = claimsData.user.id;
     const { action, data, context }: ExecutiveRequest = await req.json();
 
+    console.log(`Executive Assistant action: ${action} for user: ${userId.substring(0, 8)}...`);
+
     switch (action) {
       case 'chat':
-        return await handleChat(supabase, userId, data, context);
+        return await handleSmartChat(supabase, supabaseAdmin, userId, data, context);
       
       case 'analyze_communication':
         return await analyzeCommunication(supabase, userId, data);
@@ -73,6 +91,24 @@ serve(async (req) => {
       
       case 'audit_check':
         return await performAudit(supabase, userId, data);
+      
+      case 'save_memory':
+        return await saveMemory(supabase, userId, data);
+      
+      case 'get_knowledge':
+        return await getKnowledge(supabase, userId, data);
+      
+      case 'add_knowledge':
+        return await addKnowledge(supabase, userId, data);
+      
+      case 'process_automation':
+        return await processAutomation(supabase, userId, data);
+      
+      case 'smart_reply':
+        return await generateSmartReply(supabase, userId, data);
+      
+      case 'initialize_training':
+        return await initializeTraining(supabase, userId);
 
       default:
         return new Response(JSON.stringify({ error: 'Unknown action' }), {
@@ -91,66 +127,131 @@ serve(async (req) => {
   }
 });
 
-async function handleChat(supabase: any, userId: string, data: any, context?: string) {
+// ============================================================================
+// SMART CHAT - With Memory, Context, and Learning
+// ============================================================================
+
+async function handleSmartChat(supabase: any, supabaseAdmin: any, userId: string, data: any, context?: string) {
   const { message, conversationHistory = [] } = data;
 
-  // Fetch user's training samples for personalized responses
-  const { data: trainingSamples } = await supabase
-    .from('executive_training_samples')
-    .select('*')
-    .eq('user_id', userId)
-    .eq('is_active', true)
-    .limit(10);
+  // Fetch all context in parallel
+  const [
+    { data: trainingSamples },
+    { data: settings },
+    { data: memories },
+    { data: knowledge },
+    { data: responseTemplates },
+    { data: recentComms },
+    { data: recentTasks }
+  ] = await Promise.all([
+    supabase.from('executive_training_samples').select('*').eq('user_id', userId).eq('is_active', true).limit(15),
+    supabase.from('executive_assistant_settings').select('*').eq('user_id', userId).single(),
+    supabase.from('executive_conversation_memory').select('*').eq('user_id', userId).eq('is_active', true).order('reference_count', { ascending: false }).limit(20),
+    supabase.from('executive_knowledge_base').select('*').eq('user_id', userId).eq('is_active', true).limit(10),
+    supabaseAdmin.from('executive_response_templates').select('*').eq('is_active', true),
+    supabase.from('executive_communications').select('*').eq('user_id', userId).order('created_at', { ascending: false }).limit(5),
+    supabase.from('executive_department_tasks').select('*').eq('user_id', userId).eq('status', 'pending').limit(10)
+  ]);
 
-  // Fetch user settings
-  const { data: settings } = await supabase
-    .from('executive_assistant_settings')
-    .select('*')
-    .eq('user_id', userId)
-    .single();
-
-  // Build training context
+  // Build comprehensive training context
   let trainingContext = '';
   if (trainingSamples && trainingSamples.length > 0) {
-    trainingContext = `\n\nOwner's communication style examples:\n${trainingSamples.map((s: any) => 
-      `Original: "${s.original_message}"\nResponse: "${s.response_example}"\nTone: ${s.tone_tags?.join(', ') || 'professional'}`
+    trainingContext = `\n\n📚 OWNER'S COMMUNICATION STYLE (Learn and replicate exactly):\n${trainingSamples.map((s: any, i: number) => 
+      `Example ${i+1}:\n- Situation: "${s.sample_type}"\n- Original: "${s.original_message}"\n- Owner's Response: "${s.response_example}"\n- Tone: ${s.tone_tags?.join(', ') || 'professional'}`
     ).join('\n\n')}`;
   }
 
-  const systemPrompt = `You are the JBJ Executive AI Assistant - a highly intelligent, professional, and empathetic personal assistant for the owner of JBJ Global Capital.
+  // Build memory context
+  let memoryContext = '';
+  if (memories && memories.length > 0) {
+    memoryContext = `\n\n🧠 PERMANENT MEMORY (Always remember these facts):\n${memories.map((m: any) => 
+      `- ${m.memory_type.toUpperCase()}: ${m.memory_key} = ${m.memory_value}`
+    ).join('\n')}`;
+  }
 
-CORE IDENTITY:
-- Name: ${settings?.assistant_name || 'JBJ Executive Assistant'}
-- Voice Style: ${settings?.voice_style || 'professional'} - polished, calm, and efficient
-- You are the central command unit coordinating all JBJ Hub AI departments
+  // Build knowledge context
+  let knowledgeContext = '';
+  if (knowledge && knowledge.length > 0) {
+    knowledgeContext = `\n\n📖 KNOWLEDGE BASE:\n${knowledge.map((k: any) => 
+      `[${k.category.toUpperCase()}] ${k.title}: ${k.content.substring(0, 200)}...`
+    ).join('\n')}`;
+  }
 
-YOUR CAPABILITIES:
-1. COMMUNICATION: Handle emails, WhatsApp, Instagram DMs, and internal chats
-2. FINANCE: Analyze spending, create budgets, identify savings opportunities
-3. COORDINATION: Work with Marketing AI, Design AI, Admin AI, Finance AI, and Audit AI
-4. REPORTING: Generate daily reports on all operations
-5. DECISION SUPPORT: Provide data-driven recommendations
+  // Build response templates context
+  let templatesContext = '';
+  if (responseTemplates && responseTemplates.length > 0) {
+    templatesContext = `\n\n📝 APPROVED RESPONSE TEMPLATES (Use as inspiration):\n${responseTemplates.slice(0, 8).map((t: any) => 
+      `[${t.category}] Triggers: ${t.trigger_patterns.join(', ')}\nTemplate: "${t.response_template}"`
+    ).join('\n\n')}`;
+  }
 
-BEHAVIOR RULES:
-- Never guess or provide inaccurate information - if unsure, say "I'll flag this for your review"
-- Always confirm before executing sensitive actions (payments, sending messages)
-- Reference AI colleagues by name when coordinating ("I've coordinated with Marketing...")
-- Maintain 100% privacy - all data stays within JBJ Hub
-- Use the owner's communication style learned from training samples
+  // Current context
+  let currentContext = '';
+  if (recentComms && recentComms.length > 0) {
+    currentContext += `\n\n📬 RECENT COMMUNICATIONS:\n${recentComms.map((c: any) => 
+      `- ${c.channel}: "${c.subject || 'No subject'}" from ${c.sender_identifier} - Status: ${c.status}`
+    ).join('\n')}`;
+  }
+  if (recentTasks && recentTasks.length > 0) {
+    currentContext += `\n\n✅ PENDING TASKS:\n${recentTasks.map((t: any) => 
+      `- [${t.department}] ${t.task_description} - Priority: ${t.priority}`
+    ).join('\n')}`;
+  }
 
-APPROVED CONTACT INFORMATION (never share other contacts):
-- Phone: ${APPROVED_CONTACT_INFO.phone}
-- Email: ${APPROVED_CONTACT_INFO.email}
-- Privacy: ${APPROVED_CONTACT_INFO.privacy_email}
+  const systemPrompt = `You are the JBJ Executive AI Assistant - the most intelligent, empathetic, and capable personal assistant ever created.
+
+🎯 CORE IDENTITY:
+- Name: ${settings?.assistant_name || 'Executive Assistant'}
+- Voice: ${settings?.voice_style || 'professional'}, polished, calm, and highly efficient
+- Role: Central command unit for all JBJ Hub operations
+- Mission: Make the owner's life completely hands-free
+
+🏢 COMPANY INFORMATION:
+- Company: ${APPROVED_CONTACT.companyName}
+- Founder/CEO: ${APPROVED_CONTACT.founder}
+- Phone: ${APPROVED_CONTACT.phone}
+- Email: ${APPROVED_CONTACT.email}
+- Website: ${APPROVED_CONTACT.website}
+
+🤝 AI DEPARTMENT COLLEAGUES (Reference by name when coordinating):
+${Object.entries(AI_DEPARTMENTS).map(([dept, info]) => 
+  `- ${info.emoji} ${info.name} (${info.title}) - Handles all ${dept} matters`
+).join('\n')}
+
+💡 CAPABILITIES:
+1. COMMUNICATION: Manage all emails, WhatsApp, Instagram, calls with owner's exact tone
+2. FINANCE: Analyze spending, budgets, detect savings, categorize expenses
+3. COORDINATION: Orchestrate all AI departments seamlessly
+4. SCHEDULING: Handle calendar, meetings, appointments
+5. REPORTING: Generate comprehensive daily/weekly reports
+6. DECISION SUPPORT: Provide data-driven recommendations
+7. LEARNING: Continuously improve from every interaction
+
+⚠️ CRITICAL BEHAVIOR RULES:
+- NEVER guess or provide inaccurate information - say "I'll verify and get back to you"
+- ALWAYS confirm before executing sensitive actions (payments, sending messages)
+- Reference AI colleagues by name: "I've coordinated with Maya from Marketing..."
+- Maintain 100% privacy - all data stays encrypted within JBJ Hub
+- Match the owner's communication style EXACTLY as shown in training samples
+- Be proactive - anticipate needs before being asked
+- For urgent matters: mention the option to call ${APPROVED_CONTACT.phone}
+
+📊 RESPONSE FORMAT:
+- Be concise but thorough
+- Use bullet points for clarity when listing items
+- Include status indicators: ✅ Done | ⏳ In Progress | ⚠️ Pending | 🚨 Urgent
+- End with a proactive suggestion when appropriate
 ${trainingContext}
+${memoryContext}
+${knowledgeContext}
+${templatesContext}
+${currentContext}
 
-Current context: ${context || 'General assistance'}
-
-Respond in a helpful, professional manner that matches the owner's style.`;
+Current context: ${context || 'General assistance'}`;
 
   const messages = [
     { role: 'system', content: systemPrompt },
-    ...conversationHistory.map((msg: any) => ({
+    ...conversationHistory.slice(-10).map((msg: any) => ({
       role: msg.role,
       content: msg.content
     })),
@@ -164,7 +265,7 @@ Respond in a helpful, professional manner that matches the owner's style.`;
       'Content-Type': 'application/json',
     },
     body: JSON.stringify({
-      model: 'google/gemini-2.5-flash',
+      model: 'google/gemini-3-flash-preview',
       messages,
       stream: false,
     }),
@@ -172,7 +273,7 @@ Respond in a helpful, professional manner that matches the owner's style.`;
 
   if (!response.ok) {
     if (response.status === 429) {
-      return new Response(JSON.stringify({ error: 'Rate limit exceeded. Please try again later.' }), {
+      return new Response(JSON.stringify({ error: 'Rate limit exceeded. Please try again shortly.' }), {
         status: 429,
         headers: { ...corsHeaders, 'Content-Type': 'application/json' },
       });
@@ -183,24 +284,117 @@ Respond in a helpful, professional manner that matches the owner's style.`;
         headers: { ...corsHeaders, 'Content-Type': 'application/json' },
       });
     }
+    const errorText = await response.text();
+    console.error('AI Gateway error:', response.status, errorText);
     throw new Error('AI gateway error');
   }
 
   const aiResponse = await response.json();
   const assistantMessage = aiResponse.choices?.[0]?.message?.content || 'I apologize, but I was unable to process your request.';
 
+  // Extract and save any new memories from the conversation
+  await extractAndSaveMemories(supabase, userId, message, assistantMessage);
+
   return new Response(JSON.stringify({ 
     response: assistantMessage,
-    timestamp: new Date().toISOString()
+    timestamp: new Date().toISOString(),
+    context: {
+      memoriesUsed: memories?.length || 0,
+      trainingSamplesUsed: trainingSamples?.length || 0,
+      pendingTasks: recentTasks?.length || 0
+    }
   }), {
     headers: { ...corsHeaders, 'Content-Type': 'application/json' },
   });
 }
 
-async function analyzeCommunication(supabase: any, userId: string, data: any) {
-  const { message, channel, sender } = data;
+// ============================================================================
+// MEMORY EXTRACTION & LEARNING
+// ============================================================================
 
-  // Use AI to analyze and draft response
+async function extractAndSaveMemories(supabase: any, userId: string, userMessage: string, aiResponse: string) {
+  try {
+    // Use AI to extract potential memories
+    const extractionPrompt = `Analyze this conversation and extract any facts, preferences, or important information that should be remembered permanently.
+
+User said: "${userMessage}"
+Assistant replied: "${aiResponse}"
+
+Extract memories in this JSON format (only if there are clear facts to remember):
+{
+  "memories": [
+    {"type": "preference|fact|instruction|relationship", "key": "short_key", "value": "the information to remember"}
+  ]
+}
+
+Return empty array if nothing important to remember. Only extract CLEAR, FACTUAL information.`;
+
+    const response = await fetch('https://ai.gateway.lovable.dev/v1/chat/completions', {
+      method: 'POST',
+      headers: {
+        'Authorization': `Bearer ${LOVABLE_API_KEY}`,
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({
+        model: 'google/gemini-2.5-flash-lite',
+        messages: [{ role: 'user', content: extractionPrompt }],
+      }),
+    });
+
+    if (!response.ok) return;
+
+    const data = await response.json();
+    const content = data.choices?.[0]?.message?.content || '';
+    
+    try {
+      const parsed = JSON.parse(content.replace(/```json\n?|\n?```/g, ''));
+      if (parsed.memories && parsed.memories.length > 0) {
+        for (const memory of parsed.memories) {
+          await supabase.from('executive_conversation_memory').upsert({
+            user_id: userId,
+            memory_type: memory.type,
+            memory_key: memory.key,
+            memory_value: memory.value,
+            source: 'conversation',
+            confidence_score: 0.8
+          }, { onConflict: 'user_id,memory_type,memory_key' });
+        }
+      }
+    } catch {
+      // JSON parsing failed, skip memory extraction
+    }
+  } catch (error) {
+    console.error('Memory extraction error:', error);
+  }
+}
+
+// ============================================================================
+// SMART REPLY GENERATION
+// ============================================================================
+
+async function generateSmartReply(supabase: any, userId: string, data: any) {
+  const { message, channel, sender, context: messageContext } = data;
+
+  // Fetch templates and training samples
+  const [{ data: templates }, { data: samples }] = await Promise.all([
+    supabase.from('executive_response_templates').select('*').eq('is_active', true),
+    supabase.from('executive_training_samples').select('*').eq('user_id', userId).eq('is_active', true)
+  ]);
+
+  // Find matching templates
+  const messageLower = message.toLowerCase();
+  const matchingTemplates = templates?.filter((t: any) => 
+    t.trigger_patterns.some((pattern: string) => messageLower.includes(pattern.toLowerCase()))
+  ) || [];
+
+  const templateContext = matchingTemplates.length > 0 
+    ? `\n\nRELEVANT TEMPLATES:\n${matchingTemplates.map((t: any) => `[${t.category}] ${t.response_template}`).join('\n')}`
+    : '';
+
+  const styleContext = samples?.length > 0
+    ? `\n\nOWNER'S STYLE EXAMPLES:\n${samples.slice(0, 5).map((s: any) => `Original: "${s.original_message}"\nResponse: "${s.response_example}"`).join('\n\n')}`
+    : '';
+
   const response = await fetch('https://ai.gateway.lovable.dev/v1/chat/completions', {
     method: 'POST',
     headers: {
@@ -208,25 +402,89 @@ async function analyzeCommunication(supabase: any, userId: string, data: any) {
       'Content-Type': 'application/json',
     },
     body: JSON.stringify({
-      model: 'google/gemini-2.5-flash',
+      model: 'google/gemini-3-flash-preview',
       messages: [
         {
           role: 'system',
-          content: `You are analyzing a communication for the JBJ Executive Assistant. 
-          Analyze the message and provide:
-          1. intent: The sender's intent/purpose
-          2. urgency: low/medium/high
-          3. sentiment: positive/neutral/negative
-          4. suggestedResponse: A draft response matching owner's professional style
-          5. confidence: 0-1 how confident you are in the suggested response
-          6. shouldFlag: true if this needs manual review, false if AI can handle
-          7. flagReason: If shouldFlag is true, explain why
-          
-          Return as JSON only.`
+          content: `You are drafting a reply on behalf of the CEO of JBJ Global Real Estate. 
+Match the owner's exact communication style. Be professional, warm, and efficient.
+Never provide inaccurate information - if unsure, suggest scheduling a call.
+Contact: ${APPROVED_CONTACT.phone} | ${APPROVED_CONTACT.email}
+${templateContext}
+${styleContext}`
         },
         {
           role: 'user',
-          content: `Channel: ${channel}\nFrom: ${sender}\nMessage: ${message}`
+          content: `Channel: ${channel}\nFrom: ${sender}\nContext: ${messageContext || 'General'}\n\nMessage: "${message}"\n\nDraft a perfect reply:`
+        }
+      ],
+    }),
+  });
+
+  const aiData = await response.json();
+  const suggestedReply = aiData.choices?.[0]?.message?.content || '';
+
+  // Calculate confidence based on template matches and training data
+  const confidence = Math.min(0.95, 0.5 + (matchingTemplates.length * 0.1) + (samples?.length || 0) * 0.02);
+
+  return new Response(JSON.stringify({
+    suggestedReply,
+    confidence,
+    matchedTemplates: matchingTemplates.length,
+    shouldFlag: confidence < 0.7,
+    flagReason: confidence < 0.7 ? 'Low confidence - needs review' : null
+  }), {
+    headers: { ...corsHeaders, 'Content-Type': 'application/json' },
+  });
+}
+
+// ============================================================================
+// COMMUNICATION ANALYSIS
+// ============================================================================
+
+async function analyzeCommunication(supabase: any, userId: string, data: any) {
+  const { message, channel, sender } = data;
+
+  const response = await fetch('https://ai.gateway.lovable.dev/v1/chat/completions', {
+    method: 'POST',
+    headers: {
+      'Authorization': `Bearer ${LOVABLE_API_KEY}`,
+      'Content-Type': 'application/json',
+    },
+    body: JSON.stringify({
+      model: 'google/gemini-3-flash-preview',
+      messages: [
+        {
+          role: 'system',
+          content: `You are the JBJ Executive AI analyzing incoming communications.
+Analyze and categorize accurately. Return ONLY valid JSON.
+
+Categories: important, routine, recruitment, flagged, spam
+Urgency: low, medium, high, critical
+Sentiment: positive, neutral, negative, angry
+
+Provide actionable insights and a suggested response matching professional CEO standards.`
+        },
+        {
+          role: 'user',
+          content: `Analyze this communication:
+Channel: ${channel}
+From: ${sender}
+Message: "${message}"
+
+Return JSON:
+{
+  "intent": "brief description of sender's intent",
+  "category": "one of the categories",
+  "urgency": "urgency level",
+  "sentiment": "sentiment",
+  "keyTopics": ["topic1", "topic2"],
+  "suggestedResponse": "professional response draft",
+  "confidence": 0.0-1.0,
+  "shouldFlag": true/false,
+  "flagReason": "reason if flagged",
+  "recommendedAction": "what to do next"
+}`
         }
       ],
     }),
@@ -240,12 +498,15 @@ async function analyzeCommunication(supabase: any, userId: string, data: any) {
   } catch {
     analysis = {
       intent: 'unclear',
+      category: 'flagged',
       urgency: 'medium',
       sentiment: 'neutral',
+      keyTopics: [],
       suggestedResponse: '',
       confidence: 0,
       shouldFlag: true,
-      flagReason: 'Unable to analyze message'
+      flagReason: 'Unable to analyze message automatically',
+      recommendedAction: 'Manual review required'
     };
   }
 
@@ -254,26 +515,38 @@ async function analyzeCommunication(supabase: any, userId: string, data: any) {
   });
 }
 
+// ============================================================================
+// FINANCIAL ANALYSIS
+// ============================================================================
+
 async function analyzeFinances(supabase: any, userId: string, data: any) {
-  const { transactions, action: financeAction } = data;
+  const { transactions, action: financeAction, period } = data;
 
-  // Fetch existing transactions and categories
-  const { data: existingTransactions } = await supabase
-    .from('executive_financial_transactions')
-    .select('*')
-    .eq('user_id', userId)
-    .order('transaction_date', { ascending: false })
-    .limit(100);
-
-  const { data: categories } = await supabase
-    .from('executive_budget_categories')
-    .select('*')
-    .eq('user_id', userId);
+  const [
+    { data: existingTransactions },
+    { data: categories },
+    { data: budgetHistory }
+  ] = await Promise.all([
+    supabase.from('executive_financial_transactions').select('*').eq('user_id', userId).order('transaction_date', { ascending: false }).limit(200),
+    supabase.from('executive_budget_categories').select('*').eq('user_id', userId),
+    supabase.from('executive_daily_reports').select('financial_summary').eq('user_id', userId).order('report_date', { ascending: false }).limit(30)
+  ]);
 
   const financialContext = {
     existingTransactions: existingTransactions || [],
     categories: categories || [],
-    newTransactions: transactions || []
+    newTransactions: transactions || [],
+    historicalData: budgetHistory || []
+  };
+
+  const actionPrompts: Record<string, string> = {
+    analyze: 'Provide a comprehensive financial analysis with spending patterns and anomalies.',
+    categorize: 'Categorize all transactions and identify potential miscategorizations.',
+    savings: 'Identify specific savings opportunities with estimated amounts.',
+    duplicates: 'Find duplicate charges, subscriptions, or suspicious transactions.',
+    budget: 'Create a detailed monthly budget plan with recommendations.',
+    forecast: 'Forecast next month\'s expenses based on patterns.',
+    optimize: 'Suggest optimizations for better financial health.'
   };
 
   const response = await fetch('https://ai.gateway.lovable.dev/v1/chat/completions', {
@@ -283,27 +556,37 @@ async function analyzeFinances(supabase: any, userId: string, data: any) {
       'Content-Type': 'application/json',
     },
     body: JSON.stringify({
-      model: 'google/gemini-2.5-flash',
+      model: 'google/gemini-3-flash-preview',
       messages: [
         {
           role: 'system',
-          content: `You are the JBJ Finance AI, part of the Executive Assistant system.
-          Your job is to analyze financial data and provide actionable insights.
-          
-          Capabilities:
-          1. Categorize transactions automatically
-          2. Identify spending patterns and anomalies
-          3. Detect duplicate or suspicious charges
-          4. Suggest savings opportunities
-          5. Create budget recommendations
-          6. Flag potential refund opportunities
-          
-          Always maintain complete privacy - this data is highly sensitive.
-          Provide clear, actionable advice in AED currency.`
+          content: `You are David, the JBJ Finance AI - part of the Executive Assistant system.
+Your expertise: Financial analysis, budgeting, expense optimization, fraud detection.
+
+RESPONSIBILITIES:
+1. Categorize transactions accurately (bills, subscriptions, shopping, business, personal, etc.)
+2. Detect spending patterns and anomalies
+3. Find duplicate or suspicious charges
+4. Identify savings opportunities with specific amounts in AED
+5. Create actionable budget recommendations
+6. Flag potential refund opportunities
+7. Coordinate with the Executive Assistant on financial decisions
+
+RULES:
+- All amounts in AED unless specified
+- Be specific with savings suggestions (e.g., "Cancel X subscription: Save 150 AED/month")
+- Highlight urgent financial matters
+- Maintain complete data privacy
+- Never recommend risky investments without flagging for human review`
         },
         {
           role: 'user',
-          content: `Action: ${financeAction || 'analyze'}\n\nFinancial Data: ${JSON.stringify(financialContext)}`
+          content: `Action: ${financeAction || 'analyze'}
+${actionPrompts[financeAction] || actionPrompts.analyze}
+Period: ${period || 'current month'}
+
+Financial Data:
+${JSON.stringify(financialContext, null, 2)}`
         }
       ],
     }),
@@ -312,10 +595,20 @@ async function analyzeFinances(supabase: any, userId: string, data: any) {
   const aiResponse = await response.json();
   const analysis = aiResponse.choices?.[0]?.message?.content || 'Unable to analyze finances.';
 
+  // Calculate summary stats
+  const totalSpent = (existingTransactions || []).reduce((sum: number, t: any) => 
+    sum + (t.amount < 0 ? Math.abs(t.amount) : 0), 0);
+  const totalIncome = (existingTransactions || []).reduce((sum: number, t: any) => 
+    sum + (t.amount > 0 ? t.amount : 0), 0);
+
   return new Response(JSON.stringify({ 
     analysis,
+    analyst: AI_DEPARTMENTS.finance,
     summary: {
       totalTransactions: (existingTransactions?.length || 0) + (transactions?.length || 0),
+      totalSpent,
+      totalIncome,
+      netFlow: totalIncome - totalSpent,
       categoriesCount: categories?.length || 0
     }
   }), {
@@ -323,23 +616,27 @@ async function analyzeFinances(supabase: any, userId: string, data: any) {
   });
 }
 
+// ============================================================================
+// DAILY REPORT GENERATION
+// ============================================================================
+
 async function generateDailyReport(supabase: any, userId: string, data: any) {
   const reportDate = data?.date || new Date().toISOString().split('T')[0];
 
-  // Gather data from all departments
   const [
     { data: communications },
     { data: transactions },
     { data: departmentTasks },
-    { data: auditLogs }
+    { data: auditLogs },
+    { data: memories }
   ] = await Promise.all([
     supabase.from('executive_communications').select('*').eq('user_id', userId).gte('created_at', `${reportDate}T00:00:00`),
-    supabase.from('executive_financial_transactions').select('*').eq('user_id', userId).eq('transaction_date', reportDate),
+    supabase.from('executive_financial_transactions').select('*').eq('user_id', userId).gte('transaction_date', `${reportDate}T00:00:00`),
     supabase.from('executive_department_tasks').select('*').eq('user_id', userId).gte('created_at', `${reportDate}T00:00:00`),
-    supabase.from('executive_audit_logs').select('*').eq('user_id', userId).gte('audited_at', `${reportDate}T00:00:00`)
+    supabase.from('executive_audit_logs').select('*').eq('user_id', userId).gte('audited_at', `${reportDate}T00:00:00`),
+    supabase.from('executive_conversation_memory').select('*').eq('user_id', userId).order('created_at', { ascending: false }).limit(5)
   ]);
 
-  // Generate AI summary
   const response = await fetch('https://ai.gateway.lovable.dev/v1/chat/completions', {
     method: 'POST',
     headers: {
@@ -347,29 +644,37 @@ async function generateDailyReport(supabase: any, userId: string, data: any) {
       'Content-Type': 'application/json',
     },
     body: JSON.stringify({
-      model: 'google/gemini-2.5-flash',
+      model: 'google/gemini-3-flash-preview',
       messages: [
         {
           role: 'system',
-          content: `You are generating a daily executive report for the JBJ Hub owner.
-          
-          Create a comprehensive but easy-to-read report with:
-          1. Executive Summary (2-3 sentences)
-          2. Tasks Overview (completed ✅, pending ⚠️, in progress ⏳)
-          3. Communications Summary
-          4. Financial Highlights
-          5. Department Updates (Marketing, Design, Admin, Finance, Audit)
-          6. Key Recommendations
-          
-          Format with clear sections and visual indicators.`
+          content: `You are generating a comprehensive daily executive report for the CEO of JBJ Global Real Estate.
+
+FORMAT REQUIREMENTS:
+1. 📋 EXECUTIVE SUMMARY (2-3 bullet points - most important items only)
+2. ✅ TASKS OVERVIEW
+   - Completed ✅
+   - In Progress ⏳
+   - Pending ⚠️
+   - Blocked 🚨
+3. 📬 COMMUNICATIONS (summary with counts)
+4. 💰 FINANCIAL HIGHLIGHTS (key numbers only)
+5. 🏢 DEPARTMENT UPDATES (brief status from each AI department)
+6. 🎯 RECOMMENDATIONS (3 actionable next steps)
+7. 📅 TOMORROW'S PRIORITIES
+
+Use clear formatting, visual indicators, and be concise but thorough.
+Reference AI colleagues by name when mentioning department work.`
         },
         {
           role: 'user',
-          content: `Generate daily report for ${reportDate}:
-          Communications: ${JSON.stringify(communications || [])}
-          Transactions: ${JSON.stringify(transactions || [])}
-          Department Tasks: ${JSON.stringify(departmentTasks || [])}
-          Audit Logs: ${JSON.stringify(auditLogs || [])}`
+          content: `Generate the daily executive report for ${reportDate}:
+
+COMMUNICATIONS: ${JSON.stringify(communications || [])}
+TRANSACTIONS: ${JSON.stringify(transactions || [])}
+DEPARTMENT TASKS: ${JSON.stringify(departmentTasks || [])}
+AUDIT LOGS: ${JSON.stringify(auditLogs || [])}
+NEW MEMORIES LEARNED: ${JSON.stringify(memories || [])}`
         }
       ],
     }),
@@ -378,80 +683,76 @@ async function generateDailyReport(supabase: any, userId: string, data: any) {
   const aiResponse = await response.json();
   const reportContent = aiResponse.choices?.[0]?.message?.content || 'Report generation failed.';
 
-  // Calculate stats
   const tasksCompleted = departmentTasks?.filter((t: any) => t.status === 'completed').length || 0;
   const tasksPending = departmentTasks?.filter((t: any) => t.status === 'pending').length || 0;
   const tasksInProgress = departmentTasks?.filter((t: any) => t.status === 'in_progress').length || 0;
 
   // Save report
-  const { data: report, error } = await supabase
-    .from('executive_daily_reports')
-    .upsert({
-      user_id: userId,
-      report_date: reportDate,
-      summary_text: reportContent,
-      tasks_completed: tasksCompleted,
-      tasks_pending: tasksPending,
-      tasks_in_progress: tasksInProgress,
-      communications_handled: communications?.filter((c: any) => c.status === 'responded').length || 0,
-      communications_flagged: communications?.filter((c: any) => c.status === 'flagged').length || 0,
-      financial_summary: { 
-        total_transactions: transactions?.length || 0,
-        total_spent: transactions?.reduce((sum: number, t: any) => sum + (t.amount < 0 ? Math.abs(t.amount) : 0), 0) || 0
-      },
-      department_breakdown: {
-        marketing: departmentTasks?.filter((t: any) => t.department === 'marketing') || [],
-        design: departmentTasks?.filter((t: any) => t.department === 'design') || [],
-        admin: departmentTasks?.filter((t: any) => t.department === 'admin') || [],
-        finance: departmentTasks?.filter((t: any) => t.department === 'finance') || [],
-        audit: departmentTasks?.filter((t: any) => t.department === 'audit') || []
-      }
-    }, {
-      onConflict: 'user_id,report_date'
-    })
-    .select()
-    .single();
+  await supabase.from('executive_daily_reports').upsert({
+    user_id: userId,
+    report_date: reportDate,
+    summary_text: reportContent,
+    tasks_completed: tasksCompleted,
+    tasks_pending: tasksPending,
+    tasks_in_progress: tasksInProgress,
+    communications_handled: communications?.filter((c: any) => c.status === 'responded').length || 0,
+    communications_flagged: communications?.filter((c: any) => c.status === 'flagged').length || 0,
+    financial_summary: { 
+      total_transactions: transactions?.length || 0,
+      total_spent: transactions?.reduce((sum: number, t: any) => sum + Math.abs(t.amount || 0), 0) || 0
+    },
+    department_breakdown: {
+      marketing: departmentTasks?.filter((t: any) => t.department === 'marketing') || [],
+      design: departmentTasks?.filter((t: any) => t.department === 'design') || [],
+      admin: departmentTasks?.filter((t: any) => t.department === 'admin') || [],
+      finance: departmentTasks?.filter((t: any) => t.department === 'finance') || [],
+      audit: departmentTasks?.filter((t: any) => t.department === 'audit') || []
+    },
+    is_sent: false
+  }, { onConflict: 'user_id,report_date' });
 
   return new Response(JSON.stringify({ 
     report: reportContent,
+    date: reportDate,
     stats: {
       tasksCompleted,
       tasksPending,
       tasksInProgress,
-      communicationsHandled: communications?.length || 0
+      communicationsHandled: communications?.length || 0,
+      transactionsProcessed: transactions?.length || 0
     }
   }), {
     headers: { ...corsHeaders, 'Content-Type': 'application/json' },
   });
 }
 
+// ============================================================================
+// DEPARTMENT COORDINATION
+// ============================================================================
+
 async function coordinateDepartments(supabase: any, userId: string, data: any) {
   const { request, departments } = data;
   const requestId = crypto.randomUUID();
 
   // Create tasks for each department
-  const departmentPrompts: Record<string, string> = {
-    marketing: 'Create marketing plan, campaign strategy, and promotional content',
-    design: 'Design visual materials, banners, graphics, and brand assets',
-    admin: 'Handle logistics, scheduling, HR coordination, and administrative tasks',
-    finance: 'Prepare budget, cost analysis, and financial projections',
-    audit: 'Review compliance, accuracy, and risk assessment'
-  };
-
   const tasks = departments.map((dept: string) => ({
     user_id: userId,
     request_id: requestId,
     department: dept,
-    task_description: `${request} - ${departmentPrompts[dept] || 'General support'}`,
+    task_description: request,
     priority: 'high',
     status: 'pending',
-    assigned_ai: `${dept.charAt(0).toUpperCase() + dept.slice(1)} AI`,
+    assigned_ai: AI_DEPARTMENTS[dept as keyof typeof AI_DEPARTMENTS]?.name || dept,
     input_data: { originalRequest: request }
   }));
 
   await supabase.from('executive_department_tasks').insert(tasks);
 
-  // Generate coordination plan
+  const deptDetails = departments.map((d: string) => {
+    const info = AI_DEPARTMENTS[d as keyof typeof AI_DEPARTMENTS];
+    return info ? `${info.emoji} ${info.name} (${info.title})` : d;
+  }).join('\n');
+
   const response = await fetch('https://ai.gateway.lovable.dev/v1/chat/completions', {
     method: 'POST',
     headers: {
@@ -459,46 +760,75 @@ async function coordinateDepartments(supabase: any, userId: string, data: any) {
       'Content-Type': 'application/json',
     },
     body: JSON.stringify({
-      model: 'google/gemini-2.5-flash',
+      model: 'google/gemini-3-flash-preview',
       messages: [
         {
           role: 'system',
           content: `You are the JBJ Executive Assistant coordinating multiple AI departments.
-          Create a detailed coordination plan with timelines, deliverables, and dependencies.
-          Reference each department's AI by name (e.g., "Marketing AI will handle...", "Design AI will create...").
-          Provide a step-by-step execution plan.`
+Create a detailed coordination plan with clear ownership and timelines.
+
+DEPARTMENTS INVOLVED:
+${deptDetails}
+
+COORDINATION RULES:
+1. Assign clear ownership to each department's AI
+2. Define dependencies between tasks
+3. Set realistic timelines
+4. Identify potential blockers
+5. Create checkpoints for progress review`
         },
         {
           role: 'user',
-          content: `Request: ${request}\nDepartments involved: ${departments.join(', ')}`
+          content: `Create coordination plan for: "${request}"
+
+Departments: ${departments.join(', ')}
+
+Provide:
+1. Step-by-step execution plan
+2. Timeline with milestones
+3. Deliverables from each department
+4. Dependencies and handoffs
+5. Risk mitigation strategies`
         }
       ],
     }),
   });
 
   const aiResponse = await response.json();
-  const coordinationPlan = aiResponse.choices?.[0]?.message?.content || 'Coordination plan could not be generated.';
+  const coordinationPlan = aiResponse.choices?.[0]?.message?.content || '';
 
   return new Response(JSON.stringify({
     requestId,
     coordinationPlan,
     tasksCreated: tasks.length,
-    departments
+    departments: departments.map((d: string) => ({
+      name: d,
+      assignedTo: AI_DEPARTMENTS[d as keyof typeof AI_DEPARTMENTS]?.name || 'AI Agent',
+      status: 'pending'
+    }))
   }), {
     headers: { ...corsHeaders, 'Content-Type': 'application/json' },
   });
 }
 
+// ============================================================================
+// AUDIT & COMPLIANCE
+// ============================================================================
+
 async function performAudit(supabase: any, userId: string, data: any) {
-  const { auditType, entityId, entityType } = data;
+  const { scope, period } = data;
+  const startDate = period?.start || new Date(Date.now() - 7 * 24 * 60 * 60 * 1000).toISOString();
 
-  let entityData = null;
-  if (entityId && entityType) {
-    const { data } = await supabase.from(entityType).select('*').eq('id', entityId).single();
-    entityData = data;
-  }
+  const [
+    { data: communications },
+    { data: tasks },
+    { data: financials }
+  ] = await Promise.all([
+    supabase.from('executive_communications').select('*').eq('user_id', userId).gte('created_at', startDate),
+    supabase.from('executive_department_tasks').select('*').eq('user_id', userId).gte('created_at', startDate),
+    supabase.from('executive_financial_transactions').select('*').eq('user_id', userId).gte('transaction_date', startDate)
+  ]);
 
-  // Perform AI audit
   const response = await fetch('https://ai.gateway.lovable.dev/v1/chat/completions', {
     method: 'POST',
     headers: {
@@ -506,61 +836,296 @@ async function performAudit(supabase: any, userId: string, data: any) {
       'Content-Type': 'application/json',
     },
     body: JSON.stringify({
-      model: 'google/gemini-2.5-flash',
+      model: 'google/gemini-3-flash-preview',
       messages: [
         {
           role: 'system',
-          content: `You are the JBJ Audit AI, responsible for compliance and accuracy checking.
-          
-          Audit checklist:
-          1. Accuracy: Is all information correct?
-          2. Tone: Does it match company professional standards?
-          3. Compliance: Does it follow company policies?
-          4. Security: Are there any data leaks or privacy concerns?
-          5. Quality: Is the communication/work of high quality?
-          
-          Provide audit results as JSON with:
-          - complianceStatus: 'compliant' | 'warning' | 'non-compliant'
-          - issues: array of found issues
-          - severity: 'info' | 'warning' | 'critical'
-          - recommendations: array of improvement suggestions`
+          content: `You are Alex, the JBJ Audit & Compliance AI.
+Your role: Ensure accuracy, consistency, and compliance across all operations.
+
+AUDIT CHECKLIST:
+1. Communication Accuracy - Are all responses accurate and professional?
+2. Tone Consistency - Do responses match the owner's established style?
+3. Policy Compliance - Are company policies being followed?
+4. Financial Accuracy - Are all transactions properly categorized?
+5. Task Completion - Are tasks being completed on time?
+6. Security - Any suspicious activities or data leaks?
+
+FLAG ANYTHING CONCERNING WITH 🚨`
         },
         {
           role: 'user',
-          content: `Audit Type: ${auditType}\nData: ${JSON.stringify(entityData || data)}`
+          content: `Perform ${scope || 'comprehensive'} audit for period starting ${startDate}:
+
+COMMUNICATIONS: ${JSON.stringify(communications || [])}
+TASKS: ${JSON.stringify(tasks || [])}
+FINANCIALS: ${JSON.stringify(financials || [])}
+
+Provide:
+1. Accuracy Score (0-100%)
+2. Issues Found (categorized by severity)
+3. Recommendations
+4. Risk Assessment`
         }
       ],
     }),
   });
 
   const aiResponse = await response.json();
-  let auditResult;
-  try {
-    const content = aiResponse.choices?.[0]?.message?.content || '{}';
-    auditResult = JSON.parse(content.replace(/```json\n?|\n?```/g, ''));
-  } catch {
-    auditResult = {
-      complianceStatus: 'warning',
-      issues: ['Unable to parse audit results'],
-      severity: 'warning',
-      recommendations: ['Manual review recommended']
-    };
-  }
+  const auditReport = aiResponse.choices?.[0]?.message?.content || '';
 
-  // Log audit
+  // Log the audit
   await supabase.from('executive_audit_logs').insert({
     user_id: userId,
-    audit_type: auditType,
-    entity_id: entityId,
-    entity_type: entityType,
-    action: 'audit_performed',
-    new_state: auditResult,
-    compliance_status: auditResult.complianceStatus,
-    issues_found: auditResult.issues,
-    severity: auditResult.severity
+    audit_type: scope || 'comprehensive',
+    audited_data: { communications: communications?.length, tasks: tasks?.length, financials: financials?.length },
+    findings: auditReport,
+    severity_level: 'info',
+    is_resolved: true
   });
 
-  return new Response(JSON.stringify(auditResult), {
+  return new Response(JSON.stringify({
+    auditReport,
+    auditor: AI_DEPARTMENTS.audit,
+    period: { start: startDate, end: new Date().toISOString() },
+    stats: {
+      communicationsAudited: communications?.length || 0,
+      tasksAudited: tasks?.length || 0,
+      transactionsAudited: financials?.length || 0
+    }
+  }), {
+    headers: { ...corsHeaders, 'Content-Type': 'application/json' },
+  });
+}
+
+// ============================================================================
+// MEMORY & KNOWLEDGE MANAGEMENT
+// ============================================================================
+
+async function saveMemory(supabase: any, userId: string, data: any) {
+  const { type, key, value, source } = data;
+
+  const { error } = await supabase.from('executive_conversation_memory').upsert({
+    user_id: userId,
+    memory_type: type,
+    memory_key: key,
+    memory_value: value,
+    source: source || 'manual',
+    confidence_score: 1.0
+  }, { onConflict: 'user_id,memory_type,memory_key' });
+
+  return new Response(JSON.stringify({ 
+    success: !error,
+    message: error ? error.message : 'Memory saved successfully'
+  }), {
+    headers: { ...corsHeaders, 'Content-Type': 'application/json' },
+  });
+}
+
+async function getKnowledge(supabase: any, userId: string, data: any) {
+  const { query, category } = data;
+
+  let queryBuilder = supabase.from('executive_knowledge_base').select('*').eq('user_id', userId).eq('is_active', true);
+  
+  if (category) {
+    queryBuilder = queryBuilder.eq('category', category);
+  }
+
+  const { data: knowledge } = await queryBuilder.limit(20);
+
+  return new Response(JSON.stringify({ knowledge: knowledge || [] }), {
+    headers: { ...corsHeaders, 'Content-Type': 'application/json' },
+  });
+}
+
+async function addKnowledge(supabase: any, userId: string, data: any) {
+  const { category, title, content, keywords } = data;
+
+  const { error } = await supabase.from('executive_knowledge_base').insert({
+    user_id: userId,
+    category,
+    title,
+    content,
+    keywords: keywords || []
+  });
+
+  return new Response(JSON.stringify({ 
+    success: !error,
+    message: error ? error.message : 'Knowledge added successfully'
+  }), {
+    headers: { ...corsHeaders, 'Content-Type': 'application/json' },
+  });
+}
+
+// ============================================================================
+// AUTOMATION PROCESSING
+// ============================================================================
+
+async function processAutomation(supabase: any, userId: string, data: any) {
+  const { trigger, context } = data;
+
+  // Fetch active automation rules
+  const { data: rules } = await supabase
+    .from('executive_automation_rules')
+    .select('*')
+    .eq('user_id', userId)
+    .eq('is_active', true);
+
+  const matchedRules = [];
+  for (const rule of (rules || [])) {
+    const conditions = rule.trigger_conditions;
+    let matches = true;
+
+    if (conditions.trigger_type && conditions.trigger_type !== trigger) {
+      matches = false;
+    }
+    if (conditions.keywords) {
+      const hasKeyword = conditions.keywords.some((kw: string) => 
+        JSON.stringify(context).toLowerCase().includes(kw.toLowerCase())
+      );
+      if (!hasKeyword) matches = false;
+    }
+
+    if (matches) {
+      matchedRules.push(rule);
+      // Update execution count
+      await supabase.from('executive_automation_rules').update({
+        execution_count: (rule.execution_count || 0) + 1,
+        last_executed_at: new Date().toISOString()
+      }).eq('id', rule.id);
+    }
+  }
+
+  return new Response(JSON.stringify({
+    triggeredRules: matchedRules.length,
+    rules: matchedRules.map(r => ({
+      name: r.rule_name,
+      action: r.rule_type,
+      config: r.action_config
+    }))
+  }), {
+    headers: { ...corsHeaders, 'Content-Type': 'application/json' },
+  });
+}
+
+// ============================================================================
+// INITIALIZE TRAINING
+// ============================================================================
+
+async function initializeTraining(supabase: any, userId: string) {
+  // Add default training samples
+  const defaultSamples = [
+    {
+      user_id: userId,
+      sample_type: 'greeting',
+      original_message: 'Good morning! How can I assist you today?',
+      response_example: 'Good morning! I hope you\'re having a wonderful day. I\'m here to help with anything you need - whether it\'s scheduling, communications, or any other task. What would you like to focus on today?',
+      tone_tags: ['warm', 'professional', 'proactive'],
+      is_active: true
+    },
+    {
+      user_id: userId,
+      sample_type: 'urgent_request',
+      original_message: 'I need this done immediately',
+      response_example: 'Understood - I\'m treating this as top priority. I\'ll have it ready within the next 30 minutes and will update you as soon as it\'s complete. Is there anything else urgent I should handle alongside this?',
+      tone_tags: ['urgent', 'efficient', 'reassuring'],
+      is_active: true
+    },
+    {
+      user_id: userId,
+      sample_type: 'client_inquiry',
+      original_message: 'A client is asking about property prices',
+      response_example: 'I\'ll prepare a comprehensive pricing overview for the client right away. I\'ll include market comparisons, payment plans, and our exclusive offers. Would you like me to send it directly or prepare it for your review first?',
+      tone_tags: ['professional', 'thorough', 'client-focused'],
+      is_active: true
+    },
+    {
+      user_id: userId,
+      sample_type: 'delegation',
+      original_message: 'Handle this for me',
+      response_example: 'Absolutely, I\'ve got this covered. I\'ll handle everything and keep you updated on progress. You\'ll receive a summary once it\'s complete. Focus on what matters most - I\'ll take care of the rest.',
+      tone_tags: ['confident', 'reassuring', 'efficient'],
+      is_active: true
+    },
+    {
+      user_id: userId,
+      sample_type: 'meeting_request',
+      original_message: 'Schedule a meeting with the developer',
+      response_example: 'I\'ll coordinate with the developer\'s office right away. I\'ll propose 3 time slots that work with your calendar and confirm the best option. Shall I prepare any materials or briefing notes for the meeting?',
+      tone_tags: ['proactive', 'organized', 'thorough'],
+      is_active: true
+    }
+  ];
+
+  // Add default automation rules
+  const defaultRules = [
+    {
+      user_id: userId,
+      rule_name: 'Auto-categorize Urgent',
+      rule_type: 'categorize',
+      trigger_conditions: { keywords: ['urgent', 'asap', 'emergency', 'immediately'] },
+      action_config: { category: 'important', priority: 'high', notify: true },
+      is_active: true
+    },
+    {
+      user_id: userId,
+      rule_name: 'Auto-categorize Recruitment',
+      rule_type: 'categorize',
+      trigger_conditions: { keywords: ['cv', 'resume', 'job', 'application', 'vacancy', 'position'] },
+      action_config: { category: 'recruitment', forward_to: 'hr' },
+      is_active: true
+    },
+    {
+      user_id: userId,
+      rule_name: 'Flag Complaints',
+      rule_type: 'notify',
+      trigger_conditions: { keywords: ['complaint', 'unhappy', 'disappointed', 'terrible', 'worst'] },
+      action_config: { notify: true, escalate: true, priority: 'critical' },
+      is_active: true
+    }
+  ];
+
+  // Add default knowledge
+  const defaultKnowledge = [
+    {
+      user_id: userId,
+      category: 'company_info',
+      title: 'JBJ Global Real Estate Overview',
+      content: 'JBJ Global Real Estate L.L.C S.O.C. is a premier real estate brokerage based in Dubai, UAE. Founded by Jane Abou Jaoude, the company specializes in off-plan properties, luxury real estate, and investment advisory. Contact: +971 56 591 1000, contact@jbj.ae',
+      keywords: ['jbj', 'company', 'about', 'contact']
+    },
+    {
+      user_id: userId,
+      category: 'policies',
+      title: 'Response Time Policy',
+      content: 'All client inquiries must be responded to within 2 hours during business hours. Urgent matters require response within 30 minutes. Complaints are escalated immediately to leadership.',
+      keywords: ['response', 'time', 'policy', 'sla']
+    },
+    {
+      user_id: userId,
+      category: 'processes',
+      title: 'Client Onboarding Process',
+      content: 'New clients receive: 1) Welcome call within 24 hours, 2) Personalized property recommendations within 48 hours, 3) Market report within 72 hours, 4) First viewing scheduled within 1 week.',
+      keywords: ['onboarding', 'client', 'new', 'process']
+    }
+  ];
+
+  // Insert all defaults
+  await Promise.all([
+    supabase.from('executive_training_samples').upsert(defaultSamples, { onConflict: 'user_id,sample_type' }),
+    supabase.from('executive_automation_rules').insert(defaultRules),
+    supabase.from('executive_knowledge_base').insert(defaultKnowledge)
+  ]);
+
+  return new Response(JSON.stringify({
+    success: true,
+    message: 'Training initialized successfully',
+    initialized: {
+      trainingSamples: defaultSamples.length,
+      automationRules: defaultRules.length,
+      knowledgeEntries: defaultKnowledge.length
+    }
+  }), {
     headers: { ...corsHeaders, 'Content-Type': 'application/json' },
   });
 }
