@@ -9,7 +9,7 @@ import { Badge } from "@/components/ui/badge";
 import { Skeleton } from "@/components/ui/skeleton";
 import { toast } from "sonner";
 import { 
-  Users, FileText, Plus, Upload, Download, LogOut, Shuffle, LayoutGrid, List, Zap
+  Users, FileText, Plus, Upload, Download, LogOut, Shuffle, LayoutGrid, List, Zap, Briefcase
 } from "lucide-react";
 import CRMLeadsTable from "@/components/crm/CRMLeadsTable";
 import CRMEnhancedDashboard from "@/components/crm/CRMEnhancedDashboard";
@@ -23,6 +23,7 @@ import KanbanPipeline from "@/components/crm/KanbanPipeline";
 import ActivityTimeline from "@/components/crm/ActivityTimeline";
 import DealValueTracker from "@/components/crm/DealValueTracker";
 import AutomationRules from "@/components/crm/AutomationRules";
+import EmployeeCenter from "@/components/crm/EmployeeCenter";
 
 interface CRMProfile {
   id: string;
@@ -357,10 +358,17 @@ const CRM = () => {
                   <Zap className="h-4 w-4 mr-2" />
                   Website Leads
                 </TabsTrigger>
+                <TabsTrigger 
+                  value="employees" 
+                  className="data-[state=active]:bg-gold data-[state=active]:text-black text-muted-foreground font-semibold"
+                >
+                  <Briefcase className="h-4 w-4 mr-2" />
+                  Employee Center
+                </TabsTrigger>
               </TabsList>
 
               <TabsContent value="all">
-                <CRMLeadsTable 
+                <CRMLeadsTable
                   key={`all-${refreshKey}-${quickFilter}-${sourceFilter}`}
                   userId={user?.id || ""} 
                   filterType="all"
