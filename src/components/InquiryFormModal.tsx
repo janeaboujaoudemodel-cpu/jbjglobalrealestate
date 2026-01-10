@@ -26,14 +26,14 @@ const inquirySchema = z.object({
     .max(100, 'Name is too long')
     .regex(/^[a-zA-Z\s\-'\.]+$/, 'Name can only contain letters, spaces, hyphens, and apostrophes'),
   email: z.string()
-    .min(1, 'Email is required')
+    .min(1, '⚠️ This field is required.')
     .max(255, 'Email is too long')
-    .regex(emailRegex, 'Please enter a valid email address'),
+    .regex(emailRegex, '⚠️ Please enter a valid email address.'),
   phone: z.string()
-    .min(8, 'Please enter a valid phone number'),
-  nationality: z.string().min(1, 'Please select your nationality'),
-  language: z.string().min(1, 'Please select your preferred language'),
-  role: z.enum(['buyer', 'broker', 'visitor'], { required_error: 'Please select your role' }),
+    .min(1, '⚠️ This field is required.'),
+  nationality: z.string().min(1, '⚠️ Please select your nationality'),
+  language: z.string().min(1, '⚠️ Please select your preferred language'),
+  role: z.enum(['buyer', 'broker', 'visitor'], { required_error: '⚠️ Please select your role' }),
   buyerType: z.enum(['homeowner', 'investor']).optional(),
   message: z.string().max(1000).optional(),
 });
@@ -200,8 +200,9 @@ const InquiryFormModal = ({
         language: data.language,
       }));
 
+      const firstName = data.fullName.split(' ')[0];
       setIsSuccess(true);
-      toast.success('✅ Thank you! Our team will contact you shortly.');
+      toast.success(`✅ Thank you, ${firstName}! Our team will contact you shortly.`);
       
       setTimeout(() => {
         setIsSuccess(false);
@@ -231,7 +232,8 @@ const InquiryFormModal = ({
     // Validate phone before proceeding
     const phoneValidation = getPhoneValidation(data.phone);
     if (!phoneValidation.isValid) {
-      form.setError('phone', { message: phoneValidation.message });
+      // Don't set form error - PhoneInput shows its own validation
+      toast.error('⚠️ Please enter a valid phone number including the full country code.');
       return;
     }
 
@@ -469,17 +471,26 @@ const InquiryFormModal = ({
                     <FormField
                       control={form.control}
                       name="phone"
-                      render={({ field }) => (
+                      render={({ field, fieldState }) => (
                         <FormItem>
                           <FormLabel className="text-zinc-400 text-sm">{t('inquiry.phone')} *</FormLabel>
                           <FormControl>
                             <PhoneInput 
                               value={field.value}
-                              onChange={field.onChange}
+                              onChange={(val) => {
+                                field.onChange(val);
+                                // Clear form error when user types
+                                if (fieldState.error) {
+                                  form.clearErrors('phone');
+                                }
+                              }}
                               showValidation={true}
                             />
                           </FormControl>
-                          <FormMessage className="text-red-400 text-xs" />
+                          {/* Only show form error if PhoneInput has no local number (empty field) */}
+                          {fieldState.error && (!field.value || field.value.length <= 5) && (
+                            <p className="text-red-400 text-xs">{fieldState.error.message}</p>
+                          )}
                         </FormItem>
                       )}
                     />
