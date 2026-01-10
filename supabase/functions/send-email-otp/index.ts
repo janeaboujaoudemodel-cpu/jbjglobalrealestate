@@ -14,9 +14,14 @@ interface EmailOTPRequest {
 async function sendEmailWithResend(to: string, otp: string, fullName?: string): Promise<boolean> {
   const resendApiKey = Deno.env.get("RESEND_API_KEY");
   if (!resendApiKey) {
-    console.log(`[DEV] Email OTP for ${to}: ${otp}`);
+    console.log(`[DEV MODE] Email OTP for ${to}: ${otp}`);
+    console.log(`[DEV MODE] No RESEND_API_KEY configured, OTP logged instead of sent`);
     return true;
   }
+  
+  // Use verified domain - jbj.ae must be verified in Resend dashboard
+  // Fallback to resend.dev for testing with owner's email only
+  const fromAddress = "JBJ Global Real Estate <noreply@jbj.ae>";
 
   const response = await fetch("https://api.resend.com/emails", {
     method: "POST",
@@ -25,7 +30,7 @@ async function sendEmailWithResend(to: string, otp: string, fullName?: string): 
       "Content-Type": "application/json",
     },
     body: JSON.stringify({
-      from: "JBJ Global Real Estate <onboarding@resend.dev>",
+      from: fromAddress,
       reply_to: "contact@jbj.ae",
       to: [to],
       subject: "Your Verification Code - JBJ Global Real Estate",
@@ -108,8 +113,28 @@ async function sendEmailWithResend(to: string, otp: string, fullName?: string): 
   });
 
   if (!response.ok) {
-    const error = await response.text();
-    console.error("Resend API error:", error);
+    const errorText = await response.text();
+    console.error("Resend API error:", errorText);
+    
+    // Parse error for better logging
+    try {
+      const errorJson = JSON.parse(errorText);
+      console.error("Resend error details:", {
+        statusCode: errorJson.statusCode,
+        name: errorJson.name,
+        message: errorJson.message,
+        fromAddress: fromAddress,
+        toAddress: to
+      });
+      
+      // If it's a domain verification issue, provide clear guidance
+      if (errorJson.message?.includes('verify a domain')) {
+        console.error("ACTION REQUIRED: Verify jbj.ae domain at https://resend.com/domains");
+      }
+    } catch {
+      // Ignore JSON parse errors
+    }
+    
     return false;
   }
 

@@ -295,6 +295,27 @@ export const COUNTRY_CODES_BY_REGION = {
     { code: "+975", country: "Bhutan", flag: "🇧🇹", minLen: 8, maxLen: 8 },
     { code: "+679", country: "Fiji", flag: "🇫🇯", minLen: 7, maxLen: 7 },
     { code: "+675", country: "Papua New Guinea", flag: "🇵🇬", minLen: 8, maxLen: 8 },
+    { code: "+670", country: "Timor-Leste", flag: "🇹🇱", minLen: 7, maxLen: 8 },
+  ],
+  "Pacific Islands": [
+    { code: "+676", country: "Tonga", flag: "🇹🇴", minLen: 5, maxLen: 7 },
+    { code: "+677", country: "Solomon Islands", flag: "🇸🇧", minLen: 7, maxLen: 7 },
+    { code: "+678", country: "Vanuatu", flag: "🇻🇺", minLen: 7, maxLen: 7 },
+    { code: "+680", country: "Palau", flag: "🇵🇼", minLen: 7, maxLen: 7 },
+    { code: "+681", country: "Wallis & Futuna", flag: "🇼🇫", minLen: 6, maxLen: 6 },
+    { code: "+682", country: "Cook Islands", flag: "🇨🇰", minLen: 5, maxLen: 5 },
+    { code: "+683", country: "Niue", flag: "🇳🇺", minLen: 4, maxLen: 4 },
+    { code: "+685", country: "Samoa", flag: "🇼🇸", minLen: 5, maxLen: 7 },
+    { code: "+686", country: "Kiribati", flag: "🇰🇮", minLen: 5, maxLen: 8 },
+    { code: "+687", country: "New Caledonia", flag: "🇳🇨", minLen: 6, maxLen: 6 },
+    { code: "+688", country: "Tuvalu", flag: "🇹🇻", minLen: 5, maxLen: 6 },
+    { code: "+689", country: "French Polynesia", flag: "🇵🇫", minLen: 6, maxLen: 6 },
+    { code: "+690", country: "Tokelau", flag: "🇹🇰", minLen: 4, maxLen: 4 },
+    { code: "+691", country: "Micronesia", flag: "🇫🇲", minLen: 7, maxLen: 7 },
+    { code: "+692", country: "Marshall Islands", flag: "🇲🇭", minLen: 7, maxLen: 7 },
+    { code: "+1670", country: "Northern Mariana", flag: "🇲🇵", minLen: 7, maxLen: 7 },
+    { code: "+1671", country: "Guam", flag: "🇬🇺", minLen: 7, maxLen: 7 },
+    { code: "+1684", country: "American Samoa", flag: "🇦🇸", minLen: 7, maxLen: 7 },
   ],
   "Central Asia & Caucasus": [
     { code: "+994", country: "Azerbaijan", flag: "🇦🇿", minLen: 9, maxLen: 9 },
@@ -492,9 +513,9 @@ const PhoneInput = React.forwardRef<HTMLInputElement, PhoneInputProps>(
     };
 
     return (
-      <div className={cn("space-y-1.5", className)}>
-        <div className="flex flex-col sm:flex-row gap-2">
-          {/* Country Code Selector - Full width on mobile */}
+      <div className={cn("space-y-1.5 w-full", className)}>
+        <div className="flex flex-col sm:flex-row gap-2 w-full">
+          {/* Country Code Selector - Responsive width */}
           <Popover open={codeOpen} onOpenChange={setCodeOpen}>
             <PopoverTrigger asChild>
               <Button
@@ -503,13 +524,13 @@ const PhoneInput = React.forwardRef<HTMLInputElement, PhoneInputProps>(
                 role="combobox"
                 aria-expanded={codeOpen}
                 disabled={disabled}
-                className="w-full sm:w-[180px] h-12 bg-zinc-900 border-zinc-700 text-white hover:bg-zinc-800 hover:text-white justify-between shrink-0"
+                className="w-full sm:w-[160px] h-12 bg-zinc-900 border-zinc-700 text-white hover:bg-zinc-800 hover:text-white justify-between shrink-0"
               >
                 <span className="flex items-center gap-2 truncate">
                   <span className="text-xl">{currentCountry.flag}</span>
                   <span className="font-medium">{currentCode}</span>
-                  <span className="text-zinc-400 text-sm hidden sm:inline truncate">{currentCountry.country}</span>
                 </span>
+                <ChevronsUpDown className="ml-1 h-4 w-4 shrink-0 opacity-50" />
                 <ChevronsUpDown className="ml-1 h-4 w-4 shrink-0 opacity-50" />
               </Button>
             </PopoverTrigger>
@@ -549,8 +570,8 @@ const PhoneInput = React.forwardRef<HTMLInputElement, PhoneInputProps>(
             </PopoverContent>
           </Popover>
           
-          {/* Phone Number Input - Full width */}
-          <div className="relative flex-1 min-w-0">
+          {/* Phone Number Input - Fills remaining space */}
+          <div className="relative flex-1 w-full min-w-0">
             <Input 
               ref={ref}
               type="tel"
@@ -562,7 +583,7 @@ const PhoneInput = React.forwardRef<HTMLInputElement, PhoneInputProps>(
                 localNumber && validation.isValid && "border-green-500/50",
                 localNumber && !validation.isValid && "border-amber-500/50"
               )}
-              placeholder={placeholder || "Enter your phone number"}
+              placeholder={placeholder || `Enter your phone number`}
             />
             {showValidation && localNumber && validation.isValid && (
               <CheckCircle className="absolute right-3 top-1/2 -translate-y-1/2 h-5 w-5 text-green-500" />
