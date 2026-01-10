@@ -183,15 +183,20 @@ const AIPersonalShopper = () => {
     try {
       const fullPlan = messages.map(m => `${m.role === 'user' ? 'Client' : 'AI Concierge'}: ${m.content}`).join('\n\n');
       
-      await supabase.functions.invoke('send-inquiry-email', {
-        body: {
-          name: inquiryForm.name,
-          email: inquiryForm.email,
-          phone: inquiryForm.phone,
-          source: 'AI Travel Concierge',
-          context: fullPlan
-        }
-      });
+      // Best-effort notification (must NOT block user success)
+      try {
+        await supabase.functions.invoke('send-inquiry-email', {
+          body: {
+            name: inquiryForm.name,
+            email: inquiryForm.email,
+            phone: inquiryForm.phone,
+            source: 'AI Travel Concierge',
+            context: fullPlan
+          }
+        });
+      } catch (notifyErr) {
+        console.warn('Travel concierge notification failed:', notifyErr);
+      }
 
       // Update plan status
       if (currentPlan) {

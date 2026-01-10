@@ -108,8 +108,8 @@ const Contact = () => {
   const onSubmit = async (data: ConsultationFormData) => {
     setIsSubmitting(true);
     try {
-      // Capture lead - saves to BOTH leads AND crm_leads tables
-      await captureLead({
+      // 1) Capture lead - saves to BOTH leads AND crm_leads tables (CRITICAL)
+      const leadCaptured = await captureLead({
         email: data.email,
         fullName: data.fullName,
         phone: data.phone,
@@ -118,25 +118,33 @@ const Contact = () => {
         currentLocation: data.currentLocation,
       }, "contact-consultation", "client");
 
-      // Send email via edge function
-      await supabase.functions.invoke("send-inquiry-email", {
-        body: {
-          fullName: data.fullName,
-          email: data.email,
-          phone: data.phone,
-          nationality: data.nationality,
-          language: data.language,
-          source: "contact-consultation",
-          context: {
-            currentLocation: data.currentLocation,
-            serviceNeeded: data.serviceNeeded,
-            budgetRange: data.budgetRange || "Not specified",
-            timeline: data.timeline || "Not specified",
-            marketingConsent: data.marketingConsent ? "Yes" : "No",
+      if (!leadCaptured) {
+        throw new Error('Lead capture failed');
+      }
+
+      // 2) Best-effort admin notification (must NOT block user submission)
+      try {
+        await supabase.functions.invoke("send-inquiry-email", {
+          body: {
+            fullName: data.fullName,
+            email: data.email,
+            phone: data.phone,
+            nationality: data.nationality,
+            language: data.language,
+            source: "contact-consultation",
+            context: {
+              currentLocation: data.currentLocation,
+              serviceNeeded: data.serviceNeeded,
+              budgetRange: data.budgetRange || "Not specified",
+              timeline: data.timeline || "Not specified",
+              marketingConsent: data.marketingConsent ? "Yes" : "No",
+            },
+            message: data.message,
           },
-          message: data.message,
-        },
-      });
+        });
+      } catch (notifyErr) {
+        console.warn('Admin notification failed (lead still saved):', notifyErr);
+      }
 
       setIsSuccess(true);
       toast.success("Your inquiry has been submitted successfully!");
