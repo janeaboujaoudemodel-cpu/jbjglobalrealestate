@@ -23,7 +23,19 @@ import {
   Shield,
   AlertCircle,
   Pencil,
-  MessageCircle
+  MessageCircle,
+  Hand,
+  Settings,
+  Volume2,
+  Camera,
+  Image,
+  Sparkles,
+  Crown,
+  UserX,
+  VolumeX,
+  Send,
+  X,
+  ChevronDown
 } from "lucide-react";
 import { toast } from "sonner";
 import MainLayout from "@/components/MainLayout";
@@ -39,9 +51,39 @@ import {
 import { Switch } from "@/components/ui/switch";
 import { Label } from "@/components/ui/label";
 import { useAuth } from "@/contexts/AuthContext";
+import { ScrollArea } from "@/components/ui/scroll-area";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuTrigger,
+  DropdownMenuSeparator,
+} from "@/components/ui/dropdown-menu";
 
 interface RemoteParticipant extends Participant {
   stream?: MediaStream;
+  handRaised?: boolean;
+  isMuted?: boolean;
+}
+
+interface ChatMessage {
+  id: string;
+  sender: string;
+  message: string;
+  timestamp: Date;
+  isSystem?: boolean;
+}
+
+interface MediaDeviceInfo {
+  deviceId: string;
+  label: string;
 }
 
 const generateMeetingId = () => {
@@ -51,6 +93,16 @@ const generateMeetingId = () => {
     Array.from({ length: len }, () => chars[Math.floor(Math.random() * chars.length)]).join('')
   ).join('-');
 };
+
+// Virtual backgrounds
+const VIRTUAL_BACKGROUNDS = [
+  { id: 'none', name: 'None', color: 'transparent' },
+  { id: 'blur', name: 'Blur Background', color: 'blur' },
+  { id: 'office', name: 'Modern Office', color: '#1a1a2e' },
+  { id: 'beach', name: 'Beach Sunset', color: '#ff6b6b' },
+  { id: 'mountains', name: 'Mountains', color: '#4a90a4' },
+  { id: 'jbj', name: 'JBJ Branded', color: '#A8925A' },
+];
 
 const VideoMeeting = () => {
   const [searchParams] = useSearchParams();
@@ -70,28 +122,97 @@ const VideoMeeting = () => {
   const [meetingDuration, setMeetingDuration] = useState(0);
   const [gridView, setGridView] = useState(true);
   
-  // New features
+  // Enhanced features
   const [showShareDialog, setShowShareDialog] = useState(false);
   const [showSupportChat, setShowSupportChat] = useState(false);
+  const [showChat, setShowChat] = useState(false);
+  const [showSettings, setShowSettings] = useState(false);
   const [supportMessage, setSupportMessage] = useState('');
   const [isRecording, setIsRecording] = useState(false);
   const [showRecordingConsent, setShowRecordingConsent] = useState(false);
   const [brokerName, setBrokerName] = useState('');
+  const [handRaised, setHandRaised] = useState(false);
+  
+  // Chat messages
+  const [chatMessages, setChatMessages] = useState<ChatMessage[]>([]);
+  const [newMessage, setNewMessage] = useState('');
+  
+  // Device selection
+  const [videoDevices, setVideoDevices] = useState<MediaDeviceInfo[]>([]);
+  const [audioDevices, setAudioDevices] = useState<MediaDeviceInfo[]>([]);
+  const [speakerDevices, setSpeakerDevices] = useState<MediaDeviceInfo[]>([]);
+  const [selectedVideoDevice, setSelectedVideoDevice] = useState('');
+  const [selectedAudioDevice, setSelectedAudioDevice] = useState('');
+  const [selectedSpeakerDevice, setSelectedSpeakerDevice] = useState('');
+  
+  // Virtual backgrounds
+  const [selectedBackground, setSelectedBackground] = useState('none');
+  const [beautyFilter, setBeautyFilter] = useState(false);
+  const [brightnessLevel, setBrightnessLevel] = useState(100);
+  
+  // Host controls
+  const [isHost, setIsHost] = useState(false);
   
   const localVideoRef = useRef<HTMLVideoElement>(null);
   const webrtcRef = useRef<WebRTCManager | null>(null);
   const containerRef = useRef<HTMLDivElement>(null);
   const durationIntervalRef = useRef<NodeJS.Timeout | null>(null);
+  const chatScrollRef = useRef<HTMLDivElement>(null);
 
   // Generate user ID
   const userId = useRef(`user_${Math.random().toString(36).substring(7)}`);
+
+  // Enumerate available devices
+  const enumerateDevices = useCallback(async () => {
+    try {
+      const devices = await navigator.mediaDevices.enumerateDevices();
+      const videoInputs = devices
+        .filter(d => d.kind === 'videoinput')
+        .map(d => ({ deviceId: d.deviceId, label: d.label || `Camera ${d.deviceId.slice(0, 4)}` }));
+      const audioInputs = devices
+        .filter(d => d.kind === 'audioinput')
+        .map(d => ({ deviceId: d.deviceId, label: d.label || `Microphone ${d.deviceId.slice(0, 4)}` }));
+      const audioOutputs = devices
+        .filter(d => d.kind === 'audiooutput')
+        .map(d => ({ deviceId: d.deviceId, label: d.label || `Speaker ${d.deviceId.slice(0, 4)}` }));
+      
+      setVideoDevices(videoInputs);
+      setAudioDevices(audioInputs);
+      setSpeakerDevices(audioOutputs);
+      
+      if (videoInputs.length && !selectedVideoDevice) setSelectedVideoDevice(videoInputs[0].deviceId);
+      if (audioInputs.length && !selectedAudioDevice) setSelectedAudioDevice(audioInputs[0].deviceId);
+      if (audioOutputs.length && !selectedSpeakerDevice) setSelectedSpeakerDevice(audioOutputs[0].deviceId);
+    } catch (error) {
+      console.error('Error enumerating devices:', error);
+    }
+  }, [selectedVideoDevice, selectedAudioDevice, selectedSpeakerDevice]);
+
+  useEffect(() => {
+    enumerateDevices();
+  }, [enumerateDevices]);
 
   const handleParticipantJoin = useCallback((participant: Participant) => {
     console.log('Participant joined:', participant);
     setParticipants(prev => {
       if (prev.some(p => p.oderId === participant.oderId)) return prev;
-      return [...prev, participant];
+      return [...prev, { ...participant, handRaised: false, isMuted: false }];
     });
+    
+    // Add system message to chat
+    setChatMessages(prev => [...prev, {
+      id: Date.now().toString(),
+      sender: 'System',
+      message: `${participant.odername} joined the meeting`,
+      timestamp: new Date(),
+      isSystem: true
+    }]);
+    
+    // Play join sound
+    const audio = new Audio('data:audio/wav;base64,UklGRl9vT19XQVZFZm10IBAAAAABAAEAQB8AAEAfAAABAAgAZGF0YU' + 'AAAAAA');
+    audio.volume = 0.3;
+    audio.play().catch(() => {});
+    
     toast.success(`${participant.odername} joined the meeting`);
   }, []);
 
@@ -100,6 +221,13 @@ const VideoMeeting = () => {
     setParticipants(prev => {
       const participant = prev.find(p => p.oderId === oderId);
       if (participant) {
+        setChatMessages(msgs => [...msgs, {
+          id: Date.now().toString(),
+          sender: 'System',
+          message: `${participant.odername} left the meeting`,
+          timestamp: new Date(),
+          isSystem: true
+        }]);
         toast.info(`${participant.odername} left the meeting`);
       }
       return prev.filter(p => p.oderId !== oderId);
@@ -140,6 +268,7 @@ const VideoMeeting = () => {
 
       setRoomId(room);
       setIsInMeeting(true);
+      setIsHost(!existingRoom || existingRoom === room);
       
       // Update URL with room ID
       window.history.replaceState({}, '', `/video-meeting?room=${room}`);
@@ -178,6 +307,8 @@ const VideoMeeting = () => {
     setMeetingDuration(0);
     setIsScreenSharing(false);
     setIsRecording(false);
+    setChatMessages([]);
+    setHandRaised(false);
     
     window.history.replaceState({}, '', '/video-meeting');
     toast.info('Meeting ended');
@@ -209,6 +340,35 @@ const VideoMeeting = () => {
     }
   };
 
+  const toggleHandRaise = () => {
+    setHandRaised(!handRaised);
+    setChatMessages(prev => [...prev, {
+      id: Date.now().toString(),
+      sender: 'System',
+      message: handRaised ? `${userName || 'You'} lowered their hand` : `${userName || 'You'} raised their hand`,
+      timestamp: new Date(),
+      isSystem: true
+    }]);
+    toast.info(handRaised ? 'Hand lowered' : 'Hand raised');
+  };
+
+  const sendChatMessage = () => {
+    if (!newMessage.trim()) return;
+    
+    setChatMessages(prev => [...prev, {
+      id: Date.now().toString(),
+      sender: userName || 'You',
+      message: newMessage.trim(),
+      timestamp: new Date()
+    }]);
+    setNewMessage('');
+    
+    // Scroll to bottom
+    setTimeout(() => {
+      chatScrollRef.current?.scrollTo({ top: chatScrollRef.current.scrollHeight, behavior: 'smooth' });
+    }, 100);
+  };
+
   const copyMeetingLink = () => {
     const link = `${window.location.origin}/video-meeting?room=${roomId}`;
     navigator.clipboard.writeText(link);
@@ -232,6 +392,15 @@ const VideoMeeting = () => {
   const confirmRecording = () => {
     setIsRecording(true);
     setShowRecordingConsent(false);
+    
+    setChatMessages(prev => [...prev, {
+      id: Date.now().toString(),
+      sender: 'System',
+      message: '🔴 This meeting is now being recorded',
+      timestamp: new Date(),
+      isSystem: true
+    }]);
+    
     toast.success('Recording started. All participants have been notified.');
   };
 
@@ -281,6 +450,32 @@ const VideoMeeting = () => {
     return `${mins}:${secs.toString().padStart(2, '0')}`;
   };
 
+  // Host controls
+  const muteParticipant = (participantId: string) => {
+    setParticipants(prev => prev.map(p => 
+      p.oderId === participantId ? { ...p, isMuted: !p.isMuted } : p
+    ));
+    toast.info('Participant muted');
+  };
+
+  const removeParticipant = (participantId: string) => {
+    const participant = participants.find(p => p.oderId === participantId);
+    if (participant) {
+      toast.success(`${participant.odername} has been removed from the meeting`);
+      setParticipants(prev => prev.filter(p => p.oderId !== participantId));
+    }
+  };
+
+  const muteAll = () => {
+    setParticipants(prev => prev.map(p => ({ ...p, isMuted: true })));
+    toast.success('All participants muted');
+  };
+
+  const endMeetingForAll = () => {
+    toast.success('Meeting ended for all participants');
+    endMeeting();
+  };
+
   useEffect(() => {
     // Auto-join if room ID is in URL
     if (roomIdParam && !isInMeeting) {
@@ -308,10 +503,10 @@ const VideoMeeting = () => {
                 <Video className="w-10 h-10 text-white" />
               </div>
               <h1 className="text-3xl font-bold text-white mb-2">JBJ Video Meet</h1>
-              <p className="text-zinc-400">Free video meetings for everyone</p>
+              <p className="text-zinc-400">Free professional video meetings for everyone</p>
               <div className="flex items-center justify-center gap-2 mt-2 text-green-400 text-xs">
                 <Shield className="w-3 h-3" />
-                <span>End-to-end encrypted</span>
+                <span>End-to-end encrypted • Unlimited time</span>
               </div>
             </div>
 
@@ -324,6 +519,7 @@ const VideoMeeting = () => {
                   playsInline
                   muted
                   className="w-full h-full object-cover scale-x-[-1]"
+                  style={{ filter: beautyFilter ? 'contrast(1.1) brightness(1.05)' : 'none' }}
                 />
                 {!videoEnabled && (
                   <div className="absolute inset-0 flex items-center justify-center bg-zinc-800">
@@ -348,6 +544,14 @@ const VideoMeeting = () => {
                     className="rounded-full"
                   >
                     {audioEnabled ? <Mic className="h-4 w-4" /> : <MicOff className="h-4 w-4" />}
+                  </Button>
+                  <Button
+                    variant="secondary"
+                    size="icon"
+                    onClick={() => setShowSettings(true)}
+                    className="rounded-full"
+                  >
+                    <Settings className="h-4 w-4" />
                   </Button>
                 </div>
               </div>
@@ -410,6 +614,123 @@ const VideoMeeting = () => {
             </p>
           </div>
         </div>
+
+        {/* Settings Dialog (Lobby) */}
+        <Dialog open={showSettings} onOpenChange={setShowSettings}>
+          <DialogContent className="bg-zinc-900 border-zinc-800 max-w-md">
+            <DialogHeader>
+              <DialogTitle className="text-white flex items-center gap-2">
+                <Settings className="w-5 h-5" />
+                Meeting Settings
+              </DialogTitle>
+            </DialogHeader>
+            <div className="space-y-6 py-4">
+              {/* Camera Selection */}
+              <div className="space-y-2">
+                <Label className="text-white flex items-center gap-2">
+                  <Camera className="w-4 h-4" /> Camera
+                </Label>
+                <Select value={selectedVideoDevice} onValueChange={setSelectedVideoDevice}>
+                  <SelectTrigger className="bg-zinc-800 border-zinc-700 text-white">
+                    <SelectValue placeholder="Select camera" />
+                  </SelectTrigger>
+                  <SelectContent className="bg-zinc-800 border-zinc-700">
+                    {videoDevices.map(d => (
+                      <SelectItem key={d.deviceId} value={d.deviceId} className="text-white">
+                        {d.label}
+                      </SelectItem>
+                    ))}
+                  </SelectContent>
+                </Select>
+              </div>
+
+              {/* Microphone Selection */}
+              <div className="space-y-2">
+                <Label className="text-white flex items-center gap-2">
+                  <Mic className="w-4 h-4" /> Microphone
+                </Label>
+                <Select value={selectedAudioDevice} onValueChange={setSelectedAudioDevice}>
+                  <SelectTrigger className="bg-zinc-800 border-zinc-700 text-white">
+                    <SelectValue placeholder="Select microphone" />
+                  </SelectTrigger>
+                  <SelectContent className="bg-zinc-800 border-zinc-700">
+                    {audioDevices.map(d => (
+                      <SelectItem key={d.deviceId} value={d.deviceId} className="text-white">
+                        {d.label}
+                      </SelectItem>
+                    ))}
+                  </SelectContent>
+                </Select>
+              </div>
+
+              {/* Speaker Selection */}
+              <div className="space-y-2">
+                <Label className="text-white flex items-center gap-2">
+                  <Volume2 className="w-4 h-4" /> Speaker
+                </Label>
+                <Select value={selectedSpeakerDevice} onValueChange={setSelectedSpeakerDevice}>
+                  <SelectTrigger className="bg-zinc-800 border-zinc-700 text-white">
+                    <SelectValue placeholder="Select speaker" />
+                  </SelectTrigger>
+                  <SelectContent className="bg-zinc-800 border-zinc-700">
+                    {speakerDevices.map(d => (
+                      <SelectItem key={d.deviceId} value={d.deviceId} className="text-white">
+                        {d.label}
+                      </SelectItem>
+                    ))}
+                  </SelectContent>
+                </Select>
+              </div>
+
+              {/* Virtual Background */}
+              <div className="space-y-2">
+                <Label className="text-white flex items-center gap-2">
+                  <Image className="w-4 h-4" /> Virtual Background
+                </Label>
+                <div className="grid grid-cols-3 gap-2">
+                  {VIRTUAL_BACKGROUNDS.map(bg => (
+                    <button
+                      key={bg.id}
+                      onClick={() => setSelectedBackground(bg.id)}
+                      className={`p-2 rounded-lg text-xs text-center border transition-all ${
+                        selectedBackground === bg.id 
+                          ? 'border-red-500 bg-red-500/20' 
+                          : 'border-zinc-700 hover:border-zinc-600'
+                      }`}
+                      style={{ backgroundColor: bg.color !== 'transparent' && bg.color !== 'blur' ? bg.color + '30' : undefined }}
+                    >
+                      <span className="text-white">{bg.name}</span>
+                    </button>
+                  ))}
+                </div>
+              </div>
+
+              {/* Beauty Filter */}
+              <div className="flex items-center justify-between">
+                <Label className="text-white flex items-center gap-2">
+                  <Sparkles className="w-4 h-4" /> Beauty Filter
+                </Label>
+                <Switch 
+                  checked={beautyFilter} 
+                  onCheckedChange={setBeautyFilter}
+                />
+              </div>
+
+              {/* Brightness */}
+              <div className="space-y-2">
+                <Label className="text-white">Brightness: {brightnessLevel}%</Label>
+                <input
+                  type="range"
+                  min="50"
+                  max="150"
+                  value={brightnessLevel}
+                  onChange={(e) => setBrightnessLevel(parseInt(e.target.value))}
+                  className="w-full"
+                />
+              </div>
+            </div>
+          </DialogContent>
+        </Dialog>
       </MainLayout>
     );
   }
@@ -431,6 +752,11 @@ const VideoMeeting = () => {
               <Video className="w-4 h-4 text-white" />
             </div>
             <span className="font-semibold text-white">JBJ Video Meet</span>
+            {isHost && (
+              <span className="px-2 py-0.5 text-xs bg-gold/20 text-gold rounded-full flex items-center gap-1">
+                <Crown className="w-3 h-3" /> Host
+              </span>
+            )}
           </div>
           <div className="text-zinc-400 text-sm">
             {formatDuration(meetingDuration)}
@@ -469,6 +795,15 @@ const VideoMeeting = () => {
           <Button
             variant="ghost"
             size="icon"
+            onClick={() => setShowChat(!showChat)}
+            className={`${showChat ? 'text-white bg-zinc-800' : 'text-zinc-400'} hover:text-white`}
+            title="Chat"
+          >
+            <MessageSquare className="w-4 h-4" />
+          </Button>
+          <Button
+            variant="ghost"
+            size="icon"
             onClick={() => setGridView(!gridView)}
             className="text-zinc-400 hover:text-white"
           >
@@ -493,6 +828,24 @@ const VideoMeeting = () => {
               {totalParticipants}
             </span>
           </Button>
+          {isHost && (
+            <DropdownMenu>
+              <DropdownMenuTrigger asChild>
+                <Button variant="ghost" size="icon" className="text-zinc-400 hover:text-white">
+                  <Settings className="w-4 h-4" />
+                </Button>
+              </DropdownMenuTrigger>
+              <DropdownMenuContent className="bg-zinc-900 border-zinc-700">
+                <DropdownMenuItem onClick={muteAll} className="text-white hover:bg-zinc-800">
+                  <VolumeX className="w-4 h-4 mr-2" /> Mute All
+                </DropdownMenuItem>
+                <DropdownMenuSeparator className="bg-zinc-700" />
+                <DropdownMenuItem onClick={endMeetingForAll} className="text-red-400 hover:bg-zinc-800">
+                  <PhoneOff className="w-4 h-4 mr-2" /> End Meeting for All
+                </DropdownMenuItem>
+              </DropdownMenuContent>
+            </DropdownMenu>
+          )}
           <Button
             variant="ghost"
             size="icon"
@@ -505,102 +858,196 @@ const VideoMeeting = () => {
         </div>
       </div>
 
-      {/* Video Grid */}
-      <div className="flex-1 p-4 overflow-auto">
-        <div 
-          className={`grid gap-4 h-full`}
-          style={{ 
-            gridTemplateColumns: `repeat(${gridCols}, 1fr)`,
-            gridAutoRows: totalParticipants <= 2 ? '1fr' : 'minmax(200px, 1fr)'
-          }}
-        >
-          {/* Local Video */}
-          <div className="relative bg-zinc-900 rounded-2xl overflow-hidden group">
-            <video
-              ref={localVideoRef}
-              autoPlay
-              playsInline
-              muted
-              className="w-full h-full object-cover scale-x-[-1]"
-            />
-            {!videoEnabled && (
-              <div className="absolute inset-0 flex items-center justify-center bg-zinc-800">
-                <div className="w-24 h-24 rounded-full bg-gradient-to-br from-red-500 to-red-600 flex items-center justify-center text-white text-3xl font-bold">
-                  {(userName || 'You').charAt(0).toUpperCase()}
-                </div>
-              </div>
-            )}
-            <div className="absolute bottom-4 left-4 right-4 flex items-center justify-between">
-              <span className="bg-black/50 px-3 py-1 rounded-lg text-white text-sm backdrop-blur-sm">
-                {userName || 'You'} (You)
-              </span>
-              <div className="flex gap-1">
-                {!audioEnabled && (
-                  <div className="bg-red-500/80 p-1.5 rounded-full">
-                    <MicOff className="w-3 h-3 text-white" />
-                  </div>
-                )}
-                {!videoEnabled && (
-                  <div className="bg-red-500/80 p-1.5 rounded-full">
-                    <VideoOff className="w-3 h-3 text-white" />
-                  </div>
-                )}
-              </div>
-            </div>
-          </div>
-
-          {/* Remote Participants */}
-          {participants.map((participant) => (
-            <div key={participant.oderId} className="relative bg-zinc-900 rounded-2xl overflow-hidden group">
-              {participant.stream ? (
-                <video
-                  autoPlay
-                  playsInline
-                  className="w-full h-full object-cover"
-                  ref={(video) => {
-                    if (video && participant.stream) {
-                      video.srcObject = participant.stream;
-                    }
-                  }}
-                />
-              ) : (
+      {/* Main Content Area */}
+      <div className="flex-1 flex overflow-hidden">
+        {/* Video Grid */}
+        <div className={`flex-1 p-4 overflow-auto ${showChat ? 'mr-80' : ''}`}>
+          <div 
+            className={`grid gap-4 h-full`}
+            style={{ 
+              gridTemplateColumns: `repeat(${gridCols}, 1fr)`,
+              gridAutoRows: totalParticipants <= 2 ? '1fr' : 'minmax(200px, 1fr)'
+            }}
+          >
+            {/* Local Video */}
+            <div className="relative bg-zinc-900 rounded-2xl overflow-hidden group">
+              <video
+                ref={localVideoRef}
+                autoPlay
+                playsInline
+                muted
+                className="w-full h-full object-cover scale-x-[-1]"
+                style={{ 
+                  filter: `brightness(${brightnessLevel / 100}) ${beautyFilter ? 'contrast(1.1)' : ''}`,
+                }}
+              />
+              {!videoEnabled && (
                 <div className="absolute inset-0 flex items-center justify-center bg-zinc-800">
-                  <div className="w-24 h-24 rounded-full bg-gradient-to-br from-emerald-500 to-emerald-600 flex items-center justify-center text-white text-3xl font-bold">
-                    {participant.odername.charAt(0).toUpperCase()}
+                  <div className="w-24 h-24 rounded-full bg-gradient-to-br from-red-500 to-red-600 flex items-center justify-center text-white text-3xl font-bold">
+                    {(userName || 'You').charAt(0).toUpperCase()}
                   </div>
                 </div>
               )}
-              <div className="absolute bottom-4 left-4">
-                <span className="bg-black/50 px-3 py-1 rounded-lg text-white text-sm backdrop-blur-sm">
-                  {participant.odername}
+              {handRaised && (
+                <div className="absolute top-4 right-4 w-10 h-10 bg-amber-500 rounded-full flex items-center justify-center animate-bounce">
+                  <Hand className="w-5 h-5 text-white" />
+                </div>
+              )}
+              <div className="absolute bottom-4 left-4 right-4 flex items-center justify-between">
+                <span className="bg-black/50 px-3 py-1 rounded-lg text-white text-sm backdrop-blur-sm flex items-center gap-2">
+                  {userName || 'You'} (You)
+                  {isHost && <Crown className="w-3 h-3 text-gold" />}
                 </span>
+                <div className="flex gap-1">
+                  {!audioEnabled && (
+                    <div className="bg-red-500/80 p-1.5 rounded-full">
+                      <MicOff className="w-3 h-3 text-white" />
+                    </div>
+                  )}
+                  {!videoEnabled && (
+                    <div className="bg-red-500/80 p-1.5 rounded-full">
+                      <VideoOff className="w-3 h-3 text-white" />
+                    </div>
+                  )}
+                </div>
               </div>
             </div>
-          ))}
 
-          {/* Empty state for waiting */}
-          {participants.length === 0 && (
-            <div className="flex items-center justify-center bg-zinc-900/50 rounded-2xl border-2 border-dashed border-zinc-700">
-              <div className="text-center p-8">
-                <Users className="w-12 h-12 text-zinc-600 mx-auto mb-4" />
-                <p className="text-zinc-400 mb-2">Waiting for others to join...</p>
-                <Button variant="outline" size="sm" onClick={() => setShowShareDialog(true)}>
-                  <Share2 className="w-4 h-4 mr-2" />
-                  Invite participants
+            {/* Remote Participants */}
+            {participants.map((participant) => (
+              <div key={participant.oderId} className="relative bg-zinc-900 rounded-2xl overflow-hidden group">
+                {participant.stream ? (
+                  <video
+                    autoPlay
+                    playsInline
+                    className="w-full h-full object-cover"
+                    ref={(video) => {
+                      if (video && participant.stream) {
+                        video.srcObject = participant.stream;
+                      }
+                    }}
+                  />
+                ) : (
+                  <div className="absolute inset-0 flex items-center justify-center bg-zinc-800">
+                    <div className="w-24 h-24 rounded-full bg-gradient-to-br from-emerald-500 to-emerald-600 flex items-center justify-center text-white text-3xl font-bold">
+                      {participant.odername.charAt(0).toUpperCase()}
+                    </div>
+                  </div>
+                )}
+                {participant.handRaised && (
+                  <div className="absolute top-4 right-4 w-10 h-10 bg-amber-500 rounded-full flex items-center justify-center animate-bounce">
+                    <Hand className="w-5 h-5 text-white" />
+                  </div>
+                )}
+                <div className="absolute bottom-4 left-4 right-4 flex items-center justify-between">
+                  <span className="bg-black/50 px-3 py-1 rounded-lg text-white text-sm backdrop-blur-sm">
+                    {participant.odername}
+                  </span>
+                  {participant.isMuted && (
+                    <div className="bg-red-500/80 p-1.5 rounded-full">
+                      <MicOff className="w-3 h-3 text-white" />
+                    </div>
+                  )}
+                </div>
+                {/* Host controls overlay */}
+                {isHost && (
+                  <div className="absolute top-4 left-4 opacity-0 group-hover:opacity-100 transition-opacity flex gap-2">
+                    <Button
+                      size="icon"
+                      variant="secondary"
+                      className="w-8 h-8 rounded-full"
+                      onClick={() => muteParticipant(participant.oderId)}
+                    >
+                      {participant.isMuted ? <Mic className="w-3 h-3" /> : <MicOff className="w-3 h-3" />}
+                    </Button>
+                    <Button
+                      size="icon"
+                      variant="destructive"
+                      className="w-8 h-8 rounded-full"
+                      onClick={() => removeParticipant(participant.oderId)}
+                    >
+                      <UserX className="w-3 h-3" />
+                    </Button>
+                  </div>
+                )}
+              </div>
+            ))}
+
+            {/* Empty state for waiting */}
+            {participants.length === 0 && (
+              <div className="flex items-center justify-center bg-zinc-900/50 rounded-2xl border-2 border-dashed border-zinc-700">
+                <div className="text-center p-8">
+                  <Users className="w-12 h-12 text-zinc-600 mx-auto mb-4" />
+                  <p className="text-zinc-400 mb-2">Waiting for others to join...</p>
+                  <Button variant="outline" size="sm" onClick={() => setShowShareDialog(true)}>
+                    <Share2 className="w-4 h-4 mr-2" />
+                    Invite participants
+                  </Button>
+                </div>
+              </div>
+            )}
+          </div>
+        </div>
+
+        {/* Chat Sidebar */}
+        {showChat && (
+          <div className="fixed right-0 top-16 bottom-24 w-80 bg-zinc-900 border-l border-zinc-800 flex flex-col">
+            <div className="p-4 border-b border-zinc-800 flex items-center justify-between">
+              <h3 className="text-white font-semibold">Meeting Chat</h3>
+              <Button variant="ghost" size="icon" onClick={() => setShowChat(false)}>
+                <X className="w-4 h-4 text-zinc-400" />
+              </Button>
+            </div>
+            <ScrollArea className="flex-1 p-4" ref={chatScrollRef}>
+              <div className="space-y-3">
+                {chatMessages.map(msg => (
+                  <div 
+                    key={msg.id} 
+                    className={`${msg.isSystem ? 'text-center' : ''}`}
+                  >
+                    {msg.isSystem ? (
+                      <span className="text-xs text-zinc-500 italic">{msg.message}</span>
+                    ) : (
+                      <div className="bg-zinc-800 rounded-lg p-3">
+                        <div className="flex items-center justify-between mb-1">
+                          <span className="text-white text-sm font-medium">{msg.sender}</span>
+                          <span className="text-zinc-500 text-xs">
+                            {msg.timestamp.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}
+                          </span>
+                        </div>
+                        <p className="text-zinc-300 text-sm">{msg.message}</p>
+                      </div>
+                    )}
+                  </div>
+                ))}
+              </div>
+            </ScrollArea>
+            <div className="p-4 border-t border-zinc-800">
+              <div className="flex gap-2">
+                <Input
+                  value={newMessage}
+                  onChange={(e) => setNewMessage(e.target.value)}
+                  onKeyDown={(e) => e.key === 'Enter' && sendChatMessage()}
+                  placeholder="Type a message..."
+                  className="bg-zinc-800 border-zinc-700 text-white"
+                />
+                <Button size="icon" onClick={sendChatMessage} className="bg-red-500 hover:bg-red-600">
+                  <Send className="w-4 h-4" />
                 </Button>
               </div>
             </div>
-          )}
-        </div>
+          </div>
+        )}
       </div>
 
       {/* Controls */}
-      <div className="flex items-center justify-center gap-4 py-4 bg-zinc-900/80 border-t border-zinc-800">
+      <div className="flex items-center justify-center gap-3 py-4 bg-zinc-900/80 border-t border-zinc-800">
         <Button
           variant={audioEnabled ? "secondary" : "destructive"}
           size="lg"
           onClick={toggleAudio}
           className="rounded-full w-14 h-14"
+          title={audioEnabled ? 'Mute' : 'Unmute'}
         >
           {audioEnabled ? <Mic className="h-5 w-5" /> : <MicOff className="h-5 w-5" />}
         </Button>
@@ -610,6 +1057,7 @@ const VideoMeeting = () => {
           size="lg"
           onClick={toggleVideo}
           className="rounded-full w-14 h-14"
+          title={videoEnabled ? 'Turn off camera' : 'Turn on camera'}
         >
           {videoEnabled ? <Video className="h-5 w-5" /> : <VideoOff className="h-5 w-5" />}
         </Button>
@@ -625,6 +1073,16 @@ const VideoMeeting = () => {
         </Button>
 
         <Button
+          variant={handRaised ? "default" : "secondary"}
+          size="lg"
+          onClick={toggleHandRaise}
+          className={`rounded-full w-14 h-14 ${handRaised ? 'bg-amber-500 hover:bg-amber-600' : ''}`}
+          title={handRaised ? 'Lower hand' : 'Raise hand'}
+        >
+          <Hand className="h-5 w-5" />
+        </Button>
+
+        <Button
           variant={isRecording ? "destructive" : "secondary"}
           size="lg"
           onClick={isRecording ? stopRecording : startRecording}
@@ -635,10 +1093,21 @@ const VideoMeeting = () => {
         </Button>
 
         <Button
+          variant="secondary"
+          size="lg"
+          onClick={() => setShowSettings(true)}
+          className="rounded-full w-14 h-14"
+          title="Settings"
+        >
+          <Settings className="h-5 w-5" />
+        </Button>
+
+        <Button
           variant="destructive"
           size="lg"
           onClick={endMeeting}
           className="rounded-full w-14 h-14"
+          title="Leave meeting"
         >
           <PhoneOff className="h-5 w-5" />
         </Button>
@@ -656,8 +1125,11 @@ const VideoMeeting = () => {
                 {(userName || 'You').charAt(0).toUpperCase()}
               </div>
               <div className="flex-1">
-                <p className="text-white font-medium">{userName || 'You'}</p>
-                <p className="text-zinc-400 text-sm">Host</p>
+                <p className="text-white font-medium flex items-center gap-2">
+                  {userName || 'You'}
+                  {isHost && <Crown className="w-4 h-4 text-gold" />}
+                </p>
+                <p className="text-zinc-400 text-sm">{isHost ? 'Host' : 'You'}</p>
               </div>
               <div className="flex gap-1">
                 {audioEnabled ? <Mic className="w-4 h-4 text-zinc-400" /> : <MicOff className="w-4 h-4 text-red-400" />}
@@ -666,13 +1138,29 @@ const VideoMeeting = () => {
             </div>
             
             {participants.map((p) => (
-              <div key={p.oderId} className="flex items-center gap-3 p-3 bg-zinc-800 rounded-lg">
+              <div key={p.oderId} className="flex items-center gap-3 p-3 bg-zinc-800 rounded-lg group">
                 <div className="w-10 h-10 rounded-full bg-emerald-600 flex items-center justify-center text-white font-bold">
                   {p.odername.charAt(0).toUpperCase()}
                 </div>
                 <div className="flex-1">
-                  <p className="text-white font-medium">{p.odername}</p>
+                  <p className="text-white font-medium flex items-center gap-2">
+                    {p.odername}
+                    {p.handRaised && <Hand className="w-4 h-4 text-amber-400" />}
+                  </p>
                 </div>
+                <div className="flex gap-1">
+                  {p.isMuted ? <MicOff className="w-4 h-4 text-red-400" /> : <Mic className="w-4 h-4 text-zinc-400" />}
+                </div>
+                {isHost && (
+                  <div className="opacity-0 group-hover:opacity-100 transition-opacity flex gap-1">
+                    <Button size="icon" variant="ghost" onClick={() => muteParticipant(p.oderId)}>
+                      {p.isMuted ? <Mic className="w-4 h-4" /> : <MicOff className="w-4 h-4" />}
+                    </Button>
+                    <Button size="icon" variant="ghost" className="text-red-400" onClick={() => removeParticipant(p.oderId)}>
+                      <UserX className="w-4 h-4" />
+                    </Button>
+                  </div>
+                )}
               </div>
             ))}
           </div>
@@ -728,6 +1216,123 @@ const VideoMeeting = () => {
               Start Recording
             </Button>
           </DialogFooter>
+        </DialogContent>
+      </Dialog>
+
+      {/* Settings Dialog (In-meeting) */}
+      <Dialog open={showSettings} onOpenChange={setShowSettings}>
+        <DialogContent className="bg-zinc-900 border-zinc-800 max-w-md">
+          <DialogHeader>
+            <DialogTitle className="text-white flex items-center gap-2">
+              <Settings className="w-5 h-5" />
+              Meeting Settings
+            </DialogTitle>
+          </DialogHeader>
+          <div className="space-y-6 py-4">
+            {/* Camera Selection */}
+            <div className="space-y-2">
+              <Label className="text-white flex items-center gap-2">
+                <Camera className="w-4 h-4" /> Camera
+              </Label>
+              <Select value={selectedVideoDevice} onValueChange={setSelectedVideoDevice}>
+                <SelectTrigger className="bg-zinc-800 border-zinc-700 text-white">
+                  <SelectValue placeholder="Select camera" />
+                </SelectTrigger>
+                <SelectContent className="bg-zinc-800 border-zinc-700">
+                  {videoDevices.map(d => (
+                    <SelectItem key={d.deviceId} value={d.deviceId} className="text-white">
+                      {d.label}
+                    </SelectItem>
+                  ))}
+                </SelectContent>
+              </Select>
+            </div>
+
+            {/* Microphone Selection */}
+            <div className="space-y-2">
+              <Label className="text-white flex items-center gap-2">
+                <Mic className="w-4 h-4" /> Microphone
+              </Label>
+              <Select value={selectedAudioDevice} onValueChange={setSelectedAudioDevice}>
+                <SelectTrigger className="bg-zinc-800 border-zinc-700 text-white">
+                  <SelectValue placeholder="Select microphone" />
+                </SelectTrigger>
+                <SelectContent className="bg-zinc-800 border-zinc-700">
+                  {audioDevices.map(d => (
+                    <SelectItem key={d.deviceId} value={d.deviceId} className="text-white">
+                      {d.label}
+                    </SelectItem>
+                  ))}
+                </SelectContent>
+              </Select>
+            </div>
+
+            {/* Speaker Selection */}
+            <div className="space-y-2">
+              <Label className="text-white flex items-center gap-2">
+                <Volume2 className="w-4 h-4" /> Speaker
+              </Label>
+              <Select value={selectedSpeakerDevice} onValueChange={setSelectedSpeakerDevice}>
+                <SelectTrigger className="bg-zinc-800 border-zinc-700 text-white">
+                  <SelectValue placeholder="Select speaker" />
+                </SelectTrigger>
+                <SelectContent className="bg-zinc-800 border-zinc-700">
+                  {speakerDevices.map(d => (
+                    <SelectItem key={d.deviceId} value={d.deviceId} className="text-white">
+                      {d.label}
+                    </SelectItem>
+                  ))}
+                </SelectContent>
+              </Select>
+            </div>
+
+            {/* Virtual Background */}
+            <div className="space-y-2">
+              <Label className="text-white flex items-center gap-2">
+                <Image className="w-4 h-4" /> Virtual Background
+              </Label>
+              <div className="grid grid-cols-3 gap-2">
+                {VIRTUAL_BACKGROUNDS.map(bg => (
+                  <button
+                    key={bg.id}
+                    onClick={() => setSelectedBackground(bg.id)}
+                    className={`p-2 rounded-lg text-xs text-center border transition-all ${
+                      selectedBackground === bg.id 
+                        ? 'border-red-500 bg-red-500/20' 
+                        : 'border-zinc-700 hover:border-zinc-600'
+                    }`}
+                    style={{ backgroundColor: bg.color !== 'transparent' && bg.color !== 'blur' ? bg.color + '30' : undefined }}
+                  >
+                    <span className="text-white">{bg.name}</span>
+                  </button>
+                ))}
+              </div>
+            </div>
+
+            {/* Beauty Filter */}
+            <div className="flex items-center justify-between">
+              <Label className="text-white flex items-center gap-2">
+                <Sparkles className="w-4 h-4" /> Beauty Filter
+              </Label>
+              <Switch 
+                checked={beautyFilter} 
+                onCheckedChange={setBeautyFilter}
+              />
+            </div>
+
+            {/* Brightness */}
+            <div className="space-y-2">
+              <Label className="text-white">Brightness: {brightnessLevel}%</Label>
+              <input
+                type="range"
+                min="50"
+                max="150"
+                value={brightnessLevel}
+                onChange={(e) => setBrightnessLevel(parseInt(e.target.value))}
+                className="w-full"
+              />
+            </div>
+          </div>
         </DialogContent>
       </Dialog>
 
