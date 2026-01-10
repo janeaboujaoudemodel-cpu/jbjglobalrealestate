@@ -1,7 +1,22 @@
-import "https://deno.land/x/xhr@0.1.0/mod.ts";
-import { serve } from "https://deno.land/std@0.168.0/http/server.ts";
+import { serve } from "https://deno.land/std@0.190.0/http/server.ts";
 import { createClient } from "https://esm.sh/@supabase/supabase-js@2";
-import { z } from "https://deno.land/x/zod@v3.22.4/mod.ts";
+
+// Simple inline validation (avoiding external zod import for deployment stability)
+const validateRequest = (data: unknown): { success: boolean; data?: any; error?: string } => {
+  if (!data || typeof data !== 'object') return { success: false, error: 'Invalid request body' };
+  const obj = data as Record<string, unknown>;
+  
+  if (!obj.message || typeof obj.message !== 'string' || obj.message.length === 0 || obj.message.length > 5000) {
+    return { success: false, error: 'Message is required and must be 1-5000 characters' };
+  }
+  
+  const history = Array.isArray(obj.history) ? obj.history.slice(0, 20) : [];
+  const validServices = ['real_estate', 'partner_intro', 'legal', 'design_build', 'mortgage', 'property_management', 'general'];
+  const service = typeof obj.service === 'string' && validServices.includes(obj.service) ? obj.service : 'general';
+  const userName = typeof obj.userName === 'string' ? obj.userName.slice(0, 100) : undefined;
+  
+  return { success: true, data: { message: obj.message, history, service, userName } };
+};
 
 const ALLOWED_ORIGINS = [
   "https://jbj.ae",
@@ -381,26 +396,7 @@ function sanitizeContactInfo(text: string): string {
   return sanitized;
 }
 
-// Input validation schema
-const MessageSchema = z.object({
-  role: z.enum(['user', 'assistant', 'system']),
-  content: z.string().max(10000),
-});
-
-const RequestSchema = z.object({
-  message: z.string().min(1, "Message is required").max(5000, "Message too long"),
-  history: z.array(MessageSchema).max(20).optional().default([]),
-  service: z.enum([
-    'real_estate', 
-    'partner_intro', 
-    'legal', 
-    'design_build', 
-    'mortgage', 
-    'property_management',
-    'general'
-  ]).optional(),
-  userName: z.string().max(100).optional(),
-});
+// Input validation is now handled by the validateRequest function defined at the top
 
 // Comprehensive website knowledge base
 const WEBSITE_KNOWLEDGE = `
@@ -545,10 +541,10 @@ serve(async (req) => {
 
     // Parse and validate input
     const rawBody = await req.json();
-    const parseResult = RequestSchema.safeParse(rawBody);
+    const parseResult = validateRequest(rawBody);
 
     if (!parseResult.success) {
-      console.log('Validation failed:', parseResult.error.errors);
+      console.log('Validation failed:', parseResult.error);
       return new Response(
         JSON.stringify({ 
           error: 'Invalid request format',
