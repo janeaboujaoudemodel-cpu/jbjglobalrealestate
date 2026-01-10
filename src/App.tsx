@@ -78,6 +78,7 @@ import VapiPrompt from "./pages/VapiPrompt";
 import VideoBuilder from "./pages/VideoBuilder";
 import AreaGuides from "./pages/AreaGuides";
 import AreaDetail from "./pages/AreaDetail";
+import BusinessCardScanner from "./pages/BusinessCardScanner";
 import BuyerGuide from "./pages/BuyerGuide";
 
 const queryClient = new QueryClient();
@@ -172,6 +173,7 @@ const App = () => (
                     <Route path="/executive-assistant" element={<ExecutiveAssistant />} />
                     <Route path="/call-review" element={<CallReview />} />
                     <Route path="/video-builder" element={<VideoBuilder />} />
+                    <Route path="/business-card-scanner" element={<BusinessCardScanner />} />
                     <Route path="*" element={<NotFound />} />
                     </Routes>
                   </MainLayout>
