@@ -1,37 +1,30 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useMemo } from 'react';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
-import { Badge } from '@/components/ui/badge';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
+import { Badge } from '@/components/ui/badge';
 import { 
-  Users, FileText, Upload, Download, Calendar, 
-  Briefcase, Mail, Phone, Search, Plus, Eye
+  Users, FileText, Upload, Calendar, 
+  Briefcase, Mail, Phone, Plus, Brain, 
+  CheckCircle, XCircle, Clock, Video, UserCheck
 } from 'lucide-react';
 import { toast } from 'sonner';
 import { format } from 'date-fns';
-
-interface CVRecord {
-  id: string;
-  candidateName: string;
-  position: string;
-  email: string;
-  phone: string;
-  uploadDate: Date;
-  fileName: string;
-  fileUrl: string;
-  status: 'pending' | 'reviewed' | 'shortlisted' | 'rejected';
-}
+import CVSearchFilters from './CVSearchFilters';
+import CVRankingCard, { type CVCandidate } from './CVRankingCard';
+import InterviewScheduler from './InterviewScheduler';
 
 interface EmployeeCenterProps {
   userId: string;
 }
 
 const EmployeeCenter = ({ userId }: EmployeeCenterProps) => {
-  const [cvRecords, setCvRecords] = useState<CVRecord[]>([]);
-  const [searchTerm, setSearchTerm] = useState('');
+  const [candidates, setCandidates] = useState<CVCandidate[]>([]);
+  const [activeTab, setActiveTab] = useState('all');
   const [isUploading, setIsUploading] = useState(false);
   const [showUploadForm, setShowUploadForm] = useState(false);
+  const [isAnalyzing, setIsAnalyzing] = useState(false);
   const [uploadForm, setUploadForm] = useState({
     candidateName: '',
     position: '',
@@ -39,9 +32,21 @@ const EmployeeCenter = ({ userId }: EmployeeCenterProps) => {
     phone: ''
   });
 
-  // Mock initial data
+  // Filters
+  const [searchTerm, setSearchTerm] = useState('');
+  const [sortBy, setSortBy] = useState('newest');
+  const [positionFilter, setPositionFilter] = useState('all');
+  const [experienceFilter, setExperienceFilter] = useState('all');
+  const [statusFilter, setStatusFilter] = useState('all');
+
+  // Interview scheduling
+  const [showScheduler, setShowScheduler] = useState(false);
+  const [selectedCandidate, setSelectedCandidate] = useState<CVCandidate | null>(null);
+  const [interviewStage, setInterviewStage] = useState<'first' | 'second'>('first');
+
+  // Mock initial data with AI analysis
   useEffect(() => {
-    setCvRecords([
+    setCandidates([
       {
         id: '1',
         candidateName: 'Ahmed Hassan',
@@ -51,7 +56,18 @@ const EmployeeCenter = ({ userId }: EmployeeCenterProps) => {
         uploadDate: new Date('2024-01-08'),
         fileName: 'Ahmed_Hassan_CV.pdf',
         fileUrl: '#',
-        status: 'shortlisted'
+        status: 'analyzed',
+        aiRanking: 1,
+        aiScore: 92,
+        aiAnalysis: {
+          experience: '8 years in real estate',
+          education: 'MBA in Business Administration',
+          skills: ['Negotiation', 'Property Valuation', 'CRM Systems', 'Client Relations', 'Market Analysis'],
+          certifications: ['RERA Certified', 'Sales Excellence'],
+          achievements: ['Top Performer 2023', '$50M in sales'],
+          relevanceScore: 92,
+          recommendation: 'Highly qualified candidate with extensive experience in luxury real estate. Strong recommendation for senior broker position.'
+        }
       },
       {
         id: '2',
@@ -62,7 +78,20 @@ const EmployeeCenter = ({ userId }: EmployeeCenterProps) => {
         uploadDate: new Date('2024-01-07'),
         fileName: 'Sarah_Johnson_Resume.pdf',
         fileUrl: '#',
-        status: 'pending'
+        status: 'interview_scheduled',
+        interviewStage: 'first',
+        firstInterviewDate: new Date('2024-01-10T12:00:00'),
+        aiRanking: 2,
+        aiScore: 85,
+        aiAnalysis: {
+          experience: '5 years in property sales',
+          education: 'Bachelor in Marketing',
+          skills: ['Sales', 'Customer Service', 'Property Tours', 'Social Media Marketing'],
+          certifications: ['RERA Certified'],
+          achievements: ['100+ successful sales'],
+          relevanceScore: 85,
+          recommendation: 'Strong candidate with solid sales background. Excellent communication skills noted.'
+        }
       },
       {
         id: '3',
@@ -73,16 +102,130 @@ const EmployeeCenter = ({ userId }: EmployeeCenterProps) => {
         uploadDate: new Date('2024-01-06'),
         fileName: 'Mohamed_Ali_CV.pdf',
         fileUrl: '#',
-        status: 'reviewed'
+        status: 'interviewed',
+        interviewStage: 'first',
+        firstInterviewDate: new Date('2024-01-08T10:00:00'),
+        aiRanking: 3,
+        aiScore: 78,
+        aiAnalysis: {
+          experience: '6 years in digital marketing',
+          education: 'Master in Digital Marketing',
+          skills: ['SEO', 'Content Marketing', 'Social Media', 'Analytics', 'Campaign Management'],
+          certifications: ['Google Analytics', 'HubSpot'],
+          achievements: ['Led campaigns with 500% ROI'],
+          relevanceScore: 78,
+          recommendation: 'Good marketing background. May need additional real estate industry training.'
+        }
+      },
+      {
+        id: '4',
+        candidateName: 'Lisa Chen',
+        position: 'Senior Broker',
+        email: 'lisa@example.com',
+        phone: '+971 56 111 2222',
+        uploadDate: new Date('2024-01-05'),
+        fileName: 'Lisa_Chen_CV.pdf',
+        fileUrl: '#',
+        status: 'approved',
+        interviewStage: 'completed',
+        firstInterviewDate: new Date('2024-01-03T14:00:00'),
+        secondInterviewDate: new Date('2024-01-05T11:00:00'),
+        aiRanking: 4,
+        aiScore: 88,
+        aiAnalysis: {
+          experience: '10 years in luxury real estate',
+          education: 'Bachelor in Business',
+          skills: ['Luxury Sales', 'VIP Clients', 'International Markets', 'Mandarin', 'Arabic'],
+          certifications: ['RERA Certified', 'Luxury Property Specialist'],
+          achievements: ['$100M portfolio', 'Top 1% agent'],
+          relevanceScore: 88,
+          recommendation: 'Exceptional candidate for high-end properties. Multi-lingual advantage.'
+        }
+      },
+      {
+        id: '5',
+        candidateName: 'James Wilson',
+        position: 'Finance Manager',
+        email: 'james@example.com',
+        phone: '+971 50 333 4444',
+        uploadDate: new Date('2024-01-04'),
+        fileName: 'James_Wilson_CV.pdf',
+        fileUrl: '#',
+        status: 'pending',
+        aiRanking: undefined,
+        aiScore: undefined
       }
     ]);
   }, []);
 
-  const filteredRecords = cvRecords.filter(record =>
-    record.candidateName.toLowerCase().includes(searchTerm.toLowerCase()) ||
-    record.position.toLowerCase().includes(searchTerm.toLowerCase()) ||
-    record.email.toLowerCase().includes(searchTerm.toLowerCase())
-  );
+  // Get unique positions
+  const positions = useMemo(() => {
+    return [...new Set(candidates.map(c => c.position))];
+  }, [candidates]);
+
+  // Filter and sort candidates
+  const filteredCandidates = useMemo(() => {
+    let result = [...candidates];
+
+    // Search filter
+    if (searchTerm) {
+      const term = searchTerm.toLowerCase();
+      result = result.filter(c => 
+        c.candidateName.toLowerCase().includes(term) ||
+        c.position.toLowerCase().includes(term) ||
+        c.email.toLowerCase().includes(term)
+      );
+    }
+
+    // Position filter
+    if (positionFilter !== 'all') {
+      result = result.filter(c => c.position === positionFilter);
+    }
+
+    // Status filter
+    if (statusFilter !== 'all') {
+      result = result.filter(c => c.status === statusFilter);
+    }
+
+    // Tab filter
+    if (activeTab === 'pending') {
+      result = result.filter(c => c.status === 'pending');
+    } else if (activeTab === 'interviews') {
+      result = result.filter(c => ['interview_scheduled', 'interviewed'].includes(c.status));
+    } else if (activeTab === 'approved') {
+      result = result.filter(c => c.status === 'approved');
+    } else if (activeTab === 'rejected') {
+      result = result.filter(c => c.status === 'rejected' || c.status === 'on_hold');
+    }
+
+    // Sort
+    switch (sortBy) {
+      case 'newest':
+        result.sort((a, b) => b.uploadDate.getTime() - a.uploadDate.getTime());
+        break;
+      case 'oldest':
+        result.sort((a, b) => a.uploadDate.getTime() - b.uploadDate.getTime());
+        break;
+      case 'ranking':
+        result.sort((a, b) => (a.aiRanking || 999) - (b.aiRanking || 999));
+        break;
+      case 'name':
+        result.sort((a, b) => a.candidateName.localeCompare(b.candidateName));
+        break;
+    }
+
+    return result;
+  }, [candidates, searchTerm, sortBy, positionFilter, experienceFilter, statusFilter, activeTab]);
+
+  // Stats
+  const stats = useMemo(() => ({
+    total: candidates.length,
+    pending: candidates.filter(c => c.status === 'pending').length,
+    analyzed: candidates.filter(c => c.aiScore !== undefined).length,
+    interviews: candidates.filter(c => ['interview_scheduled', 'interviewed'].includes(c.status)).length,
+    approved: candidates.filter(c => c.status === 'approved').length,
+    rejected: candidates.filter(c => c.status === 'rejected').length
+  }), [candidates]);
 
   const handleFileUpload = async (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
@@ -94,11 +237,9 @@ const EmployeeCenter = ({ userId }: EmployeeCenterProps) => {
     }
 
     setIsUploading(true);
-
-    // Simulate upload delay
     await new Promise(resolve => setTimeout(resolve, 1500));
 
-    const newRecord: CVRecord = {
+    const newCandidate: CVCandidate = {
       id: Date.now().toString(),
       candidateName: uploadForm.candidateName,
       position: uploadForm.position || 'Unspecified',
@@ -110,27 +251,90 @@ const EmployeeCenter = ({ userId }: EmployeeCenterProps) => {
       status: 'pending'
     };
 
-    setCvRecords(prev => [newRecord, ...prev]);
+    setCandidates(prev => [newCandidate, ...prev]);
     setUploadForm({ candidateName: '', position: '', email: '', phone: '' });
     setShowUploadForm(false);
     setIsUploading(false);
-    toast.success(`CV uploaded successfully for ${uploadForm.candidateName}`);
+    toast.success(`CV uploaded for ${uploadForm.candidateName}. AI analysis will begin shortly.`);
+
+    // Simulate AI analysis
+    setTimeout(() => {
+      analyzeCV(newCandidate.id);
+    }, 2000);
   };
 
-  const getStatusColor = (status: string) => {
-    switch (status) {
-      case 'shortlisted': return 'bg-green-600 text-white';
-      case 'reviewed': return 'bg-blue-600 text-white';
-      case 'rejected': return 'bg-red-600 text-white';
-      default: return 'bg-gray-600 text-white';
+  const analyzeCV = async (candidateId: string) => {
+    setIsAnalyzing(true);
+    
+    // Simulate AI analysis
+    await new Promise(resolve => setTimeout(resolve, 3000));
+
+    setCandidates(prev => prev.map(c => {
+      if (c.id === candidateId) {
+        return {
+          ...c,
+          status: 'analyzed' as const,
+          aiScore: Math.floor(Math.random() * 30) + 60,
+          aiRanking: prev.filter(p => p.aiScore).length + 1,
+          aiAnalysis: {
+            experience: '3-5 years estimated',
+            education: 'Degree detected',
+            skills: ['Communication', 'Sales', 'Customer Service'],
+            certifications: [],
+            achievements: ['Previous role achievements noted'],
+            relevanceScore: Math.floor(Math.random() * 30) + 60,
+            recommendation: 'Candidate shows potential. Recommend interview to assess further.'
+          }
+        };
+      }
+      return c;
+    }));
+
+    setIsAnalyzing(false);
+    toast.success('AI analysis complete! Candidate has been ranked.');
+  };
+
+  const handleScheduleInterview = (candidateId: string, stage: 'first' | 'second') => {
+    const candidate = candidates.find(c => c.id === candidateId);
+    if (candidate) {
+      setSelectedCandidate(candidate);
+      setInterviewStage(stage);
+      setShowScheduler(true);
     }
   };
 
-  const stats = {
-    total: cvRecords.length,
-    pending: cvRecords.filter(r => r.status === 'pending').length,
-    shortlisted: cvRecords.filter(r => r.status === 'shortlisted').length,
-    reviewed: cvRecords.filter(r => r.status === 'reviewed').length
+  const handleInterviewScheduled = (candidateId: string, date: Date, stage: 'first' | 'second') => {
+    setCandidates(prev => prev.map(c => {
+      if (c.id === candidateId) {
+        return {
+          ...c,
+          status: 'interview_scheduled' as const,
+          interviewStage: stage,
+          ...(stage === 'first' 
+            ? { firstInterviewDate: date }
+            : { secondInterviewDate: date }
+          )
+        };
+      }
+      return c;
+    }));
+  };
+
+  const handleUpdateStatus = (candidateId: string, status: CVCandidate['status']) => {
+    setCandidates(prev => prev.map(c => {
+      if (c.id === candidateId) {
+        return { ...c, status };
+      }
+      return c;
+    }));
+    
+    const statusMessages: Record<string, string> = {
+      approved: 'Candidate approved and moved to Employees list!',
+      rejected: 'Candidate rejected.',
+      on_hold: 'Candidate placed on hold for future consideration.'
+    };
+    
+    toast.success(statusMessages[status] || 'Status updated');
   };
 
   return (
@@ -142,7 +346,7 @@ const EmployeeCenter = ({ userId }: EmployeeCenterProps) => {
             <Users className="h-7 w-7 text-gold" />
             Employee Center
           </h2>
-          <p className="text-muted-foreground mt-1">Manage employees and collect CVs</p>
+          <p className="text-muted-foreground mt-1">AI-powered recruitment & employee management</p>
         </div>
         <Button 
           onClick={() => setShowUploadForm(!showUploadForm)}
@@ -154,57 +358,47 @@ const EmployeeCenter = ({ userId }: EmployeeCenterProps) => {
       </div>
 
       {/* Stats Cards */}
-      <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
+      <div className="grid grid-cols-2 md:grid-cols-6 gap-3">
         <Card className="bg-card border-border">
-          <CardContent className="p-4">
-            <div className="flex items-center gap-3">
-              <div className="w-10 h-10 rounded-lg bg-gold/20 flex items-center justify-center">
-                <FileText className="h-5 w-5 text-gold" />
-              </div>
-              <div>
-                <p className="text-2xl font-bold text-white">{stats.total}</p>
-                <p className="text-xs text-muted-foreground">Total CVs</p>
-              </div>
-            </div>
+          <CardContent className="p-4 text-center">
+            <FileText className="h-6 w-6 text-gold mx-auto mb-2" />
+            <p className="text-2xl font-bold text-white">{stats.total}</p>
+            <p className="text-xs text-muted-foreground">Total CVs</p>
           </CardContent>
         </Card>
         <Card className="bg-card border-border">
-          <CardContent className="p-4">
-            <div className="flex items-center gap-3">
-              <div className="w-10 h-10 rounded-lg bg-orange-500/20 flex items-center justify-center">
-                <Calendar className="h-5 w-5 text-orange-400" />
-              </div>
-              <div>
-                <p className="text-2xl font-bold text-white">{stats.pending}</p>
-                <p className="text-xs text-muted-foreground">Pending</p>
-              </div>
-            </div>
+          <CardContent className="p-4 text-center">
+            <Clock className="h-6 w-6 text-orange-400 mx-auto mb-2" />
+            <p className="text-2xl font-bold text-white">{stats.pending}</p>
+            <p className="text-xs text-muted-foreground">Pending</p>
           </CardContent>
         </Card>
         <Card className="bg-card border-border">
-          <CardContent className="p-4">
-            <div className="flex items-center gap-3">
-              <div className="w-10 h-10 rounded-lg bg-blue-500/20 flex items-center justify-center">
-                <Eye className="h-5 w-5 text-blue-400" />
-              </div>
-              <div>
-                <p className="text-2xl font-bold text-white">{stats.reviewed}</p>
-                <p className="text-xs text-muted-foreground">Reviewed</p>
-              </div>
-            </div>
+          <CardContent className="p-4 text-center">
+            <Brain className="h-6 w-6 text-purple-400 mx-auto mb-2" />
+            <p className="text-2xl font-bold text-white">{stats.analyzed}</p>
+            <p className="text-xs text-muted-foreground">AI Analyzed</p>
           </CardContent>
         </Card>
         <Card className="bg-card border-border">
-          <CardContent className="p-4">
-            <div className="flex items-center gap-3">
-              <div className="w-10 h-10 rounded-lg bg-green-500/20 flex items-center justify-center">
-                <Briefcase className="h-5 w-5 text-green-400" />
-              </div>
-              <div>
-                <p className="text-2xl font-bold text-white">{stats.shortlisted}</p>
-                <p className="text-xs text-muted-foreground">Shortlisted</p>
-              </div>
-            </div>
+          <CardContent className="p-4 text-center">
+            <Video className="h-6 w-6 text-blue-400 mx-auto mb-2" />
+            <p className="text-2xl font-bold text-white">{stats.interviews}</p>
+            <p className="text-xs text-muted-foreground">Interviews</p>
+          </CardContent>
+        </Card>
+        <Card className="bg-card border-border">
+          <CardContent className="p-4 text-center">
+            <CheckCircle className="h-6 w-6 text-green-400 mx-auto mb-2" />
+            <p className="text-2xl font-bold text-white">{stats.approved}</p>
+            <p className="text-xs text-muted-foreground">Approved</p>
+          </CardContent>
+        </Card>
+        <Card className="bg-card border-border">
+          <CardContent className="p-4 text-center">
+            <XCircle className="h-6 w-6 text-red-400 mx-auto mb-2" />
+            <p className="text-2xl font-bold text-white">{stats.rejected}</p>
+            <p className="text-xs text-muted-foreground">Rejected</p>
           </CardContent>
         </Card>
       </div>
@@ -246,119 +440,107 @@ const EmployeeCenter = ({ userId }: EmployeeCenterProps) => {
                 className="bg-background border-border text-white"
               />
             </div>
-            <div className="flex items-center gap-4">
-              <label className="flex-1">
-                <div className="border-2 border-dashed border-border rounded-lg p-6 text-center cursor-pointer hover:border-gold/50 transition-colors">
-                  <Upload className="h-8 w-8 mx-auto text-muted-foreground mb-2" />
-                  <p className="text-sm text-muted-foreground">
-                    Click to upload CV, Cover Letter, or Documents
-                  </p>
-                  <p className="text-xs text-muted-foreground mt-1">PDF, DOCX, DOC (Max 10MB)</p>
-                </div>
-                <input
-                  type="file"
-                  accept=".pdf,.doc,.docx"
-                  onChange={handleFileUpload}
-                  className="hidden"
-                  disabled={isUploading}
-                />
-              </label>
-            </div>
+            <label className="block">
+              <div className="border-2 border-dashed border-border rounded-lg p-6 text-center cursor-pointer hover:border-gold/50 transition-colors">
+                <Upload className="h-8 w-8 mx-auto text-muted-foreground mb-2" />
+                <p className="text-sm text-muted-foreground">
+                  Click to upload CV, Cover Letter, or Documents
+                </p>
+                <p className="text-xs text-muted-foreground mt-1">PDF, DOCX (Max 10MB) — AI will analyze automatically</p>
+              </div>
+              <input
+                type="file"
+                accept=".pdf,.doc,.docx"
+                onChange={handleFileUpload}
+                className="hidden"
+                disabled={isUploading}
+              />
+            </label>
             {isUploading && (
               <div className="flex items-center gap-2 text-gold">
                 <div className="w-4 h-4 border-2 border-gold/30 border-t-gold rounded-full animate-spin" />
-                <span className="text-sm">Uploading...</span>
+                <span className="text-sm">Uploading & starting AI analysis...</span>
               </div>
             )}
           </CardContent>
         </Card>
       )}
 
-      {/* CV Records */}
-      <Card className="bg-card border-border">
-        <CardHeader>
-          <div className="flex items-center justify-between">
-            <CardTitle className="text-white flex items-center gap-2">
-              <FileText className="h-5 w-5 text-gold" />
-              CV Collected
-            </CardTitle>
-            <div className="relative w-64">
-              <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />
-              <Input
-                placeholder="Search candidates..."
-                value={searchTerm}
-                onChange={(e) => setSearchTerm(e.target.value)}
-                className="pl-9 bg-background border-border text-white"
-              />
+      {/* Search & Filters */}
+      <CVSearchFilters
+        onSearch={setSearchTerm}
+        onSortChange={setSortBy}
+        onPositionFilter={setPositionFilter}
+        onExperienceFilter={setExperienceFilter}
+        onStatusFilter={setStatusFilter}
+        positions={positions}
+      />
+
+      {/* Tabs */}
+      <Tabs value={activeTab} onValueChange={setActiveTab}>
+        <TabsList className="bg-muted/50">
+          <TabsTrigger value="all" className="data-[state=active]:bg-gold data-[state=active]:text-black">
+            All CVs ({candidates.length})
+          </TabsTrigger>
+          <TabsTrigger value="pending" className="data-[state=active]:bg-gold data-[state=active]:text-black">
+            Pending ({stats.pending})
+          </TabsTrigger>
+          <TabsTrigger value="interviews" className="data-[state=active]:bg-gold data-[state=active]:text-black">
+            Interviews ({stats.interviews})
+          </TabsTrigger>
+          <TabsTrigger value="approved" className="data-[state=active]:bg-gold data-[state=active]:text-black">
+            Approved ({stats.approved})
+          </TabsTrigger>
+          <TabsTrigger value="rejected" className="data-[state=active]:bg-gold data-[state=active]:text-black">
+            Rejected/Hold ({stats.rejected})
+          </TabsTrigger>
+        </TabsList>
+
+        <TabsContent value={activeTab} className="mt-4">
+          {/* AI Ranking Header */}
+          {sortBy === 'ranking' && filteredCandidates.some(c => c.aiScore) && (
+            <div className="flex items-center gap-2 mb-4 p-3 bg-purple-500/10 rounded-lg border border-purple-500/30">
+              <Brain className="h-5 w-5 text-purple-400" />
+              <span className="text-sm text-purple-400 font-medium">
+                Showing candidates ranked by AI analysis for position relevance
+              </span>
             </div>
-          </div>
-        </CardHeader>
-        <CardContent>
+          )}
+
+          {/* Candidates List */}
           <div className="space-y-3">
-            {filteredRecords.length === 0 ? (
-              <div className="text-center py-12 text-muted-foreground">
-                <FileText className="h-12 w-12 mx-auto mb-4 opacity-50" />
-                <p>No CVs found</p>
-              </div>
+            {filteredCandidates.length === 0 ? (
+              <Card className="bg-card border-border">
+                <CardContent className="py-12 text-center">
+                  <FileText className="h-12 w-12 mx-auto mb-4 text-muted-foreground opacity-50" />
+                  <p className="text-muted-foreground">No candidates found</p>
+                </CardContent>
+              </Card>
             ) : (
-              filteredRecords.map((record) => (
-                <div
-                  key={record.id}
-                  className="flex items-center justify-between p-4 rounded-lg bg-background/50 border border-border hover:border-gold/30 transition-colors"
-                >
-                  <div className="flex items-center gap-4">
-                    <div className="w-12 h-12 rounded-full bg-gold/20 flex items-center justify-center">
-                      <span className="text-lg font-bold text-gold">
-                        {record.candidateName.charAt(0)}
-                      </span>
-                    </div>
-                    <div>
-                      <h4 className="font-semibold text-white">{record.candidateName}</h4>
-                      <p className="text-sm text-muted-foreground">{record.position}</p>
-                      <div className="flex items-center gap-4 mt-1 text-xs text-muted-foreground">
-                        <span className="flex items-center gap-1">
-                          <Mail className="h-3 w-3" />
-                          {record.email}
-                        </span>
-                        <span className="flex items-center gap-1">
-                          <Phone className="h-3 w-3" />
-                          {record.phone}
-                        </span>
-                      </div>
-                    </div>
-                  </div>
-                  <div className="flex items-center gap-4">
-                    <div className="text-right">
-                      <Badge className={getStatusColor(record.status)}>
-                        {record.status.charAt(0).toUpperCase() + record.status.slice(1)}
-                      </Badge>
-                      <p className="text-xs text-muted-foreground mt-1">
-                        {format(record.uploadDate, 'MMM d, yyyy')}
-                      </p>
-                    </div>
-                    <div className="flex gap-2">
-                      <Button
-                        variant="outline"
-                        size="sm"
-                        className="text-white border-border hover:bg-muted"
-                      >
-                        <Eye className="h-4 w-4" />
-                      </Button>
-                      <Button
-                        variant="outline"
-                        size="sm"
-                        className="text-gold border-gold/30 hover:bg-gold/10"
-                      >
-                        <Download className="h-4 w-4" />
-                      </Button>
-                    </div>
-                  </div>
-                </div>
+              filteredCandidates.map((candidate, index) => (
+                <CVRankingCard
+                  key={candidate.id}
+                  candidate={candidate}
+                  rank={sortBy === 'ranking' && candidate.aiScore ? index + 1 : undefined}
+                  onView={(id) => toast.info('Opening CV viewer...')}
+                  onDownload={(id) => toast.success('Downloading CV...')}
+                  onScheduleInterview={handleScheduleInterview}
+                  onUpdateStatus={handleUpdateStatus}
+                />
               ))
             )}
           </div>
-        </CardContent>
-      </Card>
+        </TabsContent>
+      </Tabs>
+
+      {/* Interview Scheduler Modal */}
+      <InterviewScheduler
+        open={showScheduler}
+        onClose={() => setShowScheduler(false)}
+        candidate={selectedCandidate}
+        stage={interviewStage}
+        onSchedule={handleInterviewScheduled}
+      />
     </div>
   );
 };
