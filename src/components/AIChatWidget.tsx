@@ -493,7 +493,7 @@ const AIChatWidget = ({ isCollapsed, onToggleCollapse, showAttentionPulse = fals
         animate={{ x: 0, opacity: 1 }}
         exit={{ x: isRTL ? -380 : 380, opacity: 0 }}
         transition={{ type: 'spring', damping: 25, stiffness: 200 }}
-        className={`fixed ${isRTL ? 'left-0' : 'right-0'} top-16 lg:top-[72px] z-[9000] w-[380px] h-[calc(100vh-4rem)] lg:h-[calc(100vh-72px)] bg-zinc-900/98 backdrop-blur-xl border-l border-gold/20 shadow-2xl shadow-black/50 flex flex-col overflow-hidden`}
+        className={`fixed ${isRTL ? 'left-0' : 'right-0'} top-16 lg:top-[72px] z-[9000] w-full sm:w-[380px] h-[calc(100vh-4rem)] lg:h-[calc(100vh-72px)] bg-[#0E0E0E] border-l border-gold/30 shadow-2xl shadow-black/60 flex flex-col overflow-hidden`}
       >
         <ChatHeader 
           step={step} 

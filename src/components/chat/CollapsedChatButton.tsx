@@ -39,7 +39,7 @@ const CollapsedChatButton = ({ onToggle, showAttentionPulse = false }: Collapsed
         )}
       </AnimatePresence>
 
-      {/* Main button with optional pulse ring */}
+      {/* Main button with optional pulse ring - Premium black/gold styling */}
       <div className="relative">
         {showAttentionPulse && (
           <>
@@ -49,14 +49,17 @@ const CollapsedChatButton = ({ onToggle, showAttentionPulse = false }: Collapsed
         )}
         <button
           onClick={onToggle}
-          className="relative flex items-center gap-3 bg-zinc-900/95 backdrop-blur-xl border border-gold/30 rounded-full px-4 py-3 shadow-xl hover:bg-zinc-800/95 transition-all duration-300 group hover:scale-105"
+          className="relative flex items-center gap-3 bg-[#0E0E0E] border-2 border-gold/40 rounded-full px-5 py-3.5 shadow-2xl shadow-gold/20 hover:border-gold transition-all duration-300 group hover:scale-105"
         >
-          <div className="w-10 h-10 rounded-full bg-gradient-to-br from-gold to-gold/70 flex items-center justify-center flex-shrink-0">
+          <div className="w-11 h-11 rounded-full bg-gradient-to-br from-gold to-gold-light flex items-center justify-center flex-shrink-0 shadow-lg shadow-gold/30">
             <MessageCircle className="w-5 h-5 text-black" />
           </div>
           <div className="flex flex-col items-start">
-            <span className="text-white text-sm font-semibold">Chat Support</span>
-            <span className="text-gold/80 text-xs">We're online</span>
+            <span className="text-gold text-sm font-bold">JBJ Support</span>
+            <div className="flex items-center gap-1.5">
+              <span className="w-2 h-2 rounded-full bg-green-500 animate-pulse" />
+              <span className="text-green-400 text-xs font-medium">Available 24/7</span>
+            </div>
           </div>
           {isRTL ? (
             <ChevronRight className="w-5 h-5 text-gold group-hover:translate-x-1 transition-transform" />
