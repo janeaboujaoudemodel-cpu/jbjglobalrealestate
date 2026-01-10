@@ -197,7 +197,7 @@ const detectCountryCode = (): string => {
 // Complete country codes list organized by region
 export const COUNTRY_CODES_BY_REGION = {
   "GCC": [
-    { code: "+971", country: "UAE", flag: "🇦🇪", minLen: 9, maxLen: 9 },
+    { code: "+971", country: "United Arab Emirates", flag: "🇦🇪", minLen: 9, maxLen: 9 },
     { code: "+966", country: "Saudi Arabia", flag: "🇸🇦", minLen: 9, maxLen: 9 },
     { code: "+974", country: "Qatar", flag: "🇶🇦", minLen: 8, maxLen: 8 },
     { code: "+965", country: "Kuwait", flag: "🇰🇼", minLen: 8, maxLen: 8 },
@@ -530,7 +530,6 @@ const PhoneInput = React.forwardRef<HTMLInputElement, PhoneInputProps>(
                   <span className="text-xl">{currentCountry.flag}</span>
                   <span className="font-medium">{currentCode}</span>
                 </span>
-                <ChevronsUpDown className="ml-1 h-4 w-4 shrink-0 opacity-50" />
                 <ChevronsUpDown className="ml-1 h-4 w-4 shrink-0 opacity-50" />
               </Button>
             </PopoverTrigger>

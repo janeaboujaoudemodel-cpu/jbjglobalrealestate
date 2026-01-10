@@ -68,7 +68,7 @@ const InquiryFormModal = ({
   const [pendingFormData, setPendingFormData] = useState<InquiryFormData | null>(null);
   const { t, isRTL } = useLanguage();
   
-  const countries = getCountryList();
+  const countries = getCountryList('en');
   const languages = getLanguageList();
 
   const form = useForm<InquiryFormData>({

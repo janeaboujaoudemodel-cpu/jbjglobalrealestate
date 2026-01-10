@@ -120,6 +120,7 @@ const FALLBACK_COUNTRIES = [
   "Kuwait",
   "Bahrain",
   "Oman",
+  "Syria",
   "Lebanon",
   "Jordan",
   "Egypt",
@@ -160,6 +161,20 @@ function uniqSorted(list: string[]) {
   return Array.from(new Set(list.filter(Boolean))).sort((a, b) => a.localeCompare(b));
 }
 
+const COUNTRY_NAME_ALIASES: Record<string, string> = {
+  "Syrian Arab Republic": "Syria",
+  "Russian Federation": "Russia",
+  "Iran, Islamic Republic of": "Iran",
+  "Korea, Republic of": "South Korea",
+  "Korea, Democratic People's Republic of": "North Korea",
+  "Viet Nam": "Vietnam",
+  "Lao People's Democratic Republic": "Laos",
+};
+
+function normalizeCountryName(name: string) {
+  return COUNTRY_NAME_ALIASES[name] ?? name;
+}
+
 export function getCountryList(locale: string = "en"): string[] {
   try {
     const supportedValuesOf = (Intl as any).supportedValuesOf as undefined | ((key: string) => string[]);
@@ -171,7 +186,8 @@ export function getCountryList(locale: string = "en"): string[] {
     const dn = new Intl.DisplayNames([locale], { type: "region" });
     const names = regionCodes
       .map((code) => dn.of(code))
-      .filter((v): v is string => typeof v === "string" && v.trim().length > 0);
+      .filter((v): v is string => typeof v === "string" && v.trim().length > 0)
+      .map((name) => normalizeCountryName(name));
 
     return [...uniqSorted(names), "Other"];
   } catch {
