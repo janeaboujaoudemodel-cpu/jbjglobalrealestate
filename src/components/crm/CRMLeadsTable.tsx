@@ -25,10 +25,18 @@ import {
   PopoverContent,
   PopoverTrigger,
 } from "@/components/ui/popover";
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuSeparator,
+  DropdownMenuTrigger,
+} from "@/components/ui/dropdown-menu";
 import { toast } from "sonner";
-import { Search, Phone, MessageSquare, Mail, Eye, Filter, ChevronDown, Calendar, Lock, PhoneCall, Trash2 } from "lucide-react";
+import { Search, Phone, MessageSquare, Mail, Eye, Filter, ChevronDown, Calendar, Lock, PhoneCall, Trash2, MoreHorizontal, FileText, Building2, Sparkles } from "lucide-react";
 import LeadStatusBadge, { PIPELINE_STATUSES, getStatusInfo } from "./LeadStatusBadge";
 import FollowUpScheduler from "./FollowUpScheduler";
+import { useActiveLead } from "@/contexts/ActiveLeadContext";
 
 interface Lead {
   id: string;
@@ -79,12 +87,27 @@ interface CRMLeadsTableProps {
 
 const CRMLeadsTable = ({ userId, filterType, onRefresh, statusFilters = [], sourceFilter }: CRMLeadsTableProps) => {
   const navigate = useNavigate();
+  const { setActiveLead } = useActiveLead();
   const [leads, setLeads] = useState<Lead[]>([]);
   const [loading, setLoading] = useState(true);
   const [searchQuery, setSearchQuery] = useState("");
   const [statusFilter, setStatusFilter] = useState<string>("all");
   const [selectedLeads, setSelectedLeads] = useState<Set<string>>(new Set());
   const [followUpLead, setFollowUpLead] = useState<Lead | null>(null);
+
+  // Set active lead and navigate to a tool
+  const handleSelectForTool = (lead: Lead, toolPath: string) => {
+    setActiveLead({
+      id: lead.id,
+      full_name: lead.full_name,
+      email: lead.email_lower,
+      phone: lead.phone_e164,
+      nationality: lead.nationality,
+      language: lead.preferred_language,
+    });
+    toast.success(`Selected ${lead.full_name} for action`);
+    navigate(toolPath);
+  };
 
   // Check if contact details should be hidden (for company-assigned leads)
   const isCompanyAssigned = filterType === "assigned";
@@ -417,46 +440,65 @@ const CRMLeadsTable = ({ userId, filterType, onRefresh, statusFilters = [], sour
                     </div>
                   </TableCell>
                   <TableCell>
-                    <div className="text-sm space-y-1">
+                    <div className="space-y-2">
                       {isCompanyAssigned ? (
                         <>
-                          <p className="text-muted-foreground italic">{maskEmail(lead.email_lower)}</p>
-                          <p className="text-muted-foreground italic">{maskPhone(lead.phone_e164)}</p>
+                          <p className="text-muted-foreground italic text-xs">{maskEmail(lead.email_lower)}</p>
+                          <p className="text-muted-foreground italic text-xs">{maskPhone(lead.phone_e164)}</p>
                         </>
                       ) : (
                         <>
+                          {/* Email Row */}
                           {lead.email_lower && (
-                            <a 
-                              href={`mailto:${lead.email_lower}`}
-                              onClick={(e) => {
-                                e.stopPropagation();
-                                handleEmailClick(lead);
-                              }}
-                              className="text-blue-400 hover:text-blue-300 hover:underline flex items-center gap-1"
-                            >
-                              <Mail className="h-3 w-3" />
-                              {lead.email_lower}
-                            </a>
+                            <div className="flex items-center gap-2">
+                              <Button
+                                size="sm"
+                                className="h-7 px-2 bg-blue-600 hover:bg-blue-500 text-white text-xs font-semibold"
+                                onClick={(e) => {
+                                  e.stopPropagation();
+                                  handleEmailClick(lead);
+                                }}
+                                title="Send Email"
+                              >
+                                <Mail className="h-3 w-3 mr-1" />
+                                Email
+                              </Button>
+                              <span className="text-xs text-muted-foreground truncate max-w-[120px]" title={lead.email_lower}>
+                                {lead.email_lower}
+                              </span>
+                            </div>
                           )}
+                          
+                          {/* Phone Row */}
                           {lead.phone_e164 && (
                             <div className="flex items-center gap-2">
-                              <a 
-                                href={`tel:${lead.phone_e164}`}
-                                className="text-green-400 hover:text-green-300 hover:underline flex items-center gap-1"
+                              <Button
+                                size="sm"
+                                className="h-7 px-2 bg-sky-600 hover:bg-sky-500 text-white text-xs font-semibold"
+                                onClick={(e) => {
+                                  e.stopPropagation();
+                                  window.open(`tel:${lead.phone_e164}`, '_self');
+                                }}
+                                title="Call"
                               >
-                                <PhoneCall className="h-3 w-3" />
-                                {lead.phone_e164}
-                              </a>
-                              <button
+                                <PhoneCall className="h-3 w-3 mr-1" />
+                                Call
+                              </Button>
+                              <Button
+                                size="sm"
+                                className="h-7 px-2 bg-green-600 hover:bg-green-500 text-white text-xs font-semibold"
                                 onClick={(e) => {
                                   e.stopPropagation();
                                   handleWhatsAppClick(lead);
                                 }}
-                                className="text-emerald-400 hover:text-emerald-300"
-                                title="Open WhatsApp"
+                                title="WhatsApp"
                               >
-                                <MessageSquare className="h-3 w-3" />
-                              </button>
+                                <MessageSquare className="h-3 w-3 mr-1" />
+                                WhatsApp
+                              </Button>
+                              <span className="text-xs text-muted-foreground">
+                                {lead.phone_e164}
+                              </span>
                             </div>
                           )}
                         </>
@@ -565,7 +607,7 @@ const CRMLeadsTable = ({ userId, filterType, onRefresh, statusFilters = [], sour
                     </div>
                   </TableCell>
                   <TableCell>
-                    <div className="flex gap-1.5">
+                    <div className="flex gap-1.5 flex-wrap">
                       <Button
                         size="sm"
                         className="h-8 px-3 bg-white/10 hover:bg-white/20 text-white font-semibold border border-white/20"
@@ -577,51 +619,59 @@ const CRMLeadsTable = ({ userId, filterType, onRefresh, statusFilters = [], sour
                       </Button>
                       <Button
                         size="icon"
-                        className="h-8 w-8 bg-green-600 hover:bg-green-500 text-white font-bold shadow-md disabled:opacity-40 disabled:cursor-not-allowed"
-                        onClick={() => handleWhatsAppClick(lead)}
-                        disabled={!lead.phone_e164 || isCompanyAssigned}
-                        title="WhatsApp"
-                      >
-                        <MessageSquare className="h-4 w-4" />
-                      </Button>
-                      <Button
-                        size="icon"
-                        className="h-8 w-8 bg-blue-600 hover:bg-blue-500 text-white font-bold shadow-md disabled:opacity-40 disabled:cursor-not-allowed"
-                        onClick={() => {
-                          if (lead.phone_e164 && !isCompanyAssigned) {
-                            window.open(`tel:${lead.phone_e164}`, "_self");
-                          }
-                        }}
-                        disabled={!lead.phone_e164 || isCompanyAssigned}
-                        title="Call"
-                      >
-                        <PhoneCall className="h-4 w-4" />
-                      </Button>
-                      <Button
-                        size="icon"
-                        className="h-8 w-8 bg-purple-600 hover:bg-purple-500 text-white font-bold shadow-md disabled:opacity-40 disabled:cursor-not-allowed"
-                        onClick={() => handleEmailClick(lead)}
-                        disabled={!lead.email_lower || isCompanyAssigned}
-                        title="Email"
-                      >
-                        <Mail className="h-4 w-4" />
-                      </Button>
-                      <Button
-                        size="icon"
                         className="h-8 w-8 bg-amber-600 hover:bg-amber-500 text-white font-bold shadow-md"
                         onClick={() => setFollowUpLead(lead)}
                         title="Schedule Follow-up"
                       >
                         <Calendar className="h-4 w-4" />
                       </Button>
-                      <Button
-                        size="icon"
-                        className="h-8 w-8 bg-red-600 hover:bg-red-500 text-white font-bold shadow-md"
-                        onClick={() => handleDeleteLead(lead.id)}
-                        title="Delete Lead"
-                      >
-                        <Trash2 className="h-4 w-4" />
-                      </Button>
+                      
+                      {/* AI Tools & Actions Dropdown */}
+                      <DropdownMenu>
+                        <DropdownMenuTrigger asChild>
+                          <Button
+                            size="sm"
+                            className="h-8 px-2 bg-gold/20 hover:bg-gold/30 text-gold border border-gold/30 font-semibold"
+                            title="Actions & AI Tools"
+                          >
+                            <Sparkles className="h-4 w-4 mr-1" />
+                            Actions
+                            <ChevronDown className="h-3 w-3 ml-1" />
+                          </Button>
+                        </DropdownMenuTrigger>
+                        <DropdownMenuContent align="end" className="w-56 bg-card border-border">
+                          <DropdownMenuItem 
+                            onClick={() => handleSelectForTool(lead, '/properties')}
+                            className="cursor-pointer"
+                          >
+                            <Building2 className="h-4 w-4 mr-2 text-blue-400" />
+                            Select Properties for Client
+                          </DropdownMenuItem>
+                          <DropdownMenuItem 
+                            onClick={() => handleSelectForTool(lead, '/compare')}
+                            className="cursor-pointer"
+                          >
+                            <FileText className="h-4 w-4 mr-2 text-purple-400" />
+                            Create Comparison PDF
+                          </DropdownMenuItem>
+                          <DropdownMenuSeparator />
+                          <DropdownMenuItem 
+                            onClick={() => handleSelectForTool(lead, '/ai-hub')}
+                            className="cursor-pointer"
+                          >
+                            <Sparkles className="h-4 w-4 mr-2 text-gold" />
+                            AI Tools Hub
+                          </DropdownMenuItem>
+                          <DropdownMenuSeparator />
+                          <DropdownMenuItem 
+                            onClick={() => handleDeleteLead(lead.id)}
+                            className="cursor-pointer text-red-400 focus:text-red-400"
+                          >
+                            <Trash2 className="h-4 w-4 mr-2" />
+                            Delete Lead
+                          </DropdownMenuItem>
+                        </DropdownMenuContent>
+                      </DropdownMenu>
                     </div>
                   </TableCell>
                 </TableRow>

@@ -26,6 +26,7 @@ async function sendEmailWithResend(to: string, otp: string, fullName?: string): 
     },
     body: JSON.stringify({
       from: "JBJ Global Real Estate <onboarding@resend.dev>",
+      reply_to: "Contact@JBJ.ae",
       to: [to],
       subject: "Your Verification Code - JBJ Global Real Estate",
       html: `
@@ -40,10 +41,15 @@ async function sendEmailWithResend(to: string, otp: string, fullName?: string): 
               <tr>
                 <td style="padding: 40px 20px;">
                   <table role="presentation" style="max-width: 600px; margin: 0 auto; background-color: #000000; border-radius: 16px; overflow: hidden;">
-                    <!-- Header -->
+                    <!-- Header with Logo -->
                     <tr>
                       <td style="padding: 40px 40px 20px; text-align: center; border-bottom: 1px solid #333;">
+                        <!-- JBJ Monogram Logo -->
+                        <div style="width: 80px; height: 80px; margin: 0 auto 16px; background: linear-gradient(135deg, #A8925A 0%, #C9B77D 50%, #A8925A 100%); border-radius: 50%; display: flex; align-items: center; justify-content: center;">
+                          <span style="font-size: 32px; font-weight: bold; color: #000000; font-family: Georgia, serif;">JBJ</span>
+                        </div>
                         <h1 style="margin: 0; color: #A8925A; font-size: 24px; font-weight: bold;">JBJ Global Real Estate</h1>
+                        <p style="margin: 8px 0 0; color: #666666; font-size: 12px; letter-spacing: 2px; text-transform: uppercase;">UAE Real Estate Brokerage</p>
                       </td>
                     </tr>
                     
@@ -74,9 +80,12 @@ async function sendEmailWithResend(to: string, otp: string, fullName?: string): 
                     <!-- Footer -->
                     <tr>
                       <td style="padding: 20px 40px 30px; border-top: 1px solid #333; text-align: center;">
+                        <p style="margin: 0 0 12px; color: #A8925A; font-size: 14px; font-weight: bold;">
+                          Questions? Reply to this email or contact us:
+                        </p>
                         <p style="margin: 0; color: #666666; font-size: 12px;">
                           © ${new Date().getFullYear()} JBJ Global Real Estate. All rights reserved.<br>
-                          Downtown Dubai, UAE | +971 56 591 1000
+                          Downtown Dubai, UAE | +971 56 591 1000 | Contact@JBJ.ae
                         </p>
                       </td>
                     </tr>
