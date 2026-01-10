@@ -3125,6 +3125,114 @@ export type Database = {
         }
         Relationships: []
       }
+      hr_candidates: {
+        Row: {
+          ai_analysis: Json | null
+          ai_ranking: number | null
+          ai_score: number | null
+          candidate_name: string
+          certifications: string[] | null
+          cover_letter_url: string | null
+          created_at: string
+          cv_file_name: string | null
+          cv_file_url: string | null
+          education_level: string | null
+          email: string
+          experience_years: number | null
+          final_decision: string | null
+          final_decision_by: string | null
+          final_decision_date: string | null
+          final_decision_notes: string | null
+          first_interview_date: string | null
+          first_interview_notes: string | null
+          first_interview_recording_url: string | null
+          first_interviewer_decision: string | null
+          id: string
+          interview_stage: string | null
+          phone: string | null
+          position_applied: string
+          second_interview_date: string | null
+          second_interview_notes: string | null
+          second_interview_recording_url: string | null
+          second_interviewer_decision: string | null
+          skills: string[] | null
+          source: string | null
+          status: string
+          updated_at: string
+          user_id: string
+        }
+        Insert: {
+          ai_analysis?: Json | null
+          ai_ranking?: number | null
+          ai_score?: number | null
+          candidate_name: string
+          certifications?: string[] | null
+          cover_letter_url?: string | null
+          created_at?: string
+          cv_file_name?: string | null
+          cv_file_url?: string | null
+          education_level?: string | null
+          email: string
+          experience_years?: number | null
+          final_decision?: string | null
+          final_decision_by?: string | null
+          final_decision_date?: string | null
+          final_decision_notes?: string | null
+          first_interview_date?: string | null
+          first_interview_notes?: string | null
+          first_interview_recording_url?: string | null
+          first_interviewer_decision?: string | null
+          id?: string
+          interview_stage?: string | null
+          phone?: string | null
+          position_applied: string
+          second_interview_date?: string | null
+          second_interview_notes?: string | null
+          second_interview_recording_url?: string | null
+          second_interviewer_decision?: string | null
+          skills?: string[] | null
+          source?: string | null
+          status?: string
+          updated_at?: string
+          user_id: string
+        }
+        Update: {
+          ai_analysis?: Json | null
+          ai_ranking?: number | null
+          ai_score?: number | null
+          candidate_name?: string
+          certifications?: string[] | null
+          cover_letter_url?: string | null
+          created_at?: string
+          cv_file_name?: string | null
+          cv_file_url?: string | null
+          education_level?: string | null
+          email?: string
+          experience_years?: number | null
+          final_decision?: string | null
+          final_decision_by?: string | null
+          final_decision_date?: string | null
+          final_decision_notes?: string | null
+          first_interview_date?: string | null
+          first_interview_notes?: string | null
+          first_interview_recording_url?: string | null
+          first_interviewer_decision?: string | null
+          id?: string
+          interview_stage?: string | null
+          phone?: string | null
+          position_applied?: string
+          second_interview_date?: string | null
+          second_interview_notes?: string | null
+          second_interview_recording_url?: string | null
+          second_interviewer_decision?: string | null
+          skills?: string[] | null
+          source?: string | null
+          status?: string
+          updated_at?: string
+          user_id?: string
+        }
+        Relationships: []
+      }
       hr_certificates: {
         Row: {
           certificate_number: string
@@ -3175,6 +3283,71 @@ export type Database = {
           verification_token?: string
         }
         Relationships: []
+      }
+      hr_employees: {
+        Row: {
+          candidate_id: string | null
+          certifications: string[] | null
+          created_at: string
+          created_by: string
+          cv_url: string | null
+          department: string | null
+          email: string
+          employee_status: string | null
+          full_name: string
+          id: string
+          phone: string | null
+          position: string
+          skills: string[] | null
+          start_date: string | null
+          updated_at: string
+          user_id: string | null
+        }
+        Insert: {
+          candidate_id?: string | null
+          certifications?: string[] | null
+          created_at?: string
+          created_by: string
+          cv_url?: string | null
+          department?: string | null
+          email: string
+          employee_status?: string | null
+          full_name: string
+          id?: string
+          phone?: string | null
+          position: string
+          skills?: string[] | null
+          start_date?: string | null
+          updated_at?: string
+          user_id?: string | null
+        }
+        Update: {
+          candidate_id?: string | null
+          certifications?: string[] | null
+          created_at?: string
+          created_by?: string
+          cv_url?: string | null
+          department?: string | null
+          email?: string
+          employee_status?: string | null
+          full_name?: string
+          id?: string
+          phone?: string | null
+          position?: string
+          skills?: string[] | null
+          start_date?: string | null
+          updated_at?: string
+          user_id?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "hr_employees_candidate_id_fkey"
+            columns: ["candidate_id"]
+            isOneToOne: false
+            referencedRelation: "hr_candidates"
+            referencedColumns: ["id"]
+          },
+        ]
       }
       hr_interview_assessments: {
         Row: {
@@ -3250,6 +3423,74 @@ export type Database = {
             columns: ["interview_id"]
             isOneToOne: false
             referencedRelation: "hr_interviews"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      hr_interview_invitations: {
+        Row: {
+          calendar_added: boolean | null
+          calendar_event_id: string | null
+          candidate_confirmed: boolean | null
+          candidate_confirmed_at: string | null
+          candidate_id: string
+          created_at: string
+          created_by: string
+          email_sent: boolean | null
+          email_sent_at: string | null
+          id: string
+          interview_stage: string
+          interviewer_name: string
+          interviewer_title: string
+          meeting_link: string | null
+          scheduled_date: string
+          whatsapp_sent: boolean | null
+          whatsapp_sent_at: string | null
+        }
+        Insert: {
+          calendar_added?: boolean | null
+          calendar_event_id?: string | null
+          candidate_confirmed?: boolean | null
+          candidate_confirmed_at?: string | null
+          candidate_id: string
+          created_at?: string
+          created_by: string
+          email_sent?: boolean | null
+          email_sent_at?: string | null
+          id?: string
+          interview_stage: string
+          interviewer_name: string
+          interviewer_title: string
+          meeting_link?: string | null
+          scheduled_date: string
+          whatsapp_sent?: boolean | null
+          whatsapp_sent_at?: string | null
+        }
+        Update: {
+          calendar_added?: boolean | null
+          calendar_event_id?: string | null
+          candidate_confirmed?: boolean | null
+          candidate_confirmed_at?: string | null
+          candidate_id?: string
+          created_at?: string
+          created_by?: string
+          email_sent?: boolean | null
+          email_sent_at?: string | null
+          id?: string
+          interview_stage?: string
+          interviewer_name?: string
+          interviewer_title?: string
+          meeting_link?: string | null
+          scheduled_date?: string
+          whatsapp_sent?: boolean | null
+          whatsapp_sent_at?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "hr_interview_invitations_candidate_id_fkey"
+            columns: ["candidate_id"]
+            isOneToOne: false
+            referencedRelation: "hr_candidates"
             referencedColumns: ["id"]
           },
         ]
