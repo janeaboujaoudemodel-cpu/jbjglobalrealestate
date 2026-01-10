@@ -145,7 +145,7 @@ const Index = () => {
             </Link>
             <Button 
               variant="outline"
-              className="border-gold/60 text-gold hover:bg-gold/10 hover:border-gold font-medium px-10 py-6 text-sm tracking-wide transition-all duration-300 hover:shadow-lg hover:shadow-gold/20"
+              className="border-gold text-gold hover:bg-gold/10 hover:border-gold-light font-medium px-10 py-6 text-sm tracking-wide transition-all duration-300 hover:shadow-lg hover:shadow-gold/20"
               onClick={() => setIsInquiryOpen(true)}
             >
               Book Consultation
@@ -297,20 +297,20 @@ const Index = () => {
 
             {/* AI Tools Card */}
             <Link to="/ai-hub" className="group">
-              <div className="bg-zinc-900/60 border border-zinc-800 rounded-2xl p-6 md:p-8 hover:border-zinc-700 transition-all duration-300">
+              <div className="bg-zinc-900/60 border border-zinc-800 rounded-2xl p-6 md:p-8 hover:border-gold/40 transition-all duration-300">
                 <div className="flex items-center gap-4 mb-4">
-                  <div className="w-12 h-12 bg-zinc-800 rounded-xl flex items-center justify-center">
-                    <Brain className="w-6 h-6 text-zinc-400" />
+                  <div className="w-12 h-12 bg-gold/10 rounded-xl flex items-center justify-center">
+                    <Brain className="w-6 h-6 text-gold" />
                   </div>
                   <div>
                     <h3 className="text-white text-lg font-semibold">AI Assistant Hub</h3>
-                    <p className="text-zinc-500 text-xs">10+ Tools</p>
+                    <p className="text-zinc-500 text-xs">10+ Free Tools</p>
                   </div>
                 </div>
                 <p className="text-zinc-400 text-sm mb-4">
                   AI-powered property tools and assistants.
                 </p>
-                <span className="text-zinc-400 text-sm group-hover:text-gold group-hover:underline transition-colors">
+                <span className="text-gold text-sm group-hover:underline">
                   View all →
                 </span>
               </div>
