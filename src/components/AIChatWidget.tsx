@@ -179,45 +179,28 @@ const AIChatWidget = ({ isCollapsed, onToggleCollapse, showAttentionPulse = fals
       if (error) throw error;
       setConversationId(data.id);
 
-      // Save to leads table
+      // Use backend edge function to save lead (bypasses RLS)
       const normalizedEmail = userInfo.email.toLowerCase().trim();
       const normalizedPhone = userInfo.phone?.replace(/[\s\-\(\)]/g, '') || null;
       
-      await supabase.from('leads').upsert({
-        email: normalizedEmail,
-        full_name: fullName,
-        phone: normalizedPhone,
-        nationality: userInfo.nationality,
-        language: userInfo.language,
-        current_location: userInfo.currentLocation,
-        age_range: userInfo.ageRange,
-        consent_accurate: userInfo.consentAccurate,
-        consent_privacy: userInfo.consentPrivacy,
-        page_source: pageSource,
-        source: 'ai_chat_support',
-        status: 'new',
-      }, { onConflict: 'email' });
-
-      // Also save to crm_leads for CRM dashboard tracking
-      const { error: crmError } = await supabase
-        .from('crm_leads')
-        .insert({
-          full_name: fullName,
-          email_lower: normalizedEmail,
-          phone_e164: normalizedPhone,
+      const { error: captureError } = await supabase.functions.invoke('capture-lead', {
+        body: {
+          email: normalizedEmail,
+          fullName: fullName,
+          phone: normalizedPhone,
           nationality: userInfo.nationality,
-          preferred_language: userInfo.language,
-          current_location_country: userInfo.currentLocation,
-          age_range: userInfo.ageRange,
+          language: userInfo.language,
+          currentLocation: userInfo.currentLocation,
+          ageRange: userInfo.ageRange,
           source: 'ai_chat_support',
-          owner_type: 'company_assigned' as const,
-          lead_source_type: 'website',
-          contact_type: 'client' as const,
-          tags: ['ai-chat', pageSource.replace(/\//g, '-').replace(/^-/, '')],
-        });
+          subSource: `Chat - ${serviceId.replace(/_/g, ' ').replace(/\b\w/g, l => l.toUpperCase())}`,
+          pageSource: pageSource,
+          contactType: 'client',
+        },
+      });
 
-      if (crmError && crmError.code !== '23505') {
-        console.warn('CRM lead save warning:', crmError);
+      if (captureError) {
+        console.warn('Lead capture warning:', captureError);
       }
 
     } catch (error) {
