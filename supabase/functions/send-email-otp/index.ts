@@ -26,7 +26,7 @@ async function sendEmailWithResend(to: string, otp: string, fullName?: string): 
     },
     body: JSON.stringify({
       from: "JBJ Global Real Estate <onboarding@resend.dev>",
-      reply_to: "Contact@JBJ.ae",
+      reply_to: "contact@jbj.ae",
       to: [to],
       subject: "Your Verification Code - JBJ Global Real Estate",
       html: `
@@ -80,12 +80,20 @@ async function sendEmailWithResend(to: string, otp: string, fullName?: string): 
                     <!-- Footer -->
                     <tr>
                       <td style="padding: 20px 40px 30px; border-top: 1px solid #333; text-align: center;">
-                        <p style="margin: 0 0 12px; color: #A8925A; font-size: 14px; font-weight: bold;">
-                          Questions? Reply to this email or contact us:
+                        <p style="margin: 0 0 8px; color: #999999; font-size: 13px;">
+                          This is an automated message. Please do not reply directly to this email.
                         </p>
-                        <p style="margin: 0; color: #666666; font-size: 12px;">
+                        <p style="margin: 0 0 12px; color: #A8925A; font-size: 14px; font-weight: bold;">
+                          Questions? Contact us at:
+                        </p>
+                        <p style="margin: 0 0 8px; color: #ffffff; font-size: 14px;">
+                          <a href="mailto:contact@jbj.ae" style="color: #A8925A; text-decoration: none;">contact@jbj.ae</a> 
+                          &nbsp;|&nbsp; 
+                          <a href="https://wa.me/971565911000" style="color: #A8925A; text-decoration: none;">+971 56 591 1000</a>
+                        </p>
+                        <p style="margin: 16px 0 0; color: #666666; font-size: 12px;">
                           © ${new Date().getFullYear()} JBJ Global Real Estate. All rights reserved.<br>
-                          Downtown Dubai, UAE | +971 56 591 1000 | Contact@JBJ.ae
+                          Downtown Dubai, UAE
                         </p>
                       </td>
                     </tr>
