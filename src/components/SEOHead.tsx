@@ -155,6 +155,12 @@ export const pagesSEO = {
     keywords: 'Dubai communities, UAE residential areas, best neighborhoods Dubai, property communities',
     canonicalPath: '/communities',
   },
+  areaGuides: {
+    title: 'Dubai Communities & Area Guides',
+    description: 'Explore Dubai\'s most desirable neighborhoods with expert local insights. Comprehensive area guides for Downtown Dubai, Dubai Marina, Business Bay, and more.',
+    keywords: 'Dubai area guides, Dubai neighborhoods, Dubai communities, where to live in Dubai, Downtown Dubai guide, Dubai Marina guide, Business Bay guide',
+    canonicalPath: '/areas',
+  },
   mortgageCalculator: {
     title: 'Mortgage Calculator',
     description: 'Calculate your property mortgage payments with our free Dubai mortgage calculator. Estimate monthly payments for UAE properties.',
