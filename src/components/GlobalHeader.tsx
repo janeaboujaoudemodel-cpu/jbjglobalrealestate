@@ -28,7 +28,7 @@ import { ScrollArea } from "@/components/ui/scroll-area";
 import { BrandMonogram } from "@/components/BrandMonogram";
 import LanguageSwitcher from "@/components/LanguageSwitcher";
 import GlobalSearchModal from "@/components/GlobalSearchModal";
-import jbjMonogramTransparent from "@/assets/jbj-monogram-transparent.png";
+import jbjMonogramDarkBg from "@/assets/jbj-monogram-dark-bg.png";
 
 const GlobalHeader = () => {
   const { user, isAdmin, signOut } = useAuth();
@@ -100,7 +100,7 @@ const GlobalHeader = () => {
             style={{ fontFamily: "Poppins, sans-serif" }}
           >
             <img 
-              src={jbjMonogramTransparent} 
+              src={jbjMonogramDarkBg} 
               alt="JBJ" 
               className="w-10 h-10 object-contain"
             />
