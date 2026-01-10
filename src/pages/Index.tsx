@@ -178,7 +178,7 @@ const Index = () => {
             </Link>
             <Button 
               variant="outline"
-              className="border-gold/40 text-gold hover:bg-gold/10 hover:border-gold px-6 py-5 text-sm transition-all duration-300"
+              className="border-gold text-gold hover:bg-gold/10 hover:border-gold-light px-6 py-5 text-sm transition-all duration-300"
               onClick={() => setIsInquiryOpen(true)}
             >
               List Your Property
@@ -186,7 +186,7 @@ const Index = () => {
             <Link to="/market-report">
               <Button 
                 variant="outline"
-                className="border-zinc-700 text-zinc-300 hover:bg-zinc-800 hover:border-zinc-600 px-6 py-5 text-sm transition-all duration-300"
+                className="border-zinc-600 text-zinc-200 hover:bg-zinc-800 hover:border-zinc-500 px-6 py-5 text-sm transition-all duration-300"
               >
                 <FileText className="w-4 h-4 mr-2" />
                 Market Report
@@ -263,16 +263,57 @@ const Index = () => {
         </div>
       </section>
 
-      {/* RESOURCES SECTION - Simplified */}
+      {/* WHO IS THIS FOR - Clear Entry Points */}
       <section className="py-16 md:py-20 bg-zinc-950">
         <div className="container mx-auto px-4">
           <div className="text-center mb-10">
-            <h2 className="text-zinc-400 text-xs uppercase tracking-[0.2em] mb-2">Resources</h2>
+            <h2 className="text-zinc-400 text-xs uppercase tracking-[0.2em] mb-2">Who We Serve</h2>
             <p className="text-white text-xl md:text-2xl font-medium" style={{ fontFamily: "Poppins, sans-serif" }}>
-              Tools for Real Estate Professionals
+              Find Your Starting Point
             </p>
           </div>
 
+          {/* Audience Entry Cards */}
+          <div className="grid grid-cols-2 md:grid-cols-4 gap-4 max-w-4xl mx-auto mb-12">
+            <Link to="/buyer-guide" className="group">
+              <div className="bg-zinc-900/60 border border-zinc-800 rounded-xl p-5 text-center hover:border-gold/40 transition-all duration-300">
+                <div className="w-10 h-10 bg-gold/10 rounded-lg flex items-center justify-center mx-auto mb-3">
+                  <Heart className="w-5 h-5 text-gold" />
+                </div>
+                <h4 className="text-white text-sm font-semibold mb-1">Buyers</h4>
+                <p className="text-zinc-500 text-xs">Find your home</p>
+              </div>
+            </Link>
+            <Link to="/seller-guide" className="group">
+              <div className="bg-zinc-900/60 border border-zinc-800 rounded-xl p-5 text-center hover:border-gold/40 transition-all duration-300">
+                <div className="w-10 h-10 bg-gold/10 rounded-lg flex items-center justify-center mx-auto mb-3">
+                  <Target className="w-5 h-5 text-gold" />
+                </div>
+                <h4 className="text-white text-sm font-semibold mb-1">Sellers</h4>
+                <p className="text-zinc-500 text-xs">List your property</p>
+              </div>
+            </Link>
+            <Link to="/broker-toolkit" className="group">
+              <div className="bg-zinc-900/60 border border-zinc-800 rounded-xl p-5 text-center hover:border-gold/40 transition-all duration-300">
+                <div className="w-10 h-10 bg-gold/10 rounded-lg flex items-center justify-center mx-auto mb-3">
+                  <Briefcase className="w-5 h-5 text-gold" />
+                </div>
+                <h4 className="text-white text-sm font-semibold mb-1">Brokers</h4>
+                <p className="text-zinc-500 text-xs">Professional tools</p>
+              </div>
+            </Link>
+            <Link to="/ai-hub" className="group">
+              <div className="bg-zinc-900/60 border border-zinc-800 rounded-xl p-5 text-center hover:border-gold/40 transition-all duration-300">
+                <div className="w-10 h-10 bg-gold/10 rounded-lg flex items-center justify-center mx-auto mb-3">
+                  <Users className="w-5 h-5 text-gold" />
+                </div>
+                <h4 className="text-white text-sm font-semibold mb-1">Visitors</h4>
+                <p className="text-zinc-500 text-xs">Explore free tools</p>
+              </div>
+            </Link>
+          </div>
+
+          {/* Resources Grid */}
           <div className="grid md:grid-cols-2 gap-6 max-w-4xl mx-auto">
             {/* Broker Toolkit Card */}
             <Link to="/broker-toolkit" className="group">
@@ -295,9 +336,16 @@ const Index = () => {
               </div>
             </Link>
 
-            {/* AI Tools Card */}
+            {/* AI Tools Card - FREE highlighted */}
             <Link to="/ai-hub" className="group">
-              <div className="bg-zinc-900/60 border border-zinc-800 rounded-2xl p-6 md:p-8 hover:border-gold/40 transition-all duration-300">
+              <div className="bg-zinc-900/60 border border-zinc-800 rounded-2xl p-6 md:p-8 hover:border-gold/40 transition-all duration-300 relative overflow-hidden">
+                {/* FREE Badge */}
+                <div className="absolute top-4 right-4">
+                  <span className="inline-flex items-center gap-1 px-2 py-1 bg-green-500/20 border border-green-500/40 rounded-full text-green-400 text-[10px] font-semibold uppercase tracking-wider">
+                    <Sparkles className="w-3 h-3" />
+                    Free
+                  </span>
+                </div>
                 <div className="flex items-center gap-4 mb-4">
                   <div className="w-12 h-12 bg-gold/10 rounded-xl flex items-center justify-center">
                     <Brain className="w-6 h-6 text-gold" />
@@ -308,10 +356,10 @@ const Index = () => {
                   </div>
                 </div>
                 <p className="text-zinc-400 text-sm mb-4">
-                  AI-powered property tools and assistants.
+                  AI-powered property tools and assistants — all free.
                 </p>
                 <span className="text-gold text-sm group-hover:underline">
-                  View all →
+                  Access Free Tools →
                 </span>
               </div>
             </Link>
@@ -511,7 +559,7 @@ const Index = () => {
               <Link to="/properties">
                 <Button 
                   variant="outline"
-                  className="border-zinc-700 text-zinc-300 hover:bg-zinc-800 hover:border-zinc-600 px-8 py-6 text-sm transition-all duration-300"
+                  className="border-zinc-600 text-zinc-200 hover:bg-zinc-800 hover:border-zinc-500 px-8 py-6 text-sm transition-all duration-300"
                 >
                   Browse Properties
                 </Button>
