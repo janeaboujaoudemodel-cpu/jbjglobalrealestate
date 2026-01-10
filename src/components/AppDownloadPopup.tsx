@@ -13,6 +13,7 @@ const AppDownloadPopup = ({ showOnLoad = true, delayMs = 0 }: AppDownloadPopupPr
   const [isInstalling, setIsInstalling] = useState(false);
   const [isInstalled, setIsInstalled] = useState(false);
   const [deferredPrompt, setDeferredPrompt] = useState<any>(null);
+  const [showIOSInstructions, setShowIOSInstructions] = useState(false);
 
   useEffect(() => {
     // Check if already installed or dismissed
@@ -59,29 +60,32 @@ const AppDownloadPopup = ({ showOnLoad = true, delayMs = 0 }: AppDownloadPopupPr
     setIsInstalling(true);
 
     if (deferredPrompt) {
-      // Use native PWA install prompt
-      deferredPrompt.prompt();
-      const { outcome } = await deferredPrompt.userChoice;
-      
-      if (outcome === 'accepted') {
-        localStorage.setItem('jbj_pwa_installed', 'true');
-        setIsInstalled(true);
-        setIsOpen(false);
+      // Use native PWA install prompt - immediate one-click download
+      try {
+        deferredPrompt.prompt();
+        const { outcome } = await deferredPrompt.userChoice;
+        
+        if (outcome === 'accepted') {
+          localStorage.setItem('jbj_pwa_installed', 'true');
+          setIsInstalled(true);
+          setIsOpen(false);
+        }
+        setDeferredPrompt(null);
+      } catch (error) {
+        console.error('Install error:', error);
       }
-      setDeferredPrompt(null);
     } else {
-      // Fallback - show instructions or navigate to install page
+      // Detect platform for appropriate install method
       const isIOS = /iPad|iPhone|iPod/.test(navigator.userAgent);
-      const isMac = navigator.platform.toUpperCase().indexOf('MAC') >= 0;
+      const isSafari = /Safari/.test(navigator.userAgent) && !/Chrome/.test(navigator.userAgent);
       
       if (isIOS) {
-        // iOS Safari doesn't support PWA install prompt
-        alert('To install: Tap the Share button, then "Add to Home Screen"');
-      } else if (isMac) {
-        // macOS Safari
-        alert('To install: Click the Share button in Safari, then "Add to Dock"');
+        // iOS - show clear instruction modal for Add to Home Screen
+        setShowIOSInstructions(true);
       } else {
-        // For Chrome/Edge on desktop, the install button should work
+        // For desktop browsers that support PWA, try to trigger install
+        // Chrome/Edge on desktop should work with beforeinstallprompt
+        // For Firefox/other browsers, redirect to install page
         window.location.href = '/install';
       }
     }
@@ -101,15 +105,57 @@ const AppDownloadPopup = ({ showOnLoad = true, delayMs = 0 }: AppDownloadPopupPr
 
   return (
     <AnimatePresence>
+      {/* iOS Instructions Modal */}
+      {showIOSInstructions && (
+        <>
+          <motion.div
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            onClick={() => setShowIOSInstructions(false)}
+            className="fixed inset-0 bg-black/70 z-[10001]"
+          />
+          <motion.div
+            initial={{ opacity: 0, scale: 0.9, y: 20 }}
+            animate={{ opacity: 1, scale: 1, y: 0 }}
+            exit={{ opacity: 0, scale: 0.9, y: 20 }}
+            className="fixed left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 z-[10002] w-[90%] max-w-md"
+          >
+            <div className="bg-zinc-900 border border-gold/30 rounded-2xl p-6 shadow-2xl relative">
+              <button
+                onClick={() => setShowIOSInstructions(false)}
+                className="absolute top-4 right-4 w-8 h-8 rounded-full bg-zinc-800 hover:bg-zinc-700 flex items-center justify-center text-zinc-400 hover:text-white transition-colors"
+              >
+                <X className="w-4 h-4" />
+              </button>
+              <div className="text-center">
+                <h3 className="text-xl font-bold text-white mb-4">Add to Home Screen</h3>
+                <div className="text-left space-y-3 text-zinc-300 text-sm">
+                  <p>1. Tap the <span className="font-semibold text-gold">Share</span> button at the bottom of Safari</p>
+                  <p>2. Scroll down and tap <span className="font-semibold text-gold">"Add to Home Screen"</span></p>
+                  <p>3. Tap <span className="font-semibold text-gold">"Add"</span> in the top right corner</p>
+                </div>
+                <Button
+                  onClick={() => setShowIOSInstructions(false)}
+                  className="w-full mt-6 bg-gold hover:bg-gold-light text-black font-bold"
+                >
+                  Got it
+                </Button>
+              </div>
+            </div>
+          </motion.div>
+        </>
+      )}
+
       {isOpen && (
         <>
-          {/* Backdrop */}
+          {/* Backdrop - No blur to keep company name visible */}
           <motion.div
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
             onClick={handleDismiss}
-            className="fixed inset-0 bg-black/70 z-[9999] backdrop-blur-sm"
+            className="fixed inset-0 bg-black/60 z-[9999]"
           />
           
           {/* Popup */}
@@ -139,9 +185,9 @@ const AppDownloadPopup = ({ showOnLoad = true, delayMs = 0 }: AppDownloadPopupPr
                   <Smartphone className="w-10 h-10 text-black" />
                 </div>
 
-                {/* Title */}
+                {/* Title - Removed phone emoji, icon at top is sufficient */}
                 <h3 className="text-2xl font-bold text-white mb-3">
-                  📱 Download Our App
+                  Download Our App
                 </h3>
 
                 {/* Description */}
@@ -159,15 +205,15 @@ const AppDownloadPopup = ({ showOnLoad = true, delayMs = 0 }: AppDownloadPopupPr
                   ))}
                 </div>
 
-                {/* Download Button */}
+                {/* Download Button - White background with gold text for premium look */}
                 <Button
                   onClick={handleInstall}
                   disabled={isInstalling}
-                  className="w-full h-14 bg-gold hover:bg-gold-light text-black font-bold text-lg rounded-xl shadow-xl shadow-gold/30 transition-all duration-300 hover:scale-[1.02]"
+                  className="w-full h-14 bg-white hover:bg-zinc-100 text-gold font-bold text-lg rounded-xl shadow-xl transition-all duration-300 hover:scale-[1.02] border border-gold/30"
                 >
                   {isInstalling ? (
                     <>
-                      <div className="w-5 h-5 border-2 border-black/30 border-t-black rounded-full animate-spin mr-2" />
+                      <div className="w-5 h-5 border-2 border-gold/30 border-t-gold rounded-full animate-spin mr-2" />
                       Installing...
                     </>
                   ) : (

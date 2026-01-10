@@ -23,7 +23,8 @@ import {
   PenTool,
   Users,
   Table2,
-  Video
+  Video,
+  CreditCard
 } from "lucide-react";
 
 const fadeInUp = {
@@ -145,6 +146,20 @@ const freeTools = [
     link: "/video-meeting",
     features: ["Unlimited Time", "Screen Share", "Recording"],
     audience: ["Brokers", "Buyers", "Visitors"]
+  },
+  {
+    id: "business-card-scanner",
+    title: "JBJ AI Business Card Scanner",
+    description: "Scan multiple business cards with AI-powered OCR. Extract contacts instantly and import directly to your CRM. End-to-end encrypted for privacy.",
+    icon: CreditCard,
+    gradient: "from-gold to-amber-500",
+    borderColor: "border-gold/30",
+    textColor: "text-gold",
+    bgColor: "bg-gold/10",
+    link: "/business-card-scanner",
+    features: ["Multi-Card Scan", "AI OCR", "CRM Import", "Encrypted"],
+    featured: true,
+    audience: ["Brokers", "Visitors"]
   },
 ];
 
@@ -423,6 +438,53 @@ const AIHub = () => {
                   </div>
                   
                   <ArrowUpRight className="w-8 h-8 text-purple-400 group-hover:translate-x-2 group-hover:-translate-y-2 transition-transform flex-shrink-0" />
+                </div>
+              </div>
+            </Link>
+          </motion.div>
+        </div>
+      </section>
+
+      {/* Featured Tool - AI Business Card Scanner */}
+      <section className="py-12 bg-black">
+        <div className="container mx-auto px-4">
+          <motion.div
+            initial={{ opacity: 0, y: 30 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+            transition={{ duration: 0.8 }}
+          >
+            <Link to="/business-card-scanner" className="block group">
+              <div className="relative overflow-hidden rounded-3xl bg-gradient-to-r from-amber-900/50 via-gold/30 to-amber-900/50 border border-gold/30 p-8 md:p-12 hover:border-gold/50 transition-all duration-500">
+                {/* Animated glow */}
+                <div className="absolute inset-0 bg-gradient-to-r from-gold/10 via-amber-500/10 to-gold/10 opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
+                
+                <div className="relative z-10 flex flex-col md:flex-row items-center gap-8">
+                  <div className="w-24 h-24 md:w-32 md:h-32 rounded-3xl bg-gradient-to-br from-gold to-amber-500 flex items-center justify-center flex-shrink-0 group-hover:scale-110 transition-transform duration-500 shadow-2xl shadow-gold/30">
+                    <CreditCard className="w-12 h-12 md:w-16 md:h-16 text-black" />
+                  </div>
+                  
+                  <div className="text-center md:text-left flex-1">
+                    <div className="inline-flex items-center gap-2 px-3 py-1 bg-gold/20 border border-gold/30 rounded-full text-gold text-xs uppercase tracking-wider mb-4">
+                      <Shield className="w-3 h-3" />
+                      Privacy First • AI Powered
+                    </div>
+                    <h2 className="text-white text-3xl md:text-4xl font-bold mb-4" style={{ fontFamily: "Poppins, sans-serif" }}>
+                      JBJ AI Business Card Scanner
+                    </h2>
+                    <p className="text-zinc-300 text-lg mb-6 max-w-2xl">
+                      Scan multiple business cards at once with AI OCR. Extract name, email, phone, company, and more. Data is encrypted end-to-end and directly importable to your CRM.
+                    </p>
+                    <div className="flex flex-wrap gap-3 justify-center md:justify-start">
+                      {["Multi-Card Scan", "AI OCR", "CRM Import", "End-to-End Encrypted"].map((feature, idx) => (
+                        <span key={idx} className="px-4 py-2 bg-gold/10 border border-gold/20 rounded-full text-gold text-sm">
+                          {feature}
+                        </span>
+                      ))}
+                    </div>
+                  </div>
+                  
+                  <ArrowUpRight className="w-8 h-8 text-gold group-hover:translate-x-2 group-hover:-translate-y-2 transition-transform flex-shrink-0" />
                 </div>
               </div>
             </Link>
