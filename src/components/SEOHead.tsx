@@ -161,6 +161,12 @@ export const pagesSEO = {
     keywords: 'Dubai area guides, Dubai neighborhoods, Dubai communities, where to live in Dubai, Downtown Dubai guide, Dubai Marina guide, Business Bay guide',
     canonicalPath: '/areas',
   },
+  buyerGuide: {
+    title: 'Buyer Guide',
+    description: 'Step-by-step guide to purchasing property in Dubai. Learn about the buying process, costs, documentation, and how to buy as a non-resident with JBJ Global Real Estate.',
+    keywords: 'Dubai property buying guide, how to buy property in Dubai, Dubai real estate process, buying property in UAE, Dubai property purchase steps',
+    canonicalPath: '/buyer-guide',
+  },
   mortgageCalculator: {
     title: 'Mortgage Calculator',
     description: 'Calculate your property mortgage payments with our free Dubai mortgage calculator. Estimate monthly payments for UAE properties.',

@@ -77,6 +77,7 @@ import VapiPrompt from "./pages/VapiPrompt";
 import VideoBuilder from "./pages/VideoBuilder";
 import AreaGuides from "./pages/AreaGuides";
 import AreaDetail from "./pages/AreaDetail";
+import BuyerGuide from "./pages/BuyerGuide";
 
 const queryClient = new QueryClient();
 
@@ -105,6 +106,7 @@ const App = () => (
                     <Route path="/developer/:slug" element={<DeveloperDetail />} />
                     <Route path="/areas" element={<AreaGuides />} />
                     <Route path="/area/:slug" element={<AreaDetail />} />
+                    <Route path="/buyer-guide" element={<BuyerGuide />} />
                     <Route path="/quiz" element={<Quiz />} />
                     <Route path="/quiz-results" element={<QuizResults />} />
                     <Route path="/contact" element={<Contact />} />
