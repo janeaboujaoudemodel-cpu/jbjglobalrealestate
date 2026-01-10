@@ -37,7 +37,7 @@ const CRM = () => {
   const navigate = useNavigate();
   const [loading, setLoading] = useState(true);
   const [profile, setProfile] = useState<CRMProfile | null>(null);
-  const [activeTab, setActiveTab] = useState("assigned");
+  const [activeTab, setActiveTab] = useState("all");
   const [showImportModal, setShowImportModal] = useState(false);
   const [showLeadModal, setShowLeadModal] = useState(false);
   const [showBulkAssignModal, setShowBulkAssignModal] = useState(false);
@@ -285,26 +285,33 @@ const CRM = () => {
             <Tabs value={activeTab} onValueChange={setActiveTab}>
               <TabsList className="mb-4 bg-muted/50">
                 <TabsTrigger 
-                  value="assigned" 
+                  value="all" 
                   className="data-[state=active]:bg-primary data-[state=active]:text-white text-muted-foreground font-semibold"
                 >
                   <Users className="h-4 w-4 mr-2" />
-                  Company Leads
+                  All Leads
                 </TabsTrigger>
                 <TabsTrigger 
                   value="own" 
                   className="data-[state=active]:bg-primary data-[state=active]:text-white text-muted-foreground font-semibold"
                 >
                   <FileText className="h-4 w-4 mr-2" />
-                  My Own Leads
+                  My Leads
+                </TabsTrigger>
+                <TabsTrigger 
+                  value="website" 
+                  className="data-[state=active]:bg-primary data-[state=active]:text-white text-muted-foreground font-semibold"
+                >
+                  <Zap className="h-4 w-4 mr-2" />
+                  Website Leads
                 </TabsTrigger>
               </TabsList>
 
-              <TabsContent value="assigned">
+              <TabsContent value="all">
                 <CRMLeadsTable 
-                  key={`assigned-${refreshKey}-${quickFilter}-${sourceFilter}`}
+                  key={`all-${refreshKey}-${quickFilter}-${sourceFilter}`}
                   userId={user?.id || ""} 
-                  filterType="assigned"
+                  filterType="all"
                   onRefresh={handleRefresh}
                   statusFilters={quickFilterStatuses}
                   sourceFilter={sourceFilter !== "all" ? sourceFilter : undefined}
@@ -316,6 +323,17 @@ const CRM = () => {
                   key={`own-${refreshKey}-${quickFilter}-${sourceFilter}`}
                   userId={user?.id || ""} 
                   filterType="own"
+                  onRefresh={handleRefresh}
+                  statusFilters={quickFilterStatuses}
+                  sourceFilter={sourceFilter !== "all" ? sourceFilter : undefined}
+                />
+              </TabsContent>
+
+              <TabsContent value="website">
+                <CRMLeadsTable 
+                  key={`website-${refreshKey}-${quickFilter}-${sourceFilter}`}
+                  userId={user?.id || ""} 
+                  filterType="website"
                   onRefresh={handleRefresh}
                   statusFilters={quickFilterStatuses}
                   sourceFilter={sourceFilter !== "all" ? sourceFilter : undefined}

@@ -109,23 +109,30 @@ const InstallAppButton = () => {
       return;
     }
 
-    if (!deferredPrompt) return;
-    
-    try {
-      await deferredPrompt.prompt();
-      const { outcome } = await deferredPrompt.userChoice;
-      
-      if (outcome === "accepted") {
-        setIsInstalled(true);
-        localStorage.setItem(STORAGE_KEYS.INSTALLED, "true");
-        toast.success("App installed successfully!");
-      } else {
-        setIsDismissed(true);
-        localStorage.setItem(STORAGE_KEYS.DISMISSED, "true");
+    // If we have the native prompt, trigger it directly
+    if (deferredPrompt) {
+      try {
+        // Trigger the install prompt immediately
+        await deferredPrompt.prompt();
+        const { outcome } = await deferredPrompt.userChoice;
+        
+        if (outcome === "accepted") {
+          setIsInstalled(true);
+          localStorage.setItem(STORAGE_KEYS.INSTALLED, "true");
+          toast.success("App installed! Find it on your Dock or taskbar", {
+            duration: 5000,
+            description: "The JBJ app icon has been added to your device",
+          });
+        }
+        setDeferredPrompt(null);
+      } catch (error) {
+        console.error("Install prompt error:", error);
+        // Fallback: open install page
+        window.open("/install", "_blank");
       }
-      setDeferredPrompt(null);
-    } catch (error) {
-      console.error("Install prompt error:", error);
+    } else {
+      // No native prompt available, open install page with instructions
+      window.open("/install", "_blank");
     }
   }, [deferredPrompt, isIOS]);
 
@@ -138,8 +145,9 @@ const InstallAppButton = () => {
   // Hide if installed, dismissed, or on Mac Safari (not supported)
   if (isInstalled || isDismissed || isMacSafari) return null;
 
-  // Show only if native prompt available OR if iOS (for fallback)
-  if (!deferredPrompt && !isIOS) return null;
+  // Always show the button on mobile/desktop (for iOS show instructions, for others use native prompt or fallback)
+  const showButton = isIOS || deferredPrompt;
+  if (!showButton) return null;
 
   return (
     <AnimatePresence>

@@ -17,6 +17,7 @@ interface LeadCaptureRequest {
   ageRange?: string;
   source: string;
   pageSource?: string;
+  subSource?: string; // Specific form name (e.g., "Market Report Download", "Property Inquiry")
   contactType?: 'client' | 'broker' | 'investor' | 'visitor';
   role?: 'buyer' | 'broker' | 'visitor';
   buyerType?: 'homeowner' | 'investor';
@@ -66,10 +67,12 @@ serve(async (req: Request): Promise<Response> => {
       contactType = 'investor';
     }
 
-    // Build tags from source and role info
+    // Build tags from source, role info, and sub-source
     const tags: string[] = [data.source.replace(/_/g, '-')];
+    if (data.subSource) tags.push(`subsource-${data.subSource.replace(/\s+/g, '-').toLowerCase()}`);
     if (data.role) tags.push(`role-${data.role}`);
     if (data.buyerType) tags.push(`buyer-type-${data.buyerType}`);
+    if (data.pageSource) tags.push(`page-${data.pageSource.replace(/\//g, '-').replace(/^-/, '')}`);
 
     // 1. Upsert to leads table
     const { error: leadsError } = await supabase
