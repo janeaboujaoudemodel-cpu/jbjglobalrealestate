@@ -1,4 +1,4 @@
-import { useState, useEffect, useRef, forwardRef } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogDescription } from '@/components/ui/dialog';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
@@ -15,14 +15,14 @@ interface OTPVerificationModalProps {
   fullName?: string;
 }
 
-const OTPVerificationModal = forwardRef<HTMLDivElement, OTPVerificationModalProps>(({ 
+const OTPVerificationModal = ({ 
   isOpen, 
   onClose, 
   onVerified, 
   type, 
   value,
   fullName 
-}, ref) => {
+}: OTPVerificationModalProps) => {
   const [otp, setOtp] = useState(['', '', '', '', '', '']);
   const [isVerifying, setIsVerifying] = useState(false);
   const [isSending, setIsSending] = useState(false);
@@ -267,8 +267,6 @@ const OTPVerificationModal = forwardRef<HTMLDivElement, OTPVerificationModalProp
       </DialogContent>
     </Dialog>
   );
-});
-
-OTPVerificationModal.displayName = 'OTPVerificationModal';
+};
 
 export default OTPVerificationModal;
