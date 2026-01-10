@@ -124,7 +124,16 @@ const Auth = forwardRef<HTMLDivElement>((_, ref) => {
     try {
       const { error } = await signInWithGoogle();
       if (error) {
-        toast.error(error.message);
+        // Provide user-friendly error messages
+        if (error.message.includes("provider")) {
+          toast.error("Google sign-in is temporarily unavailable. Please use email/password or try again later.");
+        } else if (error.message.includes("popup")) {
+          toast.error("Sign-in popup was blocked. Please allow popups and try again.");
+        } else if (error.message.includes("network")) {
+          toast.error("Network error. Please check your connection and try again.");
+        } else {
+          toast.error("We're sorry, there was a temporary issue. Please try again or contact us via WhatsApp or email.");
+        }
       }
     } finally {
       setIsSubmitting(false);

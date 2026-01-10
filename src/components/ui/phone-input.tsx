@@ -1,6 +1,6 @@
 import * as React from "react";
 import { useState, useEffect, useMemo } from "react";
-import { CheckCircle, ChevronsUpDown } from "lucide-react";
+import { CheckCircle, ChevronsUpDown, X } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover";
@@ -50,6 +50,22 @@ const TIMEZONE_TO_COUNTRY: Record<string, string> = {
   "Europe/Budapest": "+36",
   "Europe/Bucharest": "+40",
   "Europe/Kiev": "+380",
+  "Europe/Bratislava": "+421",
+  "Europe/Ljubljana": "+386",
+  "Europe/Zagreb": "+385",
+  "Europe/Belgrade": "+381",
+  "Europe/Sofia": "+359",
+  "Europe/Riga": "+371",
+  "Europe/Vilnius": "+370",
+  "Europe/Tallinn": "+372",
+  "Europe/Minsk": "+375",
+  "Europe/Skopje": "+389",
+  "Europe/Sarajevo": "+387",
+  "Europe/Podgorica": "+382",
+  "Europe/Tirana": "+355",
+  "Europe/Luxembourg": "+352",
+  "Europe/Monaco": "+377",
+  "Europe/Malta": "+356",
   // Asia Pacific
   "Asia/Shanghai": "+86",
   "Asia/Hong_Kong": "+852",
@@ -69,6 +85,22 @@ const TIMEZONE_TO_COUNTRY: Record<string, string> = {
   "Asia/Tokyo": "+81",
   "Asia/Seoul": "+82",
   "Asia/Taipei": "+886",
+  "Asia/Kabul": "+93",
+  "Asia/Baku": "+994",
+  "Asia/Tbilisi": "+995",
+  "Asia/Yerevan": "+374",
+  "Asia/Almaty": "+7",
+  "Asia/Tashkent": "+998",
+  "Asia/Bishkek": "+996",
+  "Asia/Dushanbe": "+992",
+  "Asia/Ashgabat": "+993",
+  "Asia/Ulaanbaatar": "+976",
+  "Asia/Yangon": "+95",
+  "Asia/Phnom_Penh": "+855",
+  "Asia/Vientiane": "+856",
+  "Pacific/Fiji": "+679",
+  "Pacific/Guam": "+1671",
+  "Pacific/Honolulu": "+1808",
   // Americas
   "America/New_York": "+1",
   "America/Los_Angeles": "+1",
@@ -83,6 +115,15 @@ const TIMEZONE_TO_COUNTRY: Record<string, string> = {
   "America/Lima": "+51",
   "America/Costa_Rica": "+506",
   "America/Panama": "+507",
+  "America/Guatemala": "+502",
+  "America/Havana": "+53",
+  "America/Santo_Domingo": "+1809",
+  "America/Port-au-Prince": "+509",
+  "America/Jamaica": "+1876",
+  "America/Montevideo": "+598",
+  "America/Asuncion": "+595",
+  "America/La_Paz": "+591",
+  "America/Quito": "+593",
   // Africa
   "Africa/Johannesburg": "+27",
   "Africa/Lagos": "+234",
@@ -92,6 +133,13 @@ const TIMEZONE_TO_COUNTRY: Record<string, string> = {
   "Africa/Dar_es_Salaam": "+255",
   "Africa/Kampala": "+256",
   "Indian/Mauritius": "+230",
+  "Africa/Khartoum": "+249",
+  "Africa/Kinshasa": "+243",
+  "Africa/Luanda": "+244",
+  "Africa/Maputo": "+258",
+  "Africa/Abidjan": "+225",
+  "Africa/Dakar": "+221",
+  "Africa/Douala": "+237",
 };
 
 // Detect country code from browser timezone or locale
@@ -115,6 +163,24 @@ const detectCountryCode = (): string => {
       'CN': '+86', 'HK': '+852', 'SG': '+65', 'MY': '+60', 'JP': '+81', 'KR': '+82',
       'RU': '+7', 'BR': '+55', 'MX': '+52', 'EG': '+20', 'ZA': '+27', 'NG': '+234',
       'TR': '+90', 'IR': '+98', 'IL': '+972', 'JO': '+962', 'LB': '+961',
+      'PH': '+63', 'ID': '+62', 'TH': '+66', 'VN': '+84', 'BD': '+880',
+      'LK': '+94', 'NP': '+977', 'AF': '+93', 'IQ': '+964', 'SY': '+963',
+      'YE': '+967', 'MA': '+212', 'DZ': '+213', 'TN': '+216', 'LY': '+218',
+      'SD': '+249', 'ET': '+251', 'KE': '+254', 'TZ': '+255', 'UG': '+256',
+      'GH': '+233', 'CI': '+225', 'SN': '+221', 'CM': '+237', 'CD': '+243',
+      'AO': '+244', 'MZ': '+258', 'ZW': '+263', 'MU': '+230',
+      'CO': '+57', 'VE': '+58', 'PE': '+51', 'CL': '+56', 'AR': '+54',
+      'CU': '+53', 'DO': '+1809', 'JM': '+1876', 'HT': '+509', 'GT': '+502',
+      'PA': '+507', 'CR': '+506', 'UY': '+598', 'PY': '+595', 'BO': '+591', 'EC': '+593',
+      'PL': '+48', 'UA': '+380', 'RO': '+40', 'HU': '+36', 'CZ': '+420',
+      'GR': '+30', 'PT': '+351', 'IE': '+353', 'AT': '+43', 'CH': '+41',
+      'BE': '+32', 'NL': '+31', 'SE': '+46', 'NO': '+47', 'DK': '+45', 'FI': '+358',
+      'SK': '+421', 'SI': '+386', 'HR': '+385', 'RS': '+381', 'BG': '+359',
+      'LV': '+371', 'LT': '+370', 'EE': '+372', 'BY': '+375', 'MK': '+389',
+      'BA': '+387', 'ME': '+382', 'AL': '+355', 'LU': '+352', 'MC': '+377', 'MT': '+356',
+      'AZ': '+994', 'GE': '+995', 'AM': '+374', 'KZ': '+7', 'UZ': '+998',
+      'KG': '+996', 'TJ': '+992', 'TM': '+993', 'MN': '+976', 'MM': '+95',
+      'KH': '+855', 'LA': '+856', 'FJ': '+679', 'TW': '+886',
     };
     
     if (region && REGION_TO_DIAL[region]) {
@@ -128,7 +194,7 @@ const detectCountryCode = (): string => {
   return "+971";
 };
 
-// Country codes grouped by region with dial codes and valid number lengths
+// Complete country codes list organized by region
 export const COUNTRY_CODES_BY_REGION = {
   "GCC": [
     { code: "+971", country: "UAE", flag: "🇦🇪", minLen: 9, maxLen: 9 },
@@ -152,9 +218,11 @@ export const COUNTRY_CODES_BY_REGION = {
     { code: "+213", country: "Algeria", flag: "🇩🇿", minLen: 9, maxLen: 9 },
     { code: "+216", country: "Tunisia", flag: "🇹🇳", minLen: 8, maxLen: 8 },
     { code: "+218", country: "Libya", flag: "🇱🇾", minLen: 9, maxLen: 9 },
+    { code: "+249", country: "Sudan", flag: "🇸🇩", minLen: 9, maxLen: 9 },
+    { code: "+970", country: "Palestine", flag: "🇵🇸", minLen: 9, maxLen: 9 },
   ],
   "Europe": [
-    { code: "+44", country: "UK", flag: "🇬🇧", minLen: 10, maxLen: 10 },
+    { code: "+44", country: "United Kingdom", flag: "🇬🇧", minLen: 10, maxLen: 10 },
     { code: "+49", country: "Germany", flag: "🇩🇪", minLen: 10, maxLen: 11 },
     { code: "+33", country: "France", flag: "🇫🇷", minLen: 9, maxLen: 9 },
     { code: "+39", country: "Italy", flag: "🇮🇹", minLen: 9, maxLen: 10 },
@@ -176,15 +244,36 @@ export const COUNTRY_CODES_BY_REGION = {
     { code: "+36", country: "Hungary", flag: "🇭🇺", minLen: 9, maxLen: 9 },
     { code: "+40", country: "Romania", flag: "🇷🇴", minLen: 9, maxLen: 9 },
     { code: "+380", country: "Ukraine", flag: "🇺🇦", minLen: 9, maxLen: 9 },
+    { code: "+421", country: "Slovakia", flag: "🇸🇰", minLen: 9, maxLen: 9 },
+    { code: "+386", country: "Slovenia", flag: "🇸🇮", minLen: 8, maxLen: 8 },
+    { code: "+385", country: "Croatia", flag: "🇭🇷", minLen: 9, maxLen: 9 },
+    { code: "+381", country: "Serbia", flag: "🇷🇸", minLen: 9, maxLen: 9 },
+    { code: "+359", country: "Bulgaria", flag: "🇧🇬", minLen: 9, maxLen: 9 },
+    { code: "+371", country: "Latvia", flag: "🇱🇻", minLen: 8, maxLen: 8 },
+    { code: "+370", country: "Lithuania", flag: "🇱🇹", minLen: 8, maxLen: 8 },
+    { code: "+372", country: "Estonia", flag: "🇪🇪", minLen: 7, maxLen: 8 },
+    { code: "+375", country: "Belarus", flag: "🇧🇾", minLen: 9, maxLen: 9 },
+    { code: "+389", country: "North Macedonia", flag: "🇲🇰", minLen: 8, maxLen: 8 },
+    { code: "+387", country: "Bosnia & Herzegovina", flag: "🇧🇦", minLen: 8, maxLen: 8 },
+    { code: "+382", country: "Montenegro", flag: "🇲🇪", minLen: 8, maxLen: 8 },
+    { code: "+355", country: "Albania", flag: "🇦🇱", minLen: 9, maxLen: 9 },
+    { code: "+352", country: "Luxembourg", flag: "🇱🇺", minLen: 9, maxLen: 9 },
+    { code: "+377", country: "Monaco", flag: "🇲🇨", minLen: 8, maxLen: 9 },
+    { code: "+356", country: "Malta", flag: "🇲🇹", minLen: 8, maxLen: 8 },
+    { code: "+354", country: "Iceland", flag: "🇮🇸", minLen: 7, maxLen: 7 },
+    { code: "+357", country: "Cyprus", flag: "🇨🇾", minLen: 8, maxLen: 8 },
+    { code: "+373", country: "Moldova", flag: "🇲🇩", minLen: 8, maxLen: 8 },
   ],
   "Asia Pacific": [
     { code: "+86", country: "China", flag: "🇨🇳", minLen: 11, maxLen: 11 },
     { code: "+852", country: "Hong Kong", flag: "🇭🇰", minLen: 8, maxLen: 8 },
+    { code: "+853", country: "Macau", flag: "🇲🇴", minLen: 8, maxLen: 8 },
     { code: "+91", country: "India", flag: "🇮🇳", minLen: 10, maxLen: 10 },
     { code: "+92", country: "Pakistan", flag: "🇵🇰", minLen: 10, maxLen: 10 },
     { code: "+880", country: "Bangladesh", flag: "🇧🇩", minLen: 10, maxLen: 10 },
     { code: "+94", country: "Sri Lanka", flag: "🇱🇰", minLen: 9, maxLen: 9 },
     { code: "+977", country: "Nepal", flag: "🇳🇵", minLen: 10, maxLen: 10 },
+    { code: "+93", country: "Afghanistan", flag: "🇦🇫", minLen: 9, maxLen: 9 },
     { code: "+61", country: "Australia", flag: "🇦🇺", minLen: 9, maxLen: 9 },
     { code: "+64", country: "New Zealand", flag: "🇳🇿", minLen: 9, maxLen: 10 },
     { code: "+65", country: "Singapore", flag: "🇸🇬", minLen: 8, maxLen: 8 },
@@ -196,9 +285,28 @@ export const COUNTRY_CODES_BY_REGION = {
     { code: "+81", country: "Japan", flag: "🇯🇵", minLen: 10, maxLen: 10 },
     { code: "+82", country: "South Korea", flag: "🇰🇷", minLen: 10, maxLen: 10 },
     { code: "+886", country: "Taiwan", flag: "🇹🇼", minLen: 9, maxLen: 9 },
+    { code: "+855", country: "Cambodia", flag: "🇰🇭", minLen: 9, maxLen: 9 },
+    { code: "+856", country: "Laos", flag: "🇱🇦", minLen: 9, maxLen: 10 },
+    { code: "+95", country: "Myanmar", flag: "🇲🇲", minLen: 9, maxLen: 9 },
+    { code: "+850", country: "North Korea", flag: "🇰🇵", minLen: 9, maxLen: 9 },
+    { code: "+976", country: "Mongolia", flag: "🇲🇳", minLen: 8, maxLen: 8 },
+    { code: "+673", country: "Brunei", flag: "🇧🇳", minLen: 7, maxLen: 7 },
+    { code: "+960", country: "Maldives", flag: "🇲🇻", minLen: 7, maxLen: 7 },
+    { code: "+975", country: "Bhutan", flag: "🇧🇹", minLen: 8, maxLen: 8 },
+    { code: "+679", country: "Fiji", flag: "🇫🇯", minLen: 7, maxLen: 7 },
+    { code: "+675", country: "Papua New Guinea", flag: "🇵🇬", minLen: 8, maxLen: 8 },
+  ],
+  "Central Asia & Caucasus": [
+    { code: "+994", country: "Azerbaijan", flag: "🇦🇿", minLen: 9, maxLen: 9 },
+    { code: "+995", country: "Georgia", flag: "🇬🇪", minLen: 9, maxLen: 9 },
+    { code: "+374", country: "Armenia", flag: "🇦🇲", minLen: 8, maxLen: 8 },
+    { code: "+998", country: "Uzbekistan", flag: "🇺🇿", minLen: 9, maxLen: 9 },
+    { code: "+996", country: "Kyrgyzstan", flag: "🇰🇬", minLen: 9, maxLen: 9 },
+    { code: "+992", country: "Tajikistan", flag: "🇹🇯", minLen: 9, maxLen: 9 },
+    { code: "+993", country: "Turkmenistan", flag: "🇹🇲", minLen: 8, maxLen: 8 },
   ],
   "Americas": [
-    { code: "+1", country: "US/Canada", flag: "🇺🇸", minLen: 10, maxLen: 10 },
+    { code: "+1", country: "USA/Canada", flag: "🇺🇸", minLen: 10, maxLen: 10 },
     { code: "+52", country: "Mexico", flag: "🇲🇽", minLen: 10, maxLen: 10 },
     { code: "+55", country: "Brazil", flag: "🇧🇷", minLen: 10, maxLen: 11 },
     { code: "+54", country: "Argentina", flag: "🇦🇷", minLen: 10, maxLen: 10 },
@@ -206,8 +314,34 @@ export const COUNTRY_CODES_BY_REGION = {
     { code: "+57", country: "Colombia", flag: "🇨🇴", minLen: 10, maxLen: 10 },
     { code: "+58", country: "Venezuela", flag: "🇻🇪", minLen: 10, maxLen: 10 },
     { code: "+51", country: "Peru", flag: "🇵🇪", minLen: 9, maxLen: 9 },
+    { code: "+593", country: "Ecuador", flag: "🇪🇨", minLen: 9, maxLen: 9 },
+    { code: "+591", country: "Bolivia", flag: "🇧🇴", minLen: 8, maxLen: 8 },
+    { code: "+595", country: "Paraguay", flag: "🇵🇾", minLen: 9, maxLen: 9 },
+    { code: "+598", country: "Uruguay", flag: "🇺🇾", minLen: 8, maxLen: 8 },
     { code: "+506", country: "Costa Rica", flag: "🇨🇷", minLen: 8, maxLen: 8 },
     { code: "+507", country: "Panama", flag: "🇵🇦", minLen: 8, maxLen: 8 },
+    { code: "+502", country: "Guatemala", flag: "🇬🇹", minLen: 8, maxLen: 8 },
+    { code: "+503", country: "El Salvador", flag: "🇸🇻", minLen: 8, maxLen: 8 },
+    { code: "+504", country: "Honduras", flag: "🇭🇳", minLen: 8, maxLen: 8 },
+    { code: "+505", country: "Nicaragua", flag: "🇳🇮", minLen: 8, maxLen: 8 },
+    { code: "+53", country: "Cuba", flag: "🇨🇺", minLen: 8, maxLen: 8 },
+    { code: "+509", country: "Haiti", flag: "🇭🇹", minLen: 8, maxLen: 8 },
+    { code: "+592", country: "Guyana", flag: "🇬🇾", minLen: 7, maxLen: 7 },
+    { code: "+597", country: "Suriname", flag: "🇸🇷", minLen: 7, maxLen: 7 },
+  ],
+  "Caribbean": [
+    { code: "+1876", country: "Jamaica", flag: "🇯🇲", minLen: 7, maxLen: 7 },
+    { code: "+1868", country: "Trinidad & Tobago", flag: "🇹🇹", minLen: 7, maxLen: 7 },
+    { code: "+1809", country: "Dominican Republic", flag: "🇩🇴", minLen: 7, maxLen: 7 },
+    { code: "+1787", country: "Puerto Rico", flag: "🇵🇷", minLen: 7, maxLen: 7 },
+    { code: "+1246", country: "Barbados", flag: "🇧🇧", minLen: 7, maxLen: 7 },
+    { code: "+1242", country: "Bahamas", flag: "🇧🇸", minLen: 7, maxLen: 7 },
+    { code: "+1758", country: "Saint Lucia", flag: "🇱🇨", minLen: 7, maxLen: 7 },
+    { code: "+1767", country: "Dominica", flag: "🇩🇲", minLen: 7, maxLen: 7 },
+    { code: "+1473", country: "Grenada", flag: "🇬🇩", minLen: 7, maxLen: 7 },
+    { code: "+1268", country: "Antigua & Barbuda", flag: "🇦🇬", minLen: 7, maxLen: 7 },
+    { code: "+1784", country: "St Vincent", flag: "🇻🇨", minLen: 7, maxLen: 7 },
+    { code: "+1869", country: "St Kitts & Nevis", flag: "🇰🇳", minLen: 7, maxLen: 7 },
   ],
   "Africa": [
     { code: "+27", country: "South Africa", flag: "🇿🇦", minLen: 9, maxLen: 9 },
@@ -218,12 +352,54 @@ export const COUNTRY_CODES_BY_REGION = {
     { code: "+255", country: "Tanzania", flag: "🇹🇿", minLen: 9, maxLen: 9 },
     { code: "+256", country: "Uganda", flag: "🇺🇬", minLen: 9, maxLen: 9 },
     { code: "+263", country: "Zimbabwe", flag: "🇿🇼", minLen: 9, maxLen: 9 },
+    { code: "+260", country: "Zambia", flag: "🇿🇲", minLen: 9, maxLen: 9 },
     { code: "+230", country: "Mauritius", flag: "🇲🇺", minLen: 8, maxLen: 8 },
+    { code: "+225", country: "Ivory Coast", flag: "🇨🇮", minLen: 10, maxLen: 10 },
+    { code: "+221", country: "Senegal", flag: "🇸🇳", minLen: 9, maxLen: 9 },
+    { code: "+237", country: "Cameroon", flag: "🇨🇲", minLen: 9, maxLen: 9 },
+    { code: "+243", country: "DR Congo", flag: "🇨🇩", minLen: 9, maxLen: 9 },
+    { code: "+244", country: "Angola", flag: "🇦🇴", minLen: 9, maxLen: 9 },
+    { code: "+258", country: "Mozambique", flag: "🇲🇿", minLen: 9, maxLen: 9 },
+    { code: "+250", country: "Rwanda", flag: "🇷🇼", minLen: 9, maxLen: 9 },
+    { code: "+257", country: "Burundi", flag: "🇧🇮", minLen: 8, maxLen: 8 },
+    { code: "+267", country: "Botswana", flag: "🇧🇼", minLen: 8, maxLen: 8 },
+    { code: "+264", country: "Namibia", flag: "🇳🇦", minLen: 9, maxLen: 9 },
+    { code: "+266", country: "Lesotho", flag: "🇱🇸", minLen: 8, maxLen: 8 },
+    { code: "+268", country: "Eswatini", flag: "🇸🇿", minLen: 8, maxLen: 8 },
+    { code: "+261", country: "Madagascar", flag: "🇲🇬", minLen: 9, maxLen: 9 },
+    { code: "+269", country: "Comoros", flag: "🇰🇲", minLen: 7, maxLen: 7 },
+    { code: "+248", country: "Seychelles", flag: "🇸🇨", minLen: 7, maxLen: 7 },
+    { code: "+252", country: "Somalia", flag: "🇸🇴", minLen: 9, maxLen: 9 },
+    { code: "+253", country: "Djibouti", flag: "🇩🇯", minLen: 8, maxLen: 8 },
+    { code: "+291", country: "Eritrea", flag: "🇪🇷", minLen: 7, maxLen: 7 },
+    { code: "+211", country: "South Sudan", flag: "🇸🇸", minLen: 9, maxLen: 9 },
+    { code: "+224", country: "Guinea", flag: "🇬🇳", minLen: 9, maxLen: 9 },
+    { code: "+220", country: "Gambia", flag: "🇬🇲", minLen: 7, maxLen: 7 },
+    { code: "+223", country: "Mali", flag: "🇲🇱", minLen: 8, maxLen: 8 },
+    { code: "+226", country: "Burkina Faso", flag: "🇧🇫", minLen: 8, maxLen: 8 },
+    { code: "+227", country: "Niger", flag: "🇳🇪", minLen: 8, maxLen: 8 },
+    { code: "+228", country: "Togo", flag: "🇹🇬", minLen: 8, maxLen: 8 },
+    { code: "+229", country: "Benin", flag: "🇧🇯", minLen: 8, maxLen: 8 },
+    { code: "+231", country: "Liberia", flag: "🇱🇷", minLen: 8, maxLen: 9 },
+    { code: "+232", country: "Sierra Leone", flag: "🇸🇱", minLen: 8, maxLen: 8 },
+    { code: "+235", country: "Chad", flag: "🇹🇩", minLen: 8, maxLen: 8 },
+    { code: "+236", country: "Central African Rep", flag: "🇨🇫", minLen: 8, maxLen: 8 },
+    { code: "+238", country: "Cape Verde", flag: "🇨🇻", minLen: 7, maxLen: 7 },
+    { code: "+239", country: "São Tomé", flag: "🇸🇹", minLen: 7, maxLen: 7 },
+    { code: "+240", country: "Equatorial Guinea", flag: "🇬🇶", minLen: 9, maxLen: 9 },
+    { code: "+241", country: "Gabon", flag: "🇬🇦", minLen: 8, maxLen: 8 },
+    { code: "+242", country: "Congo", flag: "🇨🇬", minLen: 9, maxLen: 9 },
+    { code: "+245", country: "Guinea-Bissau", flag: "🇬🇼", minLen: 9, maxLen: 9 },
+    { code: "+246", country: "Diego Garcia", flag: "🇮🇴", minLen: 7, maxLen: 7 },
+    { code: "+262", country: "Réunion", flag: "🇷🇪", minLen: 9, maxLen: 9 },
+    { code: "+265", country: "Malawi", flag: "🇲🇼", minLen: 9, maxLen: 9 },
   ],
 };
 
-// Flat list for lookups
-export const COUNTRY_CODES = Object.values(COUNTRY_CODES_BY_REGION).flat();
+// Flat list for lookups - sorted by code length (longest first) to match longest code first
+export const COUNTRY_CODES = Object.values(COUNTRY_CODES_BY_REGION)
+  .flat()
+  .sort((a, b) => b.code.length - a.code.length);
 
 export type CountryCode = typeof COUNTRY_CODES[0];
 
@@ -231,8 +407,9 @@ export type CountryCode = typeof COUNTRY_CODES[0];
 export const getPhoneValidation = (phone: string): { isValid: boolean; message: string; country?: CountryCode } => {
   if (!phone) return { isValid: false, message: "Phone number is required" };
   
+  // Find the matching country code (longest match first due to sorting)
   const countryCode = COUNTRY_CODES.find(c => phone.startsWith(c.code));
-  if (!countryCode) return { isValid: false, message: "Please select a valid country code" };
+  if (!countryCode) return { isValid: false, message: "Please enter a valid phone number including country code." };
   
   const localNumber = phone.replace(countryCode.code, '').replace(/\D/g, '');
   const digitCount = localNumber.length;
@@ -325,39 +502,42 @@ const PhoneInput = React.forwardRef<HTMLInputElement, PhoneInputProps>(
                 role="combobox"
                 aria-expanded={codeOpen}
                 disabled={disabled}
-                className="w-[130px] h-12 bg-zinc-900 border-zinc-700 text-white hover:bg-zinc-800 hover:text-white justify-between shrink-0"
+                className="w-[140px] h-12 bg-zinc-900 border-zinc-700 text-white hover:bg-zinc-800 hover:text-white justify-between shrink-0"
               >
                 <span className="flex items-center gap-1.5 truncate">
-                  <span>{currentCountry.flag}</span>
-                  <span>{currentCode}</span>
+                  <span className="text-lg">{currentCountry.flag}</span>
+                  <span className="font-medium">{currentCode}</span>
                 </span>
                 <ChevronsUpDown className="ml-1 h-4 w-4 shrink-0 opacity-50" />
               </Button>
             </PopoverTrigger>
-            <PopoverContent className="w-[220px] p-0 bg-zinc-900 border-zinc-700 z-50" align="start">
+            <PopoverContent className="w-[280px] p-0 bg-zinc-900 border-zinc-700 z-50" align="start">
               <Command className="bg-zinc-900">
                 <CommandInput 
-                  placeholder="Search country..." 
+                  placeholder="Search country or code..." 
                   className="h-10 text-white border-zinc-700"
                 />
-                <CommandList className="max-h-[280px]">
+                <CommandList className="max-h-[320px]">
                   <CommandEmpty className="text-zinc-400 text-sm py-4 text-center">
                     No country found.
                   </CommandEmpty>
                   {Object.entries(COUNTRY_CODES_BY_REGION).map(([region, countries]) => (
-                    <CommandGroup key={region} heading={region} className="text-gold">
+                    <CommandGroup key={region} heading={region} className="text-gold text-xs">
                       {countries.map((country) => (
                         <CommandItem
-                          key={country.code}
-                          value={`${region} ${country.country} ${country.code}`}
+                          key={`${country.code}-${country.country}`}
+                          value={`${region} ${country.country} ${country.code} ${country.flag}`}
                           onSelect={() => handleCodeChange(country.code)}
                           className="text-white hover:bg-zinc-800 cursor-pointer"
                         >
                           <span className="flex items-center gap-2 w-full">
-                            <span>{country.flag}</span>
-                            <span className="font-medium">{country.code}</span>
+                            <span className="text-lg">{country.flag}</span>
+                            <span className="font-medium min-w-[60px]">{country.code}</span>
                             <span className="text-zinc-400 text-xs truncate">{country.country}</span>
                           </span>
+                          {currentCode === country.code && (
+                            <CheckCircle className="h-4 w-4 text-gold ml-auto" />
+                          )}
                         </CommandItem>
                       ))}
                     </CommandGroup>
@@ -375,12 +555,16 @@ const PhoneInput = React.forwardRef<HTMLInputElement, PhoneInputProps>(
               disabled={disabled}
               className={cn(
                 "h-12 bg-zinc-900 border-zinc-700 text-white placeholder:text-zinc-500 focus:border-gold pr-10",
-                localNumber && validation.isValid && "border-green-500"
+                localNumber && validation.isValid && "border-green-500/50",
+                localNumber && !validation.isValid && "border-amber-500/50"
               )}
               placeholder={placeholder || `${currentCountry.minLen} digits`}
             />
             {showValidation && localNumber && validation.isValid && (
               <CheckCircle className="absolute right-3 top-1/2 -translate-y-1/2 h-5 w-5 text-green-500" />
+            )}
+            {showValidation && localNumber && !validation.isValid && (
+              <X className="absolute right-3 top-1/2 -translate-y-1/2 h-5 w-5 text-amber-500" />
             )}
           </div>
         </div>
