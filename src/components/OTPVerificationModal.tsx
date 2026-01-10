@@ -190,7 +190,7 @@ const OTPVerificationModal = ({
                 Verify Your {type === 'email' ? 'Email' : 'Phone Number'}
               </DialogTitle>
               <DialogDescription className="text-zinc-400 mt-2">
-                We've sent a 6-digit code to <span className="text-gold font-medium">{value}</span>
+                We've sent a 6-digit code to <span dir="ltr" className="text-gold font-medium">{value}</span>
               </DialogDescription>
             </DialogHeader>
 
