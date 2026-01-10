@@ -103,67 +103,10 @@ const ComingSoon = () => {
             {/* Fill the Form Button */}
             <button
               onClick={() => openForm()}
-              className="mb-8 px-8 py-3 bg-gradient-to-r from-gold via-gold-light to-gold text-black font-semibold rounded-lg hover:opacity-90 transition-opacity shadow-xl shadow-gold/20"
+              className="px-8 py-3 bg-gradient-to-r from-gold via-gold-light to-gold text-black font-semibold rounded-lg hover:opacity-90 transition-opacity shadow-xl shadow-gold/20"
             >
               Fill the Form
             </button>
-            
-            {/* Role Selection Cards */}
-            <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-              {/* Buyer Card */}
-              <button 
-                onClick={() => openForm("buyer")}
-                className="block p-5 md:p-6 bg-zinc-900/50 border border-white/10 rounded-lg hover:border-gold/50 hover:bg-zinc-900 transition-all duration-300 group text-left"
-              >
-                <div className="w-12 h-12 rounded-full bg-gold/10 flex items-center justify-center mx-auto mb-3 group-hover:bg-gold/20 transition-colors">
-                  <svg className="w-6 h-6 text-gold" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-                    <circle cx="12" cy="12" r="10"/>
-                    <circle cx="12" cy="12" r="6"/>
-                    <circle cx="12" cy="12" r="2"/>
-                  </svg>
-                </div>
-                <h4 className="text-lg font-semibold text-white mb-1 text-center">Buyer</h4>
-                <p className="text-xs text-white/40 text-center">
-                  Looking for your dream property
-                </p>
-              </button>
-              
-              {/* Broker Card */}
-              <button 
-                onClick={() => openForm("broker")}
-                className="block p-5 md:p-6 bg-zinc-900/50 border border-white/10 rounded-lg hover:border-gold/50 hover:bg-zinc-900 transition-all duration-300 group text-left"
-              >
-                <div className="w-12 h-12 rounded-full bg-gold/10 flex items-center justify-center mx-auto mb-3 group-hover:bg-gold/20 transition-colors">
-                  <svg className="w-6 h-6 text-gold" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-                    <rect x="2" y="7" width="20" height="14" rx="2"/>
-                    <path d="M16 21V5a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v16"/>
-                  </svg>
-                </div>
-                <h4 className="text-lg font-semibold text-white mb-1 text-center">Broker</h4>
-                <p className="text-xs text-white/40 text-center">
-                  Join our exclusive network
-                </p>
-              </button>
-              
-              {/* Visitor Card */}
-              <button 
-                onClick={() => openForm("visitor")}
-                className="block p-5 md:p-6 bg-zinc-900/50 border border-white/10 rounded-lg hover:border-gold/50 hover:bg-zinc-900 transition-all duration-300 group text-left"
-              >
-                <div className="w-12 h-12 rounded-full bg-gold/10 flex items-center justify-center mx-auto mb-3 group-hover:bg-gold/20 transition-colors">
-                  <svg className="w-6 h-6 text-gold" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-                    <path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"/>
-                    <circle cx="9" cy="7" r="4"/>
-                    <path d="M22 21v-2a4 4 0 0 0-3-3.87"/>
-                    <path d="M16 3.13a4 4 0 0 1 0 7.75"/>
-                  </svg>
-                </div>
-                <h4 className="text-lg font-semibold text-white mb-1 text-center">Visitor</h4>
-                <p className="text-xs text-white/40 text-center">
-                  Explore UAE real estate
-                </p>
-              </button>
-            </div>
           </motion.div>
 
           {/* Contact Information */}

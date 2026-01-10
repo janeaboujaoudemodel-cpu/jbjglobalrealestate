@@ -39,6 +39,8 @@ interface Lead {
   preferred_language: string | null;
   current_location_country: string | null;
   source: string | null;
+  lead_source_type: string | null;
+  tags: string[] | null;
   created_at: string;
   owner_type: string;
   state?: {
@@ -529,9 +531,38 @@ const CRMLeadsTable = ({ userId, filterType, onRefresh, statusFilters = [], sour
                     </Popover>
                   </TableCell>
                   <TableCell>
-                    <span className="text-sm text-foreground">
-                      {lead.source || "-"}
-                    </span>
+                    <div className="text-sm space-y-1">
+                      <div className="font-medium text-foreground">
+                        {lead.lead_source_type === 'website' ? 'Website' : lead.lead_source_type || lead.source || '-'}
+                      </div>
+                      {lead.source && lead.source !== 'website' && (
+                        <div className="text-xs text-muted-foreground">
+                          {lead.source.replace(/-/g, ' ').replace(/\b\w/g, l => l.toUpperCase())}
+                        </div>
+                      )}
+                      {lead.tags && lead.tags.length > 0 && (
+                        <div className="flex flex-wrap gap-1">
+                          {lead.tags
+                            .filter((tag: string) => tag.startsWith('subsource-') || tag.startsWith('page-'))
+                            .slice(0, 2)
+                            .map((tag: string, idx: number) => {
+                              const label = tag
+                                .replace('subsource-', '')
+                                .replace('page-', 'Page: ')
+                                .replace(/-/g, ' ')
+                                .replace(/\b\w/g, l => l.toUpperCase());
+                              return (
+                                <span 
+                                  key={idx}
+                                  className="px-1.5 py-0.5 text-[10px] bg-gold/20 text-gold rounded"
+                                >
+                                  {label}
+                                </span>
+                              );
+                            })}
+                        </div>
+                      )}
+                    </div>
                   </TableCell>
                   <TableCell>
                     <div className="flex gap-1.5">
