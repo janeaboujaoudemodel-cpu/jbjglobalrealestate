@@ -399,6 +399,10 @@ const CRM = () => {
                   sourceFilter={sourceFilter !== "all" ? sourceFilter : undefined}
                 />
               </TabsContent>
+
+              <TabsContent value="employees">
+                <EmployeeCenter userId={user?.id || ""} />
+              </TabsContent>
             </Tabs>
           </CardContent>
         </Card>
