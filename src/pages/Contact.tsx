@@ -143,7 +143,7 @@ const Contact = () => {
       form.reset();
     } catch (error) {
       console.error("Error submitting form:", error);
-      toast.error("Something went wrong. Please try again or contact us directly.");
+      toast.error("We're sorry, there was a temporary issue. Please try again or contact us via WhatsApp or email.");
     } finally {
       setIsSubmitting(false);
     }
