@@ -546,7 +546,7 @@ const PhoneInput = React.forwardRef<HTMLInputElement, PhoneInputProps>(
               </Command>
             </PopoverContent>
           </Popover>
-          <div className="relative flex-1">
+          <div className="relative flex-1 min-w-0">
             <Input 
               ref={ref}
               type="tel"
@@ -554,11 +554,11 @@ const PhoneInput = React.forwardRef<HTMLInputElement, PhoneInputProps>(
               onChange={handleNumberChange}
               disabled={disabled}
               className={cn(
-                "h-12 bg-zinc-900 border-zinc-700 text-white placeholder:text-zinc-500 focus:border-gold pr-10",
+                "h-12 bg-zinc-900 border-zinc-700 text-white placeholder:text-zinc-500 focus:border-gold pr-10 w-full",
                 localNumber && validation.isValid && "border-green-500/50",
                 localNumber && !validation.isValid && "border-amber-500/50"
               )}
-              placeholder={placeholder || `${currentCountry.minLen} digits`}
+              placeholder={placeholder || `Enter ${currentCountry.minLen}-${currentCountry.maxLen} digits`}
             />
             {showValidation && localNumber && validation.isValid && (
               <CheckCircle className="absolute right-3 top-1/2 -translate-y-1/2 h-5 w-5 text-green-500" />

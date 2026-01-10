@@ -277,12 +277,8 @@ const InquiryFormModal = ({
               <div className="w-20 h-20 rounded-full bg-gradient-to-br from-green-500 to-green-600 flex items-center justify-center mx-auto mb-6 shadow-2xl">
                 <CheckCircle className="w-10 h-10 text-white" />
               </div>
-              <h3 className="text-2xl font-bold text-white mb-3">Thank You!</h3>
-              <p className="text-zinc-400 mb-4">Our team will contact you shortly.</p>
-              <div className="bg-zinc-900/50 border border-zinc-800 rounded-xl p-4 text-sm text-zinc-400">
-                <p>You can also reach us at:</p>
-                <p className="text-gold font-medium mt-1">{CONTACT_INFO.phone}</p>
-              </div>
+              <h3 className="text-2xl font-bold text-white mb-3">Welcome to the Community!</h3>
+              <p className="text-zinc-400 mb-4">You've successfully registered. We'll be in touch via WhatsApp shortly.</p>
             </div>
           ) : (
             <div className="relative px-6 pt-8 pb-6">
@@ -307,9 +303,9 @@ const InquiryFormModal = ({
                     backgroundClip: 'text',
                   }}
                 >
-                  {propertyName ? `Inquire About ${propertyName}` : t('inquiry.title')}
+                  {propertyName ? `Inquire About ${propertyName}` : 'Join Our Community'}
                 </DialogTitle>
-                <p className="text-zinc-400 text-sm text-center mt-2">{t('inquiry.subtitle')}</p>
+                <p className="text-zinc-400 text-sm text-center mt-2">Register to receive exclusive updates and property insights</p>
               </DialogHeader>
 
               <Form {...form}>
@@ -584,21 +580,10 @@ const InquiryFormModal = ({
                     )}
                   </Button>
 
-                  {/* Alternative Contact */}
-                  <div className="text-center pt-2">
-                    <p className="text-zinc-500 text-xs">
-                      Or reach us directly via{' '}
-                      <a 
-                        href={`https://wa.me/${CONTACT_INFO.phone.replace(/[^0-9]/g, '')}`}
-                        target="_blank"
-                        rel="noopener noreferrer"
-                        className="text-green-500 hover:underline inline-flex items-center gap-1"
-                      >
-                        <MessageCircle className="w-3 h-3" />
-                        WhatsApp
-                      </a>
-                    </p>
-                  </div>
+                  {/* Registration note */}
+                  <p className="text-zinc-500 text-xs text-center pt-2">
+                    By registering, you'll join our exclusive community and receive updates via WhatsApp.
+                  </p>
                 </form>
               </Form>
             </div>
