@@ -492,8 +492,9 @@ const PhoneInput = React.forwardRef<HTMLInputElement, PhoneInputProps>(
     };
 
     return (
-      <div className={cn("space-y-1", className)}>
-        <div className="flex gap-2">
+      <div className={cn("space-y-1.5", className)}>
+        <div className="flex flex-col sm:flex-row gap-2">
+          {/* Country Code Selector - Full width on mobile */}
           <Popover open={codeOpen} onOpenChange={setCodeOpen}>
             <PopoverTrigger asChild>
               <Button
@@ -502,41 +503,42 @@ const PhoneInput = React.forwardRef<HTMLInputElement, PhoneInputProps>(
                 role="combobox"
                 aria-expanded={codeOpen}
                 disabled={disabled}
-                className="w-[140px] h-12 bg-zinc-900 border-zinc-700 text-white hover:bg-zinc-800 hover:text-white justify-between shrink-0"
+                className="w-full sm:w-[180px] h-12 bg-zinc-900 border-zinc-700 text-white hover:bg-zinc-800 hover:text-white justify-between shrink-0"
               >
-                <span className="flex items-center gap-1.5 truncate">
-                  <span className="text-lg">{currentCountry.flag}</span>
+                <span className="flex items-center gap-2 truncate">
+                  <span className="text-xl">{currentCountry.flag}</span>
                   <span className="font-medium">{currentCode}</span>
+                  <span className="text-zinc-400 text-sm hidden sm:inline truncate">{currentCountry.country}</span>
                 </span>
                 <ChevronsUpDown className="ml-1 h-4 w-4 shrink-0 opacity-50" />
               </Button>
             </PopoverTrigger>
-            <PopoverContent className="w-[280px] p-0 bg-zinc-900 border-zinc-700 z-50" align="start">
+            <PopoverContent className="w-[320px] p-0 bg-zinc-900 border-zinc-700 z-50" align="start">
               <Command className="bg-zinc-900">
                 <CommandInput 
-                  placeholder="Search country or code..." 
-                  className="h-10 text-white border-zinc-700"
+                  placeholder="Search country name or code..." 
+                  className="h-12 text-white border-zinc-700 text-base"
                 />
-                <CommandList className="max-h-[320px]">
-                  <CommandEmpty className="text-zinc-400 text-sm py-4 text-center">
-                    No country found.
+                <CommandList className="max-h-[400px]">
+                  <CommandEmpty className="text-zinc-400 text-sm py-6 text-center">
+                    No country found. Try searching by name or code.
                   </CommandEmpty>
                   {Object.entries(COUNTRY_CODES_BY_REGION).map(([region, countries]) => (
-                    <CommandGroup key={region} heading={region} className="text-gold text-xs">
+                    <CommandGroup key={region} heading={region} className="text-gold text-xs font-semibold">
                       {countries.map((country) => (
                         <CommandItem
                           key={`${country.code}-${country.country}`}
                           value={`${region} ${country.country} ${country.code} ${country.flag}`}
                           onSelect={() => handleCodeChange(country.code)}
-                          className="text-white hover:bg-zinc-800 cursor-pointer"
+                          className="text-white hover:bg-zinc-800 cursor-pointer py-2.5"
                         >
-                          <span className="flex items-center gap-2 w-full">
-                            <span className="text-lg">{country.flag}</span>
-                            <span className="font-medium min-w-[60px]">{country.code}</span>
-                            <span className="text-zinc-400 text-xs truncate">{country.country}</span>
+                          <span className="flex items-center gap-3 w-full">
+                            <span className="text-xl">{country.flag}</span>
+                            <span className="font-semibold min-w-[65px]">{country.code}</span>
+                            <span className="text-zinc-300 text-sm truncate flex-1">{country.country}</span>
                           </span>
                           {currentCode === country.code && (
-                            <CheckCircle className="h-4 w-4 text-gold ml-auto" />
+                            <CheckCircle className="h-5 w-5 text-gold ml-auto shrink-0" />
                           )}
                         </CommandItem>
                       ))}
@@ -546,6 +548,8 @@ const PhoneInput = React.forwardRef<HTMLInputElement, PhoneInputProps>(
               </Command>
             </PopoverContent>
           </Popover>
+          
+          {/* Phone Number Input - Full width */}
           <div className="relative flex-1 min-w-0">
             <Input 
               ref={ref}
@@ -554,11 +558,11 @@ const PhoneInput = React.forwardRef<HTMLInputElement, PhoneInputProps>(
               onChange={handleNumberChange}
               disabled={disabled}
               className={cn(
-                "h-12 bg-zinc-900 border-zinc-700 text-white placeholder:text-zinc-500 focus:border-gold pr-10 w-full",
+                "h-12 bg-zinc-900 border-zinc-700 text-white text-base placeholder:text-zinc-500 focus:border-gold pr-10 w-full",
                 localNumber && validation.isValid && "border-green-500/50",
                 localNumber && !validation.isValid && "border-amber-500/50"
               )}
-              placeholder={placeholder || `Enter phone number (${currentCountry.minLen}-${currentCountry.maxLen} digits)`}
+              placeholder={placeholder || "Enter your phone number"}
             />
             {showValidation && localNumber && validation.isValid && (
               <CheckCircle className="absolute right-3 top-1/2 -translate-y-1/2 h-5 w-5 text-green-500" />
@@ -570,6 +574,9 @@ const PhoneInput = React.forwardRef<HTMLInputElement, PhoneInputProps>(
         </div>
         {showValidation && localNumber && !validation.isValid && (
           <p className="text-amber-400 text-xs">{validation.message}</p>
+        )}
+        {!localNumber && (
+          <p className="text-zinc-500 text-xs">Select your country code, then enter your phone number</p>
         )}
       </div>
     );

@@ -32,55 +32,40 @@ export const NewsletterBrevo = ({
     try {
       const normalizedEmail = email.toLowerCase().trim();
       
-      // Save to leads table for tracking
-      const { error: leadError } = await supabase
-        .from('leads')
-        .upsert({
-          email: normalizedEmail,
-          full_name: name || null,
-          source: `newsletter_${source}`,
-          page_source: window.location.pathname,
-        }, {
-          onConflict: 'email',
-        });
-
-      if (leadError) {
-        console.error('Lead save error:', leadError);
-      }
-
-      // Also save to crm_leads for CRM dashboard tracking
-      const { error: crmError } = await supabase
-        .from('crm_leads')
-        .insert({
-          full_name: name || normalizedEmail.split('@')[0],
-          email_lower: normalizedEmail,
-          source: `newsletter_${source}`,
-          owner_type: 'company_assigned' as const,
-          lead_source_type: 'website',
-          contact_type: 'client' as const,
-          tags: ['newsletter', source.replace(/_/g, '-')],
-        });
-
-      if (crmError && crmError.code !== '23505') {
-        console.warn('CRM lead save warning:', crmError);
-      }
-
-      // Call Brevo integration edge function
-      const { error: brevoError } = await supabase.functions.invoke('newsletter-subscribe', {
+      // Use backend edge function to save lead (bypasses RLS)
+      const { data: captureResult, error: captureError } = await supabase.functions.invoke('capture-lead', {
         body: {
-          email,
-          name,
-          listId,
-          source,
-          attributes: {
-            SIGNUP_DATE: new Date().toISOString(),
-            SIGNUP_PAGE: window.location.pathname,
-          },
+          email: normalizedEmail,
+          fullName: name || null,
+          source: 'newsletter',
+          subSource: source.replace(/_/g, ' ').replace(/\b\w/g, l => l.toUpperCase()),
+          pageSource: window.location.pathname,
+          contactType: 'client',
         },
       });
 
-      if (brevoError) {
-        // Still show success if lead was saved - Brevo might not be configured
+      if (captureError || (captureResult as any)?.error) {
+        console.error('Lead capture error:', captureError || (captureResult as any)?.error);
+        toast.error('Something went wrong. Please try again.');
+        setIsSubmitting(false);
+        return;
+      }
+
+      // Call Brevo integration edge function (best effort - don't block on failure)
+      try {
+        await supabase.functions.invoke('newsletter-subscribe', {
+          body: {
+            email,
+            name,
+            listId,
+            source,
+            attributes: {
+              SIGNUP_DATE: new Date().toISOString(),
+              SIGNUP_PAGE: window.location.pathname,
+            },
+          },
+        });
+      } catch (brevoError) {
         console.warn('Brevo subscription warning:', brevoError);
       }
 

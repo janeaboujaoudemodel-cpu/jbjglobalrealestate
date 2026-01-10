@@ -23,12 +23,6 @@ interface UseLeadCaptureResult {
 
 const LEAD_STORAGE_KEY = 'jj_captured_lead';
 
-// Normalize phone to E.164 format
-const normalizePhone = (phone?: string): string | null => {
-  if (!phone) return null;
-  return phone.replace(/[\s\-\(\)]/g, '');
-};
-
 export const useLeadCapture = (): UseLeadCaptureResult => {
   const [isLeadCaptured, setIsLeadCaptured] = useState(false);
   const [leadData, setLeadData] = useState<LeadData | null>(null);
@@ -68,65 +62,41 @@ export const useLeadCapture = (): UseLeadCaptureResult => {
     return null;
   }, []);
 
-  // Capture new lead - saves to BOTH leads table AND crm_leads for CRM tracking
+  // Capture new lead - uses backend edge function to bypass RLS restrictions
   const captureLead = useCallback(async (
     data: LeadData, 
     source: string,
     contactType: 'client' | 'broker' = 'client'
   ): Promise<boolean> => {
     try {
-      const normalizedEmail = data.email.toLowerCase().trim();
-      const normalizedPhone = normalizePhone(data.phone);
-
-      // 1. Save to leads table (existing behavior)
-      const { error } = await supabase
-        .from('leads')
-        .upsert({
-          email: normalizedEmail,
-          full_name: data.fullName || null,
-          phone: normalizedPhone,
-          nationality: data.nationality || null,
-          language: data.language || null,
-          birthday: data.birthday || null,
-          current_location: data.currentLocation || null,
-          age_range: data.ageRange || null,
-          source,
-          page_source: typeof window !== 'undefined' ? window.location.pathname : null,
-        }, {
-          onConflict: 'email',
-          ignoreDuplicates: false, // Update existing record
-        });
-
-      if (error && error.code !== '23505') {
-        console.error('Error capturing lead to leads table:', error);
-      }
-
-      // 2. Also save to crm_leads table for CRM dashboard access
-      const { error: crmError } = await supabase
-        .from('crm_leads')
-        .insert({
-          full_name: data.fullName || normalizedEmail.split('@')[0],
-          email_lower: normalizedEmail,
-          phone_e164: normalizedPhone,
-          nationality: data.nationality || null,
-          preferred_language: data.language || null,
-          current_location_country: data.currentLocation || null,
-          age_range: data.ageRange || null,
+      // Call backend edge function which has service role access
+      const { data: result, error } = await supabase.functions.invoke('capture-lead', {
+        body: {
+          email: data.email,
+          fullName: data.fullName,
+          phone: data.phone,
+          nationality: data.nationality,
+          language: data.language,
+          birthday: data.birthday,
+          currentLocation: data.currentLocation,
+          ageRange: data.ageRange,
           source: source,
-          owner_type: 'company_assigned' as const,
-          lead_source_type: 'website',
-          contact_type: contactType,
-          tags: [source.replace(/_/g, '-')], // Convert source to tag format
-        });
+          pageSource: typeof window !== 'undefined' ? window.location.pathname : null,
+          contactType: contactType,
+        },
+      });
 
-      if (crmError) {
-        // If duplicate (email already exists), that's okay
-        if (crmError.code !== '23505') {
-          console.warn('CRM lead save warning:', crmError);
-        }
+      if (error) {
+        console.error('Error capturing lead via edge function:', error);
+        return false;
       }
 
-      // Save to localStorage
+      if ((result as any)?.error) {
+        console.error('Lead capture error:', (result as any).error);
+        return false;
+      }
+
+      // Save to localStorage on success
       localStorage.setItem(LEAD_STORAGE_KEY, JSON.stringify(data));
       setLeadData(data);
       setIsLeadCaptured(true);
