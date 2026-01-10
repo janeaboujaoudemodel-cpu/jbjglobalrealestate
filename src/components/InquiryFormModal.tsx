@@ -430,68 +430,69 @@ const InquiryFormModal = ({
                     )}
                   />
 
-                  <div className="grid grid-cols-2 gap-4">
-                    <FormField
-                      control={form.control}
-                      name="email"
-                      render={({ field }) => (
-                        <FormItem>
-                          <FormLabel className="text-zinc-400 text-sm flex items-center gap-2">
-                            {t('inquiry.email')} *
-                            {emailStatus === 'valid' && <CheckCircle2 className="w-4 h-4 text-green-500" />}
-                            {emailStatus === 'invalid' && <XCircle className="w-4 h-4 text-red-500" />}
-                            {emailVerified && <span title="Verified"><Shield className="w-4 h-4 text-green-500" /></span>}
-                          </FormLabel>
-                          <FormControl>
-                            <Input 
-                              {...field} 
-                              type="email"
-                              onChange={(e) => {
-                                field.onChange(e);
-                                validateEmailRealtime(e.target.value);
-                                // Reset verification if email changes
-                                if (emailVerified) setEmailVerified(false);
-                              }}
-                              className={`h-12 bg-zinc-900/80 text-white placeholder:text-zinc-500 rounded-lg ${
-                                emailStatus === 'valid' ? 'border-green-500/50 focus:border-green-500' :
-                                emailStatus === 'invalid' ? 'border-red-500/50 focus:border-red-500' :
-                                'border-zinc-700/50 focus:border-gold'
-                              }`}
-                              placeholder="email@example.com"
-                            />
-                          </FormControl>
-                          <FormMessage className="text-red-400 text-xs" />
-                        </FormItem>
-                      )}
-                    />
+                  {/* Email Field - Full Width */}
+                  <FormField
+                    control={form.control}
+                    name="email"
+                    render={({ field }) => (
+                      <FormItem>
+                        <FormLabel className="text-zinc-400 text-sm flex items-center gap-2">
+                          {t('inquiry.email')} *
+                          {emailStatus === 'valid' && <CheckCircle2 className="w-4 h-4 text-green-500" />}
+                          {emailStatus === 'invalid' && <XCircle className="w-4 h-4 text-red-500" />}
+                          {emailVerified && <span title="Verified"><Shield className="w-4 h-4 text-green-500" /></span>}
+                        </FormLabel>
+                        <FormControl>
+                          <Input 
+                            {...field} 
+                            type="email"
+                            onChange={(e) => {
+                              field.onChange(e);
+                              validateEmailRealtime(e.target.value);
+                              // Reset verification if email changes
+                              if (emailVerified) setEmailVerified(false);
+                            }}
+                            className={`h-12 bg-zinc-900/80 text-white placeholder:text-zinc-500 rounded-lg w-full ${
+                              emailStatus === 'valid' ? 'border-green-500/50 focus:border-green-500' :
+                              emailStatus === 'invalid' ? 'border-red-500/50 focus:border-red-500' :
+                              'border-zinc-700/50 focus:border-gold'
+                            }`}
+                            placeholder="email@example.com"
+                          />
+                        </FormControl>
+                        <FormMessage className="text-red-400 text-xs" />
+                      </FormItem>
+                    )}
+                  />
 
-                    <FormField
-                      control={form.control}
-                      name="phone"
-                      render={({ field, fieldState }) => (
-                        <FormItem>
-                          <FormLabel className="text-zinc-400 text-sm">{t('inquiry.phone')} *</FormLabel>
-                          <FormControl>
-                            <PhoneInput 
-                              value={field.value}
-                              onChange={(val) => {
-                                field.onChange(val);
-                                // Clear form error when user types
-                                if (fieldState.error) {
-                                  form.clearErrors('phone');
-                                }
-                              }}
-                              showValidation={true}
-                            />
-                          </FormControl>
-                          {/* Only show form error if PhoneInput has no local number (empty field) */}
-                          {fieldState.error && (!field.value || field.value.length <= 5) && (
-                            <p className="text-red-400 text-xs">{fieldState.error.message}</p>
-                          )}
-                        </FormItem>
-                      )}
-                    />
-                  </div>
+                  {/* Phone Field - Full Width */}
+                  <FormField
+                    control={form.control}
+                    name="phone"
+                    render={({ field, fieldState }) => (
+                      <FormItem>
+                        <FormLabel className="text-zinc-400 text-sm">{t('inquiry.phone')} *</FormLabel>
+                        <FormControl>
+                          <PhoneInput 
+                            value={field.value}
+                            onChange={(val) => {
+                              field.onChange(val);
+                              // Clear form error when user types
+                              if (fieldState.error) {
+                                form.clearErrors('phone');
+                              }
+                            }}
+                            showValidation={true}
+                            className="w-full"
+                          />
+                        </FormControl>
+                        {/* Only show form error if PhoneInput has no local number (empty field) */}
+                        {fieldState.error && (!field.value || field.value.length <= 5) && (
+                          <p className="text-red-400 text-xs">{fieldState.error.message}</p>
+                        )}
+                      </FormItem>
+                    )}
+                  />
 
                   <div className="grid grid-cols-2 gap-4">
                     <FormField
