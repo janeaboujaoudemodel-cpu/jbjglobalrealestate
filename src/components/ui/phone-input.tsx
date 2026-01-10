@@ -405,11 +405,11 @@ export type CountryCode = typeof COUNTRY_CODES[0];
 
 // Get validation info for a phone number
 export const getPhoneValidation = (phone: string): { isValid: boolean; message: string; country?: CountryCode } => {
-  if (!phone) return { isValid: false, message: "Phone number is required" };
+  if (!phone || phone.length <= 5) return { isValid: false, message: "⚠️ This field is required." };
   
   // Find the matching country code (longest match first due to sorting)
   const countryCode = COUNTRY_CODES.find(c => phone.startsWith(c.code));
-  if (!countryCode) return { isValid: false, message: "Please enter a valid phone number including country code." };
+  if (!countryCode) return { isValid: false, message: "⚠️ Please enter a valid phone number including the full country code." };
   
   const localNumber = phone.replace(countryCode.code, '').replace(/\D/g, '');
   const digitCount = localNumber.length;
@@ -417,7 +417,7 @@ export const getPhoneValidation = (phone: string): { isValid: boolean; message: 
   if (digitCount < countryCode.minLen) {
     return { 
       isValid: false, 
-      message: `${countryCode.country} numbers need ${countryCode.minLen === countryCode.maxLen ? countryCode.minLen : `${countryCode.minLen}-${countryCode.maxLen}`} digits (${digitCount} entered)`,
+      message: `⚠️ ${countryCode.country} numbers need ${countryCode.minLen === countryCode.maxLen ? countryCode.minLen : `${countryCode.minLen}-${countryCode.maxLen}`} digits (${digitCount} entered)`,
       country: countryCode
     };
   }
@@ -425,7 +425,7 @@ export const getPhoneValidation = (phone: string): { isValid: boolean; message: 
   if (digitCount > countryCode.maxLen) {
     return { 
       isValid: false, 
-      message: `${countryCode.country} numbers have max ${countryCode.maxLen} digits`,
+      message: `⚠️ ${countryCode.country} numbers have max ${countryCode.maxLen} digits`,
       country: countryCode
     };
   }
