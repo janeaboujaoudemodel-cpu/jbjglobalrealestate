@@ -408,6 +408,7 @@ const AIChatWidget = ({ isCollapsed, onToggleCollapse, showAttentionPulse = fals
     if (!conversationId) return;
 
     try {
+      // 1) Update conversation and lead status (CRITICAL)
       await supabase
         .from('chat_conversations')
         .update({ status: 'submitted_to_team' })
@@ -418,16 +419,21 @@ const AIChatWidget = ({ isCollapsed, onToggleCollapse, showAttentionPulse = fals
         .update({ status: 'submitted' })
         .eq('email', userInfo.email);
 
-      await supabase.functions.invoke('send-inquiry-email', {
-        body: {
-          name: `${userInfo.firstName} ${userInfo.lastName}`,
-          email: userInfo.email,
-          phone: userInfo.phone,
-          message: `Chat inquiry from ${userInfo.nationality} - ${userInfo.currentLocation}\nService: ${selectedService}\nLanguage: ${userInfo.language}\n\nConversation transcript attached.`,
-          subject: `[Chat Lead] ${userInfo.firstName} ${userInfo.lastName} - ${selectedService}`,
-          source: 'ai_chat_widget',
-        },
-      });
+      // 2) Best-effort admin notification (must NOT block)
+      try {
+        await supabase.functions.invoke('send-inquiry-email', {
+          body: {
+            name: `${userInfo.firstName} ${userInfo.lastName}`,
+            email: userInfo.email,
+            phone: userInfo.phone,
+            message: `Chat inquiry from ${userInfo.nationality} - ${userInfo.currentLocation}\nService: ${selectedService}\nLanguage: ${userInfo.language}\n\nConversation transcript attached.`,
+            subject: `[Chat Lead] ${userInfo.firstName} ${userInfo.lastName} - ${selectedService}`,
+            source: 'ai_chat_widget',
+          },
+        });
+      } catch (notifyErr) {
+        console.warn('Chat notification failed (lead still saved):', notifyErr);
+      }
 
       setStep('submitted');
       toast.success('Your inquiry has been submitted to our team!');
