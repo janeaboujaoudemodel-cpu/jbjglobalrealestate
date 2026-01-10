@@ -3,6 +3,7 @@ import { motion } from "framer-motion";
 import { Link } from "react-router-dom";
 import { Crown, Sparkles } from "lucide-react";
 import InquiryFormModal from "@/components/InquiryFormModal";
+import AppDownloadPopup from "@/components/AppDownloadPopup";
 // Official JBJ logos - USE ONLY THESE
 import jbjMonogramDarkBg from "@/assets/jbj-monogram-dark-bg.png"; // Monogram only for dark backgrounds
 
@@ -187,6 +188,9 @@ const ComingSoon = () => {
         source={selectedRole ? `coming-soon-${selectedRole}` : 'coming-soon'}
         preselectedRole={selectedRole}
       />
+
+      {/* App Download Popup - Shows immediately on page load */}
+      <AppDownloadPopup showOnLoad={true} delayMs={0} />
     </>
   );
 };
