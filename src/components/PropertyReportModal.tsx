@@ -109,7 +109,7 @@ const PropertyReportModal = ({ open, onOpenChange, project }: PropertyReportModa
       const url = URL.createObjectURL(blob);
       const a = document.createElement('a');
       a.href = url;
-      a.download = `JJ-Global-Capital-${project.name.replace(/\s+/g, '-')}-Report.html`;
+      a.download = `JBJ-Global-Real-Estate-${project.name.replace(/\s+/g, '-')}-Report.html`;
       document.body.appendChild(a);
       a.click();
       document.body.removeChild(a);

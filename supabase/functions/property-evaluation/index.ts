@@ -3,8 +3,8 @@ import { createClient } from "https://esm.sh/@supabase/supabase-js@2";
 import { z } from "https://deno.land/x/zod@v3.22.4/mod.ts";
 
 const ALLOWED_ORIGINS = [
-  "https://jjglobalcapital.com",
-  "https://www.jjglobalcapital.com",
+  "https://jbj.ae",
+  "https://www.jbj.ae",
   "http://localhost:5173",
   "http://localhost:8080",
 ];
@@ -105,8 +105,8 @@ async function sendAutoBlockNotification(clientIp: string, functionName: string,
       method: "POST",
       headers: { "Content-Type": "application/json", Authorization: `Bearer ${resendApiKey}` },
       body: JSON.stringify({
-        from: "JJ Global Capital Security <security@jjglobalcapital.com>",
-        to: ["contact@jjglobalcapital.com", "jane@jjglobalcapital.com"],
+        from: "JBJ Global Real Estate Security <security@jbj.ae>",
+        to: ["contact@jbj.ae"],
         subject: `🚨 Security Alert: IP Auto-Blocked on ${functionName}`,
         html: `<div style="font-family: Arial, sans-serif; max-width: 600px; margin: 0 auto;"><div style="background: linear-gradient(135deg, #1a1a2e, #16213e); padding: 20px; border-radius: 8px 8px 0 0;"><h1 style="color: #c9a962; margin: 0;">🚨 Security Alert</h1><p style="color: #fff; margin: 10px 0 0;">IP Auto-Blocked</p></div><div style="background: #f8f9fa; padding: 25px; border: 1px solid #e9ecef; border-radius: 0 0 8px 8px;"><h2 style="color: #1a1a2e; margin-top: 0;">Block Details</h2><p><strong>IP:</strong> ${maskedIp}</p><p><strong>Function:</strong> ${functionName}</p><p><strong>Violations:</strong> ${violationCount}</p><p><strong>Total Blocks:</strong> ${blockCount}</p><p><strong>Expires:</strong> ${expiresAtFormatted} (Dubai)</p><p><strong>Duration:</strong> ${AUTO_BLOCK_DURATION_HOURS} hours</p><div style="margin-top: 20px; padding: 15px; background: #fff3cd; border-left: 4px solid #ffc107;"><strong>Action Required:</strong> Review in Admin Dashboard.</div></div></div>`,
       }),
@@ -365,7 +365,7 @@ serve(async (req) => {
       body: JSON.stringify({
         model: 'google/gemini-2.5-flash',
         messages: [
-          { role: 'system', content: 'You are a Dubai real estate market expert. Provide concise, data-driven insights. This is for informational purposes only, not investment advice.' },
+          { role: 'system', content: 'You are a Dubai real estate market expert. Provide concise, data-driven insights. This is for informational purposes only, not advice.' },
           { role: 'user', content: aiPrompt }
         ],
         max_tokens: 200
@@ -381,36 +381,40 @@ serve(async (req) => {
 
     // Determine confidence level
     const hasCompleteInfo = property.buildingName && property.developer && property.views && property.views.length > 0;
-    const confidence = hasCompleteInfo ? 'high' : property.sizeInternal > 0 ? 'medium' : 'low';
+    const confidence = hasCompleteInfo ? 'High' : (property.developer ? 'Medium' : 'Low');
 
     const result = {
-      estimatedValue: totalValue,
-      pricePerSqFt: finalPricePerSqFt,
-      confidence,
-      comparableTransactions: comparables,
-      marketInsights,
-      addOnValue: renovationValue,
-      breakdown: {
-        baseValue,
-        locationPremium: Math.round(locationPremium),
+      estimatedValue: {
+        low: Math.round(totalValue * 0.9),
+        mid: totalValue,
+        high: Math.round(totalValue * 1.1),
+        pricePerSqFt: finalPricePerSqFt,
+      },
+      premiums: {
         viewPremium: Math.round(viewPremium),
         floorPremium: Math.round(floorPremium),
-        renovationValue
+        locationPremium: Math.round(locationPremium),
+        renovationValue,
+        furnishedPremium: Math.round(baseValue * furnishedPremium),
       },
-      disclaimer: "This valuation is for informational purposes only and should not be considered investment advice. Please consult with licensed professionals for accurate property valuations."
+      comparables,
+      marketInsights,
+      confidence,
+      communityAverage: communityData.avg,
+      disclaimer: 'This valuation is for informational purposes only and is not an official appraisal. Consult a licensed valuer for formal property valuations.',
     };
 
-    console.log("Evaluation result:", JSON.stringify(result, null, 2));
+    console.log("Property evaluation completed:", { totalValue, confidence });
 
     return new Response(JSON.stringify(result), {
       headers: { ...corsHeaders, 'Content-Type': 'application/json' },
     });
-
-  } catch (error: unknown) {
+  } catch (error) {
     console.error('Property evaluation error:', error);
-    return new Response(JSON.stringify({ error: 'An error occurred while processing your request' }), {
-      status: 500,
-      headers: { ...corsHeaders, 'Content-Type': 'application/json' },
-    });
+    const corsHeaders = getCorsHeaders(req);
+    return new Response(
+      JSON.stringify({ error: 'Failed to evaluate property. Please try again.' }),
+      { status: 500, headers: { ...corsHeaders, 'Content-Type': 'application/json' } }
+    );
   }
 });

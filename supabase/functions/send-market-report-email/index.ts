@@ -12,8 +12,8 @@ const AUTO_BLOCK_DURATION_HOURS = 24;
 
 // Allowed origins - restrict CORS to trusted domains
 const ALLOWED_ORIGINS = [
-  "https://jjglobalcapital.com",
-  "https://www.jjglobalcapital.com",
+  "https://jbj.ae",
+  "https://www.jbj.ae",
   "http://localhost:5173",
   "http://localhost:8080",
 ];
@@ -293,7 +293,7 @@ const handler = async (req: Request): Promise<Response> => {
       <body>
         <div class="container">
           <div class="header">
-            <div class="logo">JJ <span>|</span> GLOBAL CAPITAL</div>
+            <div class="logo"><span>JBJ</span> GLOBAL REAL ESTATE</div>
           </div>
           <div class="badge">New Market Report Download</div>
           <h1>New Lead from Market Report</h1>
@@ -335,11 +335,8 @@ const handler = async (req: Request): Promise<Response> => {
 
     const subject = `New Market Report Download: ${safeFullName}`;
 
-    // Send to both email addresses
-    await Promise.all([
-      sendEmail("contact@jjglobalcapital.com", subject, companyEmailHtml),
-      sendEmail("jane@jjglobalcapital.com", subject, companyEmailHtml),
-    ]);
+    // Send to company email
+    await sendEmail("contact@jbj.ae", subject, companyEmailHtml);
 
     console.log("Emails sent successfully for:", safeEmail);
 

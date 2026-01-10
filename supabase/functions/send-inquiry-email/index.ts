@@ -324,7 +324,7 @@ const handler = async (req: Request): Promise<Response> => {
       <body>
         <div class="container">
           <div class="header">
-            <div class="logo">JJ <span>|</span> GLOBAL CAPITAL</div>
+            <div class="logo"><span>JBJ</span> GLOBAL REAL ESTATE</div>
           </div>
           <div class="badge">${safeSource} Inquiry</div>
           <h1>${safePropertyName ? `Property Inquiry: ${safePropertyName}` : 'New Website Inquiry'}</h1>
@@ -377,11 +377,8 @@ const handler = async (req: Request): Promise<Response> => {
       ? `Property Inquiry: ${safePropertyName} - ${safeFullName}`
       : `New Website Inquiry: ${safeFullName}`;
 
-    // Send to both email addresses
-    await Promise.all([
-      sendEmail("contact@jjglobalcapital.com", subject, companyEmailHtml),
-      sendEmail("jane@jjglobalcapital.com", subject, companyEmailHtml),
-    ]);
+    // Send to company email
+    await sendEmail("contact@jbj.ae", subject, companyEmailHtml);
 
     console.log("Inquiry emails sent successfully for:", safeEmail);
 

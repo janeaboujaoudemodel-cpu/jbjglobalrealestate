@@ -7,8 +7,8 @@ const supabaseServiceKey = Deno.env.get("SUPABASE_SERVICE_ROLE_KEY")!;
 
 // Allowed origins for CORS
 const ALLOWED_ORIGINS = [
-  "https://jjglobalcapital.com",
-  "https://www.jjglobalcapital.com",
+  "https://jbj.ae",
+  "https://www.jbj.ae",
   "http://localhost:5173",
   "http://localhost:3000",
 ];
@@ -27,7 +27,7 @@ function getCorsHeaders(req: Request) {
 }
 
 // Admin email recipients
-const ADMIN_EMAILS = ["contact@jjglobalcapital.com", "jane@jjglobalcapital.com"];
+const ADMIN_EMAILS = ["contact@jbj.ae"];
 
 interface SecurityAlertRequest {
   alertType: "data_export" | "unusual_access" | "bulk_access" | "after_hours_access" | "suspicious_pattern";
