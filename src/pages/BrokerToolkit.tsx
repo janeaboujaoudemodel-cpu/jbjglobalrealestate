@@ -27,8 +27,117 @@ import {
   Headphones,
   UserCheck,
   Building2,
-  Star
+  Star,
+  Brain
 } from "lucide-react";
+
+// Educational Categories - Structured Learning Hub
+const LEARNING_CATEGORIES = [
+  {
+    category: "Objection Handling",
+    icon: Shield,
+    color: "from-red-500 to-rose-500",
+    description: "Turn client objections into closing opportunities",
+    modules: [
+      { title: "Price Objections Masterclass", duration: "45 min", type: "video" },
+      { title: "Location Concerns Response", duration: "30 min", type: "guide" },
+      { title: "Timing Objections Playbook", duration: "25 min", type: "pdf" },
+      { title: "Competition Comparisons", duration: "35 min", type: "video" },
+    ]
+  },
+  {
+    category: "Cold Calling",
+    icon: Phone,
+    color: "from-blue-500 to-cyan-500",
+    description: "Master phone-based prospecting and appointment setting",
+    modules: [
+      { title: "Opening Scripts That Work", duration: "30 min", type: "pdf" },
+      { title: "Gatekeeper Navigation", duration: "25 min", type: "video" },
+      { title: "Voicemail Strategies", duration: "20 min", type: "guide" },
+      { title: "Follow-Up Call Sequences", duration: "40 min", type: "video" },
+    ]
+  },
+  {
+    category: "Lead Types & Qualification",
+    icon: Target,
+    color: "from-green-500 to-emerald-500",
+    description: "Identify, qualify, and prioritize different lead sources",
+    modules: [
+      { title: "Hot vs Warm vs Cold Leads", duration: "35 min", type: "video" },
+      { title: "Online Lead Qualification", duration: "25 min", type: "guide" },
+      { title: "Referral Lead Handling", duration: "30 min", type: "pdf" },
+      { title: "Developer Lead Processing", duration: "40 min", type: "video" },
+    ]
+  },
+  {
+    category: "Call Types & Scenarios",
+    icon: Headphones,
+    color: "from-purple-500 to-fuchsia-500",
+    description: "Handle every type of client conversation professionally",
+    modules: [
+      { title: "Initial Inquiry Calls", duration: "30 min", type: "video" },
+      { title: "Post-Viewing Follow-Up", duration: "25 min", type: "guide" },
+      { title: "Price Negotiation Calls", duration: "40 min", type: "video" },
+      { title: "Contract Discussion Calls", duration: "35 min", type: "pdf" },
+    ]
+  },
+  {
+    category: "Buyer Psychology",
+    icon: Brain,
+    color: "from-amber-500 to-orange-500",
+    description: "Understand what drives buying decisions",
+    modules: [
+      { title: "First-Time Buyer Mindset", duration: "35 min", type: "video" },
+      { title: "Buyer Decision Timeline", duration: "30 min", type: "guide" },
+      { title: "Emotional vs Logical Buyers", duration: "40 min", type: "video" },
+      { title: "Trust Building Techniques", duration: "25 min", type: "pdf" },
+    ]
+  },
+  {
+    category: "Closing Techniques",
+    icon: Award,
+    color: "from-gold to-gold-dark",
+    description: "Master the art of closing deals confidently",
+    modules: [
+      { title: "Trial Close Methods", duration: "30 min", type: "video" },
+      { title: "Assumptive Close Technique", duration: "25 min", type: "guide" },
+      { title: "Urgency Creation", duration: "35 min", type: "video" },
+      { title: "Final Walkthrough & Handover", duration: "40 min", type: "pdf" },
+    ]
+  },
+];
+
+// Free PDF Books for Registered Brokers
+const FREE_BOOKS = [
+  {
+    title: "Objection Handling Bible",
+    pages: 85,
+    description: "Complete guide to handling every objection in Dubai real estate",
+    color: "from-red-500/20 to-rose-500/20",
+    borderColor: "border-red-500/30",
+  },
+  {
+    title: "Cold Calling Scripts",
+    pages: 45,
+    description: "Word-for-word scripts for every cold calling scenario",
+    color: "from-blue-500/20 to-cyan-500/20",
+    borderColor: "border-blue-500/30",
+  },
+  {
+    title: "Buyer Psychology Playbook",
+    pages: 62,
+    description: "Understanding and influencing buyer decisions",
+    color: "from-amber-500/20 to-orange-500/20",
+    borderColor: "border-amber-500/30",
+  },
+  {
+    title: "Lead Conversion Manual",
+    pages: 78,
+    description: "Turn every lead type into closed deals",
+    color: "from-green-500/20 to-emerald-500/20",
+    borderColor: "border-green-500/30",
+  },
+];
 
 const COURSE_MODULES = [
   {
@@ -37,41 +146,6 @@ const COURSE_MODULES = [
     lessons: 12,
     duration: "4 hours",
     description: "Master the art of closing deals with proven techniques",
-  },
-  {
-    icon: Users,
-    title: "Objection Handling",
-    lessons: 8,
-    duration: "3 hours",
-    description: "Turn objections into opportunities",
-  },
-  {
-    icon: TrendingUp,
-    title: "Lead Generation",
-    lessons: 10,
-    duration: "5 hours",
-    description: "Build a consistent pipeline of qualified leads",
-  },
-  {
-    icon: BookOpen,
-    title: "Lead Management System",
-    lessons: 6,
-    duration: "2.5 hours",
-    description: "Organize and nurture leads effectively",
-  },
-  {
-    icon: Zap,
-    title: "Prospecting Mastery",
-    lessons: 8,
-    duration: "3.5 hours",
-    description: "Find and qualify potential clients",
-  },
-  {
-    icon: Award,
-    title: "Market Expertise",
-    lessons: 10,
-    duration: "4 hours",
-    description: "Deep dive into UAE real estate market",
   },
 ];
 
