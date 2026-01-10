@@ -46,7 +46,7 @@ interface InquiryFormModalProps {
   source?: string;
   propertyName?: string;
   context?: Record<string, string>;
-  requireVerification?: boolean;
+  skipVerification?: boolean; // Only skip if explicitly set (e.g. already verified users)
   preselectedRole?: 'buyer' | 'broker' | 'visitor';
 }
 
@@ -56,7 +56,7 @@ const InquiryFormModal = ({
   source = 'general', 
   propertyName, 
   context,
-  requireVerification = false,
+  skipVerification = false, // Email verification enabled by default
   preselectedRole
 }: InquiryFormModalProps) => {
   const [isSubmitting, setIsSubmitting] = useState(false);
@@ -241,8 +241,8 @@ const InquiryFormModal = ({
       return;
     }
 
-    // If verification is required and email not verified, show OTP modal
-    if (requireVerification && !emailVerified) {
+    // Always require email verification unless explicitly skipped
+    if (!skipVerification && !emailVerified) {
       setPendingFormData(data);
       setShowEmailOTP(true);
       return;
@@ -568,7 +568,7 @@ const InquiryFormModal = ({
                     ) : (
                       <>
                         <Send className="w-5 h-5 mr-2" />
-                        {requireVerification && !emailVerified ? 'Verify & Submit' : t('inquiry.submit')}
+                        {!skipVerification && !emailVerified ? 'Verify & Submit' : t('inquiry.submit')}
                       </>
                     )}
                   </Button>
