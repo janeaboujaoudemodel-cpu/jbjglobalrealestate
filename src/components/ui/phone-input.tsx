@@ -558,7 +558,7 @@ const PhoneInput = React.forwardRef<HTMLInputElement, PhoneInputProps>(
                 localNumber && validation.isValid && "border-green-500/50",
                 localNumber && !validation.isValid && "border-amber-500/50"
               )}
-              placeholder={placeholder || `Enter ${currentCountry.minLen}-${currentCountry.maxLen} digits`}
+              placeholder={placeholder || `Enter phone number (${currentCountry.minLen}-${currentCountry.maxLen} digits)`}
             />
             {showValidation && localNumber && validation.isValid && (
               <CheckCircle className="absolute right-3 top-1/2 -translate-y-1/2 h-5 w-5 text-green-500" />

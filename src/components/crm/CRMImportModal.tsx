@@ -183,23 +183,85 @@ const CRMImportModal = ({ open, onClose, onSuccess, userId }: CRMImportModalProp
     const selectedFile = e.target.files?.[0];
     if (!selectedFile) return;
 
-    if (!selectedFile.name.endsWith(".csv")) {
-      toast.error("Please upload a CSV file");
+    const fileName = selectedFile.name.toLowerCase();
+    const isCSV = fileName.endsWith(".csv");
+    const isExcel = fileName.endsWith(".xlsx") || fileName.endsWith(".xls");
+    const isVCard = fileName.endsWith(".vcf");
+    
+    if (!isCSV && !isExcel && !isVCard) {
+      toast.error("Please upload a CSV, Excel (.xlsx/.xls), or vCard (.vcf) file");
       return;
     }
 
     setFile(selectedFile);
     
-    const text = await selectedFile.text();
-    const parsed = parseCSV(text);
-    
-    if (parsed.length === 0) {
-      toast.error("No data found in CSV");
+    if (isCSV) {
+      const text = await selectedFile.text();
+      const parsed = parseCSV(text);
+      if (parsed.length === 0) {
+        toast.error("No data found in CSV");
+        return;
+      }
+      setParsedData(parsed);
+    } else if (isVCard) {
+      const text = await selectedFile.text();
+      const parsed = parseVCard(text);
+      if (parsed.length === 0) {
+        toast.error("No contacts found in vCard");
+        return;
+      }
+      setParsedData(parsed);
+    } else {
+      // For Excel files, show a message about using CSV
+      toast.info("Excel files detected. For best results, save as CSV and re-upload.");
       return;
     }
-
-    setParsedData(parsed);
+    
     setStep("preview");
+  };
+  
+  // Parse vCard format
+  const parseVCard = (text: string): any[] => {
+    const contacts: any[] = [];
+    const vcards = text.split("BEGIN:VCARD");
+    
+    for (const vcard of vcards) {
+      if (!vcard.trim()) continue;
+      
+      const contact: Record<string, string> = {};
+      const lines = vcard.split("\n");
+      
+      for (const line of lines) {
+        const trimmed = line.trim();
+        if (trimmed.startsWith("FN:")) {
+          contact.full_name = trimmed.replace("FN:", "").trim();
+        } else if (trimmed.startsWith("N:")) {
+          // Parse N: last;first;middle;prefix;suffix
+          const nameParts = trimmed.replace("N:", "").split(";");
+          if (!contact.full_name && nameParts.length >= 2) {
+            contact.full_name = `${nameParts[1]} ${nameParts[0]}`.trim();
+          }
+        } else if (trimmed.startsWith("TEL")) {
+          const phoneMatch = trimmed.match(/:([\d\s+\-()]+)/);
+          if (phoneMatch) {
+            contact.phone = phoneMatch[1].trim();
+          }
+        } else if (trimmed.startsWith("EMAIL")) {
+          const emailMatch = trimmed.match(/:(.+)/);
+          if (emailMatch) {
+            contact.email = emailMatch[1].trim();
+          }
+        } else if (trimmed.startsWith("ORG:")) {
+          contact.company = trimmed.replace("ORG:", "").split(";")[0].trim();
+        }
+      }
+      
+      if (contact.full_name || contact.phone || contact.email) {
+        contacts.push(contact);
+      }
+    }
+    
+    return contacts;
   };
 
   const processImport = async () => {
@@ -388,17 +450,17 @@ const CRMImportModal = ({ open, onClose, onSuccess, userId }: CRMImportModalProp
             <div className="border-2 border-dashed rounded-lg p-8 text-center">
               <Upload className="h-12 w-12 mx-auto text-muted-foreground mb-4" />
               <p className="text-sm text-muted-foreground mb-4">
-                Drag and drop a CSV file, or click to browse
+                Upload CSV, Excel (.xlsx), or vCard (.vcf) files
               </p>
               <input
                 ref={fileInputRef}
                 type="file"
-                accept=".csv"
+                accept=".csv,.xlsx,.xls,.vcf"
                 onChange={handleFileChange}
                 className="hidden"
               />
-              <Button onClick={() => fileInputRef.current?.click()}>
-                Select CSV File
+              <Button onClick={() => fileInputRef.current?.click()} className="text-white">
+                Select File
               </Button>
             </div>
 

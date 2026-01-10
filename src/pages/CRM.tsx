@@ -9,7 +9,7 @@ import { Badge } from "@/components/ui/badge";
 import { Skeleton } from "@/components/ui/skeleton";
 import { toast } from "sonner";
 import { 
-  Users, FileText, Plus, Upload, LogOut, Shuffle, LayoutGrid, List, Zap
+  Users, FileText, Plus, Upload, Download, LogOut, Shuffle, LayoutGrid, List, Zap
 } from "lucide-react";
 import CRMLeadsTable from "@/components/crm/CRMLeadsTable";
 import CRMEnhancedDashboard from "@/components/crm/CRMEnhancedDashboard";
@@ -118,6 +118,50 @@ const CRM = () => {
 
   const handleRefresh = () => {
     setRefreshKey(prev => prev + 1);
+  };
+
+  const handleExportCSV = async () => {
+    try {
+      const { data: leads } = await supabase
+        .from("crm_leads")
+        .select("full_name, email_lower, phone_e164, nationality, preferred_language, current_location_country, source, tags, created_at")
+        .order("created_at", { ascending: false });
+      
+      if (!leads || leads.length === 0) {
+        toast.error("No leads to export");
+        return;
+      }
+      
+      const headers = ["Full Name", "Email", "Phone", "Nationality", "Language", "Country", "Source", "Tags", "Created At"];
+      const csvRows = [
+        headers.join(","),
+        ...leads.map(lead => [
+          `"${(lead.full_name || '').replace(/"/g, '""')}"`,
+          lead.email_lower || '',
+          lead.phone_e164 || '',
+          lead.nationality || '',
+          lead.preferred_language || '',
+          lead.current_location_country || '',
+          lead.source || '',
+          `"${(lead.tags || []).join(', ')}"`,
+          lead.created_at ? new Date(lead.created_at).toLocaleDateString() : ''
+        ].join(","))
+      ];
+      
+      const csv = csvRows.join("\n");
+      const blob = new Blob([csv], { type: "text/csv" });
+      const url = URL.createObjectURL(blob);
+      const a = document.createElement("a");
+      a.href = url;
+      a.download = `jbj_crm_leads_${new Date().toISOString().split('T')[0]}.csv`;
+      a.click();
+      URL.revokeObjectURL(url);
+      
+      toast.success(`Exported ${leads.length} leads to CSV`);
+    } catch (err) {
+      console.error("Export failed:", err);
+      toast.error("Failed to export leads");
+    }
   };
 
   const handleSignOut = async () => {
@@ -235,7 +279,15 @@ const CRM = () => {
           </Button>
           <Button variant="outline" onClick={() => setShowImportModal(true)} className="text-white border-border hover:bg-muted">
             <Upload className="h-4 w-4 mr-2" />
-            Import Database
+            Import
+          </Button>
+          <Button 
+            variant="outline" 
+            onClick={handleExportCSV} 
+            className="text-white border-border hover:bg-muted"
+          >
+            <Download className="h-4 w-4 mr-2" />
+            Export CSV
           </Button>
           {isAdmin && (
             <Button 
