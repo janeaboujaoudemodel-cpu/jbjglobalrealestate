@@ -5229,6 +5229,7 @@ export type Database = {
       broker_profiles_public: {
         Row: {
           bio: string | null
+          created_at: string | null
           display_name: string | null
           id: string | null
           is_active: boolean | null
@@ -5237,11 +5238,13 @@ export type Database = {
           photo_url: string | null
           specializations: string[] | null
           title: string | null
+          updated_at: string | null
           user_id: string | null
           years_experience: number | null
         }
         Insert: {
           bio?: string | null
+          created_at?: string | null
           display_name?: string | null
           id?: string | null
           is_active?: boolean | null
@@ -5250,11 +5253,13 @@ export type Database = {
           photo_url?: string | null
           specializations?: string[] | null
           title?: string | null
+          updated_at?: string | null
           user_id?: string | null
           years_experience?: number | null
         }
         Update: {
           bio?: string | null
+          created_at?: string | null
           display_name?: string | null
           id?: string | null
           is_active?: boolean | null
@@ -5263,6 +5268,7 @@ export type Database = {
           photo_url?: string | null
           specializations?: string[] | null
           title?: string | null
+          updated_at?: string | null
           user_id?: string | null
           years_experience?: number | null
         }
