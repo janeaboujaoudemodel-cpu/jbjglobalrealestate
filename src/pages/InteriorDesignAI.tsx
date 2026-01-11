@@ -60,64 +60,8 @@ type DesignResult = {
   createdAt: string;
 };
 
-const packages: PackagePricing[] = [
-  {
-    id: "starter",
-    name: "Starter",
-    price: 99,
-    sizeRange: "Up to 500 sq ft",
-    features: [
-      "3 room designs",
-      "Basic 3D visualization",
-      "1 revision",
-      "PDF download",
-    ],
-  },
-  {
-    id: "professional",
-    name: "Professional",
-    price: 299,
-    sizeRange: "500 - 2,000 sq ft",
-    recommended: true,
-    features: [
-      "Full property design",
-      "High-quality 3D renders",
-      "3 revisions",
-      "Furniture recommendations",
-      "Color palette guide",
-      "PDF + Image downloads",
-    ],
-  },
-  {
-    id: "premium",
-    name: "Premium",
-    price: 599,
-    sizeRange: "2,000 - 5,000 sq ft",
-    features: [
-      "Complete property design",
-      "Photorealistic 3D renders",
-      "Unlimited revisions",
-      "Shopping list with links",
-      "Material specifications",
-      "Contractor-ready plans",
-      "Priority support",
-    ],
-  },
-  {
-    id: "enterprise",
-    name: "Enterprise / Villa",
-    price: 0,
-    sizeRange: "5,000+ sq ft",
-    features: [
-      "Custom quotation",
-      "Dedicated design team",
-      "On-site consultation option",
-      "Full project management",
-      "Premium materials sourcing",
-      "VIP concierge service",
-    ],
-  },
-];
+// All packages are FREE - no paid plans
+const packages: PackagePricing[] = [];
 
 const colorOptions = [
   { id: "neutral", name: "Neutral & Warm", colors: ["#F5F5DC", "#D2B48C", "#8B7355"] },
@@ -511,7 +455,7 @@ const downloadPdf = async () => {
         </div>
       </div>
 
-      {/* AI vs Human Comparison */}
+      {/* AI vs Human Comparison - TWO CARDS ONLY, ALL FREE */}
       {showComparison && step === 1 && (
         <div className="container mx-auto px-4 pb-16">
           <motion.div 
@@ -519,15 +463,18 @@ const downloadPdf = async () => {
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
           >
-            <h2 className="text-2xl md:text-3xl font-bold text-white text-center mb-8">
+            <h2 className="text-2xl md:text-3xl font-bold text-white text-center mb-4">
               Choose Your Design Path
             </h2>
+            <p className="text-zinc-400 text-center mb-8 max-w-2xl mx-auto">
+              All AI design tools are <span className="text-green-400 font-bold">FREE</span> to use
+            </p>
             
             <div className="grid md:grid-cols-2 gap-6">
-              {/* AI Design */}
+              {/* AI Design Studio - FREE */}
               <Card className="bg-gradient-to-br from-fuchsia-950/60 to-purple-950/60 border-2 border-fuchsia-400/60 relative overflow-hidden shadow-2xl shadow-fuchsia-500/30">
                 <div className="absolute top-4 right-4">
-                  <Badge className="bg-gradient-to-r from-fuchsia-500 to-purple-500 text-white font-bold shadow-lg">RECOMMENDED</Badge>
+                  <Badge className="bg-green-500 text-white font-bold shadow-lg">FREE</Badge>
                 </div>
                 <CardHeader className="pb-4">
                   <CardTitle className="text-white flex items-center gap-4">
@@ -547,8 +494,8 @@ const downloadPdf = async () => {
                       <span>Results in <span className="text-fuchsia-300 font-bold">seconds</span>, not weeks</span>
                     </div>
                     <div className="flex items-center gap-3 text-white">
-                      <DollarSign className="w-5 h-5 text-fuchsia-400" />
-                      <span>Affordable packages from <span className="text-fuchsia-300 font-bold">$99</span></span>
+                      <CheckCircle2 className="w-5 h-5 text-green-400" />
+                      <span><span className="text-green-400 font-bold">100% Free</span> — No payment required</span>
                     </div>
                     <div className="flex items-center gap-3 text-white">
                       <CheckCircle2 className="w-5 h-5 text-fuchsia-400" />
@@ -564,116 +511,60 @@ const downloadPdf = async () => {
                     onClick={() => setShowComparison(false)}
                     className="w-full bg-gradient-to-r from-fuchsia-500 to-purple-600 hover:from-fuchsia-400 hover:to-purple-500 text-white py-6 mt-4 shadow-xl shadow-fuchsia-500/30 font-bold text-base"
                   >
-                    Design with AI
+                    Start Designing — Free
                     <Sparkles className="w-5 h-5 ml-2" />
                   </Button>
                 </CardContent>
               </Card>
 
-              {/* Human Designer */}
-              <Card className="bg-gradient-to-br from-zinc-900/90 to-zinc-950/90 border-2 border-zinc-600/80 relative overflow-hidden shadow-xl">
+              {/* Professional Designer - Contact for Partner Intro */}
+              <Card className="bg-gradient-to-br from-zinc-900/90 to-zinc-950/90 border-2 border-gold/40 relative overflow-hidden shadow-xl">
                 <CardHeader className="pb-4">
                   <CardTitle className="text-white flex items-center gap-4">
-                    <div className="w-14 h-14 rounded-xl bg-gradient-to-br from-zinc-700 to-zinc-800 flex items-center justify-center border border-zinc-500/50">
-                      <User className="w-7 h-7 text-zinc-300" />
+                    <div className="w-14 h-14 rounded-xl bg-gradient-to-br from-gold/20 to-gold/10 flex items-center justify-center border border-gold/50">
+                      <User className="w-7 h-7 text-gold" />
                     </div>
                     <div>
                       <span className="text-xl font-bold">Professional Designer</span>
-                      <p className="text-zinc-400 text-sm font-normal">Human expertise & consultation</p>
+                      <p className="text-gold/70 text-sm font-normal">Licensed partner connection</p>
                     </div>
                   </CardTitle>
                 </CardHeader>
                 <CardContent className="space-y-5">
                   <div className="space-y-3">
                     <div className="flex items-center gap-3 text-zinc-200">
-                      <Clock className="w-5 h-5 text-zinc-400" />
-                      <span>Takes more time for personalized results</span>
+                      <Users className="w-5 h-5 text-gold" />
+                      <span>Connect with <span className="text-gold font-semibold">licensed design partners</span></span>
                     </div>
                     <div className="flex items-center gap-3 text-zinc-200">
-                      <DollarSign className="w-5 h-5 text-zinc-400" />
-                      <span>Custom pricing based on project scope</span>
-                    </div>
-                    <div className="flex items-center gap-3 text-zinc-200">
-                      <User className="w-5 h-5 text-zinc-400" />
+                      <User className="w-5 h-5 text-gold" />
                       <span>Personal consultation & human expertise</span>
                     </div>
                     <div className="flex items-center gap-3 text-zinc-200">
-                      <CheckCircle2 className="w-5 h-5 text-zinc-400" />
+                      <CheckCircle2 className="w-5 h-5 text-gold" />
                       <span>Ideal for complex, large-scale projects</span>
                     </div>
+                    <div className="flex items-center gap-3 text-zinc-200">
+                      <Clock className="w-5 h-5 text-zinc-400" />
+                      <span>Custom timeline based on project scope</span>
+                    </div>
+                  </div>
+                  
+                  <div className="pt-2 pb-2 text-center">
+                    <p className="text-gold/80 text-sm mb-4">
+                      Contact us to connect you with licensed design partners
+                    </p>
                   </div>
                   
                   <Button 
                     onClick={() => setIsInquiryOpen(true)}
-                    className="w-full bg-zinc-800 hover:bg-zinc-700 text-white border-2 border-zinc-500/50 py-6 mt-4 font-bold text-base"
+                    className="w-full bg-transparent hover:bg-gold/10 text-gold border-2 border-gold py-6 font-bold text-base"
                   >
-                    Contact Designer
+                    Contact for Partner Intro
                     <ArrowRight className="w-5 h-5 ml-2" />
                   </Button>
                 </CardContent>
               </Card>
-            </div>
-
-            {/* Quick AI Packages Section */}
-            <div className="mt-12">
-              <h3 className="text-xl md:text-2xl font-bold text-white text-center mb-6">
-                Or Choose a Quick AI Package
-              </h3>
-              <p className="text-zinc-400 text-center mb-8 max-w-2xl mx-auto">
-                Get instant designs with our ready-to-go packages. Pay once, download immediately.
-              </p>
-              
-              <div className="grid md:grid-cols-4 gap-4">
-                {packages.map((pkg) => (
-                  <Card 
-                    key={pkg.id}
-                    className={`relative cursor-pointer transition-all hover:scale-105 ${
-                      pkg.recommended 
-                        ? "bg-gradient-to-br from-fuchsia-900/40 to-purple-900/40 border-fuchsia-500/50 shadow-lg shadow-fuchsia-500/20" 
-                        : "bg-zinc-900/50 border-zinc-700 hover:border-zinc-500"
-                    }`}
-                    onClick={() => {
-                      if (pkg.id === "enterprise") {
-                        setIsInquiryOpen(true);
-                      } else {
-                        setSelectedPackage(pkg.id);
-                        setShowComparison(false);
-                      }
-                    }}
-                  >
-                    {pkg.recommended && (
-                      <div className="absolute -top-3 left-1/2 -translate-x-1/2">
-                        <Badge className="bg-fuchsia-500 text-white text-xs">POPULAR</Badge>
-                      </div>
-                    )}
-                    <CardContent className="pt-6 text-center">
-                      <h4 className="text-white font-semibold mb-2">{pkg.name}</h4>
-                      <p className="text-zinc-500 text-xs mb-3">{pkg.sizeRange}</p>
-                      <p className="text-2xl font-bold text-fuchsia-400 mb-3">
-                        {pkg.price > 0 ? `$${pkg.price}` : "Get Quote"}
-                      </p>
-                      <ul className="text-xs text-zinc-400 space-y-1 text-left">
-                        {pkg.features.slice(0, 3).map((f, i) => (
-                          <li key={i} className="flex items-center gap-1">
-                            <CheckCircle2 className="w-3 h-3 text-fuchsia-400 flex-shrink-0" />
-                            <span>{f}</span>
-                          </li>
-                        ))}
-                      </ul>
-                      <Button 
-                        className={`w-full mt-4 ${
-                          pkg.recommended 
-                            ? "bg-fuchsia-500 hover:bg-fuchsia-600 text-white" 
-                            : "bg-zinc-800 hover:bg-zinc-700 text-white"
-                        }`}
-                        size="sm"
-                      >
-                        {pkg.price > 0 ? "Select" : "Contact Us"}
-                      </Button>
-                    </CardContent>
-                  </Card>
-                ))}
-              </div>
             </div>
           </motion.div>
         </div>
