@@ -37,10 +37,15 @@ const BusinessCardCamera = ({
   const [statusMessage, setStatusMessage] = useState('');
   const [cameraError, setCameraError] = useState<string | null>(null);
 
-  // Auto-start camera on component mount
+  // Auto-start camera on component mount with retry logic
   useEffect(() => {
-    startCamera();
+    // Small delay to ensure component is fully mounted
+    const initTimer = setTimeout(() => {
+      startCamera();
+    }, 500);
+    
     return () => {
+      clearTimeout(initTimer);
       stopCamera();
     };
   }, []);
@@ -370,37 +375,47 @@ const BusinessCardCamera = ({
             </div>
             
             <div className="text-center space-y-2">
-              <h3 className="text-lg font-bold text-white">AI Business Card Scanner</h3>
+              <h3 className="text-lg font-bold text-white">JBJ AI Business Card Scanner</h3>
               <p className="text-sm text-zinc-400 max-w-xs">
-                Scan business cards instantly with AI-powered OCR technology
+                Scan multiple business cards instantly with AI-powered OCR. 
+                Supports batch scanning up to 100 cards at once.
               </p>
             </div>
             
             {cameraError ? (
               <div className="text-center space-y-3">
-                <p className="text-red-400 text-sm">{cameraError}</p>
+                <p className="text-red-400 text-sm max-w-xs">{cameraError}</p>
                 <Button 
                   onClick={startCamera} 
                   className="gap-2 bg-gold hover:bg-gold-light text-black font-bold px-8 py-6 text-lg rounded-xl shadow-lg shadow-gold/30 transition-all hover:scale-105"
                 >
                   <Camera className="h-5 w-5" />
-                  Try Again
+                  Grant Camera Access
                 </Button>
+                <p className="text-xs text-zinc-500 max-w-xs">
+                  If camera doesn't open, check browser permissions or try the Upload option.
+                </p>
               </div>
             ) : (
-              <Button 
-                onClick={startCamera} 
-                className="gap-2 bg-gold hover:bg-gold-light text-black font-bold px-8 py-6 text-lg rounded-xl shadow-lg shadow-gold/30 transition-all hover:scale-105"
-              >
-                <Camera className="h-5 w-5" />
-                Start Camera
-              </Button>
+              <div className="text-center space-y-4">
+                <Button 
+                  onClick={startCamera} 
+                  className="gap-2 bg-gold hover:bg-gold-light text-black font-bold px-8 py-6 text-lg rounded-xl shadow-lg shadow-gold/30 transition-all hover:scale-105"
+                >
+                  <Camera className="h-5 w-5" />
+                  Open Camera
+                </Button>
+                <p className="text-xs text-zinc-400">Camera will open automatically...</p>
+              </div>
             )}
             
             {/* Tips */}
-            <div className="flex items-center gap-2 text-xs text-zinc-500">
-              <Lightbulb className="h-4 w-4 text-gold" />
-              <span>Ensure good lighting for best results</span>
+            <div className="flex flex-col items-center gap-2 text-xs text-zinc-500">
+              <div className="flex items-center gap-2">
+                <Lightbulb className="h-4 w-4 text-gold" />
+                <span>Ensure good lighting for best results</span>
+              </div>
+              <span className="text-gold">Supports multi-card detection</span>
             </div>
           </div>
         ) : (
