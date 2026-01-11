@@ -129,7 +129,7 @@ const Footer = () => {
     { href: "/document-scanner", label: "JBJ Scan & Sign" },
     { href: "/property-measurement", label: "JBJ Property Measurement" },
     { href: "/interior-design-ai", label: "JBJ AI Interior Design" },
-    { href: "/ai-hub", label: "JBJ Assistant Hub" },
+    { href: "/ai-hub", label: "JBJ Broker Hub" },
   ];
 
   // Career Links

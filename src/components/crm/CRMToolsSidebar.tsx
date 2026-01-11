@@ -52,9 +52,9 @@ const toolCategories = [
     ]
   },
   {
-    name: "AI Assistants",
+    name: "Hub & Assistants",
     tools: [
-      { name: "AI Hub", href: "/ai-hub", icon: Brain, color: "text-fuchsia-400" },
+      { name: "JBJ Broker Hub", href: "/ai-hub", icon: Brain, color: "text-fuchsia-400" },
       { name: "Executive Assistant", href: "/executive-assistant", icon: Briefcase, color: "text-sky-400" },
       { name: "Property Coach", href: "/quiz", icon: Target, color: "text-lime-400" },
     ]

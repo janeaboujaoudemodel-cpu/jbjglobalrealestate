@@ -434,7 +434,7 @@ const RoleSelectionModal = ({ onRoleSelected }: RoleSelectionModalProps) => {
                       <>
                         <div className="flex items-center gap-3 text-sm text-gray-600">
                           <div className="w-6 h-6 rounded-full bg-gold/20 flex items-center justify-center text-xs font-bold text-gold">1</div>
-                          <span>Explore <strong>Free AI Tools</strong> in the JBJ Assistant Hub</span>
+                          <span>Explore <strong>Free AI Tools</strong> in the JBJ Broker Hub</span>
                         </div>
                         <div className="flex items-center gap-3 text-sm text-gray-600">
                           <div className="w-6 h-6 rounded-full bg-gold/20 flex items-center justify-center text-xs font-bold text-gold">2</div>
@@ -470,7 +470,7 @@ const RoleSelectionModal = ({ onRoleSelected }: RoleSelectionModalProps) => {
                         </div>
                         <div className="flex items-center gap-3 text-sm text-gray-600">
                           <div className="w-6 h-6 rounded-full bg-zinc-500/20 flex items-center justify-center text-xs font-bold text-zinc-600">2</div>
-                          <span>Learn About <strong>UAE Real Estate</strong></span>
+                          <span>Learn About <strong>UAE Real Estate Market</strong></span>
                         </div>
                         <div className="flex items-center gap-3 text-sm text-gray-600">
                           <div className="w-6 h-6 rounded-full bg-zinc-500/20 flex items-center justify-center text-xs font-bold text-zinc-600">3</div>
