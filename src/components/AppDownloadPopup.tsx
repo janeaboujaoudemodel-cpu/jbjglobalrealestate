@@ -168,11 +168,13 @@ const AppDownloadPopup = ({ showOnLoad = true, delayMs = 3000 }: AppDownloadPopu
             animate={{ opacity: 1, scale: 1, y: 0 }}
             exit={{ opacity: 0, scale: 0.9, y: 20 }}
             transition={{ type: 'spring', damping: 25, stiffness: 300 }}
-            className="fixed z-[10000] top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[calc(100%-32px)] max-w-[380px]"
+            className="fixed z-[10000] top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[calc(100%-32px)] max-w-[380px] max-h-[90vh] overflow-y-auto"
           >
-            <div className="bg-white rounded-2xl shadow-2xl relative overflow-hidden">
+            <div className="bg-white rounded-2xl shadow-2xl relative overflow-hidden border-2 border-gold/30">
+              {/* Premium gold glow effect */}
+              <div className="absolute -inset-1 bg-gradient-to-r from-gold/20 via-gold/30 to-gold/20 blur-sm rounded-2xl pointer-events-none" />
               {/* Gold accent line at top */}
-              <div className="absolute top-0 left-0 right-0 h-1.5 bg-gradient-to-r from-[#A8925A] via-[#D4AF37] to-[#A8925A]" />
+              <div className="absolute top-0 left-0 right-0 h-1.5 bg-gradient-to-r from-[#A8925A] via-[#D4AF37] to-[#A8925A] z-10" />
               
               {/* Close button */}
               <button
@@ -247,15 +249,15 @@ const AppDownloadPopup = ({ showOnLoad = true, delayMs = 3000 }: AppDownloadPopu
 
                 {/* THREE BUTTONS */}
                 <div className="space-y-3">
-                  {/* Install Now Button - Primary */}
+                  {/* Install Now Button - Primary (Gold gradient with BLACK text for contrast) */}
                   <Button
                     onClick={handleInstall}
                     disabled={isInstalling}
-                    className="w-full h-12 bg-gradient-to-r from-[#A8925A] to-[#D4AF37] hover:from-[#9A8550] hover:to-[#C9A630] text-white font-bold text-base rounded-xl shadow-lg transition-all duration-300 hover:scale-[1.02] border-0"
+                    className="w-full h-12 bg-gradient-to-r from-[#A8925A] to-[#D4AF37] hover:from-[#9A8550] hover:to-[#C9A630] text-black font-bold text-base rounded-xl shadow-lg transition-all duration-300 hover:scale-[1.02] border-0 hover:shadow-gold/40"
                   >
                     {isInstalling ? (
                       <span className="flex items-center gap-2">
-                        <div className="w-5 h-5 border-2 border-white/30 border-t-white rounded-full animate-spin" />
+                        <div className="w-5 h-5 border-2 border-black/30 border-t-black rounded-full animate-spin" />
                         <span>Installing...</span>
                       </span>
                     ) : (

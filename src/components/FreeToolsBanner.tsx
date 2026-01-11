@@ -90,17 +90,13 @@ export default function FreeToolsBanner() {
             onClick={canClose ? handleDismiss : undefined}
           />
 
-          {/* Pop-up - positioned to avoid JBJ Support chat widget */}
+          {/* Pop-up - Perfectly centered on all devices with safe margins */}
           <motion.div
             initial={{ opacity: 0, scale: 0.9, y: 20 }}
             animate={{ opacity: 1, scale: 1, y: 0 }}
             exit={{ opacity: 0, scale: 0.95, y: 10 }}
             transition={{ duration: 0.8, ease: "easeOut" }}
-            className="fixed z-50 left-1/2 -translate-x-1/2 w-[calc(100%-2rem)] max-w-[600px] md:max-w-[650px] sm:max-w-[500px]"
-            style={{ 
-              top: "50%",
-              transform: "translate(-50%, calc(-50% - 40px))", // Offset upward to avoid chat widget
-            }}
+            className="fixed z-50 top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[calc(100%-2rem)] max-w-[600px] max-h-[90vh] overflow-y-auto"
           >
             <div 
               className="relative rounded-2xl p-6 md:p-8"

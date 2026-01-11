@@ -310,20 +310,30 @@ const GlobalHeader = () => {
               </SheetContent>
             </Sheet>
 
-            {/* User Menu - Desktop */}
+            {/* User Menu - Desktop (Icon only, no email shown) */}
             <div className="hidden lg:block">
               {user ? (
                 <DropdownMenu>
                   <DropdownMenuTrigger asChild>
-                    <Button variant="ghost" className="text-gold hover:text-gold-light hover:bg-gold/10">
-                      <User className="w-4 h-4 mr-2" />
-                      {t('nav.myAccount')}
+                    <Button 
+                      variant="ghost" 
+                      size="icon"
+                      className="text-gold hover:text-gold-light hover:bg-gold/10 w-9 h-9"
+                      aria-label={t('nav.myAccount')}
+                    >
+                      <User className="w-5 h-5" />
                     </Button>
                   </DropdownMenuTrigger>
-                  <DropdownMenuContent align="end" className="bg-black border-zinc-800">
-                    <div className="px-3 py-2 text-zinc-500 text-sm border-b border-zinc-800">
-                      {user.email?.split("@")[0]}
+                  <DropdownMenuContent align="end" className="bg-black border-zinc-800 min-w-[180px]">
+                    <div className="px-3 py-2 text-gold font-semibold border-b border-zinc-800">
+                      {t('nav.myAccount')}
                     </div>
+                    <DropdownMenuItem asChild>
+                      <Link to="/my-account" className="flex items-center gap-2 text-zinc-300">
+                        <User className="w-4 h-4" />
+                        Profile
+                      </Link>
+                    </DropdownMenuItem>
                     <DropdownMenuItem asChild>
                       <Link to="/favorites" className="flex items-center gap-2 text-zinc-300">
                         <Heart className="w-4 h-4" />
@@ -355,8 +365,8 @@ const GlobalHeader = () => {
                 </DropdownMenu>
               ) : (
                 <Link to="/auth">
-                  <Button variant="ghost" className="text-gold hover:text-gold-light hover:bg-gold/10">
-                    {t('nav.signIn')}
+                  <Button variant="ghost" size="icon" className="text-gold hover:text-gold-light hover:bg-gold/10 w-9 h-9">
+                    <User className="w-5 h-5" />
                   </Button>
                 </Link>
               )}
