@@ -11,6 +11,7 @@ export const ru = {
   'nav.contact': 'Контакты',
   'nav.signIn': 'Войти',
   'nav.signOut': 'Выйти',
+  'nav.myAccount': 'Мой Аккаунт',
   'nav.admin': 'Панель Админа',
   'nav.favorites': 'Избранное',
   

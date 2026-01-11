@@ -287,7 +287,7 @@ const CRM = () => {
           </div>
           <div className="space-y-4">
             <SmartReminders userId={user?.id || ""} limit={4} />
-            <AutomationRules userId={user?.id || ""} />
+            <AutomationRules userId={user?.id || ""} isAdmin={isAdmin} />
           </div>
         </div>
 

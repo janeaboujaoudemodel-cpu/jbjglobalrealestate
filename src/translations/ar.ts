@@ -11,6 +11,7 @@ export const ar = {
   'nav.contact': 'اتصل بنا',
   'nav.signIn': 'تسجيل الدخول',
   'nav.signOut': 'تسجيل الخروج',
+  'nav.myAccount': 'حسابي',
   'nav.admin': 'لوحة الإدارة',
   'nav.favorites': 'المفضلة',
   'nav.compare': 'مقارنة',

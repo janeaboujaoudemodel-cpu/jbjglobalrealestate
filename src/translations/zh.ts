@@ -11,6 +11,7 @@ export const zh = {
   'nav.contact': '联系我们',
   'nav.signIn': '登录',
   'nav.signOut': '退出',
+  'nav.myAccount': '我的账户',
   'nav.admin': '管理面板',
   'nav.favorites': '收藏夹',
   

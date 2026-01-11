@@ -11,6 +11,7 @@ export const en = {
   'nav.contact': 'Contact',
   'nav.signIn': 'Sign In',
   'nav.signOut': 'Sign Out',
+  'nav.myAccount': 'My Account',
   'nav.admin': 'Admin Panel',
   'nav.favorites': 'Favorites',
   'nav.compare': 'Compare',

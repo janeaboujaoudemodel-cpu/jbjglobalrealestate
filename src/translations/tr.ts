@@ -11,6 +11,7 @@ export const tr = {
   'nav.contact': 'İletişim',
   'nav.signIn': 'Giriş Yap',
   'nav.signOut': 'Çıkış Yap',
+  'nav.myAccount': 'Hesabım',
   'nav.admin': 'Yönetici Paneli',
   'nav.favorites': 'Favoriler',
   

@@ -11,6 +11,7 @@ export const de = {
   'nav.contact': 'Kontakt',
   'nav.signIn': 'Anmelden',
   'nav.signOut': 'Abmelden',
+  'nav.myAccount': 'Mein Konto',
   'nav.admin': 'Admin-Panel',
   'nav.favorites': 'Favoriten',
   
