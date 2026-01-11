@@ -87,32 +87,24 @@ const CookiesConsentBanner = () => {
                     <Cookie className="w-6 h-6 text-gold" />
                   </div>
                   <div className="flex-1">
-                    <h3 className="text-white font-semibold text-lg mb-2">We use cookies</h3>
+                    <h3 className="text-white font-semibold text-lg mb-2">We value your privacy</h3>
                     <p className="text-zinc-400 text-sm leading-relaxed mb-4">
-                      We use essential cookies to run this website. With your permission, we also use 
-                      optional cookies for analytics and marketing. You can accept all, reject non-essential, 
-                      or manage preferences.
+                      We use cookies to enhance your experience and improve performance. You can choose 
+                      your preferences anytime. Essential cookies are required for the website to function.
                     </p>
                     <div className="flex flex-wrap gap-3">
                       <Button
                         onClick={handleAcceptAll}
-                        className="bg-gold hover:bg-gold-light text-black font-semibold px-6"
+                        className="bg-gradient-to-r from-gold to-gold-dark hover:brightness-110 text-black font-semibold px-6"
                       >
-                        Accept all
-                      </Button>
-                      <Button
-                        onClick={handleRejectNonEssential}
-                        variant="outline"
-                        className="border-zinc-600 text-white hover:bg-zinc-800"
-                      >
-                        Reject non-essential
+                        Accept All
                       </Button>
                       <Button
                         onClick={() => setShowPreferences(true)}
-                        variant="ghost"
-                        className="text-zinc-400 hover:text-white hover:bg-zinc-800"
+                        variant="outline"
+                        className="border-gold text-gold hover:bg-gold hover:text-black"
                       >
-                        Manage preferences
+                        Manage Preferences
                       </Button>
                     </div>
                     <p className="text-zinc-500 text-xs mt-4">

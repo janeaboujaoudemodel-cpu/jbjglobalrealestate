@@ -56,9 +56,10 @@ const ROLES: RoleOption[] = [
     benefits: [
       'Free AI-Powered Tools (Unlimited)',
       'Free Courses & Video Tutorials',
-      'Dedicated HR Admin & Assistant',
+      'Dedicated HR Manager & Personal Assistant',
       'Personal Property Coach',
       'Developer Briefings Access',
+      'Exclusive Invitations to Events & Workshops',
       'Priority Support'
     ],
     showWarning: true,
@@ -76,7 +77,7 @@ const ROLES: RoleOption[] = [
       'Premium Property Search',
       'Favorites & Comparison Tools',
       'Market Reports & Insights',
-      'ROI Calculator',
+      'Property Comparison Tools',
       'Direct Consultation Booking'
     ],
     welcomeTitle: `Welcome to ${BRAND_NAME}!`,
@@ -87,8 +88,8 @@ const ROLES: RoleOption[] = [
     title: 'Just Browsing',
     subtitle: 'Explore our platform first',
     icon: Eye,
-    color: 'text-zinc-500',
-    bgGradient: 'from-zinc-500/20 to-zinc-600/10',
+    color: 'text-zinc-400',
+    bgGradient: 'from-zinc-400/20 to-zinc-500/10',
     benefits: [
       'Browse Properties',
       'View Market Data',
@@ -342,7 +343,7 @@ const RoleSelectionModal = ({ onRoleSelected }: RoleSelectionModalProps) => {
 
                 <div className="bg-gray-50 border border-gray-200 rounded-xl p-6 mb-6 text-left">
                   <p className="text-gray-700 mb-4">
-                    <strong className="text-black">Select your role honestly.</strong> As a Broker Circle member, you get:
+                    <strong className="text-black">We're excited to have you join us!</strong> As a Broker Circle member, you'll receive:
                   </p>
                   
                   <ul className="space-y-3 text-sm text-gray-600">
@@ -356,7 +357,7 @@ const RoleSelectionModal = ({ onRoleSelected }: RoleSelectionModalProps) => {
                     </li>
                     <li className="flex items-start gap-3">
                       <Award className="w-5 h-5 text-gold flex-shrink-0 mt-0.5" />
-                      <span><strong>Dedicated Support</strong> – HR admin, assistant, and property coach just for you</span>
+                      <span><strong>Dedicated Support</strong> – HR Manager, Personal Assistant, and Property Coach</span>
                     </li>
                   </ul>
 

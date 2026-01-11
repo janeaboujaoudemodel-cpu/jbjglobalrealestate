@@ -219,7 +219,7 @@ export default function FreeToolsBanner() {
 
                 {/* Footer note */}
                 <p className="text-gold text-xs text-center mt-4 font-medium opacity-90">
-                  No credit card required · Join 5,000+ members
+                  No credit card required · Join 5,000+ members already using JBJ tools daily
                 </p>
 
                 {/* Countdown timer - positioned bottom-right */}
