@@ -65,59 +65,60 @@ const LeadContactActions = ({ lead, onGenerateReport }: LeadContactActionsProps)
   };
 
   return (
-    <DropdownMenu>
-      <DropdownMenuTrigger asChild>
-        <Button 
-          variant="outline" 
-          size="sm" 
-          className="bg-gold/10 border-gold/30 text-gold hover:bg-gold/20"
-        >
-          Contact Client
-          <MoreHorizontal className="w-4 h-4 ml-2" />
-        </Button>
-      </DropdownMenuTrigger>
-      <DropdownMenuContent align="end" className="bg-zinc-900 border-zinc-800 w-56">
-        <DropdownMenuItem 
-          onClick={handleSendEmail}
-          className="flex items-center gap-2 text-zinc-300 hover:text-white cursor-pointer"
-        >
-          <Mail className="w-4 h-4 text-blue-400" />
-          <span>Send Email</span>
-          {lead.email && (
-            <ExternalLink className="w-3 h-3 ml-auto text-zinc-500" />
-          )}
-        </DropdownMenuItem>
-        
-        <DropdownMenuItem 
-          onClick={handleSendWhatsApp}
-          className="flex items-center gap-2 text-zinc-300 hover:text-white cursor-pointer"
-        >
-          <MessageCircle className="w-4 h-4 text-green-400" />
-          <span>Send WhatsApp Message</span>
-          {lead.phone && (
-            <ExternalLink className="w-3 h-3 ml-auto text-zinc-500" />
-          )}
-        </DropdownMenuItem>
-        
-        <DropdownMenuItem 
-          onClick={handleCallDirectly}
-          className="flex items-center gap-2 text-zinc-300 hover:text-white cursor-pointer"
-        >
-          <Phone className="w-4 h-4 text-amber-400" />
-          <span>Call Directly</span>
-        </DropdownMenuItem>
-        
-        <DropdownMenuSeparator className="bg-zinc-800" />
-        
-        <DropdownMenuItem 
-          onClick={handleGenerateReport}
-          className="flex items-center gap-2 text-zinc-300 hover:text-white cursor-pointer"
-        >
-          <FileText className="w-4 h-4 text-purple-400" />
-          <span>Generate & Share AI Report</span>
-        </DropdownMenuItem>
-      </DropdownMenuContent>
-    </DropdownMenu>
+    <div className="flex items-center gap-2 flex-wrap">
+      {/* High-visibility action buttons - Task 21 */}
+      <Button 
+        onClick={handleCallDirectly}
+        size="sm" 
+        className="bg-amber-500 hover:bg-amber-600 text-white font-semibold shadow-md"
+        disabled={!lead.phone}
+      >
+        <Phone className="w-4 h-4 mr-1.5" />
+        Call
+      </Button>
+      
+      <Button 
+        onClick={handleSendEmail}
+        size="sm" 
+        className="bg-blue-500 hover:bg-blue-600 text-white font-semibold shadow-md"
+        disabled={!lead.email}
+      >
+        <Mail className="w-4 h-4 mr-1.5" />
+        Email
+      </Button>
+      
+      <Button 
+        onClick={handleSendWhatsApp}
+        size="sm" 
+        className="bg-green-500 hover:bg-green-600 text-white font-semibold shadow-md"
+        disabled={!lead.phone}
+      >
+        <MessageCircle className="w-4 h-4 mr-1.5" />
+        WhatsApp
+      </Button>
+
+      {/* More Actions Dropdown */}
+      <DropdownMenu>
+        <DropdownMenuTrigger asChild>
+          <Button 
+            variant="outline" 
+            size="sm" 
+            className="bg-gold/10 border-gold/30 text-gold hover:bg-gold/20"
+          >
+            <MoreHorizontal className="w-4 h-4" />
+          </Button>
+        </DropdownMenuTrigger>
+        <DropdownMenuContent align="end" className="bg-zinc-900 border-zinc-800 w-56">
+          <DropdownMenuItem 
+            onClick={handleGenerateReport}
+            className="flex items-center gap-2 text-zinc-300 hover:text-white cursor-pointer"
+          >
+            <FileText className="w-4 h-4 text-purple-400" />
+            <span>Generate & Share AI Report</span>
+          </DropdownMenuItem>
+        </DropdownMenuContent>
+      </DropdownMenu>
+    </div>
   );
 };
 

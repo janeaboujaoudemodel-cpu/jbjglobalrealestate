@@ -1,4 +1,5 @@
 import { useState, useRef, useCallback } from "react";
+import DOMPurify from "dompurify";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { 
@@ -180,9 +181,15 @@ ${content}
       const content = event.target?.result as string;
       if (editorRef.current) {
         if (file.name.endsWith('.html')) {
-          // Extract body content from HTML
+          // Extract body content from HTML and sanitize to prevent XSS
           const match = content.match(/<body[^>]*>([\s\S]*)<\/body>/i);
-          editorRef.current.innerHTML = match ? match[1] : content;
+          const htmlContent = match ? match[1] : content;
+          // Sanitize HTML to prevent XSS attacks
+          editorRef.current.innerHTML = DOMPurify.sanitize(htmlContent, {
+            ALLOWED_TAGS: ['p', 'br', 'strong', 'em', 'u', 'h1', 'h2', 'h3', 'ul', 'ol', 'li', 'a', 'span', 'div', 'table', 'tr', 'td', 'th', 'thead', 'tbody', 'img'],
+            ALLOWED_ATTR: ['href', 'class', 'style', 'src', 'alt', 'width', 'height'],
+            ALLOW_DATA_ATTR: false
+          });
         } else {
           editorRef.current.innerText = content;
         }
