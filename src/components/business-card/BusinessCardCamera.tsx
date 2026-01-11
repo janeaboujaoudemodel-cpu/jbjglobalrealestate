@@ -37,6 +37,14 @@ const BusinessCardCamera = ({
   const [statusMessage, setStatusMessage] = useState('');
   const [cameraError, setCameraError] = useState<string | null>(null);
 
+  // Auto-start camera on component mount
+  useEffect(() => {
+    startCamera();
+    return () => {
+      stopCamera();
+    };
+  }, []);
+
   const startCamera = useCallback(async () => {
     setCameraError(null);
     setScanStatus('detecting');
@@ -45,19 +53,25 @@ const BusinessCardCamera = ({
     try {
       // First check if camera is available
       const devices = await navigator.mediaDevices.enumerateDevices();
-      const hasCamera = devices.some(device => device.kind === 'videoinput');
+      const videoDevices = devices.filter(device => device.kind === 'videoinput');
       
-      if (!hasCamera) {
+      if (videoDevices.length === 0) {
         throw new Error('No camera found on this device');
       }
 
-      const mediaStream = await navigator.mediaDevices.getUserMedia({
+      // Request camera with optimal settings for card scanning
+      const constraints: MediaStreamConstraints = {
         video: {
           facingMode,
           width: { ideal: 1920, min: 1280 },
-          height: { ideal: 1080, min: 720 }
+          height: { ideal: 1080, min: 720 },
+          focusMode: { ideal: 'continuous' },
+          // @ts-ignore - Advanced constraints for better quality
+          advanced: [{ focusMode: 'continuous' }]
         }
-      });
+      };
+
+      const mediaStream = await navigator.mediaDevices.getUserMedia(constraints);
       
       if (videoRef.current) {
         videoRef.current.srcObject = mediaStream;
@@ -77,8 +91,8 @@ const BusinessCardCamera = ({
         setStream(mediaStream);
         setIsCameraReady(true);
         setScanStatus('idle');
-        setStatusMessage('Camera ready. Position your business card in the frame.');
-        toast.success("Camera started! Position your business card in the frame.");
+        setStatusMessage('Camera ready. Position business cards in the frame and capture.');
+        toast.success("Camera active! Position business card(s) in the frame.");
         
         // Start auto-detection if enabled
         if (autoDetectEnabled) {
@@ -97,6 +111,22 @@ const BusinessCardCamera = ({
           errorMessage = 'No camera found on this device.';
         } else if (error.name === 'NotReadableError' || error.name === 'TrackStartError') {
           errorMessage = 'Camera is in use by another application.';
+        } else if (error.name === 'OverconstrainedError') {
+          // Try again with simpler constraints
+          try {
+            const simpleStream = await navigator.mediaDevices.getUserMedia({ video: true });
+            if (videoRef.current) {
+              videoRef.current.srcObject = simpleStream;
+              await videoRef.current.play();
+              setStream(simpleStream);
+              setIsCameraReady(true);
+              setScanStatus('idle');
+              setStatusMessage('Camera ready (basic mode).');
+              return;
+            }
+          } catch {
+            errorMessage = 'Camera constraints not supported.';
+          }
         } else {
           errorMessage = error.message || 'Unable to access camera';
         }

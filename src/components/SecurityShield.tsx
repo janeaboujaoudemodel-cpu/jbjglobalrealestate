@@ -3,11 +3,23 @@ import { useEffect } from 'react';
 /**
  * SecurityShield - Anti-inspection and content protection component
  * Provides multiple layers of protection against code inspection and copying
+ * 
+ * IMPORTANT: This is client-side protection only. True security comes from
+ * proper backend authentication, RLS policies, and encrypted data transmission.
  */
 const SecurityShield = () => {
   useEffect(() => {
-    // Disable right-click context menu
+    // Disable right-click context menu (except on inputs)
     const handleContextMenu = (e: MouseEvent) => {
+      const target = e.target as HTMLElement;
+      // Allow right-click on form inputs
+      if (
+        target.tagName === 'INPUT' ||
+        target.tagName === 'TEXTAREA' ||
+        target.isContentEditable
+      ) {
+        return true;
+      }
       e.preventDefault();
       return false;
     };
@@ -21,12 +33,10 @@ const SecurityShield = () => {
         (e.ctrlKey && e.shiftKey && (e.key === 'J' || e.key === 'j')) ||
         (e.ctrlKey && e.shiftKey && (e.key === 'C' || e.key === 'c')) ||
         (e.ctrlKey && (e.key === 'U' || e.key === 'u')) ||
-        (e.ctrlKey && (e.key === 'S' || e.key === 's')) ||
         // Mac equivalents
         (e.metaKey && e.altKey && (e.key === 'I' || e.key === 'i')) ||
         (e.metaKey && e.altKey && (e.key === 'J' || e.key === 'j')) ||
-        (e.metaKey && (e.key === 'U' || e.key === 'u')) ||
-        (e.metaKey && (e.key === 'S' || e.key === 's'))
+        (e.metaKey && (e.key === 'U' || e.key === 'u'))
       ) {
         e.preventDefault();
         e.stopPropagation();
@@ -41,7 +51,8 @@ const SecurityShield = () => {
       if (
         target.tagName === 'INPUT' ||
         target.tagName === 'TEXTAREA' ||
-        target.isContentEditable
+        target.isContentEditable ||
+        target.closest('[data-allow-select]')
       ) {
         return true;
       }
@@ -65,15 +76,10 @@ const SecurityShield = () => {
       const heightThreshold = window.outerHeight - window.innerHeight > threshold;
       
       if (widthThreshold || heightThreshold) {
-        // DevTools might be open - can add logging here if needed
+        // DevTools might be open - clear console for privacy
         console.clear();
       }
     };
-
-    // Clear console periodically to discourage inspection
-    const clearConsoleInterval = setInterval(() => {
-      console.clear();
-    }, 5000);
 
     // Add event listeners
     document.addEventListener('contextmenu', handleContextMenu);
@@ -85,7 +91,7 @@ const SecurityShield = () => {
     // Initial detection
     detectDevTools();
 
-    // Add CSS to prevent selection globally
+    // Add CSS to prevent selection globally (with exceptions for form inputs)
     const style = document.createElement('style');
     style.id = 'security-shield-styles';
     style.textContent = `
@@ -96,7 +102,7 @@ const SecurityShield = () => {
         user-select: none;
       }
       
-      input, textarea, [contenteditable="true"] {
+      input, textarea, [contenteditable="true"], [data-allow-select], [data-allow-select] * {
         -webkit-user-select: text;
         -moz-user-select: text;
         -ms-user-select: text;
@@ -109,11 +115,10 @@ const SecurityShield = () => {
         -moz-user-drag: none;
         -o-user-drag: none;
         user-drag: none;
-        pointer-events: none;
       }
       
       /* Re-enable pointer events for interactive images */
-      a img, button img, [role="button"] img {
+      a img, button img, [role="button"] img, .interactive-img {
         pointer-events: auto;
       }
     `;
@@ -126,7 +131,6 @@ const SecurityShield = () => {
       document.removeEventListener('selectstart', handleSelectStart);
       document.removeEventListener('dragstart', handleDragStart);
       window.removeEventListener('resize', detectDevTools);
-      clearInterval(clearConsoleInterval);
       
       const styleElement = document.getElementById('security-shield-styles');
       if (styleElement) {

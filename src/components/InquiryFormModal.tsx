@@ -622,6 +622,14 @@ const InquiryFormModal = ({
                     )}
                   </Button>
 
+                  {/* Security & Privacy Notice */}
+                  <div className="flex items-start gap-2 p-3 rounded-lg bg-zinc-900/50 border border-zinc-800 mt-3">
+                    <Shield className="w-4 h-4 text-gold flex-shrink-0 mt-0.5" />
+                    <p className="text-zinc-400 text-xs leading-relaxed">
+                      Your information is securely stored in the JBJ Global Real Estate system for service and quality purposes. We never share your data with third parties.
+                    </p>
+                  </div>
+
                   {/* Registration note */}
                   <p className="text-zinc-500 text-xs text-center pt-2">
                     By registering, you'll join our exclusive community and receive updates via WhatsApp.
