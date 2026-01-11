@@ -301,7 +301,7 @@ const Index = () => {
                     <Users className="w-5 h-5 text-gold" />
                   </div>
                   <h4 className="text-white text-sm font-semibold mb-1">Visitors</h4>
-                  <p className="text-zinc-500 text-xs">Find your home</p>
+                  <p className="text-zinc-500 text-xs">Explore UAE Real Estate</p>
                 </div>
               </div>
             </Link>
@@ -385,7 +385,7 @@ const Index = () => {
                 <div className="relative rounded-2xl overflow-hidden border border-zinc-800 shadow-2xl shadow-black/80">
                   <img 
                     src={founderProfessional} 
-                    alt="Jane Abou Jaoude - Founder & CEO" 
+                    alt="Jane Abou Jaoude - Founder & Managing Director"
                     className="w-full h-full object-cover object-top"
                   />
                   {/* Gradient overlay at bottom */}

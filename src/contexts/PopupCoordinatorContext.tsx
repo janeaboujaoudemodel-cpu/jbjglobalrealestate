@@ -3,7 +3,7 @@ import { useIsMobile } from '@/hooks/use-mobile';
 
 /**
  * Popup priority levels (lower number = higher priority)
- * Only one popup can be shown at a time on mobile.
+ * STRICT: Only ONE popup visible at a time on ALL devices.
  * Popups must register and request visibility through this system.
  */
 export type PopupId = 
@@ -20,7 +20,7 @@ interface PopupPriority {
   priority: number;
 }
 
-// Priority order: lower number = shows first
+// Priority order: lower number = shows first (STRICT enforcement)
 const POPUP_PRIORITIES: PopupPriority[] = [
   { id: 'welcome-modal', priority: 1 },
   { id: 'role-selection-modal', priority: 2 },
@@ -103,8 +103,7 @@ export const PopupCoordinatorProvider: React.FC<PopupCoordinatorProviderProps> =
     });
   }, []);
 
-  // Determine which popup should be active based on priority
-  // CRITICAL FIX: Only ONE popup at a time on ALL devices (including mobile)
+  // STRICT: Determine which popup should be active - ONLY ONE at a time
   useEffect(() => {
     const pendingRequests = Array.from(requests.values())
       .filter(r => r.wantsToShow)
@@ -113,8 +112,8 @@ export const PopupCoordinatorProvider: React.FC<PopupCoordinatorProviderProps> =
     if (pendingRequests.length === 0) {
       setActivePopup(null);
     } else {
-      // FIXED: On BOTH mobile and desktop, only show ONE popup at a time
-      // This prevents multiple popups from appearing simultaneously
+      // STRICT: Only ONE popup at a time - highest priority wins
+      // Modal popups take precedence over floating buttons
       const modals = pendingRequests.filter(r => r.id !== 'install-app-button');
       const installButton = pendingRequests.find(r => r.id === 'install-app-button');
       
@@ -122,27 +121,28 @@ export const PopupCoordinatorProvider: React.FC<PopupCoordinatorProviderProps> =
         // Show only the highest priority modal
         setActivePopup(modals[0].id);
       } else if (installButton) {
+        // Only show install button when no modals are active
         setActivePopup(installButton.id);
       } else {
         setActivePopup(null);
       }
     }
-  }, [requests, isMobile]);
+  }, [requests]);
 
-  // Check if a popup can currently show
-  // FIXED: Only ONE popup can show at a time on ALL devices
+  // STRICT: Only active popup can show - no exceptions
   const canShow = useCallback((id: PopupId): boolean => {
     const request = requests.get(id);
     if (!request?.wantsToShow) return false;
 
-    // FIXED: Same logic for mobile AND desktop - only active popup can show
-    // Exception: install-app-button can show if no modals are active
+    // Install button can show when no modals are active
     if (id === 'install-app-button') {
       const activeIsModal = activePopup && activePopup !== 'install-app-button';
       return !activeIsModal;
     }
+    
+    // All other popups: only if they are the active popup
     return activePopup === id;
-  }, [requests, activePopup, isMobile]);
+  }, [requests, activePopup]);
 
   return (
     <PopupCoordinatorContext.Provider
