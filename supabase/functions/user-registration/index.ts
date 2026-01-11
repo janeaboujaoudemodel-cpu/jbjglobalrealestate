@@ -4,8 +4,8 @@ import { z } from "https://deno.land/x/zod@v3.22.4/mod.ts";
 
 // Allowed origins for CORS
 const ALLOWED_ORIGINS = [
-  "https://jjglobalcapital.com",
-  "https://www.jjglobalcapital.com",
+  "https://jbj.ae",
+  "https://www.jbj.ae",
   "http://localhost:5173",
   "http://localhost:8080",
 ];
@@ -394,7 +394,7 @@ async function isPasswordBreached(password: string): Promise<{ breached: boolean
 
     const response = await fetch(`https://api.pwnedpasswords.com/range/${prefix}`, {
       headers: {
-        "User-Agent": "JJ-Global-Capital-Security-Check",
+        "User-Agent": "JBJ-Global-Real-Estate-Security-Check",
         "Add-Padding": "true", // Adds padding to prevent response size analysis
       },
     });
