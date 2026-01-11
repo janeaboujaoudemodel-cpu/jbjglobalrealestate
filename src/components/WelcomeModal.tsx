@@ -7,7 +7,7 @@ import { User, ArrowRight } from "lucide-react";
 import { useLanguage } from "@/contexts/LanguageContext";
 import { usePopupVisibility } from "@/contexts/PopupCoordinatorContext";
 import GuidedTour from "./GuidedTour";
-import jbjFullLogoLight from "@/assets/jbj-fulllogo-light.png";
+import jbjMonogramTransparent from "@/assets/jbj-monogram-transparent.png";
 
 const WELCOME_MODAL_KEY = "jj_welcome_shown";
 const RETURNING_USER_KEY = "jj_returning_user";
@@ -80,7 +80,7 @@ const WelcomeModal = () => {
         }}
       >
         <DialogContent 
-          className="bg-white border-0 text-zinc-900 max-w-md p-0 overflow-hidden shadow-2xl rounded-2xl"
+          className="bg-black/95 backdrop-blur-xl border border-gold/30 text-white max-w-md p-0 overflow-hidden shadow-2xl rounded-2xl"
           dir={isRTL ? 'rtl' : 'ltr'}
           aria-describedby={undefined}
         >
@@ -88,60 +88,71 @@ const WelcomeModal = () => {
             <DialogTitle>Welcome to JBJ Global Real Estate</DialogTitle>
           </VisuallyHidden.Root>
           
-          {/* Premium white background */}
-          <div className="absolute inset-0 bg-gradient-to-b from-white via-gray-50 to-white" />
+          {/* Dark luxury background overlay */}
+          <div className="absolute inset-0 bg-gradient-to-b from-black via-zinc-950 to-black" />
           
           {/* Gold accent at top */}
           <div className="absolute top-0 left-0 right-0 h-1 bg-gradient-to-r from-transparent via-gold to-transparent" />
           
-          {/* Subtle ambient glow */}
+          {/* Subtle ambient gold glow */}
           <div 
-            className="absolute top-0 left-0 right-0 h-64 pointer-events-none opacity-20"
+            className="absolute top-0 left-0 right-0 h-64 pointer-events-none opacity-30"
             style={{
-              background: `radial-gradient(ellipse at 50% 0%, hsl(40 32% 51% / 0.4) 0%, transparent 70%)`
+              background: `radial-gradient(ellipse at 50% 0%, hsl(40 32% 51% / 0.5) 0%, transparent 70%)`
             }}
           />
 
-          {/* Corner accents - refined gold */}
-          <div className="absolute top-6 left-6 w-8 h-8 border-l border-t border-gold/30" />
-          <div className="absolute top-6 right-6 w-8 h-8 border-r border-t border-gold/30" />
-          <div className="absolute bottom-6 left-6 w-8 h-8 border-l border-b border-gold/20" />
-          <div className="absolute bottom-6 right-6 w-8 h-8 border-r border-b border-gold/20" />
+          {/* Corner accents - gold */}
+          <div className="absolute top-6 left-6 w-10 h-10 border-l-2 border-t-2 border-gold/50" />
+          <div className="absolute top-6 right-6 w-10 h-10 border-r-2 border-t-2 border-gold/50" />
+          <div className="absolute bottom-6 left-6 w-10 h-10 border-l-2 border-b-2 border-gold/40" />
+          <div className="absolute bottom-6 right-6 w-10 h-10 border-r-2 border-b-2 border-gold/40" />
 
           <div className="relative px-10 py-14">
-            {/* Full Logo - Light version for welcome popup */}
-            <div className="flex justify-center mb-10">
+            {/* Transparent Logo - Larger and Centered */}
+            <div className="flex justify-center mb-8">
               <img 
-                src={jbjFullLogoLight} 
+                src={jbjMonogramTransparent} 
                 alt="JBJ Global Real Estate" 
-                className="h-28 w-auto object-contain"
+                className="h-32 md:h-40 w-auto object-contain"
               />
             </div>
 
-            {/* Title */}
-            <div className="text-center mb-10">
-              <h2
-                className="text-3xl md:text-4xl font-semibold mb-5 tracking-tight text-black"
+            {/* Full Company Name - Large and Prominent */}
+            <div className="text-center mb-6">
+              <h2 
+                className="text-2xl md:text-3xl font-bold tracking-[0.15em] text-gold uppercase mb-4"
                 style={{ fontFamily: "Poppins, sans-serif" }}
               >
-                Welcome
+                JBJ Global Real Estate
               </h2>
-              <p className="text-gray-600 text-lg leading-relaxed max-w-xs mx-auto">
-                Your Gateway to<br />
-                <span className="text-transparent bg-clip-text bg-gradient-to-r from-gold via-[hsl(40_50%_45%)] to-gold font-semibold">
-                  Global Real Estate
+            </div>
+
+            {/* Welcome Title */}
+            <div className="text-center mb-8">
+              <h3
+                className="text-xl md:text-2xl font-semibold mb-4 tracking-tight text-white"
+                style={{ fontFamily: "Poppins, sans-serif" }}
+              >
+                Welcome to JBJ Global Real Estate
+              </h3>
+              <p className="text-zinc-400 text-base leading-relaxed max-w-sm mx-auto">
+                Your Gateway to{" "}
+                <span className="text-transparent bg-clip-text bg-gradient-to-r from-gold via-[hsl(40_50%_55%)] to-gold font-semibold">
+                  Exclusive Real Estate Opportunities
                 </span>
               </p>
             </div>
 
-            {/* Refined divider */}
-            <div className="relative h-px mb-10">
-              <div className="absolute inset-0 bg-gradient-to-r from-transparent via-gold/40 to-transparent" />
-              <div className="absolute left-1/2 -translate-x-1/2 -top-1 w-2 h-2 bg-gold/60 rotate-45" />
+            {/* Refined gold divider */}
+            <div className="relative h-px mb-8">
+              <div className="absolute inset-0 bg-gradient-to-r from-transparent via-gold/60 to-transparent" />
+              <div className="absolute left-1/2 -translate-x-1/2 -top-1.5 w-3 h-3 bg-gold/80 rotate-45" />
             </div>
 
-            {/* Action Buttons - Premium Black with Gold Text */}
+            {/* Action Buttons - White background for primary, Gold outline for secondary */}
             <div className="space-y-4">
+              {/* Primary Button - White background with gold text */}
               <Button
                 onClick={(e) => {
                   e.preventDefault();
@@ -149,14 +160,15 @@ const WelcomeModal = () => {
                   handleLogin();
                 }}
                 type="button"
-                className="w-full py-6 bg-black hover:bg-zinc-900 text-gold font-semibold text-base shadow-xl rounded-xl group relative overflow-hidden transition-all duration-300 border border-gold/20"
+                className="w-full py-6 bg-white hover:bg-zinc-100 text-black font-bold text-base shadow-xl rounded-xl group relative overflow-hidden transition-all duration-300 border border-gold/40"
               >
-                <div className="absolute inset-0 bg-gradient-to-r from-transparent via-gold/10 to-transparent -translate-x-full group-hover:translate-x-full transition-transform duration-700" />
-                <User className="w-5 h-5 mr-3 relative z-10" strokeWidth={1.5} />
+                <div className="absolute inset-0 bg-gradient-to-r from-transparent via-gold/20 to-transparent -translate-x-full group-hover:translate-x-full transition-transform duration-700" />
+                <User className="w-5 h-5 mr-3 relative z-10 text-gold" strokeWidth={2} />
                 <span className="flex-1 text-left relative z-10">Sign In / Create Account</span>
-                <ArrowRight className="w-5 h-5 group-hover:translate-x-1 transition-transform relative z-10" strokeWidth={1.5} />
+                <ArrowRight className="w-5 h-5 group-hover:translate-x-1 transition-transform relative z-10 text-gold" strokeWidth={2} />
               </Button>
 
+              {/* Secondary Button - Gold outline */}
               <Button
                 onClick={(e) => {
                   e.preventDefault();
@@ -165,15 +177,15 @@ const WelcomeModal = () => {
                 }}
                 type="button"
                 variant="outline"
-                className="w-full py-6 border-gray-300 bg-transparent text-black hover:bg-gray-100 hover:border-gold/50 group rounded-xl transition-all duration-300"
+                className="w-full py-6 border-2 border-gold bg-transparent text-gold hover:bg-gold/10 hover:text-gold group rounded-xl transition-all duration-300 font-bold"
               >
-                <span className="flex-1 text-left font-medium">Continue as Guest</span>
-                <ArrowRight className="w-4 h-4 text-gray-400 group-hover:text-gold group-hover:translate-x-1 transition-all" strokeWidth={1.5} />
+                <span className="flex-1 text-left">Continue as Guest</span>
+                <ArrowRight className="w-4 h-4 group-hover:translate-x-1 transition-all" strokeWidth={2} />
               </Button>
             </div>
 
-            {/* Footer text */}
-            <p className="text-center text-gray-400 text-xs mt-8">
+            {/* Footer text with copyright */}
+            <p className="text-center text-zinc-500 text-xs mt-8">
               © {new Date().getFullYear()} JBJ Global Real Estate. All Rights Reserved.
             </p>
           </div>
