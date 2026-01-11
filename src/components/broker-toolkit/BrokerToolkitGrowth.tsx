@@ -172,7 +172,7 @@ export function BrokerToolkitGrowth() {
         >
           <Button 
             className="bg-gradient-to-r from-gold to-gold-dark text-black hover:brightness-110 px-8 py-6 text-lg font-semibold"
-            onClick={() => navigate(user ? '/account' : '/auth?redirect=/account')}
+            onClick={() => navigate(user ? '/my-account' : '/auth?redirect=/my-account')}
           >
             <Trophy className="w-5 h-5 mr-2" />
             {user ? 'View My Progress' : 'Start Earning Points'}
