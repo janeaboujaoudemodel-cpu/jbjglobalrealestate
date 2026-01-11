@@ -3,14 +3,14 @@ import { Toaster } from "@/components/ui/toaster";
 import { Toaster as Sonner } from "@/components/ui/sonner";
 import { TooltipProvider } from "@/components/ui/tooltip";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
-import { BrowserRouter, Routes, Route, Navigate } from "react-router-dom";
+import { BrowserRouter, Routes, Route, Navigate, Outlet } from "react-router-dom";
 import { AuthProvider } from "@/contexts/AuthContext";
 import { LanguageProvider } from "@/contexts/LanguageContext";
 import { ActiveLeadProvider } from "@/contexts/ActiveLeadContext";
 import { PopupCoordinatorProvider } from "@/contexts/PopupCoordinatorContext";
 import ScrollToTop from "@/components/ScrollToTop";
 import AdminBypass from "@/components/AdminBypass";
-import MainLayout from "@/components/MainLayout";
+import MainLayoutWrapper from "@/components/MainLayoutWrapper";
 import Index from "./pages/Index";
 import Properties from "./pages/Properties";
 import ProjectDetail from "./pages/ProjectDetail";
@@ -104,92 +104,85 @@ const App = () => (
             <Routes>
               <Route path="/auth" element={<Auth />} />
               <Route path="/vapi-prompt" element={<VapiPrompt />} />
-              <Route path="*" element={
-                <AdminBypass>
-                  <MainLayout>
-                    <Routes>
-                    <Route path="/" element={<Index />} />
-                    <Route path="/properties" element={<Properties />} />
-                    <Route path="/project/:slug" element={<ProjectDetail />} />
-                    <Route path="/communities" element={<Communities />} />
-                    <Route path="/community/:slug" element={<CommunityDetail />} />
-                    <Route path="/developer/:slug" element={<DeveloperDetail />} />
-                    <Route path="/areas" element={<AreaGuides />} />
-                    <Route path="/area/:slug" element={<AreaDetail />} />
-                    <Route path="/buyer-guide" element={<BuyerGuide />} />
-                    <Route path="/seller-guide" element={<SellerGuide />} />
-                    <Route path="/seller-listing" element={<SellerListing />} />
-                    <Route path="/quiz" element={<Quiz />} />
-                    <Route path="/quiz-results" element={<QuizResults />} />
-                    <Route path="/contact" element={<Contact />} />
-                    <Route path="/about" element={<About />} />
-                    <Route path="/services" element={<Services />} />
-                    {/* Concierge route removed */}
-                    <Route path="/mortgage-calculator" element={<MortgageCalculator />} />
-                    <Route path="/market-report" element={<MarketReport />} />
-                    <Route path="/favorites" element={<Favorites />} />
-                    <Route path="/compare" element={<Compare />} />
-                    <Route path="/admin" element={<Admin />} />
-                    <Route path="/admin/leads" element={<AdminLeads />} />
-                    <Route path="/terms" element={<Terms />} />
-                    <Route path="/privacy" element={<Privacy />} />
-                    <Route path="/cookies" element={<Cookies />} />
-                    <Route path="/founder" element={<Founder />} />
-                    <Route path="/awards" element={<Awards />} />
-                    <Route path="/press-kit" element={<PressKit />} />
-                    <Route path="/company-profile" element={<CompanyProfile />} />
-                    <Route path="/news" element={<News />} />
-                    <Route path="/broker-toolkit" element={<BrokerToolkit />} />
-                    <Route path="/broker-dashboard" element={<BrokerDashboard />} />
-                    <Route path="/ai-hub" element={<AIHub />} />
-                    <Route path="/assistant-hub" element={<Navigate to="/ai-hub" replace />} />
-                    <Route path="/interior-design-ai" element={<InteriorDesignAI />} />
-                    <Route path="/property-evaluator" element={<PropertyEvaluator />} />
-                    <Route path="/document-scanner" element={<ScanSignDocuments />} />
-                    <Route path="/scan-sign" element={<Navigate to="/document-scanner" replace />} />
-                    <Route path="/property-measurement" element={<PropertyMeasurement />} />
-                    <Route path="/rental-index" element={<RentalIndex />} />
-                    <Route path="/ai-calendar" element={<AICalendar />} />
-                    <Route path="/ai-budget-planner" element={<AIFinancialAdvisor />} />
-                    <Route path="/ai-financial-advisor" element={<Navigate to="/ai-budget-planner" replace />} />
-                    <Route path="/ai-personal-shopper" element={<AIPersonalShopper />} />
-                    <Route path="/tools-guide" element={<Navigate to="/ai-hub" replace />} />
-                    <Route path="/intellectual-property" element={<IntellectualProperty />} />
-                    <Route path="/services/architecture" element={<Architecture />} />
-                    <Route path="/services/interior-design" element={<InteriorDesign />} />
-                    <Route path="/services/fit-out" element={<FitOut />} />
-                    <Route path="/services/design-build" element={<DesignBuild />} />
-                    <Route path="/services/law-firm" element={<LawFirm />} />
-                    <Route path="/referral-partner" element={<ReferralPartner />} />
-                    <Route path="/install" element={<Install />} />
-                    <Route path="/crm" element={<CRM />} />
-                    <Route path="/crm/leads/:id" element={<CRMLeadDetail />} />
-                    <Route path="/admin/crm" element={<AdminCRM />} />
-                    <Route path="/join" element={<JoinApplication />} />
-                    <Route path="/onboarding" element={<Onboarding />} />
-                    <Route path="/onboarding/module/:moduleId" element={<OnboardingModule />} />
-                    <Route path="/admin/onboarding" element={<AdminOnboarding />} />
-                    <Route path="/verify-certificate/:token" element={<VerifyCertificate />} />
-                    <Route path="/map" element={<PropertyMap />} />
-                    <Route path="/admin/developers" element={<AdminDevelopers />} />
-                    <Route path="/my-account" element={<BrokerAccount />} />
-                    <Route path="/hr-agent" element={<HRAgent />} />
-                    <Route path="/referral-onboarding" element={<ReferralOnboarding />} />
-                    <Route path="/signature-studio" element={<Navigate to="/document-scanner" replace />} />
-                    <Route path="/spreadsheet" element={<Spreadsheet />} />
-                    <Route path="/documents" element={<Documents />} />
-                    <Route path="/video-meeting" element={<VideoMeeting />} />
-                    <Route path="/executive-assistant" element={<ExecutiveAssistant />} />
-                    <Route path="/call-review" element={<CallReview />} />
-                    <Route path="/video-builder" element={<VideoBuilder />} />
-                    <Route path="/business-card-scanner" element={<BusinessCardScanner />} />
-                    <Route path="/jbj-analytics" element={<JBJAnalyticsDashboard />} />
-                    <Route path="/jbj-design-studio" element={<JBJDesignStudio />} />
-                    <Route path="*" element={<NotFound />} />
-                    </Routes>
-                  </MainLayout>
-                </AdminBypass>
-              } />
+              <Route element={<MainLayoutWrapper />}>
+                <Route path="/" element={<Index />} />
+                <Route path="/properties" element={<Properties />} />
+                <Route path="/project/:slug" element={<ProjectDetail />} />
+                <Route path="/communities" element={<Communities />} />
+                <Route path="/community/:slug" element={<CommunityDetail />} />
+                <Route path="/developer/:slug" element={<DeveloperDetail />} />
+                <Route path="/areas" element={<AreaGuides />} />
+                <Route path="/area/:slug" element={<AreaDetail />} />
+                <Route path="/buyer-guide" element={<BuyerGuide />} />
+                <Route path="/seller-guide" element={<SellerGuide />} />
+                <Route path="/seller-listing" element={<SellerListing />} />
+                <Route path="/quiz" element={<Quiz />} />
+                <Route path="/quiz-results" element={<QuizResults />} />
+                <Route path="/contact" element={<Contact />} />
+                <Route path="/about" element={<About />} />
+                <Route path="/services" element={<Services />} />
+                <Route path="/mortgage-calculator" element={<MortgageCalculator />} />
+                <Route path="/market-report" element={<MarketReport />} />
+                <Route path="/favorites" element={<Favorites />} />
+                <Route path="/compare" element={<Compare />} />
+                <Route path="/admin" element={<Admin />} />
+                <Route path="/admin/leads" element={<AdminLeads />} />
+                <Route path="/terms" element={<Terms />} />
+                <Route path="/privacy" element={<Privacy />} />
+                <Route path="/cookies" element={<Cookies />} />
+                <Route path="/founder" element={<Founder />} />
+                <Route path="/awards" element={<Awards />} />
+                <Route path="/press-kit" element={<PressKit />} />
+                <Route path="/company-profile" element={<CompanyProfile />} />
+                <Route path="/news" element={<News />} />
+                <Route path="/broker-toolkit" element={<BrokerToolkit />} />
+                <Route path="/broker-dashboard" element={<BrokerDashboard />} />
+                <Route path="/ai-hub" element={<AIHub />} />
+                <Route path="/assistant-hub" element={<Navigate to="/ai-hub" replace />} />
+                <Route path="/interior-design-ai" element={<InteriorDesignAI />} />
+                <Route path="/property-evaluator" element={<PropertyEvaluator />} />
+                <Route path="/document-scanner" element={<ScanSignDocuments />} />
+                <Route path="/scan-sign" element={<Navigate to="/document-scanner" replace />} />
+                <Route path="/property-measurement" element={<PropertyMeasurement />} />
+                <Route path="/rental-index" element={<RentalIndex />} />
+                <Route path="/ai-calendar" element={<AICalendar />} />
+                <Route path="/ai-budget-planner" element={<AIFinancialAdvisor />} />
+                <Route path="/ai-financial-advisor" element={<Navigate to="/ai-budget-planner" replace />} />
+                <Route path="/ai-personal-shopper" element={<AIPersonalShopper />} />
+                <Route path="/tools-guide" element={<Navigate to="/ai-hub" replace />} />
+                <Route path="/intellectual-property" element={<IntellectualProperty />} />
+                <Route path="/services/architecture" element={<Architecture />} />
+                <Route path="/services/interior-design" element={<InteriorDesign />} />
+                <Route path="/services/fit-out" element={<FitOut />} />
+                <Route path="/services/design-build" element={<DesignBuild />} />
+                <Route path="/services/law-firm" element={<LawFirm />} />
+                <Route path="/referral-partner" element={<ReferralPartner />} />
+                <Route path="/install" element={<Install />} />
+                <Route path="/crm" element={<CRM />} />
+                <Route path="/crm/leads/:id" element={<CRMLeadDetail />} />
+                <Route path="/admin/crm" element={<AdminCRM />} />
+                <Route path="/join" element={<JoinApplication />} />
+                <Route path="/onboarding" element={<Onboarding />} />
+                <Route path="/onboarding/module/:moduleId" element={<OnboardingModule />} />
+                <Route path="/admin/onboarding" element={<AdminOnboarding />} />
+                <Route path="/verify-certificate/:token" element={<VerifyCertificate />} />
+                <Route path="/map" element={<PropertyMap />} />
+                <Route path="/admin/developers" element={<AdminDevelopers />} />
+                <Route path="/my-account" element={<BrokerAccount />} />
+                <Route path="/hr-agent" element={<HRAgent />} />
+                <Route path="/referral-onboarding" element={<ReferralOnboarding />} />
+                <Route path="/signature-studio" element={<Navigate to="/document-scanner" replace />} />
+                <Route path="/spreadsheet" element={<Spreadsheet />} />
+                <Route path="/documents" element={<Documents />} />
+                <Route path="/video-meeting" element={<VideoMeeting />} />
+                <Route path="/executive-assistant" element={<ExecutiveAssistant />} />
+                <Route path="/call-review" element={<CallReview />} />
+                <Route path="/video-builder" element={<VideoBuilder />} />
+                <Route path="/business-card-scanner" element={<BusinessCardScanner />} />
+                <Route path="/jbj-analytics" element={<JBJAnalyticsDashboard />} />
+                <Route path="/jbj-design-studio" element={<JBJDesignStudio />} />
+                <Route path="*" element={<NotFound />} />
+              </Route>
             </Routes>
             </PopupCoordinatorProvider>
             </ActiveLeadProvider>

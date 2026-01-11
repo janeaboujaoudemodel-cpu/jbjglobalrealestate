@@ -1,0 +1,3 @@
+# Lovable Cloud / Netlify SPA fallback
+# All routes that don't match a real file serve index.html
+/*    /index.html   200

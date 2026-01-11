@@ -1,4 +1,5 @@
-import React, { createContext, useContext, useState, useCallback, useEffect, ReactNode } from 'react';
+import React, { createContext, useContext, useState, useCallback, useEffect, ReactNode, useMemo } from 'react';
+import { useSearchParams } from 'react-router-dom';
 import { useIsMobile } from '@/hooks/use-mobile';
 
 /**
@@ -72,8 +73,12 @@ interface PopupCoordinatorProviderProps {
 
 export const PopupCoordinatorProvider: React.FC<PopupCoordinatorProviderProps> = ({ children }) => {
   const isMobile = useIsMobile();
+  const [searchParams] = useSearchParams();
   const [requests, setRequests] = useState<Map<PopupId, PopupRequest>>(new Map());
   const [activePopup, setActivePopup] = useState<PopupId | null>(null);
+  
+  // QA Mode: Skip all popups when ?qa=1 is in URL (for testing/screenshots)
+  const isQAMode = useMemo(() => searchParams.get('qa') === '1', [searchParams]);
 
   // Get priority for a popup
   const getPriority = useCallback((id: PopupId): number => {
@@ -131,6 +136,9 @@ export const PopupCoordinatorProvider: React.FC<PopupCoordinatorProviderProps> =
 
   // STRICT: Only active popup can show - no exceptions
   const canShow = useCallback((id: PopupId): boolean => {
+    // QA Mode: Block all popups for testing/screenshots
+    if (isQAMode) return false;
+    
     const request = requests.get(id);
     if (!request?.wantsToShow) return false;
 
@@ -142,7 +150,7 @@ export const PopupCoordinatorProvider: React.FC<PopupCoordinatorProviderProps> =
     
     // All other popups: only if they are the active popup
     return activePopup === id;
-  }, [requests, activePopup]);
+  }, [requests, activePopup, isQAMode]);
 
   return (
     <PopupCoordinatorContext.Provider
