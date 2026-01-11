@@ -573,9 +573,12 @@ const EmployeesHub = ({ userId, brokers = [] }: EmployeesHubProps) => {
 
       {/* Main Tabs */}
       <Tabs value={activeTab} onValueChange={setActiveTab}>
-        <TabsList className="bg-zinc-900/50 border border-zinc-800 grid w-full grid-cols-4 md:grid-cols-8">
+        <TabsList className="bg-zinc-900/50 border border-zinc-800 grid w-full grid-cols-3 md:grid-cols-5 lg:grid-cols-9">
           <TabsTrigger value="all" className="data-[state=active]:bg-gold data-[state=active]:text-black text-xs">
             All
+          </TabsTrigger>
+          <TabsTrigger value="executive" className="data-[state=active]:bg-gold data-[state=active]:text-black text-xs">
+            Executive
           </TabsTrigger>
           <TabsTrigger value="hr" className="data-[state=active]:bg-gold data-[state=active]:text-black text-xs">
             HR

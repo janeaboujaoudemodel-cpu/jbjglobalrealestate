@@ -12,14 +12,8 @@ import { Progress } from "@/components/ui/progress";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Checkbox } from "@/components/ui/checkbox";
-import {
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
-} from "@/components/ui/select";
 import { getCountryList, getLanguageList } from "@/constants/localeOptions";
+import { SearchableSelect } from "@/components/ui/searchable-select";
 import { PaymentModal } from "@/components/PaymentModal";
 import { useQuizUsage } from "@/hooks/useQuizUsage";
 import { useMembership } from "@/hooks/useMembership";
@@ -686,39 +680,25 @@ const Quiz = () => {
                 </div>
                 <div>
                   <Label className="text-zinc-300 mb-2 block">Nationality *</Label>
-                  <Select
+                  <SearchableSelect
                     value={formData.nationality}
-                    onValueChange={(value) => setFormData({ ...formData, nationality: value })}
-                  >
-                    <SelectTrigger className="bg-zinc-800/50 border-zinc-700 text-white focus:border-purple-500">
-                      <SelectValue placeholder="Select your nationality" />
-                    </SelectTrigger>
-                    <SelectContent className="bg-zinc-900 border-zinc-800 max-h-60">
-                      {NATIONALITIES.map((nat) => (
-                        <SelectItem key={nat} value={nat} className="text-white hover:bg-purple-900/30">
-                          {nat}
-                        </SelectItem>
-                      ))}
-                    </SelectContent>
-                  </Select>
+                    onChange={(value) => setFormData({ ...formData, nationality: value })}
+                    options={NATIONALITIES}
+                    placeholder="Select your nationality"
+                    searchPlaceholder="Search countries..."
+                    priorityItem="United Arab Emirates"
+                  />
                 </div>
                 <div>
                   <Label className="text-zinc-300 mb-2 block">Preferred Language *</Label>
-                  <Select
+                  <SearchableSelect
                     value={formData.preferredLanguage}
-                    onValueChange={(value) => setFormData({ ...formData, preferredLanguage: value })}
-                  >
-                    <SelectTrigger className="bg-zinc-800/50 border-zinc-700 text-white focus:border-purple-500">
-                      <SelectValue placeholder="Select preferred language" />
-                    </SelectTrigger>
-                    <SelectContent className="bg-zinc-900 border-zinc-800 max-h-60">
-                      {LANGUAGES.map((lang) => (
-                        <SelectItem key={lang} value={lang} className="text-white hover:bg-purple-900/30">
-                          {lang}
-                        </SelectItem>
-                      ))}
-                    </SelectContent>
-                  </Select>
+                    onChange={(value) => setFormData({ ...formData, preferredLanguage: value })}
+                    options={LANGUAGES}
+                    placeholder="Select preferred language"
+                    searchPlaceholder="Search languages..."
+                    priorityItem="English"
+                  />
                 </div>
               </div>
 
