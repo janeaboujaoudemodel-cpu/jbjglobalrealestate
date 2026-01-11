@@ -95,6 +95,11 @@
     <!-- Security Protection Script - Runs before React -->
     <script>
       (function() {
+        // Disable these protections in preview/dev so runtime errors remain visible for debugging.
+        const host = window.location.hostname;
+        const isPreview = host.includes('lovableproject.com') || host === 'localhost';
+        if (isPreview) return;
+
         // Disable right-click
         document.addEventListener('contextmenu', function(e) { e.preventDefault(); });
         
