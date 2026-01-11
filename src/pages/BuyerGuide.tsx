@@ -23,6 +23,8 @@ import {
   HelpCircle,
   Phone
 } from "lucide-react";
+import { GuideNavigation, GUIDE_LINKS } from "@/components/guides/GuideNavigation";
+import Footer from "@/components/Footer";
 
 const BuyerGuide = () => {
   const steps = [
@@ -282,7 +284,7 @@ const BuyerGuide = () => {
             <div className="grid grid-cols-2 md:grid-cols-4 gap-4 md:gap-6">
               {[
                 { icon: Users, label: "First-Time Buyers", desc: "New to UAE real estate" },
-                { icon: Home, label: "End Users", desc: "Buying for personal use" },
+                { icon: Home, label: "Homeowners", desc: "Buying for personal use" },
                 { icon: Globe, label: "International Buyers", desc: "Purchasing from abroad" },
                 { icon: MapPin, label: "Relocators", desc: "Moving to Dubai" }
               ].map((item, index) => (
@@ -653,6 +655,15 @@ const BuyerGuide = () => {
           </div>
         </div>
       </section>
+
+      {/* Guide Navigation */}
+      <section className="py-8 bg-black border-t border-zinc-800">
+        <div className="container mx-auto px-4">
+          <GuideNavigation current="/buyer-guide" guides={GUIDE_LINKS} showStartHere={false} />
+        </div>
+      </section>
+
+      <Footer />
     </div>
   );
 };

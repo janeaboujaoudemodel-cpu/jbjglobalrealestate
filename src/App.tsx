@@ -84,6 +84,7 @@ import BusinessCardScanner from "./pages/BusinessCardScanner";
 import BuyerGuide from "./pages/BuyerGuide";
 import SellerGuide from "./pages/SellerGuide";
 import SellerListing from "./pages/SellerListing";
+import FAQ from "./pages/FAQ";
 import JBJAnalyticsDashboard from "./pages/JBJAnalyticsDashboard";
 import JBJDesignStudio from "./pages/JBJDesignStudio";
 
@@ -116,6 +117,7 @@ const App = () => (
                 <Route path="/buyer-guide" element={<BuyerGuide />} />
                 <Route path="/seller-guide" element={<SellerGuide />} />
                 <Route path="/seller-listing" element={<SellerListing />} />
+                <Route path="/faq" element={<FAQ />} />
                 <Route path="/quiz" element={<Quiz />} />
                 <Route path="/quiz-results" element={<QuizResults />} />
                 <Route path="/contact" element={<Contact />} />

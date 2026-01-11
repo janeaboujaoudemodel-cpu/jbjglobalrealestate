@@ -4,6 +4,7 @@ import { MapPin, ArrowUpRight, Compass } from "lucide-react";
 import Footer from "@/components/Footer";
 import { SEOHead } from "@/components/SEOHead";
 import { AREA_GUIDES } from "@/constants/areaGuides";
+import { GuideNavigation, GUIDE_LINKS } from "@/components/guides/GuideNavigation";
 
 const fadeInUp = {
   hidden: { opacity: 0, y: 30 },
@@ -182,7 +183,14 @@ const AreaGuides = () => {
                 Speak With Our Team
               </Link>
             </div>
-          </motion.div>
+        </motion.div>
+        </div>
+      </section>
+
+      {/* Guide Navigation */}
+      <section className="py-8 border-t border-zinc-800">
+        <div className="container mx-auto px-4">
+          <GuideNavigation current="/areas" guides={GUIDE_LINKS} showStartHere />
         </div>
       </section>
 

@@ -1,0 +1,50 @@
+import { motion } from "framer-motion";
+import { LucideIcon } from "lucide-react";
+
+interface Section {
+  id: string;
+  title: string;
+  icon: LucideIcon;
+}
+
+interface GuideSectionNavProps {
+  sections: Section[];
+  activeSection?: string;
+}
+
+export const GuideSectionNav = ({ sections, activeSection }: GuideSectionNavProps) => {
+  const scrollToSection = (id: string) => {
+    const element = document.getElementById(id);
+    if (element) {
+      element.scrollIntoView({ behavior: 'smooth' });
+    }
+  };
+
+  return (
+    <motion.div 
+      initial={{ opacity: 0, y: 20 }}
+      animate={{ opacity: 1, y: 0 }}
+      className="bg-zinc-900/80 backdrop-blur-sm border border-zinc-800 rounded-xl p-4 sticky top-20 z-10"
+    >
+      <p className="text-zinc-500 text-xs uppercase tracking-wider mb-3 font-medium">Quick Navigation</p>
+      <div className="flex flex-wrap gap-2">
+        {sections.map((section) => (
+          <button
+            key={section.id}
+            onClick={() => scrollToSection(section.id)}
+            className={`flex items-center gap-2 px-3 py-1.5 rounded-lg text-sm transition-all ${
+              activeSection === section.id
+                ? "bg-gold/20 text-gold border border-gold/30"
+                : "bg-zinc-800/50 text-zinc-400 hover:text-white hover:bg-zinc-800 border border-transparent"
+            }`}
+          >
+            <section.icon className="w-4 h-4" />
+            <span className="hidden sm:inline">{section.title}</span>
+          </button>
+        ))}
+      </div>
+    </motion.div>
+  );
+};
+
+export default GuideSectionNav;

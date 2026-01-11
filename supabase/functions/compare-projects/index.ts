@@ -415,7 +415,7 @@ Property ${i + 1}: ${name}
 Your analysis should:
 - Be objective and balanced
 - Highlight potential and lifestyle considerations
-- Note lifestyle factors for end-users
+- Note lifestyle factors for homeowners
 - Be formatted with clear sections
 - Be approximately 300-400 words
 - Use professional but accessible language`;

@@ -1025,7 +1025,7 @@ const MarketReport = () => {
           <td>Townhouse</td>
           <td>AED 1.8M+</td>
           <td>5-6%</td>
-          <td>End-users, capital appreciation</td>
+          <td>Homeowners, capital appreciation</td>
         </tr>
         <tr>
           <td>Villa</td>
