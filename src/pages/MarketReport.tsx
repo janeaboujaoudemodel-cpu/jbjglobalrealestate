@@ -4,13 +4,7 @@ import Footer from "@/components/Footer";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import {
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
-} from "@/components/ui/select";
+import { SearchableSelect } from "@/components/ui/searchable-select";
 import { CONTACT_INFO } from "@/constants/stats";
 import { getCountryList, getLanguageList } from "@/constants/localeOptions";
 import founderProfessional from "@/assets/founder-professional.jpeg";
@@ -2010,40 +2004,30 @@ const MarketReport = () => {
                   <div className="grid sm:grid-cols-2 gap-4">
                     <div>
                       <Label className="text-zinc-300 text-sm font-medium">Nationality *</Label>
-                      <Select
-                        value={form.nationality}
-                        onValueChange={(v) => setForm((p) => ({ ...p, nationality: v }))}
-                      >
-                        <SelectTrigger className="mt-2 bg-zinc-900/50 border-zinc-700 text-white h-12 rounded-xl">
-                          <SelectValue placeholder="Select nationality" />
-                        </SelectTrigger>
-                        <SelectContent className="bg-zinc-900 border-zinc-700 max-h-72">
-                          {countries.map((c) => (
-                            <SelectItem key={c} value={c} className="text-white hover:bg-zinc-800">
-                              {c}
-                            </SelectItem>
-                          ))}
-                        </SelectContent>
-                      </Select>
+                      <div className="mt-2">
+                        <SearchableSelect
+                          value={form.nationality}
+                          onChange={(v) => setForm((p) => ({ ...p, nationality: v }))}
+                          options={countries}
+                          placeholder="Select nationality"
+                          searchPlaceholder="Search countries..."
+                          priorityItem="United Arab Emirates"
+                        />
+                      </div>
                     </div>
 
                     <div>
                       <Label className="text-zinc-300 text-sm font-medium">Preferred Language *</Label>
-                      <Select
-                        value={form.language}
-                        onValueChange={(v) => setForm((p) => ({ ...p, language: v }))}
-                      >
-                        <SelectTrigger className="mt-2 bg-zinc-900/50 border-zinc-700 text-white h-12 rounded-xl">
-                          <SelectValue placeholder="Select language" />
-                        </SelectTrigger>
-                        <SelectContent className="bg-zinc-900 border-zinc-700 max-h-72">
-                          {languages.map((l) => (
-                            <SelectItem key={l} value={l} className="text-white hover:bg-zinc-800">
-                              {l}
-                            </SelectItem>
-                          ))}
-                        </SelectContent>
-                      </Select>
+                      <div className="mt-2">
+                        <SearchableSelect
+                          value={form.language}
+                          onChange={(v) => setForm((p) => ({ ...p, language: v }))}
+                          options={languages}
+                          placeholder="Select language"
+                          searchPlaceholder="Search languages..."
+                          priorityItem="English"
+                        />
+                      </div>
                     </div>
                   </div>
                 </div>

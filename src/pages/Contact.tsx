@@ -17,6 +17,7 @@ import { toast } from "sonner";
 import { supabase } from "@/integrations/supabase/client";
 import { useLeadCapture } from "@/hooks/useLeadCapture";
 import { getCountryList, getLanguageList } from "@/constants/localeOptions";
+import { SearchableSelect } from "@/components/ui/searchable-select";
 import { Link } from "react-router-dom";
 import { CalendlyEmbed } from "@/components/marketing/CalendlyEmbed";
 
@@ -371,20 +372,16 @@ const Contact = () => {
                           render={({ field }) => (
                             <FormItem>
                               <FormLabel className="text-zinc-300 text-sm">Nationality *</FormLabel>
-                              <Select onValueChange={field.onChange} value={field.value}>
-                                <FormControl>
-                                  <SelectTrigger className="h-12 bg-zinc-900 border-zinc-700 text-white">
-                                    <SelectValue placeholder="Select nationality" />
-                                  </SelectTrigger>
-                                </FormControl>
-                                <SelectContent className="bg-zinc-900 border-zinc-700 max-h-60">
-                                  {countries.map((country) => (
-                                    <SelectItem key={country} value={country} className="text-white hover:bg-zinc-800">
-                                      {country}
-                                    </SelectItem>
-                                  ))}
-                                </SelectContent>
-                              </Select>
+                              <FormControl>
+                                <SearchableSelect
+                                  value={field.value}
+                                  onChange={field.onChange}
+                                  options={countries}
+                                  placeholder="Select nationality"
+                                  searchPlaceholder="Search countries..."
+                                  priorityItem="United Arab Emirates"
+                                />
+                              </FormControl>
                               <FormMessage className="text-red-400 text-xs" />
                             </FormItem>
                           )}
@@ -396,20 +393,16 @@ const Contact = () => {
                           render={({ field }) => (
                             <FormItem>
                               <FormLabel className="text-zinc-300 text-sm">Preferred Language *</FormLabel>
-                              <Select onValueChange={field.onChange} value={field.value}>
-                                <FormControl>
-                                  <SelectTrigger className="h-12 bg-zinc-900 border-zinc-700 text-white">
-                                    <SelectValue placeholder="Select language" />
-                                  </SelectTrigger>
-                                </FormControl>
-                                <SelectContent className="bg-zinc-900 border-zinc-700 max-h-60">
-                                  {languages.map((lang) => (
-                                    <SelectItem key={lang} value={lang} className="text-white hover:bg-zinc-800">
-                                      {lang}
-                                    </SelectItem>
-                                  ))}
-                                </SelectContent>
-                              </Select>
+                              <FormControl>
+                                <SearchableSelect
+                                  value={field.value}
+                                  onChange={field.onChange}
+                                  options={languages}
+                                  placeholder="Select language"
+                                  searchPlaceholder="Search languages..."
+                                  priorityItem="English"
+                                />
+                              </FormControl>
                               <FormMessage className="text-red-400 text-xs" />
                             </FormItem>
                           )}

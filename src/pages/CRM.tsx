@@ -24,6 +24,7 @@ import ActivityTimeline from "@/components/crm/ActivityTimeline";
 import DealValueTracker from "@/components/crm/DealValueTracker";
 import AutomationRules from "@/components/crm/AutomationRules";
 import EmployeeCenter from "@/components/crm/EmployeeCenter";
+import EmployeesHub from "@/components/crm/EmployeesHub";
 
 interface CRMProfile {
   id: string;
@@ -363,7 +364,7 @@ const CRM = () => {
                   className="data-[state=active]:bg-gold data-[state=active]:text-black text-muted-foreground font-semibold"
                 >
                   <Briefcase className="h-4 w-4 mr-2" />
-                  Employee Center
+                  Employees Hub
                 </TabsTrigger>
               </TabsList>
 
@@ -401,7 +402,7 @@ const CRM = () => {
               </TabsContent>
 
               <TabsContent value="employees">
-                <EmployeeCenter userId={user?.id || ""} />
+                <EmployeesHub userId={user?.id || ""} />
               </TabsContent>
             </Tabs>
           </CardContent>
