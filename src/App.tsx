@@ -81,6 +81,8 @@ import AreaGuides from "./pages/AreaGuides";
 import AreaDetail from "./pages/AreaDetail";
 import BusinessCardScanner from "./pages/BusinessCardScanner";
 import BuyerGuide from "./pages/BuyerGuide";
+import SellerGuide from "./pages/SellerGuide";
+import SellerListing from "./pages/SellerListing";
 import JBJAnalyticsDashboard from "./pages/JBJAnalyticsDashboard";
 import JBJDesignStudio from "./pages/JBJDesignStudio";
 
@@ -114,6 +116,8 @@ const App = () => (
                     <Route path="/areas" element={<AreaGuides />} />
                     <Route path="/area/:slug" element={<AreaDetail />} />
                     <Route path="/buyer-guide" element={<BuyerGuide />} />
+                    <Route path="/seller-guide" element={<SellerGuide />} />
+                    <Route path="/seller-listing" element={<SellerListing />} />
                     <Route path="/quiz" element={<Quiz />} />
                     <Route path="/quiz-results" element={<QuizResults />} />
                     <Route path="/contact" element={<Contact />} />
