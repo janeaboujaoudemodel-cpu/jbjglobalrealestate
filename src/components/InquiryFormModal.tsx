@@ -6,8 +6,8 @@ import { Dialog, DialogContent, DialogHeader, DialogTitle } from '@/components/u
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Textarea } from '@/components/ui/textarea';
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from '@/components/ui/form';
+import { SearchableSelect } from '@/components/ui/searchable-select';
 import { Loader2, Send, CheckCircle, Crown, Sparkles, CheckCircle2, XCircle, Shield, Target, Briefcase, Users, Home, TrendingUp } from 'lucide-react';
 import { toast } from 'sonner';
 import { supabase } from '@/integrations/supabase/client';
@@ -254,10 +254,30 @@ const InquiryFormModal = ({
 
   return (
     <>
-      <Dialog open={isOpen} onOpenChange={(open) => !open && onClose()}>
+      <Dialog 
+        open={isOpen} 
+        onOpenChange={(open) => {
+          // Prevent closing during submission to avoid data loss
+          if (!open && !isSubmitting) {
+            onClose();
+          }
+        }}
+      >
         <DialogContent 
           className="bg-black border border-zinc-800 text-white max-w-lg p-0 overflow-hidden max-h-[90vh] overflow-y-auto"
           dir={isRTL ? 'rtl' : 'ltr'}
+          onInteractOutside={(e) => {
+            // Prevent closing on outside click during submission
+            if (isSubmitting) {
+              e.preventDefault();
+            }
+          }}
+          onEscapeKeyDown={(e) => {
+            // Prevent closing on escape during submission
+            if (isSubmitting) {
+              e.preventDefault();
+            }
+          }}
         >
           {/* Premium top gradient glow */}
           <div
@@ -529,20 +549,16 @@ const InquiryFormModal = ({
                       render={({ field }) => (
                         <FormItem>
                           <FormLabel className="text-zinc-400 text-sm">{t('inquiry.nationality')} *</FormLabel>
-                          <Select onValueChange={field.onChange} value={field.value}>
-                            <FormControl>
-                              <SelectTrigger className="h-12 bg-zinc-900/80 border-zinc-700/50 text-white rounded-lg">
-                                <SelectValue placeholder="Select" />
-                              </SelectTrigger>
-                            </FormControl>
-                            <SelectContent className="bg-zinc-900 border-zinc-700 max-h-60">
-                              {countries.map((country) => (
-                                <SelectItem key={country} value={country} className="text-white hover:bg-zinc-800">
-                                  {country}
-                                </SelectItem>
-                              ))}
-                            </SelectContent>
-                          </Select>
+                          <FormControl>
+                            <SearchableSelect
+                              value={field.value}
+                              onChange={field.onChange}
+                              options={countries}
+                              placeholder="Select nationality"
+                              searchPlaceholder="Search countries..."
+                              priorityItem="United Arab Emirates"
+                            />
+                          </FormControl>
                           <FormMessage className="text-red-400 text-xs" />
                         </FormItem>
                       )}
@@ -554,20 +570,16 @@ const InquiryFormModal = ({
                       render={({ field }) => (
                         <FormItem>
                           <FormLabel className="text-zinc-400 text-sm">{t('inquiry.language')} *</FormLabel>
-                          <Select onValueChange={field.onChange} value={field.value}>
-                            <FormControl>
-                              <SelectTrigger className="h-12 bg-zinc-900/80 border-zinc-700/50 text-white rounded-lg">
-                                <SelectValue placeholder="Select" />
-                              </SelectTrigger>
-                            </FormControl>
-                            <SelectContent className="bg-zinc-900 border-zinc-700 max-h-60">
-                              {languages.map((lang) => (
-                                <SelectItem key={lang} value={lang} className="text-white hover:bg-zinc-800">
-                                  {lang}
-                                </SelectItem>
-                              ))}
-                            </SelectContent>
-                          </Select>
+                          <FormControl>
+                            <SearchableSelect
+                              value={field.value}
+                              onChange={field.onChange}
+                              options={languages}
+                              placeholder="Select language"
+                              searchPlaceholder="Search languages..."
+                              priorityItem="English"
+                            />
+                          </FormControl>
                           <FormMessage className="text-red-400 text-xs" />
                         </FormItem>
                       )}

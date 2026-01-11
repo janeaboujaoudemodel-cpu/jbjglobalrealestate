@@ -11,6 +11,7 @@ import RoleSelectionModal from "@/components/RoleSelectionModal";
 import BrokerOnboardingBanner from "@/components/BrokerOnboardingBanner";
 import InquiryFormModal from "@/components/InquiryFormModal";
 import InstallAppButton from "@/components/InstallAppButton";
+import AppDownloadPopup from "@/components/AppDownloadPopup";
 import CookiesConsentBanner from "@/components/CookiesConsentBanner";
 import { SEOHead, pagesSEO } from "@/components/SEOHead";
 import { useLanguage } from "@/contexts/LanguageContext";
@@ -57,6 +58,9 @@ const Index = () => {
       
       {/* Cookies Consent Banner */}
       <CookiesConsentBanner />
+      
+      {/* App Download Popup - Premium PWA install prompt */}
+      <AppDownloadPopup showOnLoad={true} delayMs={3000} />
       
       {/* Floating Install App Button */}
       <InstallAppButton />
