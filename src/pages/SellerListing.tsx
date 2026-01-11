@@ -187,23 +187,33 @@ const SellerListing = () => {
     try {
       const values = form.getValues();
       
+      // Map seller listing fields to property-evaluation expected format
       const { data, error } = await supabase.functions.invoke('property-evaluation', {
         body: {
-          property_type: values.property_type,
-          location: values.property_location,
-          bedrooms: values.bedrooms,
-          size_sqft: values.property_size_sqft,
-          property_status: values.property_status,
-          is_furnished: values.is_furnished,
+          property: {
+            community: values.property_location || 'Dubai Marina',
+            subCommunity: values.community_building || '',
+            buildingName: values.community_building || '',
+            propertyType: values.property_type === 'penthouse' ? 'penthouse' :
+                          values.property_type === 'villa' ? 'villa' :
+                          values.property_type === 'townhouse' ? 'townhouse' :
+                          values.property_type === 'apartment' ? 'apartment' : 'apartment',
+            bedrooms: values.bedrooms || 1,
+            sizeInternal: values.property_size_sqft || 1000,
+            floor: 10, // Default floor
+            furnishedStatus: values.is_furnished ? 'furnished' : 'unfurnished',
+            renovationCost: 0,
+          }
         }
       });
 
       if (error) throw error;
 
-      if (data?.estimated_min && data?.estimated_max) {
-        form.setValue("estimated_range_min", data.estimated_min);
-        form.setValue("estimated_range_max", data.estimated_max);
-        form.setValue("estimated_note", `AI estimate based on ${values.property_type} in ${values.property_location}. This is informational only.`);
+      // Map response from property-evaluation to form fields
+      if (data?.estimatedValue?.low && data?.estimatedValue?.high) {
+        form.setValue("estimated_range_min", data.estimatedValue.low);
+        form.setValue("estimated_range_max", data.estimatedValue.high);
+        form.setValue("estimated_note", data.marketInsights || `AI estimate based on ${values.property_type} in ${values.property_location}. This is informational only.`);
         toast.success("Property evaluation complete!");
       } else {
         toast.info("Evaluation complete - please review the market insights.");
