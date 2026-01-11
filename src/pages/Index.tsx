@@ -275,22 +275,22 @@ const Index = () => {
                 <p className="text-zinc-500 text-xs">List your property</p>
               </div>
             </Link>
-            <Link to="/broker-toolkit" className="group">
+            <Link to="/ai-hub" className="group">
               <div className="bg-zinc-900/60 border border-zinc-800 rounded-xl p-5 text-center hover:border-gold/40 transition-all duration-300">
                 <div className="w-10 h-10 bg-gold/10 rounded-lg flex items-center justify-center mx-auto mb-3">
                   <Briefcase className="w-5 h-5 text-gold" />
                 </div>
                 <h4 className="text-white text-sm font-semibold mb-1">Brokers</h4>
-                <p className="text-zinc-500 text-xs">Professional tools</p>
+                <p className="text-zinc-500 text-xs">JBJ Broker Hub</p>
               </div>
             </Link>
-            <Link to="/ai-hub" className="group">
+            <Link to="/quiz" className="group">
               <div className="bg-zinc-900/60 border border-zinc-800 rounded-xl p-5 text-center hover:border-gold/40 transition-all duration-300">
                 <div className="w-10 h-10 bg-gold/10 rounded-lg flex items-center justify-center mx-auto mb-3">
                   <Users className="w-5 h-5 text-gold" />
                 </div>
                 <h4 className="text-white text-sm font-semibold mb-1">Visitors</h4>
-                <p className="text-zinc-500 text-xs">Explore free tools</p>
+                <p className="text-zinc-500 text-xs">Find your home</p>
               </div>
             </Link>
           </div>
@@ -318,7 +318,7 @@ const Index = () => {
               </div>
             </Link>
 
-            {/* AI Tools Card - FREE highlighted */}
+            {/* Broker Hub Card - FREE highlighted */}
             <Link to="/ai-hub" className="group">
               <div className="bg-zinc-900/60 border border-zinc-800 rounded-2xl p-6 md:p-8 hover:border-gold/40 transition-all duration-300 relative overflow-hidden">
                 {/* FREE Badge */}
@@ -333,15 +333,15 @@ const Index = () => {
                     <Brain className="w-6 h-6 text-gold" />
                   </div>
                   <div>
-                    <h3 className="text-white text-lg font-semibold">AI Assistant Hub</h3>
-                    <p className="text-zinc-500 text-xs">10+ Free Tools</p>
+                    <h3 className="text-white text-lg font-semibold">JBJ Broker Hub</h3>
+                    <p className="text-zinc-500 text-xs">20+ Free Tools</p>
                   </div>
                 </div>
                 <p className="text-zinc-400 text-sm mb-4">
-                  AI-powered property tools and assistants — all free.
+                  AI tools, training, HR support & coaching — all free.
                 </p>
                 <span className="text-gold text-sm group-hover:underline">
-                  Access Free Tools →
+                  Access Broker Hub →
                 </span>
               </div>
             </Link>

@@ -132,9 +132,9 @@ export const pagesSEO = {
     canonicalPath: '/contact',
   },
   aiHub: {
-    title: 'JBJ AI Assistant Hub',
-    description: 'Access powerful AI-powered real estate tools for property search, market analysis, document generation, and more.',
-    keywords: 'AI real estate tools, property finder AI, market analysis Dubai, JBJ AI assistant',
+    title: 'JBJ Broker Hub',
+    description: 'Access free AI tools, broker training, operations support, and coaching — all in one place. Your complete broker command center at JBJ Global Real Estate.',
+    keywords: 'JBJ Broker Hub, broker tools, real estate AI, property tools Dubai, broker support, JBJ Global Real Estate',
     canonicalPath: '/ai-hub',
   },
   awards: {
