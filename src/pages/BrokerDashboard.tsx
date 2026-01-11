@@ -57,8 +57,9 @@ export default function BrokerDashboard() {
 
   const fetchSubscription = async () => {
     try {
+      // Use safe view that masks payment data for security
       const { data, error } = await supabase
-        .from("broker_subscriptions")
+        .from("broker_subscriptions_safe")
         .select("*")
         .eq("user_id", user?.id)
         .order("created_at", { ascending: false })
