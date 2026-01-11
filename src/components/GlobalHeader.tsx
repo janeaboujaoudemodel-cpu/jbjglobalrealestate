@@ -8,7 +8,7 @@ import { useQuery } from "@tanstack/react-query";
 import { 
   Home, Heart, User, LogOut, Settings, Menu, 
   Phone, Building2, Newspaper, ClipboardCheck, FileText,
-  Sparkles, Search, Users
+  Sparkles, Search, Users, BookOpen, ChevronDown
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { useState } from "react";
@@ -65,20 +65,30 @@ const GlobalHeader = () => {
   const hasCRMAccess = crmProfile?.is_active && 
     (crmProfile?.crm_role === 'owner_admin' || crmProfile?.crm_role === 'broker_member');
 
-  // Updated navigation order per Task 1: Home, Area Guides, Buyer Guide, Seller Guide, Founder, About, Properties, Services, Awards, News, Join, Contact
+  // Simplified navigation with Guides dropdown
   const mainNavLinks = [
     { href: "/", label: t('nav.home'), icon: Home },
-    { href: "/areas", label: t('nav.areaGuides') || 'Area Guides', icon: Building2 },
-    { href: "/buyer-guide", label: t('nav.buyerGuide') || 'Buyer Guide', icon: FileText },
-    { href: "/seller-guide", label: t('nav.sellerGuide') || 'Seller Guide', icon: FileText },
-    { href: "/founder", label: t('nav.founder'), icon: User },
-    { href: "/about", label: t('nav.about'), icon: Building2 },
     { href: "/properties", label: t('nav.properties'), icon: Building2 },
     { href: "/services", label: t('nav.services'), icon: Building2 },
+    { href: "/ai-hub", label: "Broker Hub", icon: Sparkles },
+    { href: "/about", label: t('nav.about'), icon: Building2 },
+    { href: "/contact", label: t('nav.contact'), icon: Phone },
+  ];
+
+  // Guides submenu items
+  const guidesLinks = [
+    { href: "/buyer-guide", label: t('nav.buyerGuide') || 'Buyer Guide', icon: FileText },
+    { href: "/seller-guide", label: t('nav.sellerGuide') || 'Seller Guide', icon: FileText },
+    { href: "/areas", label: t('nav.areaGuides') || 'Area Guides', icon: Building2 },
+    { href: "/faq", label: 'FAQ', icon: ClipboardCheck },
+  ];
+
+  // More links for dropdown
+  const moreLinks = [
+    { href: "/founder", label: t('nav.founder'), icon: User },
     { href: "/awards", label: t('nav.awards'), icon: Building2 },
     { href: "/news", label: t('nav.news'), icon: Newspaper },
     { href: "/join", label: t('nav.join') || 'Join Our Team', icon: User },
-    { href: "/contact", label: t('nav.contact'), icon: Phone },
   ];
 
   // Property shortcuts for quick access
@@ -112,7 +122,7 @@ const GlobalHeader = () => {
             </span>
           </Link>
 
-          {/* CENTER: Desktop Navigation - Compact spacing */}
+          {/* CENTER: Desktop Navigation - Compact with Guides dropdown */}
           <nav className="hidden lg:flex items-center justify-center flex-1 mx-2">
             <div className="flex items-center gap-0">
               {mainNavLinks.map((link) => (
@@ -126,12 +136,52 @@ const GlobalHeader = () => {
                   }`}
                 >
                   {link.label}
-                  {/* Gold underline for active/hover */}
                   <span className={`absolute bottom-0 left-2 right-2 h-[2px] bg-gradient-to-r from-gold/80 to-gold transition-transform origin-left ${
                     isActive(link.href) ? "scale-x-100" : "scale-x-0 group-hover:scale-x-100"
                   }`} />
                 </Link>
               ))}
+
+              {/* Guides Dropdown */}
+              <DropdownMenu>
+                <DropdownMenuTrigger asChild>
+                  <button className="flex items-center gap-1 px-2 xl:px-2.5 py-2 text-[12px] xl:text-[13px] font-medium whitespace-nowrap transition-all text-zinc-300 hover:text-gold">
+                    <BookOpen className="w-3 h-3" />
+                    Guides
+                    <ChevronDown className="w-3 h-3" />
+                  </button>
+                </DropdownMenuTrigger>
+                <DropdownMenuContent align="center" className="bg-black border-zinc-800 min-w-[160px]">
+                  {guidesLinks.map((link) => (
+                    <DropdownMenuItem key={link.href} asChild>
+                      <Link to={link.href} className="flex items-center gap-2 text-zinc-300 hover:text-gold">
+                        <link.icon className="w-4 h-4" />
+                        {link.label}
+                      </Link>
+                    </DropdownMenuItem>
+                  ))}
+                </DropdownMenuContent>
+              </DropdownMenu>
+
+              {/* More Dropdown */}
+              <DropdownMenu>
+                <DropdownMenuTrigger asChild>
+                  <button className="flex items-center gap-1 px-2 xl:px-2.5 py-2 text-[12px] xl:text-[13px] font-medium whitespace-nowrap transition-all text-zinc-300 hover:text-gold">
+                    More
+                    <ChevronDown className="w-3 h-3" />
+                  </button>
+                </DropdownMenuTrigger>
+                <DropdownMenuContent align="center" className="bg-black border-zinc-800 min-w-[160px]">
+                  {moreLinks.map((link) => (
+                    <DropdownMenuItem key={link.href} asChild>
+                      <Link to={link.href} className="flex items-center gap-2 text-zinc-300 hover:text-gold">
+                        <link.icon className="w-4 h-4" />
+                        {link.label}
+                      </Link>
+                    </DropdownMenuItem>
+                  ))}
+                </DropdownMenuContent>
+              </DropdownMenu>
             </div>
           </nav>
 

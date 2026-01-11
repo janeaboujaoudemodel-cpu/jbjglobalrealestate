@@ -66,7 +66,7 @@ export const zh = {
   'founder.years': '年',
   'founder.countries': '国家',
   'founder.learnMore': '了解更多关于我们的创始人',
-  'founder.title': '创始人兼主席',
+  'founder.title': '创始人兼执行董事',
   'founder.description1': 'JBJ Global Real Estate是由创始人领导的房地产经纪公司，建立在坚定的标准、谨慎和长远愿景之上。',
   'founder.description2': 'Jane Abou Jaoude以责任和谨慎为根基的理念领导，建立旨在持久而非简单扩张的组织。',
   
