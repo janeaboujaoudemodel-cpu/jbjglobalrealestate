@@ -112,14 +112,14 @@ const GlobalHeader = () => {
             </span>
           </Link>
 
-          {/* CENTER: Desktop Navigation - Properly centered */}
-          <nav className="hidden lg:flex items-center justify-center flex-1 mx-4">
-            <div className="flex items-center gap-1">
+          {/* CENTER: Desktop Navigation - Compact spacing */}
+          <nav className="hidden lg:flex items-center justify-center flex-1 mx-2">
+            <div className="flex items-center gap-0">
               {mainNavLinks.map((link) => (
                 <Link
                   key={link.href}
                   to={link.href}
-                  className={`px-3 xl:px-4 py-2 text-[13px] font-medium whitespace-nowrap transition-all relative group ${
+                  className={`px-2 xl:px-2.5 py-2 text-[12px] xl:text-[13px] font-medium whitespace-nowrap transition-all relative group ${
                     isActive(link.href) 
                       ? "text-gold" 
                       : "text-zinc-300 hover:text-gold"
@@ -127,7 +127,7 @@ const GlobalHeader = () => {
                 >
                   {link.label}
                   {/* Gold underline for active/hover */}
-                  <span className={`absolute bottom-0 left-3 right-3 h-[2px] bg-gradient-to-r from-gold/80 to-gold transition-transform origin-left ${
+                  <span className={`absolute bottom-0 left-2 right-2 h-[2px] bg-gradient-to-r from-gold/80 to-gold transition-transform origin-left ${
                     isActive(link.href) ? "scale-x-100" : "scale-x-0 group-hover:scale-x-100"
                   }`} />
                 </Link>
@@ -136,15 +136,15 @@ const GlobalHeader = () => {
           </nav>
 
           {/* RIGHT: Actions (search, favorites, language, menu, user) - Gold themed */}
-          <div className="flex items-center gap-2 shrink-0 ml-auto">
+          <div className="flex items-center gap-1 shrink-0 ml-auto">
             {/* Search Icon - Gold */}
             <Button
               variant="ghost"
               size="sm"
-              className="text-gold hover:text-gold-light hover:bg-gold/10 shrink-0 w-10 h-10 p-0"
+              className="text-gold hover:text-gold-light hover:bg-gold/10 shrink-0 w-8 h-8 lg:w-9 lg:h-9 p-0"
               onClick={() => setSearchOpen(true)}
             >
-              <Search className="w-5 h-5" />
+              <Search className="w-4 h-4 lg:w-5 lg:h-5" />
             </Button>
 
             {/* Favorites - Gold icon */}
@@ -152,9 +152,9 @@ const GlobalHeader = () => {
               <Button
                 variant="ghost"
                 size="sm"
-                className="text-gold hover:text-gold-light hover:bg-gold/10 relative w-10 h-10 p-0"
+                className="text-gold hover:text-gold-light hover:bg-gold/10 relative w-8 h-8 lg:w-9 lg:h-9 p-0"
               >
-                <Heart className="w-5 h-5" />
+                <Heart className="w-4 h-4 lg:w-5 lg:h-5" />
                 {totalCount > 0 && (
                   <span className="absolute -top-1 -right-1 w-4 h-4 bg-gold text-black rounded-full text-[10px] font-semibold flex items-center justify-center">
                     {totalCount}
