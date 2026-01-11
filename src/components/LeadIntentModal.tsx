@@ -37,7 +37,7 @@ const INTENT_OPTIONS: IntentOption[] = [
     id: "property_investment",
     label: "Property Investment",
     icon: TrendingUp,
-    description: "Interested in ROI and investment opportunities",
+    description: "Invest in Dubai's growing real estate market",
   },
   {
     id: "mortgage_support",
@@ -55,7 +55,7 @@ const INTENT_OPTIONS: IntentOption[] = [
     id: "broker_partnership",
     label: "Broker Partnership",
     icon: Users,
-    description: "Want to join as a real estate broker",
+    description: "Join as a professional broker with JBJ",
   },
 ];
 
@@ -231,22 +231,27 @@ export default function LeadIntentModal() {
             </div>
 
             {/* Actions */}
-            <div className="p-6 border-t border-zinc-800 flex flex-col sm:flex-row gap-3">
-              <Button
-                variant="ghost"
-                onClick={handleSkip}
-                className="text-zinc-400 hover:text-white hover:bg-zinc-800"
-              >
-                Skip for now
-              </Button>
-              <Button
-                onClick={handleSubmit}
-                disabled={isSubmitting}
-                className="flex-1 bg-gradient-to-r from-gold to-gold-dark text-black font-semibold hover:brightness-110"
-              >
-                {isSubmitting ? "Saving..." : "Continue"}
-                <ArrowRight className="w-4 h-4 ml-2" />
-              </Button>
+            <div className="p-6 border-t border-zinc-800">
+              <div className="flex flex-col sm:flex-row gap-3 mb-3">
+                <Button
+                  variant="ghost"
+                  onClick={handleSkip}
+                  className="text-zinc-400 hover:text-white hover:bg-zinc-800"
+                >
+                  Skip for now
+                </Button>
+                <Button
+                  onClick={handleSubmit}
+                  disabled={isSubmitting}
+                  className="flex-1 bg-gradient-to-r from-gold to-gold-dark text-black font-semibold hover:brightness-110"
+                >
+                  {isSubmitting ? "Saving..." : "Continue"}
+                  <ArrowRight className="w-4 h-4 ml-2" />
+                </Button>
+              </div>
+              <p className="text-zinc-500 text-xs text-center">
+                You can update your preferences anytime from your profile.
+              </p>
             </div>
           </motion.div>
         </motion.div>
