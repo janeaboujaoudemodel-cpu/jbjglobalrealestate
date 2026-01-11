@@ -37,7 +37,7 @@ export function BrokerToolkitCTA() {
             <Button 
               size="lg"
               className="bg-gradient-to-r from-gold to-gold-dark text-black hover:brightness-110 mb-6 px-8"
-              onClick={() => navigate("/auth?redirect=/account")}
+              onClick={() => navigate("/auth?redirect=/my-account")}
             >
               <Star className="w-5 h-5 mr-2 fill-current" />
               Join Now — Completely Free
@@ -47,7 +47,7 @@ export function BrokerToolkitCTA() {
             <Button 
               size="lg"
               className="bg-gradient-to-r from-gold to-gold-dark text-black hover:brightness-110 mb-6 px-8"
-              onClick={() => navigate("/account")}
+              onClick={() => navigate("/my-account")}
             >
               <Sparkles className="w-5 h-5 mr-2" />
               Access Your Dashboard
