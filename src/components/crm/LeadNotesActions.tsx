@@ -52,7 +52,7 @@ const LeadNotesActions = ({
       created_by: userId,
     };
 
-    // Add note locally (notes stored in component state, can be persisted via parent)
+    const updatedNotes = [...notes, newNoteObj];
     setNotes(updatedNotes);
     setNewNote("");
     setIsAddingNote(false);
