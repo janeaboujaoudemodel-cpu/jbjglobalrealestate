@@ -206,7 +206,7 @@ const CRM = () => {
     switch (profile.crm_role) {
       case 'founder':
       case 'owner_admin':
-        return 'Founder & CEO';
+        return 'Founder & Managing Director';
       case 'admin':
         return 'Admin';
       default:

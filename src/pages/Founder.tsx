@@ -164,7 +164,7 @@ const Founder = () => {
           <SafeImage 
             src={founderProfessional} 
             fallbackSrc={founderHero}
-            alt="Jane Abou Jaoude - Founder & CEO"
+            alt="Jane Abou Jaoude - Founder & Managing Director"
             className="w-full h-full object-cover object-top"
           />
           {/* Multi-layer gradient overlay */}
@@ -194,7 +194,7 @@ const Founder = () => {
             <motion.div className="mb-6" variants={fadeInUp}>
               <span className="inline-flex items-center gap-2 bg-black/40 backdrop-blur-md border border-gold/40 text-gold text-xs uppercase tracking-[0.3em] px-5 py-2.5 rounded-full shadow-lg shadow-gold/10">
                 <Star className="w-3.5 h-3.5 fill-gold" />
-                Founder & CEO
+                Founder & Managing Director
               </span>
             </motion.div>
             
@@ -212,7 +212,7 @@ const Founder = () => {
             
             <motion.div variants={fadeInUp}>
               <p className="text-white text-xl md:text-2xl lg:text-3xl mb-1 font-semibold tracking-wide">
-                Founder & CEO • JBJ Global Real Estate
+                Founder & Managing Director • JBJ Global Real Estate
               </p>
               <p className="text-zinc-400 text-sm md:text-base mb-8">
                 Real Estate Brokerage • Dubai, UAE
@@ -267,7 +267,7 @@ const Founder = () => {
                   <SafeImage 
                     src={founderPremium} 
                     fallbackSrc={founderProfessional}
-                    alt="Jane Abou Jaoude - Founder & CEO" 
+                    alt="Jane Abou Jaoude - Founder & Managing Director" 
                     className="w-full h-full object-cover object-top"
                   />
                   {/* Subtle vignette */}
@@ -1024,7 +1024,7 @@ const Founder = () => {
                   </div>
                   <div className="text-center mt-2">
                     <p className="text-transparent bg-clip-text bg-gradient-to-r from-gold via-[#D4B96A] to-gold text-2xl md:text-3xl font-semibold tracking-wide mb-2" style={{ fontFamily: "Poppins, sans-serif" }}>Jane Abou Jaoude</p>
-                    <p className="text-zinc-300 text-sm uppercase tracking-[0.25em] font-medium">Founder & CEO</p>
+                    <p className="text-zinc-300 text-sm uppercase tracking-[0.25em] font-medium">Founder & Managing Director</p>
                     <div className="mt-3 space-y-1">
                       <p className="text-white text-base font-semibold tracking-wide">JBJ Global Real Estate</p>
                       <p className="text-zinc-400 text-xs">Real Estate Brokerage | Dubai, UAE</p>

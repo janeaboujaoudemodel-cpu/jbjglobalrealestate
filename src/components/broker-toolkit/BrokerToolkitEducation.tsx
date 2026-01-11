@@ -109,7 +109,7 @@ const FREE_BOOKS = [
   {
     title: "Objection Handling Bible",
     pages: 85,
-    description: "Complete guide to handling every objection in Dubai real estate",
+    description: "Complete guide to handling every objection in UAE real estate",
     color: "from-red-500/20 to-rose-500/20",
     borderColor: "border-red-500/30",
     textColor: "text-red-400",
@@ -227,7 +227,7 @@ export function BrokerToolkitEducation() {
             4 Free Books to Download
           </h3>
           <p className="text-zinc-400">
-            Exclusive guides written for Dubai real estate professionals.
+            Exclusive guides written for UAE real estate professionals.
           </p>
         </motion.div>
 

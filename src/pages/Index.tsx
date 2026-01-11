@@ -104,7 +104,7 @@ const Index = () => {
             variants={fadeInUp}
             className="text-zinc-300 text-base md:text-lg lg:text-xl max-w-2xl mx-auto leading-relaxed mb-4"
           >
-            Luxury. Precision. Integrity. Your trusted partner in Dubai real estate.
+            Luxury. Precision. Integrity. Your trusted partner in UAE real estate.
           </motion.p>
 
           {/* Partner microline */}
@@ -385,7 +385,7 @@ const Index = () => {
                 <div className="relative rounded-2xl overflow-hidden border border-zinc-800 shadow-2xl shadow-black/80">
                   <img 
                     src={founderProfessional} 
-                    alt="Jane Abou Jaoude - Founder & CEO"
+                    alt="Jane Abou Jaoude - Founder & Managing Director"
                     className="w-full h-full object-cover object-top"
                   />
                   {/* Gradient overlay at bottom */}
@@ -394,7 +394,7 @@ const Index = () => {
                 
                 {/* Name badge */}
                 <div className="absolute bottom-6 left-6 right-6 bg-black/60 backdrop-blur-md border border-gold/30 rounded-xl p-4">
-                  <p className="text-gold text-xs uppercase tracking-[0.2em] mb-1">Founder & CEO</p>
+                  <p className="text-gold text-xs uppercase tracking-[0.2em] mb-1">Founder & Managing Director</p>
                   <h3 className="text-white text-xl font-bold" style={{ fontFamily: "Poppins, sans-serif" }}>
                     Jane Abou Jaoude
                   </h3>
