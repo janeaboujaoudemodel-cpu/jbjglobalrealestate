@@ -102,6 +102,7 @@ export const PopupCoordinatorProvider: React.FC<PopupCoordinatorProviderProps> =
   }, []);
 
   // Determine which popup should be active based on priority
+  // CRITICAL FIX: Only ONE popup at a time on ALL devices (including mobile)
   useEffect(() => {
     const pendingRequests = Array.from(requests.values())
       .filter(r => r.wantsToShow)
@@ -109,44 +110,36 @@ export const PopupCoordinatorProvider: React.FC<PopupCoordinatorProviderProps> =
 
     if (pendingRequests.length === 0) {
       setActivePopup(null);
-    } else if (isMobile) {
-      // On mobile: only show the highest priority popup
-      // Exception: install-app-button can coexist if no modal is active
+    } else {
+      // FIXED: On BOTH mobile and desktop, only show ONE popup at a time
+      // This prevents multiple popups from appearing simultaneously
       const modals = pendingRequests.filter(r => r.id !== 'install-app-button');
       const installButton = pendingRequests.find(r => r.id === 'install-app-button');
       
       if (modals.length > 0) {
+        // Show only the highest priority modal
         setActivePopup(modals[0].id);
       } else if (installButton) {
         setActivePopup(installButton.id);
       } else {
         setActivePopup(null);
       }
-    } else {
-      // On desktop: allow multiple, but prioritize modals
-      // The highest priority popup gets to be "active"
-      setActivePopup(pendingRequests[0]?.id ?? null);
     }
   }, [requests, isMobile]);
 
   // Check if a popup can currently show
+  // FIXED: Only ONE popup can show at a time on ALL devices
   const canShow = useCallback((id: PopupId): boolean => {
     const request = requests.get(id);
     if (!request?.wantsToShow) return false;
 
-    if (isMobile) {
-      // On mobile: only the active popup can show
-      // Exception: install-app-button can show if no modals are active
-      if (id === 'install-app-button') {
-        const activeIsModal = activePopup && activePopup !== 'install-app-button';
-        return !activeIsModal;
-      }
-      return activePopup === id;
-    } else {
-      // On desktop: all requested popups can show
-      // But we still track which is "primary" for coordination purposes
-      return true;
+    // FIXED: Same logic for mobile AND desktop - only active popup can show
+    // Exception: install-app-button can show if no modals are active
+    if (id === 'install-app-button') {
+      const activeIsModal = activePopup && activePopup !== 'install-app-button';
+      return !activeIsModal;
     }
+    return activePopup === id;
   }, [requests, activePopup, isMobile]);
 
   return (
