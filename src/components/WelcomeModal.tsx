@@ -5,6 +5,7 @@ import { Dialog, DialogContent, DialogTitle } from "@/components/ui/dialog";
 import * as VisuallyHidden from "@radix-ui/react-visually-hidden";
 import { User, ArrowRight } from "lucide-react";
 import { useLanguage } from "@/contexts/LanguageContext";
+import { usePopupVisibility } from "@/contexts/PopupCoordinatorContext";
 import GuidedTour from "./GuidedTour";
 import jbjFullLogoLight from "@/assets/jbj-fulllogo-light.png";
 
@@ -12,8 +13,9 @@ const WELCOME_MODAL_KEY = "jj_welcome_shown";
 const RETURNING_USER_KEY = "jj_returning_user";
 
 const WelcomeModal = () => {
-  const [isOpen, setIsOpen] = useState(false);
+  const { requestToShow, dismiss, isVisible } = usePopupVisibility('welcome-modal');
   const [showTour, setShowTour] = useState(false);
+  const [shouldShow, setShouldShow] = useState(false);
   const navigate = useNavigate();
   const location = useLocation();
   const { isRTL } = useLanguage();
@@ -32,28 +34,32 @@ const WelcomeModal = () => {
     }
 
     const timer = setTimeout(() => {
-      setIsOpen(true);
+      setShouldShow(true);
+      requestToShow();
     }, 500);
     return () => clearTimeout(timer);
-  }, [location.pathname]);
+  }, [location.pathname, requestToShow]);
 
   const handleClose = () => {
     localStorage.setItem(WELCOME_MODAL_KEY, "true");
     localStorage.setItem(RETURNING_USER_KEY, "true");
-    setIsOpen(false);
+    dismiss();
+    setShouldShow(false);
   };
 
   const handleContinueAsGuest = () => {
     localStorage.setItem(WELCOME_MODAL_KEY, "true");
     localStorage.setItem(RETURNING_USER_KEY, "true");
-    setIsOpen(false);
+    dismiss();
+    setShouldShow(false);
     setShowTour(true);
   };
 
   const handleLogin = () => {
     localStorage.setItem(WELCOME_MODAL_KEY, "true");
     localStorage.setItem(RETURNING_USER_KEY, "true");
-    setIsOpen(false);
+    dismiss();
+    setShouldShow(false);
     navigate("/auth");
   };
 
@@ -61,10 +67,12 @@ const WelcomeModal = () => {
     setShowTour(false);
   };
 
+  if (!shouldShow) return <GuidedTour isOpen={showTour} onClose={handleTourClose} />;
+
   return (
     <>
       <Dialog
-        open={isOpen}
+        open={isVisible}
         onOpenChange={(open) => {
           if (!open) {
             handleClose();

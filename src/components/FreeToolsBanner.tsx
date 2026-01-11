@@ -4,6 +4,7 @@ import { motion, AnimatePresence } from "framer-motion";
 import { useAuth } from "@/contexts/AuthContext";
 import { Button } from "@/components/ui/button";
 import { X, Sparkles, Gift, Rocket } from "lucide-react";
+import { usePopupVisibility } from "@/contexts/PopupCoordinatorContext";
 
 const FREE_TOOLS_BANNER_KEY = "jbj_free_tools_banner_dismissed";
 const BANNER_LAST_SHOWN_KEY = "jbj_free_tools_banner_last_shown";
@@ -14,9 +15,10 @@ const RESHOW_INTERVAL = 24 * 60 * 60 * 1000; // 24 hours in milliseconds
 export default function FreeToolsBanner() {
   const { user, loading } = useAuth();
   const navigate = useNavigate();
-  const [isVisible, setIsVisible] = useState(false);
+  const { requestToShow, dismiss, isVisible } = usePopupVisibility('free-tools-banner');
   const [countdown, setCountdown] = useState(CLOSE_TIMER);
   const [canClose, setCanClose] = useState(false);
+  const [shouldShow, setShouldShow] = useState(false);
 
   useEffect(() => {
     // Check if already dismissed this session or within 24 hours
@@ -34,13 +36,14 @@ export default function FreeToolsBanner() {
     // Show popup after 3 seconds
     const showTimer = setTimeout(() => {
       if (!user && !loading) {
-        setIsVisible(true);
+        setShouldShow(true);
+        requestToShow();
         localStorage.setItem(BANNER_LAST_SHOWN_KEY, Date.now().toString());
       }
     }, SHOW_DELAY);
 
     return () => clearTimeout(showTimer);
-  }, [user, loading]);
+  }, [user, loading, requestToShow]);
 
   // Countdown timer
   useEffect(() => {
@@ -58,18 +61,20 @@ export default function FreeToolsBanner() {
 
   const handleDismiss = useCallback(() => {
     if (!canClose) return;
-    setIsVisible(false);
+    dismiss();
+    setShouldShow(false);
     sessionStorage.setItem(FREE_TOOLS_BANNER_KEY, "1");
-  }, [canClose]);
+  }, [canClose, dismiss]);
 
   const handleGetAccess = useCallback(() => {
-    setIsVisible(false);
+    dismiss();
+    setShouldShow(false);
     sessionStorage.setItem(FREE_TOOLS_BANNER_KEY, "1");
     navigate("/auth?redirect=/broker-toolkit");
-  }, [navigate]);
+  }, [navigate, dismiss]);
 
   // Don't show if user is logged in or still loading
-  if (loading || user) return null;
+  if (loading || user || !shouldShow) return null;
 
   return (
     <AnimatePresence>

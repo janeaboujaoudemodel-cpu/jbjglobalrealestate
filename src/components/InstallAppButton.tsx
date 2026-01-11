@@ -3,6 +3,7 @@ import { Download, X, Share } from "lucide-react";
 import { motion, AnimatePresence } from "framer-motion";
 import jbjMonogramDark from "@/assets/jbj-monogram-dark.png";
 import { toast } from "sonner";
+import { usePopupVisibility } from "@/contexts/PopupCoordinatorContext";
 
 interface BeforeInstallPromptEvent extends Event {
   prompt: () => Promise<void>;
@@ -33,12 +34,14 @@ const isMacDesktop = () => {
 };
 
 const InstallAppButton = () => {
+  const { requestToShow, dismiss, isVisible } = usePopupVisibility('install-app-button');
   const [deferredPrompt, setDeferredPrompt] = useState<BeforeInstallPromptEvent | null>(null);
   const [isInstalled, setIsInstalled] = useState(false);
   const [isDismissed, setIsDismissed] = useState(false);
   const [isIOS, setIsIOS] = useState(false);
   const [isMacSafari, setIsMacSafari] = useState(false);
   const [showIOSGuide, setShowIOSGuide] = useState(false);
+  const [shouldShow, setShouldShow] = useState(false);
 
   useEffect(() => {
     // Check localStorage for persisted states
@@ -80,12 +83,15 @@ const InstallAppButton = () => {
     const handleBeforeInstallPrompt = (e: Event) => {
       e.preventDefault();
       setDeferredPrompt(e as BeforeInstallPromptEvent);
+      setShouldShow(true);
+      requestToShow();
     };
 
     const handleAppInstalled = () => {
       setIsInstalled(true);
       setDeferredPrompt(null);
       localStorage.setItem(STORAGE_KEYS.INSTALLED, "true");
+      dismiss();
       
       toast.success("App installed! Find it on your Dock or taskbar", {
         duration: 5000,
@@ -96,11 +102,24 @@ const InstallAppButton = () => {
     window.addEventListener("beforeinstallprompt", handleBeforeInstallPrompt);
     window.addEventListener("appinstalled", handleAppInstalled);
 
+    // For iOS, show after a delay
+    if (iosDevice) {
+      const timer = setTimeout(() => {
+        setShouldShow(true);
+        requestToShow();
+      }, 5000);
+      return () => {
+        clearTimeout(timer);
+        window.removeEventListener("beforeinstallprompt", handleBeforeInstallPrompt);
+        window.removeEventListener("appinstalled", handleAppInstalled);
+      };
+    }
+
     return () => {
       window.removeEventListener("beforeinstallprompt", handleBeforeInstallPrompt);
       window.removeEventListener("appinstalled", handleAppInstalled);
     };
-  }, []);
+  }, [requestToShow, dismiss]);
 
   const handleInstallClick = useCallback(async () => {
     // iOS fallback - show instructions
@@ -119,6 +138,7 @@ const InstallAppButton = () => {
         if (outcome === "accepted") {
           setIsInstalled(true);
           localStorage.setItem(STORAGE_KEYS.INSTALLED, "true");
+          dismiss();
           toast.success("App installed! Find it on your Dock or taskbar", {
             duration: 5000,
             description: "The JBJ app icon has been added to your device",
@@ -134,20 +154,20 @@ const InstallAppButton = () => {
       // No native prompt available, open install page with instructions
       window.open("/install", "_blank");
     }
-  }, [deferredPrompt, isIOS]);
+  }, [deferredPrompt, isIOS, dismiss]);
 
   const handleDismiss = useCallback(() => {
     setIsDismissed(true);
     setShowIOSGuide(false);
     localStorage.setItem(STORAGE_KEYS.DISMISSED, "true");
-  }, []);
+    dismiss();
+  }, [dismiss]);
 
   // Hide if installed, dismissed, or on Mac Safari (not supported)
   if (isInstalled || isDismissed || isMacSafari) return null;
 
-  // Always show the button on mobile/desktop (for iOS show instructions, for others use native prompt or fallback)
-  const showButton = isIOS || deferredPrompt;
-  if (!showButton) return null;
+  // Don't show if nothing to show
+  if (!shouldShow) return null;
 
   return (
     <AnimatePresence>
@@ -192,47 +212,49 @@ const InstallAppButton = () => {
         </motion.div>
       )}
 
-      {/* Install Button */}
-      <motion.div
-        initial={{ scale: 0, opacity: 0 }}
-        animate={{ scale: 1, opacity: 1 }}
-        exit={{ scale: 0, opacity: 0 }}
-        className="fixed bottom-6 left-6 z-[9000] flex items-center gap-2 px-4 py-3 rounded-full bg-gradient-to-r from-gold to-gold-light shadow-2xl shadow-gold/40 group"
-        style={{ animation: "bounce-glow 2s ease-in-out infinite" }}
-      >
-        <button
-          onClick={handleInstallClick}
-          className="flex items-center gap-2 hover:scale-105 transition-transform"
-          aria-label="Install app"
-        >
-          <div className="w-8 h-8 rounded-full overflow-hidden border-2 border-black/30 shadow-inner">
-            <img
-              src={jbjMonogramDark}
-              alt="JBJ Global Real Estate"
-              className="w-full h-full object-contain"
-              loading="lazy"
-            />
-          </div>
-          <span className="text-black font-bold text-sm tracking-wide">
-            {isIOS ? "Add to Home" : "Install App"}
-          </span>
-          <Download className="w-5 h-5 text-black" />
-        </button>
-        
-        <button
-          onClick={handleDismiss}
-          className="ml-1 p-1 rounded-full hover:bg-black/10 transition-colors"
-          aria-label="Dismiss"
-        >
-          <X className="w-4 h-4 text-black/60" />
-        </button>
-        
+      {/* Install Button - only show when coordinator allows */}
+      {isVisible && !showIOSGuide && (
         <motion.div
-          className="absolute inset-0 rounded-full bg-gold/20 pointer-events-none"
-          animate={{ scale: [1, 1.2, 1], opacity: [0.5, 0, 0.5] }}
-          transition={{ duration: 2, repeat: Infinity, ease: "easeInOut" }}
-        />
-      </motion.div>
+          initial={{ scale: 0, opacity: 0 }}
+          animate={{ scale: 1, opacity: 1 }}
+          exit={{ scale: 0, opacity: 0 }}
+          className="fixed bottom-6 left-6 z-[9000] flex items-center gap-2 px-4 py-3 rounded-full bg-gradient-to-r from-gold to-gold-light shadow-2xl shadow-gold/40 group"
+          style={{ animation: "bounce-glow 2s ease-in-out infinite" }}
+        >
+          <button
+            onClick={handleInstallClick}
+            className="flex items-center gap-2 hover:scale-105 transition-transform"
+            aria-label="Install app"
+          >
+            <div className="w-8 h-8 rounded-full overflow-hidden border-2 border-black/30 shadow-inner">
+              <img
+                src={jbjMonogramDark}
+                alt="JBJ Global Real Estate"
+                className="w-full h-full object-contain"
+                loading="lazy"
+              />
+            </div>
+            <span className="text-black font-bold text-sm tracking-wide">
+              {isIOS ? "Add to Home" : "Install App"}
+            </span>
+            <Download className="w-5 h-5 text-black" />
+          </button>
+          
+          <button
+            onClick={handleDismiss}
+            className="ml-1 p-1 rounded-full hover:bg-black/10 transition-colors"
+            aria-label="Dismiss"
+          >
+            <X className="w-4 h-4 text-black/60" />
+          </button>
+          
+          <motion.div
+            className="absolute inset-0 rounded-full bg-gold/20 pointer-events-none"
+            animate={{ scale: [1, 1.2, 1], opacity: [0.5, 0, 0.5] }}
+            transition={{ duration: 2, repeat: Infinity, ease: "easeInOut" }}
+          />
+        </motion.div>
+      )}
 
       <style>{`
         @keyframes bounce-glow {

@@ -1,9 +1,10 @@
 import { useState, useEffect, useCallback } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { X, Check, Crown, Smartphone, Info, Download } from 'lucide-react';
+import { X, Check, Smartphone, Info, Download } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { toast } from 'sonner';
 import jbjMonogram from '@/assets/jbj-monogram-dark-bg.png';
+import { usePopupVisibility } from '@/contexts/PopupCoordinatorContext';
 
 interface BeforeInstallPromptEvent extends Event {
   prompt: () => Promise<void>;
@@ -16,12 +17,13 @@ interface AppDownloadPopupProps {
 }
 
 const AppDownloadPopup = ({ showOnLoad = true, delayMs = 3000 }: AppDownloadPopupProps) => {
-  const [isOpen, setIsOpen] = useState(false);
+  const { requestToShow, dismiss, isVisible, isMobile } = usePopupVisibility('app-download-popup');
   const [isInstalling, setIsInstalling] = useState(false);
   const [isInstalled, setIsInstalled] = useState(false);
   const [deferredPrompt, setDeferredPrompt] = useState<BeforeInstallPromptEvent | null>(null);
   const [isIOS, setIsIOS] = useState(false);
   const [showIOSInstructions, setShowIOSInstructions] = useState(false);
+  const [shouldShow, setShouldShow] = useState(false);
 
   useEffect(() => {
     // Check if already installed or dismissed
@@ -60,7 +62,7 @@ const AppDownloadPopup = ({ showOnLoad = true, delayMs = 3000 }: AppDownloadPopu
     const handleAppInstalled = () => {
       localStorage.setItem('jbj_pwa_installed', 'true');
       setIsInstalled(true);
-      setIsOpen(false);
+      dismiss();
       setDeferredPrompt(null);
       toast.success('JBJ Global Real Estate app installed successfully!');
     };
@@ -68,10 +70,11 @@ const AppDownloadPopup = ({ showOnLoad = true, delayMs = 3000 }: AppDownloadPopu
     window.addEventListener('beforeinstallprompt', handleBeforeInstallPrompt);
     window.addEventListener('appinstalled', handleAppInstalled);
 
-    // Show popup after delay if showOnLoad is true
+    // Request to show popup after delay if showOnLoad is true
     if (showOnLoad) {
       const timer = setTimeout(() => {
-        setIsOpen(true);
+        setShouldShow(true);
+        requestToShow();
       }, delayMs);
       return () => {
         clearTimeout(timer);
@@ -84,7 +87,7 @@ const AppDownloadPopup = ({ showOnLoad = true, delayMs = 3000 }: AppDownloadPopu
       window.removeEventListener('beforeinstallprompt', handleBeforeInstallPrompt);
       window.removeEventListener('appinstalled', handleAppInstalled);
     };
-  }, [showOnLoad, delayMs]);
+  }, [showOnLoad, delayMs, requestToShow, dismiss]);
 
   const handleInstall = useCallback(async () => {
     setIsInstalling(true);
@@ -98,7 +101,7 @@ const AppDownloadPopup = ({ showOnLoad = true, delayMs = 3000 }: AppDownloadPopu
         if (outcome === 'accepted') {
           localStorage.setItem('jbj_pwa_installed', 'true');
           setIsInstalled(true);
-          setIsOpen(false);
+          dismiss();
           toast.success('JBJ Global Real Estate app installed successfully!');
         } else {
           toast.info('You can install the app anytime from your browser menu.');
@@ -133,7 +136,7 @@ const AppDownloadPopup = ({ showOnLoad = true, delayMs = 3000 }: AppDownloadPopu
     }
     
     setIsInstalling(false);
-  }, [deferredPrompt, isIOS]);
+  }, [deferredPrompt, isIOS, dismiss]);
 
   const handleLearnMore = () => {
     window.open('/install', '_blank');
@@ -141,15 +144,15 @@ const AppDownloadPopup = ({ showOnLoad = true, delayMs = 3000 }: AppDownloadPopu
 
   const handleDismiss = () => {
     localStorage.setItem('jbj_app_popup_dismissed', Date.now().toString());
-    setIsOpen(false);
+    dismiss();
     setShowIOSInstructions(false);
   };
 
-  if (isInstalled) return null;
+  if (isInstalled || !shouldShow) return null;
 
   return (
     <AnimatePresence>
-      {isOpen && (
+      {isVisible && (
         <>
           {/* Backdrop - Click does NOT dismiss (user must choose an option) */}
           <motion.div
