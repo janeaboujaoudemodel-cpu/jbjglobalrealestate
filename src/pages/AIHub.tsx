@@ -1,9 +1,10 @@
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { motion } from "framer-motion";
 import Footer from "@/components/Footer";
 import AIAccessGate from "@/components/AIAccessGate";
 import FreeAccessBadge from "@/components/FreeAccessBadge";
 import { Button } from "@/components/ui/button";
+import { useAuth } from "@/contexts/AuthContext";
 import { 
   ArrowUpRight, 
   Sparkles, 
@@ -24,7 +25,19 @@ import {
   Users,
   Table2,
   Video,
-  CreditCard
+  CreditCard,
+  Camera,
+  Film,
+  Megaphone,
+  GraduationCap,
+  Briefcase,
+  UserCheck,
+  MessageSquare,
+  Bot,
+  Star,
+  Crown,
+  CheckCircle2,
+  Gift
 } from "lucide-react";
 
 const fadeInUp = {
@@ -163,6 +176,164 @@ const freeTools = [
   },
 ];
 
+// Professional Services & Assistants
+const professionalServices = [
+  {
+    id: "personal-assistant",
+    title: "JBJ Personal Assistant",
+    description: "Manage your daily schedule, meetings, reminders, and coordination — directly from your JBJ dashboard. AI + Human hybrid support.",
+    icon: Bot,
+    gradient: "from-gold to-amber-500",
+    borderColor: "border-gold/40",
+    textColor: "text-gold",
+    bgColor: "bg-gold/10",
+    link: "/executive-assistant",
+    features: ["Scheduling", "Reminders", "Task Management"],
+    tag: "FREE",
+    audience: ["Brokers", "Sellers", "Buyers"]
+  },
+  {
+    id: "graphic-designer",
+    title: "JBJ Graphic Designer",
+    description: "Instantly create premium marketing materials, property brochures, and branding visuals with AI-powered design tools.",
+    icon: Palette,
+    gradient: "from-gold to-amber-600",
+    borderColor: "border-gold/40",
+    textColor: "text-gold",
+    bgColor: "bg-gold/10",
+    link: "/design-studio",
+    features: ["Brochures", "Marketing Materials", "Brand Visuals"],
+    tag: "FREE",
+    audience: ["Brokers", "Sellers"]
+  },
+  {
+    id: "videographer",
+    title: "JBJ Videographer",
+    description: "Generate AI-enhanced property videos, promo reels, and cinematic walkthroughs for stunning property presentations.",
+    icon: Film,
+    gradient: "from-red-500 to-rose-600",
+    borderColor: "border-red-500/40",
+    textColor: "text-red-400",
+    bgColor: "bg-red-500/10",
+    link: "/video-builder",
+    features: ["Property Videos", "Promo Reels", "Walkthroughs"],
+    tag: "FREE",
+    audience: ["Brokers", "Sellers"]
+  },
+  {
+    id: "photographer",
+    title: "JBJ Property Photographer",
+    description: "Enhance your listings with high-quality property visuals using AI retouching, virtual staging, and professional editing.",
+    icon: Camera,
+    gradient: "from-blue-500 to-cyan-600",
+    borderColor: "border-blue-500/40",
+    textColor: "text-blue-400",
+    bgColor: "bg-blue-500/10",
+    link: "/interior-design-ai",
+    features: ["AI Retouching", "Virtual Staging", "Photo Enhancement"],
+    tag: "FREE",
+    audience: ["Brokers", "Sellers"]
+  },
+  {
+    id: "digital-marketing",
+    title: "JBJ Digital Marketing Suite",
+    description: "Automate campaigns, post on social media, and manage ads — all powered by AI for maximum reach and engagement.",
+    icon: Megaphone,
+    gradient: "from-emerald-500 to-green-600",
+    borderColor: "border-emerald-500/40",
+    textColor: "text-emerald-400",
+    bgColor: "bg-emerald-500/10",
+    link: "/jbj-hub",
+    features: ["Campaign Automation", "Social Media", "Ad Management"],
+    tag: "FREE",
+    audience: ["Brokers", "Sellers"]
+  },
+  {
+    id: "social-workshop",
+    title: "JBJ Social Media Workshop",
+    description: "Learn to scale your online brand through courses, tutorials, and AI optimization strategies for real estate professionals.",
+    icon: Star,
+    gradient: "from-pink-500 to-rose-500",
+    borderColor: "border-pink-500/40",
+    textColor: "text-pink-400",
+    bgColor: "bg-pink-500/10",
+    link: "/broker-toolkit",
+    features: ["Courses", "Tutorials", "AI Optimization"],
+    tag: "FREE",
+    audience: ["Brokers"]
+  },
+  {
+    id: "academy",
+    title: "JBJ Academy",
+    description: "Access exclusive video tutorials, masterclasses, and broker certifications to advance your real estate career.",
+    icon: GraduationCap,
+    gradient: "from-indigo-500 to-purple-600",
+    borderColor: "border-indigo-500/40",
+    textColor: "text-indigo-400",
+    bgColor: "bg-indigo-500/10",
+    link: "/broker-toolkit",
+    features: ["Video Tutorials", "Masterclasses", "Certifications"],
+    tag: "FREE",
+    audience: ["Brokers", "Visitors"]
+  },
+  {
+    id: "employment-hub",
+    title: "JBJ Employment Hub",
+    description: "Explore career opportunities and manage hiring or talent acquisition through the comprehensive HR portal.",
+    icon: Briefcase,
+    gradient: "from-teal-500 to-cyan-600",
+    borderColor: "border-teal-500/40",
+    textColor: "text-teal-400",
+    bgColor: "bg-teal-500/10",
+    link: "/crm",
+    features: ["Career Opportunities", "Hiring", "Talent Acquisition"],
+    tag: "FREE",
+    audience: ["Brokers", "Visitors"]
+  },
+  {
+    id: "hr-manager",
+    title: "JBJ HR Manager",
+    description: "Manage all employee records, track performance, and issue tasks to team members with our comprehensive HR system.",
+    icon: Users,
+    gradient: "from-violet-500 to-purple-600",
+    borderColor: "border-violet-500/40",
+    textColor: "text-violet-400",
+    bgColor: "bg-violet-500/10",
+    link: "/hr-agent",
+    features: ["Employee Records", "Performance Tracking", "Task Management"],
+    tag: "FREE",
+    audience: ["Admins", "Managers"]
+  },
+  {
+    id: "property-coach",
+    title: "JBJ Property Coach",
+    description: "Connect with certified property coaches for guidance, negotiation strategies, client handling advice, and market insights.",
+    icon: UserCheck,
+    gradient: "from-amber-500 to-orange-600",
+    borderColor: "border-amber-500/40",
+    textColor: "text-amber-400",
+    bgColor: "bg-amber-500/10",
+    link: "/broker-toolkit",
+    features: ["Guidance", "Negotiation Strategies", "Market Insights"],
+    tag: "FREE",
+    audience: ["Brokers", "Buyers"]
+  },
+  {
+    id: "ai-admin",
+    title: "JBJ AI Admin",
+    description: "24/7 virtual assistant to manage all JBJ tools, track performance, assist with property tasks, and coordinate your workflow.",
+    icon: Bot,
+    gradient: "from-cyan-500 to-blue-600",
+    borderColor: "border-cyan-500/40",
+    textColor: "text-cyan-400",
+    bgColor: "bg-cyan-500/10",
+    link: "/executive-assistant",
+    features: ["Tool Management", "Performance Tracking", "Workflow Coordination"],
+    tag: "FREE",
+    audience: ["Brokers", "Admins"]
+  },
+];
+
 // Advanced Broker Tools - Premium features for registered brokers
 const advancedTools = [
   {
@@ -281,7 +452,17 @@ const benefits = [
   }
 ];
 
+const circleFeatures = [
+  "20+ AI-powered property tools",
+  "Dedicated HR and personal assistants",
+  "Property coach, designer, photographer, and marketing tools",
+  "Free courses and certifications"
+];
+
 const AIHub = () => {
+  const { user } = useAuth();
+  const navigate = useNavigate();
+
   return (
     <AIAccessGate toolName="JBJ Hub">
     <section className="relative w-full min-h-screen bg-black">
@@ -370,6 +551,132 @@ const AIHub = () => {
           </motion.div>
         </div>
       </div>
+
+      {/* Join JBJ Circle Section */}
+      <section className="py-20 bg-[#0D0D0D] relative overflow-hidden">
+        {/* Gold top border */}
+        <div className="absolute top-0 left-0 right-0 h-1 bg-gradient-to-r from-transparent via-gold to-transparent" />
+        
+        <div className="container mx-auto px-4 relative z-10">
+          <motion.div
+            className="max-w-4xl mx-auto text-center"
+            initial={{ opacity: 0, y: 20 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+          >
+            {/* Animated title */}
+            <motion.h2 
+              className="text-3xl md:text-5xl font-bold mb-6"
+              style={{ 
+                fontFamily: "Poppins, sans-serif",
+                background: "linear-gradient(135deg, #CBA64B 0%, #E8D5A3 50%, #CBA64B 100%)",
+                WebkitBackgroundClip: "text",
+                WebkitTextFillColor: "transparent",
+                textShadow: "0 0 40px rgba(203, 166, 75, 0.3)"
+              }}
+              animate={{
+                textShadow: [
+                  "0 0 40px rgba(203, 166, 75, 0.3)",
+                  "0 0 60px rgba(203, 166, 75, 0.5)",
+                  "0 0 40px rgba(203, 166, 75, 0.3)"
+                ]
+              }}
+              transition={{ duration: 3, repeat: Infinity }}
+            >
+              Join JBJ Global Real Estate Circle
+            </motion.h2>
+
+            <p className="text-white text-lg md:text-xl mb-8 leading-relaxed">
+              Get full access to:
+            </p>
+
+            {/* Features list */}
+            <div className="grid md:grid-cols-2 gap-4 max-w-2xl mx-auto mb-10">
+              {circleFeatures.map((feature, idx) => (
+                <motion.div
+                  key={idx}
+                  className="flex items-center gap-3 p-4 rounded-xl border border-gold/20 bg-gold/5"
+                  initial={{ opacity: 0, x: -20 }}
+                  whileInView={{ opacity: 1, x: 0 }}
+                  viewport={{ once: true }}
+                  transition={{ delay: idx * 0.1 }}
+                  style={{
+                    boxShadow: "0 0 20px rgba(203, 166, 75, 0.1)"
+                  }}
+                >
+                  <CheckCircle2 className="w-5 h-5 text-emerald-400 flex-shrink-0" />
+                  <span className="text-white text-left">{feature}</span>
+                </motion.div>
+              ))}
+            </div>
+
+            {/* CTA Section */}
+            {user ? (
+              <motion.div
+                initial={{ opacity: 0, y: 10 }}
+                animate={{ opacity: 1, y: 0 }}
+                className="space-y-4"
+              >
+                <p className="text-gold text-lg font-medium">
+                  Welcome back! Your premium access is now active.
+                </p>
+                <Button 
+                  onClick={() => navigate("/jbj-hub")}
+                  className="bg-gradient-to-r from-gold via-gold-dark to-gold text-black font-bold px-10 py-6 text-base shadow-xl shadow-gold/30 hover:brightness-110 transition-all"
+                  style={{
+                    boxShadow: "0 0 30px rgba(203, 166, 75, 0.4)"
+                  }}
+                >
+                  <Sparkles className="w-5 h-5 mr-2" />
+                  Access All Tools
+                  <ArrowUpRight className="w-5 h-5 ml-2" />
+                </Button>
+              </motion.div>
+            ) : (
+              <motion.div
+                initial={{ opacity: 0, y: 10 }}
+                animate={{ opacity: 1, y: 0 }}
+                className="space-y-6"
+              >
+                {/* Primary CTA */}
+                <motion.div
+                  whileHover={{ scale: 1.02 }}
+                  whileTap={{ scale: 0.98 }}
+                >
+                  <Button 
+                    onClick={() => navigate("/auth?redirect=/ai-hub")}
+                    className="bg-gradient-to-r from-gold via-gold-dark to-gold text-black font-bold px-12 py-7 text-lg shadow-xl hover:brightness-110 transition-all"
+                    style={{
+                      boxShadow: "0 0 40px rgba(203, 166, 75, 0.5)",
+                      border: "2px solid rgba(203, 166, 75, 0.6)"
+                    }}
+                  >
+                    <Gift className="w-6 h-6 mr-2" />
+                    Join Now / Get Free Access
+                    <ArrowUpRight className="w-6 h-6 ml-2" />
+                  </Button>
+                </motion.div>
+
+                {/* Secondary CTA */}
+                <Button 
+                  variant="outline"
+                  onClick={() => navigate("/broker-toolkit")}
+                  className="border-2 border-gold/50 text-gold hover:bg-gold/10 hover:border-gold px-10 py-6 text-base"
+                >
+                  Learn More
+                </Button>
+
+                <p className="text-gold/80 text-sm font-medium mt-6">
+                  100% Free — No Credit Card Required
+                </p>
+                <p className="text-zinc-400 text-sm">
+                  Join over 5,000+ global members today.
+                </p>
+              </motion.div>
+            )}
+          </motion.div>
+        </div>
+      </section>
 
       {/* Benefits Section */}
       <section className="py-16 bg-zinc-950/50">
@@ -488,6 +795,87 @@ const AIHub = () => {
                 </div>
               </div>
             </Link>
+          </motion.div>
+        </div>
+      </section>
+
+      {/* PROFESSIONAL SERVICES & ASSISTANTS SECTION */}
+      <section className="py-20 bg-gradient-to-b from-black via-zinc-950 to-black">
+        <div className="container mx-auto px-4">
+          <motion.div
+            className="text-center mb-16"
+            initial={{ opacity: 0, y: 20 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+          >
+            <span className="inline-flex items-center gap-2 px-4 py-2 bg-gold/10 border border-gold/30 rounded-full text-gold text-xs uppercase tracking-wider mb-4">
+              <Crown className="w-3 h-3" />
+              Professional Services
+            </span>
+            <h2 
+              className="text-white text-3xl md:text-5xl font-bold mb-6"
+              style={{ fontFamily: "Poppins, sans-serif" }}
+            >
+              🎯 Assistants & Services
+            </h2>
+            <p className="text-zinc-400 max-w-2xl mx-auto">
+              Access dedicated professionals and AI assistants for every aspect of your real estate journey.
+            </p>
+          </motion.div>
+
+          <motion.div 
+            className="grid md:grid-cols-2 lg:grid-cols-3 gap-6"
+            initial="hidden"
+            whileInView="visible"
+            viewport={{ once: true }}
+            variants={staggerContainer}
+          >
+            {professionalServices.map((tool) => (
+              <motion.div key={tool.id} variants={fadeInUp}>
+                <Link to={tool.link} className="block group h-full">
+                  <div 
+                    className="ai-card p-6 h-full hover:scale-[1.02] transition-all duration-300"
+                    style={{
+                      boxShadow: `0 0 20px ${tool.textColor === 'text-gold' ? 'rgba(203, 166, 75, 0.15)' : 'rgba(0,0,0,0.3)'}`,
+                      border: `1px solid ${tool.textColor === 'text-gold' ? 'rgba(203, 166, 75, 0.3)' : 'rgba(255,255,255,0.1)'}`
+                    }}
+                  >
+                    <div className="relative z-10">
+                      {/* Header */}
+                      <div className="flex items-start gap-4 mb-4">
+                        <div className={`w-14 h-14 rounded-xl ${tool.bgColor} border ${tool.borderColor} flex items-center justify-center flex-shrink-0 group-hover:scale-110 transition-transform duration-300`}>
+                          <tool.icon className={`w-7 h-7 ${tool.textColor}`} />
+                        </div>
+                        <div className="flex-1">
+                          <h3 className="text-white text-lg font-bold mb-1" style={{ fontFamily: "Poppins, sans-serif" }}>
+                            {tool.title}
+                          </h3>
+                          <div className="inline-flex items-center gap-1 text-emerald-400 text-xs font-bold uppercase tracking-wider">
+                            <span className="w-2 h-2 bg-emerald-400 rounded-full animate-pulse" />
+                            {tool.tag}
+                          </div>
+                        </div>
+                        <ArrowUpRight className={`w-5 h-5 ${tool.textColor} opacity-0 group-hover:opacity-100 group-hover:translate-x-1 group-hover:-translate-y-1 transition-all`} />
+                      </div>
+
+                      {/* Description */}
+                      <p className="text-zinc-400 text-sm mb-4 leading-relaxed">
+                        {tool.description}
+                      </p>
+
+                      {/* Audience Tags */}
+                      <div className="flex flex-wrap gap-2">
+                        {tool.audience.map((aud, idx) => (
+                          <span key={idx} className="px-2 py-1 bg-zinc-800 border border-zinc-700 rounded-full text-zinc-400 text-xs">
+                            {aud}
+                          </span>
+                        ))}
+                      </div>
+                    </div>
+                  </div>
+                </Link>
+              </motion.div>
+            ))}
           </motion.div>
         </div>
       </section>
