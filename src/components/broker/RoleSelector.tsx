@@ -1,6 +1,7 @@
-import { useState } from "react";
+import { useState, useCallback } from "react";
 import { motion } from "framer-motion";
 import { Badge } from "@/components/ui/badge";
+import { Loader2 } from "lucide-react";
 import { 
   Building2, 
   Users, 
@@ -14,6 +15,7 @@ export type UserRole = "broker" | "sales_agent" | "investor";
 interface RoleSelectorProps {
   selectedRole: UserRole;
   onRoleChange: (role: UserRole) => void;
+  isLoading?: boolean;
 }
 
 const ROLES = [
@@ -52,7 +54,38 @@ const ROLES = [
   },
 ];
 
-export default function RoleSelector({ selectedRole, onRoleChange }: RoleSelectorProps) {
+export default function RoleSelector({ selectedRole, onRoleChange, isLoading = false }: RoleSelectorProps) {
+  const [pendingRole, setPendingRole] = useState<UserRole | null>(null);
+  const [isSelecting, setIsSelecting] = useState(false);
+
+  const handleRoleClick = useCallback(async (roleId: UserRole) => {
+    // Prevent double clicks
+    if (isSelecting || isLoading) return;
+    if (roleId === selectedRole) return;
+    
+    setIsSelecting(true);
+    setPendingRole(roleId);
+    
+    try {
+      // Call the parent handler
+      await onRoleChange(roleId);
+    } finally {
+      // Small delay to show the selection was successful
+      setTimeout(() => {
+        setIsSelecting(false);
+        setPendingRole(null);
+      }, 300);
+    }
+  }, [isSelecting, isLoading, selectedRole, onRoleChange]);
+
+  const isRoleActive = (roleId: UserRole) => {
+    return pendingRole === roleId || (selectedRole === roleId && !pendingRole);
+  };
+
+  const isRoleLoading = (roleId: UserRole) => {
+    return pendingRole === roleId && isSelecting;
+  };
+
   return (
     <div className="space-y-4">
       <div className="text-center mb-6">
@@ -64,30 +97,38 @@ export default function RoleSelector({ selectedRole, onRoleChange }: RoleSelecto
         {ROLES.map((role) => (
           <motion.button
             key={role.id}
-            whileHover={{ scale: 1.02 }}
-            whileTap={{ scale: 0.98 }}
-            onClick={() => onRoleChange(role.id)}
+            whileHover={{ scale: isSelecting ? 1 : 1.02 }}
+            whileTap={{ scale: isSelecting ? 1 : 0.98 }}
+            onClick={() => handleRoleClick(role.id)}
+            disabled={isSelecting || isLoading}
             className={`w-full text-left rounded-xl border-2 p-4 transition-all ${
-              selectedRole === role.id
+              isRoleActive(role.id)
                 ? "border-gold bg-gold/10"
                 : "border-zinc-700 hover:border-zinc-600 bg-zinc-900/50"
-            }`}
+            } ${(isSelecting || isLoading) ? "cursor-wait" : "cursor-pointer"}`}
           >
             <div className="flex items-start gap-4">
               <div className={`w-12 h-12 rounded-xl flex items-center justify-center ${
-                selectedRole === role.id
+                isRoleActive(role.id)
                   ? "bg-gold/20"
                   : "bg-zinc-800"
               }`}>
-                <role.icon className={`w-6 h-6 ${
-                  selectedRole === role.id ? "text-gold" : "text-zinc-400"
-                }`} />
+                {isRoleLoading(role.id) ? (
+                  <Loader2 className="w-6 h-6 text-gold animate-spin" />
+                ) : (
+                  <role.icon className={`w-6 h-6 ${
+                    isRoleActive(role.id) ? "text-gold" : "text-zinc-400"
+                  }`} />
+                )}
               </div>
               <div className="flex-1">
                 <div className="flex items-center gap-2 mb-1">
                   <span className="font-semibold text-white">{role.title}</span>
-                  {selectedRole === role.id && (
+                  {isRoleActive(role.id) && !isRoleLoading(role.id) && (
                     <CheckCircle2 className="w-4 h-4 text-gold" />
+                  )}
+                  {isRoleLoading(role.id) && (
+                    <span className="text-xs text-gold">Saving...</span>
                   )}
                 </div>
                 <p className="text-zinc-400 text-sm mb-3">{role.description}</p>
@@ -97,7 +138,7 @@ export default function RoleSelector({ selectedRole, onRoleChange }: RoleSelecto
                       key={i}
                       variant="outline" 
                       className={`text-xs ${
-                        selectedRole === role.id
+                        isRoleActive(role.id)
                           ? "border-gold/50 text-gold"
                           : "border-zinc-700 text-zinc-500"
                       }`}

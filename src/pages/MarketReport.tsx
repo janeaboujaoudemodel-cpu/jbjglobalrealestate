@@ -2096,7 +2096,7 @@ const MarketReport = () => {
                 />
                 <div>
                   <h3 className="text-white font-semibold">Jane Abou Jaoude</h3>
-                  <p className="text-gold text-sm">Founder & CEO</p>
+                  <p className="text-gold text-sm">Founder & Managing Director</p>
                 </div>
               </div>
               <p className="text-zinc-400 text-sm leading-relaxed">

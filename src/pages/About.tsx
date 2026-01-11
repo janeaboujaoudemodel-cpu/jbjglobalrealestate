@@ -206,7 +206,7 @@ const About = () => {
               </div>
               <div className="absolute -bottom-6 -left-6 bg-zinc-900 border border-gold/30 rounded-xl p-6 max-w-xs">
                 <p className="text-gold font-semibold mb-1">Jane Abou Jaoude</p>
-                <p className="text-zinc-400 text-sm">Founder & CEO, JBJ Global Real Estate</p>
+                <p className="text-zinc-400 text-sm">Founder & Managing Director, JBJ Global Real Estate</p>
               </div>
             </motion.div>
           </div>

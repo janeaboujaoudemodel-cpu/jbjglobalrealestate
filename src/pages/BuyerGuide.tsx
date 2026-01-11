@@ -281,7 +281,7 @@ const BuyerGuide = () => {
             
             <div className="grid grid-cols-2 md:grid-cols-4 gap-4 md:gap-6">
               {[
-                { icon: Users, label: "First-Time Buyers", desc: "New to Dubai real estate" },
+                { icon: Users, label: "First-Time Buyers", desc: "New to UAE real estate" },
                 { icon: Home, label: "End Users", desc: "Buying for personal use" },
                 { icon: Globe, label: "International Buyers", desc: "Purchasing from abroad" },
                 { icon: MapPin, label: "Relocators", desc: "Moving to Dubai" }
