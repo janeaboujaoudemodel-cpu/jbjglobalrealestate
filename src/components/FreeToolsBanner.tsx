@@ -85,35 +85,44 @@ export default function FreeToolsBanner() {
             onClick={canClose ? handleDismiss : undefined}
           />
 
-          {/* Pop-up */}
+          {/* Pop-up - positioned to avoid JBJ Support chat widget */}
           <motion.div
             initial={{ opacity: 0, scale: 0.9, y: 20 }}
             animate={{ opacity: 1, scale: 1, y: 0 }}
             exit={{ opacity: 0, scale: 0.95, y: 10 }}
             transition={{ duration: 0.8, ease: "easeOut" }}
-            className="fixed z-50 left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 w-[calc(100%-2rem)] max-w-[600px] md:max-w-[650px]"
-            style={{ marginBottom: "60px" }} // Space for JBJ Support chat
+            className="fixed z-50 left-1/2 -translate-x-1/2 w-[calc(100%-2rem)] max-w-[600px] md:max-w-[650px] sm:max-w-[500px]"
+            style={{ 
+              top: "50%",
+              transform: "translate(-50%, calc(-50% - 40px))", // Offset upward to avoid chat widget
+            }}
           >
             <div 
-              className="relative bg-gradient-to-br from-zinc-900 via-zinc-900 to-zinc-800 rounded-2xl p-6 md:p-8"
+              className="relative rounded-2xl p-6 md:p-8"
               style={{
                 boxShadow: `
-                  0 0 0 1px rgba(168, 146, 90, 0.3),
-                  0 0 20px rgba(255, 255, 255, 0.1),
-                  0 0 40px rgba(168, 146, 90, 0.15),
-                  0 25px 50px -12px rgba(0, 0, 0, 0.5)
+                  0 0 0 1px rgba(255, 255, 255, 0.15),
+                  0 0 0 2px rgba(168, 146, 90, 0.25),
+                  0 0 30px rgba(255, 255, 255, 0.12),
+                  0 0 60px rgba(168, 146, 90, 0.2),
+                  0 30px 60px -15px rgba(0, 0, 0, 0.6)
                 `,
                 background: `
-                  linear-gradient(180deg, rgba(255,255,255,0.03) 0%, transparent 40%),
-                  linear-gradient(135deg, #1a1a1a 0%, #0f0f0f 50%, #1a1a1a 100%)
+                  linear-gradient(180deg, rgba(255,255,255,0.06) 0%, rgba(255,255,255,0.02) 30%, transparent 60%),
+                  linear-gradient(135deg, #1f1f1f 0%, #0e0e0e 50%, #1a1a1a 100%)
                 `
               }}
             >
-              {/* White edge glow */}
+              {/* Premium white edge glow overlay */}
               <div 
                 className="absolute inset-0 rounded-2xl pointer-events-none"
                 style={{
-                  boxShadow: "inset 0 1px 0 rgba(255,255,255,0.1), 0 0 15px rgba(255,255,255,0.05)"
+                  boxShadow: `
+                    inset 0 1px 0 rgba(255,255,255,0.2),
+                    inset 0 0 20px rgba(255,255,255,0.03),
+                    0 0 25px rgba(255,255,255,0.08)
+                  `,
+                  border: "1px solid rgba(255,255,255,0.08)"
                 }}
               />
 
@@ -121,10 +130,10 @@ export default function FreeToolsBanner() {
               <button
                 onClick={handleDismiss}
                 disabled={!canClose}
-                className={`absolute top-4 right-4 transition-all duration-300 ${
+                className={`absolute top-4 right-4 z-10 p-1 rounded-full transition-all duration-300 ${
                   canClose 
-                    ? "text-zinc-400 hover:text-white cursor-pointer" 
-                    : "text-zinc-700 cursor-not-allowed"
+                    ? "text-zinc-400 hover:text-white hover:bg-white/10 cursor-pointer" 
+                    : "text-zinc-600 cursor-not-allowed opacity-50"
                 }`}
                 aria-label="Close"
               >
@@ -135,24 +144,24 @@ export default function FreeToolsBanner() {
               <div className="relative">
                 {/* Icon row */}
                 <div className="flex items-center gap-3 mb-4">
-                  <div className="w-12 h-12 rounded-full bg-gradient-to-br from-gold to-gold-dark flex items-center justify-center shadow-lg shadow-gold/20">
+                  <div className="w-12 h-12 rounded-full bg-gradient-to-br from-gold to-gold-dark flex items-center justify-center shadow-lg shadow-gold/30">
                     <Gift className="w-6 h-6 text-black" />
                   </div>
                   <div className="flex gap-2">
-                    <span className="px-3 py-1.5 bg-gold/15 text-gold text-xs font-semibold rounded-full flex items-center gap-1.5 border border-gold/30">
+                    <span className="px-3 py-1.5 bg-gold/20 text-gold text-xs font-bold rounded-full flex items-center gap-1.5 border border-gold/40 shadow-sm shadow-gold/20">
                       <Sparkles className="w-3.5 h-3.5" />
                       FREE
                     </span>
                   </div>
                 </div>
 
-                {/* Limited time badge with pulsing glow */}
+                {/* Limited time badge with pulsing gold glow every 2 seconds */}
                 <motion.div 
                   animate={{ 
                     boxShadow: [
-                      "0 0 10px rgba(168, 146, 90, 0.3)",
-                      "0 0 20px rgba(168, 146, 90, 0.5)",
-                      "0 0 10px rgba(168, 146, 90, 0.3)"
+                      "0 0 8px rgba(168, 146, 90, 0.2)",
+                      "0 0 25px rgba(168, 146, 90, 0.6)",
+                      "0 0 8px rgba(168, 146, 90, 0.2)"
                     ]
                   }}
                   transition={{ 
@@ -160,37 +169,42 @@ export default function FreeToolsBanner() {
                     repeat: Infinity,
                     ease: "easeInOut"
                   }}
-                  className="inline-flex items-center gap-1.5 px-3 py-1.5 bg-emerald-500/20 border border-emerald-500/40 rounded-full mb-4"
+                  className="inline-flex items-center gap-1.5 px-3 py-1.5 bg-emerald-500/20 border border-emerald-500/50 rounded-full mb-4"
                 >
-                  <span className="text-emerald-400 text-xs font-bold tracking-wide">LIMITED TIME OFFER</span>
+                  <span className="text-emerald-400 text-xs font-bold tracking-wide uppercase">Limited Time Offer</span>
                 </motion.div>
 
-                {/* Headline - increased brightness */}
+                {/* Headline - brighter with enhanced glow */}
                 <h3 
-                  className="text-white font-bold text-xl md:text-2xl mb-3 leading-tight"
+                  className="font-bold text-xl md:text-2xl mb-3 leading-tight"
                   style={{ 
                     fontFamily: "Poppins, sans-serif",
-                    textShadow: "0 0 20px rgba(255,255,255,0.1)"
+                    color: "#ffffff",
+                    textShadow: "0 0 30px rgba(255,255,255,0.2), 0 0 60px rgba(255,255,255,0.1)"
                   }}
                 >
                   Unlock $10,000+ Worth of AI Tools — FREE
                 </h3>
 
                 {/* Description */}
-                <p className="text-zinc-300 text-sm md:text-base mb-6 leading-relaxed">
+                <p className="text-zinc-200 text-sm md:text-base mb-6 leading-relaxed">
                   Software that costs thousands yearly — now{" "}
                   <span className="text-emerald-400 font-semibold">completely free</span>{" "}
                   for JBJ Global Real Estate members. Access AI assistants, tools, and more.
                 </p>
 
-                {/* CTA Button with hover glow */}
+                {/* CTA Button with expanding gold glow on hover */}
                 <motion.div
-                  whileHover={{ scale: 1.02 }}
+                  whileHover={{ 
+                    scale: 1.02,
+                    boxShadow: "0 0 40px rgba(168, 146, 90, 0.5)"
+                  }}
                   whileTap={{ scale: 0.98 }}
+                  className="rounded-lg"
                 >
                   <Button
                     onClick={handleGetAccess}
-                    className="w-full bg-gradient-to-r from-gold to-gold-dark text-black font-bold text-base py-6 hover:brightness-110 transition-all shadow-lg shadow-gold/30 hover:shadow-xl hover:shadow-gold/40"
+                    className="w-full bg-gradient-to-r from-gold via-gold-dark to-gold text-black font-bold text-base py-6 hover:brightness-110 transition-all duration-300 shadow-lg shadow-gold/40 hover:shadow-xl hover:shadow-gold/50"
                     size="lg"
                   >
                     <Rocket className="w-5 h-5 mr-2" />
@@ -199,20 +213,20 @@ export default function FreeToolsBanner() {
                 </motion.div>
 
                 {/* Footer note */}
-                <p className="text-gold/80 text-xs text-center mt-4 font-medium">
+                <p className="text-gold text-xs text-center mt-4 font-medium opacity-90">
                   No credit card required · Join 5,000+ members
                 </p>
 
-                {/* Countdown timer */}
-                <div className="text-center mt-4">
+                {/* Countdown timer - positioned bottom-right */}
+                <div className="flex justify-end mt-4">
                   {!canClose ? (
                     <p className="text-zinc-500 text-xs">
                       You can close this window in{" "}
-                      <span className="text-gold font-semibold">{countdown}</span>{" "}
+                      <span className="text-gold font-bold">{countdown}</span>{" "}
                       {countdown === 1 ? "second" : "seconds"}…
                     </p>
                   ) : (
-                    <p className="text-zinc-400 text-xs">
+                    <p className="text-zinc-400 text-xs font-medium">
                       You may now close this window.
                     </p>
                   )}
