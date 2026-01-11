@@ -39,10 +39,12 @@ const BusinessCardCamera = ({
 
   // Auto-start camera on component mount with retry logic
   useEffect(() => {
-    // Small delay to ensure component is fully mounted
+    // Immediate camera start for better UX
     const initTimer = setTimeout(() => {
-      startCamera();
-    }, 500);
+      if (!isCameraReady && !stream) {
+        startCamera();
+      }
+    }, 100);
     
     return () => {
       clearTimeout(initTimer);
@@ -56,6 +58,11 @@ const BusinessCardCamera = ({
     setStatusMessage('Requesting camera access...');
     
     try {
+      // Stop any existing stream first
+      if (stream) {
+        stream.getTracks().forEach(track => track.stop());
+      }
+
       // First check if camera is available
       const devices = await navigator.mediaDevices.enumerateDevices();
       const videoDevices = devices.filter(device => device.kind === 'videoinput');
@@ -64,40 +71,74 @@ const BusinessCardCamera = ({
         throw new Error('No camera found on this device');
       }
 
-      // Request camera with optimal settings for card scanning
-      const constraints: MediaStreamConstraints = {
-        video: {
-          facingMode,
-          width: { ideal: 1920, min: 1280 },
-          height: { ideal: 1080, min: 720 },
-          focusMode: { ideal: 'continuous' },
-          // @ts-ignore - Advanced constraints for better quality
-          advanced: [{ focusMode: 'continuous' }]
+      // Try multiple constraint sets for maximum compatibility
+      const constraintOptions: MediaStreamConstraints[] = [
+        {
+          video: {
+            facingMode: { exact: facingMode },
+            width: { ideal: 1920, min: 640 },
+            height: { ideal: 1080, min: 480 },
+          }
+        },
+        {
+          video: {
+            facingMode,
+            width: { ideal: 1280 },
+            height: { ideal: 720 },
+          }
+        },
+        {
+          video: { facingMode }
+        },
+        {
+          video: true
         }
-      };
+      ];
 
-      const mediaStream = await navigator.mediaDevices.getUserMedia(constraints);
+      let mediaStream: MediaStream | null = null;
+      
+      for (const constraints of constraintOptions) {
+        try {
+          mediaStream = await navigator.mediaDevices.getUserMedia(constraints);
+          break;
+        } catch (e) {
+          console.log('Constraint failed, trying next:', constraints, e);
+          continue;
+        }
+      }
+
+      if (!mediaStream) {
+        throw new Error('Could not access camera with any settings');
+      }
       
       if (videoRef.current) {
+        // Clear any existing source
+        videoRef.current.srcObject = null;
         videoRef.current.srcObject = mediaStream;
         
-        // Wait for video to be ready
+        // Wait for video to be ready with timeout
         await new Promise<void>((resolve, reject) => {
+          const timeout = setTimeout(() => reject(new Error('Video load timeout')), 10000);
+          
           if (videoRef.current) {
             videoRef.current.onloadedmetadata = () => {
+              clearTimeout(timeout);
               videoRef.current?.play()
                 .then(() => resolve())
                 .catch(reject);
             };
-            videoRef.current.onerror = () => reject(new Error('Video failed to load'));
+            videoRef.current.onerror = () => {
+              clearTimeout(timeout);
+              reject(new Error('Video failed to load'));
+            };
           }
         });
         
         setStream(mediaStream);
         setIsCameraReady(true);
         setScanStatus('idle');
-        setStatusMessage('Camera ready. Position business cards in the frame and capture.');
-        toast.success("Camera active! Position business card(s) in the frame.");
+        setStatusMessage('Camera ready. Position business cards in frame and tap Capture.');
+        toast.success("Camera active! Position business cards and capture.", { duration: 3000 });
         
         // Start auto-detection if enabled
         if (autoDetectEnabled) {
@@ -111,27 +152,13 @@ const BusinessCardCamera = ({
       let errorMessage = 'Unable to access camera';
       if (error instanceof Error) {
         if (error.name === 'NotAllowedError' || error.name === 'PermissionDeniedError') {
-          errorMessage = 'Camera access denied. Please allow camera access in your browser settings.';
+          errorMessage = 'Camera access denied. Please allow camera access in browser settings and refresh.';
         } else if (error.name === 'NotFoundError' || error.name === 'DevicesNotFoundError') {
-          errorMessage = 'No camera found on this device.';
+          errorMessage = 'No camera found. Please use the Upload tab to scan business cards.';
         } else if (error.name === 'NotReadableError' || error.name === 'TrackStartError') {
-          errorMessage = 'Camera is in use by another application.';
+          errorMessage = 'Camera is in use by another app. Close other apps and try again.';
         } else if (error.name === 'OverconstrainedError') {
-          // Try again with simpler constraints
-          try {
-            const simpleStream = await navigator.mediaDevices.getUserMedia({ video: true });
-            if (videoRef.current) {
-              videoRef.current.srcObject = simpleStream;
-              await videoRef.current.play();
-              setStream(simpleStream);
-              setIsCameraReady(true);
-              setScanStatus('idle');
-              setStatusMessage('Camera ready (basic mode).');
-              return;
-            }
-          } catch {
-            errorMessage = 'Camera constraints not supported.';
-          }
+          errorMessage = 'Camera settings not supported. Trying basic mode...';
         } else {
           errorMessage = error.message || 'Unable to access camera';
         }
@@ -139,9 +166,9 @@ const BusinessCardCamera = ({
       
       setCameraError(errorMessage);
       setStatusMessage(errorMessage);
-      toast.error(errorMessage);
+      toast.error(errorMessage, { duration: 5000 });
     }
-  }, [facingMode, autoDetectEnabled]);
+  }, [facingMode, autoDetectEnabled, stream]);
 
   const stopCamera = useCallback(() => {
     if (detectionIntervalRef.current) {
