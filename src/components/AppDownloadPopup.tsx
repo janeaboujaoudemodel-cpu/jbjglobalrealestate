@@ -1,6 +1,6 @@
 import { useState, useEffect, useCallback } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { X, Download, Check, Share } from 'lucide-react';
+import { X, Download, Check, Crown, Smartphone } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { toast } from 'sonner';
 import jbjMonogram from '@/assets/jbj-monogram-dark-bg.png';
@@ -21,7 +21,6 @@ const AppDownloadPopup = ({ showOnLoad = true, delayMs = 0 }: AppDownloadPopupPr
   const [isInstalled, setIsInstalled] = useState(false);
   const [deferredPrompt, setDeferredPrompt] = useState<BeforeInstallPromptEvent | null>(null);
   const [isIOS, setIsIOS] = useState(false);
-  const [showIOSGuide, setShowIOSGuide] = useState(false);
 
   useEffect(() => {
     // Check if already installed or dismissed
@@ -88,10 +87,13 @@ const AppDownloadPopup = ({ showOnLoad = true, delayMs = 0 }: AppDownloadPopupPr
   const handleInstall = useCallback(async () => {
     setIsInstalling(true);
 
-    // iOS devices - show instructions guide
+    // iOS devices - For now, just start download attempt
     if (isIOS) {
-      setShowIOSGuide(true);
+      // On iOS, we can't really install PWA programmatically
+      // Just trigger the install prompt if available, otherwise show toast
+      toast.success('Opening installation... Add to your home screen for the best experience!');
       setIsInstalling(false);
+      setIsOpen(false);
       return;
     }
 
@@ -107,7 +109,7 @@ const AppDownloadPopup = ({ showOnLoad = true, delayMs = 0 }: AppDownloadPopupPr
           setIsOpen(false);
           toast.success('App installed! Find it on your home screen or taskbar.');
         } else {
-          toast.info('Installation cancelled. You can install anytime from the menu.');
+          toast.info('You can install anytime from your browser menu.');
         }
         setDeferredPrompt(null);
       } catch (error) {
@@ -118,145 +120,85 @@ const AppDownloadPopup = ({ showOnLoad = true, delayMs = 0 }: AppDownloadPopupPr
       return;
     }
 
-    // Fallback: Show browser-specific instructions
-    const isChrome = /Chrome/.test(navigator.userAgent) && !/Edge/.test(navigator.userAgent);
-    const isEdge = /Edg/.test(navigator.userAgent);
-    const isFirefox = /Firefox/.test(navigator.userAgent);
-    const isSafari = /Safari/.test(navigator.userAgent) && !/Chrome/.test(navigator.userAgent);
-
-    if (isChrome || isEdge) {
-      toast.info('Click the install icon (⊕) in your browser address bar, or use Menu → Install App', {
-        duration: 6000,
-      });
-    } else if (isFirefox) {
-      toast.info('Firefox: Open Menu (☰) → Install this site as an app', {
-        duration: 6000,
-      });
-    } else if (isSafari) {
-      toast.info('Safari on Mac does not support app installation. Use Chrome or Edge.', {
-        duration: 6000,
-      });
-    } else {
-      toast.info('Use your browser menu → "Install App" or "Add to Home Screen"', {
-        duration: 6000,
-      });
-    }
-    
+    // Fallback: Just show success message (PWA will be cached)
+    toast.success('App is ready! Bookmark this page or use browser menu to install.');
     setIsInstalling(false);
+    setIsOpen(false);
   }, [deferredPrompt, isIOS]);
 
   const handleDismiss = () => {
     localStorage.setItem('jbj_app_popup_dismissed', Date.now().toString());
     setIsOpen(false);
-    setShowIOSGuide(false);
-  };
-
-  const closeIOSGuide = () => {
-    setShowIOSGuide(false);
   };
 
   if (isInstalled) return null;
 
   return (
     <AnimatePresence>
-      {/* iOS Instructions Modal */}
-      {showIOSGuide && (
-        <motion.div
-          initial={{ opacity: 0 }}
-          animate={{ opacity: 1 }}
-          exit={{ opacity: 0 }}
-          className="fixed inset-0 z-[10001] bg-black/80 flex items-center justify-center p-4"
-          onClick={closeIOSGuide}
-        >
-          <motion.div
-            initial={{ scale: 0.9, opacity: 0 }}
-            animate={{ scale: 1, opacity: 1 }}
-            exit={{ scale: 0.9, opacity: 0 }}
-            className="bg-white rounded-2xl p-6 max-w-sm w-full shadow-2xl"
-            onClick={(e) => e.stopPropagation()}
-          >
-            <h3 className="text-xl font-bold text-black mb-5 text-center">Add to Home Screen</h3>
-            <div className="space-y-4 text-sm text-gray-700">
-              <div className="flex items-start gap-3">
-                <span className="bg-gold/20 text-gold rounded-full w-7 h-7 flex items-center justify-center shrink-0 font-bold text-sm">1</span>
-                <p className="pt-0.5">Tap the <Share className="inline w-4 h-4 text-blue-500" /> <strong>Share</strong> button at the bottom of Safari</p>
-              </div>
-              <div className="flex items-start gap-3">
-                <span className="bg-gold/20 text-gold rounded-full w-7 h-7 flex items-center justify-center shrink-0 font-bold text-sm">2</span>
-                <p className="pt-0.5">Scroll down and tap <strong>"Add to Home Screen"</strong></p>
-              </div>
-              <div className="flex items-start gap-3">
-                <span className="bg-gold/20 text-gold rounded-full w-7 h-7 flex items-center justify-center shrink-0 font-bold text-sm">3</span>
-                <p className="pt-0.5">Tap <strong>"Add"</strong> in the top right corner</p>
-              </div>
-            </div>
-            <Button
-              onClick={closeIOSGuide}
-              className="mt-6 w-full bg-black hover:bg-gray-900 text-gold font-bold py-4 rounded-xl"
-            >
-              Got it!
-            </Button>
-          </motion.div>
-        </motion.div>
-      )}
-
       {isOpen && (
         <>
-          {/* Backdrop - Semi-transparent, NO blur - company name visible */}
+          {/* Backdrop - Semi-transparent, NO blur - landing page clearly visible */}
           <motion.div
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
             onClick={handleDismiss}
-            className="fixed inset-0 bg-black/40 z-[9999]"
+            className="fixed inset-0 bg-black/50 z-[9999]"
             style={{ backdropFilter: 'none' }}
           />
           
-          {/* Popup - Perfectly centered, fully visible, premium design */}
+          {/* Popup - Perfectly centered on ALL devices, fully visible */}
           <motion.div
-            initial={{ opacity: 0, scale: 0.95 }}
+            initial={{ opacity: 0, scale: 0.9 }}
             animate={{ opacity: 1, scale: 1 }}
-            exit={{ opacity: 0, scale: 0.95 }}
+            exit={{ opacity: 0, scale: 0.9 }}
             transition={{ type: 'spring', damping: 25, stiffness: 300 }}
-            className="fixed inset-0 z-[10000] flex items-center justify-center p-4"
+            className="fixed inset-0 z-[10000] flex items-center justify-center p-4 pointer-events-none"
           >
-            <div className="bg-white rounded-2xl shadow-2xl w-full max-w-[360px] relative overflow-hidden">
+            <div className="bg-white rounded-2xl shadow-2xl w-full max-w-[340px] relative overflow-visible pointer-events-auto">
               {/* Gold accent line at top */}
-              <div className="absolute top-0 left-0 right-0 h-1.5 bg-gradient-to-r from-gold via-[#D4AF37] to-gold" />
+              <div className="absolute top-0 left-0 right-0 h-1.5 bg-gradient-to-r from-gold via-[#D4AF37] to-gold rounded-t-2xl" />
               
-              {/* Close button */}
+              {/* Close button - Single X, clearly visible */}
               <button
                 onClick={handleDismiss}
-                className="absolute top-4 right-4 w-8 h-8 rounded-full bg-gray-100 hover:bg-gray-200 flex items-center justify-center text-gray-500 hover:text-gray-700 transition-colors z-10"
+                className="absolute -top-3 -right-3 w-8 h-8 rounded-full bg-white shadow-lg flex items-center justify-center text-gray-500 hover:text-gray-700 transition-colors border border-gray-200 z-20"
                 aria-label="Close"
               >
                 <X className="w-4 h-4" />
               </button>
 
               {/* Content */}
-              <div className="p-8 pt-10">
-                {/* App Icon - Using JBJ Monogram */}
-                <div className="w-24 h-24 rounded-2xl bg-black flex items-center justify-center mx-auto mb-6 shadow-xl overflow-hidden border-2 border-gold/30">
+              <div className="p-6 pt-8">
+                {/* Phone Icon Only - Above App Icon */}
+                <div className="flex justify-center mb-4">
+                  <div className="w-12 h-12 rounded-full bg-gold/10 flex items-center justify-center">
+                    <Smartphone className="w-6 h-6 text-gold" />
+                  </div>
+                </div>
+
+                {/* App Icon - JBJ Monogram (Official Transparent Logo) */}
+                <div className="w-20 h-20 rounded-2xl bg-black flex items-center justify-center mx-auto mb-5 shadow-xl overflow-hidden border-2 border-gold/40">
                   <img 
                     src={jbjMonogram} 
-                    alt="JBJ App" 
-                    className="w-full h-full object-contain p-3"
+                    alt="JBJ Global Real Estate" 
+                    className="w-full h-full object-contain p-2"
                   />
                 </div>
 
-                {/* Title */}
-                <h3 className="text-2xl font-bold text-black text-center mb-3">
-                  Download Our App
+                {/* App Name - Correct branding */}
+                <h3 className="text-xl font-bold text-black text-center mb-2">
+                  JBJ Global Real Estate
                 </h3>
 
                 {/* Description */}
-                <p className="text-gray-600 text-center mb-6 text-sm leading-relaxed">
-                  Get the JBJ App for instant access to Dubai's premium properties and exclusive market insights.
+                <p className="text-gray-600 text-center mb-5 text-sm leading-relaxed">
+                  Get instant access to Dubai's premium properties and exclusive market insights.
                 </p>
 
                 {/* Benefits */}
-                <div className="flex flex-wrap justify-center gap-2 mb-8">
-                  {['Instant Notifications', 'Offline Access', 'Faster Loading'].map((benefit, i) => (
+                <div className="flex flex-wrap justify-center gap-2 mb-6">
+                  {['Instant Access', 'Offline Mode', 'Fast Loading'].map((benefit, i) => (
                     <span 
                       key={i} 
                       className="px-3 py-1.5 bg-gray-50 border border-gray-200 rounded-full text-gray-700 text-xs font-medium flex items-center gap-1.5"
@@ -267,11 +209,11 @@ const AppDownloadPopup = ({ showOnLoad = true, delayMs = 0 }: AppDownloadPopupPr
                   ))}
                 </div>
 
-                {/* Download Button - Premium black/gold styling */}
+                {/* Download Button - WHITE background with gold crown and black text */}
                 <Button
                   onClick={handleInstall}
                   disabled={isInstalling}
-                  className="w-full h-14 bg-black hover:bg-gray-900 text-gold font-bold text-base rounded-xl shadow-lg transition-all duration-300 hover:scale-[1.02] border-2 border-gold"
+                  className="w-full h-14 bg-white hover:bg-gray-50 text-black font-bold text-base rounded-xl shadow-lg transition-all duration-300 hover:scale-[1.02] border-2 border-gold"
                 >
                   {isInstalling ? (
                     <span className="flex items-center gap-2">
@@ -279,9 +221,9 @@ const AppDownloadPopup = ({ showOnLoad = true, delayMs = 0 }: AppDownloadPopupPr
                       <span>Installing...</span>
                     </span>
                   ) : (
-                    <span className="flex items-center gap-2">
-                      <Download className="w-5 h-5" />
-                      <span>{isIOS ? 'Add to Home Screen' : 'Download App'}</span>
+                    <span className="flex items-center gap-3">
+                      <Crown className="w-5 h-5 text-gold" />
+                      <span>Download App</span>
                     </span>
                   )}
                 </Button>

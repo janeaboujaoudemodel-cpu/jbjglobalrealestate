@@ -53,9 +53,60 @@ const BusinessCardScanner = () => {
     }
   }, []);
 
+  // Smart duplicate detection and merging
+  const detectDuplicates = (newContacts: ScannedContact[], existingContacts: ScannedContact[]) => {
+    const merged: ScannedContact[] = [];
+    const duplicates: { new: ScannedContact; existing: ScannedContact }[] = [];
+
+    for (const newContact of newContacts) {
+      const existingMatch = existingContacts.find(existing => {
+        // Check if same person (by name + company) or same email/phone
+        const sameEmail = newContact.email && existing.email && 
+          newContact.email.toLowerCase() === existing.email.toLowerCase();
+        const samePhone = newContact.phone && existing.phone &&
+          newContact.phone.replace(/\D/g, '') === existing.phone.replace(/\D/g, '');
+        const sameName = newContact.name && existing.name &&
+          newContact.name.toLowerCase() === existing.name.toLowerCase();
+        const sameCompany = newContact.company && existing.company &&
+          newContact.company.toLowerCase() === existing.company.toLowerCase();
+        
+        return sameEmail || samePhone || (sameName && sameCompany);
+      });
+
+      if (existingMatch) {
+        duplicates.push({ new: newContact, existing: existingMatch });
+      } else {
+        merged.push(newContact);
+      }
+    }
+
+    return { merged, duplicates };
+  };
+
   const handleScanComplete = (contacts: ScannedContact[]) => {
-    setScannedContacts(prev => [...prev, ...contacts]);
-    toast.success(`${contacts.length} business card(s) scanned successfully`);
+    const { merged, duplicates } = detectDuplicates(contacts, scannedContacts);
+    
+    // Add non-duplicate contacts
+    if (merged.length > 0) {
+      setScannedContacts(prev => [...prev, ...merged]);
+    }
+    
+    // Handle duplicates with notification
+    if (duplicates.length > 0) {
+      duplicates.forEach(dup => {
+        toast.info(
+          `Duplicate found: ${dup.new.name || dup.new.email} matches existing contact. Skipped.`,
+          { duration: 4000 }
+        );
+      });
+    }
+    
+    const successCount = merged.length;
+    if (successCount > 0) {
+      toast.success(`${successCount} new business card(s) scanned successfully!`);
+    } else if (duplicates.length > 0) {
+      toast.info('All scanned cards were duplicates of existing contacts.');
+    }
   };
 
   const handleDeleteContact = (id: string) => {
@@ -70,6 +121,41 @@ const BusinessCardScanner = () => {
     sessionStorage.setItem('bcs_encryption_key', newKey);
     setEncryptionKey(newKey);
     toast.success("All data cleared and encryption key regenerated");
+  };
+
+  // Import to CRM function
+  const handleImportToCRM = async () => {
+    if (scannedContacts.length === 0) {
+      toast.error("No contacts to import");
+      return;
+    }
+
+    try {
+      // Send contacts to CRM
+      const leadsToImport = scannedContacts.map(contact => ({
+        full_name: contact.name || 'Unknown',
+        email: contact.email,
+        phone: contact.phone || contact.mobile,
+        company: contact.company,
+        source: 'website',
+        sub_source: 'Business Card Scanner',
+        notes: `Job Title: ${contact.jobTitle || 'N/A'}\nAddress: ${contact.address || 'N/A'}\nWebsite: ${contact.website || 'N/A'}\n${contact.notes || ''}`,
+      }));
+
+      const { supabase } = await import('@/integrations/supabase/client');
+      
+      for (const lead of leadsToImport) {
+        await supabase.functions.invoke('capture-lead', {
+          body: lead
+        });
+      }
+
+      toast.success(`${leadsToImport.length} contacts imported to CRM successfully!`);
+      handleClearAll();
+    } catch (error) {
+      console.error('CRM import error:', error);
+      toast.error('Failed to import contacts to CRM');
+    }
   };
 
   const handleExportCSV = () => {
@@ -300,7 +386,7 @@ const BusinessCardScanner = () => {
                     Export Excel
                   </Button>
                   {user && (
-                    <Button variant="default" size="sm" className="gap-2">
+                    <Button variant="default" size="sm" className="gap-2" onClick={handleImportToCRM}>
                       <UserPlus className="h-4 w-4" />
                       Import to CRM
                     </Button>
