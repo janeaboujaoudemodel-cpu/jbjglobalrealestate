@@ -229,6 +229,6 @@ export const zh = {
   'aiTools.financialDesc': '获取房产可负担性洞察',
   'aiTools.shopper': 'AI 个人购房助手',
   'aiTools.shopperDesc': '借助AI推荐找到您理想的房产',
-  'aiTools.hub': 'AI 中心',
-  'aiTools.hubDesc': '在一个地方访问所有AI工具',
+  'aiTools.hub': 'JBJ 经纪人中心',
+  'aiTools.hubDesc': '经纪人工具、培训和支持集于一处',
 };

@@ -229,6 +229,6 @@ export const hi = {
   'aiTools.financialDesc': 'संपत्ति सामर्थ्य जानकारी प्राप्त करें',
   'aiTools.shopper': 'AI पर्सनल शॉपर',
   'aiTools.shopperDesc': 'AI-संचालित सिफारिशों के साथ अपनी आदर्श संपत्ति खोजें',
-  'aiTools.hub': 'AI हब',
-  'aiTools.hubDesc': 'एक ही स्थान पर सभी AI उपकरणों तक पहुंचें',
+  'aiTools.hub': 'JBJ ब्रोकर हब',
+  'aiTools.hubDesc': 'ब्रोकर टूल्स, प्रशिक्षण और सहायता एक ही स्थान पर',
 };

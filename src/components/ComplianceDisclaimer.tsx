@@ -20,7 +20,7 @@ const ComplianceDisclaimer = ({ variant = "compact", className = "", language = 
   const shortDisclaimerEN = `JBJ Global Real Estate provides real estate brokerage support and coordination. We can introduce you to independent, licensed partners for legal services, mortgages, and concierge support. Partner services are delivered under the partner's own licence and terms, and the client contracts directly with the partner. We do not provide legal, mortgage, financial, or investment advice.`;
 
   // Short Arabic Disclaimer - Updated compliant wording
-  const shortDisclaimerAR = `جي جي جلوبال كابيتال تقدم خدمات وساطة عقارية ودعم تنسيقي. يمكننا ربطك بشركاء مستقلين ومرخصين للخدمات القانونية والتمويل العقاري وخدمات الكونسيرج. تُقدَّم خدمات الشركاء وفق ترخيصهم وشروطهم الخاصة، ويكون التعاقد مباشرة بين العميل والشريك. نحن لا نقدم استشارات قانونية أو تمويلية أو استثمارية.`;
+  const shortDisclaimerAR = `جي بي جي للعقارات تقدم خدمات وساطة عقارية ودعم تنسيقي. يمكننا ربطك بشركاء مستقلين ومرخصين للخدمات القانونية والتمويل العقاري. تُقدَّم خدمات الشركاء وفق ترخيصهم وشروطهم الخاصة، ويكون التعاقد مباشرة بين العميل والشريك. نحن لا نقدم استشارات قانونية أو تمويلية أو استثمارية.`;
 
   // Full Disclaimer Content
   const fullDisclaimerPoints = [

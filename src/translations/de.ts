@@ -229,6 +229,6 @@ export const de = {
   'aiTools.financialDesc': 'Erhalten Sie Einblicke zur Erschwinglichkeit von Immobilien',
   'aiTools.shopper': 'KI-Personal Shopper',
   'aiTools.shopperDesc': 'Finden Sie Ihre perfekte Immobilie mit KI-gestützten Empfehlungen',
-  'aiTools.hub': 'KI-Hub',
-  'aiTools.hubDesc': 'Zugriff auf alle KI-Tools an einem Ort',
+  'aiTools.hub': 'JBJ Makler-Hub',
+  'aiTools.hubDesc': 'Makler-Tools, Schulung und Support an einem Ort',
 };

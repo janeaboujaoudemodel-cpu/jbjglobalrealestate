@@ -229,6 +229,6 @@ export const it = {
   'aiTools.financialDesc': 'Ottieni informazioni sull\'accessibilità immobiliare',
   'aiTools.shopper': 'Personal Shopper IA',
   'aiTools.shopperDesc': 'Trova la tua proprietà ideale con raccomandazioni basate su IA',
-  'aiTools.hub': 'Hub IA',
-  'aiTools.hubDesc': 'Accedi a tutti gli strumenti IA in un unico posto',
+  'aiTools.hub': 'Centro Broker JBJ',
+  'aiTools.hubDesc': 'Strumenti, formazione e supporto per broker in un unico posto',
 };

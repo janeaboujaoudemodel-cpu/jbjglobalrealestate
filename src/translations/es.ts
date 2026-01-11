@@ -540,6 +540,6 @@ export const es = {
   'aiTools.financialDesc': 'Obtén planificación financiera personalizada y consejos de inversión',
   'aiTools.shopper': 'Comprador Personal IA',
   'aiTools.shopperDesc': 'Encuentra tu propiedad perfecta con recomendaciones impulsadas por IA',
-  'aiTools.hub': 'Centro de IA',
-  'aiTools.hubDesc': 'Accede a todas las herramientas de IA en un solo lugar',
+  'aiTools.hub': 'Centro de Brokers JBJ',
+  'aiTools.hubDesc': 'Herramientas, capacitación y soporte para brokers en un solo lugar',
 };
