@@ -5,11 +5,30 @@ import "./index.css";
 import { registerSW } from "virtual:pwa-register";
 import { trackPWAOpened } from "./hooks/usePWAAnalytics";
 
-// Ensure the service worker is registered in production so the app is installable.
-registerSW({ immediate: true });
+// NOTE: In dev/preview, stale service workers can cache mixed Vite chunks.
+// That can manifest as React hook runtime crashes (dispatcher is null) inside libraries.
+// We proactively unregister SWs + clear caches in dev/preview to guarantee a single consistent bundle.
+if (import.meta.env.DEV) {
+  if ("serviceWorker" in navigator) {
+    navigator.serviceWorker
+      .getRegistrations()
+      .then((regs) => Promise.all(regs.map((r) => r.unregister())))
+      .catch(() => undefined);
+  }
 
-// Track PWA app opens
-trackPWAOpened();
+  if ("caches" in window) {
+    caches
+      .keys()
+      .then((keys) => Promise.all(keys.map((k) => caches.delete(k))))
+      .catch(() => undefined);
+  }
+} else {
+  // Ensure the service worker is registered in production so the app is installable.
+  registerSW({ immediate: true });
+
+  // Track PWA app opens
+  trackPWAOpened();
+}
 
 const rootElement = document.getElementById("root");
 if (rootElement) {

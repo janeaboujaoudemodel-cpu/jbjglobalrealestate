@@ -15,8 +15,9 @@ export default defineConfig(({ mode }) => ({
     mode === "development" && componentTagger(),
     VitePWA({
       registerType: "autoUpdate",
+      // IMPORTANT: keep SW disabled in dev/preview to avoid mixed cached chunks that can break React hooks.
       devOptions: {
-        enabled: true,
+        enabled: false,
       },
       includeAssets: ["favicon.png", "favicon.svg", "robots.txt"],
       manifest: {
@@ -85,9 +86,15 @@ export default defineConfig(({ mode }) => ({
           },
         ],
       },
-    })
+    }),
   ].filter(Boolean),
+  // Helps map runtime errors to real source files during QA.
+  build: {
+    sourcemap: true,
+  },
+  // Enforce a single React instance across all deps (prevents hooks dispatcher null errors).
   resolve: {
+    dedupe: ["react", "react-dom"],
     alias: {
       "@": path.resolve(__dirname, "./src"),
     },
