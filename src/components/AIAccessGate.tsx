@@ -39,8 +39,8 @@ const BROKER_CIRCLE_BENEFITS = [
   },
   {
     icon: UserCheck,
-    title: "Dedicated HR Admin",
-    description: "One dedicated assistant for all your inquiries",
+    title: "Dedicated HR Manager",
+    description: "Hiring, policies, and performance support",
   },
   {
     icon: Building2,
@@ -81,10 +81,10 @@ const BROKER_CIRCLE_BENEFITS = [
 
 const CIRCLE_FEATURES = [
   "20+ AI-powered property tools",
-  "Dedicated HR and personal assistants",
+  "HR Manager & Personal Admin Support",
   "Property coach, designer, photographer & marketing tools",
   "Free courses and certifications",
-  "24/7 AI Admin support",
+  "24/7 Admin support",
   "Full CRM access"
 ];
 
@@ -148,7 +148,7 @@ export default function AIAccessGate({ children, toolName }: AIAccessGateProps) 
           </h1>
 
           <p className="text-white text-lg mb-2">
-            Get free access to all JBJ AI tools, assistants, HR admin, property coach, and creative suite — all in one place.
+            Get free access to all JBJ AI tools, assistants, HR Manager, property coach, and creative suite — all in one place.
           </p>
           <p className="text-zinc-400 text-base mb-8">
             Sign in to unlock <span className="text-emerald-400 font-semibold">free access</span> to all JBJ AI tools and resources.
