@@ -7,7 +7,7 @@ import { User, ArrowRight } from "lucide-react";
 import { useLanguage } from "@/contexts/LanguageContext";
 import { usePopupVisibility } from "@/contexts/PopupCoordinatorContext";
 import GuidedTour from "./GuidedTour";
-import jbjMonogramTransparent from "@/assets/jbj-monogram-transparent.png";
+import jbjMonogramDarkBg from "@/assets/jbj-monogram-dark-bg.png";
 
 const WELCOME_MODAL_KEY = "jj_welcome_shown";
 const RETURNING_USER_KEY = "jj_returning_user";
@@ -112,7 +112,7 @@ const WelcomeModal = () => {
             {/* Transparent Logo - Larger and Centered */}
             <div className="flex justify-center mb-6">
               <img 
-                src={jbjMonogramTransparent} 
+                src={jbjMonogramDarkBg} 
                 alt="JBJ Global Real Estate" 
                 className="h-36 md:h-44 w-auto object-contain"
               />
