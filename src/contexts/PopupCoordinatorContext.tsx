@@ -1,5 +1,4 @@
 import React, { createContext, useContext, useState, useCallback, useEffect, ReactNode, useMemo } from 'react';
-import { useSearchParams } from 'react-router-dom';
 import { useIsMobile } from '@/hooks/use-mobile';
 
 /**
@@ -71,14 +70,27 @@ interface PopupCoordinatorProviderProps {
   children: ReactNode;
 }
 
+/**
+ * Check if QA mode is enabled via localStorage.
+ * To enable: localStorage.setItem('qa_mode', '1')
+ * To disable: localStorage.removeItem('qa_mode')
+ */
+const checkQAMode = (): boolean => {
+  try {
+    return localStorage.getItem('qa_mode') === '1';
+  } catch {
+    return false;
+  }
+};
+
 export const PopupCoordinatorProvider: React.FC<PopupCoordinatorProviderProps> = ({ children }) => {
   const isMobile = useIsMobile();
-  const [searchParams] = useSearchParams();
   const [requests, setRequests] = useState<Map<PopupId, PopupRequest>>(new Map());
   const [activePopup, setActivePopup] = useState<PopupId | null>(null);
   
-  // QA Mode: Skip all popups when ?qa=1 is in URL (for testing/screenshots)
-  const isQAMode = useMemo(() => searchParams.get('qa') === '1', [searchParams]);
+  // QA Mode: Skip all popups when localStorage qa_mode='1' (for testing/screenshots)
+  // Usage: localStorage.setItem('qa_mode', '1') to enable, localStorage.removeItem('qa_mode') to disable
+  const isQAMode = useMemo(() => checkQAMode(), []);
 
   // Get priority for a popup
   const getPriority = useCallback((id: PopupId): number => {
