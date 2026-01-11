@@ -38,7 +38,10 @@ import {
   Loader2,
   Sparkles,
   Search,
-  LayoutDashboard
+  LayoutDashboard,
+  Upload,
+  Video,
+  Mic
 } from "lucide-react";
 import {
   Dialog,
@@ -60,6 +63,7 @@ import ExecutiveChatPanel from "@/components/executive/ExecutiveChatPanel";
 import IntegrationWizard from "@/components/executive/IntegrationWizard";
 import SocialMediaGrid from "@/components/executive/SocialMediaGrid";
 
+// RENAMED: Executive AI → Admin Command Center
 type CommCategory = 'important' | 'routine' | 'recruitment' | 'flagged' | 'spam';
 type CommChannel = 'email' | 'whatsapp' | 'instagram' | 'facebook' | 'linkedin' | 'phone' | 'sms';
 type AIStatus = 'pending' | 'auto_responded' | 'flagged_for_review' | 'human_responded' | 'ignored';
@@ -366,11 +370,11 @@ export default function ExecutiveAssistant() {
             <div className="flex items-center justify-between flex-wrap gap-4">
               <div className="flex items-center gap-4">
                 <div className="p-4 rounded-2xl bg-gradient-to-br from-gold/20 to-gold/5 border border-gold/30">
-                  <Sparkles className="h-8 w-8 text-gold" />
+                  <LayoutDashboard className="h-8 w-8 text-gold" />
                 </div>
                 <div>
-                  <h1 className="text-3xl font-bold text-white">JBJ Executive AI</h1>
-                  <p className="text-gray-400">Your intelligent command center</p>
+                  <h1 className="text-3xl font-bold text-white">JBJ Admin Command Center</h1>
+                  <p className="text-gray-400">Your intelligent command center for team management</p>
                 </div>
               </div>
               
@@ -390,7 +394,7 @@ export default function ExecutiveAssistant() {
                   className="bg-gold hover:bg-gold/90 text-black"
                 >
                   <MessageSquare className="h-4 w-4 mr-2" />
-                  Chat with AI
+                  Chat with Admin
                 </Button>
               </div>
             </div>

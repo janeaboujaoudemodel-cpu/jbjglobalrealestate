@@ -234,7 +234,7 @@ const allTools = [
   },
   {
     id: "hr-manager",
-    title: "JBJ HR Manager",
+    title: "JBJ HR",
     description: "Manage your team's profiles, issue tasks, and track performance metrics.",
     icon: Users,
     gradient: "from-white to-zinc-300",
@@ -261,8 +261,8 @@ const allTools = [
     audience: ["Brokers", "Buyers"]
   },
   {
-    id: "ai-admin",
-    title: "JBJ AI Admin",
+    id: "admin-center",
+    title: "JBJ Admin",
     description: "Your 24/7 assistant to handle data organization, reports, and property insights.",
     icon: Bot,
     gradient: "from-gold to-amber-500",
@@ -317,9 +317,9 @@ const allTools = [
     audience: ["Brokers"]
   },
   {
-    id: "ai-calendar",
-    title: "JBJ AI Calendar & Notes",
-    description: "Manage your meetings, events and notes with AI-powered scheduling and reminders.",
+    id: "calendar",
+    title: "JBJ Calendar & Notes",
+    description: "Manage your meetings, events and notes with smart scheduling and reminders.",
     icon: Calendar,
     gradient: "from-indigo-500 to-blue-500",
     borderColor: "border-indigo-500/40",
@@ -403,11 +403,11 @@ const allTools = [
 ];
 
 const circleFeatures = [
-  "20+ AI-powered property tools",
+  "20+ property tools & assistants",
   "Dedicated HR and personal assistants",
   "Property coach, designer, photographer, and marketing tools",
   "Free courses and certifications",
-  "24/7 AI Admin support",
+  "24/7 Admin support",
   "Full CRM access"
 ];
 
