@@ -9,7 +9,7 @@ import { Badge } from "@/components/ui/badge";
 import { Skeleton } from "@/components/ui/skeleton";
 import { toast } from "sonner";
 import { 
-  Users, FileText, Plus, Upload, Download, LogOut, Shuffle, LayoutGrid, List, Zap, Briefcase
+  Users, FileText, Plus, Upload, Download, LogOut, Shuffle, LayoutGrid, List, Zap, Briefcase, PanelLeftOpen, PanelLeftClose
 } from "lucide-react";
 import CRMLeadsTable from "@/components/crm/CRMLeadsTable";
 import CRMEnhancedDashboard from "@/components/crm/CRMEnhancedDashboard";
@@ -25,6 +25,7 @@ import DealValueTracker from "@/components/crm/DealValueTracker";
 import AutomationRules from "@/components/crm/AutomationRules";
 import EmployeeCenter from "@/components/crm/EmployeeCenter";
 import EmployeesHub from "@/components/crm/EmployeesHub";
+import CRMToolsSidebar from "@/components/crm/CRMToolsSidebar";
 
 interface CRMProfile {
   id: string;
@@ -45,6 +46,7 @@ const CRM = () => {
   const [showBulkAssignModal, setShowBulkAssignModal] = useState(false);
   const [refreshKey, setRefreshKey] = useState(0);
   const [viewMode, setViewMode] = useState<"table" | "kanban">("table");
+  const [showToolsSidebar, setShowToolsSidebar] = useState(false);
   
   // Smart filters
   const [quickFilter, setQuickFilter] = useState("all");
@@ -211,39 +213,55 @@ const CRM = () => {
   };
 
   return (
-    <div className="min-h-screen bg-background">
-      {/* Header */}
-      <header className="border-b border-border bg-card sticky top-0 z-50">
-        <div className="max-w-7xl mx-auto px-4 py-4 flex items-center justify-between">
-          <div className="flex items-center gap-4">
-            <h1 className="text-2xl font-bold text-white">JBJ Global Real Estate CRM</h1>
-            <Badge 
-              variant="default" 
-              className={
-                isFounder ? "bg-amber-600 text-white" :
-                isAdmin ? "bg-primary text-primary-foreground" : 
-                "bg-muted text-muted-foreground"
-              }
-            >
-              {getRoleLabel()}
-            </Badge>
-          </div>
-          <div className="flex items-center gap-3">
-            <span className="text-sm text-white font-medium">
-              {profile.display_name || user?.email}
-            </span>
-            {isAdmin && (
-              <Button variant="outline" size="sm" onClick={() => navigate("/admin/crm")} className="text-white border-border hover:bg-muted">
-                Admin Dashboard
+    <div className="min-h-screen bg-background flex">
+      {/* Tools Sidebar */}
+      <CRMToolsSidebar isOpen={showToolsSidebar} onClose={() => setShowToolsSidebar(false)} />
+
+      <div className="flex-1">
+        {/* Header */}
+        <header className="border-b border-border bg-card sticky top-0 z-50">
+          <div className="max-w-7xl mx-auto px-4 py-4 flex items-center justify-between">
+            <div className="flex items-center gap-4">
+              <Button
+                variant="ghost"
+                size="sm"
+                onClick={() => setShowToolsSidebar(!showToolsSidebar)}
+                className="text-gold hover:text-gold hover:bg-gold/10"
+              >
+                {showToolsSidebar ? (
+                  <PanelLeftClose className="h-5 w-5" />
+                ) : (
+                  <PanelLeftOpen className="h-5 w-5" />
+                )}
               </Button>
-            )}
-            <Button variant="ghost" size="sm" onClick={handleSignOut} className="text-white hover:text-white hover:bg-muted">
-              <LogOut className="h-4 w-4 mr-2" />
-              Sign Out
-            </Button>
+              <h1 className="text-2xl font-bold text-white">JBJ Global Real Estate CRM</h1>
+              <Badge 
+                variant="default" 
+                className={
+                  isFounder ? "bg-amber-600 text-white" :
+                  isAdmin ? "bg-primary text-primary-foreground" : 
+                  "bg-muted text-muted-foreground"
+                }
+              >
+                {getRoleLabel()}
+              </Badge>
+            </div>
+            <div className="flex items-center gap-3">
+              <span className="text-sm text-white font-medium">
+                {profile.display_name || user?.email}
+              </span>
+              {isAdmin && (
+                <Button variant="outline" size="sm" onClick={() => navigate("/admin/crm")} className="text-white border-border hover:bg-muted">
+                  Admin Dashboard
+                </Button>
+              )}
+              <Button variant="ghost" size="sm" onClick={handleSignOut} className="text-white hover:text-white hover:bg-muted">
+                <LogOut className="h-4 w-4 mr-2" />
+                Sign Out
+              </Button>
+            </div>
           </div>
-        </div>
-      </header>
+        </header>
 
       <main className="max-w-7xl mx-auto px-4 py-6 space-y-6">
         {/* Deal Value Tracker */}
@@ -434,7 +452,8 @@ const CRM = () => {
           filterStatus={quickFilter !== "all" ? quickFilterStatuses[0] : undefined}
           totalAvailable={Object.values(statusCounts).reduce((a, b) => a + b, 0)}
         />
-      )}
+        )}
+      </div>
     </div>
   );
 };

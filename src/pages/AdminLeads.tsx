@@ -55,6 +55,8 @@ import {
 } from "lucide-react";
 import { format } from "date-fns";
 import LeadStatusBadge, { PIPELINE_STATUSES, getStatusInfo } from "@/components/crm/LeadStatusBadge";
+import ChatTranscriptModal from "@/components/crm/ChatTranscriptModal";
+import LeadContactActions from "@/components/crm/LeadContactActions";
 
 interface Lead {
   id: string;
@@ -855,72 +857,26 @@ const AdminLeads = () => {
       </Dialog>
 
       {/* Chat Transcript Modal */}
-      <Dialog open={!!selectedConversation} onOpenChange={() => setSelectedConversation(null)}>
-        <DialogContent className="bg-zinc-900 border-zinc-800 text-white max-w-3xl max-h-[80vh]">
-          <DialogHeader>
-            <DialogTitle className="text-xl font-bold">Chat Transcript</DialogTitle>
-          </DialogHeader>
-          {selectedConversation && (
-            <div className="space-y-6">
-              <div className="grid grid-cols-3 gap-4">
-                <div>
-                  <p className="text-gray-400 text-sm mb-1">User</p>
-                  <p className="text-white font-medium">{selectedConversation.user_name || "Anonymous"}</p>
-                </div>
-                <div>
-                  <p className="text-gray-400 text-sm mb-1">Email</p>
-                  <p className="text-white">{selectedConversation.user_email}</p>
-                </div>
-                <div>
-                  <p className="text-gray-400 text-sm mb-1">Phone</p>
-                  <p className="text-white">{selectedConversation.user_phone || "—"}</p>
-                </div>
-              </div>
-              <div>
-                <p className="text-gray-400 text-sm mb-2">Conversation</p>
-                <ScrollArea className="h-[400px] bg-zinc-950 rounded-lg p-4">
-                  <div className="space-y-4">
-                    {Array.isArray(selectedConversation.messages) ? (
-                      selectedConversation.messages.map((msg: any, index: number) => (
-                        <div
-                          key={index}
-                          className={`flex ${msg.role === "user" ? "justify-end" : "justify-start"}`}
-                        >
-                          <div
-                            className={`max-w-[80%] rounded-lg px-4 py-2 ${
-                              msg.role === "user"
-                                ? "bg-gold/20 text-gold"
-                                : "bg-zinc-800 text-white"
-                            }`}
-                          >
-                            <p className="text-xs text-gray-500 mb-1">
-                              {msg.role === "user" ? "User" : "Assistant"}
-                            </p>
-                            <p className="text-sm whitespace-pre-wrap">{msg.content}</p>
-                          </div>
-                        </div>
-                      ))
-                    ) : (
-                      <p className="text-gray-500 text-center">No messages</p>
-                    )}
-                  </div>
-                </ScrollArea>
-              </div>
-              {selectedConversation.rating && (
-                <div className="flex items-center gap-2 pt-4 border-t border-zinc-800">
-                  <span className="text-gray-400 text-sm">Rating:</span>
-                  <span className="text-gold font-medium">{selectedConversation.rating}/5</span>
-                  {selectedConversation.rating_feedback && (
-                    <span className="text-gray-400 text-sm">
-                      — {selectedConversation.rating_feedback}
-                    </span>
-                  )}
-                </div>
-              )}
-            </div>
-          )}
-        </DialogContent>
-      </Dialog>
+      <ChatTranscriptModal
+        isOpen={!!selectedConversation}
+        onClose={() => setSelectedConversation(null)}
+        conversation={selectedConversation ? {
+          id: selectedConversation.id,
+          user_name: selectedConversation.user_name || "Anonymous",
+          user_email: selectedConversation.user_email,
+          user_phone: selectedConversation.user_phone,
+          messages: Array.isArray(selectedConversation.messages) 
+            ? selectedConversation.messages
+            : [],
+          status: selectedConversation.status,
+          service_type: selectedConversation.service_type,
+          page_source: selectedConversation.page_source,
+          rating: selectedConversation.rating,
+          rating_feedback: selectedConversation.rating_feedback,
+          created_at: selectedConversation.created_at,
+          updated_at: selectedConversation.updated_at
+        } : null}
+      />
     </div>
   );
 };
