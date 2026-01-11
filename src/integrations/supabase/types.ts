@@ -4791,6 +4791,135 @@ export type Database = {
         }
         Relationships: []
       }
+      seller_listings: {
+        Row: {
+          additional_doc_urls: string[] | null
+          ai_generated_description: string | null
+          bedrooms: number | null
+          community_building: string | null
+          created_at: string
+          estimated_value_range: Json | null
+          floor_plan_urls: string[] | null
+          has_upgrades: boolean | null
+          id: string
+          is_furnished: boolean | null
+          key_highlights: string[] | null
+          minimum_acceptable_price: number | null
+          passport_url: string | null
+          photo_urls: string[] | null
+          poa_url: string | null
+          preferred_contact_method: string | null
+          preferred_language: string | null
+          property_location: string
+          property_notes: string | null
+          property_size_sqft: number | null
+          property_status: string | null
+          property_type: string
+          purchase_price: number | null
+          review_notes: string | null
+          reviewed_at: string | null
+          reviewed_by: string | null
+          seller_email: string
+          seller_full_name: string
+          seller_phone: string
+          seller_type: string
+          selling_urgency: string | null
+          status: string
+          submission_confirmed: boolean | null
+          submitted_at: string | null
+          target_selling_price: number
+          title_deed_url: string | null
+          updated_at: string
+          upgrade_details: string | null
+          user_id: string | null
+          video_urls: string[] | null
+        }
+        Insert: {
+          additional_doc_urls?: string[] | null
+          ai_generated_description?: string | null
+          bedrooms?: number | null
+          community_building?: string | null
+          created_at?: string
+          estimated_value_range?: Json | null
+          floor_plan_urls?: string[] | null
+          has_upgrades?: boolean | null
+          id?: string
+          is_furnished?: boolean | null
+          key_highlights?: string[] | null
+          minimum_acceptable_price?: number | null
+          passport_url?: string | null
+          photo_urls?: string[] | null
+          poa_url?: string | null
+          preferred_contact_method?: string | null
+          preferred_language?: string | null
+          property_location: string
+          property_notes?: string | null
+          property_size_sqft?: number | null
+          property_status?: string | null
+          property_type: string
+          purchase_price?: number | null
+          review_notes?: string | null
+          reviewed_at?: string | null
+          reviewed_by?: string | null
+          seller_email: string
+          seller_full_name: string
+          seller_phone: string
+          seller_type?: string
+          selling_urgency?: string | null
+          status?: string
+          submission_confirmed?: boolean | null
+          submitted_at?: string | null
+          target_selling_price: number
+          title_deed_url?: string | null
+          updated_at?: string
+          upgrade_details?: string | null
+          user_id?: string | null
+          video_urls?: string[] | null
+        }
+        Update: {
+          additional_doc_urls?: string[] | null
+          ai_generated_description?: string | null
+          bedrooms?: number | null
+          community_building?: string | null
+          created_at?: string
+          estimated_value_range?: Json | null
+          floor_plan_urls?: string[] | null
+          has_upgrades?: boolean | null
+          id?: string
+          is_furnished?: boolean | null
+          key_highlights?: string[] | null
+          minimum_acceptable_price?: number | null
+          passport_url?: string | null
+          photo_urls?: string[] | null
+          poa_url?: string | null
+          preferred_contact_method?: string | null
+          preferred_language?: string | null
+          property_location?: string
+          property_notes?: string | null
+          property_size_sqft?: number | null
+          property_status?: string | null
+          property_type?: string
+          purchase_price?: number | null
+          review_notes?: string | null
+          reviewed_at?: string | null
+          reviewed_by?: string | null
+          seller_email?: string
+          seller_full_name?: string
+          seller_phone?: string
+          seller_type?: string
+          selling_urgency?: string | null
+          status?: string
+          submission_confirmed?: boolean | null
+          submitted_at?: string | null
+          target_selling_price?: number
+          title_deed_url?: string | null
+          updated_at?: string
+          upgrade_details?: string | null
+          user_id?: string | null
+          video_urls?: string[] | null
+        }
+        Relationships: []
+      }
       shortlists: {
         Row: {
           created_at: string
