@@ -1,25 +1,38 @@
 import { useEffect, useState } from "react";
 import { useLocation } from "react-router-dom";
 import { supabase } from "@/integrations/supabase/client";
-import ComingSoon from "@/pages/ComingSoon";
 
 interface AdminBypassProps {
   children: React.ReactNode;
 }
 
+/**
+ * AdminBypass - Now only protects /admin routes
+ * The public site is fully accessible to all users.
+ * Admin routes require admin role verification.
+ */
 const AdminBypass = ({ children }: AdminBypassProps) => {
   const location = useLocation();
   const [isAdmin, setIsAdmin] = useState<boolean | null>(null);
   const [isLoading, setIsLoading] = useState(true);
 
-  // CRM must be accessible to CRM users (owner_admin / broker_member) even if they are not "site admins".
-  // The CRM pages perform their own auth + role checks.
-  // Video Builder has its own exclusive access gate for JBJ brokers.
-  const isCrmRoute =
-    location.pathname.startsWith("/crm") || location.pathname.startsWith("/admin/crm");
+  // Routes that require admin access
+  const isAdminRoute = location.pathname.startsWith("/admin");
+  
+  // CRM routes have their own access controls
+  const isCrmRoute = location.pathname.startsWith("/crm");
+  
+  // Video Builder has its own exclusive access gate
   const isVideoBuilderRoute = location.pathname === "/video-builder";
 
   useEffect(() => {
+    // Only check admin status for admin routes
+    if (!isAdminRoute) {
+      setIsLoading(false);
+      setIsAdmin(true); // Not needed for non-admin routes
+      return;
+    }
+
     const checkAdminStatus = async () => {
       try {
         const { data: { session } } = await supabase.auth.getSession();
@@ -30,7 +43,7 @@ const AdminBypass = ({ children }: AdminBypassProps) => {
           return;
         }
 
-        // Check if user has admin role (uses backend function to avoid RLS blocking)
+        // Check if user has admin role
         const { data: hasAdminRole, error: roleError } = await supabase
           .rpc("has_role", { _user_id: session.user.id, _role: "admin" });
 
@@ -48,16 +61,21 @@ const AdminBypass = ({ children }: AdminBypassProps) => {
     checkAdminStatus();
 
     const { data: { subscription } } = supabase.auth.onAuthStateChange(() => {
-      checkAdminStatus();
+      if (isAdminRoute) {
+        checkAdminStatus();
+      }
     });
 
     return () => subscription.unsubscribe();
-  }, []);
+  }, [isAdminRoute]);
 
-  // CRM routes and Video Builder bypass this gate (they have their own access controls).
+  // CRM routes and Video Builder bypass this gate (they have their own access controls)
   if (isCrmRoute || isVideoBuilderRoute) return <>{children}</>;
 
-  // Show loading briefly
+  // Non-admin routes are always accessible (public site)
+  if (!isAdminRoute) return <>{children}</>;
+
+  // Show loading for admin routes
   if (isLoading) {
     return (
       <div className="min-h-screen bg-background flex items-center justify-center">
@@ -66,9 +84,17 @@ const AdminBypass = ({ children }: AdminBypassProps) => {
     );
   }
 
-  // Public users see Coming Soon
+  // For admin routes, require admin access
   if (!isAdmin) {
-    return <ComingSoon />;
+    return (
+      <div className="min-h-screen bg-zinc-950 flex items-center justify-center">
+        <div className="text-center">
+          <h1 className="text-2xl font-bold text-white mb-4">Admin Access Required</h1>
+          <p className="text-zinc-400 mb-6">You need admin privileges to access this page.</p>
+          <a href="/" className="text-gold hover:underline">Return to Home</a>
+        </div>
+      </div>
+    );
   }
 
   // Admins see the full site

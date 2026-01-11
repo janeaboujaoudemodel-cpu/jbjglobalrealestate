@@ -91,7 +91,7 @@ const GlobalHeader = () => {
   return (
     <header className="fixed top-0 left-0 right-0 z-[9999] bg-gradient-to-b from-black via-black/98 to-black/95 backdrop-blur-xl border-b border-gold/10 shadow-lg shadow-black/30">
       <div className="container mx-auto px-4 sm:px-6">
-        <div className="flex items-center justify-between h-16 lg:h-[72px]">
+        <div className="flex items-center h-16 lg:h-[72px]">
           
           {/* LEFT: Brand Logo - Monogram + Text */}
           <Link 
@@ -109,34 +109,36 @@ const GlobalHeader = () => {
             </span>
           </Link>
 
-          {/* CENTER: Desktop Navigation with proper separation */}
-          <nav className="hidden md:flex items-center gap-1 lg:gap-2 ml-10 lg:ml-16 xl:ml-20">
-            {mainNavLinks.map((link) => (
-              <Link
-                key={link.href}
-                to={link.href}
-                className={`px-3 lg:px-4 py-2 text-[13px] lg:text-sm font-medium whitespace-nowrap transition-all relative group ${
-                  isActive(link.href) 
-                    ? "text-gold" 
-                    : "text-zinc-300 hover:text-gold"
-                }`}
-              >
-                {link.label}
-                {/* Gold underline for active/hover */}
-                <span className={`absolute bottom-0 left-3 right-3 h-[2px] bg-gradient-to-r from-gold/80 to-gold transition-transform origin-left ${
-                  isActive(link.href) ? "scale-x-100" : "scale-x-0 group-hover:scale-x-100"
-                }`} />
-              </Link>
-            ))}
+          {/* CENTER: Desktop Navigation - Properly centered */}
+          <nav className="hidden lg:flex items-center justify-center flex-1 mx-4">
+            <div className="flex items-center gap-1">
+              {mainNavLinks.map((link) => (
+                <Link
+                  key={link.href}
+                  to={link.href}
+                  className={`px-3 xl:px-4 py-2 text-[13px] font-medium whitespace-nowrap transition-all relative group ${
+                    isActive(link.href) 
+                      ? "text-gold" 
+                      : "text-zinc-300 hover:text-gold"
+                  }`}
+                >
+                  {link.label}
+                  {/* Gold underline for active/hover */}
+                  <span className={`absolute bottom-0 left-3 right-3 h-[2px] bg-gradient-to-r from-gold/80 to-gold transition-transform origin-left ${
+                    isActive(link.href) ? "scale-x-100" : "scale-x-0 group-hover:scale-x-100"
+                  }`} />
+                </Link>
+              ))}
+            </div>
           </nav>
 
-          {/* RIGHT: Actions (search, favorites, menu, user) */}
-          <div className="flex items-center gap-1 sm:gap-2 shrink-0 ml-auto">
-            {/* Search Icon - Opens Global Search Modal */}
+          {/* RIGHT: Actions (search, favorites, language, menu, user) - Gold themed */}
+          <div className="flex items-center gap-2 shrink-0 ml-auto">
+            {/* Search Icon - Gold */}
             <Button
               variant="ghost"
               size="sm"
-              className="text-gold hover:text-gold/80 hover:bg-gold/10 shrink-0"
+              className="text-gold hover:text-gold-light hover:bg-gold/10 shrink-0 w-10 h-10 p-0"
               onClick={() => setSearchOpen(true)}
             >
               <Search className="w-5 h-5" />
@@ -147,7 +149,7 @@ const GlobalHeader = () => {
               <Button
                 variant="ghost"
                 size="sm"
-                className="text-gold hover:text-gold/80 hover:bg-gold/10 relative"
+                className="text-gold hover:text-gold-light hover:bg-gold/10 relative w-10 h-10 p-0"
               >
                 <Heart className="w-5 h-5" />
                 {totalCount > 0 && (
@@ -158,13 +160,18 @@ const GlobalHeader = () => {
               </Button>
             </Link>
 
-            {/* Mobile Menu Trigger (always visible under md) */}
+            {/* Language Switcher - Gold themed */}
+            <div className="shrink-0">
+              <LanguageSwitcher />
+            </div>
+
+            {/* Mobile Menu Trigger (visible under lg) */}
             <Sheet open={mobileMenuOpen} onOpenChange={setMobileMenuOpen}>
-              <SheetTrigger asChild className="md:hidden">
+              <SheetTrigger asChild className="lg:hidden">
                 <Button
                   variant="ghost"
                   size="sm"
-                  className="text-gold hover:text-gold/80 hover:bg-gold/10 shrink-0"
+                  className="text-gold hover:text-gold-light hover:bg-gold/10 shrink-0 w-10 h-10 p-0"
                   aria-label="Open menu"
                 >
                   <Menu className="w-5 h-5" />
@@ -299,15 +306,12 @@ const GlobalHeader = () => {
               </SheetContent>
             </Sheet>
 
-            {/* Language Switcher */}
-            <LanguageSwitcher />
-
             {/* User Menu - Desktop */}
-            <div className="hidden md:block">
+            <div className="hidden lg:block">
               {user ? (
                 <DropdownMenu>
                   <DropdownMenuTrigger asChild>
-                    <Button variant="ghost" className="text-zinc-400 hover:text-white hover:bg-zinc-800">
+                    <Button variant="ghost" className="text-gold hover:text-gold-light hover:bg-gold/10">
                       <User className="w-4 h-4 mr-2" />
                       {user.email?.split("@")[0]}
                     </Button>
@@ -344,7 +348,7 @@ const GlobalHeader = () => {
                 </DropdownMenu>
               ) : (
                 <Link to="/auth">
-                  <Button variant="ghost" className="text-zinc-400 hover:text-white hover:bg-zinc-800">
+                  <Button variant="ghost" className="text-gold hover:text-gold-light hover:bg-gold/10">
                     Sign In
                   </Button>
                 </Link>
