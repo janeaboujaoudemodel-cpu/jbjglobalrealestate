@@ -9,7 +9,7 @@ import { Badge } from "@/components/ui/badge";
 import { Skeleton } from "@/components/ui/skeleton";
 import { toast } from "sonner";
 import { 
-  Users, FileText, Plus, Upload, Download, LogOut, Shuffle, LayoutGrid, List, Zap, Briefcase, PanelLeftOpen, PanelLeftClose
+  Users, FileText, Plus, Upload, Download, LogOut, Shuffle, LayoutGrid, List, Zap, Briefcase, PanelLeftOpen, PanelLeftClose, Crown
 } from "lucide-react";
 import jbjMonogramDarkBg from "@/assets/jbj-monogram-dark-bg.png";
 import CRMLeadsTable from "@/components/crm/CRMLeadsTable";
@@ -402,6 +402,13 @@ const CRM = () => {
                   <Briefcase className="h-4 w-4 mr-2" />
                   Employees Hub
                 </TabsTrigger>
+                <TabsTrigger 
+                  value="vip" 
+                  className="data-[state=active]:bg-amber-500 data-[state=active]:text-black text-amber-400 font-semibold"
+                >
+                  <Crown className="h-4 w-4 mr-2" />
+                  VIP Leads
+                </TabsTrigger>
               </TabsList>
 
               <TabsContent value="all">
@@ -439,6 +446,17 @@ const CRM = () => {
 
               <TabsContent value="employees">
                 <EmployeesHub userId={user?.id || ""} />
+              </TabsContent>
+
+              <TabsContent value="vip">
+                <CRMLeadsTable 
+                  key={`vip-${refreshKey}-${quickFilter}-${sourceFilter}`}
+                  userId={user?.id || ""} 
+                  filterType="vip"
+                  onRefresh={handleRefresh}
+                  statusFilters={quickFilterStatuses}
+                  sourceFilter={sourceFilter !== "all" ? sourceFilter : undefined}
+                />
               </TabsContent>
             </Tabs>
           </CardContent>

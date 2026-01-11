@@ -33,7 +33,7 @@ import {
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 import { toast } from "sonner";
-import { Search, Phone, MessageSquare, Mail, Eye, Filter, ChevronDown, Calendar, Lock, PhoneCall, Trash2, MoreHorizontal, FileText, Building2, Sparkles, Calculator, TrendingUp, BarChart3, Palette, FileSignature, Flame, Thermometer, Snowflake } from "lucide-react";
+import { Search, Phone, MessageSquare, Mail, Eye, Filter, ChevronDown, Calendar, Lock, PhoneCall, Trash2, MoreHorizontal, FileText, Building2, Sparkles, Calculator, TrendingUp, BarChart3, Palette, FileSignature, Flame, Thermometer, Snowflake, Crown } from "lucide-react";
 import LeadStatusBadge, { PIPELINE_STATUSES, getStatusInfo } from "./LeadStatusBadge";
 import FollowUpScheduler from "./FollowUpScheduler";
 import { useActiveLead } from "@/contexts/ActiveLeadContext";
@@ -52,6 +52,7 @@ interface Lead {
   tags: string[] | null;
   created_at: string;
   owner_type: string;
+  is_vip?: boolean;
   state?: {
     pipeline_status: string;
     is_junk: boolean;
@@ -102,7 +103,7 @@ const getLeadTemperature = (lead: { created_at: string; state?: { last_touch_at:
 };
 interface CRMLeadsTableProps {
   userId: string;
-  filterType: "assigned" | "own" | "all" | "website";
+  filterType: "assigned" | "own" | "all" | "website" | "vip";
   onRefresh: () => void;
   statusFilters?: string[];
   sourceFilter?: string;
@@ -150,7 +151,8 @@ const CRMLeadsTable = ({ userId, filterType, onRefresh, statusFilters = [], sour
         // Website leads - leads from website forms
         query = query.eq("lead_source_type", "website");
       }
-      // For "all" and "assigned", show all leads (RLS will handle filtering)
+      // For "all", "assigned", and "vip", fetch all and filter client-side for VIP
+      // (is_vip column may not be in types yet)
 
       const { data: leadsData, error: leadsError } = await query.order("created_at", { ascending: false });
 
@@ -205,7 +207,12 @@ const CRMLeadsTable = ({ userId, filterType, onRefresh, statusFilters = [], sour
           filteredLeads = filteredLeads.filter(l => assignedIds.has(l.id));
         }
 
-        setLeads(filteredLeads);
+        // For VIP tab, filter to only VIP leads
+        if (filterType === "vip") {
+          filteredLeads = filteredLeads.filter(l => (l as any).is_vip === true);
+        }
+
+        setLeads(filteredLeads as Lead[]);
       } else {
         setLeads([]);
       }
@@ -239,6 +246,24 @@ const CRMLeadsTable = ({ userId, filterType, onRefresh, statusFilters = [], sour
     } catch (err) {
       console.error("Failed to delete lead:", err);
       toast.error("Failed to delete lead");
+    }
+  };
+
+  const handleToggleVIP = async (leadId: string, currentVIP: boolean) => {
+    try {
+      const { error } = await supabase
+        .from("crm_leads")
+        .update({ is_vip: !currentVIP } as any)
+        .eq("id", leadId);
+
+      if (error) throw error;
+
+      toast.success(currentVIP ? "Removed from VIP list" : "Added to VIP list");
+      fetchLeads();
+      onRefresh();
+    } catch (err) {
+      console.error("Failed to toggle VIP status:", err);
+      toast.error("Failed to update VIP status");
     }
   };
 
@@ -473,6 +498,17 @@ const CRMLeadsTable = ({ userId, filterType, onRefresh, statusFilters = [], sour
                             </Badge>
                           );
                         })()}
+                        {/* VIP Badge */}
+                        {(lead as any).is_vip && (
+                          <Badge 
+                            variant="outline" 
+                            className="text-[10px] px-1.5 py-0 h-5 bg-amber-500/20 border-amber-500/50 text-amber-400 font-bold"
+                            title="VIP Lead"
+                          >
+                            <Crown className="h-3 w-3 mr-0.5" />
+                            VIP
+                          </Badge>
+                        )}
                       </div>
                       <p className="text-xs text-muted-foreground">
                         {lead.nationality} · {lead.preferred_language?.toUpperCase()}
@@ -747,6 +783,15 @@ const CRMLeadsTable = ({ userId, filterType, onRefresh, statusFilters = [], sour
                           >
                             <Palette className="h-4 w-4 mr-2 text-pink-400" />
                             Interior Design AI
+                          </DropdownMenuItem>
+                          <DropdownMenuSeparator />
+                          <div className="px-2 py-1.5 text-xs font-semibold text-amber-500 uppercase tracking-wide">VIP Status</div>
+                          <DropdownMenuItem 
+                            onClick={() => handleToggleVIP(lead.id, !!(lead as any).is_vip)}
+                            className="cursor-pointer"
+                          >
+                            <Crown className={`h-4 w-4 mr-2 ${(lead as any).is_vip ? 'text-amber-400' : 'text-muted-foreground'}`} />
+                            {(lead as any).is_vip ? 'Remove from VIP' : 'Mark as VIP'}
                           </DropdownMenuItem>
                           <DropdownMenuSeparator />
                           <div className="px-2 py-1.5 text-xs font-semibold text-amber-400 uppercase tracking-wide">Documents</div>
