@@ -27,6 +27,7 @@ import CRMAIToolsPanel from "@/components/crm/CRMAIToolsPanel";
 import ClientPDFGenerator from "@/components/crm/ClientPDFGenerator";
 import AILeadScoring from "@/components/crm/AILeadScoring";
 import DealPrediction from "@/components/crm/DealPrediction";
+import AIPropertyCoach from "@/components/crm/AIPropertyCoach";
 import SmartEmailComposer from "@/components/crm/SmartEmailComposer";
 import SmartWhatsAppComposer from "@/components/crm/SmartWhatsAppComposer";
 
@@ -489,6 +490,9 @@ const CRMLeadDetail = () => {
           
           {/* Deal Prediction */}
           <DealPrediction lead={lead} currentStatus={currentStatus} activities={activities} />
+          
+          {/* AI Property Coach */}
+          <AIPropertyCoach lead={lead} activities={activities} />
 
           {/* Contact Card */}
           <Card>

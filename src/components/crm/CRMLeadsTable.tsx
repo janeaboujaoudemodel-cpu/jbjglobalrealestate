@@ -33,10 +33,11 @@ import {
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 import { toast } from "sonner";
-import { Search, Phone, MessageSquare, Mail, Eye, Filter, ChevronDown, Calendar, Lock, PhoneCall, Trash2, MoreHorizontal, FileText, Building2, Sparkles, Calculator, TrendingUp, BarChart3, Palette, FileSignature } from "lucide-react";
+import { Search, Phone, MessageSquare, Mail, Eye, Filter, ChevronDown, Calendar, Lock, PhoneCall, Trash2, MoreHorizontal, FileText, Building2, Sparkles, Calculator, TrendingUp, BarChart3, Palette, FileSignature, Flame, Thermometer, Snowflake } from "lucide-react";
 import LeadStatusBadge, { PIPELINE_STATUSES, getStatusInfo } from "./LeadStatusBadge";
 import FollowUpScheduler from "./FollowUpScheduler";
 import { useActiveLead } from "@/contexts/ActiveLeadContext";
+import { Badge } from "@/components/ui/badge";
 
 interface Lead {
   id: string;
@@ -77,6 +78,28 @@ const getFirstName = (fullName: string): string => {
   return fullName.split(" ")[0];
 };
 
+// Lead Temperature Scoring based on recency and completeness
+const getLeadTemperature = (lead: { created_at: string; state?: { last_touch_at: string | null; pipeline_status: string } }): { label: string; color: string; icon: any; bgColor: string } => {
+  const now = Date.now();
+  const createdAt = new Date(lead.created_at).getTime();
+  const lastTouch = lead.state?.last_touch_at ? new Date(lead.state.last_touch_at).getTime() : createdAt;
+  const daysSinceTouch = Math.floor((now - lastTouch) / (1000 * 60 * 60 * 24));
+  const status = lead.state?.pipeline_status || 'new';
+  
+  // Hot leads: contacted within 3 days OR positive status
+  const positiveStatuses = ['qualified', 'negotiating', 'won', 'meeting_scheduled', 'viewing_done'];
+  if (positiveStatuses.includes(status) || daysSinceTouch <= 3) {
+    return { label: 'Hot', color: 'text-red-500', icon: Flame, bgColor: 'bg-red-500/20 border-red-500/30' };
+  }
+  
+  // Warm leads: contacted within 7 days
+  if (daysSinceTouch <= 7) {
+    return { label: 'Warm', color: 'text-orange-400', icon: Thermometer, bgColor: 'bg-orange-500/20 border-orange-500/30' };
+  }
+  
+  // Cold leads: not contacted for more than 7 days
+  return { label: 'Cold', color: 'text-blue-400', icon: Snowflake, bgColor: 'bg-blue-500/20 border-blue-500/30' };
+};
 interface CRMLeadsTableProps {
   userId: string;
   filterType: "assigned" | "own" | "all" | "website";
@@ -426,14 +449,31 @@ const CRMLeadsTable = ({ userId, filterType, onRefresh, statusFilters = [], sour
                   </TableCell>
                   <TableCell>
                     <div>
-                      <p className="font-semibold text-foreground">
-                        {isCompanyAssigned ? getFirstName(lead.full_name) : lead.full_name}
-                        {isCompanyAssigned && (
-                          <span title="Contact details protected">
-                            <Lock className="inline h-3 w-3 ml-1 text-muted-foreground" />
-                          </span>
-                        )}
-                      </p>
+                      <div className="flex items-center gap-2">
+                        <p className="font-semibold text-foreground">
+                          {isCompanyAssigned ? getFirstName(lead.full_name) : lead.full_name}
+                          {isCompanyAssigned && (
+                            <span title="Contact details protected">
+                              <Lock className="inline h-3 w-3 ml-1 text-muted-foreground" />
+                            </span>
+                          )}
+                        </p>
+                        {/* Lead Temperature Badge */}
+                        {(() => {
+                          const temp = getLeadTemperature(lead);
+                          const TempIcon = temp.icon;
+                          return (
+                            <Badge 
+                              variant="outline" 
+                              className={`text-[10px] px-1.5 py-0 h-5 ${temp.bgColor} ${temp.color} font-semibold`}
+                              title={`${temp.label} Lead - Based on engagement recency`}
+                            >
+                              <TempIcon className="h-3 w-3 mr-0.5" />
+                              {temp.label}
+                            </Badge>
+                          );
+                        })()}
+                      </div>
                       <p className="text-xs text-muted-foreground">
                         {lead.nationality} · {lead.preferred_language?.toUpperCase()}
                       </p>
