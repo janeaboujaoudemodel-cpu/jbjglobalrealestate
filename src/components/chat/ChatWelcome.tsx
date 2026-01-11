@@ -1,6 +1,6 @@
 import { MessageCircle } from 'lucide-react';
 import { CONTACT_INFO } from '@/constants/stats';
-import { JJLogoTransparent } from '@/components/JJLogoImage';
+import jbjMonogramTransparent from "@/assets/jbj-monogram-transparent.png";
 
 interface ChatWelcomeProps {
   onStartChat: () => void;
@@ -11,15 +11,19 @@ const ChatWelcome = ({ onStartChat }: ChatWelcomeProps) => {
     <div className="flex-1 p-6 flex flex-col justify-center">
       <div className="text-center mb-6">
         <div className="mx-auto mb-4">
-          {/* Transparent logo: White J's with gold divider, no background */}
-          <JJLogoTransparent size="lg" />
+          {/* Transparent JBJ logo */}
+          <img 
+            src={jbjMonogramTransparent} 
+            alt="JBJ Global Real Estate" 
+            className="h-20 w-auto mx-auto object-contain"
+          />
         </div>
         <h4 className="text-white text-lg font-semibold mb-2">Welcome to JBJ Global Real Estate 👋</h4>
         <p className="text-zinc-400 text-sm">Your premium real estate partner in Dubai</p>
       </div>
 
       <div className="space-y-3">
-        {/* Chat with Team Option */}
+        {/* Chat with Team Option - Human Team, NOT AI */}
         <button
           onClick={onStartChat}
           className="w-full p-4 bg-gradient-to-r from-gold/10 to-gold/5 hover:from-gold/20 hover:to-gold/10 border border-gold/30 hover:border-gold/50 rounded-xl text-left transition-all duration-300 group"
