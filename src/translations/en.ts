@@ -541,6 +541,6 @@ export const en = {
   'aiTools.financialDesc': 'Budget analysis and property affordability insights (informational only)',
   'aiTools.shopper': 'AI Personal Shopper',
   'aiTools.shopperDesc': 'Find your perfect property with AI-powered recommendations',
-  'aiTools.hub': 'AI Hub',
-  'aiTools.hubDesc': 'Access all AI-powered tools in one place',
+  'aiTools.hub': 'JBJ Broker Hub',
+  'aiTools.hubDesc': 'Access broker tools, training, and support in one place',
 };

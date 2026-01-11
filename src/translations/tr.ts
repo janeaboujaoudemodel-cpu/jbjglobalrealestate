@@ -229,6 +229,6 @@ export const tr = {
   'aiTools.financialDesc': 'Mülk uygunluğu hakkında bilgi alın',
   'aiTools.shopper': 'AI Kişisel Alışveriş Danışmanı',
   'aiTools.shopperDesc': 'AI destekli önerilerle mükemmel mülkünüzü bulun',
-  'aiTools.hub': 'AI Merkezi',
-  'aiTools.hubDesc': 'Tüm AI araçlarına tek bir yerden erişin',
+  'aiTools.hub': 'JBJ Broker Merkezi',
+  'aiTools.hubDesc': 'Broker araçları, eğitim ve destek tek yerde',
 };
