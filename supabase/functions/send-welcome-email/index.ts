@@ -107,8 +107,8 @@ serve(async (req) => {
         <tr><td style="height: 10px;"></td></tr>
         <tr>
           <td style="padding: 15px; background-color: #f8f9fa; border-radius: 8px;">
-            <strong style="color: #1a1a2e;">👩‍💼 Dedicated HR Admin</strong>
-            <p style="color: #666; margin: 5px 0 0 0; font-size: 14px;">Jessica is your dedicated assistant for all inquiries and support.</p>
+            <strong style="color: #1a1a2e;">👩‍💼 Dedicated HR Manager & Personal Assistant</strong>
+            <p style="color: #666; margin: 5px 0 0 0; font-size: 14px;">Jessica and our team provide dedicated support for all your inquiries.</p>
           </td>
         </tr>
         <tr><td style="height: 10px;"></td></tr>

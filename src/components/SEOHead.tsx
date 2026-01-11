@@ -21,7 +21,7 @@ const BRAND_NAME = 'JBJ Global Real Estate';
 export const SEOHead = ({
   title,
   description = 'Premium real estate brokerage in Dubai offering property sales, leasing, and holiday homes services across the UAE.',
-  keywords = 'Dubai real estate, UAE property, luxury apartments, off-plan properties, JBJ Global Real Estate',
+  keywords = 'UAE real estate, Dubai property, luxury apartments, off-plan properties, JBJ Global Real Estate',
   canonicalPath,
   ogImage = DEFAULT_OG_IMAGE,
   ogType = 'website',
@@ -98,7 +98,7 @@ export const pagesSEO = {
   home: {
     title: 'Home',
     description: 'JBJ Global Real Estate - Premium real estate brokerage in Dubai. Explore luxury properties, off-plan developments, and exclusive listings across the UAE.',
-    keywords: 'Dubai real estate, UAE property brokerage, luxury apartments Dubai, off-plan properties, Palm Jumeirah, Downtown Dubai, JBJ Global Real Estate',
+    keywords: 'UAE real estate, Dubai property brokerage, luxury apartments Dubai, off-plan properties, Palm Jumeirah, Downtown Dubai, JBJ Global Real Estate',
     canonicalPath: '/',
   },
   properties: {
