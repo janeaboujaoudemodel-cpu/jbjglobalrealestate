@@ -792,6 +792,13 @@ export type Database = {
             referencedRelation: "broker_subscriptions"
             referencedColumns: ["id"]
           },
+          {
+            foreignKeyName: "broker_course_progress_subscription_id_fkey"
+            columns: ["subscription_id"]
+            isOneToOne: false
+            referencedRelation: "broker_subscriptions_safe"
+            referencedColumns: ["id"]
+          },
         ]
       }
       broker_onboarding_progress: {
@@ -900,6 +907,13 @@ export type Database = {
             columns: ["subscription_id"]
             isOneToOne: false
             referencedRelation: "broker_subscriptions"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "broker_pdf_exports_subscription_id_fkey"
+            columns: ["subscription_id"]
+            isOneToOne: false
+            referencedRelation: "broker_subscriptions_safe"
             referencedColumns: ["id"]
           },
         ]
@@ -1345,6 +1359,13 @@ export type Database = {
             referencedRelation: "broker_subscriptions"
             referencedColumns: ["id"]
           },
+          {
+            foreignKeyName: "content_access_logs_subscription_id_fkey"
+            columns: ["subscription_id"]
+            isOneToOne: false
+            referencedRelation: "broker_subscriptions_safe"
+            referencedColumns: ["id"]
+          },
         ]
       }
       course_sessions: {
@@ -1405,6 +1426,13 @@ export type Database = {
             columns: ["subscription_id"]
             isOneToOne: false
             referencedRelation: "broker_subscriptions"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "course_sessions_subscription_id_fkey"
+            columns: ["subscription_id"]
+            isOneToOne: false
+            referencedRelation: "broker_subscriptions_safe"
             referencedColumns: ["id"]
           },
         ]
@@ -2177,6 +2205,13 @@ export type Database = {
             columns: ["subscription_id"]
             isOneToOne: false
             referencedRelation: "broker_subscriptions"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "discount_code_usages_subscription_id_fkey"
+            columns: ["subscription_id"]
+            isOneToOne: false
+            referencedRelation: "broker_subscriptions_safe"
             referencedColumns: ["id"]
           },
         ]
@@ -5274,6 +5309,87 @@ export type Database = {
         }
         Relationships: []
       }
+      broker_subscriptions_safe: {
+        Row: {
+          ai_credits_limit: number | null
+          ai_credits_used: number | null
+          company_name: string | null
+          created_at: string | null
+          currency: string | null
+          email: string | null
+          expires_at: string | null
+          full_name: string | null
+          id: string | null
+          is_paid: boolean | null
+          payment_method_masked: string | null
+          payment_reference_masked: string | null
+          pdf_downloads: number | null
+          phone: string | null
+          rera_number: string | null
+          selected_addons: string[] | null
+          starts_at: string | null
+          status: string | null
+          terms_accepted_at: string | null
+          tier: string | null
+          trial_ends_at: string | null
+          updated_at: string | null
+          user_id: string | null
+          user_role: string | null
+        }
+        Insert: {
+          ai_credits_limit?: number | null
+          ai_credits_used?: number | null
+          company_name?: string | null
+          created_at?: string | null
+          currency?: string | null
+          email?: string | null
+          expires_at?: string | null
+          full_name?: string | null
+          id?: string | null
+          is_paid?: never
+          payment_method_masked?: never
+          payment_reference_masked?: never
+          pdf_downloads?: number | null
+          phone?: string | null
+          rera_number?: string | null
+          selected_addons?: string[] | null
+          starts_at?: string | null
+          status?: string | null
+          terms_accepted_at?: string | null
+          tier?: string | null
+          trial_ends_at?: string | null
+          updated_at?: string | null
+          user_id?: string | null
+          user_role?: string | null
+        }
+        Update: {
+          ai_credits_limit?: number | null
+          ai_credits_used?: number | null
+          company_name?: string | null
+          created_at?: string | null
+          currency?: string | null
+          email?: string | null
+          expires_at?: string | null
+          full_name?: string | null
+          id?: string | null
+          is_paid?: never
+          payment_method_masked?: never
+          payment_reference_masked?: never
+          pdf_downloads?: number | null
+          phone?: string | null
+          rera_number?: string | null
+          selected_addons?: string[] | null
+          starts_at?: string | null
+          status?: string | null
+          terms_accepted_at?: string | null
+          tier?: string | null
+          trial_ends_at?: string | null
+          updated_at?: string | null
+          user_id?: string | null
+          user_role?: string | null
+        }
+        Relationships: []
+      }
     }
     Functions: {
       bulk_assign_leads: {
@@ -5308,6 +5424,14 @@ export type Database = {
         Returns: {
           count: number
           status: string
+        }[]
+      }
+      get_subscription_payment_details: {
+        Args: { p_subscription_id: string }
+        Returns: {
+          payment_method: string
+          payment_reference: string
+          price_usd: number
         }[]
       }
       has_role: {
