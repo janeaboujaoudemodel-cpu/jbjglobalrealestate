@@ -27,6 +27,9 @@ import { toast } from "sonner";
 
 const ROLE_SELECTION_KEY = "jj_role_selected";
 
+// Single source of truth for brand name
+const BRAND_NAME = "JBJ Global Real Estate";
+
 type VisitorRole = 'broker' | 'investor' | 'visitor';
 
 interface RoleOption {
@@ -76,7 +79,7 @@ const ROLES: RoleOption[] = [
       'ROI Calculator',
       'Direct Consultation Booking'
     ],
-    welcomeTitle: 'Welcome to JBJ Global!',
+    welcomeTitle: `Welcome to ${BRAND_NAME}!`,
     welcomeMessage: 'As a valued buyer, you have access to exclusive market insights and premium property listings.'
   },
   {
@@ -91,7 +94,7 @@ const ROLES: RoleOption[] = [
       'View Market Data',
       'Explore Available Features'
     ],
-    welcomeTitle: 'Welcome to JBJ Global!',
+    welcomeTitle: `Welcome to ${BRAND_NAME}!`,
     welcomeMessage: 'We welcome you to explore our platform. Sign up to unlock AI tools and exclusive features.'
   }
 ];
@@ -109,7 +112,6 @@ const RoleSelectionModal = ({ onRoleSelected }: RoleSelectionModalProps) => {
   const [warningCountdown, setWarningCountdown] = useState(5);
   const [canDismissWarning, setCanDismissWarning] = useState(false);
   const [confirmedAccurate, setConfirmedAccurate] = useState(false);
-  const [isSaving, setIsSaving] = useState(false);
   const { user } = useAuth();
 
   const selectedRoleData = ROLES.find(r => r.id === selectedRole);
@@ -147,47 +149,49 @@ const RoleSelectionModal = ({ onRoleSelected }: RoleSelectionModalProps) => {
   const handleConfirmRole = async () => {
     if (!selectedRole) return;
     
-    setIsSaving(true);
-    try {
-      const sessionId = !user ? `guest_${Date.now()}_${Math.random().toString(36).substr(2, 9)}` : null;
-      
-      // Use insert with proper typing
-      const insertData: {
-        user_id?: string;
-        session_id?: string;
-        selected_role: string;
-        confirmed_accurate: boolean;
-      } = {
-        selected_role: selectedRole,
-        confirmed_accurate: confirmedAccurate
-      };
-      
-      if (user?.id) {
-        insertData.user_id = user.id;
-      } else if (sessionId) {
-        insertData.session_id = sessionId;
-      }
+    // OPTIMISTIC UI: Immediately save to localStorage and show welcome screen
+    localStorage.setItem(ROLE_SELECTION_KEY, selectedRole);
+    setCurrentStep('welcome');
+    
+    // Background save to database (non-blocking)
+    const saveToDatabase = async () => {
+      try {
+        const sessionId = !user ? `guest_${Date.now()}_${Math.random().toString(36).substr(2, 9)}` : null;
+        
+        const insertData: {
+          user_id?: string;
+          session_id?: string;
+          selected_role: string;
+          confirmed_accurate: boolean;
+        } = {
+          selected_role: selectedRole,
+          confirmed_accurate: confirmedAccurate
+        };
+        
+        if (user?.id) {
+          insertData.user_id = user.id;
+        } else if (sessionId) {
+          insertData.session_id = sessionId;
+          localStorage.setItem('jj_session_id', sessionId);
+        }
 
-      const { error } = await supabase
-        .from('user_role_selections')
-        .insert(insertData as any);
+        const { error } = await supabase
+          .from('user_role_selections')
+          .insert(insertData as any);
 
-      if (error) {
-        console.error('Error saving role:', error);
+        if (error) {
+          console.error('Error saving role to database:', error);
+          // Role is already saved locally, so user experience is preserved
+          // Optionally show a subtle warning (not blocking)
+        }
+      } catch (err) {
+        console.error('Background save error:', err);
+        // Silent fail - local storage already has the role
       }
-
-      localStorage.setItem(ROLE_SELECTION_KEY, selectedRole);
-      if (sessionId) {
-        localStorage.setItem('jj_session_id', sessionId);
-      }
-      
-      // Show welcome screen
-      setCurrentStep('welcome');
-    } catch (err) {
-      console.error('Error:', err);
-    } finally {
-      setIsSaving(false);
-    }
+    };
+    
+    // Fire and forget - don't await
+    saveToDatabase();
   };
 
   const handleBackFromWarning = () => {
@@ -300,10 +304,10 @@ const RoleSelectionModal = ({ onRoleSelected }: RoleSelectionModalProps) => {
 
                 <Button
                   onClick={handleConfirmRole}
-                  disabled={!selectedRole || isSaving}
+                  disabled={!selectedRole}
                   className="w-full py-6 bg-black hover:bg-zinc-900 text-gold font-semibold text-base shadow-xl rounded-xl group border border-gold/20 disabled:opacity-50"
                 >
-                  {isSaving ? 'Saving...' : 'Continue'}
+                  Continue
                   <ArrowRight className="w-5 h-5 ml-2 group-hover:translate-x-1 transition-transform" />
                 </Button>
               </motion.div>
@@ -385,10 +389,10 @@ const RoleSelectionModal = ({ onRoleSelected }: RoleSelectionModalProps) => {
                   </Button>
                   <Button
                     onClick={handleConfirmRole}
-                    disabled={!canDismissWarning || !confirmedAccurate || isSaving}
+                    disabled={!canDismissWarning || !confirmedAccurate}
                     className="flex-1 py-5 bg-gold hover:bg-gold/90 text-black font-semibold disabled:opacity-50"
                   >
-                    {isSaving ? 'Saving...' : 'Join Broker Circle'}
+                    Join Broker Circle
                     <ArrowRight className="w-5 h-5 ml-2" />
                   </Button>
                 </div>
@@ -461,15 +465,15 @@ const RoleSelectionModal = ({ onRoleSelected }: RoleSelectionModalProps) => {
                       <>
                         <div className="flex items-center gap-3 text-sm text-gray-600">
                           <div className="w-6 h-6 rounded-full bg-zinc-500/20 flex items-center justify-center text-xs font-bold text-zinc-600">1</div>
-                          <span>Explore <strong>Properties</strong> and market data</span>
+                          <span>Explore <strong>Properties & Market Data</strong></span>
                         </div>
                         <div className="flex items-center gap-3 text-sm text-gray-600">
                           <div className="w-6 h-6 rounded-full bg-zinc-500/20 flex items-center justify-center text-xs font-bold text-zinc-600">2</div>
-                          <span>Learn about <strong>Dubai Real Estate</strong></span>
+                          <span>Learn About <strong>UAE Real Estate</strong></span>
                         </div>
                         <div className="flex items-center gap-3 text-sm text-gray-600">
                           <div className="w-6 h-6 rounded-full bg-zinc-500/20 flex items-center justify-center text-xs font-bold text-zinc-600">3</div>
-                          <span>Upgrade anytime from the menu</span>
+                          <span>Access <strong>Tools Anytime</strong> from the Menu</span>
                         </div>
                       </>
                     )}
