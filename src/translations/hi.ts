@@ -11,8 +11,16 @@ export const hi = {
   'nav.contact': 'संपर्क करें',
   'nav.signIn': 'साइन इन करें',
   'nav.signOut': 'साइन आउट',
+  'nav.myAccount': 'मेरा खाता',
   'nav.admin': 'एडमिन पैनल',
   'nav.favorites': 'पसंदीदा',
+  'nav.compare': 'तुलना करें',
+  'nav.quiz': 'प्रॉपर्टी क्विज',
+  'nav.areaGuides': 'क्षेत्र गाइड',
+  'nav.buyerGuide': 'खरीदार गाइड',
+  'nav.sellerGuide': 'विक्रेता गाइड',
+  'nav.join': 'हमारी टीम से जुड़ें',
+  'nav.crm': 'CRM डैशबोर्ड',
   
   // Homepage
   'home.hero.welcome': 'JBJ Global Real Estate में आपका स्वागत है',

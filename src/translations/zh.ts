@@ -14,6 +14,13 @@ export const zh = {
   'nav.myAccount': '我的账户',
   'nav.admin': '管理面板',
   'nav.favorites': '收藏夹',
+  'nav.compare': '比较',
+  'nav.quiz': '房产测验',
+  'nav.areaGuides': '区域指南',
+  'nav.buyerGuide': '买家指南',
+  'nav.sellerGuide': '卖家指南',
+  'nav.join': '加入我们的团队',
+  'nav.crm': 'CRM仪表板',
   
   // Homepage
   'home.hero.welcome': '欢迎来到JBJ Global Real Estate',

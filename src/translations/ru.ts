@@ -14,6 +14,13 @@ export const ru = {
   'nav.myAccount': 'Мой Аккаунт',
   'nav.admin': 'Панель Админа',
   'nav.favorites': 'Избранное',
+  'nav.compare': 'Сравнить',
+  'nav.quiz': 'Тест Недвижимости',
+  'nav.areaGuides': 'Гиды по Районам',
+  'nav.buyerGuide': 'Руководство Покупателя',
+  'nav.sellerGuide': 'Руководство Продавца',
+  'nav.join': 'Присоединяйтесь к Команде',
+  'nav.crm': 'Панель CRM',
   
   // Homepage
   'home.hero.welcome': 'Добро пожаловать в JBJ Global Real Estate',
