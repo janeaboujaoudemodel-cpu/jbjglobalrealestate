@@ -132,7 +132,23 @@ const Privacy = () => {
               </section>
 
               <section>
-                <h2 className="text-gold text-xl font-semibold mb-4">10. Contact Us</h2>
+                <h2 className="text-gold text-xl font-semibold mb-4">10. Data Collection & Storage</h2>
+                <p>
+                  JBJ Global Real Estate collects and stores user-submitted information, including business cards, 
+                  contact details, and activity data, for the purpose of enhancing user experience, improving 
+                  platform performance, and assisting with account access or password recovery. All data is 
+                  securely encrypted and used solely for operational and service improvement purposes.
+                </p>
+                <ul className="list-disc pl-6 mt-2 space-y-2">
+                  <li>Business card data scanned through our AI-powered scanner</li>
+                  <li>User activity and interaction data for analytics</li>
+                  <li>Session tracking for improved user experience</li>
+                  <li>Form submissions and inquiry data</li>
+                </ul>
+              </section>
+
+              <section>
+                <h2 className="text-gold text-xl font-semibold mb-4">11. Contact Us</h2>
                 <p>
                   If you have questions about this Privacy Policy, please contact us at:
                 </p>
