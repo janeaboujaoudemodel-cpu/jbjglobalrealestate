@@ -1,5 +1,5 @@
 import { format } from "date-fns";
-import logoLight from "@/assets/logo-light.jpg";
+import jbjFullLogoLight from "@/assets/jbj-fulllogo-light.png";
 
 interface ReferralContractProps {
   partnerName: string;
@@ -26,7 +26,7 @@ export default function ReferralContract({
     <div className="bg-white text-black p-8 max-w-3xl mx-auto font-serif" id="referral-contract">
       {/* Header */}
       <div className="text-center border-b-2 border-gold pb-6 mb-8">
-        <img src={logoLight} alt="JBJ Global Real Estate" className="h-16 mx-auto mb-4" />
+        <img src={jbjFullLogoLight} alt="JBJ Global Real Estate" className="h-16 mx-auto mb-4" />
         <h1 className="text-2xl font-bold tracking-wide">JBJ GLOBAL REAL ESTATE</h1>
         <p className="text-sm text-gray-600 mt-1">Real Estate Brokerage</p>
         <p className="text-xs text-gray-500 mt-2">Dubai, United Arab Emirates</p>

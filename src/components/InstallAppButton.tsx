@@ -1,7 +1,7 @@
 import { useState, useEffect, useCallback } from "react";
 import { Download, X, Share } from "lucide-react";
 import { motion, AnimatePresence } from "framer-motion";
-import logoDark from "@/assets/logo-dark.jpg";
+import jbjMonogramDark from "@/assets/jbj-monogram-dark.png";
 import { toast } from "sonner";
 
 interface BeforeInstallPromptEvent extends Event {
@@ -207,9 +207,9 @@ const InstallAppButton = () => {
         >
           <div className="w-8 h-8 rounded-full overflow-hidden border-2 border-black/30 shadow-inner">
             <img
-              src={logoDark}
+              src={jbjMonogramDark}
               alt="JBJ Global Real Estate"
-              className="w-full h-full object-cover"
+              className="w-full h-full object-contain"
               loading="lazy"
             />
           </div>
