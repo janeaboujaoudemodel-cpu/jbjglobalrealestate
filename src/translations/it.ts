@@ -11,6 +11,7 @@ export const it = {
   'nav.contact': 'Contatti',
   'nav.signIn': 'Accedi',
   'nav.signOut': 'Esci',
+  'nav.myAccount': 'Il Mio Account',
   'nav.admin': 'Pannello Admin',
   'nav.favorites': 'Preferiti',
   

@@ -62,9 +62,14 @@ interface CVEntry {
   id: string;
   candidateName: string;
   email: string;
+  phone?: string;
   positionApplied: string;
   uploadDate: string;
   uploadedBy: string;
+  gender?: 'male' | 'female' | 'other';
+  languages?: string[];
+  age?: number;
+  category: 'collected' | 'flagged' | 'archived' | 'pending';
   ranking: number;
   status: 'pending' | 'reviewed' | 'interview_scheduled' | 'rejected' | 'hired';
   experience: string;
@@ -77,14 +82,36 @@ const TEAM_MEMBERS: Employee[] = [
   {
     id: 'jane',
     name: 'Jane Abou Jaoude',
-    role: 'CEO & Founder',
+    role: 'Founder',
     department: 'admin',
     type: 'human',
     email: 'jane@jbj.ae',
     phone: '+971 56 591 1000',
     status: 'active',
-    description: 'Visionary leader driving JBJ Global Real Estate success',
-    responsibilities: ['Strategic Direction', 'Business Development', 'Key Partnerships'],
+    description: 'Visionary leader and founder of JBJ Global Real Estate',
+    responsibilities: ['Strategic Direction', 'Business Development', 'Key Partnerships', 'Platform Vision'],
+  },
+  {
+    id: 'head-sales',
+    name: 'Head of Sales',
+    role: 'Sales Director',
+    department: 'brokers',
+    type: 'human',
+    email: 'sales@jbj.ae',
+    status: 'active',
+    description: 'Leads the sales team and drives revenue targets',
+    responsibilities: ['Sales Strategy', 'Team Performance', 'Client Relations', 'Revenue Growth'],
+  },
+  {
+    id: 'marketing-director',
+    name: 'Marketing Director',
+    role: 'Head of Marketing',
+    department: 'marketing',
+    type: 'human',
+    email: 'marketing@jbj.ae',
+    status: 'active',
+    description: 'Oversees all marketing initiatives and brand strategy',
+    responsibilities: ['Brand Strategy', 'Campaign Management', 'Market Research', 'Digital Marketing'],
   },
   {
     id: 'ai-receptionist',
@@ -318,6 +345,7 @@ const SAMPLE_CVS: CVEntry[] = [
     id: 'cv-1',
     candidateName: 'John Smith',
     email: 'john.smith@email.com',
+    phone: '+971 50 111 2222',
     positionApplied: 'Property Consultant',
     uploadDate: '2026-01-10',
     uploadedBy: 'Website Career Form',
@@ -325,11 +353,16 @@ const SAMPLE_CVS: CVEntry[] = [
     status: 'interview_scheduled',
     experience: '5 years in Dubai real estate',
     education: 'MBA in Real Estate Management',
+    category: 'collected',
+    gender: 'male',
+    languages: ['English', 'Arabic'],
+    age: 32,
   },
   {
     id: 'cv-2',
     candidateName: 'Emily Brown',
     email: 'emily.brown@email.com',
+    phone: '+971 55 333 4444',
     positionApplied: 'Marketing Coordinator',
     uploadDate: '2026-01-09',
     uploadedBy: 'LinkedIn Application',
@@ -337,11 +370,16 @@ const SAMPLE_CVS: CVEntry[] = [
     status: 'reviewed',
     experience: '3 years in digital marketing',
     education: 'Bachelor in Marketing',
+    category: 'collected',
+    gender: 'female',
+    languages: ['English', 'French'],
+    age: 28,
   },
   {
     id: 'cv-3',
     candidateName: 'Ali Mohammed',
     email: 'ali.m@email.com',
+    phone: '+971 52 555 6666',
     positionApplied: 'Senior Broker',
     uploadDate: '2026-01-08',
     uploadedBy: 'Referral',
@@ -349,6 +387,44 @@ const SAMPLE_CVS: CVEntry[] = [
     status: 'pending',
     experience: '8 years in luxury real estate',
     education: 'Master in Business Administration',
+    category: 'pending',
+    gender: 'male',
+    languages: ['Arabic', 'English', 'Hindi'],
+    age: 35,
+  },
+  {
+    id: 'cv-4',
+    candidateName: 'Sarah Chen',
+    email: 'sarah.chen@email.com',
+    phone: '+971 50 777 8888',
+    positionApplied: 'Junior Broker',
+    uploadDate: '2026-01-07',
+    uploadedBy: 'HR Direct Upload',
+    ranking: 6,
+    status: 'pending',
+    experience: '2 years in sales',
+    education: 'Bachelor in Business',
+    category: 'flagged',
+    gender: 'female',
+    languages: ['English', 'Mandarin'],
+    age: 25,
+  },
+  {
+    id: 'cv-5',
+    candidateName: 'Ahmed Hassan',
+    email: 'ahmed.h@email.com',
+    phone: '+971 56 999 0000',
+    positionApplied: 'Finance Officer',
+    uploadDate: '2026-01-05',
+    uploadedBy: 'Website Career Form',
+    ranking: 5,
+    status: 'rejected',
+    experience: '4 years in accounting',
+    education: 'Bachelor in Finance',
+    category: 'archived',
+    gender: 'male',
+    languages: ['Arabic', 'English'],
+    age: 30,
   },
 ];
 
@@ -364,6 +440,8 @@ const EmployeesHub = ({ userId, brokers = [] }: EmployeesHubProps) => {
   const [cvEntries, setCvEntries] = useState<CVEntry[]>(SAMPLE_CVS);
   const [cvSearchQuery, setCvSearchQuery] = useState('');
   const [cvFilter, setCvFilter] = useState<string>('all');
+  const [cvCategoryFilter, setCvCategoryFilter] = useState<string>('all');
+  const [cvGenderFilter, setCvGenderFilter] = useState<string>('all');
 
   const allBrokers = brokers.length > 0 ? brokers : SAMPLE_BROKERS;
   const allEmployees = [...TEAM_MEMBERS, ...allBrokers];
@@ -398,16 +476,37 @@ const EmployeesHub = ({ userId, brokers = [] }: EmployeesHubProps) => {
   const getFilteredCVs = () => {
     let filtered = cvEntries;
     
+    // Filter by status
     if (cvFilter !== 'all') {
       filtered = filtered.filter(cv => cv.status === cvFilter);
     }
     
+    // Filter by category (Collected, Flagged, Archived, Pending)
+    if (cvCategoryFilter !== 'all') {
+      filtered = filtered.filter(cv => cv.category === cvCategoryFilter);
+    }
+    
+    // Filter by gender
+    if (cvGenderFilter !== 'all') {
+      filtered = filtered.filter(cv => cv.gender === cvGenderFilter);
+    }
+    
+    // Enhanced search - search by name, position, email, languages, or gender keywords
     if (cvSearchQuery) {
       const query = cvSearchQuery.toLowerCase();
       filtered = filtered.filter(cv =>
         cv.candidateName.toLowerCase().includes(query) ||
         cv.positionApplied.toLowerCase().includes(query) ||
-        cv.email.toLowerCase().includes(query)
+        cv.email.toLowerCase().includes(query) ||
+        cv.experience?.toLowerCase().includes(query) ||
+        cv.education?.toLowerCase().includes(query) ||
+        cv.languages?.some(lang => lang.toLowerCase().includes(query)) ||
+        (cv.gender && cv.gender.toLowerCase().includes(query)) ||
+        (query === 'female' && cv.gender === 'female') ||
+        (query === 'male' && cv.gender === 'male') ||
+        (query === 'english' && cv.languages?.includes('English')) ||
+        (query === 'arabic' && cv.languages?.includes('Arabic')) ||
+        (query === 'marketing' && cv.positionApplied.toLowerCase().includes('marketing'))
       );
     }
     
@@ -645,12 +744,25 @@ const EmployeesHub = ({ userId, brokers = [] }: EmployeesHubProps) => {
                 <div className="relative flex-1 min-w-[200px]">
                   <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />
                   <Input
-                    placeholder="Search candidates..."
+                    placeholder="Search by name, position, language, gender, skills..."
                     value={cvSearchQuery}
                     onChange={(e) => setCvSearchQuery(e.target.value)}
                     className="pl-10 bg-zinc-900/50 border-zinc-800"
                   />
                 </div>
+                {/* Category Filter - NEW */}
+                <select
+                  value={cvCategoryFilter}
+                  onChange={(e) => setCvCategoryFilter(e.target.value)}
+                  className="px-3 py-2 bg-zinc-900/50 border border-zinc-800 rounded-md text-white text-sm"
+                >
+                  <option value="all">All Categories</option>
+                  <option value="collected">📂 Collected CVs</option>
+                  <option value="pending">⏳ Pending CVs</option>
+                  <option value="flagged">🚩 Flagged CVs</option>
+                  <option value="archived">📁 Archived CVs</option>
+                </select>
+                {/* Status Filter */}
                 <select
                   value={cvFilter}
                   onChange={(e) => setCvFilter(e.target.value)}
@@ -663,6 +775,41 @@ const EmployeesHub = ({ userId, brokers = [] }: EmployeesHubProps) => {
                   <option value="hired">Hired</option>
                   <option value="rejected">Rejected</option>
                 </select>
+                {/* Gender Filter - NEW */}
+                <select
+                  value={cvGenderFilter}
+                  onChange={(e) => setCvGenderFilter(e.target.value)}
+                  className="px-3 py-2 bg-zinc-900/50 border border-zinc-800 rounded-md text-white text-sm"
+                >
+                  <option value="all">All Gender</option>
+                  <option value="male">Male</option>
+                  <option value="female">Female</option>
+                </select>
+              </div>
+              
+              {/* Quick filter badges */}
+              <div className="flex flex-wrap gap-2 mt-3">
+                <Badge 
+                  variant={cvCategoryFilter === 'collected' ? 'default' : 'outline'}
+                  className="cursor-pointer hover:bg-gold/20"
+                  onClick={() => setCvCategoryFilter(cvCategoryFilter === 'collected' ? 'all' : 'collected')}
+                >
+                  📂 Collected ({cvEntries.filter(cv => cv.category === 'collected').length})
+                </Badge>
+                <Badge 
+                  variant={cvCategoryFilter === 'flagged' ? 'default' : 'outline'}
+                  className="cursor-pointer hover:bg-red-500/20 text-yellow-400"
+                  onClick={() => setCvCategoryFilter(cvCategoryFilter === 'flagged' ? 'all' : 'flagged')}
+                >
+                  🚩 Flagged ({cvEntries.filter(cv => cv.category === 'flagged').length})
+                </Badge>
+                <Badge 
+                  variant={cvCategoryFilter === 'archived' ? 'default' : 'outline'}
+                  className="cursor-pointer hover:bg-zinc-500/20"
+                  onClick={() => setCvCategoryFilter(cvCategoryFilter === 'archived' ? 'all' : 'archived')}
+                >
+                  📁 Archived ({cvEntries.filter(cv => cv.category === 'archived').length})
+                </Badge>
               </div>
             </CardHeader>
             <CardContent>
