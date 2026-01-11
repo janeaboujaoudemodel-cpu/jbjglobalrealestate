@@ -234,8 +234,14 @@ const RoleSelectionModal = ({ onRoleSelected }: RoleSelectionModalProps) => {
               >
                 <div className="text-center mb-8">
                   <div className="flex justify-center mb-4">
-                    <JJLogoImage variant="light" size="md" />
+                    <JJLogoImage variant="light" size="xl" showText={false} />
                   </div>
+                  <h3 
+                    className="text-lg md:text-xl font-bold tracking-[0.1em] text-black uppercase mb-3"
+                    style={{ fontFamily: "Poppins, sans-serif" }}
+                  >
+                    JBJ GLOBAL REAL ESTATE
+                  </h3>
                   <h2 className="text-2xl md:text-3xl font-semibold text-black mb-2" style={{ fontFamily: "Poppins, sans-serif" }}>
                     How Can We Help You?
                   </h2>
