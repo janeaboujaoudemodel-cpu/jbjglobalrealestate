@@ -6,6 +6,10 @@ const corsHeaders = {
   "Access-Control-Allow-Headers": "authorization, x-client-info, apikey, content-type, cf-connecting-ip, x-forwarded-for, x-real-ip",
 };
 
+// Rate limiting: max 10 submissions per IP per 15 minutes
+const RATE_LIMIT_WINDOW_MS = 15 * 60 * 1000;
+const MAX_REQUESTS_PER_WINDOW = 10;
+
 interface LeadCaptureRequest {
   email: string;
   fullName?: string;
@@ -26,11 +30,30 @@ interface LeadCaptureRequest {
   detectedCountry?: string;
 }
 
+function getClientIp(req: Request): string {
+  return (
+    req.headers.get("cf-connecting-ip") ||
+    req.headers.get("x-forwarded-for")?.split(",")[0]?.trim() ||
+    req.headers.get("x-real-ip") ||
+    "unknown"
+  );
+}
+
+// Sanitize string input to prevent injection
+function sanitizeString(input: string | undefined | null, maxLength: number = 200): string | null {
+  if (!input) return null;
+  return input
+    .trim()
+    .substring(0, maxLength)
+    .replace(/[<>]/g, '') // Remove HTML-like tags
+    .replace(/\${/g, ''); // Remove template literal injection
+}
+
 // Get location from IP using free ipapi.co service
 async function getLocationFromIP(ip: string): Promise<{ city: string | null; country: string | null }> {
   try {
     // Skip private/local IPs
-    if (ip === '127.0.0.1' || ip.startsWith('192.168.') || ip.startsWith('10.') || ip === '::1') {
+    if (ip === '127.0.0.1' || ip.startsWith('192.168.') || ip.startsWith('10.') || ip === '::1' || ip === 'unknown') {
       return { city: null, country: null };
     }
     
@@ -54,14 +77,91 @@ async function getLocationFromIP(ip: string): Promise<{ city: string | null; cou
   }
 }
 
+// Check rate limit for IP
+async function checkRateLimit(
+  supabase: any,
+  clientIp: string
+): Promise<{ allowed: boolean; retryAfterSeconds?: number }> {
+  const functionName = "capture-lead";
+  const windowStart = new Date(Date.now() - RATE_LIMIT_WINDOW_MS);
+
+  try {
+    const { data: existingEntry, error: fetchError } = await supabase
+      .from("function_rate_limits")
+      .select("*")
+      .eq("function_name", functionName)
+      .eq("rate_key", clientIp)
+      .gte("window_start", windowStart.toISOString())
+      .order("window_start", { ascending: false })
+      .limit(1)
+      .maybeSingle();
+
+    if (fetchError) {
+      console.error("Rate limit check error:", fetchError);
+      return { allowed: true }; // Allow on error to not block legitimate users
+    }
+
+    if (existingEntry) {
+      if (existingEntry.request_count >= MAX_REQUESTS_PER_WINDOW) {
+        const windowEndTime = new Date(existingEntry.window_start).getTime() + RATE_LIMIT_WINDOW_MS;
+        const retryAfterSeconds = Math.ceil((windowEndTime - Date.now()) / 1000);
+        console.warn(`Rate limit exceeded for IP: ${clientIp.substring(0, 8)}***`);
+        return { allowed: false, retryAfterSeconds: Math.max(retryAfterSeconds, 0) };
+      }
+
+      await supabase
+        .from("function_rate_limits")
+        .update({ request_count: existingEntry.request_count + 1 })
+        .eq("id", existingEntry.id);
+    } else {
+      await supabase
+        .from("function_rate_limits")
+        .insert({
+          function_name: functionName,
+          rate_key: clientIp,
+          window_start: new Date().toISOString(),
+          request_count: 1,
+        });
+    }
+
+    return { allowed: true };
+  } catch (err) {
+    console.error("Rate limit error:", err);
+    return { allowed: true };
+  }
+}
+
 serve(async (req: Request): Promise<Response> => {
   if (req.method === "OPTIONS") {
     return new Response(null, { headers: corsHeaders });
   }
 
+  const clientIp = getClientIp(req);
+
   try {
+    const supabaseUrl = Deno.env.get("SUPABASE_URL")!;
+    const supabaseServiceKey = Deno.env.get("SUPABASE_SERVICE_ROLE_KEY")!;
+    const supabase = createClient(supabaseUrl, supabaseServiceKey);
+
+    // Check rate limit first
+    const rateLimitResult = await checkRateLimit(supabase, clientIp);
+    if (!rateLimitResult.allowed) {
+      return new Response(
+        JSON.stringify({ error: "Too many requests. Please try again later." }),
+        { 
+          status: 429, 
+          headers: { 
+            ...corsHeaders, 
+            "Content-Type": "application/json",
+            "Retry-After": String(rateLimitResult.retryAfterSeconds || 900)
+          } 
+        }
+      );
+    }
+
     const data: LeadCaptureRequest = await req.json();
 
+    // Validate required fields
     if (!data.email || !data.source) {
       return new Response(
         JSON.stringify({ error: "Email and source are required" }),
@@ -69,53 +169,62 @@ serve(async (req: Request): Promise<Response> => {
       );
     }
 
+    // Strict email validation
     const emailRegex = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
-    if (!emailRegex.test(data.email)) {
+    const normalizedEmail = data.email.toLowerCase().trim().substring(0, 255);
+    if (!emailRegex.test(normalizedEmail)) {
       return new Response(
         JSON.stringify({ error: "Invalid email format" }),
         { status: 400, headers: { ...corsHeaders, "Content-Type": "application/json" } }
       );
     }
 
-    // Get client IP for geolocation
-    const clientIP = req.headers.get('cf-connecting-ip') || 
-                     req.headers.get('x-forwarded-for')?.split(',')[0]?.trim() || 
-                     req.headers.get('x-real-ip') || 
-                     '';
-    
-    // Auto-detect location from IP if not provided
-    let detectedLocation = { city: data.detectedCity || null, country: data.detectedCountry || null };
-    if (!data.currentLocation && clientIP) {
-      detectedLocation = await getLocationFromIP(clientIP);
-      console.log('Detected location from IP:', detectedLocation);
+    // Validate source is from allowed list
+    const allowedSources = [
+      'website', 'homepage', 'market_report', 'property-evaluation',
+      'contact_form', 'newsletter', 'ai_chat', 'inquiry', 'comparison',
+      'broker_signup', 'project_inquiry', 'schedule_call'
+    ];
+    const sanitizedSource = sanitizeString(data.source, 50) || 'website';
+    if (!allowedSources.includes(sanitizedSource.replace(/-/g, '_'))) {
+      console.warn(`Unknown source attempted: ${sanitizedSource}`);
+      // Still allow but log for monitoring
     }
 
-    const supabaseUrl = Deno.env.get("SUPABASE_URL")!;
-    const supabaseServiceKey = Deno.env.get("SUPABASE_SERVICE_ROLE_KEY")!;
-    const supabase = createClient(supabaseUrl, supabaseServiceKey);
+    // Sanitize all input fields
+    const sanitizedFullName = sanitizeString(data.fullName, 100);
+    const sanitizedPhone = data.phone?.replace(/[^\d+\-\s\(\)]/g, '').substring(0, 20) || null;
+    const sanitizedNationality = sanitizeString(data.nationality, 100);
+    const sanitizedLanguage = sanitizeString(data.language, 50);
+    const sanitizedLocation = sanitizeString(data.currentLocation, 100);
+    const sanitizedAgeRange = sanitizeString(data.ageRange, 20);
+    const sanitizedPageSource = sanitizeString(data.pageSource, 100);
+    const sanitizedSubSource = sanitizeString(data.subSource, 100);
 
-    const normalizedEmail = data.email.toLowerCase().trim();
-    const normalizedPhone = data.phone?.replace(/[\s\-\(\)]/g, '') || null;
-
-    // Determine contact type from role
+    // Validate contact type
+    const validContactTypes = ['client', 'broker', 'investor', 'visitor'];
     let contactType: 'client' | 'broker' | 'investor' | 'visitor' | 'other' = 'client';
-    if (data.role === 'broker') {
+    if (data.role === 'broker' && validContactTypes.includes('broker')) {
       contactType = 'broker';
-    } else if (data.role === 'visitor') {
-      contactType = 'client';
     } else if (data.buyerType === 'investor') {
       contactType = 'investor';
     }
 
-    // Build tags from source, role info, and sub-source
-    const tags: string[] = [data.source.replace(/_/g, '-')];
-    if (data.subSource) tags.push(`subsource-${data.subSource.replace(/\s+/g, '-').toLowerCase()}`);
+    // Auto-detect location from IP if not provided
+    let detectedLocation = { city: data.detectedCity || null, country: data.detectedCountry || null };
+    if (!sanitizedLocation && clientIp !== 'unknown') {
+      detectedLocation = await getLocationFromIP(clientIp);
+      console.log('Detected location from IP:', detectedLocation);
+    }
+
+    // Build tags with sanitized values
+    const tags: string[] = [sanitizedSource.replace(/_/g, '-')];
+    if (sanitizedSubSource) tags.push(`subsource-${sanitizedSubSource.replace(/\s+/g, '-').toLowerCase()}`);
     if (data.role) tags.push(`role-${data.role}`);
     if (data.buyerType) tags.push(`buyer-type-${data.buyerType}`);
-    if (data.pageSource) tags.push(`page-${data.pageSource.replace(/\//g, '-').replace(/^-/, '')}`);
+    if (sanitizedPageSource) tags.push(`page-${sanitizedPageSource.replace(/\//g, '-').replace(/^-/, '')}`);
 
-    // Use provided location or detected location
-    const locationCity = data.currentLocation || detectedLocation.city;
+    const locationCity = sanitizedLocation || detectedLocation.city;
     const locationCountry = detectedLocation.country;
 
     // 1. Upsert to leads table
@@ -123,15 +232,15 @@ serve(async (req: Request): Promise<Response> => {
       .from('leads')
       .upsert({
         email: normalizedEmail,
-        full_name: data.fullName || null,
-        phone: normalizedPhone,
-        nationality: data.nationality || null,
-        language: data.language || null,
-        birthday: data.birthday || null,
-        current_location: locationCity || null,
-        age_range: data.ageRange || null,
+        full_name: sanitizedFullName,
+        phone: sanitizedPhone,
+        nationality: sanitizedNationality,
+        language: sanitizedLanguage,
+        birthday: data.birthday ? sanitizeString(data.birthday, 20) : null,
+        current_location: locationCity,
+        age_range: sanitizedAgeRange,
         source: 'website',
-        page_source: data.pageSource || null,
+        page_source: sanitizedPageSource,
       }, {
         onConflict: 'email',
         ignoreDuplicates: false,
@@ -152,13 +261,13 @@ serve(async (req: Request): Promise<Response> => {
       const { error: updateError } = await supabase
         .from('crm_leads')
         .update({
-          full_name: data.fullName || existingLead.id,
-          phone_e164: normalizedPhone,
-          nationality: data.nationality || null,
-          preferred_language: data.language || null,
-          current_location_country: locationCountry || null,
-          current_location_city: locationCity || null,
-          age_range: data.ageRange || null,
+          full_name: sanitizedFullName || existingLead.id,
+          phone_e164: sanitizedPhone,
+          nationality: sanitizedNationality,
+          preferred_language: sanitizedLanguage,
+          current_location_country: locationCountry,
+          current_location_city: locationCity,
+          age_range: sanitizedAgeRange,
           updated_at: new Date().toISOString(),
         })
         .eq('id', existingLead.id);
@@ -172,27 +281,28 @@ serve(async (req: Request): Promise<Response> => {
       const { data: newLead, error: crmError } = await supabase
         .from('crm_leads')
         .insert({
-          full_name: data.fullName || normalizedEmail.split('@')[0],
+          full_name: sanitizedFullName || normalizedEmail.split('@')[0],
           email_lower: normalizedEmail,
-          phone_e164: normalizedPhone,
-          nationality: data.nationality || null,
-          preferred_language: data.language || null,
-          current_location_country: locationCountry || null,
-          current_location_city: locationCity || null,
-          age_range: data.ageRange || null,
-          source: data.source,
+          phone_e164: sanitizedPhone,
+          nationality: sanitizedNationality,
+          preferred_language: sanitizedLanguage,
+          current_location_country: locationCountry,
+          current_location_city: locationCity,
+          age_range: sanitizedAgeRange,
+          source: sanitizedSource,
           owner_type: 'company_assigned',
           lead_source_type: 'website',
           contact_type: contactType,
-          tags: tags,
+          tags: tags.slice(0, 10), // Limit tags
         })
         .select('id')
         .single();
 
       if (crmError) {
         console.error('Error inserting CRM lead:', crmError);
+        // Return generic error - don't expose database details
         return new Response(
-          JSON.stringify({ error: "Failed to save lead to CRM", details: crmError.message }),
+          JSON.stringify({ error: "Unable to process your request. Please try again." }),
           { status: 500, headers: { ...corsHeaders, "Content-Type": "application/json" } }
         );
       }
@@ -211,9 +321,9 @@ serve(async (req: Request): Promise<Response> => {
 
   } catch (error: unknown) {
     console.error("Error in capture-lead:", error);
-    const message = error instanceof Error ? error.message : "Internal server error";
+    // Return generic error message - don't expose internal details
     return new Response(
-      JSON.stringify({ error: message }),
+      JSON.stringify({ error: "An unexpected error occurred. Please try again." }),
       { status: 500, headers: { ...corsHeaders, "Content-Type": "application/json" } }
     );
   }
