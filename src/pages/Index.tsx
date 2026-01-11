@@ -6,20 +6,15 @@ import StatsCounter from "@/components/StatsCounter";
 import AIComparisonWidget from "@/components/AIComparisonWidget";
 import MarketReportCTA from "@/components/MarketReportCTA";
 import MortgageCalculator from "@/components/MortgageCalculator";
-import WelcomeModal from "@/components/WelcomeModal";
-import RoleSelectionModal from "@/components/RoleSelectionModal";
 import BrokerOnboardingBanner from "@/components/BrokerOnboardingBanner";
 import InquiryFormModal from "@/components/InquiryFormModal";
-import InstallAppButton from "@/components/InstallAppButton";
-import AppDownloadPopup from "@/components/AppDownloadPopup";
-import CookiesConsentBanner from "@/components/CookiesConsentBanner";
 import { SEOHead, pagesSEO } from "@/components/SEOHead";
 import { useLanguage } from "@/contexts/LanguageContext";
 import { useUserRole } from "@/hooks/useUserRole";
 import { Sparkles, ArrowUpRight, ChevronDown, User, Scale, Layers, Calculator, FileText, Heart, BarChart3, Wrench, Ruler, Palette, Calendar, Wallet, ShoppingBag, Brain, GraduationCap, Briefcase, Target, Award, PenTool, Users, Table2, Video } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import founderProfessional from "@/assets/founder-professional.jpeg";
-import luxuryVillaHero from "@/assets/luxury-villa-hero.jpeg"; // Used in other sections
+import luxuryVillaHero from "@/assets/luxury-villa-hero.jpeg";
 import jbjFullLogoLight from "@/assets/jbj-fulllogo-light.png";
 import { CONTACT_INFO } from "@/constants/stats";
 
@@ -47,24 +42,8 @@ const Index = () => {
       {/* SEO Meta Tags */}
       <SEOHead {...pagesSEO.home} />
       
-      {/* Welcome Modal - AI Assistant Popup on first load */}
-      <WelcomeModal />
-      
-      {/* Role Selection Modal - Shows after welcome modal */}
-      <RoleSelectionModal />
-      
       {/* Broker Onboarding Banner - Only for brokers */}
       {isBroker && <BrokerOnboardingBanner />}
-      
-      {/* Cookies Consent Banner */}
-      <CookiesConsentBanner />
-      
-      {/* App Download Popup - Premium PWA install prompt */}
-      <AppDownloadPopup showOnLoad={true} delayMs={3000} />
-      
-      {/* Floating Install App Button */}
-      <InstallAppButton />
-
       {/* HERO SECTION - LUXURY CINEMATIC VIDEO */}
       <div className="relative min-h-screen flex items-center justify-center overflow-hidden">
         {/* Video Background - Luxury Dubai Drone Footage Concept */}

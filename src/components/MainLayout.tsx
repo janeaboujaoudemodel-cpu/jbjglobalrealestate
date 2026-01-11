@@ -2,11 +2,9 @@ import { useEffect, useState, useRef, useCallback } from "react";
 import { useLocation } from "react-router-dom";
 import GlobalHeader from "@/components/GlobalHeader";
 import AIChatWidget from "@/components/AIChatWidget";
-import InstallAppButton from "@/components/InstallAppButton";
 import MarketingScripts from "@/components/marketing/MarketingScripts";
-import FreeToolsBanner from "@/components/FreeToolsBanner";
-import LeadIntentModal from "@/components/LeadIntentModal";
 import SecurityShield from "@/components/SecurityShield";
+import PopupLayer from "@/components/PopupLayer";
 import { useLanguage } from "@/contexts/LanguageContext";
 import { useIsMobile } from "@/hooks/use-mobile";
 
@@ -102,9 +100,8 @@ const MainLayout = ({ children }: MainLayoutProps) => {
       <main className="pt-16 lg:pt-18">
         {children}
       </main>
-      <InstallAppButton />
-      <FreeToolsBanner />
-      <LeadIntentModal />
+      {/* All popups rendered centrally */}
+      <PopupLayer />
       {!isAdminRoute && (
         <AIChatWidget
           isCollapsed={effectiveCollapsed}
