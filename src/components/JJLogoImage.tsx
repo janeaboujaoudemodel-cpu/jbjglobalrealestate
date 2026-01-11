@@ -1,9 +1,11 @@
-// JJ Logo Image Component - Uses the official logo files
-// Light version: Black J's with Gold divider on white/transparent background
-// Dark version: White J's with Gold divider on black background
+// JBJ Logo Image Component - Uses the official JBJ logo files
+// This component is DEPRECATED - Use JBJLogo.tsx instead
+// Keeping for backward compatibility - all imports redirect to JBJ assets
 
-import logoLight from "@/assets/logo-light.jpg";
-import logoDark from "@/assets/logo-dark.jpg";
+import jbjMonogramDark from "@/assets/jbj-monogram-dark.png";
+import jbjMonogramTransparent from "@/assets/jbj-monogram-transparent.png";
+import jbjFullLogoDark from "@/assets/jbj-fulllogo-dark.png";
+import jbjFullLogoLight from "@/assets/jbj-fulllogo-light.png";
 
 interface JJLogoImageProps {
   variant?: 'light' | 'dark';
@@ -28,7 +30,9 @@ export const JJLogoImage = ({
   showText = true
 }: JJLogoImageProps) => {
   const config = sizeConfig[size];
-  const logoSrc = variant === 'dark' ? logoDark : logoLight;
+  
+  // Use JBJ monogram - transparent for light backgrounds, dark for dark backgrounds
+  const logoSrc = variant === 'dark' ? jbjMonogramDark : jbjMonogramTransparent;
   
   return (
     <div className={`flex flex-col items-center ${className}`}>
@@ -57,18 +61,18 @@ export const JJLogoImage = ({
   );
 };
 
-// CSS-based transparent logo - White J's with Gold divider on transparent background
-// Use this for chat widget and dark overlays where JPG background won't work
+// CSS-based transparent logo - Gold 'B' on transparent background
+// Use this for chat widget and dark overlays where image background won't work
 interface JJLogoTransparentProps {
   size?: 'xs' | 'sm' | 'md' | 'lg';
   className?: string;
 }
 
 const transparentSizeConfig = {
-  xs: { j: 'text-2xl', divider: 'h-5', gap: '4px' },
-  sm: { j: 'text-3xl', divider: 'h-6', gap: '5px' },
-  md: { j: 'text-4xl', divider: 'h-8', gap: '6px' },
-  lg: { j: 'text-5xl', divider: 'h-10', gap: '8px' },
+  xs: { text: 'text-2xl', imgSize: 24 },
+  sm: { text: 'text-3xl', imgSize: 32 },
+  md: { text: 'text-4xl', imgSize: 40 },
+  lg: { text: 'text-5xl', imgSize: 56 },
 };
 
 export const JJLogoTransparent = ({ size = 'md', className = '' }: JJLogoTransparentProps) => {
@@ -76,55 +80,41 @@ export const JJLogoTransparent = ({ size = 'md', className = '' }: JJLogoTranspa
   
   return (
     <div className={`flex items-center justify-center ${className}`}>
-      <span 
-        className={`text-white font-extralight ${config.j} leading-none`}
-        style={{ fontFamily: "Poppins, sans-serif" }}
-      >
-        J
-      </span>
-      <div 
-        className="flex items-center justify-center"
-        style={{ marginLeft: config.gap, marginRight: config.gap }}
-      >
-        <div className={`w-[2px] bg-gradient-to-b from-transparent via-gold to-transparent ${config.divider}`} />
-      </div>
-      <span 
-        className={`text-white font-extralight ${config.j} leading-none`}
-        style={{ fontFamily: "Poppins, sans-serif" }}
-      >
-        J
-      </span>
+      <img 
+        src={jbjMonogramTransparent}
+        alt="JBJ Global Real Estate"
+        width={config.imgSize}
+        height={config.imgSize}
+        className="object-contain"
+        style={{ width: config.imgSize, height: config.imgSize }}
+      />
     </div>
   );
 };
 
-// Header-specific logo - Matches footer styling exactly (uses same logoDark asset)
-// Uses crisp rendering with explicit dimensions to prevent blur
+// Header-specific logo - Uses JBJ monogram with company name
 export const JJLogoHeaderImage = ({ className = '' }: { className?: string }) => (
   <div 
     className={`flex items-center gap-3 ${className}`}
     style={{ fontFamily: "Poppins, sans-serif" }}
   >
-    {/* Logo image - same asset as footer (logoDark), crisp at 48x48 */}
+    {/* JBJ Logo image */}
     <img 
-      src={logoDark} 
+      src={jbjMonogramDark} 
       alt="JBJ Global Real Estate"
-      width={48}
-      height={48}
+      width={44}
+      height={44}
       className="object-contain shrink-0"
       style={{ 
-        width: 48, 
-        height: 48,
+        width: 44, 
+        height: 44,
         imageRendering: 'auto'
       }}
     />
-    {/* Text block - styled like footer */}
+    {/* Text block */}
     <div className="flex flex-col justify-center leading-tight">
       <span className="text-white font-semibold text-sm md:text-base tracking-[0.12em] uppercase">
         Global Real Estate
-      </span>
-      <span className="text-gold text-[10px] md:text-xs tracking-[0.2em] uppercase mt-0.5">
-        Real Estate
       </span>
     </div>
   </div>
