@@ -14,6 +14,13 @@ export const tr = {
   'nav.myAccount': 'Hesabım',
   'nav.admin': 'Yönetici Paneli',
   'nav.favorites': 'Favoriler',
+  'nav.compare': 'Karşılaştır',
+  'nav.quiz': 'Gayrimenkul Testi',
+  'nav.areaGuides': 'Bölge Rehberleri',
+  'nav.buyerGuide': 'Alıcı Rehberi',
+  'nav.sellerGuide': 'Satıcı Rehberi',
+  'nav.join': 'Ekibimize Katılın',
+  'nav.crm': 'CRM Panosu',
   
   // Homepage
   'home.hero.welcome': 'JBJ Global Real Estate\'e Hoş Geldiniz',

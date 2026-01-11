@@ -16,6 +16,11 @@ export const fr = {
   'nav.favorites': 'Favoris',
   'nav.compare': 'Comparer',
   'nav.quiz': 'Quiz Immobilier',
+  'nav.areaGuides': 'Guides des Quartiers',
+  'nav.buyerGuide': 'Guide de l\'Acheteur',
+  'nav.sellerGuide': 'Guide du Vendeur',
+  'nav.join': 'Rejoignez Notre Équipe',
+  'nav.crm': 'Tableau de Bord CRM',
   
   // Homepage
   'home.hero.welcome': 'Bienvenue chez JBJ Global Real Estate',

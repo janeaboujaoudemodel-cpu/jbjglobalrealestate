@@ -65,17 +65,20 @@ const GlobalHeader = () => {
   const hasCRMAccess = crmProfile?.is_active && 
     (crmProfile?.crm_role === 'owner_admin' || crmProfile?.crm_role === 'broker_member');
 
-  // Updated navigation order: Home, Founder, About, Properties, Services, Awards, News, Contact, Join
+  // Updated navigation order per Task 1: Home, Area Guides, Buyer Guide, Seller Guide, Founder, About, Properties, Services, Awards, News, Join, Contact
   const mainNavLinks = [
     { href: "/", label: t('nav.home'), icon: Home },
+    { href: "/areas", label: t('nav.areaGuides') || 'Area Guides', icon: Building2 },
+    { href: "/buyer-guide", label: t('nav.buyerGuide') || 'Buyer Guide', icon: FileText },
+    { href: "/seller-guide", label: t('nav.sellerGuide') || 'Seller Guide', icon: FileText },
     { href: "/founder", label: t('nav.founder'), icon: User },
     { href: "/about", label: t('nav.about'), icon: Building2 },
     { href: "/properties", label: t('nav.properties'), icon: Building2 },
     { href: "/services", label: t('nav.services'), icon: Building2 },
     { href: "/awards", label: t('nav.awards'), icon: Building2 },
     { href: "/news", label: t('nav.news'), icon: Newspaper },
+    { href: "/join", label: t('nav.join') || 'Join Our Team', icon: User },
     { href: "/contact", label: t('nav.contact'), icon: Phone },
-    { href: "/join", label: "Join", icon: User },
   ];
 
   // Property shortcuts for quick access
@@ -245,9 +248,7 @@ const GlobalHeader = () => {
                       className="flex items-center gap-3 px-4 py-3 text-zinc-300 hover:text-white hover:bg-zinc-900/80 transition-colors"
                     >
                       <Heart className="w-5 h-5" />
-                      <span>Favorites</span>
-                      <span className="text-zinc-600">|</span>
-                      <span>Shortlist</span>
+                      <span>{t('nav.favorites')}</span>
                       {totalCount > 0 && (
                         <span className="ml-auto bg-gold text-black text-xs px-2 py-0.5 rounded-full font-medium">
                           {totalCount}
@@ -259,7 +260,10 @@ const GlobalHeader = () => {
 
                     {user ? (
                       <>
-                        <div className="px-4 py-2 text-zinc-500 text-sm">Signed in as {user.email?.split("@")[0]}</div>
+                        <div className="px-4 py-3 text-gold font-medium border-l-2 border-gold bg-gold/5">
+                          {t('nav.myAccount')}
+                        </div>
+                        <div className="px-4 py-2 text-zinc-500 text-sm">{user.email?.split("@")[0]}</div>
                         {hasCRMAccess && (
                           <Link
                             to="/crm"
@@ -267,7 +271,7 @@ const GlobalHeader = () => {
                             className="flex items-center gap-3 px-4 py-3 text-gold hover:text-gold/80 hover:bg-gold/10 transition-colors"
                           >
                             <Users className="w-5 h-5" />
-                            CRM Dashboard
+                            {t('nav.crm') || 'CRM Dashboard'}
                           </Link>
                         )}
                         {isAdmin && (
@@ -277,7 +281,7 @@ const GlobalHeader = () => {
                             className="flex items-center gap-3 px-4 py-3 text-zinc-300 hover:text-white hover:bg-zinc-900 transition-colors"
                           >
                             <Settings className="w-5 h-5" />
-                            Admin Panel
+                            {t('nav.admin')}
                           </Link>
                         )}
                         <button
@@ -288,7 +292,7 @@ const GlobalHeader = () => {
                           className="flex items-center gap-3 px-4 py-3 text-zinc-300 hover:text-white hover:bg-zinc-900 transition-colors w-full text-left"
                         >
                           <LogOut className="w-5 h-5" />
-                          Sign Out
+                          {t('nav.signOut')}
                         </button>
                       </>
                     ) : (
@@ -298,7 +302,7 @@ const GlobalHeader = () => {
                         className="flex items-center gap-3 px-4 py-3 text-gold hover:text-gold/80 hover:bg-gold/10 transition-colors"
                       >
                         <User className="w-5 h-5" />
-                        Sign In / Create Account
+                        {t('nav.signIn')}
                       </Link>
                     )}
                   </nav>
@@ -313,21 +317,24 @@ const GlobalHeader = () => {
                   <DropdownMenuTrigger asChild>
                     <Button variant="ghost" className="text-gold hover:text-gold-light hover:bg-gold/10">
                       <User className="w-4 h-4 mr-2" />
-                      {user.email?.split("@")[0]}
+                      {t('nav.myAccount')}
                     </Button>
                   </DropdownMenuTrigger>
                   <DropdownMenuContent align="end" className="bg-black border-zinc-800">
+                    <div className="px-3 py-2 text-zinc-500 text-sm border-b border-zinc-800">
+                      {user.email?.split("@")[0]}
+                    </div>
                     <DropdownMenuItem asChild>
                       <Link to="/favorites" className="flex items-center gap-2 text-zinc-300">
                         <Heart className="w-4 h-4" />
-                        My Favorites & Shortlist
+                        {t('nav.favorites')}
                       </Link>
                     </DropdownMenuItem>
                     {hasCRMAccess && (
                       <DropdownMenuItem asChild>
                         <Link to="/crm" className="flex items-center gap-2 text-zinc-300">
                           <Users className="w-4 h-4" />
-                          CRM Dashboard
+                          {t('nav.crm') || 'CRM Dashboard'}
                         </Link>
                       </DropdownMenuItem>
                     )}
@@ -335,21 +342,21 @@ const GlobalHeader = () => {
                       <DropdownMenuItem asChild>
                         <Link to="/admin" className="flex items-center gap-2 text-zinc-300">
                           <Settings className="w-4 h-4" />
-                          Admin Panel
+                          {t('nav.admin')}
                         </Link>
                       </DropdownMenuItem>
                     )}
                     <DropdownMenuSeparator className="bg-zinc-800" />
                     <DropdownMenuItem onClick={() => signOut()} className="text-zinc-300">
                       <LogOut className="w-4 h-4 mr-2" />
-                      Sign Out
+                      {t('nav.signOut')}
                     </DropdownMenuItem>
                   </DropdownMenuContent>
                 </DropdownMenu>
               ) : (
                 <Link to="/auth">
                   <Button variant="ghost" className="text-gold hover:text-gold-light hover:bg-gold/10">
-                    Sign In
+                    {t('nav.signIn')}
                   </Button>
                 </Link>
               )}

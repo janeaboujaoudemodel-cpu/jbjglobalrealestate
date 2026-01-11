@@ -11,8 +11,16 @@ export const fa = {
   'nav.contact': 'تماس با ما',
   'nav.signIn': 'ورود',
   'nav.signOut': 'خروج',
+  'nav.myAccount': 'حساب من',
   'nav.admin': 'پنل مدیریت',
   'nav.favorites': 'علاقه‌مندی‌ها',
+  'nav.compare': 'مقایسه',
+  'nav.quiz': 'آزمون ملک',
+  'nav.areaGuides': 'راهنمای مناطق',
+  'nav.buyerGuide': 'راهنمای خریدار',
+  'nav.sellerGuide': 'راهنمای فروشنده',
+  'nav.join': 'به تیم ما بپیوندید',
+  'nav.crm': 'داشبورد CRM',
   
   // Homepage
   'home.hero.welcome': 'به JBJ Global Real Estate خوش آمدید',
