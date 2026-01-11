@@ -136,20 +136,21 @@ const Index = () => {
             Licensed partners available for legal and mortgage introductions.
           </motion.p>
 
-          {/* Two CTAs Only - Gold Buttons */}
+          {/* Two CTAs Only - Premium Gold Buttons with Glow */}
           <motion.div 
             variants={fadeInUp}
             className="flex flex-col sm:flex-row items-center justify-center gap-4"
           >
             <Link to="/properties">
-              <Button className="bg-gold hover:bg-gold-light text-black font-semibold px-10 py-6 text-sm tracking-wide transition-all duration-300 hover:shadow-xl hover:shadow-gold/30 hover:scale-105">
-                Browse Properties
-                <ArrowUpRight className="w-4 h-4 ml-2" />
+              <Button className="relative bg-gradient-to-r from-gold via-[#C4A962] to-gold hover:from-gold-light hover:to-gold text-black font-bold px-10 py-6 text-sm tracking-wide transition-all duration-500 hover:shadow-2xl hover:shadow-gold/50 hover:scale-105 border border-gold/50 shadow-lg shadow-gold/30">
+                <span className="relative z-10 flex items-center">
+                  Browse Properties
+                  <ArrowUpRight className="w-4 h-4 ml-2" />
+                </span>
               </Button>
             </Link>
             <Button 
-              variant="outline"
-              className="border-gold text-gold hover:bg-gold/10 hover:border-gold-light font-medium px-10 py-6 text-sm tracking-wide transition-all duration-300 hover:shadow-lg hover:shadow-gold/20"
+              className="relative bg-transparent border-2 border-gold text-gold hover:bg-gold hover:text-black font-bold px-10 py-6 text-sm tracking-wide transition-all duration-500 hover:shadow-2xl hover:shadow-gold/40 hover:scale-105 shadow-lg shadow-gold/20"
               onClick={() => setIsInquiryOpen(true)}
             >
               Book Consultation
@@ -172,25 +173,23 @@ const Index = () => {
       {/* QUICK ACTIONS - Simplified */}
       <section className="py-16 md:py-20 bg-black">
         <div className="container mx-auto px-4">
-          {/* Primary Services Row */}
+          {/* Primary Services Row - Premium Glow Buttons */}
           <div className="flex flex-wrap justify-center gap-3 mb-8">
             <Link to="/properties">
-              <Button className="bg-gold hover:bg-gold-light text-black font-semibold px-6 py-5 text-sm transition-all duration-300">
+              <Button className="relative bg-gradient-to-r from-gold via-[#C4A962] to-gold hover:from-gold-light hover:to-gold text-black font-bold px-6 py-5 text-sm transition-all duration-500 hover:shadow-xl hover:shadow-gold/40 hover:scale-105 shadow-md shadow-gold/25 border border-gold/30">
                 Explore Properties
                 <ArrowUpRight className="w-4 h-4 ml-2" />
               </Button>
             </Link>
             <Button 
-              variant="outline"
-              className="border-gold text-gold hover:bg-gold/10 hover:border-gold-light px-6 py-5 text-sm transition-all duration-300"
+              className="relative border-2 border-gold text-gold hover:bg-gold hover:text-black font-bold px-6 py-5 text-sm transition-all duration-500 hover:shadow-xl hover:shadow-gold/30 shadow-md shadow-gold/15"
               onClick={() => setIsInquiryOpen(true)}
             >
               List Your Property
             </Button>
             <Link to="/market-report">
               <Button 
-                variant="outline"
-                className="border-zinc-600 text-zinc-200 hover:bg-zinc-800 hover:border-zinc-500 px-6 py-5 text-sm transition-all duration-300"
+                className="border-2 border-zinc-700 text-white hover:bg-zinc-800 hover:border-gold/50 hover:text-gold px-6 py-5 text-sm transition-all duration-500 hover:shadow-lg hover:shadow-gold/20 font-semibold"
               >
                 <FileText className="w-4 h-4 mr-2" />
                 Market Report
@@ -436,24 +435,24 @@ const Index = () => {
                 Jane Abou Jaoude leads with a philosophy rooted in accountability and discretion, building organizations designed to endure rather than simply expand.
               </p>
               
-              {/* Stats */}
+              {/* Stats - Updated to 12+ Years */}
               <div className="grid grid-cols-3 gap-6 mb-8">
-                <div className="text-center">
-                  <p className="text-gold text-3xl md:text-4xl font-bold" style={{ fontFamily: "Poppins, sans-serif" }}>3</p>
-                  <p className="text-zinc-500 text-xs uppercase tracking-wider">Services</p>
+                <div className="text-center p-4 bg-zinc-900/50 border border-gold/10 rounded-xl hover:border-gold/30 transition-all duration-300">
+                  <p className="text-transparent bg-clip-text bg-gradient-to-r from-gold via-[#C4A962] to-gold text-3xl md:text-4xl font-bold" style={{ fontFamily: "Poppins, sans-serif" }}>12+</p>
+                  <p className="text-zinc-400 text-xs uppercase tracking-wider mt-1">Years Experience</p>
                 </div>
-                <div className="text-center">
-                  <p className="text-gold text-3xl md:text-4xl font-bold" style={{ fontFamily: "Poppins, sans-serif" }}>5+</p>
-                  <p className="text-zinc-500 text-xs uppercase tracking-wider">Years in Dubai</p>
+                <div className="text-center p-4 bg-zinc-900/50 border border-gold/10 rounded-xl hover:border-gold/30 transition-all duration-300">
+                  <p className="text-transparent bg-clip-text bg-gradient-to-r from-gold via-[#C4A962] to-gold text-3xl md:text-4xl font-bold" style={{ fontFamily: "Poppins, sans-serif" }}>5+</p>
+                  <p className="text-zinc-400 text-xs uppercase tracking-wider mt-1">Years in Dubai</p>
                 </div>
-                <div className="text-center">
-                  <p className="text-gold text-3xl md:text-4xl font-bold" style={{ fontFamily: "Poppins, sans-serif" }}>2,800+</p>
-                  <p className="text-zinc-500 text-xs uppercase tracking-wider">Brokers Trained</p>
+                <div className="text-center p-4 bg-zinc-900/50 border border-gold/10 rounded-xl hover:border-gold/30 transition-all duration-300">
+                  <p className="text-transparent bg-clip-text bg-gradient-to-r from-gold via-[#C4A962] to-gold text-3xl md:text-4xl font-bold" style={{ fontFamily: "Poppins, sans-serif" }}>2,800+</p>
+                  <p className="text-zinc-400 text-xs uppercase tracking-wider mt-1">Brokers Trained</p>
                 </div>
               </div>
               
               <Link to="/founder">
-                <Button className="bg-gold hover:bg-gold-light text-black font-semibold px-8 py-6 text-base">
+                <Button className="relative bg-gradient-to-r from-gold via-[#C4A962] to-gold hover:from-gold-light hover:to-gold text-black font-bold px-8 py-6 text-base transition-all duration-500 hover:shadow-2xl hover:shadow-gold/50 hover:scale-105 shadow-lg shadow-gold/30 border border-gold/50">
                   Learn More About Our Founder
                   <ArrowUpRight className="w-5 h-5 ml-2" />
                 </Button>
@@ -537,33 +536,49 @@ const Index = () => {
       {/* Stats Counter Section */}
       <StatsCounter />
 
-      {/* Contact CTA Section - Quiet Luxury */}
-      <section className="py-20 md:py-24 bg-black">
-        <div className="container mx-auto px-4">
+      {/* Contact CTA Section - Premium Luxury Design */}
+      <section className="py-20 md:py-28 bg-gradient-to-b from-black via-zinc-950 to-black relative overflow-hidden">
+        {/* Decorative background elements */}
+        <div className="absolute inset-0 opacity-20">
+          <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[600px] h-[600px] bg-gold/10 rounded-full blur-3xl" />
+        </div>
+        
+        <div className="container mx-auto px-4 relative z-10">
           <motion.div 
-            className="text-center max-w-2xl mx-auto"
-            initial={{ opacity: 0, y: 20 }}
+            className="text-center max-w-3xl mx-auto"
+            initial={{ opacity: 0, y: 30 }}
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true }}
+            transition={{ duration: 0.8 }}
           >
-            <h3 className="text-2xl md:text-3xl font-semibold text-white mb-4" style={{ fontFamily: "Poppins, sans-serif" }}>
-              Ready to Get Started?
+            {/* Premium badge */}
+            <motion.span 
+              className="inline-flex items-center gap-2 px-4 py-2 bg-gold/10 border border-gold/30 rounded-full text-gold text-xs uppercase tracking-[0.2em] mb-6"
+              initial={{ opacity: 0, scale: 0.9 }}
+              whileInView={{ opacity: 1, scale: 1 }}
+              transition={{ delay: 0.2 }}
+            >
+              <Sparkles className="w-3 h-3" />
+              Begin Your Journey
+            </motion.span>
+            
+            <h3 className="text-3xl md:text-4xl lg:text-5xl font-bold text-white mb-6" style={{ fontFamily: "Poppins, sans-serif" }}>
+              Ready to <span className="text-transparent bg-clip-text bg-gradient-to-r from-gold via-[#C4A962] to-gold">Get Started?</span>
             </h3>
-            <p className="text-zinc-500 text-sm md:text-base mb-8 leading-relaxed">
-              Connect with our team to discuss buying or selling real estate in Dubai.
+            <p className="text-zinc-400 text-base md:text-lg mb-10 leading-relaxed max-w-xl mx-auto">
+              Connect with our expert team to explore exclusive opportunities in Dubai's premier real estate market.
             </p>
             <div className="flex flex-col sm:flex-row justify-center gap-4">
               <Button 
-                className="bg-gold hover:bg-gold-light text-black font-semibold px-8 py-6 text-sm transition-all duration-300"
+                className="relative bg-gradient-to-r from-gold via-[#C4A962] to-gold hover:from-gold-light hover:to-gold text-black font-bold px-10 py-6 text-base transition-all duration-500 hover:shadow-2xl hover:shadow-gold/50 hover:scale-105 shadow-lg shadow-gold/30 border border-gold/50"
                 onClick={() => setIsInquiryOpen(true)}
               >
                 Book Consultation
-                <ArrowUpRight className="w-4 h-4 ml-2" />
+                <ArrowUpRight className="w-5 h-5 ml-2" />
               </Button>
               <Link to="/properties">
                 <Button 
-                  variant="outline"
-                  className="border-zinc-600 text-zinc-200 hover:bg-zinc-800 hover:border-zinc-500 px-8 py-6 text-sm transition-all duration-300"
+                  className="border-2 border-zinc-700 text-white hover:bg-zinc-800 hover:border-gold/50 hover:text-gold px-10 py-6 text-base transition-all duration-500 hover:shadow-lg hover:shadow-gold/20 font-semibold"
                 >
                   Browse Properties
                 </Button>

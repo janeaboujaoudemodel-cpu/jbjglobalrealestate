@@ -1,5 +1,5 @@
 import { Link } from "react-router-dom";
-import { ArrowUpRight, Building2, Gem, Film, Mail, Phone, ExternalLink, Award, Globe, Users, TrendingUp, Star, MessageCircle, Calendar, MapPin, Mic, Video, Newspaper, BookOpen, Download } from "lucide-react";
+import { ArrowUpRight, Building2, Gem, Film, Mail, Phone, ExternalLink, Award, Globe, Users, TrendingUp, Star, MessageCircle, Calendar, MapPin, Mic, Video, Newspaper, BookOpen, Download, GraduationCap } from "lucide-react";
 import { motion } from "framer-motion";
 import Footer from "@/components/Footer";
 import { SafeImage } from "@/components/SafeImage";
@@ -791,7 +791,7 @@ const Founder = () => {
             </h2>
           </motion.div>
 
-          {/* Stats - 4 Chips */}
+          {/* Stats - 4 Chips with 12+ Years */}
           <motion.div 
             initial="hidden"
             whileInView="visible"
@@ -800,7 +800,7 @@ const Founder = () => {
           >
             <div className="grid grid-cols-2 md:grid-cols-4 gap-6 md:gap-8">
               {[
-                { label: "Active since 2012", icon: Calendar },
+                { label: "12+ Years Experience", icon: Calendar },
                 { label: "1M+ Followers (All Platforms)", icon: Users },
                 { label: "2,800+ Brokers Trained", icon: Award },
                 { label: "495+ Team Managed (Operations)", icon: Building2 },
@@ -813,7 +813,7 @@ const Founder = () => {
                   {/* Glow effect on hover */}
                   <div className="absolute inset-0 bg-gradient-to-br from-gold/0 to-gold/0 group-hover:from-gold/5 group-hover:to-transparent transition-all duration-500 rounded-3xl" />
                   <div className="relative z-10">
-                    <div className="w-14 h-14 mx-auto mb-4 bg-gradient-to-br from-gold/20 to-gold/5 rounded-2xl flex items-center justify-center border border-gold/20 group-hover:border-gold/50 group-hover:scale-110 transition-all duration-500 shadow-lg shadow-gold/5">
+                    <div className="w-14 h-14 mx-auto mb-4 bg-gradient-to-br from-gold/20 to-gold/5 rounded-2xl flex items-center justify-center border border-gold/20 group-hover:border-gold/50 group-hover:scale-110 transition-all duration-500 shadow-lg shadow-gold/5 animate-glow-pulse">
                       <stat.icon className="w-6 h-6 text-gold" />
                     </div>
                     <p className="text-white text-sm md:text-base font-medium">{stat.label}</p>
@@ -821,6 +821,92 @@ const Founder = () => {
                 </motion.div>
               ))}
             </div>
+          </motion.div>
+        </div>
+      </section>
+
+      {/* VISION FOR THE FUTURE */}
+      <section className="py-24 md:py-32 bg-gradient-to-b from-black via-zinc-950/30 to-black relative overflow-hidden">
+        <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[800px] h-[800px] bg-gold/5 rounded-full blur-3xl" />
+        
+        <div className="container mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
+          <motion.div
+            initial="hidden"
+            whileInView="visible"
+            viewport={{ once: true, margin: "-100px" }}
+            variants={staggerContainer}
+          >
+            <motion.div className="text-center mb-16" variants={fadeInUp}>
+              <span className="text-gold text-sm uppercase tracking-[0.4em]">Looking Ahead</span>
+              <GoldLine className="w-32 mx-auto mt-4 mb-8" />
+              <h2 
+                className="text-white text-4xl md:text-5xl lg:text-6xl font-bold"
+                style={{ fontFamily: "Poppins, sans-serif" }}
+              >
+                Vision for the <span className="text-transparent bg-clip-text bg-gradient-to-r from-gold to-[#C4A962]">Future</span>
+              </h2>
+            </motion.div>
+
+            <motion.div 
+              className="max-w-4xl mx-auto grid md:grid-cols-2 gap-8"
+              variants={staggerContainer}
+            >
+              {/* Innovation Card */}
+              <motion.div 
+                className="bg-gradient-to-br from-zinc-900/80 to-black border border-zinc-800 rounded-3xl p-8 hover:border-gold/40 transition-all duration-500 group"
+                variants={fadeInUp}
+              >
+                <div className="w-16 h-16 mb-6 bg-gradient-to-br from-gold/20 to-gold/5 rounded-2xl flex items-center justify-center border border-gold/30 group-hover:scale-110 transition-transform">
+                  <Gem className="w-8 h-8 text-gold" />
+                </div>
+                <h3 className="text-white text-xl font-bold mb-4">Technology & Innovation</h3>
+                <p className="text-zinc-400 leading-relaxed">
+                  Building the first global real estate platform of its kind with AI-powered tools, free resources, and cutting-edge technology to empower brokers, buyers, and sellers worldwide.
+                </p>
+              </motion.div>
+
+              {/* Expansion Card */}
+              <motion.div 
+                className="bg-gradient-to-br from-zinc-900/80 to-black border border-zinc-800 rounded-3xl p-8 hover:border-gold/40 transition-all duration-500 group"
+                variants={fadeInUp}
+              >
+                <div className="w-16 h-16 mb-6 bg-gradient-to-br from-gold/20 to-gold/5 rounded-2xl flex items-center justify-center border border-gold/30 group-hover:scale-110 transition-transform">
+                  <Globe className="w-8 h-8 text-gold" />
+                </div>
+                <h3 className="text-white text-xl font-bold mb-4">Global Expansion</h3>
+                <p className="text-zinc-400 leading-relaxed">
+                  Establishing JBJ Global Real Estate as a leading name across the Middle East, Europe, and beyond—while maintaining the founder-led standards and personalized service that define our brand.
+                </p>
+              </motion.div>
+
+              {/* Training Card */}
+              <motion.div 
+                className="bg-gradient-to-br from-zinc-900/80 to-black border border-zinc-800 rounded-3xl p-8 hover:border-gold/40 transition-all duration-500 group"
+                variants={fadeInUp}
+              >
+                <div className="w-16 h-16 mb-6 bg-gradient-to-br from-gold/20 to-gold/5 rounded-2xl flex items-center justify-center border border-gold/30 group-hover:scale-110 transition-transform">
+                  <GraduationCap className="w-8 h-8 text-gold" />
+                </div>
+                <h3 className="text-white text-xl font-bold mb-4">Broker Excellence</h3>
+                <p className="text-zinc-400 leading-relaxed">
+                  Scaling our broker training programs to reach 10,000+ professionals, providing world-class education, tools, and mentorship to elevate the industry standard.
+                </p>
+              </motion.div>
+
+              {/* Legacy Card */}
+              <motion.div 
+                className="bg-gradient-to-br from-zinc-900/80 to-black border border-zinc-800 rounded-3xl p-8 hover:border-gold/40 transition-all duration-500 group"
+                variants={fadeInUp}
+              >
+                <div className="w-16 h-16 mb-6 bg-gradient-to-br from-gold/20 to-gold/5 rounded-2xl flex items-center justify-center border border-gold/30 group-hover:scale-110 transition-transform">
+                  <Award className="w-8 h-8 text-gold" />
+                </div>
+                <h3 className="text-white text-xl font-bold mb-4">Building Legacy</h3>
+                <p className="text-zinc-400 leading-relaxed">
+                  Creating an organization designed to endure for generations—built on values of accountability, discretion, and unwavering commitment to excellence.
+                </p>
+              </motion.div>
+            </motion.div>
           </motion.div>
         </div>
       </section>

@@ -139,6 +139,11 @@ All colors MUST be HSL.
   50% { box-shadow: 0 0 40px hsl(var(--ai-purple) / 0.6); }
 }
 
+@keyframes gold-glow {
+  0%, 100% { box-shadow: 0 4px 20px hsl(var(--gold) / 0.3); }
+  50% { box-shadow: 0 8px 40px hsl(var(--gold) / 0.5); }
+}
+
 @keyframes gradient-shift {
   0% { background-position: 0% 50%; }
   50% { background-position: 100% 50%; }
@@ -148,6 +153,16 @@ All colors MUST be HSL.
 @keyframes shimmer {
   0% { background-position: -200% 0; }
   100% { background-position: 200% 0; }
+}
+
+@keyframes fade-in-up {
+  0% { opacity: 0; transform: translateY(30px); }
+  100% { opacity: 1; transform: translateY(0); }
+}
+
+@keyframes glow-pulse {
+  0%, 100% { filter: drop-shadow(0 0 8px hsl(var(--gold) / 0.4)); }
+  50% { filter: drop-shadow(0 0 20px hsl(var(--gold) / 0.7)); }
 }
 
 .animate-sparkle {
@@ -160,6 +175,10 @@ All colors MUST be HSL.
 
 .animate-pulse-glow {
   animation: pulse-glow 3s ease-in-out infinite;
+}
+
+.animate-gold-glow {
+  animation: gold-glow 2.5s ease-in-out infinite;
 }
 
 .animate-gradient-shift {
@@ -176,6 +195,35 @@ All colors MUST be HSL.
   );
   background-size: 200% 100%;
   animation: shimmer 2s linear infinite;
+}
+
+.animate-fade-in-up {
+  animation: fade-in-up 0.8s ease-out forwards;
+}
+
+.animate-glow-pulse {
+  animation: glow-pulse 2s ease-in-out infinite;
+}
+
+/* Premium Button Styles */
+.btn-premium-gold {
+  @apply relative bg-gradient-to-r from-gold via-[#C4A962] to-gold text-black font-bold transition-all duration-500;
+  box-shadow: 0 4px 20px hsl(var(--gold) / 0.3);
+}
+
+.btn-premium-gold:hover {
+  @apply from-gold-light to-gold scale-105;
+  box-shadow: 0 8px 40px hsl(var(--gold) / 0.5);
+}
+
+.btn-premium-outline {
+  @apply relative border-2 border-gold text-gold font-bold transition-all duration-500;
+  box-shadow: 0 2px 15px hsl(var(--gold) / 0.15);
+}
+
+.btn-premium-outline:hover {
+  @apply bg-gold text-black scale-105;
+  box-shadow: 0 6px 30px hsl(var(--gold) / 0.4);
 }
 
 @layer components {

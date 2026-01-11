@@ -371,15 +371,18 @@ const Footer = () => {
           <GoogleMyBusinessLink variant="badge" />
         </div>
 
-        {/* Bottom - Copyright & Legal */}
+        {/* Bottom - Copyright & Legal with Founder Attribution */}
         <div className="flex flex-col items-center gap-4 text-sm text-zinc-500">
           <div className="text-center space-y-2">
             <p className="font-medium text-white">
               © {currentYear} JBJ Global Real Estate. All Rights Reserved.
             </p>
             <p className="text-xs text-zinc-600">
-              Created and Developed by{" "}
-              <span className="text-gold font-medium">Jane Abou Jaoude</span> | Brokerage Services Only
+              <span className="text-gold font-medium">Developed, Created & Implemented by the Founder</span> | Brokerage Services Only
+            </p>
+            <p className="text-xs text-zinc-600 mt-1">
+              Platform Vision by{" "}
+              <span className="text-gold font-medium">Jane Abou Jaoude</span> — First Global Real Estate Platform of Its Kind
             </p>
           </div>
           <div className="flex items-center gap-5">
