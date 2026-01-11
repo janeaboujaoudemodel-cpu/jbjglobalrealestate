@@ -20,10 +20,16 @@ import {
   User, Building2, DollarSign, Home, Camera, FileText, 
   CheckCircle2, ArrowRight, ArrowLeft, Loader2, 
   Phone, Mail, MessageCircle, Upload, Sparkles, Shield,
-  Calculator, Plus, X
+  Calculator, Plus, X, Wand2, AlertCircle
 } from "lucide-react";
 import { CONTACT_INFO, getWhatsAppUrl } from "@/constants/stats";
 import SellerAssistant from "@/components/seller/SellerAssistant";
+import {
+  Dialog,
+  DialogContent,
+  DialogHeader,
+  DialogTitle,
+} from "@/components/ui/dialog";
 
 // Form validation schema
 const sellerListingSchema = z.object({
@@ -49,12 +55,16 @@ const sellerListingSchema = z.object({
   target_selling_price: z.number().min(1, "Target selling price is required"),
   minimum_acceptable_price: z.number().optional(),
   selling_urgency: z.string().default("90+"),
+  estimated_range_min: z.number().optional(),
+  estimated_range_max: z.number().optional(),
+  estimated_note: z.string().optional(),
   
   // Step 4 - Condition
   is_furnished: z.boolean().default(false),
   has_upgrades: z.boolean().default(false),
   upgrade_details: z.string().optional(),
   key_highlights: z.array(z.string()).optional(),
+  listing_description: z.string().optional(),
   
   // Step 7 - Confirmation
   submission_confirmed: z.boolean().default(false),
@@ -79,6 +89,9 @@ const SellerListing = () => {
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [listingId, setListingId] = useState<string | null>(null);
   const [showAssistant, setShowAssistant] = useState(false);
+  const [showEvaluator, setShowEvaluator] = useState(false);
+  const [isRunningEvaluator, setIsRunningEvaluator] = useState(false);
+  const [isGeneratingDescription, setIsGeneratingDescription] = useState(false);
   
   // File uploads state
   const [photoFiles, setPhotoFiles] = useState<File[]>([]);
@@ -113,10 +126,14 @@ const SellerListing = () => {
       target_selling_price: undefined,
       minimum_acceptable_price: undefined,
       selling_urgency: "90+",
+      estimated_range_min: undefined,
+      estimated_range_max: undefined,
+      estimated_note: "",
       is_furnished: false,
       has_upgrades: false,
       upgrade_details: "",
       key_highlights: [],
+      listing_description: "",
       submission_confirmed: false,
     },
   });
@@ -164,8 +181,96 @@ const SellerListing = () => {
     return fileName;
   };
 
+  // Run Property Evaluator with prefill and save-back
+  const runPropertyEvaluator = async () => {
+    setIsRunningEvaluator(true);
+    try {
+      const values = form.getValues();
+      
+      const { data, error } = await supabase.functions.invoke('property-evaluation', {
+        body: {
+          property_type: values.property_type,
+          location: values.property_location,
+          bedrooms: values.bedrooms,
+          size_sqft: values.property_size_sqft,
+          property_status: values.property_status,
+          is_furnished: values.is_furnished,
+        }
+      });
+
+      if (error) throw error;
+
+      if (data?.estimated_min && data?.estimated_max) {
+        form.setValue("estimated_range_min", data.estimated_min);
+        form.setValue("estimated_range_max", data.estimated_max);
+        form.setValue("estimated_note", `AI estimate based on ${values.property_type} in ${values.property_location}. This is informational only.`);
+        toast.success("Property evaluation complete!");
+      } else {
+        toast.info("Evaluation complete - please review the market insights.");
+      }
+    } catch (error) {
+      console.error('Evaluator error:', error);
+      toast.error("Could not run evaluator. Please try again.");
+    } finally {
+      setIsRunningEvaluator(false);
+      setShowEvaluator(false);
+    }
+  };
+
+  // Generate listing description using AI
+  const generateListingDescription = async () => {
+    setIsGeneratingDescription(true);
+    try {
+      const values = form.getValues();
+      
+      const prompt = `Generate a professional property listing description for:
+- Property Type: ${values.property_type}
+- Location: ${values.property_location}
+- Building/Community: ${values.community_building || 'N/A'}
+- Bedrooms: ${values.bedrooms === 0 ? 'Studio' : values.bedrooms || 'N/A'}
+- Size: ${values.property_size_sqft?.toLocaleString() || 'N/A'} sq.ft
+- Status: ${values.property_status}
+- Furnished: ${values.is_furnished ? 'Yes' : 'No'}
+- Upgrades: ${values.has_upgrades ? values.upgrade_details || 'Yes' : 'No'}
+- Key Highlights: ${highlights.join(', ') || 'N/A'}
+
+Requirements:
+- Write 2-3 paragraphs, professional tone
+- Highlight key features and location benefits
+- Do NOT include pricing or promises of returns
+- Do NOT make investment claims
+- Keep it factual and appealing
+- UAE Real Estate context`;
+
+      const { data, error } = await supabase.functions.invoke('ai-chat', {
+        body: {
+          messages: [
+            { role: 'system', content: 'You are a professional real estate copywriter for JBJ Global Real Estate. Write compelling, factual property descriptions. Never make investment claims or promises.' },
+            { role: 'user', content: prompt }
+          ],
+          model: 'google/gemini-2.5-flash',
+          max_tokens: 500,
+        }
+      });
+
+      if (error) throw error;
+
+      const description = data?.response || data?.content || '';
+      if (description) {
+        form.setValue("listing_description", description);
+        toast.success("Description generated! Feel free to edit.");
+      }
+    } catch (error) {
+      console.error('Description generation error:', error);
+      toast.error("Could not generate description. Please try again.");
+    } finally {
+      setIsGeneratingDescription(false);
+    }
+  };
+
   const validateStep = (step: number): boolean => {
     const values = form.getValues();
+    const sellerType = values.seller_type;
     
     switch (step) {
       case 1:
@@ -179,7 +284,17 @@ const SellerListing = () => {
       case 5:
         return true; // Optional but recommended
       case 6:
-        return true; // Optional but recommended
+        // Title Deed is required
+        if (!titleDeedFile) {
+          toast.error("Title Deed is required");
+          return false;
+        }
+        // POA is required if seller type is POA
+        if (sellerType === 'poa' && !poaFile) {
+          toast.error("Power of Attorney document is required for POA sellers");
+          return false;
+        }
+        return true;
       case 7:
         return values.submission_confirmed === true;
       default:
@@ -190,7 +305,7 @@ const SellerListing = () => {
   const goToNextStep = () => {
     if (validateStep(currentStep)) {
       setCurrentStep(Math.min(currentStep + 1, 7));
-    } else {
+    } else if (currentStep !== 6) {
       toast.error("Please complete all required fields before continuing");
     }
   };
@@ -208,6 +323,17 @@ const SellerListing = () => {
 
     if (!validateStep(7)) {
       toast.error("Please confirm your submission");
+      return;
+    }
+
+    // Final document check
+    if (!titleDeedFile) {
+      toast.error("Title Deed is required before submission");
+      return;
+    }
+    
+    if (form.getValues("seller_type") === 'poa' && !poaFile) {
+      toast.error("POA document is required for Power of Attorney sellers");
       return;
     }
 
@@ -272,6 +398,7 @@ const SellerListing = () => {
           has_upgrades: values.has_upgrades,
           upgrade_details: values.upgrade_details,
           key_highlights: highlights,
+          listing_description: values.listing_description,
           photo_urls: photoUrls,
           video_urls: videoUrls,
           floor_plan_urls: floorPlanUrls,
@@ -735,23 +862,36 @@ const SellerListing = () => {
                       </RadioGroup>
                     </div>
 
+                    {/* Property Evaluator Integration */}
                     <div className="bg-zinc-800/50 border border-zinc-700 rounded-lg p-4">
                       <div className="flex items-center gap-3 mb-3">
                         <Calculator className="w-5 h-5 text-gold" />
                         <span className="text-white font-medium">Need help with pricing?</span>
                       </div>
                       <p className="text-zinc-400 text-sm mb-3">
-                        Use our Property Evaluator to get an informational estimate based on market data.
+                        Run our Property Evaluator to get an informational estimate based on market data.
                       </p>
                       <Button 
                         type="button"
                         variant="outline"
                         className="border-gold/50 text-gold hover:bg-gold/10"
-                        onClick={() => window.open("/property-evaluator", "_blank")}
+                        onClick={() => setShowEvaluator(true)}
+                        disabled={!form.getValues("property_type") || !form.getValues("property_location")}
                       >
                         <Calculator className="w-4 h-4 mr-2" />
                         Run Property Evaluator
                       </Button>
+                      
+                      {/* Show estimate if available */}
+                      {form.watch("estimated_range_min") && form.watch("estimated_range_max") && (
+                        <div className="mt-4 p-3 bg-gold/10 border border-gold/20 rounded-lg">
+                          <p className="text-gold text-sm font-medium mb-1">AI Estimate (Informational Only)</p>
+                          <p className="text-white">
+                            AED {form.watch("estimated_range_min")?.toLocaleString()} - AED {form.watch("estimated_range_max")?.toLocaleString()}
+                          </p>
+                          <p className="text-zinc-500 text-xs mt-1">{form.watch("estimated_note")}</p>
+                        </div>
+                      )}
                     </div>
                   </motion.div>
                 )}
@@ -841,6 +981,36 @@ const SellerListing = () => {
                           </span>
                         ))}
                       </div>
+                    </div>
+
+                    {/* Listing Description with AI Generator */}
+                    <div>
+                      <div className="flex items-center justify-between mb-2">
+                        <Label className="text-white">Listing Description</Label>
+                        <Button
+                          type="button"
+                          variant="outline"
+                          size="sm"
+                          onClick={generateListingDescription}
+                          disabled={isGeneratingDescription || !form.getValues("property_type")}
+                          className="border-gold/50 text-gold hover:bg-gold/10 text-xs"
+                        >
+                          {isGeneratingDescription ? (
+                            <Loader2 className="w-3 h-3 mr-1 animate-spin" />
+                          ) : (
+                            <Wand2 className="w-3 h-3 mr-1" />
+                          )}
+                          Generate Description
+                        </Button>
+                      </div>
+                      <Textarea
+                        {...form.register("listing_description")}
+                        placeholder="Describe your property or use AI to generate a professional description..."
+                        className="bg-zinc-800 border-zinc-700 text-white mt-1 min-h-[150px]"
+                      />
+                      <p className="text-zinc-500 text-xs mt-1">
+                        This description will be used in marketing materials (you can edit it)
+                      </p>
                     </div>
                   </motion.div>
                 )}
@@ -954,10 +1124,19 @@ const SellerListing = () => {
                     </div>
 
                     <div className="space-y-6">
-                      {/* Title Deed */}
+                      {/* Title Deed - REQUIRED */}
                       <div>
-                        <Label className="text-white mb-2 block">Title Deed *</Label>
-                        <div className="border-2 border-dashed border-zinc-700 rounded-lg p-6 text-center hover:border-gold/50 transition-colors">
+                        <Label className="text-white mb-2 flex items-center gap-2">
+                          Title Deed <span className="text-red-400">*</span>
+                          {!titleDeedFile && (
+                            <span className="text-red-400 text-xs flex items-center gap-1">
+                              <AlertCircle className="w-3 h-3" /> Required
+                            </span>
+                          )}
+                        </Label>
+                        <div className={`border-2 border-dashed rounded-lg p-6 text-center transition-colors ${
+                          titleDeedFile ? 'border-green-500/50' : 'border-zinc-700 hover:border-gold/50'
+                        }`}>
                           <input
                             type="file"
                             accept="application/pdf,image/*"
@@ -1002,11 +1181,20 @@ const SellerListing = () => {
                         )}
                       </div>
 
-                      {/* POA (if applicable) */}
+                      {/* POA (Required if seller type is POA) */}
                       {form.watch("seller_type") === "poa" && (
                         <div>
-                          <Label className="text-white mb-2 block">Power of Attorney</Label>
-                          <div className="border-2 border-dashed border-zinc-700 rounded-lg p-6 text-center hover:border-gold/50 transition-colors">
+                          <Label className="text-white mb-2 flex items-center gap-2">
+                            Power of Attorney <span className="text-red-400">*</span>
+                            {!poaFile && (
+                              <span className="text-red-400 text-xs flex items-center gap-1">
+                                <AlertCircle className="w-3 h-3" /> Required for POA
+                              </span>
+                            )}
+                          </Label>
+                          <div className={`border-2 border-dashed rounded-lg p-6 text-center transition-colors ${
+                            poaFile ? 'border-green-500/50' : 'border-zinc-700 hover:border-gold/50'
+                          }`}>
                             <input
                               type="file"
                               accept="application/pdf,image/*"
@@ -1135,8 +1323,17 @@ const SellerListing = () => {
                         <div className="text-sm space-y-1">
                           <p className="text-zinc-300">{photoFiles.length} photos uploaded</p>
                           <p className="text-zinc-300">{videoFiles.length} videos uploaded</p>
-                          <p className="text-zinc-300">{titleDeedFile ? "✓" : "✗"} Title Deed</p>
+                          <p className={`flex items-center gap-1 ${titleDeedFile ? 'text-green-400' : 'text-red-400'}`}>
+                            {titleDeedFile ? <CheckCircle2 className="w-3 h-3" /> : <AlertCircle className="w-3 h-3" />}
+                            Title Deed {titleDeedFile ? '✓' : '(Required)'}
+                          </p>
                           <p className="text-zinc-300">{passportFile ? "✓" : "✗"} ID Document</p>
+                          {form.getValues("seller_type") === 'poa' && (
+                            <p className={`flex items-center gap-1 ${poaFile ? 'text-green-400' : 'text-red-400'}`}>
+                              {poaFile ? <CheckCircle2 className="w-3 h-3" /> : <AlertCircle className="w-3 h-3" />}
+                              POA Document {poaFile ? '✓' : '(Required)'}
+                            </p>
+                          )}
                         </div>
                       </div>
                     </div>
@@ -1184,7 +1381,7 @@ const SellerListing = () => {
                   <Button
                     type="button"
                     onClick={handleSubmit}
-                    disabled={isSubmitting || !form.watch("submission_confirmed")}
+                    disabled={isSubmitting || !form.watch("submission_confirmed") || !titleDeedFile || (form.getValues("seller_type") === 'poa' && !poaFile)}
                     className="bg-gradient-to-r from-gold to-gold-dark text-black font-semibold hover:brightness-110"
                   >
                     {isSubmitting ? (
@@ -1236,6 +1433,58 @@ const SellerListing = () => {
           </div>
         </div>
       </main>
+
+      {/* Property Evaluator Dialog */}
+      <Dialog open={showEvaluator} onOpenChange={setShowEvaluator}>
+        <DialogContent className="bg-zinc-900 border-zinc-800 text-white">
+          <DialogHeader>
+            <DialogTitle className="text-gold flex items-center gap-2">
+              <Calculator className="w-5 h-5" />
+              Property Evaluator
+            </DialogTitle>
+          </DialogHeader>
+          <div className="space-y-4">
+            <p className="text-zinc-400 text-sm">
+              Run our AI-powered evaluator to get an informational estimate for your property based on current market data.
+            </p>
+            <div className="bg-zinc-800/50 rounded-lg p-4 space-y-2 text-sm">
+              <p className="text-zinc-300"><span className="text-zinc-500">Type:</span> {form.getValues("property_type") || 'Not set'}</p>
+              <p className="text-zinc-300"><span className="text-zinc-500">Location:</span> {form.getValues("property_location") || 'Not set'}</p>
+              <p className="text-zinc-300"><span className="text-zinc-500">Bedrooms:</span> {form.getValues("bedrooms") === 0 ? 'Studio' : form.getValues("bedrooms") || 'Not set'}</p>
+              <p className="text-zinc-300"><span className="text-zinc-500">Size:</span> {form.getValues("property_size_sqft")?.toLocaleString() || 'Not set'} sq.ft</p>
+            </div>
+            <p className="text-zinc-500 text-xs">
+              Note: This is an AI-generated informational estimate only and should not be relied upon for pricing decisions.
+            </p>
+            <div className="flex gap-3 justify-end">
+              <Button 
+                variant="outline" 
+                onClick={() => setShowEvaluator(false)}
+                className="border-zinc-700 text-white"
+              >
+                Cancel
+              </Button>
+              <Button 
+                onClick={runPropertyEvaluator}
+                disabled={isRunningEvaluator}
+                className="bg-gold text-black hover:bg-gold/80"
+              >
+                {isRunningEvaluator ? (
+                  <>
+                    <Loader2 className="w-4 h-4 mr-2 animate-spin" />
+                    Running...
+                  </>
+                ) : (
+                  <>
+                    <Calculator className="w-4 h-4 mr-2" />
+                    Run Evaluation
+                  </>
+                )}
+              </Button>
+            </div>
+          </div>
+        </DialogContent>
+      </Dialog>
     </>
   );
 };

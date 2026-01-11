@@ -134,3 +134,6 @@ verify_jwt = false
 
 [functions.elevenlabs-video-music]
 verify_jwt = false
+
+[functions.ai-chat]
+verify_jwt = false
