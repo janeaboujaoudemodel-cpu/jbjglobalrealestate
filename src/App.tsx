@@ -6,6 +6,7 @@ import { BrowserRouter, Routes, Route, Navigate } from "react-router-dom";
 import { AuthProvider } from "@/contexts/AuthContext";
 import { LanguageProvider } from "@/contexts/LanguageContext";
 import { ActiveLeadProvider } from "@/contexts/ActiveLeadContext";
+import { PopupCoordinatorProvider } from "@/contexts/PopupCoordinatorContext";
 import ScrollToTop from "@/components/ScrollToTop";
 import AdminBypass from "@/components/AdminBypass";
 import MainLayout from "@/components/MainLayout";
@@ -94,6 +95,7 @@ const App = () => (
         <BrowserRouter>
           <AuthProvider>
             <ActiveLeadProvider>
+            <PopupCoordinatorProvider>
             <ScrollToTop />
             {/* Auth route is always accessible for admin login */}
             <Routes>
@@ -184,6 +186,7 @@ const App = () => (
                 </AdminBypass>
               } />
             </Routes>
+            </PopupCoordinatorProvider>
             </ActiveLeadProvider>
           </AuthProvider>
         </BrowserRouter>

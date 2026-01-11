@@ -1,0 +1,219 @@
+import React, { createContext, useContext, useState, useCallback, useEffect, ReactNode } from 'react';
+import { useIsMobile } from '@/hooks/use-mobile';
+
+/**
+ * Popup priority levels (lower number = higher priority)
+ * Only one popup can be shown at a time on mobile.
+ * Popups must register and request visibility through this system.
+ */
+export type PopupId = 
+  | 'welcome-modal'
+  | 'lead-intent-modal'
+  | 'app-download-popup'
+  | 'free-tools-banner'
+  | 'cookies-consent'
+  | 'install-app-button';
+
+interface PopupPriority {
+  id: PopupId;
+  priority: number;
+}
+
+// Priority order: lower number = shows first
+const POPUP_PRIORITIES: PopupPriority[] = [
+  { id: 'welcome-modal', priority: 1 },
+  { id: 'lead-intent-modal', priority: 2 },
+  { id: 'cookies-consent', priority: 3 },
+  { id: 'app-download-popup', priority: 4 },
+  { id: 'free-tools-banner', priority: 5 },
+  { id: 'install-app-button', priority: 10 }, // Lowest priority - floating button
+];
+
+interface PopupRequest {
+  id: PopupId;
+  wantsToShow: boolean;
+  priority: number;
+}
+
+interface PopupCoordinatorContextType {
+  /**
+   * Register that a popup wants to show. The coordinator decides if it can.
+   */
+  requestShow: (id: PopupId) => void;
+  
+  /**
+   * Notify that a popup is done showing (dismissed/closed).
+   */
+  notifyDismissed: (id: PopupId) => void;
+  
+  /**
+   * Check if this popup is currently allowed to show.
+   */
+  canShow: (id: PopupId) => boolean;
+  
+  /**
+   * Get the currently active popup (if any).
+   */
+  activePopup: PopupId | null;
+  
+  /**
+   * Check if we're on mobile (stricter coordination).
+   */
+  isMobile: boolean;
+}
+
+const PopupCoordinatorContext = createContext<PopupCoordinatorContextType | undefined>(undefined);
+
+interface PopupCoordinatorProviderProps {
+  children: ReactNode;
+}
+
+export const PopupCoordinatorProvider: React.FC<PopupCoordinatorProviderProps> = ({ children }) => {
+  const isMobile = useIsMobile();
+  const [requests, setRequests] = useState<Map<PopupId, PopupRequest>>(new Map());
+  const [activePopup, setActivePopup] = useState<PopupId | null>(null);
+
+  // Get priority for a popup
+  const getPriority = useCallback((id: PopupId): number => {
+    const found = POPUP_PRIORITIES.find(p => p.id === id);
+    return found?.priority ?? 100;
+  }, []);
+
+  // Request to show a popup
+  const requestShow = useCallback((id: PopupId) => {
+    setRequests(prev => {
+      const newRequests = new Map(prev);
+      newRequests.set(id, {
+        id,
+        wantsToShow: true,
+        priority: getPriority(id),
+      });
+      return newRequests;
+    });
+  }, [getPriority]);
+
+  // Notify that a popup is dismissed
+  const notifyDismissed = useCallback((id: PopupId) => {
+    setRequests(prev => {
+      const newRequests = new Map(prev);
+      newRequests.delete(id);
+      return newRequests;
+    });
+  }, []);
+
+  // Determine which popup should be active based on priority
+  useEffect(() => {
+    const pendingRequests = Array.from(requests.values())
+      .filter(r => r.wantsToShow)
+      .sort((a, b) => a.priority - b.priority);
+
+    if (pendingRequests.length === 0) {
+      setActivePopup(null);
+    } else if (isMobile) {
+      // On mobile: only show the highest priority popup
+      // Exception: install-app-button can coexist if no modal is active
+      const modals = pendingRequests.filter(r => r.id !== 'install-app-button');
+      const installButton = pendingRequests.find(r => r.id === 'install-app-button');
+      
+      if (modals.length > 0) {
+        setActivePopup(modals[0].id);
+      } else if (installButton) {
+        setActivePopup(installButton.id);
+      } else {
+        setActivePopup(null);
+      }
+    } else {
+      // On desktop: allow multiple, but prioritize modals
+      // The highest priority popup gets to be "active"
+      setActivePopup(pendingRequests[0]?.id ?? null);
+    }
+  }, [requests, isMobile]);
+
+  // Check if a popup can currently show
+  const canShow = useCallback((id: PopupId): boolean => {
+    const request = requests.get(id);
+    if (!request?.wantsToShow) return false;
+
+    if (isMobile) {
+      // On mobile: only the active popup can show
+      // Exception: install-app-button can show if no modals are active
+      if (id === 'install-app-button') {
+        const activeIsModal = activePopup && activePopup !== 'install-app-button';
+        return !activeIsModal;
+      }
+      return activePopup === id;
+    } else {
+      // On desktop: all requested popups can show
+      // But we still track which is "primary" for coordination purposes
+      return true;
+    }
+  }, [requests, activePopup, isMobile]);
+
+  return (
+    <PopupCoordinatorContext.Provider
+      value={{
+        requestShow,
+        notifyDismissed,
+        canShow,
+        activePopup,
+        isMobile,
+      }}
+    >
+      {children}
+    </PopupCoordinatorContext.Provider>
+  );
+};
+
+export const usePopupCoordinator = (): PopupCoordinatorContextType => {
+  const context = useContext(PopupCoordinatorContext);
+  if (!context) {
+    throw new Error('usePopupCoordinator must be used within PopupCoordinatorProvider');
+  }
+  return context;
+};
+
+/**
+ * Hook for individual popups to use. Handles registration and visibility.
+ */
+export const usePopupVisibility = (id: PopupId) => {
+  const { requestShow, notifyDismissed, canShow, isMobile } = usePopupCoordinator();
+  const [wantsToShow, setWantsToShow] = useState(false);
+
+  // When the popup wants to show, register with coordinator
+  useEffect(() => {
+    if (wantsToShow) {
+      requestShow(id);
+    } else {
+      notifyDismissed(id);
+    }
+  }, [wantsToShow, id, requestShow, notifyDismissed]);
+
+  // Cleanup on unmount
+  useEffect(() => {
+    return () => {
+      notifyDismissed(id);
+    };
+  }, [id, notifyDismissed]);
+
+  return {
+    /**
+     * Call this when the popup determines it should try to show.
+     */
+    requestToShow: () => setWantsToShow(true),
+    
+    /**
+     * Call this when the popup is dismissed.
+     */
+    dismiss: () => setWantsToShow(false),
+    
+    /**
+     * Whether the popup is currently allowed to render/show.
+     */
+    isVisible: wantsToShow && canShow(id),
+    
+    /**
+     * Whether we're on mobile (for additional UI adjustments).
+     */
+    isMobile,
+  };
+};
