@@ -104,7 +104,7 @@ const COMPLETION_STATUS = [
 
 const INVESTMENT_TYPES = [
   { value: "all", label: "All Types" },
-  { value: "end-user", label: "End-User" },
+  { value: "homeowner", label: "Homeowner" },
   { value: "investment", label: "Investment" },
 ];
 
@@ -713,7 +713,7 @@ const Properties = () => {
                   </SelectTrigger>
                   <SelectContent className="bg-zinc-900 border-zinc-700">
                     <SelectItem value="investor" className="text-white hover:bg-zinc-800">An Investor</SelectItem>
-                    <SelectItem value="end-user" className="text-white hover:bg-zinc-800">Looking for a Home</SelectItem>
+                    <SelectItem value="homeowner" className="text-white hover:bg-zinc-800">A Homeowner</SelectItem>
                     <SelectItem value="agent" className="text-white hover:bg-zinc-800">A Real Estate Agent</SelectItem>
                     <SelectItem value="other" className="text-white hover:bg-zinc-800">Other</SelectItem>
                   </SelectContent>

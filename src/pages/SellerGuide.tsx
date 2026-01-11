@@ -37,6 +37,8 @@ import {
 } from "lucide-react";
 import { CONTACT_INFO, getWhatsAppUrl, getCallUrl, getEmailUrl } from "@/constants/stats";
 import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from "@/components/ui/accordion";
+import { GuideNavigation, GUIDE_LINKS } from "@/components/guides/GuideNavigation";
+import Footer from "@/components/Footer";
 
 const fadeInUp = {
   hidden: { opacity: 0, y: 20 },
@@ -720,6 +722,15 @@ const SellerGuide = () => {
             </div>
           </div>
         </section>
+
+        {/* Guide Navigation */}
+        <section className="py-8 border-t border-zinc-800">
+          <div className="container mx-auto px-4">
+            <GuideNavigation current="/seller-guide" guides={GUIDE_LINKS} />
+          </div>
+        </section>
+
+        <Footer />
       </main>
     </>
   );
