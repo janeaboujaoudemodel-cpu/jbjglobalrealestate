@@ -2,8 +2,8 @@
 // This component is DEPRECATED - Use JBJLogo.tsx instead
 // Keeping for backward compatibility - all imports redirect to JBJ assets
 
-import jbjMonogramDark from "@/assets/jbj-monogram-dark.png";
-import jbjMonogramTransparent from "@/assets/jbj-monogram-transparent.png";
+import jbjMonogramDarkBg from "@/assets/jbj-monogram-dark-bg.png"; // White J's - for dark backgrounds
+import jbjMonogramLightBg from "@/assets/jbj-monogram-light-bg.png"; // Black J's - for light backgrounds
 import jbjFullLogoDark from "@/assets/jbj-fulllogo-dark.png";
 import jbjFullLogoLight from "@/assets/jbj-fulllogo-light.png";
 
@@ -31,8 +31,8 @@ export const JJLogoImage = ({
 }: JJLogoImageProps) => {
   const config = sizeConfig[size];
   
-  // Use JBJ monogram - transparent for light backgrounds, dark for dark backgrounds
-  const logoSrc = variant === 'dark' ? jbjMonogramDark : jbjMonogramTransparent;
+  // Use JBJ monogram - LightBg (black J's) for light backgrounds, DarkBg (white J's) for dark backgrounds
+  const logoSrc = variant === 'dark' ? jbjMonogramDarkBg : jbjMonogramLightBg;
   
   return (
     <div className={`flex flex-col items-center ${className}`}>
@@ -53,7 +53,7 @@ export const JJLogoImage = ({
           }}
         >
           <span className={`font-semibold ${size === 'footer' ? 'text-lg md:text-xl' : size === 'xl' ? 'text-base' : size === 'lg' ? 'text-sm' : 'text-xs'}`}>
-            GLOBAL REAL ESTATE
+            JBJ GLOBAL REAL ESTATE
           </span>
         </div>
       )}
@@ -81,7 +81,7 @@ export const JJLogoTransparent = ({ size = 'md', className = '' }: JJLogoTranspa
   return (
     <div className={`flex items-center justify-center ${className}`}>
       <img 
-        src={jbjMonogramTransparent}
+        src={jbjMonogramLightBg}
         alt="JBJ Global Real Estate"
         width={config.imgSize}
         height={config.imgSize}
@@ -98,9 +98,9 @@ export const JJLogoHeaderImage = ({ className = '' }: { className?: string }) =>
     className={`flex items-center gap-3 ${className}`}
     style={{ fontFamily: "Poppins, sans-serif" }}
   >
-    {/* JBJ Logo image */}
+    {/* JBJ Logo image - dark bg version for header (white J's visible on dark header) */}
     <img 
-      src={jbjMonogramDark} 
+      src={jbjMonogramDarkBg} 
       alt="JBJ Global Real Estate"
       width={44}
       height={44}
