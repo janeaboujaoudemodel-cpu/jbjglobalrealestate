@@ -11,6 +11,7 @@ import { toast } from "sonner";
 import { 
   Users, FileText, Plus, Upload, Download, LogOut, Shuffle, LayoutGrid, List, Zap, Briefcase, PanelLeftOpen, PanelLeftClose
 } from "lucide-react";
+import jbjMonogramDarkBg from "@/assets/jbj-monogram-dark-bg.png";
 import CRMLeadsTable from "@/components/crm/CRMLeadsTable";
 import CRMEnhancedDashboard from "@/components/crm/CRMEnhancedDashboard";
 import CRMImportModal from "@/components/crm/CRMImportModal";
@@ -26,6 +27,7 @@ import AutomationRules from "@/components/crm/AutomationRules";
 import EmployeeCenter from "@/components/crm/EmployeeCenter";
 import EmployeesHub from "@/components/crm/EmployeesHub";
 import CRMToolsSidebar from "@/components/crm/CRMToolsSidebar";
+import { AdminTasksPanel } from "@/components/crm/AdminTasksPanel";
 
 interface CRMProfile {
   id: string;
@@ -234,7 +236,19 @@ const CRM = () => {
                   <PanelLeftOpen className="h-5 w-5" />
                 )}
               </Button>
-              <h1 className="text-2xl font-bold text-white">JBJ Global Real Estate CRM</h1>
+              <div className="flex items-center gap-3">
+                <img 
+                  src={jbjMonogramDarkBg} 
+                  alt="JBJ" 
+                  className="h-10 w-10 rounded-md"
+                />
+                <div>
+                  <h1 className="text-xl font-bold text-gold tracking-wide" style={{ fontFamily: 'Poppins, sans-serif' }}>
+                    JBJ GLOBAL REAL ESTATE
+                  </h1>
+                  <p className="text-xs text-muted-foreground">Customer Relationship Management</p>
+                </div>
+              </div>
               <Badge 
                 variant="default" 
                 className={
@@ -288,6 +302,10 @@ const CRM = () => {
           <div className="space-y-4">
             <SmartReminders userId={user?.id || ""} limit={4} />
             <AutomationRules userId={user?.id || ""} isAdmin={isAdmin} />
+            {/* Admin Tasks Panel - Only visible to Founder/Owner */}
+            {isFounder && (
+              <AdminTasksPanel />
+            )}
           </div>
         </div>
 
