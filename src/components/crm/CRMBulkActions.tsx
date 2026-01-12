@@ -235,44 +235,44 @@ const CRMBulkActions = ({
           </Button>
         )}
 
-        {/* Bulk Status Change */}
-        <Select onValueChange={handleBulkStatusChange} disabled={isUpdating}>
-          <SelectTrigger className="w-[150px] bg-zinc-950 border-zinc-700 text-white h-9 font-medium">
-            <SelectValue placeholder="Status" />
-          </SelectTrigger>
-          <SelectContent 
-            className="z-[9999] border border-zinc-700 shadow-2xl max-h-64 overflow-y-auto bg-zinc-950"
-            style={{ backgroundColor: '#09090b', color: '#ffffff' }}
-          >
-            {PIPELINE_STATUSES.map(status => (
-              <SelectItem key={status.value} value={status.value} className="text-white hover:bg-zinc-800 data-[highlighted]:bg-zinc-800 focus:bg-zinc-800 py-2.5 px-3" style={{ color: '#ffffff' }}>
-                <div className="flex items-center gap-2">
-                  <span className={`w-2 h-2 rounded-full ${status.color}`} />
-                  {status.label}
-                </div>
-              </SelectItem>
-            ))}
-          </SelectContent>
-        </Select>
+        {/* Native select for guaranteed visibility */}
+        <select
+          onChange={(e) => {
+            if (e.target.value) handleBulkStatusChange(e.target.value);
+            e.target.value = '';
+          }}
+          disabled={isUpdating}
+          className="w-[150px] h-9 px-3 rounded-md border border-zinc-700 bg-zinc-950 text-white font-medium focus:outline-none focus:ring-2 focus:ring-primary/50"
+          style={{ backgroundColor: '#09090b', color: '#ffffff' }}
+          defaultValue=""
+        >
+          <option value="" disabled style={{ backgroundColor: '#09090b', color: '#888888' }}>Status</option>
+          {PIPELINE_STATUSES.map(status => (
+            <option key={status.value} value={status.value} style={{ backgroundColor: '#09090b', color: '#ffffff' }}>
+              {status.label}
+            </option>
+          ))}
+        </select>
 
-        {/* Bulk Assign */}
+        {/* Bulk Assign - Native select */}
         {brokers.length > 0 && (
-          <Select onValueChange={handleBulkAssign} disabled={isUpdating}>
-            <SelectTrigger className="w-[160px] bg-zinc-950 border-zinc-700 text-white h-9 font-medium">
-              <UserPlus className="h-4 w-4 mr-2" />
-              <SelectValue placeholder="Assign" />
-            </SelectTrigger>
-            <SelectContent 
-              className="z-[9999] border border-zinc-700 shadow-2xl bg-zinc-950"
-              style={{ backgroundColor: '#09090b', color: '#ffffff' }}
-            >
-              {brokers.map(broker => (
-                <SelectItem key={broker.id} value={broker.id} className="text-white hover:bg-zinc-800 data-[highlighted]:bg-zinc-800 focus:bg-zinc-800 py-2.5 px-3" style={{ color: '#ffffff' }}>
-                  {broker.display_name}
-                </SelectItem>
-              ))}
-            </SelectContent>
-          </Select>
+          <select
+            onChange={(e) => {
+              if (e.target.value) handleBulkAssign(e.target.value);
+              e.target.value = '';
+            }}
+            disabled={isUpdating}
+            className="w-[160px] h-9 px-3 rounded-md border border-zinc-700 bg-zinc-950 text-white font-medium focus:outline-none focus:ring-2 focus:ring-primary/50"
+            style={{ backgroundColor: '#09090b', color: '#ffffff' }}
+            defaultValue=""
+          >
+            <option value="" disabled style={{ backgroundColor: '#09090b', color: '#888888' }}>Assign to...</option>
+            {brokers.map(broker => (
+              <option key={broker.id} value={broker.id} style={{ backgroundColor: '#09090b', color: '#ffffff' }}>
+                {broker.display_name}
+              </option>
+            ))}
+          </select>
         )}
 
         {/* Export Selected */}

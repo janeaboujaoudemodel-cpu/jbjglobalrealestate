@@ -850,29 +850,30 @@ const CRMImportModalV3 = ({ open, onClose, onSuccess, userId }: CRMImportModalV3
               <Label className="text-white">
                 Source Category <span className="text-red-400">*</span>
               </Label>
-            <Select value={sourceGroup} onValueChange={(val) => {
-              setSourceGroup(val);
-              if (val !== 'custom') setCustomSourceLabel('');
-            }}>
-                <SelectTrigger className="bg-zinc-950 border-zinc-700 text-white font-medium h-11">
-                  <SelectValue placeholder="Select source type..." />
-                </SelectTrigger>
-                <SelectContent 
-                  className="z-[9999] border border-zinc-700 shadow-2xl overflow-hidden bg-zinc-950"
-                  style={{ backgroundColor: '#09090b', color: '#ffffff' }}
+            {/* Native select for guaranteed visibility */}
+            <select
+              value={sourceGroup}
+              onChange={(e) => {
+                const val = e.target.value;
+                setSourceGroup(val);
+                if (val !== 'custom') setCustomSourceLabel('');
+              }}
+              className="w-full h-11 px-3 rounded-md border border-zinc-700 bg-zinc-950 text-white font-medium focus:outline-none focus:ring-2 focus:ring-gold/50"
+              style={{ backgroundColor: '#09090b', color: '#ffffff' }}
+            >
+              <option value="" disabled style={{ backgroundColor: '#09090b', color: '#888888' }}>
+                Select source type...
+              </option>
+              {SOURCE_GROUPS.map(group => (
+                <option 
+                  key={group.value} 
+                  value={group.value}
+                  style={{ backgroundColor: '#09090b', color: '#ffffff', padding: '12px' }}
                 >
-                  {SOURCE_GROUPS.map(group => (
-                    <SelectItem 
-                      key={group.value} 
-                      value={group.value} 
-                      className="text-white hover:bg-zinc-800 data-[highlighted]:bg-zinc-800 data-[highlighted]:text-white focus:bg-zinc-800 focus:text-white cursor-pointer font-medium py-3 px-4"
-                      style={{ color: '#ffffff', backgroundColor: 'transparent' }}
-                    >
-                      {group.label}
-                    </SelectItem>
-                  ))}
-                </SelectContent>
-              </Select>
+                  {group.label}
+                </option>
+              ))}
+            </select>
               
               {/* Custom source label input */}
               {sourceGroup === 'custom' && (
@@ -999,26 +1000,27 @@ const CRMImportModalV3 = ({ open, onClose, onSuccess, userId }: CRMImportModalV3
                   {!isAddingBroker ? (
                     <>
                       <Label className="text-white">Select Broker</Label>
-                      <Select value={selectedBrokerId} onValueChange={setSelectedBrokerId}>
-                        <SelectTrigger className="bg-zinc-950 border-zinc-700 text-white font-medium h-11">
-                          <SelectValue placeholder={loadingBrokers ? "Loading..." : "Select a broker..."} />
-                        </SelectTrigger>
-                        <SelectContent 
-                          className="z-[9999] border border-zinc-700 shadow-2xl overflow-hidden bg-zinc-950"
-                          style={{ backgroundColor: '#09090b', color: '#ffffff' }}
-                        >
-                          {brokers.map(broker => (
-                            <SelectItem 
-                              key={broker.id} 
-                              value={broker.id} 
-                              className="text-white hover:bg-zinc-800 data-[highlighted]:bg-zinc-800 data-[highlighted]:text-white focus:bg-zinc-800 focus:text-white font-medium py-3 px-4"
-                              style={{ color: '#ffffff', backgroundColor: 'transparent' }}
-                            >
-                              {broker.display_name}
-                            </SelectItem>
-                          ))}
-                        </SelectContent>
-                      </Select>
+                      {/* Native select for guaranteed visibility */}
+                      <select
+                        value={selectedBrokerId}
+                        onChange={(e) => setSelectedBrokerId(e.target.value)}
+                        className="w-full h-11 px-3 rounded-md border border-zinc-700 bg-zinc-950 text-white font-medium focus:outline-none focus:ring-2 focus:ring-gold/50"
+                        style={{ backgroundColor: '#09090b', color: '#ffffff' }}
+                        disabled={loadingBrokers}
+                      >
+                        <option value="" disabled style={{ backgroundColor: '#09090b', color: '#888888' }}>
+                          {loadingBrokers ? "Loading..." : "Select a broker..."}
+                        </option>
+                        {brokers.map(broker => (
+                          <option 
+                            key={broker.id} 
+                            value={broker.id}
+                            style={{ backgroundColor: '#09090b', color: '#ffffff' }}
+                          >
+                            {broker.display_name}
+                          </option>
+                        ))}
+                      </select>
                       <Button 
                         variant="outline" 
                         size="sm"
