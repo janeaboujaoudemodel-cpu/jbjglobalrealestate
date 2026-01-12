@@ -682,9 +682,13 @@ const CRMLeadsTable = ({ userId, filterType, onRefresh, statusFilters = [], sour
                       {/* Source: show "source_group · source_name" format */}
                       <div className="font-medium text-foreground">
                         {lead.lead_source_type === 'website' ? (
-                          <span className="text-emerald-400">Website</span>
+                          <span className="text-emerald-400 font-semibold">website · Web Form</span>
+                        ) : lead.source ? (
+                          <span>{lead.source}</span>
+                        ) : lead.lead_source_type ? (
+                          <span>{lead.lead_source_type.replace(/_/g, ' ')} · Unknown</span>
                         ) : (
-                          <span>{lead.source || lead.lead_source_type?.replace(/_/g, ' ') || "—"}</span>
+                          <span className="text-muted-foreground">imported · Unknown</span>
                         )}
                       </div>
                       {lead.tags && lead.tags.length > 0 && (
