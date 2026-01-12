@@ -36,6 +36,7 @@ import { toast } from "sonner";
 import { Search, Phone, MessageSquare, Mail, Eye, Filter, ChevronDown, Calendar, Lock, PhoneCall, Trash2, MoreHorizontal, FileText, Building2, Sparkles, Calculator, TrendingUp, BarChart3, Palette, FileSignature, Flame, Thermometer, Snowflake, Crown } from "lucide-react";
 import LeadStatusBadge, { PIPELINE_STATUSES, getStatusInfo } from "./LeadStatusBadge";
 import FollowUpScheduler from "./FollowUpScheduler";
+import CRMBulkActions from "./CRMBulkActions";
 import { useActiveLead } from "@/contexts/ActiveLeadContext";
 import { Badge } from "@/components/ui/badge";
 
@@ -79,8 +80,22 @@ const getFirstName = (fullName: string): string => {
   return fullName.split(" ")[0];
 };
 
-// Lead Temperature Scoring based on recency and completeness
-const getLeadTemperature = (lead: { created_at: string; state?: { last_touch_at: string | null; pipeline_status: string } }): { label: string; color: string; icon: any; bgColor: string } => {
+/**
+ * Lead Temperature - ONLY calculate for leads with actual engagement
+ * Imported leads with no touch should NOT have auto-temperature
+ */
+const getLeadTemperature = (lead: { created_at: string; lead_source_type?: string | null; state?: { last_touch_at: string | null; pipeline_status: string } }): { label: string; color: string; icon: any; bgColor: string } | null => {
+  // For imported leads without engagement, return null (no temperature shown)
+  const hasEngagement = lead.state?.last_touch_at != null;
+  const isWebsiteLead = lead.lead_source_type === 'website';
+  
+  // Only calculate temperature if:
+  // 1. Lead has been touched/engaged, OR
+  // 2. Lead is from website (has intent)
+  if (!hasEngagement && !isWebsiteLead) {
+    return null; // No temperature for imported leads without engagement
+  }
+  
   const now = Date.now();
   const createdAt = new Date(lead.created_at).getTime();
   const lastTouch = lead.state?.last_touch_at ? new Date(lead.state.last_touch_at).getTime() : createdAt;
@@ -496,9 +511,10 @@ const CRMLeadsTable = ({ userId, filterType, onRefresh, statusFilters = [], sour
                             </span>
                           )}
                         </p>
-                        {/* Lead Temperature Badge */}
+                    {/* Lead Temperature Badge - Only show if lead has engagement */}
                         {(() => {
                           const temp = getLeadTemperature(lead);
+                          if (!temp) return null; // No temperature for unengaged imported leads
                           const TempIcon = temp.icon;
                           return (
                             <Badge 
@@ -524,7 +540,7 @@ const CRMLeadsTable = ({ userId, filterType, onRefresh, statusFilters = [], sour
                         )}
                       </div>
                       <p className="text-xs text-muted-foreground">
-                        {lead.nationality} · {lead.preferred_language?.toUpperCase()}
+                        {lead.nationality || "—"} · {lead.preferred_language?.toUpperCase() || "—"}
                       </p>
                     </div>
                   </TableCell>
@@ -663,14 +679,14 @@ const CRMLeadsTable = ({ userId, filterType, onRefresh, statusFilters = [], sour
                   </TableCell>
                   <TableCell>
                     <div className="text-sm space-y-1">
+                      {/* Source: show "source_group · source_name" format */}
                       <div className="font-medium text-foreground">
-                        {lead.lead_source_type === 'website' ? 'Website' : lead.lead_source_type || lead.source || '-'}
+                        {lead.lead_source_type === 'website' ? (
+                          <span className="text-emerald-400">Website</span>
+                        ) : (
+                          <span>{lead.source || lead.lead_source_type?.replace(/_/g, ' ') || "—"}</span>
+                        )}
                       </div>
-                      {lead.source && lead.source !== 'website' && (
-                        <div className="text-xs text-muted-foreground">
-                          {lead.source.replace(/-/g, ' ').replace(/\b\w/g, l => l.toUpperCase())}
-                        </div>
-                      )}
                       {lead.tags && lead.tags.length > 0 && (
                         <div className="flex flex-wrap gap-1">
                           {lead.tags
@@ -856,61 +872,16 @@ const CRMLeadsTable = ({ userId, filterType, onRefresh, statusFilters = [], sour
         />
       )}
 
-      {/* Bulk Actions */}
-      {selectedLeads.size > 0 && (
-        <div className="fixed bottom-4 left-1/2 -translate-x-1/2 bg-card border border-border rounded-lg shadow-lg p-4 flex items-center gap-4 z-50">
-          <span className="text-sm font-semibold text-foreground">{selectedLeads.size} selected</span>
-          <Select onValueChange={(value) => {
-            selectedLeads.forEach(id => handleStatusChange(id, value));
-            setSelectedLeads(new Set());
-          }}>
-            <SelectTrigger className="w-[180px] bg-card text-foreground border-border">
-              <SelectValue placeholder="Change status" />
-            </SelectTrigger>
-            <SelectContent className="bg-card border-border max-h-80">
-              <div className="px-2 py-1 text-xs font-semibold text-emerald-400 uppercase">Positive</div>
-              {PIPELINE_STATUSES.filter(s => s.category === 'positive').map(status => (
-                <SelectItem key={status.value} value={status.value} className="text-foreground">
-                  <div className="flex items-center gap-2">
-                    <span className={`w-2 h-2 rounded-full ${status.color}`} />
-                    {status.label}
-                  </div>
-                </SelectItem>
-              ))}
-              <div className="px-2 py-1 text-xs font-semibold text-blue-400 uppercase mt-1">Neutral</div>
-              {PIPELINE_STATUSES.filter(s => s.category === 'neutral').map(status => (
-                <SelectItem key={status.value} value={status.value} className="text-foreground">
-                  <div className="flex items-center gap-2">
-                    <span className={`w-2 h-2 rounded-full ${status.color}`} />
-                    {status.label}
-                  </div>
-                </SelectItem>
-              ))}
-              <div className="px-2 py-1 text-xs font-semibold text-amber-400 uppercase mt-1">Follow-up</div>
-              {PIPELINE_STATUSES.filter(s => s.category === 'warning').map(status => (
-                <SelectItem key={status.value} value={status.value} className="text-foreground">
-                  <div className="flex items-center gap-2">
-                    <span className={`w-2 h-2 rounded-full ${status.color}`} />
-                    {status.label}
-                  </div>
-                </SelectItem>
-              ))}
-              <div className="px-2 py-1 text-xs font-semibold text-red-400 uppercase mt-1">Negative</div>
-              {PIPELINE_STATUSES.filter(s => s.category === 'negative').map(status => (
-                <SelectItem key={status.value} value={status.value} className="text-foreground">
-                  <div className="flex items-center gap-2">
-                    <span className={`w-2 h-2 rounded-full ${status.color}`} />
-                    {status.label}
-                  </div>
-                </SelectItem>
-              ))}
-            </SelectContent>
-          </Select>
-          <Button variant="outline" size="sm" onClick={() => setSelectedLeads(new Set())} className="text-foreground">
-            Clear
-          </Button>
-        </div>
-      )}
+      {/* Bulk Actions - Full Component with Delete, Assign, Status Change */}
+      <CRMBulkActions
+        selectedIds={selectedLeads}
+        onClear={() => setSelectedLeads(new Set())}
+        onSuccess={() => {
+          fetchLeads();
+          onRefresh();
+        }}
+        userId={userId}
+      />
     </div>
   );
 };
