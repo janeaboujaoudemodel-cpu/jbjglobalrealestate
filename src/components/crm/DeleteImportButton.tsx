@@ -10,13 +10,6 @@ import {
   DialogDescription,
 } from "@/components/ui/dialog";
 import {
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
-} from "@/components/ui/select";
-import {
   AlertDialog,
   AlertDialogAction,
   AlertDialogCancel,
@@ -275,24 +268,26 @@ const DeleteImportButton = ({ userId, onSuccess, isAdmin }: DeleteImportButtonPr
                 </div>
               ) : (
                 <>
-                  <Select value={selectedSourceId} onValueChange={setSelectedSourceId}>
-                    <SelectTrigger className="bg-zinc-900 border-zinc-700 text-white">
-                      <SelectValue placeholder="Select import source..." />
-                    </SelectTrigger>
-                    <SelectContent className="bg-zinc-900 border-zinc-700 max-h-64 z-[100]">
-                      {sources.map(source => (
-                        <SelectItem key={source.id} value={source.id} className="text-white hover:bg-zinc-800 focus:bg-zinc-800 focus:text-white">
-                          <div className="flex flex-col">
-                            <span className="font-medium">{source.source_name}</span>
-                            <span className="text-xs text-muted-foreground">
-                              {source.source_group.replace(/_/g, ' ')} · {source.total_rows || 0} rows · {format(new Date(source.created_at), 'MMM d, yyyy')}
-                              {source.broker_name_snapshot && ` · ${source.broker_name_snapshot}`}
-                            </span>
-                          </div>
-                        </SelectItem>
-                      ))}
-                    </SelectContent>
-                  </Select>
+                  {/* Native select for guaranteed visibility */}
+                  <select
+                    value={selectedSourceId}
+                    onChange={(e) => setSelectedSourceId(e.target.value)}
+                    className="w-full h-11 px-3 rounded-md border border-zinc-700 bg-zinc-950 text-white font-medium focus:outline-none focus:ring-2 focus:ring-primary/50"
+                    style={{ backgroundColor: '#09090b', color: '#ffffff' }}
+                  >
+                    <option value="" disabled style={{ backgroundColor: '#09090b', color: '#888888' }}>
+                      Select import source...
+                    </option>
+                    {sources.map(source => (
+                      <option 
+                        key={source.id} 
+                        value={source.id}
+                        style={{ backgroundColor: '#09090b', color: '#ffffff' }}
+                      >
+                        {source.source_name} — {source.source_group.replace(/_/g, ' ')} ({source.total_rows || 0} rows)
+                      </option>
+                    ))}
+                  </select>
 
                   {selectedSource && (
                     <div className="bg-red-500/10 border border-red-500/30 rounded-lg p-4 space-y-2">
