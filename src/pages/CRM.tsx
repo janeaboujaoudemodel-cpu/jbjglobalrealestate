@@ -9,7 +9,7 @@ import { Badge } from "@/components/ui/badge";
 import { Skeleton } from "@/components/ui/skeleton";
 import { toast } from "sonner";
 import { 
-  Users, FileText, Plus, Upload, Download, LogOut, Shuffle, LayoutGrid, List, Zap, Briefcase, PanelLeftOpen, PanelLeftClose, Crown, Flag, Bot
+  Users, FileText, Plus, Upload, Download, LogOut, Shuffle, LayoutGrid, List, Zap, Briefcase, PanelLeftOpen, PanelLeftClose, Crown, Flag, Sparkles
 } from "lucide-react";
 import jbjMonogramDarkBg from "@/assets/jbj-monogram-dark-bg.png";
 import CRMLeadsTable from "@/components/crm/CRMLeadsTable";
@@ -348,9 +348,9 @@ const CRM = () => {
           <Button 
             variant="outline" 
             onClick={() => setShowAssistantPanel(true)} 
-            className="text-gold border-gold/50 hover:bg-gold/20"
+            className="text-gold border-gold/50 hover:bg-gold/20 font-semibold"
           >
-            <Bot className="h-4 w-4 mr-2" />
+            <Sparkles className="h-4 w-4 mr-2" />
             My Assistant
           </Button>
           <div className="ml-auto flex items-center gap-2">
