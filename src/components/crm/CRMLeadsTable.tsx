@@ -40,6 +40,11 @@ import CRMBulkActions from "./CRMBulkActions";
 import { useActiveLead } from "@/contexts/ActiveLeadContext";
 import { Badge } from "@/components/ui/badge";
 
+interface LeadSource {
+  source_group: string;
+  source_name: string;
+}
+
 interface Lead {
   id: string;
   full_name: string;
@@ -48,12 +53,15 @@ interface Lead {
   nationality: string | null;
   preferred_language: string | null;
   current_location_country: string | null;
-  source: string | null;
+  source: string | null; // Legacy field - not used for display
+  source_id: string | null;
   lead_source_type: string | null;
   tags: string[] | null;
   created_at: string;
   owner_type: string;
   vip?: boolean;
+  // Joined from crm_lead_sources
+  crm_lead_sources?: LeadSource | null;
   state?: {
     pipeline_status: string;
     is_junk: boolean;
@@ -158,7 +166,14 @@ const CRMLeadsTable = ({ userId, filterType, onRefresh, statusFilters = [], sour
   const fetchLeads = async () => {
     setLoading(true);
     try {
-      let query = supabase.from("crm_leads").select("*");
+      // Join with crm_lead_sources to get source_group and source_name
+      let query = supabase.from("crm_leads").select(`
+        *,
+        crm_lead_sources (
+          source_group,
+          source_name
+        )
+      `);
 
       if (filterType === "own") {
         query = query.eq("owner_type", "broker_owned").eq("owner_user_id", userId);
@@ -678,16 +693,18 @@ const CRMLeadsTable = ({ userId, filterType, onRefresh, statusFilters = [], sour
                   </TableCell>
                   <TableCell>
                     <div className="text-sm space-y-1">
-                      {/* Source: show "source_group · source_name" format */}
+                      {/* Source: show "source_group · source_name" format from joined data */}
                       <div className="font-medium text-foreground">
-                        {lead.lead_source_type === 'website' ? (
+                        {lead.lead_source_type === 'website' && !lead.source_id ? (
                           <span className="text-emerald-400 font-semibold">website · Web Form</span>
-                        ) : lead.source ? (
-                          <span>{lead.source}</span>
-                        ) : lead.lead_source_type ? (
-                          <span>{lead.lead_source_type.replace(/_/g, ' ')} · Unknown</span>
-                        ) : (
+                        ) : lead.crm_lead_sources ? (
+                          <span>
+                            {lead.crm_lead_sources.source_group} · {lead.crm_lead_sources.source_name}
+                          </span>
+                        ) : lead.source_id ? (
                           <span className="text-muted-foreground">imported · Unknown</span>
+                        ) : (
+                          <span className="text-muted-foreground">—</span>
                         )}
                       </div>
                       {lead.tags && lead.tags.length > 0 && (
