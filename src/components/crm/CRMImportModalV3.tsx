@@ -24,7 +24,7 @@ import { toast } from "sonner";
 import { supabase } from "@/integrations/supabase/client";
 import { 
   Upload, FileText, Download, CheckCircle, AlertCircle, 
-  Crown, Flag, FileSpreadsheet, Users, Database, User
+  Flag, FileSpreadsheet, Users, Database, User, Plus
 } from "lucide-react";
 
 // ANALYSIS_TIMEOUT: Hard timeout to prevent "Analyzing contacts..." stuck state
@@ -67,6 +67,11 @@ interface ParsedLead {
   rawData?: Record<string, string>;
 }
 
+interface CRMBroker {
+  id: string;
+  display_name: string;
+}
+
 // Source group options - Website is NOT allowed for imports
 const SOURCE_GROUPS = [
   { value: "broker_database", label: "Broker Database" },
@@ -84,8 +89,15 @@ const CRMImportModalV3 = ({ open, onClose, onSuccess, userId }: CRMImportModalV3
   const [file, setFile] = useState<File | null>(null);
   const [sourceName, setSourceName] = useState("");
   const [sourceGroup, setSourceGroup] = useState("");
-  const [brokerName, setBrokerName] = useState("");
+  
+  // Broker attribution state
   const [registerUnderBroker, setRegisterUnderBroker] = useState(false);
+  const [brokers, setBrokers] = useState<CRMBroker[]>([]);
+  const [selectedBrokerId, setSelectedBrokerId] = useState<string>("");
+  const [isAddingBroker, setIsAddingBroker] = useState(false);
+  const [newBrokerName, setNewBrokerName] = useState("");
+  const [loadingBrokers, setLoadingBrokers] = useState(false);
+  
   const [parsedData, setParsedData] = useState<ParsedLead[]>([]);
   const [analyzedData, setAnalyzedData] = useState<{
     valid: ParsedLead[];
@@ -96,6 +108,59 @@ const CRMImportModalV3 = ({ open, onClose, onSuccess, userId }: CRMImportModalV3
   const [result, setResult] = useState<ImportResult | null>(null);
   const [activePreviewTab, setActivePreviewTab] = useState("all");
   const fileInputRef = useRef<HTMLInputElement>(null);
+
+  // Fetch brokers when entering broker step
+  useEffect(() => {
+    if (step === "broker") {
+      fetchBrokers();
+    }
+  }, [step]);
+
+  const fetchBrokers = async () => {
+    setLoadingBrokers(true);
+    try {
+      const { data, error } = await supabase
+        .from("crm_brokers")
+        .select("id, display_name")
+        .order("display_name");
+      
+      if (error) throw error;
+      setBrokers(data || []);
+    } catch (err) {
+      console.error("Failed to fetch brokers:", err);
+    } finally {
+      setLoadingBrokers(false);
+    }
+  };
+
+  const handleAddNewBroker = async () => {
+    if (!newBrokerName.trim()) {
+      toast.error("Please enter a broker name");
+      return;
+    }
+
+    try {
+      const { data, error } = await supabase
+        .from("crm_brokers")
+        .insert({
+          display_name: newBrokerName.trim(),
+          created_by_user_id: userId
+        })
+        .select()
+        .single();
+
+      if (error) throw error;
+
+      setBrokers(prev => [...prev, data]);
+      setSelectedBrokerId(data.id);
+      setNewBrokerName("");
+      setIsAddingBroker(false);
+      toast.success(`Broker "${data.display_name}" created`);
+    } catch (err) {
+      console.error("Failed to create broker:", err);
+      toast.error("Failed to create broker");
+    }
+  };
 
   // Generate default source name from file or date
   const getDefaultSourceName = (fileName?: string): string => {
@@ -222,65 +287,39 @@ const CRMImportModalV3 = ({ open, onClose, onSuccess, userId }: CRMImportModalV3
 
   /**
    * FIXED: Phone normalization for UAE formats
-   * - 0501234567 → +971501234567
-   * - 501234567 → +971501234567 
-   * - 971501234567 → +971501234567
-   * - +971501234567 → +971501234567
-   * - 04-1234567 → +97141234567
    */
   const normalizePhone = (phone: string): string | null => {
     if (!phone) return null;
     
-    // Remove all non-digit characters except +
     let normalized = phone.replace(/[^\d+]/g, "");
     
     if (!normalized) return null;
     
-    // Already has + prefix
     if (normalized.startsWith("+")) {
-      // Validate: + followed by 9-15 digits
       if (/^\+[1-9]\d{8,14}$/.test(normalized)) {
         return normalized;
       }
       return null;
     }
     
-    // Handle UAE formats without +
-    
-    // Starts with 00971 (international dial format)
     if (normalized.startsWith("00971")) {
       normalized = "+971" + normalized.slice(5);
-    }
-    // Starts with 971 (country code without +)
-    else if (normalized.startsWith("971") && normalized.length >= 12) {
+    } else if (normalized.startsWith("971") && normalized.length >= 12) {
       normalized = "+" + normalized;
-    }
-    // Starts with 0 (local format: 050, 055, 04, etc.)
-    else if (normalized.startsWith("0") && normalized.length >= 9) {
+    } else if (normalized.startsWith("0") && normalized.length >= 9) {
       normalized = "+971" + normalized.slice(1);
-    }
-    // Starts with 5 (mobile without area code: 501234567, 551234567)
-    else if (normalized.startsWith("5") && normalized.length >= 9 && normalized.length <= 10) {
+    } else if (normalized.startsWith("5") && normalized.length >= 9 && normalized.length <= 10) {
       normalized = "+971" + normalized;
-    }
-    // Starts with 4 (Dubai landline: 41234567)
-    else if (normalized.startsWith("4") && normalized.length >= 8 && normalized.length <= 9) {
+    } else if (normalized.startsWith("4") && normalized.length >= 8 && normalized.length <= 9) {
       normalized = "+971" + normalized;
-    }
-    // Other UAE area codes: 2 (Abu Dhabi), 3, 6, 7, 9
-    else if (/^[236789]/.test(normalized) && normalized.length >= 8 && normalized.length <= 9) {
+    } else if (/^[236789]/.test(normalized) && normalized.length >= 8 && normalized.length <= 9) {
       normalized = "+971" + normalized;
-    }
-    // International number without + (10+ digits starting with country code)
-    else if (normalized.length >= 10 && normalized.length <= 15) {
+    } else if (normalized.length >= 10 && normalized.length <= 15) {
       normalized = "+" + normalized;
-    }
-    // Too short but might be valid - don't prefix
-    else {
+    } else {
       return null;
     }
     
-    // Final E.164 validation
     if (/^\+[1-9]\d{8,14}$/.test(normalized)) {
       return normalized;
     }
@@ -305,7 +344,6 @@ const CRMImportModalV3 = ({ open, onClose, onSuccess, userId }: CRMImportModalV3
     const seenPhones = new Set<string>();
     const seenEmails = new Set<string>();
     
-    // Check existing leads in database
     const existingPhones = new Set<string>();
     const existingEmails = new Set<string>();
     
@@ -345,7 +383,6 @@ const CRMImportModalV3 = ({ open, onClose, onSuccess, userId }: CRMImportModalV3
       const hasEmail = !!row.email?.trim();
       
       if (!hasPhone && !hasEmail) {
-        // Missing BOTH - this is the only case we flag for missing contact
         flagReasons.push("missing_phone");
         flagReasons.push("missing_email");
       } else {
@@ -446,7 +483,7 @@ const CRMImportModalV3 = ({ open, onClose, onSuccess, userId }: CRMImportModalV3
 
     setFile(selectedFile);
 
-    // Auto-generate source name from file name
+    // Auto-generate source name from file name if empty
     if (!sourceName) {
       setSourceName(getDefaultSourceName(selectedFile.name));
     }
@@ -479,6 +516,7 @@ const CRMImportModalV3 = ({ open, onClose, onSuccess, userId }: CRMImportModalV3
         parsed = parseVCard(text);
       } else {
         toast.info("Excel file detected. For best results, save as CSV and re-upload.");
+        setStep("upload");
         return;
       }
 
@@ -511,7 +549,7 @@ const CRMImportModalV3 = ({ open, onClose, onSuccess, userId }: CRMImportModalV3
 
   const handleSkipBroker = () => {
     setRegisterUnderBroker(false);
-    setBrokerName("");
+    setSelectedBrokerId("");
     setStep("preview");
   };
 
@@ -532,6 +570,9 @@ const CRMImportModalV3 = ({ open, onClose, onSuccess, userId }: CRMImportModalV3
     const batchId = crypto.randomUUID();
     const finalSourceName = sourceName || getDefaultSourceName(file?.name);
     
+    // Get selected broker info
+    const selectedBroker = brokers.find(b => b.id === selectedBrokerId);
+    
     const result: ImportResult = {
       total: parsedData.length,
       inserted: 0,
@@ -543,7 +584,7 @@ const CRMImportModalV3 = ({ open, onClose, onSuccess, userId }: CRMImportModalV3
       sourceId: null
     };
 
-    // 1. Create lead source record
+    // 1. Create lead source record with broker attribution
     const { data: sourceRecord, error: sourceError } = await supabase
       .from("crm_lead_sources")
       .insert({
@@ -553,7 +594,10 @@ const CRMImportModalV3 = ({ open, onClose, onSuccess, userId }: CRMImportModalV3
         total_rows: parsedData.length,
         valid_rows: analyzedData.valid.length,
         flagged_rows: analyzedData.flagged.length,
-        created_by_user_id: userId
+        created_by_user_id: userId,
+        // Broker attribution (optional)
+        broker_id: registerUnderBroker && selectedBrokerId ? selectedBrokerId : null,
+        broker_name_snapshot: registerUnderBroker && selectedBroker ? selectedBroker.display_name : null
       })
       .select()
       .single();
@@ -569,7 +613,6 @@ const CRMImportModalV3 = ({ open, onClose, onSuccess, userId }: CRMImportModalV3
     const { data: importRecord, error: importError } = await supabase
       .from("crm_imports")
       .insert({
-        // IMPORTANT: tie import record ID to the lead import_batch_id so admin deletion can fully purge the import
         id: batchId,
         user_id: userId,
         source_type: "csv",
@@ -599,8 +642,7 @@ const CRMImportModalV3 = ({ open, onClose, onSuccess, userId }: CRMImportModalV3
         const phoneRaw = row.phone || null;
         const phoneNormalized = phone ? phone.replace(/\D/g, '') : null;
 
-        // CRITICAL: Do NOT auto-set language or temperature
-        // Default status = new, no temperature assigned
+        // CRITICAL: Do NOT auto-set language, temperature, Hot, etc.
         const { error: insertError } = await supabase
           .from("crm_leads")
           .insert({
@@ -612,17 +654,19 @@ const CRMImportModalV3 = ({ open, onClose, onSuccess, userId }: CRMImportModalV3
             email_normalized: email,
             company_name: row.company || null,
             nationality: row.nationality || null,
-            // CRITICAL: NULL for language - do NOT default to 'en'
+            // CRITICAL: NULL for language - UI shows "—"
             preferred_language: null,
             current_location_country: row.country || null,
             current_location_city: row.city || null,
             // Do NOT detect gender automatically
             gender: null,
             age_range: null,
+            // CRITICAL: Empty tags - no auto Hot
             tags: [],
             // Source must show group and name
             source: `${sourceGroup} · ${finalSourceName}`,
-            lead_source_type: sourceGroup, // NEVER 'website' for imports
+            // CRITICAL: NEVER 'website' for imports
+            lead_source_type: sourceGroup,
             owner_type: "broker_owned",
             owner_user_id: userId,
             created_by_user_id: userId,
@@ -691,8 +735,10 @@ const CRMImportModalV3 = ({ open, onClose, onSuccess, userId }: CRMImportModalV3
     setFile(null);
     setSourceName("");
     setSourceGroup("");
-    setBrokerName("");
     setRegisterUnderBroker(false);
+    setSelectedBrokerId("");
+    setNewBrokerName("");
+    setIsAddingBroker(false);
     setParsedData([]);
     setAnalyzedData({ valid: [], flagged: [], skipped: [] });
     setProgress(0);
@@ -843,14 +889,58 @@ const CRMImportModalV3 = ({ open, onClose, onSuccess, userId }: CRMImportModalV3
               </div>
 
               {registerUnderBroker && (
-                <div className="space-y-2 ml-6">
-                  <Label className="text-white">Broker Name</Label>
-                  <Input
-                    placeholder="Enter broker name..."
-                    value={brokerName}
-                    onChange={(e) => setBrokerName(e.target.value)}
-                    className="bg-muted border-border text-white"
-                  />
+                <div className="space-y-3 ml-6">
+                  {!isAddingBroker ? (
+                    <>
+                      <Label className="text-white">Select Broker</Label>
+                      <Select value={selectedBrokerId} onValueChange={setSelectedBrokerId}>
+                        <SelectTrigger className="bg-muted border-border text-white">
+                          <SelectValue placeholder={loadingBrokers ? "Loading..." : "Select a broker..."} />
+                        </SelectTrigger>
+                        <SelectContent className="bg-card border-border">
+                          {brokers.map(broker => (
+                            <SelectItem key={broker.id} value={broker.id} className="text-white">
+                              {broker.display_name}
+                            </SelectItem>
+                          ))}
+                        </SelectContent>
+                      </Select>
+                      <Button 
+                        variant="outline" 
+                        size="sm"
+                        onClick={() => setIsAddingBroker(true)}
+                        className="mt-2"
+                      >
+                        <Plus className="h-4 w-4 mr-2" />
+                        Add New Broker
+                      </Button>
+                    </>
+                  ) : (
+                    <>
+                      <Label className="text-white">New Broker Name</Label>
+                      <div className="flex gap-2">
+                        <Input
+                          placeholder="Enter broker name..."
+                          value={newBrokerName}
+                          onChange={(e) => setNewBrokerName(e.target.value)}
+                          className="bg-muted border-border text-white flex-1"
+                        />
+                        <Button onClick={handleAddNewBroker} size="sm">
+                          Save
+                        </Button>
+                        <Button 
+                          variant="outline" 
+                          size="sm"
+                          onClick={() => {
+                            setIsAddingBroker(false);
+                            setNewBrokerName("");
+                          }}
+                        >
+                          Cancel
+                        </Button>
+                      </div>
+                    </>
+                  )}
                   <p className="text-xs text-muted-foreground">
                     This is for attribution only. Does not auto-assign leads.
                   </p>
@@ -865,6 +955,7 @@ const CRMImportModalV3 = ({ open, onClose, onSuccess, userId }: CRMImportModalV3
               <Button 
                 onClick={handleContinueWithBroker} 
                 className="flex-1 bg-gold text-black hover:bg-gold/90"
+                disabled={registerUnderBroker && !selectedBrokerId}
               >
                 Continue
               </Button>
@@ -895,6 +986,9 @@ const CRMImportModalV3 = ({ open, onClose, onSuccess, userId }: CRMImportModalV3
                 </p>
                 <p className="text-sm text-muted-foreground">
                   {parsedData.length} contacts from {file?.name}
+                  {registerUnderBroker && selectedBrokerId && (
+                    <span className="text-gold"> · Broker: {brokers.find(b => b.id === selectedBrokerId)?.display_name}</span>
+                  )}
                 </p>
               </div>
             </div>
@@ -1022,7 +1116,7 @@ const CRMImportModalV3 = ({ open, onClose, onSuccess, userId }: CRMImportModalV3
 
             {/* Action Buttons */}
             <div className="flex gap-3 pt-2">
-              <Button variant="outline" onClick={() => setStep("upload")} className="flex-1">
+              <Button variant="outline" onClick={() => setStep("broker")} className="flex-1">
                 Back
               </Button>
               <Button 

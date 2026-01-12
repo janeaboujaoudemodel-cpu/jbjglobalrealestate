@@ -19,7 +19,7 @@ import {
 } from "@/components/ui/alert-dialog";
 import { toast } from "sonner";
 import { supabase } from "@/integrations/supabase/client";
-import { Trash2, UserPlus, RefreshCw, X } from "lucide-react";
+import { Trash2, UserPlus, RefreshCw, X, Download, CheckSquare, Square } from "lucide-react";
 import { PIPELINE_STATUSES } from "./LeadStatusBadge";
 
 interface CRMBulkActionsProps {
@@ -27,6 +27,8 @@ interface CRMBulkActionsProps {
   onClear: () => void;
   onSuccess: () => void;
   userId: string;
+  onSelectAll?: () => void;
+  totalCount?: number;
 }
 
 interface Broker {
@@ -34,10 +36,18 @@ interface Broker {
   display_name: string;
 }
 
-const CRMBulkActions = ({ selectedIds, onClear, onSuccess, userId }: CRMBulkActionsProps) => {
+const CRMBulkActions = ({ 
+  selectedIds, 
+  onClear, 
+  onSuccess, 
+  userId,
+  onSelectAll,
+  totalCount = 0
+}: CRMBulkActionsProps) => {
   const [isDeleting, setIsDeleting] = useState(false);
   const [showDeleteConfirm, setShowDeleteConfirm] = useState(false);
   const [isUpdating, setIsUpdating] = useState(false);
+  const [isExporting, setIsExporting] = useState(false);
   const [brokers, setBrokers] = useState<Broker[]>([]);
 
   // Fetch brokers for assignment
@@ -123,10 +133,12 @@ const CRMBulkActions = ({ selectedIds, onClear, onSuccess, userId }: CRMBulkActi
     if (selectedIds.size === 0) return;
     
     setIsDeleting(true);
+    const toastId = toast.loading(`Deleting ${selectedIds.size} leads...`);
+    
     try {
       const ids = Array.from(selectedIds);
       
-      // Delete related records first (including all child tables)
+      // Delete related records first (cascading hard delete)
       await Promise.all([
         supabase.from("crm_lead_state_per_user").delete().in("lead_id", ids),
         supabase.from("crm_activities").delete().in("lead_id", ids),
@@ -137,6 +149,8 @@ const CRMBulkActions = ({ selectedIds, onClear, onSuccess, userId }: CRMBulkActi
         supabase.from("crm_calls").delete().in("lead_id", ids),
         supabase.from("crm_notes").delete().in("lead_id", ids),
         supabase.from("crm_campaign_recipients").delete().in("lead_id", ids),
+        supabase.from("broker_call_logs").delete().in("lead_id", ids),
+        supabase.from("broker_chat_logs").delete().in("lead_id", ids),
       ]);
       
       // Delete leads
@@ -147,15 +161,70 @@ const CRMBulkActions = ({ selectedIds, onClear, onSuccess, userId }: CRMBulkActi
 
       if (error) throw error;
 
-      toast.success(`Deleted ${ids.length} leads`);
+      toast.success(`Deleted ${ids.length} leads`, { id: toastId });
       onSuccess();
       onClear();
     } catch (err) {
       console.error("Bulk delete failed:", err);
-      toast.error("Failed to delete leads");
+      toast.error("Failed to delete leads", { id: toastId });
     } finally {
       setIsDeleting(false);
       setShowDeleteConfirm(false);
+    }
+  };
+
+  const handleExportSelected = async () => {
+    if (selectedIds.size === 0) return;
+    
+    setIsExporting(true);
+    try {
+      const ids = Array.from(selectedIds);
+      
+      const { data: leads, error } = await supabase
+        .from("crm_leads")
+        .select("full_name, phone_e164, email_lower, company_name, nationality, current_location_country, current_location_city, source, created_at")
+        .in("id", ids);
+
+      if (error) throw error;
+
+      if (!leads || leads.length === 0) {
+        toast.error("No leads to export");
+        return;
+      }
+
+      // Create CSV
+      const headers = ["Name", "Phone", "Email", "Company", "Nationality", "Country", "City", "Source", "Created"];
+      const rows = leads.map(lead => [
+        lead.full_name || "",
+        lead.phone_e164 || "",
+        lead.email_lower || "",
+        lead.company_name || "",
+        lead.nationality || "",
+        lead.current_location_country || "",
+        lead.current_location_city || "",
+        lead.source || "",
+        lead.created_at ? new Date(lead.created_at).toLocaleDateString() : ""
+      ]);
+
+      const csv = [
+        headers.join(","),
+        ...rows.map(row => row.map(cell => `"${String(cell).replace(/"/g, '""')}"`).join(","))
+      ].join("\n");
+
+      const blob = new Blob([csv], { type: "text/csv;charset=utf-8;" });
+      const url = URL.createObjectURL(blob);
+      const a = document.createElement("a");
+      a.href = url;
+      a.download = `crm_leads_export_${new Date().toISOString().slice(0, 10)}.csv`;
+      a.click();
+      URL.revokeObjectURL(url);
+
+      toast.success(`Exported ${leads.length} leads`);
+    } catch (err) {
+      console.error("Export failed:", err);
+      toast.error("Failed to export leads");
+    } finally {
+      setIsExporting(false);
     }
   };
 
@@ -163,13 +232,26 @@ const CRMBulkActions = ({ selectedIds, onClear, onSuccess, userId }: CRMBulkActi
 
   return (
     <>
-      <div className="fixed bottom-4 left-1/2 -translate-x-1/2 bg-card border border-border rounded-lg shadow-xl p-4 flex items-center gap-4 z-50 flex-wrap max-w-[95vw]">
+      <div className="fixed bottom-4 left-1/2 -translate-x-1/2 bg-card border border-border rounded-lg shadow-xl p-4 flex items-center gap-3 z-50 flex-wrap max-w-[95vw]">
         <span className="text-sm font-bold text-foreground">{selectedIds.size} selected</span>
         
+        {/* Select All */}
+        {onSelectAll && totalCount > selectedIds.size && (
+          <Button 
+            variant="outline" 
+            size="sm" 
+            onClick={onSelectAll}
+            className="text-muted-foreground"
+          >
+            <CheckSquare className="h-4 w-4 mr-1" />
+            Select All ({totalCount})
+          </Button>
+        )}
+
         {/* Bulk Status Change */}
         <Select onValueChange={handleBulkStatusChange} disabled={isUpdating}>
-          <SelectTrigger className="w-[160px] bg-muted border-border text-foreground h-9">
-            <SelectValue placeholder="Change Status" />
+          <SelectTrigger className="w-[150px] bg-muted border-border text-foreground h-9">
+            <SelectValue placeholder="Status" />
           </SelectTrigger>
           <SelectContent className="bg-card border-border max-h-64 overflow-y-auto">
             {PIPELINE_STATUSES.map(status => (
@@ -186,9 +268,9 @@ const CRMBulkActions = ({ selectedIds, onClear, onSuccess, userId }: CRMBulkActi
         {/* Bulk Assign */}
         {brokers.length > 0 && (
           <Select onValueChange={handleBulkAssign} disabled={isUpdating}>
-            <SelectTrigger className="w-[180px] bg-muted border-border text-foreground h-9">
+            <SelectTrigger className="w-[160px] bg-muted border-border text-foreground h-9">
               <UserPlus className="h-4 w-4 mr-2" />
-              <SelectValue placeholder="Assign to..." />
+              <SelectValue placeholder="Assign" />
             </SelectTrigger>
             <SelectContent className="bg-card border-border">
               {brokers.map(broker => (
@@ -200,6 +282,22 @@ const CRMBulkActions = ({ selectedIds, onClear, onSuccess, userId }: CRMBulkActi
           </Select>
         )}
 
+        {/* Export Selected */}
+        <Button 
+          variant="outline" 
+          size="sm"
+          onClick={handleExportSelected}
+          disabled={isExporting}
+          className="text-muted-foreground"
+        >
+          {isExporting ? (
+            <RefreshCw className="h-4 w-4 mr-1 animate-spin" />
+          ) : (
+            <Download className="h-4 w-4 mr-1" />
+          )}
+          Export
+        </Button>
+
         {/* Bulk Delete */}
         <Button 
           variant="destructive" 
@@ -207,14 +305,13 @@ const CRMBulkActions = ({ selectedIds, onClear, onSuccess, userId }: CRMBulkActi
           onClick={() => setShowDeleteConfirm(true)}
           disabled={isDeleting}
         >
-          <Trash2 className="h-4 w-4 mr-2" />
+          <Trash2 className="h-4 w-4 mr-1" />
           Delete
         </Button>
 
         {/* Unselect All */}
-        <Button variant="outline" size="sm" onClick={onClear} className="text-muted-foreground">
-          <X className="h-4 w-4 mr-1" />
-          Unselect All
+        <Button variant="ghost" size="sm" onClick={onClear} className="text-muted-foreground">
+          <X className="h-4 w-4" />
         </Button>
       </div>
 
@@ -225,7 +322,9 @@ const CRMBulkActions = ({ selectedIds, onClear, onSuccess, userId }: CRMBulkActi
             <AlertDialogTitle className="text-foreground">Delete {selectedIds.size} Leads?</AlertDialogTitle>
             <AlertDialogDescription className="text-muted-foreground">
               This will permanently delete {selectedIds.size} leads and all related data 
-              (activities, assignments, shortlists, reports). This action cannot be undone.
+              (activities, assignments, shortlists, reports, calls, notes). 
+              <br /><br />
+              <strong className="text-red-400">This action cannot be undone.</strong>
             </AlertDialogDescription>
           </AlertDialogHeader>
           <AlertDialogFooter>
