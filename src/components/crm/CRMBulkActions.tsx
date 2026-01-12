@@ -237,12 +237,15 @@ const CRMBulkActions = ({
 
         {/* Bulk Status Change */}
         <Select onValueChange={handleBulkStatusChange} disabled={isUpdating}>
-          <SelectTrigger className="w-[150px] bg-zinc-900 border-zinc-700 text-white h-9">
+          <SelectTrigger className="w-[150px] bg-zinc-900 border-zinc-700 text-white h-9 font-medium">
             <SelectValue placeholder="Status" />
           </SelectTrigger>
-          <SelectContent className="bg-zinc-900 border-zinc-700 max-h-64 overflow-y-auto z-[100]">
+          <SelectContent 
+            className="z-[9999] bg-zinc-950 text-white border border-zinc-800 shadow-xl max-h-64 overflow-y-auto"
+            style={{ backgroundColor: '#09090b' }}
+          >
             {PIPELINE_STATUSES.map(status => (
-              <SelectItem key={status.value} value={status.value} className="text-white hover:bg-zinc-800 focus:bg-zinc-800 focus:text-white">
+              <SelectItem key={status.value} value={status.value} className="text-white data-[highlighted]:bg-zinc-800 data-[highlighted]:text-white focus:bg-zinc-800 focus:text-white py-2">
                 <div className="flex items-center gap-2">
                   <span className={`w-2 h-2 rounded-full ${status.color}`} />
                   {status.label}
@@ -255,13 +258,16 @@ const CRMBulkActions = ({
         {/* Bulk Assign */}
         {brokers.length > 0 && (
           <Select onValueChange={handleBulkAssign} disabled={isUpdating}>
-            <SelectTrigger className="w-[160px] bg-zinc-900 border-zinc-700 text-white h-9">
+            <SelectTrigger className="w-[160px] bg-zinc-900 border-zinc-700 text-white h-9 font-medium">
               <UserPlus className="h-4 w-4 mr-2" />
               <SelectValue placeholder="Assign" />
             </SelectTrigger>
-            <SelectContent className="bg-zinc-900 border-zinc-700 z-[100]">
+            <SelectContent 
+              className="z-[9999] bg-zinc-950 text-white border border-zinc-800 shadow-xl"
+              style={{ backgroundColor: '#09090b' }}
+            >
               {brokers.map(broker => (
-                <SelectItem key={broker.id} value={broker.id} className="text-white hover:bg-zinc-800 focus:bg-zinc-800 focus:text-white">
+                <SelectItem key={broker.id} value={broker.id} className="text-white data-[highlighted]:bg-zinc-800 data-[highlighted]:text-white focus:bg-zinc-800 focus:text-white py-2">
                   {broker.display_name}
                 </SelectItem>
               ))}
