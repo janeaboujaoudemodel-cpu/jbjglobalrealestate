@@ -241,11 +241,11 @@ const CRMBulkActions = ({
             <SelectValue placeholder="Status" />
           </SelectTrigger>
           <SelectContent 
-            className="z-[9999] bg-zinc-950 text-white border border-zinc-800 shadow-xl max-h-64 overflow-y-auto"
-            style={{ backgroundColor: '#09090b' }}
+            className="z-[9999] border border-zinc-700 shadow-2xl max-h-64 overflow-y-auto"
+            style={{ backgroundColor: '#18181b' }}
           >
             {PIPELINE_STATUSES.map(status => (
-              <SelectItem key={status.value} value={status.value} className="text-white data-[highlighted]:bg-zinc-800 data-[highlighted]:text-white focus:bg-zinc-800 focus:text-white py-2">
+              <SelectItem key={status.value} value={status.value} className="text-white bg-zinc-900 hover:bg-zinc-800 data-[highlighted]:bg-zinc-700 focus:bg-zinc-700 py-2.5 px-3" style={{ color: '#ffffff', backgroundColor: '#18181b' }}>
                 <div className="flex items-center gap-2">
                   <span className={`w-2 h-2 rounded-full ${status.color}`} />
                   {status.label}
@@ -263,11 +263,11 @@ const CRMBulkActions = ({
               <SelectValue placeholder="Assign" />
             </SelectTrigger>
             <SelectContent 
-              className="z-[9999] bg-zinc-950 text-white border border-zinc-800 shadow-xl"
-              style={{ backgroundColor: '#09090b' }}
+              className="z-[9999] border border-zinc-700 shadow-2xl"
+              style={{ backgroundColor: '#18181b' }}
             >
               {brokers.map(broker => (
-                <SelectItem key={broker.id} value={broker.id} className="text-white data-[highlighted]:bg-zinc-800 data-[highlighted]:text-white focus:bg-zinc-800 focus:text-white py-2">
+                <SelectItem key={broker.id} value={broker.id} className="text-white bg-zinc-900 hover:bg-zinc-800 data-[highlighted]:bg-zinc-700 focus:bg-zinc-700 py-2.5 px-3" style={{ color: '#ffffff', backgroundColor: '#18181b' }}>
                   {broker.display_name}
                 </SelectItem>
               ))}
