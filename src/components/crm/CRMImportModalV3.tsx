@@ -1,4 +1,4 @@
-import { useState, useRef } from "react";
+import { useState, useRef, useEffect } from "react";
 import {
   Dialog,
   DialogContent,
@@ -26,6 +26,9 @@ import {
   Upload, FileText, Download, CheckCircle, AlertCircle, 
   Crown, Flag, FileSpreadsheet, Users, Database, User
 } from "lucide-react";
+
+// ANALYSIS_TIMEOUT: Hard timeout to prevent "Analyzing contacts..." stuck state
+const ANALYSIS_TIMEOUT_MS = 60000; // 60 seconds
 
 interface CRMImportModalV3Props {
   open: boolean;
@@ -406,6 +409,18 @@ const CRMImportModalV3 = ({ open, onClose, onSuccess, userId }: CRMImportModalV3
     return { valid, flagged, skipped };
   };
 
+  // Analysis timeout to prevent "Analyzing contacts..." stuck state
+  const analysisTimeoutRef = useRef<ReturnType<typeof setTimeout> | null>(null);
+  
+  // Cleanup timeout on unmount
+  useEffect(() => {
+    return () => {
+      if (analysisTimeoutRef.current) {
+        clearTimeout(analysisTimeoutRef.current);
+      }
+    };
+  }, []);
+
   const handleFileChange = async (e: React.ChangeEvent<HTMLInputElement>) => {
     const selectedFile = e.target.files?.[0];
     if (!selectedFile) return;
@@ -429,33 +444,53 @@ const CRMImportModalV3 = ({ open, onClose, onSuccess, userId }: CRMImportModalV3
     
     setStep("analysis");
     
+    // Set a hard timeout to prevent infinite "Analyzing contacts..." state
+    analysisTimeoutRef.current = setTimeout(() => {
+      if (step === "analysis") {
+        toast.warning("Analysis timed out. Import may still have completed.", { duration: 5000 });
+        setStep("broker");
+      }
+    }, ANALYSIS_TIMEOUT_MS);
+    
     let parsed: ParsedLead[] = [];
     
-    if (isCSV) {
-      const text = await selectedFile.text();
-      parsed = parseCSV(text);
-    } else if (isVCard) {
-      const text = await selectedFile.text();
-      parsed = parseVCard(text);
-    } else {
-      toast.info("Excel file detected. For best results, save as CSV and re-upload.");
+    try {
+      if (isCSV) {
+        const text = await selectedFile.text();
+        parsed = parseCSV(text);
+      } else if (isVCard) {
+        const text = await selectedFile.text();
+        parsed = parseVCard(text);
+      } else {
+        toast.info("Excel file detected. For best results, save as CSV and re-upload.");
+        if (analysisTimeoutRef.current) clearTimeout(analysisTimeoutRef.current);
+        setStep("upload");
+        return;
+      }
+      
+      if (parsed.length === 0) {
+        toast.error("No data found in file");
+        if (analysisTimeoutRef.current) clearTimeout(analysisTimeoutRef.current);
+        setStep("upload");
+        return;
+      }
+      
+      setParsedData(parsed);
+      
+      const analyzed = await analyzeData(parsed);
+      setAnalyzedData(analyzed);
+      
+      // Clear timeout on successful analysis
+      if (analysisTimeoutRef.current) clearTimeout(analysisTimeoutRef.current);
+      
+      // Go to broker attribution step (optional)
+      setStep("broker");
+    } catch (err) {
+      console.error("File analysis error:", err);
+      toast.error("Failed to analyze file");
+      if (analysisTimeoutRef.current) clearTimeout(analysisTimeoutRef.current);
       setStep("upload");
-      return;
     }
-    
-    if (parsed.length === 0) {
-      toast.error("No data found in file");
-      setStep("upload");
-      return;
-    }
-    
-    setParsedData(parsed);
-    
-    const analyzed = await analyzeData(parsed);
-    setAnalyzedData(analyzed);
-    
-    // Go to broker attribution step (optional)
-    setStep("broker");
   };
 
   const handleSkipBroker = () => {

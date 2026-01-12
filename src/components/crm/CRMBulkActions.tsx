@@ -126,13 +126,18 @@ const CRMBulkActions = ({ selectedIds, onClear, onSuccess, userId }: CRMBulkActi
     try {
       const ids = Array.from(selectedIds);
       
-      // Delete related records first
-      await supabase.from("crm_lead_state_per_user").delete().in("lead_id", ids);
-      await supabase.from("crm_activities").delete().in("lead_id", ids);
-      await supabase.from("crm_lead_assignments").delete().in("lead_id", ids);
-      await supabase.from("crm_ai_drafts").delete().in("lead_id", ids);
-      await supabase.from("crm_lead_shortlists").delete().in("lead_id", ids);
-      await supabase.from("crm_lead_reports").delete().in("lead_id", ids);
+      // Delete related records first (including all child tables)
+      await Promise.all([
+        supabase.from("crm_lead_state_per_user").delete().in("lead_id", ids),
+        supabase.from("crm_activities").delete().in("lead_id", ids),
+        supabase.from("crm_lead_assignments").delete().in("lead_id", ids),
+        supabase.from("crm_ai_drafts").delete().in("lead_id", ids),
+        supabase.from("crm_lead_shortlists").delete().in("lead_id", ids),
+        supabase.from("crm_lead_reports").delete().in("lead_id", ids),
+        supabase.from("crm_calls").delete().in("lead_id", ids),
+        supabase.from("crm_notes").delete().in("lead_id", ids),
+        supabase.from("crm_campaign_recipients").delete().in("lead_id", ids),
+      ]);
       
       // Delete leads
       const { error } = await supabase
@@ -206,9 +211,10 @@ const CRMBulkActions = ({ selectedIds, onClear, onSuccess, userId }: CRMBulkActi
           Delete
         </Button>
 
-        {/* Clear Selection */}
-        <Button variant="ghost" size="sm" onClick={onClear}>
-          <X className="h-4 w-4" />
+        {/* Unselect All */}
+        <Button variant="outline" size="sm" onClick={onClear} className="text-muted-foreground">
+          <X className="h-4 w-4 mr-1" />
+          Unselect All
         </Button>
       </div>
 
