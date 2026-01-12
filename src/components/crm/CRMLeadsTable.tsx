@@ -424,45 +424,45 @@ const CRMLeadsTable = ({ userId, filterType, onRefresh, statusFilters = [], sour
           />
         </div>
         <Select value={statusFilter} onValueChange={setStatusFilter}>
-          <SelectTrigger className="w-[200px] bg-zinc-900 border-zinc-700 text-white font-medium">
+          <SelectTrigger className="w-[200px] bg-zinc-900 border-zinc-700 text-white font-medium h-10">
             <Filter className="h-4 w-4 mr-2" />
             <SelectValue placeholder="Filter by status" />
           </SelectTrigger>
           <SelectContent 
-            className="z-[9999] bg-zinc-950 text-white border border-zinc-800 shadow-xl max-h-80"
-            style={{ backgroundColor: '#09090b' }}
+            className="z-[9999] border border-zinc-700 shadow-2xl max-h-80 overflow-hidden"
+            style={{ backgroundColor: '#18181b' }}
           >
-            <SelectItem value="all" className="text-white data-[highlighted]:bg-zinc-800 data-[highlighted]:text-white focus:bg-zinc-800 focus:text-white py-2">All Statuses</SelectItem>
-            <div className="px-2 py-1 text-xs font-semibold text-emerald-400 uppercase">Positive</div>
+            <SelectItem value="all" className="text-white bg-zinc-900 hover:bg-zinc-800 data-[highlighted]:bg-zinc-700 focus:bg-zinc-700 py-2.5 px-3" style={{ color: '#ffffff', backgroundColor: '#18181b' }}>All Statuses</SelectItem>
+            <div className="px-3 py-1.5 text-xs font-semibold text-emerald-400 uppercase bg-zinc-900/50">Positive</div>
             {PIPELINE_STATUSES.filter(s => s.category === 'positive').map(status => (
-              <SelectItem key={status.value} value={status.value} className="text-white data-[highlighted]:bg-zinc-800 data-[highlighted]:text-white focus:bg-zinc-800 focus:text-white py-2">
+              <SelectItem key={status.value} value={status.value} className="text-white bg-zinc-900 hover:bg-zinc-800 data-[highlighted]:bg-zinc-700 focus:bg-zinc-700 py-2.5 px-3" style={{ color: '#ffffff', backgroundColor: '#18181b' }}>
                 <div className="flex items-center gap-2">
                   <span className={`w-2 h-2 rounded-full ${status.color}`} />
                   {status.label}
                 </div>
               </SelectItem>
             ))}
-            <div className="px-2 py-1 text-xs font-semibold text-blue-400 uppercase mt-1">Neutral</div>
+            <div className="px-3 py-1.5 text-xs font-semibold text-blue-400 uppercase bg-zinc-900/50 mt-1">Neutral</div>
             {PIPELINE_STATUSES.filter(s => s.category === 'neutral').map(status => (
-              <SelectItem key={status.value} value={status.value} className="text-white data-[highlighted]:bg-zinc-800 data-[highlighted]:text-white focus:bg-zinc-800 focus:text-white py-2">
+              <SelectItem key={status.value} value={status.value} className="text-white bg-zinc-900 hover:bg-zinc-800 data-[highlighted]:bg-zinc-700 focus:bg-zinc-700 py-2.5 px-3" style={{ color: '#ffffff', backgroundColor: '#18181b' }}>
                 <div className="flex items-center gap-2">
                   <span className={`w-2 h-2 rounded-full ${status.color}`} />
                   {status.label}
                 </div>
               </SelectItem>
             ))}
-            <div className="px-2 py-1 text-xs font-semibold text-amber-400 uppercase mt-1">Follow-up</div>
+            <div className="px-3 py-1.5 text-xs font-semibold text-amber-400 uppercase bg-zinc-900/50 mt-1">Follow-up</div>
             {PIPELINE_STATUSES.filter(s => s.category === 'warning').map(status => (
-              <SelectItem key={status.value} value={status.value} className="text-white data-[highlighted]:bg-zinc-800 data-[highlighted]:text-white focus:bg-zinc-800 focus:text-white py-2">
+              <SelectItem key={status.value} value={status.value} className="text-white bg-zinc-900 hover:bg-zinc-800 data-[highlighted]:bg-zinc-700 focus:bg-zinc-700 py-2.5 px-3" style={{ color: '#ffffff', backgroundColor: '#18181b' }}>
                 <div className="flex items-center gap-2">
                   <span className={`w-2 h-2 rounded-full ${status.color}`} />
                   {status.label}
                 </div>
               </SelectItem>
             ))}
-            <div className="px-2 py-1 text-xs font-semibold text-red-400 uppercase mt-1">Negative</div>
+            <div className="px-3 py-1.5 text-xs font-semibold text-red-400 uppercase bg-zinc-900/50 mt-1">Negative</div>
             {PIPELINE_STATUSES.filter(s => s.category === 'negative').map(status => (
-              <SelectItem key={status.value} value={status.value} className="text-white data-[highlighted]:bg-zinc-800 data-[highlighted]:text-white focus:bg-zinc-800 focus:text-white py-2">
+              <SelectItem key={status.value} value={status.value} className="text-white bg-zinc-900 hover:bg-zinc-800 data-[highlighted]:bg-zinc-700 focus:bg-zinc-700 py-2.5 px-3" style={{ color: '#ffffff', backgroundColor: '#18181b' }}>
                 <div className="flex items-center gap-2">
                   <span className={`w-2 h-2 rounded-full ${status.color}`} />
                   {status.label}
