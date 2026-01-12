@@ -14,7 +14,8 @@ import {
 import jbjMonogramDarkBg from "@/assets/jbj-monogram-dark-bg.png";
 import CRMLeadsTable from "@/components/crm/CRMLeadsTable";
 import CRMEnhancedDashboard from "@/components/crm/CRMEnhancedDashboard";
-import CRMImportModalV2 from "@/components/crm/CRMImportModalV2";
+import CRMImportModalV3 from "@/components/crm/CRMImportModalV3";
+import DeleteImportButton from "@/components/crm/DeleteImportButton";
 import CRMLeadModal from "@/components/crm/CRMLeadModal";
 import LeadQuickFilters from "@/components/crm/LeadQuickFilters";
 import LeadSourceFilter from "@/components/crm/LeadSourceFilter";
@@ -341,6 +342,9 @@ const CRM = () => {
               Bulk Assign Leads
             </Button>
           )}
+          {isAdmin && (
+            <DeleteImportButton userId={user?.id || ""} onSuccess={handleRefresh} isAdmin={isAdmin} />
+          )}
           <Button 
             variant="outline" 
             onClick={() => setShowAssistantPanel(true)} 
@@ -493,7 +497,7 @@ const CRM = () => {
       </main>
 
       {/* Modals */}
-      <CRMImportModalV2 
+      <CRMImportModalV3 
         open={showImportModal} 
         onClose={() => setShowImportModal(false)}
         onSuccess={handleRefresh}
