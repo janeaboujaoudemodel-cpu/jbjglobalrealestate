@@ -143,7 +143,11 @@ const CRMBulkActions = ({
         p_lead_ids: ids,
       });
 
-      if (error) throw error;
+      if (error) {
+        console.error("Bulk delete error:", error);
+        toast.error(`Failed to delete leads: ${error.message}`, { id: toastId });
+        return;
+      }
 
       const deletedCount =
         (data as { lead_count?: number } | null)?.lead_count ?? ids.length;
@@ -151,9 +155,9 @@ const CRMBulkActions = ({
       toast.success(`Deleted ${deletedCount} leads`, { id: toastId });
       onSuccess();
       onClear();
-    } catch (err) {
+    } catch (err: any) {
       console.error("Bulk delete failed:", err);
-      toast.error("Failed to delete leads", { id: toastId });
+      toast.error(`Failed to delete leads: ${err.message || 'Unknown error'}`, { id: toastId });
     } finally {
       setIsDeleting(false);
       setShowDeleteConfirm(false);

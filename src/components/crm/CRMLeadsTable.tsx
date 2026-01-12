@@ -266,7 +266,11 @@ const CRMLeadsTable = ({ userId, filterType, onRefresh, statusFilters = [], sour
         p_lead_ids: [leadId],
       });
 
-      if (error) throw error;
+      if (error) {
+        console.error("Delete lead error:", error);
+        toast.error(`Failed to delete lead: ${error.message}`);
+        return;
+      }
 
       const deletedCount =
         (data as { lead_count?: number } | null)?.lead_count ?? 1;
@@ -274,9 +278,9 @@ const CRMLeadsTable = ({ userId, filterType, onRefresh, statusFilters = [], sour
       toast.success(`Lead deleted (${deletedCount})`);
       fetchLeads();
       onRefresh();
-    } catch (err) {
+    } catch (err: any) {
       console.error("Failed to delete lead:", err);
-      toast.error("Failed to delete lead");
+      toast.error(`Failed to delete lead: ${err.message || 'Unknown error'}`);
     }
   };
 
