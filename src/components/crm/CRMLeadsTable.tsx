@@ -415,15 +415,15 @@ const CRMLeadsTable = ({ userId, filterType, onRefresh, statusFilters = [], sour
           />
         </div>
         <Select value={statusFilter} onValueChange={setStatusFilter}>
-          <SelectTrigger className="w-[200px] bg-card text-foreground border-border">
+          <SelectTrigger className="w-[200px] bg-zinc-900 border-zinc-700 text-white">
             <Filter className="h-4 w-4 mr-2" />
             <SelectValue placeholder="Filter by status" />
           </SelectTrigger>
-          <SelectContent className="bg-card border-border max-h-80">
-            <SelectItem value="all" className="text-foreground">All Statuses</SelectItem>
+          <SelectContent className="bg-zinc-900 border-zinc-700 max-h-80 z-[100]">
+            <SelectItem value="all" className="text-white hover:bg-zinc-800 focus:bg-zinc-800 focus:text-white">All Statuses</SelectItem>
             <div className="px-2 py-1 text-xs font-semibold text-emerald-400 uppercase">Positive</div>
             {PIPELINE_STATUSES.filter(s => s.category === 'positive').map(status => (
-              <SelectItem key={status.value} value={status.value} className="text-foreground">
+              <SelectItem key={status.value} value={status.value} className="text-white hover:bg-zinc-800 focus:bg-zinc-800 focus:text-white">
                 <div className="flex items-center gap-2">
                   <span className={`w-2 h-2 rounded-full ${status.color}`} />
                   {status.label}
@@ -432,7 +432,7 @@ const CRMLeadsTable = ({ userId, filterType, onRefresh, statusFilters = [], sour
             ))}
             <div className="px-2 py-1 text-xs font-semibold text-blue-400 uppercase mt-1">Neutral</div>
             {PIPELINE_STATUSES.filter(s => s.category === 'neutral').map(status => (
-              <SelectItem key={status.value} value={status.value} className="text-foreground">
+              <SelectItem key={status.value} value={status.value} className="text-white hover:bg-zinc-800 focus:bg-zinc-800 focus:text-white">
                 <div className="flex items-center gap-2">
                   <span className={`w-2 h-2 rounded-full ${status.color}`} />
                   {status.label}
@@ -441,7 +441,7 @@ const CRMLeadsTable = ({ userId, filterType, onRefresh, statusFilters = [], sour
             ))}
             <div className="px-2 py-1 text-xs font-semibold text-amber-400 uppercase mt-1">Follow-up</div>
             {PIPELINE_STATUSES.filter(s => s.category === 'warning').map(status => (
-              <SelectItem key={status.value} value={status.value} className="text-foreground">
+              <SelectItem key={status.value} value={status.value} className="text-white hover:bg-zinc-800 focus:bg-zinc-800 focus:text-white">
                 <div className="flex items-center gap-2">
                   <span className={`w-2 h-2 rounded-full ${status.color}`} />
                   {status.label}
@@ -450,7 +450,7 @@ const CRMLeadsTable = ({ userId, filterType, onRefresh, statusFilters = [], sour
             ))}
             <div className="px-2 py-1 text-xs font-semibold text-red-400 uppercase mt-1">Negative</div>
             {PIPELINE_STATUSES.filter(s => s.category === 'negative').map(status => (
-              <SelectItem key={status.value} value={status.value} className="text-foreground">
+              <SelectItem key={status.value} value={status.value} className="text-white hover:bg-zinc-800 focus:bg-zinc-800 focus:text-white">
                 <div className="flex items-center gap-2">
                   <span className={`w-2 h-2 rounded-full ${status.color}`} />
                   {status.label}

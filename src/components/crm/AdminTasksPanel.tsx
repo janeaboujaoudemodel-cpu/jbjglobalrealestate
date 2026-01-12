@@ -238,29 +238,29 @@ export function AdminTasksPanel() {
                   value={newTask.category}
                   onValueChange={(v) => setNewTask({ ...newTask, category: v })}
                 >
-                  <SelectTrigger className="bg-white/5 border-white/10 text-white">
+                  <SelectTrigger className="bg-zinc-900 border-zinc-700 text-white">
                     <SelectValue placeholder="Category" />
                   </SelectTrigger>
-                  <SelectContent>
-                    <SelectItem value="general">General</SelectItem>
-                    <SelectItem value="integration">Integration</SelectItem>
-                    <SelectItem value="security">Security</SelectItem>
-                    <SelectItem value="marketing">Marketing</SelectItem>
-                    <SelectItem value="development">Development</SelectItem>
+                  <SelectContent className="bg-zinc-900 border-zinc-700 z-[100]">
+                    <SelectItem value="general" className="text-white hover:bg-zinc-800 focus:bg-zinc-800">General</SelectItem>
+                    <SelectItem value="integration" className="text-white hover:bg-zinc-800 focus:bg-zinc-800">Integration</SelectItem>
+                    <SelectItem value="security" className="text-white hover:bg-zinc-800 focus:bg-zinc-800">Security</SelectItem>
+                    <SelectItem value="marketing" className="text-white hover:bg-zinc-800 focus:bg-zinc-800">Marketing</SelectItem>
+                    <SelectItem value="development" className="text-white hover:bg-zinc-800 focus:bg-zinc-800">Development</SelectItem>
                   </SelectContent>
                 </Select>
                 <Select
                   value={newTask.priority}
                   onValueChange={(v) => setNewTask({ ...newTask, priority: v })}
                 >
-                  <SelectTrigger className="bg-white/5 border-white/10 text-white">
+                  <SelectTrigger className="bg-zinc-900 border-zinc-700 text-white">
                     <SelectValue placeholder="Priority" />
                   </SelectTrigger>
-                  <SelectContent>
-                    <SelectItem value="low">Low</SelectItem>
-                    <SelectItem value="medium">Medium</SelectItem>
-                    <SelectItem value="high">High</SelectItem>
-                    <SelectItem value="urgent">Urgent</SelectItem>
+                  <SelectContent className="bg-zinc-900 border-zinc-700 z-[100]">
+                    <SelectItem value="low" className="text-white hover:bg-zinc-800 focus:bg-zinc-800">Low</SelectItem>
+                    <SelectItem value="medium" className="text-white hover:bg-zinc-800 focus:bg-zinc-800">Medium</SelectItem>
+                    <SelectItem value="high" className="text-white hover:bg-zinc-800 focus:bg-zinc-800">High</SelectItem>
+                    <SelectItem value="urgent" className="text-white hover:bg-zinc-800 focus:bg-zinc-800">Urgent</SelectItem>
                   </SelectContent>
                 </Select>
               </div>
