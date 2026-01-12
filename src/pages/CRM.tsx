@@ -61,28 +61,7 @@ const CRM = () => {
   const [sourceFilter, setSourceFilter] = useState("all");
   const [statusCounts, setStatusCounts] = useState<Record<string, number>>({});
 
-  // QA Bypass: Allow unauthenticated screenshots in preview/dev only
-  const isQABypass = typeof window !== 'undefined' && 
-    new URLSearchParams(window.location.search).get('qa') === '1' &&
-    (window.location.hostname.includes('lovable.app') || 
-     window.location.hostname.includes('localhost') ||
-     window.location.hostname.includes('127.0.0.1'));
-
   useEffect(() => {
-    // Skip auth check in QA mode
-    if (isQABypass) {
-      // Set a mock admin profile for QA screenshots
-      setProfile({
-        id: 'qa-mock-id',
-        user_id: 'qa-mock-user',
-        crm_role: 'owner_admin',
-        is_active: true,
-        display_name: 'QA Admin (Preview Only)'
-      });
-      setLoading(false);
-      return;
-    }
-
     if (authLoading) return;
 
     if (!user) {
@@ -91,7 +70,7 @@ const CRM = () => {
     }
 
     checkCRMAccess();
-  }, [authLoading, user, navigate, isQABypass]);
+  }, [authLoading, user, navigate]);
 
   useEffect(() => {
     if (user?.id) {
