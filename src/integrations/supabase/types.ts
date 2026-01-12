@@ -5761,7 +5761,6 @@ export type Database = {
       broker_profiles_public: {
         Row: {
           bio: string | null
-          created_at: string | null
           display_name: string | null
           id: string | null
           is_active: boolean | null
@@ -5770,13 +5769,10 @@ export type Database = {
           photo_url: string | null
           specializations: string[] | null
           title: string | null
-          updated_at: string | null
-          user_id: string | null
           years_experience: number | null
         }
         Insert: {
           bio?: string | null
-          created_at?: string | null
           display_name?: string | null
           id?: string | null
           is_active?: boolean | null
@@ -5785,13 +5781,10 @@ export type Database = {
           photo_url?: string | null
           specializations?: string[] | null
           title?: string | null
-          updated_at?: string | null
-          user_id?: string | null
           years_experience?: number | null
         }
         Update: {
           bio?: string | null
-          created_at?: string | null
           display_name?: string | null
           id?: string | null
           is_active?: boolean | null
@@ -5800,8 +5793,6 @@ export type Database = {
           photo_url?: string | null
           specializations?: string[] | null
           title?: string | null
-          updated_at?: string | null
-          user_id?: string | null
           years_experience?: number | null
         }
         Relationships: []
@@ -5817,21 +5808,15 @@ export type Database = {
           expires_at: string | null
           full_name: string | null
           id: string | null
-          is_paid: boolean | null
-          payment_method_masked: string | null
-          payment_reference_masked: string | null
           pdf_downloads: number | null
-          phone: string | null
-          rera_number: string | null
+          price_usd: number | null
           selected_addons: string[] | null
           starts_at: string | null
           status: string | null
-          terms_accepted_at: string | null
           tier: string | null
           trial_ends_at: string | null
           updated_at: string | null
           user_id: string | null
-          user_role: string | null
         }
         Insert: {
           ai_credits_limit?: number | null
@@ -5843,21 +5828,15 @@ export type Database = {
           expires_at?: string | null
           full_name?: string | null
           id?: string | null
-          is_paid?: never
-          payment_method_masked?: never
-          payment_reference_masked?: never
           pdf_downloads?: number | null
-          phone?: string | null
-          rera_number?: string | null
+          price_usd?: number | null
           selected_addons?: string[] | null
           starts_at?: string | null
           status?: string | null
-          terms_accepted_at?: string | null
           tier?: string | null
           trial_ends_at?: string | null
           updated_at?: string | null
           user_id?: string | null
-          user_role?: string | null
         }
         Update: {
           ai_credits_limit?: number | null
@@ -5869,21 +5848,15 @@ export type Database = {
           expires_at?: string | null
           full_name?: string | null
           id?: string | null
-          is_paid?: never
-          payment_method_masked?: never
-          payment_reference_masked?: never
           pdf_downloads?: number | null
-          phone?: string | null
-          rera_number?: string | null
+          price_usd?: number | null
           selected_addons?: string[] | null
           starts_at?: string | null
           status?: string | null
-          terms_accepted_at?: string | null
           tier?: string | null
           trial_ends_at?: string | null
           updated_at?: string | null
           user_id?: string | null
-          user_role?: string | null
         }
         Relationships: []
       }
@@ -6062,6 +6035,33 @@ export type Database = {
       }
       cleanup_rate_limit_records: { Args: never; Returns: number }
       generate_referral_code: { Args: never; Returns: string }
+      get_all_subscriptions_admin: {
+        Args: never
+        Returns: {
+          ai_credits_limit: number
+          ai_credits_used: number
+          company_name: string
+          created_at: string
+          currency: string
+          email: string
+          expires_at: string
+          full_name: string
+          id: string
+          payment_method: string
+          payment_reference: string
+          pdf_downloads: number
+          phone: string
+          price_usd: number
+          rera_number: string
+          selected_addons: string[]
+          starts_at: string
+          status: string
+          tier: string
+          trial_ends_at: string
+          updated_at: string
+          user_id: string
+        }[]
+      }
       get_hr_role: {
         Args: { _user_id: string }
         Returns: Database["public"]["Enums"]["hr_role"]
