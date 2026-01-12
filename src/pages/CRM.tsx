@@ -351,7 +351,7 @@ const CRM = () => {
             className="text-gold border-gold/50 hover:bg-gold/20"
           >
             <Bot className="h-4 w-4 mr-2" />
-            AI Assistant
+            My Assistant
           </Button>
           <div className="ml-auto flex items-center gap-2">
             <div className="flex border border-border rounded-lg overflow-hidden">
@@ -442,6 +442,7 @@ const CRM = () => {
                   onRefresh={handleRefresh}
                   statusFilters={quickFilterStatuses}
                   sourceFilter={sourceFilter !== "all" ? sourceFilter : undefined}
+                  isAdmin={isAdmin}
                 />
               </TabsContent>
 
@@ -453,6 +454,7 @@ const CRM = () => {
                   onRefresh={handleRefresh}
                   statusFilters={quickFilterStatuses}
                   sourceFilter={sourceFilter !== "all" ? sourceFilter : undefined}
+                  isAdmin={isAdmin}
                 />
               </TabsContent>
 
@@ -464,6 +466,7 @@ const CRM = () => {
                   onRefresh={handleRefresh}
                   statusFilters={quickFilterStatuses}
                   sourceFilter={sourceFilter !== "all" ? sourceFilter : undefined}
+                  isAdmin={isAdmin}
                 />
               </TabsContent>
 
@@ -483,6 +486,7 @@ const CRM = () => {
                     onRefresh={handleRefresh}
                     statusFilters={quickFilterStatuses}
                     sourceFilter={sourceFilter !== "all" ? sourceFilter : undefined}
+                    isAdmin={isAdmin}
                   />
                 </div>
               </TabsContent>

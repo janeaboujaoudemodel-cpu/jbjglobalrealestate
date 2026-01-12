@@ -401,27 +401,44 @@ ${COMPANY_CONTACTS.email}`;
     fetchDrafts();
   };
 
+  // Assistant identity - human persona for founder
+  const ASSISTANT_IDENTITY = {
+    name: "Founder's Assistant",
+    avatar: "https://images.unsplash.com/photo-1573496359142-b8d87734a5a2?w=200&h=200&fit=crop&crop=face",
+    title: "Personal Executive Assistant"
+  };
+
   return (
     <Dialog open={isOpen} onOpenChange={onClose}>
       <DialogContent className="max-w-2xl max-h-[80vh] bg-card border-border">
         <DialogHeader>
-          <DialogTitle className="text-white flex items-center gap-2">
-            <Bot className="h-5 w-5 text-gold" />
-            CRM Assistant
+          <DialogTitle className="text-white flex items-center gap-3">
+            <div className="relative">
+              <img 
+                src={ASSISTANT_IDENTITY.avatar} 
+                alt={ASSISTANT_IDENTITY.name}
+                className="w-10 h-10 rounded-full object-cover border-2 border-gold"
+              />
+              <span className="absolute -bottom-0.5 -right-0.5 w-3 h-3 bg-green-500 rounded-full border-2 border-card" />
+            </div>
+            <div>
+              <span className="text-lg font-bold">{ASSISTANT_IDENTITY.name}</span>
+              <p className="text-xs text-muted-foreground font-normal">{ASSISTANT_IDENTITY.title}</p>
+            </div>
           </DialogTitle>
         </DialogHeader>
 
         <Tabs value={activeTab} onValueChange={setActiveTab}>
           <TabsList className="w-full bg-muted/50">
-            <TabsTrigger value="assistant" className="flex-1">
+            <TabsTrigger value="assistant" className="flex-1 data-[state=active]:bg-gold/20 data-[state=active]:text-gold">
               <Sparkles className="h-4 w-4 mr-2" />
-              Assistant
+              My Assistant
             </TabsTrigger>
-            <TabsTrigger value="employees" className="flex-1">
+            <TabsTrigger value="employees" className="flex-1 data-[state=active]:bg-gold/20 data-[state=active]:text-gold">
               <Users className="h-4 w-4 mr-2" />
-              AI Employees
+              AI Team
             </TabsTrigger>
-            <TabsTrigger value="drafts" className="flex-1">
+            <TabsTrigger value="drafts" className="flex-1 data-[state=active]:bg-gold/20 data-[state=active]:text-gold">
               <FileText className="h-4 w-4 mr-2" />
               Drafts ({drafts.length})
             </TabsTrigger>

@@ -1,4 +1,5 @@
 import { useState, useRef, useEffect } from "react";
+import * as XLSX from "xlsx";
 import {
   Dialog,
   DialogContent,
@@ -171,7 +172,7 @@ const CRMImportModalV3 = ({ open, onClose, onSuccess, userId }: CRMImportModalV3
     return `Import – ${now.toISOString().slice(0, 16).replace("T", " ")}`;
   };
 
-  const downloadTemplate = () => {
+  const downloadTemplate = (format: "csv" | "xlsx" = "csv") => {
     const headers = [
       "full_name", "phone", "email", "company", "nationality", "country", "city", "notes"
     ];
@@ -181,15 +182,76 @@ const CRMImportModalV3 = ({ open, onClose, onSuccess, userId }: CRMImportModalV3
       ["Sarah Johnson", "0551234567", "sarah@email.com", "Global Investments", "British", "UAE", "Abu Dhabi", "First-time buyer"],
     ];
     
-    const csv = [headers.join(","), ...sampleRows.map(row => row.join(","))].join("\n");
-    const blob = new Blob([csv], { type: "text/csv" });
-    const url = URL.createObjectURL(blob);
-    const a = document.createElement("a");
-    a.href = url;
-    a.download = "jbj_crm_import_template.csv";
-    a.click();
-    URL.revokeObjectURL(url);
-    toast.success("Template downloaded");
+    if (format === "xlsx") {
+      // Create Excel workbook
+      const wsData = [headers, ...sampleRows];
+      const ws = XLSX.utils.aoa_to_sheet(wsData);
+      const wb = XLSX.utils.book_new();
+      XLSX.utils.book_append_sheet(wb, ws, "Contacts");
+      XLSX.writeFile(wb, "JBJ_CRM_Import_Template.xlsx");
+      toast.success("Excel template downloaded");
+    } else {
+      // CSV download
+      const csv = [headers.join(","), ...sampleRows.map(row => row.join(","))].join("\n");
+      const blob = new Blob([csv], { type: "text/csv" });
+      const url = URL.createObjectURL(blob);
+      const a = document.createElement("a");
+      a.href = url;
+      a.download = "JBJ_CRM_Import_Template.csv";
+      a.click();
+      URL.revokeObjectURL(url);
+      toast.success("CSV template downloaded");
+    }
+  };
+
+  /**
+   * Parse Excel file (.xlsx / .xls) using SheetJS
+   */
+  const parseExcel = async (file: File): Promise<ParsedLead[]> => {
+    const arrayBuffer = await file.arrayBuffer();
+    const workbook = XLSX.read(arrayBuffer, { type: "array" });
+    
+    // Read first sheet
+    const firstSheetName = workbook.SheetNames[0];
+    if (!firstSheetName) return [];
+    
+    const worksheet = workbook.Sheets[firstSheetName];
+    const jsonData = XLSX.utils.sheet_to_json<Record<string, any>>(worksheet, { header: 1 });
+    
+    if (jsonData.length < 2) return [];
+    
+    // First row is headers
+    const rawHeaders = jsonData[0] as any[];
+    const headers = rawHeaders.map(h => 
+      String(h || '').trim().toLowerCase().replace(/['"]/g, '')
+    );
+    
+    const rows: ParsedLead[] = [];
+    
+    for (let i = 1; i < jsonData.length; i++) {
+      const rowData = jsonData[i] as any[];
+      if (!rowData || rowData.length === 0) continue;
+      
+      const rawData: Record<string, string> = {};
+      headers.forEach((header, index) => {
+        rawData[header] = String(rowData[index] || "");
+      });
+      
+      rows.push({
+        full_name: rawData.full_name || rawData.name || rawData.fullname || '',
+        phone: rawData.phone || rawData.mobile || rawData.telephone || rawData.tel || '',
+        email: rawData.email || rawData.mail || rawData.email_address || '',
+        company: rawData.company || rawData.company_name || rawData.organization || '',
+        nationality: rawData.nationality || rawData.country_of_origin || '',
+        country: rawData.country || rawData.location_country || '',
+        city: rawData.city || rawData.location_city || '',
+        notes: rawData.notes || rawData.comments || rawData.remarks || '',
+        rowIndex: i + 1, // Excel row number (1-indexed + 1 for header)
+        rawData
+      });
+    }
+    
+    return rows;
   };
 
   const sanitizeCSVValue = (val: string): string => {
@@ -511,13 +573,12 @@ const CRMImportModalV3 = ({ open, onClose, onSuccess, userId }: CRMImportModalV3
       if (isCSV) {
         const text = await selectedFile.text();
         parsed = parseCSV(text);
+      } else if (isExcel) {
+        // Parse Excel using SheetJS
+        parsed = await parseExcel(selectedFile);
       } else if (isVCard) {
         const text = await selectedFile.text();
         parsed = parseVCard(text);
-      } else {
-        toast.info("Excel file detected. For best results, save as CSV and re-upload.");
-        setStep("upload");
-        return;
       }
 
       if (analysisRunRef.current !== runId) return;
@@ -773,12 +834,16 @@ const CRMImportModalV3 = ({ open, onClose, onSuccess, userId }: CRMImportModalV3
                 Source Category <span className="text-red-400">*</span>
               </Label>
               <Select value={sourceGroup} onValueChange={setSourceGroup}>
-                <SelectTrigger className="bg-muted border-border text-white">
+                <SelectTrigger className="bg-muted border-border text-foreground">
                   <SelectValue placeholder="Select source type..." />
                 </SelectTrigger>
-                <SelectContent className="bg-card border-border">
+                <SelectContent className="bg-popover border-border z-50">
                   {SOURCE_GROUPS.map(group => (
-                    <SelectItem key={group.value} value={group.value} className="text-white">
+                    <SelectItem 
+                      key={group.value} 
+                      value={group.value} 
+                      className="text-foreground hover:bg-accent focus:bg-accent cursor-pointer"
+                    >
                       {group.label}
                     </SelectItem>
                   ))}
@@ -840,7 +905,7 @@ const CRMImportModalV3 = ({ open, onClose, onSuccess, userId }: CRMImportModalV3
               </p>
             </div>
 
-            {/* Template */}
+            {/* Template Downloads */}
             <div className="border border-border rounded-lg p-4 bg-muted/20">
               <div className="flex items-start justify-between gap-4">
                 <div className="flex items-start gap-3">
@@ -848,14 +913,20 @@ const CRMImportModalV3 = ({ open, onClose, onSuccess, userId }: CRMImportModalV3
                   <div>
                     <p className="text-sm font-medium text-white">Need a Template?</p>
                     <p className="text-xs text-muted-foreground mt-1">
-                      Download our standard format template
+                      Download our official JBJ import template
                     </p>
                   </div>
                 </div>
-                <Button variant="outline" size="sm" onClick={downloadTemplate} className="shrink-0">
-                  <Download className="h-4 w-4 mr-2" />
-                  Template
-                </Button>
+                <div className="flex gap-2 shrink-0">
+                  <Button variant="outline" size="sm" onClick={() => downloadTemplate("xlsx")} className="bg-green-600/20 border-green-600/50 text-green-400 hover:bg-green-600/30">
+                    <Download className="h-4 w-4 mr-1" />
+                    Excel
+                  </Button>
+                  <Button variant="outline" size="sm" onClick={() => downloadTemplate("csv")}>
+                    <Download className="h-4 w-4 mr-1" />
+                    CSV
+                  </Button>
+                </div>
               </div>
             </div>
           </div>
