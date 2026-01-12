@@ -230,41 +230,32 @@ export function AdminTasksPanel() {
                 className="bg-white/5 border-white/10 text-white"
               />
               <div className="grid grid-cols-2 gap-4">
-                <Select
+                {/* Native select for Category */}
+                <select
                   value={newTask.category}
-                  onValueChange={(v) => setNewTask({ ...newTask, category: v })}
+                  onChange={(e) => setNewTask({ ...newTask, category: e.target.value })}
+                  className="h-10 px-3 rounded-md border border-zinc-700 bg-zinc-950 text-white font-medium focus:outline-none focus:ring-2 focus:ring-gold/50"
+                  style={{ backgroundColor: '#09090b', color: '#ffffff' }}
                 >
-                  <SelectTrigger className="bg-zinc-950 border-zinc-700 text-white font-medium h-10">
-                    <SelectValue placeholder="Category" />
-                  </SelectTrigger>
-                  <SelectContent 
-                    className="z-[9999] border border-zinc-700 shadow-2xl bg-zinc-950"
-                    style={{ backgroundColor: '#09090b', color: '#ffffff' }}
-                  >
-                    <SelectItem value="general" className="text-white hover:bg-zinc-800 data-[highlighted]:bg-zinc-800 focus:bg-zinc-800 py-2.5 px-3" style={{ color: '#ffffff' }}>General</SelectItem>
-                    <SelectItem value="integration" className="text-white hover:bg-zinc-800 data-[highlighted]:bg-zinc-800 focus:bg-zinc-800 py-2.5 px-3" style={{ color: '#ffffff' }}>Integration</SelectItem>
-                    <SelectItem value="security" className="text-white hover:bg-zinc-800 data-[highlighted]:bg-zinc-800 focus:bg-zinc-800 py-2.5 px-3" style={{ color: '#ffffff' }}>Security</SelectItem>
-                    <SelectItem value="marketing" className="text-white hover:bg-zinc-800 data-[highlighted]:bg-zinc-800 focus:bg-zinc-800 py-2.5 px-3" style={{ color: '#ffffff' }}>Marketing</SelectItem>
-                    <SelectItem value="development" className="text-white hover:bg-zinc-800 data-[highlighted]:bg-zinc-800 focus:bg-zinc-800 py-2.5 px-3" style={{ color: '#ffffff' }}>Development</SelectItem>
-                  </SelectContent>
-                </Select>
-                <Select
+                  <option value="general" style={{ backgroundColor: '#09090b', color: '#ffffff' }}>General</option>
+                  <option value="integration" style={{ backgroundColor: '#09090b', color: '#ffffff' }}>Integration</option>
+                  <option value="security" style={{ backgroundColor: '#09090b', color: '#ffffff' }}>Security</option>
+                  <option value="marketing" style={{ backgroundColor: '#09090b', color: '#ffffff' }}>Marketing</option>
+                  <option value="development" style={{ backgroundColor: '#09090b', color: '#ffffff' }}>Development</option>
+                </select>
+                
+                {/* Native select for Priority */}
+                <select
                   value={newTask.priority}
-                  onValueChange={(v) => setNewTask({ ...newTask, priority: v })}
+                  onChange={(e) => setNewTask({ ...newTask, priority: e.target.value })}
+                  className="h-10 px-3 rounded-md border border-zinc-700 bg-zinc-950 text-white font-medium focus:outline-none focus:ring-2 focus:ring-gold/50"
+                  style={{ backgroundColor: '#09090b', color: '#ffffff' }}
                 >
-                  <SelectTrigger className="bg-zinc-950 border-zinc-700 text-white font-medium h-10">
-                    <SelectValue placeholder="Priority" />
-                  </SelectTrigger>
-                  <SelectContent 
-                    className="z-[9999] border border-zinc-700 shadow-2xl bg-zinc-950"
-                    style={{ backgroundColor: '#09090b', color: '#ffffff' }}
-                  >
-                    <SelectItem value="low" className="text-white hover:bg-zinc-800 data-[highlighted]:bg-zinc-800 focus:bg-zinc-800 py-2.5 px-3" style={{ color: '#ffffff' }}>Low</SelectItem>
-                    <SelectItem value="medium" className="text-white hover:bg-zinc-800 data-[highlighted]:bg-zinc-800 focus:bg-zinc-800 py-2.5 px-3" style={{ color: '#ffffff' }}>Medium</SelectItem>
-                    <SelectItem value="high" className="text-white hover:bg-zinc-800 data-[highlighted]:bg-zinc-800 focus:bg-zinc-800 py-2.5 px-3" style={{ color: '#ffffff' }}>High</SelectItem>
-                    <SelectItem value="urgent" className="text-white hover:bg-zinc-800 data-[highlighted]:bg-zinc-800 focus:bg-zinc-800 py-2.5 px-3" style={{ color: '#ffffff' }}>Urgent</SelectItem>
-                  </SelectContent>
-                </Select>
+                  <option value="low" style={{ backgroundColor: '#09090b', color: '#ffffff' }}>Low</option>
+                  <option value="medium" style={{ backgroundColor: '#09090b', color: '#ffffff' }}>Medium</option>
+                  <option value="high" style={{ backgroundColor: '#09090b', color: '#ffffff' }}>High</option>
+                  <option value="urgent" style={{ backgroundColor: '#09090b', color: '#ffffff' }}>Urgent</option>
+                </select>
               </div>
               <Input
                 type="date"
