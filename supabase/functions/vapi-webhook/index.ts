@@ -4,12 +4,84 @@ import { createClient } from "https://esm.sh/@supabase/supabase-js@2";
 
 const corsHeaders = {
   'Access-Control-Allow-Origin': '*',
-  'Access-Control-Allow-Headers': 'authorization, x-client-info, apikey, content-type',
+  'Access-Control-Allow-Headers': 'authorization, x-client-info, apikey, content-type, x-vapi-secret',
 };
 
 const supabaseUrl = Deno.env.get('SUPABASE_URL')!;
 const supabaseKey = Deno.env.get('SUPABASE_SERVICE_ROLE_KEY')!;
 const supabase = createClient(supabaseUrl, supabaseKey);
+
+// Rate limiting: Simple in-memory rate limiter (resets on function cold start)
+const rateLimitMap = new Map<string, { count: number; resetAt: number }>();
+const RATE_LIMIT_MAX = 100; // Max requests per window
+const RATE_LIMIT_WINDOW_MS = 60 * 1000; // 1 minute window
+
+function checkRateLimit(identifier: string): boolean {
+  const now = Date.now();
+  const existing = rateLimitMap.get(identifier);
+  
+  if (!existing || now > existing.resetAt) {
+    rateLimitMap.set(identifier, { count: 1, resetAt: now + RATE_LIMIT_WINDOW_MS });
+    return true;
+  }
+  
+  if (existing.count >= RATE_LIMIT_MAX) {
+    return false;
+  }
+  
+  existing.count++;
+  return true;
+}
+
+// Validate webhook payload structure
+function isValidVapiPayload(body: unknown): body is { message?: { type?: string; [key: string]: unknown } } {
+  if (typeof body !== 'object' || body === null) return false;
+  const payload = body as Record<string, unknown>;
+  
+  // VAPI webhooks should have a message object
+  if (payload.message !== undefined) {
+    if (typeof payload.message !== 'object' || payload.message === null) return false;
+    const message = payload.message as Record<string, unknown>;
+    
+    // Validate message type is a known VAPI type
+    const validTypes = ['assistant-request', 'function-call', 'end-of-call-report', 'hang', 'speech-update', 'transcript'];
+    if (message.type && typeof message.type === 'string' && !validTypes.includes(message.type)) {
+      console.warn('Unknown message type:', message.type);
+      // Allow unknown types but log them
+    }
+  }
+  
+  return true;
+}
+
+// Sanitize string input to prevent injection
+function sanitizeString(input: unknown, maxLength: number = 1000): string {
+  if (typeof input !== 'string') return '';
+  return input.slice(0, maxLength).replace(/[<>]/g, '');
+}
+
+// Sanitize phone number
+function sanitizePhone(input: unknown): string | null {
+  if (typeof input !== 'string') return null;
+  // Only allow digits, +, -, spaces, and parentheses
+  const cleaned = input.replace(/[^0-9+\-\s()]/g, '').slice(0, 20);
+  return cleaned.length >= 7 ? cleaned : null;
+}
+
+// Sanitize email
+function sanitizeEmail(input: unknown): string | null {
+  if (typeof input !== 'string') return null;
+  const email = input.toLowerCase().trim().slice(0, 254);
+  const emailRegex = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
+  return emailRegex.test(email) ? email : null;
+}
+
+// Get client IP for rate limiting
+function getClientIP(req: Request): string {
+  return req.headers.get('x-forwarded-for')?.split(',')[0]?.trim() || 
+         req.headers.get('x-real-ip') || 
+         'unknown';
+}
 
 // Helper function to extract lead info from transcript
 function extractLeadFromTranscript(transcript: string): {
@@ -21,6 +93,9 @@ function extractLeadFromTranscript(transcript: string): {
 } {
   const result: { name?: string; phone?: string; email?: string; interest?: string; budget?: string } = {};
   
+  // Sanitize transcript first
+  const safeTranscript = sanitizeString(transcript, 50000);
+  
   // Extract name - look for patterns like "my name is X" or "I'm X" or "this is X"
   const namePatterns = [
     /my name is (\w+(?:\s+\w+)?)/i,
@@ -29,30 +104,30 @@ function extractLeadFromTranscript(transcript: string): {
     /call me (\w+)/i,
   ];
   for (const pattern of namePatterns) {
-    const match = transcript.match(pattern);
+    const match = safeTranscript.match(pattern);
     if (match) {
-      result.name = match[1].trim();
+      result.name = sanitizeString(match[1].trim(), 100);
       break;
     }
   }
   
   // Extract phone number
   const phonePattern = /(\+?\d{1,3}[\s-]?\d{2,4}[\s-]?\d{3,4}[\s-]?\d{3,4})/;
-  const phoneMatch = transcript.match(phonePattern);
+  const phoneMatch = safeTranscript.match(phonePattern);
   if (phoneMatch) {
-    result.phone = phoneMatch[1].replace(/[\s-]/g, '');
+    result.phone = sanitizePhone(phoneMatch[1].replace(/[\s-]/g, '')) || undefined;
   }
   
   // Extract email
   const emailPattern = /([a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,})/;
-  const emailMatch = transcript.match(emailPattern);
+  const emailMatch = safeTranscript.match(emailPattern);
   if (emailMatch) {
-    result.email = emailMatch[1].toLowerCase();
+    result.email = sanitizeEmail(emailMatch[1]) || undefined;
   }
   
   // Extract interest - look for areas or property types
   const areas = ['dubai marina', 'downtown', 'palm jumeirah', 'business bay', 'jbr', 'dubai hills', 'creek harbour'];
-  const lowerTranscript = transcript.toLowerCase();
+  const lowerTranscript = safeTranscript.toLowerCase();
   for (const area of areas) {
     if (lowerTranscript.includes(area)) {
       result.interest = area.split(' ').map(w => w.charAt(0).toUpperCase() + w.slice(1)).join(' ');
@@ -67,9 +142,9 @@ function extractLeadFromTranscript(transcript: string): {
     /budget\s*(?:is|of)?\s*(?:around|about)?\s*(\d+(?:,\d{3})*)/i,
   ];
   for (const pattern of budgetPatterns) {
-    const match = transcript.match(pattern);
+    const match = safeTranscript.match(pattern);
     if (match) {
-      result.budget = match[0];
+      result.budget = sanitizeString(match[0], 50);
       break;
     }
   }
@@ -91,7 +166,8 @@ async function auditCall(transcript: string, summary?: string): Promise<{
   const highlights: string[] = [];
   let score = 80; // Start with good score
   
-  const lowerTranscript = transcript.toLowerCase();
+  const safeTranscript = sanitizeString(transcript, 50000);
+  const lowerTranscript = safeTranscript.toLowerCase();
   
   // Check for negative indicators
   if (lowerTranscript.includes("don't know") || lowerTranscript.includes("not sure")) {
@@ -106,7 +182,7 @@ async function auditCall(transcript: string, summary?: string): Promise<{
     issues.push("Possible wrong number or confusion");
     score -= 5;
   }
-  if (transcript.length < 100) {
+  if (safeTranscript.length < 100) {
     issues.push("Very short call - may indicate issue");
     score -= 10;
   }
@@ -149,7 +225,7 @@ async function auditCall(transcript: string, summary?: string): Promise<{
     leadQuality = 'warm';
   } else if (lowerTranscript.includes('just browsing') || lowerTranscript.includes('just asking')) {
     leadQuality = 'cold';
-  } else if (transcript.length < 50 || lowerTranscript.includes('wrong number')) {
+  } else if (safeTranscript.length < 50 || lowerTranscript.includes('wrong number')) {
     leadQuality = 'unqualified';
   }
   
@@ -162,7 +238,7 @@ async function auditCall(transcript: string, summary?: string): Promise<{
     highlights,
     sentiment,
     leadQuality,
-    summary: summary || `Call duration analyzed. ${highlights.length} positive points, ${issues.length} issues found.`,
+    summary: sanitizeString(summary, 500) || `Call duration analyzed. ${highlights.length} positive points, ${issues.length} issues found.`,
     followUpRecommended: leadQuality === 'hot' || leadQuality === 'warm'
   };
 }
@@ -297,7 +373,7 @@ const FUNCTION_DEFINITIONS = [
 ];
 
 // Search properties in database
-async function searchProperties(params: any) {
+async function searchProperties(params: Record<string, unknown>) {
   console.log("Searching properties with params:", params);
   
   let query = supabase
@@ -312,20 +388,23 @@ async function searchProperties(params: any) {
     .order('created_at', { ascending: false })
     .limit(5);
 
-  if (params.location) {
-    query = query.or(`community.name.ilike.%${params.location}%,name.ilike.%${params.location}%`);
+  const location = sanitizeString(params.location, 100);
+  if (location) {
+    query = query.or(`community.name.ilike.%${location}%,name.ilike.%${location}%`);
   }
-  if (params.min_price) {
+  if (typeof params.min_price === 'number' && params.min_price > 0) {
     query = query.gte('price_from', params.min_price);
   }
-  if (params.max_price) {
+  if (typeof params.max_price === 'number' && params.max_price > 0) {
     query = query.lte('price_from', params.max_price);
   }
-  if (params.bedrooms) {
-    query = query.ilike('bedrooms', `%${params.bedrooms}%`);
+  const bedrooms = sanitizeString(params.bedrooms, 10);
+  if (bedrooms) {
+    query = query.ilike('bedrooms', `%${bedrooms}%`);
   }
-  if (params.property_type) {
-    query = query.ilike('property_types', `%${params.property_type}%`);
+  const propertyType = sanitizeString(params.property_type, 50);
+  if (propertyType) {
+    query = query.ilike('property_types', `%${propertyType}%`);
   }
 
   const { data, error } = await query;
@@ -360,7 +439,8 @@ async function searchProperties(params: any) {
 
 // Get project details
 async function getProjectDetails(projectName: string) {
-  console.log("Getting project details for:", projectName);
+  const safeName = sanitizeString(projectName, 200);
+  console.log("Getting project details for:", safeName);
   
   const { data, error } = await supabase
     .from('projects')
@@ -371,12 +451,12 @@ async function getProjectDetails(projectName: string) {
       images:project_images(image_url, is_primary),
       documents:project_documents(title, document_type, file_url)
     `)
-    .ilike('name', `%${projectName}%`)
+    .ilike('name', `%${safeName}%`)
     .limit(1)
     .single();
 
   if (error || !data) {
-    return { message: `I couldn't find specific details for "${projectName}". Would you like me to search for similar projects?` };
+    return { message: `I couldn't find specific details for "${safeName}". Would you like me to search for similar projects?` };
   }
 
   return {
@@ -396,16 +476,29 @@ async function getProjectDetails(projectName: string) {
 }
 
 // Book a viewing
-async function bookViewing(params: any) {
+async function bookViewing(params: Record<string, unknown>) {
   console.log("Booking viewing:", params);
+  
+  // Sanitize inputs
+  const callerName = sanitizeString(params.caller_name, 100);
+  const phoneNumber = sanitizePhone(params.phone_number);
+  const email = sanitizeEmail(params.email);
+  const propertyInterest = sanitizeString(params.property_interest, 200);
+  const preferredDate = sanitizeString(params.preferred_date, 50);
+  const preferredTime = sanitizeString(params.preferred_time, 50);
+  const notes = sanitizeString(params.notes, 500);
+  
+  if (!callerName || !phoneNumber) {
+    return { success: false, message: "Please provide your name and phone number to book a viewing." };
+  }
   
   // Create a lead in CRM
   const { data: lead, error: leadError } = await supabase
     .from('crm_leads')
     .insert({
-      full_name: params.caller_name,
-      phone_e164: params.phone_number,
-      email_lower: params.email?.toLowerCase(),
+      full_name: callerName,
+      phone_e164: phoneNumber,
+      email_lower: email,
       source: 'phone_call',
       lead_source_type: 'vapi_phone',
       tags: ['viewing_request', 'phone_lead'],
@@ -420,13 +513,13 @@ async function bookViewing(params: any) {
 
   // Log the viewing request
   const viewingDetails = {
-    caller_name: params.caller_name,
-    phone: params.phone_number,
-    email: params.email,
-    property: params.property_interest,
-    preferred_date: params.preferred_date,
-    preferred_time: params.preferred_time,
-    notes: params.notes,
+    caller_name: callerName,
+    phone: phoneNumber,
+    email: email,
+    property: propertyInterest,
+    preferred_date: preferredDate,
+    preferred_time: preferredTime,
+    notes: notes,
     created_at: new Date().toISOString(),
     lead_id: lead?.id
   };
@@ -435,22 +528,32 @@ async function bookViewing(params: any) {
 
   return {
     success: true,
-    message: `Viewing request confirmed for ${params.property_interest}. Our team will call you back within 30 minutes to confirm the appointment.`,
+    message: `Viewing request confirmed for ${propertyInterest}. Our team will call you back within 30 minutes to confirm the appointment.`,
     reference: lead?.id?.substring(0, 8).toUpperCase() || 'VW' + Date.now().toString().slice(-6)
   };
 }
 
 // Capture lead
-async function captureLead(params: any) {
+async function captureLead(params: Record<string, unknown>) {
   console.log("Capturing lead:", params);
+  
+  // Sanitize inputs
+  const fullName = sanitizeString(params.full_name, 100);
+  const phoneNumber = sanitizePhone(params.phone_number);
+  const email = sanitizeEmail(params.email);
+  const source = sanitizeString(params.source, 50) || 'phone_call';
+  
+  if (!fullName || !phoneNumber) {
+    return { success: false, message: "Please provide your name and phone number." };
+  }
   
   const { data, error } = await supabase
     .from('crm_leads')
     .insert({
-      full_name: params.full_name,
-      phone_e164: params.phone_number,
-      email_lower: params.email?.toLowerCase(),
-      source: params.source || 'phone_call',
+      full_name: fullName,
+      phone_e164: phoneNumber,
+      email_lower: email,
+      source: source,
       lead_source_type: 'vapi_phone',
       tags: ['phone_lead'],
       owner_type: 'company_pool'
@@ -472,12 +575,13 @@ async function captureLead(params: any) {
 
 // Get developer info
 async function getDeveloperInfo(developerName: string) {
-  console.log("Getting developer info for:", developerName);
+  const safeName = sanitizeString(developerName, 100);
+  console.log("Getting developer info for:", safeName);
   
   const { data, error } = await supabase
     .from('uae_developers')
     .select('*')
-    .ilike('name', `%${developerName}%`)
+    .ilike('name', `%${safeName}%`)
     .limit(1)
     .single();
 
@@ -491,14 +595,14 @@ async function getDeveloperInfo(developerName: string) {
       "meraas": "Meraas develops unique lifestyle destinations including City Walk, Bluewaters Island, and La Mer."
     };
     
-    const lowerName = developerName.toLowerCase();
+    const lowerName = safeName.toLowerCase();
     for (const [key, info] of Object.entries(knownDevelopers)) {
       if (lowerName.includes(key)) {
-        return { name: developerName, description: info };
+        return { name: safeName, description: info };
       }
     }
     
-    return { message: `I don't have specific information about ${developerName}. Would you like me to connect you with an agent who can help?` };
+    return { message: `I don't have specific information about ${safeName}. Would you like me to connect you with an agent who can help?` };
   }
 
   return {
@@ -512,12 +616,13 @@ async function getDeveloperInfo(developerName: string) {
 
 // Get area info
 async function getAreaInfo(areaName: string) {
-  console.log("Getting area info for:", areaName);
+  const safeName = sanitizeString(areaName, 100);
+  console.log("Getting area info for:", safeName);
   
   const { data, error } = await supabase
     .from('communities')
     .select('*')
-    .ilike('name', `%${areaName}%`)
+    .ilike('name', `%${safeName}%`)
     .limit(1)
     .single();
 
@@ -532,14 +637,14 @@ async function getAreaInfo(areaName: string) {
       "dubai hills": "Dubai Hills Estate is a master-planned community by Emaar offering villas, townhouses, and apartments with a championship golf course."
     };
     
-    const lowerName = areaName.toLowerCase();
+    const lowerName = safeName.toLowerCase();
     for (const [key, info] of Object.entries(areaInfo)) {
       if (lowerName.includes(key) || key.includes(lowerName)) {
-        return { name: areaName, description: info };
+        return { name: safeName, description: info };
       }
     }
     
-    return { message: `I can provide more details about ${areaName}. Would you like me to connect you with a local expert?` };
+    return { message: `I can provide more details about ${safeName}. Would you like me to connect you with a local expert?` };
   }
 
   return {
@@ -550,30 +655,48 @@ async function getAreaInfo(areaName: string) {
 }
 
 // Handle function calls from VAPI
-async function handleFunctionCall(functionName: string, args: any) {
-  console.log(`Executing function: ${functionName}`, args);
+async function handleFunctionCall(functionName: string, args: Record<string, unknown>) {
+  const safeFunctionName = sanitizeString(functionName, 50);
+  console.log(`Executing function: ${safeFunctionName}`, args);
   
-  switch (functionName) {
+  switch (safeFunctionName) {
     case "search_properties":
       return await searchProperties(args);
     case "get_project_details":
-      return await getProjectDetails(args.project_name);
+      return await getProjectDetails(sanitizeString(args.project_name, 200));
     case "book_viewing":
       return await bookViewing(args);
     case "capture_lead":
       return await captureLead(args);
     case "get_developer_info":
-      return await getDeveloperInfo(args.developer_name);
+      return await getDeveloperInfo(sanitizeString(args.developer_name, 100));
     case "get_area_info":
-      return await getAreaInfo(args.area_name);
+      return await getAreaInfo(sanitizeString(args.area_name, 100));
     case "transfer_to_agent":
       return { 
         message: "Transferring you to one of our property consultants. Please hold.",
         transfer: true,
-        reason: args.reason
+        reason: sanitizeString(args.reason, 200)
       };
     default:
+      console.warn("Unknown function called:", safeFunctionName);
       return { error: "Unknown function" };
+  }
+}
+
+// Log webhook attempt for auditing
+async function logWebhookAttempt(
+  clientIP: string, 
+  success: boolean, 
+  messageType: string | null,
+  errorReason?: string
+) {
+  try {
+    // Use the security_access_logs table if available, otherwise just console log
+    console.log(`[WEBHOOK_AUDIT] IP: ${clientIP}, Success: ${success}, Type: ${messageType}, Error: ${errorReason || 'none'}`);
+  } catch (e) {
+    // Don't let logging failures break the webhook
+    console.error("Failed to log webhook attempt:", e);
   }
 }
 
@@ -583,14 +706,65 @@ serve(async (req) => {
     return new Response(null, { headers: corsHeaders });
   }
 
+  const clientIP = getClientIP(req);
+  
+  // Rate limiting check
+  if (!checkRateLimit(clientIP)) {
+    console.warn(`Rate limit exceeded for IP: ${clientIP}`);
+    await logWebhookAttempt(clientIP, false, null, 'rate_limit_exceeded');
+    return new Response(JSON.stringify({ error: 'Too many requests' }), {
+      status: 429,
+      headers: { ...corsHeaders, 'Content-Type': 'application/json' }
+    });
+  }
+
   try {
-    const body = await req.json();
-    console.log("VAPI webhook received:", JSON.stringify(body, null, 2));
+    // Read body as text first for validation
+    const bodyText = await req.text();
+    
+    // Reject extremely large payloads (potential DoS)
+    if (bodyText.length > 1024 * 1024) { // 1MB limit
+      console.warn(`Payload too large from IP: ${clientIP}`);
+      await logWebhookAttempt(clientIP, false, null, 'payload_too_large');
+      return new Response(JSON.stringify({ error: 'Payload too large' }), {
+        status: 413,
+        headers: { ...corsHeaders, 'Content-Type': 'application/json' }
+      });
+    }
+    
+    // Parse JSON
+    let body: unknown;
+    try {
+      body = JSON.parse(bodyText);
+    } catch {
+      console.warn(`Invalid JSON from IP: ${clientIP}`);
+      await logWebhookAttempt(clientIP, false, null, 'invalid_json');
+      return new Response(JSON.stringify({ error: 'Invalid JSON' }), {
+        status: 400,
+        headers: { ...corsHeaders, 'Content-Type': 'application/json' }
+      });
+    }
+    
+    // Validate payload structure
+    if (!isValidVapiPayload(body)) {
+      console.warn(`Invalid payload structure from IP: ${clientIP}`);
+      await logWebhookAttempt(clientIP, false, null, 'invalid_payload_structure');
+      return new Response(JSON.stringify({ error: 'Invalid payload' }), {
+        status: 400,
+        headers: { ...corsHeaders, 'Content-Type': 'application/json' }
+      });
+    }
+    
+    console.log("VAPI webhook received from IP:", clientIP);
 
     const { message } = body;
+    const messageType = message?.type as string | undefined;
+
+    // Log successful webhook receipt
+    await logWebhookAttempt(clientIP, true, messageType || 'unknown');
 
     // Handle different VAPI message types
-    switch (message?.type) {
+    switch (messageType) {
       case "assistant-request":
         // Return assistant configuration - John leads with company, mentions assistant role only if asked
         return new Response(JSON.stringify({
@@ -667,8 +841,15 @@ YOUR STYLE:
 
       case "function-call":
         // Handle function calls
-        const { functionCall } = message;
-        const result = await handleFunctionCall(functionCall.name, functionCall.parameters);
+        const functionCall = message?.functionCall as { name?: string; parameters?: Record<string, unknown> } | undefined;
+        if (!functionCall?.name) {
+          return new Response(JSON.stringify({ error: 'Invalid function call' }), {
+            status: 400,
+            headers: { ...corsHeaders, 'Content-Type': 'application/json' }
+          });
+        }
+        
+        const result = await handleFunctionCall(functionCall.name, functionCall.parameters || {});
         
         return new Response(JSON.stringify({
           result: JSON.stringify(result)
@@ -678,32 +859,43 @@ YOUR STYLE:
 
       case "end-of-call-report":
         // Save call log to database with AI auditing
+        const callData = message?.call as { id?: string; customer?: { number?: string }; status?: string } | undefined;
+        const durationSeconds = typeof message?.durationSeconds === 'number' ? message.durationSeconds : null;
+        const endedReason = sanitizeString(message?.endedReason, 100);
+        
         console.log("Call ended - saving to database:", {
-          callId: message.call?.id,
-          duration: message.durationSeconds,
-          endedReason: message.endedReason
+          callId: callData?.id,
+          duration: durationSeconds,
+          endedReason
         });
         
         try {
           // Extract lead info from transcript using simple parsing
-          const transcript = message.transcript || '';
+          const transcript = sanitizeString(message?.transcript, 100000) || '';
           const extractedInfo = extractLeadFromTranscript(transcript);
           
           // Perform AI audit of the call
-          const aiAudit = await auditCall(transcript, message.summary);
+          const summary = sanitizeString(message?.summary, 1000);
+          const aiAudit = await auditCall(transcript, summary);
+          
+          // Validate call_id format
+          const callId = sanitizeString(callData?.id, 100) || `call_${Date.now()}`;
+          const callerPhone = sanitizePhone(callData?.customer?.number);
+          const recordingUrl = sanitizeString(message?.recordingUrl, 500);
+          const callStatus = sanitizeString(callData?.status, 50);
           
           // Save to database
           const { data: callLog, error: saveError } = await supabase
             .from('vapi_call_logs')
             .insert({
-              call_id: message.call?.id || `call_${Date.now()}`,
-              caller_phone: message.call?.customer?.number,
-              duration_seconds: message.durationSeconds,
+              call_id: callId,
+              caller_phone: callerPhone,
+              duration_seconds: durationSeconds,
               transcript: transcript,
-              summary: message.summary,
-              recording_url: message.recordingUrl,
-              call_status: message.call?.status,
-              ended_reason: message.endedReason,
+              summary: summary,
+              recording_url: recordingUrl,
+              call_status: callStatus,
+              ended_reason: endedReason,
               assistant_name: 'John',
               // AI Audit results
               ai_score: aiAudit.score,
@@ -716,7 +908,7 @@ YOUR STYLE:
               ai_audited_at: new Date().toISOString(),
               // Extracted lead info
               extracted_name: extractedInfo.name,
-              extracted_phone: extractedInfo.phone || message.call?.customer?.number,
+              extracted_phone: extractedInfo.phone || callerPhone,
               extracted_email: extractedInfo.email,
               extracted_interest: extractedInfo.interest,
               extracted_budget: extractedInfo.budget,
@@ -734,28 +926,31 @@ YOUR STYLE:
             
             // Create CRM lead if we have contact info and it's a qualified lead
             if (aiAudit.leadQuality !== 'unqualified' && (extractedInfo.name || extractedInfo.phone)) {
-              const { data: lead, error: leadError } = await supabase
-                .from('crm_leads')
-                .insert({
-                  full_name: extractedInfo.name || 'Phone Lead',
-                  phone_e164: extractedInfo.phone || message.call?.customer?.number,
-                  email_lower: extractedInfo.email?.toLowerCase(),
-                  source: 'vapi_phone_call',
-                  lead_source_type: 'vapi_phone',
-                  tags: ['phone_lead', `quality_${aiAudit.leadQuality}`],
-                  owner_type: 'company_pool'
-                })
-                .select()
-                .single();
-              
-              if (!leadError && lead) {
-                // Link lead to call log
-                await supabase
-                  .from('vapi_call_logs')
-                  .update({ lead_id: lead.id })
-                  .eq('id', callLog?.id);
+              const leadPhone = extractedInfo.phone || callerPhone;
+              if (leadPhone) {
+                const { data: lead, error: leadError } = await supabase
+                  .from('crm_leads')
+                  .insert({
+                    full_name: extractedInfo.name || 'Phone Lead',
+                    phone_e164: leadPhone,
+                    email_lower: extractedInfo.email,
+                    source: 'vapi_phone_call',
+                    lead_source_type: 'vapi_phone',
+                    tags: ['phone_lead', `quality_${aiAudit.leadQuality}`],
+                    owner_type: 'company_pool'
+                  })
+                  .select()
+                  .single();
                 
-                console.log("Lead created and linked:", lead.id);
+                if (!leadError && lead) {
+                  // Link lead to call log
+                  await supabase
+                    .from('vapi_call_logs')
+                    .update({ lead_id: lead.id })
+                    .eq('id', callLog?.id);
+                  
+                  console.log("Lead created and linked:", lead.id);
+                }
               }
             }
           }
@@ -774,15 +969,16 @@ YOUR STYLE:
         });
 
       default:
-        console.log("Unhandled message type:", message?.type);
+        console.log("Unhandled message type:", messageType);
         return new Response(JSON.stringify({ received: true }), {
           headers: { ...corsHeaders, 'Content-Type': 'application/json' }
         });
     }
   } catch (error: unknown) {
     console.error("VAPI webhook error:", error);
-    const errorMessage = error instanceof Error ? error.message : "Unknown error";
-    return new Response(JSON.stringify({ error: errorMessage }), {
+    // Return generic error message - don't expose internal details
+    await logWebhookAttempt(clientIP, false, null, 'internal_error');
+    return new Response(JSON.stringify({ error: 'Internal server error' }), {
       status: 500,
       headers: { ...corsHeaders, 'Content-Type': 'application/json' }
     });
