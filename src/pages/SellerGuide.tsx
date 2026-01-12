@@ -38,6 +38,11 @@ import {
 import { CONTACT_INFO, getWhatsAppUrl, getCallUrl, getEmailUrl } from "@/constants/stats";
 import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from "@/components/ui/accordion";
 import { GuideNavigation, GUIDE_LINKS } from "@/components/guides/GuideNavigation";
+import { GuideHero } from "@/components/guides/GuideHero";
+import { GuideSection } from "@/components/guides/GuideSection";
+import { GuideCard } from "@/components/guides/GuideCard";
+import { GuideCTA } from "@/components/guides/GuideCTA";
+import { GuideTableOfContents } from "@/components/guides/GuideTableOfContents";
 import Footer from "@/components/Footer";
 
 const fadeInUp = {
@@ -221,6 +226,14 @@ const SellerGuide = () => {
     document.getElementById('selling-process')?.scrollIntoView({ behavior: 'smooth' });
   };
 
+  const tocItems = [
+    { id: 'who-is-this-for', title: 'Who Is This For', icon: Users },
+    { id: 'selling-process', title: 'Selling Process', icon: ClipboardCheck },
+    { id: 'preparation', title: 'Preparation', icon: Home },
+    { id: 'costs', title: 'Costs & Fees', icon: Calculator },
+    { id: 'faqs', title: 'FAQs', icon: HelpCircle },
+  ];
+
   return (
     <>
       <SEOHead 
@@ -229,65 +242,45 @@ const SellerGuide = () => {
       />
       
       <main className="min-h-screen bg-black">
-        {/* Hero Section */}
-        <section className="relative pt-24 pb-16 overflow-hidden">
-          <div className="absolute inset-0 bg-gradient-to-b from-gold/5 via-transparent to-transparent" />
-          <div className="absolute top-20 left-1/4 w-96 h-96 bg-gold/5 rounded-full blur-3xl" />
-          <div className="absolute bottom-0 right-1/4 w-80 h-80 bg-gold/3 rounded-full blur-3xl" />
-          
-          <motion.div 
-            className="container mx-auto px-4 relative z-10"
-            initial="hidden"
-            animate="visible"
-            variants={staggerContainer}
-          >
-            <div className="max-w-4xl mx-auto text-center">
-              <motion.span 
-                variants={fadeInUp}
-                className="inline-block px-4 py-1.5 rounded-full bg-gold/10 text-gold text-sm font-medium mb-6 border border-gold/20"
+        {/* Premium Hero */}
+        <GuideHero
+          badge="Complete Seller's Guide"
+          badgeIcon={Building2}
+          title={
+            <>
+              How to Sell Property in the{" "}
+              <span className="text-gold">UAE</span>
+            </>
+          }
+          description="Your comprehensive guide to selling property successfully in the UAE market. From preparation to handover, we're with you every step of the way."
+          actions={
+            <>
+              <Button 
+                onClick={scrollToGuide}
+                variant="outline"
+                className="border-gold/50 text-gold hover:bg-gold/10 px-6 py-3"
               >
-                Complete Seller's Guide
-              </motion.span>
-              <motion.h1 
-                variants={fadeInUp}
-                className="text-4xl md:text-5xl lg:text-6xl font-bold text-white mb-6 leading-tight"
-              >
-                Seller Guide: How to Sell Property in the{" "}
-                <span className="text-transparent bg-clip-text bg-gradient-to-r from-gold to-gold-light">UAE</span>
-              </motion.h1>
-              <motion.p 
-                variants={fadeInUp}
-                className="text-xl text-zinc-400 mb-8 max-w-2xl mx-auto"
-              >
-                Your comprehensive guide to selling property successfully in the UAE market. 
-                From preparation to handover, we're with you every step of the way.
-              </motion.p>
-              <motion.div 
-                variants={fadeInUp}
-                className="flex flex-wrap justify-center gap-4"
-              >
-                <Button 
-                  onClick={scrollToGuide}
-                  variant="outline"
-                  className="border-gold/50 text-gold hover:bg-gold/10 px-6 py-3"
-                >
-                  <ArrowDown className="w-5 h-5 mr-2" />
-                  Start the Guide
+                <ArrowDown className="w-5 h-5 mr-2" />
+                Start the Guide
+              </Button>
+              <Link to="/seller-listing">
+                <Button className="bg-gradient-to-r from-gold to-gold-dark text-black font-semibold hover:brightness-110 px-6 py-3">
+                  <Building2 className="w-5 h-5 mr-2" />
+                  List Your Property
+                  <ArrowRight className="w-5 h-5 ml-2" />
                 </Button>
-                <Link to="/seller-listing">
-                  <Button className="bg-gradient-to-r from-gold to-gold-dark text-black font-semibold hover:brightness-110 px-6 py-3">
-                    <Building2 className="w-5 h-5 mr-2" />
-                    List Your Property
-                    <ArrowRight className="w-5 h-5 ml-2" />
-                  </Button>
-                </Link>
-              </motion.div>
-            </div>
-          </motion.div>
-        </section>
+              </Link>
+            </>
+          }
+        />
+
+        {/* Sticky Table of Contents */}
+        <div className="hidden lg:block fixed right-8 top-1/3 z-30">
+          <GuideTableOfContents items={tocItems} />
+        </div>
 
         {/* Who This Guide Is For */}
-        <section className="py-16 bg-zinc-900/30">
+        <section id="who-is-this-for" className="py-16 bg-zinc-900/30 scroll-mt-20">
           <div className="container mx-auto px-4">
             <div className="max-w-5xl mx-auto">
               <motion.div
@@ -384,7 +377,7 @@ const SellerGuide = () => {
         </section>
 
         {/* Preparing Your Property */}
-        <section className="py-16 bg-zinc-900/30">
+        <section id="preparation" className="py-16 bg-zinc-900/30 scroll-mt-20">
           <div className="container mx-auto px-4">
             <div className="max-w-5xl mx-auto">
               <motion.div
@@ -497,7 +490,7 @@ const SellerGuide = () => {
         </section>
 
         {/* Selling Costs */}
-        <section className="py-16 bg-zinc-900/30">
+        <section id="costs" className="py-16 bg-zinc-900/30 scroll-mt-20">
           <div className="container mx-auto px-4">
             <div className="max-w-4xl mx-auto">
               <motion.div
@@ -592,7 +585,7 @@ const SellerGuide = () => {
         </section>
 
         {/* FAQ Section */}
-        <section className="py-16 bg-zinc-900/30">
+        <section id="faqs" className="py-16 bg-zinc-900/30 scroll-mt-20">
           <div className="container mx-auto px-4">
             <div className="max-w-4xl mx-auto">
               <motion.div
