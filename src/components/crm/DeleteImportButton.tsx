@@ -29,7 +29,7 @@ import {
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { toast } from "sonner";
 import { supabase } from "@/integrations/supabase/client";
-import { Trash2, Database, AlertTriangle, RefreshCw, Calendar, FileText } from "lucide-react";
+import { Trash2, Database, AlertTriangle, RefreshCw, FileText, Shield } from "lucide-react";
 import { format } from "date-fns";
 
 interface ImportSource {
@@ -38,6 +38,7 @@ interface ImportSource {
   source_group: string;
   total_rows: number | null;
   created_at: string;
+  broker_name_snapshot?: string | null;
 }
 
 interface DeleteImportButtonProps {
@@ -88,7 +89,8 @@ const DeleteImportButton = ({ userId, onSuccess, isAdmin }: DeleteImportButtonPr
     try {
       const { data, error } = await supabase
         .from("crm_lead_sources")
-        .select("id, source_name, source_group, total_rows, created_at")
+        .select("id, source_name, source_group, total_rows, created_at, broker_name_snapshot")
+        .neq("source_group", "website") // Filter out website sources
         .order("created_at", { ascending: false });
 
       if (error) throw error;
@@ -137,6 +139,12 @@ const DeleteImportButton = ({ userId, onSuccess, isAdmin }: DeleteImportButtonPr
   const handleDeleteBySource = async () => {
     if (!selectedSource) return;
 
+    // Double-check not a website source
+    if (selectedSource.source_group === "website") {
+      toast.error("Cannot delete website sources");
+      return;
+    }
+
     setDeleting(true);
     const toastId = toast.loading(`Deleting import "${selectedSource.source_name}"...`);
 
@@ -148,7 +156,8 @@ const DeleteImportButton = ({ userId, onSuccess, isAdmin }: DeleteImportButtonPr
 
       if (error) throw error;
 
-      const deletedLeadCount = (data as any)?.lead_count ?? leadCount;
+      const result = data as { lead_count?: number; status?: string } | null;
+      const deletedLeadCount = result?.lead_count ?? leadCount;
 
       toast.success(`Deleted ${deletedLeadCount} leads from "${selectedSource.source_name}"`, {
         id: toastId,
@@ -158,9 +167,9 @@ const DeleteImportButton = ({ userId, onSuccess, isAdmin }: DeleteImportButtonPr
       setOpen(false);
       setSelectedSourceId("");
       onSuccess();
-    } catch (err) {
+    } catch (err: any) {
       console.error("Delete failed:", err);
-      toast.error("Failed to delete import", { id: toastId });
+      toast.error(err.message || "Failed to delete import", { id: toastId });
     } finally {
       setDeleting(false);
     }
@@ -181,18 +190,19 @@ const DeleteImportButton = ({ userId, onSuccess, isAdmin }: DeleteImportButtonPr
 
       if (error) throw error;
 
-      const deletedLeadCount = (data as any)?.lead_count ?? (batchLeadCount ?? 0);
+      const result = data as { lead_count?: number; status?: string } | null;
+      const deletedLeadCount = result?.lead_count ?? (batchLeadCount ?? 0);
 
-      toast.success(`Deleted ${deletedLeadCount} leads (batch ${trimmed})`, { id: toastId });
+      toast.success(`Deleted ${deletedLeadCount} leads (batch ${trimmed.slice(0, 8)}...)`, { id: toastId });
 
       setShowConfirm(false);
       setOpen(false);
       setBatchId("");
       setBatchLeadCount(null);
       onSuccess();
-    } catch (err) {
+    } catch (err: any) {
       console.error("Delete failed:", err);
-      toast.error("Failed to delete import", { id: toastId });
+      toast.error(err.message || "Failed to delete import", { id: toastId });
     } finally {
       setDeleting(false);
     }
@@ -211,7 +221,7 @@ const DeleteImportButton = ({ userId, onSuccess, isAdmin }: DeleteImportButtonPr
 
   const canDelete = deleteMode === "source" ? !!selectedSource : (batchLeadCount !== null && batchLeadCount > 0);
   const deleteCount = deleteMode === "source" ? leadCount : (batchLeadCount || 0);
-  const deleteName = deleteMode === "source" ? selectedSource?.source_name : `Batch ${batchId}`;
+  const deleteName = deleteMode === "source" ? selectedSource?.source_name : `Batch ${batchId.slice(0, 8)}...`;
 
   return (
     <>
@@ -230,12 +240,19 @@ const DeleteImportButton = ({ userId, onSuccess, isAdmin }: DeleteImportButtonPr
           <DialogHeader>
             <DialogTitle className="text-foreground flex items-center gap-2">
               <Database className="h-5 w-5 text-red-400" />
-              Delete Import
+              Delete Import (Admin Only)
             </DialogTitle>
             <DialogDescription className="text-muted-foreground">
               Permanently delete all leads from an import source or batch.
+              Website leads cannot be deleted here.
             </DialogDescription>
           </DialogHeader>
+
+          {/* Admin Badge */}
+          <div className="flex items-center gap-2 p-2 bg-amber-500/10 border border-amber-500/30 rounded-lg">
+            <Shield className="h-4 w-4 text-amber-500" />
+            <span className="text-xs text-amber-400">Admin-only action: Hard delete with cascading removal</span>
+          </div>
 
           <Tabs value={deleteMode} onValueChange={(v) => setDeleteMode(v as "source" | "batch")}>
             <TabsList className="grid w-full grid-cols-2 mb-4">
@@ -254,7 +271,7 @@ const DeleteImportButton = ({ userId, onSuccess, isAdmin }: DeleteImportButtonPr
                 <div className="text-center py-4 text-muted-foreground">Loading...</div>
               ) : sources.length === 0 ? (
                 <div className="text-center py-4 text-muted-foreground">
-                  No import sources found
+                  No deletable import sources found
                 </div>
               ) : (
                 <>
@@ -269,6 +286,7 @@ const DeleteImportButton = ({ userId, onSuccess, isAdmin }: DeleteImportButtonPr
                             <span className="font-medium">{source.source_name}</span>
                             <span className="text-xs text-muted-foreground">
                               {source.source_group.replace(/_/g, ' ')} · {source.total_rows || 0} rows · {format(new Date(source.created_at), 'MMM d, yyyy')}
+                              {source.broker_name_snapshot && ` · ${source.broker_name_snapshot}`}
                             </span>
                           </div>
                         </SelectItem>
@@ -286,10 +304,13 @@ const DeleteImportButton = ({ userId, onSuccess, isAdmin }: DeleteImportButtonPr
                         <p><strong>Source:</strong> {selectedSource.source_name}</p>
                         <p><strong>Group:</strong> {selectedSource.source_group.replace(/_/g, ' ')}</p>
                         <p><strong>Created:</strong> {format(new Date(selectedSource.created_at), 'PPpp')}</p>
+                        {selectedSource.broker_name_snapshot && (
+                          <p><strong>Broker:</strong> {selectedSource.broker_name_snapshot}</p>
+                        )}
                         <p><strong>Leads to delete:</strong> {leadCount}</p>
                       </div>
                       <p className="text-xs text-red-400/80 mt-2">
-                        This will permanently delete all leads and related data.
+                        This will permanently delete all leads, activities, assignments, reports, and the source record.
                       </p>
                     </div>
                   )}
@@ -307,7 +328,7 @@ const DeleteImportButton = ({ userId, onSuccess, isAdmin }: DeleteImportButtonPr
                   className="bg-muted border-border text-foreground font-mono text-sm"
                 />
                 <p className="text-xs text-muted-foreground">
-                  You can find the batch ID in the database or from the import logs.
+                  You can find the batch ID in the import logs or database.
                 </p>
               </div>
 
@@ -363,8 +384,16 @@ const DeleteImportButton = ({ userId, onSuccess, isAdmin }: DeleteImportButtonPr
               You are about to permanently delete <strong className="text-foreground">{deleteCount} leads</strong> from 
               <strong className="text-foreground"> "{deleteName}"</strong>.
               <br /><br />
-              This will also delete all related activities, assignments, shortlists, reports, and drafts.
-              <br /><br />
+              This will also delete all related:
+              <ul className="list-disc list-inside mt-2 text-sm">
+                <li>Activities and call logs</li>
+                <li>Assignments and assignments history</li>
+                <li>AI drafts and shortlists</li>
+                <li>Reports and notes</li>
+                <li>Campaign recipients</li>
+                <li>The source/import record</li>
+              </ul>
+              <br />
               <strong className="text-red-400">This cannot be undone.</strong>
             </AlertDialogDescription>
           </AlertDialogHeader>

@@ -1629,6 +1629,27 @@ export type Database = {
         }
         Relationships: []
       }
+      crm_brokers: {
+        Row: {
+          created_at: string
+          created_by_user_id: string | null
+          display_name: string
+          id: string
+        }
+        Insert: {
+          created_at?: string
+          created_by_user_id?: string | null
+          display_name: string
+          id?: string
+        }
+        Update: {
+          created_at?: string
+          created_by_user_id?: string | null
+          display_name?: string
+          id?: string
+        }
+        Relationships: []
+      }
       crm_calls: {
         Row: {
           created_at: string
@@ -1986,6 +2007,8 @@ export type Database = {
       }
       crm_lead_sources: {
         Row: {
+          broker_id: string | null
+          broker_name_snapshot: string | null
           created_at: string | null
           created_by_user_id: string | null
           flagged_rows: number | null
@@ -1997,6 +2020,8 @@ export type Database = {
           valid_rows: number | null
         }
         Insert: {
+          broker_id?: string | null
+          broker_name_snapshot?: string | null
           created_at?: string | null
           created_by_user_id?: string | null
           flagged_rows?: number | null
@@ -2008,6 +2033,8 @@ export type Database = {
           valid_rows?: number | null
         }
         Update: {
+          broker_id?: string | null
+          broker_name_snapshot?: string | null
           created_at?: string | null
           created_by_user_id?: string | null
           flagged_rows?: number | null
@@ -2018,7 +2045,15 @@ export type Database = {
           total_rows?: number | null
           valid_rows?: number | null
         }
-        Relationships: []
+        Relationships: [
+          {
+            foreignKeyName: "crm_lead_sources_broker_id_fkey"
+            columns: ["broker_id"]
+            isOneToOne: false
+            referencedRelation: "crm_brokers"
+            referencedColumns: ["id"]
+          },
+        ]
       }
       crm_lead_state_per_user: {
         Row: {
