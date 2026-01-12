@@ -558,6 +558,8 @@ const CRMImportModalV3 = ({ open, onClose, onSuccess, userId }: CRMImportModalV3
       if (analysisRunRef.current !== runId) return;
       if (stepRef.current !== "analysis") return;
 
+      // Dismiss any lingering toasts first
+      toast.dismiss();
       toast.error("Analysis timed out. Please try again.", { duration: 6000 });
 
       // Force-exit analysis state + clear any pending results
@@ -834,15 +836,15 @@ const CRMImportModalV3 = ({ open, onClose, onSuccess, userId }: CRMImportModalV3
                 Source Category <span className="text-red-400">*</span>
               </Label>
               <Select value={sourceGroup} onValueChange={setSourceGroup}>
-                <SelectTrigger className="bg-muted border-border text-foreground">
+                <SelectTrigger className="bg-zinc-900 border-zinc-700 text-white">
                   <SelectValue placeholder="Select source type..." />
                 </SelectTrigger>
-                <SelectContent className="bg-popover border-border z-50">
+                <SelectContent className="bg-zinc-900 border-zinc-700 z-[100]">
                   {SOURCE_GROUPS.map(group => (
                     <SelectItem 
                       key={group.value} 
                       value={group.value} 
-                      className="text-foreground hover:bg-accent focus:bg-accent cursor-pointer"
+                      className="text-white hover:bg-zinc-800 focus:bg-zinc-800 focus:text-white cursor-pointer"
                     >
                       {group.label}
                     </SelectItem>
@@ -965,12 +967,12 @@ const CRMImportModalV3 = ({ open, onClose, onSuccess, userId }: CRMImportModalV3
                     <>
                       <Label className="text-white">Select Broker</Label>
                       <Select value={selectedBrokerId} onValueChange={setSelectedBrokerId}>
-                        <SelectTrigger className="bg-muted border-border text-white">
+                        <SelectTrigger className="bg-zinc-900 border-zinc-700 text-white">
                           <SelectValue placeholder={loadingBrokers ? "Loading..." : "Select a broker..."} />
                         </SelectTrigger>
-                        <SelectContent className="bg-card border-border">
+                        <SelectContent className="bg-zinc-900 border-zinc-700 z-[100]">
                           {brokers.map(broker => (
-                            <SelectItem key={broker.id} value={broker.id} className="text-white">
+                            <SelectItem key={broker.id} value={broker.id} className="text-white hover:bg-zinc-800 focus:bg-zinc-800 focus:text-white">
                               {broker.display_name}
                             </SelectItem>
                           ))}
