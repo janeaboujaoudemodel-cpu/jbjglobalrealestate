@@ -585,8 +585,8 @@ const CRMLeadsTable = ({ userId, filterType, onRefresh, statusFilters = [], sour
                         </>
                       ) : (
                         <>
-                          {/* Email Row */}
-                          {lead.email_lower && (
+                          {/* Email Row - Editable if missing */}
+                          {lead.email_lower ? (
                             <div className="flex items-center gap-2">
                               <Button
                                 size="sm"
@@ -604,10 +604,22 @@ const CRMLeadsTable = ({ userId, filterType, onRefresh, statusFilters = [], sour
                                 {lead.email_lower}
                               </span>
                             </div>
+                          ) : (
+                            <div className="flex items-center gap-2 text-xs">
+                              <Mail className="h-3 w-3 text-muted-foreground" />
+                              <InlineEditCell
+                                leadId={lead.id}
+                                field="email_lower"
+                                value={null}
+                                placeholder="Add email"
+                                onSuccess={fetchLeads}
+                                isAdmin={isAdmin}
+                              />
+                            </div>
                           )}
                           
-                          {/* Phone Row */}
-                          {lead.phone_e164 && (
+                          {/* Phone Row - Editable if missing */}
+                          {lead.phone_e164 ? (
                             <div className="flex items-center gap-2">
                               <Button
                                 size="sm"
@@ -636,6 +648,18 @@ const CRMLeadsTable = ({ userId, filterType, onRefresh, statusFilters = [], sour
                               <span className="text-xs text-muted-foreground">
                                 {lead.phone_e164}
                               </span>
+                            </div>
+                          ) : (
+                            <div className="flex items-center gap-2 text-xs">
+                              <Phone className="h-3 w-3 text-muted-foreground" />
+                              <InlineEditCell
+                                leadId={lead.id}
+                                field="phone_e164"
+                                value={null}
+                                placeholder="Add phone"
+                                onSuccess={fetchLeads}
+                                isAdmin={isAdmin}
+                              />
                             </div>
                           )}
                         </>
