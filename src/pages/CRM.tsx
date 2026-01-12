@@ -468,7 +468,7 @@ const CRM = () => {
       </main>
 
       {/* Modals */}
-      <CRMImportModal 
+      <CRMImportModalV2 
         open={showImportModal} 
         onClose={() => setShowImportModal(false)}
         onSuccess={handleRefresh}
