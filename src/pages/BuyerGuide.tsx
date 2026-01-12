@@ -21,9 +21,12 @@ import {
   Landmark,
   Calculator,
   HelpCircle,
-  Phone
+  Phone,
+  ArrowDown
 } from "lucide-react";
 import { GuideNavigation, GUIDE_LINKS } from "@/components/guides/GuideNavigation";
+import { GuideHero } from "@/components/guides/GuideHero";
+import { GuideTableOfContents } from "@/components/guides/GuideTableOfContents";
 import Footer from "@/components/Footer";
 
 const BuyerGuide = () => {
@@ -221,60 +224,65 @@ const BuyerGuide = () => {
     }
   ];
 
+  const tocItems = [
+    { id: 'who-this-guide-for', title: 'Who Is This For', icon: Users },
+    { id: 'ownership-types', title: 'Ownership Types', icon: Key },
+    { id: 'buying-process', title: 'Buying Process', icon: FileText },
+    { id: 'costs-fees', title: 'Costs & Fees', icon: Calculator },
+    { id: 'mortgages', title: 'Mortgages', icon: Landmark },
+    { id: 'common-mistakes', title: 'Common Mistakes', icon: AlertTriangle },
+  ];
+
   return (
-    <div className="min-h-screen bg-white">
+    <div className="min-h-screen bg-black">
       <SEOHead {...pagesSEO.buyerGuide} />
 
-      {/* Hero Section */}
-      <section className="relative py-24 md:py-32 lg:py-40 bg-gradient-to-b from-zinc-900 to-black overflow-hidden">
-        <div className="absolute inset-0 bg-[url('https://images.unsplash.com/photo-1512453979798-5ea266f8880c?auto=format&fit=crop&w=2000&q=80')] bg-cover bg-center opacity-20" />
-        <div className="absolute inset-0 bg-gradient-to-t from-black via-black/70 to-transparent" />
-        
-        <div className="container mx-auto px-4 relative z-10">
-          <div className="max-w-4xl mx-auto text-center">
-            <div className="inline-flex items-center gap-2 bg-gold/10 border border-gold/30 rounded-full px-4 py-2 mb-6">
-              <FileText className="w-4 h-4 text-gold" />
-              <span className="text-gold text-sm font-medium tracking-wide uppercase">Educational Guide</span>
-            </div>
-            
-            <h1 className="text-4xl md:text-5xl lg:text-6xl font-light text-white mb-6 leading-tight">
-              Your Complete Guide to <br className="hidden md:block" />
-              <span className="text-gold">Buying Property in Dubai</span>
-            </h1>
-            
-            <p className="text-lg md:text-xl text-zinc-300 font-light leading-relaxed max-w-3xl mx-auto mb-10">
-              A clear, educational resource to help you understand the property buying process in Dubai. 
-              Whether you're a first-time buyer or an experienced purchaser, this guide covers everything 
-              you need to make informed decisions.
-            </p>
+      {/* Premium Hero */}
+      <GuideHero
+        badge="Complete Buyer's Guide"
+        badgeIcon={FileText}
+        title={
+          <>
+            Your Complete Guide to{" "}
+            <span className="text-gold">Buying Property in Dubai</span>
+          </>
+        }
+        description="A clear, educational resource to help you understand the property buying process in Dubai. Whether you're a first-time buyer or an experienced purchaser, this guide covers everything you need to make informed decisions."
+        backgroundImage="https://images.unsplash.com/photo-1512453979798-5ea266f8880c?auto=format&fit=crop&w=2000&q=80"
+        actions={
+          <>
+            <Button 
+              variant="outline"
+              className="border-gold/50 text-gold hover:bg-gold/10 px-6"
+              onClick={() => document.getElementById('buying-process')?.scrollIntoView({ behavior: 'smooth' })}
+            >
+              <ArrowDown className="w-4 h-4 mr-2" />
+              Read the Full Guide
+            </Button>
+            <Button asChild className="bg-gold hover:bg-gold/90 text-black font-medium px-6">
+              <Link to="/properties">
+                Browse Properties
+                <ArrowRight className="w-4 h-4 ml-2" />
+              </Link>
+            </Button>
+          </>
+        }
+      />
 
-            {/* Soft CTA - Education Based */}
-            <div className="flex flex-col sm:flex-row gap-4 justify-center">
-              <Button 
-                asChild
-                size="lg"
-                variant="outline"
-                className="border-gold/50 text-gold hover:bg-gold/10 px-8"
-              >
-                <a href="#buying-process">
-                  Read the Full Guide
-                  <ArrowRight className="w-4 h-4 ml-2" />
-                </a>
-              </Button>
-            </div>
-          </div>
-        </div>
-      </section>
+      {/* Sticky Table of Contents */}
+      <div className="hidden lg:block fixed right-8 top-1/3 z-30">
+        <GuideTableOfContents items={tocItems} />
+      </div>
 
       {/* Introduction - Who This Guide Is For */}
-      <section className="py-16 md:py-24 bg-zinc-50">
+      <section id="who-this-guide-for" className="py-16 md:py-24 bg-zinc-900/30 scroll-mt-20">
         <div className="container mx-auto px-4">
           <div className="max-w-4xl mx-auto">
             <div className="text-center mb-12">
-              <h2 className="text-3xl md:text-4xl font-light text-zinc-900 mb-6">
+              <h2 className="text-3xl md:text-4xl font-light text-white mb-6">
                 Who This Guide Is For
               </h2>
-              <p className="text-lg text-zinc-600 leading-relaxed max-w-3xl mx-auto">
+              <p className="text-lg text-zinc-400 leading-relaxed max-w-3xl mx-auto">
                 Dubai's property market welcomes buyers from all over the world. Whether you're planning 
                 to make Dubai your home, securing a property for your family, or exploring options for 
                 the future — this guide provides the foundational knowledge you need.
@@ -288,12 +296,12 @@ const BuyerGuide = () => {
                 { icon: Globe, label: "International Buyers", desc: "Purchasing from abroad" },
                 { icon: MapPin, label: "Relocators", desc: "Moving to Dubai" }
               ].map((item, index) => (
-                <div key={index} className="bg-white rounded-xl p-6 shadow-sm border border-zinc-100 text-center hover:border-gold/30 transition-colors">
+                <div key={index} className="bg-zinc-900/60 rounded-xl p-6 border border-zinc-800 text-center hover:border-gold/30 transition-colors">
                   <div className="w-12 h-12 bg-gold/10 border border-gold/30 rounded-xl flex items-center justify-center mx-auto mb-4">
                     <item.icon className="w-6 h-6 text-gold" />
                   </div>
-                  <p className="font-medium text-zinc-800 mb-1">{item.label}</p>
-                  <p className="text-sm text-zinc-500">{item.desc}</p>
+                  <p className="font-medium text-white mb-1">{item.label}</p>
+                  <p className="text-sm text-zinc-400">{item.desc}</p>
                 </div>
               ))}
             </div>
@@ -302,7 +310,7 @@ const BuyerGuide = () => {
       </section>
 
       {/* Ownership Types */}
-      <section className="py-16 md:py-24 bg-white">
+      <section id="ownership-types" className="py-16 md:py-24 scroll-mt-20">
         <div className="container mx-auto px-4">
           <div className="max-w-5xl mx-auto">
             <div className="text-center mb-12">
@@ -346,7 +354,7 @@ const BuyerGuide = () => {
       </section>
 
       {/* Step-by-Step Buying Process */}
-      <section id="buying-process" className="py-16 md:py-24 bg-zinc-50 scroll-mt-20">
+      <section id="buying-process" className="py-16 md:py-24 scroll-mt-20">
         <div className="container mx-auto px-4">
           <div className="max-w-5xl mx-auto">
             <div className="text-center mb-16">
@@ -397,7 +405,7 @@ const BuyerGuide = () => {
       </section>
 
       {/* Costs & Fees */}
-      <section className="py-16 md:py-24 bg-zinc-900">
+      <section id="costs-fees" className="py-16 md:py-24 bg-zinc-900/50 scroll-mt-20">
         <div className="container mx-auto px-4">
           <div className="max-w-5xl mx-auto">
             <div className="text-center mb-12">
@@ -444,7 +452,7 @@ const BuyerGuide = () => {
       </section>
 
       {/* Mortgages Explained */}
-      <section className="py-16 md:py-24 bg-white">
+      <section id="mortgages" className="py-16 md:py-24 scroll-mt-20">
         <div className="container mx-auto px-4">
           <div className="max-w-4xl mx-auto">
             <div className="bg-gradient-to-br from-gold/5 to-transparent border border-gold/20 rounded-2xl p-8 md:p-12">
@@ -483,7 +491,7 @@ const BuyerGuide = () => {
       </section>
 
       {/* Common Buyer Mistakes */}
-      <section className="py-16 md:py-24 bg-zinc-50">
+      <section id="common-mistakes" className="py-16 md:py-24 bg-zinc-900/30 scroll-mt-20">
         <div className="container mx-auto px-4">
           <div className="max-w-5xl mx-auto">
             <div className="text-center mb-12">
