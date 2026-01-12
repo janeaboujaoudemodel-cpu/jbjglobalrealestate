@@ -9,7 +9,7 @@ import { Badge } from "@/components/ui/badge";
 import { Skeleton } from "@/components/ui/skeleton";
 import { toast } from "sonner";
 import { 
-  Users, FileText, Plus, Upload, Download, LogOut, Shuffle, LayoutGrid, List, Zap, Briefcase, PanelLeftOpen, PanelLeftClose, Crown, Flag, Bot, Shield
+  Users, FileText, Plus, Upload, Download, LogOut, Shuffle, LayoutGrid, List, Zap, Briefcase, PanelLeftOpen, PanelLeftClose, Crown, Flag, Bot
 } from "lucide-react";
 import jbjMonogramDarkBg from "@/assets/jbj-monogram-dark-bg.png";
 import CRMLeadsTable from "@/components/crm/CRMLeadsTable";
@@ -343,17 +343,7 @@ const CRM = () => {
             </Button>
           )}
           {isAdmin && (
-            <>
-              <DeleteImportButton userId={user?.id || ""} onSuccess={handleRefresh} isAdmin={isAdmin} />
-              <Button 
-                variant="outline" 
-                onClick={() => navigate("/crm/diagnostics")}
-                className="text-muted-foreground border-border hover:bg-muted"
-                title="CRM Diagnostics"
-              >
-                <Shield className="h-4 w-4" />
-              </Button>
-            </>
+            <DeleteImportButton userId={user?.id || ""} onSuccess={handleRefresh} isAdmin={isAdmin} />
           )}
           <Button 
             variant="outline" 
