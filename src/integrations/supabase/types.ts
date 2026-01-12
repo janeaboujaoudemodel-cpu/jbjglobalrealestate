@@ -6073,6 +6073,7 @@ export type Database = {
         Args: { p_import_batch_id?: string; p_source_id?: string }
         Returns: Json
       }
+      crm_hard_delete_leads: { Args: { p_lead_ids: string[] }; Returns: Json }
       generate_referral_code: { Args: never; Returns: string }
       get_all_subscriptions_admin: {
         Args: never
