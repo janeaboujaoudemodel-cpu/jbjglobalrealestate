@@ -243,19 +243,18 @@ const CRMLeadsTable = ({ userId, filterType, onRefresh, statusFilters = [], sour
     if (!confirm("Are you sure you want to delete this lead? This action cannot be undone.")) {
       return;
     }
-    
+
     try {
-      // Delete related records first
-      await supabase.from("crm_lead_state_per_user").delete().eq("lead_id", leadId);
-      await supabase.from("crm_activities").delete().eq("lead_id", leadId);
-      await supabase.from("crm_lead_assignments").delete().eq("lead_id", leadId);
-      
-      // Delete the lead
-      const { error } = await supabase.from("crm_leads").delete().eq("id", leadId);
-      
+      const { data, error } = await supabase.rpc("crm_hard_delete_leads", {
+        p_lead_ids: [leadId],
+      });
+
       if (error) throw error;
-      
-      toast.success("Lead deleted successfully");
+
+      const deletedCount =
+        (data as { lead_count?: number } | null)?.lead_count ?? 1;
+
+      toast.success(`Lead deleted (${deletedCount})`);
       fetchLeads();
       onRefresh();
     } catch (err) {
@@ -885,6 +884,8 @@ const CRMLeadsTable = ({ userId, filterType, onRefresh, statusFilters = [], sour
           onRefresh();
         }}
         userId={userId}
+        onSelectAll={() => setSelectedLeads(new Set(filteredLeads.map((l) => l.id)))}
+        totalCount={filteredLeads.length}
       />
     </div>
   );

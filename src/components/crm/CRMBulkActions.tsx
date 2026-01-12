@@ -131,37 +131,24 @@ const CRMBulkActions = ({
 
   const handleBulkDelete = async () => {
     if (selectedIds.size === 0) return;
-    
+
     setIsDeleting(true);
     const toastId = toast.loading(`Deleting ${selectedIds.size} leads...`);
-    
+
     try {
       const ids = Array.from(selectedIds);
-      
-      // Delete related records first (cascading hard delete)
-      await Promise.all([
-        supabase.from("crm_lead_state_per_user").delete().in("lead_id", ids),
-        supabase.from("crm_activities").delete().in("lead_id", ids),
-        supabase.from("crm_lead_assignments").delete().in("lead_id", ids),
-        supabase.from("crm_ai_drafts").delete().in("lead_id", ids),
-        supabase.from("crm_lead_shortlists").delete().in("lead_id", ids),
-        supabase.from("crm_lead_reports").delete().in("lead_id", ids),
-        supabase.from("crm_calls").delete().in("lead_id", ids),
-        supabase.from("crm_notes").delete().in("lead_id", ids),
-        supabase.from("crm_campaign_recipients").delete().in("lead_id", ids),
-        supabase.from("broker_call_logs").delete().in("lead_id", ids),
-        supabase.from("broker_chat_logs").delete().in("lead_id", ids),
-      ]);
-      
-      // Delete leads
-      const { error } = await supabase
-        .from("crm_leads")
-        .delete()
-        .in("id", ids);
+
+      // Server-side hard delete (single RPC) to guarantee ZERO TRACES
+      const { data, error } = await supabase.rpc("crm_hard_delete_leads", {
+        p_lead_ids: ids,
+      });
 
       if (error) throw error;
 
-      toast.success(`Deleted ${ids.length} leads`, { id: toastId });
+      const deletedCount =
+        (data as { lead_count?: number } | null)?.lead_count ?? ids.length;
+
+      toast.success(`Deleted ${deletedCount} leads`, { id: toastId });
       onSuccess();
       onClear();
     } catch (err) {
