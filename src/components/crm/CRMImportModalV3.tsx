@@ -74,7 +74,7 @@ interface CRMBroker {
 }
 
 // Source group options - Website is NOT allowed for imports
-// EXACT ORDER: My Own Database first, then alphabetically others, Other Import last
+// EXACT ORDER: My Own Database first, then alphabetically others, Custom and Other Import last
 const SOURCE_GROUPS = [
   { value: "my_own_database", label: "My Own Database" },
   { value: "broker_database", label: "Broker Database" },
@@ -83,6 +83,7 @@ const SOURCE_GROUPS = [
   { value: "event_contacts", label: "Event Contacts" },
   { value: "partner_leads", label: "Partner Leads" },
   { value: "business_cards", label: "Business Cards" },
+  { value: "custom", label: "Custom (enter your own)" },
   { value: "imported", label: "Other Import" },
 ];
 
@@ -91,6 +92,7 @@ const CRMImportModalV3 = ({ open, onClose, onSuccess, userId }: CRMImportModalV3
   const [file, setFile] = useState<File | null>(null);
   const [sourceName, setSourceName] = useState("");
   const [sourceGroup, setSourceGroup] = useState("");
+  const [customSourceLabel, setCustomSourceLabel] = useState(""); // For custom source group
   
   // Broker attribution state
   const [registerUnderBroker, setRegisterUnderBroker] = useState(false);
@@ -628,11 +630,22 @@ const CRMImportModalV3 = ({ open, onClose, onSuccess, userId }: CRMImportModalV3
       return;
     }
     
+    // Validate custom source has a label
+    if (sourceGroup === 'custom' && !customSourceLabel.trim()) {
+      toast.error("Please enter a custom source category name");
+      return;
+    }
+    
     setStep("processing");
     setProgress(0);
 
     const batchId = crypto.randomUUID();
     const finalSourceName = sourceName || getDefaultSourceName(file?.name);
+    
+    // Get display label for source group
+    const sourceGroupLabel = sourceGroup === 'custom' 
+      ? customSourceLabel.trim()
+      : SOURCE_GROUPS.find(g => g.value === sourceGroup)?.label || sourceGroup;
     
     // Get selected broker info
     const selectedBroker = brokers.find(b => b.id === selectedBrokerId);
@@ -727,8 +740,8 @@ const CRMImportModalV3 = ({ open, onClose, onSuccess, userId }: CRMImportModalV3
             age_range: null,
             // CRITICAL: Empty tags - no auto Hot
             tags: [],
-            // Source must show group and name
-            source: `${sourceGroup} · ${finalSourceName}`,
+            // Source must show group and name (use display label for custom)
+            source: `${sourceGroupLabel} · ${finalSourceName}`,
             // CRITICAL: NEVER 'website' for imports
             lead_source_type: sourceGroup,
             owner_type: "broker_owned",
@@ -799,6 +812,7 @@ const CRMImportModalV3 = ({ open, onClose, onSuccess, userId }: CRMImportModalV3
     setFile(null);
     setSourceName("");
     setSourceGroup("");
+    setCustomSourceLabel("");
     setRegisterUnderBroker(false);
     setSelectedBrokerId("");
     setNewBrokerName("");
@@ -836,7 +850,10 @@ const CRMImportModalV3 = ({ open, onClose, onSuccess, userId }: CRMImportModalV3
               <Label className="text-white">
                 Source Category <span className="text-red-400">*</span>
               </Label>
-            <Select value={sourceGroup} onValueChange={setSourceGroup}>
+            <Select value={sourceGroup} onValueChange={(val) => {
+              setSourceGroup(val);
+              if (val !== 'custom') setCustomSourceLabel('');
+            }}>
                 <SelectTrigger className="bg-zinc-950 border-zinc-700 text-white font-medium h-11">
                   <SelectValue placeholder="Select source type..." />
                 </SelectTrigger>
@@ -856,6 +873,17 @@ const CRMImportModalV3 = ({ open, onClose, onSuccess, userId }: CRMImportModalV3
                   ))}
                 </SelectContent>
               </Select>
+              
+              {/* Custom source label input */}
+              {sourceGroup === 'custom' && (
+                <Input
+                  placeholder="Enter your custom source category..."
+                  value={customSourceLabel}
+                  onChange={(e) => setCustomSourceLabel(e.target.value)}
+                  className="bg-muted border-border text-white mt-2"
+                />
+              )}
+              
               <p className="text-xs text-muted-foreground">
                 Website source is not available for imports (reserved for form submissions)
               </p>
