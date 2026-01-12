@@ -33,10 +33,11 @@ import {
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 import { toast } from "sonner";
-import { Search, Phone, MessageSquare, Mail, Eye, Filter, ChevronDown, Calendar, Lock, PhoneCall, Trash2, MoreHorizontal, FileText, Building2, Sparkles, Calculator, TrendingUp, BarChart3, Palette, FileSignature, Flame, Thermometer, Snowflake, Crown } from "lucide-react";
+import { Search, Phone, MessageSquare, Mail, Eye, Filter, ChevronDown, Calendar, Lock, PhoneCall, Trash2, MoreHorizontal, FileText, Building2, Sparkles, Calculator, TrendingUp, BarChart3, Palette, FileSignature, Flame, Thermometer, Snowflake, Crown, Pencil } from "lucide-react";
 import LeadStatusBadge, { PIPELINE_STATUSES, getStatusInfo } from "./LeadStatusBadge";
 import FollowUpScheduler from "./FollowUpScheduler";
 import CRMBulkActions from "./CRMBulkActions";
+import InlineEditCell from "./InlineEditCell";
 import { useActiveLead } from "@/contexts/ActiveLeadContext";
 import { Badge } from "@/components/ui/badge";
 
@@ -130,9 +131,10 @@ interface CRMLeadsTableProps {
   onRefresh: () => void;
   statusFilters?: string[];
   sourceFilter?: string;
+  isAdmin?: boolean;
 }
 
-const CRMLeadsTable = ({ userId, filterType, onRefresh, statusFilters = [], sourceFilter }: CRMLeadsTableProps) => {
+const CRMLeadsTable = ({ userId, filterType, onRefresh, statusFilters = [], sourceFilter, isAdmin = false }: CRMLeadsTableProps) => {
   const navigate = useNavigate();
   const { setActiveLead } = useActiveLead();
   const [leads, setLeads] = useState<Lead[]>([]);
@@ -553,9 +555,25 @@ const CRMLeadsTable = ({ userId, filterType, onRefresh, statusFilters = [], sour
                           </Badge>
                         )}
                       </div>
-                      <p className="text-xs text-muted-foreground">
-                        {lead.nationality || "—"} · {lead.preferred_language?.toUpperCase() || "—"}
-                      </p>
+                      <div className="flex items-center gap-1.5 text-xs text-muted-foreground">
+                        <InlineEditCell
+                          leadId={lead.id}
+                          field="nationality"
+                          value={lead.nationality}
+                          placeholder="—"
+                          onSuccess={fetchLeads}
+                          isAdmin={isAdmin}
+                        />
+                        <span>·</span>
+                        <InlineEditCell
+                          leadId={lead.id}
+                          field="preferred_language"
+                          value={lead.preferred_language?.toUpperCase() || null}
+                          placeholder="—"
+                          onSuccess={fetchLeads}
+                          isAdmin={isAdmin}
+                        />
+                      </div>
                     </div>
                   </TableCell>
                   <TableCell>
@@ -625,9 +643,15 @@ const CRMLeadsTable = ({ userId, filterType, onRefresh, statusFilters = [], sour
                     </div>
                   </TableCell>
                   <TableCell>
-                    <span className="text-sm text-foreground">
-                      {lead.current_location_country || "-"}
-                    </span>
+                    <InlineEditCell
+                      leadId={lead.id}
+                      field="current_location_country"
+                      value={lead.current_location_country}
+                      placeholder="—"
+                      onSuccess={fetchLeads}
+                      isAdmin={isAdmin}
+                      className="text-sm text-foreground"
+                    />
                   </TableCell>
                   <TableCell>
                     {/* Quick Status Badge - Click to change */}

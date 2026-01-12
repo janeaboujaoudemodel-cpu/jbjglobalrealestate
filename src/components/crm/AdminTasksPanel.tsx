@@ -80,14 +80,33 @@ export function AdminTasksPanel() {
   }, [user]);
 
   const fetchTasks = async () => {
+    if (!user?.id) {
+      setLoading(false);
+      return;
+    }
+    
     try {
+      // Fetch tasks for current user
       const { data, error } = await supabase
         .from("admin_tasks")
         .select("*")
+        .eq("user_id", user.id)
         .order("created_at", { ascending: false });
 
-      if (error) throw error;
-      setTasks(data || []);
+      if (error) {
+        console.error("Error fetching tasks:", error);
+        // Try without user filter if RLS handles it
+        const { data: fallbackData, error: fallbackError } = await supabase
+          .from("admin_tasks")
+          .select("*")
+          .order("created_at", { ascending: false });
+        
+        if (!fallbackError && fallbackData) {
+          setTasks(fallbackData);
+        }
+      } else {
+        setTasks(data || []);
+      }
     } catch (error) {
       console.error("Error fetching tasks:", error);
     } finally {
