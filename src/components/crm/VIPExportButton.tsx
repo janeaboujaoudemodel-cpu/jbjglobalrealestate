@@ -10,11 +10,7 @@ import {
 import { toast } from "sonner";
 import { Crown, Download, FileSpreadsheet, FileText, ChevronDown } from "lucide-react";
 
-interface VIPExportButtonProps {
-  userId: string;
-}
-
-const VIPExportButton = ({ userId }: VIPExportButtonProps) => {
+const VIPExportButton = () => {
   const [exporting, setExporting] = useState(false);
 
   const fetchVIPLeads = async () => {
