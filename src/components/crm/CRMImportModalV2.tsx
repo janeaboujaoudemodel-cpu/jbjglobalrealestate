@@ -246,19 +246,49 @@ const CRMImportModalV2 = ({ open, onClose, onSuccess, userId }: CRMImportModalV2
 
   const normalizePhone = (phone: string): string | null => {
     if (!phone) return null;
+    
+    // Remove all non-digit characters except +
     let normalized = phone.replace(/[^\d+]/g, "");
+    
+    // Handle various UAE phone formats
     if (!normalized.startsWith("+")) {
-      if (normalized.startsWith("0")) {
+      // Starts with 0 (e.g., 0501234567) -> +971501234567
+      if (normalized.startsWith("0") && normalized.length >= 9) {
         normalized = "+971" + normalized.slice(1);
-      } else if (normalized.length <= 10) {
-        normalized = "+971" + normalized;
-      } else {
+      }
+      // Starts with 971 without + (e.g., 971501234567)
+      else if (normalized.startsWith("971") && normalized.length >= 12) {
         normalized = "+" + normalized;
       }
+      // Starts with 5 (UAE mobile, e.g., 501234567) -> +971501234567
+      else if (normalized.startsWith("5") && normalized.length >= 9 && normalized.length <= 10) {
+        normalized = "+971" + normalized;
+      }
+      // UAE landline starting with 4 (e.g., 42345678) -> +97142345678
+      else if (normalized.startsWith("4") && normalized.length >= 8 && normalized.length <= 9) {
+        normalized = "+971" + normalized;
+      }
+      // UAE landline starting with 2, 3, 6, 7, 9 
+      else if (/^[236789]/.test(normalized) && normalized.length >= 8 && normalized.length <= 10) {
+        normalized = "+971" + normalized;
+      }
+      // International number without + (10+ digits)
+      else if (normalized.length >= 10) {
+        normalized = "+" + normalized;
+      }
+      // Too short, but might still be valid partial - prefix with +971
+      else if (normalized.length >= 7) {
+        normalized = "+971" + normalized;
+      }
     }
-    if (/^\+[1-9]\d{1,14}$/.test(normalized)) {
+    
+    // E.164 validation: + followed by 1-15 digits, first digit not 0
+    // Be more lenient for UAE numbers (9-15 digits total after +)
+    if (/^\+[1-9]\d{8,14}$/.test(normalized)) {
       return normalized;
     }
+    
+    // Return null only for completely invalid formats
     return null;
   };
 
