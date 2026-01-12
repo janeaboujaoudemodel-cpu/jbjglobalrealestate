@@ -123,7 +123,7 @@ const BusinessCardScanner = () => {
     toast.success("All data cleared and encryption key regenerated");
   };
 
-  // Import to CRM function
+  // Import to CRM function using proper pipeline
   const handleImportToCRM = async () => {
     if (scannedContacts.length === 0) {
       toast.error("No contacts to import");
@@ -131,26 +131,113 @@ const BusinessCardScanner = () => {
     }
 
     try {
-      // Send contacts to CRM
-      const leadsToImport = scannedContacts.map(contact => ({
-        full_name: contact.name || 'Unknown',
-        email: contact.email,
-        phone: contact.phone || contact.mobile,
-        company: contact.company,
-        source: 'website',
-        sub_source: 'Business Card Scanner',
-        notes: `Job Title: ${contact.jobTitle || 'N/A'}\nAddress: ${contact.address || 'N/A'}\nWebsite: ${contact.website || 'N/A'}\n${contact.notes || ''}`,
-      }));
-
       const { supabase } = await import('@/integrations/supabase/client');
       
-      for (const lead of leadsToImport) {
-        await supabase.functions.invoke('capture-lead', {
-          body: lead
-        });
+      // Create a source entry for this import
+      const { data: sourceData, error: sourceError } = await supabase
+        .from("crm_lead_sources")
+        .insert({
+          source_name: `Business Card Scan - ${new Date().toLocaleDateString()}`,
+          source_group: "business_cards",
+          source_file_name: "scanner_upload",
+          created_by_user_id: user?.id
+        })
+        .select()
+        .single();
+
+      if (sourceError) throw sourceError;
+
+      const batchId = crypto.randomUUID();
+      let successCount = 0;
+      let flaggedCount = 0;
+
+      for (let i = 0; i < scannedContacts.length; i++) {
+        const contact = scannedContacts[i];
+        
+        // Normalize phone and email
+        const phoneRaw = contact.phone || contact.mobile || '';
+        let phoneNormalized: string | null = null;
+        let phoneE164: string | null = null;
+        
+        if (phoneRaw) {
+          let normalized = phoneRaw.replace(/[^\d+]/g, "");
+          if (!normalized.startsWith("+")) {
+            if (normalized.startsWith("0")) {
+              normalized = "+971" + normalized.slice(1);
+            } else if (normalized.length <= 10) {
+              normalized = "+971" + normalized;
+            } else {
+              normalized = "+" + normalized;
+            }
+          }
+          if (/^\+[1-9]\d{1,14}$/.test(normalized)) {
+            phoneE164 = normalized;
+            phoneNormalized = normalized.replace(/\D/g, '');
+          }
+        }
+
+        const emailRaw = contact.email || '';
+        let emailNormalized: string | null = null;
+        if (emailRaw && /^[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,}$/i.test(emailRaw.trim())) {
+          emailNormalized = emailRaw.toLowerCase().trim();
+        }
+
+        // Determine flag reasons
+        const flagReasons: string[] = [];
+        if (!phoneRaw && !emailRaw) {
+          flagReasons.push("missing_phone", "missing_email");
+        } else {
+          if (!phoneRaw) flagReasons.push("missing_phone");
+          if (!emailRaw) flagReasons.push("missing_email");
+          if (phoneRaw && !phoneE164) flagReasons.push("invalid_phone_format");
+          if (emailRaw && !emailNormalized) flagReasons.push("invalid_email_format");
+        }
+
+        const isFlagged = flagReasons.length > 0;
+        if (isFlagged) flaggedCount++;
+
+        // Detect contact type based on job title
+        let contactType = 'client';
+        const jobTitle = (contact.jobTitle || '').toLowerCase();
+        if (jobTitle.includes('broker') || jobTitle.includes('agent') || jobTitle.includes('realtor')) {
+          contactType = 'broker';
+        } else if (jobTitle.includes('developer') || jobTitle.includes('construction')) {
+          contactType = 'developer';
+        } else if (jobTitle.includes('investor') || jobTitle.includes('investment')) {
+          contactType = 'investor';
+        }
+
+        // Insert lead with proper JBJ standard columns
+        const { error: insertError } = await supabase
+          .from("crm_leads")
+          .insert({
+            full_name: contact.name || 'Unknown',
+            phone_e164: phoneE164,
+            phone_raw: phoneRaw || null,
+            phone_normalized: phoneNormalized,
+            email_lower: emailNormalized,
+            email_normalized: emailNormalized,
+            company_name: contact.company || null,
+            source: 'business_card_scanner',
+            lead_source_type: 'business_card',
+            source_id: sourceData.id,
+            import_batch_id: batchId,
+            source_row_index: i + 1,
+            raw_import: contact as any,
+            flagged: isFlagged,
+            flag_reasons: flagReasons,
+            imported_at: new Date().toISOString(),
+            notes: `Job Title: ${contact.jobTitle || 'N/A'}\nAddress: ${contact.address || 'N/A'}\nWebsite: ${contact.website || 'N/A'}`,
+            contact_type: contactType as any,
+            created_by_user_id: user?.id,
+            owner_type: 'broker_owned' as const,
+            owner_user_id: user?.id
+          } as any);
+
+        if (!insertError) successCount++;
       }
 
-      toast.success(`${leadsToImport.length} contacts imported to CRM successfully!`);
+      toast.success(`${successCount} contacts imported to CRM!${flaggedCount > 0 ? ` (${flaggedCount} flagged for review)` : ''}`);
       handleClearAll();
     } catch (error) {
       console.error('CRM import error:', error);

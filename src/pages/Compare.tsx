@@ -20,6 +20,8 @@ import { toast } from "sonner";
 import { PaymentModal } from "@/components/PaymentModal";
 import { Badge } from "@/components/ui/badge";
 import BackNavButton from "@/components/BackNavButton";
+import ActiveLeadBanner from "@/components/crm/ActiveLeadBanner";
+import { useActiveLead } from "@/contexts/ActiveLeadContext";
 
 const INQUIRY_FORM_URL = "https://jbj.ae/contact";
 const COMPARE_FREE_KEY = "jbj_compare_free_used";
@@ -84,6 +86,7 @@ interface AIAnalysis {
 const Compare = () => {
   const { user } = useAuth();
   const navigate = useNavigate();
+  const { activeLead } = useActiveLead();
   const { hasActiveMembership } = useMembership();
   const { data: authShortlist } = useShortlist();
   const { shortlist: guestShortlist } = useGuestShortlist();
@@ -93,9 +96,9 @@ const Compare = () => {
   const [showRequestForm, setShowRequestForm] = useState(false);
   const [showVipModal, setShowVipModal] = useState(false);
   const [formData, setFormData] = useState({
-    name: "",
-    email: user?.email || "",
-    phone: "",
+    name: activeLead?.full_name || "",
+    email: activeLead?.email || user?.email || "",
+    phone: activeLead?.phone || "",
   });
   const [requestSent, setRequestSent] = useState(false);
   const tableRef = useRef<HTMLDivElement>(null);
@@ -1090,6 +1093,9 @@ const Compare = () => {
         }}
         mode="vip"
       />
+      
+      {/* Active Lead Banner for CRM linking */}
+      <ActiveLeadBanner showAddToShortlist={false} />
     </section>
   );
 };

@@ -6,6 +6,7 @@ import InquiryFormModal from "@/components/InquiryFormModal";
 import Footer from "@/components/Footer";
 import { Button } from "@/components/ui/button";
 import { useLanguage } from "@/contexts/LanguageContext";
+import ActiveLeadBanner from "@/components/crm/ActiveLeadBanner";
 
 const benefits = [
   {
@@ -155,6 +156,8 @@ const MortgageCalculatorPage = () => {
         onClose={() => setIsInquiryOpen(false)} 
         source="mortgage-advisory"
       />
+      
+      <ActiveLeadBanner showAddToShortlist={false} />
     </section>
   );
 };

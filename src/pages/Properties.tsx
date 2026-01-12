@@ -47,6 +47,7 @@ import { useProjects, useCommunities, useDevelopers } from "@/hooks/useProjects"
 import { useFilteredProjects, defaultFilters } from "@/hooks/useProjectFilters";
 import type { FilterState } from "@/components/ProjectFilters";
 import { CONTACT_INFO, getWhatsAppUrl } from "@/constants/stats";
+import ActiveLeadBanner from "@/components/crm/ActiveLeadBanner";
 
 // Currency conversion rates
 const CURRENCY_RATES: Record<string, number> = {
@@ -792,6 +793,9 @@ const Properties = () => {
       </section>
 
       <Footer />
+      
+      {/* Active Lead Banner for CRM linking */}
+      <ActiveLeadBanner showAddToShortlist={false} />
     </div>
   );
 };

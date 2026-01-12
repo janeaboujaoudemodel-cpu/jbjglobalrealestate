@@ -52,7 +52,7 @@ interface Lead {
   tags: string[] | null;
   created_at: string;
   owner_type: string;
-  is_vip?: boolean;
+  vip?: boolean;
   state?: {
     pipeline_status: string;
     is_junk: boolean;
@@ -103,7 +103,7 @@ const getLeadTemperature = (lead: { created_at: string; state?: { last_touch_at:
 };
 interface CRMLeadsTableProps {
   userId: string;
-  filterType: "assigned" | "own" | "all" | "website" | "vip";
+  filterType: "assigned" | "own" | "all" | "website" | "vip" | "flagged";
   onRefresh: () => void;
   statusFilters?: string[];
   sourceFilter?: string;
@@ -209,7 +209,7 @@ const CRMLeadsTable = ({ userId, filterType, onRefresh, statusFilters = [], sour
 
         // For VIP tab, filter to only VIP leads
         if (filterType === "vip") {
-          filteredLeads = filteredLeads.filter(l => (l as any).is_vip === true);
+          filteredLeads = filteredLeads.filter(l => (l as any).vip === true);
         }
 
         setLeads(filteredLeads as Lead[]);
@@ -251,9 +251,22 @@ const CRMLeadsTable = ({ userId, filterType, onRefresh, statusFilters = [], sour
 
   const handleToggleVIP = async (leadId: string, currentVIP: boolean) => {
     try {
+      const updateData: Record<string, any> = { 
+        vip: !currentVIP
+      };
+      
+      // If marking as VIP, set tagged_at and tagged_by
+      if (!currentVIP) {
+        updateData.vip_tagged_at = new Date().toISOString();
+        updateData.vip_tagged_by = userId;
+      } else {
+        updateData.vip_tagged_at = null;
+        updateData.vip_tagged_by = null;
+      }
+
       const { error } = await supabase
         .from("crm_leads")
-        .update({ is_vip: !currentVIP } as any)
+        .update(updateData)
         .eq("id", leadId);
 
       if (error) throw error;
@@ -499,7 +512,7 @@ const CRMLeadsTable = ({ userId, filterType, onRefresh, statusFilters = [], sour
                           );
                         })()}
                         {/* VIP Badge */}
-                        {(lead as any).is_vip && (
+                        {(lead as any).vip && (
                           <Badge 
                             variant="outline" 
                             className="text-[10px] px-1.5 py-0 h-5 bg-amber-500/20 border-amber-500/50 text-amber-400 font-bold"
@@ -787,11 +800,11 @@ const CRMLeadsTable = ({ userId, filterType, onRefresh, statusFilters = [], sour
                           <DropdownMenuSeparator />
                           <div className="px-2 py-1.5 text-xs font-semibold text-amber-500 uppercase tracking-wide">VIP Status</div>
                           <DropdownMenuItem 
-                            onClick={() => handleToggleVIP(lead.id, !!(lead as any).is_vip)}
+                            onClick={() => handleToggleVIP(lead.id, !!(lead as any).vip)}
                             className="cursor-pointer"
                           >
-                            <Crown className={`h-4 w-4 mr-2 ${(lead as any).is_vip ? 'text-amber-400' : 'text-muted-foreground'}`} />
-                            {(lead as any).is_vip ? 'Remove from VIP' : 'Mark as VIP'}
+                            <Crown className={`h-4 w-4 mr-2 ${(lead as any).vip ? 'text-amber-400' : 'text-muted-foreground'}`} />
+                            {(lead as any).vip ? 'Remove from VIP' : 'Mark as VIP'}
                           </DropdownMenuItem>
                           <DropdownMenuSeparator />
                           <div className="px-2 py-1.5 text-xs font-semibold text-amber-400 uppercase tracking-wide">Documents</div>

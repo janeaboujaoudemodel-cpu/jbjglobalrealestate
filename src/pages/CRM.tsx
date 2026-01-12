@@ -9,7 +9,7 @@ import { Badge } from "@/components/ui/badge";
 import { Skeleton } from "@/components/ui/skeleton";
 import { toast } from "sonner";
 import { 
-  Users, FileText, Plus, Upload, Download, LogOut, Shuffle, LayoutGrid, List, Zap, Briefcase, PanelLeftOpen, PanelLeftClose, Crown
+  Users, FileText, Plus, Upload, Download, LogOut, Shuffle, LayoutGrid, List, Zap, Briefcase, PanelLeftOpen, PanelLeftClose, Crown, Flag, Bot
 } from "lucide-react";
 import jbjMonogramDarkBg from "@/assets/jbj-monogram-dark-bg.png";
 import CRMLeadsTable from "@/components/crm/CRMLeadsTable";
@@ -49,6 +49,7 @@ const CRM = () => {
   const [showImportModal, setShowImportModal] = useState(false);
   const [showLeadModal, setShowLeadModal] = useState(false);
   const [showBulkAssignModal, setShowBulkAssignModal] = useState(false);
+  const [showAssistantPanel, setShowAssistantPanel] = useState(false);
   const [refreshKey, setRefreshKey] = useState(0);
   const [viewMode, setViewMode] = useState<"table" | "kanban">("table");
   const [showToolsSidebar, setShowToolsSidebar] = useState(false);
@@ -340,6 +341,14 @@ const CRM = () => {
               Bulk Assign Leads
             </Button>
           )}
+          <Button 
+            variant="outline" 
+            onClick={() => setShowAssistantPanel(true)} 
+            className="text-gold border-gold/50 hover:bg-gold/20"
+          >
+            <Bot className="h-4 w-4 mr-2" />
+            AI Assistant
+          </Button>
           <div className="ml-auto flex items-center gap-2">
             <div className="flex border border-border rounded-lg overflow-hidden">
               <Button
@@ -376,7 +385,7 @@ const CRM = () => {
           </CardHeader>
           <CardContent>
             <Tabs value={activeTab} onValueChange={setActiveTab}>
-              <TabsList className="mb-4 bg-muted/50">
+              <TabsList className="mb-4 bg-muted/50 flex-wrap">
                 <TabsTrigger 
                   value="all" 
                   className="data-[state=active]:bg-primary data-[state=active]:text-white text-muted-foreground font-semibold"
@@ -399,11 +408,11 @@ const CRM = () => {
                   Website Leads
                 </TabsTrigger>
                 <TabsTrigger 
-                  value="employees" 
-                  className="data-[state=active]:bg-gold data-[state=active]:text-black text-muted-foreground font-semibold"
+                  value="flagged" 
+                  className="data-[state=active]:bg-amber-600 data-[state=active]:text-white text-amber-400 font-semibold"
                 >
-                  <Briefcase className="h-4 w-4 mr-2" />
-                  Employees Hub
+                  <Flag className="h-4 w-4 mr-2" />
+                  Flagged
                 </TabsTrigger>
                 <TabsTrigger 
                   value="vip" 
@@ -411,6 +420,13 @@ const CRM = () => {
                 >
                   <Crown className="h-4 w-4 mr-2" />
                   VIP Leads
+                </TabsTrigger>
+                <TabsTrigger 
+                  value="employees" 
+                  className="data-[state=active]:bg-gold data-[state=active]:text-black text-muted-foreground font-semibold"
+                >
+                  <Briefcase className="h-4 w-4 mr-2" />
+                  Employees Hub
                 </TabsTrigger>
               </TabsList>
 
@@ -447,19 +463,28 @@ const CRM = () => {
                 />
               </TabsContent>
 
-              <TabsContent value="employees">
-                <EmployeesHub userId={user?.id || ""} />
+              <TabsContent value="flagged">
+                <FlaggedLeadsView userId={user?.id || ""} onRefresh={handleRefresh} />
               </TabsContent>
 
               <TabsContent value="vip">
-                <CRMLeadsTable 
-                  key={`vip-${refreshKey}-${quickFilter}-${sourceFilter}`}
-                  userId={user?.id || ""} 
-                  filterType="vip"
-                  onRefresh={handleRefresh}
-                  statusFilters={quickFilterStatuses}
-                  sourceFilter={sourceFilter !== "all" ? sourceFilter : undefined}
-                />
+                <div className="space-y-4">
+                  <div className="flex justify-end">
+                    <VIPExportButton />
+                  </div>
+                  <CRMLeadsTable 
+                    key={`vip-${refreshKey}-${quickFilter}-${sourceFilter}`}
+                    userId={user?.id || ""} 
+                    filterType="vip"
+                    onRefresh={handleRefresh}
+                    statusFilters={quickFilterStatuses}
+                    sourceFilter={sourceFilter !== "all" ? sourceFilter : undefined}
+                  />
+                </div>
+              </TabsContent>
+
+              <TabsContent value="employees">
+                <EmployeesHub userId={user?.id || ""} />
               </TabsContent>
             </Tabs>
           </CardContent>
@@ -492,6 +517,12 @@ const CRM = () => {
           totalAvailable={Object.values(statusCounts).reduce((a, b) => a + b, 0)}
         />
         )}
+
+      <CRMAssistantPanel
+        userId={user?.id || ""}
+        isOpen={showAssistantPanel}
+        onClose={() => setShowAssistantPanel(false)}
+      />
       </div>
     </div>
   );
