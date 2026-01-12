@@ -401,11 +401,12 @@ ${COMPANY_CONTACTS.email}`;
     fetchDrafts();
   };
 
-  // Assistant identity - human persona for founder: Jessica
+  // Assistant identity - human persona for founder: Jessica (NOT AI Assistant)
   const ASSISTANT_IDENTITY = {
     name: "Jessica",
     avatar: "https://images.unsplash.com/photo-1573496359142-b8d87734a5a2?w=200&h=200&fit=crop&crop=face",
-    title: "Founder's Assistant"
+    title: "Founder's Assistant",
+    description: "Your dedicated executive assistant"
   };
 
   return (
@@ -436,7 +437,7 @@ ${COMPANY_CONTACTS.email}`;
             </TabsTrigger>
             <TabsTrigger value="employees" className="flex-1 data-[state=active]:bg-gold/20 data-[state=active]:text-gold">
               <Users className="h-4 w-4 mr-2" />
-              AI Team
+              Team
             </TabsTrigger>
             <TabsTrigger value="drafts" className="flex-1 data-[state=active]:bg-gold/20 data-[state=active]:text-gold">
               <FileText className="h-4 w-4 mr-2" />

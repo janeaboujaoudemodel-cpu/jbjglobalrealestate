@@ -74,13 +74,14 @@ interface CRMBroker {
 }
 
 // Source group options - Website is NOT allowed for imports
+// EXACT ORDER: My Own Database first, then alphabetically others, Other Import last
 const SOURCE_GROUPS = [
-  { value: "broker_database", label: "Broker Database" },
   { value: "my_own_database", label: "My Own Database" },
+  { value: "broker_database", label: "Broker Database" },
   { value: "referral_database", label: "Referral Database" },
-  { value: "partner_leads", label: "Partner Leads" },
   { value: "marketing_list", label: "Marketing List" },
   { value: "event_contacts", label: "Event Contacts" },
+  { value: "partner_leads", label: "Partner Leads" },
   { value: "business_cards", label: "Business Cards" },
   { value: "imported", label: "Other Import" },
 ];
@@ -835,16 +836,19 @@ const CRMImportModalV3 = ({ open, onClose, onSuccess, userId }: CRMImportModalV3
               <Label className="text-white">
                 Source Category <span className="text-red-400">*</span>
               </Label>
-              <Select value={sourceGroup} onValueChange={setSourceGroup}>
-                <SelectTrigger className="bg-zinc-900 border-zinc-700 text-white">
+            <Select value={sourceGroup} onValueChange={setSourceGroup}>
+                <SelectTrigger className="bg-zinc-900 border-zinc-700 text-white font-medium">
                   <SelectValue placeholder="Select source type..." />
                 </SelectTrigger>
-              <SelectContent className="bg-zinc-900 border-zinc-700 z-[200] shadow-xl">
+                <SelectContent 
+                  className="z-[9999] bg-zinc-950 text-white border border-zinc-800 shadow-xl"
+                  style={{ backgroundColor: '#09090b' }}
+                >
                   {SOURCE_GROUPS.map(group => (
                     <SelectItem 
                       key={group.value} 
                       value={group.value} 
-                      className="text-white hover:bg-zinc-700 focus:bg-zinc-700 focus:text-white cursor-pointer font-medium"
+                      className="text-white data-[highlighted]:bg-zinc-800 data-[highlighted]:text-white focus:bg-zinc-800 focus:text-white cursor-pointer font-medium py-2"
                     >
                       {group.label}
                     </SelectItem>
@@ -967,12 +971,19 @@ const CRMImportModalV3 = ({ open, onClose, onSuccess, userId }: CRMImportModalV3
                     <>
                       <Label className="text-white">Select Broker</Label>
                       <Select value={selectedBrokerId} onValueChange={setSelectedBrokerId}>
-                        <SelectTrigger className="bg-zinc-900 border-zinc-700 text-white">
+                        <SelectTrigger className="bg-zinc-900 border-zinc-700 text-white font-medium">
                           <SelectValue placeholder={loadingBrokers ? "Loading..." : "Select a broker..."} />
                         </SelectTrigger>
-                        <SelectContent className="bg-zinc-900 border-zinc-700 z-[200] shadow-xl">
+                        <SelectContent 
+                          className="z-[9999] bg-zinc-950 text-white border border-zinc-800 shadow-xl"
+                          style={{ backgroundColor: '#09090b' }}
+                        >
                           {brokers.map(broker => (
-                            <SelectItem key={broker.id} value={broker.id} className="text-white hover:bg-zinc-700 focus:bg-zinc-700 focus:text-white font-medium">
+                            <SelectItem 
+                              key={broker.id} 
+                              value={broker.id} 
+                              className="text-white data-[highlighted]:bg-zinc-800 data-[highlighted]:text-white focus:bg-zinc-800 focus:text-white font-medium py-2"
+                            >
                               {broker.display_name}
                             </SelectItem>
                           ))}

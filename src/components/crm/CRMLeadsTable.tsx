@@ -291,6 +291,7 @@ const CRMLeadsTable = ({ userId, filterType, onRefresh, statusFilters = [], sour
         updateData.vip_tagged_at = new Date().toISOString();
         updateData.vip_tagged_by = userId;
       } else {
+        // Removing VIP - clear the fields
         updateData.vip_tagged_at = null;
         updateData.vip_tagged_by = null;
       }
@@ -300,14 +301,18 @@ const CRMLeadsTable = ({ userId, filterType, onRefresh, statusFilters = [], sour
         .update(updateData)
         .eq("id", leadId);
 
-      if (error) throw error;
+      if (error) {
+        console.error("VIP toggle error:", error);
+        toast.error(`Failed to update VIP: ${error.message}`);
+        return;
+      }
 
       toast.success(currentVIP ? "Removed from VIP list" : "Added to VIP list");
       fetchLeads();
       onRefresh();
-    } catch (err) {
+    } catch (err: any) {
       console.error("Failed to toggle VIP status:", err);
-      toast.error("Failed to update VIP status");
+      toast.error(`Failed to update VIP status: ${err.message || 'Unknown error'}`);
     }
   };
 
@@ -327,7 +332,11 @@ const CRMLeadsTable = ({ userId, filterType, onRefresh, statusFilters = [], sour
           { onConflict: "lead_id,user_id" }
         );
 
-      if (error) throw error;
+      if (error) {
+        console.error("Status change error:", error);
+        toast.error(`Failed to update status: ${error.message}`);
+        return;
+      }
 
       // Log activity
       await supabase.from("crm_activities").insert({
@@ -337,11 +346,11 @@ const CRMLeadsTable = ({ userId, filterType, onRefresh, statusFilters = [], sour
         metadata: { new_status: newStatus }
       });
 
-      toast.success(`Status updated to ${newStatus}`);
+      toast.success(`Status updated to ${newStatus.replace(/_/g, ' ')}`);
       fetchLeads();
-    } catch (err) {
+    } catch (err: any) {
       console.error("Failed to update status:", err);
-      toast.error("Failed to update status");
+      toast.error(`Failed to update status: ${err.message || 'Unknown error'}`);
     }
   };
 
@@ -415,15 +424,18 @@ const CRMLeadsTable = ({ userId, filterType, onRefresh, statusFilters = [], sour
           />
         </div>
         <Select value={statusFilter} onValueChange={setStatusFilter}>
-          <SelectTrigger className="w-[200px] bg-zinc-900 border-zinc-700 text-white">
+          <SelectTrigger className="w-[200px] bg-zinc-900 border-zinc-700 text-white font-medium">
             <Filter className="h-4 w-4 mr-2" />
             <SelectValue placeholder="Filter by status" />
           </SelectTrigger>
-          <SelectContent className="bg-zinc-900 border-zinc-700 max-h-80 z-[100]">
-            <SelectItem value="all" className="text-white hover:bg-zinc-800 focus:bg-zinc-800 focus:text-white">All Statuses</SelectItem>
+          <SelectContent 
+            className="z-[9999] bg-zinc-950 text-white border border-zinc-800 shadow-xl max-h-80"
+            style={{ backgroundColor: '#09090b' }}
+          >
+            <SelectItem value="all" className="text-white data-[highlighted]:bg-zinc-800 data-[highlighted]:text-white focus:bg-zinc-800 focus:text-white py-2">All Statuses</SelectItem>
             <div className="px-2 py-1 text-xs font-semibold text-emerald-400 uppercase">Positive</div>
             {PIPELINE_STATUSES.filter(s => s.category === 'positive').map(status => (
-              <SelectItem key={status.value} value={status.value} className="text-white hover:bg-zinc-800 focus:bg-zinc-800 focus:text-white">
+              <SelectItem key={status.value} value={status.value} className="text-white data-[highlighted]:bg-zinc-800 data-[highlighted]:text-white focus:bg-zinc-800 focus:text-white py-2">
                 <div className="flex items-center gap-2">
                   <span className={`w-2 h-2 rounded-full ${status.color}`} />
                   {status.label}
@@ -432,7 +444,7 @@ const CRMLeadsTable = ({ userId, filterType, onRefresh, statusFilters = [], sour
             ))}
             <div className="px-2 py-1 text-xs font-semibold text-blue-400 uppercase mt-1">Neutral</div>
             {PIPELINE_STATUSES.filter(s => s.category === 'neutral').map(status => (
-              <SelectItem key={status.value} value={status.value} className="text-white hover:bg-zinc-800 focus:bg-zinc-800 focus:text-white">
+              <SelectItem key={status.value} value={status.value} className="text-white data-[highlighted]:bg-zinc-800 data-[highlighted]:text-white focus:bg-zinc-800 focus:text-white py-2">
                 <div className="flex items-center gap-2">
                   <span className={`w-2 h-2 rounded-full ${status.color}`} />
                   {status.label}
@@ -441,7 +453,7 @@ const CRMLeadsTable = ({ userId, filterType, onRefresh, statusFilters = [], sour
             ))}
             <div className="px-2 py-1 text-xs font-semibold text-amber-400 uppercase mt-1">Follow-up</div>
             {PIPELINE_STATUSES.filter(s => s.category === 'warning').map(status => (
-              <SelectItem key={status.value} value={status.value} className="text-white hover:bg-zinc-800 focus:bg-zinc-800 focus:text-white">
+              <SelectItem key={status.value} value={status.value} className="text-white data-[highlighted]:bg-zinc-800 data-[highlighted]:text-white focus:bg-zinc-800 focus:text-white py-2">
                 <div className="flex items-center gap-2">
                   <span className={`w-2 h-2 rounded-full ${status.color}`} />
                   {status.label}
@@ -450,7 +462,7 @@ const CRMLeadsTable = ({ userId, filterType, onRefresh, statusFilters = [], sour
             ))}
             <div className="px-2 py-1 text-xs font-semibold text-red-400 uppercase mt-1">Negative</div>
             {PIPELINE_STATUSES.filter(s => s.category === 'negative').map(status => (
-              <SelectItem key={status.value} value={status.value} className="text-white hover:bg-zinc-800 focus:bg-zinc-800 focus:text-white">
+              <SelectItem key={status.value} value={status.value} className="text-white data-[highlighted]:bg-zinc-800 data-[highlighted]:text-white focus:bg-zinc-800 focus:text-white py-2">
                 <div className="flex items-center gap-2">
                   <span className={`w-2 h-2 rounded-full ${status.color}`} />
                   {status.label}
