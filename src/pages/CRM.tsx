@@ -14,7 +14,7 @@ import {
 import jbjMonogramDarkBg from "@/assets/jbj-monogram-dark-bg.png";
 import CRMLeadsTable from "@/components/crm/CRMLeadsTable";
 import CRMEnhancedDashboard from "@/components/crm/CRMEnhancedDashboard";
-import CRMImportModal from "@/components/crm/CRMImportModal";
+import CRMImportModalV2 from "@/components/crm/CRMImportModalV2";
 import CRMLeadModal from "@/components/crm/CRMLeadModal";
 import LeadQuickFilters from "@/components/crm/LeadQuickFilters";
 import LeadSourceFilter from "@/components/crm/LeadSourceFilter";
@@ -28,6 +28,9 @@ import EmployeeCenter from "@/components/crm/EmployeeCenter";
 import EmployeesHub from "@/components/crm/EmployeesHub";
 import CRMToolsSidebar from "@/components/crm/CRMToolsSidebar";
 import { AdminTasksPanel } from "@/components/crm/AdminTasksPanel";
+import FlaggedLeadsView from "@/components/crm/FlaggedLeadsView";
+import VIPExportButton from "@/components/crm/VIPExportButton";
+import CRMAssistantPanel from "@/components/crm/CRMAssistantPanel";
 
 interface CRMProfile {
   id: string;

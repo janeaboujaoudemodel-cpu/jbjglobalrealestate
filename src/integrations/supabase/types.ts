@@ -662,6 +662,13 @@ export type Database = {
             referencedRelation: "crm_leads"
             referencedColumns: ["id"]
           },
+          {
+            foreignKeyName: "broker_call_logs_lead_id_fkey"
+            columns: ["lead_id"]
+            isOneToOne: false
+            referencedRelation: "crm_vip_leads"
+            referencedColumns: ["id"]
+          },
         ]
       }
       broker_chat_logs: {
@@ -704,6 +711,13 @@ export type Database = {
             columns: ["lead_id"]
             isOneToOne: false
             referencedRelation: "crm_leads"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "broker_chat_logs_lead_id_fkey"
+            columns: ["lead_id"]
+            isOneToOne: false
+            referencedRelation: "crm_vip_leads"
             referencedColumns: ["id"]
           },
         ]
@@ -1470,7 +1484,117 @@ export type Database = {
             referencedRelation: "crm_leads"
             referencedColumns: ["id"]
           },
+          {
+            foreignKeyName: "crm_activities_lead_id_fkey"
+            columns: ["lead_id"]
+            isOneToOne: false
+            referencedRelation: "crm_vip_leads"
+            referencedColumns: ["id"]
+          },
         ]
+      }
+      crm_ai_drafts: {
+        Row: {
+          ai_employee_id: string | null
+          content: string
+          created_at: string | null
+          draft_type: string
+          id: string
+          lead_id: string | null
+          metadata: Json | null
+          reviewed_at: string | null
+          reviewed_by_user_id: string | null
+          sent_at: string | null
+          status: string | null
+          subject: string | null
+        }
+        Insert: {
+          ai_employee_id?: string | null
+          content: string
+          created_at?: string | null
+          draft_type: string
+          id?: string
+          lead_id?: string | null
+          metadata?: Json | null
+          reviewed_at?: string | null
+          reviewed_by_user_id?: string | null
+          sent_at?: string | null
+          status?: string | null
+          subject?: string | null
+        }
+        Update: {
+          ai_employee_id?: string | null
+          content?: string
+          created_at?: string | null
+          draft_type?: string
+          id?: string
+          lead_id?: string | null
+          metadata?: Json | null
+          reviewed_at?: string | null
+          reviewed_by_user_id?: string | null
+          sent_at?: string | null
+          status?: string | null
+          subject?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "crm_ai_drafts_ai_employee_id_fkey"
+            columns: ["ai_employee_id"]
+            isOneToOne: false
+            referencedRelation: "crm_ai_employees"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "crm_ai_drafts_lead_id_fkey"
+            columns: ["lead_id"]
+            isOneToOne: false
+            referencedRelation: "crm_leads"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "crm_ai_drafts_lead_id_fkey"
+            columns: ["lead_id"]
+            isOneToOne: false
+            referencedRelation: "crm_vip_leads"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      crm_ai_employees: {
+        Row: {
+          avatar_url: string | null
+          created_at: string | null
+          description: string | null
+          id: string
+          is_active: boolean | null
+          name: string
+          permissions: string[] | null
+          role: string
+          updated_at: string | null
+        }
+        Insert: {
+          avatar_url?: string | null
+          created_at?: string | null
+          description?: string | null
+          id?: string
+          is_active?: boolean | null
+          name: string
+          permissions?: string[] | null
+          role: string
+          updated_at?: string | null
+        }
+        Update: {
+          avatar_url?: string | null
+          created_at?: string | null
+          description?: string | null
+          id?: string
+          is_active?: boolean | null
+          name?: string
+          permissions?: string[] | null
+          role?: string
+          updated_at?: string | null
+        }
+        Relationships: []
       }
       crm_audit_logs: {
         Row: {
@@ -1547,6 +1671,13 @@ export type Database = {
             referencedRelation: "crm_leads"
             referencedColumns: ["id"]
           },
+          {
+            foreignKeyName: "crm_calls_lead_id_fkey"
+            columns: ["lead_id"]
+            isOneToOne: false
+            referencedRelation: "crm_vip_leads"
+            referencedColumns: ["id"]
+          },
         ]
       }
       crm_campaign_recipients: {
@@ -1596,6 +1727,13 @@ export type Database = {
             columns: ["lead_id"]
             isOneToOne: false
             referencedRelation: "crm_leads"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "crm_campaign_recipients_lead_id_fkey"
+            columns: ["lead_id"]
+            isOneToOne: false
+            referencedRelation: "crm_vip_leads"
             referencedColumns: ["id"]
           },
         ]
@@ -1741,7 +1879,146 @@ export type Database = {
             referencedRelation: "crm_leads"
             referencedColumns: ["id"]
           },
+          {
+            foreignKeyName: "crm_lead_assignments_lead_id_fkey"
+            columns: ["lead_id"]
+            isOneToOne: false
+            referencedRelation: "crm_vip_leads"
+            referencedColumns: ["id"]
+          },
         ]
+      }
+      crm_lead_reports: {
+        Row: {
+          created_at: string | null
+          created_by_user_id: string | null
+          id: string
+          include_broker_info: boolean | null
+          lead_id: string
+          pdf_url: string | null
+          report_data: Json | null
+          report_type: string
+          title: string | null
+        }
+        Insert: {
+          created_at?: string | null
+          created_by_user_id?: string | null
+          id?: string
+          include_broker_info?: boolean | null
+          lead_id: string
+          pdf_url?: string | null
+          report_data?: Json | null
+          report_type: string
+          title?: string | null
+        }
+        Update: {
+          created_at?: string | null
+          created_by_user_id?: string | null
+          id?: string
+          include_broker_info?: boolean | null
+          lead_id?: string
+          pdf_url?: string | null
+          report_data?: Json | null
+          report_type?: string
+          title?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "crm_lead_reports_lead_id_fkey"
+            columns: ["lead_id"]
+            isOneToOne: false
+            referencedRelation: "crm_leads"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "crm_lead_reports_lead_id_fkey"
+            columns: ["lead_id"]
+            isOneToOne: false
+            referencedRelation: "crm_vip_leads"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      crm_lead_shortlists: {
+        Row: {
+          added_by_user_id: string | null
+          created_at: string | null
+          id: string
+          lead_id: string
+          notes: string | null
+          property_data: Json | null
+          property_id: string
+        }
+        Insert: {
+          added_by_user_id?: string | null
+          created_at?: string | null
+          id?: string
+          lead_id: string
+          notes?: string | null
+          property_data?: Json | null
+          property_id: string
+        }
+        Update: {
+          added_by_user_id?: string | null
+          created_at?: string | null
+          id?: string
+          lead_id?: string
+          notes?: string | null
+          property_data?: Json | null
+          property_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "crm_lead_shortlists_lead_id_fkey"
+            columns: ["lead_id"]
+            isOneToOne: false
+            referencedRelation: "crm_leads"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "crm_lead_shortlists_lead_id_fkey"
+            columns: ["lead_id"]
+            isOneToOne: false
+            referencedRelation: "crm_vip_leads"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      crm_lead_sources: {
+        Row: {
+          created_at: string | null
+          created_by_user_id: string | null
+          flagged_rows: number | null
+          id: string
+          source_file_name: string | null
+          source_group: string
+          source_name: string
+          total_rows: number | null
+          valid_rows: number | null
+        }
+        Insert: {
+          created_at?: string | null
+          created_by_user_id?: string | null
+          flagged_rows?: number | null
+          id?: string
+          source_file_name?: string | null
+          source_group?: string
+          source_name: string
+          total_rows?: number | null
+          valid_rows?: number | null
+        }
+        Update: {
+          created_at?: string | null
+          created_by_user_id?: string | null
+          flagged_rows?: number | null
+          id?: string
+          source_file_name?: string | null
+          source_group?: string
+          source_name?: string
+          total_rows?: number | null
+          valid_rows?: number | null
+        }
+        Relationships: []
       }
       crm_lead_state_per_user: {
         Row: {
@@ -1791,11 +2068,20 @@ export type Database = {
             referencedRelation: "crm_leads"
             referencedColumns: ["id"]
           },
+          {
+            foreignKeyName: "crm_lead_state_per_user_lead_id_fkey"
+            columns: ["lead_id"]
+            isOneToOne: false
+            referencedRelation: "crm_vip_leads"
+            referencedColumns: ["id"]
+          },
         ]
       }
       crm_leads: {
         Row: {
           age_range: string | null
+          assigned_ai_employee_id: string | null
+          assigned_to_user_id: string | null
           auto_detected_type: boolean | null
           birthday: string | null
           company_name: string | null
@@ -1806,24 +2092,40 @@ export type Database = {
           current_location_country: string | null
           detection_keywords: string[] | null
           email_lower: string | null
+          email_normalized: string | null
+          flag_reasons: string[] | null
+          flagged: boolean | null
           full_name: string
           gender: string | null
           id: string
           import_approval_status:
             | Database["public"]["Enums"]["crm_import_approval_status"]
             | null
+          import_batch_id: string | null
+          imported_at: string | null
           lead_source_type: string | null
           nationality: string | null
+          notes: string | null
           owner_type: Database["public"]["Enums"]["crm_lead_owner_type"]
           owner_user_id: string | null
           phone_e164: string | null
+          phone_normalized: string | null
+          phone_raw: string | null
           preferred_language: string | null
+          raw_import: Json | null
           source: string | null
+          source_id: string | null
+          source_row_index: number | null
           tags: string[] | null
           updated_at: string
+          vip: boolean | null
+          vip_tagged_at: string | null
+          vip_tagged_by: string | null
         }
         Insert: {
           age_range?: string | null
+          assigned_ai_employee_id?: string | null
+          assigned_to_user_id?: string | null
           auto_detected_type?: boolean | null
           birthday?: string | null
           company_name?: string | null
@@ -1834,24 +2136,40 @@ export type Database = {
           current_location_country?: string | null
           detection_keywords?: string[] | null
           email_lower?: string | null
+          email_normalized?: string | null
+          flag_reasons?: string[] | null
+          flagged?: boolean | null
           full_name: string
           gender?: string | null
           id?: string
           import_approval_status?:
             | Database["public"]["Enums"]["crm_import_approval_status"]
             | null
+          import_batch_id?: string | null
+          imported_at?: string | null
           lead_source_type?: string | null
           nationality?: string | null
+          notes?: string | null
           owner_type?: Database["public"]["Enums"]["crm_lead_owner_type"]
           owner_user_id?: string | null
           phone_e164?: string | null
+          phone_normalized?: string | null
+          phone_raw?: string | null
           preferred_language?: string | null
+          raw_import?: Json | null
           source?: string | null
+          source_id?: string | null
+          source_row_index?: number | null
           tags?: string[] | null
           updated_at?: string
+          vip?: boolean | null
+          vip_tagged_at?: string | null
+          vip_tagged_by?: string | null
         }
         Update: {
           age_range?: string | null
+          assigned_ai_employee_id?: string | null
+          assigned_to_user_id?: string | null
           auto_detected_type?: boolean | null
           birthday?: string | null
           company_name?: string | null
@@ -1862,23 +2180,52 @@ export type Database = {
           current_location_country?: string | null
           detection_keywords?: string[] | null
           email_lower?: string | null
+          email_normalized?: string | null
+          flag_reasons?: string[] | null
+          flagged?: boolean | null
           full_name?: string
           gender?: string | null
           id?: string
           import_approval_status?:
             | Database["public"]["Enums"]["crm_import_approval_status"]
             | null
+          import_batch_id?: string | null
+          imported_at?: string | null
           lead_source_type?: string | null
           nationality?: string | null
+          notes?: string | null
           owner_type?: Database["public"]["Enums"]["crm_lead_owner_type"]
           owner_user_id?: string | null
           phone_e164?: string | null
+          phone_normalized?: string | null
+          phone_raw?: string | null
           preferred_language?: string | null
+          raw_import?: Json | null
           source?: string | null
+          source_id?: string | null
+          source_row_index?: number | null
           tags?: string[] | null
           updated_at?: string
+          vip?: boolean | null
+          vip_tagged_at?: string | null
+          vip_tagged_by?: string | null
         }
-        Relationships: []
+        Relationships: [
+          {
+            foreignKeyName: "crm_leads_assigned_ai_employee_id_fkey"
+            columns: ["assigned_ai_employee_id"]
+            isOneToOne: false
+            referencedRelation: "crm_ai_employees"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "crm_leads_source_id_fkey"
+            columns: ["source_id"]
+            isOneToOne: false
+            referencedRelation: "crm_lead_sources"
+            referencedColumns: ["id"]
+          },
+        ]
       }
       crm_notes: {
         Row: {
@@ -1908,6 +2255,13 @@ export type Database = {
             columns: ["lead_id"]
             isOneToOne: false
             referencedRelation: "crm_leads"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "crm_notes_lead_id_fkey"
+            columns: ["lead_id"]
+            isOneToOne: false
+            referencedRelation: "crm_vip_leads"
             referencedColumns: ["id"]
           },
         ]
@@ -1955,6 +2309,13 @@ export type Database = {
             columns: ["lead_id"]
             isOneToOne: false
             referencedRelation: "crm_leads"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "crm_tasks_lead_id_fkey"
+            columns: ["lead_id"]
+            isOneToOne: false
+            referencedRelation: "crm_vip_leads"
             referencedColumns: ["id"]
           },
         ]
@@ -5386,6 +5747,13 @@ export type Database = {
             referencedRelation: "crm_leads"
             referencedColumns: ["id"]
           },
+          {
+            foreignKeyName: "vapi_call_logs_lead_id_fkey"
+            columns: ["lead_id"]
+            isOneToOne: false
+            referencedRelation: "crm_vip_leads"
+            referencedColumns: ["id"]
+          },
         ]
       }
     }
@@ -5518,6 +5886,156 @@ export type Database = {
           user_role?: string | null
         }
         Relationships: []
+      }
+      crm_vip_leads: {
+        Row: {
+          age_range: string | null
+          assigned_ai_employee_id: string | null
+          assigned_to_user_id: string | null
+          auto_detected_type: boolean | null
+          birthday: string | null
+          company_name: string | null
+          contact_type: Database["public"]["Enums"]["crm_contact_type"] | null
+          created_at: string | null
+          created_by_user_id: string | null
+          current_location_city: string | null
+          current_location_country: string | null
+          detection_keywords: string[] | null
+          email_lower: string | null
+          email_normalized: string | null
+          flag_reasons: string[] | null
+          flagged: boolean | null
+          full_name: string | null
+          gender: string | null
+          id: string | null
+          import_approval_status:
+            | Database["public"]["Enums"]["crm_import_approval_status"]
+            | null
+          import_batch_id: string | null
+          imported_at: string | null
+          lead_source_type: string | null
+          nationality: string | null
+          notes: string | null
+          owner_type: Database["public"]["Enums"]["crm_lead_owner_type"] | null
+          owner_user_id: string | null
+          phone_e164: string | null
+          phone_normalized: string | null
+          phone_raw: string | null
+          preferred_language: string | null
+          raw_import: Json | null
+          source: string | null
+          source_id: string | null
+          source_row_index: number | null
+          tags: string[] | null
+          updated_at: string | null
+          vip: boolean | null
+          vip_tagged_at: string | null
+          vip_tagged_by: string | null
+        }
+        Insert: {
+          age_range?: string | null
+          assigned_ai_employee_id?: string | null
+          assigned_to_user_id?: string | null
+          auto_detected_type?: boolean | null
+          birthday?: string | null
+          company_name?: string | null
+          contact_type?: Database["public"]["Enums"]["crm_contact_type"] | null
+          created_at?: string | null
+          created_by_user_id?: string | null
+          current_location_city?: string | null
+          current_location_country?: string | null
+          detection_keywords?: string[] | null
+          email_lower?: string | null
+          email_normalized?: string | null
+          flag_reasons?: string[] | null
+          flagged?: boolean | null
+          full_name?: string | null
+          gender?: string | null
+          id?: string | null
+          import_approval_status?:
+            | Database["public"]["Enums"]["crm_import_approval_status"]
+            | null
+          import_batch_id?: string | null
+          imported_at?: string | null
+          lead_source_type?: string | null
+          nationality?: string | null
+          notes?: string | null
+          owner_type?: Database["public"]["Enums"]["crm_lead_owner_type"] | null
+          owner_user_id?: string | null
+          phone_e164?: string | null
+          phone_normalized?: string | null
+          phone_raw?: string | null
+          preferred_language?: string | null
+          raw_import?: Json | null
+          source?: string | null
+          source_id?: string | null
+          source_row_index?: number | null
+          tags?: string[] | null
+          updated_at?: string | null
+          vip?: boolean | null
+          vip_tagged_at?: string | null
+          vip_tagged_by?: string | null
+        }
+        Update: {
+          age_range?: string | null
+          assigned_ai_employee_id?: string | null
+          assigned_to_user_id?: string | null
+          auto_detected_type?: boolean | null
+          birthday?: string | null
+          company_name?: string | null
+          contact_type?: Database["public"]["Enums"]["crm_contact_type"] | null
+          created_at?: string | null
+          created_by_user_id?: string | null
+          current_location_city?: string | null
+          current_location_country?: string | null
+          detection_keywords?: string[] | null
+          email_lower?: string | null
+          email_normalized?: string | null
+          flag_reasons?: string[] | null
+          flagged?: boolean | null
+          full_name?: string | null
+          gender?: string | null
+          id?: string | null
+          import_approval_status?:
+            | Database["public"]["Enums"]["crm_import_approval_status"]
+            | null
+          import_batch_id?: string | null
+          imported_at?: string | null
+          lead_source_type?: string | null
+          nationality?: string | null
+          notes?: string | null
+          owner_type?: Database["public"]["Enums"]["crm_lead_owner_type"] | null
+          owner_user_id?: string | null
+          phone_e164?: string | null
+          phone_normalized?: string | null
+          phone_raw?: string | null
+          preferred_language?: string | null
+          raw_import?: Json | null
+          source?: string | null
+          source_id?: string | null
+          source_row_index?: number | null
+          tags?: string[] | null
+          updated_at?: string | null
+          vip?: boolean | null
+          vip_tagged_at?: string | null
+          vip_tagged_by?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "crm_leads_assigned_ai_employee_id_fkey"
+            columns: ["assigned_ai_employee_id"]
+            isOneToOne: false
+            referencedRelation: "crm_ai_employees"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "crm_leads_source_id_fkey"
+            columns: ["source_id"]
+            isOneToOne: false
+            referencedRelation: "crm_lead_sources"
+            referencedColumns: ["id"]
+          },
+        ]
       }
     }
     Functions: {
