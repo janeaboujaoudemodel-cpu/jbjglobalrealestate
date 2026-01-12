@@ -5,10 +5,15 @@ import "./index.css";
 import { registerSW } from "virtual:pwa-register";
 import { trackPWAOpened } from "./hooks/usePWAAnalytics";
 
+// Detect if we're in a Lovable preview environment
+const isLovablePreview = typeof window !== 'undefined' && 
+  (window.location.hostname.includes('lovableproject.com') || 
+   window.location.hostname.includes('lovable.app'));
+
 // NOTE: In dev/preview, stale service workers can cache mixed Vite chunks.
 // That can manifest as React hook runtime crashes (dispatcher is null) inside libraries.
 // We proactively unregister SWs + clear caches in dev/preview to guarantee a single consistent bundle.
-if (import.meta.env.DEV) {
+if (import.meta.env.DEV || isLovablePreview) {
   if ("serviceWorker" in navigator) {
     navigator.serviceWorker
       .getRegistrations()
