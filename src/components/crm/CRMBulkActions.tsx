@@ -237,12 +237,12 @@ const CRMBulkActions = ({
 
         {/* Bulk Status Change */}
         <Select onValueChange={handleBulkStatusChange} disabled={isUpdating}>
-          <SelectTrigger className="w-[150px] bg-muted border-border text-foreground h-9">
+          <SelectTrigger className="w-[150px] bg-zinc-900 border-zinc-700 text-white h-9">
             <SelectValue placeholder="Status" />
           </SelectTrigger>
-          <SelectContent className="bg-card border-border max-h-64 overflow-y-auto">
+          <SelectContent className="bg-zinc-900 border-zinc-700 max-h-64 overflow-y-auto z-[100]">
             {PIPELINE_STATUSES.map(status => (
-              <SelectItem key={status.value} value={status.value} className="text-foreground">
+              <SelectItem key={status.value} value={status.value} className="text-white hover:bg-zinc-800 focus:bg-zinc-800 focus:text-white">
                 <div className="flex items-center gap-2">
                   <span className={`w-2 h-2 rounded-full ${status.color}`} />
                   {status.label}
@@ -255,13 +255,13 @@ const CRMBulkActions = ({
         {/* Bulk Assign */}
         {brokers.length > 0 && (
           <Select onValueChange={handleBulkAssign} disabled={isUpdating}>
-            <SelectTrigger className="w-[160px] bg-muted border-border text-foreground h-9">
+            <SelectTrigger className="w-[160px] bg-zinc-900 border-zinc-700 text-white h-9">
               <UserPlus className="h-4 w-4 mr-2" />
               <SelectValue placeholder="Assign" />
             </SelectTrigger>
-            <SelectContent className="bg-card border-border">
+            <SelectContent className="bg-zinc-900 border-zinc-700 z-[100]">
               {brokers.map(broker => (
-                <SelectItem key={broker.id} value={broker.id} className="text-foreground">
+                <SelectItem key={broker.id} value={broker.id} className="text-white hover:bg-zinc-800 focus:bg-zinc-800 focus:text-white">
                   {broker.display_name}
                 </SelectItem>
               ))}

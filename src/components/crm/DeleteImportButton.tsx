@@ -276,12 +276,12 @@ const DeleteImportButton = ({ userId, onSuccess, isAdmin }: DeleteImportButtonPr
               ) : (
                 <>
                   <Select value={selectedSourceId} onValueChange={setSelectedSourceId}>
-                    <SelectTrigger className="bg-muted border-border text-foreground">
+                    <SelectTrigger className="bg-zinc-900 border-zinc-700 text-white">
                       <SelectValue placeholder="Select import source..." />
                     </SelectTrigger>
-                    <SelectContent className="bg-card border-border max-h-64">
+                    <SelectContent className="bg-zinc-900 border-zinc-700 max-h-64 z-[100]">
                       {sources.map(source => (
-                        <SelectItem key={source.id} value={source.id} className="text-foreground">
+                        <SelectItem key={source.id} value={source.id} className="text-white hover:bg-zinc-800 focus:bg-zinc-800 focus:text-white">
                           <div className="flex flex-col">
                             <span className="font-medium">{source.source_name}</span>
                             <span className="text-xs text-muted-foreground">
