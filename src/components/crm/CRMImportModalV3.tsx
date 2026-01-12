@@ -839,12 +839,12 @@ const CRMImportModalV3 = ({ open, onClose, onSuccess, userId }: CRMImportModalV3
                 <SelectTrigger className="bg-zinc-900 border-zinc-700 text-white">
                   <SelectValue placeholder="Select source type..." />
                 </SelectTrigger>
-                <SelectContent className="bg-zinc-900 border-zinc-700 z-[100]">
+              <SelectContent className="bg-zinc-900 border-zinc-700 z-[200] shadow-xl">
                   {SOURCE_GROUPS.map(group => (
                     <SelectItem 
                       key={group.value} 
                       value={group.value} 
-                      className="text-white hover:bg-zinc-800 focus:bg-zinc-800 focus:text-white cursor-pointer"
+                      className="text-white hover:bg-zinc-700 focus:bg-zinc-700 focus:text-white cursor-pointer font-medium"
                     >
                       {group.label}
                     </SelectItem>
@@ -970,9 +970,9 @@ const CRMImportModalV3 = ({ open, onClose, onSuccess, userId }: CRMImportModalV3
                         <SelectTrigger className="bg-zinc-900 border-zinc-700 text-white">
                           <SelectValue placeholder={loadingBrokers ? "Loading..." : "Select a broker..."} />
                         </SelectTrigger>
-                        <SelectContent className="bg-zinc-900 border-zinc-700 z-[100]">
+                        <SelectContent className="bg-zinc-900 border-zinc-700 z-[200] shadow-xl">
                           {brokers.map(broker => (
-                            <SelectItem key={broker.id} value={broker.id} className="text-white hover:bg-zinc-800 focus:bg-zinc-800 focus:text-white">
+                            <SelectItem key={broker.id} value={broker.id} className="text-white hover:bg-zinc-700 focus:bg-zinc-700 focus:text-white font-medium">
                               {broker.display_name}
                             </SelectItem>
                           ))}
