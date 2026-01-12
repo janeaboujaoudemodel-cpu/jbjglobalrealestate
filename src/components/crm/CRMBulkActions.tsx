@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { Button } from "@/components/ui/button";
 import {
   Select,
@@ -27,13 +27,39 @@ interface CRMBulkActionsProps {
   onClear: () => void;
   onSuccess: () => void;
   userId: string;
-  brokers?: { id: string; display_name: string }[];
 }
 
-const CRMBulkActions = ({ selectedIds, onClear, onSuccess, userId, brokers = [] }: CRMBulkActionsProps) => {
+interface Broker {
+  id: string;
+  display_name: string;
+}
+
+const CRMBulkActions = ({ selectedIds, onClear, onSuccess, userId }: CRMBulkActionsProps) => {
   const [isDeleting, setIsDeleting] = useState(false);
   const [showDeleteConfirm, setShowDeleteConfirm] = useState(false);
   const [isUpdating, setIsUpdating] = useState(false);
+  const [brokers, setBrokers] = useState<Broker[]>([]);
+
+  // Fetch brokers for assignment
+  useEffect(() => {
+    const fetchBrokers = async () => {
+      const { data } = await supabase
+        .from("crm_users_profile")
+        .select("user_id, display_name")
+        .eq("is_active", true);
+      
+      if (data) {
+        setBrokers(data.map(b => ({ 
+          id: b.user_id, 
+          display_name: b.display_name || "Unknown Broker" 
+        })));
+      }
+    };
+    
+    if (selectedIds.size > 0) {
+      fetchBrokers();
+    }
+  }, [selectedIds.size]);
 
   const handleBulkStatusChange = async (newStatus: string) => {
     if (selectedIds.size === 0) return;
@@ -132,17 +158,17 @@ const CRMBulkActions = ({ selectedIds, onClear, onSuccess, userId, brokers = [] 
 
   return (
     <>
-      <div className="fixed bottom-4 left-1/2 -translate-x-1/2 bg-card border border-border rounded-lg shadow-xl p-4 flex items-center gap-4 z-50">
-        <span className="text-sm font-bold text-white">{selectedIds.size} selected</span>
+      <div className="fixed bottom-4 left-1/2 -translate-x-1/2 bg-card border border-border rounded-lg shadow-xl p-4 flex items-center gap-4 z-50 flex-wrap max-w-[95vw]">
+        <span className="text-sm font-bold text-foreground">{selectedIds.size} selected</span>
         
         {/* Bulk Status Change */}
         <Select onValueChange={handleBulkStatusChange} disabled={isUpdating}>
-          <SelectTrigger className="w-[160px] bg-muted border-border text-white h-9">
+          <SelectTrigger className="w-[160px] bg-muted border-border text-foreground h-9">
             <SelectValue placeholder="Change Status" />
           </SelectTrigger>
           <SelectContent className="bg-card border-border max-h-64 overflow-y-auto">
             {PIPELINE_STATUSES.map(status => (
-              <SelectItem key={status.value} value={status.value} className="text-white">
+              <SelectItem key={status.value} value={status.value} className="text-foreground">
                 <div className="flex items-center gap-2">
                   <span className={`w-2 h-2 rounded-full ${status.color}`} />
                   {status.label}
@@ -155,13 +181,13 @@ const CRMBulkActions = ({ selectedIds, onClear, onSuccess, userId, brokers = [] 
         {/* Bulk Assign */}
         {brokers.length > 0 && (
           <Select onValueChange={handleBulkAssign} disabled={isUpdating}>
-            <SelectTrigger className="w-[160px] bg-muted border-border text-white h-9">
+            <SelectTrigger className="w-[180px] bg-muted border-border text-foreground h-9">
               <UserPlus className="h-4 w-4 mr-2" />
               <SelectValue placeholder="Assign to..." />
             </SelectTrigger>
             <SelectContent className="bg-card border-border">
               {brokers.map(broker => (
-                <SelectItem key={broker.id} value={broker.id} className="text-white">
+                <SelectItem key={broker.id} value={broker.id} className="text-foreground">
                   {broker.display_name}
                 </SelectItem>
               ))}
@@ -190,14 +216,14 @@ const CRMBulkActions = ({ selectedIds, onClear, onSuccess, userId, brokers = [] 
       <AlertDialog open={showDeleteConfirm} onOpenChange={setShowDeleteConfirm}>
         <AlertDialogContent className="bg-card border-border">
           <AlertDialogHeader>
-            <AlertDialogTitle className="text-white">Delete {selectedIds.size} Leads?</AlertDialogTitle>
+            <AlertDialogTitle className="text-foreground">Delete {selectedIds.size} Leads?</AlertDialogTitle>
             <AlertDialogDescription className="text-muted-foreground">
               This will permanently delete {selectedIds.size} leads and all related data 
               (activities, assignments, shortlists, reports). This action cannot be undone.
             </AlertDialogDescription>
           </AlertDialogHeader>
           <AlertDialogFooter>
-            <AlertDialogCancel className="bg-muted text-white border-border">Cancel</AlertDialogCancel>
+            <AlertDialogCancel className="bg-muted text-foreground border-border">Cancel</AlertDialogCancel>
             <AlertDialogAction 
               onClick={handleBulkDelete}
               className="bg-red-600 hover:bg-red-700 text-white"
