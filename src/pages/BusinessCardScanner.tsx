@@ -162,15 +162,33 @@ const BusinessCardScanner = () => {
         if (phoneRaw) {
           let normalized = phoneRaw.replace(/[^\d+]/g, "");
           if (!normalized.startsWith("+")) {
-            if (normalized.startsWith("0")) {
+            // Starts with 0 (e.g., 0501234567) -> +971501234567
+            if (normalized.startsWith("0") && normalized.length >= 9) {
               normalized = "+971" + normalized.slice(1);
-            } else if (normalized.length <= 10) {
-              normalized = "+971" + normalized;
-            } else {
+            }
+            // Starts with 971 without + (e.g., 971501234567)
+            else if (normalized.startsWith("971") && normalized.length >= 12) {
               normalized = "+" + normalized;
             }
+            // Starts with 5 (UAE mobile, e.g., 501234567) -> +971501234567
+            else if (normalized.startsWith("5") && normalized.length >= 9 && normalized.length <= 10) {
+              normalized = "+971" + normalized;
+            }
+            // UAE landline or other formats
+            else if (/^[23467890]/.test(normalized) && normalized.length >= 7) {
+              normalized = "+971" + normalized;
+            }
+            // International number without + (10+ digits)
+            else if (normalized.length >= 10) {
+              normalized = "+" + normalized;
+            }
+            // Shorter but might be valid
+            else if (normalized.length >= 7) {
+              normalized = "+971" + normalized;
+            }
           }
-          if (/^\+[1-9]\d{1,14}$/.test(normalized)) {
+          // E.164 validation - be lenient for UAE (9-15 digits after +)
+          if (/^\+[1-9]\d{8,14}$/.test(normalized)) {
             phoneE164 = normalized;
             phoneNormalized = normalized.replace(/\D/g, '');
           }
