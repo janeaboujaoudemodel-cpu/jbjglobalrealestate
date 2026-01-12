@@ -138,54 +138,22 @@ const DeleteImportButton = ({ userId, onSuccess, isAdmin }: DeleteImportButtonPr
     if (!selectedSource) return;
 
     setDeleting(true);
-    const toastId = toast.loading(`Deleting leads from "${selectedSource.source_name}"...`);
-    
+    const toastId = toast.loading(`Deleting import "${selectedSource.source_name}"...`);
+
     try {
-      // Get all lead IDs from this source
-      const { data: leads, error: leadsError } = await supabase
-        .from("crm_leads")
-        .select("id")
-        .eq("source_id", selectedSource.id);
+      const { data, error } = await supabase.rpc("crm_hard_delete_import", {
+        p_source_id: selectedSource.id,
+        p_import_batch_id: null,
+      });
 
-      if (leadsError) throw leadsError;
+      if (error) throw error;
 
-      const leadIds = leads?.map(l => l.id) || [];
+      const deletedLeadCount = (data as any)?.lead_count ?? leadCount;
 
-      if (leadIds.length > 0) {
-        // Delete related records in batches to avoid timeout
-        const batchSize = 100;
-        for (let i = 0; i < leadIds.length; i += batchSize) {
-          const batch = leadIds.slice(i, i + batchSize);
-          await Promise.all([
-            supabase.from("crm_lead_state_per_user").delete().in("lead_id", batch),
-            supabase.from("crm_activities").delete().in("lead_id", batch),
-            supabase.from("crm_lead_assignments").delete().in("lead_id", batch),
-            supabase.from("crm_ai_drafts").delete().in("lead_id", batch),
-            supabase.from("crm_lead_shortlists").delete().in("lead_id", batch),
-            supabase.from("crm_lead_reports").delete().in("lead_id", batch),
-            supabase.from("crm_calls").delete().in("lead_id", batch),
-            supabase.from("crm_notes").delete().in("lead_id", batch),
-            supabase.from("crm_campaign_recipients").delete().in("lead_id", batch),
-          ]);
-        }
+      toast.success(`Deleted ${deletedLeadCount} leads from "${selectedSource.source_name}"`, {
+        id: toastId,
+      });
 
-        // Delete the leads
-        const { error: deleteError } = await supabase
-          .from("crm_leads")
-          .delete()
-          .eq("source_id", selectedSource.id);
-
-        if (deleteError) throw deleteError;
-      }
-
-      // Delete the source record
-      await supabase
-        .from("crm_lead_sources")
-        .delete()
-        .eq("id", selectedSource.id);
-
-      toast.success(`Deleted ${leadIds.length} leads from "${selectedSource.source_name}"`, { id: toastId });
-      
       setShowConfirm(false);
       setOpen(false);
       setSelectedSourceId("");
@@ -199,60 +167,24 @@ const DeleteImportButton = ({ userId, onSuccess, isAdmin }: DeleteImportButtonPr
   };
 
   const handleDeleteByBatch = async () => {
-    if (!batchId.trim()) return;
+    const trimmed = batchId.trim();
+    if (!trimmed) return;
 
     setDeleting(true);
-    const toastId = toast.loading(`Deleting leads with batch ID...`);
-    
+    const toastId = toast.loading(`Deleting import batch...`);
+
     try {
-      // Get all lead IDs from this batch
-      const { data: leads, error: leadsError } = await supabase
-        .from("crm_leads")
-        .select("id, source_id")
-        .eq("import_batch_id", batchId.trim());
+      const { data, error } = await supabase.rpc("crm_hard_delete_import", {
+        p_source_id: null,
+        p_import_batch_id: trimmed,
+      });
 
-      if (leadsError) throw leadsError;
+      if (error) throw error;
 
-      const leadIds = leads?.map(l => l.id) || [];
-      const sourceIds = [...new Set(leads?.map(l => l.source_id).filter(Boolean) || [])];
+      const deletedLeadCount = (data as any)?.lead_count ?? (batchLeadCount ?? 0);
 
-      if (leadIds.length > 0) {
-        // Delete related records in batches
-        const batchSize = 100;
-        for (let i = 0; i < leadIds.length; i += batchSize) {
-          const batch = leadIds.slice(i, i + batchSize);
-          await Promise.all([
-            supabase.from("crm_lead_state_per_user").delete().in("lead_id", batch),
-            supabase.from("crm_activities").delete().in("lead_id", batch),
-            supabase.from("crm_lead_assignments").delete().in("lead_id", batch),
-            supabase.from("crm_ai_drafts").delete().in("lead_id", batch),
-            supabase.from("crm_lead_shortlists").delete().in("lead_id", batch),
-            supabase.from("crm_lead_reports").delete().in("lead_id", batch),
-            supabase.from("crm_calls").delete().in("lead_id", batch),
-            supabase.from("crm_notes").delete().in("lead_id", batch),
-            supabase.from("crm_campaign_recipients").delete().in("lead_id", batch),
-          ]);
-        }
+      toast.success(`Deleted ${deletedLeadCount} leads (batch ${trimmed})`, { id: toastId });
 
-        // Delete the leads
-        const { error: deleteError } = await supabase
-          .from("crm_leads")
-          .delete()
-          .eq("import_batch_id", batchId.trim());
-
-        if (deleteError) throw deleteError;
-      }
-
-      // Also delete source records if they exist
-      if (sourceIds.length > 0) {
-        await supabase
-          .from("crm_lead_sources")
-          .delete()
-          .in("id", sourceIds as string[]);
-      }
-
-      toast.success(`Deleted ${leadIds.length} leads`, { id: toastId });
-      
       setShowConfirm(false);
       setOpen(false);
       setBatchId("");
@@ -269,9 +201,9 @@ const DeleteImportButton = ({ userId, onSuccess, isAdmin }: DeleteImportButtonPr
   const handleDelete = () => {
     if (deleteMode === "source") {
       handleDeleteBySource();
-    } else {
-      handleDeleteByBatch();
+      return;
     }
+    handleDeleteByBatch();
   };
 
   // Only show to admins

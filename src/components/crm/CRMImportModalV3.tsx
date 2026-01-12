@@ -411,13 +411,20 @@ const CRMImportModalV3 = ({ open, onClose, onSuccess, userId }: CRMImportModalV3
 
   // Analysis timeout to prevent "Analyzing contacts..." stuck state
   const analysisTimeoutRef = useRef<ReturnType<typeof setTimeout> | null>(null);
-  
+  const analysisRunRef = useRef(0);
+  const stepRef = useRef(step);
+
+  useEffect(() => {
+    stepRef.current = step;
+  }, [step]);
+
   // Cleanup timeout on unmount
   useEffect(() => {
     return () => {
       if (analysisTimeoutRef.current) {
         clearTimeout(analysisTimeoutRef.current);
       }
+      analysisRunRef.current += 1; // invalidate any in-flight analysis
     };
   }, []);
 
@@ -425,35 +432,44 @@ const CRMImportModalV3 = ({ open, onClose, onSuccess, userId }: CRMImportModalV3
     const selectedFile = e.target.files?.[0];
     if (!selectedFile) return;
 
+    const runId = (analysisRunRef.current += 1);
+
     const fileName = selectedFile.name.toLowerCase();
     const isCSV = fileName.endsWith(".csv");
     const isExcel = fileName.endsWith(".xlsx") || fileName.endsWith(".xls");
     const isVCard = fileName.endsWith(".vcf");
-    
+
     if (!isCSV && !isExcel && !isVCard) {
       toast.error("Please upload a CSV, Excel, or vCard file");
       return;
     }
 
     setFile(selectedFile);
-    
+
     // Auto-generate source name from file name
     if (!sourceName) {
       setSourceName(getDefaultSourceName(selectedFile.name));
     }
-    
+
     setStep("analysis");
-    
+
     // Set a hard timeout to prevent infinite "Analyzing contacts..." state
+    if (analysisTimeoutRef.current) clearTimeout(analysisTimeoutRef.current);
     analysisTimeoutRef.current = setTimeout(() => {
-      if (step === "analysis") {
-        toast.warning("Analysis timed out. Import may still have completed.", { duration: 5000 });
-        setStep("broker");
-      }
+      if (analysisRunRef.current !== runId) return;
+      if (stepRef.current !== "analysis") return;
+
+      toast.error("Analysis timed out. Please try again.", { duration: 6000 });
+
+      // Force-exit analysis state + clear any pending results
+      setFile(null);
+      setParsedData([]);
+      setAnalyzedData({ valid: [], flagged: [], skipped: [] });
+      setStep("upload");
     }, ANALYSIS_TIMEOUT_MS);
-    
+
     let parsed: ParsedLead[] = [];
-    
+
     try {
       if (isCSV) {
         const text = await selectedFile.text();
@@ -463,33 +479,33 @@ const CRMImportModalV3 = ({ open, onClose, onSuccess, userId }: CRMImportModalV3
         parsed = parseVCard(text);
       } else {
         toast.info("Excel file detected. For best results, save as CSV and re-upload.");
-        if (analysisTimeoutRef.current) clearTimeout(analysisTimeoutRef.current);
-        setStep("upload");
         return;
       }
-      
+
+      if (analysisRunRef.current !== runId) return;
+
       if (parsed.length === 0) {
         toast.error("No data found in file");
-        if (analysisTimeoutRef.current) clearTimeout(analysisTimeoutRef.current);
         setStep("upload");
         return;
       }
-      
+
       setParsedData(parsed);
-      
+
       const analyzed = await analyzeData(parsed);
+      if (analysisRunRef.current !== runId) return;
+
       setAnalyzedData(analyzed);
-      
-      // Clear timeout on successful analysis
-      if (analysisTimeoutRef.current) clearTimeout(analysisTimeoutRef.current);
-      
-      // Go to broker attribution step (optional)
       setStep("broker");
     } catch (err) {
       console.error("File analysis error:", err);
       toast.error("Failed to analyze file");
-      if (analysisTimeoutRef.current) clearTimeout(analysisTimeoutRef.current);
       setStep("upload");
+    } finally {
+      if (analysisTimeoutRef.current) {
+        clearTimeout(analysisTimeoutRef.current);
+        analysisTimeoutRef.current = null;
+      }
     }
   };
 
@@ -553,11 +569,13 @@ const CRMImportModalV3 = ({ open, onClose, onSuccess, userId }: CRMImportModalV3
     const { data: importRecord, error: importError } = await supabase
       .from("crm_imports")
       .insert({
+        // IMPORTANT: tie import record ID to the lead import_batch_id so admin deletion can fully purge the import
+        id: batchId,
         user_id: userId,
         source_type: "csv",
         file_name: file?.name,
         total_rows: parsedData.length,
-        status: "processing"
+        status: "processing",
       })
       .select()
       .single();
