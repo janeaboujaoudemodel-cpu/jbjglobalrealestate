@@ -9,22 +9,25 @@ export interface PipelineStatus {
   category: 'positive' | 'neutral' | 'warning' | 'negative';
 }
 
-// Status groups for organized dropdowns
+// Status groups for organized dropdowns - NO EMOJIS, clean circles only
 export const STATUS_GROUPS = {
   positive: {
-    label: '✅ Positive',
-    color: 'text-green-400',
-    bgColor: 'bg-green-900/30',
+    label: 'POSITIVE',
+    color: 'text-emerald-400',
+    bgColor: 'bg-emerald-900/30',
+    dotColor: 'bg-emerald-500',
   },
   neutral: {
-    label: '⏳ Neutral',
+    label: 'NEUTRAL',
     color: 'text-amber-400',
     bgColor: 'bg-amber-900/30',
+    dotColor: 'bg-amber-500',
   },
   negative: {
-    label: '❌ Negative',
+    label: 'NEGATIVE',
     color: 'text-red-400',
     bgColor: 'bg-red-900/30',
+    dotColor: 'bg-red-500',
   },
 } as const;
 

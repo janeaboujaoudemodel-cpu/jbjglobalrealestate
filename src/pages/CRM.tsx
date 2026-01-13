@@ -244,12 +244,13 @@ const CRM = () => {
               <div className="flex items-center gap-3">
                 <img 
                   src={jbjMonogramDarkBg} 
-                  alt="JBJ" 
-                  className="h-10 w-10 rounded-md"
+                  alt="JBJ Global Real Estate" 
+                  className="h-11 w-11 rounded-md object-contain"
                 />
                 <div>
-                  <h1 className="text-xl font-bold text-gold tracking-wide" style={{ fontFamily: 'Poppins, sans-serif' }}>
-                    JBJ GLOBAL REAL ESTATE
+                  <h1 className="text-lg font-bold text-white tracking-wide flex items-center gap-2" style={{ fontFamily: 'Poppins, sans-serif' }}>
+                    <span className="text-gold">JBJ</span>
+                    <span>Global Real Estate</span>
                   </h1>
                   <p className="text-xs text-muted-foreground">Customer Relationship Management</p>
                 </div>
