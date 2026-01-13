@@ -16,7 +16,7 @@ import { toast } from "sonner";
 import { 
   Bot, Send, Users, MessageSquare, Sparkles, 
   CheckCircle, Clock, X, User, Phone, Mail,
-  Zap, FileText, RefreshCw, AlertCircle, Shield
+  Zap, FileText, RefreshCw, AlertCircle, Shield, AlertTriangle
 } from "lucide-react";
 import { useActiveLead } from "@/contexts/ActiveLeadContext";
 
@@ -447,6 +447,17 @@ ${COMPANY_CONTACTS.email}`;
 
           {/* Assistant Tab */}
           <TabsContent value="assistant" className="space-y-4 mt-4">
+            {/* Safety Rule Banner */}
+            <div className="bg-amber-500/10 border border-amber-500/30 rounded-lg p-3 flex items-center gap-3">
+              <Shield className="h-5 w-5 text-amber-400 shrink-0" />
+              <div className="flex-1">
+                <p className="text-xs font-medium text-amber-300">Safety Rule</p>
+                <p className="text-xs text-amber-200/70">
+                  Destructive actions (delete leads/tasks/CVs) require explicit click + 2-step confirmation.
+                </p>
+              </div>
+            </div>
+
             {/* Active Lead Context */}
             {activeLead ? (
               <div className="bg-gold/10 border border-gold/30 rounded-lg p-3 flex items-center gap-3">

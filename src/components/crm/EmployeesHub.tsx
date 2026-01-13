@@ -15,10 +15,8 @@ import {
   Phone,
   Mail,
   Video,
-  Brain,
   Palette,
   DollarSign,
-  Camera,
   Shield,
   Crown,
   Building2,
@@ -26,18 +24,10 @@ import {
   Search,
   FileText,
   Upload,
-  Filter,
   Star,
   Calendar,
-  Headphones,
-  PenTool,
-  MonitorPlay,
-  Image,
-  BarChart3,
-  UserPlus,
-  ClipboardList,
-  Award,
-  GraduationCap,
+  Sparkles,
+  AlertTriangle,
 } from 'lucide-react';
 import { toast } from 'sonner';
 import { Link } from 'react-router-dom';
@@ -555,7 +545,15 @@ const EmployeesHub = ({ userId, brokers = [] }: EmployeesHubProps) => {
   };
 
   const handleChat = (employee: Employee) => {
-    toast.success(`Starting chat with ${employee.name}...`);
+    // Open in-app chat or WhatsApp if phone available
+    if (employee.phone) {
+      const phone = employee.phone.replace(/\s+/g, '').replace('+', '');
+      window.open(`https://wa.me/${phone}`, '_blank');
+    } else if (employee.email) {
+      window.location.href = `mailto:${employee.email}?subject=Chat with ${employee.name}`;
+    } else {
+      toast.info(`${employee.name} doesn't have contact info listed`);
+    }
   };
 
   const handleCall = (employee: Employee) => {
@@ -575,8 +573,12 @@ const EmployeesHub = ({ userId, brokers = [] }: EmployeesHubProps) => {
   };
 
   const handleVideoMeeting = (employee: Employee) => {
-    toast.success(`Scheduling JBJ Video Meet with ${employee.name}...`);
-    // Navigate to video meeting page
+    // Open video meeting link or calendar
+    if (employee.email) {
+      window.open(`https://meet.google.com/new?authuser=${employee.email}`, '_blank');
+    } else {
+      toast.info('Video meeting requires an email address. Feature coming soon.');
+    }
   };
 
   const handleScheduleInterview = (cv: CVEntry) => {
@@ -605,7 +607,7 @@ const EmployeesHub = ({ userId, brokers = [] }: EmployeesHubProps) => {
             <Building2 className="h-7 w-7 text-gold" />
             JBJ Employees Hub
           </h2>
-          <p className="text-muted-foreground mt-1">AI-powered team management & HR center</p>
+          <p className="text-muted-foreground mt-1">Team Management & HR Center</p>
         </div>
         <div className="flex items-center gap-2">
           <Link to="/video-meeting">
@@ -617,51 +619,72 @@ const EmployeesHub = ({ userId, brokers = [] }: EmployeesHubProps) => {
         </div>
       </div>
 
-      {/* Stats Cards */}
+      {/* Stats Cards - CLICKABLE to filter */}
       <div className="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-7 gap-3">
-        <Card className="bg-card border-border">
+        <Card 
+          className={`bg-card border-border cursor-pointer hover:border-gold/50 transition-colors ${activeTab === 'all' ? 'border-gold ring-1 ring-gold/30' : ''}`}
+          onClick={() => setActiveTab('all')}
+        >
           <CardContent className="p-4 text-center">
             <Users className="h-5 w-5 text-gold mx-auto mb-2" />
             <p className="text-xl font-bold text-white">{stats.total}</p>
             <p className="text-xs text-muted-foreground">Total Team</p>
           </CardContent>
         </Card>
-        <Card className="bg-card border-border">
+        <Card 
+          className={`bg-card border-border cursor-pointer hover:border-blue-400/50 transition-colors ${activeTab === 'human' ? 'border-blue-400 ring-1 ring-blue-400/30' : ''}`}
+          onClick={() => setActiveTab('human')}
+        >
           <CardContent className="p-4 text-center">
             <UserCheck className="h-5 w-5 text-blue-400 mx-auto mb-2" />
             <p className="text-xl font-bold text-white">{stats.human}</p>
             <p className="text-xs text-muted-foreground">Human Staff</p>
           </CardContent>
         </Card>
-        <Card className="bg-card border-border">
+        <Card 
+          className={`bg-card border-border cursor-pointer hover:border-purple-400/50 transition-colors ${activeTab === 'ai' ? 'border-purple-400 ring-1 ring-purple-400/30' : ''}`}
+          onClick={() => setActiveTab('ai')}
+        >
           <CardContent className="p-4 text-center">
-            <Bot className="h-5 w-5 text-purple-400 mx-auto mb-2" />
+            <Sparkles className="h-5 w-5 text-purple-400 mx-auto mb-2" />
             <p className="text-xl font-bold text-white">{stats.ai}</p>
-            <p className="text-xs text-muted-foreground">AI Assistants</p>
+            <p className="text-xs text-muted-foreground">Assistants</p>
           </CardContent>
         </Card>
-        <Card className="bg-card border-border">
+        <Card 
+          className={`bg-card border-border cursor-pointer hover:border-green-400/50 transition-colors ${activeTab === 'brokers' ? 'border-green-400 ring-1 ring-green-400/30' : ''}`}
+          onClick={() => setActiveTab('brokers')}
+        >
           <CardContent className="p-4 text-center">
             <Briefcase className="h-5 w-5 text-green-400 mx-auto mb-2" />
             <p className="text-xl font-bold text-white">{stats.brokers}</p>
             <p className="text-xs text-muted-foreground">Brokers</p>
           </CardContent>
         </Card>
-        <Card className="bg-card border-border">
+        <Card 
+          className={`bg-card border-border cursor-pointer hover:border-pink-400/50 transition-colors ${activeTab === 'hr' ? 'border-pink-400 ring-1 ring-pink-400/30' : ''}`}
+          onClick={() => setActiveTab('hr')}
+        >
           <CardContent className="p-4 text-center">
             <UserCheck className="h-5 w-5 text-pink-400 mx-auto mb-2" />
             <p className="text-xl font-bold text-white">{stats.hr}</p>
             <p className="text-xs text-muted-foreground">HR Team</p>
           </CardContent>
         </Card>
-        <Card className="bg-card border-border">
+        <Card 
+          className={`bg-card border-border cursor-pointer hover:border-orange-400/50 transition-colors ${activeTab === 'marketing' ? 'border-orange-400 ring-1 ring-orange-400/30' : ''}`}
+          onClick={() => setActiveTab('marketing')}
+        >
           <CardContent className="p-4 text-center">
             <Palette className="h-5 w-5 text-orange-400 mx-auto mb-2" />
             <p className="text-xl font-bold text-white">{stats.marketing}</p>
             <p className="text-xs text-muted-foreground">Marketing</p>
           </CardContent>
         </Card>
-        <Card className="bg-card border-border border-gold/30">
+        <Card 
+          className={`bg-card border-border border-gold/30 cursor-pointer hover:border-gold transition-colors ${activeTab === 'cv' ? 'border-gold ring-1 ring-gold/30' : ''}`}
+          onClick={() => setActiveTab('cv')}
+        >
           <CardContent className="p-4 text-center">
             <FileText className="h-5 w-5 text-gold mx-auto mb-2" />
             <p className="text-xl font-bold text-gold">{stats.pendingCVs}</p>
