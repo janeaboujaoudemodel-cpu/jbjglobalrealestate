@@ -261,17 +261,17 @@ const AdminCRM = () => {
 
   return (
     <div className="min-h-screen bg-background">
-      {/* Header */}
-      <header className="border-b bg-card sticky top-0 z-50">
+      {/* Header - Unified Black/Gold Branding */}
+      <header className="border-b border-gold/20 bg-[hsl(222,84%,4.9%)] sticky top-0 z-50">
         <div className="max-w-7xl mx-auto px-4 py-4 flex items-center gap-4">
-          <Button variant="ghost" size="icon" onClick={() => navigate("/crm")}>
+          <Button variant="ghost" size="icon" onClick={() => navigate("/crm")} className="text-gold hover:text-gold hover:bg-gold/10">
             <ArrowLeft className="h-5 w-5" />
           </Button>
           <div className="flex-1">
-            <h1 className="text-xl font-bold">Admin Dashboard</h1>
-            <p className="text-sm text-muted-foreground">JBJ Global Real Estate CRM</p>
+            <h1 className="text-xl font-bold text-white">Admin Dashboard</h1>
+            <p className="text-sm text-gold/70">JBJ Global Real Estate CRM</p>
           </div>
-          <Badge className="bg-red-500">Admin</Badge>
+          <Badge className="bg-gold text-black font-semibold">Admin</Badge>
         </div>
       </header>
 

@@ -66,14 +66,14 @@ interface CRMAssistantPanelProps {
   onClose: () => void;
 }
 
-// Company contact info for drafts
+// Company contact info for drafts - OFFICIAL NUMBERS ONLY
 const COMPANY_CONTACTS = {
   name: "JBJ Global Real Estate",
-  phone: "+971 54 716 7107",
-  email: "info@jbjglobal.ae",
-  website: "www.jbjglobal.ae",
+  phone: "+971 56 591 1000",
+  email: "contact@jbj.ae",
+  website: "www.jbj.ae",
   address: "Dubai, UAE",
-  founderPhone: "+971 54 716 7107"
+  founderPhone: "+971 56 591 1000"
 };
 
 const CRMAssistantPanel = ({ userId, isOpen, onClose }: CRMAssistantPanelProps) => {

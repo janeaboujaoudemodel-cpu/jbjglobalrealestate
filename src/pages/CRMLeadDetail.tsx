@@ -424,15 +424,15 @@ const CRMLeadDetail = () => {
 
   return (
     <div className="min-h-screen bg-background">
-      {/* Header */}
-      <header className="border-b bg-card sticky top-0 z-50">
+      {/* Header - Unified Black/Gold Branding */}
+      <header className="border-b border-gold/20 bg-[hsl(222,84%,4.9%)] sticky top-0 z-50">
         <div className="max-w-5xl mx-auto px-4 py-4 flex items-center gap-4">
-          <Button variant="ghost" size="icon" onClick={() => navigate("/crm")}>
+          <Button variant="ghost" size="icon" onClick={() => navigate("/crm")} className="text-gold hover:text-gold hover:bg-gold/10">
             <ArrowLeft className="h-5 w-5" />
           </Button>
           <div className="flex-1">
-            <h1 className="text-xl font-bold">{lead.full_name}</h1>
-            <p className="text-sm text-muted-foreground">
+            <h1 className="text-xl font-bold text-white">{lead.full_name}</h1>
+            <p className="text-sm text-gold/70">
               {lead.nationality} · {lead.preferred_language?.toUpperCase()}
             </p>
           </div>
