@@ -12,11 +12,13 @@ import {
   DialogTitle,
 } from "@/components/ui/dialog";
 import { ScrollArea } from "@/components/ui/scroll-area";
+import { Checkbox } from "@/components/ui/checkbox";
 import { toast } from "sonner";
 import { 
   Bot, Send, Users, MessageSquare, Sparkles, 
   CheckCircle, Clock, X, User, Phone, Mail,
-  Zap, FileText, RefreshCw, AlertCircle, Shield, AlertTriangle
+  Zap, FileText, RefreshCw, AlertCircle, Shield, AlertTriangle,
+  ListTodo, Video, Mic, Plus, Trash2, Calendar
 } from "lucide-react";
 import { useActiveLead } from "@/contexts/ActiveLeadContext";
 
@@ -49,6 +51,15 @@ interface AIDraft {
   };
 }
 
+interface AssistantTask {
+  id: string;
+  title: string;
+  completed: boolean;
+  priority: 'high' | 'medium' | 'low';
+  dueDate?: string;
+  createdAt: string;
+}
+
 interface CRMAssistantPanelProps {
   userId: string;
   isOpen: boolean;
@@ -58,10 +69,11 @@ interface CRMAssistantPanelProps {
 // Company contact info for drafts
 const COMPANY_CONTACTS = {
   name: "JBJ Global Real Estate",
-  phone: "+971 4 XXX XXXX",
+  phone: "+971 54 716 7107",
   email: "info@jbjglobal.ae",
   website: "www.jbjglobal.ae",
-  address: "Dubai, UAE"
+  address: "Dubai, UAE",
+  founderPhone: "+971 54 716 7107"
 };
 
 const CRMAssistantPanel = ({ userId, isOpen, onClose }: CRMAssistantPanelProps) => {
@@ -72,6 +84,12 @@ const CRMAssistantPanel = ({ userId, isOpen, onClose }: CRMAssistantPanelProps) 
   const [drafts, setDrafts] = useState<AIDraft[]>([]);
   const [activeTab, setActiveTab] = useState("assistant");
   const [selectedDraft, setSelectedDraft] = useState<AIDraft | null>(null);
+  const [tasks, setTasks] = useState<AssistantTask[]>([
+    { id: '1', title: 'Follow up with VIP leads today', completed: false, priority: 'high', createdAt: new Date().toISOString() },
+    { id: '2', title: 'Review pending proposals', completed: false, priority: 'medium', createdAt: new Date().toISOString() },
+    { id: '3', title: 'Schedule property viewings for this week', completed: true, priority: 'low', createdAt: new Date().toISOString() },
+  ]);
+  const [newTaskTitle, setNewTaskTitle] = useState("");
   const inputRef = useRef<HTMLInputElement>(null);
 
   useEffect(() => {
@@ -401,12 +419,54 @@ ${COMPANY_CONTACTS.email}`;
     fetchDrafts();
   };
 
+  // Task management functions
+  const addTask = () => {
+    if (!newTaskTitle.trim()) return;
+    const newTask: AssistantTask = {
+      id: Date.now().toString(),
+      title: newTaskTitle.trim(),
+      completed: false,
+      priority: 'medium',
+      createdAt: new Date().toISOString(),
+    };
+    setTasks(prev => [newTask, ...prev]);
+    setNewTaskTitle("");
+    toast.success("Task added");
+  };
+
+  const toggleTask = (taskId: string) => {
+    setTasks(prev => prev.map(t => 
+      t.id === taskId ? { ...t, completed: !t.completed } : t
+    ));
+  };
+
+  const deleteTask = (taskId: string) => {
+    setTasks(prev => prev.filter(t => t.id !== taskId));
+    toast.success("Task removed");
+  };
+
+  // Communication handlers
+  const handleCallFounder = () => {
+    window.location.href = `tel:${COMPANY_CONTACTS.founderPhone}`;
+  };
+
+  const handleWhatsAppFounder = () => {
+    const phone = COMPANY_CONTACTS.founderPhone.replace(/\s+/g, '').replace('+', '');
+    window.open(`https://wa.me/${phone}`, '_blank');
+  };
+
+  const handleVideoCall = () => {
+    toast.info("Video call feature coming soon. Please use WhatsApp video call.");
+    const phone = COMPANY_CONTACTS.founderPhone.replace(/\s+/g, '').replace('+', '');
+    window.open(`https://wa.me/${phone}`, '_blank');
+  };
 
   const ASSISTANT_IDENTITY = {
     name: "Jessica",
-    avatar: "https://images.unsplash.com/photo-1573496359142-b8d87734a5a2?w=200&h=200&fit=crop&crop=face",
+    avatar: "https://images.unsplash.com/photo-1560250097-0b93528c311a?w=200&h=200&fit=crop&crop=face",
     title: "Founder's Assistant",
-    description: "Your dedicated executive assistant"
+    description: "Your dedicated executive assistant",
+    founderPhone: COMPANY_CONTACTS.founderPhone
   };
 
   return (
@@ -430,23 +490,63 @@ ${COMPANY_CONTACTS.email}`;
         </DialogHeader>
 
         <Tabs value={activeTab} onValueChange={setActiveTab}>
-          <TabsList className="w-full bg-muted/50">
-            <TabsTrigger value="assistant" className="flex-1 data-[state=active]:bg-gold/20 data-[state=active]:text-gold">
-              <Sparkles className="h-4 w-4 mr-2" />
-              My Assistant
+          <TabsList className="w-full bg-muted/50 grid grid-cols-4">
+            <TabsTrigger value="assistant" className="data-[state=active]:bg-gold/20 data-[state=active]:text-gold">
+              <Sparkles className="h-4 w-4 mr-1" />
+              Assistant
             </TabsTrigger>
-            <TabsTrigger value="employees" className="flex-1 data-[state=active]:bg-gold/20 data-[state=active]:text-gold">
-              <Users className="h-4 w-4 mr-2" />
+            <TabsTrigger value="tasks" className="data-[state=active]:bg-gold/20 data-[state=active]:text-gold">
+              <ListTodo className="h-4 w-4 mr-1" />
+              Tasks ({tasks.filter(t => !t.completed).length})
+            </TabsTrigger>
+            <TabsTrigger value="employees" className="data-[state=active]:bg-gold/20 data-[state=active]:text-gold">
+              <Users className="h-4 w-4 mr-1" />
               Team
             </TabsTrigger>
-            <TabsTrigger value="drafts" className="flex-1 data-[state=active]:bg-gold/20 data-[state=active]:text-gold">
-              <FileText className="h-4 w-4 mr-2" />
+            <TabsTrigger value="drafts" className="data-[state=active]:bg-gold/20 data-[state=active]:text-gold">
+              <FileText className="h-4 w-4 mr-1" />
               Drafts ({drafts.length})
             </TabsTrigger>
           </TabsList>
 
           {/* Assistant Tab */}
           <TabsContent value="assistant" className="space-y-4 mt-4">
+            {/* Quick Communication Buttons */}
+            <div className="grid grid-cols-4 gap-2">
+              <Button
+                variant="outline"
+                className="flex flex-col items-center gap-1 h-auto py-3 border-green-500/30 hover:bg-green-500/10"
+                onClick={handleWhatsAppFounder}
+              >
+                <MessageSquare className="h-5 w-5 text-green-500" />
+                <span className="text-xs text-green-400">WhatsApp</span>
+              </Button>
+              <Button
+                variant="outline"
+                className="flex flex-col items-center gap-1 h-auto py-3 border-blue-500/30 hover:bg-blue-500/10"
+                onClick={handleCallFounder}
+              >
+                <Phone className="h-5 w-5 text-blue-500" />
+                <span className="text-xs text-blue-400">Call</span>
+              </Button>
+              <Button
+                variant="outline"
+                className="flex flex-col items-center gap-1 h-auto py-3 border-purple-500/30 hover:bg-purple-500/10"
+                onClick={handleVideoCall}
+              >
+                <Video className="h-5 w-5 text-purple-500" />
+                <span className="text-xs text-purple-400">Video</span>
+              </Button>
+              <Button
+                variant="outline"
+                className="flex flex-col items-center gap-1 h-auto py-3 border-amber-500/30 hover:bg-amber-500/10"
+                onClick={() => toast.info("Voice note feature coming soon")}
+              >
+                <Mic className="h-5 w-5 text-amber-500" />
+                <span className="text-xs text-amber-400">Voice</span>
+              </Button>
+            </div>
+
             {/* Safety Rule Banner */}
             <div className="bg-amber-500/10 border border-amber-500/30 rounded-lg p-3 flex items-center gap-3">
               <Shield className="h-5 w-5 text-amber-400 shrink-0" />
@@ -525,6 +625,96 @@ ${COMPANY_CONTACTS.email}`;
                     {suggestion}
                   </Button>
                 ))}
+              </div>
+            </div>
+          </TabsContent>
+
+          {/* Tasks Tab - My Tasks Section */}
+          <TabsContent value="tasks" className="mt-4">
+            <div className="space-y-4">
+              {/* Add New Task */}
+              <div className="flex gap-2">
+                <Input
+                  placeholder="Add a new task..."
+                  value={newTaskTitle}
+                  onChange={(e) => setNewTaskTitle(e.target.value)}
+                  onKeyDown={(e) => e.key === "Enter" && addTask()}
+                  className="flex-1 bg-muted border-border text-white"
+                />
+                <Button 
+                  onClick={addTask} 
+                  disabled={!newTaskTitle.trim()}
+                  className="bg-gold text-black hover:bg-gold/90"
+                >
+                  <Plus className="h-4 w-4" />
+                </Button>
+              </div>
+
+              {/* Task List */}
+              <ScrollArea className="h-[280px]">
+                <div className="space-y-2">
+                  {tasks.length === 0 ? (
+                    <div className="text-center py-8">
+                      <ListTodo className="h-8 w-8 text-muted-foreground mx-auto mb-2" />
+                      <p className="text-muted-foreground">No tasks yet. Add your first task above.</p>
+                    </div>
+                  ) : (
+                    tasks.map((task) => (
+                      <div 
+                        key={task.id}
+                        className={`flex items-center gap-3 p-3 rounded-lg border transition-all ${
+                          task.completed 
+                            ? "bg-muted/20 border-border opacity-60" 
+                            : task.priority === 'high' 
+                              ? "bg-red-500/10 border-red-500/30"
+                              : task.priority === 'medium'
+                                ? "bg-amber-500/10 border-amber-500/30"
+                                : "bg-muted/30 border-border"
+                        }`}
+                      >
+                        <Checkbox
+                          checked={task.completed}
+                          onCheckedChange={() => toggleTask(task.id)}
+                          className="border-muted-foreground data-[state=checked]:bg-green-600"
+                        />
+                        <div className="flex-1 min-w-0">
+                          <p className={`text-sm ${task.completed ? "line-through text-muted-foreground" : "text-white"}`}>
+                            {task.title}
+                          </p>
+                          <div className="flex items-center gap-2 mt-1">
+                            <Badge variant="outline" className={`text-xs ${
+                              task.priority === 'high' ? "border-red-500/50 text-red-400" :
+                              task.priority === 'medium' ? "border-amber-500/50 text-amber-400" :
+                              "border-muted-foreground text-muted-foreground"
+                            }`}>
+                              {task.priority}
+                            </Badge>
+                            {task.dueDate && (
+                              <span className="text-xs text-muted-foreground flex items-center gap-1">
+                                <Calendar className="h-3 w-3" />
+                                {task.dueDate}
+                              </span>
+                            )}
+                          </div>
+                        </div>
+                        <Button
+                          variant="ghost"
+                          size="sm"
+                          onClick={() => deleteTask(task.id)}
+                          className="text-muted-foreground hover:text-red-400 hover:bg-red-500/10"
+                        >
+                          <Trash2 className="h-4 w-4" />
+                        </Button>
+                      </div>
+                    ))
+                  )}
+                </div>
+              </ScrollArea>
+
+              {/* Task Summary */}
+              <div className="flex items-center justify-between text-xs text-muted-foreground border-t border-border pt-3">
+                <span>{tasks.filter(t => !t.completed).length} tasks remaining</span>
+                <span>{tasks.filter(t => t.completed).length} completed</span>
               </div>
             </div>
           </TabsContent>
