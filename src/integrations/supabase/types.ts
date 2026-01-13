@@ -5844,7 +5844,7 @@ export type Database = {
           full_name: string | null
           id: string | null
           pdf_downloads: number | null
-          price_usd: number | null
+          rera_number: string | null
           selected_addons: string[] | null
           starts_at: string | null
           status: string | null
@@ -5852,6 +5852,7 @@ export type Database = {
           trial_ends_at: string | null
           updated_at: string | null
           user_id: string | null
+          user_role: string | null
         }
         Insert: {
           ai_credits_limit?: number | null
@@ -5864,7 +5865,7 @@ export type Database = {
           full_name?: string | null
           id?: string | null
           pdf_downloads?: number | null
-          price_usd?: number | null
+          rera_number?: string | null
           selected_addons?: string[] | null
           starts_at?: string | null
           status?: string | null
@@ -5872,6 +5873,7 @@ export type Database = {
           trial_ends_at?: string | null
           updated_at?: string | null
           user_id?: string | null
+          user_role?: string | null
         }
         Update: {
           ai_credits_limit?: number | null
@@ -5884,7 +5886,7 @@ export type Database = {
           full_name?: string | null
           id?: string | null
           pdf_downloads?: number | null
-          price_usd?: number | null
+          rera_number?: string | null
           selected_addons?: string[] | null
           starts_at?: string | null
           status?: string | null
@@ -5892,6 +5894,7 @@ export type Database = {
           trial_ends_at?: string | null
           updated_at?: string | null
           user_id?: string | null
+          user_role?: string | null
         }
         Relationships: []
       }
