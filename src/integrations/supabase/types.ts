@@ -4830,6 +4830,39 @@ export type Database = {
         }
         Relationships: []
       }
+      jbj_activity_logs: {
+        Row: {
+          action: string
+          actor_id: string | null
+          actor_name: string | null
+          created_at: string | null
+          details: Json | null
+          id: string
+          target_id: string | null
+          target_type: string | null
+        }
+        Insert: {
+          action: string
+          actor_id?: string | null
+          actor_name?: string | null
+          created_at?: string | null
+          details?: Json | null
+          id?: string
+          target_id?: string | null
+          target_type?: string | null
+        }
+        Update: {
+          action?: string
+          actor_id?: string | null
+          actor_name?: string | null
+          created_at?: string | null
+          details?: Json | null
+          id?: string
+          target_id?: string | null
+          target_type?: string | null
+        }
+        Relationships: []
+      }
       jbj_analytics: {
         Row: {
           action_type: string
@@ -4860,6 +4893,128 @@ export type Database = {
           tool_name?: string
           user_email?: string | null
           user_id?: string | null
+        }
+        Relationships: []
+      }
+      jbj_brokers: {
+        Row: {
+          active_leads: number | null
+          avatar_url: string | null
+          capacity: number | null
+          created_at: string | null
+          email: string
+          id: string
+          name: string
+          phone: string | null
+          specialization: string | null
+          status: string | null
+          updated_at: string | null
+          user_id: string | null
+        }
+        Insert: {
+          active_leads?: number | null
+          avatar_url?: string | null
+          capacity?: number | null
+          created_at?: string | null
+          email: string
+          id?: string
+          name: string
+          phone?: string | null
+          specialization?: string | null
+          status?: string | null
+          updated_at?: string | null
+          user_id?: string | null
+        }
+        Update: {
+          active_leads?: number | null
+          avatar_url?: string | null
+          capacity?: number | null
+          created_at?: string | null
+          email?: string
+          id?: string
+          name?: string
+          phone?: string | null
+          specialization?: string | null
+          status?: string | null
+          updated_at?: string | null
+          user_id?: string | null
+        }
+        Relationships: []
+      }
+      jbj_daily_reports: {
+        Row: {
+          avg_response_time_seconds: number | null
+          broker_id: string | null
+          calls_made: number | null
+          conversions: number | null
+          created_at: string | null
+          emails_sent: number | null
+          id: string
+          leads_contacted: number | null
+          messages_sent: number | null
+          report_date: string
+        }
+        Insert: {
+          avg_response_time_seconds?: number | null
+          broker_id?: string | null
+          calls_made?: number | null
+          conversions?: number | null
+          created_at?: string | null
+          emails_sent?: number | null
+          id?: string
+          leads_contacted?: number | null
+          messages_sent?: number | null
+          report_date?: string
+        }
+        Update: {
+          avg_response_time_seconds?: number | null
+          broker_id?: string | null
+          calls_made?: number | null
+          conversions?: number | null
+          created_at?: string | null
+          emails_sent?: number | null
+          id?: string
+          leads_contacted?: number | null
+          messages_sent?: number | null
+          report_date?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "jbj_daily_reports_broker_id_fkey"
+            columns: ["broker_id"]
+            isOneToOne: false
+            referencedRelation: "jbj_brokers"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      jbj_filters: {
+        Row: {
+          created_at: string | null
+          created_by: string | null
+          filter_type: string | null
+          id: string
+          is_active: boolean | null
+          keyword: string
+          replacement_text: string | null
+        }
+        Insert: {
+          created_at?: string | null
+          created_by?: string | null
+          filter_type?: string | null
+          id?: string
+          is_active?: boolean | null
+          keyword: string
+          replacement_text?: string | null
+        }
+        Update: {
+          created_at?: string | null
+          created_by?: string | null
+          filter_type?: string | null
+          id?: string
+          is_active?: boolean | null
+          keyword?: string
+          replacement_text?: string | null
         }
         Relationships: []
       }
@@ -4913,6 +5068,119 @@ export type Database = {
           user_phone?: string | null
         }
         Relationships: []
+      }
+      jbj_leads: {
+        Row: {
+          assigned_broker_id: string | null
+          budget_range: string | null
+          created_at: string | null
+          email: string | null
+          id: string
+          last_contact: string | null
+          name: string
+          notes: string | null
+          phone: string | null
+          property_interest: string | null
+          source: string | null
+          status: string | null
+          updated_at: string | null
+        }
+        Insert: {
+          assigned_broker_id?: string | null
+          budget_range?: string | null
+          created_at?: string | null
+          email?: string | null
+          id?: string
+          last_contact?: string | null
+          name: string
+          notes?: string | null
+          phone?: string | null
+          property_interest?: string | null
+          source?: string | null
+          status?: string | null
+          updated_at?: string | null
+        }
+        Update: {
+          assigned_broker_id?: string | null
+          budget_range?: string | null
+          created_at?: string | null
+          email?: string | null
+          id?: string
+          last_contact?: string | null
+          name?: string
+          notes?: string | null
+          phone?: string | null
+          property_interest?: string | null
+          source?: string | null
+          status?: string | null
+          updated_at?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "jbj_leads_assigned_broker_id_fkey"
+            columns: ["assigned_broker_id"]
+            isOneToOne: false
+            referencedRelation: "jbj_brokers"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      jbj_messages: {
+        Row: {
+          broker_id: string | null
+          call_duration_seconds: number | null
+          channel: string
+          content: string | null
+          created_at: string | null
+          direction: string | null
+          filter_reason: string | null
+          id: string
+          lead_id: string
+          status: string | null
+          was_filtered: boolean | null
+        }
+        Insert: {
+          broker_id?: string | null
+          call_duration_seconds?: number | null
+          channel: string
+          content?: string | null
+          created_at?: string | null
+          direction?: string | null
+          filter_reason?: string | null
+          id?: string
+          lead_id: string
+          status?: string | null
+          was_filtered?: boolean | null
+        }
+        Update: {
+          broker_id?: string | null
+          call_duration_seconds?: number | null
+          channel?: string
+          content?: string | null
+          created_at?: string | null
+          direction?: string | null
+          filter_reason?: string | null
+          id?: string
+          lead_id?: string
+          status?: string | null
+          was_filtered?: boolean | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "jbj_messages_broker_id_fkey"
+            columns: ["broker_id"]
+            isOneToOne: false
+            referencedRelation: "jbj_brokers"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "jbj_messages_lead_id_fkey"
+            columns: ["lead_id"]
+            isOneToOne: false
+            referencedRelation: "jbj_leads"
+            referencedColumns: ["id"]
+          },
+        ]
       }
       leads: {
         Row: {
@@ -7047,7 +7315,7 @@ export type Database = {
         | "human_responded"
         | "ignored"
       ai_broker_status: "active" | "paused" | "training" | "offline"
-      app_role: "admin" | "user" | "owner"
+      app_role: "admin" | "user" | "owner" | "broker"
       audit_action_type:
         | "create"
         | "read"
@@ -7274,7 +7542,7 @@ export const Constants = {
         "ignored",
       ],
       ai_broker_status: ["active", "paused", "training", "offline"],
-      app_role: ["admin", "user", "owner"],
+      app_role: ["admin", "user", "owner", "broker"],
       audit_action_type: [
         "create",
         "read",
