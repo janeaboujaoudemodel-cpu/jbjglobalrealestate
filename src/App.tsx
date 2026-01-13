@@ -88,6 +88,7 @@ import SellerListing from "./pages/SellerListing";
 import FAQ from "./pages/FAQ";
 import JBJAnalyticsDashboard from "./pages/JBJAnalyticsDashboard";
 import JBJDesignStudio from "./pages/JBJDesignStudio";
+import AIBrokerWorkspace from "./pages/AIBrokerWorkspace";
 
 const queryClient = new QueryClient();
 
@@ -140,6 +141,7 @@ const App = () => (
                 <Route path="/news" element={<News />} />
                 <Route path="/broker-toolkit" element={<BrokerToolkit />} />
                 <Route path="/broker-dashboard" element={<BrokerDashboard />} />
+                <Route path="/ai-broker-workspace" element={<AIBrokerWorkspace />} />
                 <Route path="/ai-hub" element={<AIHub />} />
                 <Route path="/assistant-hub" element={<Navigate to="/ai-hub" replace />} />
                 <Route path="/interior-design-ai" element={<InteriorDesignAI />} />
