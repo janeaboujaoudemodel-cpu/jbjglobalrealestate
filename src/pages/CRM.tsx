@@ -227,7 +227,7 @@ const CRM = () => {
       <div className="flex-1">
         {/* Header */}
         <header className="border-b border-border bg-card sticky top-0 z-50">
-          <div className="max-w-7xl mx-auto px-4 py-4 flex items-center justify-between">
+          <div className="max-w-[1600px] w-full mx-auto px-4 py-4 flex items-center justify-between">
             <div className="flex items-center gap-4">
               <Button
                 variant="ghost"
@@ -282,7 +282,7 @@ const CRM = () => {
           </div>
         </header>
 
-      <main className="max-w-7xl mx-auto px-4 py-6 space-y-6">
+      <main className="max-w-[1600px] w-full mx-auto px-4 py-6 space-y-6">
         {/* Deal Value Tracker */}
         <DealValueTracker userId={user?.id || ""} />
 
@@ -315,28 +315,24 @@ const CRM = () => {
         </div>
 
         {/* Action Buttons */}
-        <div className="flex flex-wrap gap-3">
-          <Button onClick={() => setShowLeadModal(true)} className="bg-primary text-primary-foreground hover:bg-primary/90">
+        <div className="flex flex-wrap items-center gap-3">
+          <Button onClick={() => setShowLeadModal(true)} className="btn-premium-gold">
             <Plus className="h-4 w-4 mr-2" />
             Add Lead
           </Button>
-          <Button variant="outline" onClick={() => setShowImportModal(true)} className="text-white border-border hover:bg-muted">
+          <Button variant="outline" onClick={() => setShowImportModal(true)} className="btn-premium-outline">
             <Upload className="h-4 w-4 mr-2" />
             Import
           </Button>
-          <Button 
-            variant="outline" 
-            onClick={handleExportCSV} 
-            className="text-white border-border hover:bg-muted"
-          >
+          <Button variant="outline" onClick={handleExportCSV} className="text-foreground border-border bg-card hover:bg-muted font-semibold">
             <Download className="h-4 w-4 mr-2" />
             Export CSV
           </Button>
           {isAdmin && (
-            <Button 
-              variant="outline" 
-              onClick={() => setShowBulkAssignModal(true)} 
-              className="text-amber-400 border-amber-500/50 hover:bg-amber-600/20"
+            <Button
+              variant="outline"
+              onClick={() => setShowBulkAssignModal(true)}
+              className="text-foreground border-border bg-card hover:bg-muted font-semibold"
             >
               <Shuffle className="h-4 w-4 mr-2" />
               Bulk Assign Leads
@@ -345,14 +341,15 @@ const CRM = () => {
           {isAdmin && (
             <DeleteImportButton userId={user?.id || ""} onSuccess={handleRefresh} isAdmin={isAdmin} />
           )}
-          <Button 
-            variant="outline" 
-            onClick={() => setShowAssistantPanel(true)} 
-            className="text-gold border-gold/50 hover:bg-gold/20 font-semibold"
+          <Button
+            variant="outline"
+            onClick={() => setShowAssistantPanel(true)}
+            className="text-gold border-gold/60 bg-card hover:bg-gold/15 font-bold"
           >
             <Sparkles className="h-4 w-4 mr-2" />
             My Assistant
           </Button>
+
           <div className="ml-auto flex items-center gap-2">
             <div className="flex border border-border rounded-lg overflow-hidden">
               <Button
@@ -383,51 +380,51 @@ const CRM = () => {
 
         {/* Table View */}
         {viewMode === "table" && (
-        <Card className="border-border bg-card">
+        <Card className="border-border bg-foreground text-background shadow-xl">
           <CardHeader>
-            <CardTitle className="text-white font-bold">Leads</CardTitle>
+            <CardTitle className="text-background font-bold">Leads</CardTitle>
           </CardHeader>
           <CardContent>
             <Tabs value={activeTab} onValueChange={setActiveTab}>
-              <TabsList className="mb-4 bg-muted/50 flex-wrap">
+              <TabsList className="mb-4 bg-background/5 border border-border flex-wrap">
                 <TabsTrigger 
                   value="all" 
-                  className="data-[state=active]:bg-primary data-[state=active]:text-white text-muted-foreground font-semibold"
+                  className="data-[state=active]:bg-primary data-[state=active]:text-primary-foreground text-background/70 font-bold"
                 >
                   <Users className="h-4 w-4 mr-2" />
                   All Leads
                 </TabsTrigger>
                 <TabsTrigger 
                   value="own" 
-                  className="data-[state=active]:bg-primary data-[state=active]:text-white text-muted-foreground font-semibold"
+                  className="data-[state=active]:bg-primary data-[state=active]:text-primary-foreground text-background/70 font-bold"
                 >
                   <FileText className="h-4 w-4 mr-2" />
                   My Leads
                 </TabsTrigger>
                 <TabsTrigger 
                   value="website" 
-                  className="data-[state=active]:bg-primary data-[state=active]:text-white text-muted-foreground font-semibold"
+                  className="data-[state=active]:bg-primary data-[state=active]:text-primary-foreground text-background/70 font-bold"
                 >
                   <Zap className="h-4 w-4 mr-2" />
                   Website Leads
                 </TabsTrigger>
                 <TabsTrigger 
                   value="flagged" 
-                  className="data-[state=active]:bg-amber-600 data-[state=active]:text-white text-amber-400 font-semibold"
+                  className="data-[state=active]:bg-destructive data-[state=active]:text-destructive-foreground text-background/70 font-bold"
                 >
                   <Flag className="h-4 w-4 mr-2" />
                   Flagged
                 </TabsTrigger>
                 <TabsTrigger 
                   value="vip" 
-                  className="data-[state=active]:bg-amber-500 data-[state=active]:text-black text-amber-400 font-semibold"
+                  className="data-[state=active]:bg-gold data-[state=active]:text-gold-foreground text-background/70 font-bold"
                 >
                   <Crown className="h-4 w-4 mr-2" />
                   VIP Leads
                 </TabsTrigger>
                 <TabsTrigger 
                   value="employees" 
-                  className="data-[state=active]:bg-gold data-[state=active]:text-black text-muted-foreground font-semibold"
+                  className="data-[state=active]:bg-gold data-[state=active]:text-gold-foreground text-background/70 font-bold"
                 >
                   <Briefcase className="h-4 w-4 mr-2" />
                   Employees Hub
