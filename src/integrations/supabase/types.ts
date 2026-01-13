@@ -666,6 +666,13 @@ export type Database = {
             foreignKeyName: "broker_call_logs_lead_id_fkey"
             columns: ["lead_id"]
             isOneToOne: false
+            referencedRelation: "crm_leads_secure"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "broker_call_logs_lead_id_fkey"
+            columns: ["lead_id"]
+            isOneToOne: false
             referencedRelation: "crm_vip_leads"
             referencedColumns: ["id"]
           },
@@ -711,6 +718,13 @@ export type Database = {
             columns: ["lead_id"]
             isOneToOne: false
             referencedRelation: "crm_leads"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "broker_chat_logs_lead_id_fkey"
+            columns: ["lead_id"]
+            isOneToOne: false
+            referencedRelation: "crm_leads_secure"
             referencedColumns: ["id"]
           },
           {
@@ -1488,6 +1502,13 @@ export type Database = {
             foreignKeyName: "crm_activities_lead_id_fkey"
             columns: ["lead_id"]
             isOneToOne: false
+            referencedRelation: "crm_leads_secure"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "crm_activities_lead_id_fkey"
+            columns: ["lead_id"]
+            isOneToOne: false
             referencedRelation: "crm_vip_leads"
             referencedColumns: ["id"]
           },
@@ -1549,6 +1570,13 @@ export type Database = {
             columns: ["lead_id"]
             isOneToOne: false
             referencedRelation: "crm_leads"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "crm_ai_drafts_lead_id_fkey"
+            columns: ["lead_id"]
+            isOneToOne: false
+            referencedRelation: "crm_leads_secure"
             referencedColumns: ["id"]
           },
           {
@@ -1696,6 +1724,13 @@ export type Database = {
             foreignKeyName: "crm_calls_lead_id_fkey"
             columns: ["lead_id"]
             isOneToOne: false
+            referencedRelation: "crm_leads_secure"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "crm_calls_lead_id_fkey"
+            columns: ["lead_id"]
+            isOneToOne: false
             referencedRelation: "crm_vip_leads"
             referencedColumns: ["id"]
           },
@@ -1748,6 +1783,13 @@ export type Database = {
             columns: ["lead_id"]
             isOneToOne: false
             referencedRelation: "crm_leads"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "crm_campaign_recipients_lead_id_fkey"
+            columns: ["lead_id"]
+            isOneToOne: false
+            referencedRelation: "crm_leads_secure"
             referencedColumns: ["id"]
           },
           {
@@ -1867,6 +1909,61 @@ export type Database = {
         }
         Relationships: []
       }
+      crm_lead_access_logs: {
+        Row: {
+          access_type: string
+          accessed_at: string | null
+          id: string
+          ip_address: string | null
+          lead_id: string
+          masked_access: boolean | null
+          user_agent: string | null
+          user_id: string
+        }
+        Insert: {
+          access_type: string
+          accessed_at?: string | null
+          id?: string
+          ip_address?: string | null
+          lead_id: string
+          masked_access?: boolean | null
+          user_agent?: string | null
+          user_id: string
+        }
+        Update: {
+          access_type?: string
+          accessed_at?: string | null
+          id?: string
+          ip_address?: string | null
+          lead_id?: string
+          masked_access?: boolean | null
+          user_agent?: string | null
+          user_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "crm_lead_access_logs_lead_id_fkey"
+            columns: ["lead_id"]
+            isOneToOne: false
+            referencedRelation: "crm_leads"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "crm_lead_access_logs_lead_id_fkey"
+            columns: ["lead_id"]
+            isOneToOne: false
+            referencedRelation: "crm_leads_secure"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "crm_lead_access_logs_lead_id_fkey"
+            columns: ["lead_id"]
+            isOneToOne: false
+            referencedRelation: "crm_vip_leads"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       crm_lead_assignments: {
         Row: {
           assigned_at: string
@@ -1898,6 +1995,13 @@ export type Database = {
             columns: ["lead_id"]
             isOneToOne: false
             referencedRelation: "crm_leads"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "crm_lead_assignments_lead_id_fkey"
+            columns: ["lead_id"]
+            isOneToOne: false
+            referencedRelation: "crm_leads_secure"
             referencedColumns: ["id"]
           },
           {
@@ -1955,6 +2059,13 @@ export type Database = {
             foreignKeyName: "crm_lead_reports_lead_id_fkey"
             columns: ["lead_id"]
             isOneToOne: false
+            referencedRelation: "crm_leads_secure"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "crm_lead_reports_lead_id_fkey"
+            columns: ["lead_id"]
+            isOneToOne: false
             referencedRelation: "crm_vip_leads"
             referencedColumns: ["id"]
           },
@@ -1994,6 +2105,13 @@ export type Database = {
             columns: ["lead_id"]
             isOneToOne: false
             referencedRelation: "crm_leads"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "crm_lead_shortlists_lead_id_fkey"
+            columns: ["lead_id"]
+            isOneToOne: false
+            referencedRelation: "crm_leads_secure"
             referencedColumns: ["id"]
           },
           {
@@ -2101,6 +2219,13 @@ export type Database = {
             columns: ["lead_id"]
             isOneToOne: false
             referencedRelation: "crm_leads"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "crm_lead_state_per_user_lead_id_fkey"
+            columns: ["lead_id"]
+            isOneToOne: false
+            referencedRelation: "crm_leads_secure"
             referencedColumns: ["id"]
           },
           {
@@ -2296,6 +2421,13 @@ export type Database = {
             foreignKeyName: "crm_notes_lead_id_fkey"
             columns: ["lead_id"]
             isOneToOne: false
+            referencedRelation: "crm_leads_secure"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "crm_notes_lead_id_fkey"
+            columns: ["lead_id"]
+            isOneToOne: false
             referencedRelation: "crm_vip_leads"
             referencedColumns: ["id"]
           },
@@ -2344,6 +2476,13 @@ export type Database = {
             columns: ["lead_id"]
             isOneToOne: false
             referencedRelation: "crm_leads"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "crm_tasks_lead_id_fkey"
+            columns: ["lead_id"]
+            isOneToOne: false
+            referencedRelation: "crm_leads_secure"
             referencedColumns: ["id"]
           },
           {
@@ -5786,6 +5925,13 @@ export type Database = {
             foreignKeyName: "vapi_call_logs_lead_id_fkey"
             columns: ["lead_id"]
             isOneToOne: false
+            referencedRelation: "crm_leads_secure"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "vapi_call_logs_lead_id_fkey"
+            columns: ["lead_id"]
+            isOneToOne: false
             referencedRelation: "crm_vip_leads"
             referencedColumns: ["id"]
           },
@@ -5895,6 +6041,66 @@ export type Database = {
           updated_at?: string | null
           user_id?: string | null
           user_role?: string | null
+        }
+        Relationships: []
+      }
+      crm_leads_secure: {
+        Row: {
+          assigned_to_user_id: string | null
+          contact_type: Database["public"]["Enums"]["crm_contact_type"] | null
+          created_at: string | null
+          current_location_city: string | null
+          current_location_country: string | null
+          email_normalized: string | null
+          full_name: string | null
+          has_full_access: boolean | null
+          id: string | null
+          nationality: string | null
+          owner_type: Database["public"]["Enums"]["crm_lead_owner_type"] | null
+          owner_user_id: string | null
+          phone_raw: string | null
+          source: string | null
+          tags: string[] | null
+          updated_at: string | null
+          vip: boolean | null
+        }
+        Insert: {
+          assigned_to_user_id?: string | null
+          contact_type?: Database["public"]["Enums"]["crm_contact_type"] | null
+          created_at?: string | null
+          current_location_city?: string | null
+          current_location_country?: string | null
+          email_normalized?: never
+          full_name?: string | null
+          has_full_access?: never
+          id?: string | null
+          nationality?: string | null
+          owner_type?: Database["public"]["Enums"]["crm_lead_owner_type"] | null
+          owner_user_id?: string | null
+          phone_raw?: never
+          source?: string | null
+          tags?: string[] | null
+          updated_at?: string | null
+          vip?: boolean | null
+        }
+        Update: {
+          assigned_to_user_id?: string | null
+          contact_type?: Database["public"]["Enums"]["crm_contact_type"] | null
+          created_at?: string | null
+          current_location_city?: string | null
+          current_location_country?: string | null
+          email_normalized?: never
+          full_name?: string | null
+          has_full_access?: never
+          id?: string | null
+          nationality?: string | null
+          owner_type?: Database["public"]["Enums"]["crm_lead_owner_type"] | null
+          owner_user_id?: string | null
+          phone_raw?: never
+          source?: string | null
+          tags?: string[] | null
+          updated_at?: string | null
+          vip?: boolean | null
         }
         Relationships: []
       }
@@ -6124,6 +6330,7 @@ export type Database = {
           price_usd: number
         }[]
       }
+      has_lead_access: { Args: { p_lead_id: string }; Returns: boolean }
       has_role: {
         Args: {
           _role: Database["public"]["Enums"]["app_role"]
@@ -6163,6 +6370,8 @@ export type Database = {
         }
         Returns: string
       }
+      mask_email: { Args: { email: string }; Returns: string }
+      mask_phone: { Args: { phone: string }; Returns: string }
     }
     Enums: {
       ai_action_status:
