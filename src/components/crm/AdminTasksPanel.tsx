@@ -64,6 +64,7 @@ export function AdminTasksPanel() {
   const { user } = useAuth();
   const [tasks, setTasks] = useState<AdminTask[]>([]);
   const [loading, setLoading] = useState(true);
+  const [loadError, setLoadError] = useState<string | null>(null);
   const [isAddingTask, setIsAddingTask] = useState(false);
   const [newTask, setNewTask] = useState({
     title: "",
@@ -84,7 +85,9 @@ export function AdminTasksPanel() {
       setLoading(false);
       return;
     }
-    
+
+    setLoadError(null);
+
     try {
       // Fetch ALL tasks for current user (both pending and completed)
       const { data, error } = await supabase
@@ -95,16 +98,16 @@ export function AdminTasksPanel() {
 
       if (error) {
         console.error("Error fetching tasks:", error);
+        setLoadError(error.message);
         toast.error(`Failed to load tasks: ${error.message}`);
-        // Still try to show any data we have
-        setTasks([]);
-      } else {
-        setTasks(data || []);
+        return;
       }
+
+      setTasks(data || []);
     } catch (error: any) {
       console.error("Error fetching tasks:", error);
-      toast.error(`Failed to load tasks: ${error.message || 'Unknown error'}`);
-      setTasks([]);
+      setLoadError(error?.message || "Unknown error");
+      toast.error(`Failed to load tasks: ${error?.message || 'Unknown error'}`);
     } finally {
       setLoading(false);
     }
@@ -186,6 +189,25 @@ export function AdminTasksPanel() {
         <CardContent className="p-6">
           <div className="flex items-center justify-center py-8">
             <Clock className="w-6 h-6 animate-spin text-gold" />
+          </div>
+        </CardContent>
+      </Card>
+    );
+  }
+
+  if (loadError) {
+    return (
+      <Card className="bg-black/40 border-white/10">
+        <CardHeader>
+          <CardTitle className="flex items-center gap-2 text-white">
+            <AlertTriangle className="w-5 h-5 text-red-400" />
+            My Tasks
+          </CardTitle>
+        </CardHeader>
+        <CardContent>
+          <div className="rounded-lg border border-red-500/30 bg-red-500/10 p-3">
+            <p className="text-sm text-red-200 font-semibold">Failed to load tasks</p>
+            <p className="text-xs text-red-200/80 mt-1">{loadError}</p>
           </div>
         </CardContent>
       </Card>
