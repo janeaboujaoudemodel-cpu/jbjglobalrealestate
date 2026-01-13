@@ -50,6 +50,7 @@ import { SecurityDashboardSummary } from "@/components/admin/SecurityDashboardSu
 import AuditLogDashboard from "@/components/admin/AuditLogDashboard";
 import BrokerSubscriptionsDashboard from "@/components/admin/BrokerSubscriptionsDashboard";
 import AIAnalyticsDashboard from "@/components/admin/AIAnalyticsDashboard";
+import { AIBrokersDashboard } from "@/components/admin/ai-brokers/AIBrokersDashboard";
 import MarketingSettingsDashboard from "@/components/admin/MarketingSettingsDashboard";
 import PWAAnalyticsDashboard from "@/components/admin/PWAAnalyticsDashboard";
 import { ClipboardList, Users, Briefcase, Brain, Megaphone, Smartphone } from "lucide-react";
