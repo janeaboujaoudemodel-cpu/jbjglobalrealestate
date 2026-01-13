@@ -92,6 +92,87 @@ export type Database = {
         }
         Relationships: []
       }
+      ai_brokers: {
+        Row: {
+          avatar_url: string | null
+          average_response_time_seconds: number | null
+          bio: string | null
+          created_at: string | null
+          current_daily_interactions: number | null
+          daily_interaction_limit: number | null
+          email: string
+          gender: string
+          id: string
+          knowledge_base_updated_at: string | null
+          languages: string[] | null
+          name: string
+          personality_prompt: string | null
+          phone: string | null
+          response_delay_max_seconds: number | null
+          response_delay_min_seconds: number | null
+          specialization: string[] | null
+          status: Database["public"]["Enums"]["ai_broker_status"] | null
+          total_conversions: number | null
+          total_leads_handled: number | null
+          updated_at: string | null
+          working_days: number[] | null
+          working_hours_end: string | null
+          working_hours_start: string | null
+        }
+        Insert: {
+          avatar_url?: string | null
+          average_response_time_seconds?: number | null
+          bio?: string | null
+          created_at?: string | null
+          current_daily_interactions?: number | null
+          daily_interaction_limit?: number | null
+          email: string
+          gender: string
+          id?: string
+          knowledge_base_updated_at?: string | null
+          languages?: string[] | null
+          name: string
+          personality_prompt?: string | null
+          phone?: string | null
+          response_delay_max_seconds?: number | null
+          response_delay_min_seconds?: number | null
+          specialization?: string[] | null
+          status?: Database["public"]["Enums"]["ai_broker_status"] | null
+          total_conversions?: number | null
+          total_leads_handled?: number | null
+          updated_at?: string | null
+          working_days?: number[] | null
+          working_hours_end?: string | null
+          working_hours_start?: string | null
+        }
+        Update: {
+          avatar_url?: string | null
+          average_response_time_seconds?: number | null
+          bio?: string | null
+          created_at?: string | null
+          current_daily_interactions?: number | null
+          daily_interaction_limit?: number | null
+          email?: string
+          gender?: string
+          id?: string
+          knowledge_base_updated_at?: string | null
+          languages?: string[] | null
+          name?: string
+          personality_prompt?: string | null
+          phone?: string | null
+          response_delay_max_seconds?: number | null
+          response_delay_min_seconds?: number | null
+          specialization?: string[] | null
+          status?: Database["public"]["Enums"]["ai_broker_status"] | null
+          total_conversions?: number | null
+          total_leads_handled?: number | null
+          updated_at?: string | null
+          working_days?: number[] | null
+          working_hours_end?: string | null
+          working_hours_start?: string | null
+        }
+        Relationships: []
+      }
       ai_usage_logs: {
         Row: {
           client_ip_hash: string | null
@@ -617,6 +698,62 @@ export type Database = {
         }
         Relationships: []
       }
+      broker_assignment_rules: {
+        Row: {
+          assigned_broker_id: string | null
+          assignment_method: string | null
+          broker_pool: string[] | null
+          conditions: Json
+          created_at: string | null
+          current_leads_today: number | null
+          description: string | null
+          id: string
+          is_active: boolean | null
+          max_leads_per_day: number | null
+          name: string
+          priority: number | null
+          updated_at: string | null
+        }
+        Insert: {
+          assigned_broker_id?: string | null
+          assignment_method?: string | null
+          broker_pool?: string[] | null
+          conditions?: Json
+          created_at?: string | null
+          current_leads_today?: number | null
+          description?: string | null
+          id?: string
+          is_active?: boolean | null
+          max_leads_per_day?: number | null
+          name: string
+          priority?: number | null
+          updated_at?: string | null
+        }
+        Update: {
+          assigned_broker_id?: string | null
+          assignment_method?: string | null
+          broker_pool?: string[] | null
+          conditions?: Json
+          created_at?: string | null
+          current_leads_today?: number | null
+          description?: string | null
+          id?: string
+          is_active?: boolean | null
+          max_leads_per_day?: number | null
+          name?: string
+          priority?: number | null
+          updated_at?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "broker_assignment_rules_assigned_broker_id_fkey"
+            columns: ["assigned_broker_id"]
+            isOneToOne: false
+            referencedRelation: "ai_brokers"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       broker_call_logs: {
         Row: {
           call_status: string | null
@@ -775,6 +912,95 @@ export type Database = {
         }
         Relationships: []
       }
+      broker_conversations: {
+        Row: {
+          broker_id: string
+          channel: Database["public"]["Enums"]["broker_channel"]
+          client_identifier: string | null
+          created_at: string | null
+          escalated_at: string | null
+          escalated_to_user_id: string | null
+          escalation_reason: string | null
+          external_thread_id: string | null
+          id: string
+          last_message_at: string | null
+          lead_id: string | null
+          message_count: number | null
+          started_at: string | null
+          status:
+            | Database["public"]["Enums"]["broker_conversation_status"]
+            | null
+          updated_at: string | null
+        }
+        Insert: {
+          broker_id: string
+          channel: Database["public"]["Enums"]["broker_channel"]
+          client_identifier?: string | null
+          created_at?: string | null
+          escalated_at?: string | null
+          escalated_to_user_id?: string | null
+          escalation_reason?: string | null
+          external_thread_id?: string | null
+          id?: string
+          last_message_at?: string | null
+          lead_id?: string | null
+          message_count?: number | null
+          started_at?: string | null
+          status?:
+            | Database["public"]["Enums"]["broker_conversation_status"]
+            | null
+          updated_at?: string | null
+        }
+        Update: {
+          broker_id?: string
+          channel?: Database["public"]["Enums"]["broker_channel"]
+          client_identifier?: string | null
+          created_at?: string | null
+          escalated_at?: string | null
+          escalated_to_user_id?: string | null
+          escalation_reason?: string | null
+          external_thread_id?: string | null
+          id?: string
+          last_message_at?: string | null
+          lead_id?: string | null
+          message_count?: number | null
+          started_at?: string | null
+          status?:
+            | Database["public"]["Enums"]["broker_conversation_status"]
+            | null
+          updated_at?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "broker_conversations_broker_id_fkey"
+            columns: ["broker_id"]
+            isOneToOne: false
+            referencedRelation: "ai_brokers"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "broker_conversations_lead_id_fkey"
+            columns: ["lead_id"]
+            isOneToOne: false
+            referencedRelation: "crm_leads"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "broker_conversations_lead_id_fkey"
+            columns: ["lead_id"]
+            isOneToOne: false
+            referencedRelation: "crm_leads_secure"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "broker_conversations_lead_id_fkey"
+            columns: ["lead_id"]
+            isOneToOne: false
+            referencedRelation: "crm_vip_leads"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       broker_course_progress: {
         Row: {
           completed: boolean | null
@@ -825,6 +1051,206 @@ export type Database = {
             columns: ["subscription_id"]
             isOneToOne: false
             referencedRelation: "broker_subscriptions_safe"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      broker_daily_stats: {
+        Row: {
+          avg_response_time_seconds: number | null
+          broker_id: string
+          calls_made: number | null
+          created_at: string | null
+          emails_sent: number | null
+          id: string
+          leads_contacted: number | null
+          leads_converted: number | null
+          leads_escalated: number | null
+          messages_filtered: number | null
+          messages_received: number | null
+          messages_sent: number | null
+          stat_date: string
+        }
+        Insert: {
+          avg_response_time_seconds?: number | null
+          broker_id: string
+          calls_made?: number | null
+          created_at?: string | null
+          emails_sent?: number | null
+          id?: string
+          leads_contacted?: number | null
+          leads_converted?: number | null
+          leads_escalated?: number | null
+          messages_filtered?: number | null
+          messages_received?: number | null
+          messages_sent?: number | null
+          stat_date?: string
+        }
+        Update: {
+          avg_response_time_seconds?: number | null
+          broker_id?: string
+          calls_made?: number | null
+          created_at?: string | null
+          emails_sent?: number | null
+          id?: string
+          leads_contacted?: number | null
+          leads_converted?: number | null
+          leads_escalated?: number | null
+          messages_filtered?: number | null
+          messages_received?: number | null
+          messages_sent?: number | null
+          stat_date?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "broker_daily_stats_broker_id_fkey"
+            columns: ["broker_id"]
+            isOneToOne: false
+            referencedRelation: "ai_brokers"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      broker_email_templates: {
+        Row: {
+          created_at: string | null
+          created_by: string | null
+          html_content: string
+          id: string
+          is_active: boolean | null
+          name: string
+          subject: string
+          template_type: string
+          updated_at: string | null
+          variables: string[] | null
+        }
+        Insert: {
+          created_at?: string | null
+          created_by?: string | null
+          html_content: string
+          id?: string
+          is_active?: boolean | null
+          name: string
+          subject: string
+          template_type: string
+          updated_at?: string | null
+          variables?: string[] | null
+        }
+        Update: {
+          created_at?: string | null
+          created_by?: string | null
+          html_content?: string
+          id?: string
+          is_active?: boolean | null
+          name?: string
+          subject?: string
+          template_type?: string
+          updated_at?: string | null
+          variables?: string[] | null
+        }
+        Relationships: []
+      }
+      broker_message_filters: {
+        Row: {
+          created_at: string | null
+          created_by: string | null
+          filter_type: string
+          filter_value: string
+          id: string
+          is_active: boolean | null
+          replacement_text: string | null
+          severity: string | null
+        }
+        Insert: {
+          created_at?: string | null
+          created_by?: string | null
+          filter_type: string
+          filter_value: string
+          id?: string
+          is_active?: boolean | null
+          replacement_text?: string | null
+          severity?: string | null
+        }
+        Update: {
+          created_at?: string | null
+          created_by?: string | null
+          filter_type?: string
+          filter_value?: string
+          id?: string
+          is_active?: boolean | null
+          replacement_text?: string | null
+          severity?: string | null
+        }
+        Relationships: []
+      }
+      broker_messages: {
+        Row: {
+          ai_confidence_score: number | null
+          ai_intent_detected: string | null
+          attachment_urls: string[] | null
+          broker_id: string | null
+          content: string
+          content_type: string | null
+          conversation_id: string
+          created_at: string | null
+          delivered_at: string | null
+          delivery_status: string | null
+          direction: string
+          filter_reason: string | null
+          id: string
+          original_content: string | null
+          read_at: string | null
+          was_filtered: boolean | null
+        }
+        Insert: {
+          ai_confidence_score?: number | null
+          ai_intent_detected?: string | null
+          attachment_urls?: string[] | null
+          broker_id?: string | null
+          content: string
+          content_type?: string | null
+          conversation_id: string
+          created_at?: string | null
+          delivered_at?: string | null
+          delivery_status?: string | null
+          direction: string
+          filter_reason?: string | null
+          id?: string
+          original_content?: string | null
+          read_at?: string | null
+          was_filtered?: boolean | null
+        }
+        Update: {
+          ai_confidence_score?: number | null
+          ai_intent_detected?: string | null
+          attachment_urls?: string[] | null
+          broker_id?: string | null
+          content?: string
+          content_type?: string | null
+          conversation_id?: string
+          created_at?: string | null
+          delivered_at?: string | null
+          delivery_status?: string | null
+          direction?: string
+          filter_reason?: string | null
+          id?: string
+          original_content?: string | null
+          read_at?: string | null
+          was_filtered?: boolean | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "broker_messages_broker_id_fkey"
+            columns: ["broker_id"]
+            isOneToOne: false
+            referencedRelation: "ai_brokers"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "broker_messages_conversation_id_fkey"
+            columns: ["conversation_id"]
+            isOneToOne: false
+            referencedRelation: "broker_conversations"
             referencedColumns: ["id"]
           },
         ]
@@ -1219,6 +1645,42 @@ export type Database = {
             referencedColumns: ["id"]
           },
         ]
+      }
+      broker_whatsapp_templates: {
+        Row: {
+          approval_status: string | null
+          content: string
+          created_at: string | null
+          id: string
+          is_active: boolean | null
+          meta_template_id: string | null
+          template_name: string
+          template_type: string
+          variables: string[] | null
+        }
+        Insert: {
+          approval_status?: string | null
+          content: string
+          created_at?: string | null
+          id?: string
+          is_active?: boolean | null
+          meta_template_id?: string | null
+          template_name: string
+          template_type: string
+          variables?: string[] | null
+        }
+        Update: {
+          approval_status?: string | null
+          content?: string
+          created_at?: string | null
+          id?: string
+          is_active?: boolean | null
+          meta_template_id?: string | null
+          template_name?: string
+          template_type?: string
+          variables?: string[] | null
+        }
+        Relationships: []
       }
       chat_conversations: {
         Row: {
@@ -6584,6 +7046,7 @@ export type Database = {
         | "flagged_for_review"
         | "human_responded"
         | "ignored"
+      ai_broker_status: "active" | "paused" | "training" | "offline"
       app_role: "admin" | "user" | "owner"
       audit_action_type:
         | "create"
@@ -6609,6 +7072,13 @@ export type Database = {
         | "document"
         | "settings"
         | "role"
+      broker_channel: "whatsapp" | "email" | "sms" | "call" | "video"
+      broker_conversation_status:
+        | "active"
+        | "pending_response"
+        | "waiting_client"
+        | "closed"
+        | "escalated"
       broker_task_status: "pending" | "in_progress" | "completed" | "overdue"
       broker_task_type:
         | "developer_visit"
@@ -6803,6 +7273,7 @@ export const Constants = {
         "human_responded",
         "ignored",
       ],
+      ai_broker_status: ["active", "paused", "training", "offline"],
       app_role: ["admin", "user", "owner"],
       audit_action_type: [
         "create",
@@ -6829,6 +7300,14 @@ export const Constants = {
         "document",
         "settings",
         "role",
+      ],
+      broker_channel: ["whatsapp", "email", "sms", "call", "video"],
+      broker_conversation_status: [
+        "active",
+        "pending_response",
+        "waiting_client",
+        "closed",
+        "escalated",
       ],
       broker_task_status: ["pending", "in_progress", "completed", "overdue"],
       broker_task_type: [
