@@ -59,7 +59,7 @@ interface CVEntry {
   gender?: 'male' | 'female' | 'other';
   languages?: string[];
   age?: number;
-  category: 'collected' | 'flagged' | 'archived' | 'pending';
+  category: 'collected' | 'flagged' | 'rejected' | 'pending';
   ranking: number;
   status: 'pending' | 'reviewed' | 'interview_scheduled' | 'rejected' | 'hired';
   experience: string;
@@ -71,9 +71,9 @@ const TEAM_MEMBERS: Employee[] = [
   // Executive / Admin
   {
     id: 'jane',
-    name: 'Jane Abou Jaoude',
-    role: 'Founder',
-    department: 'admin',
+    name: 'Jane Abjowwe',
+    role: 'Founder & CEO',
+    department: 'executive',
     type: 'human',
     email: 'jane@jbj.ae',
     phone: '+971 56 591 1000',
@@ -104,17 +104,28 @@ const TEAM_MEMBERS: Employee[] = [
     responsibilities: ['Brand Strategy', 'Campaign Management', 'Market Research', 'Digital Marketing'],
   },
   {
-    id: 'ai-receptionist',
-    name: 'JBJ Virtual Receptionist',
-    role: 'AI Receptionist',
+    id: 'front-desk',
+    name: 'Front Desk Executive',
+    role: 'Client Relations Executive',
     department: 'admin',
-    type: 'ai',
+    type: 'human',
     status: 'active',
-    description: 'Handles calls, schedules meetings, and manages inquiries 24/7',
+    description: 'Handles calls, schedules meetings, and manages inquiries',
     responsibilities: ['Call Handling', 'Meeting Scheduling', 'Inquiry Management'],
   },
   
-  // HR Department
+  // HR Department - Correct hierarchy: Head of Recruitment > HR Manager > HR Assistant
+  {
+    id: 'david',
+    name: 'David Carter',
+    role: 'Head of Recruitment',
+    department: 'hr',
+    type: 'human',
+    email: 'recruitment@jbj.ae',
+    status: 'active',
+    description: 'Oversees all recruitment and conducts second-round interviews',
+    responsibilities: ['Second-Round Interviews', 'Final Hiring Decisions', 'Recruitment Strategy'],
+  },
   {
     id: 'jessica',
     name: 'Jessica',
@@ -124,29 +135,18 @@ const TEAM_MEMBERS: Employee[] = [
     email: 'hr@jbj.ae',
     status: 'active',
     description: 'Manages recruitment, onboarding, and team development',
-    responsibilities: ['Recruitment', 'Onboarding', 'Training Coordination', 'First Interviews'],
-  },
-  {
-    id: 'david',
-    name: 'David Carter',
-    role: 'Head of Recruitment / COO',
-    department: 'hr',
-    type: 'human',
-    email: 'recruitment@jbj.ae',
-    status: 'active',
-    description: 'Oversees operations and second-round management interviews',
-    responsibilities: ['Operations', 'Second-Round Interviews', 'Final Hiring Decisions'],
+    responsibilities: ['First Interviews', 'Onboarding', 'Training Coordination', 'Recruitment'],
   },
   {
     id: 'hr-assistant',
     name: 'HR Assistant',
-    role: 'HR Coordinator',
+    role: 'HR Assistant',
     department: 'hr',
     type: 'human',
     email: 'hrteam@jbj.ae',
     status: 'active',
     description: 'Supports HR operations and candidate communication',
-    responsibilities: ['CV Collection', 'Interview Scheduling', 'Candidate Communication'],
+    responsibilities: ['CV Collection', 'Initial Screening', 'Interview Scheduling', 'Candidate Communication'],
   },
   
   // Marketing Department
@@ -239,50 +239,50 @@ const TEAM_MEMBERS: Employee[] = [
     type: 'human',
     email: 'assistant@jbj.ae',
     status: 'active',
-    description: 'Supports CEO with scheduling, coordination, and tasks',
+    description: 'Supports Founder with scheduling, coordination, and tasks',
     responsibilities: ['Calendar Management', 'Travel Coordination', 'Task Prioritization'],
   },
   
-  // AI Team Members
+  // Digital Team (internal use only - not labeled as AI to users)
   {
-    id: 'ai-assistant',
-    name: 'JBJ AI Assistant',
-    role: 'Central AI Coordinator',
-    department: 'ai',
-    type: 'ai',
+    id: 'digital-assistant',
+    name: 'JBJ Digital Assistant',
+    role: 'Digital Coordinator',
+    department: 'admin',
+    type: 'human',
     status: 'active',
     description: 'Coordinates between departments, handles inquiries, and automates workflows',
-    responsibilities: ['Task Coordination', 'Inquiry Handling', 'Workflow Automation'],
+    responsibilities: ['Task Coordination', 'Inquiry Handling', 'Workflow Support'],
   },
   {
-    id: 'ai-designer',
+    id: 'design-studio',
     name: 'JBJ Design Studio',
-    role: 'AI Graphic Designer',
-    department: 'ai',
-    type: 'ai',
+    role: 'Graphic Designer',
+    department: 'marketing',
+    type: 'human',
     status: 'active',
     description: 'Creates social media content, presentations, and marketing materials',
     responsibilities: ['Template Generation', 'Social Media Graphics', 'Presentations'],
   },
   {
-    id: 'ai-finance',
-    name: 'JBJ Finance Advisor',
-    role: 'AI Financial Analyst',
-    department: 'ai',
-    type: 'ai',
+    id: 'market-analyst',
+    name: 'Market Research Analyst',
+    role: 'Financial Analyst',
+    department: 'finance',
+    type: 'human',
     status: 'active',
     description: 'Provides market analysis, mortgage calculations, and property valuations',
     responsibilities: ['Market Analysis', 'Mortgage Calculations', 'Property Valuations'],
   },
   {
-    id: 'ai-crm',
-    name: 'JBJ CRM Manager',
-    role: 'AI Lead Manager',
-    department: 'ai',
-    type: 'ai',
+    id: 'crm-manager',
+    name: 'CRM Manager',
+    role: 'Lead Manager',
+    department: 'brokers',
+    type: 'human',
     status: 'active',
-    description: 'Manages leads, tracks follow-ups, and automates CRM tasks',
-    responsibilities: ['Lead Tracking', 'Follow-up Automation', 'Pipeline Management'],
+    description: 'Manages leads, tracks follow-ups, and optimizes CRM processes',
+    responsibilities: ['Lead Tracking', 'Follow-up Management', 'Pipeline Optimization'],
   },
 ];
 
@@ -411,7 +411,7 @@ const SAMPLE_CVS: CVEntry[] = [
     status: 'rejected',
     experience: '4 years in accounting',
     education: 'Bachelor in Finance',
-    category: 'archived',
+    category: 'rejected',
     gender: 'male',
     languages: ['Arabic', 'English'],
     age: 30,
@@ -471,7 +471,7 @@ const EmployeesHub = ({ userId, brokers = [] }: EmployeesHubProps) => {
       filtered = filtered.filter(cv => cv.status === cvFilter);
     }
     
-    // Filter by category (Collected, Flagged, Archived, Pending)
+    // Filter by category (Collected, Flagged, Rejected, Pending)
     if (cvCategoryFilter !== 'all') {
       filtered = filtered.filter(cv => cv.category === cvCategoryFilter);
     }
@@ -591,7 +591,7 @@ const EmployeesHub = ({ userId, brokers = [] }: EmployeesHubProps) => {
   const stats = {
     total: allEmployees.length,
     human: allEmployees.filter(e => e.type === 'human').length,
-    ai: allEmployees.filter(e => e.type === 'ai').length,
+    digital: allEmployees.filter(e => e.department === 'admin' && e.id?.includes('digital')).length,
     brokers: allEmployees.filter(e => e.department === 'brokers').length,
     hr: allEmployees.filter(e => e.department === 'hr').length,
     marketing: allEmployees.filter(e => e.department === 'marketing').length,
@@ -642,13 +642,13 @@ const EmployeesHub = ({ userId, brokers = [] }: EmployeesHubProps) => {
           </CardContent>
         </Card>
         <Card 
-          className={`bg-card border-border cursor-pointer hover:border-purple-400/50 transition-colors ${activeTab === 'ai' ? 'border-purple-400 ring-1 ring-purple-400/30' : ''}`}
-          onClick={() => setActiveTab('ai')}
+          className={`bg-card border-border cursor-pointer hover:border-purple-400/50 transition-colors ${activeTab === 'executive' ? 'border-purple-400 ring-1 ring-purple-400/30' : ''}`}
+          onClick={() => setActiveTab('executive')}
         >
           <CardContent className="p-4 text-center">
-            <Sparkles className="h-5 w-5 text-purple-400 mx-auto mb-2" />
-            <p className="text-xl font-bold text-white">{stats.ai}</p>
-            <p className="text-xs text-muted-foreground">Assistants</p>
+            <Crown className="h-5 w-5 text-purple-400 mx-auto mb-2" />
+            <p className="text-xl font-bold text-white">{allEmployees.filter(e => e.department === 'executive').length}</p>
+            <p className="text-xs text-muted-foreground">Executive</p>
           </CardContent>
         </Card>
         <Card 
@@ -695,7 +695,7 @@ const EmployeesHub = ({ userId, brokers = [] }: EmployeesHubProps) => {
 
       {/* Main Tabs */}
       <Tabs value={activeTab} onValueChange={setActiveTab}>
-        <TabsList className="bg-zinc-900/50 border border-zinc-800 grid w-full grid-cols-3 md:grid-cols-5 lg:grid-cols-9">
+        <TabsList className="bg-zinc-900/50 border border-zinc-800 grid w-full grid-cols-3 md:grid-cols-5 lg:grid-cols-8">
           <TabsTrigger value="all" className="data-[state=active]:bg-gold data-[state=active]:text-black text-xs">
             All
           </TabsTrigger>
@@ -716,9 +716,6 @@ const EmployeesHub = ({ userId, brokers = [] }: EmployeesHubProps) => {
           </TabsTrigger>
           <TabsTrigger value="brokers" className="data-[state=active]:bg-gold data-[state=active]:text-black text-xs">
             Brokers
-          </TabsTrigger>
-          <TabsTrigger value="ai" className="data-[state=active]:bg-gold data-[state=active]:text-black text-xs">
-            AI Team
           </TabsTrigger>
           <TabsTrigger value="cv" className="data-[state=active]:bg-gold data-[state=active]:text-black text-xs">
             CV Collected
@@ -783,7 +780,7 @@ const EmployeesHub = ({ userId, brokers = [] }: EmployeesHubProps) => {
                   <option value="collected">📂 Collected CVs</option>
                   <option value="pending">⏳ Pending CVs</option>
                   <option value="flagged">🚩 Flagged CVs</option>
-                  <option value="archived">📁 Archived CVs</option>
+                  <option value="rejected">❌ Rejected CVs</option>
                 </select>
                 {/* Status Filter */}
                 <select
@@ -823,15 +820,16 @@ const EmployeesHub = ({ userId, brokers = [] }: EmployeesHubProps) => {
                   variant={cvCategoryFilter === 'flagged' ? 'default' : 'outline'}
                   className="cursor-pointer hover:bg-red-500/20 text-yellow-400"
                   onClick={() => setCvCategoryFilter(cvCategoryFilter === 'flagged' ? 'all' : 'flagged')}
+                  title="Missing email, phone, or CV file"
                 >
                   🚩 Flagged ({cvEntries.filter(cv => cv.category === 'flagged').length})
                 </Badge>
                 <Badge 
-                  variant={cvCategoryFilter === 'archived' ? 'default' : 'outline'}
-                  className="cursor-pointer hover:bg-zinc-500/20"
-                  onClick={() => setCvCategoryFilter(cvCategoryFilter === 'archived' ? 'all' : 'archived')}
+                  variant={cvCategoryFilter === 'rejected' ? 'default' : 'outline'}
+                  className="cursor-pointer hover:bg-red-500/20 text-red-400"
+                  onClick={() => setCvCategoryFilter(cvCategoryFilter === 'rejected' ? 'all' : 'rejected')}
                 >
-                  📁 Archived ({cvEntries.filter(cv => cv.category === 'archived').length})
+                  ❌ Rejected ({cvEntries.filter(cv => cv.category === 'rejected').length})
                 </Badge>
               </div>
             </CardHeader>

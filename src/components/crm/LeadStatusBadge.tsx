@@ -9,12 +9,27 @@ export interface PipelineStatus {
   category: 'positive' | 'neutral' | 'warning' | 'negative';
 }
 
+// Status groups for organized dropdowns
+export const STATUS_GROUPS = {
+  positive: {
+    label: '✅ Positive',
+    color: 'text-green-400',
+    bgColor: 'bg-green-900/30',
+  },
+  neutral: {
+    label: '⏳ Neutral',
+    color: 'text-amber-400',
+    bgColor: 'bg-amber-900/30',
+  },
+  negative: {
+    label: '❌ Negative',
+    color: 'text-red-400',
+    bgColor: 'bg-red-900/30',
+  },
+} as const;
+
 export const PIPELINE_STATUSES: PipelineStatus[] = [
-  // Neutral / New
-  { value: "new", label: "New", color: "bg-blue-500", bgColor: "bg-blue-600/30", textColor: "text-blue-300", category: "neutral" },
-  
-  // Positive progression
-  { value: "contacted", label: "Contacted", color: "bg-cyan-500", bgColor: "bg-cyan-600/30", textColor: "text-cyan-300", category: "neutral" },
+  // POSITIVE (green) - Deal progression
   { value: "interested", label: "Interested", color: "bg-emerald-500", bgColor: "bg-emerald-600/30", textColor: "text-emerald-300", category: "positive" },
   { value: "qualified", label: "Qualified", color: "bg-green-500", bgColor: "bg-green-600/30", textColor: "text-green-300", category: "positive" },
   { value: "viewing", label: "Viewing Scheduled", color: "bg-purple-500", bgColor: "bg-purple-600/30", textColor: "text-purple-300", category: "positive" },
@@ -22,12 +37,14 @@ export const PIPELINE_STATUSES: PipelineStatus[] = [
   { value: "negotiation", label: "Negotiation", color: "bg-orange-500", bgColor: "bg-orange-600/30", textColor: "text-orange-300", category: "positive" },
   { value: "closed_won", label: "Closed Won", color: "bg-emerald-600", bgColor: "bg-emerald-700/40", textColor: "text-emerald-200", category: "positive" },
   
-  // Warning / Follow-up needed
-  { value: "no_answer", label: "No Answer", color: "bg-amber-500", bgColor: "bg-amber-600/30", textColor: "text-amber-300", category: "warning" },
-  { value: "callback", label: "Callback Requested", color: "bg-yellow-500", bgColor: "bg-yellow-600/30", textColor: "text-yellow-300", category: "warning" },
-  { value: "followup", label: "Follow-up", color: "bg-sky-500", bgColor: "bg-sky-600/30", textColor: "text-sky-300", category: "warning" },
+  // NEUTRAL (amber) - New / Follow-up
+  { value: "new", label: "New", color: "bg-blue-500", bgColor: "bg-blue-600/30", textColor: "text-blue-300", category: "neutral" },
+  { value: "contacted", label: "Contacted", color: "bg-cyan-500", bgColor: "bg-cyan-600/30", textColor: "text-cyan-300", category: "neutral" },
+  { value: "followup", label: "Follow-up", color: "bg-sky-500", bgColor: "bg-sky-600/30", textColor: "text-sky-300", category: "neutral" },
+  { value: "callback", label: "Callback Requested", color: "bg-yellow-500", bgColor: "bg-yellow-600/30", textColor: "text-yellow-300", category: "neutral" },
+  { value: "no_answer", label: "No Answer", color: "bg-amber-500", bgColor: "bg-amber-600/30", textColor: "text-amber-300", category: "neutral" },
   
-  // Negative / Lost
+  // NEGATIVE (red) - Lost / DNC
   { value: "not_interested", label: "Not Interested", color: "bg-rose-500", bgColor: "bg-rose-600/30", textColor: "text-rose-300", category: "negative" },
   { value: "do_not_contact", label: "Do Not Contact", color: "bg-red-600", bgColor: "bg-red-700/30", textColor: "text-red-300", category: "negative" },
   { value: "already_bought", label: "Already Bought", color: "bg-slate-500", bgColor: "bg-slate-600/30", textColor: "text-slate-300", category: "negative" },
