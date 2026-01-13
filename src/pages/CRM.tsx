@@ -32,6 +32,7 @@ import { AdminTasksPanel } from "@/components/crm/AdminTasksPanel";
 import FlaggedLeadsView from "@/components/crm/FlaggedLeadsView";
 import VIPExportButton from "@/components/crm/VIPExportButton";
 import CRMAssistantPanel from "@/components/crm/CRMAssistantPanel";
+import CRMCommunicationPanel from "@/components/crm/CRMCommunicationPanel";
 
 interface CRMProfile {
   id: string;
@@ -295,7 +296,7 @@ const CRM = () => {
         {/* Enhanced Dashboard with Charts */}
         <CRMEnhancedDashboard userId={user?.id || ""} isAdmin={isAdmin} />
 
-        {/* Smart Reminders & Automation */}
+        {/* Smart Reminders, Automation & Communication */}
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-4">
           <div className="lg:col-span-2 space-y-4">
             {/* Quick Filters */}
@@ -309,6 +310,9 @@ const CRM = () => {
             </div>
             {/* Activity Timeline */}
             <ActivityTimeline userId={user?.id || ""} limit={10} />
+            
+            {/* Communication Panel - Chat, Video, Files */}
+            <CRMCommunicationPanel />
           </div>
           <div className="space-y-4">
             <SmartReminders userId={user?.id || ""} limit={4} />

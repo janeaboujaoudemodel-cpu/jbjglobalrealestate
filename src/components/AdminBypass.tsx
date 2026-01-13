@@ -43,13 +43,19 @@ const AdminBypass = ({ children }: AdminBypassProps) => {
           return;
         }
 
-        // Check if user has admin role
-        const { data: hasAdminRole, error: roleError } = await supabase
+        // Check multiple roles: admin, owner, founder
+        const { data: hasAdminRole } = await supabase
           .rpc("has_role", { _user_id: session.user.id, _role: "admin" });
 
-        if (roleError) throw roleError;
+        const { data: hasOwnerRole } = await supabase
+          .rpc("has_role", { _user_id: session.user.id, _role: "owner" });
 
-        setIsAdmin(Boolean(hasAdminRole));
+        // Also check CRM admin status for comprehensive access
+        const { data: isCrmAdmin } = await supabase
+          .rpc("is_crm_admin", { _user_id: session.user.id });
+
+        const hasAccess = Boolean(hasAdminRole) || Boolean(hasOwnerRole) || Boolean(isCrmAdmin);
+        setIsAdmin(hasAccess);
       } catch (error) {
         console.error("Error checking admin status:", error);
         setIsAdmin(false);

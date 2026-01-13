@@ -24,7 +24,13 @@ interface AutomationRule {
   adminOnly?: boolean;
 }
 
-const defaultRules: AutomationRule[] = [
+interface AutomationFrequency {
+  type: 'instant' | 'hourly' | 'daily' | 'weekly';
+  time?: string;
+  day?: string;
+}
+
+const defaultRules: (AutomationRule & { frequency?: AutomationFrequency; assignedTeam?: string })[] = [
   {
     id: "welcome_email",
     name: "Welcome Email",
@@ -34,7 +40,9 @@ const defaultRules: AutomationRule[] = [
     isActive: true,
     icon: <Mail className="h-4 w-4 text-blue-400" />,
     executionCount: 0,
-    adminOnly: false
+    adminOnly: false,
+    frequency: { type: 'instant' },
+    assignedTeam: "Sales Team"
   },
   {
     id: "followup_reminder",
@@ -45,7 +53,9 @@ const defaultRules: AutomationRule[] = [
     isActive: true,
     icon: <Bell className="h-4 w-4 text-amber-400" />,
     executionCount: 0,
-    adminOnly: false
+    adminOnly: false,
+    frequency: { type: 'daily', time: '09:00 AM' },
+    assignedTeam: "Assigned Broker"
   },
   {
     id: "hot_lead_alert",
@@ -56,7 +66,9 @@ const defaultRules: AutomationRule[] = [
     isActive: true,
     icon: <Sparkles className="h-4 w-4 text-emerald-400" />,
     executionCount: 0,
-    adminOnly: false
+    adminOnly: false,
+    frequency: { type: 'instant' },
+    assignedTeam: "All Brokers"
   },
   {
     id: "stale_lead_7days",
@@ -67,7 +79,9 @@ const defaultRules: AutomationRule[] = [
     isActive: true,
     icon: <Clock className="h-4 w-4 text-orange-400" />,
     executionCount: 0,
-    adminOnly: true
+    adminOnly: true,
+    frequency: { type: 'daily', time: '08:00 AM' },
+    assignedTeam: "Admin + Manager"
   },
   {
     id: "broker_inactivity_3days",
@@ -78,7 +92,9 @@ const defaultRules: AutomationRule[] = [
     isActive: true,
     icon: <AlertTriangle className="h-4 w-4 text-red-400" />,
     executionCount: 0,
-    adminOnly: true
+    adminOnly: true,
+    frequency: { type: 'daily', time: '06:00 AM' },
+    assignedTeam: "Lead Pool"
   },
   {
     id: "broker_inactivity_24h",
@@ -89,7 +105,9 @@ const defaultRules: AutomationRule[] = [
     isActive: true,
     icon: <RefreshCw className="h-4 w-4 text-red-400" />,
     executionCount: 0,
-    adminOnly: true
+    adminOnly: true,
+    frequency: { type: 'hourly' },
+    assignedTeam: "Lead Pool"
   },
   {
     id: "auto_assign",
@@ -100,7 +118,9 @@ const defaultRules: AutomationRule[] = [
     isActive: true,
     icon: <UserPlus className="h-4 w-4 text-purple-400" />,
     executionCount: 0,
-    adminOnly: true
+    adminOnly: true,
+    frequency: { type: 'instant' },
+    assignedTeam: "Round-Robin Queue"
   },
   {
     id: "whatsapp_followup",
@@ -111,7 +131,9 @@ const defaultRules: AutomationRule[] = [
     isActive: true,
     icon: <MessageSquare className="h-4 w-4 text-green-400" />,
     executionCount: 0,
-    adminOnly: false
+    adminOnly: false,
+    frequency: { type: 'daily', time: '10:00 AM' },
+    assignedTeam: "Assigned Broker"
   },
   {
     id: "daily_broker_alerts",
@@ -122,7 +144,9 @@ const defaultRules: AutomationRule[] = [
     isActive: true,
     icon: <Bell className="h-4 w-4 text-blue-400" />,
     executionCount: 0,
-    adminOnly: true
+    adminOnly: true,
+    frequency: { type: 'daily', time: '09:00 AM' },
+    assignedTeam: "All Team"
   }
 ];
 
@@ -253,61 +277,89 @@ const AutomationRules = ({ userId, isAdmin = false }: AutomationRulesProps) => {
       </CardHeader>
       <CardContent>
         <div className="space-y-3">
-          {rules.map((rule) => (
+          {rules.map((rule: any) => (
             <div
               key={rule.id}
-              className={`flex items-start gap-3 p-3 rounded-lg border transition-all ${
+              className={`flex items-start gap-3 p-4 rounded-xl border transition-all ${
                 rule.isActive 
-                  ? "bg-muted/30 border-primary/30" 
+                  ? "bg-muted/30 border-primary/30 shadow-sm" 
                   : "bg-muted/10 border-border opacity-60"
               } ${rule.adminOnly && !isAdmin ? "opacity-50" : ""}`}
             >
-              <div className="p-2 rounded-lg bg-card border border-border">
+              <div className="p-2.5 rounded-xl bg-card border border-border shadow-sm">
                 {rule.icon}
               </div>
               
               <div className="flex-1 min-w-0">
-                <div className="flex items-center gap-2 mb-1 flex-wrap">
+                <div className="flex items-center gap-2 mb-1.5 flex-wrap">
                   <h4 className="text-sm font-semibold text-foreground">
                     {rule.name}
                   </h4>
                   {rule.isActive && (
-                    <Badge variant="outline" className="text-xs bg-emerald-500/20 text-emerald-400 border-emerald-500/30">
-                      Active
+                    <Badge variant="outline" className="text-[10px] bg-emerald-500/20 text-emerald-400 border-emerald-500/30 px-2">
+                      ● Active
                     </Badge>
                   )}
                   {rule.adminOnly && (
-                    <Badge variant="outline" className="text-xs bg-gold/20 text-gold border-gold/30">
-                      <Shield className="h-3 w-3 mr-1" />
-                      Admin Only
+                    <Badge variant="outline" className="text-[10px] bg-gold/20 text-gold border-gold/30 px-2">
+                      <Shield className="h-2.5 w-2.5 mr-1" />
+                      Admin
                     </Badge>
                   )}
                 </div>
-                <p className="text-xs text-muted-foreground mb-2">
+                <p className="text-xs text-muted-foreground mb-2.5">
                   {rule.description}
                 </p>
-                <div className="flex items-center gap-2 text-xs flex-wrap">
-                  <Badge variant="secondary" className="bg-blue-500/20 text-blue-400">
+                
+                {/* Trigger → Action Flow */}
+                <div className="flex items-center gap-2 text-xs flex-wrap mb-2">
+                  <Badge variant="secondary" className="bg-blue-500/20 text-blue-400 px-2.5">
                     {rule.trigger}
                   </Badge>
                   <ArrowRight className="h-3 w-3 text-muted-foreground" />
-                  <Badge variant="secondary" className="bg-purple-500/20 text-purple-400">
+                  <Badge variant="secondary" className="bg-purple-500/20 text-purple-400 px-2.5">
                     {rule.action}
                   </Badge>
+                </div>
+                
+                {/* Frequency & Team Assignment Row */}
+                <div className="flex items-center gap-3 text-[10px] flex-wrap">
+                  {rule.frequency && (
+                    <span className="flex items-center gap-1 text-muted-foreground bg-muted/50 px-2 py-1 rounded-md">
+                      <Clock className="h-3 w-3" />
+                      {rule.frequency.type === 'instant' && 'Instant'}
+                      {rule.frequency.type === 'hourly' && 'Every Hour'}
+                      {rule.frequency.type === 'daily' && `Daily ${rule.frequency.time || ''}`}
+                      {rule.frequency.type === 'weekly' && `Weekly ${rule.frequency.day || ''}`}
+                    </span>
+                  )}
+                  {rule.assignedTeam && (
+                    <span className="flex items-center gap-1 text-muted-foreground bg-muted/50 px-2 py-1 rounded-md">
+                      <UserPlus className="h-3 w-3" />
+                      {rule.assignedTeam}
+                    </span>
+                  )}
                   {rule.executionCount !== undefined && rule.executionCount > 0 && (
-                    <Badge variant="outline" className="text-[10px] border-zinc-700">
-                      <BarChart3 className="h-2.5 w-2.5 mr-1" />
+                    <span className="flex items-center gap-1 text-muted-foreground bg-muted/50 px-2 py-1 rounded-md">
+                      <BarChart3 className="h-3 w-3" />
                       {rule.executionCount} runs
-                    </Badge>
+                    </span>
                   )}
                 </div>
               </div>
 
-              <Switch
-                checked={rule.isActive}
-                onCheckedChange={() => toggleRule(rule.id)}
-                disabled={syncing || (rule.adminOnly && !isAdmin)}
-              />
+              {/* Clean Toggle */}
+              <div className="flex flex-col items-center gap-1">
+                <Switch
+                  checked={rule.isActive}
+                  onCheckedChange={() => toggleRule(rule.id)}
+                  disabled={syncing || (rule.adminOnly && !isAdmin)}
+                  className="data-[state=checked]:bg-emerald-500"
+                />
+                <span className="text-[9px] text-muted-foreground">
+                  {rule.isActive ? 'ON' : 'OFF'}
+                </span>
+              </div>
             </div>
           ))}
         </div>
