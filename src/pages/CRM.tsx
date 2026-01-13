@@ -226,14 +226,14 @@ const CRM = () => {
 
       <div className="flex-1">
         {/* Header */}
-        <header className="border-b border-border bg-card sticky top-0 z-50">
-          <div className="max-w-[1600px] w-full mx-auto px-4 py-4 flex items-center justify-between">
-            <div className="flex items-center gap-4">
+        <header className="border-b border-gold/20 bg-[hsl(222,84%,4.9%)] sticky top-0 z-50">
+          <div className="max-w-[1600px] w-full mx-auto px-4 py-3 flex items-center justify-between gap-4">
+            <div className="flex items-center gap-3 md:gap-4 flex-wrap">
               <Button
                 variant="ghost"
                 size="sm"
                 onClick={() => setShowToolsSidebar(!showToolsSidebar)}
-                className="text-gold hover:text-gold hover:bg-gold/10"
+                className="text-gold hover:text-gold hover:bg-gold/10 shrink-0"
               >
                 {showToolsSidebar ? (
                   <PanelLeftClose className="h-5 w-5" />
@@ -241,27 +241,32 @@ const CRM = () => {
                   <PanelLeftOpen className="h-5 w-5" />
                 )}
               </Button>
+              
+              {/* Logo & Brand - matching GlobalHeader */}
               <div className="flex items-center gap-3">
                 <img 
                   src={jbjMonogramDarkBg} 
                   alt="JBJ Global Real Estate" 
-                  className="h-11 w-11 rounded-md object-contain"
+                  className="h-10 w-10 md:h-11 md:w-11 rounded object-contain shrink-0"
+                  style={{ imageRendering: 'auto' }}
                 />
-                <div>
-                  <h1 className="text-lg font-bold text-white tracking-wide flex items-center gap-2" style={{ fontFamily: 'Poppins, sans-serif' }}>
-                    <span className="text-gold">JBJ</span>
-                    <span>Global Real Estate</span>
-                  </h1>
-                  <p className="text-xs text-muted-foreground">Customer Relationship Management</p>
-                </div>
+                <h1 
+                  className="text-base md:text-lg font-semibold tracking-[0.08em] uppercase text-foreground whitespace-nowrap"
+                  style={{ fontFamily: 'Poppins, sans-serif' }}
+                >
+                  <span className="text-gold">JBJ</span>{' '}
+                  <span className="text-white">Global Real Estate</span>
+                </h1>
               </div>
+
+              {/* Role Badge - vertically centered */}
               <Badge 
                 variant="default" 
-                className={
-                  isFounder ? "bg-amber-600 text-white" :
-                  isAdmin ? "bg-primary text-primary-foreground" : 
-                  "bg-muted text-muted-foreground"
-                }
+                className={`shrink-0 ${
+                  isFounder ? "bg-gold text-black font-semibold" :
+                  isAdmin ? "bg-gold/80 text-black" : 
+                  "bg-muted text-foreground"
+                }`}
               >
                 {getRoleLabel()}
               </Badge>
