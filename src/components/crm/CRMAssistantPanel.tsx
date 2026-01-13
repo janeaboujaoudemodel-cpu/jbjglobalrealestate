@@ -401,7 +401,7 @@ ${COMPANY_CONTACTS.email}`;
     fetchDrafts();
   };
 
-  // Assistant identity - human persona for founder: Jessica (NOT AI Assistant)
+
   const ASSISTANT_IDENTITY = {
     name: "Jessica",
     avatar: "https://images.unsplash.com/photo-1573496359142-b8d87734a5a2?w=200&h=200&fit=crop&crop=face",

@@ -88,9 +88,9 @@ const DeleteImportButton = ({ userId, onSuccess, isAdmin }: DeleteImportButtonPr
 
       if (error) throw error;
       setSources(data || []);
-    } catch (err) {
+    } catch (err: any) {
       console.error("Failed to fetch sources:", err);
-      toast.error("Failed to load import sources");
+      toast.error(`Failed to load import sources: ${err?.message || 'Unknown error'}`);
     } finally {
       setLoading(false);
     }
