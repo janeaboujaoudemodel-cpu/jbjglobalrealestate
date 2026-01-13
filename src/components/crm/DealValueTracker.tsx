@@ -162,62 +162,78 @@ const DealValueTracker = ({ userId }: DealValueTrackerProps) => {
 
   return (
     <div className="space-y-4">
-      {/* Main Stats Row */}
-      <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
-        <Card className="border-border bg-card">
-          <CardContent className="pt-4">
-            <div className="flex items-center gap-2 mb-2">
-              <div className="p-2 rounded-lg bg-primary/20">
-                <Briefcase className="h-4 w-4 text-primary" />
+      {/* Main Stats Row - evenly aligned */}
+      <div className="grid grid-cols-2 lg:grid-cols-4 gap-3 md:gap-4">
+        {/* Pipeline Value */}
+        <Card className="border-border/50 bg-gradient-to-br from-card to-card/80 shadow-lg">
+          <CardContent className="p-4">
+            <div className="flex items-center justify-between mb-3">
+              <div className="p-2.5 rounded-xl bg-gold/20">
+                <Briefcase className="h-5 w-5 text-gold" />
               </div>
-              <span className="text-xs text-muted-foreground">Pipeline Value</span>
+              <Badge variant="outline" className="text-xs border-gold/30 text-gold">
+                Pipeline
+              </Badge>
             </div>
-            <p className="text-2xl font-bold text-white">
+            <p className="text-2xl md:text-3xl font-bold text-foreground tracking-tight">
               {formatCurrency(stats.totalPipeline)}
             </p>
+            <p className="text-xs text-muted-foreground mt-1">Total active deals</p>
           </CardContent>
         </Card>
 
-        <Card className="border-border bg-card">
-          <CardContent className="pt-4">
-            <div className="flex items-center gap-2 mb-2">
-              <div className="p-2 rounded-lg bg-emerald-500/20">
-                <TrendingUp className="h-4 w-4 text-emerald-500" />
+        {/* Forecasted */}
+        <Card className="border-border/50 bg-gradient-to-br from-card to-card/80 shadow-lg">
+          <CardContent className="p-4">
+            <div className="flex items-center justify-between mb-3">
+              <div className="p-2.5 rounded-xl bg-emerald-500/20">
+                <TrendingUp className="h-5 w-5 text-emerald-500" />
               </div>
-              <span className="text-xs text-muted-foreground">Forecasted</span>
+              <Badge variant="outline" className="text-xs border-emerald-500/30 text-emerald-400">
+                Forecast
+              </Badge>
             </div>
-            <p className="text-2xl font-bold text-emerald-400">
+            <p className="text-2xl md:text-3xl font-bold text-emerald-400 tracking-tight">
               {formatCurrency(stats.forecastedRevenue)}
             </p>
+            <p className="text-xs text-muted-foreground mt-1">Weighted probability</p>
           </CardContent>
         </Card>
 
-        <Card className="border-border bg-card">
-          <CardContent className="pt-4">
-            <div className="flex items-center gap-2 mb-2">
-              <div className="p-2 rounded-lg bg-amber-500/20">
-                <Target className="h-4 w-4 text-amber-500" />
+        {/* Conversion */}
+        <Card className="border-border/50 bg-gradient-to-br from-card to-card/80 shadow-lg">
+          <CardContent className="p-4">
+            <div className="flex items-center justify-between mb-3">
+              <div className="p-2.5 rounded-xl bg-amber-500/20">
+                <Target className="h-5 w-5 text-amber-500" />
               </div>
-              <span className="text-xs text-muted-foreground">Conversion</span>
+              <Badge variant="outline" className="text-xs border-amber-500/30 text-amber-400">
+                Rate
+              </Badge>
             </div>
-            <p className="text-2xl font-bold text-amber-400">
+            <p className="text-2xl md:text-3xl font-bold text-amber-400 tracking-tight">
               {stats.conversionRate.toFixed(1)}%
             </p>
+            <p className="text-xs text-muted-foreground mt-1">Won vs Lost</p>
           </CardContent>
         </Card>
 
-        <Card className="border-border bg-card">
-          <CardContent className="pt-4">
-            <div className="flex items-center gap-2 mb-2">
-              <div className="p-2 rounded-lg bg-green-500/20">
-                <Award className="h-4 w-4 text-green-500" />
+        {/* Won Deals */}
+        <Card className="border-border/50 bg-gradient-to-br from-card to-card/80 shadow-lg">
+          <CardContent className="p-4">
+            <div className="flex items-center justify-between mb-3">
+              <div className="p-2.5 rounded-xl bg-green-500/20">
+                <Award className="h-5 w-5 text-green-500" />
               </div>
-              <span className="text-xs text-muted-foreground">Won Deals</span>
+              <Badge variant="outline" className="text-xs border-green-500/30 text-green-400">
+                Won
+              </Badge>
             </div>
             <div className="flex items-baseline gap-2">
-              <p className="text-2xl font-bold text-green-400">{stats.wonDeals}</p>
-              <span className="text-xs text-red-400">/ {stats.lostDeals} lost</span>
+              <p className="text-2xl md:text-3xl font-bold text-green-400 tracking-tight">{stats.wonDeals}</p>
+              <span className="text-sm text-red-400 font-medium">/ {stats.lostDeals} lost</span>
             </div>
+            <p className="text-xs text-muted-foreground mt-1">Closed deals</p>
           </CardContent>
         </Card>
       </div>

@@ -459,16 +459,7 @@ const CRMLeadDetail = () => {
                   </div>
                 </SelectItem>
               ))}
-              <div className="px-2 py-1 text-xs font-semibold text-amber-400 uppercase mt-1">Follow-up</div>
-              {PIPELINE_STATUSES.filter(s => s.category === 'warning').map(status => (
-                <SelectItem key={status.value} value={status.value}>
-                  <div className="flex items-center gap-2">
-                    <span className={`w-2 h-2 rounded-full ${status.color}`} />
-                    {status.label}
-                  </div>
-                </SelectItem>
-              ))}
-              <div className="px-2 py-1 text-xs font-semibold text-red-400 uppercase mt-1">Negative</div>
+              <div className="px-2 py-1 text-xs font-semibold text-red-400 uppercase mt-1">🔴 Negative</div>
               {PIPELINE_STATUSES.filter(s => s.category === 'negative').map(status => (
                 <SelectItem key={status.value} value={status.value}>
                   <div className="flex items-center gap-2">

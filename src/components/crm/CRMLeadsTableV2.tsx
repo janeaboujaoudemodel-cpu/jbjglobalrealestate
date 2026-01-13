@@ -468,33 +468,40 @@ export default function CRMLeadsTableV2({
                     <TableCell className="truncate max-w-[220px] text-foreground">{lead.email_lower || "—"}</TableCell>
                     <TableCell className="text-sm text-foreground">{renderSource(lead)}</TableCell>
                     <TableCell>
-                      <select
-                        value={status}
-                        onChange={(e) => handleStatusChange(lead.id, e.target.value)}
-                        className="h-9 w-[180px] rounded-md border border-border bg-card px-2 text-sm font-semibold text-foreground focus:outline-none focus:ring-2 focus:ring-ring"
-                      >
-                        <optgroup label="● POSITIVE" className="bg-emerald-950 text-emerald-300 font-bold">
-                          {groupedStatuses.positive.map((s) => (
-                            <option key={s.value} value={s.value} className="bg-card text-foreground">
-                              ● {s.label}
-                            </option>
-                          ))}
-                        </optgroup>
-                        <optgroup label="● NEUTRAL" className="bg-amber-950 text-amber-300 font-bold">
-                          {groupedStatuses.neutral.map((s) => (
-                            <option key={s.value} value={s.value} className="bg-card text-foreground">
-                              ● {s.label}
-                            </option>
-                          ))}
-                        </optgroup>
-                        <optgroup label="● NEGATIVE" className="bg-red-950 text-red-300 font-bold">
-                          {groupedStatuses.negative.map((s) => (
-                            <option key={s.value} value={s.value} className="bg-card text-foreground">
-                              ● {s.label}
-                            </option>
-                          ))}
-                        </optgroup>
-                      </select>
+                      {/* Vivid Status Badge with dropdown */}
+                      <div className="relative inline-block">
+                        <select
+                          value={status}
+                          onChange={(e) => handleStatusChange(lead.id, e.target.value)}
+                          className="h-9 w-[180px] rounded-full border-2 px-3 text-sm font-semibold focus:outline-none focus:ring-2 focus:ring-ring appearance-none cursor-pointer"
+                          style={{
+                            backgroundColor: STATUS_GROUPS[groupedStatuses.positive.some(s => s.value === status) ? 'positive' : groupedStatuses.neutral.some(s => s.value === status) ? 'neutral' : 'negative']?.bgColor?.replace('bg-', '').replace('/20', '') || '#1e293b',
+                            color: STATUS_GROUPS[groupedStatuses.positive.some(s => s.value === status) ? 'positive' : groupedStatuses.neutral.some(s => s.value === status) ? 'neutral' : 'negative']?.dotColor || '#fff',
+                          }}
+                        >
+                          <optgroup label="🟢 POSITIVE">
+                            {groupedStatuses.positive.map((s) => (
+                              <option key={s.value} value={s.value}>
+                                ● {s.label}
+                              </option>
+                            ))}
+                          </optgroup>
+                          <optgroup label="🔵 NEUTRAL">
+                            {groupedStatuses.neutral.map((s) => (
+                              <option key={s.value} value={s.value}>
+                                ● {s.label}
+                              </option>
+                            ))}
+                          </optgroup>
+                          <optgroup label="🔴 NEGATIVE">
+                            {groupedStatuses.negative.map((s) => (
+                              <option key={s.value} value={s.value}>
+                                ● {s.label}
+                              </option>
+                            ))}
+                          </optgroup>
+                        </select>
+                      </div>
                     </TableCell>
                     <TableCell>
                       <Button
@@ -512,11 +519,30 @@ export default function CRMLeadsTableV2({
                       </Button>
                     </TableCell>
                     <TableCell className="text-sm">
-                      {assignedNames[lead.id] ? (
-                        <span className="font-semibold">{assignedNames[lead.id]}</span>
-                      ) : (
-                        <span className="text-muted-foreground">—</span>
-                      )}
+                      <div className="flex items-center gap-2">
+                        {assignedNames[lead.id] ? (
+                          <span className="font-semibold text-foreground">{assignedNames[lead.id]}</span>
+                        ) : (
+                          <span className="text-muted-foreground italic">Unassigned</span>
+                        )}
+                        {isAdmin && (
+                          <Button
+                            type="button"
+                            size="sm"
+                            variant="outline"
+                            className="h-7 px-2 text-xs bg-gold/10 border-gold/30 text-gold hover:bg-gold/20 hover:text-gold"
+                            onClick={(e) => {
+                              e.stopPropagation();
+                              // Add to selection and show bulk bar for assignment
+                              setSelected(new Set([lead.id]));
+                              toast.info("Use the 'Assign Broker' dropdown above to assign this lead");
+                            }}
+                            title="Assign broker"
+                          >
+                            Assign
+                          </Button>
+                        )}
+                      </div>
                     </TableCell>
                     <TableCell className="text-right">
                       <div className="inline-flex items-center justify-end gap-1">

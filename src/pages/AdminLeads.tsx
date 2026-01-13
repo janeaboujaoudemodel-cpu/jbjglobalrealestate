@@ -425,16 +425,7 @@ const AdminLeads = () => {
                       </div>
                     </SelectItem>
                   ))}
-                  <div className="px-2 py-1 text-xs font-semibold text-amber-400 uppercase mt-1">Follow-up</div>
-                  {PIPELINE_STATUSES.filter(s => s.category === 'warning').map(status => (
-                    <SelectItem key={status.value} value={status.value}>
-                      <div className="flex items-center gap-2">
-                        <span className={`w-2 h-2 rounded-full ${status.color}`} />
-                        {status.label}
-                      </div>
-                    </SelectItem>
-                  ))}
-                  <div className="px-2 py-1 text-xs font-semibold text-red-400 uppercase mt-1">Negative</div>
+                  <div className="px-2 py-1 text-xs font-semibold text-red-400 uppercase mt-1">🔴 Negative</div>
                   {PIPELINE_STATUSES.filter(s => s.category === 'negative').map(status => (
                     <SelectItem key={status.value} value={status.value}>
                       <div className="flex items-center gap-2">
@@ -598,18 +589,7 @@ const AdminLeads = () => {
                                     <span className="text-sm text-white">{status.label}</span>
                                   </button>
                                 ))}
-                                <p className="text-xs font-semibold text-amber-400 px-2 py-1 mt-2">Follow-up</p>
-                                {PIPELINE_STATUSES.filter(s => s.category === 'warning').map(status => (
-                                  <button
-                                    key={status.value}
-                                    onClick={() => updateLeadStatus(lead.id, status.value)}
-                                    className="w-full flex items-center gap-2 px-2 py-1.5 rounded hover:bg-zinc-800 text-left transition-colors"
-                                  >
-                                    <span className={`w-2 h-2 rounded-full ${status.color}`} />
-                                    <span className="text-sm text-white">{status.label}</span>
-                                  </button>
-                                ))}
-                                <p className="text-xs font-semibold text-red-400 px-2 py-1 mt-2">Negative</p>
+                                <p className="text-xs font-semibold text-red-400 px-2 py-1 mt-2">🔴 Negative</p>
                                 {PIPELINE_STATUSES.filter(s => s.category === 'negative').map(status => (
                                   <button
                                     key={status.value}
@@ -729,18 +709,7 @@ const AdminLeads = () => {
                                     <span className="text-sm text-white">{status.label}</span>
                                   </button>
                                 ))}
-                                <p className="text-xs font-semibold text-amber-400 px-2 py-1 mt-2">Follow-up</p>
-                                {PIPELINE_STATUSES.filter(s => s.category === 'warning').map(status => (
-                                  <button
-                                    key={status.value}
-                                    onClick={() => updateChatStatus(chat.id, status.value)}
-                                    className="w-full flex items-center gap-2 px-2 py-1.5 rounded hover:bg-zinc-800 text-left transition-colors"
-                                  >
-                                    <span className={`w-2 h-2 rounded-full ${status.color}`} />
-                                    <span className="text-sm text-white">{status.label}</span>
-                                  </button>
-                                ))}
-                                <p className="text-xs font-semibold text-red-400 px-2 py-1 mt-2">Negative</p>
+                                <p className="text-xs font-semibold text-red-400 px-2 py-1 mt-2">🔴 Negative</p>
                                 {PIPELINE_STATUSES.filter(s => s.category === 'negative').map(status => (
                                   <button
                                     key={status.value}
