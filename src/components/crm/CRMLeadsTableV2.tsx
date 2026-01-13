@@ -14,7 +14,7 @@ import {
 } from "@/components/ui/table";
 import { toast } from "sonner";
 import { Mail, MessageSquare, PhoneCall, Trash2 } from "lucide-react";
-import { PIPELINE_STATUSES } from "./LeadStatusBadge";
+import { PIPELINE_STATUSES, STATUS_GROUPS } from "./LeadStatusBadge";
 import CRMLeadsBulkBar from "./CRMLeadsBulkBar";
 
 interface LeadSource {
@@ -51,10 +51,7 @@ interface CRMLeadsTableV2Props {
   isAdmin?: boolean;
 }
 
-const tokenStyle = {
-  backgroundColor: "hsl(var(--background))",
-  color: "hsl(var(--foreground))",
-} as const;
+// Removed unused tokenStyle
 
 export default function CRMLeadsTableV2({
   userId,
@@ -72,13 +69,14 @@ export default function CRMLeadsTableV2({
   const [selected, setSelected] = useState<Set<string>>(new Set());
   const [assignedNames, setAssignedNames] = useState<Record<string, string>>({});
 
-  const statusOptions = useMemo(() => {
-    const seen = new Set<string>();
-    return PIPELINE_STATUSES.filter((s) => {
-      if (seen.has(s.value)) return false;
-      seen.add(s.value);
-      return true;
-    });
+  // Group statuses by category for the dropdown
+  const groupedStatuses = useMemo(() => {
+    const groups: Record<string, typeof PIPELINE_STATUSES> = {
+      positive: PIPELINE_STATUSES.filter(s => s.category === 'positive'),
+      neutral: PIPELINE_STATUSES.filter(s => s.category === 'neutral'),
+      negative: PIPELINE_STATUSES.filter(s => s.category === 'negative'),
+    };
+    return groups;
   }, []);
 
   useEffect(() => {
@@ -440,22 +438,37 @@ export default function CRMLeadsTableV2({
                         }}
                       />
                     </TableCell>
-                    <TableCell className="font-semibold">{lead.full_name || "—"}</TableCell>
-                    <TableCell className="font-mono text-xs">{lead.phone_e164 || "—"}</TableCell>
-                    <TableCell className="truncate max-w-[220px]">{lead.email_lower || "—"}</TableCell>
-                    <TableCell className="text-sm">{renderSource(lead)}</TableCell>
+                    <TableCell className="font-semibold text-foreground">{lead.full_name || "—"}</TableCell>
+                    <TableCell className="font-mono text-sm text-foreground">{lead.phone_e164 || "—"}</TableCell>
+                    <TableCell className="truncate max-w-[220px] text-foreground">{lead.email_lower || "—"}</TableCell>
+                    <TableCell className="text-sm text-foreground">{renderSource(lead)}</TableCell>
                     <TableCell>
                       <select
                         value={status}
                         onChange={(e) => handleStatusChange(lead.id, e.target.value)}
-                        className="h-9 w-[180px] rounded-md border border-border bg-background px-2 text-sm font-semibold text-foreground focus:outline-none focus:ring-2 focus:ring-ring"
-                        style={tokenStyle}
+                        className="h-9 w-[180px] rounded-md border border-border bg-card px-2 text-sm font-semibold text-foreground focus:outline-none focus:ring-2 focus:ring-ring"
                       >
-                        {statusOptions.map((s) => (
-                          <option key={s.value} value={s.value} style={tokenStyle}>
-                            {s.label}
-                          </option>
-                        ))}
+                        <optgroup label="✅ POSITIVE" className="bg-green-950 text-green-300 font-bold">
+                          {groupedStatuses.positive.map((s) => (
+                            <option key={s.value} value={s.value} className="bg-card text-foreground">
+                              {s.label}
+                            </option>
+                          ))}
+                        </optgroup>
+                        <optgroup label="⏳ NEUTRAL" className="bg-amber-950 text-amber-300 font-bold">
+                          {groupedStatuses.neutral.map((s) => (
+                            <option key={s.value} value={s.value} className="bg-card text-foreground">
+                              {s.label}
+                            </option>
+                          ))}
+                        </optgroup>
+                        <optgroup label="❌ NEGATIVE" className="bg-red-950 text-red-300 font-bold">
+                          {groupedStatuses.negative.map((s) => (
+                            <option key={s.value} value={s.value} className="bg-card text-foreground">
+                              {s.label}
+                            </option>
+                          ))}
+                        </optgroup>
                       </select>
                     </TableCell>
                     <TableCell>
