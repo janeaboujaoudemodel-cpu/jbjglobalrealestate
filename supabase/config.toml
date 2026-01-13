@@ -146,3 +146,9 @@ verify_jwt = false
 
 [functions.broker-assign-lead]
 verify_jwt = false
+
+[functions.broker-log-call]
+verify_jwt = false
+
+[functions.broker-daily-report]
+verify_jwt = false
