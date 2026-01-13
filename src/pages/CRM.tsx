@@ -12,7 +12,7 @@ import {
   Users, FileText, Plus, Upload, Download, LogOut, Shuffle, LayoutGrid, List, Zap, Briefcase, PanelLeftOpen, PanelLeftClose, Crown, Flag, Sparkles
 } from "lucide-react";
 import jbjMonogramDarkBg from "@/assets/jbj-monogram-dark-bg.png";
-import CRMLeadsTable from "@/components/crm/CRMLeadsTable";
+import CRMLeadsTableV2 from "@/components/crm/CRMLeadsTableV2";
 import CRMEnhancedDashboard from "@/components/crm/CRMEnhancedDashboard";
 import CRMImportModalV3 from "@/components/crm/CRMImportModalV3";
 import DeleteImportButton from "@/components/crm/DeleteImportButton";
@@ -432,7 +432,7 @@ const CRM = () => {
               </TabsList>
 
               <TabsContent value="all">
-                <CRMLeadsTable
+                <CRMLeadsTableV2
                   key={`all-${refreshKey}-${quickFilter}-${sourceFilter}`}
                   userId={user?.id || ""} 
                   filterType="all"
@@ -444,7 +444,7 @@ const CRM = () => {
               </TabsContent>
 
               <TabsContent value="own">
-                <CRMLeadsTable 
+                <CRMLeadsTableV2 
                   key={`own-${refreshKey}-${quickFilter}-${sourceFilter}`}
                   userId={user?.id || ""} 
                   filterType="own"
@@ -456,7 +456,7 @@ const CRM = () => {
               </TabsContent>
 
               <TabsContent value="website">
-                <CRMLeadsTable 
+                <CRMLeadsTableV2
                   key={`website-${refreshKey}-${quickFilter}-${sourceFilter}`}
                   userId={user?.id || ""} 
                   filterType="website"
@@ -476,7 +476,7 @@ const CRM = () => {
                   <div className="flex justify-end">
                     <VIPExportButton />
                   </div>
-                  <CRMLeadsTable 
+                  <CRMLeadsTableV2
                     key={`vip-${refreshKey}-${quickFilter}-${sourceFilter}`}
                     userId={user?.id || ""} 
                     filterType="vip"
