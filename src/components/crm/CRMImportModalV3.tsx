@@ -830,7 +830,7 @@ const CRMImportModalV3 = ({ open, onClose, onSuccess, userId }: CRMImportModalV3
       .insert({
         id: batchId,
         user_id: userId,
-        source_type: "csv",
+        source_type: "csv" as const,
         file_name: file?.name,
         total_rows: parsedData.length,
         status: "processing",
