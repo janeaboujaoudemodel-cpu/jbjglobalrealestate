@@ -1,4 +1,5 @@
 import { useState, useEffect } from "react";
+import { useNavigate } from "react-router-dom";
 import { supabase } from "@/integrations/supabase/client";
 import { useAuth } from "@/contexts/AuthContext";
 import { Button } from "@/components/ui/button";
@@ -61,6 +62,7 @@ const CATEGORY_COLORS: Record<string, string> = {
 };
 
 export function AdminTasksPanel() {
+  const navigate = useNavigate();
   const { user } = useAuth();
   const [tasks, setTasks] = useState<AdminTask[]>([]);
   const [loading, setLoading] = useState(true);
@@ -75,9 +77,11 @@ export function AdminTasksPanel() {
   });
 
   useEffect(() => {
-    if (user) {
-      fetchTasks();
+    if (!user) {
+      setLoading(false);
+      return;
     }
+    fetchTasks();
   }, [user]);
 
   const fetchTasks = async () => {
