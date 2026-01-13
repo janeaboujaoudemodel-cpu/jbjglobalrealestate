@@ -5121,6 +5121,13 @@ export type Database = {
             referencedRelation: "referral_partners"
             referencedColumns: ["id"]
           },
+          {
+            foreignKeyName: "referral_commissions_referral_partner_id_fkey"
+            columns: ["referral_partner_id"]
+            isOneToOne: false
+            referencedRelation: "referral_partners_secure"
+            referencedColumns: ["id"]
+          },
         ]
       }
       referral_leads: {
@@ -5172,6 +5179,112 @@ export type Database = {
             columns: ["referral_partner_id"]
             isOneToOne: false
             referencedRelation: "referral_partners"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "referral_leads_referral_partner_id_fkey"
+            columns: ["referral_partner_id"]
+            isOneToOne: false
+            referencedRelation: "referral_partners_secure"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      referral_partner_banking: {
+        Row: {
+          bank_account_encrypted: string | null
+          bank_iban_encrypted: string | null
+          bank_name_encrypted: string | null
+          created_at: string | null
+          encryption_key_id: string | null
+          id: string
+          last_accessed_at: string | null
+          last_accessed_by: string | null
+          partner_id: string
+          updated_at: string | null
+        }
+        Insert: {
+          bank_account_encrypted?: string | null
+          bank_iban_encrypted?: string | null
+          bank_name_encrypted?: string | null
+          created_at?: string | null
+          encryption_key_id?: string | null
+          id?: string
+          last_accessed_at?: string | null
+          last_accessed_by?: string | null
+          partner_id: string
+          updated_at?: string | null
+        }
+        Update: {
+          bank_account_encrypted?: string | null
+          bank_iban_encrypted?: string | null
+          bank_name_encrypted?: string | null
+          created_at?: string | null
+          encryption_key_id?: string | null
+          id?: string
+          last_accessed_at?: string | null
+          last_accessed_by?: string | null
+          partner_id?: string
+          updated_at?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "referral_partner_banking_partner_id_fkey"
+            columns: ["partner_id"]
+            isOneToOne: true
+            referencedRelation: "referral_partners"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "referral_partner_banking_partner_id_fkey"
+            columns: ["partner_id"]
+            isOneToOne: true
+            referencedRelation: "referral_partners_secure"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      referral_partner_banking_access_logs: {
+        Row: {
+          access_type: string
+          accessed_at: string | null
+          id: string
+          ip_address: string | null
+          partner_id: string
+          user_agent: string | null
+          user_id: string
+        }
+        Insert: {
+          access_type: string
+          accessed_at?: string | null
+          id?: string
+          ip_address?: string | null
+          partner_id: string
+          user_agent?: string | null
+          user_id: string
+        }
+        Update: {
+          access_type?: string
+          accessed_at?: string | null
+          id?: string
+          ip_address?: string | null
+          partner_id?: string
+          user_agent?: string | null
+          user_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "referral_partner_banking_access_logs_partner_id_fkey"
+            columns: ["partner_id"]
+            isOneToOne: false
+            referencedRelation: "referral_partners"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "referral_partner_banking_access_logs_partner_id_fkey"
+            columns: ["partner_id"]
+            isOneToOne: false
+            referencedRelation: "referral_partners_secure"
             referencedColumns: ["id"]
           },
         ]
@@ -6254,6 +6367,78 @@ export type Database = {
           },
         ]
       }
+      referral_partners_secure: {
+        Row: {
+          approved_at: string | null
+          approved_by: string | null
+          bank_account_number: string | null
+          bank_iban: string | null
+          bank_name: string | null
+          commission_rate: number | null
+          created_at: string | null
+          email: string | null
+          full_name: string | null
+          id: string | null
+          is_owner: boolean | null
+          notes: string | null
+          partner_type: string | null
+          phone_e164: string | null
+          referral_code: string | null
+          status: string | null
+          total_conversions: number | null
+          total_earnings_aed: number | null
+          total_referrals: number | null
+          updated_at: string | null
+          user_id: string | null
+        }
+        Insert: {
+          approved_at?: string | null
+          approved_by?: string | null
+          bank_account_number?: never
+          bank_iban?: never
+          bank_name?: never
+          commission_rate?: number | null
+          created_at?: string | null
+          email?: never
+          full_name?: string | null
+          id?: string | null
+          is_owner?: never
+          notes?: string | null
+          partner_type?: string | null
+          phone_e164?: never
+          referral_code?: string | null
+          status?: string | null
+          total_conversions?: number | null
+          total_earnings_aed?: number | null
+          total_referrals?: number | null
+          updated_at?: string | null
+          user_id?: string | null
+        }
+        Update: {
+          approved_at?: string | null
+          approved_by?: string | null
+          bank_account_number?: never
+          bank_iban?: never
+          bank_name?: never
+          commission_rate?: number | null
+          created_at?: string | null
+          email?: never
+          full_name?: string | null
+          id?: string | null
+          is_owner?: never
+          notes?: string | null
+          partner_type?: string | null
+          phone_e164?: never
+          referral_code?: string | null
+          status?: string | null
+          total_conversions?: number | null
+          total_earnings_aed?: number | null
+          total_referrals?: number | null
+          updated_at?: string | null
+          user_id?: string | null
+        }
+        Relationships: []
+      }
     }
     Functions: {
       bulk_assign_leads: {
@@ -6322,6 +6507,14 @@ export type Database = {
           status: string
         }[]
       }
+      get_partner_banking_details: {
+        Args: { p_partner_id: string }
+        Returns: {
+          bank_account_number: string
+          bank_iban: string
+          bank_name: string
+        }[]
+      }
       get_subscription_payment_details: {
         Args: { p_subscription_id: string }
         Returns: {
@@ -6370,8 +6563,19 @@ export type Database = {
         }
         Returns: string
       }
+      mask_bank_account: { Args: { account: string }; Returns: string }
       mask_email: { Args: { email: string }; Returns: string }
+      mask_iban: { Args: { iban: string }; Returns: string }
       mask_phone: { Args: { phone: string }; Returns: string }
+      update_partner_banking: {
+        Args: {
+          p_bank_account?: string
+          p_bank_iban?: string
+          p_bank_name?: string
+          p_partner_id: string
+        }
+        Returns: boolean
+      }
     }
     Enums: {
       ai_action_status:
