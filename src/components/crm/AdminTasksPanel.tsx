@@ -132,9 +132,9 @@ export function AdminTasksPanel() {
       setNewTask({ title: "", description: "", category: "general", priority: "medium", due_date: "" });
       setIsAddingTask(false);
       fetchTasks();
-    } catch (error) {
+    } catch (error: any) {
       console.error("Error adding task:", error);
-      toast.error("Failed to add task");
+      toast.error(`Failed to add task: ${error?.message || 'Unknown error'}`);
     }
   };
 
@@ -154,9 +154,9 @@ export function AdminTasksPanel() {
       
       toast.success(newStatus === "completed" ? "Task completed!" : "Task reopened");
       fetchTasks();
-    } catch (error) {
+    } catch (error: any) {
       console.error("Error updating task:", error);
-      toast.error("Failed to update task");
+      toast.error(`Failed to update task: ${error?.message || 'Unknown error'}`);
     }
   };
 
@@ -171,9 +171,9 @@ export function AdminTasksPanel() {
       
       toast.success("Task deleted");
       fetchTasks();
-    } catch (error) {
+    } catch (error: any) {
       console.error("Error deleting task:", error);
-      toast.error("Failed to delete task");
+      toast.error(`Failed to delete task: ${error?.message || 'Unknown error'}`);
     }
   };
 

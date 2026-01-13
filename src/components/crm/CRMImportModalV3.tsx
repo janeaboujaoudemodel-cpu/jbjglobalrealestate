@@ -1012,12 +1012,17 @@ const CRMImportModalV3 = ({ open, onClose, onSuccess, userId }: CRMImportModalV3
               
               {/* Custom source label input */}
               {sourceGroup === 'custom' && (
-                <Input
-                  placeholder="Enter your custom source category..."
-                  value={customSourceLabel}
-                  onChange={(e) => setCustomSourceLabel(e.target.value)}
-                  className="bg-muted border-border text-white mt-2"
-                />
+                <div className="mt-2 space-y-2">
+                  <Label className="text-white">
+                    Custom source label <span className="text-red-400">*</span>
+                  </Label>
+                  <Input
+                    placeholder="e.g., Broker Master List"
+                    value={customSourceLabel}
+                    onChange={(e) => setCustomSourceLabel(e.target.value)}
+                    className="bg-muted border-border text-white"
+                  />
+                </div>
               )}
               
               <p className="text-xs text-muted-foreground">
@@ -1061,6 +1066,10 @@ const CRMImportModalV3 = ({ open, onClose, onSuccess, userId }: CRMImportModalV3
                 onClick={() => {
                   if (!sourceGroup) {
                     toast.error("Please select a source category first");
+                    return;
+                  }
+                  if (sourceGroup === "custom" && !customSourceLabel.trim()) {
+                    toast.error("Please enter a custom source label first");
                     return;
                   }
                   fileInputRef.current?.click();

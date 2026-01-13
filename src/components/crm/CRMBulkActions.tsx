@@ -96,9 +96,9 @@ const CRMBulkActions = ({
       toast.success(`Updated ${ids.length} leads to "${newStatus}"`);
       onSuccess();
       onClear();
-    } catch (err) {
+    } catch (err: any) {
       console.error("Bulk status update failed:", err);
-      toast.error("Failed to update leads");
+      toast.error(`Failed to update leads: ${err?.message || 'Unknown error'}`);
     } finally {
       setIsUpdating(false);
     }
@@ -121,9 +121,9 @@ const CRMBulkActions = ({
       toast.success(`Assigned ${ids.length} leads`);
       onSuccess();
       onClear();
-    } catch (err) {
+    } catch (err: any) {
       console.error("Bulk assign failed:", err);
-      toast.error("Failed to assign leads");
+      toast.error(`Failed to assign leads: ${err?.message || 'Unknown error'}`);
     } finally {
       setIsUpdating(false);
     }
@@ -211,9 +211,9 @@ const CRMBulkActions = ({
       URL.revokeObjectURL(url);
 
       toast.success(`Exported ${leads.length} leads`);
-    } catch (err) {
+    } catch (err: any) {
       console.error("Export failed:", err);
-      toast.error("Failed to export leads");
+      toast.error(`Failed to export leads: ${err?.message || 'Unknown error'}`);
     } finally {
       setIsExporting(false);
     }
