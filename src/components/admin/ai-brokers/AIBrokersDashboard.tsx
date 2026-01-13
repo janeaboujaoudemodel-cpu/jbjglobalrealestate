@@ -18,30 +18,7 @@ import { AIBrokerEditDialog } from "./AIBrokerEditDialog";
 import { AIBrokerStatsDialog } from "./AIBrokerStatsDialog";
 import { LeadAssignmentRulesPanel } from "./LeadAssignmentRulesPanel";
 import { MessageFiltersPanel } from "./MessageFiltersPanel";
-
-interface AIBroker {
-  id: string;
-  name: string;
-  email: string;
-  phone: string | null;
-  gender: string;
-  avatar_url: string | null;
-  bio: string | null;
-  status: "active" | "paused" | "offline" | "training";
-  specialization: string[] | null;
-  languages: string[] | null;
-  personality_prompt: string | null;
-  total_leads_handled: number | null;
-  total_conversions: number | null;
-  average_response_time_seconds: number | null;
-  current_daily_interactions: number | null;
-  daily_interaction_limit: number | null;
-  response_delay_min_seconds: number | null;
-  response_delay_max_seconds: number | null;
-  working_hours_start: string | null;
-  working_hours_end: string | null;
-  working_days: number[] | null;
-}
+import type { AIBroker } from "./types";
 
 export function AIBrokersDashboard() {
   const [brokers, setBrokers] = useState<AIBroker[]>([]);

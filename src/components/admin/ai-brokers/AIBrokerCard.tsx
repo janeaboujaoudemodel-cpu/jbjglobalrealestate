@@ -10,11 +10,8 @@ import {
 } from "@/components/ui/dropdown-menu";
 import {
   Mail,
-  Phone,
   MessageSquare,
   MoreVertical,
-  Play,
-  Pause,
   Settings,
   BarChart3,
   Users,
@@ -22,26 +19,7 @@ import {
   TrendingUp,
 } from "lucide-react";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
-
-interface AIBroker {
-  id: string;
-  name: string;
-  email: string;
-  phone: string | null;
-  gender: string;
-  avatar_url: string | null;
-  bio: string | null;
-  status: "active" | "paused" | "offline";
-  specialization: string[] | null;
-  languages: string[] | null;
-  total_leads_handled: number | null;
-  total_conversions: number | null;
-  average_response_time_seconds: number | null;
-  current_daily_interactions: number | null;
-  daily_interaction_limit: number | null;
-  working_hours_start: string | null;
-  working_hours_end: string | null;
-}
+import type { AIBroker } from "./types";
 
 interface AIBrokerCardProps {
   broker: AIBroker;

@@ -4,7 +4,7 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Switch } from "@/components/ui/switch";
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { Card, CardContent } from "@/components/ui/card";
 import {
   Select,
   SelectContent,
@@ -27,33 +27,20 @@ import {
   Trash2,
   GripVertical,
   Users,
-  ArrowRight,
   Loader2,
 } from "lucide-react";
+import type { AssignmentRule } from "./types";
+import type { Json } from "@/integrations/supabase/types";
 
-interface AIBroker {
+interface AIBrokerSimple {
   id: string;
   name: string;
-  status: string;
-}
-
-interface AssignmentRule {
-  id: string;
-  name: string;
-  description: string | null;
-  priority: number;
-  is_active: boolean;
-  assignment_method: string;
-  assigned_broker_id: string | null;
-  broker_pool: string[] | null;
-  max_leads_per_day: number | null;
-  current_leads_today: number | null;
-  conditions: unknown;
+  status: string | null;
 }
 
 export function LeadAssignmentRulesPanel() {
   const [rules, setRules] = useState<AssignmentRule[]>([]);
-  const [brokers, setBrokers] = useState<AIBroker[]>([]);
+  const [brokers, setBrokers] = useState<AIBrokerSimple[]>([]);
   const [loading, setLoading] = useState(true);
   const [editingRule, setEditingRule] = useState<AssignmentRule | null>(null);
   const [isDialogOpen, setIsDialogOpen] = useState(false);
@@ -79,7 +66,7 @@ export function LeadAssignmentRulesPanel() {
       if (rulesRes.error) throw rulesRes.error;
       if (brokersRes.error) throw brokersRes.error;
 
-      setRules(rulesRes.data || []);
+      setRules((rulesRes.data || []) as AssignmentRule[]);
       setBrokers(brokersRes.data || []);
     } catch (error) {
       console.error("Error fetching data:", error);
@@ -138,14 +125,14 @@ export function LeadAssignmentRulesPanel() {
             assigned_broker_id: ruleData.assigned_broker_id,
             broker_pool: ruleData.broker_pool,
             max_leads_per_day: ruleData.max_leads_per_day,
-            conditions: ruleData.conditions || {},
+            conditions: (ruleData.conditions || {}) as Json,
           })
           .eq("id", editingRule.id);
 
         if (error) throw error;
         toast.success("Rule updated");
       } else {
-        const { error } = await supabase.from("broker_assignment_rules").insert({
+        const { error } = await supabase.from("broker_assignment_rules").insert([{
           name: ruleData.name || "New Rule",
           description: ruleData.description,
           priority: ruleData.priority || rules.length + 1,
@@ -153,8 +140,8 @@ export function LeadAssignmentRulesPanel() {
           assigned_broker_id: ruleData.assigned_broker_id,
           broker_pool: ruleData.broker_pool,
           max_leads_per_day: ruleData.max_leads_per_day,
-          conditions: ruleData.conditions || {},
-        });
+          conditions: (ruleData.conditions || {}) as Json,
+        }]);
 
         if (error) throw error;
         toast.success("Rule created");
@@ -329,7 +316,7 @@ export function LeadAssignmentRulesPanel() {
 
 interface RuleFormProps {
   rule: AssignmentRule | null;
-  brokers: AIBroker[];
+  brokers: AIBrokerSimple[];
   onSave: (data: Partial<AssignmentRule>) => void;
   onCancel: () => void;
 }

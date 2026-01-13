@@ -9,30 +9,10 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
-import { Switch } from "@/components/ui/switch";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Badge } from "@/components/ui/badge";
 import { X, Plus } from "lucide-react";
-
-interface AIBroker {
-  id: string;
-  name: string;
-  email: string;
-  phone: string | null;
-  gender: string;
-  avatar_url: string | null;
-  bio: string | null;
-  status: "active" | "paused" | "offline";
-  specialization: string[] | null;
-  languages: string[] | null;
-  personality_prompt: string | null;
-  daily_interaction_limit: number | null;
-  response_delay_min_seconds: number | null;
-  response_delay_max_seconds: number | null;
-  working_hours_start: string | null;
-  working_hours_end: string | null;
-  working_days: number[] | null;
-}
+import type { AIBroker } from "./types";
 
 interface AIBrokerEditDialogProps {
   broker: AIBroker | null;
