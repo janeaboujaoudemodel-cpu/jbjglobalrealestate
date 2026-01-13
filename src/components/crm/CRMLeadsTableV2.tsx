@@ -222,6 +222,15 @@ export default function CRMLeadsTableV2({
   };
 
   const handleToggleVIP = async (leadId: string, currentVIP: boolean) => {
+    // Optimistic update - update UI immediately without re-fetching
+    setLeads((prev) =>
+      prev.map((l) =>
+        l.id === leadId
+          ? { ...l, vip: !currentVIP }
+          : l
+      )
+    );
+
     try {
       const updateData: Record<string, any> = { vip: !currentVIP };
       if (!currentVIP) {
@@ -234,12 +243,28 @@ export default function CRMLeadsTableV2({
 
       const { error } = await supabase.from("crm_leads").update(updateData).eq("id", leadId);
       if (error) {
+        // Revert on error
+        setLeads((prev) =>
+          prev.map((l) =>
+            l.id === leadId
+              ? { ...l, vip: currentVIP }
+              : l
+          )
+        );
         toast.error(`VIP update failed: ${error.message}`);
         return;
       }
-      await fetchLeads();
-      onRefresh();
+      // Silent success - no page shake, no reload
+      toast.success(currentVIP ? "VIP removed" : "VIP added");
     } catch (err: any) {
+      // Revert on error
+      setLeads((prev) =>
+        prev.map((l) =>
+          l.id === leadId
+            ? { ...l, vip: currentVIP }
+            : l
+        )
+      );
       toast.error(`VIP update failed: ${err?.message || "Unknown error"}`);
     }
   };
@@ -448,39 +473,43 @@ export default function CRMLeadsTableV2({
                         onChange={(e) => handleStatusChange(lead.id, e.target.value)}
                         className="h-9 w-[180px] rounded-md border border-border bg-card px-2 text-sm font-semibold text-foreground focus:outline-none focus:ring-2 focus:ring-ring"
                       >
-                        <optgroup label="✅ POSITIVE" className="bg-green-950 text-green-300 font-bold">
+                        <optgroup label="● POSITIVE" className="bg-emerald-950 text-emerald-300 font-bold">
                           {groupedStatuses.positive.map((s) => (
                             <option key={s.value} value={s.value} className="bg-card text-foreground">
-                              {s.label}
+                              ● {s.label}
                             </option>
                           ))}
                         </optgroup>
-                        <optgroup label="⏳ NEUTRAL" className="bg-amber-950 text-amber-300 font-bold">
+                        <optgroup label="● NEUTRAL" className="bg-amber-950 text-amber-300 font-bold">
                           {groupedStatuses.neutral.map((s) => (
                             <option key={s.value} value={s.value} className="bg-card text-foreground">
-                              {s.label}
+                              ● {s.label}
                             </option>
                           ))}
                         </optgroup>
-                        <optgroup label="❌ NEGATIVE" className="bg-red-950 text-red-300 font-bold">
+                        <optgroup label="● NEGATIVE" className="bg-red-950 text-red-300 font-bold">
                           {groupedStatuses.negative.map((s) => (
                             <option key={s.value} value={s.value} className="bg-card text-foreground">
-                              {s.label}
+                              ● {s.label}
                             </option>
                           ))}
                         </optgroup>
                       </select>
                     </TableCell>
                     <TableCell>
-                      <label className="inline-flex items-center gap-2">
-                        <input
-                          type="checkbox"
-                          checked={vip}
-                          onChange={() => handleToggleVIP(lead.id, vip)}
-                          className="h-4 w-4 accent-[hsl(var(--primary))]"
-                        />
-                        <span className="text-sm font-semibold">{vip ? "VIP" : "—"}</span>
-                      </label>
+                      <Button
+                        type="button"
+                        size="sm"
+                        variant={vip ? "default" : "outline"}
+                        onClick={(e) => {
+                          e.preventDefault();
+                          e.stopPropagation();
+                          handleToggleVIP(lead.id, vip);
+                        }}
+                        className={`min-w-[60px] ${vip ? "bg-gold text-black hover:bg-gold/90" : "border-border text-muted-foreground hover:bg-muted"}`}
+                      >
+                        {vip ? "★ VIP" : "—"}
+                      </Button>
                     </TableCell>
                     <TableCell className="text-sm">
                       {assignedNames[lead.id] ? (
@@ -494,8 +523,7 @@ export default function CRMLeadsTableV2({
                         <Button
                           type="button"
                           size="icon"
-                          variant="outline"
-                          className="h-9 w-9"
+                          className="h-9 w-9 bg-green-600 hover:bg-green-700 text-white border-0"
                           onClick={() => handleWhatsApp(lead)}
                           title="WhatsApp"
                         >
@@ -504,8 +532,7 @@ export default function CRMLeadsTableV2({
                         <Button
                           type="button"
                           size="icon"
-                          variant="outline"
-                          className="h-9 w-9"
+                          className="h-9 w-9 bg-blue-600 hover:bg-blue-700 text-white border-0"
                           onClick={() => handleCall(lead)}
                           title="Call"
                         >
@@ -514,8 +541,7 @@ export default function CRMLeadsTableV2({
                         <Button
                           type="button"
                           size="icon"
-                          variant="outline"
-                          className="h-9 w-9"
+                          className="h-9 w-9 bg-purple-600 hover:bg-purple-700 text-white border-0"
                           onClick={() => handleEmail(lead)}
                           title="Email"
                         >

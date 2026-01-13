@@ -693,34 +693,9 @@ const EmployeesHub = ({ userId, brokers = [] }: EmployeesHubProps) => {
         </Card>
       </div>
 
-      {/* Main Tabs */}
+      {/* Main Content - Tabs hidden, controlled by cards above */}
       <Tabs value={activeTab} onValueChange={setActiveTab}>
-        <TabsList className="bg-zinc-900/50 border border-zinc-800 grid w-full grid-cols-3 md:grid-cols-5 lg:grid-cols-8">
-          <TabsTrigger value="all" className="data-[state=active]:bg-gold data-[state=active]:text-black text-xs">
-            All
-          </TabsTrigger>
-          <TabsTrigger value="executive" className="data-[state=active]:bg-gold data-[state=active]:text-black text-xs">
-            Executive
-          </TabsTrigger>
-          <TabsTrigger value="hr" className="data-[state=active]:bg-gold data-[state=active]:text-black text-xs">
-            HR
-          </TabsTrigger>
-          <TabsTrigger value="admin" className="data-[state=active]:bg-gold data-[state=active]:text-black text-xs">
-            Admin
-          </TabsTrigger>
-          <TabsTrigger value="marketing" className="data-[state=active]:bg-gold data-[state=active]:text-black text-xs">
-            Marketing
-          </TabsTrigger>
-          <TabsTrigger value="finance" className="data-[state=active]:bg-gold data-[state=active]:text-black text-xs">
-            Finance
-          </TabsTrigger>
-          <TabsTrigger value="brokers" className="data-[state=active]:bg-gold data-[state=active]:text-black text-xs">
-            Brokers
-          </TabsTrigger>
-          <TabsTrigger value="cv" className="data-[state=active]:bg-gold data-[state=active]:text-black text-xs">
-            CV Collected
-          </TabsTrigger>
-        </TabsList>
+        {/* TabsList removed - using top cards for filtering instead */}
 
         {/* Search Bar */}
         {activeTab !== 'cv' && (
@@ -770,17 +745,17 @@ const EmployeesHub = ({ userId, brokers = [] }: EmployeesHubProps) => {
                     className="pl-10 bg-zinc-900/50 border-zinc-800"
                   />
                 </div>
-                {/* Category Filter - NEW */}
+                {/* Category Filter - NO EMOJIS */}
                 <select
                   value={cvCategoryFilter}
                   onChange={(e) => setCvCategoryFilter(e.target.value)}
-                  className="px-3 py-2 bg-zinc-900/50 border border-zinc-800 rounded-md text-white text-sm"
+                  className="px-3 py-2 bg-zinc-900/50 border border-zinc-800 rounded-md text-white text-sm font-medium"
                 >
                   <option value="all">All Categories</option>
-                  <option value="collected">📂 Collected CVs</option>
-                  <option value="pending">⏳ Pending CVs</option>
-                  <option value="flagged">🚩 Flagged CVs</option>
-                  <option value="rejected">❌ Rejected CVs</option>
+                  <option value="collected">Collected CVs</option>
+                  <option value="pending">Pending CVs</option>
+                  <option value="flagged">Flagged CVs</option>
+                  <option value="rejected">Rejected CVs</option>
                 </select>
                 {/* Status Filter */}
                 <select
@@ -807,80 +782,114 @@ const EmployeesHub = ({ userId, brokers = [] }: EmployeesHubProps) => {
                 </select>
               </div>
               
-              {/* Quick filter badges */}
+              {/* Quick filter badges - NO EMOJIS, colored circles */}
               <div className="flex flex-wrap gap-2 mt-3">
                 <Badge 
                   variant={cvCategoryFilter === 'collected' ? 'default' : 'outline'}
-                  className="cursor-pointer hover:bg-gold/20"
+                  className="cursor-pointer hover:bg-gold/20 font-semibold"
                   onClick={() => setCvCategoryFilter(cvCategoryFilter === 'collected' ? 'all' : 'collected')}
                 >
-                  📂 Collected ({cvEntries.filter(cv => cv.category === 'collected').length})
+                  <span className="w-2 h-2 rounded-full bg-blue-500 mr-2" />
+                  Collected ({cvEntries.filter(cv => cv.category === 'collected').length})
+                </Badge>
+                <Badge 
+                  variant={cvCategoryFilter === 'pending' ? 'default' : 'outline'}
+                  className="cursor-pointer hover:bg-amber-500/20 font-semibold"
+                  onClick={() => setCvCategoryFilter(cvCategoryFilter === 'pending' ? 'all' : 'pending')}
+                >
+                  <span className="w-2 h-2 rounded-full bg-amber-500 mr-2" />
+                  Pending ({cvEntries.filter(cv => cv.category === 'pending').length})
                 </Badge>
                 <Badge 
                   variant={cvCategoryFilter === 'flagged' ? 'default' : 'outline'}
-                  className="cursor-pointer hover:bg-red-500/20 text-yellow-400"
+                  className="cursor-pointer hover:bg-yellow-500/20 font-semibold text-yellow-400"
                   onClick={() => setCvCategoryFilter(cvCategoryFilter === 'flagged' ? 'all' : 'flagged')}
                   title="Missing email, phone, or CV file"
                 >
-                  🚩 Flagged ({cvEntries.filter(cv => cv.category === 'flagged').length})
+                  <span className="w-2 h-2 rounded-full bg-yellow-500 mr-2" />
+                  Flagged ({cvEntries.filter(cv => cv.category === 'flagged').length})
                 </Badge>
                 <Badge 
                   variant={cvCategoryFilter === 'rejected' ? 'default' : 'outline'}
-                  className="cursor-pointer hover:bg-red-500/20 text-red-400"
+                  className="cursor-pointer hover:bg-red-500/20 font-semibold text-red-400"
                   onClick={() => setCvCategoryFilter(cvCategoryFilter === 'rejected' ? 'all' : 'rejected')}
                 >
-                  ❌ Rejected ({cvEntries.filter(cv => cv.category === 'rejected').length})
+                  <span className="w-2 h-2 rounded-full bg-red-500 mr-2" />
+                  Rejected ({cvEntries.filter(cv => cv.category === 'rejected').length})
                 </Badge>
               </div>
             </CardHeader>
             <CardContent>
-              <ScrollArea className="h-[400px]">
+              <ScrollArea className="h-[500px]">
                 <div className="space-y-3">
                   {getFilteredCVs().map((cv) => (
-                    <Card key={cv.id} className="bg-zinc-900/50 border-zinc-800 hover:border-gold/30 transition-colors">
+                    <Card key={cv.id} className="bg-zinc-900/80 border-zinc-700 hover:border-gold/30 transition-colors">
                       <CardContent className="p-4">
                         <div className="flex items-start justify-between gap-4">
                           <div className="flex-1">
                             <div className="flex items-center gap-3 mb-2">
-                              <Avatar className="h-10 w-10 border border-gold/30">
-                                <AvatarFallback className="bg-gold/20 text-gold font-bold">
+                              <Avatar className="h-12 w-12 border-2 border-gold/30">
+                                <AvatarFallback className="bg-gold/20 text-gold font-bold text-lg">
                                   {cv.candidateName.charAt(0)}
                                 </AvatarFallback>
                               </Avatar>
                               <div>
-                                <h4 className="text-white font-semibold">{cv.candidateName}</h4>
-                                <p className="text-gold text-sm">{cv.positionApplied}</p>
+                                <h4 className="text-white font-bold text-base">{cv.candidateName}</h4>
+                                <p className="text-gold font-medium">{cv.positionApplied}</p>
                               </div>
                               {getCVStatusBadge(cv.status)}
+                              {/* Category badge */}
+                              <Badge className={`ml-2 ${
+                                cv.category === 'rejected' ? 'bg-red-600/30 text-red-300 border-red-500/30' :
+                                cv.category === 'flagged' ? 'bg-yellow-600/30 text-yellow-300 border-yellow-500/30' :
+                                cv.category === 'pending' ? 'bg-amber-600/30 text-amber-300 border-amber-500/30' :
+                                'bg-blue-600/30 text-blue-300 border-blue-500/30'
+                              }`}>
+                                {cv.category.charAt(0).toUpperCase() + cv.category.slice(1)}
+                              </Badge>
                             </div>
                             
-                            <div className="grid grid-cols-2 md:grid-cols-4 gap-4 text-sm mt-3">
+                            <div className="grid grid-cols-2 md:grid-cols-5 gap-4 text-sm mt-3">
                               <div>
-                                <p className="text-muted-foreground">Email</p>
-                                <p className="text-white">{cv.email}</p>
+                                <p className="text-zinc-400 text-xs uppercase tracking-wide">Email</p>
+                                <p className="text-white font-medium">{cv.email}</p>
                               </div>
                               <div>
-                                <p className="text-muted-foreground">Experience</p>
-                                <p className="text-white">{cv.experience}</p>
+                                <p className="text-zinc-400 text-xs uppercase tracking-wide">Phone</p>
+                                <p className="text-white font-medium">{cv.phone || '—'}</p>
                               </div>
                               <div>
-                                <p className="text-muted-foreground">Education</p>
-                                <p className="text-white">{cv.education}</p>
+                                <p className="text-zinc-400 text-xs uppercase tracking-wide">Experience</p>
+                                <p className="text-white font-medium">{cv.experience}</p>
                               </div>
                               <div>
-                                <p className="text-muted-foreground">Upload Date</p>
-                                <p className="text-white">{cv.uploadDate}</p>
+                                <p className="text-zinc-400 text-xs uppercase tracking-wide">Education</p>
+                                <p className="text-white font-medium">{cv.education}</p>
+                              </div>
+                              <div>
+                                <p className="text-zinc-400 text-xs uppercase tracking-wide">Upload Date</p>
+                                <p className="text-white font-medium">{cv.uploadDate}</p>
                               </div>
                             </div>
                             
-                            <div className="flex items-center gap-2 mt-3">
-                              <Badge className="bg-zinc-800 text-zinc-300">
+                            <div className="flex items-center gap-2 mt-3 flex-wrap">
+                              <Badge className="bg-zinc-700 text-zinc-200 font-medium">
                                 Source: {cv.uploadedBy}
                               </Badge>
-                              <Badge className="bg-gold/20 text-gold border-gold/30">
+                              <Badge className="bg-gold/20 text-gold border-gold/30 font-medium">
                                 <Star className="h-3 w-3 mr-1" />
-                                AI Ranking: {cv.ranking}/10
+                                Ranking: {cv.ranking}/10
                               </Badge>
+                              {cv.languages && cv.languages.length > 0 && (
+                                <Badge variant="outline" className="text-zinc-300">
+                                  Languages: {cv.languages.join(', ')}
+                                </Badge>
+                              )}
+                              {cv.gender && (
+                                <Badge variant="outline" className="text-zinc-300 capitalize">
+                                  {cv.gender}
+                                </Badge>
+                              )}
                             </div>
                           </div>
                           
@@ -889,17 +898,29 @@ const EmployeesHub = ({ userId, brokers = [] }: EmployeesHubProps) => {
                             <Button 
                               variant="outline" 
                               size="sm" 
-                              className="gap-2 border-gold/30 hover:bg-gold/10"
+                              className="gap-2 border-gold/50 hover:bg-gold/10 text-gold font-semibold"
                               onClick={() => handleScheduleInterview(cv)}
                             >
                               <Video className="h-4 w-4" />
                               Schedule Interview
                             </Button>
-                            <Button variant="ghost" size="sm" className="gap-2">
+                            <Button 
+                              variant="outline" 
+                              size="sm" 
+                              className="gap-2 border-zinc-600 hover:bg-zinc-800 text-white font-medium"
+                              onClick={() => toast.info('CV viewing feature coming soon')}
+                            >
                               <FileText className="h-4 w-4" />
                               View CV
                             </Button>
-                            <Button variant="ghost" size="sm" className="gap-2">
+                            <Button 
+                              variant="outline" 
+                              size="sm" 
+                              className="gap-2 border-zinc-600 hover:bg-zinc-800 text-white font-medium"
+                              onClick={() => {
+                                if (cv.email) window.location.href = `mailto:${cv.email}`;
+                              }}
+                            >
                               <Mail className="h-4 w-4" />
                               Contact
                             </Button>
