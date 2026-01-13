@@ -14,13 +14,6 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Checkbox } from "@/components/ui/checkbox";
-import {
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
-} from "@/components/ui/select";
 import { toast } from "sonner";
 import { supabase } from "@/integrations/supabase/client";
 import { 
@@ -93,6 +86,7 @@ const CRMImportModalV3 = ({ open, onClose, onSuccess, userId }: CRMImportModalV3
   const [sourceName, setSourceName] = useState("");
   const [sourceGroup, setSourceGroup] = useState("");
   const [customSourceLabel, setCustomSourceLabel] = useState(""); // For custom source group
+  const [showTemplatePicker, setShowTemplatePicker] = useState(false);
   
   // Broker attribution state
   const [registerUnderBroker, setRegisterUnderBroker] = useState(false);
@@ -166,13 +160,18 @@ const CRMImportModalV3 = ({ open, onClose, onSuccess, userId }: CRMImportModalV3
     }
   };
 
-  // Generate default source name from file or date
+  // Generate default source name from file or date (Database Name is OPTIONAL)
+  // Requirement: if empty, auto-fill from filename (without extension) + date/time
   const getDefaultSourceName = (fileName?: string): string => {
-    if (fileName) {
-      return fileName.replace(/\.[^/.]+$/, ""); // Remove extension
-    }
     const now = new Date();
-    return `Import – ${now.toISOString().slice(0, 16).replace("T", " ")}`;
+    const ts = now.toISOString().slice(0, 16).replace("T", " ");
+
+    if (fileName) {
+      const base = fileName.replace(/\.[^/.]+$/, "");
+      return `${base} – ${ts}`;
+    }
+
+    return `Import – ${ts}`;
   };
 
   const downloadTemplate = (format: "csv" | "xlsx" = "csv") => {
@@ -207,53 +206,148 @@ const CRMImportModalV3 = ({ open, onClose, onSuccess, userId }: CRMImportModalV3
     }
   };
 
+  const normalizeHeader = (h: unknown): string =>
+    String(h ?? "")
+      .trim()
+      .toLowerCase()
+      .replace(/['"]/g, "")
+      .replace(/\s+/g, "_");
+
+  const HEADER_ALIASES: Record<string, keyof Pick<ParsedLead, "full_name" | "phone" | "email" | "company" | "nationality" | "country" | "city" | "notes">> = {
+    // name
+    full_name: "full_name",
+    fullname: "full_name",
+    name: "full_name",
+    contact_name: "full_name",
+    client_name: "full_name",
+
+    // phone
+    phone: "phone",
+    mobile: "phone",
+    tel: "phone",
+    telephone: "phone",
+    phone_number: "phone",
+    cellphone: "phone",
+    cell: "phone",
+    whatsapp: "phone",
+    whatsapp_number: "phone",
+
+    // email
+    email: "email",
+    mail: "email",
+    e_mail: "email",
+    email_address: "email",
+    emailaddress: "email",
+
+    // company
+    company: "company",
+    company_name: "company",
+    organization: "company",
+    organisation: "company",
+    org: "company",
+
+    // location + misc
+    nationality: "nationality",
+    country: "country",
+    current_location_country: "country",
+    location_country: "country",
+    city: "city",
+    current_location_city: "city",
+    location_city: "city",
+    notes: "notes",
+    note: "notes",
+    comments: "notes",
+    comment: "notes",
+    remarks: "notes",
+    remark: "notes",
+  };
+
+  const mapRowByPosition = (row: any[]): ParsedLead => {
+    const get = (idx: number) => String(row?.[idx] ?? "").trim();
+    return {
+      full_name: get(0),
+      phone: get(1),
+      email: get(2),
+      company: get(3) || "",
+      nationality: get(4) || "",
+      country: get(5) || "",
+      city: get(6) || "",
+      notes: get(7) || "",
+    };
+  };
+
+  const mapRowByHeaders = (headers: string[], row: any[]): ParsedLead => {
+    const rawData: Record<string, string> = {};
+
+    for (let i = 0; i < headers.length; i++) {
+      const header = headers[i];
+      if (!header) continue;
+      rawData[header] = String(row?.[i] ?? "");
+
+      const canonical = HEADER_ALIASES[header];
+      if (canonical) {
+        // Store canonical keys for later mapping
+        if (!(canonical in rawData)) rawData[canonical] = rawData[header];
+      }
+    }
+
+    return {
+      full_name: rawData.full_name || "",
+      phone: rawData.phone || "",
+      email: rawData.email || "",
+      company: rawData.company || "",
+      nationality: rawData.nationality || "",
+      country: rawData.country || "",
+      city: rawData.city || "",
+      notes: rawData.notes || "",
+      rawData,
+    };
+  };
+
   /**
    * Parse Excel file (.xlsx / .xls) using SheetJS
    */
   const parseExcel = async (file: File): Promise<ParsedLead[]> => {
     const arrayBuffer = await file.arrayBuffer();
     const workbook = XLSX.read(arrayBuffer, { type: "array" });
-    
-    // Read first sheet
+
     const firstSheetName = workbook.SheetNames[0];
     if (!firstSheetName) return [];
-    
+
     const worksheet = workbook.Sheets[firstSheetName];
-    const jsonData = XLSX.utils.sheet_to_json<Record<string, any>>(worksheet, { header: 1 });
-    
-    if (jsonData.length < 2) return [];
-    
-    // First row is headers
-    const rawHeaders = jsonData[0] as any[];
-    const headers = rawHeaders.map(h => 
-      String(h || '').trim().toLowerCase().replace(/['"]/g, '')
-    );
-    
+    const grid = XLSX.utils.sheet_to_json<any[]>(worksheet, { header: 1, raw: false });
+
+    if (!grid || grid.length < 2) return [];
+
+    const rawHeaderRow = (grid[0] ?? []) as any[];
+    const headers = rawHeaderRow.map(normalizeHeader);
+    const usableHeaders = headers.filter((h) => !!h).length;
+    const usePositionalFallback = usableHeaders < 2;
+
     const rows: ParsedLead[] = [];
-    
-    for (let i = 1; i < jsonData.length; i++) {
-      const rowData = jsonData[i] as any[];
-      if (!rowData || rowData.length === 0) continue;
-      
-      const rawData: Record<string, string> = {};
-      headers.forEach((header, index) => {
-        rawData[header] = String(rowData[index] || "");
-      });
-      
-      rows.push({
-        full_name: rawData.full_name || rawData.name || rawData.fullname || '',
-        phone: rawData.phone || rawData.mobile || rawData.telephone || rawData.tel || '',
-        email: rawData.email || rawData.mail || rawData.email_address || '',
-        company: rawData.company || rawData.company_name || rawData.organization || '',
-        nationality: rawData.nationality || rawData.country_of_origin || '',
-        country: rawData.country || rawData.location_country || '',
-        city: rawData.city || rawData.location_city || '',
-        notes: rawData.notes || rawData.comments || rawData.remarks || '',
-        rowIndex: i + 1, // Excel row number (1-indexed + 1 for header)
-        rawData
-      });
+
+    for (let i = 1; i < grid.length; i++) {
+      const row = grid[i] as any[];
+      if (!row || row.every((c) => String(c ?? "").trim() === "")) continue;
+
+      const lead = usePositionalFallback ? mapRowByPosition(row) : mapRowByHeaders(headers, row);
+
+      // Row number in Excel (1-indexed) including header row
+      lead.rowIndex = i + 1;
+      lead.rawData = lead.rawData ?? (usePositionalFallback ? {
+        full_name: lead.full_name,
+        phone: lead.phone,
+        email: lead.email,
+        company: lead.company || "",
+        nationality: lead.nationality || "",
+        country: lead.country || "",
+        city: lead.city || "",
+        notes: lead.notes || "",
+      } : undefined);
+
+      rows.push(lead);
     }
-    
+
     return rows;
   };
 
@@ -263,49 +357,79 @@ const CRMImportModalV3 = ({ open, onClose, onSuccess, userId }: CRMImportModalV3
     return val;
   };
 
-  const parseCSV = (text: string): ParsedLead[] => {
-    const lines = text.split("\n").filter(line => line.trim());
-    if (lines.length < 2) return [];
-    
-    const headers = lines[0].split(",").map(h => h.trim().toLowerCase().replace(/['"]/g, ''));
-    const rows: ParsedLead[] = [];
-    
-    for (let i = 1; i < lines.length; i++) {
-      const values: string[] = [];
-      let current = '';
-      let inQuotes = false;
-      
-      for (const char of lines[i]) {
-        if (char === '"') {
-          inQuotes = !inQuotes;
-        } else if (char === ',' && !inQuotes) {
-          values.push(sanitizeCSVValue(current.trim().replace(/^"|"$/g, '')));
-          current = '';
+  const splitCSVLine = (line: string): string[] => {
+    const values: string[] = [];
+    let current = "";
+    let inQuotes = false;
+
+    for (let i = 0; i < line.length; i++) {
+      const char = line[i];
+
+      if (char === '"') {
+        // Handle escaped quotes ""
+        if (inQuotes && line[i + 1] === '"') {
+          current += '"';
+          i++;
         } else {
-          current += char;
+          inQuotes = !inQuotes;
         }
+        continue;
       }
-      values.push(sanitizeCSVValue(current.trim().replace(/^"|"$/g, '')));
-      
-      const rawData: Record<string, string> = {};
-      headers.forEach((header, index) => {
-        rawData[header] = values[index] || "";
-      });
-      
-      rows.push({
-        full_name: rawData.full_name || rawData.name || rawData.fullname || '',
-        phone: rawData.phone || rawData.mobile || rawData.telephone || rawData.tel || '',
-        email: rawData.email || rawData.mail || rawData.email_address || '',
-        company: rawData.company || rawData.company_name || rawData.organization || '',
-        nationality: rawData.nationality || rawData.country_of_origin || '',
-        country: rawData.country || rawData.location_country || '',
-        city: rawData.city || rawData.location_city || '',
-        notes: rawData.notes || rawData.comments || rawData.remarks || '',
-        rowIndex: i + 1,
-        rawData
-      });
+
+      if (char === ',' && !inQuotes) {
+        values.push(sanitizeCSVValue(current.trim()));
+        current = "";
+        continue;
+      }
+
+      current += char;
     }
-    
+
+    values.push(sanitizeCSVValue(current.trim()));
+    return values.map((v) => v.replace(/^"|"$/g, ""));
+  };
+
+  const parseCSV = (text: string): ParsedLead[] => {
+    const lines = text
+      .split("\n")
+      .map((l) => l.replace(/\r$/, ""))
+      .filter((line) => line.trim());
+
+    if (lines.length < 1) return [];
+
+    const headerCells = splitCSVLine(lines[0]);
+    const headers = headerCells.map(normalizeHeader);
+    const usableHeaders = headers.filter((h) => !!h).length;
+    const usePositionalFallback = usableHeaders < 2;
+
+    const rows: ParsedLead[] = [];
+
+    // If header row is unusable, treat first line as data row
+    const startIndex = usePositionalFallback ? 0 : 1;
+
+    for (let i = startIndex; i < lines.length; i++) {
+      const cells = splitCSVLine(lines[i]);
+      if (!cells || cells.every((c) => !String(c ?? "").trim())) continue;
+
+      const lead = usePositionalFallback ? mapRowByPosition(cells) : mapRowByHeaders(headers, cells);
+      lead.rowIndex = i + 1;
+
+      if (usePositionalFallback) {
+        lead.rawData = {
+          full_name: lead.full_name,
+          phone: lead.phone,
+          email: lead.email,
+          company: lead.company || "",
+          nationality: lead.nationality || "",
+          country: lead.country || "",
+          city: lead.city || "",
+          notes: lead.notes || "",
+        };
+      }
+
+      rows.push(lead);
+    }
+
     return rows;
   };
 
@@ -589,7 +713,10 @@ const CRMImportModalV3 = ({ open, onClose, onSuccess, userId }: CRMImportModalV3
       if (analysisRunRef.current !== runId) return;
 
       if (parsed.length === 0) {
-        toast.error("No data found in file");
+        toast.error("No rows found in file");
+        setFile(null);
+        setParsedData([]);
+        setAnalyzedData({ valid: [], flagged: [], skipped: [] });
         setStep("upload");
         return;
       }
@@ -601,9 +728,14 @@ const CRMImportModalV3 = ({ open, onClose, onSuccess, userId }: CRMImportModalV3
 
       setAnalyzedData(analyzed);
       setStep("broker");
-    } catch (err) {
+    } catch (err: any) {
       console.error("File analysis error:", err);
-      toast.error("Failed to analyze file");
+      const msg = err?.message ? String(err.message) : String(err);
+      toast.error(`Failed to analyze file: ${msg}`);
+
+      setFile(null);
+      setParsedData([]);
+      setAnalyzedData({ valid: [], flagged: [], skipped: [] });
       setStep("upload");
     } finally {
       if (analysisTimeoutRef.current) {
@@ -641,15 +773,18 @@ const CRMImportModalV3 = ({ open, onClose, onSuccess, userId }: CRMImportModalV3
 
     const batchId = crypto.randomUUID();
     const finalSourceName = sourceName || getDefaultSourceName(file?.name);
-    
-    // Get display label for source group
-    const sourceGroupLabel = sourceGroup === 'custom' 
-      ? customSourceLabel.trim()
-      : SOURCE_GROUPS.find(g => g.value === sourceGroup)?.label || sourceGroup;
-    
+
+    const storedSourceGroup =
+      sourceGroup === "custom"
+        ? customSourceLabel.trim()
+        : SOURCE_GROUPS.find((g) => g.value === sourceGroup)?.label || sourceGroup;
+
+    // lead_source_type must NEVER be "website" for imports
+    const leadSourceType = sourceGroup === "custom" ? customSourceLabel.trim() : sourceGroup;
+
     // Get selected broker info
-    const selectedBroker = brokers.find(b => b.id === selectedBrokerId);
-    
+    const selectedBroker = brokers.find((b) => b.id === selectedBrokerId);
+
     const result: ImportResult = {
       total: parsedData.length,
       inserted: 0,
@@ -658,7 +793,7 @@ const CRMImportModalV3 = ({ open, onClose, onSuccess, userId }: CRMImportModalV3
       flagged: analyzedData.flagged.length,
       errors: [],
       batchId,
-      sourceId: null
+      sourceId: null,
     };
 
     // 1. Create lead source record with broker attribution
@@ -666,7 +801,8 @@ const CRMImportModalV3 = ({ open, onClose, onSuccess, userId }: CRMImportModalV3
       .from("crm_lead_sources")
       .insert({
         source_name: finalSourceName,
-        source_group: sourceGroup,
+        // Store the human label (or custom label) for display: "{source_group} · {source_name}"
+        source_group: storedSourceGroup,
         source_file_name: file?.name,
         total_rows: parsedData.length,
         valid_rows: analyzedData.valid.length,
@@ -674,17 +810,19 @@ const CRMImportModalV3 = ({ open, onClose, onSuccess, userId }: CRMImportModalV3
         created_by_user_id: userId,
         // Broker attribution (optional)
         broker_id: registerUnderBroker && selectedBrokerId ? selectedBrokerId : null,
-        broker_name_snapshot: registerUnderBroker && selectedBroker ? selectedBroker.display_name : null
+        broker_name_snapshot: registerUnderBroker && selectedBroker ? selectedBroker.display_name : null,
       })
       .select()
       .single();
 
     if (sourceError) {
       console.error("Failed to create source record:", sourceError);
-      toast.error("Failed to create import source");
-    } else {
-      result.sourceId = sourceRecord?.id || null;
+      toast.error(`Failed to create import source: ${sourceError.message}`);
+      setStep("upload");
+      return;
     }
+
+    result.sourceId = sourceRecord?.id || null;
 
     // 2. Create import tracking record
     const { data: importRecord, error: importError } = await supabase
@@ -701,7 +839,7 @@ const CRMImportModalV3 = ({ open, onClose, onSuccess, userId }: CRMImportModalV3
       .single();
 
     if (importError) {
-      toast.error("Failed to create import record");
+      toast.error(`Failed to create import record: ${importError.message}`);
       setStep("upload");
       return;
     }
@@ -717,55 +855,51 @@ const CRMImportModalV3 = ({ open, onClose, onSuccess, userId }: CRMImportModalV3
         const phone = row.normalizedPhone;
         const email = row.normalizedEmail;
         const phoneRaw = row.phone || null;
-        const phoneNormalized = phone ? phone.replace(/\D/g, '') : null;
+        const phoneNormalized = phone ? phone.replace(/\D/g, "") : null;
 
-        // CRITICAL: Do NOT auto-set language, temperature, Hot, etc.
-        const { error: insertError } = await supabase
-          .from("crm_leads")
-          .insert({
-            full_name: row.full_name || "Unknown",
-            phone_e164: phone,
-            email_lower: email,
-            phone_raw: phoneRaw,
-            phone_normalized: phoneNormalized,
-            email_normalized: email,
-            company_name: row.company || null,
-            nationality: row.nationality || null,
-            // CRITICAL: NULL for language - UI shows "—"
-            preferred_language: null,
-            current_location_country: row.country || null,
-            current_location_city: row.city || null,
-            // Do NOT detect gender automatically
-            gender: null,
-            age_range: null,
-            // CRITICAL: Empty tags - no auto Hot
-            tags: [],
-            // Source must show group and name (use display label for custom)
-            source: `${sourceGroupLabel} · ${finalSourceName}`,
-            // CRITICAL: NEVER 'website' for imports
-            lead_source_type: sourceGroup,
-            owner_type: "broker_owned",
-            owner_user_id: userId,
-            created_by_user_id: userId,
-            contact_type: "client",
-            auto_detected_type: false,
-            detection_keywords: null,
-            import_approval_status: "approved" as any,
-            // Source tracking
-            source_id: result.sourceId,
-            import_batch_id: batchId,
-            source_row_index: row.rowIndex,
-            raw_import: row.rawData || null,
-            // VIP defaults to false
-            vip: false,
-            vip_tagged_at: null,
-            vip_tagged_by: null,
-            // Flagging
-            flagged: row.isFlagged || false,
-            flag_reasons: row.flagReasons || [],
-            notes: row.notes || null,
-            imported_at: new Date().toISOString()
-          });
+        const { error: insertError } = await supabase.from("crm_leads").insert({
+          full_name: row.full_name || "Unknown",
+          phone_e164: phone,
+          email_lower: email,
+          phone_raw: phoneRaw,
+          phone_normalized: phoneNormalized,
+          email_normalized: email,
+          company_name: row.company || null,
+          nationality: row.nationality || null,
+          // CRITICAL: NULL for language - UI shows "—"
+          preferred_language: null,
+          current_location_country: row.country || null,
+          current_location_city: row.city || null,
+          gender: null,
+          age_range: null,
+          // CRITICAL: Empty tags - no auto-tags
+          tags: [],
+          // Legacy display field (never used for imported leads display)
+          source: `${storedSourceGroup} · ${finalSourceName}`,
+          // CRITICAL: NEVER "website" for imports
+          lead_source_type: leadSourceType,
+          owner_type: "broker_owned",
+          owner_user_id: userId,
+          created_by_user_id: userId,
+          contact_type: "client",
+          auto_detected_type: false,
+          detection_keywords: null,
+          import_approval_status: "approved" as any,
+          // Source tracking
+          source_id: result.sourceId,
+          import_batch_id: batchId,
+          source_row_index: row.rowIndex,
+          raw_import: row.rawData || null,
+          // VIP defaults to false
+          vip: false,
+          vip_tagged_at: null,
+          vip_tagged_by: null,
+          // Flagging
+          flagged: row.isFlagged || false,
+          flag_reasons: row.flagReasons || [],
+          notes: row.notes || null,
+          imported_at: new Date().toISOString(),
+        });
 
         if (insertError) {
           result.failed++;
@@ -813,6 +947,7 @@ const CRMImportModalV3 = ({ open, onClose, onSuccess, userId }: CRMImportModalV3
     setSourceName("");
     setSourceGroup("");
     setCustomSourceLabel("");
+    setShowTemplatePicker(false);
     setRegisterUnderBroker(false);
     setSelectedBrokerId("");
     setNewBrokerName("");
@@ -949,19 +1084,39 @@ const CRMImportModalV3 = ({ open, onClose, onSuccess, userId }: CRMImportModalV3
                   <div>
                     <p className="text-sm font-medium text-white">Need a Template?</p>
                     <p className="text-xs text-muted-foreground mt-1">
-                      Download our official JBJ import template
+                      Download the official JBJ import template
                     </p>
                   </div>
                 </div>
-                <div className="flex gap-2 shrink-0">
-                  <Button variant="outline" size="sm" onClick={() => downloadTemplate("xlsx")} className="bg-green-600/20 border-green-600/50 text-green-400 hover:bg-green-600/30">
+
+                <div className="flex flex-col items-end gap-2 shrink-0">
+                  <Button
+                    variant="outline"
+                    size="sm"
+                    onClick={() => setShowTemplatePicker((v) => !v)}
+                    className="text-white border-border hover:bg-muted"
+                  >
                     <Download className="h-4 w-4 mr-1" />
-                    Excel
+                    Template
                   </Button>
-                  <Button variant="outline" size="sm" onClick={() => downloadTemplate("csv")}>
-                    <Download className="h-4 w-4 mr-1" />
-                    CSV
-                  </Button>
+
+                  {showTemplatePicker && (
+                    <div className="flex gap-2">
+                      <Button
+                        variant="outline"
+                        size="sm"
+                        onClick={() => downloadTemplate("xlsx")}
+                        className="bg-green-600/20 border-green-600/50 text-green-400 hover:bg-green-600/30"
+                      >
+                        <Download className="h-4 w-4 mr-1" />
+                        Excel
+                      </Button>
+                      <Button variant="outline" size="sm" onClick={() => downloadTemplate("csv")}>
+                        <Download className="h-4 w-4 mr-1" />
+                        CSV
+                      </Button>
+                    </div>
+                  )}
                 </div>
               </div>
             </div>
@@ -1098,7 +1253,7 @@ const CRMImportModalV3 = ({ open, onClose, onSuccess, userId }: CRMImportModalV3
               <Database className="h-5 w-5 text-gold" />
               <div className="flex-1">
                 <p className="font-medium text-white">
-                  {SOURCE_GROUPS.find(g => g.value === sourceGroup)?.label} · {sourceName || getDefaultSourceName(file?.name)}
+                  {(sourceGroup === 'custom' ? customSourceLabel.trim() : SOURCE_GROUPS.find(g => g.value === sourceGroup)?.label) || sourceGroup} · {sourceName || getDefaultSourceName(file?.name)}
                 </p>
                 <p className="text-sm text-muted-foreground">
                   {parsedData.length} contacts from {file?.name}
@@ -1134,11 +1289,11 @@ const CRMImportModalV3 = ({ open, onClose, onSuccess, userId }: CRMImportModalV3
               <div className="text-xs text-green-300">
                 <strong>All {analyzedData.valid.length} rows will be imported.</strong>
                 <br />
-                • Status: New (not Hot)
+                • Status: New
                 <br />
                 • Language: Not set (—)
                 <br />
-                • Source: {sourceGroup.replace(/_/g, ' ')} (never "Website")
+                • Source: {sourceGroup === 'custom' ? customSourceLabel.trim() : sourceGroup.replace(/_/g, ' ')} (never "Website")
               </div>
             </div>
 
@@ -1264,7 +1419,7 @@ const CRMImportModalV3 = ({ open, onClose, onSuccess, userId }: CRMImportModalV3
               <CheckCircle className="h-16 w-16 mx-auto text-green-500 mb-4" />
               <h3 className="text-lg font-medium text-white">Import Complete!</h3>
               <p className="text-sm text-muted-foreground mt-1">
-                {SOURCE_GROUPS.find(g => g.value === sourceGroup)?.label} · {sourceName || getDefaultSourceName(file?.name)}
+                {(sourceGroup === 'custom' ? customSourceLabel.trim() : SOURCE_GROUPS.find(g => g.value === sourceGroup)?.label) || sourceGroup} · {sourceName || getDefaultSourceName(file?.name)}
               </p>
             </div>
 
