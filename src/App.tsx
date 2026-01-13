@@ -89,6 +89,7 @@ import FAQ from "./pages/FAQ";
 import JBJAnalyticsDashboard from "./pages/JBJAnalyticsDashboard";
 import JBJDesignStudio from "./pages/JBJDesignStudio";
 import AIBrokerWorkspace from "./pages/AIBrokerWorkspace";
+import JBJBrokerAdmin from "./pages/JBJBrokerAdmin";
 
 const queryClient = new QueryClient();
 
