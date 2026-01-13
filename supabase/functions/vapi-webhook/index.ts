@@ -4,7 +4,7 @@ import { createClient } from "https://esm.sh/@supabase/supabase-js@2";
 
 const corsHeaders = {
   'Access-Control-Allow-Origin': '*',
-  'Access-Control-Allow-Headers': 'authorization, x-client-info, apikey, content-type, x-vapi-secret',
+  'Access-Control-Allow-Headers': 'authorization, x-client-info, apikey, content-type, x-vapi-secret, x-vapi-signature, x-vapi-timestamp, x-signature',
 };
 
 const supabaseUrl = Deno.env.get('SUPABASE_URL')!;
@@ -81,6 +81,87 @@ function getClientIP(req: Request): string {
   return req.headers.get('x-forwarded-for')?.split(',')[0]?.trim() || 
          req.headers.get('x-real-ip') || 
          'unknown';
+}
+
+function timingSafeEqual(a: Uint8Array, b: Uint8Array): boolean {
+  if (a.length !== b.length) return false;
+  let diff = 0;
+  for (let i = 0; i < a.length; i++) diff |= a[i] ^ b[i];
+  return diff === 0;
+}
+
+function getBearerToken(authHeader: string | null): string | null {
+  if (!authHeader) return null;
+  const match = authHeader.match(/^Bearer\s+(.+)$/i);
+  return match?.[1]?.trim() || null;
+}
+
+function hexToBytes(hex: string): Uint8Array | null {
+  const normalized = hex.trim().toLowerCase().replace(/^0x/, '');
+  if (!/^[0-9a-f]*$/.test(normalized) || normalized.length % 2 !== 0) return null;
+  const bytes = new Uint8Array(normalized.length / 2);
+  for (let i = 0; i < normalized.length; i += 2) {
+    bytes[i / 2] = parseInt(normalized.slice(i, i + 2), 16);
+  }
+  return bytes;
+}
+
+function bytesToHex(bytes: ArrayBuffer): string {
+  return [...new Uint8Array(bytes)].map((b) => b.toString(16).padStart(2, '0')).join('');
+}
+
+async function hmacSha256Hex(secret: string, message: string): Promise<string> {
+  const key = await crypto.subtle.importKey(
+    'raw',
+    new TextEncoder().encode(secret),
+    { name: 'HMAC', hash: 'SHA-256' },
+    false,
+    ['sign']
+  );
+  const sig = await crypto.subtle.sign('HMAC', key, new TextEncoder().encode(message));
+  return bytesToHex(sig);
+}
+
+async function verifyVapiWebhookAuth(
+  req: Request,
+  rawBody: string
+): Promise<{ ok: boolean; reason?: string }> {
+  const secret = Deno.env.get('VAPI_WEBHOOK_SECRET');
+  if (!secret) return { ok: false, reason: 'webhook_auth_not_configured' };
+
+  // Option A: Vapi "Custom Credential" → Authorization: Bearer <token>
+  const bearer = getBearerToken(req.headers.get('authorization'));
+  if (bearer) {
+    const a = new TextEncoder().encode(bearer);
+    const b = new TextEncoder().encode(secret);
+    return timingSafeEqual(a, b) ? { ok: true } : { ok: false, reason: 'invalid_bearer_token' };
+  }
+
+  // Option B: legacy shared secret header
+  const legacy = req.headers.get('x-vapi-secret');
+  if (legacy) {
+    const a = new TextEncoder().encode(legacy);
+    const b = new TextEncoder().encode(secret);
+    return timingSafeEqual(a, b) ? { ok: true } : { ok: false, reason: 'invalid_x_vapi_secret' };
+  }
+
+  // Option C: optional HMAC signature header
+  const signature = req.headers.get('x-vapi-signature') || req.headers.get('x-signature');
+  if (signature) {
+    const timestamp = req.headers.get('x-vapi-timestamp');
+    const candidates = timestamp ? [`${timestamp}.${rawBody}`, rawBody] : [rawBody];
+
+    for (const msg of candidates) {
+      const expectedHex = await hmacSha256Hex(secret, msg);
+      const expectedBytes = hexToBytes(expectedHex);
+      const providedBytes = hexToBytes(signature);
+      if (expectedBytes && providedBytes && timingSafeEqual(providedBytes, expectedBytes)) return { ok: true };
+    }
+
+    return { ok: false, reason: 'invalid_signature' };
+  }
+
+  return { ok: false, reason: 'missing_auth_headers' };
 }
 
 // Helper function to extract lead info from transcript
@@ -721,7 +802,7 @@ serve(async (req) => {
   try {
     // Read body as text first for validation
     const bodyText = await req.text();
-    
+
     // Reject extremely large payloads (potential DoS)
     if (bodyText.length > 1024 * 1024) { // 1MB limit
       console.warn(`Payload too large from IP: ${clientIP}`);
@@ -731,7 +812,24 @@ serve(async (req) => {
         headers: { ...corsHeaders, 'Content-Type': 'application/json' }
       });
     }
-    
+
+    // Webhook authentication (Bearer token / shared secret / optional HMAC)
+    const auth = await verifyVapiWebhookAuth(req, bodyText);
+    if (!auth.ok) {
+      const status = auth.reason === 'webhook_auth_not_configured' ? 500 : 401;
+      console.warn(`Webhook auth failed from IP: ${clientIP} (${auth.reason})`);
+      await logWebhookAttempt(clientIP, false, null, auth.reason);
+      return new Response(
+        JSON.stringify({
+          error: status === 500 ? 'Webhook authentication not configured' : 'Unauthorized'
+        }),
+        {
+          status,
+          headers: { ...corsHeaders, 'Content-Type': 'application/json' }
+        }
+      );
+    }
+
     // Parse JSON
     let body: unknown;
     try {
