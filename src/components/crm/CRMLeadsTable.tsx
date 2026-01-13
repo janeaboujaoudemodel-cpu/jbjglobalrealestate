@@ -442,21 +442,14 @@ const CRMLeadsTable = ({ userId, filterType, onRefresh, statusFilters = [], sour
               </option>
             ))}
           </optgroup>
-          <optgroup label="Neutral" style={{ backgroundColor: '#09090b', color: '#3b82f6' }}>
+          <optgroup label="🔵 Neutral" style={{ backgroundColor: '#09090b', color: '#3b82f6' }}>
             {PIPELINE_STATUSES.filter(s => s.category === 'neutral').map(status => (
               <option key={status.value} value={status.value} style={{ backgroundColor: '#09090b', color: '#ffffff' }}>
                 {status.label}
               </option>
             ))}
           </optgroup>
-          <optgroup label="Follow-up" style={{ backgroundColor: '#09090b', color: '#f59e0b' }}>
-            {PIPELINE_STATUSES.filter(s => s.category === 'warning').map(status => (
-              <option key={status.value} value={status.value} style={{ backgroundColor: '#09090b', color: '#ffffff' }}>
-                {status.label}
-              </option>
-            ))}
-          </optgroup>
-          <optgroup label="Negative" style={{ backgroundColor: '#09090b', color: '#ef4444' }}>
+          <optgroup label="🔴 Negative" style={{ backgroundColor: '#09090b', color: '#ef4444' }}>
             {PIPELINE_STATUSES.filter(s => s.category === 'negative').map(status => (
               <option key={status.value} value={status.value} style={{ backgroundColor: '#09090b', color: '#ffffff' }}>
                 {status.label}
@@ -707,7 +700,7 @@ const CRMLeadsTable = ({ userId, filterType, onRefresh, statusFilters = [], sour
                               <span className="text-sm text-foreground">{status.label}</span>
                             </button>
                           ))}
-                          <p className="text-xs font-semibold text-blue-400 px-2 py-1 mt-2">Neutral</p>
+                          <p className="text-xs font-semibold text-blue-400 px-2 py-1 mt-2">🔵 Neutral</p>
                           {PIPELINE_STATUSES.filter(s => s.category === 'neutral').map(status => (
                             <button
                               key={status.value}
@@ -718,18 +711,7 @@ const CRMLeadsTable = ({ userId, filterType, onRefresh, statusFilters = [], sour
                               <span className="text-sm text-foreground">{status.label}</span>
                             </button>
                           ))}
-                          <p className="text-xs font-semibold text-amber-400 px-2 py-1 mt-2">Follow-up</p>
-                          {PIPELINE_STATUSES.filter(s => s.category === 'warning').map(status => (
-                            <button
-                              key={status.value}
-                              onClick={() => handleStatusChange(lead.id, status.value)}
-                              className="w-full flex items-center gap-2 px-2 py-1.5 rounded hover:bg-accent text-left transition-colors"
-                            >
-                              <span className={`w-2 h-2 rounded-full ${status.color}`} />
-                              <span className="text-sm text-foreground">{status.label}</span>
-                            </button>
-                          ))}
-                          <p className="text-xs font-semibold text-red-400 px-2 py-1 mt-2">Negative</p>
+                          <p className="text-xs font-semibold text-red-400 px-2 py-1 mt-2">🔴 Negative</p>
                           {PIPELINE_STATUSES.filter(s => s.category === 'negative').map(status => (
                             <button
                               key={status.value}
