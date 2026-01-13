@@ -1,17 +1,14 @@
 import { useState } from "react";
 import { Card, CardContent } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
-import { Badge } from "@/components/ui/badge";
 import { Avatar, AvatarFallback } from "@/components/ui/avatar";
 import { toast } from "sonner";
-import { supabase } from "@/integrations/supabase/client";
 import {
   MessageSquare,
   Mail,
   Phone,
   MoreVertical,
   Clock,
-  Loader2,
   ExternalLink,
 } from "lucide-react";
 import {
@@ -22,6 +19,7 @@ import {
 } from "@/components/ui/dropdown-menu";
 import { AIBrokerEmailDialog } from "./AIBrokerEmailDialog";
 import { AIBrokerWhatsAppDialog } from "./AIBrokerWhatsAppDialog";
+import { AIBrokerCallDialog } from "./AIBrokerCallDialog";
 
 interface Lead {
   id: string;
@@ -40,9 +38,9 @@ interface AIBrokerLeadCardProps {
 }
 
 export function AIBrokerLeadCard({ lead, brokerId, brokerName }: AIBrokerLeadCardProps) {
-  const [sendingEmail, setSendingEmail] = useState(false);
   const [emailDialogOpen, setEmailDialogOpen] = useState(false);
   const [whatsappDialogOpen, setWhatsappDialogOpen] = useState(false);
+  const [callDialogOpen, setCallDialogOpen] = useState(false);
 
   const getInitials = (name: string) => {
     return name
@@ -72,12 +70,7 @@ export function AIBrokerLeadCard({ lead, brokerId, brokerName }: AIBrokerLeadCar
       toast.error("No phone number available");
       return;
     }
-    
-    // Open phone dialer
-    window.open(`tel:${lead.phone}`, "_self");
-    
-    // Log the call attempt
-    toast.success(`Calling ${lead.full_name}...`);
+    setCallDialogOpen(true);
   };
 
   const handleWhatsAppClick = () => {
@@ -162,14 +155,10 @@ export function AIBrokerLeadCard({ lead, brokerId, brokerName }: AIBrokerLeadCar
             <Button
               size="sm"
               onClick={handleEmailClick}
-              disabled={!lead.email || sendingEmail}
+              disabled={!lead.email}
               className="flex-1 bg-blue-600 hover:bg-blue-700 text-white"
             >
-              {sendingEmail ? (
-                <Loader2 className="h-4 w-4 mr-1 animate-spin" />
-              ) : (
-                <Mail className="h-4 w-4 mr-1" />
-              )}
+              <Mail className="h-4 w-4 mr-1" />
               Email
             </Button>
             <Button
@@ -198,6 +187,15 @@ export function AIBrokerLeadCard({ lead, brokerId, brokerName }: AIBrokerLeadCar
       <AIBrokerWhatsAppDialog
         open={whatsappDialogOpen}
         onOpenChange={setWhatsappDialogOpen}
+        lead={lead}
+        brokerId={brokerId}
+        brokerName={brokerName}
+      />
+
+      {/* Call Dialog */}
+      <AIBrokerCallDialog
+        open={callDialogOpen}
+        onOpenChange={setCallDialogOpen}
         lead={lead}
         brokerId={brokerId}
         brokerName={brokerName}
