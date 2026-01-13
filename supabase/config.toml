@@ -137,3 +137,12 @@ verify_jwt = false
 
 [functions.ai-chat]
 verify_jwt = false
+
+[functions.broker-chat]
+verify_jwt = false
+
+[functions.broker-send-email]
+verify_jwt = false
+
+[functions.broker-assign-lead]
+verify_jwt = false
