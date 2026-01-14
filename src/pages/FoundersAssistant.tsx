@@ -17,7 +17,9 @@ import {
   Loader2,
   Flame,
   Activity,
-  Video
+  Video,
+  Zap,
+  Heart,
 } from "lucide-react";
 import FoundersChatPanel from "@/components/founders-assistant/FoundersChatPanel";
 import FoundersTaskDashboard from "@/components/founders-assistant/FoundersTaskDashboard";
@@ -28,6 +30,9 @@ import FoundersNotificationCenter from "@/components/founders-assistant/Founders
 import FoundersHotLeadsPanel from "@/components/founders-assistant/FoundersHotLeadsPanel";
 import FoundersActivityCenter from "@/components/founders-assistant/FoundersActivityCenter";
 import FoundersVideoMeetPanel from "@/components/founders-assistant/FoundersVideoMeetPanel";
+import FoundersEscalationsPanel from "@/components/founders-assistant/FoundersEscalationsPanel";
+import FoundersEmotionAnalyticsPanel from "@/components/founders-assistant/FoundersEmotionAnalyticsPanel";
+import { EscalationAlertButton } from "@/components/ai/EscalationAlertButton";
 
 // Olivia AI portrait
 import oliviaPortrait from "@/assets/team/olivia-executive-assistant.png";
@@ -143,7 +148,10 @@ export default function FoundersAssistant() {
                 </div>
               </div>
               
-              <div className="flex items-center gap-4">
+              <div className="flex items-center gap-3">
+                <EscalationAlertButton 
+                  onViewAll={() => setActiveTab('escalations')}
+                />
                 <button
                   onClick={() => setIsNotificationOpen(!isNotificationOpen)}
                   className="relative p-3 rounded-full bg-[#1A1A1A] border border-gold/20 hover:border-gold/40 transition-all"
@@ -254,6 +262,20 @@ export default function FoundersAssistant() {
                 <Video className="h-4 w-4 mr-2" />
                 Video Meet
               </TabsTrigger>
+              <TabsTrigger 
+                value="escalations"
+                className="flex-1 min-w-[100px] data-[state=active]:bg-gold data-[state=active]:text-black"
+              >
+                <Zap className="h-4 w-4 mr-2" />
+                Escalations
+              </TabsTrigger>
+              <TabsTrigger 
+                value="analytics"
+                className="flex-1 min-w-[100px] data-[state=active]:bg-gold data-[state=active]:text-black"
+              >
+                <Heart className="h-4 w-4 mr-2" />
+                Analytics
+              </TabsTrigger>
             </TabsList>
 
             <AnimatePresence mode="wait">
@@ -334,6 +356,26 @@ export default function FoundersAssistant() {
                   exit={{ opacity: 0, y: -10 }}
                 >
                   <FoundersVideoMeetPanel />
+                </motion.div>
+              </TabsContent>
+
+              <TabsContent value="escalations" className="mt-0">
+                <motion.div
+                  initial={{ opacity: 0, y: 10 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  exit={{ opacity: 0, y: -10 }}
+                >
+                  <FoundersEscalationsPanel />
+                </motion.div>
+              </TabsContent>
+
+              <TabsContent value="analytics" className="mt-0">
+                <motion.div
+                  initial={{ opacity: 0, y: 10 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  exit={{ opacity: 0, y: -10 }}
+                >
+                  <FoundersEmotionAnalyticsPanel />
                 </motion.div>
               </TabsContent>
             </AnimatePresence>
