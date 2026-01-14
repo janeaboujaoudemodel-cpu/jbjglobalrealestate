@@ -1,12 +1,12 @@
 import { useState } from "react";
-import { Link } from "react-router-dom";
+import { Link, useLocation } from "react-router-dom";
 import { motion } from "framer-motion";
 import { 
   Scale, Calculator, FileText, Ruler, Palette, Video, 
   CreditCard, Users, UserCheck, Briefcase, Camera, 
   Share2, Brain, Layers, BarChart3, Table2, Calendar,
   MessageSquare, Target, GraduationCap, Wrench, Building2,
-  X
+  X, Zap, CheckSquare, Bell, StickyNote, LayoutDashboard
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { ScrollArea } from "@/components/ui/scroll-area";
@@ -18,6 +18,17 @@ interface CRMToolsSidebarProps {
 }
 
 const toolCategories = [
+  {
+    name: "CRM Modules",
+    tools: [
+      { name: "Dashboard", href: "/crm", icon: LayoutDashboard, color: "text-gold" },
+      { name: "Automations", href: "/crm/automations", icon: Zap, color: "text-amber-400", adminOnly: true },
+      { name: "My Tasks", href: "/crm/tasks", icon: CheckSquare, color: "text-emerald-400" },
+      { name: "Calendar", href: "/crm/calendar", icon: Calendar, color: "text-blue-400" },
+      { name: "Notes", href: "/crm/notes", icon: StickyNote, color: "text-purple-400" },
+      { name: "Reminders", href: "/crm/reminders", icon: Bell, color: "text-rose-400" },
+    ]
+  },
   {
     name: "Property Tools",
     tools: [
@@ -47,7 +58,7 @@ const toolCategories = [
     name: "HR & Team",
     tools: [
       { name: "HR Manager", href: "/hr-agent", icon: Users, color: "text-orange-400" },
-      { name: "Employees Hub", href: "/crm", icon: UserCheck, color: "text-teal-400", tab: "employees" },
+      { name: "Employees Hub", href: "/crm/employees", icon: UserCheck, color: "text-teal-400" },
       { name: "Onboarding", href: "/onboarding", icon: GraduationCap, color: "text-violet-400" },
     ]
   },
@@ -70,21 +81,25 @@ const toolCategories = [
 ];
 
 const CRMToolsSidebar = ({ isOpen, onClose }: CRMToolsSidebarProps) => {
+  const location = useLocation();
+  
   if (!isOpen) return null;
+
+  const isActive = (path: string) => location.pathname === path;
 
   return (
     <motion.div
-      initial={{ x: 300, opacity: 0 }}
+      initial={{ x: -300, opacity: 0 }}
       animate={{ x: 0, opacity: 1 }}
-      exit={{ x: 300, opacity: 0 }}
+      exit={{ x: -300, opacity: 0 }}
       transition={{ type: "spring", damping: 25, stiffness: 300 }}
-      className="fixed right-0 top-0 bottom-0 w-80 bg-zinc-950 border-l border-zinc-800 z-50 shadow-2xl"
+      className="fixed left-0 top-0 bottom-0 w-72 bg-zinc-950 border-r border-zinc-800 z-50 shadow-2xl"
     >
       {/* Header */}
       <div className="flex items-center justify-between p-4 border-b border-zinc-800">
         <div className="flex items-center gap-2">
           <Wrench className="w-5 h-5 text-gold" />
-          <h3 className="font-semibold text-white">CRM Tools</h3>
+          <h3 className="font-semibold text-white">CRM Navigation</h3>
         </div>
         <Button variant="ghost" size="icon" onClick={onClose} className="text-zinc-400 hover:text-white">
           <X className="w-5 h-5" />
@@ -105,10 +120,20 @@ const CRMToolsSidebar = ({ isOpen, onClose }: CRMToolsSidebarProps) => {
                     key={tool.name}
                     to={tool.href}
                     onClick={onClose}
-                    className="flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm text-zinc-300 hover:text-white hover:bg-zinc-800/50 transition-all group"
+                    className={cn(
+                      "flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm transition-all group",
+                      isActive(tool.href) 
+                        ? "bg-gold/20 text-gold border-l-2 border-gold" 
+                        : "text-zinc-300 hover:text-white hover:bg-zinc-800/50"
+                    )}
                   >
-                    <tool.icon className={cn("w-4 h-4", tool.color)} />
+                    <tool.icon className={cn("w-4 h-4", isActive(tool.href) ? "text-gold" : tool.color)} />
                     <span>{tool.name}</span>
+                    {'adminOnly' in tool && tool.adminOnly && (
+                      <span className="ml-auto text-[10px] text-amber-500/80 bg-amber-500/10 px-1.5 py-0.5 rounded">
+                        Admin
+                      </span>
+                    )}
                   </Link>
                 ))}
               </div>
