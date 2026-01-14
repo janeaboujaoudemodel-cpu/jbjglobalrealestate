@@ -1,5 +1,6 @@
 import React, { useState, useRef, useEffect, useCallback } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
+import DOMPurify from 'dompurify';
 import { 
   Send, 
   Mic, 
@@ -427,20 +428,33 @@ Just type naturally or use commands like \`/schedule\`, \`/email\`, or mention t
                   <>
                     <div className="text-sm leading-relaxed whitespace-pre-wrap prose prose-invert prose-sm max-w-none">
                       {message.content.split('\n').map((line, i) => {
-                        // Simple markdown-like rendering
-                        let rendered = line;
-                        // Bold
+                        // Escape HTML first to prevent XSS
+                        const escapeHtml = (text: string) => text
+                          .replace(/&/g, '&amp;')
+                          .replace(/</g, '&lt;')
+                          .replace(/>/g, '&gt;')
+                          .replace(/"/g, '&quot;')
+                          .replace(/'/g, '&#039;');
+                        
+                        let rendered = escapeHtml(line);
+                        // Bold (now safe after escaping)
                         rendered = rendered.replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>');
                         // Italic
                         rendered = rendered.replace(/\*(.*?)\*/g, '<em>$1</em>');
                         // Code
                         rendered = rendered.replace(/`(.*?)`/g, '<code class="bg-gold/20 px-1 rounded text-gold">$1</code>');
                         
+                        // Sanitize with DOMPurify as defense-in-depth
+                        const sanitized = DOMPurify.sanitize(rendered, {
+                          ALLOWED_TAGS: ['strong', 'em', 'code', 'p', 'br'],
+                          ALLOWED_ATTR: ['class']
+                        });
+                        
                         return (
                           <p 
                             key={i} 
                             className={line.startsWith('•') ? 'pl-2' : ''}
-                            dangerouslySetInnerHTML={{ __html: rendered }}
+                            dangerouslySetInnerHTML={{ __html: sanitized }}
                           />
                         );
                       })}
