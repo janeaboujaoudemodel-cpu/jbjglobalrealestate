@@ -26,56 +26,56 @@ const QUICK_FILTERS: QuickFilter[] = [
     id: "all", 
     label: "All Leads", 
     icon: Inbox, 
-    color: "text-white",
-    bgColor: "bg-slate-600/30 hover:bg-slate-600/50",
+    color: "text-zinc-700",
+    bgColor: "bg-zinc-100 hover:bg-zinc-200 border-zinc-300",
     statuses: [] 
   },
   { 
     id: "new", 
     label: "New", 
     icon: Star, 
-    color: "text-blue-400",
-    bgColor: "bg-blue-600/20 hover:bg-blue-600/40 border-blue-500/30",
+    color: "text-blue-600",
+    bgColor: "bg-blue-50 hover:bg-blue-100 border-blue-200",
     statuses: ["new"] 
   },
   { 
     id: "hot", 
     label: "Hot Leads", 
     icon: TrendingUp, 
-    color: "text-emerald-400",
-    bgColor: "bg-emerald-600/20 hover:bg-emerald-600/40 border-emerald-500/30",
+    color: "text-emerald-600",
+    bgColor: "bg-emerald-50 hover:bg-emerald-100 border-emerald-200",
     statuses: ["interested", "qualified", "negotiation"] 
   },
   { 
     id: "followup", 
     label: "Follow-up", 
     icon: Clock, 
-    color: "text-amber-400",
-    bgColor: "bg-amber-600/20 hover:bg-amber-600/40 border-amber-500/30",
+    color: "text-amber-600",
+    bgColor: "bg-amber-50 hover:bg-amber-100 border-amber-200",
     statuses: ["no_answer", "callback", "followup"] 
   },
   { 
     id: "closed_won", 
-    label: "Closed Won", 
+    label: "Won", 
     icon: CheckCircle, 
-    color: "text-green-400",
-    bgColor: "bg-green-600/20 hover:bg-green-600/40 border-green-500/30",
+    color: "text-green-600",
+    bgColor: "bg-green-50 hover:bg-green-100 border-green-200",
     statuses: ["closed_won"] 
   },
   { 
     id: "lost", 
     label: "Lost", 
     icon: XCircle, 
-    color: "text-red-400",
-    bgColor: "bg-red-600/20 hover:bg-red-600/40 border-red-500/30",
+    color: "text-red-600",
+    bgColor: "bg-red-50 hover:bg-red-100 border-red-200",
     statuses: ["not_interested", "closed_lost", "do_not_contact"] 
   },
   { 
     id: "junk", 
     label: "Junk", 
     icon: Trash2, 
-    color: "text-gray-400",
-    bgColor: "bg-gray-600/20 hover:bg-gray-600/40 border-gray-500/30",
+    color: "text-zinc-500",
+    bgColor: "bg-zinc-50 hover:bg-zinc-100 border-zinc-200",
     statuses: ["junk"] 
   },
 ];
