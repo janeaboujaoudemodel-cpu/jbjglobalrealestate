@@ -2,12 +2,13 @@ import { useState, useEffect } from "react";
 import { useNavigate, Link } from "react-router-dom";
 import { useAuth } from "@/contexts/AuthContext";
 import { supabase } from "@/integrations/supabase/client";
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { Card, CardContent } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Skeleton } from "@/components/ui/skeleton";
 import { toast } from "sonner";
-import { ArrowLeft, Users, UserCheck, Briefcase } from "lucide-react";
+import { ArrowLeft, Users } from "lucide-react";
 import EmployeesHub from "@/components/crm/EmployeesHub";
+import ListingAdminManager from "@/components/crm/ListingAdminManager";
 
 const CRMEmployees = () => {
   const { user, loading: authLoading } = useAuth();
@@ -96,7 +97,10 @@ const CRMEmployees = () => {
       </header>
 
       {/* Main Content */}
-      <main className="max-w-7xl mx-auto px-6 py-8">
+      <main className="max-w-7xl mx-auto px-6 py-8 space-y-6">
+        {/* Listing Admin Manager - Only for admins */}
+        {isAdmin && <ListingAdminManager />}
+
         <Card className="border-zinc-200 bg-white">
           <CardContent className="p-6">
             <EmployeesHub userId={user?.id || ""} />

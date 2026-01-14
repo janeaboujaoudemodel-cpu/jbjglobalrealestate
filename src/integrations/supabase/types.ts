@@ -5893,6 +5893,48 @@ export type Database = {
         }
         Relationships: []
       }
+      listing_admins: {
+        Row: {
+          assigned_at: string | null
+          assigned_by_user_id: string | null
+          created_at: string | null
+          display_name: string
+          email: string
+          id: string
+          is_active: boolean | null
+          last_active_at: string | null
+          notes: string | null
+          updated_at: string | null
+          user_id: string
+        }
+        Insert: {
+          assigned_at?: string | null
+          assigned_by_user_id?: string | null
+          created_at?: string | null
+          display_name: string
+          email: string
+          id?: string
+          is_active?: boolean | null
+          last_active_at?: string | null
+          notes?: string | null
+          updated_at?: string | null
+          user_id: string
+        }
+        Update: {
+          assigned_at?: string | null
+          assigned_by_user_id?: string | null
+          created_at?: string | null
+          display_name?: string
+          email?: string
+          id?: string
+          is_active?: boolean | null
+          last_active_at?: string | null
+          notes?: string | null
+          updated_at?: string | null
+          user_id?: string
+        }
+        Relationships: []
+      }
       market_alerts: {
         Row: {
           acknowledged_at: string | null
@@ -8505,6 +8547,7 @@ export type Database = {
       }
       is_hr_admin: { Args: { _user_id: string }; Returns: boolean }
       is_hr_member: { Args: { _user_id: string }; Returns: boolean }
+      is_listing_admin: { Args: { _user_id: string }; Returns: boolean }
       is_org_member: {
         Args: { _org_id: string; _user_id: string }
         Returns: boolean
@@ -8574,7 +8617,7 @@ export type Database = {
         | "human_responded"
         | "ignored"
       ai_broker_status: "active" | "paused" | "training" | "offline"
-      app_role: "admin" | "user" | "owner" | "broker"
+      app_role: "admin" | "user" | "owner" | "broker" | "listing_admin"
       audit_action_type:
         | "create"
         | "read"
@@ -8836,7 +8879,7 @@ export const Constants = {
         "ignored",
       ],
       ai_broker_status: ["active", "paused", "training", "offline"],
-      app_role: ["admin", "user", "owner", "broker"],
+      app_role: ["admin", "user", "owner", "broker", "listing_admin"],
       audit_action_type: [
         "create",
         "read",
