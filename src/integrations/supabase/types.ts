@@ -1876,6 +1876,84 @@ export type Database = {
         }
         Relationships: []
       }
+      compliance_audit_logs: {
+        Row: {
+          audit_type: string
+          audited_by: string
+          compliance_status: Database["public"]["Enums"]["compliance_status"]
+          created_at: string | null
+          findings: string[] | null
+          id: string
+          metadata: Json | null
+          policy_reference: string | null
+          recommendations: string[] | null
+          target_id: string | null
+          target_type: string
+        }
+        Insert: {
+          audit_type: string
+          audited_by: string
+          compliance_status?: Database["public"]["Enums"]["compliance_status"]
+          created_at?: string | null
+          findings?: string[] | null
+          id?: string
+          metadata?: Json | null
+          policy_reference?: string | null
+          recommendations?: string[] | null
+          target_id?: string | null
+          target_type: string
+        }
+        Update: {
+          audit_type?: string
+          audited_by?: string
+          compliance_status?: Database["public"]["Enums"]["compliance_status"]
+          created_at?: string | null
+          findings?: string[] | null
+          id?: string
+          metadata?: Json | null
+          policy_reference?: string | null
+          recommendations?: string[] | null
+          target_id?: string | null
+          target_type?: string
+        }
+        Relationships: []
+      }
+      compliance_training: {
+        Row: {
+          completed_at: string | null
+          created_at: string | null
+          id: string
+          is_completed: boolean | null
+          reminder_sent_at: string | null
+          score: number | null
+          training_content: string | null
+          training_type: string
+          user_id: string
+        }
+        Insert: {
+          completed_at?: string | null
+          created_at?: string | null
+          id?: string
+          is_completed?: boolean | null
+          reminder_sent_at?: string | null
+          score?: number | null
+          training_content?: string | null
+          training_type: string
+          user_id: string
+        }
+        Update: {
+          completed_at?: string | null
+          created_at?: string | null
+          id?: string
+          is_completed?: boolean | null
+          reminder_sent_at?: string | null
+          score?: number | null
+          training_content?: string | null
+          training_type?: string
+          user_id?: string
+        }
+        Relationships: []
+      }
       content_access_logs: {
         Row: {
           accessed_at: string
@@ -3067,6 +3145,45 @@ export type Database = {
         }
         Relationships: []
       }
+      data_access_rules: {
+        Row: {
+          access_level: string
+          conditions: Json | null
+          created_at: string | null
+          created_by: string | null
+          department: string | null
+          id: string
+          is_active: boolean | null
+          resource_type: string
+          role: string
+          updated_at: string | null
+        }
+        Insert: {
+          access_level: string
+          conditions?: Json | null
+          created_at?: string | null
+          created_by?: string | null
+          department?: string | null
+          id?: string
+          is_active?: boolean | null
+          resource_type: string
+          role: string
+          updated_at?: string | null
+        }
+        Update: {
+          access_level?: string
+          conditions?: Json | null
+          created_at?: string | null
+          created_by?: string | null
+          department?: string | null
+          id?: string
+          is_active?: boolean | null
+          resource_type?: string
+          role?: string
+          updated_at?: string | null
+        }
+        Relationships: []
+      }
       developer_sales_reps: {
         Row: {
           created_at: string
@@ -3394,6 +3511,96 @@ export type Database = {
             referencedColumns: ["id"]
           },
         ]
+      }
+      emergency_lockdowns: {
+        Row: {
+          actions_taken: string[] | null
+          affected_departments: string[] | null
+          created_at: string | null
+          deactivated_at: string | null
+          deactivated_by: string | null
+          id: string
+          is_active: boolean | null
+          severity: Database["public"]["Enums"]["security_severity"]
+          trigger_reason: string
+          triggered_by: string
+        }
+        Insert: {
+          actions_taken?: string[] | null
+          affected_departments?: string[] | null
+          created_at?: string | null
+          deactivated_at?: string | null
+          deactivated_by?: string | null
+          id?: string
+          is_active?: boolean | null
+          severity?: Database["public"]["Enums"]["security_severity"]
+          trigger_reason: string
+          triggered_by: string
+        }
+        Update: {
+          actions_taken?: string[] | null
+          affected_departments?: string[] | null
+          created_at?: string | null
+          deactivated_at?: string | null
+          deactivated_by?: string | null
+          id?: string
+          is_active?: boolean | null
+          severity?: Database["public"]["Enums"]["security_severity"]
+          trigger_reason?: string
+          triggered_by?: string
+        }
+        Relationships: []
+      }
+      ethics_violations: {
+        Row: {
+          action_required: string | null
+          ai_agent_id: string | null
+          created_at: string | null
+          department: string | null
+          description: string
+          evidence: Json | null
+          id: string
+          reviewed_at: string | null
+          reviewed_by: string | null
+          severity: Database["public"]["Enums"]["security_severity"]
+          status: string | null
+          violation_type: string
+          violator_id: string | null
+          violator_type: string | null
+        }
+        Insert: {
+          action_required?: string | null
+          ai_agent_id?: string | null
+          created_at?: string | null
+          department?: string | null
+          description: string
+          evidence?: Json | null
+          id?: string
+          reviewed_at?: string | null
+          reviewed_by?: string | null
+          severity: Database["public"]["Enums"]["security_severity"]
+          status?: string | null
+          violation_type: string
+          violator_id?: string | null
+          violator_type?: string | null
+        }
+        Update: {
+          action_required?: string | null
+          ai_agent_id?: string | null
+          created_at?: string | null
+          department?: string | null
+          description?: string
+          evidence?: Json | null
+          id?: string
+          reviewed_at?: string | null
+          reviewed_by?: string | null
+          severity?: Database["public"]["Enums"]["security_severity"]
+          status?: string | null
+          violation_type?: string
+          violator_id?: string | null
+          violator_type?: string | null
+        }
+        Relationships: []
       }
       evaluation_requests: {
         Row: {
@@ -4073,6 +4280,54 @@ export type Database = {
             referencedColumns: ["id"]
           },
         ]
+      }
+      file_provenance: {
+        Row: {
+          access_history: Json | null
+          created_at: string | null
+          department: string | null
+          encryption_status: string | null
+          file_hash: string
+          file_id: string
+          file_name: string
+          id: string
+          is_tampered: boolean | null
+          modifications: Json | null
+          updated_at: string | null
+          uploader_id: string | null
+          watermark_id: string | null
+        }
+        Insert: {
+          access_history?: Json | null
+          created_at?: string | null
+          department?: string | null
+          encryption_status?: string | null
+          file_hash: string
+          file_id: string
+          file_name: string
+          id?: string
+          is_tampered?: boolean | null
+          modifications?: Json | null
+          updated_at?: string | null
+          uploader_id?: string | null
+          watermark_id?: string | null
+        }
+        Update: {
+          access_history?: Json | null
+          created_at?: string | null
+          department?: string | null
+          encryption_status?: string | null
+          file_hash?: string
+          file_id?: string
+          file_name?: string
+          id?: string
+          is_tampered?: boolean | null
+          modifications?: Json | null
+          updated_at?: string | null
+          uploader_id?: string | null
+          watermark_id?: string | null
+        }
+        Relationships: []
       }
       function_rate_limits: {
         Row: {
@@ -6247,6 +6502,108 @@ export type Database = {
         }
         Relationships: []
       }
+      security_events: {
+        Row: {
+          action_taken: string | null
+          ai_agent_id: string | null
+          created_at: string | null
+          department: string | null
+          description: string
+          event_type: Database["public"]["Enums"]["security_event_type"]
+          id: string
+          ip_address: unknown
+          is_resolved: boolean | null
+          metadata: Json | null
+          resolved_at: string | null
+          resolved_by: string | null
+          resource_id: string | null
+          resource_type: string | null
+          severity: Database["public"]["Enums"]["security_severity"]
+          user_agent: string | null
+          user_id: string | null
+        }
+        Insert: {
+          action_taken?: string | null
+          ai_agent_id?: string | null
+          created_at?: string | null
+          department?: string | null
+          description: string
+          event_type: Database["public"]["Enums"]["security_event_type"]
+          id?: string
+          ip_address?: unknown
+          is_resolved?: boolean | null
+          metadata?: Json | null
+          resolved_at?: string | null
+          resolved_by?: string | null
+          resource_id?: string | null
+          resource_type?: string | null
+          severity?: Database["public"]["Enums"]["security_severity"]
+          user_agent?: string | null
+          user_id?: string | null
+        }
+        Update: {
+          action_taken?: string | null
+          ai_agent_id?: string | null
+          created_at?: string | null
+          department?: string | null
+          description?: string
+          event_type?: Database["public"]["Enums"]["security_event_type"]
+          id?: string
+          ip_address?: unknown
+          is_resolved?: boolean | null
+          metadata?: Json | null
+          resolved_at?: string | null
+          resolved_by?: string | null
+          resource_id?: string | null
+          resource_type?: string | null
+          severity?: Database["public"]["Enums"]["security_severity"]
+          user_agent?: string | null
+          user_id?: string | null
+        }
+        Relationships: []
+      }
+      security_health_metrics: {
+        Row: {
+          blocked_activities: number | null
+          created_at: string | null
+          data_leaks_prevented: number | null
+          department_risk_scores: Json | null
+          encryption_compliance_percent: number | null
+          ethics_flags: number | null
+          id: string
+          metric_date: string
+          policy_violations: number | null
+          security_score: number | null
+          unauthorized_attempts: number | null
+        }
+        Insert: {
+          blocked_activities?: number | null
+          created_at?: string | null
+          data_leaks_prevented?: number | null
+          department_risk_scores?: Json | null
+          encryption_compliance_percent?: number | null
+          ethics_flags?: number | null
+          id?: string
+          metric_date?: string
+          policy_violations?: number | null
+          security_score?: number | null
+          unauthorized_attempts?: number | null
+        }
+        Update: {
+          blocked_activities?: number | null
+          created_at?: string | null
+          data_leaks_prevented?: number | null
+          department_risk_scores?: Json | null
+          encryption_compliance_percent?: number | null
+          ethics_flags?: number | null
+          id?: string
+          metric_date?: string
+          policy_violations?: number | null
+          security_score?: number | null
+          unauthorized_attempts?: number | null
+        }
+        Relationships: []
+      }
       seller_listings: {
         Row: {
           additional_doc_urls: string[] | null
@@ -7257,6 +7614,7 @@ export type Database = {
         }
         Returns: number
       }
+      calculate_security_score: { Args: never; Returns: number }
       can_access_crm_lead: {
         Args: { _lead_id: string; _user_id: string }
         Returns: boolean
@@ -7371,10 +7729,33 @@ export type Database = {
         }
         Returns: string
       }
+      log_security_event_full: {
+        Args: {
+          p_action_taken?: string
+          p_ai_agent_id?: string
+          p_department?: string
+          p_description: string
+          p_event_type: Database["public"]["Enums"]["security_event_type"]
+          p_metadata?: Json
+          p_resource_id?: string
+          p_resource_type?: string
+          p_severity: Database["public"]["Enums"]["security_severity"]
+          p_user_id?: string
+        }
+        Returns: string
+      }
       mask_bank_account: { Args: { account: string }; Returns: string }
       mask_email: { Args: { email: string }; Returns: string }
       mask_iban: { Args: { iban: string }; Returns: string }
       mask_phone: { Args: { phone: string }; Returns: string }
+      trigger_emergency_lockdown: {
+        Args: {
+          p_departments?: string[]
+          p_reason: string
+          p_severity?: Database["public"]["Enums"]["security_severity"]
+        }
+        Returns: string
+      }
       update_partner_banking: {
         Args: {
           p_bank_account?: string
@@ -7447,6 +7828,7 @@ export type Database = {
         | "linkedin"
         | "phone"
         | "sms"
+      compliance_status: "compliant" | "warning" | "violation" | "under_review"
       crm_activity_type:
         | "call"
         | "whatsapp_click"
@@ -7484,6 +7866,23 @@ export type Database = {
       hr_question_type: "mcq" | "true_false" | "short_answer"
       hr_role: "broker_candidate" | "broker_member"
       reward_type: "points" | "gift" | "badge" | "certificate"
+      security_event_type:
+        | "login_attempt"
+        | "login_success"
+        | "login_failure"
+        | "unauthorized_access"
+        | "permission_change"
+        | "data_export"
+        | "file_upload"
+        | "file_download"
+        | "file_modification"
+        | "suspicious_activity"
+        | "intrusion_detected"
+        | "data_leak_attempt"
+        | "ethics_violation"
+        | "policy_violation"
+        | "lockdown_triggered"
+      security_severity: "info" | "low" | "medium" | "high" | "critical"
       visitor_role: "broker" | "referral_partner" | "client" | "visitor"
     }
     CompositeTypes: {
@@ -7674,6 +8073,7 @@ export const Constants = {
         "phone",
         "sms",
       ],
+      compliance_status: ["compliant", "warning", "violation", "under_review"],
       crm_activity_type: [
         "call",
         "whatsapp_click",
@@ -7714,6 +8114,24 @@ export const Constants = {
       hr_question_type: ["mcq", "true_false", "short_answer"],
       hr_role: ["broker_candidate", "broker_member"],
       reward_type: ["points", "gift", "badge", "certificate"],
+      security_event_type: [
+        "login_attempt",
+        "login_success",
+        "login_failure",
+        "unauthorized_access",
+        "permission_change",
+        "data_export",
+        "file_upload",
+        "file_download",
+        "file_modification",
+        "suspicious_activity",
+        "intrusion_detected",
+        "data_leak_attempt",
+        "ethics_violation",
+        "policy_violation",
+        "lockdown_triggered",
+      ],
+      security_severity: ["info", "low", "medium", "high", "critical"],
       visitor_role: ["broker", "referral_partner", "client", "visitor"],
     },
   },
