@@ -353,10 +353,13 @@ class MarketIntelligenceService {
     fromDate?: string;
     limit?: number;
   }): Promise<EconomicIndicator[]> {
-    let query = supabase
+    const baseQuery = supabase
       .from('economic_indicators')
       .select('*')
       .order('report_date', { ascending: false });
+    
+    // Build query with filters - use explicit any to avoid deep type instantiation
+    let query: any = baseQuery;
     
     if (filters?.indicatorType) {
       query = query.eq('indicator_type', filters.indicatorType);
