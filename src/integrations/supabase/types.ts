@@ -173,6 +173,84 @@ export type Database = {
         }
         Relationships: []
       }
+      ai_communication_logs: {
+        Row: {
+          action_type: string
+          ai_employee_id: string
+          ai_name: string
+          channel: string | null
+          created_at: string | null
+          id: string
+          message_preview: string | null
+          metadata: Json | null
+          recipient_id: string | null
+          recipient_type: string | null
+        }
+        Insert: {
+          action_type: string
+          ai_employee_id: string
+          ai_name: string
+          channel?: string | null
+          created_at?: string | null
+          id?: string
+          message_preview?: string | null
+          metadata?: Json | null
+          recipient_id?: string | null
+          recipient_type?: string | null
+        }
+        Update: {
+          action_type?: string
+          ai_employee_id?: string
+          ai_name?: string
+          channel?: string | null
+          created_at?: string | null
+          id?: string
+          message_preview?: string | null
+          metadata?: Json | null
+          recipient_id?: string | null
+          recipient_type?: string | null
+        }
+        Relationships: []
+      }
+      ai_daily_summaries: {
+        Row: {
+          ai_employee_id: string
+          ai_name: string
+          created_at: string | null
+          deals_closed: number | null
+          follow_ups_pending: number | null
+          id: string
+          leads_contacted: number | null
+          messages_sent: number | null
+          summary_date: string
+          summary_text: string | null
+        }
+        Insert: {
+          ai_employee_id: string
+          ai_name: string
+          created_at?: string | null
+          deals_closed?: number | null
+          follow_ups_pending?: number | null
+          id?: string
+          leads_contacted?: number | null
+          messages_sent?: number | null
+          summary_date: string
+          summary_text?: string | null
+        }
+        Update: {
+          ai_employee_id?: string
+          ai_name?: string
+          created_at?: string | null
+          deals_closed?: number | null
+          follow_ups_pending?: number | null
+          id?: string
+          leads_contacted?: number | null
+          messages_sent?: number | null
+          summary_date?: string
+          summary_text?: string | null
+        }
+        Relationships: []
+      }
       ai_usage_logs: {
         Row: {
           client_ip_hash: string | null
