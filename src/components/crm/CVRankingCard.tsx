@@ -185,17 +185,19 @@ const CVRankingCard = ({
                 variant="outline"
                 size="sm"
                 onClick={() => onView(candidate.id)}
-                className="text-white border-border hover:bg-muted"
+                className="text-zinc-900 bg-white border-zinc-300 hover:bg-zinc-100 font-medium shadow-sm"
               >
-                <Eye className="h-4 w-4" />
+                <Eye className="h-4 w-4 mr-1" />
+                Review
               </Button>
               <Button
                 variant="outline"
                 size="sm"
                 onClick={() => onDownload(candidate.id)}
-                className="text-gold border-gold/30 hover:bg-gold/10"
+                className="text-zinc-900 bg-amber-100 border-amber-400 hover:bg-amber-200 font-medium shadow-sm"
               >
-                <Download className="h-4 w-4" />
+                <Download className="h-4 w-4 mr-1" />
+                CV
               </Button>
             </div>
             
@@ -206,20 +208,20 @@ const CVRankingCard = ({
                   <Button
                     size="sm"
                     onClick={() => onScheduleInterview(candidate.id, 'first')}
-                    className="bg-blue-600 hover:bg-blue-700 text-white text-xs"
+                    className="bg-blue-600 hover:bg-blue-700 text-white text-xs font-semibold shadow-md"
                   >
                     <Video className="h-3 w-3 mr-1" />
-                    Schedule
+                    Schedule Interview
                   </Button>
                 )}
                 {candidate.interviewStage === 'first' && candidate.status === 'interviewed' && (
                   <Button
                     size="sm"
                     onClick={() => onScheduleInterview(candidate.id, 'second')}
-                    className="bg-purple-600 hover:bg-purple-700 text-white text-xs"
+                    className="bg-purple-600 hover:bg-purple-700 text-white text-xs font-semibold shadow-md"
                   >
                     <Video className="h-3 w-3 mr-1" />
-                    2nd Round
+                    2nd Round Interview
                   </Button>
                 )}
               </div>
