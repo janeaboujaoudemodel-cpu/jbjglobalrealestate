@@ -164,8 +164,8 @@ const ActivityTimeline = ({ userId, leadId, limit = 20, showLeadName = true }: A
           Activity Timeline
         </CardTitle>
       </CardHeader>
-      <CardContent>
-        <ScrollArea className="h-[400px] pr-4">
+      <CardContent className="pb-3">
+        <ScrollArea className="h-[200px] pr-4">
           {activities.length === 0 ? (
             <div className="text-center text-muted-foreground py-8">
               No activities yet
