@@ -100,6 +100,7 @@ import JBJBrokerDashboard from "./pages/JBJBrokerDashboard";
 import JBJBrokerMessages from "./pages/JBJBrokerMessages";
 import JBJBrokerReports from "./pages/JBJBrokerReports";
 import FoundersAssistant from "./pages/FoundersAssistant";
+import ListingAdmin from "./pages/ListingAdmin";
 
 const queryClient = new QueryClient();
 
@@ -209,6 +210,7 @@ const App = () => (
                 <Route path="/jbj-broker-messages" element={<JBJBrokerMessages />} />
                 <Route path="/jbj-broker-reports" element={<JBJBrokerReports />} />
                 <Route path="/founders-assistant" element={<FoundersAssistant />} />
+                <Route path="/listing-admin" element={<ListingAdmin />} />
                 <Route path="*" element={<NotFound />} />
               </Route>
             </Routes>
