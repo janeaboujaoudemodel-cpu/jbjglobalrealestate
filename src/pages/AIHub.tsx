@@ -39,7 +39,8 @@ import {
   User,
   Target,
   Headphones,
-  LogIn
+  LogIn,
+  FolderOpen
 } from "lucide-react";
 
 const fadeInUp = {
@@ -141,6 +142,17 @@ const freeAITools = [
 
 // Category 2: BROKER OPERATIONS (Human Support)
 const brokerOperations = [
+  {
+    id: "listing-admin",
+    title: "Listing Admin (Sarah)",
+    subtitle: "AI Property Manager",
+    description: "Smart property listing, document parsing, auto-categorization by developer.",
+    icon: FolderOpen,
+    color: "text-emerald-400",
+    bgColor: "bg-emerald-500/10",
+    borderColor: "border-emerald-500/30",
+    link: "/listing-admin",
+  },
   {
     id: "admin-support",
     title: "Personal Admin Support",
