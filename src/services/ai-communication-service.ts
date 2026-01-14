@@ -4,7 +4,7 @@
  */
 
 import { supabase } from "@/integrations/supabase/client";
-import { AI_PERSONALITIES, MESSAGE_TEMPLATES, EMAIL_SIGNATURE, JBJ_COMPANY_INFO } from "@/config/ai-personalities";
+import { AI_PERSONALITIES, MESSAGE_TEMPLATES, SIGNATURE_TEMPLATES, JBJ_COMPANY_INFO } from "@/config/ai-personalities";
 import type { AIPersonality } from "@/config/ai-personalities";
 
 export interface AIMessage {
@@ -114,21 +114,29 @@ export function generateWelcomeMessage(
 
 // Generate follow-up message based on days since contact
 export function generateFollowUpMessage(
-  context: LeadEngagementContext
+  context: LeadEngagementContext,
+  brokerName: string = 'Your Property Advisor'
 ): { message: string; urgency: 'low' | 'medium' | 'high' } {
   const days = context.daysSinceContact || 0;
   
   if (days <= 1) {
     return {
-      message: MESSAGE_TEMPLATES.followUp24h(context.leadName),
+      message: MESSAGE_TEMPLATES.followUp24h(context.leadName, brokerName),
       urgency: 'low',
     };
   }
   
   if (days <= 3) {
     return {
-      message: MESSAGE_TEMPLATES.followUp3d(context.leadName),
+      message: MESSAGE_TEMPLATES.followUp3d(context.leadName, brokerName),
       urgency: 'medium',
+    };
+  }
+  
+  if (days <= 7) {
+    return {
+      message: MESSAGE_TEMPLATES.followUp7d(context.leadName),
+      urgency: 'high',
     };
   }
   

@@ -118,12 +118,13 @@ export function useAICommunication() {
   // Process follow-up for lead
   const processLeadFollowUp = useCallback(async (
     context: LeadEngagementContext,
-    brokerId: string
+    brokerId: string,
+    brokerName: string = 'Your Property Advisor'
   ): Promise<CommunicationResult> => {
     setLoading(true);
 
     try {
-      const { message, urgency } = aiCommunicationService.generateFollowUpMessage(context);
+      const { message, urgency } = aiCommunicationService.generateFollowUpMessage(context, brokerName);
 
       // Log the follow-up attempt
       console.log(`Processing ${urgency} urgency follow-up for lead ${context.leadId}`);
@@ -258,9 +259,10 @@ export function useAICommunication() {
   const sendDealClosedMessage = useCallback(async (
     leadId: string,
     leadName: string,
-    brokerId: string
+    brokerId: string,
+    brokerName: string = 'Your Property Advisor'
   ): Promise<CommunicationResult> => {
-    const message = MESSAGE_TEMPLATES.dealClosed(leadName);
+    const message = MESSAGE_TEMPLATES.dealClosed(leadName, brokerName);
 
     return await sendAIBrokerMessage(
       brokerId,
