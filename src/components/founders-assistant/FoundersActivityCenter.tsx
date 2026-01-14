@@ -14,7 +14,10 @@ import {
   FileText,
   Loader2,
   RefreshCw,
-  Filter
+  Filter,
+  TrendingUp,
+  Zap,
+  BarChart3
 } from 'lucide-react';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
@@ -43,7 +46,7 @@ const activityIcons: Record<string, React.ReactNode> = {
   task: <CheckCircle className="w-4 h-4" />,
   lead: <Target className="w-4 h-4" />,
   message: <MessageSquare className="w-4 h-4" />,
-  system: <AlertCircle className="w-4 h-4" />,
+  system: <Zap className="w-4 h-4" />,
 };
 
 const activityColors: Record<string, string> = {
@@ -53,7 +56,7 @@ const activityColors: Record<string, string> = {
   task: 'bg-gold/10 text-gold border-gold/20',
   lead: 'bg-orange-500/10 text-orange-400 border-orange-500/20',
   message: 'bg-teal-500/10 text-teal-400 border-teal-500/20',
-  system: 'bg-gray-500/10 text-gray-400 border-gray-500/20',
+  system: 'bg-yellow-500/10 text-yellow-400 border-yellow-500/20',
 };
 
 const FoundersActivityCenter: React.FC = () => {
@@ -176,6 +179,17 @@ const FoundersActivityCenter: React.FC = () => {
     return activity.type === filter;
   });
 
+  // Stats
+  const stats = {
+    total: activities.length,
+    completed: activities.filter(a => a.status === 'completed').length,
+    pending: activities.filter(a => a.status === 'pending').length,
+    today: activities.filter(a => {
+      const today = new Date();
+      return a.timestamp.toDateString() === today.toDateString();
+    }).length,
+  };
+
   // Group activities by date
   const groupedActivities = filteredActivities.reduce((groups, activity) => {
     const dateKey = format(activity.timestamp, 'yyyy-MM-dd');
@@ -196,6 +210,38 @@ const FoundersActivityCenter: React.FC = () => {
 
   return (
     <div className="space-y-6">
+      {/* Stats Cards */}
+      <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
+        <Card className="bg-[#0E0E0E] border-gold/20">
+          <CardContent className="p-4 text-center">
+            <Activity className="w-6 h-6 text-gold mx-auto mb-2" />
+            <p className="text-2xl font-bold text-gold">{stats.total}</p>
+            <p className="text-xs text-gray-400">Total Activities</p>
+          </CardContent>
+        </Card>
+        <Card className="bg-[#0E0E0E] border-green-500/20">
+          <CardContent className="p-4 text-center">
+            <CheckCircle className="w-6 h-6 text-green-400 mx-auto mb-2" />
+            <p className="text-2xl font-bold text-green-400">{stats.completed}</p>
+            <p className="text-xs text-gray-400">Completed</p>
+          </CardContent>
+        </Card>
+        <Card className="bg-[#0E0E0E] border-yellow-500/20">
+          <CardContent className="p-4 text-center">
+            <Clock className="w-6 h-6 text-yellow-400 mx-auto mb-2" />
+            <p className="text-2xl font-bold text-yellow-400">{stats.pending}</p>
+            <p className="text-xs text-gray-400">Pending</p>
+          </CardContent>
+        </Card>
+        <Card className="bg-[#0E0E0E] border-blue-500/20">
+          <CardContent className="p-4 text-center">
+            <TrendingUp className="w-6 h-6 text-blue-400 mx-auto mb-2" />
+            <p className="text-2xl font-bold text-blue-400">{stats.today}</p>
+            <p className="text-xs text-gray-400">Today</p>
+          </CardContent>
+        </Card>
+      </div>
+
       {/* Header */}
       <div className="flex items-center justify-between">
         <div className="flex items-center gap-3">
@@ -232,7 +278,7 @@ const FoundersActivityCenter: React.FC = () => {
               : 'border-gold/20 text-gray-400 hover:text-white whitespace-nowrap'
             }
           >
-            {f === 'all' && 'All Activities'}
+            {f === 'all' && '📊 All Activities'}
             {f === 'email' && '📧 Emails'}
             {f === 'call' && '📞 Calls'}
             {f === 'task' && '✅ Tasks'}
@@ -247,9 +293,18 @@ const FoundersActivityCenter: React.FC = () => {
           {Object.keys(groupedActivities).length === 0 ? (
             <Card className="bg-[#0E0E0E] border-gold/20">
               <CardContent className="p-8 text-center">
-                <Activity className="w-12 h-12 text-gold/30 mx-auto mb-4" />
+                <Activity className="w-16 h-16 text-gold/30 mx-auto mb-4" />
+                <h4 className="text-white font-semibold mb-2">Activity Center</h4>
                 <p className="text-gray-400">No activities found</p>
                 <p className="text-sm text-gray-500 mt-1">Activities will appear here as you work</p>
+                <Button
+                  size="sm"
+                  className="mt-4 bg-gold hover:bg-gold/90 text-black"
+                  onClick={handleRefresh}
+                >
+                  <RefreshCw className="w-4 h-4 mr-2" />
+                  Refresh Activities
+                </Button>
               </CardContent>
             </Card>
           ) : (
@@ -258,7 +313,7 @@ const FoundersActivityCenter: React.FC = () => {
                 {/* Date Header */}
                 <div className="flex items-center gap-3 mb-3">
                   <div className="h-px bg-gold/20 flex-1" />
-                  <span className="text-xs text-gray-400 font-medium">
+                  <span className="text-xs text-gold font-medium px-3 py-1 rounded-full bg-gold/10">
                     {format(new Date(dateKey), 'EEEE, MMMM d')}
                   </span>
                   <div className="h-px bg-gold/20 flex-1" />
@@ -275,9 +330,9 @@ const FoundersActivityCenter: React.FC = () => {
                       className="relative"
                     >
                       {/* Timeline dot */}
-                      <div className="absolute -left-[13px] top-4 w-2 h-2 rounded-full bg-gold" />
+                      <div className="absolute -left-[13px] top-4 w-2.5 h-2.5 rounded-full bg-gold border-2 border-[#0A0A0A]" />
                       
-                      <Card className="bg-[#0E0E0E] border-gold/10 hover:border-gold/30 transition-all ml-4">
+                      <Card className="bg-[#0E0E0E] border-gold/10 hover:border-gold/30 transition-all ml-4 group">
                         <CardContent className="p-3">
                           <div className="flex items-start gap-3">
                             {/* Icon */}
@@ -288,7 +343,7 @@ const FoundersActivityCenter: React.FC = () => {
                             {/* Content */}
                             <div className="flex-1 min-w-0">
                               <div className="flex items-center justify-between gap-2">
-                                <h4 className="text-sm font-medium text-white truncate">
+                                <h4 className="text-sm font-medium text-white truncate group-hover:text-gold transition-colors">
                                   {activity.title}
                                 </h4>
                                 <span className="text-xs text-gray-500 flex-shrink-0">
@@ -312,6 +367,10 @@ const FoundersActivityCenter: React.FC = () => {
                                     activity.status === 'in_progress' ? 'bg-blue-500/20 text-blue-400 border-blue-500/30' :
                                     'bg-red-500/20 text-red-400 border-red-500/30'
                                   }`}>
+                                    {activity.status === 'completed' && '✅'}
+                                    {activity.status === 'pending' && '⏳'}
+                                    {activity.status === 'in_progress' && '🎯'}
+                                    {activity.status === 'failed' && '⚠️'}
                                     {activity.status}
                                   </Badge>
                                 )}
