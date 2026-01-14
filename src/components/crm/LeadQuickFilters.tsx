@@ -102,9 +102,9 @@ const LeadQuickFilters = ({ activeFilter, onChange, counts = {} }: LeadQuickFilt
             size="sm"
             onClick={() => onChange(filter.id, filter.statuses)}
             className={cn(
-              "border transition-all font-semibold",
+              "border transition-all duration-200 font-semibold",
               filter.bgColor,
-              isActive && "ring-2 ring-primary ring-offset-2 ring-offset-background"
+              isActive && "ring-2 ring-gold ring-offset-2 ring-offset-white"
             )}
           >
             <filter.icon className={cn("h-4 w-4 mr-1.5", filter.color)} />
@@ -114,7 +114,7 @@ const LeadQuickFilters = ({ activeFilter, onChange, counts = {} }: LeadQuickFilt
                 variant="secondary" 
                 className={cn(
                   "ml-2 text-xs font-bold",
-                  isActive ? "bg-primary text-primary-foreground" : "bg-muted"
+                  isActive ? "bg-gold text-black" : "bg-zinc-200 text-zinc-700"
                 )}
               >
                 {count}
