@@ -31,6 +31,7 @@ import {
 } from 'lucide-react';
 import { toast } from 'sonner';
 import { Link } from 'react-router-dom';
+import CVCenter from './CVCenter';
 
 interface Employee {
   id: string;
@@ -687,8 +688,8 @@ const EmployeesHub = ({ userId, brokers = [] }: EmployeesHubProps) => {
         >
           <CardContent className="p-4 text-center">
             <FileText className="h-5 w-5 text-gold mx-auto mb-2" />
-            <p className="text-xl font-bold text-gold">{stats.pendingCVs}</p>
-            <p className="text-xs text-crm-text-muted font-medium">Pending CVs</p>
+            <p className="text-xl font-bold text-gold">{cvEntries.length}</p>
+            <p className="text-xs text-crm-text-muted font-medium">CV Center</p>
           </CardContent>
         </Card>
       </div>
@@ -712,234 +713,9 @@ const EmployeesHub = ({ userId, brokers = [] }: EmployeesHubProps) => {
           </div>
         )}
 
-        {/* CV Collected Tab Content */}
+        {/* CV Center Tab Content */}
         <TabsContent value="cv" className="mt-4">
-          <Card className="border-border">
-            <CardHeader>
-              <div className="flex items-center justify-between flex-wrap gap-4">
-                <div>
-                  <CardTitle className="flex items-center gap-2 text-white">
-                    <FileText className="h-5 w-5 text-gold" />
-                    CV Collection & Candidate Management
-                  </CardTitle>
-                  <CardDescription>
-                    All uploaded CVs and candidate applications are stored here
-                  </CardDescription>
-                </div>
-                <div className="flex items-center gap-2">
-                  <Button variant="outline" className="gap-2 border-gold/30">
-                    <Upload className="h-4 w-4" />
-                    Upload CV
-                  </Button>
-                </div>
-              </div>
-              
-              {/* CV Filters */}
-              <div className="flex flex-wrap items-center gap-3 mt-4">
-                <div className="relative flex-1 min-w-[200px]">
-                  <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />
-                  <Input
-                    placeholder="Search by name, position, language, gender, skills..."
-                    value={cvSearchQuery}
-                    onChange={(e) => setCvSearchQuery(e.target.value)}
-                    className="pl-10 bg-zinc-900/50 border-zinc-800"
-                  />
-                </div>
-                {/* Category Filter - NO EMOJIS */}
-                <select
-                  value={cvCategoryFilter}
-                  onChange={(e) => setCvCategoryFilter(e.target.value)}
-                  className="px-3 py-2 bg-zinc-900/50 border border-zinc-800 rounded-md text-white text-sm font-medium"
-                >
-                  <option value="all">All Categories</option>
-                  <option value="collected">Collected CVs</option>
-                  <option value="pending">Pending CVs</option>
-                  <option value="flagged">Flagged CVs</option>
-                  <option value="rejected">Rejected CVs</option>
-                </select>
-                {/* Status Filter */}
-                <select
-                  value={cvFilter}
-                  onChange={(e) => setCvFilter(e.target.value)}
-                  className="px-3 py-2 bg-zinc-900/50 border border-zinc-800 rounded-md text-white text-sm"
-                >
-                  <option value="all">All Status</option>
-                  <option value="pending">Pending Review</option>
-                  <option value="reviewed">Reviewed</option>
-                  <option value="interview_scheduled">Interview Scheduled</option>
-                  <option value="hired">Hired</option>
-                  <option value="rejected">Rejected</option>
-                </select>
-                {/* Gender Filter - NEW */}
-                <select
-                  value={cvGenderFilter}
-                  onChange={(e) => setCvGenderFilter(e.target.value)}
-                  className="px-3 py-2 bg-zinc-900/50 border border-zinc-800 rounded-md text-white text-sm"
-                >
-                  <option value="all">All Gender</option>
-                  <option value="male">Male</option>
-                  <option value="female">Female</option>
-                </select>
-              </div>
-              
-              {/* Quick filter badges - NO EMOJIS, colored circles */}
-              <div className="flex flex-wrap gap-2 mt-3">
-                <Badge 
-                  variant={cvCategoryFilter === 'collected' ? 'default' : 'outline'}
-                  className="cursor-pointer hover:bg-gold/20 font-semibold"
-                  onClick={() => setCvCategoryFilter(cvCategoryFilter === 'collected' ? 'all' : 'collected')}
-                >
-                  <span className="w-2 h-2 rounded-full bg-blue-500 mr-2" />
-                  Collected ({cvEntries.filter(cv => cv.category === 'collected').length})
-                </Badge>
-                <Badge 
-                  variant={cvCategoryFilter === 'pending' ? 'default' : 'outline'}
-                  className="cursor-pointer hover:bg-amber-500/20 font-semibold"
-                  onClick={() => setCvCategoryFilter(cvCategoryFilter === 'pending' ? 'all' : 'pending')}
-                >
-                  <span className="w-2 h-2 rounded-full bg-amber-500 mr-2" />
-                  Pending ({cvEntries.filter(cv => cv.category === 'pending').length})
-                </Badge>
-                <Badge 
-                  variant={cvCategoryFilter === 'flagged' ? 'default' : 'outline'}
-                  className="cursor-pointer hover:bg-yellow-500/20 font-semibold text-yellow-400"
-                  onClick={() => setCvCategoryFilter(cvCategoryFilter === 'flagged' ? 'all' : 'flagged')}
-                  title="Missing email, phone, or CV file"
-                >
-                  <span className="w-2 h-2 rounded-full bg-yellow-500 mr-2" />
-                  Flagged ({cvEntries.filter(cv => cv.category === 'flagged').length})
-                </Badge>
-                <Badge 
-                  variant={cvCategoryFilter === 'rejected' ? 'default' : 'outline'}
-                  className="cursor-pointer hover:bg-red-500/20 font-semibold text-red-400"
-                  onClick={() => setCvCategoryFilter(cvCategoryFilter === 'rejected' ? 'all' : 'rejected')}
-                >
-                  <span className="w-2 h-2 rounded-full bg-red-500 mr-2" />
-                  Rejected ({cvEntries.filter(cv => cv.category === 'rejected').length})
-                </Badge>
-              </div>
-            </CardHeader>
-            <CardContent>
-              <ScrollArea className="h-[500px]">
-                <div className="space-y-3">
-                  {getFilteredCVs().map((cv) => (
-                    <Card key={cv.id} className="bg-zinc-900/80 border-zinc-700 hover:border-gold/30 transition-colors">
-                      <CardContent className="p-4">
-                        <div className="flex items-start justify-between gap-4">
-                          <div className="flex-1">
-                            <div className="flex items-center gap-3 mb-2">
-                              <Avatar className="h-12 w-12 border-2 border-gold/30">
-                                <AvatarFallback className="bg-gold/20 text-gold font-bold text-lg">
-                                  {cv.candidateName.charAt(0)}
-                                </AvatarFallback>
-                              </Avatar>
-                              <div>
-                                <h4 className="text-white font-bold text-base">{cv.candidateName}</h4>
-                                <p className="text-gold font-medium">{cv.positionApplied}</p>
-                              </div>
-                              {getCVStatusBadge(cv.status)}
-                              {/* Category badge */}
-                              <Badge className={`ml-2 ${
-                                cv.category === 'rejected' ? 'bg-red-600/30 text-red-300 border-red-500/30' :
-                                cv.category === 'flagged' ? 'bg-yellow-600/30 text-yellow-300 border-yellow-500/30' :
-                                cv.category === 'pending' ? 'bg-amber-600/30 text-amber-300 border-amber-500/30' :
-                                'bg-blue-600/30 text-blue-300 border-blue-500/30'
-                              }`}>
-                                {cv.category.charAt(0).toUpperCase() + cv.category.slice(1)}
-                              </Badge>
-                            </div>
-                            
-                            <div className="grid grid-cols-2 md:grid-cols-5 gap-4 text-sm mt-3">
-                              <div>
-                                <p className="text-zinc-400 text-xs uppercase tracking-wide">Email</p>
-                                <p className="text-white font-medium">{cv.email}</p>
-                              </div>
-                              <div>
-                                <p className="text-zinc-400 text-xs uppercase tracking-wide">Phone</p>
-                                <p className="text-white font-medium">{cv.phone || '—'}</p>
-                              </div>
-                              <div>
-                                <p className="text-zinc-400 text-xs uppercase tracking-wide">Experience</p>
-                                <p className="text-white font-medium">{cv.experience}</p>
-                              </div>
-                              <div>
-                                <p className="text-zinc-400 text-xs uppercase tracking-wide">Education</p>
-                                <p className="text-white font-medium">{cv.education}</p>
-                              </div>
-                              <div>
-                                <p className="text-zinc-400 text-xs uppercase tracking-wide">Upload Date</p>
-                                <p className="text-white font-medium">{cv.uploadDate}</p>
-                              </div>
-                            </div>
-                            
-                            <div className="flex items-center gap-2 mt-3 flex-wrap">
-                              <Badge className="bg-zinc-700 text-zinc-200 font-medium">
-                                Source: {cv.uploadedBy}
-                              </Badge>
-                              <Badge className="bg-gold/20 text-gold border-gold/30 font-medium">
-                                <Star className="h-3 w-3 mr-1" />
-                                Ranking: {cv.ranking}/10
-                              </Badge>
-                              {cv.languages && cv.languages.length > 0 && (
-                                <Badge variant="outline" className="text-zinc-300">
-                                  Languages: {cv.languages.join(', ')}
-                                </Badge>
-                              )}
-                              {cv.gender && (
-                                <Badge variant="outline" className="text-zinc-300 capitalize">
-                                  {cv.gender}
-                                </Badge>
-                              )}
-                            </div>
-                          </div>
-                          
-                          {/* Actions */}
-                          <div className="flex flex-col gap-2">
-                            <Button 
-                              variant="outline" 
-                              size="sm" 
-                              className="gap-2 border-gold/50 hover:bg-gold/10 text-gold font-semibold"
-                              onClick={() => handleScheduleInterview(cv)}
-                            >
-                              <Video className="h-4 w-4" />
-                              Schedule Interview
-                            </Button>
-                            <Button 
-                              variant="outline" 
-                              size="sm" 
-                              className="gap-2 border-zinc-600 hover:bg-zinc-800 text-white font-medium"
-                              onClick={() => toast.info('CV viewing feature coming soon')}
-                            >
-                              <FileText className="h-4 w-4" />
-                              View CV
-                            </Button>
-                            <Button 
-                              variant="outline" 
-                              size="sm" 
-                              className="gap-2 border-zinc-600 hover:bg-zinc-800 text-white font-medium"
-                              onClick={() => {
-                                if (cv.email) window.location.href = `mailto:${cv.email}`;
-                              }}
-                            >
-                              <Mail className="h-4 w-4" />
-                              Contact
-                            </Button>
-                          </div>
-                        </div>
-                      </CardContent>
-                    </Card>
-                  ))}
-                  
-                  {getFilteredCVs().length === 0 && (
-                    <div className="py-12 text-center">
-                      <FileText className="h-12 w-12 mx-auto mb-4 text-muted-foreground opacity-50" />
-                      <p className="text-muted-foreground">No CVs found matching your criteria</p>
-                    </div>
-                  )}
-                </div>
-              </ScrollArea>
-            </CardContent>
-          </Card>
+          <CVCenter userId={userId} />
         </TabsContent>
 
         {/* Employee List Tab Content */}
