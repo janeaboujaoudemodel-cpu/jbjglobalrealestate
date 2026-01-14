@@ -36,6 +36,7 @@ import FoundersEscalationsPanel from "@/components/founders-assistant/FoundersEs
 import FoundersEmotionAnalyticsPanel from "@/components/founders-assistant/FoundersEmotionAnalyticsPanel";
 import FoundersCollaborationPanel from "@/components/founders-assistant/FoundersCollaborationPanel";
 import FoundersInsightsPanel from "@/components/founders-assistant/FoundersInsightsPanel";
+import { FoundersDecisionPanel } from "@/components/founders-assistant/FoundersDecisionPanel";
 import { EscalationAlertButton } from "@/components/ai/EscalationAlertButton";
 
 // Olivia AI portrait
@@ -294,6 +295,13 @@ export default function FoundersAssistant() {
                 <Brain className="h-4 w-4 mr-2" />
                 AI Insights
               </TabsTrigger>
+              <TabsTrigger 
+                value="decisions"
+                className="flex-1 min-w-[100px] data-[state=active]:bg-gold data-[state=active]:text-black"
+              >
+                <Brain className="h-4 w-4 mr-2" />
+                Decisions
+              </TabsTrigger>
             </TabsList>
 
             <AnimatePresence mode="wait">
@@ -414,6 +422,16 @@ export default function FoundersAssistant() {
                   exit={{ opacity: 0, y: -10 }}
                 >
                   <FoundersInsightsPanel />
+                </motion.div>
+              </TabsContent>
+
+              <TabsContent value="decisions" className="mt-0">
+                <motion.div
+                  initial={{ opacity: 0, y: 10 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  exit={{ opacity: 0, y: -10 }}
+                >
+                  <FoundersDecisionPanel />
                 </motion.div>
               </TabsContent>
             </AnimatePresence>
