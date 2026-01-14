@@ -164,8 +164,8 @@ class ComplianceSecurityService {
     const reasons: string[] = [];
 
     // Check high-frequency downloads
-    if (activityType === 'download') {
-      const recentDownloads = await this.getRecentActivityCount(userId, 'download', 60);
+    if (activityType === 'file_download') {
+      const recentDownloads = await this.getRecentActivityCount(userId, 'file_download', 60);
       if (recentDownloads > SUSPICIOUS_PATTERNS.high_frequency_downloads.threshold) {
         riskScore += 40;
         reasons.push(SUSPICIOUS_PATTERNS.high_frequency_downloads.description);
@@ -173,7 +173,7 @@ class ComplianceSecurityService {
     }
 
     // Check large exports
-    if (activityType === 'export' && metadata.recordCount) {
+    if (activityType === 'data_export' && metadata.recordCount) {
       if ((metadata.recordCount as number) > SUSPICIOUS_PATTERNS.large_exports.threshold) {
         riskScore += 30;
         reasons.push(SUSPICIOUS_PATTERNS.large_exports.description);
@@ -215,7 +215,7 @@ class ComplianceSecurityService {
 
   private async getRecentActivityCount(
     userId: string,
-    activityType: string,
+    activityType: SecurityEventType,
     windowMinutes: number
   ): Promise<number> {
     const windowStart = new Date(Date.now() - windowMinutes * 60 * 1000).toISOString();
@@ -224,7 +224,7 @@ class ComplianceSecurityService {
       .from('security_events')
       .select('*', { count: 'exact', head: true })
       .eq('user_id', userId as any)
-      .eq('event_type', activityType)
+      .eq('event_type', activityType as any)
       .gte('created_at', windowStart);
 
     if (error) return 0;
@@ -823,9 +823,14 @@ Security Index: ${securityScore}/100.
 
 ${(alerts?.length || 0) > 0 ? `⚠️ ${alerts?.length} unresolved high-priority alerts require attention.` : 'All subsystems operational.'}`;
 
+    const typedMetrics: Partial<SecurityHealthMetrics> = metrics ? {
+      ...metrics,
+      department_risk_scores: (metrics.department_risk_scores || {}) as Record<string, number>
+    } : {};
+
     return {
       summary,
-      metrics: metrics || {},
+      metrics: typedMetrics,
       alerts: (alerts || []) as unknown as SecurityEvent[]
     };
   }
