@@ -111,6 +111,7 @@ const CRMCommunicationPanel = () => {
   const [showCallModal, setShowCallModal] = useState(false);
   const [callTarget, setCallTarget] = useState<TeamMember | null>(null);
   const [callType, setCallType] = useState<'voice' | 'video'>('voice');
+  const [lastReadTimestamps, setLastReadTimestamps] = useState<Record<string, string>>({});
   
   const messagesEndRef = useRef<HTMLDivElement>(null);
   const scrollAreaRef = useRef<HTMLDivElement>(null);
@@ -123,6 +124,39 @@ const CRMCommunicationPanel = () => {
   const currentMessages = allMessages[selectedChannel] || [];
   const currentChannel = channels.find(c => c.id === selectedChannel);
   const channelMembers = ALL_TEAM_MEMBERS.filter(m => currentChannel?.members.includes(m.id));
+
+  // Calculate unread counts per channel
+  const getUnreadCount = useCallback((channelId: string) => {
+    const messages = allMessages[channelId] || [];
+    const lastRead = lastReadTimestamps[channelId];
+    if (!lastRead) return messages.filter(m => !m.isMe).length;
+    return messages.filter(m => !m.isMe && m.timestamp > lastRead).length;
+  }, [allMessages, lastReadTimestamps]);
+
+  // Mark channel as read when selected
+  useEffect(() => {
+    if (selectedChannel) {
+      const now = new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
+      setLastReadTimestamps(prev => ({ ...prev, [selectedChannel]: now }));
+      // Update channel unread count to 0
+      setChannels(prev => prev.map(ch => 
+        ch.id === selectedChannel ? { ...ch, unread: 0 } : ch
+      ));
+    }
+  }, [selectedChannel]);
+
+  // Simulate incoming messages for demo (remove in production)
+  useEffect(() => {
+    const interval = setInterval(() => {
+      const randomChannel = DEFAULT_CHANNELS[Math.floor(Math.random() * DEFAULT_CHANNELS.length)];
+      if (randomChannel.id !== selectedChannel && Math.random() > 0.8) {
+        setChannels(prev => prev.map(ch => 
+          ch.id === randomChannel.id ? { ...ch, unread: ch.unread + 1 } : ch
+        ));
+      }
+    }, 30000); // Every 30 seconds
+    return () => clearInterval(interval);
+  }, [selectedChannel]);
 
   // Auto-scroll to bottom when messages change
   const scrollToBottom = useCallback(() => {
@@ -273,21 +307,33 @@ const CRMCommunicationPanel = () => {
               <div className="w-1/3 border-r border-zinc-200 p-2">
                 <p className="text-[10px] text-zinc-500 uppercase tracking-wide mb-2 px-1">Channels</p>
                 <div className="space-y-1">
-                  {channels.map(channel => (
-                    <button
-                      key={channel.id}
-                      onClick={() => setSelectedChannel(channel.id)}
-                      className={`w-full flex items-center justify-between px-2 py-1.5 rounded text-xs hover:bg-zinc-100 transition-colors ${
-                        selectedChannel === channel.id ? 'bg-zinc-100 text-zinc-900' : 'text-zinc-600'
-                      }`}
-                    >
-                      <span className="flex items-center gap-1.5">
-                        <Hash className="h-3 w-3" />
-                        {channel.name}
-                      </span>
-                      <span className="text-[9px] text-zinc-400">({channel.members.length})</span>
-                    </button>
-                  ))}
+                  {channels.map(channel => {
+                    const unreadCount = channel.unread;
+                    return (
+                      <button
+                        key={channel.id}
+                        onClick={() => setSelectedChannel(channel.id)}
+                        className={`w-full flex items-center justify-between px-2 py-1.5 rounded text-xs hover:bg-zinc-100 transition-colors ${
+                          selectedChannel === channel.id ? 'bg-zinc-100 text-zinc-900' : 'text-zinc-600'
+                        }`}
+                      >
+                        <span className="flex items-center gap-1.5">
+                          <Hash className="h-3 w-3" />
+                          <span className={unreadCount > 0 ? 'font-semibold text-zinc-900' : ''}>
+                            {channel.name}
+                          </span>
+                        </span>
+                        <div className="flex items-center gap-1">
+                          {unreadCount > 0 && (
+                            <span className="min-w-[18px] h-[18px] flex items-center justify-center rounded-full bg-gold text-black text-[10px] font-bold px-1">
+                              {unreadCount}
+                            </span>
+                          )}
+                          <span className="text-[9px] text-zinc-400">({channel.members.length})</span>
+                        </div>
+                      </button>
+                    );
+                  })}
                 </div>
               </div>
 

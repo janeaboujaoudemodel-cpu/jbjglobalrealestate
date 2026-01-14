@@ -18,7 +18,12 @@ import {
   MessageSquare,
   Bot,
   Lightbulb,
-  ArrowDown
+  ArrowDown,
+  X,
+  File,
+  Image,
+  FileVideo,
+  Upload
 } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
@@ -29,6 +34,8 @@ import { toast } from 'sonner';
 import { useAuth } from '@/contexts/AuthContext';
 import { allTeamMembers, TeamMember } from '@/config/team-members';
 import oliviaPortrait from "@/assets/team/olivia-executive-assistant.png";
+import { executeCommand, parseCommand } from '@/utils/slash-command-executor';
+import { useFileUpload, formatFileSize, UploadedFile } from '@/hooks/useFileUpload';
 
 interface Message {
   id: string;
@@ -77,9 +84,14 @@ const FoundersChatPanel: React.FC<FoundersChatPanelProps> = ({ userName }) => {
   const [showSuggestions, setShowSuggestions] = useState(true);
   const [showScrollButton, setShowScrollButton] = useState(false);
   const [sessionId] = useState(() => crypto.randomUUID());
+  const [pendingFiles, setPendingFiles] = useState<UploadedFile[]>([]);
   const scrollRef = useRef<HTMLDivElement>(null);
   const inputRef = useRef<HTMLInputElement>(null);
   const scrollAreaRef = useRef<HTMLDivElement>(null);
+  const fileInputRef = useRef<HTMLInputElement>(null);
+  
+  // File upload hook
+  const { files: uploadedFiles, isUploading: isUploadingFiles, uploadFiles, removeFile, clearFiles } = useFileUpload(user?.id);
 
   const displayName = userName || user?.email?.split('@')[0] || 'there';
   const capitalizedName = displayName.charAt(0).toUpperCase() + displayName.slice(1);
@@ -191,23 +203,51 @@ Just type naturally or use commands like \`/schedule\`, \`/email\`, or mention t
     m.name.toLowerCase().includes(mentionSearch.toLowerCase())
   );
 
+  // Handle file input change
+  const handleFileChange = async (e: React.ChangeEvent<HTMLInputElement>) => {
+    const files = e.target.files;
+    if (files && files.length > 0) {
+      const uploaded = await uploadFiles(files);
+      setPendingFiles(prev => [...prev, ...uploaded]);
+      toast.success(`${files.length} file(s) ready to send`);
+    }
+    // Reset input
+    if (fileInputRef.current) {
+      fileInputRef.current.value = '';
+    }
+  };
+
+  const removePendingFile = (id: string) => {
+    setPendingFiles(prev => prev.filter(f => f.id !== id));
+    removeFile(id);
+  };
+
   const handleSendMessage = useCallback(async () => {
-    if (!input.trim() || isLoading) return;
+    if ((!input.trim() && pendingFiles.length === 0) || isLoading) return;
 
     // Extract mentions
     const mentionRegex = /@(\w+\s?\w+)/g;
     const mentions = [...input.matchAll(mentionRegex)].map(m => m[1]);
 
+    // Check if this is a slash command
+    const parsedCommand = parseCommand(input.trim());
+
+    // Include file attachments in message
+    const attachments = pendingFiles.map(f => ({ name: f.name, type: f.type, url: f.url }));
+
     const userMessage: Message = {
       id: Date.now().toString(),
       role: 'user',
-      content: input.trim(),
+      content: input.trim() || `[Sent ${pendingFiles.length} file(s)]`,
       timestamp: new Date(),
       mentions,
+      attachments: attachments.length > 0 ? attachments : undefined,
     };
 
     setMessages(prev => [...prev, userMessage]);
     setInput('');
+    setPendingFiles([]);
+    clearFiles();
     setIsLoading(true);
     setShowCommands(false);
     setShowMentions(false);
@@ -224,26 +264,38 @@ Just type naturally or use commands like \`/schedule\`, \`/email\`, or mention t
     }]);
 
     try {
-      const conversationHistory = messages.filter(m => !m.isTyping).map(m => ({
-        role: m.role,
-        content: m.content,
-      }));
+      let assistantResponse: string;
+      let taskStatus: 'pending' | 'completed' | 'failed' = 'completed';
 
-      const { data, error } = await supabase.functions.invoke('executive-assistant', {
-        body: {
-          action: 'chat',
-          data: {
-            message: userMessage.content,
-            conversationHistory,
-            mentions,
+      // If it's a slash command, execute it
+      if (parsedCommand && user?.id) {
+        const result = await executeCommand(input.trim(), user.id);
+        assistantResponse = result.message;
+        taskStatus = result.success ? 'completed' : 'failed';
+      } else {
+        // Regular AI chat
+        const conversationHistory = messages.filter(m => !m.isTyping).map(m => ({
+          role: m.role,
+          content: m.content,
+        }));
+
+        const { data, error } = await supabase.functions.invoke('executive-assistant', {
+          body: {
+            action: 'chat',
+            data: {
+              message: userMessage.content,
+              conversationHistory,
+              mentions,
+              attachments,
+            },
+            context: 'Founder\'s Assistant - Full Access',
           },
-          context: 'Founder\'s Assistant - Full Access',
-        },
-      });
+        });
 
-      if (error) throw error;
+        if (error) throw error;
 
-      const assistantResponse = data?.response || "I apologize, but I'm having trouble processing that request. Could you please rephrase?";
+        assistantResponse = data?.response || "I apologize, but I'm having trouble processing that request. Could you please rephrase?";
+      }
 
       setMessages(prev => {
         const filtered = prev.filter(m => m.id !== typingId);
@@ -252,7 +304,7 @@ Just type naturally or use commands like \`/schedule\`, \`/email\`, or mention t
           role: 'assistant',
           content: assistantResponse,
           timestamp: new Date(),
-          taskStatus: 'completed',
+          taskStatus,
         }];
       });
 
@@ -272,7 +324,7 @@ Just type naturally or use commands like \`/schedule\`, \`/email\`, or mention t
     } finally {
       setIsLoading(false);
     }
-  }, [input, isLoading, messages]);
+  }, [input, isLoading, messages, pendingFiles, user?.id, clearFiles]);
 
   const handleKeyPress = (e: React.KeyboardEvent) => {
     if (e.key === 'Enter' && !e.shiftKey) {
@@ -291,11 +343,27 @@ Just type naturally or use commands like \`/schedule\`, \`/email\`, or mention t
   };
 
   const handleFileUpload = () => {
-    toast.info('File upload feature coming soon!');
+    fileInputRef.current?.click();
+  };
+
+  const getFileIcon = (type: string) => {
+    if (type.startsWith('image/')) return <Image className="w-4 h-4" />;
+    if (type.startsWith('video/')) return <FileVideo className="w-4 h-4" />;
+    return <File className="w-4 h-4" />;
   };
 
   return (
     <div className="bg-[#0E0E0E] border border-gold/20 rounded-xl overflow-hidden h-[calc(100vh-320px)] min-h-[500px] flex flex-col">
+      {/* Hidden file input */}
+      <input
+        type="file"
+        ref={fileInputRef}
+        onChange={handleFileChange}
+        multiple
+        className="hidden"
+        accept="*/*"
+      />
+      
       {/* Chat Header */}
       <div className="bg-gradient-to-r from-[#0E0E0E] to-[#1A1A1A] border-b border-gold/20 p-4 flex items-center justify-between">
         <div className="flex items-center gap-3">
@@ -522,6 +590,34 @@ Just type naturally or use commands like \`/schedule\`, \`/email\`, or mention t
         )}
       </AnimatePresence>
 
+      {/* Pending Files Preview */}
+      {pendingFiles.length > 0 && (
+        <div className="px-4 py-2 border-t border-gold/20 bg-[#1A1A1A]">
+          <p className="text-xs text-gray-400 mb-2 flex items-center gap-2">
+            <Upload className="w-3 h-3" />
+            Files ready to send ({pendingFiles.length})
+          </p>
+          <div className="flex flex-wrap gap-2">
+            {pendingFiles.map((file) => (
+              <div 
+                key={file.id}
+                className="flex items-center gap-2 bg-[#0E0E0E] border border-gold/20 rounded-lg px-3 py-1.5 text-xs"
+              >
+                {getFileIcon(file.type)}
+                <span className="text-white truncate max-w-[120px]">{file.name}</span>
+                <span className="text-gray-500">{formatFileSize(file.size)}</span>
+                <button
+                  onClick={() => removePendingFile(file.id)}
+                  className="text-gray-500 hover:text-red-400 transition-colors"
+                >
+                  <X className="w-3 h-3" />
+                </button>
+              </div>
+            ))}
+          </div>
+        </div>
+      )}
+
       {/* Input */}
       <div className="p-4 border-t border-gold/20 bg-[#0E0E0E]">
         <div className="flex items-center gap-2">
@@ -538,10 +634,15 @@ Just type naturally or use commands like \`/schedule\`, \`/email\`, or mention t
           </button>
           <button 
             onClick={handleFileUpload}
-            className="w-10 h-10 rounded-full bg-gold/10 text-gold hover:bg-gold/20 flex items-center justify-center transition-all"
-            title="Attach file"
+            disabled={isUploadingFiles}
+            className={`w-10 h-10 rounded-full flex items-center justify-center transition-all ${
+              isUploadingFiles 
+                ? 'bg-gold/20 text-gold animate-pulse'
+                : 'bg-gold/10 text-gold hover:bg-gold/20'
+            }`}
+            title="Attach file (no size limit)"
           >
-            <Paperclip className="w-5 h-5" />
+            {isUploadingFiles ? <Loader2 className="w-5 h-5 animate-spin" /> : <Paperclip className="w-5 h-5" />}
           </button>
           <div className="relative flex-1">
             <Input
@@ -563,7 +664,7 @@ Just type naturally or use commands like \`/schedule\`, \`/email\`, or mention t
           </div>
           <Button
             onClick={handleSendMessage}
-            disabled={!input.trim() || isLoading}
+            disabled={(!input.trim() && pendingFiles.length === 0) || isLoading}
             className="bg-gold hover:bg-gold/90 text-black w-11 h-11 p-0"
           >
             {isLoading ? (
@@ -574,7 +675,7 @@ Just type naturally or use commands like \`/schedule\`, \`/email\`, or mention t
           </Button>
         </div>
         <p className="text-gray-500 text-xs text-center mt-3 opacity-80">
-          Use <span className="text-gold">@name</span> to mention team members • Use <span className="text-gold">/command</span> for quick actions • <span className="text-gold">Suggested AI Prompts</span> available
+          Use <span className="text-gold">@name</span> to mention • <span className="text-gold">/command</span> for actions • <span className="text-gold">📎 Attach files</span> (no size limit)
         </p>
       </div>
     </div>
