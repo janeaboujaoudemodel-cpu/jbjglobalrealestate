@@ -416,15 +416,21 @@ export async function checkVIPStatus(leadId: string): Promise<{
   try {
     const { data: lead } = await supabase
       .from('crm_leads')
-      .select('status, source')
+      .select('vip, tags')
       .eq('id', leadId)
-      .single();
+      .maybeSingle();
     
     if (!lead) return { isVIP: false };
     
-    // Check if status indicates high value
-    if (lead.status === 'Qualified' || lead.status === 'Negotiation') {
-      return { isVIP: true, reason: 'High-value lead in pipeline' };
+    // Check if VIP flag is set
+    if (lead.vip === true) {
+      return { isVIP: true, reason: 'VIP flagged lead' };
+    }
+    
+    // Check tags for VIP indicators
+    const tags = lead.tags || [];
+    if (tags.some((tag: string) => tag.toLowerCase().includes('vip') || tag.toLowerCase().includes('priority'))) {
+      return { isVIP: true, reason: 'High-priority tagged lead' };
     }
     
     return { isVIP: false };
