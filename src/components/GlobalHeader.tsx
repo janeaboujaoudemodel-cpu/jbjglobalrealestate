@@ -85,6 +85,7 @@ const GlobalHeader = () => {
 
   // More links for dropdown
   const moreLinks = [
+    { href: "/team", label: "Meet the Team", icon: Users },
     { href: "/founder", label: t('nav.founder'), icon: User },
     { href: "/awards", label: t('nav.awards'), icon: Building2 },
     { href: "/news", label: t('nav.news'), icon: Newspaper },
