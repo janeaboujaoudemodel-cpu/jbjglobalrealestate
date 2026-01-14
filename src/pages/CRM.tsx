@@ -294,40 +294,54 @@ const CRM = () => {
           </div>
         </header>
 
-      <main className="max-w-[1600px] w-full mx-auto px-4 py-6 space-y-6">
+      <main className="max-w-[1600px] w-full mx-auto px-4 py-6 space-y-4">
         {/* Deal Value Tracker */}
         <DealValueTracker userId={user?.id || ""} />
 
         {/* Enhanced Dashboard with Charts */}
         <CRMEnhancedDashboard userId={user?.id || ""} isAdmin={isAdmin} />
 
-        {/* Smart Reminders, Automation & Communication - reduced gaps */}
-        <div className="grid grid-cols-1 lg:grid-cols-3 gap-3">
-          <div className="lg:col-span-2 space-y-3">
-            {/* Quick Filters */}
-            <div className="space-y-2">
-              <h3 className="text-sm font-semibold text-zinc-800 uppercase tracking-wide">Quick Filters</h3>
-              <LeadQuickFilters 
-                activeFilter={quickFilter} 
-                onChange={handleQuickFilterChange}
-                counts={statusCounts}
-              />
-            </div>
+        {/* Smart Reminders, Automation & Communication - Compact layout */}
+        <div className="grid grid-cols-1 lg:grid-cols-3 gap-4">
+          <div className="lg:col-span-2 space-y-4">
             {/* Activity Timeline */}
-            <ActivityTimeline userId={user?.id || ""} limit={10} />
+            <ActivityTimeline userId={user?.id || ""} limit={8} />
             
             {/* Communication Panel - Chat, Video, Files */}
             <CRMCommunicationPanel />
           </div>
-          <div className="space-y-3">
+          
+          {/* Right Column: Smart Automations (scrollable) */}
+          <div className="space-y-4">
             <SmartReminders userId={user?.id || ""} limit={4} />
-            <AutomationRules userId={user?.id || ""} isAdmin={isAdmin} />
+            
+            {/* Smart Automations - Organized scrollable container */}
+            <Card className="border-zinc-200 bg-white">
+              <CardHeader className="pb-2">
+                <CardTitle className="text-zinc-900 font-bold text-base flex items-center gap-2">
+                  <Zap className="h-4 w-4 text-gold" />
+                  Smart Automations
+                  <Badge variant="outline" className="ml-auto text-xs border-gold/30 text-gold">
+                    Active
+                  </Badge>
+                </CardTitle>
+              </CardHeader>
+              <CardContent className="p-0">
+                <div className="max-h-[350px] overflow-y-auto">
+                  <AutomationRules userId={user?.id || ""} isAdmin={isAdmin} />
+                </div>
+              </CardContent>
+            </Card>
+            
             {/* Admin Tasks Panel - Only visible to Founder/Owner */}
             {isFounder && (
               <AdminTasksPanel />
             )}
           </div>
         </div>
+        
+        {/* Divider */}
+        <div className="border-t border-zinc-200" />
 
         {/* Action Buttons */}
         <div className="flex flex-wrap items-center gap-3">
@@ -395,11 +409,22 @@ const CRM = () => {
 
         {/* Table View - WHITE background for readability */}
         {viewMode === "table" && (
-        <Card className="border-border bg-white text-zinc-900 shadow-xl">
-          <CardHeader className="pb-3">
-            <CardTitle className="text-zinc-900 font-bold">Leads</CardTitle>
+        <Card className="border-zinc-200 bg-white text-zinc-900 shadow-lg">
+          <CardHeader className="pb-3 border-b border-zinc-100">
+            <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-4">
+              <CardTitle className="text-zinc-900 font-bold text-lg">Leads Pipeline</CardTitle>
+              
+              {/* Quick Filters - Integrated into Leads header */}
+              <div className="flex-1">
+                <LeadQuickFilters 
+                  activeFilter={quickFilter} 
+                  onChange={handleQuickFilterChange}
+                  counts={statusCounts}
+                />
+              </div>
+            </div>
           </CardHeader>
-          <CardContent>
+          <CardContent className="pt-4">
             <Tabs value={activeTab} onValueChange={setActiveTab}>
               <TabsList className="mb-4 bg-zinc-100 border border-zinc-200 flex-wrap">
                 <TabsTrigger 
