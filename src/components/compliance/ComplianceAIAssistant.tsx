@@ -5,6 +5,7 @@
 
 import React, { useState, useRef, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
+import DOMPurify from 'dompurify';
 import {
   Shield,
   Send,
@@ -309,11 +310,15 @@ Would you like me to run a specific audit or show detailed information? Type "he
                         let rendered = line
                           .replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>')
                           .replace(/\*(.*?)\*/g, '<em>$1</em>');
+                        const sanitized = DOMPurify.sanitize(rendered, {
+                          ALLOWED_TAGS: ['strong', 'em', 'code', 'p', 'br', 'span'],
+                          ALLOWED_ATTR: ['class']
+                        });
                         return (
                           <p 
                             key={i} 
                             className={cn(line.startsWith('•') && 'pl-2', 'mb-1')}
-                            dangerouslySetInnerHTML={{ __html: rendered }}
+                            dangerouslySetInnerHTML={{ __html: sanitized }}
                           />
                         );
                       })}

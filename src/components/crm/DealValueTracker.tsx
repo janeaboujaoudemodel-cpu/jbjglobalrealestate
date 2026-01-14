@@ -34,8 +34,9 @@ const DealValueTracker = ({ userId }: DealValueTrackerProps) => {
   });
   const [loading, setLoading] = useState(true);
 
-  // Average deal value assumption (could be stored per lead in the future)
-  const AVERAGE_DEAL_VALUE_AED = 2500000; // 2.5M AED average property value
+  // REMOVED: Hardcoded 2.5M assumption
+  // Now we calculate based on actual lead counts only, without fabricated monetary values
+  // Pipeline values will only show if deal_value column exists in database
 
   useEffect(() => {
     calculateStats();
@@ -57,7 +58,7 @@ const DealValueTracker = ({ userId }: DealValueTrackerProps) => {
           wonDeals: 0,
           lostDeals: 0,
           conversionRate: 0,
-          averageDealSize: AVERAGE_DEAL_VALUE_AED,
+          averageDealSize: 0,
           forecastedRevenue: 0,
           stageBreakdown: []
         });
@@ -72,61 +73,37 @@ const DealValueTracker = ({ userId }: DealValueTrackerProps) => {
         statusCounts[status] = (statusCounts[status] || 0) + 1;
       });
 
-      const wonCount = statusCounts["won"] || 0;
-      const lostCount = statusCounts["lost"] || 0;
+      const wonCount = statusCounts["won"] || statusCounts["closed_won"] || 0;
+      const lostCount = statusCounts["lost"] || statusCounts["closed_lost"] || 0;
       const totalClosed = wonCount + lostCount;
       
-      // Calculate probability weights for each stage
-      const stageProbabilities: Record<string, number> = {
-        "new": 0.05,
-        "contacted": 0.10,
-        "interested": 0.25,
-        "qualified": 0.40,
-        "proposal": 0.60,
-        "negotiation": 0.80,
-        "viewing_scheduled": 0.50,
-        "documents_requested": 0.70,
-        "won": 1.0,
-        "lost": 0,
-        "junk": 0,
-        "no_answer": 0.05,
-        "callback": 0.15,
-        "not_interested": 0,
-        "wrong_number": 0,
-        "duplicate": 0
-      };
-
-      // Calculate pipeline value and stage breakdown
-      let totalPipelineValue = 0;
-      let forecastedValue = 0;
+      // Calculate stage breakdown based on actual lead counts (no fake monetary values)
       const stageBreakdown: { stage: string; value: number; count: number }[] = [];
-
-      Object.entries(statusCounts).forEach(([status, count]) => {
-        if (status !== "won" && status !== "lost" && status !== "junk") {
-          const stageValue = count * AVERAGE_DEAL_VALUE_AED;
-          const probability = stageProbabilities[status] || 0.1;
-          
-          totalPipelineValue += stageValue;
-          forecastedValue += stageValue * probability;
-
+      const activeStatuses = ['new', 'contacted', 'interested', 'qualified', 'proposal', 'negotiation', 'viewing_scheduled', 'documents_requested'];
+      
+      let totalActiveLeads = 0;
+      activeStatuses.forEach(status => {
+        const count = statusCounts[status] || 0;
+        if (count > 0) {
+          totalActiveLeads += count;
           stageBreakdown.push({
             stage: status,
-            value: stageValue,
+            value: count, // Using count as value (not fake monetary)
             count
           });
         }
       });
 
-      // Sort by value descending
-      stageBreakdown.sort((a, b) => b.value - a.value);
+      // Sort by count descending
+      stageBreakdown.sort((a, b) => b.count - a.count);
 
       setStats({
-        totalPipeline: totalPipelineValue,
+        totalPipeline: totalActiveLeads, // Now shows lead count, not fake AED
         wonDeals: wonCount,
         lostDeals: lostCount,
         conversionRate: totalClosed > 0 ? (wonCount / totalClosed) * 100 : 0,
-        averageDealSize: AVERAGE_DEAL_VALUE_AED,
-        forecastedRevenue: forecastedValue,
+        averageDealSize: 0, // Will be populated when deal_value column exists
+        forecastedRevenue: 0, // Will be populated when deal_value column exists
         stageBreakdown: stageBreakdown.slice(0, 5)
       });
     } catch (err) {
@@ -136,7 +113,12 @@ const DealValueTracker = ({ userId }: DealValueTrackerProps) => {
     }
   };
 
-  const formatCurrency = (value: number) => {
+  const formatValue = (value: number, isMonetary: boolean = false) => {
+    if (!isMonetary) {
+      // For lead counts
+      return value.toString();
+    }
+    // For actual monetary values (when deal_value column exists)
     if (value >= 1000000) {
       return `AED ${(value / 1000000).toFixed(1)}M`;
     }
@@ -200,9 +182,9 @@ const DealValueTracker = ({ userId }: DealValueTrackerProps) => {
               </Badge>
             </div>
             <p className="text-2xl md:text-3xl font-bold text-zinc-900 tracking-tight flex-1">
-              {hasNoData ? "—" : formatCurrency(stats.totalPipeline)}
+              {hasNoData ? "—" : `${stats.totalPipeline} leads`}
             </p>
-            <p className="text-xs text-zinc-500 mt-2">Total active deals</p>
+            <p className="text-xs text-zinc-500 mt-2">Active in pipeline</p>
           </CardContent>
         </Card>
 
@@ -218,9 +200,9 @@ const DealValueTracker = ({ userId }: DealValueTrackerProps) => {
               </Badge>
             </div>
             <p className="text-2xl md:text-3xl font-bold text-emerald-600 tracking-tight flex-1">
-              {hasNoData ? "—" : formatCurrency(stats.forecastedRevenue)}
+              {hasNoData || stats.forecastedRevenue === 0 ? "—" : formatValue(stats.forecastedRevenue, true)}
             </p>
-            <p className="text-xs text-zinc-500 mt-2">Weighted probability</p>
+            <p className="text-xs text-zinc-500 mt-2">Requires deal values</p>
           </CardContent>
         </Card>
 
@@ -292,7 +274,7 @@ const DealValueTracker = ({ userId }: DealValueTrackerProps) => {
                         </Badge>
                       </div>
                       <span className="text-sm font-bold text-zinc-900">
-                        {formatCurrency(stage.value)}
+                        {stage.count} leads
                       </span>
                     </div>
                     <Progress 
