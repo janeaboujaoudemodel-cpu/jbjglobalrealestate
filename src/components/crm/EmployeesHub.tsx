@@ -71,7 +71,7 @@ const TEAM_MEMBERS: Employee[] = [
   // Executive / Admin
   {
     id: 'jane',
-    name: 'Jane Abjowwe',
+    name: 'Jane Abou Jaoude',
     role: 'Founder & CEO',
     department: 'executive',
     type: 'human',
@@ -601,17 +601,17 @@ const EmployeesHub = ({ userId, brokers = [] }: EmployeesHubProps) => {
   return (
     <div className="space-y-6">
       {/* Header */}
-      <div className="flex items-center justify-between flex-wrap gap-4">
+      <div className="flex items-center justify-between flex-wrap gap-4 p-4 bg-white rounded-xl border border-crm-border shadow-sm">
         <div>
-          <h2 className="text-2xl font-bold text-white flex items-center gap-3">
+          <h2 className="text-2xl font-bold text-crm-text flex items-center gap-3">
             <Building2 className="h-7 w-7 text-gold" />
             JBJ Employees Hub
           </h2>
-          <p className="text-muted-foreground mt-1">Team Management & HR Center</p>
+          <p className="text-crm-text-muted mt-1">Team Management & HR Center</p>
         </div>
         <div className="flex items-center gap-2">
           <Link to="/video-meeting">
-            <Button variant="outline" className="gap-2 border-gold/30 hover:bg-gold/10">
+            <Button className="gap-2 bg-gold text-white hover:bg-gold-dark transition-all duration-200 font-semibold">
               <Video className="h-4 w-4" />
               JBJ Video Meet
             </Button>
@@ -619,76 +619,76 @@ const EmployeesHub = ({ userId, brokers = [] }: EmployeesHubProps) => {
         </div>
       </div>
 
-      {/* Stats Cards - CLICKABLE to filter */}
+      {/* Stats Cards - CLICKABLE to filter - WHITE BACKGROUND */}
       <div className="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-7 gap-3">
         <Card 
-          className={`bg-card border-border cursor-pointer hover:border-gold/50 transition-colors ${activeTab === 'all' ? 'border-gold ring-1 ring-gold/30' : ''}`}
+          className={`bg-white border cursor-pointer hover:shadow-md transition-all duration-200 ${activeTab === 'all' ? 'border-gold ring-2 ring-gold/20' : 'border-crm-border'}`}
           onClick={() => setActiveTab('all')}
         >
           <CardContent className="p-4 text-center">
             <Users className="h-5 w-5 text-gold mx-auto mb-2" />
-            <p className="text-xl font-bold text-white">{stats.total}</p>
-            <p className="text-xs text-muted-foreground">Total Team</p>
+            <p className="text-xl font-bold text-crm-text">{stats.total}</p>
+            <p className="text-xs text-crm-text-muted font-medium">Total Team</p>
           </CardContent>
         </Card>
         <Card 
-          className={`bg-card border-border cursor-pointer hover:border-blue-400/50 transition-colors ${activeTab === 'human' ? 'border-blue-400 ring-1 ring-blue-400/30' : ''}`}
+          className={`bg-white border cursor-pointer hover:shadow-md transition-all duration-200 ${activeTab === 'human' ? 'border-blue-500 ring-2 ring-blue-200' : 'border-crm-border'}`}
           onClick={() => setActiveTab('human')}
         >
           <CardContent className="p-4 text-center">
-            <UserCheck className="h-5 w-5 text-blue-400 mx-auto mb-2" />
-            <p className="text-xl font-bold text-white">{stats.human}</p>
-            <p className="text-xs text-muted-foreground">Human Staff</p>
+            <UserCheck className="h-5 w-5 text-blue-500 mx-auto mb-2" />
+            <p className="text-xl font-bold text-crm-text">{stats.human}</p>
+            <p className="text-xs text-crm-text-muted font-medium">Human Staff</p>
           </CardContent>
         </Card>
         <Card 
-          className={`bg-card border-border cursor-pointer hover:border-purple-400/50 transition-colors ${activeTab === 'executive' ? 'border-purple-400 ring-1 ring-purple-400/30' : ''}`}
+          className={`bg-white border cursor-pointer hover:shadow-md transition-all duration-200 ${activeTab === 'executive' ? 'border-purple-500 ring-2 ring-purple-200' : 'border-crm-border'}`}
           onClick={() => setActiveTab('executive')}
         >
           <CardContent className="p-4 text-center">
-            <Crown className="h-5 w-5 text-purple-400 mx-auto mb-2" />
-            <p className="text-xl font-bold text-white">{allEmployees.filter(e => e.department === 'executive').length}</p>
-            <p className="text-xs text-muted-foreground">Executive</p>
+            <Crown className="h-5 w-5 text-purple-500 mx-auto mb-2" />
+            <p className="text-xl font-bold text-crm-text">{allEmployees.filter(e => e.department === 'executive').length}</p>
+            <p className="text-xs text-crm-text-muted font-medium">Executive</p>
           </CardContent>
         </Card>
         <Card 
-          className={`bg-card border-border cursor-pointer hover:border-green-400/50 transition-colors ${activeTab === 'brokers' ? 'border-green-400 ring-1 ring-green-400/30' : ''}`}
+          className={`bg-white border cursor-pointer hover:shadow-md transition-all duration-200 ${activeTab === 'brokers' ? 'border-green-500 ring-2 ring-green-200' : 'border-crm-border'}`}
           onClick={() => setActiveTab('brokers')}
         >
           <CardContent className="p-4 text-center">
-            <Briefcase className="h-5 w-5 text-green-400 mx-auto mb-2" />
-            <p className="text-xl font-bold text-white">{stats.brokers}</p>
-            <p className="text-xs text-muted-foreground">Brokers</p>
+            <Briefcase className="h-5 w-5 text-green-500 mx-auto mb-2" />
+            <p className="text-xl font-bold text-crm-text">{stats.brokers}</p>
+            <p className="text-xs text-crm-text-muted font-medium">Brokers</p>
           </CardContent>
         </Card>
         <Card 
-          className={`bg-card border-border cursor-pointer hover:border-pink-400/50 transition-colors ${activeTab === 'hr' ? 'border-pink-400 ring-1 ring-pink-400/30' : ''}`}
+          className={`bg-white border cursor-pointer hover:shadow-md transition-all duration-200 ${activeTab === 'hr' ? 'border-pink-500 ring-2 ring-pink-200' : 'border-crm-border'}`}
           onClick={() => setActiveTab('hr')}
         >
           <CardContent className="p-4 text-center">
-            <UserCheck className="h-5 w-5 text-pink-400 mx-auto mb-2" />
-            <p className="text-xl font-bold text-white">{stats.hr}</p>
-            <p className="text-xs text-muted-foreground">HR Team</p>
+            <UserCheck className="h-5 w-5 text-pink-500 mx-auto mb-2" />
+            <p className="text-xl font-bold text-crm-text">{stats.hr}</p>
+            <p className="text-xs text-crm-text-muted font-medium">HR Team</p>
           </CardContent>
         </Card>
         <Card 
-          className={`bg-card border-border cursor-pointer hover:border-orange-400/50 transition-colors ${activeTab === 'marketing' ? 'border-orange-400 ring-1 ring-orange-400/30' : ''}`}
+          className={`bg-white border cursor-pointer hover:shadow-md transition-all duration-200 ${activeTab === 'marketing' ? 'border-orange-500 ring-2 ring-orange-200' : 'border-crm-border'}`}
           onClick={() => setActiveTab('marketing')}
         >
           <CardContent className="p-4 text-center">
-            <Palette className="h-5 w-5 text-orange-400 mx-auto mb-2" />
-            <p className="text-xl font-bold text-white">{stats.marketing}</p>
-            <p className="text-xs text-muted-foreground">Marketing</p>
+            <Palette className="h-5 w-5 text-orange-500 mx-auto mb-2" />
+            <p className="text-xl font-bold text-crm-text">{stats.marketing}</p>
+            <p className="text-xs text-crm-text-muted font-medium">Marketing</p>
           </CardContent>
         </Card>
         <Card 
-          className={`bg-card border-border border-gold/30 cursor-pointer hover:border-gold transition-colors ${activeTab === 'cv' ? 'border-gold ring-1 ring-gold/30' : ''}`}
+          className={`bg-white border cursor-pointer hover:shadow-md transition-all duration-200 ${activeTab === 'cv' ? 'border-gold ring-2 ring-gold/20' : 'border-crm-border'}`}
           onClick={() => setActiveTab('cv')}
         >
           <CardContent className="p-4 text-center">
             <FileText className="h-5 w-5 text-gold mx-auto mb-2" />
             <p className="text-xl font-bold text-gold">{stats.pendingCVs}</p>
-            <p className="text-xs text-muted-foreground">Pending CVs</p>
+            <p className="text-xs text-crm-text-muted font-medium">Pending CVs</p>
           </CardContent>
         </Card>
       </div>
@@ -697,16 +697,16 @@ const EmployeesHub = ({ userId, brokers = [] }: EmployeesHubProps) => {
       <Tabs value={activeTab} onValueChange={setActiveTab}>
         {/* TabsList removed - using top cards for filtering instead */}
 
-        {/* Search Bar */}
+        {/* Search Bar - WHITE BACKGROUND */}
         {activeTab !== 'cv' && (
           <div className="mt-4 mb-4">
             <div className="relative">
-              <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />
+              <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-crm-text-muted" />
               <Input
                 placeholder="Search employees by name, role, or department..."
                 value={searchQuery}
                 onChange={(e) => setSearchQuery(e.target.value)}
-                className="pl-10 bg-zinc-900/50 border-zinc-800"
+                className="pl-10 bg-white border-crm-border text-crm-text placeholder:text-crm-text-muted focus:ring-2 focus:ring-gold/30 focus:border-gold"
               />
             </div>
           </div>
@@ -949,8 +949,8 @@ const EmployeesHub = ({ userId, brokers = [] }: EmployeesHubProps) => {
               {getFilteredEmployees().map((employee) => (
                 <Card 
                   key={employee.id} 
-                  className={`bg-card border-border hover:border-gold/30 transition-colors cursor-pointer ${
-                    employee.type === 'ai' ? 'border-purple-500/20 bg-purple-500/5' : ''
+                  className={`bg-white border border-crm-border hover:border-gold/50 hover:shadow-md transition-all duration-200 cursor-pointer ${
+                    employee.type === 'ai' ? 'border-l-4 border-l-purple-500' : ''
                   }`}
                   onClick={() => setSelectedEmployee(employee)}
                 >
@@ -960,39 +960,39 @@ const EmployeesHub = ({ userId, brokers = [] }: EmployeesHubProps) => {
                         {/* Avatar */}
                         <div className="relative">
                           <Avatar className="h-12 w-12 border-2 border-gold/30">
-                            <AvatarFallback className={`${employee.type === 'ai' ? 'bg-purple-600' : 'bg-gold/20'} text-white font-bold`}>
+                            <AvatarFallback className={`${employee.type === 'ai' ? 'bg-purple-100 text-purple-600' : 'bg-gold/10 text-gold'} font-bold`}>
                               {employee.type === 'ai' ? <Bot className="h-6 w-6" /> : employee.name.charAt(0)}
                             </AvatarFallback>
                           </Avatar>
-                          <div className={`absolute -bottom-0.5 -right-0.5 w-3.5 h-3.5 rounded-full ${getStatusColor(employee.status)} border-2 border-background`} />
+                          <div className={`absolute -bottom-0.5 -right-0.5 w-3.5 h-3.5 rounded-full ${getStatusColor(employee.status)} border-2 border-white`} />
                         </div>
 
                         {/* Info */}
                         <div>
                           <div className="flex items-center gap-2 flex-wrap">
-                            <p className="font-semibold text-white">{employee.name}</p>
+                            <p className="font-semibold text-crm-text">{employee.name}</p>
                             {employee.type === 'ai' && (
-                              <Badge className="bg-purple-600/20 text-purple-400 text-xs border-purple-500/30">
+                              <Badge className="bg-purple-100 text-purple-700 text-xs border-purple-300">
                                 <Bot className="h-3 w-3 mr-1" />
                                 AI
                               </Badge>
                             )}
-                            {employee.role === 'CEO & Founder' && (
+                            {employee.role === 'Founder & CEO' && (
                               <Crown className="h-4 w-4 text-gold" />
                             )}
-                            <Badge variant="outline" className="text-xs">
+                            <Badge variant="outline" className="text-xs text-crm-text-muted border-crm-border">
                               {getDepartmentIcon(employee.department)}
                               <span className="ml-1 capitalize">{employee.department}</span>
                             </Badge>
                           </div>
-                          <p className="text-sm text-gold">{employee.role}</p>
+                          <p className="text-sm text-gold font-medium">{employee.role}</p>
                           {employee.description && (
-                            <p className="text-xs text-muted-foreground mt-1 max-w-md">{employee.description}</p>
+                            <p className="text-xs text-crm-text-muted mt-1 max-w-md">{employee.description}</p>
                           )}
                           {employee.responsibilities && (
                             <div className="flex flex-wrap gap-1 mt-2">
                               {employee.responsibilities.slice(0, 3).map((resp, idx) => (
-                                <Badge key={idx} variant="outline" className="text-[10px] py-0">
+                                <Badge key={idx} variant="outline" className="text-[10px] py-0 text-crm-text-muted border-crm-border">
                                   {resp}
                                 </Badge>
                               ))}
@@ -1008,14 +1008,14 @@ const EmployeesHub = ({ userId, brokers = [] }: EmployeesHubProps) => {
                           <div className="hidden md:flex items-center gap-4 text-sm">
                             {employee.leads !== undefined && (
                               <div className="text-center">
-                                <p className="text-white font-bold">{employee.leads}</p>
-                                <p className="text-xs text-muted-foreground">Leads</p>
+                                <p className="text-crm-text font-bold">{employee.leads}</p>
+                                <p className="text-xs text-crm-text-muted">Leads</p>
                               </div>
                             )}
                             {employee.performance !== undefined && (
                               <div className="text-center">
-                                <p className="text-green-400 font-bold">{employee.performance}%</p>
-                                <p className="text-xs text-muted-foreground">Performance</p>
+                                <p className="text-green-600 font-bold">{employee.performance}%</p>
+                                <p className="text-xs text-crm-text-muted">Performance</p>
                               </div>
                             )}
                           </div>
@@ -1026,7 +1026,7 @@ const EmployeesHub = ({ userId, brokers = [] }: EmployeesHubProps) => {
                           <Button 
                             variant="ghost" 
                             size="icon" 
-                            className="h-8 w-8 text-muted-foreground hover:text-white hover:bg-muted"
+                            className="h-8 w-8 text-crm-text-muted hover:text-gold hover:bg-gold/10 transition-all duration-200"
                             onClick={(e) => { e.stopPropagation(); handleChat(employee); }}
                           >
                             <MessageSquare className="h-4 w-4" />
@@ -1035,7 +1035,7 @@ const EmployeesHub = ({ userId, brokers = [] }: EmployeesHubProps) => {
                             <Button 
                               variant="ghost" 
                               size="icon" 
-                              className="h-8 w-8 text-muted-foreground hover:text-white hover:bg-muted"
+                              className="h-8 w-8 text-crm-text-muted hover:text-gold hover:bg-gold/10 transition-all duration-200"
                               onClick={(e) => { e.stopPropagation(); handleEmail(employee); }}
                             >
                               <Mail className="h-4 w-4" />
@@ -1045,7 +1045,7 @@ const EmployeesHub = ({ userId, brokers = [] }: EmployeesHubProps) => {
                             <Button 
                               variant="ghost" 
                               size="icon" 
-                              className="h-8 w-8 text-muted-foreground hover:text-white hover:bg-muted"
+                              className="h-8 w-8 text-crm-text-muted hover:text-gold hover:bg-gold/10 transition-all duration-200"
                               onClick={(e) => { e.stopPropagation(); handleCall(employee); }}
                             >
                               <Phone className="h-4 w-4" />
@@ -1055,7 +1055,7 @@ const EmployeesHub = ({ userId, brokers = [] }: EmployeesHubProps) => {
                             <Button 
                               variant="ghost" 
                               size="icon" 
-                              className="h-8 w-8 text-muted-foreground hover:text-white hover:bg-muted"
+                              className="h-8 w-8 text-crm-text-muted hover:text-gold hover:bg-gold/10 transition-all duration-200"
                               onClick={(e) => { e.stopPropagation(); handleVideoMeeting(employee); }}
                             >
                               <Video className="h-4 w-4" />
@@ -1063,7 +1063,7 @@ const EmployeesHub = ({ userId, brokers = [] }: EmployeesHubProps) => {
                           )}
                         </div>
 
-                        <ChevronRight className="h-5 w-5 text-muted-foreground" />
+                        <ChevronRight className="h-5 w-5 text-crm-text-muted" />
                       </div>
                     </div>
                   </CardContent>
@@ -1071,10 +1071,12 @@ const EmployeesHub = ({ userId, brokers = [] }: EmployeesHubProps) => {
               ))}
 
               {getFilteredEmployees().length === 0 && (
-                <div className="py-12 text-center">
-                  <Users className="h-12 w-12 mx-auto mb-4 text-muted-foreground opacity-50" />
-                  <p className="text-muted-foreground">No employees found in this category</p>
-                </div>
+                <Card className="bg-white border-crm-border">
+                  <CardContent className="py-12 text-center">
+                    <Users className="h-12 w-12 mx-auto mb-4 text-crm-text-muted opacity-50" />
+                    <p className="text-crm-text-muted">No employees found in this category</p>
+                  </CardContent>
+                </Card>
               )}
             </div>
           </TabsContent>

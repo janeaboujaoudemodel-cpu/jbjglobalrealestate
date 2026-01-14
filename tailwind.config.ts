@@ -68,6 +68,14 @@ export default {
           card: "hsl(var(--premium-card))",
           "card-border": "hsl(var(--premium-card-border))",
         },
+        crm: {
+          bg: "hsl(var(--crm-bg))",
+          card: "hsl(var(--crm-card))",
+          border: "hsl(var(--crm-card-border))",
+          text: "hsl(var(--crm-text))",
+          "text-muted": "hsl(var(--crm-text-muted))",
+          highlight: "hsl(var(--crm-highlight))",
+        },
         ai: {
           purple: "hsl(var(--ai-purple))",
           "purple-dark": "hsl(var(--ai-purple-dark))",
