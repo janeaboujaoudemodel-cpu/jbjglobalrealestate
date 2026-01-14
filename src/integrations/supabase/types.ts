@@ -3117,8 +3117,15 @@ export type Database = {
           created_at: string
           crm_role: Database["public"]["Enums"]["crm_role"]
           display_name: string | null
+          email: string | null
+          first_login_at: string | null
+          force_password_change: boolean | null
           id: string
           is_active: boolean
+          job_title: string | null
+          last_password_change: string | null
+          phone: string | null
+          photo_url: string | null
           preferred_language: string | null
           updated_at: string
           user_id: string
@@ -3127,8 +3134,15 @@ export type Database = {
           created_at?: string
           crm_role?: Database["public"]["Enums"]["crm_role"]
           display_name?: string | null
+          email?: string | null
+          first_login_at?: string | null
+          force_password_change?: boolean | null
           id?: string
           is_active?: boolean
+          job_title?: string | null
+          last_password_change?: string | null
+          phone?: string | null
+          photo_url?: string | null
           preferred_language?: string | null
           updated_at?: string
           user_id: string
@@ -3137,8 +3151,15 @@ export type Database = {
           created_at?: string
           crm_role?: Database["public"]["Enums"]["crm_role"]
           display_name?: string | null
+          email?: string | null
+          first_login_at?: string | null
+          force_password_change?: boolean | null
           id?: string
           is_active?: boolean
+          job_title?: string | null
+          last_password_change?: string | null
+          phone?: string | null
+          photo_url?: string | null
           preferred_language?: string | null
           updated_at?: string
           user_id?: string
@@ -8215,7 +8236,7 @@ export type Database = {
           current_location_city?: string | null
           current_location_country?: string | null
           email_normalized?: never
-          full_name?: string | null
+          full_name?: never
           has_full_access?: never
           id?: string | null
           nationality?: string | null
@@ -8234,7 +8255,7 @@ export type Database = {
           current_location_city?: string | null
           current_location_country?: string | null
           email_normalized?: never
-          full_name?: string | null
+          full_name?: never
           has_full_access?: never
           id?: string | null
           nationality?: string | null
@@ -8572,6 +8593,10 @@ export type Database = {
           price_usd: number
         }[]
       }
+      has_full_lead_pii_access: {
+        Args: { _lead_id: string; _user_id: string }
+        Returns: boolean
+      }
       has_lead_access: { Args: { p_lead_id: string }; Returns: boolean }
       has_role: {
         Args: {
@@ -8594,6 +8619,7 @@ export type Database = {
         Returns: boolean
       }
       is_owner_or_admin: { Args: { _user_id: string }; Returns: boolean }
+      is_sales_director: { Args: { _user_id: string }; Returns: boolean }
       is_team_admin: {
         Args: { _team_id: string; _user_id: string }
         Returns: boolean
@@ -8744,7 +8770,12 @@ export type Database = {
         | "closed_lost"
         | "no_answer"
         | "junk"
-      crm_role: "owner_admin" | "broker_member" | "admin" | "founder"
+      crm_role:
+        | "owner_admin"
+        | "broker_member"
+        | "admin"
+        | "founder"
+        | "sales_director"
       data_source_type:
         | "dld"
         | "dsc"
@@ -9009,7 +9040,13 @@ export const Constants = {
         "no_answer",
         "junk",
       ],
-      crm_role: ["owner_admin", "broker_member", "admin", "founder"],
+      crm_role: [
+        "owner_admin",
+        "broker_member",
+        "admin",
+        "founder",
+        "sales_director",
+      ],
       data_source_type: [
         "dld",
         "dsc",

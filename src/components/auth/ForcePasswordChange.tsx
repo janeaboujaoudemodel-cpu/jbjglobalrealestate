@@ -1,0 +1,179 @@
+import { useState } from "react";
+import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
+import { Lock, Eye, EyeOff, ShieldCheck, AlertCircle } from "lucide-react";
+import { supabase } from "@/integrations/supabase/client";
+import { toast } from "sonner";
+
+interface ForcePasswordChangeProps {
+  onComplete: () => void;
+  userName?: string;
+}
+
+export function ForcePasswordChange({ onComplete, userName }: ForcePasswordChangeProps) {
+  const [newPassword, setNewPassword] = useState("");
+  const [confirmPassword, setConfirmPassword] = useState("");
+  const [showPassword, setShowPassword] = useState(false);
+  const [isSubmitting, setIsSubmitting] = useState(false);
+  const [errors, setErrors] = useState<string[]>([]);
+
+  const validatePassword = (password: string): string[] => {
+    const errors: string[] = [];
+    if (password.length < 8) errors.push("At least 8 characters");
+    if (!/[A-Z]/.test(password)) errors.push("One uppercase letter");
+    if (!/[a-z]/.test(password)) errors.push("One lowercase letter");
+    if (!/[0-9]/.test(password)) errors.push("One number");
+    if (!/[!@#$%^&*(),.?":{}|<>]/.test(password)) errors.push("One special character");
+    return errors;
+  };
+
+  const handleSubmit = async (e: React.FormEvent) => {
+    e.preventDefault();
+    setErrors([]);
+
+    const passwordErrors = validatePassword(newPassword);
+    if (passwordErrors.length > 0) {
+      setErrors(passwordErrors);
+      return;
+    }
+
+    if (newPassword !== confirmPassword) {
+      setErrors(["Passwords do not match"]);
+      return;
+    }
+
+    setIsSubmitting(true);
+
+    try {
+      // Update password in auth
+      const { error: updateError } = await supabase.auth.updateUser({
+        password: newPassword,
+      });
+
+      if (updateError) throw updateError;
+
+      // Update CRM profile to mark password as changed
+      const { data: { user } } = await supabase.auth.getUser();
+      if (user) {
+        await supabase
+          .from("crm_users_profile")
+          .update({
+            force_password_change: false,
+            last_password_change: new Date().toISOString(),
+            first_login_at: new Date().toISOString(),
+          })
+          .eq("user_id", user.id);
+      }
+
+      toast.success("Password updated successfully!", {
+        description: "Please save your new password securely.",
+      });
+      
+      onComplete();
+    } catch (error: any) {
+      console.error("Password update error:", error);
+      toast.error("Failed to update password", {
+        description: error.message,
+      });
+    } finally {
+      setIsSubmitting(false);
+    }
+  };
+
+  return (
+    <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-slate-900 via-slate-800 to-slate-900 p-4">
+      <Card className="w-full max-w-md bg-slate-800/80 border-amber-500/30 backdrop-blur-xl">
+        <CardHeader className="text-center space-y-4">
+          <div className="mx-auto w-16 h-16 bg-gradient-to-br from-amber-400 to-amber-600 rounded-full flex items-center justify-center">
+            <Lock className="w-8 h-8 text-slate-900" />
+          </div>
+          <CardTitle className="text-2xl font-bold text-white">
+            Welcome{userName ? `, ${userName}` : ""}!
+          </CardTitle>
+          <CardDescription className="text-slate-300">
+            For your security, please create a new password. This is a one-time setup.
+          </CardDescription>
+        </CardHeader>
+
+        <CardContent>
+          <form onSubmit={handleSubmit} className="space-y-6">
+            <div className="space-y-2">
+              <Label htmlFor="newPassword" className="text-slate-200">
+                New Password
+              </Label>
+              <div className="relative">
+                <Input
+                  id="newPassword"
+                  type={showPassword ? "text" : "password"}
+                  value={newPassword}
+                  onChange={(e) => setNewPassword(e.target.value)}
+                  className="bg-slate-700/50 border-slate-600 text-white pr-10"
+                  placeholder="Enter your new password"
+                  required
+                />
+                <button
+                  type="button"
+                  onClick={() => setShowPassword(!showPassword)}
+                  className="absolute right-3 top-1/2 -translate-y-1/2 text-slate-400 hover:text-white"
+                >
+                  {showPassword ? <EyeOff className="w-4 h-4" /> : <Eye className="w-4 h-4" />}
+                </button>
+              </div>
+            </div>
+
+            <div className="space-y-2">
+              <Label htmlFor="confirmPassword" className="text-slate-200">
+                Confirm Password
+              </Label>
+              <Input
+                id="confirmPassword"
+                type={showPassword ? "text" : "password"}
+                value={confirmPassword}
+                onChange={(e) => setConfirmPassword(e.target.value)}
+                className="bg-slate-700/50 border-slate-600 text-white"
+                placeholder="Confirm your new password"
+                required
+              />
+            </div>
+
+            {errors.length > 0 && (
+              <div className="bg-red-500/10 border border-red-500/30 rounded-lg p-3">
+                <div className="flex items-center gap-2 text-red-400 text-sm font-medium mb-2">
+                  <AlertCircle className="w-4 h-4" />
+                  Password requirements:
+                </div>
+                <ul className="text-red-300 text-xs space-y-1 list-disc list-inside">
+                  {errors.map((error, index) => (
+                    <li key={index}>{error}</li>
+                  ))}
+                </ul>
+              </div>
+            )}
+
+            <div className="bg-amber-500/10 border border-amber-500/30 rounded-lg p-3">
+              <div className="flex items-center gap-2 text-amber-400 text-sm font-medium mb-2">
+                <ShieldCheck className="w-4 h-4" />
+                Security Tips
+              </div>
+              <ul className="text-amber-200/80 text-xs space-y-1">
+                <li>• Save your password in a password manager</li>
+                <li>• Don't share your password with anyone</li>
+                <li>• Use a unique password for this account</li>
+              </ul>
+            </div>
+
+            <Button
+              type="submit"
+              disabled={isSubmitting}
+              className="w-full bg-gradient-to-r from-amber-500 to-amber-600 hover:from-amber-600 hover:to-amber-700 text-slate-900 font-semibold py-3"
+            >
+              {isSubmitting ? "Updating..." : "Set New Password"}
+            </Button>
+          </form>
+        </CardContent>
+      </Card>
+    </div>
+  );
+}

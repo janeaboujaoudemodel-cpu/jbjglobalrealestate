@@ -33,11 +33,13 @@ import FlaggedLeadsView from "@/components/crm/FlaggedLeadsView";
 import VIPExportButton from "@/components/crm/VIPExportButton";
 import CRMAssistantPanel from "@/components/crm/CRMAssistantPanel";
 import CRMCommunicationPanel from "@/components/crm/CRMCommunicationPanel";
+import { ForcePasswordChange } from "@/components/auth/ForcePasswordChange";
+import { useForcePasswordChange } from "@/hooks/useForcePasswordChange";
 
 interface CRMProfile {
   id: string;
   user_id: string;
-  crm_role: 'owner_admin' | 'broker_member' | 'admin' | 'founder';
+  crm_role: 'owner_admin' | 'broker_member' | 'admin' | 'founder' | 'sales_director';
   is_active: boolean;
   display_name: string | null;
 }
@@ -56,11 +58,24 @@ const CRM = () => {
   const [viewMode, setViewMode] = useState<"table" | "kanban">("table");
   const [showToolsSidebar, setShowToolsSidebar] = useState(false);
   
+  // Force password change hook
+  const { needsPasswordChange, isLoading: passwordCheckLoading, userName, setNeedsPasswordChange } = useForcePasswordChange();
+  
   // Smart filters
   const [quickFilter, setQuickFilter] = useState("all");
   const [quickFilterStatuses, setQuickFilterStatuses] = useState<string[]>([]);
   const [sourceFilter, setSourceFilter] = useState("all");
   const [statusCounts, setStatusCounts] = useState<Record<string, number>>({});
+
+  // Show force password change screen if needed
+  if (needsPasswordChange && !passwordCheckLoading) {
+    return (
+      <ForcePasswordChange 
+        userName={userName} 
+        onComplete={() => setNeedsPasswordChange(false)} 
+      />
+    );
+  }
 
   useEffect(() => {
     if (authLoading) return;
