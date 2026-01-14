@@ -500,34 +500,34 @@ const CRMCommunicationPanel = () => {
                         <p className="text-[10px] text-zinc-500">{member.role} • {member.department}</p>
                       </div>
                     </div>
-                    <div className="flex items-center gap-1">
+                    <div className="flex items-center gap-2">
                       <Button 
-                        variant="ghost" 
-                        size="icon" 
-                        className="h-7 w-7 text-green-500 hover:bg-green-500/10"
+                        size="sm"
+                        className="h-8 px-3 bg-gradient-to-r from-green-500 to-emerald-600 hover:from-green-600 hover:to-emerald-700 text-white font-medium shadow-md transition-all duration-200 hover:scale-105"
                         onClick={() => startCall(member, 'voice')}
                       >
-                        <Phone className="h-3.5 w-3.5" />
+                        <Phone className="h-3.5 w-3.5 mr-1" />
+                        Call
                       </Button>
                       <Button 
-                        variant="ghost" 
-                        size="icon" 
-                        className="h-7 w-7 text-blue-500 hover:bg-blue-500/10"
+                        size="sm"
+                        className="h-8 px-3 bg-gradient-to-r from-blue-500 to-indigo-600 hover:from-blue-600 hover:to-indigo-700 text-white font-medium shadow-md transition-all duration-200 hover:scale-105"
                         onClick={() => startCall(member, 'video')}
                       >
-                        <Video className="h-3.5 w-3.5" />
+                        <Video className="h-3.5 w-3.5 mr-1" />
+                        Video
                       </Button>
                       <Button 
-                        variant="ghost" 
-                        size="icon" 
-                        className="h-7 w-7 text-purple-500 hover:bg-purple-500/10"
+                        size="sm"
+                        className="h-8 px-3 bg-gradient-to-r from-purple-500 to-violet-600 hover:from-purple-600 hover:to-violet-700 text-white font-medium shadow-md transition-all duration-200 hover:scale-105"
                         onClick={() => {
                           setSelectedChannel('general');
                           setActiveTab('chat');
                           toast.info(`Opening chat with ${member.name}`);
                         }}
                       >
-                        <AtSign className="h-3.5 w-3.5" />
+                        <AtSign className="h-3.5 w-3.5 mr-1" />
+                        Message
                       </Button>
                     </div>
                   </div>
