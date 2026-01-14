@@ -48,18 +48,19 @@ interface Channel {
   members: string[];
 }
 
-// All team members synced from Employee Hub
+// All team members synced from Employee Hub (Western names for AI employees)
 const ALL_TEAM_MEMBERS: TeamMember[] = [
   { id: '1', name: 'Jane Abou Jaoude', role: 'Founder & CEO', status: 'online', department: 'Executive' },
   { id: '2', name: 'Jessica', role: 'HR Manager', status: 'online', department: 'HR' },
   { id: '3', name: 'David Carter', role: 'Head of Recruitment', status: 'away', department: 'HR' },
   { id: '4', name: 'Sarah Mitchell', role: 'HR Assistant', status: 'online', department: 'HR' },
-  { id: '5', name: 'Ahmad Hassan', role: 'Senior Broker', status: 'online', department: 'Brokers' },
+  { id: '5', name: 'James Harrison', role: 'Senior Broker', status: 'online', department: 'Brokers' },
   { id: '6', name: 'Michael Johnson', role: 'Broker', status: 'away', department: 'Brokers' },
-  { id: '7', name: 'Lisa Chen', role: 'Marketing Manager', status: 'online', department: 'Marketing' },
-  { id: '8', name: 'Omar Khalil', role: 'IT Support', status: 'online', department: 'Admin' },
+  { id: '7', name: 'Victoria Sterling', role: 'Marketing Director', status: 'online', department: 'Marketing' },
+  { id: '8', name: 'Thomas Mitchell', role: 'IT Support', status: 'online', department: 'Admin' },
   { id: '9', name: 'Emily Brown', role: 'Executive Assistant', status: 'online', department: 'Executive' },
-  { id: '10', name: 'Mohammed Ali', role: 'Broker', status: 'offline', department: 'Brokers' },
+  { id: '10', name: 'Michael Anderson', role: 'AI Broker', status: 'online', department: 'AI Brokers' },
+  { id: '11', name: 'Catherine Brooks', role: 'Financial Manager', status: 'online', department: 'Finance' },
 ];
 
 const DEFAULT_CHANNELS: Channel[] = [
@@ -74,14 +75,14 @@ const DEFAULT_CHANNELS: Channel[] = [
 const INITIAL_MESSAGES: Record<string, ChatMessage[]> = {
   'jbj-group': [
     { id: '1', sender: 'Jane Abou Jaoude', senderId: '1', message: 'Welcome to JBJ Group! This is our main company channel.', timestamp: '09:00 AM', channelId: 'jbj-group' },
-    { id: '2', sender: 'Lisa Chen', senderId: '7', message: 'Good morning everyone! Marketing report is ready.', timestamp: '09:15 AM', channelId: 'jbj-group' },
+    { id: '2', sender: 'Victoria Sterling', senderId: '7', message: 'Good morning everyone! Marketing report is ready.', timestamp: '09:15 AM', channelId: 'jbj-group' },
   ],
   'general': [
     { id: '1', sender: 'System', senderId: 'system', message: 'Welcome to #general channel', timestamp: '09:00 AM', channelId: 'general' },
     { id: '2', sender: 'Jessica', senderId: '2', message: 'Good morning team! New leads coming in from the website.', timestamp: '09:15 AM', channelId: 'general' },
   ],
   'sales': [
-    { id: '1', sender: 'Ahmad Hassan', senderId: '5', message: 'Team, we have 3 hot leads for Downtown properties.', timestamp: '10:00 AM', channelId: 'sales' },
+    { id: '1', sender: 'James Harrison', senderId: '5', message: 'Team, we have 3 hot leads for Downtown properties.', timestamp: '10:00 AM', channelId: 'sales' },
     { id: '2', sender: 'Michael Johnson', senderId: '6', message: 'I can follow up on 2 of them today.', timestamp: '10:05 AM', channelId: 'sales' },
   ],
   'leads': [
@@ -163,9 +164,22 @@ const CRMCommunicationPanel = () => {
     messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' });
   }, []);
 
+  // Auto-scroll only on new messages in current channel, not on channel switch
+  const prevChannelRef = useRef(selectedChannel);
+  const prevMessageCountRef = useRef(currentMessages.length);
+
   useEffect(() => {
-    scrollToBottom();
-  }, [currentMessages, selectedChannel, scrollToBottom]);
+    const channelChanged = prevChannelRef.current !== selectedChannel;
+    const hasNewMessage = currentMessages.length > prevMessageCountRef.current;
+    
+    // Only auto-scroll if we got a new message (not on channel switch)
+    if (hasNewMessage && !channelChanged) {
+      scrollToBottom();
+    }
+    
+    prevChannelRef.current = selectedChannel;
+    prevMessageCountRef.current = currentMessages.length;
+  }, [currentMessages.length, selectedChannel, scrollToBottom]);
 
   // Handle scroll to detect if user scrolled up
   const handleScroll = useCallback((e: React.UIEvent<HTMLDivElement>) => {
@@ -199,7 +213,7 @@ const CRMCommunicationPanel = () => {
     inputRef.current?.focus();
   }, [newMessage, selectedChannel, currentUser.id]);
 
-  // Handle @ mentions
+  // Handle @ mentions - search ALL team members, not just channel members
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const value = e.target.value;
     setNewMessage(value);
@@ -208,11 +222,17 @@ const CRMCommunicationPanel = () => {
     const lastWord = value.split(' ').pop() || '';
     if (lastWord.startsWith('@') && lastWord.length > 1) {
       const searchTerm = lastWord.slice(1).toLowerCase();
-      const suggestions = channelMembers.filter(m => 
-        m.name.toLowerCase().includes(searchTerm)
+      // Search ALL_TEAM_MEMBERS for broader suggestion pool
+      const suggestions = ALL_TEAM_MEMBERS.filter(m => 
+        m.name.toLowerCase().includes(searchTerm) ||
+        m.role.toLowerCase().includes(searchTerm)
       ).slice(0, 5);
       setMentionSuggestions(suggestions);
       setShowMentions(suggestions.length > 0);
+    } else if (lastWord === '@') {
+      // Show first 5 team members when just @ is typed
+      setMentionSuggestions(ALL_TEAM_MEMBERS.slice(0, 5));
+      setShowMentions(true);
     } else {
       setShowMentions(false);
     }

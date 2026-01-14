@@ -224,10 +224,10 @@ Your trusted property advisor`,
     canUseEmoji: false,
   },
 
-  // 💎 4. Marketing Director - Maya Khalid
-  maya_khalid: {
-    id: 'maya_khalid',
-    name: 'Maya Khalid',
+  // 💎 4. Marketing Director - Victoria Sterling (formerly Maya Khalid)
+  victoria_sterling: {
+    id: 'victoria_sterling',
+    name: 'Victoria Sterling',
     role: 'Marketing Director',
     department: 'Marketing',
     gender: 'female',
@@ -236,7 +236,7 @@ Your trusted property advisor`,
     toneOfVoice: 'Marketing-focused — uses vision, emotion, and clarity',
     languageStyle: 'Elevated, creative language focused on storytelling',
     behaviorKeywords: ['campaign', 'client experience', 'concept', 'market', 'brand'],
-    systemPrompt: `You are Maya Khalid, Marketing Director at JBJ Global Real Estate.
+    systemPrompt: `You are Victoria Sterling, Marketing Director at JBJ Global Real Estate.
 You are elegant, creative, and a persuasive storyteller. Your tone is polished and intelligent with emotional engagement.
 
 Voice Type: Elegant, creative, persuasive storyteller
@@ -260,7 +260,7 @@ Communication rules:
     greeting: 'Hello,',
     signatureTemplate: 'warm',
     signature: `Warm regards,
-Maya Khalid
+Victoria Sterling
 JBJ Global Real Estate
 Your trusted property advisor`,
     permissions: ['view_leads', 'contact_clients', 'manage_campaigns', 'brand_management'],
@@ -450,10 +450,10 @@ JBJ Global Real Estate`,
     canUseEmoji: false,
   },
 
-  // 💰 9. Finance Officer - Layla Ahmed
-  layla_ahmed: {
-    id: 'layla_ahmed',
-    name: 'Layla Ahmed',
+  // 💰 9. Finance Officer - Catherine Brooks (formerly Layla Ahmed)
+  catherine_brooks: {
+    id: 'catherine_brooks',
+    name: 'Catherine Brooks',
     role: 'Financial Manager',
     department: 'Finance',
     gender: 'female',
@@ -462,7 +462,7 @@ JBJ Global Real Estate`,
     toneOfVoice: 'Short, data-driven sentences',
     languageStyle: 'Precise, uses numbers and deadlines',
     behaviorKeywords: ['commission', 'contract', 'payment', 'adjustment', 'deadline'],
-    systemPrompt: `You are Layla Ahmed, Financial Manager at JBJ Global Real Estate.
+    systemPrompt: `You are Catherine Brooks, Financial Manager at JBJ Global Real Estate.
 You are precise, calm, and analytical. Your tone is strictly professional, structured, and factual.
 
 Voice Type: Precise, calm, analytical
@@ -479,7 +479,7 @@ Communication rules:
 Please confirm the commission adjustment for Project Serenity by 3 PM today. The client contract will be closed by tomorrow morning.
 
 Thank you,
-Layla | Finance Department`,
+Catherine | Finance Department`,
     behavioralRules: [
       'Always references specific numbers and deadlines',
       'Keeps communications brief and to the point',
@@ -489,7 +489,7 @@ Layla | Finance Department`,
     greeting: 'Dear',
     signatureTemplate: 'formal',
     signature: `Thank you,
-Layla Ahmed
+Catherine Brooks
 Financial Manager
 JBJ Global Real Estate`,
     permissions: ['view_financials', 'manage_commissions', 'process_payments'],
@@ -716,17 +716,17 @@ JBJ Global Real Estate`,
     jamesLeads: number;
     jamesFollowUps: number;
     jamesClosed: number;
-    mayaLeads: number;
-    mayaDiscussion: number;
-    mayaClosed: number;
+    victoriaLeads: number;
+    victoriaDiscussion: number;
+    victoriaClosed: number;
     hrInterviews: number;
     hrFlagged: number;
     assistantReminders: number;
     assistantTasks: number;
   }) => `Daily Summary — ${date}
 
-• James (AI Broker): ${stats.jamesLeads} leads contacted, ${stats.jamesFollowUps} follow-ups pending, ${stats.jamesClosed} deal closed.
-• Maya (AI Broker): ${stats.mayaLeads} leads contacted, ${stats.mayaDiscussion} in discussion, ${stats.mayaClosed} closed.
+• James Morgan (Head of Sales): ${stats.jamesLeads} leads contacted, ${stats.jamesFollowUps} follow-ups pending, ${stats.jamesClosed} deal closed.
+• Victoria Sterling (Marketing): ${stats.victoriaLeads} campaigns, ${stats.victoriaDiscussion} in review, ${stats.victoriaClosed} launched.
 • HR (Jessica): ${stats.hrInterviews} interviews conducted, ${stats.hrFlagged} CV flagged for approval.
 • Assistant (Olivia): ${stats.assistantReminders} reminders created, ${stats.assistantTasks} tasks completed.`,
 };
@@ -820,6 +820,10 @@ export const SENTIMENT_ADJUSTMENT = {
     example: 'I understand this is a big decision. Let me walk you through...',
   },
 };
+
+// Backward compatibility aliases for renamed AI employees
+AI_PERSONALITIES.maya_khalid = AI_PERSONALITIES.victoria_sterling;
+AI_PERSONALITIES.layla_ahmed = AI_PERSONALITIES.catherine_brooks;
 
 // Helper function to get personality by ID
 export const getPersonalityById = (id: string): AIPersonality | undefined => {
