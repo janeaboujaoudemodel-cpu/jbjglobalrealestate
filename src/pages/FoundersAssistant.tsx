@@ -5,7 +5,6 @@ import MainLayout from "@/components/MainLayout";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Card, CardContent } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
-import { ScrollArea } from "@/components/ui/scroll-area";
 import { supabase } from "@/integrations/supabase/client";
 import { motion, AnimatePresence } from "framer-motion";
 import {
@@ -13,10 +12,12 @@ import {
   CheckSquare,
   Users,
   FileEdit,
-  Sparkles,
+  Wrench,
   Bell,
   Loader2,
-  Wrench
+  Flame,
+  Activity,
+  Video
 } from "lucide-react";
 import FoundersChatPanel from "@/components/founders-assistant/FoundersChatPanel";
 import FoundersTaskDashboard from "@/components/founders-assistant/FoundersTaskDashboard";
@@ -24,6 +25,9 @@ import FoundersTeamDirectory from "@/components/founders-assistant/FoundersTeamD
 import FoundersDraftsPanel from "@/components/founders-assistant/FoundersDraftsPanel";
 import FoundersAIToolsPanel from "@/components/founders-assistant/FoundersAIToolsPanel";
 import FoundersNotificationCenter from "@/components/founders-assistant/FoundersNotificationCenter";
+import FoundersHotLeadsPanel from "@/components/founders-assistant/FoundersHotLeadsPanel";
+import FoundersActivityCenter from "@/components/founders-assistant/FoundersActivityCenter";
+import FoundersVideoMeetPanel from "@/components/founders-assistant/FoundersVideoMeetPanel";
 
 // Olivia AI portrait
 import oliviaPortrait from "@/assets/team/olivia-executive-assistant.png";
@@ -50,7 +54,6 @@ export default function FoundersAssistant() {
   useEffect(() => {
     if (user) {
       fetchStats();
-      // Subscribe to real-time updates
       const channel = supabase
         .channel('founder-notifications')
         .on('postgres_changes', {
@@ -70,7 +73,6 @@ export default function FoundersAssistant() {
 
   const fetchStats = async () => {
     try {
-      // Fetch task stats
       const { data: tasks } = await supabase
         .from("assistant_tasks")
         .select("status")
@@ -85,7 +87,6 @@ export default function FoundersAssistant() {
         });
       }
 
-      // Fetch unread notifications
       const { data: unread } = await supabase
         .from("assistant_communications")
         .select("id", { count: 'exact' })
@@ -120,7 +121,6 @@ export default function FoundersAssistant() {
           >
             <div className="flex items-center justify-between flex-wrap gap-4">
               <div className="flex items-center gap-4">
-                {/* Olivia AI Avatar with gold glow */}
                 <div className="relative">
                   <div className="absolute inset-0 rounded-full bg-gradient-to-br from-gold/40 to-gold/10 blur-md animate-pulse" />
                   <div className="relative w-16 h-16 rounded-full border-2 border-gold/50 overflow-hidden bg-gradient-to-br from-gold/20 to-gold/5">
@@ -143,7 +143,6 @@ export default function FoundersAssistant() {
                 </div>
               </div>
               
-              {/* Notification Bell */}
               <div className="flex items-center gap-4">
                 <button
                   onClick={() => setIsNotificationOpen(!isNotificationOpen)}
@@ -196,43 +195,64 @@ export default function FoundersAssistant() {
             </Card>
           </div>
 
-          {/* Main Tabs */}
+          {/* Main Tabs - All 8 tabs */}
           <Tabs value={activeTab} onValueChange={setActiveTab} className="w-full">
-            <TabsList className="w-full bg-[#0E0E0E] border border-gold/20 p-1 rounded-lg mb-6">
+            <TabsList className="w-full bg-[#0E0E0E] border border-gold/20 p-1 rounded-lg mb-6 flex flex-wrap gap-1">
               <TabsTrigger 
                 value="assistant" 
-                className="flex-1 data-[state=active]:bg-gold data-[state=active]:text-black"
+                className="flex-1 min-w-[100px] data-[state=active]:bg-gold data-[state=active]:text-black"
               >
                 <MessageSquare className="h-4 w-4 mr-2" />
                 Assistant
               </TabsTrigger>
               <TabsTrigger 
                 value="tasks"
-                className="flex-1 data-[state=active]:bg-gold data-[state=active]:text-black"
+                className="flex-1 min-w-[100px] data-[state=active]:bg-gold data-[state=active]:text-black"
               >
                 <CheckSquare className="h-4 w-4 mr-2" />
                 Tasks
               </TabsTrigger>
               <TabsTrigger 
                 value="team"
-                className="flex-1 data-[state=active]:bg-gold data-[state=active]:text-black"
+                className="flex-1 min-w-[100px] data-[state=active]:bg-gold data-[state=active]:text-black"
               >
                 <Users className="h-4 w-4 mr-2" />
                 Team
               </TabsTrigger>
               <TabsTrigger 
                 value="drafts"
-                className="flex-1 data-[state=active]:bg-gold data-[state=active]:text-black"
+                className="flex-1 min-w-[100px] data-[state=active]:bg-gold data-[state=active]:text-black"
               >
                 <FileEdit className="h-4 w-4 mr-2" />
                 Drafts
               </TabsTrigger>
               <TabsTrigger 
                 value="ai-tools"
-                className="flex-1 data-[state=active]:bg-gold data-[state=active]:text-black"
+                className="flex-1 min-w-[100px] data-[state=active]:bg-gold data-[state=active]:text-black"
               >
                 <Wrench className="h-4 w-4 mr-2" />
                 AI Tools
+              </TabsTrigger>
+              <TabsTrigger 
+                value="hot-leads"
+                className="flex-1 min-w-[100px] data-[state=active]:bg-gold data-[state=active]:text-black"
+              >
+                <Flame className="h-4 w-4 mr-2" />
+                Hot Leads
+              </TabsTrigger>
+              <TabsTrigger 
+                value="activity"
+                className="flex-1 min-w-[100px] data-[state=active]:bg-gold data-[state=active]:text-black"
+              >
+                <Activity className="h-4 w-4 mr-2" />
+                Activity
+              </TabsTrigger>
+              <TabsTrigger 
+                value="video-meet"
+                className="flex-1 min-w-[100px] data-[state=active]:bg-gold data-[state=active]:text-black"
+              >
+                <Video className="h-4 w-4 mr-2" />
+                Video Meet
               </TabsTrigger>
             </TabsList>
 
@@ -284,6 +304,36 @@ export default function FoundersAssistant() {
                   exit={{ opacity: 0, y: -10 }}
                 >
                   <FoundersAIToolsPanel />
+                </motion.div>
+              </TabsContent>
+
+              <TabsContent value="hot-leads" className="mt-0">
+                <motion.div
+                  initial={{ opacity: 0, y: 10 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  exit={{ opacity: 0, y: -10 }}
+                >
+                  <FoundersHotLeadsPanel />
+                </motion.div>
+              </TabsContent>
+
+              <TabsContent value="activity" className="mt-0">
+                <motion.div
+                  initial={{ opacity: 0, y: 10 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  exit={{ opacity: 0, y: -10 }}
+                >
+                  <FoundersActivityCenter />
+                </motion.div>
+              </TabsContent>
+
+              <TabsContent value="video-meet" className="mt-0">
+                <motion.div
+                  initial={{ opacity: 0, y: 10 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  exit={{ opacity: 0, y: -10 }}
+                >
+                  <FoundersVideoMeetPanel />
                 </motion.div>
               </TabsContent>
             </AnimatePresence>
