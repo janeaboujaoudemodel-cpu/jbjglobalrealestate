@@ -10,7 +10,7 @@ import { Button } from '@/components/ui/button';
 import { ArrowLeft, Shield, Bot, Activity, FileText, Settings } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
 import SecurityDashboard from '@/components/compliance/SecurityDashboard';
-import ComplianceAIAssistant from '@/components/compliance/ComplianceAIAssistant';
+import EnhancedAishaAssistant from '@/components/compliance/EnhancedAishaAssistant';
 import { useAuth } from '@/contexts/AuthContext';
 
 const SecurityConsole: React.FC = () => {
@@ -102,7 +102,7 @@ const SecurityConsole: React.FC = () => {
                     Your dedicated AI for security monitoring, compliance auditing, and ethics enforcement
                   </p>
                 </div>
-                <ComplianceAIAssistant />
+                <EnhancedAishaAssistant />
               </motion.div>
             </div>
           </TabsContent>

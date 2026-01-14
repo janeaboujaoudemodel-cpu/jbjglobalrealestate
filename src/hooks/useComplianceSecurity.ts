@@ -1,6 +1,12 @@
 /**
  * Hook for AI Compliance, Ethics & Security Intelligence Layer
  * Provides security monitoring, compliance auditing, and ethics enforcement
+ * 
+ * Enhanced with:
+ * - AI Self-Regulation & Integrity
+ * - Secure Communication Protocols
+ * - Compliance Training Tracking
+ * - Emotion-Security Integration
  */
 
 import { useState, useEffect, useCallback } from 'react';
@@ -12,7 +18,8 @@ import {
   ComplianceAudit,
   EthicsViolation,
   SecurityHealthMetrics,
-  EmergencyLockdown
+  EmergencyLockdown,
+  ComplianceStatus
 } from '@/config/compliance-engine';
 import { useAuth } from '@/contexts/AuthContext';
 import { toast } from 'sonner';
@@ -106,6 +113,55 @@ export interface UseComplianceSecurityReturn {
     alerts: SecurityEvent[];
   }>;
 
+  // NEW: AI Self-Regulation
+  verifyAIDecision: (
+    aiAgentId: string,
+    decisionType: string,
+    decisionData: Record<string, unknown>
+  ) => Promise<{ verified: boolean; conflicts: string[]; recommendations: string[] }>;
+  getAIIntegrityScore: (aiAgentId: string) => Promise<number>;
+
+  // NEW: Secure Communication
+  generateWatermark: (userId: string, contentType: string) => Promise<string>;
+  detectCommunicationLeak: (watermarkId: string, detectedLocation: string) => Promise<{
+    leakConfirmed: boolean;
+    originalOwner?: string;
+    action: string;
+  }>;
+  scanForSensitiveData: (content: string) => Promise<{
+    containsSensitive: boolean;
+    detectedPatterns: string[];
+    redactedContent: string;
+  }>;
+
+  // NEW: Training
+  getTrainingStatus: (userId: string) => Promise<{
+    completedTrainings: string[];
+    pendingTrainings: string[];
+    overdueTrainings: string[];
+    overallCompletionRate: number;
+  }>;
+  sendTrainingReminder: (userId: string, trainingType: string) => Promise<void>;
+
+  // NEW: Emotion Integration
+  processEmotionSecurityEvent: (
+    eventId: string,
+    emotion: string,
+    emotionScore: number,
+    sourceUserId: string
+  ) => Promise<{ action: string; escalated: boolean; assignedTo?: string }>;
+
+  // NEW: Department Risk
+  getDepartmentRiskScores: () => Promise<Record<string, { score: number; level: string; topRisks: string[] }>>;
+
+  // NEW: Comprehensive Audit
+  runComprehensiveSecurityAudit: () => Promise<{
+    overallStatus: ComplianceStatus;
+    score: number;
+    categories: Record<string, { status: ComplianceStatus; findings: string[]; recommendations: string[] }>;
+    generatedAt: string;
+  }>;
+
   // Refresh
   refreshData: () => Promise<void>;
 }
@@ -169,6 +225,7 @@ export function useComplianceSecurity(): UseComplianceSecurityReturn {
     };
   }, [refreshData]);
 
+  // Original functions
   const logSecurityEvent = useCallback(async (
     eventType: SecurityEventType,
     severity: SecuritySeverity,
@@ -301,6 +358,61 @@ export function useComplianceSecurity(): UseComplianceSecurityReturn {
     return complianceSecurityService.generateDailySecuritySummary();
   }, []);
 
+  // NEW: AI Self-Regulation functions
+  const verifyAIDecision = useCallback(async (
+    aiAgentId: string,
+    decisionType: string,
+    decisionData: Record<string, unknown>
+  ) => {
+    return complianceSecurityService.verifyAIDecision(aiAgentId, decisionType, decisionData);
+  }, []);
+
+  const getAIIntegrityScore = useCallback(async (aiAgentId: string) => {
+    return complianceSecurityService.getAIIntegrityScore(aiAgentId);
+  }, []);
+
+  // NEW: Secure Communication functions
+  const generateWatermark = useCallback(async (userId: string, contentType: string) => {
+    return complianceSecurityService.generateWatermark(userId, contentType);
+  }, []);
+
+  const detectCommunicationLeak = useCallback(async (watermarkId: string, detectedLocation: string) => {
+    return complianceSecurityService.detectCommunicationLeak(watermarkId, detectedLocation);
+  }, []);
+
+  const scanForSensitiveData = useCallback(async (content: string) => {
+    return complianceSecurityService.scanForSensitiveData(content);
+  }, []);
+
+  // NEW: Training functions
+  const getTrainingStatus = useCallback(async (userId: string) => {
+    return complianceSecurityService.getTrainingStatus(userId);
+  }, []);
+
+  const sendTrainingReminder = useCallback(async (userId: string, trainingType: string) => {
+    return complianceSecurityService.sendTrainingReminder(userId, trainingType);
+  }, []);
+
+  // NEW: Emotion Integration
+  const processEmotionSecurityEvent = useCallback(async (
+    eventId: string,
+    emotion: string,
+    emotionScore: number,
+    sourceUserId: string
+  ) => {
+    return complianceSecurityService.processEmotionSecurityEvent(eventId, emotion, emotionScore, sourceUserId);
+  }, []);
+
+  // NEW: Department Risk
+  const getDepartmentRiskScores = useCallback(async () => {
+    return complianceSecurityService.getDepartmentRiskScores();
+  }, []);
+
+  // NEW: Comprehensive Audit
+  const runComprehensiveSecurityAudit = useCallback(async () => {
+    return complianceSecurityService.runComprehensiveSecurityAudit();
+  }, []);
+
   return {
     securityScore,
     isLockdownActive,
@@ -323,6 +435,16 @@ export function useComplianceSecurity(): UseComplianceSecurityReturn {
     triggerEmergencyLockdown,
     deactivateLockdown,
     generateDailySecuritySummary,
+    verifyAIDecision,
+    getAIIntegrityScore,
+    generateWatermark,
+    detectCommunicationLeak,
+    scanForSensitiveData,
+    getTrainingStatus,
+    sendTrainingReminder,
+    processEmotionSecurityEvent,
+    getDepartmentRiskScores,
+    runComprehensiveSecurityAudit,
     refreshData
   };
 }
