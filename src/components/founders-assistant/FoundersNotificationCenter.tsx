@@ -11,7 +11,9 @@ import {
   Clock,
   Trash2,
   Check,
-  Filter
+  Filter,
+  Zap,
+  FileText
 } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
@@ -19,7 +21,7 @@ import { ScrollArea } from '@/components/ui/scroll-area';
 import { supabase } from '@/integrations/supabase/client';
 import { useAuth } from '@/contexts/AuthContext';
 import { toast } from 'sonner';
-import { format } from 'date-fns';
+import { format, formatDistanceToNow } from 'date-fns';
 
 interface Notification {
   id: string;
@@ -45,14 +47,16 @@ const channelIcons: Record<string, React.ReactNode> = {
   whatsapp: <MessageSquare className="w-4 h-4" />,
   sms: <MessageSquare className="w-4 h-4" />,
   system: <Bell className="w-4 h-4" />,
+  alert: <Zap className="w-4 h-4" />,
+  task: <FileText className="w-4 h-4" />,
 };
 
-const categoryColors: Record<string, string> = {
-  important: 'bg-red-500',
-  routine: 'bg-green-500',
-  recruitment: 'bg-blue-500',
-  flagged: 'bg-yellow-500',
-  spam: 'bg-gray-500',
+const categoryConfig: Record<string, { color: string; bgColor: string; borderColor: string }> = {
+  important: { color: 'text-red-400', bgColor: 'bg-red-500/10', borderColor: 'border-red-500/30' },
+  routine: { color: 'text-green-400', bgColor: 'bg-green-500/10', borderColor: 'border-green-500/30' },
+  recruitment: { color: 'text-blue-400', bgColor: 'bg-blue-500/10', borderColor: 'border-blue-500/30' },
+  flagged: { color: 'text-yellow-400', bgColor: 'bg-yellow-500/10', borderColor: 'border-yellow-500/30' },
+  spam: { color: 'text-gray-400', bgColor: 'bg-gray-500/10', borderColor: 'border-gray-500/30' },
 };
 
 const FoundersNotificationCenter: React.FC<FoundersNotificationCenterProps> = ({ 
@@ -149,6 +153,12 @@ const FoundersNotificationCenter: React.FC<FoundersNotificationCenterProps> = ({
   });
 
   const unreadCount = notifications.filter(n => !n.is_read).length;
+  const tabCounts = {
+    all: notifications.length,
+    mentions: notifications.filter(n => n.content.includes('@')).length,
+    alerts: notifications.filter(n => n.category === 'important' || n.category === 'flagged').length,
+    tasks: notifications.filter(n => n.ai_status === 'flagged_for_review').length,
+  };
 
   return (
     <AnimatePresence>
@@ -159,7 +169,7 @@ const FoundersNotificationCenter: React.FC<FoundersNotificationCenterProps> = ({
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
-            className="fixed inset-0 bg-black/50 z-[9998]"
+            className="fixed inset-0 bg-black/60 backdrop-blur-sm z-[9998]"
             onClick={onClose}
           />
 
@@ -172,14 +182,20 @@ const FoundersNotificationCenter: React.FC<FoundersNotificationCenterProps> = ({
             className="fixed right-0 top-0 h-full w-full max-w-md bg-[#0A0A0A] border-l border-gold/20 z-[9999] flex flex-col"
           >
             {/* Header */}
-            <div className="p-4 border-b border-gold/20 flex items-center justify-between">
+            <div className="p-4 border-b border-gold/20 flex items-center justify-between bg-gradient-to-r from-[#0A0A0A] to-[#1A1A1A]">
               <div className="flex items-center gap-3">
                 <div className="p-2 rounded-lg bg-gold/10">
                   <Bell className="w-5 h-5 text-gold" />
                 </div>
                 <div>
-                  <h2 className="text-lg font-semibold text-white">Notifications</h2>
-                  <p className="text-xs text-gray-400">{unreadCount} unread</p>
+                  <h2 className="text-lg font-semibold text-white">Notification Inbox</h2>
+                  <p className="text-xs text-gray-400">
+                    {unreadCount > 0 ? (
+                      <span className="text-gold">{unreadCount} unread</span>
+                    ) : (
+                      'All caught up!'
+                    )}
+                  </p>
                 </div>
               </div>
               <div className="flex items-center gap-2">
@@ -188,9 +204,9 @@ const FoundersNotificationCenter: React.FC<FoundersNotificationCenterProps> = ({
                     size="sm"
                     variant="outline"
                     onClick={markAllAsRead}
-                    className="border-gold/20 text-gold hover:bg-gold/10"
+                    className="border-gold/20 text-gold hover:bg-gold/10 text-xs"
                   >
-                    <Check className="w-4 h-4 mr-1" />
+                    <Check className="w-3 h-3 mr-1" />
                     Mark all read
                   </Button>
                 )}
@@ -204,26 +220,31 @@ const FoundersNotificationCenter: React.FC<FoundersNotificationCenterProps> = ({
             </div>
 
             {/* Tabs */}
-            <div className="p-2 border-b border-gold/20 flex gap-1">
+            <div className="p-2 border-b border-gold/20 flex gap-1 bg-[#0E0E0E]">
               {(['all', 'mentions', 'alerts', 'tasks'] as const).map((tab) => (
                 <button
                   key={tab}
                   onClick={() => setActiveTab(tab)}
-                  className={`flex-1 px-3 py-2 rounded-lg text-sm font-medium transition-colors ${
+                  className={`flex-1 px-3 py-2 rounded-lg text-sm font-medium transition-all ${
                     activeTab === tab 
                       ? 'bg-gold text-black' 
                       : 'text-gray-400 hover:text-white hover:bg-gold/10'
                   }`}
                 >
-                  {tab === 'all' && 'All'}
-                  {tab === 'mentions' && (
-                    <span className="flex items-center justify-center gap-1">
-                      <AtSign className="w-3 h-3" />
-                      Mentions
-                    </span>
-                  )}
-                  {tab === 'alerts' && 'Alerts'}
-                  {tab === 'tasks' && 'Tasks'}
+                  <div className="flex items-center justify-center gap-1.5">
+                    {tab === 'all' && <Bell className="w-3.5 h-3.5" />}
+                    {tab === 'mentions' && <AtSign className="w-3.5 h-3.5" />}
+                    {tab === 'alerts' && <Zap className="w-3.5 h-3.5" />}
+                    {tab === 'tasks' && <FileText className="w-3.5 h-3.5" />}
+                    <span className="capitalize">{tab}</span>
+                    {tabCounts[tab] > 0 && (
+                      <span className={`text-xs px-1.5 py-0.5 rounded-full ${
+                        activeTab === tab ? 'bg-black/20' : 'bg-gold/20 text-gold'
+                      }`}>
+                        {tabCounts[tab]}
+                      </span>
+                    )}
+                  </div>
                 </button>
               ))}
             </div>
@@ -231,66 +252,78 @@ const FoundersNotificationCenter: React.FC<FoundersNotificationCenterProps> = ({
             {/* Notifications List */}
             <ScrollArea className="flex-1">
               <div className="p-4 space-y-2">
-                {filteredNotifications.length === 0 ? (
+                {loading ? (
+                  <div className="flex items-center justify-center py-12">
+                    <div className="w-8 h-8 border-2 border-gold border-t-transparent rounded-full animate-spin" />
+                  </div>
+                ) : filteredNotifications.length === 0 ? (
                   <div className="text-center py-12">
                     <Bell className="w-12 h-12 text-gold/20 mx-auto mb-4" />
-                    <p className="text-gray-400">No notifications</p>
+                    <p className="text-white font-medium">No notifications</p>
                     <p className="text-sm text-gray-500 mt-1">You're all caught up!</p>
                   </div>
                 ) : (
-                  filteredNotifications.map((notification) => (
-                    <motion.div
-                      key={notification.id}
-                      initial={{ opacity: 0, y: 10 }}
-                      animate={{ opacity: 1, y: 0 }}
-                      className={`p-4 rounded-lg border transition-all cursor-pointer ${
-                        notification.is_read 
-                          ? 'bg-[#0E0E0E] border-gold/10' 
-                          : 'bg-gold/5 border-gold/30'
-                      }`}
-                      onClick={() => markAsRead(notification.id)}
-                    >
-                      <div className="flex items-start gap-3">
-                        {/* Category indicator */}
-                        <div className={`w-2 h-2 rounded-full mt-2 ${categoryColors[notification.category]}`} />
-                        
-                        {/* Channel icon */}
-                        <div className="p-2 rounded-lg bg-gold/10 text-gold">
-                          {channelIcons[notification.channel] || <Bell className="w-4 h-4" />}
-                        </div>
+                  filteredNotifications.map((notification, index) => {
+                    const config = categoryConfig[notification.category] || categoryConfig.routine;
+                    return (
+                      <motion.div
+                        key={notification.id}
+                        initial={{ opacity: 0, y: 10 }}
+                        animate={{ opacity: 1, y: 0 }}
+                        transition={{ delay: index * 0.03 }}
+                        className={`p-4 rounded-lg border transition-all cursor-pointer group ${
+                          notification.is_read 
+                            ? 'bg-[#0E0E0E] border-gold/10 hover:border-gold/20' 
+                            : `${config.bgColor} ${config.borderColor}`
+                        }`}
+                        onClick={() => markAsRead(notification.id)}
+                      >
+                        <div className="flex items-start gap-3">
+                          {/* Channel icon */}
+                          <div className={`p-2 rounded-lg ${notification.is_read ? 'bg-gold/10' : 'bg-gold/20'} ${config.color}`}>
+                            {channelIcons[notification.channel] || <Bell className="w-4 h-4" />}
+                          </div>
 
-                        {/* Content */}
-                        <div className="flex-1 min-w-0">
-                          <div className="flex items-center justify-between gap-2">
-                            <p className="font-medium text-white truncate">
-                              {notification.sender_name || notification.sender_identifier}
-                            </p>
-                            {!notification.is_read && (
-                              <span className="w-2 h-2 rounded-full bg-gold flex-shrink-0" />
+                          {/* Content */}
+                          <div className="flex-1 min-w-0">
+                            <div className="flex items-center justify-between gap-2">
+                              <p className={`font-medium truncate ${notification.is_read ? 'text-gray-300' : 'text-white'}`}>
+                                {notification.sender_name || notification.sender_identifier}
+                              </p>
+                              <div className="flex items-center gap-2">
+                                {!notification.is_read && (
+                                  <span className="w-2 h-2 rounded-full bg-gold flex-shrink-0 animate-pulse" />
+                                )}
+                                <Badge variant="outline" className={`text-[10px] ${config.borderColor} ${config.color}`}>
+                                  {notification.category}
+                                </Badge>
+                              </div>
+                            </div>
+                            {notification.subject && (
+                              <p className={`text-sm truncate mt-1 ${notification.is_read ? 'text-gray-400' : 'text-gray-200'}`}>
+                                {notification.subject}
+                              </p>
                             )}
-                          </div>
-                          {notification.subject && (
-                            <p className="text-sm text-gray-300 truncate mt-1">{notification.subject}</p>
-                          )}
-                          <p className="text-xs text-gray-500 line-clamp-2 mt-1">{notification.content}</p>
-                          <div className="flex items-center justify-between mt-2">
-                            <span className="text-xs text-gray-500">
-                              {format(new Date(notification.received_at), 'MMM d, h:mm a')}
-                            </span>
-                            <button
-                              onClick={(e) => {
-                                e.stopPropagation();
-                                deleteNotification(notification.id);
-                              }}
-                              className="p-1 rounded hover:bg-red-500/20 text-gray-500 hover:text-red-400 transition-colors"
-                            >
-                              <Trash2 className="w-3 h-3" />
-                            </button>
+                            <p className="text-xs text-gray-500 line-clamp-2 mt-1">{notification.content}</p>
+                            <div className="flex items-center justify-between mt-3">
+                              <span className="text-xs text-gray-500">
+                                {formatDistanceToNow(new Date(notification.received_at), { addSuffix: true })}
+                              </span>
+                              <button
+                                onClick={(e) => {
+                                  e.stopPropagation();
+                                  deleteNotification(notification.id);
+                                }}
+                                className="p-1.5 rounded-lg opacity-0 group-hover:opacity-100 hover:bg-red-500/20 text-gray-500 hover:text-red-400 transition-all"
+                              >
+                                <Trash2 className="w-3.5 h-3.5" />
+                              </button>
+                            </div>
                           </div>
                         </div>
-                      </div>
-                    </motion.div>
-                  ))
+                      </motion.div>
+                    );
+                  })
                 )}
               </div>
             </ScrollArea>
