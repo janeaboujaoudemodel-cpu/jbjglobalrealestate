@@ -37,10 +37,12 @@ interface Channel {
 }
 
 const TEAM_MEMBERS: TeamMember[] = [
-  { id: '1', name: 'Jane Abjowwe', role: 'Founder & CEO', status: 'online' },
+  { id: '1', name: 'Jane Abou Jaoude', role: 'Founder & CEO', status: 'online' },
   { id: '2', name: 'Jessica', role: 'HR Manager', status: 'online' },
   { id: '3', name: 'David Carter', role: 'Head of Recruitment', status: 'away' },
   { id: '4', name: 'Sales Team', role: 'Group', status: 'online' },
+  { id: '5', name: 'Marketing Team', role: 'Group', status: 'online' },
+  { id: '6', name: 'IT Support', role: 'Admin', status: 'online' },
 ];
 
 const CHANNELS: Channel[] = [
@@ -100,9 +102,9 @@ const CRMCommunicationPanel = () => {
   };
 
   return (
-    <Card className="border-border bg-card">
+    <Card className="border-zinc-200 bg-white">
       <CardHeader className="pb-2">
-        <CardTitle className="text-white font-bold text-base flex items-center justify-between">
+        <CardTitle className="text-zinc-900 font-bold text-base flex items-center justify-between">
           <div className="flex items-center gap-2">
             <MessageSquare className="h-4 w-4 text-gold" />
             Team Communication
@@ -119,20 +121,20 @@ const CRMCommunicationPanel = () => {
       </CardHeader>
       <CardContent className="p-0">
         <Tabs value={activeTab} onValueChange={setActiveTab} className="w-full">
-          <TabsList className="w-full bg-muted/30 grid grid-cols-4 rounded-none border-b border-border">
-            <TabsTrigger value="chat" className="data-[state=active]:bg-gold/20 data-[state=active]:text-gold text-xs">
+          <TabsList className="w-full bg-zinc-100 grid grid-cols-4 rounded-none border-b border-zinc-200">
+            <TabsTrigger value="chat" className="data-[state=active]:bg-gold/20 data-[state=active]:text-gold text-zinc-600 text-xs">
               <Hash className="h-3 w-3 mr-1" />
               Channels
             </TabsTrigger>
-            <TabsTrigger value="team" className="data-[state=active]:bg-gold/20 data-[state=active]:text-gold text-xs">
+            <TabsTrigger value="team" className="data-[state=active]:bg-gold/20 data-[state=active]:text-gold text-zinc-600 text-xs">
               <Users className="h-3 w-3 mr-1" />
               Team
             </TabsTrigger>
-            <TabsTrigger value="meetings" className="data-[state=active]:bg-gold/20 data-[state=active]:text-gold text-xs">
+            <TabsTrigger value="meetings" className="data-[state=active]:bg-gold/20 data-[state=active]:text-gold text-zinc-600 text-xs">
               <Video className="h-3 w-3 mr-1" />
               Meetings
             </TabsTrigger>
-            <TabsTrigger value="files" className="data-[state=active]:bg-gold/20 data-[state=active]:text-gold text-xs">
+            <TabsTrigger value="files" className="data-[state=active]:bg-gold/20 data-[state=active]:text-gold text-zinc-600 text-xs">
               <FileText className="h-3 w-3 mr-1" />
               Files
             </TabsTrigger>
@@ -142,15 +144,15 @@ const CRMCommunicationPanel = () => {
           <TabsContent value="chat" className="m-0">
             <div className="flex h-[240px]">
               {/* Channels Sidebar */}
-              <div className="w-1/3 border-r border-border p-2">
-                <p className="text-[10px] text-muted-foreground uppercase tracking-wide mb-2 px-1">Channels</p>
+              <div className="w-1/3 border-r border-zinc-200 p-2">
+                <p className="text-[10px] text-zinc-500 uppercase tracking-wide mb-2 px-1">Channels</p>
                 <div className="space-y-1">
                   {CHANNELS.map(channel => (
                     <button
                       key={channel.id}
                       onClick={() => setSelectedChannel(channel.id)}
-                      className={`w-full flex items-center justify-between px-2 py-1.5 rounded text-xs hover:bg-muted/50 transition-colors ${
-                        selectedChannel === channel.id ? 'bg-muted/70 text-white' : 'text-muted-foreground'
+                      className={`w-full flex items-center justify-between px-2 py-1.5 rounded text-xs hover:bg-zinc-100 transition-colors ${
+                        selectedChannel === channel.id ? 'bg-zinc-100 text-zinc-900' : 'text-zinc-600'
                       }`}
                     >
                       <span className="flex items-center gap-1.5">
@@ -174,17 +176,17 @@ const CRMCommunicationPanel = () => {
                     {messages.map(msg => (
                       <div key={msg.id} className={`flex gap-2 ${msg.isMe ? 'flex-row-reverse' : ''}`}>
                         <Avatar className="h-6 w-6">
-                          <AvatarFallback className="text-[10px] bg-muted">
+                          <AvatarFallback className="text-[10px] bg-zinc-200 text-zinc-700">
                             {msg.sender[0]}
                           </AvatarFallback>
                         </Avatar>
                         <div className={`max-w-[70%] ${msg.isMe ? 'text-right' : ''}`}>
                           <div className="flex items-center gap-2 mb-0.5">
-                            <span className="text-[10px] font-medium text-foreground">{msg.sender}</span>
-                            <span className="text-[9px] text-muted-foreground">{msg.timestamp}</span>
+                            <span className="text-[10px] font-medium text-zinc-800">{msg.sender}</span>
+                            <span className="text-[9px] text-zinc-500">{msg.timestamp}</span>
                           </div>
                           <p className={`text-xs p-2 rounded-lg ${
-                            msg.isMe ? 'bg-gold/20 text-foreground' : 'bg-muted/50 text-foreground'
+                            msg.isMe ? 'bg-gold/20 text-zinc-800' : 'bg-zinc-100 text-zinc-800'
                           }`}>
                             {msg.message}
                           </p>
@@ -195,9 +197,9 @@ const CRMCommunicationPanel = () => {
                 </ScrollArea>
                 
                 {/* Message Input */}
-                <div className="p-2 border-t border-border">
+                <div className="p-2 border-t border-zinc-200">
                   <div className="flex gap-2">
-                    <Button variant="ghost" size="icon" className="h-8 w-8 text-muted-foreground hover:text-foreground">
+                    <Button variant="ghost" size="icon" className="h-8 w-8 text-zinc-500 hover:text-zinc-800">
                       <Paperclip className="h-4 w-4" />
                     </Button>
                     <Input
@@ -205,7 +207,7 @@ const CRMCommunicationPanel = () => {
                       onChange={(e) => setNewMessage(e.target.value)}
                       onKeyDown={(e) => e.key === 'Enter' && sendMessage()}
                       placeholder="Type a message..."
-                      className="h-8 text-xs bg-muted border-border"
+                      className="h-8 text-xs bg-white border-zinc-200 text-zinc-800"
                     />
                     <Button 
                       size="icon" 
@@ -227,7 +229,7 @@ const CRMCommunicationPanel = () => {
                 {TEAM_MEMBERS.map(member => (
                   <div 
                     key={member.id}
-                    className="flex items-center justify-between p-2.5 rounded-lg bg-muted/30 hover:bg-muted/50 transition-colors"
+                    className="flex items-center justify-between p-2.5 rounded-lg bg-zinc-50 hover:bg-zinc-100 transition-colors"
                   >
                     <div className="flex items-center gap-3">
                       <div className="relative">
@@ -236,11 +238,11 @@ const CRMCommunicationPanel = () => {
                             {member.name.split(' ').map(n => n[0]).join('')}
                           </AvatarFallback>
                         </Avatar>
-                        <span className={`absolute -bottom-0.5 -right-0.5 w-2.5 h-2.5 rounded-full border-2 border-card ${getStatusColor(member.status)}`} />
+                        <span className={`absolute -bottom-0.5 -right-0.5 w-2.5 h-2.5 rounded-full border-2 border-white ${getStatusColor(member.status)}`} />
                       </div>
                       <div>
-                        <p className="text-sm font-medium text-foreground">{member.name}</p>
-                        <p className="text-[10px] text-muted-foreground">{member.role}</p>
+                        <p className="text-sm font-medium text-zinc-800">{member.name}</p>
+                        <p className="text-[10px] text-zinc-500">{member.role}</p>
                       </div>
                     </div>
                     <div className="flex items-center gap-1">
