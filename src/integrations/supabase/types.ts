@@ -3184,6 +3184,72 @@ export type Database = {
         }
         Relationships: []
       }
+      developer_pipeline: {
+        Row: {
+          ai_score: number | null
+          completion_date: string | null
+          created_at: string | null
+          developer_name: string
+          expected_yield: number | null
+          id: string
+          is_featured: boolean | null
+          launch_date: string | null
+          location: string
+          metadata: Json | null
+          opportunity_notes: string | null
+          price_range_max: number | null
+          price_range_min: number | null
+          project_name: string
+          project_status: string | null
+          property_types: string[] | null
+          risk_level: Database["public"]["Enums"]["risk_level"] | null
+          total_units: number | null
+          updated_at: string | null
+        }
+        Insert: {
+          ai_score?: number | null
+          completion_date?: string | null
+          created_at?: string | null
+          developer_name: string
+          expected_yield?: number | null
+          id?: string
+          is_featured?: boolean | null
+          launch_date?: string | null
+          location: string
+          metadata?: Json | null
+          opportunity_notes?: string | null
+          price_range_max?: number | null
+          price_range_min?: number | null
+          project_name: string
+          project_status?: string | null
+          property_types?: string[] | null
+          risk_level?: Database["public"]["Enums"]["risk_level"] | null
+          total_units?: number | null
+          updated_at?: string | null
+        }
+        Update: {
+          ai_score?: number | null
+          completion_date?: string | null
+          created_at?: string | null
+          developer_name?: string
+          expected_yield?: number | null
+          id?: string
+          is_featured?: boolean | null
+          launch_date?: string | null
+          location?: string
+          metadata?: Json | null
+          opportunity_notes?: string | null
+          price_range_max?: number | null
+          price_range_min?: number | null
+          project_name?: string
+          project_status?: string | null
+          property_types?: string[] | null
+          risk_level?: Database["public"]["Enums"]["risk_level"] | null
+          total_units?: number | null
+          updated_at?: string | null
+        }
+        Relationships: []
+      }
       developer_sales_reps: {
         Row: {
           created_at: string
@@ -3468,6 +3534,57 @@ export type Database = {
           updated_at?: string
           valid_from?: string | null
           valid_until?: string | null
+        }
+        Relationships: []
+      }
+      economic_indicators: {
+        Row: {
+          category: string
+          change_percent: number | null
+          created_at: string | null
+          effective_date: string
+          id: string
+          impact_on_real_estate: string | null
+          indicator_name: string
+          metadata: Json | null
+          next_update_date: string | null
+          previous_value: number | null
+          region: string | null
+          source: string | null
+          unit: string | null
+          value: number
+        }
+        Insert: {
+          category: string
+          change_percent?: number | null
+          created_at?: string | null
+          effective_date: string
+          id?: string
+          impact_on_real_estate?: string | null
+          indicator_name: string
+          metadata?: Json | null
+          next_update_date?: string | null
+          previous_value?: number | null
+          region?: string | null
+          source?: string | null
+          unit?: string | null
+          value: number
+        }
+        Update: {
+          category?: string
+          change_percent?: number | null
+          created_at?: string | null
+          effective_date?: string
+          id?: string
+          impact_on_real_estate?: string | null
+          indicator_name?: string
+          metadata?: Json | null
+          next_update_date?: string | null
+          previous_value?: number | null
+          region?: string | null
+          source?: string | null
+          unit?: string | null
+          value?: number
         }
         Relationships: []
       }
@@ -5124,6 +5241,201 @@ export type Database = {
         }
         Relationships: []
       }
+      investment_opportunities: {
+        Row: {
+          ai_score: number | null
+          avg_price: number | null
+          created_at: string | null
+          description: string | null
+          detected_by: string | null
+          developer: string | null
+          developer_reputation_score: number | null
+          expected_yield: number | null
+          expiry_date: string | null
+          id: string
+          investor_interest_score: number | null
+          location: string
+          location_growth_index: number | null
+          market_timing_score: number | null
+          metadata: Json | null
+          opportunity_type: string
+          property_type: string | null
+          recommended_action: string | null
+          reviewed_at: string | null
+          reviewed_by: string | null
+          risk_level: Database["public"]["Enums"]["risk_level"]
+          status: Database["public"]["Enums"]["opportunity_status"] | null
+          title: string
+          updated_at: string | null
+        }
+        Insert: {
+          ai_score?: number | null
+          avg_price?: number | null
+          created_at?: string | null
+          description?: string | null
+          detected_by?: string | null
+          developer?: string | null
+          developer_reputation_score?: number | null
+          expected_yield?: number | null
+          expiry_date?: string | null
+          id?: string
+          investor_interest_score?: number | null
+          location: string
+          location_growth_index?: number | null
+          market_timing_score?: number | null
+          metadata?: Json | null
+          opportunity_type: string
+          property_type?: string | null
+          recommended_action?: string | null
+          reviewed_at?: string | null
+          reviewed_by?: string | null
+          risk_level: Database["public"]["Enums"]["risk_level"]
+          status?: Database["public"]["Enums"]["opportunity_status"] | null
+          title: string
+          updated_at?: string | null
+        }
+        Update: {
+          ai_score?: number | null
+          avg_price?: number | null
+          created_at?: string | null
+          description?: string | null
+          detected_by?: string | null
+          developer?: string | null
+          developer_reputation_score?: number | null
+          expected_yield?: number | null
+          expiry_date?: string | null
+          id?: string
+          investor_interest_score?: number | null
+          location?: string
+          location_growth_index?: number | null
+          market_timing_score?: number | null
+          metadata?: Json | null
+          opportunity_type?: string
+          property_type?: string | null
+          recommended_action?: string | null
+          reviewed_at?: string | null
+          reviewed_by?: string | null
+          risk_level?: Database["public"]["Enums"]["risk_level"]
+          status?: Database["public"]["Enums"]["opportunity_status"] | null
+          title?: string
+          updated_at?: string | null
+        }
+        Relationships: []
+      }
+      investor_analytics: {
+        Row: {
+          analysis_period_end: string
+          analysis_period_start: string
+          avg_budget_max: number | null
+          avg_budget_min: number | null
+          avg_conversion_days: number | null
+          conversion_rate: number | null
+          created_at: string | null
+          id: string
+          inquiry_volume: number | null
+          insights: string[] | null
+          investor_segment: string | null
+          metadata: Json | null
+          nationality: string | null
+          preferred_locations: string[] | null
+          preferred_payment_type: string | null
+          preferred_property_types: string[] | null
+          trend: Database["public"]["Enums"]["market_trend"] | null
+        }
+        Insert: {
+          analysis_period_end: string
+          analysis_period_start: string
+          avg_budget_max?: number | null
+          avg_budget_min?: number | null
+          avg_conversion_days?: number | null
+          conversion_rate?: number | null
+          created_at?: string | null
+          id?: string
+          inquiry_volume?: number | null
+          insights?: string[] | null
+          investor_segment?: string | null
+          metadata?: Json | null
+          nationality?: string | null
+          preferred_locations?: string[] | null
+          preferred_payment_type?: string | null
+          preferred_property_types?: string[] | null
+          trend?: Database["public"]["Enums"]["market_trend"] | null
+        }
+        Update: {
+          analysis_period_end?: string
+          analysis_period_start?: string
+          avg_budget_max?: number | null
+          avg_budget_min?: number | null
+          avg_conversion_days?: number | null
+          conversion_rate?: number | null
+          created_at?: string | null
+          id?: string
+          inquiry_volume?: number | null
+          insights?: string[] | null
+          investor_segment?: string | null
+          metadata?: Json | null
+          nationality?: string | null
+          preferred_locations?: string[] | null
+          preferred_payment_type?: string | null
+          preferred_property_types?: string[] | null
+          trend?: Database["public"]["Enums"]["market_trend"] | null
+        }
+        Relationships: []
+      }
+      investor_behavior_insights: {
+        Row: {
+          avg_budget_max_aed: number | null
+          avg_budget_min_aed: number | null
+          conversion_rate_percent: number | null
+          created_at: string
+          data_period_end: string | null
+          data_period_start: string | null
+          id: string
+          inquiry_trend: string | null
+          insight_summary: string | null
+          investor_segment: string
+          payment_preference: string | null
+          preferred_locations: string[] | null
+          preferred_property_types: string[] | null
+          sample_size: number | null
+          source_country: string | null
+        }
+        Insert: {
+          avg_budget_max_aed?: number | null
+          avg_budget_min_aed?: number | null
+          conversion_rate_percent?: number | null
+          created_at?: string
+          data_period_end?: string | null
+          data_period_start?: string | null
+          id?: string
+          inquiry_trend?: string | null
+          insight_summary?: string | null
+          investor_segment: string
+          payment_preference?: string | null
+          preferred_locations?: string[] | null
+          preferred_property_types?: string[] | null
+          sample_size?: number | null
+          source_country?: string | null
+        }
+        Update: {
+          avg_budget_max_aed?: number | null
+          avg_budget_min_aed?: number | null
+          conversion_rate_percent?: number | null
+          created_at?: string
+          data_period_end?: string | null
+          data_period_start?: string | null
+          id?: string
+          inquiry_trend?: string | null
+          insight_summary?: string | null
+          investor_segment?: string
+          payment_preference?: string | null
+          preferred_locations?: string[] | null
+          preferred_property_types?: string[] | null
+          sample_size?: number | null
+          source_country?: string | null
+        }
+        Relationships: []
+      }
       ip_blocklist: {
         Row: {
           block_count: number
@@ -5581,6 +5893,437 @@ export type Database = {
         }
         Relationships: []
       }
+      market_alerts: {
+        Row: {
+          acknowledged_at: string | null
+          acknowledged_by: string | null
+          alert_type: string
+          category: string | null
+          created_at: string
+          expires_at: string | null
+          id: string
+          impact_assessment: string | null
+          is_acknowledged: boolean | null
+          is_read: boolean | null
+          location: string | null
+          message: string
+          metadata: Json | null
+          priority: string | null
+          recommended_action: string | null
+          source_url: string | null
+          title: string
+        }
+        Insert: {
+          acknowledged_at?: string | null
+          acknowledged_by?: string | null
+          alert_type: string
+          category?: string | null
+          created_at?: string
+          expires_at?: string | null
+          id?: string
+          impact_assessment?: string | null
+          is_acknowledged?: boolean | null
+          is_read?: boolean | null
+          location?: string | null
+          message: string
+          metadata?: Json | null
+          priority?: string | null
+          recommended_action?: string | null
+          source_url?: string | null
+          title: string
+        }
+        Update: {
+          acknowledged_at?: string | null
+          acknowledged_by?: string | null
+          alert_type?: string
+          category?: string | null
+          created_at?: string
+          expires_at?: string | null
+          id?: string
+          impact_assessment?: string | null
+          is_acknowledged?: boolean | null
+          is_read?: boolean | null
+          location?: string | null
+          message?: string
+          metadata?: Json | null
+          priority?: string | null
+          recommended_action?: string | null
+          source_url?: string | null
+          title?: string
+        }
+        Relationships: []
+      }
+      market_briefings: {
+        Row: {
+          briefing_date: string
+          briefing_type: string
+          created_at: string | null
+          generated_by: string | null
+          global_factors: Json | null
+          id: string
+          is_sent: boolean | null
+          key_metrics: Json
+          opportunities: Json | null
+          recipient_id: string | null
+          recommendations: Json | null
+          risks: Json | null
+          sent_at: string | null
+          sentiment_overview: Json | null
+          summary: string
+          trends: Json | null
+        }
+        Insert: {
+          briefing_date: string
+          briefing_type: string
+          created_at?: string | null
+          generated_by?: string | null
+          global_factors?: Json | null
+          id?: string
+          is_sent?: boolean | null
+          key_metrics: Json
+          opportunities?: Json | null
+          recipient_id?: string | null
+          recommendations?: Json | null
+          risks?: Json | null
+          sent_at?: string | null
+          sentiment_overview?: Json | null
+          summary: string
+          trends?: Json | null
+        }
+        Update: {
+          briefing_date?: string
+          briefing_type?: string
+          created_at?: string | null
+          generated_by?: string | null
+          global_factors?: Json | null
+          id?: string
+          is_sent?: boolean | null
+          key_metrics?: Json
+          opportunities?: Json | null
+          recipient_id?: string | null
+          recommendations?: Json | null
+          risks?: Json | null
+          sent_at?: string | null
+          sentiment_overview?: Json | null
+          summary?: string
+          trends?: Json | null
+        }
+        Relationships: []
+      }
+      market_data_points: {
+        Row: {
+          created_at: string | null
+          data_type: string
+          id: string
+          location: string | null
+          metadata: Json | null
+          period_end: string | null
+          period_start: string | null
+          source_id: string | null
+          unit: string | null
+          value: number | null
+        }
+        Insert: {
+          created_at?: string | null
+          data_type: string
+          id?: string
+          location?: string | null
+          metadata?: Json | null
+          period_end?: string | null
+          period_start?: string | null
+          source_id?: string | null
+          unit?: string | null
+          value?: number | null
+        }
+        Update: {
+          created_at?: string | null
+          data_type?: string
+          id?: string
+          location?: string | null
+          metadata?: Json | null
+          period_end?: string | null
+          period_start?: string | null
+          source_id?: string | null
+          unit?: string | null
+          value?: number | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "market_data_points_source_id_fkey"
+            columns: ["source_id"]
+            isOneToOne: false
+            referencedRelation: "market_data_sources"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      market_data_sources: {
+        Row: {
+          api_endpoint: string | null
+          config: Json | null
+          created_at: string | null
+          description: string | null
+          id: string
+          is_active: boolean | null
+          last_sync_at: string | null
+          name: string
+          source_type: Database["public"]["Enums"]["data_source_type"]
+          update_frequency: string | null
+          updated_at: string | null
+        }
+        Insert: {
+          api_endpoint?: string | null
+          config?: Json | null
+          created_at?: string | null
+          description?: string | null
+          id?: string
+          is_active?: boolean | null
+          last_sync_at?: string | null
+          name: string
+          source_type: Database["public"]["Enums"]["data_source_type"]
+          update_frequency?: string | null
+          updated_at?: string | null
+        }
+        Update: {
+          api_endpoint?: string | null
+          config?: Json | null
+          created_at?: string | null
+          description?: string | null
+          id?: string
+          is_active?: boolean | null
+          last_sync_at?: string | null
+          name?: string
+          source_type?: Database["public"]["Enums"]["data_source_type"]
+          update_frequency?: string | null
+          updated_at?: string | null
+        }
+        Relationships: []
+      }
+      market_opportunities: {
+        Row: {
+          ai_score: number | null
+          created_at: string
+          description: string | null
+          developer_id: string | null
+          estimated_value_aed: number | null
+          expected_roi_percent: number | null
+          expires_at: string | null
+          id: string
+          location: string | null
+          opportunity_type: string
+          project_name: string | null
+          risk_level: string | null
+          source_data: Json | null
+          status: string | null
+          title: string
+          updated_at: string
+        }
+        Insert: {
+          ai_score?: number | null
+          created_at?: string
+          description?: string | null
+          developer_id?: string | null
+          estimated_value_aed?: number | null
+          expected_roi_percent?: number | null
+          expires_at?: string | null
+          id?: string
+          location?: string | null
+          opportunity_type: string
+          project_name?: string | null
+          risk_level?: string | null
+          source_data?: Json | null
+          status?: string | null
+          title: string
+          updated_at?: string
+        }
+        Update: {
+          ai_score?: number | null
+          created_at?: string
+          description?: string | null
+          developer_id?: string | null
+          estimated_value_aed?: number | null
+          expected_roi_percent?: number | null
+          expires_at?: string | null
+          id?: string
+          location?: string | null
+          opportunity_type?: string
+          project_name?: string | null
+          risk_level?: string | null
+          source_data?: Json | null
+          status?: string | null
+          title?: string
+          updated_at?: string
+        }
+        Relationships: []
+      }
+      market_predictions: {
+        Row: {
+          accuracy_score: number | null
+          actual_value: number | null
+          confidence: Database["public"]["Enums"]["prediction_confidence"]
+          confidence_score: number | null
+          created_at: string | null
+          id: string
+          location: string | null
+          model_used: string | null
+          predicted_change_percent: number | null
+          predicted_value: number | null
+          prediction_type: string
+          property_type: string | null
+          recommended_action: string | null
+          supporting_data: Json | null
+          time_horizon_days: number
+          trend: Database["public"]["Enums"]["market_trend"]
+          valid_from: string | null
+          valid_until: string | null
+        }
+        Insert: {
+          accuracy_score?: number | null
+          actual_value?: number | null
+          confidence: Database["public"]["Enums"]["prediction_confidence"]
+          confidence_score?: number | null
+          created_at?: string | null
+          id?: string
+          location?: string | null
+          model_used?: string | null
+          predicted_change_percent?: number | null
+          predicted_value?: number | null
+          prediction_type: string
+          property_type?: string | null
+          recommended_action?: string | null
+          supporting_data?: Json | null
+          time_horizon_days: number
+          trend: Database["public"]["Enums"]["market_trend"]
+          valid_from?: string | null
+          valid_until?: string | null
+        }
+        Update: {
+          accuracy_score?: number | null
+          actual_value?: number | null
+          confidence?: Database["public"]["Enums"]["prediction_confidence"]
+          confidence_score?: number | null
+          created_at?: string | null
+          id?: string
+          location?: string | null
+          model_used?: string | null
+          predicted_change_percent?: number | null
+          predicted_value?: number | null
+          prediction_type?: string
+          property_type?: string | null
+          recommended_action?: string | null
+          supporting_data?: Json | null
+          time_horizon_days?: number
+          trend?: Database["public"]["Enums"]["market_trend"]
+          valid_from?: string | null
+          valid_until?: string | null
+        }
+        Relationships: []
+      }
+      market_risk_alerts: {
+        Row: {
+          acknowledged_at: string | null
+          acknowledged_by: string | null
+          affected_locations: string[] | null
+          affected_property_types: string[] | null
+          alert_type: string
+          created_at: string | null
+          data_sources: string[] | null
+          description: string
+          expires_at: string | null
+          id: string
+          impact_assessment: string | null
+          is_acknowledged: boolean | null
+          is_resolved: boolean | null
+          metadata: Json | null
+          recommended_actions: string[] | null
+          resolved_at: string | null
+          severity: Database["public"]["Enums"]["risk_level"]
+          title: string
+        }
+        Insert: {
+          acknowledged_at?: string | null
+          acknowledged_by?: string | null
+          affected_locations?: string[] | null
+          affected_property_types?: string[] | null
+          alert_type: string
+          created_at?: string | null
+          data_sources?: string[] | null
+          description: string
+          expires_at?: string | null
+          id?: string
+          impact_assessment?: string | null
+          is_acknowledged?: boolean | null
+          is_resolved?: boolean | null
+          metadata?: Json | null
+          recommended_actions?: string[] | null
+          resolved_at?: string | null
+          severity: Database["public"]["Enums"]["risk_level"]
+          title: string
+        }
+        Update: {
+          acknowledged_at?: string | null
+          acknowledged_by?: string | null
+          affected_locations?: string[] | null
+          affected_property_types?: string[] | null
+          alert_type?: string
+          created_at?: string | null
+          data_sources?: string[] | null
+          description?: string
+          expires_at?: string | null
+          id?: string
+          impact_assessment?: string | null
+          is_acknowledged?: boolean | null
+          is_resolved?: boolean | null
+          metadata?: Json | null
+          recommended_actions?: string[] | null
+          resolved_at?: string | null
+          severity?: Database["public"]["Enums"]["risk_level"]
+          title?: string
+        }
+        Relationships: []
+      }
+      market_sentiment: {
+        Row: {
+          analysis_date: string
+          created_at: string | null
+          id: string
+          key_drivers: string[] | null
+          key_topics: string[] | null
+          metadata: Json | null
+          sample_text: string | null
+          sentiment_label: string | null
+          sentiment_score: number | null
+          source: string
+          source_type: Database["public"]["Enums"]["data_source_type"]
+        }
+        Insert: {
+          analysis_date: string
+          created_at?: string | null
+          id?: string
+          key_drivers?: string[] | null
+          key_topics?: string[] | null
+          metadata?: Json | null
+          sample_text?: string | null
+          sentiment_label?: string | null
+          sentiment_score?: number | null
+          source: string
+          source_type: Database["public"]["Enums"]["data_source_type"]
+        }
+        Update: {
+          analysis_date?: string
+          created_at?: string | null
+          id?: string
+          key_drivers?: string[] | null
+          key_topics?: string[] | null
+          metadata?: Json | null
+          sample_text?: string | null
+          sentiment_label?: string | null
+          sentiment_score?: number | null
+          source?: string
+          source_type?: Database["public"]["Enums"]["data_source_type"]
+        }
+        Relationships: []
+      }
       memberships: {
         Row: {
           created_at: string
@@ -5840,6 +6583,63 @@ export type Database = {
           phone_verified?: boolean | null
           updated_at?: string
           user_role?: string | null
+        }
+        Relationships: []
+      }
+      project_ai_scores: {
+        Row: {
+          analysis_details: Json | null
+          created_at: string
+          developer_name: string | null
+          developer_reputation_score: number | null
+          id: string
+          investor_interest_score: number | null
+          location: string | null
+          location_growth_score: number | null
+          market_timing_score: number | null
+          overall_score: number | null
+          project_id: string | null
+          project_name: string
+          recommendation: string | null
+          risk_level: string | null
+          updated_at: string
+          valid_until: string | null
+        }
+        Insert: {
+          analysis_details?: Json | null
+          created_at?: string
+          developer_name?: string | null
+          developer_reputation_score?: number | null
+          id?: string
+          investor_interest_score?: number | null
+          location?: string | null
+          location_growth_score?: number | null
+          market_timing_score?: number | null
+          overall_score?: number | null
+          project_id?: string | null
+          project_name: string
+          recommendation?: string | null
+          risk_level?: string | null
+          updated_at?: string
+          valid_until?: string | null
+        }
+        Update: {
+          analysis_details?: Json | null
+          created_at?: string
+          developer_name?: string | null
+          developer_reputation_score?: number | null
+          id?: string
+          investor_interest_score?: number | null
+          location?: string | null
+          location_growth_score?: number | null
+          market_timing_score?: number | null
+          overall_score?: number | null
+          project_id?: string | null
+          project_name?: string
+          recommendation?: string | null
+          risk_level?: string | null
+          updated_at?: string
+          valid_until?: string | null
         }
         Relationships: []
       }
@@ -7861,11 +8661,28 @@ export type Database = {
         | "no_answer"
         | "junk"
       crm_role: "owner_admin" | "broker_member" | "admin" | "founder"
+      data_source_type:
+        | "dld"
+        | "dsc"
+        | "central_bank"
+        | "property_portal"
+        | "news"
+        | "global"
+        | "internal"
       hr_application_status: "pending" | "approved" | "rejected"
       hr_module_track: "company_knowledge" | "real_estate_basics"
       hr_question_type: "mcq" | "true_false" | "short_answer"
       hr_role: "broker_candidate" | "broker_member"
+      market_trend: "rising" | "falling" | "stable" | "volatile"
+      opportunity_status:
+        | "new"
+        | "under_review"
+        | "approved"
+        | "rejected"
+        | "expired"
+      prediction_confidence: "low" | "medium" | "high" | "very_high"
       reward_type: "points" | "gift" | "badge" | "certificate"
+      risk_level: "low" | "medium" | "high" | "critical"
       security_event_type:
         | "login_attempt"
         | "login_success"
@@ -8109,11 +8926,30 @@ export const Constants = {
         "junk",
       ],
       crm_role: ["owner_admin", "broker_member", "admin", "founder"],
+      data_source_type: [
+        "dld",
+        "dsc",
+        "central_bank",
+        "property_portal",
+        "news",
+        "global",
+        "internal",
+      ],
       hr_application_status: ["pending", "approved", "rejected"],
       hr_module_track: ["company_knowledge", "real_estate_basics"],
       hr_question_type: ["mcq", "true_false", "short_answer"],
       hr_role: ["broker_candidate", "broker_member"],
+      market_trend: ["rising", "falling", "stable", "volatile"],
+      opportunity_status: [
+        "new",
+        "under_review",
+        "approved",
+        "rejected",
+        "expired",
+      ],
+      prediction_confidence: ["low", "medium", "high", "very_high"],
       reward_type: ["points", "gift", "badge", "certificate"],
+      risk_level: ["low", "medium", "high", "critical"],
       security_event_type: [
         "login_attempt",
         "login_success",
