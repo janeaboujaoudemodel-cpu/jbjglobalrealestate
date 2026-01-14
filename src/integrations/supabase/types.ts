@@ -8485,11 +8485,28 @@ export type Database = {
         Args: { _lead_id: string; _user_id: string }
         Returns: boolean
       }
+      check_lead_rate_limit: {
+        Args: {
+          p_email: string
+          p_max_submissions?: number
+          p_window_hours?: number
+        }
+        Returns: boolean
+      }
       check_rate_limit: {
         Args: {
           p_action_type: string
           p_identifier: string
           p_max_requests?: number
+          p_window_minutes?: number
+        }
+        Returns: boolean
+      }
+      check_verification_rate_limit: {
+        Args: {
+          p_identifier: string
+          p_max_attempts?: number
+          p_verification_type: string
           p_window_minutes?: number
         }
         Returns: boolean

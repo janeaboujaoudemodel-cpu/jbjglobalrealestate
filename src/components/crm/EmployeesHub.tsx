@@ -797,44 +797,44 @@ const EmployeesHub = ({ userId, brokers = [] }: EmployeesHubProps) => {
                           </div>
                         )}
 
-                        {/* Quick Actions */}
-                        <div className="flex items-center gap-1">
+                        {/* Quick Actions - HIGH VISIBILITY BUTTONS */}
+                        <div className="flex items-center gap-2">
                           <Button 
-                            variant="ghost" 
-                            size="icon" 
-                            className="h-8 w-8 text-crm-text-muted hover:text-gold hover:bg-gold/10 transition-all duration-200"
+                            size="sm"
+                            className="h-9 px-3 bg-gradient-to-r from-green-500 to-emerald-600 hover:from-green-600 hover:to-emerald-700 text-white font-medium shadow-md transition-all duration-200 hover:scale-105"
                             onClick={(e) => { e.stopPropagation(); handleChat(employee); }}
                           >
-                            <MessageSquare className="h-4 w-4" />
+                            <MessageSquare className="h-4 w-4 mr-1.5" />
+                            Chat
                           </Button>
                           {employee.email && (
                             <Button 
-                              variant="ghost" 
-                              size="icon" 
-                              className="h-8 w-8 text-crm-text-muted hover:text-gold hover:bg-gold/10 transition-all duration-200"
+                              size="sm"
+                              className="h-9 px-3 bg-gradient-to-r from-blue-500 to-indigo-600 hover:from-blue-600 hover:to-indigo-700 text-white font-medium shadow-md transition-all duration-200 hover:scale-105"
                               onClick={(e) => { e.stopPropagation(); handleEmail(employee); }}
                             >
-                              <Mail className="h-4 w-4" />
+                              <Mail className="h-4 w-4 mr-1.5" />
+                              Email
                             </Button>
                           )}
                           {employee.phone && (
                             <Button 
-                              variant="ghost" 
-                              size="icon" 
-                              className="h-8 w-8 text-crm-text-muted hover:text-gold hover:bg-gold/10 transition-all duration-200"
+                              size="sm"
+                              className="h-9 px-3 bg-gradient-to-r from-amber-400 to-yellow-500 hover:from-amber-500 hover:to-yellow-600 text-zinc-900 font-medium shadow-md transition-all duration-200 hover:scale-105"
                               onClick={(e) => { e.stopPropagation(); handleCall(employee); }}
                             >
-                              <Phone className="h-4 w-4" />
+                              <Phone className="h-4 w-4 mr-1.5" />
+                              Call
                             </Button>
                           )}
                           {employee.type === 'human' && (
                             <Button 
-                              variant="ghost" 
-                              size="icon" 
-                              className="h-8 w-8 text-crm-text-muted hover:text-gold hover:bg-gold/10 transition-all duration-200"
+                              size="sm"
+                              className="h-9 px-3 bg-gradient-to-r from-purple-500 to-violet-600 hover:from-purple-600 hover:to-violet-700 text-white font-medium shadow-md transition-all duration-200 hover:scale-105"
                               onClick={(e) => { e.stopPropagation(); handleVideoMeeting(employee); }}
                             >
-                              <Video className="h-4 w-4" />
+                              <Video className="h-4 w-4 mr-1.5" />
+                              Meet
                             </Button>
                           )}
                         </div>

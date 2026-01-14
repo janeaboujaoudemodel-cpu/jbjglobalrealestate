@@ -460,17 +460,27 @@ const CompanyCommunicationHub = () => {
               </>
             )}
           </div>
-          <div className="flex items-center gap-1">
-            <Button variant="ghost" size="icon" className="h-8 w-8">
-              <Phone className="w-4 h-4" />
+          <div className="flex items-center gap-2">
+            <Button 
+              size="sm"
+              className="h-8 px-3 bg-gradient-to-r from-green-500 to-emerald-600 hover:from-green-600 hover:to-emerald-700 text-white font-medium shadow-md transition-all duration-200 hover:scale-105"
+              onClick={() => toast.success('Starting voice call...')}
+            >
+              <Phone className="w-4 h-4 mr-1" />
+              Call
             </Button>
-            <Button variant="ghost" size="icon" className="h-8 w-8">
-              <Video className="w-4 h-4" />
+            <Button 
+              size="sm"
+              className="h-8 px-3 bg-gradient-to-r from-blue-500 to-indigo-600 hover:from-blue-600 hover:to-indigo-700 text-white font-medium shadow-md transition-all duration-200 hover:scale-105"
+              onClick={() => toast.success('Starting video call...')}
+            >
+              <Video className="w-4 h-4 mr-1" />
+              Video
             </Button>
-            <Button variant="ghost" size="icon" className="h-8 w-8">
+            <Button variant="ghost" size="icon" className="h-8 w-8 hover:bg-zinc-800">
               <Users className="w-4 h-4" />
             </Button>
-            <Button variant="ghost" size="icon" className="h-8 w-8">
+            <Button variant="ghost" size="icon" className="h-8 w-8 hover:bg-zinc-800">
               <Bell className="w-4 h-4" />
             </Button>
           </div>

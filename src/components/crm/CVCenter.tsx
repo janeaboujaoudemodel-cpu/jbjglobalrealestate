@@ -519,7 +519,7 @@ const CVCenter = ({ userId }: CVCenterProps) => {
                           <Button 
                             size="sm"
                             onClick={() => handleScheduleInterview(cv)}
-                            className="bg-[#F1C40F] hover:bg-[#FFD700] text-zinc-900 font-bold shadow-md px-4"
+                            className="bg-gradient-to-r from-amber-400 to-yellow-500 hover:from-amber-500 hover:to-yellow-600 text-zinc-900 font-bold shadow-lg px-5 py-2.5 transition-all duration-200 hover:scale-105"
                           >
                             <Video className="h-4 w-4 mr-2" />
                             Schedule Interview
@@ -527,15 +527,15 @@ const CVCenter = ({ userId }: CVCenterProps) => {
                           <Button 
                             size="sm"
                             onClick={() => handleViewCV(cv)}
-                            className="bg-white hover:bg-zinc-100 text-zinc-900 border-2 border-zinc-300 font-semibold shadow-sm px-4"
+                            className="bg-gradient-to-r from-zinc-700 to-zinc-800 hover:from-zinc-600 hover:to-zinc-700 text-white font-semibold shadow-md px-5 py-2.5 transition-all duration-200 hover:scale-105 border border-zinc-600"
                           >
                             <Eye className="h-4 w-4 mr-2" />
-                            Review
+                            View CV
                           </Button>
                           <Button 
                             size="sm"
                             onClick={() => handleContact(cv)}
-                            className="bg-blue-500 hover:bg-blue-600 text-white font-semibold shadow-sm px-4"
+                            className="bg-gradient-to-r from-blue-500 to-blue-600 hover:from-blue-600 hover:to-blue-700 text-white font-semibold shadow-md px-5 py-2.5 transition-all duration-200 hover:scale-105"
                           >
                             <Mail className="h-4 w-4 mr-2" />
                             Contact
@@ -543,23 +543,21 @@ const CVCenter = ({ userId }: CVCenterProps) => {
                           
                           {/* Status Actions */}
                           {cv.status === 'pending' && (
-                            <div className="flex gap-1 mt-2">
+                            <div className="flex gap-2 mt-3">
                               <Button 
                                 size="sm"
-                                variant="outline"
                                 onClick={() => handleUpdateStatus(cv.id, 'approved')}
-                                className="flex-1 border-green-500 text-green-600 hover:bg-green-50 text-xs"
+                                className="flex-1 bg-gradient-to-r from-green-500 to-emerald-600 hover:from-green-600 hover:to-emerald-700 text-white font-semibold shadow-md transition-all duration-200 hover:scale-105"
                               >
-                                <CheckCircle className="h-3 w-3 mr-1" />
+                                <CheckCircle className="h-4 w-4 mr-1" />
                                 Accept
                               </Button>
                               <Button 
                                 size="sm"
-                                variant="outline"
                                 onClick={() => handleUpdateStatus(cv.id, 'rejected')}
-                                className="flex-1 border-red-500 text-red-600 hover:bg-red-50 text-xs"
+                                className="flex-1 bg-gradient-to-r from-red-500 to-rose-600 hover:from-red-600 hover:to-rose-700 text-white font-semibold shadow-md transition-all duration-200 hover:scale-105"
                               >
-                                <XCircle className="h-3 w-3 mr-1" />
+                                <XCircle className="h-4 w-4 mr-1" />
                                 Reject
                               </Button>
                             </div>
