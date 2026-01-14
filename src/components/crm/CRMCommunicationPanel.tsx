@@ -44,6 +44,7 @@ const TEAM_MEMBERS: TeamMember[] = [
 ];
 
 const CHANNELS: Channel[] = [
+  { id: 'jbj-group', name: 'JBJ Group', unread: 0, type: 'channel' },
   { id: 'general', name: 'general', unread: 0, type: 'channel' },
   { id: 'sales', name: 'sales-team', unread: 3, type: 'channel' },
   { id: 'leads', name: 'hot-leads', unread: 1, type: 'channel' },
@@ -99,7 +100,7 @@ const CRMCommunicationPanel = () => {
   };
 
   return (
-    <Card className="border-border bg-card h-full">
+    <Card className="border-border bg-card">
       <CardHeader className="pb-2">
         <CardTitle className="text-white font-bold text-base flex items-center justify-between">
           <div className="flex items-center gap-2">
@@ -139,7 +140,7 @@ const CRMCommunicationPanel = () => {
 
           {/* Chat Tab */}
           <TabsContent value="chat" className="m-0">
-            <div className="flex h-[300px]">
+            <div className="flex h-[240px]">
               {/* Channels Sidebar */}
               <div className="w-1/3 border-r border-border p-2">
                 <p className="text-[10px] text-muted-foreground uppercase tracking-wide mb-2 px-1">Channels</p>
@@ -221,7 +222,7 @@ const CRMCommunicationPanel = () => {
 
           {/* Team Tab */}
           <TabsContent value="team" className="m-0 p-3">
-            <ScrollArea className="h-[300px]">
+            <ScrollArea className="h-[240px]">
               <div className="space-y-2">
                 {TEAM_MEMBERS.map(member => (
                   <div 
@@ -315,7 +316,7 @@ const CRMCommunicationPanel = () => {
 
           {/* Files Tab */}
           <TabsContent value="files" className="m-0 p-3">
-            <ScrollArea className="h-[300px]">
+            <ScrollArea className="h-[240px]">
               <div className="space-y-2">
                 <p className="text-[10px] text-muted-foreground uppercase tracking-wide mb-2">Recent Files</p>
                 {RECENT_FILES.map(file => (

@@ -260,24 +260,27 @@ const CRM = () => {
                 </h1>
               </div>
 
-              {/* Role Badge - vertically centered */}
-              <Badge 
-                variant="default" 
-                className={`shrink-0 ${
-                  isFounder ? "bg-gold text-black font-semibold" :
-                  isAdmin ? "bg-gold/80 text-black" : 
-                  "bg-muted text-foreground"
-                }`}
-              >
-                {getRoleLabel()}
-              </Badge>
+              {/* Role Badge - white background with gold text for visibility */}
+              <div className="flex items-center gap-2 bg-white/95 rounded-lg px-3 py-1.5 shadow-sm">
+                <Badge 
+                  variant="default" 
+                  className="bg-gold text-black font-bold border-0"
+                >
+                  {getRoleLabel()}
+                </Badge>
+                <span className="text-sm font-semibold text-zinc-900 uppercase tracking-wide">
+                  {profile.display_name || user?.email}
+                </span>
+              </div>
             </div>
             <div className="flex items-center gap-3">
-              <span className="text-sm text-white font-medium">
-                {profile.display_name || user?.email}
-              </span>
               {isAdmin && (
-                <Button variant="outline" size="sm" onClick={() => navigate("/admin/crm")} className="text-white border-border hover:bg-muted">
+                <Button 
+                  variant="default" 
+                  size="sm" 
+                  onClick={() => navigate("/admin/crm")} 
+                  className="bg-white text-black font-bold hover:bg-white/90 border-0 shadow-md"
+                >
                   Admin Dashboard
                 </Button>
               )}
@@ -296,11 +299,11 @@ const CRM = () => {
         {/* Enhanced Dashboard with Charts */}
         <CRMEnhancedDashboard userId={user?.id || ""} isAdmin={isAdmin} />
 
-        {/* Smart Reminders, Automation & Communication */}
-        <div className="grid grid-cols-1 lg:grid-cols-3 gap-4">
-          <div className="lg:col-span-2 space-y-4">
+        {/* Smart Reminders, Automation & Communication - reduced gaps */}
+        <div className="grid grid-cols-1 lg:grid-cols-3 gap-3">
+          <div className="lg:col-span-2 space-y-3">
             {/* Quick Filters */}
-            <div className="space-y-3">
+            <div className="space-y-2">
               <h3 className="text-sm font-semibold text-white uppercase tracking-wide">Quick Filters</h3>
               <LeadQuickFilters 
                 activeFilter={quickFilter} 
@@ -314,7 +317,7 @@ const CRM = () => {
             {/* Communication Panel - Chat, Video, Files */}
             <CRMCommunicationPanel />
           </div>
-          <div className="space-y-4">
+          <div className="space-y-3">
             <SmartReminders userId={user?.id || ""} limit={4} />
             <AutomationRules userId={user?.id || ""} isAdmin={isAdmin} />
             {/* Admin Tasks Panel - Only visible to Founder/Owner */}
@@ -388,53 +391,53 @@ const CRM = () => {
           <KanbanPipeline userId={user?.id || ""} onRefresh={handleRefresh} />
         )}
 
-        {/* Table View */}
+        {/* Table View - WHITE background for readability */}
         {viewMode === "table" && (
-        <Card className="border-border bg-foreground text-background shadow-xl">
-          <CardHeader>
-            <CardTitle className="text-background font-bold">Leads</CardTitle>
+        <Card className="border-border bg-white text-zinc-900 shadow-xl">
+          <CardHeader className="pb-3">
+            <CardTitle className="text-zinc-900 font-bold">Leads</CardTitle>
           </CardHeader>
           <CardContent>
             <Tabs value={activeTab} onValueChange={setActiveTab}>
-              <TabsList className="mb-4 bg-background/5 border border-border flex-wrap">
+              <TabsList className="mb-4 bg-zinc-100 border border-zinc-200 flex-wrap">
                 <TabsTrigger 
                   value="all" 
-                  className="data-[state=active]:bg-primary data-[state=active]:text-primary-foreground text-background/70 font-bold"
+                  className="data-[state=active]:bg-gold data-[state=active]:text-black text-zinc-600 font-bold"
                 >
                   <Users className="h-4 w-4 mr-2" />
                   All Leads
                 </TabsTrigger>
                 <TabsTrigger 
                   value="own" 
-                  className="data-[state=active]:bg-primary data-[state=active]:text-primary-foreground text-background/70 font-bold"
+                  className="data-[state=active]:bg-gold data-[state=active]:text-black text-zinc-600 font-bold"
                 >
                   <FileText className="h-4 w-4 mr-2" />
                   My Leads
                 </TabsTrigger>
                 <TabsTrigger 
                   value="website" 
-                  className="data-[state=active]:bg-primary data-[state=active]:text-primary-foreground text-background/70 font-bold"
+                  className="data-[state=active]:bg-gold data-[state=active]:text-black text-zinc-600 font-bold"
                 >
                   <Zap className="h-4 w-4 mr-2" />
                   Website Leads
                 </TabsTrigger>
                 <TabsTrigger 
                   value="flagged" 
-                  className="data-[state=active]:bg-destructive data-[state=active]:text-destructive-foreground text-background/70 font-bold"
+                  className="data-[state=active]:bg-destructive data-[state=active]:text-destructive-foreground text-zinc-600 font-bold"
                 >
                   <Flag className="h-4 w-4 mr-2" />
                   Flagged
                 </TabsTrigger>
                 <TabsTrigger 
                   value="vip" 
-                  className="data-[state=active]:bg-gold data-[state=active]:text-gold-foreground text-background/70 font-bold"
+                  className="data-[state=active]:bg-gold data-[state=active]:text-black text-zinc-600 font-bold"
                 >
                   <Crown className="h-4 w-4 mr-2" />
                   VIP Leads
                 </TabsTrigger>
                 <TabsTrigger 
                   value="employees" 
-                  className="data-[state=active]:bg-gold data-[state=active]:text-gold-foreground text-background/70 font-bold"
+                  className="data-[state=active]:bg-gold data-[state=active]:text-black text-zinc-600 font-bold"
                 >
                   <Briefcase className="h-4 w-4 mr-2" />
                   Employees Hub

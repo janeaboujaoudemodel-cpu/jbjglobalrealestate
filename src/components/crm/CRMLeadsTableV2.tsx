@@ -16,6 +16,7 @@ import { toast } from "sonner";
 import { Mail, MessageSquare, PhoneCall, Trash2 } from "lucide-react";
 import { PIPELINE_STATUSES, STATUS_GROUPS } from "./LeadStatusBadge";
 import CRMLeadsBulkBar from "./CRMLeadsBulkBar";
+import LeadAssignModal from "./LeadAssignModal";
 
 interface LeadSource {
   source_group: string;
@@ -68,6 +69,8 @@ export default function CRMLeadsTableV2({
   const [search, setSearch] = useState("");
   const [selected, setSelected] = useState<Set<string>>(new Set());
   const [assignedNames, setAssignedNames] = useState<Record<string, string>>({});
+  const [showAssignModal, setShowAssignModal] = useState(false);
+  const [assignLeadIds, setAssignLeadIds] = useState<string[]>([]);
 
   // Group statuses by category for the dropdown
   const groupedStatuses = useMemo(() => {
@@ -319,7 +322,30 @@ export default function CRMLeadsTableV2({
       toast.error("No email");
       return;
     }
-    window.open(`mailto:${lead.email_lower}`, "_blank");
+    // Open mailbox with signature
+    const subject = encodeURIComponent("Follow-up from JBJ Global Real Estate");
+    const signature = `
+
+Best regards,
+
+JANE ABOU JAOUDE
+Founder & CEO
+JBJ Global Real Estate
+
+📞 +971 XX XXX XXXX
+✉️ contact@jbj.ae
+🌐 www.jbj.ae
+
+━━━━━━━━━━━━━━━━━━━━━━
+JBJ Global Real Estate
+Your Trusted Partner in UAE Property
+━━━━━━━━━━━━━━━━━━━━━━`;
+    const body = encodeURIComponent(`Dear ${lead.full_name || "Valued Client"},
+
+Thank you for your interest in JBJ Global Real Estate. I wanted to personally follow up regarding your property inquiry.
+
+${signature}`);
+    window.open(`mailto:${lead.email_lower}?subject=${subject}&body=${body}`, "_blank");
   };
 
   const handleDelete = async (leadId: string) => {
@@ -420,10 +446,10 @@ export default function CRMLeadsTableV2({
                 />
               </TableHead>
               <TableHead>Name</TableHead>
-              <TableHead>Phone</TableHead>
-              <TableHead>Email</TableHead>
+              <TableHead className="w-[140px]">Phone</TableHead>
+              <TableHead className="min-w-[200px]">Email</TableHead>
               <TableHead>Source</TableHead>
-              <TableHead>Status</TableHead>
+              <TableHead className="w-[120px]">Status</TableHead>
               <TableHead className="w-28">VIP</TableHead>
               <TableHead>Assigned Broker</TableHead>
               <TableHead className="text-right">Actions</TableHead>
@@ -463,45 +489,68 @@ export default function CRMLeadsTableV2({
                         }}
                       />
                     </TableCell>
-                    <TableCell className="font-semibold text-foreground">{lead.full_name || "—"}</TableCell>
-                    <TableCell className="font-mono text-sm text-foreground">{lead.phone_e164 || "—"}</TableCell>
-                    <TableCell className="truncate max-w-[220px] text-foreground">{lead.email_lower || "—"}</TableCell>
-                    <TableCell className="text-sm text-foreground">{renderSource(lead)}</TableCell>
+                    <TableCell className="font-semibold text-foreground whitespace-nowrap">{lead.full_name || "—"}</TableCell>
+                    <TableCell className="font-mono text-sm text-foreground whitespace-nowrap">{lead.phone_e164 || "—"}</TableCell>
                     <TableCell>
-                      {/* Vivid Status Badge with dropdown */}
-                      <div className="relative inline-block">
-                        <select
-                          value={status}
-                          onChange={(e) => handleStatusChange(lead.id, e.target.value)}
-                          className="h-9 w-[180px] rounded-full border-2 px-3 text-sm font-semibold focus:outline-none focus:ring-2 focus:ring-ring appearance-none cursor-pointer"
-                          style={{
-                            backgroundColor: STATUS_GROUPS[groupedStatuses.positive.some(s => s.value === status) ? 'positive' : groupedStatuses.neutral.some(s => s.value === status) ? 'neutral' : 'negative']?.bgColor?.replace('bg-', '').replace('/20', '') || '#1e293b',
-                            color: STATUS_GROUPS[groupedStatuses.positive.some(s => s.value === status) ? 'positive' : groupedStatuses.neutral.some(s => s.value === status) ? 'neutral' : 'negative']?.dotColor || '#fff',
-                          }}
+                      {lead.email_lower ? (
+                        <button
+                          onClick={() => handleEmail(lead)}
+                          className="text-sm text-blue-600 hover:text-blue-800 hover:underline font-medium break-all text-left"
+                          title="Click to send email"
                         >
-                          <optgroup label="🟢 POSITIVE">
-                            {groupedStatuses.positive.map((s) => (
-                              <option key={s.value} value={s.value}>
-                                ● {s.label}
-                              </option>
-                            ))}
-                          </optgroup>
-                          <optgroup label="🔵 NEUTRAL">
-                            {groupedStatuses.neutral.map((s) => (
-                              <option key={s.value} value={s.value}>
-                                ● {s.label}
-                              </option>
-                            ))}
-                          </optgroup>
-                          <optgroup label="🔴 NEGATIVE">
-                            {groupedStatuses.negative.map((s) => (
-                              <option key={s.value} value={s.value}>
-                                ● {s.label}
-                              </option>
-                            ))}
-                          </optgroup>
-                        </select>
-                      </div>
+                          {lead.email_lower}
+                        </button>
+                      ) : (
+                        <span className="text-muted-foreground">—</span>
+                      )}
+                    </TableCell>
+                    <TableCell className="text-sm text-foreground whitespace-nowrap">{renderSource(lead)}</TableCell>
+                    <TableCell>
+                      {/* Compact Status Badge - expands on click */}
+                      <select
+                        value={status}
+                        onChange={(e) => handleStatusChange(lead.id, e.target.value)}
+                        className="h-7 w-full max-w-[110px] rounded-full border px-2 text-xs font-semibold focus:outline-none focus:ring-2 focus:ring-ring appearance-none cursor-pointer"
+                        style={{
+                          backgroundColor: groupedStatuses.positive.some(s => s.value === status) 
+                            ? 'rgba(34, 197, 94, 0.2)' 
+                            : groupedStatuses.neutral.some(s => s.value === status) 
+                              ? 'rgba(245, 158, 11, 0.2)' 
+                              : 'rgba(239, 68, 68, 0.2)',
+                          color: groupedStatuses.positive.some(s => s.value === status) 
+                            ? '#22C55E' 
+                            : groupedStatuses.neutral.some(s => s.value === status) 
+                              ? '#F59E0B' 
+                              : '#EF4444',
+                          borderColor: groupedStatuses.positive.some(s => s.value === status) 
+                            ? 'rgba(34, 197, 94, 0.4)' 
+                            : groupedStatuses.neutral.some(s => s.value === status) 
+                              ? 'rgba(245, 158, 11, 0.4)' 
+                              : 'rgba(239, 68, 68, 0.4)',
+                        }}
+                      >
+                        <optgroup label="🟢 POSITIVE">
+                          {groupedStatuses.positive.map((s) => (
+                            <option key={s.value} value={s.value}>
+                              {s.label}
+                            </option>
+                          ))}
+                        </optgroup>
+                        <optgroup label="🟡 NEUTRAL">
+                          {groupedStatuses.neutral.map((s) => (
+                            <option key={s.value} value={s.value}>
+                              {s.label}
+                            </option>
+                          ))}
+                        </optgroup>
+                        <optgroup label="🔴 NEGATIVE">
+                          {groupedStatuses.negative.map((s) => (
+                            <option key={s.value} value={s.value}>
+                              {s.label}
+                            </option>
+                          ))}
+                        </optgroup>
+                      </select>
                     </TableCell>
                     <TableCell>
                       <Button
@@ -521,7 +570,7 @@ export default function CRMLeadsTableV2({
                     <TableCell className="text-sm">
                       <div className="flex items-center gap-2">
                         {assignedNames[lead.id] ? (
-                          <span className="font-semibold text-foreground">{assignedNames[lead.id]}</span>
+                          <span className="font-semibold text-foreground whitespace-nowrap">{assignedNames[lead.id]}</span>
                         ) : (
                           <span className="text-muted-foreground italic">Unassigned</span>
                         )}
@@ -530,12 +579,11 @@ export default function CRMLeadsTableV2({
                             type="button"
                             size="sm"
                             variant="outline"
-                            className="h-7 px-2 text-xs bg-gold/10 border-gold/30 text-gold hover:bg-gold/20 hover:text-gold"
+                            className="h-7 px-2 text-xs bg-gold/10 border-gold/30 text-gold hover:bg-gold/20 hover:text-gold whitespace-nowrap"
                             onClick={(e) => {
                               e.stopPropagation();
-                              // Add to selection and show bulk bar for assignment
-                              setSelected(new Set([lead.id]));
-                              toast.info("Use the 'Assign Broker' dropdown above to assign this lead");
+                              setAssignLeadIds([lead.id]);
+                              setShowAssignModal(true);
                             }}
                             title="Assign broker"
                           >
@@ -592,6 +640,21 @@ export default function CRMLeadsTableV2({
           </TableBody>
         </Table>
       </div>
+
+      {/* Lead Assign Modal */}
+      <LeadAssignModal
+        open={showAssignModal}
+        onClose={() => {
+          setShowAssignModal(false);
+          setAssignLeadIds([]);
+        }}
+        leadIds={assignLeadIds}
+        currentUserId={userId}
+        onSuccess={() => {
+          fetchLeads();
+          onRefresh();
+        }}
+      />
     </div>
   );
 }
