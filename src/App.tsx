@@ -60,6 +60,11 @@ import ReferralPartner from "./pages/ReferralPartner";
 import Install from "./pages/Install";
 import CRM from "./pages/CRM";
 import CRMLeadDetail from "./pages/CRMLeadDetail";
+import Automations from "./pages/Automations";
+import CRMTasks from "./pages/CRMTasks";
+import CRMCalendar from "./pages/CRMCalendar";
+import CRMNotes from "./pages/CRMNotes";
+import CRMReminders from "./pages/CRMReminders";
 
 import AdminCRM from "./pages/AdminCRM";
 import JoinApplication from "./pages/JoinApplication";
@@ -170,6 +175,11 @@ const App = () => (
                 <Route path="/install" element={<Install />} />
                 <Route path="/crm" element={<CRM />} />
                 <Route path="/crm/leads/:id" element={<CRMLeadDetail />} />
+                <Route path="/crm/automations" element={<Automations />} />
+                <Route path="/crm/tasks" element={<CRMTasks />} />
+                <Route path="/crm/calendar" element={<CRMCalendar />} />
+                <Route path="/crm/notes" element={<CRMNotes />} />
+                <Route path="/crm/reminders" element={<CRMReminders />} />
                 
                 <Route path="/admin/crm" element={<AdminCRM />} />
                 <Route path="/join" element={<JoinApplication />} />
