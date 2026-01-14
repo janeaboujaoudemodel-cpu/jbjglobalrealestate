@@ -1,25 +1,26 @@
 // JBJ Global Real Estate Team Configuration
-// Professional team member data with generated portraits
+// Professional team member data with AI-generated unique portraits
 
 // Import team portraits
 import janeAbouJaoudeCeo from '@/assets/team/jane-abou-jaoude-ceo.png';
 import oliviaExecutiveAssistant from '@/assets/team/olivia-executive-assistant.png';
-import jamesMorganSales from '@/assets/team/james-morgan-sales.png';
-import mayaKhalidMarketing from '@/assets/team/maya-khalid-marketing.png';
-import danielBrooksClientRelations from '@/assets/team/daniel-brooks-client-relations.png';
+import sarahMitchellListingAdmin from '@/assets/team/sarah-mitchell-listing-admin.png';
+import williamHarrisonSales from '@/assets/team/william-harrison-sales.png';
+import victoriaSterlingMarketing from '@/assets/team/victoria-sterling-marketing.png';
+import georgeHamiltonClientRelations from '@/assets/team/george-hamilton-client-relations.png';
 import jessicaHrManager from '@/assets/team/jessica-hr-manager.png';
-import hannahHrAssistant from '@/assets/team/hannah-hr-assistant.png';
-import emmaTorresMedia from '@/assets/team/emma-torres-media.png';
-import leoMartinezDesigner from '@/assets/team/leo-martinez-designer.png';
-import alexReidVideographer from '@/assets/team/alex-reid-videographer.png';
-import claraNguyenPhotographer from '@/assets/team/clara-nguyen-photographer.png';
-import ethanWalkerEditor from '@/assets/team/ethan-walker-editor.png';
-import laylaAhmedFinance from '@/assets/team/layla-ahmed-finance.png';
-import davidLeeAccountant from '@/assets/team/david-lee-accountant.png';
-import davidCarterRecruitment from '@/assets/team/david-carter-recruitment.png';
-import sarahPatelAnalyst from '@/assets/team/sarah-patel-analyst.png';
-import christopherAdamsCrm from '@/assets/team/christopher-adams-crm.png';
-import jbjDigitalAssistant from '@/assets/team/jbj-digital-assistant.png';
+import elizabethBennettHr from '@/assets/team/elizabeth-bennett-hr.png';
+import jamesHarrisonRecruitment from '@/assets/team/james-harrison-recruitment.png';
+import sophiaAndersonMedia from '@/assets/team/sophia-anderson-media.png';
+import marcusBennettDesigner from '@/assets/team/marcus-bennett-designer.png';
+import oliverWrightVideographer from '@/assets/team/oliver-wright-videographer.png';
+import charlotteEvansPhotographer from '@/assets/team/charlotte-evans-photographer.png';
+import henryCrawfordEditor from '@/assets/team/henry-crawford-editor.png';
+import catherineBrooksFinance from '@/assets/team/catherine-brooks-finance.png';
+import benjaminColeAccountant from '@/assets/team/benjamin-cole-accountant.png';
+import isabellaRomanoAnalyst from '@/assets/team/isabella-romano-analyst.png';
+import thomasMitchellCrm from '@/assets/team/thomas-mitchell-crm.png';
+import robertMaxwellDigital from '@/assets/team/robert-maxwell-digital.png';
 
 export interface TeamMember {
   id: string;
@@ -48,183 +49,214 @@ export const executiveTeam: TeamMember[] = [
     languages: ['English', 'Arabic', 'French'],
   },
   {
-    id: 'olivia',
-    name: 'Olivia',
+    id: 'olivia-reynolds',
+    name: 'Olivia Reynolds',
     role: 'Executive Assistant to CEO',
     department: 'Executive',
     avatar: oliviaExecutiveAssistant,
     isAI: true,
     bio: 'Organized, proactive, and fast-responding assistant supporting the Founder with scheduling, reminders, and follow-ups.',
+    languages: ['English', 'Arabic', 'French', 'Spanish'],
+  },
+];
+
+// Property Operations Team
+export const propertyOperationsTeam: TeamMember[] = [
+  {
+    id: 'sarah-mitchell',
+    name: 'Sarah Mitchell',
+    role: 'Senior Listing Administrator',
+    department: 'Property Operations',
+    avatar: sarahMitchellListingAdmin,
+    isAI: true,
+    bio: 'Expert property listing specialist with meticulous attention to detail. Manages all developer portfolios, document organization, and marketing material distribution.',
+    specializations: ['Off-Plan Listings', 'Developer Relations', 'Document Management', 'Portal Publishing'],
+    languages: ['English', 'Arabic'],
   },
 ];
 
 // Sales Team
 export const salesTeam: TeamMember[] = [
   {
-    id: 'james-morgan',
-    name: 'James Morgan',
+    id: 'william-harrison',
+    name: 'William Harrison',
     role: 'Head of Sales',
     department: 'Sales',
-    avatar: jamesMorganSales,
+    avatar: williamHarrisonSales,
     isAI: true,
-    bio: 'Confident, persuasive, and analytical. Expert in converting leads into clients with clear advice.',
+    bio: 'Confident, persuasive, and analytical. Expert in converting leads into clients with clear advice and strategic deal-making.',
     specializations: ['Off-Plan Properties', 'Luxury Villas', 'Investment Properties'],
     languages: ['English', 'Arabic'],
   },
   {
-    id: 'maya-khalid',
-    name: 'Maya Khalid',
+    id: 'victoria-sterling',
+    name: 'Victoria Sterling',
     role: 'Marketing Director',
     department: 'Marketing',
-    avatar: mayaKhalidMarketing,
+    avatar: victoriaSterlingMarketing,
     isAI: true,
-    bio: 'Warm, engaging, and intelligent. Builds rapport and discovers client needs with empathy.',
-    specializations: ['Brand Strategy', 'Digital Marketing', 'Client Relations'],
-    languages: ['English', 'Arabic', 'Hindi'],
+    bio: 'Sophisticated strategist leading brand positioning, digital campaigns, and market intelligence with data-driven excellence.',
+    specializations: ['Brand Strategy', 'Digital Marketing', 'Market Analysis'],
+    languages: ['English', 'French', 'Italian'],
   },
 ];
 
 // Client Relations
 export const clientRelationsTeam: TeamMember[] = [
   {
-    id: 'daniel-brooks',
-    name: 'Daniel Brooks',
-    role: 'Client Relations Executive',
+    id: 'george-hamilton',
+    name: 'George Hamilton',
+    role: 'Client Relations Director',
     department: 'Client Relations',
-    avatar: danielBrooksClientRelations,
-    bio: 'Professional and welcoming. First point of contact for all client inquiries.',
+    avatar: georgeHamiltonClientRelations,
+    bio: 'Distinguished professional ensuring exceptional client experiences from first contact through transaction completion.',
+    languages: ['English', 'Arabic'],
   },
 ];
 
 // HR Team
 export const hrTeam: TeamMember[] = [
   {
-    id: 'jessica',
-    name: 'Jessica',
+    id: 'jessica-pemberton',
+    name: 'Jessica Pemberton',
     role: 'HR Manager',
     department: 'Human Resources',
     avatar: jessicaHrManager,
     isAI: true,
-    bio: 'Professional, structured, and neutral. Manages interviews, CVs, and assessments objectively.',
+    bio: 'Professional, structured, and objective. Manages interviews, assessments, and team development with analytical precision.',
+    languages: ['English'],
   },
   {
-    id: 'hannah',
-    name: 'Hannah',
-    role: 'HR Assistant',
+    id: 'elizabeth-bennett',
+    name: 'Elizabeth Bennett',
+    role: 'HR Coordinator',
     department: 'Human Resources',
-    avatar: hannahHrAssistant,
-    bio: 'Bright and approachable. Supports HR operations with efficiency and care.',
+    avatar: elizabethBennettHr,
+    bio: 'Warm and approachable. Supports HR operations, onboarding, and employee relations with genuine care.',
+    languages: ['English'],
   },
   {
-    id: 'david-carter',
-    name: 'David Carter',
+    id: 'james-harrison',
+    name: 'James Harrison',
     role: 'Head of Recruitment',
     department: 'Human Resources',
-    avatar: davidCarterRecruitment,
-    bio: 'Experienced recruiter with a mentoring approach. Identifies top talent for the organization.',
+    avatar: jamesHarrisonRecruitment,
+    bio: 'Experienced talent acquisition specialist with a mentoring approach. Identifies top performers for the organization.',
+    languages: ['English', 'Arabic'],
   },
 ];
 
 // Media & Creative Team
 export const creativeTeam: TeamMember[] = [
   {
-    id: 'emma-torres',
-    name: 'Emma Torres',
+    id: 'sophia-anderson',
+    name: 'Sophia Anderson',
     role: 'Media & Marketing Lead',
     department: 'Media',
-    avatar: emmaTorresMedia,
-    bio: 'Creative yet professional. Leads media strategy with intelligence and style.',
+    avatar: sophiaAndersonMedia,
+    bio: 'Dynamic creative leader orchestrating visual storytelling and brand campaigns with strategic intelligence.',
+    languages: ['English', 'Spanish'],
   },
   {
-    id: 'leo-martinez',
-    name: 'Leo Martinez',
-    role: 'Creative Designer',
+    id: 'marcus-bennett',
+    name: 'Marcus Bennett',
+    role: 'Creative Director',
     department: 'Design',
-    avatar: leoMartinezDesigner,
-    bio: 'Modern creative professional with confident artistic energy.',
+    avatar: marcusBennettDesigner,
+    bio: 'Visionary designer blending modern aesthetics with luxury real estate branding.',
+    languages: ['English'],
   },
   {
-    id: 'alex-reid',
-    name: 'Alex Reid',
-    role: 'Video Production Specialist',
+    id: 'oliver-wright',
+    name: 'Oliver Wright',
+    role: 'Video Production Lead',
     department: 'Media',
-    avatar: alexReidVideographer,
-    bio: 'Professional videographer specializing in cinematic property tours.',
+    avatar: oliverWrightVideographer,
+    bio: 'Cinematic storyteller specializing in immersive property tours and brand documentaries.',
+    languages: ['English'],
   },
   {
-    id: 'clara-nguyen',
-    name: 'Clara Nguyen',
-    role: 'Property Photographer',
+    id: 'charlotte-evans',
+    name: 'Charlotte Evans',
+    role: 'Senior Photographer',
     department: 'Media',
-    avatar: claraNguyenPhotographer,
-    bio: 'Artistic photographer capturing luxury properties with natural elegance.',
+    avatar: charlotteEvansPhotographer,
+    bio: 'Artistic photographer capturing architectural beauty and lifestyle moments with natural elegance.',
+    languages: ['English', 'French'],
   },
   {
-    id: 'ethan-walker',
-    name: 'Ethan Walker',
+    id: 'henry-crawford',
+    name: 'Henry Crawford',
     role: 'Post-Production Editor',
     department: 'Media',
-    avatar: ethanWalkerEditor,
-    bio: 'Skilled video editor creating compelling visual content.',
+    avatar: henryCrawfordEditor,
+    bio: 'Technical expert transforming raw footage into compelling visual narratives.',
+    languages: ['English'],
   },
 ];
 
 // Finance Team
 export const financeTeam: TeamMember[] = [
   {
-    id: 'layla-ahmed',
-    name: 'Layla Ahmed',
-    role: 'Financial Manager',
+    id: 'catherine-brooks',
+    name: 'Catherine Brooks',
+    role: 'Financial Director',
     department: 'Finance',
-    avatar: laylaAhmedFinance,
-    bio: 'Confident and precise. Manages financial operations with analytical excellence.',
+    avatar: catherineBrooksFinance,
+    bio: 'Strategic financial leader ensuring fiscal excellence and corporate governance compliance.',
+    languages: ['English', 'Arabic'],
   },
   {
-    id: 'david-lee',
-    name: 'David Lee',
+    id: 'benjamin-cole',
+    name: 'Benjamin Cole',
     role: 'Senior Accountant',
     department: 'Finance',
-    avatar: davidLeeAccountant,
-    bio: 'Neat and approachable. Ensures accurate financial records.',
+    avatar: benjaminColeAccountant,
+    bio: 'Meticulous professional maintaining precise financial records and regulatory compliance.',
+    languages: ['English'],
   },
   {
-    id: 'sarah-patel',
-    name: 'Sarah Patel',
+    id: 'isabella-romano',
+    name: 'Isabella Romano',
     role: 'Financial Analyst',
     department: 'Finance',
-    avatar: sarahPatelAnalyst,
-    bio: 'Intelligent and analytical. Provides data-driven insights for business decisions.',
+    avatar: isabellaRomanoAnalyst,
+    bio: 'Analytical expert providing data-driven insights for investment decisions and market trends.',
+    languages: ['English', 'Italian', 'Arabic'],
   },
 ];
 
 // Operations Team
 export const operationsTeam: TeamMember[] = [
   {
-    id: 'christopher-adams',
-    name: 'Christopher Adams',
-    role: 'CRM Lead Manager',
+    id: 'thomas-mitchell',
+    name: 'Thomas Mitchell',
+    role: 'CRM Operations Manager',
     department: 'Operations',
-    avatar: christopherAdamsCrm,
-    bio: 'Tech-savvy professional managing lead operations with confidence.',
+    avatar: thomasMitchellCrm,
+    bio: 'Tech-savvy operations leader optimizing lead management and sales pipeline efficiency.',
+    languages: ['English', 'Arabic'],
   },
 ];
 
-// AI Team
+// AI & Technology Team
 export const aiTeam: TeamMember[] = [
   {
-    id: 'jbj-digital-assistant',
-    name: 'JBJ Digital Assistant',
-    role: 'Digital Coordinator (AI)',
+    id: 'robert-maxwell',
+    name: 'Robert Maxwell',
+    role: 'Digital Intelligence Coordinator',
     department: 'Technology',
-    avatar: jbjDigitalAssistant,
+    avatar: robertMaxwellDigital,
     isAI: true,
-    bio: 'Advanced AI coordinator facilitating seamless human-AI collaboration.',
+    bio: 'Advanced AI coordinator facilitating seamless human-AI collaboration across all departments.',
+    languages: ['English', 'Arabic', 'French', 'Spanish', 'Chinese', 'Russian'],
   },
 ];
 
 // All team members combined
 export const allTeamMembers: TeamMember[] = [
   ...executiveTeam,
+  ...propertyOperationsTeam,
   ...salesTeam,
   ...clientRelationsTeam,
   ...hrTeam,
@@ -249,9 +281,20 @@ export const getHumanTeamMembers = (): TeamMember[] => {
   return allTeamMembers.filter(member => !member.isAI);
 };
 
-// Dummy employees to remove (placeholders)
-export const DUMMY_EMPLOYEES_TO_REMOVE = [
-  'Ahmed Hassan',
-  'Sarah Johnson', 
-  'Michael Chen',
-];
+// Get Sarah Mitchell - Listing Admin
+export const getListingAdmin = (): TeamMember | undefined => {
+  return getTeamMemberById('sarah-mitchell');
+};
+
+// Department groupings for display
+export const teamByDepartment = {
+  'Leadership': executiveTeam,
+  'Property Operations': propertyOperationsTeam,
+  'Sales & Marketing': salesTeam,
+  'Client Relations': clientRelationsTeam,
+  'Human Resources': hrTeam,
+  'Creative & Media': creativeTeam,
+  'Finance': financeTeam,
+  'Operations': operationsTeam,
+  'Technology': aiTeam,
+};
