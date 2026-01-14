@@ -39,8 +39,6 @@ interface Employee {
   crm_role?: string;
   is_active: boolean;
 }
-  is_active: boolean;
-}
 
 interface Broker {
   id: string;
