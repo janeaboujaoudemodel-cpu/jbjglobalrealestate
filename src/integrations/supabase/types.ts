@@ -4516,61 +4516,85 @@ export type Database = {
       }
       hr_applications: {
         Row: {
+          ai_ranking: number | null
+          ai_summary: string | null
           consent_accurate: boolean
           consent_terms: boolean
           created_at: string
           current_location_city: string
           current_location_country: string
           cv_url: string | null
+          department_category: string | null
           email: string
+          experience_years: number | null
+          flag_reason: string | null
           full_name: string
           id: string
+          languages: string[] | null
           nationality: string
           phone_e164: string
           preferred_language: string
           rejection_reason: string | null
           reviewed_at: string | null
           reviewed_by: string | null
+          skills: string[] | null
+          source: string | null
           status: Database["public"]["Enums"]["hr_application_status"]
           updated_at: string
           user_id: string
         }
         Insert: {
+          ai_ranking?: number | null
+          ai_summary?: string | null
           consent_accurate?: boolean
           consent_terms?: boolean
           created_at?: string
           current_location_city: string
           current_location_country: string
           cv_url?: string | null
+          department_category?: string | null
           email: string
+          experience_years?: number | null
+          flag_reason?: string | null
           full_name: string
           id?: string
+          languages?: string[] | null
           nationality: string
           phone_e164: string
           preferred_language?: string
           rejection_reason?: string | null
           reviewed_at?: string | null
           reviewed_by?: string | null
+          skills?: string[] | null
+          source?: string | null
           status?: Database["public"]["Enums"]["hr_application_status"]
           updated_at?: string
           user_id: string
         }
         Update: {
+          ai_ranking?: number | null
+          ai_summary?: string | null
           consent_accurate?: boolean
           consent_terms?: boolean
           created_at?: string
           current_location_city?: string
           current_location_country?: string
           cv_url?: string | null
+          department_category?: string | null
           email?: string
+          experience_years?: number | null
+          flag_reason?: string | null
           full_name?: string
           id?: string
+          languages?: string[] | null
           nationality?: string
           phone_e164?: string
           preferred_language?: string
           rejection_reason?: string | null
           reviewed_at?: string | null
           reviewed_by?: string | null
+          skills?: string[] | null
+          source?: string | null
           status?: Database["public"]["Enums"]["hr_application_status"]
           updated_at?: string
           user_id?: string
