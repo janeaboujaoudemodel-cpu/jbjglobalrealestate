@@ -9,7 +9,7 @@ import { Badge } from "@/components/ui/badge";
 import { Skeleton } from "@/components/ui/skeleton";
 import { toast } from "sonner";
 import { 
-  Users, FileText, Plus, Upload, Download, LogOut, Shuffle, LayoutGrid, List, Zap, Briefcase, PanelLeftOpen, PanelLeftClose, Crown, Flag, Sparkles
+  Users, FileText, Plus, Upload, Download, LogOut, Shuffle, LayoutGrid, List, Zap, Briefcase, PanelLeftOpen, PanelLeftClose, Crown, Flag, Sparkles, CheckSquare, Calendar
 } from "lucide-react";
 // Logo import removed - CRM uses clean minimal header
 import CRMLeadsTableV2 from "@/components/crm/CRMLeadsTableV2";
@@ -246,7 +246,7 @@ const CRM = () => {
       <div className="flex-1">
         {/* Header - Clean white minimal design */}
         <header className="border-b border-zinc-200 bg-white sticky top-0 z-50">
-          <div className="max-w-[1600px] w-full mx-auto px-6 py-3 flex items-center justify-between gap-4">
+          <div className="max-w-[1600px] w-full mx-auto px-6 py-4 flex items-center justify-between gap-4">
             <div className="flex items-center gap-3 md:gap-4">
               <Button
                 variant="ghost"
@@ -262,15 +262,65 @@ const CRM = () => {
               </Button>
               
               {/* Role Title - Dynamic based on logged-in user */}
-              <span 
-                className="text-base md:text-lg font-medium text-zinc-800 whitespace-nowrap"
-                style={{ fontFamily: 'Poppins, Inter, sans-serif' }}
-              >
-                {getRoleLabel()}
-              </span>
+              <div className="flex flex-col">
+                <span 
+                  className="text-sm text-zinc-500"
+                  style={{ fontFamily: 'Poppins, Inter, sans-serif' }}
+                >
+                  {getRoleTitle()}
+                </span>
+                <span 
+                  className="text-base md:text-lg font-semibold text-zinc-900"
+                  style={{ fontFamily: 'Poppins, Inter, sans-serif' }}
+                >
+                  {profile.display_name || 'Team Member'}
+                </span>
+              </div>
             </div>
             
-            <div className="flex items-center gap-3">
+            <div className="flex items-center gap-2">
+              {/* Quick Navigation Buttons */}
+              <div className="hidden md:flex items-center gap-1 mr-2">
+                <Button
+                  variant="ghost"
+                  size="sm"
+                  onClick={() => navigate("/crm/tasks")}
+                  className="text-zinc-600 hover:text-zinc-900 hover:bg-zinc-100 text-xs"
+                >
+                  <CheckSquare className="h-4 w-4 mr-1" />
+                  Tasks
+                </Button>
+                <Button
+                  variant="ghost"
+                  size="sm"
+                  onClick={() => navigate("/crm/calendar")}
+                  className="text-zinc-600 hover:text-zinc-900 hover:bg-zinc-100 text-xs"
+                >
+                  <Calendar className="h-4 w-4 mr-1" />
+                  Calendar
+                </Button>
+                <Button
+                  variant="ghost"
+                  size="sm"
+                  onClick={() => navigate("/crm/employees")}
+                  className="text-zinc-600 hover:text-zinc-900 hover:bg-zinc-100 text-xs"
+                >
+                  <Users className="h-4 w-4 mr-1" />
+                  Team
+                </Button>
+                {isAdmin && (
+                  <Button
+                    variant="ghost"
+                    size="sm"
+                    onClick={() => navigate("/crm/automations")}
+                    className="text-amber-600 hover:text-amber-700 hover:bg-amber-50 text-xs"
+                  >
+                    <Zap className="h-4 w-4 mr-1" />
+                    Automations
+                  </Button>
+                )}
+              </div>
+
               {isAdmin && (
                 <Button 
                   variant="ghost" 
@@ -294,7 +344,7 @@ const CRM = () => {
           </div>
         </header>
 
-      <main className="max-w-[1600px] w-full mx-auto px-4 py-6 space-y-4">
+      <main className="max-w-[1600px] w-full mx-auto px-4 pt-8 pb-6 space-y-6">
         {/* Deal Value Tracker */}
         <DealValueTracker userId={user?.id || ""} />
 

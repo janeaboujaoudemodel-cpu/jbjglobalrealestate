@@ -65,6 +65,7 @@ import CRMTasks from "./pages/CRMTasks";
 import CRMCalendar from "./pages/CRMCalendar";
 import CRMNotes from "./pages/CRMNotes";
 import CRMReminders from "./pages/CRMReminders";
+import CRMEmployees from "./pages/CRMEmployees";
 
 import AdminCRM from "./pages/AdminCRM";
 import JoinApplication from "./pages/JoinApplication";
@@ -180,6 +181,7 @@ const App = () => (
                 <Route path="/crm/calendar" element={<CRMCalendar />} />
                 <Route path="/crm/notes" element={<CRMNotes />} />
                 <Route path="/crm/reminders" element={<CRMReminders />} />
+                <Route path="/crm/employees" element={<CRMEmployees />} />
                 
                 <Route path="/admin/crm" element={<AdminCRM />} />
                 <Route path="/join" element={<JoinApplication />} />

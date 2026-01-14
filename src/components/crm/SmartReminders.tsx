@@ -166,9 +166,9 @@ const SmartReminders = ({ userId, limit = 5 }: SmartRemindersProps) => {
   const getPriorityBadge = (priority: Reminder['priority']) => {
     switch (priority) {
       case 'high':
-        return <Badge className="bg-red-500/20 text-red-400 border-red-500/30 text-xs">Urgent</Badge>;
+        return <Badge className="bg-red-100 text-red-700 border-red-200 text-[10px]">Urgent</Badge>;
       case 'medium':
-        return <Badge className="bg-amber-500/20 text-amber-400 border-amber-500/30 text-xs">Soon</Badge>;
+        return <Badge className="bg-amber-100 text-amber-700 border-amber-200 text-[10px]">Soon</Badge>;
       default:
         return null;
     }
@@ -182,59 +182,60 @@ const SmartReminders = ({ userId, limit = 5 }: SmartRemindersProps) => {
   };
 
   return (
-    <Card className="border-border bg-card">
+    <Card className="border-zinc-200 bg-white">
       <CardHeader className="pb-3">
-        <CardTitle className="text-lg flex items-center gap-2">
-          <Bell className="h-5 w-5 text-amber-400" />
+        <CardTitle className="text-base flex items-center gap-2 text-zinc-900">
+          <Bell className="h-5 w-5 text-amber-500" />
           Smart Reminders
           {reminders.filter(r => r.priority === 'high').length > 0 && (
-            <Badge className="bg-red-500 text-white">
-              {reminders.filter(r => r.priority === 'high').length}
+            <Badge className="bg-red-500 text-white ml-auto">
+              {reminders.filter(r => r.priority === 'high').length} urgent
             </Badge>
           )}
         </CardTitle>
       </CardHeader>
       <CardContent>
         {loading ? (
-          <p className="text-sm text-muted-foreground text-center py-4">Loading...</p>
+          <p className="text-sm text-zinc-500 text-center py-4">Loading reminders...</p>
         ) : reminders.length === 0 ? (
           <div className="text-center py-6">
-            <CheckCircle className="h-10 w-10 text-green-500 mx-auto mb-2" />
-            <p className="text-sm text-muted-foreground">All caught up!</p>
+            <CheckCircle className="h-10 w-10 text-emerald-500 mx-auto mb-2" />
+            <p className="text-sm font-medium text-zinc-700">All caught up!</p>
+            <p className="text-xs text-zinc-500 mt-1">No pending reminders or overdue tasks</p>
           </div>
         ) : (
-          <div className="space-y-3">
+          <div className="space-y-2">
             {reminders.map((reminder) => (
               <div
                 key={reminder.id}
                 className={cn(
                   "flex items-start gap-3 p-3 rounded-lg border transition-colors",
                   reminder.priority === 'high' 
-                    ? "border-red-500/30 bg-red-500/5" 
-                    : "border-border bg-muted/30 hover:bg-muted/50"
+                    ? "border-red-300 bg-red-50" 
+                    : "border-zinc-200 bg-zinc-50 hover:bg-zinc-100"
                 )}
               >
                 <div className={cn(
-                  "p-2 rounded-full",
-                  reminder.type === 'overdue' ? "bg-red-500/20" : "bg-muted"
+                  "p-2 rounded-full shrink-0",
+                  reminder.type === 'overdue' ? "bg-red-100" : "bg-zinc-200"
                 )}>
                   {getTypeIcon(reminder.type)}
                 </div>
                 <div className="flex-1 min-w-0">
                   <div className="flex items-center gap-2 mb-1">
-                    <span className="font-medium text-foreground truncate">
+                    <span className="font-medium text-zinc-900 truncate">
                       {reminder.leadName}
                     </span>
                     {getPriorityBadge(reminder.priority)}
                   </div>
-                  <p className="text-sm text-muted-foreground truncate">
+                  <p className="text-sm text-zinc-600 truncate">
                     {reminder.message}
                   </p>
                   <p className={cn(
                     "text-xs mt-1",
                     isPast(reminder.dueAt) && !isToday(reminder.dueAt)
-                      ? "text-red-400"
-                      : "text-muted-foreground"
+                      ? "text-red-600 font-medium"
+                      : "text-zinc-500"
                   )}>
                     {formatDueDate(reminder.dueAt)}
                   </p>
@@ -243,7 +244,7 @@ const SmartReminders = ({ userId, limit = 5 }: SmartRemindersProps) => {
                   size="sm"
                   variant="ghost"
                   onClick={() => completeReminder(reminder)}
-                  className="shrink-0"
+                  className="shrink-0 text-zinc-500 hover:text-emerald-600 hover:bg-emerald-50"
                 >
                   <CheckCircle className="h-4 w-4" />
                 </Button>

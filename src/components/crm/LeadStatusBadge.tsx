@@ -79,33 +79,55 @@ const LeadStatusBadge = ({
   const statusInfo = getStatusInfo(status);
   
   const sizeClasses = {
-    sm: "px-2 py-0.5 text-xs",
-    md: "px-3 py-1 text-xs",
-    lg: "px-4 py-1.5 text-sm"
+    sm: "px-2.5 py-1 text-[10px]",
+    md: "px-3.5 py-1.5 text-xs",
+    lg: "px-5 py-2 text-sm"
   };
 
+  // Special styling for "New" status - gold/white premium look
+  const isNew = status === 'new' || !status;
+  
   return (
     <button
       onClick={onClick}
       disabled={!onClick}
       className={cn(
-        "inline-flex items-center gap-2 rounded-full font-semibold transition-all",
+        "inline-flex items-center justify-center gap-2 rounded-full font-bold transition-all shadow-sm",
         sizeClasses[size],
-        statusInfo.bgColor,
-        statusInfo.textColor,
-        "border border-current/20",
-        onClick && "hover:scale-105 cursor-pointer",
+        isNew 
+          ? "bg-gradient-to-r from-amber-400 via-gold to-amber-500 text-zinc-900 border border-gold/50 shadow-gold/20" 
+          : cn(statusInfo.bgColor, statusInfo.textColor, "border border-current/20"),
+        onClick && "hover:scale-105 hover:shadow-md cursor-pointer group",
         !onClick && "cursor-default",
         className
       )}
     >
       {showDot && (
         <span 
-          className="w-2.5 h-2.5 rounded-full ring-2 ring-current/30"
-          style={{ backgroundColor: statusInfo.dotColor }}
+          className={cn(
+            "w-2 h-2 rounded-full ring-2",
+            isNew ? "bg-zinc-900 ring-zinc-900/30" : "ring-current/30"
+          )}
+          style={!isNew ? { backgroundColor: statusInfo.dotColor } : undefined}
         />
       )}
-      <span className="font-semibold tracking-wide">{statusInfo.label}</span>
+      <span className="font-bold tracking-wide uppercase text-center">
+        {statusInfo.label}
+      </span>
+      {onClick && (
+        <svg 
+          className={cn(
+            "w-3 h-3 transition-transform",
+            isNew ? "text-zinc-800" : "text-current/70",
+            "group-hover:translate-y-0.5"
+          )} 
+          fill="none" 
+          stroke="currentColor" 
+          viewBox="0 0 24 24"
+        >
+          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
+        </svg>
+      )}
     </button>
   );
 };
