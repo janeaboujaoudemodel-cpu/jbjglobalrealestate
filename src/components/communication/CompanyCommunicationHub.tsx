@@ -111,10 +111,13 @@ const CompanyCommunicationHub = () => {
   // Current user (would come from auth in real app)
   const currentUser = getTeamMemberById('jane-abou-jaoude') || allTeamMembers[0];
 
-  // Scroll to bottom of messages within the chat container only
+  // Scroll to bottom of messages within the chat container only - never page scroll
   const scrollToBottom = useCallback(() => {
     if (messagesContainerRef.current) {
-      messagesContainerRef.current.scrollTop = messagesContainerRef.current.scrollHeight;
+      messagesContainerRef.current.scrollTo({
+        top: messagesContainerRef.current.scrollHeight,
+        behavior: 'smooth'
+      });
     }
   }, []);
 
@@ -146,8 +149,12 @@ const CompanyCommunicationHub = () => {
     setTimeout(scrollToBottom, 100);
   };
 
-  // Send message
-  const sendMessage = () => {
+  // Send message - prevent any page scroll
+  const sendMessage = (e?: React.MouseEvent | React.KeyboardEvent) => {
+    if (e) {
+      e.preventDefault();
+      e.stopPropagation();
+    }
     if (!newMessage.trim()) return;
 
     const message: Message = {
@@ -162,8 +169,15 @@ const CompanyCommunicationHub = () => {
     setNewMessage('');
     setShowMentions(false);
 
-    // Scroll to the new message
-    setTimeout(scrollToBottom, 50);
+    // Scroll only within the messages container, not the page
+    requestAnimationFrame(() => {
+      if (messagesContainerRef.current) {
+        messagesContainerRef.current.scrollTo({
+          top: messagesContainerRef.current.scrollHeight,
+          behavior: 'smooth'
+        });
+      }
+    });
   };
 
   // Handle input change with @mention detection
@@ -594,7 +608,8 @@ const CompanyCommunicationHub = () => {
               onKeyDown={(e) => {
                 if (e.key === 'Enter' && !e.shiftKey) {
                   e.preventDefault();
-                  sendMessage();
+                  e.stopPropagation();
+                  sendMessage(e);
                 }
               }}
             />
@@ -615,8 +630,9 @@ const CompanyCommunicationHub = () => {
             </Button>
             <Button 
               size="icon" 
+              type="button"
               className="h-8 w-8 bg-gold hover:bg-gold-light text-black flex-shrink-0"
-              onClick={sendMessage}
+              onClick={(e) => sendMessage(e)}
               disabled={!newMessage.trim()}
             >
               <Send className="w-4 h-4" />
