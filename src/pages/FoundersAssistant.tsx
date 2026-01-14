@@ -21,6 +21,7 @@ import {
   Zap,
   Heart,
   Network,
+  Brain,
 } from "lucide-react";
 import FoundersChatPanel from "@/components/founders-assistant/FoundersChatPanel";
 import FoundersTaskDashboard from "@/components/founders-assistant/FoundersTaskDashboard";
@@ -34,6 +35,7 @@ import FoundersVideoMeetPanel from "@/components/founders-assistant/FoundersVide
 import FoundersEscalationsPanel from "@/components/founders-assistant/FoundersEscalationsPanel";
 import FoundersEmotionAnalyticsPanel from "@/components/founders-assistant/FoundersEmotionAnalyticsPanel";
 import FoundersCollaborationPanel from "@/components/founders-assistant/FoundersCollaborationPanel";
+import FoundersInsightsPanel from "@/components/founders-assistant/FoundersInsightsPanel";
 import { EscalationAlertButton } from "@/components/ai/EscalationAlertButton";
 
 // Olivia AI portrait
@@ -285,6 +287,13 @@ export default function FoundersAssistant() {
                 <Network className="h-4 w-4 mr-2" />
                 Collaboration
               </TabsTrigger>
+              <TabsTrigger 
+                value="insights"
+                className="flex-1 min-w-[100px] data-[state=active]:bg-gold data-[state=active]:text-black"
+              >
+                <Brain className="h-4 w-4 mr-2" />
+                AI Insights
+              </TabsTrigger>
             </TabsList>
 
             <AnimatePresence mode="wait">
@@ -395,6 +404,16 @@ export default function FoundersAssistant() {
                   exit={{ opacity: 0, y: -10 }}
                 >
                   <FoundersCollaborationPanel />
+                </motion.div>
+              </TabsContent>
+
+              <TabsContent value="insights" className="mt-0">
+                <motion.div
+                  initial={{ opacity: 0, y: 10 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  exit={{ opacity: 0, y: -10 }}
+                >
+                  <FoundersInsightsPanel />
                 </motion.div>
               </TabsContent>
             </AnimatePresence>
