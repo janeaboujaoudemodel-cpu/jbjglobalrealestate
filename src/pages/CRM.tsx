@@ -11,7 +11,7 @@ import { toast } from "sonner";
 import { 
   Users, FileText, Plus, Upload, Download, LogOut, Shuffle, LayoutGrid, List, Zap, Briefcase, PanelLeftOpen, PanelLeftClose, Crown, Flag, Sparkles
 } from "lucide-react";
-import jbjMonogramDarkBg from "@/assets/jbj-monogram-dark-bg.png";
+// Logo import removed - CRM uses clean minimal header
 import CRMLeadsTableV2 from "@/components/crm/CRMLeadsTableV2";
 import CRMEnhancedDashboard from "@/components/crm/CRMEnhancedDashboard";
 import CRMImportModalV3 from "@/components/crm/CRMImportModalV3";
@@ -226,15 +226,15 @@ const CRM = () => {
       <CRMToolsSidebar isOpen={showToolsSidebar} onClose={() => setShowToolsSidebar(false)} />
 
       <div className="flex-1">
-        {/* Header */}
-        <header className="border-b border-gold/20 bg-[hsl(222,84%,4.9%)] sticky top-0 z-50">
-          <div className="max-w-[1600px] w-full mx-auto px-4 py-3 flex items-center justify-between gap-4">
-            <div className="flex items-center gap-3 md:gap-4 flex-wrap">
+        {/* Header - Clean white minimal design */}
+        <header className="border-b border-zinc-200 bg-white sticky top-0 z-50">
+          <div className="max-w-[1600px] w-full mx-auto px-6 py-3 flex items-center justify-between gap-4">
+            <div className="flex items-center gap-3 md:gap-4">
               <Button
                 variant="ghost"
                 size="sm"
                 onClick={() => setShowToolsSidebar(!showToolsSidebar)}
-                className="text-gold hover:text-gold hover:bg-gold/10 shrink-0"
+                className="text-zinc-700 hover:text-gold hover:bg-zinc-100 shrink-0 transition-all duration-200 ease-in-out"
               >
                 {showToolsSidebar ? (
                   <PanelLeftClose className="h-5 w-5" />
@@ -243,48 +243,32 @@ const CRM = () => {
                 )}
               </Button>
               
-              {/* Logo & Brand - matching GlobalHeader */}
-              <div className="flex items-center gap-3">
-                <img 
-                  src={jbjMonogramDarkBg} 
-                  alt="JBJ Global Real Estate" 
-                  className="h-10 w-10 md:h-11 md:w-11 rounded object-contain shrink-0"
-                  style={{ imageRendering: 'auto' }}
-                />
-                <h1 
-                  className="text-base md:text-lg font-semibold tracking-[0.08em] uppercase text-foreground whitespace-nowrap"
-                  style={{ fontFamily: 'Poppins, sans-serif' }}
-                >
-                  <span className="text-gold">JBJ</span>{' '}
-                  <span className="text-white">Global Real Estate</span>
-                </h1>
-              </div>
-
-              {/* Role Badge - white background with gold text for visibility */}
-              <div className="flex items-center gap-2 bg-white/95 rounded-lg px-3 py-1.5 shadow-sm">
-                <Badge 
-                  variant="default" 
-                  className="bg-gold text-black font-bold border-0"
-                >
-                  {getRoleLabel()}
-                </Badge>
-                <span className="text-sm font-semibold text-zinc-900 uppercase tracking-wide">
-                  {profile.display_name || user?.email}
-                </span>
-              </div>
+              {/* Founder Title - Clean elegant text */}
+              <span 
+                className="text-base md:text-lg font-medium text-zinc-800 whitespace-nowrap"
+                style={{ fontFamily: 'Poppins, Inter, sans-serif' }}
+              >
+                Founder &amp; CEO — Jane Abou Jaoude
+              </span>
             </div>
+            
             <div className="flex items-center gap-3">
               {isAdmin && (
                 <Button 
-                  variant="default" 
+                  variant="ghost" 
                   size="sm" 
                   onClick={() => navigate("/admin/crm")} 
-                  className="bg-white text-black font-bold hover:bg-white/90 border-0 shadow-md"
+                  className="text-zinc-800 font-semibold hover:text-gold hover:bg-zinc-100 border border-zinc-200 transition-all duration-200 ease-in-out"
                 >
                   Admin Dashboard
                 </Button>
               )}
-              <Button variant="ghost" size="sm" onClick={handleSignOut} className="text-white hover:text-white hover:bg-muted">
+              <Button 
+                variant="ghost" 
+                size="sm" 
+                onClick={handleSignOut} 
+                className="text-zinc-700 hover:text-zinc-900 hover:bg-zinc-100 transition-all duration-200 ease-in-out"
+              >
                 <LogOut className="h-4 w-4 mr-2" />
                 Sign Out
               </Button>
