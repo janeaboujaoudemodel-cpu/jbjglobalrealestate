@@ -1,4 +1,4 @@
-import { useState, useEffect, forwardRef } from "react";
+import { useState, useEffect } from "react";
 import { useNavigate, useLocation } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 import { Dialog, DialogContent, DialogTitle } from "@/components/ui/dialog";
@@ -12,7 +12,7 @@ import jbjMonogramDarkBg from "@/assets/jbj-monogram-dark-bg.png";
 const WELCOME_MODAL_KEY = "jj_welcome_shown";
 const RETURNING_USER_KEY = "jj_returning_user";
 
-const WelcomeModal = forwardRef<HTMLDivElement>((_, ref) => {
+const WelcomeModal = () => {
   const { requestToShow, dismiss, isVisible } = usePopupVisibility('welcome-modal');
   const [showTour, setShowTour] = useState(false);
   const [shouldShow, setShouldShow] = useState(false);
@@ -70,7 +70,7 @@ const WelcomeModal = forwardRef<HTMLDivElement>((_, ref) => {
   if (!shouldShow) return <GuidedTour isOpen={showTour} onClose={handleTourClose} />;
 
   return (
-    <div ref={ref}>
+    <>
       <Dialog
         open={isVisible}
         onOpenChange={(open) => {
@@ -192,10 +192,8 @@ const WelcomeModal = forwardRef<HTMLDivElement>((_, ref) => {
       </Dialog>
 
       <GuidedTour isOpen={showTour} onClose={handleTourClose} />
-    </div>
+    </>
   );
-});
-
-WelcomeModal.displayName = "WelcomeModal";
+};
 
 export default WelcomeModal;

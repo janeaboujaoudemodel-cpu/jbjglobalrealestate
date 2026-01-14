@@ -1,4 +1,4 @@
-import { useState, forwardRef } from "react";
+import { useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { Button } from "@/components/ui/button";
 import { 
@@ -23,7 +23,7 @@ interface GuidedTourProps {
   onClose: () => void;
 }
 
-const GuidedTour = forwardRef<HTMLDivElement, GuidedTourProps>(({ isOpen, onClose }, ref) => {
+const GuidedTour = ({ isOpen, onClose }: GuidedTourProps) => {
   const [currentStep, setCurrentStep] = useState(0);
   const [showTour, setShowTour] = useState<'choice' | 'tour' | 'shortcuts' | null>('choice');
 
@@ -145,7 +145,6 @@ const GuidedTour = forwardRef<HTMLDivElement, GuidedTourProps>(({ isOpen, onClos
   if (!isOpen) return null;
 
   return (
-    <div ref={ref}>
     <AnimatePresence>
       <motion.div
         initial={{ opacity: 0 }}
@@ -346,10 +345,7 @@ const GuidedTour = forwardRef<HTMLDivElement, GuidedTourProps>(({ isOpen, onClos
         </motion.div>
       </motion.div>
     </AnimatePresence>
-    </div>
   );
-});
-
-GuidedTour.displayName = "GuidedTour";
+};
 
 export default GuidedTour;
