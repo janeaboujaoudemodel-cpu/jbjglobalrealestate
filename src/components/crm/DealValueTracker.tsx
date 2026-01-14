@@ -50,7 +50,17 @@ const DealValueTracker = ({ userId }: DealValueTrackerProps) => {
         .select("pipeline_status, lead_id")
         .eq("user_id", userId);
 
+      // Handle empty data gracefully
       if (!statesData || statesData.length === 0) {
+        setStats({
+          totalPipeline: 0,
+          wonDeals: 0,
+          lostDeals: 0,
+          conversionRate: 0,
+          averageDealSize: AVERAGE_DEAL_VALUE_AED,
+          forecastedRevenue: 0,
+          stageBreakdown: []
+        });
         setLoading(false);
         return;
       }
@@ -152,20 +162,34 @@ const DealValueTracker = ({ userId }: DealValueTrackerProps) => {
 
   if (loading) {
     return (
-      <Card className="border-border bg-card">
-        <CardContent className="py-8 text-center text-muted-foreground">
+      <Card className="border-border bg-white">
+        <CardContent className="py-8 text-center text-zinc-600">
           Calculating pipeline...
         </CardContent>
       </Card>
     );
   }
 
+  // Empty state when no data
+  const hasNoData = stats.totalPipeline === 0 && stats.wonDeals === 0 && stats.lostDeals === 0;
+
   return (
     <div className="space-y-4">
+      {/* Empty State Message */}
+      {hasNoData && (
+        <Card className="border-border bg-white">
+          <CardContent className="py-8 text-center">
+            <Briefcase className="h-12 w-12 mx-auto mb-4 text-zinc-400" />
+            <p className="text-zinc-800 font-semibold mb-1">No active data yet</p>
+            <p className="text-zinc-500 text-sm">Start adding leads to see your pipeline metrics.</p>
+          </CardContent>
+        </Card>
+      )}
+
       {/* Main Stats Row - evenly aligned with consistent height */}
       <div className="grid grid-cols-2 lg:grid-cols-4 gap-4">
         {/* Pipeline Value */}
-        <Card className="border-border/50 bg-gradient-to-br from-card to-card/80 shadow-lg h-full">
+        <Card className="border-zinc-200 bg-white shadow-lg h-full">
           <CardContent className="p-5 h-full flex flex-col">
             <div className="flex items-center justify-between mb-4">
               <div className="p-3 rounded-xl bg-gold/20">
@@ -175,80 +199,80 @@ const DealValueTracker = ({ userId }: DealValueTrackerProps) => {
                 Pipeline
               </Badge>
             </div>
-            <p className="text-2xl md:text-3xl font-bold text-foreground tracking-tight flex-1">
-              {formatCurrency(stats.totalPipeline)}
+            <p className="text-2xl md:text-3xl font-bold text-zinc-900 tracking-tight flex-1">
+              {hasNoData ? "—" : formatCurrency(stats.totalPipeline)}
             </p>
-            <p className="text-xs text-muted-foreground mt-2">Total active deals</p>
+            <p className="text-xs text-zinc-500 mt-2">Total active deals</p>
           </CardContent>
         </Card>
 
         {/* Forecasted */}
-        <Card className="border-border/50 bg-gradient-to-br from-card to-card/80 shadow-lg h-full">
+        <Card className="border-zinc-200 bg-white shadow-lg h-full">
           <CardContent className="p-5 h-full flex flex-col">
             <div className="flex items-center justify-between mb-4">
               <div className="p-3 rounded-xl bg-emerald-500/20">
                 <TrendingUp className="h-5 w-5 text-emerald-500" />
               </div>
-              <Badge variant="outline" className="text-xs border-emerald-500/30 text-emerald-400 px-3 py-1">
+              <Badge variant="outline" className="text-xs border-emerald-500/30 text-emerald-600 px-3 py-1">
                 Forecast
               </Badge>
             </div>
-            <p className="text-2xl md:text-3xl font-bold text-emerald-400 tracking-tight flex-1">
-              {formatCurrency(stats.forecastedRevenue)}
+            <p className="text-2xl md:text-3xl font-bold text-emerald-600 tracking-tight flex-1">
+              {hasNoData ? "—" : formatCurrency(stats.forecastedRevenue)}
             </p>
-            <p className="text-xs text-muted-foreground mt-2">Weighted probability</p>
+            <p className="text-xs text-zinc-500 mt-2">Weighted probability</p>
           </CardContent>
         </Card>
 
         {/* Conversion */}
-        <Card className="border-border/50 bg-gradient-to-br from-card to-card/80 shadow-lg h-full">
+        <Card className="border-zinc-200 bg-white shadow-lg h-full">
           <CardContent className="p-5 h-full flex flex-col">
             <div className="flex items-center justify-between mb-4">
               <div className="p-3 rounded-xl bg-amber-500/20">
                 <Target className="h-5 w-5 text-amber-500" />
               </div>
-              <Badge variant="outline" className="text-xs border-amber-500/30 text-amber-400 px-3 py-1">
+              <Badge variant="outline" className="text-xs border-amber-500/30 text-amber-600 px-3 py-1">
                 Conversion
               </Badge>
             </div>
-            <p className="text-2xl md:text-3xl font-bold text-amber-400 tracking-tight flex-1">
-              {stats.conversionRate.toFixed(1)}%
+            <p className="text-2xl md:text-3xl font-bold text-amber-600 tracking-tight flex-1">
+              {hasNoData ? "—" : `${stats.conversionRate.toFixed(1)}%`}
             </p>
-            <p className="text-xs text-muted-foreground mt-2">Won vs Lost</p>
+            <p className="text-xs text-zinc-500 mt-2">Won vs Lost</p>
           </CardContent>
         </Card>
 
         {/* Won Deals */}
-        <Card className="border-border/50 bg-gradient-to-br from-card to-card/80 shadow-lg h-full">
+        <Card className="border-zinc-200 bg-white shadow-lg h-full">
           <CardContent className="p-5 h-full flex flex-col">
             <div className="flex items-center justify-between mb-4">
               <div className="p-3 rounded-xl bg-green-500/20">
                 <Award className="h-5 w-5 text-green-500" />
               </div>
-              <Badge variant="outline" className="text-xs border-green-500/30 text-green-400 px-3 py-1">
+              <Badge variant="outline" className="text-xs border-green-500/30 text-green-600 px-3 py-1">
                 Won
               </Badge>
             </div>
             <div className="flex items-baseline gap-2 flex-1">
-              <p className="text-2xl md:text-3xl font-bold text-green-400 tracking-tight">{stats.wonDeals}</p>
-              <span className="text-sm text-red-400 font-medium">/ {stats.lostDeals} lost</span>
+              <p className="text-2xl md:text-3xl font-bold text-green-600 tracking-tight">{stats.wonDeals}</p>
+              <span className="text-sm text-red-500 font-medium">/ {stats.lostDeals} lost</span>
             </div>
-            <p className="text-xs text-muted-foreground mt-2">Closed deals</p>
+            <p className="text-xs text-zinc-500 mt-2">Closed deals</p>
           </CardContent>
         </Card>
       </div>
 
       {/* Stage Breakdown */}
-      <Card className="border-border bg-card">
+      <Card className="border-zinc-200 bg-white">
         <CardHeader className="pb-2">
-          <CardTitle className="text-white font-bold text-base flex items-center gap-2">
+          <CardTitle className="text-zinc-900 font-bold text-base flex items-center gap-2">
             <DollarSign className="h-4 w-4" />
             Pipeline by Stage
           </CardTitle>
         </CardHeader>
         <CardContent>
           {stats.stageBreakdown.length === 0 ? (
-            <div className="text-center text-muted-foreground py-4">
+            <div className="text-center text-zinc-500 py-4">
               No active deals in pipeline
             </div>
           ) : (
@@ -260,14 +284,14 @@ const DealValueTracker = ({ userId }: DealValueTrackerProps) => {
                     <div className="flex items-center justify-between mb-1">
                       <div className="flex items-center gap-2">
                         <span className={`w-2 h-2 rounded-full ${getStageColor(stage.stage)}`} />
-                        <span className="text-sm font-medium text-foreground capitalize">
+                        <span className="text-sm font-medium text-zinc-800 capitalize">
                           {stage.stage.replace(/_/g, " ")}
                         </span>
-                        <Badge variant="secondary" className="text-xs">
+                        <Badge variant="secondary" className="text-xs bg-zinc-100 text-zinc-700">
                           {stage.count} leads
                         </Badge>
                       </div>
-                      <span className="text-sm font-bold text-white">
+                      <span className="text-sm font-bold text-zinc-900">
                         {formatCurrency(stage.value)}
                       </span>
                     </div>

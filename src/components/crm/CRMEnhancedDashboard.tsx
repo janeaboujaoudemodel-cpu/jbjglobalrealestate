@@ -216,9 +216,9 @@ const CRMEnhancedDashboard = ({ userId, isAdmin }: EnhancedDashboardProps) => {
       {/* Primary Stats Cards */}
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
         {primaryCards.map((card, index) => (
-          <Card key={index} className="border-border bg-card">
+          <Card key={index} className="border-zinc-200 bg-white shadow-md">
             <CardHeader className="flex flex-row items-center justify-between pb-2">
-              <CardTitle className="text-sm font-semibold text-muted-foreground">
+              <CardTitle className="text-sm font-semibold text-zinc-600">
                 {card.title}
               </CardTitle>
               <div className={`p-2 rounded-lg ${card.bgColor}`}>
@@ -228,10 +228,10 @@ const CRMEnhancedDashboard = ({ userId, isAdmin }: EnhancedDashboardProps) => {
             <CardContent>
               <div className="flex items-end justify-between">
                 <div>
-                  <div className="text-2xl font-bold text-foreground">
+                  <div className="text-2xl font-bold text-zinc-900">
                     {loading ? "..." : card.value}
                   </div>
-                  <p className="text-xs text-muted-foreground mt-1">
+                  <p className="text-xs text-zinc-500 mt-1">
                     {loading ? "" : card.subValue}
                   </p>
                 </div>
@@ -250,11 +250,12 @@ const CRMEnhancedDashboard = ({ userId, isAdmin }: EnhancedDashboardProps) => {
       {/* Charts Row */}
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-4">
         {/* Activity Trend */}
-        <Card className="border-border bg-card">
+        <Card className="border-zinc-200 bg-white shadow-md">
           <CardHeader>
-            <CardTitle className="text-base font-semibold text-foreground flex items-center gap-2">
-              <TrendingUp className="h-5 w-5 text-primary" />
+            <CardTitle className="text-base font-semibold text-zinc-900 flex items-center gap-2">
+              <TrendingUp className="h-5 w-5 text-blue-500" />
               Weekly Activity
+              <span className="text-xs font-normal text-zinc-500 ml-2">Your weekly activity summary</span>
             </CardTitle>
           </CardHeader>
           <CardContent>
@@ -271,13 +272,14 @@ const CRMEnhancedDashboard = ({ userId, isAdmin }: EnhancedDashboardProps) => {
                       <stop offset="95%" stopColor="#10B981" stopOpacity={0}/>
                     </linearGradient>
                   </defs>
-                  <XAxis dataKey="day" tick={{ fill: '#888', fontSize: 12 }} />
-                  <YAxis tick={{ fill: '#888', fontSize: 12 }} />
+                  <XAxis dataKey="day" tick={{ fill: '#71717a', fontSize: 12 }} />
+                  <YAxis tick={{ fill: '#71717a', fontSize: 12 }} />
                   <Tooltip 
                     contentStyle={{ 
-                      backgroundColor: '#1a1a1a', 
-                      border: '1px solid #333',
-                      borderRadius: '8px'
+                      backgroundColor: '#ffffff', 
+                      border: '1px solid #e4e4e7',
+                      borderRadius: '8px',
+                      color: '#18181b'
                     }}
                   />
                   <Area 
@@ -301,10 +303,10 @@ const CRMEnhancedDashboard = ({ userId, isAdmin }: EnhancedDashboardProps) => {
         </Card>
 
         {/* Pipeline Distribution */}
-        <Card className="border-border bg-card">
+        <Card className="border-zinc-200 bg-white shadow-md">
           <CardHeader>
-            <CardTitle className="text-base font-semibold text-foreground flex items-center gap-2">
-              <Zap className="h-5 w-5 text-amber-400" />
+            <CardTitle className="text-base font-semibold text-zinc-900 flex items-center gap-2">
+              <Zap className="h-5 w-5 text-amber-500" />
               Pipeline Distribution
             </CardTitle>
           </CardHeader>
@@ -312,18 +314,19 @@ const CRMEnhancedDashboard = ({ userId, isAdmin }: EnhancedDashboardProps) => {
             <div className="h-48">
               <ResponsiveContainer width="100%" height="100%">
                 <BarChart data={stats.pipelineData} layout="vertical">
-                  <XAxis type="number" tick={{ fill: '#888', fontSize: 12 }} />
+                  <XAxis type="number" tick={{ fill: '#71717a', fontSize: 12 }} />
                   <YAxis 
                     dataKey="name" 
                     type="category" 
-                    tick={{ fill: '#888', fontSize: 10 }} 
+                    tick={{ fill: '#71717a', fontSize: 10 }} 
                     width={80}
                   />
                   <Tooltip 
                     contentStyle={{ 
-                      backgroundColor: '#1a1a1a', 
-                      border: '1px solid #333',
-                      borderRadius: '8px'
+                      backgroundColor: '#ffffff', 
+                      border: '1px solid #e4e4e7',
+                      borderRadius: '8px',
+                      color: '#18181b'
                     }}
                   />
                   <Bar dataKey="value" radius={[0, 4, 4, 0]}>
@@ -340,54 +343,54 @@ const CRMEnhancedDashboard = ({ userId, isAdmin }: EnhancedDashboardProps) => {
 
       {/* Secondary Stats */}
       <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
-        <Card className="border-border bg-card">
+        <Card className="border-zinc-200 bg-white shadow-md">
           <CardContent className="pt-4">
             <div className="flex items-center gap-3">
               <div className="p-2 rounded-lg bg-amber-500/10">
                 <Clock className="h-5 w-5 text-amber-500" />
               </div>
               <div>
-                <p className="text-2xl font-bold text-foreground">{stats.avgResponseTime}h</p>
-                <p className="text-xs text-muted-foreground">Avg Response</p>
+                <p className="text-2xl font-bold text-zinc-900">{stats.avgResponseTime}h</p>
+                <p className="text-xs text-zinc-500">Avg Response</p>
               </div>
             </div>
           </CardContent>
         </Card>
-        <Card className="border-border bg-card">
+        <Card className="border-zinc-200 bg-white shadow-md">
           <CardContent className="pt-4">
             <div className="flex items-center gap-3">
               <div className="p-2 rounded-lg bg-blue-500/10">
                 <Calendar className="h-5 w-5 text-blue-500" />
               </div>
               <div>
-                <p className="text-2xl font-bold text-foreground">{stats.followupsCreated}</p>
-                <p className="text-xs text-muted-foreground">Follow-ups</p>
+                <p className="text-2xl font-bold text-zinc-900">{stats.followupsCreated}</p>
+                <p className="text-xs text-zinc-500">Follow-ups</p>
               </div>
             </div>
           </CardContent>
         </Card>
-        <Card className="border-border bg-card">
+        <Card className="border-zinc-200 bg-white shadow-md">
           <CardContent className="pt-4">
             <div className="flex items-center gap-3">
               <div className="p-2 rounded-lg bg-green-500/10">
                 <CheckCircle className="h-5 w-5 text-green-500" />
               </div>
               <div>
-                <p className="text-2xl font-bold text-foreground">{stats.followupsCompleted}</p>
-                <p className="text-xs text-muted-foreground">Completed</p>
+                <p className="text-2xl font-bold text-zinc-900">{stats.followupsCompleted}</p>
+                <p className="text-xs text-zinc-500">Completed</p>
               </div>
             </div>
           </CardContent>
         </Card>
-        <Card className="border-border bg-card">
+        <Card className="border-zinc-200 bg-white shadow-md">
           <CardContent className="pt-4">
             <div className="flex items-center gap-3">
               <div className="p-2 rounded-lg bg-purple-500/10">
                 <Award className="h-5 w-5 text-purple-500" />
               </div>
               <div>
-                <p className="text-2xl font-bold text-foreground">{stats.pipelineCounts['closed_won'] || 0}</p>
-                <p className="text-xs text-muted-foreground">Deals Won</p>
+                <p className="text-2xl font-bold text-zinc-900">{stats.pipelineCounts['closed_won'] || 0}</p>
+                <p className="text-xs text-zinc-500">Deals Won</p>
               </div>
             </div>
           </CardContent>

@@ -207,16 +207,34 @@ const CRM = () => {
   const isAdmin = profile.crm_role === 'owner_admin' || profile.crm_role === 'founder' || profile.crm_role === 'admin';
   const isFounder = profile.crm_role === 'owner_admin' || profile.crm_role === 'founder';
 
-  // Get role label
+  // Get role label with proper display name
   const getRoleLabel = () => {
+    const displayName = profile.display_name || 'Team Member';
+    switch (profile.crm_role) {
+      case 'founder':
+      case 'owner_admin':
+        return `Founder & CEO — ${displayName}`;
+      case 'admin':
+        return `Admin — ${displayName}`;
+      case 'broker_member':
+        return `Broker — ${displayName}`;
+      default:
+        return displayName;
+    }
+  };
+
+  // Get short role title
+  const getRoleTitle = () => {
     switch (profile.crm_role) {
       case 'founder':
       case 'owner_admin':
         return 'Founder & CEO';
       case 'admin':
         return 'Admin';
-      default:
+      case 'broker_member':
         return 'Broker';
+      default:
+        return 'Team Member';
     }
   };
 
@@ -243,12 +261,12 @@ const CRM = () => {
                 )}
               </Button>
               
-              {/* Founder Title - Clean elegant text */}
+              {/* Role Title - Dynamic based on logged-in user */}
               <span 
                 className="text-base md:text-lg font-medium text-zinc-800 whitespace-nowrap"
                 style={{ fontFamily: 'Poppins, Inter, sans-serif' }}
               >
-                Founder &amp; CEO — Jane Abou Jaoude
+                {getRoleLabel()}
               </span>
             </div>
             
@@ -288,7 +306,7 @@ const CRM = () => {
           <div className="lg:col-span-2 space-y-3">
             {/* Quick Filters */}
             <div className="space-y-2">
-              <h3 className="text-sm font-semibold text-white uppercase tracking-wide">Quick Filters</h3>
+              <h3 className="text-sm font-semibold text-zinc-800 uppercase tracking-wide">Quick Filters</h3>
               <LeadQuickFilters 
                 activeFilter={quickFilter} 
                 onChange={handleQuickFilterChange}
