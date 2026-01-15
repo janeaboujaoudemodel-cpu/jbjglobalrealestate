@@ -9,7 +9,7 @@ import oliviaExecutiveAssistant from '@/assets/team/olivia-executive-assistant.p
 import amandaClarkeExecutiveAssistant from '@/assets/team/amanda-clarke-executive-assistant.png';
 
 // Import team portraits - Legal Team
-import hudaMarzooqLawyer from '@/assets/team/huda-marzooq-lawyer.jpg';
+import hudaMarzooqLawyer from '@/assets/team/huda-marzooq-lawyer-office.jpg';
 
 // Import team portraits - Property Operations
 import sarahMitchellListingAdmin from '@/assets/team/sarah-mitchell-listing-admin.png';
@@ -18,15 +18,15 @@ import sarahMitchellListingAdmin from '@/assets/team/sarah-mitchell-listing-admi
 import royDaviHeadOfSale from '@/assets/team/roy-davi-head-of-sale-gradient.png';
 import williamHarrisonSales from '@/assets/team/william-harrison-sales.png';
 
-// Import diverse international team members
-import priyaSharmaSales from '@/assets/team/priya-sharma-sales.png';
-import ahmedHassanSales from '@/assets/team/ahmed-hassan-sales.png';
-import liWeiChenInvestment from '@/assets/team/li-wei-chen-investment.png';
-import dmitriVolkovConsultant from '@/assets/team/dmitri-volkov-consultant.png';
-import adaezeOkonkwoSales from '@/assets/team/adaeze-okonkwo-sales.png';
-import carlosRodriguezSales from '@/assets/team/carlos-rodriguez-sales.png';
-import yukiTanakaConsultant from '@/assets/team/yuki-tanaka-consultant.png';
-import faisalKhanSales from '@/assets/team/faisal-khan-sales.png';
+// Import diverse international team members (natural photos without AI filters)
+import priyaSharmaSales from '@/assets/team/priya-sharma-natural.png';
+import ahmedHassanSales from '@/assets/team/ahmed-hassan-natural.png';
+import liWeiChenInvestment from '@/assets/team/li-wei-chen-natural.png';
+import dmitriVolkovConsultant from '@/assets/team/dmitri-volkov-natural.png';
+import adaezeOkonkwoSales from '@/assets/team/adaeze-okonkwo-natural.png';
+import carlosRodriguezSales from '@/assets/team/carlos-rodriguez-natural.png';
+import yukiTanakaConsultant from '@/assets/team/yuki-tanaka-natural.png';
+import faisalKhanSales from '@/assets/team/faisal-khan-natural.png';
 
 // Import team portraits - Software Engineering Team
 import jamesWoodwardTechLead from '@/assets/team/james-woodward-tech-lead.png';
@@ -47,11 +47,11 @@ import emmaHartleySalesManager from '@/assets/team/emma-hartley-sales-manager.pn
 import victoriaSterlingMarketing from '@/assets/team/victoria-sterling-marketing.png';
 import georgeHamiltonClientRelations from '@/assets/team/george-hamilton-client-relations.png';
 
-// Import team portraits - VIP Client Relations
+// Import team portraits - VIP Client Relations (natural photos without AI filters)
 import victoriaAshworthVipDirector from '@/assets/team/victoria-ashworth-vip-director.png';
 import charlotteWhitmoreVipAssistant from '@/assets/team/charlotte-whitmore-vip-assistant.png';
-import jamesHartwellVipManager from '@/assets/team/james-hartwell-vip-manager.png';
-import alexandraFitzgeraldVipAssistant from '@/assets/team/alexandra-fitzgerald-vip-assistant.png';
+import jamesHartwellVipManager from '@/assets/team/james-hartwell-natural.png';
+import alexandraFitzgeraldVipAssistant from '@/assets/team/alexandra-fitzgerald-natural.png';
 
 // Import team portraits - Additional CRM/Operations
 import jamesPorterCrmAssistant from '@/assets/team/james-porter-crm-assistant.png';
@@ -109,6 +109,10 @@ import meeraPatelOperations from '@/assets/team/meera-patel-operations.png';
 import keremYilmazOperations from '@/assets/team/kerem-yilmaz-operations.png';
 import lucasferreiraOperations from '@/assets/team/lucas-ferreira-operations.png';
 import jessicaWalkerOperations from '@/assets/team/jessica-walker-operations.png';
+// Additional operations team members for symmetric layout (8 total)
+import benjaminClarkeOperations from '@/assets/team/benjamin-clarke-operations.png';
+import ninaKowalskiOperations from '@/assets/team/nina-kowalski-operations.png';
+import marcusThompsonOperations from '@/assets/team/marcus-thompson-operations.png';
 
 // Import team portraits - IT Team
 import danielParkerItManager from '@/assets/team/daniel-parker-it-manager.png';
@@ -311,7 +315,6 @@ export const salesTeam: TeamMember[] = sortByHierarchy([
     department: 'Sales',
     avatar: priyaSharmaSales,
     isAI: true,
-    email: 'priya.sharma@JBJ.ae',
     bio: 'Dynamic sales professional with expertise in luxury properties and exceptional client relationship management.',
     specializations: ['Luxury Apartments', 'Investment Properties', 'Client Relations'],
     languages: ['English', 'Hindi', 'Punjabi'],
@@ -327,7 +330,6 @@ export const salesTeam: TeamMember[] = sortByHierarchy([
     department: 'Sales',
     avatar: ahmedHassanSales,
     isAI: true,
-    email: 'ahmed.hassan@JBJ.ae',
     bio: 'Experienced sales executive specializing in off-plan properties and international investor relations.',
     specializations: ['Off-Plan Sales', 'International Investors', 'Arabic Clients'],
     languages: ['English', 'Arabic'],
@@ -343,7 +345,6 @@ export const salesTeam: TeamMember[] = sortByHierarchy([
     department: 'Sales',
     avatar: liWeiChenInvestment,
     isAI: true,
-    email: 'liwei.chen@JBJ.ae',
     bio: 'Expert investment consultant focusing on Chinese and Asian investor markets with deep market knowledge.',
     specializations: ['Investment Analysis', 'Asian Markets', 'Portfolio Advisory'],
     languages: ['English', 'Mandarin', 'Cantonese'],
@@ -359,7 +360,6 @@ export const salesTeam: TeamMember[] = sortByHierarchy([
     department: 'Sales',
     avatar: dmitriVolkovConsultant,
     isAI: true,
-    email: 'dmitri.volkov@JBJ.ae',
     bio: 'Seasoned property consultant with expertise in Russian and CIS investor relations and luxury developments.',
     specializations: ['Luxury Properties', 'Russian Clients', 'High-Value Transactions'],
     languages: ['English', 'Russian', 'Ukrainian'],
@@ -375,7 +375,6 @@ export const salesTeam: TeamMember[] = sortByHierarchy([
     department: 'Sales',
     avatar: adaezeOkonkwoSales,
     isAI: true,
-    email: 'adaeze.okonkwo@JBJ.ae',
     bio: 'Results-oriented sales manager with strong focus on African investor networks and premium property sales.',
     specializations: ['Team Leadership', 'African Markets', 'Premium Properties'],
     languages: ['English', 'Igbo', 'French'],
@@ -391,7 +390,6 @@ export const salesTeam: TeamMember[] = sortByHierarchy([
     department: 'Sales',
     avatar: carlosRodriguezSales,
     isAI: true,
-    email: 'carlos.rodriguez@JBJ.ae',
     bio: 'Expert in luxury villa sales with strong connections to European and Latin American clientele.',
     specializations: ['Luxury Villas', 'European Clients', 'Latin American Markets'],
     languages: ['English', 'Spanish', 'Portuguese'],
@@ -407,7 +405,6 @@ export const salesTeam: TeamMember[] = sortByHierarchy([
     department: 'Sales',
     avatar: yukiTanakaConsultant,
     isAI: true,
-    email: 'yuki.tanaka@JBJ.ae',
     bio: 'Meticulous property consultant specializing in Japanese investor relations and premium developments.',
     specializations: ['Japanese Clients', 'Investment Properties', 'Market Analysis'],
     languages: ['English', 'Japanese'],
@@ -423,7 +420,6 @@ export const salesTeam: TeamMember[] = sortByHierarchy([
     department: 'Sales',
     avatar: faisalKhanSales,
     isAI: true,
-    email: 'faisal.khan@JBJ.ae',
     bio: 'Dedicated sales executive with expertise in South Asian investor markets and off-plan properties.',
     specializations: ['Off-Plan Sales', 'Pakistani Clients', 'Investment Advisory'],
     languages: ['English', 'Urdu', 'Punjabi'],
@@ -793,7 +789,7 @@ export const financeTeam: TeamMember[] = sortByHierarchy([
   },
 ]);
 
-// ===== Operations Team (sorted by hierarchy) =====
+// ===== Operations Team (sorted by hierarchy) - 8 members for symmetric layout =====
 export const operationsTeam: TeamMember[] = sortByHierarchy([
   {
     id: 'alexander-shaw',
@@ -802,13 +798,12 @@ export const operationsTeam: TeamMember[] = sortByHierarchy([
     department: 'Operations',
     avatar: alexanderShawOperations,
     isAI: true,
-    email: 'alexander.shaw@JBJ.ae',
     bio: 'Strategic operations leader streamlining processes and driving organizational efficiency.',
     languages: ['English', 'Turkish'],
     nationality: 'British',
     hierarchyLevel: 3,
     reportsTo: 'richard-pemberton',
-    directReports: ['sarah-mitchell', 'thomas-mitchell'],
+    directReports: ['thomas-mitchell'],
     status: 'online',
     canConductInterviews: true,
   },
@@ -819,7 +814,6 @@ export const operationsTeam: TeamMember[] = sortByHierarchy([
     department: 'Operations',
     avatar: thomasMitchellCrm,
     isAI: true,
-    email: 'thomas.mitchell@JBJ.ae',
     bio: 'Tech-savvy operations leader optimizing lead management and sales pipeline efficiency.',
     languages: ['English', 'Mandarin'],
     nationality: 'British',
@@ -835,7 +829,6 @@ export const operationsTeam: TeamMember[] = sortByHierarchy([
     department: 'Operations',
     avatar: jamesPorterCrmAssistant,
     isAI: true,
-    email: 'james.porter@JBJ.ae',
     bio: 'Efficient CRM specialist managing data integrity, lead assignments, and operational reporting.',
     languages: ['English'],
     nationality: 'British',
@@ -850,7 +843,6 @@ export const operationsTeam: TeamMember[] = sortByHierarchy([
     department: 'Operations',
     avatar: nathanBlackwellCybersecurity,
     isAI: true,
-    email: 'nathan.blackwell@JBJ.ae',
     bio: 'Security expert ensuring data protection, system security, and compliance with privacy regulations.',
     specializations: ['Cybersecurity', 'Data Protection', 'Compliance', 'Risk Management'],
     languages: ['English', 'German'],
@@ -866,13 +858,57 @@ export const operationsTeam: TeamMember[] = sortByHierarchy([
     department: 'Operations',
     avatar: elizabethHartleyBrandSpecialist,
     isAI: true,
-    email: 'sophia.hartley@JBJ.ae',
     bio: 'Brand protection specialist managing trademarks, intellectual property, and brand compliance across all channels.',
     specializations: ['Trademark Management', 'Brand Protection', 'IP Compliance', 'Legal Coordination'],
     languages: ['English', 'French'],
     nationality: 'British',
     hierarchyLevel: 5,
     reportsTo: 'alexander-shaw',
+    status: 'online',
+  },
+  {
+    id: 'benjamin-clarke',
+    name: 'Benjamin Clarke',
+    role: 'Quality Assurance Coordinator',
+    department: 'Operations',
+    avatar: benjaminClarkeOperations,
+    isAI: true,
+    bio: 'Detail-oriented quality assurance professional ensuring operational excellence and process compliance.',
+    specializations: ['Quality Control', 'Process Improvement', 'Compliance Auditing'],
+    languages: ['English'],
+    nationality: 'British',
+    hierarchyLevel: 5,
+    reportsTo: 'alexander-shaw',
+    status: 'online',
+  },
+  {
+    id: 'nina-kowalski',
+    name: 'Nina Kowalski',
+    role: 'Operations Analyst',
+    department: 'Operations',
+    avatar: ninaKowalskiOperations,
+    isAI: true,
+    bio: 'Analytical operations specialist providing data-driven insights for process optimization.',
+    specializations: ['Data Analysis', 'Process Optimization', 'Reporting'],
+    languages: ['English', 'Polish', 'German'],
+    nationality: 'Polish',
+    hierarchyLevel: 5,
+    reportsTo: 'thomas-mitchell',
+    status: 'online',
+  },
+  {
+    id: 'marcus-thompson',
+    name: 'Marcus Thompson',
+    role: 'Operations Support Specialist',
+    department: 'Operations',
+    avatar: marcusThompsonOperations,
+    isAI: true,
+    bio: 'Dedicated operations support professional ensuring smooth day-to-day business operations.',
+    specializations: ['Operations Support', 'Client Coordination', 'Administrative Tasks'],
+    languages: ['English'],
+    nationality: 'American',
+    hierarchyLevel: 6,
+    reportsTo: 'thomas-mitchell',
     status: 'online',
   },
 ]);

@@ -258,8 +258,8 @@ const MeetTheTeam = () => {
         <div className="h-px bg-gradient-to-r from-transparent via-gold/40 to-transparent" />
 
         {/* Team Sections by Department */}
-        <section className="py-16">
-          <div className="container mx-auto px-4">
+        <section className="py-12">
+          <div className="container mx-auto px-4 space-y-12">
             {departmentOrder.map((deptName) => {
               const members =
                 teamByDepartment[deptName as keyof typeof teamByDepartment];
@@ -272,7 +272,7 @@ const MeetTheTeam = () => {
                   whileInView="visible"
                   viewport={{ once: true, margin: "-50px" }}
                   variants={staggerContainer}
-                  className="mb-16"
+                  className="mb-8"
                 >
                   {/* Department Header */}
                   <motion.div
