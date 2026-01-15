@@ -4,8 +4,8 @@ import { createClient } from "https://esm.sh/@supabase/supabase-js@2";
 import { z } from "https://deno.land/x/zod@v3.22.4/mod.ts";
 
 const ALLOWED_ORIGINS = [
-  "https://jbj.ae",
-  "https://www.jbj.ae",
+  "https://JBJ.ae",
+  "https://www.JBJ.ae",
   "http://localhost:5173",
   "http://localhost:8080",
 ];
@@ -86,7 +86,7 @@ async function checkRateLimit(supabaseAdmin: any, rateKey: string): Promise<bool
 
 const APPROVED_CONTACT_INFO = {
   phone: '+971 56 591 1000',
-  email: 'contact@jbj.ae',
+  email: 'contact@JBJ.ae',
 };
 
 function sanitizeContactInfo(text: string): string {
@@ -95,6 +95,7 @@ function sanitizeContactInfo(text: string): string {
     /\+971[\s\-]?[0-9]{2}[\s\-]?[0-9]{3}[\s\-]?[0-9]{4}/g,
   ];
   const emailPattern = /[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}/g;
+  const toCanonicalJbjEmail = (value: string) => value.replace(/@jbj\.ae$/i, "@JBJ.ae");
   
   let sanitized = text;
   phonePatterns.forEach(pattern => {
@@ -106,7 +107,7 @@ function sanitizeContactInfo(text: string): string {
   });
   sanitized = sanitized.replace(emailPattern, (match) => {
     const lowerMatch = match.toLowerCase();
-    if (lowerMatch.endsWith('@jbj.ae')) return match;
+    if (lowerMatch.endsWith('@jbj.ae')) return toCanonicalJbjEmail(match);
     return APPROVED_CONTACT_INFO.email;
   });
   return sanitized;

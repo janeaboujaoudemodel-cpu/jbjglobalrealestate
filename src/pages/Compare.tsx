@@ -23,7 +23,7 @@ import BackNavButton from "@/components/BackNavButton";
 import ActiveLeadBanner from "@/components/crm/ActiveLeadBanner";
 import { useActiveLead } from "@/contexts/ActiveLeadContext";
 
-const INQUIRY_FORM_URL = "https://jbj.ae/contact";
+const INQUIRY_FORM_URL = "https://JBJ.ae/contact";
 const COMPARE_FREE_KEY = "jbj_compare_free_used";
 
 interface AIAnalysis {
@@ -391,8 +391,8 @@ const Compare = () => {
 
     <div class="footer">
       <p><strong>JBJ Global Real Estate</strong> — Real Estate Brokerage</p>
-      <p>📧 contact@jbj.ae | 📞 +971 56 591 1000</p>
-      <p>🌐 www.jbj.ae</p>
+      <p>📧 contact@JBJ.ae | 📞 +971 56 591 1000</p>
+      <p>🌐 www.JBJ.ae</p>
       <p style="margin-top:15px; font-size:12px;">Powered & Made by JBJ Global Real Estate — Real Estate Brokerage</p>
       <p style="margin-top:10px; font-size:11px; font-style:italic;">
         This report is for informational purposes only and is not legal, mortgage, financial, or investment advice.

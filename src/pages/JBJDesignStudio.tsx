@@ -106,7 +106,7 @@ const JBJDesignStudio: React.FC = () => {
     title: '',
     email: '',
     phone: '',
-    website: 'www.jbj.ae',
+    website: 'www.JBJ.ae',
     photoUrl: '',
   });
 
@@ -308,7 +308,7 @@ const JBJDesignStudio: React.FC = () => {
                       <Input
                         value={signatureData.email}
                         onChange={(e) => setSignatureData(prev => ({ ...prev, email: e.target.value }))}
-                        placeholder="jane@jbj.ae"
+                        placeholder="jane@JBJ.ae"
                         className="bg-zinc-800 border-zinc-700 text-white mt-1"
                       />
                     </div>

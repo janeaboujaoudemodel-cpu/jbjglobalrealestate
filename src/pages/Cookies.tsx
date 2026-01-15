@@ -140,7 +140,7 @@ const Cookies = () => {
                   <strong>JBJ Global Real Estate</strong><br />
                   Real Estate Brokerage<br />
                   Dubai, United Arab Emirates<br />
-                  Email: <a href="mailto:privacy@jbj.ae" className="text-gold hover:underline">privacy@jbj.ae</a>
+                  Email: <a href="mailto:privacy@JBJ.ae" className="text-gold hover:underline">privacy@JBJ.ae</a>
                 </p>
                 <p className="mt-6 text-zinc-500 text-sm">
                   © {new Date().getFullYear()} JBJ Global Real Estate. All Rights Reserved.
