@@ -135,7 +135,7 @@ const Founder = () => {
     {
       year: "2021–2022",
       title: "Head of Quality & Operations",
-      description: "Al-Ghazal Transportation Company — led service standards, team training, and operations.",
+      description: "Al-Ghazal Transportation Company — led service standards, team training, and operations (495+).",
       location: "Dubai, UAE"
     },
     {
@@ -325,25 +325,25 @@ const Founder = () => {
               
               <div className="space-y-6 text-zinc-300 leading-relaxed max-w-2xl">
                 <p className="text-xl md:text-2xl font-light text-white/90">
-                  Founder-led standards, built with discretion and long-term trust.
+                  Born August 25, 1998, in Lebanon. Fluent in French and Arabic, with self-taught English and Spanish. Active on social media since 2012 with 1M+ followers across platforms.
                 </p>
                 <p className="text-lg">
-                  Jane launched Janine's Beauty, combining beauty services with early product importing and shipping—building her foundation in client experience and service quality.
+                  At 16, Jane launched Janine's Beauty (beauty services) and began selling products via importing and shipping from China. With 12+ years of sales, customer experience, and business development expertise, she relocated to Dubai in 2020 to pursue real estate.
                 </p>
                 <p className="text-lg text-zinc-400">
-                  Her career includes working with DAMAC in 2021, leading quality and operations at Al-Ghazal Transportation Company, and developing brokerage business divisions from 2022–2024. In 2025, she founded JBJ Global Real Estate as a Dubai-based real estate brokerage.
+                  Her career includes working with DAMAC in 2021, leading quality and operations at Al-Ghazal Transportation Company (495+ team), and developing brokerage business divisions from 2022–2024. In 2025, she founded JBJ Global Real Estate as a Dubai-based real estate brokerage.
                 </p>
               </div>
               
-              {/* Key highlights (no numeric claims) */}
+              {/* Accolades row - All 3 on same line */}
               <div className="mt-12 grid grid-cols-3 gap-4 md:gap-6">
                 <div className="flex items-center gap-3">
                   <div className="w-12 h-12 bg-gradient-to-br from-gold/20 to-gold/5 rounded-xl flex items-center justify-center border border-gold/30 flex-shrink-0">
                     <Globe className="w-5 h-5 text-gold" />
                   </div>
                   <div>
-                    <p className="text-white font-medium text-sm">Executive Leadership</p>
-                    <p className="text-zinc-500 text-xs">Founder-led direction</p>
+                    <p className="text-white font-medium text-sm">4 Languages</p>
+                    <p className="text-zinc-500 text-xs">FR · EN · AR · ES</p>
                   </div>
                 </div>
                 <div className="flex items-center gap-3">
@@ -351,8 +351,8 @@ const Founder = () => {
                     <Users className="w-5 h-5 text-gold" />
                   </div>
                   <div>
-                    <p className="text-white font-medium text-sm">Brokerage Expertise</p>
-                    <p className="text-zinc-500 text-xs">Training & enablement</p>
+                    <p className="text-white font-medium text-sm">2,800+ Trained</p>
+                    <p className="text-zinc-500 text-xs">Brokers Mentored</p>
                   </div>
                 </div>
                 <div className="flex items-center gap-3">
@@ -360,8 +360,8 @@ const Founder = () => {
                     <TrendingUp className="w-5 h-5 text-gold" />
                   </div>
                   <div>
-                    <p className="text-white font-medium text-sm">Operations Excellence</p>
-                    <p className="text-zinc-500 text-xs">Standards & KPIs</p>
+                    <p className="text-white font-medium text-sm">495+ Managed</p>
+                    <p className="text-zinc-500 text-xs">Operations Team</p>
                   </div>
                 </div>
               </div>
@@ -404,13 +404,13 @@ const Founder = () => {
                   Origins & Early Entrepreneurship
                 </h3>
                 <p className="text-lg mb-4">
-                  Jane Abou Jaoude developed a multilingual, international perspective from an early age—shaping a founder-led approach rooted in discretion and standards.
+                  Jane Abou Jaoude was born on August 25, 1998, in Lebanon. Fluent in French and Arabic from childhood, she later taught herself English and Spanish—developing a global perspective from an early age.
                 </p>
                 <p className="text-lg mb-4 text-zinc-400">
-                  She launched Janine's Beauty, offering beauty services and early product selling through importing and shipping.
+                  At 16, Jane launched Janine's Beauty in 2014, offering beauty services while also selling products via importing and shipping from China. Active on social media since 2012, she built a following that now exceeds 1M+ across platforms.
                 </p>
                 <p className="text-lg text-zinc-400">
-                  These early ventures built the fundamentals of service excellence and long-term client relationships.
+                  With 12+ years of experience in sales, customer experience, and business development, these early ventures taught her the fundamentals of service excellence and client relationships.
                 </p>
               </div>
 
@@ -422,9 +422,9 @@ const Founder = () => {
                 <p className="text-lg mb-4">
                   In 2020, Jane relocated to Dubai and began building her career and network in the UAE. She started her real estate career with DAMAC in 2021, gaining valuable exposure to the Dubai property market.
                 </p>
-                 <p className="text-lg mb-4 text-zinc-400">
-                   From 2021–2022, she served as Head of Quality & Operations at Al-Ghazal Transportation Company, a luxury B2B transportation and hospitality services provider—leading training, service standards, and KPI implementation across operations.
-                 </p>
+                <p className="text-lg mb-4 text-zinc-400">
+                  From 2021–2022, she served as Head of Quality & Operations at Al-Ghazal Transportation Company, a luxury B2B transportation and hospitality services provider. Managing teams of 495+ employees, she trained coordinators and drivers while implementing service standards and KPIs.
+                </p>
                 <p className="text-lg text-zinc-400">
                   This corporate leadership experience provided invaluable insights into operations management, team building, and institutional standards—skills that would later define JBJ Global Real Estate's approach to excellence.
                 </p>
@@ -435,9 +435,9 @@ const Founder = () => {
                   <Users className="w-6 h-6" />
                   Brokerage Training & Development
                 </h3>
-                 <p className="text-lg mb-4">
-                   From 2022–2024, Jane worked with a brokerage company to develop the business across divisions including marketing, projects, sales, objection handling, and training brokers and teams.
-                 </p>
+                <p className="text-lg mb-4">
+                  From 2022–2024, Jane worked with a brokerage company to develop the business across divisions including marketing, projects, sales, objection handling, and training brokers and teams. She has trained 2,800+ brokers through her intensive programs.
+                </p>
                 <p className="text-lg mb-4 text-zinc-400">
                   In 2025–2026, she worked with Sobha Realty, supporting real estate growth through structured sales and client experience systems.
                 </p>
@@ -1015,7 +1015,7 @@ const Founder = () => {
             </h2>
           </motion.div>
 
-          {/* Stats - 4 Chips (no numeric claims) */}
+          {/* Stats - 4 Chips with 12+ Years */}
           <motion.div 
             initial="hidden"
             whileInView="visible"
@@ -1024,10 +1024,10 @@ const Founder = () => {
           >
             <div className="grid grid-cols-2 md:grid-cols-4 gap-6 md:gap-8">
               {[
-                { label: "Leadership Experience", icon: Calendar },
-                { label: "Global Network", icon: Users },
-                { label: "Broker Training", icon: Award },
-                { label: "Operations Excellence", icon: Building2 },
+                { label: "12+ Years Experience", icon: Calendar },
+                { label: "1M+ Followers (All Platforms)", icon: Users },
+                { label: "2,800+ Brokers Trained", icon: Award },
+                { label: "495+ Team Managed (Operations)", icon: Building2 },
               ].map((stat, index) => (
                 <motion.div 
                   key={stat.label}
