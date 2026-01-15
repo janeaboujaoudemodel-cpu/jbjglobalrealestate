@@ -10,7 +10,7 @@ import { SEOHead, pagesSEO } from "@/components/SEOHead";
 // Import all founder images
 import founderHero from "@/assets/founder-hero.png";
 import founderDark from "@/assets/founder-dark.png";
-import jjFlags from "@/assets/jj-flags.png";
+// jjFlags removed - old company branding
 import founderOffice from "@/assets/founder-office.jpeg";
 import founderJetBoarding from "@/assets/founder-jet-boarding.jpeg";
 import founderJetInterior from "@/assets/founder-jet-interior.jpeg";
@@ -543,22 +543,22 @@ const Founder = () => {
                 </div>
               </motion.div>
 
-              {/* Woman of the Universe UAE */}
+              {/* Business Portrait */}
               <motion.div 
                 className="group relative aspect-[4/5] rounded-2xl overflow-hidden border border-zinc-800 hover:border-gold/40 transition-all duration-500"
                 variants={scaleIn}
               >
                 <SafeImage 
-                  src={ceoLeadershipAward} 
+                  src={ceoBusinessPortrait} 
                   fallbackSrc={founderHero}
-                  alt="Woman of the Universe UAE" 
+                  alt="Jane Abou Jaoude - Business Portrait" 
                   className="w-full h-full object-cover object-center group-hover:scale-105 transition-transform duration-700"
                 />
                 <div className="absolute inset-0 bg-gradient-to-t from-black via-black/20 to-transparent opacity-80 group-hover:opacity-90 transition-opacity" />
                 <div className="absolute bottom-0 left-0 right-0 p-6">
-                  <span className="text-gold text-xs uppercase tracking-[0.2em] mb-2 block">Guest of Honor</span>
-                  <h4 className="text-white text-lg font-semibold mb-1">Woman of the Universe UAE</h4>
-                  <p className="text-zinc-400 text-sm">VIP Recognition</p>
+                  <span className="text-gold text-xs uppercase tracking-[0.2em] mb-2 block">2025</span>
+                  <h4 className="text-white text-lg font-semibold mb-1">Executive Leadership</h4>
+                  <p className="text-zinc-400 text-sm">Founder & CEO</p>
                 </div>
               </motion.div>
 
@@ -810,15 +810,15 @@ const Founder = () => {
                 </div>
               </motion.div>
 
-              {/* Photo 6 - JJ Flags */}
+              {/* Photo 6 - Professional Portrait */}
               <motion.div 
                 className="group relative aspect-[4/5] rounded-2xl overflow-hidden border border-zinc-800 hover:border-gold/40 transition-all duration-500"
                 variants={scaleIn}
               >
                 <SafeImage 
-                  src={jjFlags} 
+                  src={founderProfessional} 
                   fallbackSrc={founderHero}
-                  alt="JBJ Global Real Estate" 
+                  alt="Jane Abou Jaoude - Professional Portrait" 
                   className="w-full h-full object-cover object-center group-hover:scale-105 transition-transform duration-700"
                 />
                 <div className="absolute inset-0 bg-gradient-to-t from-black via-black/20 to-transparent opacity-80 group-hover:opacity-90 transition-opacity" />
