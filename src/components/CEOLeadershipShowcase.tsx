@@ -2,7 +2,7 @@ import { motion } from "framer-motion";
 import { Badge } from "@/components/ui/badge";
 import { Sparkles, Users, Building2, Globe, Languages } from "lucide-react";
 // Use the landscape photo with flags - CEO centered between Lebanese and UAE flags
-import ceoLandscapeFlags from "@/assets/ceo/ceo-backdrop-flags-v3.jpg";
+import ceoLandscapeFlags from "@/assets/ceo/ceo-landscape-symmetric-flags-v5.jpg";
 import AnimatedCounter from "@/components/AnimatedCounter";
 import { useTeamMetrics } from "@/hooks/useTeamMetrics";
 
