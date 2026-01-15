@@ -3124,6 +3124,7 @@ export type Database = {
           is_active: boolean
           job_title: string | null
           last_password_change: string | null
+          login_count: number | null
           phone: string | null
           photo_url: string | null
           preferred_language: string | null
@@ -3141,6 +3142,7 @@ export type Database = {
           is_active?: boolean
           job_title?: string | null
           last_password_change?: string | null
+          login_count?: number | null
           phone?: string | null
           photo_url?: string | null
           preferred_language?: string | null
@@ -3158,6 +3160,7 @@ export type Database = {
           is_active?: boolean
           job_title?: string | null
           last_password_change?: string | null
+          login_count?: number | null
           phone?: string | null
           photo_url?: string | null
           preferred_language?: string | null
