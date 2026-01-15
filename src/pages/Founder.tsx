@@ -331,12 +331,12 @@ const Founder = () => {
                   At 16, Jane launched Jane's Beauty (beauty services) and began selling products via importing and shipping from China. With 12+ years of sales, customer experience, and business development expertise, she relocated to Dubai in 2020 to pursue real estate.
                 </p>
                 <p className="text-lg text-zinc-400">
-                  Her career includes working with DAMAC in 2021, leading quality and operations at Al-Ghazal Transportation Company (495+ team), and developing brokerage business divisions from 2022–2024. In 2025, she worked with Sobha Realty before founding JBJ Global Real Estate as a Dubai-based real estate brokerage.
+                  Her career includes working with DAMAC in 2021, leading quality and operations at Al-Ghazal Transportation Company (495+ team), and developing brokerage business divisions from 2022–2024. In 2025, she worked with Sobha Realty before founding JBJ Global Real Estate — a Dubai-based real estate brokerage for property sales and leasing.
                 </p>
               </div>
               
-              {/* Accolades row - All 3 on same line */}
-              <div className="mt-12 grid grid-cols-3 gap-4 md:gap-6">
+              {/* Accolades row - All 4 on same line */}
+              <div className="mt-12 grid grid-cols-2 md:grid-cols-4 gap-4 md:gap-6">
                 <div className="flex items-center gap-3">
                   <div className="w-12 h-12 bg-gradient-to-br from-gold/20 to-gold/5 rounded-xl flex items-center justify-center border border-gold/30 flex-shrink-0">
                     <Globe className="w-5 h-5 text-gold" />
@@ -362,6 +362,15 @@ const Founder = () => {
                   <div>
                     <p className="text-white font-medium text-sm">495+ Managed</p>
                     <p className="text-zinc-500 text-xs">Operations Team</p>
+                  </div>
+                </div>
+                <div className="flex items-center gap-3">
+                  <div className="w-12 h-12 bg-gradient-to-br from-gold/20 to-gold/5 rounded-xl flex items-center justify-center border border-gold/30 flex-shrink-0">
+                    <Award className="w-5 h-5 text-gold" />
+                  </div>
+                  <div>
+                    <p className="text-white font-medium text-sm">12+ Years</p>
+                    <p className="text-zinc-500 text-xs">Industry Experience</p>
                   </div>
                 </div>
               </div>
@@ -442,7 +451,7 @@ const Founder = () => {
                   In 2025–2026, she worked with Sobha Realty, supporting real estate growth through structured sales and client experience systems.
                 </p>
                 <p className="text-lg text-zinc-400">
-                  In 2025, Jane founded JBJ Global Real Estate as a Dubai-based real estate brokerage specializing in property sales, leasing, and holiday homes across the UAE.
+                  In 2025, Jane founded JBJ Global Real Estate — a Dubai-based real estate brokerage specializing in property sales and leasing services across the UAE.
                 </p>
               </div>
 
