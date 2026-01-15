@@ -1,8 +1,8 @@
 import { motion } from "framer-motion";
 import { Badge } from "@/components/ui/badge";
 import { Sparkles, Users, Building2, Globe, Languages } from "lucide-react";
-// Use the real uploaded CEO photo - not AI generated
-import ceoOriginalPhoto from "@/assets/ceo/jane-founder-original-upload.jpg";
+// Use the landscape photo with flags - CEO centered between Lebanese and UAE flags
+import ceoLandscapeFlags from "@/assets/ceo/ceo-backdrop-flags-v3.jpg";
 import AnimatedCounter from "@/components/AnimatedCounter";
 import { useTeamMetrics } from "@/hooks/useTeamMetrics";
 
@@ -62,48 +62,32 @@ const CEOLeadershipShowcase = () => {
             </p>
           </motion.div>
 
-          {/* CEO Showcase - Real Photo of Jane */}
+          {/* CEO Landscape Photo with Flags - FULL WIDTH */}
           <motion.div
             variants={fadeInUp}
-            className="relative rounded-2xl overflow-hidden mb-12 bg-gradient-to-br from-zinc-900 via-zinc-800 to-zinc-900 border border-zinc-700/50"
+            className="relative rounded-2xl overflow-hidden mb-12 border-2 border-gold/30"
           >
-            <div className="flex flex-col md:flex-row items-center gap-8 p-8 md:p-12">
-              {/* CEO Photo - Real uploaded image */}
-              <div className="relative w-64 h-64 md:w-80 md:h-80 rounded-2xl overflow-hidden flex-shrink-0 border-2 border-gold/30">
-                <img
-                  src={ceoOriginalPhoto}
-                  alt="Jane Abou Jaoude - Founder & CEO at JBJ Global Real Estate"
-                  className="w-full h-full object-cover object-top"
-                />
-              </div>
-              
-              {/* CEO Info */}
-              <div className="text-center md:text-left flex-1">
-                <h3 className="text-white text-3xl md:text-4xl font-bold mb-3">Jane Abou Jaoude</h3>
-                <p
-                  className="text-xl md:text-2xl font-semibold mb-4"
-                  style={{
-                    background: "linear-gradient(135deg, #CBA64B 0%, #E8D5A3 50%, #CBA64B 100%)",
-                    WebkitBackgroundClip: "text",
-                    WebkitTextFillColor: "transparent",
-                  }}
-                >
-                  Founder & CEO
-                </p>
-                <div className="flex flex-wrap gap-3 justify-center md:justify-start mb-4">
-                  <Badge className="bg-gold/15 text-gold border-gold/30">12 Years Experience</Badge>
-                  <Badge className="bg-zinc-800 text-zinc-300 border-zinc-700">Lebanese</Badge>
+            <div className="relative w-full">
+              <img
+                src={ceoLandscapeFlags}
+                alt="Jane Abou Jaoude - Founder & CEO at JBJ Global Real Estate with Lebanese and UAE flags"
+                className="w-full h-auto object-cover"
+              />
+              {/* Overlay with name at bottom */}
+              <div className="absolute bottom-0 left-0 right-0 bg-gradient-to-t from-black/80 via-black/40 to-transparent p-6 md:p-8">
+                <div className="text-center">
+                  <h3 className="text-white text-2xl md:text-4xl font-bold mb-2">Jane Abou Jaoude</h3>
+                  <p
+                    className="text-xl md:text-2xl font-semibold"
+                    style={{
+                      background: "linear-gradient(135deg, #CBA64B 0%, #E8D5A3 50%, #CBA64B 100%)",
+                      WebkitBackgroundClip: "text",
+                      WebkitTextFillColor: "transparent",
+                    }}
+                  >
+                    Founder & CEO
+                  </p>
                 </div>
-                <div className="flex flex-wrap gap-2 justify-center md:justify-start mb-6">
-                  <Badge variant="outline" className="border-zinc-600 text-zinc-400">English</Badge>
-                  <Badge variant="outline" className="border-zinc-600 text-zinc-400">Arabic</Badge>
-                  <Badge variant="outline" className="border-zinc-600 text-zinc-400">French</Badge>
-                  <Badge variant="outline" className="border-zinc-600 text-zinc-400">Spanish</Badge>
-                </div>
-                <p className="text-zinc-400 text-sm md:text-base max-w-xl">
-                  Visionary leader with a passion for luxury real estate and building world-class teams. 
-                  A global innovator, award-winning entrepreneur shaping the future of luxury real estate in the Middle East.
-                </p>
               </div>
             </div>
           </motion.div>
