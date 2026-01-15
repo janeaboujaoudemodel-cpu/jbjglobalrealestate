@@ -117,6 +117,7 @@ const RoleSelectionModal = ({ onRoleSelected }: RoleSelectionModalProps) => {
   const [canDismissWarning, setCanDismissWarning] = useState(false);
   const [confirmedAccurate, setConfirmedAccurate] = useState(false);
   const [isEmployee, setIsEmployee] = useState(false);
+  const [employeeCheckDone, setEmployeeCheckDone] = useState(false);
   const [employeeName, setEmployeeName] = useState("");
   const [employeeRole, setEmployeeRole] = useState("");
   const { user } = useAuth();
@@ -127,7 +128,10 @@ const RoleSelectionModal = ({ onRoleSelected }: RoleSelectionModalProps) => {
   // Check if user is a JBJ employee (has crm_users_profile)
   useEffect(() => {
     const checkEmployeeStatus = async () => {
-      if (!user?.id) return;
+      if (!user?.id) {
+        setEmployeeCheckDone(true);
+        return;
+      }
       
       try {
         const { data, error } = await supabase
@@ -155,12 +159,16 @@ const RoleSelectionModal = ({ onRoleSelected }: RoleSelectionModalProps) => {
       } catch (err) {
         console.error('Error checking employee status:', err);
       }
+      setEmployeeCheckDone(true);
     };
     
     checkEmployeeStatus();
   }, [user?.id]);
 
   useEffect(() => {
+    // Wait for employee check to complete before showing role selection
+    if (!employeeCheckDone) return;
+    
     // Don't show role selection for employees
     if (isEmployee) return;
     
@@ -171,7 +179,7 @@ const RoleSelectionModal = ({ onRoleSelected }: RoleSelectionModalProps) => {
       }, 1000);
       return () => clearTimeout(timer);
     }
-  }, [isEmployee]);
+  }, [isEmployee, employeeCheckDone]);
 
   useEffect(() => {
     if (currentStep === 'broker-warning' && warningCountdown > 0) {

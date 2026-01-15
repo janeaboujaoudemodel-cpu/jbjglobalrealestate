@@ -95,15 +95,40 @@ const BrokerAccount = () => {
   const [callLogs, setCallLogs] = useState<CallLog[]>([]);
   const [chatLogs, setChatLogs] = useState<ChatLog[]>([]);
   const [loading, setLoading] = useState(true);
+  const [isEmployee, setIsEmployee] = useState(false);
+  const [employeeProfile, setEmployeeProfile] = useState<{ display_name?: string; crm_role?: string; job_title?: string } | null>(null);
+
+  // Check if user is a CRM employee (not just external broker)
+  useEffect(() => {
+    const checkEmployeeStatus = async () => {
+      if (!user?.id) return;
+      
+      const { data } = await supabase
+        .from('crm_users_profile')
+        .select('display_name, crm_role, job_title, is_active')
+        .eq('user_id', user.id)
+        .maybeSingle();
+      
+      if (data?.is_active && data?.crm_role) {
+        setIsEmployee(true);
+        setEmployeeProfile(data);
+      }
+    };
+    
+    checkEmployeeStatus();
+  }, [user?.id]);
 
   useEffect(() => {
-    if (!isBroker) {
-      toast.error("This page is only accessible to brokers");
+    // Allow access for both external brokers AND CRM employees
+    if (!isBroker && !isEmployee && !loading) {
+      toast.error("This page is only accessible to team members");
       navigate('/');
       return;
     }
-    fetchData();
-  }, [isBroker, navigate, user]);
+    if (user) {
+      fetchData();
+    }
+  }, [isBroker, isEmployee, navigate, user, loading]);
 
   const fetchData = async () => {
     if (!user) return;
@@ -179,12 +204,17 @@ const BrokerAccount = () => {
                 <Avatar className="h-24 w-24 border-4 border-primary/20">
                   <AvatarImage src="" />
                   <AvatarFallback className="text-2xl bg-primary text-primary-foreground">
-                    {user?.email?.charAt(0).toUpperCase()}
+                    {employeeProfile?.display_name?.charAt(0).toUpperCase() || user?.email?.charAt(0).toUpperCase()}
                   </AvatarFallback>
                 </Avatar>
                 <div className="flex-1 text-center md:text-left">
-                  <h1 className="text-2xl font-bold text-foreground mb-1">My Account</h1>
-                  <p className="text-muted-foreground">{user?.email}</p>
+                  <h1 className="text-2xl font-bold text-foreground mb-1">
+                    {employeeProfile?.display_name || 'My Account'}
+                  </h1>
+                  {employeeProfile?.job_title && (
+                    <p className="text-primary font-medium">{employeeProfile.job_title}</p>
+                  )}
+                  <p className="text-muted-foreground text-sm">{user?.email}</p>
                   <div className="flex flex-wrap items-center justify-center md:justify-start gap-2 mt-3">
                     <Badge variant="default" className="bg-primary">
                       <Star className="h-3 w-3 mr-1" />
