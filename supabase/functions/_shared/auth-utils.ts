@@ -33,15 +33,15 @@ export async function validateEmployeeAuth(req: Request): Promise<AuthResult> {
     global: { headers: { Authorization: authHeader } },
   });
 
-  const token = authHeader.replace("Bearer ", "");
-  const { data: claimsData, error: claimsError } = await supabaseAuth.auth.getClaims(token);
+  // Get user from the authenticated client
+  const { data: { user }, error: userError } = await supabaseAuth.auth.getUser();
 
-  if (claimsError || !claimsData?.claims) {
+  if (userError || !user) {
     return { authenticated: false, error: "Invalid or expired token" };
   }
 
-  const userId = claimsData.claims.sub as string;
-  const email = claimsData.claims.email as string;
+  const userId = user.id;
+  const email = user.email || "";
 
   // Use service role to check if user is a registered employee
   const supabaseService = createClient(supabaseUrl, supabaseServiceKey);
