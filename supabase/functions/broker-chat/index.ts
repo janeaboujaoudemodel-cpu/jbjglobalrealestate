@@ -1,10 +1,6 @@
 import { serve } from "https://deno.land/std@0.168.0/http/server.ts";
 import { createClient } from "https://esm.sh/@supabase/supabase-js@2";
-
-const corsHeaders = {
-  "Access-Control-Allow-Origin": "*",
-  "Access-Control-Allow-Headers": "authorization, x-client-info, apikey, content-type",
-};
+import { validateEmployeeAuth, unauthorizedResponse, forbiddenResponse, corsHeaders } from "../_shared/auth-utils.ts";
 
 interface ChatRequest {
   broker_id: string;
@@ -182,6 +178,18 @@ serve(async (req: Request): Promise<Response> => {
     return new Response(null, { headers: corsHeaders });
   }
 
+  // ============ AUTHENTICATION CHECK ============
+  const authResult = await validateEmployeeAuth(req);
+  
+  if (!authResult.authenticated) {
+    return unauthorizedResponse(authResult.error);
+  }
+  
+  if (!authResult.isEmployee) {
+    return forbiddenResponse(authResult.error);
+  }
+  // ============ END AUTH CHECK ============
+
   try {
     const { broker_id, lead_id, conversation_id, message, channel, client_identifier }: ChatRequest = await req.json();
 
@@ -343,6 +351,8 @@ serve(async (req: Request): Promise<Response> => {
         onConflict: "broker_id,stat_date",
       }
     );
+
+    console.log(`Broker chat initiated by employee ${authResult.email} for broker ${broker.name}`);
 
     return new Response(
       JSON.stringify({
