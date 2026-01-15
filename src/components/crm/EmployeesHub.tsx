@@ -55,7 +55,11 @@ import {
   contentTeam,
   customerHappinessTeam,
   clientRelationsTeam,
-  TeamMember
+  legalTeam,
+  afterSalesTeam,
+  vipClientRelationsTeam,
+  TeamMember,
+  getTeamMemberById
 } from '@/config/team-members';
 
 interface Employee {
@@ -73,6 +77,8 @@ interface Employee {
   responsibilities?: string[];
   languages?: string[];
   nationality?: string;
+  reportsTo?: string;
+  hierarchyLevel?: number;
 }
 
 interface CVEntry {
@@ -107,6 +113,8 @@ const teamMemberToEmployee = (member: TeamMember): Employee => ({
   responsibilities: member.specializations,
   languages: member.languages,
   nationality: member.nationality,
+  reportsTo: member.reportsTo,
+  hierarchyLevel: member.hierarchyLevel,
 });
 
 // Convert all team members from config to Employee format
@@ -495,8 +503,51 @@ const EmployeesHub = ({ userId, brokers = [] }: EmployeesHubProps) => {
       );
     }
     
-    return filtered;
+    // Sort by hierarchy level
+    return filtered.sort((a, b) => (a.hierarchyLevel || 99) - (b.hierarchyLevel || 99));
   };
+
+  // Group employees by department for organized display
+  const getGroupedEmployees = () => {
+    const filtered = getFilteredEmployees();
+    const grouped: Record<string, Employee[]> = {};
+    
+    filtered.forEach(emp => {
+      const dept = emp.department;
+      if (!grouped[dept]) {
+        grouped[dept] = [];
+      }
+      grouped[dept].push(emp);
+    });
+    
+    // Sort each department by hierarchy level
+    Object.keys(grouped).forEach(dept => {
+      grouped[dept].sort((a, b) => (a.hierarchyLevel || 99) - (b.hierarchyLevel || 99));
+    });
+    
+    return grouped;
+  };
+
+  // Department order for display
+  const departmentDisplayOrder = [
+    'Executive',
+    'Legal',
+    'Sales',
+    'Client Relations',
+    'VIP Client Relations',
+    'After Sales',
+    'Marketing',
+    'Content',
+    'Creative & Media',
+    'Human Resources',
+    'Finance',
+    'Operations',
+    'Software Engineering',
+    'Project Management',
+    'IT',
+    'Administration',
+    'Customer Happiness',
+  ];
 
   const getFilteredCVs = () => {
     let filtered = cvEntries;
@@ -762,118 +813,141 @@ const EmployeesHub = ({ userId, brokers = [] }: EmployeesHubProps) => {
           <CVCenter userId={userId} />
         </TabsContent>
 
-        {/* Employee List Tab Content */}
+        {/* Employee List Tab Content - Grouped by Department */}
         {activeTab !== 'cv' && (
           <TabsContent value={activeTab} className="mt-4">
-            <div className="grid gap-3">
-              {getFilteredEmployees().map((employee) => (
-                <Card 
-                  key={employee.id} 
-                  className="bg-white border border-crm-border hover:border-gold/50 hover:shadow-md transition-all duration-200 cursor-pointer"
-                  onClick={() => setSelectedEmployee(employee)}
-                >
-                  <CardContent className="p-4">
-                    <div className="flex items-center justify-between">
-                      <div className="flex items-center gap-4">
-                        {/* Avatar - Use actual team photos */}
-                        <div className="relative">
-                          <Avatar className="h-12 w-12 border-2 border-gold/30">
-                            {employee.avatar ? (
-                              <AvatarImage src={employee.avatar} alt={employee.name} className="object-cover" />
-                            ) : null}
-                            <AvatarFallback className="bg-gold/10 text-gold font-bold">
-                              {employee.name.charAt(0)}
-                            </AvatarFallback>
-                          </Avatar>
-                          <div className={`absolute -bottom-0.5 -right-0.5 w-3.5 h-3.5 rounded-full ${getStatusColor(employee.status)} border-2 border-white`} />
-                        </div>
-
-                        {/* Info - No AI labels */}
-                        <div>
-                          <div className="flex items-center gap-2 flex-wrap">
-                            <p className="font-semibold text-crm-text">{employee.name}</p>
-                            {employee.role === 'Founder & CEO' && (
-                              <Crown className="h-4 w-4 text-gold" />
-                            )}
-                            <Badge variant="outline" className="text-xs text-crm-text-muted border-crm-border">
-                              {getDepartmentIcon(employee.department)}
-                              <span className="ml-1 capitalize">{employee.department}</span>
-                            </Badge>
-                          </div>
-                          <p className="text-sm text-gold font-medium">{employee.role}</p>
-                          {employee.description && (
-                            <p className="text-xs text-crm-text-muted mt-1 max-w-md">{employee.description}</p>
-                          )}
-                          {employee.responsibilities && (
-                            <div className="flex flex-wrap gap-1 mt-2">
-                              {employee.responsibilities.slice(0, 3).map((resp, idx) => (
-                                <Badge key={idx} variant="outline" className="text-[10px] py-0 text-crm-text-muted border-crm-border">
-                                  {resp}
-                                </Badge>
-                              ))}
-                            </div>
-                          )}
-                        </div>
+            <div className="space-y-6">
+              {(() => {
+                const grouped = getGroupedEmployees();
+                const departments = Object.keys(grouped).sort((a, b) => {
+                  const aIdx = departmentDisplayOrder.indexOf(a);
+                  const bIdx = departmentDisplayOrder.indexOf(b);
+                  if (aIdx === -1 && bIdx === -1) return a.localeCompare(b);
+                  if (aIdx === -1) return 1;
+                  if (bIdx === -1) return -1;
+                  return aIdx - bIdx;
+                });
+                
+                return departments.map(dept => (
+                  <div key={dept} className="space-y-3">
+                    {/* Department Header */}
+                    <div className="flex items-center gap-3 pb-2 border-b border-crm-border">
+                      <div className="w-8 h-8 bg-gold/10 rounded-lg flex items-center justify-center">
+                        {getDepartmentIcon(dept)}
                       </div>
-
-                      {/* Actions & Stats */}
-                      <div className="flex items-center gap-3">
-                        {/* Broker Stats */}
-                        {employee.department === 'brokers' && (
-                          <div className="hidden md:flex items-center gap-4 text-sm">
-                            {employee.leads !== undefined && (
-                              <div className="text-center">
-                                <p className="text-crm-text font-bold">{employee.leads}</p>
-                                <p className="text-xs text-crm-text-muted">Leads</p>
-                              </div>
-                            )}
-                            {employee.performance !== undefined && (
-                              <div className="text-center">
-                                <p className="text-green-600 font-bold">{employee.performance}%</p>
-                                <p className="text-xs text-crm-text-muted">Performance</p>
-                              </div>
-                            )}
-                          </div>
-                        )}
-
-                        {/* Quick Actions - HIGH VISIBILITY BUTTONS */}
-                        <div className="flex items-center gap-2">
-                          <Button 
-                            size="sm"
-                            className="h-9 px-3 bg-gradient-to-r from-green-500 to-emerald-600 hover:from-green-600 hover:to-emerald-700 text-white font-medium shadow-md transition-all duration-200 hover:scale-105"
-                            onClick={(e) => { e.stopPropagation(); handleChat(employee); }}
-                          >
-                            <MessageSquare className="h-4 w-4 mr-1.5" />
-                            Chat
-                          </Button>
-                          {employee.email && (
-                            <Button 
-                              size="sm"
-                              className="h-9 px-3 bg-gradient-to-r from-blue-500 to-indigo-600 hover:from-blue-600 hover:to-indigo-700 text-white font-medium shadow-md transition-all duration-200 hover:scale-105"
-                              onClick={(e) => { e.stopPropagation(); handleEmail(employee); }}
-                            >
-                              <Mail className="h-4 w-4 mr-1.5" />
-                              Email
-                            </Button>
-                          )}
-                          {employee.type === 'human' && (
-                            <Button 
-                              size="sm"
-                              className="h-9 px-3 bg-gradient-to-r from-purple-500 to-violet-600 hover:from-purple-600 hover:to-violet-700 text-white font-medium shadow-md transition-all duration-200 hover:scale-105"
-                              onClick={(e) => { e.stopPropagation(); handleVideoMeeting(employee); }}
-                            >
-                              <Video className="h-4 w-4 mr-1.5" />
-                              Meet
-                            </Button>
-                          )}
-                        </div>
-
-                        <ChevronRight className="h-5 w-5 text-crm-text-muted" />
+                      <div>
+                        <h3 className="text-lg font-semibold text-crm-text">{dept}</h3>
+                        <p className="text-xs text-crm-text-muted">{grouped[dept].length} member{grouped[dept].length > 1 ? 's' : ''}</p>
                       </div>
                     </div>
-                  </CardContent>
-                </Card>
-              ))}
+                    
+                    {/* Department Employees */}
+                    <div className="grid gap-3">
+                      {grouped[dept].map((employee) => (
+                        <Card 
+                          key={employee.id} 
+                          className="bg-white border border-crm-border hover:border-gold/50 hover:shadow-md transition-all duration-200 cursor-pointer"
+                          onClick={() => setSelectedEmployee(employee)}
+                        >
+                          <CardContent className="p-4">
+                            <div className="flex items-center justify-between">
+                              <div className="flex items-center gap-4">
+                                {/* Avatar - Use actual team photos */}
+                                <div className="relative">
+                                  <Avatar className="h-12 w-12 border-2 border-gold/30">
+                                    {employee.avatar ? (
+                                      <AvatarImage src={employee.avatar} alt={employee.name} className="object-cover" />
+                                    ) : null}
+                                    <AvatarFallback className="bg-gold/10 text-gold font-bold">
+                                      {employee.name.charAt(0)}
+                                    </AvatarFallback>
+                                  </Avatar>
+                                  <div className={`absolute -bottom-0.5 -right-0.5 w-3.5 h-3.5 rounded-full ${getStatusColor(employee.status)} border-2 border-white`} />
+                                </div>
+
+                                {/* Info - No AI labels */}
+                                <div>
+                                  <div className="flex items-center gap-2 flex-wrap">
+                                    <p className="font-semibold text-crm-text">{employee.name}</p>
+                                    {employee.role === 'Founder & CEO' && (
+                                      <Crown className="h-4 w-4 text-gold" />
+                                    )}
+                                    {employee.hierarchyLevel && (
+                                      <Badge className="bg-purple-100 text-purple-700 text-[10px] px-1.5 py-0 border-0">
+                                        L{employee.hierarchyLevel}
+                                      </Badge>
+                                    )}
+                                  </div>
+                                  <p className="text-sm text-gold font-medium">{employee.role}</p>
+                                  
+                                  {/* Reports To */}
+                                  {employee.reportsTo && (
+                                    <div className="flex items-center gap-1.5 mt-1">
+                                      <ChevronRight className="h-3 w-3 text-crm-text-muted rotate-[-90deg]" />
+                                      <span className="text-[11px] text-crm-text-muted">Reports to: </span>
+                                      <span className="text-[11px] text-crm-text font-medium">
+                                        {(() => {
+                                          const manager = getTeamMemberById(employee.reportsTo);
+                                          return manager ? manager.name.split(' ')[0] + ' ' + manager.name.split(' ')[1]?.charAt(0) + '.' : employee.reportsTo;
+                                        })()}
+                                      </span>
+                                    </div>
+                                  )}
+                                  
+                                  {employee.languages && employee.languages.length > 0 && (
+                                    <div className="flex flex-wrap gap-1 mt-1">
+                                      {employee.languages.slice(0, 3).map((lang, idx) => (
+                                        <Badge key={idx} variant="outline" className="text-[10px] py-0 text-crm-text-muted border-crm-border">
+                                          {lang}
+                                        </Badge>
+                                      ))}
+                                    </div>
+                                  )}
+                                </div>
+                              </div>
+
+                              {/* Actions & Stats */}
+                              <div className="flex items-center gap-3">
+                                {/* Quick Actions - HIGH VISIBILITY BUTTONS */}
+                                <div className="flex items-center gap-2">
+                                  <Button 
+                                    size="sm"
+                                    className="h-9 px-3 bg-gradient-to-r from-green-500 to-emerald-600 hover:from-green-600 hover:to-emerald-700 text-white font-medium shadow-md transition-all duration-200 hover:scale-105"
+                                    onClick={(e) => { e.stopPropagation(); handleChat(employee); }}
+                                  >
+                                    <MessageSquare className="h-4 w-4 mr-1.5" />
+                                    Chat
+                                  </Button>
+                                  {employee.email && (
+                                    <Button 
+                                      size="sm"
+                                      className="h-9 px-3 bg-gradient-to-r from-blue-500 to-indigo-600 hover:from-blue-600 hover:to-indigo-700 text-white font-medium shadow-md transition-all duration-200 hover:scale-105"
+                                      onClick={(e) => { e.stopPropagation(); handleEmail(employee); }}
+                                    >
+                                      <Mail className="h-4 w-4 mr-1.5" />
+                                      Email
+                                    </Button>
+                                  )}
+                                  <Button 
+                                    size="sm"
+                                    className="h-9 px-3 bg-gradient-to-r from-purple-500 to-violet-600 hover:from-purple-600 hover:to-violet-700 text-white font-medium shadow-md transition-all duration-200 hover:scale-105"
+                                    onClick={(e) => { e.stopPropagation(); handleVideoMeeting(employee); }}
+                                  >
+                                    <Video className="h-4 w-4 mr-1.5" />
+                                    Meet
+                                  </Button>
+                                </div>
+
+                                <ChevronRight className="h-5 w-5 text-crm-text-muted" />
+                              </div>
+                            </div>
+                          </CardContent>
+                        </Card>
+                      ))}
+                    </div>
+                  </div>
+                ));
+              })()}
 
               {getFilteredEmployees().length === 0 && (
                 <Card className="bg-white border-crm-border">

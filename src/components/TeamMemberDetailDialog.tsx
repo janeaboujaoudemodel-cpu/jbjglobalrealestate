@@ -1,4 +1,4 @@
-import { TeamMember } from "@/config/team-members";
+import { TeamMember, getTeamMemberById } from "@/config/team-members";
 import {
   Dialog,
   DialogContent,
@@ -6,7 +6,7 @@ import {
   DialogTitle,
 } from "@/components/ui/dialog";
 import { Badge } from "@/components/ui/badge";
-import { Globe, Clock, MapPin, Briefcase } from "lucide-react";
+import { Globe, Clock, MapPin, Briefcase, ArrowUpRight, Users } from "lucide-react";
 
 interface TeamMemberDetailDialogProps {
   member: TeamMember | null;
@@ -21,6 +21,14 @@ const TeamMemberDetailDialog = ({
   onClose,
 }: TeamMemberDetailDialogProps) => {
   if (!member) return null;
+
+  // Get the reporting manager details
+  const reportsToMember = member.reportsTo ? getTeamMemberById(member.reportsTo) : null;
+
+  // Get direct reports details
+  const directReportsMembers = member.directReports
+    ? member.directReports.map(id => getTeamMemberById(id)).filter(Boolean) as TeamMember[]
+    : [];
 
   return (
     <Dialog open={isOpen} onOpenChange={onClose}>
@@ -75,6 +83,54 @@ const TeamMemberDetailDialog = ({
               )}
             </div>
 
+            {/* Reporting Structure */}
+            {reportsToMember && (
+              <div className="bg-zinc-800/50 rounded-lg p-3 border border-zinc-700">
+                <h4 className="text-sm font-medium text-zinc-400 mb-2 flex items-center gap-1.5">
+                  <ArrowUpRight className="w-3.5 h-3.5" />
+                  Reports To
+                </h4>
+                <div className="flex items-center gap-3">
+                  <img
+                    src={reportsToMember.avatar}
+                    alt={reportsToMember.name}
+                    className="w-10 h-10 rounded-full object-cover"
+                  />
+                  <div>
+                    <p className="text-white font-medium text-sm">{reportsToMember.name}</p>
+                    <p className="text-gold text-xs">{reportsToMember.role}</p>
+                  </div>
+                </div>
+              </div>
+            )}
+
+            {/* Direct Reports */}
+            {directReportsMembers.length > 0 && (
+              <div className="bg-zinc-800/50 rounded-lg p-3 border border-zinc-700">
+                <h4 className="text-sm font-medium text-zinc-400 mb-2 flex items-center gap-1.5">
+                  <Users className="w-3.5 h-3.5" />
+                  Direct Reports ({directReportsMembers.length})
+                </h4>
+                <div className="flex flex-wrap gap-2">
+                  {directReportsMembers.slice(0, 6).map((report) => (
+                    <div key={report.id} className="flex items-center gap-2 bg-zinc-900 rounded-lg px-2 py-1.5">
+                      <img
+                        src={report.avatar}
+                        alt={report.name}
+                        className="w-6 h-6 rounded-full object-cover"
+                      />
+                      <span className="text-zinc-300 text-xs">{report.name.split(' ')[0]}</span>
+                    </div>
+                  ))}
+                  {directReportsMembers.length > 6 && (
+                    <div className="flex items-center gap-2 bg-zinc-900 rounded-lg px-2 py-1.5">
+                      <span className="text-zinc-400 text-xs">+{directReportsMembers.length - 6} more</span>
+                    </div>
+                  )}
+                </div>
+              </div>
+            )}
+
             {member.bio && (
               <p className="text-zinc-300 leading-relaxed">{member.bio}</p>
             )}
@@ -115,6 +171,15 @@ const TeamMemberDetailDialog = ({
                     </Badge>
                   ))}
                 </div>
+              </div>
+            )}
+
+            {/* Hierarchy Level Badge */}
+            {member.hierarchyLevel && (
+              <div className="pt-2 border-t border-zinc-800">
+                <Badge className="bg-purple-500/20 text-purple-400 border-purple-500/30">
+                  Level {member.hierarchyLevel} • Joined September 2025
+                </Badge>
               </div>
             )}
           </div>
