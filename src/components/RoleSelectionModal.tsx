@@ -18,14 +18,17 @@ import {
   CheckCircle,
   BookOpen,
   Settings,
-  Home
+  Home,
+  Building2
 } from "lucide-react";
 import { JJLogoImage } from "./JJLogoImage";
 import { supabase } from "@/integrations/supabase/client";
 import { useAuth } from "@/contexts/AuthContext";
 import { toast } from "sonner";
+import { useNavigate } from "react-router-dom";
 
 const ROLE_SELECTION_KEY = "jj_role_selected";
+const EMPLOYEE_WELCOMED_KEY = "jj_employee_welcomed";
 
 // Single source of truth for brand name
 const BRAND_NAME = "JBJ Global Real Estate";
@@ -104,7 +107,7 @@ interface RoleSelectionModalProps {
   onRoleSelected?: (role: VisitorRole) => void;
 }
 
-type ModalStep = 'selection' | 'broker-warning' | 'welcome';
+type ModalStep = 'selection' | 'broker-warning' | 'welcome' | 'employee-welcome';
 
 const RoleSelectionModal = ({ onRoleSelected }: RoleSelectionModalProps) => {
   const [isOpen, setIsOpen] = useState(false);
@@ -113,11 +116,54 @@ const RoleSelectionModal = ({ onRoleSelected }: RoleSelectionModalProps) => {
   const [warningCountdown, setWarningCountdown] = useState(5);
   const [canDismissWarning, setCanDismissWarning] = useState(false);
   const [confirmedAccurate, setConfirmedAccurate] = useState(false);
+  const [isEmployee, setIsEmployee] = useState(false);
+  const [employeeName, setEmployeeName] = useState("");
+  const [employeeRole, setEmployeeRole] = useState("");
   const { user } = useAuth();
+  const navigate = useNavigate();
 
   const selectedRoleData = ROLES.find(r => r.id === selectedRole);
 
+  // Check if user is a JBJ employee (has crm_users_profile)
   useEffect(() => {
+    const checkEmployeeStatus = async () => {
+      if (!user?.id) return;
+      
+      try {
+        const { data, error } = await supabase
+          .from('crm_users_profile')
+          .select('display_name, crm_role, job_title')
+          .eq('user_id', user.id)
+          .eq('is_active', true)
+          .maybeSingle();
+        
+        if (data && !error) {
+          // User is an employee - skip role selection, show employee welcome
+          setIsEmployee(true);
+          setEmployeeName(data.display_name || "Team Member");
+          setEmployeeRole(data.job_title || data.crm_role || "Employee");
+          
+          // Check if already welcomed
+          const wasWelcomed = localStorage.getItem(EMPLOYEE_WELCOMED_KEY);
+          if (!wasWelcomed) {
+            setCurrentStep('employee-welcome');
+            setIsOpen(true);
+          }
+          // Mark role as selected so regular role modal doesn't show
+          localStorage.setItem(ROLE_SELECTION_KEY, 'employee');
+        }
+      } catch (err) {
+        console.error('Error checking employee status:', err);
+      }
+    };
+    
+    checkEmployeeStatus();
+  }, [user?.id]);
+
+  useEffect(() => {
+    // Don't show role selection for employees
+    if (isEmployee) return;
+    
     const hasSelectedRole = localStorage.getItem(ROLE_SELECTION_KEY);
     if (!hasSelectedRole) {
       const timer = setTimeout(() => {
@@ -125,7 +171,7 @@ const RoleSelectionModal = ({ onRoleSelected }: RoleSelectionModalProps) => {
       }, 1000);
       return () => clearTimeout(timer);
     }
-  }, []);
+  }, [isEmployee]);
 
   useEffect(() => {
     if (currentStep === 'broker-warning' && warningCountdown > 0) {
@@ -211,6 +257,14 @@ const RoleSelectionModal = ({ onRoleSelected }: RoleSelectionModalProps) => {
     } else if (selectedRole === 'investor') {
       toast.success('Explore our exclusive investment opportunities!');
     }
+  };
+
+  const handleEmployeeWelcomeClose = () => {
+    localStorage.setItem(EMPLOYEE_WELCOMED_KEY, 'true');
+    setIsOpen(false);
+    // Navigate to CRM dashboard
+    navigate('/crm');
+    toast.success(`Welcome to the team, ${employeeName}!`);
   };
 
   if (!isOpen) return null;
@@ -493,6 +547,71 @@ const RoleSelectionModal = ({ onRoleSelected }: RoleSelectionModalProps) => {
                 >
                   <Home className="w-5 h-5 mr-2" />
                   Start Exploring
+                  <ArrowRight className="w-5 h-5 ml-2 group-hover:translate-x-1 transition-transform" />
+                </Button>
+              </motion.div>
+            )}
+
+            {/* Employee Welcome Screen */}
+            {currentStep === 'employee-welcome' && (
+              <motion.div
+                key="employee-welcome"
+                initial={{ opacity: 0, scale: 0.95 }}
+                animate={{ opacity: 1, scale: 1 }}
+                exit={{ opacity: 0, scale: 0.95 }}
+                className="text-center"
+              >
+                <div className="flex justify-center mb-6">
+                  <div className="w-24 h-24 rounded-full bg-gradient-to-br from-gold/20 to-amber-500/10 border-2 border-gold/30 flex items-center justify-center">
+                    <Building2 className="w-12 h-12 text-gold" />
+                  </div>
+                </div>
+
+                <h2 className="text-2xl md:text-3xl font-bold text-black mb-2" style={{ fontFamily: "Poppins, sans-serif" }}>
+                  Welcome Onboard!
+                </h2>
+                
+                <p className="text-lg text-gold font-semibold mb-4">{employeeName}</p>
+
+                <p className="text-gray-600 mb-6 max-w-md mx-auto">
+                  Welcome to <strong>JBJ Global Real Estate</strong>! We're thrilled to have you join our team as <strong>{employeeRole}</strong>.
+                </p>
+
+                {/* What's Next Section */}
+                <div className="bg-gray-50 border border-gray-200 rounded-xl p-6 mb-6 text-left">
+                  <h3 className="font-semibold text-black mb-4 flex items-center gap-2">
+                    <Sparkles className="w-5 h-5 text-gold" />
+                    Your CRM Dashboard Awaits
+                  </h3>
+                  
+                  <div className="space-y-3">
+                    <div className="flex items-center gap-3 text-sm text-gray-600">
+                      <div className="w-6 h-6 rounded-full bg-gold/20 flex items-center justify-center text-xs font-bold text-gold">1</div>
+                      <span>Access your <strong>Leads & Pipeline</strong> dashboard</span>
+                    </div>
+                    <div className="flex items-center gap-3 text-sm text-gray-600">
+                      <div className="w-6 h-6 rounded-full bg-gold/20 flex items-center justify-center text-xs font-bold text-gold">2</div>
+                      <span>Manage <strong>Tasks & Calendar</strong> from the sidebar</span>
+                    </div>
+                    <div className="flex items-center gap-3 text-sm text-gray-600">
+                      <div className="w-6 h-6 rounded-full bg-gold/20 flex items-center justify-center text-xs font-bold text-gold">3</div>
+                      <span>Get AI assistance with <strong>Smart Reminders</strong></span>
+                    </div>
+                  </div>
+                </div>
+
+                <div className="p-4 bg-emerald-50 border border-emerald-200 rounded-xl mb-6">
+                  <p className="text-emerald-800 text-sm font-medium">
+                    ✓ Your account is ready. You can access your CRM anytime from the menu.
+                  </p>
+                </div>
+
+                <Button
+                  onClick={handleEmployeeWelcomeClose}
+                  className="w-full py-6 bg-black hover:bg-zinc-900 text-gold font-semibold text-base shadow-xl rounded-xl group border border-gold/20"
+                >
+                  <Briefcase className="w-5 h-5 mr-2" />
+                  Go to My CRM Dashboard
                   <ArrowRight className="w-5 h-5 ml-2 group-hover:translate-x-1 transition-transform" />
                 </Button>
               </motion.div>
