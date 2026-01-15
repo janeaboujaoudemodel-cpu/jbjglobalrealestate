@@ -7,9 +7,10 @@ export function useForcePasswordChange() {
   const [needsPasswordChange, setNeedsPasswordChange] = useState(false);
   const [isLoading, setIsLoading] = useState(true);
   const [userName, setUserName] = useState<string>("");
+  const [isFirstLoginAfterPasswordChange, setIsFirstLoginAfterPasswordChange] = useState(false);
 
   useEffect(() => {
-    const checkAndIncrementLogin = async () => {
+    const checkPasswordStatus = async () => {
       if (!user) {
         setIsLoading(false);
         setNeedsPasswordChange(false);
@@ -20,7 +21,7 @@ export function useForcePasswordChange() {
         // Fetch current profile
         const { data: crmProfile, error } = await supabase
           .from("crm_users_profile")
-          .select("force_password_change, display_name, login_count")
+          .select("force_password_change, display_name, login_count, password_changed_at")
           .eq("user_id", user.id)
           .single();
 
@@ -40,13 +41,18 @@ export function useForcePasswordChange() {
           .update({ login_count: currentLoginCount + 1 })
           .eq("user_id", user.id);
 
-        // Force password change on 2nd login (login_count was 1 before increment)
-        // 1st login (count=0→1): Founder testing, no force
-        // 2nd login (count=1→2): Employee's first real login, FORCE change
-        if (crmProfile?.force_password_change === true && currentLoginCount >= 1) {
+        // Force password change on FIRST login if flag is set
+        // Once password is changed, flag is false and welcome screen shows on next login
+        if (crmProfile?.force_password_change === true) {
           setNeedsPasswordChange(true);
+          setIsFirstLoginAfterPasswordChange(false);
+        } else if (crmProfile?.password_changed_at && currentLoginCount === 1) {
+          // This is the first login AFTER password was changed - show welcome screen
+          setNeedsPasswordChange(false);
+          setIsFirstLoginAfterPasswordChange(true);
         } else {
           setNeedsPasswordChange(false);
+          setIsFirstLoginAfterPasswordChange(false);
         }
       } catch (error) {
         console.error("Error checking password change status:", error);
@@ -56,7 +62,7 @@ export function useForcePasswordChange() {
       }
     };
 
-    checkAndIncrementLogin();
+    checkPasswordStatus();
   }, [user]);
 
   const markPasswordChanged = async () => {
@@ -67,8 +73,10 @@ export function useForcePasswordChange() {
         .from("crm_users_profile")
         .update({
           force_password_change: false,
-          last_password_change: new Date().toISOString(),
+          password_changed_at: new Date().toISOString(),
           first_login_at: new Date().toISOString(),
+          // Reset login count so next login is "first login after password change"
+          login_count: 0,
         })
         .eq("user_id", user.id);
 
@@ -84,5 +92,6 @@ export function useForcePasswordChange() {
     userName,
     markPasswordChanged,
     setNeedsPasswordChange,
+    isFirstLoginAfterPasswordChange,
   };
 }
