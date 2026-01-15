@@ -5595,11 +5595,15 @@ export type Database = {
       jbj_brokers: {
         Row: {
           active_leads: number | null
+          auto_receive_leads: boolean | null
+          availability_status: string | null
+          availability_updated_at: string | null
           avatar_url: string | null
           capacity: number | null
           created_at: string | null
           email: string
           id: string
+          last_lead_assigned_at: string | null
           name: string
           phone: string | null
           specialization: string | null
@@ -5609,11 +5613,15 @@ export type Database = {
         }
         Insert: {
           active_leads?: number | null
+          auto_receive_leads?: boolean | null
+          availability_status?: string | null
+          availability_updated_at?: string | null
           avatar_url?: string | null
           capacity?: number | null
           created_at?: string | null
           email: string
           id?: string
+          last_lead_assigned_at?: string | null
           name: string
           phone?: string | null
           specialization?: string | null
@@ -5623,17 +5631,51 @@ export type Database = {
         }
         Update: {
           active_leads?: number | null
+          auto_receive_leads?: boolean | null
+          availability_status?: string | null
+          availability_updated_at?: string | null
           avatar_url?: string | null
           capacity?: number | null
           created_at?: string | null
           email?: string
           id?: string
+          last_lead_assigned_at?: string | null
           name?: string
           phone?: string | null
           specialization?: string | null
           status?: string | null
           updated_at?: string | null
           user_id?: string | null
+        }
+        Relationships: []
+      }
+      jbj_compliance_words: {
+        Row: {
+          category: string
+          created_at: string | null
+          description: string | null
+          id: string
+          is_active: boolean | null
+          severity: string | null
+          word_pattern: string
+        }
+        Insert: {
+          category: string
+          created_at?: string | null
+          description?: string | null
+          id?: string
+          is_active?: boolean | null
+          severity?: string | null
+          word_pattern: string
+        }
+        Update: {
+          category?: string
+          created_at?: string | null
+          description?: string | null
+          id?: string
+          is_active?: boolean | null
+          severity?: string | null
+          word_pattern?: string
         }
         Relationships: []
       }
@@ -5765,6 +5807,113 @@ export type Database = {
         }
         Relationships: []
       }
+      jbj_lead_access_log: {
+        Row: {
+          access_type: string
+          broker_id: string | null
+          created_at: string | null
+          id: string
+          ip_address: unknown
+          lead_id: string | null
+          user_agent: string | null
+        }
+        Insert: {
+          access_type: string
+          broker_id?: string | null
+          created_at?: string | null
+          id?: string
+          ip_address?: unknown
+          lead_id?: string | null
+          user_agent?: string | null
+        }
+        Update: {
+          access_type?: string
+          broker_id?: string | null
+          created_at?: string | null
+          id?: string
+          ip_address?: unknown
+          lead_id?: string | null
+          user_agent?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "jbj_lead_access_log_broker_id_fkey"
+            columns: ["broker_id"]
+            isOneToOne: false
+            referencedRelation: "jbj_brokers"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "jbj_lead_access_log_lead_id_fkey"
+            columns: ["lead_id"]
+            isOneToOne: false
+            referencedRelation: "jbj_leads"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "jbj_lead_access_log_lead_id_fkey"
+            columns: ["lead_id"]
+            isOneToOne: false
+            referencedRelation: "jbj_leads_secure"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      jbj_lead_assignment_queue: {
+        Row: {
+          assigned_at: string | null
+          assigned_to_broker_id: string | null
+          assignment_order: number
+          created_at: string | null
+          expires_at: string | null
+          id: string
+          lead_id: string
+          status: string | null
+        }
+        Insert: {
+          assigned_at?: string | null
+          assigned_to_broker_id?: string | null
+          assignment_order: number
+          created_at?: string | null
+          expires_at?: string | null
+          id?: string
+          lead_id: string
+          status?: string | null
+        }
+        Update: {
+          assigned_at?: string | null
+          assigned_to_broker_id?: string | null
+          assignment_order?: number
+          created_at?: string | null
+          expires_at?: string | null
+          id?: string
+          lead_id?: string
+          status?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "jbj_lead_assignment_queue_assigned_to_broker_id_fkey"
+            columns: ["assigned_to_broker_id"]
+            isOneToOne: false
+            referencedRelation: "jbj_brokers"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "jbj_lead_assignment_queue_lead_id_fkey"
+            columns: ["lead_id"]
+            isOneToOne: false
+            referencedRelation: "jbj_leads"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "jbj_lead_assignment_queue_lead_id_fkey"
+            columns: ["lead_id"]
+            isOneToOne: false
+            referencedRelation: "jbj_leads_secure"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       jbj_leads: {
         Row: {
           assigned_broker_id: string | null
@@ -5817,6 +5966,89 @@ export type Database = {
             columns: ["assigned_broker_id"]
             isOneToOne: false
             referencedRelation: "jbj_brokers"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      jbj_message_audit: {
+        Row: {
+          audit_status: string | null
+          auto_flagged: boolean | null
+          broker_id: string | null
+          channel: string
+          content: string
+          created_at: string | null
+          direction: string
+          flagged_words: string[] | null
+          id: string
+          lead_id: string | null
+          message_id: string | null
+          reviewed_at: string | null
+          reviewed_by: string | null
+          violation_details: string | null
+          violation_type: string | null
+        }
+        Insert: {
+          audit_status?: string | null
+          auto_flagged?: boolean | null
+          broker_id?: string | null
+          channel: string
+          content: string
+          created_at?: string | null
+          direction: string
+          flagged_words?: string[] | null
+          id?: string
+          lead_id?: string | null
+          message_id?: string | null
+          reviewed_at?: string | null
+          reviewed_by?: string | null
+          violation_details?: string | null
+          violation_type?: string | null
+        }
+        Update: {
+          audit_status?: string | null
+          auto_flagged?: boolean | null
+          broker_id?: string | null
+          channel?: string
+          content?: string
+          created_at?: string | null
+          direction?: string
+          flagged_words?: string[] | null
+          id?: string
+          lead_id?: string | null
+          message_id?: string | null
+          reviewed_at?: string | null
+          reviewed_by?: string | null
+          violation_details?: string | null
+          violation_type?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "jbj_message_audit_broker_id_fkey"
+            columns: ["broker_id"]
+            isOneToOne: false
+            referencedRelation: "jbj_brokers"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "jbj_message_audit_lead_id_fkey"
+            columns: ["lead_id"]
+            isOneToOne: false
+            referencedRelation: "jbj_leads"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "jbj_message_audit_lead_id_fkey"
+            columns: ["lead_id"]
+            isOneToOne: false
+            referencedRelation: "jbj_leads_secure"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "jbj_message_audit_message_id_fkey"
+            columns: ["message_id"]
+            isOneToOne: false
+            referencedRelation: "jbj_messages"
             referencedColumns: ["id"]
           },
         ]
@@ -5874,6 +6106,13 @@ export type Database = {
             columns: ["lead_id"]
             isOneToOne: false
             referencedRelation: "jbj_leads"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "jbj_messages_lead_id_fkey"
+            columns: ["lead_id"]
+            isOneToOne: false
+            referencedRelation: "jbj_leads_secure"
             referencedColumns: ["id"]
           },
         ]
@@ -8425,6 +8664,59 @@ export type Database = {
           },
         ]
       }
+      jbj_leads_secure: {
+        Row: {
+          assigned_broker_id: string | null
+          budget_range: string | null
+          created_at: string | null
+          first_name: string | null
+          id: string | null
+          last_contact: string | null
+          masked_email: string | null
+          masked_phone: string | null
+          property_interest: string | null
+          source: string | null
+          status: string | null
+          updated_at: string | null
+        }
+        Insert: {
+          assigned_broker_id?: string | null
+          budget_range?: string | null
+          created_at?: string | null
+          first_name?: never
+          id?: string | null
+          last_contact?: string | null
+          masked_email?: never
+          masked_phone?: never
+          property_interest?: string | null
+          source?: string | null
+          status?: string | null
+          updated_at?: string | null
+        }
+        Update: {
+          assigned_broker_id?: string | null
+          budget_range?: string | null
+          created_at?: string | null
+          first_name?: never
+          id?: string | null
+          last_contact?: string | null
+          masked_email?: never
+          masked_phone?: never
+          property_interest?: string | null
+          source?: string | null
+          status?: string | null
+          updated_at?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "jbj_leads_assigned_broker_id_fkey"
+            columns: ["assigned_broker_id"]
+            isOneToOne: false
+            referencedRelation: "jbj_brokers"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       referral_partners_secure: {
         Row: {
           approved_at: string | null
@@ -8499,6 +8791,10 @@ export type Database = {
       }
     }
     Functions: {
+      auto_assign_lead_to_available_broker: {
+        Args: { p_lead_id: string }
+        Returns: string
+      }
       bulk_assign_leads: {
         Args: {
           p_assigned_by_user_id: string
@@ -8519,6 +8815,14 @@ export type Database = {
           p_window_hours?: number
         }
         Returns: boolean
+      }
+      check_message_compliance: {
+        Args: { p_content: string }
+        Returns: {
+          is_compliant: boolean
+          severity: string
+          violations: string[]
+        }[]
       }
       check_rate_limit: {
         Args: {
