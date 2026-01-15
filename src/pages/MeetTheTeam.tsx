@@ -43,32 +43,51 @@ interface TeamMemberCardProps {
   onReadMore: (member: TeamMember) => void;
 }
 
-const TeamMemberCard = ({ member, onContact, onReadMore }: TeamMemberCardProps) => (
-  <motion.div variants={fadeInUp}>
-    <Card className="bg-zinc-900/60 border-zinc-800 hover:border-gold/50 hover:scale-[1.02] transition-all duration-300 overflow-hidden group h-full cursor-pointer">
-      <CardContent className="p-0">
-        {/* Photo */}
-        <div className="relative overflow-hidden">
-          <img
-            src={member.avatar}
-            alt={member.name}
-            className="w-full aspect-square object-cover object-top group-hover:scale-105 transition-transform duration-500"
-          />
-          {/* Photo overlay gradient */}
-          <div className="absolute inset-0 bg-gradient-to-t from-zinc-950 via-transparent to-transparent opacity-80" />
-          
-          {/* Contact Button - Appears on hover */}
-          <div className="absolute bottom-4 left-1/2 -translate-x-1/2 opacity-0 group-hover:opacity-100 transition-all duration-300 transform translate-y-2 group-hover:translate-y-0">
-            <Button
-              size="sm"
-              onClick={() => onContact(member)}
-              className="bg-gold hover:bg-gold-dark text-black font-semibold shadow-lg"
-            >
-              <MessageSquare className="w-4 h-4 mr-1.5" />
-              Contact
-            </Button>
+const TeamMemberCard = ({ member, onContact, onReadMore }: TeamMemberCardProps) => {
+  // For CEO (Jane), clicking opens email; for others, opens contact form
+  const handleCardClick = (e: React.MouseEvent) => {
+    // Check if click was on the "Read more" button
+    if ((e.target as HTMLElement).closest('button')) return;
+    
+    if (member.id === 'jane-abou-jaoude' && member.email) {
+      window.location.href = `mailto:${member.email}`;
+    } else {
+      onContact(member);
+    }
+  };
+
+  return (
+    <motion.div variants={fadeInUp}>
+      <Card 
+        className="bg-zinc-900/60 border-zinc-800 hover:border-gold/50 hover:scale-[1.02] transition-all duration-300 overflow-hidden group h-full cursor-pointer"
+        onClick={handleCardClick}
+      >
+        <CardContent className="p-0">
+          {/* Photo */}
+          <div className="relative overflow-hidden">
+            <img
+              src={member.avatar}
+              alt={member.name}
+              className="w-full aspect-square object-cover object-top group-hover:scale-105 transition-transform duration-500"
+            />
+            {/* Photo overlay gradient */}
+            <div className="absolute inset-0 bg-gradient-to-t from-zinc-950 via-transparent to-transparent opacity-80" />
+            
+            {/* Contact Button - Appears on hover */}
+            <div className="absolute bottom-4 left-1/2 -translate-x-1/2 opacity-0 group-hover:opacity-100 transition-all duration-300 transform translate-y-2 group-hover:translate-y-0 pointer-events-none">
+              <Button
+                size="sm"
+                className="bg-gold hover:bg-gold-dark text-black font-semibold shadow-lg pointer-events-auto"
+                onClick={(e) => {
+                  e.stopPropagation();
+                  onContact(member);
+                }}
+              >
+                <MessageSquare className="w-4 h-4 mr-1.5" />
+                Contact
+              </Button>
+            </div>
           </div>
-        </div>
 
         {/* Info */}
         <div className="p-5 -mt-16 relative z-10">
@@ -117,11 +136,12 @@ const TeamMemberCard = ({ member, onContact, onReadMore }: TeamMemberCardProps) 
               ))}
             </div>
           )}
-        </div>
-      </CardContent>
-    </Card>
-  </motion.div>
-);
+          </div>
+        </CardContent>
+      </Card>
+    </motion.div>
+  );
+};
 
 const MeetTheTeam = () => {
   const location = useLocation();
@@ -147,6 +167,7 @@ const MeetTheTeam = () => {
 
   const departmentOrder = [
     "Leadership",
+    "Legal",
     "Sales",
     "Marketing & Content",
     "Client Relations",
