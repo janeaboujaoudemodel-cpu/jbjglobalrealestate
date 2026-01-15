@@ -3,7 +3,7 @@
 
 // Import team portraits - Executive Leadership
 import janeAbouJaoudeCeo from '@/assets/ceo/jane-ceo-executive-office-final.jpg';
-import davidThorntonCeo from '@/assets/team/david-thornton-md-realistic.png';
+import davidThorntonCeo from '@/assets/team/david-thornton-md-natural.png';
 import richardPembertonCoo from '@/assets/team/richard-pemberton-coo.png';
 import oliviaExecutiveAssistant from '@/assets/team/olivia-executive-assistant.png';
 import amandaClarkeExecutiveAssistant from '@/assets/team/amanda-clarke-executive-assistant.png';
@@ -15,7 +15,7 @@ import hudaMarzooqLawyer from '@/assets/team/huda-marzooq-lawyer.jpg';
 import sarahMitchellListingAdmin from '@/assets/team/sarah-mitchell-listing-admin.png';
 
 // Import team portraits - Sales Team
-import royDaviHeadOfSale from '@/assets/team/roy-davi-head-of-sale-fixed.jpg';
+import royDaviHeadOfSale from '@/assets/team/roy-davi-head-of-sale-gradient.png';
 import williamHarrisonSales from '@/assets/team/william-harrison-sales.png';
 
 // Import diverse international team members
@@ -34,11 +34,14 @@ import michaelWeberWebDev from '@/assets/team/michael-weber-web-developer.png';
 import amelieMartinUxDesigner from '@/assets/team/amelie-martin-ux-designer.png';
 import emmaCollinsScriptWriter from '@/assets/team/emma-collins-script-writer.png';
 import andrewTaylorIdeaCreator from '@/assets/team/andrew-taylor-idea-creator.png';
+import erikLindqvistBackend from '@/assets/team/erik-lindqvist-backend.png';
+import jiYeonKimQa from '@/assets/team/ji-yeon-kim-qa.png';
 
 // Import team portraits - Customer Happiness Team
 import lisaHendersonCustomerHappiness from '@/assets/team/lisa-henderson-customer-happiness.png';
 import jackThompsonCustomerSupport from '@/assets/team/jack-thompson-customer-support.png';
 import nataliaPetrovaHelpdesk from '@/assets/team/natalia-petrova-helpdesk.png';
+import danielMurphyCustomer from '@/assets/team/daniel-murphy-customer.png';
 import michaelAndersonSalesDirector from '@/assets/team/michael-anderson-sales-director.png';
 import emmaHartleySalesManager from '@/assets/team/emma-hartley-sales-manager.png';
 import victoriaSterlingMarketing from '@/assets/team/victoria-sterling-marketing.png';
@@ -60,6 +63,7 @@ import ryanMitchellCampaigns from '@/assets/team/ryan-mitchell-campaigns.png';
 import rachelCampbellProjectDirector from '@/assets/team/rachel-campbell-project-director.png';
 import jessicaMillerProjectManager from '@/assets/team/jessica-miller-project-manager.png';
 import christopherAdamsProjectCoordinator from '@/assets/team/christopher-adams-project-coordinator.png';
+import jasonBrooksScrum from '@/assets/team/jason-brooks-scrum.png';
 
 // Import team portraits - Web Development Team
 import davidWrightWebDeveloper from '@/assets/team/david-wright-web-developer.png';
@@ -74,6 +78,7 @@ import francescaRomanoCopywriter from '@/assets/team/francesca-romano-copywriter
 import charlotteBlakeSocialMedia from '@/assets/team/charlotte-blake-social-media.png';
 import ethanCrawfordBrandCoordinator from '@/assets/team/ethan-crawford-brand-coordinator.png';
 import sophieLaurentDigitalMarketing from '@/assets/team/sophie-laurent-digital-marketing.png';
+import oliviaJamesSocialMedia from '@/assets/team/olivia-james-social-media.png';
 
 // Import team portraits - HR Team
 import jessicaHrManager from '@/assets/team/jessica-hr-manager.png';
@@ -87,16 +92,23 @@ import marcusBennettDesigner from '@/assets/team/marcus-bennett-designer.png';
 import oliverWrightVideographer from '@/assets/team/oliver-wright-videographer.png';
 import charlotteEvansPhotographer from '@/assets/team/charlotte-evans-photographer.png';
 import henryCrawfordEditor from '@/assets/team/henry-crawford-editor.png';
+import evaVanDerBergMotion from '@/assets/team/eva-van-der-berg-motion.png';
+import jamesVenterSound from '@/assets/team/james-venter-sound.png';
 
 // Import team portraits - Finance Team
 import catherineBrooksFinance from '@/assets/team/catherine-brooks-finance.png';
 import benjaminColeAccountant from '@/assets/team/benjamin-cole-accountant.png';
 import isabellaRomanoAnalyst from '@/assets/team/isabella-romano-analyst.png';
+import sebastianMullerFinance from '@/assets/team/sebastian-muller-finance.png';
 
 // Import team portraits - Operations & Technology
 import thomasMitchellCrm from '@/assets/team/thomas-mitchell-crm.png';
 import robertMaxwellDigital from '@/assets/team/robert-maxwell-digital.png';
 import alexanderShawOperations from '@/assets/team/alexander-shaw-operations.png';
+import meeraPatelOperations from '@/assets/team/meera-patel-operations.png';
+import keremYilmazOperations from '@/assets/team/kerem-yilmaz-operations.png';
+import lucasferreiraOperations from '@/assets/team/lucas-ferreira-operations.png';
+import jessicaWalkerOperations from '@/assets/team/jessica-walker-operations.png';
 
 // Import team portraits - IT Team
 import danielParkerItManager from '@/assets/team/daniel-parker-it-manager.png';
@@ -104,6 +116,9 @@ import rajPatelItAssistant from '@/assets/team/raj-patel-it-assistant.png';
 import matthewCollinsSysadmin from '@/assets/team/matthew-collins-sysadmin.png';
 import emmaOCallaghanNetwork from '@/assets/team/emma-ocallaghan-network.png';
 import tomaszKowalczykItSupport from '@/assets/team/tomasz-kowalczyk-it-support.png';
+import omarHassanCloud from '@/assets/team/omar-hassan-cloud.png';
+import elenaPopescuDba from '@/assets/team/elena-popescu-dba.png';
+import williamGrantSecurity from '@/assets/team/william-grant-security.png';
 
 // Import team portraits - After Sales Team
 import charlesPembertonAfterSalesDir from '@/assets/team/charles-pemberton-aftersales-director.png';
@@ -117,6 +132,7 @@ import mariaSantosAdminAssistant from '@/assets/team/maria-santos-admin-assistan
 import sophieRichardsReceptionist from '@/assets/team/sophie-richards-receptionist.png';
 import gabrielaCostaReceptionist from '@/assets/team/gabriela-costa-receptionist.png';
 import claireDuboisReceptionist from '@/assets/team/claire-dubois-receptionist.png';
+import fionaCampbellAdmin from '@/assets/team/fiona-campbell-admin.png';
 
 export interface TeamMember {
   id: string;
@@ -666,13 +682,12 @@ export const creativeTeam: TeamMember[] = sortByHierarchy([
     status: 'online',
   },
   {
-    id: 'ryan-mitchell',
-    name: 'Ryan Mitchell',
+    id: 'ryan-campbell',
+    name: 'Ryan Campbell',
     role: 'Senior Campaign Manager',
     department: 'Media',
     avatar: ryanMitchellCampaigns,
     isAI: true,
-    email: 'ryan.mitchell@JBJ.ae',
     bio: 'Dynamic campaign strategist managing Meta advertising, digital marketing campaigns, and performance marketing for luxury properties.',
     specializations: ['Meta Ads', 'Google Ads', 'Campaign Strategy', 'Performance Marketing'],
     languages: ['English', 'Spanish'],
@@ -688,10 +703,39 @@ export const creativeTeam: TeamMember[] = sortByHierarchy([
     department: 'Media',
     avatar: henryCrawfordEditor,
     isAI: true,
-    email: 'henry.crawford@JBJ.ae',
     bio: 'Technical expert transforming raw footage into compelling visual narratives.',
-    languages: ['English', 'Korean'],
+    languages: ['English', 'French'],
     nationality: 'British',
+    hierarchyLevel: 5,
+    reportsTo: 'sophia-anderson',
+    status: 'online',
+  },
+  {
+    id: 'eva-van-der-berg',
+    name: 'Eva Van Der Berg',
+    role: 'Motion Graphics Designer',
+    department: 'Media',
+    avatar: evaVanDerBergMotion,
+    isAI: true,
+    bio: 'Creative motion designer crafting stunning animations and visual effects for marketing content.',
+    specializations: ['Motion Graphics', 'After Effects', 'Animation', '3D Design'],
+    languages: ['English', 'Dutch', 'German'],
+    nationality: 'Dutch',
+    hierarchyLevel: 5,
+    reportsTo: 'sophia-anderson',
+    status: 'online',
+  },
+  {
+    id: 'james-venter',
+    name: 'James Venter',
+    role: 'Sound Engineer',
+    department: 'Media',
+    avatar: jamesVenterSound,
+    isAI: true,
+    bio: 'Professional sound engineer ensuring crystal-clear audio for all video and media productions.',
+    specializations: ['Audio Engineering', 'Sound Design', 'Mixing', 'Voice-over Recording'],
+    languages: ['English', 'Afrikaans'],
+    nationality: 'South African',
     hierarchyLevel: 5,
     reportsTo: 'sophia-anderson',
     status: 'online',
