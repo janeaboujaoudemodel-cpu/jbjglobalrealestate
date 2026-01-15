@@ -161,13 +161,24 @@ export default function LeadIntentModal() {
           animate={{ opacity: 1 }}
           exit={{ opacity: 0 }}
           className="fixed inset-0 z-[100] flex items-center justify-center p-4 bg-black/80 backdrop-blur-sm"
+          onClick={handleSkip}
         >
           <motion.div
             initial={{ scale: 0.95, opacity: 0 }}
             animate={{ scale: 1, opacity: 1 }}
             exit={{ scale: 0.95, opacity: 0 }}
-            className="w-full max-w-lg bg-zinc-900 border border-zinc-800 rounded-2xl overflow-hidden"
+            className="w-full max-w-lg bg-zinc-900 border border-zinc-800 rounded-2xl overflow-hidden relative"
+            onClick={(e) => e.stopPropagation()}
           >
+            {/* Close button */}
+            <button
+              onClick={handleSkip}
+              className="absolute top-4 right-4 z-10 w-8 h-8 flex items-center justify-center rounded-full bg-zinc-800 hover:bg-zinc-700 text-zinc-400 hover:text-white transition-colors"
+              aria-label="Close"
+            >
+              <X className="w-4 h-4" />
+            </button>
+            
             {/* Header */}
             <div className="p-6 text-center border-b border-zinc-800 bg-gradient-to-b from-zinc-800/50 to-transparent">
               <div className="flex justify-center mb-4">
