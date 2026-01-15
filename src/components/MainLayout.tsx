@@ -89,7 +89,8 @@ const MainLayout = ({ children }: MainLayoutProps) => {
 
   // Chat is always an overlay – no content pushing
   // effectiveCollapsed only controls whether the panel is shown or not
-  const effectiveCollapsed = isMobile || isAdminRoute ? true : isChatCollapsed;
+  const effectiveCollapsed = isAdminRoute ? true : isChatCollapsed;
+
 
   return (
     <div className="min-h-screen bg-black">

@@ -1,7 +1,6 @@
 import { ChevronLeft, ChevronRight, MessageCircle, Sparkles } from 'lucide-react';
 import { useLanguage } from '@/contexts/LanguageContext';
 import { motion, AnimatePresence } from 'framer-motion';
-import { useState } from 'react';
 
 interface CollapsedChatButtonProps {
   onToggle: () => void;
@@ -10,16 +9,12 @@ interface CollapsedChatButtonProps {
 
 const CollapsedChatButton = ({ onToggle, showAttentionPulse = false }: CollapsedChatButtonProps) => {
   const { isRTL } = useLanguage();
-  // Start minimized on mobile (only icon visible)
-  const [isMinimized, setIsMinimized] = useState(true);
 
-  // On mobile: show only the icon button when minimized
-  // On desktop: show the full button always
   return (
     <div className={`fixed bottom-24 ${isRTL ? 'left-4' : 'right-4'} z-[9000]`}>
-      {/* Attention-grabbing banner when showAttentionPulse is true - hide on mobile when minimized */}
+      {/* Attention-grabbing banner when showAttentionPulse is true (desktop only) */}
       <AnimatePresence>
-        {showAttentionPulse && !isMinimized && (
+        {showAttentionPulse && (
           <motion.div
             initial={{ opacity: 0, y: 10, scale: 0.9 }}
             animate={{ opacity: 1, y: 0, scale: 1 }}
@@ -48,55 +43,26 @@ const CollapsedChatButton = ({ onToggle, showAttentionPulse = false }: Collapsed
       <div className="relative">
         {showAttentionPulse && (
           <>
-            <span className="absolute inset-0 rounded-full bg-gold/40 animate-ping" />
-            <span className="absolute inset-0 rounded-full bg-gold/20 animate-pulse" />
+            <span className="absolute inset-0 rounded-full bg-gold/40 animate-ping pointer-events-none" />
+            <span className="absolute inset-0 rounded-full bg-gold/20 animate-pulse pointer-events-none" />
           </>
         )}
-        
-        {/* Mobile: Icon-only button when minimized */}
-        <button
-          onClick={() => {
-            if (isMinimized) {
-              // First tap expands to show full button
-              setIsMinimized(false);
-            } else {
-              // Second tap opens chat
-              onToggle();
-            }
-          }}
-          className={`relative flex items-center bg-[#0E0E0E] border-2 border-gold/40 shadow-2xl shadow-gold/20 hover:border-gold transition-all duration-300 group hover:scale-105 ${
-            isMinimized 
-              ? 'w-14 h-14 rounded-full justify-center sm:hidden' 
-              : 'gap-3 rounded-full px-5 py-3.5'
-          }`}
-        >
-          <div className={`rounded-full bg-gradient-to-br from-gold to-gold-light flex items-center justify-center flex-shrink-0 shadow-lg shadow-gold/30 ${
-            isMinimized ? 'w-9 h-9' : 'w-11 h-11'
-          }`}>
-            <MessageCircle className={isMinimized ? 'w-4 h-4 text-black' : 'w-5 h-5 text-black'} />
-          </div>
-          
-          {/* Only show text when expanded or on desktop */}
-          <div className={`flex-col items-start ${isMinimized ? 'hidden' : 'flex'}`}>
-            <span className="text-gold text-sm font-bold">JBJ Support</span>
-            <div className="flex items-center gap-1.5">
-              <span className="w-2 h-2 rounded-full bg-green-500 animate-pulse" />
-              <span className="text-green-400 text-xs font-medium">Available 24/7</span>
-            </div>
-          </div>
-          
-          {!isMinimized && (
-            isRTL ? (
-              <ChevronRight className="w-5 h-5 text-gold group-hover:translate-x-1 transition-transform" />
-            ) : (
-              <ChevronLeft className="w-5 h-5 text-gold group-hover:-translate-x-1 transition-transform" />
-            )
-          )}
-        </button>
 
-        {/* Desktop: Always show full button */}
+        {/* Mobile: always icon-only button */}
         <button
           onClick={onToggle}
+          aria-label="Open chat support"
+          className="relative flex items-center justify-center w-14 h-14 rounded-full bg-[#0E0E0E] border-2 border-gold/40 shadow-2xl shadow-gold/20 hover:border-gold transition-all duration-300 group hover:scale-105 sm:hidden"
+        >
+          <div className="w-9 h-9 rounded-full bg-gradient-to-br from-gold to-gold-light flex items-center justify-center shadow-lg shadow-gold/30">
+            <MessageCircle className="w-4 h-4 text-black" />
+          </div>
+        </button>
+
+        {/* Desktop: full button */}
+        <button
+          onClick={onToggle}
+          aria-label="Open chat support"
           className="relative hidden sm:flex items-center gap-3 bg-[#0E0E0E] border-2 border-gold/40 rounded-full px-5 py-3.5 shadow-2xl shadow-gold/20 hover:border-gold transition-all duration-300 group hover:scale-105"
         >
           <div className="w-11 h-11 rounded-full bg-gradient-to-br from-gold to-gold-light flex items-center justify-center flex-shrink-0 shadow-lg shadow-gold/30">
@@ -121,3 +87,4 @@ const CollapsedChatButton = ({ onToggle, showAttentionPulse = false }: Collapsed
 };
 
 export default CollapsedChatButton;
+
