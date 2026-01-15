@@ -100,8 +100,7 @@ const CEOLeadershipShowcase = () => {
               <div className="absolute -top-4 left-1/2 -translate-x-1/2 text-6xl text-gold/20">"</div>
               <p className="text-xl md:text-2xl text-zinc-300 italic leading-relaxed pt-8">
                 Innovation and excellence are not just goals—they are the foundation
-                of everything we build. At JBJ Global Real Estate, we're not just selling properties;
-                we're crafting futures and shaping skylines.
+                of everything we build. At JBJ Global Real Estate, we're crafting futures and shaping skylines.
               </p>
               <p className="mt-6 text-gold font-semibold">— Jane Abou Jaoude</p>
               <p className="text-zinc-500 text-sm">Founder & CEO</p>
