@@ -2,7 +2,7 @@ import { motion } from "framer-motion";
 import { Badge } from "@/components/ui/badge";
 import { Sparkles, Users, Building2, Globe, Languages } from "lucide-react";
 // Approved CEO landscape photo (executive office with Lebanese & UAE flags) - LOCKED
-import ceoLandscapeFlags from "@/assets/ceo/jane-ceo-executive-office-final-v2.jpg";
+import ceoLandscapeFlags from "@/assets/ceo/jane-ceo-executive-office-final-v3.jpg";
 import AnimatedCounter from "@/components/AnimatedCounter";
 import { useTeamMetrics } from "@/hooks/useTeamMetrics";
 
