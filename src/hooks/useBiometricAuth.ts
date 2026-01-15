@@ -4,28 +4,38 @@ import { toast } from 'sonner';
 interface BiometricAuthResult {
   success: boolean;
   error?: string;
+  fallbackUsed?: boolean;
 }
 
 interface UseBiometricAuth {
   isAvailable: boolean;
   isSupported: boolean;
-  authenticate: () => Promise<BiometricAuthResult>;
+  authenticate: (allowFallback?: boolean) => Promise<BiometricAuthResult>;
   register: (userId: string) => Promise<BiometricAuthResult>;
   isLoading: boolean;
+  clearCredential: () => void;
+  hasStoredCredential: boolean;
 }
 
 /**
  * Hook for biometric authentication (Face ID, Touch ID, Windows Hello, etc.)
- * Uses the Web Authentication API (WebAuthn)
+ * Uses the Web Authentication API (WebAuthn) with passcode fallback support
  */
 export const useBiometricAuth = (): UseBiometricAuth => {
   const [isAvailable, setIsAvailable] = useState(false);
   const [isSupported, setIsSupported] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
+  const [hasStoredCredential, setHasStoredCredential] = useState(false);
 
   useEffect(() => {
     checkAvailability();
+    checkStoredCredential();
   }, []);
+
+  const checkStoredCredential = () => {
+    const stored = localStorage.getItem('jbj_biometric_credential');
+    setHasStoredCredential(!!stored);
+  };
 
   const checkAvailability = async () => {
     // Check if WebAuthn is supported
@@ -46,6 +56,13 @@ export const useBiometricAuth = (): UseBiometricAuth => {
       setIsAvailable(false);
     }
   };
+
+  const clearCredential = useCallback(() => {
+    localStorage.removeItem('jbj_biometric_credential');
+    localStorage.removeItem('jbj_biometric_user');
+    setHasStoredCredential(false);
+    toast.success('Biometric credential cleared');
+  }, []);
 
   const register = useCallback(async (userId: string): Promise<BiometricAuthResult> => {
     if (!isAvailable) {
@@ -76,7 +93,7 @@ export const useBiometricAuth = (): UseBiometricAuth => {
         ],
         authenticatorSelection: {
           authenticatorAttachment: 'platform',
-          userVerification: 'required',
+          userVerification: 'preferred', // Allow fallback to passcode
           residentKey: 'preferred',
         },
         timeout: 60000,
@@ -94,8 +111,9 @@ export const useBiometricAuth = (): UseBiometricAuth => {
         
         localStorage.setItem('jbj_biometric_credential', credentialIdBase64);
         localStorage.setItem('jbj_biometric_user', userId);
+        setHasStoredCredential(true);
 
-        toast.success('Biometric authentication enabled!');
+        toast.success('Face ID / Touch ID enabled successfully!');
         return { success: true };
       }
 
@@ -104,7 +122,7 @@ export const useBiometricAuth = (): UseBiometricAuth => {
       console.error('Biometric registration error:', error);
       
       if (error.name === 'NotAllowedError') {
-        return { success: false, error: 'Biometric registration was cancelled or not allowed' };
+        return { success: false, error: 'Biometric registration was cancelled. You can use your device passcode as backup.' };
       }
       
       return { success: false, error: error.message || 'Failed to register biometric' };
@@ -113,13 +131,21 @@ export const useBiometricAuth = (): UseBiometricAuth => {
     }
   }, [isAvailable]);
 
-  const authenticate = useCallback(async (): Promise<BiometricAuthResult> => {
+  const authenticate = useCallback(async (allowFallback: boolean = true): Promise<BiometricAuthResult> => {
+    // If biometric not available but fallback allowed, return with fallback flag
+    if (!isAvailable && allowFallback) {
+      return { success: false, error: 'Please use your email and password to sign in', fallbackUsed: true };
+    }
+
     if (!isAvailable) {
       return { success: false, error: 'Biometric authentication not available' };
     }
 
     const storedCredentialId = localStorage.getItem('jbj_biometric_credential');
     if (!storedCredentialId) {
+      if (allowFallback) {
+        return { success: false, error: 'No Face ID registered. Please sign in with email first, then enable Face ID.', fallbackUsed: true };
+      }
       return { success: false, error: 'No biometric credential registered. Please register first.' };
     }
 
@@ -142,7 +168,7 @@ export const useBiometricAuth = (): UseBiometricAuth => {
             transports: ['internal'],
           },
         ],
-        userVerification: 'required',
+        userVerification: 'preferred', // This allows passcode fallback on most devices
         timeout: 60000,
       };
 
@@ -151,6 +177,7 @@ export const useBiometricAuth = (): UseBiometricAuth => {
       });
 
       if (assertion) {
+        toast.success('Authentication successful!');
         return { success: true };
       }
 
@@ -159,7 +186,22 @@ export const useBiometricAuth = (): UseBiometricAuth => {
       console.error('Biometric authentication error:', error);
       
       if (error.name === 'NotAllowedError') {
+        if (allowFallback) {
+          return { 
+            success: false, 
+            error: 'Face ID cancelled. Please use your device passcode or email/password.', 
+            fallbackUsed: true 
+          };
+        }
         return { success: false, error: 'Authentication was cancelled or not allowed' };
+      }
+      
+      if (allowFallback) {
+        return { 
+          success: false, 
+          error: 'Biometric failed. Please use email/password to sign in.', 
+          fallbackUsed: true 
+        };
       }
       
       return { success: false, error: error.message || 'Authentication failed' };
@@ -174,6 +216,8 @@ export const useBiometricAuth = (): UseBiometricAuth => {
     authenticate,
     register,
     isLoading,
+    clearCredential,
+    hasStoredCredential,
   };
 };
 

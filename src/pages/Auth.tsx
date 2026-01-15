@@ -5,9 +5,11 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { toast } from "sonner";
-import { Eye, EyeOff, Mail, Lock, ArrowLeft } from "lucide-react";
+import { Eye, EyeOff, Mail, Lock, ArrowLeft, Fingerprint, Scan } from "lucide-react";
 import { z } from "zod";
 import { JJLogoImage } from "@/components/JJLogoImage";
+import { useBiometricAuth } from "@/hooks/useBiometricAuth";
+import { supabase } from "@/integrations/supabase/client";
 
 const emailSchema = z.string().email("Please enter a valid email address");
 const passwordSchema = z.string().min(6, "Password must be at least 6 characters");
@@ -18,6 +20,7 @@ const Auth = forwardRef<HTMLDivElement>((_, ref) => {
   const navigate = useNavigate();
   const [searchParams] = useSearchParams();
   const { user, signIn, signUp, signInWithGoogle, resetPassword, updatePassword, signOut, loading } = useAuth();
+  const { isAvailable: isBiometricAvailable, authenticate: biometricAuth, hasStoredCredential, isLoading: biometricLoading } = useBiometricAuth();
   
   const [mode, setMode] = useState<AuthMode>("signin");
   const [email, setEmail] = useState("");
@@ -134,6 +137,35 @@ const Auth = forwardRef<HTMLDivElement>((_, ref) => {
         } else {
           toast.error("We're sorry, there was a temporary issue. Please try again or contact us via WhatsApp or email.");
         }
+      }
+    } finally {
+      setIsSubmitting(false);
+    }
+  };
+
+  const handleBiometricSignIn = async () => {
+    setIsSubmitting(true);
+    try {
+      const result = await biometricAuth(true);
+      
+      if (result.success) {
+        // Get stored user email and auto-login
+        const storedUser = localStorage.getItem('jbj_biometric_user');
+        if (storedUser) {
+          // Retrieve session - user should already be authenticated via WebAuthn
+          const { data: { session } } = await supabase.auth.getSession();
+          if (session) {
+            toast.success('Welcome back! Signed in with Face ID.');
+            navigate('/');
+          } else {
+            toast.info('Please enter your password to complete sign-in.');
+            setEmail(storedUser);
+          }
+        }
+      } else if (result.fallbackUsed) {
+        toast.info(result.error || 'Please sign in with email and password.');
+      } else {
+        toast.error(result.error || 'Biometric authentication failed.');
       }
     } finally {
       setIsSubmitting(false);
@@ -275,14 +307,27 @@ const Auth = forwardRef<HTMLDivElement>((_, ref) => {
             </p>
           </div>
 
-          {/* Google Sign In */}
+          {/* Biometric & Google Sign In */}
           {(mode === "signin" || mode === "signup") && (
             <>
+              {/* Face ID / Touch ID Button - Only show on signin if available */}
+              {mode === "signin" && isBiometricAvailable && hasStoredCredential && (
+                <Button
+                  type="button"
+                  onClick={handleBiometricSignIn}
+                  disabled={isSubmitting || biometricLoading}
+                  className="w-full h-14 bg-gradient-to-r from-zinc-900 to-black hover:from-zinc-800 hover:to-zinc-900 text-white font-medium rounded-xl flex items-center justify-center gap-3 mb-4 border border-zinc-700 transition-all duration-300 shadow-lg"
+                >
+                  <Scan className="w-6 h-6" />
+                  <span className="text-base">Sign in with Face ID</span>
+                </Button>
+              )}
+
               <Button
                 type="button"
                 onClick={handleGoogleSignIn}
                 disabled={isSubmitting}
-                className="w-full h-12 bg-white hover:bg-gray-50 text-black font-medium rounded-xl flex items-center justify-center gap-3 mb-6 border border-gray-300 hover:border-gold/50 transition-all duration-300 shadow-sm"
+                className="w-full h-12 bg-white hover:bg-gray-50 text-black font-medium rounded-xl flex items-center justify-center gap-3 mb-4 border border-gray-300 hover:border-gold/50 transition-all duration-300 shadow-sm"
               >
                 <svg className="w-5 h-5" viewBox="0 0 24 24">
                   <path
