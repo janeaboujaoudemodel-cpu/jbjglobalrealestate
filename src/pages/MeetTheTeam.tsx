@@ -1,5 +1,6 @@
+import { useState, useEffect } from "react";
 import { motion } from "framer-motion";
-import { Link } from "react-router-dom";
+import { Link, useLocation } from "react-router-dom";
 import Footer from "@/components/Footer";
 import { SEOHead } from "@/components/SEOHead";
 import { Badge } from "@/components/ui/badge";
@@ -16,7 +17,9 @@ import {
   ArrowRight,
   Sparkles,
   Building2,
+  MessageSquare,
 } from "lucide-react";
+import TeamContactForm from "@/components/TeamContactForm";
 
 const fadeInUp = {
   hidden: { opacity: 0, y: 30 },
@@ -31,7 +34,12 @@ const staggerContainer = {
   },
 };
 
-const TeamMemberCard = ({ member }: { member: TeamMember }) => (
+interface TeamMemberCardProps {
+  member: TeamMember;
+  onContact: (member: TeamMember) => void;
+}
+
+const TeamMemberCard = ({ member, onContact }: TeamMemberCardProps) => (
   <motion.div variants={fadeInUp}>
     <Card className="bg-zinc-900/60 border-zinc-800 hover:border-gold/40 transition-all duration-300 overflow-hidden group h-full">
       <CardContent className="p-0">
@@ -42,8 +50,20 @@ const TeamMemberCard = ({ member }: { member: TeamMember }) => (
             alt={member.name}
             className="w-full aspect-square object-cover object-top group-hover:scale-105 transition-transform duration-500"
           />
-          {/* Photo overlay gradient only - no AI badge */}
+          {/* Photo overlay gradient */}
           <div className="absolute inset-0 bg-gradient-to-t from-zinc-950 via-transparent to-transparent opacity-80" />
+          
+          {/* Contact Button - Appears on hover */}
+          <div className="absolute bottom-4 left-1/2 -translate-x-1/2 opacity-0 group-hover:opacity-100 transition-all duration-300 transform translate-y-2 group-hover:translate-y-0">
+            <Button
+              size="sm"
+              onClick={() => onContact(member)}
+              className="bg-gold hover:bg-gold-dark text-black font-semibold shadow-lg"
+            >
+              <MessageSquare className="w-4 h-4 mr-1.5" />
+              Contact
+            </Button>
+          </div>
         </div>
 
         {/* Info */}
@@ -51,7 +71,19 @@ const TeamMemberCard = ({ member }: { member: TeamMember }) => (
           <h3 className="text-white font-semibold text-lg mb-1">
             {member.name}
           </h3>
-          <p className="text-gold text-sm mb-2">{member.role}</p>
+          {/* Premium shiny job title */}
+          <p 
+            className="text-sm font-medium mb-2"
+            style={{
+              background: 'linear-gradient(135deg, #CBA64B 0%, #E8D5A3 40%, #F5ECD7 50%, #E8D5A3 60%, #CBA64B 100%)',
+              WebkitBackgroundClip: 'text',
+              WebkitTextFillColor: 'transparent',
+              backgroundClip: 'text',
+              textShadow: '0 0 20px rgba(203, 166, 75, 0.3)',
+            }}
+          >
+            {member.role}
+          </p>
           <p className="text-zinc-500 text-sm mb-3">{member.department}</p>
 
           {member.bio && (
@@ -88,13 +120,32 @@ const TeamMemberCard = ({ member }: { member: TeamMember }) => (
 );
 
 const MeetTheTeam = () => {
+  const location = useLocation();
+  const [selectedMember, setSelectedMember] = useState<TeamMember | null>(null);
+  const [isContactFormOpen, setIsContactFormOpen] = useState(false);
+
+  // Scroll to top when navigating to this page
+  useEffect(() => {
+    window.scrollTo({ top: 0, behavior: 'instant' });
+  }, [location.pathname]);
+
+  const handleContactMember = (member: TeamMember) => {
+    setSelectedMember(member);
+    setIsContactFormOpen(true);
+  };
+
   const departmentOrder = [
     "Leadership",
+    "Executive",
     "Property Operations",
     "Sales & Marketing",
+    "Sales",
+    "Marketing",
     "Client Relations",
     "Human Resources",
     "Creative & Media",
+    "Design",
+    "Media",
     "Finance",
     "Operations",
     "IT",
@@ -230,7 +281,11 @@ const MeetTheTeam = () => {
                   {/* Team Grid */}
                   <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-6">
                     {members.map((member) => (
-                      <TeamMemberCard key={member.id} member={member} />
+                      <TeamMemberCard 
+                        key={member.id} 
+                        member={member} 
+                        onContact={handleContactMember}
+                      />
                     ))}
                   </div>
                 </motion.div>
@@ -282,6 +337,13 @@ const MeetTheTeam = () => {
 
         <Footer />
       </div>
+
+      {/* Contact Form Modal */}
+      <TeamContactForm
+        member={selectedMember}
+        isOpen={isContactFormOpen}
+        onClose={() => setIsContactFormOpen(false)}
+      />
     </>
   );
 };

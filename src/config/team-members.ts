@@ -3,7 +3,7 @@
 
 // Import team portraits - Executive Leadership
 import janeAbouJaoudeCeo from '@/assets/team/jane-abou-jaoude-ceo.png';
-import davidThorntonCeo from '@/assets/team/david-thornton-ceo.png';
+import davidThorntonCeo from '@/assets/team/david-thornton-ceo-v2.png';
 import richardPembertonCoo from '@/assets/team/richard-pemberton-coo.png';
 import oliviaExecutiveAssistant from '@/assets/team/olivia-executive-assistant.png';
 import amandaClarkeExecutiveAssistant from '@/assets/team/amanda-clarke-executive-assistant.png';
