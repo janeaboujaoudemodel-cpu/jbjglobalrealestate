@@ -12,8 +12,20 @@ import amandaClarkeExecutiveAssistant from '@/assets/team/amanda-clarke-executiv
 import sarahMitchellListingAdmin from '@/assets/team/sarah-mitchell-listing-admin.png';
 
 // Import team portraits - Sales Team
-import royDavidHeadOfSale from '@/assets/team/roy-david-head-of-sale.png';
+import royDaviHeadOfSale from '@/assets/team/roy-david-head-of-sale.png';
 import williamHarrisonSales from '@/assets/team/william-harrison-sales.png';
+
+// Import team portraits - Software Engineering Team
+import jamesWoodwardTechLead from '@/assets/team/james-woodward-tech-lead.png';
+import michaelWeberWebDev from '@/assets/team/michael-weber-web-developer.png';
+import amelieMartinUxDesigner from '@/assets/team/amelie-martin-ux-designer.png';
+import emmaCollinsScriptWriter from '@/assets/team/emma-collins-script-writer.png';
+import andrewTaylorIdeaCreator from '@/assets/team/andrew-taylor-idea-creator.png';
+
+// Import team portraits - Customer Happiness Team
+import lisaHendersonCustomerHappiness from '@/assets/team/lisa-henderson-customer-happiness.png';
+import jackThompsonCustomerSupport from '@/assets/team/jack-thompson-customer-support.png';
+import nataliaPetrovaHelpdesk from '@/assets/team/natalia-petrova-helpdesk.png';
 import michaelAndersonSalesDirector from '@/assets/team/michael-anderson-sales-director.png';
 import emmaHartleySalesManager from '@/assets/team/emma-hartley-sales-manager.png';
 import victoriaSterlingMarketing from '@/assets/team/victoria-sterling-marketing.png';
@@ -109,7 +121,7 @@ export const executiveTeam: TeamMember[] = sortByHierarchy([
     nationality: 'British',
     hierarchyLevel: 2,
     reportsTo: 'jane-abou-jaoude',
-    directReports: ['roy-david', 'victoria-sterling', 'catherine-brooks'],
+    directReports: ['roy-davi', 'victoria-sterling', 'catherine-brooks'],
     status: 'online',
     canConductInterviews: true,
   },
@@ -166,13 +178,13 @@ export const executiveTeam: TeamMember[] = sortByHierarchy([
 // ===== Sales & Business Development (sorted by hierarchy) =====
 export const salesTeam: TeamMember[] = sortByHierarchy([
   {
-    id: 'roy-david',
-    name: 'Roy David',
+    id: 'roy-davi',
+    name: 'Roy Davi',
     role: 'Head of Sale',
     department: 'Sales',
-    avatar: royDavidHeadOfSale,
+    avatar: royDaviHeadOfSale,
     isAI: false,
-    email: 'roy.david@JBJ.ae',
+    email: 'roy.davi@JBJ.ae',
     phone: '+971 50 123 4567',
     bio: 'Dynamic sales leader with exceptional track record in luxury real estate. Leads the entire sales division with strategic vision and hands-on management.',
     specializations: ['Luxury Properties', 'High-Net-Worth Clients', 'Investment Properties', 'Team Leadership'],
@@ -197,7 +209,7 @@ export const salesTeam: TeamMember[] = sortByHierarchy([
     languages: ['English', 'Hindi'],
     nationality: 'British',
     hierarchyLevel: 3,
-    reportsTo: 'roy-david',
+    reportsTo: 'roy-davi',
     directReports: ['george-hamilton'],
     status: 'online',
     canConductInterviews: true,
@@ -215,7 +227,7 @@ export const salesTeam: TeamMember[] = sortByHierarchy([
     languages: ['English', 'French'],
     nationality: 'British',
     hierarchyLevel: 4,
-    reportsTo: 'roy-david',
+    reportsTo: 'roy-davi',
     status: 'online',
   },
   {
@@ -231,7 +243,7 @@ export const salesTeam: TeamMember[] = sortByHierarchy([
     languages: ['English', 'Portuguese'],
     nationality: 'British',
     hierarchyLevel: 5,
-    reportsTo: 'roy-david',
+    reportsTo: 'roy-davi',
     status: 'online',
   },
 ]);
@@ -832,7 +844,7 @@ export const companyChannels: CompanyChannel[] = [
     name: 'Developer Relations',
     description: 'Coordination with real estate developers',
     type: 'project',
-    members: ['sarah-mitchell', 'roy-david', 'michael-anderson', 'emma-hartley', 'william-harrison'],
+    members: ['sarah-mitchell', 'roy-davi', 'michael-anderson', 'emma-hartley', 'william-harrison'],
     isPrivate: false,
   },
 ];
@@ -897,7 +909,7 @@ export const salesInterviewFlow: InterviewRound[] = [
   {
     round: 2,
     title: 'Sales Leadership Interview',
-    interviewers: ['roy-david', 'michael-anderson'],
+    interviewers: ['roy-davi', 'michael-anderson'],
     duration: 45,
     type: 'technical',
     description: 'Sales skills assessment, scenario discussions, and team fit.',
