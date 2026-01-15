@@ -7,7 +7,7 @@ import {
 } from "@/components/ui/dialog";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
-import { Mail, Globe, MessageSquare } from "lucide-react";
+import { Globe, MessageSquare } from "lucide-react";
 
 interface TeamMemberDetailDialogProps {
   member: TeamMember | null;
@@ -38,6 +38,7 @@ const TeamMemberDetailDialog = ({
               src={member.avatar}
               alt={member.name}
               className="w-40 h-40 md:w-48 md:h-48 rounded-xl object-cover object-top mx-auto md:mx-0"
+              loading="lazy"
             />
           </div>
 
@@ -57,7 +58,14 @@ const TeamMemberDetailDialog = ({
               >
                 {member.role}
               </p>
-              <p className="text-zinc-500 text-sm">{member.department}</p>
+              <div className="flex flex-wrap items-center gap-x-3 gap-y-1 mt-1">
+                <p className="text-zinc-500 text-sm">{member.department}</p>
+                {typeof member.yearsExperience === "number" && (
+                  <p className="text-zinc-500 text-sm">
+                    {member.yearsExperience} years experience
+                  </p>
+                )}
+              </div>
             </div>
 
             {member.bio && (
@@ -104,29 +112,21 @@ const TeamMemberDetailDialog = ({
 
             {member.nationality && (
               <p className="text-sm text-zinc-400">
-                Nationality:{" "}
-                <span className="text-zinc-300">{member.nationality}</span>
+                Nationality: <span className="text-zinc-300">{member.nationality}</span>
               </p>
             )}
 
-            {/* Contact Info & Action */}
-            <div className="pt-4 border-t border-zinc-800 space-y-3">
-              {member.email && (
-                <div className="flex items-center gap-2 text-sm text-zinc-400">
-                  <Mail className="w-4 h-4" />
-                  <span className="text-zinc-300">{member.email}</span>
-                </div>
-              )}
-
+            {/* Action */}
+            <div className="pt-4 border-t border-zinc-800">
               <Button
                 onClick={() => {
                   onClose();
                   onContact(member);
                 }}
-                className="w-full bg-gold hover:bg-gold-dark text-black font-semibold mt-4"
+                className="w-full bg-gold hover:bg-gold-dark text-black font-semibold"
               >
                 <MessageSquare className="w-4 h-4 mr-2" />
-                Contact {member.name.split(" ")[0]}
+                Contact Us
               </Button>
             </div>
           </div>

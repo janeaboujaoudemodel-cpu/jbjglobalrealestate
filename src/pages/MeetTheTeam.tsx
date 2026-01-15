@@ -44,24 +44,9 @@ interface TeamMemberCardProps {
 }
 
 const TeamMemberCard = ({ member, onContact, onReadMore }: TeamMemberCardProps) => {
-  // For CEO (Jane), clicking opens email; for others, opens contact form
-  const handleCardClick = (e: React.MouseEvent) => {
-    // Check if click was on the "Read more" button
-    if ((e.target as HTMLElement).closest('button')) return;
-    
-    if (member.id === 'jane-abou-jaoude' && member.email) {
-      window.location.href = `mailto:${member.email}`;
-    } else {
-      onContact(member);
-    }
-  };
-
   return (
     <motion.div variants={fadeInUp}>
-      <Card 
-        className="bg-zinc-900/60 border-zinc-800 hover:border-gold/50 hover:scale-[1.02] transition-all duration-300 overflow-hidden group h-full cursor-pointer"
-        onClick={handleCardClick}
-      >
+      <Card className="bg-zinc-900/60 border-zinc-800 hover:border-gold/50 transition-all duration-300 overflow-hidden group h-full">
         <CardContent className="p-0">
           {/* Photo */}
           <div className="relative overflow-hidden">
@@ -69,73 +54,84 @@ const TeamMemberCard = ({ member, onContact, onReadMore }: TeamMemberCardProps) 
               src={member.avatar}
               alt={member.name}
               className="w-full aspect-square object-cover object-top group-hover:scale-105 transition-transform duration-500"
+              loading="lazy"
             />
             {/* Photo overlay gradient */}
             <div className="absolute inset-0 bg-gradient-to-t from-zinc-950 via-transparent to-transparent opacity-80" />
-            
-            {/* Contact Button - Appears on hover */}
-            <div className="absolute bottom-4 left-1/2 -translate-x-1/2 opacity-0 group-hover:opacity-100 transition-all duration-300 transform translate-y-2 group-hover:translate-y-0 pointer-events-none">
-              <Button
-                size="sm"
-                className="bg-gold hover:bg-gold-dark text-black font-semibold shadow-lg pointer-events-auto"
-                onClick={(e) => {
-                  e.stopPropagation();
-                  onContact(member);
-                }}
-              >
-                <MessageSquare className="w-4 h-4 mr-1.5" />
-                Contact
-              </Button>
-            </div>
           </div>
 
-        {/* Info */}
-        <div className="p-5 -mt-16 relative z-10">
-          <h3 className="text-white font-semibold text-lg mb-1">
-            {member.name}
-          </h3>
-          {/* Premium shiny job title */}
-          <p 
-            className="text-sm font-medium mb-2"
-            style={{
-              background: 'linear-gradient(135deg, #CBA64B 0%, #E8D5A3 40%, #F5ECD7 50%, #E8D5A3 60%, #CBA64B 100%)',
-              WebkitBackgroundClip: 'text',
-              WebkitTextFillColor: 'transparent',
-              backgroundClip: 'text',
-              textShadow: '0 0 20px rgba(203, 166, 75, 0.3)',
-            }}
-          >
-            {member.role}
-          </p>
-          <p className="text-zinc-500 text-sm mb-3">{member.department}</p>
+          {/* Info */}
+          <div className="p-5 -mt-16 relative z-10 flex flex-col h-[230px]">
+            <div>
+              <h3 className="text-white font-semibold text-lg mb-1">{member.name}</h3>
 
-          {member.bio && (
-            <div className="mb-3">
-              <p className="text-zinc-400 text-xs line-clamp-2">
-                {member.bio}
-              </p>
-              <button
-                onClick={() => onReadMore(member)}
-                className="text-gold text-xs font-medium hover:text-gold-light mt-1 flex items-center gap-0.5"
+              {/* Premium shiny job title */}
+              <p
+                className="text-sm font-medium mb-1"
+                style={{
+                  background:
+                    "linear-gradient(135deg, #CBA64B 0%, #E8D5A3 40%, #F5ECD7 50%, #E8D5A3 60%, #CBA64B 100%)",
+                  WebkitBackgroundClip: "text",
+                  WebkitTextFillColor: "transparent",
+                  backgroundClip: "text",
+                  textShadow: "0 0 20px rgba(203, 166, 75, 0.3)",
+                }}
               >
-                Read more <ChevronRight className="w-3 h-3" />
-              </button>
-            </div>
-          )}
+                {member.role}
+              </p>
 
-          {member.languages && member.languages.length > 0 && (
-            <div className="flex flex-wrap gap-1">
-              {member.languages.map((lang) => (
-                <Badge
-                  key={lang}
-                  variant="outline"
-                  className="text-xs border-zinc-700 text-zinc-400"
-                >
-                  {lang}
-                </Badge>
-              ))}
+              <div className="flex items-center justify-between gap-3">
+                <p className="text-zinc-500 text-sm">{member.department}</p>
+                {typeof member.yearsExperience === "number" && (
+                  <p className="text-zinc-500 text-xs whitespace-nowrap">
+                    {member.yearsExperience} years
+                  </p>
+                )}
+              </div>
+
+              {member.bio && (
+                <div className="mt-3">
+                  <p className="text-zinc-400 text-xs line-clamp-2">{member.bio}</p>
+                </div>
+              )}
+
+              {member.languages && member.languages.length > 0 && (
+                <div className="flex flex-wrap gap-1 mt-3">
+                  {member.languages.map((lang) => (
+                    <Badge
+                      key={lang}
+                      variant="outline"
+                      className="text-xs border-zinc-700 text-zinc-400"
+                    >
+                      {lang}
+                    </Badge>
+                  ))}
+                </div>
+              )}
             </div>
-          )}
+
+            <div className="mt-auto pt-4 grid grid-cols-2 gap-2">
+              <Button
+                type="button"
+                size="sm"
+                className="bg-gold hover:bg-gold-dark text-black font-semibold"
+                onClick={() => onContact(member)}
+              >
+                <MessageSquare className="w-4 h-4 mr-1.5" />
+                Contact Us
+              </Button>
+
+              <Button
+                type="button"
+                size="sm"
+                variant="outline"
+                className="border-gold/40 text-gold hover:bg-gold/10"
+                onClick={() => onReadMore(member)}
+              >
+                Read more
+                <ChevronRight className="w-4 h-4 ml-1" />
+              </Button>
+            </div>
           </div>
         </CardContent>
       </Card>

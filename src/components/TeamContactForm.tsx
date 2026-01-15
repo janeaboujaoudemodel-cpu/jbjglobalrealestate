@@ -68,18 +68,18 @@ const TeamContactForm = ({ member, isOpen, onClose }: TeamContactFormProps) => {
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    
+
     if (!formData.name || !formData.email || !formData.service) {
       toast.error('Please fill in required fields');
       return;
     }
 
     setIsSubmitting(true);
-    
+
     // Simulate API call
-    await new Promise(resolve => setTimeout(resolve, 1500));
-    
-    toast.success(`Your inquiry has been sent to ${member?.name}. We'll get back to you soon!`);
+    await new Promise((resolve) => setTimeout(resolve, 1500));
+
+    toast.success("Thank you. Your inquiry has been sent to JBJ Global Real Estate.");
     setIsSubmitting(false);
     setFormData({
       name: '',
@@ -98,21 +98,11 @@ const TeamContactForm = ({ member, isOpen, onClose }: TeamContactFormProps) => {
     <Dialog open={isOpen} onOpenChange={onClose}>
       <DialogContent className="sm:max-w-lg bg-zinc-900 border-zinc-800 text-white max-h-[90vh] overflow-y-auto">
         <DialogHeader>
-          <DialogTitle className="text-xl font-bold text-white flex items-center gap-3">
-            {member?.avatar && (
-              <img 
-                src={member.avatar} 
-                alt={member.name} 
-                className="w-12 h-12 rounded-full object-cover border-2 border-gold"
-              />
-            )}
-            <div>
-              <span>Contact {member?.name}</span>
-              <p className="text-sm font-normal text-gold mt-0.5">{member?.role}</p>
-            </div>
+          <DialogTitle className="text-xl font-bold text-white">
+            Contact Us
           </DialogTitle>
           <DialogDescription className="text-zinc-400">
-            Fill in your details and we'll connect you with {member?.name?.split(' ')[0]} shortly.
+            Fill in your details and our team will get back to you shortly.
           </DialogDescription>
         </DialogHeader>
 

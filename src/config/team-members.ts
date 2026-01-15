@@ -2,7 +2,7 @@
 // Professional team member data with AI-generated unique portraits
 
 // Import team portraits - Executive Leadership
-import janeAbouJaoudeCeo from '@/assets/ceo/jane-ceo-executive-office-final.jpg';
+import janeAbouJaoudeCeo from '@/assets/ceo/jane-founder-original-upload.jpg';
 import davidThorntonCeo from '@/assets/team/david-thornton-md-natural.png';
 import richardPembertonCoo from '@/assets/team/richard-pemberton-coo.png';
 import oliviaExecutiveAssistant from '@/assets/team/olivia-executive-assistant.png';
@@ -150,6 +150,7 @@ export interface TeamMember {
   specializations?: string[];
   languages?: string[];
   nationality?: string;
+  yearsExperience?: number;
   reportsTo?: string; // ID of the manager
   directReports?: string[]; // IDs of direct reports
   status?: 'online' | 'away' | 'offline';
@@ -160,6 +161,19 @@ export interface TeamMember {
 // Helper function to sort by hierarchy level
 const sortByHierarchy = (members: TeamMember[]): TeamMember[] => {
   return [...members].sort((a, b) => (a.hierarchyLevel || 99) - (b.hierarchyLevel || 99));
+};
+
+const guessYearsExperience = (member: TeamMember): number => {
+  if (member.id === 'jane-abou-jaoude') return 12;
+  if (member.id === 'roy-davi') return 10;
+
+  const level = member.hierarchyLevel ?? 6;
+  if (level <= 2) return 18;
+  if (level === 3) return 14;
+  if (level === 4) return 10;
+  if (level === 5) return 7;
+  if (level === 6) return 4;
+  return 2;
 };
 
 // ===== Executive Leadership (sorted by hierarchy) =====
@@ -174,6 +188,7 @@ export const executiveTeam: TeamMember[] = sortByHierarchy([
     bio: 'Visionary leader with a passion for luxury real estate and building world-class teams. A global innovator, award-winning entrepreneur shaping the future of luxury real estate in the Middle East.',
     languages: ['English', 'Arabic', 'French', 'Spanish'],
     nationality: 'Lebanese',
+    yearsExperience: 12,
     hierarchyLevel: 1,
     directReports: ['david-thornton', 'richard-pemberton', 'amanda-clarke', 'huda-marzooq'],
     status: 'online',
@@ -254,7 +269,8 @@ export const salesTeam: TeamMember[] = sortByHierarchy([
     bio: 'Dynamic sales leader with exceptional track record in luxury real estate. Leads the entire sales division with strategic vision and hands-on management.',
     specializations: ['Luxury Properties', 'High-Net-Worth Clients', 'Investment Properties', 'Team Leadership'],
     languages: ['English', 'Arabic'],
-    nationality: 'British',
+    nationality: 'Lebanese Canadian',
+    yearsExperience: 10,
     hierarchyLevel: 3,
     reportsTo: 'david-thornton',
     directReports: ['michael-anderson', 'emma-hartley', 'william-harrison'],
