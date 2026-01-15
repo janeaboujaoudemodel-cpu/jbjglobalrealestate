@@ -7387,6 +7387,7 @@ export type Database = {
           handover_date: string | null
           id: string
           is_featured: boolean | null
+          is_premium: boolean | null
           location: string | null
           name: string
           payment_plan: string | null
@@ -7415,6 +7416,7 @@ export type Database = {
           handover_date?: string | null
           id?: string
           is_featured?: boolean | null
+          is_premium?: boolean | null
           location?: string | null
           name: string
           payment_plan?: string | null
@@ -7443,6 +7445,7 @@ export type Database = {
           handover_date?: string | null
           id?: string
           is_featured?: boolean | null
+          is_premium?: boolean | null
           location?: string | null
           name?: string
           payment_plan?: string | null

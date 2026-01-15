@@ -19,7 +19,8 @@ import {
   MessageCircle,
   Phone,
   Filter,
-  ExternalLink
+  ExternalLink,
+  Crown
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -382,6 +383,23 @@ const Properties = () => {
                 <SelectItem value="INR" className="text-white hover:bg-zinc-800">INR</SelectItem>
               </SelectContent>
             </Select>
+
+            {/* Premium Filter Toggle */}
+            <Button
+              variant={filters.premiumOnly ? "default" : "outline"}
+              onClick={() => {
+                updateFilter("premiumOnly", !filters.premiumOnly);
+                setAppliedFilters(prev => ({ ...prev, premiumOnly: !filters.premiumOnly }));
+              }}
+              className={`h-12 px-4 rounded-lg flex items-center gap-2 ${
+                filters.premiumOnly 
+                  ? "bg-gradient-to-r from-gold to-[#E8D5A3] text-black border-gold font-bold" 
+                  : "bg-zinc-900/80 border-zinc-700/50 text-white hover:bg-zinc-800 hover:text-white"
+              }`}
+            >
+              <Crown className="w-4 h-4" />
+              Premium
+            </Button>
 
             {/* Advanced Filters Button */}
             <Dialog open={isAdvancedOpen} onOpenChange={setIsAdvancedOpen}>
