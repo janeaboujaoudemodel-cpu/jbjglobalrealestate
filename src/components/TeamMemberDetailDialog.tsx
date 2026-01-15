@@ -7,7 +7,7 @@ import {
 } from "@/components/ui/dialog";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
-import { Mail, Phone, Globe, MessageSquare } from "lucide-react";
+import { Mail, Globe, MessageSquare } from "lucide-react";
 
 interface TeamMemberDetailDialogProps {
   member: TeamMember | null;
@@ -115,12 +115,6 @@ const TeamMemberDetailDialog = ({
                 <div className="flex items-center gap-2 text-sm text-zinc-400">
                   <Mail className="w-4 h-4" />
                   <span className="text-zinc-300">{member.email}</span>
-                </div>
-              )}
-              {member.phone && (
-                <div className="flex items-center gap-2 text-sm text-zinc-400">
-                  <Phone className="w-4 h-4" />
-                  <span className="text-zinc-300">{member.phone}</span>
                 </div>
               )}
 

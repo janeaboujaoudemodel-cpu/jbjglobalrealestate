@@ -45,7 +45,7 @@ interface TeamMemberCardProps {
 
 const TeamMemberCard = ({ member, onContact, onReadMore }: TeamMemberCardProps) => (
   <motion.div variants={fadeInUp}>
-    <Card className="bg-zinc-900/60 border-zinc-800 hover:border-gold/40 transition-all duration-300 overflow-hidden group h-full">
+    <Card className="bg-zinc-900/60 border-zinc-800 hover:border-gold/50 hover:scale-[1.02] transition-all duration-300 overflow-hidden group h-full cursor-pointer">
       <CardContent className="p-0">
         {/* Photo */}
         <div className="relative overflow-hidden">
@@ -106,7 +106,7 @@ const TeamMemberCard = ({ member, onContact, onReadMore }: TeamMemberCardProps) 
 
           {member.languages && member.languages.length > 0 && (
             <div className="flex flex-wrap gap-1">
-              {member.languages.slice(0, 4).map((lang) => (
+              {member.languages.map((lang) => (
                 <Badge
                   key={lang}
                   variant="outline"
@@ -115,14 +115,6 @@ const TeamMemberCard = ({ member, onContact, onReadMore }: TeamMemberCardProps) 
                   {lang}
                 </Badge>
               ))}
-              {member.languages.length > 4 && (
-                <Badge
-                  variant="outline"
-                  className="text-xs border-zinc-700 text-zinc-400"
-                >
-                  +{member.languages.length - 4}
-                </Badge>
-              )}
             </div>
           )}
         </div>
@@ -233,26 +225,7 @@ const MeetTheTeam = () => {
                 className="w-24 h-0.5 bg-gradient-to-r from-transparent via-gold to-transparent mx-auto mb-8"
               />
 
-              {/* Stats */}
-              <motion.div
-                variants={fadeInUp}
-                className="flex flex-wrap justify-center gap-8"
-              >
-                <div className="text-center">
-                  <p className="text-3xl font-bold text-gold">
-                    150+
-                  </p>
-                  <p className="text-zinc-500 text-sm">Team Members</p>
-                </div>
-                <div className="text-center">
-                  <p className="text-3xl font-bold text-gold">16</p>
-                  <p className="text-zinc-500 text-sm">Departments</p>
-                </div>
-                <div className="text-center">
-                  <p className="text-3xl font-bold text-gold">25+</p>
-                  <p className="text-zinc-500 text-sm">Languages Spoken</p>
-                </div>
-              </motion.div>
+              {/* Stats removed - shown in CEOLeadershipShowcase */}
             </motion.div>
           </div>
         </section>

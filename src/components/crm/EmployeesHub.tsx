@@ -66,7 +66,6 @@ interface Employee {
   type: 'human' | 'ai';
   avatar?: string;
   email?: string;
-  phone?: string;
   status: 'active' | 'away' | 'busy' | 'inactive';
   leads?: number;
   performance?: number;
@@ -103,7 +102,6 @@ const teamMemberToEmployee = (member: TeamMember): Employee => ({
   type: member.isAI ? 'ai' : 'human',
   avatar: member.avatar,
   email: member.email,
-  phone: member.phone,
   status: member.status === 'online' ? 'active' : member.status === 'away' ? 'away' : 'inactive',
   description: member.bio,
   responsibilities: member.specializations,
@@ -123,7 +121,6 @@ const TEAM_MEMBERS: Employee[] = [
     department: 'executive',
     type: 'human',
     email: 'jane@JBJ.ae',
-    phone: '+971 56 591 1000',
     status: 'active',
     description: 'Visionary leader and founder of JBJ Global Real Estate',
     responsibilities: ['Strategic Direction', 'Business Development', 'Key Partnerships', 'Platform Vision'],
@@ -342,7 +339,6 @@ const SAMPLE_BROKERS: Employee[] = [
     department: 'brokers',
     type: 'human',
     email: 'ahmed@JBJ.ae',
-    phone: '+971 50 123 4567',
     status: 'active',
     leads: 24,
     performance: 92,
@@ -355,7 +351,6 @@ const SAMPLE_BROKERS: Employee[] = [
     department: 'brokers',
     type: 'human',
     email: 'sarah@JBJ.ae',
-    phone: '+971 55 987 6543',
     status: 'active',
     leads: 18,
     performance: 85,
@@ -368,7 +363,6 @@ const SAMPLE_BROKERS: Employee[] = [
     department: 'brokers',
     type: 'human',
     email: 'michael@JBJ.ae',
-    phone: '+971 52 456 7890',
     status: 'active',
     leads: 31,
     performance: 94,
@@ -620,11 +614,8 @@ const EmployeesHub = ({ userId, brokers = [] }: EmployeesHubProps) => {
   };
 
   const handleChat = (employee: Employee) => {
-    // Open in-app chat or WhatsApp if phone available
-    if (employee.phone) {
-      const phone = employee.phone.replace(/\s+/g, '').replace('+', '');
-      window.open(`https://wa.me/${phone}`, '_blank');
-    } else if (employee.email) {
+    // Open email chat for employees
+    if (employee.email) {
       window.location.href = `mailto:${employee.email}?subject=Chat with ${employee.name}`;
     } else {
       toast.info(`${employee.name} doesn't have contact info listed`);
@@ -632,11 +623,8 @@ const EmployeesHub = ({ userId, brokers = [] }: EmployeesHubProps) => {
   };
 
   const handleCall = (employee: Employee) => {
-    if (employee.phone) {
-      window.location.href = `tel:${employee.phone}`;
-    } else {
-      toast.info(`${employee.name} doesn't have a phone number listed`);
-    }
+    // Redirect to company number for all calls
+    window.location.href = `tel:+971565911000`;
   };
 
   const handleEmail = (employee: Employee) => {
@@ -904,16 +892,6 @@ const EmployeesHub = ({ userId, brokers = [] }: EmployeesHubProps) => {
                             >
                               <Mail className="h-4 w-4 mr-1.5" />
                               Email
-                            </Button>
-                          )}
-                          {employee.phone && (
-                            <Button 
-                              size="sm"
-                              className="h-9 px-3 bg-gradient-to-r from-amber-400 to-yellow-500 hover:from-amber-500 hover:to-yellow-600 text-zinc-900 font-medium shadow-md transition-all duration-200 hover:scale-105"
-                              onClick={(e) => { e.stopPropagation(); handleCall(employee); }}
-                            >
-                              <Phone className="h-4 w-4 mr-1.5" />
-                              Call
                             </Button>
                           )}
                           {employee.type === 'human' && (
