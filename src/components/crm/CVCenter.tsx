@@ -514,12 +514,12 @@ const CVCenter = ({ userId }: CVCenterProps) => {
                           </div>
                         </div>
 
-                        {/* Right: Action Buttons - HIGH VISIBILITY */}
+                        {/* Right: Action Buttons - HIGH VISIBILITY GOLD */}
                         <div className="flex flex-col gap-2 flex-shrink-0">
                           <Button 
                             size="sm"
                             onClick={() => handleScheduleInterview(cv)}
-                            className="bg-gradient-to-r from-amber-400 to-yellow-500 hover:from-amber-500 hover:to-yellow-600 text-zinc-900 font-bold shadow-lg px-5 py-2.5 transition-all duration-200 hover:scale-105"
+                            className="bg-[#F1C40F] hover:bg-[#FFD700] text-black font-bold shadow-lg px-5 py-2.5 transition-all duration-200 hover:scale-105 border-2 border-amber-600"
                           >
                             <Video className="h-4 w-4 mr-2" />
                             Schedule Interview
@@ -527,7 +527,7 @@ const CVCenter = ({ userId }: CVCenterProps) => {
                           <Button 
                             size="sm"
                             onClick={() => handleViewCV(cv)}
-                            className="bg-gradient-to-r from-zinc-700 to-zinc-800 hover:from-zinc-600 hover:to-zinc-700 text-white font-semibold shadow-md px-5 py-2.5 transition-all duration-200 hover:scale-105 border border-zinc-600"
+                            className="bg-zinc-800 hover:bg-zinc-700 text-white font-bold shadow-lg px-5 py-2.5 transition-all duration-200 hover:scale-105 border-2 border-zinc-600"
                           >
                             <Eye className="h-4 w-4 mr-2" />
                             View CV
@@ -535,19 +535,19 @@ const CVCenter = ({ userId }: CVCenterProps) => {
                           <Button 
                             size="sm"
                             onClick={() => handleContact(cv)}
-                            className="bg-gradient-to-r from-blue-500 to-blue-600 hover:from-blue-600 hover:to-blue-700 text-white font-semibold shadow-md px-5 py-2.5 transition-all duration-200 hover:scale-105"
+                            className="bg-[#F1C40F] hover:bg-[#FFD700] text-black font-bold shadow-lg px-5 py-2.5 transition-all duration-200 hover:scale-105 border-2 border-amber-600"
                           >
                             <Mail className="h-4 w-4 mr-2" />
                             Contact
                           </Button>
                           
-                          {/* Status Actions */}
+                          {/* Status Actions - High Visibility */}
                           {cv.status === 'pending' && (
                             <div className="flex gap-2 mt-3">
                               <Button 
                                 size="sm"
                                 onClick={() => handleUpdateStatus(cv.id, 'approved')}
-                                className="flex-1 bg-gradient-to-r from-green-500 to-emerald-600 hover:from-green-600 hover:to-emerald-700 text-white font-semibold shadow-md transition-all duration-200 hover:scale-105"
+                                className="flex-1 bg-emerald-500 hover:bg-emerald-600 text-white font-bold shadow-lg transition-all duration-200 hover:scale-105 border-2 border-emerald-600"
                               >
                                 <CheckCircle className="h-4 w-4 mr-1" />
                                 Accept
@@ -555,7 +555,7 @@ const CVCenter = ({ userId }: CVCenterProps) => {
                               <Button 
                                 size="sm"
                                 onClick={() => handleUpdateStatus(cv.id, 'rejected')}
-                                className="flex-1 bg-gradient-to-r from-red-500 to-rose-600 hover:from-red-600 hover:to-rose-700 text-white font-semibold shadow-md transition-all duration-200 hover:scale-105"
+                                className="flex-1 bg-red-500 hover:bg-red-600 text-white font-bold shadow-lg transition-all duration-200 hover:scale-105 border-2 border-red-600"
                               >
                                 <XCircle className="h-4 w-4 mr-1" />
                                 Reject
