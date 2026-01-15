@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { useLocation } from "react-router-dom";
+import { useLocation, useNavigate } from "react-router-dom";
 import { supabase } from "@/integrations/supabase/client";
 
 interface AdminBypassProps {
@@ -13,15 +13,16 @@ interface AdminBypassProps {
  */
 const AdminBypass = ({ children }: AdminBypassProps) => {
   const location = useLocation();
+  const navigate = useNavigate();
   const [isAdmin, setIsAdmin] = useState<boolean | null>(null);
   const [isLoading, setIsLoading] = useState(true);
 
   // Routes that require admin access
   const isAdminRoute = location.pathname.startsWith("/admin");
-  
+
   // CRM routes have their own access controls
   const isCrmRoute = location.pathname.startsWith("/crm");
-  
+
   // Video Builder has its own exclusive access gate
   const isVideoBuilderRoute = location.pathname === "/video-builder";
 
@@ -37,9 +38,11 @@ const AdminBypass = ({ children }: AdminBypassProps) => {
       try {
         const { data: { session } } = await supabase.auth.getSession();
 
+        // If not logged in, send to login (prevents "dead" admin pages)
         if (!session?.user) {
           setIsAdmin(false);
           setIsLoading(false);
+          navigate(`/auth?redirect=${encodeURIComponent(location.pathname)}`);
           return;
         }
 
@@ -73,7 +76,7 @@ const AdminBypass = ({ children }: AdminBypassProps) => {
     });
 
     return () => subscription.unsubscribe();
-  }, [isAdminRoute]);
+  }, [isAdminRoute, location.pathname, navigate]);
 
   // CRM routes and Video Builder bypass this gate (they have their own access controls)
   if (isCrmRoute || isVideoBuilderRoute) return <>{children}</>;
