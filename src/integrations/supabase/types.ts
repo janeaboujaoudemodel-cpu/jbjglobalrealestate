@@ -8535,6 +8535,7 @@ export type Database = {
         }
         Returns: boolean
       }
+      cleanup_expired_verifications: { Args: never; Returns: undefined }
       cleanup_rate_limit_records: { Args: never; Returns: number }
       crm_hard_delete_import: {
         Args: { p_import_batch_id?: string; p_source_id?: string }
