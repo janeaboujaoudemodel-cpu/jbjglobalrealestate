@@ -6,7 +6,7 @@ import { Card, CardContent } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Skeleton } from "@/components/ui/skeleton";
 import { toast } from "sonner";
-import { ArrowLeft, Users } from "lucide-react";
+import { ArrowLeft, Users, MessageSquare } from "lucide-react";
 import EmployeesHub from "@/components/crm/EmployeesHub";
 import ListingAdminManager from "@/components/crm/ListingAdminManager";
 
@@ -93,6 +93,14 @@ const CRMEmployees = () => {
               </div>
             </div>
           </div>
+          
+          {/* Chat Button */}
+          <Link to="/employee-chat">
+            <Button variant="default" size="sm" className="bg-primary hover:bg-primary/90">
+              <MessageSquare className="h-4 w-4 mr-2" />
+              Chat with Team
+            </Button>
+          </Link>
         </div>
       </header>
 

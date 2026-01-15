@@ -3842,6 +3842,96 @@ export type Database = {
         }
         Relationships: []
       }
+      employee_chat_messages: {
+        Row: {
+          created_at: string
+          id: string
+          is_read: boolean | null
+          message: string
+          recipient_id: string
+          sender_id: string
+          sender_type: string
+        }
+        Insert: {
+          created_at?: string
+          id?: string
+          is_read?: boolean | null
+          message: string
+          recipient_id: string
+          sender_id: string
+          sender_type: string
+        }
+        Update: {
+          created_at?: string
+          id?: string
+          is_read?: boolean | null
+          message?: string
+          recipient_id?: string
+          sender_id?: string
+          sender_type?: string
+        }
+        Relationships: []
+      }
+      employee_notifications: {
+        Row: {
+          content: string | null
+          created_at: string
+          employee_id: string
+          id: string
+          is_read: boolean | null
+          notification_type: string
+          title: string
+        }
+        Insert: {
+          content?: string | null
+          created_at?: string
+          employee_id: string
+          id?: string
+          is_read?: boolean | null
+          notification_type: string
+          title: string
+        }
+        Update: {
+          content?: string | null
+          created_at?: string
+          employee_id?: string
+          id?: string
+          is_read?: boolean | null
+          notification_type?: string
+          title?: string
+        }
+        Relationships: []
+      }
+      employee_status: {
+        Row: {
+          current_activity: string | null
+          employee_name: string
+          id: string
+          is_typing: boolean | null
+          last_active_at: string | null
+          status: string
+          updated_at: string | null
+        }
+        Insert: {
+          current_activity?: string | null
+          employee_name: string
+          id: string
+          is_typing?: boolean | null
+          last_active_at?: string | null
+          status?: string
+          updated_at?: string | null
+        }
+        Update: {
+          current_activity?: string | null
+          employee_name?: string
+          id?: string
+          is_typing?: boolean | null
+          last_active_at?: string | null
+          status?: string
+          updated_at?: string | null
+        }
+        Relationships: []
+      }
       ethics_violations: {
         Row: {
           action_required: string | null
