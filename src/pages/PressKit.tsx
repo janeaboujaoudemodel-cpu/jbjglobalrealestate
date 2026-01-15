@@ -123,38 +123,17 @@ const brandAssets: DownloadableAsset[] = [
 const PressKit = () => {
   const [downloadedItems, setDownloadedItems] = useState<Set<string>>(new Set());
 
+  // Downloads disabled - photos are protected intellectual property
   const handleDownload = async (asset: DownloadableAsset) => {
-    try {
-      const response = await fetch(asset.image);
-      const blob = await response.blob();
-      const url = URL.createObjectURL(blob);
-      const a = document.createElement("a");
-      a.href = url;
-      const extension = asset.image.split('.').pop() || 'jpg';
-      a.download = `JBJ-Global-Real-Estate-${asset.name.replace(/\s+/g, '-')}.${extension}`;
-      document.body.appendChild(a);
-      a.click();
-      document.body.removeChild(a);
-      URL.revokeObjectURL(url);
-      
-      setDownloadedItems(prev => new Set([...prev, asset.id]));
-      toast.success(`Downloaded: ${asset.name}`);
-    } catch (error) {
-      toast.error("Failed to download. Please try again.");
-    }
+    toast.error("Downloads are disabled. For media inquiries, please contact media@JBJ.ae");
   };
 
   const handleDownloadAll = async (assets: DownloadableAsset[], category: string) => {
-    toast.info(`Downloading ${assets.length} ${category}...`);
-    for (const asset of assets) {
-      await handleDownload(asset);
-      await new Promise(resolve => setTimeout(resolve, 500)); // Small delay between downloads
-    }
-    toast.success(`All ${category} downloaded!`);
+    toast.error("Downloads are disabled. For media inquiries, please contact media@JBJ.ae");
   };
 
   const handleCopyBio = async () => {
-    const bioText = `Jane Abou Jaoude is the Founder of JBJ Global Real Estate, a Dubai-based real estate brokerage. Born August 25, 1998, in Lebanon, she founded her first business—James Beauty—in 2014 while still studying. Fluent in French, English, Arabic, and Spanish, Jane relocated to Dubai in 2020. She has experience in corporate operations, hospitality quality management, and real estate brokerage. She founded JBJ Global Real Estate in 2025.`;
+    const bioText = `Jane Abou Jaoude is the Founder of JBJ Global Real Estate, a Dubai-based real estate brokerage. Born August 25, 1998, in Lebanon, she founded her first business—Jane's Beauty—at age 16 in 2015 while still studying. Fluent in French, English, Arabic, and Spanish, Jane relocated to Dubai in 2020. She has experience in corporate operations, hospitality quality management, and real estate brokerage. She founded JBJ Global Real Estate in 2025.`;
     
     try {
       await navigator.clipboard.writeText(bioText);
@@ -239,7 +218,7 @@ const PressKit = () => {
               <p className="text-zinc-300 leading-relaxed">
                 <span className="text-gold font-semibold">Jane Abou Jaoude</span> is the Founder of JBJ Global Real Estate, 
                 a Dubai-based real estate brokerage. 
-                Born August 25, 1998, in Lebanon, she founded her first business—James Beauty—in 2014 while still studying. 
+                Born August 25, 1998, in Lebanon, she founded her first business—Jane's Beauty—at age 16 in 2015 while still studying. 
                 Fluent in French, English, Arabic, and Spanish, Jane relocated to Dubai in 2020. 
                 She has experience in corporate operations, hospitality quality management, and real estate brokerage. 
                 She founded JBJ Global Real Estate in 2025.
@@ -268,13 +247,12 @@ const PressKit = () => {
                   Jane Abou Jaoude <span className="text-transparent bg-clip-text bg-gradient-to-r from-gold to-[#C4A962]">Headshots</span>
                 </h2>
               </div>
-              <Button
-                onClick={() => handleDownloadAll(founderHeadshots, "headshots")}
-                className="bg-gradient-to-r from-gold to-gold-dark text-black font-semibold hover:opacity-90"
-              >
-                <Download className="w-4 h-4 mr-2" />
-                Download All Headshots
-              </Button>
+              <div className="bg-zinc-900/50 border border-zinc-700 rounded-lg px-4 py-2">
+                <p className="text-zinc-400 text-sm">
+                  <Mail className="w-4 h-4 inline mr-2" />
+                  For media inquiries: <span className="text-gold">media@JBJ.ae</span>
+                </p>
+              </div>
             </motion.div>
 
             <motion.div 
@@ -295,24 +273,12 @@ const PressKit = () => {
                     />
                     <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
                     
-                    {/* Download overlay */}
-                    <div className="absolute inset-0 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity duration-300">
-                      <Button
-                        onClick={() => handleDownload(asset)}
-                        className="bg-gold hover:bg-gold-light text-black font-semibold"
-                      >
-                        {downloadedItems.has(asset.id) ? (
-                          <>
-                            <Check className="w-4 h-4 mr-2" />
-                            Downloaded
-                          </>
-                        ) : (
-                          <>
-                            <Download className="w-4 h-4 mr-2" />
-                            Download
-                          </>
-                        )}
-                      </Button>
+                    {/* Protected overlay */}
+                    <div className="absolute inset-0 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity duration-300 bg-black/60">
+                      <div className="text-center px-4">
+                        <p className="text-white text-sm font-medium mb-1">Protected Content</p>
+                        <p className="text-zinc-400 text-xs">Contact media@JBJ.ae</p>
+                      </div>
                     </div>
                     
                     {/* Resolution badge */}
