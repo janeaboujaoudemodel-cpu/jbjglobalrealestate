@@ -61,32 +61,32 @@ const CEOLeadershipShowcase = () => {
             variants={fadeInUp}
             className="grid grid-cols-2 md:grid-cols-4 gap-6 mb-12"
           >
-            <div className="text-center p-6 bg-zinc-900/50 border border-zinc-800 rounded-xl">
+            <div className="text-center p-6 bg-zinc-900/50 border border-zinc-800 rounded-xl hover:border-gold/40 transition-all duration-300 hover:scale-[1.02]">
               <div className="w-12 h-12 bg-gold/10 rounded-lg flex items-center justify-center mx-auto mb-3">
                 <Users className="w-6 h-6 text-gold" />
               </div>
               <p className="text-2xl font-bold text-gold mb-1">150+</p>
               <p className="text-zinc-500 text-sm">Team Members</p>
             </div>
-            <div className="text-center p-6 bg-zinc-900/50 border border-zinc-800 rounded-xl">
+            <div className="text-center p-6 bg-zinc-900/50 border border-zinc-800 rounded-xl hover:border-gold/40 transition-all duration-300 hover:scale-[1.02]">
               <div className="w-12 h-12 bg-gold/10 rounded-lg flex items-center justify-center mx-auto mb-3">
                 <Building2 className="w-6 h-6 text-gold" />
               </div>
               <p className="text-2xl font-bold text-gold mb-1">16</p>
               <p className="text-zinc-500 text-sm">Departments</p>
             </div>
-            <div className="text-center p-6 bg-zinc-900/50 border border-zinc-800 rounded-xl">
+            <div className="text-center p-6 bg-zinc-900/50 border border-zinc-800 rounded-xl hover:border-gold/40 transition-all duration-300 hover:scale-[1.02]">
               <div className="w-12 h-12 bg-gold/10 rounded-lg flex items-center justify-center mx-auto mb-3">
                 <Globe className="w-6 h-6 text-gold" />
               </div>
-              <p className="text-2xl font-bold text-gold mb-1">25+</p>
+              <p className="text-2xl font-bold text-gold mb-1">40+</p>
               <p className="text-zinc-500 text-sm">Languages Spoken</p>
             </div>
-            <div className="text-center p-6 bg-zinc-900/50 border border-zinc-800 rounded-xl">
+            <div className="text-center p-6 bg-zinc-900/50 border border-zinc-800 rounded-xl hover:border-gold/40 transition-all duration-300 hover:scale-[1.02]">
               <div className="w-12 h-12 bg-gold/10 rounded-lg flex items-center justify-center mx-auto mb-3">
                 <Sparkles className="w-6 h-6 text-gold" />
               </div>
-              <p className="text-2xl font-bold text-gold mb-1">30+</p>
+              <p className="text-2xl font-bold text-gold mb-1">50+</p>
               <p className="text-zinc-500 text-sm">Nationalities</p>
             </div>
           </motion.div>

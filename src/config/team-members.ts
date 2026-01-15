@@ -3,7 +3,7 @@
 
 // Import team portraits - Executive Leadership
 import janeAbouJaoudeCeo from '@/assets/ceo/jane-ceo-executive-office-v3.jpg';
-import davidThorntonCeo from '@/assets/team/david-thornton-md-real.png';
+import davidThorntonCeo from '@/assets/team/david-thornton-md-realistic.png';
 import richardPembertonCoo from '@/assets/team/richard-pemberton-coo.png';
 import oliviaExecutiveAssistant from '@/assets/team/olivia-executive-assistant.png';
 import amandaClarkeExecutiveAssistant from '@/assets/team/amanda-clarke-executive-assistant.png';
@@ -118,7 +118,6 @@ export interface TeamMember {
   department: string;
   avatar: string;
   email?: string;
-  phone?: string;
   bio?: string;
   isAI?: boolean;
   specializations?: string[];
@@ -145,12 +144,11 @@ export const executiveTeam: TeamMember[] = sortByHierarchy([
     department: 'Executive',
     avatar: janeAbouJaoudeCeo,
     email: 'jane@JBJ.ae',
-    phone: '+971 56 591 1000',
     bio: 'Visionary leader with a passion for luxury real estate and building world-class teams. A global innovator, award-winning entrepreneur shaping the future of luxury real estate in the Middle East.',
     languages: ['English', 'Arabic', 'French', 'Spanish'],
     nationality: 'Lebanese',
     hierarchyLevel: 1,
-    directReports: ['david-thornton', 'richard-pemberton', 'olivia-reynolds', 'huda-marzooq'],
+    directReports: ['david-thornton', 'richard-pemberton', 'amanda-clarke', 'huda-marzooq'],
     status: 'online',
     canConductInterviews: true,
   },
@@ -184,37 +182,36 @@ export const executiveTeam: TeamMember[] = sortByHierarchy([
     nationality: 'British',
     hierarchyLevel: 2,
     reportsTo: 'jane-abou-jaoude',
-    directReports: ['alexander-shaw', 'jessica-pemberton', 'thomas-mitchell', 'daniel-parker', 'emily-watson'],
+    directReports: ['alexander-shaw', 'jessica-pemberton', 'thomas-mitchell', 'daniel-parker', 'emily-watson', 'olivia-reynolds'],
     status: 'online',
     canConductInterviews: true,
   },
   {
-    id: 'olivia-reynolds',
-    name: 'Olivia Reynolds',
+    id: 'amanda-clarke',
+    name: 'Amanda Clarke',
     role: 'Executive Assistant to CEO',
     department: 'Executive',
-    avatar: oliviaExecutiveAssistant,
+    avatar: amandaClarkeExecutiveAssistant,
     isAI: true,
-    email: 'olivia@JBJ.ae',
-    phone: '+971 54 716 7107',
+    email: 'amanda.clarke@JBJ.ae',
     bio: 'Organized, proactive, and fast-responding assistant supporting the Founder with scheduling, reminders, and follow-ups.',
-    languages: ['English', 'Italian', 'French', 'Spanish'],
-    nationality: 'British',
+    languages: ['English', 'French', 'Spanish'],
+    nationality: 'American',
     hierarchyLevel: 4,
     reportsTo: 'jane-abou-jaoude',
     status: 'online',
   },
   {
-    id: 'amanda-clarke',
-    name: 'Amanda Clarke',
+    id: 'olivia-reynolds',
+    name: 'Olivia Reynolds',
     role: 'Executive Assistant to COO',
     department: 'Executive',
-    avatar: amandaClarkeExecutiveAssistant,
+    avatar: oliviaExecutiveAssistant,
     isAI: true,
-    email: 'amanda.clarke@JBJ.ae',
+    email: 'olivia@JBJ.ae',
     bio: 'Professional support ensuring the COO operates at peak efficiency with precise coordination.',
-    languages: ['English', 'French', 'Italian'],
-    nationality: 'American',
+    languages: ['English', 'Italian', 'French'],
+    nationality: 'British',
     hierarchyLevel: 4,
     reportsTo: 'richard-pemberton',
     status: 'online',
@@ -231,7 +228,6 @@ export const salesTeam: TeamMember[] = sortByHierarchy([
     avatar: royDaviHeadOfSale,
     isAI: false,
     email: 'roy.davi@JBJ.ae',
-    phone: '+971 50 123 4567',
     bio: 'Dynamic sales leader with exceptional track record in luxury real estate. Leads the entire sales division with strategic vision and hands-on management.',
     specializations: ['Luxury Properties', 'High-Net-Worth Clients', 'Investment Properties', 'Team Leadership'],
     languages: ['English', 'Arabic'],
@@ -252,7 +248,7 @@ export const salesTeam: TeamMember[] = sortByHierarchy([
     email: 'michael.anderson@JBJ.ae',
     bio: 'Dynamic sales leader driving revenue growth with strategic client acquisition and team development.',
     specializations: ['Enterprise Sales', 'High-Net-Worth Clients', 'Investment Properties'],
-    languages: ['English', 'Hindi'],
+    languages: ['English'],
     nationality: 'British',
     hierarchyLevel: 3,
     reportsTo: 'roy-davi',
@@ -288,7 +284,7 @@ export const salesTeam: TeamMember[] = sortByHierarchy([
     specializations: ['Off-Plan Properties', 'Luxury Villas', 'Investment Properties'],
     languages: ['English', 'Portuguese'],
     nationality: 'British',
-    hierarchyLevel: 5,
+    hierarchyLevel: 4,
     reportsTo: 'roy-davi',
     status: 'online',
   },
