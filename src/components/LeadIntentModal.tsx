@@ -6,14 +6,15 @@ import { Button } from "@/components/ui/button";
 import { Checkbox } from "@/components/ui/checkbox";
 import { JJLogoImage } from "@/components/JJLogoImage";
 import { usePopupVisibility } from "@/contexts/PopupCoordinatorContext";
-import { 
-  Home, 
-  TrendingUp, 
-  Briefcase, 
-  Building2, 
+import {
+  Home,
+  TrendingUp,
+  Briefcase,
+  Building2,
   Users,
   ArrowRight,
-  Check
+  Check,
+  X,
 } from "lucide-react";
 import { toast } from "sonner";
 
