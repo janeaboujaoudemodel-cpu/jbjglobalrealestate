@@ -9714,6 +9714,14 @@ export type Database = {
         Args: { _team_id: string; _user_id: string }
         Returns: boolean
       }
+      log_pii_access: {
+        Args: {
+          p_access_type: string
+          p_resource_id: string
+          p_resource_type: string
+        }
+        Returns: undefined
+      }
       log_security_event: {
         Args: {
           p_action_type: string
