@@ -275,7 +275,6 @@ const RoleSelectionModal = ({ onRoleSelected }: RoleSelectionModalProps) => {
     toast.success(`Welcome to the team, ${employeeName}!`);
   };
 
-  if (bypassRoleModal) return null;
   if (!isOpen) return null;
 
   return (
