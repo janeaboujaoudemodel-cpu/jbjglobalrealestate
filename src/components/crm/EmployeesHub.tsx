@@ -158,41 +158,8 @@ const TEAM_MEMBERS: Employee[] = [
     responsibilities: ['Call Handling', 'Meeting Scheduling', 'Inquiry Management'],
   },
   
-  // HR Department - Correct hierarchy: Head of Recruitment > HR Manager > HR Assistant
-  {
-    id: 'david',
-    name: 'David Carter',
-    role: 'Head of Recruitment',
-    department: 'hr',
-    type: 'human',
-    email: 'recruitment@JBJ.ae',
-    status: 'active',
-    description: 'Oversees all recruitment and conducts second-round interviews',
-    responsibilities: ['Second-Round Interviews', 'Final Hiring Decisions', 'Recruitment Strategy'],
-  },
-  {
-    id: 'jessica',
-    name: 'Jessica',
-    role: 'HR Manager',
-    department: 'hr',
-    type: 'human',
-    email: 'hr@JBJ.ae',
-    status: 'active',
-    description: 'Manages recruitment, onboarding, and team development',
-    responsibilities: ['First Interviews', 'Onboarding', 'Training Coordination', 'Recruitment'],
-  },
-  {
-    id: 'hr-assistant',
-    name: 'HR Assistant',
-    role: 'HR Assistant',
-    department: 'hr',
-    type: 'human',
-    email: 'hrteam@JBJ.ae',
-    status: 'active',
-    description: 'Supports HR operations and candidate communication',
-    responsibilities: ['CV Collection', 'Initial Screening', 'Interview Scheduling', 'Candidate Communication'],
-  },
-  
+  // HR Department - Using centralized team members config for consistency
+  // HR staff is now imported from team-members.ts with correct photos and info
   // Marketing Department
   {
     id: 'media-lead',

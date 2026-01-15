@@ -2,7 +2,7 @@
 // Professional team member data with AI-generated unique portraits
 
 // Import team portraits - Executive Leadership
-import janeAbouJaoudeCeo from '@/assets/ceo/jane-ceo-executive-office-v3.jpg';
+import janeAbouJaoudeCeo from '@/assets/ceo/jane-ceo-executive-office-final.jpg';
 import davidThorntonCeo from '@/assets/team/david-thornton-md-realistic.png';
 import richardPembertonCoo from '@/assets/team/richard-pemberton-coo.png';
 import oliviaExecutiveAssistant from '@/assets/team/olivia-executive-assistant.png';
@@ -15,7 +15,7 @@ import hudaMarzooqLawyer from '@/assets/team/huda-marzooq-lawyer.jpg';
 import sarahMitchellListingAdmin from '@/assets/team/sarah-mitchell-listing-admin.png';
 
 // Import team portraits - Sales Team
-import royDaviHeadOfSale from '@/assets/team/roy-davi-head-of-sale-real.jpg';
+import royDaviHeadOfSale from '@/assets/team/roy-davi-head-of-sale-fixed.jpg';
 import williamHarrisonSales from '@/assets/team/william-harrison-sales.png';
 
 // Import diverse international team members
@@ -47,6 +47,8 @@ import georgeHamiltonClientRelations from '@/assets/team/george-hamilton-client-
 // Import team portraits - VIP Client Relations
 import victoriaAshworthVipDirector from '@/assets/team/victoria-ashworth-vip-director.png';
 import charlotteWhitmoreVipAssistant from '@/assets/team/charlotte-whitmore-vip-assistant.png';
+import jamesHartwellVipManager from '@/assets/team/james-hartwell-vip-manager.png';
+import alexandraFitzgeraldVipAssistant from '@/assets/team/alexandra-fitzgerald-vip-assistant.png';
 
 // Import team portraits - Additional CRM/Operations
 import jamesPorterCrmAssistant from '@/assets/team/james-porter-crm-assistant.png';
@@ -67,6 +69,11 @@ import annaKowalskiJuniorDev from '@/assets/team/anna-kowalski-junior-dev.png';
 // Import team portraits - Content & Copywriting Team
 import hannahScottContentStrategist from '@/assets/team/hannah-scott-content-strategist.png';
 import francescaRomanoCopywriter from '@/assets/team/francesca-romano-copywriter.png';
+
+// Import team portraits - Additional Marketing positions
+import charlotteBlakeSocialMedia from '@/assets/team/charlotte-blake-social-media.png';
+import ethanCrawfordBrandCoordinator from '@/assets/team/ethan-crawford-brand-coordinator.png';
+import sophieLaurentDigitalMarketing from '@/assets/team/sophie-laurent-digital-marketing.png';
 
 // Import team portraits - HR Team
 import jessicaHrManager from '@/assets/team/jessica-hr-manager.png';
@@ -159,7 +166,6 @@ export const executiveTeam: TeamMember[] = sortByHierarchy([
     department: 'Executive',
     avatar: davidThorntonCeo,
     isAI: true,
-    email: 'david.thornton@JBJ.ae',
     bio: 'Strategic business leader overseeing all operations with 25+ years of luxury real estate experience.',
     languages: ['English', 'German'],
     nationality: 'British',
@@ -176,7 +182,6 @@ export const executiveTeam: TeamMember[] = sortByHierarchy([
     department: 'Executive',
     avatar: richardPembertonCoo,
     isAI: true,
-    email: 'richard.pemberton@JBJ.ae',
     bio: 'Operational excellence leader ensuring seamless business processes and team coordination.',
     languages: ['English', 'French', 'Spanish'],
     nationality: 'British',
@@ -193,7 +198,6 @@ export const executiveTeam: TeamMember[] = sortByHierarchy([
     department: 'Executive',
     avatar: amandaClarkeExecutiveAssistant,
     isAI: true,
-    email: 'amanda.clarke@JBJ.ae',
     bio: 'Organized, proactive, and fast-responding assistant supporting the Founder with scheduling, reminders, and follow-ups.',
     languages: ['English', 'French', 'Spanish'],
     nationality: 'American',
@@ -208,7 +212,6 @@ export const executiveTeam: TeamMember[] = sortByHierarchy([
     department: 'Executive',
     avatar: oliviaExecutiveAssistant,
     isAI: true,
-    email: 'olivia@JBJ.ae',
     bio: 'Professional support ensuring the COO operates at peak efficiency with precise coordination.',
     languages: ['English', 'Italian', 'French'],
     nationality: 'British',
@@ -245,7 +248,6 @@ export const salesTeam: TeamMember[] = sortByHierarchy([
     department: 'Sales',
     avatar: michaelAndersonSalesDirector,
     isAI: true,
-    email: 'michael.anderson@JBJ.ae',
     bio: 'Dynamic sales leader driving revenue growth with strategic client acquisition and team development.',
     specializations: ['Enterprise Sales', 'High-Net-Worth Clients', 'Investment Properties'],
     languages: ['English'],
@@ -263,7 +265,6 @@ export const salesTeam: TeamMember[] = sortByHierarchy([
     department: 'Sales',
     avatar: emmaHartleySalesManager,
     isAI: true,
-    email: 'emma.hartley@JBJ.ae',
     bio: 'Results-driven manager coaching sales teams to exceed targets with consultative selling approach.',
     specializations: ['Off-Plan Sales', 'Team Leadership', 'Client Relations'],
     languages: ['English', 'French'],
@@ -279,7 +280,6 @@ export const salesTeam: TeamMember[] = sortByHierarchy([
     department: 'Sales',
     avatar: williamHarrisonSales,
     isAI: true,
-    email: 'william.harrison@JBJ.ae',
     bio: 'Confident, persuasive, and analytical. Expert in converting leads into clients with clear advice and strategic deal-making.',
     specializations: ['Off-Plan Properties', 'Luxury Villas', 'Investment Properties'],
     languages: ['English', 'Portuguese'],
@@ -474,14 +474,30 @@ export const vipClientRelationsTeam: TeamMember[] = sortByHierarchy([
     department: 'VIP Client Relations',
     avatar: victoriaAshworthVipDirector,
     isAI: true,
-    email: 'victoria.ashworth@JBJ.ae',
     bio: 'Elite client specialist managing relationships with high-net-worth individuals and VIP investors, ensuring white-glove concierge service.',
     specializations: ['VIP Services', 'Luxury Concierge', 'Private Client Management', 'Investment Advisory'],
     languages: ['English', 'French', 'Arabic'],
     nationality: 'British',
     hierarchyLevel: 3,
     reportsTo: 'george-hamilton',
-    directReports: ['charlotte-whitmore'],
+    directReports: ['james-hartwell', 'charlotte-whitmore'],
+    status: 'online',
+    canConductInterviews: true,
+  },
+  {
+    id: 'james-hartwell',
+    name: 'James Hartwell',
+    role: 'VIP Client Relations Manager',
+    department: 'VIP Client Relations',
+    avatar: jamesHartwellVipManager,
+    isAI: true,
+    bio: 'Distinguished professional managing day-to-day VIP client operations, ensuring personalized service delivery and client satisfaction.',
+    specializations: ['Client Management', 'Relationship Building', 'Service Excellence', 'VIP Coordination'],
+    languages: ['English', 'French'],
+    nationality: 'British',
+    hierarchyLevel: 4,
+    reportsTo: 'victoria-ashworth',
+    directReports: ['alexandra-fitzgerald'],
     status: 'online',
     canConductInterviews: true,
   },
@@ -492,13 +508,27 @@ export const vipClientRelationsTeam: TeamMember[] = sortByHierarchy([
     department: 'VIP Client Relations',
     avatar: charlotteWhitmoreVipAssistant,
     isAI: true,
-    email: 'charlotte.whitmore@JBJ.ae',
     bio: 'Dedicated assistant supporting VIP client operations, scheduling exclusive property viewings, and coordinating luxury client experiences.',
     specializations: ['Client Coordination', 'Event Planning', 'Property Viewings', 'Client Communication'],
     languages: ['English', 'Spanish'],
     nationality: 'British',
     hierarchyLevel: 5,
     reportsTo: 'victoria-ashworth',
+    status: 'online',
+  },
+  {
+    id: 'alexandra-fitzgerald',
+    name: 'Alexandra Fitzgerald',
+    role: 'VIP Client Relations Assistant',
+    department: 'VIP Client Relations',
+    avatar: alexandraFitzgeraldVipAssistant,
+    isAI: true,
+    bio: 'Professional assistant coordinating VIP client schedules, luxury property viewings, and exclusive client events.',
+    specializations: ['Scheduling', 'Event Coordination', 'Client Service', 'Documentation'],
+    languages: ['English', 'German'],
+    nationality: 'British',
+    hierarchyLevel: 5,
+    reportsTo: 'james-hartwell',
     status: 'online',
   },
 ]);
