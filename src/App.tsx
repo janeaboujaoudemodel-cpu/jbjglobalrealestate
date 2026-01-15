@@ -217,7 +217,7 @@ const App = () => (
                 <Route path="/jbj-broker-messages" element={<JBJBrokerMessages />} />
                 <Route path="/jbj-broker-reports" element={<JBJBrokerReports />} />
                 <Route path="/founders-assistant" element={<FoundersAssistant />} />
-                <Route path="/listing-admin" element={<ListingAdmin />} />
+                <Route path="/listing-admin/*" element={<ListingAdmin />} />
                 <Route path="/team" element={<MeetTheTeam />} />
                 <Route path="/meet-the-team" element={<Navigate to="/team" replace />} />
                 <Route path="/brokers" element={<OurBrokers />} />
