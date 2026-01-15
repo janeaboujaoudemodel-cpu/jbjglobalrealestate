@@ -36,30 +36,52 @@ serve(async (req) => {
       });
     }
 
-    // Create user in auth
-    const { data: newUser, error: createError } = await supabaseAdmin.auth.admin.createUser({
-      email: normalizedEmail,
-      password,
-      email_confirm: true,
-      user_metadata: { full_name: displayName, force_password_change: true },
-    });
-
-    if (createError) {
-      return new Response(JSON.stringify({ error: createError.message }), {
-        status: 400, headers: { ...corsHeaders, "Content-Type": "application/json" },
+    // Check if user already exists
+    const { data: existingUsers } = await supabaseAdmin.auth.admin.listUsers();
+    const existingUser = existingUsers?.users?.find(u => u.email?.toLowerCase() === normalizedEmail);
+    
+    let userId: string;
+    
+    if (existingUser) {
+      // Update existing user's password
+      const { error: updateError } = await supabaseAdmin.auth.admin.updateUserById(existingUser.id, {
+        password,
+        user_metadata: { full_name: displayName, force_password_change: true },
       });
+      
+      if (updateError) {
+        return new Response(JSON.stringify({ error: updateError.message }), {
+          status: 400, headers: { ...corsHeaders, "Content-Type": "application/json" },
+        });
+      }
+      userId = existingUser.id;
+    } else {
+      // Create new user
+      const { data: newUser, error: createError } = await supabaseAdmin.auth.admin.createUser({
+        email: normalizedEmail,
+        password,
+        email_confirm: true,
+        user_metadata: { full_name: displayName, force_password_change: true },
+      });
+
+      if (createError) {
+        return new Response(JSON.stringify({ error: createError.message }), {
+          status: 400, headers: { ...corsHeaders, "Content-Type": "application/json" },
+        });
+      }
+      userId = newUser.user.id;
     }
 
     // Create profile
     await supabaseAdmin.from("profiles").upsert({
-      id: newUser.user.id, email: normalizedEmail, full_name: displayName, phone_number: phone,
+      id: userId, email: normalizedEmail, full_name: displayName, phone_number: phone,
     });
 
-    // Create CRM profile
-    const { error: crmError } = await supabaseAdmin.from("crm_users_profile").insert({
-      user_id: newUser.user.id, crm_role: crmRole, is_active: true, display_name: displayName,
+    // Create or update CRM profile
+    const { error: crmError } = await supabaseAdmin.from("crm_users_profile").upsert({
+      user_id: userId, crm_role: crmRole, is_active: true, display_name: displayName,
       job_title: jobTitle, phone, email: normalizedEmail, force_password_change: true,
-    });
+    }, { onConflict: 'user_id' });
 
     if (crmError) {
       return new Response(JSON.stringify({ error: crmError.message }), {
@@ -68,7 +90,7 @@ serve(async (req) => {
     }
 
     return new Response(JSON.stringify({
-      success: true, user: { id: newUser.user.id, email: newUser.user.email, displayName, crmRole },
+      success: true, user: { id: userId, email: normalizedEmail, displayName, crmRole },
     }), { status: 200, headers: { ...corsHeaders, "Content-Type": "application/json" } });
   } catch (error: unknown) {
     const msg = error instanceof Error ? error.message : "Unknown error";
