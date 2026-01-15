@@ -35,7 +35,9 @@ import {
   VolumeX,
   Send,
   X,
-  ChevronDown
+  ChevronDown,
+  Brain,
+  Loader2
 } from "lucide-react";
 import { toast } from "sonner";
 import MainLayout from "@/components/MainLayout";
@@ -66,6 +68,8 @@ import {
   DropdownMenuTrigger,
   DropdownMenuSeparator,
 } from "@/components/ui/dropdown-menu";
+import { MeetingAIAssistant } from "@/components/video-meet/MeetingAIAssistant";
+import { useChatHistoryLogger } from "@/hooks/useChatHistoryLogger";
 
 interface RemoteParticipant extends Participant {
   stream?: MediaStream;
@@ -154,6 +158,18 @@ const VideoMeeting = () => {
   // Host controls
   const [isHost, setIsHost] = useState(false);
   
+  // AI Assistant
+  const [showAIAssistant, setShowAIAssistant] = useState(false);
+  const [meetingContext, setMeetingContext] = useState<any>({});
+  const [showMeetingEndedDialog, setShowMeetingEndedDialog] = useState(false);
+  const [meetingEndedBy, setMeetingEndedBy] = useState('');
+  
+  // Media initialization state
+  const [isMediaInitializing, setIsMediaInitializing] = useState(false);
+  const [mediaError, setMediaError] = useState<string | null>(null);
+  
+  const { logChat } = useChatHistoryLogger();
+  
   const localVideoRef = useRef<HTMLVideoElement>(null);
   const webrtcRef = useRef<WebRTCManager | null>(null);
   const containerRef = useRef<HTMLDivElement>(null);
@@ -163,9 +179,17 @@ const VideoMeeting = () => {
   // Generate user ID
   const userId = useRef(`user_${Math.random().toString(36).substring(7)}`);
 
-  // Enumerate available devices
+  // Enumerate available devices with proper error handling
   const enumerateDevices = useCallback(async () => {
     try {
+      // First request basic permission to get device labels
+      try {
+        const tempStream = await navigator.mediaDevices.getUserMedia({ audio: true, video: true });
+        tempStream.getTracks().forEach(track => track.stop());
+      } catch (permErr) {
+        console.log('Initial permission request (expected to potentially fail):', permErr);
+      }
+      
       const devices = await navigator.mediaDevices.enumerateDevices();
       const videoInputs = devices
         .filter(d => d.kind === 'videoinput')
@@ -184,8 +208,11 @@ const VideoMeeting = () => {
       if (videoInputs.length && !selectedVideoDevice) setSelectedVideoDevice(videoInputs[0].deviceId);
       if (audioInputs.length && !selectedAudioDevice) setSelectedAudioDevice(audioInputs[0].deviceId);
       if (audioOutputs.length && !selectedSpeakerDevice) setSelectedSpeakerDevice(audioOutputs[0].deviceId);
+      
+      setMediaError(null);
     } catch (error) {
       console.error('Error enumerating devices:', error);
+      setMediaError('Could not access media devices. Please ensure camera/microphone permissions are granted.');
     }
   }, [selectedVideoDevice, selectedAudioDevice, selectedSpeakerDevice]);
 
@@ -251,7 +278,27 @@ const VideoMeeting = () => {
       return;
     }
 
+    setIsMediaInitializing(true);
+    setMediaError(null);
+
     try {
+      // Request media permissions explicitly first
+      const stream = await navigator.mediaDevices.getUserMedia({
+        video: {
+          width: { ideal: 1280 },
+          height: { ideal: 720 },
+          facingMode: 'user',
+          deviceId: selectedVideoDevice ? { exact: selectedVideoDevice } : undefined
+        },
+        audio: {
+          echoCancellation: true,
+          noiseSuppression: true,
+          autoGainControl: true,
+          deviceId: selectedAudioDevice ? { exact: selectedAudioDevice } : undefined
+        }
+      });
+
+      // Initialize WebRTC with the obtained stream
       webrtcRef.current = new WebRTCManager(
         room,
         userId.current,
@@ -261,19 +308,21 @@ const VideoMeeting = () => {
         handleRemoteStream
       );
 
-      // Always start with camera/mic off for privacy
-      const stream = await webrtcRef.current.initialize(false, false);
+      // Initialize with stream
+      await webrtcRef.current.initialize(true, true);
       
+      // Set local video
       if (localVideoRef.current) {
         localVideoRef.current.srcObject = stream;
       }
 
+      // Enable both by default since we got permission
+      setVideoEnabled(true);
+      setAudioEnabled(true);
+
       setRoomId(room);
       setIsInMeeting(true);
       setIsHost(!existingRoom || existingRoom === room);
-      
-      // Show media prompt to user
-      setShowMediaPrompt(true);
       
       // Update URL with room ID
       window.history.replaceState({}, '', `/video-meeting?room=${room}`);
@@ -283,10 +332,34 @@ const VideoMeeting = () => {
         setMeetingDuration(prev => prev + 1);
       }, 1000);
 
-      toast.success('Joined meeting successfully');
-    } catch (error) {
+      // Log meeting start
+      logChat({
+        session_id: room,
+        role: 'user',
+        message: `Started video meeting: ${room}`,
+        source: 'video_meeting',
+        user_name: name
+      });
+
+      toast.success('Joined meeting successfully! Camera and microphone enabled.');
+    } catch (error: any) {
       console.error('Error starting meeting:', error);
-      toast.error('Failed to start meeting. Please check camera/microphone permissions.');
+      
+      let errorMessage = 'Failed to start meeting.';
+      if (error.name === 'NotAllowedError') {
+        errorMessage = 'Camera and microphone access denied. Please allow access in your browser settings.';
+      } else if (error.name === 'NotFoundError') {
+        errorMessage = 'No camera or microphone found. Please connect a device and try again.';
+      } else if (error.name === 'NotReadableError') {
+        errorMessage = 'Camera or microphone is already in use by another application.';
+      } else if (error.name === 'OverconstrainedError') {
+        errorMessage = 'The selected camera/microphone is not available.';
+      }
+      
+      setMediaError(errorMessage);
+      toast.error(errorMessage);
+    } finally {
+      setIsMediaInitializing(false);
     }
   };
 
@@ -477,8 +550,22 @@ const VideoMeeting = () => {
   };
 
   const endMeetingForAll = () => {
-    toast.success('Meeting ended for all participants');
-    endMeeting();
+    // Show professional ending message to all participants
+    setMeetingEndedBy(userName || 'Host');
+    setShowMeetingEndedDialog(true);
+    
+    // Log the meeting end
+    logChat({
+      session_id: roomId,
+      role: 'assistant',
+      message: 'Meeting ended by host',
+      source: 'video_meeting'
+    });
+    
+    setTimeout(() => {
+      setShowMeetingEndedDialog(false);
+      endMeeting();
+    }, 3000);
   };
 
   useEffect(() => {
@@ -851,6 +938,15 @@ const VideoMeeting = () => {
               </DropdownMenuContent>
             </DropdownMenu>
           )}
+          <Button
+            variant="ghost"
+            size="icon"
+            onClick={() => setShowAIAssistant(!showAIAssistant)}
+            className={`${showAIAssistant ? 'text-gold bg-gold/20' : 'text-zinc-400'} hover:text-gold`}
+            title="AI Assistant (Private)"
+          >
+            <Brain className="w-4 h-4" />
+          </Button>
           <Button
             variant="ghost"
             size="icon"
@@ -1434,6 +1530,42 @@ const VideoMeeting = () => {
           </p>
         </DialogContent>
       </Dialog>
+
+      {/* Meeting Ended Dialog */}
+      <Dialog open={showMeetingEndedDialog} onOpenChange={setShowMeetingEndedDialog}>
+        <DialogContent className="bg-zinc-900 border-zinc-800 max-w-md text-center">
+          <div className="py-8 space-y-6">
+            <div className="w-20 h-20 rounded-full bg-gradient-to-br from-gold/20 to-gold/10 flex items-center justify-center mx-auto">
+              <Video className="w-10 h-10 text-gold" />
+            </div>
+            <div>
+              <h2 className="text-2xl font-bold text-white mb-2">Meeting Ended</h2>
+              <p className="text-zinc-400">
+                This meeting has been ended by {meetingEndedBy || 'the host'}.
+              </p>
+            </div>
+            <div className="bg-zinc-800/50 rounded-xl p-4 border border-zinc-700">
+              <p className="text-gold text-sm font-medium">JBJ Global Real Estate</p>
+              <p className="text-zinc-500 text-xs mt-1">
+                Thank you for joining our video meeting. We appreciate your time.
+              </p>
+            </div>
+            <p className="text-zinc-500 text-sm">
+              You will be redirected shortly...
+            </p>
+          </div>
+        </DialogContent>
+      </Dialog>
+
+      {/* AI Assistant Panel */}
+      <MeetingAIAssistant
+        isVisible={showAIAssistant}
+        onClose={() => setShowAIAssistant(false)}
+        meetingContext={meetingContext}
+        onSuggestion={(suggestion) => {
+          setMeetingContext(prev => ({ ...prev, ...suggestion }));
+        }}
+      />
     </div>
   );
 };

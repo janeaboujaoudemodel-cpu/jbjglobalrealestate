@@ -36,8 +36,10 @@ import FoundersEscalationsPanel from "@/components/founders-assistant/FoundersEs
 import FoundersEmotionAnalyticsPanel from "@/components/founders-assistant/FoundersEmotionAnalyticsPanel";
 import FoundersCollaborationPanel from "@/components/founders-assistant/FoundersCollaborationPanel";
 import FoundersInsightsPanel from "@/components/founders-assistant/FoundersInsightsPanel";
+import FoundersNotesPanel from "@/components/founders-assistant/FoundersNotesPanel";
 import { FoundersDecisionPanel } from "@/components/founders-assistant/FoundersDecisionPanel";
 import { EscalationAlertButton } from "@/components/ai/EscalationAlertButton";
+import { FileText } from "lucide-react";
 
 // Olivia AI portrait
 import oliviaPortrait from "@/assets/team/olivia-executive-assistant.png";
@@ -296,6 +298,13 @@ export default function FoundersAssistant() {
                 AI Insights
               </TabsTrigger>
               <TabsTrigger 
+                value="notes"
+                className="flex-1 min-w-[100px] data-[state=active]:bg-gold data-[state=active]:text-black"
+              >
+                <FileText className="h-4 w-4 mr-2" />
+                Notes
+              </TabsTrigger>
+              <TabsTrigger 
                 value="decisions"
                 className="flex-1 min-w-[100px] data-[state=active]:bg-gold data-[state=active]:text-black"
               >
@@ -422,6 +431,16 @@ export default function FoundersAssistant() {
                   exit={{ opacity: 0, y: -10 }}
                 >
                   <FoundersInsightsPanel />
+                </motion.div>
+              </TabsContent>
+
+              <TabsContent value="notes" className="mt-0">
+                <motion.div
+                  initial={{ opacity: 0, y: 10 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  exit={{ opacity: 0, y: -10 }}
+                >
+                  <FoundersNotesPanel />
                 </motion.div>
               </TabsContent>
 
