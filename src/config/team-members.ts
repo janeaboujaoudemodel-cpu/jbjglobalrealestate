@@ -13,7 +13,7 @@ import anthonyPembertonStrategy from '@/assets/team/anthony-pemberton-strategy.p
 import laylaMansourPartnerships from '@/assets/team/layla-mansour-partnerships.png';
 
 // Import team portraits - Legal Team
-import hudaMarzooqLawyer from '@/assets/team/huda-marzooq-lawyer-office.jpg';
+import hudaMarzooqLawyer from '@/assets/team/huda-marzooq-lawyer-office-v2.jpg';
 // NEW Legal Team additions (to reach 4)
 import williamThorntonLegal from '@/assets/team/william-thornton-legal.png';
 import nadiaHassanLegal from '@/assets/team/nadia-hassan-legal.png';
@@ -359,7 +359,7 @@ export const executiveTeam: TeamMember[] = sortByHierarchy([
     avatar: laylaMansourPartnerships,
     isAI: true,
     bio: 'Expert in strategic partnerships, stakeholder relations, and building connections with key industry partners across the MENA region.',
-    languages: ['English', 'Arabic', 'French'],
+    languages: ['English', 'Arabic'],
     nationality: 'Jordanian',
     yearsExperience: 14,
     hierarchyLevel: 3,
@@ -411,12 +411,12 @@ export const salesTeam: TeamMember[] = sortByHierarchy([
     email: 'roy.davi@JBJ.ae',
     bio: 'Dynamic sales leader with exceptional track record in luxury real estate. Leads the entire sales division with strategic vision and hands-on management.',
     specializations: ['Luxury Properties', 'High-Net-Worth Clients', 'Investment Properties', 'Team Leadership'],
-    languages: ['English', 'Arabic', 'French'],
+    languages: ['English', 'Arabic'],
     nationality: 'Lebanese Canadian',
     yearsExperience: 10,
     hierarchyLevel: 3,
     reportsTo: 'jane-abou-jaoude',
-    directReports: ['michael-anderson', 'emma-hartley', 'william-harrison'],
+    directReports: ['michael-anderson', 'emma-hartley', 'william-harrison', 'abdullah-al-rashid'],
     status: 'online',
     canConductInterviews: true,
   },
@@ -546,8 +546,8 @@ export const salesTeam: TeamMember[] = sortByHierarchy([
     languages: ['English', 'Igbo', 'French'],
     nationality: 'Nigerian',
     yearsExperience: 9,
-    hierarchyLevel: 4,
-    reportsTo: 'roy-davi',
+    hierarchyLevel: 5,
+    reportsTo: 'abdullah-al-rashid',
     status: 'online',
   },
   {
@@ -699,18 +699,20 @@ export const salesTeam: TeamMember[] = sortByHierarchy([
   {
     id: 'abdullah-al-rashid',
     name: 'Abdullah Al Rashid',
-    role: 'VIP Sales Manager',
+    role: 'VIP Client Relationship Manager',
     department: 'Sales',
     avatar: abdullahAlRashidSales,
     isAI: true,
-    bio: 'Distinguished sales leader specializing in Saudi and GCC high-net-worth investor relations.',
-    specializations: ['Saudi Clients', 'GCC Markets', 'Ultra-Luxury Properties'],
+    bio: 'Distinguished sales leader specializing in Saudi and GCC high-net-worth investor relations and VIP client management.',
+    specializations: ['Saudi Clients', 'GCC Markets', 'Ultra-Luxury Properties', 'VIP Relations'],
     languages: ['English', 'Arabic'],
     nationality: 'Saudi Arabia',
     yearsExperience: 11,
     hierarchyLevel: 4,
     reportsTo: 'roy-davi',
+    directReports: ['adaeze-okonkwo'],
     status: 'online',
+    canConductInterviews: true,
   },
   {
     id: 'martin-gonzalez',

@@ -118,8 +118,8 @@ const TeamMemberCard = ({ member, onReadMore }: TeamMemberCardProps) => {
                 </p>
               )}
 
-              {/* Read More Button - Moved UP before languages */}
-              <div className="pt-2 border-t border-zinc-800/50 mb-2">
+            {/* Read More Button */}
+              <div className="pt-2 border-t border-zinc-800/50">
                 <button
                   type="button"
                   onClick={() => onReadMore(member)}
@@ -129,14 +129,14 @@ const TeamMemberCard = ({ member, onReadMore }: TeamMemberCardProps) => {
                 </button>
               </div>
 
-              {/* Languages - Moved DOWN after read more, Show 4, only +X if more than 4 */}
+              {/* Languages - Below read more with gap, 4 languages on one line */}
               {displayLanguages.length > 0 && (
-                <div className="flex flex-wrap gap-1">
+                <div className="flex flex-wrap gap-1.5 mt-3">
                   {displayLanguages.map((lang) => (
                     <Badge
                       key={lang}
                       variant="outline"
-                      className="text-[10px] border-zinc-700 text-zinc-400 px-1.5 py-0"
+                      className="text-[10px] border-zinc-700 text-zinc-400 px-2 py-0.5"
                     >
                       {lang}
                     </Badge>
@@ -144,7 +144,7 @@ const TeamMemberCard = ({ member, onReadMore }: TeamMemberCardProps) => {
                   {remainingLanguages > 0 && (
                     <Badge
                       variant="outline"
-                      className="text-[10px] border-zinc-700 text-zinc-400 px-1.5 py-0"
+                      className="text-[10px] border-zinc-700 text-zinc-400 px-2 py-0.5"
                     >
                       +{remainingLanguages}
                     </Badge>
