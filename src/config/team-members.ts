@@ -158,10 +158,11 @@ import priyaMehtaIt from '@/assets/team/priya-mehta-it.png';
 import oluwaseunAdeyemiIt from '@/assets/team/oluwaseun-adeyemi-it.png';
 
 // Import team portraits - After Sales Team
-import charlesPembertonAfterSalesDir from '@/assets/team/charles-pemberton-aftersales-director.png';
+import charlesPembertonAfterSalesDir from '@/assets/team/charles-pemberton-aftersales-v2.png';
 import catherineWellsAfterSalesMgr from '@/assets/team/catherine-wells-aftersales-manager.png';
 import marcusVanDerBergAfterSalesCoord from '@/assets/team/marcus-van-der-berg-aftersales-coord.png';
 import mariaSantosAfterSalesAssistant from '@/assets/team/maria-santos-aftersales-assistant.png';
+import graceReyesAfterSales from '@/assets/team/grace-reyes-customer-v2.png';
 
 // Import team portraits - Admin & Front Desk
 import emilyWatsonAdminManager from '@/assets/team/emily-watson-admin-manager.png';
@@ -202,14 +203,14 @@ import aishaNurbekovaSales from '@/assets/team/aisha-nurbekova-sales.png';
 import kwameMensahSales from '@/assets/team/kwame-mensah-sales.png';
 import armenPetrosyanFinance from '@/assets/team/armen-petrosyan-finance.png';
 import anaHorvatAdmin from '@/assets/team/ana-horvat-admin.png';
-import alejandroHerreraSales from '@/assets/team/alejandro-herrera-sales.png';
+import alejandroHerreraSales from '@/assets/team/alejandro-herrera-sales-v2.png';
 
 // NEW Additional Team Members (to reach 100+)
-import nikolaosKonstantinouSales from '@/assets/team/nikolaos-konstantinou-sales.png';
+import nikolaosKonstantinouSales from '@/assets/team/nikolaos-konstantinou-sales-v2.png';
 import lisaBergstromMarketing from '@/assets/team/lisa-bergstrom-marketing.png';
 import pawelKowalskiOperations from '@/assets/team/pawel-kowalski-operations.png';
 import siripornThongchaiClient from '@/assets/team/siriporn-thongchai-client.png';
-import jamesMurphySales from '@/assets/team/james-murphy-sales.png';
+import jamesMurphySales from '@/assets/team/james-murphy-sales-v2.png';
 import sofieNielsenHr from '@/assets/team/sofie-nielsen-hr.png';
 import carlosRamirezFinance from '@/assets/team/carlos-ramirez-finance.png';
 import raniaKhalilSales from '@/assets/team/rania-khalil-sales.png';
@@ -413,7 +414,7 @@ export const salesTeam: TeamMember[] = sortByHierarchy([
     specializations: ['Luxury Properties', 'High-Net-Worth Clients', 'Investment Properties', 'Team Leadership'],
     languages: ['English', 'Arabic'],
     nationality: 'Lebanese Canadian',
-    yearsExperience: 10,
+    yearsExperience: 15,
     hierarchyLevel: 3,
     reportsTo: 'jane-abou-jaoude',
     directReports: ['michael-anderson', 'emma-hartley', 'william-harrison', 'abdullah-al-rashid'],
@@ -431,7 +432,7 @@ export const salesTeam: TeamMember[] = sortByHierarchy([
     specializations: ['Enterprise Sales', 'High-Net-Worth Clients', 'Investment Properties'],
     languages: ['English'],
     nationality: 'British',
-    yearsExperience: 15,
+    yearsExperience: 12,
     hierarchyLevel: 3,
     reportsTo: 'roy-davi',
     directReports: ['george-hamilton'],
@@ -449,7 +450,7 @@ export const salesTeam: TeamMember[] = sortByHierarchy([
     specializations: ['Off-Plan Sales', 'Team Leadership', 'Client Relations'],
     languages: ['English', 'French'],
     nationality: 'British',
-    yearsExperience: 11,
+    yearsExperience: 10,
     hierarchyLevel: 4,
     reportsTo: 'roy-davi',
     status: 'online',
@@ -1829,7 +1830,7 @@ export const afterSalesTeam: TeamMember[] = sortByHierarchy([
     specializations: ['Client Retention', 'Handover Management', 'Service Excellence', 'Relationship Building'],
     languages: ['English', 'French'],
     nationality: 'British',
-    yearsExperience: 15,
+    yearsExperience: 14,
     hierarchyLevel: 3,
     reportsTo: 'roy-davi',
     directReports: ['catherine-wells', 'marcus-van-der-berg'],
@@ -1875,7 +1876,7 @@ export const afterSalesTeam: TeamMember[] = sortByHierarchy([
     name: 'Grace Reyes',
     role: 'After Sales Assistant',
     department: 'After Sales',
-    avatar: mariaSantosAfterSalesAssistant,
+    avatar: graceReyesAfterSales,
     isAI: true,
     bio: 'Friendly and efficient assistant supporting after-sales operations with client follow-ups and service coordination.',
     specializations: ['Client Follow-up', 'Service Scheduling', 'Administrative Support'],
