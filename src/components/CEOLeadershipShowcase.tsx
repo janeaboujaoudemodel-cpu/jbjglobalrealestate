@@ -72,7 +72,7 @@ const CEOLeadershipShowcase = () => {
                   WebkitTextFillColor: "transparent",
                 }}
               >
-                Jane Abou Jaoude
+                Jamila Abou Jaoude
               </span>
             </h2>
             <p className="text-xl text-zinc-400 mb-2">Founder & CEO</p>
@@ -142,7 +142,7 @@ const CEOLeadershipShowcase = () => {
                 of everything we build. At JBJ Global, we're not just selling properties;
                 we're crafting futures and shaping skylines.
               </p>
-              <p className="mt-6 text-gold font-semibold">— Jane Abou Jaoude</p>
+              <p className="mt-6 text-gold font-semibold">— Jamila Abou Jaoude</p>
             </div>
           </motion.div>
         </motion.div>

@@ -2,11 +2,14 @@
 // Professional team member data with AI-generated unique portraits
 
 // Import team portraits - Executive Leadership
-import janeAbouJaoudeCeo from '@/assets/team/jane-abou-jaoude-ceo.png';
+import janeAbouJaoudeCeo from '@/assets/ceo/jane-ceo-executive-office.jpg';
 import davidThorntonCeo from '@/assets/team/david-thornton-md-v3.png';
 import richardPembertonCoo from '@/assets/team/richard-pemberton-coo.png';
 import oliviaExecutiveAssistant from '@/assets/team/olivia-executive-assistant.png';
 import amandaClarkeExecutiveAssistant from '@/assets/team/amanda-clarke-executive-assistant.png';
+
+// Import team portraits - Legal Team
+import hudaMarzooqLawyer from '@/assets/team/huda-marzooq-lawyer.jpg';
 
 // Import team portraits - Property Operations
 import sarahMitchellListingAdmin from '@/assets/team/sarah-mitchell-listing-admin.png';
@@ -118,17 +121,17 @@ const sortByHierarchy = (members: TeamMember[]): TeamMember[] => {
 export const executiveTeam: TeamMember[] = sortByHierarchy([
   {
     id: 'jane-abou-jaoude',
-    name: 'Jane Abou Jaoude',
+    name: 'Jamila Abou Jaoude',
     role: 'Founder & CEO',
     department: 'Executive',
     avatar: janeAbouJaoudeCeo,
     email: 'jane@JBJ.ae',
     phone: '+971 56 591 1000',
-    bio: 'Visionary leader with a passion for luxury real estate and building world-class teams.',
+    bio: 'Visionary leader with a passion for luxury real estate and building world-class teams. A global innovator, award-winning entrepreneur shaping the future of luxury real estate in the Middle East.',
     languages: ['English', 'Arabic', 'French', 'Spanish'],
     nationality: 'Lebanese',
     hierarchyLevel: 1,
-    directReports: ['david-thornton', 'richard-pemberton', 'olivia-reynolds'],
+    directReports: ['david-thornton', 'richard-pemberton', 'olivia-reynolds', 'huda-marzooq'],
     status: 'online',
     canConductInterviews: true,
   },
@@ -1094,6 +1097,27 @@ export const customerHappinessTeam: TeamMember[] = sortByHierarchy([
   },
 ]);
 
+// ===== Legal Team =====
+export const legalTeam: TeamMember[] = sortByHierarchy([
+  {
+    id: 'huda-marzooq',
+    name: 'Huda Marzooq',
+    role: 'Legal Counsel',
+    department: 'Legal',
+    avatar: hudaMarzooqLawyer,
+    isAI: false,
+    email: 'legal@JBJ.ae',
+    bio: 'Experienced Emirati legal counsel specializing in UAE property law, contracts, and corporate governance. Provides comprehensive legal support for all real estate transactions and company matters.',
+    specializations: ['UAE Property Law', 'Contract Law', 'Corporate Governance', 'Real Estate Transactions'],
+    languages: ['English', 'Arabic'],
+    nationality: 'Emirati',
+    hierarchyLevel: 3,
+    reportsTo: 'jane-abou-jaoude',
+    status: 'online',
+    canConductInterviews: false,
+  },
+]);
+
 // ===== All Team Members Combined (excludes AI Tools - they are tools, not employees) =====
 export const allTeamMembers: TeamMember[] = [
   ...executiveTeam,
@@ -1111,6 +1135,7 @@ export const allTeamMembers: TeamMember[] = [
   ...projectManagementTeam,
   ...contentTeam,
   ...customerHappinessTeam,
+  ...legalTeam,
 ];
 
 // ===== Interview Panel Members =====
@@ -1166,6 +1191,7 @@ export const teamByDepartment = {
   'IT': itTeam,
   'Administration': adminTeam,
   'Customer Happiness': customerHappinessTeam,
+  'Legal': legalTeam,
 };
 
 // ===== Company Channels Configuration =====
