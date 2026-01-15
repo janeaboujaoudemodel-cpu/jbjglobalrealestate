@@ -251,6 +251,60 @@ export type Database = {
         }
         Relationships: []
       }
+      ai_notes: {
+        Row: {
+          ai_action_items: Json | null
+          ai_key_points: Json | null
+          ai_schedule: Json | null
+          ai_summary: string | null
+          content: string | null
+          created_at: string
+          id: string
+          is_archived: boolean | null
+          project_id: string | null
+          source_type: string | null
+          source_url: string | null
+          tags: string[] | null
+          title: string
+          updated_at: string
+          user_id: string
+        }
+        Insert: {
+          ai_action_items?: Json | null
+          ai_key_points?: Json | null
+          ai_schedule?: Json | null
+          ai_summary?: string | null
+          content?: string | null
+          created_at?: string
+          id?: string
+          is_archived?: boolean | null
+          project_id?: string | null
+          source_type?: string | null
+          source_url?: string | null
+          tags?: string[] | null
+          title: string
+          updated_at?: string
+          user_id: string
+        }
+        Update: {
+          ai_action_items?: Json | null
+          ai_key_points?: Json | null
+          ai_schedule?: Json | null
+          ai_summary?: string | null
+          content?: string | null
+          created_at?: string
+          id?: string
+          is_archived?: boolean | null
+          project_id?: string | null
+          source_type?: string | null
+          source_url?: string | null
+          tags?: string[] | null
+          title?: string
+          updated_at?: string
+          user_id?: string
+        }
+        Relationships: []
+      }
       ai_usage_logs: {
         Row: {
           client_ip_hash: string | null
@@ -1800,6 +1854,63 @@ export type Database = {
           status?: string
           updated_at?: string
           user_email?: string
+          user_name?: string | null
+          user_phone?: string | null
+        }
+        Relationships: []
+      }
+      chat_history: {
+        Row: {
+          created_at: string
+          flag_reason: string | null
+          flagged_at: string | null
+          flagged_by: string | null
+          id: string
+          is_flagged: boolean | null
+          message: string
+          metadata: Json | null
+          role: string
+          session_id: string
+          source: string
+          source_page: string | null
+          user_email: string | null
+          user_id: string | null
+          user_name: string | null
+          user_phone: string | null
+        }
+        Insert: {
+          created_at?: string
+          flag_reason?: string | null
+          flagged_at?: string | null
+          flagged_by?: string | null
+          id?: string
+          is_flagged?: boolean | null
+          message: string
+          metadata?: Json | null
+          role?: string
+          session_id: string
+          source: string
+          source_page?: string | null
+          user_email?: string | null
+          user_id?: string | null
+          user_name?: string | null
+          user_phone?: string | null
+        }
+        Update: {
+          created_at?: string
+          flag_reason?: string | null
+          flagged_at?: string | null
+          flagged_by?: string | null
+          id?: string
+          is_flagged?: boolean | null
+          message?: string
+          metadata?: Json | null
+          role?: string
+          session_id?: string
+          source?: string
+          source_page?: string | null
+          user_email?: string | null
+          user_id?: string | null
           user_name?: string | null
           user_phone?: string | null
         }
@@ -6656,6 +6767,59 @@ export type Database = {
         }
         Relationships: []
       }
+      meeting_ai_notes: {
+        Row: {
+          action_items: Json | null
+          client_details: Json | null
+          created_at: string
+          follow_up_plan: Json | null
+          generated_pdf_url: string | null
+          id: string
+          key_decisions: Json | null
+          meeting_id: string | null
+          property_suggestions: Json | null
+          summary: string | null
+          transcript: string | null
+          user_id: string | null
+        }
+        Insert: {
+          action_items?: Json | null
+          client_details?: Json | null
+          created_at?: string
+          follow_up_plan?: Json | null
+          generated_pdf_url?: string | null
+          id?: string
+          key_decisions?: Json | null
+          meeting_id?: string | null
+          property_suggestions?: Json | null
+          summary?: string | null
+          transcript?: string | null
+          user_id?: string | null
+        }
+        Update: {
+          action_items?: Json | null
+          client_details?: Json | null
+          created_at?: string
+          follow_up_plan?: Json | null
+          generated_pdf_url?: string | null
+          id?: string
+          key_decisions?: Json | null
+          meeting_id?: string | null
+          property_suggestions?: Json | null
+          summary?: string | null
+          transcript?: string | null
+          user_id?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "meeting_ai_notes_meeting_id_fkey"
+            columns: ["meeting_id"]
+            isOneToOne: false
+            referencedRelation: "video_meetings"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       memberships: {
         Row: {
           created_at: string
@@ -6702,6 +6866,39 @@ export type Database = {
           plan_type?: string
           price_usd?: number
           status?: string
+          updated_at?: string
+          user_id?: string
+        }
+        Relationships: []
+      }
+      note_projects: {
+        Row: {
+          color: string | null
+          created_at: string
+          description: string | null
+          icon: string | null
+          id: string
+          name: string
+          updated_at: string
+          user_id: string
+        }
+        Insert: {
+          color?: string | null
+          created_at?: string
+          description?: string | null
+          icon?: string | null
+          id?: string
+          name: string
+          updated_at?: string
+          user_id: string
+        }
+        Update: {
+          color?: string | null
+          created_at?: string
+          description?: string | null
+          icon?: string | null
+          id?: string
+          name?: string
           updated_at?: string
           user_id?: string
         }
@@ -8346,6 +8543,164 @@ export type Database = {
             referencedColumns: ["id"]
           },
         ]
+      }
+      video_meeting_messages: {
+        Row: {
+          created_at: string
+          id: string
+          is_private: boolean | null
+          is_system: boolean | null
+          meeting_id: string | null
+          message: string
+          participant_id: string | null
+          recipient_id: string | null
+          sender_name: string
+        }
+        Insert: {
+          created_at?: string
+          id?: string
+          is_private?: boolean | null
+          is_system?: boolean | null
+          meeting_id?: string | null
+          message: string
+          participant_id?: string | null
+          recipient_id?: string | null
+          sender_name: string
+        }
+        Update: {
+          created_at?: string
+          id?: string
+          is_private?: boolean | null
+          is_system?: boolean | null
+          meeting_id?: string | null
+          message?: string
+          participant_id?: string | null
+          recipient_id?: string | null
+          sender_name?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "video_meeting_messages_meeting_id_fkey"
+            columns: ["meeting_id"]
+            isOneToOne: false
+            referencedRelation: "video_meetings"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "video_meeting_messages_participant_id_fkey"
+            columns: ["participant_id"]
+            isOneToOne: false
+            referencedRelation: "video_meeting_participants"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      video_meeting_participants: {
+        Row: {
+          ai_broker_id: string | null
+          id: string
+          is_admin: boolean | null
+          is_ai_broker: boolean | null
+          is_host: boolean | null
+          joined_at: string
+          left_at: string | null
+          meeting_id: string | null
+          participant_email: string | null
+          participant_name: string
+          removal_reason: string | null
+          role: string | null
+          user_id: string | null
+          was_removed: boolean | null
+        }
+        Insert: {
+          ai_broker_id?: string | null
+          id?: string
+          is_admin?: boolean | null
+          is_ai_broker?: boolean | null
+          is_host?: boolean | null
+          joined_at?: string
+          left_at?: string | null
+          meeting_id?: string | null
+          participant_email?: string | null
+          participant_name: string
+          removal_reason?: string | null
+          role?: string | null
+          user_id?: string | null
+          was_removed?: boolean | null
+        }
+        Update: {
+          ai_broker_id?: string | null
+          id?: string
+          is_admin?: boolean | null
+          is_ai_broker?: boolean | null
+          is_host?: boolean | null
+          joined_at?: string
+          left_at?: string | null
+          meeting_id?: string | null
+          participant_email?: string | null
+          participant_name?: string
+          removal_reason?: string | null
+          role?: string | null
+          user_id?: string | null
+          was_removed?: boolean | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "video_meeting_participants_meeting_id_fkey"
+            columns: ["meeting_id"]
+            isOneToOne: false
+            referencedRelation: "video_meetings"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      video_meetings: {
+        Row: {
+          created_at: string
+          end_reason: string | null
+          ended_at: string | null
+          host_name: string | null
+          host_user_id: string | null
+          id: string
+          is_recording: boolean | null
+          recording_url: string | null
+          room_id: string
+          started_at: string
+          status: string | null
+          termination_message: string | null
+          title: string | null
+        }
+        Insert: {
+          created_at?: string
+          end_reason?: string | null
+          ended_at?: string | null
+          host_name?: string | null
+          host_user_id?: string | null
+          id?: string
+          is_recording?: boolean | null
+          recording_url?: string | null
+          room_id: string
+          started_at?: string
+          status?: string | null
+          termination_message?: string | null
+          title?: string | null
+        }
+        Update: {
+          created_at?: string
+          end_reason?: string | null
+          ended_at?: string | null
+          host_name?: string | null
+          host_user_id?: string | null
+          id?: string
+          is_recording?: boolean | null
+          recording_url?: string | null
+          room_id?: string
+          started_at?: string
+          status?: string | null
+          termination_message?: string | null
+          title?: string | null
+        }
+        Relationships: []
       }
     }
     Views: {
