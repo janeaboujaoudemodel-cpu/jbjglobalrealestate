@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useMemo, useState } from "react";
 import { motion } from "framer-motion";
 import Footer from "@/components/Footer";
 import { SEOHead } from "@/components/SEOHead";
@@ -7,66 +7,124 @@ import { Card, CardContent } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { allBrokers, Broker } from "@/config/brokers-data";
-import { Users, Search, Globe, Building2 } from "lucide-react";
+import { Users, Search, Crown } from "lucide-react";
 
 const fadeInUp = {
   hidden: { opacity: 0, y: 20 },
   visible: { opacity: 1, y: 0, transition: { duration: 0.4 } },
 };
 
-const BrokerCard = ({ broker }: { broker: Broker }) => (
-  <motion.div variants={fadeInUp}>
-    <Card className="bg-zinc-900/60 border-zinc-800 hover:border-gold/40 transition-all duration-300 h-full">
-      <CardContent className="p-5">
-        <div className="flex items-center gap-4 mb-3">
-          <div className="w-14 h-14 rounded-full bg-gradient-to-br from-gold/20 to-gold/5 flex items-center justify-center text-gold font-bold text-lg">
-            {broker.name.split(' ').map(n => n[0]).join('')}
+const isSeniorBroker = (broker: Broker) => broker.yearsExperience >= 10;
+
+const BrokerCard = ({ broker }: { broker: Broker }) => {
+  const senior = isSeniorBroker(broker);
+
+  return (
+    <motion.div variants={fadeInUp}>
+      <Card
+        className={
+          "bg-zinc-900/60 border-zinc-800 transition-all duration-300 h-full " +
+          (senior
+            ? "hover:border-gold/60 ring-1 ring-gold/20"
+            : "hover:border-gold/40")
+        }
+      >
+        <CardContent className="p-5">
+          <div className="flex items-center gap-4 mb-3">
+            <div className="w-14 h-14 rounded-full bg-gradient-to-br from-gold/20 to-gold/5 flex items-center justify-center text-gold font-bold text-lg">
+              {broker.name
+                .split(" ")
+                .map((n) => n[0])
+                .join("")}
+            </div>
+            <div className="flex-1 min-w-0">
+              <div className="flex items-center justify-between gap-2">
+                <h3 className="text-white font-semibold truncate">{broker.name}</h3>
+                {senior && (
+                  <Badge className="bg-gold/15 text-gold border-gold/30 text-xs">
+                    <Crown className="w-3 h-3 mr-1" />
+                    Senior
+                  </Badge>
+                )}
+              </div>
+              <p className="text-zinc-500 text-sm">{broker.nationality}</p>
+            </div>
           </div>
-          <div className="flex-1 min-w-0">
-            <h3 className="text-white font-semibold truncate">{broker.name}</h3>
-            <p className="text-zinc-500 text-sm">{broker.nationality}</p>
+
+          <p className="text-zinc-400 text-xs line-clamp-2 mb-3">{broker.bio}</p>
+
+          <div className="flex flex-wrap gap-1 mb-2">
+            {broker.specializations.slice(0, 2).map((spec) => (
+              <Badge
+                key={spec}
+                variant="outline"
+                className="text-xs border-gold/30 text-gold/80"
+              >
+                {spec}
+              </Badge>
+            ))}
           </div>
-        </div>
-        <p className="text-zinc-400 text-xs line-clamp-2 mb-3">{broker.bio}</p>
-        <div className="flex flex-wrap gap-1 mb-2">
-          {broker.specializations.slice(0, 2).map((spec) => (
-            <Badge key={spec} variant="outline" className="text-xs border-gold/30 text-gold/80">
-              {spec}
-            </Badge>
-          ))}
-        </div>
-        <div className="flex flex-wrap gap-1">
-          {broker.languages.slice(0, 3).map((lang) => (
-            <Badge key={lang} variant="outline" className="text-xs border-zinc-700 text-zinc-400">
-              {lang}
-            </Badge>
-          ))}
-        </div>
-        <p className="text-zinc-600 text-xs mt-2">{broker.yearsExperience} years experience</p>
-      </CardContent>
-    </Card>
-  </motion.div>
-);
+
+          <div className="flex flex-wrap gap-1">
+            {broker.languages.slice(0, 3).map((lang) => (
+              <Badge
+                key={lang}
+                variant="outline"
+                className="text-xs border-zinc-700 text-zinc-400"
+              >
+                {lang}
+              </Badge>
+            ))}
+          </div>
+
+          <p className="text-zinc-600 text-xs mt-2">
+            {broker.yearsExperience} years experience
+          </p>
+        </CardContent>
+      </Card>
+    </motion.div>
+  );
+};
 
 const OurBrokers = () => {
   const [search, setSearch] = useState("");
   const [nationality, setNationality] = useState<string | null>(null);
+  const [tier, setTier] = useState<"all" | "senior" | "broker">("all");
 
-  const nationalities = [...new Set(allBrokers.map(b => b.nationality))];
+  const nationalities = useMemo(
+    () => [...new Set(allBrokers.map((b) => b.nationality))],
+    []
+  );
 
-  const filteredBrokers = allBrokers.filter(broker => {
-    const matchesSearch = broker.name.toLowerCase().includes(search.toLowerCase()) ||
-      broker.specializations.some(s => s.toLowerCase().includes(search.toLowerCase()));
-    const matchesNationality = !nationality || broker.nationality === nationality;
-    return matchesSearch && matchesNationality;
-  });
+  const filteredBrokers = useMemo(() => {
+    return allBrokers.filter((broker) => {
+      const matchesSearch =
+        broker.name.toLowerCase().includes(search.toLowerCase()) ||
+        broker.specializations.some((s) =>
+          s.toLowerCase().includes(search.toLowerCase())
+        );
+
+      const matchesNationality = !nationality || broker.nationality === nationality;
+
+      const senior = isSeniorBroker(broker);
+      const matchesTier =
+        tier === "all" ? true : tier === "senior" ? senior : !senior;
+
+      return matchesSearch && matchesNationality && matchesTier;
+    });
+  }, [search, nationality, tier]);
+
+  const seniorCount = useMemo(
+    () => allBrokers.filter(isSeniorBroker).length,
+    []
+  );
 
   return (
     <>
       <SEOHead
         title="Our Brokers | JBJ Global Real Estate"
-        description="Meet our team of 128+ professional real estate brokers from around the world, ready to help you find your dream property in Dubai."
-        keywords="Dubai brokers, real estate agents, property consultants, JBJ brokers"
+        description="Meet our international team of professional brokers—senior and specialist advisors—ready to support your Dubai property goals."
+        keywords="Dubai brokers, senior brokers, real estate agents, property consultants"
         canonicalPath="/brokers"
       />
       <div className="min-h-screen bg-[#0D0D0D]">
@@ -84,12 +142,38 @@ const OurBrokers = () => {
               Our <span className="text-gold">Brokers</span>
             </h1>
             <p className="text-zinc-400 max-w-2xl mx-auto mb-8">
-              A diverse team of international real estate professionals speaking multiple languages and specializing in every aspect of Dubai property.
+              Explore our team by experience level and specialization.
             </p>
-            <div className="flex flex-wrap justify-center gap-6 text-center">
-              <div><p className="text-2xl font-bold text-gold">{nationalities.length}</p><p className="text-zinc-500 text-sm">Nationalities</p></div>
-              <div><p className="text-2xl font-bold text-gold">15+</p><p className="text-zinc-500 text-sm">Languages</p></div>
-              <div><p className="text-2xl font-bold text-gold">500+</p><p className="text-zinc-500 text-sm">Years Combined</p></div>
+
+            <div className="flex flex-wrap justify-center gap-3">
+              <Button
+                variant={tier === "all" ? "default" : "outline"}
+                size="sm"
+                onClick={() => setTier("all")}
+                className={tier === "all" ? "bg-gold text-black" : "border-zinc-700"}
+              >
+                All ({allBrokers.length})
+              </Button>
+              <Button
+                variant={tier === "senior" ? "default" : "outline"}
+                size="sm"
+                onClick={() => setTier("senior")}
+                className={
+                  tier === "senior" ? "bg-gold text-black" : "border-zinc-700 text-zinc-400"
+                }
+              >
+                Senior ({seniorCount})
+              </Button>
+              <Button
+                variant={tier === "broker" ? "default" : "outline"}
+                size="sm"
+                onClick={() => setTier("broker")}
+                className={
+                  tier === "broker" ? "bg-gold text-black" : "border-zinc-700 text-zinc-400"
+                }
+              >
+                Brokers ({allBrokers.length - seniorCount})
+              </Button>
             </div>
           </div>
         </section>
@@ -112,17 +196,25 @@ const OurBrokers = () => {
                   variant={nationality === null ? "default" : "outline"}
                   size="sm"
                   onClick={() => setNationality(null)}
-                  className={nationality === null ? "bg-gold text-black" : "border-zinc-700"}
+                  className={
+                    nationality === null
+                      ? "bg-gold text-black"
+                      : "border-zinc-700"
+                  }
                 >
                   All
                 </Button>
-                {nationalities.map(nat => (
+                {nationalities.map((nat) => (
                   <Button
                     key={nat}
                     variant={nationality === nat ? "default" : "outline"}
                     size="sm"
                     onClick={() => setNationality(nat)}
-                    className={nationality === nat ? "bg-gold text-black" : "border-zinc-700 text-zinc-400"}
+                    className={
+                      nationality === nat
+                        ? "bg-gold text-black"
+                        : "border-zinc-700 text-zinc-400"
+                    }
                   >
                     {nat}
                   </Button>
@@ -135,7 +227,9 @@ const OurBrokers = () => {
         {/* Brokers Grid */}
         <section className="py-12">
           <div className="container mx-auto px-4">
-            <p className="text-zinc-500 mb-6">{filteredBrokers.length} brokers found</p>
+            <p className="text-zinc-500 mb-6">
+              {filteredBrokers.length} broker{filteredBrokers.length === 1 ? "" : "s"} found
+            </p>
             <motion.div
               initial="hidden"
               animate="visible"
