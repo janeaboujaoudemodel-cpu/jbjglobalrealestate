@@ -1,7 +1,8 @@
 import { motion } from "framer-motion";
 import { Badge } from "@/components/ui/badge";
 import { Sparkles, Users, Building2, Globe, Languages } from "lucide-react";
-import ceoBackdropFlags from "@/assets/ceo/ceo-backdrop-flags-v3.jpg";
+// Use the real uploaded CEO photo - not AI generated
+import ceoOriginalPhoto from "@/assets/ceo/jane-founder-original-upload.jpg";
 import AnimatedCounter from "@/components/AnimatedCounter";
 import { useTeamMetrics } from "@/hooks/useTeamMetrics";
 
@@ -61,26 +62,26 @@ const CEOLeadershipShowcase = () => {
             </p>
           </motion.div>
 
-          {/* CEO Showcase with Flags Backdrop - Jane standing in center */}
+          {/* CEO Showcase - Real Photo of Jane */}
           <motion.div
             variants={fadeInUp}
-            className="relative rounded-2xl overflow-hidden mb-12"
+            className="relative rounded-2xl overflow-hidden mb-12 bg-gradient-to-br from-zinc-900 via-zinc-800 to-zinc-900 border border-zinc-700/50"
           >
-            {/* Full backdrop with Jane standing in center */}
-            <div className="relative h-[400px] md:h-[500px] lg:h-[550px]">
-              <img
-                src={ceoBackdropFlags}
-                alt="Jane Abou Jaoude - Founder & CEO at JBJ Global Real Estate Executive Office"
-                className="w-full h-full object-cover object-center"
-              />
-              {/* Gradient overlay for text readability */}
-              <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-transparent to-transparent" />
+            <div className="flex flex-col md:flex-row items-center gap-8 p-8 md:p-12">
+              {/* CEO Photo - Real uploaded image */}
+              <div className="relative w-64 h-64 md:w-80 md:h-80 rounded-2xl overflow-hidden flex-shrink-0 border-2 border-gold/30">
+                <img
+                  src={ceoOriginalPhoto}
+                  alt="Jane Abou Jaoude - Founder & CEO at JBJ Global Real Estate"
+                  className="w-full h-full object-cover object-top"
+                />
+              </div>
               
-              {/* Name and title overlay at bottom */}
-              <div className="absolute bottom-0 left-0 right-0 text-center pb-8">
-                <h3 className="text-white text-2xl md:text-3xl font-bold mb-2">Jane Abou Jaoude</h3>
+              {/* CEO Info */}
+              <div className="text-center md:text-left flex-1">
+                <h3 className="text-white text-3xl md:text-4xl font-bold mb-3">Jane Abou Jaoude</h3>
                 <p
-                  className="text-lg md:text-xl font-semibold mb-2"
+                  className="text-xl md:text-2xl font-semibold mb-4"
                   style={{
                     background: "linear-gradient(135deg, #CBA64B 0%, #E8D5A3 50%, #CBA64B 100%)",
                     WebkitBackgroundClip: "text",
@@ -89,7 +90,20 @@ const CEOLeadershipShowcase = () => {
                 >
                   Founder & CEO
                 </p>
-                <p className="text-zinc-400 text-sm">12 Years Experience • Lebanese</p>
+                <div className="flex flex-wrap gap-3 justify-center md:justify-start mb-4">
+                  <Badge className="bg-gold/15 text-gold border-gold/30">12 Years Experience</Badge>
+                  <Badge className="bg-zinc-800 text-zinc-300 border-zinc-700">Lebanese</Badge>
+                </div>
+                <div className="flex flex-wrap gap-2 justify-center md:justify-start mb-6">
+                  <Badge variant="outline" className="border-zinc-600 text-zinc-400">English</Badge>
+                  <Badge variant="outline" className="border-zinc-600 text-zinc-400">Arabic</Badge>
+                  <Badge variant="outline" className="border-zinc-600 text-zinc-400">French</Badge>
+                  <Badge variant="outline" className="border-zinc-600 text-zinc-400">Spanish</Badge>
+                </div>
+                <p className="text-zinc-400 text-sm md:text-base max-w-xl">
+                  Visionary leader with a passion for luxury real estate and building world-class teams. 
+                  A global innovator, award-winning entrepreneur shaping the future of luxury real estate in the Middle East.
+                </p>
               </div>
             </div>
           </motion.div>

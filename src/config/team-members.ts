@@ -2,7 +2,7 @@
 // Professional team member data with AI-generated unique portraits
 
 // Import team portraits - Executive Leadership
-import janeAbouJaoudeCeo from '@/assets/ceo/jane-founder-premium-landscape.png';
+import janeAbouJaoudeCeo from '@/assets/ceo/jane-founder-original-upload.jpg';
 import davidThorntonCeo from '@/assets/team/david-thornton-md-natural.png';
 import richardPembertonCoo from '@/assets/team/richard-pemberton-coo.png';
 import oliviaExecutiveAssistant from '@/assets/team/olivia-executive-assistant.png';
@@ -204,6 +204,28 @@ import armenPetrosyanFinance from '@/assets/team/armen-petrosyan-finance.png';
 import anaHorvatAdmin from '@/assets/team/ana-horvat-admin.png';
 import alejandroHerreraSales from '@/assets/team/alejandro-herrera-sales.png';
 
+// NEW Additional Team Members (to reach 100+)
+import nikolaosKonstantinouSales from '@/assets/team/nikolaos-konstantinou-sales.png';
+import lisaBergstromMarketing from '@/assets/team/lisa-bergstrom-marketing.png';
+import pawelKowalskiOperations from '@/assets/team/pawel-kowalski-operations.png';
+import siripornThongchaiClient from '@/assets/team/siriporn-thongchai-client.png';
+import jamesMurphySales from '@/assets/team/james-murphy-sales.png';
+import sofieNielsenHr from '@/assets/team/sofie-nielsen-hr.png';
+import carlosRamirezFinance from '@/assets/team/carlos-ramirez-finance.png';
+import raniaKhalilSales from '@/assets/team/rania-khalil-sales.png';
+import hansMuellerIt from '@/assets/team/hans-mueller-it.png';
+import valentinaMorenoAdmin from '@/assets/team/valentina-moreno-admin.png';
+import ahmadIbrahimSales from '@/assets/team/ahmad-ibrahim-sales.png';
+import meiLingTanCustomer from '@/assets/team/mei-ling-tan-customer.png';
+import williamEdwardsOperations from '@/assets/team/william-edwards-operations.png';
+import annaSchmidtCreative from '@/assets/team/anna-schmidt-creative.png';
+import janJanssensFinance from '@/assets/team/jan-janssens-finance.png';
+import mayaCohenSales from '@/assets/team/maya-cohen-sales.png';
+import seanOconnorMarketing from '@/assets/team/sean-oconnor-marketing.png';
+import luciaFernandezClient from '@/assets/team/lucia-fernandez-client.png';
+import andrewMackenzieSales from '@/assets/team/andrew-mackenzie-sales.png';
+import terezaSvobodovaHr from '@/assets/team/tereza-svobodova-hr.png';
+
 export interface TeamMember {
   id: string;
   name: string;
@@ -293,7 +315,7 @@ export const executiveTeam: TeamMember[] = sortByHierarchy([
     nationality: 'Lebanese',
     yearsExperience: 15,
     hierarchyLevel: 2,
-    reportsTo: 'jane-abou-jaoude',
+    reportsTo: 'david-thornton',
     status: 'online',
     canConductInterviews: true,
   },
@@ -309,23 +331,23 @@ export const executiveTeam: TeamMember[] = sortByHierarchy([
     nationality: 'British',
     yearsExperience: 18,
     hierarchyLevel: 2,
-    reportsTo: 'jane-abou-jaoude',
+    reportsTo: 'david-thornton',
     status: 'online',
     canConductInterviews: true,
   },
   {
     id: 'fatima-al-mazrouei',
     name: 'Fatima Al Mazrouei',
-    role: 'Government Relations Director',
+    role: 'Strategic Partnerships Director',
     department: 'Executive',
     avatar: fatimaAlMazroueiGovt,
     isAI: true,
-    bio: 'Expert in UAE government relations, regulatory compliance, and strategic partnerships with government entities.',
+    bio: 'Expert in strategic partnerships, stakeholder relations, and building connections with key industry partners across the MENA region.',
     languages: ['English', 'Arabic'],
     nationality: 'Emirati',
     yearsExperience: 14,
     hierarchyLevel: 3,
-    reportsTo: 'jane-abou-jaoude',
+    reportsTo: 'david-thornton',
     status: 'online',
     canConductInterviews: true,
   },
