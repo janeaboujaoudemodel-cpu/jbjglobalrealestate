@@ -18,8 +18,11 @@ import {
   Sparkles,
   Building2,
   MessageSquare,
+  ChevronRight,
 } from "lucide-react";
 import TeamContactForm from "@/components/TeamContactForm";
+import TeamMemberDetailDialog from "@/components/TeamMemberDetailDialog";
+import CEOLeadershipShowcase from "@/components/CEOLeadershipShowcase";
 
 const fadeInUp = {
   hidden: { opacity: 0, y: 30 },
@@ -37,9 +40,10 @@ const staggerContainer = {
 interface TeamMemberCardProps {
   member: TeamMember;
   onContact: (member: TeamMember) => void;
+  onReadMore: (member: TeamMember) => void;
 }
 
-const TeamMemberCard = ({ member, onContact }: TeamMemberCardProps) => (
+const TeamMemberCard = ({ member, onContact, onReadMore }: TeamMemberCardProps) => (
   <motion.div variants={fadeInUp}>
     <Card className="bg-zinc-900/60 border-zinc-800 hover:border-gold/40 transition-all duration-300 overflow-hidden group h-full">
       <CardContent className="p-0">
@@ -87,9 +91,17 @@ const TeamMemberCard = ({ member, onContact }: TeamMemberCardProps) => (
           <p className="text-zinc-500 text-sm mb-3">{member.department}</p>
 
           {member.bio && (
-            <p className="text-zinc-400 text-xs line-clamp-3 mb-3">
-              {member.bio}
-            </p>
+            <div className="mb-3">
+              <p className="text-zinc-400 text-xs line-clamp-2">
+                {member.bio}
+              </p>
+              <button
+                onClick={() => onReadMore(member)}
+                className="text-gold text-xs font-medium hover:text-gold-light mt-1 flex items-center gap-0.5"
+              >
+                Read more <ChevronRight className="w-3 h-3" />
+              </button>
+            </div>
           )}
 
           {member.languages && member.languages.length > 0 && (
@@ -123,6 +135,8 @@ const MeetTheTeam = () => {
   const location = useLocation();
   const [selectedMember, setSelectedMember] = useState<TeamMember | null>(null);
   const [isContactFormOpen, setIsContactFormOpen] = useState(false);
+  const [detailMember, setDetailMember] = useState<TeamMember | null>(null);
+  const [isDetailOpen, setIsDetailOpen] = useState(false);
 
   // Scroll to top when navigating to this page
   useEffect(() => {
@@ -134,23 +148,26 @@ const MeetTheTeam = () => {
     setIsContactFormOpen(true);
   };
 
+  const handleReadMore = (member: TeamMember) => {
+    setDetailMember(member);
+    setIsDetailOpen(true);
+  };
+
   const departmentOrder = [
     "Leadership",
-    "Executive",
-    "Property Operations",
-    "Sales & Marketing",
     "Sales",
-    "Marketing",
+    "Marketing & Content",
     "Client Relations",
+    "VIP Client Relations",
     "Human Resources",
     "Creative & Media",
-    "Design",
-    "Media",
     "Finance",
     "Operations",
+    "Software Engineering",
+    "Project Management",
     "IT",
     "Administration",
-    "Technology",
+    "Customer Happiness",
   ];
 
   return (
@@ -240,6 +257,9 @@ const MeetTheTeam = () => {
           </div>
         </section>
 
+        {/* CEO Leadership Showcase */}
+        <CEOLeadershipShowcase />
+
         {/* Divider */}
         <div className="h-px bg-gradient-to-r from-transparent via-gold/40 to-transparent" />
 
@@ -285,6 +305,7 @@ const MeetTheTeam = () => {
                         key={member.id} 
                         member={member} 
                         onContact={handleContactMember}
+                        onReadMore={handleReadMore}
                       />
                     ))}
                   </div>
@@ -343,6 +364,14 @@ const MeetTheTeam = () => {
         member={selectedMember}
         isOpen={isContactFormOpen}
         onClose={() => setIsContactFormOpen(false)}
+      />
+
+      {/* Detail Dialog */}
+      <TeamMemberDetailDialog
+        member={detailMember}
+        isOpen={isDetailOpen}
+        onClose={() => setIsDetailOpen(false)}
+        onContact={handleContactMember}
       />
     </>
   );

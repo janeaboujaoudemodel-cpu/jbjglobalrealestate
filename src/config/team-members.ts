@@ -3,7 +3,7 @@
 
 // Import team portraits - Executive Leadership
 import janeAbouJaoudeCeo from '@/assets/team/jane-abou-jaoude-ceo.png';
-import davidThorntonCeo from '@/assets/team/david-thornton-ceo-v2.png';
+import davidThorntonCeo from '@/assets/team/david-thornton-md-v3.png';
 import richardPembertonCoo from '@/assets/team/richard-pemberton-coo.png';
 import oliviaExecutiveAssistant from '@/assets/team/olivia-executive-assistant.png';
 import amandaClarkeExecutiveAssistant from '@/assets/team/amanda-clarke-executive-assistant.png';
@@ -30,6 +30,16 @@ import michaelAndersonSalesDirector from '@/assets/team/michael-anderson-sales-d
 import emmaHartleySalesManager from '@/assets/team/emma-hartley-sales-manager.png';
 import victoriaSterlingMarketing from '@/assets/team/victoria-sterling-marketing.png';
 import georgeHamiltonClientRelations from '@/assets/team/george-hamilton-client-relations.png';
+
+// Import team portraits - VIP Client Relations
+import victoriaAshworthVipDirector from '@/assets/team/victoria-ashworth-vip-director.png';
+import charlotteWhitmoreVipAssistant from '@/assets/team/charlotte-whitmore-vip-assistant.png';
+
+// Import team portraits - Additional CRM/Operations
+import jamesPorterCrmAssistant from '@/assets/team/james-porter-crm-assistant.png';
+import nathanBlackwellCybersecurity from '@/assets/team/nathan-blackwell-cybersecurity.png';
+import elizabethHartleyBrandSpecialist from '@/assets/team/elizabeth-hartley-brand-specialist.png';
+import ryanMitchellCampaigns from '@/assets/team/ryan-mitchell-campaigns.png';
 
 // Import team portraits - Project Management Team
 import rachelCampbellProjectDirector from '@/assets/team/rachel-campbell-project-director.png';
@@ -303,8 +313,47 @@ export const clientRelationsTeam: TeamMember[] = sortByHierarchy([
     nationality: 'British',
     hierarchyLevel: 3,
     reportsTo: 'michael-anderson',
+    directReports: ['victoria-ashworth'],
     status: 'online',
     canConductInterviews: true,
+  },
+]);
+
+// ===== VIP Client Relations (sorted by hierarchy) =====
+export const vipClientRelationsTeam: TeamMember[] = sortByHierarchy([
+  {
+    id: 'victoria-ashworth',
+    name: 'Victoria Ashworth',
+    role: 'VIP Client Relations Director',
+    department: 'VIP Client Relations',
+    avatar: victoriaAshworthVipDirector,
+    isAI: true,
+    email: 'victoria.ashworth@JBJ.ae',
+    bio: 'Elite client specialist managing relationships with high-net-worth individuals and VIP investors, ensuring white-glove concierge service.',
+    specializations: ['VIP Services', 'Luxury Concierge', 'Private Client Management', 'Investment Advisory'],
+    languages: ['English', 'French', 'Arabic'],
+    nationality: 'British',
+    hierarchyLevel: 3,
+    reportsTo: 'george-hamilton',
+    directReports: ['charlotte-whitmore'],
+    status: 'online',
+    canConductInterviews: true,
+  },
+  {
+    id: 'charlotte-whitmore',
+    name: 'Charlotte Whitmore',
+    role: 'VIP Client Relations Assistant',
+    department: 'VIP Client Relations',
+    avatar: charlotteWhitmoreVipAssistant,
+    isAI: true,
+    email: 'charlotte.whitmore@JBJ.ae',
+    bio: 'Dedicated assistant supporting VIP client operations, scheduling exclusive property viewings, and coordinating luxury client experiences.',
+    specializations: ['Client Coordination', 'Event Planning', 'Property Viewings', 'Client Communication'],
+    languages: ['English', 'Spanish'],
+    nationality: 'British',
+    hierarchyLevel: 5,
+    reportsTo: 'victoria-ashworth',
+    status: 'online',
   },
 ]);
 
@@ -345,31 +394,31 @@ export const hrTeam: TeamMember[] = sortByHierarchy([
     canConductInterviews: true,
   },
   {
-    id: 'elizabeth-bennett',
-    name: 'Elizabeth Bennett',
+    id: 'alessandra-moretti',
+    name: 'Alessandra Moretti',
     role: 'HR Coordinator',
     department: 'Human Resources',
-    avatar: elizabethBennettHr,
+    avatar: alessandraMorettiHrAssistant,
     isAI: true,
-    email: 'elizabeth.bennett@JBJ.ae',
-    bio: 'Warm and approachable. Supports HR operations, onboarding, and employee relations with genuine care.',
-    languages: ['English', 'Spanish', 'Portuguese'],
-    nationality: 'American',
+    email: 'alessandra.moretti@JBJ.ae',
+    bio: 'Highly organized HR professional coordinating recruitment processes, onboarding, and employee engagement programs.',
+    languages: ['English', 'Italian', 'French', 'Spanish'],
+    nationality: 'Italian',
     hierarchyLevel: 5,
     reportsTo: 'jessica-pemberton',
     status: 'online',
   },
   {
-    id: 'alessandra-moretti',
-    name: 'Alessandra Moretti',
+    id: 'elizabeth-bennett',
+    name: 'Elizabeth Bennett',
     role: 'HR Assistant',
     department: 'Human Resources',
-    avatar: alessandraMorettiHrAssistant,
+    avatar: elizabethBennettHr,
     isAI: true,
-    email: 'alessandra.moretti@JBJ.ae',
+    email: 'elizabeth.bennett@JBJ.ae',
     bio: 'Supportive and detail-oriented assistant managing HR documentation, scheduling, and employee queries.',
-    languages: ['English', 'Italian', 'French', 'Spanish'],
-    nationality: 'Italian',
+    languages: ['English', 'Spanish', 'Portuguese'],
+    nationality: 'American',
     hierarchyLevel: 6,
     reportsTo: 'jessica-pemberton',
     status: 'online',
@@ -427,14 +476,31 @@ export const creativeTeam: TeamMember[] = sortByHierarchy([
   {
     id: 'charlotte-evans',
     name: 'Charlotte Evans',
-    role: 'Senior Photographer',
+    role: 'Senior Real Estate Photographer',
     department: 'Media',
     avatar: charlotteEvansPhotographer,
     isAI: true,
     email: 'charlotte.evans@JBJ.ae',
-    bio: 'Artistic photographer capturing architectural beauty and lifestyle moments with natural elegance.',
+    bio: 'Expert architectural and property photographer specializing in luxury real estate, interior design, and premium development marketing imagery.',
+    specializations: ['Property Photography', 'Architectural Shoots', 'Interior Design', 'Aerial Photography'],
     languages: ['English', 'French', 'Italian'],
     nationality: 'British',
+    hierarchyLevel: 5,
+    reportsTo: 'sophia-anderson',
+    status: 'online',
+  },
+  {
+    id: 'ryan-mitchell',
+    name: 'Ryan Mitchell',
+    role: 'Senior Campaign Manager',
+    department: 'Media',
+    avatar: ryanMitchellCampaigns,
+    isAI: true,
+    email: 'ryan.mitchell@JBJ.ae',
+    bio: 'Dynamic campaign strategist managing Meta advertising, digital marketing campaigns, and performance marketing for luxury properties.',
+    specializations: ['Meta Ads', 'Google Ads', 'Campaign Strategy', 'Performance Marketing'],
+    languages: ['English', 'Spanish'],
+    nationality: 'American',
     hierarchyLevel: 5,
     reportsTo: 'sophia-anderson',
     status: 'online',
@@ -538,6 +604,54 @@ export const operationsTeam: TeamMember[] = sortByHierarchy([
     languages: ['English', 'Mandarin'],
     nationality: 'British',
     hierarchyLevel: 4,
+    reportsTo: 'alexander-shaw',
+    directReports: ['james-porter'],
+    status: 'online',
+  },
+  {
+    id: 'james-porter',
+    name: 'James Porter',
+    role: 'CRM Operations Assistant',
+    department: 'Operations',
+    avatar: jamesPorterCrmAssistant,
+    isAI: true,
+    email: 'james.porter@JBJ.ae',
+    bio: 'Efficient CRM specialist managing data integrity, lead assignments, and operational reporting.',
+    languages: ['English'],
+    nationality: 'British',
+    hierarchyLevel: 5,
+    reportsTo: 'thomas-mitchell',
+    status: 'online',
+  },
+  {
+    id: 'nathan-blackwell',
+    name: 'Nathan Blackwell',
+    role: 'Cybersecurity Specialist',
+    department: 'Operations',
+    avatar: nathanBlackwellCybersecurity,
+    isAI: true,
+    email: 'nathan.blackwell@JBJ.ae',
+    bio: 'Security expert ensuring data protection, system security, and compliance with privacy regulations.',
+    specializations: ['Cybersecurity', 'Data Protection', 'Compliance', 'Risk Management'],
+    languages: ['English', 'German'],
+    nationality: 'British',
+    hierarchyLevel: 5,
+    reportsTo: 'alexander-shaw',
+    status: 'online',
+  },
+  {
+    id: 'sophia-hartley',
+    name: 'Sophia Hartley',
+    role: 'Brand & Trademark Specialist',
+    department: 'Operations',
+    avatar: elizabethHartleyBrandSpecialist,
+    isAI: true,
+    email: 'sophia.hartley@JBJ.ae',
+    bio: 'Brand protection specialist managing trademarks, intellectual property, and brand compliance across all channels.',
+    specializations: ['Trademark Management', 'Brand Protection', 'IP Compliance', 'Legal Coordination'],
+    languages: ['English', 'French'],
+    nationality: 'British',
+    hierarchyLevel: 5,
     reportsTo: 'alexander-shaw',
     status: 'online',
   },
@@ -986,6 +1100,7 @@ export const allTeamMembers: TeamMember[] = [
   ...salesTeam,
   ...marketingTeam,
   ...clientRelationsTeam,
+  ...vipClientRelationsTeam,
   ...hrTeam,
   ...creativeTeam,
   ...financeTeam,
@@ -1041,6 +1156,7 @@ export const teamByDepartment = {
   'Sales': salesTeam,
   'Marketing & Content': [...marketingTeam, ...contentTeam],
   'Client Relations': clientRelationsTeam,
+  'VIP Client Relations': vipClientRelationsTeam,
   'Human Resources': hrTeam,
   'Creative & Media': creativeTeam,
   'Finance': financeTeam,
