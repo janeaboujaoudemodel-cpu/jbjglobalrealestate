@@ -9,7 +9,7 @@ export function useForcePasswordChange() {
   const [userName, setUserName] = useState<string>("");
 
   useEffect(() => {
-    const checkPasswordChangeRequired = async () => {
+    const checkAndIncrementLogin = async () => {
       if (!user) {
         setIsLoading(false);
         setNeedsPasswordChange(false);
@@ -17,18 +17,36 @@ export function useForcePasswordChange() {
       }
 
       try {
+        // Fetch current profile
         const { data: crmProfile, error } = await supabase
           .from("crm_users_profile")
-          .select("force_password_change, display_name")
+          .select("force_password_change, display_name, login_count")
           .eq("user_id", user.id)
           .single();
 
         if (error) {
           // No CRM profile = not a CRM user, no force password change needed
           setNeedsPasswordChange(false);
+          setIsLoading(false);
+          return;
+        }
+
+        const currentLoginCount = crmProfile?.login_count ?? 0;
+        setUserName(crmProfile?.display_name || "");
+
+        // Increment login count
+        await supabase
+          .from("crm_users_profile")
+          .update({ login_count: currentLoginCount + 1 })
+          .eq("user_id", user.id);
+
+        // Force password change on 2nd login (login_count was 1 before increment)
+        // 1st login (count=0→1): Founder testing, no force
+        // 2nd login (count=1→2): Employee's first real login, FORCE change
+        if (crmProfile?.force_password_change === true && currentLoginCount >= 1) {
+          setNeedsPasswordChange(true);
         } else {
-          setNeedsPasswordChange(crmProfile?.force_password_change === true);
-          setUserName(crmProfile?.display_name || "");
+          setNeedsPasswordChange(false);
         }
       } catch (error) {
         console.error("Error checking password change status:", error);
@@ -38,7 +56,7 @@ export function useForcePasswordChange() {
       }
     };
 
-    checkPasswordChangeRequired();
+    checkAndIncrementLogin();
   }, [user]);
 
   const markPasswordChanged = async () => {

@@ -22,43 +22,55 @@ serve(async (req) => {
       },
     });
 
-    // Verify the caller is an admin
-    const authHeader = req.headers.get("Authorization");
-    if (!authHeader) {
-      return new Response(JSON.stringify({ error: "Unauthorized" }), {
-        status: 401,
-        headers: { ...corsHeaders, "Content-Type": "application/json" },
-      });
-    }
-
-    const token = authHeader.replace("Bearer ", "");
-    const { data: { user: caller }, error: authError } = await supabaseAdmin.auth.getUser(token);
+    // Check for internal admin key for system operations
+    const internalKey = req.headers.get("X-Internal-Admin-Key");
+    const isInternalCall = internalKey === Deno.env.get("SUPABASE_SERVICE_ROLE_KEY");
     
-    if (authError || !caller) {
-      return new Response(JSON.stringify({ error: "Unauthorized" }), {
-        status: 401,
-        headers: { ...corsHeaders, "Content-Type": "application/json" },
-      });
-    }
+    let callerId: string | null = null;
 
-    // Check if caller is admin/owner
-    const { data: isAdmin } = await supabaseAdmin.rpc("has_role", {
-      _user_id: caller.id,
-      _role: "admin",
-    });
-    const { data: isOwner } = await supabaseAdmin.rpc("has_role", {
-      _user_id: caller.id,
-      _role: "owner",
-    });
-    const { data: isCrmAdmin } = await supabaseAdmin.rpc("is_crm_admin", {
-      _user_id: caller.id,
-    });
+    if (!isInternalCall) {
+      // Verify the caller is an admin
+      const authHeader = req.headers.get("Authorization");
+      if (!authHeader) {
+        return new Response(JSON.stringify({ error: "Unauthorized" }), {
+          status: 401,
+          headers: { ...corsHeaders, "Content-Type": "application/json" },
+        });
+      }
 
-    if (!isAdmin && !isOwner && !isCrmAdmin) {
-      return new Response(JSON.stringify({ error: "Access denied: Admin privileges required" }), {
-        status: 403,
-        headers: { ...corsHeaders, "Content-Type": "application/json" },
+      const token = authHeader.replace("Bearer ", "");
+      const { data: { user: caller }, error: authError } = await supabaseAdmin.auth.getUser(token);
+      
+      if (authError || !caller) {
+        return new Response(JSON.stringify({ error: "Unauthorized" }), {
+          status: 401,
+          headers: { ...corsHeaders, "Content-Type": "application/json" },
+        });
+      }
+
+      callerId = caller.id;
+
+      // Check if caller is admin/owner
+      const { data: isAdmin } = await supabaseAdmin.rpc("has_role", {
+        _user_id: caller.id,
+        _role: "admin",
       });
+      const { data: isOwner } = await supabaseAdmin.rpc("has_role", {
+        _user_id: caller.id,
+        _role: "owner",
+      });
+      const { data: isCrmAdmin } = await supabaseAdmin.rpc("is_crm_admin", {
+        _user_id: caller.id,
+      });
+
+      if (!isAdmin && !isOwner && !isCrmAdmin) {
+        return new Response(JSON.stringify({ error: "Access denied: Admin privileges required" }), {
+          status: 403,
+          headers: { ...corsHeaders, "Content-Type": "application/json" },
+        });
+      }
+    } else {
+      console.log("Internal system call - bypassing auth check");
     }
 
     const { email, password, displayName, crmRole, jobTitle, phone } = await req.json();
@@ -143,7 +155,7 @@ serve(async (req) => {
       p_resource_type: "crm_user",
       p_resource_id: newUser.user.id,
       p_success: true,
-      p_metadata: { created_by: caller.id, role: crmRole, job_title: jobTitle },
+      p_metadata: { created_by: callerId || "system", role: crmRole, job_title: jobTitle },
     });
 
     return new Response(
