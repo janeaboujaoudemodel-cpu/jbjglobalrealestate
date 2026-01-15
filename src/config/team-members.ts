@@ -69,7 +69,7 @@ export const executiveTeam: TeamMember[] = [
     email: 'jane@JBJ.ae',
     phone: '+971 56 591 1000',
     bio: 'Visionary leader with a passion for luxury real estate and building world-class teams.',
-    languages: ['English', 'Arabic', 'French'],
+    languages: ['English', 'Arabic', 'French', 'Spanish'],
     directReports: ['david-thornton', 'richard-pemberton', 'olivia-reynolds'],
     status: 'online',
   },

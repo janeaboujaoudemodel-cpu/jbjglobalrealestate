@@ -102,6 +102,7 @@ import JBJBrokerReports from "./pages/JBJBrokerReports";
 import FoundersAssistant from "./pages/FoundersAssistant";
 import ListingAdmin from "./pages/ListingAdmin";
 import MeetTheTeam from "./pages/MeetTheTeam";
+import OurBrokers from "./pages/OurBrokers";
 
 const queryClient = new QueryClient();
 
@@ -214,6 +215,7 @@ const App = () => (
                 <Route path="/listing-admin" element={<ListingAdmin />} />
                 <Route path="/team" element={<MeetTheTeam />} />
                 <Route path="/meet-the-team" element={<Navigate to="/team" replace />} />
+                <Route path="/brokers" element={<OurBrokers />} />
                 <Route path="*" element={<NotFound />} />
               </Route>
             </Routes>

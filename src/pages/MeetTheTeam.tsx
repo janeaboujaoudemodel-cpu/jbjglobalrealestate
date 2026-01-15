@@ -13,8 +13,6 @@ import {
 import {
   Users,
   Mail,
-  Phone,
-  Bot,
   ArrowRight,
   Sparkles,
   Building2,
@@ -44,14 +42,7 @@ const TeamMemberCard = ({ member }: { member: TeamMember }) => (
             alt={member.name}
             className="w-full aspect-square object-cover object-top group-hover:scale-105 transition-transform duration-500"
           />
-          {member.isAI && (
-            <div className="absolute top-3 right-3">
-              <Badge className="bg-gold/90 text-black border-0 text-xs">
-                <Bot className="w-3 h-3 mr-1" />
-                AI
-              </Badge>
-            </div>
-          )}
+          {/* Photo overlay gradient only - no AI badge */}
           <div className="absolute inset-0 bg-gradient-to-t from-zinc-950 via-transparent to-transparent opacity-80" />
         </div>
 
