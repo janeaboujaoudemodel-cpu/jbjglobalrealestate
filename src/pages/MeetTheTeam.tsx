@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import React, { useState, useEffect } from "react";
 import { motion } from "framer-motion";
 import { Link, useLocation } from "react-router-dom";
 import Footer from "@/components/Footer";
@@ -159,7 +159,7 @@ const TeamMemberCard = ({ member, onReadMore }: TeamMemberCardProps) => {
   );
 };
 
-const MeetTheTeam = () => {
+const MeetTheTeam: React.FC = () => {
   const location = useLocation();
   const [selectedMember, setSelectedMember] = useState<TeamMember | null>(null);
   const [isContactFormOpen, setIsContactFormOpen] = useState(false);
