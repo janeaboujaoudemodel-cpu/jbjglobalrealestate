@@ -1,7 +1,9 @@
 import { motion } from "framer-motion";
 import { Badge } from "@/components/ui/badge";
-import { Sparkles, Users, Building2, Globe } from "lucide-react";
+import { Sparkles, Users, Building2, Globe, Languages } from "lucide-react";
 import ceoBackdropFlags from "@/assets/ceo/ceo-backdrop-flags-v2.jpg";
+import AnimatedCounter from "@/components/AnimatedCounter";
+import { useTeamMetrics } from "@/hooks/useTeamMetrics";
 
 const fadeInUp = {
   hidden: { opacity: 0, y: 30 },
@@ -17,6 +19,8 @@ const staggerContainer = {
 };
 
 const CEOLeadershipShowcase = () => {
+  const metrics = useTeamMetrics();
+
   return (
     <section className="py-20 border-t border-zinc-800 relative overflow-hidden">
       {/* Background effects */}
@@ -90,7 +94,7 @@ const CEOLeadershipShowcase = () => {
             </div>
           </motion.div>
 
-          {/* Company Stats */}
+          {/* Company Stats - Animated Counters with Real Metrics */}
           <motion.div
             variants={fadeInUp}
             className="grid grid-cols-2 md:grid-cols-4 gap-6 mb-12"
@@ -99,28 +103,36 @@ const CEOLeadershipShowcase = () => {
               <div className="w-12 h-12 bg-gold/10 rounded-lg flex items-center justify-center mx-auto mb-3">
                 <Users className="w-6 h-6 text-gold" />
               </div>
-              <p className="text-2xl font-bold text-gold mb-1">150+</p>
+              <p className="text-2xl font-bold text-gold mb-1">
+                <AnimatedCounter end={metrics.totalMembers} suffix="+" duration={2500} />
+              </p>
               <p className="text-zinc-500 text-sm">Team Members</p>
             </div>
             <div className="text-center p-6 bg-zinc-900/50 border border-zinc-800 rounded-xl hover:border-gold/40 transition-all duration-300 hover:scale-[1.02]">
               <div className="w-12 h-12 bg-gold/10 rounded-lg flex items-center justify-center mx-auto mb-3">
                 <Building2 className="w-6 h-6 text-gold" />
               </div>
-              <p className="text-2xl font-bold text-gold mb-1">16</p>
+              <p className="text-2xl font-bold text-gold mb-1">
+                <AnimatedCounter end={metrics.totalDepartments} duration={2000} />
+              </p>
               <p className="text-zinc-500 text-sm">Departments</p>
+            </div>
+            <div className="text-center p-6 bg-zinc-900/50 border border-zinc-800 rounded-xl hover:border-gold/40 transition-all duration-300 hover:scale-[1.02]">
+              <div className="w-12 h-12 bg-gold/10 rounded-lg flex items-center justify-center mx-auto mb-3">
+                <Languages className="w-6 h-6 text-gold" />
+              </div>
+              <p className="text-2xl font-bold text-gold mb-1">
+                <AnimatedCounter end={metrics.totalLanguages} suffix="+" duration={2200} />
+              </p>
+              <p className="text-zinc-500 text-sm">Languages Spoken</p>
             </div>
             <div className="text-center p-6 bg-zinc-900/50 border border-zinc-800 rounded-xl hover:border-gold/40 transition-all duration-300 hover:scale-[1.02]">
               <div className="w-12 h-12 bg-gold/10 rounded-lg flex items-center justify-center mx-auto mb-3">
                 <Globe className="w-6 h-6 text-gold" />
               </div>
-              <p className="text-2xl font-bold text-gold mb-1">40+</p>
-              <p className="text-zinc-500 text-sm">Languages Spoken</p>
-            </div>
-            <div className="text-center p-6 bg-zinc-900/50 border border-zinc-800 rounded-xl hover:border-gold/40 transition-all duration-300 hover:scale-[1.02]">
-              <div className="w-12 h-12 bg-gold/10 rounded-lg flex items-center justify-center mx-auto mb-3">
-                <Sparkles className="w-6 h-6 text-gold" />
-              </div>
-              <p className="text-2xl font-bold text-gold mb-1">50+</p>
+              <p className="text-2xl font-bold text-gold mb-1">
+                <AnimatedCounter end={metrics.totalNationalities} suffix="+" duration={2300} />
+              </p>
               <p className="text-zinc-500 text-sm">Nationalities</p>
             </div>
           </motion.div>
