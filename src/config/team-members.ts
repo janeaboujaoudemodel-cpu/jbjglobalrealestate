@@ -42,6 +42,17 @@ import thomasMitchellCrm from '@/assets/team/thomas-mitchell-crm.png';
 import robertMaxwellDigital from '@/assets/team/robert-maxwell-digital.png';
 import alexanderShawOperations from '@/assets/team/alexander-shaw-operations.png';
 
+// Import team portraits - IT Team
+import danielParkerItManager from '@/assets/team/daniel-parker-it-manager.png';
+import rajPatelItAssistant from '@/assets/team/raj-patel-it-assistant.png';
+
+// Import team portraits - Admin & Front Desk
+import emilyWatsonAdminManager from '@/assets/team/emily-watson-admin-manager.png';
+import mariaSantosAdminAssistant from '@/assets/team/maria-santos-admin-assistant.png';
+import sophieRichardsReceptionist from '@/assets/team/sophie-richards-receptionist.png';
+import gabrielaCostaReceptionist from '@/assets/team/gabriela-costa-receptionist.png';
+import claireDuboisReceptionist from '@/assets/team/claire-dubois-receptionist.png';
+
 export interface TeamMember {
   id: string;
   name: string;
@@ -94,7 +105,7 @@ export const executiveTeam: TeamMember[] = sortByHierarchy([
     isAI: true,
     email: 'david.thornton@JBJ.ae',
     bio: 'Strategic business leader overseeing all operations with 25+ years of luxury real estate experience.',
-    languages: ['English', 'Arabic', 'German'],
+    languages: ['English', 'German'],
     nationality: 'British',
     hierarchyLevel: 2,
     reportsTo: 'jane-abou-jaoude',
@@ -115,7 +126,7 @@ export const executiveTeam: TeamMember[] = sortByHierarchy([
     nationality: 'British',
     hierarchyLevel: 2,
     reportsTo: 'jane-abou-jaoude',
-    directReports: ['alexander-shaw', 'jessica-pemberton', 'thomas-mitchell'],
+    directReports: ['alexander-shaw', 'jessica-pemberton', 'thomas-mitchell', 'daniel-parker', 'emily-watson'],
     status: 'online',
     canConductInterviews: true,
   },
@@ -129,7 +140,7 @@ export const executiveTeam: TeamMember[] = sortByHierarchy([
     email: 'olivia@JBJ.ae',
     phone: '+971 54 716 7107',
     bio: 'Organized, proactive, and fast-responding assistant supporting the Founder with scheduling, reminders, and follow-ups.',
-    languages: ['English', 'Arabic', 'French', 'Spanish', 'Chinese', 'Russian'],
+    languages: ['English', 'Italian', 'French', 'Spanish'],
     nationality: 'British',
     hierarchyLevel: 4,
     reportsTo: 'jane-abou-jaoude',
@@ -165,7 +176,7 @@ export const salesTeam: TeamMember[] = sortByHierarchy([
     phone: '+971 50 123 4567',
     bio: 'Dynamic sales leader with exceptional track record in luxury real estate. Leads the entire sales division with strategic vision and hands-on management.',
     specializations: ['Luxury Properties', 'High-Net-Worth Clients', 'Investment Properties', 'Team Leadership'],
-    languages: ['English', 'Arabic', 'Hebrew', 'Russian'],
+    languages: ['English', 'Hebrew', 'Russian'],
     nationality: 'Israeli-British',
     hierarchyLevel: 3,
     reportsTo: 'david-thornton',
@@ -183,7 +194,7 @@ export const salesTeam: TeamMember[] = sortByHierarchy([
     email: 'michael.anderson@JBJ.ae',
     bio: 'Dynamic sales leader driving revenue growth with strategic client acquisition and team development.',
     specializations: ['Enterprise Sales', 'High-Net-Worth Clients', 'Investment Properties'],
-    languages: ['English', 'Arabic', 'Hindi'],
+    languages: ['English', 'Hindi'],
     nationality: 'British',
     hierarchyLevel: 3,
     reportsTo: 'roy-david',
@@ -201,7 +212,7 @@ export const salesTeam: TeamMember[] = sortByHierarchy([
     email: 'emma.hartley@JBJ.ae',
     bio: 'Results-driven manager coaching sales teams to exceed targets with consultative selling approach.',
     specializations: ['Off-Plan Sales', 'Team Leadership', 'Client Relations'],
-    languages: ['English', 'Arabic', 'French'],
+    languages: ['English', 'French'],
     nationality: 'British',
     hierarchyLevel: 4,
     reportsTo: 'roy-david',
@@ -217,7 +228,7 @@ export const salesTeam: TeamMember[] = sortByHierarchy([
     email: 'william.harrison@JBJ.ae',
     bio: 'Confident, persuasive, and analytical. Expert in converting leads into clients with clear advice and strategic deal-making.',
     specializations: ['Off-Plan Properties', 'Luxury Villas', 'Investment Properties'],
-    languages: ['English', 'Arabic', 'Portuguese'],
+    languages: ['English', 'Portuguese'],
     nationality: 'British',
     hierarchyLevel: 5,
     reportsTo: 'roy-david',
@@ -259,7 +270,7 @@ export const propertyOperationsTeam: TeamMember[] = sortByHierarchy([
     email: 'sarah.mitchell@JBJ.ae',
     bio: 'Expert property listing specialist with meticulous attention to detail. Manages all developer portfolios, document organization, and marketing material distribution.',
     specializations: ['Off-Plan Listings', 'Developer Relations', 'Document Management', 'Portal Publishing'],
-    languages: ['English', 'Arabic', 'Urdu'],
+    languages: ['English'],
     nationality: 'British',
     hierarchyLevel: 5,
     reportsTo: 'alexander-shaw',
@@ -278,7 +289,7 @@ export const clientRelationsTeam: TeamMember[] = sortByHierarchy([
     isAI: true,
     email: 'george.hamilton@JBJ.ae',
     bio: 'Distinguished professional ensuring exceptional client experiences from first contact through transaction completion.',
-    languages: ['English', 'Arabic', 'Mandarin', 'Japanese'],
+    languages: ['English', 'German', 'French'],
     nationality: 'British',
     hierarchyLevel: 3,
     reportsTo: 'michael-anderson',
@@ -298,7 +309,7 @@ export const hrTeam: TeamMember[] = sortByHierarchy([
     isAI: true,
     email: 'james.harrison@JBJ.ae',
     bio: 'Experienced talent acquisition specialist with a mentoring approach. Identifies top performers for the organization.',
-    languages: ['English', 'Arabic', 'French'],
+    languages: ['English', 'French'],
     nationality: 'British',
     hierarchyLevel: 3,
     reportsTo: 'richard-pemberton',
@@ -446,7 +457,7 @@ export const financeTeam: TeamMember[] = sortByHierarchy([
     isAI: true,
     email: 'catherine.brooks@JBJ.ae',
     bio: 'Strategic financial leader ensuring fiscal excellence and corporate governance compliance.',
-    languages: ['English', 'Arabic', 'French'],
+    languages: ['English', 'French'],
     nationality: 'British',
     hierarchyLevel: 3,
     reportsTo: 'david-thornton',
@@ -478,7 +489,7 @@ export const financeTeam: TeamMember[] = sortByHierarchy([
     isAI: true,
     email: 'isabella.romano@JBJ.ae',
     bio: 'Analytical expert providing data-driven insights for investment decisions and market trends.',
-    languages: ['English', 'Italian', 'Arabic', 'Spanish'],
+    languages: ['English', 'Italian', 'Spanish'],
     nationality: 'Italian',
     hierarchyLevel: 5,
     reportsTo: 'catherine-brooks',
@@ -497,7 +508,7 @@ export const operationsTeam: TeamMember[] = sortByHierarchy([
     isAI: true,
     email: 'alexander.shaw@JBJ.ae',
     bio: 'Strategic operations leader streamlining processes and driving organizational efficiency.',
-    languages: ['English', 'Arabic', 'Turkish'],
+    languages: ['English', 'Turkish'],
     nationality: 'British',
     hierarchyLevel: 3,
     reportsTo: 'richard-pemberton',
@@ -514,7 +525,7 @@ export const operationsTeam: TeamMember[] = sortByHierarchy([
     isAI: true,
     email: 'thomas.mitchell@JBJ.ae',
     bio: 'Tech-savvy operations leader optimizing lead management and sales pipeline efficiency.',
-    languages: ['English', 'Arabic', 'Mandarin'],
+    languages: ['English', 'Mandarin'],
     nationality: 'British',
     hierarchyLevel: 4,
     reportsTo: 'alexander-shaw',
@@ -522,7 +533,124 @@ export const operationsTeam: TeamMember[] = sortByHierarchy([
   },
 ]);
 
-// ===== Technology Team (sorted by hierarchy) =====
+// ===== IT Team (sorted by hierarchy) =====
+export const itTeam: TeamMember[] = sortByHierarchy([
+  {
+    id: 'daniel-parker',
+    name: 'Daniel Parker',
+    role: 'IT Manager',
+    department: 'Technology',
+    avatar: danielParkerItManager,
+    isAI: true,
+    email: 'daniel.parker@JBJ.ae',
+    bio: 'Technical leader managing all IT infrastructure, systems, and digital solutions for the organization.',
+    languages: ['English', 'German'],
+    nationality: 'British',
+    hierarchyLevel: 4,
+    reportsTo: 'richard-pemberton',
+    directReports: ['raj-patel'],
+    status: 'online',
+    canConductInterviews: true,
+  },
+  {
+    id: 'raj-patel',
+    name: 'Raj Patel',
+    role: 'IT Assistant',
+    department: 'Technology',
+    avatar: rajPatelItAssistant,
+    isAI: true,
+    email: 'raj.patel@JBJ.ae',
+    bio: 'Dedicated IT support specialist providing technical assistance and maintaining system operations.',
+    languages: ['English', 'Hindi', 'Gujarati'],
+    nationality: 'Indian',
+    hierarchyLevel: 6,
+    reportsTo: 'daniel-parker',
+    status: 'online',
+  },
+]);
+
+// ===== Admin & Front Desk Team (sorted by hierarchy) =====
+export const adminTeam: TeamMember[] = sortByHierarchy([
+  {
+    id: 'emily-watson',
+    name: 'Emily Watson',
+    role: 'Admin Manager',
+    department: 'Administration',
+    avatar: emilyWatsonAdminManager,
+    isAI: true,
+    email: 'emily.watson@JBJ.ae',
+    bio: 'Efficient administrator overseeing office operations, facilities, and front desk coordination.',
+    languages: ['English', 'French'],
+    nationality: 'British',
+    hierarchyLevel: 4,
+    reportsTo: 'richard-pemberton',
+    directReports: ['maria-santos', 'sophie-richards', 'gabriela-costa', 'claire-dubois'],
+    status: 'online',
+    canConductInterviews: true,
+  },
+  {
+    id: 'maria-santos',
+    name: 'Maria Santos',
+    role: 'Admin Assistant',
+    department: 'Administration',
+    avatar: mariaSantosAdminAssistant,
+    isAI: true,
+    email: 'maria.santos@JBJ.ae',
+    bio: 'Organized and friendly assistant supporting daily administrative tasks and office coordination.',
+    languages: ['English', 'Filipino', 'Tagalog'],
+    nationality: 'Filipino',
+    hierarchyLevel: 6,
+    reportsTo: 'emily-watson',
+    status: 'online',
+  },
+  {
+    id: 'sophie-richards',
+    name: 'Sophie Richards',
+    role: 'Front Desk Receptionist',
+    department: 'Administration',
+    avatar: sophieRichardsReceptionist,
+    isAI: true,
+    email: 'sophie.richards@JBJ.ae',
+    bio: 'Welcoming and professional receptionist creating excellent first impressions for all visitors.',
+    languages: ['English', 'Spanish'],
+    nationality: 'British',
+    hierarchyLevel: 6,
+    reportsTo: 'emily-watson',
+    status: 'online',
+  },
+  {
+    id: 'gabriela-costa',
+    name: 'Gabriela Costa',
+    role: 'Front Desk Receptionist',
+    department: 'Administration',
+    avatar: gabrielaCostaReceptionist,
+    isAI: true,
+    email: 'gabriela.costa@JBJ.ae',
+    bio: 'Friendly and multilingual receptionist ensuring smooth visitor management and communication.',
+    languages: ['English', 'Portuguese', 'Spanish'],
+    nationality: 'Brazilian',
+    hierarchyLevel: 6,
+    reportsTo: 'emily-watson',
+    status: 'online',
+  },
+  {
+    id: 'claire-dubois',
+    name: 'Claire Dubois',
+    role: 'Front Desk Receptionist',
+    department: 'Administration',
+    avatar: claireDuboisReceptionist,
+    isAI: true,
+    email: 'claire.dubois@JBJ.ae',
+    bio: 'Elegant and attentive receptionist providing premium front desk services with French sophistication.',
+    languages: ['English', 'French', 'Italian'],
+    nationality: 'French',
+    hierarchyLevel: 6,
+    reportsTo: 'emily-watson',
+    status: 'online',
+  },
+]);
+
+// ===== Technology Team (AI Coordination) =====
 export const aiTeam: TeamMember[] = sortByHierarchy([
   {
     id: 'robert-maxwell',
@@ -533,7 +661,7 @@ export const aiTeam: TeamMember[] = sortByHierarchy([
     isAI: true,
     email: 'robert.maxwell@JBJ.ae',
     bio: 'Advanced AI coordinator facilitating seamless human-AI collaboration across all departments.',
-    languages: ['English', 'Arabic', 'French', 'Spanish', 'Chinese', 'Russian', 'Japanese'],
+    languages: ['English', 'French', 'Spanish', 'Chinese', 'Russian', 'Japanese'],
     nationality: 'British',
     hierarchyLevel: 4,
     reportsTo: 'richard-pemberton',
@@ -552,6 +680,8 @@ export const allTeamMembers: TeamMember[] = [
   ...creativeTeam,
   ...financeTeam,
   ...operationsTeam,
+  ...itTeam,
+  ...adminTeam,
   ...aiTeam,
 ];
 
@@ -601,6 +731,8 @@ export const teamByDepartment = {
   'Creative & Media': creativeTeam,
   'Finance': financeTeam,
   'Operations': operationsTeam,
+  'IT': itTeam,
+  'Administration': adminTeam,
   'Technology': aiTeam,
 };
 
@@ -681,10 +813,18 @@ export const companyChannels: CompanyChannel[] = [
   },
   {
     id: 'tech-team',
-    name: 'Technology & AI',
-    description: 'Tech initiatives and AI coordination',
+    name: 'Technology & IT',
+    description: 'Tech initiatives, IT support, and AI coordination',
     type: 'department',
-    members: aiTeam.map(m => m.id),
+    members: [...aiTeam, ...itTeam].map(m => m.id),
+    isPrivate: false,
+  },
+  {
+    id: 'admin-team',
+    name: 'Administration',
+    description: 'Office administration and front desk coordination',
+    type: 'department',
+    members: adminTeam.map(m => m.id),
     isPrivate: false,
   },
   {
