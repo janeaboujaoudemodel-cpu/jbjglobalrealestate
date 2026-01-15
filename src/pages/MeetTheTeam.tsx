@@ -10,6 +10,7 @@ import {
   allTeamMembers,
   teamByDepartment,
   TeamMember,
+  getTeamMemberById,
 } from "@/config/team-members";
 import {
   Users,
@@ -18,6 +19,7 @@ import {
   Sparkles,
   Building2,
   MessageSquare,
+  ArrowUpRight,
 } from "lucide-react";
 import TeamContactForm from "@/components/TeamContactForm";
 import TeamMemberDetailDialog from "@/components/TeamMemberDetailDialog";
@@ -42,6 +44,9 @@ interface TeamMemberCardProps {
 }
 
 const TeamMemberCard = ({ member, onReadMore }: TeamMemberCardProps) => {
+  // Get reporting manager info
+  const reportsToMember = member.reportsTo ? getTeamMemberById(member.reportsTo) : null;
+
   return (
     <motion.div variants={fadeInUp}>
       <Card className="bg-zinc-900/60 border-zinc-800 hover:border-gold/50 transition-all duration-300 overflow-hidden group h-full">
@@ -56,10 +61,19 @@ const TeamMemberCard = ({ member, onReadMore }: TeamMemberCardProps) => {
             />
             {/* Photo overlay gradient */}
             <div className="absolute inset-0 bg-gradient-to-t from-zinc-950 via-transparent to-transparent opacity-80" />
+            
+            {/* Hierarchy Level Badge */}
+            {member.hierarchyLevel && (
+              <div className="absolute top-2 right-2">
+                <Badge className="bg-purple-500/80 text-white text-[10px] px-1.5 py-0.5">
+                  L{member.hierarchyLevel}
+                </Badge>
+              </div>
+            )}
           </div>
 
           {/* Info */}
-          <div className="p-5 -mt-16 relative z-10 flex flex-col h-[200px]">
+          <div className="p-5 -mt-16 relative z-10 flex flex-col h-[240px]">
             <div>
               <h3 className="text-white font-semibold text-lg mb-1">{member.name}</h3>
 
@@ -91,9 +105,12 @@ const TeamMemberCard = ({ member, onReadMore }: TeamMemberCardProps) => {
                 <p className="text-zinc-600 text-xs mt-1">{member.nationality}</p>
               )}
 
-              {member.bio && (
-                <div className="mt-2">
-                  <p className="text-zinc-400 text-xs line-clamp-2">{member.bio}</p>
+              {/* Reports To Section */}
+              {reportsToMember && (
+                <div className="mt-2 flex items-center gap-1.5 text-zinc-500">
+                  <ArrowUpRight className="w-3 h-3" />
+                  <span className="text-[11px]">Reports to: </span>
+                  <span className="text-zinc-400 text-[11px] font-medium">{reportsToMember.name.split(' ')[0]}</span>
                 </div>
               )}
 
