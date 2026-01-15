@@ -2,8 +2,8 @@
 // Professional team member data with AI-generated unique portraits
 
 // Import team portraits - Executive Leadership
-import janeAbouJaoudeCeo from '@/assets/ceo/jane-ceo-executive-office.jpg';
-import davidThorntonCeo from '@/assets/team/david-thornton-md-v3.png';
+import janeAbouJaoudeCeo from '@/assets/ceo/jane-ceo-executive-office-v2.jpg';
+import davidThorntonCeo from '@/assets/team/david-thornton-md-real.png';
 import richardPembertonCoo from '@/assets/team/richard-pemberton-coo.png';
 import oliviaExecutiveAssistant from '@/assets/team/olivia-executive-assistant.png';
 import amandaClarkeExecutiveAssistant from '@/assets/team/amanda-clarke-executive-assistant.png';
@@ -15,7 +15,7 @@ import hudaMarzooqLawyer from '@/assets/team/huda-marzooq-lawyer.jpg';
 import sarahMitchellListingAdmin from '@/assets/team/sarah-mitchell-listing-admin.png';
 
 // Import team portraits - Sales Team
-import royDaviHeadOfSale from '@/assets/team/roy-david-head-of-sale.png';
+import royDaviHeadOfSale from '@/assets/team/roy-davi-head-of-sale-real.jpg';
 import williamHarrisonSales from '@/assets/team/william-harrison-sales.png';
 
 // Import team portraits - Software Engineering Team
@@ -130,7 +130,7 @@ const sortByHierarchy = (members: TeamMember[]): TeamMember[] => {
 export const executiveTeam: TeamMember[] = sortByHierarchy([
   {
     id: 'jane-abou-jaoude',
-    name: 'Jamila Abou Jaoude',
+    name: 'Jane Abou Jaoude',
     role: 'Founder & CEO',
     department: 'Executive',
     avatar: janeAbouJaoudeCeo,
