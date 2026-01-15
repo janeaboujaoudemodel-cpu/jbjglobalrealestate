@@ -1,8 +1,9 @@
-import { useState, useEffect, useCallback } from "react";
-import { Download, X, Share } from "lucide-react";
-import { motion, AnimatePresence } from "framer-motion";
-import jbjMonogramDarkBg from "@/assets/jbj-monogram-dark-bg.png";
+import { useCallback, useEffect, useState } from "react";
+import { Download, X } from "lucide-react";
+import { AnimatePresence, motion } from "framer-motion";
 import { toast } from "sonner";
+
+import jbjMonogramDarkBg from "@/assets/jbj-monogram-dark-bg.png";
 import { usePopupVisibility } from "@/contexts/PopupCoordinatorContext";
 
 interface BeforeInstallPromptEvent extends Event {
@@ -17,10 +18,11 @@ const STORAGE_KEYS = {
 
 const isIOSDevice = () => {
   const ua = navigator.userAgent;
-  // Detect iOS devices (iPhone, iPad, iPod) - exclude desktop Safari on Mac
   const isIOS = /iPad|iPhone|iPod/.test(ua) && !(window as any).MSStream;
-  // Detect iPadOS 13+ which reports as "MacIntel" but has touch support
-  const isIPadOS = navigator.platform === "MacIntel" && (navigator as any).maxTouchPoints > 1 && !ua.includes("Macintosh");
+  const isIPadOS =
+    navigator.platform === "MacIntel" &&
+    (navigator as any).maxTouchPoints > 1 &&
+    !ua.includes("Macintosh");
   return isIOS || isIPadOS;
 };
 
@@ -34,51 +36,44 @@ const isMacDesktop = () => {
 };
 
 const InstallAppButton = () => {
-  const { requestToShow, dismiss, isVisible } = usePopupVisibility('install-app-button');
+  const { requestToShow, dismiss, isVisible } = usePopupVisibility("install-app-button");
   const [deferredPrompt, setDeferredPrompt] = useState<BeforeInstallPromptEvent | null>(null);
   const [isInstalled, setIsInstalled] = useState(false);
   const [isDismissed, setIsDismissed] = useState(false);
   const [isIOS, setIsIOS] = useState(false);
   const [isMacSafari, setIsMacSafari] = useState(false);
-  const [showIOSGuide, setShowIOSGuide] = useState(false);
   const [shouldShow, setShouldShow] = useState(false);
 
   useEffect(() => {
-    // Check localStorage for persisted states
     const wasInstalled = localStorage.getItem(STORAGE_KEYS.INSTALLED) === "true";
     const wasDismissed = localStorage.getItem(STORAGE_KEYS.DISMISSED) === "true";
-    
+
     if (wasInstalled) {
       setIsInstalled(true);
       return;
     }
-    
+
     if (wasDismissed) {
       setIsDismissed(true);
       return;
     }
 
-    // Check if already running as PWA
     const standalone = window.matchMedia("(display-mode: standalone)").matches;
     const navigatorStandalone = (navigator as any).standalone === true;
-    
     if (standalone || navigatorStandalone) {
       setIsInstalled(true);
       localStorage.setItem(STORAGE_KEYS.INSTALLED, "true");
       return;
     }
 
-    // Check platform
     const iosDevice = isIOSDevice();
     const macDesktopSafari = isMacDesktop() && isSafariBrowser();
-    
+
     setIsIOS(iosDevice);
     setIsMacSafari(macDesktopSafari);
-    
-    // Hide on Mac Safari (no PWA support on desktop Safari)
-    if (macDesktopSafari) {
-      return;
-    }
+
+    // Desktop Safari doesn't support PWA installs
+    if (macDesktopSafari) return;
 
     const handleBeforeInstallPrompt = (e: Event) => {
       e.preventDefault();
@@ -92,128 +87,70 @@ const InstallAppButton = () => {
       setDeferredPrompt(null);
       localStorage.setItem(STORAGE_KEYS.INSTALLED, "true");
       dismiss();
-      
-      toast.success("App installed! Find it on your Dock or taskbar", {
-        duration: 5000,
-        description: "Tap the JBJ icon anytime for quick access",
-      });
+      toast.success("App installed.");
     };
 
     window.addEventListener("beforeinstallprompt", handleBeforeInstallPrompt);
     window.addEventListener("appinstalled", handleAppInstalled);
 
-    // For iOS, show after a delay
+    // iOS: show the floating button after a delay (no internal step-by-step guide)
+    let timer: number | undefined;
     if (iosDevice) {
-      const timer = setTimeout(() => {
+      timer = window.setTimeout(() => {
         setShouldShow(true);
         requestToShow();
       }, 5000);
-      return () => {
-        clearTimeout(timer);
-        window.removeEventListener("beforeinstallprompt", handleBeforeInstallPrompt);
-        window.removeEventListener("appinstalled", handleAppInstalled);
-      };
     }
 
     return () => {
+      if (timer) window.clearTimeout(timer);
       window.removeEventListener("beforeinstallprompt", handleBeforeInstallPrompt);
       window.removeEventListener("appinstalled", handleAppInstalled);
     };
   }, [requestToShow, dismiss]);
 
   const handleInstallClick = useCallback(async () => {
-    // iOS fallback - show instructions
+    // iOS cannot show a native prompt; keep this as a single-line instruction (no guide modal).
     if (isIOS) {
-      setShowIOSGuide(true);
+      toast.message("iPhone/iPad: In Safari tap Share → Add to Home Screen");
       return;
     }
 
-    // If we have the native prompt, trigger it directly
     if (deferredPrompt) {
       try {
-        // Trigger the install prompt immediately
         await deferredPrompt.prompt();
         const { outcome } = await deferredPrompt.userChoice;
-        
+
         if (outcome === "accepted") {
           setIsInstalled(true);
           localStorage.setItem(STORAGE_KEYS.INSTALLED, "true");
           dismiss();
-          toast.success("App installed! Find it on your Dock or taskbar", {
-            duration: 5000,
-            description: "The JBJ app icon has been added to your device",
-          });
+          toast.success("App installed.");
         }
+
         setDeferredPrompt(null);
       } catch (error) {
         console.error("Install prompt error:", error);
-        // Fallback: open install page
-        window.open("/install", "_blank");
+        toast.error("Install prompt failed on this browser.");
       }
-    } else {
-      // No native prompt available, open install page with instructions
-      window.open("/install", "_blank");
+      return;
     }
-  }, [deferredPrompt, isIOS, dismiss]);
+
+    toast.message("Install isn't available on this browser.");
+  }, [deferredPrompt, dismiss, isIOS]);
 
   const handleDismiss = useCallback(() => {
     setIsDismissed(true);
-    setShowIOSGuide(false);
     localStorage.setItem(STORAGE_KEYS.DISMISSED, "true");
     dismiss();
   }, [dismiss]);
 
-  // Hide if installed, dismissed, or on Mac Safari (not supported)
   if (isInstalled || isDismissed || isMacSafari) return null;
-
-  // Don't show if nothing to show
   if (!shouldShow) return null;
 
   return (
     <AnimatePresence>
-      {/* iOS Instructions Modal */}
-      {showIOSGuide && (
-        <motion.div
-          initial={{ opacity: 0 }}
-          animate={{ opacity: 1 }}
-          exit={{ opacity: 0 }}
-          className="fixed inset-0 z-[9999] bg-black/70 flex items-center justify-center p-4"
-          onClick={() => setShowIOSGuide(false)}
-        >
-          <motion.div
-            initial={{ scale: 0.9, opacity: 0 }}
-            animate={{ scale: 1, opacity: 1 }}
-            exit={{ scale: 0.9, opacity: 0 }}
-            className="bg-background rounded-2xl p-6 max-w-sm w-full shadow-2xl"
-            onClick={(e) => e.stopPropagation()}
-          >
-            <h3 className="text-lg font-bold text-foreground mb-4">Add to Home Screen</h3>
-            <div className="space-y-3 text-sm text-muted-foreground">
-              <div className="flex items-start gap-3">
-                <span className="bg-gold/20 text-gold rounded-full w-6 h-6 flex items-center justify-center shrink-0 font-bold">1</span>
-                <p>Tap the <Share className="inline w-4 h-4" /> Share button in Safari</p>
-              </div>
-              <div className="flex items-start gap-3">
-                <span className="bg-gold/20 text-gold rounded-full w-6 h-6 flex items-center justify-center shrink-0 font-bold">2</span>
-                <p>Scroll down and tap "Add to Home Screen"</p>
-              </div>
-              <div className="flex items-start gap-3">
-                <span className="bg-gold/20 text-gold rounded-full w-6 h-6 flex items-center justify-center shrink-0 font-bold">3</span>
-                <p>Tap "Add" to install the app</p>
-              </div>
-            </div>
-            <button
-              onClick={handleDismiss}
-              className="mt-6 w-full py-3 bg-gold text-black font-bold rounded-lg hover:bg-gold-light transition-colors"
-            >
-              Got it
-            </button>
-          </motion.div>
-        </motion.div>
-      )}
-
-      {/* Install Button - only show when coordinator allows */}
-      {isVisible && !showIOSGuide && (
+      {isVisible && (
         <motion.div
           initial={{ scale: 0, opacity: 0 }}
           animate={{ scale: 1, opacity: 1 }}
@@ -239,7 +176,7 @@ const InstallAppButton = () => {
             </span>
             <Download className="w-4 h-4 text-black" />
           </button>
-          
+
           <button
             onClick={handleDismiss}
             className="ml-1 p-1 rounded-full hover:bg-black/10 transition-colors"
@@ -247,21 +184,21 @@ const InstallAppButton = () => {
           >
             <X className="w-4 h-4 text-black/60" />
           </button>
-          
+
           <motion.div
             className="absolute inset-0 rounded-full bg-gold/20 pointer-events-none"
             animate={{ scale: [1, 1.2, 1], opacity: [0.5, 0, 0.5] }}
             transition={{ duration: 2, repeat: Infinity, ease: "easeInOut" }}
           />
+
+          <style>{`
+            @keyframes bounce-glow {
+              0%, 100% { transform: translateY(0) scale(1); box-shadow: 0 0 20px rgba(212, 175, 55, 0.4), 0 0 40px rgba(212, 175, 55, 0.2); }
+              50% { transform: translateY(-8px) scale(1.05); box-shadow: 0 0 30px rgba(212, 175, 55, 0.6), 0 0 60px rgba(212, 175, 55, 0.3); }
+            }
+          `}</style>
         </motion.div>
       )}
-
-      <style>{`
-        @keyframes bounce-glow {
-          0%, 100% { transform: translateY(0) scale(1); box-shadow: 0 0 20px rgba(212, 175, 55, 0.4), 0 0 40px rgba(212, 175, 55, 0.2); }
-          50% { transform: translateY(-8px) scale(1.05); box-shadow: 0 0 30px rgba(212, 175, 55, 0.6), 0 0 60px rgba(212, 175, 55, 0.3); }
-        }
-      `}</style>
     </AnimatePresence>
   );
 };
