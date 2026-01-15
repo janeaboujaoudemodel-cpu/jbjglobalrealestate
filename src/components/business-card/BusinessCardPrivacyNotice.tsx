@@ -12,7 +12,7 @@ import {
   CheckCircle2,
   XCircle
 } from "lucide-react";
-import BackNavButton from "@/components/BackNavButton";
+
 
 interface BusinessCardPrivacyNoticeProps {
   onAccept: () => void;

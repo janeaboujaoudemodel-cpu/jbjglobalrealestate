@@ -13,7 +13,7 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Badge } from "@/components/ui/badge";
 import { Progress } from "@/components/ui/progress";
 import { toast } from "sonner";
-import BackNavButton from "@/components/BackNavButton";
+
 import VideoBuilderAccessGate from "@/components/video-builder/VideoBuilderAccessGate";
 import VideoProjectSelector from "@/components/video-builder/VideoProjectSelector";
 import VideoMediaUploader from "@/components/video-builder/VideoMediaUploader";
@@ -161,7 +161,6 @@ const VideoBuilder = () => {
         <div className="container max-w-7xl mx-auto px-4 py-4">
           <div className="flex items-center justify-between">
             <div className="flex items-center gap-4">
-              <BackNavButton />
               <div>
                 <h1 className="text-xl font-semibold flex items-center gap-2">
                   <Video className="h-5 w-5 text-primary" />

@@ -11,8 +11,8 @@ const howWeHelp = [
   {
     title: "Buy & Sell Brokerage",
     description: "Brokerage support for buying and selling UAE property.",
-    gradient: "from-[#A8925A]/20 via-amber-500/10 to-[#A8925A]/20",
-    iconGradient: "from-[#A8925A] to-[#C4A962]",
+    gradient: "from-gold/20 via-gold-light/10 to-gold/20",
+    iconGradient: "from-gold to-gold-light",
     href: "/properties",
   },
   {
@@ -153,8 +153,8 @@ const Premium3DIcon = ({ title, gradient }: { title: string; gradient: string })
         <svg viewBox="0 0 40 40" className="w-10 h-10 md:w-12 md:h-12 relative z-10">
           <defs>
             <linearGradient id="iconGrad" x1="0%" y1="0%" x2="100%" y2="100%">
-              <stop offset="0%" stopColor="#D4AF37" />
-              <stop offset="100%" stopColor="#A8925A" />
+              <stop offset="0%" stopColor="hsl(45, 35%, 50%)" />
+              <stop offset="100%" stopColor="hsl(45, 32%, 39%)" />
             </linearGradient>
           </defs>
           {getIconPath()}
@@ -213,8 +213,8 @@ const HelpIcon = ({ title, gradient }: { title: string; gradient: string }) => {
         <svg viewBox="0 0 40 40" className="w-8 h-8 md:w-10 md:h-10 relative z-10">
           <defs>
             <linearGradient id="helpGrad" x1="0%" y1="0%" x2="100%" y2="100%">
-              <stop offset="0%" stopColor="#D4AF37" />
-              <stop offset="100%" stopColor="#A8925A" />
+              <stop offset="0%" stopColor="hsl(45, 35%, 50%)" />
+              <stop offset="100%" stopColor="hsl(45, 32%, 39%)" />
             </linearGradient>
           </defs>
           {getIconPath()}

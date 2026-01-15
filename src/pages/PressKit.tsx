@@ -19,7 +19,7 @@ import { Button } from "@/components/ui/button";
 import { JJLogoImage } from "@/components/JJLogoImage";
 import { CONTACT_INFO, COMPANY_STATS, getWhatsAppUrl, getCallUrl, getEmailUrl } from "@/constants/stats";
 import { toast } from "sonner";
-import BackNavButton from "@/components/BackNavButton";
+
 
 // Import founder images
 import founderProfessional from "@/assets/founder-professional.jpeg";
@@ -179,10 +179,7 @@ const PressKit = () => {
             animate="visible"
             variants={staggerContainer}
           >
-            <motion.div variants={fadeInUp} className="mb-6">
-              <BackNavButton />
-            </motion.div>
-            <motion.span 
+            <motion.span
               className="inline-block text-gold text-xs uppercase tracking-[0.4em] mb-6"
               variants={fadeInUp}
             >
