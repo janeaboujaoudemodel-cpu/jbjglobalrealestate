@@ -1,7 +1,7 @@
 import { useState, useEffect, useCallback } from "react";
 import { Download, X, Share } from "lucide-react";
 import { motion, AnimatePresence } from "framer-motion";
-import jbjMonogramDark from "@/assets/jbj-monogram-dark.png";
+import jbjMonogramDarkBg from "@/assets/jbj-monogram-dark-bg.png";
 import { toast } from "sonner";
 import { usePopupVisibility } from "@/contexts/PopupCoordinatorContext";
 
@@ -218,26 +218,26 @@ const InstallAppButton = () => {
           initial={{ scale: 0, opacity: 0 }}
           animate={{ scale: 1, opacity: 1 }}
           exit={{ scale: 0, opacity: 0 }}
-          className="fixed bottom-6 left-6 z-[9000] flex items-center gap-2 px-4 py-3 rounded-full bg-gradient-to-r from-gold to-gold-light shadow-2xl shadow-gold/40 group"
-          style={{ animation: "bounce-glow 2s ease-in-out infinite" }}
+          className="fixed bottom-20 left-4 z-[8500] flex items-center gap-1.5 px-3 py-2 rounded-full bg-gradient-to-r from-gold to-gold-light shadow-lg shadow-gold/30 group"
+          style={{ animation: "bounce-glow 3s ease-in-out infinite" }}
         >
           <button
             onClick={handleInstallClick}
             className="flex items-center gap-2 hover:scale-105 transition-transform"
             aria-label="Install app"
           >
-            <div className="w-8 h-8 rounded-full overflow-hidden border-2 border-black/30 shadow-inner">
+            <div className="w-8 h-8 rounded-lg overflow-hidden bg-black shadow-inner">
               <img
-                src={jbjMonogramDark}
+                src={jbjMonogramDarkBg}
                 alt="JBJ Global Real Estate"
-                className="w-full h-full object-contain"
+                className="w-full h-full object-contain p-0.5"
                 loading="lazy"
               />
             </div>
-            <span className="text-black font-bold text-sm tracking-wide">
-              {isIOS ? "Add to Home" : "Install App"}
+            <span className="text-black font-bold text-xs tracking-wide hidden sm:inline">
+              {isIOS ? "Add to Home" : "Install"}
             </span>
-            <Download className="w-5 h-5 text-black" />
+            <Download className="w-4 h-4 text-black" />
           </button>
           
           <button

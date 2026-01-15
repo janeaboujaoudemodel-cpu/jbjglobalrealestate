@@ -2065,6 +2065,42 @@ export type Database = {
         }
         Relationships: []
       }
+      contact_form_submissions: {
+        Row: {
+          block_reason: string | null
+          created_at: string | null
+          email: string
+          first_submission_at: string | null
+          id: string
+          ip_address: string | null
+          is_blocked: boolean | null
+          last_submission_at: string | null
+          submission_count: number | null
+        }
+        Insert: {
+          block_reason?: string | null
+          created_at?: string | null
+          email: string
+          first_submission_at?: string | null
+          id?: string
+          ip_address?: string | null
+          is_blocked?: boolean | null
+          last_submission_at?: string | null
+          submission_count?: number | null
+        }
+        Update: {
+          block_reason?: string | null
+          created_at?: string | null
+          email?: string
+          first_submission_at?: string | null
+          id?: string
+          ip_address?: string | null
+          is_blocked?: boolean | null
+          last_submission_at?: string | null
+          submission_count?: number | null
+        }
+        Relationships: []
+      }
       content_access_logs: {
         Row: {
           accessed_at: string
@@ -8702,6 +8738,295 @@ export type Database = {
         }
         Relationships: []
       }
+      vip_clients: {
+        Row: {
+          assigned_relationship_manager: string | null
+          created_at: string | null
+          email: string
+          full_name: string
+          hide_from_public: boolean | null
+          id: string
+          id_document_url: string | null
+          is_verified: boolean | null
+          job_title: string | null
+          loyalty_points: number | null
+          nationality: string | null
+          organization: string | null
+          phone: string | null
+          profession: string | null
+          properties_purchased: number | null
+          special_notes: string | null
+          total_investment_value: number | null
+          updated_at: string | null
+          user_id: string | null
+          verified_at: string | null
+          verified_by: string | null
+          vip_category: Database["public"]["Enums"]["vip_category"]
+        }
+        Insert: {
+          assigned_relationship_manager?: string | null
+          created_at?: string | null
+          email: string
+          full_name: string
+          hide_from_public?: boolean | null
+          id?: string
+          id_document_url?: string | null
+          is_verified?: boolean | null
+          job_title?: string | null
+          loyalty_points?: number | null
+          nationality?: string | null
+          organization?: string | null
+          phone?: string | null
+          profession?: string | null
+          properties_purchased?: number | null
+          special_notes?: string | null
+          total_investment_value?: number | null
+          updated_at?: string | null
+          user_id?: string | null
+          verified_at?: string | null
+          verified_by?: string | null
+          vip_category: Database["public"]["Enums"]["vip_category"]
+        }
+        Update: {
+          assigned_relationship_manager?: string | null
+          created_at?: string | null
+          email?: string
+          full_name?: string
+          hide_from_public?: boolean | null
+          id?: string
+          id_document_url?: string | null
+          is_verified?: boolean | null
+          job_title?: string | null
+          loyalty_points?: number | null
+          nationality?: string | null
+          organization?: string | null
+          phone?: string | null
+          profession?: string | null
+          properties_purchased?: number | null
+          special_notes?: string | null
+          total_investment_value?: number | null
+          updated_at?: string | null
+          user_id?: string | null
+          verified_at?: string | null
+          verified_by?: string | null
+          vip_category?: Database["public"]["Enums"]["vip_category"]
+        }
+        Relationships: []
+      }
+      vip_event_invitations: {
+        Row: {
+          created_at: string | null
+          event_id: string
+          id: string
+          notes: string | null
+          response_date: string | null
+          status: string | null
+          vip_client_id: string
+        }
+        Insert: {
+          created_at?: string | null
+          event_id: string
+          id?: string
+          notes?: string | null
+          response_date?: string | null
+          status?: string | null
+          vip_client_id: string
+        }
+        Update: {
+          created_at?: string | null
+          event_id?: string
+          id?: string
+          notes?: string | null
+          response_date?: string | null
+          status?: string | null
+          vip_client_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "vip_event_invitations_event_id_fkey"
+            columns: ["event_id"]
+            isOneToOne: false
+            referencedRelation: "vip_events"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "vip_event_invitations_vip_client_id_fkey"
+            columns: ["vip_client_id"]
+            isOneToOne: false
+            referencedRelation: "vip_clients"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      vip_events: {
+        Row: {
+          created_at: string | null
+          created_by: string | null
+          description: string | null
+          event_date: string
+          event_type: string
+          id: string
+          is_active: boolean | null
+          location: string | null
+          max_attendees: number | null
+          title: string
+          updated_at: string | null
+          vip_categories_allowed:
+            | Database["public"]["Enums"]["vip_category"][]
+            | null
+        }
+        Insert: {
+          created_at?: string | null
+          created_by?: string | null
+          description?: string | null
+          event_date: string
+          event_type?: string
+          id?: string
+          is_active?: boolean | null
+          location?: string | null
+          max_attendees?: number | null
+          title: string
+          updated_at?: string | null
+          vip_categories_allowed?:
+            | Database["public"]["Enums"]["vip_category"][]
+            | null
+        }
+        Update: {
+          created_at?: string | null
+          created_by?: string | null
+          description?: string | null
+          event_date?: string
+          event_type?: string
+          id?: string
+          is_active?: boolean | null
+          location?: string | null
+          max_attendees?: number | null
+          title?: string
+          updated_at?: string | null
+          vip_categories_allowed?:
+            | Database["public"]["Enums"]["vip_category"][]
+            | null
+        }
+        Relationships: []
+      }
+      vip_gifts: {
+        Row: {
+          created_at: string | null
+          created_by: string | null
+          delivery_date: string | null
+          delivery_status: string | null
+          gift_description: string | null
+          gift_type: string
+          gift_value: number | null
+          id: string
+          notes: string | null
+          occasion: string | null
+          tracking_number: string | null
+          vip_client_id: string
+        }
+        Insert: {
+          created_at?: string | null
+          created_by?: string | null
+          delivery_date?: string | null
+          delivery_status?: string | null
+          gift_description?: string | null
+          gift_type: string
+          gift_value?: number | null
+          id?: string
+          notes?: string | null
+          occasion?: string | null
+          tracking_number?: string | null
+          vip_client_id: string
+        }
+        Update: {
+          created_at?: string | null
+          created_by?: string | null
+          delivery_date?: string | null
+          delivery_status?: string | null
+          gift_description?: string | null
+          gift_type?: string
+          gift_value?: number | null
+          id?: string
+          notes?: string | null
+          occasion?: string | null
+          tracking_number?: string | null
+          vip_client_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "vip_gifts_vip_client_id_fkey"
+            columns: ["vip_client_id"]
+            isOneToOne: false
+            referencedRelation: "vip_clients"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      vip_loyalty_rewards: {
+        Row: {
+          created_at: string | null
+          description: string | null
+          id: string
+          is_active: boolean | null
+          name: string
+          points_required: number
+          reward_type: string
+        }
+        Insert: {
+          created_at?: string | null
+          description?: string | null
+          id?: string
+          is_active?: boolean | null
+          name: string
+          points_required: number
+          reward_type: string
+        }
+        Update: {
+          created_at?: string | null
+          description?: string | null
+          id?: string
+          is_active?: boolean | null
+          name?: string
+          points_required?: number
+          reward_type?: string
+        }
+        Relationships: []
+      }
+      vip_tool_access: {
+        Row: {
+          access_expires_at: string | null
+          access_granted_at: string | null
+          id: string
+          is_active: boolean | null
+          tool_name: string
+          vip_client_id: string
+        }
+        Insert: {
+          access_expires_at?: string | null
+          access_granted_at?: string | null
+          id?: string
+          is_active?: boolean | null
+          tool_name: string
+          vip_client_id: string
+        }
+        Update: {
+          access_expires_at?: string | null
+          access_granted_at?: string | null
+          id?: string
+          is_active?: boolean | null
+          tool_name?: string
+          vip_client_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "vip_tool_access_vip_client_id_fkey"
+            columns: ["vip_client_id"]
+            isOneToOne: false
+            referencedRelation: "vip_clients"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
     }
     Views: {
       broker_profiles_public: {
@@ -9163,6 +9488,10 @@ export type Database = {
         Args: { _lead_id: string; _user_id: string }
         Returns: boolean
       }
+      check_contact_form_rate_limit: {
+        Args: { p_email: string; p_ip_address: string }
+        Returns: Json
+      }
       check_lead_rate_limit: {
         Args: {
           p_email: string
@@ -9482,6 +9811,17 @@ export type Database = {
         | "policy_violation"
         | "lockdown_triggered"
       security_severity: "info" | "low" | "medium" | "high" | "critical"
+      vip_category:
+        | "government_official"
+        | "doctor"
+        | "lawyer"
+        | "architect"
+        | "engineer"
+        | "phd_holder"
+        | "masters_holder"
+        | "investor"
+        | "existing_buyer"
+        | "loyal_customer"
       visitor_role: "broker" | "referral_partner" | "client" | "visitor"
     }
     CompositeTypes: {
@@ -9756,6 +10096,18 @@ export const Constants = {
         "lockdown_triggered",
       ],
       security_severity: ["info", "low", "medium", "high", "critical"],
+      vip_category: [
+        "government_official",
+        "doctor",
+        "lawyer",
+        "architect",
+        "engineer",
+        "phd_holder",
+        "masters_holder",
+        "investor",
+        "existing_buyer",
+        "loyal_customer",
+      ],
       visitor_role: ["broker", "referral_partner", "client", "visitor"],
     },
   },
