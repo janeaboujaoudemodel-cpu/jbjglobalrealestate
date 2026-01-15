@@ -7,9 +7,17 @@ import davidThorntonCeo from '@/assets/team/david-thornton-md-natural.png';
 import richardPembertonCoo from '@/assets/team/richard-pemberton-coo.png';
 import oliviaExecutiveAssistant from '@/assets/team/olivia-executive-assistant.png';
 import amandaClarkeExecutiveAssistant from '@/assets/team/amanda-clarke-executive-assistant.png';
+// NEW Executive Team additions (to reach 8)
+import natashaDaoudExecutive from '@/assets/team/natasha-daoud-executive.png';
+import anthonyPembertonStrategy from '@/assets/team/anthony-pemberton-strategy.png';
+import fatimaAlMazroueiGovt from '@/assets/team/fatima-al-mazrouei-govt.png';
 
 // Import team portraits - Legal Team
 import hudaMarzooqLawyer from '@/assets/team/huda-marzooq-lawyer-office.jpg';
+// NEW Legal Team additions (to reach 4)
+import williamThorntonLegal from '@/assets/team/william-thornton-legal.png';
+import nadiaHassanLegal from '@/assets/team/nadia-hassan-legal.png';
+import michaelBrennanLegal from '@/assets/team/michael-brennan-legal.png';
 
 // Import team portraits - Property Operations
 import sarahMitchellListingAdmin from '@/assets/team/sarah-mitchell-listing-admin.png';
@@ -27,6 +35,11 @@ import adaezeOkonkwoSales from '@/assets/team/adaeze-okonkwo-natural.png';
 import carlosRodriguezSales from '@/assets/team/carlos-rodriguez-natural.png';
 import yukiTanakaConsultant from '@/assets/team/yuki-tanaka-natural.png';
 import faisalKhanSales from '@/assets/team/faisal-khan-natural.png';
+// NEW Sales Team additions (to reach 16)
+import jiYoungParkSales from '@/assets/team/ji-young-park-sales.png';
+import lucasMendesInvestment from '@/assets/team/lucas-mendes-investment.png';
+import mehmetYilmazProperty from '@/assets/team/mehmet-yilmaz-property.png';
+import zandileNdlovuSales from '@/assets/team/zandile-ndlovu-sales.png';
 
 // Import team portraits - Software Engineering Team
 import jamesWoodwardTechLead from '@/assets/team/james-woodward-tech-lead.png';
@@ -36,16 +49,26 @@ import emmaCollinsScriptWriter from '@/assets/team/emma-collins-script-writer.pn
 import andrewTaylorIdeaCreator from '@/assets/team/andrew-taylor-idea-creator.png';
 import erikLindqvistBackend from '@/assets/team/erik-lindqvist-backend.png';
 import jiYeonKimQa from '@/assets/team/ji-yeon-kim-qa.png';
+// NEW Software Engineering Team additions (to reach 8)
+import kevinLiuSoftware from '@/assets/team/kevin-liu-software.png';
+import ingridLarsenSoftware from '@/assets/team/ingrid-larsen-software.png';
 
 // Import team portraits - Customer Happiness Team
 import lisaHendersonCustomerHappiness from '@/assets/team/lisa-henderson-customer-happiness.png';
 import jackThompsonCustomerSupport from '@/assets/team/jack-thompson-customer-support.png';
 import nataliaPetrovaHelpdesk from '@/assets/team/natalia-petrova-helpdesk.png';
 import danielMurphyCustomer from '@/assets/team/daniel-murphy-customer.png';
+// NEW Customer Happiness additions (to reach 4)
+import mariaSantosCustomer from '@/assets/team/maria-santos-customer.png';
+
 import michaelAndersonSalesDirector from '@/assets/team/michael-anderson-sales-director.png';
 import emmaHartleySalesManager from '@/assets/team/emma-hartley-sales-manager.png';
 import victoriaSterlingMarketing from '@/assets/team/victoria-sterling-marketing.png';
 import georgeHamiltonClientRelations from '@/assets/team/george-hamilton-client-relations.png';
+// NEW Client Relations additions (to reach 4)
+import khalilHaddadClient from '@/assets/team/khalil-haddad-client.png';
+import oliviaHendersonClient from '@/assets/team/olivia-henderson-client.png';
+import kenjiNakamuraClient from '@/assets/team/kenji-nakamura-client.png';
 
 // Import team portraits - VIP Client Relations (natural photos without AI filters)
 import victoriaAshworthVipDirector from '@/assets/team/victoria-ashworth-vip-director.png';
@@ -79,6 +102,10 @@ import charlotteBlakeSocialMedia from '@/assets/team/charlotte-blake-social-medi
 import ethanCrawfordBrandCoordinator from '@/assets/team/ethan-crawford-brand-coordinator.png';
 import sophieLaurentDigitalMarketing from '@/assets/team/sophie-laurent-digital-marketing.png';
 import oliviaJamesSocialMedia from '@/assets/team/olivia-james-social-media.png';
+// NEW Marketing & Content additions (to reach 8)
+import emmaLindbergDigital from '@/assets/team/emma-lindberg-digital.png';
+import nikolaosPapadopoulosSocial from '@/assets/team/nikolaos-papadopoulos-social.png';
+import sarahMcintyreContent from '@/assets/team/sarah-mcintyre-content.png';
 
 // Import team portraits - HR Team
 import jessicaHrManager from '@/assets/team/jessica-hr-manager.png';
@@ -100,6 +127,8 @@ import catherineBrooksFinance from '@/assets/team/catherine-brooks-finance.png';
 import benjaminColeAccountant from '@/assets/team/benjamin-cole-accountant.png';
 import isabellaRomanoAnalyst from '@/assets/team/isabella-romano-analyst.png';
 import sebastianMullerFinance from '@/assets/team/sebastian-muller-finance.png';
+// NEW Finance addition (to reach 4)
+import stefanWeberFinance from '@/assets/team/stefan-weber-finance.png';
 
 // Import team portraits - Operations & Technology
 import thomasMitchellCrm from '@/assets/team/thomas-mitchell-crm.png';
@@ -123,6 +152,10 @@ import tomaszKowalczykItSupport from '@/assets/team/tomasz-kowalczyk-it-support.
 import omarHassanCloud from '@/assets/team/omar-hassan-cloud.png';
 import elenaPopescuDba from '@/assets/team/elena-popescu-dba.png';
 import williamGrantSecurity from '@/assets/team/william-grant-security.png';
+// NEW IT additions (to reach 8)
+import angusMacdonaldIt from '@/assets/team/angus-macdonald-it.png';
+import priyaMehtaIt from '@/assets/team/priya-mehta-it.png';
+import oluwaseunAdeyemiIt from '@/assets/team/oluwaseun-adeyemi-it.png';
 
 // Import team portraits - After Sales Team
 import charlesPembertonAfterSalesDir from '@/assets/team/charles-pemberton-aftersales-director.png';
@@ -137,6 +170,12 @@ import sophieRichardsReceptionist from '@/assets/team/sophie-richards-receptioni
 import gabrielaCostaReceptionist from '@/assets/team/gabriela-costa-receptionist.png';
 import claireDuboisReceptionist from '@/assets/team/claire-dubois-receptionist.png';
 import fionaCampbellAdmin from '@/assets/team/fiona-campbell-admin.png';
+// NEW Admin additions (to reach 8)
+import aoifeBrennanAdmin from '@/assets/team/aoife-brennan-admin.png';
+import youssefBenaliAdmin from '@/assets/team/youssef-benali-admin.png';
+
+// NEW Project Management addition (to reach 4)
+import carmenGarciaProject from '@/assets/team/carmen-garcia-project.png';
 
 export interface TeamMember {
   id: string;
