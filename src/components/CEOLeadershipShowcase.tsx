@@ -1,17 +1,6 @@
 import { motion } from "framer-motion";
 import { Badge } from "@/components/ui/badge";
-import { Award, Mic, Users, Trophy, Sparkles, Star, Globe } from "lucide-react";
-
-// Import CEO event photos
-import ceoAwardCeremony from "@/assets/ceo/ceo-award-ceremony.jpg";
-import ceoPanelSpeaking from "@/assets/ceo/ceo-panel-speaking.jpg";
-import ceoPanelDiscussion from "@/assets/ceo/ceo-panel-discussion.jpg";
-import ceoAwardTrophy from "@/assets/ceo/ceo-award-trophy.jpg";
-import ceoLeadershipAward from "@/assets/ceo/ceo-leadership-award.jpg";
-import ceoMediaInterview from "@/assets/ceo/ceo-media-interview.jpg";
-import ceoGcaAward2025 from "@/assets/ceo/ceo-gca-award-2025.jpg";
-import ceoLuxuryLifestyle from "@/assets/ceo/ceo-luxury-lifestyle.jpg";
-import ceoBusinessPortrait from "@/assets/ceo/ceo-business-portrait.jpg";
+import { Sparkles, Users, Building2, Globe } from "lucide-react";
 
 const fadeInUp = {
   hidden: { opacity: 0, y: 30 },
@@ -25,27 +14,6 @@ const staggerContainer = {
     transition: { staggerChildren: 0.1, delayChildren: 0.2 },
   },
 };
-
-const achievements = [
-  { icon: Trophy, label: "Leadership Excellence Awards 2025", type: "award" },
-  { icon: Mic, label: "Global Real Estate Summit Speaker", type: "speaking" },
-  { icon: Award, label: "GCA Leadership Award 2025", type: "award" },
-  { icon: Users, label: "Industry Panel Moderator", type: "speaking" },
-  { icon: Star, label: "Woman of the Universe UAE - Guest of Honor", type: "honor" },
-  { icon: Globe, label: "Global Innovation Leader", type: "recognition" },
-];
-
-const galleryImages = [
-  { src: ceoGcaAward2025, caption: "GCA Leadership Award 2025", category: "Awards" },
-  { src: ceoBusinessPortrait, caption: "Business Leadership Summit", category: "Speaking" },
-  { src: ceoLeadershipAward, caption: "Leadership Excellence Award 2025", category: "Awards" },
-  { src: ceoAwardTrophy, caption: "IIA 11th Edition Award Ceremony", category: "Awards" },
-  { src: ceoPanelSpeaking, caption: "Industry Panel Discussion", category: "Speaking" },
-  { src: ceoPanelDiscussion, caption: "Global Summit Panel", category: "Speaking" },
-  { src: ceoMediaInterview, caption: "Media Interview - NewsTime HDTV", category: "Media" },
-  { src: ceoLuxuryLifestyle, caption: "Luxury Real Estate Visionary", category: "Lifestyle" },
-  { src: ceoAwardCeremony, caption: "International Business Awards", category: "Awards" },
-];
 
 const CEOLeadershipShowcase = () => {
   return (
@@ -62,13 +30,13 @@ const CEOLeadershipShowcase = () => {
           whileInView="visible"
           viewport={{ once: true, margin: "-50px" }}
           variants={staggerContainer}
-          className="max-w-6xl mx-auto"
+          className="max-w-5xl mx-auto"
         >
           {/* Section Header */}
           <motion.div variants={fadeInUp} className="text-center mb-12">
             <Badge className="bg-gold/15 text-gold border-gold/30 px-4 py-1.5 mb-6">
               <Sparkles className="w-3.5 h-3.5 mr-1.5" />
-              Visionary Leadership
+              Our Vision
             </Badge>
             <h2 className="text-3xl md:text-4xl font-bold text-white mb-4">
               <span
@@ -79,77 +47,64 @@ const CEOLeadershipShowcase = () => {
                   WebkitTextFillColor: "transparent",
                 }}
               >
-                Jane Abou Jaoude
+                Excellence in Every Detail
               </span>
             </h2>
-            <p className="text-xl text-zinc-400 mb-2">Founder & CEO</p>
-            <p className="text-zinc-500 max-w-2xl mx-auto">
-              A global innovator, award-winning entrepreneur, and visionary leader
-              shaping the future of luxury real estate in the Middle East.
+            <p className="text-zinc-400 max-w-2xl mx-auto">
+              At JBJ Global Real Estate, we're committed to delivering exceptional
+              service through a world-class team of professionals.
             </p>
           </motion.div>
 
-          {/* Achievements Pills */}
+          {/* Company Stats */}
           <motion.div
             variants={fadeInUp}
-            className="flex flex-wrap justify-center gap-3 mb-12"
+            className="grid grid-cols-2 md:grid-cols-4 gap-6 mb-12"
           >
-            {achievements.map((achievement, index) => (
-              <div
-                key={index}
-                className="flex items-center gap-2 px-4 py-2 bg-zinc-900/80 border border-zinc-800 rounded-full"
-              >
-                <achievement.icon className="w-4 h-4 text-gold" />
-                <span className="text-sm text-zinc-300">{achievement.label}</span>
+            <div className="text-center p-6 bg-zinc-900/50 border border-zinc-800 rounded-xl">
+              <div className="w-12 h-12 bg-gold/10 rounded-lg flex items-center justify-center mx-auto mb-3">
+                <Users className="w-6 h-6 text-gold" />
               </div>
-            ))}
-          </motion.div>
-
-          {/* Photo Gallery */}
-          <motion.div variants={fadeInUp}>
-            <div className="grid grid-cols-2 md:grid-cols-3 gap-4">
-              {galleryImages.map((image, index) => (
-                <motion.div
-                  key={index}
-                  variants={fadeInUp}
-                  className="group relative overflow-hidden rounded-xl aspect-[4/5] cursor-pointer"
-                  whileHover={{ scale: 1.02 }}
-                  transition={{ duration: 0.3 }}
-                >
-                  <img
-                    src={image.src}
-                    alt={image.caption}
-                    className="w-full h-full object-cover object-top group-hover:scale-105 transition-transform duration-500"
-                  />
-                  {/* Overlay */}
-                  <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/20 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
-                  {/* Caption */}
-                  <div className="absolute bottom-0 left-0 right-0 p-4 translate-y-full group-hover:translate-y-0 transition-transform duration-300">
-                    <Badge className="bg-gold/20 text-gold border-gold/30 mb-2 text-xs">
-                      {image.category}
-                    </Badge>
-                    <p className="text-white text-sm font-medium">
-                      {image.caption}
-                    </p>
-                  </div>
-                </motion.div>
-              ))}
+              <p className="text-2xl font-bold text-gold mb-1">150+</p>
+              <p className="text-zinc-500 text-sm">Team Members</p>
+            </div>
+            <div className="text-center p-6 bg-zinc-900/50 border border-zinc-800 rounded-xl">
+              <div className="w-12 h-12 bg-gold/10 rounded-lg flex items-center justify-center mx-auto mb-3">
+                <Building2 className="w-6 h-6 text-gold" />
+              </div>
+              <p className="text-2xl font-bold text-gold mb-1">16</p>
+              <p className="text-zinc-500 text-sm">Departments</p>
+            </div>
+            <div className="text-center p-6 bg-zinc-900/50 border border-zinc-800 rounded-xl">
+              <div className="w-12 h-12 bg-gold/10 rounded-lg flex items-center justify-center mx-auto mb-3">
+                <Globe className="w-6 h-6 text-gold" />
+              </div>
+              <p className="text-2xl font-bold text-gold mb-1">25+</p>
+              <p className="text-zinc-500 text-sm">Languages Spoken</p>
+            </div>
+            <div className="text-center p-6 bg-zinc-900/50 border border-zinc-800 rounded-xl">
+              <div className="w-12 h-12 bg-gold/10 rounded-lg flex items-center justify-center mx-auto mb-3">
+                <Sparkles className="w-6 h-6 text-gold" />
+              </div>
+              <p className="text-2xl font-bold text-gold mb-1">30+</p>
+              <p className="text-zinc-500 text-sm">Nationalities</p>
             </div>
           </motion.div>
 
           {/* Leadership Quote */}
           <motion.div
             variants={fadeInUp}
-            className="mt-12 text-center max-w-3xl mx-auto"
+            className="text-center max-w-3xl mx-auto"
           >
             <div className="relative">
               <div className="absolute -top-4 left-1/2 -translate-x-1/2 text-6xl text-gold/20">"</div>
               <p className="text-xl md:text-2xl text-zinc-300 italic leading-relaxed pt-8">
                 Innovation and excellence are not just goals—they are the foundation
-                of everything we build. At JBJ Global, we're not just selling properties;
+                of everything we build. At JBJ Global Real Estate, we're not just selling properties;
                 we're crafting futures and shaping skylines.
               </p>
               <p className="mt-6 text-gold font-semibold">— Jane Abou Jaoude</p>
+              <p className="text-zinc-500 text-sm">Founder & CEO</p>
             </div>
           </motion.div>
         </motion.div>
