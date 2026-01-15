@@ -8616,6 +8616,7 @@ export type Database = {
         Returns: boolean
       }
       is_hr_admin: { Args: { _user_id: string }; Returns: boolean }
+      is_hr_manager: { Args: { _user_id: string }; Returns: boolean }
       is_hr_member: { Args: { _user_id: string }; Returns: boolean }
       is_listing_admin: { Args: { _user_id: string }; Returns: boolean }
       is_org_member: {
