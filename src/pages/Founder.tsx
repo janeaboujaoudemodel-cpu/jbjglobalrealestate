@@ -241,20 +241,20 @@ const Founder = () => {
           </motion.div>
         </div>
         
-        {/* Scroll indicator */}
+        {/* Scroll indicator - positioned closer to content */}
         <motion.div 
-          className="absolute bottom-8 left-1/2 -translate-x-1/2 hidden md:flex flex-col items-center gap-3 text-zinc-400"
+          className="absolute bottom-2 left-1/2 -translate-x-1/2 hidden md:flex flex-col items-center gap-2 text-zinc-400"
           initial={{ opacity: 0, y: -20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ delay: 1.5, duration: 0.8 }}
         >
           <span className="text-xs uppercase tracking-[0.3em]">Discover</span>
-          <div className="w-px h-16 bg-gradient-to-b from-gold to-transparent" />
+          <div className="w-px h-10 bg-gradient-to-b from-gold to-transparent" />
         </motion.div>
       </section>
 
       {/* THE FOUNDER - PREMIUM EDITORIAL LAYOUT */}
-      <section className="py-24 md:py-40 relative overflow-hidden">
+      <section className="pt-32 md:pt-48 pb-24 md:pb-40 relative overflow-hidden">
         {/* Subtle background elements */}
         <div className="absolute top-0 right-0 w-1/2 h-full bg-gradient-to-l from-gold/3 to-transparent" />
         <div className="absolute bottom-0 left-0 w-96 h-96 bg-gold/5 rounded-full blur-3xl" />
