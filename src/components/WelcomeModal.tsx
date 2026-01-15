@@ -6,7 +6,6 @@ import * as VisuallyHidden from "@radix-ui/react-visually-hidden";
 import { User, ArrowRight } from "lucide-react";
 import { useLanguage } from "@/contexts/LanguageContext";
 import { usePopupVisibility } from "@/contexts/PopupCoordinatorContext";
-import GuidedTour from "./GuidedTour";
 import jbjMonogramDarkBg from "@/assets/jbj-monogram-dark-bg.png";
 
 const WELCOME_MODAL_KEY = "jj_welcome_shown";
@@ -14,7 +13,6 @@ const RETURNING_USER_KEY = "jj_returning_user";
 
 const WelcomeModal = () => {
   const { requestToShow, dismiss, isVisible } = usePopupVisibility('welcome-modal');
-  const [showTour, setShowTour] = useState(false);
   const [shouldShow, setShouldShow] = useState(false);
   const navigate = useNavigate();
   const location = useLocation();
@@ -52,7 +50,7 @@ const WelcomeModal = () => {
     localStorage.setItem(RETURNING_USER_KEY, "true");
     dismiss();
     setShouldShow(false);
-    setShowTour(true);
+    // No tour - just close and allow browsing
   };
 
   const handleLogin = () => {
@@ -63,11 +61,7 @@ const WelcomeModal = () => {
     navigate("/auth");
   };
 
-  const handleTourClose = () => {
-    setShowTour(false);
-  };
-
-  if (!shouldShow) return <GuidedTour isOpen={showTour} onClose={handleTourClose} />;
+  if (!shouldShow) return null;
 
   return (
     <>
@@ -190,8 +184,6 @@ const WelcomeModal = () => {
           </div>
         </DialogContent>
       </Dialog>
-
-      <GuidedTour isOpen={showTour} onClose={handleTourClose} />
     </>
   );
 };
