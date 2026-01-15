@@ -13,7 +13,7 @@ import anthonyPembertonStrategy from '@/assets/team/anthony-pemberton-strategy.p
 import laylaMansourPartnerships from '@/assets/team/layla-mansour-partnerships.png';
 
 // Import team portraits - Legal Team
-import hudaMarzooqLawyer from '@/assets/team/huda-marzooq-lawyer-office-v2.jpg';
+import hudaMarzooqLawyer from '@/assets/team/huda-marzooq-legal-id-v3.jpg';
 // NEW Legal Team additions (to reach 4)
 import williamThorntonLegal from '@/assets/team/william-thornton-legal.png';
 import nadiaHassanLegal from '@/assets/team/nadia-hassan-legal.png';

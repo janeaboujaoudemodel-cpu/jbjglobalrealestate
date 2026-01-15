@@ -119,7 +119,7 @@ const TeamMemberCard = ({ member, onReadMore }: TeamMemberCardProps) => {
               )}
 
             {/* Read More Button */}
-              <div className="pt-2 border-t border-zinc-800/50">
+              <div className="pt-2 border-t border-zinc-800/50 mb-4">
                 <button
                   type="button"
                   onClick={() => onReadMore(member)}
@@ -129,9 +129,9 @@ const TeamMemberCard = ({ member, onReadMore }: TeamMemberCardProps) => {
                 </button>
               </div>
 
-              {/* Languages - Below read more with gap, 4 languages on one line */}
+              {/* Languages - Below read more with proper gap, 4 languages on one line */}
               {displayLanguages.length > 0 && (
-                <div className="flex flex-wrap gap-1.5 mt-3">
+                <div className="flex flex-wrap gap-1.5">
                   {displayLanguages.map((lang) => (
                     <Badge
                       key={lang}
