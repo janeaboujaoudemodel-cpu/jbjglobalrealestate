@@ -54,12 +54,13 @@ const PropertySearchBar = ({ className = "", compact = false }: PropertySearchBa
             value={keyword}
             onChange={(e) => setKeyword(e.target.value)}
             onKeyDown={(e) => e.key === "Enter" && handleSearch()}
-            className="pl-9 h-10 bg-zinc-900/80 border-zinc-700/50 text-white placeholder:text-zinc-500 focus:border-[#A8925A] rounded-lg"
+            className="pl-9 h-10 bg-zinc-900/80 border-zinc-700/50 text-white placeholder:text-zinc-500 focus:border-gold rounded-lg"
           />
         </div>
         <Button 
           onClick={handleSearch}
-          className="h-10 px-4 bg-[#A8925A] text-black hover:bg-[#C4A962] font-medium rounded-lg"
+          variant="gold"
+          className="h-10 px-4 rounded-lg"
         >
           Search
         </Button>
@@ -78,7 +79,7 @@ const PropertySearchBar = ({ className = "", compact = false }: PropertySearchBa
             value={keyword}
             onChange={(e) => setKeyword(e.target.value)}
             onKeyDown={(e) => e.key === "Enter" && handleSearch()}
-            className="pl-10 h-12 bg-zinc-900/80 border-zinc-700/50 text-white placeholder:text-zinc-500 focus:border-[#A8925A] rounded-lg"
+            className="pl-10 h-12 bg-zinc-900/80 border-zinc-700/50 text-white placeholder:text-zinc-500 focus:border-gold rounded-lg"
           />
         </div>
 
@@ -181,7 +182,8 @@ const PropertySearchBar = ({ className = "", compact = false }: PropertySearchBa
         {/* Search Button */}
         <Button 
           onClick={handleSearch}
-          className="h-12 px-8 bg-[#A8925A] text-black hover:bg-[#C4A962] font-semibold rounded-lg"
+          variant="gold"
+          className="h-12 px-8 rounded-lg"
         >
           SEARCH
         </Button>

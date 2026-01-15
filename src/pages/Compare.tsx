@@ -19,7 +19,7 @@ import { Input } from "@/components/ui/input";
 import { toast } from "sonner";
 import { PaymentModal } from "@/components/PaymentModal";
 import { Badge } from "@/components/ui/badge";
-import BackNavButton from "@/components/BackNavButton";
+
 import ActiveLeadBanner from "@/components/crm/ActiveLeadBanner";
 import { useActiveLead } from "@/contexts/ActiveLeadContext";
 
@@ -467,9 +467,6 @@ const Compare = () => {
   if (!projects?.length) {
     return (
       <section className="min-h-screen bg-gradient-to-br from-purple-950/30 via-zinc-950 to-zinc-950">
-        {/* Back Button */}
-        <BackNavButton />
-        
         {/* Decorative elements */}
         <div className="absolute top-0 right-0 w-[600px] h-[600px] bg-purple-500/10 rounded-full blur-3xl pointer-events-none" />
         <div className="absolute bottom-0 left-0 w-[400px] h-[400px] bg-purple-600/5 rounded-full blur-3xl pointer-events-none" />
@@ -608,9 +605,6 @@ const Compare = () => {
 
   return (
     <section className="min-h-screen bg-zinc-950">
-      {/* Back Navigation Button */}
-      <BackNavButton />
-      
       {/* Hero Section - Purple Theme Matching Homepage Button */}
       <div className="relative py-16 md:py-20 overflow-hidden">
         {/* Purple gradient background */}

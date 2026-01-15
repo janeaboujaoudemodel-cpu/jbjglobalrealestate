@@ -24,7 +24,7 @@ import {
   AlertTriangle,
   Info
 } from "lucide-react";
-import BackNavButton from "@/components/BackNavButton";
+
 import BusinessCardCamera from "@/components/business-card/BusinessCardCamera";
 import BusinessCardUpload from "@/components/business-card/BusinessCardUpload";
 import BusinessCardResults from "@/components/business-card/BusinessCardResults";
@@ -341,8 +341,6 @@ const BusinessCardScanner = () => {
   return (
     <div className="min-h-screen bg-background">
       <div className="container mx-auto px-4 py-8 max-w-6xl">
-        <BackNavButton />
-        
         {/* Header */}
         <div className="text-center mb-8">
           <div className="flex items-center justify-center gap-3 mb-4">

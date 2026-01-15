@@ -35,7 +35,7 @@ import {
   DropdownMenuItem,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
-import BackNavButton from "@/components/BackNavButton";
+
 import luxuryVillaHero from "@/assets/luxury-villa-hero.jpeg";
 
 const fadeInUp = {
@@ -744,10 +744,7 @@ const CompanyProfile = () => {
           animate="visible"
           variants={staggerContainer}
         >
-          <motion.div variants={fadeInUp} className="mb-6">
-            <BackNavButton />
-          </motion.div>
-          <motion.span 
+          <motion.span
             className="inline-block text-gold text-xs uppercase tracking-[0.4em] mb-6"
             variants={fadeInUp}
           >

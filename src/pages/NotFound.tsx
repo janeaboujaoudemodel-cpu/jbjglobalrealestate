@@ -33,7 +33,7 @@ const NotFound = () => {
         <div className="absolute top-1/4 left-1/4 w-96 h-96 bg-gold/5 rounded-full blur-3xl" />
         <div className="absolute bottom-1/4 right-1/4 w-64 h-64 bg-gold/3 rounded-full blur-2xl" />
         <div className="absolute inset-0 opacity-5">
-          <div className="absolute inset-0" style={{ backgroundImage: 'radial-gradient(circle at 2px 2px, #A8925A 1px, transparent 0)', backgroundSize: '50px 50px' }} />
+          <div className="absolute inset-0" style={{ backgroundImage: 'radial-gradient(circle at 2px 2px, hsl(45, 32%, 39%) 1px, transparent 0)', backgroundSize: '50px 50px' }} />
         </div>
       </div>
       
@@ -69,7 +69,7 @@ const NotFound = () => {
         {/* 404 Number with Gradient */}
         <motion.h1 
           variants={fadeInUp}
-          className="text-8xl md:text-[150px] font-bold mb-4 text-transparent bg-clip-text bg-gradient-to-r from-gold via-[#C4A962] to-gold leading-none" 
+          className="text-8xl md:text-[150px] font-bold mb-4 text-transparent bg-clip-text bg-gradient-to-r from-gold via-gold-light to-gold leading-none" 
           style={{ fontFamily: "Poppins, sans-serif" }}
         >
           404
