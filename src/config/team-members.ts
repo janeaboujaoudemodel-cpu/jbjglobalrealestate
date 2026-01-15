@@ -285,24 +285,8 @@ export const marketingTeam: TeamMember[] = sortByHierarchy([
 ]);
 
 // ===== Property Operations (sorted by hierarchy) =====
-export const propertyOperationsTeam: TeamMember[] = sortByHierarchy([
-  {
-    id: 'sarah-mitchell',
-    name: 'Sarah Mitchell',
-    role: 'Senior Listing Administrator',
-    department: 'Property Operations',
-    avatar: sarahMitchellListingAdmin,
-    isAI: true,
-    email: 'sarah.mitchell@JBJ.ae',
-    bio: 'Expert property listing specialist with meticulous attention to detail. Manages all developer portfolios, document organization, and marketing material distribution.',
-    specializations: ['Off-Plan Listings', 'Developer Relations', 'Document Management', 'Portal Publishing'],
-    languages: ['English'],
-    nationality: 'British',
-    hierarchyLevel: 5,
-    reportsTo: 'alexander-shaw',
-    status: 'online',
-  },
-]);
+// Note: Property operations staff moved to Administration
+export const propertyOperationsTeam: TeamMember[] = [];
 
 // ===== Client Relations (sorted by hierarchy) =====
 export const clientRelationsTeam: TeamMember[] = sortByHierarchy([
@@ -598,6 +582,23 @@ export const itTeam: TeamMember[] = sortByHierarchy([
 // ===== Admin & Front Desk Team (sorted by hierarchy) =====
 export const adminTeam: TeamMember[] = sortByHierarchy([
   {
+    id: 'sarah-mitchell',
+    name: 'Sarah Mitchell',
+    role: 'Senior Listing Administrator',
+    department: 'Administration',
+    avatar: sarahMitchellListingAdmin,
+    isAI: true,
+    email: 'sarah.mitchell@JBJ.ae',
+    bio: 'Expert property listing specialist with meticulous attention to detail. Manages all developer portfolios, document organization, and marketing material distribution.',
+    specializations: ['Off-Plan Listings', 'Developer Relations', 'Document Management', 'Portal Publishing'],
+    languages: ['English'],
+    nationality: 'British',
+    hierarchyLevel: 4,
+    reportsTo: 'emily-watson',
+    status: 'online',
+    canConductInterviews: true,
+  },
+  {
     id: 'emily-watson',
     name: 'Emily Watson',
     role: 'Admin Manager',
@@ -610,7 +611,7 @@ export const adminTeam: TeamMember[] = sortByHierarchy([
     nationality: 'British',
     hierarchyLevel: 4,
     reportsTo: 'richard-pemberton',
-    directReports: ['maria-santos', 'sophie-richards', 'gabriela-costa', 'claire-dubois'],
+    directReports: ['maria-santos', 'sophie-richards', 'gabriela-costa', 'claire-dubois', 'sarah-mitchell'],
     status: 'online',
     canConductInterviews: true,
   },
@@ -676,13 +677,14 @@ export const adminTeam: TeamMember[] = sortByHierarchy([
   },
 ]);
 
-// ===== Technology Team (AI Coordination) =====
-export const aiTeam: TeamMember[] = sortByHierarchy([
+// ===== AI Tools (Not included in team counts - these are tools, not employees) =====
+// These are AI tools available company-wide, not team members
+export const aiTools: TeamMember[] = sortByHierarchy([
   {
     id: 'robert-maxwell',
     name: 'Robert Maxwell',
     role: 'Digital Intelligence Coordinator',
-    department: 'Technology',
+    department: 'AI Tools',
     avatar: robertMaxwellDigital,
     isAI: true,
     email: 'robert.maxwell@JBJ.ae',
@@ -694,6 +696,9 @@ export const aiTeam: TeamMember[] = sortByHierarchy([
     status: 'online',
   },
 ]);
+
+// Backwards compatibility - deprecated, use aiTools instead
+export const aiTeam: TeamMember[] = [];
 
 // ===== Software Engineering Team (sorted by hierarchy) =====
 export const softwareEngineeringTeam: TeamMember[] = sortByHierarchy([
@@ -975,12 +980,11 @@ export const customerHappinessTeam: TeamMember[] = sortByHierarchy([
   },
 ]);
 
-// ===== All Team Members Combined =====
+// ===== All Team Members Combined (excludes AI Tools - they are tools, not employees) =====
 export const allTeamMembers: TeamMember[] = [
   ...executiveTeam,
   ...salesTeam,
   ...marketingTeam,
-  ...propertyOperationsTeam,
   ...clientRelationsTeam,
   ...hrTeam,
   ...creativeTeam,
@@ -988,7 +992,6 @@ export const allTeamMembers: TeamMember[] = [
   ...operationsTeam,
   ...itTeam,
   ...adminTeam,
-  ...aiTeam,
   ...softwareEngineeringTeam,
   ...projectManagementTeam,
   ...contentTeam,
@@ -1032,11 +1035,11 @@ export const getTeamMembersByDepartment = (department: string): TeamMember[] => 
 };
 
 // ===== Department Groupings (Sorted by Hierarchy) =====
+// Note: AI Tools are NOT included here - they are tools, not team members
 export const teamByDepartment = {
   'Leadership': executiveTeam,
   'Sales': salesTeam,
   'Marketing & Content': [...marketingTeam, ...contentTeam],
-  'Property Operations': propertyOperationsTeam,
   'Client Relations': clientRelationsTeam,
   'Human Resources': hrTeam,
   'Creative & Media': creativeTeam,
@@ -1047,7 +1050,6 @@ export const teamByDepartment = {
   'IT': itTeam,
   'Administration': adminTeam,
   'Customer Happiness': customerHappinessTeam,
-  'Technology': aiTeam,
 };
 
 // ===== Company Channels Configuration =====
