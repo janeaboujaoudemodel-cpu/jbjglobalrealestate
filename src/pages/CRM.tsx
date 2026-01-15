@@ -217,7 +217,33 @@ const CRM = () => {
     );
   }
 
-  if (!profile) return null;
+  if (!profile) {
+    return (
+      <div className="min-h-screen bg-background flex items-center justify-center p-6">
+        <Card className="w-full max-w-lg border-border bg-card">
+          <CardHeader>
+            <CardTitle className="text-foreground">CRM access unavailable</CardTitle>
+          </CardHeader>
+          <CardContent className="space-y-4">
+            <p className="text-sm text-muted-foreground">
+              We couldn’t load your CRM profile for this session. Please refresh the page. If it keeps happening, sign out and sign in again.
+            </p>
+            <div className="flex flex-col sm:flex-row gap-2">
+              <Button onClick={() => window.location.reload()} className="w-full sm:w-auto">
+                Refresh
+              </Button>
+              <Button variant="outline" onClick={() => navigate("/")} className="w-full sm:w-auto">
+                Back to site
+              </Button>
+              <Button variant="outline" onClick={handleSignOut} className="w-full sm:w-auto">
+                Sign out
+              </Button>
+            </div>
+          </CardContent>
+        </Card>
+      </div>
+    );
+  }
 
   const isAdmin = profile.crm_role === 'owner_admin' || profile.crm_role === 'founder' || profile.crm_role === 'admin';
   const isFounder = profile.crm_role === 'owner_admin' || profile.crm_role === 'founder';
