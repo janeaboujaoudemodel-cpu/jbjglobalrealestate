@@ -15,6 +15,7 @@ import { useUserRole } from "@/hooks/useUserRole";
 import { Sparkles, ArrowUpRight, ChevronDown, User, Scale, Layers, Calculator, FileText, Heart, BarChart3, Wrench, Ruler, Palette, Calendar, Wallet, ShoppingBag, Brain, GraduationCap, Briefcase, Target, Award, PenTool, Users, Table2, Video } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import founderProfessional from "@/assets/founder-professional.jpeg";
+import ceoBackdropFlags from "@/assets/ceo/ceo-backdrop-flags-v2.jpg";
 import luxuryVillaHero from "@/assets/luxury-villa-hero.jpeg";
 import jbjFullLogoLight from "@/assets/jbj-fulllogo-light.png";
 import { CONTACT_INFO } from "@/constants/stats";
@@ -365,87 +366,86 @@ const Index = () => {
         </div>
       </section>
 
-      {/* FOUNDER SECTION - Meet The Leadership */}
+      {/* FOUNDER SECTION - Meet The Leadership with Flags Backdrop */}
       <section className="py-20 md:py-28 bg-gradient-to-b from-black via-zinc-950 to-black">
         <div className="container mx-auto px-4">
           <motion.div
-            className="grid lg:grid-cols-2 gap-12 lg:gap-20 items-center"
             initial="hidden"
             whileInView="visible"
             viewport={{ once: true, margin: "-100px" }}
             variants={staggerContainer}
+            className="max-w-6xl mx-auto"
           >
-            {/* Founder Image */}
-            <motion.div 
-              className="relative order-2 lg:order-1"
-              variants={fadeInUp}
-            >
-              <div className="relative aspect-[3/4] max-w-md mx-auto lg:max-w-none">
-                {/* Decorative frame */}
-                <div className="absolute -inset-4 border border-gold/20 rounded-3xl" />
-                <div className="absolute -inset-2 bg-gradient-to-br from-gold/10 to-transparent rounded-2xl" />
-                
-                {/* Image container with smart crop - show from top */}
-                <div className="relative rounded-2xl overflow-hidden border border-zinc-800 shadow-2xl shadow-black/80">
-                  <img 
-                    src={founderProfessional} 
-                    alt="Jane Abou Jaoude - Founder & Managing Director"
-                    className="w-full h-full object-cover object-top"
-                  />
-                  {/* Gradient overlay at bottom */}
-                  <div className="absolute inset-x-0 bottom-0 h-1/3 bg-gradient-to-t from-black/80 to-transparent" />
-                </div>
-                
-                {/* Name badge */}
-                <div className="absolute bottom-6 left-6 right-6 bg-black/60 backdrop-blur-md border border-gold/30 rounded-xl p-4">
-                  <p className="text-gold text-xs uppercase tracking-[0.2em] mb-1">Founder & Managing Director</p>
-                  <h3 className="text-white text-xl font-bold" style={{ fontFamily: "Poppins, sans-serif" }}>
-                    Jane Abou Jaoude
-                  </h3>
-                </div>
-              </div>
-            </motion.div>
-
-            {/* Content */}
-            <motion.div className="order-1 lg:order-2" variants={fadeInUp}>
-              <div className="mb-6">
-                <span className="inline-flex items-center gap-2 text-gold text-sm uppercase tracking-[0.3em]">
-                  <User className="w-4 h-4" />
-                  Leadership
-                </span>
-              </div>
-              
+            {/* Section Header */}
+            <motion.div className="text-center mb-10" variants={fadeInUp}>
+              <span className="inline-flex items-center gap-2 text-gold text-sm uppercase tracking-[0.3em]">
+                <User className="w-4 h-4" />
+                Leadership
+              </span>
               <h2 
-                className="text-white text-4xl md:text-5xl lg:text-6xl font-bold mb-8"
+                className="text-white text-4xl md:text-5xl lg:text-6xl font-bold mt-4 mb-4"
                 style={{ fontFamily: "Poppins, sans-serif" }}
               >
                 Meet the <span className="text-transparent bg-clip-text bg-gradient-to-r from-gold to-gold-light">Founder</span>
               </h2>
-              
-              <p className="text-zinc-300 text-lg md:text-xl leading-relaxed mb-6">
+              <p className="text-zinc-400 text-lg max-w-2xl mx-auto">
                 JBJ Global Real Estate is a founder-led brokerage built on unwavering standards, discretion, and long-term vision.
               </p>
-              
-              <p className="text-zinc-500 text-base md:text-lg leading-relaxed mb-8">
-                Jane Abou Jaoude leads with a philosophy rooted in accountability and discretion, building organizations designed to endure rather than simply expand.
-              </p>
-              
-              {/* Stats - Updated to 12+ Years */}
-              <div className="grid grid-cols-3 gap-6 mb-8">
-                <div className="text-center p-4 bg-zinc-900/50 border border-gold/10 rounded-xl hover:border-gold/30 transition-all duration-300">
-                  <p className="text-transparent bg-clip-text bg-gradient-to-r from-gold via-[#C4A962] to-gold text-3xl md:text-4xl font-bold" style={{ fontFamily: "Poppins, sans-serif" }}>12+</p>
-                  <p className="text-zinc-400 text-xs uppercase tracking-wider mt-1">Years Experience</p>
-                </div>
-                <div className="text-center p-4 bg-zinc-900/50 border border-gold/10 rounded-xl hover:border-gold/30 transition-all duration-300">
-                  <p className="text-transparent bg-clip-text bg-gradient-to-r from-gold via-[#C4A962] to-gold text-3xl md:text-4xl font-bold" style={{ fontFamily: "Poppins, sans-serif" }}>5+</p>
-                  <p className="text-zinc-400 text-xs uppercase tracking-wider mt-1">Years in Dubai</p>
-                </div>
-                <div className="text-center p-4 bg-zinc-900/50 border border-gold/10 rounded-xl hover:border-gold/30 transition-all duration-300">
-                  <p className="text-transparent bg-clip-text bg-gradient-to-r from-gold via-[#C4A962] to-gold text-3xl md:text-4xl font-bold" style={{ fontFamily: "Poppins, sans-serif" }}>2,800+</p>
-                  <p className="text-zinc-400 text-xs uppercase tracking-wider mt-1">Brokers Trained</p>
+            </motion.div>
+
+            {/* CEO Backdrop with Flags - Full Width */}
+            <motion.div 
+              className="relative rounded-2xl overflow-hidden mb-10"
+              variants={fadeInUp}
+            >
+              <div className="relative h-[400px] md:h-[500px] lg:h-[550px]">
+                <img 
+                  src={ceoBackdropFlags} 
+                  alt="Jane Abou Jaoude - Founder & CEO at JBJ Global Real Estate Executive Office"
+                  className="w-full h-full object-cover object-center"
+                />
+                {/* Gradient overlay for text readability */}
+                <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-transparent to-transparent" />
+                
+                {/* Name and title overlay at bottom */}
+                <div className="absolute bottom-0 left-0 right-0 text-center pb-8">
+                  <h3 className="text-white text-2xl md:text-3xl font-bold mb-2">Jane Abou Jaoude</h3>
+                  <p
+                    className="text-lg md:text-xl font-semibold mb-2"
+                    style={{
+                      background: "linear-gradient(135deg, #CBA64B 0%, #E8D5A3 50%, #CBA64B 100%)",
+                      WebkitBackgroundClip: "text",
+                      WebkitTextFillColor: "transparent",
+                    }}
+                  >
+                    Founder & CEO
+                  </p>
+                  <p className="text-zinc-400 text-sm">12 Years Experience • Lebanese</p>
                 </div>
               </div>
-              
+            </motion.div>
+            
+            {/* Stats Row */}
+            <motion.div 
+              className="grid grid-cols-3 gap-6 mb-10"
+              variants={fadeInUp}
+            >
+              <div className="text-center p-4 bg-zinc-900/50 border border-gold/10 rounded-xl hover:border-gold/30 transition-all duration-300">
+                <p className="text-transparent bg-clip-text bg-gradient-to-r from-gold via-[#C4A962] to-gold text-3xl md:text-4xl font-bold" style={{ fontFamily: "Poppins, sans-serif" }}>12+</p>
+                <p className="text-zinc-400 text-xs uppercase tracking-wider mt-1">Years Experience</p>
+              </div>
+              <div className="text-center p-4 bg-zinc-900/50 border border-gold/10 rounded-xl hover:border-gold/30 transition-all duration-300">
+                <p className="text-transparent bg-clip-text bg-gradient-to-r from-gold via-[#C4A962] to-gold text-3xl md:text-4xl font-bold" style={{ fontFamily: "Poppins, sans-serif" }}>5+</p>
+                <p className="text-zinc-400 text-xs uppercase tracking-wider mt-1">Years in Dubai</p>
+              </div>
+              <div className="text-center p-4 bg-zinc-900/50 border border-gold/10 rounded-xl hover:border-gold/30 transition-all duration-300">
+                <p className="text-transparent bg-clip-text bg-gradient-to-r from-gold via-[#C4A962] to-gold text-3xl md:text-4xl font-bold" style={{ fontFamily: "Poppins, sans-serif" }}>2,800+</p>
+                <p className="text-zinc-400 text-xs uppercase tracking-wider mt-1">Brokers Trained</p>
+              </div>
+            </motion.div>
+            
+            {/* CTA Button */}
+            <motion.div className="text-center" variants={fadeInUp}>
               <Link to="/founder">
                 <Button className="relative bg-gradient-to-r from-gold via-[#C4A962] to-gold hover:from-gold-light hover:to-gold text-black font-bold px-8 py-6 text-base transition-all duration-500 hover:shadow-2xl hover:shadow-gold/50 hover:scale-105 shadow-lg shadow-gold/30 border border-gold/50">
                   Learn More About Our Founder
