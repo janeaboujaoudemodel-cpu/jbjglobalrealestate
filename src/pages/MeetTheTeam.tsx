@@ -18,7 +18,6 @@ import {
   Sparkles,
   Building2,
   MessageSquare,
-  ChevronRight,
 } from "lucide-react";
 import TeamContactForm from "@/components/TeamContactForm";
 import TeamMemberDetailDialog from "@/components/TeamMemberDetailDialog";
@@ -39,11 +38,10 @@ const staggerContainer = {
 
 interface TeamMemberCardProps {
   member: TeamMember;
-  onContact: (member: TeamMember) => void;
   onReadMore: (member: TeamMember) => void;
 }
 
-const TeamMemberCard = ({ member, onContact, onReadMore }: TeamMemberCardProps) => {
+const TeamMemberCard = ({ member, onReadMore }: TeamMemberCardProps) => {
   return (
     <motion.div variants={fadeInUp}>
       <Card className="bg-zinc-900/60 border-zinc-800 hover:border-gold/50 transition-all duration-300 overflow-hidden group h-full">
@@ -61,7 +59,7 @@ const TeamMemberCard = ({ member, onContact, onReadMore }: TeamMemberCardProps) 
           </div>
 
           {/* Info */}
-          <div className="p-5 -mt-16 relative z-10 flex flex-col h-[230px]">
+          <div className="p-5 -mt-16 relative z-10 flex flex-col h-[200px]">
             <div>
               <h3 className="text-white font-semibold text-lg mb-1">{member.name}</h3>
 
@@ -84,53 +82,53 @@ const TeamMemberCard = ({ member, onContact, onReadMore }: TeamMemberCardProps) 
                 <p className="text-zinc-500 text-sm">{member.department}</p>
                 {typeof member.yearsExperience === "number" && (
                   <p className="text-zinc-500 text-xs whitespace-nowrap">
-                    {member.yearsExperience} years
+                    {member.yearsExperience} yrs exp
                   </p>
                 )}
               </div>
 
+              {member.nationality && (
+                <p className="text-zinc-600 text-xs mt-1">{member.nationality}</p>
+              )}
+
               {member.bio && (
-                <div className="mt-3">
+                <div className="mt-2">
                   <p className="text-zinc-400 text-xs line-clamp-2">{member.bio}</p>
                 </div>
               )}
 
               {member.languages && member.languages.length > 0 && (
-                <div className="flex flex-wrap gap-1 mt-3">
-                  {member.languages.map((lang) => (
+                <div className="flex flex-wrap gap-1 mt-2">
+                  {member.languages.slice(0, 3).map((lang) => (
                     <Badge
                       key={lang}
                       variant="outline"
-                      className="text-xs border-zinc-700 text-zinc-400"
+                      className="text-[10px] border-zinc-700 text-zinc-400 px-1.5 py-0"
                     >
                       {lang}
                     </Badge>
                   ))}
+                  {member.languages.length > 3 && (
+                    <Badge
+                      variant="outline"
+                      className="text-[10px] border-zinc-700 text-zinc-400 px-1.5 py-0"
+                    >
+                      +{member.languages.length - 3}
+                    </Badge>
+                  )}
                 </div>
               )}
             </div>
 
-            <div className="mt-auto pt-4 grid grid-cols-2 gap-2">
-              <Button
+            {/* Elegant Read More link */}
+            <div className="mt-auto pt-3">
+              <button
                 type="button"
-                size="sm"
-                className="bg-gold hover:bg-gold-dark text-black font-semibold"
-                onClick={() => onContact(member)}
-              >
-                <MessageSquare className="w-4 h-4 mr-1.5" />
-                Contact Us
-              </Button>
-
-              <Button
-                type="button"
-                size="sm"
-                variant="outline"
-                className="border-gold/40 text-gold hover:bg-gold/10"
                 onClick={() => onReadMore(member)}
+                className="text-gold/70 hover:text-gold text-xs underline underline-offset-2 transition-colors"
               >
                 Read more
-                <ChevronRight className="w-4 h-4 ml-1" />
-              </Button>
+              </button>
             </div>
           </div>
         </CardContent>
@@ -151,8 +149,8 @@ const MeetTheTeam = () => {
     window.scrollTo({ top: 0, behavior: 'instant' });
   }, [location.pathname]);
 
-  const handleContactMember = (member: TeamMember) => {
-    setSelectedMember(member);
+  const handleOpenContactForm = () => {
+    setSelectedMember(null);
     setIsContactFormOpen(true);
   };
 
@@ -165,6 +163,7 @@ const MeetTheTeam = () => {
     "Leadership",
     "Legal",
     "Sales",
+    "After Sales",
     "Marketing & Content",
     "Client Relations",
     "VIP Client Relations",
@@ -242,7 +241,16 @@ const MeetTheTeam = () => {
                 className="w-24 h-0.5 bg-gradient-to-r from-transparent via-gold to-transparent mx-auto mb-8"
               />
 
-              {/* Stats removed - shown in CEOLeadershipShowcase */}
+              {/* Contact Us Button - Before employees */}
+              <motion.div variants={fadeInUp}>
+                <Button
+                  onClick={handleOpenContactForm}
+                  className="bg-gold hover:bg-gold-dark text-black font-semibold px-8"
+                >
+                  <MessageSquare className="w-4 h-4 mr-2" />
+                  Contact Us
+                </Button>
+              </motion.div>
             </motion.div>
           </div>
         </section>
@@ -288,13 +296,12 @@ const MeetTheTeam = () => {
                     </div>
                   </motion.div>
 
-                  {/* Team Grid */}
-                  <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-6">
+                  {/* Team Grid - 4 columns for perfect alignment */}
+                  <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
                     {members.map((member) => (
                       <TeamMemberCard 
                         key={member.id} 
                         member={member} 
-                        onContact={handleContactMember}
                         onReadMore={handleReadMore}
                       />
                     ))}
@@ -305,7 +312,7 @@ const MeetTheTeam = () => {
           </div>
         </section>
 
-        {/* CTA Section */}
+        {/* CTA Section with Contact Us */}
         <section className="py-16 border-t border-zinc-800">
           <div className="container mx-auto px-4">
             <motion.div
@@ -318,27 +325,26 @@ const MeetTheTeam = () => {
                 <Sparkles className="w-8 h-8 text-gold" />
               </div>
               <h3 className="text-white text-2xl md:text-3xl font-bold mb-4">
-                Join Our Team
+                Get in Touch
               </h3>
               <p className="text-zinc-400 max-w-xl mx-auto mb-8">
-                We're always looking for talented individuals who share our
-                passion for excellence in real estate. Explore career
-                opportunities with JBJ Global Real Estate.
+                Ready to work with our exceptional team? Whether you're looking to buy, sell, or invest in luxury real estate, we're here to help.
               </p>
               <div className="flex flex-wrap justify-center gap-4">
+                <Button 
+                  onClick={handleOpenContactForm}
+                  className="bg-gold hover:bg-gold-dark text-black font-semibold px-6"
+                >
+                  <MessageSquare className="w-4 h-4 mr-2" />
+                  Contact Us
+                </Button>
                 <Link to="/careers">
-                  <Button className="bg-gold hover:bg-gold-dark text-black font-semibold px-6">
-                    View Open Positions
-                    <ArrowRight className="w-4 h-4 ml-2" />
-                  </Button>
-                </Link>
-                <Link to="/contact">
                   <Button
                     variant="outline"
                     className="border-gold/50 text-gold hover:bg-gold/10"
                   >
-                    <Mail className="w-4 h-4 mr-2" />
-                    Contact Us
+                    View Open Positions
+                    <ArrowRight className="w-4 h-4 ml-2" />
                   </Button>
                 </Link>
               </div>
@@ -356,12 +362,15 @@ const MeetTheTeam = () => {
         onClose={() => setIsContactFormOpen(false)}
       />
 
-      {/* Detail Dialog */}
+      {/* Detail Dialog - No contact button inside */}
       <TeamMemberDetailDialog
         member={detailMember}
         isOpen={isDetailOpen}
         onClose={() => setIsDetailOpen(false)}
-        onContact={handleContactMember}
+        onContact={() => {
+          setIsDetailOpen(false);
+          setIsContactFormOpen(true);
+        }}
       />
     </>
   );
