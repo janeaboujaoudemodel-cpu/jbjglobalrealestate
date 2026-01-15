@@ -70,7 +70,7 @@ const TeamMemberCard = ({ member, onReadMore }: TeamMemberCardProps) => {
 
           {/* Info - Fixed height for symmetry */}
           <div className="p-5 -mt-16 relative z-10 flex flex-col h-[280px]">
-            <div className="flex-1">
+            <div>
               <h3 className="text-white font-semibold text-lg mb-1 line-clamp-1">{member.name}</h3>
 
               {/* Premium shiny job title */}
@@ -117,21 +117,21 @@ const TeamMemberCard = ({ member, onReadMore }: TeamMemberCardProps) => {
                   {member.bio}
                 </p>
               )}
+            </div>
 
-            {/* Read More Button */}
-              <div className="pt-2 border-t border-zinc-800/50 mb-4">
-                <button
-                  type="button"
-                  onClick={() => onReadMore(member)}
-                  className="text-gold hover:text-gold-light text-xs font-medium transition-colors"
-                >
-                  Read more →
-                </button>
-              </div>
+            {/* Bottom actions pinned for perfect card symmetry */}
+            <div className="mt-auto pt-2 border-t border-zinc-800/50">
+              <button
+                type="button"
+                onClick={() => onReadMore(member)}
+                className="text-gold hover:text-gold-light text-xs font-medium transition-colors"
+              >
+                Read more →
+              </button>
 
-              {/* Languages - Below read more with proper gap, 4 languages on one line */}
+              {/* Languages - Always at bottom with small gap */}
               {displayLanguages.length > 0 && (
-                <div className="flex flex-wrap gap-1.5">
+                <div className="flex flex-wrap gap-1.5 mt-2">
                   {displayLanguages.map((lang) => (
                     <Badge
                       key={lang}

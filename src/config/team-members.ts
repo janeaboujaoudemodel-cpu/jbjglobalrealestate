@@ -2,8 +2,9 @@
 // Professional team member data with AI-generated unique portraits
 
 // Import team portraits - Executive Leadership
-import janeAbouJaoudeCeo from '@/assets/ceo/jane-founder-original-upload.jpg';
-import davidThorntonCeo from '@/assets/team/david-thornton-md-v4.png';
+// NOTE: Use real, approved photos for CEO/MD. Do not swap without explicit approval.
+import janeAbouJaoudeCeo from '@/assets/ceo/jane-ceo-black-suit-original.jpg';
+import davidThorntonCeo from '@/assets/team/david-thornton-md-real.png';
 import richardPembertonCoo from '@/assets/team/richard-pemberton-coo.png';
 import oliviaExecutiveAssistant from '@/assets/team/olivia-executive-assistant.png';
 import amandaClarkeExecutiveAssistant from '@/assets/team/amanda-clarke-executive-assistant.png';
@@ -13,7 +14,7 @@ import anthonyPembertonStrategy from '@/assets/team/anthony-pemberton-strategy.p
 import laylaMansourPartnerships from '@/assets/team/layla-mansour-partnerships.png';
 
 // Import team portraits - Legal Team
-import hudaMarzooqLawyer from '@/assets/team/huda-marzooq-legal-id-v3.jpg';
+import hudaMarzooqLawyer from '@/assets/team/huda-marzooq-lawyer-office-v2.jpg';
 // NEW Legal Team additions (to reach 4)
 import williamThorntonLegal from '@/assets/team/william-thornton-legal.png';
 import nadiaHassanLegal from '@/assets/team/nadia-hassan-legal.png';
