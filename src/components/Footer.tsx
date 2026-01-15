@@ -378,7 +378,7 @@ const Footer = () => {
               © {currentYear} JBJ Global Real Estate. All Rights Reserved.
             </p>
             <p className="text-xs text-zinc-600">
-              <span className="text-gold font-medium">Developed, Created & Implemented by the Founder</span> | Brokerage Services Only
+              <span className="text-gold font-medium">Developed, Created & Implemented by the Founder, Jane Abou Jaoude</span> | Brokerage Services Only
             </p>
             <p className="text-xs text-zinc-600 mt-1">
               Platform Vision by{" "}
