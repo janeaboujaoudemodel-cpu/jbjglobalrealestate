@@ -69,7 +69,7 @@ const About = () => {
   ];
 
   const milestones = [
-    { year: "2014", event: "Janine's Beauty — Early Business Chapter" },
+    { year: "2014", event: "Jane's Beauty — Early Business Chapter" },
     { year: "2020", event: "Relocated to Dubai" },
     { year: "2021", event: "Real Estate with DAMAC" },
     { year: "2021–2022", event: "Head of Quality & Operations at Al-Ghazal Transportation" },
