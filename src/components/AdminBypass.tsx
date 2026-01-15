@@ -77,10 +77,14 @@ const AdminBypass = ({ children }: AdminBypassProps) => {
         const { data: hasBrokerRole } = await supabase
           .rpc("has_role", { _user_id: session.user.id, _role: "broker" });
 
-        const hasFullAccess = Boolean(hasAdminRole) || Boolean(hasOwnerRole) || Boolean(isCrmAdmin);
+        // Check for listing_admin role 
+        const { data: hasListingAdminRole } = await supabase
+          .rpc("has_role", { _user_id: session.user.id, _role: "listing_admin" });
+
+        const hasFullAccess = Boolean(hasAdminRole) || Boolean(hasOwnerRole) || Boolean(isCrmAdmin) || Boolean(hasListingAdminRole);
         const hasBrokerAccess = Boolean(hasBrokerRole);
 
-        // Full access for admins/owners/founders, or broker access for specific routes
+        // Full access for admins/owners/founders/listing_admins, or broker access for specific routes
         setHasAccess(hasFullAccess || hasBrokerAccess);
       } catch (error) {
         console.error("Error checking access:", error);

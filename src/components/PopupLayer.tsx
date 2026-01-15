@@ -1,44 +1,27 @@
 /**
  * PopupLayer - Centralized popup rendering
  * 
- * This component renders ALL popups in a single location to prevent:
- * - Duplicate popup instances
- * - Z-index conflicts
- * - Overlapping UI elements
+ * ALL auto-popups on first load are DISABLED to ensure:
+ * - Smooth scrolling experience
+ * - No overlapping UI elements
+ * - No blocking modals
  * 
- * All popup visibility is managed by PopupCoordinatorContext
+ * Install prompt triggers only via user action (native browser prompt).
+ * No GuidedTour, no WelcomeModal, no AppDownloadPopup on auto-load.
  */
 
-import WelcomeModal from '@/components/WelcomeModal';
-import RoleSelectionModal from '@/components/RoleSelectionModal';
 import CookiesConsentBanner from '@/components/CookiesConsentBanner';
-import AppDownloadPopup from '@/components/AppDownloadPopup';
-import FreeToolsBanner from '@/components/FreeToolsBanner';
-import LeadIntentModal from '@/components/LeadIntentModal';
 import InstallAppButton from '@/components/InstallAppButton';
 
 const PopupLayer = () => {
   return (
     <>
-      {/* Priority 1: Welcome Modal - First-time visitors */}
-      <WelcomeModal />
+      {/* Only essential non-blocking popups remain */}
       
-      {/* Priority 2: Role Selection - After welcome */}
-      <RoleSelectionModal />
-      
-      {/* Priority 3: Lead Intent Modal */}
-      <LeadIntentModal />
-      
-      {/* Priority 4: Cookies Consent */}
+      {/* Cookies Consent - Required for compliance, non-blocking banner */}
       <CookiesConsentBanner />
       
-      {/* Priority 5: App Download Popup */}
-      <AppDownloadPopup showOnLoad={true} delayMs={3000} />
-      
-      {/* Priority 6: Free Tools Banner */}
-      <FreeToolsBanner />
-      
-      {/* Priority 7: Install App Button (always visible when applicable) */}
+      {/* Install App Button - Small floating button, one-click install when browser supports */}
       <InstallAppButton />
     </>
   );
