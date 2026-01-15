@@ -1,10 +1,6 @@
 import { serve } from "https://deno.land/std@0.190.0/http/server.ts";
 import { createClient } from "https://esm.sh/@supabase/supabase-js@2";
-
-const corsHeaders = {
-  "Access-Control-Allow-Origin": "*",
-  "Access-Control-Allow-Headers": "authorization, x-client-info, apikey, content-type",
-};
+import { validateEmployeeAuth, unauthorizedResponse, forbiddenResponse, corsHeaders } from "../_shared/auth-utils.ts";
 
 interface BrokerStats {
   broker_name: string;
@@ -193,6 +189,18 @@ serve(async (req: Request): Promise<Response> => {
     return new Response(null, { headers: corsHeaders });
   }
 
+  // ============ AUTHENTICATION CHECK ============
+  const authResult = await validateEmployeeAuth(req);
+  
+  if (!authResult.authenticated) {
+    return unauthorizedResponse(authResult.error);
+  }
+  
+  if (!authResult.isEmployee) {
+    return forbiddenResponse(authResult.error);
+  }
+  // ============ END AUTH CHECK ============
+
   try {
     const resendApiKey = Deno.env.get("RESEND_API_KEY");
     if (!resendApiKey) {
@@ -328,7 +336,7 @@ serve(async (req: Request): Promise<Response> => {
       ? adminEmails 
       : ["admin@JBJ.ae"];
 
-    console.log(`Sending daily report to ${recipients.length} recipients:`, recipients);
+    console.log(`Daily report triggered by ${authResult.email}. Sending to ${recipients.length} recipients:`, recipients);
     console.log(`Report includes ${brokerStats.length} brokers with ${capacityAlerts.length} capacity alerts`);
 
     // Send the email

@@ -1,10 +1,6 @@
 import { serve } from "https://deno.land/std@0.190.0/http/server.ts";
 import { createClient } from "https://esm.sh/@supabase/supabase-js@2";
-
-const corsHeaders = {
-  "Access-Control-Allow-Origin": "*",
-  "Access-Control-Allow-Headers": "authorization, x-client-info, apikey, content-type",
-};
+import { validateEmployeeAuth, unauthorizedResponse, forbiddenResponse, corsHeaders } from "../_shared/auth-utils.ts";
 
 interface LogCallRequest {
   broker_id: string;
@@ -20,6 +16,18 @@ serve(async (req: Request): Promise<Response> => {
   if (req.method === "OPTIONS") {
     return new Response(null, { headers: corsHeaders });
   }
+
+  // ============ AUTHENTICATION CHECK ============
+  const authResult = await validateEmployeeAuth(req);
+  
+  if (!authResult.authenticated) {
+    return unauthorizedResponse(authResult.error);
+  }
+  
+  if (!authResult.isEmployee) {
+    return forbiddenResponse(authResult.error);
+  }
+  // ============ END AUTH CHECK ============
 
   try {
     const {
@@ -173,7 +181,7 @@ serve(async (req: Request): Promise<Response> => {
         .eq("id", broker_id);
     }
 
-    console.log(`Call logged successfully for broker ${broker.name} to lead ${lead_id}`);
+    console.log(`Call logged by employee ${authResult.email} for broker ${broker.name} to lead ${lead_id}`);
 
     return new Response(
       JSON.stringify({

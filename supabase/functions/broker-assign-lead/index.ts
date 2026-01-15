@@ -1,10 +1,6 @@
 import { serve } from "https://deno.land/std@0.168.0/http/server.ts";
 import { createClient } from "https://esm.sh/@supabase/supabase-js@2";
-
-const corsHeaders = {
-  "Access-Control-Allow-Origin": "*",
-  "Access-Control-Allow-Headers": "authorization, x-client-info, apikey, content-type",
-};
+import { validateEmployeeAuth, unauthorizedResponse, forbiddenResponse, corsHeaders } from "../_shared/auth-utils.ts";
 
 interface AssignLeadRequest {
   lead_id: string;
@@ -37,6 +33,18 @@ serve(async (req: Request): Promise<Response> => {
   if (req.method === "OPTIONS") {
     return new Response(null, { headers: corsHeaders });
   }
+
+  // ============ AUTHENTICATION CHECK ============
+  const authResult = await validateEmployeeAuth(req);
+  
+  if (!authResult.authenticated) {
+    return unauthorizedResponse(authResult.error);
+  }
+  
+  if (!authResult.isEmployee) {
+    return forbiddenResponse(authResult.error);
+  }
+  // ============ END AUTH CHECK ============
 
   try {
     const { lead_id, broker_id }: AssignLeadRequest = await req.json();
@@ -189,7 +197,7 @@ serve(async (req: Request): Promise<Response> => {
     await supabase.from("crm_lead_assignments").insert({
       lead_id,
       assigned_to_user_id: selectedBrokerId, // Using broker ID (they act as virtual users)
-      assigned_by_user_id: null, // System assignment
+      assigned_by_user_id: authResult.userId, // Track who made the assignment
     });
 
     // Update lead with AI broker assignment
@@ -219,6 +227,8 @@ serve(async (req: Request): Promise<Response> => {
       },
       { onConflict: "broker_id,stat_date" }
     );
+
+    console.log(`Lead ${lead_id} assigned to broker ${selectedBroker?.name} by employee ${authResult.email}`);
 
     return new Response(
       JSON.stringify({

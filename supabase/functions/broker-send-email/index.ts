@@ -1,5 +1,6 @@
 import { serve } from "https://deno.land/std@0.190.0/http/server.ts";
 import { createClient } from "https://esm.sh/@supabase/supabase-js@2";
+import { validateEmployeeAuth, unauthorizedResponse, forbiddenResponse, corsHeaders } from "../_shared/auth-utils.ts";
 
 // Resend API helper (no npm import needed)
 async function sendEmail(apiKey: string, options: {
@@ -30,11 +31,6 @@ async function sendEmail(apiKey: string, options: {
   }
 }
 
-const corsHeaders = {
-  "Access-Control-Allow-Origin": "*",
-  "Access-Control-Allow-Headers": "authorization, x-client-info, apikey, content-type",
-};
-
 interface SendEmailRequest {
   broker_id: string;
   lead_id?: string;
@@ -50,6 +46,18 @@ serve(async (req: Request): Promise<Response> => {
   if (req.method === "OPTIONS") {
     return new Response(null, { headers: corsHeaders });
   }
+
+  // ============ AUTHENTICATION CHECK ============
+  const authResult = await validateEmployeeAuth(req);
+  
+  if (!authResult.authenticated) {
+    return unauthorizedResponse(authResult.error);
+  }
+  
+  if (!authResult.isEmployee) {
+    return forbiddenResponse(authResult.error);
+  }
+  // ============ END AUTH CHECK ============
 
   try {
     const resendApiKey = Deno.env.get("RESEND_API_KEY");
@@ -167,7 +175,7 @@ serve(async (req: Request): Promise<Response> => {
       throw emailResponse.error;
     }
 
-    console.log("Email sent successfully:", emailResponse);
+    console.log(`Email sent by employee ${authResult.email} via broker ${broker.name}:`, emailResponse);
 
     // Get or create conversation
     let conversation;
