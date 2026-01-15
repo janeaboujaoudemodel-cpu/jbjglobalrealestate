@@ -569,16 +569,19 @@ const CompanyCommunicationHub = () => {
           </div>
         </div>
 
-        {/* @Mention Suggestions */}
+        {/* @Mention Suggestions - Shows ALL team members */}
         <AnimatePresence>
           {showMentions && filteredMembers.length > 0 && (
             <motion.div
               initial={{ opacity: 0, y: 10 }}
               animate={{ opacity: 1, y: 0 }}
               exit={{ opacity: 0, y: 10 }}
-              className="mx-4 mb-2 bg-zinc-800 rounded-lg border border-zinc-700 shadow-xl max-h-48 overflow-y-auto"
+              className="mx-4 mb-2 bg-zinc-800 rounded-lg border border-zinc-700 shadow-xl max-h-64 overflow-y-auto"
             >
-              {filteredMembers.slice(0, 8).map((member) => (
+              <div className="sticky top-0 bg-zinc-800 px-3 py-2 border-b border-zinc-700">
+                <p className="text-xs text-zinc-400">{filteredMembers.length} team members</p>
+              </div>
+              {filteredMembers.map((member) => (
                 <button
                   key={member.id}
                   className="w-full flex items-center gap-3 px-3 py-2 hover:bg-zinc-700 transition-colors"
@@ -590,12 +593,12 @@ const CompanyCommunicationHub = () => {
                       {member.name.split(' ').map(n => n[0]).join('')}
                     </AvatarFallback>
                   </Avatar>
-                  <div className="text-left">
-                    <p className="text-sm font-medium">{member.name}</p>
-                    <p className="text-xs text-zinc-400">{member.role}</p>
+                  <div className="text-left flex-1 min-w-0">
+                    <p className="text-sm font-medium truncate">{member.name}</p>
+                    <p className="text-xs text-zinc-400 truncate">{member.role} • {member.department}</p>
                   </div>
                   {member.isAI && (
-                    <Badge variant="outline" className="ml-auto text-[9px] border-gold/50 text-gold">AI</Badge>
+                    <Badge variant="outline" className="ml-auto text-[9px] border-gold/50 text-gold flex-shrink-0">AI</Badge>
                   )}
                 </button>
               ))}
