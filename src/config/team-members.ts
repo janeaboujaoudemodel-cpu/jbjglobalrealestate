@@ -251,6 +251,10 @@ import jamesThompsonPortfolio from '@/assets/team/james-thompson-portfolio.png';
 
 // NEW VIP Client Relations (swap with Abdullah)
 import emilyRichardsonVip from '@/assets/team/emily-richardson-vip.png';
+// NEW VIP additions to reach 8 total
+import meiLingChenVip from '@/assets/team/mei-ling-chen-vip-senior.png';
+import omarAlFahadVip from '@/assets/team/omar-al-fahad-vip-advisor.png';
+import sophieBeaumontVip from '@/assets/team/sophie-beaumont-vip-coordinator.png';
 
 export interface TeamMember {
   id: string;
@@ -1044,7 +1048,7 @@ export const marketingTeam: TeamMember[] = sortByHierarchy([
     isAI: true,
     bio: 'Sophisticated strategist leading brand positioning, digital campaigns, and market intelligence with data-driven excellence.',
     specializations: ['Brand Strategy', 'Digital Marketing', 'Market Analysis'],
-    languages: ['English', 'French'],
+    languages: ['English', 'French', 'Spanish'],
     nationality: 'British',
     yearsExperience: 14,
     hierarchyLevel: 3,
@@ -1283,7 +1287,7 @@ export const vipClientRelationsTeam: TeamMember[] = sortByHierarchy([
     isAI: true,
     bio: 'Elite client specialist managing relationships with high-net-worth individuals and VIP investors, ensuring white-glove concierge service.',
     specializations: ['VIP Services', 'Luxury Concierge', 'Private Client Management', 'Investment Advisory'],
-    languages: ['English', 'French', 'Arabic'],
+    languages: ['English', 'French', 'Arabic', 'Italian'],
     nationality: 'British',
     yearsExperience: 13,
     hierarchyLevel: 3,
@@ -1358,6 +1362,56 @@ export const vipClientRelationsTeam: TeamMember[] = sortByHierarchy([
     reportsTo: 'victoria-ashworth',
     status: 'online',
     canConductInterviews: true,
+  },
+  // NEW VIP Team Members to reach 8 total
+  {
+    id: 'mei-ling-chen',
+    name: 'Mei Ling Chen',
+    role: 'Senior VIP Client Advisor',
+    department: 'VIP Client Relations',
+    avatar: meiLingChenVip,
+    isAI: true,
+    bio: 'Sophisticated advisor specializing in Chinese and East Asian high-net-worth investor relations, providing premium concierge services.',
+    specializations: ['Chinese Clients', 'East Asian Markets', 'Ultra-Luxury Properties', 'Investment Advisory'],
+    languages: ['English', 'Mandarin', 'Cantonese'],
+    nationality: 'Singaporean',
+    yearsExperience: 9,
+    hierarchyLevel: 4,
+    reportsTo: 'victoria-ashworth',
+    status: 'online',
+    canConductInterviews: true,
+  },
+  {
+    id: 'omar-al-fahad',
+    name: 'Omar Al Fahad',
+    role: 'VIP Client Advisor (GCC)',
+    department: 'VIP Client Relations',
+    avatar: omarAlFahadVip,
+    isAI: true,
+    bio: 'Distinguished advisor specializing in Emirati and Gulf region VIP client relations, ensuring exceptional white-glove service.',
+    specializations: ['Emirati Clients', 'Gulf Markets', 'Premium Properties', 'VIP Coordination'],
+    languages: ['English', 'Arabic'],
+    nationality: 'Emirati',
+    yearsExperience: 8,
+    hierarchyLevel: 5,
+    reportsTo: 'abdullah-al-rashid',
+    status: 'online',
+  },
+  {
+    id: 'sophie-beaumont',
+    name: 'Sophie Beaumont',
+    role: 'VIP Client Coordinator',
+    department: 'VIP Client Relations',
+    avatar: sophieBeaumontVip,
+    isAI: true,
+    bio: 'Professional coordinator managing VIP client schedules, exclusive property viewings, and luxury client experiences for European investors.',
+    specializations: ['European Clients', 'Event Coordination', 'Luxury Viewings', 'Client Communication'],
+    languages: ['English', 'French', 'German'],
+    nationality: 'French',
+    yearsExperience: 6,
+    hierarchyLevel: 5,
+    reportsTo: 'james-hartwell',
+    status: 'online',
   },
 ]);
 
@@ -1921,7 +1975,7 @@ export const afterSalesTeam: TeamMember[] = sortByHierarchy([
     isAI: true,
     bio: 'Dedicated manager coordinating property handovers, snagging processes, and post-purchase client support.',
     specializations: ['Property Handover', 'Snagging Coordination', 'Client Communication'],
-    languages: ['English', 'Spanish'],
+    languages: ['English', 'Spanish', 'French'],
     nationality: 'British',
     yearsExperience: 9,
     hierarchyLevel: 4,
@@ -1939,8 +1993,8 @@ export const afterSalesTeam: TeamMember[] = sortByHierarchy([
     isAI: true,
     bio: 'Organized coordinator managing after-sales documentation, warranty claims, and developer liaison for post-handover services.',
     specializations: ['Documentation', 'Warranty Management', 'Developer Liaison'],
-    languages: ['English', 'Afrikaans'],
-    nationality: 'South African',
+    languages: ['English', 'Dutch', 'German'],
+    nationality: 'Dutch',
     yearsExperience: 6,
     hierarchyLevel: 5,
     reportsTo: 'charles-pemberton',
