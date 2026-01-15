@@ -9,8 +9,8 @@ const corsHeaders = {
 
 const APPROVED_CONTACT_INFO = {
   phone: '+971 56 591 1000',
-  email: 'contact@jbj.ae',
-  privacyEmail: 'privacy@jbj.ae',
+  email: 'contact@JBJ.ae',
+  privacyEmail: 'privacy@JBJ.ae',
   website: 'jbj.ae',
 };
 
@@ -24,6 +24,7 @@ function sanitizeContactInfo(text: string): string {
   
   const emailPattern = /[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}/g;
   const approvedEmails = ["contact@jbj.ae", "privacy@jbj.ae", "partnerships@jbj.ae", "careers@jbj.ae", "security@jbj.ae", "jane@jbj.ae"];
+  const toCanonicalJbjEmail = (value: string) => value.replace(/@jbj\.ae$/i, "@JBJ.ae");
   
   let sanitized = text;
   
@@ -37,7 +38,7 @@ function sanitizeContactInfo(text: string): string {
   
   sanitized = sanitized.replace(emailPattern, (match) => {
     const lowerMatch = match.toLowerCase();
-    if (approvedEmails.includes(lowerMatch) || lowerMatch.endsWith('@jbj.ae')) return match;
+    if (approvedEmails.includes(lowerMatch) || lowerMatch.endsWith('@jbj.ae')) return toCanonicalJbjEmail(match);
     return APPROVED_CONTACT_INFO.email;
   });
   

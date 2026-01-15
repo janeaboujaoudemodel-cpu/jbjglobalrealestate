@@ -144,7 +144,7 @@ const ComingSoon = () => {
               <span dir="ltr" className="font-medium tracking-wide">+971 56 591 1000</span>
             </a>
             <a
-              href="mailto:contact@jbj.ae"
+              href="mailto:contact@JBJ.ae"
               className="group flex items-center gap-3 text-sm text-white/70 hover:text-gold transition-all duration-300 hover:drop-shadow-[0_0_12px_hsl(var(--gold))]"
             >
               <span className="flex items-center justify-center w-10 h-10 rounded-full bg-gold/10 group-hover:bg-gold/20 transition-colors border border-gold/20 group-hover:border-gold/40">
@@ -153,7 +153,7 @@ const ComingSoon = () => {
                   <path d="m22 7-8.97 5.7a1.94 1.94 0 0 1-2.06 0L2 7"/>
                 </svg>
               </span>
-              <span dir="ltr" className="font-medium tracking-wide">contact@jbj.ae</span>
+              <span dir="ltr" className="font-medium tracking-wide">contact@JBJ.ae</span>
             </a>
             <Link
               to="/auth"

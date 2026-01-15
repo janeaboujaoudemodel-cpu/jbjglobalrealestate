@@ -63,7 +63,19 @@ serve(async (req) => {
 
     const { email, password, displayName, crmRole, jobTitle, phone } = await req.json();
 
-    if (!email || !password || !displayName || !crmRole) {
+    const normalizedEmail = String(email || "")
+      .trim()
+      .toLowerCase();
+
+    // Enforce JBJ staff email standard
+    if (!normalizedEmail.endsWith("@jbj.ae")) {
+      return new Response(JSON.stringify({ error: "Staff emails must be @jbj.ae" }), {
+        status: 400,
+        headers: { ...corsHeaders, "Content-Type": "application/json" },
+      });
+    }
+
+    if (!normalizedEmail || !password || !displayName || !crmRole) {
       return new Response(JSON.stringify({ error: "Missing required fields" }), {
         status: 400,
         headers: { ...corsHeaders, "Content-Type": "application/json" },
@@ -72,7 +84,7 @@ serve(async (req) => {
 
     // Create the user in auth
     const { data: newUser, error: createError } = await supabaseAdmin.auth.admin.createUser({
-      email,
+      email: normalizedEmail,
       password,
       email_confirm: true, // Auto-confirm email
       user_metadata: {
@@ -94,7 +106,7 @@ serve(async (req) => {
       .from("profiles")
       .upsert({
         id: newUser.user.id,
-        email: email,
+        email: normalizedEmail,
         full_name: displayName,
         phone_number: phone,
       });
@@ -113,7 +125,7 @@ serve(async (req) => {
         display_name: displayName,
         job_title: jobTitle,
         phone: phone,
-        email: email,
+        email: normalizedEmail,
         force_password_change: true,
       });
 

@@ -27,7 +27,7 @@ function getCorsHeaders(req: Request) {
 }
 
 // Admin email recipients
-const ADMIN_EMAILS = ["contact@jbj.ae"];
+const ADMIN_EMAILS = ["contact@JBJ.ae"];
 
 interface SecurityAlertRequest {
   alertType: "data_export" | "unusual_access" | "bulk_access" | "after_hours_access" | "suspicious_pattern";
