@@ -2,7 +2,7 @@
 // Professional team member data with AI-generated unique portraits
 
 // Import team portraits - Executive Leadership
-import janeAbouJaoudeCeo from '@/assets/ceo/jane-founder-original-upload.jpg';
+import janeAbouJaoudeCeo from '@/assets/ceo/jane-founder-premium-landscape.png';
 import davidThorntonCeo from '@/assets/team/david-thornton-md-natural.png';
 import richardPembertonCoo from '@/assets/team/richard-pemberton-coo.png';
 import oliviaExecutiveAssistant from '@/assets/team/olivia-executive-assistant.png';
@@ -176,6 +176,33 @@ import youssefBenaliAdmin from '@/assets/team/youssef-benali-admin.png';
 
 // NEW Project Management addition (to reach 4)
 import carmenGarciaProject from '@/assets/team/carmen-garcia-project.png';
+
+// NEW Diverse Team Member Additions (25+ new nationalities)
+import thiNguyenSales from '@/assets/team/thi-nguyen-sales.png';
+import janDeVriesSales from '@/assets/team/jan-de-vries-sales.png';
+import abdullahAlRashidSales from '@/assets/team/abdullah-al-rashid-sales.png';
+import valentinaTorresMarketing from '@/assets/team/valentina-torres-marketing.png';
+import davidCohenFinance from '@/assets/team/david-cohen-finance.png';
+import natchaPimchanClient from '@/assets/team/natcha-pimchan-client.png';
+import martinGonzalezSales from '@/assets/team/martin-gonzalez-sales.png';
+import annaKovacsHr from '@/assets/team/anna-kovacs-hr.png';
+import larsAndersenOperations from '@/assets/team/lars-andersen-operations.png';
+import wanjikuKamauAdmin from '@/assets/team/wanjiku-kamau-admin.png';
+import elenaMuellerFinance from '@/assets/team/elena-mueller-finance.png';
+import andreiPopescuIt from '@/assets/team/andrei-popescu-it.png';
+import sofiaVirtanenCustomer from '@/assets/team/sofia-virtanen-customer.png';
+import diegoSanchezSales from '@/assets/team/diego-sanchez-sales.png';
+import hansGruberOperations from '@/assets/team/hans-gruber-operations.png';
+import putriWijayaSales from '@/assets/team/putri-wijaya-sales.png';
+import pieterVandenbergheMarketing from '@/assets/team/pieter-vandenberghe-marketing.png';
+import janaNovakovaLegal from '@/assets/team/jana-novakova-legal.png';
+import rahulKrishnanIt from '@/assets/team/rahul-krishnan-it.png';
+import camilaReyesClient from '@/assets/team/camila-reyes-client.png';
+import aishaNurbekovaSales from '@/assets/team/aisha-nurbekova-sales.png';
+import kwameMensahSales from '@/assets/team/kwame-mensah-sales.png';
+import armenPetrosyanFinance from '@/assets/team/armen-petrosyan-finance.png';
+import anaHorvatAdmin from '@/assets/team/ana-horvat-admin.png';
+import alejandroHerreraSales from '@/assets/team/alejandro-herrera-sales.png';
 
 export interface TeamMember {
   id: string;
@@ -598,6 +625,151 @@ export const salesTeam: TeamMember[] = sortByHierarchy([
     reportsTo: 'adaeze-okonkwo',
     status: 'online',
   },
+  // NEW DIVERSE SALES TEAM MEMBERS
+  {
+    id: 'thi-nguyen',
+    name: 'Thi Nguyen',
+    role: 'Senior Sales Executive',
+    department: 'Sales',
+    avatar: thiNguyenSales,
+    isAI: true,
+    bio: 'Dynamic sales professional specializing in Vietnamese and Southeast Asian investor relations.',
+    specializations: ['Vietnamese Clients', 'Southeast Asian Markets', 'Investment Properties'],
+    languages: ['English', 'Vietnamese'],
+    nationality: 'Vietnamese',
+    yearsExperience: 6,
+    hierarchyLevel: 5,
+    reportsTo: 'emma-hartley',
+    status: 'online',
+  },
+  {
+    id: 'jan-de-vries',
+    name: 'Jan De Vries',
+    role: 'Senior Property Consultant',
+    department: 'Sales',
+    avatar: janDeVriesSales,
+    isAI: true,
+    bio: 'Experienced property consultant specializing in European investor networks and luxury developments.',
+    specializations: ['Dutch Clients', 'European Markets', 'Premium Properties'],
+    languages: ['English', 'Dutch', 'German'],
+    nationality: 'Dutch',
+    yearsExperience: 9,
+    hierarchyLevel: 5,
+    reportsTo: 'michael-anderson',
+    status: 'online',
+  },
+  {
+    id: 'abdullah-al-rashid',
+    name: 'Abdullah Al Rashid',
+    role: 'VIP Sales Manager',
+    department: 'Sales',
+    avatar: abdullahAlRashidSales,
+    isAI: true,
+    bio: 'Distinguished sales leader specializing in Saudi Arabian and GCC high-net-worth investor relations.',
+    specializations: ['Saudi Clients', 'GCC Markets', 'Ultra-Luxury Properties'],
+    languages: ['English', 'Arabic'],
+    nationality: 'Saudi Arabian',
+    yearsExperience: 11,
+    hierarchyLevel: 4,
+    reportsTo: 'roy-davi',
+    status: 'online',
+  },
+  {
+    id: 'martin-gonzalez',
+    name: 'Martin Gonzalez',
+    role: 'Sales Executive',
+    department: 'Sales',
+    avatar: martinGonzalezSales,
+    isAI: true,
+    bio: 'Energetic sales professional with expertise in Argentine and South American investor markets.',
+    specializations: ['Argentine Clients', 'South American Markets', 'Investment Properties'],
+    languages: ['English', 'Spanish'],
+    nationality: 'Argentine',
+    yearsExperience: 5,
+    hierarchyLevel: 5,
+    reportsTo: 'adaeze-okonkwo',
+    status: 'online',
+  },
+  {
+    id: 'diego-sanchez',
+    name: 'Diego Sanchez',
+    role: 'Property Consultant',
+    department: 'Sales',
+    avatar: diegoSanchezSales,
+    isAI: true,
+    bio: 'Dedicated property consultant specializing in Chilean and Latin American investor relations.',
+    specializations: ['Chilean Clients', 'Latin American Markets', 'Residential Properties'],
+    languages: ['English', 'Spanish'],
+    nationality: 'Chilean',
+    yearsExperience: 6,
+    hierarchyLevel: 5,
+    reportsTo: 'emma-hartley',
+    status: 'online',
+  },
+  {
+    id: 'putri-wijaya',
+    name: 'Putri Wijaya',
+    role: 'Sales Executive',
+    department: 'Sales',
+    avatar: putriWijayaSales,
+    isAI: true,
+    bio: 'Professional sales executive with expertise in Indonesian and Southeast Asian investor networks.',
+    specializations: ['Indonesian Clients', 'Southeast Asian Markets', 'Investment Properties'],
+    languages: ['English', 'Indonesian', 'Malay'],
+    nationality: 'Indonesian',
+    yearsExperience: 5,
+    hierarchyLevel: 5,
+    reportsTo: 'emma-hartley',
+    status: 'online',
+  },
+  {
+    id: 'aisha-nurbekova',
+    name: 'Aisha Nurbekova',
+    role: 'Senior Sales Executive',
+    department: 'Sales',
+    avatar: aishaNurbekovaSales,
+    isAI: true,
+    bio: 'Sophisticated sales professional specializing in Central Asian and CIS investor relations.',
+    specializations: ['Kazakh Clients', 'Central Asian Markets', 'Luxury Properties'],
+    languages: ['English', 'Russian', 'Kazakh'],
+    nationality: 'Kazakh',
+    yearsExperience: 7,
+    hierarchyLevel: 5,
+    reportsTo: 'michael-anderson',
+    status: 'online',
+  },
+  {
+    id: 'kwame-mensah',
+    name: 'Kwame Mensah',
+    role: 'Sales Executive',
+    department: 'Sales',
+    avatar: kwameMensahSales,
+    isAI: true,
+    bio: 'Dynamic sales executive specializing in Ghanaian and West African investor networks.',
+    specializations: ['Ghanaian Clients', 'West African Markets', 'Investment Properties'],
+    languages: ['English', 'Akan', 'French'],
+    nationality: 'Ghanaian',
+    yearsExperience: 6,
+    hierarchyLevel: 5,
+    reportsTo: 'adaeze-okonkwo',
+    status: 'online',
+  },
+  {
+    id: 'alejandro-herrera',
+    name: 'Alejandro Herrera',
+    role: 'Sales Executive',
+    department: 'Sales',
+    avatar: alejandroHerreraSales,
+    isAI: true,
+    bio: 'Enthusiastic sales executive with expertise in Mexican and North American investor relations.',
+    specializations: ['Mexican Clients', 'North American Markets', 'Residential Properties'],
+    languages: ['English', 'Spanish'],
+    nationality: 'Mexican',
+    yearsExperience: 5,
+    hierarchyLevel: 5,
+    reportsTo: 'emma-hartley',
+    status: 'online',
+  },
 ]);
 
 // ===== Marketing (sorted by hierarchy) - 8 members =====
@@ -730,6 +902,39 @@ export const marketingTeam: TeamMember[] = sortByHierarchy([
     yearsExperience: 2,
     hierarchyLevel: 6,
     reportsTo: 'nikolaos-papadopoulos',
+    status: 'online',
+  },
+  // NEW Marketing Team Members
+  {
+    id: 'valentina-torres',
+    name: 'Valentina Torres',
+    role: 'Marketing Coordinator',
+    department: 'Marketing',
+    avatar: valentinaTorresMarketing,
+    isAI: true,
+    bio: 'Creative marketing professional specializing in event coordination and campaign execution.',
+    specializations: ['Event Marketing', 'Campaign Coordination', 'Brand Activations'],
+    languages: ['English', 'Spanish'],
+    nationality: 'Peruvian',
+    yearsExperience: 4,
+    hierarchyLevel: 5,
+    reportsTo: 'victoria-sterling',
+    status: 'online',
+  },
+  {
+    id: 'pieter-vandenberghe',
+    name: 'Pieter Vandenberghe',
+    role: 'Content Coordinator',
+    department: 'Marketing',
+    avatar: pieterVandenbergheMarketing,
+    isAI: true,
+    bio: 'Organized content coordinator managing editorial calendars and content distribution.',
+    specializations: ['Content Management', 'Editorial Planning', 'Distribution'],
+    languages: ['English', 'Dutch', 'French'],
+    nationality: 'Belgian',
+    yearsExperience: 5,
+    hierarchyLevel: 5,
+    reportsTo: 'sarah-mcintyre',
     status: 'online',
   },
 ]);
