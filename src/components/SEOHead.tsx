@@ -167,11 +167,50 @@ export const pagesSEO = {
     keywords: 'UAE property buying guide, how to buy property in UAE, UAE real estate process, buying property in UAE, property purchase steps',
     canonicalPath: '/buyer-guide',
   },
+  sellerGuide: {
+    title: 'Seller Guide',
+    description: 'Complete guide to selling property in the UAE. Learn about pricing, documentation, marketing, and the transfer process with expert brokerage services.',
+    keywords: 'sell property Dubai, UAE property selling guide, how to sell property UAE, property sale process Dubai',
+    canonicalPath: '/seller-guide',
+  },
   mortgageCalculator: {
     title: 'Mortgage Calculator',
     description: 'Calculate your property mortgage payments with our free Dubai mortgage calculator. Estimate monthly payments for UAE properties.',
     keywords: 'Dubai mortgage calculator, UAE home loan calculator, property payment estimator, mortgage rates Dubai',
     canonicalPath: '/mortgage-calculator',
+  },
+  faq: {
+    title: 'FAQ',
+    description: 'Find answers to frequently asked questions about buying, selling, and renting property in the UAE with JBJ Global Real Estate.',
+    keywords: 'UAE real estate FAQ, Dubai property questions, real estate answers, property buying FAQ',
+    canonicalPath: '/faq',
+  },
+  team: {
+    title: 'Meet Our Team',
+    description: 'Meet the exceptional professionals behind JBJ Global Real Estate. Our diverse team is dedicated to delivering premium real estate services in Dubai.',
+    keywords: 'JBJ team, real estate professionals Dubai, property agents UAE, JBJ Global Real Estate team',
+    canonicalPath: '/team',
+  },
+  privacy: {
+    title: 'Privacy Policy',
+    description: 'JBJ Global Real Estate privacy policy. Learn how we collect, use, and protect your personal information.',
+    keywords: 'JBJ privacy policy, real estate privacy, data protection UAE',
+    canonicalPath: '/privacy',
+    noIndex: false,
+  },
+  terms: {
+    title: 'Terms of Service',
+    description: 'JBJ Global Real Estate terms of service. Read our terms and conditions for using our website and services.',
+    keywords: 'JBJ terms of service, real estate terms, website terms UAE',
+    canonicalPath: '/terms',
+    noIndex: false,
+  },
+  cookies: {
+    title: 'Cookie Policy',
+    description: 'JBJ Global Real Estate cookie policy. Learn about the cookies we use on our website.',
+    keywords: 'JBJ cookie policy, website cookies, cookie preferences',
+    canonicalPath: '/cookies',
+    noIndex: false,
   },
 };
 

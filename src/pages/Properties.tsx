@@ -48,6 +48,7 @@ import { useFilteredProjects, defaultFilters } from "@/hooks/useProjectFilters";
 import type { FilterState } from "@/components/ProjectFilters";
 import { CONTACT_INFO, getWhatsAppUrl } from "@/constants/stats";
 import ActiveLeadBanner from "@/components/crm/ActiveLeadBanner";
+import { SEOHead, pagesSEO } from "@/components/SEOHead";
 
 // Currency conversion rates
 const CURRENCY_RATES: Record<string, number> = {
@@ -232,7 +233,9 @@ const Properties = () => {
   ].filter(Boolean).length;
 
   return (
-    <div className="min-h-screen bg-[hsl(var(--premium-bg))]">
+    <>
+      <SEOHead {...pagesSEO.properties} />
+      <div className="min-h-screen bg-[hsl(var(--premium-bg))]">
       
       
       {/* Hero Section */}
@@ -796,7 +799,8 @@ const Properties = () => {
       
       {/* Active Lead Banner for CRM linking */}
       <ActiveLeadBanner showAddToShortlist={false} />
-    </div>
+      </div>
+    </>
   );
 };
 

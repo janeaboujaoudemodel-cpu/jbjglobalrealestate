@@ -3,6 +3,7 @@ import { Link } from "react-router-dom";
 import { Newspaper, ChevronRight, ArrowLeft, Calendar, ExternalLink, TrendingUp } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import Footer from "@/components/Footer";
+import { SEOHead, pagesSEO } from "@/components/SEOHead";
 
 // Real UAE property news - 2025/2026
 const newsArticles = [
@@ -99,7 +100,9 @@ const News = () => {
     : newsArticles;
 
   return (
-    <section className="min-h-screen bg-zinc-950">
+    <>
+      <SEOHead {...pagesSEO.news} />
+      <section className="min-h-screen bg-zinc-950">
       {/* Hero Section */}
       <div className="relative py-16 md:py-24 bg-gradient-to-b from-black via-zinc-950 to-zinc-950">
         {/* Background effects */}
@@ -302,7 +305,8 @@ const News = () => {
       </div>
 
       <Footer />
-    </section>
+      </section>
+    </>
   );
 };
 

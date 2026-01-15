@@ -5,6 +5,7 @@ import Footer from "@/components/Footer";
 import { Button } from "@/components/ui/button";
 import { useCountUp } from "@/hooks/useCountUp";
 import { COMPANY_STATS } from "@/constants/stats";
+import { SEOHead, pagesSEO } from "@/components/SEOHead";
 import founderProfessional from "@/assets/founder-professional.jpeg";
 import luxuryVillaHero from "@/assets/luxury-villa-hero.jpeg";
 import coupleYachtDubai from "@/assets/couple-yacht-dubai.png";
@@ -77,7 +78,9 @@ const About = () => {
   ];
 
   return (
-    <div className="min-h-screen bg-black">
+    <>
+      <SEOHead {...pagesSEO.about} />
+      <div className="min-h-screen bg-black">
       {/* Hero Section */}
       <section className="relative h-[80vh] flex items-center justify-center overflow-hidden">
         <div className="absolute inset-0">
@@ -402,7 +405,8 @@ const About = () => {
       </section>
 
       <Footer />
-    </div>
+      </div>
+    </>
   );
 };
 

@@ -1,8 +1,13 @@
+# JBJ Global Real Estate - Robots.txt
+# https://jbj.ae
+
 User-agent: Googlebot
 Allow: /
+Crawl-delay: 1
 
 User-agent: Bingbot
 Allow: /
+Crawl-delay: 1
 
 User-agent: Twitterbot
 Allow: /
@@ -10,5 +15,18 @@ Allow: /
 User-agent: facebookexternalhit
 Allow: /
 
+User-agent: LinkedInBot
+Allow: /
+
 User-agent: *
 Allow: /
+
+# Sitemap location
+Sitemap: https://jbj.ae/sitemap.xml
+
+# Disallow admin and internal pages
+Disallow: /admin
+Disallow: /crm
+Disallow: /broker-dashboard
+Disallow: /onboarding
+Disallow: /auth
