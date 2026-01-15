@@ -63,7 +63,7 @@ const GlobalHeader = () => {
   });
 
   const hasCRMAccess = crmProfile?.is_active && 
-    (crmProfile?.crm_role === 'owner_admin' || crmProfile?.crm_role === 'broker_member');
+    ['owner_admin', 'broker_member', 'sales_director', 'admin', 'founder'].includes(crmProfile?.crm_role || '');
 
   // Simplified navigation with Guides dropdown
   const mainNavLinks = [
