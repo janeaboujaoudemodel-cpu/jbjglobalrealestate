@@ -62,7 +62,7 @@ const CEOLeadershipShowcase = () => {
             </p>
           </motion.div>
 
-          {/* CEO Landscape Photo with Flags - FULL WIDTH */}
+          {/* CEO Landscape Photo with Flags - FULL WIDTH - Only Name & Title at bottom, no duplicate labels */}
           <motion.div
             variants={fadeInUp}
             className="relative rounded-2xl overflow-hidden mb-12 border-2 border-gold/30"
@@ -73,12 +73,12 @@ const CEOLeadershipShowcase = () => {
                 alt="Jane Abou Jaoude - Founder & CEO at JBJ Global Real Estate with Lebanese and UAE flags"
                 className="w-full h-auto object-cover"
               />
-              {/* Overlay with name at bottom */}
-              <div className="absolute bottom-0 left-0 right-0 bg-gradient-to-t from-black/80 via-black/40 to-transparent p-6 md:p-8">
+              {/* Overlay with name & title at bottom center only - no duplicate labels */}
+              <div className="absolute bottom-0 left-0 right-0 bg-gradient-to-t from-black/90 via-black/50 to-transparent p-6 md:p-10">
                 <div className="text-center">
-                  <h3 className="text-white text-2xl md:text-4xl font-bold mb-2">Jane Abou Jaoude</h3>
+                  <h3 className="text-white text-2xl md:text-5xl font-bold mb-2">Jane Abou Jaoude</h3>
                   <p
-                    className="text-xl md:text-2xl font-semibold"
+                    className="text-xl md:text-3xl font-semibold"
                     style={{
                       background: "linear-gradient(135deg, #CBA64B 0%, #E8D5A3 50%, #CBA64B 100%)",
                       WebkitBackgroundClip: "text",
