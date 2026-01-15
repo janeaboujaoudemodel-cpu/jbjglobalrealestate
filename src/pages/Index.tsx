@@ -1,4 +1,5 @@
 import { useState } from "react";
+import DeveloperPartnersMarquee from "@/components/DeveloperPartnersMarquee";
 import { Link } from "react-router-dom";
 import { motion } from "framer-motion";
 import Footer from "@/components/Footer";
@@ -148,6 +149,9 @@ const Index = () => {
           <ChevronDown className="w-5 h-5 animate-bounce" />
         </motion.div>
       </div>
+
+      {/* DEVELOPER PARTNERS MARQUEE */}
+      <DeveloperPartnersMarquee />
 
       {/* QUICK ACTIONS - Simplified */}
       <section className="py-16 md:py-20 bg-black">
