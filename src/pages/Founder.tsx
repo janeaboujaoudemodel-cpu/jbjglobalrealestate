@@ -320,7 +320,7 @@ const Founder = () => {
               </h2>
               
               <p className="text-gold text-sm uppercase tracking-[0.3em] mb-8 font-medium">
-                Founder & CEO · JBJ Global Real Estate
+                Dubai-Based Real Estate Brokerage
               </p>
               
               <div className="space-y-6 text-zinc-300 leading-relaxed max-w-2xl">
@@ -335,8 +335,8 @@ const Founder = () => {
                 </p>
               </div>
               
-              {/* Accolades row - All 4 on same line */}
-              <div className="mt-12 grid grid-cols-2 md:grid-cols-4 gap-4 md:gap-6">
+              {/* Accolades row - All 4 with consistent spacing */}
+              <div className="mt-12 grid grid-cols-2 md:grid-cols-4 gap-6">
                 <div className="flex items-center gap-3">
                   <div className="w-12 h-12 bg-gradient-to-br from-gold/20 to-gold/5 rounded-xl flex items-center justify-center border border-gold/30 flex-shrink-0">
                     <Globe className="w-5 h-5 text-gold" />
@@ -810,15 +810,15 @@ const Founder = () => {
                 </div>
               </motion.div>
 
-              {/* Photo 6 - Professional Portrait */}
+              {/* Photo 6 - Lifestyle Portrait */}
               <motion.div 
                 className="group relative aspect-[4/5] rounded-2xl overflow-hidden border border-zinc-800 hover:border-gold/40 transition-all duration-500"
                 variants={scaleIn}
               >
                 <SafeImage 
-                  src={founderProfessional} 
+                  src={founderYacht} 
                   fallbackSrc={founderHero}
-                  alt="Jane Abou Jaoude - Professional Portrait" 
+                  alt="Jane Abou Jaoude - Lifestyle" 
                   className="w-full h-full object-cover object-center group-hover:scale-105 transition-transform duration-700"
                 />
                 <div className="absolute inset-0 bg-gradient-to-t from-black via-black/20 to-transparent opacity-80 group-hover:opacity-90 transition-opacity" />
