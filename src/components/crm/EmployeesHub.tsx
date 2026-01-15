@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, useMemo } from 'react';
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
@@ -28,16 +28,41 @@ import {
   Calendar,
   Sparkles,
   AlertTriangle,
+  Code,
+  Heart,
+  Folder,
+  Settings,
 } from 'lucide-react';
 import { toast } from 'sonner';
 import { Link } from 'react-router-dom';
 import CVCenter from './CVCenter';
 
+// Import team members from centralized config
+import { 
+  allTeamMembers, 
+  teamByDepartment,
+  executiveTeam,
+  salesTeam,
+  hrTeam,
+  marketingTeam,
+  creativeTeam,
+  financeTeam,
+  operationsTeam,
+  itTeam,
+  adminTeam,
+  softwareEngineeringTeam,
+  projectManagementTeam,
+  contentTeam,
+  customerHappinessTeam,
+  clientRelationsTeam,
+  TeamMember
+} from '@/config/team-members';
+
 interface Employee {
   id: string;
   name: string;
   role: string;
-  department: 'admin' | 'hr' | 'finance' | 'marketing' | 'brokers' | 'ai' | 'executive';
+  department: string;
   type: 'human' | 'ai';
   avatar?: string;
   email?: string;
@@ -47,6 +72,8 @@ interface Employee {
   performance?: number;
   description?: string;
   responsibilities?: string[];
+  languages?: string[];
+  nationality?: string;
 }
 
 interface CVEntry {
@@ -67,7 +94,26 @@ interface CVEntry {
   education: string;
 }
 
-// Comprehensive team members organized by department
+// Helper to convert TeamMember to Employee format
+const teamMemberToEmployee = (member: TeamMember): Employee => ({
+  id: member.id,
+  name: member.name,
+  role: member.role,
+  department: member.department,
+  type: member.isAI ? 'ai' : 'human',
+  avatar: member.avatar,
+  email: member.email,
+  phone: member.phone,
+  status: member.status === 'online' ? 'active' : member.status === 'away' ? 'away' : 'inactive',
+  description: member.bio,
+  responsibilities: member.specializations,
+  languages: member.languages,
+  nationality: member.nationality,
+});
+
+// Convert all team members from config to Employee format
+const TEAM_MEMBERS_FROM_CONFIG: Employee[] = allTeamMembers.map(teamMemberToEmployee);
+
 const TEAM_MEMBERS: Employee[] = [
   // Executive / Admin
   {
@@ -435,19 +481,46 @@ const EmployeesHub = ({ userId, brokers = [] }: EmployeesHubProps) => {
   const [cvGenderFilter, setCvGenderFilter] = useState<string>('all');
 
   const allBrokers = brokers.length > 0 ? brokers : SAMPLE_BROKERS;
-  const allEmployees = [...TEAM_MEMBERS, ...allBrokers];
+  // Use team members from centralized config for accurate counts
+  const allEmployees = useMemo(() => [...TEAM_MEMBERS_FROM_CONFIG], []);
 
   const getFilteredEmployees = () => {
     let filtered = allEmployees;
     
-    // Filter by tab
+    // Filter by tab - map to department names from config
     if (activeTab !== 'all') {
       if (activeTab === 'ai') {
         filtered = allEmployees.filter(e => e.type === 'ai');
       } else if (activeTab === 'human') {
         filtered = allEmployees.filter(e => e.type === 'human');
+      } else if (activeTab === 'executive') {
+        filtered = allEmployees.filter(e => e.department === 'Executive');
+      } else if (activeTab === 'sales') {
+        filtered = allEmployees.filter(e => e.department === 'Sales' || e.department === 'Client Relations');
+      } else if (activeTab === 'hr') {
+        filtered = allEmployees.filter(e => e.department === 'Human Resources');
+      } else if (activeTab === 'marketing') {
+        filtered = allEmployees.filter(e => 
+          e.department === 'Marketing' || 
+          e.department === 'Marketing & Content' || 
+          e.department === 'Design' || 
+          e.department === 'Media'
+        );
+      } else if (activeTab === 'tech') {
+        filtered = allEmployees.filter(e => 
+          e.department === 'Software Engineering' || 
+          e.department === 'Technology' || 
+          e.department === 'IT'
+        );
+      } else if (activeTab === 'admin') {
+        filtered = allEmployees.filter(e => e.department === 'Administration' || e.department === 'Operations');
+      } else if (activeTab === 'finance') {
+        filtered = allEmployees.filter(e => e.department === 'Finance');
+      } else if (activeTab === 'customerHappiness') {
+        filtered = allEmployees.filter(e => e.department === 'Customer Happiness');
       } else {
-        filtered = allEmployees.filter(e => e.department === activeTab);
+        // Fallback: search by department containing tab name
+        filtered = allEmployees.filter(e => e.department.toLowerCase().includes(activeTab.toLowerCase()));
       }
     }
     
@@ -506,16 +579,17 @@ const EmployeesHub = ({ userId, brokers = [] }: EmployeesHubProps) => {
   };
 
   const getDepartmentIcon = (department: string) => {
-    switch (department) {
-      case 'admin': return <Shield className="h-4 w-4" />;
-      case 'hr': return <UserCheck className="h-4 w-4" />;
-      case 'finance': return <DollarSign className="h-4 w-4" />;
-      case 'marketing': return <Palette className="h-4 w-4" />;
-      case 'brokers': return <Briefcase className="h-4 w-4" />;
-      case 'ai': return <Bot className="h-4 w-4" />;
-      case 'executive': return <Crown className="h-4 w-4" />;
-      default: return <Users className="h-4 w-4" />;
-    }
+    const dept = department.toLowerCase();
+    if (dept.includes('admin') || dept.includes('operations')) return <Shield className="h-4 w-4" />;
+    if (dept.includes('human') || dept.includes('hr')) return <UserCheck className="h-4 w-4" />;
+    if (dept.includes('finance')) return <DollarSign className="h-4 w-4" />;
+    if (dept.includes('marketing') || dept.includes('media') || dept.includes('design')) return <Palette className="h-4 w-4" />;
+    if (dept.includes('sales') || dept.includes('client')) return <Briefcase className="h-4 w-4" />;
+    if (dept.includes('executive')) return <Crown className="h-4 w-4" />;
+    if (dept.includes('software') || dept.includes('tech') || dept.includes('it')) return <Code className="h-4 w-4" />;
+    if (dept.includes('customer') || dept.includes('happiness')) return <Heart className="h-4 w-4" />;
+    if (dept.includes('project')) return <Folder className="h-4 w-4" />;
+    return <Users className="h-4 w-4" />;
   };
 
   const getStatusColor = (status: string) => {
@@ -589,15 +663,30 @@ const EmployeesHub = ({ userId, brokers = [] }: EmployeesHubProps) => {
     ));
   };
 
-  const stats = {
+  // Calculate stats from real team config data
+  const stats = useMemo(() => ({
     total: allEmployees.length,
     human: allEmployees.filter(e => e.type === 'human').length,
-    digital: allEmployees.filter(e => e.department === 'admin' && e.id?.includes('digital')).length,
-    brokers: allEmployees.filter(e => e.department === 'brokers').length,
-    hr: allEmployees.filter(e => e.department === 'hr').length,
-    marketing: allEmployees.filter(e => e.department === 'marketing').length,
+    executive: allEmployees.filter(e => e.department === 'Executive').length,
+    sales: allEmployees.filter(e => e.department === 'Sales' || e.department === 'Client Relations').length,
+    hr: allEmployees.filter(e => e.department === 'Human Resources').length,
+    marketing: allEmployees.filter(e => 
+      e.department === 'Marketing' || 
+      e.department === 'Marketing & Content' || 
+      e.department === 'Design' || 
+      e.department === 'Media'
+    ).length,
+    finance: allEmployees.filter(e => e.department === 'Finance').length,
+    tech: allEmployees.filter(e => 
+      e.department === 'Software Engineering' || 
+      e.department === 'Technology' || 
+      e.department === 'IT'
+    ).length,
+    admin: allEmployees.filter(e => e.department === 'Administration' || e.department === 'Operations').length,
+    customerHappiness: allEmployees.filter(e => e.department === 'Customer Happiness').length,
+    projectMgmt: allEmployees.filter(e => e.department === 'Project Management').length,
     pendingCVs: cvEntries.filter(cv => cv.status === 'pending').length,
-  };
+  }), [allEmployees, cvEntries]);
 
   return (
     <div className="space-y-6">
@@ -648,18 +737,18 @@ const EmployeesHub = ({ userId, brokers = [] }: EmployeesHubProps) => {
         >
           <CardContent className="p-4 text-center">
             <Crown className="h-5 w-5 text-purple-500 mx-auto mb-2" />
-            <p className="text-xl font-bold text-crm-text">{allEmployees.filter(e => e.department === 'executive').length}</p>
+            <p className="text-xl font-bold text-crm-text">{stats.executive}</p>
             <p className="text-xs text-crm-text-muted font-medium">Executive</p>
           </CardContent>
         </Card>
         <Card 
-          className={`bg-white border cursor-pointer hover:shadow-md transition-all duration-200 ${activeTab === 'brokers' ? 'border-green-500 ring-2 ring-green-200' : 'border-crm-border'}`}
-          onClick={() => setActiveTab('brokers')}
+          className={`bg-white border cursor-pointer hover:shadow-md transition-all duration-200 ${activeTab === 'sales' ? 'border-green-500 ring-2 ring-green-200' : 'border-crm-border'}`}
+          onClick={() => setActiveTab('sales')}
         >
           <CardContent className="p-4 text-center">
             <Briefcase className="h-5 w-5 text-green-500 mx-auto mb-2" />
-            <p className="text-xl font-bold text-crm-text">{stats.brokers}</p>
-            <p className="text-xs text-crm-text-muted font-medium">Brokers</p>
+            <p className="text-xl font-bold text-crm-text">{stats.sales}</p>
+            <p className="text-xs text-crm-text-muted font-medium">Sales</p>
           </CardContent>
         </Card>
         <Card 
