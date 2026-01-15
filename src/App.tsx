@@ -11,6 +11,7 @@ import { PopupCoordinatorProvider } from "@/contexts/PopupCoordinatorContext";
 import ScrollToTop from "@/components/ScrollToTop";
 import AdminBypass from "@/components/AdminBypass";
 import MainLayoutWrapper from "@/components/MainLayoutWrapper";
+import RouteErrorBoundary from "@/components/RouteErrorBoundary";
 import Index from "./pages/Index";
 import Properties from "./pages/Properties";
 import ProjectDetail from "./pages/ProjectDetail";
@@ -177,9 +178,12 @@ const App = () => (
                 <Route path="/services/law-firm" element={<LawFirm />} />
                 <Route path="/referral-partner" element={<ReferralPartner />} />
                 <Route path="/install" element={<Install />} />
-                <Route path="/crm" element={<CRM />} />
+                <Route path="/crm" element={(
+                  <RouteErrorBoundary routeName="CRM">
+                    <CRM />
+                  </RouteErrorBoundary>
+                )} />
                 <Route path="/crm/leads/:id" element={<CRMLeadDetail />} />
-                <Route path="/crm/automations" element={<Automations />} />
                 <Route path="/crm/tasks" element={<CRMTasks />} />
                 <Route path="/crm/calendar" element={<CRMCalendar />} />
                 <Route path="/crm/notes" element={<CRMNotes />} />
