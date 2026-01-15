@@ -68,17 +68,19 @@ const CEOLeadershipShowcase = () => {
             className="relative rounded-2xl overflow-hidden mb-12 border-2 border-gold/30"
           >
             <div className="relative w-full">
+              {/* Mobile: use object-contain to show full image with flags visible */}
+              {/* Desktop: use object-cover for better visual */}
               <img
                 src={ceoLandscapeFlags}
                 alt="Jane Abou Jaoude - Founder & CEO at JBJ Global Real Estate with Lebanese and UAE flags"
-                className="w-full h-auto object-cover"
+                className="w-full h-auto min-h-[200px] sm:min-h-[300px] md:min-h-[400px] object-contain md:object-cover bg-zinc-900"
               />
               {/* Overlay with name & title at bottom center only - no duplicate labels */}
-              <div className="absolute bottom-0 left-0 right-0 bg-gradient-to-t from-black/90 via-black/50 to-transparent p-6 md:p-10">
+              <div className="absolute bottom-0 left-0 right-0 bg-gradient-to-t from-black/90 via-black/50 to-transparent p-4 sm:p-6 md:p-10">
                 <div className="text-center">
-                  <h3 className="text-white text-2xl md:text-5xl font-bold mb-2">Jane Abou Jaoude</h3>
+                  <h3 className="text-white text-xl sm:text-2xl md:text-5xl font-bold mb-1 sm:mb-2">Jane Abou Jaoude</h3>
                   <p
-                    className="text-xl md:text-3xl font-semibold"
+                    className="text-lg sm:text-xl md:text-3xl font-semibold"
                     style={{
                       background: "linear-gradient(135deg, #CBA64B 0%, #E8D5A3 50%, #CBA64B 100%)",
                       WebkitBackgroundClip: "text",
