@@ -15,7 +15,7 @@ import hudaMarzooqLawyer from '@/assets/team/huda-marzooq-lawyer-office.jpg';
 import sarahMitchellListingAdmin from '@/assets/team/sarah-mitchell-listing-admin.png';
 
 // Import team portraits - Sales Team
-import royDaviHeadOfSale from '@/assets/team/roy-davi-head-of-sale-gradient.png';
+import royDaviHeadOfSale from '@/assets/team/roy-davi-original.jpg';
 import williamHarrisonSales from '@/assets/team/william-harrison-sales.png';
 
 // Import diverse international team members (natural photos without AI filters)

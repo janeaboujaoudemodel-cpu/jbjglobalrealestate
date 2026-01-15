@@ -30,6 +30,7 @@ import ceoPanelSpeaking from "@/assets/ceo/ceo-panel-speaking.jpg";
 import ceoPanelDiscussion from "@/assets/ceo/ceo-panel-discussion.jpg";
 import ceoMediaInterview from "@/assets/ceo/ceo-media-interview.jpg";
 import ceoAwardCeremony from "@/assets/ceo/ceo-award-ceremony.jpg";
+import ceoBackdropFlags from "@/assets/ceo/ceo-backdrop-flags-v2.jpg";
 
 // Animation variants
 const fadeInUp = {

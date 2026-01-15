@@ -1,8 +1,7 @@
 import { motion } from "framer-motion";
 import { Badge } from "@/components/ui/badge";
 import { Sparkles, Users, Building2, Globe } from "lucide-react";
-import ceoBackdropFlags from "@/assets/ceo/ceo-backdrop-flags.jpg";
-import janeFounderOriginal from "@/assets/ceo/jane-founder-original-upload.jpg";
+import ceoBackdropFlags from "@/assets/ceo/ceo-backdrop-flags-v2.jpg";
 
 const fadeInUp = {
   hidden: { opacity: 0, y: 30 },
@@ -58,44 +57,35 @@ const CEOLeadershipShowcase = () => {
             </p>
           </motion.div>
 
-          {/* CEO Showcase with Flags Backdrop */}
+          {/* CEO Showcase with Flags Backdrop - Jane standing in center */}
           <motion.div
             variants={fadeInUp}
             className="relative rounded-2xl overflow-hidden mb-12"
           >
-            {/* Backdrop with Lebanese and UAE flags */}
-            <div className="relative h-[400px] md:h-[500px]">
+            {/* Full backdrop with Jane standing in center */}
+            <div className="relative h-[400px] md:h-[500px] lg:h-[550px]">
               <img
                 src={ceoBackdropFlags}
-                alt="JBJ Global Real Estate Executive Office"
-                className="w-full h-full object-cover"
+                alt="Jane Abou Jaoude - Founder & CEO at JBJ Global Real Estate Executive Office"
+                className="w-full h-full object-cover object-center"
               />
               {/* Gradient overlay for text readability */}
-              <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/20 to-transparent" />
+              <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-transparent to-transparent" />
               
-              {/* CEO Photo Overlay */}
-              <div className="absolute bottom-0 left-1/2 -translate-x-1/2 flex flex-col items-center">
-                <div className="w-32 h-32 md:w-40 md:h-40 rounded-full border-4 border-gold/60 overflow-hidden shadow-2xl shadow-gold/20 mb-4">
-                  <img
-                    src={janeFounderOriginal}
-                    alt="Jane Abou Jaoude - Founder & CEO"
-                    className="w-full h-full object-cover object-top"
-                  />
-                </div>
-                <div className="text-center pb-6">
-                  <h3 className="text-white text-xl md:text-2xl font-bold">Jane Abou Jaoude</h3>
-                  <p
-                    className="text-sm md:text-base font-medium"
-                    style={{
-                      background: "linear-gradient(135deg, #CBA64B 0%, #E8D5A3 50%, #CBA64B 100%)",
-                      WebkitBackgroundClip: "text",
-                      WebkitTextFillColor: "transparent",
-                    }}
-                  >
-                    Founder & CEO
-                  </p>
-                  <p className="text-zinc-400 text-sm mt-1">12 Years Experience • Lebanese</p>
-                </div>
+              {/* Name and title overlay at bottom */}
+              <div className="absolute bottom-0 left-0 right-0 text-center pb-8">
+                <h3 className="text-white text-2xl md:text-3xl font-bold mb-2">Jane Abou Jaoude</h3>
+                <p
+                  className="text-lg md:text-xl font-semibold mb-2"
+                  style={{
+                    background: "linear-gradient(135deg, #CBA64B 0%, #E8D5A3 50%, #CBA64B 100%)",
+                    WebkitBackgroundClip: "text",
+                    WebkitTextFillColor: "transparent",
+                  }}
+                >
+                  Founder & CEO
+                </p>
+                <p className="text-zinc-400 text-sm">12 Years Experience • Lebanese</p>
               </div>
             </div>
           </motion.div>
