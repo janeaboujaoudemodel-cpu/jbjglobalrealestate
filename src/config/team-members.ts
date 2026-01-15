@@ -3,14 +3,14 @@
 
 // Import team portraits - Executive Leadership
 import janeAbouJaoudeCeo from '@/assets/ceo/jane-founder-original-upload.jpg';
-import davidThorntonCeo from '@/assets/team/david-thornton-md-natural.png';
+import davidThorntonCeo from '@/assets/team/david-thornton-md-v4.png';
 import richardPembertonCoo from '@/assets/team/richard-pemberton-coo.png';
 import oliviaExecutiveAssistant from '@/assets/team/olivia-executive-assistant.png';
 import amandaClarkeExecutiveAssistant from '@/assets/team/amanda-clarke-executive-assistant.png';
 // NEW Executive Team additions (to reach 8)
 import natashaDaoudExecutive from '@/assets/team/natasha-daoud-executive.png';
 import anthonyPembertonStrategy from '@/assets/team/anthony-pemberton-strategy.png';
-import fatimaAlMazroueiGovt from '@/assets/team/fatima-al-mazrouei-govt.png';
+import laylaMansourPartnerships from '@/assets/team/layla-mansour-partnerships.png';
 
 // Import team portraits - Legal Team
 import hudaMarzooqLawyer from '@/assets/team/huda-marzooq-lawyer-office.jpg';
@@ -226,6 +226,14 @@ import luciaFernandezClient from '@/assets/team/lucia-fernandez-client.png';
 import andrewMackenzieSales from '@/assets/team/andrew-mackenzie-sales.png';
 import terezaSvobodovaHr from '@/assets/team/tereza-svobodova-hr.png';
 
+// NEW Sales Team Gap Fillers
+import marcusWebbSales from '@/assets/team/marcus-webb-sales.png';
+import lucaRomanoSales from '@/assets/team/luca-romano-sales.png';
+
+// NEW Content Team Gap Fillers
+import nicoleVanderbergContent from '@/assets/team/nicole-vanderberg-content.png';
+import emmaRichardsonContent from '@/assets/team/emma-richardson-content.png';
+
 export interface TeamMember {
   id: string;
   name: string;
@@ -336,18 +344,18 @@ export const executiveTeam: TeamMember[] = sortByHierarchy([
     canConductInterviews: true,
   },
   {
-    id: 'fatima-al-mazrouei',
-    name: 'Fatima Al Mazrouei',
+    id: 'layla-mansour',
+    name: 'Layla Mansour',
     role: 'Strategic Partnerships Director',
     department: 'Executive',
-    avatar: fatimaAlMazroueiGovt,
+    avatar: laylaMansourPartnerships,
     isAI: true,
     bio: 'Expert in strategic partnerships, stakeholder relations, and building connections with key industry partners across the MENA region.',
-    languages: ['English', 'Arabic'],
-    nationality: 'Emirati',
+    languages: ['English', 'Arabic', 'French'],
+    nationality: 'Jordanian',
     yearsExperience: 14,
     hierarchyLevel: 3,
-    reportsTo: 'jane-abou-jaoude',
+    reportsTo: 'david-thornton',
     status: 'online',
     canConductInterviews: true,
   },
@@ -687,10 +695,10 @@ export const salesTeam: TeamMember[] = sortByHierarchy([
     department: 'Sales',
     avatar: abdullahAlRashidSales,
     isAI: true,
-    bio: 'Distinguished sales leader specializing in Saudi Arabian and GCC high-net-worth investor relations.',
+    bio: 'Distinguished sales leader specializing in Saudi and GCC high-net-worth investor relations.',
     specializations: ['Saudi Clients', 'GCC Markets', 'Ultra-Luxury Properties'],
     languages: ['English', 'Arabic'],
-    nationality: 'Saudi Arabian',
+    nationality: 'Saudi Arabia',
     yearsExperience: 11,
     hierarchyLevel: 4,
     reportsTo: 'roy-davi',
@@ -788,6 +796,71 @@ export const salesTeam: TeamMember[] = sortByHierarchy([
     languages: ['English', 'Spanish'],
     nationality: 'Mexican',
     yearsExperience: 5,
+    hierarchyLevel: 5,
+    reportsTo: 'emma-hartley',
+    status: 'online',
+  },
+  // NEW Sales Team Members to fill grid gaps (4 more)
+  {
+    id: 'marcus-webb',
+    name: 'Marcus Webb',
+    role: 'Sales Executive',
+    department: 'Sales',
+    avatar: marcusWebbSales,
+    isAI: true,
+    bio: 'Dynamic sales executive specializing in Australian and Oceania investor networks.',
+    specializations: ['Australian Clients', 'Oceania Markets', 'Investment Properties'],
+    languages: ['English'],
+    nationality: 'Australian',
+    yearsExperience: 6,
+    hierarchyLevel: 5,
+    reportsTo: 'michael-anderson',
+    status: 'online',
+  },
+  {
+    id: 'luca-romano',
+    name: 'Luca Romano',
+    role: 'Sales Executive',
+    department: 'Sales',
+    avatar: lucaRomanoSales,
+    isAI: true,
+    bio: 'Passionate sales executive with expertise in Italian and European investor relations.',
+    specializations: ['Italian Clients', 'European Markets', 'Luxury Properties'],
+    languages: ['English', 'Italian', 'French'],
+    nationality: 'Italian',
+    yearsExperience: 5,
+    hierarchyLevel: 5,
+    reportsTo: 'emma-hartley',
+    status: 'online',
+  },
+  {
+    id: 'nikolaos-konstantinou',
+    name: 'Nikolaos Konstantinou',
+    role: 'Property Consultant',
+    department: 'Sales',
+    avatar: nikolaosKonstantinouSales,
+    isAI: true,
+    bio: 'Dedicated property consultant specializing in Greek and Mediterranean investor networks.',
+    specializations: ['Greek Clients', 'Mediterranean Markets', 'Resort Properties'],
+    languages: ['English', 'Greek'],
+    nationality: 'Greek',
+    yearsExperience: 7,
+    hierarchyLevel: 5,
+    reportsTo: 'michael-anderson',
+    status: 'online',
+  },
+  {
+    id: 'james-murphy',
+    name: 'James Murphy',
+    role: 'Sales Associate',
+    department: 'Sales',
+    avatar: jamesMurphySales,
+    isAI: true,
+    bio: 'Enthusiastic sales associate with expertise in Irish and UK investor relations.',
+    specializations: ['Irish Clients', 'UK Markets', 'Investment Properties'],
+    languages: ['English', 'Irish'],
+    nationality: 'Irish',
+    yearsExperience: 4,
     hierarchyLevel: 5,
     reportsTo: 'emma-hartley',
     status: 'online',
@@ -2132,6 +2205,39 @@ export const contentTeam: TeamMember[] = sortByHierarchy([
     reportsTo: 'hannah-scott',
     status: 'online',
   },
+  // NEW Content Team Members to fill grid gaps (2 more next to Andrew Taylor)
+  {
+    id: 'nicole-vanderberg',
+    name: 'Nicole Van Der Berg',
+    role: 'Content Creator',
+    department: 'Marketing & Content',
+    avatar: nicoleVanderbergContent,
+    isAI: true,
+    bio: 'Creative content creator specializing in video scripts and social media storytelling.',
+    specializations: ['Video Content', 'Social Media', 'Brand Storytelling'],
+    languages: ['English', 'Afrikaans'],
+    nationality: 'South African',
+    yearsExperience: 4,
+    hierarchyLevel: 5,
+    reportsTo: 'hannah-scott',
+    status: 'online',
+  },
+  {
+    id: 'emma-richardson',
+    name: 'Emma Richardson',
+    role: 'Content Strategist',
+    department: 'Marketing & Content',
+    avatar: emmaRichardsonContent,
+    isAI: true,
+    bio: 'Strategic content planner developing editorial calendars and content frameworks.',
+    specializations: ['Content Planning', 'Editorial Strategy', 'SEO Content'],
+    languages: ['English', 'French'],
+    nationality: 'Canadian',
+    yearsExperience: 5,
+    hierarchyLevel: 5,
+    reportsTo: 'hannah-scott',
+    status: 'online',
+  },
 ]);
 
 // ===== Customer Happiness Team (sorted by hierarchy) - 4 members =====
@@ -2213,13 +2319,11 @@ export const legalTeam: TeamMember[] = sortByHierarchy([
     department: 'Legal',
     avatar: hudaMarzooqLawyer,
     isAI: false,
-    bio: 'Experienced Emirati legal counsel specializing in UAE property law, contracts, and corporate governance. Provides comprehensive legal support for all real estate transactions and company matters.',
+    bio: 'Personal legal counsel for the Founder and the company. Experienced Emirati legal counsel specializing in UAE property law, contracts, and corporate governance.',
     specializations: ['UAE Property Law', 'Contract Law', 'Corporate Governance', 'Real Estate Transactions'],
     languages: ['English', 'Arabic'],
     nationality: 'Emirati',
-    yearsExperience: 15,
-    hierarchyLevel: 3,
-    reportsTo: 'jane-abou-jaoude',
+    hierarchyLevel: 2,
     directReports: ['william-thornton-legal', 'nadia-hassan'],
     status: 'online',
     canConductInterviews: false,

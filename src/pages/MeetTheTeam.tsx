@@ -118,9 +118,20 @@ const TeamMemberCard = ({ member, onReadMore }: TeamMemberCardProps) => {
                 </p>
               )}
 
-              {/* Languages - Show 4, only +X if more than 4 */}
+              {/* Read More Button - Moved UP before languages */}
+              <div className="pt-2 border-t border-zinc-800/50 mb-2">
+                <button
+                  type="button"
+                  onClick={() => onReadMore(member)}
+                  className="text-gold hover:text-gold-light text-xs font-medium transition-colors"
+                >
+                  Read more →
+                </button>
+              </div>
+
+              {/* Languages - Moved DOWN after read more, Show 4, only +X if more than 4 */}
               {displayLanguages.length > 0 && (
-                <div className="flex flex-wrap gap-1 mb-2">
+                <div className="flex flex-wrap gap-1">
                   {displayLanguages.map((lang) => (
                     <Badge
                       key={lang}
@@ -140,17 +151,6 @@ const TeamMemberCard = ({ member, onReadMore }: TeamMemberCardProps) => {
                   )}
                 </div>
               )}
-            </div>
-
-            {/* Read More Button - Always visible */}
-            <div className="pt-2 border-t border-zinc-800/50">
-              <button
-                type="button"
-                onClick={() => onReadMore(member)}
-                className="text-gold hover:text-gold-light text-xs font-medium transition-colors"
-              >
-                Read more →
-              </button>
             </div>
           </div>
         </CardContent>
