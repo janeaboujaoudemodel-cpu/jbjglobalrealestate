@@ -6,8 +6,7 @@ import {
   DialogTitle,
 } from "@/components/ui/dialog";
 import { Badge } from "@/components/ui/badge";
-import { Button } from "@/components/ui/button";
-import { Globe, MessageSquare } from "lucide-react";
+import { Globe, Clock, MapPin, Briefcase } from "lucide-react";
 
 interface TeamMemberDetailDialogProps {
   member: TeamMember | null;
@@ -20,7 +19,6 @@ const TeamMemberDetailDialog = ({
   member,
   isOpen,
   onClose,
-  onContact,
 }: TeamMemberDetailDialogProps) => {
   if (!member) return null;
 
@@ -58,14 +56,23 @@ const TeamMemberDetailDialog = ({
               >
                 {member.role}
               </p>
-              <div className="flex flex-wrap items-center gap-x-3 gap-y-1 mt-1">
-                <p className="text-zinc-500 text-sm">{member.department}</p>
-                {typeof member.yearsExperience === "number" && (
-                  <p className="text-zinc-500 text-sm">
-                    {member.yearsExperience} years experience
-                  </p>
-                )}
-              </div>
+              <p className="text-zinc-500 text-sm mt-1">{member.department}</p>
+            </div>
+
+            {/* Experience and Nationality */}
+            <div className="flex flex-wrap items-center gap-4">
+              {typeof member.yearsExperience === "number" && (
+                <div className="flex items-center gap-1.5 text-zinc-400 text-sm">
+                  <Clock className="w-4 h-4" />
+                  <span>{member.yearsExperience} years experience</span>
+                </div>
+              )}
+              {member.nationality && (
+                <div className="flex items-center gap-1.5 text-zinc-400 text-sm">
+                  <MapPin className="w-4 h-4" />
+                  <span>{member.nationality}</span>
+                </div>
+              )}
             </div>
 
             {member.bio && (
@@ -74,7 +81,8 @@ const TeamMemberDetailDialog = ({
 
             {member.specializations && member.specializations.length > 0 && (
               <div>
-                <h4 className="text-sm font-medium text-zinc-400 mb-2">
+                <h4 className="text-sm font-medium text-zinc-400 mb-2 flex items-center gap-1.5">
+                  <Briefcase className="w-3.5 h-3.5" />
                   Specializations
                 </h4>
                 <div className="flex flex-wrap gap-2">
@@ -109,26 +117,6 @@ const TeamMemberDetailDialog = ({
                 </div>
               </div>
             )}
-
-            {member.nationality && (
-              <p className="text-sm text-zinc-400">
-                Nationality: <span className="text-zinc-300">{member.nationality}</span>
-              </p>
-            )}
-
-            {/* Action */}
-            <div className="pt-4 border-t border-zinc-800">
-              <Button
-                onClick={() => {
-                  onClose();
-                  onContact(member);
-                }}
-                className="w-full bg-gold hover:bg-gold-dark text-black font-semibold"
-              >
-                <MessageSquare className="w-4 h-4 mr-2" />
-                Contact Us
-              </Button>
-            </div>
           </div>
         </div>
       </DialogContent>
