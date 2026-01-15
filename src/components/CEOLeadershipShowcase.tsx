@@ -1,6 +1,6 @@
 import { motion } from "framer-motion";
 import { Badge } from "@/components/ui/badge";
-import { Award, Mic, Users, Trophy, Sparkles, Star } from "lucide-react";
+import { Award, Mic, Users, Trophy, Sparkles, Star, Globe } from "lucide-react";
 
 // Import CEO event photos
 import ceoAwardCeremony from "@/assets/ceo/ceo-award-ceremony.jpg";
@@ -9,6 +9,9 @@ import ceoPanelDiscussion from "@/assets/ceo/ceo-panel-discussion.jpg";
 import ceoAwardTrophy from "@/assets/ceo/ceo-award-trophy.jpg";
 import ceoLeadershipAward from "@/assets/ceo/ceo-leadership-award.jpg";
 import ceoMediaInterview from "@/assets/ceo/ceo-media-interview.jpg";
+import ceoGcaAward2025 from "@/assets/ceo/ceo-gca-award-2025.jpg";
+import ceoLuxuryLifestyle from "@/assets/ceo/ceo-luxury-lifestyle.jpg";
+import ceoBusinessPortrait from "@/assets/ceo/ceo-business-portrait.jpg";
 
 const fadeInUp = {
   hidden: { opacity: 0, y: 30 },
@@ -29,14 +32,18 @@ const achievements = [
   { icon: Award, label: "GCA Leadership Award 2025", type: "award" },
   { icon: Users, label: "Industry Panel Moderator", type: "speaking" },
   { icon: Star, label: "Woman of the Universe UAE - Guest of Honor", type: "honor" },
+  { icon: Globe, label: "Global Innovation Leader", type: "recognition" },
 ];
 
 const galleryImages = [
+  { src: ceoGcaAward2025, caption: "GCA Leadership Award 2025", category: "Awards" },
+  { src: ceoBusinessPortrait, caption: "Business Leadership Summit", category: "Speaking" },
   { src: ceoLeadershipAward, caption: "Leadership Excellence Award 2025", category: "Awards" },
   { src: ceoAwardTrophy, caption: "IIA 11th Edition Award Ceremony", category: "Awards" },
   { src: ceoPanelSpeaking, caption: "Industry Panel Discussion", category: "Speaking" },
   { src: ceoPanelDiscussion, caption: "Global Summit Panel", category: "Speaking" },
   { src: ceoMediaInterview, caption: "Media Interview - NewsTime HDTV", category: "Media" },
+  { src: ceoLuxuryLifestyle, caption: "Luxury Real Estate Visionary", category: "Lifestyle" },
   { src: ceoAwardCeremony, caption: "International Business Awards", category: "Awards" },
 ];
 
