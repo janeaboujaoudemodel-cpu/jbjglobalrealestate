@@ -115,8 +115,8 @@ const Founder = () => {
   // Career Timeline
   const careerTimeline = [
     {
-      year: "2014",
-      title: "Jane's Beauty — Early Business Chapter",
+      year: "2015",
+      title: "Jane's Beauty — First Business (Age 16)",
       description: "Beauty services and early product selling via importing and shipping.",
       location: "Lebanon"
     },
@@ -416,7 +416,7 @@ const Founder = () => {
                   Jane Abou Jaoude was born on August 25, 1998, in Lebanon. Fluent in French and Arabic from childhood, she later taught herself English and Spanish—developing a global perspective from an early age.
                 </p>
                 <p className="text-lg mb-4 text-zinc-400">
-                  At 16, Jane launched Jane's Beauty in 2014, offering beauty services while also selling products via importing and shipping from China. Active on social media since 2012, she built a following that now exceeds 1M+ across platforms.
+                  At 16, Jane launched Jane's Beauty in 2015, offering beauty services while also selling products via importing and shipping from China. Active on social media since 2012, she built a following that now exceeds 1M+ across platforms.
                 </p>
                 <p className="text-lg text-zinc-400">
                   With 12+ years of experience in sales, customer experience, and business development, these early ventures taught her the fundamentals of service excellence and client relationships.
@@ -810,20 +810,20 @@ const Founder = () => {
                 </div>
               </motion.div>
 
-              {/* Photo 6 - Lifestyle Portrait */}
+              {/* Photo 6 - Executive Portrait */}
               <motion.div 
                 className="group relative aspect-[4/5] rounded-2xl overflow-hidden border border-zinc-800 hover:border-gold/40 transition-all duration-500"
                 variants={scaleIn}
               >
                 <SafeImage 
-                  src={founderYacht} 
+                  src={ceoBusinessPortrait} 
                   fallbackSrc={founderHero}
-                  alt="Jane Abou Jaoude - Lifestyle" 
+                  alt="Jane Abou Jaoude - Executive" 
                   className="w-full h-full object-cover object-center group-hover:scale-105 transition-transform duration-700"
                 />
                 <div className="absolute inset-0 bg-gradient-to-t from-black via-black/20 to-transparent opacity-80 group-hover:opacity-90 transition-opacity" />
                 <div className="absolute bottom-0 left-0 right-0 p-6">
-                  <span className="text-gold text-xs uppercase tracking-[0.2em] mb-2 block">2014 → 2025</span>
+                  <span className="text-gold text-xs uppercase tracking-[0.2em] mb-2 block">2015 → 2025</span>
                   <h4 className="text-white text-lg font-semibold mb-1">The Journey Complete</h4>
                   <p className="text-zinc-400 text-sm">From Jane's Beauty to JBJ Global Real Estate</p>
                 </div>
@@ -837,7 +837,7 @@ const Founder = () => {
             >
               <div className="flex items-center justify-center gap-8 flex-wrap">
                 <div className="text-center">
-                  <p className="text-gold text-3xl font-bold mb-1">2014</p>
+                  <p className="text-gold text-3xl font-bold mb-1">2015</p>
                   <p className="text-zinc-500 text-sm">First Business</p>
                 </div>
                 <div className="hidden md:block w-16 h-px bg-gradient-to-r from-gold/50 to-gold/20" />
@@ -1032,27 +1032,69 @@ const Founder = () => {
             variants={staggerContainer}
           >
             <div className="grid grid-cols-2 md:grid-cols-4 gap-6 md:gap-8">
-              {[
-                { label: "12+ Years Experience", icon: Calendar },
-                { label: "1M+ Followers (All Platforms)", icon: Users },
-                { label: "2,800+ Brokers Trained", icon: Award },
-                { label: "495+ Team Managed (Operations)", icon: Building2 },
-              ].map((stat, index) => (
-                <motion.div 
-                  key={stat.label}
-                  className="bg-gradient-to-br from-zinc-900 via-zinc-900/95 to-black border border-zinc-800 rounded-3xl p-8 md:p-10 hover:border-gold/40 transition-all duration-500 group relative overflow-hidden text-center"
-                  variants={fadeInUp}
-                >
-                  {/* Glow effect on hover */}
-                  <div className="absolute inset-0 bg-gradient-to-br from-gold/0 to-gold/0 group-hover:from-gold/5 group-hover:to-transparent transition-all duration-500 rounded-3xl" />
-                  <div className="relative z-10">
-                    <div className="w-14 h-14 mx-auto mb-4 bg-gradient-to-br from-gold/20 to-gold/5 rounded-2xl flex items-center justify-center border border-gold/20 group-hover:border-gold/50 group-hover:scale-110 transition-all duration-500 shadow-lg shadow-gold/5 animate-glow-pulse">
-                      <stat.icon className="w-6 h-6 text-gold" />
-                    </div>
-                    <p className="text-white text-sm md:text-base font-medium">{stat.label}</p>
+              <motion.div 
+                className="bg-gradient-to-br from-zinc-900 via-zinc-900/95 to-black border border-zinc-800 rounded-3xl p-8 md:p-10 hover:border-gold/40 transition-all duration-500 group relative overflow-hidden text-center"
+                variants={fadeInUp}
+              >
+                <div className="absolute inset-0 bg-gradient-to-br from-gold/0 to-gold/0 group-hover:from-gold/5 group-hover:to-transparent transition-all duration-500 rounded-3xl" />
+                <div className="relative z-10">
+                  <div className="w-14 h-14 mx-auto mb-4 bg-gradient-to-br from-gold/20 to-gold/5 rounded-2xl flex items-center justify-center border border-gold/20 group-hover:border-gold/50 group-hover:scale-110 transition-all duration-500 shadow-lg shadow-gold/5">
+                    <Calendar className="w-6 h-6 text-gold" />
                   </div>
-                </motion.div>
-              ))}
+                  <p className="text-gold text-3xl md:text-4xl font-bold mb-1">
+                    <CounterStat end={12} suffix="+" prefix="" label="" />
+                  </p>
+                  <p className="text-white text-sm md:text-base font-medium">Years Experience</p>
+                </div>
+              </motion.div>
+              
+              <motion.div 
+                className="bg-gradient-to-br from-zinc-900 via-zinc-900/95 to-black border border-zinc-800 rounded-3xl p-8 md:p-10 hover:border-gold/40 transition-all duration-500 group relative overflow-hidden text-center"
+                variants={fadeInUp}
+              >
+                <div className="absolute inset-0 bg-gradient-to-br from-gold/0 to-gold/0 group-hover:from-gold/5 group-hover:to-transparent transition-all duration-500 rounded-3xl" />
+                <div className="relative z-10">
+                  <div className="w-14 h-14 mx-auto mb-4 bg-gradient-to-br from-gold/20 to-gold/5 rounded-2xl flex items-center justify-center border border-gold/20 group-hover:border-gold/50 group-hover:scale-110 transition-all duration-500 shadow-lg shadow-gold/5">
+                    <Users className="w-6 h-6 text-gold" />
+                  </div>
+                  <p className="text-gold text-3xl md:text-4xl font-bold mb-1">
+                    <CounterStat end={1} suffix="M+" prefix="" label="" />
+                  </p>
+                  <p className="text-white text-sm md:text-base font-medium">Followers</p>
+                </div>
+              </motion.div>
+              
+              <motion.div 
+                className="bg-gradient-to-br from-zinc-900 via-zinc-900/95 to-black border border-zinc-800 rounded-3xl p-8 md:p-10 hover:border-gold/40 transition-all duration-500 group relative overflow-hidden text-center"
+                variants={fadeInUp}
+              >
+                <div className="absolute inset-0 bg-gradient-to-br from-gold/0 to-gold/0 group-hover:from-gold/5 group-hover:to-transparent transition-all duration-500 rounded-3xl" />
+                <div className="relative z-10">
+                  <div className="w-14 h-14 mx-auto mb-4 bg-gradient-to-br from-gold/20 to-gold/5 rounded-2xl flex items-center justify-center border border-gold/20 group-hover:border-gold/50 group-hover:scale-110 transition-all duration-500 shadow-lg shadow-gold/5">
+                    <Award className="w-6 h-6 text-gold" />
+                  </div>
+                  <p className="text-gold text-3xl md:text-4xl font-bold mb-1">
+                    <CounterStat end={2800} suffix="+" prefix="" label="" />
+                  </p>
+                  <p className="text-white text-sm md:text-base font-medium">Brokers Trained</p>
+                </div>
+              </motion.div>
+              
+              <motion.div 
+                className="bg-gradient-to-br from-zinc-900 via-zinc-900/95 to-black border border-zinc-800 rounded-3xl p-8 md:p-10 hover:border-gold/40 transition-all duration-500 group relative overflow-hidden text-center"
+                variants={fadeInUp}
+              >
+                <div className="absolute inset-0 bg-gradient-to-br from-gold/0 to-gold/0 group-hover:from-gold/5 group-hover:to-transparent transition-all duration-500 rounded-3xl" />
+                <div className="relative z-10">
+                  <div className="w-14 h-14 mx-auto mb-4 bg-gradient-to-br from-gold/20 to-gold/5 rounded-2xl flex items-center justify-center border border-gold/20 group-hover:border-gold/50 group-hover:scale-110 transition-all duration-500 shadow-lg shadow-gold/5">
+                    <Building2 className="w-6 h-6 text-gold" />
+                  </div>
+                  <p className="text-gold text-3xl md:text-4xl font-bold mb-1">
+                    <CounterStat end={495} suffix="+" prefix="" label="" />
+                  </p>
+                  <p className="text-white text-sm md:text-base font-medium">Team Managed</p>
+                </div>
+              </motion.div>
             </div>
           </motion.div>
         </div>
