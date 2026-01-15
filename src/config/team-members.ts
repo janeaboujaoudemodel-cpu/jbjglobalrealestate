@@ -2,7 +2,7 @@
 // Professional team member data with AI-generated unique portraits
 
 // Import team portraits - Executive Leadership
-import janeAbouJaoudeCeo from '@/assets/ceo/jane-ceo-executive-office-v2.jpg';
+import janeAbouJaoudeCeo from '@/assets/ceo/jane-ceo-executive-office-v3.jpg';
 import davidThorntonCeo from '@/assets/team/david-thornton-md-real.png';
 import richardPembertonCoo from '@/assets/team/richard-pemberton-coo.png';
 import oliviaExecutiveAssistant from '@/assets/team/olivia-executive-assistant.png';
@@ -17,6 +17,16 @@ import sarahMitchellListingAdmin from '@/assets/team/sarah-mitchell-listing-admi
 // Import team portraits - Sales Team
 import royDaviHeadOfSale from '@/assets/team/roy-davi-head-of-sale-real.jpg';
 import williamHarrisonSales from '@/assets/team/william-harrison-sales.png';
+
+// Import diverse international team members
+import priyaSharmaSales from '@/assets/team/priya-sharma-sales.png';
+import ahmedHassanSales from '@/assets/team/ahmed-hassan-sales.png';
+import liWeiChenInvestment from '@/assets/team/li-wei-chen-investment.png';
+import dmitriVolkovConsultant from '@/assets/team/dmitri-volkov-consultant.png';
+import adaezeOkonkwoSales from '@/assets/team/adaeze-okonkwo-sales.png';
+import carlosRodriguezSales from '@/assets/team/carlos-rodriguez-sales.png';
+import yukiTanakaConsultant from '@/assets/team/yuki-tanaka-consultant.png';
+import faisalKhanSales from '@/assets/team/faisal-khan-sales.png';
 
 // Import team portraits - Software Engineering Team
 import jamesWoodwardTechLead from '@/assets/team/james-woodward-tech-lead.png';
@@ -280,6 +290,134 @@ export const salesTeam: TeamMember[] = sortByHierarchy([
     nationality: 'British',
     hierarchyLevel: 5,
     reportsTo: 'roy-davi',
+    status: 'online',
+  },
+  {
+    id: 'priya-sharma',
+    name: 'Priya Sharma',
+    role: 'Senior Sales Executive',
+    department: 'Sales',
+    avatar: priyaSharmaSales,
+    isAI: true,
+    email: 'priya.sharma@JBJ.ae',
+    bio: 'Dynamic sales professional with expertise in luxury properties and exceptional client relationship management.',
+    specializations: ['Luxury Apartments', 'Investment Properties', 'Client Relations'],
+    languages: ['English', 'Hindi', 'Punjabi'],
+    nationality: 'Indian',
+    hierarchyLevel: 5,
+    reportsTo: 'emma-hartley',
+    status: 'online',
+  },
+  {
+    id: 'ahmed-hassan',
+    name: 'Ahmed Hassan',
+    role: 'Sales Executive',
+    department: 'Sales',
+    avatar: ahmedHassanSales,
+    isAI: true,
+    email: 'ahmed.hassan@JBJ.ae',
+    bio: 'Experienced sales executive specializing in off-plan properties and international investor relations.',
+    specializations: ['Off-Plan Sales', 'International Investors', 'Arabic Clients'],
+    languages: ['English', 'Arabic'],
+    nationality: 'Egyptian',
+    hierarchyLevel: 5,
+    reportsTo: 'emma-hartley',
+    status: 'online',
+  },
+  {
+    id: 'li-wei-chen',
+    name: 'Li Wei Chen',
+    role: 'Investment Consultant',
+    department: 'Sales',
+    avatar: liWeiChenInvestment,
+    isAI: true,
+    email: 'liwei.chen@JBJ.ae',
+    bio: 'Expert investment consultant focusing on Chinese and Asian investor markets with deep market knowledge.',
+    specializations: ['Investment Analysis', 'Asian Markets', 'Portfolio Advisory'],
+    languages: ['English', 'Mandarin', 'Cantonese'],
+    nationality: 'Chinese',
+    hierarchyLevel: 5,
+    reportsTo: 'michael-anderson',
+    status: 'online',
+  },
+  {
+    id: 'dmitri-volkov',
+    name: 'Dmitri Volkov',
+    role: 'Senior Property Consultant',
+    department: 'Sales',
+    avatar: dmitriVolkovConsultant,
+    isAI: true,
+    email: 'dmitri.volkov@JBJ.ae',
+    bio: 'Seasoned property consultant with expertise in Russian and CIS investor relations and luxury developments.',
+    specializations: ['Luxury Properties', 'Russian Clients', 'High-Value Transactions'],
+    languages: ['English', 'Russian', 'Ukrainian'],
+    nationality: 'Russian',
+    hierarchyLevel: 5,
+    reportsTo: 'michael-anderson',
+    status: 'online',
+  },
+  {
+    id: 'adaeze-okonkwo',
+    name: 'Adaeze Okonkwo',
+    role: 'Sales Manager',
+    department: 'Sales',
+    avatar: adaezeOkonkwoSales,
+    isAI: true,
+    email: 'adaeze.okonkwo@JBJ.ae',
+    bio: 'Results-oriented sales manager with strong focus on African investor networks and premium property sales.',
+    specializations: ['Team Leadership', 'African Markets', 'Premium Properties'],
+    languages: ['English', 'Igbo', 'French'],
+    nationality: 'Nigerian',
+    hierarchyLevel: 4,
+    reportsTo: 'roy-davi',
+    status: 'online',
+  },
+  {
+    id: 'carlos-rodriguez',
+    name: 'Carlos Rodriguez',
+    role: 'Senior Sales Executive',
+    department: 'Sales',
+    avatar: carlosRodriguezSales,
+    isAI: true,
+    email: 'carlos.rodriguez@JBJ.ae',
+    bio: 'Expert in luxury villa sales with strong connections to European and Latin American clientele.',
+    specializations: ['Luxury Villas', 'European Clients', 'Latin American Markets'],
+    languages: ['English', 'Spanish', 'Portuguese'],
+    nationality: 'Spanish',
+    hierarchyLevel: 5,
+    reportsTo: 'adaeze-okonkwo',
+    status: 'online',
+  },
+  {
+    id: 'yuki-tanaka',
+    name: 'Yuki Tanaka',
+    role: 'Property Consultant',
+    department: 'Sales',
+    avatar: yukiTanakaConsultant,
+    isAI: true,
+    email: 'yuki.tanaka@JBJ.ae',
+    bio: 'Meticulous property consultant specializing in Japanese investor relations and premium developments.',
+    specializations: ['Japanese Clients', 'Investment Properties', 'Market Analysis'],
+    languages: ['English', 'Japanese'],
+    nationality: 'Japanese',
+    hierarchyLevel: 5,
+    reportsTo: 'adaeze-okonkwo',
+    status: 'online',
+  },
+  {
+    id: 'faisal-khan',
+    name: 'Faisal Khan',
+    role: 'Sales Executive',
+    department: 'Sales',
+    avatar: faisalKhanSales,
+    isAI: true,
+    email: 'faisal.khan@JBJ.ae',
+    bio: 'Dedicated sales executive with expertise in South Asian investor markets and off-plan properties.',
+    specializations: ['Off-Plan Sales', 'Pakistani Clients', 'Investment Advisory'],
+    languages: ['English', 'Urdu', 'Punjabi'],
+    nationality: 'Pakistani',
+    hierarchyLevel: 5,
+    reportsTo: 'adaeze-okonkwo',
     status: 'online',
   },
 ]);

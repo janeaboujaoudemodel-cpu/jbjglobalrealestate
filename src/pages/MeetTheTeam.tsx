@@ -106,7 +106,7 @@ const TeamMemberCard = ({ member, onContact, onReadMore }: TeamMemberCardProps) 
 
           {member.languages && member.languages.length > 0 && (
             <div className="flex flex-wrap gap-1">
-              {member.languages.slice(0, 3).map((lang) => (
+              {member.languages.slice(0, 4).map((lang) => (
                 <Badge
                   key={lang}
                   variant="outline"
@@ -115,12 +115,12 @@ const TeamMemberCard = ({ member, onContact, onReadMore }: TeamMemberCardProps) 
                   {lang}
                 </Badge>
               ))}
-              {member.languages.length > 3 && (
+              {member.languages.length > 4 && (
                 <Badge
                   variant="outline"
                   className="text-xs border-zinc-700 text-zinc-400"
                 >
-                  +{member.languages.length - 3}
+                  +{member.languages.length - 4}
                 </Badge>
               )}
             </div>
@@ -240,16 +240,16 @@ const MeetTheTeam = () => {
               >
                 <div className="text-center">
                   <p className="text-3xl font-bold text-gold">
-                    {allTeamMembers.length}+
+                    150+
                   </p>
                   <p className="text-zinc-500 text-sm">Team Members</p>
                 </div>
                 <div className="text-center">
-                  <p className="text-3xl font-bold text-gold">11</p>
+                  <p className="text-3xl font-bold text-gold">16</p>
                   <p className="text-zinc-500 text-sm">Departments</p>
                 </div>
                 <div className="text-center">
-                  <p className="text-3xl font-bold text-gold">15+</p>
+                  <p className="text-3xl font-bold text-gold">25+</p>
                   <p className="text-zinc-500 text-sm">Languages Spoken</p>
                 </div>
               </motion.div>
@@ -333,7 +333,7 @@ const MeetTheTeam = () => {
               <p className="text-zinc-400 max-w-xl mx-auto mb-8">
                 We're always looking for talented individuals who share our
                 passion for excellence in real estate. Explore career
-                opportunities with JBJ Global.
+                opportunities with JBJ Global Real Estate.
               </p>
               <div className="flex flex-wrap justify-center gap-4">
                 <Link to="/careers">

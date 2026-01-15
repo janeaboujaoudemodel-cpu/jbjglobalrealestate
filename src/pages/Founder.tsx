@@ -20,6 +20,17 @@ import founderAwardStage from "@/assets/founder-award-stage.jpeg";
 import founderRedCarpet from "@/assets/founder-red-carpet.jpeg";
 import founderPremium from "@/assets/founder-premium.png";
 
+// Import CEO awards and leadership photos
+import ceoGcaAward from "@/assets/ceo/ceo-gca-award-2025.jpg";
+import ceoBusinessPortrait from "@/assets/ceo/ceo-business-portrait.jpg";
+import ceoLuxuryLifestyle from "@/assets/ceo/ceo-luxury-lifestyle.jpg";
+import ceoLeadershipAward from "@/assets/ceo/ceo-leadership-award.jpg";
+import ceoAwardTrophy from "@/assets/ceo/ceo-award-trophy.jpg";
+import ceoPanelSpeaking from "@/assets/ceo/ceo-panel-speaking.jpg";
+import ceoPanelDiscussion from "@/assets/ceo/ceo-panel-discussion.jpg";
+import ceoMediaInterview from "@/assets/ceo/ceo-media-interview.jpg";
+import ceoAwardCeremony from "@/assets/ceo/ceo-award-ceremony.jpg";
+
 // Animation variants
 const fadeInUp = {
   hidden: { opacity: 0, y: 40 },
@@ -445,6 +456,216 @@ const Founder = () => {
                   serves UAE-based and international clients seeking premium property solutions in the Emirates.
                 </p>
               </div>
+            </motion.div>
+          </motion.div>
+        </div>
+      </section>
+
+      {/* AWARDS & RECOGNITION */}
+      <section className="py-24 md:py-32 bg-gradient-to-b from-black via-zinc-950 to-black relative overflow-hidden">
+        <div className="absolute inset-0 opacity-[0.02]">
+          <div className="absolute inset-0" style={{ backgroundImage: 'radial-gradient(circle at 2px 2px, #A8925A 1px, transparent 0)', backgroundSize: '48px 48px' }} />
+        </div>
+        
+        <div className="container mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
+          <motion.div
+            initial="hidden"
+            whileInView="visible"
+            viewport={{ once: true, margin: "-100px" }}
+            variants={staggerContainer}
+          >
+            <motion.div className="text-center mb-16" variants={fadeInUp}>
+              <span className="text-gold text-sm uppercase tracking-[0.4em]">Recognition</span>
+              <GoldLine className="w-32 mx-auto mt-4 mb-8" />
+              <h2 
+                className="text-white text-4xl md:text-5xl lg:text-6xl font-bold"
+                style={{ fontFamily: "Poppins, sans-serif" }}
+              >
+                Awards & <span className="text-transparent bg-clip-text bg-gradient-to-r from-gold to-[#C4A962]">Achievements</span>
+              </h2>
+              <p className="text-zinc-400 text-lg mt-6 max-w-2xl mx-auto">
+                Recognized globally for excellence in leadership and innovation
+              </p>
+            </motion.div>
+
+            {/* Awards Grid */}
+            <motion.div 
+              className="grid md:grid-cols-2 lg:grid-cols-3 gap-6"
+              variants={staggerContainer}
+            >
+              {/* GCA Award 2025 */}
+              <motion.div 
+                className="group relative aspect-[4/5] rounded-2xl overflow-hidden border border-zinc-800 hover:border-gold/40 transition-all duration-500"
+                variants={scaleIn}
+              >
+                <SafeImage 
+                  src={ceoGcaAward} 
+                  fallbackSrc={founderHero}
+                  alt="Global Cinema Award 2025" 
+                  className="w-full h-full object-cover object-top group-hover:scale-105 transition-transform duration-700"
+                />
+                <div className="absolute inset-0 bg-gradient-to-t from-black via-black/20 to-transparent opacity-80 group-hover:opacity-90 transition-opacity" />
+                <div className="absolute bottom-0 left-0 right-0 p-6">
+                  <span className="text-gold text-xs uppercase tracking-[0.2em] mb-2 block">2025</span>
+                  <h4 className="text-white text-lg font-semibold mb-1">Global Cinema Award (GCA)</h4>
+                  <p className="text-zinc-400 text-sm">Excellence in Innovation</p>
+                </div>
+              </motion.div>
+
+              {/* International India Awards */}
+              <motion.div 
+                className="group relative aspect-[4/5] rounded-2xl overflow-hidden border border-zinc-800 hover:border-gold/40 transition-all duration-500"
+                variants={scaleIn}
+              >
+                <SafeImage 
+                  src={ceoAwardTrophy} 
+                  fallbackSrc={founderHero}
+                  alt="International India Awards 2025" 
+                  className="w-full h-full object-cover object-center group-hover:scale-105 transition-transform duration-700"
+                />
+                <div className="absolute inset-0 bg-gradient-to-t from-black via-black/20 to-transparent opacity-80 group-hover:opacity-90 transition-opacity" />
+                <div className="absolute bottom-0 left-0 right-0 p-6">
+                  <span className="text-gold text-xs uppercase tracking-[0.2em] mb-2 block">2025</span>
+                  <h4 className="text-white text-lg font-semibold mb-1">International India Awards (III-A)</h4>
+                  <p className="text-zinc-400 text-sm">Leadership Excellence</p>
+                </div>
+              </motion.div>
+
+              {/* Woman of the Universe UAE */}
+              <motion.div 
+                className="group relative aspect-[4/5] rounded-2xl overflow-hidden border border-zinc-800 hover:border-gold/40 transition-all duration-500"
+                variants={scaleIn}
+              >
+                <SafeImage 
+                  src={ceoLeadershipAward} 
+                  fallbackSrc={founderHero}
+                  alt="Woman of the Universe UAE" 
+                  className="w-full h-full object-cover object-center group-hover:scale-105 transition-transform duration-700"
+                />
+                <div className="absolute inset-0 bg-gradient-to-t from-black via-black/20 to-transparent opacity-80 group-hover:opacity-90 transition-opacity" />
+                <div className="absolute bottom-0 left-0 right-0 p-6">
+                  <span className="text-gold text-xs uppercase tracking-[0.2em] mb-2 block">Guest of Honor</span>
+                  <h4 className="text-white text-lg font-semibold mb-1">Woman of the Universe UAE</h4>
+                  <p className="text-zinc-400 text-sm">VIP Recognition</p>
+                </div>
+              </motion.div>
+
+              {/* Panel Speaking */}
+              <motion.div 
+                className="group relative aspect-[4/5] rounded-2xl overflow-hidden border border-zinc-800 hover:border-gold/40 transition-all duration-500"
+                variants={scaleIn}
+              >
+                <SafeImage 
+                  src={ceoPanelSpeaking} 
+                  fallbackSrc={founderHero}
+                  alt="Global Summit Panel Discussion" 
+                  className="w-full h-full object-cover object-center group-hover:scale-105 transition-transform duration-700"
+                />
+                <div className="absolute inset-0 bg-gradient-to-t from-black via-black/20 to-transparent opacity-80 group-hover:opacity-90 transition-opacity" />
+                <div className="absolute bottom-0 left-0 right-0 p-6">
+                  <span className="text-gold text-xs uppercase tracking-[0.2em] mb-2 block">Speaking</span>
+                  <h4 className="text-white text-lg font-semibold mb-1">Global Summit Panel</h4>
+                  <p className="text-zinc-400 text-sm">Industry Discussion Panelist</p>
+                </div>
+              </motion.div>
+
+              {/* Business Portrait */}
+              <motion.div 
+                className="group relative aspect-[4/5] rounded-2xl overflow-hidden border border-zinc-800 hover:border-gold/40 transition-all duration-500"
+                variants={scaleIn}
+              >
+                <SafeImage 
+                  src={ceoBusinessPortrait} 
+                  fallbackSrc={founderHero}
+                  alt="Business Leadership Summit" 
+                  className="w-full h-full object-cover object-top group-hover:scale-105 transition-transform duration-700"
+                />
+                <div className="absolute inset-0 bg-gradient-to-t from-black via-black/20 to-transparent opacity-80 group-hover:opacity-90 transition-opacity" />
+                <div className="absolute bottom-0 left-0 right-0 p-6">
+                  <span className="text-gold text-xs uppercase tracking-[0.2em] mb-2 block">Leadership</span>
+                  <h4 className="text-white text-lg font-semibold mb-1">Business Leadership Summit</h4>
+                  <p className="text-zinc-400 text-sm">Executive Speaker</p>
+                </div>
+              </motion.div>
+
+              {/* Media Interview */}
+              <motion.div 
+                className="group relative aspect-[4/5] rounded-2xl overflow-hidden border border-zinc-800 hover:border-gold/40 transition-all duration-500"
+                variants={scaleIn}
+              >
+                <SafeImage 
+                  src={ceoMediaInterview} 
+                  fallbackSrc={founderHero}
+                  alt="Media Interview" 
+                  className="w-full h-full object-cover object-center group-hover:scale-105 transition-transform duration-700"
+                />
+                <div className="absolute inset-0 bg-gradient-to-t from-black via-black/20 to-transparent opacity-80 group-hover:opacity-90 transition-opacity" />
+                <div className="absolute bottom-0 left-0 right-0 p-6">
+                  <span className="text-gold text-xs uppercase tracking-[0.2em] mb-2 block">Media</span>
+                  <h4 className="text-white text-lg font-semibold mb-1">NewsTime HDTV Interview</h4>
+                  <p className="text-zinc-400 text-sm">Industry Insights</p>
+                </div>
+              </motion.div>
+            </motion.div>
+
+            {/* Additional Photos Row */}
+            <motion.div 
+              className="grid md:grid-cols-3 gap-6 mt-6"
+              variants={staggerContainer}
+            >
+              <motion.div 
+                className="group relative aspect-[4/5] rounded-2xl overflow-hidden border border-zinc-800 hover:border-gold/40 transition-all duration-500"
+                variants={scaleIn}
+              >
+                <SafeImage 
+                  src={ceoPanelDiscussion} 
+                  fallbackSrc={founderHero}
+                  alt="Panel Discussion" 
+                  className="w-full h-full object-cover object-center group-hover:scale-105 transition-transform duration-700"
+                />
+                <div className="absolute inset-0 bg-gradient-to-t from-black via-black/20 to-transparent opacity-80 group-hover:opacity-90 transition-opacity" />
+                <div className="absolute bottom-0 left-0 right-0 p-6">
+                  <span className="text-gold text-xs uppercase tracking-[0.2em] mb-2 block">Discussion</span>
+                  <h4 className="text-white text-lg font-semibold mb-1">Industry Panel Discussion</h4>
+                  <p className="text-zinc-400 text-sm">Real Estate Innovation Forum</p>
+                </div>
+              </motion.div>
+
+              <motion.div 
+                className="group relative aspect-[4/5] rounded-2xl overflow-hidden border border-zinc-800 hover:border-gold/40 transition-all duration-500"
+                variants={scaleIn}
+              >
+                <SafeImage 
+                  src={ceoLuxuryLifestyle} 
+                  fallbackSrc={founderHero}
+                  alt="Luxury Lifestyle" 
+                  className="w-full h-full object-cover object-center group-hover:scale-105 transition-transform duration-700"
+                />
+                <div className="absolute inset-0 bg-gradient-to-t from-black via-black/20 to-transparent opacity-80 group-hover:opacity-90 transition-opacity" />
+                <div className="absolute bottom-0 left-0 right-0 p-6">
+                  <span className="text-gold text-xs uppercase tracking-[0.2em] mb-2 block">Visionary</span>
+                  <h4 className="text-white text-lg font-semibold mb-1">Luxury Real Estate Leader</h4>
+                  <p className="text-zinc-400 text-sm">Founder & CEO</p>
+                </div>
+              </motion.div>
+
+              <motion.div 
+                className="group relative aspect-[4/5] rounded-2xl overflow-hidden border border-zinc-800 hover:border-gold/40 transition-all duration-500"
+                variants={scaleIn}
+              >
+                <SafeImage 
+                  src={ceoAwardCeremony} 
+                  fallbackSrc={founderHero}
+                  alt="Award Ceremony" 
+                  className="w-full h-full object-cover object-center group-hover:scale-105 transition-transform duration-700"
+                />
+                <div className="absolute inset-0 bg-gradient-to-t from-black via-black/20 to-transparent opacity-80 group-hover:opacity-90 transition-opacity" />
+                <div className="absolute bottom-0 left-0 right-0 p-6">
+                  <span className="text-gold text-xs uppercase tracking-[0.2em] mb-2 block">Awards</span>
+                  <h4 className="text-white text-lg font-semibold mb-1">International Business Awards</h4>
+                  <p className="text-zinc-400 text-sm">Global Recognition</p>
+                </div>
+              </motion.div>
             </motion.div>
           </motion.div>
         </div>
