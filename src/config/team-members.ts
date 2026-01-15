@@ -234,6 +234,14 @@ import lucaRomanoSales from '@/assets/team/luca-romano-sales.png';
 import nicoleVanderbergContent from '@/assets/team/nicole-vanderberg-content.png';
 import emmaRichardsonContent from '@/assets/team/emma-richardson-content.png';
 
+// NEW Property Consultants to cover more languages
+import hansSchmidtSales from '@/assets/team/hans-schmidt-sales.png';
+import katarzynaNowakSales from '@/assets/team/katarzyna-nowak-sales.png';
+import siradaCharoensukSales from '@/assets/team/sirada-charoensuk-sales.png';
+import erikJohanssonSales from '@/assets/team/erik-johansson-sales.png';
+import miguelFerreiraSales from '@/assets/team/miguel-ferreira-sales.png';
+import tamarLeviSales from '@/assets/team/tamar-levi-sales.png';
+
 export interface TeamMember {
   id: string;
   name: string;
@@ -273,7 +281,7 @@ export const executiveTeam: TeamMember[] = sortByHierarchy([
     nationality: 'Lebanese',
     yearsExperience: 12,
     hierarchyLevel: 1,
-    directReports: ['david-thornton', 'richard-pemberton', 'amanda-clarke', 'huda-marzooq'],
+    directReports: ['david-thornton', 'richard-pemberton', 'amanda-clarke'],
     status: 'online',
     canConductInterviews: true,
   },
@@ -863,6 +871,103 @@ export const salesTeam: TeamMember[] = sortByHierarchy([
     yearsExperience: 4,
     hierarchyLevel: 5,
     reportsTo: 'emma-hartley',
+    status: 'online',
+  },
+  // NEW Property Consultants to cover more languages
+  {
+    id: 'hans-schmidt',
+    name: 'Hans Schmidt',
+    role: 'Senior Property Consultant',
+    department: 'Sales',
+    avatar: hansSchmidtSales,
+    isAI: true,
+    bio: 'Experienced property consultant specializing in German and European investor relations.',
+    specializations: ['German Clients', 'European Markets', 'Luxury Properties'],
+    languages: ['English', 'German'],
+    nationality: 'German',
+    yearsExperience: 10,
+    hierarchyLevel: 5,
+    reportsTo: 'michael-anderson',
+    status: 'online',
+  },
+  {
+    id: 'katarzyna-nowak',
+    name: 'Katarzyna Nowak',
+    role: 'Property Consultant',
+    department: 'Sales',
+    avatar: katarzynaNowakSales,
+    isAI: true,
+    bio: 'Professional property consultant specializing in Polish and Eastern European investor networks.',
+    specializations: ['Polish Clients', 'Eastern European Markets', 'Investment Properties'],
+    languages: ['English', 'Polish', 'Russian'],
+    nationality: 'Polish',
+    yearsExperience: 6,
+    hierarchyLevel: 5,
+    reportsTo: 'emma-hartley',
+    status: 'online',
+  },
+  {
+    id: 'sirada-charoensuk',
+    name: 'Sirada Charoensuk',
+    role: 'Property Consultant',
+    department: 'Sales',
+    avatar: siradaCharoensukSales,
+    isAI: true,
+    bio: 'Dedicated property consultant specializing in Thai and Southeast Asian investor relations.',
+    specializations: ['Thai Clients', 'Southeast Asian Markets', 'Residential Properties'],
+    languages: ['English', 'Thai'],
+    nationality: 'Thai',
+    yearsExperience: 5,
+    hierarchyLevel: 5,
+    reportsTo: 'adaeze-okonkwo',
+    status: 'online',
+  },
+  {
+    id: 'erik-johansson',
+    name: 'Erik Johansson',
+    role: 'Senior Property Consultant',
+    department: 'Sales',
+    avatar: erikJohanssonSales,
+    isAI: true,
+    bio: 'Experienced property consultant specializing in Scandinavian investor networks and luxury developments.',
+    specializations: ['Scandinavian Clients', 'Nordic Markets', 'Premium Properties'],
+    languages: ['English', 'Swedish', 'Norwegian', 'Danish'],
+    nationality: 'Swedish',
+    yearsExperience: 9,
+    hierarchyLevel: 5,
+    reportsTo: 'michael-anderson',
+    status: 'online',
+  },
+  {
+    id: 'miguel-ferreira',
+    name: 'Miguel Ferreira',
+    role: 'Property Consultant',
+    department: 'Sales',
+    avatar: miguelFerreiraSales,
+    isAI: true,
+    bio: 'Professional property consultant specializing in Portuguese and Brazilian investor relations.',
+    specializations: ['Portuguese Clients', 'Lusophone Markets', 'Investment Properties'],
+    languages: ['English', 'Portuguese', 'Spanish'],
+    nationality: 'Portuguese',
+    yearsExperience: 7,
+    hierarchyLevel: 5,
+    reportsTo: 'emma-hartley',
+    status: 'online',
+  },
+  {
+    id: 'tamar-levi',
+    name: 'Tamar Levi',
+    role: 'Property Consultant',
+    department: 'Sales',
+    avatar: tamarLeviSales,
+    isAI: true,
+    bio: 'Professional property consultant specializing in Israeli and Hebrew-speaking investor networks.',
+    specializations: ['Israeli Clients', 'Middle Eastern Markets', 'Investment Properties'],
+    languages: ['English', 'Hebrew', 'Arabic'],
+    nationality: 'Israeli',
+    yearsExperience: 6,
+    hierarchyLevel: 5,
+    reportsTo: 'adaeze-okonkwo',
     status: 'online',
   },
 ]);
