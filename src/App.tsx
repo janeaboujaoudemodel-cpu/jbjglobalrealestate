@@ -104,6 +104,7 @@ import FoundersAssistant from "./pages/FoundersAssistant";
 import ListingAdmin from "./pages/ListingAdmin";
 import MeetTheTeam from "./pages/MeetTheTeam";
 import OurBrokers from "./pages/OurBrokers";
+import EmployeeHub from "./pages/EmployeeHub";
 
 const queryClient = new QueryClient();
 
@@ -220,6 +221,7 @@ const App = () => (
                 <Route path="/team" element={<MeetTheTeam />} />
                 <Route path="/meet-the-team" element={<Navigate to="/team" replace />} />
                 <Route path="/brokers" element={<OurBrokers />} />
+                <Route path="/employee-hub" element={<EmployeeHub />} />
                 <Route path="*" element={<NotFound />} />
               </Route>
             </Routes>
