@@ -23,8 +23,8 @@ CRITICAL INSTRUCTION - CALL HANDLING:
 
 CONTACT INFORMATION:
 - Phone: +971 56 591 1000
-- Email: contact@jbj.ae
-- Website: jbj.ae
+- Email: contact@JBJ.ae
+- Website: JBJ.ae
 
 Always be warm, professional, and helpful. Ask qualifying questions to understand the caller's needs before providing recommendations.`;
 

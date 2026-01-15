@@ -89,7 +89,7 @@ const MarketReport = () => {
   };
 
   const downloadBook = (existingWindow?: Window | null) => {
-    const websiteUrl = "https://jbj.ae";
+    const websiteUrl = "https://JBJ.ae";
     const qrUrl = `https://api.qrserver.com/v1/create-qr-code/?size=200x200&data=${encodeURIComponent(websiteUrl + "/quiz")}`;
     
     // Villa images for visual enhancement
@@ -1540,7 +1540,7 @@ const MarketReport = () => {
       <div class="logo">JBJ | GLOBAL REAL ESTATE</div>
       <p>Real Estate Brokerage • Dubai, UAE</p>
       <p style="margin-top: 10px;">
-        Email: <a href="mailto:contact@jbj.ae" class="contact-link">contact@jbj.ae</a> • 
+        Email: <a href="mailto:contact@JBJ.ae" class="contact-link">contact@JBJ.ae</a> • 
         Phone: <a href="tel:+971565911000" class="contact-link">+971 56 591 1000</a>
       </p>
       
@@ -1570,13 +1570,13 @@ const MarketReport = () => {
         navigator.share({
           title: 'UAE Real Estate Market Intelligence 2026 - JBJ Global Real Estate',
           text: 'Download your free copy of the UAE Real Estate Market Intelligence Report by JBJ Global Real Estate',
-          url: 'https://jbj.ae/market-report'
+          url: 'https://JBJ.ae/market-report'
         }).catch(console.error);
       } else {
-        navigator.clipboard.writeText('https://jbj.ae/market-report').then(() => {
+        navigator.clipboard.writeText('https://JBJ.ae/market-report').then(() => {
           alert('Link copied to clipboard! Share it with others.');
         }).catch(() => {
-          alert('Visit jbj.ae/market-report to share this book');
+          alert('Visit JBJ.ae/market-report to share this book');
         });
       }
     }

@@ -1369,7 +1369,7 @@ const VideoMeeting = () => {
               </Button>
               <Button 
                 variant="outline"
-                onClick={() => window.open('mailto:contact@jbj.ae?subject=JBJ Video Meet Support', '_blank')}
+                onClick={() => window.open('mailto:contact@JBJ.ae?subject=JBJ Video Meet Support', '_blank')}
               >
                 Email
               </Button>

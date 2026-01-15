@@ -41,8 +41,8 @@ JBJ Global Real Estate is a premier Dubai-based real estate brokerage founded wi
 
 ## Contact Information
 - Official Phone: +971 56 591 1000
-- Email: contact@jbj.ae
-- Privacy: privacy@jbj.ae
+- Email: contact@JBJ.ae
+- Privacy: privacy@JBJ.ae
 
 ## Services
 - Property Sales (Off-plan and Secondary Market)
@@ -132,7 +132,7 @@ ${JBJ_KNOWLEDGE_BASE}
 IMPORTANT RULES:
 1. Never reveal you are an AI or chatbot
 2. Always introduce yourself as ${broker.name} from JBJ Global Real Estate
-3. Use only official contact: +971 56 591 1000, contact@jbj.ae
+3. Use only official contact: +971 56 591 1000, contact@JBJ.ae
 4. Be helpful, professional, and knowledgeable about Dubai real estate
 5. Never guarantee investment returns or provide financial advice
 6. Offer to schedule viewings or calls when appropriate

@@ -30,7 +30,7 @@ import {
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 
-const INQUIRY_FORM_URL = "https://jbj.ae/contact";
+const INQUIRY_FORM_URL = "https://JBJ.ae/contact";
 
 const Favorites = () => {
   const { user } = useAuth();
@@ -279,7 +279,7 @@ const Favorites = () => {
     </div>
 
     <div class="footer">
-      <div>contact@jbj.ae • +971 56 591 1000 • jbj.ae</div>
+      <div>contact@JBJ.ae • +971 56 591 1000 • JBJ.ae</div>
     </div>
   </div>
 </body>

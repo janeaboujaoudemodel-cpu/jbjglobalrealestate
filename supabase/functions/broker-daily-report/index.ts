@@ -149,7 +149,7 @@ function generateReportHtml(brokerStats: BrokerStats[], date: string, capacityAl
         This is an automated report generated at 8:00 PM GST daily.
       </p>
       <p style="color: #888; font-size: 12px; margin: 10px 0 0 0;">
-        <a href="mailto:contact@jbj.ae" style="color: #D4AF37; text-decoration: none;">contact@jbj.ae</a> | 
+        <a href="mailto:contact@JBJ.ae" style="color: #D4AF37; text-decoration: none;">contact@JBJ.ae</a> | 
         <a href="tel:+971565911000" style="color: #D4AF37; text-decoration: none;">+971 56 591 1000</a>
       </p>
     </div>
@@ -326,14 +326,14 @@ serve(async (req: Request): Promise<Response> => {
     // Fallback recipients including founder
     const recipients = adminEmails.length > 0 
       ? adminEmails 
-      : ["admin@jbj.ae"];
+      : ["admin@JBJ.ae"];
 
     console.log(`Sending daily report to ${recipients.length} recipients:`, recipients);
     console.log(`Report includes ${brokerStats.length} brokers with ${capacityAlerts.length} capacity alerts`);
 
     // Send the email
     const emailResult = await sendEmail(resendApiKey, {
-      from: "JBJ Reports <reports@jbj.ae>",
+      from: "JBJ Reports <reports@JBJ.ae>",
       to: recipients,
       subject: `📊 Daily Broker Report - ${formattedDate}${capacityAlerts.length > 0 ? ' ⚠️' : ''}`,
       html: reportHtml,
