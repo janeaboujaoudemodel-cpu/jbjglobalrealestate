@@ -4,8 +4,8 @@
 // Import team portraits - Executive Leadership
 // NOTE: Use real, approved photos for CEO/MD. Do not swap without explicit approval.
 import janeAbouJaoudeCeo from '@/assets/ceo/jane-ceo-black-suit-original.jpg';
-import davidThorntonCeo from '@/assets/team/david-thornton-md-realistic-v2.png';
-import richardPembertonCoo from '@/assets/team/richard-pemberton-coo-realistic.png';
+import davidThorntonCeo from '@/assets/team/david-thornton-md-40s-realistic.png';
+import richardPembertonCoo from '@/assets/team/richard-pemberton-coo-40s-realistic.png';
 import oliviaExecutiveAssistant from '@/assets/team/olivia-executive-assistant.png';
 import amandaClarkeExecutiveAssistant from '@/assets/team/amanda-clarke-executive-assistant.png';
 // NEW Executive Team additions (to reach 8)
@@ -14,7 +14,7 @@ import anthonyPembertonStrategy from '@/assets/team/anthony-pemberton-strategy.p
 import laylaMansourPartnerships from '@/assets/team/layla-mansour-partnerships.png';
 
 // Import team portraits - Legal Team
-import hudaMarzooqLawyer from '@/assets/team/huda-marzooq-legal-hijab.png';
+import hudaMarzooqLawyer from '@/assets/team/huda-marzooq-legal-realistic.png';
 // NEW Legal Team additions (to reach 4)
 import williamThorntonLegal from '@/assets/team/william-thornton-legal.png';
 import nadiaHassanLegal from '@/assets/team/nadia-hassan-legal.png';
@@ -86,7 +86,7 @@ import ryanMitchellCampaigns from '@/assets/team/ryan-mitchell-campaigns.png';
 // Import team portraits - Project Management Team
 import rachelCampbellProjectDirector from '@/assets/team/rachel-campbell-project-director.png';
 import jessicaMillerProjectManager from '@/assets/team/jessica-miller-project-manager.png';
-import christopherAdamsProjectCoordinator from '@/assets/team/christopher-adams-project-coordinator.png';
+import christopherAdamsProjectCoordinator from '@/assets/team/christopher-adams-project-realistic.png';
 import jasonBrooksScrum from '@/assets/team/jason-brooks-scrum.png';
 
 // Import team portraits - Web Development Team
@@ -129,7 +129,7 @@ import benjaminColeAccountant from '@/assets/team/benjamin-cole-accountant.png';
 import isabellaRomanoAnalyst from '@/assets/team/isabella-romano-analyst.png';
 import sebastianMullerFinance from '@/assets/team/sebastian-muller-finance.png';
 // NEW Finance addition (to reach 4)
-import stefanWeberFinance from '@/assets/team/stefan-weber-finance.png';
+import stefanWeberFinance from '@/assets/team/stefan-weber-finance-realistic.png';
 
 // Import team portraits - Operations & Technology
 import thomasMitchellCrm from '@/assets/team/thomas-mitchell-crm.png';
@@ -147,8 +147,8 @@ import marcusThompsonOperations from '@/assets/team/marcus-thompson-operations.p
 // Import team portraits - IT Team
 import danielParkerItManager from '@/assets/team/daniel-parker-it-manager.png';
 import rajPatelItAssistant from '@/assets/team/raj-patel-it-assistant.png';
-import matthewCollinsSysadmin from '@/assets/team/matthew-collins-sysadmin.png';
-import emmaOCallaghanNetwork from '@/assets/team/emma-ocallaghan-network.png';
+import matthewCollinsSysadmin from '@/assets/team/matthew-collins-sysadmin-realistic.png';
+import emmaOCallaghanNetwork from '@/assets/team/emma-ocallaghan-network-realistic.png';
 import tomaszKowalczykItSupport from '@/assets/team/tomasz-kowalczyk-it-realistic.png';
 import omarHassanCloud from '@/assets/team/omar-hassan-cloud.png';
 import elenaPopescuDba from '@/assets/team/elena-popescu-dba.png';
@@ -159,7 +159,7 @@ import priyaMehtaIt from '@/assets/team/priya-mehta-it.png';
 import oluwaseunAdeyemiIt from '@/assets/team/oluwaseun-adeyemi-it.png';
 
 // Import team portraits - After Sales Team
-import charlesPembertonAfterSalesDir from '@/assets/team/charles-pemberton-aftersales-realistic.png';
+import charlesPembertonAfterSalesDir from '@/assets/team/charles-pemberton-aftersales-40s-realistic.png';
 import catherineWellsAfterSalesMgr from '@/assets/team/catherine-wells-aftersales-manager.png';
 import marcusVanDerBergAfterSalesCoord from '@/assets/team/marcus-van-der-berg-aftersales-coord.png';
 import mariaSantosAfterSalesAssistant from '@/assets/team/maria-santos-aftersales-assistant.png';
@@ -173,11 +173,11 @@ import gabrielaCostaReceptionist from '@/assets/team/gabriela-costa-receptionist
 import claireDuboisReceptionist from '@/assets/team/claire-dubois-receptionist.png';
 import fionaCampbellAdmin from '@/assets/team/fiona-campbell-admin.png';
 // NEW Admin additions (to reach 8)
-import aoifeBrennanAdmin from '@/assets/team/aoife-brennan-admin.png';
+import aoifeBrennanAdmin from '@/assets/team/aoife-brennan-admin-realistic.png';
 import youssefBenaliAdmin from '@/assets/team/youssef-benali-admin-realistic.png';
 
 // NEW Project Management addition (to reach 4)
-import carmenGarciaProject from '@/assets/team/carmen-garcia-project.png';
+import carmenGarciaProject from '@/assets/team/carmen-garcia-project-realistic.png';
 
 // NEW Diverse Team Member Additions (25+ new nationalities)
 import thiNguyenSales from '@/assets/team/thi-nguyen-sales.png';
@@ -211,7 +211,7 @@ import nikolaosKonstantinouSales from '@/assets/team/nikolaos-konstantinou-sales
 import lisaBergstromMarketing from '@/assets/team/lisa-bergstrom-marketing.png';
 import pawelKowalskiOperations from '@/assets/team/pawel-kowalski-operations.png';
 import siripornThongchaiClient from '@/assets/team/siriporn-thongchai-client.png';
-import jamesMurphySales from '@/assets/team/james-murphy-sales-v2.png';
+import jamesMurphySales from '@/assets/team/james-murphy-sales-realistic.png';
 import sofieNielsenHr from '@/assets/team/sofie-nielsen-hr.png';
 import carlosRamirezFinance from '@/assets/team/carlos-ramirez-finance.png';
 import raniaKhalilSales from '@/assets/team/rania-khalil-sales.png';
@@ -246,7 +246,7 @@ import tamarLeviSales from '@/assets/team/tamar-levi-sales.png';
 
 // NEW Sales Team Gap Fillers (after James Murphy to fill 3 columns)
 import henryBlackwoodSales from '@/assets/team/henry-blackwood-sales.png';
-import sarahVanNiekerkSales from '@/assets/team/sarah-van-niekerk-sales.png';
+import sarahVanNiekerkSales from '@/assets/team/sarah-van-niekerk-sales-realistic.png';
 import jamesThompsonPortfolio from '@/assets/team/james-thompson-portfolio.png';
 
 // NEW VIP Client Relations (swap with Abdullah)
@@ -302,10 +302,10 @@ export const executiveTeam: TeamMember[] = sortByHierarchy([
     department: 'Executive',
     avatar: davidThorntonCeo,
     isAI: true,
-    bio: 'Strategic business leader overseeing all operations with 25+ years of luxury real estate experience.',
+    bio: 'Strategic business leader overseeing all operations with extensive luxury real estate experience.',
     languages: ['English'],
     nationality: 'British',
-    yearsExperience: 28,
+    yearsExperience: 12,
     hierarchyLevel: 2,
     reportsTo: 'jane-abou-jaoude',
     directReports: ['roy-davi', 'victoria-sterling', 'catherine-brooks'],
@@ -322,7 +322,7 @@ export const executiveTeam: TeamMember[] = sortByHierarchy([
     bio: 'Operational excellence leader ensuring seamless business processes and team coordination.',
     languages: ['English', 'French'],
     nationality: 'British',
-    yearsExperience: 22,
+    yearsExperience: 11,
     hierarchyLevel: 2,
     reportsTo: 'jane-abou-jaoude',
     directReports: ['alexander-shaw', 'jessica-pemberton', 'thomas-mitchell', 'daniel-parker', 'emily-watson', 'olivia-reynolds'],
@@ -339,7 +339,7 @@ export const executiveTeam: TeamMember[] = sortByHierarchy([
     bio: 'Strategic visionary driving long-term business growth and market expansion initiatives across MENA region.',
     languages: ['English', 'Arabic', 'French'],
     nationality: 'Lebanese',
-    yearsExperience: 15,
+    yearsExperience: 9,
     hierarchyLevel: 2,
     reportsTo: 'jane-abou-jaoude',
     status: 'online',
@@ -355,7 +355,7 @@ export const executiveTeam: TeamMember[] = sortByHierarchy([
     bio: 'Investment strategist overseeing portfolio management and high-value acquisition opportunities.',
     languages: ['English'],
     nationality: 'British',
-    yearsExperience: 18,
+    yearsExperience: 8,
     hierarchyLevel: 2,
     reportsTo: 'jane-abou-jaoude',
     status: 'online',
@@ -371,7 +371,7 @@ export const executiveTeam: TeamMember[] = sortByHierarchy([
     bio: 'Expert in strategic partnerships, stakeholder relations, and building connections with key industry partners across the MENA region.',
     languages: ['English', 'Arabic'],
     nationality: 'Jordanian',
-    yearsExperience: 14,
+    yearsExperience: 8,
     hierarchyLevel: 3,
     reportsTo: 'david-thornton',
     status: 'online',
@@ -387,7 +387,7 @@ export const executiveTeam: TeamMember[] = sortByHierarchy([
     bio: 'Organized, proactive, and fast-responding assistant supporting the Founder with scheduling, reminders, and follow-ups.',
     languages: ['English', 'Spanish'],
     nationality: 'American',
-    yearsExperience: 8,
+    yearsExperience: 7,
     hierarchyLevel: 4,
     reportsTo: 'jane-abou-jaoude',
     status: 'online',
@@ -423,7 +423,7 @@ export const salesTeam: TeamMember[] = sortByHierarchy([
     specializations: ['Luxury Properties', 'High-Net-Worth Clients', 'Investment Properties', 'Team Leadership'],
     languages: ['English', 'Arabic'],
     nationality: 'Lebanese Canadian',
-    yearsExperience: 15,
+    yearsExperience: 10,
     hierarchyLevel: 3,
     reportsTo: 'jane-abou-jaoude',
     directReports: ['michael-anderson', 'emma-hartley', 'william-harrison', 'abdullah-al-rashid'],
@@ -441,7 +441,7 @@ export const salesTeam: TeamMember[] = sortByHierarchy([
     specializations: ['Enterprise Sales', 'High-Net-Worth Clients', 'Investment Properties'],
     languages: ['English'],
     nationality: 'British',
-    yearsExperience: 12,
+    yearsExperience: 9,
     hierarchyLevel: 3,
     reportsTo: 'roy-davi',
     directReports: ['george-hamilton'],
@@ -459,7 +459,7 @@ export const salesTeam: TeamMember[] = sortByHierarchy([
     specializations: ['Off-Plan Sales', 'Team Leadership', 'Client Relations'],
     languages: ['English', 'French'],
     nationality: 'British',
-    yearsExperience: 10,
+    yearsExperience: 8,
     hierarchyLevel: 4,
     reportsTo: 'roy-davi',
     status: 'online',
@@ -904,15 +904,15 @@ export const salesTeam: TeamMember[] = sortByHierarchy([
   },
   {
     id: 'sarah-van-niekerk',
-    name: 'Sarah Van Niekerk',
+    name: 'Sarah Van Den Berg',
     role: 'Property Consultant',
     department: 'Sales',
     avatar: sarahVanNiekerkSales,
     isAI: true,
-    bio: 'Dedicated property consultant specializing in South African and African investor relations.',
-    specializations: ['South African Clients', 'African Markets', 'Investment Properties'],
-    languages: ['English', 'Afrikaans'],
-    nationality: 'South African',
+    bio: 'Dedicated property consultant specializing in Dutch and European investor relations.',
+    specializations: ['Dutch Clients', 'European Markets', 'Investment Properties'],
+    languages: ['English', 'Dutch', 'German'],
+    nationality: 'Dutch',
     yearsExperience: 6,
     hierarchyLevel: 5,
     reportsTo: 'emma-hartley',
@@ -1017,15 +1017,15 @@ export const salesTeam: TeamMember[] = sortByHierarchy([
   },
   {
     id: 'tamar-levi',
-    name: 'Tamar Levi',
+    name: 'Tamara Petrova',
     role: 'Property Consultant',
     department: 'Sales',
     avatar: tamarLeviSales,
     isAI: true,
-    bio: 'Professional property consultant specializing in Israeli and Hebrew-speaking investor networks.',
-    specializations: ['Israeli Clients', 'Middle Eastern Markets', 'Investment Properties'],
-    languages: ['English', 'Hebrew', 'Arabic'],
-    nationality: 'Israeli',
+    bio: 'Professional property consultant specializing in Eastern European and Russian-speaking investor networks.',
+    specializations: ['Russian Clients', 'Eastern European Markets', 'Investment Properties'],
+    languages: ['English', 'Russian', 'Ukrainian'],
+    nationality: 'Ukrainian',
     yearsExperience: 6,
     hierarchyLevel: 5,
     reportsTo: 'adaeze-okonkwo',
@@ -2306,12 +2306,12 @@ export const projectManagementTeam: TeamMember[] = sortByHierarchy([
   {
     id: 'carmen-garcia',
     name: 'Carmen Garcia',
-    role: 'Scrum Master',
+    role: 'Agile Project Manager',
     department: 'Project Management',
     avatar: carmenGarciaProject,
     isAI: true,
-    bio: 'Certified Scrum Master facilitating agile processes and removing impediments for development teams.',
-    specializations: ['Scrum', 'Agile Coaching', 'Sprint Planning', 'Retrospectives'],
+    bio: 'Certified Agile Project Manager facilitating agile processes and removing impediments for development teams.',
+    specializations: ['Agile Methodology', 'Project Coaching', 'Sprint Planning', 'Retrospectives'],
     languages: ['English', 'Spanish', 'Portuguese'],
     nationality: 'Spanish',
     yearsExperience: 6,
