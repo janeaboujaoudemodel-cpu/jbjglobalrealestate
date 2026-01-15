@@ -20,6 +20,7 @@ import { getCountryList, getLanguageList } from "@/constants/localeOptions";
 import { SearchableSelect } from "@/components/ui/searchable-select";
 import { Link } from "react-router-dom";
 import { CalendlyEmbed } from "@/components/marketing/CalendlyEmbed";
+import { SEOHead, pagesSEO } from "@/components/SEOHead";
 
 const consultationSchema = z.object({
   fullName: z.string().min(2, "Full name is required").max(100, "Name must be less than 100 characters"),
@@ -186,7 +187,9 @@ const Contact = () => {
   ];
 
   return (
-    <div className="min-h-screen bg-black">
+    <>
+      <SEOHead {...pagesSEO.contact} />
+      <div className="min-h-screen bg-black">
       {/* Hero Section */}
       <section className="relative py-20 md:py-28">
         <div className="absolute inset-0 bg-gradient-to-b from-zinc-900/50 to-black" />
@@ -696,7 +699,8 @@ const Contact = () => {
       </section>
 
       <Footer />
-    </div>
+      </div>
+    </>
   );
 };
 

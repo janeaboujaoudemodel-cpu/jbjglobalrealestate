@@ -2,6 +2,7 @@ import { Trophy, Star, Award, Medal } from "lucide-react";
 import Footer from "@/components/Footer";
 import { useCountUp } from "@/hooks/useCountUp";
 import { COMPANY_STATS, CONTACT_INFO } from "@/constants/stats";
+import { SEOHead, pagesSEO } from "@/components/SEOHead";
 
 const CounterStat = ({ end, suffix, prefix, label }: { end: number; suffix: string; prefix: string; label: string }) => {
   const { ref, formattedValue } = useCountUp({ end, suffix, prefix, duration: 2500 });
@@ -68,7 +69,9 @@ const Awards = () => {
   ];
 
   return (
-    <div className="min-h-screen bg-black">
+    <>
+      <SEOHead {...pagesSEO.awards} />
+      <div className="min-h-screen bg-black">
       {/* Hero Section */}
       <section className="relative py-24 md:py-32">
         <div className="absolute inset-0 bg-gradient-to-b from-zinc-900/50 to-black" />
@@ -152,7 +155,8 @@ const Awards = () => {
       </section>
 
       <Footer />
-    </div>
+      </div>
+    </>
   );
 };
 

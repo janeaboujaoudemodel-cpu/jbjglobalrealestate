@@ -2,6 +2,7 @@ import { Link } from "react-router-dom";
 import { motion } from "framer-motion";
 import Footer from "@/components/Footer";
 import { Button } from "@/components/ui/button";
+import { SEOHead, pagesSEO } from "@/components/SEOHead";
 import { 
   Building2, 
   Scale, 
@@ -107,7 +108,9 @@ const services = [
 
 const Services = () => {
   return (
-    <div className="min-h-screen bg-black">
+    <>
+      <SEOHead {...pagesSEO.services} />
+      <div className="min-h-screen bg-black">
       {/* Hero Section */}
       <section className="relative h-[70vh] flex items-center justify-center overflow-hidden">
         <div className="absolute inset-0">
@@ -298,7 +301,8 @@ const Services = () => {
       </section>
 
       <Footer />
-    </div>
+      </div>
+    </>
   );
 };
 
