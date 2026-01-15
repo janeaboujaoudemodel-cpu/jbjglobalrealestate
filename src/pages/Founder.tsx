@@ -197,7 +197,7 @@ const Founder = () => {
         <div className="absolute right-0 bottom-1/3 w-32 md:w-64 h-px bg-gradient-to-l from-gold/50 to-transparent" />
         
         {/* Hero Content - pushed down to show more of the flags */}
-        <div className="relative z-10 container mx-auto px-4 sm:px-6 lg:px-8 pb-8 md:pb-12 lg:pb-16">
+        <div className="relative z-10 container mx-auto px-4 sm:px-6 lg:px-8 pb-4 md:pb-6 lg:pb-8">
           <motion.div 
             className="max-w-4xl"
             initial="hidden"
