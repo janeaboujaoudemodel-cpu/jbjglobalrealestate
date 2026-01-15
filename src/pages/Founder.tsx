@@ -116,7 +116,7 @@ const Founder = () => {
   const careerTimeline = [
     {
       year: "2014",
-      title: "Janine's Beauty — Early Business Chapter",
+      title: "Jane's Beauty — Early Business Chapter",
       description: "Beauty services and early product selling via importing and shipping.",
       location: "Lebanon"
     },
@@ -328,7 +328,7 @@ const Founder = () => {
                   Born August 25, 1998, in Lebanon. Fluent in French and Arabic, with self-taught English and Spanish. Active on social media since 2012 with 1M+ followers across platforms.
                 </p>
                 <p className="text-lg">
-                  At 16, Jane launched Janine's Beauty (beauty services) and began selling products via importing and shipping from China. With 12+ years of sales, customer experience, and business development expertise, she relocated to Dubai in 2020 to pursue real estate.
+                  At 16, Jane launched Jane's Beauty (beauty services) and began selling products via importing and shipping from China. With 12+ years of sales, customer experience, and business development expertise, she relocated to Dubai in 2020 to pursue real estate.
                 </p>
                 <p className="text-lg text-zinc-400">
                   Her career includes working with DAMAC in 2021, leading quality and operations at Al-Ghazal Transportation Company (495+ team), and developing brokerage business divisions from 2022–2024. In 2025, she founded JBJ Global Real Estate as a Dubai-based real estate brokerage.
@@ -407,7 +407,7 @@ const Founder = () => {
                   Jane Abou Jaoude was born on August 25, 1998, in Lebanon. Fluent in French and Arabic from childhood, she later taught herself English and Spanish—developing a global perspective from an early age.
                 </p>
                 <p className="text-lg mb-4 text-zinc-400">
-                  At 16, Jane launched Janine's Beauty in 2014, offering beauty services while also selling products via importing and shipping from China. Active on social media since 2012, she built a following that now exceeds 1M+ across platforms.
+                  At 16, Jane launched Jane's Beauty in 2014, offering beauty services while also selling products via importing and shipping from China. Active on social media since 2012, she built a following that now exceeds 1M+ across platforms.
                 </p>
                 <p className="text-lg text-zinc-400">
                   With 12+ years of experience in sales, customer experience, and business development, these early ventures taught her the fundamentals of service excellence and client relationships.
@@ -816,7 +816,7 @@ const Founder = () => {
                 <div className="absolute bottom-0 left-0 right-0 p-6">
                   <span className="text-gold text-xs uppercase tracking-[0.2em] mb-2 block">2014 → 2025</span>
                   <h4 className="text-white text-lg font-semibold mb-1">The Journey Complete</h4>
-                  <p className="text-zinc-400 text-sm">From Janine's Beauty to JBJ Global Real Estate</p>
+                  <p className="text-zinc-400 text-sm">From Jane's Beauty to JBJ Global Real Estate</p>
                 </div>
               </motion.div>
             </motion.div>
