@@ -97,6 +97,8 @@ const MeetTheTeam = () => {
     "Creative & Media",
     "Finance",
     "Operations",
+    "IT",
+    "Administration",
     "Technology",
   ];
 
@@ -175,7 +177,7 @@ const MeetTheTeam = () => {
                   <p className="text-zinc-500 text-sm">Team Members</p>
                 </div>
                 <div className="text-center">
-                  <p className="text-3xl font-bold text-gold">9</p>
+                  <p className="text-3xl font-bold text-gold">11</p>
                   <p className="text-zinc-500 text-sm">Departments</p>
                 </div>
                 <div className="text-center">
