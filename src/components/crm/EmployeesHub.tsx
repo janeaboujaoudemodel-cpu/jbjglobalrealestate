@@ -872,11 +872,6 @@ const EmployeesHub = ({ userId, brokers = [] }: EmployeesHubProps) => {
                                     {employee.role === 'Founder & CEO' && (
                                       <Crown className="h-4 w-4 text-gold" />
                                     )}
-                                    {employee.hierarchyLevel && (
-                                      <Badge className="bg-purple-100 text-purple-700 text-[10px] px-1.5 py-0 border-0">
-                                        L{employee.hierarchyLevel}
-                                      </Badge>
-                                    )}
                                   </div>
                                   <p className="text-sm text-gold font-medium">{employee.role}</p>
                                   

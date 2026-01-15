@@ -2419,22 +2419,22 @@ export const customerHappinessTeam: TeamMember[] = sortByHierarchy([
 ]);
 
 // ===== Legal Team - 4 members =====
+// Huda Marzooq is EXTERNAL Legal Counsel (Owner of her own law firm) - NOT an employee
 export const legalTeam: TeamMember[] = sortByHierarchy([
   {
     id: 'huda-marzooq',
     name: 'Huda Marzooq',
-    role: 'Legal Counsel',
+    role: 'External Legal Counsel',
     department: 'Legal',
     avatar: hudaMarzooqLawyer,
     isAI: false,
-    bio: 'Personal legal counsel for the Founder and the company. Experienced Emirati legal counsel specializing in UAE property law, contracts, and corporate governance.',
-    specializations: ['UAE Property Law', 'Contract Law', 'Corporate Governance', 'Real Estate Transactions'],
+    bio: 'Owner and Managing Partner of Marzooq Legal Consultancy. Exclusive legal counsel for JBJ Global Real Estate, specializing in UAE property law, contracts, and corporate governance. A distinguished Emirati lawyer with over 15 years of experience serving high-net-worth clients and luxury real estate firms.',
+    specializations: ['UAE Property Law', 'Contract Law', 'Corporate Governance', 'Real Estate Transactions', 'VIP Client Advisory'],
     languages: ['English', 'Arabic'],
     nationality: 'Emirati',
-    hierarchyLevel: 2,
-    directReports: ['william-thornton-legal', 'nadia-hassan'],
     status: 'online',
     canConductInterviews: false,
+    // NOTE: No hierarchyLevel, reportsTo, or yearsExperience - she is an external partner, not an employee
   },
   {
     id: 'william-thornton-legal',
@@ -2448,8 +2448,9 @@ export const legalTeam: TeamMember[] = sortByHierarchy([
     languages: ['English', 'German'],
     nationality: 'British',
     yearsExperience: 12,
-    hierarchyLevel: 4,
-    reportsTo: 'huda-marzooq',
+    hierarchyLevel: 3,
+    reportsTo: 'jane-abou-jaoude',
+    directReports: ['michael-brennan'],
     status: 'online',
   },
   {
@@ -2464,8 +2465,8 @@ export const legalTeam: TeamMember[] = sortByHierarchy([
     languages: ['English', 'Arabic', 'French'],
     nationality: 'Moroccan',
     yearsExperience: 9,
-    hierarchyLevel: 4,
-    reportsTo: 'huda-marzooq',
+    hierarchyLevel: 3,
+    reportsTo: 'jane-abou-jaoude',
     status: 'online',
   },
   {
