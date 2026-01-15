@@ -32,7 +32,7 @@ import {
   LogOut,
   Plus,
   Edit2,
-  Star,
+  Crown,
   Building2,
   FileText,
   Upload,
@@ -94,7 +94,7 @@ const ListingAdmin = () => {
     developer_id: "",
     community_id: "",
     emirate: "Dubai",
-    is_featured: false,
+    is_premium: false,
     furnished_status: "unfurnished",
     payment_plan: "",
     service_charge: "",
@@ -162,7 +162,7 @@ const ListingAdmin = () => {
       developer_id: project.developer?.id || "",
       community_id: project.community?.id || "",
       emirate: project.emirate || "Dubai",
-      is_featured: project.is_featured || false,
+      is_premium: project.is_premium || false,
       furnished_status: project.furnished_status || "unfurnished",
       payment_plan: project.payment_plan || "",
       service_charge: project.service_charge || "",
@@ -195,7 +195,7 @@ const ListingAdmin = () => {
       developer_id: "",
       community_id: "",
       emirate: "Dubai",
-      is_featured: false,
+      is_premium: false,
       furnished_status: "unfurnished",
       payment_plan: "",
       service_charge: "",
@@ -356,7 +356,7 @@ const ListingAdmin = () => {
         developer_id: formData.developer_id || null,
         community_id: formData.community_id || null,
         emirate: formData.emirate,
-        is_featured: formData.is_featured,
+        is_premium: formData.is_premium,
         furnished_status: formData.furnished_status,
         payment_plan: formData.payment_plan || null,
         service_charge: formData.service_charge || null,
@@ -480,11 +480,11 @@ const ListingAdmin = () => {
               <Card className="bg-zinc-900 border-zinc-800">
                 <CardContent className="p-4">
                   <div className="flex items-center gap-2 mb-1">
-                    <Star className="w-4 h-4 text-gold" />
-                    <span className="text-zinc-400 text-sm">Featured</span>
+                    <Crown className="w-4 h-4 text-gold" />
+                    <span className="text-zinc-400 text-sm">Premium</span>
                   </div>
                   <p className="text-white text-2xl font-bold">
-                    {projects?.filter((p) => p.is_featured).length || 0}
+                    {projects?.filter((p) => p.is_premium).length || 0}
                   </p>
                 </CardContent>
               </Card>
@@ -548,8 +548,8 @@ const ListingAdmin = () => {
                             {project.developer?.name || "No Developer"}
                           </p>
                         </div>
-                        {project.is_featured && (
-                          <Star className="w-4 h-4 text-gold flex-shrink-0" />
+                        {project.is_premium && (
+                          <Crown className="w-4 h-4 text-gold flex-shrink-0" />
                         )}
                       </div>
                     </CardContent>
@@ -820,18 +820,21 @@ const ListingAdmin = () => {
                           />
                         </div>
 
-                        {/* Featured */}
-                        <div className="md:col-span-2 flex items-center justify-between p-4 bg-zinc-800/50 rounded-lg">
+                        {/* Premium Listing */}
+                        <div className="md:col-span-2 flex items-center justify-between p-4 bg-gradient-to-r from-gold/10 to-transparent border border-gold/20 rounded-lg">
                           <div>
-                            <Label className="text-white font-medium">Featured Project</Label>
+                            <Label className="text-white font-medium flex items-center gap-2">
+                              <Crown className="w-4 h-4 text-gold" />
+                              Premium Listing
+                            </Label>
                             <p className="text-zinc-500 text-sm">
-                              Featured projects appear prominently on the homepage
+                              Premium properties appear with special badge in search & listings
                             </p>
                           </div>
                           <Switch
-                            checked={formData.is_featured}
+                            checked={formData.is_premium}
                             onCheckedChange={(checked) =>
-                              setFormData({ ...formData, is_featured: checked })
+                              setFormData({ ...formData, is_premium: checked })
                             }
                           />
                         </div>

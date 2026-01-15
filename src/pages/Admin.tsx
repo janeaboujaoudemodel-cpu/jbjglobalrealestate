@@ -29,7 +29,7 @@ import {
   LogOut,
   Plus,
   Edit2,
-  Star,
+  Crown,
   Building2,
   FileText,
   Upload,
@@ -97,7 +97,7 @@ const Admin = () => {
     developer_id: "",
     community_id: "",
     emirate: "Dubai",
-    is_featured: false,
+    is_premium: false,
     furnished_status: "unfurnished",
     payment_plan: "",
     service_charge: "",
@@ -132,7 +132,7 @@ const Admin = () => {
       developer_id: project.developer?.id || "",
       community_id: project.community?.id || "",
       emirate: project.emirate || "Dubai",
-      is_featured: project.is_featured || false,
+      is_premium: project.is_premium || false,
       furnished_status: project.furnished_status || "unfurnished",
       payment_plan: project.payment_plan || "",
       service_charge: project.service_charge || "",
@@ -235,7 +235,7 @@ const Admin = () => {
     try {
       const { error } = await supabase
         .from("projects")
-        .update({ is_featured: !currentValue })
+        .update({ is_premium: !currentValue })
         .eq("id", projectId);
 
       if (error) throw error;
@@ -265,7 +265,7 @@ const Admin = () => {
         developer_id: formData.developer_id || null,
         community_id: formData.community_id || null,
         emirate: formData.emirate,
-        is_featured: formData.is_featured,
+        is_premium: formData.is_premium,
         furnished_status: formData.furnished_status,
         payment_plan: formData.payment_plan || null,
         service_charge: formData.service_charge || null,
@@ -430,11 +430,11 @@ const Admin = () => {
               </div>
               <div className="bg-zinc-900 border border-zinc-800 rounded-xl p-6">
                 <div className="flex items-center gap-3 mb-2">
-                  <Star className="w-5 h-5 text-gold" />
+                  <Crown className="w-5 h-5 text-gold" />
                   <span className="text-gray-400">Premium Properties</span>
                 </div>
                 <p className="text-white text-3xl font-bold">
-                  {projects?.filter((p) => p.is_featured).length || 0}
+                  {projects?.filter((p) => p.is_premium).length || 0}
                 </p>
               </div>
               <div className="bg-zinc-900 border border-zinc-800 rounded-xl p-6">
@@ -537,12 +537,12 @@ const Admin = () => {
                         </td>
                         <td className="px-6 py-4 text-center">
                           <button
-                            onClick={() => handleToggleFeatured(project.id, project.is_featured || false)}
+                            onClick={() => handleToggleFeatured(project.id, project.is_premium || false)}
                             className="inline-flex items-center justify-center"
                           >
-                            <Star
+                            <Crown
                               className={`w-5 h-5 transition-colors ${
-                                project.is_featured
+                                project.is_premium
                                   ? "fill-gold text-gold"
                                   : "text-gray-600 hover:text-gray-400"
                               }`}
@@ -767,8 +767,8 @@ const Admin = () => {
                 </p>
               </div>
               <Switch
-                checked={formData.is_featured}
-                onCheckedChange={(checked) => setFormData({ ...formData, is_featured: checked })}
+                checked={formData.is_premium}
+                onCheckedChange={(checked) => setFormData({ ...formData, is_premium: checked })}
               />
             </div>
 

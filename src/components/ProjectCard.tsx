@@ -2,7 +2,7 @@ import { Link } from "react-router-dom";
 import type { Project } from "@/hooks/useProjects";
 import FavoriteButton from "./FavoriteButton";
 import ShortlistBadgeButton from "./ShortlistBadgeButton";
-import { FileText, Download, Phone, MessageCircle } from "lucide-react";
+import { FileText, Download, Phone, MessageCircle, Crown } from "lucide-react";
 import { Button } from "./ui/button";
 import { CONTACT_INFO, getWhatsAppUrl, getCallUrl } from "@/constants/stats";
 
@@ -104,12 +104,21 @@ const ProjectCard = ({ project, showFavorite = true, showBadgeButton = true, cur
 
       <Link to={`/project/${project.slug}`} className="flex-1">
         {/* Image */}
-        <div className="aspect-[4/3] overflow-hidden">
+        <div className="aspect-[4/3] overflow-hidden relative">
           <img
             src={project.images?.[0]?.image_url || "https://images.unsplash.com/photo-1512917774080-9991f1c4c750?w=800"}
             alt={project.name}
             className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
           />
+          {/* Premium Badge */}
+          {project.is_premium && (
+            <div className="absolute top-12 right-3 z-10">
+              <div className="bg-gradient-to-r from-gold via-[#E8D5A3] to-gold px-2.5 py-1 rounded-full shadow-lg shadow-gold/30 flex items-center gap-1">
+                <Crown className="w-3 h-3 text-black" />
+                <span className="text-black text-[10px] font-bold uppercase tracking-wide">Premium</span>
+              </div>
+            </div>
+          )}
         </div>
         
         {/* Content */}

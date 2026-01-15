@@ -1,6 +1,6 @@
 import { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
-import { Star, Building2, Calendar, Briefcase } from "lucide-react";
+import { Crown, Building2, Calendar, Briefcase, DollarSign } from "lucide-react";
 import { useDevelopers, useProjects, useCommunities, useTrendingAreas } from "@/hooks/useProjects";
 import { useFilteredProjects, defaultFilters } from "@/hooks/useProjectFilters";
 import ProjectFilters, { type FilterState } from "@/components/ProjectFilters";
@@ -144,7 +144,7 @@ const DeveloperGrid = () => {
                 )}
                 {developer.portfolio_worth && (
                   <div className="flex items-center gap-2 text-gray-500">
-                    <Star className="w-4 h-4 text-gold" />
+                    <DollarSign className="w-4 h-4 text-gold" />
                     <span>Portfolio: {formatPortfolioWorth(developer.portfolio_worth)}</span>
                   </div>
                 )}
@@ -172,11 +172,12 @@ const DeveloperGrid = () => {
                       className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
                     />
                     
-                    {/* Premium Star */}
-                    {project.is_featured && (
+                    {/* Premium Badge */}
+                    {project.is_premium && (
                       <div className="absolute top-3 right-3 z-10">
-                        <div className="bg-black/60 backdrop-blur-sm rounded-full p-2">
-                          <Star className="w-5 h-5 fill-gold text-gold" />
+                        <div className="bg-gradient-to-r from-gold via-[#E8D5A3] to-gold px-3 py-1.5 rounded-full shadow-lg shadow-gold/30 flex items-center gap-1.5">
+                          <Crown className="w-3.5 h-3.5 text-black" />
+                          <span className="text-black text-xs font-bold uppercase tracking-wide">Premium</span>
                         </div>
                       </div>
                     )}
