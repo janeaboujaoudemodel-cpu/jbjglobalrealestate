@@ -1,7 +1,7 @@
 import { motion } from "framer-motion";
 import { Badge } from "@/components/ui/badge";
 import { Sparkles, Users, Building2, Globe, Languages } from "lucide-react";
-import ceoBackdropFlags from "@/assets/ceo/ceo-backdrop-flags-v2.jpg";
+import ceoBackdropFlags from "@/assets/ceo/ceo-backdrop-flags-v3.jpg";
 import AnimatedCounter from "@/components/AnimatedCounter";
 import { useTeamMetrics } from "@/hooks/useTeamMetrics";
 

@@ -769,34 +769,29 @@ const EmployeesHub = ({ userId, brokers = [] }: EmployeesHubProps) => {
               {getFilteredEmployees().map((employee) => (
                 <Card 
                   key={employee.id} 
-                  className={`bg-white border border-crm-border hover:border-gold/50 hover:shadow-md transition-all duration-200 cursor-pointer ${
-                    employee.type === 'ai' ? 'border-l-4 border-l-purple-500' : ''
-                  }`}
+                  className="bg-white border border-crm-border hover:border-gold/50 hover:shadow-md transition-all duration-200 cursor-pointer"
                   onClick={() => setSelectedEmployee(employee)}
                 >
                   <CardContent className="p-4">
                     <div className="flex items-center justify-between">
                       <div className="flex items-center gap-4">
-                        {/* Avatar */}
+                        {/* Avatar - Use actual team photos */}
                         <div className="relative">
                           <Avatar className="h-12 w-12 border-2 border-gold/30">
-                            <AvatarFallback className={`${employee.type === 'ai' ? 'bg-purple-100 text-purple-600' : 'bg-gold/10 text-gold'} font-bold`}>
-                              {employee.type === 'ai' ? <Bot className="h-6 w-6" /> : employee.name.charAt(0)}
+                            {employee.avatar ? (
+                              <AvatarImage src={employee.avatar} alt={employee.name} className="object-cover" />
+                            ) : null}
+                            <AvatarFallback className="bg-gold/10 text-gold font-bold">
+                              {employee.name.charAt(0)}
                             </AvatarFallback>
                           </Avatar>
                           <div className={`absolute -bottom-0.5 -right-0.5 w-3.5 h-3.5 rounded-full ${getStatusColor(employee.status)} border-2 border-white`} />
                         </div>
 
-                        {/* Info */}
+                        {/* Info - No AI labels */}
                         <div>
                           <div className="flex items-center gap-2 flex-wrap">
                             <p className="font-semibold text-crm-text">{employee.name}</p>
-                            {employee.type === 'ai' && (
-                              <Badge className="bg-purple-100 text-purple-700 text-xs border-purple-300">
-                                <Bot className="h-3 w-3 mr-1" />
-                                AI
-                              </Badge>
-                            )}
                             {employee.role === 'Founder & CEO' && (
                               <Crown className="h-4 w-4 text-gold" />
                             )}
