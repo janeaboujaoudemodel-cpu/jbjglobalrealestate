@@ -177,8 +177,8 @@ const Founder = () => {
           <SafeImage 
             src={ceoHeroOfficeFlags} 
             fallbackSrc={founderHero}
-            alt="Jane Abou Jaoude - Founder & Managing Director"
-            className="w-full h-full object-cover object-center"
+            alt="Jane Abou Jaoude - Founder & CEO"
+            className="w-full h-full object-cover object-top"
           />
           {/* Multi-layer gradient overlay */}
           <div className="absolute inset-0 bg-gradient-to-t from-black via-black/60 to-transparent" />
@@ -196,23 +196,23 @@ const Founder = () => {
         <div className="absolute left-0 top-1/3 w-32 md:w-64 h-px bg-gradient-to-r from-gold/50 to-transparent" />
         <div className="absolute right-0 bottom-1/3 w-32 md:w-64 h-px bg-gradient-to-l from-gold/50 to-transparent" />
         
-        {/* Hero Content */}
-        <div className="relative z-10 container mx-auto px-4 sm:px-6 lg:px-8 pb-16 md:pb-24 lg:pb-32">
+        {/* Hero Content - pushed down to show more of the flags */}
+        <div className="relative z-10 container mx-auto px-4 sm:px-6 lg:px-8 pb-8 md:pb-12 lg:pb-16">
           <motion.div 
             className="max-w-4xl"
             initial="hidden"
             animate="visible"
             variants={staggerContainer}
           >
-            <motion.div className="mb-6" variants={fadeInUp}>
+            <motion.div className="mb-4" variants={fadeInUp}>
               <span className="inline-flex items-center gap-2 bg-black/40 backdrop-blur-md border border-gold/40 text-gold text-xs uppercase tracking-[0.3em] px-5 py-2.5 rounded-full shadow-lg shadow-gold/10">
                 <Star className="w-3.5 h-3.5 fill-gold" />
-                Founder & Managing Director
+                Founder & CEO
               </span>
             </motion.div>
             
             <motion.h1 
-              className="text-white text-5xl sm:text-6xl md:text-7xl lg:text-8xl xl:text-9xl font-bold tracking-tight mb-6"
+              className="text-white text-4xl sm:text-5xl md:text-6xl lg:text-7xl xl:text-8xl font-bold tracking-tight mb-4"
               style={{ fontFamily: "Poppins, sans-serif" }}
               variants={fadeInUp}
             >
@@ -224,10 +224,10 @@ const Founder = () => {
             </motion.h1>
             
             <motion.div variants={fadeInUp}>
-              <p className="text-white text-xl md:text-2xl lg:text-3xl mb-1 font-semibold tracking-wide">
-                Founder & Managing Director • JBJ Global Real Estate
+              <p className="text-white text-lg md:text-xl lg:text-2xl mb-1 font-semibold tracking-wide">
+                Founder & CEO • JBJ Global Real Estate
               </p>
-              <p className="text-zinc-400 text-sm md:text-base mb-8">
+              <p className="text-zinc-400 text-sm md:text-base mb-6">
                 Real Estate Brokerage • Dubai, UAE
               </p>
             </motion.div>
