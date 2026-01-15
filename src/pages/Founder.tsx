@@ -31,6 +31,7 @@ import ceoPanelDiscussion from "@/assets/ceo/ceo-panel-discussion.jpg";
 import ceoMediaInterview from "@/assets/ceo/ceo-media-interview.jpg";
 import ceoAwardCeremony from "@/assets/ceo/ceo-award-ceremony.jpg";
 import ceoBackdropFlags from "@/assets/jane-ceo-executive-office-final-v9.jpg";
+import ceoHeroOfficeFlags from "@/assets/ceo-hero-office-flags.jpg";
 
 // Animation variants
 const fadeInUp = {
@@ -172,12 +173,12 @@ const Founder = () => {
           animate={{ scale: 1 }}
           transition={{ duration: 1.5, ease: "easeOut" }}
         >
-          {/* Hero image - smart crop from top (head first) */}
+          {/* Hero image - CEO with flags in office */}
           <SafeImage 
-            src={founderProfessional} 
+            src={ceoHeroOfficeFlags} 
             fallbackSrc={founderHero}
             alt="Jane Abou Jaoude - Founder & Managing Director"
-            className="w-full h-full object-cover object-top"
+            className="w-full h-full object-cover object-center"
           />
           {/* Multi-layer gradient overlay */}
           <div className="absolute inset-0 bg-gradient-to-t from-black via-black/60 to-transparent" />
