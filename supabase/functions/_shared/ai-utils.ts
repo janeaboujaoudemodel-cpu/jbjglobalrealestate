@@ -37,8 +37,8 @@ export function getCorsHeaders(req: Request): Record<string, string> {
 
 export const APPROVED_CONTACT = {
   phone: "+971 56 591 1000",
-  email: "contact@jbj.ae",
-  privacyEmail: "privacy@jbj.ae",
+  email: "contact@JBJ.ae",
+  privacyEmail: "privacy@JBJ.ae",
   website: "jbj.ae",
   whatsapp: "+971565911000",
   companyName: "JBJ Global Real Estate",
@@ -85,10 +85,12 @@ export function sanitizeContactInfo(text: string): string {
   });
 
   // Replace non-approved emails
+  const toCanonicalJbjEmail = (value: string) => value.replace(/@jbj\.ae$/i, "@JBJ.ae");
+
   sanitized = sanitized.replace(emailPattern, (match) => {
-    if (APPROVED_EMAILS.includes(match.toLowerCase())) return match;
-    // Allow jbj.ae emails
-    if (match.toLowerCase().endsWith("@jbj.ae")) return match;
+    const lower = match.toLowerCase();
+    // Allow any @jbj.ae address, but force JBJ casing in output
+    if (lower.endsWith("@jbj.ae")) return toCanonicalJbjEmail(match);
     return APPROVED_CONTACT.email;
   });
 

@@ -30,7 +30,7 @@ async function sendEmailWithResend(to: string, otp: string, fullName?: string): 
     },
     body: JSON.stringify({
       from: fromAddress,
-      reply_to: "contact@jbj.ae",
+      reply_to: "contact@JBJ.ae",
       to: [to],
       subject: "Your Verification Code - JBJ Global Real Estate",
       html: `
@@ -97,7 +97,7 @@ async function sendEmailWithResend(to: string, otp: string, fullName?: string): 
                           Questions? Contact us at:
                         </p>
                         <p style="margin: 0 0 8px; color: #ffffff; font-size: 14px; font-family: Arial, sans-serif;">
-                          <a href="mailto:contact@jbj.ae" style="color: #A8925A; text-decoration: none;">contact@jbj.ae</a> 
+                          <a href="mailto:contact@JBJ.ae" style="color: #A8925A; text-decoration: none;">contact@JBJ.ae</a> 
                           &nbsp;|&nbsp; 
                           <a href="https://wa.me/971565911000" style="color: #A8925A; text-decoration: none;">+971 56 591 1000</a>
                         </p>
@@ -134,7 +134,7 @@ async function sendEmailWithResend(to: string, otp: string, fullName?: string): 
       
       // If it's a domain verification issue, provide clear guidance
       if (errorJson.message?.includes('verify a domain')) {
-        console.error("ACTION REQUIRED: Verify jbj.ae domain at https://resend.com/domains");
+        console.error("ACTION REQUIRED: Verify JBJ.ae domain at https://resend.com/domains");
       }
     } catch {
       // Ignore JSON parse errors

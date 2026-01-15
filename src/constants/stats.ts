@@ -45,9 +45,9 @@ export const COMPANY_STATS_LEGACY = {
 export const CONTACT_INFO = {
   phone: '+971 56 591 1000',
   phoneRaw: '+971565911000',
-  email: 'contact@jbj.ae',
-  emailCapitalized: 'contact@jbj.ae',
-  privacyEmail: 'privacy@jbj.ae',
+  email: 'contact@JBJ.ae',
+  emailCapitalized: 'contact@JBJ.ae',
+  privacyEmail: 'privacy@JBJ.ae',
   whatsappNumber: '971565911000',
   whatsappMessage: "Hi, I'm interested in learning more about property brokerage services with JBJ Global Real Estate.",
   address: 'Downtown Dubai, UAE',
@@ -55,7 +55,7 @@ export const CONTACT_INFO = {
   companyDescriptor: 'JBJ Global Real Estate',
   companyFull: 'JBJ Global Real Estate L.L.C S.O.C.',
   founder: 'Jane Abou Jaoude',
-  domain: 'jbj.ae',
+  domain: 'JBJ.ae',
 };
 
 // Generate WhatsApp URL
