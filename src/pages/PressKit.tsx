@@ -29,7 +29,7 @@ import founderOffice from "@/assets/founder-office.jpeg";
 import founderAwardStage from "@/assets/founder-award-stage.jpeg";
 import founderRedCarpet from "@/assets/founder-red-carpet.jpeg";
 import founderSpeaking from "@/assets/founder-speaking.png";
-import jjFlags from "@/assets/jj-flags.png";
+// jjFlags removed - old company branding
 
 const fadeInUp = {
   hidden: { opacity: 0, y: 30 },
