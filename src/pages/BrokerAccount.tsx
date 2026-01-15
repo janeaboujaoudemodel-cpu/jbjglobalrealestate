@@ -96,7 +96,7 @@ const BrokerAccount = () => {
   const [chatLogs, setChatLogs] = useState<ChatLog[]>([]);
   const [loading, setLoading] = useState(true);
   const [isEmployee, setIsEmployee] = useState(false);
-  const [employeeProfile, setEmployeeProfile] = useState<{ display_name?: string; crm_role?: string; job_title?: string } | null>(null);
+  const [employeeProfile, setEmployeeProfile] = useState<{ display_name?: string; crm_role?: string; job_title?: string; photo_url?: string } | null>(null);
 
   // Check if user is a CRM employee (not just external broker)
   useEffect(() => {
@@ -105,7 +105,7 @@ const BrokerAccount = () => {
       
       const { data } = await supabase
         .from('crm_users_profile')
-        .select('display_name, crm_role, job_title, is_active')
+        .select('display_name, crm_role, job_title, is_active, photo_url')
         .eq('user_id', user.id)
         .maybeSingle();
       
@@ -202,7 +202,7 @@ const BrokerAccount = () => {
             <CardContent className="p-6">
               <div className="flex flex-col md:flex-row items-center gap-6">
                 <Avatar className="h-24 w-24 border-4 border-primary/20">
-                  <AvatarImage src="" />
+                  <AvatarImage src={employeeProfile?.photo_url || ""} />
                   <AvatarFallback className="text-2xl bg-primary text-primary-foreground">
                     {employeeProfile?.display_name?.charAt(0).toUpperCase() || user?.email?.charAt(0).toUpperCase()}
                   </AvatarFallback>

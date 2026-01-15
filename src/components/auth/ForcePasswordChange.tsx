@@ -3,9 +3,10 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
-import { Lock, Eye, EyeOff, ShieldCheck, AlertCircle } from "lucide-react";
+import { Lock, Eye, EyeOff, ShieldCheck, AlertCircle, CheckCircle2, LogIn } from "lucide-react";
 import { supabase } from "@/integrations/supabase/client";
 import { toast } from "sonner";
+import { useAuth } from "@/contexts/AuthContext";
 
 interface ForcePasswordChangeProps {
   onComplete: () => void;
@@ -13,11 +14,13 @@ interface ForcePasswordChangeProps {
 }
 
 export function ForcePasswordChange({ onComplete, userName }: ForcePasswordChangeProps) {
+  const { signOut } = useAuth();
   const [newPassword, setNewPassword] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
   const [showPassword, setShowPassword] = useState(false);
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [errors, setErrors] = useState<string[]>([]);
+  const [passwordChanged, setPasswordChanged] = useState(false);
 
   const validatePassword = (password: string): string[] => {
     const errors: string[] = [];
@@ -61,17 +64,19 @@ export function ForcePasswordChange({ onComplete, userName }: ForcePasswordChang
           .from("crm_users_profile")
           .update({
             force_password_change: false,
-            last_password_change: new Date().toISOString(),
+            password_changed_at: new Date().toISOString(),
             first_login_at: new Date().toISOString(),
+            login_count: 0, // Reset so next login triggers welcome
           })
           .eq("user_id", user.id);
       }
 
       toast.success("Password updated successfully!", {
-        description: "Please save your new password securely.",
+        description: "Please login again with your new password.",
       });
       
-      onComplete();
+      // Show success screen instead of completing
+      setPasswordChanged(true);
     } catch (error: any) {
       console.error("Password update error:", error);
       toast.error("Failed to update password", {
@@ -81,6 +86,48 @@ export function ForcePasswordChange({ onComplete, userName }: ForcePasswordChang
       setIsSubmitting(false);
     }
   };
+
+  const handleLoginAgain = async () => {
+    await signOut();
+    window.location.href = "/auth";
+  };
+
+  // Show success screen after password change
+  if (passwordChanged) {
+    return (
+      <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-slate-900 via-slate-800 to-slate-900 p-4">
+        <Card className="w-full max-w-md bg-slate-800/80 border-emerald-500/30 backdrop-blur-xl">
+          <CardHeader className="text-center space-y-4">
+            <div className="mx-auto w-16 h-16 bg-gradient-to-br from-emerald-400 to-emerald-600 rounded-full flex items-center justify-center">
+              <CheckCircle2 className="w-8 h-8 text-white" />
+            </div>
+            <CardTitle className="text-2xl font-bold text-white">
+              Password Updated!
+            </CardTitle>
+            <CardDescription className="text-slate-300">
+              Your new password has been saved successfully. Please login again with your new password to continue.
+            </CardDescription>
+          </CardHeader>
+
+          <CardContent className="space-y-4">
+            <div className="bg-emerald-500/10 border border-emerald-500/30 rounded-lg p-4 text-center">
+              <p className="text-emerald-300 text-sm">
+                For security, you'll be signed out and redirected to the login page.
+              </p>
+            </div>
+            
+            <Button
+              onClick={handleLoginAgain}
+              className="w-full bg-gradient-to-r from-amber-500 to-amber-600 hover:from-amber-600 hover:to-amber-700 text-slate-900 font-semibold py-3"
+            >
+              <LogIn className="w-4 h-4 mr-2" />
+              Login with New Password
+            </Button>
+          </CardContent>
+        </Card>
+      </div>
+    );
+  }
 
   return (
     <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-slate-900 via-slate-800 to-slate-900 p-4">

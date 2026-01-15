@@ -3125,6 +3125,7 @@ export type Database = {
           job_title: string | null
           last_password_change: string | null
           login_count: number | null
+          password_changed_at: string | null
           phone: string | null
           photo_url: string | null
           preferred_language: string | null
@@ -3143,6 +3144,7 @@ export type Database = {
           job_title?: string | null
           last_password_change?: string | null
           login_count?: number | null
+          password_changed_at?: string | null
           phone?: string | null
           photo_url?: string | null
           preferred_language?: string | null
@@ -3161,6 +3163,7 @@ export type Database = {
           job_title?: string | null
           last_password_change?: string | null
           login_count?: number | null
+          password_changed_at?: string | null
           phone?: string | null
           photo_url?: string | null
           preferred_language?: string | null
