@@ -15,7 +15,7 @@ import { useUserRole } from "@/hooks/useUserRole";
 import { Sparkles, ArrowUpRight, ChevronDown, User, Scale, Layers, Calculator, FileText, Heart, BarChart3, Wrench, Ruler, Palette, Calendar, Wallet, ShoppingBag, Brain, GraduationCap, Briefcase, Target, Award, PenTool, Users, Table2, Video } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import founderProfessional from "@/assets/founder-professional.jpeg";
-import ceoBackdropFlags from "@/assets/founder-professional.jpeg";
+
 import luxuryVillaHero from "@/assets/luxury-villa-hero.jpeg";
 import jbjFullLogoLight from "@/assets/jbj-fulllogo-light.png";
 import { CONTACT_INFO } from "@/constants/stats";
@@ -366,7 +366,7 @@ const Index = () => {
         </div>
       </section>
 
-      {/* FOUNDER SECTION - Meet The Leadership with Flags Backdrop */}
+      {/* FOUNDER SECTION - Meet The Leadership */}
       <section className="py-20 md:py-28 bg-gradient-to-b from-black via-zinc-950 to-black">
         <div className="container mx-auto px-4">
           <motion.div
@@ -377,7 +377,7 @@ const Index = () => {
             className="max-w-6xl mx-auto"
           >
             {/* Section Header */}
-            <motion.div className="text-center mb-10" variants={fadeInUp}>
+            <motion.div className="text-center mb-12" variants={fadeInUp}>
               <span className="inline-flex items-center gap-2 text-gold text-sm uppercase tracking-[0.3em]">
                 <User className="w-4 h-4" />
                 Leadership
@@ -393,25 +393,28 @@ const Index = () => {
               </p>
             </motion.div>
 
-            {/* CEO Backdrop with Flags - Full Width */}
+            {/* Founder Card - Classic Side by Side Layout */}
             <motion.div 
-              className="relative rounded-2xl overflow-hidden mb-10"
+              className="bg-zinc-900/50 border border-gold/20 rounded-3xl overflow-hidden"
               variants={fadeInUp}
             >
-              <div className="relative h-[400px] md:h-[500px] lg:h-[550px]">
-                <img 
-                  src={ceoBackdropFlags} 
-                  alt="Jane Abou Jaoude - Founder & CEO at JBJ Global Real Estate Executive Office"
-                  className="w-full h-full object-cover object-center"
-                />
-                {/* Gradient overlay for text readability */}
-                <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-transparent to-transparent" />
+              <div className="grid md:grid-cols-2 gap-0">
+                {/* Photo Side */}
+                <div className="relative">
+                  <img 
+                    src={founderProfessional} 
+                    alt="Jane Abou Jaoude - Founder & CEO at JBJ Global Real Estate"
+                    className="w-full h-full object-cover object-top min-h-[400px] md:min-h-[500px]"
+                  />
+                  {/* Subtle gradient overlay */}
+                  <div className="absolute inset-0 bg-gradient-to-r from-transparent to-zinc-900/30 md:block hidden" />
+                </div>
                 
-                {/* Name and title overlay at bottom */}
-                <div className="absolute bottom-0 left-0 right-0 text-center pb-8">
-                  <h3 className="text-white text-2xl md:text-3xl font-bold mb-2">Jane Abou Jaoude</h3>
+                {/* Content Side */}
+                <div className="p-8 md:p-12 flex flex-col justify-center">
+                  <h3 className="text-white text-3xl md:text-4xl font-bold mb-2">Jane Abou Jaoude</h3>
                   <p
-                    className="text-lg md:text-xl font-semibold mb-2"
+                    className="text-xl md:text-2xl font-semibold mb-6"
                     style={{
                       background: "linear-gradient(135deg, #CBA64B 0%, #E8D5A3 50%, #CBA64B 100%)",
                       WebkitBackgroundClip: "text",
@@ -420,38 +423,37 @@ const Index = () => {
                   >
                     Founder & CEO
                   </p>
-                  <p className="text-zinc-400 text-sm">12 Years Experience • Lebanese</p>
+                  
+                  <p className="text-zinc-400 text-base leading-relaxed mb-8">
+                    With over 12 years of experience and a proven track record of training 2,800+ brokers, 
+                    Jane leads JBJ Global Real Estate with a commitment to excellence, integrity, and client success.
+                  </p>
+                  
+                  {/* Stats Row */}
+                  <div className="grid grid-cols-3 gap-4 mb-8">
+                    <div className="text-center p-3 bg-black/30 border border-gold/10 rounded-xl">
+                      <p className="text-transparent bg-clip-text bg-gradient-to-r from-gold via-[#C4A962] to-gold text-2xl md:text-3xl font-bold">12+</p>
+                      <p className="text-zinc-500 text-[10px] uppercase tracking-wider mt-1">Years Exp</p>
+                    </div>
+                    <div className="text-center p-3 bg-black/30 border border-gold/10 rounded-xl">
+                      <p className="text-transparent bg-clip-text bg-gradient-to-r from-gold via-[#C4A962] to-gold text-2xl md:text-3xl font-bold">5+</p>
+                      <p className="text-zinc-500 text-[10px] uppercase tracking-wider mt-1">In Dubai</p>
+                    </div>
+                    <div className="text-center p-3 bg-black/30 border border-gold/10 rounded-xl">
+                      <p className="text-transparent bg-clip-text bg-gradient-to-r from-gold via-[#C4A962] to-gold text-2xl md:text-3xl font-bold">2.8K+</p>
+                      <p className="text-zinc-500 text-[10px] uppercase tracking-wider mt-1">Trained</p>
+                    </div>
+                  </div>
+                  
+                  {/* CTA Button */}
+                  <Link to="/founder">
+                    <Button className="w-full md:w-auto bg-gradient-to-r from-gold via-[#C4A962] to-gold hover:from-gold-light hover:to-gold text-black font-bold px-8 py-6 text-base transition-all duration-500 hover:shadow-2xl hover:shadow-gold/50 hover:scale-105 shadow-lg shadow-gold/30 border border-gold/50">
+                      Learn More About Our Founder
+                      <ArrowUpRight className="w-5 h-5 ml-2" />
+                    </Button>
+                  </Link>
                 </div>
               </div>
-            </motion.div>
-            
-            {/* Stats Row */}
-            <motion.div 
-              className="grid grid-cols-3 gap-6 mb-10"
-              variants={fadeInUp}
-            >
-              <div className="text-center p-4 bg-zinc-900/50 border border-gold/10 rounded-xl hover:border-gold/30 transition-all duration-300">
-                <p className="text-transparent bg-clip-text bg-gradient-to-r from-gold via-[#C4A962] to-gold text-3xl md:text-4xl font-bold" style={{ fontFamily: "Poppins, sans-serif" }}>12+</p>
-                <p className="text-zinc-400 text-xs uppercase tracking-wider mt-1">Years Experience</p>
-              </div>
-              <div className="text-center p-4 bg-zinc-900/50 border border-gold/10 rounded-xl hover:border-gold/30 transition-all duration-300">
-                <p className="text-transparent bg-clip-text bg-gradient-to-r from-gold via-[#C4A962] to-gold text-3xl md:text-4xl font-bold" style={{ fontFamily: "Poppins, sans-serif" }}>5+</p>
-                <p className="text-zinc-400 text-xs uppercase tracking-wider mt-1">Years in Dubai</p>
-              </div>
-              <div className="text-center p-4 bg-zinc-900/50 border border-gold/10 rounded-xl hover:border-gold/30 transition-all duration-300">
-                <p className="text-transparent bg-clip-text bg-gradient-to-r from-gold via-[#C4A962] to-gold text-3xl md:text-4xl font-bold" style={{ fontFamily: "Poppins, sans-serif" }}>2,800+</p>
-                <p className="text-zinc-400 text-xs uppercase tracking-wider mt-1">Brokers Trained</p>
-              </div>
-            </motion.div>
-            
-            {/* CTA Button */}
-            <motion.div className="text-center" variants={fadeInUp}>
-              <Link to="/founder">
-                <Button className="relative bg-gradient-to-r from-gold via-[#C4A962] to-gold hover:from-gold-light hover:to-gold text-black font-bold px-8 py-6 text-base transition-all duration-500 hover:shadow-2xl hover:shadow-gold/50 hover:scale-105 shadow-lg shadow-gold/30 border border-gold/50">
-                  Learn More About Our Founder
-                  <ArrowUpRight className="w-5 h-5 ml-2" />
-                </Button>
-              </Link>
             </motion.div>
           </motion.div>
         </div>
