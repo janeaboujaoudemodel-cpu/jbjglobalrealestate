@@ -47,6 +47,11 @@ const TeamMemberCard = ({ member, onReadMore }: TeamMemberCardProps) => {
   // Get reporting manager info
   const reportsToMember = member.reportsTo ? getTeamMemberById(member.reportsTo) : null;
 
+  // Show up to 4 languages, only +X if more than 4
+  const maxLanguages = 4;
+  const displayLanguages = member.languages?.slice(0, maxLanguages) || [];
+  const remainingLanguages = (member.languages?.length || 0) - maxLanguages;
+
   return (
     <motion.div variants={fadeInUp}>
       <Card className="bg-zinc-900/60 border-zinc-800 hover:border-gold/50 transition-all duration-300 overflow-hidden group h-full">
@@ -61,62 +66,62 @@ const TeamMemberCard = ({ member, onReadMore }: TeamMemberCardProps) => {
             />
             {/* Photo overlay gradient */}
             <div className="absolute inset-0 bg-gradient-to-t from-zinc-950 via-transparent to-transparent opacity-80" />
-            
-            {/* Hierarchy Level Badge */}
-            {member.hierarchyLevel && (
-              <div className="absolute top-2 right-2">
-                <Badge className="bg-purple-500/80 text-white text-[10px] px-1.5 py-0.5">
-                  L{member.hierarchyLevel}
-                </Badge>
-              </div>
-            )}
           </div>
 
-          {/* Info */}
-          <div className="p-5 -mt-16 relative z-10 flex flex-col h-[240px]">
-            <div>
-              <h3 className="text-white font-semibold text-lg mb-1">{member.name}</h3>
+          {/* Info - Fixed height for symmetry */}
+          <div className="p-5 -mt-16 relative z-10 flex flex-col h-[280px]">
+            <div className="flex-1">
+              <h3 className="text-white font-semibold text-lg mb-1 line-clamp-1">{member.name}</h3>
 
               {/* Premium shiny job title */}
               <p
-                className="text-sm font-medium mb-1"
+                className="text-sm font-medium mb-1 line-clamp-1"
                 style={{
                   background:
                     "linear-gradient(135deg, #CBA64B 0%, #E8D5A3 40%, #F5ECD7 50%, #E8D5A3 60%, #CBA64B 100%)",
                   WebkitBackgroundClip: "text",
                   WebkitTextFillColor: "transparent",
                   backgroundClip: "text",
-                  textShadow: "0 0 20px rgba(203, 166, 75, 0.3)",
                 }}
               >
                 {member.role}
               </p>
 
-              <div className="flex items-center justify-between gap-3">
-                <p className="text-zinc-500 text-sm">{member.department}</p>
+              <div className="flex items-center gap-2 text-zinc-500 text-xs mb-1">
+                <span>{member.department}</span>
                 {typeof member.yearsExperience === "number" && (
-                  <p className="text-zinc-500 text-xs whitespace-nowrap">
-                    {member.yearsExperience} yrs exp
-                  </p>
+                  <>
+                    <span>•</span>
+                    <span>{member.yearsExperience} yrs</span>
+                  </>
+                )}
+                {member.nationality && (
+                  <>
+                    <span>•</span>
+                    <span>{member.nationality}</span>
+                  </>
                 )}
               </div>
 
-              {member.nationality && (
-                <p className="text-zinc-600 text-xs mt-1">{member.nationality}</p>
-              )}
-
-              {/* Reports To Section */}
+              {/* Reports To - Only show manager name (no hierarchy levels) */}
               {reportsToMember && (
-                <div className="mt-2 flex items-center gap-1.5 text-zinc-500">
-                  <ArrowUpRight className="w-3 h-3" />
-                  <span className="text-[11px]">Reports to: </span>
-                  <span className="text-zinc-400 text-[11px] font-medium">{reportsToMember.name.split(' ')[0]}</span>
+                <div className="flex items-center gap-1.5 text-zinc-500 text-[11px] mb-2">
+                  <ArrowUpRight className="w-3 h-3 flex-shrink-0" />
+                  <span>Reports to {reportsToMember.name}</span>
                 </div>
               )}
 
-              {member.languages && member.languages.length > 0 && (
-                <div className="flex flex-wrap gap-1 mt-2">
-                  {member.languages.slice(0, 3).map((lang) => (
+              {/* Short Bio */}
+              {member.bio && (
+                <p className="text-zinc-500 text-xs line-clamp-2 mb-2">
+                  {member.bio}
+                </p>
+              )}
+
+              {/* Languages - Show 4, only +X if more than 4 */}
+              {displayLanguages.length > 0 && (
+                <div className="flex flex-wrap gap-1 mb-2">
+                  {displayLanguages.map((lang) => (
                     <Badge
                       key={lang}
                       variant="outline"
@@ -125,26 +130,26 @@ const TeamMemberCard = ({ member, onReadMore }: TeamMemberCardProps) => {
                       {lang}
                     </Badge>
                   ))}
-                  {member.languages.length > 3 && (
+                  {remainingLanguages > 0 && (
                     <Badge
                       variant="outline"
                       className="text-[10px] border-zinc-700 text-zinc-400 px-1.5 py-0"
                     >
-                      +{member.languages.length - 3}
+                      +{remainingLanguages}
                     </Badge>
                   )}
                 </div>
               )}
             </div>
 
-            {/* Elegant Read More link */}
-            <div className="mt-auto pt-3">
+            {/* Read More Button - Always visible */}
+            <div className="pt-2 border-t border-zinc-800/50">
               <button
                 type="button"
                 onClick={() => onReadMore(member)}
-                className="text-gold/70 hover:text-gold text-xs underline underline-offset-2 transition-colors"
+                className="text-gold hover:text-gold-light text-xs font-medium transition-colors"
               >
-                Read more
+                Read more →
               </button>
             </div>
           </div>
