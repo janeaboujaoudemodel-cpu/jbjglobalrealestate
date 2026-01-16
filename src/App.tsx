@@ -109,6 +109,11 @@ import MeetTheTeam from "./pages/MeetTheTeam";
 import OurBrokers from "./pages/OurBrokers";
 import EmployeeHub from "./pages/EmployeeHub";
 import EmployeeChatPage from "./pages/EmployeeChatPage";
+import Partners from "./pages/Partners";
+import PartnerMortgage from "./pages/partners/PartnerMortgage";
+import PartnerLegal from "./pages/partners/PartnerLegal";
+import PartnerCompanySetup from "./pages/partners/PartnerCompanySetup";
+import PartnerVisaServices from "./pages/partners/PartnerVisaServices";
 
 const queryClient = new QueryClient();
 
@@ -142,6 +147,11 @@ const App = () => (
                 <Route path="/rent-guide" element={<RentGuide />} />
                 <Route path="/tenant-guide" element={<TenantGuide />} />
                 <Route path="/landlord-guide" element={<LandlordGuide />} />
+                <Route path="/partners" element={<Partners />} />
+                <Route path="/partners/mortgage" element={<PartnerMortgage />} />
+                <Route path="/partners/legal" element={<PartnerLegal />} />
+                <Route path="/partners/company-setup" element={<PartnerCompanySetup />} />
+                <Route path="/partners/visa-services" element={<PartnerVisaServices />} />
                 <Route path="/faq" element={<FAQ />} />
                 <Route path="/quiz" element={<Quiz />} />
                 <Route path="/quiz-results" element={<QuizResults />} />
