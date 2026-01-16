@@ -89,11 +89,7 @@ export function classifySalesRole(title: string): SalesHierarchyCategory {
   }
 
   // Rule 6: Consultant or Executive (without Senior)
-  if (
-    normalizedTitle.includes('consultant') ||
-    normalizedTitle.includes('executive') ||
-    normalizedTitle.includes('investment')
-  ) {
+  if (normalizedTitle.includes('consultant') || normalizedTitle.includes('executive')) {
     return 'Property Consultant / Sales Executive';
   }
 
