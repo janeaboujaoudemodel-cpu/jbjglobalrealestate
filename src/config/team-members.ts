@@ -118,13 +118,13 @@ import jamesHarrisonRecruitment from '@/assets/team/james-harrison-hr-v2.png'; /
 import alessandraMorettiHrAssistant from '@/assets/team/alessandra-moretti-hr-assistant.png';
 
 // Import team portraits - Creative Team
-import sophiaAndersonMedia from '@/assets/team/sophia-anderson-media.png';
-import marcusBennettDesigner from '@/assets/team/marcus-bennett-designer.png';
-import oliverWrightVideographer from '@/assets/team/oliver-wright-videographer.png';
-import charlotteEvansPhotographer from '@/assets/team/charlotte-evans-photographer.png';
-import henryCrawfordEditor from '@/assets/team/henry-crawford-editor.png';
-import evaVanDerBergMotion from '@/assets/team/eva-van-der-berg-motion.png';
-import jamesVenterSound from '@/assets/team/james-venter-sound.png';
+import sophiaAndersonMedia from '@/assets/team/sophia-anderson-media.png'; // LOCKED_EXISTING
+import marcusBennettDesigner from '@/assets/team/marcus-bennett-creative-v2.png'; // LOCKED_EXISTING - refreshed photo
+import oliverWrightVideographer from '@/assets/team/oliver-wright-video-v2.png'; // LOCKED_EXISTING - refreshed photo
+import charlotteEvansPhotographer from '@/assets/team/charlotte-evans-photographer.png'; // LOCKED_EXISTING
+import henryCrawfordEditor from '@/assets/team/henry-crawford-editor.png'; // LOCKED_EXISTING
+import evaVanDerBergMotion from '@/assets/team/eva-van-der-berg-motion.png'; // LOCKED_EXISTING
+import jamesVenterSound from '@/assets/team/james-venter-sound.png'; // LOCKED_EXISTING
 
 // Import team portraits - Finance Team
 import catherineBrooksFinance from '@/assets/team/catherine-brooks-finance.png';
@@ -1599,44 +1599,50 @@ export const creativeTeam: TeamMember[] = sortByHierarchy([
     id: 'marcus-bennett',
     name: 'Marcus Bennett',
     role: 'Creative Director',
-    department: 'Design',
-    avatar: marcusBennettDesigner,
+    department: 'Creative & Media',
+    avatar: marcusBennettDesigner, // LOCKED_EXISTING - refreshed photo
     isAI: true,
-    bio: 'Visionary designer blending modern aesthetics with luxury real estate branding.',
+    bio: 'Visionary creative leader blending modern aesthetics with luxury real estate branding and high-end visual identity design.',
+    specializations: ['Creative Direction', 'Brand Identity', 'Visual Design', 'Luxury Marketing'],
     languages: ['English'],
     nationality: 'British',
     yearsExperience: 12,
     hierarchyLevel: 3,
     reportsTo: 'victoria-sterling',
+    directReports: ['sophia-anderson'],
     status: 'online',
+    canConductInterviews: true,
   },
   {
     id: 'sophia-anderson',
     name: 'Sophia Anderson',
     role: 'Media & Marketing Lead',
-    department: 'Media',
-    avatar: sophiaAndersonMedia,
+    department: 'Creative & Media',
+    avatar: sophiaAndersonMedia, // LOCKED_EXISTING
     isAI: true,
-    bio: 'Dynamic creative leader orchestrating visual storytelling and brand campaigns with strategic intelligence.',
+    bio: 'Dynamic media strategist overseeing storytelling, brand campaigns, and integrated marketing visuals to elevate company identity across global markets.',
+    specializations: ['Media Strategy', 'Brand Campaigns', 'Visual Storytelling', 'Marketing Integration'],
     languages: ['English', 'Spanish'],
     nationality: 'American',
     yearsExperience: 10,
     hierarchyLevel: 4,
     reportsTo: 'victoria-sterling',
-    directReports: ['oliver-wright', 'charlotte-evans', 'henry-crawford'],
+    directReports: ['oliver-wright', 'charlotte-evans', 'ryan-campbell', 'henry-crawford', 'eva-van-der-berg', 'james-venter'],
     status: 'online',
+    canConductInterviews: true,
   },
   {
     id: 'oliver-wright',
     name: 'Oliver Wright',
     role: 'Video Production Lead',
-    department: 'Media',
-    avatar: oliverWrightVideographer,
+    department: 'Creative & Media',
+    avatar: oliverWrightVideographer, // LOCKED_EXISTING - refreshed photo
     isAI: true,
-    bio: 'Cinematic storyteller specializing in immersive property tours and brand documentaries.',
+    bio: 'Cinematic production specialist crafting immersive property tours and brand documentaries, ensuring top-tier visual storytelling.',
+    specializations: ['Video Production', 'Property Tours', 'Brand Documentaries', 'Cinematic Storytelling'],
     languages: ['English'],
     nationality: 'British',
-    yearsExperience: 8,
+    yearsExperience: 9,
     hierarchyLevel: 5,
     reportsTo: 'sophia-anderson',
     status: 'online',
@@ -1645,10 +1651,10 @@ export const creativeTeam: TeamMember[] = sortByHierarchy([
     id: 'charlotte-evans',
     name: 'Charlotte Evans',
     role: 'Senior Real Estate Photographer',
-    department: 'Media',
-    avatar: charlotteEvansPhotographer,
+    department: 'Creative & Media',
+    avatar: charlotteEvansPhotographer, // LOCKED_EXISTING
     isAI: true,
-    bio: 'Expert architectural and property photographer specializing in luxury real estate, interior design, and premium development marketing imagery.',
+    bio: 'Expert photographer capturing luxury real estate imagery, interior compositions, and lifestyle visuals for premium campaigns.',
     specializations: ['Property Photography', 'Architectural Shoots', 'Interior Design', 'Aerial Photography'],
     languages: ['English', 'French'],
     nationality: 'British',
@@ -1661,10 +1667,10 @@ export const creativeTeam: TeamMember[] = sortByHierarchy([
     id: 'ryan-campbell',
     name: 'Ryan Campbell',
     role: 'Senior Campaign Manager',
-    department: 'Media',
-    avatar: ryanMitchellCampaigns,
+    department: 'Creative & Media',
+    avatar: ryanMitchellCampaigns, // LOCKED_EXISTING
     isAI: true,
-    bio: 'Dynamic campaign strategist managing Meta advertising, digital marketing campaigns, and performance marketing for luxury properties.',
+    bio: 'Innovative campaign leader managing digital media launches and advertising visuals, ensuring brand consistency across all creative platforms.',
     specializations: ['Meta Ads', 'Google Ads', 'Campaign Strategy', 'Performance Marketing'],
     languages: ['English', 'Spanish'],
     nationality: 'American',
@@ -1677,10 +1683,11 @@ export const creativeTeam: TeamMember[] = sortByHierarchy([
     id: 'henry-crawford',
     name: 'Henry Crawford',
     role: 'Post-Production Editor',
-    department: 'Media',
-    avatar: henryCrawfordEditor,
+    department: 'Creative & Media',
+    avatar: henryCrawfordEditor, // LOCKED_EXISTING
     isAI: true,
-    bio: 'Technical expert transforming raw footage into compelling visual narratives.',
+    bio: 'Technical expert in post-production editing, transforming raw footage into visually compelling narratives and cinematic property videos.',
+    specializations: ['Video Editing', 'Color Grading', 'Post-Production', 'Visual Effects'],
     languages: ['English'],
     nationality: 'British',
     yearsExperience: 6,
@@ -1692,10 +1699,10 @@ export const creativeTeam: TeamMember[] = sortByHierarchy([
     id: 'eva-van-der-berg',
     name: 'Eva Van Der Berg',
     role: 'Motion Graphics Designer',
-    department: 'Media',
-    avatar: evaVanDerBergMotion,
+    department: 'Creative & Media',
+    avatar: evaVanDerBergMotion, // LOCKED_EXISTING
     isAI: true,
-    bio: 'Creative motion designer crafting stunning animations and visual effects for marketing content.',
+    bio: 'Creative designer developing animated visuals and motion graphics for marketing and real estate media campaigns.',
     specializations: ['Motion Graphics', 'After Effects', 'Animation', '3D Design'],
     languages: ['English', 'Dutch', 'German'],
     nationality: 'Dutch',
@@ -1708,10 +1715,10 @@ export const creativeTeam: TeamMember[] = sortByHierarchy([
     id: 'james-venter',
     name: 'James Venter',
     role: 'Sound Engineer',
-    department: 'Media',
-    avatar: jamesVenterSound,
+    department: 'Creative & Media',
+    avatar: jamesVenterSound, // LOCKED_EXISTING
     isAI: true,
-    bio: 'Professional sound engineer ensuring crystal-clear audio for all video and media productions.',
+    bio: 'Professional sound engineer ensuring pristine audio production and synchronization across video, podcast, and marketing projects.',
     specializations: ['Audio Engineering', 'Sound Design', 'Mixing', 'Voice-over Recording'],
     languages: ['English', 'Afrikaans'],
     nationality: 'South African',
