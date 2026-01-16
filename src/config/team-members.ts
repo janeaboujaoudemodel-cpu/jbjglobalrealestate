@@ -437,7 +437,7 @@ export const salesTeam: TeamMember[] = sortByHierarchy([
     avatar: royDaviHeadOfSale,
     isAI: false,
     email: 'roy.davi@JBJ.ae',
-    bio: 'Dynamic sales leader with a strong track record in luxury real estate and international client relations.',
+    bio: 'Leads the global sales organization, setting strategy and mentoring regional directors.',
     specializations: ['Luxury Properties', 'High-Net-Worth Clients', 'Investment Properties', 'Team Leadership'],
     languages: ['English', 'Arabic'],
     nationality: 'Lebanese Canadian',
@@ -456,14 +456,14 @@ export const salesTeam: TeamMember[] = sortByHierarchy([
     department: 'Sales',
     avatar: michaelAndersonSalesDirector,
     isAI: true,
-    bio: 'Strategic sales director driving revenue growth through client acquisition and cross-border partnerships.',
+    bio: 'Oversees regional sales operations and corporate partnerships.',
     specializations: ['Enterprise Sales', 'High-Net-Worth Clients', 'Investment Properties'],
     languages: ['English'],
     nationality: 'British',
     yearsExperience: 9,
     hierarchyLevel: 3,
     reportsTo: 'roy-davi',
-    directReports: ['george-hamilton'],
+    directReports: ['george-hamilton', 'li-wei-chen', 'dmitri-volkov'],
     status: 'online',
     canConductInterviews: true,
     // Photo Status: LOCKED_EXISTING
@@ -475,14 +475,16 @@ export const salesTeam: TeamMember[] = sortByHierarchy([
     department: 'Sales',
     avatar: emmaHartleySalesManager,
     isAI: true,
-    bio: 'Results-driven sales manager leading high-performing teams and optimizing international market penetration.',
+    bio: 'Manages multinational sales teams and optimizes client pipelines.',
     specializations: ['Off-Plan Sales', 'Team Leadership', 'Client Relations'],
     languages: ['English', 'French'],
     nationality: 'British',
     yearsExperience: 8,
     hierarchyLevel: 4,
     reportsTo: 'roy-davi',
+    directReports: ['priya-sharma', 'ahmed-hassan'],
     status: 'online',
+    // Photo Status: LOCKED_EXISTING
   },
   {
     id: 'william-harrison',
@@ -491,7 +493,7 @@ export const salesTeam: TeamMember[] = sortByHierarchy([
     department: 'Sales',
     avatar: williamHarrisonSales,
     isAI: true,
-    bio: 'Confident, persuasive, and analytical. Expert in converting leads into clients with clear advice and strategic deal-making.',
+    bio: 'Senior closer focusing on high-value property portfolios.',
     specializations: ['Off-Plan Properties', 'Luxury Villas', 'Investment Properties'],
     languages: ['English'],
     nationality: 'British',
@@ -499,6 +501,7 @@ export const salesTeam: TeamMember[] = sortByHierarchy([
     hierarchyLevel: 4,
     reportsTo: 'roy-davi',
     status: 'online',
+    // Photo Status: LOCKED_EXISTING
   },
   {
     id: 'priya-sharma',
@@ -507,7 +510,7 @@ export const salesTeam: TeamMember[] = sortByHierarchy([
     department: 'Sales',
     avatar: priyaSharmaSales,
     isAI: true,
-    bio: 'Dynamic sales professional with expertise in luxury properties and exceptional client relationship management.',
+    bio: 'Handles premium client accounts across India and GCC regions.',
     specializations: ['Luxury Apartments', 'Investment Properties', 'Client Relations'],
     languages: ['English', 'Hindi', 'Punjabi'],
     nationality: 'Indian',
@@ -515,6 +518,7 @@ export const salesTeam: TeamMember[] = sortByHierarchy([
     hierarchyLevel: 5,
     reportsTo: 'emma-hartley',
     status: 'online',
+    // Photo Status: LOCKED_EXISTING
   },
   {
     id: 'ahmed-hassan',
@@ -523,7 +527,7 @@ export const salesTeam: TeamMember[] = sortByHierarchy([
     department: 'Sales',
     avatar: ahmedHassanSales,
     isAI: true,
-    bio: 'Experienced sales executive specializing in off-plan properties and international investor relations.',
+    bio: 'Focuses on Middle East buyer relations and client onboarding.',
     specializations: ['Off-Plan Sales', 'International Investors', 'Arabic Clients'],
     languages: ['English', 'Arabic'],
     nationality: 'Egyptian',
@@ -531,6 +535,7 @@ export const salesTeam: TeamMember[] = sortByHierarchy([
     hierarchyLevel: 5,
     reportsTo: 'emma-hartley',
     status: 'online',
+    // Photo Status: LOCKED_EXISTING
   },
   {
     id: 'li-wei-chen',
@@ -539,7 +544,7 @@ export const salesTeam: TeamMember[] = sortByHierarchy([
     department: 'Sales',
     avatar: liWeiChenInvestment,
     isAI: true,
-    bio: 'Expert investment consultant focusing on Chinese and Asian investor markets with deep market knowledge.',
+    bio: 'Advises Asia-Pacific investors and coordinates international transactions.',
     specializations: ['Investment Analysis', 'Asian Markets', 'Portfolio Advisory'],
     languages: ['English', 'Mandarin', 'Cantonese'],
     nationality: 'Chinese',
@@ -547,6 +552,7 @@ export const salesTeam: TeamMember[] = sortByHierarchy([
     hierarchyLevel: 5,
     reportsTo: 'michael-anderson',
     status: 'online',
+    // Photo Status: LOCKED_EXISTING
   },
   {
     id: 'dmitri-volkov',
@@ -555,7 +561,7 @@ export const salesTeam: TeamMember[] = sortByHierarchy([
     department: 'Sales',
     avatar: dmitriVolkovConsultant,
     isAI: true,
-    bio: 'Seasoned property consultant with expertise in Russian and CIS investor relations and luxury developments.',
+    bio: 'Senior consultant for Eastern European and CIS markets.',
     specializations: ['Luxury Properties', 'Russian Clients', 'High-Value Transactions'],
     languages: ['English', 'Russian', 'Ukrainian'],
     nationality: 'Russian',
@@ -563,6 +569,7 @@ export const salesTeam: TeamMember[] = sortByHierarchy([
     hierarchyLevel: 5,
     reportsTo: 'michael-anderson',
     status: 'online',
+    // Photo Status: LOCKED_EXISTING
   },
   {
     id: 'adaeze-okonkwo',
@@ -571,7 +578,7 @@ export const salesTeam: TeamMember[] = sortByHierarchy([
     department: 'Sales',
     avatar: adaezeOkonkwoSales,
     isAI: true,
-    bio: 'Sales manager leading multicultural teams with focus on African investor relations and premium developments.',
+    bio: 'Leads African market initiatives and regional business development.',
     specializations: ['Team Leadership', 'African Markets', 'Premium Properties'],
     languages: ['English', 'Igbo', 'French'],
     nationality: 'Nigerian',
@@ -579,6 +586,7 @@ export const salesTeam: TeamMember[] = sortByHierarchy([
     hierarchyLevel: 5,
     reportsTo: 'emily-richardson-sales',
     status: 'online',
+    // Photo Status: LOCKED_EXISTING
   },
   {
     id: 'carlos-rodriguez',
@@ -587,7 +595,7 @@ export const salesTeam: TeamMember[] = sortByHierarchy([
     department: 'Sales',
     avatar: carlosRodriguezSales,
     isAI: true,
-    bio: 'Expert in luxury villa sales with strong connections to European and Latin American clientele.',
+    bio: 'Specializes in Iberian and Latin American clientele.',
     specializations: ['Luxury Villas', 'European Clients', 'Latin American Markets'],
     languages: ['English', 'Spanish', 'Portuguese'],
     nationality: 'Spanish',
@@ -595,6 +603,7 @@ export const salesTeam: TeamMember[] = sortByHierarchy([
     hierarchyLevel: 5,
     reportsTo: 'adaeze-okonkwo',
     status: 'online',
+    // Photo Status: LOCKED_EXISTING
   },
   {
     id: 'yuki-tanaka',
