@@ -88,8 +88,8 @@ export function classifySalesRole(title: string): SalesHierarchyCategory {
     return 'Sales Coordinator / Administrative Support';
   }
 
-  // Rule 6: Consultant or Executive (without Senior)
-  if (normalizedTitle.includes('consultant') || normalizedTitle.includes('executive')) {
+  // Rule 6: Consultant, Executive, or Sales Representative (without Senior)
+  if (normalizedTitle.includes('consultant') || normalizedTitle.includes('executive') || normalizedTitle.includes('representative')) {
     return 'Property Consultant / Sales Executive';
   }
 

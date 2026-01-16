@@ -42,8 +42,15 @@ import lucasMendesInvestment from '@/assets/team/lucas-mendes-investment.png';
 import mehmetYilmazProperty from '@/assets/team/mehmet-yilmaz-property.png';
 import zandileNdlovuSales from '@/assets/team/zandile-ndlovu-sales.png';
 // NEW: Unique Indian male photo for Ananya Sharma + 40th Sales member
-import ananyaSharmaIndianMale from '@/assets/team/ananya-sharma-indian-male.png';
-import thaboMokoenaSales from '@/assets/team/thabo-mokoena-sales.png';
+import ananyaSharmaIndianMale from '@/assets/team/ananya-sharma-sales-new.jpg';
+import thaboMokoenaSales from '@/assets/team/thabo-mokoena-sales-new.jpg';
+// MENA Regional Property Consultants
+import omarKhourySales from '@/assets/team/omar-khoury-sales.jpg';
+import raniaHaddadSales from '@/assets/team/rania-haddad-sales.jpg';
+import karimBerradaSales from '@/assets/team/karim-berrada-sales.jpg';
+import amiraBensaidSales from '@/assets/team/amira-bensaid-sales.jpg';
+import nabilTrabelsiSales from '@/assets/team/nabil-trabelsi-sales.jpg';
+import laylaHaririSales from '@/assets/team/layla-hariri-sales.jpg';
 
 // Import team portraits - Software Engineering Team
 import jamesWoodwardTechLead from '@/assets/team/james-woodward-tech-lead-v2.png'; // LOCKED_EXISTING - refreshed photo
@@ -1156,45 +1163,112 @@ export const salesTeam: TeamMember[] = classifySalesDepartment(sortByHierarchy([
     status: 'online',
     // Photo Status: LOCKED_EXISTING
   },
-  // ===== REGIONAL MARKET COVERAGE PLACEHOLDERS =====
+  // ===== MENA REGIONAL PROPERTY CONSULTANTS =====
   // AUTO_SYNC_HIERARCHY = TRUE, LOCKED_GLOBAL = TRUE
-  // These are neutral regional coverage records (no personal/AI profiles)
   {
-    id: 'sales-rep-syria',
-    name: 'Sales Representative – Syrian Market',
-    role: 'Sales Representative – Syrian Market',
+    id: 'omar-khoury-sales',
+    name: 'Omar Khoury',
+    role: 'Property Consultant',
     department: 'Sales',
-    avatar: '', // Regional placeholder - no personal photo
+    avatar: omarKhourySales,
     isAI: false,
-    bio: 'Handles off-plan and investment property transactions for MENA investors from Syria.',
+    bio: 'Specializes in off-plan and investment property transactions for Syrian investors.',
     specializations: ['Off-Plan Properties', 'Investment Properties', 'MENA Investors'],
     languages: ['Arabic', 'English'],
-    nationality: 'Syria',
-    yearsExperience: 0,
-    hierarchyLevel: 7,
-    reportsTo: 'roy-davi',
+    nationality: 'Syrian',
+    yearsExperience: 4,
+    hierarchyLevel: 6,
+    reportsTo: 'adaeze-okonkwo',
     status: 'online',
-    // REGIONAL_PLACEHOLDER = true
+    // Photo Status: LOCKED_EXISTING
   },
   {
-    id: 'sales-rep-jordan',
-    name: 'Sales Representative – Jordan Market',
-    role: 'Sales Representative – Jordan Market',
+    id: 'rania-haddad-sales',
+    name: 'Rania Haddad',
+    role: 'Property Consultant',
     department: 'Sales',
-    avatar: '', // Regional placeholder - no personal photo
+    avatar: raniaHaddadSales,
     isAI: false,
-    bio: 'Coordinates GCC–Levant investment opportunities and client onboarding for Jordan.',
+    bio: 'Coordinates GCC–Levant investment opportunities and client onboarding for Jordanian clients.',
     specializations: ['GCC-Levant Coordination', 'Client Onboarding', 'Investment Properties'],
     languages: ['Arabic', 'English'],
-    nationality: 'Jordan',
-    yearsExperience: 0,
-    hierarchyLevel: 7,
-    reportsTo: 'roy-davi',
+    nationality: 'Jordanian',
+    yearsExperience: 5,
+    hierarchyLevel: 6,
+    reportsTo: 'adaeze-okonkwo',
     status: 'online',
-    // REGIONAL_PLACEHOLDER = true
+    // Photo Status: LOCKED_EXISTING
+  },
+  {
+    id: 'karim-berrada-sales',
+    name: 'Karim Berrada',
+    role: 'Property Consultant',
+    department: 'Sales',
+    avatar: karimBerradaSales,
+    isAI: false,
+    bio: 'Serves North African investors seeking premium Dubai property opportunities.',
+    specializations: ['North African Markets', 'Luxury Properties', 'Investment Advisory'],
+    languages: ['Arabic', 'French', 'English'],
+    nationality: 'Moroccan',
+    yearsExperience: 4,
+    hierarchyLevel: 6,
+    reportsTo: 'adaeze-okonkwo',
+    status: 'online',
+    // Photo Status: LOCKED_EXISTING
+  },
+  {
+    id: 'amira-bensaid-sales',
+    name: 'Amira Bensaid',
+    role: 'Property Consultant',
+    department: 'Sales',
+    avatar: amiraBensaidSales,
+    isAI: false,
+    bio: 'Assists Algerian families and investors with Dubai property acquisitions.',
+    specializations: ['Family Properties', 'Investment Properties', 'Algerian Market'],
+    languages: ['Arabic', 'French', 'English'],
+    nationality: 'Algerian',
+    yearsExperience: 3,
+    hierarchyLevel: 6,
+    reportsTo: 'adaeze-okonkwo',
+    status: 'online',
+    // Photo Status: LOCKED_EXISTING
+  },
+  {
+    id: 'nabil-trabelsi-sales',
+    name: 'Nabil Trabelsi',
+    role: 'Property Consultant',
+    department: 'Sales',
+    avatar: nabilTrabelsiSales,
+    isAI: false,
+    bio: 'Specializes in property solutions for Tunisian investors and expat community.',
+    specializations: ['Tunisian Market', 'Expat Services', 'Residential Properties'],
+    languages: ['Arabic', 'French', 'English'],
+    nationality: 'Tunisian',
+    yearsExperience: 4,
+    hierarchyLevel: 6,
+    reportsTo: 'adaeze-okonkwo',
+    status: 'online',
+    // Photo Status: LOCKED_EXISTING
+  },
+  {
+    id: 'layla-hariri-sales',
+    name: 'Layla Hariri',
+    role: 'Property Consultant',
+    department: 'Sales',
+    avatar: laylaHaririSales,
+    isAI: false,
+    bio: 'Guides Lebanese investors through Dubai real estate acquisitions and portfolio management.',
+    specializations: ['Lebanese Market', 'Portfolio Management', 'Luxury Apartments'],
+    languages: ['Arabic', 'French', 'English'],
+    nationality: 'Lebanese',
+    yearsExperience: 5,
+    hierarchyLevel: 6,
+    reportsTo: 'adaeze-okonkwo',
+    status: 'online',
+    // Photo Status: LOCKED_EXISTING
   },
 ]));
-// LOCKED_GLOBAL = true - Sales department finalized (42 members including regional placeholders)
+// LOCKED_GLOBAL = true - Sales department finalized (46 members including MENA consultants)
 
 // ===== Marketing (sorted by hierarchy) - 10 members =====
 // LOCKED_GLOBAL = true - synced across /team, /crm/employees, /reports, /dashboard
