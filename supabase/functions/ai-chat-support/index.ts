@@ -560,25 +560,43 @@ serve(async (req) => {
     let serviceContext = '';
     switch(service) {
       case 'real_estate':
-        serviceContext = 'The user is interested in real estate. Focus on properties, developers, communities, property benefits, and the property buying process in UAE.';
+        serviceContext = 'The user is interested in real estate. Focus on properties, developers, communities, property benefits, and the property buying/selling/renting process in UAE.';
         break;
       case 'partner_intro':
-        serviceContext = 'The user needs partner introductions. Focus on connecting them with our legal, mortgage, and property management partners. Note: We provide introductions only, not direct services.';
+        serviceContext = `The user needs partner introductions. JBJ GLOBAL REAL ESTATE facilitates introductions to licensed partners for mortgage, legal, visa, and company setup services. 
+CRITICAL: You MUST say "JBJ GLOBAL REAL ESTATE facilitates introductions to licensed partners for this service." 
+NEVER say: "We provide", "We handle", "We process", "We offer", or "Our [service]" when referring to mortgage, legal, visa, or corporate services.`;
         break;
       case 'legal':
-        serviceContext = 'The user needs legal partner introductions. Focus on connecting them with our legal partners for property transactions, documentation, Golden Visa, and company formation. Note: We provide introductions only, not direct legal services.';
+        serviceContext = `The user needs legal partner introductions. JBJ GLOBAL REAL ESTATE facilitates introductions to licensed law firms for property transactions, documentation, and contract review.
+CRITICAL: You MUST say "JBJ GLOBAL REAL ESTATE facilitates introductions to licensed legal partners." 
+NEVER say: "We provide legal services", "We handle legal matters", "We process legal documents", or "Our legal team".`;
         break;
       case 'design_build':
         serviceContext = 'The user is interested in design and build services. Focus on interior design, fit-out, renovation, and smart home solutions.';
         break;
       case 'mortgage':
-        serviceContext = 'The user needs mortgage partner introductions. Focus on connecting them with our mortgage partners for financing options. Note: We provide introductions only, not financial advice.';
+        serviceContext = `The user needs mortgage partner introductions. JBJ GLOBAL REAL ESTATE facilitates introductions to licensed mortgage brokers and banks.
+CRITICAL: You MUST say "JBJ GLOBAL REAL ESTATE facilitates introductions to licensed mortgage partners."
+NEVER say: "We provide mortgage services", "We handle mortgage approvals", "We offer financing", or "Our mortgage team".`;
         break;
       case 'property_management':
-        serviceContext = 'The user needs property management partner introductions. Focus on connecting them with our property management partners. Note: We provide introductions only, not direct management services.';
+        serviceContext = `The user needs property management partner introductions. JBJ GLOBAL REAL ESTATE facilitates introductions to licensed property management companies.
+CRITICAL: You MUST say "JBJ GLOBAL REAL ESTATE facilitates introductions to licensed property management partners."
+NEVER say: "We manage properties", "We handle property management", or "Our property management services".`;
+        break;
+      case 'visa':
+        serviceContext = `The user needs visa partner introductions. JBJ GLOBAL REAL ESTATE facilitates introductions to licensed immigration consultants for Golden Visa, investor visa, and residency services.
+CRITICAL: You MUST say "JBJ GLOBAL REAL ESTATE facilitates introductions to licensed visa partners."
+NEVER say: "We provide visa services", "We handle visa applications", "We process visas", or "Our visa team".`;
+        break;
+      case 'company_setup':
+        serviceContext = `The user needs company setup partner introductions. JBJ GLOBAL REAL ESTATE facilitates introductions to licensed corporate service providers for mainland and free zone company formation.
+CRITICAL: You MUST say "JBJ GLOBAL REAL ESTATE facilitates introductions to licensed corporate service partners."
+NEVER say: "We provide company setup services", "We handle company formation", or "Our corporate services".`;
         break;
       default:
-        serviceContext = 'Help the user discover which of our services best suits their needs.';
+        serviceContext = 'Help the user discover which of our services best suits their needs. Remember: JBJ GLOBAL REAL ESTATE is licensed for BUY, SELL & RENT (LEASING) only. For mortgage, legal, visa, and corporate services, we facilitate introductions to licensed partners only.';
     }
 
     // Build messages array with comprehensive system prompt
@@ -600,6 +618,14 @@ serve(async (req) => {
 - Add personality - throw in the occasional emoji 😊 but don't overdo it
 - Sound enthusiastic about properties you genuinely think are great deals
 - It's okay to use phrases like "honestly", "to be real with you", "between us"
+
+## CRITICAL COMPLIANCE - PARTNER SERVICES (MUST FOLLOW EXACTLY):
+JBJ GLOBAL REAL ESTATE is licensed for BUY, SELL & RENT (LEASING) only.
+For Mortgage, Legal, Visa, and Company Setup services:
+- You MUST say: "JBJ GLOBAL REAL ESTATE facilitates introductions to licensed partners for [service]."
+- NEVER say: "We provide", "We handle", "We process", "We offer [service]", or "Our [service] team"
+- Correct: "For mortgage assistance, JBJ Global Real Estate facilitates introductions to licensed mortgage brokers."
+- WRONG (NEVER SAY): "We can help with your mortgage" or "We provide visa services" or "Our legal team"
 
 ## WHAT YOU KNOW:
 ${WEBSITE_KNOWLEDGE}
