@@ -2747,7 +2747,7 @@ export const legalTeam: TeamMember[] = sortByHierarchy([
   {
     id: 'huda-marzooq',
     name: 'Huda Marzooq',
-    role: 'External Legal Counsel',
+    role: 'Legal Counsel',
     department: 'Legal',
     avatar: hudaMarzooqLawyer,
     isAI: false,
