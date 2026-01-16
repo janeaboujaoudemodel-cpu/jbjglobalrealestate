@@ -6,7 +6,7 @@ import { toast } from "sonner";
 
 import { Button } from "@/components/ui/button";
 import { usePopupVisibility } from "@/contexts/PopupCoordinatorContext";
-import jbjMonogram from "@/assets/jbj-monogram-dark-bg.png";
+import jbjMonogramTransparent from "@/assets/jbj-monogram-transparent.png";
 
 interface BeforeInstallPromptEvent extends Event {
   prompt: () => Promise<void>;
@@ -37,6 +37,17 @@ const isIOSDevice = () => {
     !ua.includes("Macintosh");
   return isIOS || isIPadOS;
 };
+
+const isSafariBrowser = () => {
+  const ua = navigator.userAgent;
+  return /Safari/.test(ua) && !/Chrome/.test(ua) && !/CriOS/.test(ua);
+};
+
+const isMacDesktop = () => {
+  return navigator.platform === "MacIntel" && (navigator as any).maxTouchPoints <= 1;
+};
+
+const isMacSafari = () => isMacDesktop() && isSafariBrowser();
 
 const AppDownloadPopup = ({
   showOnLoad = true,
@@ -73,11 +84,21 @@ const AppDownloadPopup = ({
     const oneDayAgo = Date.now() - 24 * 60 * 60 * 1000;
     if (dismissedTime > oneDayAgo) return;
 
-    setIsIOS(isIOSDevice());
+    const ios = isIOSDevice();
+    setIsIOS(ios);
+
+    // macOS Safari doesn't support PWA installs
+    if (!ios && isMacSafari()) return;
 
     const handleBeforeInstallPrompt = (e: Event) => {
       e.preventDefault();
       setDeferredPrompt(e as BeforeInstallPromptEvent);
+
+      // Only auto-show once the install prompt is actually available.
+      if (showOnLoad) {
+        setShouldShow(true);
+        requestToShow();
+      }
     };
 
     const handleAppInstalled = () => {
@@ -91,8 +112,9 @@ const AppDownloadPopup = ({
     window.addEventListener("beforeinstallprompt", handleBeforeInstallPrompt);
     window.addEventListener("appinstalled", handleAppInstalled);
 
+    // iOS: show after a delay (no native install prompt)
     let timer: number | undefined;
-    if (showOnLoad) {
+    if (showOnLoad && ios) {
       timer = window.setTimeout(() => {
         setShouldShow(true);
         requestToShow();
@@ -139,7 +161,11 @@ const AppDownloadPopup = ({
       return;
     }
 
+    // Not supported / not ready: stop nagging and explain.
     toast.message("Install isn't available on this browser.");
+    localStorage.setItem(STORAGE_KEYS.DISMISSED_AT, Date.now().toString());
+    setShouldShow(false);
+    dismiss();
   }, [deferredPrompt, dismiss, isInstalling, isIOS]);
 
   const handleDismiss = useCallback(() => {
@@ -164,7 +190,7 @@ const AppDownloadPopup = ({
             <div className="flex items-center gap-3 p-3">
               <div className="w-10 h-10 rounded-xl overflow-hidden bg-foreground/5 border border-border">
                 <img
-                  src={jbjMonogram}
+                  src={jbjMonogramTransparent}
                   alt="JBJ Global Real Estate"
                   className="w-full h-full object-contain p-1"
                   loading="lazy"
@@ -233,7 +259,7 @@ const AppDownloadPopup = ({
                 <div className="flex items-center gap-4">
                   <div className="w-14 h-14 rounded-2xl overflow-hidden bg-foreground/5 border border-border">
                     <img
-                      src={jbjMonogram}
+                      src={jbjMonogramTransparent}
                       alt="JBJ Global Real Estate"
                       className="w-full h-full object-contain p-2"
                       loading="lazy"

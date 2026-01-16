@@ -36,11 +36,9 @@ export function BrandMonogram({
 }) {
   const cfg = sizeConfig[size];
   const wordmarkColor = variant === "light" ? "text-foreground" : "text-white";
-  
-  // Use transparent version for light backgrounds, dark version for dark backgrounds
-  const logoSrc = variant === "light" || variant === "transparent" 
-    ? jbjMonogramTransparent 
-    : jbjMonogramDark;
+
+  // Use a dark monogram on light backgrounds, and a white/transparent monogram on dark backgrounds.
+  const logoSrc = variant === "light" ? jbjMonogramDark : jbjMonogramTransparent;
 
   return (
     <div
