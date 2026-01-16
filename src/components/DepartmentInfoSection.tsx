@@ -1,0 +1,142 @@
+import React from 'react';
+import { motion } from 'framer-motion';
+import { Badge } from '@/components/ui/badge';
+import { 
+  Rocket, 
+  CheckCircle2, 
+  Clock, 
+  Cpu, 
+  Globe,
+  Sparkles 
+} from 'lucide-react';
+import { getDepartmentMetadata, ProjectHighlight } from '@/config/department-metadata';
+
+const fadeInUp = {
+  hidden: { opacity: 0, y: 20 },
+  visible: { opacity: 1, y: 0, transition: { duration: 0.4 } },
+};
+
+interface DepartmentInfoSectionProps {
+  departmentName: string;
+}
+
+const statusConfig = {
+  Active: {
+    icon: Rocket,
+    bgColor: 'bg-emerald-500/10',
+    textColor: 'text-emerald-400',
+    borderColor: 'border-emerald-500/30',
+  },
+  Planned: {
+    icon: Clock,
+    bgColor: 'bg-amber-500/10',
+    textColor: 'text-amber-400',
+    borderColor: 'border-amber-500/30',
+  },
+  Completed: {
+    icon: CheckCircle2,
+    bgColor: 'bg-blue-500/10',
+    textColor: 'text-blue-400',
+    borderColor: 'border-blue-500/30',
+  },
+};
+
+const ProjectHighlightCard = ({ highlight }: { highlight: ProjectHighlight }) => {
+  const config = statusConfig[highlight.status];
+  const StatusIcon = config.icon;
+
+  return (
+    <div className={`p-4 rounded-lg border ${config.borderColor} ${config.bgColor}`}>
+      <div className="flex items-start justify-between gap-3 mb-2">
+        <h4 className="text-white text-sm font-medium line-clamp-1">{highlight.title}</h4>
+        <Badge 
+          variant="outline" 
+          className={`text-[10px] ${config.textColor} ${config.borderColor} shrink-0`}
+        >
+          <StatusIcon className="w-3 h-3 mr-1" />
+          {highlight.status}
+        </Badge>
+      </div>
+      <p className="text-zinc-400 text-xs line-clamp-2">{highlight.description}</p>
+    </div>
+  );
+};
+
+const DepartmentInfoSection: React.FC<DepartmentInfoSectionProps> = ({ departmentName }) => {
+  const metadata = getDepartmentMetadata(departmentName);
+
+  if (!metadata) return null;
+
+  return (
+    <motion.div
+      variants={fadeInUp}
+      initial="hidden"
+      animate="visible"
+      className="mb-6 p-5 bg-zinc-900/40 border border-zinc-800 rounded-xl"
+    >
+      {/* Department Summary */}
+      <div className="mb-5">
+        <div className="flex items-center gap-2 mb-2">
+          <Sparkles className="w-4 h-4 text-gold" />
+          <span className="text-gold text-xs font-medium uppercase tracking-wider">Overview</span>
+        </div>
+        <p className="text-zinc-300 text-sm leading-relaxed">{metadata.summary}</p>
+      </div>
+
+      {/* Tech Stack */}
+      <div className="mb-5">
+        <div className="flex items-center gap-2 mb-3">
+          <Cpu className="w-4 h-4 text-gold" />
+          <span className="text-gold text-xs font-medium uppercase tracking-wider">Tech Stack</span>
+        </div>
+        <div className="flex flex-wrap gap-2">
+          {metadata.techStack.map((tech) => (
+            <Badge
+              key={tech}
+              variant="outline"
+              className="text-xs border-zinc-700 text-zinc-300 bg-zinc-800/50 px-3 py-1"
+            >
+              {tech}
+            </Badge>
+          ))}
+        </div>
+      </div>
+
+      {/* Regional Coverage (if applicable) */}
+      {metadata.regionalCoverage && metadata.regionalCoverage.length > 0 && (
+        <div className="mb-5">
+          <div className="flex items-center gap-2 mb-3">
+            <Globe className="w-4 h-4 text-gold" />
+            <span className="text-gold text-xs font-medium uppercase tracking-wider">Regional Coverage</span>
+          </div>
+          <div className="flex flex-wrap gap-2">
+            {metadata.regionalCoverage.map((region) => (
+              <Badge
+                key={region}
+                variant="outline"
+                className="text-xs border-gold/30 text-gold bg-gold/5 px-3 py-1"
+              >
+                {region}
+              </Badge>
+            ))}
+          </div>
+        </div>
+      )}
+
+      {/* Project Highlights */}
+      <div>
+        <div className="flex items-center gap-2 mb-3">
+          <Rocket className="w-4 h-4 text-gold" />
+          <span className="text-gold text-xs font-medium uppercase tracking-wider">Project Highlights</span>
+        </div>
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-3">
+          {metadata.projectHighlights.map((highlight) => (
+            <ProjectHighlightCard key={highlight.title} highlight={highlight} />
+          ))}
+        </div>
+      </div>
+    </motion.div>
+  );
+};
+
+export default DepartmentInfoSection;
