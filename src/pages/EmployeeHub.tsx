@@ -41,7 +41,7 @@ const topPerformers = {
     badge: 'gold' as const
   },
   'Human Resources': { 
-    memberId: 'jessica-pemberton', 
+    memberId: 'jessica-whitmore', 
     metric: '23 Hires',
     badge: 'gold' as const
   },
