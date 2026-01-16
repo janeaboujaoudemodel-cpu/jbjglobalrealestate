@@ -8,21 +8,21 @@ interface ChatWelcomeProps {
 
 const ChatWelcome = ({ onStartChat }: ChatWelcomeProps) => {
   return (
-    <div className="flex-1 p-6 flex flex-col justify-center">
-      <div className="text-center mb-4">
+    <div className="flex-1 p-6 flex flex-col">
+      <div className="text-center mb-4 mt-2">
         <div className="mx-auto mb-3">
           {/* JBJ logo - black box version for dark backgrounds */}
           <img 
             src={jbjMonogramDarkBg} 
             alt="JBJ Global Real Estate" 
-            className="h-14 w-auto mx-auto object-contain"
+            className="h-20 w-auto mx-auto object-contain"
           />
         </div>
         <h4 className="text-white text-lg font-semibold mb-1">Welcome to JBJ Global Real Estate 👋</h4>
         <p className="text-zinc-400 text-sm">Your premium real estate partner in Dubai</p>
       </div>
 
-      <div className="space-y-3">
+      <div className="space-y-3 flex-1 flex flex-col">
         {/* Chat with Team Option - Human Team, NOT AI */}
         <button
           onClick={onStartChat}
@@ -59,7 +59,10 @@ const ChatWelcome = ({ onStartChat }: ChatWelcomeProps) => {
           </div>
         </a>
 
-        <p className="text-zinc-500 text-xs text-center mt-4 px-4">
+        {/* Spacer to push tip to bottom */}
+        <div className="flex-1"></div>
+
+        <p className="text-zinc-500 text-xs text-center px-4 pb-2">
           💡 <strong className="text-zinc-400">Tip:</strong> Our team can answer most questions right away. For complex matters, we'll connect you to a specialist!
         </p>
       </div>
