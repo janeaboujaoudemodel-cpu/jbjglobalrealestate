@@ -2595,7 +2595,8 @@ export const legalTeam: TeamMember[] = sortByHierarchy([
     nationality: 'Emirati',
     status: 'online',
     canConductInterviews: false,
-    // NOTE: No hierarchyLevel, reportsTo, or yearsExperience - she is an external partner, not an employee
+    hierarchyLevel: 0, // Ensures she appears first in Legal department (external partner, premium positioning)
+    // NOTE: No reportsTo or yearsExperience - she is an external partner, not an employee
   },
   {
     id: 'william-thornton-legal',
