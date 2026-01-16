@@ -58,12 +58,14 @@ import kevinLiuSoftware from '@/assets/team/kevin-liu-software.png';
 import ingridLarsenSoftware from '@/assets/team/ingrid-larsen-software.png';
 
 // Import team portraits - Customer Happiness Team
-import lisaHendersonCustomerHappiness from '@/assets/team/lisa-henderson-customer-happiness.png';
-import jackThompsonCustomerSupport from '@/assets/team/jack-thompson-customer-support.png';
-import nataliaPetrovaHelpdesk from '@/assets/team/natalia-petrova-helpdesk.png';
+// LOCKED_GLOBAL = false (temporary) - synced across /team, /customer-happiness, /crm
+// Tools: ChatBGCRM Pro, Zendesk, Intercom, WhatsApp Business, HubSpot, Typeform
+import lisaHendersonCustomerHappiness from '@/assets/team/lisa-henderson-customer-v2.png'; // LOCKED_EXISTING - refreshed photo
+import jackThompsonCustomerSupport from '@/assets/team/jack-thompson-customer-v2.png'; // LOCKED_EXISTING - refreshed photo
+import nataliaPetrovaHelpdesk from '@/assets/team/natalia-petrova-helpdesk-v2.png'; // LOCKED_EXISTING - refreshed photo
 import danielMurphyCustomer from '@/assets/team/daniel-murphy-customer.png';
-// NEW Customer Happiness additions (to reach 4)
-import mariaSantosCustomer from '@/assets/team/maria-santos-customer.png';
+// Customer Happiness team (4 total)
+import mariaSantosCustomer from '@/assets/team/maria-santos-customer.png'; // LOCKED_EXISTING
 
 import michaelAndersonSalesDirector from '@/assets/team/michael-anderson-sales-director.png';
 import emmaHartleySalesManager from '@/assets/team/emma-hartley-sales-manager.png';
@@ -2662,17 +2664,19 @@ export const contentTeam: TeamMember[] = sortByHierarchy([
   },
 ]);
 // ===== Customer Happiness Team (sorted by hierarchy) - 4 members =====
-// LOCKED_GLOBAL = true - synced across /team, /crm/employees, /reports, /dashboard
+// LOCKED_GLOBAL = false (temporary) - synced across /team, /customer-happiness, /crm
+// Tools: ChatBGCRM Pro Supporter, Zendesk, Intercom, WhatsApp Business, HubSpot, Typeform, SurveyMonkey
+// Mission: Deliver exceptional customer care through responsiveness, empathy, and multilingual service
 export const customerHappinessTeam: TeamMember[] = sortByHierarchy([
   {
     id: 'lisa-henderson',
     name: 'Lisa Henderson',
     role: 'Customer Happiness Director',
     department: 'Customer Happiness',
-    avatar: lisaHendersonCustomerHappiness,
+    avatar: lisaHendersonCustomerHappiness, // LOCKED_EXISTING - refreshed photo
     isAI: true,
-    bio: 'Passionate leader dedicated to ensuring exceptional customer experiences across all touchpoints.',
-    specializations: ['Customer Experience', 'Service Excellence', 'Team Leadership'],
+    bio: 'Passionate department head leading customer satisfaction initiatives across all JBJ branches. Expert in client retention, service improvement, and personalized support strategy. Oversees the development of global service standards to ensure long-term client loyalty.',
+    specializations: ['Customer Experience', 'Service Excellence', 'Team Leadership', 'Client Retention', 'Service Strategy'],
     languages: ['English'],
     nationality: 'British',
     yearsExperience: 13,
@@ -2681,54 +2685,58 @@ export const customerHappinessTeam: TeamMember[] = sortByHierarchy([
     directReports: ['jack-thompson', 'natalia-petrova', 'maria-santos-ch'],
     status: 'online',
     canConductInterviews: true,
+    // Photo Status: LOCKED_EXISTING
   },
   {
     id: 'jack-thompson',
     name: 'Jack Thompson',
     role: 'Customer Support Lead',
     department: 'Customer Happiness',
-    avatar: jackThompsonCustomerSupport,
+    avatar: jackThompsonCustomerSupport, // LOCKED_EXISTING - refreshed photo
     isAI: true,
-    bio: 'Experienced support professional ensuring quick and effective resolution of customer inquiries.',
-    specializations: ['Support Management', 'Issue Resolution', 'Training'],
+    bio: 'Experienced customer support professional coordinating the day-to-day operations of JBJ\'s client support channels. Skilled in conflict resolution, CRM ticket management, and escalation handling.',
+    specializations: ['Support Management', 'Conflict Resolution', 'CRM Ticket Management', 'Escalation Handling'],
     languages: ['English'],
     nationality: 'British',
     yearsExperience: 8,
     hierarchyLevel: 4,
     reportsTo: 'lisa-henderson',
     status: 'online',
+    // Photo Status: LOCKED_EXISTING
   },
   {
     id: 'natalia-petrova',
     name: 'Natalia Petrova',
     role: 'Helpdesk Specialist',
     department: 'Customer Happiness',
-    avatar: nataliaPetrovaHelpdesk,
+    avatar: nataliaPetrovaHelpdesk, // LOCKED_EXISTING - refreshed photo
     isAI: true,
-    bio: 'Multilingual helpdesk specialist providing technical support in Russian and English.',
-    specializations: ['Technical Support', 'Ticket Management', 'User Training'],
+    bio: 'Multilingual helpdesk expert providing fast and effective support in English, Russian, and Ukrainian. Specializes in technical troubleshooting, ticket management, and customer feedback analysis.',
+    specializations: ['Technical Troubleshooting', 'Ticket Management', 'Customer Feedback Analysis', 'Multilingual Support'],
     languages: ['English', 'Russian', 'Ukrainian'],
     nationality: 'Russian',
     yearsExperience: 5,
     hierarchyLevel: 5,
     reportsTo: 'lisa-henderson',
     status: 'online',
+    // Photo Status: LOCKED_EXISTING
   },
   {
     id: 'maria-santos-ch',
     name: 'Maria Santos',
     role: 'Customer Experience Specialist',
     department: 'Customer Happiness',
-    avatar: mariaSantosCustomer,
+    avatar: mariaSantosCustomer, // LOCKED_EXISTING
     isAI: true,
-    bio: 'Dedicated customer experience specialist ensuring client satisfaction and feedback management.',
-    specializations: ['Customer Feedback', 'Experience Design', 'Client Satisfaction'],
+    bio: 'Dedicated customer experience specialist ensuring client satisfaction through personalized feedback collection, onboarding guidance, and issue resolution. Maintains an empathetic approach to every client interaction.',
+    specializations: ['Customer Feedback', 'Onboarding Guidance', 'Issue Resolution', 'Client Satisfaction'],
     languages: ['English', 'Portuguese', 'Spanish'],
     nationality: 'Brazilian',
     yearsExperience: 4,
     hierarchyLevel: 5,
     reportsTo: 'lisa-henderson',
     status: 'online',
+    // Photo Status: LOCKED_EXISTING
   },
 ]);
 
