@@ -2593,7 +2593,8 @@ export const customerHappinessTeam: TeamMember[] = sortByHierarchy([
 ]);
 
 // ===== Legal Team - 4 members =====
-// Huda Marzooq is EXTERNAL Legal Counsel (Owner of her own law firm) - NOT an employee
+// Huda Marzooq is EXTERNAL Legal Counsel - NOT an employee
+// LOCKED_GLOBAL = true - synced across /team, /crm/employees, /team-communication, /reports, /dashboard
 export const legalTeam: TeamMember[] = sortByHierarchy([
   {
     id: 'huda-marzooq',
@@ -2602,14 +2603,15 @@ export const legalTeam: TeamMember[] = sortByHierarchy([
     department: 'Legal',
     avatar: hudaMarzooqLawyer,
     isAI: false,
-    bio: 'Official legal counsel for Jane Abou Jaoude and JBJ Global Real Estate. A distinguished Emirati lawyer specializing in UAE property law, contracts, and corporate governance.',
+    bio: 'Official legal counsel representing Jane Abou Jaoude and JBJ Global Real Estate. Provides advisory oversight on UAE legal matters, property transactions, and corporate documentation.',
     specializations: ['UAE Property Law', 'Contract Law', 'Corporate Governance', 'Real Estate Transactions'],
     languages: ['English', 'Arabic'],
     nationality: 'Emirati',
     status: 'online',
     canConductInterviews: false,
-    hierarchyLevel: 0, // Ensures she appears first in Legal department (external partner, premium positioning)
+    hierarchyLevel: 0, // MUST be 0 to appear FIRST - external partner, premium positioning
     // NOTE: No reportsTo or yearsExperience - she is an external partner, not an employee
+    // Photo Status: LOCKED_EXISTING
   },
   {
     id: 'william-thornton-legal',
@@ -2618,15 +2620,16 @@ export const legalTeam: TeamMember[] = sortByHierarchy([
     department: 'Legal',
     avatar: williamThorntonLegal,
     isAI: true,
-    bio: 'Experienced legal advisor specializing in international real estate transactions and corporate law.',
+    bio: 'Senior advisor managing corporate legal frameworks and international property compliance. Supports executive leadership in risk management and regulatory coordination.',
     specializations: ['International Law', 'Corporate Law', 'Contract Negotiation'],
     languages: ['English', 'German'],
     nationality: 'British',
     yearsExperience: 12,
-    hierarchyLevel: 3,
+    hierarchyLevel: 1, // Second in hierarchy
     reportsTo: 'jane-abou-jaoude',
     directReports: ['michael-brennan'],
     status: 'online',
+    // Photo Status: LOCKED_EXISTING
   },
   {
     id: 'nadia-hassan',
@@ -2635,14 +2638,15 @@ export const legalTeam: TeamMember[] = sortByHierarchy([
     department: 'Legal',
     avatar: nadiaHassanLegal,
     isAI: true,
-    bio: 'Compliance expert ensuring regulatory adherence and risk management across all operations.',
+    bio: 'Oversees JBJ\'s compliance systems, ensuring all business processes align with regional and international regulations. Coordinates with the legal and operations teams.',
     specializations: ['Regulatory Compliance', 'Risk Management', 'Documentation'],
     languages: ['English', 'Arabic', 'French'],
     nationality: 'Moroccan',
     yearsExperience: 9,
-    hierarchyLevel: 3,
+    hierarchyLevel: 2, // Third in hierarchy
     reportsTo: 'jane-abou-jaoude',
     status: 'online',
+    // Photo Status: LOCKED_EXISTING
   },
   {
     id: 'michael-brennan',
@@ -2651,14 +2655,15 @@ export const legalTeam: TeamMember[] = sortByHierarchy([
     department: 'Legal',
     avatar: michaelBrennanLegal,
     isAI: true,
-    bio: 'Organized legal assistant supporting contract management, documentation, and legal research.',
+    bio: 'Provides administrative and documentation support for the legal team. Assists with contract preparation, filings, and daily case management.',
     specializations: ['Legal Research', 'Document Management', 'Contract Administration'],
-    languages: ['English', 'Irish'],
+    languages: ['English', 'Italian'],
     nationality: 'Irish',
     yearsExperience: 4,
-    hierarchyLevel: 5,
+    hierarchyLevel: 3, // Fourth in hierarchy
     reportsTo: 'william-thornton-legal',
     status: 'online',
+    // Photo Status: LOCKED_EXISTING
   },
 ]);
 
