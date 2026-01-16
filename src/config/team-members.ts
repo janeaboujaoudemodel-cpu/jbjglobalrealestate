@@ -113,8 +113,8 @@ import sarahMcintyreContent from '@/assets/team/sarah-mcintyre-content.png';
 
 // Import team portraits - HR Team
 import jessicaHrManager from '@/assets/team/jessica-hr-manager.png';
-import elizabethBennettHr from '@/assets/team/elizabeth-bennett-hr.png';
-import jamesHarrisonRecruitment from '@/assets/team/james-harrison-recruitment.png';
+import elizabethBennettHr from '@/assets/team/elizabeth-bennett-hr-v2.png'; // LOCKED_EXISTING - refreshed photo
+import jamesHarrisonRecruitment from '@/assets/team/james-harrison-hr-v2.png'; // LOCKED_EXISTING - refreshed photo
 import alessandraMorettiHrAssistant from '@/assets/team/alessandra-moretti-hr-assistant.png';
 
 // Import team portraits - Creative Team
@@ -1527,9 +1527,10 @@ export const hrTeam: TeamMember[] = sortByHierarchy([
     name: 'James Harrison',
     role: 'Head of Recruitment',
     department: 'Human Resources',
-    avatar: jamesHarrisonRecruitment,
+    avatar: jamesHarrisonRecruitment, // LOCKED_EXISTING - refreshed photo
     isAI: true,
-    bio: 'Experienced talent acquisition specialist with a mentoring approach. Identifies top performers for the organization.',
+    bio: 'Experienced talent acquisition specialist with a strategic approach to hiring and leadership development, expert in identifying top performers for diverse international roles.',
+    specializations: ['Talent Acquisition', 'Leadership Development', 'International Recruitment', 'Strategic Hiring'],
     languages: ['English'],
     nationality: 'British',
     yearsExperience: 14,
@@ -1544,15 +1545,16 @@ export const hrTeam: TeamMember[] = sortByHierarchy([
     name: 'Jessica Whitmore',
     role: 'HR Manager',
     department: 'Human Resources',
-    avatar: jessicaHrManager,
+    avatar: jessicaHrManager, // LOCKED_EXISTING
     isAI: true,
-    bio: 'Professional, structured, and objective. Manages interviews, assessments, and team development with analytical precision.',
+    bio: 'Professional and structured HR leader overseeing recruitment, employee relations, and organizational culture with a focus on efficiency and team growth.',
+    specializations: ['Employee Relations', 'Recruitment Management', 'Organizational Culture', 'Team Development'],
     languages: ['English', 'Dutch'],
     nationality: 'British',
     yearsExperience: 10,
     hierarchyLevel: 4,
     reportsTo: 'james-harrison',
-    directReports: ['elizabeth-bennett', 'alessandra-moretti'],
+    directReports: ['alessandra-moretti', 'elizabeth-bennett'],
     status: 'online',
     canConductInterviews: true,
   },
@@ -1561,9 +1563,10 @@ export const hrTeam: TeamMember[] = sortByHierarchy([
     name: 'Alessandra Moretti',
     role: 'HR Coordinator',
     department: 'Human Resources',
-    avatar: alessandraMorettiHrAssistant,
+    avatar: alessandraMorettiHrAssistant, // LOCKED_EXISTING
     isAI: true,
-    bio: 'Highly organized HR professional coordinating recruitment processes, onboarding, and employee engagement programs.',
+    bio: 'Highly organized HR coordinator managing onboarding, internal communications, and recruitment logistics across international branches.',
+    specializations: ['Onboarding', 'Internal Communications', 'Recruitment Logistics', 'Employee Engagement'],
     languages: ['English', 'Italian', 'French'],
     nationality: 'Italian',
     yearsExperience: 7,
@@ -1576,9 +1579,10 @@ export const hrTeam: TeamMember[] = sortByHierarchy([
     name: 'Elizabeth Bennett',
     role: 'HR Assistant',
     department: 'Human Resources',
-    avatar: elizabethBennettHr,
+    avatar: elizabethBennettHr, // LOCKED_EXISTING - refreshed photo
     isAI: true,
-    bio: 'Supportive and detail-oriented assistant managing HR documentation, scheduling, and employee queries.',
+    bio: 'Supportive and detail-oriented HR assistant handling documentation, scheduling, and employee support, ensuring seamless day-to-day HR operations.',
+    specializations: ['HR Documentation', 'Scheduling', 'Employee Support', 'Administrative Tasks'],
     languages: ['English', 'Spanish'],
     nationality: 'American',
     yearsExperience: 4,
