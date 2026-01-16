@@ -73,7 +73,7 @@ const ChatWelcome = ({ onStartChat }: ChatWelcomeProps) => {
       </div>
 
       {/* Tip at bottom */}
-      <p className="text-zinc-500 text-xs text-center mt-4 px-4">
+      <p className="text-zinc-500 text-xs text-center mt-2 px-4">
         💡 <strong className="text-zinc-400">Tip:</strong> Our team can answer most questions right
         away. For complex matters, we'll connect you to a specialist!
       </p>
