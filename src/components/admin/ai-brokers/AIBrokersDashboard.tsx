@@ -12,12 +12,14 @@ import {
   Bot,
   RefreshCw,
   Loader2,
+  PieChart,
 } from "lucide-react";
 import { AIBrokerCard } from "./AIBrokerCard";
 import { AIBrokerEditDialog } from "./AIBrokerEditDialog";
 import { AIBrokerStatsDialog } from "./AIBrokerStatsDialog";
 import { LeadAssignmentRulesPanel } from "./LeadAssignmentRulesPanel";
 import { MessageFiltersPanel } from "./MessageFiltersPanel";
+import { PipelineAnalyticsPanel } from "./PipelineAnalyticsPanel";
 import type { AIBroker } from "./types";
 
 export function AIBrokersDashboard() {
@@ -234,6 +236,13 @@ export function AIBrokersDashboard() {
             Brokers
           </TabsTrigger>
           <TabsTrigger
+            value="pipelines"
+            className="data-[state=active]:bg-gold data-[state=active]:text-black"
+          >
+            <PieChart className="h-4 w-4 mr-2" />
+            Pipeline Analytics
+          </TabsTrigger>
+          <TabsTrigger
             value="assignment"
             className="data-[state=active]:bg-gold data-[state=active]:text-black"
           >
@@ -276,6 +285,10 @@ export function AIBrokersDashboard() {
               ))}
             </div>
           )}
+        </TabsContent>
+
+        <TabsContent value="pipelines">
+          <PipelineAnalyticsPanel />
         </TabsContent>
 
         <TabsContent value="assignment">
