@@ -19,48 +19,70 @@ export default defineConfig(({ mode }) => ({
       devOptions: {
         enabled: false,
       },
-      includeAssets: ["favicon.png", "favicon.svg", "robots.txt"],
+      includeAssets: ["favicon.png", "favicon.svg", "robots.txt", "og-image.jpg"],
       manifest: {
-        name: "JBJ Global Real Estate",
+        name: "JBJ Global Real Estate - Dubai Property Brokerage",
         short_name: "JBJ Real Estate",
-        description: "Premium UAE Real Estate Brokerage - Property Sales, Leasing & Holiday Homes",
+        description: "Buy, sell, or rent luxury properties in Dubai with JBJ Global Real Estate. Founded by Jane Abou Jaoude. Expert brokerage services across UAE.",
         theme_color: "#0a0a0a",
         background_color: "#0a0a0a",
         display: "standalone",
         orientation: "portrait-primary",
         scope: "/",
         start_url: "/",
+        lang: "en",
+        dir: "ltr",
+        categories: ["business", "real estate", "lifestyle"],
         icons: [
           {
-            src: "/pwa-192x192.jpg",
+            src: "/pwa-192x192.png",
             sizes: "192x192",
-            type: "image/jpeg",
+            type: "image/png",
             purpose: "any",
           },
           {
-            src: "/pwa-512x512.jpg",
+            src: "/pwa-512x512.png",
             sizes: "512x512",
-            type: "image/jpeg",
+            type: "image/png",
             purpose: "any",
           },
           {
-            src: "/pwa-512x512.jpg",
+            src: "/pwa-512x512.png",
             sizes: "512x512",
-            type: "image/jpeg",
+            type: "image/png",
             purpose: "maskable",
           },
         ],
-        categories: ["business", "lifestyle"],
+        shortcuts: [
+          {
+            name: "Browse Properties",
+            short_name: "Properties",
+            description: "View all available properties",
+            url: "/properties",
+          },
+          {
+            name: "Contact Us",
+            short_name: "Contact",
+            description: "Get in touch with JBJ",
+            url: "/contact",
+          },
+        ],
       },
       workbox: {
         maximumFileSizeToCacheInBytes: 5 * 1024 * 1024, // 5MB limit
         globPatterns: ["**/*.{js,css,html,ico,png,svg,jpg,jpeg,webp,woff,woff2}"],
+        // Clear old caches on new SW activation
+        cleanupOutdatedCaches: true,
+        // Skip waiting to activate new SW immediately
+        skipWaiting: true,
+        // Claim clients immediately
+        clientsClaim: true,
         runtimeCaching: [
           {
             urlPattern: /^https:\/\/fonts\.googleapis\.com\/.*/i,
             handler: "CacheFirst",
             options: {
-              cacheName: "google-fonts-cache",
+              cacheName: "jbj-google-fonts-v2",
               expiration: {
                 maxEntries: 10,
                 maxAgeSeconds: 60 * 60 * 24 * 365,
@@ -74,13 +96,24 @@ export default defineConfig(({ mode }) => ({
             urlPattern: /^https:\/\/fonts\.gstatic\.com\/.*/i,
             handler: "CacheFirst",
             options: {
-              cacheName: "gstatic-fonts-cache",
+              cacheName: "jbj-gstatic-fonts-v2",
               expiration: {
                 maxEntries: 10,
                 maxAgeSeconds: 60 * 60 * 24 * 365,
               },
               cacheableResponse: {
                 statuses: [0, 200],
+              },
+            },
+          },
+          {
+            urlPattern: /\.(png|jpg|jpeg|svg|gif|webp)$/i,
+            handler: "CacheFirst",
+            options: {
+              cacheName: "jbj-images-v2",
+              expiration: {
+                maxEntries: 100,
+                maxAgeSeconds: 60 * 60 * 24 * 30, // 30 days
               },
             },
           },

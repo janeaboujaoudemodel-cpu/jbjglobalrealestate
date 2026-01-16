@@ -1,14 +1,35 @@
 # JBJ Global Real Estate - Robots.txt
 # https://jbj.ae
+# Founder: Jane Abou Jaoude
 
+# Allow all major search engines
 User-agent: Googlebot
 Allow: /
 Crawl-delay: 1
+
+User-agent: Googlebot-Image
+Allow: /
 
 User-agent: Bingbot
 Allow: /
 Crawl-delay: 1
 
+User-agent: Slurp
+Allow: /
+Crawl-delay: 2
+
+User-agent: DuckDuckBot
+Allow: /
+
+User-agent: Baiduspider
+Allow: /
+Crawl-delay: 2
+
+User-agent: YandexBot
+Allow: /
+Crawl-delay: 2
+
+# Social Media Bots
 User-agent: Twitterbot
 Allow: /
 
@@ -18,8 +39,22 @@ Allow: /
 User-agent: LinkedInBot
 Allow: /
 
+User-agent: Pinterest
+Allow: /
+
+User-agent: WhatsApp
+Allow: /
+
+User-agent: Slackbot
+Allow: /
+
+User-agent: TelegramBot
+Allow: /
+
+# Default for all other bots
 User-agent: *
 Allow: /
+Crawl-delay: 2
 
 # Sitemap location
 Sitemap: https://jbj.ae/sitemap.xml
@@ -30,3 +65,11 @@ Disallow: /crm
 Disallow: /broker-dashboard
 Disallow: /onboarding
 Disallow: /auth
+Disallow: /api/
+Disallow: /*.json$
+Disallow: /*?*
+
+# Allow important resources
+Allow: /og-image.jpg
+Allow: /favicon.png
+Allow: /logo.png
