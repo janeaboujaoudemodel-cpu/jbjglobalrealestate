@@ -87,9 +87,9 @@ import elizabethHartleyBrandSpecialist from '@/assets/team/elizabeth-hartley-bra
 import ryanMitchellCampaigns from '@/assets/team/ryan-mitchell-campaigns.png';
 
 // Import team portraits - Project Management Team
-import rachelCampbellProjectDirector from '@/assets/team/rachel-campbell-project-director.png';
-import jessicaMillerProjectManager from '@/assets/team/jessica-miller-project-manager.png';
-import christopherAdamsProjectCoordinator from '@/assets/team/christopher-adams-project-realistic.png';
+import rachelCampbellProjectDirector from '@/assets/team/rachel-campbell-project-director-v2.png'; // LOCKED_EXISTING - refreshed photo
+import jessicaMillerProjectManager from '@/assets/team/jessica-miller-project-manager.png'; // LOCKED_EXISTING
+import christopherAdamsProjectCoordinator from '@/assets/team/christopher-adams-project-v2.png'; // LOCKED_EXISTING - refreshed photo
 import jasonBrooksScrum from '@/assets/team/jason-brooks-scrum.png';
 
 // Import team portraits - Web Development Team
@@ -178,7 +178,7 @@ import aoifeBrennanAdmin from '@/assets/team/aoife-brennan-admin-realistic.png';
 import youssefBenaliAdmin from '@/assets/team/youssef-benali-admin-realistic.png';
 
 // NEW Project Management addition (to reach 4)
-import carmenGarciaProject from '@/assets/team/carmen-garcia-project-realistic.png';
+import carmenGarciaProject from '@/assets/team/carmen-garcia-project-v2.png'; // LOCKED_EXISTING - refreshed photo
 
 // NEW Diverse Team Member Additions (25+ new nationalities)
 import thiNguyenSales from '@/assets/team/thi-nguyen-sales.png';
@@ -2452,17 +2452,18 @@ export const softwareEngineeringTeam: TeamMember[] = sortByHierarchy([
 ]);
 
 // ===== Project Management Team (sorted by hierarchy) - 4 members =====
-// LOCKED_GLOBAL = true - synced across /team, /crm/employees, /reports, /dashboard
+// LOCKED_GLOBAL = false (temporary) - synced across /team, /projects, /crm/systems
+// Tools: Asana, Trello, Jira, Monday.com, MS Project | Methodologies: Agile, Scrum, Kanban
 export const projectManagementTeam: TeamMember[] = sortByHierarchy([
   {
     id: 'rachel-campbell',
     name: 'Rachel Campbell',
     role: 'Project Director',
     department: 'Project Management',
-    avatar: rachelCampbellProjectDirector,
+    avatar: rachelCampbellProjectDirector, // LOCKED_EXISTING - refreshed photo
     isAI: true,
-    bio: 'Strategic project director overseeing all company initiatives and ensuring timely delivery.',
-    specializations: ['Strategic Planning', 'Stakeholder Management', 'Resource Allocation'],
+    bio: 'Strategic and analytical project director overseeing company-wide initiatives and ensuring timely, cost-efficient project delivery. Expert in resource allocation, risk mitigation, and cross-departmental coordination.',
+    specializations: ['Strategic Planning', 'Stakeholder Management', 'Resource Allocation', 'Risk Mitigation'],
     languages: ['English'],
     nationality: 'British',
     yearsExperience: 14,
@@ -2471,48 +2472,52 @@ export const projectManagementTeam: TeamMember[] = sortByHierarchy([
     directReports: ['jessica-miller', 'christopher-adams', 'carmen-garcia'],
     status: 'online',
     canConductInterviews: true,
+    // Photo Status: LOCKED_EXISTING
   },
   {
     id: 'jessica-miller',
     name: 'Jessica Miller',
     role: 'Project Manager',
     department: 'Project Management',
-    avatar: jessicaMillerProjectManager,
+    avatar: jessicaMillerProjectManager, // LOCKED_EXISTING
     isAI: true,
-    bio: 'Organized project manager ensuring smooth execution of digital and business projects.',
-    specializations: ['Agile', 'Scrum', 'Risk Management'],
+    bio: 'Skilled project manager coordinating diverse business projects across marketing, tech, and sales domains. Strong communicator with expertise in workflow optimization and agile implementation.',
+    specializations: ['Agile', 'Scrum', 'Risk Management', 'Workflow Optimization'],
     languages: ['English', 'Spanish'],
     nationality: 'American',
     yearsExperience: 8,
     hierarchyLevel: 4,
     reportsTo: 'rachel-campbell',
     status: 'online',
+    canConductInterviews: true,
+    // Photo Status: LOCKED_EXISTING
   },
   {
     id: 'christopher-adams',
     name: 'Christopher Adams',
     role: 'Project Coordinator',
     department: 'Project Management',
-    avatar: christopherAdamsProjectCoordinator,
+    avatar: christopherAdamsProjectCoordinator, // LOCKED_EXISTING - refreshed photo
     isAI: true,
-    bio: 'Detail-oriented coordinator managing project timelines and team communications.',
-    specializations: ['Scheduling', 'Documentation', 'Team Coordination'],
+    bio: 'Organized and proactive project coordinator managing team communication, scheduling, and documentation. Ensures seamless progress tracking and supports management reporting cycles.',
+    specializations: ['Scheduling', 'Documentation', 'Team Coordination', 'Progress Tracking'],
     languages: ['English'],
     nationality: 'British',
     yearsExperience: 5,
     hierarchyLevel: 5,
     reportsTo: 'rachel-campbell',
     status: 'online',
+    // Photo Status: LOCKED_EXISTING
   },
   {
     id: 'carmen-garcia',
-    name: 'Carmen Garcia',
+    name: 'Carmen García',
     role: 'Agile Project Manager',
     department: 'Project Management',
-    avatar: carmenGarciaProject,
+    avatar: carmenGarciaProject, // LOCKED_EXISTING - refreshed photo
     isAI: true,
-    bio: 'Certified Agile Project Manager facilitating agile processes and removing impediments for development teams.',
-    specializations: ['Agile Methodology', 'Project Coaching', 'Sprint Planning', 'Retrospectives'],
+    bio: 'Certified Agile project manager facilitating sprints, retrospectives, and agile methodologies across technology and creative teams. Skilled in Scrum frameworks and cross-functional delivery.',
+    specializations: ['Agile Methodology', 'Scrum', 'Sprint Planning', 'Retrospectives', 'Kanban'],
     languages: ['English', 'Spanish', 'Portuguese'],
     nationality: 'Spanish',
     yearsExperience: 6,
