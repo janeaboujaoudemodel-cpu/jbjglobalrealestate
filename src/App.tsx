@@ -92,6 +92,9 @@ import BusinessCardScanner from "./pages/BusinessCardScanner";
 import BuyerGuide from "./pages/BuyerGuide";
 import SellerGuide from "./pages/SellerGuide";
 import SellerListing from "./pages/SellerListing";
+import RentGuide from "./pages/RentGuide";
+import TenantGuide from "./pages/TenantGuide";
+import LandlordGuide from "./pages/LandlordGuide";
 import FAQ from "./pages/FAQ";
 import JBJAnalyticsDashboard from "./pages/JBJAnalyticsDashboard";
 import JBJDesignStudio from "./pages/JBJDesignStudio";
@@ -136,6 +139,9 @@ const App = () => (
                 <Route path="/buyer-guide" element={<BuyerGuide />} />
                 <Route path="/seller-guide" element={<SellerGuide />} />
                 <Route path="/seller-listing" element={<SellerListing />} />
+                <Route path="/rent-guide" element={<RentGuide />} />
+                <Route path="/tenant-guide" element={<TenantGuide />} />
+                <Route path="/landlord-guide" element={<LandlordGuide />} />
                 <Route path="/faq" element={<FAQ />} />
                 <Route path="/quiz" element={<Quiz />} />
                 <Route path="/quiz-results" element={<QuizResults />} />
