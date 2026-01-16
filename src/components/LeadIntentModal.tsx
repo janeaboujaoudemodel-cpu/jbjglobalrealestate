@@ -29,34 +29,34 @@ interface IntentOption {
 
 const INTENT_OPTIONS: IntentOption[] = [
   {
-    id: "property_purchase",
-    label: "Property Purchase",
+    id: "buy",
+    label: "Buy",
     icon: Home,
     description: "Looking to buy residential or commercial property",
   },
   {
-    id: "property_investment",
-    label: "Property Investment",
+    id: "sell",
+    label: "Sell",
     icon: TrendingUp,
-    description: "Invest in Dubai's growing real estate market",
+    description: "Sell your property with expert guidance",
   },
   {
-    id: "mortgage_support",
-    label: "Mortgage / Financing",
-    icon: Briefcase,
-    description: "Need help with mortgage or payment plans",
-  },
-  {
-    id: "property_rental",
-    label: "Property Rental",
+    id: "rent_lease",
+    label: "Rent / Lease",
     icon: Building2,
-    description: "Looking to rent a property in UAE",
+    description: "Looking to rent or lease a property in UAE",
   },
   {
-    id: "broker_partnership",
-    label: "Broker Partnership",
+    id: "broker",
+    label: "Broker",
     icon: Users,
     description: "Join as a professional broker with JBJ",
+  },
+  {
+    id: "partner_services",
+    label: "Partner Services",
+    icon: Briefcase,
+    description: "Mortgage, legal, visa & corporate services via licensed partners",
   },
 ];
 

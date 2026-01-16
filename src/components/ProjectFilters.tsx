@@ -47,6 +47,7 @@ export interface FilterState {
   currency: 'AED' | 'USD' | 'EUR' | 'GBP';
   sizeUnit: 'sqft' | 'sqm';
   language: 'en' | 'ar';
+  transactionType: 'all' | 'buy' | 'rent'; // Transaction type filter
 }
 
 interface ProjectFiltersProps {
@@ -257,6 +258,7 @@ const ProjectFilters = ({
       currency: filters.currency,
       sizeUnit: filters.sizeUnit,
       language: filters.language,
+      transactionType: 'all',
     });
   };
 
