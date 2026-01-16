@@ -3,7 +3,7 @@ import { Download, X } from "lucide-react";
 import { AnimatePresence, motion } from "framer-motion";
 import { toast } from "sonner";
 
-import jbjMonogramTransparent from "@/assets/jbj-monogram-transparent.png";
+import jbjMonogramDarkBg from "@/assets/jbj-monogram-dark-bg.png";
 import { usePopupVisibility } from "@/contexts/PopupCoordinatorContext";
 
 interface BeforeInstallPromptEvent extends Event {
@@ -165,7 +165,7 @@ const InstallAppButton = () => {
           >
             <div className="w-8 h-8 rounded-lg overflow-hidden bg-black shadow-inner">
               <img
-                src={jbjMonogramTransparent}
+                src={jbjMonogramDarkBg}
                 alt="JBJ Global Real Estate"
                 className="w-full h-full object-contain p-0.5"
                 loading="lazy"
