@@ -118,8 +118,8 @@ const About = () => {
             className="text-zinc-400 text-lg md:text-xl max-w-2xl mx-auto"
             variants={fadeInUp}
           >
-            JBJ Global Real Estate is a real estate brokerage serving UAE-based and international clients 
-            with expert property sales, leasing, and holiday home services across the UAE.
+            JBJ Global Real Estate is licensed to BUY, SELL, and RENT (LEASING) real estate, serving UAE-based and international clients 
+            with expert property services across the UAE.
           </motion.p>
         </motion.div>
       </section>
@@ -171,8 +171,8 @@ const About = () => {
               </h2>
               <div className="space-y-5 text-zinc-400 leading-relaxed">
                 <p>
-                  Founded in Dubai, JBJ Global Real Estate is a real estate brokerage dedicated to helping 
-                  clients buy, sell, and lease premium properties across the UAE.
+                  Founded in Dubai, JBJ Global Real Estate is licensed to BUY, SELL, and RENT (LEASING) 
+                  premium properties across the UAE.
                 </p>
                 <p>
                   Our team of experienced brokers brings deep market knowledge and strong negotiation skills, 
@@ -180,8 +180,8 @@ const About = () => {
                 </p>
                 <p>
                   Beyond brokerage, we connect clients with trusted independent professionals — including law firms, 
-                  mortgage specialists, and property managers — to provide comprehensive support throughout 
-                  their real estate journey.
+                  mortgage specialists, visa consultants, and property managers — to provide comprehensive support throughout 
+                  their real estate journey. Mortgage, legal, visa, and corporate services are provided through licensed partners.
                 </p>
               </div>
               
@@ -384,7 +384,7 @@ const About = () => {
               Ready to Find Your Perfect Property?
             </h2>
             <p className="text-zinc-400 text-lg mb-8 max-w-2xl mx-auto">
-              Connect with our brokerage team for expert guidance on buying, selling, or leasing in the UAE
+              Connect with our brokerage team for expert guidance on buying, selling, or renting in the UAE
             </p>
             <div className="flex flex-wrap justify-center gap-4">
               <Link to="/contact">

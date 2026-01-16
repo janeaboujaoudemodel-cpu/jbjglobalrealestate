@@ -88,7 +88,7 @@ const Index = () => {
             className="inline-flex items-center gap-2 px-5 py-2 bg-black/30 backdrop-blur-md border border-gold/40 rounded-full text-gold text-[10px] md:text-xs uppercase tracking-[0.3em] mb-8 shadow-lg shadow-gold/10"
           >
             <span className="w-2 h-2 bg-gold rounded-full animate-pulse" />
-            Real Estate Brokerage
+            Licensed Real Estate Brokerage
           </motion.span>
           
           {/* H1 - Premium Typography */}
@@ -97,8 +97,8 @@ const Index = () => {
             className="text-white text-4xl sm:text-5xl md:text-6xl lg:text-7xl font-bold tracking-tight leading-[1.1] mb-6"
             style={{ fontFamily: "Poppins, sans-serif" }}
           >
-            Buy & Sell Brokerage<br />
-            <span className="text-transparent bg-clip-text bg-gradient-to-r from-gold via-[#C4A962] to-gold">in Dubai</span>
+            Buy. Sell. Rent.<br />
+            <span className="text-transparent bg-clip-text bg-gradient-to-r from-gold via-[#C4A962] to-gold">Delivered with Intelligence.</span>
           </motion.h1>
           
           {/* Subline - Premium tagline */}
@@ -106,7 +106,7 @@ const Index = () => {
             variants={fadeInUp}
             className="text-zinc-300 text-base md:text-lg lg:text-xl max-w-2xl mx-auto leading-relaxed mb-4"
           >
-            Luxury. Precision. Integrity. Your trusted partner in UAE real estate.
+            Luxury real estate brokerage for buying, selling & leasing in the UAE.
           </motion.p>
 
           {/* Partner microline */}
@@ -114,7 +114,7 @@ const Index = () => {
             variants={fadeInUp}
             className="text-zinc-500 text-xs md:text-sm mb-10"
           >
-            Licensed partners available for legal and mortgage introductions.
+            Mortgage, legal & visa services provided through licensed partners.
           </motion.p>
 
           {/* Two CTAs Only - Premium Gold Buttons with Glow */}
@@ -389,7 +389,7 @@ const Index = () => {
                 Meet the <span className="text-transparent bg-clip-text bg-gradient-to-r from-gold to-gold-light">Founder</span>
               </h2>
               <p className="text-zinc-400 text-lg max-w-2xl mx-auto">
-                JBJ Global Real Estate is a founder-led brokerage built on unwavering standards, discretion, and long-term vision.
+                JBJ Global Real Estate is a founder-led brokerage for buying, selling, and leasing — built on unwavering standards, discretion, and long-term vision.
               </p>
             </motion.div>
 

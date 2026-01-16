@@ -70,11 +70,12 @@ const Footer = () => {
   // Our Services — required hierarchy with working pages
   const serviceLinks = [
     {
-      title: "Buy & Sell Brokerage",
+      title: "Buy, Sell & Rent Brokerage",
       href: "/properties",
       items: [
         { label: "Off-Plan Properties", href: "/properties?status=off-plan" },
         { label: "Ready Properties", href: "/properties?status=ready" },
+        { label: "Leasing & Rentals", href: "/properties?type=rent" },
         { label: "Property Search", href: "/quiz" },
       ],
     },
@@ -154,8 +155,11 @@ const Footer = () => {
           <h2 className="text-2xl md:text-3xl lg:text-4xl font-light tracking-[0.3em] text-gold mb-4">
             JBJ GLOBAL REAL ESTATE
           </h2>
-          <p className="text-zinc-400 text-base md:text-lg max-w-2xl mx-auto leading-relaxed">
-            Dubai mainland real estate brokerage — with trusted partner introductions for legal, mortgage, and specialist services.
+          <p className="text-zinc-400 text-base md:text-lg max-w-2xl mx-auto leading-relaxed mb-2">
+            Licensed for BUY, SELL & RENT (LEASING) real estate in the UAE.
+          </p>
+          <p className="text-zinc-500 text-sm max-w-xl mx-auto leading-relaxed">
+            Mortgage, legal, visa, and corporate services are provided through licensed partners.
           </p>
         </div>
 
@@ -331,24 +335,24 @@ const Footer = () => {
             
             {/* English Disclaimer */}
             <p className="text-zinc-400 text-sm leading-relaxed mb-4">
-              <span className="text-white font-medium">JBJ Global Real Estate</span> is a Dubai mainland real estate brokerage. 
-              For legal services and mortgage support, we can connect you with independent licensed partners. 
+              <span className="text-white font-medium">JBJ Global Real Estate</span> is a Dubai mainland real estate brokerage licensed to BUY, SELL & RENT (LEASING) properties across the UAE. 
+              For legal services, mortgage support, visa, and corporate services, we can connect you with independent licensed partners. 
               Clients contract and transact directly with the partner under the partner's own terms.
             </p>
             
             {/* English Legal Line */}
             <p className="text-zinc-300 text-xs leading-relaxed mb-4 font-medium">
-              Licensed Real Estate Brokerage in Dubai (Mainland). Operated by JBJ Global Real Estate L.L.C S.O.C. Owned & Led by Jane Abou Jaoude.
+              Licensed Real Estate Brokerage for Buy, Sell & Rent in Dubai (Mainland). Operated by JBJ Global Real Estate L.L.C S.O.C. Owned & Led by Jane Abou Jaoude.
             </p>
             
             {/* Arabic Disclaimer */}
             <p className="text-zinc-500 text-xs leading-relaxed mb-4" dir="rtl">
-              جي بي جي العقارية العالمية هي وساطة عقارية مرخصة في دبي. للخدمات القانونية والتمويل العقاري، يمكننا ربطك بشركاء مستقلين ومرخصين. يكون التعاقد مباشرة بين العميل والشريك وفق شروط الشريك.
+              جي بي جي العقارية العالمية هي وساطة عقارية مرخصة في دبي للبيع والشراء والإيجار. للخدمات القانونية والتمويل العقاري والتأشيرات، يمكننا ربطك بشركاء مستقلين ومرخصين. يكون التعاقد مباشرة بين العميل والشريك وفق شروط الشريك.
             </p>
             
             {/* Arabic Legal Line */}
             <p className="text-zinc-400 text-xs leading-relaxed mb-4" dir="rtl">
-              وساطة عقارية مرخصة في دبي (البر الرئيسي). يتم تشغيل الموقع من قبل JBJ Global Real Estate L.L.C S.O.C.
+              وساطة عقارية مرخصة للبيع والشراء والإيجار في دبي (البر الرئيسي). يتم تشغيل الموقع من قبل JBJ Global Real Estate L.L.C S.O.C.
             </p>
             
             <p className="text-zinc-500 text-xs leading-relaxed mb-4">
