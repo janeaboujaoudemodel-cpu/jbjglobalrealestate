@@ -25,6 +25,8 @@ import {
 import TeamContactForm from "@/components/TeamContactForm";
 import TeamMemberDetailDialog from "@/components/TeamMemberDetailDialog";
 import CEOLeadershipShowcase from "@/components/CEOLeadershipShowcase";
+import DepartmentInfoSection from "@/components/DepartmentInfoSection";
+import { companySummary } from "@/config/department-metadata";
 
 const fadeInUp = {
   hidden: { opacity: 0, y: 30 },
@@ -64,6 +66,8 @@ const TeamMemberCard = ({ member, onReadMore }: TeamMemberCardProps) => {
               alt={member.name}
               className="w-full aspect-square object-cover object-top group-hover:scale-105 transition-transform duration-500"
               loading="lazy"
+              decoding="async"
+              fetchPriority="low"
             />
             {/* Photo overlay gradient */}
             <div className="absolute inset-0 bg-gradient-to-t from-zinc-950 via-transparent to-transparent opacity-80" />
@@ -253,11 +257,19 @@ const MeetTheTeam: React.FC = () => {
               </motion.h1>
 
               <motion.p
-                className="text-zinc-400 text-lg max-w-2xl mx-auto mb-8"
+                className="text-zinc-400 text-lg max-w-2xl mx-auto mb-6"
                 variants={fadeInUp}
               >
                 A world-class team of professionals dedicated to delivering
                 exceptional real estate experiences in Dubai and beyond.
+              </motion.p>
+
+              {/* Company Summary */}
+              <motion.p
+                className="text-zinc-500 text-sm max-w-3xl mx-auto mb-8 italic"
+                variants={fadeInUp}
+              >
+                {companySummary}
               </motion.p>
 
               <motion.div
@@ -293,25 +305,25 @@ const MeetTheTeam: React.FC = () => {
                 const total = salesHierarchy.totalCount;
                 if (total === 0) return null;
 
-                return (
-                  <motion.div
-                    key={deptName}
-                    initial="hidden"
-                    whileInView="visible"
-                    viewport={{ once: true, margin: "-50px" }}
-                    variants={staggerContainer}
-                    className="mb-8"
-                  >
-                    {/* Department Header */}
+                  return (
                     <motion.div
-                      variants={fadeInUp}
-                      className="flex items-center gap-3 mb-8"
+                      key={deptName}
+                      initial="hidden"
+                      whileInView="visible"
+                      viewport={{ once: true, margin: "-50px" }}
+                      variants={staggerContainer}
+                      className="mb-8"
                     >
-                      <div className="w-10 h-10 bg-gold/10 rounded-lg flex items-center justify-center">
-                        <Building2 className="w-5 h-5 text-gold" />
-                      </div>
-                      <div>
-                        <h2 className="text-white text-2xl font-semibold">
+                      {/* Department Header */}
+                      <motion.div
+                        variants={fadeInUp}
+                        className="flex items-center gap-3 mb-4"
+                      >
+                        <div className="w-10 h-10 bg-gold/10 rounded-lg flex items-center justify-center">
+                          <Building2 className="w-5 h-5 text-gold" />
+                        </div>
+                        <div>
+                          <h2 className="text-white text-2xl font-semibold">
                           {deptName}
                         </h2>
                         <p className="text-zinc-500 text-sm">
@@ -319,6 +331,9 @@ const MeetTheTeam: React.FC = () => {
                         </p>
                       </div>
                     </motion.div>
+
+                    {/* Department Info Section */}
+                    <DepartmentInfoSection departmentName={deptName} />
 
                     <div className="space-y-10">
                       {salesHierarchy.activeCategories.map((category) => {
@@ -371,7 +386,7 @@ const MeetTheTeam: React.FC = () => {
                   {/* Department Header */}
                   <motion.div
                     variants={fadeInUp}
-                    className="flex items-center gap-3 mb-8"
+                    className="flex items-center gap-3 mb-4"
                   >
                     <div className="w-10 h-10 bg-gold/10 rounded-lg flex items-center justify-center">
                       <Building2 className="w-5 h-5 text-gold" />
@@ -385,6 +400,9 @@ const MeetTheTeam: React.FC = () => {
                       </p>
                     </div>
                   </motion.div>
+
+                  {/* Department Info Section */}
+                  <DepartmentInfoSection departmentName={deptName} />
 
                   {/* Team Grid - 4 columns for perfect alignment */}
                   <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
