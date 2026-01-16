@@ -1,6 +1,6 @@
 import { MessageCircle } from 'lucide-react';
 import { CONTACT_INFO } from '@/constants/stats';
-import jbjMonogramTransparent from "@/assets/jbj-monogram-transparent.png";
+import jbjMonogramDarkBg from "@/assets/jbj-monogram-dark-bg.png";
 
 interface ChatWelcomeProps {
   onStartChat: () => void;
@@ -11,9 +11,9 @@ const ChatWelcome = ({ onStartChat }: ChatWelcomeProps) => {
     <div className="flex-1 p-6 flex flex-col justify-center">
       <div className="text-center mb-6">
         <div className="mx-auto mb-4">
-          {/* Transparent JBJ logo */}
+          {/* JBJ logo - black box version for dark backgrounds */}
           <img 
-            src={jbjMonogramTransparent} 
+            src={jbjMonogramDarkBg} 
             alt="JBJ Global Real Estate" 
             className="h-20 w-auto mx-auto object-contain"
           />
