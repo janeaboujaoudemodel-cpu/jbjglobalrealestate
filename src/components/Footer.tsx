@@ -389,7 +389,10 @@ const Footer = () => {
               <span className="text-gold font-medium">Jane Abou Jaoude</span> — First Global Real Estate Platform of Its Kind
             </p>
           </div>
-          <div className="flex items-center gap-5">
+          <div className="flex flex-wrap items-center justify-center gap-3 md:gap-5">
+            <Link to="/trust-and-audit-center" className="hover:text-gold transition-colors">
+              Trust & Compliance
+            </Link>
             <Link to="/privacy" className="hover:text-gold transition-colors">
               Privacy Policy
             </Link>

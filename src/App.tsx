@@ -114,6 +114,7 @@ import PartnerMortgage from "./pages/partners/PartnerMortgage";
 import PartnerLegal from "./pages/partners/PartnerLegal";
 import PartnerCompanySetup from "./pages/partners/PartnerCompanySetup";
 import PartnerVisaServices from "./pages/partners/PartnerVisaServices";
+import TrustAndAuditCenter from "./pages/TrustAndAuditCenter";
 
 const queryClient = new QueryClient();
 
@@ -167,6 +168,7 @@ const App = () => (
                 <Route path="/terms" element={<Terms />} />
                 <Route path="/privacy" element={<Privacy />} />
                 <Route path="/cookies" element={<Cookies />} />
+                <Route path="/trust-and-audit-center" element={<TrustAndAuditCenter />} />
                 <Route path="/founder" element={<Founder />} />
                 <Route path="/awards" element={<Awards />} />
                 <Route path="/press-kit" element={<PressKit />} />
