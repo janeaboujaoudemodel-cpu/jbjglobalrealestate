@@ -1,5 +1,5 @@
-import { useState, useMemo } from "react";
-import { Link } from "react-router-dom";
+import { useState, useMemo, useEffect } from "react";
+import { Link, useSearchParams } from "react-router-dom";
 import { motion } from "framer-motion";
 import { 
   Search, 
@@ -130,15 +130,41 @@ const BATHROOM_OPTIONS = [
 ];
 
 const Properties = () => {
+  const [searchParams] = useSearchParams();
   const { data: projects, isLoading } = useProjects();
   const { data: communities } = useCommunities();
   const { data: developers } = useDevelopers();
   
-  const [filters, setFilters] = useState<ExtendedFilterState>(defaultExtendedFilters);
-  const [appliedFilters, setAppliedFilters] = useState<ExtendedFilterState>(defaultExtendedFilters);
+  // Get transaction type from URL params
+  const urlTransaction = searchParams.get('transaction') as 'buy' | 'rent' | null;
+  const urlStatus = searchParams.get('status');
+  
+  const initialFilters: ExtendedFilterState = {
+    ...defaultExtendedFilters,
+    transactionType: urlTransaction || 'all',
+    handoverStatus: urlStatus || null,
+  };
+  
+  const [filters, setFilters] = useState<ExtendedFilterState>(initialFilters);
+  const [appliedFilters, setAppliedFilters] = useState<ExtendedFilterState>(initialFilters);
   const [sortBy, setSortBy] = useState<string>("newest");
   const [isAdvancedOpen, setIsAdvancedOpen] = useState(false);
   const [isRequestFormOpen, setIsRequestFormOpen] = useState(false);
+  
+  // Update filters when URL params change
+  useEffect(() => {
+    const newTransaction = searchParams.get('transaction') as 'buy' | 'rent' | null;
+    const newStatus = searchParams.get('status');
+    if (newTransaction || newStatus) {
+      const updated: ExtendedFilterState = {
+        ...filters,
+        transactionType: newTransaction || 'all' as const,
+        handoverStatus: newStatus || filters.handoverStatus,
+      };
+      setFilters(updated);
+      setAppliedFilters(updated);
+    }
+  }, [searchParams]);
   
   // Convert extended filters to standard FilterState for useFilteredProjects
   // Use appliedFilters instead of filters for actual filtering
@@ -272,6 +298,33 @@ const Properties = () => {
       {/* Main Search Bar */}
       <section className="sticky top-16 z-30 bg-zinc-950/95 backdrop-blur-md border-b border-zinc-800/50 py-4">
         <div className="container mx-auto px-4">
+          {/* Transaction Type Tabs - Buy / Rent / All */}
+          <div className="flex items-center gap-2 mb-4">
+            <span className="text-zinc-400 text-sm mr-2">I want to:</span>
+            {[
+              { value: 'all', label: 'All' },
+              { value: 'buy', label: 'Buy' },
+              { value: 'rent', label: 'Rent / Lease' },
+            ].map((option) => (
+              <Button
+                key={option.value}
+                variant={filters.transactionType === option.value ? "default" : "outline"}
+                size="sm"
+                onClick={() => {
+                  updateFilter("transactionType", option.value as 'all' | 'buy' | 'rent');
+                  setAppliedFilters(prev => ({ ...prev, transactionType: option.value as 'all' | 'buy' | 'rent' }));
+                }}
+                className={`h-9 px-4 rounded-full ${
+                  filters.transactionType === option.value
+                    ? "bg-gradient-to-r from-gold to-[#E8D5A3] text-black border-gold font-semibold"
+                    : "bg-zinc-900/80 border-zinc-700/50 text-white hover:bg-zinc-800 hover:text-white"
+                }`}
+              >
+                {option.label}
+              </Button>
+            ))}
+          </div>
+          
           <div className="flex flex-wrap items-center gap-3">
             {/* Keyword Search */}
             <div className="relative flex-1 min-w-[200px]">

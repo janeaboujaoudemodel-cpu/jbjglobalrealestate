@@ -24,6 +24,7 @@ export const defaultFilters: FilterState = {
   currency: 'AED',
   sizeUnit: 'sqft',
   language: 'en',
+  transactionType: 'all',
 };
 
 // Check if a project is premium based on is_premium flag or keywords in name/description
