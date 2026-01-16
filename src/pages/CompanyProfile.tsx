@@ -53,23 +53,23 @@ const staggerContainer = {
 
 const companyInfo = {
   name: "JBJ Global Real Estate",
-  tagline: "Your Gateway to UAE's Premier Real Estate Brokerage",
+  tagline: "Buy. Sell. Rent. Delivered with Intelligence.",
   founded: "2025",
   headquarters: "Downtown Dubai, UAE",
   ceo: "Jane Abou Jaoude",
-  about: `JBJ Global Real Estate is a Dubai-based real estate brokerage specializing in property sales, leasing, and holiday homes across the UAE. Founded by entrepreneur Jane Abou Jaoude, we provide brokerage support and partner introductions for discerning clients seeking exceptional properties in the UAE.
+  about: `JBJ Global Real Estate is a Dubai-based real estate brokerage licensed to BUY, SELL, and RENT (LEASING) properties across the UAE. Founded by entrepreneur Jane Abou Jaoude, we provide brokerage support and partner introductions for discerning clients seeking exceptional properties in the UAE.
 
 Our founder-led approach ensures that every client receives personalized attention and professional guidance, backed by our extensive market knowledge and exclusive network of developers, legal partners, and service providers.
 
 We serve UAE-based and international clients interested in UAE real estate, offering expert brokerage services with a commitment to excellence.`,
-  mission: "To provide discerning clients with professional brokerage support and access to the UAE's most exclusive properties, delivered with the highest standards of integrity, expertise, and personalized service.",
+  mission: "To provide discerning clients with professional brokerage support for buying, selling, and leasing, along with access to the UAE's most exclusive properties, delivered with the highest standards of integrity, expertise, and personalized service.",
   vision: "To be the trusted choice for clients seeking premium real estate brokerage services in the UAE, recognized for our commitment to client success.",
   services: [
-    "Property Sales & Leasing Brokerage",
+    "Property Sales, Leasing & Rental Brokerage",
     "Legal Partner Introductions",
     "Interior Design & Architecture Partners",
     "Mortgage Partner Introductions",
-    "Golden Visa Assistance",
+    "Golden Visa Assistance (via Partners)",
     "Holiday Homes Management"
   ],
   values: [
@@ -175,15 +175,15 @@ const CompanyProfile = () => {
       });
 
       // Tagline
-      page1.drawText("Your Gateway to UAE's Premier", {
-        x: pageWidth / 2 - 135,
+      page1.drawText("Buy. Sell. Rent.", {
+        x: pageWidth / 2 - 70,
         y: pageHeight - 500,
-        size: 16,
-        font: helvetica,
-        color: whiteColor,
+        size: 18,
+        font: helveticaBold,
+        color: goldColor,
       });
-      page1.drawText("Real Estate Brokerage", {
-        x: pageWidth / 2 - 95,
+      page1.drawText("Delivered with Intelligence.", {
+        x: pageWidth / 2 - 105,
         y: pageHeight - 525,
         size: 16,
         font: helvetica,
@@ -247,18 +247,18 @@ const CompanyProfile = () => {
       // About text (wrapped)
       const aboutLines = [
         "JBJ Global Real Estate is a Dubai-based real estate brokerage",
-        "specializing in property sales, leasing, and holiday homes across",
-        "the UAE. Founded by entrepreneur Jane Abou Jaoude, we provide",
-        "brokerage support and partner introductions for discerning clients",
-        "seeking exceptional properties in the UAE.",
+        "licensed to BUY, SELL, and RENT (LEASING) properties across the UAE.",
+        "Founded by entrepreneur Jane Abou Jaoude, we provide brokerage",
+        "support and partner introductions for discerning clients seeking",
+        "exceptional properties in the UAE.",
         "",
         "Our founder-led approach ensures that every client receives",
         "personalized attention and professional guidance, backed by our",
         "extensive market knowledge and exclusive network of developers,",
         "legal experts, and luxury service providers.",
         "",
-        "We serve UAE-based and international clients interested in",
-        "UAE real estate, offering expert brokerage services."
+        "Mortgage, legal, visa, and corporate services are provided",
+        "through licensed partners."
       ];
 
       let yPos = pageHeight - 160;
@@ -435,12 +435,12 @@ const CompanyProfile = () => {
       });
 
       const services = [
-        "Property Sales & Leasing Brokerage",
-        "Luxury Concierge & Lifestyle Support",
+        "Property Sales, Leasing & Rental Brokerage",
         "Legal Partner Introductions",
         "Interior Design & Architecture Partners",
         "Mortgage Partner Introductions",
-        "Golden Visa Assistance"
+        "Golden Visa Assistance (via Partners)",
+        "Holiday Homes Management"
       ];
 
       yPos = pageHeight - 410;
