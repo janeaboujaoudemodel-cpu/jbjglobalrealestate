@@ -9782,7 +9782,13 @@ export type Database = {
         | "human_responded"
         | "ignored"
       ai_broker_status: "active" | "paused" | "training" | "offline"
-      app_role: "admin" | "user" | "owner" | "broker" | "listing_admin"
+      app_role:
+        | "admin"
+        | "user"
+        | "owner"
+        | "broker"
+        | "listing_admin"
+        | "hr_admin"
       audit_action_type:
         | "create"
         | "read"
@@ -10060,7 +10066,14 @@ export const Constants = {
         "ignored",
       ],
       ai_broker_status: ["active", "paused", "training", "offline"],
-      app_role: ["admin", "user", "owner", "broker", "listing_admin"],
+      app_role: [
+        "admin",
+        "user",
+        "owner",
+        "broker",
+        "listing_admin",
+        "hr_admin",
+      ],
       audit_action_type: [
         "create",
         "read",
