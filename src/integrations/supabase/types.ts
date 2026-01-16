@@ -3006,6 +3006,7 @@ export type Database = {
         Row: {
           age_range: string | null
           assigned_ai_employee_id: string | null
+          assigned_broker_id: string | null
           assigned_to_user_id: string | null
           auto_detected_type: boolean | null
           birthday: string | null
@@ -3028,16 +3029,26 @@ export type Database = {
             | null
           import_batch_id: string | null
           imported_at: string | null
+          lead_intent: string | null
           lead_source_type: string | null
           nationality: string | null
           notes: string | null
           owner_type: Database["public"]["Enums"]["crm_lead_owner_type"]
           owner_user_id: string | null
+          partner_service_type: string | null
           phone_e164: string | null
           phone_normalized: string | null
           phone_raw: string | null
+          pipeline_stage: string | null
           preferred_language: string | null
           raw_import: Json | null
+          rental_budget_max: number | null
+          rental_budget_min: number | null
+          rental_lease_duration: string | null
+          rental_move_in_timeline: string | null
+          rental_preferred_areas: string[] | null
+          rental_property_type: string | null
+          rental_renter_type: string | null
           source: string | null
           source_id: string | null
           source_row_index: number | null
@@ -3050,6 +3061,7 @@ export type Database = {
         Insert: {
           age_range?: string | null
           assigned_ai_employee_id?: string | null
+          assigned_broker_id?: string | null
           assigned_to_user_id?: string | null
           auto_detected_type?: boolean | null
           birthday?: string | null
@@ -3072,16 +3084,26 @@ export type Database = {
             | null
           import_batch_id?: string | null
           imported_at?: string | null
+          lead_intent?: string | null
           lead_source_type?: string | null
           nationality?: string | null
           notes?: string | null
           owner_type?: Database["public"]["Enums"]["crm_lead_owner_type"]
           owner_user_id?: string | null
+          partner_service_type?: string | null
           phone_e164?: string | null
           phone_normalized?: string | null
           phone_raw?: string | null
+          pipeline_stage?: string | null
           preferred_language?: string | null
           raw_import?: Json | null
+          rental_budget_max?: number | null
+          rental_budget_min?: number | null
+          rental_lease_duration?: string | null
+          rental_move_in_timeline?: string | null
+          rental_preferred_areas?: string[] | null
+          rental_property_type?: string | null
+          rental_renter_type?: string | null
           source?: string | null
           source_id?: string | null
           source_row_index?: number | null
@@ -3094,6 +3116,7 @@ export type Database = {
         Update: {
           age_range?: string | null
           assigned_ai_employee_id?: string | null
+          assigned_broker_id?: string | null
           assigned_to_user_id?: string | null
           auto_detected_type?: boolean | null
           birthday?: string | null
@@ -3116,16 +3139,26 @@ export type Database = {
             | null
           import_batch_id?: string | null
           imported_at?: string | null
+          lead_intent?: string | null
           lead_source_type?: string | null
           nationality?: string | null
           notes?: string | null
           owner_type?: Database["public"]["Enums"]["crm_lead_owner_type"]
           owner_user_id?: string | null
+          partner_service_type?: string | null
           phone_e164?: string | null
           phone_normalized?: string | null
           phone_raw?: string | null
+          pipeline_stage?: string | null
           preferred_language?: string | null
           raw_import?: Json | null
+          rental_budget_max?: number | null
+          rental_budget_min?: number | null
+          rental_lease_duration?: string | null
+          rental_move_in_timeline?: string | null
+          rental_preferred_areas?: string[] | null
+          rental_property_type?: string | null
+          rental_renter_type?: string | null
           source?: string | null
           source_id?: string | null
           source_row_index?: number | null
@@ -3141,6 +3174,13 @@ export type Database = {
             columns: ["assigned_ai_employee_id"]
             isOneToOne: false
             referencedRelation: "crm_ai_employees"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "crm_leads_assigned_broker_id_fkey"
+            columns: ["assigned_broker_id"]
+            isOneToOne: false
+            referencedRelation: "ai_brokers"
             referencedColumns: ["id"]
           },
           {
