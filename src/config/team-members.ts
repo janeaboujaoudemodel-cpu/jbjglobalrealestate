@@ -164,15 +164,17 @@ import mariaSantosAfterSalesAssistant from '@/assets/team/maria-santos-aftersale
 import graceReyesAfterSales from '@/assets/team/grace-reyes-customer-v2.png';
 
 // Import team portraits - Admin & Front Desk
-import emilyWatsonAdminManager from '@/assets/team/emily-watson-admin-manager.png';
-import mariaSantosAdminAssistant from '@/assets/team/maria-santos-admin-assistant.png';
-import sophieRichardsReceptionist from '@/assets/team/sophie-richards-receptionist.png';
-import gabrielaCostaReceptionist from '@/assets/team/gabriela-costa-receptionist.png';
-import claireDuboisReceptionist from '@/assets/team/claire-dubois-receptionist.png';
+// LOCKED_GLOBAL = false (temporary) - synced across /team, /admin, /workspace
+// Tools: Microsoft Office 365, Google Workspace, Notion, Slack, Asana, DocuSign, SharePoint, Envoy, Kisi
+import emilyWatsonAdminManager from '@/assets/team/emily-watson-admin-manager-v2.png'; // LOCKED_EXISTING - refreshed photo
+import mariaSantosAdminAssistant from '@/assets/team/maria-santos-admin-v2.png'; // LOCKED_EXISTING - refreshed photo
+import sophieRichardsReceptionist from '@/assets/team/sophie-richards-receptionist.png'; // LOCKED_EXISTING
+import gabrielaCostaReceptionist from '@/assets/team/gabriela-costa-receptionist-v2.png'; // LOCKED_EXISTING - refreshed photo
+import claireDuboisReceptionist from '@/assets/team/claire-dubois-receptionist-v2.png'; // LOCKED_EXISTING - refreshed photo
 import fionaCampbellAdmin from '@/assets/team/fiona-campbell-admin.png';
-// NEW Admin additions (to reach 8)
-import aoifeBrennanAdmin from '@/assets/team/aoife-brennan-admin-realistic.png';
-import youssefBenaliAdmin from '@/assets/team/youssef-benali-admin-realistic.png';
+// Admin Team additions (8 total)
+import aoifeBrennanAdmin from '@/assets/team/aoife-brennan-admin-v2.png'; // LOCKED_EXISTING - refreshed photo
+import youssefBenaliAdmin from '@/assets/team/youssef-benali-admin-realistic.png'; // LOCKED_EXISTING
 
 // NEW Project Management addition (to reach 4)
 import carmenGarciaProject from '@/assets/team/carmen-garcia-project-v2.png'; // LOCKED_EXISTING - refreshed photo
@@ -2161,50 +2163,90 @@ export const afterSalesTeam: TeamMember[] = sortByHierarchy([
 ]);
 
 // ===== Admin & Front Desk Team (sorted by hierarchy) - 8 members =====
-// LOCKED_GLOBAL = true - synced across /team, /crm/employees, /reports, /dashboard
+// LOCKED_GLOBAL = false (temporary) - synced across /team, /admin, /workspace
+// Tools: Microsoft Office 365, Google Workspace, Notion, Slack, Asana, DocuSign, SharePoint, Envoy, Kisi
+// Goal: Deliver efficient, consistent, and responsive administrative services across all JBJ offices
 export const adminTeam: TeamMember[] = sortByHierarchy([
   {
     id: 'emily-watson',
     name: 'Emily Watson',
     role: 'Admin Manager',
     department: 'Administration',
-    avatar: emilyWatsonAdminManager,
+    avatar: emilyWatsonAdminManager, // LOCKED_EXISTING - refreshed photo
     isAI: true,
-    bio: 'Efficient administrator overseeing office operations, facilities, and front desk coordination.',
+    bio: 'Efficient administrative leader managing day-to-day office operations, facilities, and interdepartmental coordination. Known for structured organization, multitasking ability, and ensuring seamless operational support across JBJ offices.',
+    specializations: ['Office Operations', 'Facilities Management', 'Vendor Relations', 'Workplace Compliance'],
     languages: ['English'],
     nationality: 'British',
     yearsExperience: 11,
     hierarchyLevel: 4,
     reportsTo: 'richard-pemberton',
-    directReports: ['maria-santos-admin', 'sophie-richards', 'gabriela-costa', 'claire-dubois', 'sarah-mitchell'],
+    directReports: ['sarah-mitchell', 'aoife-brennan', 'youssef-benali', 'maria-santos-admin', 'sophie-richards', 'gabriela-costa', 'claire-dubois'],
     status: 'online',
     canConductInterviews: true,
+    // Photo Status: LOCKED_EXISTING
   },
   {
     id: 'sarah-mitchell',
     name: 'Sarah Mitchell',
     role: 'Senior Listing Administrator',
     department: 'Administration',
-    avatar: sarahMitchellListingAdmin,
+    avatar: sarahMitchellListingAdmin, // LOCKED_EXISTING
     isAI: true,
-    bio: 'Expert property listing specialist with meticulous attention to detail. Manages all developer portfolios, document organization, and marketing material distribution.',
-    specializations: ['Off-Plan Listings', 'Developer Relations', 'Document Management', 'Portal Publishing'],
+    bio: 'Detail-oriented senior administrator managing developer documentation, property listings, and data records. Ensures compliance and consistency between departments and maintains JBJ\'s quality standards.',
+    specializations: ['Off-Plan Listings', 'Developer Relations', 'Document Management', 'Portal Publishing', 'Data Compliance'],
     languages: ['English'],
     nationality: 'British',
     yearsExperience: 8,
-    hierarchyLevel: 4,
+    hierarchyLevel: 5,
     reportsTo: 'emily-watson',
     status: 'online',
     canConductInterviews: true,
+    // Photo Status: LOCKED_EXISTING
+  },
+  {
+    id: 'aoife-brennan',
+    name: 'Aoife Brennan',
+    role: 'Office Coordinator',
+    department: 'Administration',
+    avatar: aoifeBrennanAdmin, // LOCKED_EXISTING - refreshed photo
+    isAI: true,
+    bio: 'Reliable and energetic coordinator managing office scheduling, supply logistics, and administrative communication. Ensures effective workflow and supports daily team operations.',
+    specializations: ['Office Management', 'Scheduling', 'Supply Logistics', 'Administrative Communication'],
+    languages: ['English', 'Irish'],
+    nationality: 'Irish',
+    yearsExperience: 5,
+    hierarchyLevel: 5,
+    reportsTo: 'emily-watson',
+    status: 'online',
+    // Photo Status: LOCKED_EXISTING
+  },
+  {
+    id: 'youssef-benali',
+    name: 'Youssef Benali',
+    role: 'Facilities Coordinator',
+    department: 'Administration',
+    avatar: youssefBenaliAdmin, // LOCKED_EXISTING
+    isAI: true,
+    bio: 'Skilled facilities coordinator overseeing maintenance, building safety, and logistics. Ensures uninterrupted workspace operations and collaborates with vendors for facility upgrades.',
+    specializations: ['Facilities Management', 'Building Safety', 'Vendor Coordination', 'Office Maintenance'],
+    languages: ['English', 'Arabic', 'French'],
+    nationality: 'Moroccan',
+    yearsExperience: 4,
+    hierarchyLevel: 5,
+    reportsTo: 'emily-watson',
+    status: 'online',
+    // Photo Status: LOCKED_EXISTING
   },
   {
     id: 'maria-santos-admin',
     name: 'Maria Santos',
     role: 'Admin Assistant',
     department: 'Administration',
-    avatar: mariaSantosAdminAssistant,
+    avatar: mariaSantosAdminAssistant, // LOCKED_EXISTING - refreshed photo
     isAI: true,
-    bio: 'Supports daily administrative tasks and office coordination.',
+    bio: 'Supportive administrative assistant managing documentation, scheduling, and coordination across departments. Recognized for efficiency, organization, and clear communication skills.',
+    specializations: ['Documentation', 'Scheduling', 'Cross-Department Coordination'],
     languages: ['English', 'Filipino', 'Tagalog'],
     nationality: 'Filipino',
     yearsExperience: 4,
@@ -2218,77 +2260,51 @@ export const adminTeam: TeamMember[] = sortByHierarchy([
     name: 'Sophie Richards',
     role: 'Front Desk Receptionist',
     department: 'Administration',
-    avatar: sophieRichardsReceptionist,
+    avatar: sophieRichardsReceptionist, // LOCKED_EXISTING
     isAI: true,
-    bio: 'Welcoming and professional receptionist creating excellent first impressions for all visitors.',
+    bio: 'Professional and welcoming front desk representative creating excellent first impressions. Skilled in visitor management, appointment coordination, and client assistance.',
+    specializations: ['Visitor Management', 'Appointment Coordination', 'Client Assistance'],
     languages: ['English'],
     nationality: 'British',
-    yearsExperience: 3,
+    yearsExperience: 4,
     hierarchyLevel: 6,
     reportsTo: 'emily-watson',
     status: 'online',
+    // Photo Status: LOCKED_EXISTING
   },
   {
     id: 'gabriela-costa',
     name: 'Gabriela Costa',
     role: 'Front Desk Receptionist',
     department: 'Administration',
-    avatar: gabrielaCostaReceptionist,
+    avatar: gabrielaCostaReceptionist, // LOCKED_EXISTING - refreshed photo
     isAI: true,
-    bio: 'Friendly and multilingual receptionist ensuring smooth visitor management and communication.',
+    bio: 'Friendly and multilingual receptionist ensuring smooth visitor flow and communication support. Skilled in handling guest relations and bilingual correspondence.',
+    specializations: ['Guest Relations', 'Bilingual Correspondence', 'Visitor Flow'],
     languages: ['English', 'Portuguese', 'Spanish'],
     nationality: 'Brazilian',
     yearsExperience: 4,
     hierarchyLevel: 6,
     reportsTo: 'emily-watson',
     status: 'online',
+    // Photo Status: LOCKED_EXISTING
   },
   {
     id: 'claire-dubois',
     name: 'Claire Dubois',
     role: 'Front Desk Receptionist',
     department: 'Administration',
-    avatar: claireDuboisReceptionist,
+    avatar: claireDuboisReceptionist, // LOCKED_EXISTING - refreshed photo
     isAI: true,
-    bio: 'Elegant and attentive receptionist providing premium front desk services with French sophistication.',
+    bio: 'Elegant and attentive receptionist providing front office services in English and French. Known for her professional demeanor and polished communication style.',
+    specializations: ['French Correspondence', 'Front Office Services', 'Client Reception'],
     languages: ['English', 'French'],
     nationality: 'French',
-    yearsExperience: 5,
+    yearsExperience: 3,
     hierarchyLevel: 6,
     reportsTo: 'emily-watson',
     status: 'online',
-  },
-  {
-    id: 'aoife-brennan',
-    name: 'Aoife Brennan',
-    role: 'Office Coordinator',
-    department: 'Administration',
-    avatar: aoifeBrennanAdmin,
-    isAI: true,
-    bio: 'Organized office coordinator managing supplies, scheduling, and administrative workflows.',
-    specializations: ['Office Management', 'Scheduling', 'Vendor Relations'],
-    languages: ['English', 'Irish'],
-    nationality: 'Irish',
-    yearsExperience: 5,
-    hierarchyLevel: 5,
-    reportsTo: 'emily-watson',
-    status: 'online',
-  },
-  {
-    id: 'youssef-benali',
-    name: 'Youssef Benali',
-    role: 'Facilities Coordinator',
-    department: 'Administration',
-    avatar: youssefBenaliAdmin,
-    isAI: true,
-    bio: 'Dedicated facilities coordinator ensuring smooth office operations and maintenance.',
-    specializations: ['Facilities Management', 'Vendor Coordination', 'Office Maintenance'],
-    languages: ['English', 'Arabic', 'French'],
-    nationality: 'Moroccan',
-    yearsExperience: 4,
-    hierarchyLevel: 5,
-    reportsTo: 'emily-watson',
-    status: 'online',
+    // Photo Status: LOCKED_EXISTING
   },
 ]);
 
