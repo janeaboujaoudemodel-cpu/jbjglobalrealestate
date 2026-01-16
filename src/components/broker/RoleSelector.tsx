@@ -22,7 +22,7 @@ const ROLES = [
   {
     id: "broker" as UserRole,
     title: "Real Estate Broker",
-    description: "Licensed broker working with clients to buy/sell properties",
+    description: "Licensed broker working with clients to buy, sell & rent properties",
     icon: Building2,
     benefits: [
       "Property presentation tools",

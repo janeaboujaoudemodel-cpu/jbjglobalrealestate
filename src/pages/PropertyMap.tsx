@@ -165,6 +165,16 @@ const PropertyMap = () => {
   const [selectedDeveloper, setSelectedDeveloper] = useState<string>("all");
   const [selectedBedrooms, setSelectedBedrooms] = useState<string>("all");
   const [priceRange, setPriceRange] = useState<[number, number]>([0, 50000000]);
+  const [transactionType, setTransactionType] = useState<'all' | 'buy' | 'rent'>('all');
+  
+  // Get transaction type from URL
+  useEffect(() => {
+    const params = new URLSearchParams(window.location.search);
+    const txn = params.get('transaction');
+    if (txn === 'buy' || txn === 'rent') {
+      setTransactionType(txn);
+    }
+  }, []);
   
   // Get unique developers
   const developers = useMemo(() => {
@@ -215,9 +225,10 @@ const PropertyMap = () => {
     setSelectedDeveloper("all");
     setSelectedBedrooms("all");
     setPriceRange([0, 50000000]);
+    setTransactionType('all');
   };
   
-  const hasActiveFilters = searchTerm || selectedDeveloper !== "all" || selectedBedrooms !== "all" || priceRange[0] > 0 || priceRange[1] < 50000000;
+  const hasActiveFilters = searchTerm || selectedDeveloper !== "all" || selectedBedrooms !== "all" || priceRange[0] > 0 || priceRange[1] < 50000000 || transactionType !== 'all';
 
   if (isLoading) {
     return (
@@ -280,6 +291,24 @@ const PropertyMap = () => {
                   <SheetTitle>Filter Properties</SheetTitle>
                 </SheetHeader>
                 <div className="space-y-6 mt-6">
+                  {/* Transaction Type */}
+                  <div className="space-y-2">
+                    <label className="text-sm font-medium">Transaction Type</label>
+                    <div className="flex gap-2">
+                      {(['all', 'buy', 'rent'] as const).map((type) => (
+                        <Button
+                          key={type}
+                          variant={transactionType === type ? "default" : "outline"}
+                          size="sm"
+                          onClick={() => setTransactionType(type)}
+                          className="flex-1"
+                        >
+                          {type === 'all' ? 'All' : type === 'buy' ? 'Buy' : 'Rent / Lease'}
+                        </Button>
+                      ))}
+                    </div>
+                  </div>
+                  
                   {/* Mobile Search */}
                   <div className="md:hidden space-y-2">
                     <label className="text-sm font-medium">Search</label>

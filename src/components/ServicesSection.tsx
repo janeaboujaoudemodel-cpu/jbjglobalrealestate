@@ -10,17 +10,17 @@ const INQUIRY_FORM_URL = "https://jbj.ae/contact";
 const howWeHelp = [
   {
     title: "Buy & Sell Brokerage",
-    description: "Brokerage support for buying and selling UAE property.",
+    description: "Expert brokerage support for buying and selling UAE property.",
     gradient: "from-gold/20 via-gold-light/10 to-gold/20",
     iconGradient: "from-gold to-gold-light",
-    href: "/properties",
+    href: "/properties?transaction=buy",
   },
   {
-    title: "Leasing Brokerage",
-    description: "Residential and commercial leasing support.",
+    title: "Rent / Lease Brokerage",
+    description: "Residential and commercial renting & leasing support.",
     gradient: "from-blue-500/20 via-cyan-500/10 to-blue-600/20",
     iconGradient: "from-blue-400 to-cyan-400",
-    href: "/properties?status=ready",
+    href: "/properties?transaction=rent",
   },
   {
     title: "Partner Introductions",
@@ -180,7 +180,7 @@ const HelpIcon = ({ title, gradient }: { title: string; gradient: string }) => {
             <polygon points="18,4 4,16 32,16" fill="url(#helpGrad)"/>
           </g>
         );
-      case "Leasing Brokerage":
+      case "Rent / Lease Brokerage":
         return (
           <g>
             <rect x="6" y="10" width="28" height="20" rx="3" fill="url(#helpGrad)" opacity="0.9"/>
