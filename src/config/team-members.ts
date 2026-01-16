@@ -427,25 +427,27 @@ export const executiveTeam: TeamMember[] = sortByHierarchy([
 ]);
 
 // ===== Sales & Business Development (sorted by hierarchy) =====
+// LOCKED_GLOBAL = true - synced across /team, /crm/employees, /reports, /dashboard
 export const salesTeam: TeamMember[] = sortByHierarchy([
   {
     id: 'roy-davi',
     name: 'Roy Davi',
-    role: 'Head of Sale',
+    role: 'Head of Sales',
     department: 'Sales',
     avatar: royDaviHeadOfSale,
     isAI: false,
     email: 'roy.davi@JBJ.ae',
-    bio: 'Dynamic sales leader with exceptional track record in luxury real estate. Leads the entire sales division with strategic vision and hands-on management.',
+    bio: 'Dynamic sales leader with a strong track record in luxury real estate and international client relations.',
     specializations: ['Luxury Properties', 'High-Net-Worth Clients', 'Investment Properties', 'Team Leadership'],
     languages: ['English', 'Arabic'],
     nationality: 'Lebanese Canadian',
     yearsExperience: 10,
     hierarchyLevel: 3,
     reportsTo: 'jane-abou-jaoude',
-    directReports: ['michael-anderson', 'emma-hartley', 'william-harrison', 'abdullah-al-rashid'],
+    directReports: ['michael-anderson', 'emma-hartley', 'william-harrison', 'emily-richardson-sales'],
     status: 'online',
     canConductInterviews: true,
+    // Photo Status: LOCKED_EXISTING
   },
   {
     id: 'michael-anderson',
@@ -454,7 +456,7 @@ export const salesTeam: TeamMember[] = sortByHierarchy([
     department: 'Sales',
     avatar: michaelAndersonSalesDirector,
     isAI: true,
-    bio: 'Dynamic sales leader driving revenue growth with strategic client acquisition and team development.',
+    bio: 'Strategic sales director driving revenue growth through client acquisition and cross-border partnerships.',
     specializations: ['Enterprise Sales', 'High-Net-Worth Clients', 'Investment Properties'],
     languages: ['English'],
     nationality: 'British',
@@ -464,6 +466,7 @@ export const salesTeam: TeamMember[] = sortByHierarchy([
     directReports: ['george-hamilton'],
     status: 'online',
     canConductInterviews: true,
+    // Photo Status: LOCKED_EXISTING
   },
   {
     id: 'emma-hartley',
@@ -472,7 +475,7 @@ export const salesTeam: TeamMember[] = sortByHierarchy([
     department: 'Sales',
     avatar: emmaHartleySalesManager,
     isAI: true,
-    bio: 'Results-driven manager coaching sales teams to exceed targets with consultative selling approach.',
+    bio: 'Results-driven sales manager leading high-performing teams and optimizing international market penetration.',
     specializations: ['Off-Plan Sales', 'Team Leadership', 'Client Relations'],
     languages: ['English', 'French'],
     nationality: 'British',
@@ -568,7 +571,7 @@ export const salesTeam: TeamMember[] = sortByHierarchy([
     department: 'Sales',
     avatar: adaezeOkonkwoSales,
     isAI: true,
-    bio: 'Results-oriented sales manager with strong focus on African investor networks and premium property sales.',
+    bio: 'Sales manager leading multicultural teams with focus on African investor relations and premium developments.',
     specializations: ['Team Leadership', 'African Markets', 'Premium Properties'],
     languages: ['English', 'Igbo', 'French'],
     nationality: 'Nigerian',
@@ -730,7 +733,7 @@ export const salesTeam: TeamMember[] = sortByHierarchy([
     department: 'Sales',
     avatar: emilyRichardsonVip,
     isAI: true,
-    bio: 'Experienced sales leader specializing in high-net-worth client acquisition and team development.',
+    bio: 'Experienced leader specializing in high-value client acquisition and luxury property sales.',
     specializations: ['High-Net-Worth Clients', 'Team Leadership', 'Client Acquisition'],
     languages: ['English', 'French'],
     nationality: 'Canadian',
@@ -1064,23 +1067,9 @@ export const salesTeam: TeamMember[] = sortByHierarchy([
     reportsTo: 'emma-hartley',
     status: 'online',
   },
-  {
-    id: 'chen-wei-sales',
-    name: 'Chen Wei',
-    role: 'Property Consultant',
-    department: 'Sales',
-    avatar: liWeiChenInvestment,
-    isAI: true,
-    bio: 'Experienced property consultant specializing in Chinese investor networks and luxury waterfront properties.',
-    specializations: ['Chinese Clients', 'Luxury Waterfront', 'Investment Properties'],
-    languages: ['English', 'Mandarin', 'Cantonese'],
-    nationality: 'Chinese',
-    yearsExperience: 6,
-    hierarchyLevel: 5,
-    reportsTo: 'michael-anderson',
-    status: 'online',
-  },
+  // NOTE: Chen Wei merged into Li Wei Chen (id: li-wei-chen) - no duplicate entry
 ]);
+// LOCKED_GLOBAL = true - Sales department finalized
 
 // ===== Marketing (sorted by hierarchy) - 8 members =====
 export const marketingTeam: TeamMember[] = sortByHierarchy([
