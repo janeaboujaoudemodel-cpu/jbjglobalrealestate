@@ -41,6 +41,9 @@ import jiYoungParkSales from '@/assets/team/ji-young-park-sales.png';
 import lucasMendesInvestment from '@/assets/team/lucas-mendes-investment.png';
 import mehmetYilmazProperty from '@/assets/team/mehmet-yilmaz-property.png';
 import zandileNdlovuSales from '@/assets/team/zandile-ndlovu-sales.png';
+// NEW: Unique Indian male photo for Ananya Sharma + 40th Sales member
+import ananyaSharmaIndianMale from '@/assets/team/ananya-sharma-indian-male.png';
+import thaboMokoenaSales from '@/assets/team/thabo-mokoena-sales.png';
 
 // Import team portraits - Software Engineering Team
 import jamesWoodwardTechLead from '@/assets/team/james-woodward-tech-lead.png';
@@ -1088,7 +1091,7 @@ export const salesTeam: TeamMember[] = sortByHierarchy([
     name: 'Ananya Sharma',
     role: 'Property Consultant',
     department: 'Sales',
-    avatar: mehmetYilmazProperty, // TEMP: Needs unique photo - using placeholder
+    avatar: ananyaSharmaIndianMale, // LOCKED_EXISTING - unique Indian male portrait
     isAI: true,
     bio: 'Serves South Asian investors with family home and investment expertise.',
     specializations: ['South Asian Clients', 'Family Homes', 'Investment Properties'],
@@ -1098,10 +1101,27 @@ export const salesTeam: TeamMember[] = sortByHierarchy([
     hierarchyLevel: 5,
     reportsTo: 'emma-hartley',
     status: 'online',
-    // Photo Status: NEEDS_UNIQUE_PHOTO - currently using placeholder to avoid duplicate
+    // Photo Status: LOCKED_EXISTING
+  },
+  {
+    id: 'thabo-mokoena',
+    name: 'Thabo Mokoena',
+    role: 'Property Consultant',
+    department: 'Sales',
+    avatar: thaboMokoenaSales,
+    isAI: true,
+    bio: 'Assists Southern African investors with Dubai property acquisitions.',
+    specializations: ['African Markets', 'Investment Properties', 'First-time Buyers'],
+    languages: ['English', 'Zulu', 'Afrikaans'],
+    nationality: 'South African',
+    yearsExperience: 4,
+    hierarchyLevel: 6,
+    reportsTo: 'adaeze-okonkwo',
+    status: 'online',
+    // Photo Status: LOCKED_EXISTING
   },
 ]);
-// LOCKED_GLOBAL = true - Sales department finalized (39 members)
+// LOCKED_GLOBAL = true - Sales department finalized (40 members)
 
 // ===== Marketing (sorted by hierarchy) - 10 members =====
 // LOCKED_GLOBAL = true - synced across /team, /crm/employees, /reports, /dashboard
