@@ -146,18 +146,15 @@ import ninaKowalskiOperations from '@/assets/team/nina-kowalski-operations-v2.pn
 import marcusThompsonOperations from '@/assets/team/marcus-thompson-operations.png'; // LOCKED_EXISTING
 
 // Import team portraits - IT Team
-import danielParkerItManager from '@/assets/team/daniel-parker-it-manager.png';
-import rajPatelItAssistant from '@/assets/team/raj-patel-it-assistant.png';
-import matthewCollinsSysadmin from '@/assets/team/matthew-collins-sysadmin-realistic.png';
-import emmaOCallaghanNetwork from '@/assets/team/emma-ocallaghan-network-realistic.png';
-import tomaszKowalczykItSupport from '@/assets/team/tomasz-kowalczyk-it-realistic.png';
-import omarHassanCloud from '@/assets/team/omar-hassan-cloud.png';
-import elenaPopescuDba from '@/assets/team/elena-popescu-dba.png';
-import williamGrantSecurity from '@/assets/team/william-grant-security.png';
-// NEW IT additions (to reach 8)
-import angusMacKenzieIt from '@/assets/team/angus-mackenzie-it-realistic.png';
-import priyaMehtaIt from '@/assets/team/priya-mehta-it.png';
-import oluwaseunAdeyemiIt from '@/assets/team/oluwaseun-adeyemi-it.png';
+// LOCKED_GLOBAL = true - synced across /team, /crm, /intranet
+import danielParkerItManager from '@/assets/team/daniel-parker-it-director-v2.png'; // LOCKED_EXISTING - refreshed photo
+import matthewCollinsSysadmin from '@/assets/team/matthew-collins-sysadmin-realistic.png'; // LOCKED_EXISTING
+import emmaOCallaghanNetwork from '@/assets/team/emma-ocallaghan-network-realistic.png'; // LOCKED_EXISTING
+import rajPatelItAssistant from '@/assets/team/raj-patel-it-support-v2.png'; // LOCKED_EXISTING - refreshed photo
+import angusMacKenzieIt from '@/assets/team/angus-mackenzie-it-realistic.png'; // LOCKED_EXISTING
+import priyaMehtaIt from '@/assets/team/priya-mehta-it.png'; // LOCKED_EXISTING
+import oluwaseunAdeyemiIt from '@/assets/team/oluwaseun-adeyemi-it.png'; // LOCKED_EXISTING
+import tomaszKowalczykItSupport from '@/assets/team/tomasz-kowalczyk-it-tech-v2.png'; // LOCKED_EXISTING - refreshed photo
 
 // Import team portraits - After Sales Team
 import charlesAshfordAfterSalesDir from '@/assets/team/charles-ashford-after-sales.png'; // LOCKED_EXISTING - refreshed photo
@@ -1937,138 +1934,152 @@ export const operationsTeam: TeamMember[] = sortByHierarchy([
 ]);
 
 // ===== IT Team (sorted by hierarchy) - 8 members =====
-// LOCKED_GLOBAL = true - synced across /team, /crm/employees, /reports, /dashboard
+// LOCKED_GLOBAL = true - synced across /team, /crm, /intranet
+// Infrastructure: Microsoft Azure, AWS, VMware, Cisco
+// DevOps Tools: Jenkins, GitHub Actions, Docker, Kubernetes
+// Database Systems: MySQL, PostgreSQL, MongoDB
+// Security Tools: CrowdStrike, Bitdefender, Splunk, Okta
+// Monitoring: Grafana, Prometheus, Elastic Stack
 export const itTeam: TeamMember[] = sortByHierarchy([
   {
     id: 'daniel-parker',
     name: 'Daniel Parker',
     role: 'IT Director',
     department: 'Technology',
-    avatar: danielParkerItManager,
+    avatar: danielParkerItManager, // LOCKED_EXISTING - refreshed photo
     isAI: true,
-    bio: 'Technical leader managing all IT infrastructure, systems, and digital solutions for the organization. Oversees cybersecurity, cloud infrastructure, and enterprise technology strategy.',
-    specializations: ['IT Strategy', 'Infrastructure', 'Cybersecurity', 'Cloud Solutions'],
+    bio: 'Technical leader managing all IT infrastructure, systems, and digital operations for JBJ Global Real Estate. Oversees cybersecurity, networking, data integrity, and enterprise software environments across regions.',
+    specializations: ['IT Strategy', 'Infrastructure', 'Cybersecurity', 'Enterprise Systems', 'Cloud Solutions'],
     languages: ['English'],
     nationality: 'British',
     yearsExperience: 16,
     hierarchyLevel: 3,
     reportsTo: 'richard-pemberton',
-    directReports: ['matthew-collins', 'emma-ocallaghan', 'raj-patel', 'angus-mackenzie'],
+    directReports: ['matthew-collins', 'emma-ocallaghan', 'raj-patel', 'angus-mackenzie', 'priya-mehta', 'oluwaseun-adeyemi'],
     status: 'online',
     canConductInterviews: true,
+    // Photo Status: LOCKED_EXISTING
   },
   {
     id: 'matthew-collins',
     name: 'Matthew Collins',
     role: 'Systems Administrator',
     department: 'Technology',
-    avatar: matthewCollinsSysadmin,
+    avatar: matthewCollinsSysadmin, // LOCKED_EXISTING
     isAI: true,
-    bio: 'Experienced systems administrator managing servers, cloud infrastructure, and enterprise applications for optimal performance.',
-    specializations: ['Server Management', 'Cloud Infrastructure', 'Backup & Recovery'],
+    bio: 'Experienced systems administrator maintaining enterprise servers, cloud infrastructure, and security frameworks. Ensures system uptime, data backups, and hardware reliability across departments.',
+    specializations: ['Server Management', 'Cloud Infrastructure', 'Backup & Recovery', 'Enterprise Applications'],
     languages: ['English'],
     nationality: 'British',
     yearsExperience: 9,
     hierarchyLevel: 5,
     reportsTo: 'daniel-parker',
     status: 'online',
+    // Photo Status: LOCKED_EXISTING
   },
   {
     id: 'emma-ocallaghan',
     name: "Emma O'Callaghan",
     role: 'Network Engineer',
     department: 'Technology',
-    avatar: emmaOCallaghanNetwork,
+    avatar: emmaOCallaghanNetwork, // LOCKED_EXISTING
     isAI: true,
-    bio: 'Skilled network engineer ensuring robust and secure network infrastructure across all office locations.',
-    specializations: ['Network Security', 'VPN', 'Firewall Management', 'Network Architecture'],
+    bio: 'Skilled network engineer responsible for configuring and maintaining robust and secure networking systems, VPNs, and connectivity solutions across JBJ offices.',
+    specializations: ['Network Security', 'VPN', 'Firewall Management', 'Network Architecture', 'Cisco'],
     languages: ['English', 'Irish'],
     nationality: 'Irish',
     yearsExperience: 7,
     hierarchyLevel: 5,
     reportsTo: 'daniel-parker',
     status: 'online',
+    // Photo Status: LOCKED_EXISTING
   },
   {
     id: 'raj-patel',
     name: 'Raj Patel',
     role: 'Senior IT Support Specialist',
     department: 'Technology',
-    avatar: rajPatelItAssistant,
+    avatar: rajPatelItAssistant, // LOCKED_EXISTING - refreshed photo
     isAI: true,
-    bio: 'Dedicated IT support specialist providing technical assistance and maintaining system operations across the organization.',
-    specializations: ['Technical Support', 'Troubleshooting', 'Hardware Maintenance'],
+    bio: 'Dedicated IT support professional managing on-site and remote assistance, troubleshooting, and hardware/software support for global teams. Known for efficiency and user-centered problem-solving.',
+    specializations: ['Technical Support', 'Troubleshooting', 'Hardware Maintenance', 'Remote Assistance'],
     languages: ['English', 'Hindi', 'Gujarati'],
     nationality: 'Indian',
-    yearsExperience: 8,
-    hierarchyLevel: 5,
+    yearsExperience: 9,
+    hierarchyLevel: 4,
     reportsTo: 'daniel-parker',
     directReports: ['tomasz-kowalczyk'],
     status: 'online',
-  },
-  {
-    id: 'tomasz-kowalczyk',
-    name: 'Tomasz Kowalczyk',
-    role: 'IT Support Technician',
-    department: 'Technology',
-    avatar: tomaszKowalczykItSupport,
-    isAI: true,
-    bio: 'Friendly and efficient IT support technician handling day-to-day technical issues and user assistance.',
-    specializations: ['Helpdesk Support', 'Desktop Support', 'User Training'],
-    languages: ['English', 'Polish'],
-    nationality: 'Polish',
-    yearsExperience: 3,
-    hierarchyLevel: 6,
-    reportsTo: 'raj-patel',
-    status: 'online',
+    canConductInterviews: true,
+    // Photo Status: LOCKED_EXISTING
   },
   {
     id: 'angus-mackenzie',
     name: 'Angus MacKenzie',
     role: 'DevOps Engineer',
     department: 'Technology',
-    avatar: angusMacKenzieIt,
+    avatar: angusMacKenzieIt, // LOCKED_EXISTING
     isAI: true,
-    bio: 'Expert DevOps engineer managing CI/CD pipelines, infrastructure automation, and deployment processes.',
-    specializations: ['DevOps', 'CI/CD', 'Docker', 'Kubernetes'],
+    bio: 'Expert DevOps engineer leading CI/CD pipeline automation, system deployment, and monitoring infrastructure using tools like Jenkins, Docker, and Kubernetes.',
+    specializations: ['DevOps', 'CI/CD', 'Docker', 'Kubernetes', 'Jenkins', 'GitHub Actions'],
     languages: ['English', 'Scottish Gaelic'],
     nationality: 'Scottish',
     yearsExperience: 9,
     hierarchyLevel: 5,
     reportsTo: 'daniel-parker',
     status: 'online',
+    // Photo Status: LOCKED_EXISTING
   },
   {
     id: 'priya-mehta',
     name: 'Priya Mehta',
     role: 'Database Administrator',
     department: 'Technology',
-    avatar: priyaMehtaIt,
+    avatar: priyaMehtaIt, // LOCKED_EXISTING
     isAI: true,
-    bio: 'Skilled database administrator managing data integrity, performance optimization, and backup strategies.',
-    specializations: ['Database Management', 'SQL', 'Data Optimization', 'Backup Systems'],
+    bio: 'Skilled database administrator maintaining data integrity, security, and performance optimization for JBJ enterprise systems. Specializes in SQL, PostgreSQL, and MongoDB environments.',
+    specializations: ['Database Management', 'SQL', 'PostgreSQL', 'MongoDB', 'Data Optimization', 'Backup Systems'],
     languages: ['English', 'Hindi', 'Marathi'],
     nationality: 'Indian',
     yearsExperience: 6,
     hierarchyLevel: 5,
     reportsTo: 'daniel-parker',
     status: 'online',
+    // Photo Status: LOCKED_EXISTING
   },
   {
     id: 'oluwaseun-adeyemi',
     name: 'Oluwaseun Adeyemi',
     role: 'Security Analyst',
     department: 'Technology',
-    avatar: oluwaseunAdeyemiIt,
+    avatar: oluwaseunAdeyemiIt, // LOCKED_EXISTING
     isAI: true,
-    bio: 'Cybersecurity professional monitoring threats, conducting security audits, and implementing protection measures.',
-    specializations: ['Security Analysis', 'Threat Detection', 'Security Audits', 'Compliance'],
+    bio: 'Cybersecurity analyst monitoring and mitigating security threats, performing audits, and ensuring compliance with international data protection standards (GDPR, ISO 27001).',
+    specializations: ['Security Analysis', 'Threat Detection', 'Security Audits', 'GDPR Compliance', 'ISO 27001'],
     languages: ['English', 'Yoruba'],
     nationality: 'Nigerian',
     yearsExperience: 5,
     hierarchyLevel: 5,
     reportsTo: 'daniel-parker',
     status: 'online',
+    // Photo Status: LOCKED_EXISTING
+  },
+  {
+    id: 'tomasz-kowalczyk',
+    name: 'Tomasz Kowalczyk',
+    role: 'IT Support Technician',
+    department: 'Technology',
+    avatar: tomaszKowalczykItSupport, // LOCKED_EXISTING - refreshed photo
+    isAI: true,
+    bio: 'Friendly and efficient IT technician providing day-to-day system support, handling software configurations, and ensuring workstation performance across departments.',
+    specializations: ['Helpdesk Support', 'Desktop Support', 'User Training', 'Software Configuration'],
+    languages: ['English', 'Polish'],
+    nationality: 'Polish',
+    yearsExperience: 3,
+    hierarchyLevel: 6,
+    reportsTo: 'raj-patel',
+    status: 'online',
+    // Photo Status: LOCKED_EXISTING
   },
 ]);
 
