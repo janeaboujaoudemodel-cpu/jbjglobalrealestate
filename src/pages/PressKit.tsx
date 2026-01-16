@@ -277,7 +277,7 @@ const PressKit = () => {
                     <div className="absolute inset-0 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity duration-300 bg-black/60">
                       <div className="text-center px-4">
                         <p className="text-white text-sm font-medium mb-1">Protected Content</p>
-                        <p className="text-zinc-400 text-xs">Contact media@JBJ.ae</p>
+                        <p className="text-zinc-400 text-xs">For media inquiries, use the contact form</p>
                       </div>
                     </div>
                     
