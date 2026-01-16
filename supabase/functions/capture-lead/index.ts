@@ -10,6 +10,10 @@ const corsHeaders = {
 const RATE_LIMIT_WINDOW_MS = 15 * 60 * 1000;
 const MAX_REQUESTS_PER_WINDOW = 10;
 
+// Partner service types for compliance tracking
+type PartnerServiceType = 'mortgage' | 'legal' | 'company_setup' | 'visa' | 'golden_visa' | 'schengen' | null;
+type LeadIntent = 'buy' | 'sell' | 'rent' | 'lease' | 'broker' | 'partner_service' | null;
+
 interface LeadCaptureRequest {
   email: string;
   fullName?: string;
@@ -28,6 +32,10 @@ interface LeadCaptureRequest {
   message?: string;
   detectedCity?: string;
   detectedCountry?: string;
+  // Partner service compliance fields
+  intent?: LeadIntent;
+  partnerServiceType?: PartnerServiceType;
+  partnerConsentGiven?: boolean;
 }
 
 function getClientIp(req: Request): string {
@@ -183,13 +191,27 @@ serve(async (req: Request): Promise<Response> => {
     const allowedSources = [
       'website', 'homepage', 'market_report', 'property-evaluation',
       'contact_form', 'newsletter', 'ai_chat', 'inquiry', 'comparison',
-      'broker_signup', 'project_inquiry', 'schedule_call'
+      'broker_signup', 'project_inquiry', 'schedule_call',
+      // Partner service sources
+      'partner_mortgage', 'partner_legal', 'partner_company_setup', 'partner_visa'
     ];
     const sanitizedSource = sanitizeString(data.source, 50) || 'website';
     if (!allowedSources.includes(sanitizedSource.replace(/-/g, '_'))) {
       console.warn(`Unknown source attempted: ${sanitizedSource}`);
       // Still allow but log for monitoring
     }
+
+    // Validate partner service intent
+    const validIntents: LeadIntent[] = ['buy', 'sell', 'rent', 'lease', 'broker', 'partner_service'];
+    const leadIntent: LeadIntent = data.intent && validIntents.includes(data.intent) ? data.intent : null;
+    
+    // Validate partner service type
+    const validPartnerTypes: PartnerServiceType[] = ['mortgage', 'legal', 'company_setup', 'visa', 'golden_visa', 'schengen'];
+    const partnerServiceType: PartnerServiceType = data.partnerServiceType && validPartnerTypes.includes(data.partnerServiceType) 
+      ? data.partnerServiceType : null;
+    
+    // For partner services, consent must be given
+    const partnerConsentGiven = data.partnerConsentGiven === true;
 
     // Sanitize all input fields
     const sanitizedFullName = sanitizeString(data.fullName, 100);
@@ -223,6 +245,19 @@ serve(async (req: Request): Promise<Response> => {
     if (data.role) tags.push(`role-${data.role}`);
     if (data.buyerType) tags.push(`buyer-type-${data.buyerType}`);
     if (sanitizedPageSource) tags.push(`page-${sanitizedPageSource.replace(/\//g, '-').replace(/^-/, '')}`);
+    
+    // Partner service tags for compliance tracking
+    if (leadIntent === 'partner_service') {
+      tags.push('intent-partner-service');
+      if (partnerServiceType) {
+        tags.push(`partner-type-${partnerServiceType.replace(/_/g, '-')}`);
+      }
+      if (partnerConsentGiven) {
+        tags.push('partner-consent-given');
+      }
+    } else if (leadIntent) {
+      tags.push(`intent-${leadIntent}`);
+    }
 
     const locationCity = sanitizedLocation || detectedLocation.city;
     const locationCountry = detectedLocation.country;

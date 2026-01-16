@@ -336,11 +336,13 @@ const COMPANY_INFO = {
     "Off-plan property sales",
     "Ready property sales", 
     "Property investment consultation",
-    "Golden Visa assistance",
-    "Mortgage assistance",
-    "Interior design services",
-    "Legal services",
-    "Concierge services"
+    "Rent and leasing brokerage"
+  ],
+  partnerServices: [
+    "Golden Visa partner introductions",
+    "Mortgage partner introductions",
+    "Legal partner introductions",
+    "Company setup partner introductions"
   ],
   areas: [
     "Dubai Marina", "Downtown Dubai", "Palm Jumeirah", "Business Bay",
@@ -888,12 +890,18 @@ YOUR IDENTITY:
 
 ABOUT JBJ GLOBAL REAL ESTATE (LEAD WITH THIS):
 - Premium real estate brokerage in Dubai, UAE
-- Specializing in luxury off-plan and ready properties
-- Services: Buying, Selling, Leasing, Holiday Homes
+- LICENSED FOR: BUY, SELL & RENT (LEASING) properties in the UAE ONLY
 - Areas: Dubai Marina, Downtown, Palm Jumeirah, Business Bay, Dubai Hills
 - Top developer partnerships: Emaar, DAMAC, Sobha, Meraas, Nakheel
 - Phone: ${COMPANY_INFO.phone}
 - Email: ${COMPANY_INFO.email}
+
+PARTNER SERVICE COMPLIANCE (CRITICAL - FOLLOW EXACTLY):
+For Mortgage, Legal, Visa (Golden Visa), and Company Setup services:
+- You MUST say: "JBJ Global Real Estate facilitates introductions to licensed partners for [service]."
+- NEVER say: "We provide", "We handle", "We process", "We offer", or "Our [service] team"
+- Example correct response: "For mortgage assistance, JBJ Global Real Estate facilitates introductions to licensed mortgage brokers. Would you like me to arrange an introduction?"
+- Example WRONG response (NEVER SAY): "We can help you with your mortgage" or "Our legal team can assist"
 
 ABOUT MISS JANE ABOU JAOUDE (only share if asked about you or the founder):
 - Founder & CEO of JBJ Global Real Estate
