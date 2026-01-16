@@ -18,7 +18,7 @@ import {
   Bot,
 } from 'lucide-react';
 
-type UserType = 'broker' | 'buyer' | 'seller' | 'investor' | 'visitor';
+type UserType = 'broker' | 'buyer' | 'seller' | 'renter' | 'investor' | 'visitor';
 
 interface ContentConfig {
   badge: string;
@@ -90,6 +90,23 @@ const CONTENT_BY_USER_TYPE: Record<UserType, ContentConfig> = {
       icon: Phone,
     },
   },
+  renter: {
+    badge: 'For Property Renters',
+    badgeIcon: Home,
+    title: 'Ready to Find Your',
+    highlightText: 'Perfect Rental?',
+    subtitle: 'Browse residential and commercial rentals across Dubai. Flexible leasing options with expert guidance.',
+    primaryButton: {
+      text: 'Browse Rentals',
+      link: '/properties?transaction=rent',
+      icon: Search,
+    },
+    secondaryButton: {
+      text: 'Contact Our Team',
+      link: '/contact',
+      icon: Phone,
+    },
+  },
   investor: {
     badge: 'For Investors',
     badgeIcon: TrendingUp,
@@ -112,7 +129,7 @@ const CONTENT_BY_USER_TYPE: Record<UserType, ContentConfig> = {
     badgeIcon: Star,
     title: 'Discover Dubai\'s',
     highlightText: 'Premium Real Estate',
-    subtitle: 'Whether you\'re buying, selling, or joining our team — JBJ Global Real Estate is your trusted partner.',
+    subtitle: 'Whether you\'re buying, selling, renting, or joining our team — JBJ Global Real Estate is your trusted partner.',
     primaryButton: {
       text: 'Explore Properties',
       link: '/properties',
@@ -153,13 +170,16 @@ const DynamicBrokerSection = ({ forcedUserType }: DynamicBrokerSectionProps) => 
 
     // Check URL path for hints
     const path = window.location.pathname.toLowerCase();
+    const search = window.location.search.toLowerCase();
     if (path.includes('broker') || path.includes('toolkit') || path.includes('training')) {
       setUserType('broker');
     } else if (path.includes('off-plan') || path.includes('invest')) {
       setUserType('investor');
     } else if (path.includes('sell') || path.includes('evaluation')) {
       setUserType('seller');
-    } else if (path.includes('properties') || path.includes('search') || path.includes('buy')) {
+    } else if (path.includes('rent') || path.includes('lease') || search.includes('transaction=rent')) {
+      setUserType('renter');
+    } else if (path.includes('properties') || path.includes('search') || path.includes('buy') || search.includes('transaction=buy')) {
       setUserType('buyer');
     }
     // Default: visitor

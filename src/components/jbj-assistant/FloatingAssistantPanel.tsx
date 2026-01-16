@@ -78,7 +78,7 @@ const FloatingAssistantPanel: React.FC = () => {
       case 'receptionist':
         return `Welcome to JBJ Global Real Estate! I'm ${agent.name}.${toolContext}How may I direct your inquiry today?`;
       case 'broker':
-        return `Good day! I'm ${agent.name}, your Senior Property Advisor.${toolContext}Whether you're looking to buy, sell, or explore UAE real estate, I'm here to guide you.`;
+        return `Good day! I'm ${agent.name}, your Senior Property Advisor.${toolContext}Whether you're looking to buy, sell, rent, or explore UAE real estate, I'm here to guide you.`;
       case 'property_manager':
         return `Hello! I'm ${agent.name}, your Property Management Specialist.${toolContext}Need help with maintenance, tenant matters, or property inspections?`;
       case 'marketing_coordinator':
