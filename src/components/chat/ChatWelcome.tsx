@@ -8,9 +8,9 @@ interface ChatWelcomeProps {
 
 const ChatWelcome = ({ onStartChat }: ChatWelcomeProps) => {
   return (
-    <div className="flex-1 p-6 flex flex-col">
-      <div className="text-center mb-2 mt-4">
-        <div className="mx-auto mb-2">
+    <div className="flex-1 p-6 flex flex-col justify-center">
+      <div className="text-center mb-4">
+        <div className="mx-auto mb-3">
           {/* JBJ logo - black box version for dark backgrounds */}
           <img 
             src={jbjMonogramDarkBg} 
