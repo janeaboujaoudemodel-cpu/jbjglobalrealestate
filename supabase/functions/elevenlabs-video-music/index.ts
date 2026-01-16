@@ -1,9 +1,17 @@
 import { serve } from "https://deno.land/std@0.168.0/http/server.ts";
+import { createClient } from "https://esm.sh/@supabase/supabase-js@2";
+import { z } from "https://deno.land/x/zod@v3.22.4/mod.ts";
 
 const corsHeaders = {
   "Access-Control-Allow-Origin": "*",
   "Access-Control-Allow-Headers": "authorization, x-client-info, apikey, content-type",
 };
+
+// Input validation schema
+const RequestSchema = z.object({
+  prompt: z.string().min(1, "Prompt is required").max(500, "Prompt must be under 500 characters"),
+  duration: z.number().min(5).max(120).optional().default(30),
+});
 
 serve(async (req) => {
   if (req.method === "OPTIONS") {
@@ -11,16 +19,57 @@ serve(async (req) => {
   }
 
   try {
-    const { prompt, duration } = await req.json();
+    // Require authentication
+    const authHeader = req.headers.get('Authorization');
+    if (!authHeader) {
+      console.error("No authorization header provided");
+      return new Response(
+        JSON.stringify({ error: 'Authentication required' }),
+        { status: 401, headers: { ...corsHeaders, 'Content-Type': 'application/json' } }
+      );
+    }
+
+    const supabase = createClient(
+      Deno.env.get('SUPABASE_URL') ?? '',
+      Deno.env.get('SUPABASE_ANON_KEY') ?? '',
+      { global: { headers: { Authorization: authHeader } } }
+    );
+
+    const token = authHeader.replace('Bearer ', '');
+    const { data: claimsData, error: claimsError } = await supabase.auth.getClaims(token);
+
+    if (claimsError || !claimsData?.claims) {
+      console.error("Invalid authentication:", claimsError);
+      return new Response(
+        JSON.stringify({ error: 'Invalid authentication' }),
+        { status: 401, headers: { ...corsHeaders, 'Content-Type': 'application/json' } }
+      );
+    }
+
+    const userId = claimsData.claims.sub;
+    console.log("Authenticated user requesting music generation:", userId);
+
     const ELEVENLABS_API_KEY = Deno.env.get("ELEVENLABS_API_KEY");
 
     if (!ELEVENLABS_API_KEY) {
       throw new Error("ELEVENLABS_API_KEY not configured");
     }
 
-    if (!prompt) {
-      throw new Error("Prompt is required");
+    // Parse and validate input
+    const rawBody = await req.json();
+    const validationResult = RequestSchema.safeParse(rawBody);
+
+    if (!validationResult.success) {
+      console.error("Validation error:", validationResult.error.errors);
+      return new Response(
+        JSON.stringify({ error: validationResult.error.errors[0].message }),
+        { status: 400, headers: { ...corsHeaders, 'Content-Type': 'application/json' } }
+      );
     }
+
+    const { prompt, duration } = validationResult.data;
+
+    console.log("Generating music for user:", userId, "prompt length:", prompt.length);
 
     const response = await fetch("https://api.elevenlabs.io/v1/music", {
       method: "POST",
@@ -30,7 +79,7 @@ serve(async (req) => {
       },
       body: JSON.stringify({
         prompt,
-        duration_seconds: Math.min(duration || 30, 120),
+        duration_seconds: duration,
       }),
     });
 
@@ -41,6 +90,7 @@ serve(async (req) => {
     }
 
     const audioBuffer = await response.arrayBuffer();
+    console.log("Successfully generated music for user:", userId);
 
     return new Response(audioBuffer, {
       headers: {

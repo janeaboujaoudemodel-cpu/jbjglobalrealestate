@@ -1,9 +1,22 @@
 import { serve } from "https://deno.land/std@0.168.0/http/server.ts";
+import { createClient } from "https://esm.sh/@supabase/supabase-js@2";
+import { z } from "https://deno.land/x/zod@v3.22.4/mod.ts";
 
 const corsHeaders = {
   "Access-Control-Allow-Origin": "*",
   "Access-Control-Allow-Headers": "authorization, x-client-info, apikey, content-type",
 };
+
+// Valid language and style enums
+const VALID_LANGUAGES = ["en-GB", "en-US", "ar"] as const;
+const VALID_STYLES = ["calm", "energetic", "neutral"] as const;
+
+// Input validation schema
+const RequestSchema = z.object({
+  text: z.string().min(1, "Text is required").max(5000, "Text must be under 5000 characters"),
+  language: z.enum(VALID_LANGUAGES).optional().default("en-GB"),
+  style: z.enum(VALID_STYLES).optional().default("neutral"),
+});
 
 serve(async (req) => {
   if (req.method === "OPTIONS") {
@@ -11,26 +24,66 @@ serve(async (req) => {
   }
 
   try {
-    const { text, language, style } = await req.json();
+    // Require authentication
+    const authHeader = req.headers.get('Authorization');
+    if (!authHeader) {
+      console.error("No authorization header provided");
+      return new Response(
+        JSON.stringify({ error: 'Authentication required' }),
+        { status: 401, headers: { ...corsHeaders, 'Content-Type': 'application/json' } }
+      );
+    }
+
+    const supabase = createClient(
+      Deno.env.get('SUPABASE_URL') ?? '',
+      Deno.env.get('SUPABASE_ANON_KEY') ?? '',
+      { global: { headers: { Authorization: authHeader } } }
+    );
+
+    const token = authHeader.replace('Bearer ', '');
+    const { data: claimsData, error: claimsError } = await supabase.auth.getClaims(token);
+
+    if (claimsError || !claimsData?.claims) {
+      console.error("Invalid authentication:", claimsError);
+      return new Response(
+        JSON.stringify({ error: 'Invalid authentication' }),
+        { status: 401, headers: { ...corsHeaders, 'Content-Type': 'application/json' } }
+      );
+    }
+
+    const userId = claimsData.claims.sub;
+    console.log("Authenticated user requesting voice generation:", userId);
+
     const ELEVENLABS_API_KEY = Deno.env.get("ELEVENLABS_API_KEY");
 
     if (!ELEVENLABS_API_KEY) {
       throw new Error("ELEVENLABS_API_KEY not configured");
     }
 
-    if (!text) {
-      throw new Error("Text is required");
+    // Parse and validate input
+    const rawBody = await req.json();
+    const validationResult = RequestSchema.safeParse(rawBody);
+
+    if (!validationResult.success) {
+      console.error("Validation error:", validationResult.error.errors);
+      return new Response(
+        JSON.stringify({ error: validationResult.error.errors[0].message }),
+        { status: 400, headers: { ...corsHeaders, 'Content-Type': 'application/json' } }
+      );
     }
+
+    const { text, language, style } = validationResult.data;
 
     // Map language/style to voice ID
     const voiceMap: Record<string, string> = {
       "en-GB": "pNInz6obpgDQGcFmaJgB", // Adam - British
       "en-US": "21m00Tcm4TlvDq8ikWAM", // Rachel - American
       "ar": "TxGEqnHWrfWFTfGW9XjX", // Josh - can do Arabic accent
-      default: "pNInz6obpgDQGcFmaJgB",
     };
 
-    const voiceId = voiceMap[language] || voiceMap.default;
+    const voiceId = voiceMap[language] || voiceMap["en-GB"];
+
+    console.log("Generating voice for user:", userId, "text length:", text.length, "language:", language);
 
     const response = await fetch(
       `https://api.elevenlabs.io/v1/text-to-speech/${voiceId}`,
@@ -59,6 +112,7 @@ serve(async (req) => {
     }
 
     const audioBuffer = await response.arrayBuffer();
+    console.log("Successfully generated voice for user:", userId);
 
     return new Response(audioBuffer, {
       headers: {

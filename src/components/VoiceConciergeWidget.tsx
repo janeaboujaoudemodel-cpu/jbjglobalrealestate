@@ -1,8 +1,9 @@
-import { useState, useCallback } from "react";
+import { useState, useCallback, useEffect } from "react";
 import { useConversation } from "@elevenlabs/react";
-import { Phone, PhoneOff, X, Mic, Volume2 } from "lucide-react";
+import { Phone, PhoneOff, X, Mic, Volume2, LogIn } from "lucide-react";
 import { supabase } from "@/integrations/supabase/client";
 import { toast } from "sonner";
+import { useNavigate } from "react-router-dom";
 
 const STORAGE_KEY = "jj_voice_concierge_minimized_at";
 const RESTORE_AFTER_MS = 24 * 60 * 60 * 1000; // 24 hours
@@ -26,6 +27,24 @@ const getInitialMinimized = (): boolean => {
 const VoiceConciergeWidget = () => {
   const [isMinimized, setIsMinimized] = useState(getInitialMinimized);
   const [isConnecting, setIsConnecting] = useState(false);
+  const [isAuthenticated, setIsAuthenticated] = useState<boolean | null>(null);
+  const navigate = useNavigate();
+
+  // Check authentication status
+  useEffect(() => {
+    const checkAuth = async () => {
+      const { data: { session } } = await supabase.auth.getSession();
+      setIsAuthenticated(!!session);
+    };
+
+    checkAuth();
+
+    const { data: { subscription } } = supabase.auth.onAuthStateChange((event, session) => {
+      setIsAuthenticated(!!session);
+    });
+
+    return () => subscription.unsubscribe();
+  }, []);
 
   const conversation = useConversation({
     onConnect: () => {
@@ -62,18 +81,36 @@ const VoiceConciergeWidget = () => {
     }
   };
 
+  const handleLoginRedirect = () => {
+    toast.info("Please log in to use the voice concierge");
+    navigate("/auth");
+  };
+
   const startConversation = useCallback(async () => {
+    // Check authentication before proceeding
+    const { data: { session } } = await supabase.auth.getSession();
+    if (!session) {
+      toast.error("Please log in to use the voice concierge");
+      navigate("/auth");
+      return;
+    }
+
     setIsConnecting(true);
     try {
       // Request microphone permission
       await navigator.mediaDevices.getUserMedia({ audio: true });
 
-      // Get token from edge function
+      // Get token from edge function (auth header passed automatically)
       const { data, error } = await supabase.functions.invoke(
         "elevenlabs-conversation-token"
       );
 
       if (error) {
+        if (error.message?.includes("Authentication")) {
+          toast.error("Please log in to use the voice concierge");
+          navigate("/auth");
+          return;
+        }
         throw new Error(error.message || "Failed to get conversation token");
       }
 
@@ -96,13 +133,18 @@ const VoiceConciergeWidget = () => {
     } finally {
       setIsConnecting(false);
     }
-  }, [conversation]);
+  }, [conversation, navigate]);
 
   const stopConversation = useCallback(async () => {
     await conversation.endSession();
   }, [conversation]);
 
   const isConnected = conversation.status === "connected";
+
+  // Don't render until we know auth status
+  if (isAuthenticated === null) {
+    return null;
+  }
 
   // Minimized state - small phone icon button (no pulse, no text)
   if (isMinimized) {
@@ -141,8 +183,19 @@ const VoiceConciergeWidget = () => {
         <X className="w-3.5 h-3.5" />
       </button>
       
-      {/* Main button - shows "Speak with us" by default with pulse */}
-      {!isConnected ? (
+      {/* Main button - shows login prompt for unauthenticated users */}
+      {!isAuthenticated ? (
+        <button
+          onClick={handleLoginRedirect}
+          className="relative flex items-center gap-2 bg-gold hover:bg-gold-light text-gold-foreground px-4 py-3 rounded-full shadow-lg hover:shadow-xl transition-all duration-300 hover:scale-105 group"
+          aria-label="Login to use voice concierge"
+        >
+          <LogIn className="w-5 h-5" />
+          <span className="font-medium text-sm">
+            Login to speak
+          </span>
+        </button>
+      ) : !isConnected ? (
         <button
           onClick={startConversation}
           disabled={isConnecting}
