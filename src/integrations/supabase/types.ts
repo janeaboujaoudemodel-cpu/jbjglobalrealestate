@@ -9694,6 +9694,7 @@ export type Database = {
         Returns: boolean
       }
       is_active_crm_member: { Args: { _user_id: string }; Returns: boolean }
+      is_authorized_staff: { Args: never; Returns: boolean }
       is_crm_admin: { Args: { _user_id: string }; Returns: boolean }
       is_email_domain_blocked: {
         Args: { email_address: string }
