@@ -162,7 +162,7 @@ import priyaMehtaIt from '@/assets/team/priya-mehta-it.png';
 import oluwaseunAdeyemiIt from '@/assets/team/oluwaseun-adeyemi-it.png';
 
 // Import team portraits - After Sales Team
-import charlesPembertonAfterSalesDir from '@/assets/team/charles-pemberton-aftersales-40s-realistic.png';
+import charlesAshfordAfterSalesDir from '@/assets/team/charles-ashford-after-sales.png'; // LOCKED_EXISTING - refreshed photo
 import catherineWellsAfterSalesMgr from '@/assets/team/catherine-wells-aftersales-manager.png';
 import marcusVanDerBergAfterSalesCoord from '@/assets/team/marcus-van-der-berg-aftersales-coord.png';
 import mariaSantosAfterSalesAssistant from '@/assets/team/maria-santos-aftersales-assistant.png';
@@ -2048,9 +2048,9 @@ export const afterSalesTeam: TeamMember[] = sortByHierarchy([
     name: 'Charles Ashford',
     role: 'After Sales Director',
     department: 'After Sales',
-    avatar: charlesPembertonAfterSalesDir,
+    avatar: charlesAshfordAfterSalesDir, // LOCKED_EXISTING - refreshed professional portrait
     isAI: true,
-    bio: 'Distinguished professional overseeing all post-transaction client services, ensuring smooth handovers, and maintaining long-term client relationships.',
+    bio: 'Distinguished professional overseeing all post-transaction client services, ensuring smooth project handovers and top-tier customer satisfaction.',
     specializations: ['Client Retention', 'Handover Management', 'Service Excellence', 'Relationship Building'],
     languages: ['English', 'French'],
     nationality: 'British',
@@ -2060,15 +2060,16 @@ export const afterSalesTeam: TeamMember[] = sortByHierarchy([
     directReports: ['catherine-wells', 'marcus-van-der-berg'],
     status: 'online',
     canConductInterviews: true,
+    // Photo Status: LOCKED_EXISTING
   },
   {
     id: 'catherine-wells',
     name: 'Catherine Wells',
     role: 'After Sales Manager',
     department: 'After Sales',
-    avatar: catherineWellsAfterSalesMgr,
+    avatar: catherineWellsAfterSalesMgr, // LOCKED_EXISTING
     isAI: true,
-    bio: 'Dedicated manager coordinating property handovers, snagging processes, and post-purchase client support.',
+    bio: 'Dedicated manager coordinating property handovers, snagging processes, and client relations with meticulous attention to detail.',
     specializations: ['Property Handover', 'Snagging Coordination', 'Client Communication'],
     languages: ['English', 'Spanish', 'French'],
     nationality: 'British',
@@ -2078,15 +2079,16 @@ export const afterSalesTeam: TeamMember[] = sortByHierarchy([
     directReports: ['grace-reyes'],
     status: 'online',
     canConductInterviews: true,
+    // Photo Status: LOCKED_EXISTING
   },
   {
     id: 'marcus-van-der-berg',
     name: 'Marcus Van Der Berg',
     role: 'After Sales Coordinator',
     department: 'After Sales',
-    avatar: marcusVanDerBergAfterSalesCoord,
+    avatar: marcusVanDerBergAfterSalesCoord, // LOCKED_EXISTING
     isAI: true,
-    bio: 'Organized coordinator managing after-sales documentation, warranty claims, and developer liaison for post-handover services.',
+    bio: 'Organized coordinator managing after-sales documentation, warranty claims, and developer liaison tasks with precision and efficiency.',
     specializations: ['Documentation', 'Warranty Management', 'Developer Liaison'],
     languages: ['English', 'Dutch', 'German'],
     nationality: 'Dutch',
@@ -2094,15 +2096,16 @@ export const afterSalesTeam: TeamMember[] = sortByHierarchy([
     hierarchyLevel: 5,
     reportsTo: 'charles-ashford',
     status: 'online',
+    // Photo Status: LOCKED_EXISTING
   },
   {
     id: 'grace-reyes',
     name: 'Grace Reyes',
     role: 'After Sales Assistant',
     department: 'After Sales',
-    avatar: graceReyesAfterSales,
+    avatar: graceReyesAfterSales, // LOCKED_EXISTING
     isAI: true,
-    bio: 'Friendly and efficient assistant supporting after-sales operations with client follow-ups and service coordination.',
+    bio: 'Friendly and efficient assistant supporting after-sales operations, ensuring timely communication and smooth client follow-ups.',
     specializations: ['Client Follow-up', 'Service Scheduling', 'Administrative Support'],
     languages: ['English', 'Filipino', 'Tagalog'],
     nationality: 'Filipino',
@@ -2110,6 +2113,7 @@ export const afterSalesTeam: TeamMember[] = sortByHierarchy([
     hierarchyLevel: 6,
     reportsTo: 'catherine-wells',
     status: 'online',
+    // Photo Status: LOCKED_EXISTING
   },
 ]);
 
