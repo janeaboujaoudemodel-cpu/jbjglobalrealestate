@@ -127,12 +127,10 @@ import evaVanDerBergMotion from '@/assets/team/eva-van-der-berg-motion.png'; // 
 import jamesVenterSound from '@/assets/team/james-venter-sound.png'; // LOCKED_EXISTING
 
 // Import team portraits - Finance Team
-import catherineBrooksFinance from '@/assets/team/catherine-brooks-finance.png';
-import benjaminColeAccountant from '@/assets/team/benjamin-cole-accountant.png';
-import isabellaRomanoAnalyst from '@/assets/team/isabella-romano-analyst.png';
-import sebastianMullerFinance from '@/assets/team/sebastian-muller-finance.png';
-// NEW Finance addition (to reach 4)
-import stefanWeberFinance from '@/assets/team/stefan-weber-finance-realistic.png';
+import catherineBrooksFinance from '@/assets/team/catherine-brooks-finance.png'; // LOCKED_EXISTING
+import edwardColeAccountant from '@/assets/team/edward-cole-accountant-v2.png'; // LOCKED_EXISTING - refreshed photo
+import isabellaRomanoAnalyst from '@/assets/team/isabella-romano-analyst-v2.png'; // LOCKED_EXISTING - refreshed photo
+import stefanWeberFinance from '@/assets/team/stefan-weber-finance-realistic.png'; // LOCKED_EXISTING
 
 // Import team portraits - Operations & Technology
 import thomasMitchellCrm from '@/assets/team/thomas-mitchell-crm.png';
@@ -1737,15 +1735,33 @@ export const financeTeam: TeamMember[] = sortByHierarchy([
     name: 'Catherine Brooks',
     role: 'Financial Director',
     department: 'Finance',
-    avatar: catherineBrooksFinance,
+    avatar: catherineBrooksFinance, // LOCKED_EXISTING
     isAI: true,
-    bio: 'Strategic financial leader ensuring fiscal excellence and corporate governance compliance.',
+    bio: 'Strategic financial leader ensuring fiscal excellence, corporate governance, and long-term business sustainability. Oversees all financial operations and compliance activities across global branches.',
+    specializations: ['Financial Strategy', 'Corporate Governance', 'Compliance', 'Global Operations'],
     languages: ['English'],
     nationality: 'British',
     yearsExperience: 12,
     hierarchyLevel: 3,
     reportsTo: 'jane-abou-jaoude',
-    directReports: ['edward-cole', 'isabella-romano', 'stefan-weber'],
+    directReports: ['stefan-weber', 'edward-cole', 'isabella-romano'],
+    status: 'online',
+    canConductInterviews: true,
+  },
+  {
+    id: 'stefan-weber',
+    name: 'Stefan Weber',
+    role: 'Finance Manager',
+    department: 'Finance',
+    avatar: stefanWeberFinance, // LOCKED_EXISTING
+    isAI: true,
+    bio: 'Experienced finance manager overseeing budgeting, forecasting, and financial reporting, with a strong focus on process accuracy and European compliance standards.',
+    specializations: ['Budgeting', 'Financial Reporting', 'Forecasting', 'European Compliance'],
+    languages: ['English', 'German', 'French'],
+    nationality: 'German',
+    yearsExperience: 11,
+    hierarchyLevel: 4,
+    reportsTo: 'catherine-brooks',
     status: 'online',
     canConductInterviews: true,
   },
@@ -1754,9 +1770,10 @@ export const financeTeam: TeamMember[] = sortByHierarchy([
     name: 'Edward Cole',
     role: 'Senior Accountant',
     department: 'Finance',
-    avatar: benjaminColeAccountant,
+    avatar: edwardColeAccountant, // LOCKED_EXISTING - refreshed photo
     isAI: true,
-    bio: 'Meticulous professional maintaining precise financial records and regulatory compliance.',
+    bio: 'Meticulous accounting professional ensuring accuracy in financial reporting, reconciliation, and regulatory compliance. Skilled in financial planning and audit coordination.',
+    specializations: ['Financial Reporting', 'Reconciliation', 'Audit Coordination', 'Regulatory Compliance'],
     languages: ['English'],
     nationality: 'British',
     yearsExperience: 10,
@@ -1769,29 +1786,14 @@ export const financeTeam: TeamMember[] = sortByHierarchy([
     name: 'Isabella Romano',
     role: 'Financial Analyst',
     department: 'Finance',
-    avatar: isabellaRomanoAnalyst,
+    avatar: isabellaRomanoAnalyst, // LOCKED_EXISTING - refreshed photo
     isAI: true,
-    bio: 'Analytical expert providing data-driven insights for investment decisions and market trends.',
+    bio: 'Data-driven analyst specializing in investment forecasting, market trend research, and strategic financial modeling to support executive decision-making.',
+    specializations: ['Investment Forecasting', 'Market Research', 'Financial Modeling', 'Strategic Analysis'],
     languages: ['English', 'Italian', 'Spanish'],
     nationality: 'Italian',
     yearsExperience: 6,
     hierarchyLevel: 5,
-    reportsTo: 'catherine-brooks',
-    status: 'online',
-  },
-  {
-    id: 'stefan-weber',
-    name: 'Stefan Weber',
-    role: 'Finance Manager',
-    department: 'Finance',
-    avatar: stefanWeberFinance,
-    isAI: true,
-    bio: 'Experienced finance manager overseeing budgeting, forecasting, and financial reporting.',
-    specializations: ['Budgeting', 'Financial Reporting', 'Cash Flow Management'],
-    languages: ['English', 'German', 'French'],
-    nationality: 'German',
-    yearsExperience: 11,
-    hierarchyLevel: 4,
     reportsTo: 'catherine-brooks',
     status: 'online',
   },
