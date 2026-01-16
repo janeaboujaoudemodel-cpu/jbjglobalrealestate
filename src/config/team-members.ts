@@ -292,7 +292,7 @@ export const executiveTeam: TeamMember[] = sortByHierarchy([
     department: 'Executive',
     avatar: janeAbouJaoudeCeo, // LOCKED_EXISTING - Do not modify
     email: 'jane@JBJ.ae',
-    bio: 'Visionary founder with a decade of leadership in luxury real estate. Oversees global strategy, partnerships, and corporate growth. Leads JBJ\'s mission to build a borderless, technology-driven property network connecting clients worldwide.',
+    bio: 'Visionary founder leading JBJ\'s international growth and innovation in luxury real estate.',
     languages: ['English', 'Arabic', 'French', 'Spanish'],
     nationality: 'Lebanese',
     yearsExperience: 12,
@@ -309,8 +309,8 @@ export const executiveTeam: TeamMember[] = sortByHierarchy([
     department: 'Executive',
     avatar: davidThorntonCeo, // LOCKED_EXISTING - Do not modify
     isAI: true,
-    bio: 'Senior executive responsible for corporate operations, expansion, and broker performance. Manages strategic planning and regional execution across the company\'s international offices.',
-    languages: ['English', 'French'],
+    bio: 'Oversees operations and performance across all global divisions with a focus on strategic expansion.',
+    languages: ['English'],
     nationality: 'British',
     yearsExperience: 12,
     joinDate: '2025-09-10',
@@ -327,8 +327,8 @@ export const executiveTeam: TeamMember[] = sortByHierarchy([
     department: 'Executive',
     avatar: richardPembertonCoo, // LOCKED_EXISTING - Do not modify
     isAI: true,
-    bio: 'Oversees all internal operations, performance tracking, and cross-department coordination. Ensures efficient workflows, consistency in service delivery, and operational excellence.',
-    languages: ['English', 'French'],
+    bio: 'Manages internal systems and ensures operational excellence across JBJ\'s departments.',
+    languages: ['English'],
     nationality: 'British',
     yearsExperience: 11,
     joinDate: '2025-09-10',
@@ -345,7 +345,7 @@ export const executiveTeam: TeamMember[] = sortByHierarchy([
     department: 'Executive',
     avatar: natashaDaoudExecutive, // LOCKED_EXISTING - Do not modify
     isAI: true,
-    bio: 'Leads corporate strategy, market analytics, and innovation initiatives. Focused on long-term growth, diversification, and expanding JBJ\'s brand footprint in the Middle East and Europe.',
+    bio: 'Develops corporate strategy and market intelligence to drive JBJ\'s expansion in the Middle East and Europe.',
     languages: ['English', 'Arabic', 'French'],
     nationality: 'Lebanese',
     yearsExperience: 9,
@@ -362,7 +362,7 @@ export const executiveTeam: TeamMember[] = sortByHierarchy([
     department: 'Executive',
     avatar: anthonyPembertonStrategy, // LOCKED_EXISTING - Do not modify
     isAI: true,
-    bio: 'Heads JBJ\'s global investment division, managing asset portfolios and investor relations. Specializes in capital management and high-value property acquisitions.',
+    bio: 'Leads investment and finance operations, managing high-value assets and global property portfolios.',
     languages: ['English'],
     nationality: 'British',
     yearsExperience: 8,
@@ -379,7 +379,7 @@ export const executiveTeam: TeamMember[] = sortByHierarchy([
     department: 'Executive',
     avatar: laylaMansourPartnerships, // LOCKED_EXISTING - Do not modify
     isAI: true,
-    bio: 'Builds and sustains long-term partnerships with developers and luxury agencies. Strengthens client trust through collaboration and regional market expertise.',
+    bio: 'Builds long-term partnerships and business alliances across JBJ\'s key international markets.',
     languages: ['English', 'Arabic'],
     nationality: 'Jordanian',
     yearsExperience: 8,
@@ -396,7 +396,7 @@ export const executiveTeam: TeamMember[] = sortByHierarchy([
     department: 'Executive',
     avatar: amandaClarkeExecutiveAssistant, // LOCKED_EXISTING - Do not modify
     isAI: true,
-    bio: 'Manages CEO scheduling, correspondence, and executive logistics. Acts as the liaison between leadership and key partners, ensuring smooth communication and project follow-up.',
+    bio: 'Provides executive-level coordination and communication support for the CEO\'s daily operations.',
     languages: ['English', 'Spanish'],
     nationality: 'American',
     yearsExperience: 7,
@@ -412,7 +412,7 @@ export const executiveTeam: TeamMember[] = sortByHierarchy([
     department: 'Executive',
     avatar: oliviaExecutiveAssistant, // LOCKED_EXISTING - Do not modify
     isAI: true,
-    bio: 'Supports COO operations, oversees reporting processes, and ensures efficiency across departments. Maintains project documentation and internal communication accuracy.',
+    bio: 'Supports the COO and manages interdepartmental communication to ensure efficiency.',
     languages: ['English', 'Italian'],
     nationality: 'British',
     yearsExperience: 6,
