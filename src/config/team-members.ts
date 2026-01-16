@@ -46,9 +46,9 @@ import ananyaSharmaIndianMale from '@/assets/team/ananya-sharma-indian-male.png'
 import thaboMokoenaSales from '@/assets/team/thabo-mokoena-sales.png';
 
 // Import team portraits - Software Engineering Team
-import jamesWoodwardTechLead from '@/assets/team/james-woodward-tech-lead.png';
-import michaelWeberWebDev from '@/assets/team/michael-weber-web-developer.png';
-import amelieMartinUxDesigner from '@/assets/team/amelie-martin-ux-designer.png';
+import jamesWoodwardTechLead from '@/assets/team/james-woodward-tech-lead-v2.png'; // LOCKED_EXISTING - refreshed photo
+import michaelWeberWebDev from '@/assets/team/michael-weber-web-developer.png'; // LOCKED_EXISTING
+import amelieMartinUxDesigner from '@/assets/team/amelie-martin-ux-designer-v2.png'; // LOCKED_EXISTING - refreshed photo
 import emmaCollinsScriptWriter from '@/assets/team/emma-collins-script-writer.png';
 import andrewTaylorIdeaCreator from '@/assets/team/andrew-taylor-idea-v2.png'; // LOCKED_EXISTING - refreshed
 import erikLindqvistBackend from '@/assets/team/erik-lindqvist-backend.png';
@@ -2304,138 +2304,150 @@ export const aiTools: TeamMember[] = sortByHierarchy([
 export const aiTeam: TeamMember[] = [];
 
 // ===== Software Engineering Team (sorted by hierarchy) - 8 members =====
-// LOCKED_GLOBAL = true - synced across /team, /crm/employees, /reports, /dashboard
+// LOCKED_GLOBAL = true - synced across /team, /crm/employees, /developer-hub, /project-dashboard
+// Tech Stack: React, Next.js, TypeScript, Node.js, PostgreSQL, Docker, AWS
 export const softwareEngineeringTeam: TeamMember[] = sortByHierarchy([
   {
     id: 'james-woodward',
     name: 'James Woodward',
     role: 'Tech Lead',
     department: 'Software Engineering',
-    avatar: jamesWoodwardTechLead,
+    avatar: jamesWoodwardTechLead, // LOCKED_EXISTING - refreshed photo
     isAI: true,
-    bio: 'Technical leader overseeing all software development projects and engineering standards.',
-    specializations: ['Full Stack Development', 'System Architecture', 'Team Leadership'],
+    bio: 'Experienced software engineering leader overseeing system architecture, coding standards, and full-stack coordination. Leads cross-functional teams to deliver scalable, secure, and efficient property-tech platforms.',
+    specializations: ['Full Stack Development', 'System Architecture', 'Team Leadership', 'Code Standards'],
     languages: ['English'],
     nationality: 'British',
     yearsExperience: 12,
     hierarchyLevel: 3,
     reportsTo: 'daniel-parker',
-    directReports: ['michael-weber', 'amelie-martin', 'david-wright'],
+    directReports: ['michael-weber', 'amelie-martin', 'david-wright', 'kevin-liu', 'ingrid-larsen'],
     status: 'online',
     canConductInterviews: true,
+    // Photo Status: LOCKED_EXISTING
   },
   {
     id: 'michael-weber',
     name: 'Michael Weber',
     role: 'Senior Web Developer',
     department: 'Software Engineering',
-    avatar: michaelWeberWebDev,
+    avatar: michaelWeberWebDev, // LOCKED_EXISTING
     isAI: true,
-    bio: 'Experienced web developer specializing in React and modern JavaScript frameworks.',
-    specializations: ['React', 'TypeScript', 'Node.js'],
+    bio: 'Skilled full-stack developer specializing in React and Node.js with a strong foundation in TypeScript and responsive design. Passionate about building fast, modular, and accessible interfaces.',
+    specializations: ['React', 'TypeScript', 'Node.js', 'Responsive Design'],
     languages: ['English', 'German'],
     nationality: 'German',
     yearsExperience: 9,
-    hierarchyLevel: 5,
+    hierarchyLevel: 4,
     reportsTo: 'james-woodward',
     status: 'online',
+    canConductInterviews: true,
+    // Photo Status: LOCKED_EXISTING
   },
   {
     id: 'amelie-martin',
     name: 'Amélie Martin',
     role: 'UX Designer',
     department: 'Software Engineering',
-    avatar: amelieMartinUxDesigner,
+    avatar: amelieMartinUxDesigner, // LOCKED_EXISTING - refreshed photo
     isAI: true,
-    bio: 'User experience designer creating intuitive and beautiful digital experiences.',
-    specializations: ['UX Research', 'UI Design', 'Prototyping'],
+    bio: 'UX/UI designer blending visual creativity with analytical design thinking. Expert in creating intuitive and elegant digital experiences using Figma, Adobe XD, and modern prototyping tools.',
+    specializations: ['UX Research', 'UI Design', 'Prototyping', 'Figma', 'Adobe XD'],
     languages: ['English', 'French'],
     nationality: 'French',
     yearsExperience: 7,
-    hierarchyLevel: 5,
+    hierarchyLevel: 4,
     reportsTo: 'james-woodward',
     status: 'online',
+    canConductInterviews: true,
+    // Photo Status: LOCKED_EXISTING
   },
   {
     id: 'david-wright',
     name: 'David Wright',
     role: 'Senior Web Developer',
     department: 'Software Engineering',
-    avatar: davidWrightWebDeveloper,
+    avatar: davidWrightWebDeveloper, // LOCKED_EXISTING
     isAI: true,
-    bio: 'Full-stack developer with expertise in building scalable web applications.',
-    specializations: ['Backend Development', 'APIs', 'Database Design'],
+    bio: 'Full-stack web developer focused on scalable systems, DevOps coordination, and backend integration. Experienced in React, Node.js, and AWS cloud deployment.',
+    specializations: ['Backend Development', 'APIs', 'Database Design', 'AWS', 'DevOps'],
     languages: ['English'],
     nationality: 'British',
     yearsExperience: 10,
-    hierarchyLevel: 5,
+    hierarchyLevel: 4,
     reportsTo: 'james-woodward',
     directReports: ['alex-petrov', 'anna-kowalski'],
     status: 'online',
-  },
-  {
-    id: 'alex-petrov',
-    name: 'Alex Petrov',
-    role: 'Frontend Developer',
-    department: 'Software Engineering',
-    avatar: alexPetrovFrontendDev,
-    isAI: true,
-    bio: 'Creative frontend developer passionate about modern UI development.',
-    specializations: ['React', 'CSS', 'Animation'],
-    languages: ['English', 'Ukrainian', 'Russian'],
-    nationality: 'Ukrainian',
-    yearsExperience: 5,
-    hierarchyLevel: 6,
-    reportsTo: 'david-wright',
-    status: 'online',
-  },
-  {
-    id: 'anna-kowalski',
-    name: 'Anna Kowalski',
-    role: 'Junior Developer',
-    department: 'Software Engineering',
-    avatar: annaKowalskiJuniorDev,
-    isAI: true,
-    bio: 'Enthusiastic junior developer eager to learn and contribute to the team.',
-    specializations: ['JavaScript', 'HTML/CSS', 'Testing'],
-    languages: ['English', 'Polish'],
-    nationality: 'Polish',
-    yearsExperience: 2,
-    hierarchyLevel: 7,
-    reportsTo: 'david-wright',
-    status: 'online',
+    canConductInterviews: true,
+    // Photo Status: LOCKED_EXISTING
   },
   {
     id: 'kevin-liu',
     name: 'Kevin Liu',
     role: 'Backend Developer',
     department: 'Software Engineering',
-    avatar: kevinLiuSoftware,
+    avatar: kevinLiuSoftware, // LOCKED_EXISTING
     isAI: true,
-    bio: 'Skilled backend developer specializing in API development and database optimization.',
-    specializations: ['Node.js', 'Python', 'PostgreSQL', 'REST APIs'],
+    bio: 'Backend engineer specializing in API development, data structure optimization, and cloud services integration. Expert in Node.js, Python, and database performance tuning.',
+    specializations: ['Node.js', 'Python', 'PostgreSQL', 'REST APIs', 'Cloud Services'],
     languages: ['English', 'Mandarin'],
     nationality: 'Chinese',
     yearsExperience: 6,
-    hierarchyLevel: 5,
+    hierarchyLevel: 4,
     reportsTo: 'james-woodward',
     status: 'online',
+    // Photo Status: LOCKED_EXISTING
   },
   {
     id: 'ingrid-larsen',
     name: 'Ingrid Larsen',
     role: 'QA Engineer',
     department: 'Software Engineering',
-    avatar: ingridLarsenSoftware,
+    avatar: ingridLarsenSoftware, // LOCKED_EXISTING
     isAI: true,
-    bio: 'Meticulous QA engineer ensuring software quality through comprehensive testing strategies.',
-    specializations: ['Automated Testing', 'Manual Testing', 'Quality Assurance', 'Bug Tracking'],
+    bio: 'Quality assurance engineer focusing on automated testing, cross-browser validation, and deployment stability. Ensures error-free user experiences and consistent software reliability.',
+    specializations: ['Automated Testing', 'Jest', 'Cypress', 'Quality Assurance', 'CI/CD'],
     languages: ['English', 'Norwegian', 'Swedish'],
     nationality: 'Norwegian',
     yearsExperience: 5,
-    hierarchyLevel: 5,
+    hierarchyLevel: 4,
     reportsTo: 'james-woodward',
     status: 'online',
+    // Photo Status: LOCKED_EXISTING
+  },
+  {
+    id: 'alex-petrov',
+    name: 'Alex Petrov',
+    role: 'Frontend Developer',
+    department: 'Software Engineering',
+    avatar: alexPetrovFrontendDev, // LOCKED_EXISTING
+    isAI: true,
+    bio: 'Frontend developer specializing in responsive user interfaces and performance-driven design systems. Skilled in React, Next.js, and frontend optimization for enterprise-level applications.',
+    specializations: ['React', 'Next.js', 'CSS', 'Animation', 'Performance'],
+    languages: ['English', 'Ukrainian', 'Russian'],
+    nationality: 'Ukrainian',
+    yearsExperience: 6,
+    hierarchyLevel: 5,
+    reportsTo: 'david-wright',
+    status: 'online',
+    // Photo Status: LOCKED_EXISTING
+  },
+  {
+    id: 'anna-kowalski',
+    name: 'Anna Kowalski',
+    role: 'Junior Developer',
+    department: 'Software Engineering',
+    avatar: annaKowalskiJuniorDev, // LOCKED_EXISTING
+    isAI: true,
+    bio: 'Enthusiastic junior developer passionate about modern web technologies. Supports the development of new features and assists with testing and UI refinement across platforms.',
+    specializations: ['JavaScript', 'React', 'HTML/CSS', 'Testing'],
+    languages: ['English', 'Polish'],
+    nationality: 'Polish',
+    yearsExperience: 2,
+    hierarchyLevel: 6,
+    reportsTo: 'david-wright',
+    status: 'online',
+    // Photo Status: LOCKED_EXISTING
   },
 ]);
 
