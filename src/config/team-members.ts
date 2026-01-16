@@ -2589,7 +2589,7 @@ export const legalTeam: TeamMember[] = sortByHierarchy([
     department: 'Legal',
     avatar: hudaMarzooqLawyer,
     isAI: false,
-    bio: 'Official legal counsel for Jane Abou Jaoude and JBJ Global Real Estate. A distinguished Emirati lawyer specializing in UAE property law, contracts, and corporate governance with over 15 years of experience.',
+    bio: 'Official legal counsel for Jane Abou Jaoude and JBJ Global Real Estate. A distinguished Emirati lawyer specializing in UAE property law, contracts, and corporate governance.',
     specializations: ['UAE Property Law', 'Contract Law', 'Corporate Governance', 'Real Estate Transactions'],
     languages: ['English', 'Arabic'],
     nationality: 'Emirati',
