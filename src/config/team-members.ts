@@ -258,6 +258,26 @@ import meiLingChenVip from '@/assets/team/mei-ling-chen-vip-senior.png';
 import omarAlFahadVip from '@/assets/team/omar-al-fahad-vip-v2.png'; // LOCKED_EXISTING - refreshed photo
 import sophieBeaumontVip from '@/assets/team/sophie-beaumont-vip-v2.png'; // LOCKED_EXISTING - refreshed photo
 
+// Import Sales Hierarchy Classification
+// AUTO_SYNC_HIERARCHY = TRUE, LOCKED_GLOBAL = TRUE
+// Synchronized across /team, /crm/employees, /dashboard, /team-communication
+import {
+  classifySalesRole,
+  getSalesHierarchyLevel,
+  SalesHierarchyCategory,
+  SALES_HIERARCHY_LEVELS,
+  getSalesHierarchyCategories,
+} from '@/utils/salesHierarchyClassification';
+
+// Re-export for external use
+export {
+  classifySalesRole,
+  getSalesHierarchyLevel,
+  SALES_HIERARCHY_LEVELS,
+  getSalesHierarchyCategories,
+} from '@/utils/salesHierarchyClassification';
+export type { SalesHierarchyCategory } from '@/utils/salesHierarchyClassification';
+
 export interface TeamMember {
   id: string;
   name: string;
@@ -277,6 +297,8 @@ export interface TeamMember {
   status?: 'online' | 'away' | 'offline';
   hierarchyLevel?: number;
   canConductInterviews?: boolean;
+  // AUTO_SYNC_HIERARCHY = TRUE - Auto-populated for Sales department
+  salesHierarchyCategory?: SalesHierarchyCategory;
 }
 
 // Helper function to sort by hierarchy level
@@ -285,6 +307,20 @@ const sortByHierarchy = (members: TeamMember[]): TeamMember[] => {
   return [...members].sort(
     (a, b) => (a.hierarchyLevel ?? 99) - (b.hierarchyLevel ?? 99)
   );
+};
+
+// Helper function to auto-classify Sales department members
+// AUTO_SYNC_HIERARCHY = TRUE, LOCKED_GLOBAL = TRUE
+const classifySalesDepartment = (members: TeamMember[]): TeamMember[] => {
+  return members.map((member) => {
+    if (member.department === 'Sales') {
+      return {
+        ...member,
+        salesHierarchyCategory: classifySalesRole(member.role),
+      };
+    }
+    return member;
+  });
 };
 
 // ===== Executive Leadership (sorted by hierarchy) - 8 members =====
@@ -430,7 +466,8 @@ export const executiveTeam: TeamMember[] = sortByHierarchy([
 
 // ===== Sales & Business Development (sorted by hierarchy) =====
 // LOCKED_GLOBAL = true - synced across /team, /crm/employees, /reports, /dashboard
-export const salesTeam: TeamMember[] = sortByHierarchy([
+// AUTO_SYNC_HIERARCHY = TRUE - Categories auto-assigned based on title
+export const salesTeam: TeamMember[] = classifySalesDepartment(sortByHierarchy([
   {
     id: 'roy-davi',
     name: 'Roy Davi',
@@ -1119,7 +1156,7 @@ export const salesTeam: TeamMember[] = sortByHierarchy([
     status: 'online',
     // Photo Status: LOCKED_EXISTING
   },
-]);
+]));
 // LOCKED_GLOBAL = true - Sales department finalized (40 members)
 
 // ===== Marketing (sorted by hierarchy) - 10 members =====
