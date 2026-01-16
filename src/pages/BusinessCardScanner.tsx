@@ -1,5 +1,6 @@
 import { useState, useEffect } from "react";
 import { useAuth } from "@/contexts/AuthContext";
+import { supabase } from "@/integrations/supabase/client";
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
@@ -131,8 +132,6 @@ const BusinessCardScanner = () => {
     }
 
     try {
-      const { supabase } = await import('@/integrations/supabase/client');
-      
       // Create a source entry for this import
       const { data: sourceData, error: sourceError } = await supabase
         .from("crm_lead_sources")
