@@ -133,17 +133,17 @@ import isabellaRomanoAnalyst from '@/assets/team/isabella-romano-analyst-v2.png'
 import stefanWeberFinance from '@/assets/team/stefan-weber-finance-realistic.png'; // LOCKED_EXISTING
 
 // Import team portraits - Operations & Technology
-import thomasMitchellCrm from '@/assets/team/thomas-mitchell-crm.png';
+import thomasMitchellCrm from '@/assets/team/thomas-mitchell-crm.png'; // LOCKED_EXISTING
 import robertMaxwellDigital from '@/assets/team/robert-maxwell-digital.png';
-import alexanderShawOperations from '@/assets/team/alexander-shaw-operations.png';
+import alexanderShawOperations from '@/assets/team/alexander-shaw-operations-v2.png'; // LOCKED_EXISTING - refreshed photo
 import meeraPatelOperations from '@/assets/team/meera-patel-operations.png';
 import keremYilmazOperations from '@/assets/team/kerem-yilmaz-operations.png';
 import lucasferreiraOperations from '@/assets/team/lucas-ferreira-operations.png';
 import jessicaWalkerOperations from '@/assets/team/jessica-walker-operations.png';
 // Additional operations team members for symmetric layout (8 total)
-import benjaminClarkeOperations from '@/assets/team/benjamin-clarke-operations.png';
-import ninaKowalskiOperations from '@/assets/team/nina-kowalski-operations.png';
-import marcusThompsonOperations from '@/assets/team/marcus-thompson-operations.png';
+import benjaminClarkeOperations from '@/assets/team/benjamin-clarke-operations.png'; // LOCKED_EXISTING
+import ninaKowalskiOperations from '@/assets/team/nina-kowalski-operations-v2.png'; // LOCKED_EXISTING - refreshed photo
+import marcusThompsonOperations from '@/assets/team/marcus-thompson-operations.png'; // LOCKED_EXISTING
 
 // Import team portraits - IT Team
 import danielParkerItManager from '@/assets/team/daniel-parker-it-manager.png';
@@ -1807,15 +1807,16 @@ export const operationsTeam: TeamMember[] = sortByHierarchy([
     name: 'Alexander Shaw',
     role: 'Operations Director',
     department: 'Operations',
-    avatar: alexanderShawOperations,
+    avatar: alexanderShawOperations, // LOCKED_EXISTING - refreshed photo
     isAI: true,
-    bio: 'Strategic operations leader streamlining processes and driving organizational efficiency.',
+    bio: 'Strategic operations leader optimizing company workflows, streamlining cross-departmental efficiency, and ensuring operational excellence across all branches.',
+    specializations: ['Operations Strategy', 'Process Optimization', 'Cross-Department Efficiency', 'Branch Management'],
     languages: ['English'],
     nationality: 'British',
     yearsExperience: 15,
     hierarchyLevel: 3,
     reportsTo: 'richard-pemberton',
-    directReports: ['thomas-mitchell'],
+    directReports: ['thomas-mitchell', 'nathan-blackwell', 'sophia-hartley'],
     status: 'online',
     canConductInterviews: true,
   },
@@ -1824,25 +1825,28 @@ export const operationsTeam: TeamMember[] = sortByHierarchy([
     name: 'Thomas Mitchell',
     role: 'CRM Operations Manager',
     department: 'Operations',
-    avatar: thomasMitchellCrm,
+    avatar: thomasMitchellCrm, // LOCKED_EXISTING
     isAI: true,
-    bio: 'Tech-savvy operations leader optimizing lead management and sales pipeline efficiency.',
+    bio: 'Tech-savvy manager leading CRM systems, improving lead management, and ensuring seamless coordination between sales and operations divisions.',
+    specializations: ['CRM Management', 'Lead Management', 'Sales-Operations Coordination', 'Pipeline Optimization'],
     languages: ['English'],
     nationality: 'British',
     yearsExperience: 11,
     hierarchyLevel: 4,
     reportsTo: 'alexander-shaw',
-    directReports: ['james-porter'],
+    directReports: ['james-porter', 'oliver-clarke', 'nina-kowalski', 'marcus-thompson'],
     status: 'online',
+    canConductInterviews: true,
   },
   {
     id: 'james-porter',
     name: 'James Porter',
     role: 'CRM Operations Assistant',
     department: 'Operations',
-    avatar: jamesPorterCrmAssistant,
+    avatar: jamesPorterCrmAssistant, // LOCKED_EXISTING
     isAI: true,
-    bio: 'Efficient CRM specialist managing data integrity, lead assignments, and operational reporting.',
+    bio: 'Efficient CRM specialist responsible for managing data accuracy, lead assignments, and performance reporting to support operational goals.',
+    specializations: ['Data Management', 'Lead Assignments', 'Performance Reporting', 'CRM Support'],
     languages: ['English'],
     nationality: 'British',
     yearsExperience: 4,
@@ -1855,10 +1859,10 @@ export const operationsTeam: TeamMember[] = sortByHierarchy([
     name: 'Nathan Blackwell',
     role: 'Cybersecurity Specialist',
     department: 'Operations',
-    avatar: nathanBlackwellCybersecurity,
+    avatar: nathanBlackwellCybersecurity, // LOCKED_EXISTING
     isAI: true,
-    bio: 'Security expert ensuring data protection, system security, and compliance with privacy regulations.',
-    specializations: ['Cybersecurity', 'Data Protection', 'Compliance', 'Risk Management'],
+    bio: 'Security expert ensuring data protection, system integrity, and cybersecurity compliance across the organization\'s digital infrastructure.',
+    specializations: ['Cybersecurity', 'Data Protection', 'System Integrity', 'Compliance'],
     languages: ['English'],
     nationality: 'British',
     yearsExperience: 8,
@@ -1871,9 +1875,9 @@ export const operationsTeam: TeamMember[] = sortByHierarchy([
     name: 'Sophia Hartley',
     role: 'Brand & Trademark Specialist',
     department: 'Operations',
-    avatar: elizabethHartleyBrandSpecialist,
+    avatar: elizabethHartleyBrandSpecialist, // LOCKED_EXISTING
     isAI: true,
-    bio: 'Brand protection specialist managing trademarks, intellectual property, and brand compliance across all channels.',
+    bio: 'Specialist in managing brand protection, intellectual property, and legal trademark processes, ensuring JBJ\'s assets remain secure and consistent worldwide.',
     specializations: ['Trademark Management', 'Brand Protection', 'IP Compliance', 'Legal Coordination'],
     languages: ['English'],
     nationality: 'British',
@@ -1887,15 +1891,15 @@ export const operationsTeam: TeamMember[] = sortByHierarchy([
     name: 'Oliver Clarke',
     role: 'Quality Assurance Coordinator',
     department: 'Operations',
-    avatar: benjaminClarkeOperations,
+    avatar: benjaminClarkeOperations, // LOCKED_EXISTING
     isAI: true,
-    bio: 'Detail-oriented quality assurance professional ensuring operational excellence and process compliance.',
-    specializations: ['Quality Control', 'Process Improvement', 'Compliance Auditing'],
+    bio: 'Detail-oriented QA coordinator ensuring operational excellence through continuous process improvement, auditing, and compliance testing.',
+    specializations: ['Quality Control', 'Process Improvement', 'Compliance Auditing', 'Operational Testing'],
     languages: ['English'],
     nationality: 'British',
     yearsExperience: 5,
     hierarchyLevel: 5,
-    reportsTo: 'alexander-shaw',
+    reportsTo: 'thomas-mitchell',
     status: 'online',
   },
   {
@@ -1903,10 +1907,10 @@ export const operationsTeam: TeamMember[] = sortByHierarchy([
     name: 'Nina Kowalski',
     role: 'Operations Analyst',
     department: 'Operations',
-    avatar: ninaKowalskiOperations,
+    avatar: ninaKowalskiOperations, // LOCKED_EXISTING - refreshed photo
     isAI: true,
-    bio: 'Analytical operations specialist providing data-driven insights for process optimization.',
-    specializations: ['Data Analysis', 'Process Optimization', 'Reporting'],
+    bio: 'Analytical operations expert delivering data-driven insights for process optimization, KPI tracking, and resource allocation efficiency.',
+    specializations: ['Data Analysis', 'Process Optimization', 'KPI Tracking', 'Resource Allocation'],
     languages: ['English', 'Polish', 'German'],
     nationality: 'Polish',
     yearsExperience: 6,
@@ -1919,10 +1923,10 @@ export const operationsTeam: TeamMember[] = sortByHierarchy([
     name: 'Marcus Thompson',
     role: 'Operations Support Specialist',
     department: 'Operations',
-    avatar: marcusThompsonOperations,
+    avatar: marcusThompsonOperations, // LOCKED_EXISTING
     isAI: true,
-    bio: 'Dedicated operations support professional ensuring smooth day-to-day business operations.',
-    specializations: ['Operations Support', 'Client Coordination', 'Administrative Tasks'],
+    bio: 'Dedicated operations support professional managing day-to-day logistics, system coordination, and cross-team communication to ensure seamless execution.',
+    specializations: ['Operations Support', 'Logistics', 'System Coordination', 'Cross-Team Communication'],
     languages: ['English'],
     nationality: 'American',
     yearsExperience: 4,
