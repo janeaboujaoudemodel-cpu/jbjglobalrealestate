@@ -50,7 +50,7 @@ import jamesWoodwardTechLead from '@/assets/team/james-woodward-tech-lead.png';
 import michaelWeberWebDev from '@/assets/team/michael-weber-web-developer.png';
 import amelieMartinUxDesigner from '@/assets/team/amelie-martin-ux-designer.png';
 import emmaCollinsScriptWriter from '@/assets/team/emma-collins-script-writer.png';
-import andrewTaylorIdeaCreator from '@/assets/team/andrew-taylor-idea-creator.png';
+import andrewTaylorIdeaCreator from '@/assets/team/andrew-taylor-idea-v2.png'; // LOCKED_EXISTING - refreshed
 import erikLindqvistBackend from '@/assets/team/erik-lindqvist-backend.png';
 import jiYeonKimQa from '@/assets/team/ji-yeon-kim-qa.png';
 // NEW Software Engineering Team additions (to reach 8)
@@ -98,14 +98,14 @@ import alexPetrovFrontendDev from '@/assets/team/alex-petrov-frontend-dev.png';
 import annaKowalskiJuniorDev from '@/assets/team/anna-kowalski-junior-dev.png';
 
 // Import team portraits - Content & Copywriting Team
-import hannahScottContentStrategist from '@/assets/team/hannah-scott-content-strategist.png';
-import francescaRomanoCopywriter from '@/assets/team/francesca-romano-copywriter.png';
+import hannahScottContentStrategist from '@/assets/team/hannah-scott-content-v2.png'; // LOCKED_EXISTING - refreshed
+import francescaRomanoCopywriter from '@/assets/team/francesca-romano-copywriter-v2.png'; // LOCKED_EXISTING - refreshed
 
 // Import team portraits - Additional Marketing positions
 import charlotteBlakeSocialMedia from '@/assets/team/charlotte-blake-social-media.png';
-import ethanCrawfordBrandCoordinator from '@/assets/team/ethan-crawford-brand-coordinator.png';
+import ethanCrawfordBrandCoordinator from '@/assets/team/ethan-crawford-brand-v2.png'; // LOCKED_EXISTING - refreshed
 import sophieLaurentDigitalMarketing from '@/assets/team/sophie-laurent-digital-marketing.png';
-import oliviaJamesSocialMedia from '@/assets/team/olivia-james-social-media.png';
+import oliviaJamesSocialMedia from '@/assets/team/olivia-james-social-v2.png'; // LOCKED_EXISTING - refreshed
 // NEW Marketing & Content additions (to reach 8)
 import emmaLindbergDigital from '@/assets/team/emma-lindberg-digital.png';
 import nikolaosPapadopoulosSocial from '@/assets/team/nikolaos-papadopoulos-social.png';
@@ -1131,75 +1131,82 @@ export const marketingTeam: TeamMember[] = sortByHierarchy([
     name: 'Victoria Sterling',
     role: 'Marketing Director',
     department: 'Marketing',
-    avatar: victoriaSterlingMarketing,
+    avatar: victoriaSterlingMarketing, // LOCKED_EXISTING
     isAI: true,
-    bio: 'Sophisticated strategist leading brand positioning, digital campaigns, and market intelligence with data-driven excellence.',
+    bio: 'Leads brand strategy, digital campaigns, and market intelligence with data-driven excellence.',
     specializations: ['Brand Strategy', 'Digital Marketing', 'Market Analysis'],
     languages: ['English', 'French', 'Spanish'],
     nationality: 'British',
     yearsExperience: 14,
     hierarchyLevel: 3,
     reportsTo: 'jane-abou-jaoude',
-    directReports: ['sophia-anderson', 'marcus-bennett', 'hannah-scott'],
+    directReports: ['emma-lindberg', 'nikolaos-papadopoulos', 'sarah-mcintyre', 'hannah-scott'],
     status: 'online',
     canConductInterviews: true,
+    // Photo Status: LOCKED_EXISTING
   },
   {
     id: 'emma-lindberg',
     name: 'Emma Lindberg',
     role: 'Digital Marketing Manager',
     department: 'Marketing',
-    avatar: emmaLindbergDigital,
+    avatar: emmaLindbergDigital, // LOCKED_EXISTING
     isAI: true,
-    bio: 'Strategic digital marketer specializing in SEO, PPC, and data-driven marketing campaigns.',
+    bio: 'Manages SEO, PPC, and performance marketing campaigns with strategic precision.',
     specializations: ['SEO', 'PPC', 'Analytics', 'Marketing Automation'],
     languages: ['English', 'Swedish', 'Norwegian'],
     nationality: 'Swedish',
     yearsExperience: 9,
     hierarchyLevel: 4,
     reportsTo: 'victoria-sterling',
+    directReports: ['sophie-laurent'],
     status: 'online',
+    // Photo Status: LOCKED_EXISTING
   },
   {
     id: 'nikolaos-papadopoulos',
     name: 'Nikolaos Papadopoulos',
     role: 'Social Media Manager',
     department: 'Marketing',
-    avatar: nikolaosPapadopoulosSocial,
+    avatar: nikolaosPapadopoulosSocial, // LOCKED_EXISTING
     isAI: true,
-    bio: 'Creative social media strategist with expertise in luxury brand positioning and engagement.',
+    bio: 'Oversees social media strategy and luxury brand positioning across all platforms.',
     specializations: ['Social Media Strategy', 'Content Creation', 'Influencer Marketing'],
     languages: ['English', 'Greek'],
     nationality: 'Greek',
     yearsExperience: 6,
-    hierarchyLevel: 5,
+    hierarchyLevel: 4,
     reportsTo: 'victoria-sterling',
+    directReports: ['charlotte-blake', 'olivia-james'],
     status: 'online',
+    // Photo Status: LOCKED_EXISTING
   },
   {
     id: 'sarah-mcintyre',
     name: 'Sarah McIntyre',
     role: 'Content Marketing Manager',
     department: 'Marketing',
-    avatar: sarahMcintyreContent,
+    avatar: sarahMcintyreContent, // LOCKED_EXISTING
     isAI: true,
-    bio: 'Skilled content marketer creating compelling narratives that drive engagement and conversions.',
+    bio: 'Develops content strategies that drive engagement and conversions for the brand.',
     specializations: ['Content Strategy', 'Blog Management', 'Email Marketing'],
     languages: ['English', 'Irish'],
     nationality: 'Irish',
     yearsExperience: 7,
-    hierarchyLevel: 5,
+    hierarchyLevel: 4,
     reportsTo: 'victoria-sterling',
+    directReports: ['pieter-vandenberghe'],
     status: 'online',
+    // Photo Status: LOCKED_EXISTING
   },
   {
     id: 'charlotte-blake',
     name: 'Charlotte Blake',
     role: 'Social Media Specialist',
     department: 'Marketing',
-    avatar: charlotteBlakeSocialMedia,
+    avatar: charlotteBlakeSocialMedia, // LOCKED_EXISTING
     isAI: true,
-    bio: 'Creative social media expert managing brand presence across multiple platforms.',
+    bio: 'Manages brand presence and content creation across Instagram and LinkedIn.',
     specializations: ['Instagram', 'LinkedIn', 'Content Creation'],
     languages: ['English'],
     nationality: 'British',
@@ -1207,31 +1214,16 @@ export const marketingTeam: TeamMember[] = sortByHierarchy([
     hierarchyLevel: 5,
     reportsTo: 'nikolaos-papadopoulos',
     status: 'online',
-  },
-  {
-    id: 'ethan-crawford',
-    name: 'Ethan Crawford',
-    role: 'Brand Coordinator',
-    department: 'Marketing',
-    avatar: ethanCrawfordBrandCoordinator,
-    isAI: true,
-    bio: 'Brand coordinator ensuring consistent visual identity across all marketing materials.',
-    specializations: ['Brand Guidelines', 'Visual Identity', 'Marketing Collateral'],
-    languages: ['English'],
-    nationality: 'British',
-    yearsExperience: 3,
-    hierarchyLevel: 6,
-    reportsTo: 'victoria-sterling',
-    status: 'online',
+    // Photo Status: LOCKED_EXISTING
   },
   {
     id: 'sophie-laurent',
     name: 'Sophie Laurent',
     role: 'Digital Marketing Specialist',
     department: 'Marketing',
-    avatar: sophieLaurentDigitalMarketing,
+    avatar: sophieLaurentDigitalMarketing, // LOCKED_EXISTING
     isAI: true,
-    bio: 'Digital marketing specialist with expertise in campaign optimization and analytics.',
+    bio: 'Optimizes paid advertising campaigns and analyzes performance metrics.',
     specializations: ['Google Ads', 'Facebook Ads', 'Campaign Optimization'],
     languages: ['English', 'French'],
     nationality: 'French',
@@ -1239,32 +1231,16 @@ export const marketingTeam: TeamMember[] = sortByHierarchy([
     hierarchyLevel: 5,
     reportsTo: 'emma-lindberg',
     status: 'online',
+    // Photo Status: LOCKED_EXISTING
   },
-  {
-    id: 'olivia-james',
-    name: 'Olivia James',
-    role: 'Social Media Assistant',
-    department: 'Marketing',
-    avatar: oliviaJamesSocialMedia,
-    isAI: true,
-    bio: 'Enthusiastic social media assistant supporting daily content creation and community engagement.',
-    specializations: ['Content Scheduling', 'Community Management', 'Graphics'],
-    languages: ['English'],
-    nationality: 'British',
-    yearsExperience: 2,
-    hierarchyLevel: 6,
-    reportsTo: 'nikolaos-papadopoulos',
-    status: 'online',
-  },
-  // NEW Marketing Team Members
   {
     id: 'valentina-torres',
     name: 'Valentina Torres',
     role: 'Marketing Coordinator',
     department: 'Marketing',
-    avatar: valentinaTorresMarketing,
+    avatar: valentinaTorresMarketing, // LOCKED_EXISTING
     isAI: true,
-    bio: 'Creative marketing professional specializing in event coordination and campaign execution.',
+    bio: 'Coordinates marketing events and ensures seamless campaign execution.',
     specializations: ['Event Marketing', 'Campaign Coordination', 'Brand Activations'],
     languages: ['English', 'Spanish'],
     nationality: 'Peruvian',
@@ -1272,15 +1248,16 @@ export const marketingTeam: TeamMember[] = sortByHierarchy([
     hierarchyLevel: 5,
     reportsTo: 'victoria-sterling',
     status: 'online',
+    // Photo Status: LOCKED_EXISTING
   },
   {
     id: 'pieter-vandenberghe',
     name: 'Pieter Vandenberghe',
     role: 'Content Coordinator',
     department: 'Marketing',
-    avatar: pieterVandenbergheMarketing,
+    avatar: pieterVandenbergheMarketing, // LOCKED_EXISTING
     isAI: true,
-    bio: 'Organized content coordinator managing editorial calendars and content distribution.',
+    bio: 'Manages editorial calendars and content distribution across all channels.',
     specializations: ['Content Management', 'Editorial Planning', 'Distribution'],
     languages: ['English', 'Dutch', 'French'],
     nationality: 'Belgian',
@@ -1288,9 +1265,43 @@ export const marketingTeam: TeamMember[] = sortByHierarchy([
     hierarchyLevel: 5,
     reportsTo: 'sarah-mcintyre',
     status: 'online',
+    // Photo Status: LOCKED_EXISTING
+  },
+  {
+    id: 'ethan-crawford',
+    name: 'Ethan Crawford',
+    role: 'Brand Coordinator',
+    department: 'Marketing',
+    avatar: ethanCrawfordBrandCoordinator, // LOCKED_EXISTING - refreshed portrait
+    isAI: true,
+    bio: 'Ensures consistent visual identity across all marketing materials and touchpoints.',
+    specializations: ['Brand Guidelines', 'Visual Identity', 'Marketing Collateral'],
+    languages: ['English'],
+    nationality: 'British',
+    yearsExperience: 3,
+    hierarchyLevel: 6,
+    reportsTo: 'victoria-sterling',
+    status: 'online',
+    // Photo Status: LOCKED_EXISTING
+  },
+  {
+    id: 'olivia-james',
+    name: 'Olivia James',
+    role: 'Social Media Assistant',
+    department: 'Marketing',
+    avatar: oliviaJamesSocialMedia, // LOCKED_EXISTING - refreshed portrait
+    isAI: true,
+    bio: 'Supports content creation and community engagement across social platforms.',
+    specializations: ['Content Scheduling', 'Community Management', 'Graphics'],
+    languages: ['English'],
+    nationality: 'British',
+    yearsExperience: 2,
+    hierarchyLevel: 6,
+    reportsTo: 'nikolaos-papadopoulos',
+    status: 'online',
+    // Photo Status: LOCKED_EXISTING
   },
 ]);
-
 // ===== Property Operations (sorted by hierarchy) =====
 export const propertyOperationsTeam: TeamMember[] = [];
 
@@ -2486,26 +2497,27 @@ export const contentTeam: TeamMember[] = sortByHierarchy([
     name: 'Hannah Scott',
     role: 'Content Strategist',
     department: 'Marketing & Content',
-    avatar: hannahScottContentStrategist,
+    avatar: hannahScottContentStrategist, // LOCKED_EXISTING - refreshed portrait
     isAI: true,
-    bio: 'Strategic content leader developing compelling narratives for real estate marketing.',
+    bio: 'Leads content strategy and develops compelling narratives for real estate marketing.',
     specializations: ['Content Strategy', 'SEO', 'Brand Voice'],
     languages: ['English'],
     nationality: 'British',
     yearsExperience: 9,
     hierarchyLevel: 4,
     reportsTo: 'victoria-sterling',
-    directReports: ['emma-collins', 'francesca-romano', 'andrew-taylor'],
+    directReports: ['emma-collins', 'francesca-romano', 'andrew-taylor', 'nicole-vanderberg', 'emma-richardson'],
     status: 'online',
+    // Photo Status: LOCKED_EXISTING
   },
   {
     id: 'emma-collins',
     name: 'Emma Collins',
     role: 'Script Writer',
     department: 'Marketing & Content',
-    avatar: emmaCollinsScriptWriter,
+    avatar: emmaCollinsScriptWriter, // LOCKED_EXISTING
     isAI: true,
-    bio: 'Creative scriptwriter crafting engaging video content and marketing scripts.',
+    bio: 'Crafts engaging video content and marketing scripts for luxury property campaigns.',
     specializations: ['Video Scripts', 'Storytelling', 'Social Media'],
     languages: ['English'],
     nationality: 'British',
@@ -2513,15 +2525,16 @@ export const contentTeam: TeamMember[] = sortByHierarchy([
     hierarchyLevel: 5,
     reportsTo: 'hannah-scott',
     status: 'online',
+    // Photo Status: LOCKED_EXISTING
   },
   {
     id: 'francesca-romano',
     name: 'Francesca Romano',
     role: 'Copywriter',
     department: 'Marketing & Content',
-    avatar: francescaRomanoCopywriter,
+    avatar: francescaRomanoCopywriter, // LOCKED_EXISTING - refreshed portrait
     isAI: true,
-    bio: 'Multilingual copywriter creating persuasive property descriptions and marketing materials.',
+    bio: 'Creates persuasive property descriptions and multilingual marketing materials.',
     specializations: ['Property Descriptions', 'Email Marketing', 'Ad Copy'],
     languages: ['English', 'Italian', 'French'],
     nationality: 'Italian',
@@ -2529,15 +2542,16 @@ export const contentTeam: TeamMember[] = sortByHierarchy([
     hierarchyLevel: 5,
     reportsTo: 'hannah-scott',
     status: 'online',
+    // Photo Status: LOCKED_EXISTING
   },
   {
     id: 'andrew-taylor',
     name: 'Andrew Taylor',
     role: 'Idea Creator',
     department: 'Marketing & Content',
-    avatar: andrewTaylorIdeaCreator,
+    avatar: andrewTaylorIdeaCreator, // LOCKED_EXISTING - refreshed portrait
     isAI: true,
-    bio: 'Creative ideation specialist generating innovative marketing concepts and campaigns.',
+    bio: 'Generates innovative marketing concepts and creative campaign ideas.',
     specializations: ['Creative Concepts', 'Campaign Ideas', 'Brainstorming'],
     languages: ['English'],
     nationality: 'British',
@@ -2545,16 +2559,16 @@ export const contentTeam: TeamMember[] = sortByHierarchy([
     hierarchyLevel: 5,
     reportsTo: 'hannah-scott',
     status: 'online',
+    // Photo Status: LOCKED_EXISTING
   },
-  // NEW Content Team Members to fill grid gaps (2 more next to Andrew Taylor)
   {
     id: 'nicole-vanderberg',
     name: 'Nicole Van Der Berg',
     role: 'Content Creator',
     department: 'Marketing & Content',
-    avatar: nicoleVanderbergContent,
+    avatar: nicoleVanderbergContent, // LOCKED_EXISTING
     isAI: true,
-    bio: 'Creative content creator specializing in video scripts and social media storytelling.',
+    bio: 'Specializes in video scripts and social media storytelling for brand engagement.',
     specializations: ['Video Content', 'Social Media', 'Brand Storytelling'],
     languages: ['English', 'Afrikaans'],
     nationality: 'South African',
@@ -2562,15 +2576,16 @@ export const contentTeam: TeamMember[] = sortByHierarchy([
     hierarchyLevel: 5,
     reportsTo: 'hannah-scott',
     status: 'online',
+    // Photo Status: LOCKED_EXISTING
   },
   {
     id: 'emma-richardson',
     name: 'Emma Richardson',
     role: 'Content Strategist',
     department: 'Marketing & Content',
-    avatar: emmaRichardsonContent,
+    avatar: emmaRichardsonContent, // LOCKED_EXISTING
     isAI: true,
-    bio: 'Strategic content planner developing editorial calendars and content frameworks.',
+    bio: 'Develops editorial calendars and SEO content frameworks for property marketing.',
     specializations: ['Content Planning', 'Editorial Strategy', 'SEO Content'],
     languages: ['English', 'French'],
     nationality: 'Canadian',
@@ -2578,9 +2593,9 @@ export const contentTeam: TeamMember[] = sortByHierarchy([
     hierarchyLevel: 5,
     reportsTo: 'hannah-scott',
     status: 'online',
+    // Photo Status: LOCKED_EXISTING
   },
 ]);
-
 // ===== Customer Happiness Team (sorted by hierarchy) - 4 members =====
 // LOCKED_GLOBAL = true - synced across /team, /crm/employees, /reports, /dashboard
 export const customerHappinessTeam: TeamMember[] = sortByHierarchy([
