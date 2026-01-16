@@ -1088,7 +1088,7 @@ export const salesTeam: TeamMember[] = sortByHierarchy([
     name: 'Ananya Sharma',
     role: 'Property Consultant',
     department: 'Sales',
-    avatar: priyaSharmaSales,
+    avatar: mehmetYilmazProperty, // TEMP: Needs unique photo - using placeholder
     isAI: true,
     bio: 'Serves South Asian investors with family home and investment expertise.',
     specializations: ['South Asian Clients', 'Family Homes', 'Investment Properties'],
@@ -1098,12 +1098,13 @@ export const salesTeam: TeamMember[] = sortByHierarchy([
     hierarchyLevel: 5,
     reportsTo: 'emma-hartley',
     status: 'online',
-    // Photo Status: LOCKED_EXISTING
+    // Photo Status: NEEDS_UNIQUE_PHOTO - currently using placeholder to avoid duplicate
   },
 ]);
 // LOCKED_GLOBAL = true - Sales department finalized (39 members)
 
-// ===== Marketing (sorted by hierarchy) - 8 members =====
+// ===== Marketing (sorted by hierarchy) - 10 members =====
+// LOCKED_GLOBAL = true - synced across /team, /crm/employees, /reports, /dashboard
 export const marketingTeam: TeamMember[] = sortByHierarchy([
   {
     id: 'victoria-sterling',
@@ -1274,6 +1275,7 @@ export const marketingTeam: TeamMember[] = sortByHierarchy([
 export const propertyOperationsTeam: TeamMember[] = [];
 
 // ===== Client Relations (sorted by hierarchy) - 4 members =====
+// LOCKED_GLOBAL = true - synced across /team, /crm/employees, /reports, /dashboard
 export const clientRelationsTeam: TeamMember[] = sortByHierarchy([
   {
     id: 'george-hamilton',
@@ -1342,7 +1344,8 @@ export const clientRelationsTeam: TeamMember[] = sortByHierarchy([
   },
 ]);
 
-// ===== VIP Client Relations (sorted by hierarchy) =====
+// ===== VIP Client Relations (sorted by hierarchy) - 8 members =====
+// LOCKED_GLOBAL = true - synced across /team, /crm/employees, /reports, /dashboard
 export const vipClientRelationsTeam: TeamMember[] = sortByHierarchy([
   {
     id: 'victoria-ashworth',
@@ -1481,7 +1484,8 @@ export const vipClientRelationsTeam: TeamMember[] = sortByHierarchy([
   },
 ]);
 
-// ===== Human Resources (sorted by hierarchy) =====
+// ===== Human Resources (sorted by hierarchy) - 4 members =====
+// LOCKED_GLOBAL = true - synced across /team, /crm/employees, /reports, /dashboard
 export const hrTeam: TeamMember[] = sortByHierarchy([
   {
     id: 'james-harrison',
@@ -1549,7 +1553,8 @@ export const hrTeam: TeamMember[] = sortByHierarchy([
   },
 ]);
 
-// ===== Creative & Media Team (sorted by hierarchy) =====
+// ===== Creative & Media Team (sorted by hierarchy) - 8 members =====
+// LOCKED_GLOBAL = true - synced across /team, /crm/employees, /reports, /dashboard
 export const creativeTeam: TeamMember[] = sortByHierarchy([
   {
     id: 'marcus-bennett',
@@ -1679,6 +1684,7 @@ export const creativeTeam: TeamMember[] = sortByHierarchy([
 ]);
 
 // ===== Finance Team (sorted by hierarchy) - 4 members =====
+// LOCKED_GLOBAL = true - synced across /team, /crm/employees, /reports, /dashboard
 export const financeTeam: TeamMember[] = sortByHierarchy([
   {
     id: 'catherine-brooks',
@@ -1745,7 +1751,8 @@ export const financeTeam: TeamMember[] = sortByHierarchy([
   },
 ]);
 
-// ===== Operations Team (sorted by hierarchy) - 8 members for symmetric layout =====
+// ===== Operations Team (sorted by hierarchy) - 8 members =====
+// LOCKED_GLOBAL = true - synced across /team, /crm/employees, /reports, /dashboard
 export const operationsTeam: TeamMember[] = sortByHierarchy([
   {
     id: 'alexander-shaw',
@@ -1878,6 +1885,7 @@ export const operationsTeam: TeamMember[] = sortByHierarchy([
 ]);
 
 // ===== IT Team (sorted by hierarchy) - 8 members =====
+// LOCKED_GLOBAL = true - synced across /team, /crm/employees, /reports, /dashboard
 export const itTeam: TeamMember[] = sortByHierarchy([
   {
     id: 'daniel-parker',
@@ -2012,7 +2020,8 @@ export const itTeam: TeamMember[] = sortByHierarchy([
   },
 ]);
 
-// ===== After Sales Team (sorted by hierarchy) =====
+// ===== After Sales Team (sorted by hierarchy) - 4 members =====
+// LOCKED_GLOBAL = true - synced across /team, /crm/employees, /reports, /dashboard
 export const afterSalesTeam: TeamMember[] = sortByHierarchy([
   {
     id: 'charles-ashford',
@@ -2084,7 +2093,8 @@ export const afterSalesTeam: TeamMember[] = sortByHierarchy([
   },
 ]);
 
-// ===== Admin & Front Desk Team (sorted by hierarchy) =====
+// ===== Admin & Front Desk Team (sorted by hierarchy) - 8 members =====
+// LOCKED_GLOBAL = true - synced across /team, /crm/employees, /reports, /dashboard
 export const adminTeam: TeamMember[] = sortByHierarchy([
   {
     id: 'emily-watson',
@@ -2099,7 +2109,7 @@ export const adminTeam: TeamMember[] = sortByHierarchy([
     yearsExperience: 11,
     hierarchyLevel: 4,
     reportsTo: 'richard-pemberton',
-    directReports: ['maria-santos', 'sophie-richards', 'gabriela-costa', 'claire-dubois', 'sarah-mitchell'],
+    directReports: ['maria-santos-admin', 'sophie-richards', 'gabriela-costa', 'claire-dubois', 'sarah-mitchell'],
     status: 'online',
     canConductInterviews: true,
   },
@@ -2121,19 +2131,20 @@ export const adminTeam: TeamMember[] = sortByHierarchy([
     canConductInterviews: true,
   },
   {
-    id: 'maria-santos',
+    id: 'maria-santos-admin',
     name: 'Maria Santos',
     role: 'Admin Assistant',
     department: 'Administration',
     avatar: mariaSantosAdminAssistant,
     isAI: true,
-    bio: 'Organized and friendly assistant supporting daily administrative tasks and office coordination.',
+    bio: 'Supports daily administrative tasks and office coordination.',
     languages: ['English', 'Filipino', 'Tagalog'],
     nationality: 'Filipino',
     yearsExperience: 4,
     hierarchyLevel: 6,
     reportsTo: 'emily-watson',
     status: 'online',
+    // Photo Status: LOCKED_EXISTING
   },
   {
     id: 'sophie-richards',
@@ -2236,7 +2247,8 @@ export const aiTools: TeamMember[] = sortByHierarchy([
 // Backwards compatibility
 export const aiTeam: TeamMember[] = [];
 
-// ===== Software Engineering Team (sorted by hierarchy) =====
+// ===== Software Engineering Team (sorted by hierarchy) - 8 members =====
+// LOCKED_GLOBAL = true - synced across /team, /crm/employees, /reports, /dashboard
 export const softwareEngineeringTeam: TeamMember[] = sortByHierarchy([
   {
     id: 'james-woodward',
@@ -2372,6 +2384,7 @@ export const softwareEngineeringTeam: TeamMember[] = sortByHierarchy([
 ]);
 
 // ===== Project Management Team (sorted by hierarchy) - 4 members =====
+// LOCKED_GLOBAL = true - synced across /team, /crm/employees, /reports, /dashboard
 export const projectManagementTeam: TeamMember[] = sortByHierarchy([
   {
     id: 'rachel-campbell',
@@ -2441,7 +2454,8 @@ export const projectManagementTeam: TeamMember[] = sortByHierarchy([
   },
 ]);
 
-// ===== Content & Copywriting Team (sorted by hierarchy) =====
+// ===== Content & Copywriting Team (sorted by hierarchy) - 6 members =====
+// LOCKED_GLOBAL = true - synced across /team, /crm/employees, /reports, /dashboard
 export const contentTeam: TeamMember[] = sortByHierarchy([
   {
     id: 'hannah-scott',
@@ -2544,6 +2558,7 @@ export const contentTeam: TeamMember[] = sortByHierarchy([
 ]);
 
 // ===== Customer Happiness Team (sorted by hierarchy) - 4 members =====
+// LOCKED_GLOBAL = true - synced across /team, /crm/employees, /reports, /dashboard
 export const customerHappinessTeam: TeamMember[] = sortByHierarchy([
   {
     id: 'lisa-henderson',
