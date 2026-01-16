@@ -6,7 +6,7 @@ import { toast } from "sonner";
 
 import { Button } from "@/components/ui/button";
 import { usePopupVisibility } from "@/contexts/PopupCoordinatorContext";
-import jbjMonogramTransparent from "@/assets/jbj-monogram-transparent.png";
+import jbjMonogramLightBg from "@/assets/jbj-monogram-light-bg.png";
 
 interface BeforeInstallPromptEvent extends Event {
   prompt: () => Promise<void>;
@@ -87,18 +87,12 @@ const AppDownloadPopup = ({
     const ios = isIOSDevice();
     setIsIOS(ios);
 
-    // macOS Safari doesn't support PWA installs
+    // macOS Safari doesn't support PWA installs - don't show popup
     if (!ios && isMacSafari()) return;
 
     const handleBeforeInstallPrompt = (e: Event) => {
       e.preventDefault();
       setDeferredPrompt(e as BeforeInstallPromptEvent);
-
-      // Only auto-show once the install prompt is actually available.
-      if (showOnLoad) {
-        setShouldShow(true);
-        requestToShow();
-      }
     };
 
     const handleAppInstalled = () => {
@@ -112,9 +106,9 @@ const AppDownloadPopup = ({
     window.addEventListener("beforeinstallprompt", handleBeforeInstallPrompt);
     window.addEventListener("appinstalled", handleAppInstalled);
 
-    // iOS: show after a delay (no native install prompt)
+    // Show the popup after delay for all supported browsers (iOS gets instructions, others get install)
     let timer: number | undefined;
-    if (showOnLoad && ios) {
+    if (showOnLoad) {
       timer = window.setTimeout(() => {
         setShouldShow(true);
         requestToShow();
@@ -190,7 +184,7 @@ const AppDownloadPopup = ({
             <div className="flex items-center gap-3 p-3">
               <div className="w-10 h-10 rounded-xl overflow-hidden bg-foreground/5 border border-border">
                 <img
-                  src={jbjMonogramTransparent}
+                  src={jbjMonogramLightBg}
                   alt="JBJ Global Real Estate"
                   className="w-full h-full object-contain p-1"
                   loading="lazy"
@@ -259,7 +253,7 @@ const AppDownloadPopup = ({
                 <div className="flex items-center gap-4">
                   <div className="w-14 h-14 rounded-2xl overflow-hidden bg-foreground/5 border border-border">
                     <img
-                      src={jbjMonogramTransparent}
+                      src={jbjMonogramLightBg}
                       alt="JBJ Global Real Estate"
                       className="w-full h-full object-contain p-2"
                       loading="lazy"
