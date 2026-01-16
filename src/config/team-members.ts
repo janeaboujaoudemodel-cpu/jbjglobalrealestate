@@ -76,7 +76,7 @@ import kenjiNakamuraClient from '@/assets/team/kenji-nakamura-client.png';
 
 // Import team portraits - VIP Client Relations (natural photos without AI filters)
 import victoriaAshworthVipDirector from '@/assets/team/victoria-ashworth-vip-director.png';
-import charlotteWhitmoreVipAssistant from '@/assets/team/charlotte-whitmore-vip-assistant.png';
+import charlotteWhitmoreVipAssistant from '@/assets/team/charlotte-whitmore-vip-v2.png'; // LOCKED_EXISTING - refreshed photo
 import jamesHartwellVipManager from '@/assets/team/james-hartwell-natural.png';
 import alexandraFitzgeraldVipAssistant from '@/assets/team/alexandra-fitzgerald-natural.png';
 
@@ -257,7 +257,7 @@ import emilyRichardsonVip from '@/assets/team/emily-richardson-vip.png';
 // NEW VIP additions to reach 8 total
 import meiLingChenVip from '@/assets/team/mei-ling-chen-vip-senior.png';
 import omarAlFahadVip from '@/assets/team/omar-al-fahad-vip-advisor.png';
-import sophieBeaumontVip from '@/assets/team/sophie-beaumont-vip-coordinator.png';
+import sophieBeaumontVip from '@/assets/team/sophie-beaumont-vip-v2.png'; // LOCKED_EXISTING - refreshed photo
 
 export interface TeamMember {
   id: string;
@@ -1387,16 +1387,16 @@ export const vipClientRelationsTeam: TeamMember[] = sortByHierarchy([
     name: 'Victoria Ashworth',
     role: 'VIP Client Relations Director',
     department: 'VIP Client Relations',
-    avatar: victoriaAshworthVipDirector,
+    avatar: victoriaAshworthVipDirector, // LOCKED_EXISTING
     isAI: true,
-    bio: 'Elite client specialist managing relationships with high-net-worth individuals and VIP investors, ensuring white-glove concierge service.',
+    bio: 'Elite client specialist managing relationships with high-net-worth individuals and VIP investors, delivering tailored real estate and investment experiences.',
     specializations: ['VIP Services', 'Luxury Concierge', 'Private Client Management', 'Investment Advisory'],
     languages: ['English', 'French', 'Arabic', 'Italian'],
     nationality: 'British',
     yearsExperience: 13,
     hierarchyLevel: 3,
     reportsTo: 'george-hamilton',
-    directReports: ['james-hartwell', 'charlotte-whitmore', 'abdullah-al-rashid'],
+    directReports: ['james-hartwell', 'abdullah-al-rashid', 'mei-ling-chen', 'charlotte-whitmore'],
     status: 'online',
     canConductInterviews: true,
   },
@@ -1405,16 +1405,51 @@ export const vipClientRelationsTeam: TeamMember[] = sortByHierarchy([
     name: 'James Hartwell',
     role: 'VIP Client Relations Manager',
     department: 'VIP Client Relations',
-    avatar: jamesHartwellVipManager,
+    avatar: jamesHartwellVipManager, // LOCKED_EXISTING
     isAI: true,
-    bio: 'Distinguished professional managing day-to-day VIP client operations, ensuring personalized service delivery and client satisfaction.',
+    bio: 'Distinguished professional managing day-to-day VIP client operations, ensuring personalized attention and consistent excellence in service.',
     specializations: ['Client Management', 'Relationship Building', 'Service Excellence', 'VIP Coordination'],
     languages: ['English', 'French'],
     nationality: 'British',
     yearsExperience: 10,
     hierarchyLevel: 4,
     reportsTo: 'victoria-ashworth',
-    directReports: ['alexandra-fitzgerald'],
+    directReports: ['alexandra-fitzgerald', 'sophie-beaumont'],
+    status: 'online',
+    canConductInterviews: true,
+  },
+  {
+    id: 'abdullah-al-rashid',
+    name: 'Abdullah Al Rashid',
+    role: 'VIP Client Relations Manager (GCC)',
+    department: 'VIP Client Relations',
+    avatar: abdullahAlRashidSales, // LOCKED_EXISTING
+    isAI: true,
+    bio: 'Esteemed relationship manager specializing in VIP client relations across Saudi Arabia and the Gulf region, focusing on premium property investments and partnerships.',
+    specializations: ['Saudi Clients', 'GCC Markets', 'Ultra-Luxury Properties', 'VIP Relations'],
+    languages: ['English', 'Arabic'],
+    nationality: 'Saudi Arabian',
+    yearsExperience: 11,
+    hierarchyLevel: 4,
+    reportsTo: 'victoria-ashworth',
+    directReports: ['omar-al-fahad'],
+    status: 'online',
+    canConductInterviews: true,
+  },
+  {
+    id: 'mei-ling-chen',
+    name: 'Mei Ling Chen',
+    role: 'Senior VIP Client Advisor',
+    department: 'VIP Client Relations',
+    avatar: meiLingChenVip, // LOCKED_EXISTING
+    isAI: true,
+    bio: 'Sophisticated advisor with expertise in Chinese and Southeast Asian high-net-worth investor relations, offering strategic client portfolio support.',
+    specializations: ['Chinese Clients', 'Southeast Asian Markets', 'Ultra-Luxury Properties', 'Investment Advisory'],
+    languages: ['English', 'Mandarin'],
+    nationality: 'Singaporean',
+    yearsExperience: 8,
+    hierarchyLevel: 4,
+    reportsTo: 'victoria-ashworth',
     status: 'online',
     canConductInterviews: true,
   },
@@ -1423,9 +1458,9 @@ export const vipClientRelationsTeam: TeamMember[] = sortByHierarchy([
     name: 'Charlotte Whitmore',
     role: 'VIP Client Relations Assistant',
     department: 'VIP Client Relations',
-    avatar: charlotteWhitmoreVipAssistant,
+    avatar: charlotteWhitmoreVipAssistant, // LOCKED_EXISTING - refreshed photo
     isAI: true,
-    bio: 'Dedicated assistant supporting VIP client operations, scheduling exclusive property viewings, and coordinating luxury client experiences.',
+    bio: 'Proactive assistant supporting VIP client schedules and exclusive property experiences, ensuring seamless communication and scheduling.',
     specializations: ['Client Coordination', 'Event Planning', 'Property Viewings', 'Client Communication'],
     languages: ['English', 'Spanish'],
     nationality: 'British',
@@ -1439,9 +1474,9 @@ export const vipClientRelationsTeam: TeamMember[] = sortByHierarchy([
     name: 'Alexandra Fitzgerald',
     role: 'VIP Client Relations Assistant',
     department: 'VIP Client Relations',
-    avatar: alexandraFitzgeraldVipAssistant,
+    avatar: alexandraFitzgeraldVipAssistant, // LOCKED_EXISTING
     isAI: true,
-    bio: 'Professional assistant coordinating VIP client schedules, luxury property viewings, and exclusive client events.',
+    bio: 'Energetic and detail-oriented assistant coordinating high-end client appointments and premium real estate engagements with discretion and precision.',
     specializations: ['Scheduling', 'Event Coordination', 'Client Service', 'Documentation'],
     languages: ['English'],
     nationality: 'British',
@@ -1451,48 +1486,13 @@ export const vipClientRelationsTeam: TeamMember[] = sortByHierarchy([
     status: 'online',
   },
   {
-    id: 'abdullah-al-rashid',
-    name: 'Abdullah Al Rashid',
-    role: 'VIP Client Relations Manager (GCC)',
-    department: 'VIP Client Relations',
-    avatar: abdullahAlRashidSales,
-    isAI: true,
-    bio: 'Distinguished VIP relationship manager specializing in Saudi and GCC high-net-worth investor relations, ensuring premium white-glove service for Gulf region clients.',
-    specializations: ['Saudi Clients', 'GCC Markets', 'Ultra-Luxury Properties', 'VIP Relations'],
-    languages: ['English', 'Arabic'],
-    nationality: 'Saudi Arabia',
-    yearsExperience: 11,
-    hierarchyLevel: 4,
-    reportsTo: 'victoria-ashworth',
-    status: 'online',
-    canConductInterviews: true,
-  },
-  // NEW VIP Team Members to reach 8 total
-  {
-    id: 'mei-ling-chen',
-    name: 'Mei Ling Chen',
-    role: 'Senior VIP Client Advisor',
-    department: 'VIP Client Relations',
-    avatar: meiLingChenVip,
-    isAI: true,
-    bio: 'Sophisticated advisor specializing in Chinese and East Asian high-net-worth investor relations, providing premium concierge services.',
-    specializations: ['Chinese Clients', 'East Asian Markets', 'Ultra-Luxury Properties', 'Investment Advisory'],
-    languages: ['English', 'Mandarin', 'Cantonese'],
-    nationality: 'Singaporean',
-    yearsExperience: 9,
-    hierarchyLevel: 4,
-    reportsTo: 'victoria-ashworth',
-    status: 'online',
-    canConductInterviews: true,
-  },
-  {
     id: 'omar-al-fahad',
     name: 'Omar Al Fahad',
     role: 'VIP Client Advisor (GCC)',
     department: 'VIP Client Relations',
-    avatar: omarAlFahadVip,
+    avatar: omarAlFahadVip, // LOCKED_EXISTING
     isAI: true,
-    bio: 'Distinguished advisor specializing in Emirati and Gulf region VIP client relations, ensuring exceptional white-glove service.',
+    bio: 'Expert advisor specializing in Emirati and Gulf-region investor relations, managing luxury client portfolios and elite real estate partnerships.',
     specializations: ['Emirati Clients', 'Gulf Markets', 'Premium Properties', 'VIP Coordination'],
     languages: ['English', 'Arabic'],
     nationality: 'Emirati',
@@ -1506,9 +1506,9 @@ export const vipClientRelationsTeam: TeamMember[] = sortByHierarchy([
     name: 'Sophie Beaumont',
     role: 'VIP Client Coordinator',
     department: 'VIP Client Relations',
-    avatar: sophieBeaumontVip,
+    avatar: sophieBeaumontVip, // LOCKED_EXISTING - refreshed photo
     isAI: true,
-    bio: 'Professional coordinator managing VIP client schedules, exclusive property viewings, and luxury client experiences for European investors.',
+    bio: 'Multilingual coordinator managing VIP schedules, client correspondence, and project documentation, ensuring smooth coordination across European clients.',
     specializations: ['European Clients', 'Event Coordination', 'Luxury Viewings', 'Client Communication'],
     languages: ['English', 'French', 'German'],
     nationality: 'French',
