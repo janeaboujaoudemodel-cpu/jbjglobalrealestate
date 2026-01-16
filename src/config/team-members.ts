@@ -256,7 +256,7 @@ import jamesThompsonPortfolio from '@/assets/team/james-thompson-portfolio.png';
 import emilyRichardsonVip from '@/assets/team/emily-richardson-vip.png';
 // NEW VIP additions to reach 8 total
 import meiLingChenVip from '@/assets/team/mei-ling-chen-vip-senior.png';
-import omarAlFahadVip from '@/assets/team/omar-al-fahad-vip-advisor.png';
+import omarAlFahadVip from '@/assets/team/omar-al-fahad-vip-v2.png'; // LOCKED_EXISTING - refreshed photo
 import sophieBeaumontVip from '@/assets/team/sophie-beaumont-vip-v2.png'; // LOCKED_EXISTING - refreshed photo
 
 export interface TeamMember {
