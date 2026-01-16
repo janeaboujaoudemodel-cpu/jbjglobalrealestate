@@ -1156,8 +1156,45 @@ export const salesTeam: TeamMember[] = classifySalesDepartment(sortByHierarchy([
     status: 'online',
     // Photo Status: LOCKED_EXISTING
   },
+  // ===== REGIONAL MARKET COVERAGE PLACEHOLDERS =====
+  // AUTO_SYNC_HIERARCHY = TRUE, LOCKED_GLOBAL = TRUE
+  // These are neutral regional coverage records (no personal/AI profiles)
+  {
+    id: 'sales-rep-syria',
+    name: 'Sales Representative – Syrian Market',
+    role: 'Sales Representative – Syrian Market',
+    department: 'Sales',
+    avatar: '', // Regional placeholder - no personal photo
+    isAI: false,
+    bio: 'Handles off-plan and investment property transactions for MENA investors from Syria.',
+    specializations: ['Off-Plan Properties', 'Investment Properties', 'MENA Investors'],
+    languages: ['Arabic', 'English'],
+    nationality: 'Syria',
+    yearsExperience: 0,
+    hierarchyLevel: 7,
+    reportsTo: 'roy-davi',
+    status: 'online',
+    // REGIONAL_PLACEHOLDER = true
+  },
+  {
+    id: 'sales-rep-jordan',
+    name: 'Sales Representative – Jordan Market',
+    role: 'Sales Representative – Jordan Market',
+    department: 'Sales',
+    avatar: '', // Regional placeholder - no personal photo
+    isAI: false,
+    bio: 'Coordinates GCC–Levant investment opportunities and client onboarding for Jordan.',
+    specializations: ['GCC-Levant Coordination', 'Client Onboarding', 'Investment Properties'],
+    languages: ['Arabic', 'English'],
+    nationality: 'Jordan',
+    yearsExperience: 0,
+    hierarchyLevel: 7,
+    reportsTo: 'roy-davi',
+    status: 'online',
+    // REGIONAL_PLACEHOLDER = true
+  },
 ]));
-// LOCKED_GLOBAL = true - Sales department finalized (40 members)
+// LOCKED_GLOBAL = true - Sales department finalized (42 members including regional placeholders)
 
 // ===== Marketing (sorted by hierarchy) - 10 members =====
 // LOCKED_GLOBAL = true - synced across /team, /crm/employees, /reports, /dashboard
