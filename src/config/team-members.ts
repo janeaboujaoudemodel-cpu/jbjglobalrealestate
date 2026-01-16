@@ -471,7 +471,7 @@ export const salesTeam: TeamMember[] = classifySalesDepartment(sortByHierarchy([
   {
     id: 'roy-davi',
     name: 'Roy Davi',
-    role: 'Head of Sales',
+    role: 'Vice President of Sales',
     department: 'Sales',
     avatar: royDaviHeadOfSale,
     isAI: false,

@@ -12,6 +12,7 @@ import {
   TeamMember,
   getTeamMemberById,
 } from "@/config/team-members";
+import { useSalesHierarchy } from "@/hooks/useSalesHierarchy";
 import {
   Users,
   Mail,
@@ -165,6 +166,7 @@ const MeetTheTeam: React.FC = () => {
   const [isContactFormOpen, setIsContactFormOpen] = useState(false);
   const [detailMember, setDetailMember] = useState<TeamMember | null>(null);
   const [isDetailOpen, setIsDetailOpen] = useState(false);
+  const salesHierarchy = useSalesHierarchy();
 
   // Scroll to top when navigating to this page
   useEffect(() => {
@@ -287,6 +289,72 @@ const MeetTheTeam: React.FC = () => {
         <section className="py-12">
           <div className="container mx-auto px-4 space-y-12">
             {departmentOrder.map((deptName) => {
+              if (deptName === "Sales") {
+                const total = salesHierarchy.totalCount;
+                if (total === 0) return null;
+
+                return (
+                  <motion.div
+                    key={deptName}
+                    initial="hidden"
+                    whileInView="visible"
+                    viewport={{ once: true, margin: "-50px" }}
+                    variants={staggerContainer}
+                    className="mb-8"
+                  >
+                    {/* Department Header */}
+                    <motion.div
+                      variants={fadeInUp}
+                      className="flex items-center gap-3 mb-8"
+                    >
+                      <div className="w-10 h-10 bg-gold/10 rounded-lg flex items-center justify-center">
+                        <Building2 className="w-5 h-5 text-gold" />
+                      </div>
+                      <div>
+                        <h2 className="text-white text-2xl font-semibold">
+                          {deptName}
+                        </h2>
+                        <p className="text-zinc-500 text-sm">
+                          {total} member{total > 1 ? "s" : ""}
+                        </p>
+                      </div>
+                    </motion.div>
+
+                    <div className="space-y-10">
+                      {salesHierarchy.activeCategories.map((category) => {
+                        const categoryMembers =
+                          salesHierarchy.getMembersByCategory(category);
+                        if (categoryMembers.length === 0) return null;
+
+                        return (
+                          <div key={category}>
+                            <div className="flex items-center justify-between gap-4 mb-4">
+                              <h3 className="text-white text-lg font-semibold">
+                                {category}
+                              </h3>
+                              <p className="text-zinc-500 text-sm">
+                                {categoryMembers.length} member
+                                {categoryMembers.length > 1 ? "s" : ""}
+                              </p>
+                            </div>
+
+                            <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
+                              {categoryMembers.map((member) => (
+                                <TeamMemberCard
+                                  key={member.id}
+                                  member={member}
+                                  onReadMore={handleReadMore}
+                                />
+                              ))}
+                            </div>
+                          </div>
+                        );
+                      })}
+                    </div>
+                  </motion.div>
+                );
+              }
+
               const members =
                 teamByDepartment[deptName as keyof typeof teamByDepartment];
               if (!members || members.length === 0) return null;
@@ -321,9 +389,9 @@ const MeetTheTeam: React.FC = () => {
                   {/* Team Grid - 4 columns for perfect alignment */}
                   <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
                     {members.map((member) => (
-                      <TeamMemberCard 
-                        key={member.id} 
-                        member={member} 
+                      <TeamMemberCard
+                        key={member.id}
+                        member={member}
                         onReadMore={handleReadMore}
                       />
                     ))}
