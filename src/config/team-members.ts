@@ -14,7 +14,7 @@ import anthonyPembertonStrategy from '@/assets/team/anthony-pemberton-strategy.p
 import laylaMansourPartnerships from '@/assets/team/layla-mansour-partnerships.png';
 
 // Import team portraits - Legal Team
-import hudaMarzooqLawyer from '@/assets/team/huda-marzooq-legal-realistic.png';
+import hudaMarzooqLawyer from '@/assets/team/huda-marzooq-lawyer-office.jpg';
 // NEW Legal Team additions (to reach 4)
 import williamThorntonLegal from '@/assets/team/william-thornton-legal.png';
 import nadiaHassanLegal from '@/assets/team/nadia-hassan-legal.png';
@@ -329,7 +329,7 @@ export const executiveTeam: TeamMember[] = sortByHierarchy([
     yearsExperience: 11,
     hierarchyLevel: 2,
     reportsTo: 'jane-abou-jaoude',
-    directReports: ['alexander-shaw', 'jessica-pemberton', 'thomas-mitchell', 'daniel-parker', 'emily-watson', 'olivia-reynolds'],
+    directReports: ['alexander-shaw', 'jessica-whitmore', 'thomas-mitchell', 'daniel-parker', 'emily-watson', 'olivia-reynolds'],
     status: 'online',
     canConductInterviews: true,
   },
@@ -350,8 +350,8 @@ export const executiveTeam: TeamMember[] = sortByHierarchy([
     canConductInterviews: true,
   },
   {
-    id: 'anthony-pemberton',
-    name: 'Anthony Pemberton',
+    id: 'anthony-crawford',
+    name: 'Anthony Crawford',
     role: 'Chief Investment Officer',
     department: 'Executive',
     avatar: anthonyPembertonStrategy,
@@ -1035,6 +1035,38 @@ export const salesTeam: TeamMember[] = sortByHierarchy([
     reportsTo: 'adaeze-okonkwo',
     status: 'online',
   },
+  {
+    id: 'ananya-sharma-sales',
+    name: 'Ananya Sharma',
+    role: 'Property Consultant',
+    department: 'Sales',
+    avatar: priyaSharmaSales,
+    isAI: true,
+    bio: 'Dedicated property consultant fluent in Hindi and Gujarati, specializing in South Asian investor relations and family homes.',
+    specializations: ['South Asian Clients', 'Family Homes', 'Investment Properties'],
+    languages: ['English', 'Hindi', 'Gujarati'],
+    nationality: 'Indian',
+    yearsExperience: 5,
+    hierarchyLevel: 5,
+    reportsTo: 'emma-hartley',
+    status: 'online',
+  },
+  {
+    id: 'chen-wei-sales',
+    name: 'Chen Wei',
+    role: 'Property Consultant',
+    department: 'Sales',
+    avatar: liWeiChenInvestment,
+    isAI: true,
+    bio: 'Experienced property consultant specializing in Chinese investor networks and luxury waterfront properties.',
+    specializations: ['Chinese Clients', 'Luxury Waterfront', 'Investment Properties'],
+    languages: ['English', 'Mandarin', 'Cantonese'],
+    nationality: 'Chinese',
+    yearsExperience: 6,
+    hierarchyLevel: 5,
+    reportsTo: 'michael-anderson',
+    status: 'online',
+  },
 ]);
 
 // ===== Marketing (sorted by hierarchy) - 8 members =====
@@ -1430,13 +1462,13 @@ export const hrTeam: TeamMember[] = sortByHierarchy([
     yearsExperience: 14,
     hierarchyLevel: 3,
     reportsTo: 'richard-pemberton',
-    directReports: ['jessica-pemberton'],
+    directReports: ['jessica-whitmore'],
     status: 'online',
     canConductInterviews: true,
   },
   {
-    id: 'jessica-pemberton',
-    name: 'Jessica Pemberton',
+    id: 'jessica-whitmore',
+    name: 'Jessica Whitmore',
     role: 'HR Manager',
     department: 'Human Resources',
     avatar: jessicaHrManager,
@@ -1463,7 +1495,7 @@ export const hrTeam: TeamMember[] = sortByHierarchy([
     nationality: 'Italian',
     yearsExperience: 7,
     hierarchyLevel: 5,
-    reportsTo: 'jessica-pemberton',
+    reportsTo: 'jessica-whitmore',
     status: 'online',
   },
   {
@@ -1478,7 +1510,7 @@ export const hrTeam: TeamMember[] = sortByHierarchy([
     nationality: 'American',
     yearsExperience: 4,
     hierarchyLevel: 6,
-    reportsTo: 'jessica-pemberton',
+    reportsTo: 'jessica-whitmore',
     status: 'online',
   },
 ]);
@@ -1624,16 +1656,16 @@ export const financeTeam: TeamMember[] = sortByHierarchy([
     bio: 'Strategic financial leader ensuring fiscal excellence and corporate governance compliance.',
     languages: ['English'],
     nationality: 'British',
-    yearsExperience: 18,
+    yearsExperience: 12,
     hierarchyLevel: 3,
     reportsTo: 'jane-abou-jaoude',
-    directReports: ['benjamin-cole', 'isabella-romano', 'stefan-weber'],
+    directReports: ['edward-cole', 'isabella-romano', 'stefan-weber'],
     status: 'online',
     canConductInterviews: true,
   },
   {
-    id: 'benjamin-cole',
-    name: 'Benjamin Cole',
+    id: 'edward-cole',
+    name: 'Edward Cole',
     role: 'Senior Accountant',
     department: 'Finance',
     avatar: benjaminColeAccountant,
@@ -1672,7 +1704,7 @@ export const financeTeam: TeamMember[] = sortByHierarchy([
     specializations: ['Budgeting', 'Financial Reporting', 'Cash Flow Management'],
     languages: ['English', 'German', 'French'],
     nationality: 'German',
-    yearsExperience: 12,
+    yearsExperience: 11,
     hierarchyLevel: 4,
     reportsTo: 'catherine-brooks',
     status: 'online',
@@ -1762,8 +1794,8 @@ export const operationsTeam: TeamMember[] = sortByHierarchy([
     status: 'online',
   },
   {
-    id: 'benjamin-clarke',
-    name: 'Benjamin Clarke',
+    id: 'oliver-clarke',
+    name: 'Oliver Clarke',
     role: 'Quality Assurance Coordinator',
     department: 'Operations',
     avatar: benjaminClarkeOperations,
@@ -1949,8 +1981,8 @@ export const itTeam: TeamMember[] = sortByHierarchy([
 // ===== After Sales Team (sorted by hierarchy) =====
 export const afterSalesTeam: TeamMember[] = sortByHierarchy([
   {
-    id: 'charles-pemberton',
-    name: 'Charles Pemberton',
+    id: 'charles-ashford',
+    name: 'Charles Ashford',
     role: 'After Sales Director',
     department: 'After Sales',
     avatar: charlesPembertonAfterSalesDir,
@@ -1979,7 +2011,7 @@ export const afterSalesTeam: TeamMember[] = sortByHierarchy([
     nationality: 'British',
     yearsExperience: 9,
     hierarchyLevel: 4,
-    reportsTo: 'charles-pemberton',
+    reportsTo: 'charles-ashford',
     directReports: ['grace-reyes'],
     status: 'online',
     canConductInterviews: true,
@@ -1997,7 +2029,7 @@ export const afterSalesTeam: TeamMember[] = sortByHierarchy([
     nationality: 'Dutch',
     yearsExperience: 6,
     hierarchyLevel: 5,
-    reportsTo: 'charles-pemberton',
+    reportsTo: 'charles-ashford',
     status: 'online',
   },
   {

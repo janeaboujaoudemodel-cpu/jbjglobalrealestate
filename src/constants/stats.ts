@@ -18,8 +18,8 @@ export const COMPANY_STATS = {
     note: 'By Founder (2022-2024)',
   },
   socialFollowers: {
-    end: 1,
-    suffix: 'M+',
+    end: 1000000,
+    suffix: '+',
     prefix: '',
     label: 'Social Followers',
     note: 'All Platforms Combined',

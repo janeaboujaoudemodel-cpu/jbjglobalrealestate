@@ -73,7 +73,15 @@ const StatItem = ({ end, suffix, prefix, label, icon: Icon, isVisible }: StatIte
     };
   }, [isVisible, end]);
 
-  const formattedValue = `${prefix}${count.toLocaleString()}${suffix}`;
+  // Format large numbers with abbreviation (1M+ for millions)
+  const formatNumber = (num: number): string => {
+    if (num >= 1000000) {
+      return (num / 1000000).toFixed(0) + 'M';
+    }
+    return num.toLocaleString();
+  };
+
+  const formattedValue = `${prefix}${formatNumber(count)}${suffix}`;
 
   return (
     <div className="relative group">
