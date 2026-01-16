@@ -278,8 +278,11 @@ export interface TeamMember {
 }
 
 // Helper function to sort by hierarchy level
+// IMPORTANT: use nullish coalescing so hierarchyLevel=0 is respected (0 is a valid value)
 const sortByHierarchy = (members: TeamMember[]): TeamMember[] => {
-  return [...members].sort((a, b) => (a.hierarchyLevel || 99) - (b.hierarchyLevel || 99));
+  return [...members].sort(
+    (a, b) => (a.hierarchyLevel ?? 99) - (b.hierarchyLevel ?? 99)
+  );
 };
 
 // ===== Executive Leadership (sorted by hierarchy) - 8 members =====
