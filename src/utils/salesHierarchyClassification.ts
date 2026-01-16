@@ -108,12 +108,26 @@ export function getSalesHierarchyLevel(title: string): number {
 
 /**
  * Sorts Sales team members by hierarchy level (highest first)
+ * Within the same level, "Senior" titles come before non-senior
  */
 export function sortSalesByHierarchy<T extends { role: string }>(members: T[]): T[] {
   return [...members].sort((a, b) => {
     const levelA = getSalesHierarchyLevel(a.role);
     const levelB = getSalesHierarchyLevel(b.role);
-    return levelA - levelB;
+    
+    // First sort by hierarchy level
+    if (levelA !== levelB) {
+      return levelA - levelB;
+    }
+    
+    // Within same level, prioritize "Senior" titles
+    const aIsSenior = a.role.toLowerCase().includes('senior');
+    const bIsSenior = b.role.toLowerCase().includes('senior');
+    
+    if (aIsSenior && !bIsSenior) return -1;
+    if (!aIsSenior && bIsSenior) return 1;
+    
+    return 0;
   });
 }
 
