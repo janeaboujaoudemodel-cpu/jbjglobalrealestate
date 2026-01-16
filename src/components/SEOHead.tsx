@@ -13,23 +13,27 @@ interface SEOHeadProps {
 const BASE_URL = 'https://jbj.ae';
 const DEFAULT_OG_IMAGE = `${BASE_URL}/og-image.jpg`;
 const BRAND_NAME = 'JBJ Global Real Estate';
+const FOUNDER_NAME = 'Jane Abou Jaoude';
+
+// Core keywords that should appear across all pages for maximum SEO coverage
+const CORE_KEYWORDS = 'JBJ, JBJ Global Real Estate, Jane Abou Jaoude, Dubai real estate, buy property Dubai, sell property Dubai, rent Dubai, UAE property, real estate brokerage Dubai';
 
 /**
  * SEO Head Component - Sets document title and meta tags for each page
- * Usage: <SEOHead title="Properties" description="Browse luxury properties..." />
+ * Optimized for: JBJ, Jane Abou Jaoude, Dubai real estate, buy/sell/rent
  */
 export const SEOHead = ({
   title,
-  description = 'Premium real estate brokerage in Dubai offering property sales, leasing, and holiday homes services across the UAE.',
-  keywords = 'UAE real estate, Dubai property, luxury apartments, off-plan properties, JBJ Global Real Estate',
+  description = 'JBJ Global Real Estate, founded by Jane Abou Jaoude, offers premium property brokerage in Dubai. Buy, sell, or rent luxury apartments, villas, and off-plan properties across the UAE.',
+  keywords = CORE_KEYWORDS,
   canonicalPath,
   ogImage = DEFAULT_OG_IMAGE,
   ogType = 'website',
   noIndex = false,
 }: SEOHeadProps) => {
   const fullTitle = title === 'Home' 
-    ? `${BRAND_NAME} | Premium UAE Real Estate Brokerage`
-    : `${title} | ${BRAND_NAME}`;
+    ? `${BRAND_NAME} | Dubai Property Brokerage | Buy, Sell, Rent | ${FOUNDER_NAME}`
+    : `${title} | ${BRAND_NAME} Dubai`;
 
   useEffect(() => {
     // Set document title
@@ -47,15 +51,28 @@ export const SEOHead = ({
       element.setAttribute('content', content);
     };
 
+    // Enhanced keywords with core terms
+    const enhancedKeywords = `${keywords}, ${CORE_KEYWORDS}`;
+
     // Basic SEO meta tags
     setMetaTag('description', description);
-    setMetaTag('keywords', keywords);
-    setMetaTag('author', BRAND_NAME);
+    setMetaTag('keywords', enhancedKeywords);
+    setMetaTag('author', `${FOUNDER_NAME} - ${BRAND_NAME}`);
+    
+    // Additional SEO tags
+    setMetaTag('robots', noIndex ? 'noindex, nofollow' : 'index, follow, max-image-preview:large, max-snippet:-1, max-video-preview:-1');
+    setMetaTag('googlebot', 'index, follow');
+    setMetaTag('bingbot', 'index, follow');
+    setMetaTag('revisit-after', '3 days');
+    setMetaTag('rating', 'general');
+    setMetaTag('distribution', 'global');
 
     // Open Graph meta tags
     setMetaTag('og:title', fullTitle, true);
     setMetaTag('og:description', description, true);
     setMetaTag('og:image', ogImage, true);
+    setMetaTag('og:image:width', '1200', true);
+    setMetaTag('og:image:height', '630', true);
     setMetaTag('og:type', ogType, true);
     setMetaTag('og:site_name', BRAND_NAME, true);
     setMetaTag('og:locale', 'en_US', true);
@@ -65,6 +82,7 @@ export const SEOHead = ({
     setMetaTag('twitter:title', fullTitle);
     setMetaTag('twitter:description', description);
     setMetaTag('twitter:image', ogImage);
+    setMetaTag('twitter:site', '@jbjglobalrealestate');
 
     // Canonical URL
     if (canonicalPath) {
@@ -77,137 +95,130 @@ export const SEOHead = ({
       canonicalElement.setAttribute('href', `${BASE_URL}${canonicalPath}`);
     }
 
-    // Robots meta tag
-    if (noIndex) {
-      setMetaTag('robots', 'noindex, nofollow');
-    } else {
-      setMetaTag('robots', 'index, follow');
-    }
-
     // Cleanup on unmount - restore defaults
     return () => {
-      document.title = `${BRAND_NAME} | Premium UAE Real Estate Brokerage`;
+      document.title = `${BRAND_NAME} | Dubai Property Brokerage | Buy, Sell, Rent`;
     };
   }, [fullTitle, description, keywords, canonicalPath, ogImage, ogType, noIndex]);
 
   return null; // This component doesn't render anything
 };
 
-// Pre-configured SEO for common pages
+// Pre-configured SEO for common pages - Optimized for Google visibility
 export const pagesSEO = {
   home: {
     title: 'Home',
-    description: 'JBJ Global Real Estate - Premium real estate brokerage in Dubai. Explore luxury properties, off-plan developments, and exclusive listings across the UAE.',
-    keywords: 'UAE real estate, Dubai property brokerage, luxury apartments Dubai, off-plan properties, Palm Jumeirah, Downtown Dubai, JBJ Global Real Estate',
+    description: 'JBJ Global Real Estate, founded by Jane Abou Jaoude, is Dubai\'s premier property brokerage. Buy, sell, or rent luxury apartments, villas, and off-plan properties in Palm Jumeirah, Downtown Dubai, Marina & across UAE.',
+    keywords: 'JBJ, JBJ Global Real Estate, Jane Abou Jaoude, Jane Lebanese Dubai, Dubai real estate, buy property Dubai, sell property Dubai, rent apartment Dubai, UAE property brokerage, luxury apartments Dubai, off-plan properties, Palm Jumeirah, Downtown Dubai, Dubai Marina, Business Bay, real estate agent Dubai',
     canonicalPath: '/',
   },
   properties: {
-    title: 'Properties',
-    description: 'Browse our exclusive collection of luxury properties in Dubai and the UAE. From waterfront villas to premium apartments and off-plan developments.',
-    keywords: 'Dubai properties, UAE real estate listings, luxury villas Dubai, apartments for sale, off-plan projects UAE',
+    title: 'Properties for Sale & Rent in Dubai',
+    description: 'Browse exclusive luxury properties in Dubai and UAE. Apartments, villas, penthouses for sale or rent in Palm Jumeirah, Downtown Dubai, Marina. JBJ Global Real Estate by Jane Abou Jaoude.',
+    keywords: 'Dubai properties for sale, apartments for rent Dubai, villas Dubai, penthouse Dubai, off-plan projects UAE, Palm Jumeirah properties, Downtown Dubai apartments, Dubai Marina rentals, buy property Dubai, rent Dubai',
     canonicalPath: '/properties',
   },
   founder: {
-    title: 'Founder & Leadership',
-    description: 'Meet Jane Abou Jaoude, Founder & Managing Director of JBJ Global Real Estate. Discover the vision and leadership behind UAE\'s trusted real estate brokerage.',
-    keywords: 'Jane Abou Jaoude, JBJ founder, UAE real estate leader, real estate brokerage, JBJ Global Real Estate founder',
+    title: 'Jane Abou Jaoude - Founder & CEO',
+    description: 'Meet Jane Abou Jaoude, Lebanese entrepreneur and Founder of JBJ Global Real Estate Dubai. Visionary leader in UAE real estate with award-winning brokerage services.',
+    keywords: 'Jane Abou Jaoude, Jane Lebanese Dubai, Jane Dubai real estate, JBJ founder, Lebanese entrepreneur Dubai, UAE real estate leader, JBJ Global Real Estate founder, Jane CEO Dubai',
     canonicalPath: '/founder',
   },
   about: {
-    title: 'About Us',
-    description: 'Learn about JBJ Global Real Estate - UAE\'s trusted real estate brokerage serving UAE-based and international clients with expert property services.',
-    keywords: 'about JBJ, UAE real estate company, UAE brokerage, real estate services UAE',
+    title: 'About JBJ Global Real Estate Dubai',
+    description: 'JBJ Global Real Estate is UAE\'s trusted property brokerage founded by Jane Abou Jaoude. Expert services for buying, selling, and renting properties across Dubai and UAE.',
+    keywords: 'about JBJ, JBJ Global Real Estate company, UAE real estate brokerage, Dubai property company, Jane Abou Jaoude company, real estate services Dubai, trusted property agent Dubai',
     canonicalPath: '/about',
   },
   services: {
-    title: 'Services',
-    description: 'Comprehensive real estate services including property sales, leasing, holiday homes, and partner introductions for legal, mortgage, and design services.',
-    keywords: 'real estate services Dubai, property sales UAE, leasing services, holiday homes Dubai, property management',
+    title: 'Real Estate Services - Buy, Sell, Rent Dubai',
+    description: 'Comprehensive real estate services by JBJ Global Real Estate. Buy properties, sell your home, rent apartments, holiday homes, off-plan investments in Dubai UAE.',
+    keywords: 'buy property Dubai, sell property Dubai, rent apartment Dubai, holiday homes Dubai, off-plan investment UAE, property management Dubai, real estate services UAE, JBJ services',
     canonicalPath: '/services',
   },
   contact: {
-    title: 'Contact Us',
-    description: 'Get in touch with JBJ Global Real Estate for property inquiries, consultations, and partnership opportunities. Located in Dubai, UAE.',
-    keywords: 'contact JBJ, UAE real estate contact, property consultation UAE, real estate inquiry UAE',
+    title: 'Contact JBJ Global Real Estate Dubai',
+    description: 'Contact JBJ Global Real Estate for property inquiries in Dubai. Founded by Jane Abou Jaoude. Call +971 56 591 1000 or email contact@JBJ.ae for expert assistance.',
+    keywords: 'contact JBJ, JBJ phone number, Dubai real estate contact, property consultation Dubai, Jane Abou Jaoude contact, JBJ Global Real Estate email, real estate inquiry Dubai',
     canonicalPath: '/contact',
   },
   aiHub: {
-    title: 'JBJ Broker Hub',
-    description: 'Access free AI tools, broker training, operations support, and coaching — all in one place. Your complete broker command center at JBJ Global Real Estate.',
-    keywords: 'JBJ Broker Hub, broker tools, real estate AI, property tools Dubai, broker support, JBJ Global Real Estate',
+    title: 'JBJ Broker Hub - Free AI Tools & Training',
+    description: 'Access free AI tools, broker training, and operations support at JBJ Broker Hub. Your complete command center for real estate success by JBJ Global Real Estate.',
+    keywords: 'JBJ Broker Hub, broker tools Dubai, real estate AI tools, property tools, broker training UAE, JBJ Global Real Estate tools, free broker resources',
     canonicalPath: '/ai-hub',
   },
   awards: {
-    title: 'Awards & Recognition',
-    description: 'Discover the awards and recognition received by JBJ Global Real Estate for excellence in UAE real estate brokerage services.',
-    keywords: 'real estate awards UAE, JBJ awards, property brokerage recognition UAE',
+    title: 'Awards & Recognition - JBJ Global Real Estate',
+    description: 'Discover awards received by JBJ Global Real Estate and founder Jane Abou Jaoude. Excellence in UAE real estate brokerage services.',
+    keywords: 'JBJ awards, Jane Abou Jaoude awards, real estate awards Dubai, property brokerage recognition UAE, GCA awards, III-A awards, Dubai real estate excellence',
     canonicalPath: '/awards',
   },
   news: {
-    title: 'News & Insights',
-    description: 'Stay updated with the latest UAE real estate news, market insights, and property trends from JBJ Global Real Estate.',
-    keywords: 'UAE real estate news, UAE property market, real estate insights, market trends UAE',
+    title: 'Dubai Real Estate News & Market Insights',
+    description: 'Latest Dubai real estate news and market insights from JBJ Global Real Estate. Stay updated on property trends, new developments, and investment opportunities.',
+    keywords: 'Dubai real estate news, UAE property market, real estate insights Dubai, market trends UAE, property news, JBJ news, Dubai property updates',
     canonicalPath: '/news',
   },
   communities: {
-    title: 'Communities',
-    description: 'Explore premier residential communities across Dubai and the UAE. Find your ideal neighborhood with JBJ Global Real Estate.',
-    keywords: 'Dubai communities, UAE residential areas, best neighborhoods Dubai, property communities',
+    title: 'Dubai Communities & Neighborhoods Guide',
+    description: 'Explore premier residential communities in Dubai. Find your ideal neighborhood in Palm Jumeirah, Downtown, Marina, and more with JBJ Global Real Estate.',
+    keywords: 'Dubai communities, Dubai neighborhoods, where to live Dubai, Palm Jumeirah area, Downtown Dubai living, Dubai Marina community, best areas Dubai, property communities UAE',
     canonicalPath: '/communities',
   },
   areaGuides: {
-    title: 'Dubai Communities & Area Guides',
-    description: 'Explore Dubai\'s most desirable neighborhoods with expert local insights. Comprehensive area guides for Downtown Dubai, Dubai Marina, Business Bay, and more.',
-    keywords: 'Dubai area guides, Dubai neighborhoods, Dubai communities, where to live in Dubai, Downtown Dubai guide, Dubai Marina guide, Business Bay guide',
+    title: 'Dubai Area Guides - Best Neighborhoods',
+    description: 'Comprehensive Dubai area guides by JBJ Global Real Estate. Expert insights on Downtown Dubai, Dubai Marina, Business Bay, Palm Jumeirah and more.',
+    keywords: 'Dubai area guides, Dubai neighborhoods guide, Downtown Dubai guide, Dubai Marina guide, Business Bay guide, Palm Jumeirah guide, where to buy Dubai, best neighborhoods Dubai',
     canonicalPath: '/areas',
   },
   buyerGuide: {
-    title: 'Buyer Guide',
-    description: 'Step-by-step guide to purchasing property in the UAE. Learn about the buying process, costs, documentation, and how to buy as a non-resident with JBJ Global Real Estate.',
-    keywords: 'UAE property buying guide, how to buy property in UAE, UAE real estate process, buying property in UAE, property purchase steps',
+    title: 'How to Buy Property in Dubai - Buyer Guide',
+    description: 'Complete guide to buying property in Dubai by JBJ Global Real Estate. Step-by-step process, costs, and documentation for UAE property purchase.',
+    keywords: 'how to buy property Dubai, Dubai property buying guide, buy apartment Dubai, purchase property UAE, property buying process Dubai, foreigner buy Dubai, JBJ buyer guide',
     canonicalPath: '/buyer-guide',
   },
   sellerGuide: {
-    title: 'Seller Guide',
-    description: 'Complete guide to selling property in the UAE. Learn about pricing, documentation, marketing, and the transfer process with expert brokerage services.',
-    keywords: 'sell property Dubai, UAE property selling guide, how to sell property UAE, property sale process Dubai',
+    title: 'How to Sell Property in Dubai - Seller Guide',
+    description: 'Expert guide to selling property in Dubai by JBJ Global Real Estate. Pricing, marketing, documentation, and transfer process for UAE property sales.',
+    keywords: 'sell property Dubai, how to sell house Dubai, Dubai property selling guide, property sale process UAE, sell apartment Dubai, JBJ seller guide, selling property UAE',
     canonicalPath: '/seller-guide',
   },
   mortgageCalculator: {
-    title: 'Mortgage Calculator',
-    description: 'Calculate your property mortgage payments with our free Dubai mortgage calculator. Estimate monthly payments for UAE properties.',
-    keywords: 'Dubai mortgage calculator, UAE home loan calculator, property payment estimator, mortgage rates Dubai',
+    title: 'Dubai Mortgage Calculator - Property Payments',
+    description: 'Free Dubai mortgage calculator by JBJ Global Real Estate. Calculate monthly payments, interest rates, and affordability for UAE property purchases.',
+    keywords: 'Dubai mortgage calculator, UAE home loan calculator, property payment calculator, mortgage rates Dubai, home loan Dubai, property finance UAE, JBJ mortgage tool',
     canonicalPath: '/mortgage-calculator',
   },
   faq: {
-    title: 'FAQ',
-    description: 'Find answers to frequently asked questions about buying, selling, and renting property in the UAE with JBJ Global Real Estate.',
-    keywords: 'UAE real estate FAQ, Dubai property questions, real estate answers, property buying FAQ',
+    title: 'Frequently Asked Questions - Dubai Real Estate',
+    description: 'Find answers to common questions about buying, selling, and renting property in Dubai. Expert guidance from JBJ Global Real Estate.',
+    keywords: 'Dubai real estate FAQ, property questions Dubai, buying property FAQ UAE, renting Dubai questions, real estate answers, JBJ FAQ, Dubai property help',
     canonicalPath: '/faq',
   },
   team: {
-    title: 'Meet Our Team',
-    description: 'Meet the exceptional professionals behind JBJ Global Real Estate. Our diverse team is dedicated to delivering premium real estate services in Dubai.',
-    keywords: 'JBJ team, real estate professionals Dubai, property agents UAE, JBJ Global Real Estate team',
+    title: 'Meet Our Expert Real Estate Team',
+    description: 'Meet the professionals behind JBJ Global Real Estate Dubai. Our diverse team led by Jane Abou Jaoude delivers premium property services.',
+    keywords: 'JBJ team, real estate professionals Dubai, property agents UAE, JBJ Global Real Estate team, Jane Abou Jaoude team, Dubai property experts',
     canonicalPath: '/team',
   },
   privacy: {
     title: 'Privacy Policy',
-    description: 'JBJ Global Real Estate privacy policy. Learn how we collect, use, and protect your personal information.',
-    keywords: 'JBJ privacy policy, real estate privacy, data protection UAE',
+    description: 'JBJ Global Real Estate privacy policy. How we collect, use, and protect your personal information.',
+    keywords: 'JBJ privacy policy, real estate privacy Dubai, data protection UAE',
     canonicalPath: '/privacy',
     noIndex: false,
   },
   terms: {
     title: 'Terms of Service',
-    description: 'JBJ Global Real Estate terms of service. Read our terms and conditions for using our website and services.',
-    keywords: 'JBJ terms of service, real estate terms, website terms UAE',
+    description: 'JBJ Global Real Estate terms of service. Terms and conditions for using our website and services.',
+    keywords: 'JBJ terms of service, real estate terms Dubai, website terms UAE',
     canonicalPath: '/terms',
     noIndex: false,
   },
   cookies: {
     title: 'Cookie Policy',
-    description: 'JBJ Global Real Estate cookie policy. Learn about the cookies we use on our website.',
+    description: 'JBJ Global Real Estate cookie policy. Information about cookies used on our website.',
     keywords: 'JBJ cookie policy, website cookies, cookie preferences',
     canonicalPath: '/cookies',
     noIndex: false,
