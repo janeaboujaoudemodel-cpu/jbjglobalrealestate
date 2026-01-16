@@ -124,6 +124,8 @@ export default defineConfig(({ mode }) => ({
   // Helps map runtime errors to real source files during QA.
   build: {
     sourcemap: true,
+    // Disable gzip size reporting to speed up builds with many assets
+    reportCompressedSize: false,
   },
   // Enforce a single React instance across all deps (prevents hooks dispatcher null errors).
   resolve: {
