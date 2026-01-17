@@ -1,5 +1,6 @@
+import { useState } from "react";
 import { motion } from "framer-motion";
-import { FileText, Download, Calendar, Database, Shield, ExternalLink, ArrowRight } from "lucide-react";
+import { FileText, Download, Calendar, Database, Shield, ExternalLink, ArrowRight, ChevronDown } from "lucide-react";
 import { Link } from "react-router-dom";
 import Footer from "@/components/Footer";
 import { SEOHead } from "@/components/SEOHead";
@@ -45,54 +46,50 @@ const reports = [
     pages: 48,
     featured: true,
   },
-  {
-    id: 'monthly-dec-2025',
-    title: 'Monthly Market Snapshot',
-    subtitle: 'December 2025',
-    description: 'Year-end monthly summary capturing holiday season market activity.',
-    type: 'monthly',
-    date: '2025-12-15',
-    pages: 12,
-    featured: false,
-  },
-  {
-    id: 'quarterly-q3-2025',
-    title: 'Quarterly Market Review',
-    subtitle: 'Q3 2025',
-    description: 'Third quarter analysis with summer market dynamics and post-Eid trends.',
-    type: 'quarterly',
-    date: '2025-10-05',
-    pages: 26,
-    featured: false,
-  },
-  {
-    id: 'monthly-nov-2025',
-    title: 'Monthly Market Snapshot',
-    subtitle: 'November 2025',
-    description: 'November market activity with COP28 legacy impact analysis.',
-    type: 'monthly',
-    date: '2025-11-15',
-    pages: 12,
-    featured: false,
-  },
+];
+
+// Monthly Archive - consolidated list for download selector
+const monthlyArchive = [
+  { month: 'January 2026', date: '2026-01-15', available: true },
+  { month: 'December 2025', date: '2025-12-15', available: true },
+  { month: 'November 2025', date: '2025-11-15', available: true },
+  { month: 'October 2025', date: '2025-10-15', available: true },
+  { month: 'September 2025', date: '2025-09-15', available: true },
+  { month: 'August 2025', date: '2025-08-15', available: true },
+  { month: 'July 2025', date: '2025-07-15', available: true },
+  { month: 'June 2025', date: '2025-06-15', available: true },
+  { month: 'May 2025', date: '2025-05-15', available: true },
+  { month: 'April 2025', date: '2025-04-15', available: true },
+  { month: 'March 2025', date: '2025-03-15', available: true },
+  { month: 'February 2025', date: '2025-02-15', available: true },
+  { month: 'January 2025', date: '2025-01-15', available: true },
+];
+
+const quarterlyArchive = [
+  { quarter: 'Q4 2025', date: '2026-01-05', available: true },
+  { quarter: 'Q3 2025', date: '2025-10-05', available: true },
+  { quarter: 'Q2 2025', date: '2025-07-05', available: true },
+  { quarter: 'Q1 2025', date: '2025-04-05', available: true },
 ];
 
 const MarketReportsPage = () => {
+  const [selectedMonthlyDownload, setSelectedMonthlyDownload] = useState<string | null>(null);
+  const [selectedQuarterlyDownload, setSelectedQuarterlyDownload] = useState<string | null>(null);
+
   const getTypeBadge = (type: string) => {
     switch (type) {
       case 'monthly':
-        return <Badge className="bg-blue-500/20 text-blue-400 border-blue-500/30">Monthly</Badge>;
+        return <Badge className="bg-blue-500/20 text-blue-500 border-blue-500/30 font-medium">Monthly</Badge>;
       case 'quarterly':
-        return <Badge className="bg-purple-500/20 text-purple-400 border-purple-500/30">Quarterly</Badge>;
+        return <Badge className="bg-purple-500/20 text-purple-500 border-purple-500/30 font-medium">Quarterly</Badge>;
       case 'annual':
-        return <Badge className="bg-gold/20 text-gold border-gold/30">Annual</Badge>;
+        return <Badge className="bg-gold/20 text-gold border-gold/30 font-medium">Annual</Badge>;
       default:
         return null;
     }
   };
 
-  const featuredReports = reports.filter(r => r.featured);
-  const archiveReports = reports.filter(r => !r.featured);
+  const featuredReports = reports;
 
   return (
     <div className="min-h-screen bg-black">
@@ -138,14 +135,14 @@ const MarketReportsPage = () => {
         </motion.div>
       </section>
 
-      {/* Featured Reports */}
-      <section className="py-16 border-t border-zinc-900">
+      {/* Featured Reports - Premium White Cards */}
+      <section className="py-16 border-t border-zinc-200 bg-white">
         <div className="container mx-auto px-4">
-          <h2 className="text-white text-2xl font-bold mb-8" style={{ fontFamily: "Poppins, sans-serif" }}>
+          <h2 className="text-black text-2xl font-bold mb-8 text-center" style={{ fontFamily: "Poppins, sans-serif" }}>
             Latest Reports
           </h2>
 
-          <div className="grid md:grid-cols-3 gap-6">
+          <div className="grid md:grid-cols-3 gap-6 max-w-5xl mx-auto">
             {featuredReports.map((report, index) => (
               <motion.div
                 key={report.id}
@@ -154,24 +151,24 @@ const MarketReportsPage = () => {
                 viewport={{ once: true }}
                 transition={{ delay: index * 0.1 }}
               >
-                <Card className="bg-zinc-900/50 border-zinc-800 hover:border-gold/30 transition-all h-full group">
+                <Card className="bg-white border-zinc-200 hover:border-gold hover:shadow-xl hover:shadow-gold/10 transition-all h-full group">
                   <CardContent className="p-6 flex flex-col h-full">
                     <div className="flex items-start justify-between mb-4">
                       {getTypeBadge(report.type)}
-                      <span className="text-zinc-600 text-xs">{report.pages} pages</span>
+                      <span className="text-zinc-400 text-xs bg-zinc-100 px-2 py-1 rounded">{report.pages} pages</span>
                     </div>
 
-                    <h3 className="text-white font-bold text-lg mb-1">{report.title}</h3>
-                    <p className="text-gold text-sm mb-3">{report.subtitle}</p>
-                    <p className="text-zinc-500 text-sm mb-6 flex-grow">{report.description}</p>
+                    <h3 className="text-black font-bold text-xl mb-1">{report.title}</h3>
+                    <p className="text-gold font-medium text-sm mb-3">{report.subtitle}</p>
+                    <p className="text-zinc-600 text-sm mb-6 flex-grow leading-relaxed">{report.description}</p>
 
-                    <div className="flex items-center justify-between pt-4 border-t border-zinc-800">
-                      <div className="flex items-center gap-2 text-zinc-600 text-xs">
+                    <div className="flex items-center justify-between pt-4 border-t border-zinc-200">
+                      <div className="flex items-center gap-2 text-zinc-400 text-xs">
                         <Calendar className="w-3 h-3" />
                         {new Date(report.date).toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' })}
                       </div>
                       <Link to="/market-report">
-                        <Button size="sm" className="bg-gold/10 text-gold hover:bg-gold/20 border border-gold/30">
+                        <Button size="sm" className="bg-black text-white hover:bg-zinc-900">
                           <Download className="w-4 h-4 mr-2" />
                           Download
                         </Button>
@@ -185,56 +182,122 @@ const MarketReportsPage = () => {
         </div>
       </section>
 
-      {/* Archive */}
-      <section className="py-16 border-t border-zinc-900">
+      {/* Report Archive - Consolidated Monthly & Quarterly Selectors */}
+      <section className="py-16 border-t border-zinc-200 bg-white">
         <div className="container mx-auto px-4">
-          <h2 className="text-white text-2xl font-bold mb-8" style={{ fontFamily: "Poppins, sans-serif" }}>
+          <h2 className="text-black text-2xl font-bold mb-8 text-center" style={{ fontFamily: "Poppins, sans-serif" }}>
             Report Archive
           </h2>
 
-          <div className="max-w-3xl mx-auto space-y-4">
-            {archiveReports.map((report) => (
-              <div key={report.id} className="bg-zinc-900/50 border border-zinc-800 rounded-xl p-4 flex items-center justify-between">
-                <div className="flex items-center gap-4">
-                  <div className="w-10 h-10 rounded-lg bg-zinc-800 flex items-center justify-center">
-                    <FileText className="w-5 h-5 text-gold" />
+          <div className="grid md:grid-cols-2 gap-8 max-w-4xl mx-auto">
+            {/* Monthly Reports Selector */}
+            <Card className="bg-white border-zinc-200 hover:border-gold/50 hover:shadow-lg transition-all">
+              <CardContent className="p-6">
+                <div className="flex items-center gap-3 mb-4">
+                  <div className="w-12 h-12 rounded-xl bg-blue-500/10 flex items-center justify-center">
+                    <Calendar className="w-6 h-6 text-blue-500" />
                   </div>
                   <div>
-                    <p className="text-white font-semibold">{report.title}</p>
-                    <p className="text-zinc-500 text-sm">{report.subtitle}</p>
+                    <h3 className="text-black font-bold text-lg">Monthly Snapshots</h3>
+                    <p className="text-zinc-500 text-sm">Quick monthly market overviews</p>
                   </div>
                 </div>
-                <div className="flex items-center gap-4">
-                  {getTypeBadge(report.type)}
-                  <Link to="/market-report">
-                    <Button size="sm" variant="ghost" className="text-gold hover:text-gold-light">
-                      <Download className="w-4 h-4" />
-                    </Button>
-                  </Link>
+                <p className="text-zinc-600 text-sm mb-4">
+                  Download any monthly report from our archive. Data sourced from Dubai Government Open Data.
+                </p>
+                <select 
+                  className="w-full p-3 border border-zinc-300 rounded-lg text-black bg-white mb-4 focus:border-gold focus:ring-1 focus:ring-gold"
+                  value={selectedMonthlyDownload || ''}
+                  onChange={(e) => setSelectedMonthlyDownload(e.target.value)}
+                >
+                  <option value="">Select Month...</option>
+                  {monthlyArchive.map((item) => (
+                    <option key={item.month} value={item.date}>{item.month}</option>
+                  ))}
+                </select>
+                <Link to="/market-report">
+                  <Button 
+                    className="w-full bg-blue-500 text-white hover:bg-blue-600"
+                    disabled={!selectedMonthlyDownload}
+                  >
+                    <Download className="w-4 h-4 mr-2" />
+                    Download Report
+                  </Button>
+                </Link>
+              </CardContent>
+            </Card>
+
+            {/* Quarterly Reports Selector */}
+            <Card className="bg-white border-zinc-200 hover:border-gold/50 hover:shadow-lg transition-all">
+              <CardContent className="p-6">
+                <div className="flex items-center gap-3 mb-4">
+                  <div className="w-12 h-12 rounded-xl bg-purple-500/10 flex items-center justify-center">
+                    <FileText className="w-6 h-6 text-purple-500" />
+                  </div>
+                  <div>
+                    <h3 className="text-black font-bold text-lg">Quarterly Reviews</h3>
+                    <p className="text-zinc-500 text-sm">In-depth quarterly analysis</p>
+                  </div>
                 </div>
-              </div>
-            ))}
+                <p className="text-zinc-600 text-sm mb-4">
+                  Comprehensive quarterly reports with area breakdowns and property type analysis.
+                </p>
+                <select 
+                  className="w-full p-3 border border-zinc-300 rounded-lg text-black bg-white mb-4 focus:border-gold focus:ring-1 focus:ring-gold"
+                  value={selectedQuarterlyDownload || ''}
+                  onChange={(e) => setSelectedQuarterlyDownload(e.target.value)}
+                >
+                  <option value="">Select Quarter...</option>
+                  {quarterlyArchive.map((item) => (
+                    <option key={item.quarter} value={item.date}>{item.quarter}</option>
+                  ))}
+                </select>
+                <Link to="/market-report">
+                  <Button 
+                    className="w-full bg-purple-500 text-white hover:bg-purple-600"
+                    disabled={!selectedQuarterlyDownload}
+                  >
+                    <Download className="w-4 h-4 mr-2" />
+                    Download Report
+                  </Button>
+                </Link>
+              </CardContent>
+            </Card>
           </div>
+
+          {/* Data source note */}
+          <p className="text-center text-zinc-500 text-xs mt-8">
+            All reports are generated from official Dubai Government Open Data sources
+          </p>
         </div>
       </section>
 
-      {/* Custom Report CTA */}
-      <section className="py-16 border-t border-zinc-900">
+      {/* Custom Report CTA - Gold Champagne Theme */}
+      <section className="py-16 border-t border-zinc-200 bg-white">
         <div className="container mx-auto px-4">
-          <Card className="bg-gradient-to-br from-zinc-900 to-zinc-950 border-gold/20 max-w-3xl mx-auto">
-            <CardContent className="p-8 text-center">
-              <h3 className="text-white text-2xl font-bold mb-4" style={{ fontFamily: "Poppins, sans-serif" }}>
-                Need a Custom Report?
-              </h3>
-              <p className="text-zinc-400 mb-6">
-                Our team can prepare bespoke market analysis for specific areas, property types, or investment scenarios.
-              </p>
-              <Link to="/contact">
-                <Button className="bg-gradient-to-r from-gold to-gold-dark text-black font-semibold">
-                  Request Custom Report
-                  <ExternalLink className="w-4 h-4 ml-2" />
-                </Button>
-              </Link>
+          <Card className="bg-gradient-to-br from-gold/10 via-gold/5 to-amber-50 border-gold/30 max-w-3xl mx-auto overflow-hidden">
+            <CardContent className="p-8 md:p-10 text-center relative">
+              {/* Subtle decorative elements */}
+              <div className="absolute top-0 left-0 w-32 h-32 bg-gradient-to-br from-gold/20 to-transparent rounded-full -translate-x-1/2 -translate-y-1/2" />
+              <div className="absolute bottom-0 right-0 w-24 h-24 bg-gradient-to-tl from-gold/15 to-transparent rounded-full translate-x-1/2 translate-y-1/2" />
+              
+              <div className="relative z-10">
+                <div className="w-14 h-14 rounded-xl bg-gold/20 border border-gold/40 flex items-center justify-center mx-auto mb-5">
+                  <FileText className="w-7 h-7 text-gold" />
+                </div>
+                <h3 className="text-black text-2xl md:text-3xl font-bold mb-4" style={{ fontFamily: "Poppins, sans-serif" }}>
+                  Need a Custom Report?
+                </h3>
+                <p className="text-zinc-700 mb-6 max-w-lg mx-auto leading-relaxed">
+                  Our market intelligence team can prepare bespoke analysis for specific areas, property types, or investment scenarios tailored to your requirements.
+                </p>
+                <Link to="/contact">
+                  <Button className="bg-black text-white hover:bg-zinc-900 font-semibold px-8 py-6 text-base">
+                    Request Custom Report
+                    <ExternalLink className="w-4 h-4 ml-2" />
+                  </Button>
+                </Link>
+              </div>
             </CardContent>
           </Card>
         </div>

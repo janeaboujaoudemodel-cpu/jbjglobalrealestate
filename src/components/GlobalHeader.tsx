@@ -82,10 +82,13 @@ const GlobalHeader = () => {
     { href: "/properties", label: "All Properties", icon: Building2 },
   ];
 
-  // Guides submenu items
+  // Guides submenu items - INCLUDES ALL GUIDES
   const guidesLinks = [
     { href: "/buyer-guide", label: t('nav.buyerGuide') || 'Buyer Guide', icon: FileText },
     { href: "/seller-guide", label: t('nav.sellerGuide') || 'Seller Guide', icon: FileText },
+    { href: "/rent-guide", label: 'Rent Guide', icon: FileText },
+    { href: "/tenant-guide", label: 'Tenant Guide', icon: FileText },
+    { href: "/landlord-guide", label: 'Landlord Guide', icon: FileText },
     { href: "/areas", label: t('nav.areaGuides') || 'Area Guides', icon: Building2 },
     { href: "/faq", label: 'FAQ', icon: ClipboardCheck },
   ];
