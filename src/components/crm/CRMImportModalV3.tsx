@@ -1,5 +1,5 @@
 import { useState, useRef, useEffect } from "react";
-import * as XLSX from "xlsx";
+import ExcelJS from "exceljs";
 import {
   Dialog,
   DialogContent,
@@ -174,7 +174,7 @@ const CRMImportModalV3 = ({ open, onClose, onSuccess, userId }: CRMImportModalV3
     return `Import – ${ts}`;
   };
 
-  const downloadTemplate = (format: "csv" | "xlsx" = "csv") => {
+  const downloadTemplate = async (format: "csv" | "xlsx" = "csv") => {
     const headers = [
       "full_name", "phone", "email", "company", "nationality", "country", "city", "notes"
     ];
@@ -185,12 +185,25 @@ const CRMImportModalV3 = ({ open, onClose, onSuccess, userId }: CRMImportModalV3
     ];
     
     if (format === "xlsx") {
-      // Create Excel workbook
-      const wsData = [headers, ...sampleRows];
-      const ws = XLSX.utils.aoa_to_sheet(wsData);
-      const wb = XLSX.utils.book_new();
-      XLSX.utils.book_append_sheet(wb, ws, "Contacts");
-      XLSX.writeFile(wb, "JBJ_CRM_Import_Template.xlsx");
+      // Create Excel workbook using ExcelJS (secure alternative to xlsx)
+      const workbook = new ExcelJS.Workbook();
+      const worksheet = workbook.addWorksheet("Contacts");
+      worksheet.addRow(headers);
+      sampleRows.forEach(row => worksheet.addRow(row));
+      
+      // Auto-fit columns
+      worksheet.columns.forEach(column => {
+        column.width = 20;
+      });
+      
+      const buffer = await workbook.xlsx.writeBuffer();
+      const blob = new Blob([buffer], { type: "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet" });
+      const url = URL.createObjectURL(blob);
+      const a = document.createElement("a");
+      a.href = url;
+      a.download = "JBJ_CRM_Import_Template.xlsx";
+      a.click();
+      URL.revokeObjectURL(url);
       toast.success("Excel template downloaded");
     } else {
       // CSV download
@@ -305,19 +318,25 @@ const CRMImportModalV3 = ({ open, onClose, onSuccess, userId }: CRMImportModalV3
   };
 
   /**
-   * Parse Excel file (.xlsx / .xls) using SheetJS
+   * Parse Excel file (.xlsx / .xls) using ExcelJS (secure alternative)
    */
   const parseExcel = async (file: File): Promise<ParsedLead[]> => {
     const arrayBuffer = await file.arrayBuffer();
-    const workbook = XLSX.read(arrayBuffer, { type: "array" });
+    const workbook = new ExcelJS.Workbook();
+    await workbook.xlsx.load(arrayBuffer);
 
-    const firstSheetName = workbook.SheetNames[0];
-    if (!firstSheetName) return [];
+    const worksheet = workbook.worksheets[0];
+    if (!worksheet || worksheet.rowCount < 2) return [];
 
-    const worksheet = workbook.Sheets[firstSheetName];
-    const grid = XLSX.utils.sheet_to_json<any[]>(worksheet, { header: 1, raw: false });
+    // Get all rows as arrays
+    const grid: any[][] = [];
+    worksheet.eachRow({ includeEmpty: false }, (row, rowNumber) => {
+      const values = row.values as any[];
+      // ExcelJS row.values is 1-indexed, shift to 0-indexed
+      grid[rowNumber - 1] = values.slice(1);
+    });
 
-    if (!grid || grid.length < 2) return [];
+    if (grid.length < 2) return [];
 
     const rawHeaderRow = (grid[0] ?? []) as any[];
     const headers = rawHeaderRow.map(normalizeHeader);
