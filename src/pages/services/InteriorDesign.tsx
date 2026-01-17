@@ -117,7 +117,7 @@ const InteriorDesign = () => {
 
           <motion.div variants={fadeInUp}>
             <a href={CONTACT_INFO.inquiryFormUrl} target="_blank" rel="noopener noreferrer">
-              <Button className="bg-gold hover:bg-gold-light text-black font-semibold px-8 py-6 text-base">
+              <Button variant="primary" className="px-8 py-6 text-base">
                 Book a Consultation
                 <ArrowUpRight className="w-5 h-5 ml-2" />
               </Button>
@@ -272,7 +272,7 @@ const InteriorDesign = () => {
               Let our award-winning designers create an interior that reflects your unique style and elevates your everyday life.
             </p>
             <a href={CONTACT_INFO.inquiryFormUrl} target="_blank" rel="noopener noreferrer">
-              <Button className="bg-gold hover:bg-gold-light text-black font-semibold px-8 py-6 text-base">
+              <Button variant="primary" className="px-8 py-6 text-base">
                 Start Your Design Journey
                 <ArrowUpRight className="w-5 h-5 ml-2" />
               </Button>

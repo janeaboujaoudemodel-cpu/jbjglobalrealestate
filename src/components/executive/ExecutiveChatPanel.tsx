@@ -325,7 +325,8 @@ When asked to do tasks, confirm you've understood and will handle it. For comple
             <Button
               onClick={handleSendMessage}
               disabled={!input.trim() || isLoading}
-              className="bg-gold hover:bg-gold/90 text-black w-10 h-10 p-0"
+              variant="primary"
+              className="w-10 h-10 p-0"
             >
               {isLoading ? (
                 <Loader2 className="w-5 h-5 animate-spin" />

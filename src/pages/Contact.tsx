@@ -266,7 +266,8 @@ const Contact = () => {
                 </div>
                 <Button 
                   onClick={() => setIsSuccess(false)}
-                  className="mt-8 bg-gold hover:bg-gold-light text-black font-semibold px-8"
+                  variant="primary"
+                  className="mt-8 px-8"
                 >
                   Submit Another Inquiry
                 </Button>

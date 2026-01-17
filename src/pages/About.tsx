@@ -4,6 +4,7 @@ import { ArrowUpRight, Shield, Users, TrendingUp, Building2, BarChart3, FileChec
 import Footer from "@/components/Footer";
 import { Button } from "@/components/ui/button";
 import { SEOHead, pagesSEO } from "@/components/SEOHead";
+import { PortraitImage } from "@/components/ui/portrait-image";
 import founderProfessional from "@/assets/founder-professional.jpeg";
 import luxuryVillaHero from "@/assets/luxury-villa-hero.jpeg";
 import luxuryVilla1 from "@/assets/luxury-villa-1.jpeg";
@@ -150,7 +151,7 @@ const About = () => {
             >
               <Link to="/contact" className="relative z-20">
                 <Button 
-                  variant="gold"
+                  variant="primary"
                   className="px-8 py-6 text-base"
                 >
                   Contact Us
@@ -159,7 +160,7 @@ const About = () => {
               </Link>
               <Link to="/properties" className="relative z-20">
                 <Button 
-                  variant="goldOutline"
+                  variant="secondary"
                   className="px-8 py-6 text-base"
                 >
                   Browse Properties
@@ -190,27 +191,20 @@ const About = () => {
                   
                   {/* Circular portrait - GLOBAL FOUNDER IMAGE RULE */}
                   <Link to="/founder" className="block group relative z-10">
-                    {/* Container must be square with equal breathing space */}
-                    <div 
-                      className="w-56 h-56 md:w-64 md:h-64 lg:w-72 lg:h-72 rounded-full overflow-hidden border-2 border-gold/30 group-hover:border-gold/60 transition-all duration-300 mx-auto bg-zinc-900"
-                    >
-                      {/* GLOBAL IMAGE RULE - LOCKED: No cropping, perfect centering
-                          - object-fit: contain (no cropping/zooming)
-                          - object-position: center center (mathematically centered)
-                          - Equal gap on all sides */}
-                      <img 
-                        src={founderProfessional} 
-                        alt="Jane Abou Jaoude, Founder and CEO of JBJ GLOBAL REAL ESTATE" 
-                        className="w-full h-full bg-zinc-950"
-                        style={{ 
-                          objectFit: 'contain',
-                          objectPosition: 'center center',
-                        }}
-                        loading="lazy"
-                        decoding="async"
-                        fetchPriority="low"
-                      />
-                    </div>
+                    {/* GLOBAL PORTRAIT IMAGE SYSTEM - LOCKED
+                        - Subject fills 70-85% of frame
+                        - Head is NEVER cropped
+                        - Face centered with focus on upper portion
+                        - Uses PortraitImage component */}
+                    <PortraitImage 
+                      src={founderProfessional}
+                      alt="Jane Abou Jaoude, Founder and CEO of JBJ GLOBAL REAL ESTATE"
+                      shape="circle"
+                      size="full"
+                      focus="upper"
+                      bordered
+                      className="w-56 h-56 md:w-64 md:h-64 lg:w-72 lg:h-72 mx-auto group-hover:border-gold/60 transition-all duration-300"
+                    />
                     <p className="text-center mt-4 text-gold text-sm group-hover:text-gold-light transition-colors">
                       View Leadership Profile →
                     </p>
@@ -538,7 +532,7 @@ const About = () => {
             >
               <Link to="/contact" className="relative z-10">
                 <Button 
-                  variant="gold"
+                  variant="primary"
                   className="px-8 py-6 text-base"
                 >
                   Contact Us
@@ -547,7 +541,7 @@ const About = () => {
               </Link>
               <Link to="/properties" className="relative z-10">
                 <Button 
-                  variant="goldOutline"
+                  variant="secondary"
                   className="px-8 py-6 text-base"
                 >
                   Browse Properties

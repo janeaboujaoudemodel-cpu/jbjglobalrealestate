@@ -181,7 +181,8 @@ export function BrokerAIAssistant() {
         <Button
           onClick={handleSubmit}
           disabled={isLoading}
-          className="w-full bg-gold/10 text-gold hover:bg-gold/20 border border-gold/30"
+          variant="secondary"
+          className="w-full"
         >
           {isLoading ? (
             <>

@@ -168,7 +168,8 @@ export default function SignaturePad({
           type="button"
           onClick={confirmSignature}
           disabled={!hasSignature}
-          className="flex-1 bg-gold hover:bg-gold/90 text-black"
+          variant="primary"
+          className="flex-1"
         >
           <Check className="w-4 h-4 mr-2" />
           Confirm
