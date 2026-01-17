@@ -27,19 +27,10 @@ export const defaultFilters: FilterState = {
   transactionType: 'all',
 };
 
-// Check if a project is premium based on is_premium flag or keywords in name/description
-const PREMIUM_KEYWORDS = [
-  'villa', 'penthouse', 'mansion', 'duplex', 'townhouse', 
-  'premium', 'luxury', 'exclusive', 'sky villa', 'garden villa',
-  'beach villa', 'palace', 'estate', 'signature'
-];
-
+// Check if a project is premium based ONLY on is_premium flag (no auto-detection)
 const isPremiumProperty = (project: Project): boolean => {
-  // First check the is_premium flag from the database
-  if (project.is_premium) return true;
-  // Fallback to keyword matching
-  const searchText = `${project.name} ${project.description || ''}`.toLowerCase();
-  return PREMIUM_KEYWORDS.some(keyword => searchText.includes(keyword));
+  // Only check the is_premium flag from the database (admin-controlled)
+  return project.is_premium === true;
 };
 
 // Get handover year from string
