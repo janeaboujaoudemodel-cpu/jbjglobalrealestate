@@ -102,7 +102,7 @@ const AIComparisonWidget = () => {
 
         {/* CTA */}
         <Link to="/compare">
-          <Button className="w-full md:w-auto bg-gold hover:bg-gold-light text-black font-semibold px-8 py-5 text-base">
+          <Button variant="dark" className="w-full md:w-auto px-8 py-5 text-base">
             Start Comparing
             <ArrowUpRight className="w-5 h-5 ml-2" />
           </Button>

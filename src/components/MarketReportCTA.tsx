@@ -217,7 +217,8 @@ const MarketReportCTA = () => {
             {/* Download Button */}
             <Link to="/market-report" className="block">
               <Button 
-                className="w-full bg-gradient-to-r from-gold via-gold to-gold-dark hover:from-gold-light hover:to-gold text-black font-bold px-8 py-7 text-lg rounded-full shadow-xl shadow-gold/30 transition-all duration-300 hover:shadow-2xl hover:shadow-gold/40 hover:scale-[1.02]"
+                variant="dark"
+                className="w-full px-8 py-7 text-lg rounded-full"
               >
                 Download Your Free Book Now
               </Button>

@@ -27,6 +27,8 @@ const BRAND_SECONDARY =
   "bg-transparent text-gold border-2 border-gold hover:bg-white hover:text-gold";
 const BRAND_MEDIA =
   "bg-transparent text-white border-2 border-white hover:bg-white hover:text-gold hover:border-gold";
+const BRAND_DARK =
+  "bg-black text-gold border-2 border-gold hover:bg-gold hover:text-black";
 
 const buttonVariants = cva(
   "inline-flex items-center justify-center gap-2 whitespace-nowrap rounded-md text-sm font-semibold ring-offset-background transition-all duration-300 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 [&_svg]:pointer-events-none [&_svg]:size-4 [&_svg]:shrink-0 cursor-pointer tracking-[0.02em]",
@@ -37,6 +39,7 @@ const buttonVariants = cva(
         primary: BRAND_PRIMARY,
         secondary: BRAND_SECONDARY,
         media: BRAND_MEDIA,
+        dark: BRAND_DARK,
 
         // Legacy aliases (render as branded variants)
         default: BRAND_PRIMARY,

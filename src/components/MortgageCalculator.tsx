@@ -112,7 +112,7 @@ const MortgageCalculator = ({ defaultPrice = 2000000, compact = false }: Mortgag
 
         <div className="mt-6 text-center">
           <Link to="/contact">
-            <Button className="bg-gradient-to-r from-zinc-900 to-black border border-gold/40 text-gold font-semibold px-8 py-5 text-base shadow-lg shadow-black/20 transition-all duration-300 hover:shadow-xl hover:shadow-gold/20 hover:scale-[1.02] hover:border-gold/60">
+            <Button variant="dark" className="px-8 py-5 text-base">
               Connect with Mortgage Partners
               <ArrowRight className="w-4 h-4 ml-2" />
             </Button>
@@ -317,7 +317,7 @@ const MortgageCalculator = ({ defaultPrice = 2000000, compact = false }: Mortgag
 
             {/* CTA - Gold gradient */}
             <a href={INQUIRY_FORM_URL} target="_blank" rel="noopener noreferrer" className="block">
-              <Button className="w-full bg-gold hover:bg-gold-dark text-gold-foreground h-12 text-base font-semibold group">
+              <Button variant="dark" className="w-full h-12 text-base group">
                 Request Mortgage Partner Introduction
                 <ArrowRight className="w-4 h-4 ml-2 group-hover:translate-x-1 transition-transform" />
               </Button>
