@@ -145,14 +145,14 @@ const DocumentDownloads = ({ documents }: DocumentDownloadsProps) => {
                 onClick={() => handleDownload(doc)}
                 className="w-full flex items-center gap-3 p-4 rounded-xl bg-white hover:bg-zinc-100 transition-colors group border border-zinc-200 hover:border-gold"
               >
-                <div className="w-10 h-10 rounded-lg bg-gold/10 flex items-center justify-center text-gold">
-                  {getDocumentIcon(type)}
+                <div className="w-10 h-10 rounded-lg bg-black flex items-center justify-center flex-shrink-0">
+                  <span className="text-gold">{getDocumentIcon(type)}</span>
                 </div>
-                <div className="flex-1 text-left">
-                  <p className="text-black font-medium">{getDocumentLabel(type)}</p>
-                  <p className="text-zinc-500 text-sm truncate">{doc.file_name}</p>
+                <div className="flex-1 min-w-0 text-left">
+                  <p className="text-black font-medium truncate">{getDocumentLabel(type)}</p>
+                  <p className="text-zinc-500 text-sm truncate max-w-[180px]">{doc.file_name}</p>
                 </div>
-                <Download className="w-5 h-5 text-gold group-hover:text-gold transition-colors" />
+                <Download className="w-5 h-5 text-gold group-hover:text-gold transition-colors flex-shrink-0" />
               </button>
             ))}
           </div>
