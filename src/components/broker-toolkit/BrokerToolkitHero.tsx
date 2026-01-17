@@ -13,6 +13,7 @@ import {
   Wrench,
   Trophy
 } from "lucide-react";
+import brokerHubHero from "@/assets/broker-hub-hero.jpg";
 
 const QUICK_BENEFITS = [
   { icon: Wrench, text: "11+ AI Tools" },
@@ -27,10 +28,17 @@ export function BrokerToolkitHero() {
 
   return (
     <section className="relative py-16 lg:py-24 overflow-hidden">
-      {/* Background effects */}
-      <div className="absolute inset-0 bg-gradient-to-b from-gold/5 via-transparent to-transparent" />
-      <div className="absolute top-20 left-1/4 w-96 h-96 bg-gold/5 rounded-full blur-3xl" />
-      <div className="absolute bottom-20 right-1/4 w-96 h-96 bg-purple-500/5 rounded-full blur-3xl" />
+      {/* Background Hero Image */}
+      <div className="absolute inset-0">
+        <img 
+          src={brokerHubHero} 
+          alt="JBJ Broker Hub" 
+          className="w-full h-full object-cover"
+          loading="eager"
+          decoding="async"
+        />
+        <div className="absolute inset-0 bg-gradient-to-b from-black/80 via-black/70 to-black" />
+      </div>
       
       <div className="container mx-auto px-4 relative z-10">
         <motion.div

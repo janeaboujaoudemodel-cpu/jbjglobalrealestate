@@ -28,9 +28,9 @@ const SUPPORT_TEAM = [
     borderColor: 'border-pink-500/30',
   },
   {
-    role: 'Admin / Receptionist',
-    name: 'JBJ Admin Team',
-    description: 'Handles listings, documentation, and client coordination.',
+    role: 'Broker Admin',
+    name: 'Nadia Al-Rashid',
+    description: 'Dedicated admin for broker operations, listings, and documentation.',
     icon: Shield,
     color: 'text-blue-400',
     bgColor: 'bg-blue-500/10',

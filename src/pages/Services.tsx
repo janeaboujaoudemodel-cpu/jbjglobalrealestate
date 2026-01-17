@@ -165,7 +165,7 @@ const Services = () => {
               <motion.div
                 key={service.id}
                 variants={fadeInUp}
-                className="group relative overflow-hidden rounded-2xl bg-zinc-900 border border-zinc-800 hover:border-gold/50 transition-all duration-500"
+                className="group relative overflow-hidden rounded-2xl bg-white border border-zinc-200 hover:border-gold hover:shadow-xl hover:shadow-gold/10 transition-all duration-500"
               >
                 {/* Image */}
                 <div className="aspect-[4/3] overflow-hidden">
@@ -174,19 +174,19 @@ const Services = () => {
                     alt={service.title}
                     className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110"
                   />
-                  <div className="absolute inset-0 bg-gradient-to-t from-black via-black/50 to-transparent" />
+                  <div className="absolute inset-0 bg-gradient-to-t from-white via-white/60 to-transparent" />
                 </div>
                 
                 {/* Content */}
                 <div className="absolute bottom-0 left-0 right-0 p-6">
                   <div className="flex items-center gap-3 mb-3">
-                    <div className="w-12 h-12 rounded-xl bg-gradient-to-br from-gold to-gold-dark flex items-center justify-center">
-                      <service.icon className="w-6 h-6 text-black" />
+                    <div className="w-12 h-12 rounded-xl bg-black flex items-center justify-center">
+                      <service.icon className="w-6 h-6 text-gold" />
                     </div>
-                    <h3 className="text-white text-xl font-bold">{service.title}</h3>
+                    <h3 className="text-black text-xl font-bold">{service.title}</h3>
                   </div>
                   
-                  <p className="text-zinc-400 text-sm mb-4 line-clamp-2">
+                  <p className="text-zinc-600 text-sm mb-4 line-clamp-2">
                     {service.description}
                   </p>
                   
@@ -195,7 +195,7 @@ const Services = () => {
                     {service.features.slice(0, 3).map((feature) => (
                       <span 
                         key={feature}
-                        className="text-xs text-gold/80 bg-gold/10 px-2 py-1 rounded-full border border-gold/20"
+                        className="text-xs text-black bg-zinc-100 px-2 py-1 rounded-full border border-zinc-200"
                       >
                         {feature}
                       </span>
@@ -204,7 +204,8 @@ const Services = () => {
                   
                   <Link to={service.link}>
                     <Button 
-                      className="w-full bg-white/10 backdrop-blur-sm border border-white/20 text-white hover:bg-white/20 hover:border-gold/50 transition-all"
+                      variant="dark"
+                      className="w-full"
                     >
                       Explore
                       <ArrowUpRight className="w-4 h-4 ml-2" />
