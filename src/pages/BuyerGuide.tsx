@@ -681,8 +681,8 @@ const BuyerGuide = () => {
         </div>
       </section>
 
-      {/* Guide Navigation */}
-      <section className="py-8 bg-black border-t border-zinc-800">
+      {/* Guide Navigation - White background to separate from footer */}
+      <section className="py-12 bg-white border-t border-zinc-200">
         <div className="container mx-auto px-4">
           <GuideNavigation current="/buyer-guide" guides={GUIDE_LINKS} showStartHere={false} />
         </div>

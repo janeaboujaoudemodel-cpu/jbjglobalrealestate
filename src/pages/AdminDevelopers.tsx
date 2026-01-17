@@ -693,7 +693,7 @@ const DeveloperCard = ({ developer, reps, onEdit, onDelete, onAddRep, onEditRep,
                         rel="noopener noreferrer"
                         className="p-2 rounded-lg bg-green-500/20 text-green-400 hover:bg-green-500/30"
                       >
-                        <MessageCircle className="w-4 h-4" />
+                        <MessageCircle className="w-4 h-4 text-green-400" />
                       </a>
                     )}
                     {rep.email && (

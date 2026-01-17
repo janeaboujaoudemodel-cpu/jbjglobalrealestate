@@ -68,7 +68,7 @@ export const de = {
   'founder.learnMore': 'Mehr Über Unseren Gründer Erfahren',
   'founder.title': 'Gründerin und Geschäftsführerin',
   'founder.description1': 'JBJ Global Real Estate ist eine gründergeführte Immobilienmaklerfirma, die auf unnachgiebigen Standards, Diskretion und langfristiger Vision aufgebaut ist.',
-  'founder.description2': 'Jane Abou Jaoude führt mit einer Philosophie, die auf Verantwortlichkeit und Diskretion basiert und Organisationen aufbaut, die auf Beständigkeit ausgelegt sind, anstatt einfach zu expandieren.',
+  'founder.description2': 'Gründerin und CEO Jane Abou Jaoude führt mit einer Philosophie, die auf Verantwortlichkeit und Diskretion basiert und Organisationen aufbaut, die auf Beständigkeit ausgelegt sind, anstatt einfach zu expandieren.',
   
   // Market Report
   'report.exclusive': 'Exklusiver Kostenloser Download',

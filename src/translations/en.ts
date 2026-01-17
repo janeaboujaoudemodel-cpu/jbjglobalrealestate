@@ -67,7 +67,7 @@ export const en = {
   'founder.learnMore': 'Learn More About Our Founder',
   'founder.title': 'Founder and CEO',
   'founder.description1': 'JBJ Global Real Estate is a founder-led real estate brokerage built on unwavering standards, discretion, and long-term vision.',
-  'founder.description2': 'Jane Abou Jaoude leads with a philosophy rooted in accountability and discretion, building organizations designed to endure rather than simply expand.',
+  'founder.description2': 'Founder and CEO Jane Abou Jaoude leads with a philosophy rooted in accountability and discretion, building organizations designed to endure rather than simply expand.',
   'founder.vision': 'Vision',
   'founder.mission': 'Mission',
   'founder.values': 'Values',

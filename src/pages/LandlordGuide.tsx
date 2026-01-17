@@ -466,8 +466,8 @@ const LandlordGuide = () => {
         showContactOptions
       />
 
-      {/* Guide Navigation */}
-      <div className="bg-black py-12">
+      {/* Guide Navigation - White background to separate from footer */}
+      <div className="bg-white py-12 border-t border-zinc-200">
         <div className="container mx-auto px-4">
           <GuideNavigation current="/landlord-guide" guides={GUIDE_LINKS} />
         </div>

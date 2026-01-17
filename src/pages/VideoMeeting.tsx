@@ -954,7 +954,7 @@ const VideoMeeting = () => {
             className="text-zinc-400 hover:text-white"
             title="JBJ Support"
           >
-            <MessageCircle className="w-4 h-4" />
+            <MessageCircle className="w-4 h-4 text-green-500" />
           </Button>
         </div>
       </div>

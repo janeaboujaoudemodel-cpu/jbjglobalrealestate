@@ -484,7 +484,7 @@ Requirements:
                   rel="noopener noreferrer"
                 >
                   <Button variant="primary">
-                    <MessageCircle className="w-4 h-4 mr-2" />
+                    <MessageCircle className="w-4 h-4 mr-2 text-green-500" />
                     Chat on WhatsApp
                   </Button>
                 </a>
