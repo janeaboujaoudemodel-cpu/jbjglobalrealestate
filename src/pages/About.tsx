@@ -194,16 +194,16 @@ const About = () => {
                     <div 
                       className="w-56 h-56 md:w-64 md:h-64 lg:w-72 lg:h-72 rounded-full overflow-hidden border-2 border-gold/30 group-hover:border-gold/60 transition-all duration-300 mx-auto bg-zinc-900"
                     >
-                      {/* CRITICAL: Perfect center alignment required
+                      {/* GLOBAL IMAGE RULE - LOCKED: No cropping, perfect centering
                           - object-fit: contain (no cropping/zooming)
                           - object-position: center center (mathematically centered)
                           - Equal gap on all sides */}
                       <img 
                         src={founderProfessional} 
                         alt="Jane Abou Jaoude, Founder and CEO of JBJ GLOBAL REAL ESTATE" 
-                        className="w-full h-full"
+                        className="w-full h-full bg-zinc-950"
                         style={{ 
-                          objectFit: 'cover',
+                          objectFit: 'contain',
                           objectPosition: 'center center',
                         }}
                         loading="lazy"

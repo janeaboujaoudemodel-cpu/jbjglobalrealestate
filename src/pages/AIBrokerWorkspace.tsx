@@ -247,12 +247,13 @@ export default function AIBrokerWorkspace() {
             <div className="space-y-6">
               {/* Broker Card */}
               <div className="text-center">
+                {/* GLOBAL IMAGE RULE - LOCKED: No cropping, perfect centering */}
                 <div className="w-20 h-20 rounded-full bg-gradient-to-br from-gold to-gold-dark mx-auto mb-3 flex items-center justify-center">
                   {activeBroker.avatar_url ? (
                     <img
                       src={activeBroker.avatar_url}
                       alt={activeBroker.name}
-                      className="w-full h-full rounded-full object-cover"
+                      className="w-full h-full rounded-full object-contain object-center bg-zinc-950"
                     />
                   ) : (
                     <span className="text-black text-2xl font-bold">

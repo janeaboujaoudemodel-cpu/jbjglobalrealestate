@@ -460,15 +460,17 @@ const MarketReport = () => {
     color: #666;
   }
   
+  /* GLOBAL IMAGE RULE - LOCKED: No cropping, perfect centering */
   .founder-image {
     width: 160px;
     height: 160px;
     border-radius: 50%;
-    object-fit: cover;
-    object-position: center 15%;
+    object-fit: contain;
+    object-position: center center;
     border: 4px solid #A8925A;
     margin: 0 auto 30px;
     display: block;
+    background: #0a0a0a;
   }
   
   .founder-section {
@@ -483,12 +485,15 @@ const MarketReport = () => {
     margin: 30px 0;
   }
   
+  /* GLOBAL IMAGE RULE - LOCKED: No cropping, perfect centering */
   .villa-gallery img {
     width: 100%;
     height: 180px;
-    object-fit: cover;
+    object-fit: contain;
+    object-position: center center;
     border-radius: 12px;
     border: 1px solid rgba(168, 146, 90, 0.3);
+    background: #0a0a0a;
   }
   
   .disclaimer {
@@ -798,7 +803,8 @@ const MarketReport = () => {
         <p style="font-size: 14px;">This book distills my experience into structured frameworks that help you evaluate opportunities objectively—whether you are a first-time buyer or an experienced portfolio investor.</p>
       </div>
       <div>
-        <img src="${villaImages[1]}" alt="Luxury Property" style="width: 100%; height: 200px; object-fit: cover; border-radius: 12px; border: 1px solid rgba(168, 146, 90, 0.3);" />
+        <!-- GLOBAL IMAGE RULE - LOCKED: No cropping, perfect centering -->
+        <img src="${villaImages[1]}" alt="Luxury Property" style="width: 100%; height: 200px; object-fit: contain; object-position: center center; border-radius: 12px; border: 1px solid rgba(168, 146, 90, 0.3); background: #0a0a0a;" />
       </div>
     </div>
     

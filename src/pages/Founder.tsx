@@ -173,12 +173,13 @@ const Founder = () => {
           animate={{ scale: 1 }}
           transition={{ duration: 1.5, ease: "easeOut" }}
         >
+          {/* GLOBAL IMAGE RULE - LOCKED: No cropping, perfect centering */}
           {/* Hero image - CEO with flags in office */}
           <SafeImage 
             src={ceoHeroOfficeFlags} 
             fallbackSrc={founderHero}
             alt="Jane Abou Jaoude - Founder & CEO"
-            className="w-full h-full object-cover object-top"
+            className="w-full h-full object-contain object-center bg-zinc-950"
           />
           {/* Multi-layer gradient overlay */}
           <div className="absolute inset-0 bg-gradient-to-t from-black via-black/60 to-transparent" />
@@ -277,12 +278,13 @@ const Founder = () => {
                 <div className="absolute -bottom-2 -right-2 w-20 h-20 border-r-2 border-b-2 border-gold/50 rounded-br-3xl" />
                 
                 {/* Main photo container */}
-                <div className="relative aspect-[3/4] rounded-3xl overflow-hidden border border-gold/20 shadow-2xl shadow-gold/10 bg-gradient-to-b from-white to-zinc-100">
+                {/* GLOBAL IMAGE RULE - LOCKED: No cropping, perfect centering */}
+                <div className="relative aspect-[3/4] rounded-3xl overflow-hidden border border-gold/20 shadow-2xl shadow-gold/10 bg-zinc-950">
                   <SafeImage 
                     src={founderPremium} 
                     fallbackSrc={founderProfessional}
                     alt="Jane Abou Jaoude, Founder and CEO of JBJ GLOBAL REAL ESTATE" 
-                    className="w-full h-full object-cover object-top"
+                    className="w-full h-full object-contain object-center"
                   />
                   {/* Subtle vignette */}
                   <div className="absolute inset-0 bg-gradient-to-t from-black/20 via-transparent to-transparent" />
@@ -1284,13 +1286,14 @@ const Founder = () => {
                 <div className="flex flex-col items-center gap-5">
                   {/* Larger avatar with premium ring */}
                   <div className="relative">
+                    {/* GLOBAL IMAGE RULE - LOCKED: No cropping, perfect centering */}
                     <div className="w-32 h-32 md:w-36 md:h-36 rounded-full p-1.5 bg-gradient-to-br from-gold via-[#C4A962] to-gold shadow-2xl shadow-gold/30">
-                      <div className="w-full h-full rounded-full overflow-hidden bg-black">
+                      <div className="w-full h-full rounded-full overflow-hidden bg-zinc-950">
                         <SafeImage 
                           src={founderProfessional} 
                           fallbackSrc={founderHero} 
                           alt="Jane Abou Jaoude" 
-                          className="w-full h-full object-cover object-[center_15%] scale-125"
+                          className="w-full h-full object-contain object-center"
                         />
                       </div>
                     </div>
