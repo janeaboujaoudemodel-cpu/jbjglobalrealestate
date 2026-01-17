@@ -80,7 +80,7 @@ export const tr = {
   'report.highlight2': 'Geliştirici karşılaştırma çerçevesi',
   'report.highlight3': 'Mülk durum tespiti kontrol listesi',
   'report.highlight4': 'Topluluk ROI sıralamaları',
-  'report.createdBy': 'Jane Abou Jaoude tarafından oluşturuldu',
+  'report.createdBy': 'Kurucu ve CEO Jane Abou Jaoude tarafından oluşturuldu',
   'report.exclusiveFor': 'JBJ Global Real Estate\'e Özel',
   'report.poweredBy': 'Gayrimenkul Aracı Kuruluşu | Dubai, BAE',
   

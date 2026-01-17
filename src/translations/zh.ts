@@ -80,7 +80,7 @@ export const zh = {
   'report.highlight2': '开发商比较框架',
   'report.highlight3': '房产尽职调查清单',
   'report.highlight4': '社区投资回报率排名',
-  'report.createdBy': '由Jane Abou Jaoude创作',
+  'report.createdBy': '由创始人兼首席执行官 Jane Abou Jaoude 创作',
   'report.exclusiveFor': 'JBJ Global Real Estate独家',
   'report.poweredBy': '房地产经纪 | 迪拜，阿联酋',
   

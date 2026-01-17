@@ -80,7 +80,7 @@ export const fa = {
   'report.highlight2': 'چارچوب مقایسه توسعه‌دهندگان',
   'report.highlight3': 'چک‌لیست بررسی دقیق ملک',
   'report.highlight4': 'رتبه‌بندی ROI مناطق',
-  'report.createdBy': 'ایجاد شده توسط جین ابو جاعوده',
+  'report.createdBy': 'ایجاد شده توسط بنیان‌گذار و مدیرعامل جین ابو جاعوده',
   'report.exclusiveFor': 'انحصاری برای JBJ Global Real Estate',
   'report.poweredBy': 'کارگزاری املاک | دبی، امارات',
   

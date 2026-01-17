@@ -285,7 +285,7 @@ ${result.notes ? `\nNOTES\n-----\n${result.notes}` : ''}
 
 ================================
 Powered by JBJ Global Real Estate
-Developed by Founder Jane Abou Jaoude
+Developed by Founder and CEO Jane Abou Jaoude
 jbj.ae
     `.trim();
 

@@ -742,7 +742,7 @@ const Favorites = () => {
             </div>
 
             <p className="text-zinc-500 text-xs text-center">
-              Powered by JBJ Global Real Estate • Founder-led by Jane Abou Jaoude
+              Powered by JBJ Global Real Estate • Founder-led by Founder and CEO Jane Abou Jaoude
             </p>
           </div>
         </DialogContent>

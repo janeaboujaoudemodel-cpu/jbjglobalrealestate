@@ -257,7 +257,7 @@ const IntellectualProperty = () => {
               Last Updated: {new Date().toLocaleDateString('en-US', { month: 'long', year: 'numeric' })}
             </p>
             <p className="text-gold text-sm mt-2">
-              © {currentYear} JBJ Global Real Estate. Developed & Created by Founder Jane Abou Jaoude.
+              © {currentYear} JBJ Global Real Estate. Developed & Created by Founder and CEO Jane Abou Jaoude.
             </p>
           </div>
         </div>

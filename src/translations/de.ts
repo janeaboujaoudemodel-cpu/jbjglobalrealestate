@@ -80,7 +80,7 @@ export const de = {
   'report.highlight2': 'Entwickler-Vergleichsrahmen',
   'report.highlight3': 'Immobilien-Due-Diligence-Checkliste',
   'report.highlight4': 'Community-ROI-Rankings',
-  'report.createdBy': 'Erstellt von Jane Abou Jaoude',
+  'report.createdBy': 'Erstellt von Gründerin und CEO Jane Abou Jaoude',
   'report.exclusiveFor': 'Exklusiv für JBJ Global Real Estate',
   'report.poweredBy': 'Immobilienmaklerei | Dubai, VAE',
   

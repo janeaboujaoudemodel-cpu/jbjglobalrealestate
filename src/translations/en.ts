@@ -134,7 +134,7 @@ export const en = {
   'report.highlight2': 'Developer comparison framework',
   'report.highlight3': 'Investment due diligence checklist',
   'report.highlight4': 'Community ROI rankings',
-  'report.createdBy': 'Created by Jane Abou Jaoude',
+  'report.createdBy': 'Created by Founder and CEO Jane Abou Jaoude',
   'report.exclusiveFor': 'Exclusive for JBJ Global Real Estate',
   'report.descriptor': 'Real Estate Brokerage | Dubai, UAE',
   
