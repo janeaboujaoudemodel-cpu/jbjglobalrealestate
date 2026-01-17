@@ -9,25 +9,22 @@ import { cn } from "@/lib/utils";
  * GLOBAL BUTTON SYSTEM - JBJ GLOBAL REAL ESTATE (LOCKED & FINAL)
  * ============================================================
  * 
- * BRANDED BUTTONS (USE FOR MAIN ACTIONS):
- * - primary: White bg → transparent on hover (main CTAs)
- * - secondary: Transparent bg → white on hover (secondary CTAs)
- * - media: For image/video backgrounds (white text)
+ * BRANDED BUTTONS (USE FOR MAIN CTAs):
+ * - primary: White bg → transparent on hover (main actions)
+ * - secondary: Transparent bg → white on hover (secondary actions)  
+ * - media: For image/video backgrounds (white text → gold on hover)
  * 
- * UTILITY BUTTONS (INTERNAL/SYSTEM USE):
+ * UTILITY VARIANTS (CRM/Internal use with className overrides):
  * - ghost: Transparent, subtle hover
  * - outline: Bordered, subtle
  * - destructive: Red for dangerous actions
+ * - default: Standard primary button
  * - link: Text-only link style
  * 
  * FORBIDDEN:
  * - gold, goldOutline, heroOutline (DELETED - use primary/secondary/media)
  * - Custom className styling (bg-gold, shadow-*, scale-*, etc.)
- * - Filled gold backgrounds
- * - Shadows or glow effects
- * 
- * APPLIES TO:
- * - Front-end, Back-end, CRM, Employee Hub, Database UI
+ * - Shadows or glow effects on branded buttons
  * ============================================================
  */
 
@@ -37,26 +34,21 @@ const buttonVariants = cva(
     variants: {
       variant: {
         // ============================================================
-        // BRANDED BUTTONS - JBJ GOLD SYSTEM (LOCKED)
+        // BRANDED BUTTONS - JBJ GOLD SYSTEM (PRIMARY USE)
         // ============================================================
         
-        // PRIMARY: WHITE BASE (Main actions)
-        // Default: White bg, Gold text, Gold border
-        // Hover (INVERTED): Transparent bg, Gold text, Gold border
-        primary: "bg-white text-gold border border-gold hover:bg-transparent hover:text-gold",
+        // PRIMARY: WHITE BASE (Main CTAs)
+        primary: "bg-white text-gold border-2 border-gold hover:bg-transparent hover:text-gold",
         
-        // SECONDARY: TRANSPARENT BASE (Secondary actions)
-        // Default: Transparent bg, Gold text, Gold border
-        // Hover (INVERTED): White bg, Gold text, Gold border
-        secondary: "bg-transparent text-gold border border-gold hover:bg-white hover:text-gold",
+        // SECONDARY: TRANSPARENT BASE (Secondary CTAs)  
+        secondary: "bg-transparent text-gold border-2 border-gold hover:bg-white hover:text-gold",
         
-        // MEDIA: FOR IMAGES/VIDEOS (Hero overlays)
-        // Default: Transparent bg, White text, White border
-        // Hover (INVERTED): White bg, Gold text
-        media: "bg-transparent text-white border border-white hover:bg-white hover:text-gold",
-        
+        // MEDIA: FOR IMAGES/VIDEOS (Hero overlays with white text)
+        media: "bg-transparent text-white border-2 border-white hover:bg-white hover:text-gold hover:border-gold",
+
         // ============================================================
-        // UTILITY BUTTONS (Internal/System use)
+        // UTILITY VARIANTS - Minimal styling for internal/CRM use
+        // These allow className overrides for specific UI contexts
         // ============================================================
         default: "bg-primary text-primary-foreground hover:bg-primary/90",
         destructive: "bg-destructive text-destructive-foreground hover:bg-destructive/90",
@@ -65,9 +57,9 @@ const buttonVariants = cva(
         link: "text-primary underline-offset-4 hover:underline",
       },
       size: {
-        default: "h-10 px-4 py-2",
-        sm: "h-9 rounded-md px-3",
-        lg: "h-11 rounded-md px-8",
+        default: "h-10 px-6 py-2",
+        sm: "h-9 rounded-md px-4",
+        lg: "h-12 rounded-md px-8 text-base",
         icon: "h-10 w-10",
       },
     },

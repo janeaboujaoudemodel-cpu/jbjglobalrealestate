@@ -190,7 +190,7 @@ const ChatTracker = ({ leadId, phoneNumber: initialPhone, onChatLogged }: ChatTr
           {/* Action Buttons */}
           <div className="flex gap-2">
             <Button 
-              variant="outline" 
+              variant="secondary" 
               className="flex-1"
               onClick={openWhatsApp}
               disabled={!contactNumber}
