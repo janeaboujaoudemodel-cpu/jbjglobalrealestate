@@ -270,6 +270,9 @@ const BuyerGuide = () => {
         }
       />
 
+      {/* Divider between Hero and Who This Guide Is For */}
+      <div className="h-px bg-gradient-to-r from-transparent via-gold/30 to-transparent" />
+
       {/* Sticky Table of Contents */}
       <div className="hidden lg:block fixed right-8 top-1/3 z-30">
         <GuideTableOfContents items={tocItems} />
@@ -328,10 +331,10 @@ const BuyerGuide = () => {
               {ownershipTypes.map((type, index) => (
                 <div 
                   key={index}
-                  className="bg-white rounded-2xl p-8 border border-zinc-200 hover:border-gold/50 hover:shadow-lg transition-all"
+                  className="bg-white rounded-2xl p-8 border border-zinc-200 hover:border-gold/50 hover:shadow-lg transition-all h-full flex flex-col"
                 >
                   <div className="flex items-center gap-4 mb-6">
-                    <div className="w-12 h-12 bg-black rounded-xl flex items-center justify-center">
+                    <div className="w-12 h-12 bg-black rounded-xl flex items-center justify-center flex-shrink-0">
                       <type.icon className="w-6 h-6 text-gold" />
                     </div>
                     <div>
@@ -339,9 +342,9 @@ const BuyerGuide = () => {
                       <p className="text-sm text-zinc-600">{type.description}</p>
                     </div>
                   </div>
-                  <ul className="space-y-3">
+                  <ul className="space-y-3 flex-1">
                     {type.points.map((point, pointIndex) => (
-                      <li key={pointIndex} className="flex items-start gap-3">
+                      <li key={pointIndex} className="flex items-start gap-3 min-h-[48px]">
                         <CheckCircle2 className="w-5 h-5 text-gold flex-shrink-0 mt-0.5" />
                         <span className="text-zinc-700 text-sm leading-relaxed">{point}</span>
                       </li>
@@ -355,14 +358,14 @@ const BuyerGuide = () => {
       </section>
 
       {/* Step-by-Step Buying Process */}
-      <section id="buying-process" className="py-16 md:py-24 scroll-mt-20">
+      <section id="buying-process" className="py-16 md:py-24 bg-zinc-50 scroll-mt-20">
         <div className="container mx-auto px-4">
           <div className="max-w-5xl mx-auto">
             <div className="text-center mb-16">
-              <h2 className="text-3xl md:text-4xl font-light text-zinc-900 mb-4">
+              <h2 className="text-3xl md:text-4xl font-semibold text-black mb-4">
                 The 6-Step Buying Process
               </h2>
-              <p className="text-lg text-zinc-600 max-w-2xl mx-auto">
+              <p className="text-lg text-zinc-700 max-w-2xl mx-auto leading-relaxed">
                 A clear roadmap from defining your requirements to receiving your keys. 
                 Each step is designed to keep you informed and confident.
               </p>
@@ -404,6 +407,9 @@ const BuyerGuide = () => {
           </div>
         </div>
       </section>
+
+      {/* Divider between Six-Step Process and Costs & Fees */}
+      <div className="h-px bg-gradient-to-r from-transparent via-gold/30 to-transparent" />
 
       {/* Costs & Fees */}
       <section id="costs-fees" className="py-16 md:py-24 bg-zinc-50 scroll-mt-20">
@@ -453,6 +459,9 @@ const BuyerGuide = () => {
           </div>
         </div>
       </section>
+
+      {/* Divider between Costs & Fees and Mortgages */}
+      <div className="h-px bg-gradient-to-r from-transparent via-gold/30 to-transparent" />
 
       {/* Mortgages Explained */}
       <section id="mortgages" className="py-16 md:py-24 bg-white scroll-mt-20">

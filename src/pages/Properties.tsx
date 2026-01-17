@@ -296,11 +296,11 @@ const Properties = () => {
       </section>
 
       {/* Main Search Bar */}
-      <section className="sticky top-16 z-30 bg-zinc-950/95 backdrop-blur-md border-b border-zinc-800/50 py-4">
+      <section className="sticky top-16 z-30 bg-white backdrop-blur-md border-b border-zinc-200 py-4 shadow-sm">
         <div className="container mx-auto px-4">
           {/* Transaction Type Tabs - Buy / Rent / All */}
           <div className="flex items-center gap-2 mb-4">
-            <span className="text-zinc-400 text-sm mr-2">I want to:</span>
+            <span className="text-zinc-600 text-sm mr-2">I want to:</span>
             {[
               { value: 'all', label: 'All' },
               { value: 'buy', label: 'Buy' },
@@ -317,7 +317,7 @@ const Properties = () => {
                 className={`h-9 px-4 rounded-full ${
                   filters.transactionType === option.value
                     ? "bg-gradient-to-r from-gold to-[#E8D5A3] text-black border-gold font-semibold"
-                    : "bg-zinc-900/80 border-zinc-700/50 text-white hover:bg-zinc-800 hover:text-white"
+                    : "bg-white border-zinc-300 text-zinc-700 hover:bg-zinc-100 hover:text-black"
                 }`}
               >
                 {option.label}
@@ -333,7 +333,7 @@ const Properties = () => {
                 placeholder="Search"
                 value={filters.search}
                 onChange={(e) => updateFilter("search", e.target.value)}
-                className="pl-8 h-10 bg-zinc-900/80 border-zinc-700/50 text-white placeholder:text-zinc-500 focus:border-gold rounded-lg text-xs"
+                className="pl-8 h-10 bg-white border-zinc-300 text-black placeholder:text-zinc-500 focus:border-gold rounded-lg text-xs"
               />
             </div>
 
@@ -342,16 +342,16 @@ const Properties = () => {
               value={filters.emirate || "all"}
               onValueChange={(value) => updateFilter("emirate", value === "all" ? null : value)}
             >
-              <SelectTrigger className="w-[95px] h-10 bg-zinc-900/80 border-zinc-700/50 text-white rounded-lg text-xs flex-shrink-0">
+              <SelectTrigger className="w-[95px] h-10 bg-white border-zinc-300 text-black rounded-lg text-xs flex-shrink-0">
                 <MapPin className="w-3 h-3 mr-1 text-zinc-500 flex-shrink-0" />
                 <SelectValue placeholder="Area" />
               </SelectTrigger>
-              <SelectContent className="bg-zinc-900 border-zinc-700">
-                <SelectItem value="all" className="text-white hover:bg-zinc-800">All Areas</SelectItem>
-                <SelectItem value="Dubai" className="text-white hover:bg-zinc-800">Dubai</SelectItem>
-                <SelectItem value="Abu Dhabi" className="text-white hover:bg-zinc-800">Abu Dhabi</SelectItem>
-                <SelectItem value="Sharjah" className="text-white hover:bg-zinc-800">Sharjah</SelectItem>
-                <SelectItem value="Ras Al Khaimah" className="text-white hover:bg-zinc-800">RAK</SelectItem>
+              <SelectContent className="bg-white border-zinc-200">
+                <SelectItem value="all" className="text-black hover:bg-zinc-100">All Areas</SelectItem>
+                <SelectItem value="Dubai" className="text-black hover:bg-zinc-100">Dubai</SelectItem>
+                <SelectItem value="Abu Dhabi" className="text-black hover:bg-zinc-100">Abu Dhabi</SelectItem>
+                <SelectItem value="Sharjah" className="text-black hover:bg-zinc-100">Sharjah</SelectItem>
+                <SelectItem value="Ras Al Khaimah" className="text-black hover:bg-zinc-100">RAK</SelectItem>
               </SelectContent>
             </Select>
 
@@ -360,14 +360,14 @@ const Properties = () => {
               value={filters.developerId || "all"}
               onValueChange={(value) => updateFilter("developerId", value === "all" ? null : value)}
             >
-              <SelectTrigger className="w-[90px] h-10 bg-zinc-900/80 border-zinc-700/50 text-white rounded-lg text-xs flex-shrink-0">
+              <SelectTrigger className="w-[90px] h-10 bg-white border-zinc-300 text-black rounded-lg text-xs flex-shrink-0">
                 <Building2 className="w-3 h-3 mr-1 text-zinc-500 flex-shrink-0" />
                 <SelectValue placeholder="Dev" />
               </SelectTrigger>
-              <SelectContent className="bg-zinc-900 border-zinc-700 max-h-60">
-                <SelectItem value="all" className="text-white hover:bg-zinc-800">All Devs</SelectItem>
+              <SelectContent className="bg-white border-zinc-200 max-h-60">
+                <SelectItem value="all" className="text-black hover:bg-zinc-100">All Devs</SelectItem>
                 {developers?.map((dev) => (
-                  <SelectItem key={dev.id} value={dev.id} className="text-white hover:bg-zinc-800">
+                  <SelectItem key={dev.id} value={dev.id} className="text-black hover:bg-zinc-100">
                     {dev.name}
                   </SelectItem>
                 ))}
@@ -392,17 +392,17 @@ const Properties = () => {
                 }
               }}
             >
-              <SelectTrigger className="w-[80px] h-10 bg-zinc-900/80 border-zinc-700/50 text-white rounded-lg text-xs flex-shrink-0">
+              <SelectTrigger className="w-[80px] h-10 bg-white border-zinc-300 text-black rounded-lg text-xs flex-shrink-0">
                 <DollarSign className="w-3 h-3 mr-0.5 text-zinc-500 flex-shrink-0" />
                 <SelectValue placeholder="$" />
               </SelectTrigger>
-              <SelectContent className="bg-zinc-900 border-zinc-700">
-                <SelectItem value="all" className="text-white hover:bg-zinc-800">Any</SelectItem>
-                <SelectItem value="0-1000000" className="text-white hover:bg-zinc-800">&lt;1M</SelectItem>
-                <SelectItem value="1000000-3000000" className="text-white hover:bg-zinc-800">1-3M</SelectItem>
-                <SelectItem value="3000000-5000000" className="text-white hover:bg-zinc-800">3-5M</SelectItem>
-                <SelectItem value="5000000-10000000" className="text-white hover:bg-zinc-800">5-10M</SelectItem>
-                <SelectItem value="10000000-500000000" className="text-white hover:bg-zinc-800">10M+</SelectItem>
+              <SelectContent className="bg-white border-zinc-200">
+                <SelectItem value="all" className="text-black hover:bg-zinc-100">Any</SelectItem>
+                <SelectItem value="0-1000000" className="text-black hover:bg-zinc-100">&lt;1M</SelectItem>
+                <SelectItem value="1000000-3000000" className="text-black hover:bg-zinc-100">1-3M</SelectItem>
+                <SelectItem value="3000000-5000000" className="text-black hover:bg-zinc-100">3-5M</SelectItem>
+                <SelectItem value="5000000-10000000" className="text-black hover:bg-zinc-100">5-10M</SelectItem>
+                <SelectItem value="10000000-500000000" className="text-black hover:bg-zinc-100">10M+</SelectItem>
               </SelectContent>
             </Select>
 
@@ -411,12 +411,12 @@ const Properties = () => {
               value={filters.sizeUnit}
               onValueChange={(value) => updateFilter("sizeUnit", value as 'sqft' | 'sqm')}
             >
-              <SelectTrigger className="w-[60px] h-10 bg-zinc-900/80 border-zinc-700/50 text-white rounded-lg text-xs flex-shrink-0">
+              <SelectTrigger className="w-[60px] h-10 bg-white border-zinc-300 text-black rounded-lg text-xs flex-shrink-0">
                 <SelectValue />
               </SelectTrigger>
-              <SelectContent className="bg-zinc-900 border-zinc-700">
-                <SelectItem value="sqft" className="text-white hover:bg-zinc-800">ft²</SelectItem>
-                <SelectItem value="sqm" className="text-white hover:bg-zinc-800">m²</SelectItem>
+              <SelectContent className="bg-white border-zinc-200">
+                <SelectItem value="sqft" className="text-black hover:bg-zinc-100">ft²</SelectItem>
+                <SelectItem value="sqm" className="text-black hover:bg-zinc-100">m²</SelectItem>
               </SelectContent>
             </Select>
 
@@ -425,15 +425,15 @@ const Properties = () => {
               value={filters.currency}
               onValueChange={(value) => updateFilter("currency", value as ExtendedCurrency)}
             >
-              <SelectTrigger className="w-[58px] h-10 bg-zinc-900/80 border-zinc-700/50 text-white rounded-lg text-xs flex-shrink-0">
+              <SelectTrigger className="w-[58px] h-10 bg-white border-zinc-300 text-black rounded-lg text-xs flex-shrink-0">
                 <SelectValue />
               </SelectTrigger>
-              <SelectContent className="bg-zinc-900 border-zinc-700">
-                <SelectItem value="AED" className="text-white hover:bg-zinc-800">AED</SelectItem>
-                <SelectItem value="USD" className="text-white hover:bg-zinc-800">USD</SelectItem>
-                <SelectItem value="EUR" className="text-white hover:bg-zinc-800">EUR</SelectItem>
-                <SelectItem value="GBP" className="text-white hover:bg-zinc-800">GBP</SelectItem>
-                <SelectItem value="INR" className="text-white hover:bg-zinc-800">INR</SelectItem>
+              <SelectContent className="bg-white border-zinc-200">
+                <SelectItem value="AED" className="text-black hover:bg-zinc-100">AED</SelectItem>
+                <SelectItem value="USD" className="text-black hover:bg-zinc-100">USD</SelectItem>
+                <SelectItem value="EUR" className="text-black hover:bg-zinc-100">EUR</SelectItem>
+                <SelectItem value="GBP" className="text-black hover:bg-zinc-100">GBP</SelectItem>
+                <SelectItem value="INR" className="text-black hover:bg-zinc-100">INR</SelectItem>
               </SelectContent>
             </Select>
 
@@ -447,7 +447,7 @@ const Properties = () => {
               className={`h-10 px-3 rounded-lg flex items-center gap-1.5 text-sm flex-shrink-0 ${
                 filters.premiumOnly 
                   ? "bg-gradient-to-r from-gold to-[#E8D5A3] text-black border-gold font-bold" 
-                  : "bg-zinc-900/80 border-zinc-700/50 text-white hover:bg-zinc-800 hover:text-white"
+                  : "bg-white border-zinc-300 text-zinc-700 hover:bg-zinc-100 hover:text-black"
               }`}
             >
               <Crown className="w-3.5 h-3.5" />
@@ -459,7 +459,7 @@ const Properties = () => {
               <DialogTrigger asChild>
                 <Button 
                   variant="outline" 
-                  className="h-10 px-3 bg-zinc-900/80 border-zinc-700/50 text-white hover:bg-zinc-800 hover:text-white rounded-lg flex-shrink-0"
+                  className="h-10 px-3 bg-white border-zinc-300 text-zinc-700 hover:bg-zinc-100 hover:text-black rounded-lg flex-shrink-0"
                 >
                   <Filter className="w-3.5 h-3.5" />
                   {activeFilterCount > 0 && (
