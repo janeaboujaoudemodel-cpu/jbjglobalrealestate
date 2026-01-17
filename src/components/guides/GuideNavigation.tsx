@@ -29,15 +29,17 @@ export const GuideNavigation = ({ current, guides, showStartHere = false }: Guid
       <div className="max-w-4xl mx-auto">
         {/* Start Here Block */}
         {showStartHere && (
-          <div className="mb-8 bg-gradient-to-br from-gold/10 via-gold/5 to-transparent border border-gold/30 rounded-xl p-6 text-center">
-            <Home className="w-8 h-8 text-gold mx-auto mb-3" />
-            <h3 className="text-lg font-semibold text-white mb-2">New to UAE Real Estate?</h3>
-            <p className="text-zinc-400 text-sm mb-4">
+          <div className="mb-8 bg-gradient-to-br from-gold/10 via-gold/5 to-white border-2 border-gold/30 rounded-2xl p-8 text-center shadow-lg">
+            <div className="w-14 h-14 bg-black rounded-2xl flex items-center justify-center mx-auto mb-4 shadow-lg">
+              <Home className="w-7 h-7 text-gold" />
+            </div>
+            <h3 className="text-xl font-bold text-black mb-3">New to UAE Real Estate?</h3>
+            <p className="text-zinc-600 text-sm mb-5 max-w-md mx-auto leading-relaxed">
               Start with our Buyer Guide to understand the fundamentals of purchasing property in the UAE.
             </p>
             <Link 
               to="/buyer-guide"
-              className="inline-flex items-center gap-2 px-4 py-2 bg-gold/20 hover:bg-gold/30 text-gold rounded-lg transition-colors text-sm font-medium"
+              className="inline-flex items-center gap-2 px-6 py-3 bg-gradient-to-r from-gold to-gold-dark hover:from-gold-dark hover:to-gold text-black rounded-xl transition-all text-sm font-semibold shadow-lg hover:shadow-xl"
             >
               Start Here: Buyer Guide
               <ArrowRight className="w-4 h-4" />
@@ -46,19 +48,22 @@ export const GuideNavigation = ({ current, guides, showStartHere = false }: Guid
         )}
 
         {/* Navigation Arrows */}
-        <div className="flex flex-col sm:flex-row gap-4">
+        <div className="flex flex-col sm:flex-row gap-6">
           {prevGuide ? (
             <Link 
               to={prevGuide.path}
-              className="flex-1 group bg-white hover:bg-zinc-50 border border-zinc-200 hover:border-gold/50 rounded-xl p-5 transition-all hover:shadow-lg"
+              className="flex-1 group bg-gradient-to-br from-zinc-50 to-white border-2 border-zinc-200 hover:border-gold/50 rounded-2xl p-8 transition-all hover:shadow-xl"
             >
-              <div className="flex items-center gap-4">
-                <div className="w-12 h-12 bg-black rounded-xl flex items-center justify-center group-hover:bg-gold/10 transition-colors">
-                  <ArrowLeft className="w-5 h-5 text-gold" />
+              <div className="flex items-center gap-6">
+                <div className="w-16 h-16 bg-black rounded-2xl flex items-center justify-center group-hover:bg-gold/10 transition-colors shadow-lg">
+                  <ArrowLeft className="w-7 h-7 text-gold" />
                 </div>
                 <div className="flex-1">
-                  <p className="text-zinc-500 text-xs uppercase tracking-wider mb-1 font-medium">Previous Guide</p>
-                  <p className="text-black font-semibold group-hover:text-gold transition-colors text-lg">{prevGuide.title}</p>
+                  <p className="text-zinc-500 text-sm uppercase tracking-wider mb-2 font-semibold">Previous Guide</p>
+                  <p className="text-black font-bold group-hover:text-gold transition-colors text-xl md:text-2xl">{prevGuide.title}</p>
+                  {prevGuide.description && (
+                    <p className="text-zinc-600 text-sm mt-2">{prevGuide.description}</p>
+                  )}
                 </div>
               </div>
             </Link>
@@ -69,15 +74,18 @@ export const GuideNavigation = ({ current, guides, showStartHere = false }: Guid
           {nextGuide ? (
             <Link 
               to={nextGuide.path}
-              className="flex-1 group bg-white hover:bg-zinc-50 border border-zinc-200 hover:border-gold/50 rounded-xl p-5 transition-all hover:shadow-lg text-right"
+              className="flex-1 group bg-gradient-to-br from-gold/10 to-gold/5 border-2 border-gold/30 hover:border-gold rounded-2xl p-8 transition-all hover:shadow-xl text-right"
             >
-              <div className="flex items-center justify-end gap-4">
+              <div className="flex items-center justify-end gap-6">
                 <div className="flex-1">
-                  <p className="text-zinc-500 text-xs uppercase tracking-wider mb-1 font-medium">Next Guide</p>
-                  <p className="text-black font-semibold group-hover:text-gold transition-colors text-lg">{nextGuide.title}</p>
+                  <p className="text-gold text-sm uppercase tracking-wider mb-2 font-semibold">Next Guide</p>
+                  <p className="text-black font-bold group-hover:text-gold transition-colors text-xl md:text-2xl">{nextGuide.title}</p>
+                  {nextGuide.description && (
+                    <p className="text-zinc-600 text-sm mt-2">{nextGuide.description}</p>
+                  )}
                 </div>
-                <div className="w-12 h-12 bg-black rounded-xl flex items-center justify-center group-hover:bg-gold/10 transition-colors">
-                  <ArrowRight className="w-5 h-5 text-gold" />
+                <div className="w-16 h-16 bg-gradient-to-br from-gold to-gold-dark rounded-2xl flex items-center justify-center shadow-lg">
+                  <ArrowRight className="w-7 h-7 text-black" />
                 </div>
               </div>
             </Link>
@@ -87,20 +95,23 @@ export const GuideNavigation = ({ current, guides, showStartHere = false }: Guid
         </div>
 
         {/* All Guides Links */}
-        <div className="mt-6 flex flex-wrap justify-center gap-2">
-          {guides.map((guide) => (
-            <Link
-              key={guide.path}
-              to={guide.path}
-              className={`px-4 py-2 rounded-lg text-sm font-medium transition-all ${
-                guide.path === current
-                  ? "bg-gold text-black shadow-md"
-                  : "bg-white text-zinc-700 hover:text-black hover:bg-zinc-100 border border-zinc-200 hover:border-gold/50"
-              }`}
-            >
-              {guide.title}
-            </Link>
-          ))}
+        <div className="mt-8 pt-6 border-t border-zinc-200">
+          <p className="text-center text-sm text-zinc-500 font-medium uppercase tracking-wider mb-4">All Guides</p>
+          <div className="flex flex-wrap justify-center gap-3">
+            {guides.map((guide) => (
+              <Link
+                key={guide.path}
+                to={guide.path}
+                className={`px-5 py-2.5 rounded-xl text-sm font-semibold transition-all ${
+                  guide.path === current
+                    ? "bg-gradient-to-r from-gold to-gold-dark text-black shadow-lg"
+                    : "bg-zinc-100 text-zinc-700 hover:text-black hover:bg-zinc-200 border border-zinc-200 hover:border-gold/50"
+                }`}
+              >
+                {guide.title}
+              </Link>
+            ))}
+          </div>
         </div>
       </div>
     </motion.div>

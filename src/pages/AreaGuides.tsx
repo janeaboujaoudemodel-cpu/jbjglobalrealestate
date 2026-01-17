@@ -208,7 +208,7 @@ const AreaGuides = () => {
       </section>
 
       {/* Guide Navigation */}
-      <section className="py-8 border-t border-zinc-800">
+      <section className="py-12 bg-white border-t border-zinc-200">
         <div className="container mx-auto px-4">
           <GuideNavigation current="/areas" guides={GUIDE_LINKS} showStartHere />
         </div>
