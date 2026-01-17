@@ -147,8 +147,8 @@ const sitemapSections: SitemapSection[] = [
     icon: GraduationCap,
     color: "text-pink-400",
     links: [
-      { href: "/join", label: "Apply to Join", description: "Submit your application" },
-      { href: "/hr-agent", label: "Contact HR · Jessica", description: "HR virtual assistant" },
+      { href: "/join", label: "Apply to Join Our Team", description: "Submit your application" },
+      { href: "/hr-agent", label: "Contact Our HR · Jessica", description: "HR virtual assistant" },
       { href: "/onboarding", label: "Training Portal", description: "Onboarding and training" },
       { href: "/referral-partner", label: "Referral Partner", description: "Become a referral partner" },
     ],

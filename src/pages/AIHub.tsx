@@ -542,8 +542,8 @@ const AIHub = () => {
         {/* Gold Divider */}
         <div className="h-px bg-gradient-to-r from-transparent via-gold/40 to-transparent" />
 
-        {/* Quick Benefits Strip - WHITE BACKGROUND */}
-        <section className="py-12 bg-white">
+        {/* Quick Benefits Strip - PREMIUM CHAMPAGNE */}
+        <section className="py-12 bg-gradient-to-br from-white via-[#FDFBF7] to-[#F5F0E6]">
           <div className="container mx-auto px-4">
             <div className="grid grid-cols-2 md:grid-cols-4 gap-6">
               {quickBenefits.map((benefit, idx) => (
@@ -749,8 +749,8 @@ const AIHub = () => {
         {/* Gold Divider */}
         <div className="h-px bg-gradient-to-r from-transparent via-gold/40 to-transparent" />
 
-        {/* JOIN SECTION - WHITE BACKGROUND */}
-        <section className="py-16 md:py-20 bg-white">
+        {/* JOIN SECTION - PREMIUM CHAMPAGNE */}
+        <section className="py-16 md:py-20 bg-gradient-to-br from-white via-[#FDFBF7] to-[#F5F0E6]">
           <div className="container mx-auto px-4">
             <motion.div
               className="max-w-3xl mx-auto text-center"
