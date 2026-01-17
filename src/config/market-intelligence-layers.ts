@@ -2,6 +2,7 @@
  * JBJ GLOBAL REAL ESTATE — Market Intelligence Layer Separation
  * 
  * PRIORITY 4 — PART 4: PUBLIC vs INTERNAL MARKET INTELLIGENCE
+ * PRIORITY 6 — PART 2: 4-TIER INTELLIGENCE STRUCTURE
  * 
  * Brand: JBJ GLOBAL REAL ESTATE
  * Core Activities: BUY · SELL · RENT
@@ -11,18 +12,524 @@
  * - They NEVER share write access
  * - They NEVER expose the same depth of data
  * - Compliance firewall enforced at all times
+ * - 4-tier access control: Public → Registered → Client → Internal
  */
 
 import type { DataRoomAccessRole } from '@/types/data-rooms';
 
 // ============================================================================
-// MARKET INTELLIGENCE LAYER IDENTIFIERS
+// BRAND CONSTANTS (LOCKED — PRIORITY 6)
+// ============================================================================
+
+export const BRAND_CONSTANTS = {
+  COMPANY_NAME: 'JBJ GLOBAL REAL ESTATE',
+  CORE_ACTIVITIES: 'BUY · SELL · RENT',
+  FORBIDDEN_TERMS: ['leasing', 'lease', 'jbj', 'Jbj', 'JBj', 'jBJ'],
+} as const;
+
+// ============================================================================
+// MARKET INTELLIGENCE LAYER IDENTIFIERS (LEGACY — PRIORITY 4)
 // ============================================================================
 
 export type MarketIntelligenceLayer = 'public' | 'internal';
 
 // ============================================================================
-// CONTENT TYPE DEFINITIONS
+// 4-TIER INTELLIGENCE STRUCTURE (PRIORITY 6 — PART 2)
+// ============================================================================
+
+export type IntelligenceTier = 
+  | 'public'
+  | 'registered_user'
+  | 'client_only'
+  | 'internal_strategic';
+
+export type TierAccessLevel = 'open' | 'authenticated' | 'client' | 'admin_executive';
+
+export interface IntelligenceTierDefinition {
+  id: IntelligenceTier;
+  name: string;
+  purpose: string;
+  access_level: TierAccessLevel;
+  allowed_content: string[];
+  forbidden_content: string[];
+  access_rules: {
+    requires_auth: boolean;
+    requires_client_status: boolean;
+    requires_admin_role: boolean;
+    allowed_roles: DataRoomAccessRole[];
+    broker_mediated: boolean;
+    auditable: boolean;
+  };
+  data_exposure: {
+    can_show_prices: boolean;
+    can_show_yields: boolean;
+    can_show_forecasts: boolean;
+    can_show_deal_specific: boolean;
+    can_show_internal_metrics: boolean;
+    can_personalize: boolean;
+  };
+}
+
+// ============================================================================
+// TIER 1: PUBLIC MARKET INTELLIGENCE
+// ============================================================================
+
+export const PUBLIC_INTELLIGENCE: IntelligenceTierDefinition = {
+  id: 'public',
+  name: 'Public Market Intelligence',
+  purpose: 'Trust-building, education, authority demonstration',
+  access_level: 'open',
+  
+  allowed_content: [
+    'market_overviews',
+    'historical_price_movements_descriptive',
+    'supply_demand_commentary',
+    'area_profiles',
+    'infrastructure_explanations',
+    'master_plan_explanations',
+    'government_initiatives_published',
+    'market_cycle_education',
+    'high_level_trend_discussion',
+    'general_market_context',
+    'educational_content',
+  ],
+  
+  forbidden_content: [
+    'forecasts_as_guarantees',
+    'deal_specific_advice',
+    'personalized_recommendations',
+    'internal_metrics',
+    'client_data',
+    'pricing_models',
+    'conversion_data',
+    'partner_performance',
+    'inventory_velocity',
+    'lead_intelligence',
+  ],
+  
+  access_rules: {
+    requires_auth: false,
+    requires_client_status: false,
+    requires_admin_role: false,
+    allowed_roles: ['viewer', 'prospect', 'broker', 'investor', 'developer_rep', 'executive', 'owner'],
+    broker_mediated: false,
+    auditable: false,
+  },
+  
+  data_exposure: {
+    can_show_prices: true, // Historical only, descriptive
+    can_show_yields: false,
+    can_show_forecasts: false,
+    can_show_deal_specific: false,
+    can_show_internal_metrics: false,
+    can_personalize: false,
+  },
+};
+
+// ============================================================================
+// TIER 2: REGISTERED USER INTELLIGENCE
+// ============================================================================
+
+export const REGISTERED_USER_INTELLIGENCE: IntelligenceTierDefinition = {
+  id: 'registered_user',
+  name: 'Registered User Intelligence',
+  purpose: 'Deeper engagement and lead qualification',
+  access_level: 'authenticated',
+  
+  allowed_content: [
+    ...PUBLIC_INTELLIGENCE.allowed_content,
+    'extended_reports',
+    'area_comparison_tables',
+    'buyer_seller_market_context',
+    'absorption_rate_explanations',
+    'rental_yield_discussion_descriptive',
+    'scenario_explanations_non_guaranteed',
+    'market_timing_general',
+    'investment_considerations_educational',
+  ],
+  
+  forbidden_content: [
+    'deal_specific_advice',
+    'personalized_investment_recommendations',
+    'internal_metrics',
+    'pricing_models',
+    'partner_performance',
+    'lead_intelligence',
+    'guaranteed_outcomes',
+    'specific_roi_projections',
+  ],
+  
+  access_rules: {
+    requires_auth: true,
+    requires_client_status: false,
+    requires_admin_role: false,
+    allowed_roles: ['prospect', 'broker', 'investor', 'developer_rep', 'executive', 'owner'],
+    broker_mediated: false,
+    auditable: true,
+  },
+  
+  data_exposure: {
+    can_show_prices: true,
+    can_show_yields: true, // Descriptive only
+    can_show_forecasts: false,
+    can_show_deal_specific: false,
+    can_show_internal_metrics: false,
+    can_personalize: false,
+  },
+};
+
+// ============================================================================
+// TIER 3: CLIENT-ONLY ADVISORY INTELLIGENCE
+// ============================================================================
+
+export const CLIENT_ONLY_INTELLIGENCE: IntelligenceTierDefinition = {
+  id: 'client_only',
+  name: 'Client-Only Advisory Intelligence',
+  purpose: 'Direct brokerage advisory support',
+  access_level: 'client',
+  
+  allowed_content: [
+    ...REGISTERED_USER_INTELLIGENCE.allowed_content,
+    'deal_specific_analysis',
+    'property_comparisons',
+    'budget_alignment_discussions',
+    'risk_considerations',
+    'area_suitability_analysis',
+    'buy_sell_rent_strategy_discussions',
+    'personalized_market_context',
+    'client_specific_scenarios',
+    'negotiation_context',
+  ],
+  
+  forbidden_content: [
+    'internal_metrics',
+    'pricing_models',
+    'partner_performance',
+    'lead_intelligence',
+    'inventory_velocity',
+    'conversion_rates',
+    'company_strategy',
+    'guaranteed_returns',
+  ],
+  
+  access_rules: {
+    requires_auth: true,
+    requires_client_status: true,
+    requires_admin_role: false,
+    allowed_roles: ['investor', 'executive', 'owner'],
+    broker_mediated: true,
+    auditable: true,
+  },
+  
+  data_exposure: {
+    can_show_prices: true,
+    can_show_yields: true,
+    can_show_forecasts: false, // Still no guarantees
+    can_show_deal_specific: true,
+    can_show_internal_metrics: false,
+    can_personalize: true,
+  },
+};
+
+// ============================================================================
+// TIER 4: INTERNAL STRATEGIC INTELLIGENCE (STRICT)
+// ============================================================================
+
+export const INTERNAL_STRATEGIC_INTELLIGENCE: IntelligenceTierDefinition = {
+  id: 'internal_strategic',
+  name: 'Internal Strategic Intelligence',
+  purpose: 'Company strategy and decision-making',
+  access_level: 'admin_executive',
+  
+  allowed_content: [
+    ...CLIENT_ONLY_INTELLIGENCE.allowed_content,
+    'internal_analytics',
+    'pricing_sensitivity_models',
+    'inventory_velocity',
+    'partner_performance',
+    'lead_conversion_intelligence',
+    'market_timing_insights_internal',
+    'competitive_analysis',
+    'revenue_projections',
+    'strategic_planning_data',
+    'broker_performance_metrics',
+    'campaign_effectiveness',
+  ],
+  
+  forbidden_content: [
+    'guaranteed_client_returns', // Even internally, we don't promise client outcomes
+  ],
+  
+  access_rules: {
+    requires_auth: true,
+    requires_client_status: false,
+    requires_admin_role: true,
+    allowed_roles: ['executive', 'owner'],
+    broker_mediated: false,
+    auditable: true,
+  },
+  
+  data_exposure: {
+    can_show_prices: true,
+    can_show_yields: true,
+    can_show_forecasts: true, // Internal forecasting only
+    can_show_deal_specific: true,
+    can_show_internal_metrics: true,
+    can_personalize: true,
+  },
+};
+
+// ============================================================================
+// TIER REGISTRY
+// ============================================================================
+
+export const INTELLIGENCE_TIERS: Record<IntelligenceTier, IntelligenceTierDefinition> = {
+  public: PUBLIC_INTELLIGENCE,
+  registered_user: REGISTERED_USER_INTELLIGENCE,
+  client_only: CLIENT_ONLY_INTELLIGENCE,
+  internal_strategic: INTERNAL_STRATEGIC_INTELLIGENCE,
+};
+
+// ============================================================================
+// USER ACCESS CONTEXT (PRIORITY 6 — PART 2)
+// ============================================================================
+
+export interface UserAccessContext {
+  is_authenticated: boolean;
+  is_active_client: boolean;
+  is_admin: boolean;
+  is_executive: boolean;
+  is_owner: boolean;
+  role?: DataRoomAccessRole;
+}
+
+/**
+ * Determines the maximum intelligence tier a user can access
+ */
+export function getMaxAccessibleTier(context: UserAccessContext): IntelligenceTier {
+  // Owner/Executive = Internal Strategic
+  if (context.is_owner || context.is_executive) {
+    return 'internal_strategic';
+  }
+  
+  // Admin without executive role = Client-Only (can assist clients)
+  if (context.is_admin) {
+    return 'client_only';
+  }
+  
+  // Active client = Client-Only
+  if (context.is_authenticated && context.is_active_client) {
+    return 'client_only';
+  }
+  
+  // Authenticated = Registered User
+  if (context.is_authenticated) {
+    return 'registered_user';
+  }
+  
+  // Default = Public
+  return 'public';
+}
+
+/**
+ * Checks if a user can access a specific tier
+ */
+export function canAccessTier(
+  context: UserAccessContext,
+  requestedTier: IntelligenceTier
+): boolean {
+  const tierHierarchy: IntelligenceTier[] = [
+    'public',
+    'registered_user',
+    'client_only',
+    'internal_strategic',
+  ];
+  
+  const maxTier = getMaxAccessibleTier(context);
+  const maxIndex = tierHierarchy.indexOf(maxTier);
+  const requestedIndex = tierHierarchy.indexOf(requestedTier);
+  
+  return requestedIndex <= maxIndex;
+}
+
+/**
+ * Checks if specific content type is allowed in a tier
+ */
+export function isContentAllowedInTier(
+  contentType: string,
+  tier: IntelligenceTier
+): boolean {
+  const tierDef = INTELLIGENCE_TIERS[tier];
+  
+  // Check if explicitly forbidden
+  if (tierDef.forbidden_content.includes(contentType)) {
+    return false;
+  }
+  
+  // Check if explicitly allowed
+  return tierDef.allowed_content.includes(contentType);
+}
+
+/**
+ * Gets the appropriate tier for a content type
+ */
+export function getMinimumTierForContent(contentType: string): IntelligenceTier | null {
+  const tierOrder: IntelligenceTier[] = [
+    'public',
+    'registered_user',
+    'client_only',
+    'internal_strategic',
+  ];
+  
+  for (const tier of tierOrder) {
+    if (isContentAllowedInTier(contentType, tier)) {
+      return tier;
+    }
+  }
+  
+  return null;
+}
+
+// ============================================================================
+// TIER ISOLATION RULES (PRIORITY 6 — PART 2)
+// ============================================================================
+
+export const TIER_ISOLATION_RULES = {
+  // Internal data NEVER flows to lower tiers
+  internal_to_public: {
+    allowed: false,
+    reason: 'Internal strategic intelligence must NEVER be exposed publicly',
+  },
+  
+  internal_to_registered: {
+    allowed: false,
+    reason: 'Internal strategic intelligence must NEVER be exposed to registered users',
+  },
+  
+  internal_to_client: {
+    allowed: false,
+    reason: 'Internal strategic intelligence must NEVER be exposed to clients',
+  },
+  
+  // Client data flows down only with explicit broker mediation
+  client_to_public: {
+    allowed: false,
+    reason: 'Client-specific intelligence must NEVER be exposed publicly',
+  },
+  
+  client_to_registered: {
+    allowed: false,
+    reason: 'Client-specific intelligence requires active client status',
+  },
+  
+  // Registered content can inform public (generalized)
+  registered_to_public: {
+    allowed: true,
+    condition: 'Must be generalized, no user-specific data',
+  },
+  
+  // AI MUST respect these boundaries
+  ai_cross_tier_combination: {
+    allowed: false,
+    reason: 'AI must NEVER combine internal + public data in one output',
+  },
+} as const;
+
+// ============================================================================
+// INTELLIGENCE ACCESS LOG (PRIORITY 6 — PART 2)
+// ============================================================================
+
+export interface IntelligenceAccessLog {
+  timestamp: string;
+  user_id: string | null;
+  tier_accessed: IntelligenceTier;
+  content_types: string[];
+  access_granted: boolean;
+  denial_reason?: string;
+  ip_address?: string;
+  user_agent?: string;
+  broker_id?: string;
+}
+
+/**
+ * Creates an access log entry
+ */
+export function createAccessLogEntry(
+  userId: string | null,
+  tier: IntelligenceTier,
+  contentTypes: string[],
+  granted: boolean,
+  denialReason?: string
+): IntelligenceAccessLog {
+  return {
+    timestamp: new Date().toISOString(),
+    user_id: userId,
+    tier_accessed: tier,
+    content_types: contentTypes,
+    access_granted: granted,
+    denial_reason: denialReason,
+  };
+}
+
+// ============================================================================
+// AI TIER VALIDATION (PRIORITY 6 — PART 2)
+// ============================================================================
+
+export interface AITierContext {
+  current_tier: IntelligenceTier;
+  user_context: UserAccessContext;
+  content_types_requested: string[];
+}
+
+export interface AITierValidation {
+  is_valid: boolean;
+  violations: string[];
+  allowed_content: string[];
+  blocked_content: string[];
+  tier_used: IntelligenceTier;
+}
+
+/**
+ * Validates AI output request against tier boundaries
+ */
+export function validateAITierRequest(context: AITierContext): AITierValidation {
+  const violations: string[] = [];
+  const allowed_content: string[] = [];
+  const blocked_content: string[] = [];
+  
+  // Verify user can access requested tier
+  if (!canAccessTier(context.user_context, context.current_tier)) {
+    violations.push(`User cannot access tier: ${context.current_tier}`);
+    return {
+      is_valid: false,
+      violations,
+      allowed_content: [],
+      blocked_content: context.content_types_requested,
+      tier_used: getMaxAccessibleTier(context.user_context),
+    };
+  }
+  
+  // Check each content type
+  for (const contentType of context.content_types_requested) {
+    if (isContentAllowedInTier(contentType, context.current_tier)) {
+      allowed_content.push(contentType);
+    } else {
+      blocked_content.push(contentType);
+      violations.push(`Content type '${contentType}' not allowed in tier '${context.current_tier}'`);
+    }
+  }
+  
+  return {
+    is_valid: violations.length === 0,
+    violations,
+    allowed_content,
+    blocked_content,
+    tier_used: context.current_tier,
+  };
+}
+
+// ============================================================================
+// CONTENT TYPE DEFINITIONS (LEGACY — PRIORITY 4)
 // ============================================================================
 
 export type PublicContentType = 
@@ -42,7 +549,7 @@ export type InternalContentType =
   | 'jurisdiction_risk_notes';
 
 // ============================================================================
-// PUBLIC MARKET INTELLIGENCE LAYER
+// PUBLIC MARKET INTELLIGENCE LAYER (LEGACY — PRIORITY 4)
 // ============================================================================
 
 export const PUBLIC_MARKET_INTELLIGENCE = {
@@ -118,7 +625,7 @@ export const PUBLIC_MARKET_INTELLIGENCE = {
 } as const;
 
 // ============================================================================
-// INTERNAL MARKET INTELLIGENCE LAYER
+// INTERNAL MARKET INTELLIGENCE LAYER (LEGACY — PRIORITY 4)
 // ============================================================================
 
 export const INTERNAL_MARKET_INTELLIGENCE = {
@@ -291,6 +798,7 @@ export const AI_MARKET_INTELLIGENCE_RULES = {
     'Avoid advice or predictions',
     'Adapt tone per jurisdiction rules',
     'Include appropriate disclaimers',
+    'Respect intelligence tier boundaries',
   ],
   
   AI_MUST_NOT: [
@@ -299,6 +807,8 @@ export const AI_MARKET_INTELLIGENCE_RULES = {
     'Recommend buy/sell actions',
     'Claim governmental authority',
     'Promise returns or yields',
+    'Combine internal + public data in one output',
+    'Surface internal intelligence publicly',
   ],
   
   // Jurisdiction adaptation
@@ -391,6 +901,33 @@ export function validateLayerSeparation(): boolean {
 }
 
 // ============================================================================
+// MARKET INTELLIGENCE PURPOSE (PRIORITY 6 — PART 2)
+// ============================================================================
+
+export const MARKET_INTELLIGENCE_PURPOSE = {
+  exists_to: [
+    'Support brokerage advisory',
+    'Educate clients and investors',
+    'Demonstrate authority and depth',
+    `Enable better ${BRAND_CONSTANTS.CORE_ACTIVITIES} decisions`,
+    'Support internal strategy and negotiations',
+  ],
+  
+  must_never: [
+    'Act as a regulator',
+    'Act as a government portal',
+    'Promise outcomes or returns',
+    'Replace human brokerage advisory',
+  ],
+  
+  brand_enforcement: {
+    company_name: BRAND_CONSTANTS.COMPANY_NAME,
+    core_activities: BRAND_CONSTANTS.CORE_ACTIVITIES,
+    forbidden_terms: BRAND_CONSTANTS.FORBIDDEN_TERMS,
+  },
+} as const;
+
+// ============================================================================
 // MASTER EXPORT
 // ============================================================================
 
@@ -401,79 +938,68 @@ export const MARKET_INTELLIGENCE_LAYERS = {
   COMPLIANCE_FIREWALL,
   MANDATORY_DISCLAIMERS,
   AI_RULES: AI_MARKET_INTELLIGENCE_RULES,
+  // Priority 6 additions
+  TIERS: INTELLIGENCE_TIERS,
+  PURPOSE: MARKET_INTELLIGENCE_PURPOSE,
+  BRAND: BRAND_CONSTANTS,
 } as const;
 
 // ============================================================================
-// PRIORITY 4 — PART 4 STATUS
+// STATUS EXPORT
 // ============================================================================
 
 export const MARKET_INTELLIGENCE_LAYERS_STATUS = {
-  PRIORITY: 'PRIORITY 4 — PART 4',
+  PRIORITY: 'PRIORITY 6 — PART 2',
   STATUS: 'COMPLETE',
-  VERSION: '1.0.0',
+  VERSION: '2.0.0',
   
-  LAYERS_SEPARATED: {
-    PUBLIC_LAYER: true,
-    INTERNAL_LAYER: true,
-    LOGICALLY_ISOLATED: true,
-    PERMISSION_ISOLATED: true,
-    NEVER_SHARED_WRITE: true,
-    NEVER_SAME_DATA_DEPTH: true,
+  FOUR_TIER_STRUCTURE: {
+    tier_1_public: {
+      name: 'Public Market Intelligence',
+      purpose: 'Trust-building, education, authority',
+      access: 'open',
+    },
+    tier_2_registered: {
+      name: 'Registered User Intelligence',
+      purpose: 'Deeper engagement and lead qualification',
+      access: 'authenticated',
+    },
+    tier_3_client: {
+      name: 'Client-Only Advisory Intelligence',
+      purpose: 'Direct brokerage advisory support',
+      access: 'client + broker_mediated',
+    },
+    tier_4_internal: {
+      name: 'Internal Strategic Intelligence',
+      purpose: 'Company strategy and decision-making',
+      access: 'admin_executive',
+    },
   },
   
-  PUBLIC_LAYER_CONTENT: {
-    ALLOWED: [
-      'Market snapshots',
-      'Price ranges (historical)',
-      'Supply/demand indicators (descriptive)',
-      'High-level trends (past & present)',
-      'Methodology summary',
-      'Data source attribution',
-    ],
-    FORBIDDEN: [
-      'Recommendations',
-      'Predictions',
-      'Forecasts',
-      'Investment advice',
-      'Yield promises',
-      'Best time to buy/sell',
-      'Government affiliation claims',
-    ],
-    ACCESS: 'Public or logged-in, read-only, no export',
+  ACCESS_CONTROL: {
+    rbac_enforced: true,
+    tier_separation: true,
+    privilege_escalation_blocked: true,
+    api_exposure_controlled: true,
+    ai_leakage_prevented: true,
   },
   
-  INTERNAL_LAYER_ACCESS: {
-    owner_founder: 'full_access',
-    executive: 'read_only',
-    investor: 'no_access',
-    partner: 'no_access',
-    internal_staff: 'no_access',
-  },
-  
-  COMPLIANCE_FIREWALL_ENFORCED: {
-    NO_ADVISORY_CONTENT: true,
-    NO_PREDICTIVE_CONTENT: true,
-    NO_GOVERNMENTAL_CLAIMS: true,
-    NO_REGULATORY_AUTHORITY: true,
-    MANDATORY_DISCLAIMERS: true,
-    AI_DESCRIPTIVE_ONLY: true,
+  AI_SAFEGUARDS: {
+    tier_boundary_enforcement: true,
+    cross_tier_combination_blocked: true,
+    internal_never_public: true,
+    client_data_protected: true,
   },
   
   BRAND_COMPLIANCE: {
     COMPANY_NAME: 'JBJ GLOBAL REAL ESTATE',
     CORE_ACTIVITIES: 'BUY · SELL · RENT',
-    FORBIDDEN_TERMS: ['leasing', 'Lease'],
+    FORBIDDEN_TERMS: ['leasing', 'lease'],
   },
   
-  FILES_CREATED: [
+  FILES_MODIFIED: [
     'src/config/market-intelligence-layers.ts',
-  ],
-  
-  NOT_IMPLEMENTED: [
-    'UI changes',
-    'New routes',
-    'New pages',
-    'Content population',
-    'Exports',
+    'src/config/ai-intelligence-tier-enforcement.ts',
+    'src/hooks/useIntelligenceTierAccess.ts',
   ],
 } as const;
