@@ -54,9 +54,10 @@ export function BrokerToolkitGrowth() {
           viewport={{ once: true }}
           className="text-center mb-12"
         >
-          <Badge className="bg-gold/20 text-gold border-gold/30 mb-4">
-            <TrendingUp className="w-3 h-3 mr-1" />
-            Growth & Rewards
+          <Badge className="bg-white text-black border-gold/30 mb-4 shadow-sm">
+            <TrendingUp className="w-3 h-3 mr-1 text-gold" />
+            <span className="text-gold">Growth</span>
+            <span className="text-black ml-1">& Rewards</span>
           </Badge>
           <h2 className="text-3xl md:text-4xl font-bold text-white mb-4">
             Level Up Your <span className="text-gold">Career</span>

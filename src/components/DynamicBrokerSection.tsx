@@ -197,9 +197,10 @@ const DynamicBrokerSection = ({ forcedUserType }: DynamicBrokerSectionProps) => 
           variants={fadeInUp}
         >
           {/* Badge */}
-          <Badge className="bg-gold/20 text-gold border-gold/30 mb-6 py-2 px-4">
-            <content.badgeIcon className="w-4 h-4 mr-2" />
-            {content.badge}
+          <Badge className="bg-white text-black border-gold/30 mb-6 py-2 px-4 shadow-sm">
+            <content.badgeIcon className="w-4 h-4 mr-2 text-gold" />
+            <span className="text-gold">{content.badge.split(' ')[0]}</span>
+            <span className="text-black ml-1">{content.badge.split(' ').slice(1).join(' ')}</span>
           </Badge>
 
           {/* Title */}

@@ -299,7 +299,10 @@ const EmployeeHub = () => {
             <div className="flex items-center gap-3 mb-6">
               <Trophy className="h-6 w-6 text-gold" />
               <h2 className="text-xl font-bold text-white">Top Performers of the Month</h2>
-              <Badge className="bg-gold/20 text-gold border-gold/30">January 2026</Badge>
+              <Badge className="bg-white text-black border-gold/30 shadow-sm">
+                <span className="text-gold">January</span>
+                <span className="text-black ml-1">2026</span>
+              </Badge>
             </div>
             
             <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-6 gap-4">
@@ -402,9 +405,10 @@ const EmployeeHub = () => {
                 electronics (iPad, iPhone), and special recognition at company events.
               </p>
               <div className="flex flex-wrap justify-center gap-4">
-                <Badge className="bg-gold/20 text-gold border-gold/30 px-4 py-2 text-sm">
-                  <Award className="w-4 h-4 mr-2" />
-                  Monthly Prize Draw
+                <Badge className="bg-white text-black border-gold/30 px-4 py-2 text-sm shadow-sm">
+                  <Award className="w-4 h-4 mr-2 text-gold" />
+                  <span className="text-gold">Monthly</span>
+                  <span className="text-black ml-1">Prize Draw</span>
                 </Badge>
                 <Badge className="bg-amber-500/20 text-amber-400 border-amber-500/30 px-4 py-2 text-sm">
                   <Star className="w-4 h-4 mr-2" />

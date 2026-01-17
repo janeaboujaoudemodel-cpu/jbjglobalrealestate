@@ -147,8 +147,9 @@ export default function FoundersAssistant() {
                 <div>
                   <h1 className="text-2xl font-bold text-white flex items-center gap-2">
                     Olivia AI
-                    <Badge className="bg-gold/20 text-gold border-gold/30 text-xs">
-                      Founder's Assistant
+                    <Badge className="bg-white text-black border-gold/30 text-xs shadow-sm">
+                      <span className="text-gold">Founder's</span>
+                      <span className="text-black ml-1">Assistant</span>
                     </Badge>
                   </h1>
                   <p className="text-gray-400 text-sm">Your personal AI executive assistant • Available 24/7</p>

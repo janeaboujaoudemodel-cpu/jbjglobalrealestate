@@ -1024,7 +1024,10 @@ const Founder = () => {
             viewport={{ once: true, margin: "-100px" }}
             variants={fadeInUp}
           >
-            <span className="text-gold text-sm uppercase tracking-[0.4em]">Track Record</span>
+            <span className="inline-block px-5 py-2 bg-white border border-gold/30 rounded-full text-xs uppercase tracking-[0.2em] font-semibold shadow-sm">
+              <span className="text-gold">Track</span>
+              <span className="text-black"> Record</span>
+            </span>
             <GoldLine className="w-32 mx-auto mt-4 mb-8" />
             <h2 
               className="text-white text-4xl md:text-5xl lg:text-6xl font-bold"

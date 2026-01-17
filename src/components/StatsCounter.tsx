@@ -134,8 +134,9 @@ const StatsCounter = () => {
       <div className="container mx-auto px-4">
         {/* Section Header - Premium Label */}
         <div className="text-center mb-10">
-          <span className="inline-block px-4 py-1.5 bg-gradient-to-r from-[#C8A766]/20 via-black to-[#C8A766]/20 border border-[#C8A766]/30 rounded-full text-[#C8A766] text-xs uppercase tracking-[0.2em] font-medium mb-3">
-            Track Record
+          <span className="inline-block px-5 py-2 bg-white border border-gold/30 rounded-full text-xs uppercase tracking-[0.2em] font-semibold mb-3 shadow-sm">
+            <span className="text-gold">Track</span>
+            <span className="text-black"> Record</span>
           </span>
           <p className="text-zinc-400 text-sm">Founder experience</p>
         </div>

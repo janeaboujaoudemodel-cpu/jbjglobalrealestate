@@ -120,8 +120,9 @@ const MonthlyMarketBrief = () => {
 
           <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-4">
             <div>
-              <Badge className="mb-3 bg-gold/20 text-gold border-gold/30">
-                MONTHLY MARKET BRIEF
+              <Badge className="mb-3 bg-white text-black border-gold/30 shadow-sm">
+                <span className="text-gold">MONTHLY</span>
+                <span className="text-black ml-1">MARKET BRIEF</span>
               </Badge>
               <h1 className="text-3xl md:text-4xl font-bold text-white">
                 {data.period}

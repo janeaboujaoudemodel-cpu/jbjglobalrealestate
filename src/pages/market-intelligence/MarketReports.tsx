@@ -308,26 +308,26 @@ const MarketReportsPage = () => {
         <div className="container mx-auto px-4">
           <div className="grid md:grid-cols-3 gap-4 max-w-3xl mx-auto">
             <Link to="/market-intelligence/overview" className="group">
-              <Card className="bg-white border-zinc-200 hover:border-gold/50 hover:shadow-lg transition-all">
+              <Card className="bg-gradient-to-r from-white via-[#FDFBF7] to-[#F5F0E6] border-gold/30 hover:border-gold/50 hover:shadow-lg transition-all shadow-sm">
                 <CardContent className="p-4 flex items-center justify-between">
-                  <span className="text-black font-medium group-hover:text-gold transition-colors">Market Overview</span>
-                  <ArrowRight className="w-4 h-4 text-gold" />
+                  <span className="text-gold font-medium group-hover:text-gold-dark transition-colors">Market Overview</span>
+                  <ArrowRight className="w-4 h-4 text-black" />
                 </CardContent>
               </Card>
             </Link>
             <Link to="/market-intelligence/areas" className="group">
-              <Card className="bg-white border-zinc-200 hover:border-gold/50 hover:shadow-lg transition-all">
+              <Card className="bg-gradient-to-r from-white via-[#FDFBF7] to-[#F5F0E6] border-gold/30 hover:border-gold/50 hover:shadow-lg transition-all shadow-sm">
                 <CardContent className="p-4 flex items-center justify-between">
-                  <span className="text-black font-medium group-hover:text-gold transition-colors">Area Intelligence</span>
-                  <ArrowRight className="w-4 h-4 text-gold" />
+                  <span className="text-gold font-medium group-hover:text-gold-dark transition-colors">Area Intelligence</span>
+                  <ArrowRight className="w-4 h-4 text-black" />
                 </CardContent>
               </Card>
             </Link>
             <Link to="/market-intelligence/methodology" className="group">
-              <Card className="bg-white border-zinc-200 hover:border-gold/50 hover:shadow-lg transition-all">
+              <Card className="bg-gradient-to-r from-white via-[#FDFBF7] to-[#F5F0E6] border-gold/30 hover:border-gold/50 hover:shadow-lg transition-all shadow-sm">
                 <CardContent className="p-4 flex items-center justify-between">
-                  <span className="text-black font-medium group-hover:text-gold transition-colors">Methodology</span>
-                  <ArrowRight className="w-4 h-4 text-gold" />
+                  <span className="text-gold font-medium group-hover:text-gold-dark transition-colors">Methodology</span>
+                  <ArrowRight className="w-4 h-4 text-black" />
                 </CardContent>
               </Card>
             </Link>

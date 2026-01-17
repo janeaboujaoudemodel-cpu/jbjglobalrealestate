@@ -426,9 +426,10 @@ const AdvancedBrokerToolkit = () => {
           viewport={{ once: true }}
           variants={fadeInUp}
         >
-          <Badge className="bg-gold/20 text-gold border-gold/30 mb-4">
-            <Briefcase className="w-3 h-3 mr-1" />
-            Advanced Broker Toolkit
+          <Badge className="bg-white text-black border-gold/30 mb-4 shadow-sm">
+            <Briefcase className="w-3 h-3 mr-1 text-gold" />
+            <span className="text-gold">Advanced</span>
+            <span className="text-black ml-1">Broker Toolkit</span>
           </Badge>
           <h2 className="text-3xl md:text-4xl lg:text-5xl font-bold text-white mb-4" style={{ fontFamily: 'Poppins, sans-serif' }}>
             Everything You Need to <span className="text-gold">Succeed</span>
