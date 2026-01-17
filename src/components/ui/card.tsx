@@ -2,8 +2,21 @@ import * as React from "react";
 
 import { cn } from "@/lib/utils";
 
+/* ============================================================
+ * GLOBAL CARD SYSTEM - JBJ GLOBAL REAL ESTATE (LOCKED)
+ * Architectural · Calm · Premium · Trustworthy
+ * No shadows, no gradients, no animated hover effects
+ * ============================================================ */
+
 const Card = React.forwardRef<HTMLDivElement, React.HTMLAttributes<HTMLDivElement>>(({ className, ...props }, ref) => (
-  <div ref={ref} className={cn("rounded-lg border bg-card text-card-foreground shadow-sm", className)} {...props} />
+  <div 
+    ref={ref} 
+    className={cn(
+      "rounded-lg border border-border/30 bg-card text-card-foreground transition-colors duration-200 hover:border-gold/40", 
+      className
+    )} 
+    {...props} 
+  />
 ));
 Card.displayName = "Card";
 
@@ -16,14 +29,21 @@ CardHeader.displayName = "CardHeader";
 
 const CardTitle = React.forwardRef<HTMLParagraphElement, React.HTMLAttributes<HTMLHeadingElement>>(
   ({ className, ...props }, ref) => (
-    <h3 ref={ref} className={cn("text-2xl font-semibold leading-none tracking-tight", className)} {...props} />
+    <h3 
+      ref={ref} 
+      className={cn(
+        "text-lg md:text-xl font-medium leading-tight tracking-tight text-foreground", 
+        className
+      )} 
+      {...props} 
+    />
   ),
 );
 CardTitle.displayName = "CardTitle";
 
 const CardDescription = React.forwardRef<HTMLParagraphElement, React.HTMLAttributes<HTMLParagraphElement>>(
   ({ className, ...props }, ref) => (
-    <p ref={ref} className={cn("text-sm text-muted-foreground", className)} {...props} />
+    <p ref={ref} className={cn("text-sm text-muted-foreground leading-relaxed", className)} {...props} />
   ),
 );
 CardDescription.displayName = "CardDescription";
@@ -35,9 +55,32 @@ CardContent.displayName = "CardContent";
 
 const CardFooter = React.forwardRef<HTMLDivElement, React.HTMLAttributes<HTMLDivElement>>(
   ({ className, ...props }, ref) => (
-    <div ref={ref} className={cn("flex items-center p-6 pt-0", className)} {...props} />
+    <div 
+      ref={ref} 
+      className={cn(
+        "flex items-center p-6 pt-4 border-t border-border/20", 
+        className
+      )} 
+      {...props} 
+    />
   ),
 );
 CardFooter.displayName = "CardFooter";
 
-export { Card, CardHeader, CardFooter, CardTitle, CardDescription, CardContent };
+/* --- Card Meta Component (for secondary info) --- */
+const CardMeta = React.forwardRef<HTMLParagraphElement, React.HTMLAttributes<HTMLParagraphElement>>(
+  ({ className, ...props }, ref) => (
+    <p ref={ref} className={cn("text-sm text-muted-foreground", className)} {...props} />
+  ),
+);
+CardMeta.displayName = "CardMeta";
+
+/* --- Card Detail Component (for key details like price/status) --- */
+const CardDetail = React.forwardRef<HTMLParagraphElement, React.HTMLAttributes<HTMLParagraphElement>>(
+  ({ className, ...props }, ref) => (
+    <p ref={ref} className={cn("text-base font-medium text-gold", className)} {...props} />
+  ),
+);
+CardDetail.displayName = "CardDetail";
+
+export { Card, CardHeader, CardFooter, CardTitle, CardDescription, CardContent, CardMeta, CardDetail };
