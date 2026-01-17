@@ -477,7 +477,7 @@ const AIHub = () => {
                   </Button>
                 ) : (
                   <Button 
-                    onClick={() => navigate("/account")}
+                    onClick={() => navigate("/my-account")}
                     className="bg-gradient-to-r from-gold to-gold-dark text-black font-bold px-8 py-6 text-base shadow-lg hover:brightness-110 transition-all"
                     style={{ boxShadow: "0 0 25px rgba(203, 166, 75, 0.35)" }}
                   >
@@ -717,7 +717,7 @@ const AIHub = () => {
               {/* CTA */}
               {user ? (
                 <Button 
-                  onClick={() => navigate("/account")}
+                  onClick={() => navigate("/my-account")}
                   className="bg-gradient-to-r from-gold to-gold-dark text-black font-bold px-10 py-6 text-base shadow-lg hover:brightness-110 transition-all"
                   style={{ boxShadow: "0 0 25px rgba(203, 166, 75, 0.35)" }}
                 >

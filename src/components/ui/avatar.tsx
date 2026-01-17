@@ -43,27 +43,52 @@ Avatar.displayName = AvatarPrimitive.Root.displayName;
 
 /**
  * AvatarImage - GLOBAL PORTRAIT RULE APPLIED
- * - Uses object-fit: cover for visual presence (fills container)
- * - Face positioned in upper portion (object-position: center 25%)
- * - Head is never cropped
- * - Subject fills 70-85% of container
+ * - Never crop head/shoulders (foreground uses object-fit: contain)
+ * - Never show empty borders (background uses blurred cover-fill)
  */
 const AvatarImage = React.forwardRef<
   React.ElementRef<typeof AvatarPrimitive.Image>,
   React.ComponentPropsWithoutRef<typeof AvatarPrimitive.Image>
->(({ className, ...props }, ref) => (
-  <AvatarPrimitive.Image 
-    ref={ref} 
-    className={cn(
-      "aspect-square h-full w-full",
-      className
-    )}
-    style={{
-      objectFit: 'cover',
-      objectPosition: 'center 20%',
-    }}
-    {...props} 
-  />
+>(({ className, style, src, srcSet, sizes, alt = "", ...props }, ref) => (
+  <>
+    {src ? (
+      <img
+        aria-hidden="true"
+        alt=""
+        src={src}
+        srcSet={srcSet}
+        sizes={sizes}
+        className="absolute inset-0 h-full w-full"
+        style={{
+          objectFit: "cover",
+          objectPosition: "center 12%",
+          filter: "blur(14px)",
+          transform: "scale(1.15)",
+          opacity: 0.32,
+        }}
+        loading="lazy"
+        decoding="async"
+        onError={(e) => {
+          e.currentTarget.style.display = "none";
+        }}
+      />
+    ) : null}
+
+    <AvatarPrimitive.Image
+      ref={ref}
+      alt={alt}
+      src={src}
+      srcSet={srcSet}
+      sizes={sizes}
+      className={cn("absolute inset-0 h-full w-full", className)}
+      style={{
+        objectFit: "contain",
+        objectPosition: "center 12%",
+        ...style,
+      }}
+      {...props}
+    />
+  </>
 ));
 AvatarImage.displayName = AvatarPrimitive.Image.displayName;
 
