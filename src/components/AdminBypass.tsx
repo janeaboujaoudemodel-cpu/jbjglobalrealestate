@@ -9,6 +9,7 @@ interface AdminBypassProps {
 
 // Public routes that bypass the Coming Soon gate (always accessible)
 const PUBLIC_ROUTES = [
+  "/",
   "/install",
   "/vapi-prompt",
   "/areas",
@@ -16,6 +17,13 @@ const PUBLIC_ROUTES = [
   "/seller-guide",
   "/seller-listing",
   "/video-builder",
+  "/about",
+  "/contact",
+  "/services",
+  "/communities",
+  "/properties",
+  "/founder",
+  "/team",
 ];
 
 /**

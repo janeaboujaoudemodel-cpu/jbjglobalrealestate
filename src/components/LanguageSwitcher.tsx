@@ -17,7 +17,7 @@ const LanguageSwitcher = () => {
     <DropdownMenu>
       <DropdownMenuTrigger asChild>
         <Button
-          variant="ghost"
+          variant="secondary"
           size="sm"
           className="h-8 px-2.5 text-white/70 hover:text-gold hover:bg-transparent border border-transparent hover:border-gold/30 rounded-md transition-all"
         >

@@ -216,7 +216,7 @@ All colors MUST be HSL.
 /* ============================================================
  * DEPRECATED - DO NOT USE
  * These classes violate the GLOBAL BUTTON SYSTEM (LOCKED)
- * Use Button component with variant="gold" or variant="goldOutline"
+ * Use Button component with variant="primary", "secondary", or "media"
  * ============================================================ */
 /* .btn-premium-gold - REMOVED: Violates no-shadow, no-scale rules */
 /* .btn-premium-outline - REMOVED: Violates inverted-hover rules */
