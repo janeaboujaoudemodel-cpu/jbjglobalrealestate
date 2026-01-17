@@ -1902,17 +1902,24 @@ const MarketReport = () => {
             transition={{ duration: 0.6 }}
             className="max-w-4xl mx-auto text-center"
           >
-            <img 
-              src={founderProfessional} 
-              alt="Jane Abou Jaoude"
-              className="w-24 h-24 md:w-28 md:h-28 rounded-full object-cover object-[center_25%] scale-125 border-2 border-gold/50 mx-auto mb-6"
-            />
+            {/* GLOBAL FOUNDER IMAGE RULE: Perfect center, no cropping */}
+            <div className="w-24 h-24 md:w-28 md:h-28 rounded-full overflow-hidden border-2 border-gold/50 mx-auto mb-6 bg-zinc-900">
+              <img 
+                src={founderProfessional} 
+                alt="Jane Abou Jaoude, Founder and CEO of JBJ GLOBAL REAL ESTATE"
+                className="w-full h-full"
+                style={{
+                  objectFit: 'cover',
+                  objectPosition: 'center center',
+                }}
+              />
+            </div>
             <blockquote className="text-white text-xl md:text-2xl lg:text-3xl font-light leading-relaxed mb-6 italic" style={{ fontFamily: "Poppins, sans-serif" }}>
               "This book represents years of experience in UAE real estate, distilled into actionable frameworks. I created it so investors can make informed decisions with confidence."
             </blockquote>
             <div>
               <p className="text-gold font-semibold text-lg">Jane Abou Jaoude</p>
-              <p className="text-zinc-500 text-sm">Founder, JBJ Global Real Estate</p>
+              <p className="text-zinc-500 text-sm">Founder and CEO, JBJ GLOBAL REAL ESTATE</p>
               <p className="text-zinc-600 text-xs mt-1">Real Estate Brokerage • Dubai, UAE</p>
             </div>
           </motion.div>
@@ -2089,14 +2096,21 @@ const MarketReport = () => {
             {/* Founder Card */}
             <div className="bg-gradient-to-br from-gold/10 to-zinc-950 border border-gold/20 rounded-3xl p-8">
               <div className="flex items-center gap-4 mb-4">
-                <img 
-                  src={founderProfessional} 
-                  alt="Jane Abou Jaoude"
-                  className="w-16 h-16 rounded-full object-cover object-[center_15%] scale-110 border-2 border-gold/50"
-                />
+                {/* GLOBAL FOUNDER IMAGE RULE: Perfect center, no cropping */}
+                <div className="w-16 h-16 rounded-full overflow-hidden border-2 border-gold/50 bg-zinc-900 flex-shrink-0">
+                  <img 
+                    src={founderProfessional} 
+                    alt="Jane Abou Jaoude, Founder and CEO"
+                    className="w-full h-full"
+                    style={{
+                      objectFit: 'cover',
+                      objectPosition: 'center center',
+                    }}
+                  />
+                </div>
                 <div>
                   <h3 className="text-white font-semibold">Jane Abou Jaoude</h3>
-                  <p className="text-gold text-sm">Founder & Managing Director</p>
+                  <p className="text-gold text-sm">Founder and CEO</p>
                 </div>
               </div>
               <p className="text-zinc-400 text-sm leading-relaxed">

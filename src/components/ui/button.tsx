@@ -5,7 +5,7 @@ import { cva, type VariantProps } from "class-variance-authority";
 import { cn } from "@/lib/utils";
 
 const buttonVariants = cva(
-  "inline-flex items-center justify-center gap-2 whitespace-nowrap rounded-md text-sm font-medium ring-offset-background transition-all duration-200 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 [&_svg]:pointer-events-none [&_svg]:size-4 [&_svg]:shrink-0",
+  "inline-flex items-center justify-center gap-2 whitespace-nowrap rounded-md text-sm font-medium ring-offset-background transition-all duration-300 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 [&_svg]:pointer-events-none [&_svg]:size-4 [&_svg]:shrink-0 cursor-pointer",
   {
     variants: {
       variant: {
@@ -15,10 +15,28 @@ const buttonVariants = cva(
         secondary: "bg-secondary text-secondary-foreground hover:bg-secondary/80",
         ghost: "hover:bg-accent hover:text-accent-foreground",
         link: "text-primary underline-offset-4 hover:underline",
-        // Premium gold variant - sophisticated and readable
-        gold: "bg-gold text-gold-foreground font-semibold hover:bg-gold-light shadow-md hover:shadow-lg",
-        // Gold outline variant
-        goldOutline: "border-2 border-gold text-gold font-semibold hover:bg-gold hover:text-gold-foreground",
+        
+        // ============================================================
+        // GLOBAL BUTTON SYSTEM - JBJ GLOBAL REAL ESTATE
+        // ============================================================
+        
+        // PRIMARY BUTTON (Action / Conversion)
+        // Background: White | Text: Gold | Border: Gold
+        // Hover: Transparent bg, Gold text, Gold border
+        // Usage: Contact Us, Book Consultation, Get in Touch
+        gold: "bg-white text-gold border border-gold font-semibold hover:bg-transparent hover:text-gold shadow-sm",
+        
+        // SECONDARY BUTTON (Navigation / Browsing)
+        // Background: Transparent | Text: White on dark / Gold on light | Border: Gold
+        // Hover: White bg, Gold text
+        // Usage: Browse Properties, View Leadership Profile, Explore
+        goldOutline: "bg-transparent text-white border border-gold font-semibold hover:bg-white hover:text-gold",
+        
+        // IMAGE-HERO BUTTON (Only when button sits on a photo)
+        // Background: Transparent | Text: White | Border: White
+        // Hover: White bg, Gold text
+        // Usage: Buttons placed directly over hero images
+        heroOutline: "bg-transparent text-white border border-white font-semibold hover:bg-white hover:text-gold",
       },
       size: {
         default: "h-10 px-4 py-2",

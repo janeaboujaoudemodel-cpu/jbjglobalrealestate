@@ -281,7 +281,7 @@ const Founder = () => {
                   <SafeImage 
                     src={founderPremium} 
                     fallbackSrc={founderProfessional}
-                    alt="Jane Abou Jaoude - Founder & Managing Director" 
+                    alt="Jane Abou Jaoude, Founder and CEO of JBJ GLOBAL REAL ESTATE" 
                     className="w-full h-full object-cover object-top"
                   />
                   {/* Subtle vignette */}
@@ -1299,9 +1299,9 @@ const Founder = () => {
                   </div>
                   <div className="text-center mt-2">
                     <p className="text-transparent bg-clip-text bg-gradient-to-r from-gold via-[#D4B96A] to-gold text-2xl md:text-3xl font-semibold tracking-wide mb-2" style={{ fontFamily: "Poppins, sans-serif" }}>Jane Abou Jaoude</p>
-                    <p className="text-zinc-300 text-sm uppercase tracking-[0.25em] font-medium">Founder & Managing Director</p>
+                    <p className="text-zinc-300 text-sm uppercase tracking-[0.25em] font-medium">Founder and CEO</p>
                     <div className="mt-3 space-y-1">
-                      <p className="text-white text-base font-semibold tracking-wide">JBJ Global Real Estate</p>
+                      <p className="text-white text-base font-semibold tracking-wide">JBJ GLOBAL REAL ESTATE</p>
                       <p className="text-zinc-400 text-xs">Real Estate Brokerage | Dubai, UAE</p>
                     </div>
                   </div>

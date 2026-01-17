@@ -47,11 +47,11 @@ All colors MUST be HSL.
     --sidebar-border: 220 13% 91%;
     --sidebar-ring: 217.2 91.2% 59.8%;
 
-    /* Premium Refined Gold Theme - #847444 (HSL: 45 32% 39%) - Sophisticated & Subtle */
-    --gold: 45 32% 39%;
-    --gold-light: 45 35% 50%;
-    --gold-dark: 45 30% 32%;
-    --gold-muted: 45 25% 45%;
+    /* Premium Refined Gold Theme - #C8A766 (HSL: 42 45% 59%) - Refined Champagne Gold */
+    --gold: 42 45% 59%;
+    --gold-light: 42 50% 65%;
+    --gold-dark: 42 40% 50%;
+    --gold-muted: 42 35% 55%;
     --gold-foreground: 0 0% 100%;
 
     /* Premium surfaces */
