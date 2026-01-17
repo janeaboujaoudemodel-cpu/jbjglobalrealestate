@@ -337,13 +337,56 @@ export const DATA_SOURCE_INDEPENDENCE = {
 export type DataSourceStatus = typeof DATA_SOURCE_INDEPENDENCE.DATA_SOURCE_STATUSES[number];
 
 // ============================================================================
+// STEP 6 — COMMERCIAL FLOW & CLIENT OWNERSHIP (NON-NEGOTIABLE)
+// ============================================================================
+
+export const COMMERCIAL_FLOW = {
+  OBJECTIVE: 'Define unambiguous ownership of clients, execution rights, and revenue across all expansion models.',
+
+  // Client ownership (ABSOLUTE)
+  CLIENT_OWNERSHIP: {
+    OWNER: 'JBJ GLOBAL REAL ESTATE',
+    RULE: 'All clients belong to JBJ GLOBAL REAL ESTATE.',
+    PROHIBITED: [
+      'Platforms owning the client',
+      'Data providers owning the client',
+      'Intelligence partners owning the client',
+    ],
+  },
+
+  // Execution responsibility by model
+  EXECUTION_BY_MODEL: {
+    MODEL_A: 'JBJ executes directly',
+    MODEL_B: 'Licensed partner executes on behalf of JBJ',
+    MODEL_C: 'No execution permitted',
+  },
+
+  // Commission logic
+  COMMISSION_LOGIC: {
+    GENERATION: 'Commission is generated ONLY at execution level',
+    ATTRIBUTION: 'Revenue attribution is logged per jurisdiction and model',
+    PARTNER_COMPENSATION: 'Contractual, not implied',
+  },
+
+  // Reporting rules
+  REPORTING: {
+    CONVERSION_TRACKING: 'All conversions are tracked inside JBJ systems',
+    EXTERNAL_DEFINITION: 'No external platform defines conversion success',
+  },
+
+  // Gate rules
+  AMBIGUITY_ALLOWED: false,
+  PARTNER_OVERRIDE_ALLOWED: false,
+} as const;
+
+// ============================================================================
 // PRIORITY 3 STATUS RULE
 // ============================================================================
 
 export const PRIORITY_3_STATUS = {
   NAME: 'GLOBAL EXPANSION PLAYBOOK',
   STATUS: 'LOCKED',
-  VERSION: '2.0',
+  VERSION: '2.1',
 
   EXECUTION_PREREQUISITES: [
     'All critical security patches completed',
@@ -359,6 +402,7 @@ export const PRIORITY_3_STATUS = {
     { step: 3, name: 'Global Platform Architecture', status: 'COMPLETE' },
     { step: 4, name: 'Governance & Enforcement', status: 'COMPLETE' },
     { step: 5, name: 'Data Source Independence & Redundancy', status: 'COMPLETE' },
+    { step: 6, name: 'Commercial Flow & Client Ownership', status: 'COMPLETE' },
   ],
 } as const;
 
@@ -482,6 +526,7 @@ export const GLOBAL_EXPANSION = {
   PLATFORM_ARCHITECTURE,
   GOVERNANCE_ENFORCEMENT,
   DATA_SOURCE_INDEPENDENCE,
+  COMMERCIAL_FLOW,
   RISK_PREVENTION,
   PRIORITY_3_STATUS,
 } as const;
