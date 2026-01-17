@@ -13,6 +13,40 @@ export default {
       },
     },
     extend: {
+      /* ============================================================
+       * GLOBAL TYPOGRAPHY SYSTEM - JBJ GLOBAL REAL ESTATE (LOCKED)
+       * ONE primary font family across the entire platform
+       * ============================================================ */
+      fontFamily: {
+        sans: ['Inter', 'system-ui', 'sans-serif'],
+      },
+      fontSize: {
+        /* H1 - Primary Headline */
+        'h1': ['3.5rem', { lineHeight: '1.1', fontWeight: '600', letterSpacing: '-0.02em' }],
+        'h1-md': ['3rem', { lineHeight: '1.1', fontWeight: '600', letterSpacing: '-0.02em' }],
+        'h1-sm': ['2.25rem', { lineHeight: '1.15', fontWeight: '600', letterSpacing: '-0.01em' }],
+        /* H2 - Section Headline */
+        'h2': ['2.5rem', { lineHeight: '1.2', fontWeight: '500', letterSpacing: '-0.01em' }],
+        'h2-md': ['2rem', { lineHeight: '1.2', fontWeight: '500', letterSpacing: '-0.01em' }],
+        'h2-sm': ['1.5rem', { lineHeight: '1.25', fontWeight: '500' }],
+        /* H3 - Subsection Headline */
+        'h3': ['1.5rem', { lineHeight: '1.3', fontWeight: '500' }],
+        'h3-sm': ['1.25rem', { lineHeight: '1.3', fontWeight: '500' }],
+        /* H4 - Minor Headline / Labels */
+        'h4': ['1.25rem', { lineHeight: '1.4', fontWeight: '400' }],
+        'h4-sm': ['1.125rem', { lineHeight: '1.4', fontWeight: '400' }],
+        /* Body Text */
+        'body': ['1rem', { lineHeight: '1.6', fontWeight: '400' }],
+        'body-lg': ['1.125rem', { lineHeight: '1.6', fontWeight: '400' }],
+        /* Meta / Small Text */
+        'meta': ['0.875rem', { lineHeight: '1.5', fontWeight: '400' }],
+        'meta-xs': ['0.75rem', { lineHeight: '1.5', fontWeight: '400' }],
+        /* Table Text */
+        'table-header': ['0.875rem', { lineHeight: '1.4', fontWeight: '500', letterSpacing: '0.05em' }],
+        'table-cell': ['0.875rem', { lineHeight: '1.4', fontWeight: '400' }],
+        /* Label / Tag */
+        'label': ['0.75rem', { lineHeight: '1.4', fontWeight: '500', letterSpacing: '0.1em' }],
+      },
       colors: {
         border: "hsl(var(--border))",
         input: "hsl(var(--input))",
