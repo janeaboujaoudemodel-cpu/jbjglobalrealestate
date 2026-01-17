@@ -297,7 +297,7 @@ const FAQ = () => {
                   variants={fadeInUp}
                   className="flex items-center gap-3 mb-6"
                 >
-                  <div className="w-12 h-12 bg-gold/10 border border-gold/30 rounded-xl flex items-center justify-center">
+                  <div className="w-12 h-12 bg-black border border-gold rounded-xl flex items-center justify-center">
                     <category.icon className="w-6 h-6 text-gold" />
                   </div>
                   <h2 className="text-2xl md:text-3xl font-bold text-white">{category.title}</h2>

@@ -81,7 +81,7 @@ const AreaGuides = () => {
                 transition={{ delay: index * 0.1 }}
                 className="text-center"
               >
-                <div className="inline-flex items-center justify-center w-12 h-12 bg-gold/10 border border-gold/30 rounded-xl mb-3">
+                <div className="inline-flex items-center justify-center w-12 h-12 bg-black border border-gold rounded-xl mb-3">
                   <item.icon className="w-6 h-6 text-gold" />
                 </div>
                 <div className="text-2xl md:text-3xl font-bold text-white">{item.value}</div>

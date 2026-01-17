@@ -88,10 +88,10 @@ const FeatureCard = ({
   description: string;
 }) => (
   <motion.div 
-    className="bg-zinc-900/60 border border-zinc-800/50 rounded-xl p-6 hover:border-gold/30 transition-colors"
+    className="bg-zinc-900/60 border border-gold/30 rounded-xl p-6 hover:border-gold transition-colors"
     variants={fadeInUp}
   >
-    <div className="w-12 h-12 rounded-lg bg-gold/10 flex items-center justify-center mb-4">
+    <div className="w-12 h-12 rounded-lg bg-black border border-gold flex items-center justify-center mb-4">
       <Icon className="w-6 h-6 text-gold" />
     </div>
     <h3 className="text-white text-lg font-semibold mb-2">{title}</h3>

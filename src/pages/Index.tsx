@@ -12,7 +12,7 @@ import InquiryFormModal from "@/components/InquiryFormModal";
 import { SEOHead, pagesSEO } from "@/components/SEOHead";
 import { useLanguage } from "@/contexts/LanguageContext";
 import { useUserRole } from "@/hooks/useUserRole";
-import { Sparkles, ArrowUpRight, ChevronDown, User, Scale, Layers, Calculator, FileText, Heart, BarChart3, Wrench, Ruler, Palette, Calendar, Wallet, ShoppingBag, Brain, GraduationCap, Briefcase, Target, Award, PenTool, Users, Table2, Video } from "lucide-react";
+import { Sparkles, ArrowUpRight, ChevronDown, User, Scale, Layers, Calculator, FileText, Heart, BarChart3, Wrench, Ruler, Palette, Calendar, Wallet, ShoppingBag, Brain, GraduationCap, Briefcase, Target, Award, PenTool, Users, Table2, Video, Home, Key } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import founderProfessional from "@/assets/founder-professional.jpeg";
 
@@ -260,13 +260,13 @@ const Index = () => {
             </p>
           </div>
 
-          {/* Audience Entry Cards - White Cards */}
-          <div className="grid grid-cols-2 md:grid-cols-4 gap-4 max-w-4xl mx-auto mb-12">
+          {/* Audience Entry Cards - White Cards with Black Icon Containers */}
+          <div className="grid grid-cols-2 md:grid-cols-5 gap-4 max-w-5xl mx-auto mb-12">
             <Link to="/buyer-guide" className="group">
               <div className="bg-white border border-zinc-200 rounded-xl p-5 text-center hover:border-gold hover:shadow-xl hover:shadow-gold/20 transition-all duration-300 relative overflow-hidden">
                 <div className="absolute inset-0 bg-gradient-to-br from-gold/5 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
                 <div className="relative z-10">
-                  <div className="w-10 h-10 bg-gold/10 rounded-lg flex items-center justify-center mx-auto mb-3 group-hover:bg-gold/20 transition-colors">
+                  <div className="w-10 h-10 bg-black rounded-lg flex items-center justify-center mx-auto mb-3 group-hover:bg-zinc-900 transition-colors">
                     <Heart className="w-5 h-5 text-gold" />
                   </div>
                   <h4 className="text-black text-sm font-semibold mb-1">Buyers</h4>
@@ -278,7 +278,7 @@ const Index = () => {
               <div className="bg-white border border-zinc-200 rounded-xl p-5 text-center hover:border-gold hover:shadow-xl hover:shadow-gold/20 transition-all duration-300 relative overflow-hidden">
                 <div className="absolute inset-0 bg-gradient-to-br from-gold/5 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
                 <div className="relative z-10">
-                  <div className="w-10 h-10 bg-gold/10 rounded-lg flex items-center justify-center mx-auto mb-3 group-hover:bg-gold/20 transition-colors">
+                  <div className="w-10 h-10 bg-black rounded-lg flex items-center justify-center mx-auto mb-3 group-hover:bg-zinc-900 transition-colors">
                     <Target className="w-5 h-5 text-gold" />
                   </div>
                   <h4 className="text-black text-sm font-semibold mb-1">Sellers</h4>
@@ -286,11 +286,23 @@ const Index = () => {
                 </div>
               </div>
             </Link>
+            <Link to="/rent-guide" className="group">
+              <div className="bg-white border border-zinc-200 rounded-xl p-5 text-center hover:border-gold hover:shadow-xl hover:shadow-gold/20 transition-all duration-300 relative overflow-hidden">
+                <div className="absolute inset-0 bg-gradient-to-br from-gold/5 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
+                <div className="relative z-10">
+                  <div className="w-10 h-10 bg-black rounded-lg flex items-center justify-center mx-auto mb-3 group-hover:bg-zinc-900 transition-colors">
+                    <Key className="w-5 h-5 text-gold" />
+                  </div>
+                  <h4 className="text-black text-sm font-semibold mb-1">Renters</h4>
+                  <p className="text-zinc-600 text-xs">Rent a property</p>
+                </div>
+              </div>
+            </Link>
             <Link to="/ai-hub" className="group">
               <div className="bg-white border border-zinc-200 rounded-xl p-5 text-center hover:border-gold hover:shadow-xl hover:shadow-gold/20 transition-all duration-300 relative overflow-hidden">
                 <div className="absolute inset-0 bg-gradient-to-br from-gold/5 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
                 <div className="relative z-10">
-                  <div className="w-10 h-10 bg-gold/10 rounded-lg flex items-center justify-center mx-auto mb-3 group-hover:bg-gold/20 transition-colors">
+                  <div className="w-10 h-10 bg-black rounded-lg flex items-center justify-center mx-auto mb-3 group-hover:bg-zinc-900 transition-colors">
                     <Briefcase className="w-5 h-5 text-gold" />
                   </div>
                   <h4 className="text-black text-sm font-semibold mb-1">Brokers</h4>
@@ -302,7 +314,7 @@ const Index = () => {
               <div className="bg-white border border-zinc-200 rounded-xl p-5 text-center hover:border-gold hover:shadow-xl hover:shadow-gold/20 transition-all duration-300 relative overflow-hidden">
                 <div className="absolute inset-0 bg-gradient-to-br from-gold/5 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
                 <div className="relative z-10">
-                  <div className="w-10 h-10 bg-gold/10 rounded-lg flex items-center justify-center mx-auto mb-3 group-hover:bg-gold/20 transition-colors">
+                  <div className="w-10 h-10 bg-black rounded-lg flex items-center justify-center mx-auto mb-3 group-hover:bg-zinc-900 transition-colors">
                     <Users className="w-5 h-5 text-gold" />
                   </div>
                   <h4 className="text-black text-sm font-semibold mb-1">Visitors</h4>
@@ -318,7 +330,7 @@ const Index = () => {
             <Link to="/broker-toolkit" className="group">
               <div className="bg-white border border-zinc-200 rounded-2xl p-6 md:p-8 hover:border-gold hover:shadow-xl hover:shadow-gold/20 transition-all duration-300">
                 <div className="flex items-center gap-4 mb-4">
-                  <div className="w-12 h-12 bg-gold/10 rounded-xl flex items-center justify-center">
+                  <div className="w-12 h-12 bg-black rounded-xl flex items-center justify-center">
                     <GraduationCap className="w-6 h-6 text-gold" />
                   </div>
                   <div>
@@ -346,7 +358,7 @@ const Index = () => {
                   </span>
                 </div>
                 <div className="flex items-center gap-4 mb-4">
-                  <div className="w-12 h-12 bg-gold/10 rounded-xl flex items-center justify-center">
+                  <div className="w-12 h-12 bg-black rounded-xl flex items-center justify-center">
                     <Brain className="w-6 h-6 text-gold" />
                   </div>
                   <div>
@@ -430,17 +442,17 @@ const Index = () => {
                     Jane leads JBJ Global Real Estate with a commitment to excellence, integrity, and client success.
                   </p>
                   
-                  {/* Stats Row */}
+                  {/* Stats Row - Gold Borders */}
                   <div className="grid grid-cols-3 gap-4 mb-8">
-                    <div className="text-center p-3 bg-black/30 border border-gold/10 rounded-xl">
+                    <div className="text-center p-3 bg-black/30 border border-gold rounded-xl">
                       <p className="text-transparent bg-clip-text bg-gradient-to-r from-gold via-[#C4A962] to-gold text-2xl md:text-3xl font-bold">12+</p>
                       <p className="text-zinc-500 text-[10px] uppercase tracking-wider mt-1">Years Exp</p>
                     </div>
-                    <div className="text-center p-3 bg-black/30 border border-gold/10 rounded-xl">
-                      <p className="text-transparent bg-clip-text bg-gradient-to-r from-gold via-[#C4A962] to-gold text-2xl md:text-3xl font-bold">5+</p>
-                      <p className="text-zinc-500 text-[10px] uppercase tracking-wider mt-1">In Dubai</p>
+                    <div className="text-center p-3 bg-black/30 border border-gold rounded-xl">
+                      <p className="text-transparent bg-clip-text bg-gradient-to-r from-gold via-[#C4A962] to-gold text-2xl md:text-3xl font-bold">10+</p>
+                      <p className="text-zinc-500 text-[10px] uppercase tracking-wider mt-1">Team Members</p>
                     </div>
-                    <div className="text-center p-3 bg-black/30 border border-gold/10 rounded-xl">
+                    <div className="text-center p-3 bg-black/30 border border-gold rounded-xl">
                       <p className="text-transparent bg-clip-text bg-gradient-to-r from-gold via-[#C4A962] to-gold text-2xl md:text-3xl font-bold">2.8K+</p>
                       <p className="text-zinc-500 text-[10px] uppercase tracking-wider mt-1">Trained</p>
                     </div>
