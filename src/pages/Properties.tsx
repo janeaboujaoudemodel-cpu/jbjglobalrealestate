@@ -325,15 +325,14 @@ const Properties = () => {
             ))}
           </div>
           
-          <div className="flex items-center gap-2 overflow-x-auto pb-2 scrollbar-hide">
+          <div className="flex items-center gap-2 overflow-x-auto pb-2 scrollbar-hide w-full">
             {/* Keyword Search */}
-            <div className="relative w-[90px] flex-shrink-0">
-              <Search className="absolute left-2.5 top-1/2 -translate-y-1/2 w-3.5 h-3.5 text-zinc-500" />
+            <div className="relative flex-1 min-w-[120px]">
               <Input
-                placeholder="Search"
+                placeholder="Keyword"
                 value={filters.search}
                 onChange={(e) => updateFilter("search", e.target.value)}
-                className="pl-8 h-10 bg-white border-zinc-300 text-black placeholder:text-zinc-500 focus:border-gold rounded-lg text-xs"
+                className="h-10 bg-white border-zinc-300 text-black placeholder:text-zinc-500 focus:border-gold rounded-lg text-sm px-4"
               />
             </div>
 
@@ -342,16 +341,16 @@ const Properties = () => {
               value={filters.emirate || "all"}
               onValueChange={(value) => updateFilter("emirate", value === "all" ? null : value)}
             >
-              <SelectTrigger className="w-[95px] h-10 bg-white border-zinc-300 text-black rounded-lg text-xs flex-shrink-0">
-                <MapPin className="w-3 h-3 mr-1 text-zinc-500 flex-shrink-0" />
-                <SelectValue placeholder="Area" />
+              <SelectTrigger className="w-[130px] h-10 bg-white border-zinc-300 text-black rounded-lg text-sm flex-shrink-0">
+                <MapPin className="w-3.5 h-3.5 mr-1.5 text-zinc-500 flex-shrink-0" />
+                <SelectValue placeholder="All Locations" />
               </SelectTrigger>
               <SelectContent className="bg-white border-zinc-200">
-                <SelectItem value="all" className="text-black hover:bg-zinc-100">All Areas</SelectItem>
+                <SelectItem value="all" className="text-black hover:bg-zinc-100">All Locations</SelectItem>
                 <SelectItem value="Dubai" className="text-black hover:bg-zinc-100">Dubai</SelectItem>
                 <SelectItem value="Abu Dhabi" className="text-black hover:bg-zinc-100">Abu Dhabi</SelectItem>
                 <SelectItem value="Sharjah" className="text-black hover:bg-zinc-100">Sharjah</SelectItem>
-                <SelectItem value="Ras Al Khaimah" className="text-black hover:bg-zinc-100">RAK</SelectItem>
+                <SelectItem value="Ras Al Khaimah" className="text-black hover:bg-zinc-100">Ras Al Khaimah</SelectItem>
               </SelectContent>
             </Select>
 
@@ -360,12 +359,12 @@ const Properties = () => {
               value={filters.developerId || "all"}
               onValueChange={(value) => updateFilter("developerId", value === "all" ? null : value)}
             >
-              <SelectTrigger className="w-[90px] h-10 bg-white border-zinc-300 text-black rounded-lg text-xs flex-shrink-0">
-                <Building2 className="w-3 h-3 mr-1 text-zinc-500 flex-shrink-0" />
-                <SelectValue placeholder="Dev" />
+              <SelectTrigger className="w-[150px] h-10 bg-white border-zinc-300 text-black rounded-lg text-sm flex-shrink-0">
+                <Building2 className="w-3.5 h-3.5 mr-1.5 text-zinc-500 flex-shrink-0" />
+                <SelectValue placeholder="All Developers" />
               </SelectTrigger>
               <SelectContent className="bg-white border-zinc-200 max-h-60">
-                <SelectItem value="all" className="text-black hover:bg-zinc-100">All Devs</SelectItem>
+                <SelectItem value="all" className="text-black hover:bg-zinc-100">All Developers</SelectItem>
                 {developers?.map((dev) => (
                   <SelectItem key={dev.id} value={dev.id} className="text-black hover:bg-zinc-100">
                     {dev.name}
@@ -392,16 +391,16 @@ const Properties = () => {
                 }
               }}
             >
-              <SelectTrigger className="w-[80px] h-10 bg-white border-zinc-300 text-black rounded-lg text-xs flex-shrink-0">
-                <DollarSign className="w-3 h-3 mr-0.5 text-zinc-500 flex-shrink-0" />
-                <SelectValue placeholder="$" />
+              <SelectTrigger className="w-[120px] h-10 bg-white border-zinc-300 text-black rounded-lg text-sm flex-shrink-0">
+                <DollarSign className="w-3.5 h-3.5 mr-1 text-zinc-500 flex-shrink-0" />
+                <SelectValue placeholder="Any Price" />
               </SelectTrigger>
               <SelectContent className="bg-white border-zinc-200">
-                <SelectItem value="all" className="text-black hover:bg-zinc-100">Any</SelectItem>
-                <SelectItem value="0-1000000" className="text-black hover:bg-zinc-100">&lt;1M</SelectItem>
-                <SelectItem value="1000000-3000000" className="text-black hover:bg-zinc-100">1-3M</SelectItem>
-                <SelectItem value="3000000-5000000" className="text-black hover:bg-zinc-100">3-5M</SelectItem>
-                <SelectItem value="5000000-10000000" className="text-black hover:bg-zinc-100">5-10M</SelectItem>
+                <SelectItem value="all" className="text-black hover:bg-zinc-100">Any Price</SelectItem>
+                <SelectItem value="0-1000000" className="text-black hover:bg-zinc-100">Under 1M</SelectItem>
+                <SelectItem value="1000000-3000000" className="text-black hover:bg-zinc-100">1M - 3M</SelectItem>
+                <SelectItem value="3000000-5000000" className="text-black hover:bg-zinc-100">3M - 5M</SelectItem>
+                <SelectItem value="5000000-10000000" className="text-black hover:bg-zinc-100">5M - 10M</SelectItem>
                 <SelectItem value="10000000-500000000" className="text-black hover:bg-zinc-100">10M+</SelectItem>
               </SelectContent>
             </Select>
@@ -411,12 +410,12 @@ const Properties = () => {
               value={filters.sizeUnit}
               onValueChange={(value) => updateFilter("sizeUnit", value as 'sqft' | 'sqm')}
             >
-              <SelectTrigger className="w-[60px] h-10 bg-white border-zinc-300 text-black rounded-lg text-xs flex-shrink-0">
+              <SelectTrigger className="w-[80px] h-10 bg-white border-zinc-300 text-black rounded-lg text-sm flex-shrink-0">
                 <SelectValue />
               </SelectTrigger>
               <SelectContent className="bg-white border-zinc-200">
-                <SelectItem value="sqft" className="text-black hover:bg-zinc-100">ft²</SelectItem>
-                <SelectItem value="sqm" className="text-black hover:bg-zinc-100">m²</SelectItem>
+                <SelectItem value="sqft" className="text-black hover:bg-zinc-100">sq ft</SelectItem>
+                <SelectItem value="sqm" className="text-black hover:bg-zinc-100">sq m</SelectItem>
               </SelectContent>
             </Select>
 
@@ -425,7 +424,7 @@ const Properties = () => {
               value={filters.currency}
               onValueChange={(value) => updateFilter("currency", value as ExtendedCurrency)}
             >
-              <SelectTrigger className="w-[58px] h-10 bg-white border-zinc-300 text-black rounded-lg text-xs flex-shrink-0">
+              <SelectTrigger className="w-[80px] h-10 bg-white border-zinc-300 text-black rounded-lg text-sm flex-shrink-0">
                 <SelectValue />
               </SelectTrigger>
               <SelectContent className="bg-white border-zinc-200">
@@ -679,7 +678,7 @@ const Properties = () => {
             </Button>
           </div>
 
-          {/* Sorting Pills - Improved visuals */}
+          {/* Sorting Pills - Black fill with gold text */}
           <div className="flex items-center justify-center gap-2 mt-5">
             {[
               { value: "newest", label: "Newest" },
@@ -691,8 +690,8 @@ const Properties = () => {
                 onClick={() => setSortBy(option.value)}
                 className={`px-4 py-2 rounded-full text-xs font-semibold transition-all border ${
                   sortBy === option.value
-                    ? "bg-gold text-black border-gold shadow-lg shadow-gold/20"
-                    : "bg-zinc-900/80 text-zinc-300 border-zinc-700 hover:border-gold/50 hover:text-white"
+                    ? "bg-black text-gold border-black shadow-lg"
+                    : "bg-black text-gold border-black hover:bg-zinc-800"
                 }`}
               >
                 {option.label}
@@ -701,6 +700,9 @@ const Properties = () => {
           </div>
         </div>
       </section>
+
+      {/* Divider between Search and Results */}
+      <div className="h-1 bg-gradient-to-r from-transparent via-gold/40 to-transparent" />
 
       {/* Results Section */}
       <section className="py-12 bg-white">

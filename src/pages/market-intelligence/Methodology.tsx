@@ -64,7 +64,7 @@ const Methodology = () => {
         </div>
       </section>
 
-      <div className="container mx-auto px-4 max-w-4xl py-16 space-y-16">
+      <div className="container mx-auto px-4 max-w-4xl py-16 space-y-0">
         
         {/* SECTION 1 — Introduction (Authority + Neutral) */}
         <motion.section
@@ -72,10 +72,11 @@ const Methodology = () => {
           whileInView="visible"
           viewport={{ once: true }}
           variants={fadeInUp}
+          className="py-12 bg-zinc-50 rounded-xl px-8 mb-8"
         >
           <div className="flex items-center gap-3 mb-6">
-            <div className="w-10 h-10 rounded-lg bg-muted flex items-center justify-center">
-              <Shield className="w-5 h-5 text-muted-foreground" />
+            <div className="w-10 h-10 rounded-lg bg-black flex items-center justify-center">
+              <Shield className="w-5 h-5 text-gold" />
             </div>
             <h2 className="text-foreground text-xl font-semibold">Introduction</h2>
           </div>
@@ -96,15 +97,16 @@ const Methodology = () => {
           whileInView="visible"
           viewport={{ once: true }}
           variants={fadeInUp}
+          className="py-12"
         >
           <div className="flex items-center gap-3 mb-6">
-            <div className="w-10 h-10 rounded-lg bg-muted flex items-center justify-center">
-              <Database className="w-5 h-5 text-muted-foreground" />
+            <div className="w-10 h-10 rounded-lg bg-black flex items-center justify-center">
+              <Database className="w-5 h-5 text-gold" />
             </div>
             <h2 className="text-foreground text-xl font-semibold">Data Sources</h2>
           </div>
           
-          <div className="bg-muted/30 rounded-lg border border-border p-6">
+          <div className="bg-white rounded-lg border border-zinc-200 p-6 shadow-sm">
             <p className="text-muted-foreground text-sm mb-6">
               Our market intelligence draws from the following official government Open Data sources:
             </p>
@@ -112,7 +114,7 @@ const Methodology = () => {
             <ul className="space-y-4">
               {APPROVED_DATA_SOURCES.map((source) => (
                 <li key={source.id} className="flex items-start gap-3">
-                  <span className="text-muted-foreground mt-1">•</span>
+                  <span className="text-gold mt-1">•</span>
                   <div>
                     <span className="text-foreground font-medium">{source.name}</span>
                     <span className="text-muted-foreground"> – {source.dataType.toLowerCase()}</span>
@@ -121,7 +123,7 @@ const Methodology = () => {
               ))}
             </ul>
             
-            <p className="text-muted-foreground text-xs mt-6 pt-4 border-t border-border/50">
+            <p className="text-muted-foreground text-xs mt-6 pt-4 border-t border-zinc-200">
               We name categories and sources, not raw dataset URLs. All data is used in accordance with official open data policies.
             </p>
           </div>
@@ -133,10 +135,11 @@ const Methodology = () => {
           whileInView="visible"
           viewport={{ once: true }}
           variants={fadeInUp}
+          className="py-12 bg-zinc-50 rounded-xl px-8"
         >
           <div className="flex items-center gap-3 mb-6">
-            <div className="w-10 h-10 rounded-lg bg-muted flex items-center justify-center">
-              <FileCheck className="w-5 h-5 text-muted-foreground" />
+            <div className="w-10 h-10 rounded-lg bg-black flex items-center justify-center">
+              <FileCheck className="w-5 h-5 text-gold" />
             </div>
             <h2 className="text-foreground text-xl font-semibold">How the Data Is Used</h2>
           </div>
@@ -163,15 +166,16 @@ const Methodology = () => {
           whileInView="visible"
           viewport={{ once: true }}
           variants={fadeInUp}
+          className="py-12"
         >
           <div className="flex items-center gap-3 mb-6">
-            <div className="w-10 h-10 rounded-lg bg-destructive/10 flex items-center justify-center">
-              <AlertTriangle className="w-5 h-5 text-destructive" />
+            <div className="w-10 h-10 rounded-lg bg-red-100 flex items-center justify-center">
+              <AlertTriangle className="w-5 h-5 text-red-600" />
             </div>
             <h2 className="text-foreground text-xl font-semibold">What We Do NOT Do</h2>
           </div>
           
-          <div className="bg-destructive/5 border border-destructive/20 rounded-lg p-6">
+          <div className="bg-red-50 border border-red-200 rounded-lg p-6">
             <p className="text-foreground leading-relaxed mb-4">
               {MASTER_LOCK.BRAND.COMPANY_NAME} does not provide price predictions, investment advice, financial recommendations, or guarantees of performance.
             </p>
@@ -187,22 +191,23 @@ const Methodology = () => {
           whileInView="visible"
           viewport={{ once: true }}
           variants={fadeInUp}
+          className="py-12 bg-zinc-50 rounded-xl px-8"
         >
           <div className="flex items-center gap-3 mb-6">
-            <div className="w-10 h-10 rounded-lg bg-muted flex items-center justify-center">
-              <Bot className="w-5 h-5 text-muted-foreground" />
+            <div className="w-10 h-10 rounded-lg bg-black flex items-center justify-center">
+              <Bot className="w-5 h-5 text-gold" />
             </div>
             <h2 className="text-foreground text-xl font-semibold">AI Usage Disclosure</h2>
           </div>
           
-          <div className="bg-muted/30 rounded-lg border border-border p-6 space-y-4">
+          <div className="space-y-4">
             <p className="text-muted-foreground leading-relaxed">
               Artificial intelligence tools are used to summarize, visualize, and explain aggregated data in plain language.
             </p>
             <p className="text-muted-foreground leading-relaxed">
               AI systems do <strong className="text-foreground font-medium">not</strong> make decisions, recommendations, or predictions, and do not replace licensed professionals.
             </p>
-            <p className="text-muted-foreground text-sm pt-4 border-t border-border/50">
+            <p className="text-muted-foreground text-sm pt-4 border-t border-zinc-200">
               All AI-generated content is clearly labeled and provides descriptive analysis only.
             </p>
           </div>
@@ -214,32 +219,35 @@ const Methodology = () => {
           whileInView="visible"
           viewport={{ once: true }}
           variants={fadeInUp}
+          className="py-12"
         >
           <div className="flex items-center gap-3 mb-6">
-            <div className="w-10 h-10 rounded-lg bg-muted flex items-center justify-center">
-              <Clock className="w-5 h-5 text-muted-foreground" />
+            <div className="w-10 h-10 rounded-lg bg-black flex items-center justify-center">
+              <Clock className="w-5 h-5 text-gold" />
             </div>
             <h2 className="text-foreground text-xl font-semibold">Update Frequency & Accuracy</h2>
           </div>
           
-          <ul className="space-y-3 text-muted-foreground">
-            <li className="flex items-start gap-3">
-              <span className="text-muted-foreground mt-1">•</span>
-              <span>Data is updated periodically based on availability of official sources</span>
-            </li>
-            <li className="flex items-start gap-3">
-              <span className="text-muted-foreground mt-1">•</span>
-              <span>Update frequency varies by dataset (monthly, quarterly, or as published)</span>
-            </li>
-            <li className="flex items-start gap-3">
-              <span className="text-muted-foreground mt-1">•</span>
-              <span>"Last updated" timestamps are displayed where applicable</span>
-            </li>
-            <li className="flex items-start gap-3">
-              <span className="text-muted-foreground mt-1">•</span>
-              <span>This is not real-time data</span>
-            </li>
-          </ul>
+          <div className="bg-white rounded-lg border border-zinc-200 p-6 shadow-sm">
+            <ul className="space-y-3 text-muted-foreground">
+              <li className="flex items-start gap-3">
+                <span className="text-gold mt-1">•</span>
+                <span>Data is updated periodically based on availability of official sources</span>
+              </li>
+              <li className="flex items-start gap-3">
+                <span className="text-gold mt-1">•</span>
+                <span>Update frequency varies by dataset (monthly, quarterly, or as published)</span>
+              </li>
+              <li className="flex items-start gap-3">
+                <span className="text-gold mt-1">•</span>
+                <span>"Last updated" timestamps are displayed where applicable</span>
+              </li>
+              <li className="flex items-start gap-3">
+                <span className="text-gold mt-1">•</span>
+                <span>This is not real-time data</span>
+              </li>
+            </ul>
+          </div>
         </motion.section>
 
         {/* SECTION 7 — Legal & Independence Statement (FINAL SHIELD) */}
@@ -248,19 +256,20 @@ const Methodology = () => {
           whileInView="visible"
           viewport={{ once: true }}
           variants={fadeInUp}
+          className="py-12 bg-zinc-900 rounded-xl px-8 text-white"
         >
           <div className="flex items-center gap-3 mb-6">
-            <div className="w-10 h-10 rounded-lg bg-muted flex items-center justify-center">
-              <Scale className="w-5 h-5 text-muted-foreground" />
+            <div className="w-10 h-10 rounded-lg bg-gold/20 flex items-center justify-center">
+              <Scale className="w-5 h-5 text-gold" />
             </div>
-            <h2 className="text-foreground text-xl font-semibold">Legal & Independence Statement</h2>
+            <h2 className="text-white text-xl font-semibold">Legal & Independence Statement</h2>
           </div>
           
-          <div className="bg-muted/50 rounded-lg border border-border p-6">
-            <p className="text-foreground leading-relaxed mb-4">
+          <div>
+            <p className="text-white leading-relaxed mb-4">
               {MASTER_LOCK.BRAND.COMPANY_NAME} is a private licensed real estate brokerage.
             </p>
-            <p className="text-muted-foreground leading-relaxed">
+            <p className="text-zinc-400 leading-relaxed">
               {GOVERNMENT_DISCLOSURES.PRIMARY}
             </p>
           </div>
