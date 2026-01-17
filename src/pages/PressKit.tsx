@@ -1,20 +1,29 @@
 import { useState, useEffect } from "react";
 import { motion } from "framer-motion";
-import { 
-  FileText, 
-  User, 
-  Building2, 
+import {
+  FileText,
+  User,
+  Building2,
   ExternalLink,
   Mail,
   Phone,
   Shield,
-  Lock
+  Lock,
+  MessageCircle,
+  Share2,
+  UserPlus,
 } from "lucide-react";
 import { Link } from "react-router-dom";
 import Footer from "@/components/Footer";
 import { Button } from "@/components/ui/button";
-import { JJLogoImage } from "@/components/JJLogoImage";
-import { CONTACT_INFO, COMPANY_STATS, getWhatsAppUrl, getCallUrl, getEmailUrl } from "@/constants/stats";
+import {
+  AlertDialog,
+  AlertDialogContent,
+  AlertDialogHeader,
+  AlertDialogTitle,
+  AlertDialogDescription,
+} from "@/components/ui/alert-dialog";
+import { CONTACT_INFO, getWhatsAppUrl, getCallUrl } from "@/constants/stats";
 import { toast } from "sonner";
 
 // Import founder images
@@ -303,66 +312,6 @@ const PressKit = () => {
         </div>
       </section>
 
-      {/* Logo Display Section - White Cards */}
-      <section className="py-20 md:py-28 bg-gradient-to-b from-zinc-950/50 via-black to-zinc-950/50">
-        <div className="container mx-auto px-4">
-          <motion.div
-            initial="hidden"
-            whileInView="visible"
-            viewport={{ once: true }}
-            variants={staggerContainer}
-          >
-            <motion.div className="text-center mb-12" variants={fadeInUp}>
-              <span className="text-gold text-sm uppercase tracking-[0.3em] mb-4 block">Brand Assets</span>
-              <h2 
-                className="text-white text-3xl md:text-4xl font-bold"
-                style={{ fontFamily: "Poppins, sans-serif" }}
-              >
-                Official <span className="text-transparent bg-clip-text bg-gradient-to-r from-gold to-[#C4A962]">Logos</span>
-              </h2>
-            </motion.div>
-
-            {/* Logo Display */}
-            <motion.div className="mb-12" variants={fadeInUp}>
-              <div className="grid md:grid-cols-2 gap-8 max-w-4xl mx-auto">
-                {/* Dark Logo on Light */}
-                <div className="bg-gradient-to-br from-white via-[#FDFBF7] to-[#F5F0E6] border border-gold/30 rounded-2xl p-8 md:p-12 text-center shadow-lg">
-                  <p className="text-zinc-600 text-xs uppercase tracking-wider mb-6">For Light Backgrounds</p>
-                  <div className="flex justify-center mb-6">
-                    <div className="transform scale-150">
-                      <JJLogoImage variant="light" size="lg" showText={false} />
-                    </div>
-                  </div>
-                  <p className="text-zinc-700 text-sm mb-4">Primary logo with gold accents</p>
-                  <div className="flex items-center justify-center gap-2 text-zinc-500 text-xs">
-                    <Lock className="w-3 h-3 text-gold" />
-                    SVG format available on request
-                  </div>
-                </div>
-
-                {/* Light Logo on Dark */}
-                <div className="bg-black border border-zinc-800 rounded-2xl p-8 md:p-12 text-center">
-                  <p className="text-zinc-500 text-xs uppercase tracking-wider mb-6">For Dark Backgrounds</p>
-                  <div className="flex justify-center items-center mb-6 h-20">
-                    <span className="text-3xl font-light tracking-[0.3em] text-[#A8925A]" style={{ fontFamily: "Poppins, sans-serif" }}>
-                      JBJ
-                    </span>
-                    <div className="ml-4 flex flex-col items-start">
-                      <span className="text-white text-sm font-semibold tracking-[0.2em]">GLOBAL</span>
-                      <span className="text-white text-sm font-semibold tracking-[0.2em]">REAL ESTATE</span>
-                    </div>
-                  </div>
-                  <p className="text-zinc-400 text-sm mb-4">Inverted logo for dark backgrounds</p>
-                  <div className="flex items-center justify-center gap-2 text-zinc-600 text-xs">
-                    <Lock className="w-3 h-3 text-gold" />
-                    SVG format available on request
-                  </div>
-                </div>
-              </div>
-            </motion.div>
-          </motion.div>
-        </div>
-      </section>
 
       {/* Company Fact Sheet - White Cards */}
       <section className="py-20 md:py-28">
@@ -458,7 +407,7 @@ const PressKit = () => {
       </section>
 
       {/* Media Contact - Premium White/Gold Section */}
-      <section className="py-20 md:py-28 bg-gradient-to-b from-zinc-950/50 via-black to-zinc-950/50 border-t border-zinc-800">
+      <section className="py-20 md:py-28 bg-white border-t border-zinc-200">
         <div className="container mx-auto px-4">
           <motion.div
             initial="hidden"
@@ -468,12 +417,14 @@ const PressKit = () => {
             className="max-w-3xl mx-auto"
           >
             {/* Premium Contact Card */}
-            <motion.div 
-              className="bg-gradient-to-br from-white via-[#FDFBF7] to-[#F5F0E6] border border-gold/30 rounded-3xl p-8 md:p-12 text-center shadow-lg"
+            <motion.div
+              className="bg-white border border-gold/30 rounded-3xl p-8 md:p-12 text-center shadow-lg"
               variants={fadeInUp}
             >
-              <span className="text-gold text-sm uppercase tracking-[0.3em] mb-4 block">Press Inquiries</span>
-              <h2 
+              <span className="text-gold text-sm uppercase tracking-[0.3em] mb-4 block">
+                Press Inquiries
+              </span>
+              <h2
                 className="text-black text-3xl md:text-4xl font-bold mb-6"
                 style={{ fontFamily: "Poppins, sans-serif" }}
               >
@@ -483,21 +434,26 @@ const PressKit = () => {
                 For press inquiries, interview requests, or additional assets, please contact our media relations team.
               </p>
 
-              <div className="flex flex-wrap justify-center gap-4 mb-8">
-                <a 
-                  href="mailto:media@jbj.ae"
-                  className="inline-flex items-center gap-3 bg-gradient-to-r from-gold to-[#C4A962] text-black font-semibold px-8 py-4 rounded-xl hover:opacity-90 transition-all duration-300 shadow-lg shadow-gold/30"
+              <div className="flex flex-col sm:flex-row justify-center gap-4 mb-8">
+                <Button asChild variant="primary" size="lg" className="w-full sm:w-auto">
+                  <a href="mailto:media@JBJ.ae" className="inline-flex items-center gap-2">
+                    <Mail className="w-5 h-5" />
+                    <span className="font-semibold">media@JBJ.ae</span>
+                  </a>
+                </Button>
+
+                <Button
+                  type="button"
+                  variant="dark"
+                  size="lg"
+                  className="w-full sm:w-auto"
+                  onClick={() => setPhoneActionsOpen(true)}
                 >
-                  <Mail className="w-5 h-5" />
-                  media@JBJ.ae
-                </a>
-                <a 
-                  href={getCallUrl()}
-                  className="inline-flex items-center gap-3 bg-black border-2 border-zinc-700 text-white font-semibold px-8 py-4 rounded-xl hover:bg-zinc-900 hover:border-gold/50 transition-all duration-300"
-                >
-                  <Phone className="w-5 h-5" />
-                  {CONTACT_INFO.phone}
-                </a>
+                  <span className="inline-flex items-center gap-2">
+                    <Phone className="w-5 h-5" />
+                    <span className="font-semibold">{CONTACT_INFO.phone}</span>
+                  </span>
+                </Button>
               </div>
 
               <Link
@@ -508,6 +464,105 @@ const PressKit = () => {
                 View Full Company Profile
               </Link>
             </motion.div>
+
+            {/* Phone actions (Call / WhatsApp / Add Contact / Share) */}
+            <AlertDialog open={phoneActionsOpen} onOpenChange={setPhoneActionsOpen}>
+              <AlertDialogContent className="bg-white border border-gold/30">
+                <AlertDialogHeader>
+                  <AlertDialogTitle className="text-black">Contact Options</AlertDialogTitle>
+                  <AlertDialogDescription className="text-zinc-600">
+                    Choose how you would like to contact JBJ GLOBAL REAL ESTATE.
+                  </AlertDialogDescription>
+                </AlertDialogHeader>
+
+                <div className="grid gap-3">
+                  <Button asChild variant="dark" className="w-full">
+                    <a href={getCallUrl()} className="inline-flex items-center justify-center gap-2">
+                      <Phone className="w-4 h-4" />
+                      Call
+                    </a>
+                  </Button>
+
+                  <Button asChild variant="secondary" className="w-full">
+                    <a
+                      href={getWhatsAppUrl("Hi! I would like to connect with the team.")}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="inline-flex items-center justify-center gap-2"
+                    >
+                      <MessageCircle className="w-4 h-4" />
+                      WhatsApp
+                    </a>
+                  </Button>
+
+                  <Button
+                    type="button"
+                    variant="secondary"
+                    className="w-full"
+                    onClick={() => {
+                      const vcf = [
+                        'BEGIN:VCARD',
+                        'VERSION:3.0',
+                        'FN:JBJ GLOBAL REAL ESTATE',
+                        `TEL;TYPE=WORK,VOICE:${CONTACT_INFO.phone}`,
+                        `EMAIL;TYPE=INTERNET:${CONTACT_INFO.emailCapitalized}`,
+                        `URL:https://${CONTACT_INFO.domain}`,
+                        'END:VCARD',
+                      ].join('\n');
+
+                      const blob = new Blob([vcf], { type: 'text/vcard;charset=utf-8' });
+                      const url = window.URL.createObjectURL(blob);
+                      const a = document.createElement('a');
+                      a.href = url;
+                      a.download = 'JBJ_GLOBAL_REAL_ESTATE.vcf';
+                      document.body.appendChild(a);
+                      a.click();
+                      document.body.removeChild(a);
+                      window.URL.revokeObjectURL(url);
+
+                      toast.success('Contact card saved.');
+                      setPhoneActionsOpen(false);
+                    }}
+                  >
+                    <span className="inline-flex items-center justify-center gap-2">
+                      <UserPlus className="w-4 h-4" />
+                      Add to Contacts
+                    </span>
+                  </Button>
+
+                  <Button
+                    type="button"
+                    variant="secondary"
+                    className="w-full"
+                    onClick={async () => {
+                      try {
+                        if (!navigator.share) {
+                          toast.error('Sharing is not supported on this device.');
+                          return;
+                        }
+                        await navigator.share({
+                          title: 'JBJ GLOBAL REAL ESTATE',
+                          text: `${CONTACT_INFO.phone} • ${CONTACT_INFO.emailCapitalized}`,
+                          url: `${window.location.origin}/contact`,
+                        });
+                        setPhoneActionsOpen(false);
+                      } catch {
+                        // user cancelled
+                      }
+                    }}
+                  >
+                    <span className="inline-flex items-center justify-center gap-2">
+                      <Share2 className="w-4 h-4" />
+                      Share
+                    </span>
+                  </Button>
+
+                  <Button type="button" variant="primary" className="w-full" onClick={() => setPhoneActionsOpen(false)}>
+                    Close
+                  </Button>
+                </div>
+              </AlertDialogContent>
+            </AlertDialog>
           </motion.div>
         </div>
       </section>
