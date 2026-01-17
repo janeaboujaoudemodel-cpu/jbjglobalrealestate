@@ -327,10 +327,29 @@ const AIHub = () => {
   const { user } = useAuth();
   const navigate = useNavigate();
 
+  // Get glow color class based on tool color
+  const getGlowClass = (color: string) => {
+    if (color.includes('emerald')) return 'shadow-emerald-500/20 hover:shadow-gold/30';
+    if (color.includes('blue')) return 'shadow-blue-500/20 hover:shadow-gold/30';
+    if (color.includes('purple')) return 'shadow-purple-500/20 hover:shadow-gold/30';
+    if (color.includes('green')) return 'shadow-green-500/20 hover:shadow-gold/30';
+    if (color.includes('fuchsia')) return 'shadow-fuchsia-500/20 hover:shadow-gold/30';
+    if (color.includes('zinc')) return 'shadow-zinc-500/20 hover:shadow-gold/30';
+    if (color.includes('lime')) return 'shadow-lime-500/20 hover:shadow-gold/30';
+    if (color.includes('pink')) return 'shadow-pink-500/20 hover:shadow-gold/30';
+    if (color.includes('violet')) return 'shadow-violet-500/20 hover:shadow-gold/30';
+    if (color.includes('amber')) return 'shadow-amber-500/20 hover:shadow-gold/30';
+    if (color.includes('gold')) return 'shadow-gold/20 hover:shadow-gold/30';
+    if (color.includes('red')) return 'shadow-red-500/20 hover:shadow-gold/30';
+    if (color.includes('cyan')) return 'shadow-cyan-500/20 hover:shadow-gold/30';
+    if (color.includes('indigo')) return 'shadow-indigo-500/20 hover:shadow-gold/30';
+    return 'shadow-zinc-500/20 hover:shadow-gold/30';
+  };
+
   const renderToolCard = (tool: typeof freeAITools[0], showFree = true) => (
     <motion.div key={tool.id} variants={fadeInUp}>
       <Link to={tool.link} className="block group h-full">
-        <Card className={`bg-gradient-to-br from-zinc-900/90 to-zinc-950 border ${tool.borderColor} hover:border-gold hover:shadow-xl hover:shadow-gold/20 transition-all duration-300 h-full group-hover:scale-[1.02] backdrop-blur-sm`}>
+        <Card className={`bg-gradient-to-br from-zinc-900/90 to-zinc-950 border ${tool.borderColor} hover:border-gold shadow-lg ${getGlowClass(tool.color)} hover:shadow-xl transition-all duration-300 h-full group-hover:scale-[1.02] backdrop-blur-sm`}>
           <CardContent className="p-5">
             <div className="flex items-start gap-4">
               <div className={`w-12 h-12 ${tool.bgColor} rounded-xl flex items-center justify-center flex-shrink-0 group-hover:scale-110 transition-transform`}>
@@ -358,7 +377,7 @@ const AIHub = () => {
   const renderOperationCard = (item: typeof brokerOperations[0]) => (
     <motion.div key={item.id} variants={fadeInUp}>
       <Link to={item.link} className="block group h-full">
-        <Card className={`bg-gradient-to-br from-zinc-900/90 to-zinc-950 border ${item.borderColor} hover:border-gold hover:shadow-xl hover:shadow-gold/20 transition-all duration-300 h-full backdrop-blur-sm`}>
+        <Card className={`bg-gradient-to-br from-zinc-900/90 to-zinc-950 border ${item.borderColor} hover:border-gold shadow-lg ${getGlowClass(item.color)} hover:shadow-xl transition-all duration-300 h-full backdrop-blur-sm group-hover:scale-[1.02]`}>
           <CardContent className="p-5">
             <div className={`w-12 h-12 ${item.bgColor} rounded-xl flex items-center justify-center mb-4 group-hover:scale-110 transition-transform`}>
               <item.icon className={`w-6 h-6 ${item.color}`} />

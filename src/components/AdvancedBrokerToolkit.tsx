@@ -356,7 +356,7 @@ const AdvancedBrokerToolkit = () => {
 
   const renderTeamCard = (member: typeof PROFESSIONAL_SUPPORT[0], index: number) => (
     <motion.div key={index} variants={fadeInUp}>
-      <Card className={`bg-zinc-900/60 border ${member.borderColor} hover:border-opacity-100 transition-all duration-300 h-full shadow-lg ${member.glowColor} hover:shadow-xl`}>
+      <Card className={`bg-zinc-900/60 border ${member.borderColor} hover:border-gold transition-all duration-300 h-full shadow-lg ${member.glowColor} hover:shadow-xl hover:shadow-gold/30 group-hover:scale-[1.02]`}>
         <CardContent className="p-5">
           <div className={`w-12 h-12 ${member.bgColor} rounded-xl flex items-center justify-center mb-4`}>
             <member.icon className={`h-6 w-6 ${member.color}`} />
@@ -371,7 +371,7 @@ const AdvancedBrokerToolkit = () => {
 
   const renderTrainingCard = (item: typeof TRAINING_DEVELOPMENT[0], index: number) => (
     <motion.div key={index} variants={fadeInUp}>
-      <Card className={`bg-zinc-900/60 border-zinc-800 hover:border-opacity-100 transition-all duration-300 h-full shadow-lg ${item.glowColor} hover:shadow-xl cursor-pointer group`}>
+      <Card className={`bg-zinc-900/60 border-zinc-800 hover:border-gold transition-all duration-300 h-full shadow-lg ${item.glowColor} hover:shadow-xl hover:shadow-gold/30 cursor-pointer group`}>
         <CardContent className="p-4">
           <div className="flex items-center gap-3">
             <div className={`w-10 h-10 ${item.bgColor} rounded-lg flex items-center justify-center group-hover:scale-110 transition-transform`}>
@@ -390,7 +390,7 @@ const AdvancedBrokerToolkit = () => {
   const renderToolCard = (tool: typeof TOOLS_OPERATIONS[0], index: number) => (
     <motion.div key={index} variants={fadeInUp}>
       <Link to={tool.link}>
-        <Card className={`bg-zinc-900/60 border-zinc-800 hover:border-opacity-100 transition-all duration-300 h-full shadow-lg ${tool.glowColor} hover:shadow-xl group cursor-pointer`}>
+        <Card className={`bg-zinc-900/60 border-zinc-800 hover:border-gold transition-all duration-300 h-full shadow-lg ${tool.glowColor} hover:shadow-xl hover:shadow-gold/30 group cursor-pointer`}>
           <CardContent className="p-4">
             <div className="flex items-center gap-3">
               <div className={`w-10 h-10 ${tool.bgColor} rounded-lg flex items-center justify-center group-hover:scale-110 transition-transform`}>
