@@ -6,6 +6,7 @@ import DocumentDownloads from "@/components/DocumentDownloads";
 import ShareButton from "@/components/ShareButton";
 import FavoriteButton from "@/components/FavoriteButton";
 import PropertyReportModal from "@/components/PropertyReportModal";
+import ClientMarketContext from "@/components/client-intelligence/ClientMarketContext";
 import { Skeleton } from "@/components/ui/skeleton";
 import { Button } from "@/components/ui/button";
 import { ChevronLeft, MapPin, Building, Calendar, DollarSign, Layers, Users, Map, Download, FileText, MessageCircle, Phone } from "lucide-react";
@@ -305,6 +306,13 @@ const ProjectDetail = () => {
                 Download & Share Report
               </Button>
             </div>
+
+            {/* Market Context - Client Intelligence */}
+            <ClientMarketContext
+              areaName={project.community?.name || project.location || "Dubai"}
+              trendDirection="stable"
+              rentDemandLevel="moderate"
+            />
 
             {/* Downloads */}
             <DocumentDownloads documents={project.documents || []} />
