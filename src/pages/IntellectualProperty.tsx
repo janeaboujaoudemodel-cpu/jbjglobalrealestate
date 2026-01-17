@@ -55,7 +55,7 @@ const IntellectualProperty = () => {
                 <p className="text-zinc-300 mt-4 leading-relaxed">
                   This platform, including but not limited to all software code, AI algorithms, user interface designs, 
                   branding elements, written content, graphics, and digital assets, is the exclusive intellectual property 
-                  of <span className="text-white font-medium">Jane Abou Jaoude</span>, Founder & Managing Director of JBJ Global Real Estate.
+                  of <span className="text-white font-medium">Jane Abou Jaoude</span>, Founder and CEO of JBJ GLOBAL REAL ESTATE.
                 </p>
               </div>
             </div>
@@ -246,7 +246,7 @@ const IntellectualProperty = () => {
             </p>
             <div className="space-y-2 text-zinc-400">
               <p><span className="text-white">Email:</span> privacy@jbj.ae</p>
-              <p><span className="text-white">Legal Representative:</span> Jane Abou Jaoude, Founder & Managing Director</p>
+              <p><span className="text-white">Legal Representative:</span> Jane Abou Jaoude, Founder and CEO</p>
               <p><span className="text-white">Jurisdiction:</span> Dubai, United Arab Emirates</p>
             </div>
           </div>

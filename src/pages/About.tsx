@@ -160,7 +160,7 @@ const About = () => {
               <Link to="/properties" className="relative z-20">
                 <Button 
                   variant="goldOutline"
-                  className="px-8 py-6 text-base border-gold/60 text-white hover:text-black"
+                  className="px-8 py-6 text-base"
                 >
                   Browse Properties
                   <ArrowUpRight className="w-4 h-4 ml-2" />
@@ -190,21 +190,21 @@ const About = () => {
                   
                   {/* Circular portrait - GLOBAL FOUNDER IMAGE RULE */}
                   <Link to="/founder" className="block group relative z-10">
+                    {/* Container must be square with equal breathing space */}
                     <div 
-                      className="w-56 h-56 md:w-64 md:h-64 lg:w-72 lg:h-72 rounded-full overflow-hidden border-2 border-gold/30 group-hover:border-gold/60 transition-all duration-300 mx-auto"
-                      style={{
-                        /* Equal padding on all sides for perfect centering */
-                        padding: '0',
-                      }}
+                      className="w-56 h-56 md:w-64 md:h-64 lg:w-72 lg:h-72 rounded-full overflow-hidden border-2 border-gold/30 group-hover:border-gold/60 transition-all duration-300 mx-auto bg-zinc-900"
                     >
+                      {/* CRITICAL: Perfect center alignment required
+                          - object-fit: contain (no cropping/zooming)
+                          - object-position: center center (mathematically centered)
+                          - Equal gap on all sides */}
                       <img 
                         src={founderProfessional} 
                         alt="Jane Abou Jaoude, Founder and CEO of JBJ GLOBAL REAL ESTATE" 
-                        className="w-full h-full object-cover"
+                        className="w-full h-full"
                         style={{ 
-                          /* CRITICAL: Perfect center - no cropping */
+                          objectFit: 'cover',
                           objectPosition: 'center center',
-                          objectFit: 'cover'
                         }}
                         loading="lazy"
                         decoding="async"
@@ -547,7 +547,7 @@ const About = () => {
               <Link to="/properties" className="relative z-10">
                 <Button 
                   variant="goldOutline"
-                  className="px-8 py-6 text-base border-gold/60 text-white hover:text-black"
+                  className="px-8 py-6 text-base"
                 >
                   Browse Properties
                   <ArrowUpRight className="w-4 h-4 ml-2" />

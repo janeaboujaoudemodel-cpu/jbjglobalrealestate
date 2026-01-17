@@ -49,12 +49,17 @@ export const FounderPhilosophySection = () => {
               variants={fadeInUp}
               className="flex-shrink-0 mx-auto md:mx-0"
             >
-              <Link to="/founder-and-leadership" className="block group">
-                <div className="w-36 h-36 md:w-44 md:h-44 rounded-full overflow-hidden border-2 border-gold/30 group-hover:border-gold transition-colors duration-300 shadow-lg">
+              <Link to="/founder" className="block group">
+                {/* GLOBAL FOUNDER IMAGE RULE: Perfect center, no cropping */}
+                <div className="w-36 h-36 md:w-44 md:h-44 rounded-full overflow-hidden border-2 border-gold/30 group-hover:border-gold transition-colors duration-300 shadow-lg bg-zinc-900">
                   <img 
                     src={founderPremium}
-                    alt="Jane Abou Jaoude – Founder and CEO of JBJ GLOBAL REAL ESTATE"
-                    className="w-full h-full object-cover object-top"
+                    alt="Jane Abou Jaoude, Founder and CEO of JBJ GLOBAL REAL ESTATE"
+                    className="w-full h-full"
+                    style={{
+                      objectFit: 'cover',
+                      objectPosition: 'center center',
+                    }}
                     loading="lazy"
                   />
                 </div>
@@ -68,9 +73,9 @@ export const FounderPhilosophySection = () => {
             >
               {/* Attribution */}
               <p className="text-gold text-sm uppercase tracking-[0.2em]">
-                Written by the founder,{" "}
+                Written by the Founder,{" "}
                 <Link 
-                  to="/founder-and-leadership" 
+                  to="/founder" 
                   className="underline underline-offset-4 hover:text-gold-light transition-colors"
                 >
                   Jane Abou Jaoude
@@ -134,11 +139,10 @@ export const FounderPhilosophySection = () => {
 
               {/* Signature */}
               <div className="pt-8 border-t border-zinc-800/50">
-                <p className="text-zinc-400 italic text-base">
-                  —{" "}
+                <p className="text-zinc-400 text-base">
                   <Link 
-                    to="/founder-and-leadership"
-                    className="text-white hover:text-gold transition-colors not-italic font-medium"
+                    to="/founder"
+                    className="text-white hover:text-gold transition-colors font-medium"
                   >
                     Jane Abou Jaoude
                   </Link>
