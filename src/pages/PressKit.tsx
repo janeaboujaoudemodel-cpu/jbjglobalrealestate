@@ -99,6 +99,8 @@ const founderHeadshots: FounderPhoto[] = [
 ];
 
 const PressKit = () => {
+  const [phoneActionsOpen, setPhoneActionsOpen] = useState(false);
+
   // Disable right-click and copy functionality
   useEffect(() => {
     const handleContextMenu = (e: MouseEvent) => {
