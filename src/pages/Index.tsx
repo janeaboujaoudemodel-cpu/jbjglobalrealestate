@@ -446,7 +446,7 @@ const Index = () => {
                       WebkitTextFillColor: "transparent",
                     }}
                   >
-                    Founder & CEO
+                    Founder and CEO
                   </p>
                   
                   <p className="text-zinc-400 text-base leading-relaxed mb-8">

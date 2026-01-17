@@ -2,7 +2,7 @@ import { useState } from "react";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { z } from "zod";
-import { MapPin, Phone, Mail, Calendar, ArrowUpRight, MessageCircle, Send, Loader2, Shield, CheckCircle, ExternalLink } from "lucide-react";
+import { MapPin, Phone, Mail, Calendar, ArrowUpRight, MessageCircle, Send, Loader2, Shield, CheckCircle, ExternalLink, Download, Share2, PhoneCall } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
@@ -10,6 +10,7 @@ import { Checkbox } from "@/components/ui/checkbox";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from "@/components/ui/form";
 import { PhoneInput, getPhoneValidation } from "@/components/ui/phone-input";
+import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/ui/dialog";
 import Footer from "@/components/Footer";
 import { useLanguage } from "@/contexts/LanguageContext";
 import { CONTACT_INFO, getWhatsAppUrl, getCallUrl, getEmailUrl } from "@/constants/stats";
@@ -21,6 +22,7 @@ import { SearchableSelect } from "@/components/ui/searchable-select";
 import { Link } from "react-router-dom";
 import { CalendlyEmbed } from "@/components/marketing/CalendlyEmbed";
 import { SEOHead, pagesSEO } from "@/components/SEOHead";
+import { MeetingBookingModal } from "@/components/MeetingBookingModal";
 import contactHero from "@/assets/images/contact-hero.jpg";
 
 const consultationSchema = z.object({
@@ -756,6 +758,53 @@ END:VCARD`;
           </div>
         </div>
       </section>
+
+      {/* Phone Actions Dialog */}
+      <Dialog open={phoneActionsOpen} onOpenChange={setPhoneActionsOpen}>
+        <DialogContent className="max-w-sm bg-white border-zinc-200">
+          <DialogHeader>
+            <DialogTitle className="text-black text-lg font-semibold">Contact Options</DialogTitle>
+          </DialogHeader>
+          <div className="space-y-3 pt-2">
+            <Button 
+              onClick={() => handlePhoneAction('call')}
+              className="w-full h-12 bg-blue-600 hover:bg-blue-700 text-white justify-start gap-3"
+            >
+              <PhoneCall className="w-5 h-5" />
+              Call Now
+            </Button>
+            <Button 
+              onClick={() => handlePhoneAction('whatsapp')}
+              className="w-full h-12 bg-green-600 hover:bg-green-700 text-white justify-start gap-3"
+            >
+              <MessageCircle className="w-5 h-5" />
+              WhatsApp
+            </Button>
+            <Button 
+              onClick={() => handlePhoneAction('save')}
+              variant="outline"
+              className="w-full h-12 border-zinc-300 text-zinc-700 hover:bg-zinc-50 justify-start gap-3"
+            >
+              <Download className="w-5 h-5" />
+              Save Contact
+            </Button>
+            <Button 
+              onClick={() => handlePhoneAction('share')}
+              variant="outline"
+              className="w-full h-12 border-zinc-300 text-zinc-700 hover:bg-zinc-50 justify-start gap-3"
+            >
+              <Share2 className="w-5 h-5" />
+              Share Contact
+            </Button>
+          </div>
+        </DialogContent>
+      </Dialog>
+
+      {/* Meeting Booking Modal */}
+      <MeetingBookingModal 
+        open={meetingModalOpen} 
+        onOpenChange={setMeetingModalOpen} 
+      />
 
       <Footer />
       </div>
