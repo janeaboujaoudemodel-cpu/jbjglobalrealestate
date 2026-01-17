@@ -235,8 +235,17 @@ All colors MUST be HSL.
 }
 
 @layer components {
+  /* ============================================================
+   * GLOBAL DESIGN SYSTEM - JBJ GLOBAL REAL ESTATE
+   * LOCKED - Applies to Front-End, Back-End, CRM, Employee Hub
+   * ============================================================ */
+
+  /* ============================================================
+   * 1. GLOBAL IMAGE RULE - LOCKED
+   * Applies to all images: users, staff, profiles, content
+   * ============================================================ */
+  
   /**
-   * GLOBAL IMAGE RULE - LOCKED
    * Apply .jj-image-contain to any image that must follow the no-crop rule
    * - NO cropping, NO zooming, NO auto-fit
    * - Perfect centering (object-fit: contain, object-position: center center)
@@ -248,8 +257,7 @@ All colors MUST be HSL.
   }
 
   /**
-   * GLOBAL CIRCLE IMAGE RULE - LOCKED
-   * For circular profile images, avatars, founder portraits
+   * GLOBAL CIRCLE IMAGE RULE - For circular profile images, avatars
    * - Use full original image
    * - Perfect centering
    * - No cropping of head/shoulders
@@ -258,6 +266,129 @@ All colors MUST be HSL.
     @apply object-contain rounded-full;
     object-position: center center !important;
   }
+
+  /* ============================================================
+   * 2. GLOBAL USER PROFILE RULE - LOCKED
+   * Consistent profile layout across all systems
+   * ============================================================ */
+  
+  .jj-profile-card {
+    @apply flex flex-col items-center text-center;
+  }
+  
+  .jj-profile-card .jj-profile-image {
+    @apply object-contain object-center rounded-full bg-zinc-950;
+  }
+  
+  .jj-profile-card .jj-profile-name {
+    @apply text-white font-semibold mt-3;
+  }
+  
+  .jj-profile-card .jj-profile-role {
+    @apply text-gold text-sm mt-1;
+  }
+
+  /* ============================================================
+   * 3. GLOBAL BUTTON SYSTEM - INVERTED HOVER (LOCKED)
+   * All buttons must invert on hover
+   * ============================================================ */
+  
+  /* Button Type A - White Base (Default) */
+  .jj-btn-primary {
+    @apply bg-white text-gold border border-gold font-semibold;
+    @apply transition-all duration-300;
+  }
+  .jj-btn-primary:hover {
+    @apply bg-transparent text-gold border-gold;
+  }
+  
+  /* Button Type B - Transparent Base (For images/videos) */
+  .jj-btn-secondary {
+    @apply bg-transparent text-gold border border-gold font-semibold;
+    @apply transition-all duration-300;
+  }
+  .jj-btn-secondary:hover {
+    @apply bg-white text-gold border-gold;
+  }
+  
+  /* Button on Hero/Image backgrounds */
+  .jj-btn-hero {
+    @apply bg-transparent text-white border border-white font-semibold;
+    @apply transition-all duration-300;
+  }
+  .jj-btn-hero:hover {
+    @apply bg-white text-gold border-white;
+  }
+
+  /* ============================================================
+   * 4. GLOBAL SPACING & RHYTHM RULE - UNIFIED (LOCKED)
+   * Consistent spacing across all systems
+   * ============================================================ */
+  
+  /* Section spacing */
+  .jj-section {
+    @apply py-12 md:py-16 lg:py-20;
+  }
+  
+  .jj-section-sm {
+    @apply py-8 md:py-10 lg:py-12;
+  }
+  
+  .jj-section-lg {
+    @apply py-16 md:py-20 lg:py-24;
+  }
+  
+  /* Card spacing */
+  .jj-card {
+    @apply p-4 md:p-5 lg:p-6;
+  }
+  
+  .jj-card-compact {
+    @apply p-3 md:p-4;
+  }
+  
+  /* Content gaps */
+  .jj-gap-content {
+    @apply gap-4 md:gap-5 lg:gap-6;
+  }
+  
+  .jj-gap-items {
+    @apply gap-3 md:gap-4;
+  }
+  
+  /* Text rhythm */
+  .jj-text-spacing {
+    @apply space-y-3 md:space-y-4;
+  }
+  
+  /* Profile layout spacing */
+  .jj-profile-spacing {
+    @apply space-y-2;
+  }
+
+  /* ============================================================
+   * 5. DESIGN INTENT - Premium, Luxury Feel
+   * ============================================================ */
+  
+  .jj-premium-surface {
+    @apply bg-zinc-950 border border-zinc-800/50;
+  }
+  
+  .jj-premium-card {
+    @apply bg-zinc-900/80 border border-zinc-800/60 rounded-xl;
+  }
+  
+  .jj-gold-accent {
+    @apply text-gold;
+  }
+  
+  .jj-gold-border {
+    @apply border-gold/30;
+  }
+
+  /* ============================================================
+   * LEGACY UTILITY CLASSES (Kept for compatibility)
+   * ============================================================ */
 
   /* Filter chip active state */
   .filter-chip-active {
