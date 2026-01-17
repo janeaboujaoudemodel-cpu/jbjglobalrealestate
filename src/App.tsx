@@ -31,6 +31,9 @@ import MarketOverview from "./pages/market-intelligence/MarketOverview";
 import AreaIntelligence from "./pages/market-intelligence/AreaIntelligence";
 import MarketAreaDetail from "./pages/market-intelligence/AreaDetail";
 import MarketReportsPage from "./pages/market-intelligence/MarketReports";
+import MonthlyMarketBrief from "./pages/market-intelligence/MonthlyMarketBrief";
+import QuarterlyMarketReview from "./pages/market-intelligence/QuarterlyMarketReview";
+import AnnualMarketSummary from "./pages/market-intelligence/AnnualMarketSummary";
 import Methodology from "./pages/market-intelligence/Methodology";
 import InternalDashboard from "./pages/market-intelligence/internal/InternalDashboard";
 import BrokerIntelligence from "./pages/market-intelligence/internal/BrokerIntelligence";
@@ -177,6 +180,9 @@ const App = () => (
                 <Route path="/market-intelligence/areas" element={<AreaIntelligence />} />
                 <Route path="/market-intelligence/areas/:slug" element={<MarketAreaDetail />} />
                 <Route path="/market-intelligence/reports" element={<MarketReportsPage />} />
+                <Route path="/market-intelligence/reports/monthly/:period" element={<MonthlyMarketBrief />} />
+                <Route path="/market-intelligence/reports/quarterly/:period" element={<QuarterlyMarketReview />} />
+                <Route path="/market-intelligence/reports/annual/:year" element={<AnnualMarketSummary />} />
                 <Route path="/market-intelligence/methodology" element={<Methodology />} />
                 <Route path="/internal/market-intelligence/dashboard" element={<InternalDashboard />} />
                 <Route path="/internal/market-intelligence/brokers" element={<BrokerIntelligence />} />
