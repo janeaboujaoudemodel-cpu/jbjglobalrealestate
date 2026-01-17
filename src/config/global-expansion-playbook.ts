@@ -1,39 +1,37 @@
 /**
  * JBJ GLOBAL REAL ESTATE
  * PRIORITY 3 — GLOBAL EXPANSION PLAYBOOK
- * STEP 1: EXPANSION PHILOSOPHY, CONTROL MODEL & NON-NEGOTIABLES
  * 
- * Defines how JBJ expands globally without breaking control, compliance, brand, or intelligence.
+ * Defines how JBJ GLOBAL REAL ESTATE expands globally without losing control, compliance, intelligence, or brand authority.
+ * Expansion is system-driven, not opportunistic.
  * 
  * STATUS: LOCKED
- * VERSION: 1.0
+ * VERSION: 2.0
  * DATE: 2026-01-17
  */
 
 import { MASTER_LOCK } from './master-lock';
 
 // ============================================================================
-// EXPANSION PHILOSOPHY
+// STEP 1 — EXPANSION PHILOSOPHY & CONTROL MODEL
 // ============================================================================
 
 export const EXPANSION_PHILOSOPHY = {
-  // What the playbook IS NOT
-  IS_NOT: [
-    'A franchise model',
-    'A copy-paste website strategy',
-    'A marketing rollout',
-    'A listing aggregation expansion',
-  ],
+  // Core principle (LOCKED)
+  PRINCIPLE: 'Centralized Intelligence · Localized Execution',
 
-  // What the playbook IS
-  IS: [
-    'A centralized intelligence + governance system',
-    'With localized execution',
-    'Under one global authority',
-  ],
-
-  // Core principle
-  PRINCIPLE: 'One brain. Many jurisdictions. Zero chaos.',
+  // What this means
+  MEANING: {
+    CENTRALIZED: [
+      'Market Intelligence',
+      'AI governance',
+      'Brand, language, and compliance',
+    ],
+    LOCALIZED: [
+      'Execution (brokerage, licensing, partners)',
+      'Per jurisdiction, under JBJ control',
+    ],
+  },
 
   // Control model
   CONTROL_MODEL: {
@@ -55,9 +53,6 @@ export const EXPANSION_PHILOSOPHY = {
       'Jurisdiction-specific disclosures',
     ],
   },
-
-  // Governance statement
-  GOVERNANCE: 'Centralized Intelligence · Localized Execution',
 } as const;
 
 // ============================================================================
@@ -65,234 +60,268 @@ export const EXPANSION_PHILOSOPHY = {
 // ============================================================================
 
 export const GLOBAL_CONSTANTS = {
-  // Brand & Language (never change)
+  // These NEVER change in any country
   BRAND: {
-    COMPANY_NAME: MASTER_LOCK.BRAND.COMPANY_NAME,
-    FOUNDER_NAME: MASTER_LOCK.BRAND.FOUNDER_NAME,
+    COMPANY_NAME: MASTER_LOCK.BRAND.COMPANY_NAME, // JBJ GLOBAL REAL ESTATE
+    FOUNDER_NAME: MASTER_LOCK.BRAND.FOUNDER_NAME, // JANE ABOU JAOUDÉ
     SERVICE_SCOPE: 'BUY · SELL · RENT',
-    AI_DISCLOSURE: MASTER_LOCK.AI.MANDATORY_DISCLOSURE,
-    DOMAIN_FORMAT: 'All Capital',
-    LOCKED: true,
+    UNCHANGED: true,
   },
 
-  // AI Rules (universal)
+  // AI Rules (universal, non-negotiable)
   AI_RULES: {
+    DESCRIPTIVE_ONLY: true,
     NO_PREDICTIONS: true,
     NO_ADVICE: true,
-    NO_GUARANTEES: true,
-    MODE_SEPARATION_ENFORCED: true,
-    AUDIT_LOGGING_REQUIRED: true,
-    DISCLOSURE_MANDATORY: true,
-    RULES: [
-      'No predictions in any jurisdiction',
-      'No investment advice anywhere',
-      'No guarantees of any kind',
-      'Mode separation enforced globally',
-      'All outputs logged and auditable',
-    ],
+    ENFORCED_GLOBALLY: true,
   },
 
-  // Data Ethics (universal)
-  DATA_ETHICS: {
+  // Data Rules (universal)
+  DATA_RULES: {
+    GOVERNMENT_OPEN_DATA_DESCRIPTIVE_ONLY: true,
     NO_RAW_DATA_REDISTRIBUTION: true,
-    NO_PII_LEAKAGE: true,
-    OPEN_DATA_DESCRIPTIVE_ONLY: true,
-    RULES: [
-      'No raw data redistribution to any party',
-      'No PII leakage under any circumstance',
-      'Open Data used descriptively only',
-      'Local data laws supersede when stricter',
-    ],
   },
 
-  // Compliance gate
-  COMPLIANCE_GATE: 'If a country cannot comply with these constants → no expansion.',
+  // Client Ownership Rule
+  CLIENT_OWNERSHIP: {
+    OWNER: 'JBJ GLOBAL REAL ESTATE',
+    ALWAYS: true,
+  },
+
+  // Compliance gate (HARD RULE)
+  COMPLIANCE_GATE: 'If a country cannot comply → it is NOT activated.',
 } as const;
 
 // ============================================================================
-// EXPANSION MODELS
+// EXPANSION MODELS (SELECTED PER COUNTRY)
 // ============================================================================
 
 export const EXPANSION_MODELS = {
-  // Model A: Direct Licensed Presence
+  // MODEL A — Direct Licensed Presence
   MODEL_A: {
     ID: 'A',
     NAME: 'Direct Licensed Presence',
-    USED_WHEN: [
-      'You obtain a local brokerage license',
-      'You operate directly',
-      'Full market commitment is strategic',
-    ],
+    DESCRIPTION: 'JBJ holds or obtains a local brokerage license and executes directly.',
     CHARACTERISTICS: {
       CONTROL: 'Full',
       MARGIN: 'Full',
       SETUP_COST: 'Higher',
       AUTHORITY: 'Strongest',
-      DATA_OWNERSHIP: 'Complete',
-      CLIENT_OWNERSHIP: 'Complete',
     },
-    BEST_FOR: [
-      'GCC countries',
-      'Strategic markets',
-      'High-value jurisdictions',
-      'Long-term presence markets',
-    ],
-    RISK_LEVEL: 'Low (after setup)',
   },
 
-  // Model B: Licensed Local Partner
+  // MODEL B — Licensed Local Partner (Execution Only)
   MODEL_B: {
     ID: 'B',
     NAME: 'Licensed Local Partner (Execution Only)',
-    USED_WHEN: [
-      'Local licensing is complex',
-      'Speed to market is priority',
-      'Regulatory barriers exist',
-    ],
-    CHARACTERISTICS: {
-      CONTROL: 'Platform & Intelligence',
-      MARGIN: 'Commission split',
-      SETUP_COST: 'Lower',
-      AUTHORITY: 'Shared execution',
-      DATA_OWNERSHIP: 'JBJ retains',
-      CLIENT_OWNERSHIP: 'JBJ retains',
-    },
-    CRITICAL_RULES: [
-      'JBJ owns platform & intelligence',
+    DESCRIPTION: 'A local licensed partner executes transactions.',
+    RULES: [
+      'JBJ controls platform, clients, data, and intelligence',
       'Partner executes deals only',
-      'Clear commission split defined upfront',
-      'JBJ controls entire client journey',
+      'Strict governance and commission tracking',
       'Partner NEVER owns the client',
-      'Partner NEVER owns the data',
-      'Exit clause always included',
     ],
-    BEST_FOR: [
-      'Complex regulatory markets',
-      'Fast market entry',
-      'Testing demand before Model A',
-    ],
-    RISK_LEVEL: 'Medium (partner dependency)',
   },
 
-  // Model C: Intelligence-Only
+  // MODEL C — Intelligence-Only Presence
   MODEL_C: {
     ID: 'C',
     NAME: 'Intelligence-Only Market Entry',
-    USED_WHEN: [
-      'Testing a market',
-      'No execution initially',
-      'Regulatory uncertainty',
-      'Brand presence without commitment',
-    ],
-    CHARACTERISTICS: {
-      CONTROL: 'Full (limited scope)',
-      MARGIN: 'None (no execution)',
-      SETUP_COST: 'Minimal',
-      AUTHORITY: 'Intelligence only',
-      DATA_OWNERSHIP: 'Complete',
-      CLIENT_OWNERSHIP: 'N/A',
-    },
+    DESCRIPTION: 'No execution. No brokerage claims.',
     INCLUDES: [
-      'Market Intelligence pages',
-      'Educational content',
-      'Brand presence',
+      'Market Intelligence only',
+      'Data, reports, and authority',
     ],
     EXCLUDES: [
-      'Listings execution',
-      'Brokerage claims',
+      'Brokerage execution',
       'Transaction facilitation',
-      'Local partner relationships',
     ],
-    BEST_FOR: [
-      'Market testing',
-      'Building awareness',
-      'Gathering intelligence before commitment',
-      'Jurisdictions with unclear regulations',
-    ],
-    RISK_LEVEL: 'Lowest',
-    NOTE: 'This is how institutions enter markets safely.',
+    LEGAL_EXPOSURE: 'Zero',
   },
 } as const;
 
 // ============================================================================
-// COUNTRY READINESS CHECK
+// STEP 2 — COUNTRY CLASSIFICATION & EXPANSION SEQUENCING
 // ============================================================================
 
-export const COUNTRY_READINESS = {
-  // Mandatory questions (all must be YES)
-  MANDATORY_QUESTIONS: [
+export const COUNTRY_CLASSIFICATION = {
+  // Classification principle (NON-NEGOTIABLE)
+  PRINCIPLE: 'Expansion is NOT based on: Noise, Introductions, Ego, Opportunistic deals.',
+  BASED_ON: 'Structured evaluation ONLY.',
+
+  // Mandatory Country Evaluation Criteria (ALL must pass)
+  MANDATORY_CRITERIA: [
     {
-      id: 'Q1',
-      question: 'Is BUY · SELL · RENT legally definable?',
-      explanation: 'Local law must recognize these transaction types',
-      required_answer: true,
+      id: 'LICENSING_CLARITY',
+      question: 'Is BUY · SELL · RENT legally definable and executable?',
+      required: true,
     },
     {
-      id: 'Q2',
-      question: 'Is data usage compliant?',
-      explanation: 'Can we collect, store, and use data legally?',
-      required_answer: true,
+      id: 'DATA_AVAILABILITY',
+      question: 'Does public or government-recognized real estate data exist?',
+      required: true,
     },
     {
-      id: 'Q3',
-      question: 'Can AI disclosures be honored?',
-      explanation: 'Can we maintain AI governance standards?',
-      required_answer: true,
+      id: 'AI_COMPLIANCE',
+      question: 'Is descriptive AI usage legally acceptable?',
+      required: true,
     },
     {
-      id: 'Q4',
-      question: 'Can partner dependency be avoided or managed?',
-      explanation: 'Is Model A or controlled Model B possible?',
-      required_answer: true,
+      id: 'PARTNER_DEPENDENCY_RISK',
+      question: 'Can the platform avoid relying on a single vendor or data source?',
+      required: true,
     },
     {
-      id: 'Q5',
-      question: 'Can exit be clean?',
-      explanation: 'Can we withdraw without legal entanglement?',
-      required_answer: true,
+      id: 'EXIT_SAFETY',
+      question: 'Can JBJ GLOBAL REAL ESTATE exit cleanly without exposure?',
+      required: true,
     },
   ],
 
   // Gate rule
-  GATE_RULE: 'If any answer is NO → PAUSE expansion to that country.',
+  GATE_RULE: 'If any one fails → country is REJECTED.',
+} as const;
 
-  // Additional due diligence
-  DUE_DILIGENCE: [
-    'Regulatory environment stability',
-    'Currency convertibility',
-    'Repatriation of earnings',
-    'Political risk assessment',
-    'Market size viability',
-    'Competitive landscape',
+// ============================================================================
+// COUNTRY TIERS (LOCKED)
+// ============================================================================
+
+export const COUNTRY_TIERS = {
+  // TIER 1 — CORE MARKETS
+  TIER_1: {
+    NAME: 'CORE MARKETS',
+    EXECUTION_MODEL: ['A', 'B'],
+    CHARACTERISTICS: [
+      'Clear licensing',
+      'Strong Open Data',
+      'High regulatory trust',
+      'Strategic long-term value',
+    ],
+    PURPOSE: 'Anchor authority and credibility.',
+  },
+
+  // TIER 2 — STRATEGIC GROWTH MARKETS
+  TIER_2: {
+    NAME: 'STRATEGIC GROWTH MARKETS',
+    EXECUTION_MODEL: ['B'],
+    CHARACTERISTICS: [
+      'High demand',
+      'More complex regulation',
+      'Strong partner ecosystems',
+    ],
+    PURPOSE: 'Controlled growth without overexposure.',
+  },
+
+  // TIER 3 — INTELLIGENCE-ONLY MARKETS
+  TIER_3: {
+    NAME: 'INTELLIGENCE-ONLY MARKETS',
+    EXECUTION_MODEL: ['C'],
+    CHARACTERISTICS: [
+      'Limited execution clarity',
+      'Acceptable data availability',
+    ],
+    PURPOSE: 'Visibility, learning, zero execution risk.',
+  },
+} as const;
+
+// ============================================================================
+// EXPANSION SEQUENCING (MANDATORY ORDER)
+// ============================================================================
+
+export const EXPANSION_SEQUENCING = {
+  // The platform must prevent skipping phases
+  SKIP_PREVENTION: true,
+
+  PHASES: [
+    {
+      phase: 1,
+      name: 'Strengthen Tier 1',
+      actions: [
+        'Compliance hardened',
+        'AI governance locked',
+        'Intelligence stabilized',
+        'Execution perfected',
+      ],
+      prerequisite: null,
+    },
+    {
+      phase: 2,
+      name: 'Activate Tier 2',
+      actions: [
+        'Partners onboarded under governance',
+        'Limited execution scope',
+        'Client and data ownership enforced',
+      ],
+      prerequisite: 'Phase 1 complete',
+    },
+    {
+      phase: 3,
+      name: 'Deploy Tier 3',
+      actions: [
+        'Intelligence only',
+        'No execution',
+        'No brokerage representation',
+      ],
+      prerequisite: 'Phase 2 complete',
+    },
   ],
 } as const;
 
 // ============================================================================
-// PLATFORM ARCHITECTURE REQUIREMENTS
+// STEP 3 — GLOBAL PLATFORM ARCHITECTURE & JURISDICTION LAYER
 // ============================================================================
 
 export const PLATFORM_ARCHITECTURE = {
-  REQUIREMENTS: [
-    'Country selector (non-intrusive)',
-    'Jurisdiction-aware disclosures',
+  DESCRIPTION: 'One global platform with multiple jurisdictional rule sets.',
+  
+  MUST_SUPPORT: [
+    'Country-aware routing',
+    'Jurisdiction-specific disclosures',
     'Local compliance overlays',
-    'Shared intelligence backbone',
-    'Separate execution permissions',
-    'Unified brand presentation',
-    'Localized legal footers',
-    'Currency handling per jurisdiction',
-    'Language support per market',
+    'Permission-based execution access',
+    'Centralized intelligence with localized execution rules',
+  ],
+} as const;
+
+// ============================================================================
+// STEP 4 — GOVERNANCE & ENFORCEMENT
+// ============================================================================
+
+export const GOVERNANCE_ENFORCEMENT = {
+  SYSTEM_MUST_ENFORCE: [
+    'Expansion model selection per country',
+    'Compliance checks before activation',
+    'AI mode separation per jurisdiction',
+    'Partner governance rules',
+    'Clean exit mechanisms',
   ],
 
-  PRINCIPLE: 'One platform. Multiple rule-sets.',
+  MANUAL_OVERRIDES: false,
+} as const;
 
-  TECHNICAL_IMPLICATIONS: {
-    DATABASE: 'Country-aware partitioning for compliance',
-    AI_LAYER: 'Jurisdiction-specific disclosure injection',
-    FRONTEND: 'Dynamic legal/compliance component loading',
-    BACKEND: 'Geo-aware RLS policies where required',
-    REPORTING: 'Country-segregated analytics',
-  },
+// ============================================================================
+// PRIORITY 3 STATUS RULE
+// ============================================================================
+
+export const PRIORITY_3_STATUS = {
+  NAME: 'GLOBAL EXPANSION PLAYBOOK',
+  STATUS: 'LOCKED',
+  VERSION: '2.0',
+
+  EXECUTION_PREREQUISITES: [
+    'All critical security patches completed',
+    'Verification accepted',
+    'RLS and access controls confirmed',
+  ],
+
+  RULE: 'Expansion without security acceptance is FORBIDDEN.',
+
+  STEPS: [
+    { step: 1, name: 'Expansion Philosophy & Control Model', status: 'COMPLETE' },
+    { step: 2, name: 'Country Classification & Sequencing', status: 'COMPLETE' },
+    { step: 3, name: 'Global Platform Architecture', status: 'COMPLETE' },
+    { step: 4, name: 'Governance & Enforcement', status: 'COMPLETE' },
+  ],
 } as const;
 
 // ============================================================================
@@ -306,8 +335,6 @@ export const RISK_PREVENTION = {
     'Brand fractures across markets',
     'AI becomes risky',
     'Authority collapses',
-    'Data governance fails',
-    'Exit becomes expensive',
   ],
 
   WITH_THIS_PLAYBOOK: [
@@ -315,37 +342,7 @@ export const RISK_PREVENTION = {
     'Stay in control',
     'Enter and exit markets cleanly',
     'Remain institution-ready',
-    'Maintain unified brand authority',
-    'Preserve data governance',
-    'Protect regulatory standing',
   ],
-} as const;
-
-// ============================================================================
-// PRIORITY 3 STATUS
-// ============================================================================
-
-export const PRIORITY_3_STATUS = {
-  NAME: 'GLOBAL EXPANSION PLAYBOOK',
-  STATUS: 'IN_PROGRESS',
-
-  STEPS: [
-    { step: 1, name: 'Expansion Philosophy & Control Model', status: 'COMPLETE' },
-    { step: 2, name: 'Country Classification & Sequencing', status: 'PENDING' },
-    { step: 3, name: 'Legal & Regulatory Framework', status: 'PENDING' },
-    { step: 4, name: 'Technical Implementation Guide', status: 'PENDING' },
-  ],
-
-  NEXT_STEP: {
-    NUMBER: 2,
-    NAME: 'Country Classification & Expansion Sequencing',
-    FOCUS: [
-      'Classify countries into tiers',
-      'Decide expansion order',
-      'Match each country to right model (A/B/C)',
-      'Avoid emotional or opportunistic expansion',
-    ],
-  },
 } as const;
 
 // ============================================================================
@@ -353,23 +350,23 @@ export const PRIORITY_3_STATUS = {
 // ============================================================================
 
 /**
- * Check if a country passes readiness check
+ * Check if a country passes all mandatory criteria
  */
 export function checkCountryReadiness(answers: Record<string, boolean>): {
   ready: boolean;
-  failedQuestions: string[];
+  failedCriteria: string[];
 } {
-  const failedQuestions: string[] = [];
+  const failedCriteria: string[] = [];
   
-  COUNTRY_READINESS.MANDATORY_QUESTIONS.forEach(q => {
-    if (answers[q.id] !== q.required_answer) {
-      failedQuestions.push(q.question);
+  COUNTRY_CLASSIFICATION.MANDATORY_CRITERIA.forEach(criterion => {
+    if (answers[criterion.id] !== criterion.required) {
+      failedCriteria.push(criterion.question);
     }
   });
 
   return {
-    ready: failedQuestions.length === 0,
-    failedQuestions,
+    ready: failedCriteria.length === 0,
+    failedCriteria,
   };
 }
 
@@ -385,11 +382,11 @@ export function getRecommendedModel(criteria: {
   if (criteria.testingMarket) return 'C';
   if (criteria.hasLocalLicense && criteria.strategicPriority) return 'A';
   if (criteria.complexRegulations) return 'B';
-  return 'A'; // Default to strongest model if conditions allow
+  return 'A';
 }
 
 /**
- * Validate expansion decision against non-negotiables
+ * Validate expansion decision
  */
 export function validateExpansionDecision(decision: {
   countryName: string;
@@ -403,15 +400,14 @@ export function validateExpansionDecision(decision: {
   
   const readiness = checkCountryReadiness(decision.readinessAnswers);
   if (!readiness.ready) {
-    issues.push(`Country fails readiness check: ${readiness.failedQuestions.join(', ')}`);
+    issues.push(`Country fails readiness: ${readiness.failedCriteria.join(', ')}`);
   }
 
-  if (decision.model === 'B') {
-    issues.push('WARNING: Model B requires strict partner governance controls');
-  }
-
+  // Check security prerequisites
+  // Priority 3 execution requires security acceptance
+  
   return {
-    valid: issues.length === 0 || (issues.length === 1 && issues[0].startsWith('WARNING')),
+    valid: issues.length === 0,
     issues,
   };
 }
@@ -428,10 +424,10 @@ export function getModelDetails(modelId: 'A' | 'B' | 'C') {
 }
 
 /**
- * Get Priority 3 status
+ * Check if expansion can proceed (security gate)
  */
-export function getPriority3Status() {
-  return PRIORITY_3_STATUS;
+export function canProceedWithExpansion(securityAccepted: boolean): boolean {
+  return securityAccepted;
 }
 
 // ============================================================================
@@ -442,8 +438,11 @@ export const GLOBAL_EXPANSION = {
   EXPANSION_PHILOSOPHY,
   GLOBAL_CONSTANTS,
   EXPANSION_MODELS,
-  COUNTRY_READINESS,
+  COUNTRY_CLASSIFICATION,
+  COUNTRY_TIERS,
+  EXPANSION_SEQUENCING,
   PLATFORM_ARCHITECTURE,
+  GOVERNANCE_ENFORCEMENT,
   RISK_PREVENTION,
   PRIORITY_3_STATUS,
 } as const;
