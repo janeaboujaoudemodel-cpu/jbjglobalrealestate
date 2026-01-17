@@ -165,12 +165,13 @@ const Index = () => {
                 <ArrowUpRight className="w-4 h-4 ml-2" />
               </Button>
             </Link>
-            <Button 
-              className="relative border-2 border-gold text-gold hover:bg-gold hover:text-black font-bold px-6 py-5 text-sm transition-all duration-500 hover:shadow-xl hover:shadow-gold/30 shadow-md shadow-gold/15"
-              onClick={() => setIsInquiryOpen(true)}
-            >
-              List Your Property
-            </Button>
+            <Link to="/seller-listing">
+              <Button 
+                className="relative border-2 border-gold text-gold hover:bg-gold hover:text-black font-bold px-6 py-5 text-sm transition-all duration-500 hover:shadow-xl hover:shadow-gold/30 shadow-md shadow-gold/15"
+              >
+                List Your Property
+              </Button>
+            </Link>
             <Link to="/market-report">
               <Button 
                 className="border-2 border-zinc-700 text-white hover:bg-zinc-800 hover:border-gold/50 hover:text-gold px-6 py-5 text-sm transition-all duration-500 hover:shadow-lg hover:shadow-gold/20 font-semibold"
