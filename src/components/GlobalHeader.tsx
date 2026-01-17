@@ -167,7 +167,6 @@ const GlobalHeader = () => {
                   <button className={`flex items-center gap-1 px-2 xl:px-2.5 py-2 text-[12px] xl:text-[13px] font-medium whitespace-nowrap transition-all ${
                     location.pathname === '/properties' ? 'text-gold' : 'text-zinc-300 hover:text-gold'
                   }`}>
-                    <Building2 className="w-3 h-3" />
                     {t('nav.properties')}
                     <ChevronDown className="w-3 h-3" />
                   </button>
