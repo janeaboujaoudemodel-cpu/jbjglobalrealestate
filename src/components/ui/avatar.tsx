@@ -60,7 +60,7 @@ const AvatarImage = React.forwardRef<
     )}
     style={{
       objectFit: 'cover',
-      objectPosition: 'center 25%',
+      objectPosition: 'center 20%',
     }}
     {...props} 
   />

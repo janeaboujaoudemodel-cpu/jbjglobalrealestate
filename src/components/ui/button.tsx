@@ -6,55 +6,44 @@ import { cn } from "@/lib/utils";
 
 /**
  * ============================================================
- * GLOBAL BUTTON SYSTEM - JBJ GLOBAL REAL ESTATE (LOCKED & FINAL)
+ * GLOBAL BUTTON SYSTEM - JBJ GLOBAL REAL ESTATE (LOCKED)
  * ============================================================
- * 
- * BRANDED BUTTONS (USE FOR MAIN CTAs):
- * - primary: White bg → transparent on hover (main actions)
- * - secondary: Transparent bg → white on hover (secondary actions)  
+ * ALLOWED BRANDED STYLES:
+ * - primary: White bg → transparent on hover
+ * - secondary: Transparent bg → white on hover
  * - media: For image/video backgrounds (white text → gold on hover)
- * 
- * UTILITY VARIANTS (CRM/Internal use with className overrides):
- * - ghost: Transparent, subtle hover
- * - outline: Bordered, subtle
- * - destructive: Red for dangerous actions
- * - default: Standard primary button
- * - link: Text-only link style
- * 
- * FORBIDDEN:
- * - gold, goldOutline, heroOutline (DELETED - use primary/secondary/media)
- * - Custom className styling (bg-gold, shadow-*, scale-*, etc.)
- * - Shadows or glow effects on branded buttons
+ *
+ * ENFORCEMENT:
+ * - Any visual overrides passed via className are automatically stripped
+ *   (bg-*, gradient from/to/via, shadow-*, scale-*, text/border color overrides).
+ * - Legacy/utility variants remain ONLY as aliases to prevent build breaks;
+ *   they render as one of the 3 branded styles.
  * ============================================================
  */
+
+const BRAND_PRIMARY =
+  "bg-white text-gold border-2 border-gold hover:bg-transparent hover:text-gold";
+const BRAND_SECONDARY =
+  "bg-transparent text-gold border-2 border-gold hover:bg-white hover:text-gold";
+const BRAND_MEDIA =
+  "bg-transparent text-white border-2 border-white hover:bg-white hover:text-gold hover:border-gold";
 
 const buttonVariants = cva(
   "inline-flex items-center justify-center gap-2 whitespace-nowrap rounded-md text-sm font-semibold ring-offset-background transition-all duration-300 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 [&_svg]:pointer-events-none [&_svg]:size-4 [&_svg]:shrink-0 cursor-pointer tracking-[0.02em]",
   {
     variants: {
       variant: {
-        // ============================================================
-        // BRANDED BUTTONS - JBJ GOLD SYSTEM (PRIMARY USE)
-        // ============================================================
-        
-        // PRIMARY: WHITE BASE (Main CTAs)
-        primary: "bg-white text-gold border-2 border-gold hover:bg-transparent hover:text-gold",
-        
-        // SECONDARY: TRANSPARENT BASE (Secondary CTAs)  
-        secondary: "bg-transparent text-gold border-2 border-gold hover:bg-white hover:text-gold",
-        
-        // MEDIA: FOR IMAGES/VIDEOS (Hero overlays with white text)
-        media: "bg-transparent text-white border-2 border-white hover:bg-white hover:text-gold hover:border-gold",
+        // LOCKED branded variants
+        primary: BRAND_PRIMARY,
+        secondary: BRAND_SECONDARY,
+        media: BRAND_MEDIA,
 
-        // ============================================================
-        // UTILITY VARIANTS - Minimal styling for internal/CRM use
-        // These allow className overrides for specific UI contexts
-        // ============================================================
-        default: "bg-primary text-primary-foreground hover:bg-primary/90",
-        destructive: "bg-destructive text-destructive-foreground hover:bg-destructive/90",
-        outline: "border border-input bg-background hover:bg-accent hover:text-accent-foreground",
-        ghost: "hover:bg-accent hover:text-accent-foreground",
-        link: "text-primary underline-offset-4 hover:underline",
+        // Legacy aliases (render as branded variants)
+        default: BRAND_PRIMARY,
+        destructive: BRAND_PRIMARY,
+        outline: BRAND_SECONDARY,
+        ghost: BRAND_SECONDARY,
+        link: BRAND_SECONDARY,
       },
       size: {
         default: "h-10 px-6 py-2",
@@ -76,10 +65,44 @@ export interface ButtonProps
   asChild?: boolean;
 }
 
+const COLOR_WORDS =
+  "gold|white|black|zinc|gray|slate|neutral|stone|red|orange|amber|yellow|lime|green|emerald|teal|cyan|sky|blue|indigo|violet|purple|fuchsia|pink|rose";
+
+const forbiddenClassPatterns: RegExp[] = [
+  // Backgrounds + gradients
+  new RegExp(`(^|:)(bg-|from-|via-|to-)`),
+  // Shadows / glows
+  new RegExp(`(^|:)shadow`),
+  new RegExp(`(^|:)drop-shadow`),
+  // Scaling / transforms used as effects
+  new RegExp(`(^|:)(hover:)?scale-`),
+  // Hover color overrides
+  new RegExp(`(^|:)hover:(bg-|text-|border-)`),
+  // Text color overrides (but NOT sizing like text-sm)
+  new RegExp(`(^|:)text-(${COLOR_WORDS})(-|/|$)`),
+  // Border color overrides (but NOT widths like border-2)
+  new RegExp(`(^|:)border-(${COLOR_WORDS})(-|/|$)`),
+];
+
+function sanitizeButtonClassName(className?: string) {
+  if (!className) return undefined;
+  const tokens = className.split(/\s+/).filter(Boolean);
+  const kept = tokens.filter((t) => !forbiddenClassPatterns.some((re) => re.test(t)));
+  return kept.join(" ") || undefined;
+}
+
 const Button = React.forwardRef<HTMLButtonElement, ButtonProps>(
   ({ className, variant, size, asChild = false, ...props }, ref) => {
     const Comp = asChild ? Slot : "button";
-    return <Comp className={cn(buttonVariants({ variant, size, className }))} ref={ref} {...props} />;
+    const safeClassName = sanitizeButtonClassName(className);
+
+    return (
+      <Comp
+        className={cn(buttonVariants({ variant, size, className: safeClassName }))}
+        ref={ref}
+        {...props}
+      />
+    );
   },
 );
 Button.displayName = "Button";
