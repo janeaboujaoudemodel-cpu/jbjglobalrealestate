@@ -325,15 +325,15 @@ const Properties = () => {
             ))}
           </div>
           
-          <div className="flex flex-wrap items-center gap-3">
+          <div className="flex items-center gap-2 overflow-x-auto pb-2 scrollbar-hide">
             {/* Keyword Search */}
-            <div className="relative flex-1 min-w-[200px]">
-              <Search className="absolute left-4 top-1/2 -translate-y-1/2 w-4 h-4 text-zinc-500" />
+            <div className="relative min-w-[120px] flex-shrink">
+              <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-zinc-500" />
               <Input
                 placeholder="Keyword"
                 value={filters.search}
                 onChange={(e) => updateFilter("search", e.target.value)}
-                className="pl-10 h-12 bg-zinc-900/80 border-zinc-700/50 text-white placeholder:text-zinc-500 focus:border-gold rounded-lg"
+                className="pl-9 h-10 bg-zinc-900/80 border-zinc-700/50 text-white placeholder:text-zinc-500 focus:border-gold rounded-lg text-sm"
               />
             </div>
 
@@ -342,8 +342,8 @@ const Properties = () => {
               value={filters.emirate || "all"}
               onValueChange={(value) => updateFilter("emirate", value === "all" ? null : value)}
             >
-              <SelectTrigger className="w-[150px] h-12 bg-zinc-900/80 border-zinc-700/50 text-white rounded-lg">
-                <MapPin className="w-4 h-4 mr-2 text-zinc-500" />
+              <SelectTrigger className="w-[110px] h-10 bg-zinc-900/80 border-zinc-700/50 text-white rounded-lg text-sm flex-shrink-0">
+                <MapPin className="w-3.5 h-3.5 mr-1.5 text-zinc-500" />
                 <SelectValue placeholder="Location" />
               </SelectTrigger>
               <SelectContent className="bg-zinc-900 border-zinc-700">
@@ -360,8 +360,8 @@ const Properties = () => {
               value={filters.developerId || "all"}
               onValueChange={(value) => updateFilter("developerId", value === "all" ? null : value)}
             >
-              <SelectTrigger className="w-[150px] h-12 bg-zinc-900/80 border-zinc-700/50 text-white rounded-lg">
-                <Building2 className="w-4 h-4 mr-2 text-zinc-500" />
+              <SelectTrigger className="w-[110px] h-10 bg-zinc-900/80 border-zinc-700/50 text-white rounded-lg text-sm flex-shrink-0">
+                <Building2 className="w-3.5 h-3.5 mr-1.5 text-zinc-500" />
                 <SelectValue placeholder="Developer" />
               </SelectTrigger>
               <SelectContent className="bg-zinc-900 border-zinc-700 max-h-60">
@@ -392,9 +392,9 @@ const Properties = () => {
                 }
               }}
             >
-              <SelectTrigger className="w-[150px] h-12 bg-zinc-900/80 border-zinc-700/50 text-white rounded-lg">
-                <DollarSign className="w-4 h-4 mr-2 text-zinc-500" />
-                <SelectValue placeholder="Price Range" />
+              <SelectTrigger className="w-[100px] h-10 bg-zinc-900/80 border-zinc-700/50 text-white rounded-lg text-sm flex-shrink-0">
+                <DollarSign className="w-3.5 h-3.5 mr-1 text-zinc-500" />
+                <SelectValue placeholder="Price" />
               </SelectTrigger>
               <SelectContent className="bg-zinc-900 border-zinc-700">
                 <SelectItem value="all" className="text-white hover:bg-zinc-800">Any Price</SelectItem>
@@ -411,7 +411,7 @@ const Properties = () => {
               value={filters.sizeUnit}
               onValueChange={(value) => updateFilter("sizeUnit", value as 'sqft' | 'sqm')}
             >
-              <SelectTrigger className="w-[100px] h-12 bg-zinc-900/80 border-zinc-700/50 text-white rounded-lg">
+              <SelectTrigger className="w-[70px] h-10 bg-zinc-900/80 border-zinc-700/50 text-white rounded-lg text-sm flex-shrink-0">
                 <SelectValue />
               </SelectTrigger>
               <SelectContent className="bg-zinc-900 border-zinc-700">
@@ -425,7 +425,7 @@ const Properties = () => {
               value={filters.currency}
               onValueChange={(value) => updateFilter("currency", value as ExtendedCurrency)}
             >
-              <SelectTrigger className="w-[100px] h-12 bg-zinc-900/80 border-zinc-700/50 text-white rounded-lg">
+              <SelectTrigger className="w-[70px] h-10 bg-zinc-900/80 border-zinc-700/50 text-white rounded-lg text-sm flex-shrink-0">
                 <SelectValue />
               </SelectTrigger>
               <SelectContent className="bg-zinc-900 border-zinc-700">
@@ -444,13 +444,13 @@ const Properties = () => {
                 updateFilter("premiumOnly", !filters.premiumOnly);
                 setAppliedFilters(prev => ({ ...prev, premiumOnly: !filters.premiumOnly }));
               }}
-              className={`h-12 px-4 rounded-lg flex items-center gap-2 ${
+              className={`h-10 px-3 rounded-lg flex items-center gap-1.5 text-sm flex-shrink-0 ${
                 filters.premiumOnly 
                   ? "bg-gradient-to-r from-gold to-[#E8D5A3] text-black border-gold font-bold" 
                   : "bg-zinc-900/80 border-zinc-700/50 text-white hover:bg-zinc-800 hover:text-white"
               }`}
             >
-              <Crown className="w-4 h-4" />
+              <Crown className="w-3.5 h-3.5" />
               Premium
             </Button>
 
@@ -459,11 +459,11 @@ const Properties = () => {
               <DialogTrigger asChild>
                 <Button 
                   variant="outline" 
-                  className="h-12 px-4 bg-zinc-900/80 border-zinc-700/50 text-white hover:bg-zinc-800 hover:text-white rounded-lg"
+                  className="h-10 px-3 bg-zinc-900/80 border-zinc-700/50 text-white hover:bg-zinc-800 hover:text-white rounded-lg flex-shrink-0"
                 >
-                  <Filter className="w-4 h-4 mr-2" />
+                  <Filter className="w-3.5 h-3.5" />
                   {activeFilterCount > 0 && (
-                    <span className="mr-2 px-1.5 py-0.5 bg-gold text-black text-xs font-bold rounded">
+                    <span className="ml-1.5 px-1.5 py-0.5 bg-gold text-black text-xs font-bold rounded">
                       {activeFilterCount}
                     </span>
                   )}
@@ -673,7 +673,7 @@ const Properties = () => {
             <Button 
               onClick={handleSearch}
               variant="primary"
-              className="h-12 px-8 rounded-lg"
+              className="h-10 px-6 rounded-lg text-sm flex-shrink-0"
             >
               SEARCH
             </Button>
@@ -703,18 +703,18 @@ const Properties = () => {
       </section>
 
       {/* Results Section */}
-      <section className="py-12">
+      <section className="py-12 bg-white">
         <div className="container mx-auto px-4">
           {/* Results Count */}
           <div className="mb-8 flex items-center justify-between">
-            <p className="text-zinc-400">
-              Showing <span className="text-white font-medium">{sortedProjects.length}</span> properties
+            <p className="text-zinc-600">
+              Showing <span className="text-black font-medium">{sortedProjects.length}</span> properties
             </p>
             {activeFilterCount > 0 && (
               <Button
                 variant="ghost"
                 onClick={clearFilters}
-                className="text-zinc-400 hover:text-white"
+                className="text-zinc-500 hover:text-black"
               >
                 <X className="w-4 h-4 mr-2" />
                 Clear all filters
@@ -726,7 +726,7 @@ const Properties = () => {
           {isLoading ? (
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
               {[...Array(8)].map((_, i) => (
-                <div key={i} className="bg-zinc-900 rounded-xl h-[420px] animate-pulse" />
+                <div key={i} className="bg-zinc-100 rounded-xl h-[420px] animate-pulse" />
               ))}
             </div>
           ) : sortedProjects.length > 0 ? (
@@ -742,12 +742,12 @@ const Properties = () => {
             </div>
           ) : (
             <div className="text-center py-20">
-              <div className="w-20 h-20 bg-zinc-900 rounded-full flex items-center justify-center mx-auto mb-6">
-                <Search className="w-10 h-10 text-zinc-600" />
+              <div className="w-20 h-20 bg-zinc-100 rounded-full flex items-center justify-center mx-auto mb-6">
+                <Search className="w-10 h-10 text-zinc-400" />
               </div>
-              <h3 className="text-xl font-semibold text-white mb-2">No properties found</h3>
+              <h3 className="text-xl font-semibold text-black mb-2">No properties found</h3>
               <p className="text-zinc-500 mb-6">Try adjusting your filters or search criteria</p>
-              <Button onClick={clearFilters} variant="outline" className="border-zinc-700 text-white hover:bg-zinc-800">
+              <Button onClick={clearFilters} variant="outline" className="border-zinc-300 text-black hover:bg-zinc-100">
                 Clear Filters
               </Button>
             </div>
@@ -756,59 +756,59 @@ const Properties = () => {
       </section>
 
       {/* Request Details Form Section */}
-      <section className="py-16 bg-zinc-950">
+      <section className="py-16 bg-white border-t border-zinc-200">
         <div className="container mx-auto px-4">
           <div className="max-w-xl mx-auto">
             <motion.div
               initial={{ opacity: 0, y: 20 }}
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true }}
-              className="bg-zinc-900/50 border border-zinc-800 rounded-2xl p-8"
+              className="bg-zinc-50 border border-zinc-200 rounded-2xl p-8 shadow-sm"
             >
-              <h2 className="text-2xl md:text-3xl font-semibold text-white text-center mb-8" style={{ fontFamily: "Poppins, sans-serif" }}>
+              <h2 className="text-2xl md:text-3xl font-semibold text-black text-center mb-8" style={{ fontFamily: "Poppins, sans-serif" }}>
                 Request Details
               </h2>
               
               <div className="space-y-4">
                 <Input
                   placeholder="Name"
-                  className="h-14 bg-zinc-900/80 border-zinc-700 text-white placeholder:text-zinc-500 rounded-lg"
+                  className="h-14 bg-white border-zinc-300 text-black placeholder:text-zinc-400 rounded-lg focus:border-gold"
                 />
                 <Input
                   type="email"
                   placeholder="Email"
-                  className="h-14 bg-zinc-900/80 border-zinc-700 text-white placeholder:text-zinc-500 rounded-lg"
+                  className="h-14 bg-white border-zinc-300 text-black placeholder:text-zinc-400 rounded-lg focus:border-gold"
                 />
                 <Input
                   type="tel"
                   placeholder="Phone"
-                  className="h-14 bg-zinc-900/80 border-zinc-700 text-white placeholder:text-zinc-500 rounded-lg"
+                  className="h-14 bg-white border-zinc-300 text-black placeholder:text-zinc-400 rounded-lg focus:border-gold"
                 />
                 <Select>
-                  <SelectTrigger className="h-14 bg-zinc-900/80 border-zinc-700 text-zinc-500 rounded-lg">
+                  <SelectTrigger className="h-14 bg-white border-zinc-300 text-zinc-500 rounded-lg">
                     <SelectValue placeholder="I am..." />
                   </SelectTrigger>
-                  <SelectContent className="bg-zinc-900 border-zinc-700">
-                    <SelectItem value="investor" className="text-white hover:bg-zinc-800">An Investor</SelectItem>
-                    <SelectItem value="homeowner" className="text-white hover:bg-zinc-800">A Homeowner</SelectItem>
-                    <SelectItem value="agent" className="text-white hover:bg-zinc-800">A Real Estate Agent</SelectItem>
-                    <SelectItem value="other" className="text-white hover:bg-zinc-800">Other</SelectItem>
+                  <SelectContent className="bg-white border-zinc-200">
+                    <SelectItem value="investor" className="text-black hover:bg-zinc-100">An Investor</SelectItem>
+                    <SelectItem value="homeowner" className="text-black hover:bg-zinc-100">A Homeowner</SelectItem>
+                    <SelectItem value="agent" className="text-black hover:bg-zinc-100">A Real Estate Agent</SelectItem>
+                    <SelectItem value="other" className="text-black hover:bg-zinc-100">Other</SelectItem>
                   </SelectContent>
                 </Select>
                 <textarea
                   placeholder="Message"
                   rows={4}
-                  className="w-full px-4 py-3 bg-zinc-900/80 border border-zinc-700 text-white placeholder:text-zinc-500 rounded-lg resize-none focus:outline-none focus:border-gold"
+                  className="w-full px-4 py-3 bg-white border border-zinc-300 text-black placeholder:text-zinc-400 rounded-lg resize-none focus:outline-none focus:border-gold"
                 />
                 <div className="flex items-center gap-3">
-                  <Checkbox id="consent" className="border-zinc-600 data-[state=checked]:bg-gold data-[state=checked]:border-gold" />
-                  <label htmlFor="consent" className="text-zinc-400 text-sm">
+                  <Checkbox id="consent" className="border-zinc-400 data-[state=checked]:bg-gold data-[state=checked]:border-gold" />
+                  <label htmlFor="consent" className="text-zinc-600 text-sm">
                     I agree to be contacted
                   </label>
                 </div>
                 <Button 
                   onClick={handleInquirySubmit}
-                  variant="primary"
+                  variant="dark"
                   className="w-full h-14 text-lg rounded-lg mt-4"
                 >
                   SUBMIT
@@ -817,21 +817,21 @@ const Properties = () => {
 
               {/* Current Filter Summary */}
               {activeFilterCount > 0 && (
-                <div className="mt-6 pt-6 border-t border-zinc-800">
+                <div className="mt-6 pt-6 border-t border-zinc-200">
                   <p className="text-zinc-500 text-sm mb-3">Your search includes:</p>
                   <div className="flex flex-wrap gap-2">
                     {filters.emirate && (
-                      <span className="px-3 py-1 bg-zinc-800 text-zinc-300 text-xs rounded-full">
+                      <span className="px-3 py-1 bg-zinc-200 text-zinc-700 text-xs rounded-full">
                         {filters.emirate}
                       </span>
                     )}
                     {filters.developerId && developers?.find(d => d.id === filters.developerId) && (
-                      <span className="px-3 py-1 bg-zinc-800 text-zinc-300 text-xs rounded-full">
+                      <span className="px-3 py-1 bg-zinc-200 text-zinc-700 text-xs rounded-full">
                         {developers.find(d => d.id === filters.developerId)?.name}
                       </span>
                     )}
                     {(filters.priceMin > 0 || filters.priceMax < 500000000) && (
-                      <span className="px-3 py-1 bg-zinc-800 text-zinc-300 text-xs rounded-full">
+                      <span className="px-3 py-1 bg-zinc-200 text-zinc-700 text-xs rounded-full">
                         {formatPrice(filters.priceMin)} - {formatPrice(filters.priceMax)}
                       </span>
                     )}
@@ -844,7 +844,7 @@ const Properties = () => {
       </section>
 
       {/* Quick Contact CTA */}
-      <section className="py-12 border-t border-zinc-800">
+      <section className="py-12 bg-zinc-950 border-t border-zinc-800">
         <div className="container mx-auto px-4">
           <div className="flex flex-wrap items-center justify-center gap-4">
             <a href={buildSureFormsUrl()} target="_blank" rel="noopener noreferrer">
