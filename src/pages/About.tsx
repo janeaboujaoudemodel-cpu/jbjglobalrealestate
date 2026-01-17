@@ -202,22 +202,18 @@ const About = () => {
                   {/* Subtle premium background card */}
                   <div className="absolute inset-0 -m-6 bg-gradient-to-br from-zinc-900/80 to-zinc-950/50 rounded-2xl border border-zinc-800/40" />
                   
-                  {/* Circular portrait - GLOBAL FOUNDER IMAGE RULE */}
+                  {/* Circular portrait - GLOBAL PORTRAIT RULE: object-position center 20%, no cropping */}
                   <Link to="/founder" className="block group relative z-10">
-                    {/* GLOBAL PORTRAIT IMAGE SYSTEM - LOCKED
-                        - Subject fills 70-85% of frame
-                        - Head is NEVER cropped
-                        - Face centered with focus on upper portion
-                        - Uses PortraitImage component */}
-                    <PortraitImage 
-                      src={founderProfessional}
-                      alt="Jane Abou Jaoude, Founder and CEO of JBJ GLOBAL REAL ESTATE"
-                      shape="circle"
-                      size="full"
-                      focus="upper"
-                      bordered={false}
-                      className="w-56 h-56 md:w-64 md:h-64 lg:w-72 lg:h-72 mx-auto transition-transform duration-300"
-                    />
+                    <div className="w-56 h-56 md:w-64 md:h-64 lg:w-72 lg:h-72 mx-auto rounded-full overflow-hidden border-2 border-zinc-800">
+                      <img 
+                        src={founderProfessional}
+                        alt="Jane Abou Jaoude, Founder and CEO of JBJ GLOBAL REAL ESTATE"
+                        className="w-full h-full object-cover"
+                        style={{ objectPosition: "center 20%" }}
+                        loading="lazy"
+                        decoding="async"
+                      />
+                    </div>
                     <p className="text-center mt-4 text-gold text-sm group-hover:text-gold-light transition-colors">
                       View Leadership Profile →
                     </p>
@@ -254,7 +250,7 @@ const About = () => {
         </Section>
 
         {/* SECTION 3: HOW WE OPERATE - Text LEFT, Image RIGHT */}
-        <Section dark>
+        <Section light>
           <motion.div
             initial="hidden"
             whileInView="visible"
@@ -264,9 +260,9 @@ const About = () => {
             <div className="grid lg:grid-cols-2 gap-10 lg:gap-16 items-center">
               {/* LEFT: Text Content */}
               <motion.div variants={fadeInUp}>
-                <SectionLabel>How We Operate</SectionLabel>
-                <SectionHeadline>Client Capital, Treated as Our Own</SectionHeadline>
-                <ContentText>
+                <SectionLabel dark={false}>How We Operate</SectionLabel>
+                <SectionHeadline light>Client Capital, Treated as Our Own</SectionHeadline>
+                <ContentText light>
                   <p>
                     At JBJ GLOBAL REAL ESTATE, we work with clients as if we are investing our own capital.
                   </p>
@@ -275,23 +271,23 @@ const About = () => {
                   </p>
                 </ContentText>
                 
-                {/* Feature Cards */}
+                {/* Feature Cards - scaled content for light bg */}
                 <div className="grid sm:grid-cols-2 gap-4 mt-8">
-                  <div className="bg-zinc-900/50 border border-zinc-800/50 rounded-lg p-4">
-                    <Users className="w-5 h-5 text-gold mb-2" />
-                    <p className="text-white text-sm font-medium">Client-First Advisory</p>
+                  <div className="bg-white border border-zinc-200 rounded-lg p-5">
+                    <Users className="w-6 h-6 text-gold mb-3" />
+                    <p className="text-black text-base font-semibold leading-snug">Client-First Advisory</p>
                   </div>
-                  <div className="bg-zinc-900/50 border border-zinc-800/50 rounded-lg p-4">
-                    <Shield className="w-5 h-5 text-gold mb-2" />
-                    <p className="text-white text-sm font-medium">Capital Protection</p>
+                  <div className="bg-white border border-zinc-200 rounded-lg p-5">
+                    <Shield className="w-6 h-6 text-gold mb-3" />
+                    <p className="text-black text-base font-semibold leading-snug">Capital Protection</p>
                   </div>
-                  <div className="bg-zinc-900/50 border border-zinc-800/50 rounded-lg p-4">
-                    <TrendingUp className="w-5 h-5 text-gold mb-2" />
-                    <p className="text-white text-sm font-medium">Long-Term Strategy</p>
+                  <div className="bg-white border border-zinc-200 rounded-lg p-5">
+                    <TrendingUp className="w-6 h-6 text-gold mb-3" />
+                    <p className="text-black text-base font-semibold leading-snug">Long-Term Strategy</p>
                   </div>
-                  <div className="bg-zinc-900/50 border border-zinc-800/50 rounded-lg p-4">
-                    <Target className="w-5 h-5 text-gold mb-2" />
-                    <p className="text-white text-sm font-medium">Goal Alignment</p>
+                  <div className="bg-white border border-zinc-200 rounded-lg p-5">
+                    <Target className="w-6 h-6 text-gold mb-3" />
+                    <p className="text-black text-base font-semibold leading-snug">Goal Alignment</p>
                   </div>
                 </div>
               </motion.div>
@@ -316,7 +312,7 @@ const About = () => {
         </Section>
 
         {/* SECTION 4: OFF-PLAN POLICY - 3 Card Layout */}
-        <Section>
+        <Section light>
           <motion.div
             initial="hidden"
             whileInView="visible"
@@ -324,23 +320,26 @@ const About = () => {
             variants={staggerContainer}
           >
             <motion.div className="text-center mb-10" variants={fadeInUp}>
-              <SectionLabel>Off-Plan Policy</SectionLabel>
-              <SectionHeadline className="max-w-2xl mx-auto">No Fees. No Pressure.</SectionHeadline>
+              <SectionLabel dark={false}>Off-Plan Policy</SectionLabel>
+              <SectionHeadline light className="max-w-2xl mx-auto">No Fees. No Pressure.</SectionHeadline>
             </motion.div>
 
             {/* 3 Card Grid */}
             <div className="grid md:grid-cols-3 gap-6">
               <FeatureCard 
+                light
                 icon={FileCheck}
                 title="No Client Fees"
                 description="For off-plan properties, we do not charge clients any fees. We do not take money from clients to sell them a project."
               />
               <FeatureCard 
+                light
                 icon={Shield}
                 title="No Pressure"
                 description="Our role is to protect, guide, and educate. It is not to push clients toward what benefits us or the company."
               />
               <FeatureCard 
+                light
                 icon={Heart}
                 title="Client Protection First"
                 description="We prioritize client interests above all else. Every recommendation is made with your financial wellbeing in mind."
@@ -414,7 +413,7 @@ const About = () => {
         </Section>
 
         {/* SECTION 6: YOUR DECISION - Callout Block */}
-        <Section>
+        <Section light>
           <motion.div
             initial="hidden"
             whileInView="visible"

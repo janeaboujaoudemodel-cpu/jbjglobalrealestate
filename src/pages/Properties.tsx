@@ -168,9 +168,11 @@ const Properties = () => {
   
   // Convert extended filters to standard FilterState for useFilteredProjects
   // Use appliedFilters instead of filters for actual filtering
+  // Map completionStatus to handoverStatus
   const standardFilters: FilterState = {
     ...appliedFilters,
     currency: appliedFilters.currency as FilterState['currency'],
+    handoverStatus: appliedFilters.completionStatus,
   };
   
   const filteredProjects = useFilteredProjects(projects, standardFilters);
@@ -794,6 +796,16 @@ const Properties = () => {
                 <>
                   <h3 className="text-xl font-semibold text-black mb-2">No Rental Listings Available</h3>
                   <p className="text-zinc-500 mb-6">We currently do not have rental properties listed. Please check back soon or contact us for assistance.</p>
+                </>
+              ) : appliedFilters.transactionType === 'buy' && appliedFilters.completionStatus === 'ready' ? (
+                <>
+                  <h3 className="text-xl font-semibold text-black mb-2">No Ready Properties Found</h3>
+                  <p className="text-zinc-500 mb-6">Try adjusting your filters or search criteria to find available ready properties.</p>
+                </>
+              ) : appliedFilters.transactionType === 'buy' && appliedFilters.completionStatus === 'off-plan' ? (
+                <>
+                  <h3 className="text-xl font-semibold text-black mb-2">No Off-Plan Properties Found</h3>
+                  <p className="text-zinc-500 mb-6">Try adjusting your filters or search criteria to find available off-plan properties.</p>
                 </>
               ) : appliedFilters.transactionType === 'buy' ? (
                 <>

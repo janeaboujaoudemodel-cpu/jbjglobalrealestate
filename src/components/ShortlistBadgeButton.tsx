@@ -100,10 +100,10 @@ const ShortlistBadgeButton = ({
         <TooltipTrigger asChild>
           <button
             onClick={handleNotShortlisted}
-            className={`${sizeClasses[size]} flex items-center gap-1.5 rounded-full bg-zinc-800/60 backdrop-blur-sm border border-zinc-700/50 text-zinc-500 cursor-pointer hover:bg-zinc-700/60 transition-all ${className}`}
+            className={`${sizeClasses[size]} flex items-center gap-1.5 rounded-full bg-gold/20 backdrop-blur-sm border border-gold/40 text-gold cursor-pointer hover:bg-gold/30 transition-all ${className}`}
           >
             <Award className={iconSizes[size]} />
-            <span className="hidden sm:inline">Add Badge</span>
+            <span className="hidden sm:inline text-sm font-medium">Add Badge</span>
           </button>
         </TooltipTrigger>
         <TooltipContent className="max-w-[200px] text-center">
