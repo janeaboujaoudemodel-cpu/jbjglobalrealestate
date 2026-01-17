@@ -85,22 +85,22 @@ const StatItem = ({ end, suffix, prefix, label, icon: Icon, isVisible }: StatIte
 
   return (
     <div className="relative group">
-      <div className="bg-zinc-900/60 border border-zinc-800/80 rounded-2xl p-6 md:p-8 text-center hover:border-gold/30 transition-all duration-500">
-        {/* Icon - Subtle */}
-        <div className="w-12 h-12 mx-auto mb-4 rounded-xl bg-gold/10 flex items-center justify-center">
-          <Icon className="w-6 h-6 text-gold/80" />
+      <div className="bg-white border border-zinc-200 rounded-2xl p-6 md:p-8 text-center hover:border-gold/50 hover:shadow-lg hover:shadow-gold/10 transition-all duration-500">
+        {/* Icon - Black circle with gold icon */}
+        <div className="w-12 h-12 mx-auto mb-4 rounded-xl bg-black flex items-center justify-center shadow-lg">
+          <Icon className="w-6 h-6 text-gold" />
         </div>
         
         {/* Counter Value */}
         <div 
-          className="text-2xl md:text-3xl lg:text-4xl font-semibold text-gold mb-1"
+          className="text-2xl md:text-3xl lg:text-4xl font-semibold text-black mb-1"
           style={{ fontFamily: "Poppins, sans-serif" }}
         >
           {formattedValue}
         </div>
         
         {/* Label */}
-        <div className="text-zinc-500 text-xs md:text-sm">
+        <div className="text-zinc-600 text-xs md:text-sm font-medium">
           {label}
         </div>
       </div>
@@ -130,16 +130,14 @@ const StatsCounter = () => {
   }, []);
 
   return (
-    <section ref={sectionRef} className="py-16 md:py-20 bg-zinc-950">
+    <section ref={sectionRef} className="py-16 md:py-20 bg-white">
       <div className="container mx-auto px-4">
-        {/* Section Header - Minimal */}
+        {/* Section Header - Premium Label */}
         <div className="text-center mb-10">
-          <h2 
-            className="text-zinc-400 text-xs uppercase tracking-[0.2em] mb-2"
-          >
+          <span className="inline-block px-4 py-1.5 bg-gradient-to-r from-[#C8A766]/20 via-white to-[#C8A766]/20 border border-[#C8A766]/30 rounded-full text-[#C8A766] text-xs uppercase tracking-[0.2em] font-medium mb-3">
             Track Record
-          </h2>
-          <p className="text-zinc-600 text-xs">Founder experience</p>
+          </span>
+          <p className="text-zinc-500 text-sm">Founder experience</p>
         </div>
         
         {/* Stats Grid - Clean */}

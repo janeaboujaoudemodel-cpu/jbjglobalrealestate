@@ -1,5 +1,6 @@
-import { AlertTriangle, Shield, Lock, FileText, Building2 } from "lucide-react";
+import { AlertTriangle, Shield, Lock, FileText, Building2, MessageCircle, Phone } from "lucide-react";
 import { Link } from "react-router-dom";
+import { CONTACT_INFO, getWhatsAppUrl } from "@/constants/stats";
 
 interface LegalDisclaimerProps {
   variant?: "full" | "compact" | "investment" | "ai-tools" | "brokerage";
@@ -90,15 +91,41 @@ const LegalDisclaimer = ({ variant = "compact", className = "" }: LegalDisclaime
 
   if (variant === "ai-tools") {
     return (
-      <div className={`bg-purple-500/10 border border-purple-500/30 rounded-lg p-4 ${className}`}>
-        <div className="flex items-start gap-3">
-          <Shield className="w-5 h-5 text-purple-400 flex-shrink-0 mt-0.5" />
+      <div className={`bg-zinc-900/80 border border-gold/30 rounded-xl p-5 ${className}`}>
+        <div className="flex items-start gap-3 mb-4">
+          <div className="w-10 h-10 bg-gold/10 border border-gold/30 rounded-lg flex items-center justify-center flex-shrink-0">
+            <Shield className="w-5 h-5 text-gold" />
+          </div>
           <div>
-            <p className="text-purple-200 text-sm font-medium mb-1">AI Tool Disclaimer</p>
-            <p className="text-purple-200/70 text-xs leading-relaxed">
-              AI-generated analysis is for informational purposes only and does not constitute professional advice. 
-              Results should be verified independently. These tools are proprietary to JBJ Global Real Estate.
+            <p className="text-gold text-sm font-semibold mb-1">AI Tool Disclaimer</p>
+            <p className="text-zinc-400 text-xs leading-relaxed">
+              AI-generated analysis is for informational purposes only and does not constitute legal, 
+              mortgage, financial, or investment advice. Results are estimates and should be verified independently.
             </p>
+          </div>
+        </div>
+        
+        <div className="border-t border-zinc-800 pt-4">
+          <p className="text-zinc-400 text-xs mb-3">
+            For accurate legal and investment guidance, contact our team to connect you with our licensed partners.
+          </p>
+          <div className="flex flex-wrap gap-3">
+            <a 
+              href={getWhatsAppUrl("Hello, I used your AI tool and would like expert guidance.")}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="inline-flex items-center gap-2 px-4 py-2 bg-green-900/30 border border-green-700/50 rounded-lg text-green-400 text-xs hover:bg-green-900/50 transition-colors"
+            >
+              <MessageCircle className="w-3.5 h-3.5" />
+              WhatsApp Us
+            </a>
+            <a 
+              href={`tel:${CONTACT_INFO.phone}`}
+              className="inline-flex items-center gap-2 px-4 py-2 bg-blue-900/30 border border-blue-700/50 rounded-lg text-blue-400 text-xs hover:bg-blue-900/50 transition-colors"
+            >
+              <Phone className="w-3.5 h-3.5" />
+              {CONTACT_INFO.phone}
+            </a>
           </div>
         </div>
       </div>

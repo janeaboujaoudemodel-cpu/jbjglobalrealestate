@@ -66,6 +66,25 @@ export function useFilteredProjects(
     if (!projects) return [];
 
     let filtered = projects.filter((project) => {
+      // Transaction type filter (buy vs rent)
+      // For now, we use handover_date to determine if it's for sale (off-plan/ready)
+      // "rent" properties would typically be marked differently
+      // Until we have a transaction_type column, we'll filter based on naming conventions
+      if (filters.transactionType && filters.transactionType !== 'all') {
+        const projectName = project.name.toLowerCase();
+        const projectDesc = (project.description || '').toLowerCase();
+        const isRentalProperty = projectName.includes('rent') || 
+                                  projectDesc.includes('for rent') ||
+                                  projectDesc.includes('rental');
+        
+        if (filters.transactionType === 'rent' && !isRentalProperty) {
+          return false;
+        }
+        if (filters.transactionType === 'buy' && isRentalProperty) {
+          return false;
+        }
+      }
+
       // Search filter
       if (filters.search) {
         const searchLower = filters.search.toLowerCase();
