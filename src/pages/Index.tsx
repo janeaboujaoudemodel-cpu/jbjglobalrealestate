@@ -293,7 +293,7 @@ const Index = () => {
                   <div className="w-10 h-10 bg-black rounded-lg flex items-center justify-center mx-auto mb-3 group-hover:bg-zinc-900 transition-colors">
                     <Key className="w-5 h-5 text-gold" />
                   </div>
-                  <h4 className="text-black text-sm font-semibold mb-1">Renters</h4>
+                  <h4 className="text-black text-sm font-semibold mb-1">Rentals</h4>
                   <p className="text-zinc-600 text-xs">Rent a property</p>
                 </div>
               </div>
