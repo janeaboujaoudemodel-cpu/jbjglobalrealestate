@@ -91,7 +91,7 @@ const CONTENT_BY_USER_TYPE: Record<UserType, ContentConfig> = {
     },
   },
   renter: {
-    badge: 'For Property Renters',
+    badge: 'For Property Rentals',
     badgeIcon: Home,
     title: 'Ready to Find Your',
     highlightText: 'Perfect Rental?',
