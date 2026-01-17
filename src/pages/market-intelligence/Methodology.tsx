@@ -1,7 +1,9 @@
 import { motion } from "framer-motion";
-import { Database, Shield, RefreshCw, FileCheck, AlertTriangle, ExternalLink } from "lucide-react";
+import { Database, Shield, RefreshCw, FileCheck, AlertTriangle, ExternalLink, ArrowRight } from "lucide-react";
+import { Link } from "react-router-dom";
 import Footer from "@/components/Footer";
 import { SEOHead } from "@/components/SEOHead";
+import { MarketIntelligenceSchema } from "@/components/seo/MarketIntelligenceSchema";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { OPEN_DATA_SOURCES, MARKET_DISCLAIMER } from "@/config/open-data-config";
 
@@ -24,10 +26,14 @@ const Methodology = () => {
   return (
     <div className="min-h-screen bg-black">
       <SEOHead 
-        title="Methodology & Data Sources | JBJ Global Real Estate"
-        description="Learn about our data sources, update frequency, and aggregation methodology. Full transparency on how we generate market intelligence."
-        keywords="data methodology, open data sources, real estate data, transparency"
+        title="Real Estate Market Data Methodology & Sources | How Dubai Property Prices Are Calculated | JBJ GLOBAL REAL ESTATE"
+        description="Full transparency on how we source, aggregate, and present Dubai real estate market intelligence. Official government Open Data sources, update frequency, and what the data is and is not."
+        keywords="real estate market data Dubai, how Dubai property prices are calculated, open data sources, market methodology, data transparency, government data sources"
         canonicalPath="/market-intelligence/methodology"
+      />
+      <MarketIntelligenceSchema 
+        type="methodology"
+        description="Full transparency on data sources, update frequency, and aggregation methodology for Dubai real estate market intelligence."
       />
 
       {/* Hero */}
@@ -248,6 +254,44 @@ const Methodology = () => {
               </div>
             </CardContent>
           </Card>
+        </div>
+      </section>
+
+      {/* Internal Links */}
+      <section className="py-16 border-t border-zinc-900">
+        <div className="container mx-auto px-4">
+          <h2 className="text-white text-2xl font-bold mb-8 text-center" style={{ fontFamily: "Poppins, sans-serif" }}>
+            Explore Market Intelligence
+          </h2>
+          <div className="grid md:grid-cols-3 gap-6 max-w-4xl mx-auto">
+            <Link to="/market-intelligence/overview" className="group">
+              <Card className="bg-zinc-900/50 border-zinc-800 hover:border-gold/30 transition-all h-full">
+                <CardContent className="p-6">
+                  <h3 className="text-white font-bold mb-2 group-hover:text-gold transition-colors">Market Overview</h3>
+                  <p className="text-zinc-500 text-sm mb-4">UAE & Dubai macro snapshot with transaction trends and price movements.</p>
+                  <ArrowRight className="w-5 h-5 text-gold" />
+                </CardContent>
+              </Card>
+            </Link>
+            <Link to="/market-intelligence/areas" className="group">
+              <Card className="bg-zinc-900/50 border-zinc-800 hover:border-gold/30 transition-all h-full">
+                <CardContent className="p-6">
+                  <h3 className="text-white font-bold mb-2 group-hover:text-gold transition-colors">Area Intelligence</h3>
+                  <p className="text-zinc-500 text-sm mb-4">Deep dive into Dubai neighborhoods with historical trends.</p>
+                  <ArrowRight className="w-5 h-5 text-gold" />
+                </CardContent>
+              </Card>
+            </Link>
+            <Link to="/market-intelligence/reports" className="group">
+              <Card className="bg-zinc-900/50 border-zinc-800 hover:border-gold/30 transition-all h-full">
+                <CardContent className="p-6">
+                  <h3 className="text-white font-bold mb-2 group-hover:text-gold transition-colors">Market Reports</h3>
+                  <p className="text-zinc-500 text-sm mb-4">Download monthly, quarterly, and annual market reports.</p>
+                  <ArrowRight className="w-5 h-5 text-gold" />
+                </CardContent>
+              </Card>
+            </Link>
+          </div>
         </div>
       </section>
 

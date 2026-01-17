@@ -3,6 +3,7 @@ import { MapPin, TrendingUp, TrendingDown, BarChart3, Database, Shield, ArrowRig
 import { Link } from "react-router-dom";
 import Footer from "@/components/Footer";
 import { SEOHead } from "@/components/SEOHead";
+import { MarketIntelligenceSchema } from "@/components/seo/MarketIntelligenceSchema";
 import { Card, CardContent } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { DUBAI_AREAS_MARKET_DATA, MARKET_DISCLAIMER } from "@/config/open-data-config";
@@ -27,10 +28,14 @@ const AreaIntelligence = () => {
   return (
     <div className="min-h-screen bg-black">
       <SEOHead 
-        title="Area Intelligence | Dubai Neighborhoods | JBJ Global Real Estate"
-        description="Deep dive into Dubai's prime neighborhoods. Historical price trends, rental analysis, and demand indicators for each area."
-        keywords="Dubai areas, neighborhood analysis, property prices by area, Dubai real estate zones"
+        title="Dubai Area Intelligence | Rent Trends & Property Prices by Neighborhood | JBJ GLOBAL REAL ESTATE"
+        description="Deep dive into Dubai neighborhoods. Historical price trends, rent analysis, demand vs supply indicators, and market insights for BUY · SELL · RENT decisions."
+        keywords="Dubai areas property prices, rent trends Dubai Marina, Business Bay real estate, Downtown Dubai prices, Palm Jumeirah market, JBR property trends, Dubai neighborhood analysis"
         canonicalPath="/market-intelligence/areas"
+      />
+      <MarketIntelligenceSchema 
+        type="area"
+        description="Deep dive into Dubai's prime neighborhoods with historical price trends, rent analysis, and demand indicators for informed BUY · SELL · RENT decisions."
       />
 
       {/* Hero */}
@@ -147,6 +152,38 @@ const AreaIntelligence = () => {
                 </Link>
               </motion.div>
             ))}
+          </div>
+        </div>
+      </section>
+
+      {/* Internal Links */}
+      <section className="py-12 border-t border-zinc-900">
+        <div className="container mx-auto px-4">
+          <div className="grid md:grid-cols-3 gap-4 max-w-3xl mx-auto">
+            <Link to="/market-intelligence/overview" className="group">
+              <Card className="bg-zinc-900/50 border-zinc-800 hover:border-gold/30 transition-all">
+                <CardContent className="p-4 flex items-center justify-between">
+                  <span className="text-white group-hover:text-gold transition-colors">Market Overview</span>
+                  <ArrowRight className="w-4 h-4 text-gold" />
+                </CardContent>
+              </Card>
+            </Link>
+            <Link to="/market-intelligence/reports" className="group">
+              <Card className="bg-zinc-900/50 border-zinc-800 hover:border-gold/30 transition-all">
+                <CardContent className="p-4 flex items-center justify-between">
+                  <span className="text-white group-hover:text-gold transition-colors">Market Reports</span>
+                  <ArrowRight className="w-4 h-4 text-gold" />
+                </CardContent>
+              </Card>
+            </Link>
+            <Link to="/market-intelligence/methodology" className="group">
+              <Card className="bg-zinc-900/50 border-zinc-800 hover:border-gold/30 transition-all">
+                <CardContent className="p-4 flex items-center justify-between">
+                  <span className="text-white group-hover:text-gold transition-colors">Methodology</span>
+                  <ArrowRight className="w-4 h-4 text-gold" />
+                </CardContent>
+              </Card>
+            </Link>
           </div>
         </div>
       </section>

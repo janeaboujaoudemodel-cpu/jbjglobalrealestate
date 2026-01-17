@@ -3,6 +3,7 @@ import { BarChart3, TrendingUp, TrendingDown, Minus, Database, Shield, ArrowUpRi
 import { Link } from "react-router-dom";
 import Footer from "@/components/Footer";
 import { SEOHead } from "@/components/SEOHead";
+import { MarketIntelligenceSchema } from "@/components/seo/MarketIntelligenceSchema";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { MARKET_OVERVIEW_STATS, QUARTERLY_TRENDS, PROPERTY_TYPE_TRENDS, MARKET_DISCLAIMER } from "@/config/open-data-config";
@@ -49,10 +50,15 @@ const MarketOverview = () => {
   return (
     <div className="min-h-screen bg-black">
       <SEOHead 
-        title="Market Overview | Dubai Real Estate Trends | JBJ Global Real Estate"
-        description="UAE & Dubai real estate macro snapshot. High-level transaction trends, average price movement, and rental trends powered by official government Open Data."
-        keywords="Dubai real estate trends, property market overview, transaction volume, price trends, rental market"
+        title="Dubai Real Estate Market Overview | BUY · SELL · RENT Trends | JBJ GLOBAL REAL ESTATE"
+        description="UAE & Dubai real estate market trends and analysis. Transaction volumes, price movements, and rent trends powered by official government Open Data. No predictions, just insights."
+        keywords="Dubai real estate market trends, Dubai property market analysis, Dubai rent trends, UAE property prices, Dubai transaction volume, real estate market overview"
         canonicalPath="/market-intelligence/overview"
+      />
+      <MarketIntelligenceSchema 
+        type="overview" 
+        lastUpdated={MARKET_OVERVIEW_STATS.reportDate}
+        description="UAE & Dubai real estate macro snapshot with high-level transaction trends, price movements, and rent analysis powered by official government Open Data."
       />
 
       {/* Hero */}
