@@ -408,8 +408,8 @@ const PressKit = () => {
         </div>
       </section>
 
-      {/* Media Contact - Premium White/Gold Section */}
-      <section className="py-20 md:py-28 bg-white border-t border-zinc-200">
+      {/* Media Contact - Premium champagne Section */}
+      <section className="py-20 md:py-28 bg-gradient-to-br from-white via-[#FDFBF7] to-[#F5F0E6] border-t border-zinc-200">
         <div className="container mx-auto px-4">
           <motion.div
             initial="hidden"

@@ -343,7 +343,7 @@ const AreaDetail = () => {
       </section>
 
       {/* CTA Section */}
-      <section className="py-20 bg-white">
+      <section className="py-20 bg-gradient-to-br from-white via-[#FDFBF7] to-[#F5F0E6]">
         <div className="container mx-auto px-4">
           <motion.div 
             className="max-w-4xl mx-auto text-center bg-white rounded-3xl p-12 border border-zinc-200 shadow-sm"

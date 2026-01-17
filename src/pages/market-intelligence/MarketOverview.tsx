@@ -92,8 +92,8 @@ const MarketOverview = () => {
         </motion.div>
       </section>
 
-      {/* Key Stats Grid - White background */}
-      <section className="py-16 border-t border-zinc-200 bg-white">
+      {/* Key Stats Grid - Premium champagne background */}
+      <section className="py-16 border-t border-zinc-200 bg-gradient-to-br from-white via-[#FDFBF7] to-[#F5F0E6]">
         <div className="container mx-auto px-4">
           <div className="grid grid-cols-2 lg:grid-cols-4 gap-6">
             {stats.map((stat, index) => (
@@ -126,8 +126,8 @@ const MarketOverview = () => {
         </div>
       </section>
 
-      {/* Transaction Trends - White background */}
-      <section className="py-16 border-t border-zinc-200 bg-white">
+      {/* Transaction Trends - Premium champagne background */}
+      <section className="py-16 border-t border-zinc-200 bg-gradient-to-br from-white via-[#FDFBF7] to-[#F5F0E6]">
         <div className="container mx-auto px-4">
           <h2 className="text-black text-2xl md:text-3xl font-bold mb-8 text-center" style={{ fontFamily: "Poppins, sans-serif" }}>
             Quarterly Transaction Trends
@@ -159,8 +159,8 @@ const MarketOverview = () => {
         </div>
       </section>
 
-      {/* Property Type Performance - White background */}
-      <section className="py-16 border-t border-zinc-200 bg-white">
+      {/* Property Type Performance - Premium champagne background */}
+      <section className="py-16 border-t border-zinc-200 bg-gradient-to-br from-white via-[#FDFBF7] to-[#F5F0E6]">
         <div className="container mx-auto px-4">
           <h2 className="text-black text-2xl md:text-3xl font-bold mb-8 text-center" style={{ fontFamily: "Poppins, sans-serif" }}>
             Performance by Property Type
@@ -188,8 +188,8 @@ const MarketOverview = () => {
         </div>
       </section>
 
-      {/* Navigation Links - White background */}
-      <section className="py-16 border-t border-zinc-200 bg-white">
+      {/* Navigation Links - Premium champagne background */}
+      <section className="py-16 border-t border-zinc-200 bg-gradient-to-br from-white via-[#FDFBF7] to-[#F5F0E6]">
         <div className="container mx-auto px-4">
           <div className="grid md:grid-cols-3 gap-4 max-w-3xl mx-auto">
             <Link to="/market-intelligence/areas" className="group">

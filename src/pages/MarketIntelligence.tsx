@@ -207,8 +207,8 @@ const MarketIntelligence = () => {
       {/* Data Sources Panel */}
       <DataSourcesPanel />
 
-      {/* Compliance Disclaimer - White background to separate from footer */}
-      <section className="py-12 bg-white border-t border-zinc-200">
+      {/* Compliance Disclaimer - Premium champagne background */}
+      <section className="py-12 bg-gradient-to-br from-white via-[#FDFBF7] to-[#F5F0E6] border-t border-zinc-200">
         <div className="container mx-auto px-4">
           <div className="max-w-3xl mx-auto">
             <div className="bg-zinc-50 border border-zinc-200 rounded-2xl p-8 text-center">

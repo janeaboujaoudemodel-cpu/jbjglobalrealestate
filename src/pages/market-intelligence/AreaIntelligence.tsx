@@ -156,8 +156,8 @@ const AreaIntelligence = () => {
         </div>
       </section>
 
-      {/* Internal Links - WHITE BACKGROUND */}
-      <section className="py-12 bg-white border-t border-zinc-200">
+      {/* Internal Links - Premium champagne background */}
+      <section className="py-12 bg-gradient-to-br from-white via-[#FDFBF7] to-[#F5F0E6] border-t border-zinc-200">
         <div className="container mx-auto px-4">
           <div className="grid md:grid-cols-3 gap-4 max-w-3xl mx-auto">
             <Link to="/market-intelligence/overview" className="group">

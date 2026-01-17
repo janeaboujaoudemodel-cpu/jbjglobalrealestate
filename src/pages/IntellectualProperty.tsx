@@ -245,7 +245,7 @@ const IntellectualProperty = () => {
               For licensing requests, partnership inquiries, or to report intellectual property violations, please contact our legal department:
             </p>
             <div className="space-y-2 text-zinc-400">
-              <p><span className="text-white">Email:</span> privacy@jbj.ae</p>
+              <p><span className="text-white">Email:</span> Privacy@JBJ.ae</p>
               <p><span className="text-white">Legal Representative:</span> Jane Abou Jaoude Founder & CEO JBJ Global Real Estate</p>
               <p><span className="text-white">Jurisdiction:</span> Dubai, United Arab Emirates</p>
             </div>

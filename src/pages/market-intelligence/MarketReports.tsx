@@ -135,8 +135,8 @@ const MarketReportsPage = () => {
         </motion.div>
       </section>
 
-      {/* Featured Reports - Premium White Cards */}
-      <section className="py-16 border-t border-zinc-200 bg-white">
+      {/* Featured Reports - Premium champagne Cards */}
+      <section className="py-16 border-t border-zinc-200 bg-gradient-to-br from-white via-[#FDFBF7] to-[#F5F0E6]">
         <div className="container mx-auto px-4">
           <h2 className="text-black text-2xl font-bold mb-8 text-center" style={{ fontFamily: "Poppins, sans-serif" }}>
             Latest Reports
@@ -183,7 +183,7 @@ const MarketReportsPage = () => {
       </section>
 
       {/* Report Archive - Consolidated Monthly & Quarterly Selectors */}
-      <section className="py-16 border-t border-zinc-200 bg-white">
+      <section className="py-16 border-t border-zinc-200 bg-gradient-to-br from-white via-[#FDFBF7] to-[#F5F0E6]">
         <div className="container mx-auto px-4">
           <h2 className="text-black text-2xl font-bold mb-8 text-center" style={{ fontFamily: "Poppins, sans-serif" }}>
             Report Archive
@@ -273,7 +273,7 @@ const MarketReportsPage = () => {
       </section>
 
       {/* Custom Report CTA - Gold Champagne Theme */}
-      <section className="py-16 border-t border-zinc-200 bg-white">
+      <section className="py-16 border-t border-zinc-200 bg-gradient-to-br from-white via-[#FDFBF7] to-[#F5F0E6]">
         <div className="container mx-auto px-4">
           <Card className="bg-gradient-to-br from-gold/10 via-gold/5 to-amber-50 border-gold/30 max-w-3xl mx-auto overflow-hidden">
             <CardContent className="p-8 md:p-10 text-center relative">

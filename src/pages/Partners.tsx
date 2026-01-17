@@ -244,7 +244,7 @@ const Partners = () => {
         </section>
 
         {/* CTA Section */}
-        <section className="py-20 bg-white">
+        <section className="py-20 bg-gradient-to-br from-white via-[#FDFBF7] to-[#F5F0E6]">
           <div className="container mx-auto px-4">
             <div className="max-w-3xl mx-auto text-center">
               <h2 className="text-3xl font-bold text-black mb-4">Need Assistance?</h2>

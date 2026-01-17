@@ -32,7 +32,7 @@ const EmailClient = () => {
     {
       id: "1",
       from: "JBJ Global Real Estate",
-      fromEmail: "contact@jbj.ae",
+      fromEmail: "Contact@JBJ.ae",
       to: "you@example.com",
       subject: "Welcome to your Email Client",
       body: "Thank you for using our email client! This is a demo email to show you how the interface works.\n\nYou can compose new emails, reply to existing ones, organize them into folders, and much more.\n\nBest regards,\nJBJ Global Real Estate Team",

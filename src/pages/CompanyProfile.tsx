@@ -528,7 +528,7 @@ const CompanyProfile = () => {
       const contactDetails = [
         { label: "Location", value: "Downtown Dubai, UAE" },
         { label: "Phone", value: "+971 56 591 1000" },
-        { label: "Email", value: "contact@jbj.ae" },
+        { label: "Email", value: "Contact@JBJ.ae" },
         { label: "Website", value: "www.jbj.ae" },
       ];
 

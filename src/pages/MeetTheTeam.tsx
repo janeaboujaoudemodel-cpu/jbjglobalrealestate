@@ -431,7 +431,7 @@ const MeetTheTeam: React.FC = () => {
         </section>
 
         {/* CTA Section with Contact Us */}
-        <section className="py-16 bg-white border-t border-zinc-200">
+        <section className="py-16 bg-gradient-to-br from-white via-[#FDFBF7] to-[#F5F0E6] border-t border-zinc-200">
           <div className="container mx-auto px-4">
             <motion.div
               initial={{ opacity: 0, y: 30 }}
