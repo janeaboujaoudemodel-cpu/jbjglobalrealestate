@@ -382,10 +382,10 @@ const CompanyProfile = () => {
 
       // Stats grid - Verified figures only
       const statsData = [
-        { label: "Years in Dubai", value: "5+" },
+        { label: "Industry Experience", value: "12+ Years" },
         { label: "Brokers Trained By Founder", value: "2,800+" },
         { label: "Social Followers (All Platforms)", value: "1M+" },
-        { label: "Team Managed (Operations)", value: "495+" },
+        { label: "Team Members", value: "10+" },
       ];
 
       let statX = margin;

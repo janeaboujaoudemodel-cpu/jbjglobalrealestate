@@ -483,15 +483,15 @@ const PressKit = () => {
                   Key Metrics
                 </h4>
                 <div className="space-y-4">
-                  <div className="flex justify-between border-b border-zinc-800 pb-3">
-                    <span className="text-zinc-500">Years in Dubai</span>
-                    <span className="text-gold font-bold">5+</span>
+                  <div className="flex justify-between border-b border-gold/30 pb-3">
+                    <span className="text-zinc-500">Industry Experience</span>
+                    <span className="text-gold font-bold">12+ Years</span>
                   </div>
-                  <div className="flex justify-between border-b border-zinc-800 pb-3">
+                  <div className="flex justify-between border-b border-gold/30 pb-3">
                     <span className="text-zinc-500">Brokers Trained</span>
                     <span className="text-gold font-bold">2,800+</span>
                   </div>
-                  <div className="flex justify-between border-b border-zinc-800 pb-3">
+                  <div className="flex justify-between border-b border-gold/30 pb-3">
                     <span className="text-zinc-500">Team Members</span>
                     <span className="text-gold font-bold">10+</span>
                   </div>

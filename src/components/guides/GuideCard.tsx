@@ -44,12 +44,12 @@ export const GuideCard = ({
     >
       <div className="flex items-start gap-4">
         {number !== undefined && (
-          <div className="flex-shrink-0 w-12 h-12 bg-gradient-to-br from-gold/20 to-gold/5 border border-gold/30 rounded-xl flex items-center justify-center">
+          <div className="flex-shrink-0 w-12 h-12 bg-black border border-gold rounded-xl flex items-center justify-center">
             <span className="text-gold text-xl font-semibold">{number}</span>
           </div>
         )}
         {Icon && !number && (
-          <div className="flex-shrink-0 w-12 h-12 bg-gold/10 border border-gold/30 rounded-xl flex items-center justify-center">
+          <div className="flex-shrink-0 w-12 h-12 bg-black border border-gold rounded-xl flex items-center justify-center">
             <Icon className="w-6 h-6 text-gold" />
           </div>
         )}

@@ -92,31 +92,17 @@ const PortraitImage = React.forwardRef<HTMLImageElement, PortraitImageProps>(
           className
         )}
       >
-        {/* No-empty-edges + no-crop portrait rendering:
-            - Background layer fills frame (cover + blur)
-            - Foreground layer shows full subject (contain)
+        {/* GLOBAL PORTRAIT RULE: Image must FILL frame completely - no empty borders
+            - Uses object-fit: cover to fill entire frame
+            - Centered focus to prevent head/shoulder cropping
+            - No blurred background layer needed when filling completely
         */}
-        <img
-          aria-hidden="true"
-          alt=""
-          className="w-full h-full absolute inset-0"
-          style={{
-            objectFit: "cover",
-            objectPosition: focusPositions[focus],
-            filter: "blur(18px)",
-            transform: "scale(1.15)",
-            opacity: 0.35,
-          }}
-          loading="lazy"
-          decoding="async"
-          src={props.src}
-        />
         <img
           ref={ref}
           alt={alt}
           className="w-full h-full absolute inset-0"
           style={{
-            objectFit: "contain",
+            objectFit: "cover",
             objectPosition: focusPositions[focus],
             ...style,
           }}
