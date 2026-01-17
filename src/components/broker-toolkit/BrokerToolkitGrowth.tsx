@@ -73,9 +73,9 @@ export function BrokerToolkitGrowth() {
             whileInView={{ opacity: 1, x: 0 }}
             viewport={{ once: true }}
           >
-            <Card className="bg-zinc-900/60 border-zinc-800 h-full">
+            <Card className="bg-white border border-zinc-200 hover:border-gold hover:shadow-xl hover:shadow-gold/20 h-full">
               <CardContent className="p-6">
-                <h3 className="text-xl font-semibold text-white mb-6 flex items-center gap-2">
+                <h3 className="text-xl font-semibold text-black mb-6 flex items-center gap-2">
                   <Crown className="w-5 h-5 text-gold" />
                   Broker Levels
                 </h3>
@@ -87,7 +87,7 @@ export function BrokerToolkitGrowth() {
                       </div>
                       <div className="flex-1">
                         <div className="flex justify-between items-center mb-1">
-                          <span className="text-white font-medium">{level.name}</span>
+                          <span className="text-black font-medium">{level.name}</span>
                           <span className="text-zinc-500 text-sm">{level.points.toLocaleString()} pts</span>
                         </div>
                         <Progress value={i === 0 ? 100 : 0} className="h-1.5" />
@@ -105,20 +105,20 @@ export function BrokerToolkitGrowth() {
             whileInView={{ opacity: 1, x: 0 }}
             viewport={{ once: true }}
           >
-            <Card className="bg-zinc-900/60 border-zinc-800 h-full">
+            <Card className="bg-white border border-zinc-200 hover:border-gold hover:shadow-xl hover:shadow-gold/20 h-full">
               <CardContent className="p-6">
-                <h3 className="text-xl font-semibold text-white mb-6 flex items-center gap-2">
+                <h3 className="text-xl font-semibold text-black mb-6 flex items-center gap-2">
                   <Zap className="w-5 h-5 text-gold" />
                   Earn Points
                 </h3>
                 <div className="space-y-3">
                   {POINT_ACTIVITIES.map((activity, i) => (
-                    <div key={i} className="flex items-center justify-between py-2 border-b border-zinc-800/50 last:border-0">
+                    <div key={i} className="flex items-center justify-between py-2 border-b border-zinc-200 last:border-0">
                       <div className="flex items-center gap-3">
                         <div className="w-8 h-8 rounded-lg bg-gold/10 flex items-center justify-center">
                           <activity.icon className="w-4 h-4 text-gold" />
                         </div>
-                        <span className="text-zinc-300 text-sm">{activity.activity}</span>
+                        <span className="text-zinc-700 text-sm">{activity.activity}</span>
                       </div>
                       <span className="text-gold font-semibold">+{activity.points}</span>
                     </div>

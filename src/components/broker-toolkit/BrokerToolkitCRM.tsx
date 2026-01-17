@@ -91,15 +91,15 @@ export function BrokerToolkitCRM() {
               transition={{ delay: i * 0.1 }}
               viewport={{ once: true }}
             >
-              <Card className="bg-zinc-900/60 border-zinc-800 hover:border-zinc-700 transition-all h-full">
+              <Card className="bg-white border border-zinc-200 hover:border-gold hover:shadow-xl hover:shadow-gold/20 transition-all h-full">
                 <CardContent className="p-5">
                   <div className="flex items-start gap-4">
                     <div className={`w-12 h-12 ${feature.bgColor} rounded-xl flex items-center justify-center flex-shrink-0`}>
                       <feature.icon className={`w-6 h-6 ${feature.color}`} />
                     </div>
                     <div>
-                      <h3 className="text-white font-semibold mb-1">{feature.title}</h3>
-                      <p className="text-zinc-500 text-sm">{feature.description}</p>
+                      <h3 className="text-black font-semibold mb-1">{feature.title}</h3>
+                      <p className="text-zinc-600 text-sm">{feature.description}</p>
                     </div>
                   </div>
                 </CardContent>

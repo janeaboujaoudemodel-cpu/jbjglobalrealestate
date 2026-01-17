@@ -166,7 +166,7 @@ export function BrokerToolkitTools() {
               viewport={{ once: true }}
             >
               <Link to={tool.link}>
-                <Card className={`bg-zinc-900/60 border ${tool.borderColor} hover:border-opacity-100 transition-all duration-300 h-full hover:shadow-lg group cursor-pointer`}>
+                <Card className={`bg-white border border-zinc-200 hover:border-gold hover:shadow-xl hover:shadow-gold/20 transition-all duration-300 h-full group cursor-pointer`}>
                   <CardContent className="p-5">
                     <div className="flex items-start gap-4">
                       <div className={`w-12 h-12 ${tool.bgColor} rounded-xl flex items-center justify-center flex-shrink-0 group-hover:scale-110 transition-transform`}>
@@ -174,14 +174,14 @@ export function BrokerToolkitTools() {
                       </div>
                       <div className="flex-1 min-w-0">
                         <div className="flex items-center gap-2 mb-1">
-                          <h3 className="text-white font-semibold truncate">{tool.name}</h3>
+                          <h3 className="text-black font-semibold truncate">{tool.name}</h3>
                           {tool.badge && (
                             <Badge className="bg-gold/20 text-gold border-gold/30 text-[10px] px-1.5 py-0 flex-shrink-0">
                               {tool.badge}
                             </Badge>
                           )}
                         </div>
-                        <p className="text-zinc-500 text-sm mb-2">{tool.description}</p>
+                        <p className="text-zinc-600 text-sm mb-2">{tool.description}</p>
                         <div className="flex items-center gap-2">
                           {tool.tier === 'free' ? (
                             <span className="flex items-center gap-1 text-xs text-green-400">
