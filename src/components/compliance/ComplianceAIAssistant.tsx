@@ -1,5 +1,5 @@
 /**
- * Compliance AI Assistant (Aisha)
+ * Compliance Assistant (Aisha)
  * Sub-module under Olivia for security monitoring and auditing
  */
 
@@ -59,7 +59,7 @@ const ComplianceAIAssistant: React.FC = () => {
     {
       id: '1',
       role: 'assistant',
-      content: `Assalamu Alaikum. I am Aisha, your Compliance AI Assistant. I monitor all security, ethics, and compliance matters for JBJ Global Real Estate.
+      content: `Assalamu Alaikum. I am Aisha, your Compliance Assistant. I monitor all security, ethics, and compliance matters for JBJ Global Real Estate.
 
 Current Security Index: **${securityScore}/100**
 
@@ -67,7 +67,7 @@ How may I assist you today? You can ask me to:
 - Run security or compliance audits
 - Show recent alerts and violations
 - Generate compliance reports
-- Review AI behavior ethics`,
+- Review team behavior ethics`,
       timestamp: new Date(),
       type: 'report'
     }
@@ -118,7 +118,7 @@ Audit completed at ${format(new Date(result.created_at), 'PPpp')}`;
 
 ✅ No pending ethics violations detected.
 
-All AI agents and human employees are operating within ethical guidelines.
+All team members are operating within ethical guidelines.
 
 Last checked: ${format(new Date(), 'PPpp')}`;
       }
@@ -172,8 +172,8 @@ ${criticalEvents.length > 5 ? `\n...and ${criticalEvents.length - 5} more alerts
 • "Run access control audit" - Permission verification
 
 **Ethics:**
-• "Show ethics violations" - AI and human behavior report
-• "Run ethics audit" - AI behavior ethics check
+• "Show ethics violations" - Team behavior report
+• "Run ethics audit" - Team ethics check
 
 **Actions:**
 • "Trigger lockdown" - Emergency platform lockdown

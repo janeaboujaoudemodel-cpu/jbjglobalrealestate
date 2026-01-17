@@ -465,7 +465,7 @@ const SecurityDashboard: React.FC = () => {
                 <Users className="h-5 w-5 text-purple-500" />
                 Ethics Violations
               </CardTitle>
-              <CardDescription>AI and human behavior monitoring</CardDescription>
+              <CardDescription>Team behavior monitoring</CardDescription>
             </CardHeader>
             <CardContent>
               <ScrollArea className="h-[500px]">
@@ -474,7 +474,7 @@ const SecurityDashboard: React.FC = () => {
                     <div className="text-center py-12 text-muted-foreground">
                       <CheckCircle className="h-12 w-12 mx-auto mb-4 text-green-500" />
                       <p>No ethics violations recorded</p>
-                      <p className="text-sm">All AI and human activities are compliant</p>
+                      <p className="text-sm">All team activities are compliant</p>
                     </div>
                   ) : (
                     ethicsViolations.map((violation) => (

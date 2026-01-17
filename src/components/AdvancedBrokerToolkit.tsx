@@ -85,7 +85,7 @@ const PROFESSIONAL_SUPPORT = [
   },
   {
     role: 'Personal Assistant',
-    name: 'AI & Human',
+    name: 'Layla',
     description: 'Task scheduling, follow-ups, and daily coordination.',
     icon: Calendar,
     color: 'text-cyan-400',

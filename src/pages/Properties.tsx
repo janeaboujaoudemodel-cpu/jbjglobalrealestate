@@ -327,13 +327,13 @@ const Properties = () => {
           
           <div className="flex items-center gap-2 overflow-x-auto pb-2 scrollbar-hide">
             {/* Keyword Search */}
-            <div className="relative min-w-[120px] flex-shrink">
-              <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-zinc-500" />
+            <div className="relative w-[90px] flex-shrink-0">
+              <Search className="absolute left-2.5 top-1/2 -translate-y-1/2 w-3.5 h-3.5 text-zinc-500" />
               <Input
-                placeholder="Keyword"
+                placeholder="Search"
                 value={filters.search}
                 onChange={(e) => updateFilter("search", e.target.value)}
-                className="pl-9 h-10 bg-zinc-900/80 border-zinc-700/50 text-white placeholder:text-zinc-500 focus:border-gold rounded-lg text-sm"
+                className="pl-8 h-10 bg-zinc-900/80 border-zinc-700/50 text-white placeholder:text-zinc-500 focus:border-gold rounded-lg text-xs"
               />
             </div>
 
@@ -342,16 +342,16 @@ const Properties = () => {
               value={filters.emirate || "all"}
               onValueChange={(value) => updateFilter("emirate", value === "all" ? null : value)}
             >
-              <SelectTrigger className="w-[110px] h-10 bg-zinc-900/80 border-zinc-700/50 text-white rounded-lg text-sm flex-shrink-0">
-                <MapPin className="w-3.5 h-3.5 mr-1.5 text-zinc-500" />
-                <SelectValue placeholder="Location" />
+              <SelectTrigger className="w-[95px] h-10 bg-zinc-900/80 border-zinc-700/50 text-white rounded-lg text-xs flex-shrink-0">
+                <MapPin className="w-3 h-3 mr-1 text-zinc-500 flex-shrink-0" />
+                <SelectValue placeholder="Area" />
               </SelectTrigger>
               <SelectContent className="bg-zinc-900 border-zinc-700">
-                <SelectItem value="all" className="text-white hover:bg-zinc-800">All Locations</SelectItem>
+                <SelectItem value="all" className="text-white hover:bg-zinc-800">All Areas</SelectItem>
                 <SelectItem value="Dubai" className="text-white hover:bg-zinc-800">Dubai</SelectItem>
                 <SelectItem value="Abu Dhabi" className="text-white hover:bg-zinc-800">Abu Dhabi</SelectItem>
                 <SelectItem value="Sharjah" className="text-white hover:bg-zinc-800">Sharjah</SelectItem>
-                <SelectItem value="Ras Al Khaimah" className="text-white hover:bg-zinc-800">Ras Al Khaimah</SelectItem>
+                <SelectItem value="Ras Al Khaimah" className="text-white hover:bg-zinc-800">RAK</SelectItem>
               </SelectContent>
             </Select>
 
@@ -360,12 +360,12 @@ const Properties = () => {
               value={filters.developerId || "all"}
               onValueChange={(value) => updateFilter("developerId", value === "all" ? null : value)}
             >
-              <SelectTrigger className="w-[110px] h-10 bg-zinc-900/80 border-zinc-700/50 text-white rounded-lg text-sm flex-shrink-0">
-                <Building2 className="w-3.5 h-3.5 mr-1.5 text-zinc-500" />
-                <SelectValue placeholder="Developer" />
+              <SelectTrigger className="w-[90px] h-10 bg-zinc-900/80 border-zinc-700/50 text-white rounded-lg text-xs flex-shrink-0">
+                <Building2 className="w-3 h-3 mr-1 text-zinc-500 flex-shrink-0" />
+                <SelectValue placeholder="Dev" />
               </SelectTrigger>
               <SelectContent className="bg-zinc-900 border-zinc-700 max-h-60">
-                <SelectItem value="all" className="text-white hover:bg-zinc-800">All Developers</SelectItem>
+                <SelectItem value="all" className="text-white hover:bg-zinc-800">All Devs</SelectItem>
                 {developers?.map((dev) => (
                   <SelectItem key={dev.id} value={dev.id} className="text-white hover:bg-zinc-800">
                     {dev.name}
@@ -392,16 +392,16 @@ const Properties = () => {
                 }
               }}
             >
-              <SelectTrigger className="w-[100px] h-10 bg-zinc-900/80 border-zinc-700/50 text-white rounded-lg text-sm flex-shrink-0">
-                <DollarSign className="w-3.5 h-3.5 mr-1 text-zinc-500" />
-                <SelectValue placeholder="Price" />
+              <SelectTrigger className="w-[80px] h-10 bg-zinc-900/80 border-zinc-700/50 text-white rounded-lg text-xs flex-shrink-0">
+                <DollarSign className="w-3 h-3 mr-0.5 text-zinc-500 flex-shrink-0" />
+                <SelectValue placeholder="$" />
               </SelectTrigger>
               <SelectContent className="bg-zinc-900 border-zinc-700">
-                <SelectItem value="all" className="text-white hover:bg-zinc-800">Any Price</SelectItem>
-                <SelectItem value="0-1000000" className="text-white hover:bg-zinc-800">Under 1M</SelectItem>
-                <SelectItem value="1000000-3000000" className="text-white hover:bg-zinc-800">1M - 3M</SelectItem>
-                <SelectItem value="3000000-5000000" className="text-white hover:bg-zinc-800">3M - 5M</SelectItem>
-                <SelectItem value="5000000-10000000" className="text-white hover:bg-zinc-800">5M - 10M</SelectItem>
+                <SelectItem value="all" className="text-white hover:bg-zinc-800">Any</SelectItem>
+                <SelectItem value="0-1000000" className="text-white hover:bg-zinc-800">&lt;1M</SelectItem>
+                <SelectItem value="1000000-3000000" className="text-white hover:bg-zinc-800">1-3M</SelectItem>
+                <SelectItem value="3000000-5000000" className="text-white hover:bg-zinc-800">3-5M</SelectItem>
+                <SelectItem value="5000000-10000000" className="text-white hover:bg-zinc-800">5-10M</SelectItem>
                 <SelectItem value="10000000-500000000" className="text-white hover:bg-zinc-800">10M+</SelectItem>
               </SelectContent>
             </Select>
@@ -411,12 +411,12 @@ const Properties = () => {
               value={filters.sizeUnit}
               onValueChange={(value) => updateFilter("sizeUnit", value as 'sqft' | 'sqm')}
             >
-              <SelectTrigger className="w-[70px] h-10 bg-zinc-900/80 border-zinc-700/50 text-white rounded-lg text-sm flex-shrink-0">
+              <SelectTrigger className="w-[60px] h-10 bg-zinc-900/80 border-zinc-700/50 text-white rounded-lg text-xs flex-shrink-0">
                 <SelectValue />
               </SelectTrigger>
               <SelectContent className="bg-zinc-900 border-zinc-700">
-                <SelectItem value="sqft" className="text-white hover:bg-zinc-800">sq ft</SelectItem>
-                <SelectItem value="sqm" className="text-white hover:bg-zinc-800">sq m</SelectItem>
+                <SelectItem value="sqft" className="text-white hover:bg-zinc-800">ft²</SelectItem>
+                <SelectItem value="sqm" className="text-white hover:bg-zinc-800">m²</SelectItem>
               </SelectContent>
             </Select>
 
@@ -425,7 +425,7 @@ const Properties = () => {
               value={filters.currency}
               onValueChange={(value) => updateFilter("currency", value as ExtendedCurrency)}
             >
-              <SelectTrigger className="w-[70px] h-10 bg-zinc-900/80 border-zinc-700/50 text-white rounded-lg text-sm flex-shrink-0">
+              <SelectTrigger className="w-[58px] h-10 bg-zinc-900/80 border-zinc-700/50 text-white rounded-lg text-xs flex-shrink-0">
                 <SelectValue />
               </SelectTrigger>
               <SelectContent className="bg-zinc-900 border-zinc-700">
@@ -679,20 +679,20 @@ const Properties = () => {
             </Button>
           </div>
 
-          {/* Sorting Pills */}
-          <div className="flex items-center justify-center gap-3 mt-6">
+          {/* Sorting Pills - Improved visuals */}
+          <div className="flex items-center justify-center gap-2 mt-5">
             {[
               { value: "newest", label: "Newest" },
-              { value: "price-low", label: "Price: Low→High" },
-              { value: "price-high", label: "Price: High→Low" },
+              { value: "price-low", label: "Low → High" },
+              { value: "price-high", label: "High → Low" },
             ].map((option) => (
               <button
                 key={option.value}
                 onClick={() => setSortBy(option.value)}
-                className={`px-5 py-2 rounded-full text-sm font-medium transition-all border ${
+                className={`px-4 py-2 rounded-full text-xs font-semibold transition-all border ${
                   sortBy === option.value
-                    ? "bg-white text-black border-white"
-                    : "bg-transparent text-zinc-400 border-zinc-700 hover:border-zinc-500 hover:text-zinc-200"
+                    ? "bg-gold text-black border-gold shadow-lg shadow-gold/20"
+                    : "bg-zinc-900/80 text-zinc-300 border-zinc-700 hover:border-gold/50 hover:text-white"
                 }`}
               >
                 {option.label}

@@ -7,15 +7,15 @@ const corsHeaders = {
   "Access-Control-Allow-Headers": "authorization, x-client-info, apikey, content-type",
 };
 
-// Valid language and style enums
-const VALID_LANGUAGES = ["en-GB", "en-US", "ar"] as const;
-const VALID_STYLES = ["calm", "energetic", "neutral"] as const;
+// Valid language and style enums - expanded for client compatibility
+const VALID_LANGUAGES = ["en-GB", "en-US", "ar", "hi", "ru", "zh", "fr", "de", "it", "es"] as const;
+const VALID_STYLES = ["professional", "warm", "energetic", "calm", "neutral"] as const;
 
 // Input validation schema
 const RequestSchema = z.object({
   text: z.string().min(1, "Text is required").max(5000, "Text must be under 5000 characters"),
   language: z.enum(VALID_LANGUAGES).optional().default("en-GB"),
-  style: z.enum(VALID_STYLES).optional().default("neutral"),
+  style: z.enum(VALID_STYLES).optional().default("professional"),
 });
 
 serve(async (req) => {
@@ -74,11 +74,18 @@ serve(async (req) => {
 
     const { text, language, style } = validationResult.data;
 
-    // Map language/style to voice ID
+    // Map language to voice ID (expanded multilingual support)
     const voiceMap: Record<string, string> = {
-      "en-GB": "pNInz6obpgDQGcFmaJgB", // Adam - British
-      "en-US": "21m00Tcm4TlvDq8ikWAM", // Rachel - American
-      "ar": "TxGEqnHWrfWFTfGW9XjX", // Josh - can do Arabic accent
+      "en-GB": "JBFqnCBsd6RMkjVDRZzb",  // George - British
+      "en-US": "EXAVITQu4vr4xnSDxMaL",  // Sarah - American
+      "ar": "SAz9YHcvj6GT2YYXdXww",     // River - can do Arabic
+      "hi": "TX3LPaxmHKxFdv7VOQHJ",     // Liam - Hindi accent
+      "ru": "bIHbv24MWmeRgasZH58o",     // Will - Russian accent
+      "zh": "Xb7hH8MSUJpSbSDYk0k2",     // Alice - Chinese accent
+      "fr": "FGY2WhTYpPnrIDTdsKH5",     // Laura - French
+      "de": "N2lVS1w4EtoT3dr4eOWO",     // Callum - German
+      "it": "onwK4e9ZLuTAKqWW03F9",     // Daniel - Italian
+      "es": "XrExE9yKIg1WjnnlVkGX",     // Matilda - Spanish
     };
 
     const voiceId = voiceMap[language] || voiceMap["en-GB"];
@@ -97,9 +104,10 @@ serve(async (req) => {
           text,
           model_id: "eleven_multilingual_v2",
           voice_settings: {
-            stability: style === "calm" ? 0.8 : 0.5,
+            stability: style === "calm" ? 0.8 : style === "professional" ? 0.65 : 0.5,
             similarity_boost: 0.75,
-            style: style === "energetic" ? 0.8 : 0.4,
+            style: style === "energetic" ? 0.8 : style === "warm" ? 0.6 : 0.4,
+            use_speaker_boost: true,
           },
         }),
       }
