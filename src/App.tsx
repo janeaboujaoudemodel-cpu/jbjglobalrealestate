@@ -131,6 +131,7 @@ import PartnerVisaServices from "./pages/partners/PartnerVisaServices";
 import TrustAndAuditCenter from "./pages/TrustAndAuditCenter";
 import ClientPortal from "./pages/client/ClientPortal";
 import PartnerGovernance from "./pages/governance/PartnerGovernance";
+import AIGovernance from "./pages/governance/AIGovernance";
 
 const queryClient = new QueryClient();
 
@@ -275,6 +276,7 @@ const App = () => (
                 <Route path="/brokers" element={<OurBrokers />} />
                 <Route path="/employee-hub" element={<EmployeeHub />} />
                 <Route path="/employee-chat" element={<EmployeeChatPage />} />
+                <Route path="/governance/ai" element={<AIGovernance />} />
                 <Route path="*" element={<NotFound />} />
               </Route>
             </Routes>
