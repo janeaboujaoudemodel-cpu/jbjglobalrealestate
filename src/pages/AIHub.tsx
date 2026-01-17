@@ -516,13 +516,6 @@ const AIHub = () => {
                 </Button>
               </motion.div>
 
-              {/* Disclaimer - Smaller */}
-              <motion.p 
-                variants={fadeInUp}
-                className="text-zinc-600 text-xs max-w-lg mx-auto"
-              >
-                AI outputs are informational estimates only and not legal, mortgage, financial, or investment advice.
-              </motion.p>
             </motion.div>
           </div>
         </div>
@@ -530,8 +523,8 @@ const AIHub = () => {
         {/* Gold Divider */}
         <div className="h-px bg-gradient-to-r from-transparent via-gold/40 to-transparent" />
 
-        {/* Quick Benefits Strip */}
-        <section className="py-12 bg-zinc-950">
+        {/* Quick Benefits Strip - WHITE BACKGROUND */}
+        <section className="py-12 bg-white">
           <div className="container mx-auto px-4">
             <div className="grid grid-cols-2 md:grid-cols-4 gap-6">
               {quickBenefits.map((benefit, idx) => (
@@ -543,11 +536,11 @@ const AIHub = () => {
                   viewport={{ once: true }}
                   transition={{ delay: idx * 0.1 }}
                 >
-                  <div className="w-12 h-12 rounded-xl bg-gold/10 border border-gold/20 flex items-center justify-center mx-auto mb-3">
-                    <benefit.icon className="w-6 h-6 text-gold" />
+                  <div className="w-14 h-14 rounded-xl bg-black flex items-center justify-center mx-auto mb-3 shadow-lg">
+                    <benefit.icon className="w-7 h-7 text-gold" />
                   </div>
-                  <h3 className="text-white font-medium text-sm mb-1">{benefit.title}</h3>
-                  <p className="text-zinc-500 text-xs">{benefit.desc}</p>
+                  <h3 className="text-black font-semibold text-base mb-1">{benefit.title}</h3>
+                  <p className="text-zinc-600 text-sm">{benefit.desc}</p>
                 </motion.div>
               ))}
             </div>

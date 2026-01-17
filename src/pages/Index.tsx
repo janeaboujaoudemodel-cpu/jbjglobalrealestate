@@ -189,7 +189,9 @@ const Index = () => {
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true }}
           >
-            <h3 className="text-zinc-400 text-xs uppercase tracking-[0.2em] mb-4">Licensed Partner Network</h3>
+            <span className="inline-block px-4 py-1.5 bg-gradient-to-r from-[#C8A766]/20 via-black/50 to-[#C8A766]/20 border border-[#C8A766]/30 rounded-full text-[#C8A766] text-xs uppercase tracking-[0.2em] font-medium mb-4">
+              Licensed Partner Network
+            </span>
             <div className="flex flex-wrap justify-center gap-3">
               <Link to="/services/law-firm">
                 <span className="inline-flex items-center gap-2 px-4 py-2 bg-gradient-to-r from-black via-zinc-900 to-black border border-gold/40 rounded-full text-gold text-sm hover:bg-gold/10 hover:border-gold hover:text-white hover:shadow-[0_0_15px_rgba(200,167,102,0.3)] transition-all duration-300">
@@ -217,7 +219,9 @@ const Index = () => {
 
           {/* Tools Row - Simplified to top 4 + View All */}
           <div className="text-center">
-            <h3 className="text-zinc-400 text-xs uppercase tracking-[0.2em] mb-4">Property Tools</h3>
+            <span className="inline-block px-4 py-1.5 bg-gradient-to-r from-[#C8A766]/20 via-black/50 to-[#C8A766]/20 border border-[#C8A766]/30 rounded-full text-[#C8A766] text-xs uppercase tracking-[0.2em] font-medium mb-4">
+              Property Tools
+            </span>
             <div className="flex flex-wrap justify-center gap-3 mb-4">
               <Link to="/compare">
                 <Button variant="outline" className="border-zinc-800 text-zinc-400 hover:border-gold/40 hover:text-gold text-xs px-4 py-3">
@@ -255,7 +259,9 @@ const Index = () => {
       <section className="py-16 md:py-20 bg-zinc-950">
         <div className="container mx-auto px-4">
           <div className="text-center mb-10">
-            <h2 className="text-zinc-400 text-xs uppercase tracking-[0.2em] mb-2">Who We Serve</h2>
+            <span className="inline-block px-4 py-1.5 bg-gradient-to-r from-[#C8A766]/20 via-white to-[#C8A766]/20 border border-[#C8A766]/30 rounded-full text-[#C8A766] text-xs uppercase tracking-[0.2em] font-medium mb-3">
+              Who We Serve
+            </span>
             <p className="text-white text-xl md:text-2xl font-medium" style={{ fontFamily: "Poppins, sans-serif" }}>
               Find Your Starting Point
             </p>
