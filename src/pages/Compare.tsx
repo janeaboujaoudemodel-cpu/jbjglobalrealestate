@@ -391,7 +391,7 @@ const Compare = () => {
 
     <div class="footer">
       <p><strong>JBJ Global Real Estate</strong> — Real Estate Brokerage</p>
-      <p>📧 contact@JBJ.ae | 📞 +971 56 591 1000</p>
+      <p>📧 Contact@JBJ.ae | 📞 +971 56 591 1000</p>
       <p>🌐 www.JBJ.ae</p>
       <p style="margin-top:15px; font-size:12px;">Powered & Made by JBJ Global Real Estate — Real Estate Brokerage</p>
       <p style="margin-top:10px; font-size:11px; font-style:italic;">

@@ -32,14 +32,14 @@ export interface AIPersonality {
 export const JBJ_COMPANY_INFO = {
   name: "JBJ Global Real Estate",
   nameFull: "JBJ Global Real Estate L.L.C S.O.C.",
-  phone: "+971 54 717 6710",
-  email: "contact@jbj.ae",
-  privacyEmail: "privacy@jbj.ae",
-  website: "www.jbj.ae",
+  phone: "+971 56 591 1000",
+  email: "Contact@JBJ.ae",
+  privacyEmail: "Privacy@JBJ.ae",
+  website: "www.JBJ.ae",
   locations: ["Dubai", "London", "Riyadh"],
   founder: "Jane Abou Jaoude",
-  founderTitle: "Founder & CEO JBJ Global Real Estate",
-  founderFullTitle: "Jane Abou Jaoude Founder & CEO JBJ Global Real Estate",
+  founderTitle: "Founder and CEO JBJ Global Real Estate",
+  founderFullTitle: "Jane Abou Jaoude Founder and CEO JBJ Global Real Estate",
 };
 
 // Company Voice Pillars

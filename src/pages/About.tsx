@@ -194,14 +194,14 @@ const About = () => {
             variants={staggerContainer}
           >
             <div className="grid lg:grid-cols-2 gap-10 lg:gap-16 items-center">
-              {/* LEFT: Founder Image with Premium BLACK Card Background */}
+              {/* LEFT: Founder Image with Premium Champagne Card Background */}
               <motion.div 
                 className="flex justify-center"
                 variants={fadeInUp}
               >
                 <div className="relative">
-                  {/* BLACK background card for contrast */}
-                  <div className="absolute inset-0 -m-6 bg-black rounded-2xl border border-zinc-800" />
+                  {/* Champagne/white background card for premium look */}
+                  <div className="absolute inset-0 -m-6 bg-gradient-to-br from-white via-[#faf8f5] to-[#f5f0e8] rounded-2xl border border-gold/30 shadow-lg" />
                   
                   {/* Circular portrait - GLOBAL PORTRAIT RULE: object-position center 20%, no cropping */}
                   <Link to="/founder" className="block group relative z-10">
@@ -215,8 +215,8 @@ const About = () => {
                         decoding="async"
                       />
                     </div>
-                    <p className="text-center mt-4 text-gold text-sm group-hover:text-gold-light transition-colors">
-                      View Leadership Profile →
+                    <p className="text-center mt-4 text-gold text-sm font-medium group-hover:text-gold-light transition-colors">
+                      Meet the Leadership →
                     </p>
                   </Link>
                 </div>
@@ -280,23 +280,23 @@ const About = () => {
                   </p>
                 </ContentText>
                 
-                {/* Feature Cards - dark background style */}
+                {/* Feature Cards - champagne/white style to match founder card */}
                 <div className="grid sm:grid-cols-2 gap-4 mt-8">
-                  <div className="bg-zinc-900 border border-zinc-800 rounded-lg p-5">
+                  <div className="bg-gradient-to-br from-white via-[#faf8f5] to-[#f5f0e8] border border-gold/30 rounded-lg p-5 shadow-sm">
                     <Users className="w-6 h-6 text-gold mb-3" />
-                    <p className="text-white text-base font-semibold leading-snug">Client-First Advisory</p>
+                    <p className="text-black text-base font-semibold leading-snug">Client-First Advisory</p>
                   </div>
-                  <div className="bg-zinc-900 border border-zinc-800 rounded-lg p-5">
+                  <div className="bg-gradient-to-br from-white via-[#faf8f5] to-[#f5f0e8] border border-gold/30 rounded-lg p-5 shadow-sm">
                     <Shield className="w-6 h-6 text-gold mb-3" />
-                    <p className="text-white text-base font-semibold leading-snug">Capital Protection</p>
+                    <p className="text-black text-base font-semibold leading-snug">Capital Protection</p>
                   </div>
-                  <div className="bg-zinc-900 border border-zinc-800 rounded-lg p-5">
+                  <div className="bg-gradient-to-br from-white via-[#faf8f5] to-[#f5f0e8] border border-gold/30 rounded-lg p-5 shadow-sm">
                     <TrendingUp className="w-6 h-6 text-gold mb-3" />
-                    <p className="text-white text-base font-semibold leading-snug">Long-Term Strategy</p>
+                    <p className="text-black text-base font-semibold leading-snug">Long-Term Strategy</p>
                   </div>
-                  <div className="bg-zinc-900 border border-zinc-800 rounded-lg p-5">
+                  <div className="bg-gradient-to-br from-white via-[#faf8f5] to-[#f5f0e8] border border-gold/30 rounded-lg p-5 shadow-sm">
                     <Target className="w-6 h-6 text-gold mb-3" />
-                    <p className="text-white text-base font-semibold leading-snug">Goal Alignment</p>
+                    <p className="text-black text-base font-semibold leading-snug">Goal Alignment</p>
                   </div>
                 </div>
               </motion.div>
@@ -357,8 +357,8 @@ const About = () => {
           </motion.div>
         </Section>
 
-        {/* SECTION 5: MARKET INTELLIGENCE - WHITE BACKGROUND */}
-        <Section light>
+        {/* SECTION 5: MARKET INTELLIGENCE - BLACK BACKGROUND */}
+        <Section dark>
           <motion.div
             initial="hidden"
             whileInView="visible"
@@ -403,9 +403,9 @@ const About = () => {
 
               {/* RIGHT: Text Content */}
               <motion.div variants={fadeInUp}>
-                <SectionLabel dark={false}>Market Intelligence</SectionLabel>
-                <SectionHeadline light>Data, Not Opinion</SectionHeadline>
-                <ContentText light>
+                <SectionLabel>Market Intelligence</SectionLabel>
+                <SectionHeadline>Data, Not Opinion</SectionHeadline>
+                <ContentText>
                   <p>
                     Developers promote their own projects. Sales agents sell what they are assigned. Our role is different.
                   </p>
@@ -532,53 +532,57 @@ const About = () => {
           </motion.div>
         </Section>
 
-        {/* SECTION 9: CTA - WHITE BACKGROUND for separation from dark footer */}
-        <Section light className="py-14 md:py-18 lg:py-24">
-          <motion.div 
-            className="text-center"
-            initial="hidden"
-            whileInView="visible"
-            viewport={{ once: true }}
-            variants={staggerContainer}
-          >
-            <motion.h2 
-              className="text-black text-2xl md:text-3xl lg:text-4xl font-semibold mb-4"
-              style={{ fontFamily: "Poppins, sans-serif" }}
-              variants={fadeInUp}
-            >
-              Ready to Find Your Perfect Property?
-            </motion.h2>
-            <motion.p 
-              className="text-zinc-600 text-lg mb-10 max-w-xl mx-auto"
-              variants={fadeInUp}
-            >
-              Connect with our brokerage team for expert guidance on buying, selling, or renting in the UAE.
-            </motion.p>
-            <motion.div 
-              className="flex flex-wrap justify-center gap-4"
-              variants={fadeInUp}
-            >
-              <Link to="/contact" className="relative z-10">
-                <Button 
-                  variant="dark"
-                  className="px-8 py-6 text-base"
+        {/* SECTION 9: CTA - Premium champagne background for separation from dark footer */}
+        <section className="py-14 md:py-18 lg:py-24 bg-gradient-to-br from-white via-[#faf8f5] to-[#f5f0e8]">
+          <div className="container mx-auto px-6">
+            <div className="max-w-[1100px] mx-auto">
+              <motion.div 
+                className="text-center"
+                initial="hidden"
+                whileInView="visible"
+                viewport={{ once: true }}
+                variants={staggerContainer}
+              >
+                <motion.h2 
+                  className="text-black text-2xl md:text-3xl lg:text-4xl font-semibold mb-4"
+                  style={{ fontFamily: "Poppins, sans-serif" }}
+                  variants={fadeInUp}
                 >
-                  Contact Us
-                  <ArrowUpRight className="w-4 h-4 ml-2" />
-                </Button>
-              </Link>
-              <Link to="/properties" className="relative z-10">
-                <Button 
-                  variant="secondary"
-                  className="px-8 py-6 text-base border-black text-black hover:bg-black hover:text-white"
+                  Ready to Find Your Perfect Property?
+                </motion.h2>
+                <motion.p 
+                  className="text-zinc-600 text-lg mb-10 max-w-xl mx-auto"
+                  variants={fadeInUp}
                 >
-                  Browse Properties
-                  <ArrowUpRight className="w-4 h-4 ml-2" />
-                </Button>
-              </Link>
-            </motion.div>
-          </motion.div>
-        </Section>
+                  Connect with our brokerage team for expert guidance on buying, selling, or renting in the UAE.
+                </motion.p>
+                <motion.div 
+                  className="flex flex-wrap justify-center gap-4"
+                  variants={fadeInUp}
+                >
+                  <Link to="/contact" className="relative z-10">
+                    <Button 
+                      variant="dark"
+                      className="px-8 py-6 text-base"
+                    >
+                      Contact Us
+                      <ArrowUpRight className="w-4 h-4 ml-2" />
+                    </Button>
+                  </Link>
+                  <Link to="/properties" className="relative z-10">
+                    <Button 
+                      variant="secondary"
+                      className="px-8 py-6 text-base border-black text-black hover:bg-black hover:text-white"
+                    >
+                      Browse Properties
+                      <ArrowUpRight className="w-4 h-4 ml-2" />
+                    </Button>
+                  </Link>
+                </motion.div>
+              </motion.div>
+            </div>
+          </div>
+        </section>
 
         <Footer />
       </div>
