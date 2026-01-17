@@ -137,7 +137,7 @@ const Footer = () => {
   // Career Links
   const careerLinks = [
     { href: "/join", label: "Apply to Join" },
-    { href: "/hr-agent", label: "Chat with Jessica" },
+    { href: "/hr-agent", label: "Contact HR · Jessica" },
     { href: "/onboarding", label: "Training Portal" },
   ];
 
