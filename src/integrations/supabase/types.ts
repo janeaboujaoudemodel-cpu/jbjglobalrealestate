@@ -9573,6 +9573,57 @@ export type Database = {
           },
         ]
       }
+      developer_sales_reps_public: {
+        Row: {
+          created_at: string | null
+          developer_id: string | null
+          email_masked: string | null
+          full_name: string | null
+          id: string | null
+          is_active: boolean | null
+          is_primary: boolean | null
+          phone_masked: string | null
+          title: string | null
+        }
+        Insert: {
+          created_at?: string | null
+          developer_id?: string | null
+          email_masked?: never
+          full_name?: string | null
+          id?: string | null
+          is_active?: boolean | null
+          is_primary?: boolean | null
+          phone_masked?: never
+          title?: string | null
+        }
+        Update: {
+          created_at?: string | null
+          developer_id?: string | null
+          email_masked?: never
+          full_name?: string | null
+          id?: string | null
+          is_active?: boolean | null
+          is_primary?: boolean | null
+          phone_masked?: never
+          title?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "developer_sales_reps_developer_id_fkey"
+            columns: ["developer_id"]
+            isOneToOne: false
+            referencedRelation: "uae_developers"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "developer_sales_reps_developer_id_fkey"
+            columns: ["developer_id"]
+            isOneToOne: false
+            referencedRelation: "uae_developers_public"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       jbj_leads_secure: {
         Row: {
           assigned_broker_id: string | null
