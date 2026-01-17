@@ -105,25 +105,25 @@ const ClientMarketContext = ({
   }
 
   return (
-    <Card className="bg-card/50 backdrop-blur-sm border-border/50">
+    <Card className="bg-zinc-900 border-zinc-700">
       <CardHeader className="pb-3">
         <div className="flex items-center justify-between">
-          <CardTitle className="text-base font-medium text-foreground flex items-center gap-2">
+          <CardTitle className="text-base font-medium text-white flex items-center gap-2">
             Market Context
             <TooltipProvider>
               <Tooltip>
                 <TooltipTrigger>
-                  <Info className="w-4 h-4 text-muted-foreground" />
+          <Info className="w-4 h-4 text-zinc-400" />
                 </TooltipTrigger>
-                <TooltipContent className="max-w-xs">
-                  <p className="text-xs">
+                <TooltipContent className="max-w-xs bg-zinc-800 border-zinc-700">
+                  <p className="text-xs text-white">
                     Insights based on aggregated official data. Provided for informational purposes only.
                   </p>
                 </TooltipContent>
               </Tooltip>
             </TooltipProvider>
           </CardTitle>
-          <div className="flex items-center gap-1 text-xs text-muted-foreground">
+          <div className="flex items-center gap-1 text-xs text-zinc-400">
             <Clock className="w-3 h-3" />
             <span>Updated {lastUpdated}</span>
           </div>
@@ -134,18 +134,18 @@ const ClientMarketContext = ({
         <div className="flex items-center justify-between gap-4 flex-wrap">
           <div className="flex items-center gap-2">
             {getTrendIcon()}
-            <span className="text-sm text-foreground">{getTrendLabel()}</span>
+            <span className="text-sm text-white">{getTrendLabel()}</span>
           </div>
           {getDemandBadge()}
         </div>
 
         {/* Plain-English Context */}
-        <p className="text-sm text-muted-foreground leading-relaxed">
+        <p className="text-sm text-zinc-400 leading-relaxed">
           {getContextNarrative()}
         </p>
 
         {/* Mandatory Disclaimer */}
-        <p className="text-[10px] text-muted-foreground/60 border-t border-border/30 pt-3">
+        <p className="text-[10px] text-zinc-500 border-t border-zinc-700 pt-3">
           Insights are based on aggregated official data and are provided for informational purposes only.
           This does not constitute financial, investment, or legal advice.
         </p>

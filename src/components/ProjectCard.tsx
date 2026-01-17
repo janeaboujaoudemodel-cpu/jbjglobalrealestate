@@ -205,16 +205,16 @@ const ProjectCard = ({ project, showFavorite = true, showBadgeButton = true, cur
             onClick={handleWhatsApp}
             className="bg-green-950/30 border-green-800/50 hover:bg-green-900/40 hover:border-green-600 text-green-400 hover:text-green-300 text-xs h-9"
           >
-            <MessageCircle className="w-3.5 h-3.5 mr-1.5" />
+            <MessageCircle className="w-3.5 h-3.5 mr-1.5 text-green-500" />
             WhatsApp
           </Button>
           <Button
             variant="outline"
             size="sm"
             onClick={handleCall}
-            className="bg-gold/10 border-gold/30 hover:bg-gold/20 hover:border-gold text-gold hover:text-white text-xs h-9"
+            className="bg-blue-950/30 border-blue-800/50 hover:bg-blue-900/40 hover:border-blue-600 text-blue-400 hover:text-blue-300 text-xs h-9"
           >
-            <Phone className="w-3.5 h-3.5 mr-1.5" />
+            <Phone className="w-3.5 h-3.5 mr-1.5 text-blue-500" />
             Call
           </Button>
         </div>

@@ -272,14 +272,14 @@ const ProjectDetail = () => {
                 onClick={handleWhatsApp}
                 className="bg-green-600 hover:bg-green-700 text-white font-semibold h-12"
               >
-                <MessageCircle className="w-5 h-5 mr-2" />
+                <MessageCircle className="w-5 h-5 mr-2 text-white" />
                 WhatsApp
               </Button>
               <Button
                 onClick={handleCall}
                 className="bg-blue-600 hover:bg-blue-700 text-white font-semibold h-12"
               >
-                <Phone className="w-5 h-5 mr-2" />
+                <Phone className="w-5 h-5 mr-2 text-white" />
                 Call Now
               </Button>
             </div>
@@ -332,7 +332,7 @@ const ProjectDetail = () => {
                 href="https://jbj.ae/contact"
                 target="_blank"
                 rel="noopener noreferrer"
-                className="block w-full py-3 px-6 bg-gradient-to-r from-gold to-gold-dark text-black font-semibold rounded-lg hover:opacity-90 transition-opacity text-center"
+                className="block w-full py-3 px-6 bg-white text-gold border-2 border-gold font-semibold rounded-lg hover:bg-transparent hover:text-gold transition-all duration-300 text-center"
                 style={{ fontFamily: "Poppins, sans-serif" }}
               >
                 Contact Us
