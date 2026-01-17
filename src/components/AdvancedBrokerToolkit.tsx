@@ -541,7 +541,7 @@ const AdvancedBrokerToolkit = () => {
               </Button>
             </Link>
             <Link to="/ai-hub">
-              <Button variant="outline" className="gap-2 border-gold/30 hover:bg-gold/10 px-8 py-6 text-lg">
+              <Button variant="secondary" className="gap-2 px-8 py-6 text-lg">
                 <Brain className="h-5 w-5" />
                 Explore All Tools
               </Button>

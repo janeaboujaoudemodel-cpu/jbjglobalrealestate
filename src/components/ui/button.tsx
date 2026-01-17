@@ -9,30 +9,22 @@ import { cn } from "@/lib/utils";
  * GLOBAL BUTTON SYSTEM - JBJ GLOBAL REAL ESTATE (LOCKED & FINAL)
  * ============================================================
  * 
- * MANDATORY: All buttons must use ONLY these variants.
- * NO custom classes (bg-gold, shadow, scale, glow) allowed.
+ * BRANDED BUTTONS (USE FOR MAIN ACTIONS):
+ * - primary: White bg → transparent on hover (main CTAs)
+ * - secondary: Transparent bg → white on hover (secondary CTAs)
+ * - media: For image/video backgrounds (white text)
  * 
- * INVERTED HOVER RULE (LOCKED):
- * - All buttons INVERT their colors on hover
- * 
- * VARIANT: primary (White Base)
- *   Default: White bg, Gold text, Gold border
- *   Hover (INVERTED): Transparent bg, Gold text, Gold border
- * 
- * VARIANT: secondary (Transparent Base)
- *   Default: Transparent bg, Gold text, Gold border
- *   Hover (INVERTED): White bg, Gold text, Gold border
- * 
- * VARIANT: media (For Images/Videos)
- *   Default: Transparent bg, White text, White border
- *   Hover (INVERTED): White bg, Gold text
+ * UTILITY BUTTONS (INTERNAL/SYSTEM USE):
+ * - ghost: Transparent, subtle hover
+ * - outline: Bordered, subtle
+ * - destructive: Red for dangerous actions
+ * - link: Text-only link style
  * 
  * FORBIDDEN:
+ * - gold, goldOutline, heroOutline (DELETED - use primary/secondary/media)
+ * - Custom className styling (bg-gold, shadow-*, scale-*, etc.)
  * - Filled gold backgrounds
- * - Dark gold hover states
  * - Shadows or glow effects
- * - Scaling or animation tricks
- * - bg-gold, hover:bg-gold, shadow-*, scale-*, glow-*
  * 
  * APPLIES TO:
  * - Front-end, Back-end, CRM, Employee Hub, Database UI
@@ -45,7 +37,7 @@ const buttonVariants = cva(
     variants: {
       variant: {
         // ============================================================
-        // GLOBAL BUTTON SYSTEM - INVERTED HOVER (LOCKED & FINAL)
+        // BRANDED BUTTONS - JBJ GOLD SYSTEM (LOCKED)
         // ============================================================
         
         // PRIMARY: WHITE BASE (Main actions)
@@ -64,15 +56,7 @@ const buttonVariants = cva(
         media: "bg-transparent text-white border border-white hover:bg-white hover:text-gold",
         
         // ============================================================
-        // LEGACY VARIANTS (Map to new system for backwards compatibility)
-        // These will be deprecated - migrate to primary/secondary/media
-        // ============================================================
-        gold: "bg-white text-gold border border-gold hover:bg-transparent hover:text-gold",
-        goldOutline: "bg-transparent text-gold border border-gold hover:bg-white hover:text-gold",
-        heroOutline: "bg-transparent text-white border border-white hover:bg-white hover:text-gold",
-        
-        // ============================================================
-        // UTILITY VARIANTS (Internal/System use only)
+        // UTILITY BUTTONS (Internal/System use)
         // ============================================================
         default: "bg-primary text-primary-foreground hover:bg-primary/90",
         destructive: "bg-destructive text-destructive-foreground hover:bg-destructive/90",

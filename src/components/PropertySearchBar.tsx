@@ -59,7 +59,7 @@ const PropertySearchBar = ({ className = "", compact = false }: PropertySearchBa
         </div>
         <Button 
           onClick={handleSearch}
-          variant="gold"
+          variant="primary"
           className="h-10 px-4 rounded-lg"
         >
           Search
@@ -182,7 +182,7 @@ const PropertySearchBar = ({ className = "", compact = false }: PropertySearchBa
         {/* Search Button */}
         <Button 
           onClick={handleSearch}
-          variant="gold"
+          variant="primary"
           className="h-12 px-8 rounded-lg"
         >
           SEARCH

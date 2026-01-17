@@ -199,10 +199,10 @@ const Install = () => {
                 transition={{ delay: 0.2 }}
                 className="mb-8"
               >
-                <Button
+              <Button
                   onClick={handleInstall}
                   disabled={installing}
-                  variant="gold"
+                  variant="primary"
                   className="px-10 py-7 text-xl disabled:opacity-70"
                 >
                   {installing ? (

@@ -268,7 +268,7 @@ const CVManagementCenter = () => {
                 All uploaded CVs and candidate applications are stored here
               </CardDescription>
             </div>
-            <Button variant="gold" className="gap-2">
+            <Button variant="primary" className="gap-2">
               <Upload className="h-4 w-4" />
               Upload CV
             </Button>
@@ -567,7 +567,7 @@ const CVManagementCenter = () => {
             </Button>
             <Button 
               onClick={confirmScheduleInterview}
-              variant="gold"
+              variant="primary"
             >
               Schedule Interview
             </Button>

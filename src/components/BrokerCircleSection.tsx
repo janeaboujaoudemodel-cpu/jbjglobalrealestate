@@ -196,7 +196,7 @@ const BrokerCircleSection = () => {
               Explore Our AI Tools
             </h3>
             <Link to="/ai-hub">
-              <Button variant="outline" className="gap-2 border-gold/30 hover:bg-gold/10">
+              <Button variant="secondary" className="gap-2">
                 <Brain className="h-4 w-4" />
                 Visit JBJ Hub
                 <ArrowRight className="h-4 w-4" />
@@ -270,14 +270,14 @@ const BrokerCircleSection = () => {
         >
           <div className="flex flex-col sm:flex-row items-center justify-center gap-4">
             <Link to="/broker-toolkit">
-              <Button variant="gold" className="gap-2 px-8 py-6 text-lg">
+              <Button variant="primary" className="gap-2 px-8 py-6 text-lg">
                 <Award className="h-5 w-5" />
                 Join Broker Circle — It's Free
                 <ArrowRight className="h-5 w-5" />
               </Button>
             </Link>
             <Link to="/ai-hub">
-              <Button variant="outline" className="gap-2 border-gold/30 hover:bg-gold/10 px-8 py-6 text-lg">
+              <Button variant="secondary" className="gap-2 px-8 py-6 text-lg">
                 <Brain className="h-5 w-5" />
                 Explore Free Tools
               </Button>

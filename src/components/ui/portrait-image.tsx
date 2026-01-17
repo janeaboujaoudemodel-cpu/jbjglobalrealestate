@@ -18,8 +18,9 @@ import { cn } from "@/lib/utils";
  * 
  * HOW IT WORKS:
  * - Uses object-fit: cover for visual presence
- * - Uses object-position: center 20% to focus on face/upper body
+ * - Uses object-position to focus on face/upper body
  * - Container controls the frame, image fills it properly
+ * - The image FILLS the container visually
  * 
  * APPLIES TO:
  * - About page (Founder)
@@ -58,10 +59,16 @@ const shapeClasses = {
   rounded: "rounded-xl",
 };
 
+/**
+ * Focus positions for portrait framing
+ * - "top": Face is at the very top of the image (15% from top)
+ * - "upper": Face is in upper portion (25% from top) - DEFAULT
+ * - "center": Face is centered (50%)
+ */
 const focusPositions = {
   top: "center 15%",
   upper: "center 25%",
-  center: "center center",
+  center: "center 40%",
 };
 
 const PortraitImage = React.forwardRef<HTMLImageElement, PortraitImageProps>(
@@ -72,12 +79,13 @@ const PortraitImage = React.forwardRef<HTMLImageElement, PortraitImageProps>(
     bordered = true,
     focus = "upper",
     alt = "",
+    style,
     ...props 
   }, ref) => {
     return (
       <div 
         className={cn(
-          "overflow-hidden bg-zinc-900 flex-shrink-0",
+          "overflow-hidden bg-zinc-900 flex-shrink-0 relative",
           sizeClasses[size],
           shapeClasses[shape],
           bordered && "border-2 border-gold/30",
@@ -87,10 +95,11 @@ const PortraitImage = React.forwardRef<HTMLImageElement, PortraitImageProps>(
         <img
           ref={ref}
           alt={alt}
-          className="w-full h-full"
+          className="w-full h-full absolute inset-0"
           style={{
             objectFit: "cover",
             objectPosition: focusPositions[focus],
+            ...style,
           }}
           loading="lazy"
           decoding="async"

@@ -99,7 +99,7 @@ const LawFirm = () => {
 
           <motion.div variants={fadeInUp}>
             <a href={CONTACT_INFO.inquiryFormUrl} target="_blank" rel="noopener noreferrer">
-              <Button variant="gold" className="px-8 py-6 text-base">
+              <Button variant="primary" className="px-8 py-6 text-base">
                 Schedule Legal Consultation
                 <ArrowUpRight className="w-5 h-5 ml-2" />
               </Button>
@@ -225,7 +225,7 @@ const LawFirm = () => {
             </p>
             <div className="flex flex-wrap justify-center gap-4">
               <a href={CONTACT_INFO.inquiryFormUrl} target="_blank" rel="noopener noreferrer">
-                <Button variant="gold" className="px-8 py-6 text-base">
+                <Button variant="primary" className="px-8 py-6 text-base">
                   Book Consultation
                   <ArrowUpRight className="w-5 h-5 ml-2" />
                 </Button>

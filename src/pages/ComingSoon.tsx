@@ -115,7 +115,7 @@ const ComingSoon = () => {
             {/* GLOBAL BUTTON SYSTEM - Type A: White Base, Gold text/border, Inverted hover */}
             <Button
               onClick={() => openForm()}
-              variant="gold"
+              variant="primary"
               className="px-10 py-6 text-lg gap-3"
             >
               <Crown className="w-5 h-5" />

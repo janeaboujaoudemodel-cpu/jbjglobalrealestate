@@ -234,7 +234,7 @@ const Automations = () => {
               </div>
             </div>
           </div>
-          <Button variant="gold">
+          <Button variant="primary">
             <Plus className="h-4 w-4 mr-2" />
             Create Rule
           </Button>

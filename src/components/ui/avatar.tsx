@@ -5,19 +5,15 @@ import { cn } from "@/lib/utils";
 
 /**
  * ============================================================
- * GLOBAL IMAGE RULE - LOCKED (NO CROP + PERFECT CENTERING)
+ * GLOBAL AVATAR SYSTEM - JBJ GLOBAL REAL ESTATE (LOCKED)
  * ============================================================
  * 
- * CORE RULES:
- * - NEVER crop images (no head, face, body, hands, or edges cut)
- * - Preserve original image ratio at all times
- * - Subject must visually occupy 70-85% of container
- * - Perfect centering: horizontal + vertical
- * - Head positioned in upper third of frame
- * - Equal breathing space on all sides
- * - Black/dark backgrounds must be preserved
- * - Circle is a MASK only - no zoom-out behavior
- * - Image quality must remain original and high-resolution
+ * CORE RULES (ALIGNED WITH PORTRAIT IMAGE SYSTEM):
+ * - Subject occupies 70-85% of container (visual presence)
+ * - Subject is centered (face in middle)
+ * - Head is NEVER cropped
+ * - Uses object-fit: cover with smart positioning
+ * - Circle is a MASK - image fills it properly
  * 
  * Applies to:
  * - Founder images
@@ -26,7 +22,6 @@ import { cn } from "@/lib/utils";
  * - CRM users
  * - User profile avatars
  * - Leadership cards
- * - Any image container (circle, square, rectangle)
  * ============================================================
  */
 
@@ -38,8 +33,7 @@ const Avatar = React.forwardRef<
     ref={ref}
     className={cn(
       "relative flex shrink-0 overflow-hidden rounded-full",
-      // Dark background preserved for image integrity
-      "bg-zinc-950",
+      "bg-zinc-900",
       className
     )}
     {...props}
@@ -48,11 +42,11 @@ const Avatar = React.forwardRef<
 Avatar.displayName = AvatarPrimitive.Root.displayName;
 
 /**
- * AvatarImage - GLOBAL IMAGE RULE APPLIED
- * - NO cropping - image shown exactly as provided
- * - Subject fills 70-85% of container naturally
- * - Head positioned in upper third (object-position: center 15%)
- * - Dark background preserved
+ * AvatarImage - GLOBAL PORTRAIT RULE APPLIED
+ * - Uses object-fit: cover for visual presence (fills container)
+ * - Face positioned in upper portion (object-position: center 25%)
+ * - Head is never cropped
+ * - Subject fills 70-85% of container
  */
 const AvatarImage = React.forwardRef<
   React.ElementRef<typeof AvatarPrimitive.Image>,
@@ -65,8 +59,8 @@ const AvatarImage = React.forwardRef<
       className
     )}
     style={{
-      objectFit: 'contain',
-      objectPosition: 'center 15%', // Head in upper third
+      objectFit: 'cover',
+      objectPosition: 'center 25%',
     }}
     {...props} 
   />
