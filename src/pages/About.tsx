@@ -185,8 +185,8 @@ const About = () => {
           </motion.div>
         </section>
 
-        {/* SECTION 2: FOUNDER WRITTEN BLOCK - Image LEFT, Text RIGHT */}
-        <Section>
+        {/* SECTION 2: FOUNDER WRITTEN BLOCK - WHITE BACKGROUND */}
+        <Section light>
           <motion.div
             initial="hidden"
             whileInView="visible"
@@ -201,14 +201,14 @@ const About = () => {
               >
                 <div className="relative">
                   {/* Subtle premium background card */}
-                  <div className="absolute inset-0 -m-6 bg-gradient-to-br from-zinc-900/80 to-zinc-950/50 rounded-2xl border border-zinc-800/40" />
+                  <div className="absolute inset-0 -m-6 bg-gradient-to-br from-zinc-100 to-zinc-200/50 rounded-2xl border border-zinc-200" />
                   
                   {/* Circular portrait - GLOBAL PORTRAIT RULE: object-position center 20%, no cropping */}
                   <Link to="/founder" className="block group relative z-10">
-                    <div className="w-56 h-56 md:w-64 md:h-64 lg:w-72 lg:h-72 mx-auto rounded-full overflow-hidden border-2 border-zinc-800">
+                    <div className="w-56 h-56 md:w-64 md:h-64 lg:w-72 lg:h-72 mx-auto rounded-full overflow-hidden border-2 border-zinc-300">
                       <img 
                         src={founderProfessional}
-                        alt="Jane Abou Jaoude, Founder and CEO of JBJ GLOBAL REAL ESTATE"
+                        alt="Founder and CEO Jane Abou Jaoude of JBJ GLOBAL REAL ESTATE"
                         className="w-full h-full object-cover"
                         style={{ objectPosition: "center 20%" }}
                         loading="lazy"
@@ -224,17 +224,17 @@ const About = () => {
 
               {/* RIGHT: Founder Statement */}
               <motion.div variants={fadeInUp}>
-                <SectionLabel>Written by the Founder</SectionLabel>
-                <p className="text-white text-xl md:text-2xl font-medium mb-6">
+                <SectionLabel dark={false}>Written by the Founder</SectionLabel>
+                <p className="text-black text-xl md:text-2xl font-medium mb-6">
                   <Link 
                     to="/founder" 
                     className="text-gold hover:text-gold-light underline underline-offset-4 transition-colors"
                   >
-                    Jane Abou Jaoude
+                    Founder and CEO Jane Abou Jaoude
                   </Link>
                 </p>
                 
-                <ContentText>
+                <ContentText light>
                   <p>
                     I believe real estate decisions should never be driven by pressure, commissions, or promises that do not exist in reality.
                   </p>
@@ -250,8 +250,8 @@ const About = () => {
           </motion.div>
         </Section>
 
-        {/* SECTION 3: HOW WE OPERATE - Text LEFT, Image RIGHT */}
-        <Section light>
+        {/* SECTION 3: HOW WE OPERATE - BLACK BACKGROUND */}
+        <Section>
           <motion.div
             initial="hidden"
             whileInView="visible"
@@ -261,9 +261,9 @@ const About = () => {
             <div className="grid lg:grid-cols-2 gap-10 lg:gap-16 items-center">
               {/* LEFT: Text Content */}
               <motion.div variants={fadeInUp}>
-                <SectionLabel dark={false}>How We Operate</SectionLabel>
-                <SectionHeadline light>Client Capital, Treated as Our Own</SectionHeadline>
-                <ContentText light>
+                <SectionLabel>How We Operate</SectionLabel>
+                <SectionHeadline>Client Capital, Treated as Our Own</SectionHeadline>
+                <ContentText>
                   <p>
                     At JBJ GLOBAL REAL ESTATE, we work with clients as if we are investing our own capital.
                   </p>
@@ -272,23 +272,23 @@ const About = () => {
                   </p>
                 </ContentText>
                 
-                {/* Feature Cards - scaled content for light bg */}
+                {/* Feature Cards - dark background style */}
                 <div className="grid sm:grid-cols-2 gap-4 mt-8">
-                  <div className="bg-white border border-zinc-200 rounded-lg p-5">
+                  <div className="bg-zinc-900 border border-zinc-800 rounded-lg p-5">
                     <Users className="w-6 h-6 text-gold mb-3" />
-                    <p className="text-black text-base font-semibold leading-snug">Client-First Advisory</p>
+                    <p className="text-white text-base font-semibold leading-snug">Client-First Advisory</p>
                   </div>
-                  <div className="bg-white border border-zinc-200 rounded-lg p-5">
+                  <div className="bg-zinc-900 border border-zinc-800 rounded-lg p-5">
                     <Shield className="w-6 h-6 text-gold mb-3" />
-                    <p className="text-black text-base font-semibold leading-snug">Capital Protection</p>
+                    <p className="text-white text-base font-semibold leading-snug">Capital Protection</p>
                   </div>
-                  <div className="bg-white border border-zinc-200 rounded-lg p-5">
+                  <div className="bg-zinc-900 border border-zinc-800 rounded-lg p-5">
                     <TrendingUp className="w-6 h-6 text-gold mb-3" />
-                    <p className="text-black text-base font-semibold leading-snug">Long-Term Strategy</p>
+                    <p className="text-white text-base font-semibold leading-snug">Long-Term Strategy</p>
                   </div>
-                  <div className="bg-white border border-zinc-200 rounded-lg p-5">
+                  <div className="bg-zinc-900 border border-zinc-800 rounded-lg p-5">
                     <Target className="w-6 h-6 text-gold mb-3" />
-                    <p className="text-black text-base font-semibold leading-snug">Goal Alignment</p>
+                    <p className="text-white text-base font-semibold leading-snug">Goal Alignment</p>
                   </div>
                 </div>
               </motion.div>
@@ -312,8 +312,8 @@ const About = () => {
           </motion.div>
         </Section>
 
-        {/* SECTION 4: OFF-PLAN POLICY - 3 Card Layout */}
-        <Section light>
+        {/* SECTION 4: OFF-PLAN POLICY - BLACK BACKGROUND with WHITE CARDS */}
+        <Section>
           <motion.div
             initial="hidden"
             whileInView="visible"
@@ -321,11 +321,11 @@ const About = () => {
             variants={staggerContainer}
           >
             <motion.div className="text-center mb-10" variants={fadeInUp}>
-              <SectionLabel dark={false}>Off-Plan Policy</SectionLabel>
-              <SectionHeadline light className="max-w-2xl mx-auto">No Fees. No Pressure.</SectionHeadline>
+              <SectionLabel>Off-Plan Policy</SectionLabel>
+              <SectionHeadline className="max-w-2xl mx-auto">No Fees. No Pressure.</SectionHeadline>
             </motion.div>
 
-            {/* 3 Card Grid */}
+            {/* 3 Card Grid - WHITE CARDS on BLACK background */}
             <div className="grid md:grid-cols-3 gap-6">
               <FeatureCard 
                 light
@@ -349,8 +349,8 @@ const About = () => {
           </motion.div>
         </Section>
 
-        {/* SECTION 5: MARKET INTELLIGENCE - Image LEFT, Text RIGHT */}
-        <Section dark>
+        {/* SECTION 5: MARKET INTELLIGENCE - WHITE BACKGROUND */}
+        <Section light>
           <motion.div
             initial="hidden"
             whileInView="visible"
@@ -395,9 +395,9 @@ const About = () => {
 
               {/* RIGHT: Text Content */}
               <motion.div variants={fadeInUp}>
-                <SectionLabel>Market Intelligence</SectionLabel>
-                <SectionHeadline>Data, Not Opinion</SectionHeadline>
-                <ContentText>
+                <SectionLabel dark={false}>Market Intelligence</SectionLabel>
+                <SectionHeadline light>Data, Not Opinion</SectionHeadline>
+                <ContentText light>
                   <p>
                     Developers promote their own projects. Sales agents sell what they are assigned. Our role is different.
                   </p>
@@ -413,24 +413,24 @@ const About = () => {
           </motion.div>
         </Section>
 
-        {/* SECTION 6: YOUR DECISION - Callout Block */}
-        <Section light>
+        {/* SECTION 6: YOUR DECISION - BLACK BACKGROUND with WHITE CARD */}
+        <Section>
           <motion.div
             initial="hidden"
             whileInView="visible"
             viewport={{ once: true, margin: "-50px" }}
             variants={fadeInUp}
           >
-            {/* Callout Block with Background Contrast */}
-            <div className="relative bg-gradient-to-br from-zinc-900/90 to-zinc-950/70 border border-zinc-800/50 rounded-2xl p-10 md:p-14 text-center overflow-hidden">
+            {/* WHITE Callout Card on BLACK background */}
+            <div className="relative bg-white border border-zinc-200 rounded-2xl p-10 md:p-14 text-center overflow-hidden shadow-lg">
               {/* Subtle gold accent */}
-              <div className="absolute top-0 left-1/2 -translate-x-1/2 w-40 h-px bg-gradient-to-r from-transparent via-gold/50 to-transparent" />
+              <div className="absolute top-0 left-1/2 -translate-x-1/2 w-40 h-px bg-gradient-to-r from-transparent via-gold to-transparent" />
               
-              <SectionLabel>Your Decision</SectionLabel>
-              <SectionHeadline className="max-w-3xl mx-auto">
+              <SectionLabel dark={false}>Your Decision</SectionLabel>
+              <SectionHeadline light className="max-w-3xl mx-auto">
                 Clarity, Confidence, Protection
               </SectionHeadline>
-              <ContentText className="max-w-2xl mx-auto text-center">
+              <ContentText light className="max-w-2xl mx-auto text-center">
                 <p>
                   Clients always make the final decision.
                 </p>
@@ -483,40 +483,43 @@ const About = () => {
               />
             </div>
 
-            <motion.p 
-              className="text-zinc-600 text-center mt-8 max-w-2xl mx-auto"
-              style={{ fontSize: '15px', lineHeight: 1.7 }}
-              variants={fadeInUp}
-            >
-              Developers do not manage rentals or resales. This is where an independent, licensed brokerage adds real value.
-            </motion.p>
           </motion.div>
         </Section>
 
-        {/* SECTION 8: SIGNATURE - WHITE BACKGROUND for flow to CTA */}
-        <Section light className="py-8 md:py-12 lg:py-16">
+        {/* SECTION 8: SIGNATURE - BLACK BACKGROUND with WHITE CARD */}
+        <Section className="py-8 md:py-12 lg:py-16">
           <motion.div
             initial="hidden"
             whileInView="visible"
             viewport={{ once: true }}
             variants={fadeInUp}
-            className="text-center"
           >
-            <div className="inline-block">
-              <div className="w-px h-10 bg-gradient-to-b from-transparent via-gold/50 to-transparent mx-auto mb-6" />
+            {/* WHITE CARD with signature content */}
+            <div className="bg-white border border-zinc-200 rounded-2xl p-10 md:p-14 text-center shadow-lg max-w-2xl mx-auto">
+              <p className="text-zinc-700 text-base md:text-lg mb-6 leading-relaxed">
+                Developers do not manage rentals or resales. This is where an independent, licensed brokerage adds real value.
+              </p>
+              
+              <div className="w-20 h-px bg-gradient-to-r from-transparent via-gold to-transparent mx-auto mb-6" />
+              
               <Link 
                 to="/founder" 
                 className="inline-block group"
               >
                 <p className="text-black text-xl md:text-2xl font-medium mb-2 group-hover:text-gold transition-colors">
-                  Jane Abou Jaoude
+                  Founder and CEO Jane Abou Jaoude
                 </p>
               </Link>
               <p 
-                className="text-gold text-xs uppercase tracking-[0.18em]"
+                className="text-gold text-xs uppercase tracking-[0.18em] mb-4"
               >
-                Founder and CEO, JBJ GLOBAL REAL ESTATE
+                JBJ GLOBAL REAL ESTATE
               </p>
+              
+              {/* Initials */}
+              <div className="inline-flex items-center justify-center w-16 h-16 rounded-full bg-black border-2 border-gold">
+                <span className="text-gold text-xl font-bold">JBJ</span>
+              </div>
             </div>
           </motion.div>
         </Section>
