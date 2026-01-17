@@ -69,9 +69,9 @@ export default defineConfig(({ mode }) => ({
         ],
       },
       workbox: {
-        maximumFileSizeToCacheInBytes: 5 * 1024 * 1024, // 5MB limit
+        // Allow slightly larger JS bundles to be precached (our main chunk can exceed 5MB)
+        maximumFileSizeToCacheInBytes: 7 * 1024 * 1024, // 7MB limit
         globPatterns: ["**/*.{js,css,html,ico,png,svg,jpg,jpeg,webp,woff,woff2}"],
-        // Clear old caches on new SW activation
         cleanupOutdatedCaches: true,
         // Skip waiting to activate new SW immediately
         skipWaiting: true,
