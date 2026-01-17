@@ -1924,9 +1924,9 @@ const MarketReport = () => {
               "This book represents years of experience in UAE real estate, distilled into actionable frameworks. I created it so investors can make informed decisions with confidence."
             </blockquote>
             <div>
-              <p className="text-gold font-semibold text-lg">Jane Abou Jaoude</p>
-              <p className="text-zinc-500 text-sm">Founder and CEO, JBJ GLOBAL REAL ESTATE</p>
-              <p className="text-zinc-600 text-xs mt-1">Real Estate Brokerage • Dubai, UAE</p>
+              <p className="text-white font-semibold text-lg tracking-wide">Jane Abou Jaoude</p>
+              <p className="text-gold text-sm font-medium mt-1">Founder & CEO</p>
+              <p className="text-zinc-400 text-sm mt-0.5">JBJ Global Real Estate</p>
             </div>
           </motion.div>
         </div>
