@@ -81,14 +81,15 @@ export const FounderPhilosophySection = () => {
               className="flex-1"
             >
               {/* Attribution */}
-              <p className="text-black text-sm font-medium tracking-wide mb-6">
-                <span className="uppercase tracking-[0.15em]">Written by the Founder,</span>{" "}
+              <p className="text-gold text-sm font-medium tracking-wide mb-6">
+                <span className="uppercase tracking-[0.15em]">Written by Founder and CEO,</span>{" "}
                 <Link 
                   to="/founder" 
                   className="text-gold font-semibold hover:text-gold-light transition-colors underline underline-offset-4"
                 >
                   Jane Abou Jaoude
                 </Link>
+                <span className="block text-zinc-600 text-xs mt-1 normal-case tracking-normal">JBJ GLOBAL REAL ESTATE</span>
               </p>
 
               {/* Premium White Text Box */}
@@ -154,7 +155,7 @@ export const FounderPhilosophySection = () => {
                     Jane Abou Jaoude
                   </p>
                   <p className="text-gold text-sm font-medium mt-1 tracking-wide">
-                    Founder & CEO
+                    Founder and CEO
                   </p>
                   <p className="text-zinc-600 text-sm mt-0.5 tracking-wide">
                     JBJ Global Real Estate
