@@ -117,6 +117,7 @@ import JBJBrokerDashboard from "./pages/JBJBrokerDashboard";
 import JBJBrokerMessages from "./pages/JBJBrokerMessages";
 import JBJBrokerReports from "./pages/JBJBrokerReports";
 import FoundersAssistant from "./pages/FoundersAssistant";
+import BrokerAdminAssistant from "./pages/BrokerAdminAssistant";
 import ListingAdmin from "./pages/ListingAdmin";
 import MeetTheTeam from "./pages/MeetTheTeam";
 import OurBrokers from "./pages/OurBrokers";
@@ -276,6 +277,7 @@ const App = () => (
                 <Route path="/jbj-broker-messages" element={<JBJBrokerMessages />} />
                 <Route path="/jbj-broker-reports" element={<JBJBrokerReports />} />
                 <Route path="/founders-assistant" element={<FoundersAssistant />} />
+                <Route path="/broker-admin-assistant" element={<BrokerAdminAssistant />} />
                 <Route path="/listing-admin/*" element={<ListingAdmin />} />
                 <Route path="/team" element={<MeetTheTeam />} />
                 <Route path="/meet-the-team" element={<Navigate to="/team" replace />} />
