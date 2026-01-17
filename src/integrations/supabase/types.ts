@@ -764,6 +764,39 @@ export type Database = {
         }
         Relationships: []
       }
+      banking_access_audit: {
+        Row: {
+          access_type: string
+          accessed_at: string | null
+          id: string
+          ip_address: unknown
+          partner_id: string | null
+          user_agent: string | null
+          user_email: string | null
+          user_id: string | null
+        }
+        Insert: {
+          access_type: string
+          accessed_at?: string | null
+          id?: string
+          ip_address?: unknown
+          partner_id?: string | null
+          user_agent?: string | null
+          user_email?: string | null
+          user_id?: string | null
+        }
+        Update: {
+          access_type?: string
+          accessed_at?: string | null
+          id?: string
+          ip_address?: unknown
+          partner_id?: string | null
+          user_agent?: string | null
+          user_email?: string | null
+          user_id?: string | null
+        }
+        Relationships: []
+      }
       blocked_email_domains: {
         Row: {
           created_at: string | null
@@ -7686,7 +7719,7 @@ export type Database = {
             foreignKeyName: "referral_commissions_referral_partner_id_fkey"
             columns: ["referral_partner_id"]
             isOneToOne: false
-            referencedRelation: "referral_partners_secure"
+            referencedRelation: "referral_partners_safe"
             referencedColumns: ["id"]
           },
         ]
@@ -7746,7 +7779,58 @@ export type Database = {
             foreignKeyName: "referral_leads_referral_partner_id_fkey"
             columns: ["referral_partner_id"]
             isOneToOne: false
-            referencedRelation: "referral_partners_secure"
+            referencedRelation: "referral_partners_safe"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      referral_partner_bank_vault: {
+        Row: {
+          bank_account_number: string | null
+          bank_iban: string | null
+          bank_name: string | null
+          created_at: string | null
+          created_by: string | null
+          id: string
+          partner_id: string
+          updated_at: string | null
+          updated_by: string | null
+        }
+        Insert: {
+          bank_account_number?: string | null
+          bank_iban?: string | null
+          bank_name?: string | null
+          created_at?: string | null
+          created_by?: string | null
+          id?: string
+          partner_id: string
+          updated_at?: string | null
+          updated_by?: string | null
+        }
+        Update: {
+          bank_account_number?: string | null
+          bank_iban?: string | null
+          bank_name?: string | null
+          created_at?: string | null
+          created_by?: string | null
+          id?: string
+          partner_id?: string
+          updated_at?: string | null
+          updated_by?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "referral_partner_bank_vault_partner_id_fkey"
+            columns: ["partner_id"]
+            isOneToOne: true
+            referencedRelation: "referral_partners"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "referral_partner_bank_vault_partner_id_fkey"
+            columns: ["partner_id"]
+            isOneToOne: true
+            referencedRelation: "referral_partners_safe"
             referencedColumns: ["id"]
           },
         ]
@@ -7800,7 +7884,7 @@ export type Database = {
             foreignKeyName: "referral_partner_banking_partner_id_fkey"
             columns: ["partner_id"]
             isOneToOne: true
-            referencedRelation: "referral_partners_secure"
+            referencedRelation: "referral_partners_safe"
             referencedColumns: ["id"]
           },
         ]
@@ -7845,7 +7929,7 @@ export type Database = {
             foreignKeyName: "referral_partner_banking_access_logs_partner_id_fkey"
             columns: ["partner_id"]
             isOneToOne: false
-            referencedRelation: "referral_partners_secure"
+            referencedRelation: "referral_partners_safe"
             referencedColumns: ["id"]
           },
         ]
@@ -7854,9 +7938,6 @@ export type Database = {
         Row: {
           approved_at: string | null
           approved_by: string | null
-          bank_account_number: string | null
-          bank_iban: string | null
-          bank_name: string | null
           commission_rate: number
           created_at: string
           email: string
@@ -7876,9 +7957,6 @@ export type Database = {
         Insert: {
           approved_at?: string | null
           approved_by?: string | null
-          bank_account_number?: string | null
-          bank_iban?: string | null
-          bank_name?: string | null
           commission_rate?: number
           created_at?: string
           email: string
@@ -7898,9 +7976,6 @@ export type Database = {
         Update: {
           approved_at?: string | null
           approved_by?: string | null
-          bank_account_number?: string | null
-          bank_iban?: string | null
-          bank_name?: string | null
           commission_rate?: number
           created_at?: string
           email?: string
@@ -9530,19 +9605,15 @@ export type Database = {
           },
         ]
       }
-      referral_partners_secure: {
+      referral_partners_safe: {
         Row: {
           approved_at: string | null
           approved_by: string | null
-          bank_account_number: string | null
-          bank_iban: string | null
-          bank_name: string | null
           commission_rate: number | null
           created_at: string | null
           email: string | null
           full_name: string | null
           id: string | null
-          is_owner: boolean | null
           notes: string | null
           partner_type: string | null
           phone_e164: string | null
@@ -9557,18 +9628,14 @@ export type Database = {
         Insert: {
           approved_at?: string | null
           approved_by?: string | null
-          bank_account_number?: never
-          bank_iban?: never
-          bank_name?: never
           commission_rate?: number | null
           created_at?: string | null
-          email?: never
+          email?: string | null
           full_name?: string | null
           id?: string | null
-          is_owner?: never
           notes?: string | null
           partner_type?: string | null
-          phone_e164?: never
+          phone_e164?: string | null
           referral_code?: string | null
           status?: string | null
           total_conversions?: number | null
@@ -9580,18 +9647,14 @@ export type Database = {
         Update: {
           approved_at?: string | null
           approved_by?: string | null
-          bank_account_number?: never
-          bank_iban?: never
-          bank_name?: never
           commission_rate?: number | null
           created_at?: string | null
-          email?: never
+          email?: string | null
           full_name?: string | null
           id?: string | null
-          is_owner?: never
           notes?: string | null
           partner_type?: string | null
-          phone_e164?: never
+          phone_e164?: string | null
           referral_code?: string | null
           status?: string | null
           total_conversions?: number | null
