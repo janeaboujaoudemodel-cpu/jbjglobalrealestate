@@ -730,8 +730,8 @@ const AIHub = () => {
         {/* Gold Divider */}
         <div className="h-px bg-gradient-to-r from-transparent via-gold/40 to-transparent" />
 
-        {/* JOIN SECTION */}
-        <section className="py-16 md:py-20 bg-[#0D0D0D]">
+        {/* JOIN SECTION - WHITE BACKGROUND */}
+        <section className="py-16 md:py-20 bg-white">
           <div className="container mx-auto px-4">
             <motion.div
               className="max-w-3xl mx-auto text-center"
@@ -739,7 +739,7 @@ const AIHub = () => {
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true }}
             >
-              <h2 className="text-2xl md:text-3xl font-bold text-white mb-6">
+              <h2 className="text-2xl md:text-3xl font-bold text-black mb-6">
                 {user ? (
                   <>Welcome back, <span className="text-gold">{user.email?.split('@')[0]}</span>!</>
                 ) : (
@@ -752,14 +752,14 @@ const AIHub = () => {
                 {hubBenefits.map((feature, idx) => (
                   <motion.div
                     key={idx}
-                    className="flex items-center gap-2 p-3 rounded-lg border border-gold/20 bg-gold/5"
+                    className="flex items-center gap-2 p-3 rounded-lg border border-gold/30 bg-gradient-to-r from-[#F5F0E6] to-[#FBF8F3]"
                     initial={{ opacity: 0, x: -20 }}
                     whileInView={{ opacity: 1, x: 0 }}
                     viewport={{ once: true }}
                     transition={{ delay: idx * 0.08 }}
                   >
-                    <CheckCircle2 className="w-4 h-4 text-emerald-400 flex-shrink-0" />
-                    <span className="text-white text-left text-sm">{feature}</span>
+                    <CheckCircle2 className="w-4 h-4 text-emerald-500 flex-shrink-0" />
+                    <span className="text-black text-left text-sm">{feature}</span>
                   </motion.div>
                 ))}
               </div>
@@ -768,8 +768,8 @@ const AIHub = () => {
               {user ? (
                 <Button 
                   onClick={() => navigate("/my-account")}
-                  className="bg-gradient-to-r from-gold to-gold-dark text-black font-bold px-10 py-6 text-base shadow-lg hover:brightness-110 transition-all"
-                  style={{ boxShadow: "0 0 25px rgba(203, 166, 75, 0.35)" }}
+                  variant="dark"
+                  className="px-10 py-6 text-base shadow-lg"
                 >
                   <Sparkles className="w-5 h-5 mr-2" />
                   Access All Tools
@@ -779,14 +779,14 @@ const AIHub = () => {
                 <div className="space-y-4">
                   <Button 
                     onClick={() => navigate("/auth?redirect=/ai-hub")}
-                    className="bg-gradient-to-r from-gold to-gold-dark text-black font-bold px-10 py-6 text-base shadow-lg hover:brightness-110 transition-all"
-                    style={{ boxShadow: "0 0 25px rgba(203, 166, 75, 0.35)" }}
+                    variant="dark"
+                    className="px-10 py-6 text-base shadow-lg"
                   >
                     <Gift className="w-5 h-5 mr-2" />
                     Sign In / Create Account
                     <ArrowUpRight className="w-5 h-5 ml-2" />
                   </Button>
-                  <p className="text-gold/70 text-sm">
+                  <p className="text-gold text-sm">
                     100% Free — No Credit Card Required
                   </p>
                 </div>

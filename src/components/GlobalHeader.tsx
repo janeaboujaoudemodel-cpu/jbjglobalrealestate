@@ -172,11 +172,11 @@ const GlobalHeader = () => {
                     <ChevronDown className="w-3 h-3" />
                   </button>
                 </DropdownMenuTrigger>
-                <DropdownMenuContent align="center" className="bg-black border-zinc-800 min-w-[200px] mt-2">
+                <DropdownMenuContent align="center" className="bg-white border-gold/30 min-w-[200px] mt-2 shadow-lg">
                   {propertiesLinks.map((link) => (
                     <DropdownMenuItem key={link.href} asChild>
-                      <Link to={link.href} className="flex items-center gap-2 text-zinc-300 hover:text-gold py-2.5">
-                        <link.icon className="w-4 h-4" />
+                      <Link to={link.href} className="flex items-center gap-2 text-black hover:text-gold hover:bg-gold/10 py-2.5">
+                        <link.icon className="w-4 h-4 text-gold" />
                         {link.label}
                       </Link>
                     </DropdownMenuItem>
@@ -210,11 +210,11 @@ const GlobalHeader = () => {
                     <ChevronDown className="w-3 h-3" />
                   </button>
                 </DropdownMenuTrigger>
-                <DropdownMenuContent align="center" className="bg-black border-zinc-800 min-w-[160px] mt-2">
+                <DropdownMenuContent align="center" className="bg-white border-gold/30 min-w-[160px] mt-2 shadow-lg">
                   {guidesLinks.map((link) => (
                     <DropdownMenuItem key={link.href} asChild>
-                      <Link to={link.href} className="flex items-center gap-2 text-zinc-300 hover:text-gold py-2.5">
-                        <link.icon className="w-4 h-4" />
+                      <Link to={link.href} className="flex items-center gap-2 text-black hover:text-gold hover:bg-gold/10 py-2.5">
+                        <link.icon className="w-4 h-4 text-gold" />
                         {link.label}
                       </Link>
                     </DropdownMenuItem>
@@ -233,11 +233,11 @@ const GlobalHeader = () => {
                     <ChevronDown className="w-3 h-3" />
                   </button>
                 </DropdownMenuTrigger>
-                <DropdownMenuContent align="center" className="bg-black border-zinc-800 min-w-[180px] mt-2">
+                <DropdownMenuContent align="center" className="bg-white border-gold/30 min-w-[180px] mt-2 shadow-lg">
                   {marketIntelLinks.map((link) => (
                     <DropdownMenuItem key={link.href} asChild>
-                      <Link to={link.href} className="flex items-center gap-2 text-zinc-300 hover:text-gold py-2.5">
-                        <link.icon className="w-4 h-4" />
+                      <Link to={link.href} className="flex items-center gap-2 text-black hover:text-gold hover:bg-gold/10 py-2.5">
+                        <link.icon className="w-4 h-4 text-gold" />
                         {link.label}
                       </Link>
                     </DropdownMenuItem>
@@ -253,11 +253,11 @@ const GlobalHeader = () => {
                     <ChevronDown className="w-3 h-3" />
                   </button>
                 </DropdownMenuTrigger>
-                <DropdownMenuContent align="center" className="bg-black border-zinc-800 min-w-[160px] mt-2">
+                <DropdownMenuContent align="center" className="bg-white border-gold/30 min-w-[160px] mt-2 shadow-lg">
                   {moreLinks.map((link) => (
                     <DropdownMenuItem key={link.href} asChild>
-                      <Link to={link.href} className="flex items-center gap-2 text-zinc-300 hover:text-gold py-2.5">
-                        <link.icon className="w-4 h-4" />
+                      <Link to={link.href} className="flex items-center gap-2 text-black hover:text-gold hover:bg-gold/10 py-2.5">
+                        <link.icon className="w-4 h-4 text-gold" />
                         {link.label}
                       </Link>
                     </DropdownMenuItem>
