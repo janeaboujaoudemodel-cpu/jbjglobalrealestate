@@ -215,6 +215,7 @@ const App = () => (
                 <Route path="/broker-dashboard" element={<BrokerDashboard />} />
                 <Route path="/broker/training" element={<BrokerTraining />} />
                 <Route path="/ai-broker-workspace" element={<AIBrokerWorkspace />} />
+                <Route path="/ai-hub" element={<AIHub />} />
                 <Route path="/assistant-hub" element={<Navigate to="/ai-hub" replace />} />
                 <Route path="/interior-design-ai" element={<InteriorDesignAI />} />
                 <Route path="/property-evaluator" element={<PropertyEvaluator />} />

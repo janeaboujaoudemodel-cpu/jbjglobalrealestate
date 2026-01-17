@@ -107,7 +107,7 @@ const LEARNING_CATEGORIES = [
 
 const FREE_BOOKS = [
   {
-    title: "Objection Handling Bible",
+    title: "Objection Handling Guide",
     pages: 85,
     description: "Complete guide to handling every objection in UAE real estate",
     color: "from-red-500/20 to-rose-500/20",
@@ -115,7 +115,7 @@ const FREE_BOOKS = [
     textColor: "text-red-400",
   },
   {
-    title: "Cold Calling Scripts",
+    title: "Cold Calling Scripts Book",
     pages: 45,
     description: "Word-for-word scripts for every cold calling scenario",
     color: "from-blue-500/20 to-cyan-500/20",
@@ -123,7 +123,7 @@ const FREE_BOOKS = [
     textColor: "text-blue-400",
   },
   {
-    title: "Buyer Psychology Playbook",
+    title: "Buyer Psychology Guide",
     pages: 62,
     description: "Understanding and influencing buyer decisions",
     color: "from-amber-500/20 to-orange-500/20",
