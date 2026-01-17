@@ -358,7 +358,7 @@ const Contact = () => {
                                       className="flex-shrink-0 h-12 px-3 bg-green-600 hover:bg-green-500 text-white rounded-md flex items-center justify-center transition-colors"
                                       title="Chat on WhatsApp"
                                     >
-                                      <MessageCircle className="w-5 h-5" />
+                                      <MessageCircle className="w-5 h-5 text-white" />
                                     </a>
                                   )}
                                 </div>

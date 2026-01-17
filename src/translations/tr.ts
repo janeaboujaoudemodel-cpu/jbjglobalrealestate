@@ -68,7 +68,7 @@ export const tr = {
   'founder.learnMore': 'Kurucumuz Hakkında Daha Fazla Bilgi',
   'founder.title': 'Kurucu ve Genel Müdür',
   'founder.description1': 'JBJ Global Real Estate, sarsılmaz standartlar, gizlilik ve uzun vadeli vizyon üzerine kurulmuş, kurucu liderliğindeki bir gayrimenkul aracı kuruluşudur.',
-  'founder.description2': 'Jane Abou Jaoude, hesap verebilirlik ve gizlilik üzerine kurulu bir felsefe ile liderlik eder, sadece genişlemek yerine dayanıklılık için tasarlanmış organizasyonlar kurar.',
+  'founder.description2': 'Kurucu ve CEO Jane Abou Jaoude, hesap verebilirlik ve gizlilik üzerine kurulu bir felsefe ile liderlik eder, sadece genişlemek yerine dayanıklılık için tasarlanmış organizasyonlar kurar.',
   
   // Market Report
   'report.exclusive': 'Özel Ücretsiz İndirme',

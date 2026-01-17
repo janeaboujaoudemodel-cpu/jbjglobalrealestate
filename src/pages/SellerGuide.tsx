@@ -669,7 +669,7 @@ const SellerGuide = () => {
                   rel="noopener noreferrer"
                   className="flex items-center gap-2 text-zinc-400 hover:text-gold transition-colors"
                 >
-                  <MessageCircle className="w-4 h-4" />
+                  <MessageCircle className="w-4 h-4 text-green-500" />
                   WhatsApp: {CONTACT_INFO.phone}
                 </a>
                 <a 
@@ -720,8 +720,8 @@ const SellerGuide = () => {
           </div>
         </section>
 
-        {/* Guide Navigation */}
-        <section className="py-8 border-t border-zinc-800">
+        {/* Guide Navigation - White background to separate from footer */}
+        <section className="py-12 bg-white border-t border-zinc-200">
           <div className="container mx-auto px-4">
             <GuideNavigation current="/seller-guide" guides={GUIDE_LINKS} />
           </div>

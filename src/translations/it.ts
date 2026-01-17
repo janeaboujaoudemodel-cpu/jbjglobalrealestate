@@ -68,7 +68,7 @@ export const it = {
   'founder.learnMore': 'Scopri di Più sul Nostro Fondatore',
   'founder.title': 'Fondatrice e Direttrice Generale',
   'founder.description1': 'JBJ Global Real Estate è un\'agenzia immobiliare guidata dal fondatore, costruita su standard incrollabili, discrezione e visione a lungo termine.',
-  'founder.description2': 'Jane Abou Jaoude guida con una filosofia radicata nella responsabilità e nella discrezione, costruendo organizzazioni progettate per durare piuttosto che semplicemente espandersi.',
+  'founder.description2': 'La Fondatrice e CEO Jane Abou Jaoude guida con una filosofia radicata nella responsabilità e nella discrezione, costruendo organizzazioni progettate per durare piuttosto che semplicemente espandersi.',
   
   // Market Report
   'report.exclusive': 'Download Esclusivo Gratuito',

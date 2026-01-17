@@ -307,7 +307,7 @@ const Footer = () => {
               rel="noopener noreferrer"
               className="flex items-center gap-2 text-white hover:text-gold transition-colors text-sm md:text-base"
             >
-              <MessageCircle className="w-4 h-4 text-gold flex-shrink-0" />
+              <MessageCircle className="w-4 h-4 text-green-500 flex-shrink-0" />
               <span>WhatsApp Us</span>
             </a>
             <span className="text-zinc-600 hidden md:inline">|</span>

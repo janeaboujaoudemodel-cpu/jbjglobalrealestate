@@ -65,7 +65,7 @@ export const GuideCTA = ({
           <>
             <a href={getWhatsAppUrl()}>
               <Button variant="outline" className="border-green-500/50 text-green-400 hover:bg-green-500/10 px-6 py-3">
-                <MessageSquare className="w-5 h-5 mr-2" />
+                <MessageSquare className="w-5 h-5 mr-2 text-green-500" />
                 WhatsApp
               </Button>
             </a>

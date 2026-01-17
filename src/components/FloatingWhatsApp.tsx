@@ -72,7 +72,7 @@ const FloatingWhatsApp = () => {
         className="fixed bottom-6 right-6 z-50 w-10 h-10 bg-green-600 hover:bg-green-500 text-white rounded-full shadow-lg hover:shadow-xl transition-all duration-300 hover:scale-110 flex items-center justify-center"
         aria-label="Show WhatsApp chat"
       >
-        <MessageCircle className="w-5 h-5" />
+        <MessageCircle className="w-5 h-5 text-white" />
       </button>
     );
   }
