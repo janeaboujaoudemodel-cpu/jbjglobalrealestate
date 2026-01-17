@@ -1,18 +1,12 @@
 import { Link } from "react-router-dom";
 import { motion } from "framer-motion";
-import { Award, Users, Building2, Globe, Target, Shield, ArrowUpRight, Sparkles, CheckCircle } from "lucide-react";
 import Footer from "@/components/Footer";
-import { Button } from "@/components/ui/button";
-import { useCountUp } from "@/hooks/useCountUp";
-import { COMPANY_STATS } from "@/constants/stats";
 import { SEOHead, pagesSEO } from "@/components/SEOHead";
-import { FounderPhilosophySection } from "@/components/FounderPhilosophySection";
 import founderProfessional from "@/assets/founder-professional.jpeg";
 import luxuryVillaHero from "@/assets/luxury-villa-hero.jpeg";
-import coupleYachtDubai from "@/assets/couple-yacht-dubai.png";
 
 const fadeInUp = {
-  hidden: { opacity: 0, y: 30 },
+  hidden: { opacity: 0, y: 20 },
   visible: { opacity: 1, y: 0, transition: { duration: 0.6 } }
 };
 
@@ -20,395 +14,384 @@ const staggerContainer = {
   hidden: { opacity: 0 },
   visible: {
     opacity: 1,
-    transition: { staggerChildren: 0.1, delayChildren: 0.1 }
+    transition: { staggerChildren: 0.15, delayChildren: 0.1 }
   }
 };
 
-const CounterStat = ({ end, suffix, prefix, label }: { end: number; suffix: string; prefix: string; label: string }) => {
-  const { ref, formattedValue } = useCountUp({ end, suffix, prefix, duration: 2500 });
-
-  return (
-    <div ref={ref} className="text-center p-8 bg-zinc-900/50 rounded-2xl border border-zinc-800">
-      <p 
-        className="text-transparent bg-clip-text bg-gradient-to-r from-gold via-gold-light to-gold text-4xl md:text-5xl font-bold mb-3" 
-        style={{ fontFamily: "Poppins, sans-serif" }}
-      >
-        {formattedValue}
-      </p>
-      <p className="text-zinc-400 text-sm uppercase tracking-wider">{label}</p>
-    </div>
-  );
-};
-
 const About = () => {
-  const stats = [
-    COMPANY_STATS.yearsInDubai,
-    COMPANY_STATS.brokersTrainedBy,
-    COMPANY_STATS.socialFollowers,
-    COMPANY_STATS.teamManaged,
-  ];
-
-  const values = [
-    {
-      icon: Shield,
-      title: "Trust & Integrity",
-      description: "We build lasting relationships founded on transparency, honesty, and unwavering commitment to our clients' best interests.",
-      color: "from-blue-500 to-cyan-500"
-    },
-    {
-      icon: Target,
-      title: "Excellence",
-      description: "Every transaction is handled with meticulous attention to detail, ensuring exceptional outcomes for our distinguished clientele.",
-      color: "from-purple-500 to-fuchsia-500"
-    },
-    {
-      icon: Globe,
-      title: "UAE Focus",
-      description: "Serving UAE-based and international clients interested in UAE real estate.",
-      color: "from-gold to-gold-dark"
-    },
-  ];
-
-  const milestones = [
-    { year: "2015", event: "Jane's Beauty — First Business (Age 16)" },
-    { year: "2020", event: "Relocated to Dubai" },
-    { year: "2021", event: "Real Estate with DAMAC" },
-    { year: "2021–2022", event: "Head of Quality & Operations at Al-Ghazal Transportation" },
-    { year: "2022–2024", event: "Brokerage Training & Business Development" },
-    { year: "2025", event: "Founded JBJ Global Real Estate Brokerage" },
-  ];
-
   return (
     <>
       <SEOHead {...pagesSEO.about} />
       <div className="min-h-screen bg-black">
-      {/* Hero Section */}
-      <section className="relative h-[80vh] flex items-center justify-center overflow-hidden">
-        <div className="absolute inset-0">
-          <img 
-            src={luxuryVillaHero} 
-            alt="About JBJ Global Real Estate" 
-            className="w-full h-full object-cover"
-          />
-          <div className="absolute inset-0 bg-gradient-to-b from-black/70 via-black/50 to-black" />
-        </div>
         
-        <motion.div 
-          className="relative z-10 text-center px-4 max-w-4xl mx-auto"
-          initial="hidden"
-          animate="visible"
-          variants={staggerContainer}
-        >
-          <motion.span 
-            className="inline-block text-gold text-xs uppercase tracking-[0.4em] mb-6"
-            variants={fadeInUp}
-          >
-            About Us
-          </motion.span>
-          <motion.h1 
-            className="text-white text-4xl md:text-6xl lg:text-7xl font-bold mb-6"
-            style={{ fontFamily: "Poppins, sans-serif" }}
-            variants={fadeInUp}
-          >
-            Dubai's Trusted<br />
-            <span className="text-transparent bg-clip-text bg-gradient-to-r from-gold to-gold-light">
-              Real Estate Brokerage
-            </span>
-          </motion.h1>
-          <motion.p 
-            className="text-zinc-400 text-lg md:text-xl max-w-2xl mx-auto"
-            variants={fadeInUp}
-          >
-            JBJ Global Real Estate is licensed to BUY, SELL, and RENT real estate, serving UAE-based and international clients 
-            with expert property services across the UAE.
-          </motion.p>
-        </motion.div>
-      </section>
-
-      {/* Founder-Led Philosophy & Advisory Positioning */}
-      <FounderPhilosophySection />
-
-      {/* Stats Section */}
-      <section className="py-20 relative overflow-hidden">
-        <div 
-          className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[800px] h-[800px] pointer-events-none"
-          style={{
-            background: "radial-gradient(ellipse at center, hsl(40 32% 51% / 0.08) 0%, transparent 60%)",
-          }}
-        />
-        <div className="container mx-auto px-4 relative z-10">
-          <motion.div 
-            className="grid grid-cols-2 lg:grid-cols-4 gap-6"
-            initial="hidden"
-            whileInView="visible"
-            viewport={{ once: true }}
-            variants={staggerContainer}
-          >
-            {stats.map((stat) => (
-              <motion.div key={stat.label} variants={fadeInUp}>
-                <CounterStat {...stat} />
-              </motion.div>
-            ))}
-          </motion.div>
-        </div>
-      </section>
-
-      {/* Our Story Section */}
-      <section className="py-20">
-        <div className="container mx-auto px-4">
-          <div className="grid lg:grid-cols-2 gap-16 items-center">
-            <motion.div
-              initial={{ opacity: 0, x: -30 }}
-              whileInView={{ opacity: 1, x: 0 }}
-              viewport={{ once: true }}
-              transition={{ duration: 0.6 }}
-            >
-              <span className="text-gold text-xs uppercase tracking-[0.3em] mb-4 block">Our Story</span>
-              <h2 
-                className="text-white text-3xl md:text-5xl font-bold mb-6"
-                style={{ fontFamily: "Poppins, sans-serif" }}
-              >
-                Built on Vision,<br />
-                <span className="text-transparent bg-clip-text bg-gradient-to-r from-gold to-gold-light">
-                  Driven by Results
-                </span>
-              </h2>
-              <div className="space-y-5 text-zinc-400 leading-relaxed">
-                <p>
-                  Founded in Dubai, JBJ Global Real Estate is licensed to BUY, SELL, and RENT 
-                  premium properties across the UAE.
-                </p>
-                <p>
-                  Our team of experienced brokers brings deep market knowledge and strong negotiation skills, 
-                  ensuring our clients achieve the best outcomes in their property transactions.
-                </p>
-                <p>
-                  Beyond brokerage, we connect clients with trusted independent professionals — including law firms, 
-                  mortgage specialists, visa consultants, and property managers — to provide comprehensive support throughout 
-                  their real estate journey. Mortgage, legal, visa, and corporate services are provided through licensed partners.
-                </p>
-              </div>
-              
-              <Link to="/founder">
-                <Button className="mt-8 bg-gradient-to-r from-gold to-gold-dark text-black font-semibold hover:opacity-90">
-                  Meet Our Founder
-                  <ArrowUpRight className="w-4 h-4 ml-2" />
-                </Button>
-              </Link>
-            </motion.div>
-            
-            <motion.div
-              initial={{ opacity: 0, x: 30 }}
-              whileInView={{ opacity: 1, x: 0 }}
-              viewport={{ once: true }}
-              transition={{ duration: 0.6 }}
-              className="relative"
-            >
-              <div className="aspect-[4/5] rounded-2xl overflow-hidden">
-                <img 
-                  src={founderProfessional} 
-                  alt="Jane Abou Jaoude - Founder" 
-                  className="w-full h-full object-cover object-top"
-                />
-              </div>
-              <div className="absolute -bottom-6 -left-6 bg-zinc-900 border border-gold/30 rounded-xl p-6 max-w-xs">
-                <p className="text-gold font-semibold mb-1">Jane Abou Jaoude</p>
-                <p className="text-zinc-400 text-sm">Founder & Managing Director, JBJ Global Real Estate</p>
-              </div>
-            </motion.div>
+        {/* SECTION 1 — HERO / POSITIONING */}
+        <section className="relative h-[60vh] min-h-[500px] flex items-center justify-center overflow-hidden">
+          <div className="absolute inset-0">
+            <img 
+              src={luxuryVillaHero} 
+              alt="About JBJ GLOBAL REAL ESTATE" 
+              className="w-full h-full object-cover"
+              loading="eager"
+              decoding="async"
+              fetchPriority="high"
+            />
+            <div className="absolute inset-0 bg-gradient-to-b from-black/80 via-black/60 to-black" />
           </div>
-        </div>
-      </section>
-
-      {/* Values Section */}
-      <section className="py-20 bg-gradient-to-b from-zinc-900/50 to-black">
-        <div className="container mx-auto px-4">
-          <motion.div 
-            className="text-center mb-16"
-            initial={{ opacity: 0, y: 20 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true }}
-          >
-            <span className="text-gold text-xs uppercase tracking-[0.3em] mb-4 block">Our Values</span>
-            <h2 
-              className="text-white text-3xl md:text-5xl font-bold"
-              style={{ fontFamily: "Poppins, sans-serif" }}
-            >
-              The Pillars of Our Success
-            </h2>
-          </motion.div>
           
           <motion.div 
-            className="grid md:grid-cols-3 gap-8"
+            className="relative z-10 text-center px-6 max-w-4xl mx-auto"
             initial="hidden"
-            whileInView="visible"
-            viewport={{ once: true }}
+            animate="visible"
             variants={staggerContainer}
           >
-            {values.map((value) => (
-              <motion.div 
-                key={value.title}
-                className="bg-zinc-900/50 border border-zinc-800 rounded-2xl p-8 hover:border-gold/30 transition-all duration-300 group"
-                variants={fadeInUp}
-              >
-                <div className={`w-16 h-16 rounded-xl bg-gradient-to-br ${value.color} flex items-center justify-center mb-6 group-hover:scale-110 transition-transform`}>
-                  <value.icon className="w-8 h-8 text-white" />
-                </div>
-                <h3 className="text-white text-xl font-bold mb-3">{value.title}</h3>
-                <p className="text-zinc-400 leading-relaxed">{value.description}</p>
-              </motion.div>
-            ))}
-          </motion.div>
-        </div>
-      </section>
-
-      {/* Timeline Section */}
-      <section className="py-20">
-        <div className="container mx-auto px-4">
-          <motion.div 
-            className="text-center mb-16"
-            initial={{ opacity: 0, y: 20 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true }}
-          >
-            <span className="text-gold text-xs uppercase tracking-[0.3em] mb-4 block">Our Journey</span>
-            <h2 
-              className="text-white text-3xl md:text-5xl font-bold"
+            <motion.span 
+              className="inline-block text-gold text-xs uppercase tracking-[0.4em] mb-6"
+              variants={fadeInUp}
+            >
+              About Us
+            </motion.span>
+            <motion.h1 
+              className="text-white text-3xl md:text-5xl lg:text-6xl font-semibold mb-8 leading-tight"
               style={{ fontFamily: "Poppins, sans-serif" }}
+              variants={fadeInUp}
             >
-              Milestones & Achievements
-            </h2>
+              JBJ GLOBAL REAL ESTATE
+            </motion.h1>
+            <motion.p 
+              className="text-zinc-300 text-lg md:text-xl max-w-3xl mx-auto leading-relaxed"
+              variants={fadeInUp}
+            >
+              A Dubai licensed brokerage authorized to BUY, SELL, and RENT real estate across the UAE, serving local and international clients.
+            </motion.p>
           </motion.div>
-          
-          <motion.div 
-            className="max-w-3xl mx-auto"
-            initial="hidden"
-            whileInView="visible"
-            viewport={{ once: true }}
-            variants={staggerContainer}
-          >
-            {milestones.map((milestone, index) => (
-              <motion.div 
-                key={milestone.year}
-                className="flex items-start gap-6 mb-8"
-                variants={fadeInUp}
-              >
-                <div className="flex-shrink-0 w-20 text-right">
-                  <span className="text-gold font-bold text-lg">{milestone.year}</span>
-                </div>
-                <div className="relative flex-shrink-0">
-                  <div className="w-4 h-4 rounded-full bg-gold" />
-                  {index < milestones.length - 1 && (
-                    <div className="absolute top-4 left-1/2 -translate-x-1/2 w-px h-12 bg-gold/30" />
-                  )}
-                </div>
-                <div className="flex-1 pb-8">
-                  <p className="text-white font-medium">{milestone.event}</p>
-                </div>
-              </motion.div>
-            ))}
-          </motion.div>
-        </div>
-      </section>
+        </section>
 
-      {/* Services Preview */}
-      <section className="py-20 bg-gradient-to-b from-zinc-900/50 to-black">
-        <div className="container mx-auto px-4">
-          <div className="grid lg:grid-cols-2 gap-16 items-center">
-            <motion.div
-              initial={{ opacity: 0, x: -30 }}
-              whileInView={{ opacity: 1, x: 0 }}
+        {/* SECTION 2 — FOUNDER STATEMENT (FIRST PERSON) */}
+        <section className="py-20 md:py-28">
+          <div className="container mx-auto px-6">
+            <motion.div 
+              className="max-w-5xl mx-auto"
+              initial="hidden"
+              whileInView="visible"
               viewport={{ once: true }}
-              transition={{ duration: 0.6 }}
-              className="relative"
+              variants={staggerContainer}
             >
-              <div className="aspect-video rounded-2xl overflow-hidden">
-                <img 
-                  src={coupleYachtDubai} 
-                  alt="Luxury Lifestyle" 
-                  className="w-full h-full object-cover"
-                />
-              </div>
-            </motion.div>
-            
-            <motion.div
-              initial={{ opacity: 0, x: 30 }}
-              whileInView={{ opacity: 1, x: 0 }}
-              viewport={{ once: true }}
-              transition={{ duration: 0.6 }}
-            >
-              <span className="text-gold text-xs uppercase tracking-[0.3em] mb-4 block">What We Offer</span>
-              <h2 
-                className="text-white text-3xl md:text-4xl font-bold mb-6"
-                style={{ fontFamily: "Poppins, sans-serif" }}
-              >
-                Comprehensive Services
-              </h2>
-              
-              <div className="space-y-4 mb-8">
-                {[
-                  "Property Sales & Rental Brokerage",
-                  "Holiday Homes & Short-Term Rentals",
-                  "Partner Introductions (Legal, Mortgage, Management)",
-                  "Luxury Concierge Services",
-                  "Design & Build via Sister Companies"
-                ].map((service) => (
-                  <div key={service} className="flex items-center gap-3">
-                    <CheckCircle className="w-5 h-5 text-gold flex-shrink-0" />
-                    <span className="text-zinc-300">{service}</span>
+              <div className="grid lg:grid-cols-[280px_1fr] gap-12 lg:gap-16 items-start">
+                {/* Founder Image */}
+                <motion.div 
+                  className="flex justify-center lg:justify-start"
+                  variants={fadeInUp}
+                >
+                  <Link to="/founder" className="block group">
+                    <div className="w-48 h-48 md:w-56 md:h-56 rounded-full overflow-hidden border-2 border-gold/30 group-hover:border-gold/60 transition-colors duration-300">
+                      <img 
+                        src={founderProfessional} 
+                        alt="Jane Abou Jaoude, Founder and CEO of JBJ GLOBAL REAL ESTATE" 
+                        className="w-full h-full object-cover object-top"
+                        loading="lazy"
+                        decoding="async"
+                        fetchPriority="low"
+                      />
+                    </div>
+                  </Link>
+                </motion.div>
+
+                {/* Founder Statement */}
+                <motion.div variants={fadeInUp}>
+                  <p className="text-gold/80 text-sm uppercase tracking-widest mb-6">
+                    Written by the founder,{" "}
+                    <Link 
+                      to="/founder" 
+                      className="text-gold hover:text-gold-light underline underline-offset-4 transition-colors"
+                    >
+                      Jane Abou Jaoude
+                    </Link>
+                  </p>
+                  
+                  <div className="space-y-6 text-zinc-300 text-lg leading-relaxed">
+                    <p>
+                      I believe real estate decisions should never be driven by pressure, commissions, or promises that do not exist in reality.
+                    </p>
+                    <p>
+                      There is no such thing as guaranteed ROI. Real estate follows cycles, market forces, and external factors that cannot be controlled.
+                    </p>
+                    <p>
+                      My responsibility as the founder is to protect people from decisions made with incomplete information or unrealistic expectations.
+                    </p>
                   </div>
-                ))}
+                </motion.div>
               </div>
-              
-              <Link to="/services">
-                <Button className="bg-gradient-to-r from-gold to-gold-dark text-black font-semibold hover:opacity-90">
-                  Explore Our Services
-                  <ArrowUpRight className="w-4 h-4 ml-2" />
-                </Button>
-              </Link>
             </motion.div>
           </div>
-        </div>
-      </section>
+        </section>
 
-      {/* CTA Section */}
-      <section className="py-20">
-        <div className="container mx-auto px-4">
-          <motion.div 
-            className="max-w-4xl mx-auto text-center bg-gradient-to-br from-zinc-900 to-zinc-950 rounded-3xl p-12 border border-gold/20"
-            initial={{ opacity: 0, y: 20 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true }}
-          >
-            <Sparkles className="w-12 h-12 text-gold mx-auto mb-6" />
-            <h2 
-              className="text-white text-3xl md:text-4xl font-bold mb-4"
-              style={{ fontFamily: "Poppins, sans-serif" }}
+        {/* SECTION 3 — HOW JBJ OPERATES */}
+        <section className="py-16 md:py-24 bg-zinc-950/50">
+          <div className="container mx-auto px-6">
+            <motion.div 
+              className="max-w-4xl mx-auto"
+              initial="hidden"
+              whileInView="visible"
+              viewport={{ once: true }}
+              variants={staggerContainer}
             >
-              Ready to Find Your Perfect Property?
-            </h2>
-            <p className="text-zinc-400 text-lg mb-8 max-w-2xl mx-auto">
-              Connect with our brokerage team for expert guidance on buying, selling, or renting in the UAE
-            </p>
-            <div className="flex flex-wrap justify-center gap-4">
-              <Link to="/contact">
-                <Button className="bg-gradient-to-r from-gold to-gold-dark text-black font-bold px-8 py-6 text-base hover:opacity-90">
-                  Contact Us
-                  <ArrowUpRight className="w-5 h-5 ml-2" />
-                </Button>
-              </Link>
-              <Link to="/properties">
-                <Button variant="outline" className="border-white/30 text-white hover:bg-white/10 px-8 py-6 text-base">
-                  Browse Properties
-                  <ArrowUpRight className="w-5 h-5 ml-2" />
-                </Button>
-              </Link>
-            </div>
-          </motion.div>
-        </div>
-      </section>
+              <motion.h2 
+                className="text-gold text-xs uppercase tracking-[0.3em] mb-8"
+                variants={fadeInUp}
+              >
+                How We Operate
+              </motion.h2>
+              
+              <motion.div 
+                className="space-y-6 text-zinc-300 text-lg leading-relaxed"
+                variants={fadeInUp}
+              >
+                <p>
+                  At JBJ GLOBAL REAL ESTATE, we work with clients as if we are investing our own capital.
+                </p>
+                <p>
+                  We do not treat a client's portfolio as a transaction. We treat it as if it were our own.
+                </p>
+              </motion.div>
+            </motion.div>
+          </div>
+        </section>
 
-      <Footer />
+        {/* SECTION 4 — OFF-PLAN POLICY */}
+        <section className="py-16 md:py-24">
+          <div className="container mx-auto px-6">
+            <motion.div 
+              className="max-w-4xl mx-auto"
+              initial="hidden"
+              whileInView="visible"
+              viewport={{ once: true }}
+              variants={staggerContainer}
+            >
+              <motion.h2 
+                className="text-gold text-xs uppercase tracking-[0.3em] mb-8"
+                variants={fadeInUp}
+              >
+                Off-Plan Policy
+              </motion.h2>
+              
+              <motion.div 
+                className="space-y-6 text-zinc-300 text-lg leading-relaxed"
+                variants={fadeInUp}
+              >
+                <p>
+                  For off-plan properties, we do not charge clients any fees.
+                </p>
+                <p>
+                  We do not take money from clients to sell them a project.
+                </p>
+                <p>
+                  Our role is to protect, guide, and educate. It is not to push clients toward what benefits us or the company.
+                </p>
+              </motion.div>
+            </motion.div>
+          </div>
+        </section>
+
+        {/* SECTION 5 — MARKET TRUTH */}
+        <section className="py-16 md:py-24 bg-zinc-950/50">
+          <div className="container mx-auto px-6">
+            <motion.div 
+              className="max-w-4xl mx-auto"
+              initial="hidden"
+              whileInView="visible"
+              viewport={{ once: true }}
+              variants={staggerContainer}
+            >
+              <motion.h2 
+                className="text-gold text-xs uppercase tracking-[0.3em] mb-8"
+                variants={fadeInUp}
+              >
+                Our Position
+              </motion.h2>
+              
+              <motion.div 
+                className="space-y-6 text-zinc-300 text-lg leading-relaxed"
+                variants={fadeInUp}
+              >
+                <p>
+                  Developers promote their own projects.
+                </p>
+                <p>
+                  Sales agents sell what they are assigned.
+                </p>
+                <p>
+                  Our role is different.
+                </p>
+              </motion.div>
+            </motion.div>
+          </div>
+        </section>
+
+        {/* SECTION 6 — MARKET ANALYSIS APPROACH */}
+        <section className="py-16 md:py-24">
+          <div className="container mx-auto px-6">
+            <motion.div 
+              className="max-w-4xl mx-auto"
+              initial="hidden"
+              whileInView="visible"
+              viewport={{ once: true }}
+              variants={staggerContainer}
+            >
+              <motion.h2 
+                className="text-gold text-xs uppercase tracking-[0.3em] mb-8"
+                variants={fadeInUp}
+              >
+                Market Analysis
+              </motion.h2>
+              
+              <motion.div 
+                className="space-y-6 text-zinc-300 text-lg leading-relaxed"
+                variants={fadeInUp}
+              >
+                <p>
+                  We analyze the entire market. This includes developers, projects, locations, pricing history, and future planning zones.
+                </p>
+                <p>
+                  Our analysis relies on official government data, public planning strategies, infrastructure roadmaps, and historical real estate cycles.
+                </p>
+              </motion.div>
+            </motion.div>
+          </div>
+        </section>
+
+        {/* SECTION 7 — CLIENT DECISION AUTHORITY */}
+        <section className="py-16 md:py-24 bg-zinc-950/50">
+          <div className="container mx-auto px-6">
+            <motion.div 
+              className="max-w-4xl mx-auto"
+              initial="hidden"
+              whileInView="visible"
+              viewport={{ once: true }}
+              variants={staggerContainer}
+            >
+              <motion.h2 
+                className="text-gold text-xs uppercase tracking-[0.3em] mb-8"
+                variants={fadeInUp}
+              >
+                Your Decision
+              </motion.h2>
+              
+              <motion.div 
+                className="space-y-6 text-zinc-300 text-lg leading-relaxed"
+                variants={fadeInUp}
+              >
+                <p>
+                  Clients always make the final decision.
+                </p>
+                <p>
+                  Our role is to provide clarity, structure, and protection so decisions are made with confidence.
+                </p>
+              </motion.div>
+            </motion.div>
+          </div>
+        </section>
+
+        {/* SECTION 8 — POST-HANDOVER SERVICES */}
+        <section className="py-16 md:py-24">
+          <div className="container mx-auto px-6">
+            <motion.div 
+              className="max-w-4xl mx-auto"
+              initial="hidden"
+              whileInView="visible"
+              viewport={{ once: true }}
+              variants={staggerContainer}
+            >
+              <motion.h2 
+                className="text-gold text-xs uppercase tracking-[0.3em] mb-8"
+                variants={fadeInUp}
+              >
+                After Handover
+              </motion.h2>
+              
+              <motion.div 
+                className="space-y-6 text-zinc-300 text-lg leading-relaxed"
+                variants={fadeInUp}
+              >
+                <p>
+                  After handover, we continue supporting clients through rental strategy, resale planning, and long-term asset positioning.
+                </p>
+                <p>
+                  Developers do not manage rentals or resales. This is where an independent, licensed brokerage adds real value.
+                </p>
+              </motion.div>
+            </motion.div>
+          </div>
+        </section>
+
+        {/* SECTION 9 — ETHICS & LAW */}
+        <section className="py-16 md:py-24 bg-zinc-950/50">
+          <div className="container mx-auto px-6">
+            <motion.div 
+              className="max-w-4xl mx-auto"
+              initial="hidden"
+              whileInView="visible"
+              viewport={{ once: true }}
+              variants={staggerContainer}
+            >
+              <motion.h2 
+                className="text-gold text-xs uppercase tracking-[0.3em] mb-8"
+                variants={fadeInUp}
+              >
+                Our Standards
+              </motion.h2>
+              
+              <motion.div 
+                className="space-y-6 text-zinc-300 text-lg leading-relaxed"
+                variants={fadeInUp}
+              >
+                <p>
+                  We do not sell based on personal relationships, commission levels, or convenience.
+                </p>
+                <p>
+                  We respect the laws of the United Arab Emirates.
+                </p>
+                <p>
+                  We respect the client.
+                </p>
+                <p>
+                  We respect the capital being invested.
+                </p>
+              </motion.div>
+            </motion.div>
+          </div>
+        </section>
+
+        {/* SECTION 10 — SIGNATURE */}
+        <section className="py-20 md:py-28">
+          <div className="container mx-auto px-6">
+            <motion.div 
+              className="max-w-4xl mx-auto text-center"
+              initial="hidden"
+              whileInView="visible"
+              viewport={{ once: true }}
+              variants={staggerContainer}
+            >
+              <motion.div 
+                className="inline-block"
+                variants={fadeInUp}
+              >
+                <Link 
+                  to="/founder" 
+                  className="group"
+                >
+                  <p className="text-white text-xl md:text-2xl font-medium mb-2 group-hover:text-gold transition-colors">
+                    Jane Abou Jaoude
+                  </p>
+                </Link>
+                <p className="text-gold text-sm uppercase tracking-widest">
+                  Founder and CEO, JBJ GLOBAL REAL ESTATE
+                </p>
+              </motion.div>
+            </motion.div>
+          </div>
+        </section>
+
+        <Footer />
       </div>
     </>
   );
