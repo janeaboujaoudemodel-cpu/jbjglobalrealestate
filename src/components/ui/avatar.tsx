@@ -53,6 +53,13 @@ Avatar.displayName = AvatarPrimitive.Root.displayName;
  * - object-position: center 15% = focus on face, crop from bottom
  * - Maximum zoom while preserving head & shoulders
  */
+/**
+ * AvatarImage - GLOBAL PORTRAIT RULE (LOCKED - FINAL)
+ * - object-fit: cover = fills frame completely, no gaps
+ * - object-position: center 40% = MAXIMUM ZOOM on face, crop from bottom
+ * - Head and shoulders are NEVER cropped
+ * - NO GAPS around head/shoulders allowed
+ */
 const AvatarImage = React.forwardRef<
   React.ElementRef<typeof AvatarPrimitive.Image>,
   React.ComponentPropsWithoutRef<typeof AvatarPrimitive.Image>
@@ -66,7 +73,7 @@ const AvatarImage = React.forwardRef<
     className={cn("h-full w-full", className)}
     style={{
       objectFit: "cover",
-      objectPosition: "center 15%",
+      objectPosition: "center 40%",
       ...style,
     }}
     {...props}
