@@ -1,32 +1,29 @@
+/**
+ * Government-Safe Market Intelligence Methodology Page
+ * LOCKED STRUCTURE - Do not modify without explicit authorization
+ * 
+ * URL: /market-intelligence/methodology
+ * Purpose: Legal + Institutional Shield
+ */
+
 import { motion } from "framer-motion";
-import { Database, Shield, RefreshCw, FileCheck, AlertTriangle, ExternalLink, ArrowRight } from "lucide-react";
-import { Link } from "react-router-dom";
+import { Database, Shield, FileCheck, Clock, AlertTriangle, Scale, Bot } from "lucide-react";
 import Footer from "@/components/Footer";
 import { SEOHead } from "@/components/SEOHead";
 import { MarketIntelligenceSchema } from "@/components/seo/MarketIntelligenceSchema";
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { OPEN_DATA_SOURCES, MARKET_DISCLAIMER } from "@/config/open-data-config";
+import { APPROVED_DATA_SOURCES, GOVERNMENT_DISCLOSURES } from "@/config/government-cobranding";
+import { MASTER_LOCK } from "@/config/master-lock";
 
 const fadeInUp = {
-  hidden: { opacity: 0, y: 30 },
-  visible: { opacity: 1, y: 0, transition: { duration: 0.6 } }
+  hidden: { opacity: 0, y: 20 },
+  visible: { opacity: 1, y: 0, transition: { duration: 0.5 } }
 };
 
 const Methodology = () => {
-  const getFrequencyLabel = (freq: string) => {
-    switch (freq) {
-      case 'daily': return 'Daily';
-      case 'weekly': return 'Weekly';
-      case 'monthly': return 'Monthly';
-      case 'quarterly': return 'Quarterly';
-      default: return freq;
-    }
-  };
-
   return (
-    <div className="min-h-screen bg-black">
+    <div className="min-h-screen bg-background">
       <SEOHead 
-        title="Real Estate Market Data Methodology & Sources | How Dubai Property Prices Are Calculated | JBJ GLOBAL REAL ESTATE"
+        title="Market Intelligence Methodology & Data Sources | JBJ GLOBAL REAL ESTATE"
         description="Full transparency on how we source, aggregate, and present Dubai real estate market intelligence. Official government Open Data sources, update frequency, and what the data is and is not."
         keywords="real estate market data Dubai, how Dubai property prices are calculated, open data sources, market methodology, data transparency, government data sources"
         canonicalPath="/market-intelligence/methodology"
@@ -36,277 +33,240 @@ const Methodology = () => {
         description="Full transparency on data sources, update frequency, and aggregation methodology for Dubai real estate market intelligence."
       />
 
-      {/* Hero */}
-      <section className="relative min-h-[50vh] flex items-center overflow-hidden">
-        <div className="absolute inset-0 bg-gradient-to-b from-zinc-900/50 via-black to-black" />
-        <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_center,_var(--tw-gradient-stops))] from-gold/5 via-transparent to-transparent" />
-        
-        <motion.div 
-          className="relative z-10 container mx-auto px-4 py-24 text-center"
-          initial="hidden"
-          animate="visible"
-          variants={{ visible: { transition: { staggerChildren: 0.15 } } }}
-        >
-          <motion.div className="flex items-center justify-center gap-2 mb-6" variants={fadeInUp}>
-            <Database className="w-6 h-6 text-gold" />
-            <span className="text-gold text-sm uppercase tracking-[0.3em]">Market Intelligence</span>
-          </motion.div>
-
-          <motion.h1 
-            className="text-white text-4xl md:text-5xl lg:text-6xl font-bold mb-6"
-            style={{ fontFamily: "Poppins, sans-serif" }}
-            variants={fadeInUp}
+      {/* Hero - Calm, Institutional */}
+      <section className="relative py-20 border-b border-border/50">
+        <div className="container mx-auto px-4 max-w-4xl">
+          <motion.div 
+            className="text-center"
+            initial="hidden"
+            animate="visible"
+            variants={{ visible: { transition: { staggerChildren: 0.1 } } }}
           >
-            Methodology & Data Sources
-          </motion.h1>
+            <motion.div className="flex items-center justify-center gap-2 mb-4" variants={fadeInUp}>
+              <Database className="w-5 h-5 text-muted-foreground" />
+              <span className="text-muted-foreground text-sm uppercase tracking-widest">Market Intelligence</span>
+            </motion.div>
 
-          <motion.p className="text-zinc-400 text-lg md:text-xl max-w-2xl mx-auto" variants={fadeInUp}>
-            Full transparency on how we source, aggregate, and present market intelligence.
-          </motion.p>
-        </motion.div>
-      </section>
+            <motion.h1 
+              className="text-foreground text-3xl md:text-4xl font-semibold mb-4"
+              variants={fadeInUp}
+            >
+              Methodology & Data Sources
+            </motion.h1>
 
-      {/* Data Sources */}
-      <section className="py-16 border-t border-zinc-900">
-        <div className="container mx-auto px-4">
-          <h2 className="text-white text-2xl font-bold mb-8 text-center" style={{ fontFamily: "Poppins, sans-serif" }}>
-            Official Data Sources
-          </h2>
-
-          <div className="grid md:grid-cols-3 gap-6 max-w-5xl mx-auto">
-            {OPEN_DATA_SOURCES.map((source, index) => (
-              <motion.div
-                key={source.id}
-                initial={{ opacity: 0, y: 20 }}
-                whileInView={{ opacity: 1, y: 0 }}
-                viewport={{ once: true }}
-                transition={{ delay: index * 0.1 }}
-              >
-                <Card className="bg-zinc-900/50 border-zinc-800 h-full">
-                  <CardHeader>
-                    <div className="w-12 h-12 rounded-xl bg-gold/10 border border-gold/30 flex items-center justify-center mb-4">
-                      <Database className="w-6 h-6 text-gold" />
-                    </div>
-                    <CardTitle className="text-white">{source.name}</CardTitle>
-                    <p className="text-zinc-500 text-sm">{source.provider}</p>
-                  </CardHeader>
-                  <CardContent>
-                    <p className="text-zinc-400 text-sm mb-4">{source.description}</p>
-                    
-                    <div className="space-y-3">
-                      <div className="flex items-center justify-between text-sm">
-                        <span className="text-zinc-500">Update Frequency</span>
-                        <span className="text-white">{getFrequencyLabel(source.updateFrequency)}</span>
-                      </div>
-                      <div className="flex items-center justify-between text-sm">
-                        <span className="text-zinc-500">Last Updated</span>
-                        <span className="text-white">{source.lastUpdated}</span>
-                      </div>
-                    </div>
-
-                    <div className="mt-4 pt-4 border-t border-zinc-800">
-                      <p className="text-zinc-600 text-xs mb-2">Data Types</p>
-                      <div className="flex flex-wrap gap-1">
-                        {source.dataTypes.map((type) => (
-                          <span key={type} className="text-xs bg-zinc-800 text-zinc-400 px-2 py-1 rounded">
-                            {type}
-                          </span>
-                        ))}
-                      </div>
-                    </div>
-
-                    {source.url && (
-                      <a 
-                        href={source.url} 
-                        target="_blank" 
-                        rel="noopener noreferrer"
-                        className="mt-4 flex items-center gap-2 text-gold text-sm hover:text-gold-light"
-                      >
-                        <ExternalLink className="w-4 h-4" />
-                        Visit Source
-                      </a>
-                    )}
-                  </CardContent>
-                </Card>
-              </motion.div>
-            ))}
-          </div>
+            <motion.p 
+              className="text-muted-foreground text-lg max-w-2xl mx-auto leading-relaxed"
+              variants={fadeInUp}
+            >
+              Full transparency on how we source, aggregate, and present market intelligence.
+            </motion.p>
+          </motion.div>
         </div>
       </section>
 
-      {/* Methodology */}
-      <section className="py-16 border-t border-zinc-900">
-        <div className="container mx-auto px-4">
-          <div className="max-w-4xl mx-auto">
-            <h2 className="text-white text-2xl font-bold mb-8 text-center" style={{ fontFamily: "Poppins, sans-serif" }}>
-              Our Methodology
-            </h2>
-
-            <div className="space-y-6">
-              <Card className="bg-zinc-900/50 border-zinc-800">
-                <CardContent className="p-6">
-                  <div className="flex items-start gap-4">
-                    <div className="w-10 h-10 rounded-lg bg-gold/10 border border-gold/30 flex items-center justify-center shrink-0">
-                      <FileCheck className="w-5 h-5 text-gold" />
-                    </div>
-                    <div>
-                      <h3 className="text-white font-bold mb-2">Data Collection</h3>
-                      <p className="text-zinc-400 text-sm">
-                        We exclusively use official government Open Data portals. No scraping, no private platforms, 
-                        no third-party proprietary dashboards. All data is publicly available and sourced through 
-                        official APIs and download portals.
-                      </p>
-                    </div>
-                  </div>
-                </CardContent>
-              </Card>
-
-              <Card className="bg-zinc-900/50 border-zinc-800">
-                <CardContent className="p-6">
-                  <div className="flex items-start gap-4">
-                    <div className="w-10 h-10 rounded-lg bg-gold/10 border border-gold/30 flex items-center justify-center shrink-0">
-                      <RefreshCw className="w-5 h-5 text-gold" />
-                    </div>
-                    <div>
-                      <h3 className="text-white font-bold mb-2">Aggregation & Transformation</h3>
-                      <p className="text-zinc-400 text-sm">
-                        Raw data is aggregated to calculate trends, generate averages, create indexes, and compare 
-                        periods (YoY, QoQ). We never display raw datasets publicly or republish individual 
-                        transaction records. All outputs are transformed insights.
-                      </p>
-                    </div>
-                  </div>
-                </CardContent>
-              </Card>
-
-              <Card className="bg-zinc-900/50 border-zinc-800">
-                <CardContent className="p-6">
-                  <div className="flex items-start gap-4">
-                    <div className="w-10 h-10 rounded-lg bg-gold/10 border border-gold/30 flex items-center justify-center shrink-0">
-                      <Shield className="w-5 h-5 text-gold" />
-                    </div>
-                    <div>
-                      <h3 className="text-white font-bold mb-2">AI-Powered Analysis</h3>
-                      <p className="text-zinc-400 text-sm">
-                        AI is used to explain trends in plain English and answer "why" behind the numbers. 
-                        AI does not predict prices and does not give financial advice. All AI-generated content 
-                        is clearly labeled and provides descriptive analysis only.
-                      </p>
-                    </div>
-                  </div>
-                </CardContent>
-              </Card>
-
-              <Card className="bg-zinc-900/50 border-zinc-800">
-                <CardContent className="p-6">
-                  <div className="flex items-start gap-4">
-                    <div className="w-10 h-10 rounded-lg bg-gold/10 border border-gold/30 flex items-center justify-center shrink-0">
-                      <RefreshCw className="w-5 h-5 text-gold" />
-                    </div>
-                    <div>
-                      <h3 className="text-white font-bold mb-2">Update Frequency</h3>
-                      <p className="text-zinc-400 text-sm">
-                        Market intelligence is updated monthly or quarterly depending on source availability. 
-                        This is not real-time data. Each data point includes a timestamp showing when it was 
-                        last refreshed.
-                      </p>
-                    </div>
-                  </div>
-                </CardContent>
-              </Card>
+      <div className="container mx-auto px-4 max-w-4xl py-16 space-y-16">
+        
+        {/* SECTION 1 — Introduction (Authority + Neutral) */}
+        <motion.section
+          initial="hidden"
+          whileInView="visible"
+          viewport={{ once: true }}
+          variants={fadeInUp}
+        >
+          <div className="flex items-center gap-3 mb-6">
+            <div className="w-10 h-10 rounded-lg bg-muted flex items-center justify-center">
+              <Shield className="w-5 h-5 text-muted-foreground" />
             </div>
+            <h2 className="text-foreground text-xl font-semibold">Introduction</h2>
           </div>
-        </div>
-      </section>
-
-      {/* What This Is Not */}
-      <section className="py-16 border-t border-zinc-900">
-        <div className="container mx-auto px-4">
-          <Card className="bg-red-950/20 border-red-500/30 max-w-3xl mx-auto">
-            <CardContent className="p-8">
-              <div className="flex items-start gap-4">
-                <AlertTriangle className="w-8 h-8 text-red-400 shrink-0" />
-                <div>
-                  <h3 className="text-white font-bold text-xl mb-4">What This Data Is NOT</h3>
-                  <ul className="space-y-2 text-zinc-400 text-sm">
-                    <li className="flex items-start gap-2">
-                      <span className="text-red-400">✕</span>
-                      <span>Not financial or investment advice</span>
-                    </li>
-                    <li className="flex items-start gap-2">
-                      <span className="text-red-400">✕</span>
-                      <span>Not price predictions or forecasts</span>
-                    </li>
-                    <li className="flex items-start gap-2">
-                      <span className="text-red-400">✕</span>
-                      <span>Not property listings or inventory</span>
-                    </li>
-                    <li className="flex items-start gap-2">
-                      <span className="text-red-400">✕</span>
-                      <span>Not a recommendation to buy or sell</span>
-                    </li>
-                    <li className="flex items-start gap-2">
-                      <span className="text-red-400">✕</span>
-                      <span>Not real-time trading data</span>
-                    </li>
-                  </ul>
-                </div>
-              </div>
-            </CardContent>
-          </Card>
-        </div>
-      </section>
-
-      {/* Internal Links */}
-      <section className="py-16 border-t border-zinc-900">
-        <div className="container mx-auto px-4">
-          <h2 className="text-white text-2xl font-bold mb-8 text-center" style={{ fontFamily: "Poppins, sans-serif" }}>
-            Explore Market Intelligence
-          </h2>
-          <div className="grid md:grid-cols-3 gap-6 max-w-4xl mx-auto">
-            <Link to="/market-intelligence/overview" className="group">
-              <Card className="bg-zinc-900/50 border-zinc-800 hover:border-gold/30 transition-all h-full">
-                <CardContent className="p-6">
-                  <h3 className="text-white font-bold mb-2 group-hover:text-gold transition-colors">Market Overview</h3>
-                  <p className="text-zinc-500 text-sm mb-4">UAE & Dubai macro snapshot with transaction trends and price movements.</p>
-                  <ArrowRight className="w-5 h-5 text-gold" />
-                </CardContent>
-              </Card>
-            </Link>
-            <Link to="/market-intelligence/areas" className="group">
-              <Card className="bg-zinc-900/50 border-zinc-800 hover:border-gold/30 transition-all h-full">
-                <CardContent className="p-6">
-                  <h3 className="text-white font-bold mb-2 group-hover:text-gold transition-colors">Area Intelligence</h3>
-                  <p className="text-zinc-500 text-sm mb-4">Deep dive into Dubai neighborhoods with historical trends.</p>
-                  <ArrowRight className="w-5 h-5 text-gold" />
-                </CardContent>
-              </Card>
-            </Link>
-            <Link to="/market-intelligence/reports" className="group">
-              <Card className="bg-zinc-900/50 border-zinc-800 hover:border-gold/30 transition-all h-full">
-                <CardContent className="p-6">
-                  <h3 className="text-white font-bold mb-2 group-hover:text-gold transition-colors">Market Reports</h3>
-                  <p className="text-zinc-500 text-sm mb-4">Download monthly, quarterly, and annual market reports.</p>
-                  <ArrowRight className="w-5 h-5 text-gold" />
-                </CardContent>
-              </Card>
-            </Link>
+          
+          <div className="prose prose-neutral dark:prose-invert max-w-none">
+            <p className="text-muted-foreground leading-relaxed">
+              {MASTER_LOCK.BRAND.COMPANY_NAME} provides market intelligence to support transparency and informed understanding of the UAE real estate market.
+            </p>
+            <p className="text-muted-foreground leading-relaxed">
+              Our insights are derived from aggregated official government Open Data and publicly available statistical sources. This information is presented for informational and educational purposes only.
+            </p>
           </div>
-        </div>
-      </section>
+        </motion.section>
 
-      {/* Disclaimer */}
-      <section className="py-12 border-t border-zinc-900">
-        <div className="container mx-auto px-4">
-          <div className="max-w-3xl mx-auto bg-zinc-900/30 border border-zinc-800 rounded-xl p-6 text-center">
-            <div className="flex items-center justify-center gap-4 mb-4">
-              <Database className="w-5 h-5 text-gold" />
-              <Shield className="w-5 h-5 text-gold" />
+        {/* SECTION 2 — Data Sources (Transparency) */}
+        <motion.section
+          initial="hidden"
+          whileInView="visible"
+          viewport={{ once: true }}
+          variants={fadeInUp}
+        >
+          <div className="flex items-center gap-3 mb-6">
+            <div className="w-10 h-10 rounded-lg bg-muted flex items-center justify-center">
+              <Database className="w-5 h-5 text-muted-foreground" />
             </div>
-            <p className="text-zinc-500 text-sm whitespace-pre-line">{MARKET_DISCLAIMER}</p>
+            <h2 className="text-foreground text-xl font-semibold">Data Sources</h2>
           </div>
-        </div>
-      </section>
+          
+          <div className="bg-muted/30 rounded-lg border border-border p-6">
+            <p className="text-muted-foreground text-sm mb-6">
+              Our market intelligence draws from the following official government Open Data sources:
+            </p>
+            
+            <ul className="space-y-4">
+              {APPROVED_DATA_SOURCES.map((source) => (
+                <li key={source.id} className="flex items-start gap-3">
+                  <span className="text-muted-foreground mt-1">•</span>
+                  <div>
+                    <span className="text-foreground font-medium">{source.name}</span>
+                    <span className="text-muted-foreground"> – {source.dataType.toLowerCase()}</span>
+                  </div>
+                </li>
+              ))}
+            </ul>
+            
+            <p className="text-muted-foreground text-xs mt-6 pt-4 border-t border-border/50">
+              We name categories and sources, not raw dataset URLs. All data is used in accordance with official open data policies.
+            </p>
+          </div>
+        </motion.section>
+
+        {/* SECTION 3 — How the Data Is Used (Critical Section) */}
+        <motion.section
+          initial="hidden"
+          whileInView="visible"
+          viewport={{ once: true }}
+          variants={fadeInUp}
+        >
+          <div className="flex items-center gap-3 mb-6">
+            <div className="w-10 h-10 rounded-lg bg-muted flex items-center justify-center">
+              <FileCheck className="w-5 h-5 text-muted-foreground" />
+            </div>
+            <h2 className="text-foreground text-xl font-semibold">How the Data Is Used</h2>
+          </div>
+          
+          <div className="space-y-4 text-muted-foreground leading-relaxed">
+            <p>
+              Data is <strong className="text-foreground font-medium">aggregated</strong> across time periods and geographic areas to identify descriptive trends and patterns.
+            </p>
+            <p>
+              Data is <strong className="text-foreground font-medium">summarized</strong> to provide high-level insights without exposing individual transaction details.
+            </p>
+            <p>
+              Data is <strong className="text-foreground font-medium">contextualized</strong> to help users understand market conditions in plain language.
+            </p>
+            <p>
+              {MASTER_LOCK.BRAND.COMPANY_NAME} does <strong className="text-foreground font-medium">not</strong> publish raw government datasets, individual transaction records, or personally identifiable information.
+            </p>
+          </div>
+        </motion.section>
+
+        {/* SECTION 4 — What We Do NOT Do (VERY IMPORTANT) */}
+        <motion.section
+          initial="hidden"
+          whileInView="visible"
+          viewport={{ once: true }}
+          variants={fadeInUp}
+        >
+          <div className="flex items-center gap-3 mb-6">
+            <div className="w-10 h-10 rounded-lg bg-destructive/10 flex items-center justify-center">
+              <AlertTriangle className="w-5 h-5 text-destructive" />
+            </div>
+            <h2 className="text-foreground text-xl font-semibold">What We Do NOT Do</h2>
+          </div>
+          
+          <div className="bg-destructive/5 border border-destructive/20 rounded-lg p-6">
+            <p className="text-foreground leading-relaxed mb-4">
+              {MASTER_LOCK.BRAND.COMPANY_NAME} does not provide price predictions, investment advice, financial recommendations, or guarantees of performance.
+            </p>
+            <p className="text-muted-foreground leading-relaxed">
+              All market intelligence is <strong className="text-foreground font-medium">descriptive and historical</strong> in nature. We explain what has happened, not what will happen.
+            </p>
+          </div>
+        </motion.section>
+
+        {/* SECTION 5 — AI Usage Disclosure (MANDATORY) */}
+        <motion.section
+          initial="hidden"
+          whileInView="visible"
+          viewport={{ once: true }}
+          variants={fadeInUp}
+        >
+          <div className="flex items-center gap-3 mb-6">
+            <div className="w-10 h-10 rounded-lg bg-muted flex items-center justify-center">
+              <Bot className="w-5 h-5 text-muted-foreground" />
+            </div>
+            <h2 className="text-foreground text-xl font-semibold">AI Usage Disclosure</h2>
+          </div>
+          
+          <div className="bg-muted/30 rounded-lg border border-border p-6 space-y-4">
+            <p className="text-muted-foreground leading-relaxed">
+              Artificial intelligence tools are used to summarize, visualize, and explain aggregated data in plain language.
+            </p>
+            <p className="text-muted-foreground leading-relaxed">
+              AI systems do <strong className="text-foreground font-medium">not</strong> make decisions, recommendations, or predictions, and do not replace licensed professionals.
+            </p>
+            <p className="text-muted-foreground text-sm pt-4 border-t border-border/50">
+              All AI-generated content is clearly labeled and provides descriptive analysis only.
+            </p>
+          </div>
+        </motion.section>
+
+        {/* SECTION 6 — Update Frequency & Accuracy */}
+        <motion.section
+          initial="hidden"
+          whileInView="visible"
+          viewport={{ once: true }}
+          variants={fadeInUp}
+        >
+          <div className="flex items-center gap-3 mb-6">
+            <div className="w-10 h-10 rounded-lg bg-muted flex items-center justify-center">
+              <Clock className="w-5 h-5 text-muted-foreground" />
+            </div>
+            <h2 className="text-foreground text-xl font-semibold">Update Frequency & Accuracy</h2>
+          </div>
+          
+          <ul className="space-y-3 text-muted-foreground">
+            <li className="flex items-start gap-3">
+              <span className="text-muted-foreground mt-1">•</span>
+              <span>Data is updated periodically based on availability of official sources</span>
+            </li>
+            <li className="flex items-start gap-3">
+              <span className="text-muted-foreground mt-1">•</span>
+              <span>Update frequency varies by dataset (monthly, quarterly, or as published)</span>
+            </li>
+            <li className="flex items-start gap-3">
+              <span className="text-muted-foreground mt-1">•</span>
+              <span>"Last updated" timestamps are displayed where applicable</span>
+            </li>
+            <li className="flex items-start gap-3">
+              <span className="text-muted-foreground mt-1">•</span>
+              <span>This is not real-time data</span>
+            </li>
+          </ul>
+        </motion.section>
+
+        {/* SECTION 7 — Legal & Independence Statement (FINAL SHIELD) */}
+        <motion.section
+          initial="hidden"
+          whileInView="visible"
+          viewport={{ once: true }}
+          variants={fadeInUp}
+        >
+          <div className="flex items-center gap-3 mb-6">
+            <div className="w-10 h-10 rounded-lg bg-muted flex items-center justify-center">
+              <Scale className="w-5 h-5 text-muted-foreground" />
+            </div>
+            <h2 className="text-foreground text-xl font-semibold">Legal & Independence Statement</h2>
+          </div>
+          
+          <div className="bg-muted/50 rounded-lg border border-border p-6">
+            <p className="text-foreground leading-relaxed mb-4">
+              {MASTER_LOCK.BRAND.COMPANY_NAME} is a private licensed real estate brokerage.
+            </p>
+            <p className="text-muted-foreground leading-relaxed">
+              {GOVERNMENT_DISCLOSURES.PRIMARY}
+            </p>
+          </div>
+        </motion.section>
+
+      </div>
 
       <Footer />
     </div>
