@@ -11,7 +11,7 @@ import {
   ArrowRight,
   LogIn,
   Gift,
-  Bot,
+  Headphones,
   Palette,
   Film,
   Camera,
@@ -48,9 +48,9 @@ const BROKER_CIRCLE_BENEFITS = [
     description: "Direct access to a property coach",
   },
   {
-    icon: Bot,
-    title: "JBJ Personal Assistant",
-    description: "Daily task assistance, reminders & smart alerts",
+    icon: Headphones,
+    title: "Admin Support",
+    description: "Coordination, reminders, and operational support",
   },
   {
     icon: Palette,
@@ -81,7 +81,7 @@ const BROKER_CIRCLE_BENEFITS = [
 
 const CIRCLE_FEATURES = [
   "20+ AI-powered property tools",
-  "HR Manager & Personal Admin Support",
+  "HR Manager & Admin Support",
   "Property coach, designer, photographer & marketing tools",
   "Free courses and certifications",
   "24/7 Admin support",
