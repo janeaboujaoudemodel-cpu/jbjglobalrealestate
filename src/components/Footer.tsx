@@ -185,19 +185,21 @@ const Footer = () => {
         {/* Divider */}
         <div className="h-px bg-gradient-to-r from-transparent via-zinc-700 to-transparent mb-10" />
 
-        {/* Menu + Services + Toolkit Grid - Premium Layout */}
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-10 md:gap-8 mb-10 max-w-6xl mx-auto">
-          {/* Menu */}
-          <div className="text-center md:text-left">
-            <h4 className="text-gold font-semibold mb-5 text-sm uppercase tracking-[0.2em]">
-              Menu
-            </h4>
-            <ul className="space-y-2.5">
+        {/* Menu + Services + Toolkit Grid - Premium White Card Layout */}
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-6 md:gap-4 mb-10 max-w-6xl mx-auto">
+          {/* Menu Card */}
+          <div className="bg-white rounded-xl p-5 border border-zinc-200 shadow-sm">
+            <div className="bg-gradient-to-r from-[#F5F0E6] to-[#FBF8F3] rounded-lg px-3 py-1.5 mb-4 inline-block">
+              <h4 className="text-gold font-semibold text-sm uppercase tracking-[0.15em]">
+                Menu
+              </h4>
+            </div>
+            <ul className="space-y-2">
               {menuLinks.map((link) => (
                 <li key={link.href}>
                   <Link
                     to={link.href}
-                    className="text-white hover:text-gold transition-colors text-base inline-block"
+                    className="text-black hover:text-gold transition-colors text-sm inline-block"
                   >
                     {link.label}
                   </Link>
@@ -206,30 +208,54 @@ const Footer = () => {
             </ul>
           </div>
 
-          {/* Our Services */}
-          <div className="text-center md:text-left">
-            <h4 className="text-gold font-semibold mb-5 text-sm uppercase tracking-[0.2em]">
-              Our Services
-            </h4>
-            <div className="space-y-2.5">
+          {/* Our Services Card */}
+          <div className="bg-white rounded-xl p-5 border border-zinc-200 shadow-sm">
+            <div className="bg-gradient-to-r from-[#F5F0E6] to-[#FBF8F3] rounded-lg px-3 py-1.5 mb-4 inline-block">
+              <h4 className="text-gold font-semibold text-sm uppercase tracking-[0.15em]">
+                Our Services
+              </h4>
+            </div>
+            <div className="space-y-2">
               {serviceLinks.map((svc) => (
-                <DivisionAccordion key={svc.title} title={svc.title} items={svc.items} href={svc.href} />
+                <div key={svc.title}>
+                  <Link 
+                    to={svc.href}
+                    className="text-black hover:text-gold transition-colors text-sm font-medium block"
+                  >
+                    {svc.title}
+                  </Link>
+                  {svc.items.length > 0 && (
+                    <div className="pl-3 mt-1 space-y-1 border-l border-gold/30">
+                      {svc.items.map((item) => (
+                        <Link
+                          key={item.label}
+                          to={item.href}
+                          className="block text-gold hover:text-gold-dark transition-colors text-xs"
+                        >
+                          {item.label}
+                        </Link>
+                      ))}
+                    </div>
+                  )}
+                </div>
               ))}
             </div>
           </div>
 
-          {/* Broker Toolkit */}
-          <div className="text-center md:text-left">
-            <h4 className="text-gold font-semibold mb-5 text-sm uppercase tracking-[0.2em]">
-              Broker Toolkit
-            </h4>
-            <p className="text-zinc-500 text-xs mb-4">Guides & Resources</p>
-            <ul className="space-y-2.5">
+          {/* Broker Toolkit Card */}
+          <div className="bg-white rounded-xl p-5 border border-zinc-200 shadow-sm">
+            <div className="bg-gradient-to-r from-[#F5F0E6] to-[#FBF8F3] rounded-lg px-3 py-1.5 mb-4 inline-block">
+              <h4 className="text-gold font-semibold text-sm uppercase tracking-[0.15em]">
+                Broker Toolkit
+              </h4>
+            </div>
+            <p className="text-zinc-500 text-xs mb-3">Guides & Resources</p>
+            <ul className="space-y-2">
               {academyLinks.map((link) => (
                 <li key={link.href}>
                   <Link
                     to={link.href}
-                    className="text-white hover:text-gold transition-colors text-base inline-block"
+                    className="text-black hover:text-gold transition-colors text-sm inline-block"
                   >
                     {link.label}
                   </Link>
@@ -238,18 +264,20 @@ const Footer = () => {
             </ul>
           </div>
 
-          {/* Professional Tools */}
-          <div className="text-center md:text-left">
-            <h4 className="text-gold font-semibold mb-5 text-sm uppercase tracking-[0.2em]">
-              Professional Tools
-            </h4>
-            <p className="text-zinc-500 text-xs mb-4">AI-Powered Work Assistants</p>
-            <ul className="space-y-2.5">
+          {/* Professional Tools Card */}
+          <div className="bg-white rounded-xl p-5 border border-zinc-200 shadow-sm">
+            <div className="bg-gradient-to-r from-[#F5F0E6] to-[#FBF8F3] rounded-lg px-3 py-1.5 mb-4 inline-block">
+              <h4 className="text-gold font-semibold text-sm uppercase tracking-[0.15em]">
+                Professional Tools
+              </h4>
+            </div>
+            <p className="text-zinc-500 text-xs mb-3">AI-Powered Work Assistants</p>
+            <ul className="space-y-2">
               {professionalTools.map((link) => (
                 <li key={link.href}>
                   <Link
                     to={link.href}
-                    className="text-white hover:text-gold transition-colors text-base inline-block"
+                    className="text-black hover:text-gold transition-colors text-sm inline-block"
                   >
                     {link.label}
                   </Link>
@@ -258,18 +286,20 @@ const Footer = () => {
             </ul>
           </div>
 
-          {/* Careers */}
-          <div className="text-center md:text-left">
-            <h4 className="text-gold font-semibold mb-5 text-sm uppercase tracking-[0.2em]">
-              Careers
-            </h4>
-            <p className="text-zinc-500 text-xs mb-4">Join Our Team</p>
-            <ul className="space-y-2.5">
+          {/* Careers Card */}
+          <div className="bg-white rounded-xl p-5 border border-zinc-200 shadow-sm">
+            <div className="bg-gradient-to-r from-[#F5F0E6] to-[#FBF8F3] rounded-lg px-3 py-1.5 mb-4 inline-block">
+              <h4 className="text-gold font-semibold text-sm uppercase tracking-[0.15em]">
+                Careers
+              </h4>
+            </div>
+            <p className="text-zinc-500 text-xs mb-3">Join Our Team</p>
+            <ul className="space-y-2">
               {careerLinks.map((link) => (
                 <li key={link.href}>
                   <Link
                     to={link.href}
-                    className="text-white hover:text-gold transition-colors text-base inline-block"
+                    className="text-black hover:text-gold transition-colors text-sm inline-block"
                   >
                     {link.label}
                   </Link>
@@ -297,7 +327,7 @@ const Footer = () => {
               href={getCallUrl()}
               className="flex items-center gap-2 text-white hover:text-gold transition-colors text-sm md:text-base"
             >
-              <Phone className="w-4 h-4 text-gold flex-shrink-0" />
+              <Phone className="w-4 h-4 text-blue-500 flex-shrink-0" />
               <span>{CONTACT_INFO.phone}</span>
             </a>
             <span className="text-zinc-600 hidden md:inline">|</span>

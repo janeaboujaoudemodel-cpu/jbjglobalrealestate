@@ -663,10 +663,10 @@ const Contact = () => {
             {/* Call CTA */}
             <a 
               href={getCallUrl()}
-              className="flex items-center gap-4 bg-black border border-gold/30 hover:border-gold rounded-xl p-5 transition-all group hover:shadow-lg hover:shadow-gold/20"
+              className="flex items-center gap-4 bg-black border border-blue-800/50 hover:border-blue-600 rounded-xl p-5 transition-all group hover:shadow-lg hover:shadow-blue-600/20"
             >
-              <div className="w-12 h-12 bg-gold/20 rounded-full flex items-center justify-center group-hover:scale-110 transition-transform">
-                <Phone className="w-6 h-6 text-gold" />
+              <div className="w-12 h-12 bg-blue-600/20 rounded-full flex items-center justify-center group-hover:scale-110 transition-transform">
+                <Phone className="w-6 h-6 text-blue-500" />
               </div>
               <div>
                 <h3 className="text-white font-semibold mb-0.5" style={{ fontFamily: "Poppins, sans-serif" }}>

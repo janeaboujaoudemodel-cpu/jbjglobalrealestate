@@ -254,16 +254,16 @@ const Services = () => {
             ].map((tool) => (
               <Link key={tool.name} to={tool.link}>
                 <motion.div 
-                  className="p-6 rounded-2xl bg-zinc-900/50 border border-zinc-800 hover:border-white/30 transition-all duration-300 group cursor-pointer"
+                  className="p-6 rounded-2xl bg-white border border-zinc-200 hover:border-gold/50 hover:shadow-xl hover:shadow-gold/10 transition-all duration-300 group cursor-pointer"
                   whileHover={{ scale: 1.02 }}
                 >
                   <div className={`w-14 h-14 rounded-xl bg-gradient-to-br ${tool.color} flex items-center justify-center mb-4`}>
                     <tool.icon className="w-7 h-7 text-white" />
                   </div>
-                  <h4 className="text-white font-semibold mb-2 group-hover:text-gold transition-colors">
+                  <h4 className="text-black font-semibold mb-2 group-hover:text-gold transition-colors">
                     {tool.name}
                   </h4>
-                  <ArrowUpRight className="w-4 h-4 text-zinc-500 group-hover:text-gold group-hover:translate-x-1 group-hover:-translate-y-1 transition-all" />
+                  <ArrowUpRight className="w-4 h-4 text-zinc-400 group-hover:text-gold group-hover:translate-x-1 group-hover:-translate-y-1 transition-all" />
                 </motion.div>
               </Link>
             ))}

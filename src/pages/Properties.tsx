@@ -513,27 +513,27 @@ const Properties = () => {
                   )}
                 </Button>
               </DialogTrigger>
-              <DialogContent className="max-w-2xl bg-zinc-950 border-zinc-800 text-white p-0">
-                <DialogHeader className="p-6 border-b border-zinc-800">
-                  <DialogTitle className="text-xl font-semibold" style={{ fontFamily: "Poppins, sans-serif" }}>
+              <DialogContent className="max-w-2xl bg-white border-gold/30 text-black p-0">
+                <DialogHeader className="p-6 border-b border-gold/20 bg-gradient-to-r from-[#F5F0E6] to-[#FBF8F3]">
+                  <DialogTitle className="text-xl font-semibold text-gold" style={{ fontFamily: "Poppins, sans-serif" }}>
                     Advanced Filters
                   </DialogTitle>
                 </DialogHeader>
                 <ScrollArea className="max-h-[70vh]">
-                  <div className="p-6 space-y-6">
+                  <div className="p-6 space-y-6 bg-white">
                     {/* Property Type */}
                     <div>
-                      <label className="text-sm text-zinc-400 mb-2 block">Property Type</label>
+                      <label className="text-sm text-gold font-medium mb-2 block">Property Type</label>
                       <Select
                         value={filters.propertyType || "all"}
                         onValueChange={(value) => updateFilter("propertyType", value === "all" ? null : value)}
                       >
-                        <SelectTrigger className="w-full h-12 bg-zinc-900 border-zinc-700 text-white">
+                        <SelectTrigger className="w-full h-12 bg-[#F5F0E6] border-gold/30 text-black">
                           <SelectValue />
                         </SelectTrigger>
-                        <SelectContent className="bg-zinc-900 border-zinc-700">
+                        <SelectContent className="bg-white border-gold/30">
                           {PROPERTY_TYPES.map((type) => (
-                            <SelectItem key={type.value} value={type.value} className="text-white hover:bg-zinc-800">
+                            <SelectItem key={type.value} value={type.value} className="text-black hover:bg-gold/10 focus:bg-gold/10 focus:text-black">
                               {type.label}
                             </SelectItem>
                           ))}
@@ -544,7 +544,7 @@ const Properties = () => {
                     {/* Bedrooms & Bathrooms */}
                     <div className="grid grid-cols-2 gap-4">
                       <div>
-                        <label className="text-sm text-zinc-400 mb-2 block">Bedrooms</label>
+                        <label className="text-sm text-gold font-medium mb-2 block">Bedrooms</label>
                         <Select
                           value={filters.bedroomsMin === null ? "all" : filters.bedroomsMin === 0 ? "studio" : String(filters.bedroomsMin)}
                           onValueChange={(value) => {
@@ -553,13 +553,13 @@ const Properties = () => {
                             else updateFilter("bedroomsMin", parseInt(value));
                           }}
                         >
-                          <SelectTrigger className="w-full h-12 bg-zinc-900 border-zinc-700 text-white">
-                            <Bed className="w-4 h-4 mr-2 text-zinc-500" />
+                          <SelectTrigger className="w-full h-12 bg-[#F5F0E6] border-gold/30 text-black">
+                            <Bed className="w-4 h-4 mr-2 text-gold" />
                             <SelectValue />
                           </SelectTrigger>
-                          <SelectContent className="bg-zinc-900 border-zinc-700">
+                          <SelectContent className="bg-white border-gold/30">
                             {BEDROOM_OPTIONS.map((opt) => (
-                              <SelectItem key={opt.value} value={opt.value} className="text-white hover:bg-zinc-800">
+                              <SelectItem key={opt.value} value={opt.value} className="text-black hover:bg-gold/10 focus:bg-gold/10 focus:text-black">
                                 {opt.label}
                               </SelectItem>
                             ))}
@@ -567,18 +567,18 @@ const Properties = () => {
                         </Select>
                       </div>
                       <div>
-                        <label className="text-sm text-zinc-400 mb-2 block">Bathrooms</label>
+                        <label className="text-sm text-gold font-medium mb-2 block">Bathrooms</label>
                         <Select
                           value={filters.bathroomsMin === null ? "all" : String(filters.bathroomsMin)}
                           onValueChange={(value) => updateFilter("bathroomsMin", value === "all" ? null : parseInt(value))}
                         >
-                          <SelectTrigger className="w-full h-12 bg-zinc-900 border-zinc-700 text-white">
-                            <Bath className="w-4 h-4 mr-2 text-zinc-500" />
+                          <SelectTrigger className="w-full h-12 bg-[#F5F0E6] border-gold/30 text-black">
+                            <Bath className="w-4 h-4 mr-2 text-gold" />
                             <SelectValue />
                           </SelectTrigger>
-                          <SelectContent className="bg-zinc-900 border-zinc-700">
+                          <SelectContent className="bg-white border-gold/30">
                             {BATHROOM_OPTIONS.map((opt) => (
-                              <SelectItem key={opt.value} value={opt.value} className="text-white hover:bg-zinc-800">
+                              <SelectItem key={opt.value} value={opt.value} className="text-black hover:bg-gold/10 focus:bg-gold/10 focus:text-black">
                                 {opt.label}
                               </SelectItem>
                             ))}
@@ -589,60 +589,60 @@ const Properties = () => {
 
                     {/* Size Range */}
                     <div>
-                      <label className="text-sm text-zinc-400 mb-2 block">Size ({filters.sizeUnit})</label>
+                      <label className="text-sm text-gold font-medium mb-2 block">Size ({filters.sizeUnit})</label>
                       <div className="grid grid-cols-2 gap-4 mb-4">
                         <Input
                           type="number"
                           placeholder="Min"
                           value={filters.sizeMin || ""}
                           onChange={(e) => updateFilter("sizeMin", parseInt(e.target.value) || 0)}
-                          className="h-12 bg-zinc-900 border-zinc-700 text-white"
+                          className="h-12 bg-[#F5F0E6] border-gold/30 text-black placeholder:text-zinc-500"
                         />
                         <Input
                           type="number"
                           placeholder="Max"
                           value={filters.sizeMax < 50000 ? filters.sizeMax : ""}
                           onChange={(e) => updateFilter("sizeMax", parseInt(e.target.value) || 50000)}
-                          className="h-12 bg-zinc-900 border-zinc-700 text-white"
+                          className="h-12 bg-[#F5F0E6] border-gold/30 text-black placeholder:text-zinc-500"
                         />
                       </div>
                     </div>
 
                     {/* Price Range */}
                     <div>
-                      <label className="text-sm text-zinc-400 mb-2 block">Price Range ({filters.currency})</label>
+                      <label className="text-sm text-gold font-medium mb-2 block">Price Range ({filters.currency})</label>
                       <div className="grid grid-cols-2 gap-4 mb-4">
                         <Input
                           type="text"
                           placeholder="Min"
                           value={filters.priceMin > 0 ? filters.priceMin.toLocaleString() : ""}
                           onChange={(e) => updateFilter("priceMin", parseInt(e.target.value.replace(/,/g, '')) || 0)}
-                          className="h-12 bg-zinc-900 border-zinc-700 text-white"
+                          className="h-12 bg-[#F5F0E6] border-gold/30 text-black placeholder:text-zinc-500"
                         />
                         <Input
                           type="text"
                           placeholder="Max"
                           value={filters.priceMax < 500000000 ? filters.priceMax.toLocaleString() : ""}
                           onChange={(e) => updateFilter("priceMax", parseInt(e.target.value.replace(/,/g, '')) || 500000000)}
-                          className="h-12 bg-zinc-900 border-zinc-700 text-white"
+                          className="h-12 bg-[#F5F0E6] border-gold/30 text-black placeholder:text-zinc-500"
                         />
                       </div>
                     </div>
 
                     {/* Completion Status */}
                     <div>
-                      <label className="text-sm text-zinc-400 mb-2 block">Completion Status</label>
+                      <label className="text-sm text-gold font-medium mb-2 block">Completion Status</label>
                       <Select
                         value={filters.completionStatus || "all"}
                         onValueChange={(value) => updateFilter("completionStatus", value === "all" ? null : value)}
                       >
-                        <SelectTrigger className="w-full h-12 bg-zinc-900 border-zinc-700 text-white">
-                          <Calendar className="w-4 h-4 mr-2 text-zinc-500" />
+                        <SelectTrigger className="w-full h-12 bg-[#F5F0E6] border-gold/30 text-black">
+                          <Calendar className="w-4 h-4 mr-2 text-gold" />
                           <SelectValue />
                         </SelectTrigger>
-                        <SelectContent className="bg-zinc-900 border-zinc-700">
+                        <SelectContent className="bg-white border-gold/30">
                           {COMPLETION_STATUS.map((status) => (
-                            <SelectItem key={status.value} value={status.value} className="text-white hover:bg-zinc-800">
+                            <SelectItem key={status.value} value={status.value} className="text-black hover:bg-gold/10 focus:bg-gold/10 focus:text-black">
                               {status.label}
                             </SelectItem>
                           ))}
@@ -652,18 +652,18 @@ const Properties = () => {
 
                     {/* Investment Type */}
                     <div>
-                      <label className="text-sm text-zinc-400 mb-2 block">Investment Type</label>
+                      <label className="text-sm text-gold font-medium mb-2 block">Investment Type</label>
                       <Select
                         value={filters.investmentType || "all"}
                         onValueChange={(value) => updateFilter("investmentType", value === "all" ? null : value)}
                       >
-                        <SelectTrigger className="w-full h-12 bg-zinc-900 border-zinc-700 text-white">
-                          <Home className="w-4 h-4 mr-2 text-zinc-500" />
+                        <SelectTrigger className="w-full h-12 bg-[#F5F0E6] border-gold/30 text-black">
+                          <Home className="w-4 h-4 mr-2 text-gold" />
                           <SelectValue />
                         </SelectTrigger>
-                        <SelectContent className="bg-zinc-900 border-zinc-700">
+                        <SelectContent className="bg-white border-gold/30">
                           {INVESTMENT_TYPES.map((type) => (
-                            <SelectItem key={type.value} value={type.value} className="text-white hover:bg-zinc-800">
+                            <SelectItem key={type.value} value={type.value} className="text-black hover:bg-gold/10 focus:bg-gold/10 focus:text-black">
                               {type.label}
                             </SelectItem>
                           ))}
@@ -673,19 +673,19 @@ const Properties = () => {
 
                     {/* Community */}
                     <div>
-                      <label className="text-sm text-zinc-400 mb-2 block">Community</label>
+                      <label className="text-sm text-gold font-medium mb-2 block">Community</label>
                       <Select
                         value={filters.communityId || "all"}
                         onValueChange={(value) => updateFilter("communityId", value === "all" ? null : value)}
                       >
-                        <SelectTrigger className="w-full h-12 bg-zinc-900 border-zinc-700 text-white">
-                          <MapPin className="w-4 h-4 mr-2 text-zinc-500" />
+                        <SelectTrigger className="w-full h-12 bg-[#F5F0E6] border-gold/30 text-black">
+                          <MapPin className="w-4 h-4 mr-2 text-gold" />
                           <SelectValue placeholder="All Communities" />
                         </SelectTrigger>
-                        <SelectContent className="bg-zinc-900 border-zinc-700 max-h-60">
-                          <SelectItem value="all" className="text-white hover:bg-zinc-800">All Communities</SelectItem>
+                        <SelectContent className="bg-white border-gold/30 max-h-60">
+                          <SelectItem value="all" className="text-black hover:bg-gold/10 focus:bg-gold/10 focus:text-black">All Communities</SelectItem>
                           {communities?.map((comm) => (
-                            <SelectItem key={comm.id} value={comm.id} className="text-white hover:bg-zinc-800">
+                            <SelectItem key={comm.id} value={comm.id} className="text-black hover:bg-gold/10 focus:bg-gold/10 focus:text-black">
                               {comm.name}
                             </SelectItem>
                           ))}
@@ -694,11 +694,11 @@ const Properties = () => {
                     </div>
                   </div>
                 </ScrollArea>
-                <div className="p-6 border-t border-zinc-800 flex justify-between">
+                <div className="p-6 border-t border-gold/20 flex justify-between bg-gradient-to-r from-[#F5F0E6] to-[#FBF8F3]">
                   <Button
                     variant="ghost"
                     onClick={clearFilters}
-                    className="text-zinc-400 hover:text-white"
+                    className="text-zinc-600 hover:text-black"
                   >
                     Clear All
                   </Button>
