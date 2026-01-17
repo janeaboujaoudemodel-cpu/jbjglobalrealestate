@@ -158,3 +158,6 @@ verify_jwt = false
 
 [functions.ai-market-narratives]
 verify_jwt = false
+
+[functions.broker-ai-assistant]
+verify_jwt = false
