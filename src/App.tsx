@@ -118,6 +118,7 @@ import ListingAdmin from "./pages/ListingAdmin";
 import MeetTheTeam from "./pages/MeetTheTeam";
 import OurBrokers from "./pages/OurBrokers";
 import EmployeeHub from "./pages/EmployeeHub";
+import BrokerTraining from "./pages/broker/BrokerTraining";
 import EmployeeChatPage from "./pages/EmployeeChatPage";
 import Partners from "./pages/Partners";
 import PartnerMortgage from "./pages/partners/PartnerMortgage";
@@ -197,6 +198,7 @@ const App = () => (
                 <Route path="/news" element={<News />} />
                 <Route path="/broker-toolkit" element={<BrokerToolkit />} />
                 <Route path="/broker-dashboard" element={<BrokerDashboard />} />
+                <Route path="/broker/training" element={<BrokerTraining />} />
                 <Route path="/ai-broker-workspace" element={<AIBrokerWorkspace />} />
                 <Route path="/ai-hub" element={<AIHub />} />
                 <Route path="/assistant-hub" element={<Navigate to="/ai-hub" replace />} />
