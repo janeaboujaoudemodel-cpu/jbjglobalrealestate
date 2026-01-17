@@ -95,7 +95,7 @@ const CookiesConsentBanner = () => {
                     <div className="flex flex-wrap gap-3">
                       <Button
                         onClick={handleAcceptAll}
-                        className="bg-gradient-to-r from-gold to-gold-dark hover:brightness-110 text-black font-semibold px-6"
+                        variant="gold"
                       >
                         Accept All
                       </Button>
@@ -184,7 +184,7 @@ const CookiesConsentBanner = () => {
                 <div className="flex gap-3">
                   <Button
                     onClick={handleSavePreferences}
-                    className="bg-gold hover:bg-gold-light text-black font-semibold px-6"
+                    variant="gold"
                   >
                     Save preferences
                   </Button>

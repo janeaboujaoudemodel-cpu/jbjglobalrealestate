@@ -2,6 +2,7 @@ import { useState } from "react";
 import { motion } from "framer-motion";
 import { Link } from "react-router-dom";
 import { Crown, Sparkles } from "lucide-react";
+import { Button } from "@/components/ui/button";
 import InquiryFormModal from "@/components/InquiryFormModal";
 // Official JBJ logos - USE ONLY THESE
 import jbjMonogramDarkBg from "@/assets/jbj-monogram-dark-bg.png"; // Monogram only for dark backgrounds
@@ -111,15 +112,15 @@ const ComingSoon = () => {
               Fill the form to join our circle and be the first to access exclusive properties and market insights.
             </p>
 
-            {/* Premium CTA Button - White background with gold accents */}
-            <button
+            {/* GLOBAL BUTTON SYSTEM - Type A: White Base, Gold text/border, Inverted hover */}
+            <Button
               onClick={() => openForm()}
-              className="group relative inline-flex items-center gap-3 px-10 py-4 bg-white text-black font-bold text-lg rounded-lg shadow-2xl shadow-gold/20 hover:shadow-gold/40 transition-all duration-300 hover:scale-[1.02]"
+              variant="gold"
+              className="px-10 py-6 text-lg gap-3"
             >
-              <Crown className="w-5 h-5 text-gold" />
-              <span className="tracking-wide">Join Now</span>
-              <div className="absolute inset-0 rounded-lg border-2 border-gold/30 group-hover:border-gold/60 transition-colors" />
-            </button>
+              <Crown className="w-5 h-5" />
+              Join Now
+            </Button>
           </motion.div>
 
           {/* Contact Information */}

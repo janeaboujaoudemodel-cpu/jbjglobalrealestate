@@ -770,7 +770,8 @@ const CompanyProfile = () => {
             <Button
               onClick={generatePDF}
               disabled={isGenerating}
-              className="bg-gradient-to-r from-gold to-gold-dark text-black font-bold px-8 py-6 text-lg hover:opacity-90"
+              variant="gold"
+              className="px-8 py-6 text-lg"
             >
               {isGenerating ? (
                 <div className="flex items-center gap-2">
@@ -995,7 +996,8 @@ const CompanyProfile = () => {
             <Button
               onClick={generatePDF}
               disabled={isGenerating}
-              className="bg-gradient-to-r from-gold to-gold-dark text-black font-bold px-10 py-6 text-lg hover:opacity-90"
+              variant="gold"
+              className="px-10 py-6 text-lg"
             >
               {isGenerating ? (
                 <div className="flex items-center gap-2">
@@ -1042,7 +1044,8 @@ const CompanyProfile = () => {
             <div className="space-y-3">
               <Button
                 onClick={handleDownload}
-                className="w-full bg-gradient-to-r from-gold to-gold-dark text-black font-bold py-6 hover:opacity-90"
+                variant="gold"
+                className="w-full py-6"
               >
                 <Download className="w-5 h-5 mr-2" />
                 Save to Device

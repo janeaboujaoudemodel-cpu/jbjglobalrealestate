@@ -202,10 +202,8 @@ const Install = () => {
                 <Button
                   onClick={handleInstall}
                   disabled={installing}
-                  className="bg-gradient-to-r from-gold to-gold-light text-black font-bold px-10 py-7 text-xl hover:shadow-lg hover:shadow-gold/40 transition-all hover:scale-105 disabled:opacity-70 animate-[bounce_2s_ease-in-out_infinite]"
-                  style={{
-                    boxShadow: '0 0 30px rgba(168, 146, 90, 0.4)',
-                  }}
+                  variant="gold"
+                  className="px-10 py-7 text-xl disabled:opacity-70"
                 >
                   {installing ? (
                     <>

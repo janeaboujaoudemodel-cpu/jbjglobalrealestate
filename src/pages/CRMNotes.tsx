@@ -165,7 +165,7 @@ const CRMNotes = () => {
               </div>
             </div>
           </div>
-          <Button onClick={addNote} className="btn-premium-gold">
+          <Button onClick={addNote} variant="gold">
             <Plus className="h-4 w-4 mr-2" />
             New Note
           </Button>
@@ -192,7 +192,7 @@ const CRMNotes = () => {
               <StickyNote className="h-12 w-12 mx-auto mb-4 text-zinc-300" />
               <p className="text-zinc-600 font-medium">No notes yet</p>
               <p className="text-sm text-zinc-400 mt-1">Create your first note to get started</p>
-              <Button onClick={addNote} className="mt-4 btn-premium-gold">
+              <Button onClick={addNote} variant="gold" className="mt-4">
                 <Plus className="h-4 w-4 mr-2" />
                 Create Note
               </Button>
@@ -221,7 +221,7 @@ const CRMNotes = () => {
                         placeholder="Write your note..."
                       />
                       <div className="flex gap-2">
-                        <Button size="sm" onClick={saveEdit} className="btn-premium-gold">
+                        <Button size="sm" onClick={saveEdit} variant="gold">
                           <Save className="h-3 w-3 mr-1" />
                           Save
                         </Button>

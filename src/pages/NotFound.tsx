@@ -98,23 +98,19 @@ const NotFound = () => {
           className="flex flex-col sm:flex-row flex-wrap gap-4 justify-center mb-12"
         >
           <Link to="/">
-            <Button className="relative bg-gradient-to-r from-gold via-[#C4A962] to-gold hover:from-gold-light hover:to-gold text-black font-bold px-8 py-5 text-sm transition-all duration-500 hover:shadow-2xl hover:shadow-gold/50 hover:scale-105 shadow-lg shadow-gold/30 border border-gold/50 w-full sm:w-auto">
+            <Button variant="gold" className="px-8 py-5 text-sm w-full sm:w-auto">
               <Home className="w-4 h-4 mr-2" />
               Back to Home
             </Button>
           </Link>
           <Link to="/broker-toolkit">
-            <Button 
-              className="border-2 border-gold text-gold hover:bg-gold hover:text-black font-bold px-8 py-5 text-sm transition-all duration-500 hover:shadow-xl hover:shadow-gold/30 w-full sm:w-auto"
-            >
+            <Button variant="goldOutline" className="px-8 py-5 text-sm w-full sm:w-auto">
               <Briefcase className="w-4 h-4 mr-2" />
               Broker Tools
             </Button>
           </Link>
           <Link to="/contact">
-            <Button 
-              className="border-2 border-zinc-700 text-white hover:bg-zinc-800 hover:border-gold/50 hover:text-gold px-8 py-5 text-sm transition-all duration-500 hover:shadow-lg hover:shadow-gold/20 font-semibold w-full sm:w-auto"
-            >
+            <Button variant="goldOutline" className="px-8 py-5 text-sm w-full sm:w-auto">
               <Phone className="w-4 h-4 mr-2" />
               Contact Support
             </Button>
