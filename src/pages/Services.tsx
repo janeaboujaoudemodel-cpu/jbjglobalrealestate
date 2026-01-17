@@ -3,6 +3,7 @@ import { motion } from "framer-motion";
 import Footer from "@/components/Footer";
 import { Button } from "@/components/ui/button";
 import { SEOHead, pagesSEO } from "@/components/SEOHead";
+import { FounderPhilosophySection } from "@/components/FounderPhilosophySection";
 import { 
   Building2, 
   Scale, 
@@ -215,6 +216,9 @@ const Services = () => {
           </motion.div>
         </div>
       </section>
+
+      {/* Founder-Led Philosophy & Advisory Positioning */}
+      <FounderPhilosophySection />
 
       {/* AI Tools Section */}
       <section className="py-20 bg-gradient-to-b from-zinc-900/50 to-black">

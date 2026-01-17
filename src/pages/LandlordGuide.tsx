@@ -1,6 +1,7 @@
 import { SEOHead } from "@/components/SEOHead";
 import { Button } from "@/components/ui/button";
 import { Link } from "react-router-dom";
+import { FounderPhilosophySection } from "@/components/FounderPhilosophySection";
 import { 
   CheckCircle2, 
   FileText, 
@@ -449,6 +450,9 @@ const LandlordGuide = () => {
           </div>
         </div>
       </section>
+
+      {/* Founder-Led Philosophy & Advisory Positioning */}
+      <FounderPhilosophySection />
 
       {/* CTA */}
       <GuideCTA

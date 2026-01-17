@@ -1,6 +1,7 @@
 import { SEOHead } from "@/components/SEOHead";
 import { Button } from "@/components/ui/button";
 import { Link } from "react-router-dom";
+import { FounderPhilosophySection } from "@/components/FounderPhilosophySection";
 import { motion } from "framer-motion";
 import { 
   CheckCircle2, 
@@ -623,6 +624,9 @@ const SellerGuide = () => {
             </div>
           </div>
         </section>
+
+        {/* Founder-Led Philosophy & Advisory Positioning */}
+        <FounderPhilosophySection />
 
         {/* Final CTA Section */}
         <section className="py-20">
