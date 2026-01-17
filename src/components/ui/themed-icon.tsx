@@ -1,0 +1,53 @@
+import { LucideIcon } from "lucide-react";
+import { cn } from "@/lib/utils";
+
+interface ThemedIconProps {
+  icon: LucideIcon;
+  variant?: "light" | "dark";
+  size?: "sm" | "md" | "lg" | "xl";
+  className?: string;
+}
+
+/**
+ * ThemedIcon - Globally consistent icon styling
+ * 
+ * On dark/black backgrounds (variant="dark"): White circle with gold icon
+ * On light/white backgrounds (variant="light"): Black circle with gold icon
+ */
+export function ThemedIcon({ 
+  icon: Icon, 
+  variant = "light", 
+  size = "md",
+  className 
+}: ThemedIconProps) {
+  const sizeClasses = {
+    sm: "w-8 h-8",
+    md: "w-10 h-10",
+    lg: "w-12 h-12",
+    xl: "w-16 h-16",
+  };
+
+  const iconSizeClasses = {
+    sm: "w-4 h-4",
+    md: "w-5 h-5",
+    lg: "w-6 h-6",
+    xl: "w-8 h-8",
+  };
+
+  // Dark background = white circle + gold icon
+  // Light background = black circle + gold icon
+  const bgClass = variant === "dark" ? "bg-white" : "bg-black";
+
+  return (
+    <div 
+      className={cn(
+        sizeClasses[size],
+        bgClass,
+        "rounded-full flex items-center justify-center flex-shrink-0",
+        className
+      )}
+    >
+      <Icon className={cn(iconSizeClasses[size], "text-gold")} />
+    </div>
+  );
+}

@@ -7,3 +7,4 @@ export { BrokerToolkitSupport } from './BrokerToolkitSupport';
 export { BrokerToolkitCRM } from './BrokerToolkitCRM';
 export { BrokerToolkitGrowth } from './BrokerToolkitGrowth';
 export { BrokerToolkitCTA } from './BrokerToolkitCTA';
+export { default as BrokerCRMAccessGate } from './BrokerCRMAccessGate';
