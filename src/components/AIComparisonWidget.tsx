@@ -57,8 +57,8 @@ const AIComparisonWidget = () => {
               Developed by Founder Jane Abou Jaoude • Powered by JBJ Global Real Estate
             </p>
           </div>
-          <div className="hidden md:flex w-16 h-16 bg-gradient-to-br from-gold to-gold-dark rounded-2xl items-center justify-center shadow-lg shadow-gold/30">
-            <BarChart3 className="w-8 h-8 text-black" />
+          <div className="hidden md:flex w-16 h-16 bg-black rounded-2xl items-center justify-center shadow-lg">
+            <BarChart3 className="w-8 h-8 text-gold" />
           </div>
         </div>
 
