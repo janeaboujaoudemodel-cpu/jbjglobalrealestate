@@ -191,19 +191,19 @@ const Index = () => {
             <h3 className="text-zinc-400 text-xs uppercase tracking-[0.2em] mb-4">Licensed Partner Network</h3>
             <div className="flex flex-wrap justify-center gap-3">
               <Link to="/services/law-firm">
-                <span className="inline-flex items-center gap-2 px-4 py-2 bg-zinc-900 border border-zinc-800 rounded-full text-zinc-300 text-sm hover:border-gold/40 hover:text-gold transition-all">
+                <span className="inline-flex items-center gap-2 px-4 py-2 bg-gradient-to-r from-black via-zinc-900 to-black border border-gold/40 rounded-full text-gold text-sm hover:bg-gold/10 hover:border-gold hover:text-white hover:shadow-[0_0_15px_rgba(200,167,102,0.3)] transition-all duration-300">
                   <Scale className="w-4 h-4" />
                   Legal Partners
                 </span>
               </Link>
               <Link to="/mortgage-calculator">
-                <span className="inline-flex items-center gap-2 px-4 py-2 bg-zinc-900 border border-zinc-800 rounded-full text-zinc-300 text-sm hover:border-gold/40 hover:text-gold transition-all">
+                <span className="inline-flex items-center gap-2 px-4 py-2 bg-gradient-to-r from-black via-zinc-900 to-black border border-gold/40 rounded-full text-gold text-sm hover:bg-gold/10 hover:border-gold hover:text-white hover:shadow-[0_0_15px_rgba(200,167,102,0.3)] transition-all duration-300">
                   <Calculator className="w-4 h-4" />
                   Mortgage Partners
                 </span>
               </Link>
               <Link to="/services/design-build">
-                <span className="inline-flex items-center gap-2 px-4 py-2 bg-zinc-900 border border-zinc-800 rounded-full text-zinc-300 text-sm hover:border-gold/40 hover:text-gold transition-all">
+                <span className="inline-flex items-center gap-2 px-4 py-2 bg-gradient-to-r from-black via-zinc-900 to-black border border-gold/40 rounded-full text-gold text-sm hover:bg-gold/10 hover:border-gold hover:text-white hover:shadow-[0_0_15px_rgba(200,167,102,0.3)] transition-all duration-300">
                   <Wrench className="w-4 h-4" />
                   Design & Build
                 </span>
