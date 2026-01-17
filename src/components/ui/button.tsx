@@ -4,6 +4,33 @@ import { cva, type VariantProps } from "class-variance-authority";
 
 import { cn } from "@/lib/utils";
 
+/**
+ * ============================================================
+ * GLOBAL BUTTON SYSTEM - JBJ GLOBAL REAL ESTATE (LOCKED)
+ * ============================================================
+ * 
+ * CORE RULE: All buttons must INVERT on hover
+ * 
+ * Button Type A (gold) - White Base
+ *   Default: White bg, Gold text, Gold border
+ *   Hover: Transparent bg, Gold text, Gold border
+ * 
+ * Button Type B (goldOutline) - Transparent Base  
+ *   Default: Transparent bg, Gold text, Gold border
+ *   Hover: White bg, Gold text, Gold border
+ * 
+ * Button Hero (heroOutline) - For images/videos
+ *   Default: Transparent bg, White text, White border
+ *   Hover: White bg, Gold text, White border
+ * 
+ * FORBIDDEN:
+ * - Filled gold backgrounds
+ * - Dark gold hover states
+ * - Shadows or glow effects
+ * - Scaling or animation tricks
+ * ============================================================
+ */
+
 const buttonVariants = cva(
   "inline-flex items-center justify-center gap-2 whitespace-nowrap rounded-md text-sm font-medium ring-offset-background transition-all duration-300 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 [&_svg]:pointer-events-none [&_svg]:size-4 [&_svg]:shrink-0 cursor-pointer",
   {
@@ -17,25 +44,22 @@ const buttonVariants = cva(
         link: "text-primary underline-offset-4 hover:underline",
         
         // ============================================================
-        // GLOBAL BUTTON SYSTEM - JBJ GLOBAL REAL ESTATE
+        // GLOBAL BUTTON SYSTEM - INVERTED HOVER (LOCKED)
         // ============================================================
         
-        // PRIMARY BUTTON (Action / Conversion)
-        // Background: White | Text: Gold | Border: Gold
-        // Hover: Transparent bg, Gold text, Gold border
-        // Usage: Contact Us, Book Consultation, Get in Touch
-        gold: "bg-white text-gold border border-gold font-semibold hover:bg-transparent hover:text-gold shadow-sm",
+        // TYPE A: WHITE BASE (Primary actions)
+        // Default: White bg, Gold text, Gold border
+        // Hover (INVERTED): Transparent bg, Gold text, Gold border
+        gold: "bg-white text-gold border border-gold font-semibold hover:bg-transparent hover:text-gold",
         
-        // SECONDARY BUTTON (Navigation / Browsing)
-        // Background: Transparent | Text: White on dark / Gold on light | Border: Gold
-        // Hover: White bg, Gold text
-        // Usage: Browse Properties, View Leadership Profile, Explore
+        // TYPE B: TRANSPARENT BASE (Secondary actions)
+        // Default: Transparent bg, White/Gold text, Gold border
+        // Hover (INVERTED): White bg, Gold text, Gold border
         goldOutline: "bg-transparent text-white border border-gold font-semibold hover:bg-white hover:text-gold",
         
-        // IMAGE-HERO BUTTON (Only when button sits on a photo)
-        // Background: Transparent | Text: White | Border: White
-        // Hover: White bg, Gold text
-        // Usage: Buttons placed directly over hero images
+        // HERO TYPE: FOR IMAGES/VIDEOS
+        // Default: Transparent bg, White text, White border
+        // Hover (INVERTED): White bg, Gold text
         heroOutline: "bg-transparent text-white border border-white font-semibold hover:bg-white hover:text-gold",
       },
       size: {

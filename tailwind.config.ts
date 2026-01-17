@@ -87,6 +87,17 @@ export default {
           glow: "hsl(var(--ai-glow))",
         },
       },
+      /* ============================================================
+       * GLOBAL SPACING SYSTEM - JBJ GLOBAL REAL ESTATE (LOCKED)
+       * Unified spacing rhythm across all systems
+       * ============================================================ */
+      spacing: {
+        'section': '5rem',      // 80px - Standard section padding
+        'section-sm': '3rem',   // 48px - Compact section padding
+        'section-lg': '6rem',   // 96px - Large section padding
+        'card': '1.5rem',       // 24px - Card internal padding
+        'card-sm': '1rem',      // 16px - Compact card padding
+      },
       borderRadius: {
         lg: "var(--radius)",
         md: "calc(var(--radius) - 2px)",
