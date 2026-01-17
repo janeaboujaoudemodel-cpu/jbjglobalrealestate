@@ -330,22 +330,22 @@ const AIHub = () => {
   const renderToolCard = (tool: typeof freeAITools[0], showFree = true) => (
     <motion.div key={tool.id} variants={fadeInUp}>
       <Link to={tool.link} className="block group h-full">
-        <Card className={`bg-white border border-zinc-200 hover:border-gold hover:shadow-xl hover:shadow-gold/20 transition-all duration-300 h-full group-hover:scale-[1.02]`}>
+        <Card className={`bg-gradient-to-br from-zinc-900/90 to-zinc-950 border ${tool.borderColor} hover:border-gold hover:shadow-xl hover:shadow-gold/20 transition-all duration-300 h-full group-hover:scale-[1.02] backdrop-blur-sm`}>
           <CardContent className="p-5">
             <div className="flex items-start gap-4">
               <div className={`w-12 h-12 ${tool.bgColor} rounded-xl flex items-center justify-center flex-shrink-0 group-hover:scale-110 transition-transform`}>
                 <tool.icon className={`w-6 h-6 ${tool.color}`} />
               </div>
               <div className="flex-1 min-w-0">
-                <div className="flex items-center gap-2 mb-1">
-                  <h3 className="text-black font-semibold truncate">{tool.title}</h3>
+                <div className="flex items-start gap-2 mb-1 flex-wrap">
+                  <h3 className="text-white font-semibold text-sm leading-tight">{tool.title}</h3>
                   {showFree && (
                     <Badge className="bg-emerald-500/20 text-emerald-400 border-emerald-500/30 text-[10px] px-1.5 py-0 flex-shrink-0">
                       FREE
                     </Badge>
                   )}
                 </div>
-                <p className="text-zinc-600 text-sm line-clamp-2">{tool.description}</p>
+                <p className="text-zinc-400 text-sm line-clamp-2">{tool.description}</p>
               </div>
               <ArrowUpRight className={`w-5 h-5 ${tool.color} opacity-0 group-hover:opacity-100 transition-opacity flex-shrink-0`} />
             </div>
@@ -358,14 +358,14 @@ const AIHub = () => {
   const renderOperationCard = (item: typeof brokerOperations[0]) => (
     <motion.div key={item.id} variants={fadeInUp}>
       <Link to={item.link} className="block group h-full">
-        <Card className={`bg-white border border-zinc-200 hover:border-gold hover:shadow-xl hover:shadow-gold/20 transition-all duration-300 h-full`}>
+        <Card className={`bg-gradient-to-br from-zinc-900/90 to-zinc-950 border ${item.borderColor} hover:border-gold hover:shadow-xl hover:shadow-gold/20 transition-all duration-300 h-full backdrop-blur-sm`}>
           <CardContent className="p-5">
             <div className={`w-12 h-12 ${item.bgColor} rounded-xl flex items-center justify-center mb-4 group-hover:scale-110 transition-transform`}>
               <item.icon className={`w-6 h-6 ${item.color}`} />
             </div>
-            <h3 className="text-black font-semibold mb-1">{item.title}</h3>
+            <h3 className="text-white font-semibold mb-1">{item.title}</h3>
             <p className={`${item.color} text-sm mb-2`}>{item.subtitle}</p>
-            <p className="text-zinc-600 text-sm">{item.description}</p>
+            <p className="text-zinc-400 text-sm">{item.description}</p>
           </CardContent>
         </Card>
       </Link>
