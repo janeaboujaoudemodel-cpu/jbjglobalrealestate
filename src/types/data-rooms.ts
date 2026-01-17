@@ -1,7 +1,7 @@
 /**
  * JBJ GLOBAL REAL ESTATE — Data Room Type Definitions
  * 
- * PRIORITY 4 — PART 2: ACCESS CONTROL TYPES
+ * PRIORITY 4 — PART 3: AUDIT LOGGING & VERSIONING TYPES
  * Brand: JBJ GLOBAL REAL ESTATE
  * Core Activities: BUY · SELL · RENT
  */
@@ -58,6 +58,115 @@ export type AccessApprovalStatus =
   | 'denied'
   | 'revoked'
   | 'expired';
+
+// ============================================================================
+// AUDIT ACTION TYPES
+// ============================================================================
+
+export type DataRoomAuditAction = 
+  | 'view'
+  | 'create'
+  | 'update'
+  | 'delete'
+  | 'export'
+  | 'deny'
+  | 'permission_change'
+  | 'access_request'
+  | 'access_grant'
+  | 'access_revoke';
+
+// ============================================================================
+// AUDIT RESOURCE TYPES
+// ============================================================================
+
+export type DataRoomAuditResourceType = 
+  | 'document'
+  | 'dataset'
+  | 'note'
+  | 'permission'
+  | 'export'
+  | 'data_room'
+  | 'metadata';
+
+// ============================================================================
+// AUDIT RESULT TYPES
+// ============================================================================
+
+export type DataRoomAuditResult = 
+  | 'success'
+  | 'blocked'
+  | 'denied'
+  | 'error';
+
+// ============================================================================
+// AUDIT LOG ENTRY (IMMUTABLE)
+// ============================================================================
+
+export interface DataRoomAuditLogEntry {
+  readonly id: string;
+  readonly timestamp: string;
+  readonly actor_user_id: string;
+  readonly actor_role: DataRoomAccessRole;
+  readonly actor_email: string | null;
+  readonly data_room_id: DataRoomId;
+  readonly data_room_name: string;
+  readonly resource_type: DataRoomAuditResourceType;
+  readonly resource_id: string | null;
+  readonly action_type: DataRoomAuditAction;
+  readonly result: DataRoomAuditResult;
+  readonly ip_address: string | null;
+  readonly user_agent: string | null;
+  readonly metadata: Record<string, unknown> | null;
+  // IMMUTABLE: No edits allowed after creation
+  readonly is_immutable: true;
+}
+
+// ============================================================================
+// VERSION ENTRY (FOR DOCUMENTS & METADATA)
+// ============================================================================
+
+export interface DataRoomVersionRecord {
+  readonly id: string;
+  readonly entity_type: 'document' | 'dataset' | 'note' | 'metadata';
+  readonly entity_id: string;
+  readonly data_room_id: DataRoomId;
+  readonly version_number: number;
+  readonly previous_version_id: string | null;
+  readonly actor_user_id: string;
+  readonly actor_email: string | null;
+  readonly change_summary: string;
+  readonly snapshot_data: Record<string, unknown> | null;
+  readonly created_at: string;
+  // IMMUTABLE: No edits allowed after creation
+  readonly is_immutable: true;
+}
+
+// ============================================================================
+// EXPORT TRACEABILITY LOG (FRAMEWORK)
+// ============================================================================
+
+export interface DataRoomExportLog {
+  readonly id: string;
+  readonly timestamp: string;
+  readonly export_type: 'pdf' | 'csv' | 'xlsx';
+  readonly data_room_id: DataRoomId;
+  readonly data_room_name: string;
+  readonly exported_scope: {
+    documents?: string[];
+    datasets?: string[];
+    notes?: string[];
+  };
+  readonly actor_user_id: string;
+  readonly actor_role: DataRoomAccessRole;
+  readonly actor_email: string | null;
+  readonly delivery_target: 'download' | 'internal_link' | 'email';
+  readonly file_checksum: string | null;
+  readonly file_size_bytes: number | null;
+  readonly ip_address: string | null;
+  readonly user_agent: string | null;
+  // IMMUTABLE: No edits allowed after creation
+  readonly is_immutable: true;
+}
 
 // ============================================================================
 // PERMISSION ENTRY (PER ROLE PER DATA ROOM)
@@ -155,7 +264,7 @@ export interface DataRoomNote {
 }
 
 // ============================================================================
-// VERSION HISTORY
+// VERSION HISTORY (LEGACY — KEPT FOR COMPATIBILITY)
 // ============================================================================
 
 export interface DataRoomVersionEntry {
