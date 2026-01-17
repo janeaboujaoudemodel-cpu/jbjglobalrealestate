@@ -130,17 +130,17 @@ const StatsCounter = () => {
   }, []);
 
   return (
-    <section ref={sectionRef} className="py-16 md:py-20 bg-white">
+    <section ref={sectionRef} className="py-16 md:py-20 bg-black">
       <div className="container mx-auto px-4">
         {/* Section Header - Premium Label */}
         <div className="text-center mb-10">
-          <span className="inline-block px-4 py-1.5 bg-gradient-to-r from-[#C8A766]/20 via-white to-[#C8A766]/20 border border-[#C8A766]/30 rounded-full text-[#C8A766] text-xs uppercase tracking-[0.2em] font-medium mb-3">
+          <span className="inline-block px-4 py-1.5 bg-gradient-to-r from-[#C8A766]/20 via-black to-[#C8A766]/20 border border-[#C8A766]/30 rounded-full text-[#C8A766] text-xs uppercase tracking-[0.2em] font-medium mb-3">
             Track Record
           </span>
-          <p className="text-zinc-500 text-sm">Founder experience</p>
+          <p className="text-zinc-400 text-sm">Founder experience</p>
         </div>
         
-        {/* Stats Grid - Clean */}
+        {/* Stats Grid - White Cards on Black background */}
         <div className="grid grid-cols-2 lg:grid-cols-4 gap-4 md:gap-6 max-w-4xl mx-auto">
           {stats.map((stat, index) => (
             <StatItem key={index} {...stat} isVisible={isVisible} />

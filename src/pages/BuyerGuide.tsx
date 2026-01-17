@@ -544,24 +544,23 @@ const BuyerGuide = () => {
         </div>
       </section>
 
-      {/* Buying as a Non-Resident */}
-      <section className="py-16 md:py-24 bg-white">
+      {/* Buying as a Non-Resident - BLACK BACKGROUND with WHITE BOX */}
+      <section className="py-16 md:py-24 bg-black">
         <div className="container mx-auto px-4">
           <div className="max-w-4xl mx-auto">
-            <div className="bg-zinc-900 rounded-2xl p-8 md:p-12 relative overflow-hidden">
-              <div className="absolute top-0 right-0 w-64 h-64 bg-gold/5 rounded-full blur-3xl" />
+            <div className="bg-white rounded-2xl p-8 md:p-12 relative overflow-hidden border border-zinc-200 shadow-lg">
               
               <div className="relative z-10">
                 <div className="flex items-center gap-3 mb-6">
-                  <div className="w-12 h-12 bg-gold/10 border border-gold/30 rounded-xl flex items-center justify-center">
+                  <div className="w-12 h-12 bg-black rounded-xl flex items-center justify-center">
                     <Globe className="w-6 h-6 text-gold" />
                   </div>
-                  <h2 className="text-3xl md:text-4xl font-light text-white">
+                  <h2 className="text-3xl md:text-4xl font-light text-black">
                     Buying as a Non-Resident
                   </h2>
                 </div>
                 
-                <p className="text-lg text-zinc-300 leading-relaxed mb-6">
+                <p className="text-lg text-zinc-700 leading-relaxed mb-6">
                   Dubai welcomes international buyers. Non-residents can purchase property in 
                   designated freehold areas without needing UAE residency. This has made Dubai 
                   one of the most accessible property markets in the world.
@@ -576,12 +575,12 @@ const BuyerGuide = () => {
                   ].map((point, index) => (
                     <div key={index} className="flex items-start gap-3">
                       <CheckCircle2 className="w-5 h-5 text-gold flex-shrink-0 mt-0.5" />
-                      <span className="text-zinc-300 text-sm">{point}</span>
+                      <span className="text-zinc-700 text-sm">{point}</span>
                     </div>
                   ))}
                 </div>
                 
-                <p className="text-zinc-400">
+                <p className="text-zinc-600">
                   Your broker can guide you through the specific requirements and connect you 
                   with appropriate legal support if needed for your situation.
                 </p>
