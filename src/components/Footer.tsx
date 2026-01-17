@@ -185,127 +185,121 @@ const Footer = () => {
         {/* Divider */}
         <div className="h-px bg-gradient-to-r from-transparent via-zinc-700 to-transparent mb-10" />
 
-        {/* Menu + Services + Toolkit Grid - Premium White Card Layout */}
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-6 md:gap-4 mb-10 max-w-6xl mx-auto">
-          {/* Menu Card */}
-          <div className="bg-white rounded-xl p-5 border border-zinc-200 shadow-sm">
-            <div className="bg-gradient-to-r from-[#F5F0E6] to-[#FBF8F3] rounded-lg px-3 py-1.5 mb-4 inline-block">
-              <h4 className="text-gold font-semibold text-sm uppercase tracking-[0.15em]">
+        {/* Menu + Services + Toolkit Grid - Unified Premium White Section */}
+        <div className="bg-white rounded-2xl p-6 md:p-8 border border-zinc-200 shadow-lg mb-10 max-w-6xl mx-auto">
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-0 divide-y lg:divide-y-0 lg:divide-x divide-gold/20">
+            {/* Menu */}
+            <div className="py-5 lg:py-0 lg:px-5 first:pt-0 lg:first:pl-0 last:pb-0 lg:last:pr-0">
+              <h4 className="text-gold font-semibold text-sm uppercase tracking-[0.15em] mb-4">
                 Menu
               </h4>
+              <ul className="space-y-2">
+                {menuLinks.map((link) => (
+                  <li key={link.href}>
+                    <Link
+                      to={link.href}
+                      className="text-black hover:text-gold transition-colors text-sm inline-block"
+                    >
+                      {link.label}
+                    </Link>
+                  </li>
+                ))}
+              </ul>
             </div>
-            <ul className="space-y-2">
-              {menuLinks.map((link) => (
-                <li key={link.href}>
-                  <Link
-                    to={link.href}
-                    className="text-black hover:text-gold transition-colors text-sm inline-block"
-                  >
-                    {link.label}
-                  </Link>
-                </li>
-              ))}
-            </ul>
-          </div>
 
-          {/* Our Services Card */}
-          <div className="bg-white rounded-xl p-5 border border-zinc-200 shadow-sm">
-            <div className="bg-gradient-to-r from-[#F5F0E6] to-[#FBF8F3] rounded-lg px-3 py-1.5 mb-4 inline-block">
-              <h4 className="text-gold font-semibold text-sm uppercase tracking-[0.15em]">
+            {/* Gold Divider visible on mobile */}
+            
+            {/* Our Services */}
+            <div className="py-5 lg:py-0 lg:px-5">
+              <h4 className="text-gold font-semibold text-sm uppercase tracking-[0.15em] mb-4">
                 Our Services
               </h4>
+              <div className="space-y-2">
+                {serviceLinks.map((svc) => (
+                  <div key={svc.title}>
+                    <Link 
+                      to={svc.href}
+                      className="text-black hover:text-gold transition-colors text-sm font-medium block"
+                    >
+                      {svc.title}
+                    </Link>
+                    {svc.items.length > 0 && (
+                      <div className="pl-3 mt-1 space-y-1 border-l border-gold/30">
+                        {svc.items.map((item) => (
+                          <Link
+                            key={item.label}
+                            to={item.href}
+                            className="block text-gold hover:text-gold-dark transition-colors text-xs"
+                          >
+                            {item.label}
+                          </Link>
+                        ))}
+                      </div>
+                    )}
+                  </div>
+                ))}
+              </div>
             </div>
-            <div className="space-y-2">
-              {serviceLinks.map((svc) => (
-                <div key={svc.title}>
-                  <Link 
-                    to={svc.href}
-                    className="text-black hover:text-gold transition-colors text-sm font-medium block"
-                  >
-                    {svc.title}
-                  </Link>
-                  {svc.items.length > 0 && (
-                    <div className="pl-3 mt-1 space-y-1 border-l border-gold/30">
-                      {svc.items.map((item) => (
-                        <Link
-                          key={item.label}
-                          to={item.href}
-                          className="block text-gold hover:text-gold-dark transition-colors text-xs"
-                        >
-                          {item.label}
-                        </Link>
-                      ))}
-                    </div>
-                  )}
-                </div>
-              ))}
-            </div>
-          </div>
 
-          {/* Broker Toolkit Card */}
-          <div className="bg-white rounded-xl p-5 border border-zinc-200 shadow-sm">
-            <div className="bg-gradient-to-r from-[#F5F0E6] to-[#FBF8F3] rounded-lg px-3 py-1.5 mb-4 inline-block">
-              <h4 className="text-gold font-semibold text-sm uppercase tracking-[0.15em]">
+            {/* Broker Toolkit */}
+            <div className="py-5 lg:py-0 lg:px-5">
+              <h4 className="text-gold font-semibold text-sm uppercase tracking-[0.15em] mb-4">
                 Broker Toolkit
               </h4>
+              <p className="text-zinc-500 text-xs mb-3">Guides & Resources</p>
+              <ul className="space-y-2">
+                {academyLinks.map((link) => (
+                  <li key={link.href}>
+                    <Link
+                      to={link.href}
+                      className="text-black hover:text-gold transition-colors text-sm inline-block"
+                    >
+                      {link.label}
+                    </Link>
+                  </li>
+                ))}
+              </ul>
             </div>
-            <p className="text-zinc-500 text-xs mb-3">Guides & Resources</p>
-            <ul className="space-y-2">
-              {academyLinks.map((link) => (
-                <li key={link.href}>
-                  <Link
-                    to={link.href}
-                    className="text-black hover:text-gold transition-colors text-sm inline-block"
-                  >
-                    {link.label}
-                  </Link>
-                </li>
-              ))}
-            </ul>
-          </div>
 
-          {/* Professional Tools Card */}
-          <div className="bg-white rounded-xl p-5 border border-zinc-200 shadow-sm">
-            <div className="bg-gradient-to-r from-[#F5F0E6] to-[#FBF8F3] rounded-lg px-3 py-1.5 mb-4 inline-block">
-              <h4 className="text-gold font-semibold text-sm uppercase tracking-[0.15em]">
+            {/* Professional Tools */}
+            <div className="py-5 lg:py-0 lg:px-5">
+              <h4 className="text-gold font-semibold text-sm uppercase tracking-[0.15em] mb-4">
                 Professional Tools
               </h4>
+              <p className="text-zinc-500 text-xs mb-3">AI-Powered Assistants</p>
+              <ul className="space-y-2">
+                {professionalTools.map((link) => (
+                  <li key={link.href}>
+                    <Link
+                      to={link.href}
+                      className="text-black hover:text-gold transition-colors text-sm inline-block"
+                    >
+                      {link.label}
+                    </Link>
+                  </li>
+                ))}
+              </ul>
             </div>
-            <p className="text-zinc-500 text-xs mb-3">AI-Powered Work Assistants</p>
-            <ul className="space-y-2">
-              {professionalTools.map((link) => (
-                <li key={link.href}>
-                  <Link
-                    to={link.href}
-                    className="text-black hover:text-gold transition-colors text-sm inline-block"
-                  >
-                    {link.label}
-                  </Link>
-                </li>
-              ))}
-            </ul>
-          </div>
 
-          {/* Careers Card */}
-          <div className="bg-white rounded-xl p-5 border border-zinc-200 shadow-sm">
-            <div className="bg-gradient-to-r from-[#F5F0E6] to-[#FBF8F3] rounded-lg px-3 py-1.5 mb-4 inline-block">
-              <h4 className="text-gold font-semibold text-sm uppercase tracking-[0.15em]">
+            {/* Careers */}
+            <div className="py-5 lg:py-0 lg:px-5 lg:last:pr-0">
+              <h4 className="text-gold font-semibold text-sm uppercase tracking-[0.15em] mb-4">
                 Careers
               </h4>
+              <p className="text-zinc-500 text-xs mb-3">Join Our Team</p>
+              <ul className="space-y-2">
+                {careerLinks.map((link) => (
+                  <li key={link.href}>
+                    <Link
+                      to={link.href}
+                      className="text-black hover:text-gold transition-colors text-sm inline-block"
+                    >
+                      {link.label}
+                    </Link>
+                  </li>
+                ))}
+              </ul>
             </div>
-            <p className="text-zinc-500 text-xs mb-3">Join Our Team</p>
-            <ul className="space-y-2">
-              {careerLinks.map((link) => (
-                <li key={link.href}>
-                  <Link
-                    to={link.href}
-                    className="text-black hover:text-gold transition-colors text-sm inline-block"
-                  >
-                    {link.label}
-                  </Link>
-                </li>
-              ))}
-            </ul>
           </div>
         </div>
 
