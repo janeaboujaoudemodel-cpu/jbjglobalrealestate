@@ -134,22 +134,22 @@ const MarketOverview = () => {
           
           <div className="grid md:grid-cols-4 gap-4 max-w-4xl mx-auto">
             {QUARTERLY_TRENDS.map((quarter, index) => (
-              <Card key={quarter.quarter} className="bg-zinc-900/50 border-zinc-800">
+              <Card key={quarter.quarter} className="bg-white border-zinc-200 hover:border-gold/50 hover:shadow-lg transition-all">
                 <CardHeader className="pb-2">
                   <CardTitle className="text-gold text-sm">{quarter.quarter}</CardTitle>
                 </CardHeader>
                 <CardContent>
-                  <p className="text-white text-2xl font-bold">{quarter.transactions.toLocaleString()}</p>
+                  <p className="text-black text-2xl font-bold">{quarter.transactions.toLocaleString()}</p>
                   <p className="text-zinc-500 text-xs">Transactions</p>
-                  <div className="mt-3 pt-3 border-t border-zinc-800">
-                    <p className="text-zinc-400 text-sm">AED {quarter.avgPrice}/sqft</p>
-                    <div className="w-full bg-zinc-800 rounded-full h-1.5 mt-2">
+                  <div className="mt-3 pt-3 border-t border-zinc-200">
+                    <p className="text-zinc-700 text-sm">AED {quarter.avgPrice}/sqft</p>
+                    <div className="w-full bg-zinc-200 rounded-full h-1.5 mt-2">
                       <div 
                         className="bg-gradient-to-r from-gold to-gold-light h-1.5 rounded-full" 
                         style={{ width: `${quarter.index}%` }}
                       />
                     </div>
-                    <p className="text-zinc-600 text-xs mt-1">Index: {quarter.index}</p>
+                    <p className="text-zinc-500 text-xs mt-1">Index: {quarter.index}</p>
                   </div>
                 </CardContent>
               </Card>
@@ -167,16 +167,16 @@ const MarketOverview = () => {
 
           <div className="max-w-3xl mx-auto space-y-4">
             {PROPERTY_TYPE_TRENDS.map((type) => (
-              <div key={type.type} className="bg-zinc-900/50 border border-zinc-800 rounded-xl p-4 flex items-center justify-between">
+              <div key={type.type} className="bg-white border border-zinc-200 rounded-xl p-4 flex items-center justify-between hover:border-gold/50 hover:shadow-lg transition-all">
                 <div>
-                  <p className="text-white font-semibold">{type.type}</p>
+                  <p className="text-black font-semibold">{type.type}</p>
                   <p className="text-zinc-500 text-sm">{type.volume.toLocaleString()} transactions</p>
                 </div>
                 <div className="text-right">
-                  <p className="text-white font-bold">AED {type.avgPrice}/sqft</p>
+                  <p className="text-black font-bold">AED {type.avgPrice}/sqft</p>
                   <div className="flex items-center gap-1 justify-end">
                     {getTrendIcon(type.change)}
-                    <span className={`text-sm ${type.change > 0 ? 'text-emerald-400' : 'text-red-400'}`}>
+                    <span className={`text-sm ${type.change > 0 ? 'text-emerald-500' : 'text-red-500'}`}>
                       {type.change > 0 ? '+' : ''}{type.change}%
                     </span>
                   </div>
@@ -190,47 +190,42 @@ const MarketOverview = () => {
       {/* Navigation Links */}
       <section className="py-16 border-t border-zinc-900">
         <div className="container mx-auto px-4">
-          <div className="grid md:grid-cols-3 gap-6 max-w-4xl mx-auto">
+          <div className="grid md:grid-cols-3 gap-4 max-w-3xl mx-auto">
             <Link to="/market-intelligence/areas" className="group">
-              <Card className="bg-zinc-900/50 border-zinc-800 hover:border-gold/30 transition-all h-full">
-                <CardContent className="p-6">
-                  <h3 className="text-white font-bold mb-2 group-hover:text-gold transition-colors">Area Intelligence</h3>
-                  <p className="text-zinc-500 text-sm mb-4">Deep dive into specific Dubai areas with historical trends.</p>
-                  <ArrowRight className="w-5 h-5 text-gold" />
+              <Card className="bg-white border-zinc-200 hover:border-gold/50 hover:shadow-lg transition-all">
+                <CardContent className="p-4 flex items-center justify-between">
+                  <span className="text-black font-medium group-hover:text-gold transition-colors">Area Intelligence</span>
+                  <ArrowRight className="w-4 h-4 text-gold" />
                 </CardContent>
               </Card>
             </Link>
             <Link to="/market-intelligence/reports" className="group">
-              <Card className="bg-zinc-900/50 border-zinc-800 hover:border-gold/30 transition-all h-full">
-                <CardContent className="p-6">
-                  <h3 className="text-white font-bold mb-2 group-hover:text-gold transition-colors">Market Reports</h3>
-                  <p className="text-zinc-500 text-sm mb-4">Download monthly, quarterly, and annual market reports.</p>
-                  <ArrowRight className="w-5 h-5 text-gold" />
+              <Card className="bg-white border-zinc-200 hover:border-gold/50 hover:shadow-lg transition-all">
+                <CardContent className="p-4 flex items-center justify-between">
+                  <span className="text-black font-medium group-hover:text-gold transition-colors">Market Reports</span>
+                  <ArrowRight className="w-4 h-4 text-gold" />
                 </CardContent>
               </Card>
             </Link>
             <Link to="/market-intelligence/methodology" className="group">
-              <Card className="bg-zinc-900/50 border-zinc-800 hover:border-gold/30 transition-all h-full">
-                <CardContent className="p-6">
-                  <h3 className="text-white font-bold mb-2 group-hover:text-gold transition-colors">Methodology</h3>
-                  <p className="text-zinc-500 text-sm mb-4">Learn about our data sources and aggregation methods.</p>
-                  <ArrowRight className="w-5 h-5 text-gold" />
+              <Card className="bg-white border-zinc-200 hover:border-gold/50 hover:shadow-lg transition-all">
+                <CardContent className="p-4 flex items-center justify-between">
+                  <span className="text-black font-medium group-hover:text-gold transition-colors">Methodology</span>
+                  <ArrowRight className="w-4 h-4 text-gold" />
                 </CardContent>
               </Card>
             </Link>
           </div>
-        </div>
-      </section>
-
-      {/* Disclaimer */}
-      <section className="py-12 border-t border-zinc-900">
-        <div className="container mx-auto px-4">
-          <div className="max-w-3xl mx-auto bg-zinc-900/30 border border-zinc-800 rounded-xl p-6 text-center">
-            <div className="flex items-center justify-center gap-4 mb-4">
-              <Database className="w-5 h-5 text-gold" />
-              <Shield className="w-5 h-5 text-gold" />
+          
+          {/* Disclaimer Box - White style */}
+          <div className="max-w-3xl mx-auto mt-8">
+            <div className="bg-white border border-zinc-200 rounded-xl p-6 text-center">
+              <div className="flex items-center justify-center gap-4 mb-4">
+                <Database className="w-5 h-5 text-gold" />
+                <Shield className="w-5 h-5 text-gold" />
+              </div>
+              <p className="text-zinc-600 text-sm whitespace-pre-line">{MARKET_DISCLAIMER}</p>
             </div>
-            <p className="text-zinc-500 text-sm whitespace-pre-line">{MARKET_DISCLAIMER}</p>
           </div>
         </div>
       </section>
