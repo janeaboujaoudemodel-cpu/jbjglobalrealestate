@@ -500,9 +500,11 @@ const Compare = () => {
               Thank you for exploring our exclusive AI-powered property comparison tool.
               Get detailed insights, ROI projections, and expert recommendations.
             </p>
-            <p className="text-zinc-500 text-sm mb-12">
-              Developed by Founder and CEO Jane Abou Jaoude • Powered by JBJ Global Real Estate
-            </p>
+            <div className="text-center mb-12">
+              <p className="text-zinc-300 text-sm font-medium">Jane Abou Jaoude</p>
+              <p className="text-gold text-xs mt-0.5">Founder & CEO</p>
+              <p className="text-zinc-500 text-xs mt-0.5">JBJ Global Real Estate</p>
+            </div>
 
             {/* Steps Guide */}
             <div className="bg-zinc-900/80 backdrop-blur-sm border border-purple-500/20 rounded-3xl p-8 md:p-10 mb-10">
@@ -634,9 +636,11 @@ const Compare = () => {
             <p className="text-zinc-300 text-lg md:text-xl mb-4 max-w-2xl">
               Compare projects dynamically with AI-powered analysis including valuation, ROI, and market insights.
             </p>
-            <p className="text-zinc-500 text-sm">
-              Developed by Founder and CEO Jane Abou Jaoude • Powered by JBJ Global Real Estate
-            </p>
+            <div className="mt-2">
+              <p className="text-zinc-300 text-sm font-medium">Jane Abou Jaoude</p>
+              <p className="text-gold text-xs mt-0.5">Founder & CEO</p>
+              <p className="text-zinc-500 text-xs mt-0.5">JBJ Global Real Estate</p>
+            </div>
 
             {/* Feature Cards - Purple Theme */}
             <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mt-8">

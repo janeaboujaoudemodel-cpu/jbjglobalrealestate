@@ -162,9 +162,11 @@ export default function MarketReportCTAModal({
           </Button>
         </div>
 
-        <p className="text-center text-xs text-zinc-400 mt-4">
-          Created by Founder and CEO Jane Abou Jaoude • Exclusive for JBJ Global Real Estate
-        </p>
+        <div className="text-center mt-4">
+          <p className="text-zinc-300 text-xs font-medium">Jane Abou Jaoude</p>
+          <p className="text-gold text-xs mt-0.5">Founder & CEO</p>
+          <p className="text-zinc-500 text-xs mt-0.5">JBJ Global Real Estate</p>
+        </div>
       </DialogContent>
     </Dialog>
   );

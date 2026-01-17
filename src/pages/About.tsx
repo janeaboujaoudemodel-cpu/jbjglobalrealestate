@@ -225,14 +225,22 @@ const About = () => {
               {/* RIGHT: Founder Statement */}
               <motion.div variants={fadeInUp}>
                 <SectionLabel dark={false}>Written by the Founder</SectionLabel>
-                <p className="text-black text-xl md:text-2xl font-medium mb-6">
+                <div className="mb-6">
                   <Link 
                     to="/founder" 
-                    className="text-gold hover:text-gold-light underline underline-offset-4 transition-colors"
+                    className="block group"
                   >
-                    Founder and CEO Jane Abou Jaoude
+                    <p className="text-black text-xl md:text-2xl font-semibold tracking-wide group-hover:text-gold transition-colors">
+                      Jane Abou Jaoude
+                    </p>
+                    <p className="text-gold text-base font-medium mt-1">
+                      Founder & CEO
+                    </p>
+                    <p className="text-zinc-600 text-sm mt-0.5">
+                      JBJ Global Real Estate
+                    </p>
                   </Link>
-                </p>
+                </div>
                 
                 <ContentText light>
                   <p>
