@@ -671,18 +671,18 @@ const Contact = () => {
         </div>
       </section>
 
-      {/* Compliance Disclaimer */}
-      <section className="py-10 border-t border-zinc-800">
+      {/* Compliance Disclaimer - White background to separate from footer */}
+      <section className="py-10 bg-white border-t border-zinc-200">
         <div className="container mx-auto px-4">
-          <div className="max-w-3xl mx-auto bg-zinc-900/30 border border-zinc-800 rounded-xl p-6 md:p-8">
+          <div className="max-w-3xl mx-auto bg-zinc-50 border border-zinc-200 rounded-xl p-6 md:p-8">
             <div className="flex items-center gap-2 mb-4">
-              <div className="w-8 h-8 bg-gold/10 border border-gold/30 rounded-lg flex items-center justify-center">
+              <div className="w-8 h-8 bg-black rounded-lg flex items-center justify-center">
                 <Shield className="w-4 h-4 text-gold" />
               </div>
-              <h3 className="text-white font-semibold">Important Notice</h3>
+              <h3 className="text-black font-semibold">Important Notice</h3>
             </div>
             
-            <p className="text-zinc-400 text-sm leading-relaxed mb-4">
+            <p className="text-zinc-600 text-sm leading-relaxed mb-4">
               JBJ Global Real Estate provides real estate brokerage support and coordination. 
               We can introduce you to independent, licensed partners for legal services, mortgages, and concierge support. 
               Partner services are delivered under the partner's own licence and terms, and the client contracts directly with the partner. 

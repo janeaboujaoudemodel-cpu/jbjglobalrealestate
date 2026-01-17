@@ -89,6 +89,7 @@ const ContentText = ({ children, className = "", light = false }: { children: Re
 );
 
 // Card component for standards/policies - supports light backgrounds
+// UPDATED: Larger content inside cards per user request
 const FeatureCard = ({ 
   icon: Icon, 
   title, 
@@ -101,14 +102,14 @@ const FeatureCard = ({
   light?: boolean;
 }) => (
   <motion.div 
-    className={`${light ? 'bg-white border-zinc-200 hover:border-gold' : 'bg-zinc-900/60 border-gold/30 hover:border-gold'} border rounded-xl p-6 transition-colors`}
+    className={`${light ? 'bg-white border-zinc-200 hover:border-gold shadow-sm' : 'bg-zinc-900/60 border-gold/30 hover:border-gold'} border rounded-xl p-6 md:p-8 transition-colors`}
     variants={fadeInUp}
   >
-    <div className={`w-12 h-12 rounded-lg ${light ? 'bg-black' : 'bg-black border border-gold'} flex items-center justify-center mb-4`}>
-      <Icon className="w-6 h-6 text-gold" />
+    <div className={`w-14 h-14 rounded-lg ${light ? 'bg-black' : 'bg-black border border-gold'} flex items-center justify-center mb-5`}>
+      <Icon className="w-7 h-7 text-gold" />
     </div>
-    <h3 className={`${light ? 'text-black' : 'text-white'} text-lg font-semibold mb-2`}>{title}</h3>
-    <p className={`${light ? 'text-zinc-600' : 'text-zinc-400'} text-sm leading-relaxed`}>{description}</p>
+    <h3 className={`${light ? 'text-black' : 'text-white'} text-xl font-semibold mb-3`}>{title}</h3>
+    <p className={`${light ? 'text-zinc-600' : 'text-zinc-400'} text-base leading-relaxed`}>{description}</p>
   </motion.div>
 );
 
@@ -371,23 +372,23 @@ const About = () => {
                 />
                 <div className="absolute inset-0 bg-gradient-to-r from-black/50 to-transparent rounded-2xl" />
                 
-                {/* Overlay Cards - Market Intelligence Visual */}
-                <div className="absolute bottom-6 left-6 right-6 grid grid-cols-2 gap-3">
-                  <div className="bg-black/80 backdrop-blur-sm border border-zinc-700/50 rounded-lg p-3">
-                    <BarChart3 className="w-4 h-4 text-gold mb-1" />
-                    <p className="text-white text-xs font-medium">Government Data</p>
+                {/* Overlay Cards - Market Intelligence Visual - LARGER CONTENT */}
+                <div className="absolute bottom-6 left-6 right-6 grid grid-cols-2 gap-4">
+                  <div className="bg-black/80 backdrop-blur-sm border border-zinc-700/50 rounded-lg p-4">
+                    <BarChart3 className="w-6 h-6 text-gold mb-2" />
+                    <p className="text-white text-sm font-medium">Government Data</p>
                   </div>
-                  <div className="bg-black/80 backdrop-blur-sm border border-zinc-700/50 rounded-lg p-3">
-                    <Building2 className="w-4 h-4 text-gold mb-1" />
-                    <p className="text-white text-xs font-medium">Infrastructure</p>
+                  <div className="bg-black/80 backdrop-blur-sm border border-zinc-700/50 rounded-lg p-4">
+                    <Building2 className="w-6 h-6 text-gold mb-2" />
+                    <p className="text-white text-sm font-medium">Infrastructure</p>
                   </div>
-                  <div className="bg-black/80 backdrop-blur-sm border border-zinc-700/50 rounded-lg p-3">
-                    <TrendingUp className="w-4 h-4 text-gold mb-1" />
-                    <p className="text-white text-xs font-medium">Market Cycles</p>
+                  <div className="bg-black/80 backdrop-blur-sm border border-zinc-700/50 rounded-lg p-4">
+                    <TrendingUp className="w-6 h-6 text-gold mb-2" />
+                    <p className="text-white text-sm font-medium">Market Cycles</p>
                   </div>
-                  <div className="bg-black/80 backdrop-blur-sm border border-zinc-700/50 rounded-lg p-3">
-                    <Target className="w-4 h-4 text-gold mb-1" />
-                    <p className="text-white text-xs font-medium">Planning Strategy</p>
+                  <div className="bg-black/80 backdrop-blur-sm border border-zinc-700/50 rounded-lg p-4">
+                    <Target className="w-6 h-6 text-gold mb-2" />
+                    <p className="text-white text-sm font-medium">Planning Strategy</p>
                   </div>
                 </div>
               </motion.div>
@@ -441,8 +442,8 @@ const About = () => {
           </motion.div>
         </Section>
 
-        {/* SECTION 7: OUR STANDARDS - Card Grid */}
-        <Section dark>
+        {/* SECTION 7: OUR STANDARDS - Card Grid - WHITE BACKGROUND */}
+        <Section light>
           <motion.div
             initial="hidden"
             whileInView="visible"
@@ -450,28 +451,32 @@ const About = () => {
             variants={staggerContainer}
           >
             <motion.div className="text-center mb-10" variants={fadeInUp}>
-              <SectionLabel>Our Standards</SectionLabel>
-              <SectionHeadline className="max-w-2xl mx-auto">Integrity in Every Transaction</SectionHeadline>
+              <SectionLabel dark={false}>Our Standards</SectionLabel>
+              <SectionHeadline light className="max-w-2xl mx-auto">Integrity in Every Transaction</SectionHeadline>
             </motion.div>
 
-            {/* 4 Card Grid */}
+            {/* 4 Card Grid - Larger content inside cards */}
             <div className="grid sm:grid-cols-2 lg:grid-cols-4 gap-5">
               <FeatureCard 
+                light
                 icon={Scale}
                 title="Ethical Practice"
                 description="We do not sell based on personal relationships, commission levels, or convenience."
               />
               <FeatureCard 
+                light
                 icon={Shield}
                 title="Legal Compliance"
                 description="We respect the laws of the United Arab Emirates."
               />
               <FeatureCard 
+                light
                 icon={Heart}
                 title="Client Respect"
                 description="We respect the client. We respect the capital being invested."
               />
               <FeatureCard 
+                light
                 icon={TrendingUp}
                 title="Post-Handover Support"
                 description="We continue supporting clients through rental strategy, resale planning, and long-term asset positioning."
@@ -479,7 +484,7 @@ const About = () => {
             </div>
 
             <motion.p 
-              className="text-zinc-400 text-center mt-8 max-w-2xl mx-auto"
+              className="text-zinc-600 text-center mt-8 max-w-2xl mx-auto"
               style={{ fontSize: '15px', lineHeight: 1.7 }}
               variants={fadeInUp}
             >
@@ -488,8 +493,8 @@ const About = () => {
           </motion.div>
         </Section>
 
-        {/* SECTION 8: SIGNATURE */}
-        <Section className="py-8 md:py-12 lg:py-16">
+        {/* SECTION 8: SIGNATURE - WHITE BACKGROUND for flow to CTA */}
+        <Section light className="py-8 md:py-12 lg:py-16">
           <motion.div
             initial="hidden"
             whileInView="visible"
@@ -503,7 +508,7 @@ const About = () => {
                 to="/founder" 
                 className="inline-block group"
               >
-                <p className="text-white text-xl md:text-2xl font-medium mb-2 group-hover:text-gold transition-colors">
+                <p className="text-black text-xl md:text-2xl font-medium mb-2 group-hover:text-gold transition-colors">
                   Jane Abou Jaoude
                 </p>
               </Link>

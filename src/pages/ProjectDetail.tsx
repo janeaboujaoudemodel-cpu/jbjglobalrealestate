@@ -13,7 +13,7 @@ import { Button } from "@/components/ui/button";
 import { ChevronLeft, MapPin, Building, Calendar, DollarSign, Layers, Users, Map, Download, FileText, MessageCircle, Phone } from "lucide-react";
 import { toast } from "sonner";
 
-const WHATSAPP_NUMBER = "97156591100";
+const WHATSAPP_NUMBER = "971565911000";
 
 const ProjectDetail = () => {
   const { slug } = useParams<{ slug: string }>();
@@ -274,17 +274,17 @@ const ProjectDetail = () => {
               <div className="grid grid-cols-2 gap-3">
                 <Button
                   onClick={handleWhatsApp}
-                  className="bg-green-600 hover:bg-green-700 text-white font-semibold h-12"
+                  className="bg-green-600 hover:bg-green-700 text-white font-semibold h-12 flex items-center justify-center"
                 >
                   <MessageCircle className="w-5 h-5 mr-2 text-white" />
-                  WhatsApp
+                  <span>WhatsApp</span>
                 </Button>
                 <Button
                   onClick={handleCall}
-                  className="bg-blue-600 hover:bg-blue-700 text-white font-semibold h-12"
+                  className="bg-blue-600 hover:bg-blue-700 text-white font-semibold h-12 flex items-center justify-center"
                 >
                   <Phone className="w-5 h-5 mr-2 text-white" />
-                  Call Now
+                  <span>Call Now</span>
                 </Button>
               </div>
 

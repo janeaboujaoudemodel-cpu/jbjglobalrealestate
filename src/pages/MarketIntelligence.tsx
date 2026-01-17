@@ -6,6 +6,7 @@ import Footer from "@/components/Footer";
 import { SEOHead } from "@/components/SEOHead";
 import { Button } from "@/components/ui/button";
 import { FounderPhilosophySection } from "@/components/FounderPhilosophySection";
+import { PreFooterSeparator } from "@/components/PreFooterSeparator";
 import {
   MarketOverviewDashboard,
   AreaIntelligenceGrid,
@@ -206,16 +207,16 @@ const MarketIntelligence = () => {
       {/* Data Sources Panel */}
       <DataSourcesPanel />
 
-      {/* Compliance Disclaimer */}
-      <section className="py-12 border-t border-zinc-900">
+      {/* Compliance Disclaimer - White background to separate from footer */}
+      <section className="py-12 bg-white border-t border-zinc-200">
         <div className="container mx-auto px-4">
           <div className="max-w-3xl mx-auto">
-            <div className="bg-zinc-900/50 border border-zinc-800 rounded-2xl p-8 text-center">
-              <div className="w-12 h-12 rounded-xl bg-gold/10 border border-gold/30 flex items-center justify-center mx-auto mb-4">
+            <div className="bg-zinc-50 border border-zinc-200 rounded-2xl p-8 text-center">
+              <div className="w-12 h-12 rounded-xl bg-black flex items-center justify-center mx-auto mb-4">
                 <Info className="w-6 h-6 text-gold" />
               </div>
-              <h3 className="text-white text-xl font-bold mb-4">Compliance & Transparency</h3>
-              <p className="text-zinc-500 text-sm leading-relaxed whitespace-pre-line">
+              <h3 className="text-black text-xl font-bold mb-4">Compliance & Transparency</h3>
+              <p className="text-zinc-600 text-sm leading-relaxed whitespace-pre-line">
                 {MARKET_DISCLAIMER}
               </p>
             </div>
@@ -223,40 +224,15 @@ const MarketIntelligence = () => {
         </div>
       </section>
 
-      {/* CTA Section */}
-      <section className="py-20 bg-gradient-to-b from-zinc-900/50 to-black">
-        <div className="container mx-auto px-4">
-          <motion.div 
-            className="max-w-4xl mx-auto text-center bg-gradient-to-br from-zinc-900 to-zinc-950 rounded-3xl p-12 border border-gold/20"
-            initial={{ opacity: 0, y: 20 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true }}
-          >
-            <h2 
-              className="text-white text-3xl md:text-4xl font-bold mb-4"
-              style={{ fontFamily: "Poppins, sans-serif" }}
-            >
-              Ready to Make Informed Decisions?
-            </h2>
-            <p className="text-zinc-400 text-lg mb-8 max-w-2xl mx-auto">
-              Speak with our team for personalized guidance based on your investment goals and market conditions.
-            </p>
-            <div className="flex flex-wrap justify-center gap-4">
-              <Link to="/contact">
-                <Button className="bg-gradient-to-r from-gold to-gold-dark text-black font-bold px-8 py-6 text-base hover:opacity-90">
-                  Speak With Our Team
-                  <ArrowUpRight className="w-5 h-5 ml-2" />
-                </Button>
-              </Link>
-              <Link to="/quiz">
-                <Button variant="outline" className="border-white/30 text-white hover:bg-white/10 px-8 py-6 text-base">
-                  AI Home Finder
-                </Button>
-              </Link>
-            </div>
-          </motion.div>
-        </div>
-      </section>
+      {/* Pre-Footer White Section with CTA */}
+      <PreFooterSeparator 
+        title="Ready to Make Informed Decisions?"
+        subtitle="Speak with our team for personalized guidance based on your investment goals and market conditions."
+        primaryLink="/contact"
+        primaryText="Speak With Our Team"
+        secondaryLink="/quiz"
+        secondaryText="AI Home Finder"
+      />
 
       <Footer />
     </div>

@@ -691,16 +691,16 @@ const SellerGuide = () => {
           </div>
         </section>
 
-        {/* Compliance Disclaimer */}
-        <section className="py-8 border-t border-zinc-800">
+        {/* Compliance Disclaimer - White background to separate from footer */}
+        <section className="py-8 bg-white border-t border-zinc-200">
           <div className="container mx-auto px-4">
             <div className="max-w-4xl mx-auto">
-              <div className="bg-zinc-900/30 border border-zinc-800 rounded-lg p-6">
-                <h4 className="text-gold font-semibold mb-3 flex items-center gap-2">
-                  <Shield className="w-4 h-4" />
+              <div className="bg-zinc-50 border border-zinc-200 rounded-lg p-6">
+                <h4 className="text-black font-semibold mb-3 flex items-center gap-2">
+                  <Shield className="w-4 h-4 text-gold" />
                   Important Disclaimer
                 </h4>
-                <div className="text-zinc-500 text-sm space-y-2">
+                <div className="text-zinc-600 text-sm space-y-2">
                   <p>
                     JBJ Global Real Estate provides real estate brokerage services only. We are not licensed to provide 
                     legal, financial, mortgage, or investment advice. Information in this guide is for educational purposes 
