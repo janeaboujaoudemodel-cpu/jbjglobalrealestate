@@ -460,13 +460,13 @@ const MarketReport = () => {
     color: #666;
   }
   
-  /* GLOBAL IMAGE RULE - LOCKED (FINAL): Portraits use cover + center 15% for max zoom */
+  /* GLOBAL PORTRAIT IMAGE RULE - LOCKED (FINAL): Portraits use cover + center 40% for max zoom */
   .founder-image {
     width: 160px;
     height: 160px;
     border-radius: 50%;
     object-fit: cover;
-    object-position: center 15%;
+    object-position: center 40%;
     border: 4px solid #A8925A;
     margin: 0 auto 30px;
     display: block;
@@ -1497,10 +1497,10 @@ const MarketReport = () => {
     <h2 style="color: #8b5cf6;">AI Property Matchmaker</h2>
     <p>JBJ Global Real Estate has developed an exclusive AI-powered Property Matchmaker to help buyers identify properties aligned with their criteria.</p>
     
-    <div style="background: linear-gradient(135deg, rgba(139, 92, 246, 0.2) 0%, rgba(168, 146, 90, 0.1) 100%); border: 1px solid rgba(139, 92, 246, 0.4); border-radius: 16px; padding: 25px; margin: 25px 0;">
-      <p style="color: #a78bfa; font-size: 12px; text-transform: uppercase; letter-spacing: 0.15em; margin-bottom: 10px;">Premium AI Technology</p>
-      <p style="color: #fff; font-size: 16px; margin-bottom: 5px; font-weight: 600;">Developed by the Founder, Jane Abou Jaoude</p>
-      <p style="color: #888; font-size: 13px; margin-bottom: 0;">Exclusive for JBJ Global Real Estate • Real Estate Brokerage</p>
+    <div style="background: linear-gradient(135deg, #ffffff 0%, #f5f5f0 100%); border: 1px solid #d4d4d4; border-radius: 16px; padding: 25px; margin: 25px 0;">
+      <p style="color: #A8925A; font-size: 12px; text-transform: uppercase; letter-spacing: 0.15em; margin-bottom: 10px;">Premium AI Technology</p>
+      <p style="color: #000; font-size: 16px; margin-bottom: 5px; font-weight: 600;">Developed by the Founder and CEO, Jane Abou Jaoude</p>
+      <p style="color: #555; font-size: 13px; margin-bottom: 0;">Exclusive for JBJ Global Real Estate • Real Estate Brokerage</p>
     </div>
     
     <h3>How It Works</h3>
@@ -1908,7 +1908,7 @@ const MarketReport = () => {
             transition={{ duration: 0.6 }}
             className="max-w-4xl mx-auto text-center"
           >
-            {/* GLOBAL FOUNDER IMAGE RULE: Perfect center, no cropping */}
+            {/* GLOBAL FOUNDER IMAGE RULE: Perfect center 40%, no cropping */}
             <div className="w-24 h-24 md:w-28 md:h-28 rounded-full overflow-hidden border-2 border-gold/50 mx-auto mb-6 bg-zinc-900">
               <img 
                 src={founderProfessional} 
@@ -1916,7 +1916,7 @@ const MarketReport = () => {
                 className="w-full h-full"
                 style={{
                   objectFit: 'cover',
-                  objectPosition: 'center center',
+                  objectPosition: 'center 40%',
                 }}
               />
             </div>
@@ -1942,7 +1942,7 @@ const MarketReport = () => {
             whileInView={{ opacity: 1, x: 0 }}
             viewport={{ once: true }}
             transition={{ duration: 0.6, delay: 0.2 }}
-            className="lg:col-span-3 bg-gradient-to-br from-zinc-900/80 to-zinc-950 border border-zinc-800 rounded-3xl p-8 md:p-10"
+            className="lg:col-span-3 bg-white border border-zinc-200 rounded-3xl p-8 md:p-10 shadow-xl"
           >
             {/* Show streamlined view for returning users */}
             {canDirectDownload ? (
@@ -1950,8 +1950,8 @@ const MarketReport = () => {
                 <div className="w-20 h-20 rounded-full bg-gradient-to-br from-gold/20 to-gold/5 border border-gold/30 flex items-center justify-center mx-auto mb-6">
                   <CheckCircle className="w-10 h-10 text-gold" />
                 </div>
-                <h2 className="text-white text-2xl font-bold mb-3">Welcome Back!</h2>
-                <p className="text-zinc-400 mb-2">
+                <h2 className="text-black text-2xl font-bold mb-3">Welcome Back!</h2>
+                <p className="text-zinc-600 mb-2">
                   We recognize you, <span className="text-gold font-medium">{leadData?.fullName || leadData?.email}</span>
                 </p>
                 <p className="text-zinc-500 text-sm mb-8">
@@ -1973,8 +1973,8 @@ const MarketReport = () => {
                     <Unlock className="w-6 h-6 text-gold" />
                   </div>
                   <div>
-                    <h2 className="text-white text-2xl font-bold">Unlock Your Book</h2>
-                    <p className="text-zinc-400 mt-1">
+                    <h2 className="text-black text-2xl font-bold">Unlock Your Book</h2>
+                    <p className="text-zinc-600 mt-1">
                       Complete the form below to unlock instant access to the UAE Market Intelligence book.
                     </p>
                   </div>
@@ -1982,12 +1982,12 @@ const MarketReport = () => {
 
                 <div className="space-y-5">
                   <div>
-                    <Label className="text-zinc-300 text-sm font-medium">Full Name *</Label>
+                    <Label className="text-zinc-700 text-sm font-medium">Full Name *</Label>
                     <Input
                       value={form.fullName}
                       onChange={(e) => setForm((p) => ({ ...p, fullName: e.target.value }))}
                       placeholder="Enter your full name"
-                      className="mt-2 bg-zinc-900/50 border-zinc-700 text-white h-12 rounded-xl focus:border-gold/50 focus:ring-gold/20"
+                      className="mt-2 bg-zinc-50 border-zinc-300 text-black h-12 rounded-xl focus:border-gold/50 focus:ring-gold/20"
                     />
                   </div>
 

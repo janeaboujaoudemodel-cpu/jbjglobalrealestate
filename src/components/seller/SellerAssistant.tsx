@@ -156,9 +156,9 @@ Help the user complete their listing form and answer questions about the selling
   };
 
   const quickActions = [
-    { icon: Calculator, label: "Run Evaluator", action: () => window.open("/property-evaluator", "_blank") },
-    { icon: FileText, label: "Seller Guide", action: () => window.open("/seller-guide", "_blank") },
-    { icon: MessageCircle, label: "WhatsApp", action: () => window.open(`https://wa.me/${CONTACT_INFO.whatsappNumber}`, "_blank") },
+    { icon: Calculator, label: "Run Evaluator", action: () => window.open("/property-evaluator", "_blank"), iconClass: "text-gold" },
+    { icon: FileText, label: "Seller Guide", action: () => window.open("/seller-guide", "_blank"), iconClass: "text-gold" },
+    { icon: MessageCircle, label: "WhatsApp", action: () => window.open(`https://wa.me/${CONTACT_INFO.whatsappNumber}`, "_blank"), iconClass: "text-green-500" },
   ];
 
   return (
@@ -166,7 +166,7 @@ Help the user complete their listing form and answer questions about the selling
       initial={{ opacity: 0, y: 20 }}
       animate={{ opacity: 1, y: 0 }}
       exit={{ opacity: 0, y: 20 }}
-      className="bg-zinc-900/80 border border-gold/30 rounded-xl overflow-hidden"
+      className="bg-white border border-gold/30 rounded-xl overflow-hidden shadow-xl"
     >
       {/* Header */}
       <div className="bg-gradient-to-r from-gold/20 to-gold/5 border-b border-gold/20 px-4 py-3 flex items-center justify-between">
@@ -175,7 +175,7 @@ Help the user complete their listing form and answer questions about the selling
             <Sparkles className="w-4 h-4 text-gold" />
           </div>
           <div>
-            <h3 className="text-white font-semibold text-sm">JBJ Seller Assistant</h3>
+            <h3 className="text-black font-semibold text-sm">JBJ Seller Assistant</h3>
             <p className="text-gold/70 text-xs">Here to help you list your property</p>
           </div>
         </div>
@@ -183,30 +183,30 @@ Help the user complete their listing form and answer questions about the selling
           variant="ghost"
           size="icon"
           onClick={onClose}
-          className="text-zinc-400 hover:text-white hover:bg-zinc-800"
+          className="text-zinc-500 hover:text-black hover:bg-zinc-100"
         >
           <X className="w-4 h-4" />
         </Button>
       </div>
 
       {/* Quick Actions */}
-      <div className="px-4 py-2 border-b border-zinc-800 flex gap-2 overflow-x-auto">
+      <div className="px-4 py-2 border-b border-zinc-200 flex gap-2 overflow-x-auto bg-zinc-50">
         {quickActions.map((action, index) => (
           <Button
             key={index}
             variant="outline"
             size="sm"
             onClick={action.action}
-            className="border-zinc-700 text-zinc-300 hover:text-gold hover:border-gold/50 whitespace-nowrap text-xs"
+            className="border-zinc-300 text-zinc-700 hover:text-gold hover:border-gold/50 whitespace-nowrap text-xs bg-white"
           >
-            <action.icon className="w-3 h-3 mr-1" />
+            <action.icon className={`w-3 h-3 mr-1 ${action.iconClass}`} />
             {action.label}
           </Button>
         ))}
       </div>
 
       {/* Messages */}
-      <ScrollArea className="h-[300px] p-4" ref={scrollRef}>
+      <ScrollArea className="h-[300px] p-4 bg-white" ref={scrollRef}>
         <div className="space-y-4">
           {messages.map((message, index) => (
             <div
@@ -217,7 +217,7 @@ Help the user complete their listing form and answer questions about the selling
                 className={`max-w-[85%] rounded-lg px-4 py-2.5 ${
                   message.role === "user"
                     ? "bg-gold text-black"
-                    : "bg-zinc-800 text-zinc-200"
+                    : "bg-zinc-100 text-zinc-800 border border-zinc-200"
                 }`}
               >
                 <p className="text-sm whitespace-pre-wrap">{message.content}</p>
@@ -226,7 +226,7 @@ Help the user complete their listing form and answer questions about the selling
           ))}
           {isLoading && (
             <div className="flex justify-start">
-              <div className="bg-zinc-800 rounded-lg px-4 py-2.5">
+              <div className="bg-zinc-100 border border-zinc-200 rounded-lg px-4 py-2.5">
                 <Loader2 className="w-4 h-4 animate-spin text-gold" />
               </div>
             </div>
@@ -235,7 +235,7 @@ Help the user complete their listing form and answer questions about the selling
       </ScrollArea>
 
       {/* Suggested Questions */}
-      <div className="px-4 py-2 border-t border-zinc-800">
+      <div className="px-4 py-2 border-t border-zinc-200 bg-zinc-50">
         <p className="text-zinc-500 text-xs mb-2 flex items-center gap-1">
           <Lightbulb className="w-3 h-3" />
           Suggested questions:
@@ -246,7 +246,7 @@ Help the user complete their listing form and answer questions about the selling
               key={index}
               onClick={() => sendMessage(question)}
               disabled={isLoading}
-              className="text-xs px-3 py-1.5 bg-zinc-800 text-zinc-300 rounded-full hover:bg-zinc-700 hover:text-white transition-colors disabled:opacity-50"
+              className="text-xs px-3 py-1.5 bg-white text-zinc-700 border border-zinc-300 rounded-full hover:bg-gold/10 hover:text-gold hover:border-gold/50 transition-colors disabled:opacity-50"
             >
               {question}
             </button>
@@ -255,7 +255,7 @@ Help the user complete their listing form and answer questions about the selling
       </div>
 
       {/* Input */}
-      <div className="p-4 border-t border-zinc-800">
+      <div className="p-4 border-t border-zinc-200 bg-white">
         <form
           onSubmit={(e) => {
             e.preventDefault();
@@ -267,7 +267,7 @@ Help the user complete their listing form and answer questions about the selling
             value={input}
             onChange={(e) => setInput(e.target.value)}
             placeholder="Ask me anything about selling..."
-            className="bg-zinc-800 border-zinc-700 text-white placeholder:text-zinc-500"
+            className="bg-zinc-50 border-zinc-300 text-black placeholder:text-zinc-400"
             disabled={isLoading}
           />
           <Button
@@ -282,7 +282,7 @@ Help the user complete their listing form and answer questions about the selling
             )}
           </Button>
         </form>
-        <p className="text-zinc-600 text-xs mt-2 text-center">
+        <p className="text-zinc-500 text-xs mt-2 text-center">
           AI responses are informational only. For advice, contact our team.
         </p>
       </div>
