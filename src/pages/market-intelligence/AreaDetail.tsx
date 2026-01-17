@@ -1,8 +1,9 @@
 import { motion } from "framer-motion";
-import { MapPin, TrendingUp, TrendingDown, BarChart3, Database, Shield, ArrowLeft, Info, Building2, Users, Home } from "lucide-react";
+import { MapPin, TrendingUp, TrendingDown, BarChart3, Database, Shield, ArrowLeft, Info, Building2, Users, Home, ArrowRight } from "lucide-react";
 import { Link, useParams } from "react-router-dom";
 import Footer from "@/components/Footer";
 import { SEOHead } from "@/components/SEOHead";
+import { MarketIntelligenceSchema } from "@/components/seo/MarketIntelligenceSchema";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
@@ -68,10 +69,16 @@ const MarketAreaDetail = () => {
   return (
     <div className="min-h-screen bg-black">
       <SEOHead 
-        title={`${area.area} Market Intelligence | JBJ Global Real Estate`}
-        description={`${area.area} real estate market analysis. Historical price trends, rental analysis, and demand indicators powered by official government Open Data.`}
-        keywords={`${area.area} property prices, ${area.area} real estate, Dubai ${area.area} market`}
+        title={`${area.area} Rent Trends & Property Prices | Is ${area.area} Good for Renting? | JBJ GLOBAL REAL ESTATE`}
+        description={`${area.area} real estate market analysis. Historical price trends, rent analysis, demand vs supply indicators, and market insights for BUY · SELL · RENT decisions. Powered by official government Open Data.`}
+        keywords={`${area.area} property prices, ${area.area} rent trends, is ${area.area} good for renting, Dubai ${area.area} real estate, ${area.area} market analysis, ${area.area} investment`}
         canonicalPath={`/market-intelligence/areas/${slug}`}
+      />
+      <MarketIntelligenceSchema 
+        type="area-detail"
+        areaName={area.area}
+        areaSlug={slug}
+        description={`${area.area} real estate market analysis with historical price trends, rent analysis, and demand indicators.`}
       />
 
       {/* Hero */}
@@ -219,6 +226,41 @@ const MarketAreaDetail = () => {
                 </Button>
               </Link>
             </div>
+          </div>
+        </div>
+      </section>
+
+      {/* Internal Links */}
+      <section className="py-12 border-t border-zinc-900">
+        <div className="container mx-auto px-4">
+          <h3 className="text-white text-xl font-bold mb-6 text-center" style={{ fontFamily: "Poppins, sans-serif" }}>
+            Continue Exploring
+          </h3>
+          <div className="grid md:grid-cols-3 gap-4 max-w-3xl mx-auto">
+            <Link to="/market-intelligence/overview" className="group">
+              <Card className="bg-zinc-900/50 border-zinc-800 hover:border-gold/30 transition-all">
+                <CardContent className="p-4 flex items-center justify-between">
+                  <span className="text-white group-hover:text-gold transition-colors">Market Overview</span>
+                  <ArrowRight className="w-4 h-4 text-gold" />
+                </CardContent>
+              </Card>
+            </Link>
+            <Link to="/market-intelligence/reports" className="group">
+              <Card className="bg-zinc-900/50 border-zinc-800 hover:border-gold/30 transition-all">
+                <CardContent className="p-4 flex items-center justify-between">
+                  <span className="text-white group-hover:text-gold transition-colors">Market Reports</span>
+                  <ArrowRight className="w-4 h-4 text-gold" />
+                </CardContent>
+              </Card>
+            </Link>
+            <Link to="/market-intelligence/methodology" className="group">
+              <Card className="bg-zinc-900/50 border-zinc-800 hover:border-gold/30 transition-all">
+                <CardContent className="p-4 flex items-center justify-between">
+                  <span className="text-white group-hover:text-gold transition-colors">Methodology</span>
+                  <ArrowRight className="w-4 h-4 text-gold" />
+                </CardContent>
+              </Card>
+            </Link>
           </div>
         </div>
       </section>

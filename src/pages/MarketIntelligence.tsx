@@ -1,6 +1,7 @@
 import { motion } from "framer-motion";
 import { ArrowUpRight, BarChart3, Database, Shield, Info } from "lucide-react";
 import { Link } from "react-router-dom";
+import { useEffect } from "react";
 import Footer from "@/components/Footer";
 import { SEOHead } from "@/components/SEOHead";
 import { Button } from "@/components/ui/button";
@@ -18,13 +19,92 @@ const fadeInUp = {
   visible: { opacity: 1, y: 0, transition: { duration: 0.6 } }
 };
 
+// Organization schema for main Market Intelligence page
+const organizationSchema = {
+  "@context": "https://schema.org",
+  "@type": "Organization",
+  "@id": "https://jbjglobalrealestate.lovable.app/#organization",
+  name: "JBJ GLOBAL REAL ESTATE",
+  url: "https://jbjglobalrealestate.lovable.app",
+  logo: "https://jbjglobalrealestate.lovable.app/lovable-uploads/c6c68c7f-b5b7-4e7a-9f66-3ff7e08fd37f.png",
+  founder: {
+    "@type": "Person",
+    name: "JANE ABOU JAOUDÉ"
+  },
+  contactPoint: {
+    "@type": "ContactPoint",
+    contactType: "customer service",
+    email: "contact@JBJ.ae"
+  }
+};
+
+const breadcrumbSchema = {
+  "@context": "https://schema.org",
+  "@type": "BreadcrumbList",
+  itemListElement: [
+    {
+      "@type": "ListItem",
+      position: 1,
+      name: "Home",
+      item: "https://jbjglobalrealestate.lovable.app"
+    },
+    {
+      "@type": "ListItem",
+      position: 2,
+      name: "Market Intelligence",
+      item: "https://jbjglobalrealestate.lovable.app/market-intelligence"
+    }
+  ]
+};
+
+const webPageSchema = {
+  "@context": "https://schema.org",
+  "@type": "WebPage",
+  name: "Dubai Real Estate Market Intelligence | BUY · SELL · RENT Insights",
+  description: "Data-driven Dubai real estate insights powered by official government Open Data. Explore market trends, area analysis, and AI-generated reports for BUY · SELL · RENT decisions.",
+  url: "https://jbjglobalrealestate.lovable.app/market-intelligence",
+  isPartOf: {
+    "@type": "WebSite",
+    name: "JBJ GLOBAL REAL ESTATE",
+    url: "https://jbjglobalrealestate.lovable.app"
+  },
+  publisher: organizationSchema,
+  about: {
+    "@type": "Thing",
+    name: "Dubai Real Estate Market Intelligence"
+  }
+};
+
 const MarketIntelligence = () => {
+  // Inject structured data
+  useEffect(() => {
+    const schemas = [organizationSchema, breadcrumbSchema, webPageSchema];
+    
+    // Remove existing schema scripts
+    const existingScripts = document.querySelectorAll('script[data-schema="market-intelligence-main"]');
+    existingScripts.forEach(script => script.remove());
+
+    // Add new schema scripts
+    schemas.forEach((schema) => {
+      const script = document.createElement("script");
+      script.type = "application/ld+json";
+      script.setAttribute("data-schema", "market-intelligence-main");
+      script.textContent = JSON.stringify(schema);
+      document.head.appendChild(script);
+    });
+
+    return () => {
+      const scripts = document.querySelectorAll('script[data-schema="market-intelligence-main"]');
+      scripts.forEach(script => script.remove());
+    };
+  }, []);
+
   return (
     <div className="min-h-screen bg-black">
       <SEOHead 
-        title="Market Intelligence | Dubai Real Estate Insights | JBJ Global Real Estate"
-        description="Data-driven Dubai real estate insights powered by official government Open Data. Explore market trends, area analysis, and AI-generated reports."
-        keywords="Dubai real estate market, property trends, market intelligence, open data, Dubai property analysis, investment insights"
+        title="Market Intelligence | Dubai Real Estate Insights | BUY · SELL · RENT | JBJ GLOBAL REAL ESTATE"
+        description="Data-driven Dubai real estate insights powered by official government Open Data. Explore market trends, area analysis, and AI-generated reports. No predictions, just trusted insights."
+        keywords="Dubai real estate market, property trends, market intelligence, open data, Dubai property analysis, rent trends Dubai, BUY SELL RENT Dubai, JANE ABOU JAOUDÉ"
         canonicalPath="/market-intelligence"
       />
 

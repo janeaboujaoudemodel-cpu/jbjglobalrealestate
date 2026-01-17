@@ -1,8 +1,9 @@
 import { motion } from "framer-motion";
-import { FileText, Download, Calendar, Database, Shield, ExternalLink } from "lucide-react";
+import { FileText, Download, Calendar, Database, Shield, ExternalLink, ArrowRight } from "lucide-react";
 import { Link } from "react-router-dom";
 import Footer from "@/components/Footer";
 import { SEOHead } from "@/components/SEOHead";
+import { MarketIntelligenceSchema } from "@/components/seo/MarketIntelligenceSchema";
 import { Card, CardContent } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
@@ -18,7 +19,7 @@ const reports = [
     id: 'monthly-jan-2026',
     title: 'Monthly Market Snapshot',
     subtitle: 'January 2026',
-    description: 'Quick overview of transaction volumes, price movements, and rental trends for the past month.',
+    description: 'Quick overview of transaction volumes, price movements, and rent trends for the past month.',
     type: 'monthly',
     date: '2026-01-15',
     pages: 12,
@@ -96,10 +97,15 @@ const MarketReportsPage = () => {
   return (
     <div className="min-h-screen bg-black">
       <SEOHead 
-        title="Market Reports | Dubai Real Estate Reports | JBJ Global Real Estate"
-        description="Download monthly, quarterly, and annual Dubai real estate market reports. Data-driven insights powered by official government Open Data."
-        keywords="Dubai real estate reports, market analysis, property reports, investment reports"
+        title="Dubai Real Estate Market Reports | BUY · SELL · RENT Analysis | JBJ GLOBAL REAL ESTATE"
+        description="Download monthly, quarterly, and annual Dubai real estate market reports. Data-driven insights powered by official government Open Data. No predictions, just clear analysis."
+        keywords="Dubai real estate report, Dubai rental market report, UAE property market insights, Dubai market analysis, quarterly market review, annual property report"
         canonicalPath="/market-intelligence/reports"
+      />
+      <MarketIntelligenceSchema 
+        type="reports"
+        lastUpdated="2026-01-15"
+        description="Monthly, quarterly, and annual Dubai real estate market reports with clear charts, government Open Data attribution, and editorial analysis for BUY · SELL · RENT decisions."
       />
 
       {/* Hero */}
@@ -231,6 +237,38 @@ const MarketReportsPage = () => {
               </Link>
             </CardContent>
           </Card>
+        </div>
+      </section>
+
+      {/* Internal Links */}
+      <section className="py-12 border-t border-zinc-900">
+        <div className="container mx-auto px-4">
+          <div className="grid md:grid-cols-3 gap-4 max-w-3xl mx-auto">
+            <Link to="/market-intelligence/overview" className="group">
+              <Card className="bg-zinc-900/50 border-zinc-800 hover:border-gold/30 transition-all">
+                <CardContent className="p-4 flex items-center justify-between">
+                  <span className="text-white group-hover:text-gold transition-colors">Market Overview</span>
+                  <ArrowRight className="w-4 h-4 text-gold" />
+                </CardContent>
+              </Card>
+            </Link>
+            <Link to="/market-intelligence/areas" className="group">
+              <Card className="bg-zinc-900/50 border-zinc-800 hover:border-gold/30 transition-all">
+                <CardContent className="p-4 flex items-center justify-between">
+                  <span className="text-white group-hover:text-gold transition-colors">Area Intelligence</span>
+                  <ArrowRight className="w-4 h-4 text-gold" />
+                </CardContent>
+              </Card>
+            </Link>
+            <Link to="/market-intelligence/methodology" className="group">
+              <Card className="bg-zinc-900/50 border-zinc-800 hover:border-gold/30 transition-all">
+                <CardContent className="p-4 flex items-center justify-between">
+                  <span className="text-white group-hover:text-gold transition-colors">Methodology</span>
+                  <ArrowRight className="w-4 h-4 text-gold" />
+                </CardContent>
+              </Card>
+            </Link>
+          </div>
         </div>
       </section>
 
