@@ -29,7 +29,7 @@ export const JJLogo = ({ size = 'md', showText = true, className = '' }: JJLogoP
       {/* JBJ Monogram */}
       <img 
         src={isFooter ? jbjMonogramTransparent : jbjMonogramDark} 
-        alt="JBJ Global Real Estate"
+        alt="JBJ GLOBAL REAL ESTATE"
         width={config.width}
         height={config.height}
         className="object-contain"
@@ -46,7 +46,7 @@ export const JJLogo = ({ size = 'md', showText = true, className = '' }: JJLogoP
           }}
         >
           <span className={`font-semibold ${config.text} tracking-[0.12em] uppercase`}>
-            JBJ Global Real Estate
+            JBJ GLOBAL REAL ESTATE
           </span>
         </div>
       )}
@@ -63,7 +63,7 @@ export const JJLogoHeader = ({ className = '' }: { className?: string }) => (
     {/* JBJ Monogram */}
     <img 
       src={jbjMonogramDark} 
-      alt="JBJ Global Real Estate"
+      alt="JBJ GLOBAL REAL ESTATE"
       width={44}
       height={44}
       className="object-contain shrink-0"

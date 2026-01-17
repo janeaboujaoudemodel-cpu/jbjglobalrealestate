@@ -30,7 +30,7 @@ const Terms = () => {
               <section>
                 <h2 className="text-gold text-xl font-semibold mb-4">1. Who We Are</h2>
                 <p>
-                  This website is operated by JBJ Global Real Estate (the "Company", "we", "us", "our"). 
+                  This website is operated by JBJ GLOBAL REAL ESTATE (the "Company", "we", "us", "our"). 
                   We are a Dubai-based real estate brokerage and provide real estate brokerage support 
                   for property sales and rentals, and (where applicable) holiday homes support subject 
                   to relevant approvals and permits.
@@ -176,13 +176,13 @@ const Terms = () => {
                   For questions about these Terms:
                 </p>
                 <p className="mt-4">
-                  <strong>JBJ Global Real Estate</strong><br />
+                  <strong>JBJ GLOBAL REAL ESTATE</strong><br />
                   Real Estate Brokerage<br />
                   Dubai, United Arab Emirates<br />
                   Email: <a href="mailto:privacy@jbj.ae" className="text-gold hover:underline">privacy@jbj.ae</a>
                 </p>
                 <p className="mt-6 text-zinc-500 text-sm">
-                  © {new Date().getFullYear()} JBJ Global Real Estate. All Rights Reserved.<br />
+                  © {new Date().getFullYear()} JBJ GLOBAL REAL ESTATE. All Rights Reserved.<br />
                   Developed and Created by Founder Jane Abou Jaoude
                 </p>
               </section>

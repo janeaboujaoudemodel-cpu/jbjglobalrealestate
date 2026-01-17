@@ -44,7 +44,7 @@ const NATIONALITIES = [
 const SERVICES = [
   { value: 'buy', label: 'Buy Property' },
   { value: 'sell', label: 'Sell Property' },
-  { value: 'rent', label: 'Rent / Lease Property' },
+  { value: 'rent', label: 'Rent Property' },
   { value: 'investment', label: 'Investment Advisory' },
   { value: 'mortgage', label: 'Mortgage Support' },
   { value: 'legal', label: 'Legal / Law Firm Support' },

@@ -180,7 +180,7 @@ const HelpIcon = ({ title, gradient }: { title: string; gradient: string }) => {
             <polygon points="18,4 4,16 32,16" fill="url(#helpGrad)"/>
           </g>
         );
-      case "Rent / Lease Brokerage":
+      case "Rent Brokerage":
         return (
           <g>
             <rect x="6" y="10" width="28" height="20" rx="3" fill="url(#helpGrad)" opacity="0.9"/>

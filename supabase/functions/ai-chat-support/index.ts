@@ -200,13 +200,13 @@ type RenterType = 'tenant' | 'landlord' | null;
 const INTENT_KEYWORDS = {
   buy: ['buy', 'purchase', 'invest', 'investment', 'looking to buy', 'want to buy', 'buying', 'off-plan', 'offplan', 'investor', 'freehold', 'own', 'ownership', 'first home', 'golden visa property', 'roi', 'yield', 'returns'],
   sell: ['sell', 'selling', 'want to sell', 'looking to sell', 'property valuation', 'market price', 'home value', 'list for sale', 'seller'],
-  rent_lease: ['rent', 'rental', 'lease', 'leasing', 'tenant', 'landlord', 'renting', 'monthly rent', 'annual rent', 'looking to rent', 'want to rent', 'short term', 'long term', 'furnished', 'unfurnished', 'move in', 'ejari', 'tenancy', 'let', 'letting'],
+  rent_lease: ['rent', 'rental', 'tenant', 'landlord', 'renting', 'monthly rent', 'annual rent', 'looking to rent', 'want to rent', 'short term', 'long term', 'furnished', 'unfurnished', 'move in', 'ejari', 'tenancy', 'let', 'letting'],
   broker_registration: ['become a broker', 'join as broker', 'broker registration', 'agent career', 'real estate career', 'work as broker', 'join jbj', 'career in real estate'],
   partner_services: ['mortgage', 'home loan', 'financing', 'legal', 'lawyer', 'contract', 'company setup', 'business setup', 'free zone', 'visa', 'golden visa', 'investor visa', 'residency', 'schengen']
 };
 
 const RENTAL_TENANT_KEYWORDS = ['looking for apartment', 'looking for villa', 'need to rent', 'want to rent', 'move in', 'relocating', 'moving to dubai', 'monthly budget'];
-const RENTAL_LANDLORD_KEYWORDS = ['list my property', 'rent out', 'rent my', 'find tenant', 'lease my', 'my property', 'vacant property', 'rental income', 'property management'];
+const RENTAL_LANDLORD_KEYWORDS = ['list my property', 'rent out', 'rent my', 'find tenant', 'my property', 'vacant property', 'rental income', 'property management'];
 
 function classifyIntent(message: string): { intent: LeadIntent; renterType: RenterType; confidence: number } {
   const lowerMessage = message.toLowerCase();
@@ -257,7 +257,7 @@ const WEBSITE_KNOWLEDGE = `
 JBJ GLOBAL REAL ESTATE - COMPLETE SERVICES & INFORMATION:
 
 COMPANY OVERVIEW:
-- JBJ Global Real Estate is a Dubai-based real estate brokerage licensed for BUY, SELL & RENT (LEASING) only
+- JBJ GLOBAL REAL ESTATE is a Dubai-based real estate brokerage licensed for BUY, SELL & RENT only
 - Founded by Jane Abou Jaoude
 - Headquarters: Dubai, UAE
 
@@ -270,7 +270,7 @@ CONTACT INFORMATION (USE ONLY THESE):
 LICENSED SERVICES (Direct Services):
 1. BUYING PROPERTIES - Off-plan and ready properties across UAE
 2. SELLING PROPERTIES - Property listings and marketing
-3. RENTING / LEASING - Tenant placements and landlord services
+3. RENTING - Tenant placements and landlord services
 
 PARTNER INTRODUCTIONS ONLY (NOT in-house services):
 - Mortgage services - We facilitate introductions to licensed mortgage brokers
@@ -426,7 +426,7 @@ The user wants to sell their property. Focus on:
         break;
       case 'rent_lease':
         intentContext = `
-DETECTED INTENT: RENT / LEASE
+DETECTED INTENT: RENT
 Renter Type: ${classification.renterType || 'Unknown - need to clarify'}
 
 ${classification.renterType === 'tenant' ? `
@@ -434,7 +434,7 @@ USER IS A TENANT looking to rent. Ask these qualification questions (one at a ti
 1. Monthly budget range
 2. Preferred areas (Dubai Marina, Downtown, JVC, etc.)
 3. Property type (Studio, 1BR, 2BR, Villa, etc.)
-4. Lease duration (short/long term)
+4. Rental duration (short/long term)
 5. Move-in timeline
 ` : ''}
 ${classification.renterType === 'landlord' ? `
@@ -471,7 +471,7 @@ NEVER claim we provide these services directly.`;
         serviceContext = 'Focus on selling properties - valuation, marketing, listings.';
         break;
       case 'rent':
-        serviceContext = 'Focus on renting/leasing - tenant search, landlord services, property management partner intros.';
+        serviceContext = 'Focus on renting - tenant search, landlord services, property management partner intros.';
         break;
       case 'mortgage':
       case 'legal':
@@ -489,7 +489,7 @@ NEVER claim we provide these services directly.`;
 
     // Add clarification if needed
     const clarificationNote = needsClarification ? 
-      `\n\nIMPORTANT: The user said they want to "list their property". You MUST ask: "Would you like to **sell** the property or **rent/lease** it out?" Do NOT assume.` : '';
+      `\n\nIMPORTANT: The user said they want to "list their property". You MUST ask: "Would you like to **sell** the property or **rent** it out?" Do NOT assume.` : '';
 
     // ============================================
     // BUILD MESSAGES
@@ -501,7 +501,7 @@ NEVER claim we provide these services directly.`;
 
 ## WHO YOU ARE:
 - Your name is Sara - friendly and professional
-- Expert on Dubai real estate - buying, selling, and renting/leasing
+- Expert on Dubai real estate - buying, selling, and renting
 - You work for JBJ GLOBAL REAL ESTATE
 
 ## CRITICAL COMPLIANCE RULES:
@@ -509,7 +509,7 @@ NEVER claim we provide these services directly.`;
 ### JBJ IS LICENSED FOR (Direct Services):
 - BUY properties
 - SELL properties  
-- RENT / LEASE properties
+- RENT properties
 
 ### PARTNER SERVICES ONLY (NOT in-house):
 For Mortgage, Legal, Visa, Company Setup - ALWAYS say:
@@ -534,7 +534,7 @@ ${WEBSITE_KNOWLEDGE}
 ## TALKING TO:
 ${userName || 'this client'}
 
-## RENTAL QUALIFICATION (when intent is rent/lease):
+## RENTAL QUALIFICATION (when intent is rent):
 Ask these questions ONE AT A TIME:
 ${Object.entries(RENTAL_QUALIFICATION_FLOW).map(([k, v]) => typeof v === 'string' ? `- ${v}` : '').filter(Boolean).join('\n')}
 

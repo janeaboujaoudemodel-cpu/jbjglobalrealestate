@@ -303,7 +303,7 @@ const PropertyMap = () => {
                           onClick={() => setTransactionType(type)}
                           className="flex-1"
                         >
-                          {type === 'all' ? 'All' : type === 'buy' ? 'Buy' : 'Rent / Lease'}
+                          {type === 'all' ? 'All' : type === 'buy' ? 'Buy' : 'Rent'}
                         </Button>
                       ))}
                     </div>

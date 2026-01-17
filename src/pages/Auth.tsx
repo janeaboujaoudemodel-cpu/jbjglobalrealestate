@@ -85,7 +85,7 @@ const Auth = forwardRef<HTMLDivElement>((_, ref) => {
             toast.error(error.message);
           }
         } else {
-          toast.success("Account created successfully! Welcome to JBJ Global Real Estate.");
+          toast.success("Account created successfully! Welcome to JBJ GLOBAL REAL ESTATE.");
           navigate("/");
         }
       } else if (mode === "signin") {
@@ -260,7 +260,7 @@ const Auth = forwardRef<HTMLDivElement>((_, ref) => {
           </div>
 
           <p className="text-center text-gray-400 text-xs mt-8">
-            © {new Date().getFullYear()} JBJ Global Real Estate. All Rights Reserved.
+            © {new Date().getFullYear()} JBJ GLOBAL REAL ESTATE. All Rights Reserved.
           </p>
         </div>
       </div>
@@ -502,7 +502,7 @@ const Auth = forwardRef<HTMLDivElement>((_, ref) => {
         </div>
 
         <p className="text-center text-gray-400 text-xs mt-8">
-          © {new Date().getFullYear()} JBJ Global Real Estate. All Rights Reserved.
+          © {new Date().getFullYear()} JBJ GLOBAL REAL ESTATE. All Rights Reserved.
         </p>
       </div>
     </div>

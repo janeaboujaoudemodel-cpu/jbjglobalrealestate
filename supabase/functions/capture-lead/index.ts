@@ -12,7 +12,7 @@ const MAX_REQUESTS_PER_WINDOW = 10;
 
 // Partner service types for compliance tracking
 type PartnerServiceType = 'mortgage' | 'legal' | 'company_setup' | 'visa' | 'golden_visa' | 'schengen' | null;
-type LeadIntent = 'buy' | 'sell' | 'rent' | 'lease' | 'broker' | 'partner_service' | null;
+type LeadIntent = 'buy' | 'sell' | 'rent' | 'broker' | 'partner_service' | null;
 
 interface LeadCaptureRequest {
   email: string;
@@ -202,7 +202,7 @@ serve(async (req: Request): Promise<Response> => {
     }
 
     // Validate partner service intent
-    const validIntents: LeadIntent[] = ['buy', 'sell', 'rent', 'lease', 'broker', 'partner_service'];
+    const validIntents: LeadIntent[] = ['buy', 'sell', 'rent', 'broker', 'partner_service'];
     const leadIntent: LeadIntent = data.intent && validIntents.includes(data.intent) ? data.intent : null;
     
     // Validate partner service type

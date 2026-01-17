@@ -57,7 +57,7 @@ const CEOLeadershipShowcase = () => {
               </span>
             </h2>
             <p className="text-zinc-400 max-w-2xl mx-auto">
-              At JBJ Global Real Estate, we're committed to delivering exceptional
+              At JBJ GLOBAL REAL ESTATE, we're committed to delivering exceptional
               service through a world-class team of professionals.
             </p>
           </motion.div>
