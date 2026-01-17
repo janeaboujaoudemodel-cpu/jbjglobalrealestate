@@ -21,6 +21,7 @@ import { SearchableSelect } from "@/components/ui/searchable-select";
 import { Link } from "react-router-dom";
 import { CalendlyEmbed } from "@/components/marketing/CalendlyEmbed";
 import { SEOHead, pagesSEO } from "@/components/SEOHead";
+import contactHero from "@/assets/images/contact-hero.jpg";
 
 const consultationSchema = z.object({
   fullName: z.string().min(2, "Full name is required").max(100, "Name must be less than 100 characters"),
@@ -190,9 +191,16 @@ const Contact = () => {
     <>
       <SEOHead {...pagesSEO.contact} />
       <div className="min-h-screen bg-black">
-      {/* Hero Section */}
+      {/* Hero Section with Image */}
       <section className="relative py-20 md:py-28">
-        <div className="absolute inset-0 bg-gradient-to-b from-zinc-900/50 to-black" />
+        <div className="absolute inset-0">
+          <img 
+            src={contactHero} 
+            alt="Book a consultation" 
+            className="w-full h-full object-cover"
+          />
+          <div className="absolute inset-0 bg-gradient-to-b from-black/80 via-black/70 to-black" />
+        </div>
         <div className="relative container mx-auto px-4">
           <p className="text-gold text-sm uppercase tracking-[0.2em] mb-4">Real Estate Brokerage</p>
           <h1 
@@ -205,14 +213,14 @@ const Contact = () => {
             Brokerage support for buying, selling, and renting property in Dubai and the UAE. 
             We also coordinate introductions to independent licensed partners for legal, mortgage, and concierge support.
           </p>
-          <p className="text-zinc-500 text-sm max-w-2xl leading-relaxed border-l-2 border-gold/30 pl-4">
+          <p className="text-zinc-400 text-sm max-w-2xl leading-relaxed border-l-2 border-gold/30 pl-4">
             Introductions and coordination only — partner services are delivered under the partner's own terms and licence.
           </p>
         </div>
       </section>
 
       {/* Contact Cards */}
-      <section className="py-10 bg-zinc-50 border-y border-zinc-200">
+      <section className="py-10 bg-black border-y border-zinc-800">
         <div className="container mx-auto px-4">
           <div className="grid grid-cols-2 lg:grid-cols-4 gap-4 md:gap-6">
             {contactCards.map((card) => (
@@ -221,7 +229,7 @@ const Contact = () => {
                 className="bg-white border border-zinc-200 rounded-xl p-5 hover:border-gold/50 hover:shadow-lg transition-all"
               >
                 <div className="w-10 h-10 bg-black rounded-lg flex items-center justify-center mb-3">
-                  <card.icon className="w-5 h-5 text-gold" />
+                  <card.icon className={`w-5 h-5 ${card.title === 'Phone' ? 'text-blue-500' : 'text-gold'}`} />
                 </div>
                 <h3 className="text-black font-semibold text-sm mb-1">{card.title}</h3>
                 {card.action ? (
@@ -241,7 +249,7 @@ const Contact = () => {
       </section>
 
       {/* Consultation Form Section */}
-      <section className="py-16 md:py-20 bg-zinc-50">
+      <section className="py-16 md:py-20 bg-black">
         <div className="container mx-auto px-4">
           <div className="max-w-3xl mx-auto">
             {isSuccess ? (

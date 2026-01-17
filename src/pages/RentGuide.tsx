@@ -21,8 +21,10 @@ import {
   AlertTriangle,
   HelpCircle,
   User,
-  Building
+  Building,
+  MessageCircle
 } from "lucide-react";
+import rentGuideHero from "@/assets/images/rent-guide-hero.jpg";
 import { GuideNavigation, GUIDE_LINKS } from "@/components/guides/GuideNavigation";
 import { GuideHero } from "@/components/guides/GuideHero";
 import { GuideTableOfContents } from "@/components/guides/GuideTableOfContents";
@@ -205,7 +207,7 @@ const RentGuide = () => {
           </>
         }
         description="A clear, educational resource covering everything you need to know about renting in Dubai — from finding the right property to understanding your rights as a tenant."
-        backgroundImage="https://images.unsplash.com/photo-1600596542815-ffad4c1539a9?auto=format&fit=crop&w=2000&q=80"
+        backgroundImage={rentGuideHero}
         actions={
           <>
             <Button 
@@ -232,7 +234,7 @@ const RentGuide = () => {
       </div>
 
       {/* How Renting Works in Dubai */}
-      <section id="how-renting-works" className="py-16 md:py-24 bg-zinc-900/30 scroll-mt-20">
+      <section id="how-renting-works" className="py-16 md:py-24 bg-black scroll-mt-20">
         <div className="container mx-auto px-4">
           <div className="max-w-4xl mx-auto">
             <div className="text-center mb-12">
@@ -263,12 +265,12 @@ const RentGuide = () => {
                   desc: "All tenancies must be registered with Ejari (Dubai Land Department) to be legally valid." 
                 }
               ].map((item, index) => (
-                <div key={index} className="bg-zinc-900/60 rounded-xl p-6 border border-zinc-800 hover:border-gold/30 transition-colors">
-                  <div className="w-12 h-12 bg-gold/10 border border-gold/30 rounded-xl flex items-center justify-center mb-4">
+                <div key={index} className="bg-white rounded-xl p-6 border border-zinc-200 hover:border-gold/30 transition-colors">
+                  <div className="w-12 h-12 bg-black border border-gold/30 rounded-xl flex items-center justify-center mb-4">
                     <item.icon className="w-6 h-6 text-gold" />
                   </div>
-                  <h3 className="font-medium text-white mb-2">{item.title}</h3>
-                  <p className="text-sm text-zinc-400">{item.desc}</p>
+                  <h3 className="font-medium text-black mb-2">{item.title}</h3>
+                  <p className="text-sm text-zinc-600">{item.desc}</p>
                 </div>
               ))}
             </div>
@@ -277,14 +279,14 @@ const RentGuide = () => {
       </section>
 
       {/* Rental Process Steps */}
-      <section id="rental-process" className="py-16 md:py-24 scroll-mt-20">
+      <section id="rental-process" className="py-16 md:py-24 bg-black scroll-mt-20">
         <div className="container mx-auto px-4">
           <div className="max-w-5xl mx-auto">
             <div className="text-center mb-16">
-              <h2 className="text-3xl md:text-4xl font-light text-zinc-900 mb-4">
+              <h2 className="text-3xl md:text-4xl font-light text-white mb-4">
                 The 6-Step Rental Process
               </h2>
-              <p className="text-lg text-zinc-600 max-w-2xl mx-auto">
+              <p className="text-lg text-zinc-400 max-w-2xl mx-auto">
                 From initial search to move-in day — here's what to expect when renting in Dubai.
               </p>
             </div>
@@ -327,14 +329,14 @@ const RentGuide = () => {
       </section>
 
       {/* Payment Structures */}
-      <section id="payment-structures" className="py-16 md:py-24 bg-zinc-50 scroll-mt-20">
+      <section id="payment-structures" className="py-16 md:py-24 bg-black scroll-mt-20">
         <div className="container mx-auto px-4">
           <div className="max-w-5xl mx-auto">
             <div className="text-center mb-12">
-              <h2 className="text-3xl md:text-4xl font-semibold text-black mb-4">
+              <h2 className="text-3xl md:text-4xl font-semibold text-white mb-4">
                 Payment Structures
               </h2>
-              <p className="text-lg text-zinc-700 max-w-2xl mx-auto">
+              <p className="text-lg text-zinc-400 max-w-2xl mx-auto">
                 Dubai's rental market uses a cheque-based payment system. Understanding your options helps in negotiation.
               </p>
             </div>
@@ -358,14 +360,14 @@ const RentGuide = () => {
       </section>
 
       {/* Costs & Fees */}
-      <section id="costs-fees" className="py-16 md:py-24 bg-white scroll-mt-20">
+      <section id="costs-fees" className="py-16 md:py-24 bg-black scroll-mt-20">
         <div className="container mx-auto px-4">
           <div className="max-w-5xl mx-auto">
             <div className="text-center mb-12">
-              <h2 className="text-3xl md:text-4xl font-semibold text-black mb-4">
+              <h2 className="text-3xl md:text-4xl font-semibold text-white mb-4">
                 Rental Costs & Fees
               </h2>
-              <p className="text-lg text-zinc-700 max-w-2xl mx-auto">
+              <p className="text-lg text-zinc-400 max-w-2xl mx-auto">
                 Beyond the monthly rent, budget for these one-time and recurring costs.
               </p>
             </div>
@@ -393,7 +395,7 @@ const RentGuide = () => {
       </section>
 
       {/* How JBJ Supports Tenants & Landlords */}
-      <section id="jbj-support" className="py-16 md:py-24 bg-zinc-900/30 scroll-mt-20">
+      <section id="jbj-support" className="py-16 md:py-24 bg-black scroll-mt-20">
         <div className="container mx-auto px-4">
           <div className="max-w-5xl mx-auto">
             <div className="text-center mb-12">
