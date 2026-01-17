@@ -97,17 +97,17 @@ const Methodology = () => {
           whileInView="visible"
           viewport={{ once: true }}
           variants={fadeInUp}
-          className="py-12"
+          className="py-12 bg-zinc-900 rounded-xl px-8 text-white mb-8"
         >
           <div className="flex items-center gap-3 mb-6">
-            <div className="w-10 h-10 rounded-lg bg-black flex items-center justify-center">
+            <div className="w-10 h-10 rounded-lg bg-gold/20 flex items-center justify-center">
               <Database className="w-5 h-5 text-gold" />
             </div>
-            <h2 className="text-foreground text-xl font-semibold">Data Sources</h2>
+            <h2 className="text-white text-xl font-semibold">Data Sources</h2>
           </div>
           
-          <div className="bg-white rounded-lg border border-zinc-200 p-6 shadow-sm">
-            <p className="text-muted-foreground text-sm mb-6">
+          <div className="bg-black/30 rounded-lg border border-white/10 p-6">
+            <p className="text-zinc-300 text-sm mb-6">
               Our market intelligence draws from the following official government Open Data sources:
             </p>
             
@@ -116,14 +116,14 @@ const Methodology = () => {
                 <li key={source.id} className="flex items-start gap-3">
                   <span className="text-gold mt-1">•</span>
                   <div>
-                    <span className="text-foreground font-medium">{source.name}</span>
-                    <span className="text-muted-foreground"> – {source.dataType.toLowerCase()}</span>
+                    <span className="text-white font-medium">{source.name}</span>
+                    <span className="text-zinc-400"> – {source.dataType.toLowerCase()}</span>
                   </div>
                 </li>
               ))}
             </ul>
             
-            <p className="text-muted-foreground text-xs mt-6 pt-4 border-t border-zinc-200">
+            <p className="text-zinc-400 text-xs mt-6 pt-4 border-t border-white/10">
               We name categories and sources, not raw dataset URLs. All data is used in accordance with official open data policies.
             </p>
           </div>
@@ -219,17 +219,17 @@ const Methodology = () => {
           whileInView="visible"
           viewport={{ once: true }}
           variants={fadeInUp}
-          className="py-12"
+          className="py-12 bg-zinc-900 rounded-xl px-8 text-white mb-8"
         >
           <div className="flex items-center gap-3 mb-6">
-            <div className="w-10 h-10 rounded-lg bg-black flex items-center justify-center">
+            <div className="w-10 h-10 rounded-lg bg-gold/20 flex items-center justify-center">
               <Clock className="w-5 h-5 text-gold" />
             </div>
-            <h2 className="text-foreground text-xl font-semibold">Update Frequency & Accuracy</h2>
+            <h2 className="text-white text-xl font-semibold">Update Frequency & Accuracy</h2>
           </div>
           
-          <div className="bg-white rounded-lg border border-zinc-200 p-6 shadow-sm">
-            <ul className="space-y-3 text-muted-foreground">
+          <div className="bg-black/30 rounded-lg border border-white/10 p-6">
+            <ul className="space-y-3 text-zinc-300">
               <li className="flex items-start gap-3">
                 <span className="text-gold mt-1">•</span>
                 <span>Data is updated periodically based on availability of official sources</span>
