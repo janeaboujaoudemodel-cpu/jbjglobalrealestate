@@ -496,18 +496,18 @@ const BuyerGuide = () => {
       </section>
 
       {/* Common Buyer Mistakes */}
-      <section id="common-mistakes" className="py-16 md:py-24 bg-zinc-50 scroll-mt-20">
+      <section id="common-mistakes" className="py-16 md:py-24 bg-black scroll-mt-20">
         <div className="container mx-auto px-4">
           <div className="max-w-5xl mx-auto">
             <div className="text-center mb-12">
-              <div className="inline-flex items-center gap-2 bg-red-50 border border-red-200 rounded-full px-4 py-2 mb-4">
-                <AlertTriangle className="w-4 h-4 text-red-500" />
-                <span className="text-red-600 text-sm font-semibold">Avoid These Pitfalls</span>
+              <div className="inline-flex items-center gap-2 bg-red-500/10 border border-red-500/30 rounded-full px-4 py-2 mb-4">
+                <AlertTriangle className="w-4 h-4 text-red-400" />
+                <span className="text-red-400 text-sm font-semibold">Avoid These Pitfalls</span>
               </div>
-              <h2 className="text-3xl md:text-4xl font-semibold text-black mb-4">
+              <h2 className="text-3xl md:text-4xl font-semibold text-white mb-4">
                 Common Buyer Mistakes
               </h2>
-              <p className="text-lg text-zinc-700 max-w-2xl mx-auto leading-relaxed">
+              <p className="text-lg text-zinc-400 max-w-2xl mx-auto leading-relaxed">
                 Learning from others' mistakes can save you time, money, and stress. 
                 Here are the most common pitfalls to avoid.
               </p>
