@@ -134,6 +134,21 @@ const TOOLS = [
   },
 ];
 
+// Get glow color class based on tool color
+const getGlowClass = (color: string) => {
+  if (color.includes('purple')) return 'shadow-purple-500/20 hover:shadow-gold/30';
+  if (color.includes('green')) return 'shadow-green-500/20 hover:shadow-gold/30';
+  if (color.includes('blue')) return 'shadow-blue-500/20 hover:shadow-gold/30';
+  if (color.includes('cyan')) return 'shadow-cyan-500/20 hover:shadow-gold/30';
+  if (color.includes('gold')) return 'shadow-gold/20 hover:shadow-gold/30';
+  if (color.includes('emerald')) return 'shadow-emerald-500/20 hover:shadow-gold/30';
+  if (color.includes('pink')) return 'shadow-pink-500/20 hover:shadow-gold/30';
+  if (color.includes('yellow')) return 'shadow-yellow-500/20 hover:shadow-gold/30';
+  if (color.includes('orange')) return 'shadow-orange-500/20 hover:shadow-gold/30';
+  if (color.includes('violet')) return 'shadow-violet-500/20 hover:shadow-gold/30';
+  return 'shadow-zinc-500/20 hover:shadow-gold/30';
+};
+
 export function BrokerToolkitTools() {
   return (
     <section id="section-tools" className="py-16 md:py-20">
@@ -166,7 +181,7 @@ export function BrokerToolkitTools() {
               viewport={{ once: true }}
             >
               <Link to={tool.link}>
-                <Card className={`bg-white border border-zinc-200 hover:border-gold hover:shadow-xl hover:shadow-gold/20 transition-all duration-300 h-full group cursor-pointer`}>
+                <Card className={`bg-white border ${tool.borderColor} hover:border-gold shadow-lg ${getGlowClass(tool.color)} hover:shadow-xl transition-all duration-300 h-full group cursor-pointer`}>
                   <CardContent className="p-5">
                     <div className="flex items-start gap-4">
                       <div className={`w-12 h-12 ${tool.bgColor} rounded-xl flex items-center justify-center flex-shrink-0 group-hover:scale-110 transition-transform`}>
