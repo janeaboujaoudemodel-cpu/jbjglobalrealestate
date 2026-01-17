@@ -123,14 +123,50 @@ export default {
       },
       /* ============================================================
        * GLOBAL SPACING SYSTEM - JBJ GLOBAL REAL ESTATE (LOCKED)
-       * Unified spacing rhythm across all systems
+       * Base unit: 8px - All spacing must be multiples of 8px
+       * Allowed: 8 / 16 / 24 / 32 / 40 / 48 / 56 / 64 / 80 / 96
        * ============================================================ */
       spacing: {
-        'section': '5rem',      // 80px - Standard section padding
-        'section-sm': '3rem',   // 48px - Compact section padding
-        'section-lg': '6rem',   // 96px - Large section padding
-        'card': '1.5rem',       // 24px - Card internal padding
-        'card-sm': '1rem',      // 16px - Compact card padding
+        // Base multiples of 8px
+        '1': '0.25rem',    // 4px (exception for fine details)
+        '2': '0.5rem',     // 8px - Base unit
+        '3': '0.75rem',    // 12px (exception)
+        '4': '1rem',       // 16px
+        '5': '1.25rem',    // 20px (exception)
+        '6': '1.5rem',     // 24px
+        '7': '1.75rem',    // 28px (exception)
+        '8': '2rem',       // 32px
+        '9': '2.25rem',    // 36px (exception)
+        '10': '2.5rem',    // 40px
+        '11': '2.75rem',   // 44px (exception)
+        '12': '3rem',      // 48px
+        '14': '3.5rem',    // 56px
+        '16': '4rem',      // 64px
+        '20': '5rem',      // 80px
+        '24': '6rem',      // 96px
+        // Semantic spacing tokens (LOCKED)
+        'page': '6rem',           // 96px - Page top/bottom padding
+        'section': '6rem',        // 96px - Section-to-section spacing
+        'section-inner': '4rem',  // 64px - Section internal padding (desktop)
+        'section-inner-md': '3rem', // 48px - Section internal padding (tablet)
+        'section-inner-sm': '2rem', // 32px - Section internal padding (mobile)
+        'heading-text': '1.5rem', // 24px - Heading → paragraph
+        'text-text': '1rem',      // 16px - Paragraph → paragraph
+        'text-button': '2rem',    // 32px - Paragraph → button
+        'label-content': '0.5rem', // 8px - Label → content
+        'button-y': '1rem',       // 16px - Button vertical padding
+        'button-x': '2rem',       // 32px - Button horizontal padding
+        'button-gap': '1rem',     // 16px - Button-to-button horizontal
+        'button-content': '2rem', // 32px - Button-to-content vertical
+        'image-text': '2rem',     // 32px - Image-to-text
+        'card': '2rem',           // 32px - Card internal padding
+        'card-gap': '2rem',       // 32px - Card-to-card spacing
+        'avatar-name': '1.5rem',  // 24px - Profile image to name
+        'name-role': '0.5rem',    // 8px - Name to role
+        'avatar-container': '1.5rem', // 24px - Avatar container padding
+        'input-gap': '1rem',      // 16px - Input-to-input
+        'input-label': '0.5rem',  // 8px - Input-to-label
+        'input-button': '2rem',   // 32px - Input-to-button
       },
       borderRadius: {
         lg: "var(--radius)",

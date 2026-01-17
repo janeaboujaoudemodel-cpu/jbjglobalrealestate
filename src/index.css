@@ -653,53 +653,202 @@ All colors MUST be HSL.
   }
 
   /* ============================================================
-   * 4. GLOBAL SPACING & RHYTHM RULE - UNIFIED (LOCKED)
-   * Consistent spacing across all systems
+   * 4. GLOBAL SPACING SYSTEM - LOCKED & UNIFIED
+   * Base unit: 8px - All spacing must be multiples of 8px
+   * Allowed: 8 / 16 / 24 / 32 / 40 / 48 / 56 / 64 / 80 / 96
+   * No random values, no odd numbers, no auto margins
    * ============================================================ */
   
-  /* Section spacing */
-  .jj-section {
-    @apply py-12 md:py-16 lg:py-20;
-  }
-  
-  .jj-section-sm {
-    @apply py-8 md:py-10 lg:py-12;
-  }
-  
-  .jj-section-lg {
-    @apply py-16 md:py-20 lg:py-24;
-  }
-  
-  /* Card spacing */
-  .jj-card {
-    @apply p-4 md:p-5 lg:p-6;
-  }
-  
-  .jj-card-compact {
-    @apply p-3 md:p-4;
-  }
-  
-  /* Content gaps */
-  .jj-gap-content {
-    @apply gap-4 md:gap-5 lg:gap-6;
-  }
-  
-  .jj-gap-items {
-    @apply gap-3 md:gap-4;
-  }
-  
-  /* Text rhythm */
-  .jj-text-spacing {
-    @apply space-y-3 md:space-y-4;
-  }
-  
-  /* Profile layout spacing */
-  .jj-profile-spacing {
-    @apply space-y-2;
+  /* --- Page & Section Spacing --- */
+  /* Page top/bottom: 96px | Section-to-section: 96px */
+  .jj-page {
+    padding-top: 6rem;    /* 96px */
+    padding-bottom: 6rem; /* 96px */
   }
 
+  .jj-section {
+    padding-top: 6rem;    /* 96px - Section-to-section */
+    padding-bottom: 6rem;
+  }
+
+  /* Section internal padding: Desktop 64px, Tablet 48px, Mobile 32px */
+  .jj-section-inner {
+    padding: 4rem;        /* 64px desktop */
+  }
+  @media (max-width: 1024px) {
+    .jj-section-inner {
+      padding: 3rem;      /* 48px tablet */
+    }
+  }
+  @media (max-width: 640px) {
+    .jj-section-inner {
+      padding: 2rem;      /* 32px mobile */
+    }
+  }
+
+  /* Responsive section wrapper */
+  .jj-section-responsive {
+    @apply py-24 lg:py-24 md:py-12 sm:py-8;
+    /* 96px → 48px → 32px */
+  }
+
+  /* --- Text Spacing --- */
+  /* Heading → paragraph: 24px */
+  .jj-heading-gap {
+    margin-bottom: 1.5rem; /* 24px */
+  }
+
+  /* Paragraph → paragraph: 16px */
+  .jj-text-gap {
+    margin-bottom: 1rem;   /* 16px */
+  }
+
+  /* Paragraph → button: 32px */
+  .jj-text-to-button {
+    margin-bottom: 2rem;   /* 32px */
+  }
+
+  /* Label → content: 8px */
+  .jj-label-gap {
+    margin-bottom: 0.5rem; /* 8px */
+  }
+
+  /* Text block with proper rhythm */
+  .jj-text-rhythm > * + * {
+    margin-top: 1rem;      /* 16px between paragraphs */
+  }
+
+  .jj-text-rhythm > h1 + *,
+  .jj-text-rhythm > h2 + *,
+  .jj-text-rhythm > h3 + *,
+  .jj-text-rhythm > h4 + * {
+    margin-top: 1.5rem;    /* 24px after headings */
+  }
+
+  /* --- Button Spacing --- */
+  /* Internal: 16px vertical, 32px horizontal */
+  .jj-btn-spacing {
+    padding: 1rem 2rem;    /* 16px 32px */
+  }
+
+  /* Button-to-button horizontal: 16px */
+  .jj-btn-group {
+    gap: 1rem;             /* 16px */
+  }
+
+  /* Button-to-content vertical: 32px */
+  .jj-btn-content-gap {
+    margin-top: 2rem;      /* 32px */
+  }
+
+  /* --- Image & Card Spacing --- */
+  /* Image-to-text: 32px */
+  .jj-image-gap {
+    margin-bottom: 2rem;   /* 32px */
+  }
+
+  /* Card internal padding: 32px */
+  .jj-card-padding {
+    padding: 2rem;         /* 32px */
+  }
+
+  /* Card-to-card spacing: 32px */
+  .jj-card-grid-gap {
+    gap: 2rem;             /* 32px */
+  }
+
+  /* --- Profile & Avatar Spacing --- */
+  /* Profile image to name: 24px */
+  .jj-avatar-to-name {
+    margin-top: 1.5rem;    /* 24px */
+  }
+
+  /* Name to role: 8px */
+  .jj-name-to-role {
+    margin-top: 0.5rem;    /* 8px */
+  }
+
+  /* Avatar container padding: 24px */
+  .jj-avatar-container {
+    padding: 1.5rem;       /* 24px */
+  }
+
+  /* Profile card with proper spacing */
+  .jj-profile-layout {
+    @apply flex flex-col items-center text-center;
+  }
+
+  .jj-profile-layout .jj-profile-image {
+    @apply mb-6;           /* 24px */
+  }
+
+  .jj-profile-layout .jj-profile-name {
+    @apply mb-2;           /* 8px */
+  }
+
+  /* --- Form Spacing --- */
+  /* Input-to-input: 16px */
+  .jj-form-gap {
+    gap: 1rem;             /* 16px */
+  }
+
+  /* Input-to-label: 8px */
+  .jj-input-label-gap {
+    margin-bottom: 0.5rem; /* 8px */
+  }
+
+  /* Input-to-button: 32px */
+  .jj-form-submit-gap {
+    margin-top: 2rem;      /* 32px */
+  }
+
+  /* Form group with label + input */
+  .jj-form-group > label {
+    margin-bottom: 0.5rem; /* 8px */
+    display: block;
+  }
+
+  .jj-form-group + .jj-form-group {
+    margin-top: 1rem;      /* 16px */
+  }
+
+  /* --- Utility Spacing Classes (8px multiples) --- */
+  .jj-gap-8 { gap: 0.5rem; }   /* 8px */
+  .jj-gap-16 { gap: 1rem; }    /* 16px */
+  .jj-gap-24 { gap: 1.5rem; }  /* 24px */
+  .jj-gap-32 { gap: 2rem; }    /* 32px */
+  .jj-gap-40 { gap: 2.5rem; }  /* 40px */
+  .jj-gap-48 { gap: 3rem; }    /* 48px */
+  .jj-gap-64 { gap: 4rem; }    /* 64px */
+  .jj-gap-80 { gap: 5rem; }    /* 80px */
+  .jj-gap-96 { gap: 6rem; }    /* 96px */
+
+  .jj-mt-8 { margin-top: 0.5rem; }
+  .jj-mt-16 { margin-top: 1rem; }
+  .jj-mt-24 { margin-top: 1.5rem; }
+  .jj-mt-32 { margin-top: 2rem; }
+  .jj-mt-48 { margin-top: 3rem; }
+  .jj-mt-64 { margin-top: 4rem; }
+  .jj-mt-96 { margin-top: 6rem; }
+
+  .jj-mb-8 { margin-bottom: 0.5rem; }
+  .jj-mb-16 { margin-bottom: 1rem; }
+  .jj-mb-24 { margin-bottom: 1.5rem; }
+  .jj-mb-32 { margin-bottom: 2rem; }
+  .jj-mb-48 { margin-bottom: 3rem; }
+  .jj-mb-64 { margin-bottom: 4rem; }
+  .jj-mb-96 { margin-bottom: 6rem; }
+
+  .jj-p-8 { padding: 0.5rem; }
+  .jj-p-16 { padding: 1rem; }
+  .jj-p-24 { padding: 1.5rem; }
+  .jj-p-32 { padding: 2rem; }
+  .jj-p-48 { padding: 3rem; }
+  .jj-p-64 { padding: 4rem; }
+  .jj-p-96 { padding: 6rem; }
+
   /* ============================================================
-   * 5. DESIGN INTENT - Premium, Luxury Feel
+   * 5. DESIGN INTENT - Premium, Luxury Feel (LOCKED)
    * ============================================================ */
   
   .jj-premium-surface {
@@ -708,6 +857,7 @@ All colors MUST be HSL.
   
   .jj-premium-card {
     @apply bg-zinc-900/80 border border-zinc-800/60 rounded-xl;
+    padding: 2rem; /* 32px - card internal padding */
   }
   
   .jj-gold-accent {
