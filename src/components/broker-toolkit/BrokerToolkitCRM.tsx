@@ -1,8 +1,10 @@
 import { motion } from "framer-motion";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { Badge } from "@/components/ui/badge";
 import { Card, CardContent } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
+import { supabase } from "@/integrations/supabase/client";
+import { toast } from "sonner";
 import { 
   Target,
   Users,
@@ -12,8 +14,10 @@ import {
   MessageSquare,
   TrendingUp,
   ArrowRight,
-  Zap
+  Zap,
+  Lock
 } from "lucide-react";
+import { ThemedIcon } from "@/components/ui/themed-icon";
 
 const CRM_FEATURES = [
   {
@@ -61,6 +65,43 @@ const CRM_FEATURES = [
 ];
 
 export function BrokerToolkitCRM() {
+  const navigate = useNavigate();
+  
+  const handleCRMAccess = async () => {
+    const { data: { session } } = await supabase.auth.getSession();
+    
+    if (!session?.user) {
+      toast.error("Please sign in to access the CRM dashboard");
+      navigate("/auth");
+      return;
+    }
+    
+    // Check if user has broker_member role
+    const { data: hrRole } = await supabase
+      .from("hr_user_roles")
+      .select("role, is_active")
+      .eq("user_id", session.user.id)
+      .eq("role", "broker_member")
+      .eq("is_active", true)
+      .maybeSingle();
+    
+    // Check for admin/owner roles
+    const [adminResult, ownerResult] = await Promise.all([
+      supabase.rpc("has_role", { _user_id: session.user.id, _role: "admin" }),
+      supabase.rpc("has_role", { _user_id: session.user.id, _role: "owner" }),
+    ]);
+    
+    const isExecutive = Boolean(adminResult.data) || Boolean(ownerResult.data);
+    const isRegisteredBroker = hrRole?.role === "broker_member" && hrRole?.is_active;
+    
+    if (isExecutive || isRegisteredBroker) {
+      navigate("/crm");
+    } else {
+      toast.info("You are not a registered broker. Please apply to join our team.");
+      navigate("/join");
+    }
+  };
+  
   return (
     <section id="section-crm" className="py-16 md:py-20 bg-zinc-900/30">
       <div className="container mx-auto px-4">
@@ -94,9 +135,7 @@ export function BrokerToolkitCRM() {
               <Card className="bg-white border border-zinc-200 hover:border-gold hover:shadow-xl hover:shadow-gold/20 transition-all h-full">
                 <CardContent className="p-5">
                   <div className="flex items-start gap-4">
-                    <div className={`w-12 h-12 ${feature.bgColor} rounded-xl flex items-center justify-center flex-shrink-0`}>
-                      <feature.icon className={`w-6 h-6 ${feature.color}`} />
-                    </div>
+                    <ThemedIcon icon={feature.icon} variant="light" size="lg" />
                     <div>
                       <h3 className="text-black font-semibold mb-1">{feature.title}</h3>
                       <p className="text-zinc-600 text-sm">{feature.description}</p>
@@ -117,19 +156,27 @@ export function BrokerToolkitCRM() {
         >
           <Card className="bg-gradient-to-br from-green-500/10 to-emerald-500/5 border border-green-500/30">
             <CardContent className="p-8 text-center">
+              <div className="w-16 h-16 bg-green-500/20 rounded-full flex items-center justify-center mx-auto mb-4">
+                <Lock className="w-8 h-8 text-green-400" />
+              </div>
               <h3 className="text-2xl font-bold text-white mb-4">
                 Ready to Organize Your Leads?
               </h3>
-              <p className="text-zinc-400 mb-6 max-w-xl mx-auto">
-                Access the full JBJ CRM with lead scoring, pipeline management, and AI-powered insights.
+              <p className="text-zinc-400 mb-2 max-w-xl mx-auto">
+                Access the full JBJ CRM with lead scoring, pipeline management, and insights.
               </p>
-              <Link to="/crm">
-                <Button className="bg-gradient-to-r from-green-500 to-emerald-600 text-white hover:brightness-110 px-8">
-                  <Target className="w-5 h-5 mr-2" />
-                  Open CRM Dashboard
-                  <ArrowRight className="w-5 h-5 ml-2" />
-                </Button>
-              </Link>
+              <p className="text-zinc-500 text-sm mb-6">
+                <Lock className="w-3 h-3 inline mr-1" />
+                Available exclusively to registered JBJ brokers
+              </p>
+              <Button 
+                onClick={handleCRMAccess}
+                className="bg-gradient-to-r from-green-500 to-emerald-600 text-white hover:brightness-110 px-8"
+              >
+                <Target className="w-5 h-5 mr-2" />
+                Open CRM Dashboard
+                <ArrowRight className="w-5 h-5 ml-2" />
+              </Button>
             </CardContent>
           </Card>
         </motion.div>
