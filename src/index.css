@@ -241,6 +241,197 @@ All colors MUST be HSL.
    * ============================================================ */
 
   /* ============================================================
+   * 0. GLOBAL CARD SYSTEM - LOCKED ARCHITECTURE
+   * Applies to: Website · CRM · Employee Hub · Profiles · Listings
+   * Cards are structured containers for decision-making
+   * ============================================================ */
+
+  /* --- Base Card Structure --- */
+  .jj-card-base {
+    @apply bg-card border border-border/30 rounded-lg;
+    padding: var(--spacing-card, 1.5rem);
+  }
+
+  .jj-card-base:hover {
+    @apply border-gold/40;
+  }
+
+  /* --- Card with Image --- */
+  .jj-card-media {
+    @apply bg-card border border-border/30 rounded-lg overflow-hidden;
+  }
+
+  .jj-card-media:hover {
+    @apply border-gold/40;
+  }
+
+  .jj-card-media-image {
+    @apply w-full aspect-[4/3];
+    padding: 0.75rem 0.75rem 0 0.75rem;
+  }
+
+  .jj-card-media-image img {
+    @apply w-full h-full rounded-md;
+    object-fit: contain;
+    object-position: center center;
+  }
+
+  .jj-card-media-content {
+    padding: 1rem 1.5rem 1.5rem 1.5rem;
+  }
+
+  /* --- Property Card --- */
+  .jj-property-card {
+    @apply bg-card border border-border/30 rounded-lg overflow-hidden transition-colors duration-200;
+  }
+
+  .jj-property-card:hover {
+    @apply border-gold/50;
+  }
+
+  .jj-property-card-image {
+    @apply w-full aspect-[16/10] relative;
+    padding: 0.75rem;
+  }
+
+  .jj-property-card-image img {
+    @apply w-full h-full rounded-md;
+    object-fit: cover;
+    object-position: center center;
+  }
+
+  .jj-property-card-content {
+    @apply flex flex-col gap-2;
+    padding: 1rem 1.5rem 1.5rem 1.5rem;
+  }
+
+  .jj-property-card-title {
+    @apply text-lg font-medium text-foreground truncate;
+  }
+
+  .jj-property-card-meta {
+    @apply text-sm text-muted-foreground;
+  }
+
+  .jj-property-card-detail {
+    @apply text-base font-medium text-gold;
+  }
+
+  /* --- User / Employee Card --- */
+  .jj-user-card {
+    @apply bg-card border border-border/30 rounded-lg transition-colors duration-200;
+    padding: 1.5rem;
+  }
+
+  .jj-user-card:hover {
+    @apply border-gold/50;
+  }
+
+  .jj-user-card-centered {
+    @apply flex flex-col items-center text-center gap-4;
+  }
+
+  .jj-user-card-image {
+    @apply w-20 h-20 rounded-full overflow-hidden border-2 border-gold/30;
+  }
+
+  .jj-user-card-image img {
+    @apply w-full h-full;
+    object-fit: contain;
+    object-position: center center;
+  }
+
+  .jj-user-card-name {
+    @apply text-lg font-semibold text-foreground;
+  }
+
+  .jj-user-card-role {
+    @apply text-sm font-normal text-gold;
+  }
+
+  /* --- CRM Record Card --- */
+  .jj-crm-card {
+    @apply bg-card border border-border/30 rounded-lg transition-colors duration-200;
+    padding: 1.25rem 1.5rem;
+  }
+
+  .jj-crm-card:hover {
+    @apply border-gold/50;
+  }
+
+  .jj-crm-card-header {
+    @apply flex items-center justify-between gap-4;
+  }
+
+  .jj-crm-card-title {
+    @apply text-base font-medium text-foreground;
+  }
+
+  .jj-crm-card-status {
+    @apply text-xs font-medium uppercase tracking-wide px-2 py-1 rounded bg-gold/10 text-gold;
+  }
+
+  .jj-crm-card-meta {
+    @apply text-sm text-muted-foreground mt-2;
+  }
+
+  /* --- Analytics / Insight Card --- */
+  .jj-insight-card {
+    @apply bg-card border border-border/30 rounded-lg;
+    padding: 1.5rem;
+  }
+
+  .jj-insight-card:hover {
+    @apply border-gold/40;
+  }
+
+  .jj-insight-card-title {
+    @apply text-sm font-medium text-muted-foreground uppercase tracking-wide;
+  }
+
+  .jj-insight-card-value {
+    @apply text-3xl font-semibold text-foreground mt-2;
+  }
+
+  .jj-insight-card-meta {
+    @apply text-sm text-muted-foreground mt-1;
+  }
+
+  /* --- Card Internal Spacing --- */
+  .jj-card-spacing {
+    @apply flex flex-col gap-3;
+  }
+
+  .jj-card-spacing-tight {
+    @apply flex flex-col gap-2;
+  }
+
+  /* --- Card Grid Layouts --- */
+  .jj-card-grid {
+    @apply grid gap-6;
+    grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+  }
+
+  .jj-card-grid-lg {
+    @apply grid gap-8;
+    grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+  }
+
+  .jj-card-grid-sm {
+    @apply grid gap-4;
+    grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
+  }
+
+  /* --- Card Action Area --- */
+  .jj-card-action {
+    @apply mt-4 pt-4 border-t border-border/20;
+  }
+
+  .jj-card-action-inline {
+    @apply mt-4;
+  }
+
+  /* ============================================================
    * 0. GLOBAL TYPOGRAPHY SYSTEM - LOCKED
    * ONE primary font family across the entire platform
    * Authority, Clarity, Luxury, Calm Confidence
