@@ -487,8 +487,8 @@ const downloadPdf = async () => {
                     </div>
                   </CardTitle>
                 </CardHeader>
-                <CardContent className="space-y-5">
-                  <div className="space-y-3">
+                <CardContent className="space-y-5 flex flex-col h-full">
+                  <div className="space-y-3 flex-1">
                     <div className="flex items-center gap-3 text-white">
                       <Zap className="w-5 h-5 text-fuchsia-400" />
                       <span>Results in <span className="text-fuchsia-300 font-bold">seconds</span>, not weeks</span>
@@ -509,7 +509,7 @@ const downloadPdf = async () => {
                   
                   <Button 
                     onClick={() => setShowComparison(false)}
-                    className="w-full bg-gradient-to-r from-fuchsia-500 to-purple-600 hover:from-fuchsia-400 hover:to-purple-500 text-white py-6 mt-4 shadow-xl shadow-fuchsia-500/30 font-bold text-base"
+                    className="w-full bg-gradient-to-r from-fuchsia-500 to-purple-600 hover:from-fuchsia-400 hover:to-purple-500 text-white py-6 shadow-xl shadow-fuchsia-500/30 font-bold text-base mt-auto"
                   >
                     Start Designing — Free
                     <Sparkles className="w-5 h-5 ml-2" />
@@ -530,8 +530,8 @@ const downloadPdf = async () => {
                     </div>
                   </CardTitle>
                 </CardHeader>
-                <CardContent className="space-y-5">
-                  <div className="space-y-3">
+                <CardContent className="space-y-5 flex flex-col h-full">
+                  <div className="space-y-3 flex-1">
                     <div className="flex items-center gap-3 text-zinc-200">
                       <Users className="w-5 h-5 text-gold" />
                       <span>Connect with <span className="text-gold font-semibold">licensed design partners</span></span>
@@ -550,7 +550,7 @@ const downloadPdf = async () => {
                     </div>
                   </div>
                   
-                  <div className="pt-2 pb-2 text-center">
+                  <div className="text-center">
                     <p className="text-gold/80 text-sm mb-4">
                       Contact us to connect you with licensed design partners
                     </p>
@@ -558,7 +558,7 @@ const downloadPdf = async () => {
                   
                   <Button 
                     onClick={() => setIsInquiryOpen(true)}
-                    className="w-full bg-transparent hover:bg-gold/10 text-gold border-2 border-gold py-6 font-bold text-base"
+                    className="w-full bg-transparent hover:bg-gold/10 text-gold border-2 border-gold py-6 font-bold text-base mt-auto"
                   >
                     Contact for Partner Intro
                     <ArrowRight className="w-5 h-5 ml-2" />

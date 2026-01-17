@@ -316,41 +316,41 @@ www.jbj.ae | contact@jbj.ae | +971 56 591 1000
   return (
     <section className="min-h-screen bg-gradient-to-br from-zinc-950 via-black to-zinc-950">
       {/* Header */}
-      <div className="bg-gradient-to-r from-amber-900/30 via-yellow-800/20 to-amber-900/30 border-b border-gold/30">
+      <div className="bg-gradient-to-r from-blue-900/30 via-blue-800/20 to-blue-900/30 border-b border-blue-500/30">
         <div className="container mx-auto px-4 py-12">
           <motion.div
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             className="text-center"
           >
-            <div className="inline-flex items-center gap-2 bg-gold/20 border border-gold/40 rounded-full px-4 py-1 mb-4">
-              <Sparkles className="w-4 h-4 text-gold" />
-              <span className="text-gold text-sm font-medium">AI-Powered Valuation</span>
+            <div className="inline-flex items-center gap-2 bg-blue-500/20 border border-blue-500/40 rounded-full px-4 py-1 mb-4">
+              <Sparkles className="w-4 h-4 text-blue-400" />
+              <span className="text-blue-400 text-sm font-medium">AI-Powered Valuation</span>
             </div>
             <h1 className="text-4xl md:text-5xl font-bold text-white mb-4">
-              Property <span className="text-transparent bg-clip-text bg-gradient-to-r from-gold to-amber-400">Evaluator</span>
+              Property <span className="text-transparent bg-clip-text bg-gradient-to-r from-blue-400 to-cyan-400">Evaluator</span>
             </h1>
             <p className="text-zinc-400 max-w-2xl mx-auto">
               Get an AI-powered property valuation based on DLD transaction data, comparable sales, and market analysis.
             </p>
-            <p className="text-xs text-gold mt-2">Developed by Founder Jane Abou Jaoude • Powered by JBJ Global Real Estate</p>
+            <p className="text-xs text-blue-400 mt-2">Developed by Founder Jane Abou Jaoude • Powered by JBJ Global Real Estate</p>
           </motion.div>
         </div>
       </div>
 
       <div className="container mx-auto px-4 py-8">
         <Tabs value={activeTab} onValueChange={setActiveTab}>
-          <TabsList className="grid grid-cols-4 w-full max-w-2xl mx-auto bg-zinc-900 border border-zinc-800 mb-8">
-            <TabsTrigger value="property" className="data-[state=active]:bg-gold data-[state=active]:text-black">
+          <TabsList className="grid grid-cols-4 w-full max-w-2xl mx-auto bg-zinc-900 border border-blue-500/30 mb-8">
+            <TabsTrigger value="property" className="data-[state=active]:bg-blue-500 data-[state=active]:text-white">
               Property Details
             </TabsTrigger>
-            <TabsTrigger value="modifications" className="data-[state=active]:bg-gold data-[state=active]:text-black">
+            <TabsTrigger value="modifications" className="data-[state=active]:bg-blue-500 data-[state=active]:text-white">
               Modifications
             </TabsTrigger>
-            <TabsTrigger value="owner" className="data-[state=active]:bg-gold data-[state=active]:text-black">
+            <TabsTrigger value="owner" className="data-[state=active]:bg-blue-500 data-[state=active]:text-white">
               Owner Info
             </TabsTrigger>
-            <TabsTrigger value="results" disabled={!evaluation} className="data-[state=active]:bg-gold data-[state=active]:text-black">
+            <TabsTrigger value="results" disabled={!evaluation} className="data-[state=active]:bg-blue-500 data-[state=active]:text-white">
               Results
             </TabsTrigger>
           </TabsList>
