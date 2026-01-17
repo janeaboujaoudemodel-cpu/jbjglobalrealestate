@@ -22,7 +22,7 @@ const benefits = [
   {
     icon: Building2,
     title: "Property Matching",
-    description: "We help match your budget to the best investment opportunities"
+    description: "We help match your budget to high-potential property opportunities"
   },
   {
     icon: Users,

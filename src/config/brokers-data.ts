@@ -146,7 +146,7 @@ export const allBrokers: Broker[] = [
     yearsExperience: 5,
     email: generateEmail('Amelia Norton'),
     phone: generatePhone(10),
-    bio: 'Data-driven approach to identifying the best investment opportunities.',
+    bio: 'Data-driven approach to identifying high-potential investment opportunities.',
   },
   {
     id: 'broker-011',

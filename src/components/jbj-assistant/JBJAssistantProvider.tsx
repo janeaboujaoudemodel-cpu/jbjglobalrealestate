@@ -73,7 +73,7 @@ export const JBJ_AI_AGENTS: AIAgent[] = [
     title: 'Property Management Specialist',
     avatar: 'https://images.unsplash.com/photo-1573496359142-b8d87734a5a2?w=200&h=200&fit=crop&crop=face',
     personality: 'Systematic, proactive, and solution-oriented. Ensures properties are well-maintained and tenants satisfied.',
-    capabilities: ['Maintenance coordination', 'Tenant relations', 'Property inspections', 'Lease management'],
+    capabilities: ['Maintenance coordination', 'Tenant relations', 'Property inspections', 'Rental management'],
     isAvailable: true,
   },
   {

@@ -173,7 +173,7 @@ const RentGuide = () => {
       points: [
         "Property marketing and tenant sourcing",
         "Tenant screening and reference checks",
-        "Lease agreement preparation and negotiation",
+        "Rental agreement preparation and negotiation",
         "Ejari registration coordination"
       ]
     }

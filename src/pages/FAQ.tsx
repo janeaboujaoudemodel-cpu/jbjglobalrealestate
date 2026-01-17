@@ -124,7 +124,7 @@ const FAQ = () => {
       questions: [
         {
           question: "What is an Ejari and why do I need it?",
-          answer: "Ejari is the official registration system for tenancy contracts in Dubai. It validates your lease agreement with the relevant authority. Landlords must register their rental agreements through Ejari within 30 days of signing."
+          answer: "Ejari is the official registration system for tenancy contracts in Dubai. It validates your rental agreement with the relevant authority. Landlords must register their rental agreements through Ejari within 30 days of signing."
         },
         {
           question: "What is the role of the Dubai Land Department?",
