@@ -1,7 +1,7 @@
 /**
  * JBJ GLOBAL REAL ESTATE — Data Room Type Definitions
  * 
- * STRUCTURE ONLY — No UI, no routes, no permissions logic
+ * PRIORITY 4 — PART 2: ACCESS CONTROL TYPES
  * Brand: JBJ GLOBAL REAL ESTATE
  * Core Activities: BUY · SELL · RENT
  */
@@ -17,6 +17,28 @@ export type DataRoomId =
   | 'expansion_risk';
 
 // ============================================================================
+// ACCESS ROLES (LOCKED — EXACTLY 5 ROLES)
+// ============================================================================
+
+export type DataRoomAccessRole = 
+  | 'owner_founder'
+  | 'executive'
+  | 'investor'
+  | 'partner'
+  | 'internal_staff';
+
+// ============================================================================
+// PERMISSION TYPES
+// ============================================================================
+
+export type DataRoomPermission = 
+  | 'full_access'      // read/write/version
+  | 'read_only'        // read only
+  | 'read_approval'    // read-only with explicit approval required
+  | 'read_high_level'  // read-only, high-level data only
+  | 'no_access';       // zero access
+
+// ============================================================================
 // ACCESS LEVEL FLAGS
 // ============================================================================
 
@@ -25,6 +47,61 @@ export type DataRoomAccessLevel =
   | 'executive_only'
   | 'restricted'
   | 'confidential';
+
+// ============================================================================
+// ACCESS APPROVAL STATUS
+// ============================================================================
+
+export type AccessApprovalStatus = 
+  | 'pending'
+  | 'approved'
+  | 'denied'
+  | 'revoked'
+  | 'expired';
+
+// ============================================================================
+// PERMISSION ENTRY (PER ROLE PER DATA ROOM)
+// ============================================================================
+
+export interface DataRoomPermissionEntry {
+  role: DataRoomAccessRole;
+  permission: DataRoomPermission;
+  requires_approval: boolean;
+  approval_status?: AccessApprovalStatus;
+  approved_by?: string;
+  approved_at?: string;
+  expires_at?: string;
+  can_escalate: false; // ALWAYS FALSE — no role may escalate its own access
+  revocable: true;     // ALWAYS TRUE — all access must be revocable instantly
+}
+
+// ============================================================================
+// ACCESS MATRIX (PER DATA ROOM)
+// ============================================================================
+
+export interface DataRoomAccessMatrix {
+  data_room_id: DataRoomId;
+  permissions: DataRoomPermissionEntry[];
+  last_updated: string;
+  enforced_server_side: true; // ALWAYS TRUE
+}
+
+// ============================================================================
+// ACCESS REQUEST
+// ============================================================================
+
+export interface DataRoomAccessRequest {
+  id: string;
+  user_id: string;
+  data_room_id: DataRoomId;
+  requested_role: DataRoomAccessRole;
+  request_reason: string;
+  status: AccessApprovalStatus;
+  requested_at: string;
+  reviewed_by?: string;
+  reviewed_at?: string;
+  denial_reason?: string;
+}
 
 // ============================================================================
 // DOCUMENT TYPES
