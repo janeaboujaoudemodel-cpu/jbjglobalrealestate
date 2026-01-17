@@ -1439,19 +1439,19 @@ const Founder = () => {
                 Connect <ArrowUpRight className="w-5 h-5" />
               </Link>
               <a 
-                href="mailto:contact@jbj.ae"
+                href="mailto:Contact@JBJ.ae"
                 className="inline-flex items-center gap-3 bg-zinc-900/80 backdrop-blur-sm border-2 border-zinc-700 text-white font-semibold px-10 py-4 rounded-2xl hover:bg-zinc-800 hover:border-gold/50 transition-all duration-300"
               >
                 Partnership <ArrowUpRight className="w-5 h-5" />
               </a>
               <a 
-                href="mailto:contact@jbj.ae"
+                href="mailto:Contact@JBJ.ae"
                 className="inline-flex items-center gap-3 bg-zinc-900/80 backdrop-blur-sm border-2 border-zinc-700 text-white font-semibold px-10 py-4 rounded-2xl hover:bg-zinc-800 hover:border-gold/50 transition-all duration-300"
               >
                 Collaboration <ArrowUpRight className="w-5 h-5" />
               </a>
               <a 
-                href="mailto:contact@jbj.ae"
+                href="mailto:Contact@JBJ.ae"
                 className="inline-flex items-center gap-3 bg-zinc-900/80 backdrop-blur-sm border-2 border-zinc-700 text-white font-semibold px-10 py-4 rounded-2xl hover:bg-zinc-800 hover:border-gold/50 transition-all duration-300"
               >
                 Careers <ArrowUpRight className="w-5 h-5" />

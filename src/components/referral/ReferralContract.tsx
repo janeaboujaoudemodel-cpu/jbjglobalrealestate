@@ -53,7 +53,7 @@ export default function ReferralContract({
             <p className="font-semibold mb-2">The Company:</p>
             <p>JBJ Global Real Estate L.L.C.</p>
             <p>Dubai, United Arab Emirates</p>
-            <p>Email: contact@jbj.ae</p>
+            <p>Email: Contact@JBJ.ae</p>
           </div>
           <div>
             <p className="font-semibold mb-2">The Referral Partner:</p>
@@ -185,7 +185,7 @@ export default function ReferralContract({
       {/* Footer */}
       <div className="mt-12 pt-4 border-t border-gray-200 text-center text-xs text-gray-500">
         <p>JBJ Global Real Estate L.L.C. | Dubai, United Arab Emirates</p>
-        <p>www.jbj.ae | contact@jbj.ae</p>
+        <p>www.JBJ.ae | Contact@JBJ.ae</p>
         <p className="mt-2">This document is electronically generated and valid without physical stamp.</p>
       </div>
     </div>

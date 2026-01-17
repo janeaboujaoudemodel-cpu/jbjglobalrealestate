@@ -280,8 +280,8 @@ export default function Onboarding() {
                   )}
                   <p className="text-sm text-muted-foreground">
                     If you have questions, please contact us at{" "}
-                    <a href="mailto:contact@jbj.ae" className="text-gold hover:underline">
-                      contact@jbj.ae
+                    <a href="mailto:Contact@JBJ.ae" className="text-gold hover:underline">
+                      Contact@JBJ.ae
                     </a>
                   </p>
                 </>

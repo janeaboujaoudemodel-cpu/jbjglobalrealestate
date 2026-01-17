@@ -215,6 +215,8 @@ END:VCARD`;
       value: "Downtown Dubai, UAE",
       action: null,
       iconColor: "text-gold",
+      titleColor: "text-gold",
+      valueColor: "text-gold",
       clickable: false,
     },
     {
@@ -223,6 +225,8 @@ END:VCARD`;
       value: CONTACT_INFO.phone,
       action: 'phone-actions',
       iconColor: "text-gold",
+      titleColor: "text-gold",
+      valueColor: "text-gold hover:underline",
       clickable: true,
     },
     {
@@ -231,6 +235,8 @@ END:VCARD`;
       value: CONTACT_INFO.email,
       action: getEmailUrl(),
       iconColor: "text-gold",
+      titleColor: "text-gold",
+      valueColor: "text-gold hover:underline",
       clickable: true,
     },
     {
@@ -239,6 +245,8 @@ END:VCARD`;
       value: "Book Online Meeting",
       action: 'meeting',
       iconColor: "text-gold",
+      titleColor: "text-gold",
+      valueColor: "text-gold hover:underline",
       clickable: true,
     },
   ];
@@ -292,8 +300,8 @@ END:VCARD`;
                 <div className="w-10 h-10 bg-black rounded-lg flex items-center justify-center mb-3">
                   <card.icon className={`w-5 h-5 ${card.iconColor}`} />
                 </div>
-                <h3 className="text-black font-semibold text-sm mb-1">{card.title}</h3>
-                <p className={`text-sm ${card.clickable ? 'text-gold hover:underline' : 'text-zinc-600'}`}>{card.value}</p>
+                <h3 className={`font-semibold text-sm mb-1 ${card.titleColor}`}>{card.title}</h3>
+                <p className={`text-sm ${card.valueColor}`}>{card.value}</p>
               </div>
             ))}
           </div>
