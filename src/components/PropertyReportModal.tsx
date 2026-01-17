@@ -191,9 +191,9 @@ const PropertyReportModal = ({ open, onOpenChange, project }: PropertyReportModa
         }
         onOpenChange(isOpen);
       }}>
-        <DialogContent className="bg-white border-zinc-200 max-w-4xl max-h-[90vh] p-0 overflow-hidden">
+        <DialogContent className="bg-white border-zinc-200 max-w-4xl h-[90vh] p-0 flex flex-col overflow-hidden">
           {/* Report Viewer Header */}
-          <div className="sticky top-0 z-10 bg-white border-b border-zinc-200 px-4 py-3 flex items-center justify-between">
+          <div className="sticky top-0 z-10 bg-white border-b border-zinc-200 px-4 py-3 flex items-center justify-between shrink-0">
             <div className="flex items-center gap-3">
               <Button
                 variant="ghost"
@@ -216,7 +216,7 @@ const PropertyReportModal = ({ open, onOpenChange, project }: PropertyReportModa
                 variant="outline"
                 className="border-green-500/30 text-green-600 hover:bg-green-50"
               >
-                <MessageCircle className="w-4 h-4 mr-1" />
+                <MessageCircle className="w-4 h-4 mr-1 text-green-500" />
                 Share
               </Button>
               <Button
@@ -231,10 +231,10 @@ const PropertyReportModal = ({ open, onOpenChange, project }: PropertyReportModa
           </div>
           
           {/* Report Content */}
-          <div className="overflow-y-auto max-h-[calc(90vh-60px)]">
+          <div className="flex-1 overflow-y-auto">
             <iframe
               srcDoc={reportHtml}
-              className="w-full min-h-[80vh] border-0"
+              className="w-full h-full min-h-[600px] border-0"
               title="Property Report"
             />
           </div>
@@ -245,7 +245,7 @@ const PropertyReportModal = ({ open, onOpenChange, project }: PropertyReportModa
 
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
-      <DialogContent className="bg-zinc-900 border-zinc-800 text-white max-w-lg">
+      <DialogContent className="bg-zinc-900 border-zinc-800 text-white max-w-lg max-h-[90vh] overflow-y-auto">
         <DialogHeader>
           <DialogTitle className="text-xl font-semibold flex items-center gap-3">
             <div className="w-10 h-10 rounded-full bg-gold flex items-center justify-center">
@@ -296,7 +296,7 @@ const PropertyReportModal = ({ open, onOpenChange, project }: PropertyReportModa
               variant="outline"
               className="bg-green-600/10 border-green-600/30 text-green-400 hover:bg-green-600/20 hover:text-green-300 h-12"
             >
-              <MessageCircle className="w-5 h-5 mr-2" />
+              <MessageCircle className="w-5 h-5 mr-2 text-green-500" />
               WhatsApp
             </Button>
             <Button
@@ -304,7 +304,7 @@ const PropertyReportModal = ({ open, onOpenChange, project }: PropertyReportModa
               variant="outline"
               className="bg-blue-600/10 border-blue-600/30 text-blue-400 hover:bg-blue-600/20 hover:text-blue-300 h-12"
             >
-              <Phone className="w-5 h-5 mr-2" />
+              <Phone className="w-5 h-5 mr-2 text-blue-500" />
               Call Now
             </Button>
           </div>

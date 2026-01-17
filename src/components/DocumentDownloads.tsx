@@ -107,10 +107,10 @@ const DocumentDownloads = ({ documents }: DocumentDownloadsProps) => {
   }, {} as Record<string, Document[]>);
 
   return (
-    <div className="bg-zinc-900 rounded-xl p-6 border border-zinc-800">
-      <div className="flex items-center justify-between mb-4">
+    <div className="bg-zinc-50 rounded-xl p-6 border border-zinc-200">
+      <div className="flex flex-col gap-3 mb-4">
         <h3
-          className="text-white text-xl font-semibold"
+          className="text-black text-xl font-semibold"
           style={{ fontFamily: "Poppins, sans-serif" }}
         >
           Project Materials
@@ -120,7 +120,7 @@ const DocumentDownloads = ({ documents }: DocumentDownloadsProps) => {
             variant="outline"
             size="sm"
             onClick={handleDownloadAll}
-            className="border-zinc-700 text-zinc-300 hover:bg-zinc-800 hover:text-white bg-transparent"
+            className="w-full border-gold text-gold hover:bg-gold hover:text-black bg-white"
           >
             <Download className="w-4 h-4 mr-2" />
             Download All Materials
@@ -131,7 +131,7 @@ const DocumentDownloads = ({ documents }: DocumentDownloadsProps) => {
       {/* Watermark Notice */}
       <div className="flex items-center gap-2 mb-4 p-3 bg-gold/10 border border-gold/20 rounded-lg">
         <Shield className="w-4 h-4 text-gold flex-shrink-0" />
-        <p className="text-xs text-zinc-400">
+        <p className="text-xs text-zinc-600">
           <span className="text-gold font-medium">Protected Content:</span> All downloads are watermarked and tracked for intellectual property protection.
         </p>
       </div>
@@ -143,16 +143,16 @@ const DocumentDownloads = ({ documents }: DocumentDownloadsProps) => {
               <button
                 key={doc.id}
                 onClick={() => handleDownload(doc)}
-                className="w-full flex items-center gap-3 p-4 rounded-xl bg-zinc-950 hover:bg-zinc-800 transition-colors group border border-zinc-800 hover:border-zinc-600"
+                className="w-full flex items-center gap-3 p-4 rounded-xl bg-white hover:bg-zinc-100 transition-colors group border border-zinc-200 hover:border-gold"
               >
-                <div className="w-10 h-10 rounded-lg bg-zinc-800 flex items-center justify-center text-zinc-300">
+                <div className="w-10 h-10 rounded-lg bg-gold/10 flex items-center justify-center text-gold">
                   {getDocumentIcon(type)}
                 </div>
                 <div className="flex-1 text-left">
-                  <p className="text-white font-medium">{getDocumentLabel(type)}</p>
+                  <p className="text-black font-medium">{getDocumentLabel(type)}</p>
                   <p className="text-zinc-500 text-sm truncate">{doc.file_name}</p>
                 </div>
-                <Download className="w-5 h-5 text-zinc-500 group-hover:text-white transition-colors" />
+                <Download className="w-5 h-5 text-gold group-hover:text-gold transition-colors" />
               </button>
             ))}
           </div>
