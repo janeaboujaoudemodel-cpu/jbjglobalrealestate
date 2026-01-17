@@ -210,10 +210,11 @@ const App = () => (
                 <Route path="/company-profile" element={<CompanyProfile />} />
                 <Route path="/news" element={<News />} />
                 <Route path="/broker-toolkit" element={<BrokerToolkit />} />
+                {/* Alias: historical Broker Toolkit dashboard URL */}
+                <Route path="/broker-toolkit/dashboard" element={<Navigate to="/broker-dashboard" replace />} />
                 <Route path="/broker-dashboard" element={<BrokerDashboard />} />
                 <Route path="/broker/training" element={<BrokerTraining />} />
                 <Route path="/ai-broker-workspace" element={<AIBrokerWorkspace />} />
-                <Route path="/ai-hub" element={<AIHub />} />
                 <Route path="/assistant-hub" element={<Navigate to="/ai-hub" replace />} />
                 <Route path="/interior-design-ai" element={<InteriorDesignAI />} />
                 <Route path="/property-evaluator" element={<PropertyEvaluator />} />
@@ -255,6 +256,8 @@ const App = () => (
                 <Route path="/map" element={<PropertyMap />} />
                 <Route path="/admin/developers" element={<AdminDevelopers />} />
                 <Route path="/my-account" element={<BrokerAccount />} />
+                {/* Alias: older links pointing to /account */}
+                <Route path="/account" element={<Navigate to="/my-account" replace />} />
                 <Route path="/hr-agent" element={<HRAgent />} />
                 <Route path="/referral-onboarding" element={<ReferralOnboarding />} />
                 <Route path="/signature-studio" element={<Navigate to="/document-scanner" replace />} />

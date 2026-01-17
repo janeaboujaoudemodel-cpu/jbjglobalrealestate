@@ -45,7 +45,7 @@ export default function BrokerDashboard() {
 
   useEffect(() => {
     if (!loading && !user) {
-      navigate("/auth?redirect=/broker-toolkit/dashboard");
+      navigate("/auth?redirect=/broker-dashboard");
     }
   }, [user, loading, navigate]);
 

@@ -1,4 +1,5 @@
 import { TeamMember, getTeamMemberById } from "@/config/team-members";
+import { PortraitImage } from "@/components/ui/portrait-image";
 import {
   Dialog,
   DialogContent,
@@ -38,13 +39,16 @@ const TeamMemberDetailDialog = ({
         </DialogHeader>
 
         <div className="flex flex-col md:flex-row gap-6">
-          {/* Photo */}
+          {/* Photo (GLOBAL RULE: no crop, no empty edges) */}
           <div className="flex-shrink-0">
-            <img
+            <PortraitImage
               src={member.avatar}
               alt={member.name}
-              className="w-40 h-40 md:w-48 md:h-48 rounded-xl object-cover object-top mx-auto md:mx-0"
-              loading="lazy"
+              shape="rounded"
+              size="full"
+              bordered={false}
+              focus="top"
+              className="w-40 h-40 md:w-48 md:h-48 mx-auto md:mx-0"
             />
           </div>
 
