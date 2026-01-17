@@ -47,9 +47,11 @@ export function BrokerToolkitHero() {
           className="text-center max-w-4xl mx-auto"
         >
           {/* Badge */}
-          <Badge className="bg-gold/20 text-gold border-gold/30 mb-6 px-4 py-1.5">
-            <Star className="w-3.5 h-3.5 mr-1.5 fill-gold" />
-            JBJ Broker Circle — Free Membership
+          <Badge className="bg-white text-black border-gold/30 mb-6 px-4 py-1.5 shadow-sm">
+            <Star className="w-3.5 h-3.5 mr-1.5 fill-gold text-gold" />
+            <span className="text-gold">JBJ Broker Circle</span>
+            <span className="text-black mx-1">—</span>
+            <span className="text-black">Free Membership</span>
           </Badge>
 
           {/* Main headline - Clear value prop */}

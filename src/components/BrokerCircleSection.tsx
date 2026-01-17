@@ -139,9 +139,10 @@ const BrokerCircleSection = () => {
           viewport={{ once: true }}
           variants={fadeInUp}
         >
-          <Badge className="bg-gold/20 text-gold border-gold/30 mb-4">
-            <Star className="w-3 h-3 mr-1" />
-            JBJ Broker Circle
+          <Badge className="bg-white text-gold border-gold/30 mb-4 shadow-sm">
+            <Star className="w-3 h-3 mr-1 text-black" />
+            <span className="text-gold">JBJ</span>
+            <span className="text-black ml-1">Broker Circle</span>
           </Badge>
           <h2 className="text-3xl md:text-4xl lg:text-5xl font-bold text-white mb-4" style={{ fontFamily: 'Poppins, sans-serif' }}>
             Ready to Join the <span className="text-gold">Broker Circle</span>?

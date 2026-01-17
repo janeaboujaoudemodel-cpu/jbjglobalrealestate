@@ -162,9 +162,9 @@ const ProjectDetail = () => {
                       <Button
                         variant="outline"
                         size="sm"
-                        className="bg-white border-gold text-gold hover:bg-gold hover:text-black font-medium"
+                        className="bg-gradient-to-r from-white via-[#FDFBF7] to-[#F5F0E6] border-gold/40 text-gold hover:bg-gold hover:text-black font-medium shadow-sm"
                       >
-                        <Map className="w-4 h-4 mr-2 text-gold" />
+                        <Map className="w-4 h-4 mr-2 text-black" />
                         View on Map
                       </Button>
                     </a>
@@ -336,7 +336,7 @@ const ProjectDetail = () => {
                   href="https://wa.me/971565911000"
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="block w-full py-3 px-6 bg-white text-gold border-2 border-gold font-semibold rounded-lg hover:bg-gold hover:text-black transition-all duration-300 text-center"
+                  className="block w-full py-3 px-6 bg-gradient-to-r from-white via-[#FDFBF7] to-[#F5F0E6] text-gold border-2 border-gold/40 font-semibold rounded-lg hover:bg-gold hover:text-black transition-all duration-300 text-center shadow-sm"
                   style={{ fontFamily: "Poppins, sans-serif" }}
                 >
                   Contact Us
