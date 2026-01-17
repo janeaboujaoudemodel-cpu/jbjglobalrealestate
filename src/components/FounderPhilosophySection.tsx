@@ -81,11 +81,11 @@ export const FounderPhilosophySection = () => {
               className="flex-1"
             >
               {/* Attribution */}
-              <p className="text-gold text-sm uppercase tracking-[0.2em] mb-6">
-                Written by the Founder,{" "}
+              <p className="text-black text-sm font-medium tracking-wide mb-6">
+                <span className="uppercase tracking-[0.15em]">Written by the Founder,</span>{" "}
                 <Link 
                   to="/founder" 
-                  className="underline underline-offset-4 hover:text-gold-light transition-colors"
+                  className="text-gold font-semibold hover:text-gold-light transition-colors underline underline-offset-4"
                 >
                   Jane Abou Jaoude
                 </Link>
