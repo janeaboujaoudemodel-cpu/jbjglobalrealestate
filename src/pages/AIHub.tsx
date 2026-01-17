@@ -267,7 +267,7 @@ const educationCerts = [
   {
     id: "employment-hub",
     title: "JBJ Employment Hub",
-    description: "Hire or get hired in real estate.",
+    description: "Hire or get hired in Real Estate.",
     icon: Briefcase,
     color: "text-cyan-400",
     bgColor: "bg-cyan-500/10",
@@ -417,20 +417,39 @@ const AIHub = () => {
       <SEOHead 
         title="JBJ Broker Hub"
         description="Access free AI tools, broker training, operations support, and coaching — all in one place. Your complete broker command center at JBJ Global Real Estate."
-        keywords="JBJ Broker Hub, broker tools, real estate AI, property tools Dubai, broker support, JBJ Global Real Estate"
+        keywords="JBJ Broker Hub, broker tools, Real Estate AI, property tools Dubai, broker support, JBJ Global Real Estate"
         canonicalPath="/ai-hub"
       />
       
       <section className="relative w-full min-h-screen bg-[#0D0D0D]">
-        {/* HERO SECTION - Clean & Premium */}
+        {/* HERO SECTION - With Video Background */}
         <div className="relative py-16 md:py-24 overflow-hidden">
+          {/* Video Background */}
+          <div className="absolute inset-0 z-0">
+            <video 
+              autoPlay 
+              loop 
+              muted 
+              playsInline
+              className="w-full h-full object-cover opacity-40"
+              poster="https://images.unsplash.com/photo-1512453979798-5ea266f8880c?w=1920&q=80"
+            >
+              <source 
+                src="https://videos.pexels.com/video-files/3571264/3571264-uhd_2560_1440_30fps.mp4" 
+                type="video/mp4" 
+              />
+            </video>
+            {/* Dark overlay for better text readability */}
+            <div className="absolute inset-0 bg-gradient-to-b from-black/70 via-black/60 to-[#0D0D0D]" />
+          </div>
+          
           {/* Animated gradient orbs */}
-          <div className="absolute inset-0 overflow-hidden">
+          <div className="absolute inset-0 overflow-hidden z-[1]">
             <div className="absolute top-0 left-1/4 w-[500px] h-[500px] bg-gold/10 rounded-full blur-[120px]" />
             <div className="absolute bottom-0 right-1/4 w-[400px] h-[400px] bg-purple-500/5 rounded-full blur-[100px]" />
           </div>
 
-          <div className="container mx-auto px-4 relative z-10">
+          <div className="container mx-auto px-4 relative z-10 pt-8 md:pt-16">
             <motion.div
               initial="hidden"
               animate="visible"

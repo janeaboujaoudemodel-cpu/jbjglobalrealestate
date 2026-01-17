@@ -295,7 +295,7 @@ const BuyerGuide = () => {
             
             <div className="grid grid-cols-2 md:grid-cols-4 gap-4 md:gap-6">
               {[
-                { icon: Users, label: "First-Time Buyers", desc: "New to UAE real estate" },
+                { icon: Users, label: "First-Time Buyers", desc: "New to UAE Real Estate" },
                 { icon: Home, label: "Homeowners", desc: "Buying for personal use" },
                 { icon: Globe, label: "International Buyers", desc: "Purchasing from abroad" },
                 { icon: MapPin, label: "Relocators", desc: "Moving to Dubai" }
@@ -672,7 +672,7 @@ const BuyerGuide = () => {
               <span className="text-zinc-600 font-medium">Disclaimer:</span> This guide is provided 
               for general educational and informational purposes only. It does not constitute legal, 
               financial, mortgage, or professional advice. JBJ Global Real Estate is a licensed 
-              real estate brokerage and does not provide legal or financial advisory services. 
+              Real Estate brokerage and does not provide legal or financial advisory services. 
               Buyers should conduct independent due diligence and consult with qualified 
               professionals before making any property purchase decisions.
             </p>

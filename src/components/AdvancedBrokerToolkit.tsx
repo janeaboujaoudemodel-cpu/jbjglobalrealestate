@@ -183,7 +183,7 @@ const MEDIA_MARKETING = [
 const TRAINING_DEVELOPMENT = [
   {
     name: 'Real Estate Foundations',
-    description: 'Core knowledge for starting in real estate',
+    description: 'Core knowledge for starting in Real Estate',
     icon: BookOpen,
     color: 'text-blue-400',
     glowColor: 'shadow-blue-500/30',

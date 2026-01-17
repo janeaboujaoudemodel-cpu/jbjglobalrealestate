@@ -105,14 +105,14 @@ export const NewsletterBrevo = ({
           placeholder="Enter your email"
           value={email}
           onChange={(e) => setEmail(e.target.value)}
-          className="flex-1 bg-zinc-900/50 border-zinc-700 text-white placeholder:text-zinc-500 focus:border-gold/50 focus:ring-gold/20"
+          className="flex-1 bg-white border-gold/30 text-black placeholder:text-zinc-400 focus:border-gold focus:ring-gold/30 shadow-sm"
           required
           disabled={isSubmitting}
         />
         <Button
           type="submit"
           disabled={isSubmitting}
-          className="bg-gold hover:bg-gold-light text-black font-semibold px-4"
+          className="bg-gradient-to-r from-gold via-[#D4B86A] to-gold text-black font-semibold px-5 shadow-md hover:brightness-110 transition-all"
         >
           {isSubmitting ? (
             <Loader2 className="w-4 h-4 animate-spin" />
