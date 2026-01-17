@@ -530,7 +530,7 @@ Requirements:
             )}
           </div>
 
-          {/* Progress Steps */}
+          {/* Progress Steps - White/Gold Premium Styling */}
           <div className="max-w-4xl mx-auto mb-8">
             <div className="flex items-center justify-between overflow-x-auto pb-2 gap-2">
               {STEPS.map((step, index) => (
@@ -540,17 +540,17 @@ Requirements:
                     currentStep === step.number 
                       ? 'text-gold' 
                       : currentStep > step.number 
-                        ? 'text-green-500' 
-                        : 'text-zinc-600'
+                        ? 'text-gold' 
+                        : 'text-zinc-400'
                   }`}
                   onClick={() => step.number < currentStep && setCurrentStep(step.number)}
                 >
                   <div className={`w-10 h-10 rounded-full flex items-center justify-center mb-2 border-2 transition-all ${
                     currentStep === step.number 
-                      ? 'bg-gold/20 border-gold' 
+                      ? 'bg-gradient-to-br from-gold to-gold-dark border-gold text-black' 
                       : currentStep > step.number 
-                        ? 'bg-green-500/20 border-green-500'
-                        : 'bg-zinc-900 border-zinc-700'
+                        ? 'bg-white border-gold/50 text-gold'
+                        : 'bg-white/10 border-zinc-600 text-zinc-400'
                   }`}>
                     {currentStep > step.number ? (
                       <CheckCircle2 className="w-5 h-5" />
@@ -564,9 +564,9 @@ Requirements:
             </div>
           </div>
 
-          {/* Form Content */}
+          {/* Form Content - White Background Premium Styling */}
           <div className="max-w-3xl mx-auto">
-            <div className="bg-zinc-900/50 border border-zinc-800 rounded-2xl p-6 md:p-8">
+            <div className="bg-white border border-zinc-200 rounded-2xl p-6 md:p-8 shadow-xl">
               <AnimatePresence mode="wait">
                 {/* Step 1: Seller Details */}
                 {currentStep === 1 && (
@@ -578,50 +578,50 @@ Requirements:
                     className="space-y-6"
                   >
                     <div>
-                      <h2 className="text-xl font-bold text-white mb-2">Seller Details</h2>
-                      <p className="text-zinc-400 text-sm">Tell us about yourself so we can contact you</p>
+                      <h2 className="text-xl font-bold text-black mb-2">Seller Details</h2>
+                      <p className="text-zinc-600 text-sm">Tell us about yourself so we can contact you</p>
                     </div>
 
                     <div className="grid md:grid-cols-2 gap-4">
                       <div>
-                        <Label className="text-white">Full Name *</Label>
+                        <Label className="text-black font-medium">Full Name *</Label>
                         <Input
                           {...form.register("seller_full_name")}
                           placeholder="Enter your full name"
-                          className="bg-zinc-800 border-zinc-700 text-white mt-1"
+                          className="bg-zinc-50 border-zinc-300 text-black placeholder:text-zinc-400 mt-1"
                         />
                       </div>
                       <div>
-                        <Label className="text-white">Phone Number *</Label>
+                        <Label className="text-black font-medium">Phone Number *</Label>
                         <Input
                           {...form.register("seller_phone")}
                           placeholder="+971 50 123 4567"
-                          className="bg-zinc-800 border-zinc-700 text-white mt-1"
+                          className="bg-zinc-50 border-zinc-300 text-black placeholder:text-zinc-400 mt-1"
                         />
                       </div>
                     </div>
 
                     <div>
-                      <Label className="text-white">Email Address *</Label>
+                      <Label className="text-black font-medium">Email Address *</Label>
                       <Input
                         {...form.register("seller_email")}
                         type="email"
                         placeholder="your@email.com"
-                        className="bg-zinc-800 border-zinc-700 text-white mt-1"
+                        className="bg-zinc-50 border-zinc-300 text-black placeholder:text-zinc-400 mt-1"
                       />
                     </div>
 
                     <div className="grid md:grid-cols-2 gap-4">
                       <div>
-                        <Label className="text-white">Preferred Language</Label>
+                        <Label className="text-black font-medium">Preferred Language</Label>
                         <Select 
                           value={form.watch("preferred_language")} 
                           onValueChange={(v) => form.setValue("preferred_language", v)}
                         >
-                          <SelectTrigger className="bg-zinc-800 border-zinc-700 text-white mt-1">
+                          <SelectTrigger className="bg-zinc-50 border-zinc-300 text-black mt-1">
                             <SelectValue />
                           </SelectTrigger>
-                          <SelectContent className="bg-zinc-800 border-zinc-700">
+                          <SelectContent className="bg-white border-zinc-200">
                             <SelectItem value="en">English</SelectItem>
                             <SelectItem value="ar">Arabic</SelectItem>
                             <SelectItem value="fr">French</SelectItem>
@@ -631,15 +631,15 @@ Requirements:
                         </Select>
                       </div>
                       <div>
-                        <Label className="text-white">Preferred Contact Method</Label>
+                        <Label className="text-black font-medium">Preferred Contact Method</Label>
                         <Select 
                           value={form.watch("preferred_contact_method")} 
                           onValueChange={(v) => form.setValue("preferred_contact_method", v)}
                         >
-                          <SelectTrigger className="bg-zinc-800 border-zinc-700 text-white mt-1">
+                          <SelectTrigger className="bg-zinc-50 border-zinc-300 text-black mt-1">
                             <SelectValue />
                           </SelectTrigger>
-                          <SelectContent className="bg-zinc-800 border-zinc-700">
+                          <SelectContent className="bg-white border-zinc-200">
                             <SelectItem value="whatsapp">WhatsApp</SelectItem>
                             <SelectItem value="call">Phone Call</SelectItem>
                             <SelectItem value="email">Email</SelectItem>
@@ -649,7 +649,7 @@ Requirements:
                     </div>
 
                     <div>
-                      <Label className="text-white mb-3 block">Seller Type *</Label>
+                      <Label className="text-black font-medium mb-3 block">Seller Type *</Label>
                       <RadioGroup 
                         value={form.watch("seller_type")} 
                         onValueChange={(v) => form.setValue("seller_type", v)}
@@ -664,9 +664,9 @@ Requirements:
                             <RadioGroupItem 
                               value={option.value} 
                               id={option.value}
-                              className="border-zinc-600"
+                              className="border-zinc-400"
                             />
-                            <Label htmlFor={option.value} className="ml-2 text-zinc-300 cursor-pointer">
+                            <Label htmlFor={option.value} className="ml-2 text-zinc-700 cursor-pointer">
                               {option.label}
                             </Label>
                           </div>
@@ -1418,7 +1418,7 @@ Requirements:
                 className="border-gold/50 text-gold hover:bg-gold/10"
               >
                 <Sparkles className="w-4 h-4 mr-2" />
-                {showAssistant ? "Hide" : "Show"} JBJ Seller Assistant
+                {showAssistant ? "Hide" : "Get Help with"} JBJ Seller Assistant
               </Button>
             </div>
 
