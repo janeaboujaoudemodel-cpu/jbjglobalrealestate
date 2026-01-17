@@ -329,14 +329,15 @@ const Properties = () => {
             {/* Divider */}
             <div className="w-px h-6 bg-zinc-300 mx-2" />
             
-            {/* Ready Properties Shortcut */}
+            {/* Ready Properties Shortcut - Also sets transactionType to 'buy' */}
             <Button
               variant={appliedFilters.completionStatus === 'ready' ? "default" : "outline"}
               size="sm"
               onClick={() => {
                 const newStatus = appliedFilters.completionStatus === 'ready' ? null : 'ready';
                 updateFilter("completionStatus", newStatus);
-                setAppliedFilters(prev => ({ ...prev, completionStatus: newStatus }));
+                updateFilter("transactionType", 'buy');
+                setAppliedFilters(prev => ({ ...prev, completionStatus: newStatus, transactionType: 'buy' }));
               }}
               className={`h-9 px-4 rounded-full flex items-center gap-1.5 ${
                 appliedFilters.completionStatus === 'ready'
@@ -348,14 +349,15 @@ const Properties = () => {
               Ready
             </Button>
             
-            {/* Off-Plan Properties Shortcut */}
+            {/* Off-Plan Properties Shortcut - Also sets transactionType to 'buy' */}
             <Button
               variant={appliedFilters.completionStatus === 'off-plan' ? "default" : "outline"}
               size="sm"
               onClick={() => {
                 const newStatus = appliedFilters.completionStatus === 'off-plan' ? null : 'off-plan';
                 updateFilter("completionStatus", newStatus);
-                setAppliedFilters(prev => ({ ...prev, completionStatus: newStatus }));
+                updateFilter("transactionType", 'buy');
+                setAppliedFilters(prev => ({ ...prev, completionStatus: newStatus, transactionType: 'buy' }));
               }}
               className={`h-9 px-4 rounded-full flex items-center gap-1.5 ${
                 appliedFilters.completionStatus === 'off-plan'
