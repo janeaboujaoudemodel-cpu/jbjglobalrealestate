@@ -216,6 +216,29 @@ const GlobalHeader = () => {
                       </Link>
                     </DropdownMenuItem>
                   ))}
+              </DropdownMenuContent>
+              </DropdownMenu>
+
+              {/* Market Intelligence Dropdown */}
+              <DropdownMenu>
+                <DropdownMenuTrigger asChild>
+                  <button className={`flex items-center gap-1 px-2 xl:px-2.5 py-2 text-[12px] xl:text-[13px] font-medium whitespace-nowrap transition-all ${
+                    location.pathname.startsWith('/market-intelligence') ? 'text-gold' : 'text-zinc-300 hover:text-gold'
+                  }`}>
+                    <Newspaper className="w-3 h-3" />
+                    Market Intel
+                    <ChevronDown className="w-3 h-3" />
+                  </button>
+                </DropdownMenuTrigger>
+                <DropdownMenuContent align="center" className="bg-black border-zinc-800 min-w-[180px]">
+                  {marketIntelLinks.map((link) => (
+                    <DropdownMenuItem key={link.href} asChild>
+                      <Link to={link.href} className="flex items-center gap-2 text-zinc-300 hover:text-gold">
+                        <link.icon className="w-4 h-4" />
+                        {link.label}
+                      </Link>
+                    </DropdownMenuItem>
+                  ))}
                 </DropdownMenuContent>
               </DropdownMenu>
 
