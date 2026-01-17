@@ -408,7 +408,7 @@ const LandlordGuide = () => {
                 How JBJ GLOBAL REAL ESTATE Supports Landlords
               </h2>
               <p className="text-lg text-zinc-400 max-w-2xl mx-auto">
-                Licensed for BUY, SELL & RENT (LEASING), we provide comprehensive landlord services.
+                Licensed for BUY, SELL & RENT, we provide comprehensive landlord services.
               </p>
             </div>
 
@@ -453,7 +453,7 @@ const LandlordGuide = () => {
       {/* CTA */}
       <GuideCTA
         title="Ready to List Your Property?"
-        description="Our leasing team can help you market, screen tenants, and manage your rental property."
+        description="Our rental team can help you market, screen tenants, and manage your rental property."
         primaryAction={{
           label: "List Your Property for Rent",
           href: "/contact",

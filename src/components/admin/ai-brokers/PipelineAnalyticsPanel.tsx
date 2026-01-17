@@ -152,8 +152,8 @@ export function PipelineAnalyticsPanel() {
           }))
         },
         {
-          pipeline: 'rent_lease_pipeline',
-          label: 'Rent / Leasing Pipeline',
+          pipeline: 'rent_pipeline',
+          label: 'Rent Pipeline',
           icon: Building2,
           color: 'text-amber-500',
           leadCount: pipelineData.rent_lease_pipeline.leads.length,

@@ -32,7 +32,7 @@ const Terms = () => {
                 <p>
                   This website is operated by JBJ Global Real Estate (the "Company", "we", "us", "our"). 
                   We are a Dubai-based real estate brokerage and provide real estate brokerage support 
-                  for property sales and leasing, and (where applicable) holiday homes support subject 
+                  for property sales and rentals, and (where applicable) holiday homes support subject 
                   to relevant approvals and permits.
                 </p>
               </section>
@@ -41,7 +41,7 @@ const Terms = () => {
                 <h2 className="text-gold text-xl font-semibold mb-4">2. Scope of Our Services</h2>
                 <p>We provide:</p>
                 <ul className="list-disc pl-6 mt-2 space-y-2">
-                  <li>Real estate brokerage support (property sales and leasing)</li>
+                  <li>Real estate brokerage support (property sales and rentals)</li>
                   <li>Property search and introductions to listings/projects</li>
                   <li>Coordination support for viewings, documentation and transaction process (as applicable)</li>
                   <li>Holiday homes support (short-term rental support) only where permitted and subject to relevant approvals/permits</li>

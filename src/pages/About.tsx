@@ -118,7 +118,7 @@ const About = () => {
             className="text-zinc-400 text-lg md:text-xl max-w-2xl mx-auto"
             variants={fadeInUp}
           >
-            JBJ Global Real Estate is licensed to BUY, SELL, and RENT (LEASING) real estate, serving UAE-based and international clients 
+            JBJ Global Real Estate is licensed to BUY, SELL, and RENT real estate, serving UAE-based and international clients 
             with expert property services across the UAE.
           </motion.p>
         </motion.div>
@@ -171,7 +171,7 @@ const About = () => {
               </h2>
               <div className="space-y-5 text-zinc-400 leading-relaxed">
                 <p>
-                  Founded in Dubai, JBJ Global Real Estate is licensed to BUY, SELL, and RENT (LEASING) 
+                  Founded in Dubai, JBJ Global Real Estate is licensed to BUY, SELL, and RENT 
                   premium properties across the UAE.
                 </p>
                 <p>
@@ -343,7 +343,7 @@ const About = () => {
               
               <div className="space-y-4 mb-8">
                 {[
-                  "Property Sales & Leasing Brokerage",
+                  "Property Sales & Rental Brokerage",
                   "Holiday Homes & Short-Term Rentals",
                   "Partner Introductions (Legal, Mortgage, Management)",
                   "Luxury Concierge Services",

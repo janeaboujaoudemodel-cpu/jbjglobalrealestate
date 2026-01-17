@@ -77,7 +77,7 @@ const GlobalHeader = () => {
   // Properties submenu items for Buy / Rent / New Projects
   const propertiesLinks = [
     { href: "/properties?transaction=buy", label: "Buy Properties", icon: Home },
-    { href: "/properties?transaction=rent", label: "Rent / Lease Properties", icon: Building2 },
+    { href: "/properties?transaction=rent", label: "Rent Properties", icon: Building2 },
     { href: "/properties?status=off-plan", label: "New Projects (Off-Plan)", icon: Building2 },
     { href: "/properties", label: "All Properties", icon: Building2 },
   ];

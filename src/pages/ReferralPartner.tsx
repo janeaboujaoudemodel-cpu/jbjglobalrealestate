@@ -68,7 +68,7 @@ const ReferralPartner = () => {
                   <div>
                     <h3 className="text-white font-semibold mb-1">Refer a Client</h3>
                     <p className="text-zinc-400">
-                      Introduce us to individuals or companies interested in buying, selling, or leasing property in the UAE.
+                      Introduce us to individuals or companies interested in buying, selling, or renting property in the UAE.
                     </p>
                   </div>
                 </div>

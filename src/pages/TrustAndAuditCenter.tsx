@@ -52,7 +52,7 @@ const TrustAndAuditCenter = () => {
                     JBJ GLOBAL REAL ESTATE is a licensed real estate brokerage in Dubai, UAE.
                   </p>
                   <div className="flex flex-wrap gap-3 mb-4">
-                    {["BUY", "SELL", "RENT (LEASING)"].map((activity) => (
+                    {["BUY", "SELL", "RENT"].map((activity) => (
                       <span 
                         key={activity}
                         className="inline-flex items-center gap-2 px-4 py-2 bg-gold/20 text-gold font-semibold rounded-lg"
@@ -64,7 +64,7 @@ const TrustAndAuditCenter = () => {
                   </div>
                   <p className="text-zinc-400 text-sm">
                     Our brokerage license permits us to facilitate property transactions across the United Arab Emirates, 
-                    including off-plan developments, ready properties, and residential/commercial leasing.
+                    including off-plan developments, ready properties, and residential/commercial rentals.
                   </p>
                 </div>
                 <div className="grid md:grid-cols-2 gap-4 mt-6">

@@ -53,7 +53,7 @@ type ConsultationFormData = z.infer<typeof consultationSchema>;
 
 const SERVICE_OPTIONS = [
   { value: "buy-sell", label: "Buy / Sell Brokerage" },
-  { value: "leasing", label: "Leasing Brokerage" },
+  { value: "rent", label: "Rent Brokerage" },
   { value: "holiday-homes", label: "Holiday Homes (Short-Term)" },
   { value: "partner-mortgage", label: "Partner Introduction: Mortgage" },
   { value: "partner-legal", label: "Partner Introduction: Legal" },
@@ -202,7 +202,7 @@ const Contact = () => {
             Book a Consultation
           </h1>
           <p className="text-zinc-300 text-lg md:text-xl max-w-3xl leading-relaxed mb-4">
-            Brokerage support for buying, selling, and leasing property in Dubai and the UAE. 
+            Brokerage support for buying, selling, and renting property in Dubai and the UAE. 
             We also coordinate introductions to independent licensed partners for legal, mortgage, and concierge support.
           </p>
           <p className="text-zinc-500 text-sm max-w-2xl leading-relaxed border-l-2 border-gold/30 pl-4">

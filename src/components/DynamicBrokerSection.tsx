@@ -95,7 +95,7 @@ const CONTENT_BY_USER_TYPE: Record<UserType, ContentConfig> = {
     badgeIcon: Home,
     title: 'Ready to Find Your',
     highlightText: 'Perfect Rental?',
-    subtitle: 'Browse residential and commercial rentals across Dubai. Flexible leasing options with expert guidance.',
+    subtitle: 'Browse residential and commercial rentals across Dubai. Flexible rental options with expert guidance.',
     primaryButton: {
       text: 'Browse Rentals',
       link: '/properties?transaction=rent',

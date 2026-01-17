@@ -99,7 +99,7 @@ const Partners = () => {
               
               <p className="text-xl text-muted-foreground mb-8 leading-relaxed">
                 JBJ GLOBAL REAL ESTATE is licensed for{" "}
-                <span className="text-gold font-semibold">BUY, SELL & RENT (LEASING)</span> only.
+                <span className="text-gold font-semibold">BUY, SELL & RENT</span> only.
                 For all other services, we connect you with independent licensed partners.
               </p>
 
@@ -226,7 +226,7 @@ const Partners = () => {
                 <div className="bg-background p-6 rounded-xl border border-border">
                   <h3 className="font-semibold mb-3 text-lg">Licensed Real Estate Brokerage</h3>
                   <p className="text-muted-foreground text-sm leading-relaxed">
-                    JBJ GLOBAL REAL ESTATE is a Dubai mainland brokerage licensed to BUY, SELL & RENT (LEASING) 
+                    JBJ GLOBAL REAL ESTATE is a Dubai mainland brokerage licensed to BUY, SELL & RENT 
                     properties across the UAE. This is our core expertise and regulated activity.
                   </p>
                 </div>

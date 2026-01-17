@@ -57,15 +57,15 @@ const companyInfo = {
   founded: "2025",
   headquarters: "Downtown Dubai, UAE",
   ceo: "Jane Abou Jaoude",
-  about: `JBJ Global Real Estate is a Dubai-based real estate brokerage licensed to BUY, SELL, and RENT (LEASING) properties across the UAE. Founded by entrepreneur Jane Abou Jaoude, we provide brokerage support and partner introductions for discerning clients seeking exceptional properties in the UAE.
+  about: `JBJ Global Real Estate is a Dubai-based real estate brokerage licensed to BUY, SELL, and RENT properties across the UAE. Founded by entrepreneur Jane Abou Jaoude, we provide brokerage support and partner introductions for discerning clients seeking exceptional properties in the UAE.
 
 Our founder-led approach ensures that every client receives personalized attention and professional guidance, backed by our extensive market knowledge and exclusive network of developers, legal partners, and service providers.
 
 We serve UAE-based and international clients interested in UAE real estate, offering expert brokerage services with a commitment to excellence.`,
-  mission: "To provide discerning clients with professional brokerage support for buying, selling, and leasing, along with access to the UAE's most exclusive properties, delivered with the highest standards of integrity, expertise, and personalized service.",
+  mission: "To provide discerning clients with professional brokerage support for buying, selling, and renting, along with access to the UAE's most exclusive properties, delivered with the highest standards of integrity, expertise, and personalized service.",
   vision: "To be the trusted choice for clients seeking premium real estate brokerage services in the UAE, recognized for our commitment to client success.",
   services: [
-    "Property Sales, Leasing & Rental Brokerage",
+    "Property Sales & Rental Brokerage",
     "Legal Partner Introductions",
     "Interior Design & Architecture Partners",
     "Mortgage Partner Introductions",
@@ -247,7 +247,7 @@ const CompanyProfile = () => {
       // About text (wrapped)
       const aboutLines = [
         "JBJ Global Real Estate is a Dubai-based real estate brokerage",
-        "licensed to BUY, SELL, and RENT (LEASING) properties across the UAE.",
+        "licensed to BUY, SELL, and RENT properties across the UAE.",
         "Founded by entrepreneur Jane Abou Jaoude, we provide brokerage",
         "support and partner introductions for discerning clients seeking",
         "exceptional properties in the UAE.",
@@ -435,7 +435,7 @@ const CompanyProfile = () => {
       });
 
       const services = [
-        "Property Sales, Leasing & Rental Brokerage",
+        "Property Sales & Rental Brokerage",
         "Legal Partner Introductions",
         "Interior Design & Architecture Partners",
         "Mortgage Partner Introductions",
@@ -628,7 +628,7 @@ const CompanyProfile = () => {
         "IMPORTANT NOTICE:",
         "",
         "JBJ Global Real Estate is a Dubai-based real estate brokerage",
-        "specializing in property sales, leasing, and holiday homes.",
+        "specializing in property sales, rentals, and holiday homes.",
         "",
         "We are NOT a financial institution, law firm, or mortgage provider.",
         "We do NOT provide legal, mortgage, or financial advice.",
@@ -957,7 +957,7 @@ const CompanyProfile = () => {
                 <div className="space-y-3 text-sm text-zinc-400">
                   <p>
                     JBJ Global Real Estate is a Dubai-based <strong className="text-zinc-300">real estate brokerage</strong> specializing 
-                    in property sales, leasing, and holiday homes. We are NOT a financial institution, law firm, or mortgage provider.
+                    in property sales, rentals, and holiday homes. We are NOT a financial institution, law firm, or mortgage provider.
                   </p>
                   <p>
                     We do NOT provide legal, mortgage, or financial advice. Legal, mortgage, and property management 
