@@ -88,13 +88,17 @@ const FavoriteButton = ({
           <button
             onClick={handleFavoriteClick}
             disabled={toggleUserFavorite.isPending}
-            className={`${sizeClasses[size]} flex items-center justify-center rounded-full bg-black/60 backdrop-blur-sm hover:bg-black/80 transition-all duration-200 border border-white/10`}
+            className={`${sizeClasses[size]} flex items-center justify-center rounded-full transition-all duration-200 border ${
+              isFavorite 
+                ? "bg-gradient-to-r from-white via-[#FDFBF7] to-[#F5F0E6] border-gold/40 shadow-lg"
+                : "bg-gradient-to-r from-white via-[#FDFBF7] to-[#F5F0E6] border-gold/30 hover:border-gold hover:shadow-lg"
+            }`}
           >
             <Heart
               className={`${iconSizes[size]} transition-all duration-200 ${
                 isFavorite 
                   ? "fill-red-500 text-red-500" 
-                  : "text-white hover:text-red-400"
+                  : "text-black hover:text-red-500"
               }`}
             />
           </button>
@@ -112,14 +116,14 @@ const FavoriteButton = ({
               disabled={toggleUserShortlist.isPending}
               className={`${sizeClasses[size]} flex items-center justify-center rounded-full transition-all duration-200 border ${
                 isShortlisted
-                  ? "bg-gold text-black border-gold"
-                  : "bg-black/60 backdrop-blur-sm hover:bg-black/80 text-white border-white/10"
+                  ? "bg-gradient-to-r from-white via-[#FDFBF7] to-[#F5F0E6] border-gold shadow-lg"
+                  : "bg-gradient-to-r from-white via-[#FDFBF7] to-[#F5F0E6] border-gold/30 hover:border-gold hover:shadow-lg"
               }`}
             >
               {isShortlisted ? (
-                <Check className={iconSizes[size]} />
+                <Check className={`${iconSizes[size]} text-black`} />
               ) : (
-                <ListPlus className={iconSizes[size]} />
+                <ListPlus className={`${iconSizes[size]} text-black`} />
               )}
             </button>
           </TooltipTrigger>

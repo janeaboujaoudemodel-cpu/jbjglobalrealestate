@@ -189,25 +189,26 @@ const Index = () => {
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true }}
           >
-            <span className="inline-block px-4 py-1.5 bg-gradient-to-r from-[#C8A766]/20 via-black/50 to-[#C8A766]/20 border border-[#C8A766]/30 rounded-full text-[#C8A766] text-xs uppercase tracking-[0.2em] font-medium mb-4">
+            <span className="inline-flex items-center gap-2 px-5 py-2 bg-gradient-to-r from-white via-[#FDFBF7] to-[#F5F0E6] border border-gold/40 rounded-full text-black text-xs uppercase tracking-[0.2em] font-medium mb-4 shadow-md">
+              <Scale className="w-3 h-3 text-gold" />
               Licensed Partner Network
             </span>
             <div className="flex flex-wrap justify-center gap-3">
               <Link to="/services/law-firm">
-                <span className="inline-flex items-center gap-2 px-4 py-2 bg-gradient-to-r from-black via-zinc-900 to-black border border-gold/40 rounded-full text-gold text-sm hover:bg-gold/10 hover:border-gold hover:text-white hover:shadow-[0_0_15px_rgba(200,167,102,0.3)] transition-all duration-300">
-                  <Scale className="w-4 h-4" />
+                <span className="inline-flex items-center gap-2 px-4 py-2.5 bg-gradient-to-r from-white via-[#FDFBF7] to-[#F5F0E6] border border-gold/40 rounded-full text-black text-sm hover:border-gold hover:shadow-lg hover:shadow-gold/20 transition-all duration-300 shadow-sm">
+                  <Scale className="w-4 h-4 text-gold" />
                   Legal Partners
                 </span>
               </Link>
               <Link to="/mortgage-calculator">
-                <span className="inline-flex items-center gap-2 px-4 py-2 bg-gradient-to-r from-black via-zinc-900 to-black border border-gold/40 rounded-full text-gold text-sm hover:bg-gold/10 hover:border-gold hover:text-white hover:shadow-[0_0_15px_rgba(200,167,102,0.3)] transition-all duration-300">
-                  <Calculator className="w-4 h-4" />
+                <span className="inline-flex items-center gap-2 px-4 py-2.5 bg-gradient-to-r from-white via-[#FDFBF7] to-[#F5F0E6] border border-gold/40 rounded-full text-black text-sm hover:border-gold hover:shadow-lg hover:shadow-gold/20 transition-all duration-300 shadow-sm">
+                  <Calculator className="w-4 h-4 text-gold" />
                   Mortgage Partners
                 </span>
               </Link>
               <Link to="/services/design-build">
-                <span className="inline-flex items-center gap-2 px-4 py-2 bg-gradient-to-r from-black via-zinc-900 to-black border border-gold/40 rounded-full text-gold text-sm hover:bg-gold/10 hover:border-gold hover:text-white hover:shadow-[0_0_15px_rgba(200,167,102,0.3)] transition-all duration-300">
-                  <Wrench className="w-4 h-4" />
+                <span className="inline-flex items-center gap-2 px-4 py-2.5 bg-gradient-to-r from-white via-[#FDFBF7] to-[#F5F0E6] border border-gold/40 rounded-full text-black text-sm hover:border-gold hover:shadow-lg hover:shadow-gold/20 transition-all duration-300 shadow-sm">
+                  <Wrench className="w-4 h-4 text-gold" />
                   Design & Build
                 </span>
               </Link>
@@ -219,31 +220,32 @@ const Index = () => {
 
           {/* Tools Row - Simplified to top 4 + View All */}
           <div className="text-center">
-            <span className="inline-block px-4 py-1.5 bg-gradient-to-r from-[#C8A766]/20 via-black/50 to-[#C8A766]/20 border border-[#C8A766]/30 rounded-full text-[#C8A766] text-xs uppercase tracking-[0.2em] font-medium mb-4">
+            <span className="inline-flex items-center gap-2 px-5 py-2 bg-gradient-to-r from-white via-[#FDFBF7] to-[#F5F0E6] border border-gold/40 rounded-full text-black text-xs uppercase tracking-[0.2em] font-medium mb-4 shadow-md">
+              <Sparkles className="w-3 h-3 text-gold" />
               Property Tools
             </span>
             <div className="flex flex-wrap justify-center gap-3 mb-4">
               <Link to="/compare">
-                <Button variant="outline" className="border-zinc-800 text-zinc-400 hover:border-gold/40 hover:text-gold text-xs px-4 py-3">
-                  <BarChart3 className="w-3 h-3 mr-2" />
+                <Button variant="outline" className="bg-gradient-to-r from-white via-[#FDFBF7] to-[#F5F0E6] border-gold/40 text-black hover:border-gold hover:bg-gold/10 hover:shadow-lg hover:shadow-gold/20 text-xs px-4 py-3 shadow-sm">
+                  <BarChart3 className="w-3 h-3 mr-2 text-gold" />
                   Compare
                 </Button>
               </Link>
               <Link to="/property-evaluator">
-                <Button variant="outline" className="border-zinc-800 text-zinc-400 hover:border-gold/40 hover:text-gold text-xs px-4 py-3">
-                  <Calculator className="w-3 h-3 mr-2" />
+                <Button variant="outline" className="bg-gradient-to-r from-white via-[#FDFBF7] to-[#F5F0E6] border-gold/40 text-black hover:border-gold hover:bg-gold/10 hover:shadow-lg hover:shadow-gold/20 text-xs px-4 py-3 shadow-sm">
+                  <Calculator className="w-3 h-3 mr-2 text-gold" />
                   Evaluator
                 </Button>
               </Link>
               <Link to="/mortgage-calculator">
-                <Button variant="outline" className="border-zinc-800 text-zinc-400 hover:border-gold/40 hover:text-gold text-xs px-4 py-3">
-                  <Calculator className="w-3 h-3 mr-2" />
+                <Button variant="outline" className="bg-gradient-to-r from-white via-[#FDFBF7] to-[#F5F0E6] border-gold/40 text-black hover:border-gold hover:bg-gold/10 hover:shadow-lg hover:shadow-gold/20 text-xs px-4 py-3 shadow-sm">
+                  <Calculator className="w-3 h-3 mr-2 text-gold" />
                   Mortgage
                 </Button>
               </Link>
               <Link to="/quiz">
-                <Button variant="outline" className="border-zinc-800 text-zinc-400 hover:border-gold/40 hover:text-gold text-xs px-4 py-3">
-                  <Sparkles className="w-3 h-3 mr-2" />
+                <Button variant="outline" className="bg-gradient-to-r from-white via-[#FDFBF7] to-[#F5F0E6] border-gold/40 text-black hover:border-gold hover:bg-gold/10 hover:shadow-lg hover:shadow-gold/20 text-xs px-4 py-3 shadow-sm">
+                  <Sparkles className="w-3 h-3 mr-2 text-gold" />
                   AI Home Finder
                 </Button>
               </Link>
@@ -259,7 +261,8 @@ const Index = () => {
       <section className="py-16 md:py-20 bg-zinc-950">
         <div className="container mx-auto px-4">
           <div className="text-center mb-10">
-            <span className="inline-block px-4 py-1.5 bg-gradient-to-r from-[#C8A766]/20 via-white to-[#C8A766]/20 border border-[#C8A766]/30 rounded-full text-[#C8A766] text-xs uppercase tracking-[0.2em] font-medium mb-3">
+            <span className="inline-flex items-center gap-2 px-5 py-2 bg-gradient-to-r from-white via-[#FDFBF7] to-[#F5F0E6] border border-gold/40 rounded-full text-black text-xs uppercase tracking-[0.2em] font-medium mb-3 shadow-md">
+              <Users className="w-3 h-3 text-gold" />
               Who We Serve
             </span>
             <p className="text-white text-xl md:text-2xl font-medium" style={{ fontFamily: "Poppins, sans-serif" }}>
@@ -531,9 +534,9 @@ const Index = () => {
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true }}
             >
-              <span className="inline-flex items-center gap-2 px-4 py-2 bg-gold/10 border border-gold/40 rounded-full mb-4">
+              <span className="inline-flex items-center gap-2 px-5 py-2.5 bg-gradient-to-r from-gold/20 via-[#F5F0E6] to-gold/20 border border-gold/50 rounded-full mb-4 shadow-lg shadow-gold/10">
                 <Calculator className="w-4 h-4 text-gold" />
-                <span className="text-zinc-700 text-xs font-semibold uppercase tracking-wider">Mortgage Estimate</span>
+                <span className="text-black text-xs font-semibold uppercase tracking-wider">Mortgage Estimate</span>
               </span>
               <h3 className="text-zinc-900 text-3xl md:text-4xl font-bold" style={{ fontFamily: "Poppins, sans-serif" }}>
                 Mortgage <span className="text-transparent bg-clip-text bg-gradient-to-r from-gold via-[#C4A962] to-gold">Calculator</span>
@@ -565,14 +568,14 @@ const Index = () => {
             viewport={{ once: true }}
             transition={{ duration: 0.8 }}
           >
-            {/* Premium badge */}
+            {/* Premium badge with glow */}
             <motion.span 
-              className="inline-flex items-center gap-2 px-4 py-2 bg-black/5 border border-zinc-200 rounded-full text-black text-xs uppercase tracking-[0.2em] mb-6"
+              className="inline-flex items-center gap-2 px-5 py-2.5 bg-gradient-to-r from-gold/20 via-[#F5F0E6] to-gold/20 border border-gold/50 rounded-full text-black text-xs uppercase tracking-[0.2em] mb-6 shadow-lg shadow-gold/20"
               initial={{ opacity: 0, scale: 0.9 }}
               whileInView={{ opacity: 1, scale: 1 }}
               transition={{ delay: 0.2 }}
             >
-              <Sparkles className="w-3 h-3 text-gold" />
+              <Sparkles className="w-3 h-3 text-gold animate-pulse" />
               Begin Your Journey
             </motion.span>
             

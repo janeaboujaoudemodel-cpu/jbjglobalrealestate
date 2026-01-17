@@ -160,30 +160,84 @@ const Contact = () => {
     }
   };
 
+  const [phoneActionsOpen, setPhoneActionsOpen] = useState(false);
+  const [meetingModalOpen, setMeetingModalOpen] = useState(false);
+
+  const handlePhoneAction = (action: string) => {
+    const phoneNumber = CONTACT_INFO.phone.replace(/\s/g, '');
+    switch(action) {
+      case 'call':
+        window.location.href = `tel:${phoneNumber}`;
+        break;
+      case 'whatsapp':
+        window.open(getWhatsAppUrl(), '_blank');
+        break;
+      case 'save':
+        // Create vCard
+        const vcard = `BEGIN:VCARD
+VERSION:3.0
+FN:JBJ Global Real Estate
+TEL:${phoneNumber}
+EMAIL:${CONTACT_INFO.email}
+ORG:JBJ Global Real Estate
+END:VCARD`;
+        const blob = new Blob([vcard], { type: 'text/vcard' });
+        const url = URL.createObjectURL(blob);
+        const link = document.createElement('a');
+        link.href = url;
+        link.download = 'JBJ-Global-Real-Estate.vcf';
+        link.click();
+        URL.revokeObjectURL(url);
+        toast.success("Contact saved!");
+        break;
+      case 'share':
+        if (navigator.share) {
+          navigator.share({
+            title: 'JBJ Global Real Estate',
+            text: `Contact JBJ Global Real Estate: ${phoneNumber}`,
+            url: window.location.href,
+          });
+        } else {
+          navigator.clipboard.writeText(phoneNumber);
+          toast.success("Phone number copied!");
+        }
+        break;
+    }
+    setPhoneActionsOpen(false);
+  };
+
   const contactCards = [
     {
       icon: MapPin,
       title: "Location",
       value: "Downtown Dubai, UAE",
       action: null,
+      iconColor: "text-gold",
+      clickable: false,
     },
     {
       icon: Phone,
       title: "Phone",
       value: CONTACT_INFO.phone,
-      action: getCallUrl(),
+      action: 'phone-actions',
+      iconColor: "text-gold",
+      clickable: true,
     },
     {
       icon: Mail,
       title: "Email",
       value: CONTACT_INFO.email,
       action: getEmailUrl(),
+      iconColor: "text-gold",
+      clickable: true,
     },
     {
       icon: Calendar,
       title: "Availability",
-      value: "By Appointment",
-      action: null,
+      value: "Book Online Meeting",
+      action: 'meeting',
+      iconColor: "text-gold",
+      clickable: true,
     },
   ];
 
@@ -226,22 +280,18 @@ const Contact = () => {
             {contactCards.map((card) => (
               <div 
                 key={card.title}
-                className="bg-white border border-zinc-200 rounded-xl p-5 hover:border-gold/50 hover:shadow-lg transition-all"
+                onClick={() => {
+                  if (card.action === 'phone-actions') setPhoneActionsOpen(true);
+                  else if (card.action === 'meeting') setMeetingModalOpen(true);
+                  else if (card.action && card.clickable) window.location.href = card.action;
+                }}
+                className={`bg-white border border-zinc-200 rounded-xl p-5 hover:border-gold/50 hover:shadow-lg transition-all ${card.clickable ? 'cursor-pointer' : ''}`}
               >
                 <div className="w-10 h-10 bg-black rounded-lg flex items-center justify-center mb-3">
-                  <card.icon className={`w-5 h-5 ${card.title === 'Phone' ? 'text-blue-500' : 'text-gold'}`} />
+                  <card.icon className={`w-5 h-5 ${card.iconColor}`} />
                 </div>
                 <h3 className="text-black font-semibold text-sm mb-1">{card.title}</h3>
-                {card.action ? (
-                  <a 
-                    href={card.action}
-                    className="text-zinc-600 hover:text-gold transition-colors text-sm"
-                  >
-                    {card.value}
-                  </a>
-                ) : (
-                  <p className="text-zinc-600 text-sm">{card.value}</p>
-                )}
+                <p className={`text-sm ${card.clickable ? 'text-gold hover:underline' : 'text-zinc-600'}`}>{card.value}</p>
               </div>
             ))}
           </div>
