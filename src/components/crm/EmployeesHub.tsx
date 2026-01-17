@@ -125,7 +125,7 @@ const TEAM_MEMBERS: Employee[] = [
   {
     id: 'jane',
     name: 'Jane Abou Jaoude',
-    role: 'Founder & CEO',
+    role: 'Founder & CEO JBJ Global Real Estate',
     department: 'executive',
     type: 'human',
     email: 'jane@JBJ.ae',

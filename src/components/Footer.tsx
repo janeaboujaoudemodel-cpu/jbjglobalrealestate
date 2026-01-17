@@ -342,7 +342,7 @@ const Footer = () => {
             
             {/* English Legal Line */}
             <p className="text-zinc-300 text-xs leading-relaxed mb-4 font-medium">
-              Licensed Real Estate Brokerage for Buy, Sell & Rent in Dubai (Mainland). Operated by JBJ Global Real Estate L.L.C S.O.C. Owned & Led by Founder and CEO Jane Abou Jaoude.
+              Licensed Real Estate Brokerage for Buy, Sell & Rent in Dubai (Mainland). Operated by JBJ Global Real Estate L.L.C S.O.C. Owned & Led by Jane Abou Jaoude Founder & CEO JBJ Global Real Estate.
             </p>
             
             {/* Arabic Disclaimer */}
@@ -357,7 +357,7 @@ const Footer = () => {
             
             <p className="text-zinc-500 text-xs leading-relaxed mb-4">
               All content, design, and technology on this platform are the intellectual property of 
-              Founder and CEO Jane Abou Jaoude and JBJ Global Real Estate. Unauthorized reproduction is strictly prohibited.
+              Jane Abou Jaoude Founder & CEO JBJ Global Real Estate. Unauthorized reproduction is strictly prohibited.
             </p>
             
             <div className="flex flex-wrap items-center justify-center gap-2 text-xs text-zinc-600">
@@ -382,7 +382,7 @@ const Footer = () => {
               © {currentYear} JBJ Global Real Estate. All Rights Reserved.
             </p>
             <p className="text-xs text-zinc-600">
-              <span className="text-gold font-medium">Developed, Created & Implemented by the Founder, Jane Abou Jaoude</span> | Brokerage Services Only
+              <span className="text-gold font-medium">Developed, Created & Implemented by Jane Abou Jaoude Founder & CEO JBJ Global Real Estate</span> | Brokerage Services Only
             </p>
             <p className="text-xs text-zinc-600 mt-1">
               Platform Vision by{" "}

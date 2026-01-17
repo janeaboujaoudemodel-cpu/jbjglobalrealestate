@@ -50,7 +50,7 @@ interface Channel {
 
 // All team members synced from Employee Hub (Western names for AI employees)
 const ALL_TEAM_MEMBERS: TeamMember[] = [
-  { id: '1', name: 'Jane Abou Jaoude', role: 'Founder & CEO', status: 'online', department: 'Executive' },
+  { id: '1', name: 'Jane Abou Jaoude', role: 'Founder & CEO JBJ Global Real Estate', status: 'online', department: 'Executive' },
   { id: '2', name: 'Jessica', role: 'HR Manager', status: 'online', department: 'HR' },
   { id: '3', name: 'David Carter', role: 'Head of Recruitment', status: 'away', department: 'HR' },
   { id: '4', name: 'Sarah Mitchell', role: 'HR Assistant', status: 'online', department: 'HR' },

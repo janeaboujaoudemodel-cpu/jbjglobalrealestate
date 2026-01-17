@@ -336,7 +336,7 @@ export const executiveTeam: TeamMember[] = sortByHierarchy([
   {
     id: 'jane-abou-jaoude',
     name: 'Jane Abou Jaoude',
-    role: 'Founder & CEO',
+    role: 'Founder & CEO JBJ Global Real Estate',
     department: 'Executive',
     avatar: janeAbouJaoudeCeo, // LOCKED_EXISTING - Do not modify
     email: 'jane@JBJ.ae',

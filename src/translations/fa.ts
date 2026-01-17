@@ -66,9 +66,9 @@ export const fa = {
   'founder.years': 'سال',
   'founder.countries': 'کشور',
   'founder.learnMore': 'درباره بنیانگذار ما بیشتر بدانید',
-  'founder.title': 'بنیانگذار و مدیر عامل',
+  'founder.title': 'بنیانگذار و مدیرعامل JBJ Global Real Estate',
   'founder.description1': 'JBJ Global Real Estate یک شرکت کارگزاری املاک به رهبری بنیانگذار است که بر پایه استانداردهای تزلزل‌ناپذیر، محرمانگی و چشم‌انداز بلندمدت بنا شده است.',
-  'founder.description2': 'بنیانگذار و مدیرعامل جین ابو جاعوده با فلسفه‌ای ریشه‌دار در مسئولیت‌پذیری و محرمانگی رهبری می‌کند و سازمان‌هایی را می‌سازد که برای پایداری طراحی شده‌اند نه صرفاً گسترش.',
+  'founder.description2': 'جین ابو جاعوده بنیانگذار و مدیرعامل JBJ Global Real Estate با فلسفه‌ای ریشه‌دار در مسئولیت‌پذیری و محرمانگی رهبری می‌کند و سازمان‌هایی را می‌سازد که برای پایداری طراحی شده‌اند نه صرفاً گسترش.',
   
   // Market Report
   'report.exclusive': 'دانلود رایگان انحصاری',
@@ -80,7 +80,7 @@ export const fa = {
   'report.highlight2': 'چارچوب مقایسه توسعه‌دهندگان',
   'report.highlight3': 'چک‌لیست بررسی دقیق ملک',
   'report.highlight4': 'رتبه‌بندی ROI مناطق',
-  'report.createdBy': 'ایجاد شده توسط بنیان‌گذار و مدیرعامل جین ابو جاعوده',
+  'report.createdBy': 'ایجاد شده توسط جین ابو جاعوده بنیان‌گذار و مدیرعامل JBJ Global Real Estate',
   'report.exclusiveFor': 'انحصاری برای JBJ Global Real Estate',
   'report.poweredBy': 'کارگزاری املاک | دبی، امارات',
   

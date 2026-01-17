@@ -17,6 +17,8 @@
 export const BRAND_LOCK = Object.freeze({
   COMPANY_NAME: 'JBJ GLOBAL REAL ESTATE',
   FOUNDER_NAME: 'Jane Abou Jaoude',
+  FOUNDER_TITLE: 'Founder & CEO JBJ Global Real Estate',
+  FOUNDER_FULL_TITLE: 'Jane Abou Jaoude Founder & CEO JBJ Global Real Estate',
   CORE_SERVICES: 'BUY · SELL · RENT',
   DOMAIN: 'JBJ.ae',
   PRIMARY_EMAIL: 'contact@JBJ.ae',
