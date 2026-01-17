@@ -300,6 +300,43 @@ export const GOVERNANCE_ENFORCEMENT = {
 } as const;
 
 // ============================================================================
+// STEP 5 — DATA SOURCE INDEPENDENCE & REDUNDANCY (NON-NEGOTIABLE)
+// ============================================================================
+
+export const DATA_SOURCE_INDEPENDENCE = {
+  OBJECTIVE: 'Ensure JBJ GLOBAL REAL ESTATE is NEVER dependent on a single data source, platform, partner, or API for listings or market intelligence.',
+
+  // Every country must have these
+  COUNTRY_REQUIREMENTS: {
+    PRIMARY_DATA_SOURCE: true,
+    SECONDARY_DATA_SOURCE: true,
+    FALLBACK_SOURCE: true, // Manual or public
+  },
+
+  // Prohibited dependencies
+  NO_EXECUTION_MAY_RELY_ON: [
+    'A single private platform',
+    'A revocable API without fallback',
+    'Exclusive data ownership by a partner',
+  ],
+
+  // Removal handling
+  DATA_SOURCE_REMOVAL_RULES: [
+    'Platform must continue operating',
+    'Listings may degrade gracefully but NEVER disappear entirely',
+    'Market Intelligence remains active using alternative sources',
+  ],
+
+  // Internal tracking statuses
+  DATA_SOURCE_STATUSES: ['active', 'degraded', 'disabled'] as const,
+
+  // Gate rule
+  GATE_RULE: 'No country activation is allowed without redundancy.',
+} as const;
+
+export type DataSourceStatus = typeof DATA_SOURCE_INDEPENDENCE.DATA_SOURCE_STATUSES[number];
+
+// ============================================================================
 // PRIORITY 3 STATUS RULE
 // ============================================================================
 
@@ -321,6 +358,7 @@ export const PRIORITY_3_STATUS = {
     { step: 2, name: 'Country Classification & Sequencing', status: 'COMPLETE' },
     { step: 3, name: 'Global Platform Architecture', status: 'COMPLETE' },
     { step: 4, name: 'Governance & Enforcement', status: 'COMPLETE' },
+    { step: 5, name: 'Data Source Independence & Redundancy', status: 'COMPLETE' },
   ],
 } as const;
 
@@ -443,6 +481,7 @@ export const GLOBAL_EXPANSION = {
   EXPANSION_SEQUENCING,
   PLATFORM_ARCHITECTURE,
   GOVERNANCE_ENFORCEMENT,
+  DATA_SOURCE_INDEPENDENCE,
   RISK_PREVENTION,
   PRIORITY_3_STATUS,
 } as const;
