@@ -173,13 +173,15 @@ const Founder = () => {
           animate={{ scale: 1 }}
           transition={{ duration: 1.5, ease: "easeOut" }}
         >
-          {/* GLOBAL IMAGE RULE - LOCKED: No cropping, perfect centering */}
-          {/* Hero image - CEO with flags in office */}
+          {/* GLOBAL IMAGE RULE - LOCKED (FINAL):
+              object-fit: cover + center 15% = max zoom, crop from bottom only
+              Preserves head & shoulders, crops suit area */}
           <SafeImage 
             src={ceoHeroOfficeFlags} 
             fallbackSrc={founderHero}
             alt="Jane Abou Jaoude - Founder & CEO"
-            className="w-full h-full object-contain object-center bg-zinc-950"
+            className="w-full h-full bg-zinc-950"
+            style={{ objectFit: "cover", objectPosition: "center 15%" }}
           />
           {/* Multi-layer gradient overlay */}
           <div className="absolute inset-0 bg-gradient-to-t from-black via-black/60 to-transparent" />
@@ -278,13 +280,15 @@ const Founder = () => {
                 <div className="absolute -bottom-2 -right-2 w-20 h-20 border-r-2 border-b-2 border-gold/50 rounded-br-3xl" />
                 
                 {/* Main photo container */}
-                {/* GLOBAL IMAGE RULE - LOCKED: No cropping, perfect centering */}
+                {/* GLOBAL IMAGE RULE - LOCKED (FINAL):
+                    object-fit: cover + center 15% = max zoom, crop from bottom */}
                 <div className="relative aspect-[3/4] rounded-3xl overflow-hidden border border-gold/20 shadow-2xl shadow-gold/10 bg-zinc-950">
                   <SafeImage 
                     src={founderPremium} 
                     fallbackSrc={founderProfessional}
                     alt="Jane Abou Jaoude, Founder and CEO of JBJ GLOBAL REAL ESTATE" 
-                    className="w-full h-full object-contain object-center"
+                    className="w-full h-full"
+                    style={{ objectFit: "cover", objectPosition: "center 15%" }}
                   />
                   {/* Subtle vignette */}
                   <div className="absolute inset-0 bg-gradient-to-t from-black/20 via-transparent to-transparent" />
@@ -726,7 +730,8 @@ const Founder = () => {
                   src={founderProfessional} 
                   fallbackSrc={founderHero}
                   alt="Jane Abou Jaoude - Professional Portrait" 
-                  className="w-full h-full object-cover object-top group-hover:scale-105 transition-transform duration-700"
+                  className="w-full h-full group-hover:scale-105 transition-transform duration-700"
+                  style={{ objectFit: "cover", objectPosition: "center 15%" }}
                 />
                 <div className="absolute inset-0 bg-gradient-to-t from-black via-black/20 to-transparent opacity-80 group-hover:opacity-90 transition-opacity" />
                 <div className="absolute bottom-0 left-0 right-0 p-6">
@@ -745,7 +750,8 @@ const Founder = () => {
                   src={founderOffice} 
                   fallbackSrc={founderHero}
                   alt="Jane Abou Jaoude - Executive" 
-                  className="w-full h-full object-cover object-top group-hover:scale-105 transition-transform duration-700"
+                  className="w-full h-full group-hover:scale-105 transition-transform duration-700"
+                  style={{ objectFit: "cover", objectPosition: "center 15%" }}
                 />
                 <div className="absolute inset-0 bg-gradient-to-t from-black via-black/20 to-transparent opacity-80 group-hover:opacity-90 transition-opacity" />
                 <div className="absolute bottom-0 left-0 right-0 p-6">
@@ -764,7 +770,8 @@ const Founder = () => {
                   src={founderAwardStage} 
                   fallbackSrc={founderHero}
                   alt="Jane Abou Jaoude - Industry Event" 
-                  className="w-full h-full object-cover object-center group-hover:scale-105 transition-transform duration-700"
+                  className="w-full h-full group-hover:scale-105 transition-transform duration-700"
+                  style={{ objectFit: "cover", objectPosition: "center 15%" }}
                 />
                 <div className="absolute inset-0 bg-gradient-to-t from-black via-black/20 to-transparent opacity-80 group-hover:opacity-90 transition-opacity" />
                 <div className="absolute bottom-0 left-0 right-0 p-6">
@@ -783,7 +790,8 @@ const Founder = () => {
                   src={founderPremium} 
                   fallbackSrc={founderHero}
                   alt="Jane Abou Jaoude - Premium Portrait" 
-                  className="w-full h-full object-cover object-top group-hover:scale-105 transition-transform duration-700"
+                  className="w-full h-full group-hover:scale-105 transition-transform duration-700"
+                  style={{ objectFit: "cover", objectPosition: "center 15%" }}
                 />
                 <div className="absolute inset-0 bg-gradient-to-t from-black via-black/20 to-transparent opacity-80 group-hover:opacity-90 transition-opacity" />
                 <div className="absolute bottom-0 left-0 right-0 p-6">
@@ -1286,14 +1294,15 @@ const Founder = () => {
                 <div className="flex flex-col items-center gap-5">
                   {/* Larger avatar with premium ring */}
                   <div className="relative">
-                    {/* GLOBAL IMAGE RULE - LOCKED: No cropping, perfect centering */}
+                    {/* GLOBAL IMAGE RULE - LOCKED (FINAL): max zoom, crop from bottom */}
                     <div className="w-32 h-32 md:w-36 md:h-36 rounded-full p-1.5 bg-gradient-to-br from-gold via-[#C4A962] to-gold shadow-2xl shadow-gold/30">
                       <div className="w-full h-full rounded-full overflow-hidden bg-zinc-950">
                         <SafeImage 
                           src={founderProfessional} 
                           fallbackSrc={founderHero} 
                           alt="Jane Abou Jaoude" 
-                          className="w-full h-full object-contain object-center"
+                          className="w-full h-full"
+                          style={{ objectFit: "cover", objectPosition: "center 15%" }}
                         />
                       </div>
                     </div>

@@ -5,15 +5,21 @@ import { cn } from "@/lib/utils";
 
 /**
  * ============================================================
- * GLOBAL AVATAR SYSTEM - JBJ GLOBAL REAL ESTATE (LOCKED)
+ * GLOBAL AVATAR SYSTEM - JBJ GLOBAL REAL ESTATE (LOCKED - FINAL)
  * ============================================================
  * 
  * CORE RULES (ALIGNED WITH PORTRAIT IMAGE SYSTEM):
- * - Subject occupies 70-85% of container (visual presence)
- * - Subject is centered (face in middle)
- * - Head is NEVER cropped
- * - Uses object-fit: cover with smart positioning
- * - Circle is a MASK - image fills it properly
+ * 1. MAXIMUM ZOOM: Fill the frame as much as possible
+ * 2. NEVER crop the head
+ * 3. NEVER crop shoulders or hands/sides
+ * 4. CAN crop the suit/body from bottom if needed
+ * 5. Face must be centered
+ * 6. Minimize empty gaps in the frame
+ * 
+ * HOW IT WORKS:
+ * - Uses object-fit: cover to fill frame completely (no gaps)
+ * - Uses object-position: center 15% to focus on face/upper body
+ * - Crops from bottom (suit area) while preserving head & shoulders
  * 
  * Applies to:
  * - Founder images
@@ -42,53 +48,29 @@ const Avatar = React.forwardRef<
 Avatar.displayName = AvatarPrimitive.Root.displayName;
 
 /**
- * AvatarImage - GLOBAL PORTRAIT RULE APPLIED
- * - Never crop head/shoulders (foreground uses object-fit: contain)
- * - Never show empty borders (background uses blurred cover-fill)
+ * AvatarImage - GLOBAL PORTRAIT RULE (LOCKED - FINAL)
+ * - object-fit: cover = fills frame completely, no gaps
+ * - object-position: center 15% = focus on face, crop from bottom
+ * - Maximum zoom while preserving head & shoulders
  */
 const AvatarImage = React.forwardRef<
   React.ElementRef<typeof AvatarPrimitive.Image>,
   React.ComponentPropsWithoutRef<typeof AvatarPrimitive.Image>
 >(({ className, style, src, srcSet, sizes, alt = "", ...props }, ref) => (
-  <>
-    {src ? (
-      <img
-        aria-hidden="true"
-        alt=""
-        src={src}
-        srcSet={srcSet}
-        sizes={sizes}
-        className="absolute inset-0 h-full w-full"
-        style={{
-          objectFit: "cover",
-          objectPosition: "center 12%",
-          filter: "blur(14px)",
-          transform: "scale(1.15)",
-          opacity: 0.32,
-        }}
-        loading="lazy"
-        decoding="async"
-        onError={(e) => {
-          e.currentTarget.style.display = "none";
-        }}
-      />
-    ) : null}
-
-    <AvatarPrimitive.Image
-      ref={ref}
-      alt={alt}
-      src={src}
-      srcSet={srcSet}
-      sizes={sizes}
-      className={cn("absolute inset-0 h-full w-full", className)}
-      style={{
-        objectFit: "contain",
-        objectPosition: "center 12%",
-        ...style,
-      }}
-      {...props}
-    />
-  </>
+  <AvatarPrimitive.Image
+    ref={ref}
+    alt={alt}
+    src={src}
+    srcSet={srcSet}
+    sizes={sizes}
+    className={cn("h-full w-full", className)}
+    style={{
+      objectFit: "cover",
+      objectPosition: "center 15%",
+      ...style,
+    }}
+    {...props}
+  />
 ));
 AvatarImage.displayName = AvatarPrimitive.Image.displayName;
 

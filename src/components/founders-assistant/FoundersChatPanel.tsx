@@ -584,9 +584,14 @@ Just type naturally or use commands like \`/schedule\`, \`/email\`, or mention t
                   onClick={() => insertMention(member)}
                   className="flex items-center gap-3 w-full px-3 py-2 rounded-lg hover:bg-gold/10 transition-colors"
                 >
-                  {/* GLOBAL IMAGE RULE - LOCKED: No cropping, perfect centering */}
+                  {/* GLOBAL IMAGE RULE - LOCKED (FINAL): max zoom, crop from bottom */}
                   <div className="w-8 h-8 rounded-full overflow-hidden border border-gold/20 bg-zinc-900">
-                    <img src={member.avatar} alt={member.name} className="w-full h-full object-contain object-center" />
+                    <img 
+                      src={member.avatar} 
+                      alt={member.name} 
+                      className="w-full h-full"
+                      style={{ objectFit: "cover", objectPosition: "center 15%" }}
+                    />
                   </div>
                   <div className="text-left flex-1">
                     <p className="text-sm text-white">{member.name}</p>

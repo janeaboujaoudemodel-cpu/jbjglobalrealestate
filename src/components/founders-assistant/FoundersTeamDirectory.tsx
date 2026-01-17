@@ -86,10 +86,12 @@ const FoundersTeamDirectory: React.FC = () => {
                     {/* Avatar */}
                     <div className="relative">
                       <div className="w-14 h-14 rounded-full overflow-hidden border-2 border-gold/30 group-hover:border-gold/60 transition-colors">
+                        {/* GLOBAL IMAGE RULE - LOCKED (FINAL): max zoom, crop from bottom */}
                         <img 
                           src={member.avatar} 
                           alt={member.name} 
-                          className="w-full h-full object-cover"
+                          className="w-full h-full"
+                          style={{ objectFit: "cover", objectPosition: "center 15%" }}
                         />
                       </div>
                       {member.isAI && (

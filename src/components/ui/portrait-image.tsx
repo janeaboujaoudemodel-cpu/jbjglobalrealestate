@@ -8,19 +8,19 @@ import { cn } from "@/lib/utils";
  * 
  * USE FOR: Founder, Employees, Users, Team Members, Avatars
  * 
- * RULES (MANDATORY):
- * - Subject occupies 70-85% of container (visual presence)
- * - Subject is centered (face in middle)
- * - Head is NEVER cropped
- * - No "tiny subject inside large background"
- * - No distortions
- * - High-resolution only
+ * RULES (MANDATORY - FINAL):
+ * 1. MAXIMUM ZOOM: Fill the frame as much as possible
+ * 2. NEVER crop the head
+ * 3. NEVER crop shoulders or hands/sides
+ * 4. CAN crop the suit/body from bottom if needed
+ * 5. Face must be centered
+ * 6. Minimize empty gaps in the frame
  * 
  * HOW IT WORKS:
- * - Uses object-fit: cover for visual presence
- * - Uses object-position to focus on face/upper body
- * - Container controls the frame, image fills it properly
- * - The image FILLS the container visually
+ * - Uses object-fit: cover to fill frame completely (no gaps)
+ * - Uses object-position: center top to focus on face/upper body
+ * - Crops from bottom (suit area) while preserving head & shoulders
+ * - The image FILLS the container with maximum visual presence
  * 
  * APPLIES TO:
  * - About page (Founder)
@@ -60,15 +60,18 @@ const shapeClasses = {
 };
 
 /**
- * Focus positions for portrait framing
- * - "top": Face is at the very top of the image (12% from top)
- * - "upper": Face is in upper portion (20% from top) - DEFAULT
- * - "center": Face is centered (50%)
+ * Focus positions for portrait framing (object-position values)
+ * - "top": Face at very top - crops more from bottom (center 5%)
+ * - "upper": Face in upper third - balanced crop (center 15%) - DEFAULT
+ * - "center": Face centered - equal crop top/bottom (center 35%)
+ * 
+ * These values work with object-fit: cover to maximize zoom
+ * while keeping head/shoulders visible and cropping from bottom
  */
 const focusPositions = {
-  top: "center 12%",
-  upper: "center 20%",
-  center: "center 50%",
+  top: "center 5%",
+  upper: "center 15%",
+  center: "center 35%",
 };
 
 const PortraitImage = React.forwardRef<HTMLImageElement, PortraitImageProps>(
@@ -92,37 +95,17 @@ const PortraitImage = React.forwardRef<HTMLImageElement, PortraitImageProps>(
           className
         )}
       >
-        {/* GLOBAL PORTRAIT RULE:
-            - Never crop head/shoulders (foreground uses object-fit: contain)
-            - Never show empty borders (background uses blurred cover-fill)
+        {/* GLOBAL PORTRAIT RULE (LOCKED):
+            - object-fit: cover = fills frame completely, no gaps
+            - object-position: center top% = focus on face, crop from bottom
+            - Maximum zoom while preserving head & shoulders
         */}
-
-        {/* Background fill layer (prevents empty edges in circle/rounded frames) */}
-        <img
-          aria-hidden="true"
-          alt=""
-          src={props.src}
-          srcSet={props.srcSet}
-          sizes={props.sizes}
-          className="w-full h-full absolute inset-0"
-          style={{
-            objectFit: "cover",
-            objectPosition: focusPositions[focus],
-            filter: "blur(14px)",
-            transform: "scale(1.12)",
-            opacity: 0.32,
-          }}
-          loading="lazy"
-          decoding="async"
-        />
-
-        {/* Foreground image (full subject visible) */}
         <img
           ref={ref}
           alt={alt}
-          className="w-full h-full absolute inset-0"
+          className="w-full h-full"
           style={{
-            objectFit: "contain",
+            objectFit: "cover",
             objectPosition: focusPositions[focus],
             ...style,
           }}

@@ -50,7 +50,8 @@ export const FounderPhilosophySection = () => {
               className="flex-shrink-0 mx-auto md:mx-0"
             >
               <Link to="/founder" className="block group">
-                {/* GLOBAL FOUNDER IMAGE RULE: Perfect center, no cropping */}
+                {/* GLOBAL IMAGE RULE - LOCKED (FINAL):
+                    object-fit: cover + center 15% = max zoom, crop from bottom only */}
                 <div className="w-36 h-36 md:w-44 md:h-44 rounded-full overflow-hidden border-2 border-gold/30 group-hover:border-gold transition-colors duration-300 shadow-lg bg-zinc-900">
                   <img 
                     src={founderPremium}
@@ -58,7 +59,7 @@ export const FounderPhilosophySection = () => {
                     className="w-full h-full"
                     style={{
                       objectFit: 'cover',
-                      objectPosition: 'center center',
+                      objectPosition: 'center 15%',
                     }}
                     loading="lazy"
                   />

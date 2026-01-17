@@ -253,7 +253,8 @@ export default function AIBrokerWorkspace() {
                     <img
                       src={activeBroker.avatar_url}
                       alt={activeBroker.name}
-                      className="w-full h-full rounded-full object-contain object-center bg-zinc-950"
+                      className="w-full h-full rounded-full bg-zinc-950"
+                      style={{ objectFit: "cover", objectPosition: "center 15%" }}
                     />
                   ) : (
                     <span className="text-black text-2xl font-bold">
