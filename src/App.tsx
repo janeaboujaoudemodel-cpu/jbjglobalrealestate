@@ -26,6 +26,7 @@ import Services from "./pages/Services";
 // Concierge removed
 import MortgageCalculator from "./pages/MortgageCalculator";
 import MarketReport from "./pages/MarketReport";
+import MarketIntelligence from "./pages/MarketIntelligence";
 import Favorites from "./pages/Favorites";
 import Compare from "./pages/Compare";
 import Auth from "./pages/Auth";
@@ -161,6 +162,8 @@ const App = () => (
                 <Route path="/services" element={<Services />} />
                 <Route path="/mortgage-calculator" element={<MortgageCalculator />} />
                 <Route path="/market-report" element={<MarketReport />} />
+                <Route path="/market-intelligence" element={<MarketIntelligence />} />
+                <Route path="/insights" element={<MarketIntelligence />} />
                 <Route path="/favorites" element={<Favorites />} />
                 <Route path="/compare" element={<Compare />} />
                 <Route path="/admin" element={<Admin />} />

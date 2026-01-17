@@ -109,6 +109,7 @@ const Footer = () => {
     { href: "/press-kit", label: "Press Kit" },
     { href: "/properties", label: "Properties" },
     { href: "/areas", label: "Area Guides" },
+    { href: "/market-intelligence", label: "Market Intelligence" },
     { href: "/buyer-guide", label: "Buyer Guide" },
     { href: "/services", label: "Services" },
     { href: "/awards", label: "Awards" },
