@@ -232,7 +232,8 @@ const Favorites = () => {
     .sub{color:#9a9a9a; margin-top:10px; font-size:13px}
     .grid{display:grid; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); gap:16px}
     .card{background:#141414; border:1px solid #2a2a2a; border-radius:14px; overflow:hidden}
-    .img{width:100%; height:160px; object-fit:cover; display:block}
+    /* GLOBAL IMAGE RULE - LOCKED: No cropping, perfect centering */
+    .img{width:100%; height:160px; object-fit:contain; object-position:center center; display:block; background:#0a0a0a}
     .content{padding:14px}
     .title{font-size:16px; font-weight:700; margin-bottom:6px}
     .meta{color:#b4b4b4; font-size:12px; margin-bottom:10px}

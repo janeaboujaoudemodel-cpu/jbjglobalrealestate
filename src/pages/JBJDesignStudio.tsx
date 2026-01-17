@@ -177,7 +177,8 @@ const JBJDesignStudio: React.FC = () => {
         <table cellpadding="0" cellspacing="0" style="font-family: Arial, sans-serif; color: #1A1A1A;">
           <tr>
             <td style="padding-right: 15px; border-right: 2px solid #D4AF37;">
-              ${signatureData.photoUrl ? `<img src="${signatureData.photoUrl}" alt="${signatureData.name}" style="width: 80px; height: 80px; border-radius: 50%; object-fit: cover;">` : ''}
+              <!-- GLOBAL IMAGE RULE - LOCKED: No cropping, perfect centering -->
+              ${signatureData.photoUrl ? `<img src="${signatureData.photoUrl}" alt="${signatureData.name}" style="width: 80px; height: 80px; border-radius: 50%; object-fit: contain; object-position: center center; background: #0a0a0a;">` : ''}
             </td>
             <td style="padding-left: 15px;">
               <p style="margin: 0; font-size: 16px; font-weight: bold; color: #000;">${signatureData.name}</p>

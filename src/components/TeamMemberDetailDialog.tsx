@@ -91,10 +91,11 @@ const TeamMemberDetailDialog = ({
                   Reports To
                 </h4>
                 <div className="flex items-center gap-3">
+                  {/* GLOBAL IMAGE RULE - LOCKED: No cropping, perfect centering */}
                   <img
                     src={reportsToMember.avatar}
                     alt={reportsToMember.name}
-                    className="w-10 h-10 rounded-full object-cover"
+                    className="w-10 h-10 rounded-full object-contain object-center bg-zinc-900"
                   />
                   <div>
                     <p className="text-white font-medium text-sm">{reportsToMember.name}</p>
@@ -114,10 +115,11 @@ const TeamMemberDetailDialog = ({
                 <div className="flex flex-wrap gap-2">
                   {directReportsMembers.slice(0, 6).map((report) => (
                     <div key={report.id} className="flex items-center gap-2 bg-zinc-900 rounded-lg px-2 py-1.5">
+                      {/* GLOBAL IMAGE RULE - LOCKED: No cropping, perfect centering */}
                       <img
                         src={report.avatar}
                         alt={report.name}
-                        className="w-6 h-6 rounded-full object-cover"
+                        className="w-6 h-6 rounded-full object-contain object-center bg-zinc-950"
                       />
                       <span className="text-zinc-300 text-xs">{report.name.split(' ')[0]}</span>
                     </div>

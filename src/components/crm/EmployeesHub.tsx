@@ -855,8 +855,9 @@ const EmployeesHub = ({ userId, brokers = [] }: EmployeesHubProps) => {
                                 {/* Avatar - Use actual team photos */}
                                 <div className="relative">
                                   <Avatar className="h-12 w-12 border-2 border-gold/30">
+                                    {/* GLOBAL IMAGE RULE - LOCKED: No cropping, perfect centering */}
                                     {employee.avatar ? (
-                                      <AvatarImage src={employee.avatar} alt={employee.name} className="object-cover" />
+                                      <AvatarImage src={employee.avatar} alt={employee.name} className="object-contain object-center bg-zinc-900" />
                                     ) : null}
                                     <AvatarFallback className="bg-gold/10 text-gold font-bold">
                                       {employee.name.charAt(0)}

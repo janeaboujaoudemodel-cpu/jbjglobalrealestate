@@ -61,10 +61,11 @@ const TeamMemberCard = ({ member, onReadMore }: TeamMemberCardProps) => {
         <CardContent className="p-0">
           {/* Photo */}
           <div className="relative overflow-hidden">
+            {/* GLOBAL IMAGE RULE - LOCKED: Team portrait - no cropping, perfect centering */}
             <img
               src={member.avatar}
               alt={member.name}
-              className="w-full aspect-square object-cover object-top group-hover:scale-105 transition-transform duration-500"
+              className="w-full aspect-square object-contain object-center group-hover:scale-105 transition-transform duration-500 bg-zinc-950"
               loading="lazy"
               decoding="async"
               fetchPriority="low"

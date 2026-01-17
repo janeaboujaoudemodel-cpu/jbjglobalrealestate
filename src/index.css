@@ -235,6 +235,30 @@ All colors MUST be HSL.
 }
 
 @layer components {
+  /**
+   * GLOBAL IMAGE RULE - LOCKED
+   * Apply .jj-image-contain to any image that must follow the no-crop rule
+   * - NO cropping, NO zooming, NO auto-fit
+   * - Perfect centering (object-fit: contain, object-position: center center)
+   * - Equal spacing on all sides
+   */
+  .jj-image-contain {
+    @apply object-contain;
+    object-position: center center !important;
+  }
+
+  /**
+   * GLOBAL CIRCLE IMAGE RULE - LOCKED
+   * For circular profile images, avatars, founder portraits
+   * - Use full original image
+   * - Perfect centering
+   * - No cropping of head/shoulders
+   */
+  .jj-circle-image {
+    @apply object-contain rounded-full;
+    object-position: center center !important;
+  }
+
   /* Filter chip active state */
   .filter-chip-active {
     @apply bg-gradient-to-r from-gold to-gold-dark text-gold-foreground shadow-sm;
