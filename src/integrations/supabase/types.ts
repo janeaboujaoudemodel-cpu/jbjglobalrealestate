@@ -1768,6 +1768,13 @@ export type Database = {
             referencedRelation: "uae_developers"
             referencedColumns: ["id"]
           },
+          {
+            foreignKeyName: "broker_tasks_developer_id_fkey"
+            columns: ["developer_id"]
+            isOneToOne: false
+            referencedRelation: "uae_developers_public"
+            referencedColumns: ["id"]
+          },
         ]
       }
       broker_training_progress: {
@@ -3548,6 +3555,13 @@ export type Database = {
             referencedRelation: "uae_developers"
             referencedColumns: ["id"]
           },
+          {
+            foreignKeyName: "developer_sales_reps_developer_id_fkey"
+            columns: ["developer_id"]
+            isOneToOne: false
+            referencedRelation: "uae_developers_public"
+            referencedColumns: ["id"]
+          },
         ]
       }
       developer_visit_checkins: {
@@ -3611,6 +3625,13 @@ export type Database = {
             columns: ["developer_id"]
             isOneToOne: false
             referencedRelation: "uae_developers"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "developer_visit_checkins_developer_id_fkey"
+            columns: ["developer_id"]
+            isOneToOne: false
+            referencedRelation: "uae_developers_public"
             referencedColumns: ["id"]
           },
         ]
@@ -9662,6 +9683,51 @@ export type Database = {
           total_referrals?: number | null
           updated_at?: string | null
           user_id?: string | null
+        }
+        Relationships: []
+      }
+      uae_developers_public: {
+        Row: {
+          created_at: string | null
+          description: string | null
+          founded_year: number | null
+          headquarters: string | null
+          id: string | null
+          is_active: boolean | null
+          location_city: string | null
+          location_emirate: string | null
+          logo_url: string | null
+          name: string | null
+          slug: string | null
+          updated_at: string | null
+        }
+        Insert: {
+          created_at?: string | null
+          description?: string | null
+          founded_year?: number | null
+          headquarters?: string | null
+          id?: string | null
+          is_active?: boolean | null
+          location_city?: string | null
+          location_emirate?: string | null
+          logo_url?: string | null
+          name?: string | null
+          slug?: string | null
+          updated_at?: string | null
+        }
+        Update: {
+          created_at?: string | null
+          description?: string | null
+          founded_year?: number | null
+          headquarters?: string | null
+          id?: string | null
+          is_active?: boolean | null
+          location_city?: string | null
+          location_emirate?: string | null
+          logo_url?: string | null
+          name?: string | null
+          slug?: string | null
+          updated_at?: string | null
         }
         Relationships: []
       }
