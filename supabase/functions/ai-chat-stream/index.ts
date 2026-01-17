@@ -127,7 +127,7 @@ const WEBSITE_KNOWLEDGE = `
 JBJ GLOBAL REAL ESTATE - DUBAI REAL ESTATE BROKERAGE
 - Email: ${APPROVED_CONTACT_INFO.email}
 - Phone: ${APPROVED_CONTACT_INFO.phone}
-- Services: Property Sales, Leasing, Holiday Homes, Design & Build, Legal Partner Introductions
+- Services: Property Sales, Rentals, Holiday Homes, Design & Build, Legal Partner Introductions
 - Areas: Dubai Marina, Downtown, Palm Jumeirah, Business Bay, JBR, Dubai Hills
 - Developers: Emaar, DAMAC, Nakheel, Sobha, Meraas, Azizi
 - Benefits: 0% property tax, 0% income tax, Golden Visa eligibility

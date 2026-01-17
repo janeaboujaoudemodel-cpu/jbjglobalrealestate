@@ -178,7 +178,7 @@ const VideoPreviewPlayer = ({ project }: VideoPreviewPlayerProps) => {
               <div className="text-center animate-fade-in">
                 <img
                   src={jbjLogo}
-                  alt="JBJ Global Real Estate"
+                  alt="JBJ GLOBAL REAL ESTATE"
                   className="h-16 mx-auto mb-4"
                 />
                 <p className="text-white/80 text-sm">presents</p>

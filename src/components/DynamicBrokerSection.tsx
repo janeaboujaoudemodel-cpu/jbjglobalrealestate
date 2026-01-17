@@ -177,7 +177,7 @@ const DynamicBrokerSection = ({ forcedUserType }: DynamicBrokerSectionProps) => 
       setUserType('investor');
     } else if (path.includes('sell') || path.includes('evaluation')) {
       setUserType('seller');
-    } else if (path.includes('rent') || path.includes('lease') || search.includes('transaction=rent')) {
+    } else if (path.includes('rent') || search.includes('transaction=rent')) {
       setUserType('renter');
     } else if (path.includes('properties') || path.includes('search') || path.includes('buy') || search.includes('transaction=buy')) {
       setUserType('buyer');

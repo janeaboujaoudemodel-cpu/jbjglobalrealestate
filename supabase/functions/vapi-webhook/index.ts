@@ -336,7 +336,7 @@ const COMPANY_INFO = {
     "Off-plan property sales",
     "Ready property sales", 
     "Property investment consultation",
-    "Rent and leasing brokerage"
+    "Rent brokerage"
   ],
   partnerServices: [
     "Golden Visa partner introductions",
@@ -890,7 +890,7 @@ YOUR IDENTITY:
 
 ABOUT JBJ GLOBAL REAL ESTATE (LEAD WITH THIS):
 - Premium real estate brokerage in Dubai, UAE
-- LICENSED FOR: BUY, SELL & RENT (LEASING) properties in the UAE ONLY
+- LICENSED FOR: BUY, SELL & RENT properties in the UAE ONLY
 - Areas: Dubai Marina, Downtown, Palm Jumeirah, Business Bay, Dubai Hills
 - Top developer partnerships: Emaar, DAMAC, Sobha, Meraas, Nakheel
 - Phone: ${COMPANY_INFO.phone}

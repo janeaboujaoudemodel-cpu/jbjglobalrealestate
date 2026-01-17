@@ -304,7 +304,7 @@ const Properties = () => {
             {[
               { value: 'all', label: 'All' },
               { value: 'buy', label: 'Buy' },
-              { value: 'rent', label: 'Rent / Lease' },
+              { value: 'rent', label: 'Rent' },
             ].map((option) => (
               <Button
                 key={option.value}

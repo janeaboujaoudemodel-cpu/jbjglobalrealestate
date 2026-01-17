@@ -78,8 +78,8 @@ export function PipelineAnalyticsPanel() {
         let pipeline = 'buy_pipeline'; // Default
         if (intent === 'sell' || allText.includes('sell') || allText.includes('seller')) {
           pipeline = 'sell_pipeline';
-        } else if (intent === 'rent_lease' || allText.includes('rent') || allText.includes('lease') || allText.includes('tenant')) {
-          pipeline = 'rent_lease_pipeline';
+        } else if (intent === 'rent_lease' || allText.includes('rent') || allText.includes('tenant')) {
+          pipeline = 'rent_pipeline';
         } else if (intent === 'buy' || allText.includes('buy') || allText.includes('invest')) {
           pipeline = 'buy_pipeline';
         }
@@ -345,7 +345,7 @@ export function PipelineAnalyticsPanel() {
             </div>
             <div className="flex items-center gap-2">
               <div className="w-3 h-3 rounded-full bg-amber-500" />
-              <span className="text-gray-300">Rent/Lease = Tenant or Landlord rental</span>
+              <span className="text-gray-300">Rent = Tenant or Landlord rental</span>
             </div>
           </div>
         </CardContent>

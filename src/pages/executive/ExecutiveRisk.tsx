@@ -330,7 +330,7 @@ const ExecutiveRisk = () => {
                         <li>• Investment advice detection</li>
                         <li>• ROI/guarantee language blocking</li>
                         <li>• Prediction claim filtering</li>
-                        <li>• "Leasing" terminology replacement</li>
+                        <li>• Forbidden terminology enforcement</li>
                       </ul>
                     </div>
 

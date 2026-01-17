@@ -38,7 +38,7 @@ function getRequiredSpecializations(intent?: string): string[] {
     case 'sell':
       return ['sales', 'secondary', 'listings'];
     case 'rent_lease':
-      return ['leasing', 'rentals', 'property_management'];
+      return ['rentals', 'property_management'];
     default:
       return []; // Any broker can handle
   }
