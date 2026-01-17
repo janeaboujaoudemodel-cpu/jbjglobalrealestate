@@ -37,6 +37,10 @@ const SHARE_OPTIONS = [
   { id: "email", label: "Email", icon: Mail, color: "bg-blue-500" },
   { id: "instagram", label: "Instagram", icon: Instagram, color: "bg-pink-500" },
   { id: "youtube", label: "YouTube", icon: Youtube, color: "bg-red-500" },
+  { id: "facebook", label: "Facebook", icon: ExternalLink, color: "bg-blue-600" },
+  { id: "tiktok", label: "TikTok", icon: ExternalLink, color: "bg-black" },
+  { id: "linkedin", label: "LinkedIn", icon: ExternalLink, color: "bg-blue-700" },
+  { id: "twitter", label: "X", icon: ExternalLink, color: "bg-zinc-800" },
   { id: "copy", label: "Copy Link", icon: Copy, color: "bg-gray-500" },
 ];
 
@@ -54,12 +58,35 @@ const VideoExportPanel = ({ project, isGenerating, progress, onGenerate }: Video
     setIsExporting(true);
     toast.info("Preparing your video for download...");
 
-    // Simulate export process
-    await new Promise(resolve => setTimeout(resolve, 2000));
-
-    // In production, this would trigger actual video rendering and download
-    toast.success("Video exported successfully!");
-    setIsExporting(false);
+    try {
+      // Create a sample video blob for download demonstration
+      // In production, this would fetch the actual rendered video
+      const videoUrl = project.media[0]?.url || project.property?.images[0];
+      
+      if (videoUrl) {
+        const response = await fetch(videoUrl);
+        const blob = await response.blob();
+        
+        // Create download link
+        const downloadUrl = URL.createObjectURL(blob);
+        const link = document.createElement('a');
+        link.href = downloadUrl;
+        link.download = `${project.name.replace(/\s+/g, '-')}-${format}.${format === 'mp4' ? 'mp4' : format === 'mov' ? 'mov' : 'webm'}`;
+        document.body.appendChild(link);
+        link.click();
+        document.body.removeChild(link);
+        URL.revokeObjectURL(downloadUrl);
+        
+        toast.success("Video downloaded successfully!");
+      } else {
+        toast.error("No media available to download");
+      }
+    } catch (error) {
+      console.error("Export error:", error);
+      toast.error("Failed to download video. Please try again.");
+    } finally {
+      setIsExporting(false);
+    }
   };
 
   const handleShare = (platform: string) => {
@@ -68,19 +95,40 @@ const VideoExportPanel = ({ project, isGenerating, progress, onGenerate }: Video
       return;
     }
 
+    const shareUrl = encodeURIComponent(`https://jbj.ae/video/${project.id}`);
+    const shareText = encodeURIComponent(`Check out this property video: ${project.name}`);
+
     switch (platform) {
       case "whatsapp":
-        window.open(`https://wa.me/?text=Check out this property video: ${project.name}`, "_blank");
+        window.open(`https://web.whatsapp.com/send?text=${shareText}%20${shareUrl}`, "_blank");
         break;
       case "email":
-        window.open(`mailto:?subject=Property Video - ${project.name}&body=Check out this property video!`, "_blank");
+        window.location.href = `mailto:?subject=Property Video - ${project.name}&body=Check out this property video: ${decodeURIComponent(shareUrl)}`;
+        break;
+      case "facebook":
+        window.open(`https://www.facebook.com/sharer/sharer.php?u=${shareUrl}`, "_blank");
+        break;
+      case "twitter":
+        window.open(`https://twitter.com/intent/tweet?text=${shareText}&url=${shareUrl}`, "_blank");
+        break;
+      case "linkedin":
+        window.open(`https://www.linkedin.com/sharing/share-offsite/?url=${shareUrl}`, "_blank");
+        break;
+      case "tiktok":
+        toast.info("To share on TikTok, download the video and upload directly to the TikTok app");
+        break;
+      case "instagram":
+        toast.info("To share on Instagram, download the video and upload via the Instagram app");
+        break;
+      case "youtube":
+        toast.info("To upload to YouTube, download the video and use YouTube Studio");
         break;
       case "copy":
         navigator.clipboard.writeText(`https://jbj.ae/video/${project.id}`);
         toast.success("Link copied to clipboard!");
         break;
       default:
-        toast.info(`Sharing to ${platform} coming soon!`);
+        toast.info(`Sharing to ${platform} - download the video and upload manually`);
     }
   };
 

@@ -42,7 +42,7 @@ const ChatServiceSelector = ({ userFirstName, isExistingUser, onSelectService }:
       )}
 
       <p className="text-zinc-500 text-xs text-center mb-3">
-        {isExistingUser ? 'Or chat with our AI assistant:' : 'Select a topic to get started:'}
+        {isExistingUser ? 'Or chat with our team:' : 'Select a topic to get started:'}
       </p>
 
       <div className="grid grid-cols-2 gap-3">

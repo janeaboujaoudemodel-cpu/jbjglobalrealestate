@@ -96,7 +96,7 @@ const SecurityConsole: React.FC = () => {
                 <div className="mb-6">
                   <h2 className="text-2xl font-bold flex items-center gap-2">
                     <Bot className="h-6 w-6 text-purple-500" />
-                    Aisha - Compliance AI Assistant
+                    Aisha - Compliance Assistant
                   </h2>
                   <p className="text-muted-foreground mt-1">
                     Your dedicated AI for security monitoring, compliance auditing, and ethics enforcement
@@ -125,7 +125,7 @@ const SecurityConsole: React.FC = () => {
                 />
                 <ReportCard
                   title="Monthly Ethics Review"
-                  description="AI and human behavior analysis"
+                  description="Team behavior analysis"
                   icon={Bot}
                   frequency="1st of each month"
                 />
