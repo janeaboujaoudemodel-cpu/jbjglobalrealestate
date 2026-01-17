@@ -576,6 +576,17 @@ const AIHub = () => {
               <p className="text-zinc-400 max-w-2xl mx-auto">
                 Quick shortcuts to every tool. Full categories are listed below.
               </p>
+            </motion.div>
+
+            <motion.div 
+              className="grid md:grid-cols-2 lg:grid-cols-4 gap-4"
+              initial="hidden"
+              whileInView="visible"
+              viewport={{ once: true }}
+              variants={staggerContainer}
+            >
+              {allHubTools.map((tool) => renderToolCard(tool, false))}
+            </motion.div>
           </div>
         </section>
 
