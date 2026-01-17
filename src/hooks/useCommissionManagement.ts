@@ -12,6 +12,7 @@ import {
   type DealConversionRecord,
   type PartnerCommissionConfig,
   type CommissionRecord,
+  type CommissionAuditLog,
   ORIGINATING_CHANNELS,
   EXECUTION_MODELS,
   DEAL_STATUSES,
