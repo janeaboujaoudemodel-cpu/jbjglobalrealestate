@@ -323,6 +323,47 @@ const Properties = () => {
                 {option.label}
               </Button>
             ))}
+            
+            {/* Divider */}
+            <div className="w-px h-6 bg-zinc-300 mx-2" />
+            
+            {/* Ready Properties Shortcut */}
+            <Button
+              variant={appliedFilters.completionStatus === 'ready' ? "default" : "outline"}
+              size="sm"
+              onClick={() => {
+                const newStatus = appliedFilters.completionStatus === 'ready' ? null : 'ready';
+                updateFilter("completionStatus", newStatus);
+                setAppliedFilters(prev => ({ ...prev, completionStatus: newStatus }));
+              }}
+              className={`h-9 px-4 rounded-full flex items-center gap-1.5 ${
+                appliedFilters.completionStatus === 'ready'
+                  ? "bg-gradient-to-r from-emerald-600 to-emerald-500 text-white border-emerald-600 font-semibold shadow-md"
+                  : "bg-white border-zinc-300 text-zinc-700 hover:bg-emerald-50 hover:border-emerald-300 hover:text-emerald-700"
+              }`}
+            >
+              <CheckCircle className="w-3.5 h-3.5" />
+              Ready
+            </Button>
+            
+            {/* Off-Plan Properties Shortcut */}
+            <Button
+              variant={appliedFilters.completionStatus === 'off-plan' ? "default" : "outline"}
+              size="sm"
+              onClick={() => {
+                const newStatus = appliedFilters.completionStatus === 'off-plan' ? null : 'off-plan';
+                updateFilter("completionStatus", newStatus);
+                setAppliedFilters(prev => ({ ...prev, completionStatus: newStatus }));
+              }}
+              className={`h-9 px-4 rounded-full flex items-center gap-1.5 ${
+                appliedFilters.completionStatus === 'off-plan'
+                  ? "bg-gradient-to-r from-gold to-[#E8D5A3] text-black border-gold font-semibold shadow-md"
+                  : "bg-white border-zinc-300 text-zinc-700 hover:bg-gold/10 hover:border-gold/50 hover:text-gold"
+              }`}
+            >
+              <Calendar className="w-3.5 h-3.5" />
+              Off-Plan
+            </Button>
           </div>
           
           <div className="flex items-center gap-2 overflow-x-auto pb-2 scrollbar-hide w-full">
@@ -711,6 +752,8 @@ const Properties = () => {
           <div className="mb-8 flex items-center justify-between">
             <p className="text-zinc-600">
               Showing <span className="text-black font-medium">{sortedProjects.length}</span> properties
+              {appliedFilters.transactionType === 'rent' && ' for rent'}
+              {appliedFilters.transactionType === 'buy' && ' for sale'}
             </p>
             {activeFilterCount > 0 && (
               <Button
@@ -747,8 +790,22 @@ const Properties = () => {
               <div className="w-20 h-20 bg-zinc-100 rounded-full flex items-center justify-center mx-auto mb-6">
                 <Search className="w-10 h-10 text-zinc-400" />
               </div>
-              <h3 className="text-xl font-semibold text-black mb-2">No properties found</h3>
-              <p className="text-zinc-500 mb-6">Try adjusting your filters or search criteria</p>
+              {appliedFilters.transactionType === 'rent' ? (
+                <>
+                  <h3 className="text-xl font-semibold text-black mb-2">No Rental Listings Available</h3>
+                  <p className="text-zinc-500 mb-6">We currently do not have rental properties listed. Please check back soon or contact us for assistance.</p>
+                </>
+              ) : appliedFilters.transactionType === 'buy' ? (
+                <>
+                  <h3 className="text-xl font-semibold text-black mb-2">No Properties for Sale Found</h3>
+                  <p className="text-zinc-500 mb-6">Try adjusting your filters or search criteria to find available properties.</p>
+                </>
+              ) : (
+                <>
+                  <h3 className="text-xl font-semibold text-black mb-2">No properties found</h3>
+                  <p className="text-zinc-500 mb-6">Try adjusting your filters or search criteria</p>
+                </>
+              )}
               <Button onClick={clearFilters} variant="outline" className="border-zinc-300 text-black hover:bg-zinc-100">
                 Clear Filters
               </Button>

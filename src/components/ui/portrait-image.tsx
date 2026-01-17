@@ -68,10 +68,18 @@ const shapeClasses = {
  * These values work with object-fit: cover to maximize zoom
  * while keeping head/shoulders visible and cropping from bottom
  */
+/**
+ * CRITICAL PORTRAIT ZOOM RULE (LOCKED - FINAL):
+ * Images must FILL the frame with MAXIMUM ZOOM.
+ * - No gaps around head/shoulders
+ * - Head must NEVER be cropped
+ * - Shoulders must NEVER be cropped
+ * - Zoom in as much as possible while preserving head/shoulders
+ */
 const focusPositions = {
-  top: "center 5%",
-  upper: "center 20%",
-  center: "center 35%",
+  top: "center 15%",
+  upper: "center 40%",
+  center: "center 50%",
 };
 
 const PortraitImage = React.forwardRef<HTMLImageElement, PortraitImageProps>(
