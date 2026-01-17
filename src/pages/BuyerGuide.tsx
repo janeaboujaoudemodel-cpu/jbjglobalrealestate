@@ -665,12 +665,12 @@ const BuyerGuide = () => {
         </div>
       </section>
 
-      {/* Legal Disclaimer */}
-      <section className="py-8 bg-black border-t border-zinc-800">
+      {/* Legal Disclaimer - White background to separate from footer */}
+      <section className="py-8 bg-white border-t border-zinc-200">
         <div className="container mx-auto px-4">
           <div className="max-w-4xl mx-auto">
             <p className="text-center text-zinc-500 text-sm leading-relaxed">
-              <span className="text-zinc-400 font-medium">Disclaimer:</span> This guide is provided 
+              <span className="text-zinc-600 font-medium">Disclaimer:</span> This guide is provided 
               for general educational and informational purposes only. It does not constitute legal, 
               financial, mortgage, or professional advice. JBJ Global Real Estate is a licensed 
               real estate brokerage and does not provide legal or financial advisory services. 

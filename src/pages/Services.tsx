@@ -4,6 +4,7 @@ import Footer from "@/components/Footer";
 import { Button } from "@/components/ui/button";
 import { SEOHead, pagesSEO } from "@/components/SEOHead";
 import { FounderPhilosophySection } from "@/components/FounderPhilosophySection";
+import { PreFooterSeparator } from "@/components/PreFooterSeparator";
 import { 
   Building2, 
   Scale, 
@@ -269,41 +270,15 @@ const Services = () => {
       </section>
 
 
-      {/* CTA Section */}
-      <section className="py-20 bg-gradient-to-b from-zinc-900/50 to-black">
-        <div className="container mx-auto px-4">
-          <motion.div 
-            className="max-w-4xl mx-auto text-center"
-            initial={{ opacity: 0, y: 20 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true }}
-          >
-            <h2 
-              className="text-white text-3xl md:text-5xl font-bold mb-6"
-              style={{ fontFamily: "Poppins, sans-serif" }}
-            >
-              Ready to Get Started?
-            </h2>
-            <p className="text-zinc-400 text-lg mb-8 max-w-2xl mx-auto">
-              Speak with our team for personalized brokerage support
-            </p>
-            <div className="flex flex-wrap justify-center gap-4">
-              <Link to="/contact">
-                <Button className="bg-gradient-to-r from-gold to-gold-dark text-black font-bold px-8 py-6 text-base hover:opacity-90 transition-opacity">
-                  Contact Us
-                  <ArrowUpRight className="w-5 h-5 ml-2" />
-                </Button>
-              </Link>
-              <Link to="/properties">
-                <Button className="bg-white text-black font-bold px-8 py-6 text-base hover:bg-zinc-100 transition-all">
-                  Browse Properties
-                  <ArrowUpRight className="w-5 h-5 ml-2" />
-                </Button>
-              </Link>
-            </div>
-          </motion.div>
-        </div>
-      </section>
+      {/* Pre-Footer White Section - Separates from dark footer */}
+      <PreFooterSeparator 
+        title="Ready to Get Started?"
+        subtitle="Speak with our team for personalized brokerage support across Dubai and the UAE."
+        primaryLink="/contact"
+        primaryText="Contact Us"
+        secondaryLink="/properties"
+        secondaryText="Browse Properties"
+      />
 
       <Footer />
       </div>

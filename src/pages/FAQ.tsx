@@ -371,12 +371,12 @@ const FAQ = () => {
         </div>
       </section>
 
-      {/* Disclaimer */}
-      <section className="py-8 border-t border-zinc-800">
+      {/* Disclaimer - White background to separate from footer */}
+      <section className="py-8 bg-white border-t border-zinc-200">
         <div className="container mx-auto px-4">
           <div className="max-w-4xl mx-auto">
             <p className="text-center text-zinc-500 text-sm leading-relaxed">
-              <span className="text-zinc-400 font-medium">Disclaimer:</span> This FAQ is provided 
+              <span className="text-zinc-600 font-medium">Disclaimer:</span> This FAQ is provided 
               for general informational purposes only. It does not constitute legal, financial, or 
               professional advice. Regulations and requirements may change. Consult with qualified 
               professionals for advice specific to your situation.
