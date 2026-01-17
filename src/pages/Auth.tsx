@@ -191,7 +191,7 @@ const Auth = forwardRef<HTMLDivElement>((_, ref) => {
 
   const getSubtitle = () => {
     switch (mode) {
-      case "signup": return "Create your account to access exclusive UAE real estate opportunities";
+      case "signup": return "Create your account to access exclusive UAE Real Estate opportunities";
       case "forgot": return "Enter your email address and we'll send you a secure reset link";
       case "reset": return "Please enter your new password below";
       default: return "Greetings from JBJ Global Real Estate. We're delighted to have you back.";

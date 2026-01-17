@@ -26,7 +26,7 @@ const ChatWelcome = ({ onStartChat }: ChatWelcomeProps) => {
           <h4 className="text-white text-lg font-semibold mb-1">
             Welcome to JBJ Global Real Estate 👋
           </h4>
-          <p className="text-zinc-400 text-sm">Your premium real estate partner in Dubai</p>
+          <p className="text-zinc-400 text-sm">Your premium Real Estate partner in Dubai</p>
         </div>
 
         <div className="space-y-3">

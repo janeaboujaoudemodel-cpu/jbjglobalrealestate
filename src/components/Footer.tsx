@@ -153,27 +153,34 @@ const Footer = () => {
               className="h-24 md:h-32 lg:h-40 w-auto object-contain mx-auto mb-6"
             />
           </Link>
-          <h2 className="text-2xl md:text-3xl lg:text-4xl font-light tracking-[0.3em] text-gold mb-4">
-            JBJ GLOBAL REAL ESTATE
-          </h2>
-          <p className="text-zinc-400 text-base md:text-lg max-w-2xl mx-auto leading-relaxed mb-2">
-            Licensed for BUY, SELL & RENT real estate in the UAE.
+        <h2 className="text-2xl md:text-3xl lg:text-4xl font-light tracking-[0.3em] text-gold mb-4">
+          JBJ GLOBAL REAL ESTATE
+        </h2>
+        {/* Premium Licensed Badge */}
+        <div className="inline-flex items-center gap-3 bg-gradient-to-r from-white via-[#FDFBF7] to-[#F5F0E6] border border-gold/30 rounded-full px-6 py-2.5 mb-4 shadow-lg">
+          <div className="w-2 h-2 bg-gold rounded-full animate-pulse" />
+          <p className="text-black font-medium text-sm md:text-base tracking-wide">
+            <span className="text-gold font-semibold">Licensed</span> for BUY · SELL · RENT Real Estate in the UAE
           </p>
-          <p className="text-zinc-500 text-sm max-w-xl mx-auto leading-relaxed">
-            Mortgage, legal, visa, and corporate services are provided through licensed partners.
-          </p>
+          <div className="w-2 h-2 bg-gold rounded-full animate-pulse" />
         </div>
+        <p className="text-zinc-500 text-sm max-w-xl mx-auto leading-relaxed">
+          Mortgage, legal, visa, and corporate services are provided through licensed partners.
+        </p>
+      </div>
 
-        {/* Newsletter Section - Premium Style */}
+        {/* Newsletter Section - Premium White & Gold Style */}
         <div className="mb-10 md:mb-14">
-          <div className="max-w-xl mx-auto text-center">
-            <h4 className="text-gold font-semibold text-sm uppercase tracking-[0.3em] mb-2">
-              Stay in the Loop
-            </h4>
-            <p className="text-zinc-400 text-sm mb-4">
-              Be the first to access new listings, market updates, and personalized brokerage guidance.
-            </p>
-            <NewsletterBrevo variant="compact" source="footer" />
+          <div className="max-w-xl mx-auto">
+            <div className="bg-gradient-to-br from-white via-[#FDFBF7] to-[#F5F0E6] rounded-2xl p-6 md:p-8 border border-gold/30 shadow-lg">
+              <h4 className="text-gold font-semibold text-sm uppercase tracking-[0.3em] mb-2 text-center">
+                Stay in the Loop
+              </h4>
+              <p className="text-zinc-600 text-sm mb-5 text-center">
+                Be the first to access new listings, market updates, and personalized brokerage guidance.
+              </p>
+              <NewsletterBrevo variant="compact" source="footer" />
+            </div>
           </div>
         </div>
 
@@ -348,24 +355,24 @@ const Footer = () => {
         {/* Divider */}
         <div className="h-px bg-gradient-to-r from-transparent via-zinc-700 to-transparent mb-6" />
 
-        {/* Comprehensive Copyright & Legal Section */}
+        {/* Comprehensive Copyright & Legal Section - Premium White */}
         <div className="max-w-4xl mx-auto mb-8">
-          <div className="bg-zinc-900/50 border border-zinc-800 rounded-xl p-6 text-center">
+          <div className="bg-gradient-to-br from-white via-[#FDFBF7] to-[#F5F0E6] border border-gold/30 rounded-2xl p-6 md:p-8 text-center shadow-lg">
             <div className="flex items-center justify-center gap-2 mb-4">
-              <div className="w-8 h-8 bg-gold/10 border border-gold/30 rounded-lg flex items-center justify-center">
+              <div className="w-8 h-8 bg-gold/20 border border-gold/40 rounded-lg flex items-center justify-center">
                 <span className="text-gold text-lg font-bold">©</span>
               </div>
-              <h4 className="text-white font-semibold">Legal Disclaimer</h4>
+              <h4 className="text-black font-semibold">Legal Disclaimer</h4>
             </div>
             
-            <p className="text-zinc-400 text-sm leading-relaxed mb-4">
-              <span className="text-white font-medium">JBJ Global Real Estate</span> is a Dubai mainland real estate brokerage licensed to BUY, SELL & RENT properties across the UAE. 
+            <p className="text-zinc-600 text-sm leading-relaxed mb-4">
+              <span className="text-black font-medium">JBJ Global Real Estate</span> is a Dubai mainland Real Estate brokerage licensed to BUY, SELL & RENT properties across the UAE. 
               For legal services, mortgage support, visa, and corporate services, we can connect you with independent licensed partners. 
               Clients contract and transact directly with the partner under the partner's own terms.
             </p>
             
             {/* English Legal Line */}
-            <p className="text-zinc-300 text-xs leading-relaxed mb-4 font-medium">
+            <p className="text-zinc-700 text-xs leading-relaxed mb-4 font-medium">
               Licensed Real Estate Brokerage for Buy, Sell & Rent in Dubai (Mainland). Operated by JBJ Global Real Estate L.L.C S.O.C. Owned & Led by Jane Abou Jaoude Founder & CEO JBJ Global Real Estate.
             </p>
             
@@ -375,7 +382,7 @@ const Footer = () => {
             </p>
             
             {/* Arabic Legal Line */}
-            <p className="text-zinc-400 text-xs leading-relaxed mb-4" dir="rtl">
+            <p className="text-zinc-500 text-xs leading-relaxed mb-4" dir="rtl">
               وساطة عقارية مرخصة للبيع والشراء والإيجار في دبي (البر الرئيسي). يتم تشغيل الموقع من قبل JBJ Global Real Estate L.L.C S.O.C.
             </p>
             
