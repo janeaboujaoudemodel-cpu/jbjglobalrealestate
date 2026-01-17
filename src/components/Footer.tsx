@@ -151,7 +151,7 @@ const Footer = () => {
     <footer className="bg-black border-t border-zinc-800">
       <div className="container mx-auto px-4 py-10 md:py-14">
         {/* Logo + Company Name - Matching Coming Soon Style */}
-        <div className="text-center mb-10 md:mb-14">
+        <div className="text-center mb-8 md:mb-10">
           <Link to="/" className="inline-block">
             <img 
               src={jbjMonogramDark} 
@@ -159,40 +159,43 @@ const Footer = () => {
               className="h-24 md:h-32 lg:h-40 w-auto object-contain mx-auto mb-6"
             />
           </Link>
-        <h2 className="text-2xl md:text-3xl lg:text-4xl font-light tracking-[0.3em] text-gold mb-4">
-          JBJ GLOBAL REAL ESTATE
-        </h2>
-        {/* Premium Licensed Badge */}
-        <div className="inline-flex items-center gap-3 bg-gradient-to-r from-white via-[#FDFBF7] to-[#F5F0E6] border border-gold/30 rounded-full px-6 py-2.5 mb-4 shadow-lg">
-          <div className="w-2 h-2 bg-gold rounded-full animate-pulse" />
-          <p className="text-black font-medium text-sm md:text-base tracking-wide">
-            <span className="text-gold font-semibold">Licensed</span> for BUY · SELL · RENT Real Estate in the UAE
-          </p>
-          <div className="w-2 h-2 bg-gold rounded-full animate-pulse" />
+          <h2 className="text-2xl md:text-3xl lg:text-4xl font-light tracking-[0.3em] text-gold mb-6">
+            JBJ GLOBAL REAL ESTATE
+          </h2>
         </div>
-        <p className="text-zinc-500 text-sm max-w-xl mx-auto leading-relaxed">
-          Mortgage, legal, visa, and corporate services are provided through licensed partners.
-        </p>
-      </div>
 
-        {/* Newsletter Section - Premium White & Gold Style */}
-        <div className="mb-10 md:mb-14">
-          <div className="max-w-xl mx-auto">
-            <div className="bg-gradient-to-br from-white via-[#FDFBF7] to-[#F5F0E6] rounded-2xl p-6 md:p-8 border border-gold/30 shadow-lg">
-              <h4 className="text-gold font-semibold text-sm uppercase tracking-[0.3em] mb-2 text-center">
-                Stay in the Loop
-              </h4>
-              <p className="text-zinc-600 text-sm mb-5 text-center">
-                Be the first to access new listings, market updates, and personalized brokerage guidance.
-              </p>
-              <NewsletterBrevo variant="compact" source="footer" />
-            </div>
+        {/* Premium White/Champagne Section - License + Newsletter + Social */}
+        <div className="bg-gradient-to-br from-white via-[#FDFBF7] to-[#F5F0E6] rounded-2xl p-6 md:p-10 border border-gold/30 shadow-lg mb-10 max-w-3xl mx-auto">
+          {/* Licensed Badge */}
+          <div className="flex items-center justify-center gap-3 mb-4">
+            <div className="w-2 h-2 bg-gold rounded-full animate-pulse" />
+            <p className="text-black font-medium text-sm md:text-base tracking-wide text-center">
+              <span className="text-gold font-semibold">Licensed</span> for BUY · SELL · RENT Real Estate in the UAE
+            </p>
+            <div className="w-2 h-2 bg-gold rounded-full animate-pulse" />
           </div>
-        </div>
+          <p className="text-black text-sm mb-6 text-center">
+            Mortgage, legal, visa, and corporate services are provided through licensed partners.
+          </p>
 
-        {/* Social Links */}
-        <div className="flex justify-center mb-8">
-          <SocialLinks variant="gold" iconClassName="w-6 h-6" />
+          {/* Divider */}
+          <div className="h-px bg-gradient-to-r from-transparent via-gold/40 to-transparent mb-6" />
+
+          {/* Stay in the Loop */}
+          <h4 className="text-black font-semibold text-sm uppercase tracking-[0.3em] mb-2 text-center">
+            Stay in the Loop
+          </h4>
+          <p className="text-zinc-600 text-sm mb-5 text-center">
+            Be the first to access new listings, market updates, and personalized brokerage guidance.
+          </p>
+          <div className="max-w-md mx-auto mb-6">
+            <NewsletterBrevo variant="compact" source="footer" />
+          </div>
+
+          {/* Social Links */}
+          <div className="flex justify-center">
+            <SocialLinks variant="default" iconClassName="w-6 h-6 text-black hover:text-gold transition-colors" />
+          </div>
         </div>
 
         {/* Divider */}

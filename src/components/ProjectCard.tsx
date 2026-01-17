@@ -110,15 +110,8 @@ const ProjectCard = ({ project, showFavorite = true, showBadgeButton = true, cur
             alt={project.name}
             className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
           />
-          {/* Premium Badge */}
-          {project.is_premium && (
-            <div className="absolute top-12 right-3 z-10">
-              <div className="bg-gradient-to-r from-gold via-[#E8D5A3] to-gold px-2.5 py-1 rounded-full shadow-lg shadow-gold/30 flex items-center gap-1">
-                <Crown className="w-3 h-3 text-black" />
-                <span className="text-black text-[10px] font-bold uppercase tracking-wide">Premium</span>
-              </div>
-            </div>
-          )}
+          {/* Premium Badge - Hidden by default, admin controls via is_premium flag in admin panel */}
+          {/* Badge currently disabled - will only show when admin explicitly marks as premium via listing */}
         </div>
         
         {/* Content */}

@@ -297,8 +297,8 @@ const Properties = () => {
         </div>
       </section>
 
-      {/* Main Search Bar */}
-      <section className="sticky top-16 z-30 bg-white backdrop-blur-md border-b border-zinc-200 py-4 shadow-sm">
+      {/* Main Search Bar - Fixed under header */}
+      <section className="sticky top-16 z-40 bg-white backdrop-blur-md border-b border-zinc-200 py-4 shadow-md">
         <div className="container mx-auto px-4">
           {/* Transaction Type Tabs - Buy / Rent / All */}
           <div className="flex items-center gap-2 mb-4">
