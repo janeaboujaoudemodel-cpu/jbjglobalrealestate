@@ -70,7 +70,7 @@ const shapeClasses = {
  */
 const focusPositions = {
   top: "center 5%",
-  upper: "center 15%",
+  upper: "center 20%",
   center: "center 35%",
 };
 
@@ -79,7 +79,7 @@ const PortraitImage = React.forwardRef<HTMLImageElement, PortraitImageProps>(
     className, 
     shape = "circle", 
     size = "lg", 
-    bordered = true,
+    bordered = false,
     focus = "upper",
     alt = "",
     style,
