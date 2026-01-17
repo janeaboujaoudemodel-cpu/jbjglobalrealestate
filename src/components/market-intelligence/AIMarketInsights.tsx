@@ -6,6 +6,7 @@ import {
 } from "lucide-react";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { supabase } from "@/integrations/supabase/client";
 import { toast } from "sonner";
 
@@ -23,6 +24,7 @@ interface InsightCard {
   category: 'trend' | 'demand' | 'supply' | 'opportunity';
 }
 
+// Pre-set educational insights (public authority content)
 const PRESET_INSIGHTS: InsightCard[] = [
   {
     id: '1',
@@ -58,28 +60,52 @@ const PRESET_INSIGHTS: InsightCard[] = [
   },
 ];
 
+type NarrativeType = 'market_overview' | 'area_intelligence' | 'rental_trends';
+
+const narrativeOptions: { id: NarrativeType; label: string; icon: React.ElementType }[] = [
+  { id: 'market_overview', label: 'Market Overview', icon: TrendingUp },
+  { id: 'area_intelligence', label: 'Area Intelligence', icon: Building2 },
+  { id: 'rental_trends', label: 'Rental Trends', icon: Users },
+];
+
 export const AIMarketInsights = () => {
   const [isGenerating, setIsGenerating] = useState(false);
-  const [customInsight, setCustomInsight] = useState<string | null>(null);
+  const [activeNarrativeType, setActiveNarrativeType] = useState<NarrativeType>('market_overview');
+  const [generatedNarratives, setGeneratedNarratives] = useState<Record<NarrativeType, string | null>>({
+    market_overview: null,
+    area_intelligence: null,
+    rental_trends: null,
+  });
 
-  const generateCustomInsight = async () => {
+  const generatePublicNarrative = async (type: NarrativeType) => {
     setIsGenerating(true);
     try {
-      const { data, error } = await supabase.functions.invoke('ai-market-report', {
+      const { data, error } = await supabase.functions.invoke('ai-market-narratives', {
         body: {
-          reportType: 'quick-insight',
-          areas: ['All Dubai'],
-          period: 'Current market conditions',
+          mode: 'public',
+          narrativeType: type,
         },
       });
 
-      if (error) throw error;
-      
-      if (data?.report) {
-        setCustomInsight(data.report);
+      if (error) {
+        if (error.message?.includes('429')) {
+          toast.error('Rate limit exceeded. Please try again in a moment.');
+        } else if (error.message?.includes('402')) {
+          toast.error('AI service temporarily unavailable.');
+        } else {
+          throw error;
+        }
+        return;
+      }
+
+      if (data?.narrative) {
+        setGeneratedNarratives(prev => ({
+          ...prev,
+          [type]: data.narrative,
+        }));
       }
     } catch (err) {
-      console.error('Error generating insight:', err);
+      console.error('Error generating narrative:', err);
       toast.error('Unable to generate insight. Please try again.');
     } finally {
       setIsGenerating(false);
@@ -111,8 +137,8 @@ export const AIMarketInsights = () => {
             </p>
           </motion.div>
 
-          {/* Insights Grid */}
-          <div className="grid md:grid-cols-2 gap-6 mb-8">
+          {/* Preset Insights Grid */}
+          <div className="grid md:grid-cols-2 gap-6 mb-12">
             {PRESET_INSIGHTS.map((insight) => (
               <motion.div key={insight.id} variants={fadeInUp}>
                 <Card className="bg-zinc-900/50 border-zinc-800 hover:border-gold/30 transition-all h-full">
@@ -137,52 +163,75 @@ export const AIMarketInsights = () => {
             ))}
           </div>
 
-          {/* Custom Insight Generator */}
+          {/* AI Narrative Generator */}
           <motion.div variants={fadeInUp}>
             <Card className="bg-gradient-to-br from-zinc-900 to-zinc-950 border-gold/20">
               <CardContent className="p-8">
-                <div className="flex flex-col md:flex-row items-center gap-6">
+                <div className="flex flex-col md:flex-row items-start gap-6 mb-6">
                   <div className="w-16 h-16 rounded-2xl bg-gradient-to-br from-gold/20 to-gold/5 border border-gold/30 flex items-center justify-center shrink-0">
                     <Brain className="w-8 h-8 text-gold" />
                   </div>
-                  <div className="flex-1 text-center md:text-left">
+                  <div className="flex-1">
                     <h3 className="text-white text-xl font-bold mb-2">
-                      Generate Market Briefing
+                      Generate Market Narrative
                     </h3>
                     <p className="text-zinc-400 text-sm mb-4">
-                      Get an AI-generated summary of current market conditions based on the latest Open Data.
+                      Get an AI-generated analysis based on official government Open Data. 
+                      Select a topic below to generate educational market insights.
                     </p>
-                    <Button
-                      onClick={generateCustomInsight}
-                      disabled={isGenerating}
-                      className="bg-gradient-to-r from-gold to-gold-dark text-black font-semibold hover:opacity-90"
-                    >
-                      {isGenerating ? (
-                        <>
-                          <RefreshCw className="w-4 h-4 mr-2 animate-spin" />
-                          Generating...
-                        </>
-                      ) : (
-                        <>
-                          <Sparkles className="w-4 h-4 mr-2" />
-                          Generate Insight
-                        </>
-                      )}
-                    </Button>
                   </div>
                 </div>
 
-                {customInsight && (
-                  <div className="mt-6 p-6 bg-zinc-800/50 rounded-xl border border-zinc-700">
-                    <div className="flex items-center gap-2 text-gold text-sm mb-3">
-                      <MessageSquare className="w-4 h-4" />
-                      AI Market Briefing
-                    </div>
-                    <div className="text-zinc-300 text-sm leading-relaxed whitespace-pre-wrap">
-                      {customInsight}
-                    </div>
-                  </div>
-                )}
+                <Tabs value={activeNarrativeType} onValueChange={(v) => setActiveNarrativeType(v as NarrativeType)}>
+                  <TabsList className="bg-zinc-800/50 border border-zinc-700 mb-6">
+                    {narrativeOptions.map((opt) => (
+                      <TabsTrigger
+                        key={opt.id}
+                        value={opt.id}
+                        className="flex items-center gap-2 data-[state=active]:bg-gold/20 data-[state=active]:text-gold"
+                      >
+                        <opt.icon className="w-4 h-4" />
+                        <span className="hidden sm:inline">{opt.label}</span>
+                      </TabsTrigger>
+                    ))}
+                  </TabsList>
+
+                  {narrativeOptions.map((opt) => (
+                    <TabsContent key={opt.id} value={opt.id}>
+                      <div className="space-y-4">
+                        <Button
+                          onClick={() => generatePublicNarrative(opt.id)}
+                          disabled={isGenerating}
+                          className="bg-gradient-to-r from-gold to-gold-dark text-black font-semibold hover:opacity-90"
+                        >
+                          {isGenerating && activeNarrativeType === opt.id ? (
+                            <>
+                              <RefreshCw className="w-4 h-4 mr-2 animate-spin" />
+                              Generating...
+                            </>
+                          ) : (
+                            <>
+                              <Sparkles className="w-4 h-4 mr-2" />
+                              Generate {opt.label}
+                            </>
+                          )}
+                        </Button>
+
+                        {generatedNarratives[opt.id] && (
+                          <div className="p-6 bg-zinc-800/50 rounded-xl border border-zinc-700">
+                            <div className="flex items-center gap-2 text-gold text-sm mb-3">
+                              <MessageSquare className="w-4 h-4" />
+                              AI Market Analysis
+                            </div>
+                            <div className="text-zinc-300 text-sm leading-relaxed whitespace-pre-wrap">
+                              {generatedNarratives[opt.id]}
+                            </div>
+                          </div>
+                        )}
+                      </div>
+                    </TabsContent>
+                  ))}
+                </Tabs>
               </CardContent>
             </Card>
           </motion.div>
@@ -194,9 +243,9 @@ export const AIMarketInsights = () => {
           >
             <Info className="w-5 h-5 text-gold shrink-0 mt-0.5" />
             <p className="text-zinc-500 text-xs leading-relaxed">
-              AI-generated insights are for informational purposes only and do not constitute financial, investment, or legal advice. 
-              All explanations are based on publicly available government data and should not be used as the sole basis for any decisions. 
-              AI does not predict prices or provide specific investment recommendations.
+              AI-generated insights are based on aggregated government Open Data and are provided for informational purposes only. 
+              They do not constitute financial, investment, or legal advice. 
+              AI explains data but does not predict prices or provide specific investment recommendations.
             </p>
           </motion.div>
         </motion.div>
