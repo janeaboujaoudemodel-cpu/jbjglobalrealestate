@@ -8,7 +8,7 @@ import { AuthProvider } from "@/contexts/AuthContext";
 import { LanguageProvider } from "@/contexts/LanguageContext";
 import { ActiveLeadProvider } from "@/contexts/ActiveLeadContext";
 import { PopupCoordinatorProvider } from "@/contexts/PopupCoordinatorContext";
-import ScrollToTop from "@/components/ScrollToTop";
+import { ScrollToTopOnMount } from "@/components/ScrollToTop";
 import AdminBypass from "@/components/AdminBypass";
 import MainLayoutWrapper from "@/components/MainLayoutWrapper";
 import RouteErrorBoundary from "@/components/RouteErrorBoundary";
@@ -147,7 +147,7 @@ const App = () => (
           <AuthProvider>
             <ActiveLeadProvider>
             <PopupCoordinatorProvider>
-            <ScrollToTop />
+            <ScrollToTopOnMount />
             {/* Auth route is always accessible for admin login */}
             <Routes>
               <Route path="/auth" element={<Auth />} />
