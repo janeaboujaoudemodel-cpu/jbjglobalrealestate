@@ -87,8 +87,15 @@ const GlobalHeader = () => {
     { href: "/buyer-guide", label: t('nav.buyerGuide') || 'Buyer Guide', icon: FileText },
     { href: "/seller-guide", label: t('nav.sellerGuide') || 'Seller Guide', icon: FileText },
     { href: "/areas", label: t('nav.areaGuides') || 'Area Guides', icon: Building2 },
-    { href: "/market-intelligence", label: 'Market Intelligence', icon: Building2 },
     { href: "/faq", label: 'FAQ', icon: ClipboardCheck },
+  ];
+
+  // Market Intelligence submenu
+  const marketIntelLinks = [
+    { href: "/market-intelligence/overview", label: 'Market Overview', icon: Building2 },
+    { href: "/market-intelligence/areas", label: 'Area Intelligence', icon: Building2 },
+    { href: "/market-intelligence/reports", label: 'Market Reports', icon: FileText },
+    { href: "/market-intelligence/methodology", label: 'Methodology', icon: ClipboardCheck },
   ];
 
   // More links for dropdown
