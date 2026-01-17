@@ -380,13 +380,52 @@ export const COMMERCIAL_FLOW = {
 } as const;
 
 // ============================================================================
+// STEP 7 — REGULATORY & CLAIM FIREWALL (NON-NEGOTIABLE)
+// ============================================================================
+
+export const REGULATORY_FIREWALL = {
+  OBJECTIVE: 'Prevent any regulatory misrepresentation across jurisdictions.',
+
+  // Prohibited representations (ABSOLUTE)
+  JBJ_MUST_NEVER_PRESENT_AS: [
+    'A government platform',
+    'An official registry',
+    'A regulatory authority',
+  ],
+
+  // Market Intelligence boundaries
+  MARKET_INTELLIGENCE: {
+    DESCRIPTIVE_ONLY: true,
+    INFORMATIONAL_ONLY: true,
+    NON_ADVISORY: true,
+  },
+
+  // AI system rules
+  AI_SYSTEMS_MUST: [
+    'Avoid predictive language where restricted',
+    'Avoid legal or financial advice',
+    'Adapt tone per jurisdiction rules',
+  ],
+
+  // Jurisdiction injection requirements
+  JURISDICTION_MUST_INJECT: [
+    'Correct legal disclaimers',
+    'Partner service disclaimers',
+    'Data source attribution where required',
+  ],
+
+  // Compliance fallback
+  NON_COMPLIANCE_RULE: 'If a jurisdiction cannot comply → it remains Intelligence-Only (Model C).',
+} as const;
+
+// ============================================================================
 // PRIORITY 3 STATUS RULE
 // ============================================================================
 
 export const PRIORITY_3_STATUS = {
   NAME: 'GLOBAL EXPANSION PLAYBOOK',
   STATUS: 'LOCKED',
-  VERSION: '2.1',
+  VERSION: '2.2',
 
   EXECUTION_PREREQUISITES: [
     'All critical security patches completed',
@@ -403,6 +442,7 @@ export const PRIORITY_3_STATUS = {
     { step: 4, name: 'Governance & Enforcement', status: 'COMPLETE' },
     { step: 5, name: 'Data Source Independence & Redundancy', status: 'COMPLETE' },
     { step: 6, name: 'Commercial Flow & Client Ownership', status: 'COMPLETE' },
+    { step: 7, name: 'Regulatory & Claim Firewall', status: 'COMPLETE' },
   ],
 } as const;
 
@@ -527,6 +567,7 @@ export const GLOBAL_EXPANSION = {
   GOVERNANCE_ENFORCEMENT,
   DATA_SOURCE_INDEPENDENCE,
   COMMERCIAL_FLOW,
+  REGULATORY_FIREWALL,
   RISK_PREVENTION,
   PRIORITY_3_STATUS,
 } as const;
