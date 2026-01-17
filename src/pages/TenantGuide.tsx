@@ -276,7 +276,7 @@ const TenantGuide = () => {
                 Deposits & Renewals
               </h2>
               <p className="text-lg text-zinc-400 max-w-2xl mx-auto">
-                Understand how security deposits work and what to expect during lease renewals.
+                Understand how security deposits work and what to expect during rental renewals.
               </p>
             </div>
 
@@ -302,7 +302,7 @@ const TenantGuide = () => {
             <div>
               <h3 className="text-xl font-medium text-white mb-6 flex items-center gap-3">
                 <RefreshCw className="w-5 h-5 text-gold" />
-                Lease Renewals
+                Rental Renewals
               </h3>
               <div className="grid md:grid-cols-2 gap-4">
                 {renewalInfo.map((info, index) => (

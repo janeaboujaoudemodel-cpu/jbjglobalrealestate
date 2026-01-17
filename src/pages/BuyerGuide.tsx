@@ -113,14 +113,14 @@ const BuyerGuide = () => {
       points: [
         "Available to all nationalities in designated freehold areas",
         "Popular areas: Dubai Marina, Downtown, Palm Jumeirah, JBR, Business Bay",
-        "You own the property outright — can sell, lease, or pass to heirs",
+        "You own the property outright — can sell, rent out, or pass to heirs",
         "Most common choice for international and local buyers"
       ]
     },
     {
       title: "Leasehold Ownership",
       icon: Clock,
-      description: "Long-term lease rights, typically 10 to 99 years depending on the area.",
+      description: "Long-term tenure rights, typically 10 to 99 years depending on the area.",
       points: [
         "Property rights for a fixed period, then reverts to landowner",
         "Common in certain older or non-freehold areas",

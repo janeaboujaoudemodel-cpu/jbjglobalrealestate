@@ -90,7 +90,7 @@ export const RENTAL_TENANT_KEYWORDS = [
 
 export const RENTAL_LANDLORD_KEYWORDS = [
   'list my property', 'rent out', 'rent my', 'tenant for', 'find tenant',
-  'lease my', 'my property', 'own property', 'vacant property', 'investment property',
+  'my property', 'own property', 'vacant property', 'investment property',
   'rental income', 'letting', 'property management', 'manage my property'
 ];
 
@@ -203,7 +203,7 @@ export interface RentalQualificationData {
   budgetMax?: number;
   preferredAreas?: string[];
   propertyType?: 'apartment' | 'villa' | 'townhouse' | 'commercial' | 'studio';
-  leaseDuration?: 'short_term' | 'long_term';
+  rentalDuration?: 'short_term' | 'long_term';
   moveInTimeline?: string;
   bedrooms?: number;
   furnished?: boolean;
@@ -226,8 +226,8 @@ export const RENTAL_QUALIFICATION_QUESTIONS = {
     question: "What **type of property** are you looking for?",
     options: ['Studio', 'Apartment', 'Villa', 'Townhouse', 'Commercial Space']
   },
-  leaseDuration: {
-    question: "Are you looking for a **short-term** (less than 1 year) or **long-term** lease?",
+  rentalDuration: {
+    question: "Are you looking for a **short-term** (less than 1 year) or **long-term** rental?",
     options: ['Short-term (< 1 year)', 'Long-term (1+ years)']
   },
   moveInTimeline: {

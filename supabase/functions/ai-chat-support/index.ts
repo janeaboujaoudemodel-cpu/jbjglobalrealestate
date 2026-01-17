@@ -297,7 +297,7 @@ const RENTAL_QUALIFICATION_FLOW = {
   },
   areas: "Which **areas** are you interested in? (e.g., Dubai Marina, Downtown, JVC, Business Bay)",
   propertyType: "What **type of property** are you looking for? (Studio, Apartment, Villa, Townhouse, Commercial)",
-  duration: "Are you looking for a **short-term** (less than 1 year) or **long-term** lease?",
+  duration: "Are you looking for a **short-term** (less than 1 year) or **long-term** rental?",
   moveIn: "When do you need to **move in**?"
 };
 

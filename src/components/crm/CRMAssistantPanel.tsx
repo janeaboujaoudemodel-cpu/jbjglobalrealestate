@@ -329,7 +329,7 @@ I hope this message finds you well. I wanted to follow up on our previous conver
 We have some exciting new developments that might interest you:
 • Exclusive off-plan opportunities with flexible payment plans
 • Premium ready-to-move properties in prime locations
-• Investment options with guaranteed returns
+• Properties aligned with your investment goals
 
 Would you like to schedule a viewing or discuss your options?
 

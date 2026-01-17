@@ -355,7 +355,7 @@ jbj.ae
               <div className="bg-zinc-900/50 border border-teal-500/20 rounded-xl p-4">
                 <AlertCircle className="w-8 h-8 text-teal-400 mx-auto mb-2" />
                 <p className="text-white font-medium">Check Rental Sizes</p>
-                <p className="text-zinc-500 text-sm">Verify apartment sizes before signing a lease agreement</p>
+                <p className="text-zinc-500 text-sm">Verify apartment sizes before signing a rental agreement</p>
               </div>
               <div className="bg-zinc-900/50 border border-teal-500/20 rounded-xl p-4">
                 <Sparkles className="w-8 h-8 text-teal-400 mx-auto mb-2" />
