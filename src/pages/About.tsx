@@ -374,21 +374,21 @@ const About = () => {
                 
                 {/* Overlay Cards - Market Intelligence Visual - LARGER CONTENT */}
                 <div className="absolute bottom-6 left-6 right-6 grid grid-cols-2 gap-4">
-                  <div className="bg-black/80 backdrop-blur-sm border border-zinc-700/50 rounded-lg p-4">
-                    <BarChart3 className="w-6 h-6 text-gold mb-2" />
-                    <p className="text-white text-sm font-medium">Government Data</p>
+                  <div className="bg-black/85 backdrop-blur-sm border border-zinc-700/50 rounded-lg p-5">
+                    <BarChart3 className="w-8 h-8 text-gold mb-3" />
+                    <p className="text-white text-base font-semibold">Government Data</p>
                   </div>
-                  <div className="bg-black/80 backdrop-blur-sm border border-zinc-700/50 rounded-lg p-4">
-                    <Building2 className="w-6 h-6 text-gold mb-2" />
-                    <p className="text-white text-sm font-medium">Infrastructure</p>
+                  <div className="bg-black/85 backdrop-blur-sm border border-zinc-700/50 rounded-lg p-5">
+                    <Building2 className="w-8 h-8 text-gold mb-3" />
+                    <p className="text-white text-base font-semibold">Infrastructure</p>
                   </div>
-                  <div className="bg-black/80 backdrop-blur-sm border border-zinc-700/50 rounded-lg p-4">
-                    <TrendingUp className="w-6 h-6 text-gold mb-2" />
-                    <p className="text-white text-sm font-medium">Market Cycles</p>
+                  <div className="bg-black/85 backdrop-blur-sm border border-zinc-700/50 rounded-lg p-5">
+                    <TrendingUp className="w-8 h-8 text-gold mb-3" />
+                    <p className="text-white text-base font-semibold">Market Cycles</p>
                   </div>
-                  <div className="bg-black/80 backdrop-blur-sm border border-zinc-700/50 rounded-lg p-4">
-                    <Target className="w-6 h-6 text-gold mb-2" />
-                    <p className="text-white text-sm font-medium">Planning Strategy</p>
+                  <div className="bg-black/85 backdrop-blur-sm border border-zinc-700/50 rounded-lg p-5">
+                    <Target className="w-8 h-8 text-gold mb-3" />
+                    <p className="text-white text-base font-semibold">Planning Strategy</p>
                   </div>
                 </div>
               </motion.div>

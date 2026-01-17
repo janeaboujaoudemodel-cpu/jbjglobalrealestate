@@ -156,12 +156,12 @@ const AreaIntelligence = () => {
         </div>
       </section>
 
-      {/* Internal Links */}
-      <section className="py-12 border-t border-zinc-900">
+      {/* Internal Links - WHITE BACKGROUND */}
+      <section className="py-12 bg-white border-t border-zinc-200">
         <div className="container mx-auto px-4">
           <div className="grid md:grid-cols-3 gap-4 max-w-3xl mx-auto">
             <Link to="/market-intelligence/overview" className="group">
-              <Card className="bg-white border-zinc-200 hover:border-gold/50 hover:shadow-lg transition-all">
+              <Card className="bg-zinc-50 border-zinc-200 hover:border-gold/50 hover:shadow-lg transition-all">
                 <CardContent className="p-4 flex items-center justify-between">
                   <span className="text-black font-medium group-hover:text-gold transition-colors">Market Overview</span>
                   <ArrowRight className="w-4 h-4 text-gold" />
@@ -169,7 +169,7 @@ const AreaIntelligence = () => {
               </Card>
             </Link>
             <Link to="/market-intelligence/reports" className="group">
-              <Card className="bg-white border-zinc-200 hover:border-gold/50 hover:shadow-lg transition-all">
+              <Card className="bg-zinc-50 border-zinc-200 hover:border-gold/50 hover:shadow-lg transition-all">
                 <CardContent className="p-4 flex items-center justify-between">
                   <span className="text-black font-medium group-hover:text-gold transition-colors">Market Reports</span>
                   <ArrowRight className="w-4 h-4 text-gold" />
@@ -177,7 +177,7 @@ const AreaIntelligence = () => {
               </Card>
             </Link>
             <Link to="/market-intelligence/methodology" className="group">
-              <Card className="bg-white border-zinc-200 hover:border-gold/50 hover:shadow-lg transition-all">
+              <Card className="bg-zinc-50 border-zinc-200 hover:border-gold/50 hover:shadow-lg transition-all">
                 <CardContent className="p-4 flex items-center justify-between">
                   <span className="text-black font-medium group-hover:text-gold transition-colors">Methodology</span>
                   <ArrowRight className="w-4 h-4 text-gold" />
@@ -186,9 +186,9 @@ const AreaIntelligence = () => {
             </Link>
           </div>
           
-          {/* Disclaimer Box - White style */}
+          {/* Disclaimer Box */}
           <div className="max-w-3xl mx-auto mt-8">
-            <div className="bg-white border border-zinc-200 rounded-xl p-6 text-center">
+            <div className="bg-zinc-50 border border-zinc-200 rounded-xl p-6 text-center">
               <div className="flex items-center justify-center gap-4 mb-4">
                 <Database className="w-5 h-5 text-gold" />
                 <Shield className="w-5 h-5 text-gold" />
