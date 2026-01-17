@@ -27,6 +27,15 @@ import Services from "./pages/Services";
 import MortgageCalculator from "./pages/MortgageCalculator";
 import MarketReport from "./pages/MarketReport";
 import MarketIntelligence from "./pages/MarketIntelligence";
+import MarketOverview from "./pages/market-intelligence/MarketOverview";
+import AreaIntelligence from "./pages/market-intelligence/AreaIntelligence";
+import MarketAreaDetail from "./pages/market-intelligence/AreaDetail";
+import MarketReportsPage from "./pages/market-intelligence/MarketReports";
+import Methodology from "./pages/market-intelligence/Methodology";
+import InternalDashboard from "./pages/market-intelligence/internal/InternalDashboard";
+import BrokerIntelligence from "./pages/market-intelligence/internal/BrokerIntelligence";
+import AIInsights from "./pages/market-intelligence/internal/AIInsights";
+import DataOperations from "./pages/market-intelligence/internal/DataOperations";
 import Favorites from "./pages/Favorites";
 import Compare from "./pages/Compare";
 import Auth from "./pages/Auth";
@@ -163,6 +172,15 @@ const App = () => (
                 <Route path="/mortgage-calculator" element={<MortgageCalculator />} />
                 <Route path="/market-report" element={<MarketReport />} />
                 <Route path="/market-intelligence" element={<MarketIntelligence />} />
+                <Route path="/market-intelligence/overview" element={<MarketOverview />} />
+                <Route path="/market-intelligence/areas" element={<AreaIntelligence />} />
+                <Route path="/market-intelligence/areas/:slug" element={<MarketAreaDetail />} />
+                <Route path="/market-intelligence/reports" element={<MarketReportsPage />} />
+                <Route path="/market-intelligence/methodology" element={<Methodology />} />
+                <Route path="/internal/market-intelligence/dashboard" element={<InternalDashboard />} />
+                <Route path="/internal/market-intelligence/brokers" element={<BrokerIntelligence />} />
+                <Route path="/internal/market-intelligence/ai-insights" element={<AIInsights />} />
+                <Route path="/internal/market-intelligence/data-ops" element={<DataOperations />} />
                 <Route path="/insights" element={<MarketIntelligence />} />
                 <Route path="/favorites" element={<Favorites />} />
                 <Route path="/compare" element={<Compare />} />
