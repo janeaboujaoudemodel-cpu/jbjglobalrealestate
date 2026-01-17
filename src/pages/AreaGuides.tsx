@@ -59,7 +59,7 @@ const AreaGuides = () => {
               Explore All Areas
             </Button>
             <Link to="/properties">
-              <Button variant="gold" className="px-6">
+              <Button variant="primary" className="px-6">
                 <Building2 className="w-4 h-4 mr-2" />
                 View Properties
               </Button>

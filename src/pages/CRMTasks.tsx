@@ -185,7 +185,7 @@ const CRMTasks = () => {
                 onKeyDown={(e) => e.key === 'Enter' && addTask()}
                 className="flex-1"
               />
-              <Button onClick={addTask} variant="gold">
+              <Button onClick={addTask} variant="primary">
                 <Plus className="h-4 w-4 mr-2" />
                 Add Task
               </Button>
@@ -208,7 +208,7 @@ const CRMTasks = () => {
             {['all', 'todo', 'in_progress', 'done'].map(status => (
               <Button
                 key={status}
-                variant={filterStatus === status ? "gold" : "outline"}
+                variant={filterStatus === status ? "primary" : "secondary"}
                 size="sm"
                 onClick={() => setFilterStatus(status)}
               >

@@ -190,7 +190,7 @@ const CRMReminders = () => {
               </div>
             </div>
           </div>
-          <Button variant="gold">
+          <Button variant="primary">
             <Plus className="h-4 w-4 mr-2" />
             Add Reminder
           </Button>
@@ -209,7 +209,7 @@ const CRMReminders = () => {
           ].map(f => (
             <Button
               key={f.key}
-              variant={filter === f.key ? "gold" : "outline"}
+              variant={filter === f.key ? "primary" : "secondary"}
               size="sm"
               onClick={() => setFilter(f.key as typeof filter)}
             >

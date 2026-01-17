@@ -109,7 +109,7 @@ const ChatTracker = ({ leadId, phoneNumber: initialPhone, onChatLogged }: ChatTr
       if (!open) resetForm();
     }}>
       <DialogTrigger asChild>
-        <Button variant="outline" size="sm" className="text-green-600">
+        <Button variant="secondary" size="sm">
           <MessageCircle className="h-4 w-4 mr-1" />
           Log Chat
         </Button>
@@ -136,11 +136,10 @@ const ChatTracker = ({ leadId, phoneNumber: initialPhone, onChatLogged }: ChatTr
                 className="flex-1"
               />
               <Button 
-                variant="outline" 
+                variant="secondary" 
                 size="icon"
                 onClick={openWhatsApp}
                 disabled={!contactNumber}
-                className="text-green-600"
               >
                 <Send className="h-4 w-4" />
               </Button>

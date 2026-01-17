@@ -95,14 +95,13 @@ const CookiesConsentBanner = () => {
                     <div className="flex flex-wrap gap-3">
                       <Button
                         onClick={handleAcceptAll}
-                        variant="gold"
+                        variant="primary"
                       >
                         Accept All
                       </Button>
                       <Button
                         onClick={() => setShowPreferences(true)}
-                        variant="outline"
-                        className="border-gold text-gold hover:bg-gold hover:text-black"
+                        variant="secondary"
                       >
                         Manage Preferences
                       </Button>
@@ -184,14 +183,13 @@ const CookiesConsentBanner = () => {
                 <div className="flex gap-3">
                   <Button
                     onClick={handleSavePreferences}
-                    variant="gold"
+                    variant="primary"
                   >
                     Save preferences
                   </Button>
                   <Button
                     onClick={() => setShowPreferences(false)}
-                    variant="ghost"
-                    className="text-zinc-400 hover:text-white"
+                    variant="secondary"
                   >
                     Cancel
                   </Button>

@@ -140,7 +140,7 @@ const CallTracker = ({ leadId, phoneNumber: initialPhone, onCallLogged }: CallTr
       if (!open) resetForm();
     }}>
       <DialogTrigger asChild>
-        <Button variant="outline" size="sm" className="text-blue-600">
+        <Button variant="secondary" size="sm">
           <Phone className="h-4 w-4 mr-1" />
           Log Call
         </Button>
@@ -238,7 +238,7 @@ const CallTracker = ({ leadId, phoneNumber: initialPhone, onCallLogged }: CallTr
             {!isCallActive ? (
               <>
                 <Button 
-                  variant="outline" 
+                  variant="secondary" 
                   className="flex-1"
                   onClick={startCall}
                   disabled={!phoneNumber}
@@ -247,6 +247,7 @@ const CallTracker = ({ leadId, phoneNumber: initialPhone, onCallLogged }: CallTr
                   Start Call & Timer
                 </Button>
                 <Button 
+                  variant="primary"
                   className="flex-1"
                   onClick={saveCallLog}
                   disabled={saving || !phoneNumber}
@@ -257,7 +258,7 @@ const CallTracker = ({ leadId, phoneNumber: initialPhone, onCallLogged }: CallTr
               </>
             ) : (
               <Button 
-                variant="destructive" 
+                variant="secondary" 
                 className="w-full"
                 onClick={endCall}
               >

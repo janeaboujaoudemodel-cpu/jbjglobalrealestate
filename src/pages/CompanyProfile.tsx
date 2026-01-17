@@ -770,7 +770,7 @@ const CompanyProfile = () => {
             <Button
               onClick={generatePDF}
               disabled={isGenerating}
-              variant="gold"
+              variant="primary"
               className="px-8 py-6 text-lg"
             >
               {isGenerating ? (
@@ -996,7 +996,7 @@ const CompanyProfile = () => {
             <Button
               onClick={generatePDF}
               disabled={isGenerating}
-              variant="gold"
+              variant="primary"
               className="px-10 py-6 text-lg"
             >
               {isGenerating ? (
@@ -1044,7 +1044,7 @@ const CompanyProfile = () => {
             <div className="space-y-3">
               <Button
                 onClick={handleDownload}
-                variant="gold"
+                variant="primary"
                 className="w-full py-6"
               >
                 <Download className="w-5 h-5 mr-2" />

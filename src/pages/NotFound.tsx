@@ -98,19 +98,19 @@ const NotFound = () => {
           className="flex flex-col sm:flex-row flex-wrap gap-4 justify-center mb-12"
         >
           <Link to="/">
-            <Button variant="gold" className="px-8 py-5 text-sm w-full sm:w-auto">
+            <Button variant="primary" className="px-8 py-5 text-sm w-full sm:w-auto">
               <Home className="w-4 h-4 mr-2" />
               Back to Home
             </Button>
           </Link>
           <Link to="/broker-toolkit">
-            <Button variant="goldOutline" className="px-8 py-5 text-sm w-full sm:w-auto">
+            <Button variant="secondary" className="px-8 py-5 text-sm w-full sm:w-auto">
               <Briefcase className="w-4 h-4 mr-2" />
               Broker Tools
             </Button>
           </Link>
           <Link to="/contact">
-            <Button variant="goldOutline" className="px-8 py-5 text-sm w-full sm:w-auto">
+            <Button variant="secondary" className="px-8 py-5 text-sm w-full sm:w-auto">
               <Phone className="w-4 h-4 mr-2" />
               Contact Support
             </Button>

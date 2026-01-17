@@ -436,11 +436,11 @@ const CRM = () => {
 
         {/* Action Buttons */}
         <div className="flex flex-wrap items-center gap-3">
-          <Button onClick={() => setShowLeadModal(true)} variant="gold">
+          <Button onClick={() => setShowLeadModal(true)} variant="primary">
             <Plus className="h-4 w-4 mr-2" />
             Add Lead
           </Button>
-          <Button variant="goldOutline" onClick={() => setShowImportModal(true)}>
+          <Button variant="secondary" onClick={() => setShowImportModal(true)}>
             <Upload className="h-4 w-4 mr-2" />
             Import
           </Button>

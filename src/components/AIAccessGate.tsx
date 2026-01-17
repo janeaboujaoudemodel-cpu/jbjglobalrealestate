@@ -236,8 +236,7 @@ export default function AIAccessGate({ children, toolName }: AIAccessGateProps) 
             </motion.div>
             <Button
               size="lg"
-              variant="outline"
-              className="border-2 border-gold/50 text-gold hover:bg-gold/10 hover:border-gold px-8 py-6 text-base"
+              variant="secondary"
               onClick={() => navigate("/properties")}
             >
               Browse Properties Instead
