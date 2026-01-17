@@ -475,11 +475,12 @@ ${COMPANY_CONTACTS.email}`;
         <DialogHeader>
           <DialogTitle className="text-white flex items-center gap-3">
             <div className="relative">
-              {/* GLOBAL IMAGE RULE - LOCKED: Avatar - no cropping, perfect centering */}
+              {/* GLOBAL IMAGE RULE - LOCKED (FINAL): max zoom, crop from bottom */}
               <img 
                 src={ASSISTANT_IDENTITY.avatar} 
                 alt={ASSISTANT_IDENTITY.name}
-                className="w-10 h-10 rounded-full object-contain object-center border-2 border-gold bg-zinc-950"
+                className="w-10 h-10 rounded-full border-2 border-gold bg-zinc-950"
+                style={{ objectFit: "cover", objectPosition: "center 15%" }}
               />
               <span className="absolute -bottom-0.5 -right-0.5 w-3 h-3 bg-green-500 rounded-full border-2 border-card" />
             </div>

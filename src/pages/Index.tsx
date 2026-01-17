@@ -414,11 +414,13 @@ const Index = () => {
               <div className="grid md:grid-cols-2 gap-0">
                 {/* Photo Side */}
                 <div className="relative">
-                  {/* GLOBAL IMAGE RULE - LOCKED: Founder portrait - no cropping, perfect centering */}
+                  {/* GLOBAL IMAGE RULE - LOCKED (FINAL):
+                      object-fit: cover + center 15% = max zoom, crop from bottom only */}
                   <img 
                     src={founderProfessional} 
                     alt="Jane Abou Jaoude - Founder & CEO at JBJ Global Real Estate"
-                    className="w-full h-full object-contain object-center min-h-[400px] md:min-h-[500px] bg-zinc-950"
+                    className="w-full h-full min-h-[400px] md:min-h-[500px] bg-zinc-950"
+                    style={{ objectFit: "cover", objectPosition: "center 15%" }}
                   />
                   {/* Subtle gradient overlay */}
                   <div className="absolute inset-0 bg-gradient-to-r from-transparent to-zinc-900/30 md:block hidden" />

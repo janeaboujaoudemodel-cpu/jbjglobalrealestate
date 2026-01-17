@@ -61,26 +61,19 @@ const TeamMemberCard = ({ member, onReadMore }: TeamMemberCardProps) => {
         <CardContent className="p-0">
           {/* Photo */}
           <div className="relative overflow-hidden">
-            {/* GLOBAL IMAGE RULE - LOCKED: no empty edges + no crop (blur-fill background + contain foreground) */}
-            <img
-              aria-hidden="true"
-              alt=""
-              src={member.avatar}
-              className="absolute inset-0 w-full h-full object-cover"
-              style={{
-                objectPosition: "center 20%",
-                filter: "blur(18px)",
-                transform: "scale(1.15)",
-                opacity: 0.35,
-              }}
-              loading="lazy"
-              decoding="async"
-              fetchPriority="low"
-            />
+            {/* GLOBAL IMAGE RULE - LOCKED (FINAL):
+                - object-fit: cover = fills frame completely, no gaps
+                - object-position: center 15% = focus on face, crop from bottom (suit area)
+                - Maximum zoom while preserving head & shoulders
+                - NEVER crop head or shoulders, CAN crop suit from bottom */}
             <img
               src={member.avatar}
               alt={member.name}
-              className="relative z-10 w-full aspect-square object-contain object-center group-hover:scale-105 transition-transform duration-500"
+              className="w-full aspect-square group-hover:scale-105 transition-transform duration-500"
+              style={{
+                objectFit: "cover",
+                objectPosition: "center 15%",
+              }}
               loading="lazy"
               decoding="async"
               fetchPriority="low"

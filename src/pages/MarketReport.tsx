@@ -460,13 +460,13 @@ const MarketReport = () => {
     color: #666;
   }
   
-  /* GLOBAL IMAGE RULE - LOCKED: No cropping, perfect centering */
+  /* GLOBAL IMAGE RULE - LOCKED (FINAL): Portraits use cover + center 15% for max zoom */
   .founder-image {
     width: 160px;
     height: 160px;
     border-radius: 50%;
-    object-fit: contain;
-    object-position: center center;
+    object-fit: cover;
+    object-position: center 15%;
     border: 4px solid #A8925A;
     margin: 0 auto 30px;
     display: block;
