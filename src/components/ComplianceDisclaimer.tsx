@@ -28,8 +28,8 @@ const ComplianceDisclaimer = ({ variant = "compact", className = "", language = 
       icon: Building2,
       title: language === "ar" ? "خدمات الوساطة العقارية" : "Real Estate Brokerage Services",
       content: language === "ar" 
-        ? "جي بي جي جلوبال للعقارات متخصصة في المبيعات والتأجير وتنسيق المعاملات العقارية في دولة الإمارات العربية المتحدة."
-        : "JBJ Global Real Estate specializes in property sales, leasing, and transaction coordination within the UAE."
+        ? "جي بي جي جلوبال للعقارات متخصصة في المبيعات والإيجار وتنسيق المعاملات العقارية في دولة الإمارات العربية المتحدة."
+        : "JBJ Global Real Estate specializes in property sales, rentals, and transaction coordination within the UAE."
     },
     {
       icon: Scale,

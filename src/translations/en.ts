@@ -25,7 +25,7 @@ export const en = {
   // Homepage
   'home.hero.welcome': 'JBJ Global Real Estate',
   'home.hero.tagline': "Dubai's Premier Real Estate Brokerage",
-  'home.hero.subtitle': 'Expert property sales, leasing & holiday homes across the UAE',
+  'home.hero.subtitle': 'Expert property sales, rentals & holiday homes across the UAE',
   'home.hero.exclusive': 'Real Estate Brokerage',
   'home.cta.explore': 'Explore Our Services',
   'home.cta.properties': 'Explore Properties',
@@ -78,7 +78,7 @@ export const en = {
   'about.title': 'About JBJ Global Real Estate',
   'about.subtitle': 'Your trusted partner in UAE real estate brokerage',
   'about.whoWeAre': 'Who We Are',
-  'about.whoWeAreDesc': 'JBJ Global Real Estate is a real estate brokerage specializing in property sales, leasing, and holiday homes across the UAE.',
+  'about.whoWeAreDesc': 'JBJ Global Real Estate is a real estate brokerage specializing in property sales, rentals, and holiday homes across the UAE.',
   'about.ourMission': 'Our Mission',
   'about.ourMissionDesc': 'To provide exceptional brokerage services, connecting clients with the right properties through expert negotiation and transaction support.',
   'about.ourVision': 'Our Vision',

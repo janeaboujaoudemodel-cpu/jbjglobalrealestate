@@ -27,7 +27,7 @@ const LegalDisclaimer = ({ variant = "compact", className = "" }: LegalDisclaime
             <Building2 className="w-4 h-4 text-gold flex-shrink-0 mt-1" />
             <p>
               <strong className="text-white">Brokerage Services:</strong> JBJ Global Real Estate is a 
-              brokerage providing property sales, leasing, and holiday home services within the UAE.
+              brokerage providing property sales, rentals, and holiday home services within the UAE.
             </p>
           </div>
 

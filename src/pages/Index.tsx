@@ -106,7 +106,7 @@ const Index = () => {
             variants={fadeInUp}
             className="text-zinc-300 text-base md:text-lg lg:text-xl max-w-2xl mx-auto leading-relaxed mb-4"
           >
-            Luxury real estate brokerage for buying, selling & leasing in the UAE.
+            Luxury real estate brokerage for buying, selling & renting in the UAE.
           </motion.p>
 
           {/* Partner microline */}
@@ -389,7 +389,7 @@ const Index = () => {
                 Meet the <span className="text-transparent bg-clip-text bg-gradient-to-r from-gold to-gold-light">Founder</span>
               </h2>
               <p className="text-zinc-400 text-lg max-w-2xl mx-auto">
-                JBJ Global Real Estate is a founder-led brokerage for buying, selling, and leasing — built on unwavering standards, discretion, and long-term vision.
+                JBJ Global Real Estate is a founder-led brokerage for buying, selling, and renting — built on unwavering standards, discretion, and long-term vision.
               </p>
             </motion.div>
 

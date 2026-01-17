@@ -41,10 +41,10 @@ const INTENT_OPTIONS: IntentOption[] = [
     description: "Sell your property with expert guidance",
   },
   {
-    id: "rent_lease",
-    label: "Rent / Lease",
+    id: "rent",
+    label: "Rent",
     icon: Building2,
-    description: "Looking to rent or lease a property in UAE",
+    description: "Looking to rent a property in UAE",
   },
   {
     id: "broker",

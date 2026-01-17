@@ -407,7 +407,7 @@ const TenantGuide = () => {
       {/* CTA */}
       <GuideCTA
         title="Looking for Your Next Rental Home?"
-        description="Our licensed leasing advisors can help you find the perfect rental property in Dubai."
+        description="Our licensed rental advisors can help you find the perfect rental property in Dubai."
         primaryAction={{
           label: "Find Rental Properties",
           href: "/properties?transaction=rent",

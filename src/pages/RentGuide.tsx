@@ -400,7 +400,7 @@ const RentGuide = () => {
                 How JBJ GLOBAL REAL ESTATE Supports You
               </h2>
               <p className="text-lg text-zinc-400 max-w-2xl mx-auto">
-                Licensed for BUY, SELL & RENT (LEASING), we provide professional brokerage services for both tenants and landlords.
+                Licensed for BUY, SELL & RENT, we provide professional brokerage services for both tenants and landlords.
               </p>
             </div>
 
@@ -458,7 +458,7 @@ const RentGuide = () => {
       {/* CTA */}
       <GuideCTA
         title="Ready to Find Your Next Home?"
-        description="Speak with a JBJ leasing advisor to explore rental properties across Dubai."
+        description="Speak with a JBJ rental advisor to explore rental properties across Dubai."
         primaryAction={{
           label: "View Rental Properties",
           href: "/properties?transaction=rent",

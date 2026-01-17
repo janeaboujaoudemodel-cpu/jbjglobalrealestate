@@ -331,7 +331,7 @@ const Founder = () => {
                   At 16, Jane launched Jane's Beauty (beauty services) and began selling products via importing and shipping from China. With 12+ years of sales, customer experience, and business development expertise, she relocated to Dubai in 2020 to pursue real estate.
                 </p>
                 <p className="text-lg text-zinc-400">
-                  Her career includes working with DAMAC in 2021, leading quality and operations at Al-Ghazal Transportation Company (495+ team), and developing brokerage business divisions from 2022–2024. In 2025, she worked with Sobha Realty before founding JBJ Global Real Estate — a Dubai-based real estate brokerage for property sales and leasing.
+                  Her career includes working with DAMAC in 2021, leading quality and operations at Al-Ghazal Transportation Company (495+ team), and developing brokerage business divisions from 2022–2024. In 2025, she worked with Sobha Realty before founding JBJ Global Real Estate — a Dubai-based real estate brokerage for property sales and rentals.
                 </p>
               </div>
               
@@ -451,7 +451,7 @@ const Founder = () => {
                   In 2025–2026, she worked with Sobha Realty, supporting real estate growth through structured sales and client experience systems.
                 </p>
                 <p className="text-lg text-zinc-400">
-                  In 2025, Jane founded JBJ Global Real Estate — a Dubai-based real estate brokerage specializing in property sales and leasing services across the UAE.
+                  In 2025, Jane founded JBJ Global Real Estate — a Dubai-based real estate brokerage specializing in property sales and rental services across the UAE.
                 </p>
               </div>
 

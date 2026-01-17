@@ -75,7 +75,7 @@ const Footer = () => {
       items: [
         { label: "Off-Plan Properties", href: "/properties?status=off-plan" },
         { label: "Ready Properties", href: "/properties?status=ready" },
-        { label: "Leasing & Rentals", href: "/properties?type=rent" },
+        { label: "Rentals", href: "/properties?type=rent" },
         { label: "Property Search", href: "/quiz" },
       ],
     },
@@ -156,7 +156,7 @@ const Footer = () => {
             JBJ GLOBAL REAL ESTATE
           </h2>
           <p className="text-zinc-400 text-base md:text-lg max-w-2xl mx-auto leading-relaxed mb-2">
-            Licensed for BUY, SELL & RENT (LEASING) real estate in the UAE.
+            Licensed for BUY, SELL & RENT real estate in the UAE.
           </p>
           <p className="text-zinc-500 text-sm max-w-xl mx-auto leading-relaxed">
             Mortgage, legal, visa, and corporate services are provided through licensed partners.
@@ -333,9 +333,8 @@ const Footer = () => {
               <h4 className="text-white font-semibold">Legal Disclaimer</h4>
             </div>
             
-            {/* English Disclaimer */}
             <p className="text-zinc-400 text-sm leading-relaxed mb-4">
-              <span className="text-white font-medium">JBJ Global Real Estate</span> is a Dubai mainland real estate brokerage licensed to BUY, SELL & RENT (LEASING) properties across the UAE. 
+              <span className="text-white font-medium">JBJ Global Real Estate</span> is a Dubai mainland real estate brokerage licensed to BUY, SELL & RENT properties across the UAE. 
               For legal services, mortgage support, visa, and corporate services, we can connect you with independent licensed partners. 
               Clients contract and transact directly with the partner under the partner's own terms.
             </p>

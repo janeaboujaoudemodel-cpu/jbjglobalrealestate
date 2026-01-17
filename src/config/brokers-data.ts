@@ -154,7 +154,7 @@ export const allBrokers: Broker[] = [
     nationality: 'British',
     gender: 'male',
     languages: ['English', 'German'],
-    specializations: ['Business Bay', 'Commercial Leasing'],
+    specializations: ['Business Bay', 'Commercial Rentals'],
     yearsExperience: 13,
     email: generateEmail('Thomas Burke'),
     phone: generatePhone(11),

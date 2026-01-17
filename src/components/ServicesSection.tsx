@@ -16,8 +16,8 @@ const howWeHelp = [
     href: "/properties?transaction=buy",
   },
   {
-    title: "Rent / Lease Brokerage",
-    description: "Residential and commercial renting & leasing support.",
+    title: "Rent Brokerage",
+    description: "Residential and commercial rental support.",
     gradient: "from-blue-500/20 via-cyan-500/10 to-blue-600/20",
     iconGradient: "from-blue-400 to-cyan-400",
     href: "/properties?transaction=rent",

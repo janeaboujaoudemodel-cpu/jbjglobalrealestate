@@ -47,13 +47,13 @@ const services = [
     features: ["Off-Plan Projects", "Ready Properties", "Price Negotiations", "Transaction Support"]
   },
   {
-    id: "leasing",
-    title: "Leasing Brokerage",
-    description: "Professional leasing services for landlords and tenants seeking quality rental properties.",
+    id: "rent",
+    title: "Rent Brokerage",
+    description: "Professional rental services for landlords and tenants seeking quality rental properties.",
     icon: Home,
     image: "https://images.unsplash.com/photo-1560448204-e02f11c3d0e2?w=800&q=80",
     link: "/properties?status=ready",
-    features: ["Tenant Sourcing", "Lease Negotiations", "Contract Coordination", "Market Analysis"]
+    features: ["Tenant Sourcing", "Rental Negotiations", "Contract Coordination", "Market Analysis"]
   },
   {
     id: "holiday-homes",
@@ -145,7 +145,7 @@ const Services = () => {
             className="text-zinc-400 text-lg md:text-xl max-w-2xl mx-auto"
             variants={fadeInUp}
           >
-            Expert brokerage services for property sales, leasing, and holiday homes — plus trusted partner introductions
+            Expert brokerage services for property sales, rentals, and holiday homes — plus trusted partner introductions
           </motion.p>
         </motion.div>
       </section>

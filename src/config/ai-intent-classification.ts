@@ -1,6 +1,6 @@
 /**
  * AI Intent Classification System - JBJ Global Real Estate
- * Classifies leads into Buy, Sell, Rent/Lease, Broker, and Partner Services
+ * Classifies leads into Buy, Sell, Rent, Broker, and Partner Services
  */
 
 // ============================================
@@ -10,7 +10,7 @@
 export type LeadIntent = 
   | 'buy' 
   | 'sell' 
-  | 'rent_lease' 
+  | 'rent' 
   | 'broker_registration' 
   | 'partner_services';
 
@@ -51,8 +51,8 @@ export const INTENT_KEYWORDS = {
     'list for sale', 'sale listing', 'seller', 'selling property',
     'exit strategy', 'dispose', 'offload'
   ],
-  rent_lease: [
-    'rent', 'rental', 'lease', 'leasing', 'tenant', 'landlord', 'renting',
+  rent: [
+    'rent', 'rental', 'tenant', 'landlord', 'renting',
     'monthly rent', 'annual rent', 'looking to rent', 'want to rent',
     'short term', 'long term', 'furnished', 'unfurnished', 'move in',
     'ejari', 'dewa', 'tenancy', 'tenancy contract', 'rental agreement',
@@ -105,7 +105,7 @@ export function classifyIntent(message: string): IntentClassification {
   const scores: Record<LeadIntent, number> = {
     buy: 0,
     sell: 0,
-    rent_lease: 0,
+    rent: 0,
     broker_registration: 0,
     partner_services: 0
   };
@@ -151,7 +151,7 @@ export function classifyIntent(message: string): IntentClassification {
 
   // Determine renter type if rental intent
   let renterType: RenterType = null;
-  if (primaryIntent === 'rent_lease') {
+  if (primaryIntent === 'rent') {
     const tenantScore = RENTAL_TENANT_KEYWORDS.filter(k => lowerMessage.includes(k)).length;
     const landlordScore = RENTAL_LANDLORD_KEYWORDS.filter(k => lowerMessage.includes(k)).length;
     
@@ -191,7 +191,7 @@ export function needsSellRentClarification(message: string): boolean {
 }
 
 export const SELL_RENT_CLARIFICATION_PROMPT = 
-  "I'd be happy to help with your property! Just to make sure I guide you correctly - are you looking to **sell** the property or **rent/lease** it out?";
+  "I'd be happy to help with your property! Just to make sure I guide you correctly - are you looking to **sell** the property or **rent** it out?";
 
 // ============================================
 // RENTAL QUALIFICATION QUESTIONS
@@ -240,7 +240,7 @@ export const RENTAL_QUALIFICATION_QUESTIONS = {
 // BROKER SPECIALIZATION MATCHING
 // ============================================
 
-export type BrokerSpecialization = 'sales' | 'leasing' | 'off_plan' | 'secondary' | 'commercial' | 'vip';
+export type BrokerSpecialization = 'sales' | 'rentals' | 'off_plan' | 'secondary' | 'commercial' | 'vip';
 
 export function getBrokerSpecializationForIntent(
   intent: LeadIntent,
@@ -251,11 +251,11 @@ export function getBrokerSpecializationForIntent(
       return ['sales', 'off_plan', 'secondary'];
     case 'sell':
       return ['sales', 'secondary'];
-    case 'rent_lease':
+    case 'rent':
       if (renterType === 'landlord') {
-        return ['leasing', 'sales']; // Landlords might also sell
+        return ['rentals', 'sales']; // Landlords might also sell
       }
-      return ['leasing'];
+      return ['rentals'];
     case 'broker_registration':
       return []; // HR handles this, not brokers
     case 'partner_services':
@@ -271,8 +271,8 @@ export function getPipelineForIntent(intent: LeadIntent): string {
       return 'buy_pipeline';
     case 'sell':
       return 'sell_pipeline';
-    case 'rent_lease':
-      return 'rent_lease_pipeline';
+    case 'rent':
+      return 'rent_pipeline';
     case 'broker_registration':
       return 'hr_pipeline';
     case 'partner_services':
@@ -288,7 +288,7 @@ export function getPipelineForIntent(intent: LeadIntent): string {
 
 export const COMPLIANCE_LANGUAGE = {
   introduction: "I'm an AI assistant for JBJ GLOBAL REAL ESTATE.",
-  licensed_services: "JBJ GLOBAL REAL ESTATE is licensed for BUY, SELL & RENT (LEASING).",
+  licensed_services: "JBJ GLOBAL REAL ESTATE is licensed for BUY, SELL & RENT.",
   partner_services: "This service is provided through licensed partners.",
   partner_intro_template: (service: string) => 
     `JBJ GLOBAL REAL ESTATE facilitates introductions to licensed partners for ${service}.`,
