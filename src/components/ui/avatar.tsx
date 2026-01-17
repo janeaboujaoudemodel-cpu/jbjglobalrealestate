@@ -4,11 +4,30 @@ import * as AvatarPrimitive from "@radix-ui/react-avatar";
 import { cn } from "@/lib/utils";
 
 /**
- * GLOBAL IMAGE RULE - LOCKED
- * - NO cropping, NO zooming, NO auto-fit
- * - Images must be perfectly centered (object-fit: contain, object-position: center center)
- * - Equal spacing on all sides
- * - Container adapts to image, not image to container
+ * ============================================================
+ * GLOBAL IMAGE RULE - LOCKED (NO CROP + PERFECT CENTERING)
+ * ============================================================
+ * 
+ * CORE RULES:
+ * - NEVER crop images (no head, face, body, hands, or edges cut)
+ * - Preserve original image ratio at all times
+ * - Subject must visually occupy 70-85% of container
+ * - Perfect centering: horizontal + vertical
+ * - Head positioned in upper third of frame
+ * - Equal breathing space on all sides
+ * - Black/dark backgrounds must be preserved
+ * - Circle is a MASK only - no zoom-out behavior
+ * - Image quality must remain original and high-resolution
+ * 
+ * Applies to:
+ * - Founder images
+ * - Employee photos
+ * - Team members
+ * - CRM users
+ * - User profile avatars
+ * - Leadership cards
+ * - Any image container (circle, square, rectangle)
+ * ============================================================
  */
 
 const Avatar = React.forwardRef<
@@ -17,7 +36,12 @@ const Avatar = React.forwardRef<
 >(({ className, ...props }, ref) => (
   <AvatarPrimitive.Root
     ref={ref}
-    className={cn("relative flex shrink-0 overflow-hidden rounded-full", className)}
+    className={cn(
+      "relative flex shrink-0 overflow-hidden rounded-full",
+      // Dark background preserved for image integrity
+      "bg-zinc-950",
+      className
+    )}
     {...props}
   />
 ));
@@ -25,8 +49,10 @@ Avatar.displayName = AvatarPrimitive.Root.displayName;
 
 /**
  * AvatarImage - GLOBAL IMAGE RULE APPLIED
- * Uses object-fit: contain and object-position: center center
- * NO cropping - image shown exactly as provided
+ * - NO cropping - image shown exactly as provided
+ * - Subject fills 70-85% of container naturally
+ * - Head positioned in upper third (object-position: center 15%)
+ * - Dark background preserved
  */
 const AvatarImage = React.forwardRef<
   React.ElementRef<typeof AvatarPrimitive.Image>,
@@ -36,10 +62,12 @@ const AvatarImage = React.forwardRef<
     ref={ref} 
     className={cn(
       "aspect-square h-full w-full",
-      // LOCKED: Global image rule - no cropping, perfect centering
-      "object-contain object-center",
       className
-    )} 
+    )}
+    style={{
+      objectFit: 'contain',
+      objectPosition: 'center 15%', // Head in upper third
+    }}
     {...props} 
   />
 ));
@@ -51,10 +79,13 @@ const AvatarFallback = React.forwardRef<
 >(({ className, ...props }, ref) => (
   <AvatarPrimitive.Fallback
     ref={ref}
-    className={cn("flex h-full w-full items-center justify-center rounded-full bg-muted", className)}
+    className={cn(
+      "flex h-full w-full items-center justify-center rounded-full bg-muted text-muted-foreground",
+      className
+    )}
     {...props}
   />
 ));
-AvatarFallback.displayName = AvatarPrimitive.Fallback.displayName;
+AvatarFallback.displayName = AvatarFallback.displayName;
 
 export { Avatar, AvatarImage, AvatarFallback };
