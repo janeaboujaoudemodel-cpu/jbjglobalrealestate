@@ -63,9 +63,9 @@ const freeAITools = [
     title: "JBJ AI Home Finder",
     description: "Match buyers to listings with AI-powered filters.",
     icon: Home,
-    color: "text-emerald-400",
-    bgColor: "bg-emerald-500/10",
-    borderColor: "border-emerald-500/30",
+    color: "text-purple-400",
+    bgColor: "bg-purple-500/10",
+    borderColor: "border-purple-500/30",
     link: "/quiz",
   },
   {
@@ -83,9 +83,9 @@ const freeAITools = [
     title: "JBJ Property Comparison",
     description: "Compare properties side-by-side with AI insights.",
     icon: BarChart3,
-    color: "text-purple-400",
-    bgColor: "bg-purple-500/10",
-    borderColor: "border-purple-500/30",
+    color: "text-cyan-400",
+    bgColor: "bg-cyan-500/10",
+    borderColor: "border-cyan-500/30",
     link: "/compare",
   },
   {
@@ -93,9 +93,9 @@ const freeAITools = [
     title: "JBJ Mortgage Calculator",
     description: "Estimate monthly payments and financing options.",
     icon: Calculator,
-    color: "text-emerald-400",
-    bgColor: "bg-emerald-500/10",
-    borderColor: "border-emerald-500/30",
+    color: "text-teal-400",
+    bgColor: "bg-teal-500/10",
+    borderColor: "border-teal-500/30",
     link: "/mortgage-calculator",
   },
   {
@@ -103,9 +103,9 @@ const freeAITools = [
     title: "JBJ Rental Index Evaluator",
     description: "AI-powered rental estimates with market trends.",
     icon: Layers,
-    color: "text-green-400",
-    bgColor: "bg-green-500/10",
-    borderColor: "border-green-500/30",
+    color: "text-emerald-400",
+    bgColor: "bg-emerald-500/10",
+    borderColor: "border-emerald-500/30",
     link: "/rental-index",
   },
   {
@@ -123,20 +123,10 @@ const freeAITools = [
     title: "JBJ Business Card Scanner",
     description: "Scan and save business cards into your CRM.",
     icon: CreditCard,
-    color: "text-zinc-300",
-    bgColor: "bg-zinc-500/10",
-    borderColor: "border-zinc-500/30",
+    color: "text-amber-400",
+    bgColor: "bg-amber-500/10",
+    borderColor: "border-amber-500/30",
     link: "/business-card-scanner",
-  },
-  {
-    id: "referral-program",
-    title: "JBJ Referral Program",
-    description: "Earn 5% commission on successful referrals.",
-    icon: Award,
-    color: "text-lime-400",
-    bgColor: "bg-lime-500/10",
-    borderColor: "border-lime-500/30",
-    link: "/referral-onboarding",
   },
 ];
 
@@ -145,7 +135,7 @@ const brokerOperations = [
   {
     id: "listing-admin",
     title: "Listing Admin (Sarah)",
-    subtitle: "AI Property Manager",
+    subtitle: "Property Administration",
     description: "Smart property listing, document parsing, auto-categorization by developer.",
     icon: FolderOpen,
     color: "text-emerald-400",
@@ -286,6 +276,20 @@ const educationCerts = [
     link: "/crm",
   },
   {
+    id: "referral-program",
+    title: "JBJ Referral Program",
+    description: "Earn 5% commission on successful referrals.",
+    icon: Award,
+    color: "text-lime-400",
+    bgColor: "bg-lime-500/10",
+    borderColor: "border-lime-500/30",
+    link: "/referral-onboarding",
+  },
+];
+
+// Category 5: PRODUCTIVITY TOOLS
+const productivityTools = [
+  {
     id: "video-meeting",
     title: "JBJ Video Meet",
     description: "Free unlimited video meetings with recording.",
@@ -304,6 +308,16 @@ const educationCerts = [
     bgColor: "bg-indigo-500/10",
     borderColor: "border-indigo-500/30",
     link: "/ai-calendar",
+  },
+  {
+    id: "scan-sign",
+    title: "JBJ Scan & Sign",
+    description: "Digital document signing and scanning.",
+    icon: FileText,
+    color: "text-sky-400",
+    bgColor: "bg-sky-500/10",
+    borderColor: "border-sky-500/30",
+    link: "/documents",
   },
 ];
 
@@ -666,13 +680,49 @@ const AIHub = () => {
             </motion.div>
 
             <motion.div 
-              className="grid md:grid-cols-2 lg:grid-cols-4 gap-4"
+              className="grid md:grid-cols-2 lg:grid-cols-3 gap-4"
               initial="hidden"
               whileInView="visible"
               viewport={{ once: true }}
               variants={staggerContainer}
             >
               {educationCerts.map((tool) => renderToolCard(tool, false))}
+            </motion.div>
+          </div>
+        </section>
+
+        {/* Gold Divider */}
+        <div className="h-px bg-gradient-to-r from-transparent via-gold/40 to-transparent" />
+
+        {/* CATEGORY 5: PRODUCTIVITY TOOLS */}
+        <section className="py-16 md:py-20 bg-[#0D0D0D]">
+          <div className="container mx-auto px-4">
+            <motion.div
+              className="text-center mb-12"
+              initial={{ opacity: 0, y: 20 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true }}
+            >
+              <Badge className="bg-indigo-500/20 text-indigo-400 border-indigo-500/30 mb-4">
+                <Calendar className="w-3 h-3 mr-1" />
+                Productivity Tools
+              </Badge>
+              <h2 className="text-2xl md:text-3xl font-bold text-white mb-2">
+                Productivity Tools
+              </h2>
+              <p className="text-zinc-400 max-w-lg mx-auto">
+                Video meetings, calendar, and document tools to stay organized.
+              </p>
+            </motion.div>
+
+            <motion.div 
+              className="grid md:grid-cols-2 lg:grid-cols-3 gap-4"
+              initial="hidden"
+              whileInView="visible"
+              viewport={{ once: true }}
+              variants={staggerContainer}
+            >
+              {productivityTools.map((tool) => renderToolCard(tool, false))}
             </motion.div>
           </div>
         </section>

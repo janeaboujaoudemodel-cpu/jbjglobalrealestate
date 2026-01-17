@@ -25,20 +25,20 @@ const TOOLS = [
     name: 'JBJ AI Property Comparison',
     description: 'Compare up to 3 properties with AI-powered insights',
     icon: Layout,
-    link: '/ai-hub',
-    color: 'text-purple-400',
-    bgColor: 'bg-purple-500/10',
-    borderColor: 'border-purple-500/30',
+    link: '/compare',
+    color: 'text-cyan-400',
+    bgColor: 'bg-cyan-500/10',
+    borderColor: 'border-cyan-500/30',
     tier: 'free',
   },
   {
     name: 'JBJ Property Evaluator',
     description: 'Get instant AI-powered property valuations',
     icon: TrendingUp,
-    link: '/property-evaluation',
-    color: 'text-green-400',
-    bgColor: 'bg-green-500/10',
-    borderColor: 'border-green-500/30',
+    link: '/property-evaluator',
+    color: 'text-blue-400',
+    bgColor: 'bg-blue-500/10',
+    borderColor: 'border-blue-500/30',
     tier: 'free',
   },
   {
@@ -46,9 +46,9 @@ const TOOLS = [
     description: 'Calculate payments and affordability instantly',
     icon: Calculator,
     link: '/mortgage-calculator',
-    color: 'text-blue-400',
-    bgColor: 'bg-blue-500/10',
-    borderColor: 'border-blue-500/30',
+    color: 'text-teal-400',
+    bgColor: 'bg-teal-500/10',
+    borderColor: 'border-teal-500/30',
     tier: 'free',
   },
   {
@@ -110,17 +110,6 @@ const TOOLS = [
     bgColor: 'bg-blue-500/10',
     borderColor: 'border-blue-500/30',
     tier: 'member',
-  },
-  {
-    name: 'JBJ Referral Hub',
-    description: 'Earn through referrals — Open to everyone',
-    icon: Share2,
-    link: '/referral',
-    color: 'text-orange-400',
-    bgColor: 'bg-orange-500/10',
-    borderColor: 'border-orange-500/30',
-    tier: 'free',
-    badge: 'Open to All',
   },
   {
     name: 'JBJ Content Generator',
@@ -190,11 +179,6 @@ export function BrokerToolkitTools() {
                       <div className="flex-1 min-w-0">
                         <div className="flex items-center gap-2 mb-1">
                           <h3 className="text-black font-semibold truncate">{tool.name}</h3>
-                          {tool.badge && (
-                            <Badge className="bg-gold/20 text-gold border-gold/30 text-[10px] px-1.5 py-0 flex-shrink-0">
-                              {tool.badge}
-                            </Badge>
-                          )}
                         </div>
                         <p className="text-zinc-600 text-sm mb-2">{tool.description}</p>
                         <div className="flex items-center gap-2">
