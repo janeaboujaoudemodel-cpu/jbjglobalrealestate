@@ -24,78 +24,91 @@ const staggerContainer = {
 };
 
 // Section wrapper with consistent vertical rhythm
+// Updated: Support for white theme to separate from dark footer
 const Section = ({ 
   children, 
   className = "", 
   dark = false,
+  light = false,
   id
 }: { 
   children: React.ReactNode; 
   className?: string;
   dark?: boolean;
+  light?: boolean;
   id?: string;
-}) => (
-  <section 
-    id={id}
-    className={`py-10 md:py-14 lg:py-[72px] ${dark ? 'bg-zinc-950/80' : 'bg-black'} ${className}`}
-  >
-    <div className="container mx-auto px-6">
-      <div className="max-w-[1100px] mx-auto">
-        {children}
+}) => {
+  const bgClass = light 
+    ? 'bg-white' 
+    : dark 
+      ? 'bg-zinc-950/80' 
+      : 'bg-black';
+  
+  return (
+    <section 
+      id={id}
+      className={`py-10 md:py-14 lg:py-[72px] ${bgClass} ${className}`}
+    >
+      <div className="container mx-auto px-6">
+        <div className="max-w-[1100px] mx-auto">
+          {children}
+        </div>
       </div>
-    </div>
-  </section>
-);
+    </section>
+  );
+};
 
-// Section label component
-const SectionLabel = ({ children }: { children: React.ReactNode }) => (
+// Section label component - supports light backgrounds
+const SectionLabel = ({ children, dark = true }: { children: React.ReactNode; dark?: boolean }) => (
   <span 
-    className="block text-gold text-xs uppercase mb-4 tracking-[0.18em]"
+    className={`block text-gold text-xs uppercase mb-4 tracking-[0.18em]`}
     style={{ fontSize: '12px' }}
   >
     {children}
   </span>
 );
 
-// Section headline component
-const SectionHeadline = ({ children, className = "" }: { children: React.ReactNode; className?: string }) => (
+// Section headline component - supports light backgrounds
+const SectionHeadline = ({ children, className = "", light = false }: { children: React.ReactNode; className?: string; light?: boolean }) => (
   <h2 
-    className={`text-white text-2xl md:text-[32px] lg:text-[40px] font-semibold mb-6 leading-tight ${className}`}
+    className={`${light ? 'text-black' : 'text-white'} text-2xl md:text-[32px] lg:text-[40px] font-semibold mb-6 leading-tight ${className}`}
     style={{ fontFamily: "Poppins, sans-serif" }}
   >
     {children}
   </h2>
 );
 
-// Content text wrapper for readability
-const ContentText = ({ children, className = "" }: { children: React.ReactNode; className?: string }) => (
+// Content text wrapper for readability - supports light backgrounds
+const ContentText = ({ children, className = "", light = false }: { children: React.ReactNode; className?: string; light?: boolean }) => (
   <div 
-    className={`max-w-[680px] space-y-4 text-zinc-300 ${className}`}
+    className={`max-w-[680px] space-y-4 ${light ? 'text-zinc-700' : 'text-zinc-300'} ${className}`}
     style={{ fontSize: '17px', lineHeight: 1.75 }}
   >
     {children}
   </div>
 );
 
-// Card component for standards/policies
+// Card component for standards/policies - supports light backgrounds
 const FeatureCard = ({ 
   icon: Icon, 
   title, 
-  description 
+  description,
+  light = false
 }: { 
   icon: React.ComponentType<{ className?: string }>; 
   title: string; 
   description: string;
+  light?: boolean;
 }) => (
   <motion.div 
-    className="bg-zinc-900/60 border border-gold/30 rounded-xl p-6 hover:border-gold transition-colors"
+    className={`${light ? 'bg-white border-zinc-200 hover:border-gold' : 'bg-zinc-900/60 border-gold/30 hover:border-gold'} border rounded-xl p-6 transition-colors`}
     variants={fadeInUp}
   >
-    <div className="w-12 h-12 rounded-lg bg-black border border-gold flex items-center justify-center mb-4">
+    <div className={`w-12 h-12 rounded-lg ${light ? 'bg-black' : 'bg-black border border-gold'} flex items-center justify-center mb-4`}>
       <Icon className="w-6 h-6 text-gold" />
     </div>
-    <h3 className="text-white text-lg font-semibold mb-2">{title}</h3>
-    <p className="text-zinc-400 text-sm leading-relaxed">{description}</p>
+    <h3 className={`${light ? 'text-black' : 'text-white'} text-lg font-semibold mb-2`}>{title}</h3>
+    <p className={`${light ? 'text-zinc-600' : 'text-zinc-400'} text-sm leading-relaxed`}>{description}</p>
   </motion.div>
 );
 
@@ -504,8 +517,8 @@ const About = () => {
           </motion.div>
         </Section>
 
-        {/* SECTION 9: CTA */}
-        <Section dark className="py-14 md:py-18 lg:py-24">
+        {/* SECTION 9: CTA - WHITE BACKGROUND for separation from dark footer */}
+        <Section light className="py-14 md:py-18 lg:py-24">
           <motion.div 
             className="text-center"
             initial="hidden"
@@ -514,14 +527,14 @@ const About = () => {
             variants={staggerContainer}
           >
             <motion.h2 
-              className="text-white text-2xl md:text-3xl lg:text-4xl font-semibold mb-4"
+              className="text-black text-2xl md:text-3xl lg:text-4xl font-semibold mb-4"
               style={{ fontFamily: "Poppins, sans-serif" }}
               variants={fadeInUp}
             >
               Ready to Find Your Perfect Property?
             </motion.h2>
             <motion.p 
-              className="text-zinc-400 text-lg mb-10 max-w-xl mx-auto"
+              className="text-zinc-600 text-lg mb-10 max-w-xl mx-auto"
               variants={fadeInUp}
             >
               Connect with our brokerage team for expert guidance on buying, selling, or renting in the UAE.
@@ -532,7 +545,7 @@ const About = () => {
             >
               <Link to="/contact" className="relative z-10">
                 <Button 
-                  variant="primary"
+                  variant="dark"
                   className="px-8 py-6 text-base"
                 >
                   Contact Us
@@ -542,7 +555,7 @@ const About = () => {
               <Link to="/properties" className="relative z-10">
                 <Button 
                   variant="secondary"
-                  className="px-8 py-6 text-base"
+                  className="px-8 py-6 text-base border-black text-black hover:bg-black hover:text-white"
                 >
                   Browse Properties
                   <ArrowUpRight className="w-4 h-4 ml-2" />

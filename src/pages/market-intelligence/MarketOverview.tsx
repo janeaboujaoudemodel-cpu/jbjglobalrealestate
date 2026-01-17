@@ -2,6 +2,7 @@ import { motion } from "framer-motion";
 import { BarChart3, TrendingUp, TrendingDown, Minus, Database, Shield, ArrowUpRight, ArrowRight } from "lucide-react";
 import { Link } from "react-router-dom";
 import Footer from "@/components/Footer";
+import PreFooterSeparator from "@/components/PreFooterSeparator";
 import { SEOHead } from "@/components/SEOHead";
 import { MarketIntelligenceSchema } from "@/components/seo/MarketIntelligenceSchema";
 import { Button } from "@/components/ui/button";
@@ -48,7 +49,7 @@ const MarketOverview = () => {
   };
 
   return (
-    <div className="min-h-screen bg-black">
+    <div className="min-h-screen bg-white">
       <SEOHead 
         title="Dubai Real Estate Market Overview | BUY · SELL · RENT Trends | JBJ GLOBAL REAL ESTATE"
         description="UAE & Dubai real estate market trends and analysis. Transaction volumes, price movements, and rent trends powered by official government Open Data. No predictions, just insights."
@@ -61,8 +62,8 @@ const MarketOverview = () => {
         description="UAE & Dubai real estate macro snapshot with high-level transaction trends, price movements, and rent analysis powered by official government Open Data."
       />
 
-      {/* Hero */}
-      <section className="relative min-h-[50vh] flex items-center overflow-hidden">
+      {/* Hero - Dark for brand consistency */}
+      <section className="relative min-h-[50vh] flex items-center overflow-hidden bg-black">
         <div className="absolute inset-0 bg-gradient-to-b from-zinc-900/50 via-black to-black" />
         <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_center,_var(--tw-gradient-stops))] from-gold/5 via-transparent to-transparent" />
         
@@ -91,8 +92,8 @@ const MarketOverview = () => {
         </motion.div>
       </section>
 
-      {/* Key Stats Grid */}
-      <section className="py-16 border-t border-zinc-900">
+      {/* Key Stats Grid - White background */}
+      <section className="py-16 border-t border-zinc-200 bg-white">
         <div className="container mx-auto px-4">
           <div className="grid grid-cols-2 lg:grid-cols-4 gap-6">
             {stats.map((stat, index) => (
@@ -103,13 +104,13 @@ const MarketOverview = () => {
                 viewport={{ once: true }}
                 transition={{ delay: index * 0.1 }}
               >
-                <Card className="bg-zinc-900/50 border-zinc-800 text-center p-6">
+                <Card className="bg-white border-zinc-200 text-center p-6 hover:border-gold/50 hover:shadow-lg transition-all">
                   <CardContent className="p-0">
                     <p className="text-zinc-500 text-sm mb-2">{stat.label}</p>
-                    <p className="text-white text-3xl font-bold mb-2">{stat.value}</p>
+                    <p className="text-black text-3xl font-bold mb-2">{stat.value}</p>
                     <div className="flex items-center justify-center gap-2">
                       {getTrendIcon(stat.change)}
-                      <span className={`text-sm ${stat.change > 0 ? 'text-emerald-400' : stat.change < 0 ? 'text-red-400' : 'text-zinc-400'}`}>
+                      <span className={`text-sm ${stat.change > 0 ? 'text-emerald-500' : stat.change < 0 ? 'text-red-500' : 'text-zinc-400'}`}>
                         {stat.change > 0 ? '+' : ''}{stat.change}% {stat.period}
                       </span>
                     </div>
@@ -119,16 +120,16 @@ const MarketOverview = () => {
             ))}
           </div>
 
-          <p className="text-center text-zinc-600 text-xs mt-6">
+          <p className="text-center text-zinc-500 text-xs mt-6">
             Source: {MARKET_OVERVIEW_STATS.dataSource} | Last Updated: {MARKET_OVERVIEW_STATS.reportDate}
           </p>
         </div>
       </section>
 
-      {/* Transaction Trends */}
-      <section className="py-16 border-t border-zinc-900">
+      {/* Transaction Trends - White background */}
+      <section className="py-16 border-t border-zinc-200 bg-white">
         <div className="container mx-auto px-4">
-          <h2 className="text-white text-2xl md:text-3xl font-bold mb-8 text-center" style={{ fontFamily: "Poppins, sans-serif" }}>
+          <h2 className="text-black text-2xl md:text-3xl font-bold mb-8 text-center" style={{ fontFamily: "Poppins, sans-serif" }}>
             Quarterly Transaction Trends
           </h2>
           
@@ -158,10 +159,10 @@ const MarketOverview = () => {
         </div>
       </section>
 
-      {/* Property Type Performance */}
-      <section className="py-16 border-t border-zinc-900">
+      {/* Property Type Performance - White background */}
+      <section className="py-16 border-t border-zinc-200 bg-white">
         <div className="container mx-auto px-4">
-          <h2 className="text-white text-2xl md:text-3xl font-bold mb-8 text-center" style={{ fontFamily: "Poppins, sans-serif" }}>
+          <h2 className="text-black text-2xl md:text-3xl font-bold mb-8 text-center" style={{ fontFamily: "Poppins, sans-serif" }}>
             Performance by Property Type
           </h2>
 
@@ -187,8 +188,8 @@ const MarketOverview = () => {
         </div>
       </section>
 
-      {/* Navigation Links */}
-      <section className="py-16 border-t border-zinc-900">
+      {/* Navigation Links - White background */}
+      <section className="py-16 border-t border-zinc-200 bg-white">
         <div className="container mx-auto px-4">
           <div className="grid md:grid-cols-3 gap-4 max-w-3xl mx-auto">
             <Link to="/market-intelligence/areas" className="group">
@@ -230,6 +231,14 @@ const MarketOverview = () => {
         </div>
       </section>
 
+      <PreFooterSeparator 
+        title="Explore More Market Intelligence"
+        subtitle="Dive deeper into area-specific data and detailed market reports."
+        primaryLink="/market-intelligence/areas"
+        primaryText="View Area Intelligence"
+        secondaryLink="/market-intelligence/reports"
+        secondaryText="Browse Reports"
+      />
       <Footer />
     </div>
   );
