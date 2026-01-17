@@ -57,19 +57,19 @@ const ClientMarketContext = ({
     switch (rentDemandLevel) {
       case "high":
         return (
-          <Badge variant="outline" className="border-emerald-500/50 text-emerald-400 bg-emerald-500/10">
+          <Badge variant="outline" className="border-emerald-500 text-emerald-500 bg-emerald-500/10 font-medium">
             High RENT demand
           </Badge>
         );
       case "balanced":
         return (
-          <Badge variant="outline" className="border-amber-500/50 text-amber-400 bg-amber-500/10">
+          <Badge variant="outline" className="border-amber-500 text-amber-500 bg-amber-500/10 font-medium">
             Balanced market
           </Badge>
         );
       default:
         return (
-          <Badge variant="outline" className="border-muted-foreground/50 text-muted-foreground bg-muted/20">
+          <Badge variant="outline" className="border-gold text-gold bg-gold/10 font-medium">
             Moderate demand
           </Badge>
         );
@@ -105,15 +105,15 @@ const ClientMarketContext = ({
   }
 
   return (
-    <Card className="bg-zinc-900 border-zinc-700">
+    <Card className="bg-white border-2 border-gold/30 shadow-lg">
       <CardHeader className="pb-3">
         <div className="flex items-center justify-between">
-          <CardTitle className="text-base font-medium text-white flex items-center gap-2">
+          <CardTitle className="text-base font-medium text-black flex items-center gap-2">
             Market Context
             <TooltipProvider>
               <Tooltip>
                 <TooltipTrigger>
-          <Info className="w-4 h-4 text-zinc-400" />
+            <Info className="w-4 h-4 text-gold" />
                 </TooltipTrigger>
                 <TooltipContent className="max-w-xs bg-zinc-800 border-zinc-700">
                   <p className="text-xs text-white">
@@ -123,29 +123,29 @@ const ClientMarketContext = ({
               </Tooltip>
             </TooltipProvider>
           </CardTitle>
-          <div className="flex items-center gap-1 text-xs text-zinc-400">
-            <Clock className="w-3 h-3" />
-            <span>Updated {lastUpdated}</span>
+          <div className="flex items-center gap-1 text-xs text-zinc-500 bg-zinc-100 px-2 py-1 rounded-full">
+            <Clock className="w-3 h-3 text-gold" />
+            <span className="font-medium">Updated {lastUpdated}</span>
           </div>
         </div>
       </CardHeader>
       <CardContent className="space-y-4">
         {/* Trend & Demand Summary */}
         <div className="flex items-center justify-between gap-4 flex-wrap">
-          <div className="flex items-center gap-2">
+          <div className="flex items-center gap-2 bg-zinc-50 px-3 py-2 rounded-lg">
             {getTrendIcon()}
-            <span className="text-sm text-white">{getTrendLabel()}</span>
+            <span className="text-sm text-black font-medium">{getTrendLabel()}</span>
           </div>
           {getDemandBadge()}
         </div>
 
         {/* Plain-English Context */}
-        <p className="text-sm text-zinc-400 leading-relaxed">
+        <p className="text-sm text-zinc-600 leading-relaxed">
           {getContextNarrative()}
         </p>
 
         {/* Mandatory Disclaimer */}
-        <p className="text-[10px] text-zinc-500 border-t border-zinc-700 pt-3">
+        <p className="text-[10px] text-zinc-400 border-t border-zinc-200 pt-3">
           Insights are based on aggregated official data and are provided for informational purposes only.
           This does not constitute financial, investment, or legal advice.
         </p>
