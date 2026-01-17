@@ -16,7 +16,7 @@ import founderJetBoarding from "@/assets/founder-jet-boarding.jpeg";
 import founderJetInterior from "@/assets/founder-jet-interior.jpeg";
 import founderProfessional from "@/assets/founder-professional.jpeg";
 import founderYacht from "@/assets/founder-yacht.jpeg";
-import founderAwardStage from "@/assets/founder-award-stage.jpeg";
+// founderAwardStage removed - image deleted per founder request
 import founderRedCarpet from "@/assets/founder-red-carpet.jpeg";
 import founderPremium from "@/assets/founder-premium.png";
 
@@ -761,23 +761,23 @@ const Founder = () => {
                 </div>
               </motion.div>
 
-              {/* Photo 3 - Industry Event */}
+              {/* Photo 3 - Office Portrait */}
               <motion.div 
                 className="group relative aspect-[4/5] rounded-2xl overflow-hidden border border-zinc-800 hover:border-gold/40 transition-all duration-500"
                 variants={scaleIn}
               >
                 <SafeImage 
-                  src={founderAwardStage} 
+                  src={founderOffice} 
                   fallbackSrc={founderHero}
-                  alt="Jane Abou Jaoude - Industry Event" 
+                  alt="Jane Abou Jaoude - Executive Office" 
                   className="w-full h-full group-hover:scale-105 transition-transform duration-700"
                   style={{ objectFit: "cover", objectPosition: "center 15%" }}
                 />
                 <div className="absolute inset-0 bg-gradient-to-t from-black via-black/20 to-transparent opacity-80 group-hover:opacity-90 transition-opacity" />
                 <div className="absolute bottom-0 left-0 right-0 p-6">
-                  <span className="text-gold text-xs uppercase tracking-[0.2em] mb-2 block">Events</span>
-                  <h4 className="text-white text-lg font-semibold mb-1">Industry Event</h4>
-                  <p className="text-zinc-400 text-sm">Networking in real estate</p>
+                  <span className="text-gold text-xs uppercase tracking-[0.2em] mb-2 block">Leadership</span>
+                  <h4 className="text-white text-lg font-semibold mb-1">Executive Office</h4>
+                  <p className="text-zinc-400 text-sm">Downtown Dubai Headquarters</p>
                 </div>
               </motion.div>
 
@@ -1354,15 +1354,15 @@ const Founder = () => {
             viewport={{ once: true, margin: "-100px" }}
             variants={staggerContainer}
           >
-            {/* Industry event photo - Full height premium display */}
+            {/* Professional portrait - Full height premium display */}
             <motion.div 
               className="aspect-[3/4] rounded-3xl overflow-hidden border border-gold/20 shadow-2xl shadow-gold/10 group relative"
               variants={scaleIn}
             >
               <SafeImage 
-                src={founderAwardStage} 
+                src={founderProfessional} 
                 fallbackSrc={founderHero}
-                alt="Jane Abou Jaoude - Industry Event"
+                alt="Jane Abou Jaoude - Professional Portrait"
                 className="w-full h-full object-cover object-top group-hover:scale-105 transition-transform duration-1000"
               />
               {/* Premium overlay gradient */}

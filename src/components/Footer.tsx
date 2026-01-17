@@ -125,19 +125,25 @@ const Footer = () => {
   ];
 
   const professionalTools = [
+    { href: "/ai-hub", label: "JBJ Broker Hub" },
     { href: "/compare", label: "Property Comparison" },
     { href: "/property-evaluator", label: "JBJ Property Evaluator" },
     { href: "/rental-index", label: "JBJ Rental Index" },
-    { href: "/document-scanner", label: "JBJ Scan & Sign" },
-    { href: "/property-measurement", label: "JBJ Property Measurement" },
-    { href: "/interior-design-ai", label: "JBJ AI Interior Design" },
-    { href: "/ai-hub", label: "JBJ Broker Hub" },
+    { href: "/mortgage-calculator", label: "Mortgage Calculator" },
+    { href: "/quiz", label: "AI Home Finder" },
+    { href: "/interior-design-ai", label: "AI Interior Design" },
+    { href: "/business-card-scanner", label: "Business Card Scanner" },
+    { href: "/documents", label: "Documents & Spreadsheets" },
+    { href: "/video-meeting", label: "Video Meet" },
+    { href: "/ai-calendar", label: "Calendar & Notes" },
+    { href: "/design-studio", label: "Graphic Designer" },
+    { href: "/video-builder", label: "Videographer" },
   ];
 
   // Career Links
   const careerLinks = [
-    { href: "/join", label: "Apply to Join" },
-    { href: "/hr-agent", label: "Contact HR · Jessica" },
+    { href: "/join", label: "Apply to Join Our Team" },
+    { href: "/hr-agent", label: "Contact Our HR · Jessica" },
     { href: "/onboarding", label: "Training Portal" },
   ];
 

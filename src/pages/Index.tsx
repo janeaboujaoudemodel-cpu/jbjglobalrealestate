@@ -555,8 +555,8 @@ const Index = () => {
       {/* Stats Counter Section */}
       <StatsCounter />
 
-      {/* Contact CTA Section - Premium White Design */}
-      <section className="py-20 md:py-28 bg-white relative overflow-hidden">
+      {/* Contact CTA Section - Premium Champagne Design */}
+      <section className="py-20 md:py-28 bg-gradient-to-br from-white via-[#FDFBF7] to-[#F5F0E6] relative overflow-hidden">
         <div className="container mx-auto px-4 relative z-10">
           <motion.div 
             className="text-center max-w-3xl mx-auto"

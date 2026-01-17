@@ -286,7 +286,7 @@ export default function JoinApplication() {
               <Button asChild className="bg-gold hover:bg-gold/90 text-black font-semibold">
                 <Link to="/hr-agent">
                   <MessageCircle className="w-4 h-4 mr-2" />
-                  Contact HR · Jessica
+                  Contact Our HR · Jessica
                 </Link>
               </Button>
             </div>
