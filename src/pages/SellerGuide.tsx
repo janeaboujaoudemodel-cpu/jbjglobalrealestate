@@ -691,8 +691,8 @@ const SellerGuide = () => {
           </div>
         </section>
 
-        {/* Compliance Disclaimer - White background to separate from footer */}
-        <section className="py-8 bg-white border-t border-zinc-200">
+        {/* Compliance Disclaimer - Premium champagne background */}
+        <section className="py-8 bg-gradient-to-br from-white via-[#FDFBF7] to-[#F5F0E6] border-t border-zinc-200">
           <div className="container mx-auto px-4">
             <div className="max-w-4xl mx-auto">
               <div className="bg-zinc-50 border border-zinc-200 rounded-lg p-6">
@@ -720,8 +720,8 @@ const SellerGuide = () => {
           </div>
         </section>
 
-        {/* Guide Navigation - White background to separate from footer */}
-        <section className="py-12 bg-white border-t border-zinc-200">
+        {/* Guide Navigation - Premium champagne background */}
+        <section className="py-12 bg-gradient-to-br from-white via-[#FDFBF7] to-[#F5F0E6] border-t border-zinc-200">
           <div className="container mx-auto px-4">
             <GuideNavigation current="/seller-guide" guides={GUIDE_LINKS} />
           </div>

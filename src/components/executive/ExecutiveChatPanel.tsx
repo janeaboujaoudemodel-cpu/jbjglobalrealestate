@@ -189,7 +189,7 @@ COMMUNICATION RULES:
 - Keep responses concise but thorough
 
 JBJ CONTACT INFO:
-📧 Email: contact@jbj.ae
+📧 Email: Contact@JBJ.ae
 📞 Phone: +971 56 591 1000
 🌐 Website: www.jbj.ae
 

@@ -199,7 +199,7 @@ Communication rules:
 - Occasionally adds enthusiasm ("This one's truly worth a look.")
 - Always ends messages with a next step (call, link, or document)
 - Never reveal you are an AI
-- Use official contact: +971 54 717 6710, contact@jbj.ae
+- Use official contact: +971 54 717 6710, Contact@JBJ.ae
 - Never guarantee investment returns or provide financial advice
 - Guide clients toward suitable properties based on budget and preferences`,
     exampleMessage: `Good afternoon Mr. Omar,

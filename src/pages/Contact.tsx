@@ -739,8 +739,8 @@ END:VCARD`;
         </div>
       </section>
 
-      {/* Compliance Disclaimer - White background to separate from footer */}
-      <section className="py-10 bg-white border-t border-zinc-200">
+      {/* Compliance Disclaimer - Premium champagne background */}
+      <section className="py-10 bg-gradient-to-br from-white via-[#FDFBF7] to-[#F5F0E6] border-t border-zinc-200">
         <div className="container mx-auto px-4">
           <div className="max-w-3xl mx-auto bg-zinc-50 border border-zinc-200 rounded-xl p-6 md:p-8">
             <div className="flex items-center gap-2 mb-4">

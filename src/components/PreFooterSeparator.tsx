@@ -28,9 +28,9 @@ export const PreFooterSeparator = ({
   secondaryText = "Browse Properties"
 }: PreFooterSeparatorProps) => {
   if (!showCTA) {
-    // Simple white separator without CTA
+    // Simple champagne separator without CTA
     return (
-      <section className="bg-white py-16">
+      <section className="bg-gradient-to-br from-white via-[#FDFBF7] to-[#F5F0E6] py-16">
         <div className="container mx-auto px-6">
           <div className="max-w-[1100px] mx-auto text-center">
             <div className="h-px bg-zinc-200 w-24 mx-auto" />
@@ -41,7 +41,7 @@ export const PreFooterSeparator = ({
   }
 
   return (
-    <section className="bg-white py-16 md:py-20">
+    <section className="bg-gradient-to-br from-white via-[#FDFBF7] to-[#F5F0E6] py-16 md:py-20">
       <div className="container mx-auto px-6">
         <div className="max-w-[1100px] mx-auto text-center">
           <h2 

@@ -329,7 +329,7 @@ const FAQ = () => {
       </section>
 
       {/* Still Have Questions */}
-      <section className="py-16 bg-white">
+      <section className="py-16 bg-gradient-to-br from-white via-[#FDFBF7] to-[#F5F0E6]">
         <div className="container mx-auto px-4">
           <motion.div 
             initial={{ opacity: 0, y: 20 }}
@@ -365,14 +365,14 @@ const FAQ = () => {
       </section>
 
       {/* Guide Navigation */}
-      <section className="py-12 bg-white border-t border-zinc-200">
+      <section className="py-12 bg-gradient-to-br from-white via-[#FDFBF7] to-[#F5F0E6] border-t border-zinc-200">
         <div className="container mx-auto px-4">
           <GuideNavigation current="/faq" guides={GUIDE_LINKS} />
         </div>
       </section>
 
-      {/* Disclaimer - White background to separate from footer */}
-      <section className="py-8 bg-white border-t border-zinc-200">
+      {/* Disclaimer - Premium champagne background */}
+      <section className="py-8 bg-gradient-to-br from-white via-[#FDFBF7] to-[#F5F0E6] border-t border-zinc-200">
         <div className="container mx-auto px-4">
           <div className="max-w-4xl mx-auto">
             <p className="text-center text-zinc-500 text-sm leading-relaxed">

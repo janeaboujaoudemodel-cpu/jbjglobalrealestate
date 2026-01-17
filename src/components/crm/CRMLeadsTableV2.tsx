@@ -333,7 +333,7 @@ Founder & CEO
 JBJ Global Real Estate
 
 📞 +971 XX XXX XXXX
-✉️ contact@jbj.ae
+✉️ Contact@JBJ.ae
 🌐 www.jbj.ae
 
 ━━━━━━━━━━━━━━━━━━━━━━
