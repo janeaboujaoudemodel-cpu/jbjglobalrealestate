@@ -244,24 +244,24 @@ const Partners = () => {
         </section>
 
         {/* CTA Section */}
-        <section className="py-20">
+        <section className="py-20 bg-white">
           <div className="container mx-auto px-4">
             <div className="max-w-3xl mx-auto text-center">
-              <h2 className="text-3xl font-bold mb-4">Need Assistance?</h2>
-              <p className="text-muted-foreground mb-8">
+              <h2 className="text-3xl font-bold text-black mb-4">Need Assistance?</h2>
+              <p className="text-zinc-600 mb-8">
                 Whether you're buying, selling, renting, or need a partner introduction, 
                 our team is here to help guide you through the process.
               </p>
               
               <div className="flex flex-wrap justify-center gap-4">
                 <Link to="/properties">
-                  <Button size="lg" className="bg-gold hover:bg-gold/90 text-black">
+                  <Button size="lg" variant="dark">
                     Browse Properties
                     <ArrowRight className="w-4 h-4 ml-2" />
                   </Button>
                 </Link>
                 <Link to="/contact">
-                  <Button size="lg" variant="outline">
+                  <Button size="lg" variant="secondary" className="border-black text-black hover:bg-black hover:text-white">
                     Contact Us
                   </Button>
                 </Link>

@@ -172,7 +172,7 @@ const DesignBuild = () => {
       </section>
 
       {/* CTA Section */}
-      <section className="py-20 bg-black">
+      <section className="py-20 bg-white">
         <div className="container mx-auto px-4">
           <motion.div
             className="text-center max-w-3xl mx-auto"
@@ -182,16 +182,16 @@ const DesignBuild = () => {
           >
             <span className="text-gold text-xs uppercase tracking-[0.3em] mb-4 block">Start Your Project</span>
             <h2 
-              className="text-white text-3xl md:text-4xl font-bold mb-6"
+              className="text-black text-3xl md:text-4xl font-bold mb-6"
               style={{ fontFamily: "Poppins, sans-serif" }}
             >
               Ready to Transform Your Space?
             </h2>
-            <p className="text-zinc-400 mb-8">
+            <p className="text-zinc-600 mb-8">
               Our design experts are ready to bring your vision to life. Schedule a consultation today.
             </p>
             <a href={CONTACT_INFO.inquiryFormUrl} target="_blank" rel="noopener noreferrer">
-              <Button variant="primary" className="px-8 py-6 text-base">
+              <Button variant="dark" className="px-8 py-6 text-base">
                 Request Consultation
                 <ArrowUpRight className="w-5 h-5 ml-2" />
               </Button>

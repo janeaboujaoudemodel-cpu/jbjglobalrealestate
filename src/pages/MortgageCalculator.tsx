@@ -125,21 +125,22 @@ const MortgageCalculatorPage = () => {
       </div>
 
       {/* CTA Section */}
-      <div className="py-16 md:py-24 bg-gradient-to-b from-muted/20 to-background">
+      <div className="py-16 md:py-24 bg-white">
         <div className="container mx-auto px-4">
           <div className="max-w-3xl mx-auto text-center">
             <h2 
-              className="text-3xl md:text-4xl font-bold text-foreground mb-6"
+              className="text-3xl md:text-4xl font-bold text-black mb-6"
               style={{ fontFamily: "Poppins, sans-serif" }}
             >
               Ready to Secure Your <span className="text-gold">Mortgage?</span>
             </h2>
-            <p className="text-muted-foreground text-lg mb-8">
+            <p className="text-zinc-600 text-lg mb-8">
               Speak with our mortgage advisors today and get personalized guidance for your property investment financing needs.
             </p>
             <Button 
               onClick={() => setIsInquiryOpen(true)}
-              className="bg-gold hover:bg-gold-dark text-gold-foreground px-8 py-6 h-auto font-semibold text-lg transition-colors"
+              variant="dark"
+              className="px-8 py-6 h-auto font-semibold text-lg"
             >
               {t('mortgage.contactAdvisor')}
               <ArrowUpRight className="w-5 h-5 ml-2" />

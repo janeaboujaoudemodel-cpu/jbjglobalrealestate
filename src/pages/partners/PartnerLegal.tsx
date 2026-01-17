@@ -256,30 +256,30 @@ const PartnerLegal = () => {
         </section>
 
         {/* CTA Section */}
-        <section className="py-16 bg-muted/30">
+        <section className="py-16 bg-white">
           <div className="container mx-auto px-4">
             <div className="max-w-2xl mx-auto">
-              <Card className="border-gold/30">
+              <Card className="border-zinc-200 bg-white shadow-sm">
                 <CardHeader className="text-center">
-                  <div className="w-16 h-16 bg-gold/10 rounded-full flex items-center justify-center mx-auto mb-4">
+                  <div className="w-16 h-16 bg-black rounded-full flex items-center justify-center mx-auto mb-4">
                     <Users className="w-8 h-8 text-gold" />
                   </div>
-                  <CardTitle className="text-2xl">Request Partner Introduction</CardTitle>
+                  <CardTitle className="text-2xl text-black">Request Partner Introduction</CardTitle>
                 </CardHeader>
                 <CardContent className="space-y-6">
-                  <p className="text-center text-muted-foreground">
+                  <p className="text-center text-zinc-600">
                     Need legal support for your property transaction? We'll connect you with a licensed 
                     law firm that specializes in UAE real estate law.
                   </p>
 
                   {/* Consent Checkbox */}
-                  <div className="flex items-start gap-3 p-4 bg-muted/50 rounded-lg">
+                  <div className="flex items-start gap-3 p-4 bg-zinc-50 rounded-lg border border-zinc-200">
                     <Checkbox 
                       id="legal-consent" 
                       checked={consentChecked}
                       onCheckedChange={(checked) => setConsentChecked(checked as boolean)}
                     />
-                    <Label htmlFor="legal-consent" className="text-sm text-muted-foreground cursor-pointer">
+                    <Label htmlFor="legal-consent" className="text-sm text-zinc-600 cursor-pointer">
                       I understand this service is provided by an independent licensed law firm. 
                       JBJ GLOBAL REAL ESTATE facilitates introductions only and does not provide legal services directly.
                     </Label>
@@ -288,7 +288,8 @@ const PartnerLegal = () => {
                   <Button 
                     onClick={handleRequestIntroduction}
                     size="lg" 
-                    className="w-full bg-gold hover:bg-gold/90 text-black"
+                    variant="dark"
+                    className="w-full"
                   >
                     Request Introduction to Licensed Partner
                     <ArrowRight className="w-4 h-4 ml-2" />
