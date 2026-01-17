@@ -555,13 +555,8 @@ const Index = () => {
       {/* Stats Counter Section */}
       <StatsCounter />
 
-      {/* Contact CTA Section - Premium Luxury Design */}
-      <section className="py-20 md:py-28 bg-gradient-to-b from-black via-zinc-950 to-black relative overflow-hidden">
-        {/* Decorative background elements */}
-        <div className="absolute inset-0 opacity-20">
-          <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[600px] h-[600px] bg-gold/10 rounded-full blur-3xl" />
-        </div>
-        
+      {/* Contact CTA Section - Premium White Design */}
+      <section className="py-20 md:py-28 bg-white relative overflow-hidden">
         <div className="container mx-auto px-4 relative z-10">
           <motion.div 
             className="text-center max-w-3xl mx-auto"
@@ -572,24 +567,25 @@ const Index = () => {
           >
             {/* Premium badge */}
             <motion.span 
-              className="inline-flex items-center gap-2 px-4 py-2 bg-gold/10 border border-gold/30 rounded-full text-gold text-xs uppercase tracking-[0.2em] mb-6"
+              className="inline-flex items-center gap-2 px-4 py-2 bg-black/5 border border-zinc-200 rounded-full text-black text-xs uppercase tracking-[0.2em] mb-6"
               initial={{ opacity: 0, scale: 0.9 }}
               whileInView={{ opacity: 1, scale: 1 }}
               transition={{ delay: 0.2 }}
             >
-              <Sparkles className="w-3 h-3" />
+              <Sparkles className="w-3 h-3 text-gold" />
               Begin Your Journey
             </motion.span>
             
-            <h3 className="text-3xl md:text-4xl lg:text-5xl font-bold text-white mb-6" style={{ fontFamily: "Poppins, sans-serif" }}>
-              Ready to <span className="text-transparent bg-clip-text bg-gradient-to-r from-gold via-[#C4A962] to-gold">Get Started?</span>
+            <h3 className="text-3xl md:text-4xl lg:text-5xl font-bold text-black mb-6" style={{ fontFamily: "Poppins, sans-serif" }}>
+              Ready to <span className="text-gold">Get Started?</span>
             </h3>
-            <p className="text-zinc-400 text-base md:text-lg mb-10 leading-relaxed max-w-xl mx-auto">
+            <p className="text-zinc-600 text-base md:text-lg mb-10 leading-relaxed max-w-xl mx-auto">
               Connect with our expert team to explore exclusive opportunities in Dubai's premier real estate market.
             </p>
             <div className="flex flex-col sm:flex-row justify-center gap-4">
               <Button 
-                className="relative bg-gradient-to-r from-gold via-[#C4A962] to-gold hover:from-gold-light hover:to-gold text-black font-bold px-10 py-6 text-base transition-all duration-500 hover:shadow-2xl hover:shadow-gold/50 hover:scale-105 shadow-lg shadow-gold/30 border border-gold/50"
+                variant="dark"
+                className="px-10 py-6 text-base"
                 onClick={() => setIsInquiryOpen(true)}
               >
                 Book Consultation
@@ -597,7 +593,8 @@ const Index = () => {
               </Button>
               <Link to="/properties">
                 <Button 
-                  className="border-2 border-zinc-700 text-white hover:bg-zinc-800 hover:border-gold/50 hover:text-gold px-10 py-6 text-base transition-all duration-500 hover:shadow-lg hover:shadow-gold/20 font-semibold"
+                  variant="secondary"
+                  className="border-black text-black hover:bg-black hover:text-white px-10 py-6 text-base"
                 >
                   Browse Properties
                 </Button>

@@ -431,27 +431,27 @@ const MeetTheTeam: React.FC = () => {
         </section>
 
         {/* CTA Section with Contact Us */}
-        <section className="py-16 border-t border-zinc-800">
+        <section className="py-16 bg-white border-t border-zinc-200">
           <div className="container mx-auto px-4">
             <motion.div
               initial={{ opacity: 0, y: 30 }}
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true }}
-              className="bg-gradient-to-br from-zinc-900 via-zinc-900 to-zinc-800 rounded-2xl border border-zinc-800 p-8 md:p-12 text-center max-w-4xl mx-auto"
+              className="bg-white rounded-2xl border border-zinc-200 p-8 md:p-12 text-center max-w-4xl mx-auto shadow-sm"
             >
-              <div className="w-16 h-16 bg-gold/10 rounded-xl flex items-center justify-center mx-auto mb-6">
+              <div className="w-16 h-16 bg-black rounded-xl flex items-center justify-center mx-auto mb-6">
                 <Sparkles className="w-8 h-8 text-gold" />
               </div>
-              <h3 className="text-white text-2xl md:text-3xl font-bold mb-4">
+              <h3 className="text-black text-2xl md:text-3xl font-bold mb-4">
                 Get in Touch
               </h3>
-              <p className="text-zinc-400 max-w-xl mx-auto mb-8">
+              <p className="text-zinc-600 max-w-xl mx-auto mb-8">
                 Ready to work with our exceptional team? Whether you're looking to buy, sell, or invest in luxury real estate, we're here to help.
               </p>
               <div className="flex flex-wrap justify-center gap-4">
                 <Button 
                   onClick={handleOpenContactForm}
-                  variant="primary"
+                  variant="dark"
                   className="px-6"
                 >
                   <MessageSquare className="w-4 h-4 mr-2" />
@@ -459,8 +459,8 @@ const MeetTheTeam: React.FC = () => {
                 </Button>
                 <Link to="/careers">
                   <Button
-                    variant="outline"
-                    className="border-gold/50 text-gold hover:bg-gold/10"
+                    variant="secondary"
+                    className="border-black text-black hover:bg-black hover:text-white"
                   >
                     View Open Positions
                     <ArrowRight className="w-4 h-4 ml-2" />
