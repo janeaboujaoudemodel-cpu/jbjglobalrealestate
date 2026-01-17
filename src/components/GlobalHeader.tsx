@@ -87,6 +87,7 @@ const GlobalHeader = () => {
     { href: "/buyer-guide", label: t('nav.buyerGuide') || 'Buyer Guide', icon: FileText },
     { href: "/seller-guide", label: t('nav.sellerGuide') || 'Seller Guide', icon: FileText },
     { href: "/areas", label: t('nav.areaGuides') || 'Area Guides', icon: Building2 },
+    { href: "/market-intelligence", label: 'Market Intelligence', icon: Building2 },
     { href: "/faq", label: 'FAQ', icon: ClipboardCheck },
   ];
 
