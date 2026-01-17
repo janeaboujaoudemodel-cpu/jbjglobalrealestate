@@ -307,13 +307,13 @@ const SellerGuide = () => {
                     whileInView={{ opacity: 1, y: 0 }}
                     viewport={{ once: true }}
                     transition={{ delay: index * 0.1 }}
-                    className="bg-zinc-900/60 border border-zinc-800 rounded-xl p-6 hover:border-gold/30 transition-all group"
+                    className="bg-white border border-zinc-200 rounded-xl p-6 hover:border-gold hover:shadow-xl hover:shadow-gold/20 transition-all group"
                   >
                     <div className="w-12 h-12 bg-gold/10 rounded-xl flex items-center justify-center mb-4 group-hover:bg-gold/20 transition-colors">
                       <item.icon className="w-6 h-6 text-gold" />
                     </div>
-                    <h3 className="text-lg font-bold text-white mb-2">{item.title}</h3>
-                    <p className="text-zinc-400 text-sm">{item.description}</p>
+                    <h3 className="text-lg font-bold text-black mb-2">{item.title}</h3>
+                    <p className="text-zinc-600 text-sm">{item.description}</p>
                   </motion.div>
                 ))}
               </div>
@@ -348,7 +348,7 @@ const SellerGuide = () => {
                     whileInView={{ opacity: 1, x: 0 }}
                     viewport={{ once: true }}
                     transition={{ delay: index * 0.05 }}
-                    className="bg-zinc-900/50 border border-zinc-800 rounded-xl p-6 md:p-8 hover:border-gold/20 transition-all"
+                    className="bg-white border border-zinc-200 rounded-xl p-6 md:p-8 hover:border-gold hover:shadow-xl hover:shadow-gold/20 transition-all"
                   >
                     <div className="flex items-start gap-4">
                       <div className="flex-shrink-0 w-14 h-14 bg-gradient-to-br from-gold/20 to-gold/5 rounded-xl flex items-center justify-center border border-gold/20">
@@ -357,12 +357,12 @@ const SellerGuide = () => {
                       <div className="flex-1">
                         <div className="flex items-center gap-3 mb-2">
                           <span className="px-2 py-0.5 bg-gold/10 text-gold font-bold text-xs rounded">Step {step.number}</span>
-                          <h3 className="text-xl font-bold text-white">{step.title}</h3>
+                          <h3 className="text-xl font-bold text-black">{step.title}</h3>
                         </div>
-                        <p className="text-zinc-400 mb-4">{step.description}</p>
+                        <p className="text-zinc-600 mb-4">{step.description}</p>
                         <ul className="grid md:grid-cols-2 gap-2">
                           {step.items.map((item, i) => (
-                            <li key={i} className="flex items-start gap-2 text-zinc-300 text-sm">
+                            <li key={i} className="flex items-start gap-2 text-zinc-700 text-sm">
                               <CheckCircle2 className="w-4 h-4 text-gold flex-shrink-0 mt-0.5" />
                               <span>{item}</span>
                             </li>
@@ -405,13 +405,13 @@ const SellerGuide = () => {
                     whileInView={{ opacity: 1, y: 0 }}
                     viewport={{ once: true }}
                     transition={{ delay: index * 0.1 }}
-                    className="bg-zinc-900/60 border border-zinc-800 rounded-xl p-6 text-center"
+                    className="bg-white border border-zinc-200 rounded-xl p-6 text-center hover:border-gold hover:shadow-xl hover:shadow-gold/20 transition-all"
                   >
                     <div className="w-12 h-12 bg-gold/10 rounded-xl flex items-center justify-center mx-auto mb-4">
                       <item.icon className="w-6 h-6 text-gold" />
                     </div>
-                    <h3 className="text-white font-semibold mb-2">{item.title}</h3>
-                    <p className="text-zinc-400 text-sm">{item.description}</p>
+                    <h3 className="text-black font-semibold mb-2">{item.title}</h3>
+                    <p className="text-zinc-600 text-sm">{item.description}</p>
                   </motion.div>
                 ))}
               </div>
@@ -439,35 +439,35 @@ const SellerGuide = () => {
                   </p>
                 </motion.div>
 
-                <motion.div variants={fadeInUp} className="bg-zinc-900/50 border border-zinc-800 rounded-xl p-6 md:p-8 mb-8">
-                  <h3 className="text-xl font-bold text-white mb-4">Factors That Influence Your Property Value</h3>
+                <motion.div variants={fadeInUp} className="bg-white border border-zinc-200 rounded-xl p-6 md:p-8 mb-8 hover:border-gold hover:shadow-xl hover:shadow-gold/20 transition-all">
+                  <h3 className="text-xl font-bold text-black mb-4">Factors That Influence Your Property Value</h3>
                   <div className="grid md:grid-cols-2 gap-4">
                     <div className="flex items-start gap-3">
                       <TrendingUp className="w-5 h-5 text-gold mt-1" />
                       <div>
-                        <p className="text-white font-medium">Market Conditions</p>
-                        <p className="text-zinc-400 text-sm">Current supply, demand, and recent transaction data</p>
+                        <p className="text-black font-medium">Market Conditions</p>
+                        <p className="text-zinc-600 text-sm">Current supply, demand, and recent transaction data</p>
                       </div>
                     </div>
                     <div className="flex items-start gap-3">
                       <Building2 className="w-5 h-5 text-gold mt-1" />
                       <div>
-                        <p className="text-white font-medium">Location & Community</p>
-                        <p className="text-zinc-400 text-sm">Area desirability, amenities, and accessibility</p>
+                        <p className="text-black font-medium">Location & Community</p>
+                        <p className="text-zinc-600 text-sm">Area desirability, amenities, and accessibility</p>
                       </div>
                     </div>
                     <div className="flex items-start gap-3">
                       <Home className="w-5 h-5 text-gold mt-1" />
                       <div>
-                        <p className="text-white font-medium">Property Condition</p>
-                        <p className="text-zinc-400 text-sm">Upgrades, maintenance, and overall appeal</p>
+                        <p className="text-black font-medium">Property Condition</p>
+                        <p className="text-zinc-600 text-sm">Upgrades, maintenance, and overall appeal</p>
                       </div>
                     </div>
                     <div className="flex items-start gap-3">
                       <Eye className="w-5 h-5 text-gold mt-1" />
                       <div>
-                        <p className="text-white font-medium">Views & Floor</p>
-                        <p className="text-zinc-400 text-sm">Sea/city views, floor level, and unit position</p>
+                        <p className="text-black font-medium">Views & Floor</p>
+                        <p className="text-zinc-600 text-sm">Sea/city views, floor level, and unit position</p>
                       </div>
                     </div>
                   </div>
@@ -515,13 +515,13 @@ const SellerGuide = () => {
                     <motion.div 
                       key={index} 
                       variants={fadeInUp}
-                      className="bg-zinc-900/60 border border-zinc-800 rounded-xl p-5 hover:border-gold/20 transition-all"
+                      className="bg-white border border-zinc-200 rounded-xl p-5 hover:border-gold hover:shadow-xl hover:shadow-gold/20 transition-all"
                     >
                       <div className="flex justify-between items-start mb-2">
-                        <span className="text-white font-medium">{cost.label}</span>
+                        <span className="text-black font-medium">{cost.label}</span>
                         <span className="text-gold font-bold">{cost.value}</span>
                       </div>
-                      <p className="text-zinc-500 text-sm">{cost.note}</p>
+                      <p className="text-zinc-600 text-sm">{cost.note}</p>
                     </motion.div>
                   ))}
                 </div>
@@ -550,26 +550,26 @@ const SellerGuide = () => {
                 </motion.div>
 
                 <motion.div variants={fadeInUp} className="grid md:grid-cols-3 gap-6 mb-8">
-                  <div className="bg-zinc-900/50 border border-zinc-800 rounded-xl p-6 text-center">
+                  <div className="bg-white border border-zinc-200 rounded-xl p-6 text-center hover:border-gold hover:shadow-xl hover:shadow-gold/20 transition-all">
                     <div className="w-12 h-12 bg-gold/10 rounded-xl flex items-center justify-center mx-auto mb-4">
                       <Target className="w-6 h-6 text-gold" />
                     </div>
-                    <h3 className="text-white font-semibold mb-2">Expert Brokerage</h3>
-                    <p className="text-zinc-400 text-sm">RERA-licensed brokers with deep UAE market knowledge</p>
+                    <h3 className="text-black font-semibold mb-2">Expert Brokerage</h3>
+                    <p className="text-zinc-600 text-sm">RERA-licensed brokers with deep UAE market knowledge</p>
                   </div>
-                  <div className="bg-zinc-900/50 border border-zinc-800 rounded-xl p-6 text-center">
+                  <div className="bg-white border border-zinc-200 rounded-xl p-6 text-center hover:border-gold hover:shadow-xl hover:shadow-gold/20 transition-all">
                     <div className="w-12 h-12 bg-gold/10 rounded-xl flex items-center justify-center mx-auto mb-4">
                       <Globe className="w-6 h-6 text-gold" />
                     </div>
-                    <h3 className="text-white font-semibold mb-2">Global Reach</h3>
-                    <p className="text-zinc-400 text-sm">Access to international buyers through our network</p>
+                    <h3 className="text-black font-semibold mb-2">Global Reach</h3>
+                    <p className="text-zinc-600 text-sm">Access to international buyers through our network</p>
                   </div>
-                  <div className="bg-zinc-900/50 border border-zinc-800 rounded-xl p-6 text-center">
+                  <div className="bg-white border border-zinc-200 rounded-xl p-6 text-center hover:border-gold hover:shadow-xl hover:shadow-gold/20 transition-all">
                     <div className="w-12 h-12 bg-gold/10 rounded-xl flex items-center justify-center mx-auto mb-4">
                       <Users className="w-6 h-6 text-gold" />
                     </div>
-                    <h3 className="text-white font-semibold mb-2">Partner Network</h3>
-                    <p className="text-zinc-400 text-sm">Introductions to legal and mortgage partners when needed</p>
+                    <h3 className="text-black font-semibold mb-2">Partner Network</h3>
+                    <p className="text-zinc-600 text-sm">Introductions to legal and mortgage partners when needed</p>
                   </div>
                 </motion.div>
 
@@ -608,12 +608,12 @@ const SellerGuide = () => {
                       <AccordionItem 
                         key={index} 
                         value={`faq-${index}`}
-                        className="bg-zinc-900/60 border border-zinc-800 rounded-xl px-6 data-[state=open]:border-gold/30"
+                        className="bg-white border border-zinc-200 rounded-xl px-6 data-[state=open]:border-gold hover:border-gold hover:shadow-xl hover:shadow-gold/20 transition-all"
                       >
-                        <AccordionTrigger className="text-white text-left hover:text-gold hover:no-underline py-5">
+                        <AccordionTrigger className="text-black text-left hover:text-gold hover:no-underline py-5">
                           {faq.question}
                         </AccordionTrigger>
-                        <AccordionContent className="text-zinc-400 pb-5">
+                        <AccordionContent className="text-zinc-600 pb-5">
                           {faq.answer}
                         </AccordionContent>
                       </AccordionItem>

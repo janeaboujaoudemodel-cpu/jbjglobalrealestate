@@ -180,22 +180,22 @@ export function BrokerToolkitEducation() {
               transition={{ delay: i * 0.1 }}
               viewport={{ once: true }}
             >
-              <Card className="bg-zinc-900/60 border-zinc-800 hover:border-zinc-700 transition-all h-full">
+              <Card className="bg-white border border-zinc-200 hover:border-gold hover:shadow-xl hover:shadow-gold/20 transition-all h-full">
                 <CardContent className="p-5">
                   <div className="flex items-center gap-3 mb-4">
                     <div className={`w-10 h-10 ${category.bgColor} rounded-lg flex items-center justify-center`}>
                       <category.icon className={`w-5 h-5 ${category.textColor}`} />
                     </div>
                     <div>
-                      <h3 className="text-white font-semibold">{category.category}</h3>
+                      <h3 className="text-black font-semibold">{category.category}</h3>
                       <p className="text-zinc-500 text-xs">{category.modules.length} modules</p>
                     </div>
                   </div>
-                  <p className="text-zinc-400 text-sm mb-4">{category.description}</p>
+                  <p className="text-zinc-600 text-sm mb-4">{category.description}</p>
                   <div className="space-y-2">
                     {category.modules.map((module, j) => (
-                      <div key={j} className="flex items-center justify-between text-xs py-1.5 border-b border-zinc-800/50 last:border-0">
-                        <div className="flex items-center gap-2 text-zinc-300">
+                      <div key={j} className="flex items-center justify-between text-xs py-1.5 border-b border-zinc-200 last:border-0">
+                        <div className="flex items-center gap-2 text-zinc-700">
                           {getTypeIcon(module.type)}
                           <span className="truncate">{module.title}</span>
                         </div>

@@ -24,10 +24,10 @@ export const GuideCard = ({
   children
 }: GuideCardProps) => {
   const variants = {
-    default: "bg-zinc-900/60 border-zinc-800 hover:border-gold/30",
-    highlight: "bg-gradient-to-br from-gold/10 via-gold/5 to-transparent border-gold/30",
-    dark: "bg-black/60 border-zinc-700",
-    numbered: "bg-zinc-900/60 border-zinc-800 hover:border-gold/30"
+    default: "bg-white border-zinc-200 hover:border-gold hover:shadow-xl hover:shadow-gold/20",
+    highlight: "bg-gradient-to-br from-white via-gold/5 to-white border-gold/40",
+    dark: "bg-white border-zinc-200 hover:border-gold",
+    numbered: "bg-white border-zinc-200 hover:border-gold hover:shadow-xl hover:shadow-gold/20"
   };
 
   return (
@@ -56,17 +56,17 @@ export const GuideCard = ({
         <div className="flex-1">
           <div className="flex items-center gap-3 mb-2">
             {Icon && number !== undefined && <Icon className="w-5 h-5 text-gold" />}
-            <h3 className="text-xl md:text-2xl font-medium text-white">{title}</h3>
+            <h3 className="text-xl md:text-2xl font-medium text-black">{title}</h3>
           </div>
           {description && (
-            <p className="text-zinc-400 mb-4">{description}</p>
+            <p className="text-zinc-600 mb-4">{description}</p>
           )}
           {items && items.length > 0 && (
             <ul className="space-y-2">
               {items.map((item, index) => (
                 <li key={index} className="flex items-start gap-3">
                   <CheckCircle2 className="w-4 h-4 text-gold flex-shrink-0 mt-1" />
-                  <span className="text-zinc-300 text-sm">{item}</span>
+                  <span className="text-zinc-700 text-sm">{item}</span>
                 </li>
               ))}
             </ul>

@@ -153,14 +153,14 @@ export function BrokerToolkitSupport() {
                 transition={{ delay: i * 0.1 }}
                 viewport={{ once: true }}
               >
-                <Card className={`bg-zinc-900/60 border ${member.borderColor} hover:border-opacity-100 transition-all h-full`}>
+                <Card className={`bg-white border border-zinc-200 hover:border-gold hover:shadow-xl hover:shadow-gold/20 transition-all h-full`}>
                   <CardContent className="p-5">
                     <div className={`w-12 h-12 ${member.bgColor} rounded-xl flex items-center justify-center mb-4`}>
                       <member.icon className={`w-6 h-6 ${member.color}`} />
                     </div>
-                    <h4 className="text-white font-semibold mb-1">{member.role}</h4>
+                    <h4 className="text-black font-semibold mb-1">{member.role}</h4>
                     <p className={`${member.color} text-sm mb-2`}>{member.name}</p>
-                    <p className="text-zinc-500 text-xs">{member.description}</p>
+                    <p className="text-zinc-600 text-xs">{member.description}</p>
                   </CardContent>
                 </Card>
               </motion.div>
@@ -183,13 +183,13 @@ export function BrokerToolkitSupport() {
                 transition={{ delay: i * 0.05 }}
                 viewport={{ once: true }}
               >
-                <Card className="bg-zinc-900/60 border-zinc-800 hover:border-zinc-700 transition-all h-full">
+                <Card className="bg-white border border-zinc-200 hover:border-gold hover:shadow-xl hover:shadow-gold/20 transition-all h-full">
                   <CardContent className="p-4 text-center">
                     <div className={`w-10 h-10 ${member.bgColor} rounded-lg flex items-center justify-center mx-auto mb-3`}>
                       <member.icon className={`w-5 h-5 ${member.color}`} />
                     </div>
-                    <h4 className="text-white font-medium text-sm mb-0.5">{member.role}</h4>
-                    <p className="text-zinc-500 text-xs">{member.description}</p>
+                    <h4 className="text-black font-medium text-sm mb-0.5">{member.role}</h4>
+                    <p className="text-zinc-600 text-xs">{member.description}</p>
                   </CardContent>
                 </Card>
               </motion.div>

@@ -69,8 +69,8 @@ export default function PageNavigation() {
 
   const buttonBaseClass = cn(
     "h-10 w-10 rounded-full shadow-lg transition-all duration-300",
-    "bg-gold/90 backdrop-blur-md border border-gold/50 text-gold-foreground",
-    "hover:bg-gold hover:shadow-[0_4px_20px_hsl(45_32%_39%_/_0.4)]",
+    "bg-white backdrop-blur-md border-2 border-gold",
+    "hover:bg-gold/10 hover:shadow-[0_4px_20px_hsl(45_32%_39%_/_0.4)]",
     "focus:ring-2 focus:ring-gold focus:ring-offset-2"
   );
 
@@ -89,7 +89,7 @@ export default function PageNavigation() {
         )}
         aria-label="Scroll to top"
       >
-        <ArrowUp className="w-4 h-4 text-black" />
+        <ArrowUp className="w-4 h-4 text-gold" />
       </Button>
 
       {/* Back to Previous Page */}
@@ -102,7 +102,7 @@ export default function PageNavigation() {
           className={buttonBaseClass}
           aria-label="Go back"
         >
-          <ArrowLeft className="w-4 h-4 text-black" />
+          <ArrowLeft className="w-4 h-4 text-gold" />
         </Button>
       )}
 
@@ -119,7 +119,7 @@ export default function PageNavigation() {
         )}
         aria-label="Scroll to bottom"
       >
-        <ArrowDown className="w-4 h-4 text-black" />
+        <ArrowDown className="w-4 h-4 text-gold" />
       </Button>
     </div>
   );
