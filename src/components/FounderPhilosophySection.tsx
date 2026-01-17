@@ -150,11 +150,14 @@ export const FounderPhilosophySection = () => {
 
                 {/* Signature */}
                 <div className="pt-8 mt-8 border-t border-zinc-200">
-                  <p className="text-zinc-900 text-base font-semibold">
+                  <p className="text-black text-lg font-semibold tracking-wide">
                     Jane Abou Jaoude
                   </p>
-                  <p className="text-zinc-500 text-sm mt-1 tracking-wide">
-                    Founder and CEO, JBJ GLOBAL REAL ESTATE
+                  <p className="text-gold text-sm font-medium mt-1 tracking-wide">
+                    Founder & CEO
+                  </p>
+                  <p className="text-zinc-600 text-sm mt-0.5 tracking-wide">
+                    JBJ Global Real Estate
                   </p>
                 </div>
               </div>
