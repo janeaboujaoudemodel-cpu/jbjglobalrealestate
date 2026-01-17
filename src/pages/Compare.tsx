@@ -501,7 +501,7 @@ const Compare = () => {
               Get detailed insights, ROI projections, and expert recommendations.
             </p>
             <p className="text-zinc-500 text-sm mb-12">
-              Developed by Founder Jane Abou Jaoude • Powered by JBJ Global Real Estate
+              Developed by Founder and CEO Jane Abou Jaoude • Powered by JBJ Global Real Estate
             </p>
 
             {/* Steps Guide */}
@@ -635,7 +635,7 @@ const Compare = () => {
               Compare projects dynamically with AI-powered analysis including valuation, ROI, and market insights.
             </p>
             <p className="text-zinc-500 text-sm">
-              Developed by Founder Jane Abou Jaoude • Powered by JBJ Global Real Estate
+              Developed by Founder and CEO Jane Abou Jaoude • Powered by JBJ Global Real Estate
             </p>
 
             {/* Feature Cards - Purple Theme */}

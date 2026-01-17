@@ -333,7 +333,7 @@ www.jbj.ae | contact@jbj.ae | +971 56 591 1000
             <p className="text-zinc-400 max-w-2xl mx-auto">
               Get an AI-powered property valuation based on DLD transaction data, comparable sales, and market analysis.
             </p>
-            <p className="text-xs text-blue-400 mt-2">Developed by Founder Jane Abou Jaoude • Powered by JBJ Global Real Estate</p>
+            <p className="text-xs text-blue-400 mt-2">Developed by Founder and CEO Jane Abou Jaoude • Powered by JBJ Global Real Estate</p>
           </motion.div>
         </div>
       </div>

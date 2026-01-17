@@ -80,7 +80,7 @@ export const hi = {
   'report.highlight2': 'डेवलपर तुलना ढांचा',
   'report.highlight3': 'संपत्ति उचित परिश्रम चेकलिस्ट',
   'report.highlight4': 'समुदाय ROI रैंकिंग',
-  'report.createdBy': 'जेन अबू जाउदे द्वारा निर्मित',
+  'report.createdBy': 'संस्थापक और CEO जेन अबू जाउदे द्वारा निर्मित',
   'report.exclusiveFor': 'JBJ Global Real Estate के लिए विशेष',
   'report.poweredBy': 'रियल एस्टेट ब्रोकरेज | दुबई, UAE',
   

@@ -163,7 +163,7 @@ export default function MarketReportCTAModal({
         </div>
 
         <p className="text-center text-xs text-zinc-400 mt-4">
-          Created by Jane Abou Jaoude • Exclusive for JBJ Global Real Estate
+          Created by Founder and CEO Jane Abou Jaoude • Exclusive for JBJ Global Real Estate
         </p>
       </DialogContent>
     </Dialog>

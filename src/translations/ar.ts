@@ -135,7 +135,7 @@ export const ar = {
   'report.highlight2': 'إطار مقارنة المطورين',
   'report.highlight3': 'قائمة العناية الواجبة للعقارات',
   'report.highlight4': 'تصنيفات المجتمعات السكنية',
-  'report.createdBy': 'من تأليف جين أبو جودة',
+  'report.createdBy': 'من تأليف المؤسسة والرئيسة التنفيذية جين أبو جودة',
   'report.exclusiveFor': 'حصري لجي بي جي للعقارات',
   'report.poweredBy': 'جي بي جي للعقارات | دبي، الإمارات',
   

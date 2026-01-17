@@ -409,17 +409,17 @@ const BuyerGuide = () => {
       </section>
 
       {/* Divider between Six-Step Process and Costs & Fees */}
-      <div className="h-px bg-gradient-to-r from-transparent via-gold/30 to-transparent" />
+      <div className="h-px bg-black" />
 
       {/* Costs & Fees */}
-      <section id="costs-fees" className="py-16 md:py-24 bg-zinc-50 scroll-mt-20">
+      <section id="costs-fees" className="py-16 md:py-24 bg-black scroll-mt-20">
         <div className="container mx-auto px-4">
           <div className="max-w-5xl mx-auto">
             <div className="text-center mb-12">
-              <h2 className="text-3xl md:text-4xl font-semibold text-black mb-4">
+              <h2 className="text-3xl md:text-4xl font-semibold text-white mb-4">
                 Costs & Fees Overview
               </h2>
-              <p className="text-lg text-zinc-700 max-w-2xl mx-auto leading-relaxed">
+              <p className="text-lg text-zinc-200 max-w-2xl mx-auto leading-relaxed">
                 Transparency is essential. Here are the key costs you should budget for 
                 when purchasing property in Dubai.
               </p>
@@ -461,10 +461,10 @@ const BuyerGuide = () => {
       </section>
 
       {/* Divider between Costs & Fees and Mortgages */}
-      <div className="h-px bg-gradient-to-r from-transparent via-gold/30 to-transparent" />
+      <div className="h-px bg-black" />
 
       {/* Mortgages Explained */}
-      <section id="mortgages" className="py-16 md:py-24 bg-white scroll-mt-20">
+      <section id="mortgages" className="py-16 md:py-24 bg-black scroll-mt-20">
         <div className="container mx-auto px-4">
           <div className="max-w-4xl mx-auto">
             <div className="bg-white border border-zinc-200 rounded-2xl p-8 md:p-12 shadow-sm">

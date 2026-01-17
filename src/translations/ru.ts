@@ -80,7 +80,7 @@ export const ru = {
   'report.highlight2': 'Сравнительная база застройщиков',
   'report.highlight3': 'Чек-лист экспертизы недвижимости',
   'report.highlight4': 'Рейтинги ROI по районам',
-  'report.createdBy': 'Создано Джейн Абу Жауде',
+  'report.createdBy': 'Создано основателем и CEO Джейн Абу Жауде',
   'report.exclusiveFor': 'Эксклюзивно для JBJ Global Real Estate',
   'report.poweredBy': 'Брокерская компания по недвижимости | Дубай, ОАЭ',
   

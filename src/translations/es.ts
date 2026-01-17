@@ -135,7 +135,7 @@ export const es = {
   'report.highlight2': 'Marco de comparación de desarrolladores',
   'report.highlight3': 'Lista de verificación de diligencia debida de inversión',
   'report.highlight4': 'Rankings de ROI por comunidad',
-  'report.createdBy': 'Creado por Jane Abou Jaoude',
+  'report.createdBy': 'Creado por la Fundadora y CEO Jane Abou Jaoude',
   'report.exclusiveFor': 'Exclusivo para JBJ Global Real Estate',
   'report.poweredBy': 'Agencia Inmobiliaria | Dubai, EAU',
   

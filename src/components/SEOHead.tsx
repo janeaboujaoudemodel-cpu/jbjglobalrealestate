@@ -24,7 +24,7 @@ const CORE_KEYWORDS = 'JBJ, JBJ Global Real Estate, Jane Abou Jaoude, Dubai real
  */
 export const SEOHead = ({
   title,
-  description = 'JBJ Global Real Estate, founded by Jane Abou Jaoude, offers premium property brokerage in Dubai. Buy, sell, or rent luxury apartments, villas, and off-plan properties across the UAE.',
+  description = 'JBJ Global Real Estate, founded by Founder and CEO Jane Abou Jaoude, offers premium property brokerage in Dubai. Buy, sell, or rent luxury apartments, villas, and off-plan properties across the UAE.',
   keywords = CORE_KEYWORDS,
   canonicalPath,
   ogImage = DEFAULT_OG_IMAGE,
@@ -108,13 +108,13 @@ export const SEOHead = ({
 export const pagesSEO = {
   home: {
     title: 'Home',
-    description: 'JBJ Global Real Estate, founded by Jane Abou Jaoude, is Dubai\'s premier property brokerage. Buy, sell, or rent luxury apartments, villas, and off-plan properties in Palm Jumeirah, Downtown Dubai, Marina & across UAE.',
+    description: 'JBJ Global Real Estate, founded by Founder and CEO Jane Abou Jaoude, is Dubai\'s premier property brokerage. Buy, sell, or rent luxury apartments, villas, and off-plan properties in Palm Jumeirah, Downtown Dubai, Marina & across UAE.',
     keywords: 'JBJ, JBJ Global Real Estate, Jane Abou Jaoude, Jane Lebanese Dubai, Dubai real estate, buy property Dubai, sell property Dubai, rent apartment Dubai, UAE property brokerage, luxury apartments Dubai, off-plan properties, Palm Jumeirah, Downtown Dubai, Dubai Marina, Business Bay, real estate agent Dubai',
     canonicalPath: '/',
   },
   properties: {
     title: 'Properties for Sale & Rent in Dubai',
-    description: 'Browse exclusive luxury properties in Dubai and UAE. Apartments, villas, penthouses for sale or rent in Palm Jumeirah, Downtown Dubai, Marina. JBJ Global Real Estate by Jane Abou Jaoude.',
+    description: 'Browse exclusive luxury properties in Dubai and UAE. Apartments, villas, penthouses for sale or rent in Palm Jumeirah, Downtown Dubai, Marina. JBJ Global Real Estate by Founder and CEO Jane Abou Jaoude.',
     keywords: 'Dubai properties for sale, apartments for rent Dubai, villas Dubai, penthouse Dubai, off-plan projects UAE, Palm Jumeirah properties, Downtown Dubai apartments, Dubai Marina rentals, buy property Dubai, rent Dubai',
     canonicalPath: '/properties',
   },
@@ -126,7 +126,7 @@ export const pagesSEO = {
   },
   about: {
     title: 'About JBJ Global Real Estate Dubai',
-    description: 'JBJ Global Real Estate is UAE\'s trusted property brokerage founded by Jane Abou Jaoude. Expert services for buying, selling, and renting properties across Dubai and UAE.',
+    description: 'JBJ Global Real Estate is UAE\'s trusted property brokerage founded by Founder and CEO Jane Abou Jaoude. Expert services for buying, selling, and renting properties across Dubai and UAE.',
     keywords: 'about JBJ, JBJ Global Real Estate company, UAE real estate brokerage, Dubai property company, Jane Abou Jaoude company, real estate services Dubai, trusted property agent Dubai',
     canonicalPath: '/about',
   },
@@ -138,7 +138,7 @@ export const pagesSEO = {
   },
   contact: {
     title: 'Contact JBJ Global Real Estate Dubai',
-    description: 'Contact JBJ Global Real Estate for property inquiries in Dubai. Founded by Jane Abou Jaoude. Call +971 56 591 1000 or email contact@JBJ.ae for expert assistance.',
+    description: 'Contact JBJ Global Real Estate for property inquiries in Dubai. Founded by Founder and CEO Jane Abou Jaoude. Call +971 56 591 1000 or email contact@JBJ.ae for expert assistance.',
     keywords: 'contact JBJ, JBJ phone number, Dubai real estate contact, property consultation Dubai, Jane Abou Jaoude contact, JBJ Global Real Estate email, real estate inquiry Dubai',
     canonicalPath: '/contact',
   },
@@ -150,7 +150,7 @@ export const pagesSEO = {
   },
   awards: {
     title: 'Awards & Recognition - JBJ Global Real Estate',
-    description: 'Discover awards received by JBJ Global Real Estate and founder Jane Abou Jaoude. Excellence in UAE real estate brokerage services.',
+    description: 'Discover awards received by JBJ Global Real Estate and Founder and CEO Jane Abou Jaoude. Excellence in UAE real estate brokerage services.',
     keywords: 'JBJ awards, Jane Abou Jaoude awards, real estate awards Dubai, property brokerage recognition UAE, GCA awards, III-A awards, Dubai real estate excellence',
     canonicalPath: '/awards',
   },

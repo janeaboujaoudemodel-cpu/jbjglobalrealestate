@@ -1819,7 +1819,7 @@ const MarketReport = () => {
                         <span className="block text-gold">Market Intelligence</span>
                       </h3>
                       
-                      <p className="text-zinc-500 text-xs mt-4">By Jane Abou Jaoude</p>
+                      <p className="text-zinc-500 text-xs mt-4">By Founder and CEO Jane Abou Jaoude</p>
                       
                       {/* JJ Logo */}
                       <div className="mt-6 pt-4 border-t border-zinc-800">

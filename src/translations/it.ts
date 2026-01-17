@@ -80,7 +80,7 @@ export const it = {
   'report.highlight2': 'Framework di confronto sviluppatori',
   'report.highlight3': 'Checklist di due diligence immobiliare',
   'report.highlight4': 'Classifiche ROI delle comunità',
-  'report.createdBy': 'Creato da Jane Abou Jaoude',
+  'report.createdBy': 'Creato dalla Fondatrice e CEO Jane Abou Jaoude',
   'report.exclusiveFor': 'Esclusivo per JBJ Global Real Estate',
   'report.poweredBy': 'Agenzia Immobiliare | Dubai, EAU',
   

@@ -139,7 +139,7 @@ const MarketReportCTA = () => {
                       {/* Author & Branding */}
                       <div className="w-full pt-4 border-t border-gold/30">
                         <p className="text-zinc-400 text-xs md:text-sm mb-3">
-                          By Jane Abou Jaoude
+                          By Founder and CEO Jane Abou Jaoude
                         </p>
                         <p className="text-gold/80 text-[10px] md:text-xs uppercase tracking-[0.2em] font-medium">
                           JBJ Global Real Estate
