@@ -166,33 +166,33 @@ const Services = () => {
               <motion.div
                 key={service.id}
                 variants={fadeInUp}
-                className="group relative overflow-hidden rounded-2xl bg-white border border-zinc-200 hover:border-gold hover:shadow-xl hover:shadow-gold/10 transition-all duration-500"
+                className="group relative overflow-hidden rounded-2xl bg-white border border-zinc-200 hover:border-gold hover:shadow-xl hover:shadow-gold/10 transition-all duration-500 flex flex-col"
               >
                 {/* Image */}
-                <div className="aspect-[4/3] overflow-hidden">
+                <div className="aspect-[16/10] overflow-hidden relative flex-shrink-0">
                   <img 
                     src={service.image} 
                     alt={service.title}
                     className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110"
                   />
-                  <div className="absolute inset-0 bg-gradient-to-t from-white via-white/60 to-transparent" />
+                  <div className="absolute inset-0 bg-gradient-to-t from-white/90 via-white/30 to-transparent" />
                 </div>
                 
-                {/* Content */}
-                <div className="absolute bottom-0 left-0 right-0 p-6">
+                {/* Content - No longer absolute */}
+                <div className="p-6 flex flex-col flex-1">
                   <div className="flex items-center gap-3 mb-3">
-                    <div className="w-12 h-12 rounded-xl bg-black flex items-center justify-center">
+                    <div className="w-12 h-12 rounded-xl bg-black flex items-center justify-center flex-shrink-0">
                       <service.icon className="w-6 h-6 text-gold" />
                     </div>
-                    <h3 className="text-black text-xl font-bold">{service.title}</h3>
+                    <h3 className="text-black text-xl font-bold line-clamp-1">{service.title}</h3>
                   </div>
                   
-                  <p className="text-zinc-600 text-sm mb-4 line-clamp-2">
+                  <p className="text-zinc-600 text-sm mb-4 line-clamp-2 flex-shrink-0">
                     {service.description}
                   </p>
                   
                   {/* Features */}
-                  <div className="flex flex-wrap gap-2 mb-4">
+                  <div className="flex flex-wrap gap-2 mb-4 flex-shrink-0">
                     {service.features.slice(0, 3).map((feature) => (
                       <span 
                         key={feature}
@@ -203,15 +203,17 @@ const Services = () => {
                     ))}
                   </div>
                   
-                  <Link to={service.link}>
-                    <Button 
-                      variant="dark"
-                      className="w-full"
-                    >
-                      Explore
-                      <ArrowUpRight className="w-4 h-4 ml-2" />
-                    </Button>
-                  </Link>
+                  <div className="mt-auto">
+                    <Link to={service.link}>
+                      <Button 
+                        variant="dark"
+                        className="w-full"
+                      >
+                        Explore
+                        <ArrowUpRight className="w-4 h-4 ml-2" />
+                      </Button>
+                    </Link>
+                  </div>
                 </div>
               </motion.div>
             ))}

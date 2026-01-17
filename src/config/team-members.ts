@@ -184,6 +184,7 @@ import fionaCampbellAdmin from '@/assets/team/fiona-campbell-admin.png';
 // Admin Team additions (8 total)
 import aoifeBrennanAdmin from '@/assets/team/aoife-brennan-admin-v2.png'; // LOCKED_EXISTING - refreshed photo
 import youssefBenaliAdmin from '@/assets/team/youssef-benali-admin-realistic.png'; // LOCKED_EXISTING
+import leilaRahmanBrokerAdmin from '@/assets/team/leila-rahman-broker-admin.png'; // NEW: Broker Admin persona
 
 // NEW Project Management addition (to reach 4)
 import carmenGarciaProject from '@/assets/team/carmen-garcia-project-v2.png'; // LOCKED_EXISTING - refreshed photo
@@ -2331,7 +2332,7 @@ export const adminTeam: TeamMember[] = sortByHierarchy([
     yearsExperience: 11,
     hierarchyLevel: 4,
     reportsTo: 'richard-pemberton',
-    directReports: ['sarah-mitchell', 'aoife-brennan', 'youssef-benali', 'maria-santos-admin', 'sophie-richards', 'gabriela-costa', 'claire-dubois'],
+    directReports: ['sarah-mitchell', 'aoife-brennan', 'leila-rahman', 'youssef-benali', 'maria-santos-admin', 'sophie-richards', 'gabriela-costa', 'claire-dubois'],
     status: 'online',
     canConductInterviews: true,
     // Photo Status: LOCKED_EXISTING
@@ -2370,6 +2371,22 @@ export const adminTeam: TeamMember[] = sortByHierarchy([
     reportsTo: 'emily-watson',
     status: 'online',
     // Photo Status: LOCKED_EXISTING
+  },
+  {
+    id: 'leila-rahman',
+    name: 'Leila Rahman',
+    role: 'Broker Administrator',
+    department: 'Administration',
+    avatar: leilaRahmanBrokerAdmin,
+    isAI: true,
+    bio: 'Dedicated administrator supporting the broker network with onboarding coordination, documentation management, and operational support. Ensures seamless broker lifecycle management from recruitment to activation.',
+    specializations: ['Broker Onboarding', 'License Coordination', 'Compliance Documentation', 'CRM Administration'],
+    languages: ['English', 'Arabic'],
+    nationality: 'Emirati',
+    yearsExperience: 6,
+    hierarchyLevel: 5,
+    reportsTo: 'emily-watson',
+    status: 'online',
   },
   {
     id: 'youssef-benali',

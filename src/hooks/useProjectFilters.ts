@@ -142,24 +142,32 @@ export function useFilteredProjects(
       // Handover status filter
       if (filters.handoverStatus) {
         const handover = project.handover_date?.toLowerCase();
-        if (!handover) return false;
-
-        switch (filters.handoverStatus) {
-          case "ready":
-            if (!handover.includes("ready")) return false;
-            break;
-          case "off-plan":
-            if (handover.includes("ready")) return false;
-            break;
-          case "close-to-handover":
-            if (!isCloseToHandover(project.handover_date)) return false;
-            break;
-          case "2029+":
-            const year = getHandoverYear(project.handover_date);
-            if (!year || year < 2029) return false;
-            break;
-          default:
-            if (!handover.includes(filters.handoverStatus)) return false;
+        
+        // If no handover date is set, treat it as off-plan by default
+        if (!handover) {
+          // Only pass if we're specifically looking for off-plan properties
+          if (filters.handoverStatus !== "off-plan") {
+            return false;
+          }
+        } else {
+          switch (filters.handoverStatus) {
+            case "ready":
+              if (!handover.includes("ready")) return false;
+              break;
+            case "off-plan":
+              // Properties without handover date or not marked "ready" are off-plan
+              if (handover.includes("ready")) return false;
+              break;
+            case "close-to-handover":
+              if (!isCloseToHandover(project.handover_date)) return false;
+              break;
+            case "2029+":
+              const year = getHandoverYear(project.handover_date);
+              if (!year || year < 2029) return false;
+              break;
+            default:
+              if (!handover.includes(filters.handoverStatus)) return false;
+          }
         }
       }
 

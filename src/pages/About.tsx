@@ -194,18 +194,18 @@ const About = () => {
             variants={staggerContainer}
           >
             <div className="grid lg:grid-cols-2 gap-10 lg:gap-16 items-center">
-              {/* LEFT: Founder Image with Premium Card Background */}
+              {/* LEFT: Founder Image with Premium BLACK Card Background */}
               <motion.div 
                 className="flex justify-center"
                 variants={fadeInUp}
               >
                 <div className="relative">
-                  {/* Subtle premium background card */}
-                  <div className="absolute inset-0 -m-6 bg-gradient-to-br from-zinc-100 to-zinc-200/50 rounded-2xl border border-zinc-200" />
+                  {/* BLACK background card for contrast */}
+                  <div className="absolute inset-0 -m-6 bg-black rounded-2xl border border-zinc-800" />
                   
                   {/* Circular portrait - GLOBAL PORTRAIT RULE: object-position center 20%, no cropping */}
                   <Link to="/founder" className="block group relative z-10">
-                    <div className="w-56 h-56 md:w-64 md:h-64 lg:w-72 lg:h-72 mx-auto rounded-full overflow-hidden border-2 border-zinc-300">
+                    <div className="w-56 h-56 md:w-64 md:h-64 lg:w-72 lg:h-72 mx-auto rounded-full overflow-hidden border-2 border-gold/50">
                       <img 
                         src={founderProfessional}
                         alt="Founder and CEO Jane Abou Jaoude of JBJ GLOBAL REAL ESTATE"
@@ -442,8 +442,8 @@ const About = () => {
           </motion.div>
         </Section>
 
-        {/* SECTION 7: OUR STANDARDS - Card Grid - WHITE BACKGROUND */}
-        <Section light>
+        {/* SECTION 7: OUR STANDARDS - Card Grid - BLACK BACKGROUND with WHITE CARDS */}
+        <Section>
           <motion.div
             initial="hidden"
             whileInView="visible"
@@ -451,11 +451,11 @@ const About = () => {
             variants={staggerContainer}
           >
             <motion.div className="text-center mb-10" variants={fadeInUp}>
-              <SectionLabel dark={false}>Our Standards</SectionLabel>
-              <SectionHeadline light className="max-w-2xl mx-auto">Integrity in Every Transaction</SectionHeadline>
+              <SectionLabel>Our Standards</SectionLabel>
+              <SectionHeadline className="max-w-2xl mx-auto">Integrity in Every Transaction</SectionHeadline>
             </motion.div>
 
-            {/* 4 Card Grid - Larger content inside cards */}
+            {/* 4 Card Grid - WHITE CARDS on BLACK background */}
             <div className="grid sm:grid-cols-2 lg:grid-cols-4 gap-5">
               <FeatureCard 
                 light
