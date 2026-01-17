@@ -245,24 +245,24 @@ const PropertyReportModal = ({ open, onOpenChange, project }: PropertyReportModa
 
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
-      <DialogContent className="bg-zinc-900 border-zinc-800 text-white max-w-lg max-h-[90vh] overflow-y-auto">
+      <DialogContent className="bg-white border-zinc-200 text-black max-w-lg max-h-[85vh] overflow-y-auto my-4">
         <DialogHeader>
-          <DialogTitle className="text-xl font-semibold flex items-center gap-3">
-            <div className="w-10 h-10 rounded-full bg-gold flex items-center justify-center">
-              <FileText className="w-5 h-5 text-black" />
+          <DialogTitle className="text-xl font-semibold flex items-center gap-3 text-black">
+            <div className="w-10 h-10 rounded-full bg-black flex items-center justify-center">
+              <FileText className="w-5 h-5 text-gold" />
             </div>
             Property Report & Share
           </DialogTitle>
-          <DialogDescription className="text-zinc-400">
+          <DialogDescription className="text-zinc-500">
             View the complete property report or share it with others.
           </DialogDescription>
         </DialogHeader>
 
         <div className="space-y-4 mt-4">
           {/* Property Info Summary */}
-          <div className="bg-zinc-800/50 rounded-lg p-4 border border-zinc-700">
-            <h3 className="font-semibold text-white mb-1">{project.name}</h3>
-            <p className="text-sm text-zinc-400">
+          <div className="bg-zinc-100 rounded-lg p-4 border border-zinc-200">
+            <h3 className="font-semibold text-black mb-1">{project.name}</h3>
+            <p className="text-sm text-zinc-500">
               {project.location || 'Dubai'} • {project.developer?.name || 'Premium Developer'}
             </p>
             <p className="text-gold font-medium mt-2">
@@ -274,7 +274,8 @@ const PropertyReportModal = ({ open, onOpenChange, project }: PropertyReportModa
           <Button
             onClick={handleViewReport}
             disabled={isGenerating}
-            className="w-full bg-gold text-black hover:bg-gold-light font-semibold h-12"
+            variant="dark"
+            className="w-full font-semibold h-12"
           >
             {isGenerating && activeAction === "view" ? (
               <>
@@ -294,7 +295,7 @@ const PropertyReportModal = ({ open, onOpenChange, project }: PropertyReportModa
             <Button
               onClick={handleShareWhatsApp}
               variant="outline"
-              className="bg-green-600/10 border-green-600/30 text-green-400 hover:bg-green-600/20 hover:text-green-300 h-12"
+              className="bg-green-50 border-green-500/30 text-green-600 hover:bg-green-100 hover:text-green-700 h-12"
             >
               <MessageCircle className="w-5 h-5 mr-2 text-green-500" />
               WhatsApp
@@ -302,7 +303,7 @@ const PropertyReportModal = ({ open, onOpenChange, project }: PropertyReportModa
             <Button
               onClick={handleCall}
               variant="outline"
-              className="bg-blue-600/10 border-blue-600/30 text-blue-400 hover:bg-blue-600/20 hover:text-blue-300 h-12"
+              className="bg-blue-50 border-blue-500/30 text-blue-600 hover:bg-blue-100 hover:text-blue-700 h-12"
             >
               <Phone className="w-5 h-5 mr-2 text-blue-500" />
               Call Now
@@ -311,19 +312,19 @@ const PropertyReportModal = ({ open, onOpenChange, project }: PropertyReportModa
 
           {/* Send to Email */}
           <div className="space-y-2">
-            <Label className="text-zinc-400 text-sm">Share via Email</Label>
+            <Label className="text-zinc-600 text-sm">Share via Email</Label>
             <div className="flex gap-2">
               <Input
                 type="email"
                 placeholder="Enter email address"
                 value={userEmail}
                 onChange={(e) => setUserEmail(e.target.value)}
-                className="bg-zinc-800 border-zinc-700 text-white flex-1"
+                className="bg-white border-zinc-300 text-black placeholder:text-zinc-400 flex-1"
               />
               <Button
                 onClick={handleShareToEmail}
                 variant="outline"
-                className="border-zinc-700 text-white hover:bg-zinc-800"
+                className="border-zinc-300 text-black hover:bg-zinc-100"
               >
                 <Send className="w-4 h-4" />
               </Button>
@@ -331,34 +332,35 @@ const PropertyReportModal = ({ open, onOpenChange, project }: PropertyReportModa
           </div>
 
           {/* Send to JBJ Global Real Estate */}
-          <Button
-            onClick={handleSendToJJ}
-            variant="outline"
-            className="w-full border-gold/30 text-gold hover:bg-gold/10 h-12"
-          >
-            <Mail className="w-5 h-5 mr-2" />
-            Contact JBJ Global Real Estate Advisor
-          </Button>
+          <a href={`mailto:${JJ_EMAIL}?subject=${encodeURIComponent(`Property Inquiry: ${project.name}`)}&body=${encodeURIComponent(`Hi JBJ Global Real Estate Team,\n\nI am interested in the following property:\n\nProperty: ${project.name}\nLocation: ${project.location || 'Dubai'}\nDeveloper: ${project.developer?.name || 'N/A'}\nStarting Price: AED ${project.price_from ? (project.price_from / 1000000).toFixed(2) + 'M' : 'Contact for pricing'}\n\nPlease contact me with more information.\n\nBest regards`)}`}>
+            <Button
+              variant="outline"
+              className="w-full border-gold text-gold hover:bg-gold/10 h-12"
+            >
+              <Mail className="w-5 h-5 mr-2" />
+              Contact JBJ Global Real Estate Advisor
+            </Button>
+          </a>
 
           {/* Individual Documents */}
           {project.documents && project.documents.length > 0 && (
-            <div className="pt-4 border-t border-zinc-800">
-              <Label className="text-zinc-400 text-sm mb-3 block">Individual Materials</Label>
+            <div className="pt-4 border-t border-zinc-200">
+              <Label className="text-zinc-600 text-sm mb-3 block">Individual Materials</Label>
               <div className="space-y-2">
                 {project.documents.map((doc, idx) => (
                   <button
                     key={idx}
                     onClick={() => window.open(doc.file_url, "_blank")}
-                    className="w-full flex items-center gap-3 p-3 rounded-lg bg-zinc-800/50 hover:bg-zinc-800 transition-colors text-left"
+                    className="w-full flex items-center gap-3 p-3 rounded-lg bg-zinc-50 hover:bg-zinc-100 transition-colors text-left border border-zinc-200"
                   >
-                    <div className="w-8 h-8 rounded bg-zinc-700 flex items-center justify-center text-xs text-zinc-300">
-                      PDF
+                    <div className="w-8 h-8 rounded bg-black flex items-center justify-center">
+                      <FileText className="w-4 h-4 text-gold" />
                     </div>
                     <div className="flex-1 min-w-0">
-                      <p className="text-white text-sm font-medium truncate">{doc.file_name}</p>
+                      <p className="text-black text-sm font-medium truncate">{doc.file_name}</p>
                       <p className="text-zinc-500 text-xs capitalize">{doc.document_type.replace(/_/g, ' ')}</p>
                     </div>
-                    <Download className="w-4 h-4 text-zinc-500" />
+                    <Download className="w-4 h-4 text-gold" />
                   </button>
                 ))}
               </div>

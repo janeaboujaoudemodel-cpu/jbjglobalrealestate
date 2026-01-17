@@ -333,7 +333,7 @@ const ProjectDetail = () => {
                   Get in touch with our team for more information, pricing, and availability.
                 </p>
                 <a 
-                  href="https://jbj.ae/contact"
+                  href="https://wa.me/971565911000"
                   target="_blank"
                   rel="noopener noreferrer"
                   className="block w-full py-3 px-6 bg-white text-gold border-2 border-gold font-semibold rounded-lg hover:bg-gold hover:text-black transition-all duration-300 text-center"
