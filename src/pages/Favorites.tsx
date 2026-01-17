@@ -248,7 +248,7 @@ const Favorites = () => {
     <div class="header">
       <div class="logo"><span class="gold">JBJ</span> GLOBAL REAL ESTATE</div>
       <div class="sub">Shortlist prepared on ${dateStr} • For consultation & tailored advisory</div>
-      <div class="sub">Powered by JBJ Global Real Estate • Founder-led by Jane Abou Jaoude</div>
+      <div class="sub">Jane Abou Jaoude Founder & CEO JBJ Global Real Estate</div>
     </div>
 
     <div class="grid">
@@ -742,7 +742,7 @@ const Favorites = () => {
             </div>
 
             <p className="text-zinc-500 text-xs text-center">
-              Powered by JBJ Global Real Estate • Founder-led by Founder and CEO Jane Abou Jaoude
+              Powered by JBJ Global Real Estate • Jane Abou Jaoude Founder & CEO JBJ Global Real Estate
             </p>
           </div>
         </DialogContent>

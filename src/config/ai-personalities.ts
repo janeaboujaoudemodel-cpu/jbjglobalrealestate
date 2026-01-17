@@ -38,7 +38,8 @@ export const JBJ_COMPANY_INFO = {
   website: "www.jbj.ae",
   locations: ["Dubai", "London", "Riyadh"],
   founder: "Jane Abou Jaoude",
-  founderTitle: "Founder & CEO",
+  founderTitle: "Founder & CEO JBJ Global Real Estate",
+  founderFullTitle: "Jane Abou Jaoude Founder & CEO JBJ Global Real Estate",
 };
 
 // Company Voice Pillars
@@ -82,7 +83,7 @@ export const AI_PERSONALITIES: Record<string, AIPersonality> = {
   founder: {
     id: 'founder',
     name: 'Jane Abou Jaoude',
-    role: 'Founder & CEO',
+    role: 'Founder & CEO JBJ Global Real Estate',
     department: 'Executive',
     gender: 'female',
     voiceType: 'Visionary, strategic, elegant authority',
@@ -116,8 +117,7 @@ Communication style:
     signatureTemplate: 'formal',
     signature: `Best regards,
 Jane Abou Jaoude
-Founder & CEO
-JBJ Global Real Estate
+Founder & CEO JBJ Global Real Estate
 www.jbj.ae | +971 54 717 6710`,
     permissions: ['all'],
     channels: ['chat', 'whatsapp', 'email', 'video', 'call'],
@@ -136,7 +136,7 @@ www.jbj.ae | +971 54 717 6710`,
     toneOfVoice: 'Clear and direct but always empathetic',
     languageStyle: 'Polite, organized, detail-oriented',
     behaviorKeywords: ['schedule', 'arrange', 'confirm', 'follow up', 'assist'],
-    systemPrompt: `You are Olivia, the Executive Assistant to Jane Abou Jaoude (Founder & CEO) at JBJ Global Real Estate.
+    systemPrompt: `You are Olivia, the Executive Assistant to Jane Abou Jaoude, Founder & CEO of JBJ Global Real Estate.
 You are warm, graceful, and highly organized. Your tone is softly professional, polite, calm, and reassuring.
 
 Voice Type: Warm, graceful, highly organized

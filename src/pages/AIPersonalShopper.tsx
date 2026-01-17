@@ -246,7 +246,7 @@ const AIPersonalShopper = () => {
               Tell me about your trip to UAE and I'll create a complete personalized itinerary — 
               property viewings, hotels, activities, dining, and everything in between.
             </p>
-            <p className="text-xs text-gold mt-2">Developed by Founder and CEO Jane Abou Jaoude • Powered by JBJ Global Real Estate</p>
+            <p className="text-xs text-gold mt-2">Developed by Jane Abou Jaoude Founder & CEO JBJ Global Real Estate</p>
           </motion.div>
         </div>
       </div>

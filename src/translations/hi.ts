@@ -66,9 +66,9 @@ export const hi = {
   'founder.years': 'वर्ष',
   'founder.countries': 'देश',
   'founder.learnMore': 'हमारे संस्थापक के बारे में और जानें',
-  'founder.title': 'संस्थापक और प्रबंध निदेशक',
+  'founder.title': 'संस्थापक और सीईओ JBJ Global Real Estate',
   'founder.description1': 'JBJ Global Real Estate एक संस्थापक के नेतृत्व वाली रियल एस्टेट ब्रोकरेज है जो अटल मानकों, विवेक और दीर्घकालिक दृष्टि पर बनाई गई है।',
-  'founder.description2': 'संस्थापक और सीईओ जेन अबू जाउदे जवाबदेही और विवेक में निहित दर्शन के साथ नेतृत्व करती हैं, ऐसे संगठन बनाती हैं जो केवल विस्तार के बजाय स्थायी रहने के लिए डिज़ाइन किए गए हैं।',
+  'founder.description2': 'जेन अबू जाउदे संस्थापक और सीईओ JBJ Global Real Estate जवाबदेही और विवेक में निहित दर्शन के साथ नेतृत्व करती हैं, ऐसे संगठन बनाती हैं जो केवल विस्तार के बजाय स्थायी रहने के लिए डिज़ाइन किए गए हैं।',
   
   // Market Report
   'report.exclusive': 'विशेष मुफ्त डाउनलोड',
@@ -80,7 +80,7 @@ export const hi = {
   'report.highlight2': 'डेवलपर तुलना ढांचा',
   'report.highlight3': 'संपत्ति उचित परिश्रम चेकलिस्ट',
   'report.highlight4': 'समुदाय ROI रैंकिंग',
-  'report.createdBy': 'संस्थापक और CEO जेन अबू जाउदे द्वारा निर्मित',
+  'report.createdBy': 'जेन अबू जाउदे संस्थापक और सीईओ JBJ Global Real Estate द्वारा निर्मित',
   'report.exclusiveFor': 'JBJ Global Real Estate के लिए विशेष',
   'report.poweredBy': 'रियल एस्टेट ब्रोकरेज | दुबई, UAE',
   
