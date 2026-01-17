@@ -1771,11 +1771,11 @@ const MarketReport = () => {
       )}
 
       {/* Hero Section */}
-      <section className="relative pt-24 pb-16 md:pt-32 md:pb-24 overflow-hidden">
+      <section className="relative pt-24 pb-16 md:pt-32 md:pb-24 overflow-hidden bg-white">
         {/* Background Elements */}
         <div className="absolute inset-0 bg-gradient-to-b from-gold/5 via-transparent to-transparent" />
         <div className="absolute top-20 right-0 w-[600px] h-[600px] bg-gold/5 rounded-full blur-[150px]" />
-        <div className="absolute bottom-0 left-0 w-[400px] h-[400px] bg-purple-500/5 rounded-full blur-[100px]" />
+        <div className="absolute bottom-0 left-0 w-[400px] h-[400px] bg-gold/5 rounded-full blur-[100px]" />
         
         <div className="container mx-auto px-4 relative z-10">
           <div className="grid lg:grid-cols-2 gap-12 items-center">
@@ -1861,12 +1861,12 @@ const MarketReport = () => {
                 Exclusive Market Report
               </div>
               
-              <h1 className="text-white text-3xl md:text-5xl lg:text-6xl font-bold leading-tight mb-6" style={{ fontFamily: "Poppins, sans-serif" }}>
+              <h1 className="text-black text-3xl md:text-5xl lg:text-6xl font-bold leading-tight mb-6" style={{ fontFamily: "Poppins, sans-serif" }}>
                 Unlock Your
                 <span className="block text-gold">Investment Edge</span>
               </h1>
               
-              <p className="text-zinc-400 text-lg md:text-xl leading-relaxed mb-8">
+              <p className="text-zinc-600 text-lg md:text-xl leading-relaxed mb-8">
                 An educational, founder-led overview designed around government-led sources and structured decision frameworks—created exclusively for clients of JBJ Global Real Estate.
               </p>
               
@@ -1878,7 +1878,7 @@ const MarketReport = () => {
                   { icon: Star, text: "AI Matchmaker Access" },
                   { icon: BookOpen, text: "Expert Insights" },
                 ].map((item, i) => (
-                  <div key={i} className="flex items-center gap-3 text-zinc-300 text-sm">
+                  <div key={i} className="flex items-center gap-3 text-zinc-700 text-sm">
                     <div className="w-8 h-8 rounded-lg bg-gold/10 border border-gold/20 flex items-center justify-center">
                       <item.icon className="w-4 h-4 text-gold" />
                     </div>
