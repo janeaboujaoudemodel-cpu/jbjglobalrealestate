@@ -41,19 +41,19 @@ const ExecutiveOverview = () => {
     const fetchMetrics = async () => {
       try {
         // Use static metrics for executive overview
-        setMetrics(prev => ({
-          ...prev,
+        setMetrics({
           activeDeals: { buy: 12, sell: 8, rent: 24 },
           weeklyVelocity: 18,
           monthlyVelocity: 67,
           leadQualityTrend: "up",
+          topAreas: [
             { name: "Downtown Dubai", momentum: "high" },
             { name: "Dubai Marina", momentum: "high" },
             { name: "Business Bay", momentum: "medium" },
             { name: "JVC", momentum: "medium" },
             { name: "Palm Jumeirah", momentum: "high" },
           ],
-        }));
+        });
 
         setLastUpdated(new Date().toISOString());
       } catch (error) {
