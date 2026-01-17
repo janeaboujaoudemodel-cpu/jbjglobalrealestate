@@ -260,73 +260,73 @@ const Index = () => {
             </p>
           </div>
 
-          {/* Audience Entry Cards - With Glow Effects */}
+          {/* Audience Entry Cards - White Cards */}
           <div className="grid grid-cols-2 md:grid-cols-4 gap-4 max-w-4xl mx-auto mb-12">
             <Link to="/buyer-guide" className="group">
-              <div className="bg-zinc-900/60 border border-zinc-800 rounded-xl p-5 text-center hover:border-gold/40 transition-all duration-300 hover:shadow-lg hover:shadow-gold/10 relative overflow-hidden">
+              <div className="bg-white border border-zinc-200 rounded-xl p-5 text-center hover:border-gold hover:shadow-xl hover:shadow-gold/20 transition-all duration-300 relative overflow-hidden">
                 <div className="absolute inset-0 bg-gradient-to-br from-gold/5 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
                 <div className="relative z-10">
                   <div className="w-10 h-10 bg-gold/10 rounded-lg flex items-center justify-center mx-auto mb-3 group-hover:bg-gold/20 transition-colors">
                     <Heart className="w-5 h-5 text-gold" />
                   </div>
-                  <h4 className="text-white text-sm font-semibold mb-1">Buyers</h4>
-                  <p className="text-zinc-500 text-xs">Find your home</p>
+                  <h4 className="text-black text-sm font-semibold mb-1">Buyers</h4>
+                  <p className="text-zinc-600 text-xs">Find your home</p>
                 </div>
               </div>
             </Link>
             <Link to="/seller-guide" className="group">
-              <div className="bg-zinc-900/60 border border-zinc-800 rounded-xl p-5 text-center hover:border-gold/40 transition-all duration-300 hover:shadow-lg hover:shadow-gold/10 relative overflow-hidden">
+              <div className="bg-white border border-zinc-200 rounded-xl p-5 text-center hover:border-gold hover:shadow-xl hover:shadow-gold/20 transition-all duration-300 relative overflow-hidden">
                 <div className="absolute inset-0 bg-gradient-to-br from-gold/5 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
                 <div className="relative z-10">
                   <div className="w-10 h-10 bg-gold/10 rounded-lg flex items-center justify-center mx-auto mb-3 group-hover:bg-gold/20 transition-colors">
                     <Target className="w-5 h-5 text-gold" />
                   </div>
-                  <h4 className="text-white text-sm font-semibold mb-1">Sellers</h4>
-                  <p className="text-zinc-500 text-xs">List your property</p>
+                  <h4 className="text-black text-sm font-semibold mb-1">Sellers</h4>
+                  <p className="text-zinc-600 text-xs">List your property</p>
                 </div>
               </div>
             </Link>
             <Link to="/ai-hub" className="group">
-              <div className="bg-zinc-900/60 border border-zinc-800 rounded-xl p-5 text-center hover:border-gold/40 transition-all duration-300 hover:shadow-lg hover:shadow-gold/10 relative overflow-hidden">
+              <div className="bg-white border border-zinc-200 rounded-xl p-5 text-center hover:border-gold hover:shadow-xl hover:shadow-gold/20 transition-all duration-300 relative overflow-hidden">
                 <div className="absolute inset-0 bg-gradient-to-br from-gold/5 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
                 <div className="relative z-10">
                   <div className="w-10 h-10 bg-gold/10 rounded-lg flex items-center justify-center mx-auto mb-3 group-hover:bg-gold/20 transition-colors">
                     <Briefcase className="w-5 h-5 text-gold" />
                   </div>
-                  <h4 className="text-white text-sm font-semibold mb-1">Brokers</h4>
-                  <p className="text-zinc-500 text-xs">Join JBJ Broker Circle</p>
+                  <h4 className="text-black text-sm font-semibold mb-1">Brokers</h4>
+                  <p className="text-zinc-600 text-xs">Join JBJ Broker Circle</p>
                 </div>
               </div>
             </Link>
             <Link to="/quiz" className="group">
-              <div className="bg-zinc-900/60 border border-zinc-800 rounded-xl p-5 text-center hover:border-gold/40 transition-all duration-300 hover:shadow-lg hover:shadow-gold/10 relative overflow-hidden">
+              <div className="bg-white border border-zinc-200 rounded-xl p-5 text-center hover:border-gold hover:shadow-xl hover:shadow-gold/20 transition-all duration-300 relative overflow-hidden">
                 <div className="absolute inset-0 bg-gradient-to-br from-gold/5 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
                 <div className="relative z-10">
                   <div className="w-10 h-10 bg-gold/10 rounded-lg flex items-center justify-center mx-auto mb-3 group-hover:bg-gold/20 transition-colors">
                     <Users className="w-5 h-5 text-gold" />
                   </div>
-                  <h4 className="text-white text-sm font-semibold mb-1">Visitors</h4>
-                  <p className="text-zinc-500 text-xs">Explore UAE Real Estate</p>
+                  <h4 className="text-black text-sm font-semibold mb-1">Visitors</h4>
+                  <p className="text-zinc-600 text-xs">Explore UAE Real Estate</p>
                 </div>
               </div>
             </Link>
           </div>
 
-          {/* Resources Grid */}
+          {/* Resources Grid - White Cards */}
           <div className="grid md:grid-cols-2 gap-6 max-w-4xl mx-auto">
             {/* Broker Toolkit Card */}
             <Link to="/broker-toolkit" className="group">
-              <div className="bg-zinc-900/60 border border-zinc-800 rounded-2xl p-6 md:p-8 hover:border-gold/40 transition-all duration-300">
+              <div className="bg-white border border-zinc-200 rounded-2xl p-6 md:p-8 hover:border-gold hover:shadow-xl hover:shadow-gold/20 transition-all duration-300">
                 <div className="flex items-center gap-4 mb-4">
                   <div className="w-12 h-12 bg-gold/10 rounded-xl flex items-center justify-center">
                     <GraduationCap className="w-6 h-6 text-gold" />
                   </div>
                   <div>
-                    <h3 className="text-white text-lg font-semibold">Broker Toolkit</h3>
+                    <h3 className="text-black text-lg font-semibold">Broker Toolkit</h3>
                     <p className="text-zinc-500 text-xs">Guides & Resources</p>
                   </div>
                 </div>
-                <p className="text-zinc-400 text-sm mb-4">
+                <p className="text-zinc-600 text-sm mb-4">
                   Practical guides for real estate professionals.
                 </p>
                 <span className="text-gold text-sm group-hover:underline">
@@ -337,10 +337,10 @@ const Index = () => {
 
             {/* Broker Hub Card - FREE highlighted */}
             <Link to="/ai-hub" className="group">
-              <div className="bg-zinc-900/60 border border-zinc-800 rounded-2xl p-6 md:p-8 hover:border-gold/40 transition-all duration-300 relative overflow-hidden">
+              <div className="bg-white border border-zinc-200 rounded-2xl p-6 md:p-8 hover:border-gold hover:shadow-xl hover:shadow-gold/20 transition-all duration-300 relative overflow-hidden">
                 {/* FREE Badge */}
                 <div className="absolute top-4 right-4">
-                  <span className="inline-flex items-center gap-1 px-2 py-1 bg-green-500/20 border border-green-500/40 rounded-full text-green-400 text-[10px] font-semibold uppercase tracking-wider">
+                  <span className="inline-flex items-center gap-1 px-2 py-1 bg-green-500/20 border border-green-500/40 rounded-full text-green-500 text-[10px] font-semibold uppercase tracking-wider">
                     <Sparkles className="w-3 h-3" />
                     Free
                   </span>
@@ -350,11 +350,11 @@ const Index = () => {
                     <Brain className="w-6 h-6 text-gold" />
                   </div>
                   <div>
-                    <h3 className="text-white text-lg font-semibold">JBJ Broker Hub</h3>
+                    <h3 className="text-black text-lg font-semibold">JBJ Broker Hub</h3>
                     <p className="text-zinc-500 text-xs">20+ Free Tools</p>
                   </div>
                 </div>
-                <p className="text-zinc-400 text-sm mb-4">
+                <p className="text-zinc-600 text-sm mb-4">
                   AI tools, training, HR support & coaching — all free.
                 </p>
                 <span className="text-gold text-sm group-hover:underline">
