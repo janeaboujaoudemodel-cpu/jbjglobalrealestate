@@ -129,6 +129,7 @@ import PartnerLegal from "./pages/partners/PartnerLegal";
 import PartnerCompanySetup from "./pages/partners/PartnerCompanySetup";
 import PartnerVisaServices from "./pages/partners/PartnerVisaServices";
 import TrustAndAuditCenter from "./pages/TrustAndAuditCenter";
+import ClientPortal from "./pages/client/ClientPortal";
 
 const queryClient = new QueryClient();
 
@@ -189,6 +190,7 @@ const App = () => (
                 <Route path="/internal/market-intelligence/ai-insights" element={<AIInsights />} />
                 <Route path="/internal/market-intelligence/data-ops" element={<DataOperations />} />
                 <Route path="/insights" element={<MarketIntelligence />} />
+                <Route path="/client-portal" element={<ClientPortal />} />
                 <Route path="/favorites" element={<Favorites />} />
                 <Route path="/compare" element={<Compare />} />
                 <Route path="/admin" element={<Admin />} />
