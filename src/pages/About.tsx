@@ -201,7 +201,7 @@ const About = () => {
                       alt="Jane Abou Jaoude, Founder and CEO of JBJ GLOBAL REAL ESTATE"
                       shape="circle"
                       size="full"
-                      focus="upper"
+                      focus="center"
                       bordered
                       className="w-56 h-56 md:w-64 md:h-64 lg:w-72 lg:h-72 mx-auto group-hover:border-gold/60 transition-all duration-300"
                     />

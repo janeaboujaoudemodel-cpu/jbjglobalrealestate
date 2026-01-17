@@ -61,11 +61,26 @@ const TeamMemberCard = ({ member, onReadMore }: TeamMemberCardProps) => {
         <CardContent className="p-0">
           {/* Photo */}
           <div className="relative overflow-hidden">
-            {/* GLOBAL IMAGE RULE - LOCKED: Team portrait - no cropping, perfect centering */}
+            {/* GLOBAL IMAGE RULE - LOCKED: no empty edges + no crop (blur-fill background + contain foreground) */}
+            <img
+              aria-hidden="true"
+              alt=""
+              src={member.avatar}
+              className="absolute inset-0 w-full h-full object-cover"
+              style={{
+                objectPosition: "center 20%",
+                filter: "blur(18px)",
+                transform: "scale(1.15)",
+                opacity: 0.35,
+              }}
+              loading="lazy"
+              decoding="async"
+              fetchPriority="low"
+            />
             <img
               src={member.avatar}
               alt={member.name}
-              className="w-full aspect-square object-contain object-center group-hover:scale-105 transition-transform duration-500 bg-zinc-950"
+              className="relative z-10 w-full aspect-square object-contain object-center group-hover:scale-105 transition-transform duration-500"
               loading="lazy"
               decoding="async"
               fetchPriority="low"

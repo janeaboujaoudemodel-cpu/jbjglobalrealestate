@@ -61,14 +61,14 @@ const shapeClasses = {
 
 /**
  * Focus positions for portrait framing
- * - "top": Face is at the very top of the image (15% from top)
- * - "upper": Face is in upper portion (25% from top) - DEFAULT
+ * - "top": Face is at the very top of the image (12% from top)
+ * - "upper": Face is in upper portion (20% from top) - DEFAULT
  * - "center": Face is centered (50%)
  */
 const focusPositions = {
-  top: "center 15%",
-  upper: "center 25%",
-  center: "center 40%",
+  top: "center 12%",
+  upper: "center 20%",
+  center: "center 50%",
 };
 
 const PortraitImage = React.forwardRef<HTMLImageElement, PortraitImageProps>(
@@ -92,12 +92,31 @@ const PortraitImage = React.forwardRef<HTMLImageElement, PortraitImageProps>(
           className
         )}
       >
+        {/* No-empty-edges + no-crop portrait rendering:
+            - Background layer fills frame (cover + blur)
+            - Foreground layer shows full subject (contain)
+        */}
+        <img
+          aria-hidden="true"
+          alt=""
+          className="w-full h-full absolute inset-0"
+          style={{
+            objectFit: "cover",
+            objectPosition: focusPositions[focus],
+            filter: "blur(18px)",
+            transform: "scale(1.15)",
+            opacity: 0.35,
+          }}
+          loading="lazy"
+          decoding="async"
+          src={props.src}
+        />
         <img
           ref={ref}
           alt={alt}
           className="w-full h-full absolute inset-0"
           style={{
-            objectFit: "cover",
+            objectFit: "contain",
             objectPosition: focusPositions[focus],
             ...style,
           }}
