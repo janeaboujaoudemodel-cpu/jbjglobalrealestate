@@ -297,12 +297,12 @@ const BuyerGuide = () => {
                 { icon: Globe, label: "International Buyers", desc: "Purchasing from abroad" },
                 { icon: MapPin, label: "Relocators", desc: "Moving to Dubai" }
               ].map((item, index) => (
-                <div key={index} className="bg-zinc-900/60 rounded-xl p-6 border border-zinc-800 text-center hover:border-gold/30 transition-colors">
-                  <div className="w-12 h-12 bg-gold/10 border border-gold/30 rounded-xl flex items-center justify-center mx-auto mb-4">
+                <div key={index} className="bg-white rounded-xl p-6 border border-zinc-200 text-center hover:border-gold/50 hover:shadow-lg transition-all">
+                  <div className="w-12 h-12 bg-black rounded-xl flex items-center justify-center mx-auto mb-4">
                     <item.icon className="w-6 h-6 text-gold" />
                   </div>
-                  <p className="font-medium text-white mb-1">{item.label}</p>
-                  <p className="text-sm text-zinc-400">{item.desc}</p>
+                  <p className="font-medium text-black mb-1">{item.label}</p>
+                  <p className="text-sm text-zinc-600">{item.desc}</p>
                 </div>
               ))}
             </div>
@@ -311,14 +311,14 @@ const BuyerGuide = () => {
       </section>
 
       {/* Ownership Types */}
-      <section id="ownership-types" className="py-16 md:py-24 scroll-mt-20">
+      <section id="ownership-types" className="py-16 md:py-24 bg-zinc-50 scroll-mt-20">
         <div className="container mx-auto px-4">
           <div className="max-w-5xl mx-auto">
             <div className="text-center mb-12">
-              <h2 className="text-3xl md:text-4xl font-light text-zinc-900 mb-4">
+              <h2 className="text-3xl md:text-4xl font-semibold text-black mb-4">
                 Understanding Ownership Types
               </h2>
-              <p className="text-lg text-zinc-600 max-w-2xl mx-auto">
+              <p className="text-lg text-zinc-700 max-w-2xl mx-auto leading-relaxed">
                 Dubai offers two main ownership structures. Understanding the difference helps you 
                 choose what's right for your situation.
               </p>
@@ -328,22 +328,22 @@ const BuyerGuide = () => {
               {ownershipTypes.map((type, index) => (
                 <div 
                   key={index}
-                  className="bg-zinc-50 rounded-2xl p-8 border border-zinc-100 hover:border-gold/30 transition-colors"
+                  className="bg-white rounded-2xl p-8 border border-zinc-200 hover:border-gold/50 hover:shadow-lg transition-all"
                 >
                   <div className="flex items-center gap-4 mb-6">
-                    <div className="w-12 h-12 bg-gold/10 border border-gold/30 rounded-xl flex items-center justify-center">
+                    <div className="w-12 h-12 bg-black rounded-xl flex items-center justify-center">
                       <type.icon className="w-6 h-6 text-gold" />
                     </div>
                     <div>
-                      <h3 className="text-xl font-medium text-zinc-900">{type.title}</h3>
-                      <p className="text-sm text-zinc-500">{type.description}</p>
+                      <h3 className="text-xl font-semibold text-black">{type.title}</h3>
+                      <p className="text-sm text-zinc-600">{type.description}</p>
                     </div>
                   </div>
                   <ul className="space-y-3">
                     {type.points.map((point, pointIndex) => (
                       <li key={pointIndex} className="flex items-start gap-3">
                         <CheckCircle2 className="w-5 h-5 text-gold flex-shrink-0 mt-0.5" />
-                        <span className="text-zinc-600 text-sm">{point}</span>
+                        <span className="text-zinc-700 text-sm leading-relaxed">{point}</span>
                       </li>
                     ))}
                   </ul>
@@ -406,14 +406,14 @@ const BuyerGuide = () => {
       </section>
 
       {/* Costs & Fees */}
-      <section id="costs-fees" className="py-16 md:py-24 bg-zinc-900/50 scroll-mt-20">
+      <section id="costs-fees" className="py-16 md:py-24 bg-zinc-50 scroll-mt-20">
         <div className="container mx-auto px-4">
           <div className="max-w-5xl mx-auto">
             <div className="text-center mb-12">
-              <h2 className="text-3xl md:text-4xl font-light text-white mb-4">
+              <h2 className="text-3xl md:text-4xl font-semibold text-black mb-4">
                 Costs & Fees Overview
               </h2>
-              <p className="text-lg text-zinc-400 max-w-2xl mx-auto">
+              <p className="text-lg text-zinc-700 max-w-2xl mx-auto leading-relaxed">
                 Transparency is essential. Here are the key costs you should budget for 
                 when purchasing property in Dubai.
               </p>
@@ -423,26 +423,28 @@ const BuyerGuide = () => {
               {costs.map((cost, index) => (
                 <div 
                   key={index}
-                  className="bg-zinc-800/50 border border-zinc-700 rounded-xl p-6 hover:border-gold/30 transition-colors"
+                  className="bg-white border border-zinc-200 rounded-xl p-6 hover:border-gold/50 hover:shadow-lg transition-all"
                 >
                   <div className="flex items-start gap-4">
-                    <div className="w-10 h-10 bg-gold/10 border border-gold/30 rounded-lg flex items-center justify-center flex-shrink-0">
+                    <div className="w-10 h-10 bg-black rounded-lg flex items-center justify-center flex-shrink-0">
                       <cost.icon className="w-5 h-5 text-gold" />
                     </div>
                     <div>
-                      <h4 className="text-white font-medium mb-1">{cost.title}</h4>
-                      <p className="text-zinc-400 text-sm">{cost.description}</p>
+                      <h4 className="text-black font-semibold mb-1">{cost.title}</h4>
+                      <p className="text-zinc-600 text-sm leading-relaxed">{cost.description}</p>
                     </div>
                   </div>
                 </div>
               ))}
             </div>
 
-            <div className="mt-8 bg-zinc-800/30 border border-zinc-700 rounded-xl p-6">
+            <div className="mt-8 bg-white border border-zinc-200 rounded-xl p-6 shadow-sm">
               <div className="flex items-start gap-3">
-                <HelpCircle className="w-5 h-5 text-gold flex-shrink-0 mt-0.5" />
-                <p className="text-zinc-400 text-sm">
-                  <span className="text-white font-medium">Note:</span> Exact amounts vary based on property value, 
+                <div className="w-8 h-8 bg-black rounded-lg flex items-center justify-center flex-shrink-0">
+                  <HelpCircle className="w-4 h-4 text-gold" />
+                </div>
+                <p className="text-zinc-700 text-sm leading-relaxed">
+                  <span className="text-black font-semibold">Note:</span> Exact amounts vary based on property value, 
                   transaction type, and specific circumstances. Your broker will provide detailed cost estimates 
                   based on your specific purchase.
                 </p>
@@ -453,18 +455,20 @@ const BuyerGuide = () => {
       </section>
 
       {/* Mortgages Explained */}
-      <section id="mortgages" className="py-16 md:py-24 scroll-mt-20">
+      <section id="mortgages" className="py-16 md:py-24 bg-white scroll-mt-20">
         <div className="container mx-auto px-4">
           <div className="max-w-4xl mx-auto">
-            <div className="bg-gradient-to-br from-gold/5 to-transparent border border-gold/20 rounded-2xl p-8 md:p-12">
-              <div className="flex items-center gap-3 mb-6">
-                <Landmark className="w-8 h-8 text-gold" />
-                <h2 className="text-3xl md:text-4xl font-light text-zinc-900">
+            <div className="bg-white border border-zinc-200 rounded-2xl p-8 md:p-12 shadow-sm">
+              <div className="flex items-center gap-4 mb-6">
+                <div className="w-12 h-12 bg-black rounded-xl flex items-center justify-center">
+                  <Landmark className="w-6 h-6 text-gold" />
+                </div>
+                <h2 className="text-3xl md:text-4xl font-semibold text-black">
                   Mortgages in Dubai
                 </h2>
               </div>
               
-              <p className="text-lg text-zinc-600 leading-relaxed mb-8">
+              <p className="text-lg text-zinc-700 leading-relaxed mb-8">
                 If you're considering financing your purchase, here's what you need to know about 
                 mortgages in Dubai. Many banks offer competitive mortgage products for both 
                 residents and non-residents.
@@ -472,16 +476,16 @@ const BuyerGuide = () => {
               
               <div className="grid md:grid-cols-2 gap-4 mb-8">
                 {mortgagePoints.map((point, index) => (
-                  <div key={index} className="flex items-start gap-3">
+                  <div key={index} className="flex items-start gap-3 bg-zinc-50 rounded-lg p-3">
                     <CheckCircle2 className="w-5 h-5 text-gold flex-shrink-0 mt-0.5" />
-                    <span className="text-zinc-600 text-sm">{point}</span>
+                    <span className="text-zinc-700 text-sm leading-relaxed">{point}</span>
                   </div>
                 ))}
               </div>
 
-              <div className="bg-white/50 border border-gold/10 rounded-xl p-4">
-                <p className="text-zinc-500 text-sm">
-                  <span className="text-zinc-700 font-medium">Important:</span> JBJ Global Real Estate 
+              <div className="bg-zinc-50 border border-zinc-200 rounded-xl p-5">
+                <p className="text-zinc-700 text-sm leading-relaxed">
+                  <span className="text-black font-semibold">Important:</span> JBJ Global Real Estate 
                   does not provide mortgage or financial advice. We can introduce you to independent 
                   licensed mortgage advisors who can assess your situation and provide tailored guidance.
                 </p>
@@ -492,18 +496,18 @@ const BuyerGuide = () => {
       </section>
 
       {/* Common Buyer Mistakes */}
-      <section id="common-mistakes" className="py-16 md:py-24 bg-zinc-900/30 scroll-mt-20">
+      <section id="common-mistakes" className="py-16 md:py-24 bg-zinc-50 scroll-mt-20">
         <div className="container mx-auto px-4">
           <div className="max-w-5xl mx-auto">
             <div className="text-center mb-12">
-              <div className="inline-flex items-center gap-2 bg-red-50 border border-red-100 rounded-full px-4 py-2 mb-4">
+              <div className="inline-flex items-center gap-2 bg-red-50 border border-red-200 rounded-full px-4 py-2 mb-4">
                 <AlertTriangle className="w-4 h-4 text-red-500" />
-                <span className="text-red-600 text-sm font-medium">Avoid These Pitfalls</span>
+                <span className="text-red-600 text-sm font-semibold">Avoid These Pitfalls</span>
               </div>
-              <h2 className="text-3xl md:text-4xl font-light text-zinc-900 mb-4">
+              <h2 className="text-3xl md:text-4xl font-semibold text-black mb-4">
                 Common Buyer Mistakes
               </h2>
-              <p className="text-lg text-zinc-600 max-w-2xl mx-auto">
+              <p className="text-lg text-zinc-700 max-w-2xl mx-auto leading-relaxed">
                 Learning from others' mistakes can save you time, money, and stress. 
                 Here are the most common pitfalls to avoid.
               </p>
@@ -513,15 +517,15 @@ const BuyerGuide = () => {
               {commonMistakes.map((mistake, index) => (
                 <div 
                   key={index}
-                  className="bg-white rounded-xl p-6 border border-zinc-200 hover:border-red-200 transition-colors"
+                  className="bg-white rounded-xl p-6 border border-zinc-200 hover:border-red-300 hover:shadow-lg transition-all"
                 >
                   <div className="flex items-start gap-4">
-                    <div className="w-10 h-10 bg-red-50 border border-red-100 rounded-lg flex items-center justify-center flex-shrink-0">
-                      <XCircle className="w-5 h-5 text-red-400" />
+                    <div className="w-10 h-10 bg-red-50 border border-red-200 rounded-lg flex items-center justify-center flex-shrink-0">
+                      <XCircle className="w-5 h-5 text-red-500" />
                     </div>
                     <div>
-                      <h4 className="text-zinc-900 font-medium mb-2">{mistake.title}</h4>
-                      <p className="text-zinc-500 text-sm">{mistake.description}</p>
+                      <h4 className="text-black font-semibold mb-2">{mistake.title}</h4>
+                      <p className="text-zinc-600 text-sm leading-relaxed">{mistake.description}</p>
                     </div>
                   </div>
                 </div>

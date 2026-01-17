@@ -212,27 +212,27 @@ const Contact = () => {
       </section>
 
       {/* Contact Cards */}
-      <section className="py-10 border-y border-zinc-800">
+      <section className="py-10 bg-zinc-50 border-y border-zinc-200">
         <div className="container mx-auto px-4">
           <div className="grid grid-cols-2 lg:grid-cols-4 gap-4 md:gap-6">
             {contactCards.map((card) => (
               <div 
                 key={card.title}
-                className="bg-zinc-900/50 border border-zinc-800 rounded-xl p-5 hover:border-gold/30 transition-colors"
+                className="bg-white border border-zinc-200 rounded-xl p-5 hover:border-gold/50 hover:shadow-lg transition-all"
               >
-                <div className="w-10 h-10 bg-gold/10 rounded-lg flex items-center justify-center mb-3">
+                <div className="w-10 h-10 bg-black rounded-lg flex items-center justify-center mb-3">
                   <card.icon className="w-5 h-5 text-gold" />
                 </div>
-                <h3 className="text-white font-semibold text-sm mb-1">{card.title}</h3>
+                <h3 className="text-black font-semibold text-sm mb-1">{card.title}</h3>
                 {card.action ? (
                   <a 
                     href={card.action}
-                    className="text-zinc-400 hover:text-gold transition-colors text-sm"
+                    className="text-zinc-600 hover:text-gold transition-colors text-sm"
                   >
                     {card.value}
                   </a>
                 ) : (
-                  <p className="text-zinc-400 text-sm">{card.value}</p>
+                  <p className="text-zinc-600 text-sm">{card.value}</p>
                 )}
               </div>
             ))}
@@ -241,7 +241,7 @@ const Contact = () => {
       </section>
 
       {/* Consultation Form Section */}
-      <section className="py-16 md:py-20">
+      <section className="py-16 md:py-20 bg-zinc-50">
         <div className="container mx-auto px-4">
           <div className="max-w-3xl mx-auto">
             {isSuccess ? (
@@ -274,15 +274,15 @@ const Contact = () => {
               </div>
             ) : (
               /* Form */
-              <div className="bg-zinc-900/30 border border-zinc-800 rounded-2xl p-6 md:p-10">
+              <div className="bg-white border border-zinc-200 rounded-2xl p-6 md:p-10 shadow-sm">
                 <div className="text-center mb-8">
-                  <div className="w-14 h-14 bg-gold/10 border border-gold/30 rounded-xl flex items-center justify-center mx-auto mb-4">
+                  <div className="w-14 h-14 bg-black rounded-xl flex items-center justify-center mx-auto mb-4">
                     <Shield className="w-7 h-7 text-gold" />
                   </div>
-                  <h2 className="text-2xl md:text-3xl font-bold text-white mb-2" style={{ fontFamily: "Poppins, sans-serif" }}>
+                  <h2 className="text-2xl md:text-3xl font-bold text-black mb-2" style={{ fontFamily: "Poppins, sans-serif" }}>
                     Consultation Request
                   </h2>
-                  <p className="text-zinc-400 text-sm">
+                  <p className="text-zinc-600 text-sm">
                     Complete the form below and our team will reach out to discuss your requirements.
                   </p>
                 </div>
@@ -291,20 +291,20 @@ const Contact = () => {
                   <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-6">
                     {/* Personal Information */}
                     <div className="space-y-4">
-                      <FormField
+                        <FormField
                         control={form.control}
                         name="fullName"
                         render={({ field }) => (
                           <FormItem>
-                            <FormLabel className="text-zinc-300 text-sm">Full Name *</FormLabel>
+                            <FormLabel className="text-zinc-700 text-sm font-medium">Full Name *</FormLabel>
                             <FormControl>
                               <Input 
                                 {...field} 
-                                className="h-12 bg-zinc-900 border-zinc-700 text-white placeholder:text-zinc-500 focus:border-gold"
+                                className="h-12 bg-zinc-50 border-zinc-300 text-black placeholder:text-zinc-400 focus:border-gold focus:bg-white"
                                 placeholder="John Doe"
                               />
                             </FormControl>
-                            <FormMessage className="text-red-400 text-xs" />
+                            <FormMessage className="text-red-500 text-xs" />
                           </FormItem>
                         )}
                       />
@@ -315,16 +315,16 @@ const Contact = () => {
                           name="email"
                           render={({ field }) => (
                             <FormItem>
-                              <FormLabel className="text-zinc-300 text-sm">Email Address *</FormLabel>
+                              <FormLabel className="text-zinc-700 text-sm font-medium">Email Address *</FormLabel>
                               <FormControl>
                                 <Input 
                                   {...field} 
                                   type="email"
-                                  className="h-12 bg-zinc-900 border-zinc-700 text-white placeholder:text-zinc-500 focus:border-gold"
+                                  className="h-12 bg-zinc-50 border-zinc-300 text-black placeholder:text-zinc-400 focus:border-gold focus:bg-white"
                                   placeholder="email@example.com"
                                 />
                               </FormControl>
-                              <FormMessage className="text-red-400 text-xs" />
+                              <FormMessage className="text-red-500 text-xs" />
                             </FormItem>
                           )}
                         />
@@ -342,7 +342,7 @@ const Contact = () => {
                             
                             return (
                               <FormItem>
-                                <FormLabel className="text-zinc-300 text-sm">Phone Number *</FormLabel>
+                                <FormLabel className="text-zinc-700 text-sm font-medium">Phone Number *</FormLabel>
                                 <div className="flex gap-2">
                                   <FormControl>
                                     <PhoneInput
@@ -362,7 +362,7 @@ const Contact = () => {
                                     </a>
                                   )}
                                 </div>
-                                <FormMessage className="text-red-400 text-xs" />
+                                <FormMessage className="text-red-500 text-xs" />
                               </FormItem>
                             );
                           }}
@@ -375,7 +375,7 @@ const Contact = () => {
                           name="nationality"
                           render={({ field }) => (
                             <FormItem>
-                              <FormLabel className="text-zinc-300 text-sm">Nationality *</FormLabel>
+                              <FormLabel className="text-zinc-700 text-sm font-medium">Nationality *</FormLabel>
                               <FormControl>
                                 <SearchableSelect
                                   value={field.value}
@@ -386,7 +386,7 @@ const Contact = () => {
                                   priorityItem="United Arab Emirates"
                                 />
                               </FormControl>
-                              <FormMessage className="text-red-400 text-xs" />
+                              <FormMessage className="text-red-500 text-xs" />
                             </FormItem>
                           )}
                         />
@@ -396,7 +396,7 @@ const Contact = () => {
                           name="language"
                           render={({ field }) => (
                             <FormItem>
-                              <FormLabel className="text-zinc-300 text-sm">Preferred Language *</FormLabel>
+                              <FormLabel className="text-zinc-700 text-sm font-medium">Preferred Language *</FormLabel>
                               <FormControl>
                                 <SearchableSelect
                                   value={field.value}
@@ -407,7 +407,7 @@ const Contact = () => {
                                   priorityItem="English"
                                 />
                               </FormControl>
-                              <FormMessage className="text-red-400 text-xs" />
+                              <FormMessage className="text-red-500 text-xs" />
                             </FormItem>
                           )}
                         />
@@ -418,22 +418,22 @@ const Contact = () => {
                         name="currentLocation"
                         render={({ field }) => (
                           <FormItem>
-                            <FormLabel className="text-zinc-300 text-sm">Current Location (Country & City) *</FormLabel>
+                            <FormLabel className="text-zinc-700 text-sm font-medium">Current Location (Country & City) *</FormLabel>
                             <FormControl>
                               <Input 
                                 {...field} 
-                                className="h-12 bg-zinc-900 border-zinc-700 text-white placeholder:text-zinc-500 focus:border-gold"
+                                className="h-12 bg-zinc-50 border-zinc-300 text-black placeholder:text-zinc-400 focus:border-gold focus:bg-white"
                                 placeholder="e.g., Dubai, UAE or London, UK"
                               />
                             </FormControl>
-                            <FormMessage className="text-red-400 text-xs" />
+                            <FormMessage className="text-red-500 text-xs" />
                           </FormItem>
                         )}
                       />
                     </div>
 
                     {/* Service Selection */}
-                    <div className="h-px bg-zinc-800 my-6" />
+                    <div className="h-px bg-zinc-200 my-6" />
                     
                     <div className="space-y-4">
                       <FormField
@@ -441,22 +441,22 @@ const Contact = () => {
                         name="serviceNeeded"
                         render={({ field }) => (
                           <FormItem>
-                            <FormLabel className="text-zinc-300 text-sm">Service Needed *</FormLabel>
+                            <FormLabel className="text-zinc-700 text-sm font-medium">Service Needed *</FormLabel>
                             <Select onValueChange={field.onChange} value={field.value}>
                               <FormControl>
-                                <SelectTrigger className="h-12 bg-zinc-900 border-zinc-700 text-white">
+                                <SelectTrigger className="h-12 bg-zinc-50 border-zinc-300 text-black">
                                   <SelectValue placeholder="Select a service" />
                                 </SelectTrigger>
                               </FormControl>
-                              <SelectContent className="bg-zinc-900 border-zinc-700">
+                              <SelectContent className="bg-white border-zinc-200">
                                 {SERVICE_OPTIONS.map((option) => (
-                                  <SelectItem key={option.value} value={option.value} className="text-white hover:bg-zinc-800">
+                                  <SelectItem key={option.value} value={option.value} className="text-black hover:bg-zinc-100">
                                     {option.label}
                                   </SelectItem>
                                 ))}
                               </SelectContent>
                             </Select>
-                            <FormMessage className="text-red-400 text-xs" />
+                            <FormMessage className="text-red-500 text-xs" />
                           </FormItem>
                         )}
                       />
@@ -467,16 +467,16 @@ const Contact = () => {
                           name="budgetRange"
                           render={({ field }) => (
                             <FormItem>
-                              <FormLabel className="text-zinc-300 text-sm">Budget Range (Optional)</FormLabel>
+                              <FormLabel className="text-zinc-700 text-sm font-medium">Budget Range (Optional)</FormLabel>
                               <Select onValueChange={field.onChange} value={field.value}>
                                 <FormControl>
-                                  <SelectTrigger className="h-12 bg-zinc-900 border-zinc-700 text-white">
+                                  <SelectTrigger className="h-12 bg-zinc-50 border-zinc-300 text-black">
                                     <SelectValue placeholder="Select budget" />
                                   </SelectTrigger>
                                 </FormControl>
-                                <SelectContent className="bg-zinc-900 border-zinc-700">
+                                <SelectContent className="bg-white border-zinc-200">
                                   {BUDGET_OPTIONS.map((option) => (
-                                    <SelectItem key={option.value} value={option.value} className="text-white hover:bg-zinc-800">
+                                    <SelectItem key={option.value} value={option.value} className="text-black hover:bg-zinc-100">
                                       {option.label}
                                     </SelectItem>
                                   ))}
@@ -491,16 +491,16 @@ const Contact = () => {
                           name="timeline"
                           render={({ field }) => (
                             <FormItem>
-                              <FormLabel className="text-zinc-300 text-sm">Timeline (Optional)</FormLabel>
+                              <FormLabel className="text-zinc-700 text-sm font-medium">Timeline (Optional)</FormLabel>
                               <Select onValueChange={field.onChange} value={field.value}>
                                 <FormControl>
-                                  <SelectTrigger className="h-12 bg-zinc-900 border-zinc-700 text-white">
+                                  <SelectTrigger className="h-12 bg-zinc-50 border-zinc-300 text-black">
                                     <SelectValue placeholder="Select timeline" />
                                   </SelectTrigger>
                                 </FormControl>
-                                <SelectContent className="bg-zinc-900 border-zinc-700">
+                                <SelectContent className="bg-white border-zinc-200">
                                   {TIMELINE_OPTIONS.map((option) => (
-                                    <SelectItem key={option.value} value={option.value} className="text-white hover:bg-zinc-800">
+                                    <SelectItem key={option.value} value={option.value} className="text-black hover:bg-zinc-100">
                                       {option.label}
                                     </SelectItem>
                                   ))}
@@ -516,22 +516,22 @@ const Contact = () => {
                         name="message"
                         render={({ field }) => (
                           <FormItem>
-                            <FormLabel className="text-zinc-300 text-sm">Additional Message (Optional)</FormLabel>
+                            <FormLabel className="text-zinc-700 text-sm font-medium">Additional Message (Optional)</FormLabel>
                             <FormControl>
                               <Textarea 
                                 {...field} 
-                                className="min-h-[100px] bg-zinc-900 border-zinc-700 text-white placeholder:text-zinc-500 focus:border-gold resize-none"
+                                className="min-h-[100px] bg-zinc-50 border-zinc-300 text-black placeholder:text-zinc-400 focus:border-gold focus:bg-white resize-none"
                                 placeholder="Tell us more about your requirements..."
                               />
                             </FormControl>
-                            <FormMessage className="text-red-400 text-xs" />
+                            <FormMessage className="text-red-500 text-xs" />
                           </FormItem>
                         )}
                       />
                     </div>
 
                     {/* Checkboxes */}
-                    <div className="h-px bg-zinc-800 my-6" />
+                    <div className="h-px bg-zinc-200 my-6" />
 
                     <div className="space-y-4">
                       <FormField
@@ -543,14 +543,14 @@ const Contact = () => {
                               <Checkbox 
                                 checked={field.value} 
                                 onCheckedChange={field.onChange}
-                                className="border-zinc-600 data-[state=checked]:bg-gold data-[state=checked]:border-gold mt-0.5"
+                                className="border-zinc-400 data-[state=checked]:bg-gold data-[state=checked]:border-gold mt-0.5"
                               />
                             </FormControl>
                             <div className="space-y-1 leading-none">
-                              <FormLabel className="text-zinc-300 text-sm font-normal cursor-pointer">
+                              <FormLabel className="text-zinc-700 text-sm font-normal cursor-pointer">
                                 I confirm the information provided is accurate. *
                               </FormLabel>
-                              <FormMessage className="text-red-400 text-xs" />
+                              <FormMessage className="text-red-500 text-xs" />
                             </div>
                           </FormItem>
                         )}
@@ -565,17 +565,17 @@ const Contact = () => {
                               <Checkbox 
                                 checked={field.value} 
                                 onCheckedChange={field.onChange}
-                                className="border-zinc-600 data-[state=checked]:bg-gold data-[state=checked]:border-gold mt-0.5"
+                                className="border-zinc-400 data-[state=checked]:bg-gold data-[state=checked]:border-gold mt-0.5"
                               />
                             </FormControl>
                             <div className="space-y-1 leading-none">
-                              <FormLabel className="text-zinc-300 text-sm font-normal cursor-pointer">
+                              <FormLabel className="text-zinc-700 text-sm font-normal cursor-pointer">
                                 I agree to the{" "}
                                 <Link to="/terms" className="text-gold hover:underline">Terms of Service</Link>
                                 {" "}and{" "}
                                 <Link to="/privacy" className="text-gold hover:underline">Privacy Policy</Link>. *
                               </FormLabel>
-                              <FormMessage className="text-red-400 text-xs" />
+                              <FormMessage className="text-red-500 text-xs" />
                             </div>
                           </FormItem>
                         )}
@@ -590,11 +590,11 @@ const Contact = () => {
                               <Checkbox 
                                 checked={field.value} 
                                 onCheckedChange={field.onChange}
-                                className="border-zinc-600 data-[state=checked]:bg-gold data-[state=checked]:border-gold mt-0.5"
+                                className="border-zinc-400 data-[state=checked]:bg-gold data-[state=checked]:border-gold mt-0.5"
                               />
                             </FormControl>
                             <div className="space-y-1 leading-none">
-                              <FormLabel className="text-zinc-300 text-sm font-normal cursor-pointer">
+                              <FormLabel className="text-zinc-700 text-sm font-normal cursor-pointer">
                                 I would like to receive updates and market insights. (Optional)
                               </FormLabel>
                             </div>

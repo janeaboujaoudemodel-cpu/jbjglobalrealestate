@@ -50,15 +50,15 @@ export const GuideNavigation = ({ current, guides, showStartHere = false }: Guid
           {prevGuide ? (
             <Link 
               to={prevGuide.path}
-              className="flex-1 group bg-zinc-900/60 hover:bg-zinc-900 border border-zinc-800 hover:border-gold/30 rounded-xl p-4 transition-all"
+              className="flex-1 group bg-white hover:bg-zinc-50 border border-zinc-200 hover:border-gold/50 rounded-xl p-5 transition-all hover:shadow-lg"
             >
-              <div className="flex items-center gap-3">
-                <div className="w-10 h-10 bg-gold/10 rounded-lg flex items-center justify-center group-hover:bg-gold/20 transition-colors">
+              <div className="flex items-center gap-4">
+                <div className="w-12 h-12 bg-black rounded-xl flex items-center justify-center group-hover:bg-gold/10 transition-colors">
                   <ArrowLeft className="w-5 h-5 text-gold" />
                 </div>
-                <div>
-                  <p className="text-zinc-500 text-xs uppercase tracking-wider mb-1">Previous Guide</p>
-                  <p className="text-white font-medium group-hover:text-gold transition-colors">{prevGuide.title}</p>
+                <div className="flex-1">
+                  <p className="text-zinc-500 text-xs uppercase tracking-wider mb-1 font-medium">Previous Guide</p>
+                  <p className="text-black font-semibold group-hover:text-gold transition-colors text-lg">{prevGuide.title}</p>
                 </div>
               </div>
             </Link>
@@ -69,14 +69,14 @@ export const GuideNavigation = ({ current, guides, showStartHere = false }: Guid
           {nextGuide ? (
             <Link 
               to={nextGuide.path}
-              className="flex-1 group bg-zinc-900/60 hover:bg-zinc-900 border border-zinc-800 hover:border-gold/30 rounded-xl p-4 transition-all text-right"
+              className="flex-1 group bg-white hover:bg-zinc-50 border border-zinc-200 hover:border-gold/50 rounded-xl p-5 transition-all hover:shadow-lg text-right"
             >
-              <div className="flex items-center justify-end gap-3">
-                <div>
-                  <p className="text-zinc-500 text-xs uppercase tracking-wider mb-1">Next Guide</p>
-                  <p className="text-white font-medium group-hover:text-gold transition-colors">{nextGuide.title}</p>
+              <div className="flex items-center justify-end gap-4">
+                <div className="flex-1">
+                  <p className="text-zinc-500 text-xs uppercase tracking-wider mb-1 font-medium">Next Guide</p>
+                  <p className="text-black font-semibold group-hover:text-gold transition-colors text-lg">{nextGuide.title}</p>
                 </div>
-                <div className="w-10 h-10 bg-gold/10 rounded-lg flex items-center justify-center group-hover:bg-gold/20 transition-colors">
+                <div className="w-12 h-12 bg-black rounded-xl flex items-center justify-center group-hover:bg-gold/10 transition-colors">
                   <ArrowRight className="w-5 h-5 text-gold" />
                 </div>
               </div>
@@ -92,10 +92,10 @@ export const GuideNavigation = ({ current, guides, showStartHere = false }: Guid
             <Link
               key={guide.path}
               to={guide.path}
-              className={`px-3 py-1.5 rounded-full text-xs font-medium transition-all ${
+              className={`px-4 py-2 rounded-lg text-sm font-medium transition-all ${
                 guide.path === current
-                  ? "bg-gold/20 text-gold border border-gold/30"
-                  : "bg-zinc-800 text-zinc-400 hover:text-white hover:bg-zinc-700 border border-transparent"
+                  ? "bg-gold text-black shadow-md"
+                  : "bg-white text-zinc-700 hover:text-black hover:bg-zinc-100 border border-zinc-200 hover:border-gold/50"
               }`}
             >
               {guide.title}
