@@ -528,33 +528,66 @@ All colors MUST be HSL.
   /* ============================================================
    * 1. GLOBAL IMAGE RULE - LOCKED
    * Applies to all images: users, staff, profiles, content
+   * NO CROP + PERFECT CENTERING
    * ============================================================ */
   
   /**
-   * Apply .jj-image-contain to any image that must follow the no-crop rule
-   * - NO cropping, NO zooming, NO auto-fit
-   * - Perfect centering (object-fit: contain, object-position: center center)
-   * - Equal spacing on all sides
+   * GLOBAL IMAGE RULE:
+   * - NEVER crop images (no head, face, body, hands, or edges cut)
+   * - Preserve original image ratio at all times
+   * - Subject must visually occupy 70-85% of container (controlled scale)
+   * - Perfect centering: horizontal + vertical
+   * - Head positioned in upper third
+   * - Equal breathing space on all sides
+   * - Black/dark backgrounds must be preserved
+   * - Image quality must remain original and high-resolution
    */
+  
+  /* Standard contained image - no crop, perfect centering */
   .jj-image-contain {
-    @apply object-contain;
+    object-fit: contain !important;
     object-position: center center !important;
+  }
+
+  /* Portrait image - for people/profile photos with head in upper area */
+  .jj-image-portrait {
+    object-fit: contain !important;
+    object-position: center 20% !important;
+  }
+
+  /* Scaled image - ensures subject fills 70-85% while maintaining ratio */
+  .jj-image-scaled {
+    object-fit: contain !important;
+    object-position: center center !important;
+    transform: scale(0.9);
+    transform-origin: center center;
   }
 
   /**
    * GLOBAL CIRCLE IMAGE RULE - For circular profile images, avatars
-   * - Use full original image
-   * - Perfect centering
-   * - No cropping of head/shoulders
+   * - Circle is a MASK only
+   * - Image fits naturally inside the circle
+   * - No zoom-out behavior
+   * - Subject should fill 70-85% of the circle
+   * - Perfect centering with head in upper third
    */
   .jj-circle-image {
-    @apply object-contain rounded-full;
-    object-position: center center !important;
+    object-fit: contain !important;
+    object-position: center 15% !important;
+    border-radius: 50%;
+  }
+
+  /* Circle image with cover - for photos that need to fill the circle */
+  .jj-circle-image-fill {
+    object-fit: cover !important;
+    object-position: center 20% !important;
+    border-radius: 50%;
   }
 
   /* ============================================================
    * 2. GLOBAL USER PROFILE RULE - LOCKED
    * Consistent profile layout across all systems
+   * Same hierarchy: Image → Name → Role
    * ============================================================ */
   
   .jj-profile-card {
@@ -562,15 +595,29 @@ All colors MUST be HSL.
   }
   
   .jj-profile-card .jj-profile-image {
-    @apply object-contain object-center rounded-full bg-zinc-950;
+    object-fit: contain !important;
+    object-position: center 15% !important;
+    @apply rounded-full bg-zinc-950;
   }
   
   .jj-profile-card .jj-profile-name {
-    @apply text-white font-semibold mt-3;
+    @apply text-foreground font-semibold mt-3;
   }
   
   .jj-profile-card .jj-profile-role {
     @apply text-gold text-sm mt-1;
+  }
+
+  /* Profile image container - ensures proper sizing */
+  .jj-profile-image-container {
+    @apply relative overflow-hidden rounded-full;
+    background-color: #0a0a0a;
+  }
+
+  .jj-profile-image-container img {
+    @apply w-full h-full;
+    object-fit: contain !important;
+    object-position: center 15% !important;
   }
 
   /* ============================================================
