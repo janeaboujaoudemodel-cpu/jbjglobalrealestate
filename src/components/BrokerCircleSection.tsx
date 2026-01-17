@@ -270,7 +270,7 @@ const BrokerCircleSection = () => {
         >
           <div className="flex flex-col sm:flex-row items-center justify-center gap-4">
             <Link to="/broker-toolkit">
-              <Button className="gap-2 bg-gold hover:bg-gold/90 text-black px-8 py-6 text-lg font-semibold rounded-xl shadow-lg shadow-gold/20">
+              <Button variant="gold" className="gap-2 px-8 py-6 text-lg">
                 <Award className="h-5 w-5" />
                 Join Broker Circle — It's Free
                 <ArrowRight className="h-5 w-5" />

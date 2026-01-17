@@ -213,26 +213,13 @@ All colors MUST be HSL.
   animation: glow-pulse 2s ease-in-out infinite;
 }
 
-/* Premium Button Styles */
-.btn-premium-gold {
-  @apply relative bg-gradient-to-r from-gold via-[#C4A962] to-gold text-black font-bold transition-all duration-500;
-  box-shadow: 0 4px 20px hsl(var(--gold) / 0.3);
-}
-
-.btn-premium-gold:hover {
-  @apply from-gold-light to-gold scale-105;
-  box-shadow: 0 8px 40px hsl(var(--gold) / 0.5);
-}
-
-.btn-premium-outline {
-  @apply relative border-2 border-gold text-gold font-bold transition-all duration-500;
-  box-shadow: 0 2px 15px hsl(var(--gold) / 0.15);
-}
-
-.btn-premium-outline:hover {
-  @apply bg-gold text-black scale-105;
-  box-shadow: 0 6px 30px hsl(var(--gold) / 0.4);
-}
+/* ============================================================
+ * DEPRECATED - DO NOT USE
+ * These classes violate the GLOBAL BUTTON SYSTEM (LOCKED)
+ * Use Button component with variant="gold" or variant="goldOutline"
+ * ============================================================ */
+/* .btn-premium-gold - REMOVED: Violates no-shadow, no-scale rules */
+/* .btn-premium-outline - REMOVED: Violates inverted-hover rules */
 
 @layer components {
   /* ============================================================
@@ -577,12 +564,11 @@ All colors MUST be HSL.
     border-radius: 50%;
   }
 
-  /* Circle image with cover - for photos that need to fill the circle */
-  .jj-circle-image-fill {
-    object-fit: cover !important;
-    object-position: center 20% !important;
-    border-radius: 50%;
-  }
+  /* ============================================================
+   * REMOVED: .jj-circle-image-fill (object-fit: cover)
+   * REASON: Violates GLOBAL IMAGE RULE - NO CROPPING EVER
+   * All circular images must use .jj-circle-image with contain
+   * ============================================================ */
 
   /* ============================================================
    * 2. GLOBAL USER PROFILE RULE - LOCKED

@@ -660,7 +660,8 @@ const Properties = () => {
                   </Button>
                   <Button
                     onClick={() => setIsAdvancedOpen(false)}
-                    className="bg-gold text-black hover:bg-gold-light px-8"
+                    variant="gold"
+                    className="px-8"
                   >
                     Apply Filters
                   </Button>
@@ -671,7 +672,8 @@ const Properties = () => {
             {/* SEARCH Button - Manual trigger */}
             <Button 
               onClick={handleSearch}
-              className="h-12 px-8 bg-gold text-black hover:bg-gold-light font-semibold rounded-lg"
+              variant="gold"
+              className="h-12 px-8 rounded-lg"
             >
               SEARCH
             </Button>
@@ -806,7 +808,8 @@ const Properties = () => {
                 </div>
                 <Button 
                   onClick={handleInquirySubmit}
-                  className="w-full h-14 bg-gold text-black hover:bg-gold-light font-semibold text-lg rounded-lg mt-4"
+                  variant="gold"
+                  className="w-full h-14 text-lg rounded-lg mt-4"
                 >
                   SUBMIT
                 </Button>
@@ -845,7 +848,7 @@ const Properties = () => {
         <div className="container mx-auto px-4">
           <div className="flex flex-wrap items-center justify-center gap-4">
             <a href={buildSureFormsUrl()} target="_blank" rel="noopener noreferrer">
-              <Button className="bg-gold text-black hover:bg-gold-light h-12 px-8 font-semibold">
+              <Button variant="gold" className="h-12 px-8">
                 <ArrowUpRight className="w-4 h-4 mr-2" />
                 Register Interest
               </Button>
@@ -857,7 +860,7 @@ const Properties = () => {
               </Button>
             </a>
             <a href={`tel:${CONTACT_INFO.phoneRaw}`}>
-              <Button variant="outline" className="border-gold/50 text-gold hover:bg-gold hover:text-black h-12 px-8">
+              <Button variant="goldOutline" className="h-12 px-8">
                 <Phone className="w-4 h-4 mr-2" />
                 Call Now
               </Button>

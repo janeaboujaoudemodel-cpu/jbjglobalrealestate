@@ -219,7 +219,7 @@ const DynamicBrokerSection = ({ forcedUserType }: DynamicBrokerSectionProps) => 
           {/* CTA Buttons */}
           <div className="flex flex-col sm:flex-row items-center justify-center gap-4">
             <Link to={content.primaryButton.link}>
-              <Button className="gap-2 bg-gold hover:bg-gold/90 text-black px-8 py-6 text-lg font-semibold rounded-xl shadow-lg shadow-gold/20 min-w-[200px]">
+              <Button variant="gold" className="gap-2 px-8 py-6 text-lg min-w-[200px]">
                 <content.primaryButton.icon className="h-5 w-5" />
                 {content.primaryButton.text}
                 <ArrowRight className="h-5 w-5" />

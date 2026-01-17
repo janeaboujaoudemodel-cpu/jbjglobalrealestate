@@ -59,7 +59,7 @@ const AreaGuides = () => {
               Explore All Areas
             </Button>
             <Link to="/properties">
-              <Button className="bg-gold hover:bg-gold/90 text-black font-medium px-6">
+              <Button variant="gold" className="px-6">
                 <Building2 className="w-4 h-4 mr-2" />
                 View Properties
               </Button>

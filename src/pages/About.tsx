@@ -294,6 +294,7 @@ const About = () => {
                 className="relative rounded-2xl overflow-hidden"
                 variants={fadeInUp}
               >
+                {/* Property/landscape images can use object-cover as they are not portraits */}
                 <img 
                   src={luxuryVilla1} 
                   alt="Premium Advisory Services" 

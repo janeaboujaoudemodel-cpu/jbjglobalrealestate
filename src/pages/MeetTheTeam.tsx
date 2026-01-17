@@ -282,7 +282,8 @@ const MeetTheTeam: React.FC = () => {
               <motion.div variants={fadeInUp}>
                 <Button
                   onClick={handleOpenContactForm}
-                  className="bg-gold hover:bg-gold-dark text-black font-semibold px-8"
+                  variant="gold"
+                  className="px-8"
                 >
                   <MessageSquare className="w-4 h-4 mr-2" />
                   Contact Us
@@ -442,7 +443,8 @@ const MeetTheTeam: React.FC = () => {
               <div className="flex flex-wrap justify-center gap-4">
                 <Button 
                   onClick={handleOpenContactForm}
-                  className="bg-gold hover:bg-gold-dark text-black font-semibold px-6"
+                  variant="gold"
+                  className="px-6"
                 >
                   <MessageSquare className="w-4 h-4 mr-2" />
                   Contact Us
