@@ -226,7 +226,7 @@ const GlobalHeader = () => {
                     location.pathname.startsWith('/market-intelligence') ? 'text-gold' : 'text-zinc-300 hover:text-gold'
                   }`}>
                     <Newspaper className="w-3 h-3" />
-                    Market Intel
+                    Market Intelligence
                     <ChevronDown className="w-3 h-3" />
                   </button>
                 </DropdownMenuTrigger>
