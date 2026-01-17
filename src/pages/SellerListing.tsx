@@ -483,14 +483,13 @@ Requirements:
                   target="_blank"
                   rel="noopener noreferrer"
                 >
-                  <Button className="bg-gradient-to-r from-gold to-gold-dark text-black font-semibold">
+                  <Button variant="primary">
                     <MessageCircle className="w-4 h-4 mr-2" />
                     Chat on WhatsApp
                   </Button>
                 </a>
                 <Button 
-                  variant="outline" 
-                  className="border-zinc-700 text-white hover:bg-zinc-800"
+                  variant="secondary" 
                   onClick={() => navigate("/")}
                 >
                   Return Home

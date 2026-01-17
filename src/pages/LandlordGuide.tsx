@@ -220,14 +220,14 @@ const LandlordGuide = () => {
         actions={
           <>
             <Button 
-              variant="outline"
-              className="border-gold/50 text-gold hover:bg-gold/10 px-6"
+              variant="secondary"
+              className="px-6"
               onClick={() => document.getElementById('listing-process')?.scrollIntoView({ behavior: 'smooth' })}
             >
               <ArrowDown className="w-4 h-4 mr-2" />
               Read the Full Guide
             </Button>
-            <Button asChild className="bg-gold hover:bg-gold/90 text-black font-medium px-6">
+            <Button asChild variant="primary" className="px-6">
               <Link to="/contact">
                 List Your Property
                 <ArrowRight className="w-4 h-4 ml-2" />
@@ -435,13 +435,13 @@ const LandlordGuide = () => {
             <p className="text-zinc-400">Explore more resources for landlords and tenants</p>
           </div>
           <div className="flex justify-center gap-4">
-            <Button asChild variant="outline" className="border-gold/50 text-gold hover:bg-gold/10">
+            <Button asChild variant="secondary">
               <Link to="/rent-guide">
                 Rent Guide
                 <ArrowRight className="w-4 h-4 ml-2" />
               </Link>
             </Button>
-            <Button asChild variant="outline" className="border-gold/50 text-gold hover:bg-gold/10">
+            <Button asChild variant="secondary">
               <Link to="/tenant-guide">
                 Tenant Guide
                 <ArrowRight className="w-4 h-4 ml-2" />

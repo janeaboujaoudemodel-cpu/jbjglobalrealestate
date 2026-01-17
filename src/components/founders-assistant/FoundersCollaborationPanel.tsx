@@ -182,7 +182,7 @@ export default function FoundersCollaborationPanel() {
         <div className="flex flex-wrap gap-2">
           <Dialog open={isTaskDialogOpen} onOpenChange={setIsTaskDialogOpen}>
             <DialogTrigger asChild>
-              <Button className="bg-gold/20 text-gold border-gold/30 hover:bg-gold/30">
+              <Button variant="secondary">
                 <Zap className="h-4 w-4 mr-2" />
                 Route Task
               </Button>

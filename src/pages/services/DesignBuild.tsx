@@ -159,9 +159,7 @@ const DesignBuild = () => {
                   </ul>
 
                   <Link to={`/services/${service.slug}`}>
-                    <Button 
-                      className="w-full bg-gold hover:bg-gold-light text-black font-semibold"
-                    >
+                    <Button variant="primary" className="w-full">
                       Explore {service.title}
                       <ArrowUpRight className="w-4 h-4 ml-2" />
                     </Button>
@@ -193,7 +191,7 @@ const DesignBuild = () => {
               Our design experts are ready to bring your vision to life. Schedule a consultation today.
             </p>
             <a href={CONTACT_INFO.inquiryFormUrl} target="_blank" rel="noopener noreferrer">
-              <Button className="bg-gold hover:bg-gold-light text-black font-semibold px-8 py-6 text-base">
+              <Button variant="primary" className="px-8 py-6 text-base">
                 Request Consultation
                 <ArrowUpRight className="w-5 h-5 ml-2" />
               </Button>

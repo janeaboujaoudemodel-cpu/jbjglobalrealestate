@@ -611,7 +611,7 @@ const FlaggedLeadsView = ({ userId, onRefresh }: FlaggedLeadsViewProps) => {
                 <Button variant="outline" className="flex-1" onClick={() => setEditingLead(null)}>
                   Cancel
                 </Button>
-                <Button className="flex-1 bg-gold text-black hover:bg-gold/90" onClick={handleSaveEdit}>
+                <Button variant="primary" className="flex-1" onClick={handleSaveEdit}>
                   <Save className="h-4 w-4 mr-2" />
                   Save Changes
                 </Button>

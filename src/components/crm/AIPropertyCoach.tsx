@@ -337,7 +337,7 @@ const AIPropertyCoach = ({ lead, activities = [], onSuggestionApply }: AIPropert
             <Button
               onClick={handleAskCoach}
               disabled={loading || !question.trim()}
-              className="bg-gold hover:bg-gold/90 text-black"
+              variant="primary"
             >
               <Send className="h-4 w-4" />
             </Button>

@@ -291,7 +291,7 @@ const AIPersonalShopper = () => {
                         className="bg-zinc-800 border-zinc-700 text-white"
                       />
                     </div>
-                    <Button onClick={savePlan} className="w-full bg-emerald-600 hover:bg-emerald-700">
+                    <Button onClick={savePlan} variant="primary" className="w-full">
                       Save Plan
                     </Button>
                   </div>
@@ -300,7 +300,7 @@ const AIPersonalShopper = () => {
 
               <Dialog open={showInquiryModal} onOpenChange={setShowInquiryModal}>
                 <DialogTrigger asChild>
-                  <Button size="sm" className="bg-gold hover:bg-gold/90 text-black text-xs">
+                  <Button size="sm" variant="primary" className="text-xs">
                     <Mail className="w-3 h-3 mr-1" /> Submit to Team
                   </Button>
                 </DialogTrigger>
@@ -340,7 +340,7 @@ const AIPersonalShopper = () => {
                         className="bg-zinc-800 border-zinc-700 text-white"
                       />
                     </div>
-                    <Button onClick={submitInquiry} className="w-full bg-gold hover:bg-gold/90 text-black">
+                    <Button onClick={submitInquiry} variant="primary" className="w-full">
                       Submit to Concierge Team
                     </Button>
                   </div>

@@ -154,7 +154,7 @@ const EmailClient = () => {
         <div className="p-4">
           <Dialog open={composeOpen} onOpenChange={setComposeOpen}>
             <DialogTrigger asChild>
-              <Button className="w-full bg-blue-600 hover:bg-blue-700">
+              <Button variant="primary" className="w-full">
                 <Pencil className="w-4 h-4 mr-2" />
                 Compose
               </Button>
@@ -189,7 +189,7 @@ const EmailClient = () => {
                     <Button variant="outline" onClick={() => setComposeOpen(false)}>
                       Cancel
                     </Button>
-                    <Button onClick={sendEmail} className="bg-blue-600 hover:bg-blue-700">
+                    <Button onClick={sendEmail} variant="primary">
                       <Send className="w-4 h-4 mr-2" />
                       Send
                     </Button>

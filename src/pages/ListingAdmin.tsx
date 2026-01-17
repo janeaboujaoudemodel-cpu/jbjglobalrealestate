@@ -130,7 +130,7 @@ const ListingAdmin = () => {
               You don't have permission to access the Listing Admin panel. 
               Please contact your administrator to request access.
             </p>
-            <Button onClick={() => navigate("/")} className="bg-gold hover:bg-gold-dark text-black">
+            <Button onClick={() => navigate("/")} variant="primary">
               Go Home
             </Button>
           </CardContent>
@@ -493,7 +493,8 @@ const ListingAdmin = () => {
             {/* Actions */}
             <Button
               onClick={handleCreateNew}
-              className="w-full bg-gold hover:bg-gold-dark text-black font-semibold"
+              variant="primary"
+              className="w-full"
             >
               <Plus className="w-4 h-4 mr-2" />
               Add New Project
@@ -867,7 +868,7 @@ const ListingAdmin = () => {
                           <Button
                             onClick={handleSaveProject}
                             disabled={isSaving}
-                            className="bg-gold hover:bg-gold-dark text-black font-semibold"
+                            variant="primary"
                           >
                             {isSaving ? "Saving..." : isCreating ? "Create Project" : "Save Changes"}
                           </Button>
@@ -892,7 +893,7 @@ const ListingAdmin = () => {
                         <Button
                           onClick={() => fileInputRef.current?.click()}
                           disabled={isUploadingDocument}
-                          className="bg-gold hover:bg-gold-dark text-black"
+                          variant="primary"
                         >
                           <Upload className="w-4 h-4 mr-2" />
                           {isUploadingDocument ? "Uploading..." : "Upload Document"}
@@ -955,7 +956,7 @@ const ListingAdmin = () => {
                       <div className="p-4 bg-zinc-800/50 rounded-lg">
                         <Button
                           onClick={() => imageInputRef.current?.click()}
-                          className="bg-gold hover:bg-gold-dark text-black"
+                          variant="primary"
                         >
                           <Image className="w-4 h-4 mr-2" />
                           Upload Images
@@ -1016,7 +1017,7 @@ const ListingAdmin = () => {
                   </p>
                   <Button
                     onClick={handleCreateNew}
-                    className="bg-gold hover:bg-gold-dark text-black font-semibold"
+                    variant="primary"
                   >
                     <Plus className="w-4 h-4 mr-2" />
                     Create New Project
