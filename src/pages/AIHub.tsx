@@ -29,7 +29,6 @@ import {
   GraduationCap,
   Briefcase,
   UserCheck,
-  Bot,
   CheckCircle2,
   Gift,
   Home,
@@ -145,10 +144,10 @@ const brokerOperations = [
   },
   {
     id: "admin-support",
-    title: "Personal Admin Support",
-    subtitle: "24/7 Assistance",
-    description: "Daily admin tasks, reminders, follow-ups, scheduling, and coordination.",
-    icon: Bot,
+    title: "Olivia — Executive Admin",
+    subtitle: "Founder Support",
+    description: "Scheduling, follow-ups, coordination, and admin workflows.",
+    icon: User,
     color: "text-gold",
     bgColor: "bg-gold/10",
     borderColor: "border-gold/30",
@@ -321,9 +320,17 @@ const productivityTools = [
   },
 ];
 
+const allHubTools = [
+  ...freeAITools,
+  ...brokerOperations,
+  ...creativeMarketing,
+  ...educationCerts,
+  ...productivityTools,
+];
+
 const hubBenefits = [
   "20+ property tools & assistants",
-  "Personal admin support (24/7)",
+  "Executive admin support (24/7)",
   "HR Manager & HR Assistant",
   "Property coach for deal strategy",
   "Creative & marketing suite",
@@ -468,7 +475,7 @@ const AIHub = () => {
                 className="text-zinc-400 text-base max-w-xl mx-auto mb-8"
                 variants={fadeInUp}
               >
-                Free AI tools • Broker training • Operations support • Personal coaching
+                Free AI tools • Broker training • Operations support • Coaching
               </motion.p>
 
               {/* Gold divider */}
@@ -561,32 +568,21 @@ const AIHub = () => {
             >
               <Badge className="bg-emerald-500/20 text-emerald-400 border-emerald-500/30 mb-4">
                 <Sparkles className="w-3 h-3 mr-1" />
-                Free AI Tools
+                Tools Shortcuts
               </Badge>
               <h2 className="text-2xl md:text-3xl font-bold text-white mb-2">
-                Free AI Tools for Everyone
+                All Tools — Quick Access
               </h2>
-              <p className="text-zinc-400 max-w-lg mx-auto">
-                No signup required for these powerful property tools.
+              <p className="text-zinc-400 max-w-2xl mx-auto">
+                Quick shortcuts to every tool. Full categories are listed below.
               </p>
-            </motion.div>
-
-            <motion.div 
-              className="grid md:grid-cols-2 lg:grid-cols-4 gap-4"
-              initial="hidden"
-              whileInView="visible"
-              viewport={{ once: true }}
-              variants={staggerContainer}
-            >
-              {freeAITools.map((tool) => renderToolCard(tool))}
-            </motion.div>
           </div>
         </section>
 
         {/* Gold Divider */}
         <div className="h-px bg-gradient-to-r from-transparent via-gold/40 to-transparent" />
 
-        {/* CATEGORY 2: BROKER OPERATIONS (Human Support) */}
+        {/* CATEGORY 2: BROKER OPERATIONS SUPPORT */}
         <section className="py-16 md:py-20 bg-zinc-950">
           <div className="container mx-auto px-4">
             <motion.div
@@ -600,10 +596,10 @@ const AIHub = () => {
                 Broker Operations
               </Badge>
               <h2 className="text-2xl md:text-3xl font-bold text-white mb-2">
-                Broker Operations (Human Support)
+                Broker Operations Support
               </h2>
               <p className="text-zinc-400 max-w-lg mx-auto">
-                Dedicated human support to help you succeed.
+                Dedicated operations support to help you succeed.
               </p>
             </motion.div>
 

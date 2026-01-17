@@ -15,7 +15,6 @@ import {
   Building2,
   DollarSign,
   Award,
-  Bot,
 } from 'lucide-react';
 
 type UserType = 'broker' | 'buyer' | 'seller' | 'renter' | 'investor' | 'visitor';
@@ -53,7 +52,7 @@ const CONTENT_BY_USER_TYPE: Record<UserType, ContentConfig> = {
     secondaryButton: {
       text: 'Explore Broker Tools',
       link: '/ai-hub',
-      icon: Bot,
+      icon: Briefcase,
     },
   },
   buyer: {
