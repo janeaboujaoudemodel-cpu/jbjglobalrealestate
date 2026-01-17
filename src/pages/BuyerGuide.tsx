@@ -1,6 +1,7 @@
 import { SEOHead, pagesSEO } from "@/components/SEOHead";
 import { Button } from "@/components/ui/button";
 import { Link } from "react-router-dom";
+import { FounderPhilosophySection } from "@/components/FounderPhilosophySection";
 import { 
   CheckCircle2, 
   Search, 
@@ -604,6 +605,9 @@ const BuyerGuide = () => {
           </div>
         </div>
       </section>
+
+      {/* Founder-Led Philosophy & Advisory Positioning */}
+      <FounderPhilosophySection />
 
       {/* Final CTA - Book Consultation */}
       <section className="py-20 md:py-28 bg-gradient-to-b from-zinc-900 to-black relative overflow-hidden">

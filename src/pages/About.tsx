@@ -6,6 +6,7 @@ import { Button } from "@/components/ui/button";
 import { useCountUp } from "@/hooks/useCountUp";
 import { COMPANY_STATS } from "@/constants/stats";
 import { SEOHead, pagesSEO } from "@/components/SEOHead";
+import { FounderPhilosophySection } from "@/components/FounderPhilosophySection";
 import founderProfessional from "@/assets/founder-professional.jpeg";
 import luxuryVillaHero from "@/assets/luxury-villa-hero.jpeg";
 import coupleYachtDubai from "@/assets/couple-yacht-dubai.png";
@@ -123,6 +124,9 @@ const About = () => {
           </motion.p>
         </motion.div>
       </section>
+
+      {/* Founder-Led Philosophy & Advisory Positioning */}
+      <FounderPhilosophySection />
 
       {/* Stats Section */}
       <section className="py-20 relative overflow-hidden">

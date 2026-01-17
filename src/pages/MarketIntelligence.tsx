@@ -5,6 +5,7 @@ import { useEffect } from "react";
 import Footer from "@/components/Footer";
 import { SEOHead } from "@/components/SEOHead";
 import { Button } from "@/components/ui/button";
+import { FounderPhilosophySection } from "@/components/FounderPhilosophySection";
 import {
   MarketOverviewDashboard,
   AreaIntelligenceGrid,
@@ -184,6 +185,9 @@ const MarketIntelligence = () => {
           </motion.div>
         </motion.div>
       </section>
+
+      {/* Founder-Led Philosophy & Advisory Positioning */}
+      <FounderPhilosophySection />
 
       {/* Market Overview Dashboard */}
       <div id="overview">
