@@ -139,14 +139,6 @@ const DeveloperPartnersMarquee = () => {
                       : '0 0 8px rgba(200,167,102,0.3)',
                   }}
                 >
-                  className={
-                    developer.developerId
-                      ? "text-gold text-sm md:text-base font-semibold tracking-wide whitespace-nowrap transition-all duration-300 cursor-pointer drop-shadow-[0_0_8px_rgba(200,167,102,0.6)] hover:text-white hover:drop-shadow-[0_0_20px_rgba(255,255,255,0.9)]"
-                      : "text-gold/70 text-sm md:text-base font-semibold tracking-wide whitespace-nowrap transition-all duration-300 cursor-pointer drop-shadow-[0_0_6px_rgba(200,167,102,0.4)] hover:text-white hover:drop-shadow-[0_0_20px_rgba(255,255,255,0.9)]"
-                  }
-                  title={developer.name}
-                  style={{ textShadow: developer.developerId ? '0 0 12px rgba(200,167,102,0.5)' : '0 0 8px rgba(200,167,102,0.3)' }}
-                >
                   {developer.name}
                 </Link>
 
