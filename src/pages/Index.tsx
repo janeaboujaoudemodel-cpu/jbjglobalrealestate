@@ -203,8 +203,8 @@ const Index = () => {
             </p>
           </div>
 
-          {/* Audience Entry Cards - White Cards with Black Icon Containers + Referral */}
-          <div className="grid grid-cols-3 md:grid-cols-6 gap-3 max-w-6xl mx-auto mb-12">
+          {/* Audience Entry Cards - White Cards with Black Icon Containers + Careers */}
+          <div className="grid grid-cols-4 md:grid-cols-7 gap-3 max-w-6xl mx-auto mb-12">
             <Link to="/buyer-guide" className="group">
               <div className="bg-white border border-zinc-200 rounded-xl p-4 text-center hover:border-gold hover:shadow-xl hover:shadow-gold/20 transition-all duration-300 relative overflow-hidden">
                 <div className="absolute inset-0 bg-gradient-to-br from-gold/5 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
@@ -277,6 +277,18 @@ const Index = () => {
                 </div>
               </div>
             </Link>
+            <Link to="/join" className="group">
+              <div className="bg-white border border-zinc-200 rounded-xl p-4 text-center hover:border-gold hover:shadow-xl hover:shadow-gold/20 transition-all duration-300 relative overflow-hidden">
+                <div className="absolute inset-0 bg-gradient-to-br from-gold/5 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
+                <div className="relative z-10">
+                  <div className="w-9 h-9 bg-black rounded-lg flex items-center justify-center mx-auto mb-2 group-hover:bg-zinc-900 transition-colors">
+                    <GraduationCap className="w-4 h-4 text-gold" />
+                  </div>
+                  <h4 className="text-black text-xs font-semibold mb-0.5">Careers</h4>
+                  <p className="text-zinc-600 text-[10px]">Join our team</p>
+                </div>
+              </div>
+            </Link>
           </div>
 
           {/* Quick Actions - Champagne Gold for Explore/List Properties */}
@@ -331,12 +343,12 @@ const Index = () => {
             </Link>
           </div>
 
-          {/* Licensed Partner Network - White Card Style */}
+          {/* Licensed Partner Network - White Card Style - Equal Heights */}
           <div className="grid grid-cols-3 gap-4 max-w-3xl mx-auto mb-12">
-            <Link to="/services/law-firm" className="group">
-              <div className="bg-white border border-zinc-200 rounded-xl p-5 text-center hover:border-gold hover:shadow-xl hover:shadow-gold/20 transition-all duration-300 relative overflow-hidden">
+            <Link to="/services/law-firm" className="group h-full">
+              <div className="bg-white border border-zinc-200 rounded-xl p-5 text-center hover:border-gold hover:shadow-xl hover:shadow-gold/20 transition-all duration-300 relative overflow-hidden h-full flex flex-col justify-between">
                 <div className="absolute inset-0 bg-gradient-to-br from-gold/5 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
-                <div className="relative z-10">
+                <div className="relative z-10 flex flex-col items-center">
                   <div className="w-10 h-10 bg-black rounded-lg flex items-center justify-center mx-auto mb-3 group-hover:bg-zinc-900 transition-colors">
                     <Scale className="w-5 h-5 text-gold" />
                   </div>
@@ -345,27 +357,27 @@ const Index = () => {
                 </div>
               </div>
             </Link>
-            <Link to="/mortgage-calculator" className="group">
-              <div className="bg-white border border-zinc-200 rounded-xl p-5 text-center hover:border-gold hover:shadow-xl hover:shadow-gold/20 transition-all duration-300 relative overflow-hidden">
+            <Link to="/mortgage-calculator" className="group h-full">
+              <div className="bg-white border border-zinc-200 rounded-xl p-5 text-center hover:border-gold hover:shadow-xl hover:shadow-gold/20 transition-all duration-300 relative overflow-hidden h-full flex flex-col justify-between">
                 <div className="absolute inset-0 bg-gradient-to-br from-gold/5 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
-                <div className="relative z-10">
+                <div className="relative z-10 flex flex-col items-center">
                   <div className="w-10 h-10 bg-black rounded-lg flex items-center justify-center mx-auto mb-3 group-hover:bg-zinc-900 transition-colors">
                     <Calculator className="w-5 h-5 text-gold" />
                   </div>
                   <h4 className="text-black text-sm font-semibold mb-1">Mortgage Partners</h4>
-                  <p className="text-zinc-600 text-xs">Mortgage Calculator · Through AI & Partners</p>
+                  <p className="text-zinc-600 text-xs leading-tight">Mortgage Calculator<br /><span className="text-gold">Through AI & Partners</span></p>
                 </div>
               </div>
             </Link>
-            <Link to="/services/design-build" className="group">
-              <div className="bg-white border border-zinc-200 rounded-xl p-5 text-center hover:border-gold hover:shadow-xl hover:shadow-gold/20 transition-all duration-300 relative overflow-hidden">
+            <Link to="/services/design-build" className="group h-full">
+              <div className="bg-white border border-zinc-200 rounded-xl p-5 text-center hover:border-gold hover:shadow-xl hover:shadow-gold/20 transition-all duration-300 relative overflow-hidden h-full flex flex-col justify-between">
                 <div className="absolute inset-0 bg-gradient-to-br from-gold/5 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
-                <div className="relative z-10">
+                <div className="relative z-10 flex flex-col items-center">
                   <div className="w-10 h-10 bg-black rounded-lg flex items-center justify-center mx-auto mb-3 group-hover:bg-zinc-900 transition-colors">
                     <Wrench className="w-5 h-5 text-gold" />
                   </div>
                   <h4 className="text-black text-sm font-semibold mb-1">Design & Build</h4>
-                  <p className="text-zinc-600 text-xs">Through AI & Partners</p>
+                  <p className="text-zinc-600 text-xs"><span className="text-gold">Through AI & Partners</span></p>
                 </div>
               </div>
             </Link>
