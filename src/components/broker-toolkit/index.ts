@@ -3,6 +3,8 @@ export { BrokerToolkitStats } from './BrokerToolkitStats';
 export { BrokerToolkitNavigation } from './BrokerToolkitNavigation';
 export { BrokerToolkitTools } from './BrokerToolkitTools';
 export { BrokerToolkitEducation } from './BrokerToolkitEducation';
+export { BrokerToolkitAcademy } from './BrokerToolkitAcademy';
+export { BrokerToolkitOperations } from './BrokerToolkitOperations';
 export { BrokerToolkitSupport } from './BrokerToolkitSupport';
 export { BrokerToolkitCRM } from './BrokerToolkitCRM';
 export { BrokerToolkitGrowth } from './BrokerToolkitGrowth';
