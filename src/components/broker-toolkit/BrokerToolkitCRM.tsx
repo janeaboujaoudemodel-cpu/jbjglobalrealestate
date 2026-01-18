@@ -167,7 +167,7 @@ export function BrokerToolkitCRM() {
                 </p>
                 <Button 
                   onClick={handleCRMAccess}
-                  className="bg-gradient-to-r from-white via-[#FDFBF7] to-[#F5F0E6] text-gold hover:bg-white/90 hover:text-gold-dark px-8 font-semibold shadow-lg"
+                  className="bg-gradient-to-r from-white via-[#FDFBF7] to-[#F5F0E6] text-gold hover:bg-transparent hover:text-white border border-white/20 hover:border-white px-8 font-semibold shadow-lg transition-all duration-300"
                 >
                   <Target className="w-5 h-5 mr-2" />
                   Open CRM Dashboard

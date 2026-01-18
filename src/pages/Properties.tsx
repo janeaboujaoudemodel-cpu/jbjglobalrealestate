@@ -353,7 +353,7 @@ const Properties = () => {
       </section>
 
       {/* Main Search Bar - Fixed under header (sticky on scroll) */}
-      <section className="sticky top-16 lg:top-[72px] z-40 bg-background backdrop-blur-md border-b border-border py-4 shadow-md">
+      <section className="sticky top-16 lg:top-[72px] z-40 bg-black/95 backdrop-blur-md border-b border-zinc-800 py-4 shadow-lg shadow-black/50">
         <div className="container mx-auto px-4">
           {/* Transaction Type Tabs - Buy / Rent */}
           <div className="flex items-center gap-2 mb-4 flex-wrap">
