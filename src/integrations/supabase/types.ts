@@ -9180,6 +9180,66 @@ export type Database = {
           },
         ]
       }
+      support_tickets: {
+        Row: {
+          assigned_to: string | null
+          attachment_urls: string[] | null
+          created_at: string
+          description: string
+          email: string
+          full_name: string
+          id: string
+          internal_notes: string | null
+          phone: string | null
+          priority: string | null
+          resolved_at: string | null
+          service_category: string
+          status: string
+          subject: string
+          ticket_number: string
+          updated_at: string
+          user_id: string | null
+        }
+        Insert: {
+          assigned_to?: string | null
+          attachment_urls?: string[] | null
+          created_at?: string
+          description: string
+          email: string
+          full_name: string
+          id?: string
+          internal_notes?: string | null
+          phone?: string | null
+          priority?: string | null
+          resolved_at?: string | null
+          service_category: string
+          status?: string
+          subject: string
+          ticket_number: string
+          updated_at?: string
+          user_id?: string | null
+        }
+        Update: {
+          assigned_to?: string | null
+          attachment_urls?: string[] | null
+          created_at?: string
+          description?: string
+          email?: string
+          full_name?: string
+          id?: string
+          internal_notes?: string | null
+          phone?: string | null
+          priority?: string | null
+          resolved_at?: string | null
+          service_category?: string
+          status?: string
+          subject?: string
+          ticket_number?: string
+          updated_at?: string
+          user_id?: string | null
+        }
+        Relationships: []
+      }
       team_members: {
         Row: {
           id: string
