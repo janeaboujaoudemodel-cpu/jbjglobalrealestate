@@ -207,93 +207,82 @@ const Index = () => {
             </p>
           </div>
 
-          {/* Audience Entry Cards - White Cards with Black Icon Containers - Row 1: 4 cards */}
-          <div className="grid grid-cols-2 sm:grid-cols-4 gap-3 max-w-4xl mx-auto mb-3">
-            <Link to="/buyer-guide" className="group">
-              <div className="bg-white border border-zinc-200 rounded-xl p-4 text-center hover:border-gold hover:shadow-xl hover:shadow-gold/20 transition-all duration-300 relative overflow-hidden h-full">
+          {/* Audience Entry Cards - All 7 user categories on ONE line */}
+          <div className="flex justify-center gap-2 md:gap-3 max-w-5xl mx-auto mb-10 flex-wrap md:flex-nowrap">
+            <Link to="/buyer-guide" className="group flex-1 min-w-[70px] max-w-[100px] md:max-w-none">
+              <div className="bg-white border border-zinc-200 rounded-lg p-2 md:p-3 text-center hover:border-gold hover:shadow-lg hover:shadow-gold/20 transition-all duration-300 relative overflow-hidden h-full">
                 <div className="absolute inset-0 bg-gradient-to-br from-gold/5 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
                 <div className="relative z-10">
-                  <div className="w-9 h-9 bg-black rounded-lg flex items-center justify-center mx-auto mb-2 group-hover:bg-zinc-900 transition-colors">
-                    <Heart className="w-4 h-4 text-gold" />
+                  <div className="w-7 h-7 md:w-8 md:h-8 bg-black rounded-lg flex items-center justify-center mx-auto mb-1 md:mb-2 group-hover:bg-zinc-900 transition-colors">
+                    <Heart className="w-3.5 h-3.5 md:w-4 md:h-4 text-gold" />
                   </div>
-                  <h4 className="text-black text-xs font-semibold mb-0.5">Buyers</h4>
-                  <p className="text-zinc-600 text-[10px]">Find your home</p>
+                  <h4 className="text-black text-[10px] md:text-xs font-semibold">Buyers</h4>
                 </div>
               </div>
             </Link>
-            <Link to="/seller-guide" className="group">
-              <div className="bg-white border border-zinc-200 rounded-xl p-4 text-center hover:border-gold hover:shadow-xl hover:shadow-gold/20 transition-all duration-300 relative overflow-hidden h-full">
+            <Link to="/seller-guide" className="group flex-1 min-w-[70px] max-w-[100px] md:max-w-none">
+              <div className="bg-white border border-zinc-200 rounded-lg p-2 md:p-3 text-center hover:border-gold hover:shadow-lg hover:shadow-gold/20 transition-all duration-300 relative overflow-hidden h-full">
                 <div className="absolute inset-0 bg-gradient-to-br from-gold/5 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
                 <div className="relative z-10">
-                  <div className="w-9 h-9 bg-black rounded-lg flex items-center justify-center mx-auto mb-2 group-hover:bg-zinc-900 transition-colors">
-                    <Target className="w-4 h-4 text-gold" />
+                  <div className="w-7 h-7 md:w-8 md:h-8 bg-black rounded-lg flex items-center justify-center mx-auto mb-1 md:mb-2 group-hover:bg-zinc-900 transition-colors">
+                    <Target className="w-3.5 h-3.5 md:w-4 md:h-4 text-gold" />
                   </div>
-                  <h4 className="text-black text-xs font-semibold mb-0.5">Sellers</h4>
-                  <p className="text-zinc-600 text-[10px]">List property</p>
+                  <h4 className="text-black text-[10px] md:text-xs font-semibold">Sellers</h4>
                 </div>
               </div>
             </Link>
-            <Link to="/rent-guide" className="group">
-              <div className="bg-white border border-zinc-200 rounded-xl p-4 text-center hover:border-gold hover:shadow-xl hover:shadow-gold/20 transition-all duration-300 relative overflow-hidden h-full">
+            <Link to="/rent-guide" className="group flex-1 min-w-[70px] max-w-[100px] md:max-w-none">
+              <div className="bg-white border border-zinc-200 rounded-lg p-2 md:p-3 text-center hover:border-gold hover:shadow-lg hover:shadow-gold/20 transition-all duration-300 relative overflow-hidden h-full">
                 <div className="absolute inset-0 bg-gradient-to-br from-gold/5 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
                 <div className="relative z-10">
-                  <div className="w-9 h-9 bg-black rounded-lg flex items-center justify-center mx-auto mb-2 group-hover:bg-zinc-900 transition-colors">
-                    <Key className="w-4 h-4 text-gold" />
+                  <div className="w-7 h-7 md:w-8 md:h-8 bg-black rounded-lg flex items-center justify-center mx-auto mb-1 md:mb-2 group-hover:bg-zinc-900 transition-colors">
+                    <Key className="w-3.5 h-3.5 md:w-4 md:h-4 text-gold" />
                   </div>
-                  <h4 className="text-black text-xs font-semibold mb-0.5">Renters</h4>
-                  <p className="text-zinc-600 text-[10px]">Rent property</p>
+                  <h4 className="text-black text-[10px] md:text-xs font-semibold">Renters</h4>
                 </div>
               </div>
             </Link>
-            <Link to="/ai-hub" className="group">
-              <div className="bg-white border border-zinc-200 rounded-xl p-4 text-center hover:border-gold hover:shadow-xl hover:shadow-gold/20 transition-all duration-300 relative overflow-hidden h-full">
+            <Link to="/ai-hub" className="group flex-1 min-w-[70px] max-w-[100px] md:max-w-none">
+              <div className="bg-white border border-zinc-200 rounded-lg p-2 md:p-3 text-center hover:border-gold hover:shadow-lg hover:shadow-gold/20 transition-all duration-300 relative overflow-hidden h-full">
                 <div className="absolute inset-0 bg-gradient-to-br from-gold/5 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
                 <div className="relative z-10">
-                  <div className="w-9 h-9 bg-black rounded-lg flex items-center justify-center mx-auto mb-2 group-hover:bg-zinc-900 transition-colors">
-                    <Briefcase className="w-4 h-4 text-gold" />
+                  <div className="w-7 h-7 md:w-8 md:h-8 bg-black rounded-lg flex items-center justify-center mx-auto mb-1 md:mb-2 group-hover:bg-zinc-900 transition-colors">
+                    <Briefcase className="w-3.5 h-3.5 md:w-4 md:h-4 text-gold" />
                   </div>
-                  <h4 className="text-black text-xs font-semibold mb-0.5">Brokers</h4>
-                  <p className="text-zinc-600 text-[10px]">Join circle</p>
+                  <h4 className="text-black text-[10px] md:text-xs font-semibold">Brokers</h4>
                 </div>
               </div>
             </Link>
-          </div>
-
-          {/* Audience Entry Cards - Row 2: 3 cards centered */}
-          <div className="flex justify-center gap-3 max-w-4xl mx-auto mb-12">
-            <Link to="/quiz" className="group w-[calc(25%-0.375rem)] min-w-0">
-              <div className="bg-white border border-zinc-200 rounded-xl p-4 text-center hover:border-gold hover:shadow-xl hover:shadow-gold/20 transition-all duration-300 relative overflow-hidden h-full">
+            <Link to="/quiz" className="group flex-1 min-w-[70px] max-w-[100px] md:max-w-none">
+              <div className="bg-white border border-zinc-200 rounded-lg p-2 md:p-3 text-center hover:border-gold hover:shadow-lg hover:shadow-gold/20 transition-all duration-300 relative overflow-hidden h-full">
                 <div className="absolute inset-0 bg-gradient-to-br from-gold/5 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
                 <div className="relative z-10">
-                  <div className="w-9 h-9 bg-black rounded-lg flex items-center justify-center mx-auto mb-2 group-hover:bg-zinc-900 transition-colors">
-                    <Users className="w-4 h-4 text-gold" />
+                  <div className="w-7 h-7 md:w-8 md:h-8 bg-black rounded-lg flex items-center justify-center mx-auto mb-1 md:mb-2 group-hover:bg-zinc-900 transition-colors">
+                    <Users className="w-3.5 h-3.5 md:w-4 md:h-4 text-gold" />
                   </div>
-                  <h4 className="text-black text-xs font-semibold mb-0.5">Visitors</h4>
-                  <p className="text-zinc-600 text-[10px]">Explore UAE</p>
+                  <h4 className="text-black text-[10px] md:text-xs font-semibold">Visitors</h4>
                 </div>
               </div>
             </Link>
-            <Link to="/referral" className="group w-[calc(25%-0.375rem)] min-w-0">
-              <div className="bg-white border border-zinc-200 rounded-xl p-4 text-center hover:border-gold hover:shadow-xl hover:shadow-gold/20 transition-all duration-300 relative overflow-hidden h-full">
+            <Link to="/referral" className="group flex-1 min-w-[70px] max-w-[100px] md:max-w-none">
+              <div className="bg-white border border-zinc-200 rounded-lg p-2 md:p-3 text-center hover:border-gold hover:shadow-lg hover:shadow-gold/20 transition-all duration-300 relative overflow-hidden h-full">
                 <div className="absolute inset-0 bg-gradient-to-br from-gold/5 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
                 <div className="relative z-10">
-                  <div className="w-9 h-9 bg-black rounded-lg flex items-center justify-center mx-auto mb-2 group-hover:bg-zinc-900 transition-colors">
-                    <Award className="w-4 h-4 text-gold" />
+                  <div className="w-7 h-7 md:w-8 md:h-8 bg-black rounded-lg flex items-center justify-center mx-auto mb-1 md:mb-2 group-hover:bg-zinc-900 transition-colors">
+                    <Award className="w-3.5 h-3.5 md:w-4 md:h-4 text-gold" />
                   </div>
-                  <h4 className="text-black text-xs font-semibold mb-0.5">Referral</h4>
-                  <p className="text-zinc-600 text-[10px]">Earn rewards</p>
+                  <h4 className="text-black text-[10px] md:text-xs font-semibold">Referral</h4>
                 </div>
               </div>
             </Link>
-            <Link to="/join" className="group w-[calc(25%-0.375rem)] min-w-0">
-              <div className="bg-white border border-zinc-200 rounded-xl p-4 text-center hover:border-gold hover:shadow-xl hover:shadow-gold/20 transition-all duration-300 relative overflow-hidden h-full">
+            <Link to="/join" className="group flex-1 min-w-[70px] max-w-[100px] md:max-w-none">
+              <div className="bg-white border border-zinc-200 rounded-lg p-2 md:p-3 text-center hover:border-gold hover:shadow-lg hover:shadow-gold/20 transition-all duration-300 relative overflow-hidden h-full">
                 <div className="absolute inset-0 bg-gradient-to-br from-gold/5 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
                 <div className="relative z-10">
-                  <div className="w-9 h-9 bg-black rounded-lg flex items-center justify-center mx-auto mb-2 group-hover:bg-zinc-900 transition-colors">
-                    <GraduationCap className="w-4 h-4 text-gold" />
+                  <div className="w-7 h-7 md:w-8 md:h-8 bg-black rounded-lg flex items-center justify-center mx-auto mb-1 md:mb-2 group-hover:bg-zinc-900 transition-colors">
+                    <GraduationCap className="w-3.5 h-3.5 md:w-4 md:h-4 text-gold" />
                   </div>
-                  <h4 className="text-black text-xs font-semibold mb-0.5">Careers</h4>
-                  <p className="text-zinc-600 text-[10px]">Join our team</p>
+                  <h4 className="text-black text-[10px] md:text-xs font-semibold">Careers</h4>
                 </div>
               </div>
             </Link>
