@@ -243,37 +243,76 @@ const SellerGuide = () => {
       />
       
       <main className="min-h-screen bg-black">
-        {/* Premium Hero */}
-        <GuideHero
-          badge="Complete Seller's Guide"
-          badgeIcon={Building2}
-          title={
-            <>
-              How to Sell Property in the{" "}
-              <span className="text-gold">UAE</span>
-            </>
-          }
-          description="Your comprehensive guide to selling property successfully in the UAE market. From preparation to handover, we're with you every step of the way."
-          actions={
-            <>
-              <Button 
-                onClick={scrollToGuide}
-                variant="outline"
-                className="border-gold/50 text-gold hover:bg-gold/10 px-6 py-3"
+        {/* Premium Hero with Background */}
+        <section className="relative py-24 md:py-32 lg:py-40 overflow-hidden">
+          {/* Background */}
+          <div className="absolute inset-0 bg-gradient-to-b from-zinc-900 to-black" />
+          <div 
+            className="absolute inset-0 bg-cover bg-center opacity-20"
+            style={{ backgroundImage: `url(https://images.unsplash.com/photo-1560518883-ce09059eeffa?w=1920)` }}
+          />
+          <div className="absolute inset-0 bg-gradient-to-t from-black via-black/70 to-transparent" />
+          
+          {/* Decorative elements */}
+          <div className="absolute top-20 left-1/4 w-96 h-96 bg-gold/5 rounded-full blur-3xl" />
+          <div className="absolute bottom-0 right-1/4 w-80 h-80 bg-gold/3 rounded-full blur-3xl" />
+          
+          <motion.div 
+            className="container mx-auto px-4 relative z-10"
+            initial="hidden"
+            animate="visible"
+            variants={staggerContainer}
+          >
+            <div className="max-w-4xl mx-auto text-center">
+              {/* Badge */}
+              <motion.div 
+                className="inline-flex items-center gap-2 bg-gold/10 border border-gold/30 rounded-full px-4 py-2 mb-6"
+                variants={fadeInUp}
               >
-                <ArrowDown className="w-5 h-5 mr-2" />
-                Start the Guide
-              </Button>
-              <Link to="/seller-listing">
-                <Button className="bg-gradient-to-r from-gold to-gold-dark text-black font-semibold hover:brightness-110 px-6 py-3">
-                  <Building2 className="w-5 h-5 mr-2" />
-                  List Your Property
-                  <ArrowRight className="w-5 h-5 ml-2" />
+                <Building2 className="w-4 h-4 text-gold" />
+                <span className="text-gold text-sm font-medium tracking-wide uppercase">Complete Seller's Guide</span>
+              </motion.div>
+              
+              {/* Title */}
+              <motion.h1 
+                className="text-4xl md:text-5xl lg:text-6xl font-light text-white mb-6 leading-tight"
+                variants={fadeInUp}
+              >
+                How to Sell Property in the{" "}
+                <span className="text-gold">UAE</span>
+              </motion.h1>
+              
+              {/* Description */}
+              <motion.p 
+                className="text-lg md:text-xl text-zinc-300 font-light leading-relaxed max-w-3xl mx-auto mb-10"
+                variants={fadeInUp}
+              >
+                Your comprehensive guide to selling property successfully in the UAE market. From preparation to handover, we're with you every step of the way.
+              </motion.p>
+              
+              {/* Actions */}
+              <motion.div variants={fadeInUp} className="flex flex-wrap justify-center gap-4">
+                <Button 
+                  onClick={scrollToGuide}
+                  variant="outline"
+                  className="border-gold/50 text-gold hover:bg-gold/10 px-6 py-3"
+                >
+                  <ArrowDown className="w-5 h-5 mr-2" />
+                  Start the Guide
                 </Button>
-              </Link>
-            </>
-          }
-        />
+                <Link to="/seller-listing">
+                  <Button className="bg-gradient-to-r from-gold to-gold-dark text-black font-semibold hover:brightness-110 px-6 py-3">
+                    <Building2 className="w-5 h-5 mr-2" />
+                    List Your Property
+                    <svg className="w-5 h-5 ml-2" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24">
+                      <path strokeLinecap="round" strokeLinejoin="round" d="M7 17L17 7M17 7H7M17 7V17" />
+                    </svg>
+                  </Button>
+                </Link>
+              </motion.div>
+            </div>
+          </motion.div>
+        </section>
 
         {/* Sticky Table of Contents */}
         <div className="hidden lg:block fixed right-8 top-1/3 z-30">
@@ -630,20 +669,20 @@ const SellerGuide = () => {
         {/* Founder-Led Philosophy & Advisory Positioning */}
         <FounderPhilosophySection />
 
-        {/* Final CTA Section */}
-        <section className="py-20">
+        {/* Final CTA Section - White Box */}
+        <section className="py-20 bg-black">
           <div className="container mx-auto px-4">
             <motion.div 
               initial={{ opacity: 0, y: 20 }}
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true }}
-              className="max-w-3xl mx-auto text-center bg-gradient-to-br from-gold/10 via-gold/5 to-transparent border border-gold/30 rounded-2xl p-8 md:p-12"
+              className="max-w-3xl mx-auto text-center bg-white border border-zinc-200 rounded-2xl p-8 md:p-12 shadow-xl"
             >
               <Sparkles className="w-12 h-12 text-gold mx-auto mb-4" />
-              <h2 className="text-2xl md:text-3xl font-bold text-white mb-4">
+              <h2 className="text-2xl md:text-3xl font-bold text-black mb-4">
                 Ready to List Your Property?
               </h2>
-              <p className="text-zinc-400 mb-8 max-w-xl mx-auto">
+              <p className="text-zinc-600 mb-8 max-w-xl mx-auto">
                 Start your selling journey with JBJ Global Real Estate. Our expert team is ready to help you 
                 achieve the best outcome for your property sale.
               </p>
@@ -669,23 +708,23 @@ const SellerGuide = () => {
                   href={getWhatsAppUrl("Hi, I'd like to discuss selling my property in the UAE.")}
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="flex items-center gap-2 text-zinc-400 hover:text-gold transition-colors"
+                  className="flex items-center gap-2 text-zinc-600 hover:text-gold transition-colors"
                 >
                   <MessageCircle className="w-4 h-4 text-green-500" />
                   WhatsApp: {CONTACT_INFO.phone}
                 </a>
                 <a 
                   href={getCallUrl()}
-                  className="flex items-center gap-2 text-zinc-400 hover:text-gold transition-colors"
+                  className="flex items-center gap-2 text-zinc-600 hover:text-gold transition-colors"
                 >
-                  <Phone className="w-4 h-4" />
+                  <Phone className="w-4 h-4 text-blue-500" />
                   Call: {CONTACT_INFO.phone}
                 </a>
                 <a 
                   href={getEmailUrl()}
-                  className="flex items-center gap-2 text-zinc-400 hover:text-gold transition-colors"
+                  className="flex items-center gap-2 text-zinc-600 hover:text-gold transition-colors"
                 >
-                  <Mail className="w-4 h-4" />
+                  <Mail className="w-4 h-4 text-orange-500" />
                   {CONTACT_INFO.email}
                 </a>
               </div>
@@ -693,11 +732,11 @@ const SellerGuide = () => {
           </div>
         </section>
 
-        {/* Compliance Disclaimer - Premium champagne background */}
-        <section className="py-8 bg-gradient-to-br from-white via-[#FDFBF7] to-[#F5F0E6] border-t border-zinc-200">
+        {/* Compliance Disclaimer - Black section with white box */}
+        <section className="py-8 bg-black">
           <div className="container mx-auto px-4">
             <div className="max-w-4xl mx-auto">
-              <div className="bg-zinc-50 border border-zinc-200 rounded-lg p-6">
+              <div className="bg-white border border-zinc-200 rounded-lg p-6 shadow-lg">
                 <h4 className="text-black font-semibold mb-3 flex items-center gap-2">
                   <Shield className="w-4 h-4 text-gold" />
                   Important Disclaimer

@@ -65,12 +65,12 @@ export const FounderPhilosophySection = () => {
                   />
                 </div>
               </Link>
-              {/* View Leadership Link */}
+              {/* Know More About the Founder Link */}
               <Link 
                 to="/founder" 
                 className="flex items-center justify-center gap-2 mt-4 text-gold hover:text-gold-light text-sm transition-colors group"
               >
-                <span>View Leadership</span>
+                <span>Know More About the Founder</span>
                 <span className="group-hover:translate-x-1 transition-transform">→</span>
               </Link>
             </motion.div>
@@ -81,8 +81,8 @@ export const FounderPhilosophySection = () => {
               className="flex-1"
             >
               {/* Attribution */}
-              <p className="text-gold text-sm font-medium tracking-wide mb-6">
-                <span className="uppercase tracking-[0.15em]">Written by Founder and CEO,</span>{" "}
+              <p className="text-sm font-medium tracking-wide mb-6">
+                <span className="text-white uppercase tracking-[0.15em]">Written by Founder and CEO,</span>{" "}
                 <Link 
                   to="/founder" 
                   className="text-gold font-semibold hover:text-gold-light transition-colors underline underline-offset-4"

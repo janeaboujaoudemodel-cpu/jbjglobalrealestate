@@ -304,6 +304,9 @@ const PartnerMortgage = () => {
                   <Button variant="outline" size="sm">
                     <Building2 className="w-4 h-4 mr-2" />
                     Browse Properties
+                    <svg className="w-3 h-3 ml-2" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24">
+                      <path strokeLinecap="round" strokeLinejoin="round" d="M7 17L17 7M17 7H7M17 7V17" />
+                    </svg>
                   </Button>
                 </Link>
               </div>

@@ -593,6 +593,9 @@ const Compare = () => {
               <Button className="bg-gradient-to-r from-purple-600 to-purple-700 text-white hover:from-purple-500 hover:to-purple-600 shadow-lg shadow-purple-500/30 hover:shadow-purple-500/50 transition-all duration-300 px-8 py-6 text-lg">
                 <Building className="w-5 h-5 mr-2" />
                 Browse Properties
+                <svg className="w-5 h-5 ml-2" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" d="M7 17L17 7M17 7H7M17 7V17" />
+                </svg>
               </Button>
             </Link>
             
