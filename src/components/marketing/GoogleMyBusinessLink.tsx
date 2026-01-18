@@ -6,7 +6,9 @@ interface GoogleMyBusinessLinkProps {
 }
 
 // Replace with actual Google Business Profile link when verified
-const GMB_URL = 'https://g.page/jbjglobalrealestate';
+// NOTE: g.page URLs require a verified Google Business Profile from Google
+// This cannot be created programmatically - must be set up via Google Business dashboard
+const GMB_URL = 'https://www.google.com/maps/place/Dubai/@25.2048493,55.2707828,11z';
 
 export const GoogleMyBusinessLink = ({
   className = '',

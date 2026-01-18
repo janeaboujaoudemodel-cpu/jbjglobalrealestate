@@ -69,15 +69,15 @@ export function BrokerToolkitGrowth() {
         </motion.div>
 
         <div className="grid lg:grid-cols-2 gap-8 mb-12">
-          {/* Levels Card - Black & Gold theme */}
+          {/* Levels Card - White background to match Earn Points */}
           <motion.div
             initial={{ opacity: 0, x: -20 }}
             whileInView={{ opacity: 1, x: 0 }}
             viewport={{ once: true }}
           >
-            <Card className="bg-black border border-gold/40 hover:border-gold hover:shadow-xl hover:shadow-gold/20 h-full">
+            <Card className="bg-gradient-to-br from-white via-[#FDFBF7] to-[#F5F0E6] border border-gold/40 hover:border-gold hover:shadow-xl hover:shadow-gold/20 h-full">
               <CardContent className="p-6">
-                <h3 className="text-xl font-semibold text-gold mb-6 flex items-center gap-2">
+                <h3 className="text-xl font-semibold text-black mb-6 flex items-center gap-2">
                   <Crown className="w-5 h-5 text-gold" />
                   Broker Levels
                 </h3>
@@ -89,10 +89,10 @@ export function BrokerToolkitGrowth() {
                       </div>
                       <div className="flex-1">
                         <div className="flex justify-between items-center mb-1">
-                          <span className="text-white font-medium">{level.name}</span>
-                          <span className="text-gold text-sm">{level.points.toLocaleString()} pts</span>
+                          <span className="text-black font-medium">{level.name}</span>
+                          <span className="text-gold text-sm font-semibold">{level.points.toLocaleString()} pts</span>
                         </div>
-                        <Progress value={i === 0 ? 100 : 0} className="h-1.5 bg-zinc-800" />
+                        <Progress value={i === 0 ? 100 : 0} className="h-1.5 bg-zinc-200" />
                       </div>
                     </div>
                   ))}
@@ -101,15 +101,15 @@ export function BrokerToolkitGrowth() {
             </Card>
           </motion.div>
 
-          {/* Point Activities Card - Black & Gold theme */}
+          {/* Point Activities Card - White background */}
           <motion.div
             initial={{ opacity: 0, x: 20 }}
             whileInView={{ opacity: 1, x: 0 }}
             viewport={{ once: true }}
           >
-            <Card className="bg-black border border-gold/40 hover:border-gold hover:shadow-xl hover:shadow-gold/20 h-full">
+            <Card className="bg-gradient-to-br from-white via-[#FDFBF7] to-[#F5F0E6] border border-gold/40 hover:border-gold hover:shadow-xl hover:shadow-gold/20 h-full">
               <CardContent className="p-6">
-                <h3 className="text-xl font-semibold text-gold mb-6 flex items-center gap-2">
+                <h3 className="text-xl font-semibold text-black mb-6 flex items-center gap-2">
                   <Zap className="w-5 h-5 text-gold" />
                   Earn Points
                 </h3>
@@ -120,7 +120,7 @@ export function BrokerToolkitGrowth() {
                         <div className="w-8 h-8 rounded-lg bg-gold/20 flex items-center justify-center">
                           <activity.icon className="w-4 h-4 text-gold" />
                         </div>
-                        <span className="text-zinc-300 text-sm">{activity.activity}</span>
+                        <span className="text-zinc-700 text-sm">{activity.activity}</span>
                       </div>
                       <span className="text-gold font-semibold">+{activity.points}</span>
                     </div>
@@ -151,12 +151,12 @@ export function BrokerToolkitGrowth() {
                 transition={{ delay: i * 0.1 }}
                 viewport={{ once: true }}
               >
-                <Card className="bg-black border border-gold/40 hover:border-gold/60 hover:shadow-xl hover:shadow-gold/20 transition-all cursor-pointer h-full">
+                <Card className="bg-gradient-to-br from-white via-[#FDFBF7] to-[#F5F0E6] border border-gold/40 hover:border-gold/60 hover:shadow-xl hover:shadow-gold/20 transition-all cursor-pointer h-full">
                   <CardContent className="p-5 text-center">
                     <div className="w-12 h-12 rounded-full bg-gold/20 flex items-center justify-center mx-auto mb-3">
                       <reward.icon className="w-6 h-6 text-gold" />
                     </div>
-                    <h4 className="text-white font-medium mb-1">{reward.name}</h4>
+                    <h4 className="text-black font-medium mb-1">{reward.name}</h4>
                     <p className="text-gold font-semibold">{reward.points.toLocaleString()} points</p>
                   </CardContent>
                 </Card>

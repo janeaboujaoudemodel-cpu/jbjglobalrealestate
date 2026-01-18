@@ -1786,16 +1786,46 @@ const MarketReport = () => {
               transition={{ duration: 0.8 }}
               className="relative perspective-1000"
             >
-              {/* 3D Book Container */}
-              <div className="relative mx-auto w-[280px] md:w-[320px] transform-gpu" style={{ perspective: '1000px' }}>
+              {/* 3D Book Container - Side-based hover flip */}
+              <div 
+                className="relative mx-auto w-[280px] md:w-[320px] transform-gpu group" 
+                style={{ perspective: '1200px' }}
+                onMouseMove={(e) => {
+                  const rect = e.currentTarget.getBoundingClientRect();
+                  const x = e.clientX - rect.left;
+                  const centerX = rect.width / 2;
+                  const rotateY = x < centerX ? 25 : -25; // Left side = flip right, right side = flip left
+                  const scale = 1.05;
+                  const translateZ = 50;
+                  e.currentTarget.querySelector<HTMLDivElement>('.book-inner')?.style.setProperty('transform', `rotateY(${rotateY}deg) rotateX(3deg) translateZ(${translateZ}px) scale(${scale})`);
+                }}
+                onMouseLeave={(e) => {
+                  e.currentTarget.querySelector<HTMLDivElement>('.book-inner')?.style.setProperty('transform', 'rotateY(-12deg) rotateX(5deg)');
+                }}
+              >
                 <div 
-                  className="relative transform-gpu transition-transform duration-500 hover:rotate-y-6"
+                  className="book-inner relative transform-gpu transition-transform duration-500 ease-out"
                   style={{ transformStyle: 'preserve-3d', transform: 'rotateY(-12deg) rotateX(5deg)' }}
                 >
                   {/* Book Cover */}
                   <div className="relative bg-gradient-to-br from-zinc-900 via-black to-zinc-900 rounded-lg overflow-hidden shadow-2xl border border-gold/30" style={{ boxShadow: '20px 20px 60px rgba(0,0,0,0.8), -5px -5px 20px rgba(168, 146, 90, 0.1)' }}>
-                    {/* Book Spine Effect */}
-                    <div className="absolute left-0 top-0 bottom-0 w-4 bg-gradient-to-r from-gold/30 via-gold/10 to-transparent" />
+                    {/* Book Spine Effect - Thicker for readability */}
+                    <div 
+                      className="absolute left-0 top-0 bottom-0 w-8 bg-gradient-to-r from-zinc-800 via-zinc-700 to-zinc-900 border-r border-gold/30"
+                      style={{ transformStyle: 'preserve-3d', transform: 'rotateY(-90deg) translateX(-16px)', transformOrigin: 'left center' }}
+                    >
+                      <div className="absolute inset-0 flex items-center justify-center">
+                        <span 
+                          className="text-gold text-[9px] font-bold tracking-[0.15em] uppercase whitespace-nowrap"
+                          style={{ transform: 'rotate(-90deg)', textShadow: '0 0 10px rgba(200,167,102,0.5)' }}
+                        >
+                          JBJ Global Real Estate 2026
+                        </span>
+                      </div>
+                    </div>
+                    
+                    {/* Visible Spine on Cover */}
+                    <div className="absolute left-0 top-0 bottom-0 w-6 bg-gradient-to-r from-gold/40 via-gold/20 to-transparent" />
                     
                     {/* Cover Image */}
                     <img 
@@ -1827,14 +1857,18 @@ const MarketReport = () => {
                       </div>
                     </div>
                     
-                    {/* Book Pages Effect */}
-                    <div className="absolute right-0 top-0 bottom-0 w-2">
-                      <div className="h-full bg-gradient-to-l from-zinc-100/5 via-zinc-200/10 to-transparent" style={{ clipPath: 'polygon(100% 0, 100% 100%, 0 95%, 0 5%)' }} />
+                    {/* Book Pages Effect - Thicker pages */}
+                    <div className="absolute right-0 top-0 bottom-0 w-3">
+                      <div className="h-full bg-gradient-to-l from-zinc-100/10 via-zinc-200/15 to-transparent" style={{ clipPath: 'polygon(100% 0, 100% 100%, 0 95%, 0 5%)' }} />
+                      {/* Individual page lines for depth */}
+                      <div className="absolute right-0 top-[5%] bottom-[5%] w-[2px] bg-zinc-300/20" />
+                      <div className="absolute right-[3px] top-[6%] bottom-[6%] w-[1px] bg-zinc-300/15" />
+                      <div className="absolute right-[5px] top-[7%] bottom-[7%] w-[1px] bg-zinc-300/10" />
                     </div>
                   </div>
                   
                   {/* Shadow */}
-                  <div className="absolute -bottom-4 left-4 right-4 h-8 bg-black/60 blur-xl rounded-full" />
+                  <div className="absolute -bottom-4 left-4 right-4 h-8 bg-black/60 blur-xl rounded-full transition-all duration-500 group-hover:blur-2xl group-hover:h-10" />
                 </div>
               </div>
               
