@@ -145,37 +145,43 @@ const Properties = () => {
   const [isAdvancedOpen, setIsAdvancedOpen] = useState(false);
   const [isRequestFormOpen, setIsRequestFormOpen] = useState(false);
   
-  // Update filters when URL params change (including developer name from marquee)
+  // Update filters when URL params change (including developer from homepage marquee)
   useEffect(() => {
     const newTransaction = searchParams.get('transaction') as 'buy' | 'rent' | null;
     const newStatus = searchParams.get('status');
-    const developerName = searchParams.get('developer');
-    
-    // Find developer ID by name if developer param exists
-    let developerIdFromUrl: string | null = null;
-    if (developerName && developers && developers.length > 0) {
-      const matchedDeveloper = developers.find(
-        d => d.name.toLowerCase() === developerName.toLowerCase()
-      );
-      if (matchedDeveloper) {
-        developerIdFromUrl = matchedDeveloper.id;
-      }
-    }
-    
-    // Only update if we have URL params AND (if developer param exists, we need developers to be loaded)
-    const hasDeveloperParam = !!developerName;
-    const developersLoaded = developers && developers.length > 0;
-    
+    const developerParam = searchParams.get('developer');
+
+    const hasDeveloperParam = !!developerParam;
+    const developersLoaded = !!developers && developers.length > 0;
+
     // If there's a developer param but developers aren't loaded yet, wait
     if (hasDeveloperParam && !developersLoaded) {
       return;
     }
-    
+
+    // Resolve developerId from param (supports id, slug, or name)
+    let developerIdFromUrl: string | null = null;
+    if (developerParam && developersLoaded) {
+      const normalized = developerParam.toLowerCase().trim();
+
+      const matchedDeveloper =
+        developers.find((d) => d.id === developerParam) ||
+        developers.find((d) => d.slug?.toLowerCase() === normalized) ||
+        developers.find((d) => d.name.toLowerCase() === normalized);
+
+      if (matchedDeveloper) {
+        developerIdFromUrl = matchedDeveloper.id;
+      } else {
+        // If a developer param exists but we can't resolve it, don't clobber current filters
+        return;
+      }
+    }
+
     // Apply filters if any URL params exist
-    if (newTransaction || newStatus || developerIdFromUrl || hasDeveloperParam) {
+    if (newTransaction || newStatus || developerIdFromUrl) {
       const updated: ExtendedFilterState = {
         ...defaultExtendedFilters,
-        transactionType: newTransaction || 'all' as const,
+        transactionType: (newTransaction || 'all') as ExtendedFilterState['transactionType'],
         handoverStatus: newStatus || null,
         developerId: developerIdFromUrl,
       };
