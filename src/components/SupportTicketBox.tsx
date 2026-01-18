@@ -362,7 +362,7 @@ const SupportTicketBox = () => {
                       </Button>
                     </DialogTrigger>
 
-                    <DialogContent className="bg-white border-zinc-200 max-w-lg max-h-[calc(100vh-120px)] overflow-y-auto z-[100] fixed top-[100px] left-1/2 -translate-x-1/2 translate-y-0 data-[state=open]:animate-in data-[state=closed]:animate-out data-[state=closed]:fade-out-0 data-[state=open]:fade-in-0">
+                    <DialogContent className="bg-white border-zinc-200 max-w-lg max-h-[calc(100vh-60px)] z-[100] fixed top-[30px] left-1/2 -translate-x-1/2 translate-y-0 data-[state=open]:animate-in data-[state=closed]:animate-out data-[state=closed]:fade-out-0 data-[state=open]:fade-in-0 overflow-hidden flex flex-col">
                       <DialogHeader>
                         <DialogTitle className="text-black text-xl font-bold flex items-center gap-2">
                           <Headphones className="w-5 h-5 text-red-500" />
@@ -370,74 +370,75 @@ const SupportTicketBox = () => {
                         </DialogTitle>
                       </DialogHeader>
 
-                      <AnimatePresence mode="wait">
-                        {isSubmitted ? (
-                          <motion.div
-                            key="success"
-                            initial={{ opacity: 0, scale: 0.9 }}
-                            animate={{ opacity: 1, scale: 1 }}
-                            exit={{ opacity: 0, scale: 0.9 }}
-                            className="py-8 text-center"
-                          >
-                            <div className="w-20 h-20 bg-green-100 rounded-full flex items-center justify-center mx-auto mb-4">
-                              <CheckCircle className="w-10 h-10 text-green-500" />
-                            </div>
-                            <h3 className="text-xl font-bold text-black mb-2">We've Got Your Ticket!</h3>
-                            <p className="text-zinc-600 mb-6">
-                              We're sorry you're experiencing issues. Our team is on it!
-                            </p>
+                      <div className="overflow-y-auto flex-1 pr-2">
+                        <AnimatePresence mode="wait">
+                          {isSubmitted ? (
+                            <motion.div
+                              key="success"
+                              initial={{ opacity: 0, scale: 0.9 }}
+                              animate={{ opacity: 1, scale: 1 }}
+                              exit={{ opacity: 0, scale: 0.9 }}
+                              className="py-8 text-center"
+                            >
+                              <div className="w-20 h-20 bg-green-100 rounded-full flex items-center justify-center mx-auto mb-4">
+                                <CheckCircle className="w-10 h-10 text-green-500" />
+                              </div>
+                              <h3 className="text-xl font-bold text-black mb-2">We've Got Your Ticket!</h3>
+                              <p className="text-zinc-600 mb-6">
+                                We're sorry you're experiencing issues. Our team is on it!
+                              </p>
 
-                            {/* Ticket Number Box */}
-                            <div className="bg-gradient-to-r from-gold/10 via-gold/5 to-gold/10 border border-gold/40 rounded-xl p-6 mb-6">
-                              <p className="text-sm text-zinc-600 mb-2">Your Ticket Number</p>
-                              <div className="flex items-center justify-center gap-3">
-                                <span className="text-2xl font-bold text-gold tracking-wider">{ticketNumber}</span>
+                              {/* Ticket Number Box */}
+                              <div className="bg-gradient-to-r from-gold/10 via-gold/5 to-gold/10 border border-gold/40 rounded-xl p-6 mb-6">
+                                <p className="text-sm text-zinc-600 mb-2">Your Ticket Number</p>
+                                <div className="flex items-center justify-center gap-3">
+                                  <span className="text-2xl font-bold text-gold tracking-wider">{ticketNumber}</span>
+                                  <Button
+                                    variant="ghost"
+                                    size="icon"
+                                    onClick={copyTicketNumber}
+                                    className="hover:bg-gold/10"
+                                  >
+                                    {copied ? (
+                                      <Check className="w-5 h-5 text-green-500" />
+                                    ) : (
+                                      <Copy className="w-5 h-5 text-gold" />
+                                    )}
+                                  </Button>
+                                </div>
+                              </div>
+
+                              <p className="text-sm text-zinc-500 mb-6">
+                                A confirmation email has been sent to <strong>{formData.email}</strong>
+                              </p>
+
+                              {/* Action Buttons */}
+                              <div className="space-y-3">
                                 <Button
-                                  variant="ghost"
-                                  size="icon"
-                                  onClick={copyTicketNumber}
-                                  className="hover:bg-gold/10"
+                                  onClick={submitAnotherTicket}
+                                  variant="outline"
+                                  className="w-full border-red-200 text-red-600 hover:bg-red-50 hover:border-red-300"
                                 >
-                                  {copied ? (
-                                    <Check className="w-5 h-5 text-green-500" />
-                                  ) : (
-                                    <Copy className="w-5 h-5 text-gold" />
-                                  )}
+                                  <Plus className="w-4 h-4 mr-2" />
+                                  Have Another Problem? Submit Another Ticket
+                                </Button>
+                                <Button
+                                  onClick={resetForm}
+                                  className="w-full bg-black text-white hover:bg-zinc-800"
+                                >
+                                  Close
                                 </Button>
                               </div>
-                            </div>
-
-                            <p className="text-sm text-zinc-500 mb-6">
-                              A confirmation email has been sent to <strong>{formData.email}</strong>
-                            </p>
-
-                            {/* Action Buttons */}
-                            <div className="space-y-3">
-                              <Button
-                                onClick={submitAnotherTicket}
-                                variant="outline"
-                                className="w-full border-red-200 text-red-600 hover:bg-red-50 hover:border-red-300"
-                              >
-                                <Plus className="w-4 h-4 mr-2" />
-                                Have Another Problem? Submit Another Ticket
-                              </Button>
-                              <Button
-                                onClick={resetForm}
-                                className="w-full bg-black text-white hover:bg-zinc-800"
-                              >
-                                Close
-                              </Button>
-                            </div>
-                          </motion.div>
-                        ) : (
-                          <motion.form
-                            key="form"
-                            initial={{ opacity: 0 }}
-                            animate={{ opacity: 1 }}
-                            exit={{ opacity: 0 }}
-                            onSubmit={handleSubmit}
-                            className="space-y-4 py-4"
-                          >
+                            </motion.div>
+                          ) : (
+                            <motion.form
+                              key="form"
+                              initial={{ opacity: 0 }}
+                              animate={{ opacity: 1 }}
+                              exit={{ opacity: 0 }}
+                              onSubmit={handleSubmit}
+                              className="space-y-4 py-4"
+                            >
                             {/* Contact Info */}
                             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                               <div>
@@ -493,12 +494,12 @@ const SupportTicketBox = () => {
                                 value={formData.serviceCategory}
                                 onValueChange={(value) => setFormData({ ...formData, serviceCategory: value, otherCategoryDetail: value !== "Other" ? "" : formData.otherCategoryDetail })}
                               >
-                                <SelectTrigger className="mt-1 border-zinc-300 focus:border-gold">
+                                <SelectTrigger className="mt-1 border-zinc-300 focus:border-gold bg-white">
                                   <SelectValue placeholder="Select the service" />
                                 </SelectTrigger>
-                                <SelectContent className="max-h-60">
+                                <SelectContent className="max-h-60 bg-white border border-zinc-200 shadow-lg z-[200]">
                                   {SERVICE_CATEGORIES.map((category) => (
-                                    <SelectItem key={category} value={category}>
+                                    <SelectItem key={category} value={category} className="hover:bg-zinc-100 cursor-pointer">
                                       {category}
                                     </SelectItem>
                                   ))}
@@ -563,12 +564,12 @@ const SupportTicketBox = () => {
                                 value={formData.priority}
                                 onValueChange={(value) => setFormData({ ...formData, priority: value })}
                               >
-                                <SelectTrigger className="mt-1 border-zinc-300 focus:border-gold">
+                                <SelectTrigger className="mt-1 border-zinc-300 focus:border-gold bg-white">
                                   <SelectValue placeholder="Select priority" />
                                 </SelectTrigger>
-                                <SelectContent>
+                                <SelectContent className="bg-white border border-zinc-200 shadow-lg z-[200]">
                                   {PRIORITY_LEVELS.map((level) => (
-                                    <SelectItem key={level.value} value={level.value}>
+                                    <SelectItem key={level.value} value={level.value} className="hover:bg-zinc-100 cursor-pointer">
                                       <span className={`font-medium ${level.color}`}>{level.label}</span>
                                       <span className="text-zinc-400 text-xs ml-2">- {level.description}</span>
                                     </SelectItem>
@@ -600,22 +601,7 @@ const SupportTicketBox = () => {
                               </p>
                             </div>
 
-                            {/* Escalate to Tech Team Option */}
-                            {(formData.serviceCategory === "Technical Bug (Website/App)" || formData.serviceCategory === "AI Tools & Features") && (
-                              <div className="flex items-center gap-3 p-4 bg-gradient-to-r from-blue-50 to-zinc-50 rounded-lg border border-blue-200">
-                                <input
-                                  type="checkbox"
-                                  id="escalate-tech"
-                                  checked={formData.escalateToTech}
-                                  onChange={(e) => setFormData({ ...formData, escalateToTech: e.target.checked })}
-                                  className="w-5 h-5 rounded border-blue-300 text-blue-500 focus:ring-blue-500"
-                                />
-                                <label htmlFor="escalate-tech" className="text-sm text-zinc-700">
-                                  <span className="font-medium text-blue-600">Escalate to Web Developer / Lovable AI</span>
-                                  <span className="block text-xs text-zinc-500">For direct technical fix</span>
-                                </label>
-                              </div>
-                            )}
+                            {/* Escalate option removed - handled internally by admins */}
 
                             {/* File Upload */}
                             <div>
@@ -689,20 +675,38 @@ const SupportTicketBox = () => {
                             <Button
                               type="submit"
                               disabled={isSubmitting}
-                              className="w-full relative bg-gradient-to-r from-red-500 via-red-600 to-red-500 text-white border-0 py-6 font-bold rounded-lg shadow-[0_6px_24px_rgba(239,68,68,0.4),inset_0_1px_2px_rgba(255,255,255,0.2)] hover:shadow-[0_8px_32px_rgba(239,68,68,0.5)] transition-all duration-300"
+                              className="w-full relative bg-gradient-to-r from-white via-[#FDFBF7] to-[#F5F0E6] text-black border-2 border-gold/50 py-6 font-bold rounded-xl transition-all duration-300 hover:scale-[1.02] transform active:scale-95 group"
+                              style={{
+                                textShadow: 'none',
+                                boxShadow: `
+                                  0 10px 30px rgba(200,167,102,0.4),
+                                  0 6px 15px rgba(0,0,0,0.2),
+                                  inset 0 2px 4px rgba(255,255,255,0.9),
+                                  inset 0 -2px 4px rgba(200,167,102,0.2),
+                                  0 0 20px rgba(200,167,102,0.3)
+                                `,
+                              }}
                             >
+                              {/* 3D Top highlight */}
+                              <span className="absolute inset-x-0 top-0 h-1/2 rounded-t-xl bg-gradient-to-b from-white/80 to-transparent pointer-events-none" />
+                              {/* 3D Bottom shadow */}
+                              <span className="absolute inset-x-0 bottom-0 h-1/3 rounded-b-xl bg-gradient-to-t from-gold/10 to-transparent pointer-events-none" />
+                              {/* Glow effect on hover */}
+                              <span className="absolute inset-0 rounded-xl opacity-0 group-hover:opacity-100 transition-opacity duration-300 pointer-events-none" style={{ boxShadow: '0 0 40px rgba(200,167,102,0.6), inset 0 0 20px rgba(200,167,102,0.1)' }} />
                               {isSubmitting ? (
-                                <>Submitting...</>
+                                <span className="relative text-gold">Submitting...</span>
                               ) : (
-                                <>
-                                  <Send className="w-4 h-4 mr-2" />
-                                  Create Ticket & Notify Support
-                                </>
+                                <span className="relative flex items-center justify-center gap-2">
+                                  <Send className="w-5 h-5 text-gold" />
+                                  <span className="text-gold">Create Ticket</span>
+                                  <span className="text-black">& Notify Support</span>
+                                </span>
                               )}
                             </Button>
                           </motion.form>
                         )}
                       </AnimatePresence>
+                    </div>
                     </DialogContent>
                   </Dialog>
 
