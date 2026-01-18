@@ -79,7 +79,7 @@ const ProjectCard = ({ project, showFavorite = true, showBadgeButton = true, cur
   const callHref = getCallUrl();
 
   return (
-    <div className="group relative overflow-hidden rounded-2xl bg-zinc-900 border border-zinc-800 hover:border-gold/30 transition-all duration-300 flex flex-col">
+    <div className="group relative overflow-hidden rounded-2xl bg-gradient-to-br from-white via-[#FDFBF7] to-[#F5F0E6] border border-gold/30 hover:border-gold hover:shadow-xl hover:shadow-gold/20 transition-all duration-300 flex flex-col">
       {/* Favorite Button */}
       {showFavorite && (
         <div className="absolute top-3 right-3 z-10 opacity-0 group-hover:opacity-100 transition-opacity">
@@ -109,14 +109,14 @@ const ProjectCard = ({ project, showFavorite = true, showBadgeButton = true, cur
         {/* Content */}
         <div className="p-5">
           {/* Project Name */}
-          <h4 className="text-white text-lg font-semibold mb-2 line-clamp-1 group-hover:text-gold transition-colors">
+          <h4 className="text-black text-lg font-semibold mb-2 line-clamp-1 group-hover:text-gold transition-colors">
             {project.name}
           </h4>
           
           {/* Location */}
           {project.location && (
-            <p className="text-zinc-500 text-sm mb-3 flex items-center gap-1.5">
-              <svg className="w-4 h-4 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <p className="text-zinc-600 text-sm mb-3 flex items-center gap-1.5">
+              <svg className="w-4 h-4 flex-shrink-0 text-gold" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z" />
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 11a3 3 0 11-6 0 3 3 0 016 0z" />
               </svg>
@@ -126,14 +126,14 @@ const ProjectCard = ({ project, showFavorite = true, showBadgeButton = true, cur
           
           {/* Developer */}
           {project.developer && (
-            <p className="text-zinc-600 text-sm mb-2">
-              by <span className="text-zinc-400">{project.developer.name}</span>
+            <p className="text-zinc-500 text-sm mb-2">
+              by <span className="text-zinc-700">{project.developer.name}</span>
             </p>
           )}
           
           {/* Bedrooms */}
           {project.bedrooms_min && (
-            <p className="text-zinc-600 text-sm mb-3">
+            <p className="text-zinc-500 text-sm mb-3">
               {project.bedrooms_min === project.bedrooms_max
                 ? `${project.bedrooms_min} Bedrooms`
                 : `${project.bedrooms_min}-${project.bedrooms_max} Bedrooms`}
@@ -142,7 +142,7 @@ const ProjectCard = ({ project, showFavorite = true, showBadgeButton = true, cur
           
           {/* Size */}
           {project.size_min && (
-            <p className="text-zinc-500 text-sm mb-2">
+            <p className="text-zinc-600 text-sm mb-2">
               {convertSize(project.size_min, sizeUnit).toLocaleString()} {sizeUnit}
               {project.size_max && project.size_max !== project.size_min && 
                 ` - ${convertSize(project.size_max, sizeUnit).toLocaleString()} ${sizeUnit}`}
@@ -166,7 +166,7 @@ const ProjectCard = ({ project, showFavorite = true, showBadgeButton = true, cur
             variant="outline"
             size="sm"
             onClick={handleDownloadBrochure}
-            className="bg-zinc-800/50 border-zinc-700 hover:bg-zinc-700 hover:border-zinc-600 text-zinc-300 hover:text-white text-xs h-9"
+            className="bg-white/80 border-gold/30 hover:bg-gold/10 hover:border-gold text-zinc-700 hover:text-gold text-xs h-9"
           >
             <FileText className="w-3.5 h-3.5 mr-1.5" />
             Brochure
@@ -175,7 +175,7 @@ const ProjectCard = ({ project, showFavorite = true, showBadgeButton = true, cur
             variant="outline"
             size="sm"
             onClick={handleDownloadAll}
-            className="bg-zinc-800/50 border-zinc-700 hover:bg-zinc-700 hover:border-zinc-600 text-zinc-300 hover:text-white text-xs h-9"
+            className="bg-white/80 border-gold/30 hover:bg-gold/10 hover:border-gold text-zinc-700 hover:text-gold text-xs h-9"
           >
             <Download className="w-3.5 h-3.5 mr-1.5" />
             Materials

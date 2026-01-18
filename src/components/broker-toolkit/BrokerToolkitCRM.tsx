@@ -92,8 +92,8 @@ export function BrokerToolkitCRM() {
   
   return (
     <>
-      {/* CRM Section - Emerald/Green theme */}
-      <section id="section-crm" className="py-16 md:py-20 bg-gradient-to-br from-emerald-950 via-emerald-900 to-emerald-950">
+      {/* CRM Section - Black background with emerald-themed cards */}
+      <section id="section-crm" className="py-16 md:py-20 bg-black">
         <div className="container mx-auto px-4">
           <motion.div
             initial={{ opacity: 0, y: 20 }}
@@ -108,7 +108,7 @@ export function BrokerToolkitCRM() {
             <h2 className="text-3xl md:text-4xl font-bold text-white mb-4">
               Manage Leads Like a <span className="text-emerald-300">Pro</span>
             </h2>
-            <p className="text-emerald-200/70 max-w-2xl mx-auto">
+            <p className="text-zinc-400 max-w-2xl mx-auto">
               Our built-in CRM helps you track every lead, automate follow-ups, and close more deals.
             </p>
           </motion.div>
@@ -141,8 +141,8 @@ export function BrokerToolkitCRM() {
         </div>
       </section>
 
-      {/* CRM Preview Card - Lighter green section for "Ready to Organize" - Matching emerald ombre */}
-      <section className="py-16 md:py-20 bg-gradient-to-br from-emerald-900/60 via-emerald-800/50 to-emerald-900/60">
+      {/* CRM Preview Card - Black background with emerald card */}
+      <section className="py-16 md:py-20 bg-black">
         <div className="container mx-auto px-4">
           <motion.div
             initial={{ opacity: 0, y: 20 }}
@@ -165,14 +165,14 @@ export function BrokerToolkitCRM() {
                   <Lock className="w-3 h-3 inline mr-1" />
                   Available exclusively to registered JBJ brokers
                 </p>
-                <Button 
+                <button 
                   onClick={handleCRMAccess}
-                  className="bg-gradient-to-r from-white via-[#FDFBF7] to-[#F5F0E6] text-gold hover:bg-transparent hover:text-white border border-white/20 hover:border-white px-8 font-semibold shadow-lg transition-all duration-300"
+                  className="inline-flex items-center justify-center gap-2 bg-gradient-to-r from-white via-[#FDFBF7] to-[#F5F0E6] text-gold hover:bg-transparent hover:text-white border border-white/20 hover:border-white px-8 py-3 font-semibold shadow-lg transition-all duration-300 rounded-md"
                 >
-                  <Target className="w-5 h-5 mr-2" />
+                  <Target className="w-5 h-5" />
                   Open CRM Dashboard
-                  <ArrowUpRight className="w-5 h-5 ml-2" />
-                </Button>
+                  <ArrowUpRight className="w-5 h-5" />
+                </button>
               </CardContent>
             </Card>
           </motion.div>

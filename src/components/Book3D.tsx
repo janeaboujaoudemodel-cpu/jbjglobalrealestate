@@ -1,3 +1,4 @@
+import { useState } from "react";
 import { motion } from "framer-motion";
 
 interface Book3DProps {
@@ -6,6 +7,8 @@ interface Book3DProps {
 }
 
 const Book3D = ({ size = "md", className = "" }: Book3DProps) => {
+  const [hoverSide, setHoverSide] = useState<"left" | "right" | null>(null);
+  
   const dimensions = {
     sm: { width: 160, height: 220, spine: 18, fontSize: "text-[10px]", titleSize: "text-sm" },
     md: { width: 220, height: 300, spine: 24, fontSize: "text-xs", titleSize: "text-base" },
@@ -13,6 +16,29 @@ const Book3D = ({ size = "md", className = "" }: Book3DProps) => {
   };
 
   const { width, height, spine, fontSize, titleSize } = dimensions[size];
+
+  // Calculate rotation based on which side is hovered
+  const getRotation = () => {
+    if (hoverSide === "left") return -45; // Flip left
+    if (hoverSide === "right") return 45;  // Flip right
+    return 0; // Neutral
+  };
+
+  const handleMouseMove = (e: React.MouseEvent<HTMLDivElement>) => {
+    const rect = e.currentTarget.getBoundingClientRect();
+    const x = e.clientX - rect.left;
+    const midpoint = rect.width / 2;
+    
+    if (x < midpoint) {
+      setHoverSide("left");
+    } else {
+      setHoverSide("right");
+    }
+  };
+
+  const handleMouseLeave = () => {
+    setHoverSide(null);
+  };
 
   return (
     <motion.div
@@ -23,24 +49,20 @@ const Book3D = ({ size = "md", className = "" }: Book3DProps) => {
         perspective: "1200px",
         transformStyle: "preserve-3d",
       }}
-      initial={{ rotateY: -8, rotateX: 5 }}
+      onMouseMove={handleMouseMove}
+      onMouseLeave={handleMouseLeave}
+      initial={{ rotateY: 0, rotateX: 5 }}
       animate={{ 
-        rotateY: [-8, 12, -8],
-        rotateX: [5, -2, 5],
+        rotateY: getRotation(),
+        rotateX: hoverSide ? -5 : 5,
+        scale: hoverSide ? 1.08 : 1,
       }}
       transition={{
-        duration: 5,
-        repeat: Infinity,
-        ease: "easeInOut",
-      }}
-      whileHover={{
-        rotateY: 45,
-        rotateX: -5,
-        scale: 1.08,
-        transition: { duration: 0.5, ease: "easeOut" }
+        duration: 0.5,
+        ease: "easeOut",
       }}
       whileTap={{
-        rotateY: 90,
+        rotateY: 120,
         scale: 1.02,
         transition: { duration: 0.6 }
       }}

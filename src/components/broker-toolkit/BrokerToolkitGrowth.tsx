@@ -20,11 +20,11 @@ import {
 } from "lucide-react";
 
 const LEVELS = [
-  { level: 1, name: "Starter", points: 0, color: "from-zinc-500 to-zinc-600" },
-  { level: 2, name: "Rising Star", points: 500, color: "from-blue-500 to-blue-600" },
-  { level: 3, name: "Top Performer", points: 2000, color: "from-purple-500 to-purple-600" },
-  { level: 4, name: "Elite Broker", points: 5000, color: "from-gold to-gold-dark" },
-  { level: 5, name: "Legend", points: 10000, color: "from-rose-500 to-rose-600" },
+  { level: 1, name: "Starter", points: 0 },
+  { level: 2, name: "Rising Star", points: 500 },
+  { level: 3, name: "Top Performer", points: 2000 },
+  { level: 4, name: "Elite Broker", points: 5000 },
+  { level: 5, name: "Legend", points: 10000 },
 ];
 
 const POINT_ACTIVITIES = [
@@ -47,7 +47,7 @@ export function BrokerToolkitGrowth() {
   const { user } = useAuth();
 
   return (
-    <section id="section-growth" className="py-16 md:py-20 bg-[hsl(var(--premium-bg))]">
+    <section id="section-growth" className="py-16 md:py-20 bg-black">
       <div className="container mx-auto px-4">
         <motion.div
           initial={{ opacity: 0, y: 20 }}
@@ -84,7 +84,7 @@ export function BrokerToolkitGrowth() {
                 <div className="space-y-4">
                   {LEVELS.map((level, i) => (
                     <div key={i} className="flex items-center gap-4">
-                      <div className={`w-10 h-10 rounded-full bg-gradient-to-r ${level.color} flex items-center justify-center text-white font-bold text-sm`}>
+                      <div className="w-10 h-10 rounded-full bg-gradient-to-br from-white via-[#FDFBF7] to-[#F5F0E6] border border-gold/50 flex items-center justify-center text-black font-bold text-sm shadow-md">
                         {level.level}
                       </div>
                       <div className="flex-1">
@@ -172,14 +172,14 @@ export function BrokerToolkitGrowth() {
           viewport={{ once: true }}
           className="text-center"
         >
-          <Button 
-            className="bg-transparent border-2 border-gold text-gold hover:bg-gold hover:text-black px-8 py-6 text-lg font-semibold transition-all shadow-[0_0_30px_rgba(200,167,102,0.4)] hover:shadow-[0_0_40px_rgba(200,167,102,0.6)]"
+          <button 
+            className="inline-flex items-center justify-center gap-2 bg-transparent border-2 border-gold text-gold hover:bg-gradient-to-r hover:from-white hover:via-[#FDFBF7] hover:to-[#F5F0E6] hover:text-gold px-8 py-4 text-lg font-semibold transition-all rounded-md shadow-[0_0_30px_rgba(200,167,102,0.4)] hover:shadow-[0_0_40px_rgba(200,167,102,0.6)]"
             onClick={() => navigate(user ? '/my-account' : '/auth?redirect=/my-account')}
           >
-            <Trophy className="w-5 h-5 mr-2" />
+            <Trophy className="w-5 h-5" />
             {user ? 'View My Progress' : 'Start Earning Points'}
-            <ArrowUpRight className="w-5 h-5 ml-2" />
-          </Button>
+            <ArrowUpRight className="w-5 h-5" />
+          </button>
         </motion.div>
       </div>
     </section>
