@@ -239,9 +239,12 @@ const handler = async (req: Request): Promise<Response> => {
           .summary-row:last-child { border-bottom: none; }
           .summary-label { color: #666; font-size: 13px; }
           .summary-value { color: #1a1a1a; font-weight: 600; font-size: 13px; text-align: right; }
-          .ticket-box { background: linear-gradient(135deg, #C8A766, #B8956E); padding: 30px; text-align: center; border-radius: 12px; margin: 25px 0; }
-          .ticket-number { font-size: 32px; font-weight: bold; color: #fff; letter-spacing: 3px; user-select: all; cursor: pointer; font-family: 'Courier New', monospace; }
-          .copy-hint { font-size: 12px; color: rgba(255,255,255,0.9); margin-top: 10px; }
+          .ticket-box { background: linear-gradient(135deg, #fdfbf7, #f5f0e6); border: 2px solid #C8A766; border-radius: 12px; padding: 25px; margin: 25px 0; }
+          .ticket-box h3 { color: #1a1a1a; margin: 0 0 20px 0; font-size: 18px; border-bottom: 1px solid #C8A766; padding-bottom: 10px; }
+          .ticket-number-row { display: flex; align-items: center; justify-content: space-between; }
+          .ticket-number { font-size: 20px; font-weight: bold; color: #C8A766; letter-spacing: 2px; font-family: 'Courier New', monospace; }
+          .copy-btn { background: linear-gradient(135deg, #C8A766, #B8956E); border: none; color: #fff; padding: 8px 16px; border-radius: 6px; cursor: pointer; font-size: 12px; display: inline-flex; align-items: center; gap: 6px; }
+          .copy-btn:hover { opacity: 0.9; }
           .sla-badge { background: #000; color: #C8A766; padding: 8px 20px; border-radius: 20px; display: inline-block; margin-top: 15px; font-size: 12px; font-weight: 600; }
           .message { background: #f9f9f9; padding: 20px; border-radius: 8px; margin: 20px 0; }
           .warning-box { background: #fff3cd; border: 1px solid #ffc107; border-radius: 8px; padding: 15px; margin: 20px 0; }
@@ -291,11 +294,18 @@ const handler = async (req: Request): Promise<Response> => {
             <p>Dear <strong>${fullName}</strong>,</p>
             <p>We have received your support request and are sorry to hear you're experiencing an issue. Our team is committed to resolving this as quickly as possible.</p>
             
-            <!-- Ticket Number Box -->
+            <!-- Ticket Number Box - Matching Ticket Summary Style -->
             <div class="ticket-box">
-              <p style="color: #fff; margin: 0 0 10px 0; font-size: 14px;">Your Ticket Number</p>
-              <p class="ticket-number">${ticket.ticket_number}</p>
-              <p class="copy-hint">📋 Select and copy your ticket number for reference</p>
+              <h3>🎫 Your Ticket Number</h3>
+              <div class="ticket-number-row">
+                <span class="ticket-number">${ticket.ticket_number}</span>
+                <button class="copy-btn" onclick="navigator.clipboard.writeText('${ticket.ticket_number}'); this.innerHTML='✓ Copied!';">
+                  📋 Copy
+                </button>
+              </div>
+            </div>
+            
+            <div style="text-align: center; margin: 15px 0;">
               <div class="sla-badge">⏱️ Response within 24-48 hours</div>
             </div>
 
