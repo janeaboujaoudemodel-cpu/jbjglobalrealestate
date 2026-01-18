@@ -110,12 +110,23 @@ const InstallAppButton = () => {
   }, [requestToShow, dismiss]);
 
   const handleInstallClick = useCallback(async () => {
-    // iOS cannot show a native prompt; keep this as a single-line instruction (no guide modal).
+    // iOS: Try to trigger share sheet automatically for one-click experience
     if (isIOS) {
-      toast.message("iPhone/iPad: In Safari tap Share → Add to Home Screen");
+      if (navigator.share) {
+        try {
+          await navigator.share({
+            title: 'JBJ Global Real Estate',
+            text: 'Install the JBJ Global Real Estate app',
+            url: window.location.origin,
+          });
+        } catch {
+          // User cancelled - silently dismiss
+        }
+      }
       return;
     }
 
+    // One-click install for browsers with deferred prompt
     if (deferredPrompt) {
       try {
         await deferredPrompt.prompt();
@@ -131,25 +142,12 @@ const InstallAppButton = () => {
         setDeferredPrompt(null);
       } catch (error) {
         console.error("Install prompt error:", error);
-        toast.error("Install prompt failed on this browser.");
       }
       return;
     }
 
-    // Provide helpful browser-specific instructions instead of error
-    const isChrome = /Chrome/.test(navigator.userAgent) && !/Edg/.test(navigator.userAgent);
-    const isEdge = /Edg/.test(navigator.userAgent);
-    const isFirefox = /Firefox/.test(navigator.userAgent);
-    
-    if (isChrome) {
-      toast.message("Chrome: Tap ⋮ menu (top-right) → 'Install app' or 'Add to Home Screen'");
-    } else if (isEdge) {
-      toast.message("Edge: Tap ⋯ menu → 'Apps' → 'Install this site as an app'");
-    } else if (isFirefox) {
-      toast.message("Firefox: Tap menu → 'Install' or 'Add to Home Screen'");
-    } else {
-      toast.message("Open browser menu → 'Install app' or 'Add to Home Screen'");
-    }
+    // Silently dismiss if install not available - no error messages
+    dismiss();
   }, [deferredPrompt, dismiss, isIOS]);
 
   const handleDismiss = useCallback(() => {
