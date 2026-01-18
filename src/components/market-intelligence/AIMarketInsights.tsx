@@ -141,20 +141,20 @@ export const AIMarketInsights = () => {
           <div className="grid md:grid-cols-2 gap-6 mb-12">
             {PRESET_INSIGHTS.map((insight) => (
               <motion.div key={insight.id} variants={fadeInUp}>
-                <Card className="bg-zinc-900/50 border-zinc-800 hover:border-gold/30 transition-all h-full">
+                <Card className="bg-white border-zinc-200 hover:border-gold/50 hover:shadow-lg transition-all h-full">
                   <CardHeader className="pb-3">
                     <div className="flex items-start gap-3">
-                      <div className="w-10 h-10 rounded-lg bg-gold/10 border border-gold/30 flex items-center justify-center shrink-0">
+                      <div className="w-10 h-10 rounded-lg bg-black flex items-center justify-center shrink-0">
                         <insight.icon className="w-5 h-5 text-gold" />
                       </div>
                       <div>
-                        <CardTitle className="text-white text-lg mb-1">{insight.title}</CardTitle>
+                        <CardTitle className="text-black text-lg mb-1">{insight.title}</CardTitle>
                         <p className="text-gold/80 text-sm italic">"{insight.question}"</p>
                       </div>
                     </div>
                   </CardHeader>
                   <CardContent>
-                    <p className="text-zinc-400 text-sm leading-relaxed">
+                    <p className="text-zinc-600 text-sm leading-relaxed">
                       {insight.insight}
                     </p>
                   </CardContent>
@@ -165,17 +165,17 @@ export const AIMarketInsights = () => {
 
           {/* AI Narrative Generator */}
           <motion.div variants={fadeInUp}>
-            <Card className="bg-gradient-to-br from-zinc-900 to-zinc-950 border-gold/20">
+            <Card className="bg-white border-zinc-200 shadow-lg">
               <CardContent className="p-8">
                 <div className="flex flex-col md:flex-row items-start gap-6 mb-6">
-                  <div className="w-16 h-16 rounded-2xl bg-gradient-to-br from-gold/20 to-gold/5 border border-gold/30 flex items-center justify-center shrink-0">
+                  <div className="w-16 h-16 rounded-2xl bg-black flex items-center justify-center shrink-0">
                     <Brain className="w-8 h-8 text-gold" />
                   </div>
                   <div className="flex-1">
-                    <h3 className="text-white text-xl font-bold mb-2">
+                    <h3 className="text-black text-xl font-bold mb-2">
                       Generate Market Narrative
                     </h3>
-                    <p className="text-zinc-400 text-sm mb-4">
+                    <p className="text-zinc-600 text-sm mb-4">
                       Get an AI-generated analysis based on official government Open Data. 
                       Select a topic below to generate educational market insights.
                     </p>
@@ -183,12 +183,12 @@ export const AIMarketInsights = () => {
                 </div>
 
                 <Tabs value={activeNarrativeType} onValueChange={(v) => setActiveNarrativeType(v as NarrativeType)}>
-                  <TabsList className="bg-zinc-800/50 border border-zinc-700 mb-6">
+                  <TabsList className="bg-zinc-100 border border-zinc-200 mb-6">
                     {narrativeOptions.map((opt) => (
                       <TabsTrigger
                         key={opt.id}
                         value={opt.id}
-                        className="flex items-center gap-2 data-[state=active]:bg-gold/20 data-[state=active]:text-gold"
+                        className="flex items-center gap-2 data-[state=active]:bg-black data-[state=active]:text-gold"
                       >
                         <opt.icon className="w-4 h-4" />
                         <span className="hidden sm:inline">{opt.label}</span>
@@ -202,7 +202,7 @@ export const AIMarketInsights = () => {
                         <Button
                           onClick={() => generatePublicNarrative(opt.id)}
                           disabled={isGenerating}
-                          className="bg-gradient-to-r from-gold to-gold-dark text-black font-semibold hover:opacity-90"
+                          className="bg-black text-white font-semibold hover:bg-zinc-800"
                         >
                           {isGenerating && activeNarrativeType === opt.id ? (
                             <>
@@ -218,12 +218,12 @@ export const AIMarketInsights = () => {
                         </Button>
 
                         {generatedNarratives[opt.id] && (
-                          <div className="p-6 bg-zinc-800/50 rounded-xl border border-zinc-700">
+                          <div className="p-6 bg-zinc-100 rounded-xl border border-zinc-200">
                             <div className="flex items-center gap-2 text-gold text-sm mb-3">
                               <MessageSquare className="w-4 h-4" />
                               AI Market Analysis
                             </div>
-                            <div className="text-zinc-300 text-sm leading-relaxed whitespace-pre-wrap">
+                            <div className="text-zinc-700 text-sm leading-relaxed whitespace-pre-wrap">
                               {generatedNarratives[opt.id]}
                             </div>
                           </div>
@@ -238,11 +238,11 @@ export const AIMarketInsights = () => {
 
           {/* Disclaimer */}
           <motion.div 
-            className="mt-8 flex items-start gap-3 p-4 bg-zinc-900/50 border border-zinc-800 rounded-xl max-w-3xl mx-auto"
+            className="mt-8 flex items-start gap-3 p-4 bg-white border border-zinc-200 rounded-xl max-w-3xl mx-auto"
             variants={fadeInUp}
           >
             <Info className="w-5 h-5 text-gold shrink-0 mt-0.5" />
-            <p className="text-zinc-500 text-xs leading-relaxed">
+            <p className="text-zinc-600 text-xs leading-relaxed">
               AI-generated insights are based on aggregated government Open Data and are provided for informational purposes only. 
               They do not constitute financial, investment, or legal advice. 
               AI explains data but does not predict prices or provide specific investment recommendations.

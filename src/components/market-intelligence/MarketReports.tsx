@@ -103,7 +103,7 @@ export const MarketReports = () => {
   };
 
   return (
-    <section className="py-16 bg-gradient-to-b from-zinc-900/30 to-black">
+    <section className="py-16 bg-black">
       <div className="container mx-auto px-4">
         <motion.div
           initial="hidden"
@@ -131,36 +131,36 @@ export const MarketReports = () => {
           <div className="grid md:grid-cols-2 gap-6 max-w-4xl mx-auto">
             {REPORT_TYPES.map((report) => (
               <motion.div key={report.id} variants={fadeInUp}>
-                <Card className="bg-zinc-900/50 border-zinc-800 hover:border-gold/30 transition-all h-full">
+                <Card className="bg-white border-zinc-200 hover:border-gold/50 hover:shadow-lg transition-all h-full">
                   <CardHeader>
                     <div className="flex items-start justify-between">
-                      <div className="w-12 h-12 rounded-xl bg-gold/10 border border-gold/30 flex items-center justify-center">
+                      <div className="w-12 h-12 rounded-xl bg-black flex items-center justify-center">
                         <report.icon className="w-6 h-6 text-gold" />
                       </div>
-                      <Badge variant="outline" className="bg-zinc-800/50 text-zinc-400 border-zinc-700">
+                      <Badge variant="outline" className="bg-zinc-100 text-zinc-600 border-zinc-300">
                         <Clock className="w-3 h-3 mr-1" />
                         {report.frequency}
                       </Badge>
                     </div>
-                    <CardTitle className="text-white text-xl mt-4">{report.title}</CardTitle>
+                    <CardTitle className="text-black text-xl mt-4">{report.title}</CardTitle>
                   </CardHeader>
                   <CardContent>
-                    <p className="text-zinc-400 text-sm mb-6">
+                    <p className="text-zinc-600 text-sm mb-6">
                       {report.description}
                     </p>
                     
                     {/* Report Features */}
                     <div className="space-y-2 mb-6">
-                      <div className="flex items-center gap-2 text-zinc-500 text-xs">
-                        <CheckCircle className="w-4 h-4 text-emerald-400" />
+                      <div className="flex items-center gap-2 text-zinc-600 text-xs">
+                        <CheckCircle className="w-4 h-4 text-emerald-500" />
                         Powered by Government Open Data
                       </div>
-                      <div className="flex items-center gap-2 text-zinc-500 text-xs">
-                        <CheckCircle className="w-4 h-4 text-emerald-400" />
+                      <div className="flex items-center gap-2 text-zinc-600 text-xs">
+                        <CheckCircle className="w-4 h-4 text-emerald-500" />
                         AI-generated insights included
                       </div>
-                      <div className="flex items-center gap-2 text-zinc-500 text-xs">
-                        <CheckCircle className="w-4 h-4 text-emerald-400" />
+                      <div className="flex items-center gap-2 text-zinc-600 text-xs">
+                        <CheckCircle className="w-4 h-4 text-emerald-500" />
                         Source attribution & timestamps
                       </div>
                     </div>
@@ -168,7 +168,7 @@ export const MarketReports = () => {
                     <Button
                       onClick={() => generateReport(report)}
                       disabled={generatingId === report.id}
-                      className="w-full bg-gradient-to-r from-gold to-gold-dark text-black font-semibold hover:opacity-90"
+                      className="w-full bg-black text-white font-semibold hover:bg-zinc-800"
                     >
                       {generatingId === report.id ? (
                         <>
@@ -190,12 +190,12 @@ export const MarketReports = () => {
 
           {/* Report Disclaimer */}
           <motion.div 
-            className="mt-10 p-6 bg-zinc-900/50 border border-zinc-800 rounded-2xl max-w-3xl mx-auto text-center"
+            className="mt-10 p-6 bg-white border border-zinc-200 rounded-2xl max-w-3xl mx-auto text-center"
             variants={fadeInUp}
           >
             <FileText className="w-8 h-8 text-gold mx-auto mb-4" />
-            <h4 className="text-white font-semibold mb-2">Report Disclaimer</h4>
-            <p className="text-zinc-500 text-sm leading-relaxed">
+            <h4 className="text-black font-semibold mb-2">Report Disclaimer</h4>
+            <p className="text-zinc-600 text-sm leading-relaxed">
               All market reports are generated using AI analysis of publicly available government Open Data. 
               Reports are for informational purposes only and do not constitute investment advice. 
               Data sources include Dubai Pulse, Dubai Statistics Center, and Dubai Land Department. 
