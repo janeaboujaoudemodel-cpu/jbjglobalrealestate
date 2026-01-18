@@ -8,7 +8,7 @@ import { useQuery } from "@tanstack/react-query";
 import { 
   Home, Heart, User, LogOut, Settings, Menu, 
   Phone, Building2, Newspaper, ClipboardCheck, FileText,
-  Sparkles, Search, Users, BookOpen, ChevronDown, Briefcase, UserCircle
+  Sparkles, Search, Users, BookOpen, ChevronDown, Briefcase, UserCircle, FolderOpen
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { useState } from "react";
@@ -535,6 +535,16 @@ const GlobalHeader = () => {
                                 <Briefcase className="w-4 h-4 text-gold" />
                               </div>
                               <span className="font-medium">Employee Hub</span>
+                            </Link>
+                          </DropdownMenuItem>
+                          
+                          {/* Listing Admin */}
+                          <DropdownMenuItem asChild className="focus:bg-gold/10">
+                            <Link to="/listing-admin" className="flex items-center gap-3 text-zinc-300 hover:text-gold px-5 py-3 transition-colors">
+                              <div className="w-8 h-8 rounded-lg bg-gold/10 flex items-center justify-center">
+                                <FolderOpen className="w-4 h-4 text-gold" />
+                              </div>
+                              <span className="font-medium">Listing Admin</span>
                             </Link>
                           </DropdownMenuItem>
                         </>
