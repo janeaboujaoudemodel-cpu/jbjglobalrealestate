@@ -271,66 +271,66 @@ const FAQ = () => {
         }
       />
 
-      {/* FAQ Content with Sidebar */}
-      <section id="faq-content" className="py-16 bg-black">
+      {/* FAQ Content with Sticky TOC Above */}
+      <section id="faq-content" className="py-16 bg-black relative">
         <div className="container mx-auto px-4">
-          <div className="flex flex-col lg:flex-row gap-8">
-            {/* Main Content - FULL WIDTH on left */}
-            <div className="flex-1 space-y-16 order-1">
-              {categories.map((category, categoryIndex) => (
-                <motion.div
-                  key={categoryIndex}
-                  id={`category-${categoryIndex}`}
-                  initial="hidden"
-                  whileInView="visible"
-                  viewport={{ once: true, margin: "-100px" }}
-                  variants={staggerContainer}
-                  className="scroll-mt-32"
-                >
-                  {/* Category Header */}
-                  <motion.div 
-                    variants={fadeInUp}
-                    className="flex items-center gap-4 mb-6"
-                  >
-                    <div className="w-12 h-12 bg-white rounded-xl flex items-center justify-center">
-                      <category.icon className="w-6 h-6 text-gold" />
-                    </div>
-                    <h2 className="text-2xl md:text-3xl font-bold text-white">{category.title}</h2>
-                  </motion.div>
-
-                  {/* Questions - FULL WIDTH single column per category */}
-                  <motion.div variants={fadeInUp}>
-                    <div className="space-y-4">
-                      {category.questions.map((faq, faqIndex) => (
-                        <Accordion key={faqIndex} type="single" collapsible className="w-full">
-                          <AccordionItem 
-                            value={`${categoryIndex}-${faqIndex}`}
-                            data-accordion-item={`${categoryIndex}-${faqIndex}`}
-                            className="bg-white border border-zinc-200 rounded-xl px-6 data-[state=open]:border-gold/50 data-[state=open]:shadow-md transition-all w-full"
-                          >
-                            <AccordionTrigger className="text-black text-left hover:text-gold hover:no-underline py-5 text-base font-medium">
-                              {faq.question}
-                            </AccordionTrigger>
-                            <AccordionContent className="text-zinc-600 pb-5 leading-relaxed">
-                              {faq.answer}
-                            </AccordionContent>
-                          </AccordionItem>
-                        </Accordion>
-                      ))}
-                    </div>
-                  </motion.div>
-                </motion.div>
-              ))}
-            </div>
-
-            {/* Sticky Sidebar - Desktop Only - RIGHT SIDE */}
-            <div className="hidden lg:block w-80 flex-shrink-0 order-2">
+          {/* Sticky FAQ Quick Access - Above Cards */}
+          <div className="sticky top-0 z-50 mb-8 -mx-4 px-4 pt-4 pb-2 bg-gradient-to-b from-black via-black to-transparent">
+            <div className="max-w-4xl mx-auto">
               <FAQTableOfContents 
                 categories={categories}
                 title="FAQ Quick Access"
-                sticky={true}
+                sticky={false}
               />
             </div>
+          </div>
+
+          {/* Main Content - Full Width Below TOC */}
+          <div className="max-w-4xl mx-auto space-y-16">
+            {categories.map((category, categoryIndex) => (
+              <motion.div
+                key={categoryIndex}
+                id={`category-${categoryIndex}`}
+                initial="hidden"
+                whileInView="visible"
+                viewport={{ once: true, margin: "-100px" }}
+                variants={staggerContainer}
+                className="scroll-mt-72"
+              >
+                {/* Category Header */}
+                <motion.div 
+                  variants={fadeInUp}
+                  className="flex items-center gap-4 mb-6"
+                >
+                  <div className="w-12 h-12 bg-white rounded-xl flex items-center justify-center">
+                    <category.icon className="w-6 h-6 text-gold" />
+                  </div>
+                  <h2 className="text-2xl md:text-3xl font-bold text-white">{category.title}</h2>
+                </motion.div>
+
+                {/* Questions - FULL WIDTH single column per category */}
+                <motion.div variants={fadeInUp}>
+                  <div className="space-y-4">
+                    {category.questions.map((faq, faqIndex) => (
+                      <Accordion key={faqIndex} type="single" collapsible className="w-full">
+                        <AccordionItem 
+                          value={`${categoryIndex}-${faqIndex}`}
+                          data-accordion-item={`${categoryIndex}-${faqIndex}`}
+                          className="bg-white border border-zinc-200 rounded-xl px-6 data-[state=open]:border-gold/50 data-[state=open]:shadow-md transition-all w-full"
+                        >
+                          <AccordionTrigger className="text-black text-left hover:text-gold hover:no-underline py-5 text-base font-medium">
+                            {faq.question}
+                          </AccordionTrigger>
+                          <AccordionContent className="text-zinc-600 pb-5 leading-relaxed">
+                            {faq.answer}
+                          </AccordionContent>
+                        </AccordionItem>
+                      </Accordion>
+                    ))}
+                  </div>
+                </motion.div>
+              </motion.div>
+            ))}
           </div>
         </div>
       </section>
