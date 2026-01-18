@@ -226,14 +226,14 @@ const TenantGuide = () => {
       </section>
 
       {/* Understanding Ejari */}
-      <section id="ejari" className="py-16 md:py-24 scroll-mt-20">
+      <section id="ejari" className="py-16 md:py-24 bg-black scroll-mt-20">
         <div className="container mx-auto px-4">
           <div className="max-w-5xl mx-auto">
             <div className="text-center mb-12">
-              <h2 className="text-3xl md:text-4xl font-light text-zinc-900 mb-4">
+              <h2 className="text-3xl md:text-4xl font-light text-white mb-4">
                 Understanding Ejari
               </h2>
-              <p className="text-lg text-zinc-600 max-w-2xl mx-auto">
+              <p className="text-lg text-zinc-400 max-w-2xl mx-auto">
                 Ejari registration is mandatory for all residential tenancies in Dubai. Here's what you need to know.
               </p>
             </div>
@@ -242,14 +242,14 @@ const TenantGuide = () => {
               {ejariInfo.map((info, index) => (
                 <div 
                   key={index}
-                  className="bg-zinc-50 border border-zinc-200 rounded-xl p-6 hover:border-gold/30 transition-colors"
+                  className="bg-white border border-zinc-200 rounded-xl p-6 hover:border-gold/30 transition-colors"
                 >
                   <div className="flex items-start gap-4">
-                    <div className="w-10 h-10 bg-gold/10 border border-gold/30 rounded-lg flex items-center justify-center flex-shrink-0">
+                    <div className="w-10 h-10 bg-black border border-gold/30 rounded-lg flex items-center justify-center flex-shrink-0">
                       <info.icon className="w-5 h-5 text-gold" />
                     </div>
                     <div>
-                      <h3 className="text-lg font-medium text-zinc-900 mb-2">{info.title}</h3>
+                      <h3 className="text-lg font-medium text-black mb-2">{info.title}</h3>
                       <p className="text-sm text-zinc-600">{info.description}</p>
                     </div>
                   </div>
@@ -258,12 +258,12 @@ const TenantGuide = () => {
             </div>
 
             {/* Educational Disclaimer */}
-            <div className="mt-8 bg-amber-50 border border-amber-200 rounded-xl p-6">
+            <div className="mt-8 bg-amber-900/30 border border-amber-600/30 rounded-xl p-6">
               <div className="flex items-start gap-4">
-                <AlertTriangle className="w-6 h-6 text-amber-600 flex-shrink-0 mt-0.5" />
+                <AlertTriangle className="w-6 h-6 text-amber-400 flex-shrink-0 mt-0.5" />
                 <div>
-                  <h4 className="font-medium text-amber-800 mb-2">Educational Information Only</h4>
-                  <p className="text-sm text-amber-700">
+                  <h4 className="font-medium text-amber-300 mb-2">Educational Information Only</h4>
+                  <p className="text-sm text-amber-200/80">
                     This guide provides educational information about Ejari. JBJ GLOBAL REAL ESTATE does not 
                     directly process Ejari registrations. Your landlord or a licensed service center handles 
                     the official registration process.
@@ -336,14 +336,14 @@ const TenantGuide = () => {
       </section>
 
       {/* Your Rights */}
-      <section id="rights" className="py-16 md:py-24 scroll-mt-20">
+      <section id="rights" className="py-16 md:py-24 bg-black scroll-mt-20">
         <div className="container mx-auto px-4">
           <div className="max-w-4xl mx-auto">
             <div className="text-center mb-12">
-              <h2 className="text-3xl md:text-4xl font-light text-zinc-900 mb-4">
+              <h2 className="text-3xl md:text-4xl font-light text-white mb-4">
                 Your Rights as a Tenant
               </h2>
-              <p className="text-lg text-zinc-600 max-w-2xl mx-auto">
+              <p className="text-lg text-zinc-400 max-w-2xl mx-auto">
                 Dubai's rental laws provide important protections for tenants. Know your rights.
               </p>
             </div>
@@ -371,13 +371,13 @@ const TenantGuide = () => {
                   desc: "Access to RERA's Rental Dispute Settlement Centre for unresolved conflicts with landlords."
                 }
               ].map((right, index) => (
-                <div key={index} className="bg-zinc-50 border border-zinc-200 rounded-xl p-6 hover:border-gold/30 transition-colors">
+                <div key={index} className="bg-white border border-zinc-200 rounded-xl p-6 hover:border-gold/30 transition-colors">
                   <div className="flex items-start gap-4">
-                    <div className="w-10 h-10 bg-gold/10 border border-gold/30 rounded-lg flex items-center justify-center flex-shrink-0">
+                    <div className="w-10 h-10 bg-black border border-gold/30 rounded-lg flex items-center justify-center flex-shrink-0">
                       <right.icon className="w-5 h-5 text-gold" />
                     </div>
                     <div>
-                      <h3 className="text-lg font-medium text-zinc-900 mb-2">{right.title}</h3>
+                      <h3 className="text-lg font-medium text-black mb-2">{right.title}</h3>
                       <p className="text-sm text-zinc-600">{right.desc}</p>
                     </div>
                   </div>
