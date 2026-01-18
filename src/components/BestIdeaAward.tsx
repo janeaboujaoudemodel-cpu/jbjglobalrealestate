@@ -167,16 +167,39 @@ const BestIdeaAward = () => {
                         <p className="text-zinc-400 text-sm">13" • 256GB • Wi-Fi + Cellular</p>
                         <p className="text-gold/80 text-sm mt-1">
                           <Gift className="w-3 h-3 inline mr-1" />
-                          Value: AED 6,499
+                          Value: AED 11,000
                         </p>
                       </div>
                     </div>
                   </div>
 
+                  {/* Winner's Recognition */}
+                  <div className="bg-gradient-to-r from-gold/10 via-gold/5 to-gold/10 border border-gold/40 rounded-xl p-4 mb-5">
+                    <div className="flex items-center gap-2 mb-3">
+                      <div className="w-8 h-8 bg-gold/20 rounded-lg flex items-center justify-center">
+                        <Sparkles className="w-4 h-4 text-gold" />
+                      </div>
+                      <span className="text-black font-bold text-sm">Winner's Recognition Package</span>
+                    </div>
+                    <ul className="space-y-2 text-xs text-zinc-700">
+                      <li className="flex items-start gap-2">
+                        <span className="text-gold mt-0.5">✦</span>
+                        <span>Your <span className="text-gold font-semibold">portrait framed</span> & featured on our website</span>
+                      </li>
+                      <li className="flex items-start gap-2">
+                        <span className="text-gold mt-0.5">✦</span>
+                        <span>Free <span className="text-gold font-semibold">publication & recognition</span> across all platforms</span>
+                      </li>
+                      <li className="flex items-start gap-2">
+                        <span className="text-gold mt-0.5">✦</span>
+                        <span>Official <span className="text-gold font-semibold">Certificate of Creativity</span> from JBJ Global</span>
+                      </li>
+                    </ul>
+                  </div>
+
                   <div className="text-xs text-zinc-500">
                     <p>• One winner selected monthly from all valid entries</p>
                     <p>• Anonymous submissions are welcome but won't enter the draw</p>
-                    <p>• All ideas become property of JBJ Global Real Estate</p>
                   </div>
                 </div>
 
