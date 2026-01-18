@@ -4053,6 +4053,72 @@ export type Database = {
         }
         Relationships: []
       }
+      employee_commissions: {
+        Row: {
+          approved_at: string | null
+          approved_by: string | null
+          commission_amount: number
+          commission_rate: number
+          created_at: string | null
+          currency: string
+          deal_closed_date: string | null
+          deal_id: string | null
+          deal_reference: string | null
+          deal_value: number
+          employee_name: string
+          id: string
+          notes: string | null
+          payment_date: string | null
+          property_location: string | null
+          property_type: string | null
+          status: string
+          updated_at: string | null
+          user_id: string
+        }
+        Insert: {
+          approved_at?: string | null
+          approved_by?: string | null
+          commission_amount?: number
+          commission_rate?: number
+          created_at?: string | null
+          currency?: string
+          deal_closed_date?: string | null
+          deal_id?: string | null
+          deal_reference?: string | null
+          deal_value?: number
+          employee_name: string
+          id?: string
+          notes?: string | null
+          payment_date?: string | null
+          property_location?: string | null
+          property_type?: string | null
+          status?: string
+          updated_at?: string | null
+          user_id: string
+        }
+        Update: {
+          approved_at?: string | null
+          approved_by?: string | null
+          commission_amount?: number
+          commission_rate?: number
+          created_at?: string | null
+          currency?: string
+          deal_closed_date?: string | null
+          deal_id?: string | null
+          deal_reference?: string | null
+          deal_value?: number
+          employee_name?: string
+          id?: string
+          notes?: string | null
+          payment_date?: string | null
+          property_location?: string | null
+          property_type?: string | null
+          status?: string
+          updated_at?: string | null
+          user_id?: string
+        }
+        Relationships: []
+      }
       employee_daily_metrics: {
         Row: {
           calls_made: number | null
@@ -4110,6 +4176,57 @@ export type Database = {
         }
         Relationships: []
       }
+      employee_earnings_summary: {
+        Row: {
+          created_at: string | null
+          currency: string | null
+          department: string | null
+          employee_name: string
+          id: string
+          month: number
+          net_earnings: number | null
+          total_bonus: number | null
+          total_commission: number | null
+          total_deductions: number | null
+          total_salary: number | null
+          updated_at: string | null
+          user_id: string
+          year: number
+        }
+        Insert: {
+          created_at?: string | null
+          currency?: string | null
+          department?: string | null
+          employee_name: string
+          id?: string
+          month: number
+          net_earnings?: number | null
+          total_bonus?: number | null
+          total_commission?: number | null
+          total_deductions?: number | null
+          total_salary?: number | null
+          updated_at?: string | null
+          user_id: string
+          year: number
+        }
+        Update: {
+          created_at?: string | null
+          currency?: string | null
+          department?: string | null
+          employee_name?: string
+          id?: string
+          month?: number
+          net_earnings?: number | null
+          total_bonus?: number | null
+          total_commission?: number | null
+          total_deductions?: number | null
+          total_salary?: number | null
+          updated_at?: string | null
+          user_id?: string
+          year?: number
+        }
+        Relationships: []
+      }
       employee_notifications: {
         Row: {
           content: string | null
@@ -4139,6 +4256,81 @@ export type Database = {
           title?: string
         }
         Relationships: []
+      }
+      employee_payment_history: {
+        Row: {
+          amount: number
+          created_at: string | null
+          currency: string
+          description: string | null
+          employee_name: string
+          id: string
+          payment_date: string
+          payment_method: string | null
+          payment_type: string
+          period_end: string | null
+          period_start: string | null
+          processed_by: string | null
+          reference_number: string | null
+          related_commission_id: string | null
+          related_salary_id: string | null
+          status: string
+          user_id: string
+        }
+        Insert: {
+          amount: number
+          created_at?: string | null
+          currency?: string
+          description?: string | null
+          employee_name: string
+          id?: string
+          payment_date: string
+          payment_method?: string | null
+          payment_type: string
+          period_end?: string | null
+          period_start?: string | null
+          processed_by?: string | null
+          reference_number?: string | null
+          related_commission_id?: string | null
+          related_salary_id?: string | null
+          status?: string
+          user_id: string
+        }
+        Update: {
+          amount?: number
+          created_at?: string | null
+          currency?: string
+          description?: string | null
+          employee_name?: string
+          id?: string
+          payment_date?: string
+          payment_method?: string | null
+          payment_type?: string
+          period_end?: string | null
+          period_start?: string | null
+          processed_by?: string | null
+          reference_number?: string | null
+          related_commission_id?: string | null
+          related_salary_id?: string | null
+          status?: string
+          user_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "employee_payment_history_related_commission_id_fkey"
+            columns: ["related_commission_id"]
+            isOneToOne: false
+            referencedRelation: "employee_commissions"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "employee_payment_history_related_salary_id_fkey"
+            columns: ["related_salary_id"]
+            isOneToOne: false
+            referencedRelation: "employee_salaries"
+            referencedColumns: ["id"]
+          },
+        ]
       }
       employee_reports: {
         Row: {
@@ -4206,6 +4398,63 @@ export type Database = {
           status?: string
           submitted_at?: string
           updated_at?: string
+        }
+        Relationships: []
+      }
+      employee_salaries: {
+        Row: {
+          bank_account_number: string | null
+          bank_iban: string | null
+          bank_name: string | null
+          base_salary: number
+          created_at: string | null
+          created_by: string | null
+          currency: string
+          department: string
+          effective_date: string
+          employee_name: string
+          end_date: string | null
+          id: string
+          notes: string | null
+          salary_type: string
+          updated_at: string | null
+          user_id: string
+        }
+        Insert: {
+          bank_account_number?: string | null
+          bank_iban?: string | null
+          bank_name?: string | null
+          base_salary?: number
+          created_at?: string | null
+          created_by?: string | null
+          currency?: string
+          department: string
+          effective_date?: string
+          employee_name: string
+          end_date?: string | null
+          id?: string
+          notes?: string | null
+          salary_type?: string
+          updated_at?: string | null
+          user_id: string
+        }
+        Update: {
+          bank_account_number?: string | null
+          bank_iban?: string | null
+          bank_name?: string | null
+          base_salary?: number
+          created_at?: string | null
+          created_by?: string | null
+          currency?: string
+          department?: string
+          effective_date?: string
+          employee_name?: string
+          end_date?: string | null
+          id?: string
+          notes?: string | null
+          salary_type?: string
+          updated_at?: string | null
+          user_id?: string
         }
         Relationships: []
       }
