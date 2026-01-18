@@ -62,6 +62,8 @@ import { Label } from "@/components/ui/label";
 import ExecutiveChatPanel from "@/components/executive/ExecutiveChatPanel";
 import IntegrationWizard from "@/components/executive/IntegrationWizard";
 import SocialMediaGrid from "@/components/executive/SocialMediaGrid";
+import { CommandPalette } from "@/components/ui/command-palette";
+import { FloatingActionBar } from "@/components/ui/floating-action-bar";
 
 // RENAMED: Executive AI → Admin Command Center
 type CommCategory = 'important' | 'routine' | 'recruitment' | 'flagged' | 'spam';
@@ -125,11 +127,11 @@ const channelIcons: Record<CommChannel, React.ReactNode> = {
 };
 
 const statusConfig: Record<AIStatus, { label: string; color: string; icon: React.ReactNode }> = {
-  pending: { label: "Pending", color: "bg-yellow-100 text-yellow-800", icon: <Clock className="h-3 w-3" /> },
-  auto_responded: { label: "Auto Responded", color: "bg-green-100 text-green-800", icon: <Zap className="h-3 w-3" /> },
-  flagged_for_review: { label: "Needs Review", color: "bg-red-100 text-red-800", icon: <AlertTriangle className="h-3 w-3" /> },
-  human_responded: { label: "You Responded", color: "bg-blue-100 text-blue-800", icon: <CheckCircle className="h-3 w-3" /> },
-  ignored: { label: "Ignored", color: "bg-gray-100 text-gray-800", icon: <Eye className="h-3 w-3" /> }
+  pending: { label: "Pending", color: "bg-yellow-100 text-yellow-800 border-yellow-300", icon: <Clock className="h-3 w-3" /> },
+  auto_responded: { label: "Auto Responded", color: "bg-green-100 text-green-800 border-green-300", icon: <Zap className="h-3 w-3" /> },
+  flagged_for_review: { label: "Needs Review", color: "bg-red-100 text-red-800 border-red-300", icon: <AlertTriangle className="h-3 w-3" /> },
+  human_responded: { label: "You Responded", color: "bg-blue-100 text-blue-800 border-blue-300", icon: <CheckCircle className="h-3 w-3" /> },
+  ignored: { label: "Ignored", color: "bg-gray-100 text-gray-800 border-gray-300", icon: <Eye className="h-3 w-3" /> }
 };
 
 export default function ExecutiveAssistant() {
@@ -145,6 +147,7 @@ export default function ExecutiveAssistant() {
   const [selectedComm, setSelectedComm] = useState<Communication | null>(null);
   const [humanResponse, setHumanResponse] = useState("");
   const [isChatOpen, setIsChatOpen] = useState(false);
+  const [showCommandPalette, setShowCommandPalette] = useState(false);
   const [integrationWizard, setIntegrationWizard] = useState<{
     isOpen: boolean;
     type: 'email' | 'phone' | 'whatsapp' | 'social';
@@ -174,6 +177,18 @@ export default function ExecutiveAssistant() {
       fetchData();
     }
   }, [user]);
+
+  // Keyboard shortcut for command palette
+  useEffect(() => {
+    const handleKeyDown = (e: KeyboardEvent) => {
+      if ((e.metaKey || e.ctrlKey) && e.key === 'k') {
+        e.preventDefault();
+        setShowCommandPalette(true);
+      }
+    };
+    document.addEventListener('keydown', handleKeyDown);
+    return () => document.removeEventListener('keydown', handleKeyDown);
+  }, []);
 
   const fetchData = async () => {
     setLoading(true);
@@ -350,8 +365,8 @@ export default function ExecutiveAssistant() {
   if (authLoading) {
     return (
       <MainLayout>
-        <div className="flex items-center justify-center min-h-screen">
-          <Loader2 className="h-8 w-8 animate-spin text-primary" />
+        <div className="flex items-center justify-center min-h-screen bg-gradient-to-br from-white via-[#FDFBF7] to-[#F5F0E6]">
+          <Loader2 className="h-8 w-8 animate-spin text-gold" />
         </div>
       </MainLayout>
     );
@@ -359,39 +374,41 @@ export default function ExecutiveAssistant() {
 
   return (
     <MainLayout>
-      <div className="min-h-screen bg-[#0A0A0A]">
-        <div className="container mx-auto px-4 py-8 max-w-7xl">
+      <div className="min-h-screen bg-gradient-to-br from-white via-[#FDFBF7] to-[#F5F0E6]">
+        {/* Command Palette */}
+        <CommandPalette isOpen={showCommandPalette} onClose={() => setShowCommandPalette(false)} />
+        
+        <div className="container mx-auto px-4 py-8 max-w-7xl pb-24">
           {/* Premium Header */}
           <motion.div 
             initial={{ opacity: 0, y: -20 }}
             animate={{ opacity: 1, y: 0 }}
             className="mb-8"
           >
-            <div className="flex items-center justify-between flex-wrap gap-4">
+            <div className="flex items-center justify-between flex-wrap gap-4 bg-white/80 backdrop-blur-sm border-2 border-gold/30 rounded-2xl p-4 shadow-[0_4px_20px_rgba(200,167,102,0.1)]">
               <div className="flex items-center gap-4">
-                <div className="p-4 rounded-2xl bg-gradient-to-br from-gold/20 to-gold/5 border border-gold/30">
+                <div className="p-4 rounded-2xl bg-gradient-to-br from-gold/20 to-gold/5 border-2 border-gold/30">
                   <LayoutDashboard className="h-8 w-8 text-gold" />
                 </div>
                 <div>
-                  <h1 className="text-3xl font-bold text-white">JBJ Admin Command Center</h1>
-                  <p className="text-gray-400">Your intelligent command center for team management</p>
+                  <h1 className="text-3xl font-bold text-black">JBJ Admin Command Center</h1>
+                  <p className="text-zinc-500">Your intelligent command center for team management</p>
                 </div>
               </div>
               
               {/* Global Search */}
               <div className="flex items-center gap-3">
-                <div className="relative">
-                  <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-gray-500" />
-                  <Input
-                    placeholder="Search across all tools..."
-                    value={globalSearch}
-                    onChange={(e) => setGlobalSearch(e.target.value)}
-                    className="w-64 pl-10 bg-[#1A1A1A] border-gold/20 text-white placeholder:text-gray-500"
-                  />
-                </div>
+                <button
+                  onClick={() => setShowCommandPalette(true)}
+                  className="flex items-center gap-2 px-4 py-2 rounded-xl bg-white border-2 border-gold/30 text-zinc-500 hover:border-gold/50 transition-all"
+                >
+                  <Search className="h-4 w-4 text-gold" />
+                  <span className="text-sm">Search across all tools...</span>
+                  <kbd className="ml-2 px-2 py-0.5 bg-gold/10 text-gold text-xs rounded font-mono">⌘K</kbd>
+                </button>
                 <Button
                   onClick={() => setIsChatOpen(true)}
-                  className="bg-gold hover:bg-gold/90 text-black"
+                  variant="primary"
                 >
                   <MessageSquare className="h-4 w-4 mr-2" />
                   Chat with Admin
@@ -400,694 +417,445 @@ export default function ExecutiveAssistant() {
             </div>
           </motion.div>
 
-          {/* Stats Cards - Premium Dark Theme */}
+          {/* Stats Cards - Premium White/Gold Theme */}
           <div className="grid grid-cols-2 md:grid-cols-5 gap-4 mb-8">
-            <Card className="bg-[#0E0E0E] border-gold/20">
+            <Card className="bg-white border-2 border-gold/30 shadow-[0_4px_20px_rgba(200,167,102,0.1)]">
               <CardContent className="p-4">
                 <div className="flex items-center justify-between">
                   <div>
-                    <p className="text-sm text-gray-400">Total</p>
-                    <p className="text-2xl font-bold text-white">{stats.total}</p>
+                    <p className="text-sm text-zinc-500">Total</p>
+                    <p className="text-2xl font-bold text-black">{stats.total}</p>
                   </div>
-                  <Mail className="h-8 w-8 text-gold/50" />
+                  <div className="w-10 h-10 rounded-lg bg-gold/10 flex items-center justify-center">
+                    <Mail className="h-5 w-5 text-gold" />
+                  </div>
                 </div>
               </CardContent>
             </Card>
             
-            <Card className="bg-[#0E0E0E] border-red-500/30">
+            <Card className="bg-white border-2 border-red-500/30 shadow-[0_4px_20px_rgba(239,68,68,0.1)]">
               <CardContent className="p-4">
                 <div className="flex items-center justify-between">
                   <div>
-                    <p className="text-sm text-red-400">Important</p>
-                    <p className="text-2xl font-bold text-red-400">{stats.important}</p>
+                    <p className="text-sm text-red-600">Important</p>
+                    <p className="text-2xl font-bold text-red-600">{stats.important}</p>
                   </div>
-                  <Bell className="h-8 w-8 text-red-500/50" />
+                  <div className="w-10 h-10 rounded-lg bg-red-500/10 flex items-center justify-center">
+                    <Bell className="h-5 w-5 text-red-500" />
+                  </div>
                 </div>
               </CardContent>
             </Card>
             
-            <Card className="bg-[#0E0E0E] border-yellow-500/30">
+            <Card className="bg-white border-2 border-yellow-500/30 shadow-[0_4px_20px_rgba(234,179,8,0.1)]">
               <CardContent className="p-4">
                 <div className="flex items-center justify-between">
                   <div>
-                    <p className="text-sm text-yellow-400">Needs Review</p>
-                    <p className="text-2xl font-bold text-yellow-400">{stats.flagged}</p>
+                    <p className="text-sm text-yellow-600">Needs Review</p>
+                    <p className="text-2xl font-bold text-yellow-600">{stats.flagged}</p>
                   </div>
-                  <AlertTriangle className="h-8 w-8 text-yellow-500/50" />
+                  <div className="w-10 h-10 rounded-lg bg-yellow-500/10 flex items-center justify-center">
+                    <AlertTriangle className="h-5 w-5 text-yellow-500" />
+                  </div>
                 </div>
               </CardContent>
             </Card>
             
-            <Card className="bg-[#0E0E0E] border-green-500/30">
+            <Card className="bg-white border-2 border-green-500/30 shadow-[0_4px_20px_rgba(34,197,94,0.1)]">
               <CardContent className="p-4">
                 <div className="flex items-center justify-between">
                   <div>
-                    <p className="text-sm text-green-400">Auto Handled</p>
-                    <p className="text-2xl font-bold text-green-400">{stats.autoResponded}</p>
+                    <p className="text-sm text-green-600">Auto Handled</p>
+                    <p className="text-2xl font-bold text-green-600">{stats.autoResponded}</p>
                   </div>
-                  <Zap className="h-8 w-8 text-green-500/50" />
+                  <div className="w-10 h-10 rounded-lg bg-green-500/10 flex items-center justify-center">
+                    <Zap className="h-5 w-5 text-green-500" />
+                  </div>
                 </div>
               </CardContent>
             </Card>
             
-            <Card className="bg-[#0E0E0E] border-blue-500/30">
+            <Card className="bg-white border-2 border-blue-500/30 shadow-[0_4px_20px_rgba(59,130,246,0.1)]">
               <CardContent className="p-4">
                 <div className="flex items-center justify-between">
                   <div>
-                    <p className="text-sm text-blue-400">HR Requests</p>
-                    <p className="text-2xl font-bold text-blue-400">{stats.recruitment}</p>
+                    <p className="text-sm text-blue-600">HR Requests</p>
+                    <p className="text-2xl font-bold text-blue-600">{stats.recruitment}</p>
                   </div>
-                  <Users className="h-8 w-8 text-blue-500/50" />
+                  <div className="w-10 h-10 rounded-lg bg-blue-500/10 flex items-center justify-center">
+                    <Users className="h-5 w-5 text-blue-500" />
+                  </div>
                 </div>
               </CardContent>
             </Card>
           </div>
-          
-          <Card className="bg-gradient-to-br from-red-500/10 to-red-500/5 border-red-500/20">
-            <CardContent className="p-4">
-              <div className="flex items-center justify-between">
-                <div>
-                  <p className="text-sm text-red-600">Important</p>
-                  <p className="text-2xl font-bold text-red-600">{stats.important}</p>
-                </div>
-                <Bell className="h-8 w-8 text-red-500/50" />
-              </div>
-            </CardContent>
-          </Card>
-          
-          <Card className="bg-gradient-to-br from-yellow-500/10 to-yellow-500/5 border-yellow-500/20">
-            <CardContent className="p-4">
-              <div className="flex items-center justify-between">
-                <div>
-                  <p className="text-sm text-yellow-600">Needs Review</p>
-                  <p className="text-2xl font-bold text-yellow-600">{stats.flagged}</p>
-                </div>
-                <AlertTriangle className="h-8 w-8 text-yellow-500/50" />
-              </div>
-            </CardContent>
-          </Card>
-          
-          <Card className="bg-gradient-to-br from-green-500/10 to-green-500/5 border-green-500/20">
-            <CardContent className="p-4">
-              <div className="flex items-center justify-between">
-                <div>
-                  <p className="text-sm text-green-600">Auto Handled</p>
-                  <p className="text-2xl font-bold text-green-600">{stats.autoResponded}</p>
-                </div>
-                <Zap className="h-8 w-8 text-green-500/50" />
-              </div>
-            </CardContent>
-          </Card>
-          
-          <Card className="bg-gradient-to-br from-blue-500/10 to-blue-500/5 border-blue-500/20">
-            <CardContent className="p-4">
-              <div className="flex items-center justify-between">
-                <div>
-                  <p className="text-sm text-blue-600">Recruitment</p>
-                  <p className="text-2xl font-bold text-blue-600">{stats.recruitment}</p>
-                </div>
-                <Users className="h-8 w-8 text-blue-500/50" />
-              </div>
-            </CardContent>
-          </Card>
-        </div>
 
-        {/* Main Tabs */}
-        <Tabs value={activeTab} onValueChange={setActiveTab} className="space-y-6">
-          <TabsList className="grid w-full grid-cols-4 lg:w-auto lg:inline-grid">
-            <TabsTrigger value="inbox" className="gap-2">
-              <Mail className="h-4 w-4" />
-              <span className="hidden sm:inline">Inbox</span>
-            </TabsTrigger>
-            <TabsTrigger value="training" className="gap-2">
-              <BookOpen className="h-4 w-4" />
-              <span className="hidden sm:inline">Train AI</span>
-            </TabsTrigger>
-            <TabsTrigger value="rules" className="gap-2">
-              <Filter className="h-4 w-4" />
-              <span className="hidden sm:inline">Rules</span>
-            </TabsTrigger>
-            <TabsTrigger value="integrations" className="gap-2">
-              <Settings className="h-4 w-4" />
-              <span className="hidden sm:inline">Connect</span>
-            </TabsTrigger>
-          </TabsList>
+          {/* Main Tabs - Premium Theme */}
+          <Tabs value={activeTab} onValueChange={setActiveTab} className="space-y-6">
+            <TabsList className="bg-white/80 border-2 border-gold/30 p-1 shadow-[0_4px_20px_rgba(200,167,102,0.1)]">
+              <TabsTrigger value="inbox" className="data-[state=active]:bg-gold data-[state=active]:text-black text-black">
+                <Mail className="h-4 w-4 mr-2" />
+                Inbox
+              </TabsTrigger>
+              <TabsTrigger value="responses" className="data-[state=active]:bg-gold data-[state=active]:text-black text-black">
+                <Brain className="h-4 w-4 mr-2" />
+                AI Responses
+              </TabsTrigger>
+              <TabsTrigger value="rules" className="data-[state=active]:bg-gold data-[state=active]:text-black text-black">
+                <Filter className="h-4 w-4 mr-2" />
+                Rules
+              </TabsTrigger>
+              <TabsTrigger value="integrations" className="data-[state=active]:bg-gold data-[state=active]:text-black text-black">
+                <Settings className="h-4 w-4 mr-2" />
+                Integrations
+              </TabsTrigger>
+            </TabsList>
 
-          {/* Inbox Tab */}
-          <TabsContent value="inbox" className="space-y-4">
-            {/* Category Filter */}
-            <div className="flex flex-wrap gap-2">
-              <Button 
-                variant={selectedCategory === "all" ? "default" : "outline"}
-                size="sm"
-                onClick={() => setSelectedCategory("all")}
-              >
-                All
-              </Button>
-              {(["important", "flagged", "routine", "recruitment", "spam"] as CommCategory[]).map(cat => (
-                <Button
-                  key={cat}
-                  variant={selectedCategory === cat ? "default" : "outline"}
-                  size="sm"
-                  onClick={() => setSelectedCategory(cat)}
-                  className="capitalize"
+            {/* Inbox Tab */}
+            <TabsContent value="inbox" className="space-y-4">
+              <div className="flex items-center gap-2 flex-wrap">
+                <Badge
+                  className={`cursor-pointer px-4 py-2 ${selectedCategory === 'all' ? 'bg-gold text-black' : 'bg-white text-black border-2 border-gold/30'}`}
+                  onClick={() => setSelectedCategory('all')}
                 >
-                  <span className={`w-2 h-2 rounded-full mr-2 ${categoryColors[cat]}`} />
-                  {cat}
-                </Button>
-              ))}
-            </div>
+                  All ({stats.total})
+                </Badge>
+                <Badge
+                  className={`cursor-pointer px-4 py-2 ${selectedCategory === 'important' ? 'bg-red-500 text-white' : 'bg-red-50 text-red-600 border-2 border-red-200'}`}
+                  onClick={() => setSelectedCategory('important')}
+                >
+                  Important ({stats.important})
+                </Badge>
+                <Badge
+                  className={`cursor-pointer px-4 py-2 ${selectedCategory === 'routine' ? 'bg-green-500 text-white' : 'bg-green-50 text-green-600 border-2 border-green-200'}`}
+                  onClick={() => setSelectedCategory('routine')}
+                >
+                  Routine
+                </Badge>
+                <Badge
+                  className={`cursor-pointer px-4 py-2 ${selectedCategory === 'recruitment' ? 'bg-blue-500 text-white' : 'bg-blue-50 text-blue-600 border-2 border-blue-200'}`}
+                  onClick={() => setSelectedCategory('recruitment')}
+                >
+                  HR ({stats.recruitment})
+                </Badge>
+                <Badge
+                  className={`cursor-pointer px-4 py-2 ${selectedCategory === 'flagged' ? 'bg-yellow-500 text-white' : 'bg-yellow-50 text-yellow-600 border-2 border-yellow-200'}`}
+                  onClick={() => setSelectedCategory('flagged')}
+                >
+                  Flagged ({stats.flagged})
+                </Badge>
+              </div>
 
-            {/* Communications List */}
-            <Card>
-              <CardHeader className="flex flex-row items-center justify-between">
-                <div>
-                  <CardTitle>Communications</CardTitle>
-                  <CardDescription>
-                    {filteredComms.length} messages • AI handles routine, flags uncertain
-                  </CardDescription>
-                </div>
-                <Button variant="outline" size="sm" onClick={fetchData}>
-                  <RefreshCw className="h-4 w-4 mr-2" />
-                  Refresh
-                </Button>
-              </CardHeader>
-              <CardContent>
-                {loading ? (
-                  <div className="flex items-center justify-center py-12">
-                    <Loader2 className="h-8 w-8 animate-spin text-primary" />
-                  </div>
-                ) : filteredComms.length === 0 ? (
-                  <div className="text-center py-12 text-muted-foreground">
-                    <Mail className="h-12 w-12 mx-auto mb-4 opacity-50" />
-                    <p>No communications yet</p>
-                    <p className="text-sm">Connect your channels to start receiving messages</p>
-                  </div>
-                ) : (
-                  <ScrollArea className="h-[500px]">
-                    <div className="space-y-3">
-                      {filteredComms.map((comm) => (
-                        <motion.div
-                          key={comm.id}
-                          initial={{ opacity: 0 }}
-                          animate={{ opacity: 1 }}
-                          className={`p-4 rounded-lg border cursor-pointer transition-all hover:shadow-md ${
-                            !comm.is_read ? "bg-primary/5 border-primary/20" : "bg-card"
-                          }`}
-                          onClick={() => setSelectedComm(comm)}
-                        >
-                          <div className="flex items-start justify-between gap-4">
-                            <div className="flex items-center gap-3">
-                              <div className="p-2 rounded-full bg-muted">
-                                {channelIcons[comm.channel]}
-                              </div>
-                              <div>
-                                <div className="flex items-center gap-2">
-                                  <span className="font-medium">
-                                    {comm.sender_name || comm.sender_identifier}
-                                  </span>
-                                  <span className={`w-2 h-2 rounded-full ${categoryColors[comm.category]}`} />
-                                </div>
-                                <p className="text-sm text-muted-foreground line-clamp-1">
-                                  {comm.subject || comm.content.substring(0, 60)}...
-                                </p>
-                              </div>
+              <ScrollArea className="h-[600px]">
+                <div className="space-y-3">
+                  {filteredComms.map((comm) => (
+                    <Card
+                      key={comm.id}
+                      className={`cursor-pointer hover:border-gold/50 transition-all bg-white border-2 ${!comm.is_read ? 'border-gold/40 shadow-[0_4px_20px_rgba(200,167,102,0.15)]' : 'border-gold/20'}`}
+                      onClick={() => setSelectedComm(comm)}
+                    >
+                      <CardContent className="p-4">
+                        <div className="flex items-start justify-between gap-4">
+                          <div className="flex items-start gap-3">
+                            <div className="w-10 h-10 rounded-full bg-gold/10 flex items-center justify-center text-gold">
+                              {channelIcons[comm.channel]}
                             </div>
-                            <div className="flex flex-col items-end gap-2">
-                              <Badge className={statusConfig[comm.ai_status].color}>
-                                {statusConfig[comm.ai_status].icon}
-                                <span className="ml-1">{statusConfig[comm.ai_status].label}</span>
-                              </Badge>
-                              <span className="text-xs text-muted-foreground">
-                                {new Date(comm.received_at).toLocaleDateString()}
-                              </span>
+                            <div>
+                              <p className="font-semibold text-black">{comm.sender_name || comm.sender_identifier}</p>
+                              <p className="text-sm text-zinc-600 line-clamp-2">{comm.subject || comm.content}</p>
+                              <p className="text-xs text-zinc-400 mt-1">
+                                {new Date(comm.received_at).toLocaleString()}
+                              </p>
                             </div>
                           </div>
-                          
-                          {comm.ai_status === "flagged_for_review" && (
-                            <div className="mt-3 p-2 rounded bg-yellow-50 dark:bg-yellow-900/20 text-sm">
-                              <AlertTriangle className="h-4 w-4 inline mr-2 text-yellow-600" />
-                              <span className="text-yellow-800 dark:text-yellow-200">
-                                AI needs your guidance: {comm.ai_reasoning || "Uncertain how to respond"}
+                          <div className="flex flex-col items-end gap-2">
+                            <Badge className={`${statusConfig[comm.ai_status].color} flex items-center gap-1`}>
+                              {statusConfig[comm.ai_status].icon}
+                              {statusConfig[comm.ai_status].label}
+                            </Badge>
+                            {comm.ai_confidence_score && (
+                              <span className="text-xs text-zinc-400">
+                                {Math.round(comm.ai_confidence_score * 100)}% confident
                               </span>
-                            </div>
-                          )}
-                        </motion.div>
-                      ))}
-                    </div>
-                  </ScrollArea>
-                )}
-              </CardContent>
-            </Card>
-          </TabsContent>
-
-          {/* Training Tab */}
-          <TabsContent value="training" className="space-y-6">
-            <Card>
-              <CardHeader>
-                <CardTitle className="flex items-center gap-2">
-                  <BookOpen className="h-5 w-5" />
-                  Teach Your AI
-                </CardTitle>
-                <CardDescription>
-                  Add response templates. When AI sees these keywords, it will use your template.
-                  Enable "Auto Reply" for AI to respond automatically without asking.
-                </CardDescription>
-              </CardHeader>
-              <CardContent className="space-y-4">
-                <div className="grid gap-4 md:grid-cols-2">
-                  <div className="space-y-2">
-                    <Label>Trigger Keywords (comma separated)</Label>
-                    <Input
-                      placeholder="pricing, cost, how much, rates"
-                      value={newResponseKeywords}
-                      onChange={(e) => setNewResponseKeywords(e.target.value)}
-                    />
-                  </div>
-                  <div className="space-y-2">
-                    <Label>Category (optional)</Label>
-                    <Select value={newResponseCategory} onValueChange={(v) => setNewResponseCategory(v as CommCategory)}>
-                      <SelectTrigger>
-                        <SelectValue placeholder="Any category" />
-                      </SelectTrigger>
-                      <SelectContent>
-                        <SelectItem value="important">Important</SelectItem>
-                        <SelectItem value="routine">Routine</SelectItem>
-                        <SelectItem value="recruitment">Recruitment</SelectItem>
-                      </SelectContent>
-                    </Select>
-                  </div>
-                </div>
-                
-                <div className="space-y-2">
-                  <Label>Response Template</Label>
-                  <Textarea
-                    placeholder="Thank you for your inquiry about pricing. Our rates start from AED X for Y service. Would you like to schedule a consultation?"
-                    value={newResponseTemplate}
-                    onChange={(e) => setNewResponseTemplate(e.target.value)}
-                    rows={4}
-                  />
-                </div>
-                
-                <div className="flex items-center justify-between">
-                  <div className="flex items-center gap-2">
-                    <Switch
-                      checked={newResponseAutoReply}
-                      onCheckedChange={setNewResponseAutoReply}
-                    />
-                    <Label>Auto Reply (AI responds without asking)</Label>
-                  </div>
-                  <Button onClick={addLearnedResponse}>
-                    <Plus className="h-4 w-4 mr-2" />
-                    Add Template
-                  </Button>
-                </div>
-              </CardContent>
-            </Card>
-
-            {/* Existing Templates */}
-            <Card>
-              <CardHeader>
-                <CardTitle>Your Response Templates ({learnedResponses.length})</CardTitle>
-              </CardHeader>
-              <CardContent>
-                {learnedResponses.length === 0 ? (
-                  <p className="text-center text-muted-foreground py-8">
-                    No templates yet. Add one above to start training your AI.
-                  </p>
-                ) : (
-                  <div className="space-y-3">
-                    {learnedResponses.map((resp) => (
-                      <div key={resp.id} className="p-4 rounded-lg border bg-card">
-                        <div className="flex items-start justify-between">
-                          <div className="flex-1">
-                            <div className="flex items-center gap-2 mb-2">
-                              <div className="flex flex-wrap gap-1">
-                                {resp.trigger_keywords.map((kw, i) => (
-                                  <Badge key={i} variant="secondary" className="text-xs">
-                                    {kw}
-                                  </Badge>
-                                ))}
-                              </div>
-                              {resp.is_auto_respond && (
-                                <Badge className="bg-green-100 text-green-800">
-                                  <Zap className="h-3 w-3 mr-1" />
-                                  Auto
-                                </Badge>
-                              )}
-                            </div>
-                            <p className="text-sm text-muted-foreground line-clamp-2">
-                              {resp.response_template}
-                            </p>
-                            <p className="text-xs text-muted-foreground mt-2">
-                              Used {resp.use_count} times
-                            </p>
+                            )}
                           </div>
-                          <Button
-                            variant="ghost"
-                            size="icon"
-                            onClick={() => deleteLearnedResponse(resp.id)}
-                          >
-                            <Trash2 className="h-4 w-4 text-destructive" />
-                          </Button>
                         </div>
-                      </div>
-                    ))}
-                  </div>
-                )}
-              </CardContent>
-            </Card>
-          </TabsContent>
-
-          {/* Rules Tab */}
-          <TabsContent value="rules" className="space-y-6">
-            <Card>
-              <CardHeader>
-                <CardTitle className="flex items-center gap-2">
-                  <Filter className="h-5 w-5" />
-                  Ignore & Filter Rules
-                </CardTitle>
-                <CardDescription>
-                  Tell AI what to ignore, archive, or move to recruitment folder.
-                  These messages won't clutter your important inbox.
-                </CardDescription>
-              </CardHeader>
-              <CardContent className="space-y-4">
-                <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-4">
-                  <div className="space-y-2">
-                    <Label>Rule Name</Label>
-                    <Input
-                      placeholder="Marketing emails"
-                      value={newRuleName}
-                      onChange={(e) => setNewRuleName(e.target.value)}
-                    />
-                  </div>
-                  <div className="space-y-2">
-                    <Label>Type</Label>
-                    <Select value={newRuleType} onValueChange={setNewRuleType}>
-                      <SelectTrigger>
-                        <SelectValue />
-                      </SelectTrigger>
-                      <SelectContent>
-                        <SelectItem value="keyword">Keyword</SelectItem>
-                        <SelectItem value="sender">Sender</SelectItem>
-                        <SelectItem value="domain">Domain</SelectItem>
-                        <SelectItem value="subject_pattern">Subject Pattern</SelectItem>
-                      </SelectContent>
-                    </Select>
-                  </div>
-                  <div className="space-y-2">
-                    <Label>Value</Label>
-                    <Input
-                      placeholder="unsubscribe, newsletter"
-                      value={newRuleValue}
-                      onChange={(e) => setNewRuleValue(e.target.value)}
-                    />
-                  </div>
-                  <div className="space-y-2">
-                    <Label>Action</Label>
-                    <Select value={newRuleAction} onValueChange={setNewRuleAction}>
-                      <SelectTrigger>
-                        <SelectValue />
-                      </SelectTrigger>
-                      <SelectContent>
-                        <SelectItem value="archive">Archive (hide)</SelectItem>
-                        <SelectItem value="move_to_category">Move to Recruitment</SelectItem>
-                        <SelectItem value="delete">Delete</SelectItem>
-                      </SelectContent>
-                    </Select>
-                  </div>
+                      </CardContent>
+                    </Card>
+                  ))}
                 </div>
-                <Button onClick={addIgnoreRule}>
-                  <Plus className="h-4 w-4 mr-2" />
-                  Add Rule
-                </Button>
-              </CardContent>
-            </Card>
+              </ScrollArea>
+            </TabsContent>
 
-            {/* Existing Rules */}
-            <Card>
-              <CardHeader>
-                <CardTitle>Active Rules ({ignoreRules.length})</CardTitle>
-              </CardHeader>
-              <CardContent>
-                {ignoreRules.length === 0 ? (
-                  <p className="text-center text-muted-foreground py-8">
-                    No rules yet. Add one above to start filtering.
-                  </p>
-                ) : (
-                  <div className="space-y-3">
-                    {ignoreRules.map((rule) => (
-                      <div key={rule.id} className="p-4 rounded-lg border bg-card flex items-center justify-between">
-                        <div>
-                          <div className="flex items-center gap-2">
-                            <span className="font-medium">{rule.rule_name}</span>
-                            <Badge variant="outline">{rule.rule_type}</Badge>
-                            <Badge variant="secondary">{rule.action}</Badge>
+            {/* Responses Tab */}
+            <TabsContent value="responses" className="space-y-6">
+              <Card className="bg-white border-2 border-gold/30 shadow-[0_4px_20px_rgba(200,167,102,0.1)]">
+                <CardHeader>
+                  <CardTitle className="text-black flex items-center gap-2">
+                    <Plus className="h-5 w-5 text-gold" />
+                    Add Response Template
+                  </CardTitle>
+                  <CardDescription className="text-zinc-500">
+                    Teach the AI how to respond to specific types of messages
+                  </CardDescription>
+                </CardHeader>
+                <CardContent className="space-y-4">
+                  <div className="grid md:grid-cols-2 gap-4">
+                    <div className="space-y-2">
+                      <Label className="text-black">Trigger Keywords (comma-separated)</Label>
+                      <Input
+                        placeholder="e.g., price, availability, viewing"
+                        value={newResponseKeywords}
+                        onChange={(e) => setNewResponseKeywords(e.target.value)}
+                        className="bg-white border-2 border-gold/30 text-black placeholder:text-zinc-400"
+                      />
+                    </div>
+                    <div className="space-y-2">
+                      <Label className="text-black">Category Filter (optional)</Label>
+                      <Select value={newResponseCategory} onValueChange={(v) => setNewResponseCategory(v as CommCategory)}>
+                        <SelectTrigger className="bg-white border-2 border-gold/30 text-black">
+                          <SelectValue placeholder="Any category" />
+                        </SelectTrigger>
+                        <SelectContent className="bg-white border-gold/30">
+                          <SelectItem value="">Any category</SelectItem>
+                          <SelectItem value="important">Important</SelectItem>
+                          <SelectItem value="routine">Routine</SelectItem>
+                          <SelectItem value="recruitment">HR/Recruitment</SelectItem>
+                        </SelectContent>
+                      </Select>
+                    </div>
+                  </div>
+                  <div className="space-y-2">
+                    <Label className="text-black">Response Template</Label>
+                    <Textarea
+                      placeholder="Enter your response template..."
+                      value={newResponseTemplate}
+                      onChange={(e) => setNewResponseTemplate(e.target.value)}
+                      className="min-h-[100px] bg-white border-2 border-gold/30 text-black placeholder:text-zinc-400"
+                    />
+                  </div>
+                  <div className="flex items-center justify-between">
+                    <div className="flex items-center gap-2">
+                      <Switch
+                        checked={newResponseAutoReply}
+                        onCheckedChange={setNewResponseAutoReply}
+                      />
+                      <Label className="text-black">Auto-send response</Label>
+                    </div>
+                    <Button onClick={addLearnedResponse} variant="primary">
+                      <Plus className="h-4 w-4 mr-2" />
+                      Add Template
+                    </Button>
+                  </div>
+                </CardContent>
+              </Card>
+
+              {/* Existing responses */}
+              <div className="grid gap-4">
+                {learnedResponses.map((response) => (
+                  <Card key={response.id} className="bg-white border-2 border-gold/30">
+                    <CardContent className="p-4">
+                      <div className="flex items-start justify-between">
+                        <div className="flex-1">
+                          <div className="flex items-center gap-2 mb-2">
+                            {response.trigger_keywords.map((kw) => (
+                              <Badge key={kw} variant="outline" className="border-gold/30 text-black">{kw}</Badge>
+                            ))}
+                            {response.is_auto_respond && (
+                              <Badge className="bg-green-100 text-green-800 border-green-300">Auto-reply</Badge>
+                            )}
                           </div>
-                          <p className="text-sm text-muted-foreground mt-1">
-                            Match: "{rule.rule_value}" • Used {rule.match_count} times
-                          </p>
+                          <p className="text-sm text-zinc-600 line-clamp-2">{response.response_template}</p>
+                          <p className="text-xs text-zinc-400 mt-2">Used {response.use_count} times</p>
                         </div>
                         <Button
                           variant="ghost"
-                          size="icon"
-                          onClick={() => deleteIgnoreRule(rule.id)}
+                          size="sm"
+                          onClick={() => deleteLearnedResponse(response.id)}
+                          className="text-red-500 hover:text-red-700 hover:bg-red-50"
                         >
-                          <Trash2 className="h-4 w-4 text-destructive" />
+                          <Trash2 className="h-4 w-4" />
                         </Button>
                       </div>
-                    ))}
-                  </div>
-                )}
-              </CardContent>
-            </Card>
-          </TabsContent>
+                    </CardContent>
+                  </Card>
+                ))}
+              </div>
+            </TabsContent>
 
-          {/* Integrations Tab */}
-          <TabsContent value="integrations" className="space-y-6">
-            <div className="grid gap-6 md:grid-cols-2">
-              {/* Email Integration */}
-              <Card>
+            {/* Rules Tab */}
+            <TabsContent value="rules" className="space-y-6">
+              <Card className="bg-white border-2 border-gold/30 shadow-[0_4px_20px_rgba(200,167,102,0.1)]">
                 <CardHeader>
-                  <div className="flex items-center gap-3">
-                    <div className="p-2 rounded-lg bg-red-100 dark:bg-red-900/30">
-                      <Mail className="h-6 w-6 text-red-600" />
-                    </div>
-                    <div>
-                      <CardTitle>Email</CardTitle>
-                      <CardDescription>Gmail & Hostinger</CardDescription>
-                    </div>
-                  </div>
+                  <CardTitle className="text-black flex items-center gap-2">
+                    <Filter className="h-5 w-5 text-gold" />
+                    Add Ignore/Filter Rule
+                  </CardTitle>
                 </CardHeader>
-                <CardContent>
-                  <p className="text-sm text-muted-foreground mb-4">
-                    Connect your email accounts to let AI read, categorize, and respond.
-                  </p>
-                  <Badge variant="outline" className="mb-4">Not Connected</Badge>
-                  <div className="space-y-2 text-sm">
-                    <p>📋 You need:</p>
-                    <ul className="list-disc list-inside text-muted-foreground">
-                      <li>Gmail: Enable Gmail API in Google Cloud Console</li>
-                      <li>Hostinger: Get IMAP credentials from hosting panel</li>
-                    </ul>
-                  </div>
-                </CardContent>
-              </Card>
-
-              {/* Phone Integration */}
-              <Card>
-                <CardHeader>
-                  <div className="flex items-center gap-3">
-                    <div className="p-2 rounded-lg bg-green-100 dark:bg-green-900/30">
-                      <Phone className="h-6 w-6 text-green-600" />
+                <CardContent className="space-y-4">
+                  <div className="grid md:grid-cols-3 gap-4">
+                    <div className="space-y-2">
+                      <Label className="text-black">Rule Name</Label>
+                      <Input
+                        placeholder="e.g., Block marketing emails"
+                        value={newRuleName}
+                        onChange={(e) => setNewRuleName(e.target.value)}
+                        className="bg-white border-2 border-gold/30 text-black"
+                      />
                     </div>
-                    <div>
-                      <CardTitle>Phone Calls</CardTitle>
-                      <CardDescription>VAPI.ai Integration</CardDescription>
+                    <div className="space-y-2">
+                      <Label className="text-black">Rule Type</Label>
+                      <Select value={newRuleType} onValueChange={setNewRuleType}>
+                        <SelectTrigger className="bg-white border-2 border-gold/30 text-black">
+                          <SelectValue />
+                        </SelectTrigger>
+                        <SelectContent className="bg-white border-gold/30">
+                          <SelectItem value="keyword">Keyword</SelectItem>
+                          <SelectItem value="sender">Sender Contains</SelectItem>
+                          <SelectItem value="subject">Subject Contains</SelectItem>
+                        </SelectContent>
+                      </Select>
                     </div>
-                  </div>
-                </CardHeader>
-                <CardContent>
-                  <p className="text-sm text-muted-foreground mb-4">
-                    Forward your UAE number to VAPI AI agent for 24/7 answering.
-                  </p>
-                  <Badge variant="outline" className="mb-4">Not Connected</Badge>
-                  <div className="space-y-2 text-sm">
-                    <p>📋 You need:</p>
-                    <ul className="list-disc list-inside text-muted-foreground">
-                      <li>VAPI.ai account & API key</li>
-                      <li>Set up call forwarding: Etisalat *100</li>
-                    </ul>
-                  </div>
-                </CardContent>
-              </Card>
-
-              {/* WhatsApp Integration */}
-              <Card>
-                <CardHeader>
-                  <div className="flex items-center gap-3">
-                    <div className="p-2 rounded-lg bg-emerald-100 dark:bg-emerald-900/30">
-                      <MessageSquare className="h-6 w-6 text-emerald-600" />
-                    </div>
-                    <div>
-                      <CardTitle>WhatsApp</CardTitle>
-                      <CardDescription>Meta Business API</CardDescription>
+                    <div className="space-y-2">
+                      <Label className="text-black">Action</Label>
+                      <Select value={newRuleAction} onValueChange={setNewRuleAction}>
+                        <SelectTrigger className="bg-white border-2 border-gold/30 text-black">
+                          <SelectValue />
+                        </SelectTrigger>
+                        <SelectContent className="bg-white border-gold/30">
+                          <SelectItem value="archive">Archive</SelectItem>
+                          <SelectItem value="delete">Delete</SelectItem>
+                          <SelectItem value="move_to_category">Move to HR</SelectItem>
+                        </SelectContent>
+                      </Select>
                     </div>
                   </div>
-                </CardHeader>
-                <CardContent>
-                  <p className="text-sm text-muted-foreground mb-4">
-                    Connect WhatsApp Business to auto-respond to inquiries.
-                  </p>
-                  <Badge variant="outline" className="mb-4">Not Connected</Badge>
-                  <div className="space-y-2 text-sm">
-                    <p>📋 You need:</p>
-                    <ul className="list-disc list-inside text-muted-foreground">
-                      <li>Meta Business Account (verified)</li>
-                      <li>WhatsApp Business API access (2-4 weeks approval)</li>
-                    </ul>
-                  </div>
-                </CardContent>
-              </Card>
-
-              {/* Social Media Integration */}
-              <Card>
-                <CardHeader>
-                  <div className="flex items-center gap-3">
-                    <div className="p-2 rounded-lg bg-pink-100 dark:bg-pink-900/30">
-                      <Instagram className="h-6 w-6 text-pink-600" />
-                    </div>
-                    <div>
-                      <CardTitle>Social Media</CardTitle>
-                      <CardDescription>Instagram, Facebook, LinkedIn</CardDescription>
-                    </div>
-                  </div>
-                </CardHeader>
-                <CardContent>
-                  <p className="text-sm text-muted-foreground mb-4">
-                    Manage all social DMs and comments from one place.
-                  </p>
-                  <Badge variant="outline" className="mb-4">Not Connected</Badge>
-                  <div className="space-y-2 text-sm">
-                    <p>📋 You need:</p>
-                    <ul className="list-disc list-inside text-muted-foreground">
-                      <li>Meta Business Suite (Instagram, Facebook)</li>
-                      <li>LinkedIn Sales Navigator API (optional)</li>
-                    </ul>
-                  </div>
-                </CardContent>
-              </Card>
-            </div>
-          </TabsContent>
-        </Tabs>
-
-        {/* Communication Detail Modal */}
-        <Dialog open={!!selectedComm} onOpenChange={() => setSelectedComm(null)}>
-          <DialogContent className="max-w-2xl">
-            {selectedComm && (
-              <>
-                <DialogHeader>
-                  <div className="flex items-center gap-3">
-                    <div className="p-2 rounded-full bg-muted">
-                      {channelIcons[selectedComm.channel]}
-                    </div>
-                    <div>
-                      <DialogTitle>
-                        {selectedComm.sender_name || selectedComm.sender_identifier}
-                      </DialogTitle>
-                      <DialogDescription>
-                        {selectedComm.sender_identifier} • {new Date(selectedComm.received_at).toLocaleString()}
-                      </DialogDescription>
-                    </div>
-                  </div>
-                </DialogHeader>
-                
-                <div className="space-y-4">
-                  {selectedComm.subject && (
-                    <div>
-                      <Label className="text-muted-foreground">Subject</Label>
-                      <p className="font-medium">{selectedComm.subject}</p>
-                    </div>
-                  )}
-                  
-                  <div>
-                    <Label className="text-muted-foreground">Message</Label>
-                    <div className="p-4 rounded-lg bg-muted/50 mt-1">
-                      <p className="whitespace-pre-wrap">{selectedComm.content}</p>
-                    </div>
-                  </div>
-
-                  {selectedComm.ai_response && (
-                    <div>
-                      <Label className="text-muted-foreground">AI Response</Label>
-                      <div className="p-4 rounded-lg bg-green-50 dark:bg-green-900/20 mt-1">
-                        <p className="whitespace-pre-wrap">{selectedComm.ai_response}</p>
-                      </div>
-                    </div>
-                  )}
-
-                  {selectedComm.ai_status === "flagged_for_review" && (
-                    <div className="p-4 rounded-lg bg-yellow-50 dark:bg-yellow-900/20">
-                      <div className="flex items-center gap-2 mb-2">
-                        <AlertTriangle className="h-5 w-5 text-yellow-600" />
-                        <span className="font-medium text-yellow-800 dark:text-yellow-200">
-                          AI needs your help
-                        </span>
-                      </div>
-                      <p className="text-sm text-yellow-700 dark:text-yellow-300">
-                        {selectedComm.ai_reasoning || "I'm not sure how to respond to this message. Please provide a response, and I'll learn from it."}
-                      </p>
-                    </div>
-                  )}
-
-                  <div className="space-y-2">
-                    <Label>Your Response (AI will learn from this)</Label>
-                    <Textarea
-                      placeholder="Type your response here..."
-                      value={humanResponse}
-                      onChange={(e) => setHumanResponse(e.target.value)}
-                      rows={4}
+                  <div className="flex items-center gap-4">
+                    <Input
+                      placeholder="Enter value to match..."
+                      value={newRuleValue}
+                      onChange={(e) => setNewRuleValue(e.target.value)}
+                      className="flex-1 bg-white border-2 border-gold/30 text-black"
                     />
-                  </div>
-
-                  <div className="flex items-center justify-between">
-                    <div className="flex gap-2">
-                      <Button
-                        variant="outline"
-                        size="sm"
-                        onClick={() => markAsCategory(selectedComm.id, "important")}
-                      >
-                        <Bell className="h-4 w-4 mr-1" />
-                        Important
-                      </Button>
-                      <Button
-                        variant="outline"
-                        size="sm"
-                        onClick={() => markAsCategory(selectedComm.id, "recruitment")}
-                      >
-                        <Users className="h-4 w-4 mr-1" />
-                        Recruitment
-                      </Button>
-                      <Button
-                        variant="outline"
-                        size="sm"
-                        onClick={() => markAsCategory(selectedComm.id, "spam")}
-                      >
-                        <Trash2 className="h-4 w-4 mr-1" />
-                        Spam
-                      </Button>
-                    </div>
-                    <Button onClick={handleHumanResponse} disabled={!humanResponse.trim()}>
-                      <Send className="h-4 w-4 mr-2" />
-                      Send & Teach AI
+                    <Button onClick={addIgnoreRule} variant="primary">
+                      <Plus className="h-4 w-4 mr-2" />
+                      Add Rule
                     </Button>
                   </div>
+                </CardContent>
+              </Card>
+
+              {/* Existing rules */}
+              <div className="grid gap-4">
+                {ignoreRules.map((rule) => (
+                  <Card key={rule.id} className="bg-white border-2 border-gold/30">
+                    <CardContent className="p-4">
+                      <div className="flex items-center justify-between">
+                        <div>
+                          <p className="font-medium text-black">{rule.rule_name}</p>
+                          <p className="text-sm text-zinc-500">
+                            {rule.rule_type}: "{rule.rule_value}" → {rule.action}
+                          </p>
+                          <p className="text-xs text-zinc-400">Matched {rule.match_count} times</p>
+                        </div>
+                        <Button
+                          variant="ghost"
+                          size="sm"
+                          onClick={() => deleteIgnoreRule(rule.id)}
+                          className="text-red-500 hover:text-red-700 hover:bg-red-50"
+                        >
+                          <Trash2 className="h-4 w-4" />
+                        </Button>
+                      </div>
+                    </CardContent>
+                  </Card>
+                ))}
+              </div>
+            </TabsContent>
+
+            {/* Integrations Tab */}
+            <TabsContent value="integrations">
+              <SocialMediaGrid />
+            </TabsContent>
+          </Tabs>
+        </div>
+
+        {/* Floating Action Bar */}
+        <FloatingActionBar />
+
+        {/* Communication Detail Dialog */}
+        <Dialog open={!!selectedComm} onOpenChange={() => setSelectedComm(null)}>
+          <DialogContent className="max-w-2xl bg-white border-2 border-gold/30">
+            <DialogHeader>
+              <DialogTitle className="text-black flex items-center gap-2">
+                {selectedComm && channelIcons[selectedComm.channel]}
+                {selectedComm?.sender_name || selectedComm?.sender_identifier}
+              </DialogTitle>
+            </DialogHeader>
+            {selectedComm && (
+              <div className="space-y-4">
+                <div className="p-4 bg-gradient-to-r from-[#FDFBF7] to-white rounded-lg border border-gold/20">
+                  <p className="text-black whitespace-pre-wrap">{selectedComm.content}</p>
                 </div>
-              </>
+                
+                {selectedComm.ai_response && (
+                  <div className="p-4 bg-green-50 rounded-lg border border-green-200">
+                    <p className="text-sm font-medium text-green-800 mb-2">AI Suggested Response:</p>
+                    <p className="text-green-700">{selectedComm.ai_response}</p>
+                  </div>
+                )}
+
+                <div className="space-y-2">
+                  <Label className="text-black">Your Response</Label>
+                  <Textarea
+                    placeholder="Type your response..."
+                    value={humanResponse}
+                    onChange={(e) => setHumanResponse(e.target.value)}
+                    className="min-h-[100px] bg-white border-2 border-gold/30 text-black"
+                  />
+                  <Button onClick={handleHumanResponse} variant="primary">
+                    <Send className="h-4 w-4 mr-2" />
+                    Send & Teach AI
+                  </Button>
+                </div>
+
+                <div className="flex items-center gap-2 pt-4 border-t border-gold/20">
+                  <span className="text-sm text-zinc-500">Quick actions:</span>
+                  <Button
+                    variant="secondary"
+                    size="sm"
+                    onClick={() => markAsCategory(selectedComm.id, 'important')}
+                  >
+                    Mark Important
+                  </Button>
+                  <Button
+                    variant="secondary"
+                    size="sm"
+                    onClick={() => markAsCategory(selectedComm.id, 'routine')}
+                  >
+                    Mark Routine
+                  </Button>
+                  <Button
+                    variant="secondary"
+                    size="sm"
+                    onClick={() => markAsCategory(selectedComm.id, 'recruitment')}
+                  >
+                    Move to HR
+                  </Button>
+                </div>
+              </div>
             )}
           </DialogContent>
         </Dialog>
+
+        {/* Chat Panel */}
+        <ExecutiveChatPanel isOpen={isChatOpen} onClose={() => setIsChatOpen(false)} />
+
+        {/* Integration Wizard */}
+        <IntegrationWizard
+          isOpen={integrationWizard.isOpen}
+          onClose={() => setIntegrationWizard({ isOpen: false, type: 'email' })}
+        />
       </div>
     </MainLayout>
   );

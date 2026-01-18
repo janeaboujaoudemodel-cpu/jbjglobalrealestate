@@ -9,9 +9,8 @@ import { Badge } from "@/components/ui/badge";
 import { Skeleton } from "@/components/ui/skeleton";
 import { toast } from "sonner";
 import { 
-  Users, FileText, Plus, Upload, Download, LogOut, Shuffle, LayoutGrid, List, Zap, Briefcase, PanelLeftOpen, PanelLeftClose, Crown, Flag, Sparkles, CheckSquare, Calendar
+  Users, FileText, Plus, Upload, Download, LogOut, Shuffle, LayoutGrid, List, Zap, Briefcase, PanelLeftOpen, PanelLeftClose, Crown, Flag, Sparkles, CheckSquare, Calendar, Search, Bell, Settings, Brain
 } from "lucide-react";
-// Logo import removed - CRM uses clean minimal header
 import CRMLeadsTableV2 from "@/components/crm/CRMLeadsTableV2";
 import CRMEnhancedDashboard from "@/components/crm/CRMEnhancedDashboard";
 import CRMImportModalV3 from "@/components/crm/CRMImportModalV3";
@@ -35,6 +34,9 @@ import CRMAssistantPanel from "@/components/crm/CRMAssistantPanel";
 import CRMCommunicationPanel from "@/components/crm/CRMCommunicationPanel";
 import { ForcePasswordChange } from "@/components/auth/ForcePasswordChange";
 import { useForcePasswordChange } from "@/hooks/useForcePasswordChange";
+import { CommandPalette } from "@/components/ui/command-palette";
+import { FloatingActionBar } from "@/components/ui/floating-action-bar";
+import AIInsightsPanel from "@/components/ui/ai-insights-panel";
 
 interface CRMProfile {
   id: string;
@@ -57,6 +59,8 @@ const CRM = () => {
   const [refreshKey, setRefreshKey] = useState(0);
   const [viewMode, setViewMode] = useState<"table" | "kanban">("table");
   const [showToolsSidebar, setShowToolsSidebar] = useState(false);
+  const [showCommandPalette, setShowCommandPalette] = useState(false);
+  const [showAIInsights, setShowAIInsights] = useState(true);
   
   // Force password change hook
   const { needsPasswordChange, isLoading: passwordCheckLoading, userName, setNeedsPasswordChange } = useForcePasswordChange();
@@ -66,6 +70,13 @@ const CRM = () => {
   const [quickFilterStatuses, setQuickFilterStatuses] = useState<string[]>([]);
   const [sourceFilter, setSourceFilter] = useState("all");
   const [statusCounts, setStatusCounts] = useState<Record<string, number>>({});
+
+  // AI Insights mock data
+  const aiInsights = [
+    { id: '1', type: 'prediction' as const, title: 'Hot Lead Alert', description: '3 leads showing high engagement signals', confidence: 94, trend: 'up' as const },
+    { id: '2', type: 'recommendation' as const, title: 'Follow-up Needed', description: '7 leads haven\'t been contacted in 48h', confidence: 87 },
+    { id: '3', type: 'alert' as const, title: 'Deal at Risk', description: 'Premium client showing disengagement', confidence: 78, trend: 'down' as const },
+  ];
 
   // Show force password change screen if needed
   if (needsPasswordChange && !passwordCheckLoading) {
@@ -93,6 +104,18 @@ const CRM = () => {
       fetchStatusCounts();
     }
   }, [user?.id, refreshKey]);
+
+  // Keyboard shortcut for command palette
+  useEffect(() => {
+    const handleKeyDown = (e: KeyboardEvent) => {
+      if ((e.metaKey || e.ctrlKey) && e.key === 'k') {
+        e.preventDefault();
+        setShowCommandPalette(true);
+      }
+    };
+    document.addEventListener('keydown', handleKeyDown);
+    return () => document.removeEventListener('keydown', handleKeyDown);
+  }, []);
 
   const checkCRMAccess = async () => {
     if (!user) return;
@@ -203,15 +226,15 @@ const CRM = () => {
 
   if (loading) {
     return (
-      <div className="min-h-screen bg-background p-6">
+      <div className="min-h-screen bg-gradient-to-br from-white via-[#FDFBF7] to-[#F5F0E6] p-6">
         <div className="max-w-7xl mx-auto space-y-6">
-          <Skeleton className="h-12 w-64" />
+          <Skeleton className="h-12 w-64 bg-gold/10" />
           <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
             {[1, 2, 3, 4].map(i => (
-              <Skeleton key={i} className="h-32" />
+              <Skeleton key={i} className="h-32 bg-gold/10" />
             ))}
           </div>
-          <Skeleton className="h-96" />
+          <Skeleton className="h-96 bg-gold/10" />
         </div>
       </div>
     );
@@ -219,23 +242,23 @@ const CRM = () => {
 
   if (!profile) {
     return (
-      <div className="min-h-screen bg-background flex items-center justify-center p-6">
-        <Card className="w-full max-w-lg border-border bg-card">
+      <div className="min-h-screen bg-gradient-to-br from-white via-[#FDFBF7] to-[#F5F0E6] flex items-center justify-center p-6">
+        <Card className="w-full max-w-lg border-2 border-gold/30 bg-white shadow-[0_10px_40px_rgba(200,167,102,0.15)]">
           <CardHeader>
-            <CardTitle className="text-foreground">CRM access unavailable</CardTitle>
+            <CardTitle className="text-black">CRM access unavailable</CardTitle>
           </CardHeader>
           <CardContent className="space-y-4">
-            <p className="text-sm text-muted-foreground">
-              We couldn’t load your CRM profile for this session. Please refresh the page. If it keeps happening, sign out and sign in again.
+            <p className="text-sm text-zinc-600">
+              We couldn't load your CRM profile for this session. Please refresh the page. If it keeps happening, sign out and sign in again.
             </p>
             <div className="flex flex-col sm:flex-row gap-2">
-              <Button onClick={() => window.location.reload()} className="w-full sm:w-auto">
+              <Button onClick={() => window.location.reload()} variant="primary" className="w-full sm:w-auto">
                 Refresh
               </Button>
-              <Button variant="outline" onClick={() => navigate("/")} className="w-full sm:w-auto">
+              <Button variant="secondary" onClick={() => navigate("/")} className="w-full sm:w-auto">
                 Back to site
               </Button>
-              <Button variant="outline" onClick={handleSignOut} className="w-full sm:w-auto">
+              <Button variant="secondary" onClick={handleSignOut} className="w-full sm:w-auto">
                 Sign out
               </Button>
             </div>
@@ -280,20 +303,23 @@ const CRM = () => {
   };
 
   return (
-    <div className="min-h-screen bg-background flex">
+    <div className="min-h-screen bg-gradient-to-br from-white via-[#FDFBF7] to-[#F5F0E6] flex">
+      {/* Command Palette */}
+      <CommandPalette isOpen={showCommandPalette} onClose={() => setShowCommandPalette(false)} />
+      
       {/* Tools Sidebar */}
       <CRMToolsSidebar isOpen={showToolsSidebar} onClose={() => setShowToolsSidebar(false)} />
 
       <div className="flex-1">
-        {/* Header - Clean white minimal design */}
-        <header className="border-b border-zinc-200 bg-white sticky top-0 z-50">
+        {/* Premium Header - White/Gold/Champagne */}
+        <header className="border-b-2 border-gold/30 bg-gradient-to-r from-white via-[#FDFBF7] to-[#F5F0E6] sticky top-0 z-50 shadow-[0_4px_20px_rgba(200,167,102,0.1)]">
           <div className="max-w-[1600px] w-full mx-auto px-6 py-4 flex items-center justify-between gap-4">
             <div className="flex items-center gap-3 md:gap-4">
               <Button
                 variant="ghost"
                 size="sm"
                 onClick={() => setShowToolsSidebar(!showToolsSidebar)}
-                className="text-zinc-700 hover:text-gold hover:bg-zinc-100 shrink-0 transition-all duration-200 ease-in-out"
+                className="text-black hover:text-gold hover:bg-gold/10 shrink-0 transition-all duration-200 ease-in-out"
               >
                 {showToolsSidebar ? (
                   <PanelLeftClose className="h-5 w-5" />
@@ -304,29 +330,55 @@ const CRM = () => {
               
               {/* Role Title - Dynamic based on logged-in user */}
               <div className="flex flex-col">
-                <span 
-                  className="text-sm text-zinc-500"
-                  style={{ fontFamily: 'Poppins, Inter, sans-serif' }}
-                >
+                <span className="text-sm text-gold font-medium">
                   {getRoleTitle()}
                 </span>
-                <span 
-                  className="text-base md:text-lg font-semibold text-zinc-900"
-                  style={{ fontFamily: 'Poppins, Inter, sans-serif' }}
-                >
+                <span className="text-base md:text-lg font-bold text-black">
                   {profile.display_name || 'Team Member'}
                 </span>
               </div>
             </div>
             
+            {/* Search & Quick Actions */}
+            <div className="hidden lg:flex items-center gap-2 flex-1 max-w-md mx-4">
+              <button
+                onClick={() => setShowCommandPalette(true)}
+                className="flex items-center gap-2 w-full px-4 py-2 rounded-xl bg-white/80 border-2 border-gold/30 text-zinc-500 hover:border-gold/50 transition-all"
+              >
+                <Search className="h-4 w-4 text-gold" />
+                <span className="text-sm">Search leads, tasks...</span>
+                <kbd className="ml-auto px-2 py-0.5 bg-gold/10 text-gold text-xs rounded font-mono">⌘K</kbd>
+              </button>
+            </div>
+            
             <div className="flex items-center gap-2">
+              {/* AI Insights Toggle */}
+              <Button
+                variant="ghost"
+                size="sm"
+                onClick={() => setShowAIInsights(!showAIInsights)}
+                className={`text-gold hover:text-black hover:bg-gold/20 ${showAIInsights ? 'bg-gold/10' : ''}`}
+              >
+                <Brain className="h-4 w-4" />
+              </Button>
+              
+              {/* Notifications */}
+              <Button
+                variant="ghost"
+                size="sm"
+                className="text-black hover:text-gold hover:bg-gold/10 relative"
+              >
+                <Bell className="h-4 w-4" />
+                <span className="absolute -top-1 -right-1 w-4 h-4 bg-red-500 rounded-full text-[10px] text-white flex items-center justify-center">3</span>
+              </Button>
+              
               {/* Quick Navigation Buttons */}
               <div className="hidden md:flex items-center gap-1 mr-2">
                 <Button
                   variant="ghost"
                   size="sm"
                   onClick={() => navigate("/crm/tasks")}
-                  className="text-zinc-600 hover:text-zinc-900 hover:bg-zinc-100 text-xs"
+                  className="text-black hover:text-gold hover:bg-gold/10 text-xs"
                 >
                   <CheckSquare className="h-4 w-4 mr-1" />
                   Tasks
@@ -335,7 +387,7 @@ const CRM = () => {
                   variant="ghost"
                   size="sm"
                   onClick={() => navigate("/crm/calendar")}
-                  className="text-zinc-600 hover:text-zinc-900 hover:bg-zinc-100 text-xs"
+                  className="text-black hover:text-gold hover:bg-gold/10 text-xs"
                 >
                   <Calendar className="h-4 w-4 mr-1" />
                   Calendar
@@ -344,7 +396,7 @@ const CRM = () => {
                   variant="ghost"
                   size="sm"
                   onClick={() => navigate("/crm/employees")}
-                  className="text-zinc-600 hover:text-zinc-900 hover:bg-zinc-100 text-xs"
+                  className="text-black hover:text-gold hover:bg-gold/10 text-xs"
                 >
                   <Users className="h-4 w-4 mr-1" />
                   Team
@@ -354,7 +406,7 @@ const CRM = () => {
                     variant="ghost"
                     size="sm"
                     onClick={() => navigate("/crm/automations")}
-                    className="text-amber-600 hover:text-amber-700 hover:bg-amber-50 text-xs"
+                    className="text-gold hover:text-black hover:bg-gold/20 text-xs font-semibold"
                   >
                     <Zap className="h-4 w-4 mr-1" />
                     Automations
@@ -364,10 +416,10 @@ const CRM = () => {
 
               {isAdmin && (
                 <Button 
-                  variant="ghost" 
+                  variant="secondary" 
                   size="sm" 
                   onClick={() => navigate("/admin/crm")} 
-                  className="text-zinc-800 font-semibold hover:text-gold hover:bg-zinc-100 border border-zinc-200 transition-all duration-200 ease-in-out"
+                  className="font-semibold"
                 >
                   Admin Dashboard
                 </Button>
@@ -376,7 +428,7 @@ const CRM = () => {
                 variant="ghost" 
                 size="sm" 
                 onClick={handleSignOut} 
-                className="text-zinc-700 hover:text-zinc-900 hover:bg-zinc-100 transition-all duration-200 ease-in-out"
+                className="text-black hover:text-gold hover:bg-gold/10"
               >
                 <LogOut className="h-4 w-4 mr-2" />
                 Sign Out
@@ -385,280 +437,227 @@ const CRM = () => {
           </div>
         </header>
 
-      <main className="max-w-[1600px] w-full mx-auto px-4 pt-8 pb-6 space-y-6">
-        {/* Deal Value Tracker */}
-        <DealValueTracker userId={user?.id || ""} />
+        <div className="flex">
+          {/* Main Content */}
+          <main className={`flex-1 max-w-[1600px] w-full mx-auto px-4 pt-8 pb-24 space-y-6 ${showAIInsights ? 'pr-80' : ''}`}>
+            {/* Deal Value Tracker */}
+            <DealValueTracker userId={user?.id || ""} />
 
-        {/* Enhanced Dashboard with Charts */}
-        <CRMEnhancedDashboard userId={user?.id || ""} isAdmin={isAdmin} />
+            {/* Enhanced Dashboard with Charts */}
+            <CRMEnhancedDashboard userId={user?.id || ""} isAdmin={isAdmin} />
 
-        {/* Smart Reminders, Automation & Communication - Compact layout */}
-        <div className="grid grid-cols-1 lg:grid-cols-3 gap-4">
-          <div className="lg:col-span-2 space-y-4">
-            {/* Activity Timeline */}
-            <ActivityTimeline userId={user?.id || ""} limit={8} />
-            
-            {/* Communication Panel - Chat, Video, Files */}
-            <CRMCommunicationPanel />
-          </div>
-          
-          {/* Right Column: Smart Automations (scrollable) */}
-          <div className="space-y-4">
-            <SmartReminders userId={user?.id || ""} limit={4} />
-            
-            {/* Smart Automations - Organized scrollable container */}
-            <Card className="border-zinc-200 bg-white">
-              <CardHeader className="pb-2">
-                <CardTitle className="text-zinc-900 font-bold text-base flex items-center gap-2">
-                  <Zap className="h-4 w-4 text-gold" />
-                  Smart Automations
-                  <Badge variant="outline" className="ml-auto text-xs border-gold/30 text-gold">
-                    Active
-                  </Badge>
-                </CardTitle>
-              </CardHeader>
-              <CardContent className="p-0">
-                <div className="max-h-[350px] overflow-y-auto">
-                  <AutomationRules userId={user?.id || ""} isAdmin={isAdmin} />
-                </div>
-              </CardContent>
-            </Card>
-            
-            {/* Admin Tasks Panel - Only visible to Founder/Owner */}
-            {isFounder && (
-              <AdminTasksPanel />
-            )}
-          </div>
-        </div>
-        
-        {/* Divider */}
-        <div className="border-t border-zinc-200" />
-
-        {/* Action Buttons */}
-        <div className="flex flex-wrap items-center gap-3">
-          <Button onClick={() => setShowLeadModal(true)} variant="primary">
-            <Plus className="h-4 w-4 mr-2" />
-            Add Lead
-          </Button>
-          <Button variant="secondary" onClick={() => setShowImportModal(true)}>
-            <Upload className="h-4 w-4 mr-2" />
-            Import
-          </Button>
-          <Button variant="outline" onClick={handleExportCSV} className="text-foreground border-border bg-card hover:bg-muted font-semibold">
-            <Download className="h-4 w-4 mr-2" />
-            Export CSV
-          </Button>
-          {isAdmin && (
-            <Button
-              variant="outline"
-              onClick={() => setShowBulkAssignModal(true)}
-              className="text-foreground border-border bg-card hover:bg-muted font-semibold"
-            >
-              <Shuffle className="h-4 w-4 mr-2" />
-              Bulk Assign Leads
-            </Button>
-          )}
-          {isAdmin && (
-            <DeleteImportButton userId={user?.id || ""} onSuccess={handleRefresh} isAdmin={isAdmin} />
-          )}
-          <Button
-            variant="outline"
-            onClick={() => setShowAssistantPanel(true)}
-            className="text-gold border-gold/60 bg-card hover:bg-gold/15 font-bold"
-          >
-            <Sparkles className="h-4 w-4 mr-2" />
-            My Assistant
-          </Button>
-
-          <div className="ml-auto flex items-center gap-2">
-            <div className="flex border border-border rounded-lg overflow-hidden">
-              <Button
-                variant={viewMode === "table" ? "secondary" : "ghost"}
-                size="sm"
-                onClick={() => setViewMode("table")}
-                className="rounded-none"
-              >
-                <List className="h-4 w-4" />
-              </Button>
-              <Button
-                variant={viewMode === "kanban" ? "secondary" : "ghost"}
-                size="sm"
-                onClick={() => setViewMode("kanban")}
-                className="rounded-none"
-              >
-                <LayoutGrid className="h-4 w-4" />
-              </Button>
-            </div>
-            <LeadSourceFilter value={sourceFilter} onChange={setSourceFilter} />
-          </div>
-        </div>
-
-        {/* Kanban View */}
-        {viewMode === "kanban" && (
-          <KanbanPipeline userId={user?.id || ""} onRefresh={handleRefresh} />
-        )}
-
-        {/* Table View - WHITE background for readability */}
-        {viewMode === "table" && (
-        <Card className="border-zinc-200 bg-white text-zinc-900 shadow-lg">
-          <CardHeader className="pb-3 border-b border-zinc-100">
-            <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-4">
-              <CardTitle className="text-zinc-900 font-bold text-lg">Leads Pipeline</CardTitle>
+            {/* Smart Reminders, Automation & Communication - Compact layout */}
+            <div className="grid grid-cols-1 lg:grid-cols-3 gap-4">
+              <div className="lg:col-span-2 space-y-4">
+                {/* Activity Timeline */}
+                <ActivityTimeline userId={user?.id || ""} limit={8} />
+                
+                {/* Communication Panel - Chat, Video, Files */}
+                <CRMCommunicationPanel />
+              </div>
               
-              {/* Quick Filters - Integrated into Leads header */}
-              <div className="flex-1">
-                <LeadQuickFilters 
-                  activeFilter={quickFilter} 
-                  onChange={handleQuickFilterChange}
-                  counts={statusCounts}
-                />
+              {/* Right Column: Smart Automations (scrollable) */}
+              <div className="space-y-4">
+                <SmartReminders userId={user?.id || ""} limit={4} />
+                
+                {/* Smart Automations - Premium Card */}
+                <Card className="border-2 border-gold/30 bg-white shadow-[0_4px_20px_rgba(200,167,102,0.1)]">
+                  <CardHeader className="pb-2">
+                    <CardTitle className="text-black font-bold text-base flex items-center gap-2">
+                      <Zap className="h-4 w-4 text-gold" />
+                      Smart Automations
+                      <Badge className="ml-auto text-xs bg-gold/10 text-gold border-gold/30">
+                        Active
+                      </Badge>
+                    </CardTitle>
+                  </CardHeader>
+                  <CardContent className="p-0">
+                    <div className="max-h-[350px] overflow-y-auto">
+                      <AutomationRules userId={user?.id || ""} isAdmin={isAdmin} />
+                    </div>
+                  </CardContent>
+                </Card>
+                
+                {/* Admin Tasks Panel - Only visible to Founder/Owner */}
+                {isFounder && (
+                  <AdminTasksPanel />
+                )}
               </div>
             </div>
-          </CardHeader>
-          <CardContent className="pt-4">
-            <Tabs value={activeTab} onValueChange={setActiveTab}>
-              <TabsList className="mb-4 bg-zinc-100 border border-zinc-200 flex-wrap">
+            
+            {/* Divider */}
+            <div className="border-t-2 border-gold/20" />
+
+            {/* Action Buttons - Premium Style */}
+            <div className="flex flex-wrap items-center gap-3">
+              <Button onClick={() => setShowLeadModal(true)} variant="primary">
+                <Plus className="h-4 w-4 mr-2" />
+                Add Lead
+              </Button>
+              <Button variant="secondary" onClick={() => setShowImportModal(true)}>
+                <Upload className="h-4 w-4 mr-2" />
+                Import
+              </Button>
+              <Button 
+                variant="secondary" 
+                onClick={handleExportCSV}
+              >
+                <Download className="h-4 w-4 mr-2" />
+                Export CSV
+              </Button>
+              {isAdmin && (
+                <Button
+                  variant="secondary"
+                  onClick={() => setShowBulkAssignModal(true)}
+                >
+                  <Shuffle className="h-4 w-4 mr-2" />
+                  Bulk Assign Leads
+                </Button>
+              )}
+              {isAdmin && (
+                <DeleteImportButton userId={user?.id || ""} onSuccess={handleRefresh} isAdmin={isAdmin} />
+              )}
+              <Button
+                variant="secondary"
+                onClick={() => setShowAssistantPanel(true)}
+                className="text-gold border-gold/30"
+              >
+                <Sparkles className="h-4 w-4 mr-2" />
+                AI Assistant
+              </Button>
+              {isAdmin && (
+                <VIPExportButton />
+              )}
+
+              {/* View Mode Toggle */}
+              <div className="ml-auto flex items-center bg-white/80 border-2 border-gold/30 rounded-lg p-1">
+                <button
+                  onClick={() => setViewMode("table")}
+                  className={`p-2 rounded transition-all ${viewMode === "table" ? "bg-gold text-black" : "text-black hover:bg-gold/10"}`}
+                >
+                  <List className="h-4 w-4" />
+                </button>
+                <button
+                  onClick={() => setViewMode("kanban")}
+                  className={`p-2 rounded transition-all ${viewMode === "kanban" ? "bg-gold text-black" : "text-black hover:bg-gold/10"}`}
+                >
+                  <LayoutGrid className="h-4 w-4" />
+                </button>
+              </div>
+            </div>
+
+            {/* Leads Section with Tabs */}
+            <Tabs value={activeTab} onValueChange={setActiveTab} className="w-full">
+              <TabsList className="bg-white/80 border-2 border-gold/30 p-1 mb-4">
                 <TabsTrigger 
                   value="all" 
-                  className="data-[state=active]:bg-gold data-[state=active]:text-black text-zinc-600 font-bold"
+                  className="data-[state=active]:bg-gold data-[state=active]:text-black text-black"
                 >
                   <Users className="h-4 w-4 mr-2" />
                   All Leads
                 </TabsTrigger>
                 <TabsTrigger 
-                  value="own" 
-                  className="data-[state=active]:bg-gold data-[state=active]:text-black text-zinc-600 font-bold"
-                >
-                  <FileText className="h-4 w-4 mr-2" />
-                  My Leads
-                </TabsTrigger>
-                <TabsTrigger 
-                  value="website" 
-                  className="data-[state=active]:bg-gold data-[state=active]:text-black text-zinc-600 font-bold"
-                >
-                  <Zap className="h-4 w-4 mr-2" />
-                  Website Leads
-                </TabsTrigger>
-                <TabsTrigger 
-                  value="flagged" 
-                  className="data-[state=active]:bg-destructive data-[state=active]:text-destructive-foreground text-zinc-600 font-bold"
+                  value="flagged"
+                  className="data-[state=active]:bg-gold data-[state=active]:text-black text-black"
                 >
                   <Flag className="h-4 w-4 mr-2" />
                   Flagged
+                  {statusCounts.flagged && (
+                    <Badge className="ml-2 bg-red-500/20 text-red-600 border-red-500/30">{statusCounts.flagged}</Badge>
+                  )}
                 </TabsTrigger>
                 <TabsTrigger 
-                  value="vip" 
-                  className="data-[state=active]:bg-gold data-[state=active]:text-black text-zinc-600 font-bold"
+                  value="vip"
+                  className="data-[state=active]:bg-gold data-[state=active]:text-black text-black"
                 >
                   <Crown className="h-4 w-4 mr-2" />
                   VIP Leads
                 </TabsTrigger>
                 <TabsTrigger 
-                  value="employees" 
-                  className="data-[state=active]:bg-gold data-[state=active]:text-black text-zinc-600 font-bold"
+                  value="employees"
+                  className="data-[state=active]:bg-gold data-[state=active]:text-black text-black"
                 >
                   <Briefcase className="h-4 w-4 mr-2" />
                   Employees Hub
                 </TabsTrigger>
               </TabsList>
 
-              <TabsContent value="all">
-                <CRMLeadsTableV2
-                  key={`all-${refreshKey}-${quickFilter}-${sourceFilter}`}
-                  userId={user?.id || ""} 
-                  filterType="all"
-                  onRefresh={handleRefresh}
-                  statusFilters={quickFilterStatuses}
-                  sourceFilter={sourceFilter !== "all" ? sourceFilter : undefined}
-                  isAdmin={isAdmin}
-                />
-              </TabsContent>
-
-              <TabsContent value="own">
+              <TabsContent value="all" className="space-y-4">
+                {/* Leads Display */}
                 <CRMLeadsTableV2 
-                  key={`own-${refreshKey}-${quickFilter}-${sourceFilter}`}
+                  key={refreshKey}
                   userId={user?.id || ""} 
-                  filterType="own"
-                  onRefresh={handleRefresh}
-                  statusFilters={quickFilterStatuses}
-                  sourceFilter={sourceFilter !== "all" ? sourceFilter : undefined}
-                  isAdmin={isAdmin}
-                />
-              </TabsContent>
-
-              <TabsContent value="website">
-                <CRMLeadsTableV2
-                  key={`website-${refreshKey}-${quickFilter}-${sourceFilter}`}
-                  userId={user?.id || ""} 
-                  filterType="website"
-                  onRefresh={handleRefresh}
-                  statusFilters={quickFilterStatuses}
-                  sourceFilter={sourceFilter !== "all" ? sourceFilter : undefined}
-                  isAdmin={isAdmin}
                 />
               </TabsContent>
 
               <TabsContent value="flagged">
-                <FlaggedLeadsView userId={user?.id || ""} onRefresh={handleRefresh} />
+                <FlaggedLeadsView 
+                  key={refreshKey}
+                  userId={user?.id || ""} 
+                />
               </TabsContent>
 
               <TabsContent value="vip">
-                <div className="space-y-4">
-                  <div className="flex justify-end">
-                    <VIPExportButton />
-                  </div>
-                  <CRMLeadsTableV2
-                    key={`vip-${refreshKey}-${quickFilter}-${sourceFilter}`}
-                    userId={user?.id || ""} 
-                    filterType="vip"
-                    onRefresh={handleRefresh}
-                    statusFilters={quickFilterStatuses}
-                    sourceFilter={sourceFilter !== "all" ? sourceFilter : undefined}
-                    isAdmin={isAdmin}
-                  />
-                </div>
+                <CRMLeadsTableV2 
+                  key={refreshKey}
+                  userId={user?.id || ""} 
+                />
               </TabsContent>
 
               <TabsContent value="employees">
                 <EmployeesHub userId={user?.id || ""} />
               </TabsContent>
             </Tabs>
-          </CardContent>
-        </Card>
-        )}
-      </main>
+          </main>
 
-      {/* Modals */}
-      <CRMImportModalV3 
-        open={showImportModal} 
-        onClose={() => setShowImportModal(false)}
-        onSuccess={handleRefresh}
-        userId={user?.id || ""}
-      />
+          {/* AI Insights Panel */}
+          {showAIInsights && (
+            <aside className="fixed right-0 top-[73px] bottom-0 w-80 border-l-2 border-gold/30 bg-gradient-to-b from-white via-[#FDFBF7] to-[#F5F0E6] overflow-hidden">
+              <AIInsightsPanel 
+                insights={aiInsights}
+                isLoading={false}
+                onRefresh={() => toast.info("Refreshing AI insights...")}
+              />
+            </aside>
+          )}
+        </div>
 
-      <CRMLeadModal
-        open={showLeadModal}
-        onClose={() => setShowLeadModal(false)}
-        onSuccess={handleRefresh}
-        userId={user?.id || ""}
-      />
+        {/* Floating Action Bar */}
+        <FloatingActionBar />
 
-      {isAdmin && (
+        {/* Modals */}
+        <CRMImportModalV3
+          open={showImportModal}
+          onClose={() => setShowImportModal(false)}
+          onSuccess={() => {
+            setShowImportModal(false);
+            handleRefresh();
+          }}
+        />
+
+        <CRMLeadModal
+          open={showLeadModal}
+          onClose={() => setShowLeadModal(false)}
+          onSuccess={() => {
+            setShowLeadModal(false);
+            handleRefresh();
+          }}
+        />
+
         <BulkAssignModal
           open={showBulkAssignModal}
           onClose={() => setShowBulkAssignModal(false)}
-          onSuccess={handleRefresh}
-          selectedLeadIds={[]}
-          filterStatus={quickFilter !== "all" ? quickFilterStatuses[0] : undefined}
-          totalAvailable={Object.values(statusCounts).reduce((a, b) => a + b, 0)}
+          onSuccess={() => {
+            setShowBulkAssignModal(false);
+            handleRefresh();
+          }}
         />
-        )}
 
-      <CRMAssistantPanel
-        userId={user?.id || ""}
-        isOpen={showAssistantPanel}
-        onClose={() => setShowAssistantPanel(false)}
-      />
+        <CRMAssistantPanel 
+          userId={user?.id || ""}
+          isOpen={showAssistantPanel}
+          onClose={() => setShowAssistantPanel(false)}
+        />
       </div>
     </div>
   );

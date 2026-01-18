@@ -5,6 +5,7 @@ import MainLayout from "@/components/MainLayout";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Card, CardContent } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
+import { Button } from "@/components/ui/button";
 import { supabase } from "@/integrations/supabase/client";
 import { motion, AnimatePresence } from "framer-motion";
 import {
@@ -22,6 +23,9 @@ import {
   Heart,
   Network,
   Brain,
+  Search,
+  Settings,
+  Home,
 } from "lucide-react";
 import FoundersChatPanel from "@/components/founders-assistant/FoundersChatPanel";
 import FoundersTaskDashboard from "@/components/founders-assistant/FoundersTaskDashboard";
@@ -39,6 +43,8 @@ import FoundersInsightsPanel from "@/components/founders-assistant/FoundersInsig
 import FoundersNotesPanel from "@/components/founders-assistant/FoundersNotesPanel";
 import { FoundersDecisionPanel } from "@/components/founders-assistant/FoundersDecisionPanel";
 import { EscalationAlertButton } from "@/components/ai/EscalationAlertButton";
+import { CommandPalette } from "@/components/ui/command-palette";
+import { FloatingActionBar } from "@/components/ui/floating-action-bar";
 import { FileText } from "lucide-react";
 
 // Amanda Clarke - Founder's Executive Assistant portrait
@@ -50,6 +56,7 @@ export default function FoundersAssistant() {
   const [activeTab, setActiveTab] = useState("assistant");
   const [unreadCount, setUnreadCount] = useState(0);
   const [isNotificationOpen, setIsNotificationOpen] = useState(false);
+  const [showCommandPalette, setShowCommandPalette] = useState(false);
   const [stats, setStats] = useState({
     activeTasks: 0,
     pendingTasks: 0,
@@ -83,6 +90,18 @@ export default function FoundersAssistant() {
     }
   }, [user]);
 
+  // Keyboard shortcut for command palette
+  useEffect(() => {
+    const handleKeyDown = (e: KeyboardEvent) => {
+      if ((e.metaKey || e.ctrlKey) && e.key === 'k') {
+        e.preventDefault();
+        setShowCommandPalette(true);
+      }
+    };
+    document.addEventListener('keydown', handleKeyDown);
+    return () => document.removeEventListener('keydown', handleKeyDown);
+  }, []);
+
   const fetchStats = async () => {
     try {
       const { data: tasks } = await supabase
@@ -114,7 +133,7 @@ export default function FoundersAssistant() {
   if (authLoading) {
     return (
       <MainLayout>
-        <div className="flex items-center justify-center min-h-screen bg-[#0A0A0A]">
+        <div className="flex items-center justify-center min-h-screen bg-gradient-to-br from-white via-[#FDFBF7] to-[#F5F0E6]">
           <Loader2 className="h-8 w-8 animate-spin text-gold" />
         </div>
       </MainLayout>
@@ -123,15 +142,18 @@ export default function FoundersAssistant() {
 
   return (
     <MainLayout>
-      <div className="min-h-screen bg-[#0A0A0A]">
-        <div className="container mx-auto px-4 py-6 max-w-7xl">
-          {/* Header */}
+      <div className="min-h-screen bg-gradient-to-br from-white via-[#FDFBF7] to-[#F5F0E6]">
+        {/* Command Palette */}
+        <CommandPalette isOpen={showCommandPalette} onClose={() => setShowCommandPalette(false)} />
+        
+        <div className="container mx-auto px-4 py-6 max-w-7xl pb-24">
+          {/* Premium Header */}
           <motion.div 
             initial={{ opacity: 0, y: -20 }}
             animate={{ opacity: 1, y: 0 }}
             className="mb-6"
           >
-            <div className="flex items-center justify-between flex-wrap gap-4">
+            <div className="flex items-center justify-between flex-wrap gap-4 bg-white/80 backdrop-blur-sm border-2 border-gold/30 rounded-2xl p-4 shadow-[0_4px_20px_rgba(200,167,102,0.1)]">
               <div className="flex items-center gap-4">
                 <div className="relative">
                   <div className="absolute inset-0 rounded-full bg-gradient-to-br from-gold/40 to-gold/10 blur-md animate-pulse" />
@@ -142,27 +164,36 @@ export default function FoundersAssistant() {
                       className="w-full h-full object-cover"
                     />
                   </div>
-                  <span className="absolute bottom-0 right-0 w-4 h-4 bg-green-500 border-2 border-[#0A0A0A] rounded-full animate-pulse" />
+                  <span className="absolute bottom-0 right-0 w-4 h-4 bg-green-500 border-2 border-white rounded-full animate-pulse" />
                 </div>
                 <div>
-                  <h1 className="text-2xl font-bold text-white flex items-center gap-2">
+                  <h1 className="text-2xl font-bold text-black flex items-center gap-2">
                     Amanda Clarke
-                    <Badge className="bg-white text-black border-gold/30 text-xs shadow-sm">
-                      <span className="text-gold">Founder's</span>
-                      <span className="text-black ml-1">Executive Assistant</span>
+                    <Badge className="bg-gold/10 text-gold border-gold/30 text-xs">
+                      Founder's Executive Assistant
                     </Badge>
                   </h1>
-                  <p className="text-gray-400 text-sm">Your personal executive assistant • Available 24/7</p>
+                  <p className="text-zinc-500 text-sm">Your personal executive assistant • Available 24/7</p>
                 </div>
               </div>
               
               <div className="flex items-center gap-3">
+                {/* Search */}
+                <button
+                  onClick={() => setShowCommandPalette(true)}
+                  className="hidden md:flex items-center gap-2 px-4 py-2 rounded-xl bg-white border-2 border-gold/30 text-zinc-500 hover:border-gold/50 transition-all"
+                >
+                  <Search className="h-4 w-4 text-gold" />
+                  <span className="text-sm">Search...</span>
+                  <kbd className="ml-2 px-2 py-0.5 bg-gold/10 text-gold text-xs rounded font-mono">⌘K</kbd>
+                </button>
+                
                 <EscalationAlertButton 
                   onViewAll={() => setActiveTab('escalations')}
                 />
                 <button
                   onClick={() => setIsNotificationOpen(!isNotificationOpen)}
-                  className="relative p-3 rounded-full bg-[#1A1A1A] border border-gold/20 hover:border-gold/40 transition-all"
+                  className="relative p-3 rounded-full bg-white border-2 border-gold/30 hover:border-gold/50 transition-all"
                 >
                   <Bell className="h-5 w-5 text-gold" />
                   {unreadCount > 0 && (
@@ -175,10 +206,10 @@ export default function FoundersAssistant() {
             </div>
           </motion.div>
 
-          {/* Task Stats Cards - Clickable */}
+          {/* Task Stats Cards - Premium Champagne Theme */}
           <div className="grid grid-cols-2 md:grid-cols-4 gap-4 mb-6">
             <Card 
-              className="bg-white border-2 border-gold/30 shadow-[0_0_15px_rgba(200,167,102,0.15)] cursor-pointer hover:border-gold/50 hover:shadow-[0_0_20px_rgba(200,167,102,0.25)] transition-all"
+              className="bg-white border-2 border-gold/30 shadow-[0_4px_20px_rgba(200,167,102,0.1)] cursor-pointer hover:border-gold/50 hover:shadow-[0_8px_30px_rgba(200,167,102,0.2)] transition-all"
               onClick={() => setActiveTab('tasks')}
             >
               <CardContent className="p-4 flex items-center justify-between">
@@ -189,7 +220,7 @@ export default function FoundersAssistant() {
               </CardContent>
             </Card>
             <Card 
-              className="bg-white border-2 border-green-500/30 shadow-[0_0_15px_rgba(34,197,94,0.1)] cursor-pointer hover:border-green-500/50 transition-all"
+              className="bg-white border-2 border-green-500/30 shadow-[0_4px_20px_rgba(34,197,94,0.1)] cursor-pointer hover:border-green-500/50 transition-all"
               onClick={() => setActiveTab('tasks')}
             >
               <CardContent className="p-4 flex items-center justify-between">
@@ -200,7 +231,7 @@ export default function FoundersAssistant() {
               </CardContent>
             </Card>
             <Card 
-              className="bg-white border-2 border-amber-500/30 shadow-[0_0_15px_rgba(245,158,11,0.1)] cursor-pointer hover:border-amber-500/50 transition-all"
+              className="bg-white border-2 border-amber-500/30 shadow-[0_4px_20px_rgba(245,158,11,0.1)] cursor-pointer hover:border-amber-500/50 transition-all"
               onClick={() => setActiveTab('tasks')}
             >
               <CardContent className="p-4 flex items-center justify-between">
@@ -211,7 +242,7 @@ export default function FoundersAssistant() {
               </CardContent>
             </Card>
             <Card 
-              className="bg-white border-2 border-orange-500/30 shadow-[0_0_15px_rgba(249,115,22,0.1)] cursor-pointer hover:border-orange-500/50 transition-all"
+              className="bg-white border-2 border-orange-500/30 shadow-[0_4px_20px_rgba(249,115,22,0.1)] cursor-pointer hover:border-orange-500/50 transition-all"
               onClick={() => setActiveTab('tasks')}
             >
               <CardContent className="p-4 flex items-center justify-between">
@@ -223,103 +254,103 @@ export default function FoundersAssistant() {
             </Card>
           </div>
 
-          {/* Main Tabs - All 8 tabs */}
+          {/* Main Tabs - Premium White/Gold Theme */}
           <Tabs value={activeTab} onValueChange={setActiveTab} className="w-full">
-            <TabsList className="w-full bg-[#0E0E0E] border border-gold/20 p-1 rounded-lg mb-6 flex flex-wrap gap-1">
+            <TabsList className="w-full bg-white/80 border-2 border-gold/30 p-1 rounded-xl mb-6 flex flex-wrap gap-1 shadow-[0_4px_20px_rgba(200,167,102,0.1)]">
               <TabsTrigger 
                 value="assistant" 
-                className="flex-1 min-w-[100px] data-[state=active]:bg-gold data-[state=active]:text-black"
+                className="flex-1 min-w-[100px] data-[state=active]:bg-gold data-[state=active]:text-black text-black"
               >
                 <MessageSquare className="h-4 w-4 mr-2" />
                 Assistant
               </TabsTrigger>
               <TabsTrigger 
                 value="tasks"
-                className="flex-1 min-w-[100px] data-[state=active]:bg-gold data-[state=active]:text-black"
+                className="flex-1 min-w-[100px] data-[state=active]:bg-gold data-[state=active]:text-black text-black"
               >
                 <CheckSquare className="h-4 w-4 mr-2" />
                 Tasks
               </TabsTrigger>
               <TabsTrigger 
                 value="team"
-                className="flex-1 min-w-[100px] data-[state=active]:bg-gold data-[state=active]:text-black"
+                className="flex-1 min-w-[100px] data-[state=active]:bg-gold data-[state=active]:text-black text-black"
               >
                 <Users className="h-4 w-4 mr-2" />
                 Team
               </TabsTrigger>
               <TabsTrigger 
                 value="drafts"
-                className="flex-1 min-w-[100px] data-[state=active]:bg-gold data-[state=active]:text-black"
+                className="flex-1 min-w-[100px] data-[state=active]:bg-gold data-[state=active]:text-black text-black"
               >
                 <FileEdit className="h-4 w-4 mr-2" />
                 Drafts
               </TabsTrigger>
               <TabsTrigger 
                 value="ai-tools"
-                className="flex-1 min-w-[100px] data-[state=active]:bg-gold data-[state=active]:text-black"
+                className="flex-1 min-w-[100px] data-[state=active]:bg-gold data-[state=active]:text-black text-black"
               >
                 <Wrench className="h-4 w-4 mr-2" />
                 AI Tools
               </TabsTrigger>
               <TabsTrigger 
                 value="hot-leads"
-                className="flex-1 min-w-[100px] data-[state=active]:bg-gold data-[state=active]:text-black"
+                className="flex-1 min-w-[100px] data-[state=active]:bg-gold data-[state=active]:text-black text-black"
               >
                 <Flame className="h-4 w-4 mr-2" />
                 Hot Leads
               </TabsTrigger>
               <TabsTrigger 
                 value="activity"
-                className="flex-1 min-w-[100px] data-[state=active]:bg-gold data-[state=active]:text-black"
+                className="flex-1 min-w-[100px] data-[state=active]:bg-gold data-[state=active]:text-black text-black"
               >
                 <Activity className="h-4 w-4 mr-2" />
                 Activity
               </TabsTrigger>
               <TabsTrigger 
                 value="video-meet"
-                className="flex-1 min-w-[100px] data-[state=active]:bg-gold data-[state=active]:text-black"
+                className="flex-1 min-w-[100px] data-[state=active]:bg-gold data-[state=active]:text-black text-black"
               >
                 <Video className="h-4 w-4 mr-2" />
                 Video Meet
               </TabsTrigger>
               <TabsTrigger 
                 value="escalations"
-                className="flex-1 min-w-[100px] data-[state=active]:bg-gold data-[state=active]:text-black"
+                className="flex-1 min-w-[100px] data-[state=active]:bg-gold data-[state=active]:text-black text-black"
               >
                 <Zap className="h-4 w-4 mr-2" />
                 Escalations
               </TabsTrigger>
               <TabsTrigger 
                 value="analytics"
-                className="flex-1 min-w-[100px] data-[state=active]:bg-gold data-[state=active]:text-black"
+                className="flex-1 min-w-[100px] data-[state=active]:bg-gold data-[state=active]:text-black text-black"
               >
                 <Heart className="h-4 w-4 mr-2" />
                 Analytics
               </TabsTrigger>
               <TabsTrigger 
                 value="collaboration"
-                className="flex-1 min-w-[100px] data-[state=active]:bg-gold data-[state=active]:text-black"
+                className="flex-1 min-w-[100px] data-[state=active]:bg-gold data-[state=active]:text-black text-black"
               >
                 <Network className="h-4 w-4 mr-2" />
                 Collaboration
               </TabsTrigger>
               <TabsTrigger 
                 value="insights"
-                className="flex-1 min-w-[100px] data-[state=active]:bg-gold data-[state=active]:text-black"
+                className="flex-1 min-w-[100px] data-[state=active]:bg-gold data-[state=active]:text-black text-black"
               >
                 <Brain className="h-4 w-4 mr-2" />
                 AI Insights
               </TabsTrigger>
               <TabsTrigger 
                 value="notes"
-                className="flex-1 min-w-[100px] data-[state=active]:bg-gold data-[state=active]:text-black"
+                className="flex-1 min-w-[100px] data-[state=active]:bg-gold data-[state=active]:text-black text-black"
               >
                 <FileText className="h-4 w-4 mr-2" />
                 Notes
               </TabsTrigger>
               <TabsTrigger 
                 value="decisions"
-                className="flex-1 min-w-[100px] data-[state=active]:bg-gold data-[state=active]:text-black"
+                className="flex-1 min-w-[100px] data-[state=active]:bg-gold data-[state=active]:text-black text-black"
               >
                 <Brain className="h-4 w-4 mr-2" />
                 Decisions
@@ -470,12 +501,22 @@ export default function FoundersAssistant() {
           </Tabs>
         </div>
 
-        {/* Notification Center Slide-over */}
-        <FoundersNotificationCenter 
-          isOpen={isNotificationOpen} 
-          onClose={() => setIsNotificationOpen(false)}
-          onUnreadCountChange={setUnreadCount}
-        />
+        {/* Floating Action Bar */}
+        <FloatingActionBar />
+
+        {/* Notification Panel */}
+        <AnimatePresence>
+          {isNotificationOpen && (
+            <motion.div
+              initial={{ opacity: 0, x: 300 }}
+              animate={{ opacity: 1, x: 0 }}
+              exit={{ opacity: 0, x: 300 }}
+              className="fixed right-0 top-0 h-full w-96 bg-white border-l-2 border-gold/30 shadow-xl z-50"
+            >
+              <FoundersNotificationCenter isOpen={isNotificationOpen} onClose={() => setIsNotificationOpen(false)} />
+            </motion.div>
+          )}
+        </AnimatePresence>
       </div>
     </MainLayout>
   );

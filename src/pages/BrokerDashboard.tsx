@@ -7,10 +7,13 @@ import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { Progress } from "@/components/ui/progress";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import { Card, CardContent } from "@/components/ui/card";
 import Footer from "@/components/Footer";
 import BrokerPDFGenerator from "@/components/broker/BrokerPDFGenerator";
 import BrokerCourses from "@/components/broker/BrokerCourses";
 import BrokerAITools from "@/components/broker/BrokerAITools";
+import { CommandPalette } from "@/components/ui/command-palette";
+import { FloatingActionBar } from "@/components/ui/floating-action-bar";
 import {
   Crown,
   FileText,
@@ -23,6 +26,9 @@ import {
   AlertCircle,
   Phone,
   Mail,
+  Search,
+  Bell,
+  Home,
 } from "lucide-react";
 
 interface Subscription {
@@ -42,6 +48,7 @@ export default function BrokerDashboard() {
   const [subscription, setSubscription] = useState<Subscription | null>(null);
   const [loadingSubscription, setLoadingSubscription] = useState(true);
   const [activeTab, setActiveTab] = useState("overview");
+  const [showCommandPalette, setShowCommandPalette] = useState(false);
 
   useEffect(() => {
     if (!loading && !user) {
@@ -54,6 +61,18 @@ export default function BrokerDashboard() {
       fetchSubscription();
     }
   }, [user]);
+
+  // Keyboard shortcut for command palette
+  useEffect(() => {
+    const handleKeyDown = (e: KeyboardEvent) => {
+      if ((e.metaKey || e.ctrlKey) && e.key === 'k') {
+        e.preventDefault();
+        setShowCommandPalette(true);
+      }
+    };
+    document.addEventListener('keydown', handleKeyDown);
+    return () => document.removeEventListener('keydown', handleKeyDown);
+  }, []);
 
   const fetchSubscription = async () => {
     try {
@@ -77,7 +96,7 @@ export default function BrokerDashboard() {
 
   if (loading || loadingSubscription) {
     return (
-      <div className="min-h-screen bg-[hsl(var(--premium-bg))] flex items-center justify-center">
+      <div className="min-h-screen bg-gradient-to-br from-white via-[#FDFBF7] to-[#F5F0E6] flex items-center justify-center">
         <div className="animate-spin w-8 h-8 border-2 border-gold border-t-transparent rounded-full" />
       </div>
     );
@@ -85,16 +104,18 @@ export default function BrokerDashboard() {
 
   if (!subscription) {
     return (
-      <div className="min-h-screen bg-[hsl(var(--premium-bg))] flex items-center justify-center p-4">
+      <div className="min-h-screen bg-gradient-to-br from-white via-[#FDFBF7] to-[#F5F0E6] flex items-center justify-center p-4">
         <div className="text-center max-w-md">
-          <AlertCircle className="w-16 h-16 text-gold mx-auto mb-4" />
-          <h1 className="text-2xl font-bold text-white mb-4">No Active Subscription</h1>
-          <p className="text-zinc-400 mb-6">
+          <div className="w-20 h-20 rounded-2xl bg-gold/10 flex items-center justify-center mx-auto mb-4">
+            <AlertCircle className="w-10 h-10 text-gold" />
+          </div>
+          <h1 className="text-2xl font-bold text-black mb-4">No Active Subscription</h1>
+          <p className="text-zinc-500 mb-6">
             You don't have an active Broker Toolkit subscription. Start your free trial today!
           </p>
           <Button
             onClick={() => navigate("/broker-toolkit")}
-            className="bg-gradient-to-r from-gold to-gold-dark text-black hover:brightness-110"
+            variant="primary"
           >
             <Crown className="w-5 h-5 mr-2" />
             View Plans
@@ -127,37 +148,54 @@ export default function BrokerDashboard() {
     : 0;
 
   return (
-    <div className="min-h-screen bg-[hsl(var(--premium-bg))]">
-      {/* Header */}
-      <section className="py-8 border-b border-zinc-800">
+    <div className="min-h-screen bg-gradient-to-br from-white via-[#FDFBF7] to-[#F5F0E6]">
+      {/* Command Palette */}
+      <CommandPalette isOpen={showCommandPalette} onClose={() => setShowCommandPalette(false)} />
+      
+      {/* Premium Header */}
+      <section className="py-6 border-b-2 border-gold/30 bg-gradient-to-r from-white via-[#FDFBF7] to-[#F5F0E6] shadow-[0_4px_20px_rgba(200,167,102,0.1)]">
         <div className="container mx-auto px-4">
           <div className="flex flex-col md:flex-row items-start md:items-center justify-between gap-4">
-            <div>
-              <div className="flex items-center gap-3 mb-2">
-                <h1 className="text-2xl md:text-3xl font-bold text-white">Broker Dashboard</h1>
-                <Badge className={`${
-                  subscription.tier === "enterprise" 
-                    ? "bg-purple-500/20 text-purple-400 border-purple-500/30"
-                    : subscription.tier === "professional"
-                    ? "bg-gold/20 text-gold border-gold/30"
-                    : "bg-zinc-600/20 text-zinc-300 border-zinc-600/30"
-                }`}>
-                  {tierLabels[subscription.tier] || subscription.tier}
-                </Badge>
+            <div className="flex items-center gap-4">
+              <div className="w-12 h-12 rounded-xl bg-gradient-to-br from-gold to-amber-600 flex items-center justify-center shadow-lg shadow-gold/20">
+                <Crown className="w-6 h-6 text-black" />
               </div>
-              {isTrialActive && (
-                <p className="text-amber-400 flex items-center gap-2">
-                  <Clock className="w-4 h-4" />
-                  Trial: {trialDaysLeft} days remaining
-                </p>
-              )}
+              <div>
+                <div className="flex items-center gap-3 mb-1">
+                  <h1 className="text-2xl md:text-3xl font-bold text-black">Broker Dashboard</h1>
+                  <Badge className={`${
+                    subscription.tier === "enterprise" 
+                      ? "bg-purple-500/10 text-purple-600 border-purple-500/30"
+                      : subscription.tier === "professional"
+                      ? "bg-gold/10 text-gold border-gold/30"
+                      : "bg-zinc-100 text-zinc-600 border-zinc-300"
+                  }`}>
+                    {tierLabels[subscription.tier] || subscription.tier}
+                  </Badge>
+                </div>
+                {isTrialActive && (
+                  <p className="text-amber-600 flex items-center gap-2 text-sm">
+                    <Clock className="w-4 h-4" />
+                    Trial: {trialDaysLeft} days remaining
+                  </p>
+                )}
+              </div>
             </div>
 
             <div className="flex items-center gap-3">
+              {/* Search */}
+              <button
+                onClick={() => setShowCommandPalette(true)}
+                className="hidden md:flex items-center gap-2 px-4 py-2 rounded-xl bg-white border-2 border-gold/30 text-zinc-500 hover:border-gold/50 transition-all"
+              >
+                <Search className="h-4 w-4 text-gold" />
+                <span className="text-sm">Search...</span>
+                <kbd className="ml-2 px-2 py-0.5 bg-gold/10 text-gold text-xs rounded font-mono">⌘K</kbd>
+              </button>
+              
               {isTrialActive && (
                 <Button
-                  variant="outline"
-                  className="border-gold text-gold hover:bg-gold/10"
+                  variant="secondary"
                   onClick={() => {
                     window.open(
                       "https://wa.me/971565911000?text=Hi%2C%20I%20want%20to%20activate%20my%20Broker%20Toolkit%20subscription",
@@ -169,12 +207,13 @@ export default function BrokerDashboard() {
                   Activate Now
                 </Button>
               )}
-              <Button
-                variant="outline"
-                className="border-zinc-700 text-white hover:bg-zinc-800"
-              >
+              <Button variant="secondary">
                 <Settings className="w-4 h-4 mr-2" />
                 Settings
+              </Button>
+              <Button variant="secondary" onClick={() => navigate("/")}>
+                <Home className="w-4 h-4 mr-2" />
+                Home
               </Button>
             </div>
           </div>
@@ -183,12 +222,12 @@ export default function BrokerDashboard() {
 
       {/* Trial Banner */}
       {isTrialActive && (
-        <div className="bg-gradient-to-r from-amber-500/10 via-amber-500/5 to-transparent border-b border-amber-500/20">
+        <div className="bg-gradient-to-r from-amber-50 via-amber-100/50 to-transparent border-b-2 border-amber-500/20">
           <div className="container mx-auto px-4 py-4">
             <div className="flex flex-col md:flex-row items-center justify-between gap-4">
               <div className="flex items-center gap-3">
-                <AlertCircle className="w-5 h-5 text-amber-500" />
-                <p className="text-amber-200">
+                <AlertCircle className="w-5 h-5 text-amber-600" />
+                <p className="text-amber-700">
                   Your trial ends in <strong>{trialDaysLeft} days</strong>. Contact us to activate your subscription.
                 </p>
               </div>
@@ -197,14 +236,14 @@ export default function BrokerDashboard() {
                   href="https://wa.me/971565911000"
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="flex items-center gap-2 text-amber-400 hover:text-amber-300"
+                  className="flex items-center gap-2 text-amber-600 hover:text-amber-700"
                 >
                   <Phone className="w-4 h-4" />
                   +971 56 591 1000
                 </a>
                 <a
                   href="mailto:Contact@JBJ.ae"
-                  className="flex items-center gap-2 text-amber-400 hover:text-amber-300"
+                  className="flex items-center gap-2 text-amber-600 hover:text-amber-700"
                 >
                   <Mail className="w-4 h-4" />
                   Email Us
@@ -216,22 +255,22 @@ export default function BrokerDashboard() {
       )}
 
       {/* Main Content */}
-      <div className="container mx-auto px-4 py-8">
+      <div className="container mx-auto px-4 py-8 pb-24">
         <Tabs value={activeTab} onValueChange={setActiveTab} className="space-y-8">
-          <TabsList className="bg-zinc-900 border border-zinc-800 p-1">
-            <TabsTrigger value="overview" className="data-[state=active]:bg-gold data-[state=active]:text-black">
+          <TabsList className="bg-white/80 border-2 border-gold/30 p-1 shadow-[0_4px_20px_rgba(200,167,102,0.1)]">
+            <TabsTrigger value="overview" className="data-[state=active]:bg-gold data-[state=active]:text-black text-black">
               <TrendingUp className="w-4 h-4 mr-2" />
               Overview
             </TabsTrigger>
-            <TabsTrigger value="pdf-generator" className="data-[state=active]:bg-gold data-[state=active]:text-black">
+            <TabsTrigger value="pdf-generator" className="data-[state=active]:bg-gold data-[state=active]:text-black text-black">
               <FileText className="w-4 h-4 mr-2" />
               PDF Generator
             </TabsTrigger>
-            <TabsTrigger value="ai-tools" className="data-[state=active]:bg-gold data-[state=active]:text-black">
+            <TabsTrigger value="ai-tools" className="data-[state=active]:bg-gold data-[state=active]:text-black text-black">
               <Sparkles className="w-4 h-4 mr-2" />
               AI Tools
             </TabsTrigger>
-            <TabsTrigger value="courses" className="data-[state=active]:bg-gold data-[state=active]:text-black">
+            <TabsTrigger value="courses" className="data-[state=active]:bg-gold data-[state=active]:text-black text-black">
               <GraduationCap className="w-4 h-4 mr-2" />
               Courses
             </TabsTrigger>
@@ -244,24 +283,27 @@ export default function BrokerDashboard() {
               <motion.div
                 initial={{ opacity: 0, y: 20 }}
                 animate={{ opacity: 1, y: 0 }}
-                className="bg-zinc-900/50 border border-zinc-800 rounded-xl p-6"
               >
-                <div className="flex items-center gap-3 mb-4">
-                  <div className="w-10 h-10 rounded-lg bg-blue-500/20 flex items-center justify-center">
-                    <Sparkles className="w-5 h-5 text-blue-400" />
-                  </div>
-                  <div>
-                    <p className="text-zinc-400 text-sm">AI Credits</p>
-                    <p className="text-white font-semibold">
-                      {subscription.ai_credits_limit === null
-                        ? "Unlimited"
-                        : `${subscription.ai_credits_used} / ${subscription.ai_credits_limit}`}
-                    </p>
-                  </div>
-                </div>
-                {subscription.ai_credits_limit !== null && (
-                  <Progress value={aiCreditsPercent} className="h-2" />
-                )}
+                <Card className="bg-white border-2 border-blue-500/30 shadow-[0_4px_20px_rgba(59,130,246,0.1)]">
+                  <CardContent className="p-6">
+                    <div className="flex items-center gap-3 mb-4">
+                      <div className="w-10 h-10 rounded-lg bg-blue-500/10 flex items-center justify-center">
+                        <Sparkles className="w-5 h-5 text-blue-500" />
+                      </div>
+                      <div>
+                        <p className="text-zinc-500 text-sm">AI Credits</p>
+                        <p className="text-black font-semibold">
+                          {subscription.ai_credits_limit === null
+                            ? "Unlimited"
+                            : `${subscription.ai_credits_used} / ${subscription.ai_credits_limit}`}
+                        </p>
+                      </div>
+                    </div>
+                    {subscription.ai_credits_limit !== null && (
+                      <Progress value={aiCreditsPercent} className="h-2" />
+                    )}
+                  </CardContent>
+                </Card>
               </motion.div>
 
               {/* PDF Downloads Card */}
@@ -269,17 +311,20 @@ export default function BrokerDashboard() {
                 initial={{ opacity: 0, y: 20 }}
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ delay: 0.1 }}
-                className="bg-zinc-900/50 border border-zinc-800 rounded-xl p-6"
               >
-                <div className="flex items-center gap-3 mb-4">
-                  <div className="w-10 h-10 rounded-lg bg-green-500/20 flex items-center justify-center">
-                    <FileText className="w-5 h-5 text-green-400" />
-                  </div>
-                  <div>
-                    <p className="text-zinc-400 text-sm">PDFs Generated</p>
-                    <p className="text-white font-semibold">{subscription.pdf_downloads}</p>
-                  </div>
-                </div>
+                <Card className="bg-white border-2 border-green-500/30 shadow-[0_4px_20px_rgba(34,197,94,0.1)]">
+                  <CardContent className="p-6">
+                    <div className="flex items-center gap-3 mb-4">
+                      <div className="w-10 h-10 rounded-lg bg-green-500/10 flex items-center justify-center">
+                        <FileText className="w-5 h-5 text-green-500" />
+                      </div>
+                      <div>
+                        <p className="text-zinc-500 text-sm">PDFs Generated</p>
+                        <p className="text-black font-semibold">{subscription.pdf_downloads}</p>
+                      </div>
+                    </div>
+                  </CardContent>
+                </Card>
               </motion.div>
 
               {/* Subscription Status Card */}
@@ -287,17 +332,20 @@ export default function BrokerDashboard() {
                 initial={{ opacity: 0, y: 20 }}
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ delay: 0.2 }}
-                className="bg-zinc-900/50 border border-zinc-800 rounded-xl p-6"
               >
-                <div className="flex items-center gap-3 mb-4">
-                  <div className="w-10 h-10 rounded-lg bg-gold/20 flex items-center justify-center">
-                    <Crown className="w-5 h-5 text-gold" />
-                  </div>
-                  <div>
-                    <p className="text-zinc-400 text-sm">Status</p>
-                    <p className="text-white font-semibold capitalize">{subscription.status}</p>
-                  </div>
-                </div>
+                <Card className="bg-white border-2 border-gold/30 shadow-[0_4px_20px_rgba(200,167,102,0.1)]">
+                  <CardContent className="p-6">
+                    <div className="flex items-center gap-3 mb-4">
+                      <div className="w-10 h-10 rounded-lg bg-gold/10 flex items-center justify-center">
+                        <Crown className="w-5 h-5 text-gold" />
+                      </div>
+                      <div>
+                        <p className="text-zinc-500 text-sm">Status</p>
+                        <p className="text-black font-semibold capitalize">{subscription.status}</p>
+                      </div>
+                    </div>
+                  </CardContent>
+                </Card>
               </motion.div>
 
               {/* Expiry Card */}
@@ -305,21 +353,24 @@ export default function BrokerDashboard() {
                 initial={{ opacity: 0, y: 20 }}
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ delay: 0.3 }}
-                className="bg-zinc-900/50 border border-zinc-800 rounded-xl p-6"
               >
-                <div className="flex items-center gap-3 mb-4">
-                  <div className="w-10 h-10 rounded-lg bg-purple-500/20 flex items-center justify-center">
-                    <Clock className="w-5 h-5 text-purple-400" />
-                  </div>
-                  <div>
-                    <p className="text-zinc-400 text-sm">
-                      {isTrialActive ? "Trial Ends" : "Expires"}
-                    </p>
-                    <p className="text-white font-semibold">
-                      {isTrialActive ? trialDaysLeft : daysUntilExpiry} days
-                    </p>
-                  </div>
-                </div>
+                <Card className="bg-white border-2 border-purple-500/30 shadow-[0_4px_20px_rgba(168,85,247,0.1)]">
+                  <CardContent className="p-6">
+                    <div className="flex items-center gap-3 mb-4">
+                      <div className="w-10 h-10 rounded-lg bg-purple-500/10 flex items-center justify-center">
+                        <Clock className="w-5 h-5 text-purple-500" />
+                      </div>
+                      <div>
+                        <p className="text-zinc-500 text-sm">
+                          {isTrialActive ? "Trial Ends" : "Expires"}
+                        </p>
+                        <p className="text-black font-semibold">
+                          {isTrialActive ? trialDaysLeft : daysUntilExpiry} days
+                        </p>
+                      </div>
+                    </div>
+                  </CardContent>
+                </Card>
               </motion.div>
             </div>
 
@@ -329,11 +380,13 @@ export default function BrokerDashboard() {
                 initial={{ opacity: 0, y: 20 }}
                 animate={{ opacity: 1, y: 0 }}
                 onClick={() => setActiveTab("pdf-generator")}
-                className="bg-gradient-to-br from-blue-500/10 to-blue-500/5 border border-blue-500/30 rounded-xl p-6 text-left hover:border-blue-500/50 transition-colors"
+                className="bg-white border-2 border-blue-500/30 rounded-xl p-6 text-left hover:border-blue-500/50 hover:shadow-[0_8px_30px_rgba(59,130,246,0.15)] transition-all"
               >
-                <FileText className="w-10 h-10 text-blue-400 mb-4" />
-                <h3 className="text-lg font-semibold text-white mb-2">Generate Property PDF</h3>
-                <p className="text-zinc-400 text-sm">Create branded property presentations</p>
+                <div className="w-12 h-12 rounded-xl bg-blue-500/10 flex items-center justify-center mb-4">
+                  <FileText className="w-6 h-6 text-blue-500" />
+                </div>
+                <h3 className="text-lg font-semibold text-black mb-2">Generate Property PDF</h3>
+                <p className="text-zinc-500 text-sm">Create branded property presentations</p>
               </motion.button>
 
               <motion.button
@@ -341,11 +394,13 @@ export default function BrokerDashboard() {
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ delay: 0.1 }}
                 onClick={() => setActiveTab("ai-tools")}
-                className="bg-gradient-to-br from-purple-500/10 to-purple-500/5 border border-purple-500/30 rounded-xl p-6 text-left hover:border-purple-500/50 transition-colors"
+                className="bg-white border-2 border-purple-500/30 rounded-xl p-6 text-left hover:border-purple-500/50 hover:shadow-[0_8px_30px_rgba(168,85,247,0.15)] transition-all"
               >
-                <Sparkles className="w-10 h-10 text-purple-400 mb-4" />
-                <h3 className="text-lg font-semibold text-white mb-2">AI Comparison Tool</h3>
-                <p className="text-zinc-400 text-sm">Compare properties with AI insights</p>
+                <div className="w-12 h-12 rounded-xl bg-purple-500/10 flex items-center justify-center mb-4">
+                  <Sparkles className="w-6 h-6 text-purple-500" />
+                </div>
+                <h3 className="text-lg font-semibold text-black mb-2">AI Comparison Tool</h3>
+                <p className="text-zinc-500 text-sm">Compare properties with AI insights</p>
               </motion.button>
 
               <motion.button
@@ -353,11 +408,13 @@ export default function BrokerDashboard() {
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ delay: 0.2 }}
                 onClick={() => setActiveTab("courses")}
-                className="bg-gradient-to-br from-gold/10 to-gold/5 border border-gold/30 rounded-xl p-6 text-left hover:border-gold/50 transition-colors"
+                className="bg-white border-2 border-gold/30 rounded-xl p-6 text-left hover:border-gold/50 hover:shadow-[0_8px_30px_rgba(200,167,102,0.15)] transition-all"
               >
-                <GraduationCap className="w-10 h-10 text-gold mb-4" />
-                <h3 className="text-lg font-semibold text-white mb-2">Training Courses</h3>
-                <p className="text-zinc-400 text-sm">Master real estate sales techniques</p>
+                <div className="w-12 h-12 rounded-xl bg-gold/10 flex items-center justify-center mb-4">
+                  <GraduationCap className="w-6 h-6 text-gold" />
+                </div>
+                <h3 className="text-lg font-semibold text-black mb-2">Training Courses</h3>
+                <p className="text-zinc-500 text-sm">Master real estate sales techniques</p>
               </motion.button>
             </div>
           </TabsContent>
@@ -378,6 +435,9 @@ export default function BrokerDashboard() {
           </TabsContent>
         </Tabs>
       </div>
+
+      {/* Floating Action Bar */}
+      <FloatingActionBar />
 
       <Footer />
     </div>
