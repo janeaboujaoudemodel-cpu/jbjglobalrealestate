@@ -363,7 +363,7 @@ const Index = () => {
           <div className="grid md:grid-cols-2 gap-6 max-w-4xl mx-auto">
             {/* Broker Toolkit Card */}
             <Link to="/broker-toolkit" className="group">
-              <div className="bg-gradient-to-br from-white via-[#FDFBF7] to-[#F5F0E6] border border-zinc-200 rounded-2xl p-6 md:p-8 hover:border-gold hover:shadow-xl hover:shadow-gold/20 transition-all duration-300">
+              <div className="bg-gradient-to-br from-white via-[#FDFBF7] to-[#F5F0E6] border border-gold/40 rounded-2xl p-6 md:p-8 hover:border-gold hover:shadow-[0_0_30px_rgba(200,167,102,0.4)] transition-all duration-300 shadow-[0_0_20px_rgba(200,167,102,0.2)]">
                 <div className="flex items-center gap-4 mb-4">
                   <div className="w-12 h-12 bg-black rounded-xl flex items-center justify-center">
                     <GraduationCap className="w-6 h-6 text-gold" />
@@ -382,16 +382,9 @@ const Index = () => {
               </div>
             </Link>
 
-            {/* Broker Hub Card - FREE highlighted */}
+            {/* Broker Hub Card */}
             <Link to="/ai-hub" className="group">
-              <div className="bg-gradient-to-br from-white via-[#FDFBF7] to-[#F5F0E6] border border-zinc-200 rounded-2xl p-6 md:p-8 hover:border-gold hover:shadow-xl hover:shadow-gold/20 transition-all duration-300 relative overflow-hidden">
-                {/* FREE Badge */}
-                <div className="absolute top-4 right-4">
-                  <span className="inline-flex items-center gap-1 px-2 py-1 bg-green-500/20 border border-green-500/40 rounded-full text-green-500 text-[10px] font-semibold uppercase tracking-wider">
-                    <Sparkles className="w-3 h-3" />
-                    Free
-                  </span>
-                </div>
+              <div className="bg-gradient-to-br from-white via-[#FDFBF7] to-[#F5F0E6] border border-gold/40 rounded-2xl p-6 md:p-8 hover:border-gold hover:shadow-[0_0_30px_rgba(200,167,102,0.4)] transition-all duration-300 shadow-[0_0_20px_rgba(200,167,102,0.2)]">
                 <div className="flex items-center gap-4 mb-4">
                   <div className="w-12 h-12 bg-black rounded-xl flex items-center justify-center">
                     <Brain className="w-6 h-6 text-gold" />
@@ -497,7 +490,7 @@ const Index = () => {
                   
                   {/* CTA Button */}
                   <Link to="/founder">
-                    <Button className="w-full md:w-auto bg-gradient-to-r from-gold via-[#C4A962] to-gold hover:from-gold-light hover:to-gold text-black font-bold px-8 py-6 text-base transition-all duration-500 hover:shadow-2xl hover:shadow-gold/50 hover:scale-105 shadow-lg shadow-gold/30 border border-gold/50">
+                    <Button className="w-full md:w-auto bg-gradient-to-r from-gold via-[#C4A962] to-gold hover:from-gold-light hover:to-gold text-black font-bold px-8 py-6 text-base transition-all duration-500 hover:shadow-[0_0_40px_rgba(200,167,102,0.6)] hover:scale-105 shadow-[0_0_25px_rgba(200,167,102,0.4)] border border-gold/50">
                       Learn More About Our Founder
                       <ArrowUpRight className="w-5 h-5 ml-2" />
                     </Button>
