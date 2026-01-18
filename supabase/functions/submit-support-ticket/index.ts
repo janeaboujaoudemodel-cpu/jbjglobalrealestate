@@ -209,51 +209,127 @@ const handler = async (req: Request): Promise<Response> => {
       // Continue - don't fail the whole request
     }
 
-    // Send confirmation email to customer
+    // Calculate SLA due date (24-48 hours)
+    const now = new Date();
+    const slaDueDate = new Date(now.getTime() + 48 * 60 * 60 * 1000);
+    const formattedDate = now.toLocaleDateString('en-GB', { day: '2-digit', month: 'short', year: 'numeric' });
+    const formattedSlaDate = slaDueDate.toLocaleDateString('en-GB', { day: '2-digit', month: 'short', year: 'numeric' });
+
+    // Send confirmation email to customer with enhanced design
     const customerEmailHtml = `
       <!DOCTYPE html>
       <html>
       <head>
+        <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
         <style>
-          body { font-family: Arial, sans-serif; line-height: 1.6; color: #333; }
-          .container { max-width: 600px; margin: 0 auto; padding: 20px; }
-          .header { background: linear-gradient(135deg, #000, #1a1a1a); padding: 30px; text-align: center; }
-          .header h1 { color: #C8A766; margin: 0; }
-          .header p { color: #fff; margin: 10px 0 0 0; }
-          .content { background: #f9f9f9; padding: 30px; }
-          .ticket-box { background: linear-gradient(135deg, #C8A766, #B8956E); padding: 25px; text-align: center; border-radius: 10px; margin: 20px 0; position: relative; }
-          .ticket-number { font-size: 28px; font-weight: bold; color: #fff; letter-spacing: 2px; user-select: all; cursor: pointer; }
-          .copy-hint { font-size: 11px; color: rgba(255,255,255,0.8); margin-top: 8px; }
-          .message { background: #fff; padding: 20px; border-radius: 8px; margin: 20px 0; }
-          .footer { text-align: center; padding: 20px; color: #888; font-size: 12px; background: #f0f0f0; }
-          .gold { color: #C8A766; }
+          body { font-family: 'Segoe UI', Arial, sans-serif; line-height: 1.6; color: #333; margin: 0; padding: 0; background-color: #f5f5f5; }
+          .container { max-width: 600px; margin: 0 auto; background: #fff; }
+          .hero { background: linear-gradient(135deg, #000 0%, #1a1a1a 50%, #2d2d2d 100%); padding: 40px 30px; text-align: center; }
+          .hero h1 { color: #C8A766; margin: 0 0 10px 0; font-size: 28px; font-weight: bold; }
+          .hero p { color: #fff; margin: 0; font-size: 16px; }
+          .hero-contact { margin-top: 25px; padding-top: 20px; border-top: 1px solid rgba(200,167,102,0.3); }
+          .hero-contact-item { display: inline-block; margin: 8px 15px; }
+          .hero-contact-item a { color: #C8A766; text-decoration: none; font-size: 14px; }
+          .hero-contact-item a:hover { text-decoration: underline; }
+          .content { padding: 30px; background: #fff; }
+          .ticket-summary { background: linear-gradient(135deg, #fdfbf7, #f5f0e6); border: 2px solid #C8A766; border-radius: 12px; padding: 25px; margin: 20px 0; }
+          .ticket-summary h3 { color: #1a1a1a; margin: 0 0 20px 0; font-size: 18px; border-bottom: 1px solid #C8A766; padding-bottom: 10px; }
+          .summary-row { display: flex; justify-content: space-between; padding: 8px 0; border-bottom: 1px solid #e8e8e8; }
+          .summary-row:last-child { border-bottom: none; }
+          .summary-label { color: #666; font-size: 13px; }
+          .summary-value { color: #1a1a1a; font-weight: 600; font-size: 13px; text-align: right; }
+          .ticket-box { background: linear-gradient(135deg, #C8A766, #B8956E); padding: 30px; text-align: center; border-radius: 12px; margin: 25px 0; }
+          .ticket-number { font-size: 32px; font-weight: bold; color: #fff; letter-spacing: 3px; user-select: all; cursor: pointer; font-family: 'Courier New', monospace; }
+          .copy-hint { font-size: 12px; color: rgba(255,255,255,0.9); margin-top: 10px; }
+          .sla-badge { background: #000; color: #C8A766; padding: 8px 20px; border-radius: 20px; display: inline-block; margin-top: 15px; font-size: 12px; font-weight: 600; }
+          .message { background: #f9f9f9; padding: 20px; border-radius: 8px; margin: 20px 0; }
           .warning-box { background: #fff3cd; border: 1px solid #ffc107; border-radius: 8px; padding: 15px; margin: 20px 0; }
           .warning-box strong { color: #856404; }
-          .contact-box { background: #e8f4fd; border: 1px solid #0d6efd; border-radius: 8px; padding: 15px; margin: 20px 0; text-align: center; }
-          .email-link { color: #C8A766; font-weight: bold; text-decoration: none; font-size: 16px; }
-          .email-link:hover { text-decoration: underline; }
+          .contact-hero { background: linear-gradient(135deg, #000, #1a1a1a); padding: 30px; text-align: center; margin: 25px 0; border-radius: 12px; }
+          .contact-hero h3 { color: #C8A766; margin: 0 0 20px 0; font-size: 18px; }
+          .contact-grid { display: table; width: 100%; }
+          .contact-item { display: table-cell; width: 50%; text-align: center; padding: 10px; vertical-align: top; }
+          .contact-item a { color: #fff; text-decoration: none; font-size: 14px; display: block; }
+          .contact-item .icon { font-size: 20px; margin-bottom: 5px; }
+          .contact-item .label { color: #C8A766; font-size: 11px; text-transform: uppercase; letter-spacing: 1px; }
+          .social-links { margin-top: 20px; padding-top: 20px; border-top: 1px solid rgba(200,167,102,0.3); }
+          .social-links a { display: inline-block; margin: 0 10px; padding: 8px 16px; background: rgba(200,167,102,0.1); border: 1px solid #C8A766; border-radius: 20px; color: #C8A766; text-decoration: none; font-size: 12px; }
+          .quick-links { background: #f9f9f9; padding: 25px; margin: 25px 0; border-radius: 12px; }
+          .quick-links h3 { color: #1a1a1a; margin: 0 0 15px 0; font-size: 16px; text-align: center; }
+          .links-grid { text-align: center; }
+          .link-item { display: inline-block; margin: 5px 10px; }
+          .link-item a { color: #C8A766; text-decoration: none; font-size: 13px; padding: 8px 16px; border: 1px solid #C8A766; border-radius: 6px; display: inline-block; }
+          .link-item a:hover { background: #C8A766; color: #000; }
+          .footer { background: #1a1a1a; text-align: center; padding: 30px; color: #888; font-size: 12px; }
+          .footer-brand { color: #C8A766; font-size: 16px; font-weight: bold; margin-bottom: 10px; }
+          .footer-tagline { color: #666; font-size: 11px; margin-bottom: 15px; }
+          .footer p { margin: 5px 0; }
+          .gold { color: #C8A766; }
         </style>
       </head>
       <body>
         <div class="container">
-          <div class="header">
+          <!-- Hero Section with Contact Info -->
+          <div class="hero">
             <h1>JBJ Global Real Estate</h1>
             <p>Support Ticket Confirmation</p>
+            <div class="hero-contact">
+              <span class="hero-contact-item">
+                <a href="tel:+971565911000">📞 +971 56 591 1000</a>
+              </span>
+              <span class="hero-contact-item">
+                <a href="mailto:${OFFICIAL_EMAILS.support}"">✉️ ${OFFICIAL_EMAILS.support}</a>
+              </span>
+              <span class="hero-contact-item">
+                <a href="mailto:${OFFICIAL_EMAILS.contact}">📧 ${OFFICIAL_EMAILS.contact}</a>
+              </span>
+            </div>
           </div>
+          
           <div class="content">
             <p>Dear <strong>${fullName}</strong>,</p>
             <p>We have received your support request and are sorry to hear you're experiencing an issue. Our team is committed to resolving this as quickly as possible.</p>
             
+            <!-- Ticket Number Box -->
             <div class="ticket-box">
-              <p style="color: #fff; margin: 0 0 10px 0; font-size: 14px;">Your Ticket Number (Click to Copy)</p>
+              <p style="color: #fff; margin: 0 0 10px 0; font-size: 14px;">Your Ticket Number</p>
               <p class="ticket-number">${ticket.ticket_number}</p>
               <p class="copy-hint">📋 Select and copy your ticket number for reference</p>
+              <div class="sla-badge">⏱️ Response within 24-48 hours</div>
+            </div>
+
+            <!-- Ticket Summary -->
+            <div class="ticket-summary">
+              <h3>📋 Ticket Summary</h3>
+              <table style="width: 100%; border-collapse: collapse;">
+                <tr style="border-bottom: 1px solid #e8e8e8;">
+                  <td style="padding: 10px 0; color: #666; font-size: 13px;">Ticket Number</td>
+                  <td style="padding: 10px 0; color: #1a1a1a; font-weight: 600; font-size: 13px; text-align: right;">${ticket.ticket_number}</td>
+                </tr>
+                <tr style="border-bottom: 1px solid #e8e8e8;">
+                  <td style="padding: 10px 0; color: #666; font-size: 13px;">Request Type</td>
+                  <td style="padding: 10px 0; color: #1a1a1a; font-weight: 600; font-size: 13px; text-align: right;">${serviceCategory}</td>
+                </tr>
+                <tr style="border-bottom: 1px solid #e8e8e8;">
+                  <td style="padding: 10px 0; color: #666; font-size: 13px;">Subject</td>
+                  <td style="padding: 10px 0; color: #1a1a1a; font-weight: 600; font-size: 13px; text-align: right;">${subject}</td>
+                </tr>
+                <tr style="border-bottom: 1px solid #e8e8e8;">
+                  <td style="padding: 10px 0; color: #666; font-size: 13px;">Request Date</td>
+                  <td style="padding: 10px 0; color: #1a1a1a; font-weight: 600; font-size: 13px; text-align: right;">${formattedDate}</td>
+                </tr>
+                <tr>
+                  <td style="padding: 10px 0; color: #666; font-size: 13px;">SLA Due Date</td>
+                  <td style="padding: 10px 0; color: #C8A766; font-weight: 600; font-size: 13px; text-align: right;">${formattedSlaDate} (24-48 hrs)</td>
+                </tr>
+              </table>
             </div>
 
             <div class="message">
               <p><strong>What happens next?</strong></p>
               <ul>
-                <li>Our support team will review your ticket within 24 hours</li>
+                <li>Our support team will review your ticket within 24-48 hours</li>
                 <li>You'll receive updates via email</li>
                 <li>Please keep your ticket number for reference</li>
               </ul>
@@ -263,18 +339,60 @@ const handler = async (req: Request): Promise<Response> => {
               <strong>⚠️ Important:</strong> This is an automatic email generated from our system. <strong>Please do not reply to this email</strong> as we won't receive your message.
             </div>
 
-            <div class="contact-box">
-              <p style="margin: 0 0 10px 0; color: #333;">Need to add more information or have urgent concerns?</p>
-              <p style="margin: 0 0 10px 0; color: #666; font-size: 14px;">Copy your ticket number and add it to the subject line, then send directly to:</p>
-              <a href="mailto:${OFFICIAL_EMAILS.support}?subject=[Ticket: ${ticket.ticket_number}] Follow-up" class="email-link">${OFFICIAL_EMAILS.support}</a>
+            <!-- Contact Hero Section -->
+            <div class="contact-hero">
+              <h3>Need to Follow Up?</h3>
+              <p style="color: #aaa; font-size: 13px; margin: 0 0 15px 0;">Copy your ticket number and include it in the subject line</p>
+              <div class="contact-grid">
+                <div class="contact-item">
+                  <a href="mailto:${OFFICIAL_EMAILS.support}?subject=[Ticket: ${ticket.ticket_number}] Follow-up">
+                    <span class="icon">✉️</span><br>
+                    ${OFFICIAL_EMAILS.support}<br>
+                    <span class="label">Support Email</span>
+                  </a>
+                </div>
+                <div class="contact-item">
+                  <a href="tel:+971565911000">
+                    <span class="icon">📞</span><br>
+                    +971 56 591 1000<br>
+                    <span class="label">Direct Line</span>
+                  </a>
+                </div>
+              </div>
+              
+              <!-- Social Media Links -->
+              <div class="social-links">
+                <a href="https://instagram.com/jbj.ae">Instagram</a>
+                <a href="https://facebook.com/jbjglobal">Facebook</a>
+                <a href="https://linkedin.com/company/jbjglobal">LinkedIn</a>
+                <a href="https://wa.me/971565911000">WhatsApp</a>
+              </div>
+            </div>
+
+            <!-- Quick Links Section -->
+            <div class="quick-links">
+              <h3>🔗 Explore While You Wait</h3>
+              <div class="links-grid">
+                <span class="link-item"><a href="https://jbj.ae/properties">Properties</a></span>
+                <span class="link-item"><a href="https://jbj.ae/services">Our Services</a></span>
+                <span class="link-item"><a href="https://jbj.ae/about">About Us</a></span>
+                <span class="link-item"><a href="https://jbj.ae/market-intelligence">Market Intelligence</a></span>
+                <span class="link-item"><a href="https://jbj.ae/buyer-guide">Buyer Guide</a></span>
+                <span class="link-item"><a href="https://jbj.ae/seller-guide">Seller Guide</a></span>
+                <span class="link-item"><a href="https://jbj.ae/contact">Contact</a></span>
+              </div>
             </div>
 
             <p>Best regards,<br><span class="gold">JBJ Global Real Estate Support Team</span></p>
           </div>
+          
+          <!-- Footer -->
           <div class="footer">
-            <p>© 2026 JBJ Global Real Estate. All rights reserved.</p>
-            <p><strong>This is an automated confirmation. Do not reply to this email.</strong></p>
-            <p style="font-size: 10px; color: #aaa;">If you reply to this email, your message will not be received.</p>
+            <p class="footer-brand">JBJ Global Real Estate</p>
+            <p class="footer-tagline">First Global Real Estate Platform of Its Kind</p>
+            <p>Developed, Created & Implemented by The Founder & CEO, <span class="gold">Jane Abou Jaoude</span></p>
+            <p style="margin-top: 15px;">© 2026 JBJ Global Real Estate. All rights reserved.</p>
+            <p style="margin-top: 10px; font-size: 10px; color: #666;"><strong>This is an automated confirmation. Do not reply to this email.</strong></p>
           </div>
         </div>
       </body>
