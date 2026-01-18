@@ -49,7 +49,7 @@ const MarketOverview = () => {
   };
 
   return (
-    <div className="min-h-screen bg-white">
+    <div className="min-h-screen bg-black">
       <SEOHead 
         title="Dubai Real Estate Market Overview | BUY · SELL · RENT Trends | JBJ GLOBAL REAL ESTATE"
         description="UAE & Dubai real estate market trends and analysis. Transaction volumes, price movements, and rent trends powered by official government Open Data. No predictions, just insights."
@@ -92,8 +92,8 @@ const MarketOverview = () => {
         </motion.div>
       </section>
 
-      {/* Key Stats Grid - Premium champagne background */}
-      <section className="py-16 border-t border-zinc-200 bg-gradient-to-br from-white via-[#FDFBF7] to-[#F5F0E6]">
+      {/* Key Stats Grid - Black background with white cards */}
+      <section className="py-16 border-t border-zinc-800 bg-black">
         <div className="container mx-auto px-4">
           <div className="grid grid-cols-2 lg:grid-cols-4 gap-6">
             {stats.map((stat, index) => (
@@ -120,16 +120,16 @@ const MarketOverview = () => {
             ))}
           </div>
 
-          <p className="text-center text-zinc-500 text-xs mt-6">
+          <p className="text-center text-zinc-400 text-xs mt-6">
             Source: {MARKET_OVERVIEW_STATS.dataSource} | Last Updated: {MARKET_OVERVIEW_STATS.reportDate}
           </p>
         </div>
       </section>
 
-      {/* Transaction Trends - Premium champagne background */}
-      <section className="py-16 border-t border-zinc-200 bg-gradient-to-br from-white via-[#FDFBF7] to-[#F5F0E6]">
+      {/* Transaction Trends - Black background with white cards */}
+      <section className="py-16 border-t border-zinc-800 bg-black">
         <div className="container mx-auto px-4">
-          <h2 className="text-black text-2xl md:text-3xl font-bold mb-8 text-center" style={{ fontFamily: "Poppins, sans-serif" }}>
+          <h2 className="text-white text-2xl md:text-3xl font-bold mb-8 text-center" style={{ fontFamily: "Poppins, sans-serif" }}>
             Quarterly Transaction Trends
           </h2>
           
@@ -159,10 +159,10 @@ const MarketOverview = () => {
         </div>
       </section>
 
-      {/* Property Type Performance - Premium champagne background */}
-      <section className="py-16 border-t border-zinc-200 bg-gradient-to-br from-white via-[#FDFBF7] to-[#F5F0E6]">
+      {/* Property Type Performance - Black background with white cards */}
+      <section className="py-16 border-t border-zinc-800 bg-black">
         <div className="container mx-auto px-4">
-          <h2 className="text-black text-2xl md:text-3xl font-bold mb-8 text-center" style={{ fontFamily: "Poppins, sans-serif" }}>
+          <h2 className="text-white text-2xl md:text-3xl font-bold mb-8 text-center" style={{ fontFamily: "Poppins, sans-serif" }}>
             Performance by Property Type
           </h2>
 

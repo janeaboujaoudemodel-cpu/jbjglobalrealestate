@@ -289,14 +289,14 @@ const BuyerGuide = () => {
       </div>
 
       {/* Introduction - Who This Guide Is For */}
-      <section id="who-this-guide-for" className="py-16 md:py-24 bg-white scroll-mt-20">
+      <section id="who-this-guide-for" className="py-16 md:py-24 bg-black scroll-mt-20">
         <div className="container mx-auto px-4">
           <div className="max-w-4xl mx-auto">
             <div className="text-center mb-12">
-              <h2 className="text-3xl md:text-4xl font-light text-black mb-6">
+              <h2 className="text-3xl md:text-4xl font-light text-white mb-6">
                 Who This Guide Is For
               </h2>
-              <p className="text-lg text-zinc-700 leading-relaxed max-w-3xl mx-auto">
+              <p className="text-lg text-zinc-300 leading-relaxed max-w-3xl mx-auto">
                 Dubai's property market welcomes buyers from all over the world. Whether you're planning 
                 to make Dubai your home, securing a property for your family, or exploring options for 
                 the future, this guide provides the foundational knowledge you need.
@@ -310,7 +310,7 @@ const BuyerGuide = () => {
                 { icon: Globe, label: "International Buyers", desc: "Purchasing from abroad" },
                 { icon: MapPin, label: "Relocators", desc: "Moving to Dubai" }
               ].map((item, index) => (
-                <div key={index} className="bg-gold/10 rounded-xl p-6 border border-gold/20 text-center hover:border-gold/50 hover:shadow-lg transition-all">
+                <div key={index} className="bg-white rounded-xl p-6 border border-zinc-200 text-center hover:border-gold/50 hover:shadow-lg transition-all">
                   <div className="w-12 h-12 bg-black rounded-xl flex items-center justify-center mx-auto mb-4">
                     <item.icon className="w-6 h-6 text-gold" />
                   </div>

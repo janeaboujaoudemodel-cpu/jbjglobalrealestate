@@ -301,14 +301,14 @@ const LandlordGuide = () => {
       </section>
 
       {/* Pricing Strategy */}
-      <section id="pricing" className="py-16 md:py-24 scroll-mt-20">
+      <section id="pricing" className="py-16 md:py-24 bg-black scroll-mt-20">
         <div className="container mx-auto px-4">
           <div className="max-w-5xl mx-auto">
             <div className="text-center mb-12">
-              <h2 className="text-3xl md:text-4xl font-light text-zinc-900 mb-4">
+              <h2 className="text-3xl md:text-4xl font-light text-white mb-4">
                 Pricing & Market Positioning
               </h2>
-              <p className="text-lg text-zinc-600 max-w-2xl mx-auto">
+              <p className="text-lg text-zinc-400 max-w-2xl mx-auto">
                 The right price attracts quality tenants quickly. Price too high and your property sits vacant; too low and you leave money on the table.
               </p>
             </div>
@@ -317,14 +317,14 @@ const LandlordGuide = () => {
               {pricingTips.map((tip, index) => (
                 <div 
                   key={index}
-                  className="bg-zinc-50 border border-zinc-200 rounded-xl p-6 hover:border-gold/30 transition-colors"
+                  className="bg-white border border-zinc-200 rounded-xl p-6 hover:border-gold/30 transition-colors"
                 >
                   <div className="flex items-start gap-4">
-                    <div className="w-10 h-10 bg-gold/10 border border-gold/30 rounded-lg flex items-center justify-center flex-shrink-0">
+                    <div className="w-10 h-10 bg-black border border-gold/30 rounded-lg flex items-center justify-center flex-shrink-0">
                       <tip.icon className="w-5 h-5 text-gold" />
                     </div>
                     <div>
-                      <h3 className="text-lg font-medium text-zinc-900 mb-2">{tip.title}</h3>
+                      <h3 className="text-lg font-medium text-black mb-2">{tip.title}</h3>
                       <p className="text-sm text-zinc-600">{tip.description}</p>
                     </div>
                   </div>
@@ -374,14 +374,14 @@ const LandlordGuide = () => {
       </section>
 
       {/* Landlord Responsibilities */}
-      <section id="responsibilities" className="py-16 md:py-24 scroll-mt-20">
+      <section id="responsibilities" className="py-16 md:py-24 bg-black scroll-mt-20">
         <div className="container mx-auto px-4">
           <div className="max-w-5xl mx-auto">
             <div className="text-center mb-12">
-              <h2 className="text-3xl md:text-4xl font-light text-zinc-900 mb-4">
+              <h2 className="text-3xl md:text-4xl font-light text-white mb-4">
                 Your Responsibilities as a Landlord
               </h2>
-              <p className="text-lg text-zinc-600 max-w-2xl mx-auto">
+              <p className="text-lg text-zinc-400 max-w-2xl mx-auto">
                 Dubai's rental laws outline specific obligations for landlords. Understanding these helps avoid disputes.
               </p>
             </div>
@@ -390,14 +390,14 @@ const LandlordGuide = () => {
               {landlordResponsibilities.map((resp, index) => (
                 <div 
                   key={index}
-                  className="bg-zinc-50 border border-zinc-200 rounded-xl p-6 hover:border-gold/30 transition-colors"
+                  className="bg-white border border-zinc-200 rounded-xl p-6 hover:border-gold/30 transition-colors"
                 >
                   <div className="flex items-start gap-4">
-                    <div className="w-10 h-10 bg-gold/10 border border-gold/30 rounded-lg flex items-center justify-center flex-shrink-0">
+                    <div className="w-10 h-10 bg-black border border-gold/30 rounded-lg flex items-center justify-center flex-shrink-0">
                       <resp.icon className="w-5 h-5 text-gold" />
                     </div>
                     <div>
-                      <h3 className="text-lg font-medium text-zinc-900 mb-2">{resp.title}</h3>
+                      <h3 className="text-lg font-medium text-black mb-2">{resp.title}</h3>
                       <p className="text-sm text-zinc-600">{resp.desc}</p>
                     </div>
                   </div>

@@ -261,14 +261,14 @@ const FAQ = () => {
       />
 
       {/* Category Quick Links */}
-      <section className="py-8 bg-white border-y border-zinc-200 sticky top-16 z-20 backdrop-blur-sm">
+      <section className="py-8 bg-zinc-900 border-y border-zinc-700 sticky top-16 z-20 backdrop-blur-sm">
         <div className="container mx-auto px-4">
           <div className="flex flex-wrap justify-center gap-2">
             {categories.map((category, index) => (
               <button
                 key={index}
                 onClick={() => document.getElementById(`category-${index}`)?.scrollIntoView({ behavior: 'smooth' })}
-                className="flex items-center gap-2 px-4 py-2.5 bg-zinc-100 hover:bg-black text-zinc-700 hover:text-gold rounded-lg transition-all text-sm font-medium border border-zinc-200 hover:border-black"
+                className="flex items-center gap-2 px-4 py-2.5 bg-zinc-800 hover:bg-gold text-zinc-300 hover:text-black rounded-lg transition-all text-sm font-medium border border-zinc-700 hover:border-gold"
               >
                 <category.icon className="w-4 h-4" />
                 {category.title}
@@ -279,7 +279,7 @@ const FAQ = () => {
       </section>
 
       {/* FAQ Content */}
-      <section id="faq-content" className="py-16 bg-zinc-50">
+      <section id="faq-content" className="py-16 bg-black">
         <div className="container mx-auto px-4">
           <div className="max-w-4xl mx-auto space-y-16">
             {categories.map((category, categoryIndex) => (
@@ -297,10 +297,10 @@ const FAQ = () => {
                   variants={fadeInUp}
                   className="flex items-center gap-4 mb-6"
                 >
-                  <div className="w-12 h-12 bg-black rounded-xl flex items-center justify-center">
+                  <div className="w-12 h-12 bg-white rounded-xl flex items-center justify-center">
                     <category.icon className="w-6 h-6 text-gold" />
                   </div>
-                  <h2 className="text-2xl md:text-3xl font-bold text-black">{category.title}</h2>
+                  <h2 className="text-2xl md:text-3xl font-bold text-white">{category.title}</h2>
                 </motion.div>
 
                 {/* Questions */}
