@@ -8,6 +8,7 @@ import {
   Home, 
   Users,
   ArrowRight,
+  ArrowUpRight,
   Shield,
   Banknote,
   Key,
