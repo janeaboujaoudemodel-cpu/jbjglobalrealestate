@@ -573,7 +573,7 @@ const Admin = () => {
                           <div className="w-16 h-16 rounded-lg bg-gold/10 flex items-center justify-center overflow-hidden">
                             {project.images?.[0] ? (
                               <img
-                                src={project.images[0]}
+                                src={typeof project.images[0] === 'string' ? project.images[0] : project.images[0]?.image_url}
                                 alt={project.name}
                                 className="w-full h-full object-cover"
                               />
