@@ -53,6 +53,7 @@ import AIAnalyticsDashboard from "@/components/admin/AIAnalyticsDashboard";
 import { AIBrokersDashboard } from "@/components/admin/ai-brokers/AIBrokersDashboard";
 import MarketingSettingsDashboard from "@/components/admin/MarketingSettingsDashboard";
 import PWAAnalyticsDashboard from "@/components/admin/PWAAnalyticsDashboard";
+import VisitorInsightsDashboard from "@/components/admin/VisitorInsightsDashboard";
 import { ClipboardList, Users, Briefcase, Brain, Megaphone, Smartphone } from "lucide-react";
 
 interface ProjectDocument {
@@ -383,6 +384,10 @@ const Admin = () => {
                 <Smartphone className="w-4 h-4 mr-2" />
                 PWA Analytics
               </TabsTrigger>
+              <TabsTrigger value="visitor-insights" className="data-[state=active]:bg-gold data-[state=active]:text-black">
+                <Activity className="w-4 h-4 mr-2" />
+                Visitors
+              </TabsTrigger>
               <TabsTrigger
                 value="leads"
                 className="data-[state=active]:bg-gold data-[state=active]:text-black"
@@ -416,6 +421,10 @@ const Admin = () => {
 
           <TabsContent value="pwa-analytics" className="space-y-8">
             <PWAAnalyticsDashboard />
+          </TabsContent>
+
+          <TabsContent value="visitor-insights" className="space-y-8">
+            <VisitorInsightsDashboard />
           </TabsContent>
 
           <TabsContent value="properties" className="space-y-8">
