@@ -11315,6 +11315,7 @@ export type Database = {
         }
         Returns: boolean
       }
+      cleanup_device_tracking_data: { Args: never; Returns: number }
       cleanup_expired_verifications: { Args: never; Returns: undefined }
       cleanup_rate_limit_records: { Args: never; Returns: number }
       crm_hard_delete_import: {
