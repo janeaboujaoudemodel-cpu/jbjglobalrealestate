@@ -1,12 +1,12 @@
 import { useState, useMemo } from "react";
 import { Link } from "react-router-dom";
 import { motion } from "framer-motion";
-import { MapPin, ArrowUpRight, Compass, Building2, Users, Home, TrendingUp, Search, X } from "lucide-react";
+import { MapPin, ArrowUpRight, Compass, Building2, Users, Home, TrendingUp, Search, X, Flame, SortAsc, Clock, Star } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import Footer from "@/components/Footer";
 import { SEOHead } from "@/components/SEOHead";
-import { AREA_GUIDES } from "@/constants/areaGuides";
+import { AREA_GUIDES, UAE_EMIRATES as EMIRATES_DATA } from "@/constants/areaGuides";
 import { GuideNavigation, GUIDE_LINKS, GuideHero, GuideCTA } from "@/components/guides";
 
 const fadeInUp = {
@@ -22,7 +22,7 @@ const staggerContainer = {
   }
 };
 
-// UAE Emirates with their communities (Source: Dubai Land Department, Abu Dhabi Municipality, Government portals)
+// UAE Emirates for filter
 const UAE_EMIRATES = [
   { id: "all", name: "All Emirates" },
   { id: "dubai", name: "Dubai" },
@@ -34,9 +34,22 @@ const UAE_EMIRATES = [
   { id: "umm-al-quwain", name: "Umm Al Quwain" },
 ];
 
+// Trending communities (based on market activity)
+const TRENDING_COMMUNITIES = [
+  "downtown-dubai",
+  "dubai-marina", 
+  "palm-jumeirah",
+  "dubai-hills-estate",
+  "dubai-creek-harbour"
+];
+
+// Sort options
+type SortOption = "featured" | "newest" | "trending" | "alphabetical";
+
 const AreaGuides = () => {
   const [searchQuery, setSearchQuery] = useState("");
   const [selectedEmirate, setSelectedEmirate] = useState("all");
+  const [sortBy, setSortBy] = useState<SortOption>("featured");
 
   // Source: Dubai Land Department Annual Report 2024, Dubai Statistics Center
   const highlights = [
@@ -46,19 +59,48 @@ const AreaGuides = () => {
     { icon: TrendingUp, value: "7-9%", label: "Avg. Yield" },
   ];
 
-  // Filter guides based on search and emirate
+  // Filter and sort guides
   const filteredGuides = useMemo(() => {
-    return AREA_GUIDES.filter(area => {
+    let filtered = AREA_GUIDES.filter(area => {
       const matchesSearch = searchQuery === "" || 
         area.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
         area.shortDescription.toLowerCase().includes(searchQuery.toLowerCase());
       
-      // For now, all guides are Dubai-based
-      const matchesEmirate = selectedEmirate === "all" || selectedEmirate === "dubai";
+      // Check emirate filter using the EMIRATES_DATA
+      if (selectedEmirate === "all") {
+        return matchesSearch;
+      }
+      
+      const emirate = EMIRATES_DATA.find(e => e.id === selectedEmirate);
+      const matchesEmirate = emirate ? emirate.areas.includes(area.slug) : false;
       
       return matchesSearch && matchesEmirate;
     });
-  }, [searchQuery, selectedEmirate]);
+
+    // Apply sorting
+    switch (sortBy) {
+      case "trending":
+        filtered = [...filtered].sort((a, b) => {
+          const aIsTrending = TRENDING_COMMUNITIES.includes(a.slug) ? 0 : 1;
+          const bIsTrending = TRENDING_COMMUNITIES.includes(b.slug) ? 0 : 1;
+          return aIsTrending - bIsTrending;
+        });
+        break;
+      case "alphabetical":
+        filtered = [...filtered].sort((a, b) => a.name.localeCompare(b.name));
+        break;
+      case "newest":
+        // Reverse order (newest added last in array)
+        filtered = [...filtered].reverse();
+        break;
+      case "featured":
+      default:
+        // Keep original order
+        break;
+    }
+
+    return filtered;
+  }, [searchQuery, selectedEmirate, sortBy]);
 
   return (
     <div className="min-h-screen bg-black">
@@ -145,49 +187,73 @@ const AreaGuides = () => {
             </p>
 
             {/* Search & Filter Bar */}
-            <div className="max-w-4xl mx-auto">
-              <div className="bg-gradient-to-r from-white via-[#FDFBF7] to-[#F5F0E6] rounded-2xl p-4 border border-gold/30 shadow-lg">
-                <div className="flex flex-col md:flex-row gap-4">
-                  {/* Search Input */}
-                  <div className="flex-1 relative">
-                    <Search className="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-gold" />
-                    <Input
-                      type="text"
-                      placeholder="Search by community name..."
-                      value={searchQuery}
-                      onChange={(e) => setSearchQuery(e.target.value)}
-                      className="pl-12 pr-10 h-12 bg-white border-gold/30 focus:border-gold text-black placeholder:text-zinc-500"
-                    />
-                    {searchQuery && (
-                      <button
-                        onClick={() => setSearchQuery("")}
-                        className="absolute right-3 top-1/2 -translate-y-1/2 w-6 h-6 rounded-full bg-zinc-200 hover:bg-zinc-300 flex items-center justify-center transition-colors"
-                      >
-                        <X className="w-3 h-3 text-zinc-600" />
-                      </button>
-                    )}
+            <div className="max-w-5xl mx-auto">
+              <div className="bg-gradient-to-r from-white via-[#FDFBF7] to-[#F5F0E6] rounded-2xl p-4 md:p-6 border border-gold/30 shadow-lg">
+                {/* Search Input - Full Width */}
+                <div className="relative mb-4">
+                  <div className="absolute left-4 top-1/2 -translate-y-1/2 flex items-center justify-center w-5 h-5">
+                    <Search className="w-5 h-5 text-gold" />
                   </div>
+                  <Input
+                    type="text"
+                    placeholder="Search by community name..."
+                    value={searchQuery}
+                    onChange={(e) => setSearchQuery(e.target.value)}
+                    className="pl-12 pr-10 h-12 bg-white border-gold/30 focus:border-gold text-black placeholder:text-zinc-500 w-full"
+                  />
+                  {searchQuery && (
+                    <button
+                      onClick={() => setSearchQuery("")}
+                      className="absolute right-3 top-1/2 -translate-y-1/2 w-6 h-6 rounded-full bg-zinc-200 hover:bg-zinc-300 flex items-center justify-center transition-colors"
+                    >
+                      <X className="w-3 h-3 text-zinc-600" />
+                    </button>
+                  )}
+                </div>
 
-                  {/* Emirate Filter */}
-                  <div className="flex flex-wrap gap-2">
-                    {UAE_EMIRATES.map((emirate) => (
-                      <button
-                        key={emirate.id}
-                        onClick={() => setSelectedEmirate(emirate.id)}
-                        className={`px-4 py-2 rounded-full text-sm font-medium transition-all ${
-                          selectedEmirate === emirate.id
-                            ? "bg-black text-gold border border-gold/50"
-                            : "bg-white text-zinc-600 border border-zinc-300 hover:border-gold/50 hover:text-gold"
-                        }`}
-                      >
-                        {emirate.name}
-                      </button>
-                    ))}
-                  </div>
+                {/* Emirate Filter - Horizontally Scrollable */}
+                <div className="flex flex-wrap gap-2 justify-center">
+                  {UAE_EMIRATES.map((emirate) => (
+                    <button
+                      key={emirate.id}
+                      onClick={() => setSelectedEmirate(emirate.id)}
+                      className={`px-4 py-2 rounded-full text-sm font-medium transition-all whitespace-nowrap ${
+                        selectedEmirate === emirate.id
+                          ? "bg-black text-gold border border-gold/50"
+                          : "bg-white text-zinc-600 border border-zinc-300 hover:border-gold/50 hover:text-gold"
+                      }`}
+                    >
+                      {emirate.name}
+                    </button>
+                  ))}
+                </div>
+
+                {/* Sort Options */}
+                <div className="mt-4 flex flex-wrap items-center justify-center gap-2">
+                  <span className="text-sm text-zinc-500 mr-2">Sort by:</span>
+                  {[
+                    { id: "featured" as SortOption, label: "Featured", icon: Star },
+                    { id: "trending" as SortOption, label: "Trending", icon: Flame },
+                    { id: "newest" as SortOption, label: "Newest", icon: Clock },
+                    { id: "alphabetical" as SortOption, label: "A-Z", icon: SortAsc },
+                  ].map((option) => (
+                    <button
+                      key={option.id}
+                      onClick={() => setSortBy(option.id)}
+                      className={`flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-medium transition-all ${
+                        sortBy === option.id
+                          ? "bg-gold text-black"
+                          : "bg-zinc-100 text-zinc-600 hover:bg-gold/20 hover:text-gold"
+                      }`}
+                    >
+                      <option.icon className="w-3 h-3" />
+                      {option.label}
+                    </button>
+                  ))}
                 </div>
 
                 {/* Results Count */}
-                <div className="mt-3 text-sm text-zinc-600">
+                <div className="mt-4 text-sm text-zinc-600 text-center">
                   Showing <span className="font-semibold text-gold">{filteredGuides.length}</span> communities
                   {selectedEmirate !== "all" && (
                     <span> in <span className="font-semibold">{UAE_EMIRATES.find(e => e.id === selectedEmirate)?.name}</span></span>
@@ -220,12 +286,20 @@ const AreaGuides = () => {
                     />
                     <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-black/30 to-transparent" />
                     
+                    {/* Trending Badge */}
+                    {TRENDING_COMMUNITIES.includes(area.slug) && (
+                      <div className="absolute top-4 left-4 flex items-center gap-1.5 px-3 py-1.5 bg-gradient-to-r from-orange-500 to-red-500 rounded-full shadow-lg">
+                        <Flame className="w-3.5 h-3.5 text-white" />
+                        <span className="text-xs font-bold text-white uppercase tracking-wide">Trending</span>
+                      </div>
+                    )}
+                    
                     {/* Hover Arrow */}
                     <div className="absolute top-4 right-4 w-10 h-10 rounded-full bg-white/90 border border-gold/40 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-all duration-300 transform translate-y-2 group-hover:translate-y-0 shadow-lg">
                       <ArrowUpRight className="w-5 h-5 text-black" />
                     </div>
 
-                    {/* Price Range Badge */}
+                    {/* Premium Badge */}
                     <div className="absolute bottom-4 left-4">
                       <span className="px-3 py-1 bg-white/90 backdrop-blur-sm border border-gold/30 rounded-full text-xs text-black font-medium shadow-md">
                         Premium Community

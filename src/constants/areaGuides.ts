@@ -663,16 +663,145 @@ Its central location makes Al Barsha ideal for those who need quick access to mu
       description: "Explore Al Barsha — a central Dubai community with Mall of the Emirates, Ski Dubai, and excellent connectivity. Find properties with JBJ Global Real Estate.",
       keywords: "Al Barsha Dubai, Mall of the Emirates area, central apartments Dubai, Al Barsha villas, Dubai residential"
     }
+  },
+  // Abu Dhabi Communities
+  {
+    slug: "saadiyat-island",
+    name: "Saadiyat Island",
+    heroImage: "https://images.unsplash.com/photo-1578895101408-1a36b834405b?w=1920&q=80",
+    shortDescription: "Abu Dhabi's cultural island featuring world-class museums and pristine beaches.",
+    overview: `Saadiyat Island is Abu Dhabi's premier cultural destination, home to the Louvre Abu Dhabi and future Guggenheim. This 27 sq km island combines stunning natural beaches with world-class cultural institutions and luxury residences.`,
+    lifestyle: "Residents enjoy a refined lifestyle surrounded by art, nature, and luxury amenities.",
+    location: {
+      landmarks: ["Louvre Abu Dhabi", "Saadiyat Beach", "Future Guggenheim", "NYU Abu Dhabi"],
+      connectivity: ["15 minutes to Abu Dhabi Downtown", "30 minutes to Abu Dhabi Airport"]
+    },
+    amenities: {
+      dining: "World-class restaurants within cultural district and beach clubs.",
+      retail: "Boutique shopping and art galleries.",
+      leisure: "Pristine beaches, golf courses, and cultural venues.",
+      wellness: "Beach clubs and luxury spa facilities."
+    },
+    propertyTypes: ["Beachfront villas", "Luxury apartments", "Cultural district residences"],
+    residents: ["Art enthusiasts", "Diplomats", "Academics", "High-net-worth families"],
+    seo: {
+      title: "Saadiyat Island Area Guide",
+      description: "Discover Saadiyat Island — Abu Dhabi's cultural destination with Louvre, beaches, and luxury living.",
+      keywords: "Saadiyat Island, Abu Dhabi culture, Louvre Abu Dhabi, beachfront property Abu Dhabi"
+    }
+  },
+  {
+    slug: "yas-island",
+    name: "Yas Island",
+    heroImage: "https://images.unsplash.com/photo-1600596542815-ffad4c1539a9?w=1920&q=80",
+    shortDescription: "Abu Dhabi's entertainment island with Formula 1, theme parks, and waterfront living.",
+    overview: `Yas Island is Abu Dhabi's entertainment capital, featuring Ferrari World, Yas Waterworld, Warner Bros. World, and the Yas Marina Circuit. The island offers a unique blend of excitement and residential tranquility.`,
+    lifestyle: "Perfect for those who love entertainment, sports, and an active lifestyle.",
+    location: {
+      landmarks: ["Yas Marina Circuit", "Ferrari World", "Yas Waterworld", "Warner Bros. World"],
+      connectivity: ["10 minutes to Abu Dhabi Airport", "25 minutes to Abu Dhabi Downtown"]
+    },
+    amenities: {
+      dining: "Numerous restaurants at Yas Mall and along the marina.",
+      retail: "Yas Mall offers comprehensive shopping options.",
+      leisure: "Theme parks, F1 circuit, golf courses, and beach facilities.",
+      wellness: "Marina-side gyms and wellness centers."
+    },
+    propertyTypes: ["Marina apartments", "Golf villas", "Waterfront residences"],
+    residents: ["Motorsport enthusiasts", "Young families", "Entertainment lovers"],
+    seo: {
+      title: "Yas Island Area Guide",
+      description: "Explore Yas Island — Abu Dhabi's entertainment hub with F1, theme parks, and luxury living.",
+      keywords: "Yas Island, Ferrari World, Abu Dhabi entertainment, Yas Marina property"
+    }
+  },
+  // Sharjah Communities
+  {
+    slug: "al-majaz",
+    name: "Al Majaz",
+    heroImage: "https://images.unsplash.com/photo-1582672060674-bc2bd808a8b5?w=1920&q=80",
+    shortDescription: "Sharjah's premier waterfront district along Khalid Lagoon with cultural attractions.",
+    overview: `Al Majaz is Sharjah's most sought-after residential area, located along the picturesque Khalid Lagoon. The area is known for its beautiful waterfront promenade, Al Majaz Waterfront, and proximity to cultural attractions.`,
+    lifestyle: "Family-oriented living with stunning lagoon views and cultural activities.",
+    location: {
+      landmarks: ["Al Majaz Waterfront", "Khalid Lagoon", "Al Noor Island", "Sharjah Art Museum"],
+      connectivity: ["15 minutes to Dubai", "10 minutes to Sharjah Airport"]
+    },
+    amenities: {
+      dining: "Waterfront cafés and restaurants with lagoon views.",
+      retail: "Nearby malls and traditional souks.",
+      leisure: "Musical fountain, parks, and water activities.",
+      wellness: "Jogging tracks and fitness facilities."
+    },
+    propertyTypes: ["Lagoon-view apartments", "High-rise residences", "Family apartments"],
+    residents: ["Families", "Professionals working in Dubai", "Art and culture enthusiasts"],
+    seo: {
+      title: "Al Majaz Area Guide",
+      description: "Discover Al Majaz — Sharjah's waterfront district with lagoon views and cultural attractions.",
+      keywords: "Al Majaz Sharjah, Khalid Lagoon, Sharjah waterfront, Sharjah apartments"
+    }
+  },
+  // Ras Al Khaimah Communities
+  {
+    slug: "al-hamra-village",
+    name: "Al Hamra Village",
+    heroImage: "https://images.unsplash.com/photo-1512453979798-5ea266f8880c?w=1920&q=80",
+    shortDescription: "RAK's integrated beach and golf community with waterfront living.",
+    overview: `Al Hamra Village is Ras Al Khaimah's premier integrated community, offering a unique blend of beach living, golf, and marina lifestyle. The freehold development features stunning Arabian Gulf views and world-class amenities.`,
+    lifestyle: "Relaxed beach and golf lifestyle away from city hustle.",
+    location: {
+      landmarks: ["Al Hamra Golf Club", "Al Hamra Marina", "Al Hamra Mall", "Beach access"],
+      connectivity: ["45 minutes to Dubai", "20 minutes to RAK Airport"]
+    },
+    amenities: {
+      dining: "Marina restaurants and beach cafés.",
+      retail: "Al Hamra Mall and local shops.",
+      leisure: "18-hole golf course, marina, and beach clubs.",
+      wellness: "Resort spas and fitness facilities."
+    },
+    propertyTypes: ["Beach villas", "Golf course homes", "Marina apartments", "Townhouses"],
+    residents: ["Golf enthusiasts", "Beach lovers", "Retirees", "Investors seeking value"],
+    seo: {
+      title: "Al Hamra Village Area Guide",
+      description: "Explore Al Hamra Village — RAK's beach and golf community with marina living.",
+      keywords: "Al Hamra Village, RAK property, Ras Al Khaimah beach, RAK golf community"
+    }
+  },
+  // Ajman Communities
+  {
+    slug: "ajman-corniche",
+    name: "Ajman Corniche",
+    heroImage: "https://images.unsplash.com/photo-1518684079-3c830dcef090?w=1920&q=80",
+    shortDescription: "Ajman's scenic waterfront with affordable high-rise living and beach access.",
+    overview: `Ajman Corniche offers stunning Arabian Gulf views with affordable luxury. The area features modern high-rise towers, a beautiful beach promenade, and easy access to Dubai while maintaining a quieter lifestyle.`,
+    lifestyle: "Affordable beachfront living with a peaceful community atmosphere.",
+    location: {
+      landmarks: ["Ajman Beach", "Ajman Museum", "City Centre Ajman", "Ajman Marina"],
+      connectivity: ["30 minutes to Dubai", "25 minutes to Sharjah"]
+    },
+    amenities: {
+      dining: "Beachfront restaurants and hotel dining.",
+      retail: "City Centre Ajman and local markets.",
+      leisure: "Beach activities, parks, and water sports.",
+      wellness: "Beach jogging tracks and hotel gyms."
+    },
+    propertyTypes: ["Sea-view apartments", "Affordable towers", "Studio units"],
+    residents: ["First-time buyers", "Investors", "Professionals working in Dubai/Sharjah"],
+    seo: {
+      title: "Ajman Corniche Area Guide",
+      description: "Discover Ajman Corniche — affordable waterfront living with Gulf views near Dubai.",
+      keywords: "Ajman Corniche, Ajman beach property, affordable UAE property, Ajman apartments"
+    }
   }
 ];
 
 // Emirates filter for UAE-wide expansion
 export const UAE_EMIRATES = [
   { id: "dubai", name: "Dubai", areas: ["downtown-dubai", "dubai-marina", "business-bay", "palm-jumeirah", "jumeirah-village-circle", "dubai-hills-estate", "arabian-ranches", "emirates-hills", "dubai-creek-harbour", "jumeirah-beach-residence", "difc", "mirdif", "al-barsha"] },
-  { id: "abu-dhabi", name: "Abu Dhabi", areas: [] },
-  { id: "sharjah", name: "Sharjah", areas: [] },
-  { id: "ajman", name: "Ajman", areas: [] },
-  { id: "ras-al-khaimah", name: "Ras Al Khaimah", areas: [] },
+  { id: "abu-dhabi", name: "Abu Dhabi", areas: ["saadiyat-island", "yas-island"] },
+  { id: "sharjah", name: "Sharjah", areas: ["al-majaz"] },
+  { id: "ajman", name: "Ajman", areas: ["ajman-corniche"] },
+  { id: "ras-al-khaimah", name: "Ras Al Khaimah", areas: ["al-hamra-village"] },
   { id: "fujairah", name: "Fujairah", areas: [] },
   { id: "umm-al-quwain", name: "Umm Al Quwain", areas: [] },
 ];

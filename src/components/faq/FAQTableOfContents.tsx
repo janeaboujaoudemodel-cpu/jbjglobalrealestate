@@ -168,8 +168,8 @@ export const FAQTableOfContents = ({
       initial={{ opacity: 0, y: 20 }}
       animate={{ opacity: 1, y: 0 }}
       className={cn(
-        "bg-white border border-gold/30 rounded-xl overflow-hidden shadow-lg max-h-[calc(100vh-200px)] overflow-y-auto",
-        sticky && "sticky top-1/4 z-[60]"
+        "bg-white border border-gold/30 rounded-xl overflow-hidden shadow-lg",
+        sticky ? "sticky top-4 z-[60] max-h-[calc(100vh-200px)] overflow-y-auto" : "max-h-[400px] overflow-y-auto"
       )}
     >
       {/* Header */}
