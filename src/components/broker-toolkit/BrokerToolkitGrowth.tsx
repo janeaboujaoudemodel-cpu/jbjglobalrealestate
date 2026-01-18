@@ -47,7 +47,7 @@ export function BrokerToolkitGrowth() {
   const { user } = useAuth();
 
   return (
-    <section id="section-growth" className="py-16 md:py-20">
+    <section id="section-growth" className="py-16 md:py-20 bg-[hsl(var(--premium-bg))]">
       <div className="container mx-auto px-4">
         <motion.div
           initial={{ opacity: 0, y: 20 }}
@@ -69,15 +69,15 @@ export function BrokerToolkitGrowth() {
         </motion.div>
 
         <div className="grid lg:grid-cols-2 gap-8 mb-12">
-          {/* Levels Card */}
+          {/* Levels Card - Black & Gold theme */}
           <motion.div
             initial={{ opacity: 0, x: -20 }}
             whileInView={{ opacity: 1, x: 0 }}
             viewport={{ once: true }}
           >
-            <Card className="bg-white border border-zinc-200 hover:border-gold hover:shadow-xl hover:shadow-gold/20 h-full">
+            <Card className="bg-black border border-gold/40 hover:border-gold hover:shadow-xl hover:shadow-gold/20 h-full">
               <CardContent className="p-6">
-                <h3 className="text-xl font-semibold text-black mb-6 flex items-center gap-2">
+                <h3 className="text-xl font-semibold text-gold mb-6 flex items-center gap-2">
                   <Crown className="w-5 h-5 text-gold" />
                   Broker Levels
                 </h3>
@@ -89,10 +89,10 @@ export function BrokerToolkitGrowth() {
                       </div>
                       <div className="flex-1">
                         <div className="flex justify-between items-center mb-1">
-                          <span className="text-black font-medium">{level.name}</span>
-                          <span className="text-zinc-500 text-sm">{level.points.toLocaleString()} pts</span>
+                          <span className="text-white font-medium">{level.name}</span>
+                          <span className="text-gold text-sm">{level.points.toLocaleString()} pts</span>
                         </div>
-                        <Progress value={i === 0 ? 100 : 0} className="h-1.5" />
+                        <Progress value={i === 0 ? 100 : 0} className="h-1.5 bg-zinc-800" />
                       </div>
                     </div>
                   ))}
@@ -101,26 +101,26 @@ export function BrokerToolkitGrowth() {
             </Card>
           </motion.div>
 
-          {/* Point Activities Card */}
+          {/* Point Activities Card - Black & Gold theme */}
           <motion.div
             initial={{ opacity: 0, x: 20 }}
             whileInView={{ opacity: 1, x: 0 }}
             viewport={{ once: true }}
           >
-            <Card className="bg-white border border-zinc-200 hover:border-gold hover:shadow-xl hover:shadow-gold/20 h-full">
+            <Card className="bg-black border border-gold/40 hover:border-gold hover:shadow-xl hover:shadow-gold/20 h-full">
               <CardContent className="p-6">
-                <h3 className="text-xl font-semibold text-black mb-6 flex items-center gap-2">
+                <h3 className="text-xl font-semibold text-gold mb-6 flex items-center gap-2">
                   <Zap className="w-5 h-5 text-gold" />
                   Earn Points
                 </h3>
                 <div className="space-y-3">
                   {POINT_ACTIVITIES.map((activity, i) => (
-                    <div key={i} className="flex items-center justify-between py-2 border-b border-zinc-200 last:border-0">
+                    <div key={i} className="flex items-center justify-between py-2 border-b border-gold/20 last:border-0">
                       <div className="flex items-center gap-3">
-                        <div className="w-8 h-8 rounded-lg bg-gold/10 flex items-center justify-center">
+                        <div className="w-8 h-8 rounded-lg bg-gold/20 flex items-center justify-center">
                           <activity.icon className="w-4 h-4 text-gold" />
                         </div>
-                        <span className="text-zinc-700 text-sm">{activity.activity}</span>
+                        <span className="text-zinc-300 text-sm">{activity.activity}</span>
                       </div>
                       <span className="text-gold font-semibold">+{activity.points}</span>
                     </div>
@@ -151,12 +151,12 @@ export function BrokerToolkitGrowth() {
                 transition={{ delay: i * 0.1 }}
                 viewport={{ once: true }}
               >
-                <Card className="bg-gradient-to-br from-gold/10 to-gold/5 border border-gold/30 hover:border-gold/50 transition-all cursor-pointer">
+                <Card className="bg-gradient-to-br from-gold/10 to-gold/5 border border-gold/30 hover:border-gold/50 transition-all cursor-pointer h-full">
                   <CardContent className="p-5 text-center">
                     <div className="w-12 h-12 rounded-full bg-gold/20 flex items-center justify-center mx-auto mb-3">
                       <reward.icon className="w-6 h-6 text-gold" />
                     </div>
-                    <h4 className="text-white font-medium mb-1">{reward.name}</h4>
+                    <h4 className="text-black font-medium mb-1">{reward.name}</h4>
                     <p className="text-gold font-semibold">{reward.points.toLocaleString()} points</p>
                   </CardContent>
                 </Card>
@@ -173,12 +173,12 @@ export function BrokerToolkitGrowth() {
           className="text-center"
         >
           <Button 
-            className="bg-gradient-to-r from-gold to-gold-dark text-black hover:brightness-110 px-8 py-6 text-lg font-semibold"
+            className="bg-gradient-to-r from-gold to-gold-dark text-black hover:brightness-110 hover:shadow-lg hover:shadow-gold/40 px-8 py-6 text-lg font-semibold transition-all"
             onClick={() => navigate(user ? '/my-account' : '/auth?redirect=/my-account')}
           >
             <Trophy className="w-5 h-5 mr-2" />
             {user ? 'View My Progress' : 'Start Earning Points'}
-            <ArrowUpRight className="w-5 h-5 ml-2 text-gold" />
+            <ArrowUpRight className="w-5 h-5 ml-2" />
           </Button>
         </motion.div>
       </div>
