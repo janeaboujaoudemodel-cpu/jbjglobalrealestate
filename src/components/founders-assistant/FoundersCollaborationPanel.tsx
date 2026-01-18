@@ -177,7 +177,7 @@ export default function FoundersCollaborationPanel() {
       <div className="flex flex-wrap items-center justify-between gap-4">
         <div>
           <h2 className="text-xl font-semibold text-white">Department Coordination</h2>
-          <p className="text-sm text-gray-400">AI-powered cross-department collaboration</p>
+          <p className="text-sm text-zinc-400">AI-powered cross-department collaboration</p>
         </div>
         <div className="flex flex-wrap gap-2">
           <Dialog open={isTaskDialogOpen} onOpenChange={setIsTaskDialogOpen}>
@@ -306,15 +306,15 @@ export default function FoundersCollaborationPanel() {
       
       {/* Daily Summary Modal */}
       {dailySummary && (
-        <Card className="bg-[#0E0E0E] border-gold/30">
+        <Card className="bg-white border-2 border-gold/30 shadow-[0_0_20px_rgba(200,167,102,0.15)]">
           <CardHeader className="flex flex-row items-center justify-between pb-2">
             <CardTitle className="text-gold text-lg">📅 Daily Company Summary</CardTitle>
-            <Button size="sm" variant="ghost" onClick={() => setDailySummary(null)} className="text-gray-400">
+            <Button size="sm" variant="ghost" onClick={() => setDailySummary(null)} className="text-zinc-500 hover:text-black">
               ✕
             </Button>
           </CardHeader>
           <CardContent>
-            <pre className="text-gray-300 whitespace-pre-wrap text-sm font-mono">{dailySummary}</pre>
+            <pre className="text-black whitespace-pre-wrap text-sm font-mono bg-zinc-50 p-4 rounded-lg border border-zinc-200">{dailySummary}</pre>
           </CardContent>
         </Card>
       )}
