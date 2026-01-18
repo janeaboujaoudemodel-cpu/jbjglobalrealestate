@@ -4473,6 +4473,33 @@ export type Database = {
         }
         Relationships: []
       }
+      employee_salary_access_audit: {
+        Row: {
+          access_type: string
+          accessed_at: string | null
+          employee_salary_id: string | null
+          id: string
+          ip_address: string | null
+          user_id: string | null
+        }
+        Insert: {
+          access_type: string
+          accessed_at?: string | null
+          employee_salary_id?: string | null
+          id?: string
+          ip_address?: string | null
+          user_id?: string | null
+        }
+        Update: {
+          access_type?: string
+          accessed_at?: string | null
+          employee_salary_id?: string | null
+          id?: string
+          ip_address?: string | null
+          user_id?: string | null
+        }
+        Relationships: []
+      }
       employee_status: {
         Row: {
           current_activity: string | null

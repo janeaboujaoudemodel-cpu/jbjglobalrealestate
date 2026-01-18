@@ -151,15 +151,16 @@ const SupportTicketBox = () => {
       for (const file of attachments) {
         const fileExt = file.name.split('.').pop();
         const fileName = `${Date.now()}-${Math.random().toString(36).substring(7)}.${fileExt}`;
-        const filePath = `support-tickets/${fileName}`;
+        const filePath = `${fileName}`;
 
+        // Use secure support-attachments bucket with proper RLS
         const { error: uploadError } = await supabase.storage
-          .from('documents')
+          .from('support-attachments')
           .upload(filePath, file);
 
         if (!uploadError) {
           const { data: { publicUrl } } = supabase.storage
-            .from('documents')
+            .from('support-attachments')
             .getPublicUrl(filePath);
           attachmentUrls.push(publicUrl);
         }
