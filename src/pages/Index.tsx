@@ -12,7 +12,7 @@ import InquiryFormModal from "@/components/InquiryFormModal";
 import { SEOHead, pagesSEO } from "@/components/SEOHead";
 import { useLanguage } from "@/contexts/LanguageContext";
 import { useUserRole } from "@/hooks/useUserRole";
-import { Sparkles, ArrowUpRight, ChevronDown, User, Scale, Layers, Calculator, FileText, Heart, BarChart3, Wrench, Ruler, Palette, Calendar, Wallet, ShoppingBag, Brain, GraduationCap, Briefcase, Target, Award, PenTool, Users, Table2, Video, Home, Key } from "lucide-react";
+import { Sparkles, ArrowUpRight, ArrowRight, ChevronDown, User, Scale, Layers, Calculator, FileText, Heart, BarChart3, Wrench, Ruler, Palette, Calendar, Wallet, ShoppingBag, Brain, GraduationCap, Briefcase, Target, Award, PenTool, Users, Table2, Video, Home, Key } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import founderProfessional from "@/assets/founder-professional.jpeg";
 
@@ -254,6 +254,7 @@ const Index = () => {
               <Button className="mt-4 bg-gradient-to-r from-black via-zinc-900 to-black border border-gold/40 text-gold hover:border-gold hover:shadow-[0_0_15px_rgba(200,167,102,0.3)] hover:bg-gold/10 transition-all duration-300 px-6 py-2.5 text-sm font-medium">
                 <Sparkles className="w-4 h-4 mr-2" />
                 Explore All Tools
+                <ArrowRight className="w-4 h-4 ml-2 text-black" />
               </Button>
             </Link>
           </div>
