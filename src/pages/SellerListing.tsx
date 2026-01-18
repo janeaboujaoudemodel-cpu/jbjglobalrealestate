@@ -530,30 +530,30 @@ Requirements:
                 </div>
               )}
               
-              {/* Seller Assistant CTA */}
+              {/* Seller Assistant CTA - Premium 3D Button */}
               <div className="mt-6">
                 <Button
                   type="button"
                   onClick={() => setShowAssistant(true)}
-                  className="relative bg-gradient-to-r from-white via-[#FDFBF7] to-[#F5F0E6] text-black border-2 border-gold/50 px-6 py-3 text-sm font-bold rounded-xl transition-all duration-300 hover:scale-105 transform active:scale-95 group"
+                  className="relative px-8 py-4 text-sm font-bold rounded-xl transition-all duration-300 hover:scale-105 transform active:scale-95 group overflow-hidden"
                   style={{
-                    textShadow: 'none',
+                    background: 'linear-gradient(135deg, #000 0%, #1a1a1a 50%, #C8A766 100%)',
+                    border: '2px solid rgba(200,167,102,0.5)',
                     boxShadow: `
                       0 10px 30px rgba(200,167,102,0.4),
-                      0 6px 15px rgba(0,0,0,0.2),
-                      inset 0 2px 4px rgba(255,255,255,0.9),
+                      0 6px 15px rgba(0,0,0,0.3),
+                      inset 0 2px 4px rgba(255,255,255,0.1),
                       inset 0 -2px 4px rgba(200,167,102,0.2),
-                      0 0 20px rgba(200,167,102,0.3)
+                      0 0 25px rgba(200,167,102,0.3)
                     `,
                   }}
                 >
-                  <span className="absolute inset-x-0 top-0 h-1/2 rounded-t-xl bg-gradient-to-b from-white/80 to-transparent pointer-events-none" />
-                  <span className="absolute inset-x-0 bottom-0 h-1/3 rounded-b-xl bg-gradient-to-t from-gold/10 to-transparent pointer-events-none" />
+                  <span className="absolute inset-x-0 top-0 h-1/2 rounded-t-xl bg-gradient-to-b from-white/10 to-transparent pointer-events-none" />
                   <span className="absolute inset-0 rounded-xl opacity-0 group-hover:opacity-100 transition-opacity duration-300 pointer-events-none" style={{ boxShadow: '0 0 40px rgba(200,167,102,0.6), inset 0 0 20px rgba(200,167,102,0.1)' }} />
                   <span className="relative flex items-center gap-2">
-                    <Wand2 className="w-4 h-4 text-gold" />
-                    <span className="text-gold">Get Help</span>
-                    <span className="text-black">with JBJ Seller Assistant</span>
+                    <Wand2 className="w-5 h-5 text-gold" />
+                    <span className="text-gold font-bold">Get Help</span>
+                    <span className="text-white">with JBJ Seller Assistant</span>
                   </span>
                 </Button>
               </div>
@@ -573,16 +573,16 @@ Requirements:
                       ? 'text-gold' 
                       : currentStep > step.number 
                         ? 'text-gold' 
-                        : 'text-zinc-400'
+                        : 'text-zinc-500'
                   }`}
                   onClick={() => step.number < currentStep && setCurrentStep(step.number)}
                 >
                   <div className={`w-10 h-10 rounded-full flex items-center justify-center mb-2 border-2 transition-all ${
                     currentStep === step.number 
-                      ? 'bg-gradient-to-br from-gold to-gold-dark border-gold text-black' 
+                      ? 'bg-gradient-to-br from-gold to-gold-dark border-gold text-black shadow-lg shadow-gold/30' 
                       : currentStep > step.number 
-                        ? 'bg-white border-gold/50 text-gold'
-                        : 'bg-white/10 border-zinc-600 text-zinc-400'
+                        ? 'bg-white border-gold text-gold'
+                        : 'bg-zinc-100 border-zinc-300 text-zinc-500'
                   }`}>
                     {currentStep > step.number ? (
                       <CheckCircle2 className="w-5 h-5" />
@@ -590,15 +590,17 @@ Requirements:
                       <step.icon className="w-5 h-5" />
                     )}
                   </div>
-                  <span className="text-xs text-center whitespace-nowrap">{step.title}</span>
+                  <span className={`text-xs text-center whitespace-nowrap ${
+                    currentStep === step.number ? 'text-black font-medium' : 'text-zinc-600'
+                  }`}>{step.title}</span>
                 </div>
               ))}
             </div>
           </div>
 
-          {/* Form Content - Black Background */}
+          {/* Form Content - White/Champagne/Gold Theme */}
           <div className="max-w-3xl mx-auto">
-            <div className="bg-zinc-950 border border-zinc-800 rounded-2xl p-6 md:p-8 shadow-xl">
+            <div className="bg-gradient-to-br from-white via-[#FDFBF7] to-[#F5F0E6] border border-gold/30 rounded-2xl p-6 md:p-8 shadow-xl">
               <AnimatePresence mode="wait">
                 {/* Step 1: Seller Details */}
                 {currentStep === 1 && (
@@ -610,50 +612,53 @@ Requirements:
                     className="space-y-6"
                   >
                     <div>
-                      <h2 className="text-xl font-bold text-white mb-2">Seller Details</h2>
-                      <p className="text-zinc-400 text-sm">Tell us about yourself so we can contact you</p>
+                      <h2 className="text-xl font-bold text-black mb-2">Seller Details</h2>
+                      <p className="text-zinc-600 text-sm">Tell us about yourself so we can contact you</p>
                     </div>
 
                     <div className="grid md:grid-cols-2 gap-4">
                       <div>
-                        <Label className="text-zinc-300 font-medium">Full Name *</Label>
+                        <Label className="text-black font-medium">Full Name <span className="text-gold">*</span></Label>
                         <Input
                           {...form.register("seller_full_name")}
                           placeholder="Enter your full name"
-                          className="bg-zinc-900 border-zinc-700 text-white placeholder:text-gold/70 mt-1 focus:border-gold"
+                          className="bg-zinc-50 border-zinc-300 text-black placeholder:text-gold mt-1 focus:border-gold"
+                          style={{ textShadow: 'none' }}
                         />
                       </div>
                       <div>
-                        <Label className="text-zinc-300 font-medium">Phone Number *</Label>
+                        <Label className="text-black font-medium">Phone Number <span className="text-gold">*</span></Label>
                         <Input
                           {...form.register("seller_phone")}
                           placeholder="+971 50 123 4567"
-                          className="bg-zinc-900 border-zinc-700 text-white placeholder:text-gold/70 mt-1 focus:border-gold"
+                          className="bg-zinc-50 border-zinc-300 text-black placeholder:text-gold mt-1 focus:border-gold"
+                          style={{ textShadow: 'none' }}
                         />
                       </div>
                     </div>
 
                     <div>
-                      <Label className="text-zinc-300 font-medium">Email Address *</Label>
+                      <Label className="text-black font-medium">Email Address <span className="text-gold">*</span></Label>
                       <Input
                         {...form.register("seller_email")}
                         type="email"
                         placeholder="your@email.com"
-                        className="bg-zinc-900 border-zinc-700 text-white placeholder:text-gold/70 mt-1 focus:border-gold"
+                        className="bg-zinc-50 border-zinc-300 text-black placeholder:text-gold mt-1 focus:border-gold"
+                        style={{ textShadow: 'none' }}
                       />
                     </div>
 
                     <div className="grid md:grid-cols-2 gap-4">
                       <div>
-                        <Label className="text-zinc-300 font-medium">Preferred Language</Label>
+                        <Label className="text-black font-medium">Preferred Language</Label>
                         <Select 
                           value={form.watch("preferred_language")} 
                           onValueChange={(v) => form.setValue("preferred_language", v)}
                         >
-                          <SelectTrigger className="bg-zinc-900 border-zinc-700 text-white mt-1">
+                          <SelectTrigger className="bg-zinc-50 border-zinc-300 text-black mt-1">
                             <SelectValue />
                           </SelectTrigger>
-                          <SelectContent className="bg-zinc-900 border-zinc-700">
+                          <SelectContent className="bg-white border-zinc-200">
                             <SelectItem value="en">English</SelectItem>
                             <SelectItem value="ar">Arabic</SelectItem>
                             <SelectItem value="fr">French</SelectItem>
@@ -663,15 +668,15 @@ Requirements:
                         </Select>
                       </div>
                       <div>
-                        <Label className="text-zinc-300 font-medium">Preferred Contact Method</Label>
+                        <Label className="text-black font-medium">Preferred Contact Method</Label>
                         <Select 
                           value={form.watch("preferred_contact_method")} 
                           onValueChange={(v) => form.setValue("preferred_contact_method", v)}
                         >
-                          <SelectTrigger className="bg-zinc-900 border-zinc-700 text-white mt-1">
+                          <SelectTrigger className="bg-zinc-50 border-zinc-300 text-black mt-1">
                             <SelectValue />
                           </SelectTrigger>
-                          <SelectContent className="bg-zinc-900 border-zinc-700">
+                          <SelectContent className="bg-white border-zinc-200">
                             <SelectItem value="whatsapp">WhatsApp</SelectItem>
                             <SelectItem value="call">Phone Call</SelectItem>
                             <SelectItem value="email">Email</SelectItem>
@@ -681,7 +686,7 @@ Requirements:
                     </div>
 
                     <div>
-                      <Label className="text-zinc-300 font-medium mb-3 block">Seller Type *</Label>
+                      <Label className="text-black font-medium mb-3 block">Seller Type <span className="text-gold">*</span></Label>
                       <RadioGroup 
                         value={form.watch("seller_type")} 
                         onValueChange={(v) => form.setValue("seller_type", v)}
@@ -696,9 +701,9 @@ Requirements:
                             <RadioGroupItem 
                               value={option.value} 
                               id={option.value}
-                              className="border-zinc-600"
+                              className="border-gold/50"
                             />
-                            <Label htmlFor={option.value} className="ml-2 text-zinc-300 cursor-pointer">
+                            <Label htmlFor={option.value} className="ml-2 text-zinc-700 cursor-pointer">
                               {option.label}
                             </Label>
                           </div>
@@ -718,21 +723,21 @@ Requirements:
                     className="space-y-6"
                   >
                     <div>
-                      <h2 className="text-xl font-bold text-white mb-2">Property Details</h2>
-                      <p className="text-zinc-400 text-sm">Tell us about your property</p>
+                      <h2 className="text-xl font-bold text-black mb-2">Property Details</h2>
+                      <p className="text-zinc-600 text-sm">Tell us about your property</p>
                     </div>
 
                     <div className="grid md:grid-cols-2 gap-4">
                       <div>
-                        <Label className="text-zinc-300 font-medium">Property Type *</Label>
+                        <Label className="text-black font-medium">Property Type <span className="text-gold">*</span></Label>
                         <Select
                           value={form.watch("property_type")}
                           onValueChange={(v) => form.setValue("property_type", v)}
                         >
-                          <SelectTrigger className="bg-zinc-900 border-zinc-700 text-white mt-1">
+                          <SelectTrigger className="bg-zinc-50 border-zinc-300 text-black mt-1">
                             <SelectValue placeholder="Select type" />
                           </SelectTrigger>
-                          <SelectContent className="bg-zinc-900 border-zinc-700">
+                          <SelectContent className="bg-white border-zinc-200">
                             <SelectItem value="apartment">Apartment</SelectItem>
                             <SelectItem value="villa">Villa</SelectItem>
                             <SelectItem value="townhouse">Townhouse</SelectItem>
@@ -744,11 +749,11 @@ Requirements:
                         </Select>
                       </div>
                       <div>
-                        <Label className="text-zinc-300 font-medium">Location / Area *</Label>
+                        <Label className="text-black font-medium">Location / Area <span className="text-gold">*</span></Label>
                         <Input
                           {...form.register("property_location")}
                           placeholder="e.g., Downtown Dubai"
-                          className="bg-zinc-900 border-zinc-700 text-white placeholder:text-gold/70 mt-1 focus:border-gold"
+                          className="bg-zinc-50 border-zinc-300 text-black placeholder:text-gold mt-1 focus:border-gold"
                         />
                       </div>
                     </div>
