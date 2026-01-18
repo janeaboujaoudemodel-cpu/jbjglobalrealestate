@@ -142,7 +142,7 @@ export function BrokerToolkitGrowth() {
             <Gift className="w-5 h-5 text-gold" />
             Redeem Rewards
           </h3>
-          <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-4">
+          <div className="grid grid-cols-2 lg:grid-cols-4 gap-4">
             {REWARDS.map((reward, i) => (
               <motion.div
                 key={i}
@@ -151,12 +151,12 @@ export function BrokerToolkitGrowth() {
                 transition={{ delay: i * 0.1 }}
                 viewport={{ once: true }}
               >
-                <Card className="bg-gradient-to-br from-gold/10 to-gold/5 border border-gold/30 hover:border-gold/50 transition-all cursor-pointer h-full">
+                <Card className="bg-black border border-gold/40 hover:border-gold/60 hover:shadow-xl hover:shadow-gold/20 transition-all cursor-pointer h-full">
                   <CardContent className="p-5 text-center">
                     <div className="w-12 h-12 rounded-full bg-gold/20 flex items-center justify-center mx-auto mb-3">
                       <reward.icon className="w-6 h-6 text-gold" />
                     </div>
-                    <h4 className="text-black font-medium mb-1">{reward.name}</h4>
+                    <h4 className="text-white font-medium mb-1">{reward.name}</h4>
                     <p className="text-gold font-semibold">{reward.points.toLocaleString()} points</p>
                   </CardContent>
                 </Card>
@@ -173,7 +173,7 @@ export function BrokerToolkitGrowth() {
           className="text-center"
         >
           <Button 
-            className="bg-gradient-to-r from-gold to-gold-dark text-black hover:brightness-110 hover:shadow-lg hover:shadow-gold/40 px-8 py-6 text-lg font-semibold transition-all"
+            className="bg-transparent border-2 border-gold text-gold hover:bg-gold hover:text-black px-8 py-6 text-lg font-semibold transition-all shadow-[0_0_30px_rgba(200,167,102,0.4)] hover:shadow-[0_0_40px_rgba(200,167,102,0.6)]"
             onClick={() => navigate(user ? '/my-account' : '/auth?redirect=/my-account')}
           >
             <Trophy className="w-5 h-5 mr-2" />

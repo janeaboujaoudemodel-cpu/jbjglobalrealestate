@@ -1,6 +1,7 @@
-import { ChevronLeft, ChevronRight, MessageCircle, Sparkles } from 'lucide-react';
+import { ChevronLeft, ChevronRight, Sparkles } from 'lucide-react';
 import { useLanguage } from '@/contexts/LanguageContext';
 import { motion, AnimatePresence } from 'framer-motion';
+import { SquareChatIcon } from '@/components/ui/SquareChatIcon';
 
 interface CollapsedChatButtonProps {
   onToggle: () => void;
@@ -23,7 +24,7 @@ const CollapsedChatButton = ({ onToggle, showAttentionPulse = false }: Collapsed
             className="absolute -top-20 right-0 w-64 bg-gradient-to-br from-gold via-gold-dark to-gold border border-gold/50 rounded-2xl p-4 shadow-2xl shadow-gold/30 hidden sm:block"
           >
             <div className="flex items-start gap-3">
-              <div className="w-8 h-8 rounded-full bg-black/20 flex items-center justify-center flex-shrink-0">
+              <div className="w-8 h-8 rounded-lg bg-black/20 flex items-center justify-center flex-shrink-0">
                 <Sparkles className="w-4 h-4 text-black" />
               </div>
               <div>
@@ -43,30 +44,30 @@ const CollapsedChatButton = ({ onToggle, showAttentionPulse = false }: Collapsed
       <div className="relative">
         {showAttentionPulse && (
           <>
-            <span className="absolute inset-0 rounded-full bg-gold/40 animate-ping pointer-events-none" />
-            <span className="absolute inset-0 rounded-full bg-gold/20 animate-pulse pointer-events-none" />
+            <span className="absolute inset-0 rounded-xl bg-gold/40 animate-ping pointer-events-none" />
+            <span className="absolute inset-0 rounded-xl bg-gold/20 animate-pulse pointer-events-none" />
           </>
         )}
 
-        {/* Mobile: always icon-only button */}
+        {/* Mobile: always icon-only button - SQUARE style */}
         <button
           onClick={onToggle}
           aria-label="Open chat support"
-          className="relative flex items-center justify-center w-14 h-14 rounded-full bg-[#0E0E0E] border-2 border-gold/40 shadow-2xl shadow-gold/20 hover:border-gold transition-all duration-300 group hover:scale-105 sm:hidden"
+          className="relative flex items-center justify-center w-14 h-14 rounded-xl bg-[#0E0E0E] border-2 border-gold/40 shadow-2xl shadow-gold/20 hover:border-gold transition-all duration-300 group hover:scale-105 sm:hidden"
         >
           <div className="w-9 h-9 rounded-lg bg-white flex items-center justify-center shadow-lg">
-            <MessageCircle className="w-4 h-4 text-gold" />
+            <SquareChatIcon className="w-4 h-4 text-gold" size={16} />
           </div>
         </button>
 
-        {/* Desktop: full button */}
+        {/* Desktop: full button - SQUARE style */}
         <button
           onClick={onToggle}
           aria-label="Open chat support"
-          className="relative hidden sm:flex items-center gap-3 bg-[#0E0E0E] border-2 border-gold/40 rounded-full px-5 py-3.5 shadow-2xl shadow-gold/20 hover:border-gold transition-all duration-300 group hover:scale-105"
+          className="relative hidden sm:flex items-center gap-3 bg-[#0E0E0E] border-2 border-gold/40 rounded-xl px-5 py-3.5 shadow-2xl shadow-gold/20 hover:border-gold transition-all duration-300 group hover:scale-105"
         >
           <div className="w-11 h-11 rounded-lg bg-white flex items-center justify-center flex-shrink-0 shadow-lg">
-            <MessageCircle className="w-5 h-5 text-gold" />
+            <SquareChatIcon className="w-5 h-5 text-gold" size={20} />
           </div>
           <div className="flex flex-col items-start">
             <span className="text-gold text-sm font-bold">JBJ Support</span>
