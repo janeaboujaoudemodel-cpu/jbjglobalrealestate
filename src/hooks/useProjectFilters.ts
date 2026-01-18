@@ -120,9 +120,12 @@ export function useFilteredProjects(
         return false;
       }
 
-      // Developer filter
-      if (filters.developerId && project.developer?.id !== filters.developerId) {
-        return false;
+      // Developer filter (supports both joined relation and raw developer_id column)
+      if (filters.developerId) {
+        const projectDeveloperId =
+          project.developer?.id ??
+          (project as unknown as { developer_id?: string }).developer_id;
+        if (projectDeveloperId !== filters.developerId) return false;
       }
 
       // Emirate filter
