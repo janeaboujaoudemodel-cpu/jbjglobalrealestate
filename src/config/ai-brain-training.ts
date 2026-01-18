@@ -440,10 +440,10 @@ export const AI_PERSONA_TRAINING: AIPersonaTraining[] = [
     specializations: ['Executive support', 'Report analysis', 'Cross-department coordination'],
   },
   
-  // Olivia Reynolds - COO's Assistant (Limited Access)
+  // Victoria Reynolds - COO's Assistant (Limited Access)
   {
-    personaId: 'olivia',
-    name: 'Olivia Reynolds',
+    personaId: 'victoria',
+    name: 'Victoria Reynolds',
     age: 29,
     nationality: 'British',
     languages: ['English', 'French'],
