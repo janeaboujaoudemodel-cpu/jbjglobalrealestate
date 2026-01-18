@@ -686,21 +686,21 @@ Requirements:
                     className="space-y-6"
                   >
                     <div>
-                      <h2 className="text-xl font-bold text-white mb-2">Property Details</h2>
-                      <p className="text-zinc-400 text-sm">Tell us about your property</p>
+                      <h2 className="text-xl font-bold text-crm-text mb-2">Property Details</h2>
+                      <p className="text-crm-text-muted text-sm">Tell us about your property</p>
                     </div>
 
                     <div className="grid md:grid-cols-2 gap-4">
                       <div>
-                        <Label className="text-white">Property Type *</Label>
-                        <Select 
-                          value={form.watch("property_type")} 
+                        <Label className="text-crm-text font-medium">Property Type *</Label>
+                        <Select
+                          value={form.watch("property_type")}
                           onValueChange={(v) => form.setValue("property_type", v)}
                         >
-                          <SelectTrigger className="bg-zinc-800 border-zinc-700 text-white mt-1">
+                          <SelectTrigger className="bg-crm-highlight border-crm-border text-crm-text mt-1">
                             <SelectValue placeholder="Select type" />
                           </SelectTrigger>
-                          <SelectContent className="bg-zinc-800 border-zinc-700">
+                          <SelectContent className="bg-crm-card border-crm-border text-crm-text z-[9999]">
                             <SelectItem value="apartment">Apartment</SelectItem>
                             <SelectItem value="villa">Villa</SelectItem>
                             <SelectItem value="townhouse">Townhouse</SelectItem>
@@ -712,35 +712,35 @@ Requirements:
                         </Select>
                       </div>
                       <div>
-                        <Label className="text-white">Location / Area *</Label>
+                        <Label className="text-crm-text font-medium">Location / Area *</Label>
                         <Input
                           {...form.register("property_location")}
                           placeholder="e.g., Downtown Dubai"
-                          className="bg-zinc-800 border-zinc-700 text-white mt-1"
+                          className="bg-crm-highlight border-crm-border text-crm-text placeholder:text-crm-text-muted mt-1"
                         />
                       </div>
                     </div>
 
                     <div>
-                      <Label className="text-white">Community / Building Name</Label>
+                      <Label className="text-crm-text font-medium">Community / Building Name</Label>
                       <Input
                         {...form.register("community_building")}
                         placeholder="e.g., Burj Khalifa, Palm Jumeirah"
-                        className="bg-zinc-800 border-zinc-700 text-white mt-1"
+                        className="bg-crm-highlight border-crm-border text-crm-text placeholder:text-crm-text-muted mt-1"
                       />
                     </div>
 
                     <div className="grid md:grid-cols-2 gap-4">
                       <div>
-                        <Label className="text-white">Bedrooms</Label>
-                        <Select 
-                          value={form.watch("bedrooms")?.toString()} 
+                        <Label className="text-crm-text font-medium">Bedrooms</Label>
+                        <Select
+                          value={form.watch("bedrooms")?.toString()}
                           onValueChange={(v) => form.setValue("bedrooms", parseInt(v))}
                         >
-                          <SelectTrigger className="bg-zinc-800 border-zinc-700 text-white mt-1">
+                          <SelectTrigger className="bg-crm-highlight border-crm-border text-crm-text mt-1">
                             <SelectValue placeholder="Select" />
                           </SelectTrigger>
-                          <SelectContent className="bg-zinc-800 border-zinc-700">
+                          <SelectContent className="bg-crm-card border-crm-border text-crm-text z-[9999]">
                             <SelectItem value="0">Studio</SelectItem>
                             <SelectItem value="1">1 BR</SelectItem>
                             <SelectItem value="2">2 BR</SelectItem>
@@ -752,20 +752,20 @@ Requirements:
                         </Select>
                       </div>
                       <div>
-                        <Label className="text-white">Size (sq.ft)</Label>
+                        <Label className="text-crm-text font-medium">Size (sq.ft)</Label>
                         <Input
                           type="number"
                           {...form.register("property_size_sqft", { valueAsNumber: true })}
                           placeholder="e.g., 1500"
-                          className="bg-zinc-800 border-zinc-700 text-white mt-1"
+                          className="bg-crm-highlight border-crm-border text-crm-text placeholder:text-crm-text-muted mt-1"
                         />
                       </div>
                     </div>
 
                     <div>
-                      <Label className="text-white mb-3 block">Property Status</Label>
-                      <RadioGroup 
-                        value={form.watch("property_status")} 
+                      <Label className="text-crm-text font-medium mb-3 block">Property Status</Label>
+                      <RadioGroup
+                        value={form.watch("property_status")}
                         onValueChange={(v) => form.setValue("property_status", v)}
                         className="grid grid-cols-2 md:grid-cols-4 gap-3"
                       >
@@ -776,12 +776,15 @@ Requirements:
                           { value: "off-plan", label: "Off-Plan" },
                         ].map((option) => (
                           <div key={option.value} className="flex items-center">
-                            <RadioGroupItem 
-                              value={option.value} 
+                            <RadioGroupItem
+                              value={option.value}
                               id={`status-${option.value}`}
-                              className="border-zinc-600"
+                              className="border-crm-border"
                             />
-                            <Label htmlFor={`status-${option.value}`} className="ml-2 text-zinc-300 cursor-pointer text-sm">
+                            <Label
+                              htmlFor={`status-${option.value}`}
+                              className="ml-2 text-crm-text-muted cursor-pointer text-sm"
+                            >
                               {option.label}
                             </Label>
                           </div>
@@ -790,11 +793,11 @@ Requirements:
                     </div>
 
                     <div>
-                      <Label className="text-white">Additional Notes</Label>
+                      <Label className="text-crm-text font-medium">Additional Notes</Label>
                       <Textarea
                         {...form.register("property_notes")}
                         placeholder="Any other details about your property..."
-                        className="bg-zinc-800 border-zinc-700 text-white mt-1 min-h-[100px]"
+                        className="bg-crm-highlight border-crm-border text-crm-text placeholder:text-crm-text-muted mt-1 min-h-[100px]"
                       />
                     </div>
                   </motion.div>
@@ -810,45 +813,45 @@ Requirements:
                     className="space-y-6"
                   >
                     <div>
-                      <h2 className="text-xl font-bold text-white mb-2">Pricing Information</h2>
-                      <p className="text-zinc-400 text-sm">Help us understand your pricing expectations</p>
+                      <h2 className="text-xl font-bold text-crm-text mb-2">Pricing Information</h2>
+                      <p className="text-crm-text-muted text-sm">Help us understand your pricing expectations</p>
                     </div>
 
                     <div>
-                      <Label className="text-white">Purchase Price (AED) - Optional</Label>
+                      <Label className="text-crm-text font-medium">Purchase Price (AED) - Optional</Label>
                       <Input
                         type="number"
                         {...form.register("purchase_price", { valueAsNumber: true })}
                         placeholder="Original purchase price"
-                        className="bg-zinc-800 border-zinc-700 text-white mt-1"
+                        className="bg-crm-highlight border-crm-border text-crm-text placeholder:text-crm-text-muted mt-1"
                       />
-                      <p className="text-zinc-500 text-xs mt-1">What you paid for the property</p>
+                      <p className="text-crm-text-muted text-xs mt-1">What you paid for the property</p>
                     </div>
 
                     <div>
-                      <Label className="text-white">Target Selling Price (AED) *</Label>
+                      <Label className="text-crm-text font-medium">Target Selling Price (AED) *</Label>
                       <Input
                         type="number"
                         {...form.register("target_selling_price", { valueAsNumber: true })}
                         placeholder="Your desired selling price"
-                        className="bg-zinc-800 border-zinc-700 text-white mt-1"
+                        className="bg-crm-highlight border-crm-border text-crm-text placeholder:text-crm-text-muted mt-1"
                       />
                     </div>
 
                     <div>
-                      <Label className="text-white">Minimum Acceptable Price (AED) - Optional</Label>
+                      <Label className="text-crm-text font-medium">Minimum Acceptable Price (AED) - Optional</Label>
                       <Input
                         type="number"
                         {...form.register("minimum_acceptable_price", { valueAsNumber: true })}
                         placeholder="Lowest price you'd accept"
-                        className="bg-zinc-800 border-zinc-700 text-white mt-1"
+                        className="bg-crm-highlight border-crm-border text-crm-text placeholder:text-crm-text-muted mt-1"
                       />
                     </div>
 
                     <div>
-                      <Label className="text-white mb-3 block">Selling Urgency</Label>
-                      <RadioGroup 
-                        value={form.watch("selling_urgency")} 
+                      <Label className="text-crm-text font-medium mb-3 block">Selling Urgency</Label>
+                      <RadioGroup
+                        value={form.watch("selling_urgency")}
                         onValueChange={(v) => form.setValue("selling_urgency", v)}
                         className="grid grid-cols-3 gap-3"
                       >
@@ -858,12 +861,15 @@ Requirements:
                           { value: "90+", label: "90+ days / Flexible" },
                         ].map((option) => (
                           <div key={option.value} className="flex items-center">
-                            <RadioGroupItem 
-                              value={option.value} 
+                            <RadioGroupItem
+                              value={option.value}
                               id={`urgency-${option.value}`}
-                              className="border-zinc-600"
+                              className="border-crm-border"
                             />
-                            <Label htmlFor={`urgency-${option.value}`} className="ml-2 text-zinc-300 cursor-pointer text-sm">
+                            <Label
+                              htmlFor={`urgency-${option.value}`}
+                              className="ml-2 text-crm-text-muted cursor-pointer text-sm"
+                            >
                               {option.label}
                             </Label>
                           </div>
@@ -872,15 +878,15 @@ Requirements:
                     </div>
 
                     {/* Property Evaluator Integration */}
-                    <div className="bg-zinc-800/50 border border-zinc-700 rounded-lg p-4">
+                    <div className="bg-crm-highlight border border-crm-border rounded-lg p-4">
                       <div className="flex items-center gap-3 mb-3">
                         <Calculator className="w-5 h-5 text-gold" />
-                        <span className="text-white font-medium">Need help with pricing?</span>
+                        <span className="text-crm-text font-medium">Need help with pricing?</span>
                       </div>
-                      <p className="text-zinc-400 text-sm mb-3">
+                      <p className="text-crm-text-muted text-sm mb-3">
                         Run our Property Evaluator to get an informational estimate based on market data.
                       </p>
-                      <Button 
+                      <Button
                         type="button"
                         variant="outline"
                         className="border-gold/50 text-gold hover:bg-gold/10"
@@ -890,15 +896,15 @@ Requirements:
                         <Calculator className="w-4 h-4 mr-2" />
                         Run Property Evaluator
                       </Button>
-                      
+
                       {/* Show estimate if available */}
                       {form.watch("estimated_range_min") && form.watch("estimated_range_max") && (
                         <div className="mt-4 p-3 bg-gold/10 border border-gold/20 rounded-lg">
                           <p className="text-gold text-sm font-medium mb-1">AI Estimate (Informational Only)</p>
-                          <p className="text-white">
+                          <p className="text-crm-text">
                             AED {form.watch("estimated_range_min")?.toLocaleString()} - AED {form.watch("estimated_range_max")?.toLocaleString()}
                           </p>
-                          <p className="text-zinc-500 text-xs mt-1">{form.watch("estimated_note")}</p>
+                          <p className="text-crm-text-muted text-xs mt-1">{form.watch("estimated_note")}</p>
                         </div>
                       )}
                     </div>

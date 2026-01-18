@@ -74,9 +74,6 @@ const DeveloperPartnersMarquee = () => {
     });
   }, [developers, inventoryByDeveloperId]);
 
-  // If we have inventory for any curated partner, only enable those links.
-  const hasAnyInventory = partners.some((p) => (p.inventoryCount ?? 0) > 0);
-
   // Duplicate for seamless loop
   const duplicatedDevelopers = [...partners, ...partners];
 
@@ -120,35 +117,28 @@ const DeveloperPartnersMarquee = () => {
           {...(isPaused && { animate: undefined })}
         >
           {duplicatedDevelopers.map((developer, index) => {
-            const isClickable =
-              !!developer.developerId &&
-              (!hasAnyInventory || (developer.inventoryCount ?? 0) > 0);
-
+            const isClickable = !!developer.developerId;
             return (
               <div
                 key={`${developer.slug}-${index}`}
                 className="flex-shrink-0 flex items-center gap-3 group"
               >
-                {isClickable ? (
-                  <Link
-                    to={`/properties?developer=${encodeURIComponent(
-                      developer.developerId!
-                    )}`}
-                    className="text-gold text-sm md:text-base font-semibold tracking-wide whitespace-nowrap transition-all duration-300 cursor-pointer drop-shadow-[0_0_8px_rgba(200,167,102,0.6)] hover:text-white hover:drop-shadow-[0_0_20px_rgba(255,255,255,0.9)]"
-                    title={`${developer.name}`}
-                    style={{ textShadow: '0 0 12px rgba(200,167,102,0.5)' }}
-                  >
-                    {developer.name}
-                  </Link>
-                ) : (
-                  <span
-                    className="text-gold/70 text-sm md:text-base font-semibold tracking-wide whitespace-nowrap cursor-default drop-shadow-[0_0_6px_rgba(200,167,102,0.4)] hover:text-white hover:drop-shadow-[0_0_20px_rgba(255,255,255,0.9)] transition-all duration-300"
-                    title={developer.name}
-                    style={{ textShadow: '0 0 8px rgba(200,167,102,0.3)' }}
-                  >
-                    {developer.name}
-                  </span>
-                )}
+                <Link
+                  to={
+                    developer.developerId
+                      ? `/properties?developer=${encodeURIComponent(developer.developerId)}`
+                      : "/properties"
+                  }
+                  className={
+                    developer.developerId
+                      ? "text-gold text-sm md:text-base font-semibold tracking-wide whitespace-nowrap transition-all duration-300 cursor-pointer drop-shadow-[0_0_8px_rgba(200,167,102,0.6)] hover:text-white hover:drop-shadow-[0_0_20px_rgba(255,255,255,0.9)]"
+                      : "text-gold/70 text-sm md:text-base font-semibold tracking-wide whitespace-nowrap transition-all duration-300 cursor-pointer drop-shadow-[0_0_6px_rgba(200,167,102,0.4)] hover:text-white hover:drop-shadow-[0_0_20px_rgba(255,255,255,0.9)]"
+                  }
+                  title={developer.name}
+                  style={{ textShadow: developer.developerId ? '0 0 12px rgba(200,167,102,0.5)' : '0 0 8px rgba(200,167,102,0.3)' }}
+                >
+                  {developer.name}
+                </Link>
 
                 {/* Separator diamond - glowing */}
                 {index < duplicatedDevelopers.length - 1 && (
