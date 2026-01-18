@@ -160,25 +160,37 @@ const BestIdeaAward = () => {
                     Share it with us and enter the monthly draw to win!
                   </p>
 
-                  {/* Prize Display */}
-                  <div className="bg-black rounded-xl p-6 mb-6 relative overflow-hidden">
-                    <div className="absolute inset-0 bg-gradient-to-r from-gold/10 to-transparent" />
-                    <div className="relative z-10 flex items-center gap-4">
-                      <div className="w-16 h-16 bg-gradient-to-br from-gold/30 to-gold/10 rounded-xl flex items-center justify-center">
-                        <Tablet className="w-8 h-8 text-gold" />
-                      </div>
-                      <div>
-                        <p className="text-gold font-bold text-lg">iPad Pro M4</p>
-                        <p className="text-zinc-400 text-sm">13" • 256GB • Wi-Fi + Cellular</p>
-                        <div className="mt-2 grid grid-cols-2 gap-x-4 gap-y-1 text-xs">
-                          <p className="text-gold/90"><Gift className="w-3 h-3 inline mr-1" />AED 11,000</p>
-                          <p className="text-zinc-400">USD $2,995</p>
-                          <p className="text-zinc-400">EUR €2,750</p>
-                          <p className="text-zinc-400">GBP £2,350</p>
-                          <p className="text-zinc-400">INR ₹2,49,000</p>
+                  {/* Prize Display - Two Options */}
+                  <div className="space-y-3 mb-6">
+                    {/* iPad Pro M4 */}
+                    <div className="bg-black rounded-xl p-5 relative overflow-hidden">
+                      <div className="absolute inset-0 bg-gradient-to-r from-gold/10 to-transparent" />
+                      <div className="relative z-10 flex items-center gap-4">
+                        <div className="w-14 h-14 bg-gradient-to-br from-gold/30 to-gold/10 rounded-xl flex items-center justify-center">
+                          <Tablet className="w-7 h-7 text-gold" />
+                        </div>
+                        <div>
+                          <p className="text-gold font-bold">iPad Pro M4 (13-inch)</p>
+                          <p className="text-zinc-400 text-xs">256GB • Wi-Fi + Cellular • Space Black</p>
+                          <p className="text-gold/90 text-sm mt-1"><Gift className="w-3 h-3 inline mr-1" />AED 5,499</p>
                         </div>
                       </div>
                     </div>
+                    {/* iPhone 17 Pro Max */}
+                    <div className="bg-black rounded-xl p-5 relative overflow-hidden">
+                      <div className="absolute inset-0 bg-gradient-to-r from-gold/10 to-transparent" />
+                      <div className="relative z-10 flex items-center gap-4">
+                        <div className="w-14 h-14 bg-gradient-to-br from-gold/30 to-gold/10 rounded-xl flex items-center justify-center">
+                          <Gift className="w-7 h-7 text-gold" />
+                        </div>
+                        <div>
+                          <p className="text-gold font-bold">iPhone 17 Pro Max</p>
+                          <p className="text-zinc-400 text-xs">256GB • Deep Blue</p>
+                          <p className="text-gold/90 text-sm mt-1"><Gift className="w-3 h-3 inline mr-1" />AED 5,099</p>
+                        </div>
+                      </div>
+                    </div>
+                    <p className="text-zinc-500 text-xs italic text-center">Prize depends on the winning idea</p>
                   </div>
 
                   {/* Winner's Recognition */}
@@ -244,13 +256,14 @@ const BestIdeaAward = () => {
                       </Button>
                     </DialogTrigger>
                     
-                    <DialogContent className="bg-white border-gold/30 max-w-lg">
+                    <DialogContent className="bg-white border-gold/30 max-w-lg max-h-[calc(100vh-60px)] z-[100] fixed top-[30px] left-1/2 -translate-x-1/2 translate-y-0 data-[state=open]:animate-in data-[state=closed]:animate-out data-[state=closed]:fade-out-0 data-[state=open]:fade-in-0 overflow-hidden flex flex-col">
                       <DialogHeader>
                         <DialogTitle className="text-black text-xl font-bold flex items-center gap-2">
                           <Lightbulb className="w-5 h-5 text-gold" />
                           Submit Your Idea
                         </DialogTitle>
                       </DialogHeader>
+                      <div className="overflow-y-auto flex-1 pr-2">
 
                       {isSubmitted ? (
                         <motion.div 
@@ -404,6 +417,7 @@ const BestIdeaAward = () => {
                           </Button>
                         </form>
                       )}
+                      </div>
                     </DialogContent>
                   </Dialog>
 
