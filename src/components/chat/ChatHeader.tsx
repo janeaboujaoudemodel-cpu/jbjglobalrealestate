@@ -75,7 +75,7 @@ const ChatHeader = ({ step, isExistingUser, onBack, onToggleCollapse }: ChatHead
           variant="ghost"
           size="icon"
           onClick={onToggleCollapse}
-          className="text-gold/80 hover:text-gold hover:bg-gold/10"
+          className="w-10 h-10 rounded-lg bg-gradient-to-br from-white via-[#FDFBF7] to-[#F5F0E6] border border-gold/40 text-gold hover:border-gold hover:shadow-lg hover:shadow-gold/20 transition-all"
           title="Minimize chat"
         >
           {isRTL ? <PanelRightOpen className="w-5 h-5" /> : <PanelRightClose className="w-5 h-5" />}
