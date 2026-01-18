@@ -335,21 +335,33 @@ const SupportTicketBox = () => {
                   <Dialog open={isOpen} onOpenChange={setIsOpen}>
                     <DialogTrigger asChild>
                       <Button
-                        className="relative bg-gradient-to-r from-red-500 via-red-600 to-red-500 text-white border-0 px-10 py-7 text-lg font-bold rounded-xl shadow-[0_8px_32px_rgba(239,68,68,0.4),0_4px_12px_rgba(0,0,0,0.3),inset_0_2px_4px_rgba(255,255,255,0.2)] hover:shadow-[0_12px_40px_rgba(239,68,68,0.6),0_6px_16px_rgba(0,0,0,0.4),inset_0_2px_4px_rgba(255,255,255,0.3)] transition-all duration-300 hover:scale-105 transform active:scale-95"
+                        className="relative bg-gradient-to-r from-white via-[#FDFBF7] to-[#F5F0E6] text-black border-2 border-gold/50 px-10 py-7 text-lg font-bold rounded-xl transition-all duration-300 hover:scale-105 transform active:scale-95 group"
                         style={{
-                          textShadow: '0 2px 4px rgba(0,0,0,0.3)',
-                          background: 'linear-gradient(145deg, #ef4444, #dc2626, #b91c1c)',
+                          textShadow: 'none',
+                          boxShadow: `
+                            0 10px 30px rgba(200,167,102,0.4),
+                            0 6px 15px rgba(0,0,0,0.2),
+                            inset 0 2px 4px rgba(255,255,255,0.9),
+                            inset 0 -2px 4px rgba(200,167,102,0.2),
+                            0 0 20px rgba(200,167,102,0.3)
+                          `,
                         }}
                       >
-                        <span className="absolute inset-0 rounded-xl bg-gradient-to-b from-white/20 to-transparent opacity-50" />
+                        {/* 3D Top highlight */}
+                        <span className="absolute inset-x-0 top-0 h-1/2 rounded-t-xl bg-gradient-to-b from-white/80 to-transparent pointer-events-none" />
+                        {/* 3D Bottom shadow */}
+                        <span className="absolute inset-x-0 bottom-0 h-1/3 rounded-b-xl bg-gradient-to-t from-gold/10 to-transparent pointer-events-none" />
+                        {/* Glow effect on hover */}
+                        <span className="absolute inset-0 rounded-xl opacity-0 group-hover:opacity-100 transition-opacity duration-300 pointer-events-none" style={{ boxShadow: '0 0 40px rgba(200,167,102,0.6), inset 0 0 20px rgba(200,167,102,0.1)' }} />
                         <span className="relative flex items-center gap-2">
-                          <Headphones className="w-6 h-6" />
-                          Create Support Ticket
+                          <Headphones className="w-6 h-6 text-gold" />
+                          <span className="text-gold">Create</span>
+                          <span className="text-black">Support Ticket</span>
                         </span>
                       </Button>
                     </DialogTrigger>
 
-                    <DialogContent className="bg-white border-zinc-200 max-w-lg max-h-[85vh] overflow-y-auto z-[100]">
+                    <DialogContent className="bg-white border-zinc-200 max-w-lg max-h-[calc(100vh-120px)] overflow-y-auto z-[100] fixed top-[100px] left-1/2 -translate-x-1/2 translate-y-0 data-[state=open]:animate-in data-[state=closed]:animate-out data-[state=closed]:fade-out-0 data-[state=open]:fade-in-0">
                       <DialogHeader>
                         <DialogTitle className="text-black text-xl font-bold flex items-center gap-2">
                           <Headphones className="w-5 h-5 text-red-500" />

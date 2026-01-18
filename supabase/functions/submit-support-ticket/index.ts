@@ -221,11 +221,17 @@ const handler = async (req: Request): Promise<Response> => {
           .header h1 { color: #C8A766; margin: 0; }
           .header p { color: #fff; margin: 10px 0 0 0; }
           .content { background: #f9f9f9; padding: 30px; }
-          .ticket-box { background: linear-gradient(135deg, #C8A766, #B8956E); padding: 25px; text-align: center; border-radius: 10px; margin: 20px 0; }
-          .ticket-number { font-size: 28px; font-weight: bold; color: #fff; letter-spacing: 2px; }
+          .ticket-box { background: linear-gradient(135deg, #C8A766, #B8956E); padding: 25px; text-align: center; border-radius: 10px; margin: 20px 0; position: relative; }
+          .ticket-number { font-size: 28px; font-weight: bold; color: #fff; letter-spacing: 2px; user-select: all; cursor: pointer; }
+          .copy-hint { font-size: 11px; color: rgba(255,255,255,0.8); margin-top: 8px; }
           .message { background: #fff; padding: 20px; border-radius: 8px; margin: 20px 0; }
-          .footer { text-align: center; padding: 20px; color: #888; font-size: 12px; }
+          .footer { text-align: center; padding: 20px; color: #888; font-size: 12px; background: #f0f0f0; }
           .gold { color: #C8A766; }
+          .warning-box { background: #fff3cd; border: 1px solid #ffc107; border-radius: 8px; padding: 15px; margin: 20px 0; }
+          .warning-box strong { color: #856404; }
+          .contact-box { background: #e8f4fd; border: 1px solid #0d6efd; border-radius: 8px; padding: 15px; margin: 20px 0; text-align: center; }
+          .email-link { color: #C8A766; font-weight: bold; text-decoration: none; font-size: 16px; }
+          .email-link:hover { text-decoration: underline; }
         </style>
       </head>
       <body>
@@ -239,8 +245,9 @@ const handler = async (req: Request): Promise<Response> => {
             <p>We have received your support request and are sorry to hear you're experiencing an issue. Our team is committed to resolving this as quickly as possible.</p>
             
             <div class="ticket-box">
-              <p style="color: #fff; margin: 0 0 10px 0; font-size: 14px;">Your Ticket Number</p>
+              <p style="color: #fff; margin: 0 0 10px 0; font-size: 14px;">Your Ticket Number (Click to Copy)</p>
               <p class="ticket-number">${ticket.ticket_number}</p>
+              <p class="copy-hint">📋 Select and copy your ticket number for reference</p>
             </div>
 
             <div class="message">
@@ -252,13 +259,22 @@ const handler = async (req: Request): Promise<Response> => {
               </ul>
             </div>
 
-            <p>If you need to add more information or have urgent concerns, please reply to this email with your ticket number.</p>
+            <div class="warning-box">
+              <strong>⚠️ Important:</strong> This is an automatic email generated from our system. <strong>Please do not reply to this email</strong> as we won't receive your message.
+            </div>
+
+            <div class="contact-box">
+              <p style="margin: 0 0 10px 0; color: #333;">Need to add more information or have urgent concerns?</p>
+              <p style="margin: 0 0 10px 0; color: #666; font-size: 14px;">Copy your ticket number and add it to the subject line, then send directly to:</p>
+              <a href="mailto:${OFFICIAL_EMAILS.support}?subject=[Ticket: ${ticket.ticket_number}] Follow-up" class="email-link">${OFFICIAL_EMAILS.support}</a>
+            </div>
 
             <p>Best regards,<br><span class="gold">JBJ Global Real Estate Support Team</span></p>
           </div>
           <div class="footer">
             <p>© 2026 JBJ Global Real Estate. All rights reserved.</p>
-            <p>This is an automated confirmation. Please do not reply directly to this email.</p>
+            <p><strong>This is an automated confirmation. Do not reply to this email.</strong></p>
+            <p style="font-size: 10px; color: #aaa;">If you reply to this email, your message will not be received.</p>
           </div>
         </div>
       </body>
