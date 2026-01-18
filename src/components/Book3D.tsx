@@ -1,6 +1,7 @@
 import { useState } from "react";
 import { motion } from "framer-motion";
 import { cn } from "@/lib/utils";
+import marketReportCover from "@/assets/ceo/jane-founder-premium-landscape.png";
 
 interface Book3DProps {
   size?: "sm" | "md" | "lg";
@@ -130,7 +131,10 @@ const Book3D = ({ size = "md", className = "" }: Book3DProps) => {
           style={{
             left: spine,
             width: width,
-            background: "linear-gradient(145deg, #1a1a1a 0%, #0d0d0d 50%, #1a1a1a 100%)",
+            backgroundImage: `linear-gradient(145deg, rgba(0,0,0,0.55) 0%, rgba(0,0,0,0.78) 60%, rgba(0,0,0,0.6) 100%), url(${marketReportCover})`,
+            backgroundSize: "cover",
+            backgroundPosition: "center 20%",
+            backgroundRepeat: "no-repeat",
             border: "1px solid rgba(168, 146, 90, 0.5)",
             transform: `translateZ(${spine / 2}px)`,
             boxShadow: `
