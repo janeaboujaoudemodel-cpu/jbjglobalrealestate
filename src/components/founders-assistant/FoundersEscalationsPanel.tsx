@@ -95,7 +95,7 @@ export function FoundersEscalationsPanel() {
         shouldEscalate: true,
         escalationReason: 'Client expressed significant dissatisfaction',
       },
-      escalatedTo: ['christopher_adams', 'olivia', 'founder'],
+      escalatedTo: ['christopher_adams', 'amanda', 'founder'],
       status: 'pending',
       responseDeadline: new Date(Date.now() + 5 * 60 * 1000),
     },
@@ -187,8 +187,8 @@ export function FoundersEscalationsPanel() {
     toast.success('Escalation resolved');
   };
 
-  const handleLetOliviaHandle = (event: EscalationEvent) => {
-    toast.success('Olivia will handle this escalation', {
+  const handleLetAmandaHandle = (event: EscalationEvent) => {
+    toast.success('Amanda will handle this escalation', {
       description: `Auto-response will be sent to ${event.senderName}`,
     });
   };
@@ -505,11 +505,11 @@ export function FoundersEscalationsPanel() {
                                 <Button
                                   variant="outline"
                                   size="sm"
-                                  onClick={() => handleLetOliviaHandle(event)}
+                                  onClick={() => handleLetAmandaHandle(event)}
                                   className="border-gold/30 text-gold hover:bg-gold/10"
                                 >
                                   <Zap className="h-4 w-4 mr-1" />
-                                  Let Olivia Handle
+                                  Let Amanda Handle
                                 </Button>
                               </div>
                             )}
