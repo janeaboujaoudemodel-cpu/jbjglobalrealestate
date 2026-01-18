@@ -17,6 +17,54 @@ interface GuideCTAProps {
   variant?: "default" | "compact" | "full";
 }
 
+// Premium 3D Button Component for white backgrounds
+const Premium3DButton = ({ 
+  children, 
+  href, 
+  variant = "primary" 
+}: { 
+  children: React.ReactNode; 
+  href: string; 
+  variant?: "primary" | "whatsapp" | "call";
+}) => {
+  const baseClasses = "relative px-8 py-4 text-base font-bold rounded-xl transition-all duration-300 hover:scale-[1.02] transform active:scale-[0.98] group inline-flex items-center gap-2";
+  
+  const variantStyles = {
+    primary: {
+      bg: "bg-gradient-to-r from-white via-[#FDFBF7] to-[#F5F0E6]",
+      text: "text-black",
+      border: "border-2 border-gold/50",
+      shadow: `0 10px 30px rgba(200,167,102,0.4), 0 6px 15px rgba(0,0,0,0.2), inset 0 2px 4px rgba(255,255,255,0.9), inset 0 -2px 4px rgba(200,167,102,0.2), 0 0 20px rgba(200,167,102,0.3)`,
+    },
+    whatsapp: {
+      bg: "bg-white",
+      text: "text-green-600",
+      border: "border-2 border-green-500/50",
+      shadow: `0 10px 25px rgba(34,197,94,0.3), 0 6px 15px rgba(0,0,0,0.15), inset 0 2px 4px rgba(255,255,255,0.9), 0 0 15px rgba(34,197,94,0.2)`,
+    },
+    call: {
+      bg: "bg-white",
+      text: "text-gold",
+      border: "border-2 border-gold/50",
+      shadow: `0 10px 25px rgba(200,167,102,0.3), 0 6px 15px rgba(0,0,0,0.15), inset 0 2px 4px rgba(255,255,255,0.9), 0 0 15px rgba(200,167,102,0.2)`,
+    }
+  };
+
+  const style = variantStyles[variant];
+
+  return (
+    <a href={href} className={`${baseClasses} ${style.bg} ${style.text} ${style.border}`} style={{ boxShadow: style.shadow }}>
+      {/* 3D Top highlight */}
+      <span className="absolute inset-x-0 top-0 h-1/2 rounded-t-xl bg-gradient-to-b from-white/80 to-transparent pointer-events-none" />
+      {/* 3D Bottom shadow */}
+      <span className="absolute inset-x-0 bottom-0 h-1/3 rounded-b-xl bg-gradient-to-t from-black/5 to-transparent pointer-events-none" />
+      {/* Glow effect on hover */}
+      <span className="absolute inset-0 rounded-xl opacity-0 group-hover:opacity-100 transition-opacity duration-300 pointer-events-none" style={{ boxShadow: '0 0 40px rgba(200,167,102,0.5), inset 0 0 20px rgba(200,167,102,0.1)' }} />
+      <span className="relative flex items-center gap-2">{children}</span>
+    </a>
+  );
+};
+
 export const GuideCTA = ({
   title,
   description,
@@ -26,59 +74,54 @@ export const GuideCTA = ({
   variant = "default"
 }: GuideCTAProps) => {
   return (
-    <motion.div
-      initial={{ opacity: 0, y: 20 }}
-      whileInView={{ opacity: 1, y: 0 }}
-      viewport={{ once: true }}
-      className={`bg-gradient-to-br from-gold/10 via-gold/5 to-transparent border border-gold/30 rounded-2xl ${
-        variant === "compact" ? "p-6" : "p-8 md:p-12"
-      } text-center`}
-    >
-      {Icon && (
-        <div className="w-16 h-16 bg-gold/20 border border-gold/30 rounded-2xl flex items-center justify-center mx-auto mb-6">
-          <Icon className="w-8 h-8 text-gold" />
-        </div>
-      )}
-      
-      <h3 className={`font-bold text-white mb-4 ${
-        variant === "compact" ? "text-xl" : "text-2xl md:text-3xl"
-      }`}>
-        {title}
-      </h3>
-      
-      <p className="text-zinc-400 mb-8 max-w-xl mx-auto">
-        {description}
-      </p>
-      
-      <div className="flex flex-wrap justify-center gap-4">
-        {primaryAction && (
-          <Link to={primaryAction.href}>
-            <Button className="bg-gradient-to-r from-gold to-gold-dark text-black font-semibold hover:brightness-110 px-6 py-3">
-              {primaryAction.icon && <primaryAction.icon className="w-5 h-5 mr-2" />}
-              {primaryAction.label}
-              <ArrowUpRight className="w-4 h-4 ml-2 text-gold" />
-            </Button>
-          </Link>
+    <section className="py-16 md:py-20 bg-gradient-to-br from-white via-[#FDFBF7] to-[#F5F0E6]">
+      <motion.div
+        initial={{ opacity: 0, y: 15 }}
+        whileInView={{ opacity: 1, y: 0 }}
+        viewport={{ once: true }}
+        transition={{ duration: 0.4, ease: "easeOut" }}
+        className={`container mx-auto px-4 ${variant === "compact" ? "py-6" : "py-8 md:py-12"} text-center`}
+      >
+        {Icon && (
+          <div className="w-16 h-16 bg-black border border-gold/30 rounded-2xl flex items-center justify-center mx-auto mb-6">
+            <Icon className="w-8 h-8 text-gold" />
+          </div>
         )}
         
-        {showContactOptions && (
-          <>
-            <a href={getWhatsAppUrl()}>
-              <Button variant="outline" className="border-green-500/50 text-green-400 hover:bg-green-500/10 px-6 py-3">
-                <MessageSquare className="w-5 h-5 mr-2 text-green-500" />
-                WhatsApp
-              </Button>
-            </a>
-            <a href={getCallUrl()}>
-              <Button variant="outline" className="border-gold/50 text-gold hover:bg-gold/10 px-6 py-3">
-                <Phone className="w-5 h-5 mr-2" />
-                {CONTACT_INFO.phone}
-              </Button>
-            </a>
-          </>
-        )}
-      </div>
-    </motion.div>
+        <h3 className={`font-bold text-black mb-4 ${
+          variant === "compact" ? "text-xl" : "text-2xl md:text-3xl"
+        }`}>
+          {title}
+        </h3>
+        
+        <p className="text-zinc-600 mb-8 max-w-xl mx-auto">
+          {description}
+        </p>
+        
+        <div className="flex flex-wrap justify-center gap-4">
+          {primaryAction && (
+            <Premium3DButton href={primaryAction.href} variant="primary">
+              {primaryAction.icon && <primaryAction.icon className="w-5 h-5 text-gold" />}
+              <span className="text-gold">{primaryAction.label}</span>
+              <ArrowUpRight className="w-4 h-4 text-gold" />
+            </Premium3DButton>
+          )}
+          
+          {showContactOptions && (
+            <>
+              <Premium3DButton href={getWhatsAppUrl()} variant="whatsapp">
+                <MessageSquare className="w-5 h-5 text-green-500" />
+                <span>WhatsApp</span>
+              </Premium3DButton>
+              <Premium3DButton href={getCallUrl()} variant="call">
+                <Phone className="w-5 h-5 text-gold" />
+                <span>{CONTACT_INFO.phone}</span>
+              </Premium3DButton>
+            </>
+          )}
+        </div>
+      </motion.div>
+    </section>
   );
 };
 
