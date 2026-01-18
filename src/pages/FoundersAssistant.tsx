@@ -175,37 +175,49 @@ export default function FoundersAssistant() {
             </div>
           </motion.div>
 
-          {/* Task Stats Cards */}
+          {/* Task Stats Cards - Clickable */}
           <div className="grid grid-cols-2 md:grid-cols-4 gap-4 mb-6">
-            <Card className="bg-[#0E0E0E] border-gold/20">
+            <Card 
+              className="bg-white border-2 border-gold/30 shadow-[0_0_15px_rgba(200,167,102,0.15)] cursor-pointer hover:border-gold/50 hover:shadow-[0_0_20px_rgba(200,167,102,0.25)] transition-all"
+              onClick={() => setActiveTab('tasks')}
+            >
               <CardContent className="p-4 flex items-center justify-between">
                 <div>
-                  <p className="text-xs text-gray-400">🧭 Active Tasks</p>
+                  <p className="text-xs text-zinc-500">🧭 Active Tasks</p>
                   <p className="text-2xl font-bold text-gold">{stats.activeTasks}</p>
                 </div>
               </CardContent>
             </Card>
-            <Card className="bg-[#0E0E0E] border-green-500/20">
+            <Card 
+              className="bg-white border-2 border-green-500/30 shadow-[0_0_15px_rgba(34,197,94,0.1)] cursor-pointer hover:border-green-500/50 transition-all"
+              onClick={() => setActiveTab('tasks')}
+            >
               <CardContent className="p-4 flex items-center justify-between">
                 <div>
-                  <p className="text-xs text-gray-400">✅ Completed</p>
-                  <p className="text-2xl font-bold text-green-400">{stats.completedTasks}</p>
+                  <p className="text-xs text-zinc-500">✅ Completed</p>
+                  <p className="text-2xl font-bold text-green-600">{stats.completedTasks}</p>
                 </div>
               </CardContent>
             </Card>
-            <Card className="bg-[#0E0E0E] border-yellow-500/20">
+            <Card 
+              className="bg-white border-2 border-amber-500/30 shadow-[0_0_15px_rgba(245,158,11,0.1)] cursor-pointer hover:border-amber-500/50 transition-all"
+              onClick={() => setActiveTab('tasks')}
+            >
               <CardContent className="p-4 flex items-center justify-between">
                 <div>
-                  <p className="text-xs text-gray-400">⏳ Pending</p>
-                  <p className="text-2xl font-bold text-yellow-400">{stats.pendingTasks}</p>
+                  <p className="text-xs text-zinc-500">⏳ Pending</p>
+                  <p className="text-2xl font-bold text-amber-600">{stats.pendingTasks}</p>
                 </div>
               </CardContent>
             </Card>
-            <Card className="bg-[#0E0E0E] border-orange-500/20">
+            <Card 
+              className="bg-white border-2 border-orange-500/30 shadow-[0_0_15px_rgba(249,115,22,0.1)] cursor-pointer hover:border-orange-500/50 transition-all"
+              onClick={() => setActiveTab('tasks')}
+            >
               <CardContent className="p-4 flex items-center justify-between">
                 <div>
-                  <p className="text-xs text-gray-400">⚠️ Awaiting Approval</p>
-                  <p className="text-2xl font-bold text-orange-400">{stats.awaitingApproval}</p>
+                  <p className="text-xs text-zinc-500">⚠️ Awaiting Approval</p>
+                  <p className="text-2xl font-bold text-orange-600">{stats.awaitingApproval}</p>
                 </div>
               </CardContent>
             </Card>
