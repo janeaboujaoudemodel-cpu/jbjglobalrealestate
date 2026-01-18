@@ -4,7 +4,8 @@ import { useNavigate } from "react-router-dom";
 import { 
   Users, Trophy, Medal, Star, Award, Search, Filter, 
   Building2, Crown, TrendingUp, Target, Heart, Briefcase,
-  ChevronRight, Globe, Phone, Mail, UserCheck, BarChart3
+  ChevronRight, Globe, Phone, Mail, UserCheck, BarChart3,
+  MessageSquare, Calendar, Sparkles
 } from "lucide-react";
 import { SEOHead } from "@/components/SEOHead";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
@@ -14,6 +15,7 @@ import { Input } from "@/components/ui/input";
 import { Tabs, TabsList, TabsTrigger, TabsContent } from "@/components/ui/tabs";
 import { Avatar, AvatarImage, AvatarFallback } from "@/components/ui/avatar";
 import Footer from "@/components/Footer";
+import EmployeeChatPanel from "@/components/employee-hub/EmployeeChatPanel";
 import { 
   allTeamMembers, 
   teamByDepartment, 
@@ -32,6 +34,13 @@ import {
   adminTeam,
   TeamMember 
 } from "@/config/team-members";
+import { 
+  isNewJoiner, 
+  getNewJoinerLabel, 
+  formatJoinDate,
+  getTenureLabel,
+  getInitials 
+} from "@/utils/employeeUtils";
 
 // Mock top performers data - in production this would come from database
 const topPerformers = {
@@ -83,9 +92,17 @@ const departmentIcons: Record<string, typeof Building2> = {
   'Technology': Globe,
 };
 
-const EmployeeCard = ({ member }: { member: TeamMember }) => {
+const EmployeeCard = ({ 
+  member, 
+  onOpenChat 
+}: { 
+  member: TeamMember; 
+  onOpenChat: (member: TeamMember) => void;
+}) => {
   const isTopPerformer = Object.values(topPerformers).some(p => p.memberId === member.id);
   const performerData = Object.entries(topPerformers).find(([_, p]) => p.memberId === member.id);
+  const newJoinerLabel = getNewJoinerLabel(member);
+  const joinDateFormatted = formatJoinDate(member);
   
   return (
     <motion.div
@@ -95,18 +112,28 @@ const EmployeeCard = ({ member }: { member: TeamMember }) => {
       className="group"
     >
       <Card className={`bg-zinc-900/60 border-zinc-800 hover:border-gold/40 transition-all duration-300 h-full relative overflow-hidden ${isTopPerformer ? 'ring-2 ring-gold/50' : ''}`}>
+        {/* New Joiner Badge */}
+        {newJoinerLabel && (
+          <div className="absolute top-0 left-0 bg-gradient-to-br from-emerald-500 to-green-600 text-white px-3 py-1 text-xs font-bold flex items-center gap-1 rounded-br-xl z-10">
+            <Sparkles className="h-3 w-3" />
+            {newJoinerLabel}
+          </div>
+        )}
+        
+        {/* Top Performer Badge */}
         {isTopPerformer && (
           <div className="absolute top-0 right-0 bg-gradient-to-bl from-gold to-amber-600 text-black px-3 py-1 text-xs font-bold flex items-center gap-1 rounded-bl-xl">
             <Trophy className="h-3 w-3" />
             Top Performer
           </div>
         )}
+        
         <CardContent className="p-5">
           <div className="flex items-start gap-4">
             <Avatar className="w-16 h-16 border-2 border-gold/30">
               <AvatarImage src={member.avatar} alt={member.name} />
               <AvatarFallback className="bg-gold/20 text-gold">
-                {member.name.split(' ').map(n => n[0]).join('')}
+                {getInitials(member.name)}
               </AvatarFallback>
             </Avatar>
             <div className="flex-1 min-w-0">
@@ -127,6 +154,14 @@ const EmployeeCard = ({ member }: { member: TeamMember }) => {
           
           <p className="text-zinc-400 text-xs line-clamp-2 mt-3">{member.bio}</p>
           
+          {/* Join Date */}
+          {member.joinDate && (
+            <div className="flex items-center gap-1 mt-2 text-xs text-zinc-500">
+              <Calendar className="h-3 w-3" />
+              <span>Joined: {joinDateFormatted}</span>
+            </div>
+          )}
+          
           <div className="flex flex-wrap gap-1 mt-3">
             {member.languages?.slice(0, 3).map((lang) => (
               <Badge key={lang} variant="outline" className="text-xs border-zinc-700 text-zinc-400">
@@ -135,13 +170,26 @@ const EmployeeCard = ({ member }: { member: TeamMember }) => {
             ))}
           </div>
           
-          <div className="flex items-center gap-2 mt-3 pt-3 border-t border-zinc-800">
-            <Badge variant="outline" className={`text-xs ${member.status === 'online' ? 'border-green-500/30 text-green-400' : 'border-zinc-700 text-zinc-500'}`}>
-              {member.status === 'online' ? '● Online' : '○ Away'}
-            </Badge>
-            {member.nationality && (
-              <span className="text-zinc-500 text-xs">{member.nationality}</span>
-            )}
+          <div className="flex items-center justify-between mt-3 pt-3 border-t border-zinc-800">
+            <div className="flex items-center gap-2">
+              <Badge variant="outline" className={`text-xs ${member.status === 'online' ? 'border-green-500/30 text-green-400' : 'border-zinc-700 text-zinc-500'}`}>
+                {member.status === 'online' ? '● Online' : '○ Away'}
+              </Badge>
+              {member.nationality && (
+                <span className="text-zinc-500 text-xs">{member.nationality}</span>
+              )}
+            </div>
+            
+            {/* Chat Button */}
+            <Button
+              size="sm"
+              variant="ghost"
+              onClick={() => onOpenChat(member)}
+              className="text-gold hover:text-gold/80 hover:bg-gold/10 h-7 px-2"
+            >
+              <MessageSquare className="h-4 w-4 mr-1" />
+              Chat
+            </Button>
           </div>
         </CardContent>
       </Card>
@@ -151,10 +199,12 @@ const EmployeeCard = ({ member }: { member: TeamMember }) => {
 
 const DepartmentSection = ({ 
   name, 
-  members 
+  members,
+  onOpenChat,
 }: { 
   name: string; 
   members: TeamMember[];
+  onOpenChat: (member: TeamMember) => void;
 }) => {
   const Icon = departmentIcons[name] || Building2;
   const topPerformer = topPerformers[name as keyof typeof topPerformers];
@@ -182,7 +232,7 @@ const DepartmentSection = ({
       
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4">
         {members.map((member) => (
-          <EmployeeCard key={member.id} member={member} />
+          <EmployeeCard key={member.id} member={member} onOpenChat={onOpenChat} />
         ))}
       </div>
     </div>
@@ -193,6 +243,15 @@ const EmployeeHub = () => {
   const navigate = useNavigate();
   const [search, setSearch] = useState("");
   const [selectedDepartment, setSelectedDepartment] = useState<string>("all");
+  const [chatEmployee, setChatEmployee] = useState<TeamMember | null>(null);
+  
+  const handleOpenChat = (member: TeamMember) => {
+    setChatEmployee(member);
+  };
+  
+  const handleCloseChat = () => {
+    setChatEmployee(null);
+  };
   
   const departments = Object.keys(teamByDepartment);
   
@@ -381,7 +440,7 @@ const EmployeeHub = () => {
             
             <div className="space-y-12">
               {Object.entries(groupedMembers).map(([dept, members]) => (
-                <DepartmentSection key={dept} name={dept} members={members} />
+                <DepartmentSection key={dept} name={dept} members={members} onOpenChat={handleOpenChat} />
               ))}
             </div>
             
@@ -424,6 +483,17 @@ const EmployeeHub = () => {
         </section>
         
         <Footer />
+        
+        {/* Chat Panel */}
+        <AnimatePresence>
+          {chatEmployee && (
+            <EmployeeChatPanel 
+              employee={chatEmployee} 
+              onClose={handleCloseChat}
+              currentUserName="Jane"
+            />
+          )}
+        </AnimatePresence>
       </div>
     </>
   );
