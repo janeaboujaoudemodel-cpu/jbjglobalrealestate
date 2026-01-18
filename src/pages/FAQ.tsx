@@ -23,6 +23,7 @@ import { Link } from "react-router-dom";
 import { GuideNavigation, GUIDE_LINKS } from "@/components/guides/GuideNavigation";
 import { FAQHero } from "@/components/faq/FAQHero";
 import { FAQTableOfContents } from "@/components/faq/FAQTableOfContents";
+import { FAQFloatingSidebar } from "@/components/faq/FAQFloatingSidebar";
 import Footer from "@/components/Footer";
 
 const fadeInUp = {
@@ -271,11 +272,19 @@ const FAQ = () => {
         }
       />
 
+      {/* Floating Sidebar Navigation - Like Buyer Guide (Right Side) */}
+      <div className="hidden lg:block fixed right-8 top-1/4 z-[55] max-w-xs">
+        <FAQFloatingSidebar 
+          categories={categories}
+          title="FAQ Quick Nav"
+        />
+      </div>
+
       {/* FAQ Content with Sticky TOC Above */}
       <section id="faq-content" className="py-16 bg-black relative">
         <div className="container mx-auto px-4">
-          {/* Sticky FAQ Quick Access - Compact & Above Content */}
-          <div className="sticky top-0 z-50 -mx-4 px-4 py-3 bg-black/95 backdrop-blur-sm border-b border-gold/20 shadow-lg">
+          {/* Sticky FAQ Quick Access - Compact & Above Content (Mobile/Tablet Only) */}
+          <div className="lg:hidden sticky top-0 z-50 -mx-4 px-4 py-3 bg-black/95 backdrop-blur-sm border-b border-gold/20 shadow-lg">
             <div className="max-w-5xl mx-auto">
               <FAQTableOfContents 
                 categories={categories}
@@ -286,7 +295,7 @@ const FAQ = () => {
           </div>
 
           {/* Main Content - Full Width Below TOC */}
-          <div className="max-w-4xl mx-auto space-y-16 mt-8">
+          <div className="max-w-4xl mx-auto space-y-16 mt-8 lg:mr-80">
             {categories.map((category, categoryIndex) => (
               <motion.div
                 key={categoryIndex}
