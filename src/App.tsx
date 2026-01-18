@@ -138,6 +138,21 @@ import AIGovernance from "./pages/governance/AIGovernance";
 import InstitutionalLock from "./pages/governance/InstitutionalLock";
 import GovernmentMethodology from "./pages/governance/GovernmentMethodology";
 
+// Communication & Productivity Tools
+import CompanyComm from "./pages/CompanyComm";
+import EmailClient from "./pages/EmailClient";
+import TeamChat from "./pages/TeamChat";
+import KanbanBoard from "./pages/KanbanBoard";
+import Whiteboard from "./pages/Whiteboard";
+import MindMap from "./pages/MindMap";
+import Presentations from "./pages/Presentations";
+import FormBuilder from "./pages/FormBuilder";
+
+// Admin & System Tools
+import CustomerHappiness from "./pages/CustomerHappiness";
+import Sitemap from "./pages/Sitemap";
+import SecurityConsole from "./pages/SecurityConsole";
+
 const queryClient = new QueryClient();
 
 const App = () => (
@@ -291,6 +306,23 @@ const App = () => (
                 <Route path="/governance/ai" element={<AIGovernance />} />
                 <Route path="/governance/institutional-lock" element={<InstitutionalLock />} />
                 <Route path="/governance/methodology" element={<GovernmentMethodology />} />
+                
+                {/* Communication & Productivity Tools */}
+                <Route path="/automations" element={<Automations />} />
+                <Route path="/company-comm" element={<CompanyComm />} />
+                <Route path="/email-client" element={<EmailClient />} />
+                <Route path="/team-chat" element={<TeamChat />} />
+                <Route path="/kanban" element={<KanbanBoard />} />
+                <Route path="/whiteboard" element={<Whiteboard />} />
+                <Route path="/mindmap" element={<MindMap />} />
+                <Route path="/presentations" element={<Presentations />} />
+                <Route path="/form-builder" element={<FormBuilder />} />
+                
+                {/* Admin & System Tools */}
+                <Route path="/customer-happiness" element={<CustomerHappiness />} />
+                <Route path="/sitemap" element={<Sitemap />} />
+                <Route path="/security-console" element={<SecurityConsole />} />
+                
                 <Route path="*" element={<NotFound />} />
               </Route>
             </Routes>
