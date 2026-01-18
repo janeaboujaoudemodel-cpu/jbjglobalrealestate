@@ -872,7 +872,7 @@ const CustomerHappiness = () => {
                   <CardContent className="p-6 text-center">
                     <Phone className="w-8 h-8 text-gold mx-auto mb-3" />
                     <p className="text-white font-medium mb-1">Call Us</p>
-                    <a href="tel:+97156591100" className="text-zinc-400 hover:text-gold">
+                    <a href="tel:+971565911000" className="text-zinc-400 hover:text-gold">
                       +971 56 591 1000
                     </a>
                   </CardContent>
@@ -881,8 +881,8 @@ const CustomerHappiness = () => {
                   <CardContent className="p-6 text-center">
                     <Mail className="w-8 h-8 text-gold mx-auto mb-3" />
                     <p className="text-white font-medium mb-1">Email Us</p>
-                    <a href="mailto:support@jbj.ae" className="text-zinc-400 hover:text-gold">
-                      support@jbj.ae
+                    <a href="mailto:Contact@JBJ.ae" className="text-zinc-400 hover:text-gold">
+                      Contact@JBJ.ae
                     </a>
                   </CardContent>
                 </Card>

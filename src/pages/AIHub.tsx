@@ -532,6 +532,7 @@ const AIHub = () => {
                   className="border-2 border-gold/40 text-gold hover:bg-gold/10 hover:border-gold px-8 py-6 text-base font-semibold"
                 >
                   Explore Free Tools
+                  <ArrowUpRight className="w-5 h-5 ml-2" />
                 </Button>
               </motion.div>
 

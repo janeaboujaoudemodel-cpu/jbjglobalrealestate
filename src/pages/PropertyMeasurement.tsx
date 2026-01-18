@@ -284,8 +284,8 @@ ${result.rooms.map(room => `${room.name}: ${room.area} sq ft (${convertArea(room
 ${result.notes ? `\nNOTES\n-----\n${result.notes}` : ''}
 
 ================================
-Powered by JBJ Global Real Estate
-Developed by Founder and CEO Jane Abou Jaoude
+Software developed and implemented by The Founder & CEO, Jane Abou Jaoude
+Designed exclusively for JBJ Global Real Estate
 jbj.ae
     `.trim();
 
