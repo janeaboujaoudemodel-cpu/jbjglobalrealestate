@@ -65,7 +65,7 @@ const Install = () => {
     // Track button click
     trackPWAEvent('button_click', { hasPrompt: !!deferredPrompt, isIOS });
     
-    // For Android/Desktop with install prompt
+    // For Android/Desktop with install prompt - one-click install
     if (deferredPrompt) {
       setInstalling(true);
       try {
@@ -80,14 +80,13 @@ const Install = () => {
         }
       } catch (err) {
         console.error('Install prompt failed:', err);
-        toast.error("Installation failed. Try using browser menu.");
       }
       setDeferredPrompt(null);
       setInstalling(false);
       return;
     }
     
-    // For iOS - trigger share sheet automatically if possible
+    // For iOS - trigger share sheet automatically for one-click experience
     if (isIOS) {
       if (navigator.share) {
         try {
@@ -97,17 +96,13 @@ const Install = () => {
             url: window.location.origin,
           });
         } catch {
-          // User cancelled or share failed - show instructions
-          toast.info("Tap the Share button (⬆), then 'Add to Home Screen'");
+          // User cancelled - silent
         }
-      } else {
-        toast.info("Tap the Share button (⬆), then 'Add to Home Screen'");
       }
       return;
     }
     
-    // Fallback for browsers without install prompt
-    toast.info("Use your browser menu → 'Install app' or 'Add to Home Screen'");
+    // Fallback: silently do nothing if not supported
   };
 
   const features = [

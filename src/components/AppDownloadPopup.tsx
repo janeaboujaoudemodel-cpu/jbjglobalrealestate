@@ -125,9 +125,19 @@ const AppDownloadPopup = ({
   const handleInstall = useCallback(async () => {
     if (isInstalling) return;
 
-    // iOS: cannot trigger a native install prompt; keep this as a single-line instruction (no step-by-step guide).
+    // iOS: Try to trigger share sheet automatically for one-click experience
     if (isIOS) {
-      toast.message("iPhone/iPad: In Safari tap Share → Add to Home Screen");
+      if (navigator.share) {
+        try {
+          await navigator.share({
+            title: 'JBJ Global Real Estate',
+            text: 'Install the JBJ Global Real Estate app',
+            url: window.location.origin,
+          });
+        } catch {
+          // User cancelled - silently dismiss
+        }
+      }
       return;
     }
 
@@ -148,28 +158,13 @@ const AppDownloadPopup = ({
         setDeferredPrompt(null);
       } catch (error) {
         console.error("Install error:", error);
-        toast.error("Install prompt failed on this browser.");
       } finally {
         setIsInstalling(false);
       }
       return;
     }
 
-    // Provide helpful browser-specific instructions instead of error
-    const isChrome = /Chrome/.test(navigator.userAgent) && !/Edg/.test(navigator.userAgent);
-    const isEdge = /Edg/.test(navigator.userAgent);
-    const isFirefox = /Firefox/.test(navigator.userAgent);
-    
-    if (isChrome) {
-      toast.message("Chrome: Tap ⋮ menu (top-right) → 'Install app' or 'Add to Home Screen'");
-    } else if (isEdge) {
-      toast.message("Edge: Tap ⋯ menu → 'Apps' → 'Install this site as an app'");
-    } else if (isFirefox) {
-      toast.message("Firefox: Tap menu → 'Install' or 'Add to Home Screen'");
-    } else {
-      toast.message("Open browser menu → 'Install app' or 'Add to Home Screen'");
-    }
-    
+    // Silently dismiss if install not available - no error messages
     localStorage.setItem(STORAGE_KEYS.DISMISSED_AT, Date.now().toString());
     setShouldShow(false);
     dismiss();
