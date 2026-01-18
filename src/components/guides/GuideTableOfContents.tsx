@@ -120,7 +120,7 @@ export const GuideTableOfContents = ({
         initial={{ opacity: 0, y: 20 }}
         animate={{ opacity: 1, y: 0 }}
         className={cn(
-          "bg-white border border-gold/30 rounded-xl overflow-hidden shadow-lg",
+          "bg-white border border-gold/30 rounded-xl overflow-hidden shadow-lg max-h-[calc(100vh-200px)] overflow-y-auto",
           sticky && "sticky top-24"
         )}
       >
@@ -160,14 +160,14 @@ export const GuideTableOfContents = ({
                   className={cn(
                     "w-full flex items-center gap-3 px-3 py-2.5 rounded-lg text-left text-sm transition-all",
                     activeId === item.id
-                      ? "bg-gradient-to-r from-gold to-gold-dark text-black font-medium shadow-md"
+                      ? "bg-gradient-to-r from-[#F5EBD7] via-[#E8DCC8] to-[#D4C4A8] text-black font-medium shadow-md border border-gold/40"
                       : "text-zinc-600 hover:text-black hover:bg-zinc-100 border border-transparent hover:border-zinc-200"
                   )}
                 >
                   <span className={cn(
                     "w-6 h-6 rounded-full flex items-center justify-center text-xs font-medium",
                     activeId === item.id
-                      ? "bg-black/20 text-black"
+                      ? "bg-black text-gold"
                       : "bg-gold/10 text-gold"
                   )}>
                     {index + 1}
@@ -180,15 +180,15 @@ export const GuideTableOfContents = ({
                 </button>
               ))}
               
-              {/* CTA Action Button */}
+              {/* CTA Action Button - Premium 3D Glow Style */}
               {ctaAction && (
                 <Link to={ctaAction.href} className="block mt-4">
                   <Button 
-                    className="w-full bg-gradient-to-r from-gold to-gold-dark text-black font-semibold hover:brightness-110 py-3"
+                    className="w-full relative bg-gradient-to-r from-white via-[#FDFBF7] to-[#F5F0E6] text-gold font-semibold py-3 border border-gold/40 shadow-[0_4px_20px_rgba(200,167,102,0.3),0_8px_30px_rgba(0,0,0,0.15)] hover:shadow-[0_6px_25px_rgba(200,167,102,0.5),0_10px_40px_rgba(0,0,0,0.2)] hover:scale-[1.02] transition-all duration-300"
                   >
-                    {ctaAction.icon && <ctaAction.icon className="w-4 h-4 mr-2" />}
-                    {ctaAction.label}
-                    <ArrowUpRight className="w-4 h-4 ml-2" />
+                    {ctaAction.icon && <ctaAction.icon className="w-4 h-4 mr-2 text-black" />}
+                    <span className="text-gold font-semibold">{ctaAction.label}</span>
+                    <ArrowUpRight className="w-4 h-4 ml-2 text-black" />
                   </Button>
                 </Link>
               )}
