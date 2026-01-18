@@ -137,7 +137,7 @@ export const REAL_ESTATE_KNOWLEDGE = {
 export const COMPANY_KNOWLEDGE = {
   name: 'JBJ Global Real Estate',
   fullName: 'JBJ Global Real Estate L.L.C S.O.C.',
-  founded: '6+ years in Dubai premium real estate',
+  founded: '12+ years of industry experience',
   services: ['BUY', 'SELL', 'RENT', 'Property Management', 'Investment Advisory'],
   
   founder: {

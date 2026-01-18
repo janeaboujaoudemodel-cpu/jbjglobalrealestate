@@ -564,7 +564,7 @@ Daily report deadline: ${config.dailyReportTime} GST
 █ COMPANY KNOWLEDGE
 Company: JBJ Global Real Estate L.L.C S.O.C.
 Founder: Jane Abou Jaoude (Founder & CEO)
-Experience: 6+ years in Dubai premium real estate
+Experience: 12+ years of industry experience
 Services: BUY · SELL · RENT
 Contact: +971 56 591 1000 | Contact@JBJ.ae | www.jbj.ae
 Offices: Dubai (HQ), London, Riyadh
