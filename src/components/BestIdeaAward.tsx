@@ -170,13 +170,12 @@ const BestIdeaAward = () => {
                           <Tablet className="w-7 h-7 text-gold" />
                         </div>
                         <div>
-                          <p className="text-gold font-bold">iPad Pro M4 (13-inch)</p>
-                          <p className="text-zinc-400 text-xs">256GB • Wi-Fi + Cellular • Space Black</p>
-                          <p className="text-gold/90 text-sm mt-1"><Gift className="w-3 h-3 inline mr-1" />AED 5,499</p>
+                          <p className="text-gold font-bold">iPad Pro with M4 chip (13-inch)</p>
+                          <p className="text-zinc-400 text-xs">Ultra Retina XDR Display • Apple Pencil Pro Compatible • Space Black</p>
                         </div>
                       </div>
                     </div>
-                    {/* iPhone 17 Pro Max */}
+                    {/* iPhone 16 Pro Max */}
                     <div className="bg-black rounded-xl p-5 relative overflow-hidden">
                       <div className="absolute inset-0 bg-gradient-to-r from-gold/10 to-transparent" />
                       <div className="relative z-10 flex items-center gap-4">
@@ -184,9 +183,8 @@ const BestIdeaAward = () => {
                           <Gift className="w-7 h-7 text-gold" />
                         </div>
                         <div>
-                          <p className="text-gold font-bold">iPhone 17 Pro Max</p>
-                          <p className="text-zinc-400 text-xs">256GB • Deep Blue</p>
-                          <p className="text-gold/90 text-sm mt-1"><Gift className="w-3 h-3 inline mr-1" />AED 5,099</p>
+                          <p className="text-gold font-bold">iPhone 16 Pro Max</p>
+                          <p className="text-zinc-400 text-xs">A18 Pro chip • 48MP Camera System • Titanium Design</p>
                         </div>
                       </div>
                     </div>
