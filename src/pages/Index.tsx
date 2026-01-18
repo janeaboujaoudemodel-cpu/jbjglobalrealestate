@@ -135,6 +135,7 @@ const Index = () => {
               onClick={() => setIsInquiryOpen(true)}
             >
               Book Consultation
+              <ArrowUpRight className="w-4 h-4 ml-2 text-gold" />
             </Button>
           </motion.div>
         </motion.div>
