@@ -792,6 +792,58 @@ Its central location makes Al Barsha ideal for those who need quick access to mu
       description: "Discover Ajman Corniche — affordable waterfront living with Gulf views near Dubai.",
       keywords: "Ajman Corniche, Ajman beach property, affordable UAE property, Ajman apartments"
     }
+  },
+  // Fujairah Communities
+  {
+    slug: "fujairah-corniche",
+    name: "Fujairah Corniche",
+    heroImage: "https://images.unsplash.com/photo-1582672060674-bc2bd808a8b5?w=1920&q=80",
+    shortDescription: "Fujairah's scenic waterfront with mountain backdrop and Arabian Sea views.",
+    overview: `Fujairah Corniche offers a unique living experience on the UAE's eastern coast, with stunning views of the Hajar Mountains meeting the Arabian Sea. This peaceful emirate provides a slower pace of life with easy access to pristine beaches and diving spots.`,
+    lifestyle: "Relaxed coastal living with mountain adventures and beach access.",
+    location: {
+      landmarks: ["Fujairah Fort", "Al Bidya Mosque", "Fujairah Museum", "Dibba Beach"],
+      connectivity: ["2 hours to Dubai", "30 minutes to Fujairah Airport"]
+    },
+    amenities: {
+      dining: "Seafood restaurants and hotel dining along the coast.",
+      retail: "City Centre Fujairah and local markets.",
+      leisure: "Diving, snorkeling, mountain hiking, and beach activities.",
+      wellness: "Resort spas and waterfront wellness facilities."
+    },
+    propertyTypes: ["Beachfront apartments", "Mountain-view villas", "Affordable residential units"],
+    residents: ["Beach lovers", "Divers and outdoor enthusiasts", "Those seeking peaceful coastal living"],
+    seo: {
+      title: "Fujairah Corniche Area Guide",
+      description: "Discover Fujairah Corniche — the UAE's eastern coast gem with mountain and sea views.",
+      keywords: "Fujairah property, UAE east coast, Fujairah beach, Fujairah real estate"
+    }
+  },
+  // Umm Al Quwain Communities
+  {
+    slug: "umm-al-quwain-marina",
+    name: "Umm Al Quwain Marina",
+    heroImage: "https://images.unsplash.com/photo-1518684079-3c830dcef090?w=1920&q=80",
+    shortDescription: "A tranquil marina community offering affordable waterfront living near Dubai.",
+    overview: `Umm Al Quwain Marina provides an affordable waterfront lifestyle in one of the UAE's most peaceful emirates. The community offers modern residences with marina views, easy access to beaches, and a genuine Emirati atmosphere.`,
+    lifestyle: "Quiet, family-oriented living with water sports and fishing culture.",
+    location: {
+      landmarks: ["UAQ Marina", "Dreamland Aqua Park", "UAQ Museum", "Mangrove nature reserves"],
+      connectivity: ["45 minutes to Dubai", "30 minutes to Sharjah"]
+    },
+    amenities: {
+      dining: "Local restaurants and marina cafés.",
+      retail: "Local shopping centers and traditional souks.",
+      leisure: "Water sports, fishing, mangrove kayaking, and Dreamland Aqua Park.",
+      wellness: "Beach activities and peaceful outdoor spaces."
+    },
+    propertyTypes: ["Marina apartments", "Affordable villas", "Waterfront townhouses"],
+    residents: ["Families seeking affordability", "Water sports enthusiasts", "Those working in Dubai seeking value"],
+    seo: {
+      title: "UAQ Marina Area Guide",
+      description: "Explore Umm Al Quwain Marina — affordable waterfront living near Dubai with marina lifestyle.",
+      keywords: "Umm Al Quwain property, UAQ Marina, affordable UAE property, UAQ real estate"
+    }
   }
 ];
 
@@ -802,8 +854,8 @@ export const UAE_EMIRATES = [
   { id: "sharjah", name: "Sharjah", areas: ["al-majaz"] },
   { id: "ajman", name: "Ajman", areas: ["ajman-corniche"] },
   { id: "ras-al-khaimah", name: "Ras Al Khaimah", areas: ["al-hamra-village"] },
-  { id: "fujairah", name: "Fujairah", areas: [] },
-  { id: "umm-al-quwain", name: "Umm Al Quwain", areas: [] },
+  { id: "fujairah", name: "Fujairah", areas: ["fujairah-corniche"] },
+  { id: "umm-al-quwain", name: "Umm Al Quwain", areas: ["umm-al-quwain-marina"] },
 ];
 
 export const getAreaBySlug = (slug: string): AreaGuide | undefined => {

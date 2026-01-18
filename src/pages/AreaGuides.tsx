@@ -188,28 +188,26 @@ const AreaGuides = () => {
 
             {/* Search & Filter Bar */}
             <div className="max-w-5xl mx-auto">
-              <div className="bg-gradient-to-r from-white via-[#FDFBF7] to-[#F5F0E6] rounded-2xl p-4 md:p-6 border border-gold/30 shadow-lg">
-                {/* Search Input - Full Width */}
-                <div className="relative mb-4">
-                  <div className="absolute left-4 top-1/2 -translate-y-1/2 flex items-center justify-center w-5 h-5">
-                    <Search className="w-5 h-5 text-gold" />
-                  </div>
-                  <Input
-                    type="text"
-                    placeholder="Search by community name..."
-                    value={searchQuery}
-                    onChange={(e) => setSearchQuery(e.target.value)}
-                    className="pl-12 pr-10 h-12 bg-white border-gold/30 focus:border-gold text-black placeholder:text-zinc-500 w-full"
-                  />
-                  {searchQuery && (
-                    <button
-                      onClick={() => setSearchQuery("")}
-                      className="absolute right-3 top-1/2 -translate-y-1/2 w-6 h-6 rounded-full bg-zinc-200 hover:bg-zinc-300 flex items-center justify-center transition-colors"
-                    >
-                      <X className="w-3 h-3 text-zinc-600" />
-                    </button>
-                  )}
-                </div>
+            <div className="bg-gradient-to-r from-white via-[#FDFBF7] to-[#F5F0E6] rounded-2xl p-4 md:p-6 border border-gold/30 shadow-lg">
+              {/* Search Input - Full Width */}
+              <div className="relative mb-4">
+                <Search className="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-gold pointer-events-none" />
+                <Input
+                  type="text"
+                  placeholder="Search by community name..."
+                  value={searchQuery}
+                  onChange={(e) => setSearchQuery(e.target.value)}
+                  className="pl-12 pr-10 h-12 bg-white border-gold/30 focus:border-gold text-black placeholder:text-zinc-500 w-full"
+                />
+                {searchQuery && (
+                  <button
+                    onClick={() => setSearchQuery("")}
+                    className="absolute right-3 top-1/2 -translate-y-1/2 w-6 h-6 rounded-full bg-zinc-200 hover:bg-zinc-300 flex items-center justify-center transition-colors"
+                  >
+                    <X className="w-3 h-3 text-zinc-600" />
+                  </button>
+                )}
+              </div>
 
                 {/* Emirate Filter - Horizontally Scrollable */}
                 <div className="flex flex-wrap gap-2 justify-center">

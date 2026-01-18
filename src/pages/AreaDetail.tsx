@@ -96,11 +96,11 @@ const AreaDetail = () => {
         </motion.div>
       </section>
 
-      {/* Overview Section */}
-      <section className="py-20">
+      {/* Overview Section - White/Gold Theme */}
+      <section className="py-20 bg-gradient-to-br from-white via-[#FDFBF7] to-[#F5F0E6]">
         <div className="container mx-auto px-4">
           <motion.div 
-            className="max-w-4xl"
+            className="max-w-4xl mx-auto"
             initial="hidden"
             whileInView="visible"
             viewport={{ once: true }}
@@ -113,18 +113,18 @@ const AreaDetail = () => {
               Overview
             </motion.span>
             <motion.h2 
-              className="text-white text-3xl md:text-4xl font-bold mb-8"
+              className="text-black text-3xl md:text-4xl font-bold mb-8"
               style={{ fontFamily: "Poppins, sans-serif" }}
               variants={fadeInUp}
             >
               About {area.name}
             </motion.h2>
             <motion.div 
-              className="prose prose-lg prose-invert max-w-none"
+              className="bg-white rounded-2xl p-8 border border-gold/30 shadow-lg"
               variants={fadeInUp}
             >
               {area.overview.split('\n\n').map((paragraph, idx) => (
-                <p key={idx} className="text-zinc-400 leading-relaxed mb-6">
+                <p key={idx} className="text-zinc-700 leading-relaxed mb-4 last:mb-0">
                   {paragraph}
                 </p>
               ))}
@@ -132,14 +132,14 @@ const AreaDetail = () => {
             
             {/* Lifestyle */}
             <motion.div 
-              className="mt-12 p-8 bg-zinc-900/50 border border-zinc-800 rounded-2xl"
+              className="mt-8 p-8 bg-white border border-gold/30 rounded-2xl shadow-lg"
               variants={fadeInUp}
             >
-              <h3 className="text-white text-xl font-bold mb-4 flex items-center gap-3">
+              <h3 className="text-black text-xl font-bold mb-4 flex items-center gap-3">
                 <Heart className="w-5 h-5 text-gold" />
-                Lifestyle & Atmosphere
+                <span className="text-gold">Lifestyle & Atmosphere</span>
               </h3>
-              <p className="text-zinc-400 leading-relaxed">
+              <p className="text-zinc-700 leading-relaxed">
                 {area.lifestyle}
               </p>
             </motion.div>
@@ -147,8 +147,8 @@ const AreaDetail = () => {
         </div>
       </section>
 
-      {/* Location & Connectivity */}
-      <section className="py-20 bg-gradient-to-b from-zinc-900/30 to-black">
+      {/* Location & Connectivity - Black Background with White Cards */}
+      <section className="py-20 bg-black">
         <div className="container mx-auto px-4">
           <motion.div
             initial="hidden"
@@ -171,39 +171,39 @@ const AreaDetail = () => {
             </motion.h2>
             
             <div className="grid md:grid-cols-2 gap-8">
-              {/* Landmarks */}
+              {/* Landmarks - White Card */}
               <motion.div 
-                className="bg-zinc-900/50 border border-zinc-800 rounded-2xl p-8"
+                className="bg-gradient-to-br from-white via-[#FDFBF7] to-[#F5F0E6] border border-gold/30 rounded-2xl p-8 shadow-lg"
                 variants={fadeInUp}
               >
-                <h3 className="text-white text-xl font-bold mb-6 flex items-center gap-3">
+                <h3 className="text-black text-xl font-bold mb-6 flex items-center gap-3">
                   <MapPin className="w-5 h-5 text-gold" />
-                  Key Landmarks
+                  <span className="text-gold">Key Landmarks</span>
                 </h3>
                 <ul className="space-y-4">
                   {area.location.landmarks.map((landmark, idx) => (
                     <li key={idx} className="flex items-start gap-3">
                       <div className="w-2 h-2 rounded-full bg-gold mt-2 flex-shrink-0" />
-                      <span className="text-zinc-400">{landmark}</span>
+                      <span className="text-zinc-700">{landmark}</span>
                     </li>
                   ))}
                 </ul>
               </motion.div>
 
-              {/* Connectivity */}
+              {/* Connectivity - White Card */}
               <motion.div 
-                className="bg-zinc-900/50 border border-zinc-800 rounded-2xl p-8"
+                className="bg-gradient-to-br from-white via-[#FDFBF7] to-[#F5F0E6] border border-gold/30 rounded-2xl p-8 shadow-lg"
                 variants={fadeInUp}
               >
-                <h3 className="text-white text-xl font-bold mb-6 flex items-center gap-3">
+                <h3 className="text-black text-xl font-bold mb-6 flex items-center gap-3">
                   <Train className="w-5 h-5 text-gold" />
-                  Connectivity
+                  <span className="text-gold">Connectivity</span>
                 </h3>
                 <ul className="space-y-4">
                   {area.location.connectivity.map((item, idx) => (
                     <li key={idx} className="flex items-start gap-3">
                       <div className="w-2 h-2 rounded-full bg-gold mt-2 flex-shrink-0" />
-                      <span className="text-zinc-400">{item}</span>
+                      <span className="text-zinc-700">{item}</span>
                     </li>
                   ))}
                 </ul>
@@ -213,8 +213,8 @@ const AreaDetail = () => {
         </div>
       </section>
 
-      {/* Lifestyle & Amenities */}
-      <section className="py-20">
+      {/* Lifestyle & Amenities - White/Champagne Theme */}
+      <section className="py-20 bg-gradient-to-br from-white via-[#FDFBF7] to-[#F5F0E6]">
         <div className="container mx-auto px-4">
           <motion.div
             initial="hidden"
@@ -229,7 +229,7 @@ const AreaDetail = () => {
               Amenities
             </motion.span>
             <motion.h2 
-              className="text-white text-3xl md:text-4xl font-bold mb-12"
+              className="text-black text-3xl md:text-4xl font-bold mb-12"
               style={{ fontFamily: "Poppins, sans-serif" }}
               variants={fadeInUp}
             >
@@ -245,14 +245,14 @@ const AreaDetail = () => {
               ].map((amenity, idx) => (
                 <motion.div 
                   key={amenity.title}
-                  className="bg-zinc-900/50 border border-zinc-800 rounded-2xl p-8 hover:border-gold/30 transition-all"
+                  className="bg-white border border-gold/30 rounded-2xl p-8 hover:border-gold hover:shadow-xl transition-all shadow-lg"
                   variants={fadeInUp}
                 >
-                  <div className="w-12 h-12 rounded-xl bg-gold/10 border border-gold/30 flex items-center justify-center mb-4">
+                  <div className="w-12 h-12 rounded-xl bg-black flex items-center justify-center mb-4">
                     <amenity.icon className="w-6 h-6 text-gold" />
                   </div>
-                  <h3 className="text-white text-xl font-bold mb-3">{amenity.title}</h3>
-                  <p className="text-zinc-400 leading-relaxed">{amenity.content}</p>
+                  <h3 className="text-gold text-xl font-bold mb-3">{amenity.title}</h3>
+                  <p className="text-zinc-700 leading-relaxed">{amenity.content}</p>
                 </motion.div>
               ))}
             </div>
@@ -260,8 +260,8 @@ const AreaDetail = () => {
         </div>
       </section>
 
-      {/* Property Types */}
-      <section className="py-20 bg-gradient-to-b from-zinc-900/30 to-black">
+      {/* Property Types - Black Background with White Cards */}
+      <section className="py-20 bg-black">
         <div className="container mx-auto px-4">
           <motion.div
             initial="hidden"
@@ -290,10 +290,10 @@ const AreaDetail = () => {
               {area.propertyTypes.map((type, idx) => (
                 <div 
                   key={idx}
-                  className="flex items-center gap-3 p-4 bg-zinc-900/50 border border-zinc-800 rounded-xl"
+                  className="flex items-center gap-3 p-4 bg-gradient-to-br from-white via-[#FDFBF7] to-[#F5F0E6] border border-gold/30 rounded-xl shadow-md hover:border-gold hover:shadow-lg transition-all"
                 >
                   <Building2 className="w-5 h-5 text-gold flex-shrink-0" />
-                  <span className="text-zinc-300">{type}</span>
+                  <span className="text-black font-medium">{type}</span>
                 </div>
               ))}
             </motion.div>
@@ -301,8 +301,8 @@ const AreaDetail = () => {
         </div>
       </section>
 
-      {/* Who Lives Here */}
-      <section className="py-20">
+      {/* Who Lives Here - White/Champagne Theme */}
+      <section className="py-20 bg-gradient-to-br from-white via-[#FDFBF7] to-[#F5F0E6]">
         <div className="container mx-auto px-4">
           <motion.div
             initial="hidden"
@@ -317,7 +317,7 @@ const AreaDetail = () => {
               Community
             </motion.span>
             <motion.h2 
-              className="text-white text-3xl md:text-4xl font-bold mb-12"
+              className="text-black text-3xl md:text-4xl font-bold mb-12"
               style={{ fontFamily: "Poppins, sans-serif" }}
               variants={fadeInUp}
             >
@@ -331,10 +331,10 @@ const AreaDetail = () => {
               {area.residents.map((resident, idx) => (
                 <div 
                   key={idx}
-                  className="flex items-center gap-3 p-4 bg-zinc-900/50 border border-zinc-800 rounded-xl"
+                  className="flex items-center gap-3 p-4 bg-white border border-gold/30 rounded-xl shadow-md hover:border-gold hover:shadow-lg transition-all"
                 >
                   <Users className="w-5 h-5 text-gold flex-shrink-0" />
-                  <span className="text-zinc-300">{resident}</span>
+                  <span className="text-black font-medium">{resident}</span>
                 </div>
               ))}
             </motion.div>
@@ -378,9 +378,9 @@ const AreaDetail = () => {
         </div>
       </section>
 
-      {/* Other Areas */}
+      {/* Other Areas - Black Background with White Cards */}
       {otherAreas.length > 0 && (
-        <section className="py-20">
+        <section className="py-20 bg-black">
           <div className="container mx-auto px-4">
             <motion.div
               initial={{ opacity: 0, y: 20 }}
@@ -399,7 +399,7 @@ const AreaDetail = () => {
                   <Link 
                     key={otherArea.slug}
                     to={`/area/${otherArea.slug}`}
-                    className="group block relative overflow-hidden rounded-2xl bg-zinc-900 border border-zinc-800 hover:border-gold/30 transition-all"
+                    className="group block relative overflow-hidden rounded-2xl bg-gradient-to-br from-white via-[#FDFBF7] to-[#F5F0E6] border border-gold/30 hover:border-gold hover:shadow-xl transition-all shadow-lg"
                   >
                     <div className="relative h-48 overflow-hidden">
                       <img 
@@ -407,13 +407,13 @@ const AreaDetail = () => {
                         alt={otherArea.name}
                         className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110"
                       />
-                      <div className="absolute inset-0 bg-gradient-to-t from-black via-black/40 to-transparent" />
+                      <div className="absolute inset-0 bg-gradient-to-t from-white via-white/40 to-transparent" />
                     </div>
                     <div className="p-6">
-                      <h3 className="text-white text-xl font-bold mb-2 group-hover:text-gold transition-colors">
+                      <h3 className="text-black text-xl font-bold mb-2 group-hover:text-gold transition-colors">
                         {otherArea.name}
                       </h3>
-                      <p className="text-zinc-400 text-sm line-clamp-2">{otherArea.shortDescription}</p>
+                      <p className="text-zinc-600 text-sm line-clamp-2">{otherArea.shortDescription}</p>
                     </div>
                   </Link>
                 ))}
