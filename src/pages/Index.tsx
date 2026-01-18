@@ -189,113 +189,6 @@ const Index = () => {
       {/* DEVELOPER PARTNERS MARQUEE */}
       <DeveloperPartnersMarquee />
 
-      {/* QUICK ACTIONS - Simplified */}
-      <section className="py-16 md:py-20 bg-black">
-        <div className="container mx-auto px-4">
-          {/* Primary Services Row - Premium Glow Buttons */}
-          <div className="flex flex-wrap justify-center gap-3 mb-8">
-            <Link to="/properties">
-              <Button className="relative bg-gradient-to-r from-gold via-[#C4A962] to-gold hover:from-gold-light hover:to-gold text-black font-bold px-6 py-5 text-sm transition-all duration-500 hover:shadow-xl hover:shadow-gold/40 hover:scale-105 shadow-md shadow-gold/25 border border-gold/30">
-                Explore Properties
-                <ArrowUpRight className="w-4 h-4 ml-2" />
-              </Button>
-            </Link>
-            <Link to="/seller-listing">
-              <Button 
-                className="relative border-2 border-gold text-gold hover:bg-gold hover:text-black font-bold px-6 py-5 text-sm transition-all duration-500 hover:shadow-xl hover:shadow-gold/30 shadow-md shadow-gold/15"
-              >
-                List Your Property
-                <ArrowUpRight className="w-4 h-4 ml-2" />
-              </Button>
-            </Link>
-            <Link to="/market-report">
-              <Button 
-                className="border-2 border-zinc-700 text-white hover:bg-zinc-800 hover:border-gold/50 hover:text-gold px-6 py-5 text-sm transition-all duration-500 hover:shadow-lg hover:shadow-gold/20 font-semibold"
-              >
-                <FileText className="w-4 h-4 mr-2" />
-                Market Report
-              </Button>
-            </Link>
-          </div>
-
-          {/* Licensed Partner Network */}
-          <motion.div 
-            className="max-w-2xl mx-auto text-center mb-12"
-            initial={{ opacity: 0, y: 20 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true }}
-          >
-            <span className="inline-flex items-center gap-2 px-5 py-2 bg-gradient-to-r from-black via-zinc-900 to-black border border-gold/40 rounded-full text-gold text-xs uppercase tracking-[0.2em] font-medium mb-4 shadow-md">
-              <Scale className="w-3 h-3 text-gold" />
-              Licensed Partner Network
-            </span>
-            <div className="flex flex-wrap justify-center gap-3">
-              <Link to="/services/law-firm">
-                <span className="inline-flex items-center gap-2 px-4 py-2.5 bg-gradient-to-r from-white via-[#FDFBF7] to-[#F5F0E6] border border-gold/40 rounded-full text-black text-sm hover:border-gold hover:shadow-lg hover:shadow-gold/20 transition-all duration-300 shadow-sm">
-                  <Scale className="w-4 h-4 text-gold" />
-                  Legal Partners
-                </span>
-              </Link>
-              <Link to="/mortgage-calculator">
-                <span className="inline-flex items-center gap-2 px-4 py-2.5 bg-gradient-to-r from-white via-[#FDFBF7] to-[#F5F0E6] border border-gold/40 rounded-full text-black text-sm hover:border-gold hover:shadow-lg hover:shadow-gold/20 transition-all duration-300 shadow-sm">
-                  <Calculator className="w-4 h-4 text-gold" />
-                  Mortgage Partners
-                </span>
-              </Link>
-              <Link to="/services/design-build">
-                <span className="inline-flex items-center gap-2 px-4 py-2.5 bg-gradient-to-r from-white via-[#FDFBF7] to-[#F5F0E6] border border-gold/40 rounded-full text-black text-sm hover:border-gold hover:shadow-lg hover:shadow-gold/20 transition-all duration-300 shadow-sm">
-                  <Wrench className="w-4 h-4 text-gold" />
-                  Design & Build
-                </span>
-              </Link>
-            </div>
-            <p className="text-zinc-500 text-xs mt-4 max-w-md mx-auto">
-              We introduce clients to independent licensed partners. Clients contract directly with partners.
-            </p>
-          </motion.div>
-
-          {/* Tools Row - Simplified to top 4 + View All */}
-          <div className="text-center">
-            <span className="inline-flex items-center gap-2 px-5 py-2 bg-gradient-to-r from-white via-[#FDFBF7] to-[#F5F0E6] border border-gold/40 rounded-full text-black text-xs uppercase tracking-[0.2em] font-medium mb-4 shadow-md">
-              <Sparkles className="w-3 h-3 text-gold" />
-              Property Tools
-            </span>
-            <div className="flex flex-wrap justify-center gap-3 mb-4">
-              <Link to="/compare">
-                <Button variant="outline" className="bg-gradient-to-r from-white via-[#FDFBF7] to-[#F5F0E6] border-gold/40 text-black hover:border-gold hover:bg-gold/10 hover:shadow-lg hover:shadow-gold/20 text-xs px-4 py-3 shadow-sm">
-                  <BarChart3 className="w-3 h-3 mr-2 text-gold" />
-                  Compare
-                </Button>
-              </Link>
-              <Link to="/property-evaluator">
-                <Button variant="outline" className="bg-gradient-to-r from-white via-[#FDFBF7] to-[#F5F0E6] border-gold/40 text-black hover:border-gold hover:bg-gold/10 hover:shadow-lg hover:shadow-gold/20 text-xs px-4 py-3 shadow-sm">
-                  <Calculator className="w-3 h-3 mr-2 text-gold" />
-                  Evaluator
-                </Button>
-              </Link>
-              <Link to="/mortgage-calculator">
-                <Button variant="outline" className="bg-gradient-to-r from-white via-[#FDFBF7] to-[#F5F0E6] border-gold/40 text-black hover:border-gold hover:bg-gold/10 hover:shadow-lg hover:shadow-gold/20 text-xs px-4 py-3 shadow-sm">
-                  <Calculator className="w-3 h-3 mr-2 text-gold" />
-                  Mortgage
-                </Button>
-              </Link>
-              <Link to="/quiz">
-                <Button variant="outline" className="bg-gradient-to-r from-white via-[#FDFBF7] to-[#F5F0E6] border-gold/40 text-black hover:border-gold hover:bg-gold/10 hover:shadow-lg hover:shadow-gold/20 text-xs px-4 py-3 shadow-sm">
-                  <Sparkles className="w-3 h-3 mr-2 text-gold" />
-                  AI Home Finder
-                </Button>
-              </Link>
-            </div>
-            <Link to="/ai-hub">
-              <Button className="mt-4 bg-gradient-to-r from-black via-zinc-900 to-black border border-gold/40 text-gold hover:border-gold hover:shadow-[0_0_15px_rgba(200,167,102,0.3)] hover:bg-gold/10 transition-all duration-300 px-6 py-2.5 text-sm font-medium">
-                <Sparkles className="w-4 h-4 mr-2" />
-                Explore All Tools
-                <ArrowUpRight className="w-4 h-4 ml-2 text-gold" />
-              </Button>
-            </Link>
-          </div>
-        </div>
-      </section>
 
       {/* WHO IS THIS FOR - Clear Entry Points */}
       <section className="py-16 md:py-20 bg-zinc-950">
@@ -369,6 +262,98 @@ const Index = () => {
                   </div>
                   <h4 className="text-black text-sm font-semibold mb-1">Visitors</h4>
                   <p className="text-zinc-600 text-xs">Explore UAE Real Estate</p>
+                </div>
+              </div>
+            </Link>
+          </div>
+
+          {/* Quick Actions - White Card Style */}
+          <div className="grid grid-cols-2 md:grid-cols-4 gap-4 max-w-4xl mx-auto mb-12">
+            <Link to="/properties" className="group">
+              <div className="bg-white border border-zinc-200 rounded-xl p-5 text-center hover:border-gold hover:shadow-xl hover:shadow-gold/20 transition-all duration-300 relative overflow-hidden">
+                <div className="absolute inset-0 bg-gradient-to-br from-gold/5 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
+                <div className="relative z-10">
+                  <div className="w-10 h-10 bg-black rounded-lg flex items-center justify-center mx-auto mb-3 group-hover:bg-zinc-900 transition-colors">
+                    <Home className="w-5 h-5 text-gold" />
+                  </div>
+                  <h4 className="text-black text-sm font-semibold mb-1">Explore Properties</h4>
+                  <p className="text-zinc-600 text-xs">Browse listings</p>
+                </div>
+              </div>
+            </Link>
+            <Link to="/seller-listing" className="group">
+              <div className="bg-white border border-zinc-200 rounded-xl p-5 text-center hover:border-gold hover:shadow-xl hover:shadow-gold/20 transition-all duration-300 relative overflow-hidden">
+                <div className="absolute inset-0 bg-gradient-to-br from-gold/5 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
+                <div className="relative z-10">
+                  <div className="w-10 h-10 bg-black rounded-lg flex items-center justify-center mx-auto mb-3 group-hover:bg-zinc-900 transition-colors">
+                    <Target className="w-5 h-5 text-gold" />
+                  </div>
+                  <h4 className="text-black text-sm font-semibold mb-1">List Your Property</h4>
+                  <p className="text-zinc-600 text-xs">Sell or rent</p>
+                </div>
+              </div>
+            </Link>
+            <Link to="/market-report" className="group">
+              <div className="bg-white border border-zinc-200 rounded-xl p-5 text-center hover:border-gold hover:shadow-xl hover:shadow-gold/20 transition-all duration-300 relative overflow-hidden">
+                <div className="absolute inset-0 bg-gradient-to-br from-gold/5 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
+                <div className="relative z-10">
+                  <div className="w-10 h-10 bg-black rounded-lg flex items-center justify-center mx-auto mb-3 group-hover:bg-zinc-900 transition-colors">
+                    <FileText className="w-5 h-5 text-gold" />
+                  </div>
+                  <h4 className="text-black text-sm font-semibold mb-1">Market Report</h4>
+                  <p className="text-zinc-600 text-xs">Latest insights</p>
+                </div>
+              </div>
+            </Link>
+            <Link to="/ai-hub" className="group">
+              <div className="bg-white border border-zinc-200 rounded-xl p-5 text-center hover:border-gold hover:shadow-xl hover:shadow-gold/20 transition-all duration-300 relative overflow-hidden">
+                <div className="absolute inset-0 bg-gradient-to-br from-gold/5 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
+                <div className="relative z-10">
+                  <div className="w-10 h-10 bg-black rounded-lg flex items-center justify-center mx-auto mb-3 group-hover:bg-zinc-900 transition-colors">
+                    <Sparkles className="w-5 h-5 text-gold" />
+                  </div>
+                  <h4 className="text-black text-sm font-semibold mb-1">All Tools</h4>
+                  <p className="text-zinc-600 text-xs">AI-powered tools</p>
+                </div>
+              </div>
+            </Link>
+          </div>
+
+          {/* Licensed Partner Network - White Card Style */}
+          <div className="grid grid-cols-3 gap-4 max-w-3xl mx-auto mb-12">
+            <Link to="/services/law-firm" className="group">
+              <div className="bg-white border border-zinc-200 rounded-xl p-5 text-center hover:border-gold hover:shadow-xl hover:shadow-gold/20 transition-all duration-300 relative overflow-hidden">
+                <div className="absolute inset-0 bg-gradient-to-br from-gold/5 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
+                <div className="relative z-10">
+                  <div className="w-10 h-10 bg-black rounded-lg flex items-center justify-center mx-auto mb-3 group-hover:bg-zinc-900 transition-colors">
+                    <Scale className="w-5 h-5 text-gold" />
+                  </div>
+                  <h4 className="text-black text-sm font-semibold mb-1">Legal Partners</h4>
+                  <p className="text-zinc-600 text-xs">Licensed advisors</p>
+                </div>
+              </div>
+            </Link>
+            <Link to="/mortgage-calculator" className="group">
+              <div className="bg-white border border-zinc-200 rounded-xl p-5 text-center hover:border-gold hover:shadow-xl hover:shadow-gold/20 transition-all duration-300 relative overflow-hidden">
+                <div className="absolute inset-0 bg-gradient-to-br from-gold/5 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
+                <div className="relative z-10">
+                  <div className="w-10 h-10 bg-black rounded-lg flex items-center justify-center mx-auto mb-3 group-hover:bg-zinc-900 transition-colors">
+                    <Calculator className="w-5 h-5 text-gold" />
+                  </div>
+                  <h4 className="text-black text-sm font-semibold mb-1">Mortgage Partners</h4>
+                  <p className="text-zinc-600 text-xs">Financing options</p>
+                </div>
+              </div>
+            </Link>
+            <Link to="/services/design-build" className="group">
+              <div className="bg-white border border-zinc-200 rounded-xl p-5 text-center hover:border-gold hover:shadow-xl hover:shadow-gold/20 transition-all duration-300 relative overflow-hidden">
+                <div className="absolute inset-0 bg-gradient-to-br from-gold/5 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
+                <div className="relative z-10">
+                  <div className="w-10 h-10 bg-black rounded-lg flex items-center justify-center mx-auto mb-3 group-hover:bg-zinc-900 transition-colors">
+                    <Wrench className="w-5 h-5 text-gold" />
+                  </div>
+                  <h4 className="text-black text-sm font-semibold mb-1">Design & Build</h4>
+                  <p className="text-zinc-600 text-xs">Interior solutions</p>
                 </div>
               </div>
             </Link>
