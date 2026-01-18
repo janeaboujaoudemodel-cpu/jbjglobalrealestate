@@ -216,14 +216,14 @@ const About = () => {
                       />
                     </div>
                     <p className="text-center mt-4 text-gold text-sm font-medium group-hover:text-gold-light transition-colors">
-                      Meet the Leadership →
+                      Know More About the Founder →
                     </p>
                   </Link>
                 </div>
               </motion.div>
 
               {/* RIGHT: Founder Statement */}
-              <motion.div variants={fadeInUp}>
+              <motion.div variants={fadeInUp} className="mt-8 md:mt-0">
                 <SectionLabel dark={false}>Written by the Founder</SectionLabel>
                 <div className="mb-6">
                   <Link 

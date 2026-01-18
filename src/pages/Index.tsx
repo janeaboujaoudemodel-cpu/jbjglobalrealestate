@@ -205,10 +205,10 @@ const Index = () => {
             </p>
           </div>
 
-          {/* Audience Entry Cards - White Cards with Black Icon Containers + Careers */}
-          <div className="grid grid-cols-4 md:grid-cols-7 gap-3 max-w-6xl mx-auto mb-12">
+          {/* Audience Entry Cards - White Cards with Black Icon Containers - Row 1: 4 cards */}
+          <div className="grid grid-cols-2 sm:grid-cols-4 gap-3 max-w-4xl mx-auto mb-3">
             <Link to="/buyer-guide" className="group">
-              <div className="bg-white border border-zinc-200 rounded-xl p-4 text-center hover:border-gold hover:shadow-xl hover:shadow-gold/20 transition-all duration-300 relative overflow-hidden">
+              <div className="bg-white border border-zinc-200 rounded-xl p-4 text-center hover:border-gold hover:shadow-xl hover:shadow-gold/20 transition-all duration-300 relative overflow-hidden h-full">
                 <div className="absolute inset-0 bg-gradient-to-br from-gold/5 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
                 <div className="relative z-10">
                   <div className="w-9 h-9 bg-black rounded-lg flex items-center justify-center mx-auto mb-2 group-hover:bg-zinc-900 transition-colors">
@@ -220,7 +220,7 @@ const Index = () => {
               </div>
             </Link>
             <Link to="/seller-guide" className="group">
-              <div className="bg-white border border-zinc-200 rounded-xl p-4 text-center hover:border-gold hover:shadow-xl hover:shadow-gold/20 transition-all duration-300 relative overflow-hidden">
+              <div className="bg-white border border-zinc-200 rounded-xl p-4 text-center hover:border-gold hover:shadow-xl hover:shadow-gold/20 transition-all duration-300 relative overflow-hidden h-full">
                 <div className="absolute inset-0 bg-gradient-to-br from-gold/5 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
                 <div className="relative z-10">
                   <div className="w-9 h-9 bg-black rounded-lg flex items-center justify-center mx-auto mb-2 group-hover:bg-zinc-900 transition-colors">
@@ -232,7 +232,7 @@ const Index = () => {
               </div>
             </Link>
             <Link to="/rent-guide" className="group">
-              <div className="bg-white border border-zinc-200 rounded-xl p-4 text-center hover:border-gold hover:shadow-xl hover:shadow-gold/20 transition-all duration-300 relative overflow-hidden">
+              <div className="bg-white border border-zinc-200 rounded-xl p-4 text-center hover:border-gold hover:shadow-xl hover:shadow-gold/20 transition-all duration-300 relative overflow-hidden h-full">
                 <div className="absolute inset-0 bg-gradient-to-br from-gold/5 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
                 <div className="relative z-10">
                   <div className="w-9 h-9 bg-black rounded-lg flex items-center justify-center mx-auto mb-2 group-hover:bg-zinc-900 transition-colors">
@@ -244,7 +244,7 @@ const Index = () => {
               </div>
             </Link>
             <Link to="/ai-hub" className="group">
-              <div className="bg-white border border-zinc-200 rounded-xl p-4 text-center hover:border-gold hover:shadow-xl hover:shadow-gold/20 transition-all duration-300 relative overflow-hidden">
+              <div className="bg-white border border-zinc-200 rounded-xl p-4 text-center hover:border-gold hover:shadow-xl hover:shadow-gold/20 transition-all duration-300 relative overflow-hidden h-full">
                 <div className="absolute inset-0 bg-gradient-to-br from-gold/5 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
                 <div className="relative z-10">
                   <div className="w-9 h-9 bg-black rounded-lg flex items-center justify-center mx-auto mb-2 group-hover:bg-zinc-900 transition-colors">
@@ -255,8 +255,12 @@ const Index = () => {
                 </div>
               </div>
             </Link>
-            <Link to="/quiz" className="group">
-              <div className="bg-white border border-zinc-200 rounded-xl p-4 text-center hover:border-gold hover:shadow-xl hover:shadow-gold/20 transition-all duration-300 relative overflow-hidden">
+          </div>
+
+          {/* Audience Entry Cards - Row 2: 3 cards centered */}
+          <div className="flex justify-center gap-3 max-w-4xl mx-auto mb-12">
+            <Link to="/quiz" className="group w-[calc(25%-0.375rem)] min-w-0">
+              <div className="bg-white border border-zinc-200 rounded-xl p-4 text-center hover:border-gold hover:shadow-xl hover:shadow-gold/20 transition-all duration-300 relative overflow-hidden h-full">
                 <div className="absolute inset-0 bg-gradient-to-br from-gold/5 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
                 <div className="relative z-10">
                   <div className="w-9 h-9 bg-black rounded-lg flex items-center justify-center mx-auto mb-2 group-hover:bg-zinc-900 transition-colors">
@@ -267,8 +271,8 @@ const Index = () => {
                 </div>
               </div>
             </Link>
-            <Link to="/referral" className="group">
-              <div className="bg-white border border-zinc-200 rounded-xl p-4 text-center hover:border-gold hover:shadow-xl hover:shadow-gold/20 transition-all duration-300 relative overflow-hidden">
+            <Link to="/referral" className="group w-[calc(25%-0.375rem)] min-w-0">
+              <div className="bg-white border border-zinc-200 rounded-xl p-4 text-center hover:border-gold hover:shadow-xl hover:shadow-gold/20 transition-all duration-300 relative overflow-hidden h-full">
                 <div className="absolute inset-0 bg-gradient-to-br from-gold/5 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
                 <div className="relative z-10">
                   <div className="w-9 h-9 bg-black rounded-lg flex items-center justify-center mx-auto mb-2 group-hover:bg-zinc-900 transition-colors">
@@ -279,8 +283,8 @@ const Index = () => {
                 </div>
               </div>
             </Link>
-            <Link to="/join" className="group">
-              <div className="bg-white border border-zinc-200 rounded-xl p-4 text-center hover:border-gold hover:shadow-xl hover:shadow-gold/20 transition-all duration-300 relative overflow-hidden">
+            <Link to="/join" className="group w-[calc(25%-0.375rem)] min-w-0">
+              <div className="bg-white border border-zinc-200 rounded-xl p-4 text-center hover:border-gold hover:shadow-xl hover:shadow-gold/20 transition-all duration-300 relative overflow-hidden h-full">
                 <div className="absolute inset-0 bg-gradient-to-br from-gold/5 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
                 <div className="relative z-10">
                   <div className="w-9 h-9 bg-black rounded-lg flex items-center justify-center mx-auto mb-2 group-hover:bg-zinc-900 transition-colors">
