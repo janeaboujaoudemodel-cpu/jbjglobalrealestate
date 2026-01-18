@@ -5,6 +5,7 @@ import { Button } from "@/components/ui/button";
 import { 
   Star,
   ArrowRight,
+  ArrowUpRight,
   Phone,
   Mail,
   Shield,
@@ -45,7 +46,7 @@ export function BrokerToolkitCTA() {
             >
               <Star className="w-5 h-5 mr-2 fill-current" />
               Join Now — Completely Free
-              <ArrowRight className="w-5 h-5 ml-2" />
+              <ArrowUpRight className="w-5 h-5 ml-2 text-gold" />
             </Button>
           ) : (
             <Button 
@@ -56,7 +57,7 @@ export function BrokerToolkitCTA() {
             >
               <Sparkles className="w-5 h-5 mr-2" />
               Access Your Dashboard
-              <ArrowRight className="w-5 h-5 ml-2" />
+              <ArrowUpRight className="w-5 h-5 ml-2 text-gold" />
             </Button>
           )}
 

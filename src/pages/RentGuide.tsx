@@ -10,6 +10,7 @@ import {
   Users,
   Building2,
   ArrowRight,
+  ArrowUpRight,
   Shield,
   Banknote,
   Key,
@@ -221,7 +222,7 @@ const RentGuide = () => {
             <Button asChild className="bg-gold hover:bg-gold/90 text-black font-medium px-6">
               <Link to="/properties?transaction=rent">
                 View Rental Properties
-                <ArrowRight className="w-4 h-4 ml-2" />
+                <ArrowUpRight className="w-4 h-4 ml-2 text-gold" />
               </Link>
             </Button>
           </>
@@ -445,13 +446,13 @@ const RentGuide = () => {
             <Button asChild variant="outline" className="border-zinc-300 text-black hover:bg-zinc-100 hover:border-gold/50">
               <Link to="/tenant-guide">
                 Tenant Guide
-                <ArrowRight className="w-4 h-4 ml-2" />
+                <ArrowUpRight className="w-4 h-4 ml-2 text-gold" />
               </Link>
             </Button>
             <Button asChild variant="outline" className="border-zinc-300 text-black hover:bg-zinc-100 hover:border-gold/50">
               <Link to="/landlord-guide">
                 Landlord Guide
-                <ArrowRight className="w-4 h-4 ml-2" />
+                <ArrowUpRight className="w-4 h-4 ml-2 text-gold" />
               </Link>
             </Button>
           </div>

@@ -62,6 +62,7 @@ const AreaGuides = () => {
               <Button variant="primary" className="px-6">
                 <Building2 className="w-4 h-4 mr-2" />
                 View Properties
+                <ArrowUpRight className="w-4 h-4 ml-2 text-gold" />
               </Button>
             </Link>
           </div>

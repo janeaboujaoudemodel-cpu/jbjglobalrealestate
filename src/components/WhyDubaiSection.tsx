@@ -1,5 +1,5 @@
 import { Link } from "react-router-dom";
-import { ArrowRight, TrendingUp, Shield, Building, Globe, Coins, Landmark } from "lucide-react";
+import { ArrowRight, ArrowUpRight, TrendingUp, Shield, Building, Globe, Coins, Landmark } from "lucide-react";
 import { Button } from "@/components/ui/button";
 
 const WhyDubaiSection = () => {
@@ -114,7 +114,7 @@ const WhyDubaiSection = () => {
               <Link to="/">
                 <Button className="bg-gradient-to-r from-gold to-gold-dark text-black hover:opacity-90 font-semibold group w-fit">
                   Discover Properties
-                  <ArrowRight className="w-4 h-4 ml-2 group-hover:translate-x-1 transition-transform" />
+                  <ArrowUpRight className="w-4 h-4 ml-2 text-gold group-hover:translate-x-1 transition-transform" />
                 </Button>
               </Link>
             </div>
