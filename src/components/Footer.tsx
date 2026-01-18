@@ -122,6 +122,8 @@ const Footer = () => {
     { href: "/broker-toolkit", label: "Broker Toolkit" },
     { href: "/broker-toolkit/dashboard", label: "My Dashboard" },
     { href: "/tools-guide", label: "Guides & Resources" },
+    { href: "/design-studio", label: "Graphic Designer" },
+    { href: "/video-builder", label: "Videographer" },
   ];
 
   const professionalTools = [
@@ -136,8 +138,6 @@ const Footer = () => {
     { href: "/documents", label: "Documents & Spreadsheets" },
     { href: "/video-meeting", label: "Video Meet" },
     { href: "/ai-calendar", label: "Calendar & Notes" },
-    { href: "/design-studio", label: "Graphic Designer" },
-    { href: "/video-builder", label: "Videographer" },
   ];
 
   // Career Links

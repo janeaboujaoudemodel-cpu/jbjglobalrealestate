@@ -81,9 +81,9 @@ const DeveloperPartnersMarquee = () => {
   const distance = Math.max(1200, partners.length * 180);
 
   return (
-    <section className="py-8 md:py-12 bg-black border-y border-zinc-800/50 overflow-hidden">
-      <div className="container mx-auto px-4 mb-8">
-        <h3 className="text-center text-lg md:text-xl font-semibold uppercase tracking-[0.3em] bg-gradient-to-r from-[#F5F0E6] via-white to-[#F5F0E6] bg-clip-text text-transparent drop-shadow-[0_0_20px_rgba(255,255,255,0.4)]">
+    <section className="py-12 md:py-20 bg-black border-y border-zinc-800/50 overflow-hidden">
+      <div className="container mx-auto px-4 mb-12 md:mb-16">
+        <h3 className="text-center text-xl md:text-2xl lg:text-3xl font-semibold uppercase tracking-[0.3em] bg-gradient-to-r from-[#F5F0E6] via-white to-[#F5F0E6] bg-clip-text text-transparent drop-shadow-[0_0_20px_rgba(255,255,255,0.4)]">
           Partnering with UAE's Premier Developers
         </h3>
       </div>
@@ -100,7 +100,7 @@ const DeveloperPartnersMarquee = () => {
 
         {/* Scrolling content */}
         <motion.div
-          className="flex items-center gap-10 md:gap-14"
+          className="flex items-center gap-12 md:gap-16 py-4"
           animate={{
             x: [0, -distance],
           }}
@@ -129,8 +129,8 @@ const DeveloperPartnersMarquee = () => {
                   )}`}
                   className={
                     developer.developerId
-                      ? "text-gold text-sm md:text-base font-semibold tracking-wide whitespace-nowrap transition-all duration-300 cursor-pointer drop-shadow-[0_0_8px_rgba(200,167,102,0.6)] hover:text-white hover:drop-shadow-[0_0_20px_rgba(255,255,255,0.9)]"
-                      : "text-gold/70 text-sm md:text-base font-semibold tracking-wide whitespace-nowrap transition-all duration-300 cursor-pointer drop-shadow-[0_0_6px_rgba(200,167,102,0.4)] hover:text-white hover:drop-shadow-[0_0_20px_rgba(255,255,255,0.9)]"
+                      ? "text-gold text-base md:text-lg lg:text-xl font-semibold tracking-wide whitespace-nowrap transition-all duration-300 cursor-pointer drop-shadow-[0_0_8px_rgba(200,167,102,0.6)] hover:text-white hover:drop-shadow-[0_0_20px_rgba(255,255,255,0.9)]"
+                      : "text-gold/70 text-base md:text-lg lg:text-xl font-semibold tracking-wide whitespace-nowrap transition-all duration-300 cursor-pointer drop-shadow-[0_0_6px_rgba(200,167,102,0.4)] hover:text-white hover:drop-shadow-[0_0_20px_rgba(255,255,255,0.9)]"
                   }
                   title={developer.name}
                   style={{
