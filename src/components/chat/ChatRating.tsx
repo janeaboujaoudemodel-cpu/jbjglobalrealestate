@@ -1,10 +1,19 @@
 import { useState } from 'react';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
-import { Star, X } from 'lucide-react';
+import { Textarea } from '@/components/ui/textarea';
+import { Star, X, ThumbsUp, ThumbsDown, Sparkles, MessageCircle } from 'lucide-react';
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 
 interface ChatRatingProps {
-  onSubmitRating: (rating: number, feedback: string) => void;
+  onSubmitRating: (rating: number, feedback: string, additionalData?: {
+    wasHelpful: boolean | null;
+    whatImprove: string;
+    howHeardAboutUs: string;
+    agentBehavior: number;
+    responseSpeed: number;
+    whatDidntWork: string;
+  }) => void;
   onSkip: () => void;
 }
 
@@ -12,59 +21,247 @@ const ChatRating = ({ onSubmitRating, onSkip }: ChatRatingProps) => {
   const [rating, setRating] = useState(0);
   const [hoveredRating, setHoveredRating] = useState(0);
   const [feedback, setFeedback] = useState('');
+  const [wasHelpful, setWasHelpful] = useState<boolean | null>(null);
+  const [whatImprove, setWhatImprove] = useState('');
+  const [howHeardAboutUs, setHowHeardAboutUs] = useState('');
+  const [agentBehavior, setAgentBehavior] = useState(0);
+  const [hoveredAgentBehavior, setHoveredAgentBehavior] = useState(0);
+  const [responseSpeed, setResponseSpeed] = useState(0);
+  const [hoveredResponseSpeed, setHoveredResponseSpeed] = useState(0);
+  const [whatDidntWork, setWhatDidntWork] = useState('');
+  const [step, setStep] = useState<'main' | 'details'>('main');
+
+  const handleSubmit = () => {
+    onSubmitRating(rating, feedback, {
+      wasHelpful,
+      whatImprove,
+      howHeardAboutUs,
+      agentBehavior,
+      responseSpeed,
+      whatDidntWork,
+    });
+  };
+
+  const ratingLabels = ['😢 Horrible', '😕 Poor', '😐 Okay', '😊 Good', '🤩 Perfect'];
 
   return (
-    <div className="flex-1 p-6 flex flex-col items-center justify-center">
-      <div className="w-16 h-16 rounded-full bg-gradient-to-r from-gold/20 to-gold/10 flex items-center justify-center mb-4">
-        <Star className="w-8 h-8 text-gold" />
+    <div className="flex-1 p-4 flex flex-col overflow-y-auto">
+      <div className="w-14 h-14 rounded-full bg-gradient-to-r from-gold/20 to-gold/10 flex items-center justify-center mb-3 mx-auto">
+        <Star className="w-7 h-7 text-gold" />
       </div>
-      <h4 className="text-white text-lg font-semibold mb-2">How was your experience?</h4>
-      <p className="text-zinc-400 text-sm text-center mb-6">Your feedback helps us improve</p>
+      
+      {step === 'main' ? (
+        <>
+          <h4 className="text-white text-base font-semibold mb-1 text-center">How was your experience?</h4>
+          <p className="text-zinc-400 text-xs text-center mb-4">Your feedback helps us improve</p>
 
-      <div className="flex gap-2 mb-6">
-        {[1, 2, 3, 4, 5].map((star) => (
-          <button
-            key={star}
-            onClick={() => setRating(star)}
-            onMouseEnter={() => setHoveredRating(star)}
-            onMouseLeave={() => setHoveredRating(0)}
-            className="transition-transform hover:scale-110"
-          >
-            <Star
-              className={`w-8 h-8 ${
-                star <= (hoveredRating || rating)
-                  ? 'text-gold fill-gold'
-                  : 'text-zinc-600'
-              }`}
+          {/* Overall Rating */}
+          <div className="flex gap-2 mb-2 justify-center">
+            {[1, 2, 3, 4, 5].map((star) => (
+              <button
+                key={star}
+                onClick={() => setRating(star)}
+                onMouseEnter={() => setHoveredRating(star)}
+                onMouseLeave={() => setHoveredRating(0)}
+                className="transition-transform hover:scale-110"
+              >
+                <Star
+                  className={`w-6 h-6 ${
+                    star <= (hoveredRating || rating)
+                      ? 'text-gold fill-gold'
+                      : 'text-zinc-600'
+                  }`}
+                />
+              </button>
+            ))}
+          </div>
+          {(hoveredRating || rating) > 0 && (
+            <p className="text-gold text-xs text-center mb-4">{ratingLabels[(hoveredRating || rating) - 1]}</p>
+          )}
+
+          {/* Was it helpful */}
+          <div className="mb-4">
+            <p className="text-zinc-300 text-xs mb-2 text-center">Did this chat answer your questions?</p>
+            <div className="flex gap-3 justify-center">
+              <button
+                onClick={() => setWasHelpful(true)}
+                className={`flex items-center gap-2 px-4 py-2 rounded-lg border transition-all ${
+                  wasHelpful === true
+                    ? 'border-green-500 bg-green-500/20 text-green-400'
+                    : 'border-zinc-600 text-zinc-400 hover:border-green-500/50'
+                }`}
+              >
+                <ThumbsUp className="w-4 h-4" />
+                <span className="text-xs">Yes</span>
+              </button>
+              <button
+                onClick={() => setWasHelpful(false)}
+                className={`flex items-center gap-2 px-4 py-2 rounded-lg border transition-all ${
+                  wasHelpful === false
+                    ? 'border-red-500 bg-red-500/20 text-red-400'
+                    : 'border-zinc-600 text-zinc-400 hover:border-red-500/50'
+                }`}
+              >
+                <ThumbsDown className="w-4 h-4" />
+                <span className="text-xs">No</span>
+              </button>
+            </div>
+          </div>
+
+          {/* How did you hear about us */}
+          <div className="mb-4">
+            <p className="text-zinc-300 text-xs mb-2 text-center">How did you hear about us?</p>
+            <Select value={howHeardAboutUs} onValueChange={setHowHeardAboutUs}>
+              <SelectTrigger className="bg-white/10 border-gold/20 text-white text-xs h-9">
+                <SelectValue placeholder="Select an option" />
+              </SelectTrigger>
+              <SelectContent>
+                <SelectItem value="google">Google Search</SelectItem>
+                <SelectItem value="social_media">Social Media</SelectItem>
+                <SelectItem value="friend_referral">Friend/Family Referral</SelectItem>
+                <SelectItem value="agent_referral">Agent Referral</SelectItem>
+                <SelectItem value="advertisement">Advertisement</SelectItem>
+                <SelectItem value="property_portal">Property Portal</SelectItem>
+                <SelectItem value="event">Event/Exhibition</SelectItem>
+                <SelectItem value="news_article">News Article</SelectItem>
+                <SelectItem value="other">Other</SelectItem>
+              </SelectContent>
+            </Select>
+          </div>
+
+          <div className="flex gap-3 mt-auto">
+            <Button
+              variant="outline"
+              onClick={onSkip}
+              size="sm"
+              className="flex-1 border-zinc-600 text-zinc-300 hover:bg-zinc-800"
+            >
+              <X className="w-3 h-3 mr-1" />
+              Skip
+            </Button>
+            <Button
+              onClick={() => setStep('details')}
+              disabled={rating === 0}
+              size="sm"
+              className="flex-1 bg-gold hover:bg-gold/90 text-black"
+            >
+              Continue
+            </Button>
+          </div>
+        </>
+      ) : (
+        <>
+          <h4 className="text-white text-sm font-semibold mb-3 text-center">Tell us more</h4>
+
+          {/* Agent Behavior Rating */}
+          <div className="mb-3">
+            <div className="flex items-center justify-between mb-1">
+              <p className="text-zinc-300 text-xs flex items-center gap-1">
+                <MessageCircle className="w-3 h-3 text-gold" />
+                Assistant behavior
+              </p>
+            </div>
+            <div className="flex gap-1 justify-center">
+              {[1, 2, 3, 4, 5].map((star) => (
+                <button
+                  key={star}
+                  onClick={() => setAgentBehavior(star)}
+                  onMouseEnter={() => setHoveredAgentBehavior(star)}
+                  onMouseLeave={() => setHoveredAgentBehavior(0)}
+                  className="transition-transform hover:scale-110"
+                >
+                  <Star
+                    className={`w-5 h-5 ${
+                      star <= (hoveredAgentBehavior || agentBehavior)
+                        ? 'text-gold fill-gold'
+                        : 'text-zinc-600'
+                    }`}
+                  />
+                </button>
+              ))}
+            </div>
+          </div>
+
+          {/* Response Speed Rating */}
+          <div className="mb-3">
+            <div className="flex items-center justify-between mb-1">
+              <p className="text-zinc-300 text-xs flex items-center gap-1">
+                <Sparkles className="w-3 h-3 text-gold" />
+                Response speed
+              </p>
+            </div>
+            <div className="flex gap-1 justify-center">
+              {[1, 2, 3, 4, 5].map((star) => (
+                <button
+                  key={star}
+                  onClick={() => setResponseSpeed(star)}
+                  onMouseEnter={() => setHoveredResponseSpeed(star)}
+                  onMouseLeave={() => setHoveredResponseSpeed(0)}
+                  className="transition-transform hover:scale-110"
+                >
+                  <Star
+                    className={`w-5 h-5 ${
+                      star <= (hoveredResponseSpeed || responseSpeed)
+                        ? 'text-gold fill-gold'
+                        : 'text-zinc-600'
+                    }`}
+                  />
+                </button>
+              ))}
+            </div>
+          </div>
+
+          {/* What didn't work (if rating < 4) */}
+          {rating < 4 && (
+            <div className="mb-3">
+              <p className="text-zinc-300 text-xs mb-1">What didn't work for you?</p>
+              <Textarea
+                value={whatDidntWork}
+                onChange={(e) => setWhatDidntWork(e.target.value)}
+                placeholder="Tell us what went wrong..."
+                className="bg-white/10 border-gold/20 text-white placeholder:text-white/40 text-xs h-16 resize-none"
+              />
+            </div>
+          )}
+
+          {/* What can we improve */}
+          <div className="mb-3">
+            <p className="text-zinc-300 text-xs mb-1">What can we improve?</p>
+            <Textarea
+              value={whatImprove}
+              onChange={(e) => setWhatImprove(e.target.value)}
+              placeholder="Your suggestions help us get better..."
+              className="bg-white/10 border-gold/20 text-white placeholder:text-white/40 text-xs h-16 resize-none"
             />
-          </button>
-        ))}
-      </div>
+          </div>
 
-      <Input
-        value={feedback}
-        onChange={(e) => setFeedback(e.target.value)}
-        placeholder="Any additional feedback? (optional)"
-        className="bg-white/10 border-gold/20 text-white placeholder:text-white/40 mb-4 w-full max-w-xs"
-      />
+          {/* Additional feedback */}
+          <Input
+            value={feedback}
+            onChange={(e) => setFeedback(e.target.value)}
+            placeholder="Any additional comments? (optional)"
+            className="bg-white/10 border-gold/20 text-white placeholder:text-white/40 mb-3 text-xs h-9"
+          />
 
-      <div className="flex gap-3">
-        <Button
-          variant="outline"
-          onClick={onSkip}
-          className="border-zinc-600 text-zinc-300 hover:bg-zinc-800"
-        >
-          <X className="w-4 h-4 mr-2" />
-          Skip
-        </Button>
-        <Button
-          onClick={() => onSubmitRating(rating, feedback)}
-          disabled={rating === 0}
-          className="bg-gold hover:bg-gold/90 text-black"
-        >
-          Submit Feedback
-        </Button>
-      </div>
+          <div className="flex gap-3 mt-auto">
+            <Button
+              variant="outline"
+              onClick={() => setStep('main')}
+              size="sm"
+              className="flex-1 border-zinc-600 text-zinc-300 hover:bg-zinc-800"
+            >
+              Back
+            </Button>
+            <Button
+              onClick={handleSubmit}
+              size="sm"
+              className="flex-1 bg-gold hover:bg-gold/90 text-black"
+            >
+              Submit Feedback
+            </Button>
+          </div>
+        </>
+      )}
     </div>
   );
 };
