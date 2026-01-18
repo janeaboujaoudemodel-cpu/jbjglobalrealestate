@@ -9,20 +9,21 @@ interface Book3DProps {
 const Book3D = ({ size = "md", className = "" }: Book3DProps) => {
   const [hoverSide, setHoverSide] = useState<"left" | "right" | null>(null);
   
+  // Enhanced dimensions with thicker spine for more dramatic 3D effect
   const dimensions = {
-    sm: { width: 160, height: 220, spine: 18, fontSize: "text-[10px]", titleSize: "text-sm" },
-    md: { width: 220, height: 300, spine: 24, fontSize: "text-xs", titleSize: "text-base" },
-    lg: { width: 300, height: 400, spine: 30, fontSize: "text-sm", titleSize: "text-lg" },
+    sm: { width: 180, height: 250, spine: 28, fontSize: "text-[10px]", titleSize: "text-sm" },
+    md: { width: 240, height: 330, spine: 36, fontSize: "text-xs", titleSize: "text-base" },
+    lg: { width: 320, height: 440, spine: 45, fontSize: "text-sm", titleSize: "text-lg" },
   };
 
   const { width, height, spine, fontSize, titleSize } = dimensions[size];
-  const pageThickness = Math.max(10, spine - 8);
+  const pageThickness = Math.max(16, spine - 10);
 
-  // Calculate rotation based on which side is hovered
+  // Calculate rotation based on which side is hovered - increased angles for dramatic flip
   const getRotation = () => {
-    if (hoverSide === "left") return -45; // Flip left
-    if (hoverSide === "right") return 45;  // Flip right
-    return 0; // Neutral
+    if (hoverSide === "left") return -75; // Flip left - more dramatic
+    if (hoverSide === "right") return 75;  // Flip right - more dramatic  
+    return -15; // Slight tilt at rest for 3D effect
   };
 
   const handleMouseMove = (e: React.MouseEvent<HTMLDivElement>) => {
@@ -43,39 +44,39 @@ const Book3D = ({ size = "md", className = "" }: Book3DProps) => {
 
   return (
     <motion.div
-      className={`relative ${className}`}
+      className={`relative cursor-pointer ${className}`}
       style={{ 
-        width: width + spine + 20, 
-        height: height + 20,
-        perspective: "1200px",
+        width: width + spine + 30, 
+        height: height + 30,
+        perspective: "1500px",
         transformStyle: "preserve-3d",
       }}
       onMouseMove={handleMouseMove}
       onMouseLeave={handleMouseLeave}
-      initial={{ rotateY: 0, rotateX: 5 }}
+      initial={{ rotateY: -15, rotateX: 5 }}
       animate={{ 
         rotateY: getRotation(),
-        rotateX: hoverSide ? -5 : 5,
-        scale: hoverSide ? 1.08 : 1,
+        rotateX: hoverSide ? -8 : 5,
+        scale: hoverSide ? 1.12 : 1,
       }}
       transition={{
-        duration: 0.5,
-        ease: "easeOut",
+        duration: 0.6,
+        ease: [0.23, 1, 0.32, 1], // Custom easing for smooth flip
       }}
       whileTap={{
-        rotateY: 120,
-        scale: 1.02,
-        transition: { duration: 0.6 }
+        rotateY: 150,
+        scale: 1.05,
+        transition: { duration: 0.8, ease: "easeOut" }
       }}
     >
-      {/* Book shadow */}
+      {/* Book shadow - enhanced for depth */}
       <div 
-        className="absolute bottom-0 left-1/2 -translate-x-1/2"
+        className="absolute bottom-0 left-1/2 -translate-x-1/2 transition-all duration-500"
         style={{
-          width: width * 0.8,
-          height: 20,
-          background: "radial-gradient(ellipse, rgba(0,0,0,0.4) 0%, transparent 70%)",
-          filter: "blur(8px)",
+          width: width * 0.9,
+          height: hoverSide ? 30 : 24,
+          background: "radial-gradient(ellipse, rgba(0,0,0,0.6) 0%, rgba(0,0,0,0.3) 40%, transparent 70%)",
+          filter: hoverSide ? "blur(16px)" : "blur(10px)",
           transform: `translateZ(-${spine * 2}px)`,
         }}
       />
@@ -87,7 +88,7 @@ const Book3D = ({ size = "md", className = "" }: Book3DProps) => {
           width: width + spine,
           height: height,
           transformStyle: "preserve-3d",
-          transform: "rotateY(0deg)",
+          transform: "rotateY(-15deg)",
         }}
       >
         {/* Book spine - Elegant gold gradient */}

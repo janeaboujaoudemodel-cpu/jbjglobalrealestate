@@ -1,8 +1,8 @@
 import { Link } from "react-router-dom";
 import { motion } from "framer-motion";
-import { CheckCircle, Sparkles } from "lucide-react";
+import { CheckCircle } from "lucide-react";
 import { Button } from "@/components/ui/button";
-import luxuryVilla1 from "@/assets/luxury-villa-1.jpeg";
+import Book3D from "@/components/Book3D";
 
 const fadeInUp = {
   hidden: { opacity: 0, y: 20 },
@@ -29,158 +29,14 @@ const MarketReportCTA = () => {
       {/* Premium White Frame Container */}
       <div className="bg-white rounded-3xl p-8 md:p-12 shadow-2xl shadow-black/50">
         <div className="grid lg:grid-cols-2 gap-8 lg:gap-12 items-start">
-          {/* Left: Premium 3D Book */}
+          {/* Left: Enhanced 3D Book Component */}
           <div className="flex items-center justify-center lg:justify-start">
-            <div className="relative" style={{ perspective: "1500px" }}>
+            <div className="relative">
               {/* Ambient glow */}
               <div className="absolute inset-0 bg-gradient-to-br from-gold/30 via-gold/10 to-transparent blur-3xl rounded-full scale-150 -z-10" />
               
-              {/* Interactive 3D Book - Enhanced Flip with Click-to-Open */}
-              <motion.div
-                className="relative cursor-grab active:cursor-grabbing"
-                whileHover={{ scale: 1.08, rotateY: 35 }}
-                whileTap={{ rotateY: 120, scale: 1.02, transition: { duration: 0.8 } }}
-                animate={{ rotateY: [-10, 12, -10] }}
-                transition={{ duration: 5, repeat: Infinity, ease: "easeInOut" }}
-              >
-                <motion.div 
-                  className="relative"
-                  style={{ 
-                    transformStyle: "preserve-3d", 
-                    transform: "rotateY(-15deg) rotateX(5deg)" 
-                  }}
-                  whileHover={{ rotateY: 30, rotateX: -4 }}
-                  transition={{ duration: 0.5, ease: "easeOut" }}
-                >
-                  {/* Book Shadow */}
-                  <div 
-                    className="absolute -bottom-8 left-1/2 -translate-x-1/2 w-64 h-12 bg-black/40 blur-2xl rounded-full"
-                    style={{ transform: "translateZ(-60px)" }}
-                  />
-                  
-                  {/* Book Spine */}
-                  <div
-                    className="absolute left-0 top-0 h-full hidden md:block"
-                    style={{
-                      width: 32,
-                      background: "linear-gradient(90deg, #6B5B3D 0%, #A8925A 25%, #C4A962 50%, #A8925A 75%, #6B5B3D 100%)",
-                      transform: "translateX(-32px) rotateY(-90deg)",
-                      transformOrigin: "right center",
-                      boxShadow: "inset -4px 0 15px rgba(0,0,0,0.6), inset 3px 0 8px rgba(255,255,255,0.1)",
-                    }}
-                  >
-                    <div className="h-full flex items-center justify-center">
-                      <span 
-                        className="text-black font-bold"
-                        style={{ writingMode: "vertical-rl", fontSize: "11px", letterSpacing: "0.25em" }}
-                      >
-                        JBJ GLOBAL REAL ESTATE • 2026
-                      </span>
-                    </div>
-                  </div>
-
-                  {/* Book Front Cover */}
-                  <div
-                    className="w-64 h-[400px] md:w-80 md:h-[480px] rounded-lg overflow-hidden"
-                    style={{
-                      background: "linear-gradient(165deg, #2a2a2a 0%, #1a1a1a 40%, #0f0f0f 100%)",
-                      boxShadow: `
-                        20px 25px 50px rgba(0,0,0,0.5),
-                        inset 0 0 120px rgba(168,146,90,0.08),
-                        0 0 80px rgba(168,146,90,0.15),
-                        0 0 2px rgba(168,146,90,0.5)
-                      `,
-                      border: "1.5px solid rgba(168, 146, 90, 0.5)",
-                    }}
-                  >
-                    {/* Top Villa Image Section */}
-                    <div className="relative h-[45%] overflow-hidden">
-                      <img 
-                        src={luxuryVilla1}
-                        alt="Luxury UAE Villa"
-                        className="w-full h-full object-cover"
-                      />
-                      <div className="absolute inset-0 bg-gradient-to-b from-black/20 via-transparent to-black/90" />
-                      
-                      {/* Reflection overlay on image */}
-                      <div 
-                        className="absolute inset-0"
-                        style={{
-                          background: "linear-gradient(135deg, rgba(255,255,255,0.15) 0%, transparent 50%)"
-                        }}
-                      />
-                    </div>
-
-                    {/* Cover Content */}
-                    <div className="relative h-[55%] flex flex-col items-center justify-between p-6 md:p-8 text-center">
-                      {/* Gold decorative line */}
-                      <div className="w-16 h-1 bg-gradient-to-r from-transparent via-gold to-transparent absolute -top-0.5" />
-                      
-                      {/* Badge - Lifted Higher */}
-                      <div className="inline-flex items-center gap-2 px-4 py-2 border border-gold/50 rounded-full bg-black/50 backdrop-blur-sm mt-0">
-                        <Sparkles className="w-3 h-3 text-gold" />
-                        <span className="text-gold text-[10px] md:text-xs font-semibold uppercase tracking-[0.15em]">
-                          Latest Edition 2026
-                        </span>
-                      </div>
-                      
-                      {/* Main Title - More Compact */}
-                      <div className="flex-1 flex flex-col items-center justify-center py-2">
-                        <h3 
-                          className="text-white font-bold text-xl md:text-2xl mb-1 drop-shadow-lg" 
-                          style={{ fontFamily: "Poppins, sans-serif" }}
-                        >
-                          UAE Real Estate
-                        </h3>
-                        <p className="text-transparent bg-clip-text bg-gradient-to-r from-gold via-[#D4B970] to-gold font-semibold text-base md:text-lg">
-                          Market Intelligence
-                        </p>
-                      </div>
-
-                      {/* Author & Branding */}
-                      <div className="w-full pt-4 border-t border-gold/30">
-                        <p className="text-zinc-400 text-xs md:text-sm mb-3">
-                          By The Founder & CEO, Jane Abou Jaoude
-                        </p>
-                        <p className="text-gold/80 text-[10px] md:text-xs uppercase tracking-[0.2em] font-medium">
-                          JBJ Global Real Estate
-                        </p>
-                      </div>
-                    </div>
-
-                    {/* Glossy reflection effect */}
-                    <div 
-                      className="absolute inset-0 pointer-events-none"
-                      style={{ 
-                        background: "linear-gradient(135deg, rgba(255,255,255,0.08) 0%, transparent 35%, rgba(0,0,0,0.15) 100%)" 
-                      }}
-                    />
-                  </div>
-
-                  {/* Pages edge */}
-                  <div
-                    className="absolute right-0 top-[4px] h-[calc(100%-8px)] hidden md:block"
-                    style={{
-                      width: 16,
-                      background: "repeating-linear-gradient(to bottom, #f8f8f5 0px, #f8f8f5 1px, #f0efe8 1px, #f0efe8 2px)",
-                      transform: "translateX(100%) rotateY(90deg)",
-                      transformOrigin: "left center",
-                      boxShadow: "inset -4px 0 8px rgba(0,0,0,0.2), inset 2px 0 3px rgba(255,255,255,0.6)",
-                    }}
-                  />
-
-                  {/* Back cover */}
-                  <div
-                    className="absolute top-0 left-0 w-full h-full hidden md:block"
-                    style={{
-                      background: "linear-gradient(165deg, #1a1a1f 0%, #0a0a0f 100%)",
-                      transform: "translateZ(-16px)",
-                      borderRadius: "0 8px 8px 0",
-                      boxShadow: "inset 0 0 30px rgba(0,0,0,0.6)",
-                    }}
-                  />
-                </motion.div>
-              </motion.div>
+              {/* Enhanced 3D Book with dramatic flip */}
+              <Book3D size="lg" />
               
               {/* Free Download Badge */}
               <motion.div 
