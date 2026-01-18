@@ -7,19 +7,23 @@ import {
   DialogTitle,
 } from "@/components/ui/dialog";
 import { Badge } from "@/components/ui/badge";
-import { Globe, Clock, MapPin, Briefcase, ArrowUpRight, Users } from "lucide-react";
+import { Button } from "@/components/ui/button";
+import { Globe, Clock, MapPin, Briefcase, ArrowUpRight, Users, MessageSquare, Mail } from "lucide-react";
 
 interface TeamMemberDetailDialogProps {
   member: TeamMember | null;
   isOpen: boolean;
   onClose: () => void;
   onContact: (member: TeamMember) => void;
+  isInternalUser?: boolean;
 }
 
 const TeamMemberDetailDialog = ({
   member,
   isOpen,
   onClose,
+  onContact,
+  isInternalUser = false,
 }: TeamMemberDetailDialogProps) => {
   if (!member) return null;
 
@@ -30,6 +34,16 @@ const TeamMemberDetailDialog = ({
   const directReportsMembers = member.directReports
     ? member.directReports.map(id => getTeamMemberById(id)).filter(Boolean) as TeamMember[]
     : [];
+
+  const handleChatClick = () => {
+    onContact(member);
+  };
+
+  const handleEmailClick = () => {
+    if (member.email) {
+      window.location.href = `mailto:${member.email}`;
+    }
+  };
 
   return (
     <Dialog open={isOpen} onOpenChange={onClose}>
@@ -86,6 +100,37 @@ const TeamMemberDetailDialog = ({
                 </div>
               )}
             </div>
+
+            {/* Contact Actions - Only for Internal Users */}
+            {isInternalUser && (
+              <div className="bg-zinc-800/70 rounded-lg p-4 border border-gold/20">
+                <h4 className="text-sm font-medium text-gold mb-3">Contact Options</h4>
+                <div className="flex flex-wrap gap-2">
+                  <Button
+                    size="sm"
+                    onClick={handleChatClick}
+                    className="bg-gold hover:bg-gold-light text-black font-medium"
+                  >
+                    <MessageSquare className="w-4 h-4 mr-2" />
+                    Chat
+                  </Button>
+                  {member.email && (
+                    <Button
+                      size="sm"
+                      variant="outline"
+                      onClick={handleEmailClick}
+                      className="border-zinc-600 text-zinc-300 hover:bg-zinc-800"
+                    >
+                      <Mail className="w-4 h-4 mr-2" />
+                      Email
+                    </Button>
+                  )}
+                </div>
+                {member.email && (
+                  <p className="text-zinc-500 text-xs mt-2">{member.email}</p>
+                )}
+              </div>
+            )}
 
             {/* Reporting Structure */}
             {reportsToMember && (
