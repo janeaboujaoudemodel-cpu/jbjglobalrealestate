@@ -20,8 +20,10 @@ import {
   Phone,
   Filter,
   ExternalLink,
-  Crown
+  Crown,
+  Mail
 } from "lucide-react";
+import dubaiLandmarksVideo from "@/assets/videos/dubai-landmarks-hero.mp4";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import {
@@ -322,34 +324,63 @@ const Properties = () => {
       <div className="min-h-screen bg-[hsl(var(--premium-bg))]">
       
       
-      {/* Hero Section */}
-      <section className="pt-24 pb-12 bg-gradient-to-b from-black via-zinc-950 to-[hsl(var(--premium-bg))]">
-        <div className="container mx-auto px-4">
+      {/* Hero Section - Cinematic Video */}
+      <section className="relative h-[70vh] min-h-[500px] flex items-center justify-center overflow-hidden">
+        {/* Video Background */}
+        <div className="absolute inset-0">
+          <video
+            autoPlay
+            muted
+            loop
+            playsInline
+            className="w-full h-full object-cover"
+          >
+            <source src={dubaiLandmarksVideo} type="video/mp4" />
+          </video>
+          <div className="absolute inset-0 bg-gradient-to-b from-black/70 via-black/50 to-black" />
+        </div>
+        
+        {/* Floating gold accent orbs */}
+        <div className="absolute top-1/4 left-10 w-64 h-64 bg-gold/5 rounded-full blur-[100px] pointer-events-none" />
+        <div className="absolute bottom-1/4 right-10 w-96 h-96 bg-gold/10 rounded-full blur-[120px] pointer-events-none" />
+        
+        <div className="relative z-10 container mx-auto px-4">
           <motion.div 
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.6 }}
-            className="text-center max-w-3xl mx-auto"
+            className="text-center max-w-4xl mx-auto"
           >
             {/* Label */}
-            <span className="inline-block text-gold text-sm tracking-[0.3em] uppercase mb-4 font-medium">
+            <span className="inline-block text-gold text-xs md:text-sm uppercase tracking-[0.5em] mb-6 border border-gold/30 px-6 py-2 rounded-full backdrop-blur-sm">
               PROPERTIES
             </span>
             
             {/* Heading */}
             <h1 
-              className="text-4xl md:text-5xl lg:text-6xl font-bold text-white mb-4"
+              className="text-4xl md:text-6xl lg:text-7xl font-bold text-white mb-6 tracking-[-0.02em]"
               style={{ fontFamily: "Poppins, sans-serif" }}
             >
               Curated Listings. Global Standard.
             </h1>
             
             {/* Subtitle */}
-            <p className="text-zinc-400 text-lg md:text-xl">
+            <p className="text-zinc-300 text-lg md:text-2xl max-w-3xl mx-auto leading-relaxed">
               Exclusive investment-grade properties with trusted advisory.
             </p>
           </motion.div>
         </div>
+        
+        {/* Scroll indicator */}
+        <motion.div 
+          className="absolute bottom-8 left-1/2 -translate-x-1/2 flex flex-col items-center gap-2"
+          initial={{ opacity: 0, y: -20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ delay: 1, duration: 0.6 }}
+        >
+          <span className="text-gold/60 text-xs tracking-widest uppercase">Explore</span>
+          <div className="w-[1px] h-12 bg-gradient-to-b from-gold/60 to-transparent" />
+        </motion.div>
       </section>
 
       {/* Main Search Bar - Fixed under header (sticky on scroll) */}
@@ -908,13 +939,24 @@ const Properties = () => {
                 </>
               ) : (
                 <>
-                  <div className="w-20 h-20 bg-zinc-100 rounded-full flex items-center justify-center mx-auto mb-6">
-                    <Search className="w-10 h-10 text-zinc-400" />
+                  <div className="w-20 h-20 bg-gradient-to-br from-[#FDFBF7] to-[#F5F0E6] rounded-full flex items-center justify-center mx-auto mb-6 border border-gold/30 shadow-[0_0_30px_rgba(200,167,102,0.3)]">
+                    <Search className="w-10 h-10 text-gold drop-shadow-[0_0_8px_rgba(200,167,102,0.5)]" />
                   </div>
                   {appliedFilters.transactionType === 'rent' ? (
                     <>
                       <h3 className="text-xl font-semibold text-black mb-2">No Rental Listings Available</h3>
-                      <p className="text-zinc-500 mb-6">We currently do not have rental properties listed. Please check back soon or contact us for assistance.</p>
+                      <p className="text-zinc-500 mb-4">We currently do not have rental properties listed. Please check back soon or contact us for assistance.</p>
+                      <div className="flex flex-col sm:flex-row items-center justify-center gap-3 mb-6">
+                        <a href={`tel:${CONTACT_INFO.phoneRaw}`} className="flex items-center gap-2 text-gold hover:text-gold-light transition-colors">
+                          <Phone className="w-4 h-4" />
+                          <span className="font-medium">{CONTACT_INFO.phone}</span>
+                        </a>
+                        <span className="hidden sm:inline text-zinc-400">|</span>
+                        <a href={`mailto:${CONTACT_INFO.email}`} className="flex items-center gap-2 text-gold hover:text-gold-light transition-colors">
+                          <Mail className="w-4 h-4" />
+                          <span className="font-medium">{CONTACT_INFO.email}</span>
+                        </a>
+                      </div>
                     </>
                   ) : appliedFilters.transactionType === 'buy' && appliedFilters.completionStatus === 'ready' ? (
                     <>
@@ -937,7 +979,8 @@ const Properties = () => {
                       <p className="text-zinc-500 mb-6">Try adjusting your filters or search criteria</p>
                     </>
                   )}
-                  <Button onClick={clearFilters} variant="outline" className="border-zinc-300 text-black hover:bg-zinc-100">
+                  <Button onClick={clearFilters} variant="primary" className="bg-gradient-to-r from-[#FDFBF7] to-[#F5F0E6] border border-gold/30 text-black hover:bg-white">
+                    <X className="w-4 h-4 mr-2" />
                     Clear Filters
                   </Button>
                 </>
@@ -964,20 +1007,20 @@ const Properties = () => {
               <div className="space-y-4">
                 <Input
                   placeholder="Name"
-                  className="h-14 bg-white border-zinc-300 text-black placeholder:text-zinc-400 rounded-lg focus:border-gold"
+                  className="h-14 bg-white border-zinc-300 text-black placeholder:text-gold/70 placeholder:drop-shadow-[0_0_4px_rgba(200,167,102,0.4)] rounded-lg focus:border-gold"
                 />
                 <Input
                   type="email"
                   placeholder="Email"
-                  className="h-14 bg-white border-zinc-300 text-black placeholder:text-zinc-400 rounded-lg focus:border-gold"
+                  className="h-14 bg-white border-zinc-300 text-black placeholder:text-gold/70 placeholder:drop-shadow-[0_0_4px_rgba(200,167,102,0.4)] rounded-lg focus:border-gold"
                 />
                 <Input
                   type="tel"
                   placeholder="Phone"
-                  className="h-14 bg-white border-zinc-300 text-black placeholder:text-zinc-400 rounded-lg focus:border-gold"
+                  className="h-14 bg-white border-zinc-300 text-black placeholder:text-gold/70 placeholder:drop-shadow-[0_0_4px_rgba(200,167,102,0.4)] rounded-lg focus:border-gold"
                 />
                 <Select>
-                  <SelectTrigger className="h-14 bg-white border-zinc-300 text-zinc-500 rounded-lg">
+                  <SelectTrigger className="h-14 bg-white border-zinc-300 text-gold/70 rounded-lg [&>span]:drop-shadow-[0_0_4px_rgba(200,167,102,0.4)]">
                     <SelectValue placeholder="I am..." />
                   </SelectTrigger>
                   <SelectContent className="bg-white border-zinc-200">
@@ -990,11 +1033,11 @@ const Properties = () => {
                 <textarea
                   placeholder="Message"
                   rows={4}
-                  className="w-full px-4 py-3 bg-white border border-zinc-300 text-black placeholder:text-zinc-400 rounded-lg resize-none focus:outline-none focus:border-gold"
+                  className="w-full px-4 py-3 bg-white border border-zinc-300 text-black placeholder:text-gold/70 placeholder:drop-shadow-[0_0_4px_rgba(200,167,102,0.4)] rounded-lg resize-none focus:outline-none focus:border-gold"
                 />
                 <div className="flex items-center gap-3">
                   <Checkbox id="consent" className="border-zinc-400 data-[state=checked]:bg-gold data-[state=checked]:border-gold" />
-                  <label htmlFor="consent" className="text-zinc-600 text-sm">
+                  <label htmlFor="consent" className="text-black text-sm">
                     I agree to be contacted
                   </label>
                 </div>

@@ -261,8 +261,12 @@ const Services = () => {
       <FounderPhilosophySection />
 
       {/* AI Tools Section */}
-      <section className="py-20 bg-gradient-to-b from-zinc-900/50 to-black">
-        <div className="container mx-auto px-4">
+      <section className="py-20 bg-gradient-to-b from-black via-zinc-950 to-black relative overflow-hidden">
+        {/* Background glow effects */}
+        <div className="absolute top-0 left-1/4 w-96 h-96 bg-gold/5 rounded-full blur-[150px] pointer-events-none" />
+        <div className="absolute bottom-0 right-1/4 w-96 h-96 bg-gold/5 rounded-full blur-[150px] pointer-events-none" />
+        
+        <div className="container mx-auto px-4 relative z-10">
           <motion.div 
             className="text-center mb-16"
             initial={{ opacity: 0, y: 20 }}
@@ -281,28 +285,38 @@ const Services = () => {
             </p>
           </motion.div>
 
-          <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-6">
+          <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
             {[
-              { name: "AI Property Comparison", icon: FileSearch, link: "/compare", color: "from-purple-500 to-fuchsia-500" },
-              { name: "AI Interior Design", icon: Palette, link: "/interior-design-ai", color: "from-fuchsia-500 to-pink-500" },
-              { name: "AI Measurement", icon: Building2, link: "/property-measurement", color: "from-teal-500 to-cyan-500" },
-              { name: "Mortgage Calculator", icon: Calculator, link: "/mortgage-calculator", color: "from-blue-500 to-cyan-500" }
+              { name: "AI Property Comparison", icon: FileSearch, link: "/compare" },
+              { name: "AI Interior Design", icon: Palette, link: "/interior-design-ai" },
+              { name: "AI Measurement", icon: Building2, link: "/property-measurement" },
+              { name: "Mortgage Calculator", icon: Calculator, link: "/mortgage-calculator" }
             ].map((tool) => (
               <Link key={tool.name} to={tool.link}>
                 <motion.div 
-                  className="p-6 rounded-2xl bg-white border border-zinc-200 hover:border-gold/50 hover:shadow-xl hover:shadow-gold/10 transition-all duration-300 group cursor-pointer"
+                  className="p-6 rounded-2xl bg-gradient-to-br from-white via-[#FDFBF7] to-[#F5F0E6] border border-gold/30 hover:border-black hover:shadow-xl transition-all duration-300 group cursor-pointer"
                   whileHover={{ scale: 1.02 }}
                 >
-                  <div className={`w-14 h-14 rounded-xl bg-gradient-to-br ${tool.color} flex items-center justify-center mb-4`}>
-                    <tool.icon className="w-7 h-7 text-white" />
+                  <div className="w-14 h-14 rounded-xl bg-gradient-to-br from-white via-[#FDFBF7] to-[#F5F0E6] border border-gold/30 flex items-center justify-center mb-4">
+                    <tool.icon className="w-7 h-7 text-black" />
                   </div>
-                  <h4 className="text-black font-semibold mb-2 group-hover:text-gold transition-colors">
+                  <h4 className="text-gold font-semibold mb-2 group-hover:text-black transition-colors">
                     {tool.name}
                   </h4>
-                  <ArrowUpRight className="w-4 h-4 text-zinc-400 group-hover:text-gold group-hover:translate-x-1 group-hover:-translate-y-1 transition-all" />
+                  <ArrowUpRight className="w-4 h-4 text-gold group-hover:text-black group-hover:translate-x-1 group-hover:-translate-y-1 transition-all" />
                 </motion.div>
               </Link>
             ))}
+          </div>
+          
+          {/* Explore More Tools Button */}
+          <div className="text-center">
+            <Link to="/ai-hub">
+              <Button variant="secondary" size="lg" className="px-8">
+                Explore More AI Tools
+                <ArrowUpRight className="w-5 h-5 ml-2" />
+              </Button>
+            </Link>
           </div>
         </div>
       </section>
