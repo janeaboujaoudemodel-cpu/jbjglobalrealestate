@@ -6942,6 +6942,39 @@ export type Database = {
         }
         Relationships: []
       }
+      internal_chat_messages: {
+        Row: {
+          attachments: Json | null
+          created_at: string
+          employee_id: string
+          employee_name: string
+          id: string
+          message: string
+          role: string
+          user_id: string
+        }
+        Insert: {
+          attachments?: Json | null
+          created_at?: string
+          employee_id: string
+          employee_name: string
+          id?: string
+          message: string
+          role: string
+          user_id: string
+        }
+        Update: {
+          attachments?: Json | null
+          created_at?: string
+          employee_id?: string
+          employee_name?: string
+          id?: string
+          message?: string
+          role?: string
+          user_id?: string
+        }
+        Relationships: []
+      }
       investment_opportunities: {
         Row: {
           ai_score: number | null

@@ -55,28 +55,82 @@ const EmployeeChatPanel: React.FC<EmployeeChatPanelProps> = ({
     messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' });
   }, [messages]);
 
-  // Welcome message on mount
+  // Load chat history from database
   useEffect(() => {
-    const welcomeMessages = [
-      `Hi ${currentUserName}! How can I help you today?`,
-      `Hello ${currentUserName}, good to hear from you. What do you need?`,
-      `Hey ${currentUserName}! I'm here to assist. What's on your mind?`,
-      `Hi there ${currentUserName}! How may I assist you today?`,
-    ];
-    
-    const randomWelcome = welcomeMessages[Math.floor(Math.random() * welcomeMessages.length)];
-    
-    setTimeout(() => {
-      setMessages([{
-        id: `welcome-${Date.now()}`,
-        role: 'assistant',
-        content: randomWelcome,
-        timestamp: new Date(),
-        type: 'text',
-        status: 'read',
-      }]);
-    }, 500);
+    const loadChatHistory = async () => {
+      try {
+        const { data: session } = await supabase.auth.getSession();
+        if (!session?.session?.user?.id) return;
+
+        const { data: existingMessages, error } = await supabase
+          .from('internal_chat_messages')
+          .select('*')
+          .eq('user_id', session.session.user.id)
+          .eq('employee_id', employee.id)
+          .order('created_at', { ascending: true })
+          .limit(50);
+
+        if (error) {
+          console.error('Error loading chat history:', error);
+        } else if (existingMessages && existingMessages.length > 0) {
+          // Convert DB messages to our Message format
+          const loadedMessages: Message[] = existingMessages.map((msg) => ({
+            id: msg.id,
+            role: msg.role as 'user' | 'assistant',
+            content: msg.message,
+            timestamp: new Date(msg.created_at),
+            type: 'text',
+            status: 'read',
+          }));
+          setMessages(loadedMessages);
+          return; // Don't show welcome if we have history
+        }
+      } catch (err) {
+        console.error('Failed to load chat history:', err);
+      }
+
+      // Show welcome message only if no history
+      const welcomeMessages = [
+        `Hi ${currentUserName}! How can I help you today?`,
+        `Hello ${currentUserName}, good to hear from you. What do you need?`,
+        `Hey ${currentUserName}! I'm here to assist. What's on your mind?`,
+        `Hi there ${currentUserName}! How may I assist you today?`,
+      ];
+      
+      const randomWelcome = welcomeMessages[Math.floor(Math.random() * welcomeMessages.length)];
+      
+      setTimeout(() => {
+        setMessages([{
+          id: `welcome-${Date.now()}`,
+          role: 'assistant',
+          content: randomWelcome,
+          timestamp: new Date(),
+          type: 'text',
+          status: 'read',
+        }]);
+      }, 500);
+    };
+
+    loadChatHistory();
   }, [employee.id, currentUserName]);
+
+  // Save message to database
+  const persistMessage = async (message: Message) => {
+    try {
+      const { data: session } = await supabase.auth.getSession();
+      if (!session?.session?.user?.id) return;
+
+      await supabase.from('internal_chat_messages').insert({
+        user_id: session.session.user.id,
+        employee_id: employee.id,
+        employee_name: employee.name,
+        message: message.content,
+        role: message.role,
+      });
+    } catch (err) {
+      console.error('Failed to persist message:', err);
+    }
+  };
 
   const sendMessage = async () => {
     if (!inputValue.trim() || isLoading) return;
@@ -93,6 +147,9 @@ const EmployeeChatPanel: React.FC<EmployeeChatPanelProps> = ({
     setMessages(prev => [...prev, userMessage]);
     setInputValue('');
     setIsLoading(true);
+
+    // Persist user message
+    await persistMessage(userMessage);
 
     try {
       // Generate persona-specific context
@@ -134,6 +191,9 @@ const EmployeeChatPanel: React.FC<EmployeeChatPanelProps> = ({
       };
 
       setMessages(prev => [...prev, assistantMessage]);
+      
+      // Persist assistant message
+      await persistMessage(assistantMessage);
     } catch (error) {
       console.error('Chat error:', error);
       
@@ -147,14 +207,19 @@ const EmployeeChatPanel: React.FC<EmployeeChatPanelProps> = ({
       
       const fallback = fallbackResponses[Math.floor(Math.random() * fallbackResponses.length)];
       
-      setMessages(prev => [...prev, {
+      const fallbackMessage: Message = {
         id: `assistant-${Date.now()}`,
         role: 'assistant',
         content: fallback,
         timestamp: new Date(),
         type: 'text',
         status: 'delivered',
-      }]);
+      };
+      
+      setMessages(prev => [...prev, fallbackMessage]);
+      
+      // Persist fallback message
+      await persistMessage(fallbackMessage);
     } finally {
       setIsLoading(false);
     }
