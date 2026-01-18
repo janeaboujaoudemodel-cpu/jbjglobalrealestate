@@ -78,6 +78,11 @@ const ProjectCard = ({ project, showFavorite = true, showBadgeButton = true, cur
   const whatsappHref = getWhatsAppUrl(whatsappMessage);
   const callHref = getCallUrl();
 
+  const navigateExternal = (href: string) => {
+    // Avoid popup blockers / iframe restrictions by navigating directly.
+    window.location.href = href;
+  };
+
   return (
     <div className="group relative overflow-hidden rounded-2xl bg-gradient-to-br from-white via-[#FDFBF7] to-[#F5F0E6] border border-gold/30 hover:border-gold hover:shadow-xl hover:shadow-gold/20 transition-all duration-300 flex flex-col">
       {/* Favorite Button */}
@@ -187,9 +192,11 @@ const ProjectCard = ({ project, showFavorite = true, showBadgeButton = true, cur
           <Button variant="primary" size="sm" asChild className="text-xs h-9">
             <a
               href={whatsappHref}
-              target="_blank"
-              rel="noopener noreferrer"
-              onClick={(e) => e.stopPropagation()}
+              onClick={(e) => {
+                e.preventDefault();
+                e.stopPropagation();
+                navigateExternal(whatsappHref);
+              }}
               className="inline-flex items-center justify-center gap-2"
             >
               <MessageCircle className="w-3.5 h-3.5 text-green-600" />
@@ -199,7 +206,11 @@ const ProjectCard = ({ project, showFavorite = true, showBadgeButton = true, cur
           <Button variant="primary" size="sm" asChild className="text-xs h-9">
             <a
               href={callHref}
-              onClick={(e) => e.stopPropagation()}
+              onClick={(e) => {
+                e.preventDefault();
+                e.stopPropagation();
+                navigateExternal(callHref);
+              }}
               className="inline-flex items-center justify-center gap-2"
             >
               <Phone className="w-3.5 h-3.5 text-blue-600" />

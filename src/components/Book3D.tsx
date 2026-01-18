@@ -16,6 +16,7 @@ const Book3D = ({ size = "md", className = "" }: Book3DProps) => {
   };
 
   const { width, height, spine, fontSize, titleSize } = dimensions[size];
+  const pageThickness = Math.max(10, spine - 8);
 
   // Calculate rotation based on which side is hovered
   const getRotation = () => {
@@ -75,7 +76,7 @@ const Book3D = ({ size = "md", className = "" }: Book3DProps) => {
           height: 20,
           background: "radial-gradient(ellipse, rgba(0,0,0,0.4) 0%, transparent 70%)",
           filter: "blur(8px)",
-          transform: "translateZ(-50px)",
+          transform: `translateZ(-${spine * 2}px)`,
         }}
       />
 
@@ -86,7 +87,7 @@ const Book3D = ({ size = "md", className = "" }: Book3DProps) => {
           width: width + spine,
           height: height,
           transformStyle: "preserve-3d",
-          transform: "rotateY(-20deg)",
+          transform: "rotateY(0deg)",
         }}
       >
         {/* Book spine - Elegant gold gradient */}
@@ -233,7 +234,7 @@ const Book3D = ({ size = "md", className = "" }: Book3DProps) => {
         <div
           className="absolute right-0 top-[2px] h-[calc(100%-4px)]"
           style={{
-            width: 10,
+            width: pageThickness,
             background: "repeating-linear-gradient(to bottom, #f5f0e0 0px, #f5f0e0 1px, #ebe5d5 1px, #ebe5d5 2px)",
             transform: "translateX(100%) rotateY(90deg)",
             transformOrigin: "left center",
@@ -246,7 +247,7 @@ const Book3D = ({ size = "md", className = "" }: Book3DProps) => {
           className="absolute top-0 left-0 w-full h-full"
           style={{
             background: "linear-gradient(145deg, #151515 0%, #0a0a0a 100%)",
-            transform: "translateZ(-10px)",
+            transform: `translateZ(-${spine}px)`,
             borderRadius: "0 4px 4px 0",
           }}
         />
