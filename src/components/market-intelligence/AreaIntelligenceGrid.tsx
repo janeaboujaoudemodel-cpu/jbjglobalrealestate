@@ -39,16 +39,16 @@ const AreaCard = ({ area }: { area: AreaMarketSnapshot }) => {
   
   return (
     <motion.div variants={fadeInUp}>
-      <Card className="bg-zinc-900/50 border-zinc-800 hover:border-gold/30 transition-all group h-full">
+      <Card className="bg-white border-zinc-200 hover:border-gold/50 hover:shadow-lg transition-all group h-full">
         <CardContent className="p-6">
           {/* Header */}
           <div className="flex items-start justify-between mb-4">
             <div className="flex items-center gap-2">
-              <div className="w-10 h-10 rounded-lg bg-gold/10 border border-gold/30 flex items-center justify-center">
+              <div className="w-10 h-10 rounded-lg bg-black flex items-center justify-center">
                 <MapPin className="w-5 h-5 text-gold" />
               </div>
               <div>
-                <h3 className="text-white font-semibold group-hover:text-gold transition-colors">
+                <h3 className="text-black font-semibold group-hover:text-gold transition-colors">
                   {area.area}
                 </h3>
                 <p className="text-zinc-500 text-xs">Dubai, UAE</p>
@@ -59,19 +59,19 @@ const AreaCard = ({ area }: { area: AreaMarketSnapshot }) => {
 
           {/* Metrics */}
           <div className="grid grid-cols-2 gap-4 mb-4">
-            <div className="bg-zinc-800/50 rounded-lg p-3">
-              <div className="flex items-center gap-1 text-zinc-400 text-xs mb-1">
+            <div className="bg-zinc-100 rounded-lg p-3">
+              <div className="flex items-center gap-1 text-zinc-500 text-xs mb-1">
                 <Home className="w-3 h-3" />
                 Price Index
               </div>
-              <p className="text-white font-bold text-lg">{area.priceIndex}</p>
+              <p className="text-black font-bold text-lg">{area.priceIndex}</p>
             </div>
-            <div className="bg-zinc-800/50 rounded-lg p-3">
-              <div className="flex items-center gap-1 text-zinc-400 text-xs mb-1">
+            <div className="bg-zinc-100 rounded-lg p-3">
+              <div className="flex items-center gap-1 text-zinc-500 text-xs mb-1">
                 <Building2 className="w-3 h-3" />
                 Rental Index
               </div>
-              <p className="text-white font-bold text-lg">{area.rentalIndex}</p>
+              <p className="text-black font-bold text-lg">{area.rentalIndex}</p>
             </div>
           </div>
 
@@ -79,10 +79,10 @@ const AreaCard = ({ area }: { area: AreaMarketSnapshot }) => {
           <div className="space-y-3 mb-4">
             <div>
               <div className="flex justify-between text-xs mb-1">
-                <span className="text-zinc-400">Demand Score</span>
-                <span className="text-white">{area.demandScore}/100</span>
+                <span className="text-zinc-500">Demand Score</span>
+                <span className="text-black">{area.demandScore}/100</span>
               </div>
-              <div className="h-2 bg-zinc-800 rounded-full overflow-hidden">
+              <div className="h-2 bg-zinc-200 rounded-full overflow-hidden">
                 <div 
                   className="h-full bg-gradient-to-r from-gold/80 to-gold rounded-full"
                   style={{ width: `${area.demandScore}%` }}
@@ -91,12 +91,12 @@ const AreaCard = ({ area }: { area: AreaMarketSnapshot }) => {
             </div>
             <div>
               <div className="flex justify-between text-xs mb-1">
-                <span className="text-zinc-400">Supply Score</span>
-                <span className="text-white">{area.supplyScore}/100</span>
+                <span className="text-zinc-500">Supply Score</span>
+                <span className="text-black">{area.supplyScore}/100</span>
               </div>
-              <div className="h-2 bg-zinc-800 rounded-full overflow-hidden">
+              <div className="h-2 bg-zinc-200 rounded-full overflow-hidden">
                 <div 
-                  className="h-full bg-gradient-to-r from-zinc-600 to-zinc-500 rounded-full"
+                  className="h-full bg-gradient-to-r from-zinc-500 to-zinc-400 rounded-full"
                   style={{ width: `${area.supplyScore}%` }}
                 />
               </div>
@@ -104,9 +104,9 @@ const AreaCard = ({ area }: { area: AreaMarketSnapshot }) => {
           </div>
 
           {/* YoY Change */}
-          <div className="flex items-center justify-between py-3 border-t border-zinc-800">
-            <span className="text-zinc-400 text-sm">Year-over-Year</span>
-            <span className={`font-bold ${area.yoyChange >= 0 ? 'text-emerald-400' : 'text-red-400'}`}>
+          <div className="flex items-center justify-between py-3 border-t border-zinc-200">
+            <span className="text-zinc-500 text-sm">Year-over-Year</span>
+            <span className={`font-bold ${area.yoyChange >= 0 ? 'text-emerald-500' : 'text-red-500'}`}>
               {area.yoyChange >= 0 ? '+' : ''}{area.yoyChange}%
             </span>
           </div>
@@ -114,7 +114,7 @@ const AreaCard = ({ area }: { area: AreaMarketSnapshot }) => {
           {/* Highlights */}
           <div className="space-y-2 mb-4">
             {area.highlights.slice(0, 2).map((highlight, idx) => (
-              <p key={idx} className="text-zinc-500 text-xs flex items-start gap-2">
+              <p key={idx} className="text-zinc-600 text-xs flex items-start gap-2">
                 <span className="text-gold mt-0.5">•</span>
                 {highlight}
               </p>
@@ -137,7 +137,7 @@ const AreaCard = ({ area }: { area: AreaMarketSnapshot }) => {
 
 export const AreaIntelligenceGrid = () => {
   return (
-    <section className="py-16 bg-gradient-to-b from-zinc-900/30 to-black">
+    <section className="py-16 bg-black">
       <div className="container mx-auto px-4">
         <motion.div
           initial="hidden"
