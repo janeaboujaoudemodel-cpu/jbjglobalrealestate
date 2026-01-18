@@ -130,6 +130,7 @@ const freeAITools = [
 ];
 
 // Category 2: BROKER OPERATIONS (Human Support)
+// Reordered: Listing Admin, Property Coach, Broker Admin, HR Manager (4 cards in 4 columns)
 const brokerOperations = [
   {
     id: "listing-admin",
@@ -141,6 +142,17 @@ const brokerOperations = [
     bgColor: "bg-emerald-500/10",
     borderColor: "border-emerald-500/30",
     link: "/listing-admin",
+  },
+  {
+    id: "property-coach",
+    title: "Property Coach",
+    subtitle: "Broker Coaching",
+    description: "Scripts, objections, roleplay, deal strategy, accountability.",
+    icon: Target,
+    color: "text-amber-400",
+    bgColor: "bg-amber-500/10",
+    borderColor: "border-amber-500/30",
+    link: "/broker-toolkit",
   },
   {
     id: "broker-admin-support",
@@ -163,28 +175,6 @@ const brokerOperations = [
     bgColor: "bg-pink-500/10",
     borderColor: "border-pink-500/30",
     link: "/hr-agent",
-  },
-  {
-    id: "hr-assistant",
-    title: "HR Assistant",
-    subtitle: "Support Staff",
-    description: "Contracts support, onboarding checklists, document coordination.",
-    icon: UserCheck,
-    color: "text-violet-400",
-    bgColor: "bg-violet-500/10",
-    borderColor: "border-violet-500/30",
-    link: "/crm",
-  },
-  {
-    id: "property-coach",
-    title: "Property Coach",
-    subtitle: "Broker Coaching",
-    description: "Scripts, objections, roleplay, deal strategy, accountability.",
-    icon: Target,
-    color: "text-amber-400",
-    bgColor: "bg-amber-500/10",
-    borderColor: "border-amber-500/30",
-    link: "/broker-toolkit",
   },
 ];
 

@@ -1,12 +1,13 @@
 import { useState } from "react";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { Users, FileText, Activity, Linkedin, Building2, DollarSign, Briefcase } from "lucide-react";
+import { Users, FileText, Activity, Linkedin, Building2, DollarSign, Briefcase, Wallet } from "lucide-react";
 import JobOfferManager from "@/components/hr/JobOfferManager";
 import { EmployeePerformanceDashboard } from "@/components/hr/EmployeePerformanceDashboard";
 import { LinkedInInsightsPanel } from "@/components/hr/LinkedInInsightsPanel";
 import { CompetitorTrackingPanel } from "@/components/hr/CompetitorTrackingPanel";
 import { SalaryBenchmarkPanel } from "@/components/hr/SalaryBenchmarkPanel";
+import { EmployeeSalaryCommissionPanel } from "@/components/employee-hub/EmployeeSalaryCommissionPanel";
 
 export default function HRDashboard() {
   const [activeTab, setActiveTab] = useState("performance");
@@ -69,6 +70,13 @@ export default function HRDashboard() {
               <Building2 className="h-4 w-4" />
               Competitors
             </TabsTrigger>
+            <TabsTrigger 
+              value="payroll" 
+              className="gap-2 data-[state=active]:bg-primary data-[state=active]:text-primary-foreground"
+            >
+              <Wallet className="h-4 w-4" />
+              Salaries & Commissions
+            </TabsTrigger>
           </TabsList>
 
           <TabsContent value="performance" className="mt-6">
@@ -89,6 +97,10 @@ export default function HRDashboard() {
 
           <TabsContent value="competitors" className="mt-6">
             <CompetitorTrackingPanel />
+          </TabsContent>
+
+          <TabsContent value="payroll" className="mt-6">
+            <EmployeeSalaryCommissionPanel />
           </TabsContent>
         </Tabs>
       </div>
