@@ -152,6 +152,9 @@ const Index = () => {
         </motion.div>
       </div>
 
+      {/* DEVELOPER PARTNERS MARQUEE */}
+      <DeveloperPartnersMarquee />
+
       {/* AI HOME FINDER - Premium CTA Section */}
       <section className="py-10 md:py-14 bg-black">
         <div className="container mx-auto px-4">
@@ -185,9 +188,6 @@ const Index = () => {
           </motion.div>
         </div>
       </section>
-
-      {/* DEVELOPER PARTNERS MARQUEE */}
-      <DeveloperPartnersMarquee />
 
 
       {/* WHO IS THIS FOR - Clear Entry Points */}
