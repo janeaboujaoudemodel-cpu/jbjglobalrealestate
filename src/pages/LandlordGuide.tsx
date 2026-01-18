@@ -217,21 +217,20 @@ const LandlordGuide = () => {
           </>
         }
         description="Learn how to successfully list your property for rent, screen quality tenants, and manage your rental investment. This educational guide covers the essentials of being a landlord in Dubai."
-        backgroundImage="https://images.unsplash.com/photo-1582407947304-fd86f028f716?auto=format&fit=crop&w=2000&q=80"
+        backgroundImage="https://images.unsplash.com/photo-1600596542815-ffad4c1539a9?auto=format&fit=crop&w=2000&q=80"
         actions={
           <>
             <Button 
-              variant="secondary"
-              className="px-6"
+              className="relative bg-gradient-to-r from-white via-[#FDFBF7] to-[#F5F0E6] border border-gold/40 px-6 py-3 shadow-[0_4px_20px_rgba(200,167,102,0.3),0_8px_30px_rgba(0,0,0,0.15)] hover:shadow-[0_6px_25px_rgba(200,167,102,0.5),0_10px_40px_rgba(0,0,0,0.2)] hover:scale-[1.02] transition-all duration-300"
               onClick={() => document.getElementById('listing-process')?.scrollIntoView({ behavior: 'smooth' })}
             >
-              <ArrowDown className="w-4 h-4 mr-2" />
-              Read the Full Guide
+              <ArrowDown className="w-4 h-4 mr-2 text-black" />
+              <span className="text-gold font-semibold">Read the Full Guide</span>
             </Button>
-            <Button asChild variant="primary" className="px-6">
+            <Button asChild className="relative bg-gradient-to-r from-white via-[#FDFBF7] to-[#F5F0E6] border border-gold/40 px-6 py-3 shadow-[0_4px_20px_rgba(200,167,102,0.3),0_8px_30px_rgba(0,0,0,0.15)] hover:shadow-[0_6px_25px_rgba(200,167,102,0.5),0_10px_40px_rgba(0,0,0,0.2)] hover:scale-[1.02] transition-all duration-300">
               <Link to="/contact">
-                List Your Property
-                <ArrowUpRight className="w-4 h-4 ml-2 text-gold" />
+                <span className="text-gold font-semibold">List Your Property</span>
+                <ArrowUpRight className="w-4 h-4 ml-2 text-black" />
               </Link>
             </Button>
           </>

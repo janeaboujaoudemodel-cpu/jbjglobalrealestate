@@ -56,7 +56,7 @@ const CommunityDetail = () => {
     filters.facilities.length > 0;
 
   return (
-    <section className="relative w-full min-h-screen bg-zinc-950">
+    <section className="relative w-full min-h-screen bg-black">
       {/* Hero Image */}
       <div className="relative h-[40vh] md:h-[50vh]">
         <img
@@ -64,93 +64,110 @@ const CommunityDetail = () => {
           alt={community.name}
           className="w-full h-full object-cover"
         />
-        <div className="absolute inset-0 bg-gradient-to-t from-zinc-950 via-black/50 to-transparent" />
+        <div className="absolute inset-0 bg-gradient-to-t from-black via-black/50 to-transparent" />
         
         <Link
           to="/communities"
-          className="absolute top-6 left-6 flex items-center gap-2 text-white/80 hover:text-white transition-colors"
+          className="absolute top-6 left-6 flex items-center gap-2 text-white/80 hover:text-white transition-colors bg-black/30 backdrop-blur-sm px-4 py-2 rounded-full"
         >
           <ChevronLeft className="w-5 h-5" />
-          <span style={{ fontFamily: "Poppins, sans-serif" }}>Back to Communities</span>
+          <span className="font-medium">Back to Communities</span>
         </Link>
       </div>
 
       {/* Content */}
       <div className="container mx-auto px-4 -mt-20 relative z-10 pb-16">
-        <h1
-          className="text-white font-bold mb-2"
-          style={{
-            fontFamily: "Poppins, sans-serif",
-            fontSize: "clamp(32px, 5vw, 56px)",
-            lineHeight: "1.2",
-          }}
-        >
-          {community.name}
-        </h1>
-        {community.location && (
-          <p className="text-gold text-lg mb-4" style={{ fontFamily: "Poppins, sans-serif" }}>
-            {community.location}
-          </p>
-        )}
-        {community.description && (
-          <p className="text-gray-400 text-lg mb-12 max-w-3xl" style={{ fontFamily: "Poppins, sans-serif" }}>
-            {community.description}
-          </p>
-        )}
+        {/* Community Info Card - White/Gold/Champagne */}
+        <div className="bg-gradient-to-br from-white via-[#FDFBF7] to-[#F5F0E6] rounded-2xl p-6 md:p-8 border border-gold/30 shadow-xl mb-12">
+          <h1 className="text-black font-bold mb-2 text-3xl md:text-4xl lg:text-5xl">
+            {community.name}
+          </h1>
+          {community.location && (
+            <p className="text-gold text-lg mb-4 font-medium">{community.location}</p>
+          )}
+          {community.description && (
+            <p className="text-zinc-700 text-lg max-w-3xl">{community.description}</p>
+          )}
+        </div>
 
-        <h2
-          className="text-white font-semibold mb-8"
-          style={{
-            fontFamily: "Poppins, sans-serif",
-            fontSize: "28px",
-          }}
-        >
-          Projects in {community.name}
-        </h2>
+        {/* Projects Section */}
+        <div className="bg-gradient-to-br from-white via-[#FDFBF7] to-[#F5F0E6] rounded-2xl p-6 md:p-8 border border-gold/30 shadow-lg">
+          <h2 className="text-black font-semibold mb-6 text-2xl">
+            Projects in {community.name}
+          </h2>
 
-        <ProjectFilters
-          filters={filters}
-          onFiltersChange={setFilters}
-          developers={developers}
-          trendingAreas={trendingAreas}
-          showCommunityFilter={false}
-        />
+          <ProjectFilters
+            filters={filters}
+            onFiltersChange={setFilters}
+            developers={developers}
+            trendingAreas={trendingAreas}
+            showCommunityFilter={false}
+          />
 
-        {hasFiltersApplied && (
-          <p className="text-gray-400 mb-6">
-            Found <span className="text-white font-semibold">{filteredProjects.length}</span> project{filteredProjects.length !== 1 ? "s" : ""}
-          </p>
-        )}
-
-        {loadingProjects ? (
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
-            {[...Array(4)].map((_, i) => (
-              <Skeleton key={i} className="aspect-[4/3] rounded-lg bg-zinc-800" />
-            ))}
-          </div>
-        ) : filteredProjects.length > 0 ? (
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
-            {filteredProjects.map((project) => (
-              <ProjectCard key={project.id} project={project} />
-            ))}
-          </div>
-        ) : (
-          <div className="text-center py-12 bg-zinc-900 rounded-lg">
-            <p className="text-gray-400 mb-2">
-              {hasFiltersApplied
-                ? "No projects match your filters"
-                : "No projects available in this community yet."}
+          {hasFiltersApplied && (
+            <p className="text-zinc-600 mb-6">
+              Found <span className="text-gold font-semibold">{filteredProjects.length}</span> project{filteredProjects.length !== 1 ? "s" : ""}
             </p>
-            {hasFiltersApplied && (
-              <button
-                onClick={() => setFilters(defaultFilters)}
-                className="text-gold hover:underline"
-              >
-                Clear all filters
-              </button>
-            )}
+          )}
+
+          {loadingProjects ? (
+            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
+              {[...Array(4)].map((_, i) => (
+                <Skeleton key={i} className="aspect-[4/3] rounded-lg bg-zinc-200" />
+              ))}
+            </div>
+          ) : filteredProjects.length > 0 ? (
+            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
+              {filteredProjects.map((project) => (
+                <ProjectCard key={project.id} project={project} />
+              ))}
+            </div>
+          ) : (
+            <div className="text-center py-12 bg-white rounded-lg border border-zinc-200">
+              <p className="text-zinc-600 mb-2">
+                {hasFiltersApplied
+                  ? "No projects match your filters"
+                  : "No projects available in this community yet."}
+              </p>
+              {hasFiltersApplied && (
+                <button
+                  onClick={() => setFilters(defaultFilters)}
+                  className="text-gold hover:underline font-medium"
+                >
+                  Clear all filters
+                </button>
+              )}
+            </div>
+          )}
+        </div>
+
+        {/* Educational Disclaimer */}
+        <div className="mt-8 bg-gradient-to-br from-white via-[#FDFBF7] to-[#F5F0E6] rounded-xl p-6 border border-gold/30">
+          <div className="flex items-start gap-4">
+            <div className="w-10 h-10 bg-black rounded-lg flex items-center justify-center flex-shrink-0">
+              <svg className="w-5 h-5 text-gold" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+              </svg>
+            </div>
+            <div>
+              <h3 className="text-gold font-semibold mb-1">Information provided is for general guidance only</h3>
+              <p className="text-black text-sm">This community guide provides educational information about {community.name}. For specific property inquiries, please contact our team.</p>
+            </div>
           </div>
-        )}
+        </div>
+
+        {/* View All Areas CTA */}
+        <div className="mt-8 text-center">
+          <Link 
+            to="/areas"
+            className="inline-flex items-center gap-2 bg-gradient-to-r from-white via-[#FDFBF7] to-[#F5F0E6] border border-gold/40 px-6 py-3 rounded-xl shadow-[0_4px_20px_rgba(200,167,102,0.3),0_8px_30px_rgba(0,0,0,0.15)] hover:shadow-[0_6px_25px_rgba(200,167,102,0.5),0_10px_40px_rgba(0,0,0,0.2)] hover:scale-[1.02] transition-all duration-300"
+          >
+            <span className="text-gold font-semibold">View All Area Guides</span>
+            <svg className="w-4 h-4 text-black" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17 8l4 4m0 0l-4 4m4-4H3" />
+            </svg>
+          </Link>
+        </div>
       </div>
     </section>
   );
