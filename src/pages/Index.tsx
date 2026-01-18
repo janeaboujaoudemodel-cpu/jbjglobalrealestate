@@ -363,7 +363,7 @@ const Index = () => {
           <div className="grid md:grid-cols-2 gap-6 max-w-4xl mx-auto">
             {/* Broker Toolkit Card */}
             <Link to="/broker-toolkit" className="group">
-              <div className="bg-white border border-zinc-200 rounded-2xl p-6 md:p-8 hover:border-gold hover:shadow-xl hover:shadow-gold/20 transition-all duration-300">
+              <div className="bg-gradient-to-br from-white via-[#FDFBF7] to-[#F5F0E6] border border-zinc-200 rounded-2xl p-6 md:p-8 hover:border-gold hover:shadow-xl hover:shadow-gold/20 transition-all duration-300">
                 <div className="flex items-center gap-4 mb-4">
                   <div className="w-12 h-12 bg-black rounded-xl flex items-center justify-center">
                     <GraduationCap className="w-6 h-6 text-gold" />
@@ -384,7 +384,7 @@ const Index = () => {
 
             {/* Broker Hub Card - FREE highlighted */}
             <Link to="/ai-hub" className="group">
-              <div className="bg-white border border-zinc-200 rounded-2xl p-6 md:p-8 hover:border-gold hover:shadow-xl hover:shadow-gold/20 transition-all duration-300 relative overflow-hidden">
+              <div className="bg-gradient-to-br from-white via-[#FDFBF7] to-[#F5F0E6] border border-zinc-200 rounded-2xl p-6 md:p-8 hover:border-gold hover:shadow-xl hover:shadow-gold/20 transition-all duration-300 relative overflow-hidden">
                 {/* FREE Badge */}
                 <div className="absolute top-4 right-4">
                   <span className="inline-flex items-center gap-1 px-2 py-1 bg-green-500/20 border border-green-500/40 rounded-full text-green-500 text-[10px] font-semibold uppercase tracking-wider">
