@@ -1,5 +1,6 @@
 import { useState, useEffect, useRef } from "react";
 import { supabase } from "@/integrations/supabase/client";
+import oliviaExecutiveAssistant from '@/assets/team/olivia-executive-assistant.png';
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Badge } from "@/components/ui/badge";
@@ -462,10 +463,10 @@ ${COMPANY_CONTACTS.email}`;
   };
 
   const ASSISTANT_IDENTITY = {
-    name: "Jessica",
-    avatar: "https://images.unsplash.com/photo-1560250097-0b93528c311a?w=200&h=200&fit=crop&crop=face",
-    title: "Founder's Assistant",
-    description: "Your dedicated executive assistant",
+    name: "Olivia Reynolds",
+    avatar: oliviaExecutiveAssistant,
+    title: "Executive AI Assistant",
+    description: "Your dedicated executive AI assistant",
     founderPhone: COMPANY_CONTACTS.founderPhone
   };
 

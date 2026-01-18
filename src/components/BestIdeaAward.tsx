@@ -71,36 +71,32 @@ const BestIdeaAward = () => {
     setIsSubmitting(true);
 
     try {
-      // Store the idea - we always save the data internally
-      const submissionData = {
-        idea: formData.idea,
-        full_name: formData.isAnonymous ? "Anonymous" : formData.fullName,
-        email: formData.isAnonymous ? null : formData.email,
-        phone: formData.isAnonymous ? null : formData.phone,
-        is_anonymous: formData.isAnonymous,
-        user_id: user?.id || null,
-        // Always store actual details if available (for tracking)
-        actual_name: formData.fullName || null,
-        actual_email: formData.email || user?.email || null,
-        actual_phone: formData.phone || null,
-        created_at: new Date().toISOString(),
-      };
-
-      // In production, this would save to a database table
-      console.log("Idea submission:", submissionData);
-      
       // Generate draw ticket number
       const ticketNum = `IDEA-${Date.now().toString(36).toUpperCase()}-${Math.random().toString(36).substring(2, 6).toUpperCase()}`;
-      setDrawTicketNumber(ticketNum);
       
-      // Simulate API call
-      await new Promise(resolve => setTimeout(resolve, 1000));
+      // Save to database
+      const { error } = await supabase
+        .from('best_idea_submissions')
+        .insert({
+          idea: formData.idea,
+          full_name: formData.isAnonymous ? "Anonymous" : formData.fullName,
+          email: formData.isAnonymous ? null : formData.email,
+          phone: formData.isAnonymous ? null : formData.phone,
+          is_anonymous: formData.isAnonymous,
+          user_id: user?.id || null,
+          actual_name: formData.fullName || null,
+          actual_email: formData.email || user?.email || null,
+          actual_phone: formData.phone || null,
+          draw_ticket_number: formData.isAnonymous ? null : ticketNum,
+        });
 
-      setIsSubmitted(true);
+      if (error) throw error;
       
-      // Don't show toast - the success dialog is more prominent
+      setDrawTicketNumber(ticketNum);
+      setIsSubmitted(true);
 
     } catch (error) {
+      console.error("Failed to submit idea:", error);
       toast.error("Failed to submit idea. Please try again.");
     } finally {
       setIsSubmitting(false);

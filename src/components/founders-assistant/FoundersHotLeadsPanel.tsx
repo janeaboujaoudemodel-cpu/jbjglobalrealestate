@@ -57,12 +57,19 @@ const FoundersHotLeadsPanel: React.FC<FoundersHotLeadsPanelProps> = ({ onLeadCli
   }, [user]);
 
   const fetchHotLeads = async () => {
+    if (!user?.id) {
+      setLoading(false);
+      return;
+    }
+    
     try {
-      // Fetch only user's personal hot leads (VIP = true)
-      const { data, error } = await supabase
+      // Fetch only user's personal hot leads (VIP = true AND assigned to current user)
+      const userId = user.id;
+      const { data, error } = await (supabase
         .from('crm_leads')
-        .select('id, full_name, email_lower, phone_e164, vip, source, notes, created_at, updated_at')
+        .select('id, full_name, email_lower, phone_e164, vip, source, notes, created_at, updated_at') as any)
         .eq('vip', true)
+        .eq('assigned_user_id', userId)
         .order('updated_at', { ascending: false })
         .limit(20);
 

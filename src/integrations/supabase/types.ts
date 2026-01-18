@@ -833,6 +833,66 @@ export type Database = {
         }
         Relationships: []
       }
+      best_idea_submissions: {
+        Row: {
+          actual_email: string | null
+          actual_name: string | null
+          actual_phone: string | null
+          admin_notes: string | null
+          created_at: string
+          draw_ticket_number: string | null
+          email: string | null
+          full_name: string
+          id: string
+          idea: string
+          is_anonymous: boolean
+          phone: string | null
+          reviewed_at: string | null
+          reviewed_by: string | null
+          status: string
+          updated_at: string
+          user_id: string | null
+        }
+        Insert: {
+          actual_email?: string | null
+          actual_name?: string | null
+          actual_phone?: string | null
+          admin_notes?: string | null
+          created_at?: string
+          draw_ticket_number?: string | null
+          email?: string | null
+          full_name?: string
+          id?: string
+          idea: string
+          is_anonymous?: boolean
+          phone?: string | null
+          reviewed_at?: string | null
+          reviewed_by?: string | null
+          status?: string
+          updated_at?: string
+          user_id?: string | null
+        }
+        Update: {
+          actual_email?: string | null
+          actual_name?: string | null
+          actual_phone?: string | null
+          admin_notes?: string | null
+          created_at?: string
+          draw_ticket_number?: string | null
+          email?: string | null
+          full_name?: string
+          id?: string
+          idea?: string
+          is_anonymous?: boolean
+          phone?: string | null
+          reviewed_at?: string | null
+          reviewed_by?: string | null
+          status?: string
+          updated_at?: string
+          user_id?: string | null
+        }
+        Relationships: []
+      }
       blocked_email_domains: {
         Row: {
           created_at: string | null
