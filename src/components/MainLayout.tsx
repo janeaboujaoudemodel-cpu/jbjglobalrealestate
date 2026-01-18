@@ -97,8 +97,8 @@ const MainLayout = ({ children }: MainLayoutProps) => {
       <SecurityShield />
       <MarketingScripts />
       <GlobalHeader />
-      {/* No padding adjustment – chat overlays content */}
-      <main className="pt-16 lg:pt-18">
+      {/* Match content offset to fixed header height */}
+      <main className="pt-24 lg:pt-28">
         {children}
       </main>
       {/* All popups rendered centrally */}
