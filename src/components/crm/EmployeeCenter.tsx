@@ -11,9 +11,11 @@ import {
 } from 'lucide-react';
 import { toast } from 'sonner';
 import { format } from 'date-fns';
+import { supabase } from '@/integrations/supabase/client';
 import CVSearchFilters from './CVSearchFilters';
 import CVRankingCard, { type CVCandidate } from './CVRankingCard';
 import InterviewScheduler from './InterviewScheduler';
+import CVViewer from '@/components/hr/CVViewer';
 
 interface EmployeeCenterProps {
   userId: string;
@@ -43,6 +45,10 @@ const EmployeeCenter = ({ userId }: EmployeeCenterProps) => {
   const [showScheduler, setShowScheduler] = useState(false);
   const [selectedCandidate, setSelectedCandidate] = useState<CVCandidate | null>(null);
   const [interviewStage, setInterviewStage] = useState<'first' | 'second'>('first');
+
+  // CV Viewer
+  const [showCVViewer, setShowCVViewer] = useState(false);
+  const [viewingCandidate, setViewingCandidate] = useState<CVCandidate | null>(null);
 
   // Mock initial data with AI analysis
   useEffect(() => {
@@ -522,8 +528,21 @@ const EmployeeCenter = ({ userId }: EmployeeCenterProps) => {
                   key={candidate.id}
                   candidate={candidate}
                   rank={sortBy === 'ranking' && candidate.aiScore ? index + 1 : undefined}
-                  onView={(id) => toast.info('Opening CV viewer...')}
-                  onDownload={(id) => toast.success('Downloading CV...')}
+                  onView={(id) => {
+                    const c = candidates.find(cand => cand.id === id);
+                    if (c) {
+                      setViewingCandidate(c);
+                      setShowCVViewer(true);
+                    }
+                  }}
+                  onDownload={(id) => {
+                    const c = candidates.find(cand => cand.id === id);
+                    if (c?.fileUrl && c.fileUrl !== '#') {
+                      window.open(c.fileUrl, '_blank');
+                    } else {
+                      toast.error('No CV file available');
+                    }
+                  }}
                   onScheduleInterview={handleScheduleInterview}
                   onUpdateStatus={handleUpdateStatus}
                 />
@@ -541,6 +560,28 @@ const EmployeeCenter = ({ userId }: EmployeeCenterProps) => {
         stage={interviewStage}
         onSchedule={handleInterviewScheduled}
       />
+
+      {/* CV Viewer Modal */}
+      {viewingCandidate && (
+        <CVViewer
+          open={showCVViewer}
+          onClose={() => {
+            setShowCVViewer(false);
+            setViewingCandidate(null);
+          }}
+          candidateId={viewingCandidate.id}
+          candidateName={viewingCandidate.candidateName}
+          cvUrl={viewingCandidate.fileUrl !== '#' ? viewingCandidate.fileUrl : null}
+          cvFileName={viewingCandidate.fileName}
+          candidateData={{
+            email: viewingCandidate.email,
+            phone: viewingCandidate.phone,
+            position: viewingCandidate.position,
+            uploadDate: viewingCandidate.uploadDate,
+            aiAnalysis: viewingCandidate.aiAnalysis
+          }}
+        />
+      )}
     </div>
   );
 };
