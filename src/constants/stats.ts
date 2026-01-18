@@ -7,7 +7,7 @@ export const COMPANY_STATS = {
     end: 12,
     suffix: '+',
     prefix: '',
-    label: 'Years in Dubai',
+    label: 'Years Experience',
     note: 'Founder experience since 2014',
   },
   brokersTrainedBy: {

@@ -49,7 +49,7 @@ export const en = {
   'home.discover': 'Discover',
   
   // Stats
-  'home.stats.yearsInDubai': 'Years in Dubai',
+  'home.stats.yearsInDubai': 'Years Experience',
   'home.stats.brokersTrainedBy': 'Brokers Trained',
   'home.stats.clientSatisfaction': 'Client Satisfaction',
   'home.stats.teamMembers': 'Team Members',
@@ -62,7 +62,7 @@ export const en = {
   'founder.meetThe': 'Meet the',
   'founder.founder': 'Founder',
   'founder.services': 'Services',
-  'founder.years': 'Years in Dubai',
+  'founder.years': 'Years Experience',
   'founder.brokersTrainedBy': 'Brokers Trained',
   'founder.learnMore': 'Learn More About The Founder',
   'founder.title': 'Founder & CEO JBJ Global Real Estate',

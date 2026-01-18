@@ -58,7 +58,7 @@ const SAMPLE_CVS: CVEntry[] = [
     uploadedBy: 'Website Career Form',
     ranking: 8,
     status: 'interview_scheduled',
-    experience: '5 years in Dubai real estate',
+    experience: '5 years of real estate experience',
     education: 'MBA in Real Estate Management',
     category: 'collected',
     gender: 'male',
