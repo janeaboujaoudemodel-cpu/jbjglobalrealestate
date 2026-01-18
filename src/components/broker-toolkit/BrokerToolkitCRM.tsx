@@ -137,31 +137,31 @@ export function BrokerToolkitCRM() {
           ))}
         </div>
 
-        {/* CRM Preview Card */}
+        {/* CRM Preview Card - Lighter green/teal for contrast */}
         <motion.div
           initial={{ opacity: 0, y: 20 }}
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true }}
           className="max-w-4xl mx-auto"
         >
-          <Card className="bg-green-900/40 border border-green-500/40">
+          <Card className="bg-emerald-900/30 border border-emerald-400/40">
             <CardContent className="p-8 text-center">
-              <div className="w-16 h-16 bg-green-500/20 rounded-full flex items-center justify-center mx-auto mb-4">
-                <Lock className="w-8 h-8 text-green-300" />
+              <div className="w-16 h-16 bg-emerald-400/20 rounded-full flex items-center justify-center mx-auto mb-4">
+                <Lock className="w-8 h-8 text-emerald-300" />
               </div>
               <h3 className="text-2xl font-bold text-white mb-4">
                 Ready to Organize Your Leads?
               </h3>
-              <p className="text-green-200/80 mb-2 max-w-xl mx-auto">
+              <p className="text-emerald-100/80 mb-2 max-w-xl mx-auto">
                 Access the full JBJ CRM with lead scoring, pipeline management, and insights.
               </p>
-              <p className="text-green-300/60 text-sm mb-6">
+              <p className="text-emerald-200/60 text-sm mb-6">
                 <Lock className="w-3 h-3 inline mr-1" />
                 Available exclusively to registered JBJ brokers
               </p>
               <Button 
                 onClick={handleCRMAccess}
-                className="bg-gradient-to-r from-green-500 to-emerald-600 text-white hover:brightness-110 px-8"
+                className="bg-gradient-to-r from-emerald-500 to-emerald-600 text-white hover:brightness-110 px-8"
               >
                 <Target className="w-5 h-5 mr-2" />
                 Open CRM Dashboard

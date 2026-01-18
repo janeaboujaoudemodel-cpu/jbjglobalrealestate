@@ -141,10 +141,10 @@ export function BrokerToolkitSupport() {
           </div>
         </div>
 
-        {/* Media & Marketing Team */}
-        <div className="bg-orange-950/60 rounded-2xl p-8 border border-orange-500/30">
+        {/* Media & Marketing Team - Teal theme */}
+        <div className="bg-teal-950/80 rounded-2xl p-8 border border-teal-500/30">
           <h3 className="text-xl font-semibold text-white mb-6 flex items-center gap-2">
-            <Camera className="w-5 h-5 text-orange-300" />
+            <Camera className="w-5 h-5 text-teal-300" />
             Media & Marketing Team
           </h3>
           <div className="grid md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-6 gap-4">
@@ -156,13 +156,13 @@ export function BrokerToolkitSupport() {
                 transition={{ delay: i * 0.05 }}
                 viewport={{ once: true }}
               >
-                <Card className="bg-orange-900/50 border border-orange-500/30 hover:border-orange-400 hover:bg-orange-900/70 transition-all h-full">
+                <Card className="bg-teal-900/50 border border-teal-500/30 hover:border-teal-400 hover:bg-teal-900/70 transition-all h-full">
                   <CardContent className="p-4 text-center">
-                    <div className="w-10 h-10 bg-orange-500/20 rounded-lg flex items-center justify-center mx-auto mb-3">
-                      <member.icon className="w-5 h-5 text-orange-300" />
+                    <div className="w-10 h-10 bg-teal-500/20 rounded-lg flex items-center justify-center mx-auto mb-3">
+                      <member.icon className="w-5 h-5 text-teal-300" />
                     </div>
                     <h4 className="text-white font-medium text-sm mb-0.5">{member.role}</h4>
-                    <p className="text-orange-200/60 text-xs">{member.description}</p>
+                    <p className="text-teal-200/60 text-xs">{member.description}</p>
                   </CardContent>
                 </Card>
               </motion.div>
