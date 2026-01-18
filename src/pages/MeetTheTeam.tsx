@@ -481,6 +481,8 @@ const MeetTheTeam: React.FC = () => {
                         key={member.id}
                         member={member}
                         onReadMore={handleReadMore}
+                        isInternalUser={isInternalUser}
+                        onDirectClick={handleDirectClick}
                       />
                     ))}
                   </div>
@@ -541,7 +543,7 @@ const MeetTheTeam: React.FC = () => {
         onClose={() => setIsContactFormOpen(false)}
       />
 
-      {/* Detail Dialog - No contact button inside */}
+      {/* Detail Dialog - Contact options for internal users */}
       <TeamMemberDetailDialog
         member={detailMember}
         isOpen={isDetailOpen}
@@ -550,6 +552,7 @@ const MeetTheTeam: React.FC = () => {
           setIsDetailOpen(false);
           setIsContactFormOpen(true);
         }}
+        isInternalUser={isInternalUser}
       />
     </>
   );
