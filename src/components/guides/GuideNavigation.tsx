@@ -39,10 +39,11 @@ export const GuideNavigation = ({ current, guides, showStartHere = false }: Guid
             </p>
             <Link 
               to="/buyer-guide"
-              className="inline-flex items-center gap-2 px-6 py-3 bg-gradient-to-r from-gold to-gold-dark hover:from-gold-dark hover:to-gold text-black rounded-xl transition-all text-sm font-semibold shadow-lg hover:shadow-xl"
+              className="inline-flex items-center gap-2 px-6 py-3 bg-gradient-to-r from-white via-[#FDFBF7] to-[#F5F0E6] border border-gold/40 rounded-xl transition-all text-sm font-semibold shadow-[0_4px_20px_rgba(200,167,102,0.3),0_8px_30px_rgba(0,0,0,0.15)] hover:shadow-[0_6px_25px_rgba(200,167,102,0.5),0_10px_40px_rgba(0,0,0,0.2)] hover:scale-[1.02]"
             >
-              Start Here: Buyer Guide
-              <ArrowRight className="w-4 h-4" />
+              <span className="text-gold">Start Here:</span>
+              <span className="text-black">Buyer Guide</span>
+              <ArrowRight className="w-4 h-4 text-black" />
             </Link>
           </div>
         )}
@@ -104,8 +105,8 @@ export const GuideNavigation = ({ current, guides, showStartHere = false }: Guid
                 to={guide.path}
                 className={`px-5 py-2.5 rounded-xl text-sm font-semibold transition-all ${
                   guide.path === current
-                    ? "bg-gradient-to-r from-gold to-gold-dark text-black shadow-lg"
-                    : "bg-zinc-100 text-zinc-700 hover:text-black hover:bg-zinc-200 border border-zinc-200 hover:border-gold/50"
+                    ? "bg-gradient-to-r from-[#D4C4A8] via-[#C8B89A] to-[#B8A888] text-black shadow-md border border-gold/50"
+                    : "bg-gradient-to-r from-white via-[#FDFBF7] to-[#F5F0E6] text-zinc-700 hover:text-black border border-gold/30 hover:border-gold/50 shadow-[0_2px_10px_rgba(200,167,102,0.2)] hover:shadow-[0_4px_15px_rgba(200,167,102,0.3)] hover:scale-[1.02]"
                 }`}
               >
                 {guide.title}

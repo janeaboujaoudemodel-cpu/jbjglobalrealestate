@@ -409,24 +409,24 @@ const LandlordGuide = () => {
       </section>
 
       {/* JBJ Services */}
-      <section className="py-16 md:py-24 bg-zinc-900/30">
+      <section className="py-16 md:py-24 bg-gradient-to-br from-white via-[#FDFBF7] to-[#F5F0E6]">
         <div className="container mx-auto px-4">
           <div className="max-w-4xl mx-auto">
             <div className="text-center mb-12">
-              <h2 className="text-3xl md:text-4xl font-light text-white mb-4">
-                How JBJ GLOBAL REAL ESTATE Supports Landlords
+              <h2 className="text-3xl md:text-4xl font-light text-black mb-4">
+                How <span className="text-gold">JBJ GLOBAL REAL ESTATE</span> Supports Landlords
               </h2>
-              <p className="text-lg text-zinc-400 max-w-2xl mx-auto">
+              <p className="text-lg text-zinc-600 max-w-2xl mx-auto">
                 Licensed for BUY, SELL & RENT, we provide comprehensive landlord services.
               </p>
             </div>
 
-            <div className="bg-gradient-to-br from-gold/10 via-gold/5 to-transparent border border-gold/30 rounded-2xl p-8">
+            <div className="bg-white border border-gold/30 rounded-2xl p-8 shadow-lg">
               <div className="grid md:grid-cols-2 gap-4">
                 {jbjServices.map((service, index) => (
                   <div key={index} className="flex items-start gap-3">
                     <CheckCircle2 className="w-5 h-5 text-gold flex-shrink-0 mt-0.5" />
-                    <span className="text-zinc-200">{service}</span>
+                    <span className="text-zinc-700">{service}</span>
                   </div>
                 ))}
               </div>
