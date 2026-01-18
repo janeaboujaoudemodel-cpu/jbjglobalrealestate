@@ -597,7 +597,7 @@ const AIHub = () => {
         <div className="h-px bg-gradient-to-r from-transparent via-gold/40 to-transparent" />
 
         {/* CATEGORY 2: BROKER OPERATIONS SUPPORT */}
-        <section className="py-16 md:py-20 bg-zinc-950">
+        <section className="py-16 md:py-20 bg-[#0D0D0D]">
           <div className="container mx-auto px-4">
             <motion.div
               className="text-center mb-12"
@@ -669,7 +669,7 @@ const AIHub = () => {
         <div className="h-px bg-gradient-to-r from-transparent via-gold/40 to-transparent" />
 
         {/* CATEGORY 4: EDUCATION & CERTIFICATIONS */}
-        <section className="py-16 md:py-20 bg-zinc-950">
+        <section className="py-16 md:py-20 bg-[#0D0D0D]">
           <div className="container mx-auto px-4">
             <motion.div
               className="text-center mb-12"
