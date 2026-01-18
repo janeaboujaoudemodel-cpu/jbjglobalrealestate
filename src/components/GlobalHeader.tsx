@@ -76,11 +76,11 @@ const GlobalHeader = () => {
 
   // Properties submenu items for Buy / Rent / New Projects / List Property
   const propertiesLinks = [
+    { href: "/seller-listing", label: "List Your Property", icon: ClipboardCheck },
     { href: "/properties?transaction=buy", label: "Buy Properties", icon: Home },
     { href: "/properties?transaction=rent", label: "Rent Properties", icon: Building2 },
     { href: "/properties?status=off-plan", label: "New Projects (Off-Plan)", icon: Building2 },
     { href: "/properties", label: "All Properties", icon: Building2 },
-    { href: "/seller-listing", label: "List Your Property", icon: ClipboardCheck },
   ];
 
   // Guides submenu items - INCLUDES ALL GUIDES
@@ -131,6 +131,7 @@ const GlobalHeader = () => {
             to="/" 
             className="flex items-center gap-3 shrink-0 hover:opacity-90 transition-opacity"
             style={{ fontFamily: "Poppins, sans-serif" }}
+            onClick={() => window.scrollTo({ top: 0, behavior: 'smooth' })}
           >
             <img 
               src={jbjMonogramDarkBg} 
