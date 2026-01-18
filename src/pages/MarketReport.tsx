@@ -1537,7 +1537,7 @@ const MarketReport = () => {
       <img class="qr-code" src="${qrUrl}" alt="AI Property Matchmaker QR" />
       <div>
         <h3 style="margin-top: 0; margin-bottom: 10px; color: #8b5cf6;">Try Our AI Property Matchmaker</h3>
-        <p style="margin-bottom: 10px;">Scan this QR code or visit our website to access the complimentary AI assessment tool created by our founder.</p>
+        <p style="margin-bottom: 10px;">Scan this QR code or visit our website to access the complimentary AI assessment tool created by the founder.</p>
         <p style="color: #8b5cf6; font-weight: 600; margin-bottom: 0;"><a href="${websiteUrl}/quiz" style="color: #8b5cf6; text-decoration: none;">${websiteUrl}/quiz</a></p>
       </div>
     </div>
@@ -2089,7 +2089,7 @@ const MarketReport = () => {
                   "Developer & community comparison frameworks",
                   "Investment due diligence checklist",
                   "Complimentary AI Home Finder access",
-                  "Expert insights from our founder",
+                  "Expert insights from the founder",
                 ].map((item, i) => (
                   <li key={i} className="flex items-start gap-3">
                     <CheckCircle className="w-5 h-5 text-gold flex-shrink-0 mt-0.5" />

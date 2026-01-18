@@ -190,13 +190,13 @@ const ProjectCard = ({ project, showFavorite = true, showBadgeButton = true, cur
           </Button>
         </div>
 
-        {/* Contact Buttons */}
+        {/* Contact Buttons - White fill, transparent on hover */}
         <div className="grid grid-cols-2 gap-2">
           <Button
             variant="outline"
             size="sm"
             onClick={handleWhatsApp}
-            className="bg-green-950/30 border-green-800/50 hover:bg-green-900/40 hover:border-green-600 text-green-400 hover:text-green-300 text-xs h-9"
+            className="bg-white border-green-600/50 hover:bg-transparent hover:border-green-500 text-black hover:text-green-400 text-xs h-9 transition-all"
           >
             <MessageCircle className="w-3.5 h-3.5 mr-1.5 text-green-500" />
             WhatsApp
@@ -205,7 +205,7 @@ const ProjectCard = ({ project, showFavorite = true, showBadgeButton = true, cur
             variant="outline"
             size="sm"
             onClick={handleCall}
-            className="bg-blue-950/30 border-blue-800/50 hover:bg-blue-900/40 hover:border-blue-600 text-blue-400 hover:text-blue-300 text-xs h-9"
+            className="bg-white border-blue-600/50 hover:bg-transparent hover:border-blue-500 text-black hover:text-blue-400 text-xs h-9 transition-all"
           >
             <Phone className="w-3.5 h-3.5 mr-1.5 text-blue-500" />
             Call

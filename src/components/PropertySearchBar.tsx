@@ -217,8 +217,11 @@ const PropertySearchBar = ({ className = "", compact = false }: PropertySearchBa
           <Filter className="w-4 h-4" />
         </Button>
 
-        {/* Search Button */}
-        <Button onClick={handleSearch} variant="primary" className="h-12 px-8 rounded-lg">
+        {/* Search Button - Gold Glow */}
+        <Button 
+          onClick={handleSearch} 
+          className="h-12 px-8 rounded-lg bg-gradient-to-r from-gold to-gold-dark text-black font-bold hover:brightness-110 hover:shadow-[0_0_25px_rgba(200,167,102,0.6)] transition-all duration-300 shadow-[0_0_15px_rgba(200,167,102,0.4)] cursor-pointer"
+        >
           SEARCH
         </Button>
       </div>
