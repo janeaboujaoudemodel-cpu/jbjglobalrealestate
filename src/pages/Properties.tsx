@@ -81,6 +81,7 @@ interface ExtendedFilterState extends Omit<FilterState, 'currency'> {
 
 const defaultExtendedFilters: ExtendedFilterState = {
   ...defaultFilters,
+  transactionType: 'buy',
   currency: 'AED' as ExtendedCurrency,
   propertyType: null,
   bathroomsMin: null,
@@ -135,10 +136,6 @@ const Properties = () => {
   const { data: communities } = useCommunities();
   const { data: developers } = useDevelopers();
   
-  // Get transaction type from URL params
-  const urlTransaction = searchParams.get('transaction') as 'buy' | 'rent' | null;
-  const urlStatus = searchParams.get('status');
-  
   const [filters, setFilters] = useState<ExtendedFilterState>(defaultExtendedFilters);
   const [appliedFilters, setAppliedFilters] = useState<ExtendedFilterState>(defaultExtendedFilters);
   const [sortBy, setSortBy] = useState<string>("newest");
@@ -177,12 +174,15 @@ const Properties = () => {
       }
     }
 
+    const tx: ExtendedFilterState['transactionType'] =
+      newTransaction === 'rent' ? 'rent' : 'buy';
+
     // Apply filters if any URL params exist
     if (newTransaction || newStatus || developerIdFromUrl) {
       const updated: ExtendedFilterState = {
         ...defaultExtendedFilters,
-        transactionType: (newTransaction || 'all') as ExtendedFilterState['transactionType'],
-        handoverStatus: newStatus || null,
+        transactionType: tx,
+        completionStatus: newStatus || null,
         developerId: developerIdFromUrl,
       };
       setFilters(updated);
@@ -198,9 +198,23 @@ const Properties = () => {
     currency: appliedFilters.currency as FilterState['currency'],
     handoverStatus: appliedFilters.completionStatus,
   };
-  
+
   const filteredProjects = useFilteredProjects(projects, standardFilters);
-  
+
+  const availableDevelopers = useMemo(() => {
+    if (!developers) return [];
+
+    const ids = new Set<string>();
+    (projects ?? []).forEach((p) => {
+      const developerId = p.developer?.id ?? (p as unknown as { developer_id?: string }).developer_id;
+      if (developerId) ids.add(developerId);
+    });
+
+    // If we don't have projects yet (or none are published), fall back to full list
+    if (!projects || ids.size === 0) return developers;
+
+    return developers.filter((d) => ids.has(d.id));
+  }, [developers, projects]);
   // Sort projects
   const sortedProjects = useMemo(() => {
     let sorted = [...filteredProjects];
@@ -322,13 +336,12 @@ const Properties = () => {
       </section>
 
       {/* Main Search Bar - Fixed under header */}
-      <section className="sticky top-16 z-40 bg-white backdrop-blur-md border-b border-zinc-200 py-4 shadow-md">
+      <section className="sticky top-16 z-40 bg-background backdrop-blur-md border-b border-border py-4 shadow-md">
         <div className="container mx-auto px-4">
-          {/* Transaction Type Tabs - Buy / Rent / All */}
-          <div className="flex items-center gap-2 mb-4">
-            <span className="text-zinc-600 text-sm mr-2">I want to:</span>
+          {/* Transaction Type Tabs - Buy / Rent */}
+          <div className="flex items-center gap-2 mb-4 flex-wrap">
+            <span className="text-muted-foreground text-sm mr-2">I want to:</span>
             {[
-              { value: 'all', label: 'All' },
               { value: 'buy', label: 'Buy' },
               { value: 'rent', label: 'Rent' },
             ].map((option) => (
@@ -337,61 +350,85 @@ const Properties = () => {
                 variant={filters.transactionType === option.value ? "default" : "outline"}
                 size="sm"
                 onClick={() => {
-                  updateFilter("transactionType", option.value as 'all' | 'buy' | 'rent');
-                  setAppliedFilters(prev => ({ ...prev, transactionType: option.value as 'all' | 'buy' | 'rent' }));
+                  updateFilter("transactionType", option.value as 'buy' | 'rent');
+                  updateFilter("completionStatus", null);
+                  setAppliedFilters((prev) => ({
+                    ...prev,
+                    transactionType: option.value as 'buy' | 'rent',
+                    completionStatus: null,
+                  }));
                 }}
                 className={`h-9 px-4 rounded-full ${
                   filters.transactionType === option.value
-                    ? "bg-gradient-to-r from-gold to-[#E8D5A3] text-black border-gold font-semibold"
-                    : "bg-white border-zinc-300 text-zinc-700 hover:bg-zinc-100 hover:text-black"
+                    ? "bg-gradient-to-r from-gold to-gold-light text-foreground border-gold font-semibold"
+                    : "bg-background border-input text-muted-foreground hover:bg-muted hover:text-foreground"
                 }`}
               >
                 {option.label}
               </Button>
             ))}
-            
-            {/* Divider */}
-            <div className="w-px h-6 bg-zinc-300 mx-2" />
-            
-            {/* Ready Properties Shortcut - Also sets transactionType to 'buy' */}
-            <Button
-              variant={appliedFilters.completionStatus === 'ready' ? "default" : "outline"}
-              size="sm"
-              onClick={() => {
-                const newStatus = appliedFilters.completionStatus === 'ready' ? null : 'ready';
-                updateFilter("completionStatus", newStatus);
-                updateFilter("transactionType", 'buy');
-                setAppliedFilters(prev => ({ ...prev, completionStatus: newStatus, transactionType: 'buy' }));
-              }}
-              className={`h-9 px-4 rounded-full flex items-center gap-1.5 ${
-                appliedFilters.completionStatus === 'ready'
-                  ? "bg-gradient-to-r from-emerald-600 to-emerald-500 text-white border-emerald-600 font-semibold shadow-md"
-                  : "bg-white border-zinc-300 text-zinc-700 hover:bg-emerald-50 hover:border-emerald-300 hover:text-emerald-700"
-              }`}
-            >
-              <CheckCircle className="w-3.5 h-3.5" />
-              Ready
-            </Button>
-            
-            {/* Off-Plan Properties Shortcut - Also sets transactionType to 'buy' */}
-            <Button
-              variant={appliedFilters.completionStatus === 'off-plan' ? "default" : "outline"}
-              size="sm"
-              onClick={() => {
-                const newStatus = appliedFilters.completionStatus === 'off-plan' ? null : 'off-plan';
-                updateFilter("completionStatus", newStatus);
-                updateFilter("transactionType", 'buy');
-                setAppliedFilters(prev => ({ ...prev, completionStatus: newStatus, transactionType: 'buy' }));
-              }}
-              className={`h-9 px-4 rounded-full flex items-center gap-1.5 ${
-                appliedFilters.completionStatus === 'off-plan'
-                  ? "bg-gradient-to-r from-gold to-[#E8D5A3] text-black border-gold font-semibold shadow-md"
-                  : "bg-white border-zinc-300 text-zinc-700 hover:bg-gold/10 hover:border-gold/50 hover:text-gold"
-              }`}
-            >
-              <Calendar className="w-3.5 h-3.5" />
-              Off-Plan
-            </Button>
+
+            {/* Buy-only Status Shortcuts */}
+            {appliedFilters.transactionType === 'buy' && (
+              <>
+                <div className="w-px h-6 bg-border mx-2" />
+
+                {/* All status */}
+                <Button
+                  variant={appliedFilters.completionStatus === null ? "default" : "outline"}
+                  size="sm"
+                  onClick={() => {
+                    updateFilter("completionStatus", null);
+                    setAppliedFilters((prev) => ({ ...prev, completionStatus: null, transactionType: 'buy' }));
+                  }}
+                  className={`h-9 px-4 rounded-full ${
+                    appliedFilters.completionStatus === null
+                      ? "bg-gradient-to-r from-gold to-gold-light text-foreground border-gold font-semibold"
+                      : "bg-background border-input text-muted-foreground hover:bg-muted hover:text-foreground"
+                  }`}
+                >
+                  All
+                </Button>
+
+                {/* Ready */}
+                <Button
+                  variant={appliedFilters.completionStatus === 'ready' ? "default" : "outline"}
+                  size="sm"
+                  onClick={() => {
+                    const newStatus = appliedFilters.completionStatus === 'ready' ? null : 'ready';
+                    updateFilter("completionStatus", newStatus);
+                    setAppliedFilters((prev) => ({ ...prev, completionStatus: newStatus, transactionType: 'buy' }));
+                  }}
+                  className={`h-9 px-4 rounded-full flex items-center gap-1.5 ${
+                    appliedFilters.completionStatus === 'ready'
+                      ? "bg-ai-emerald text-white border-ai-emerald font-semibold shadow-md"
+                      : "bg-background border-input text-muted-foreground hover:bg-ai-emerald/10 hover:border-ai-emerald/40 hover:text-foreground"
+                  }`}
+                >
+                  <CheckCircle className="w-3.5 h-3.5" />
+                  Ready
+                </Button>
+
+                {/* Off-Plan */}
+                <Button
+                  variant={appliedFilters.completionStatus === 'off-plan' ? "default" : "outline"}
+                  size="sm"
+                  onClick={() => {
+                    const newStatus = appliedFilters.completionStatus === 'off-plan' ? null : 'off-plan';
+                    updateFilter("completionStatus", newStatus);
+                    setAppliedFilters((prev) => ({ ...prev, completionStatus: newStatus, transactionType: 'buy' }));
+                  }}
+                  className={`h-9 px-4 rounded-full flex items-center gap-1.5 ${
+                    appliedFilters.completionStatus === 'off-plan'
+                      ? "bg-gradient-to-r from-gold to-gold-light text-foreground border-gold font-semibold shadow-md"
+                      : "bg-background border-input text-muted-foreground hover:bg-gold/10 hover:border-gold/50 hover:text-foreground"
+                  }`}
+                >
+                  <Calendar className="w-3.5 h-3.5" />
+                  Off-Plan
+                </Button>
+              </>
+            )}
           </div>
           
           <div className="flex items-center gap-2 overflow-x-auto pb-2 scrollbar-hide w-full">
@@ -434,7 +471,7 @@ const Properties = () => {
               </SelectTrigger>
               <SelectContent className="bg-white border-zinc-200 max-h-60">
                 <SelectItem value="all" className="text-black hover:bg-zinc-100">All Developers</SelectItem>
-                {developers?.map((dev) => (
+                {availableDevelopers?.map((dev) => (
                   <SelectItem key={dev.id} value={dev.id} className="text-black hover:bg-zinc-100">
                     {dev.name}
                   </SelectItem>
