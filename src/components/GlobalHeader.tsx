@@ -74,13 +74,11 @@ const GlobalHeader = () => {
     { href: "/contact", label: t('nav.contact'), icon: Phone },
   ];
 
-  // Properties submenu items for Buy / Rent / New Projects / List Property
+  // Properties submenu items for Buy / Rent / List Property
   const propertiesLinks = [
-    { href: "/seller-listing", label: "List Your Property", icon: ClipboardCheck },
     { href: "/properties?transaction=buy", label: "Buy Properties", icon: Home },
+    { href: "/seller-listing", label: "List Your Property", icon: ClipboardCheck },
     { href: "/properties?transaction=rent", label: "Rent Properties", icon: Building2 },
-    { href: "/properties?status=off-plan", label: "New Projects (Off-Plan)", icon: Building2 },
-    { href: "/properties", label: "All Properties", icon: Building2 },
   ];
 
   // Guides submenu items - INCLUDES ALL GUIDES
