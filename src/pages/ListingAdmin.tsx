@@ -18,36 +18,28 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
-import {
-  Dialog,
-  DialogContent,
-  DialogHeader,
-  DialogTitle,
-  DialogTrigger,
-} from "@/components/ui/dialog";
 import { ScrollArea } from "@/components/ui/scroll-area";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { toast } from "sonner";
 import {
   LogOut,
   Plus,
-  Edit2,
   Crown,
   Building2,
-  FileText,
   Upload,
-  Search,
   Trash2,
   Download,
   File,
   X,
-  Home,
   Image,
   ArrowLeft,
   FolderOpen,
   ExternalLink,
-  BookOpen,
+  MessageCircle,
+  Users,
 } from "lucide-react";
+import ListingSearchFilters from "@/components/listing-admin/ListingSearchFilters";
+import ListingAdminChat from "@/components/listing-admin/ListingAdminChat";
 
 interface ProjectDocument {
   id: string;
@@ -69,10 +61,13 @@ const ListingAdmin = () => {
 
   const [searchQuery, setSearchQuery] = useState("");
   const [filterDeveloper, setFilterDeveloper] = useState<string>("all");
+  const [filterEmirate, setFilterEmirate] = useState<string>("all");
+  const [filterLocation, setFilterLocation] = useState<string>("");
   const [selectedProject, setSelectedProject] = useState<any>(null);
   const [isEditing, setIsEditing] = useState(false);
   const [isCreating, setIsCreating] = useState(false);
   const [isSaving, setIsSaving] = useState(false);
+  const [showChat, setShowChat] = useState(false);
 
   // Document upload state
   const [projectDocuments, setProjectDocuments] = useState<ProjectDocument[]>([]);
@@ -112,7 +107,7 @@ const ListingAdmin = () => {
 
   if (checkingAdmin) {
     return (
-      <div className="min-h-screen bg-zinc-950 flex items-center justify-center">
+      <div className="min-h-screen bg-black flex items-center justify-center pt-28">
         <div className="animate-spin rounded-full h-8 w-8 border-t-2 border-gold" />
       </div>
     );
@@ -120,14 +115,14 @@ const ListingAdmin = () => {
 
   if (!hasAccess) {
     return (
-      <div className="min-h-screen bg-zinc-950 flex items-center justify-center">
-        <Card className="bg-zinc-900 border-zinc-800 max-w-md mx-4">
+      <div className="min-h-screen bg-black flex items-center justify-center pt-28">
+        <Card className="bg-white border-zinc-200 max-w-md mx-4">
           <CardContent className="p-8 text-center">
-            <div className="w-16 h-16 bg-red-500/20 rounded-full flex items-center justify-center mx-auto mb-4">
-              <X className="w-8 h-8 text-red-400" />
+            <div className="w-16 h-16 bg-red-100 rounded-full flex items-center justify-center mx-auto mb-4">
+              <X className="w-8 h-8 text-red-500" />
             </div>
-            <h2 className="text-white text-xl font-semibold mb-2">Access Denied</h2>
-            <p className="text-zinc-400 mb-6">
+            <h2 className="text-black text-xl font-semibold mb-2">Access Denied</h2>
+            <p className="text-zinc-600 mb-6">
               You don't have permission to access the Listing Admin panel. 
               Please contact your administrator to request access.
             </p>
@@ -143,9 +138,14 @@ const ListingAdmin = () => {
   const filteredProjects = projects?.filter((project) => {
     const matchesSearch = 
       project.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
-      project.developer?.name.toLowerCase().includes(searchQuery.toLowerCase());
+      project.developer?.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
+      project.location?.toLowerCase().includes(searchQuery.toLowerCase());
     const matchesDeveloper = filterDeveloper === "all" || project.developer?.id === filterDeveloper;
-    return matchesSearch && matchesDeveloper;
+    const matchesEmirate = filterEmirate === "all" || project.emirate === filterEmirate;
+    const matchesLocation = !filterLocation || 
+      project.location?.toLowerCase().includes(filterLocation.toLowerCase()) ||
+      project.community?.name?.toLowerCase().includes(filterLocation.toLowerCase());
+    return matchesSearch && matchesDeveloper && matchesEmirate && matchesLocation;
   });
 
   const handleEditProject = async (project: any) => {
@@ -423,50 +423,64 @@ const ListingAdmin = () => {
     navigate("/");
   };
 
+  const handleBulkUpload = (url: string) => {
+    console.log("Bulk upload URL:", url);
+    // This would trigger the edge function to process the Google Drive link
+  };
+
+  const handleCreateListing = (type: "off-plan" | "secondary", data: any) => {
+    console.log("Create listing:", type, data);
+    handleCreateNew();
+    // Pre-fill form data from AI response
+  };
+
   return (
-    <div className="min-h-screen bg-zinc-950">
+    <div className="min-h-screen bg-black pt-24 lg:pt-28">
       {/* Header */}
-      <header className="border-b border-zinc-800 bg-zinc-950/80 backdrop-blur-sm sticky top-0 z-50">
-        <div className="container mx-auto px-4 py-4 flex items-center justify-between">
-          <div className="flex items-center gap-4">
-            <Button
-              variant="ghost"
-              size="icon"
-              onClick={() => navigate("/")}
-              className="text-zinc-400 hover:text-white"
-            >
-              <ArrowLeft className="w-5 h-5" />
-            </Button>
-            <div>
-              <h1 className="text-white text-xl font-bold" style={{ fontFamily: "Poppins, sans-serif" }}>
-                Listing Admin
-              </h1>
-              <p className="text-zinc-500 text-sm">
-                Welcome, {adminData?.display_name || user?.email}
-              </p>
+      <header className="border-b border-zinc-800 bg-black/80 backdrop-blur-sm sticky top-[88px] lg:top-[104px] z-40">
+        <div className="container mx-auto px-4 py-4">
+          <div className="flex items-center justify-between gap-4">
+            <div className="flex items-center gap-4">
+              <Button
+                variant="ghost"
+                size="icon"
+                onClick={() => navigate("/")}
+                className="text-zinc-400 hover:text-white"
+              >
+                <ArrowLeft className="w-5 h-5" />
+              </Button>
+              <div className="flex items-center gap-3">
+                <h1 className="text-white text-xl font-bold" style={{ fontFamily: "Poppins, sans-serif" }}>
+                  Listing Admin
+                </h1>
+                <span className="text-zinc-500">•</span>
+                <span className="text-zinc-400 text-sm">Property Manager</span>
+              </div>
             </div>
-          </div>
-          <div className="flex items-center gap-3">
-            <Button
-              variant="outline"
-              onClick={() => navigate("/admin/training-guide")}
-              className="border-gold/50 text-gold hover:bg-gold/10"
-            >
-              <BookOpen className="w-4 h-4 mr-2" />
-              Training Guide
-            </Button>
-            <Badge className="bg-gold/20 text-gold border-gold/30">
-              <Building2 className="w-3 h-3 mr-1" />
-              Property Manager
-            </Badge>
-            <Button
-              variant="outline"
-              onClick={handleSignOut}
-              className="border-zinc-700 text-white hover:bg-zinc-800"
-            >
-              <LogOut className="w-4 h-4 mr-2" />
-              Sign Out
-            </Button>
+            <div className="flex items-center gap-3">
+              <Button
+                onClick={() => setShowChat(!showChat)}
+                className="bg-gradient-to-r from-white via-[#FDFBF7] to-[#F5F0E6] border border-gold/30 text-black hover:bg-black hover:text-white hover:border-black transition-all duration-300"
+              >
+                <MessageCircle className="w-4 h-4 mr-2 text-gold group-hover:text-white" />
+                Chat with Sarah
+              </Button>
+              <Button
+                onClick={() => navigate("/team")}
+                className="bg-gradient-to-r from-white via-[#FDFBF7] to-[#F5F0E6] border border-gold/30 text-black hover:bg-black hover:text-white hover:border-black transition-all duration-300"
+              >
+                <Users className="w-4 h-4 mr-2 text-gold" />
+                Team
+              </Button>
+              <Button
+                variant="outline"
+                onClick={handleSignOut}
+                className="border-zinc-700 text-white hover:bg-zinc-800"
+              >
+                <LogOut className="w-4 h-4 mr-2" />
+                Sign Out
+              </Button>
+            </div>
           </div>
         </div>
       </header>
@@ -477,22 +491,26 @@ const ListingAdmin = () => {
           <div className="lg:col-span-1 space-y-4">
             {/* Stats */}
             <div className="grid grid-cols-2 gap-3">
-              <Card className="bg-zinc-900 border-zinc-800">
+              <Card className="bg-white border-zinc-200">
                 <CardContent className="p-4">
                   <div className="flex items-center gap-2 mb-1">
-                    <Building2 className="w-4 h-4 text-gold" />
-                    <span className="text-zinc-400 text-sm">Projects</span>
+                    <div className="w-6 h-6 rounded-full bg-black flex items-center justify-center">
+                      <Building2 className="w-3 h-3 text-gold" />
+                    </div>
+                    <span className="text-zinc-600 text-sm">Projects</span>
                   </div>
-                  <p className="text-white text-2xl font-bold">{projects?.length || 0}</p>
+                  <p className="text-black text-2xl font-bold">{projects?.length || 0}</p>
                 </CardContent>
               </Card>
-              <Card className="bg-zinc-900 border-zinc-800">
+              <Card className="bg-white border-zinc-200">
                 <CardContent className="p-4">
                   <div className="flex items-center gap-2 mb-1">
-                    <Crown className="w-4 h-4 text-gold" />
-                    <span className="text-zinc-400 text-sm">Premium</span>
+                    <div className="w-6 h-6 rounded-full bg-black flex items-center justify-center">
+                      <Crown className="w-3 h-3 text-gold" />
+                    </div>
+                    <span className="text-zinc-600 text-sm">Premium</span>
                   </div>
-                  <p className="text-white text-2xl font-bold">
+                  <p className="text-black text-2xl font-bold">
                     {projects?.filter((p) => p.is_premium).length || 0}
                   </p>
                 </CardContent>
@@ -502,80 +520,91 @@ const ListingAdmin = () => {
             {/* Actions */}
             <Button
               onClick={handleCreateNew}
-              variant="primary"
-              className="w-full"
+              className="w-full bg-gradient-to-r from-white via-[#FDFBF7] to-[#F5F0E6] border border-gold/30 text-black hover:bg-black hover:text-white hover:border-black transition-all duration-300"
             >
-              <Plus className="w-4 h-4 mr-2" />
+              <Plus className="w-4 h-4 mr-2 text-gold" />
               Add New Project
             </Button>
 
-            {/* Filters */}
-            <div className="space-y-3">
-              <div className="relative">
-                <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-zinc-500" />
-                <Input
-                  placeholder="Search projects..."
-                  value={searchQuery}
-                  onChange={(e) => setSearchQuery(e.target.value)}
-                  className="pl-10 bg-zinc-900 border-zinc-700 text-white"
+            {/* Search Filters */}
+            <Card className="bg-white border-zinc-200">
+              <CardContent className="p-4">
+                <ListingSearchFilters
+                  developers={developers || []}
+                  onSearchChange={setSearchQuery}
+                  onDeveloperChange={setFilterDeveloper}
+                  onEmirateChange={setFilterEmirate}
+                  onLocationChange={setFilterLocation}
+                  searchValue={searchQuery}
+                  developerValue={filterDeveloper}
+                  emirateValue={filterEmirate}
+                  locationValue={filterLocation}
                 />
-              </div>
-              <Select value={filterDeveloper} onValueChange={setFilterDeveloper}>
-                <SelectTrigger className="bg-zinc-900 border-zinc-700 text-white">
-                  <SelectValue placeholder="Filter by Developer" />
-                </SelectTrigger>
-                <SelectContent>
-                  <SelectItem value="all">All Developers</SelectItem>
-                  {developers?.map((dev) => (
-                    <SelectItem key={dev.id} value={dev.id}>
-                      {dev.name}
-                    </SelectItem>
-                  ))}
-                </SelectContent>
-              </Select>
-            </div>
+              </CardContent>
+            </Card>
 
             {/* Project List */}
-            <ScrollArea className="h-[calc(100vh-400px)]">
-              <div className="space-y-2 pr-4">
-                {filteredProjects?.map((project) => (
-                  <Card
-                    key={project.id}
-                    className={`bg-zinc-900 border cursor-pointer transition-all hover:border-gold/50 ${
-                      selectedProject?.id === project.id
-                        ? "border-gold"
-                        : "border-zinc-800"
-                    }`}
-                    onClick={() => handleEditProject(project)}
-                  >
-                    <CardContent className="p-3">
+            <Card className="bg-white border-zinc-200">
+              <CardHeader className="py-3 px-4 border-b border-zinc-200">
+                <CardTitle className="text-black text-sm font-medium">
+                  All Listed Projects ({filteredProjects?.length || 0})
+                </CardTitle>
+              </CardHeader>
+              <ScrollArea className="h-[calc(100vh-520px)]">
+                <div className="p-2 space-y-2">
+                  {filteredProjects?.map((project) => (
+                    <div
+                      key={project.id}
+                      className={`p-3 rounded-lg cursor-pointer transition-all border ${
+                        selectedProject?.id === project.id
+                          ? "border-gold bg-gold/10"
+                          : "border-zinc-200 hover:border-gold/50 bg-zinc-50"
+                      }`}
+                      onClick={() => handleEditProject(project)}
+                    >
                       <div className="flex items-start justify-between gap-2">
                         <div className="min-w-0 flex-1">
-                          <h3 className="text-white font-medium truncate text-sm">
+                          <h3 className="text-black font-medium truncate text-sm">
                             {project.name}
                           </h3>
                           <p className="text-zinc-500 text-xs truncate">
                             {project.developer?.name || "No Developer"}
                           </p>
+                          {project.emirate && (
+                            <p className="text-zinc-400 text-xs">{project.emirate}</p>
+                          )}
                         </div>
                         {project.is_premium && (
                           <Crown className="w-4 h-4 text-gold flex-shrink-0" />
                         )}
                       </div>
-                    </CardContent>
-                  </Card>
-                ))}
-              </div>
-            </ScrollArea>
+                    </div>
+                  ))}
+                  {filteredProjects?.length === 0 && (
+                    <div className="text-center py-8 text-zinc-500">
+                      <FolderOpen className="w-10 h-10 mx-auto mb-2 opacity-50" />
+                      <p className="text-sm">No projects found</p>
+                    </div>
+                  )}
+                </div>
+              </ScrollArea>
+            </Card>
           </div>
 
-          {/* Right Panel - Editor */}
+          {/* Right Panel - Editor or Chat */}
           <div className="lg:col-span-2">
-            {(isEditing || isCreating) ? (
-              <Card className="bg-zinc-900 border-zinc-800">
-                <CardHeader className="border-b border-zinc-800">
+            {showChat ? (
+              <div className="h-[calc(100vh-220px)]">
+                <ListingAdminChat
+                  onBulkUpload={handleBulkUpload}
+                  onCreateListing={handleCreateListing}
+                />
+              </div>
+            ) : (isEditing || isCreating) ? (
+              <Card className="bg-white border-zinc-200">
+                <CardHeader className="border-b border-zinc-200">
                   <div className="flex items-center justify-between">
-                    <CardTitle className="text-white">
+                    <CardTitle className="text-black">
                       {isCreating ? "Create New Project" : `Edit: ${selectedProject?.name}`}
                     </CardTitle>
                     <div className="flex items-center gap-2">
@@ -584,7 +613,7 @@ const ListingAdmin = () => {
                           variant="ghost"
                           size="sm"
                           onClick={() => window.open(`/project/${selectedProject?.slug}`, "_blank")}
-                          className="text-zinc-400 hover:text-white"
+                          className="text-zinc-600 hover:text-black"
                         >
                           <ExternalLink className="w-4 h-4 mr-1" />
                           View
@@ -598,7 +627,7 @@ const ListingAdmin = () => {
                           setIsCreating(false);
                           setSelectedProject(null);
                         }}
-                        className="text-zinc-400 hover:text-white"
+                        className="text-zinc-600 hover:text-black"
                       >
                         <X className="w-4 h-4" />
                       </Button>
@@ -607,20 +636,20 @@ const ListingAdmin = () => {
                 </CardHeader>
                 <CardContent className="p-6">
                   <Tabs defaultValue="details" className="space-y-6">
-                    <TabsList className="bg-zinc-800 border border-zinc-700">
-                      <TabsTrigger value="details" className="data-[state=active]:bg-gold data-[state=active]:text-black">
+                    <TabsList className="bg-zinc-100 border border-zinc-200">
+                      <TabsTrigger value="details" className="data-[state=active]:bg-black data-[state=active]:text-white">
                         Details
                       </TabsTrigger>
                       <TabsTrigger 
                         value="documents" 
-                        className="data-[state=active]:bg-gold data-[state=active]:text-black"
+                        className="data-[state=active]:bg-black data-[state=active]:text-white"
                         disabled={isCreating}
                       >
                         Documents
                       </TabsTrigger>
                       <TabsTrigger 
                         value="images" 
-                        className="data-[state=active]:bg-gold data-[state=active]:text-black"
+                        className="data-[state=active]:bg-black data-[state=active]:text-white"
                         disabled={isCreating}
                       >
                         Images
@@ -631,7 +660,7 @@ const ListingAdmin = () => {
                       <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                         {/* Name */}
                         <div className="md:col-span-2">
-                          <Label className="text-zinc-400">Project Name *</Label>
+                          <Label className="text-zinc-600">Project Name *</Label>
                           <Input
                             value={formData.name}
                             onChange={(e) => {
@@ -642,20 +671,20 @@ const ListingAdmin = () => {
                               });
                             }}
                             placeholder="e.g., Sobha Hartland II"
-                            className="bg-zinc-800 border-zinc-700 text-white mt-1"
+                            className="bg-zinc-50 border-zinc-300 text-black mt-1"
                           />
                         </div>
 
                         {/* Developer */}
                         <div>
-                          <Label className="text-zinc-400">Developer *</Label>
+                          <Label className="text-zinc-600">Developer *</Label>
                           <Select
                             value={formData.developer_id}
                             onValueChange={(value) =>
                               setFormData({ ...formData, developer_id: value })
                             }
                           >
-                            <SelectTrigger className="bg-zinc-800 border-zinc-700 text-white mt-1">
+                            <SelectTrigger className="bg-zinc-50 border-zinc-300 text-black mt-1">
                               <SelectValue placeholder="Select Developer" />
                             </SelectTrigger>
                             <SelectContent>
@@ -670,14 +699,14 @@ const ListingAdmin = () => {
 
                         {/* Community */}
                         <div>
-                          <Label className="text-zinc-400">Community</Label>
+                          <Label className="text-zinc-600">Community</Label>
                           <Select
                             value={formData.community_id}
                             onValueChange={(value) =>
                               setFormData({ ...formData, community_id: value })
                             }
                           >
-                            <SelectTrigger className="bg-zinc-800 border-zinc-700 text-white mt-1">
+                            <SelectTrigger className="bg-zinc-50 border-zinc-300 text-black mt-1">
                               <SelectValue placeholder="Select Community" />
                             </SelectTrigger>
                             <SelectContent>
@@ -692,27 +721,27 @@ const ListingAdmin = () => {
 
                         {/* Location */}
                         <div>
-                          <Label className="text-zinc-400">Location</Label>
+                          <Label className="text-zinc-600">Location</Label>
                           <Input
                             value={formData.location}
                             onChange={(e) =>
                               setFormData({ ...formData, location: e.target.value })
                             }
                             placeholder="e.g., MBR City, Dubai"
-                            className="bg-zinc-800 border-zinc-700 text-white mt-1"
+                            className="bg-zinc-50 border-zinc-300 text-black mt-1"
                           />
                         </div>
 
                         {/* Emirate */}
                         <div>
-                          <Label className="text-zinc-400">Emirate</Label>
+                          <Label className="text-zinc-600">Emirate</Label>
                           <Select
                             value={formData.emirate}
                             onValueChange={(value) =>
                               setFormData({ ...formData, emirate: value })
                             }
                           >
-                            <SelectTrigger className="bg-zinc-800 border-zinc-700 text-white mt-1">
+                            <SelectTrigger className="bg-zinc-50 border-zinc-300 text-black mt-1">
                               <SelectValue />
                             </SelectTrigger>
                             <SelectContent>
@@ -727,7 +756,7 @@ const ListingAdmin = () => {
 
                         {/* Price Range */}
                         <div>
-                          <Label className="text-zinc-400">Price From (AED)</Label>
+                          <Label className="text-zinc-600">Price From (AED)</Label>
                           <Input
                             type="number"
                             value={formData.price_from}
@@ -735,12 +764,12 @@ const ListingAdmin = () => {
                               setFormData({ ...formData, price_from: e.target.value })
                             }
                             placeholder="e.g., 1500000"
-                            className="bg-zinc-800 border-zinc-700 text-white mt-1"
+                            className="bg-zinc-50 border-zinc-300 text-black mt-1"
                           />
                         </div>
 
                         <div>
-                          <Label className="text-zinc-400">Price To (AED)</Label>
+                          <Label className="text-zinc-600">Price To (AED)</Label>
                           <Input
                             type="number"
                             value={formData.price_to}
@@ -748,13 +777,13 @@ const ListingAdmin = () => {
                               setFormData({ ...formData, price_to: e.target.value })
                             }
                             placeholder="e.g., 5000000"
-                            className="bg-zinc-800 border-zinc-700 text-white mt-1"
+                            className="bg-zinc-50 border-zinc-300 text-black mt-1"
                           />
                         </div>
 
                         {/* Bedrooms */}
                         <div>
-                          <Label className="text-zinc-400">Bedrooms Min</Label>
+                          <Label className="text-zinc-600">Bedrooms Min</Label>
                           <Input
                             type="number"
                             value={formData.bedrooms_min}
@@ -762,12 +791,12 @@ const ListingAdmin = () => {
                               setFormData({ ...formData, bedrooms_min: e.target.value })
                             }
                             placeholder="e.g., 1"
-                            className="bg-zinc-800 border-zinc-700 text-white mt-1"
+                            className="bg-zinc-50 border-zinc-300 text-black mt-1"
                           />
                         </div>
 
                         <div>
-                          <Label className="text-zinc-400">Bedrooms Max</Label>
+                          <Label className="text-zinc-600">Bedrooms Max</Label>
                           <Input
                             type="number"
                             value={formData.bedrooms_max}
@@ -775,65 +804,65 @@ const ListingAdmin = () => {
                               setFormData({ ...formData, bedrooms_max: e.target.value })
                             }
                             placeholder="e.g., 4"
-                            className="bg-zinc-800 border-zinc-700 text-white mt-1"
+                            className="bg-zinc-50 border-zinc-300 text-black mt-1"
                           />
                         </div>
 
                         {/* Handover & Service Charge */}
                         <div>
-                          <Label className="text-zinc-400">Handover Date</Label>
+                          <Label className="text-zinc-600">Handover Date</Label>
                           <Input
                             value={formData.handover_date}
                             onChange={(e) =>
                               setFormData({ ...formData, handover_date: e.target.value })
                             }
                             placeholder="e.g., Q4 2026"
-                            className="bg-zinc-800 border-zinc-700 text-white mt-1"
+                            className="bg-zinc-50 border-zinc-300 text-black mt-1"
                           />
                         </div>
 
                         <div>
-                          <Label className="text-zinc-400">Service Charge</Label>
+                          <Label className="text-zinc-600">Service Charge</Label>
                           <Input
                             value={formData.service_charge}
                             onChange={(e) =>
                               setFormData({ ...formData, service_charge: e.target.value })
                             }
                             placeholder="e.g., 15 AED/sqft"
-                            className="bg-zinc-800 border-zinc-700 text-white mt-1"
+                            className="bg-zinc-50 border-zinc-300 text-black mt-1"
                           />
                         </div>
 
                         {/* Payment Plan */}
                         <div className="md:col-span-2">
-                          <Label className="text-zinc-400">Payment Plan</Label>
+                          <Label className="text-zinc-600">Payment Plan</Label>
                           <Input
                             value={formData.payment_plan}
                             onChange={(e) =>
                               setFormData({ ...formData, payment_plan: e.target.value })
                             }
                             placeholder="e.g., 60/40 or 10/90"
-                            className="bg-zinc-800 border-zinc-700 text-white mt-1"
+                            className="bg-zinc-50 border-zinc-300 text-black mt-1"
                           />
                         </div>
 
                         {/* Description */}
                         <div className="md:col-span-2">
-                          <Label className="text-zinc-400">Description</Label>
+                          <Label className="text-zinc-600">Description</Label>
                           <Textarea
                             value={formData.description}
                             onChange={(e) =>
                               setFormData({ ...formData, description: e.target.value })
                             }
                             placeholder="Enter project description..."
-                            className="bg-zinc-800 border-zinc-700 text-white mt-1 min-h-[120px]"
+                            className="bg-zinc-50 border-zinc-300 text-black mt-1 min-h-[120px]"
                           />
                         </div>
 
                         {/* Premium Listing */}
                         <div className="md:col-span-2 flex items-center justify-between p-4 bg-gradient-to-r from-gold/10 to-transparent border border-gold/20 rounded-lg">
                           <div>
-                            <Label className="text-white font-medium flex items-center gap-2">
+                            <Label className="text-black font-medium flex items-center gap-2">
                               <Crown className="w-4 h-4 text-gold" />
                               Premium Listing
                             </Label>
@@ -851,12 +880,12 @@ const ListingAdmin = () => {
                       </div>
 
                       {/* Action Buttons */}
-                      <div className="flex items-center justify-between pt-4 border-t border-zinc-800">
+                      <div className="flex items-center justify-between pt-4 border-t border-zinc-200">
                         {!isCreating && (
                           <Button
                             variant="destructive"
                             onClick={handleDeleteProject}
-                            className="bg-red-500/20 text-red-400 hover:bg-red-500/30 border-red-500/30"
+                            className="bg-red-100 text-red-600 hover:bg-red-200 border-red-200"
                           >
                             <Trash2 className="w-4 h-4 mr-2" />
                             Delete Project
@@ -870,14 +899,14 @@ const ListingAdmin = () => {
                               setIsCreating(false);
                               setSelectedProject(null);
                             }}
-                            className="border-zinc-700 text-zinc-400"
+                            className="border-zinc-300 text-zinc-600"
                           >
                             Cancel
                           </Button>
                           <Button
                             onClick={handleSaveProject}
                             disabled={isSaving}
-                            variant="primary"
+                            className="bg-black text-white hover:bg-zinc-800"
                           >
                             {isSaving ? "Saving..." : isCreating ? "Create Project" : "Save Changes"}
                           </Button>
@@ -886,9 +915,9 @@ const ListingAdmin = () => {
                     </TabsContent>
 
                     <TabsContent value="documents" className="space-y-4">
-                      <div className="flex items-center gap-4 p-4 bg-zinc-800/50 rounded-lg">
+                      <div className="flex items-center gap-4 p-4 bg-zinc-100 rounded-lg border border-zinc-200">
                         <Select value={selectedDocType} onValueChange={setSelectedDocType}>
-                          <SelectTrigger className="w-40 bg-zinc-800 border-zinc-700">
+                          <SelectTrigger className="w-40 bg-white border-zinc-300">
                             <SelectValue />
                           </SelectTrigger>
                           <SelectContent>
@@ -902,7 +931,7 @@ const ListingAdmin = () => {
                         <Button
                           onClick={() => fileInputRef.current?.click()}
                           disabled={isUploadingDocument}
-                          variant="primary"
+                          className="bg-black text-white hover:bg-zinc-800"
                         >
                           <Upload className="w-4 h-4 mr-2" />
                           {isUploadingDocument ? "Uploading..." : "Upload Document"}
@@ -926,12 +955,12 @@ const ListingAdmin = () => {
                           projectDocuments.map((doc) => (
                             <div
                               key={doc.id}
-                              className="flex items-center justify-between p-3 bg-zinc-800/50 rounded-lg"
+                              className="flex items-center justify-between p-3 bg-zinc-50 rounded-lg border border-zinc-200"
                             >
                               <div className="flex items-center gap-3">
                                 <File className="w-5 h-5 text-gold" />
                                 <div>
-                                  <p className="text-white text-sm">{doc.file_name}</p>
+                                  <p className="text-black text-sm">{doc.file_name}</p>
                                   <p className="text-zinc-500 text-xs">
                                     {doc.document_type} • {formatFileSize(doc.file_size)}
                                   </p>
@@ -942,7 +971,7 @@ const ListingAdmin = () => {
                                   variant="ghost"
                                   size="sm"
                                   onClick={() => window.open(doc.file_url, "_blank")}
-                                  className="text-zinc-400 hover:text-white"
+                                  className="text-zinc-600 hover:text-black"
                                 >
                                   <Download className="w-4 h-4" />
                                 </Button>
@@ -950,7 +979,7 @@ const ListingAdmin = () => {
                                   variant="ghost"
                                   size="sm"
                                   onClick={() => handleDeleteDocument(doc)}
-                                  className="text-red-400 hover:text-red-300"
+                                  className="text-red-500 hover:text-red-600"
                                 >
                                   <Trash2 className="w-4 h-4" />
                                 </Button>
@@ -962,10 +991,10 @@ const ListingAdmin = () => {
                     </TabsContent>
 
                     <TabsContent value="images" className="space-y-4">
-                      <div className="p-4 bg-zinc-800/50 rounded-lg">
+                      <div className="p-4 bg-zinc-100 rounded-lg border border-zinc-200">
                         <Button
                           onClick={() => imageInputRef.current?.click()}
-                          variant="primary"
+                          className="bg-black text-white hover:bg-zinc-800"
                         >
                           <Image className="w-4 h-4 mr-2" />
                           Upload Images
@@ -987,7 +1016,7 @@ const ListingAdmin = () => {
                         {selectedProject?.images?.map((img: any) => (
                           <div
                             key={img.id}
-                            className="relative aspect-video rounded-lg overflow-hidden bg-zinc-800"
+                            className="relative aspect-video rounded-lg overflow-hidden bg-zinc-100 border border-zinc-200"
                           >
                             <img
                               src={img.image_url}
@@ -1013,24 +1042,33 @@ const ListingAdmin = () => {
                 </CardContent>
               </Card>
             ) : (
-              <Card className="bg-zinc-900 border-zinc-800">
+              <Card className="bg-white border-zinc-200">
                 <CardContent className="p-12 text-center">
                   <div className="w-20 h-20 bg-gold/10 rounded-full flex items-center justify-center mx-auto mb-6">
                     <Building2 className="w-10 h-10 text-gold" />
                   </div>
-                  <h2 className="text-white text-xl font-semibold mb-2">
+                  <h2 className="text-black text-xl font-semibold mb-2">
                     Select a Project to Edit
                   </h2>
-                  <p className="text-zinc-400 mb-6">
+                  <p className="text-zinc-600 mb-6">
                     Choose a project from the list on the left, or create a new one
                   </p>
-                  <Button
-                    onClick={handleCreateNew}
-                    variant="primary"
-                  >
-                    <Plus className="w-4 h-4 mr-2" />
-                    Create New Project
-                  </Button>
+                  <div className="flex justify-center gap-3">
+                    <Button
+                      onClick={handleCreateNew}
+                      className="bg-gradient-to-r from-white via-[#FDFBF7] to-[#F5F0E6] border border-gold/30 text-black hover:bg-black hover:text-white hover:border-black transition-all duration-300"
+                    >
+                      <Plus className="w-4 h-4 mr-2 text-gold" />
+                      Create New Project
+                    </Button>
+                    <Button
+                      onClick={() => setShowChat(true)}
+                      className="bg-black text-white hover:bg-zinc-800"
+                    >
+                      <MessageCircle className="w-4 h-4 mr-2" />
+                      Ask Sarah
+                    </Button>
+                  </div>
                 </CardContent>
               </Card>
             )}
