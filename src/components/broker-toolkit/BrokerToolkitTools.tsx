@@ -95,7 +95,7 @@ const TOOLS = [
 
 export function BrokerToolkitTools() {
   return (
-    <section id="section-tools" className="py-16 md:py-20 bg-purple-950/80">
+    <section id="section-tools" className="py-16 md:py-20 bg-gradient-to-br from-purple-950 via-purple-900 to-purple-950">
       <div className="container mx-auto px-4">
         <motion.div
           initial={{ opacity: 0, y: 20 }}
@@ -103,7 +103,7 @@ export function BrokerToolkitTools() {
           viewport={{ once: true }}
           className="text-center mb-12"
         >
-          <Badge className="bg-purple-500/30 text-purple-300 border-purple-400/50 mb-4">
+          <Badge className="bg-purple-500/30 text-purple-200 border-purple-400/50 mb-4">
             <Wrench className="w-3 h-3 mr-1" />
             AI-Powered Tools
           </Badge>
@@ -125,11 +125,11 @@ export function BrokerToolkitTools() {
               viewport={{ once: true }}
             >
               <Link to={tool.link}>
-                <Card className="bg-purple-900/50 border border-purple-500/30 hover:border-purple-400 hover:bg-purple-900/70 shadow-lg shadow-purple-500/10 hover:shadow-purple-400/20 transition-all duration-300 h-full group cursor-pointer">
+                <Card className="bg-purple-900/60 border border-purple-500/30 hover:border-purple-400 hover:bg-purple-900/80 shadow-lg shadow-purple-500/10 hover:shadow-purple-400/20 transition-all duration-300 h-full group cursor-pointer">
                   <CardContent className="p-5">
                     <div className="flex items-start gap-4">
-                      <div className="w-12 h-12 bg-purple-500/20 rounded-xl flex items-center justify-center flex-shrink-0 group-hover:scale-110 transition-transform">
-                        <tool.icon className="w-6 h-6 text-purple-300" />
+                      <div className="w-12 h-12 bg-purple-500/30 rounded-xl flex items-center justify-center flex-shrink-0 group-hover:scale-110 transition-transform">
+                        <tool.icon className="w-6 h-6 text-purple-200" />
                       </div>
                       <div className="flex-1 min-w-0">
                         <div className="flex items-center gap-2 mb-1">
@@ -138,7 +138,7 @@ export function BrokerToolkitTools() {
                         <p className="text-purple-200/70 text-sm mb-2">{tool.description}</p>
                         <div className="flex items-center gap-2">
                           {tool.tier === 'free' ? (
-                            <span className="flex items-center gap-1 text-xs text-green-400">
+                            <span className="flex items-center gap-1 text-xs text-emerald-300">
                               <Unlock className="w-3 h-3" />
                               Free Access
                             </span>
@@ -150,7 +150,7 @@ export function BrokerToolkitTools() {
                           )}
                         </div>
                       </div>
-                      <ArrowRight className="w-5 h-5 text-purple-400 opacity-0 group-hover:opacity-100 transition-opacity flex-shrink-0" />
+                      <ArrowRight className="w-5 h-5 text-purple-300 opacity-0 group-hover:opacity-100 transition-opacity flex-shrink-0" />
                     </div>
                   </CardContent>
                 </Card>

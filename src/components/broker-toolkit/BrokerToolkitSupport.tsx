@@ -91,7 +91,7 @@ const MEDIA_TEAM = [
 
 export function BrokerToolkitSupport() {
   return (
-    <section id="section-support" className="py-16 md:py-20 bg-pink-950/80">
+    <section id="section-support" className="py-16 md:py-20 bg-gradient-to-br from-pink-950 via-pink-900 to-pink-950">
       <div className="container mx-auto px-4">
         <motion.div
           initial={{ opacity: 0, y: 20 }}
@@ -99,7 +99,7 @@ export function BrokerToolkitSupport() {
           viewport={{ once: true }}
           className="text-center mb-12"
         >
-          <Badge className="bg-pink-500/30 text-pink-300 border-pink-400/50 mb-4">
+          <Badge className="bg-pink-500/30 text-pink-200 border-pink-400/50 mb-4">
             <Users className="w-3 h-3 mr-1" />
             Dedicated Support Team
           </Badge>
@@ -126,10 +126,10 @@ export function BrokerToolkitSupport() {
                 transition={{ delay: i * 0.1 }}
                 viewport={{ once: true }}
               >
-                <Card className="bg-pink-900/50 border border-pink-500/30 hover:border-pink-400 hover:bg-pink-900/70 transition-all h-full">
+                <Card className="bg-pink-900/60 border border-pink-500/30 hover:border-pink-400 hover:bg-pink-900/80 transition-all h-full shadow-lg shadow-pink-500/10">
                   <CardContent className="p-5">
-                    <div className="w-12 h-12 bg-pink-500/20 rounded-xl flex items-center justify-center mb-4">
-                      <member.icon className="w-6 h-6 text-pink-300" />
+                    <div className="w-12 h-12 bg-pink-500/30 rounded-xl flex items-center justify-center mb-4">
+                      <member.icon className="w-6 h-6 text-pink-200" />
                     </div>
                     <h4 className="text-white font-semibold mb-1">{member.role}</h4>
                     <p className="text-pink-300 text-sm mb-2">{member.name}</p>
@@ -141,7 +141,7 @@ export function BrokerToolkitSupport() {
           </div>
         </div>
 
-        {/* Media & Marketing Team - Teal theme */}
+        {/* Media & Marketing Team - Teal theme as a separate section within pink */}
         <div className="bg-teal-950/80 rounded-2xl p-8 border border-teal-500/30">
           <h3 className="text-xl font-semibold text-white mb-6 flex items-center gap-2">
             <Camera className="w-5 h-5 text-teal-300" />
@@ -156,10 +156,10 @@ export function BrokerToolkitSupport() {
                 transition={{ delay: i * 0.05 }}
                 viewport={{ once: true }}
               >
-                <Card className="bg-teal-900/50 border border-teal-500/30 hover:border-teal-400 hover:bg-teal-900/70 transition-all h-full">
+                <Card className="bg-teal-900/60 border border-teal-500/30 hover:border-teal-400 hover:bg-teal-900/80 transition-all h-full shadow-lg shadow-teal-500/10">
                   <CardContent className="p-4 text-center">
-                    <div className="w-10 h-10 bg-teal-500/20 rounded-lg flex items-center justify-center mx-auto mb-3">
-                      <member.icon className="w-5 h-5 text-teal-300" />
+                    <div className="w-10 h-10 bg-teal-500/30 rounded-lg flex items-center justify-center mx-auto mb-3">
+                      <member.icon className="w-5 h-5 text-teal-200" />
                     </div>
                     <h4 className="text-white font-medium text-sm mb-0.5">{member.role}</h4>
                     <p className="text-teal-200/60 text-xs">{member.description}</p>

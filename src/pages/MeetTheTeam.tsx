@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { motion } from "framer-motion";
-import { Link, useLocation } from "react-router-dom";
+import { Link, useLocation, useNavigate } from "react-router-dom";
 import Footer from "@/components/Footer";
 import { SEOHead } from "@/components/SEOHead";
 import { Badge } from "@/components/ui/badge";
@@ -13,6 +13,8 @@ import {
   getTeamMemberById,
 } from "@/config/team-members";
 import { useSalesHierarchy } from "@/hooks/useSalesHierarchy";
+import { useAuth } from "@/contexts/AuthContext";
+import { supabase } from "@/integrations/supabase/client";
 import {
   Users,
   Mail,
@@ -44,9 +46,11 @@ const staggerContainer = {
 interface TeamMemberCardProps {
   member: TeamMember;
   onReadMore: (member: TeamMember) => void;
+  isInternalUser?: boolean;
+  onDirectClick?: (member: TeamMember) => void;
 }
 
-const TeamMemberCard = ({ member, onReadMore }: TeamMemberCardProps) => {
+const TeamMemberCard = ({ member, onReadMore, isInternalUser, onDirectClick }: TeamMemberCardProps) => {
   // Get reporting manager info
   const reportsToMember = member.reportsTo ? getTeamMemberById(member.reportsTo) : null;
 
@@ -55,9 +59,18 @@ const TeamMemberCard = ({ member, onReadMore }: TeamMemberCardProps) => {
   const displayLanguages = member.languages?.slice(0, maxLanguages) || [];
   const remainingLanguages = (member.languages?.length || 0) - maxLanguages;
 
+  const handleCardClick = () => {
+    if (isInternalUser && onDirectClick) {
+      onDirectClick(member);
+    }
+  };
+
   return (
     <motion.div variants={fadeInUp}>
-      <Card className="bg-zinc-900/60 border-zinc-800 hover:border-gold/50 transition-all duration-300 overflow-hidden group h-full">
+      <Card 
+        className={`bg-zinc-900/60 border-zinc-800 hover:border-gold/50 transition-all duration-300 overflow-hidden group h-full ${isInternalUser ? 'cursor-pointer' : ''}`}
+        onClick={handleCardClick}
+      >
         <CardContent className="p-0">
           {/* Photo */}
           <div className="relative overflow-hidden">
@@ -175,11 +188,50 @@ const TeamMemberCard = ({ member, onReadMore }: TeamMemberCardProps) => {
 
 const MeetTheTeam: React.FC = () => {
   const location = useLocation();
+  const navigate = useNavigate();
+  const { user } = useAuth();
   const [selectedMember, setSelectedMember] = useState<TeamMember | null>(null);
   const [isContactFormOpen, setIsContactFormOpen] = useState(false);
   const [detailMember, setDetailMember] = useState<TeamMember | null>(null);
   const [isDetailOpen, setIsDetailOpen] = useState(false);
+  const [isInternalUser, setIsInternalUser] = useState(false);
   const salesHierarchy = useSalesHierarchy();
+
+  // Check if user is an internal employee (has hr_user_roles or admin/owner)
+  useEffect(() => {
+    const checkInternalUser = async () => {
+      if (!user) {
+        setIsInternalUser(false);
+        return;
+      }
+
+      try {
+        // Check for HR roles
+        const { data: hrRole } = await supabase
+          .from("hr_user_roles")
+          .select("role, is_active")
+          .eq("user_id", user.id)
+          .eq("is_active", true)
+          .maybeSingle();
+
+        // Check for admin/owner roles
+        const [adminResult, ownerResult] = await Promise.all([
+          supabase.rpc("has_role", { _user_id: user.id, _role: "admin" }),
+          supabase.rpc("has_role", { _user_id: user.id, _role: "owner" }),
+        ]);
+
+        const isAdmin = Boolean(adminResult.data) || Boolean(ownerResult.data);
+        const hasHrRole = hrRole?.is_active;
+
+        setIsInternalUser(isAdmin || hasHrRole);
+      } catch (error) {
+        console.error("Error checking internal user status:", error);
+        setIsInternalUser(false);
+      }
+    };
+
+    checkInternalUser();
+  }, [user]);
 
   // Scroll to top when navigating to this page
   useEffect(() => {
@@ -192,6 +244,12 @@ const MeetTheTeam: React.FC = () => {
   };
 
   const handleReadMore = (member: TeamMember) => {
+    setDetailMember(member);
+    setIsDetailOpen(true);
+  };
+
+  // For internal users, clicking the card opens the detail dialog directly
+  const handleDirectClick = (member: TeamMember) => {
     setDetailMember(member);
     setIsDetailOpen(true);
   };
@@ -369,6 +427,8 @@ const MeetTheTeam: React.FC = () => {
                                   key={member.id}
                                   member={member}
                                   onReadMore={handleReadMore}
+                                  isInternalUser={isInternalUser}
+                                  onDirectClick={handleDirectClick}
                                 />
                               ))}
                             </div>
