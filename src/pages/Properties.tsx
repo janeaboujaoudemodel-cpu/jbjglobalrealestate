@@ -836,12 +836,12 @@ const Properties = () => {
       <div className="h-1 bg-gradient-to-r from-transparent via-gold/40 to-transparent" />
 
       {/* Results Section */}
-      <section className="py-12 bg-white">
+      <section className="py-12 bg-black">
         <div className="container mx-auto px-4">
           {/* Results Count */}
           <div className="mb-8 flex items-center justify-between">
-            <p className="text-zinc-600">
-              Showing <span className="text-black font-medium">{sortedProjects.length}</span> properties
+            <p className="text-zinc-400">
+              Showing <span className="text-gold font-medium">{sortedProjects.length}</span> properties
               {appliedFilters.transactionType === 'rent' && ' for rent'}
               {appliedFilters.transactionType === 'buy' && ' for sale'}
             </p>
@@ -861,7 +861,7 @@ const Properties = () => {
           {isLoading ? (
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
               {[...Array(8)].map((_, i) => (
-                <div key={i} className="bg-zinc-100 rounded-xl h-[420px] animate-pulse" />
+                <div key={i} className="bg-zinc-800 rounded-xl h-[420px] animate-pulse" />
               ))}
             </div>
           ) : sortedProjects.length > 0 ? (
@@ -948,14 +948,14 @@ const Properties = () => {
       </section>
 
       {/* Request Details Form Section */}
-      <section className="py-16 bg-white border-t border-zinc-200">
+      <section className="py-16 bg-black border-t border-zinc-800">
         <div className="container mx-auto px-4">
           <div className="max-w-xl mx-auto">
             <motion.div
               initial={{ opacity: 0, y: 20 }}
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true }}
-              className="bg-zinc-50 border border-zinc-200 rounded-2xl p-8 shadow-sm"
+              className="bg-gradient-to-br from-white via-[#FDFBF7] to-[#F5F0E6] border border-gold/30 rounded-2xl p-8 shadow-lg"
             >
               <h2 className="text-2xl md:text-3xl font-semibold text-black text-center mb-8" style={{ fontFamily: "Poppins, sans-serif" }}>
                 Request Details
@@ -1036,24 +1036,24 @@ const Properties = () => {
       </section>
 
       {/* Quick Contact CTA */}
-      <section className="py-12 bg-zinc-950 border-t border-zinc-800">
+      <section className="py-12 bg-gradient-to-br from-white via-[#FDFBF7] to-[#F5F0E6] border-t border-gold/20">
         <div className="container mx-auto px-4">
             <div className="flex flex-wrap items-center justify-center gap-4">
-              <Button asChild variant="primary" className="h-12 px-8">
+              <Button asChild className="h-12 px-8 bg-black text-gold font-semibold hover:bg-zinc-900 border border-gold/30">
                 <a href={buildSureFormsUrl()} target="_blank" rel="noopener noreferrer">
                   <ArrowUpRight className="w-4 h-4 mr-2" />
                   Register Interest
                 </a>
               </Button>
 
-              <Button asChild variant="outline" className="h-12 px-8">
+              <Button asChild className="h-12 px-8 bg-gradient-to-r from-gold to-gold-dark text-black font-semibold hover:brightness-110">
                 <a href={getWhatsAppUrl()} target="_blank" rel="noopener noreferrer">
                   <MessageCircle className="w-4 h-4 mr-2" />
                   WhatsApp
                 </a>
               </Button>
 
-              <Button asChild variant="secondary" className="h-12 px-8">
+              <Button asChild className="h-12 px-8 bg-black text-gold font-semibold hover:bg-zinc-900 border border-gold/30">
                 <a href={`tel:${CONTACT_INFO.phoneRaw}`}>
                   <Phone className="w-4 h-4 mr-2" />
                   Call Now

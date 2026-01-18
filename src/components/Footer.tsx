@@ -170,7 +170,7 @@ const Footer = () => {
           <div className="flex items-center justify-center gap-3 mb-4">
             <div className="w-2 h-2 bg-gold rounded-full animate-pulse" />
             <p className="text-black font-medium text-sm md:text-base tracking-wide text-center">
-              <span className="text-gold font-semibold">Licensed</span> for BUY · SELL · RENT Real Estate in the UAE
+              <span className="text-gold font-semibold">Licensed</span> · BUY · SELL · RENT <span className="font-bold">REAL ESTATE</span> For The <span className="text-gold font-semibold">UAE</span>
             </p>
             <div className="w-2 h-2 bg-gold rounded-full animate-pulse" />
           </div>
