@@ -23,20 +23,26 @@ const Book3D = ({ size = "md", className = "" }: Book3DProps) => {
         perspective: "1200px",
         transformStyle: "preserve-3d",
       }}
-      initial={{ rotateY: -5, rotateX: 5 }}
+      initial={{ rotateY: -8, rotateX: 5 }}
       animate={{ 
-        rotateY: [-5, 5, -5],
-        rotateX: [5, 2, 5],
+        rotateY: [-8, 12, -8],
+        rotateX: [5, -2, 5],
       }}
       transition={{
-        duration: 6,
+        duration: 5,
         repeat: Infinity,
         ease: "easeInOut",
       }}
       whileHover={{
-        rotateY: 15,
-        scale: 1.05,
-        transition: { duration: 0.4 }
+        rotateY: 45,
+        rotateX: -5,
+        scale: 1.08,
+        transition: { duration: 0.5, ease: "easeOut" }
+      }}
+      whileTap={{
+        rotateY: 90,
+        scale: 1.02,
+        transition: { duration: 0.6 }
       }}
     >
       {/* Book shadow */}

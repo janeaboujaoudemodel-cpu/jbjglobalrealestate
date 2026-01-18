@@ -21,14 +21,15 @@ import { cn } from "@/lib/utils";
  * ============================================================
  */
 
+// Champagne gradient: from-white via-[#FDFBF7] to-[#F5F0E6]
 const BRAND_PRIMARY =
-  "bg-white text-gold border-2 border-gold hover:bg-transparent hover:text-gold";
+  "bg-white text-gold border-2 border-gold hover:bg-gradient-to-r hover:from-white hover:via-[#FDFBF7] hover:to-[#F5F0E6] hover:text-gold";
 const BRAND_SECONDARY =
-  "bg-transparent text-gold border-2 border-gold hover:bg-white hover:text-gold";
+  "bg-transparent text-gold border-2 border-gold hover:bg-gradient-to-r hover:from-white hover:via-[#FDFBF7] hover:to-[#F5F0E6] hover:text-gold";
 const BRAND_MEDIA =
-  "bg-transparent text-white border-2 border-white hover:bg-white hover:text-gold hover:border-gold";
+  "bg-transparent text-white border-2 border-white hover:bg-gradient-to-r hover:from-white hover:via-[#FDFBF7] hover:to-[#F5F0E6] hover:text-gold hover:border-gold";
 const BRAND_DARK =
-  "bg-black text-gold border-2 border-gold hover:bg-gold hover:text-black";
+  "bg-black text-gold border-2 border-gold hover:bg-gradient-to-r hover:from-white hover:via-[#FDFBF7] hover:to-[#F5F0E6] hover:text-gold hover:border-gold";
 
 const buttonVariants = cva(
   "inline-flex items-center justify-center gap-2 whitespace-nowrap rounded-md text-sm font-semibold ring-offset-background transition-all duration-300 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 [&_svg]:pointer-events-none [&_svg]:size-4 [&_svg]:shrink-0 cursor-pointer tracking-[0.02em]",
@@ -72,15 +73,14 @@ const COLOR_WORDS =
   "gold|white|black|zinc|gray|slate|neutral|stone|red|orange|amber|yellow|lime|green|emerald|teal|cyan|sky|blue|indigo|violet|purple|fuchsia|pink|rose";
 
 const forbiddenClassPatterns: RegExp[] = [
-  // Backgrounds + gradients
-  new RegExp(`(^|:)(bg-|from-|via-|to-)`),
+  // Backgrounds + gradients (but allow hover:bg-gradient for our champagne styling)
+  new RegExp(`(^|:)(?!hover:)bg-(?!gradient)`),
+  new RegExp(`(^|:)(?!hover:)(from-|via-|to-)(?!white|\\[#FD|\\[#F5)`),
   // Shadows / glows
   new RegExp(`(^|:)shadow`),
   new RegExp(`(^|:)drop-shadow`),
   // Scaling / transforms used as effects
   new RegExp(`(^|:)(hover:)?scale-`),
-  // Hover color overrides
-  new RegExp(`(^|:)hover:(bg-|text-|border-)`),
   // Text color overrides (but NOT sizing like text-sm)
   new RegExp(`(^|:)text-(${COLOR_WORDS})(-|/|$)`),
   // Border color overrides (but NOT widths like border-2)

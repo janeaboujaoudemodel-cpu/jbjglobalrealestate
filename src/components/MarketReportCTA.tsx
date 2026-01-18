@@ -35,12 +35,13 @@ const MarketReportCTA = () => {
               {/* Ambient glow */}
               <div className="absolute inset-0 bg-gradient-to-br from-gold/30 via-gold/10 to-transparent blur-3xl rounded-full scale-150 -z-10" />
               
-              {/* Interactive 3D Book - Enhanced Flip */}
+              {/* Interactive 3D Book - Enhanced Flip with Click-to-Open */}
               <motion.div
                 className="relative cursor-grab active:cursor-grabbing"
-                whileHover={{ scale: 1.05, rotateY: 25 }}
-                animate={{ rotateY: [-8, 8, -8] }}
-                transition={{ duration: 6, repeat: Infinity, ease: "easeInOut" }}
+                whileHover={{ scale: 1.08, rotateY: 35 }}
+                whileTap={{ rotateY: 120, scale: 1.02, transition: { duration: 0.8 } }}
+                animate={{ rotateY: [-10, 12, -10] }}
+                transition={{ duration: 5, repeat: Infinity, ease: "easeInOut" }}
               >
                 <motion.div 
                   className="relative"
@@ -48,8 +49,8 @@ const MarketReportCTA = () => {
                     transformStyle: "preserve-3d", 
                     transform: "rotateY(-15deg) rotateX(5deg)" 
                   }}
-                  whileHover={{ rotateY: 20, rotateX: -2 }}
-                  transition={{ duration: 0.6 }}
+                  whileHover={{ rotateY: 30, rotateX: -4 }}
+                  transition={{ duration: 0.5, ease: "easeOut" }}
                 >
                   {/* Book Shadow */}
                   <div 
