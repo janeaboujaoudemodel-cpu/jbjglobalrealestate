@@ -108,25 +108,25 @@ const FoundersChatPanel: React.FC<FoundersChatPanelProps> = ({ userName }) => {
       const welcomeMessage: Message = {
         id: 'welcome',
         role: 'assistant',
-        content: `${greeting}, ${capitalizedName}! 👋
+        content: `${greeting}, Miss Jane! 👋
 
-I'm **Amanda Clarke**, your personal executive assistant. I'm here to help you manage everything seamlessly.
+I'm **Amanda Clarke**, your personal executive assistant. I'm here to serve you and ensure everything runs seamlessly.
 
-**What I can do for you:**
-• 📧 Manage emails, WhatsApp, and all communications
+**At your service:**
+• 📧 Manage all your communications - emails, WhatsApp, and social media
 • 📅 Schedule meetings and create JBJ Video Meet links
-• 📊 Generate reports and analyze broker performance
-• 👥 Coordinate with all team members and departments
+• 📊 Generate reports and monitor team performance
+• 👥 Coordinate with all departments on your behalf
 • 🎯 Track leads, payments, and follow-ups
-• 📋 Create and manage tasks
-• 📈 Collect daily reports from broker assistants
+• 📋 Manage tasks and priorities
+• 📈 Collect daily reports from all department heads
 • 📝 Take notes from meetings, calls, and interviews
 
 I speak English and Spanish fluently. For other languages, I use professional translation to ensure accurate communication.
 
 Just type naturally or use commands like \`/schedule\`, \`/email\`, or mention team members with @name.
 
-*How may I assist you today?*`,
+*How may I assist you today, Miss Jane?*`,
         timestamp: new Date(),
       };
       setMessages([welcomeMessage]);
@@ -384,7 +384,7 @@ Just type naturally or use commands like \`/schedule\`, \`/email\`, or mention t
               Amanda Clarke
               <Badge className="bg-gold/10 text-gold border-gold/30 text-[10px]">
                 <Sparkles className="w-2.5 h-2.5 mr-0.5" />
-                Executive Assistant
+                Your Personal Assistant
               </Badge>
             </h3>
             <p className="text-gray-400 text-xs flex items-center gap-1">
@@ -601,11 +601,9 @@ Just type naturally or use commands like \`/schedule\`, \`/email\`, or mention t
                     <p className="text-sm text-white">{member.name}</p>
                     <p className="text-xs text-gray-400">{member.role}</p>
                   </div>
+                  {/* Star indicator visible only to founder */}
                   {member.isAI && (
-                    <Badge className="bg-gold/10 text-gold border-gold/30 text-xs">
-                      <Bot className="w-3 h-3 mr-1" />
-                      AI
-                    </Badge>
+                    <Sparkles className="w-4 h-4 text-gold flex-shrink-0" />
                   )}
                 </button>
               ))}

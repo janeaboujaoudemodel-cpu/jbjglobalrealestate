@@ -294,7 +294,7 @@ const App = () => (
                 <Route path="/jbj-broker-dashboard" element={<JBJBrokerDashboard />} />
                 <Route path="/jbj-broker-messages" element={<JBJBrokerMessages />} />
                 <Route path="/jbj-broker-reports" element={<JBJBrokerReports />} />
-                <Route path="/founders-assistant" element={<FoundersAssistant />} />
+                <Route path="/founder-assistant" element={<FoundersAssistant />} />
                 <Route path="/broker-admin-assistant" element={<BrokerAdminAssistant />} />
                 <Route path="/listing-admin/*" element={<ListingAdmin />} />
                 <Route path="/admin/training-guide" element={<AdminTrainingGuide />} />

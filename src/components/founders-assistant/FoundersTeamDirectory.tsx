@@ -94,20 +94,16 @@ const FoundersTeamDirectory: React.FC = () => {
                           style={{ objectFit: "cover", objectPosition: "center 15%" }}
                         />
                       </div>
-                      {member.isAI && (
-                        <span className="absolute -bottom-1 -right-1 w-5 h-5 bg-gold rounded-full flex items-center justify-center">
-                          <Sparkles className="w-3 h-3 text-black" />
-                        </span>
-                      )}
+                      {/* Star indicator - visible only to founder/admin */}
+                      <span className="absolute -bottom-1 -right-1 w-5 h-5 bg-gold rounded-full flex items-center justify-center">
+                        <Sparkles className="w-3 h-3 text-black" />
+                      </span>
                     </div>
 
                     {/* Info */}
                     <div className="flex-1 min-w-0">
                       <div className="flex items-center gap-2">
                         <h4 className="text-white font-semibold truncate">{member.name}</h4>
-                        {member.isAI && (
-                          <Badge className="bg-gold/10 text-gold border-gold/30 text-xs">AI</Badge>
-                        )}
                       </div>
                       <p className="text-sm text-gold truncate">{member.role}</p>
                       <div className="flex items-center gap-1 mt-1 text-xs text-gray-500">
@@ -133,45 +129,34 @@ const FoundersTeamDirectory: React.FC = () => {
                     </div>
                   )}
 
-                  {/* Quick Actions */}
+                  {/* Quick Actions - All employees get same buttons */}
                   <div className="flex items-center gap-2 mt-4 pt-4 border-t border-gold/10">
-                    {member.isAI ? (
-                      <Button
-                        size="sm"
-                        className="flex-1 bg-gold hover:bg-gold/90 text-black"
-                        onClick={() => handleContact(member, 'whatsapp')}
-                      >
-                        <MessageSquare className="w-4 h-4 mr-2" />
-                        Chat with AI
-                      </Button>
-                    ) : (
-                      <>
-                        <button
-                          onClick={() => handleContact(member, 'email')}
-                          className="w-8 h-8 rounded-full bg-gold/10 text-gold hover:bg-gold/20 flex items-center justify-center transition-colors"
-                        >
-                          <Mail className="w-4 h-4" />
-                        </button>
-                        <button
-                          onClick={() => handleContact(member, 'phone')}
-                          className="w-8 h-8 rounded-full bg-gold/10 text-gold hover:bg-gold/20 flex items-center justify-center transition-colors"
-                        >
-                          <Phone className="w-4 h-4" />
-                        </button>
-                        <button
-                          onClick={() => handleContact(member, 'whatsapp')}
-                          className="w-8 h-8 rounded-full bg-gold/10 text-gold hover:bg-gold/20 flex items-center justify-center transition-colors"
-                        >
-                          <MessageSquare className="w-4 h-4" />
-                        </button>
-                        <button
-                          onClick={() => handleContact(member, 'video')}
-                          className="w-8 h-8 rounded-full bg-gold/10 text-gold hover:bg-gold/20 flex items-center justify-center transition-colors"
-                        >
-                          <Video className="w-4 h-4" />
-                        </button>
-                      </>
-                    )}
+                    <Button
+                      size="sm"
+                      className="flex-1 bg-gold hover:bg-gold/90 text-black"
+                      onClick={() => handleContact(member, 'whatsapp')}
+                    >
+                      <MessageSquare className="w-4 h-4 mr-2" />
+                      Chat
+                    </Button>
+                    <button
+                      onClick={() => handleContact(member, 'email')}
+                      className="w-8 h-8 rounded-full bg-gold/10 text-gold hover:bg-gold/20 flex items-center justify-center transition-colors"
+                    >
+                      <Mail className="w-4 h-4" />
+                    </button>
+                    <button
+                      onClick={() => handleContact(member, 'phone')}
+                      className="w-8 h-8 rounded-full bg-gold/10 text-gold hover:bg-gold/20 flex items-center justify-center transition-colors"
+                    >
+                      <Phone className="w-4 h-4" />
+                    </button>
+                    <button
+                      onClick={() => handleContact(member, 'video')}
+                      className="w-8 h-8 rounded-full bg-gold/10 text-gold hover:bg-gold/20 flex items-center justify-center transition-colors"
+                    >
+                      <Video className="w-4 h-4" />
+                    </button>
                   </div>
                 </CardContent>
               </Card>
