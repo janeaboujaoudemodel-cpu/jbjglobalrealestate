@@ -417,17 +417,21 @@ const Footer = () => {
 
         {/* Bottom - Copyright & Legal with Founder Attribution */}
         <div className="flex flex-col items-center gap-4 text-sm text-zinc-500">
-          <div className="text-center space-y-2">
+          <div className="text-center space-y-3">
             <p className="font-medium text-white">
               © {currentYear} JBJ Global Real Estate. All Rights Reserved.
             </p>
-            <p className="text-xs text-zinc-600">
-              <span className="text-gold font-medium">Developed, Created & Implemented by Jane Abou Jaoude Founder & CEO JBJ Global Real Estate</span> | Brokerage Services Only
-            </p>
-            <p className="text-xs text-zinc-600 mt-1">
-              Platform Vision by{" "}
-              <span className="text-gold font-medium">Jane Abou Jaoude</span> — First Global Real Estate Platform of Its Kind
-            </p>
+            <div className="space-y-1">
+              <p className="text-gold font-medium text-sm">
+                Developed, Created & Implemented by The Founder & CEO, Jane Abou Jaoude
+              </p>
+              <p className="text-zinc-500 text-xs">
+                Designed exclusively for JBJ Global Real Estate
+              </p>
+              <Link to="/about" className="inline-block text-white hover:text-gold transition-colors text-sm font-medium mt-2">
+                First Global Real Estate Platform of Its Kind →
+              </Link>
+            </div>
           </div>
           <div className="flex flex-wrap items-center justify-center gap-3 md:gap-5">
             <Link to="/trust-and-audit-center" className="hover:text-gold transition-colors">

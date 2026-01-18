@@ -91,7 +91,7 @@ const MEDIA_TEAM = [
 
 export function BrokerToolkitSupport() {
   return (
-    <section id="section-support" className="py-16 md:py-20 bg-gradient-to-br from-pink-950 via-pink-900 to-pink-950">
+    <section id="section-support" className="py-16 md:py-20 bg-black">
       <div className="container mx-auto px-4">
         <motion.div
           initial={{ opacity: 0, y: 20 }}
@@ -106,7 +106,7 @@ export function BrokerToolkitSupport() {
           <h2 className="text-3xl md:text-4xl font-bold text-white mb-4">
             Your Personal <span className="text-pink-300">Success Team</span>
           </h2>
-          <p className="text-pink-200/70 max-w-2xl mx-auto">
+          <p className="text-zinc-400 max-w-2xl mx-auto">
             A full team of professionals dedicated to helping you succeed — all included in your membership.
           </p>
         </motion.div>

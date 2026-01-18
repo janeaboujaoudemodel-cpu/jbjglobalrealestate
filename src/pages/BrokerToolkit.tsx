@@ -16,7 +16,7 @@ export default function BrokerToolkit() {
   const [activeSection, setActiveSection] = useState("tools");
 
   return (
-    <div className="min-h-screen bg-[hsl(var(--premium-bg))]">
+    <div className="min-h-screen bg-black">
       <BrokerToolkitHero />
       <BrokerToolkitStats />
       <BrokerToolkitNavigation 

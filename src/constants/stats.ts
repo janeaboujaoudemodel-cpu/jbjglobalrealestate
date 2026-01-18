@@ -4,18 +4,18 @@
 
 export const COMPANY_STATS = {
   yearsInDubai: {
-    end: 6,
+    end: 12,
     suffix: '+',
     prefix: '',
     label: 'Years in Dubai',
-    note: 'Founder active since 2020',
+    note: 'Founder experience since 2014',
   },
   brokersTrainedBy: {
-    end: 2800,
+    end: 4800,
     suffix: '+',
     prefix: '',
     label: 'Brokers Trained',
-    note: 'By Founder (2022-2024)',
+    note: 'By Founder (2014-2026)',
   },
   socialFollowers: {
     end: 1000000,
@@ -25,11 +25,11 @@ export const COMPANY_STATS = {
     note: 'All Platforms Combined',
   },
   teamManaged: {
-    end: 495,
+    end: 147,
     suffix: '+',
     prefix: '',
-    label: 'Team Managed',
-    note: 'Operations Experience',
+    label: 'Team Members',
+    note: 'Current Team Size',
   },
 };
 

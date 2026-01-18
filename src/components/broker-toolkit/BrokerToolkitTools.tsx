@@ -95,7 +95,7 @@ const TOOLS = [
 
 export function BrokerToolkitTools() {
   return (
-    <section id="section-tools" className="py-16 md:py-20 bg-gradient-to-br from-purple-950 via-purple-900 to-purple-950">
+    <section id="section-tools" className="py-16 md:py-20 bg-black">
       <div className="container mx-auto px-4">
         <motion.div
           initial={{ opacity: 0, y: 20 }}
@@ -110,7 +110,7 @@ export function BrokerToolkitTools() {
           <h2 className="text-3xl md:text-4xl font-bold text-white mb-4">
             Professional Tools for <span className="text-purple-300">Modern Brokers</span>
           </h2>
-          <p className="text-purple-200/70 max-w-2xl mx-auto">
+          <p className="text-zinc-400 max-w-2xl mx-auto">
             Generate stunning presentations, manage leads, and close deals faster with our AI-powered toolkit.
           </p>
         </motion.div>

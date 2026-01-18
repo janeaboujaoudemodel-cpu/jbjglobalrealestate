@@ -481,29 +481,29 @@ const Index = () => {
                   <div className="absolute inset-0 bg-gradient-to-r from-transparent to-zinc-900/40 md:block hidden pointer-events-none" />
                 </div>
 
-                {/* Content Side - Dark for premium contrast */}
-                <div className="p-8 md:p-12 flex flex-col justify-center bg-zinc-950">
-                  <h3 className="text-white text-3xl md:text-4xl font-bold mb-2">Jane Abou Jaoude</h3>
+                {/* Content Side - Champagne/Gold for premium contrast */}
+                <div className="p-8 md:p-12 flex flex-col justify-center bg-gradient-to-br from-[#FDFBF7] via-[#F5F0E6] to-[#EDE4D3]">
+                  <h3 className="text-black text-3xl md:text-4xl font-bold mb-2">Jane Abou Jaoude</h3>
                   <p className="text-gold text-xl md:text-2xl font-semibold mb-6">Founder & CEO</p>
 
-                  <p className="text-zinc-300 text-base leading-relaxed mb-8">
-                    With over 12 years of experience and a proven track record of training 2,800+ brokers,
+                  <p className="text-zinc-700 text-base leading-relaxed mb-8">
+                    With over 12 years of experience and a proven track record of training 4,800+ brokers,
                     Jane leads JBJ Global Real Estate with a commitment to excellence, integrity, and client success.
                   </p>
 
                   {/* Stats Row */}
                   <div className="grid grid-cols-3 gap-4 mb-8">
-                    <div className="text-center p-3 bg-black border border-zinc-800 rounded-xl">
+                    <div className="text-center p-3 bg-black border border-gold/30 rounded-xl">
                       <p className="text-gold text-2xl md:text-3xl font-bold">12+</p>
                       <p className="text-zinc-400 text-[10px] uppercase tracking-wider mt-1">Years Exp</p>
                     </div>
-                    <div className="text-center p-3 bg-black border border-zinc-800 rounded-xl">
-                      <p className="text-gold text-2xl md:text-3xl font-bold">10+</p>
+                    <div className="text-center p-3 bg-black border border-gold/30 rounded-xl">
+                      <p className="text-gold text-2xl md:text-3xl font-bold">147+</p>
                       <p className="text-zinc-400 text-[10px] uppercase tracking-wider mt-1">Team Members</p>
                     </div>
-                    <div className="text-center p-3 bg-black border border-zinc-800 rounded-xl">
-                      <p className="text-gold text-2xl md:text-3xl font-bold">2.8K+</p>
-                      <p className="text-zinc-400 text-[10px] uppercase tracking-wider mt-1">Trained</p>
+                    <div className="text-center p-3 bg-black border border-gold/30 rounded-xl">
+                      <p className="text-gold text-2xl md:text-3xl font-bold">4.8K+</p>
+                      <p className="text-zinc-400 text-[10px] uppercase tracking-wider mt-1">Brokers Trained</p>
                     </div>
                   </div>
 

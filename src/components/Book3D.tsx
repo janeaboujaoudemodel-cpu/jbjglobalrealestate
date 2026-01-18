@@ -1,5 +1,6 @@
 import { useState } from "react";
 import { motion } from "framer-motion";
+import { cn } from "@/lib/utils";
 
 interface Book3DProps {
   size?: "sm" | "md" | "lg";
@@ -9,21 +10,23 @@ interface Book3DProps {
 const Book3D = ({ size = "md", className = "" }: Book3DProps) => {
   const [hoverSide, setHoverSide] = useState<"left" | "right" | null>(null);
   
-  // Enhanced dimensions with thicker spine for more dramatic 3D effect
+  // Enhanced dimensions with MUCH thicker spine for dramatic 3D effect
   const dimensions = {
-    sm: { width: 180, height: 250, spine: 28, fontSize: "text-[10px]", titleSize: "text-sm" },
-    md: { width: 240, height: 330, spine: 36, fontSize: "text-xs", titleSize: "text-base" },
-    lg: { width: 320, height: 440, spine: 45, fontSize: "text-sm", titleSize: "text-lg" },
+    sm: { width: 180, height: 250, spine: 50, fontSize: "text-[10px]", titleSize: "text-sm" },
+    md: { width: 240, height: 330, spine: 70, fontSize: "text-xs", titleSize: "text-base" },
+    lg: { width: 320, height: 440, spine: 90, fontSize: "text-sm", titleSize: "text-lg" },
   };
 
   const { width, height, spine, fontSize, titleSize } = dimensions[size];
-  const pageThickness = Math.max(16, spine - 10);
+  const pageThickness = Math.max(30, spine - 15);
 
-  // Calculate rotation based on which side is hovered - increased angles for dramatic flip
+  // Calculate rotation based on which side is hovered
+  // LEFT hover = flip to show RIGHT side (negative rotation)
+  // RIGHT hover = flip to show LEFT side (positive rotation)
   const getRotation = () => {
-    if (hoverSide === "left") return -75; // Flip left - more dramatic
-    if (hoverSide === "right") return 75;  // Flip right - more dramatic  
-    return -15; // Slight tilt at rest for 3D effect
+    if (hoverSide === "left") return -70; // Hover left → flip left to show right
+    if (hoverSide === "right") return 70; // Hover right → flip right to show left
+    return 0; // Neutral position - flat facing viewer
   };
 
   const handleMouseMove = (e: React.MouseEvent<HTMLDivElement>) => {
@@ -43,89 +46,95 @@ const Book3D = ({ size = "md", className = "" }: Book3DProps) => {
   };
 
   return (
-    <motion.div
-      className={`relative cursor-pointer ${className}`}
+    <div
+      className={cn("relative cursor-pointer", className)}
       style={{ 
-        width: width + spine + 30, 
-        height: height + 30,
+        width: width + spine + 40, 
+        height: height + 40,
         perspective: "1500px",
-        transformStyle: "preserve-3d",
       }}
       onMouseMove={handleMouseMove}
       onMouseLeave={handleMouseLeave}
-      initial={{ rotateY: -15, rotateX: 5 }}
-      animate={{ 
-        rotateY: getRotation(),
-        rotateX: hoverSide ? -8 : 5,
-        scale: hoverSide ? 1.12 : 1,
-      }}
-      transition={{
-        duration: 0.6,
-        ease: [0.23, 1, 0.32, 1], // Custom easing for smooth flip
-      }}
-      whileTap={{
-        rotateY: 150,
-        scale: 1.05,
-        transition: { duration: 0.8, ease: "easeOut" }
-      }}
     >
-      {/* Book shadow - enhanced for depth */}
-      <div 
-        className="absolute bottom-0 left-1/2 -translate-x-1/2 transition-all duration-500"
-        style={{
-          width: width * 0.9,
-          height: hoverSide ? 30 : 24,
-          background: "radial-gradient(ellipse, rgba(0,0,0,0.6) 0%, rgba(0,0,0,0.3) 40%, transparent 70%)",
-          filter: hoverSide ? "blur(16px)" : "blur(10px)",
-          transform: `translateZ(-${spine * 2}px)`,
-        }}
-      />
-
-      {/* Book container with 3D transform */}
-      <div 
+      <motion.div
         className="relative"
         style={{
           width: width + spine,
           height: height,
           transformStyle: "preserve-3d",
-          transform: "rotateY(-15deg)",
+          transformOrigin: "center center",
+        }}
+        initial={{ rotateY: 0 }}
+        animate={{ 
+          rotateY: getRotation(),
+          scale: hoverSide ? 1.08 : 1,
+        }}
+        transition={{
+          type: "spring",
+          stiffness: 80,
+          damping: 12,
+          mass: 1.2,
+        }}
+        whileTap={{
+          rotateY: 180,
+          scale: 1.02,
+          transition: { duration: 0.8, ease: "easeOut" }
         }}
       >
-        {/* Book spine - Elegant gold gradient */}
+        {/* Book shadow - enhanced for depth */}
+        <div 
+          className="absolute bottom-0 left-1/2 -translate-x-1/2 transition-all duration-500"
+          style={{
+            width: width * 0.9,
+            height: hoverSide ? 35 : 28,
+            background: "radial-gradient(ellipse, rgba(0,0,0,0.6) 0%, rgba(0,0,0,0.3) 40%, transparent 70%)",
+            filter: hoverSide ? "blur(18px)" : "blur(12px)",
+            transform: `translateZ(-${spine * 2}px) translateY(20px)`,
+          }}
+        />
+
+        {/* Book spine - The thick edge - NOW MUCH THICKER */}
         <div
-          className="absolute left-0 top-0 h-full"
+          className="absolute top-0 h-full"
           style={{
             width: spine,
-            background: "linear-gradient(90deg, #7A6A42 0%, #A8925A 30%, #C4A85C 50%, #A8925A 70%, #7A6A42 100%)",
-            transform: `translateX(-${spine}px) rotateY(-90deg)`,
-            transformOrigin: "right center",
-            boxShadow: "inset -2px 0 8px rgba(0,0,0,0.3), inset 2px 0 4px rgba(255,255,255,0.1)",
+            left: 0,
+            background: "linear-gradient(90deg, #1a1a1a 0%, #2d2d2d 20%, #3a3a3a 50%, #2d2d2d 80%, #1a1a1a 100%)",
+            transform: `rotateY(-90deg) translateZ(${width / 2}px) translateX(-${spine / 2}px)`,
+            transformOrigin: "center center",
+            boxShadow: "inset -4px 0 15px rgba(0,0,0,0.5), inset 4px 0 8px rgba(200,167,102,0.15)",
+            borderTop: "1px solid rgba(200,167,102,0.3)",
+            borderBottom: "1px solid rgba(200,167,102,0.3)",
           }}
         >
-          <div className="h-full flex items-center justify-center">
+          {/* Spine Text - Vertical */}
+          <div className="absolute inset-0 flex items-center justify-center">
             <span 
-              className="text-white font-semibold tracking-widest drop-shadow-lg"
+              className="text-gold font-bold tracking-[0.25em] uppercase whitespace-nowrap"
               style={{ 
                 writingMode: "vertical-rl", 
                 textOrientation: "mixed",
-                fontSize: size === "sm" ? "8px" : size === "md" ? "10px" : "12px",
-                letterSpacing: "0.2em",
-                textShadow: "0 1px 2px rgba(0,0,0,0.5)",
+                transform: "rotate(180deg)",
+                fontSize: size === "sm" ? "10px" : size === "md" ? "13px" : "16px",
+                textShadow: "0 0 15px rgba(200,167,102,0.6), 0 2px 4px rgba(0,0,0,0.5)",
               }}
             >
-              JBJ GLOBAL REAL ESTATE
+              JBJ Global Real Estate 2026
             </span>
           </div>
         </div>
 
         {/* Book front cover - Premium dark design */}
         <div
-          className="absolute top-0 left-0 w-full h-full rounded-r-md overflow-hidden"
+          className="absolute top-0 w-full h-full rounded-r-md overflow-hidden"
           style={{
+            left: spine,
+            width: width,
             background: "linear-gradient(145deg, #1a1a1a 0%, #0d0d0d 50%, #1a1a1a 100%)",
             border: "1px solid rgba(168, 146, 90, 0.5)",
+            transform: `translateZ(${spine / 2}px)`,
             boxShadow: `
-              4px 4px 20px rgba(0,0,0,0.5),
+              8px 8px 30px rgba(0,0,0,0.5),
               inset 0 0 60px rgba(168, 146, 90, 0.08),
               inset 0 1px 0 rgba(255,255,255,0.05)
             `,
@@ -231,29 +240,40 @@ const Book3D = ({ size = "md", className = "" }: Book3DProps) => {
           />
         </div>
 
-        {/* Book pages (side) - Cream colored pages */}
+        {/* Book pages (side) - Cream colored pages - THICKER */}
         <div
-          className="absolute right-0 top-[2px] h-[calc(100%-4px)]"
+          className="absolute top-[2px] h-[calc(100%-4px)]"
           style={{
             width: pageThickness,
+            left: spine + width,
             background: "repeating-linear-gradient(to bottom, #f5f0e0 0px, #f5f0e0 1px, #ebe5d5 1px, #ebe5d5 2px)",
-            transform: "translateX(100%) rotateY(90deg)",
-            transformOrigin: "left center",
-            boxShadow: "inset -2px 0 4px rgba(0,0,0,0.15)",
+            transform: `rotateY(90deg) translateZ(${width / 2}px) translateX(-${pageThickness / 2}px)`,
+            transformOrigin: "center center",
+            boxShadow: "inset -3px 0 8px rgba(0,0,0,0.2)",
           }}
         />
 
-        {/* Book back cover (partially visible) */}
+        {/* Book back cover */}
         <div
-          className="absolute top-0 left-0 w-full h-full"
+          className="absolute top-0 w-full h-full rounded-l-md"
           style={{
+            left: spine,
+            width: width,
             background: "linear-gradient(145deg, #151515 0%, #0a0a0a 100%)",
-            transform: `translateZ(-${spine}px)`,
-            borderRadius: "0 4px 4px 0",
+            transform: `translateZ(-${spine / 2}px)`,
+            boxShadow: "0 0 0 1px rgba(168, 146, 90, 0.2)",
           }}
-        />
-      </div>
-    </motion.div>
+        >
+          {/* Back cover minimal design */}
+          <div className="absolute inset-0 border border-gold/20 rounded-l-md" />
+          <div className="absolute inset-0 flex items-center justify-center">
+            <span className="text-zinc-600 text-xs uppercase tracking-[0.2em]">
+              JBJ Global
+            </span>
+          </div>
+        </div>
+      </motion.div>
+    </div>
   );
 };
 
