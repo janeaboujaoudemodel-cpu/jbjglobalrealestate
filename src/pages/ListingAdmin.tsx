@@ -46,6 +46,7 @@ import {
   ArrowLeft,
   FolderOpen,
   ExternalLink,
+  BookOpen,
 } from "lucide-react";
 
 interface ProjectDocument {
@@ -446,6 +447,14 @@ const ListingAdmin = () => {
             </div>
           </div>
           <div className="flex items-center gap-3">
+            <Button
+              variant="outline"
+              onClick={() => navigate("/admin/training-guide")}
+              className="border-gold/50 text-gold hover:bg-gold/10"
+            >
+              <BookOpen className="w-4 h-4 mr-2" />
+              Training Guide
+            </Button>
             <Badge className="bg-gold/20 text-gold border-gold/30">
               <Building2 className="w-3 h-3 mr-1" />
               Property Manager

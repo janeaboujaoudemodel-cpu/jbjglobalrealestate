@@ -815,38 +815,67 @@ const Properties = () => {
             </div>
           ) : (
             <div className="text-center py-20">
-              <div className="w-20 h-20 bg-zinc-100 rounded-full flex items-center justify-center mx-auto mb-6">
-                <Search className="w-10 h-10 text-zinc-400" />
-              </div>
-              {appliedFilters.transactionType === 'rent' ? (
+              {/* Developer Selected but No Listings */}
+              {appliedFilters.developerId && developers?.find(d => d.id === appliedFilters.developerId) ? (
                 <>
-                  <h3 className="text-xl font-semibold text-black mb-2">No Rental Listings Available</h3>
-                  <p className="text-zinc-500 mb-6">We currently do not have rental properties listed. Please check back soon or contact us for assistance.</p>
-                </>
-              ) : appliedFilters.transactionType === 'buy' && appliedFilters.completionStatus === 'ready' ? (
-                <>
-                  <h3 className="text-xl font-semibold text-black mb-2">No Ready Properties Found</h3>
-                  <p className="text-zinc-500 mb-6">Try adjusting your filters or search criteria to find available ready properties.</p>
-                </>
-              ) : appliedFilters.transactionType === 'buy' && appliedFilters.completionStatus === 'off-plan' ? (
-                <>
-                  <h3 className="text-xl font-semibold text-black mb-2">No Off-Plan Properties Found</h3>
-                  <p className="text-zinc-500 mb-6">Try adjusting your filters or search criteria to find available off-plan properties.</p>
-                </>
-              ) : appliedFilters.transactionType === 'buy' ? (
-                <>
-                  <h3 className="text-xl font-semibold text-black mb-2">No Properties for Sale Found</h3>
-                  <p className="text-zinc-500 mb-6">Try adjusting your filters or search criteria to find available properties.</p>
+                  <div className="w-24 h-24 bg-gradient-to-br from-gold/20 to-gold/5 rounded-full flex items-center justify-center mx-auto mb-6 border border-gold/30">
+                    <Building2 className="w-12 h-12 text-gold" />
+                  </div>
+                  <h3 className="text-2xl font-semibold text-black mb-3" style={{ fontFamily: "Poppins, sans-serif" }}>
+                    No Listings Yet for {developers.find(d => d.id === appliedFilters.developerId)?.name}
+                  </h3>
+                  <p className="text-zinc-500 mb-6 max-w-md mx-auto">
+                    We're currently adding properties from this developer to our portfolio. 
+                    Register your interest to be notified when listings become available.
+                  </p>
+                  <div className="flex flex-col sm:flex-row items-center justify-center gap-3">
+                    <a href={getWhatsAppUrl()} target="_blank" rel="noopener noreferrer">
+                      <Button variant="primary" className="h-12 px-8">
+                        <MessageCircle className="w-4 h-4 mr-2" />
+                        Register Interest via WhatsApp
+                      </Button>
+                    </a>
+                    <Button onClick={clearFilters} variant="outline" className="border-zinc-300 text-black hover:bg-zinc-100 h-12 px-6">
+                      Browse All Properties
+                    </Button>
+                  </div>
                 </>
               ) : (
                 <>
-                  <h3 className="text-xl font-semibold text-black mb-2">No properties found</h3>
-                  <p className="text-zinc-500 mb-6">Try adjusting your filters or search criteria</p>
+                  <div className="w-20 h-20 bg-zinc-100 rounded-full flex items-center justify-center mx-auto mb-6">
+                    <Search className="w-10 h-10 text-zinc-400" />
+                  </div>
+                  {appliedFilters.transactionType === 'rent' ? (
+                    <>
+                      <h3 className="text-xl font-semibold text-black mb-2">No Rental Listings Available</h3>
+                      <p className="text-zinc-500 mb-6">We currently do not have rental properties listed. Please check back soon or contact us for assistance.</p>
+                    </>
+                  ) : appliedFilters.transactionType === 'buy' && appliedFilters.completionStatus === 'ready' ? (
+                    <>
+                      <h3 className="text-xl font-semibold text-black mb-2">No Ready Properties Found</h3>
+                      <p className="text-zinc-500 mb-6">Try adjusting your filters or search criteria to find available ready properties.</p>
+                    </>
+                  ) : appliedFilters.transactionType === 'buy' && appliedFilters.completionStatus === 'off-plan' ? (
+                    <>
+                      <h3 className="text-xl font-semibold text-black mb-2">No Off-Plan Properties Found</h3>
+                      <p className="text-zinc-500 mb-6">Try adjusting your filters or search criteria to find available off-plan properties.</p>
+                    </>
+                  ) : appliedFilters.transactionType === 'buy' ? (
+                    <>
+                      <h3 className="text-xl font-semibold text-black mb-2">No Properties for Sale Found</h3>
+                      <p className="text-zinc-500 mb-6">Try adjusting your filters or search criteria to find available properties.</p>
+                    </>
+                  ) : (
+                    <>
+                      <h3 className="text-xl font-semibold text-black mb-2">No properties found</h3>
+                      <p className="text-zinc-500 mb-6">Try adjusting your filters or search criteria</p>
+                    </>
+                  )}
+                  <Button onClick={clearFilters} variant="outline" className="border-zinc-300 text-black hover:bg-zinc-100">
+                    Clear Filters
+                  </Button>
                 </>
               )}
-              <Button onClick={clearFilters} variant="outline" className="border-zinc-300 text-black hover:bg-zinc-100">
-                Clear Filters
-              </Button>
             </div>
           )}
         </div>
