@@ -2042,30 +2042,30 @@ const MarketReport = () => {
 
                   <div className="grid sm:grid-cols-2 gap-4">
                     <div>
-                      <Label className="text-zinc-300 text-sm font-medium">Email *</Label>
+                      <Label className="text-black text-sm font-medium">Email <span className="text-gold">*</span></Label>
                       <Input
                         type="email"
                         value={form.email}
                         onChange={(e) => setForm((p) => ({ ...p, email: e.target.value }))}
                         placeholder="your@email.com"
-                        className="mt-2 bg-zinc-900/50 border-zinc-700 text-white h-12 rounded-xl focus:border-gold/50 focus:ring-gold/20"
+                        className="mt-2 bg-zinc-50 border-zinc-300 text-black placeholder:text-gold h-12 rounded-xl focus:border-gold/50 focus:ring-gold/20"
                       />
                     </div>
                     <div>
-                      <Label className="text-zinc-300 text-sm font-medium">Phone *</Label>
+                      <Label className="text-black text-sm font-medium">Phone <span className="text-gold">*</span></Label>
                       <Input
                         type="tel"
                         value={form.phone}
                         onChange={(e) => setForm((p) => ({ ...p, phone: e.target.value }))}
                         placeholder="+971 50 123 4567"
-                        className="mt-2 bg-zinc-900/50 border-zinc-700 text-white h-12 rounded-xl focus:border-gold/50 focus:ring-gold/20"
+                        className="mt-2 bg-zinc-50 border-zinc-300 text-black placeholder:text-gold h-12 rounded-xl focus:border-gold/50 focus:ring-gold/20"
                       />
                     </div>
                   </div>
 
                   <div className="grid sm:grid-cols-2 gap-4">
                     <div>
-                      <Label className="text-zinc-300 text-sm font-medium">Nationality *</Label>
+                      <Label className="text-black text-sm font-medium">Nationality <span className="text-gold">*</span></Label>
                       <div className="mt-2">
                         <SearchableSelect
                           value={form.nationality}
@@ -2079,7 +2079,7 @@ const MarketReport = () => {
                     </div>
 
                     <div>
-                      <Label className="text-zinc-300 text-sm font-medium">Preferred Language *</Label>
+                      <Label className="text-black text-sm font-medium">Preferred Language <span className="text-gold">*</span></Label>
                       <div className="mt-2">
                         <SearchableSelect
                           value={form.language}
@@ -2129,9 +2129,9 @@ const MarketReport = () => {
             transition={{ duration: 0.6, delay: 0.3 }}
             className="lg:col-span-2 space-y-6"
           >
-            {/* What You'll Receive */}
-            <div className="bg-gradient-to-br from-zinc-900/80 to-zinc-950 border border-zinc-800 rounded-3xl p-8">
-              <h2 className="text-white text-xl font-bold mb-6">What You'll Receive</h2>
+            {/* What You'll Receive - White/Champagne Theme */}
+            <div className="bg-gradient-to-br from-white via-[#FDFBF7] to-[#F5F0E6] border border-gold/30 rounded-3xl p-8 shadow-lg">
+              <h2 className="text-black text-xl font-bold mb-6">What You'll Receive</h2>
               <ul className="space-y-4">
                 {[
                   "Structured market overview (educational)",
@@ -2142,46 +2142,21 @@ const MarketReport = () => {
                 ].map((item, i) => (
                   <li key={i} className="flex items-start gap-3">
                     <CheckCircle className="w-5 h-5 text-gold flex-shrink-0 mt-0.5" />
-                    <span className="text-zinc-300 text-sm">{item}</span>
+                    <span className="text-zinc-700 text-sm">{item}</span>
                   </li>
                 ))}
               </ul>
             </div>
 
-            {/* Founder Card */}
-            <div className="bg-gradient-to-br from-gold/10 to-zinc-950 border border-gold/20 rounded-3xl p-8">
-              <div className="flex items-center gap-4 mb-4">
-                {/* GLOBAL FOUNDER IMAGE RULE: Perfect center, no cropping */}
-                <div className="w-16 h-16 rounded-full overflow-hidden border-2 border-gold/50 bg-zinc-900 flex-shrink-0">
-                  <img 
-                    src={founderProfessional} 
-                    alt="Jane Abou Jaoude, Founder & CEO"
-                    className="w-full h-full"
-                    style={{
-                      objectFit: 'cover',
-                      objectPosition: 'center center',
-                    }}
-                  />
-                </div>
-                <div>
-                  <h3 className="text-white font-semibold">Jane Abou Jaoude</h3>
-                  <p className="text-gold text-sm">Founder & CEO</p>
-                </div>
-              </div>
-              <p className="text-zinc-400 text-sm leading-relaxed">
-                "This book represents years of experience in UAE real estate, distilled into actionable frameworks for investors."
+            {/* Brand Box - White/Champagne Theme - REMOVED DUPLICATE FOUNDER CARD */}
+            <div className="bg-gradient-to-br from-white via-[#FDFBF7] to-[#F5F0E6] border border-gold/30 rounded-2xl p-6 text-center shadow-lg">
+              <p className="text-zinc-600 text-xs mb-1">
+                Created by <span className="text-black font-semibold">Jane Abou Jaoude</span>
               </p>
-            </div>
-
-            {/* Brand Box */}
-            <div className="bg-zinc-900/50 border border-zinc-800 rounded-2xl p-6 text-center">
-              <p className="text-zinc-500 text-xs mb-1">
-                Created by <span className="text-white font-semibold">Jane Abou Jaoude</span>
-              </p>
-              <p className="text-zinc-400 text-sm">
+              <p className="text-zinc-700 text-sm">
                 Exclusive for <span className="text-gold font-semibold">JBJ Global Real Estate</span>
               </p>
-              <p className="text-zinc-600 text-[10px] mt-2 uppercase tracking-widest">
+              <p className="text-zinc-500 text-[10px] mt-2 uppercase tracking-widest">
                 Real Estate Brokerage • Dubai, UAE
               </p>
             </div>
