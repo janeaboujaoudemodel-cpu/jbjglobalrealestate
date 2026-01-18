@@ -215,7 +215,7 @@ END:VCARD`;
       value: "Downtown Dubai, UAE",
       action: null,
       iconColor: "text-gold",
-      titleColor: "text-gold",
+      titleColor: "text-black",
       valueColor: "text-gold",
       clickable: false,
     },
@@ -225,7 +225,7 @@ END:VCARD`;
       value: CONTACT_INFO.phone,
       action: 'phone-actions',
       iconColor: "text-gold",
-      titleColor: "text-gold",
+      titleColor: "text-black",
       valueColor: "text-gold hover:underline",
       clickable: true,
     },
@@ -235,7 +235,7 @@ END:VCARD`;
       value: CONTACT_INFO.email,
       action: getEmailUrl(),
       iconColor: "text-gold",
-      titleColor: "text-gold",
+      titleColor: "text-black",
       valueColor: "text-gold hover:underline",
       clickable: true,
     },
@@ -245,7 +245,7 @@ END:VCARD`;
       value: "Book Online Meeting",
       action: 'meeting',
       iconColor: "text-gold",
-      titleColor: "text-gold",
+      titleColor: "text-black",
       valueColor: "text-gold hover:underline",
       clickable: true,
     },
@@ -364,11 +364,11 @@ END:VCARD`;
                         name="fullName"
                         render={({ field }) => (
                           <FormItem>
-                            <FormLabel className="text-zinc-700 text-sm font-medium">Full Name *</FormLabel>
+                            <FormLabel className="text-black text-sm font-medium">Full Name *</FormLabel>
                             <FormControl>
                               <Input 
                                 {...field} 
-                                className="h-12 bg-zinc-50 border-zinc-300 text-black placeholder:text-zinc-400 focus:border-gold focus:bg-white"
+                                className="h-12 bg-zinc-50 border-zinc-300 text-black placeholder:text-gold/70 placeholder:drop-shadow-[0_0_4px_rgba(200,167,102,0.4)] focus:border-gold focus:bg-white"
                                 placeholder="John Doe"
                               />
                             </FormControl>
@@ -383,12 +383,12 @@ END:VCARD`;
                           name="email"
                           render={({ field }) => (
                             <FormItem>
-                              <FormLabel className="text-zinc-700 text-sm font-medium">Email Address *</FormLabel>
+                              <FormLabel className="text-black text-sm font-medium">Email Address *</FormLabel>
                               <FormControl>
                                 <Input 
                                   {...field} 
                                   type="email"
-                                  className="h-12 bg-zinc-50 border-zinc-300 text-black placeholder:text-zinc-400 focus:border-gold focus:bg-white"
+                                  className="h-12 bg-zinc-50 border-zinc-300 text-black placeholder:text-gold/70 placeholder:drop-shadow-[0_0_4px_rgba(200,167,102,0.4)] focus:border-gold focus:bg-white"
                                   placeholder="email@example.com"
                                 />
                               </FormControl>

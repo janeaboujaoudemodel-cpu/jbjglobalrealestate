@@ -51,27 +51,28 @@ export const FounderPhilosophySection = () => {
             >
               <Link to="/founder" className="block group">
                 {/* GLOBAL IMAGE RULE - LOCKED (FINAL):
-                    object-fit: cover + center 15% = max zoom, crop from bottom only */}
-                <div className="w-36 h-36 md:w-44 md:h-44 rounded-full overflow-hidden border-2 border-gold/30 group-hover:border-gold transition-colors duration-300 shadow-lg bg-zinc-900">
+                    object-fit: cover + center 5% = max zoom, focus on face, never crop head */}
+                <div className="w-36 h-36 md:w-44 md:h-44 rounded-full overflow-hidden border-2 border-white/50 group-hover:border-white group-hover:shadow-[0_0_20px_rgba(255,255,255,0.4)] transition-all duration-300 shadow-lg bg-zinc-900">
                   <img 
                     src={founderPremium}
                     alt="Jane Abou Jaoude, Founder & CEO of JBJ GLOBAL REAL ESTATE"
                     className="w-full h-full"
                     style={{
                       objectFit: 'cover',
-                      objectPosition: 'center 15%',
+                      objectPosition: 'center 5%',
+                      transform: 'scale(1.3)',
                     }}
                     loading="lazy"
                   />
                 </div>
               </Link>
-              {/* Know More About the Founder Link */}
+              {/* Know More About the Founder Link - Different label style with hover */}
               <Link 
                 to="/founder" 
-                className="flex items-center justify-center gap-2 mt-4 text-gold hover:text-gold-light text-sm transition-colors group"
+                className="flex items-center justify-center gap-2 mt-4 px-4 py-2 rounded-full border border-gold/50 text-gold hover:bg-gold hover:text-black text-sm transition-all duration-300 group"
               >
                 <span>Know More About the Founder</span>
-                <span className="group-hover:translate-x-1 transition-transform">→</span>
+                <span className="group-hover:translate-x-0.5 group-hover:-translate-y-0.5 transition-transform">↗</span>
               </Link>
             </motion.div>
 
@@ -89,7 +90,15 @@ export const FounderPhilosophySection = () => {
                 >
                   Jane Abou Jaoude
                 </Link>
-                <span className="block text-zinc-600 text-xs mt-1 normal-case tracking-normal">JBJ GLOBAL REAL ESTATE</span>
+                <span className="block mt-1 normal-case tracking-normal">
+                  at{" "}
+                  <Link 
+                    to="/about" 
+                    className="text-gold drop-shadow-[0_0_6px_rgba(200,167,102,0.5)] hover:text-gold-light transition-colors underline underline-offset-2"
+                  >
+                    JBJ Global Real Estate
+                  </Link>
+                </span>
               </p>
 
               {/* Premium White Text Box */}
