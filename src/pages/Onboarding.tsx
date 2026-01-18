@@ -230,7 +230,7 @@ export default function Onboarding() {
               </CardDescription>
             </CardHeader>
             <CardContent>
-              <Button asChild className="bg-gold hover:bg-gold/90 text-black">
+              <Button asChild variant="dark">
                 <Link to="/join">Apply Now</Link>
               </Button>
             </CardContent>

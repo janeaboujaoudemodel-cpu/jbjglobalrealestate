@@ -115,7 +115,7 @@ const Architecture = () => {
 
           <motion.div variants={fadeInUp}>
             <a href={CONTACT_INFO.inquiryFormUrl} target="_blank" rel="noopener noreferrer">
-              <Button className="bg-gold hover:bg-gold-light text-black font-semibold px-8 py-6 text-base">
+              <Button variant="media" className="px-8 py-6 text-base">
                 Start Your Project
                 <ArrowUpRight className="w-5 h-5 ml-2" />
               </Button>
@@ -233,7 +233,7 @@ const Architecture = () => {
               From concept sketches to completed masterpieces, our architects bring your dreams to life.
             </p>
             <a href={CONTACT_INFO.inquiryFormUrl} target="_blank" rel="noopener noreferrer">
-              <Button className="bg-gold hover:bg-gold-light text-black font-semibold px-8 py-6 text-base">
+              <Button variant="media" className="px-8 py-6 text-base">
                 Schedule Consultation
                 <ArrowUpRight className="w-5 h-5 ml-2" />
               </Button>

@@ -125,19 +125,21 @@ const Index = () => {
             className="flex flex-col sm:flex-row items-center justify-center gap-4"
           >
             <Link to="/properties">
-              <Button className="relative bg-gradient-to-r from-gold via-[#C4A962] to-gold hover:from-gold-light hover:to-gold text-black font-bold px-10 py-6 text-sm tracking-wide transition-all duration-500 hover:shadow-2xl hover:shadow-gold/50 hover:scale-105 border border-gold/50 shadow-lg shadow-gold/30">
-                <span className="relative z-10 flex items-center">
-                  Explore Properties
-                  <ArrowUpRight className="w-4 h-4 ml-2" />
-                </span>
+              <Button 
+                variant="media"
+                className="px-10 py-6 text-sm"
+              >
+                Explore Properties
+                <ArrowUpRight className="w-4 h-4 ml-2" />
               </Button>
             </Link>
             <Button 
-              className="relative bg-transparent border-2 border-gold text-gold hover:bg-gold hover:text-black font-bold px-10 py-6 text-sm tracking-wide transition-all duration-500 hover:shadow-2xl hover:shadow-gold/40 hover:scale-105 shadow-lg shadow-gold/20"
+              variant="secondary"
+              className="px-10 py-6 text-sm border-white text-white hover:bg-white hover:text-gold"
               onClick={() => setIsInquiryOpen(true)}
             >
               Book Consultation
-              <ArrowUpRight className="w-4 h-4 ml-2 text-gold" />
+              <ArrowUpRight className="w-4 h-4 ml-2" />
             </Button>
           </motion.div>
         </motion.div>
@@ -493,7 +495,7 @@ const Index = () => {
                   <p className="text-gold text-xl md:text-2xl font-semibold mb-6">Founder & CEO</p>
 
                   <p className="text-zinc-700 text-base leading-relaxed mb-8">
-                    With over 12 years of experience and a proven track record of training 4,800+ brokers,
+                    With 12+ years of industry experience and a proven track record of training 4,800+ brokers,
                     Jane leads JBJ Global Real Estate with a commitment to excellence, integrity, and client success.
                   </p>
 

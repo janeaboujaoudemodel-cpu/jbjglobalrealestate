@@ -408,7 +408,7 @@ const CRMAIToolsPanel = ({ lead, onGeneratePDF }: CRMAIToolsPanelProps) => {
               <Button variant="outline" onClick={() => setShowPDFDialog(false)} className="flex-1">
                 Cancel
               </Button>
-              <Button onClick={confirmGeneratePDF} className="flex-1 bg-gold text-black hover:bg-gold/90">
+              <Button onClick={confirmGeneratePDF} variant="dark" className="flex-1">
                 <FileText className="h-4 w-4 mr-2" />
                 Generate PDF
               </Button>

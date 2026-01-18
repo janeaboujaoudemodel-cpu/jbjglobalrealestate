@@ -430,7 +430,7 @@ const NewJoinerApplicationForm: React.FC<NewJoinerApplicationFormProps> = ({
             <Button
               type="submit"
               disabled={isSubmitting}
-              className="bg-gold text-black hover:bg-gold/90"
+              variant="dark"
             >
               {isSubmitting ? (
                 <>

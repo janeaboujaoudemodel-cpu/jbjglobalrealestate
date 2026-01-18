@@ -479,7 +479,7 @@ const AdminDevelopers = () => {
             <Button variant="outline" onClick={() => setIsDevDialogOpen(false)} className="border-zinc-600">
               Cancel
             </Button>
-            <Button onClick={handleSaveDeveloper} className="bg-gold hover:bg-gold/90 text-black">
+            <Button onClick={handleSaveDeveloper} variant="dark">
               {editingDev ? "Update" : "Add Developer"}
             </Button>
           </DialogFooter>
@@ -574,7 +574,7 @@ const AdminDevelopers = () => {
             <Button variant="outline" onClick={() => setIsRepDialogOpen(false)} className="border-zinc-600">
               Cancel
             </Button>
-            <Button onClick={handleSaveRep} className="bg-gold hover:bg-gold/90 text-black">
+            <Button onClick={handleSaveRep} variant="dark">
               {editingRep ? "Update" : "Add Sales Rep"}
             </Button>
           </DialogFooter>

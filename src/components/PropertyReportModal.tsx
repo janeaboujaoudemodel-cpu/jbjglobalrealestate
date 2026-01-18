@@ -222,7 +222,7 @@ const PropertyReportModal = ({ open, onOpenChange, project }: PropertyReportModa
               <Button
                 onClick={handleDownload}
                 size="sm"
-                className="bg-gold text-black hover:bg-gold-light"
+                variant="dark"
               >
                 <Download className="w-4 h-4 mr-1" />
                 Download

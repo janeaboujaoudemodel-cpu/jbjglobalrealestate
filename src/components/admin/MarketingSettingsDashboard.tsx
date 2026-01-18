@@ -186,7 +186,7 @@ export const MarketingSettingsDashboard = () => {
           <Button
             onClick={handleSave}
             disabled={!hasChanges || isSaving}
-            className="bg-gold hover:bg-gold-light text-black"
+            variant="dark"
           >
             <Save className="w-4 h-4 mr-2" />
             {isSaving ? 'Saving...' : 'Save Settings'}
