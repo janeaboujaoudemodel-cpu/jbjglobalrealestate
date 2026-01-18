@@ -149,8 +149,8 @@ const GlobalHeader = () => {
           </Link>
 
           {/* CENTER: Desktop Navigation - Premium styling with elegant dropdowns */}
-          <nav className="hidden lg:flex items-center justify-center flex-1 mx-2">
-            <div className="flex items-center gap-0 bg-gradient-to-r from-white via-[#FDFBF7] to-[#F5F0E6] backdrop-blur-sm rounded-full px-1 py-1 border border-gold/30 shadow-lg">
+          <nav className="hidden lg:flex items-center justify-center flex-1 mx-4">
+            <div className="flex items-center gap-0.5 bg-gradient-to-r from-white via-[#FDFBF7] to-[#F5F0E6] backdrop-blur-sm rounded-full px-3 py-1.5 border border-gold/30 shadow-lg">
               {mainNavLinks.slice(0, 1).map((link) => (
                 <Link
                   key={link.href}
@@ -293,37 +293,37 @@ const GlobalHeader = () => {
             </div>
           </nav>
 
-          {/* RIGHT: Actions - Premium icon buttons with gold accents */}
-          <div className="flex items-center gap-2 shrink-0 ml-auto">
-            {/* Search Icon - Premium gold button */}
+          {/* RIGHT: Actions - Smaller premium icon buttons with inverted hover */}
+          <div className="flex items-center gap-1.5 shrink-0 ml-auto">
+            {/* Search Icon - White bg with gold icon normally, inverted on hover */}
             <Button
               variant="ghost"
               size="sm"
-              className="relative text-gold hover:text-gold-light w-10 h-10 lg:w-11 lg:h-11 p-0 rounded-full border border-gold/20 hover:border-gold/50 hover:bg-gold/10 transition-all duration-300 group"
+              className="relative w-8 h-8 p-0 rounded-full bg-white border border-gold/30 hover:bg-transparent hover:border-gold/50 transition-all duration-300 group"
               onClick={() => setSearchOpen(true)}
             >
-              <Search className="w-4 h-4 lg:w-5 lg:h-5 group-hover:scale-110 transition-transform" />
+              <Search className="w-3.5 h-3.5 text-gold group-hover:text-gold-light transition-colors" />
             </Button>
 
-            {/* Favorites - Premium gold button */}
+            {/* Favorites - White bg with gold icon normally, inverted on hover */}
             <Link to="/favorites" className="shrink-0">
               <Button
                 variant="ghost"
                 size="sm"
-                className="relative text-gold hover:text-gold-light w-10 h-10 lg:w-11 lg:h-11 p-0 rounded-full border border-gold/20 hover:border-gold/50 hover:bg-gold/10 transition-all duration-300 group"
+                className="relative w-8 h-8 p-0 rounded-full bg-white border border-gold/30 hover:bg-transparent hover:border-gold/50 transition-all duration-300 group"
               >
-                <Heart className="w-4 h-4 lg:w-5 lg:h-5 group-hover:scale-110 transition-transform" />
+                <Heart className="w-3.5 h-3.5 text-gold group-hover:text-gold-light transition-colors" />
                 {totalCount > 0 && (
-                  <span className="absolute -top-0.5 -right-0.5 w-5 h-5 bg-gradient-to-br from-gold to-gold-dark text-black rounded-full text-[10px] font-bold flex items-center justify-center shadow-lg shadow-gold/30">
+                  <span className="absolute -top-0.5 -right-0.5 w-4 h-4 bg-gradient-to-br from-gold to-gold-dark text-black rounded-full text-[9px] font-bold flex items-center justify-center shadow-lg shadow-gold/30">
                     {totalCount}
                   </span>
                 )}
               </Button>
             </Link>
 
-            {/* Language Switcher - Premium styled */}
+            {/* Language Switcher - Smaller, inverted style */}
             <div className="shrink-0">
-              <LanguageSwitcher />
+              <LanguageSwitcher variant="compact" />
             </div>
 
             {/* Mobile Menu Trigger (visible under lg) */}
@@ -468,7 +468,7 @@ const GlobalHeader = () => {
               </SheetContent>
             </Sheet>
 
-            {/* User Menu - Desktop - Premium profile dropdown */}
+            {/* User Menu - Desktop - Premium profile dropdown matching nav style */}
             <div className="hidden lg:block">
               {user ? (
                 <DropdownMenu>
@@ -476,109 +476,111 @@ const GlobalHeader = () => {
                     <Button 
                       variant="ghost" 
                       size="icon"
-                      className="relative text-gold hover:text-gold-light w-10 h-10 lg:w-11 lg:h-11 p-0 rounded-full border border-gold/20 hover:border-gold/50 hover:bg-gold/10 transition-all duration-300 group"
+                      className="relative text-gold hover:text-gold-light w-9 h-9 p-0 rounded-full border border-gold/20 hover:border-gold/50 hover:bg-gold/10 transition-all duration-300 group"
                       aria-label={t('nav.myAccount')}
                     >
-                      <User className="w-5 h-5 group-hover:scale-110 transition-transform" />
+                      <User className="w-4 h-4 group-hover:scale-110 transition-transform" />
                     </Button>
                   </DropdownMenuTrigger>
                   <DropdownMenuContent 
                     align="end" 
                     sideOffset={12}
-                    className="bg-gradient-to-b from-zinc-900 to-black border border-gold/30 min-w-[240px] shadow-2xl shadow-black/50 rounded-xl overflow-hidden"
+                    className="bg-gradient-to-b from-white to-zinc-50 border border-gold/30 min-w-[260px] shadow-2xl shadow-black/30 py-3 rounded-xl overflow-hidden"
                   >
-                    {/* Premium header with gold accent */}
-                    <div className="relative px-5 py-4 border-b border-gold/20 bg-gradient-to-r from-gold/5 to-transparent">
-                      <div className="absolute top-0 left-0 right-0 h-[2px] bg-gradient-to-r from-transparent via-gold to-transparent" />
+                    {/* Premium header matching nav dropdown style */}
+                    <div className="absolute top-0 left-0 right-0 h-[2px] bg-gradient-to-r from-transparent via-gold to-transparent" />
+                    <div className="px-5 py-3 border-b border-gold/20 bg-gradient-to-r from-gold/5 to-transparent">
                       <p className="text-gold font-semibold text-sm tracking-wide">{t('nav.myAccount')}</p>
-                      <p className="text-zinc-500 text-xs mt-1 truncate">{user.email}</p>
+                      <p className="text-black text-xs mt-1 truncate">{user.email}</p>
                     </div>
                     
                     <div className="py-2">
-                      <DropdownMenuItem asChild className="focus:bg-gold/10">
-                        <Link to="/my-account" className="flex items-center gap-3 text-zinc-300 hover:text-gold px-5 py-3 transition-colors">
-                          <div className="w-8 h-8 rounded-lg bg-gold/10 flex items-center justify-center">
-                            <UserCircle className="w-4 h-4 text-gold" />
+                      <DropdownMenuItem asChild className="py-0 px-0 focus:bg-gold/10">
+                        <Link to="/my-account" className="flex items-center gap-3 text-zinc-800 hover:text-gold hover:bg-gold/10 py-3 px-5 transition-all w-full group">
+                          <div className="w-7 h-7 rounded-md bg-black flex items-center justify-center group-hover:bg-gold/20 transition-colors">
+                            <UserCircle className="w-3.5 h-3.5 text-gold" />
                           </div>
-                          <span className="font-medium">Profile</span>
+                          <span className="font-medium text-sm">Profile</span>
                         </Link>
                       </DropdownMenuItem>
-                      <DropdownMenuItem asChild className="focus:bg-gold/10">
-                        <Link to="/favorites" className="flex items-center gap-3 text-zinc-300 hover:text-gold px-5 py-3 transition-colors">
-                          <div className="w-8 h-8 rounded-lg bg-gold/10 flex items-center justify-center">
-                            <Heart className="w-4 h-4 text-gold" />
+                      <DropdownMenuItem asChild className="py-0 px-0 focus:bg-gold/10">
+                        <Link to="/favorites" className="flex items-center gap-3 text-zinc-800 hover:text-gold hover:bg-gold/10 py-3 px-5 transition-all w-full group">
+                          <div className="w-7 h-7 rounded-md bg-black flex items-center justify-center group-hover:bg-gold/20 transition-colors">
+                            <Heart className="w-3.5 h-3.5 text-gold" />
                           </div>
-                          <span className="font-medium">{t('nav.favorites')}</span>
+                          <span className="font-medium text-sm">{t('nav.favorites')}</span>
                         </Link>
                       </DropdownMenuItem>
                       
                       {/* Admin/Founder shortcuts */}
                       {(isAdmin || hasCRMAccess) && (
                         <>
-                          <DropdownMenuSeparator className="bg-gold/10 my-2" />
-                          <p className="px-5 py-1.5 text-[10px] uppercase tracking-wider text-gold/60 font-medium">Admin Shortcuts</p>
+                          <DropdownMenuSeparator className="bg-gold/20 my-2" />
+                          <p className="px-5 py-1.5 text-[10px] uppercase tracking-wider text-gold font-medium">Admin Shortcuts</p>
                           
                           {/* My Assistant - Always show for admin/founder */}
-                          <DropdownMenuItem asChild className="focus:bg-gold/10">
-                            <Link to="/founder-assistant" className="flex items-center gap-3 text-zinc-300 hover:text-gold px-5 py-3 transition-colors">
-                              <div className="w-8 h-8 rounded-lg bg-gold/10 flex items-center justify-center">
-                                <Sparkles className="w-4 h-4 text-gold" />
+                          <DropdownMenuItem asChild className="py-0 px-0 focus:bg-gold/10">
+                            <Link to="/founder-assistant" className="flex items-center gap-3 text-zinc-800 hover:text-gold hover:bg-gold/10 py-3 px-5 transition-all w-full group">
+                              <div className="w-7 h-7 rounded-md bg-black flex items-center justify-center group-hover:bg-gold/20 transition-colors">
+                                <Sparkles className="w-3.5 h-3.5 text-gold" />
                               </div>
-                              <span className="font-medium">My Assistant</span>
+                              <span className="font-medium text-sm">My Assistant</span>
                             </Link>
                           </DropdownMenuItem>
                           
                           {/* Employee Hub */}
-                          <DropdownMenuItem asChild className="focus:bg-gold/10">
-                            <Link to="/employee-hub" className="flex items-center gap-3 text-zinc-300 hover:text-gold px-5 py-3 transition-colors">
-                              <div className="w-8 h-8 rounded-lg bg-gold/10 flex items-center justify-center">
-                                <Briefcase className="w-4 h-4 text-gold" />
+                          <DropdownMenuItem asChild className="py-0 px-0 focus:bg-gold/10">
+                            <Link to="/employee-hub" className="flex items-center gap-3 text-zinc-800 hover:text-gold hover:bg-gold/10 py-3 px-5 transition-all w-full group">
+                              <div className="w-7 h-7 rounded-md bg-black flex items-center justify-center group-hover:bg-gold/20 transition-colors">
+                                <Briefcase className="w-3.5 h-3.5 text-gold" />
                               </div>
-                              <span className="font-medium">Employee Hub</span>
+                              <span className="font-medium text-sm">Employee Hub</span>
                             </Link>
                           </DropdownMenuItem>
                           
                           {/* Listing Admin */}
-                          <DropdownMenuItem asChild className="focus:bg-gold/10">
-                            <Link to="/listing-admin" className="flex items-center gap-3 text-zinc-300 hover:text-gold px-5 py-3 transition-colors">
-                              <div className="w-8 h-8 rounded-lg bg-gold/10 flex items-center justify-center">
-                                <FolderOpen className="w-4 h-4 text-gold" />
+                          <DropdownMenuItem asChild className="py-0 px-0 focus:bg-gold/10">
+                            <Link to="/listing-admin" className="flex items-center gap-3 text-zinc-800 hover:text-gold hover:bg-gold/10 py-3 px-5 transition-all w-full group">
+                              <div className="w-7 h-7 rounded-md bg-black flex items-center justify-center group-hover:bg-gold/20 transition-colors">
+                                <FolderOpen className="w-3.5 h-3.5 text-gold" />
                               </div>
-                              <span className="font-medium">Listing Admin</span>
+                              <span className="font-medium text-sm">Listing Admin</span>
                             </Link>
                           </DropdownMenuItem>
                         </>
                       )}
                       
                       {hasCRMAccess && (
-                        <DropdownMenuItem asChild className="focus:bg-gold/10">
-                          <Link to="/crm" className="flex items-center gap-3 text-zinc-300 hover:text-gold px-5 py-3 transition-colors">
-                            <div className="w-8 h-8 rounded-lg bg-gold/10 flex items-center justify-center">
-                              <Users className="w-4 h-4 text-gold" />
+                        <DropdownMenuItem asChild className="py-0 px-0 focus:bg-gold/10">
+                          <Link to="/crm" className="flex items-center gap-3 text-zinc-800 hover:text-gold hover:bg-gold/10 py-3 px-5 transition-all w-full group">
+                            <div className="w-7 h-7 rounded-md bg-black flex items-center justify-center group-hover:bg-gold/20 transition-colors">
+                              <Users className="w-3.5 h-3.5 text-gold" />
                             </div>
-                            <span className="font-medium">{t('nav.crm') || 'CRM Dashboard'}</span>
+                            <span className="font-medium text-sm">{t('nav.crm') || 'CRM Dashboard'}</span>
                           </Link>
                         </DropdownMenuItem>
                       )}
                       {isAdmin && (
-                        <DropdownMenuItem asChild className="focus:bg-gold/10">
-                          <Link to="/admin" className="flex items-center gap-3 text-zinc-300 hover:text-gold px-5 py-3 transition-colors">
-                            <div className="w-8 h-8 rounded-lg bg-gold/10 flex items-center justify-center">
-                              <Settings className="w-4 h-4 text-gold" />
+                        <DropdownMenuItem asChild className="py-0 px-0 focus:bg-gold/10">
+                          <Link to="/admin" className="flex items-center gap-3 text-zinc-800 hover:text-gold hover:bg-gold/10 py-3 px-5 transition-all w-full group">
+                            <div className="w-7 h-7 rounded-md bg-black flex items-center justify-center group-hover:bg-gold/20 transition-colors">
+                              <Settings className="w-3.5 h-3.5 text-gold" />
                             </div>
-                            <span className="font-medium">{t('nav.admin')}</span>
+                            <span className="font-medium text-sm">{t('nav.admin')}</span>
                           </Link>
                         </DropdownMenuItem>
                       )}
                     </div>
                     
-                    <DropdownMenuSeparator className="bg-gold/10" />
+                    <DropdownMenuSeparator className="bg-gold/20" />
                     <div className="py-2">
-                      <DropdownMenuItem onClick={() => signOut()} className="flex items-center gap-3 text-zinc-400 hover:text-red-400 px-5 py-3 cursor-pointer focus:bg-red-500/10">
-                        <div className="w-8 h-8 rounded-lg bg-red-500/10 flex items-center justify-center">
-                          <LogOut className="w-4 h-4 text-red-400" />
+                      <DropdownMenuItem onClick={() => signOut()} className="py-0 px-0 cursor-pointer focus:bg-red-500/10">
+                        <div className="flex items-center gap-3 text-zinc-600 hover:text-red-500 py-3 px-5 transition-all w-full group">
+                          <div className="w-7 h-7 rounded-md bg-red-100 flex items-center justify-center group-hover:bg-red-200 transition-colors">
+                            <LogOut className="w-3.5 h-3.5 text-red-500" />
+                          </div>
+                          <span className="font-medium text-sm">{t('nav.signOut')}</span>
                         </div>
-                        <span className="font-medium">{t('nav.signOut')}</span>
                       </DropdownMenuItem>
                     </div>
                   </DropdownMenuContent>
