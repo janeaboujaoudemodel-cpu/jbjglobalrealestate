@@ -225,10 +225,10 @@ export const DELIVERY_REQUIREMENTS: DeliveryRequirement[] = [
     title: "CRM 'My Assistant' uses Olivia identity",
     requirement:
       "Default assistant must be Olivia AI with custom portrait (no 'No Assistant Found' state).",
-    status: "partial",
+    status: "done",
     evidence: [
       "src/pages/CRM.tsx (My Assistant button opens assistant panel)",
-      "src/components/crm/CRMAssistantPanel.tsx (assistant identity currently hard-coded to 'Jessica' w/ Unsplash avatar)",
+      "src/components/crm/CRMAssistantPanel.tsx (now uses Olivia Reynolds with official team portrait)",
     ],
   },
 
