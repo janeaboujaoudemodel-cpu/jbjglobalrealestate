@@ -92,10 +92,13 @@ const CRMEnhancedDashboard = ({ userId, isAdmin }: EnhancedDashboardProps) => {
         statesQuery = statesQuery.eq("user_id", userId);
       }
 
-      const [callsRes, activitiesRes, statesRes] = await Promise.all([
+      const [callsRes, activitiesRes, statesRes, leadsCountRes] = await Promise.all([
         callsQuery,
         activitiesQuery,
-        statesQuery
+        statesQuery,
+        isAdmin
+          ? supabase.from("crm_leads").select("id", { count: "exact", head: true })
+          : Promise.resolve({ count: 0 } as any),
       ]);
 
       const calls = callsRes.data || [];
@@ -121,6 +124,9 @@ const CRMEnhancedDashboard = ({ userId, isAdmin }: EnhancedDashboardProps) => {
       states.forEach(s => {
         pipelineCounts[s.pipeline_status] = (pipelineCounts[s.pipeline_status] || 0) + 1;
       });
+
+      // Total leads (no placeholders)
+      const totalLeads = isAdmin ? (leadsCountRes.count || 0) : states.length;
 
       // Calculate conversion rate
       const totalClosed = (pipelineCounts['closed_won'] || 0) + (pipelineCounts['closed_lost'] || 0);
@@ -157,10 +163,10 @@ const CRMEnhancedDashboard = ({ userId, isAdmin }: EnhancedDashboardProps) => {
         whatsappWeek,
         followupsCreated,
         followupsCompleted,
-        totalLeads: states.length,
+        totalLeads,
         pipelineCounts,
         conversionRate,
-        avgResponseTime: 2.4,
+        avgResponseTime: 0,
         weeklyTrend,
         pipelineData,
         topPerformers: []
