@@ -44,6 +44,7 @@ const BestIdeaAward = () => {
   const [isOpen, setIsOpen] = useState(false);
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [isSubmitted, setIsSubmitted] = useState(false);
+  const [drawTicketNumber, setDrawTicketNumber] = useState("");
   const [formData, setFormData] = useState<IdeaSubmission>({
     fullName: "",
     email: "",
@@ -88,34 +89,38 @@ const BestIdeaAward = () => {
       // In production, this would save to a database table
       console.log("Idea submission:", submissionData);
       
+      // Generate draw ticket number
+      const ticketNum = `IDEA-${Date.now().toString(36).toUpperCase()}-${Math.random().toString(36).substring(2, 6).toUpperCase()}`;
+      setDrawTicketNumber(ticketNum);
+      
       // Simulate API call
       await new Promise(resolve => setTimeout(resolve, 1000));
 
       setIsSubmitted(true);
-      toast.success(
-        formData.isAnonymous 
-          ? "Thank you for your idea! Note: Anonymous submissions don't enter the iPad draw."
-          : "Thank you! Your idea has been submitted and you're entered in the iPad draw!"
-      );
-
-      // Reset form after success
-      setTimeout(() => {
-        setIsOpen(false);
-        setIsSubmitted(false);
-        setFormData({
-          fullName: "",
-          email: "",
-          phone: "",
-          idea: "",
-          isAnonymous: false,
-        });
-      }, 2000);
+      
+      // Don't show toast - the success dialog is more prominent
 
     } catch (error) {
       toast.error("Failed to submit idea. Please try again.");
     } finally {
       setIsSubmitting(false);
     }
+  };
+
+  const handleCloseSuccess = () => {
+    setIsOpen(false);
+    // Reset after dialog closes
+    setTimeout(() => {
+      setIsSubmitted(false);
+      setDrawTicketNumber("");
+      setFormData({
+        fullName: "",
+        email: "",
+        phone: "",
+        idea: "",
+        isAnonymous: false,
+      });
+    }, 300);
   };
 
   return (
@@ -165,10 +170,13 @@ const BestIdeaAward = () => {
                       <div>
                         <p className="text-gold font-bold text-lg">iPad Pro M4</p>
                         <p className="text-zinc-400 text-sm">13" • 256GB • Wi-Fi + Cellular</p>
-                        <p className="text-gold/80 text-sm mt-1">
-                          <Gift className="w-3 h-3 inline mr-1" />
-                          Value: AED 11,000
-                        </p>
+                        <div className="mt-2 grid grid-cols-2 gap-x-4 gap-y-1 text-xs">
+                          <p className="text-gold/90"><Gift className="w-3 h-3 inline mr-1" />AED 11,000</p>
+                          <p className="text-zinc-400">USD $2,995</p>
+                          <p className="text-zinc-400">EUR €2,750</p>
+                          <p className="text-zinc-400">GBP £2,350</p>
+                          <p className="text-zinc-400">INR ₹2,49,000</p>
+                        </div>
                       </div>
                     </div>
                   </div>
@@ -197,9 +205,10 @@ const BestIdeaAward = () => {
                     </ul>
                   </div>
 
-                  <div className="text-xs text-zinc-500">
+                  <div className="text-xs text-zinc-500 space-y-1">
                     <p>• One winner selected monthly from all valid entries</p>
                     <p>• Anonymous submissions are welcome but won't enter the draw</p>
+                    <p>• <span className="text-gold">Submit multiple unique ideas = Multiple draw tickets!</span></p>
                   </div>
                 </div>
 
@@ -228,16 +237,48 @@ const BestIdeaAward = () => {
                         <motion.div 
                           initial={{ opacity: 0, scale: 0.9 }}
                           animate={{ opacity: 1, scale: 1 }}
-                          className="py-8 text-center"
+                          className="py-6 text-center"
                         >
-                          <CheckCircle className="w-16 h-16 text-green-500 mx-auto mb-4" />
-                          <h3 className="text-xl font-bold text-black mb-2">Idea Submitted!</h3>
-                          <p className="text-zinc-600">
-                            {formData.isAnonymous 
-                              ? "Thank you for your idea!"
-                              : "You're now entered in the iPad draw!"
-                            }
-                          </p>
+                          <div className="w-20 h-20 bg-gradient-to-br from-green-100 to-green-50 rounded-full flex items-center justify-center mx-auto mb-5">
+                            <CheckCircle className="w-10 h-10 text-green-500" />
+                          </div>
+                          <h3 className="text-2xl font-bold text-black mb-3">Idea Received Successfully!</h3>
+                          
+                          {!formData.isAnonymous && (
+                            <div className="bg-gradient-to-r from-gold/10 via-gold/5 to-gold/10 border border-gold/40 rounded-xl p-5 mb-5">
+                              <p className="text-sm text-zinc-600 mb-2">Your Draw Ticket Number</p>
+                              <p className="text-xl font-bold text-gold tracking-wider mb-2">{drawTicketNumber}</p>
+                              <p className="text-xs text-zinc-500">This ticket is linked to your account</p>
+                            </div>
+                          )}
+
+                          <div className="bg-zinc-50 rounded-xl p-5 mb-5 text-left">
+                            <p className="text-zinc-700 mb-3">
+                              <span className="text-gold font-semibold">We deeply appreciate</span> your creativity and the time you took to share your idea with us.
+                            </p>
+                            {!formData.isAnonymous ? (
+                              <>
+                                <p className="text-zinc-600 text-sm mb-2">
+                                  Your idea has been linked to your contact details. In case you are the winner, we will contact you accordingly.
+                                </p>
+                                <p className="text-zinc-600 text-sm">
+                                  <Sparkles className="w-4 h-4 inline text-gold mr-1" />
+                                  <span className="text-gold font-medium">Submit another unique idea</span> to get additional draw tickets!
+                                </p>
+                              </>
+                            ) : (
+                              <p className="text-zinc-500 text-sm">
+                                Note: Anonymous submissions don't enter the draw, but your idea will still be considered.
+                              </p>
+                            )}
+                          </div>
+
+                          <Button
+                            onClick={handleCloseSuccess}
+                            className="bg-black text-gold hover:bg-zinc-900 border border-gold/30 px-8 py-5"
+                          >
+                            Close & Submit Another Idea
+                          </Button>
                         </motion.div>
                       ) : (
                         <form onSubmit={handleSubmit} className="space-y-4 py-4">

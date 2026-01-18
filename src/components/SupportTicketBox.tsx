@@ -48,7 +48,15 @@ const SERVICE_CATEGORIES = [
   "Mobile App",
   "Document Management",
   "Communication (Email/WhatsApp)",
+  "Technical Bug (Website/App)",
   "Other"
+];
+
+const PRIORITY_LEVELS = [
+  { value: "low", label: "Low", color: "text-zinc-500", description: "Minor issue, no urgency" },
+  { value: "normal", label: "Normal", color: "text-blue-500", description: "Standard priority" },
+  { value: "high", label: "High", color: "text-orange-500", description: "Significant impact" },
+  { value: "critical", label: "Critical", color: "text-red-500", description: "Blocking/Urgent" },
 ];
 
 const SupportTicketBox = () => {
@@ -65,6 +73,8 @@ const SupportTicketBox = () => {
     serviceCategory: "",
     subject: "",
     description: "",
+    priority: "normal",
+    escalateToTech: false,
   });
   const [attachments, setAttachments] = useState<File[]>([]);
 
@@ -136,6 +146,8 @@ const SupportTicketBox = () => {
           serviceCategory: formData.serviceCategory,
           subject: formData.subject,
           description: formData.description,
+          priority: formData.priority,
+          escalateToTech: formData.escalateToTech,
           attachmentUrls
         }
       });
@@ -164,6 +176,8 @@ const SupportTicketBox = () => {
       serviceCategory: "",
       subject: "",
       description: "",
+      priority: "normal",
+      escalateToTech: false,
     });
     setAttachments([]);
     setIsOpen(false);
@@ -403,6 +417,30 @@ const SupportTicketBox = () => {
                               />
                             </div>
 
+                            {/* Priority Selection */}
+                            <div>
+                              <Label className="text-zinc-700 flex items-center gap-2">
+                                <AlertCircle className="w-4 h-4 text-orange-500" />
+                                Priority Level
+                              </Label>
+                              <Select
+                                value={formData.priority}
+                                onValueChange={(value) => setFormData({ ...formData, priority: value })}
+                              >
+                                <SelectTrigger className="mt-1 border-zinc-300 focus:border-gold">
+                                  <SelectValue placeholder="Select priority" />
+                                </SelectTrigger>
+                                <SelectContent>
+                                  {PRIORITY_LEVELS.map((level) => (
+                                    <SelectItem key={level.value} value={level.value}>
+                                      <span className={`font-medium ${level.color}`}>{level.label}</span>
+                                      <span className="text-zinc-400 text-xs ml-2">- {level.description}</span>
+                                    </SelectItem>
+                                  ))}
+                                </SelectContent>
+                              </Select>
+                            </div>
+
                             {/* Description */}
                             <div>
                               <Label className="text-zinc-700">
@@ -416,6 +454,23 @@ const SupportTicketBox = () => {
                                 required
                               />
                             </div>
+
+                            {/* Escalate to Tech Team Option */}
+                            {(formData.serviceCategory === "Technical Bug (Website/App)" || formData.serviceCategory === "AI Tools & Features") && (
+                              <div className="flex items-center gap-3 p-4 bg-gradient-to-r from-blue-50 to-zinc-50 rounded-lg border border-blue-200">
+                                <input
+                                  type="checkbox"
+                                  id="escalate-tech"
+                                  checked={formData.escalateToTech}
+                                  onChange={(e) => setFormData({ ...formData, escalateToTech: e.target.checked })}
+                                  className="w-5 h-5 rounded border-blue-300 text-blue-500 focus:ring-blue-500"
+                                />
+                                <label htmlFor="escalate-tech" className="text-sm text-zinc-700">
+                                  <span className="font-medium text-blue-600">Escalate to Web Developer / Lovable AI</span>
+                                  <span className="block text-xs text-zinc-500">For direct technical fix</span>
+                                </label>
+                              </div>
+                            )}
 
                             {/* File Upload */}
                             <div>
@@ -499,7 +554,7 @@ const SupportTicketBox = () => {
                   </Dialog>
 
                   <p className="text-sm text-zinc-500 mt-4">
-                    Email: <span className="text-gold font-medium">support@jbj.ae</span>
+                    Email: <span className="text-gold font-medium">Support@JBJ.ae</span>
                   </p>
                 </div>
               </div>
