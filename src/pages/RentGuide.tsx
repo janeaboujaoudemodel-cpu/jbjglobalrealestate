@@ -229,8 +229,8 @@ const RentGuide = () => {
         }
       />
 
-      {/* Sticky Table of Contents */}
-      <div className="hidden lg:block fixed right-8 top-1/3 z-30">
+      {/* Sticky Table of Contents - z-50 to appear above JBJ support widget */}
+      <div className="hidden lg:block fixed right-8 top-1/3 z-50">
         <GuideTableOfContents 
           items={tocItems}
           ctaAction={{
