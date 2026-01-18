@@ -183,7 +183,7 @@ const Terms = () => {
                 </p>
                 <p className="mt-6 text-zinc-500 text-sm">
                   © {new Date().getFullYear()} JBJ GLOBAL REAL ESTATE. All Rights Reserved.<br />
-                  Developed and Created by Founder and CEO Jane Abou Jaoude
+                  Developed and Created by Founder & CEO Jane Abou Jaoude
                 </p>
               </section>
             </div>

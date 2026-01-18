@@ -55,8 +55,8 @@ const ChatHeader = ({ step, isExistingUser, onBack, onToggleCollapse }: ChatHead
             />
           </div>
         ) : (
-          <div className="w-10 h-10 rounded-full bg-gradient-to-br from-gold to-gold-light flex items-center justify-center shadow-lg shadow-gold/30">
-            <MessageCircle className="w-5 h-5 text-black" />
+          <div className="w-10 h-10 rounded-lg bg-white border border-gold/30 flex items-center justify-center shadow-lg">
+            <MessageCircle className="w-5 h-5 text-gold" />
           </div>
         )}
         <div>

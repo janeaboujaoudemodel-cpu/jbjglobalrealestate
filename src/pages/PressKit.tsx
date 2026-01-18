@@ -227,7 +227,7 @@ const PressKit = () => {
               </div>
               
               <p className="text-zinc-700 leading-relaxed">
-                <span className="text-gold font-semibold">Jane Abou Jaoude</span> is the Founder and CEO of JBJ GLOBAL REAL ESTATE, 
+                <span className="text-gold font-semibold">Jane Abou Jaoude</span> is the Founder & CEO of JBJ GLOBAL REAL ESTATE, 
                 a Dubai-based Real Estate brokerage. 
                 Born August 25, 1998, in Lebanon, she founded her first business—Jane's Beauty—at age 16 in 2015 while still studying. 
                 Fluent in French, English, Arabic, and Spanish, Jane relocated to Dubai in 2020. 

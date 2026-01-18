@@ -38,8 +38,8 @@ export const JBJ_COMPANY_INFO = {
   website: "www.JBJ.ae",
   locations: ["Dubai", "London", "Riyadh"],
   founder: "Jane Abou Jaoude",
-  founderTitle: "Founder and CEO JBJ Global Real Estate",
-  founderFullTitle: "Jane Abou Jaoude Founder and CEO JBJ Global Real Estate",
+  founderTitle: "Founder & CEO JBJ Global Real Estate",
+  founderFullTitle: "Jane Abou Jaoude Founder & CEO JBJ Global Real Estate",
 };
 
 // Company Voice Pillars

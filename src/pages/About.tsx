@@ -208,7 +208,7 @@ const About = () => {
                     <div className="w-56 h-56 md:w-64 md:h-64 lg:w-72 lg:h-72 mx-auto rounded-full overflow-hidden border-2 border-gold/50">
                       <img 
                         src={founderProfessional}
-                        alt="Founder and CEO Jane Abou Jaoude of JBJ GLOBAL REAL ESTATE"
+                        alt="Founder & CEO Jane Abou Jaoude of JBJ GLOBAL REAL ESTATE"
                         className="w-full h-full object-cover"
                         style={{ objectPosition: "center 20%" }}
                         loading="lazy"
@@ -515,7 +515,7 @@ const About = () => {
                 className="inline-block group"
               >
                 <p className="text-black text-xl md:text-2xl font-medium mb-2 group-hover:text-gold transition-colors">
-                  Founder and CEO Jane Abou Jaoude
+                  Founder & CEO Jane Abou Jaoude
                 </p>
               </Link>
               <p 

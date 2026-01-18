@@ -193,7 +193,7 @@ const Book3D = ({ size = "md", className = "" }: Book3DProps) => {
             <div className="mt-auto pt-3 md:pt-4 w-full">
               <div className="w-full h-[1px] bg-gradient-to-r from-transparent via-zinc-700/50 to-transparent mb-2" />
               <p className="text-zinc-500 text-[7px] md:text-[8px] uppercase tracking-[0.2em]">
-                By Founder and CEO Jane Abou Jaoude
+                By Founder & CEO Jane Abou Jaoude
               </p>
             </div>
           </div>

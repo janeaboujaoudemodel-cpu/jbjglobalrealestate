@@ -33,16 +33,16 @@ const ChatWelcome = ({ onStartChat }: ChatWelcomeProps) => {
           {/* Chat with Team Option - Human Team, NOT AI */}
           <button
             onClick={onStartChat}
-            className="w-full p-4 bg-gradient-to-r from-gold/10 to-gold/5 hover:from-gold/20 hover:to-gold/10 border border-gold/30 hover:border-gold/50 rounded-xl text-left transition-all duration-300 group"
+            className="w-full p-4 bg-gradient-to-r from-[#FDFBF7] via-white to-[#F5F0E6] border border-gold/40 hover:border-gold rounded-xl text-left transition-all duration-300 group shadow-sm"
           >
             <div className="flex items-center gap-4">
-              <div className="w-12 h-12 rounded-full bg-gradient-to-br from-gold to-gold/70 flex items-center justify-center">
-                <MessageCircle className="w-6 h-6 text-black" />
+              <div className="w-12 h-12 rounded-lg bg-white border border-gold/30 flex items-center justify-center shadow-sm">
+                <MessageCircle className="w-6 h-6 text-gold" />
               </div>
               <div className="flex-1">
-                <h5 className="text-white text-sm font-semibold mb-1">💬 Chat with our team</h5>
+                <h5 className="text-black text-sm font-semibold mb-1">💬 Chat with our team</h5>
                 <p className="text-gold text-xs font-medium">⚡ Quick answers • Available 24/7</p>
-                <p className="text-zinc-400 text-xs mt-1">One of our realty members will assist you</p>
+                <p className="text-zinc-600 text-xs mt-1">One of our realty members will assist you</p>
               </div>
             </div>
           </button>
@@ -57,7 +57,7 @@ const ChatWelcome = ({ onStartChat }: ChatWelcomeProps) => {
             className="w-full p-4 bg-green-500/10 hover:bg-green-500/20 border border-green-500/30 hover:border-green-500/50 rounded-xl text-left transition-all duration-300 group block"
           >
             <div className="flex items-center gap-4">
-              <div className="w-12 h-12 rounded-full bg-green-500 flex items-center justify-center">
+              <div className="w-12 h-12 rounded-lg bg-green-500 flex items-center justify-center">
                 <MessageCircle className="w-6 h-6 text-white" />
               </div>
               <div className="flex-1">

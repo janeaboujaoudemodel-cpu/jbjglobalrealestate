@@ -54,7 +54,7 @@ const CollapsedChatButton = ({ onToggle, showAttentionPulse = false }: Collapsed
           aria-label="Open chat support"
           className="relative flex items-center justify-center w-14 h-14 rounded-full bg-[#0E0E0E] border-2 border-gold/40 shadow-2xl shadow-gold/20 hover:border-gold transition-all duration-300 group hover:scale-105 sm:hidden"
         >
-          <div className="w-9 h-9 rounded-full bg-white flex items-center justify-center shadow-lg">
+          <div className="w-9 h-9 rounded-lg bg-white flex items-center justify-center shadow-lg">
             <MessageCircle className="w-4 h-4 text-gold" />
           </div>
         </button>
@@ -65,7 +65,7 @@ const CollapsedChatButton = ({ onToggle, showAttentionPulse = false }: Collapsed
           aria-label="Open chat support"
           className="relative hidden sm:flex items-center gap-3 bg-[#0E0E0E] border-2 border-gold/40 rounded-full px-5 py-3.5 shadow-2xl shadow-gold/20 hover:border-gold transition-all duration-300 group hover:scale-105"
         >
-          <div className="w-11 h-11 rounded-full bg-white flex items-center justify-center flex-shrink-0 shadow-lg">
+          <div className="w-11 h-11 rounded-lg bg-white flex items-center justify-center flex-shrink-0 shadow-lg">
             <MessageCircle className="w-5 h-5 text-gold" />
           </div>
           <div className="flex flex-col items-start">

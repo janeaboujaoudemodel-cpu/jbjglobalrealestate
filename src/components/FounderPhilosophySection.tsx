@@ -55,7 +55,7 @@ export const FounderPhilosophySection = () => {
                 <div className="w-36 h-36 md:w-44 md:h-44 rounded-full overflow-hidden border-2 border-gold/30 group-hover:border-gold transition-colors duration-300 shadow-lg bg-zinc-900">
                   <img 
                     src={founderPremium}
-                    alt="Jane Abou Jaoude, Founder and CEO of JBJ GLOBAL REAL ESTATE"
+                    alt="Jane Abou Jaoude, Founder & CEO of JBJ GLOBAL REAL ESTATE"
                     className="w-full h-full"
                     style={{
                       objectFit: 'cover',
@@ -82,7 +82,7 @@ export const FounderPhilosophySection = () => {
             >
               {/* Attribution */}
               <p className="text-sm font-medium tracking-wide mb-6">
-                <span className="text-white uppercase tracking-[0.15em]">Written by Founder and CEO,</span>{" "}
+                <span className="text-white uppercase tracking-[0.15em]">Written by Founder & CEO,</span>{" "}
                 <Link 
                   to="/founder" 
                   className="text-gold font-semibold hover:text-gold-light transition-colors underline underline-offset-4"
@@ -155,7 +155,7 @@ export const FounderPhilosophySection = () => {
                     Jane Abou Jaoude
                   </p>
                   <p className="text-gold text-sm font-medium mt-1 tracking-wide">
-                    Founder and CEO
+                    Founder & CEO
                   </p>
                   <p className="text-zinc-600 text-sm mt-0.5 tracking-wide">
                     JBJ Global Real Estate

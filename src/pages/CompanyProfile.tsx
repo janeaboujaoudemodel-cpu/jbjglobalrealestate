@@ -56,8 +56,8 @@ const companyInfo = {
   tagline: "Buy. Sell. Rent. Delivered with Intelligence.",
   founded: "2025",
   headquarters: "Downtown Dubai, UAE",
-  ceo: "Founder and CEO Jane Abou Jaoude",
-  about: `JBJ Global Real Estate is a Dubai-based real estate brokerage licensed to BUY, SELL, and RENT properties across the UAE. Founded by Founder and CEO Jane Abou Jaoude, we provide brokerage support and partner introductions for discerning clients seeking exceptional properties in the UAE.
+  ceo: "Founder & CEO Jane Abou Jaoude",
+  about: `JBJ Global Real Estate is a Dubai-based real estate brokerage licensed to BUY, SELL, and RENT properties across the UAE. Founded by Founder & CEO Jane Abou Jaoude, we provide brokerage support and partner introductions for discerning clients seeking exceptional properties in the UAE.
 
 Our founder-led approach ensures that every client receives personalized attention and professional guidance, backed by our extensive market knowledge and exclusive network of developers, legal partners, and service providers.
 
