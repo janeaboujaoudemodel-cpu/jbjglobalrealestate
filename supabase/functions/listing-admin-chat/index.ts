@@ -63,10 +63,11 @@ Always respond in a helpful, conversational manner. Use markdown formatting for 
       JSON.stringify({ response: assistantResponse }),
       { headers: { ...corsHeaders, "Content-Type": "application/json" } }
     );
-  } catch (error) {
+  } catch (error: unknown) {
     console.error("Error:", error);
+    const errorMessage = error instanceof Error ? error.message : "An unexpected error occurred";
     return new Response(
-      JSON.stringify({ error: error.message }),
+      JSON.stringify({ error: errorMessage }),
       { status: 500, headers: { ...corsHeaders, "Content-Type": "application/json" } }
     );
   }
