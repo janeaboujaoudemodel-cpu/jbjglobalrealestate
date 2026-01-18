@@ -12083,29 +12083,17 @@ export type Database = {
         }
         Returns: undefined
       }
-      log_security_event:
-        | {
-            Args: {
-              p_action_type: string
-              p_failure_reason?: string
-              p_metadata?: Json
-              p_resource_id?: string
-              p_resource_type: string
-              p_success?: boolean
-            }
-            Returns: string
-          }
-        | {
-            Args: {
-              p_action: string
-              p_details?: Json
-              p_event_type: string
-              p_resource_id?: string
-              p_resource_type?: string
-              p_severity?: string
-            }
-            Returns: string
-          }
+      log_security_event: {
+        Args: {
+          p_action: string
+          p_details?: Json
+          p_event_type: string
+          p_resource_id?: string
+          p_resource_type?: string
+          p_severity?: string
+        }
+        Returns: string
+      }
       log_security_event_full: {
         Args: {
           p_action_taken?: string
