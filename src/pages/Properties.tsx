@@ -326,14 +326,23 @@ const Properties = () => {
       
       {/* Hero Section - Cinematic Video */}
       <section className="relative h-[70vh] min-h-[500px] flex items-center justify-center overflow-hidden">
-        {/* Video Background */}
-        <div className="absolute inset-0">
+        {/* Video Background with poster for instant display */}
+        <div className="absolute inset-0 bg-black">
+          {/* Poster/fallback image that shows immediately */}
+          <div 
+            className="absolute inset-0 bg-cover bg-center"
+            style={{
+              backgroundImage: `url('https://images.unsplash.com/photo-1512453979798-5ea266f8880c?w=1920&q=80')`,
+            }}
+          />
           <video
             autoPlay
             muted
             loop
             playsInline
-            className="w-full h-full object-cover"
+            preload="auto"
+            className="absolute inset-0 w-full h-full object-cover"
+            poster="https://images.unsplash.com/photo-1512453979798-5ea266f8880c?w=1920&q=80"
           >
             <source src={dubaiLandmarksVideo} type="video/mp4" />
           </video>

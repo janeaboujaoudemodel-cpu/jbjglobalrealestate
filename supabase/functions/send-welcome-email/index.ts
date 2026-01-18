@@ -228,16 +228,65 @@ serve(async (req) => {
                       </td>
                     </tr>
                     
-                    <!-- Footer -->
+                    <!-- Quick Links Section -->
                     <tr>
-                      <td style="background-color: #1a1a2e; padding: 30px; text-align: center;">
-                        <p style="color: #999; font-size: 14px; margin: 0 0 10px 0;">Need assistance? We're here to help.</p>
-                        <p style="color: #d4af37; font-size: 14px; margin: 0;">
-                          📧 Contact@JBJ.ae | 📞 +971 56 591 1000
+                      <td style="padding: 30px 40px; background-color: #f9f9f9;">
+                        <h3 style="color: #1a1a2e; margin: 0 0 15px 0; font-size: 16px; text-align: center;">🔗 Explore Our Platform</h3>
+                        <table width="100%" cellpadding="0" cellspacing="0">
+                          <tr>
+                            <td align="center">
+                              <a href="https://jbj.ae/properties" style="display: inline-block; margin: 5px; padding: 8px 16px; border: 1px solid #C8A766; border-radius: 6px; color: #C8A766; text-decoration: none; font-size: 13px;">Properties</a>
+                              <a href="https://jbj.ae/services" style="display: inline-block; margin: 5px; padding: 8px 16px; border: 1px solid #C8A766; border-radius: 6px; color: #C8A766; text-decoration: none; font-size: 13px;">Services</a>
+                              <a href="https://jbj.ae/about" style="display: inline-block; margin: 5px; padding: 8px 16px; border: 1px solid #C8A766; border-radius: 6px; color: #C8A766; text-decoration: none; font-size: 13px;">About Us</a>
+                              <a href="https://jbj.ae/market-intelligence" style="display: inline-block; margin: 5px; padding: 8px 16px; border: 1px solid #C8A766; border-radius: 6px; color: #C8A766; text-decoration: none; font-size: 13px;">Market Intelligence</a>
+                              <a href="https://jbj.ae/buyer-guide" style="display: inline-block; margin: 5px; padding: 8px 16px; border: 1px solid #C8A766; border-radius: 6px; color: #C8A766; text-decoration: none; font-size: 13px;">Buyer Guide</a>
+                              <a href="https://jbj.ae/contact" style="display: inline-block; margin: 5px; padding: 8px 16px; border: 1px solid #C8A766; border-radius: 6px; color: #C8A766; text-decoration: none; font-size: 13px;">Contact</a>
+                            </td>
+                          </tr>
+                        </table>
+                      </td>
+                    </tr>
+                    
+                    <!-- Social Media & Contact Footer -->
+                    <tr>
+                      <td style="background: linear-gradient(135deg, #000 0%, #1a1a1a 100%); padding: 35px; text-align: center;">
+                        <!-- Contact Info -->
+                        <p style="color: #C8A766; font-size: 14px; margin: 0 0 15px 0;">Need assistance? We're here to help.</p>
+                        <table width="100%" cellpadding="0" cellspacing="0" style="margin-bottom: 20px;">
+                          <tr>
+                            <td align="center">
+                              <a href="tel:+971565911000" style="color: #fff; text-decoration: none; font-size: 14px; margin: 0 15px;">📞 +971 56 591 1000</a>
+                              <a href="mailto:Contact@JBJ.ae" style="color: #fff; text-decoration: none; font-size: 14px; margin: 0 15px;">✉️ Contact@JBJ.ae</a>
+                              <a href="mailto:Support@JBJ.ae" style="color: #fff; text-decoration: none; font-size: 14px; margin: 0 15px;">🎫 Support@JBJ.ae</a>
+                            </td>
+                          </tr>
+                        </table>
+                        
+                        <!-- Social Media Links -->
+                        <table width="100%" cellpadding="0" cellspacing="0" style="margin-bottom: 20px;">
+                          <tr>
+                            <td align="center">
+                              <a href="https://instagram.com/jbj.ae" style="display: inline-block; margin: 0 8px; padding: 8px 16px; background: rgba(200,167,102,0.1); border: 1px solid #C8A766; border-radius: 20px; color: #C8A766; text-decoration: none; font-size: 12px;">Instagram</a>
+                              <a href="https://facebook.com/jbjglobal" style="display: inline-block; margin: 0 8px; padding: 8px 16px; background: rgba(200,167,102,0.1); border: 1px solid #C8A766; border-radius: 20px; color: #C8A766; text-decoration: none; font-size: 12px;">Facebook</a>
+                              <a href="https://linkedin.com/company/jbjglobal" style="display: inline-block; margin: 0 8px; padding: 8px 16px; background: rgba(200,167,102,0.1); border: 1px solid #C8A766; border-radius: 20px; color: #C8A766; text-decoration: none; font-size: 12px;">LinkedIn</a>
+                              <a href="https://wa.me/971565911000" style="display: inline-block; margin: 0 8px; padding: 8px 16px; background: rgba(200,167,102,0.1); border: 1px solid #C8A766; border-radius: 20px; color: #C8A766; text-decoration: none; font-size: 12px;">WhatsApp</a>
+                            </td>
+                          </tr>
+                        </table>
+                        
+                        <!-- Brand Attribution -->
+                        <p style="color: #C8A766; font-size: 14px; margin: 0 0 5px 0; font-weight: 600;">JBJ Global Real Estate</p>
+                        <p style="color: #888; font-size: 12px; margin: 0 0 10px 0;">First Global Real Estate Platform of Its Kind</p>
+                        <p style="color: #666; font-size: 11px; margin: 0 0 15px 0;">
+                          Developed, Created & Implemented by The Founder & CEO, <span style="color: #C8A766;">Jane Abou Jaoude</span>
                         </p>
-                        <p style="color: #666; font-size: 12px; margin: 20px 0 0 0;">
+                        
+                        <p style="color: #555; font-size: 11px; margin: 15px 0 0 0;">
                           JBJ Global Real Estate provides brokerage support and partner introductions only.<br>
                           We do not provide legal, mortgage, financial, or advisory services.
+                        </p>
+                        <p style="color: #444; font-size: 10px; margin: 15px 0 0 0;">
+                          © 2026 JBJ Global Real Estate. All rights reserved.
                         </p>
                       </td>
                     </tr>
