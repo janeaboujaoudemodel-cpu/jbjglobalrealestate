@@ -48,7 +48,7 @@ const STATS = [
 
 export function BrokerToolkitStats() {
   return (
-    <section className="py-12 border-y border-zinc-800 bg-zinc-900/30">
+    <section className="py-12 border-y border-zinc-800 bg-black">
       <div className="container mx-auto px-4">
         <div className="grid grid-cols-2 md:grid-cols-5 gap-6">
           {STATS.map((stat, i) => (

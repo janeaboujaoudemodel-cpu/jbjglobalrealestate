@@ -122,7 +122,7 @@ export function BrokerToolkitEducation() {
   return (
     <>
       {/* Training & Education Section - Blue Theme */}
-      <section id="section-education" className="py-16 md:py-20 bg-gradient-to-br from-blue-950 via-blue-900 to-blue-950">
+      <section id="section-education" className="py-16 md:py-20 bg-black">
         <div className="container mx-auto px-4">
           <motion.div
             initial={{ opacity: 0, y: 20 }}
@@ -135,9 +135,9 @@ export function BrokerToolkitEducation() {
               Training & Education
             </Badge>
             <h2 className="text-3xl md:text-4xl font-bold text-white mb-4">
-              24 Training Modules to <span className="text-blue-300">Master Real Estate</span>
+              24 Trainings Modules to <span className="text-blue-300">Master Real Estate</span>
             </h2>
-            <p className="text-blue-200/70 max-w-2xl mx-auto">
+            <p className="text-zinc-400 max-w-2xl mx-auto">
               Comprehensive video courses, guides, and playbooks to accelerate your career.
             </p>
           </motion.div>
@@ -187,7 +187,7 @@ export function BrokerToolkitEducation() {
       </section>
 
       {/* Free Books Section - Green Theme */}
-      <section className="py-16 md:py-20 bg-gradient-to-br from-emerald-950 via-emerald-900 to-emerald-950">
+      <section className="py-16 md:py-20 bg-black">
         <div className="container mx-auto px-4">
           <motion.div
             initial={{ opacity: 0, y: 20 }}
@@ -202,7 +202,7 @@ export function BrokerToolkitEducation() {
             <h3 className="text-2xl md:text-3xl font-bold text-white mb-2">
               4 Free Books to <span className="text-emerald-300">Download</span>
             </h3>
-            <p className="text-emerald-200/70">
+            <p className="text-zinc-400">
               Exclusive guides written for UAE real estate professionals.
             </p>
           </motion.div>
