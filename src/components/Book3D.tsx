@@ -11,11 +11,11 @@ interface Book3DProps {
 const Book3D = ({ size = "md", className = "" }: Book3DProps) => {
   const [hoverSide, setHoverSide] = useState<"left" | "right" | null>(null);
   
-  // Enhanced dimensions with MUCH thicker spine for dramatic 3D effect
+  // Enhanced dimensions with EXTRA THICK spine to display full company name
   const dimensions = {
-    sm: { width: 180, height: 250, spine: 50, fontSize: "text-[10px]", titleSize: "text-sm" },
-    md: { width: 240, height: 330, spine: 70, fontSize: "text-xs", titleSize: "text-base" },
-    lg: { width: 320, height: 440, spine: 90, fontSize: "text-sm", titleSize: "text-lg" },
+    sm: { width: 180, height: 250, spine: 65, fontSize: "text-[10px]", titleSize: "text-sm" },
+    md: { width: 240, height: 330, spine: 85, fontSize: "text-xs", titleSize: "text-base" },
+    lg: { width: 320, height: 440, spine: 110, fontSize: "text-sm", titleSize: "text-lg" },
   };
 
   const { width, height, spine, fontSize, titleSize } = dimensions[size];
@@ -108,19 +108,20 @@ const Book3D = ({ size = "md", className = "" }: Book3DProps) => {
             borderBottom: "1px solid rgba(200,167,102,0.3)",
           }}
         >
-          {/* Spine Text - Vertical */}
+          {/* Spine Text - Vertical - Extra readable on thicker spine */}
           <div className="absolute inset-0 flex items-center justify-center">
             <span 
-              className="text-gold font-bold tracking-[0.25em] uppercase whitespace-nowrap"
+              className="text-gold font-bold tracking-[0.35em] uppercase whitespace-nowrap"
               style={{ 
                 writingMode: "vertical-rl", 
                 textOrientation: "mixed",
                 transform: "rotate(180deg)",
-                fontSize: size === "sm" ? "10px" : size === "md" ? "13px" : "16px",
-                textShadow: "0 0 15px rgba(200,167,102,0.6), 0 2px 4px rgba(0,0,0,0.5)",
+                fontSize: size === "sm" ? "11px" : size === "md" ? "14px" : "18px",
+                textShadow: "0 0 20px rgba(200,167,102,0.7), 0 2px 6px rgba(0,0,0,0.6)",
+                letterSpacing: "0.4em",
               }}
             >
-              JBJ Global Real Estate 2026
+              JBJ GLOBAL REAL ESTATE 2026
             </span>
           </div>
         </div>

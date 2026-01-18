@@ -445,7 +445,7 @@ const Index = () => {
                 Meet the <span className="text-gold">Founder</span>
               </h2>
               <p className="text-zinc-300 text-lg max-w-2xl mx-auto">
-                JBJ Global Real Estate is a founder-led brokerage for buying, selling, and renting — built on unwavering standards, discretion, and long-term vision.
+                <Link to="/about" className="text-gold hover:underline">JBJ Global Real Estate</Link> is a founder-led brokerage for buying, selling, and renting — built on unwavering standards, discretion, and long-term vision.
               </p>
             </motion.div>
 
