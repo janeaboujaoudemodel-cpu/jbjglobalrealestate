@@ -274,19 +274,19 @@ const FAQ = () => {
       {/* FAQ Content with Sticky TOC Above */}
       <section id="faq-content" className="py-16 bg-black relative">
         <div className="container mx-auto px-4">
-          {/* Sticky FAQ Quick Access - Above Cards */}
-          <div className="sticky top-0 z-50 mb-8 -mx-4 px-4 pt-4 pb-2 bg-gradient-to-b from-black via-black to-transparent">
-            <div className="max-w-4xl mx-auto">
+          {/* Sticky FAQ Quick Access - Compact & Above Content */}
+          <div className="sticky top-0 z-50 -mx-4 px-4 py-3 bg-black/95 backdrop-blur-sm border-b border-gold/20 shadow-lg">
+            <div className="max-w-5xl mx-auto">
               <FAQTableOfContents 
                 categories={categories}
                 title="FAQ Quick Access"
-                sticky={false}
+                sticky={true}
               />
             </div>
           </div>
 
           {/* Main Content - Full Width Below TOC */}
-          <div className="max-w-4xl mx-auto space-y-16">
+          <div className="max-w-4xl mx-auto space-y-16 mt-8">
             {categories.map((category, categoryIndex) => (
               <motion.div
                 key={categoryIndex}
@@ -295,7 +295,7 @@ const FAQ = () => {
                 whileInView="visible"
                 viewport={{ once: true, margin: "-100px" }}
                 variants={staggerContainer}
-                className="scroll-mt-72"
+                className="scroll-mt-40"
               >
                 {/* Category Header */}
                 <motion.div 
