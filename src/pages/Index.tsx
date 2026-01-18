@@ -386,11 +386,11 @@ const Index = () => {
 
           {/* Resources Grid - Champagne Glowing Cards */}
           <div className="grid md:grid-cols-2 gap-6 max-w-4xl mx-auto">
-            {/* Broker Toolkit Card - Champagne Glow */}
+            {/* Broker Toolkit Card - Champagne Glow with Visible Border Glow */}
             <Link to="/broker-toolkit" className="group">
-              <div className="bg-gradient-to-br from-[#FDFBF7] via-[#F5F0E6] to-[#EDE4D3] border border-gold/50 rounded-2xl p-6 md:p-8 hover:border-gold hover:shadow-[0_0_40px_rgba(200,167,102,0.5)] transition-all duration-300 shadow-[0_0_25px_rgba(200,167,102,0.3)]">
+              <div className="bg-gradient-to-br from-[#FDFBF7] via-[#F5F0E6] to-[#EDE4D3] border-2 border-gold/60 rounded-2xl p-6 md:p-8 hover:border-white hover:shadow-[0_0_50px_rgba(255,255,255,0.5)] transition-all duration-300 shadow-[0_0_30px_rgba(200,167,102,0.5)]">
                 <div className="flex items-center gap-4 mb-4">
-                  <div className="w-12 h-12 bg-black rounded-xl flex items-center justify-center shadow-lg shadow-gold/20">
+                  <div className="w-12 h-12 bg-black rounded-xl flex items-center justify-center shadow-lg shadow-gold/30">
                     <GraduationCap className="w-6 h-6 text-gold" />
                   </div>
                   <div>
@@ -410,11 +410,11 @@ const Index = () => {
               </div>
             </Link>
 
-            {/* Broker Hub Card - Champagne Glow */}
+            {/* Broker Hub Card - Champagne Glow with Visible Border Glow */}
             <Link to="/ai-hub" className="group">
-              <div className="bg-gradient-to-br from-[#FDFBF7] via-[#F5F0E6] to-[#EDE4D3] border border-gold/50 rounded-2xl p-6 md:p-8 hover:border-gold hover:shadow-[0_0_40px_rgba(200,167,102,0.5)] transition-all duration-300 shadow-[0_0_25px_rgba(200,167,102,0.3)]">
+              <div className="bg-gradient-to-br from-[#FDFBF7] via-[#F5F0E6] to-[#EDE4D3] border-2 border-gold/60 rounded-2xl p-6 md:p-8 hover:border-white hover:shadow-[0_0_50px_rgba(255,255,255,0.5)] transition-all duration-300 shadow-[0_0_30px_rgba(200,167,102,0.5)]">
                 <div className="flex items-center gap-4 mb-4">
-                  <div className="w-12 h-12 bg-black rounded-xl flex items-center justify-center shadow-lg shadow-gold/20">
+                  <div className="w-12 h-12 bg-black rounded-xl flex items-center justify-center shadow-lg shadow-gold/30">
                     <Layers className="w-6 h-6 text-gold" />
                   </div>
                   <div>
@@ -470,14 +470,14 @@ const Index = () => {
               variants={fadeInUp}
             >
               <div className="grid md:grid-cols-2 gap-0">
-                {/* Photo Side */}
-                <div className="relative">
+                {/* Photo Side - Gold/Champagne Background */}
+                <div className="relative bg-gradient-to-br from-[#C8A766]/30 via-[#D4B970]/20 to-[#C8A766]/30">
                   {/* GLOBAL IMAGE RULE - LOCKED (FINAL):
                       object-fit: cover + center 15% = max zoom, crop from bottom only */}
                   <img 
                     src={founderProfessional} 
                     alt="Jane Abou Jaoude - Founder & CEO at JBJ Global Real Estate"
-                    className="w-full h-full min-h-[400px] md:min-h-[500px] bg-zinc-950"
+                    className="w-full h-full min-h-[400px] md:min-h-[500px]"
                     style={{ objectFit: "cover", objectPosition: "center 15%" }}
                   />
                   {/* Subtle gradient overlay */}
@@ -519,10 +519,10 @@ const Index = () => {
                     </div>
                   </div>
                   
-                  {/* CTA Button */}
+                  {/* CTA Button - Glowing */}
                   <Link to="/founder">
-                    <Button className="w-full md:w-auto bg-gradient-to-r from-gold via-[#C4A962] to-gold hover:from-gold-light hover:to-gold text-black font-bold px-8 py-6 text-base transition-all duration-500 hover:shadow-[0_0_40px_rgba(200,167,102,0.6)] hover:scale-105 shadow-[0_0_25px_rgba(200,167,102,0.4)] border border-gold/50">
-                      Learn More About Our Founder
+                    <Button className="w-full md:w-auto bg-gradient-to-r from-gold via-[#C4A962] to-gold hover:from-gold-light hover:to-gold text-black font-bold px-8 py-6 text-base transition-all duration-500 hover:shadow-[0_0_60px_rgba(200,167,102,0.8)] hover:scale-105 shadow-[0_0_35px_rgba(200,167,102,0.6)] border border-gold/50 animate-gold-glow">
+                      Learn More About The Founder
                       <ArrowUpRight className="w-5 h-5 ml-2" />
                     </Button>
                   </Link>
