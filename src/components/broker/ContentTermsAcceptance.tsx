@@ -120,7 +120,7 @@ export default function ContentTermsAcceptance({
                   <p className="text-zinc-500">
                     © {new Date().getFullYear()} JBJ Global Real Estate. All Rights Reserved.
                     <br />
-                    Developed and Created by Founder and CEO Jane Abou Jaoude
+                    Developed and Created by Founder & CEO Jane Abou Jaoude
                     <br />
                     For copyright registration inquiries: legal@jbj.ae
                   </p>

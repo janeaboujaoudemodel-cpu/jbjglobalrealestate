@@ -2141,6 +2141,51 @@ export type Database = {
         }
         Relationships: []
       }
+      contact_gating_submissions: {
+        Row: {
+          created_at: string
+          email: string
+          email_verified: boolean | null
+          full_name: string
+          id: string
+          location: string | null
+          nationality: string | null
+          phone: string
+          phone_verified: boolean | null
+          preferred_language: string | null
+          service_interest: string | null
+          session_id: string
+        }
+        Insert: {
+          created_at?: string
+          email: string
+          email_verified?: boolean | null
+          full_name: string
+          id?: string
+          location?: string | null
+          nationality?: string | null
+          phone: string
+          phone_verified?: boolean | null
+          preferred_language?: string | null
+          service_interest?: string | null
+          session_id: string
+        }
+        Update: {
+          created_at?: string
+          email?: string
+          email_verified?: boolean | null
+          full_name?: string
+          id?: string
+          location?: string | null
+          nationality?: string | null
+          phone?: string
+          phone_verified?: boolean | null
+          preferred_language?: string | null
+          service_interest?: string | null
+          session_id?: string
+        }
+        Relationships: []
+      }
       content_access_logs: {
         Row: {
           accessed_at: string
@@ -9255,6 +9300,156 @@ export type Database = {
             referencedColumns: ["id"]
           },
         ]
+      }
+      visitor_documents: {
+        Row: {
+          action: string
+          created_at: string
+          document_name: string | null
+          document_type: string
+          document_url: string | null
+          file_size: number | null
+          id: string
+          session_id: string
+          storage_path: string | null
+        }
+        Insert: {
+          action: string
+          created_at?: string
+          document_name?: string | null
+          document_type: string
+          document_url?: string | null
+          file_size?: number | null
+          id?: string
+          session_id: string
+          storage_path?: string | null
+        }
+        Update: {
+          action?: string
+          created_at?: string
+          document_name?: string | null
+          document_type?: string
+          document_url?: string | null
+          file_size?: number | null
+          id?: string
+          session_id?: string
+          storage_path?: string | null
+        }
+        Relationships: []
+      }
+      visitor_events: {
+        Row: {
+          created_at: string
+          element_class: string | null
+          element_id: string | null
+          element_text: string | null
+          event_data: Json | null
+          event_name: string
+          event_type: string
+          id: string
+          page_path: string | null
+          session_id: string
+        }
+        Insert: {
+          created_at?: string
+          element_class?: string | null
+          element_id?: string | null
+          element_text?: string | null
+          event_data?: Json | null
+          event_name: string
+          event_type: string
+          id?: string
+          page_path?: string | null
+          session_id: string
+        }
+        Update: {
+          created_at?: string
+          element_class?: string | null
+          element_id?: string | null
+          element_text?: string | null
+          event_data?: Json | null
+          event_name?: string
+          event_type?: string
+          id?: string
+          page_path?: string | null
+          session_id?: string
+        }
+        Relationships: []
+      }
+      visitor_sessions: {
+        Row: {
+          browser: string | null
+          city: string | null
+          contact_details: Json | null
+          country: string | null
+          created_at: string
+          device_type: string | null
+          first_visit_at: string
+          id: string
+          ip_address: string | null
+          is_bounced: boolean | null
+          is_converted: boolean | null
+          landing_page: string | null
+          last_activity_at: string
+          os: string | null
+          pages_visited: number | null
+          referrer: string | null
+          scroll_depth_max: number | null
+          session_id: string
+          total_time_spent: number | null
+          user_agent: string | null
+          user_id: string | null
+          visitor_fingerprint: string | null
+        }
+        Insert: {
+          browser?: string | null
+          city?: string | null
+          contact_details?: Json | null
+          country?: string | null
+          created_at?: string
+          device_type?: string | null
+          first_visit_at?: string
+          id?: string
+          ip_address?: string | null
+          is_bounced?: boolean | null
+          is_converted?: boolean | null
+          landing_page?: string | null
+          last_activity_at?: string
+          os?: string | null
+          pages_visited?: number | null
+          referrer?: string | null
+          scroll_depth_max?: number | null
+          session_id: string
+          total_time_spent?: number | null
+          user_agent?: string | null
+          user_id?: string | null
+          visitor_fingerprint?: string | null
+        }
+        Update: {
+          browser?: string | null
+          city?: string | null
+          contact_details?: Json | null
+          country?: string | null
+          created_at?: string
+          device_type?: string | null
+          first_visit_at?: string
+          id?: string
+          ip_address?: string | null
+          is_bounced?: boolean | null
+          is_converted?: boolean | null
+          landing_page?: string | null
+          last_activity_at?: string
+          os?: string | null
+          pages_visited?: number | null
+          referrer?: string | null
+          scroll_depth_max?: number | null
+          session_id?: string
+          total_time_spent?: number | null
+          user_agent?: string | null
+          user_id?: string | null
+          visitor_fingerprint?: string | null
+        }
+        Relationships: []
       }
     }
     Views: {

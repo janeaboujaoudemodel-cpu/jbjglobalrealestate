@@ -1499,7 +1499,7 @@ const MarketReport = () => {
     
     <div style="background: linear-gradient(135deg, #ffffff 0%, #f5f5f0 100%); border: 1px solid #d4d4d4; border-radius: 16px; padding: 25px; margin: 25px 0;">
       <p style="color: #A8925A; font-size: 12px; text-transform: uppercase; letter-spacing: 0.15em; margin-bottom: 10px;">Premium AI Technology</p>
-      <p style="color: #000; font-size: 16px; margin-bottom: 5px; font-weight: 600;">Developed by the Founder and CEO, Jane Abou Jaoude</p>
+      <p style="color: #000; font-size: 16px; margin-bottom: 5px; font-weight: 600;">Developed by the Founder & CEO, Jane Abou Jaoude</p>
       <p style="color: #555; font-size: 13px; margin-bottom: 0;">Exclusive for JBJ Global Real Estate • Real Estate Brokerage</p>
     </div>
     
@@ -1819,7 +1819,7 @@ const MarketReport = () => {
                         <span className="block text-gold">Market Intelligence</span>
                       </h3>
                       
-                      <p className="text-zinc-500 text-xs mt-4">By Founder and CEO Jane Abou Jaoude</p>
+                      <p className="text-zinc-500 text-xs mt-4">By Founder & CEO Jane Abou Jaoude</p>
                       
                       {/* JJ Logo */}
                       <div className="mt-6 pt-4 border-t border-zinc-800">
@@ -1912,7 +1912,7 @@ const MarketReport = () => {
             <div className="w-24 h-24 md:w-28 md:h-28 rounded-full overflow-hidden border-2 border-gold/50 mx-auto mb-6 bg-zinc-900">
               <img 
                 src={founderProfessional} 
-                alt="Jane Abou Jaoude, Founder and CEO of JBJ GLOBAL REAL ESTATE"
+                alt="Jane Abou Jaoude, Founder & CEO of JBJ GLOBAL REAL ESTATE"
                 className="w-full h-full"
                 style={{
                   objectFit: 'cover',
@@ -2106,7 +2106,7 @@ const MarketReport = () => {
                 <div className="w-16 h-16 rounded-full overflow-hidden border-2 border-gold/50 bg-zinc-900 flex-shrink-0">
                   <img 
                     src={founderProfessional} 
-                    alt="Jane Abou Jaoude, Founder and CEO"
+                    alt="Jane Abou Jaoude, Founder & CEO"
                     className="w-full h-full"
                     style={{
                       objectFit: 'cover',
@@ -2116,7 +2116,7 @@ const MarketReport = () => {
                 </div>
                 <div>
                   <h3 className="text-white font-semibold">Jane Abou Jaoude</h3>
-                  <p className="text-gold text-sm">Founder and CEO</p>
+                  <p className="text-gold text-sm">Founder & CEO</p>
                 </div>
               </div>
               <p className="text-zinc-400 text-sm leading-relaxed">
