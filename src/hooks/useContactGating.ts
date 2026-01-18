@@ -14,6 +14,13 @@ const GATED_ACTIONS = [
   'form_submission',
   'document_view',
   'schedule_meeting',
+  'video_meeting',
+  'property_compare',
+  'market_report',
+  'roi_calculator',
+  'mortgage_calculator',
+  'ai_home_finder',
+  'interior_design',
 ];
 
 export const useContactGating = () => {
