@@ -153,7 +153,7 @@ const Properties = () => {
     
     // Find developer ID by name if developer param exists
     let developerIdFromUrl: string | null = null;
-    if (developerName && developers) {
+    if (developerName && developers && developers.length > 0) {
       const matchedDeveloper = developers.find(
         d => d.name.toLowerCase() === developerName.toLowerCase()
       );
@@ -162,7 +162,17 @@ const Properties = () => {
       }
     }
     
-    if (newTransaction || newStatus || developerIdFromUrl) {
+    // Only update if we have URL params AND (if developer param exists, we need developers to be loaded)
+    const hasDeveloperParam = !!developerName;
+    const developersLoaded = developers && developers.length > 0;
+    
+    // If there's a developer param but developers aren't loaded yet, wait
+    if (hasDeveloperParam && !developersLoaded) {
+      return;
+    }
+    
+    // Apply filters if any URL params exist
+    if (newTransaction || newStatus || developerIdFromUrl || hasDeveloperParam) {
       const updated: ExtendedFilterState = {
         ...defaultExtendedFilters,
         transactionType: newTransaction || 'all' as const,
