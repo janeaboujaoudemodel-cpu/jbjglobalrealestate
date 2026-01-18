@@ -41,8 +41,8 @@ import { FoundersDecisionPanel } from "@/components/founders-assistant/FoundersD
 import { EscalationAlertButton } from "@/components/ai/EscalationAlertButton";
 import { FileText } from "lucide-react";
 
-// Olivia AI portrait
-import oliviaPortrait from "@/assets/team/olivia-executive-assistant.png";
+// Amanda Clarke - Founder's Executive Assistant portrait
+import amandaPortrait from "@/assets/team/amanda-clarke-executive-assistant.png";
 
 export default function FoundersAssistant() {
   const { user, loading: authLoading } = useAuth();
@@ -137,8 +137,8 @@ export default function FoundersAssistant() {
                   <div className="absolute inset-0 rounded-full bg-gradient-to-br from-gold/40 to-gold/10 blur-md animate-pulse" />
                   <div className="relative w-16 h-16 rounded-full border-2 border-gold/50 overflow-hidden bg-gradient-to-br from-gold/20 to-gold/5">
                     <img 
-                      src={oliviaPortrait} 
-                      alt="Olivia AI" 
+                      src={amandaPortrait} 
+                      alt="Amanda Clarke" 
                       className="w-full h-full object-cover"
                     />
                   </div>
@@ -146,13 +146,13 @@ export default function FoundersAssistant() {
                 </div>
                 <div>
                   <h1 className="text-2xl font-bold text-white flex items-center gap-2">
-                    Olivia AI
+                    Amanda Clarke
                     <Badge className="bg-white text-black border-gold/30 text-xs shadow-sm">
                       <span className="text-gold">Founder's</span>
-                      <span className="text-black ml-1">Assistant</span>
+                      <span className="text-black ml-1">Executive Assistant</span>
                     </Badge>
                   </h1>
-                  <p className="text-gray-400 text-sm">Your personal AI executive assistant • Available 24/7</p>
+                  <p className="text-gray-400 text-sm">Your personal executive assistant • Available 24/7</p>
                 </div>
               </div>
               

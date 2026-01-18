@@ -153,7 +153,7 @@ async function handleWhatsAppCommand(args: string, userId: string): Promise<Comm
   // Log the WhatsApp intent
   await supabase.from('ai_communication_logs').insert({
     ai_employee_id: userId,
-    ai_name: 'Olivia AI',
+    ai_name: 'Amanda Clarke',
     action_type: 'whatsapp_send',
     channel: 'whatsapp',
     recipient_id: recipient,

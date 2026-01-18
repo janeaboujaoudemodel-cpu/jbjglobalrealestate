@@ -95,9 +95,9 @@ class DepartmentCoordinationService {
         success: false,
         department: 'unknown',
         departmentName: 'Unknown',
-        assignedTo: 'Olivia',
+        assignedTo: 'Amanda Clarke',
         confidence: 0,
-        message: 'Unable to determine appropriate department. Task assigned to Olivia for manual routing.',
+        message: 'Unable to determine appropriate department. Task assigned to Amanda Clarke for manual routing.',
       };
     }
     
@@ -121,8 +121,8 @@ class DepartmentCoordinationService {
       id: `log_${Date.now()}`,
       type: 'task_routed',
       departmentId: routing.department,
-      actorId: 'olivia',
-      actorName: 'Olivia AI',
+      actorId: 'amanda_clarke',
+      actorName: 'Amanda Clarke',
       targetId: department.headId,
       targetName: department.headName,
       action: 'Task Routed',
@@ -289,7 +289,7 @@ class DepartmentCoordinationService {
     
     const summary: CompanyDailySummary = {
       date: new Date(),
-      generatedBy: 'Olivia AI',
+      generatedBy: 'Amanda Clarke',
       departments: departmentSummaries,
       overallHighlights: ['System running smoothly'],
       criticalItems: [],
@@ -302,8 +302,8 @@ class DepartmentCoordinationService {
       id: `log_${Date.now()}`,
       type: 'report_generated',
       departmentId: 'all',
-      actorId: 'olivia',
-      actorName: 'Olivia AI',
+      actorId: 'amanda_clarke',
+      actorName: 'Amanda Clarke',
       action: 'Daily Summary Generated',
       details: 'Company-wide daily summary report generated and ready for Founder review.',
       timestamp: new Date(),
@@ -387,8 +387,8 @@ class DepartmentCoordinationService {
       }
     }
     
-    // Always include Olivia and Founder
-    if (!attendees.includes('olivia')) attendees.unshift('olivia');
+    // Always include Amanda Clarke and Founder
+    if (!attendees.includes('amanda_clarke')) attendees.unshift('amanda_clarke');
     if (!attendees.includes('founder')) attendees.unshift('founder');
     
     const meetingId = `meeting_${Date.now()}`;
@@ -397,8 +397,8 @@ class DepartmentCoordinationService {
       id: `log_${Date.now()}`,
       type: 'workflow_update',
       departmentId: 'all',
-      actorId: 'olivia',
-      actorName: 'Olivia AI',
+      actorId: 'amanda_clarke',
+      actorName: 'Amanda Clarke',
       action: 'Cross-Department Meeting Scheduled',
       details: `Meeting "${topic}" scheduled for ${scheduledAt.toLocaleString()} with ${departments.map(d => DEPARTMENTS[d]?.name).join(', ')}`,
       metadata: { meetingId, departments, attendees },

@@ -34,7 +34,7 @@ import { supabase } from '@/integrations/supabase/client';
 import { toast } from 'sonner';
 import { useAuth } from '@/contexts/AuthContext';
 import { allTeamMembers, TeamMember } from '@/config/team-members';
-import oliviaPortrait from "@/assets/team/olivia-executive-assistant.png";
+import amandaPortrait from "@/assets/team/amanda-clarke-executive-assistant.png";
 import { executeCommand, parseCommand } from '@/utils/slash-command-executor';
 import { useFileUpload, formatFileSize, UploadedFile } from '@/hooks/useFileUpload';
 
@@ -110,15 +110,19 @@ const FoundersChatPanel: React.FC<FoundersChatPanelProps> = ({ userName }) => {
         role: 'assistant',
         content: `${greeting}, ${capitalizedName}! 👋
 
-I'm **Olivia AI**, your personal executive assistant. I'm here to help you manage everything seamlessly.
+I'm **Amanda Clarke**, your personal executive assistant. I'm here to help you manage everything seamlessly.
 
 **What I can do for you:**
 • 📧 Manage emails, WhatsApp, and all communications
 • 📅 Schedule meetings and create JBJ Video Meet links
-• 📊 Generate reports and analyze data
+• 📊 Generate reports and analyze broker performance
 • 👥 Coordinate with all team members and departments
-• 🎯 Track leads and follow-ups
+• 🎯 Track leads, payments, and follow-ups
 • 📋 Create and manage tasks
+• 📈 Collect daily reports from broker assistants
+• 📝 Take notes from meetings, calls, and interviews
+
+I speak English and Spanish fluently. For other languages, I use professional translation to ensure accurate communication.
 
 Just type naturally or use commands like \`/schedule\`, \`/email\`, or mention team members with @name.
 
@@ -371,16 +375,16 @@ Just type naturally or use commands like \`/schedule\`, \`/email\`, or mention t
           <div className="relative">
             <div className="absolute inset-0 rounded-full bg-gradient-to-br from-gold/30 to-gold/5 blur-sm animate-pulse" />
             <div className="relative w-12 h-12 rounded-full overflow-hidden border-2 border-gold/50">
-              <img src={oliviaPortrait} alt="Olivia AI" className="w-full h-full object-cover" />
+              <img src={amandaPortrait} alt="Amanda Clarke" className="w-full h-full object-cover" />
             </div>
             <span className="absolute bottom-0 right-0 w-3.5 h-3.5 bg-green-500 border-2 border-[#0A0A0A] rounded-full" />
           </div>
           <div>
             <h3 className="text-gold font-semibold text-sm flex items-center gap-2">
-              Olivia AI
+              Amanda Clarke
               <Badge className="bg-gold/10 text-gold border-gold/30 text-[10px]">
                 <Sparkles className="w-2.5 h-2.5 mr-0.5" />
-                AI Powered
+                Executive Assistant
               </Badge>
             </h3>
             <p className="text-gray-400 text-xs flex items-center gap-1">
@@ -410,7 +414,7 @@ Just type naturally or use commands like \`/schedule\`, \`/email\`, or mention t
             >
               {message.role === 'assistant' && (
                 <div className="w-8 h-8 rounded-full overflow-hidden mr-2 flex-shrink-0 border border-gold/30">
-                  <img src={oliviaPortrait} alt="Olivia" className="w-full h-full object-cover" />
+                  <img src={amandaPortrait} alt="Amanda Clarke" className="w-full h-full object-cover" />
                 </div>
               )}
               <div className={`max-w-[80%] ${
