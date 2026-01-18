@@ -16,6 +16,7 @@ export { default as AIObjectionHandler } from "./AIObjectionHandler";
 export { default as AIMarketReport } from "./AIMarketReport";
 export { default as AICompetitorAnalysis } from "./AICompetitorAnalysis";
 export { default as AIROICalculator } from "./AIROICalculator";
+export { default as AIPropertyAnalyzer } from "./AIPropertyAnalyzer";
 
 // Communication
 export { default as AIMeetingSummarizer } from "./AIMeetingSummarizer";

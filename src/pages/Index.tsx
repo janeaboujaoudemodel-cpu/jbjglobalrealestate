@@ -598,6 +598,57 @@ const Index = () => {
               <p className="text-zinc-500 text-xs text-center mt-4">
                 Estimates only. Introductions to independent licensed mortgage partners.
               </p>
+              
+              {/* Dual Buttons with 3D Premium Styling */}
+              <div className="flex flex-col sm:flex-row gap-4 mt-8 justify-center">
+                <Link to="/mortgage">
+                  <button 
+                    className="relative inline-flex items-center justify-center gap-2 px-8 py-5 text-base font-bold rounded-xl transition-all duration-300 bg-gradient-to-r from-white via-[#FDFBF7] to-[#F5F0E6] border-2 border-gold/50 hover:scale-[1.02] transform active:scale-95 group"
+                    style={{
+                      boxShadow: `
+                        0 10px 30px rgba(200,167,102,0.4),
+                        0 6px 15px rgba(0,0,0,0.2),
+                        inset 0 2px 4px rgba(255,255,255,0.9),
+                        inset 0 -2px 4px rgba(200,167,102,0.2),
+                        0 0 20px rgba(200,167,102,0.3)
+                      `,
+                    }}
+                  >
+                    <span className="absolute inset-x-0 top-0 h-1/2 rounded-t-xl bg-gradient-to-b from-white/80 to-transparent pointer-events-none" />
+                    <span className="absolute inset-x-0 bottom-0 h-1/3 rounded-b-xl bg-gradient-to-t from-gold/10 to-transparent pointer-events-none" />
+                    <span className="absolute inset-0 rounded-xl opacity-0 group-hover:opacity-100 transition-opacity duration-300 pointer-events-none" style={{ boxShadow: '0 0 40px rgba(200,167,102,0.6), inset 0 0 20px rgba(200,167,102,0.1)' }} />
+                    <span className="relative flex items-center justify-center gap-2">
+                      <Sparkles className="w-5 h-5 text-gold" />
+                      <span className="text-gold">Try Our AI</span>
+                      <span className="text-black">Mortgage Calculator</span>
+                    </span>
+                  </button>
+                </Link>
+                
+                <Link to="/partners/mortgage">
+                  <button 
+                    className="relative inline-flex items-center justify-center gap-2 px-8 py-5 text-base font-bold rounded-xl transition-all duration-300 bg-gradient-to-r from-white via-[#FDFBF7] to-[#F5F0E6] border-2 border-gold/50 hover:scale-[1.02] transform active:scale-95 group"
+                    style={{
+                      boxShadow: `
+                        0 10px 30px rgba(200,167,102,0.4),
+                        0 6px 15px rgba(0,0,0,0.2),
+                        inset 0 2px 4px rgba(255,255,255,0.9),
+                        inset 0 -2px 4px rgba(200,167,102,0.2),
+                        0 0 20px rgba(200,167,102,0.3)
+                      `,
+                    }}
+                  >
+                    <span className="absolute inset-x-0 top-0 h-1/2 rounded-t-xl bg-gradient-to-b from-white/80 to-transparent pointer-events-none" />
+                    <span className="absolute inset-x-0 bottom-0 h-1/3 rounded-b-xl bg-gradient-to-t from-gold/10 to-transparent pointer-events-none" />
+                    <span className="absolute inset-0 rounded-xl opacity-0 group-hover:opacity-100 transition-opacity duration-300 pointer-events-none" style={{ boxShadow: '0 0 40px rgba(200,167,102,0.6), inset 0 0 20px rgba(200,167,102,0.1)' }} />
+                    <span className="relative flex items-center justify-center gap-2">
+                      <Users className="w-5 h-5 text-gold" />
+                      <span className="text-gold">Connect With</span>
+                      <span className="text-black">Mortgage Partners</span>
+                    </span>
+                  </button>
+                </Link>
+              </div>
             </div>
           </div>
         </div>

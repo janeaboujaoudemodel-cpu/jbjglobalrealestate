@@ -305,6 +305,42 @@ export type Database = {
         }
         Relationships: []
       }
+      ai_tool_projects: {
+        Row: {
+          created_at: string
+          id: string
+          is_shared: boolean | null
+          project_data: Json
+          project_name: string
+          thumbnail_url: string | null
+          tool_type: string
+          updated_at: string
+          user_id: string
+        }
+        Insert: {
+          created_at?: string
+          id?: string
+          is_shared?: boolean | null
+          project_data?: Json
+          project_name: string
+          thumbnail_url?: string | null
+          tool_type: string
+          updated_at?: string
+          user_id: string
+        }
+        Update: {
+          created_at?: string
+          id?: string
+          is_shared?: boolean | null
+          project_data?: Json
+          project_name?: string
+          thumbnail_url?: string | null
+          tool_type?: string
+          updated_at?: string
+          user_id?: string
+        }
+        Relationships: []
+      }
       ai_usage_logs: {
         Row: {
           client_ip_hash: string | null
@@ -7687,6 +7723,60 @@ export type Database = {
         }
         Relationships: []
       }
+      market_news: {
+        Row: {
+          ai_generated: boolean | null
+          category: string
+          content: string | null
+          created_at: string
+          excerpt: string | null
+          id: string
+          image_url: string | null
+          is_featured: boolean | null
+          is_verified: boolean | null
+          published_date: string
+          source: string
+          source_url: string | null
+          tags: string[] | null
+          title: string
+          updated_at: string
+        }
+        Insert: {
+          ai_generated?: boolean | null
+          category?: string
+          content?: string | null
+          created_at?: string
+          excerpt?: string | null
+          id?: string
+          image_url?: string | null
+          is_featured?: boolean | null
+          is_verified?: boolean | null
+          published_date?: string
+          source: string
+          source_url?: string | null
+          tags?: string[] | null
+          title: string
+          updated_at?: string
+        }
+        Update: {
+          ai_generated?: boolean | null
+          category?: string
+          content?: string | null
+          created_at?: string
+          excerpt?: string | null
+          id?: string
+          image_url?: string | null
+          is_featured?: boolean | null
+          is_verified?: boolean | null
+          published_date?: string
+          source?: string
+          source_url?: string | null
+          tags?: string[] | null
+          title?: string
+          updated_at?: string
+        }
+        Relationships: []
+      }
       market_opportunities: {
         Row: {
           ai_score: number | null
@@ -8616,6 +8706,42 @@ export type Database = {
             referencedColumns: ["id"]
           },
         ]
+      }
+      property_analysis_cache: {
+        Row: {
+          analysis_data: Json
+          analysis_type: string
+          area_name: string
+          confidence_score: number | null
+          created_at: string
+          expires_at: string
+          id: string
+          sources_used: string[] | null
+          user_id: string | null
+        }
+        Insert: {
+          analysis_data?: Json
+          analysis_type?: string
+          area_name: string
+          confidence_score?: number | null
+          created_at?: string
+          expires_at?: string
+          id?: string
+          sources_used?: string[] | null
+          user_id?: string | null
+        }
+        Update: {
+          analysis_data?: Json
+          analysis_type?: string
+          area_name?: string
+          confidence_score?: number | null
+          created_at?: string
+          expires_at?: string
+          id?: string
+          sources_used?: string[] | null
+          user_id?: string | null
+        }
+        Relationships: []
       }
       pwa_analytics: {
         Row: {
