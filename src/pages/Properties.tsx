@@ -147,6 +147,10 @@ const Properties = () => {
     const newTransaction = searchParams.get('transaction') as 'buy' | 'rent' | null;
     const newStatus = searchParams.get('status');
     const developerParam = searchParams.get('developer');
+    const keywordParam =
+      searchParams.get('q') ||
+      searchParams.get('keyword') ||
+      searchParams.get('search');
 
     const hasDeveloperParam = !!developerParam;
     const developersLoaded = !!developers && developers.length > 0;
@@ -181,12 +185,13 @@ const Properties = () => {
       newTransaction === 'rent' ? 'rent' : 'buy';
 
     // Apply filters if any URL params exist
-    if (newTransaction || newStatus || developerIdFromUrl) {
+    if (newTransaction || newStatus || developerIdFromUrl || keywordParam) {
       const updated: ExtendedFilterState = {
         ...defaultExtendedFilters,
         transactionType: tx,
         completionStatus: newStatus || null,
         developerId: developerIdFromUrl,
+        search: keywordParam ?? "",
       };
       setFilters(updated);
       setAppliedFilters(updated);
@@ -449,7 +454,15 @@ const Properties = () => {
               <Input
                 placeholder="Keyword"
                 value={filters.search}
-                onChange={(e) => updateFilter("search", e.target.value)}
+                onChange={(e) => {
+                  const next = e.target.value;
+                  updateFilter("search", next);
+                  // Keyword should work instantly without needing "Search"
+                  setAppliedFilters((prev) => ({ ...prev, search: next }));
+                }}
+                onKeyDown={(e) => {
+                  if (e.key === "Enter") handleSearch();
+                }}
                 className="h-10 bg-white border-zinc-300 text-black placeholder:text-zinc-500 focus:border-gold rounded-lg text-sm px-4"
               />
             </div>

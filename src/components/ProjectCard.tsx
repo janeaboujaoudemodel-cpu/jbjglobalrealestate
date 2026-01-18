@@ -73,18 +73,10 @@ const ProjectCard = ({ project, showFavorite = true, showBadgeButton = true, cur
     }
   };
 
-  const handleWhatsApp = (e: React.MouseEvent) => {
-    e.preventDefault();
-    e.stopPropagation();
-    const message = `Hello JBJ Global Real Estate,\n\nI am interested in ${project.name} located in ${project.location || 'UAE'}.\n\nPlease provide more details about this property.\n\nThank you.`;
-    window.open(getWhatsAppUrl(message), '_blank');
-  };
+  const whatsappMessage = `Hello JBJ Global Real Estate,\n\nI am interested in ${project.name} located in ${project.location || 'UAE'}.\n\nPlease provide more details about this property.\n\nThank you.`;
 
-  const handleCall = (e: React.MouseEvent) => {
-    e.preventDefault();
-    e.stopPropagation();
-    window.location.href = getCallUrl();
-  };
+  const whatsappHref = getWhatsAppUrl(whatsappMessage);
+  const callHref = getCallUrl();
 
   return (
     <div className="group relative overflow-hidden rounded-2xl bg-zinc-900 border border-zinc-800 hover:border-gold/30 transition-all duration-300 flex flex-col">
@@ -192,23 +184,27 @@ const ProjectCard = ({ project, showFavorite = true, showBadgeButton = true, cur
 
         {/* Contact Buttons - White fill, transparent on hover */}
         <div className="grid grid-cols-2 gap-2">
-          <Button
-            variant="outline"
-            size="sm"
-            onClick={handleWhatsApp}
-            className="bg-white border-green-600/50 hover:bg-transparent hover:border-green-500 text-black hover:text-green-400 text-xs h-9 transition-all"
-          >
-            <MessageCircle className="w-3.5 h-3.5 mr-1.5 text-green-500" />
-            WhatsApp
+          <Button variant="primary" size="sm" asChild className="text-xs h-9">
+            <a
+              href={whatsappHref}
+              target="_blank"
+              rel="noopener noreferrer"
+              onClick={(e) => e.stopPropagation()}
+              className="inline-flex items-center justify-center gap-2"
+            >
+              <MessageCircle className="w-3.5 h-3.5 text-green-600" />
+              WhatsApp
+            </a>
           </Button>
-          <Button
-            variant="outline"
-            size="sm"
-            onClick={handleCall}
-            className="bg-white border-blue-600/50 hover:bg-transparent hover:border-blue-500 text-black hover:text-blue-400 text-xs h-9 transition-all"
-          >
-            <Phone className="w-3.5 h-3.5 mr-1.5 text-blue-500" />
-            Call
+          <Button variant="primary" size="sm" asChild className="text-xs h-9">
+            <a
+              href={callHref}
+              onClick={(e) => e.stopPropagation()}
+              className="inline-flex items-center justify-center gap-2"
+            >
+              <Phone className="w-3.5 h-3.5 text-blue-600" />
+              Call
+            </a>
           </Button>
         </div>
       </div>

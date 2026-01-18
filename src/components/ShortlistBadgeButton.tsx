@@ -100,7 +100,7 @@ const ShortlistBadgeButton = ({
         <TooltipTrigger asChild>
           <button
             onClick={handleNotShortlisted}
-            className={`${sizeClasses[size]} flex items-center gap-1.5 rounded-full bg-gold/20 backdrop-blur-sm border border-gold/40 text-gold cursor-pointer hover:bg-gold/30 transition-all ${className}`}
+            className={`${sizeClasses[size]} flex items-center gap-1.5 rounded-full bg-white border border-gold/40 text-gold cursor-pointer hover:bg-white/90 transition-all ${className}`}
           >
             <Award className={iconSizes[size]} />
             <span className="hidden sm:inline text-sm font-medium">Add Badge</span>
@@ -137,7 +137,7 @@ const ShortlistBadgeButton = ({
         <DropdownMenuTrigger asChild>
           <button
             onClick={(e) => e.stopPropagation()}
-            className={`${sizeClasses[size]} flex items-center gap-1.5 rounded-full bg-gold/20 backdrop-blur-sm border border-gold/30 text-gold hover:bg-gold/30 transition-all cursor-pointer ${className}`}
+            className={`${sizeClasses[size]} flex items-center gap-1.5 rounded-full bg-white border border-gold/30 text-gold hover:bg-white/90 transition-all cursor-pointer ${className}`}
           >
             <Award className={iconSizes[size]} />
             <span className="hidden sm:inline">{currentBadge ? "Change" : "Add Badge"}</span>
