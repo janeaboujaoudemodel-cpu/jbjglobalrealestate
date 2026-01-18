@@ -6,6 +6,8 @@ import {
   BrokerToolkitNavigation,
   BrokerToolkitTools,
   BrokerToolkitEducation,
+  BrokerToolkitAcademy,
+  BrokerToolkitOperations,
   BrokerToolkitSupport,
   BrokerToolkitCRM,
   BrokerToolkitGrowth,
@@ -25,7 +27,9 @@ export default function BrokerToolkit() {
       />
       <BrokerToolkitTools />
       <BrokerToolkitEducation />
+      <BrokerToolkitAcademy />
       <BrokerToolkitSupport />
+      <BrokerToolkitOperations />
       <BrokerToolkitCRM />
       <BrokerToolkitGrowth />
       <BrokerToolkitCTA />

@@ -510,27 +510,59 @@ Requirements:
       />
       
       <main className="min-h-screen bg-black pt-20 pb-16">
-        <div className="container mx-auto px-4">
-          {/* Header */}
-          <div className="max-w-4xl mx-auto text-center mb-8">
-            <span className="inline-block px-3 py-1 rounded-full bg-gold/10 text-gold text-sm font-medium mb-4 border border-gold/20">
-              Seller Listing Tool
-            </span>
-            <h1 className="text-3xl md:text-4xl font-bold text-white mb-3">
-              List Your Property for Sale
-            </h1>
-            <p className="text-zinc-400">
-              Complete the form below to submit your property listing. Our team will contact you within 24-48 hours.
-            </p>
-            {hasDraft && (
-              <div className="mt-4 p-3 bg-gold/10 border border-gold/20 rounded-lg text-sm text-gold">
-                <Sparkles className="w-4 h-4 inline-block mr-2" />
-                Draft restored from your previous session
+        {/* White/Gold Champagne Hero Section */}
+        <div className="bg-gradient-to-br from-white via-[#FDFBF7] to-[#F5F0E6]">
+          <div className="container mx-auto px-4 py-12">
+            <div className="max-w-4xl mx-auto text-center">
+              <span className="inline-block px-4 py-1.5 rounded-full bg-black text-gold text-sm font-medium mb-4 border border-gold/30">
+                Seller Listing Tool
+              </span>
+              <h1 className="text-3xl md:text-4xl font-bold text-black mb-3">
+                List Your Property <span className="text-gold">for Sale</span>
+              </h1>
+              <p className="text-zinc-600 mb-6">
+                Complete the form below to submit your property listing. Our team will contact you within 24-48 hours.
+              </p>
+              {hasDraft && (
+                <div className="p-3 bg-gold/10 border border-gold/30 rounded-lg text-sm text-gold inline-flex items-center gap-2">
+                  <Sparkles className="w-4 h-4" />
+                  Draft restored from your previous session
+                </div>
+              )}
+              
+              {/* Seller Assistant CTA */}
+              <div className="mt-6">
+                <Button
+                  type="button"
+                  onClick={() => setShowAssistant(true)}
+                  className="relative bg-gradient-to-r from-white via-[#FDFBF7] to-[#F5F0E6] text-black border-2 border-gold/50 px-6 py-3 text-sm font-bold rounded-xl transition-all duration-300 hover:scale-105 transform active:scale-95 group"
+                  style={{
+                    textShadow: 'none',
+                    boxShadow: `
+                      0 10px 30px rgba(200,167,102,0.4),
+                      0 6px 15px rgba(0,0,0,0.2),
+                      inset 0 2px 4px rgba(255,255,255,0.9),
+                      inset 0 -2px 4px rgba(200,167,102,0.2),
+                      0 0 20px rgba(200,167,102,0.3)
+                    `,
+                  }}
+                >
+                  <span className="absolute inset-x-0 top-0 h-1/2 rounded-t-xl bg-gradient-to-b from-white/80 to-transparent pointer-events-none" />
+                  <span className="absolute inset-x-0 bottom-0 h-1/3 rounded-b-xl bg-gradient-to-t from-gold/10 to-transparent pointer-events-none" />
+                  <span className="absolute inset-0 rounded-xl opacity-0 group-hover:opacity-100 transition-opacity duration-300 pointer-events-none" style={{ boxShadow: '0 0 40px rgba(200,167,102,0.6), inset 0 0 20px rgba(200,167,102,0.1)' }} />
+                  <span className="relative flex items-center gap-2">
+                    <Wand2 className="w-4 h-4 text-gold" />
+                    <span className="text-gold">Get Help</span>
+                    <span className="text-black">with JBJ Seller Assistant</span>
+                  </span>
+                </Button>
               </div>
-            )}
+            </div>
           </div>
+        </div>
 
-          {/* Progress Steps - White/Gold Premium Styling */}
+        <div className="container mx-auto px-4 mt-8">
+          {/* Progress Steps */}
           <div className="max-w-4xl mx-auto mb-8">
             <div className="flex items-center justify-between overflow-x-auto pb-2 gap-2">
               {STEPS.map((step, index) => (
@@ -564,9 +596,9 @@ Requirements:
             </div>
           </div>
 
-          {/* Form Content - White Background Premium Styling */}
+          {/* Form Content - Black Background */}
           <div className="max-w-3xl mx-auto">
-            <div className="bg-white border border-zinc-200 rounded-2xl p-6 md:p-8 shadow-xl">
+            <div className="bg-zinc-950 border border-zinc-800 rounded-2xl p-6 md:p-8 shadow-xl">
               <AnimatePresence mode="wait">
                 {/* Step 1: Seller Details */}
                 {currentStep === 1 && (
@@ -578,50 +610,50 @@ Requirements:
                     className="space-y-6"
                   >
                     <div>
-                      <h2 className="text-xl font-bold text-black mb-2">Seller Details</h2>
-                      <p className="text-zinc-600 text-sm">Tell us about yourself so we can contact you</p>
+                      <h2 className="text-xl font-bold text-white mb-2">Seller Details</h2>
+                      <p className="text-zinc-400 text-sm">Tell us about yourself so we can contact you</p>
                     </div>
 
                     <div className="grid md:grid-cols-2 gap-4">
                       <div>
-                        <Label className="text-black font-medium">Full Name *</Label>
+                        <Label className="text-zinc-300 font-medium">Full Name *</Label>
                         <Input
                           {...form.register("seller_full_name")}
                           placeholder="Enter your full name"
-                          className="bg-zinc-50 border-zinc-300 text-black placeholder:text-zinc-400 mt-1"
+                          className="bg-zinc-900 border-zinc-700 text-white placeholder:text-gold/70 mt-1 focus:border-gold"
                         />
                       </div>
                       <div>
-                        <Label className="text-black font-medium">Phone Number *</Label>
+                        <Label className="text-zinc-300 font-medium">Phone Number *</Label>
                         <Input
                           {...form.register("seller_phone")}
                           placeholder="+971 50 123 4567"
-                          className="bg-zinc-50 border-zinc-300 text-black placeholder:text-zinc-400 mt-1"
+                          className="bg-zinc-900 border-zinc-700 text-white placeholder:text-gold/70 mt-1 focus:border-gold"
                         />
                       </div>
                     </div>
 
                     <div>
-                      <Label className="text-black font-medium">Email Address *</Label>
+                      <Label className="text-zinc-300 font-medium">Email Address *</Label>
                       <Input
                         {...form.register("seller_email")}
                         type="email"
                         placeholder="your@email.com"
-                        className="bg-zinc-50 border-zinc-300 text-black placeholder:text-zinc-400 mt-1"
+                        className="bg-zinc-900 border-zinc-700 text-white placeholder:text-gold/70 mt-1 focus:border-gold"
                       />
                     </div>
 
                     <div className="grid md:grid-cols-2 gap-4">
                       <div>
-                        <Label className="text-black font-medium">Preferred Language</Label>
+                        <Label className="text-zinc-300 font-medium">Preferred Language</Label>
                         <Select 
                           value={form.watch("preferred_language")} 
                           onValueChange={(v) => form.setValue("preferred_language", v)}
                         >
-                          <SelectTrigger className="bg-zinc-50 border-zinc-300 text-black mt-1">
+                          <SelectTrigger className="bg-zinc-900 border-zinc-700 text-white mt-1">
                             <SelectValue />
                           </SelectTrigger>
-                          <SelectContent className="bg-white border-zinc-200">
+                          <SelectContent className="bg-zinc-900 border-zinc-700">
                             <SelectItem value="en">English</SelectItem>
                             <SelectItem value="ar">Arabic</SelectItem>
                             <SelectItem value="fr">French</SelectItem>
@@ -631,15 +663,15 @@ Requirements:
                         </Select>
                       </div>
                       <div>
-                        <Label className="text-black font-medium">Preferred Contact Method</Label>
+                        <Label className="text-zinc-300 font-medium">Preferred Contact Method</Label>
                         <Select 
                           value={form.watch("preferred_contact_method")} 
                           onValueChange={(v) => form.setValue("preferred_contact_method", v)}
                         >
-                          <SelectTrigger className="bg-zinc-50 border-zinc-300 text-black mt-1">
+                          <SelectTrigger className="bg-zinc-900 border-zinc-700 text-white mt-1">
                             <SelectValue />
                           </SelectTrigger>
-                          <SelectContent className="bg-white border-zinc-200">
+                          <SelectContent className="bg-zinc-900 border-zinc-700">
                             <SelectItem value="whatsapp">WhatsApp</SelectItem>
                             <SelectItem value="call">Phone Call</SelectItem>
                             <SelectItem value="email">Email</SelectItem>
@@ -649,7 +681,7 @@ Requirements:
                     </div>
 
                     <div>
-                      <Label className="text-black font-medium mb-3 block">Seller Type *</Label>
+                      <Label className="text-zinc-300 font-medium mb-3 block">Seller Type *</Label>
                       <RadioGroup 
                         value={form.watch("seller_type")} 
                         onValueChange={(v) => form.setValue("seller_type", v)}
@@ -664,9 +696,9 @@ Requirements:
                             <RadioGroupItem 
                               value={option.value} 
                               id={option.value}
-                              className="border-zinc-400"
+                              className="border-zinc-600"
                             />
-                            <Label htmlFor={option.value} className="ml-2 text-zinc-700 cursor-pointer">
+                            <Label htmlFor={option.value} className="ml-2 text-zinc-300 cursor-pointer">
                               {option.label}
                             </Label>
                           </div>
@@ -686,21 +718,21 @@ Requirements:
                     className="space-y-6"
                   >
                     <div>
-                      <h2 className="text-xl font-bold text-black mb-2">Property Details</h2>
-                      <p className="text-zinc-600 text-sm">Tell us about your property</p>
+                      <h2 className="text-xl font-bold text-white mb-2">Property Details</h2>
+                      <p className="text-zinc-400 text-sm">Tell us about your property</p>
                     </div>
 
                     <div className="grid md:grid-cols-2 gap-4">
                       <div>
-                        <Label className="text-black font-medium">Property Type *</Label>
+                        <Label className="text-zinc-300 font-medium">Property Type *</Label>
                         <Select
                           value={form.watch("property_type")}
                           onValueChange={(v) => form.setValue("property_type", v)}
                         >
-                          <SelectTrigger className="bg-zinc-50 border-zinc-300 text-black mt-1">
+                          <SelectTrigger className="bg-zinc-900 border-zinc-700 text-white mt-1">
                             <SelectValue placeholder="Select type" />
                           </SelectTrigger>
-                          <SelectContent className="bg-white border-zinc-200">
+                          <SelectContent className="bg-zinc-900 border-zinc-700">
                             <SelectItem value="apartment">Apartment</SelectItem>
                             <SelectItem value="villa">Villa</SelectItem>
                             <SelectItem value="townhouse">Townhouse</SelectItem>
@@ -712,11 +744,11 @@ Requirements:
                         </Select>
                       </div>
                       <div>
-                        <Label className="text-black font-medium">Location / Area *</Label>
+                        <Label className="text-zinc-300 font-medium">Location / Area *</Label>
                         <Input
                           {...form.register("property_location")}
                           placeholder="e.g., Downtown Dubai"
-                          className="bg-zinc-50 border-zinc-300 text-black placeholder:text-zinc-400 mt-1"
+                          className="bg-zinc-900 border-zinc-700 text-white placeholder:text-gold/70 mt-1 focus:border-gold"
                         />
                       </div>
                     </div>
