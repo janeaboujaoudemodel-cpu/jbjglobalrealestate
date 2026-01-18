@@ -188,7 +188,7 @@ const creativeMarketing = [
     color: "text-purple-400",
     bgColor: "bg-purple-500/10",
     borderColor: "border-purple-500/30",
-    link: "/design-studio",
+    link: "/jbj-design-studio",
   },
   {
     id: "videographer",
