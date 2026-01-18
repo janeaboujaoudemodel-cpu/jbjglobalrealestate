@@ -91,86 +91,93 @@ export function BrokerToolkitCRM() {
   };
   
   return (
-    <section id="section-crm" className="py-16 md:py-20 bg-emerald-950/80">
-      <div className="container mx-auto px-4">
-        <motion.div
-          initial={{ opacity: 0, y: 20 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true }}
-          className="text-center mb-12"
-        >
-          <Badge className="bg-emerald-500/30 text-emerald-300 border-emerald-400/50 mb-4">
-            <Target className="w-3 h-3 mr-1" />
-            CRM & Lead Management
-          </Badge>
-          <h2 className="text-3xl md:text-4xl font-bold text-white mb-4">
-            Manage Leads Like a <span className="text-emerald-300">Pro</span>
-          </h2>
-          <p className="text-emerald-200/70 max-w-2xl mx-auto">
-            Our built-in CRM helps you track every lead, automate follow-ups, and close more deals.
-          </p>
-        </motion.div>
+    <>
+      {/* CRM Section - Emerald/Green theme */}
+      <section id="section-crm" className="py-16 md:py-20 bg-gradient-to-br from-emerald-950 via-emerald-900 to-emerald-950">
+        <div className="container mx-auto px-4">
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+            className="text-center mb-12"
+          >
+            <Badge className="bg-emerald-500/30 text-emerald-200 border-emerald-400/50 mb-4">
+              <Target className="w-3 h-3 mr-1" />
+              CRM & Lead Management
+            </Badge>
+            <h2 className="text-3xl md:text-4xl font-bold text-white mb-4">
+              Manage Leads Like a <span className="text-emerald-300">Pro</span>
+            </h2>
+            <p className="text-emerald-200/70 max-w-2xl mx-auto">
+              Our built-in CRM helps you track every lead, automate follow-ups, and close more deals.
+            </p>
+          </motion.div>
 
-        <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6 mb-12">
-          {CRM_FEATURES.map((feature, i) => (
-            <motion.div
-              key={i}
-              initial={{ opacity: 0, y: 20 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              transition={{ delay: i * 0.1 }}
-              viewport={{ once: true }}
-            >
-              <Card className="bg-emerald-900/50 border border-emerald-500/30 hover:border-emerald-400 hover:bg-emerald-900/70 transition-all h-full">
-                <CardContent className="p-5">
-                  <div className="flex items-start gap-4">
-                    <div className="w-12 h-12 bg-emerald-500/20 rounded-xl flex items-center justify-center flex-shrink-0">
-                      <feature.icon className="w-6 h-6 text-emerald-300" />
-                    </div>
-                    <div>
-                      <h3 className="text-white font-semibold mb-1">{feature.title}</h3>
-                      <p className="text-emerald-200/70 text-sm">{feature.description}</p>
-                    </div>
-                  </div>
-                </CardContent>
-              </Card>
-            </motion.div>
-          ))}
-        </div>
-
-        {/* CRM Preview Card - Lighter green/teal for contrast */}
-        <motion.div
-          initial={{ opacity: 0, y: 20 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true }}
-          className="max-w-4xl mx-auto"
-        >
-          <Card className="bg-emerald-900/30 border border-emerald-400/40">
-            <CardContent className="p-8 text-center">
-              <div className="w-16 h-16 bg-emerald-400/20 rounded-full flex items-center justify-center mx-auto mb-4">
-                <Lock className="w-8 h-8 text-emerald-300" />
-              </div>
-              <h3 className="text-2xl font-bold text-white mb-4">
-                Ready to Organize Your Leads?
-              </h3>
-              <p className="text-emerald-100/80 mb-2 max-w-xl mx-auto">
-                Access the full JBJ CRM with lead scoring, pipeline management, and insights.
-              </p>
-              <p className="text-emerald-200/60 text-sm mb-6">
-                <Lock className="w-3 h-3 inline mr-1" />
-                Available exclusively to registered JBJ brokers
-              </p>
-              <Button 
-                onClick={handleCRMAccess}
-                className="bg-gradient-to-r from-emerald-500 to-emerald-600 text-white hover:brightness-110 px-8"
+          <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6 mb-12">
+            {CRM_FEATURES.map((feature, i) => (
+              <motion.div
+                key={i}
+                initial={{ opacity: 0, y: 20 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                transition={{ delay: i * 0.1 }}
+                viewport={{ once: true }}
               >
-                <Target className="w-5 h-5 mr-2" />
-                Open CRM Dashboard
-                <ArrowUpRight className="w-5 h-5 ml-2 text-gold" />
-              </Button>
-            </CardContent>
-          </Card>
-        </motion.div>
-      </div>
-    </section>
+                <Card className="bg-emerald-900/60 border border-emerald-500/30 hover:border-emerald-400 hover:bg-emerald-900/80 transition-all h-full shadow-lg shadow-emerald-500/10">
+                  <CardContent className="p-5">
+                    <div className="flex items-start gap-4">
+                      <div className="w-12 h-12 bg-emerald-500/30 rounded-xl flex items-center justify-center flex-shrink-0">
+                        <feature.icon className="w-6 h-6 text-emerald-200" />
+                      </div>
+                      <div>
+                        <h3 className="text-white font-semibold mb-1">{feature.title}</h3>
+                        <p className="text-emerald-200/70 text-sm">{feature.description}</p>
+                      </div>
+                    </div>
+                  </CardContent>
+                </Card>
+              </motion.div>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      {/* CRM Preview Card - Lighter green section for "Ready to Organize" */}
+      <section className="py-16 md:py-20 bg-gradient-to-br from-green-900/80 via-green-800/70 to-green-900/80">
+        <div className="container mx-auto px-4">
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+            className="max-w-4xl mx-auto"
+          >
+            <Card className="bg-green-800/50 border border-green-400/40 shadow-xl shadow-green-500/20">
+              <CardContent className="p-8 text-center">
+                <div className="w-16 h-16 bg-green-500/30 rounded-full flex items-center justify-center mx-auto mb-4">
+                  <Lock className="w-8 h-8 text-green-200" />
+                </div>
+                <h3 className="text-2xl font-bold text-white mb-4">
+                  Ready to Organize Your Leads?
+                </h3>
+                <p className="text-green-100/80 mb-2 max-w-xl mx-auto">
+                  Access the full JBJ CRM with lead scoring, pipeline management, and insights.
+                </p>
+                <p className="text-green-200/60 text-sm mb-6">
+                  <Lock className="w-3 h-3 inline mr-1" />
+                  Available exclusively to registered JBJ brokers
+                </p>
+                <Button 
+                  onClick={handleCRMAccess}
+                  className="bg-gradient-to-r from-green-500 to-emerald-600 text-white hover:brightness-110 px-8"
+                >
+                  <Target className="w-5 h-5 mr-2" />
+                  Open CRM Dashboard
+                  <ArrowUpRight className="w-5 h-5 ml-2" />
+                </Button>
+              </CardContent>
+            </Card>
+          </motion.div>
+        </div>
+      </section>
+    </>
   );
 }
