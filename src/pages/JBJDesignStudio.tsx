@@ -1,4 +1,4 @@
-import React, { useState, useRef, useCallback } from 'react';
+import React, { useState, useRef, useCallback, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { 
   Palette, 
@@ -50,7 +50,30 @@ import {
   Calendar,
   Gift,
   Crown,
-  Heart
+  Heart,
+  FolderOpen,
+  Save,
+  Trash2,
+  Clock,
+  Eye,
+  Lock,
+  Unlock,
+  Grid,
+  List,
+  Filter,
+  Search,
+  Copy,
+  Pencil,
+  ChevronRight,
+  ChevronDown,
+  Zap,
+  Target,
+  Users2,
+  GraduationCap,
+  Award,
+  TrendingUp,
+  Map,
+  Wallet
 } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
@@ -64,9 +87,10 @@ import { useAuth } from '@/contexts/AuthContext';
 import { toast } from 'sonner';
 import Footer from '@/components/Footer';
 import ReportProblemButton from '@/components/jbj-assistant/ReportProblemButton';
-import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from '@/components/ui/dialog';
+import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger, DialogDescription } from '@/components/ui/dialog';
 import { Badge } from '@/components/ui/badge';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
+import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
 
 // Template categories with icons
 const TEMPLATE_CATEGORIES = [
@@ -82,6 +106,9 @@ const TEMPLATE_CATEGORIES = [
   { id: 'logo', label: 'Logos & Branding', icon: Crown, color: 'from-amber-500 to-amber-700' },
   { id: 'property', label: 'Property Marketing', icon: Building2, color: 'from-emerald-500 to-emerald-700' },
   { id: 'events', label: 'Events & Campaigns', icon: Megaphone, color: 'from-rose-500 to-rose-700' },
+  { id: 'video', label: 'Video Thumbnails', icon: Video, color: 'from-cyan-500 to-cyan-700' },
+  { id: 'print', label: 'Print Materials', icon: Newspaper, color: 'from-slate-500 to-slate-700' },
+  { id: 'portfolio', label: 'Portfolios', icon: GraduationCap, color: 'from-violet-500 to-violet-700' },
 ];
 
 // Pre-built templates with real sizes
@@ -136,6 +163,18 @@ const TEMPLATES = [
   { id: 'event-invite', category: 'events', name: 'Event Invitation', size: '1080x1080', aspect: '1:1' },
   { id: 'event-banner', category: 'events', name: 'Event Banner', size: '1920x600', aspect: '3.2:1' },
   { id: 'holiday-greeting', category: 'events', name: 'Holiday Greeting', size: '1080x1080', aspect: '1:1' },
+  // Video Thumbnails
+  { id: 'video-property-tour', category: 'video', name: 'Property Tour Thumb', size: '1280x720', aspect: '16:9' },
+  { id: 'video-market-update', category: 'video', name: 'Market Update', size: '1280x720', aspect: '16:9' },
+  { id: 'video-shorts', category: 'video', name: 'Shorts/Reels', size: '1080x1920', aspect: '9:16' },
+  // Print Materials
+  { id: 'print-poster-a3', category: 'print', name: 'A3 Poster', size: '3508x4961', aspect: 'A3' },
+  { id: 'print-banner-large', category: 'print', name: 'Roll-up Banner', size: '2000x5000', aspect: '1:2.5' },
+  { id: 'print-magazine-ad', category: 'print', name: 'Magazine Ad', size: '2480x3508', aspect: 'A4' },
+  // Portfolios
+  { id: 'portfolio-broker', category: 'portfolio', name: 'Broker Portfolio', size: '1920x1080', aspect: '16:9' },
+  { id: 'portfolio-modeling', category: 'portfolio', name: 'Modeling Book', size: '1080x1350', aspect: '4:5' },
+  { id: 'portfolio-rate-card', category: 'portfolio', name: 'Rate Card', size: '1920x1080', aspect: '16:9' },
 ];
 
 // JBJ Brand Colors

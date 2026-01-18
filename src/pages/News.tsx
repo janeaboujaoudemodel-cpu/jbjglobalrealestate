@@ -1,12 +1,16 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
-import { Newspaper, ChevronRight, ArrowLeft, Calendar, ExternalLink, TrendingUp } from "lucide-react";
+import { Newspaper, ChevronRight, ArrowLeft, Calendar, ExternalLink, TrendingUp, Loader2, RefreshCw, Bot } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import Footer from "@/components/Footer";
 import { SEOHead, pagesSEO } from "@/components/SEOHead";
+import { supabase } from "@/integrations/supabase/client";
+import { useQuery } from "@tanstack/react-query";
+import { toast } from "sonner";
+import { Badge } from "@/components/ui/badge";
 
-// Real UAE property news - 2025/2026
-const newsArticles = [
+// Fallback static news for when DB is empty
+const staticNewsArticles = [
   {
     id: "1",
     title: "Dubai Real Estate Market Hits Strongest Growth on Record in H1 2025",
@@ -90,14 +94,84 @@ const newsArticles = [
   },
 ];
 
+interface MarketNews {
+  id: string;
+  title: string;
+  excerpt: string;
+  content: string | null;
+  category: string;
+  source: string;
+  source_url: string | null;
+  image_url: string | null;
+  published_date: string;
+  ai_generated: boolean;
+  is_featured: boolean;
+}
+
 const News = () => {
   const [selectedCategory, setSelectedCategory] = useState<string | null>(null);
+  const [isRefreshing, setIsRefreshing] = useState(false);
 
-  const categories = ["All", "Market Update", "Analysis", "Policy", "Economic", "Monthly Report", "Market Outlook"];
+  // Fetch news from database
+  const { data: dbNews, isLoading, refetch } = useQuery({
+    queryKey: ['market-news'],
+    queryFn: async () => {
+      const { data, error } = await supabase
+        .from('market_news')
+        .select('*')
+        .order('published_date', { ascending: false })
+        .limit(50);
+      
+      if (error) throw error;
+      return data as MarketNews[];
+    },
+  });
+
+  // Transform DB news to display format, fallback to static if empty
+  const newsArticles = dbNews && dbNews.length > 0 
+    ? dbNews.map(n => ({
+        id: n.id,
+        title: n.title,
+        excerpt: n.excerpt,
+        category: n.category,
+        date: n.published_date,
+        source: n.source,
+        image: n.image_url || "https://images.unsplash.com/photo-1512453979798-5ea266f8880c?w=800",
+        isAI: n.ai_generated,
+        sourceUrl: n.source_url,
+      }))
+    : staticNewsArticles;
+
+  const categories = ["All", "Market Update", "Analysis", "Policy", "Economic", "Monthly Report", "Market Outlook", "Developer News", "Government"];
 
   const filteredNews = selectedCategory && selectedCategory !== "All"
     ? newsArticles.filter(n => n.category === selectedCategory)
     : newsArticles;
+
+  const handleRefreshNews = async () => {
+    setIsRefreshing(true);
+    try {
+      const { error } = await supabase.functions.invoke('ai-news-collector', {
+        body: { action: 'collect' }
+      });
+      
+      if (error) {
+        if (error.message?.includes('429')) {
+          toast.error("Rate limit exceeded. Please try again later.");
+          return;
+        }
+        throw error;
+      }
+      
+      await refetch();
+      toast.success("News updated successfully!");
+    } catch (err) {
+      console.error("Failed to refresh news:", err);
+      toast.error("Failed to refresh news. Please try again.");
+    } finally {
+      setIsRefreshing(false);
+    }
+  };
 
   return (
     <>
@@ -116,21 +190,45 @@ const News = () => {
             Back to Properties
           </Link>
           
-          <div className="flex items-center gap-4 mb-6">
-            <div className="w-14 h-14 rounded-xl bg-gradient-to-br from-gold/20 to-gold/5 border border-gold/20 flex items-center justify-center">
-              <Newspaper className="w-7 h-7 text-gold" />
+          <div className="flex items-center justify-between gap-4 mb-6 flex-wrap">
+            <div className="flex items-center gap-4">
+              <div className="w-14 h-14 rounded-xl bg-gradient-to-br from-gold/20 to-gold/5 border border-gold/20 flex items-center justify-center">
+                <Newspaper className="w-7 h-7 text-gold" />
+              </div>
+              <div>
+                <h1 
+                  className="text-4xl md:text-5xl font-bold text-white"
+                  style={{ fontFamily: "Poppins, sans-serif" }}
+                >
+                  News & <span className="text-gold">Insights</span>
+                </h1>
+                <div className="flex items-center gap-2 mt-1">
+                  <Badge variant="outline" className="text-gold border-gold/30 text-xs">
+                    <Bot className="w-3 h-3 mr-1" />
+                    AI-Powered Updates
+                  </Badge>
+                </div>
+              </div>
             </div>
-            <div>
-              <h1 
-                className="text-4xl md:text-5xl font-bold text-white"
-                style={{ fontFamily: "Poppins, sans-serif" }}
-              >
-                News & <span className="text-gold">Insights</span>
-              </h1>
-            </div>
+            
+            {/* Refresh Button */}
+            <Button
+              onClick={handleRefreshNews}
+              disabled={isRefreshing}
+              variant="outline"
+              className="border-gold/30 text-gold hover:bg-gold/10"
+            >
+              {isRefreshing ? (
+                <Loader2 className="w-4 h-4 mr-2 animate-spin" />
+              ) : (
+                <RefreshCw className="w-4 h-4 mr-2" />
+              )}
+              {isRefreshing ? "Updating..." : "Refresh News"}
+            </Button>
           </div>
           <p className="text-zinc-400 text-lg max-w-2xl">
-            Stay informed about the latest UAE real estate market updates, economic developments, and investment opportunities
+            Stay informed about the latest UAE real estate market updates, economic developments, and investment opportunities. 
+            <span className="text-gold/80"> Our AI News Reporter collects news from official government sources daily.</span>
           </p>
         </div>
       </div>
@@ -156,153 +254,230 @@ const News = () => {
         </div>
       </div>
 
+      {/* Loading State */}
+      {isLoading && (
+        <div className="container mx-auto px-4 py-16 flex justify-center">
+          <Loader2 className="w-8 h-8 text-gold animate-spin" />
+        </div>
+      )}
+
       {/* News Grid */}
-      <div className="container mx-auto px-4 py-12 md:py-16">
-        {/* Featured Article */}
-        {filteredNews.length > 0 && (
-          <div className="mb-12">
-            <article className="group relative bg-gradient-to-br from-zinc-900 to-zinc-950 border border-zinc-800 rounded-2xl overflow-hidden hover:border-gold/30 transition-all duration-500">
-              <div className="grid md:grid-cols-2 gap-0">
+      {!isLoading && (
+        <div className="container mx-auto px-4 py-12 md:py-16">
+          {/* Featured Article */}
+          {filteredNews.length > 0 && (
+            <div className="mb-12">
+              <article className="group relative bg-gradient-to-br from-zinc-900 to-zinc-950 border border-zinc-800 rounded-2xl overflow-hidden hover:border-gold/30 transition-all duration-500">
+                <div className="grid md:grid-cols-2 gap-0">
+                  {/* Image */}
+                  <div className="aspect-video md:aspect-auto md:h-full relative overflow-hidden">
+                    <img 
+                      src={filteredNews[0].image} 
+                      alt={filteredNews[0].title}
+                      className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700"
+                    />
+                    <div className="absolute inset-0 bg-gradient-to-r from-transparent to-zinc-900/50" />
+                  </div>
+
+                  {/* Content */}
+                  <div className="p-8 md:p-10 flex flex-col justify-center">
+                    <div className="flex items-center gap-3 mb-4">
+                      <span className="text-xs text-black bg-gold px-3 py-1 rounded-full font-medium">
+                        Featured
+                      </span>
+                      <span className="text-xs text-gold bg-gold/10 px-3 py-1 rounded-full">
+                        {filteredNews[0].category}
+                      </span>
+                      {'isAI' in filteredNews[0] && filteredNews[0].isAI && (
+                        <span className="text-xs text-purple-400 bg-purple-500/10 px-3 py-1 rounded-full flex items-center gap-1">
+                          <Bot className="w-3 h-3" />
+                          AI Curated
+                        </span>
+                      )}
+                    </div>
+
+                    <h2 className="text-2xl md:text-3xl font-bold text-white mb-4 group-hover:text-gold transition-colors line-clamp-2" style={{ fontFamily: "Poppins, sans-serif" }}>
+                      {filteredNews[0].title}
+                    </h2>
+
+                    <p className="text-zinc-400 mb-6 line-clamp-3">
+                      {filteredNews[0].excerpt}
+                    </p>
+
+                    <div className="flex items-center justify-between">
+                      <div className="flex items-center gap-4 text-sm text-zinc-500">
+                        <span className="flex items-center gap-1">
+                          <Calendar className="w-4 h-4" />
+                          {new Date(filteredNews[0].date).toLocaleDateString("en-US", {
+                            month: "short",
+                            day: "numeric",
+                            year: "numeric"
+                          })}
+                        </span>
+                        <span className="flex items-center gap-1">
+                          <ExternalLink className="w-4 h-4" />
+                          {filteredNews[0].source}
+                        </span>
+                      </div>
+                      {'sourceUrl' in filteredNews[0] && filteredNews[0].sourceUrl ? (
+                        <a 
+                          href={filteredNews[0].sourceUrl as string} 
+                          target="_blank" 
+                          rel="noopener noreferrer"
+                          className="flex items-center text-gold font-medium hover:underline"
+                        >
+                          <span>Read More</span>
+                          <ChevronRight className="w-4 h-4 ml-1 group-hover:translate-x-1 transition-transform" />
+                        </a>
+                      ) : (
+                        <div className="flex items-center text-gold font-medium">
+                          <span>Read More</span>
+                          <ChevronRight className="w-4 h-4 ml-1 group-hover:translate-x-1 transition-transform" />
+                        </div>
+                      )}
+                    </div>
+                  </div>
+                </div>
+              </article>
+            </div>
+          )}
+
+          {/* Rest of Articles Grid */}
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+            {filteredNews.slice(1).map((article) => (
+              <article 
+                key={article.id}
+                className="group bg-gradient-to-br from-zinc-900/80 to-zinc-950 border border-zinc-800 rounded-xl overflow-hidden hover:border-gold/30 transition-all duration-500 hover:-translate-y-1 hover:shadow-xl hover:shadow-gold/5"
+              >
                 {/* Image */}
-                <div className="aspect-video md:aspect-auto md:h-full relative overflow-hidden">
+                <div className="aspect-video relative overflow-hidden">
                   <img 
-                    src={filteredNews[0].image} 
-                    alt={filteredNews[0].title}
+                    src={article.image} 
+                    alt={article.title}
                     className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700"
                   />
-                  <div className="absolute inset-0 bg-gradient-to-r from-transparent to-zinc-900/50" />
+                  <div className="absolute inset-0 bg-gradient-to-t from-zinc-900 via-transparent to-transparent" />
+                  <div className="absolute top-3 left-3 flex gap-2">
+                    <span className="text-xs text-gold bg-gold/10 backdrop-blur-sm px-3 py-1 rounded-full border border-gold/20">
+                      {article.category}
+                    </span>
+                    {'isAI' in article && article.isAI && (
+                      <span className="text-xs text-purple-400 bg-purple-500/20 backdrop-blur-sm px-2 py-1 rounded-full border border-purple-500/20 flex items-center gap-1">
+                        <Bot className="w-3 h-3" />
+                      </span>
+                    )}
+                  </div>
                 </div>
 
                 {/* Content */}
-                <div className="p-8 md:p-10 flex flex-col justify-center">
-                  <div className="flex items-center gap-3 mb-4">
-                    <span className="text-xs text-black bg-gold px-3 py-1 rounded-full font-medium">
-                      Featured
+                <div className="p-5">
+                  <div className="flex items-center gap-3 mb-3 text-xs text-zinc-500">
+                    <span className="flex items-center gap-1">
+                      <Calendar className="w-3 h-3" />
+                      {new Date(article.date).toLocaleDateString("en-US", {
+                        month: "short",
+                        day: "numeric",
+                        year: "numeric"
+                      })}
                     </span>
-                    <span className="text-xs text-gold bg-gold/10 px-3 py-1 rounded-full">
-                      {filteredNews[0].category}
-                    </span>
+                    <span className="text-zinc-600">•</span>
+                    <span>{article.source}</span>
                   </div>
 
-                  <h2 className="text-2xl md:text-3xl font-bold text-white mb-4 group-hover:text-gold transition-colors line-clamp-2" style={{ fontFamily: "Poppins, sans-serif" }}>
-                    {filteredNews[0].title}
-                  </h2>
+                  <h3 className="text-lg font-semibold text-white mb-2 group-hover:text-gold transition-colors line-clamp-2" style={{ fontFamily: "Poppins, sans-serif" }}>
+                    {article.title}
+                  </h3>
 
-                  <p className="text-zinc-400 mb-6 line-clamp-3">
-                    {filteredNews[0].excerpt}
+                  <p className="text-sm text-zinc-400 mb-4 line-clamp-2">
+                    {article.excerpt}
                   </p>
 
-                  <div className="flex items-center justify-between">
-                    <div className="flex items-center gap-4 text-sm text-zinc-500">
-                      <span className="flex items-center gap-1">
-                        <Calendar className="w-4 h-4" />
-                        {new Date(filteredNews[0].date).toLocaleDateString("en-US", {
-                          month: "short",
-                          day: "numeric",
-                          year: "numeric"
-                        })}
-                      </span>
-                      <span className="flex items-center gap-1">
-                        <ExternalLink className="w-4 h-4" />
-                        {filteredNews[0].source}
-                      </span>
-                    </div>
-                    <div className="flex items-center text-gold font-medium">
+                  {'sourceUrl' in article && article.sourceUrl ? (
+                    <a 
+                      href={article.sourceUrl as string} 
+                      target="_blank" 
+                      rel="noopener noreferrer"
+                      className="flex items-center text-gold text-sm font-medium hover:underline"
+                    >
+                      <span>Read More</span>
+                      <ChevronRight className="w-4 h-4 ml-1 group-hover:translate-x-1 transition-transform" />
+                    </a>
+                  ) : (
+                    <div className="flex items-center text-gold text-sm font-medium">
                       <span>Read More</span>
                       <ChevronRight className="w-4 h-4 ml-1 group-hover:translate-x-1 transition-transform" />
                     </div>
-                  </div>
+                  )}
                 </div>
-              </div>
-            </article>
+              </article>
+            ))}
           </div>
-        )}
 
-        {/* Rest of Articles Grid */}
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-          {filteredNews.slice(1).map((article) => (
-            <article 
-              key={article.id}
-              className="group bg-gradient-to-br from-zinc-900/80 to-zinc-950 border border-zinc-800 rounded-xl overflow-hidden hover:border-gold/30 transition-all duration-500 hover:-translate-y-1 hover:shadow-xl hover:shadow-gold/5"
-            >
-              {/* Image */}
-              <div className="aspect-video relative overflow-hidden">
-                <img 
-                  src={article.image} 
-                  alt={article.title}
-                  className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700"
-                />
-                <div className="absolute inset-0 bg-gradient-to-t from-zinc-900 via-transparent to-transparent" />
-                <div className="absolute top-3 left-3">
-                  <span className="text-xs text-gold bg-gold/10 backdrop-blur-sm px-3 py-1 rounded-full border border-gold/20">
-                    {article.category}
-                  </span>
-                </div>
+          {/* Empty State */}
+          {filteredNews.length === 0 && (
+            <div className="text-center py-16">
+              <Newspaper className="w-12 h-12 text-zinc-600 mx-auto mb-4" />
+              <h3 className="text-white text-xl font-semibold mb-2">No news in this category</h3>
+              <p className="text-zinc-400">Try selecting a different category or refresh the news.</p>
+            </div>
+          )}
+
+          {/* Market Stats Banner */}
+          <div className="mt-16 bg-gradient-to-r from-zinc-900 via-zinc-900/80 to-zinc-900 border border-zinc-800 rounded-2xl p-8 md:p-10">
+            <div className="flex items-center gap-3 mb-6">
+              <TrendingUp className="w-6 h-6 text-gold" />
+              <h3 className="text-xl font-bold text-white" style={{ fontFamily: "Poppins, sans-serif" }}>
+                Key Market Statistics — 2025
+              </h3>
+            </div>
+            <div className="grid grid-cols-2 md:grid-cols-4 gap-6">
+              <div className="text-center">
+                <p className="text-3xl md:text-4xl font-bold text-gold mb-1">AED 328.8B</p>
+                <p className="text-sm text-zinc-400">H1 2025 Transaction Value</p>
               </div>
+              <div className="text-center">
+                <p className="text-3xl md:text-4xl font-bold text-gold mb-1">99,000+</p>
+                <p className="text-sm text-zinc-400">H1 2025 Transactions</p>
+              </div>
+              <div className="text-center">
+                <p className="text-3xl md:text-4xl font-bold text-gold mb-1">+23.7%</p>
+                <p className="text-sm text-zinc-400">YoY Volume Growth</p>
+              </div>
+              <div className="text-center">
+                <p className="text-3xl md:text-4xl font-bold text-gold mb-1">+41%</p>
+                <p className="text-sm text-zinc-400">YoY Value Growth</p>
+              </div>
+            </div>
+            <p className="text-xs text-zinc-500 mt-6 text-center">
+              Source: Dubai Land Department, Christie's Real Estate Dubai, Property Finder
+            </p>
+          </div>
 
-              {/* Content */}
-              <div className="p-5">
-                <div className="flex items-center gap-3 mb-3 text-xs text-zinc-500">
-                  <span className="flex items-center gap-1">
-                    <Calendar className="w-3 h-3" />
-                    {new Date(article.date).toLocaleDateString("en-US", {
-                      month: "short",
-                      day: "numeric",
-                      year: "numeric"
-                    })}
-                  </span>
-                  <span className="text-zinc-600">•</span>
-                  <span>{article.source}</span>
-                </div>
-
-                <h3 className="text-lg font-semibold text-white mb-2 group-hover:text-gold transition-colors line-clamp-2" style={{ fontFamily: "Poppins, sans-serif" }}>
-                  {article.title}
-                </h3>
-
-                <p className="text-sm text-zinc-400 mb-4 line-clamp-2">
-                  {article.excerpt}
+          {/* AI News Reporter Info */}
+          <div className="mt-8 bg-gradient-to-br from-purple-950/30 to-zinc-900 border border-purple-500/20 rounded-2xl p-6 md:p-8">
+            <div className="flex items-start gap-4">
+              <div className="w-14 h-14 rounded-xl bg-gradient-to-br from-purple-500/30 to-purple-600/20 border border-purple-500/30 flex items-center justify-center flex-shrink-0">
+                <Bot className="w-7 h-7 text-purple-400" />
+              </div>
+              <div>
+                <h3 className="text-white font-semibold text-lg mb-2">AI News Reporter</h3>
+                <p className="text-zinc-400 text-sm mb-3">
+                  Our AI News Reporter automatically collects and curates real estate news from official UAE government sources 
+                  including Dubai Media Office, Dubai Land Department, Abu Dhabi Media Office, and Ministry of Economy. 
+                  News is updated daily to keep you informed of the latest market developments.
                 </p>
-
-                <div className="flex items-center text-gold text-sm font-medium">
-                  <span>Read More</span>
-                  <ChevronRight className="w-4 h-4 ml-1 group-hover:translate-x-1 transition-transform" />
+                <div className="flex flex-wrap gap-2">
+                  {["Dubai Media Office", "Dubai Land Dept", "Abu Dhabi Media", "Ministry of Economy", "RERA"].map((source) => (
+                    <Badge key={source} variant="outline" className="text-purple-400 border-purple-500/30 text-xs">
+                      {source}
+                    </Badge>
+                  ))}
                 </div>
               </div>
-            </article>
-          ))}
-        </div>
-
-        {/* Market Stats Banner */}
-        <div className="mt-16 bg-gradient-to-r from-zinc-900 via-zinc-900/80 to-zinc-900 border border-zinc-800 rounded-2xl p-8 md:p-10">
-          <div className="flex items-center gap-3 mb-6">
-            <TrendingUp className="w-6 h-6 text-gold" />
-            <h3 className="text-xl font-bold text-white" style={{ fontFamily: "Poppins, sans-serif" }}>
-              Key Market Statistics — 2025
-            </h3>
-          </div>
-          <div className="grid grid-cols-2 md:grid-cols-4 gap-6">
-            <div className="text-center">
-              <p className="text-3xl md:text-4xl font-bold text-gold mb-1">AED 328.8B</p>
-              <p className="text-sm text-zinc-400">H1 2025 Transaction Value</p>
-            </div>
-            <div className="text-center">
-              <p className="text-3xl md:text-4xl font-bold text-gold mb-1">99,000+</p>
-              <p className="text-sm text-zinc-400">H1 2025 Transactions</p>
-            </div>
-            <div className="text-center">
-              <p className="text-3xl md:text-4xl font-bold text-gold mb-1">+23.7%</p>
-              <p className="text-sm text-zinc-400">YoY Volume Growth</p>
-            </div>
-            <div className="text-center">
-              <p className="text-3xl md:text-4xl font-bold text-gold mb-1">+41%</p>
-              <p className="text-sm text-zinc-400">YoY Value Growth</p>
             </div>
           </div>
-          <p className="text-xs text-zinc-500 mt-6 text-center">
-            Source: Dubai Land Department, Christie's Real Estate Dubai, Property Finder
-          </p>
         </div>
-      </div>
+      )}
 
       <Footer />
       </section>
