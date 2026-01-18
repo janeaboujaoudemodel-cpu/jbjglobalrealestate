@@ -153,6 +153,7 @@ import FormBuilder from "./pages/FormBuilder";
 import CustomerHappiness from "./pages/CustomerHappiness";
 import Sitemap from "./pages/Sitemap";
 import SecurityConsole from "./pages/SecurityConsole";
+import ITDepartment from "./pages/ITDepartment";
 
 const queryClient = new QueryClient();
 
@@ -323,6 +324,7 @@ const App = () => (
                 <Route path="/customer-happiness" element={<CustomerHappiness />} />
                 <Route path="/sitemap" element={<Sitemap />} />
                 <Route path="/security-console" element={<SecurityConsole />} />
+                <Route path="/it-department" element={<ITDepartment />} />
                 
                 <Route path="*" element={<NotFound />} />
               </Route>

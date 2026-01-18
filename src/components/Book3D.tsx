@@ -168,34 +168,24 @@ const Book3D = ({ size = "md", className = "" }: Book3DProps) => {
           
           {/* Cover content */}
           <div className="relative h-full flex flex-col items-center justify-center p-4 md:p-6 text-center z-10">
-            {/* JJ Logo Mark */}
+            {/* JBJ Logo Mark - NEW BRANDING */}
             <div className="mb-3 md:mb-4">
-              <div className="flex items-center justify-center gap-1">
+              <div className="flex flex-col items-center">
                 <span 
-                  className="text-gold font-bold"
+                  className="text-gold font-bold tracking-[0.3em] uppercase"
                   style={{ 
-                    fontSize: size === "sm" ? "24px" : size === "md" ? "32px" : "40px",
+                    fontSize: size === "sm" ? "28px" : size === "md" ? "36px" : "44px",
                     fontFamily: "Poppins, sans-serif",
-                    textShadow: "0 2px 4px rgba(168,146,90,0.3)",
+                    textShadow: "0 2px 8px rgba(168,146,90,0.4)",
+                    letterSpacing: "0.2em",
                   }}
                 >
-                  J
+                  JBJ
                 </span>
-                <div className="w-[2px] h-6 md:h-8 bg-gradient-to-b from-transparent via-gold/60 to-transparent mx-1" />
-                <span 
-                  className="text-gold font-bold"
-                  style={{ 
-                    fontSize: size === "sm" ? "24px" : size === "md" ? "32px" : "40px",
-                    fontFamily: "Poppins, sans-serif",
-                    textShadow: "0 2px 4px rgba(168,146,90,0.3)",
-                  }}
-                >
-                  J
+                <span className="text-gold/60 text-[7px] md:text-[8px] tracking-[0.3em] uppercase block mt-1">
+                  Global Real Estate
                 </span>
               </div>
-              <span className="text-gold/60 text-[7px] md:text-[8px] tracking-[0.3em] uppercase block mt-1">
-                Global Real Estate
-              </span>
             </div>
 
             {/* Decorative divider */}
@@ -240,16 +230,50 @@ const Book3D = ({ size = "md", className = "" }: Book3DProps) => {
           />
         </div>
 
-        {/* Book pages (side) - Cream colored pages - THICKER */}
+        {/* Book top edge - Sealed cream pages texture */}
         <div
-          className="absolute top-[2px] h-[calc(100%-4px)]"
+          className="absolute left-0"
+          style={{
+            width: width + spine,
+            height: pageThickness,
+            top: 0,
+            background: "linear-gradient(180deg, #e8e2d4 0%, #f0ead8 30%, #f5f0e0 70%, #ebe5d5 100%)",
+            transform: `rotateX(90deg) translateZ(${height / 2}px) translateY(-${pageThickness / 2}px)`,
+            transformOrigin: "center center",
+            boxShadow: "inset 0 2px 8px rgba(0,0,0,0.15)",
+            borderLeft: "1px solid rgba(0,0,0,0.2)",
+            borderRight: "1px solid rgba(0,0,0,0.2)",
+          }}
+        />
+
+        {/* Book bottom edge - Sealed cream pages texture */}
+        <div
+          className="absolute left-0"
+          style={{
+            width: width + spine,
+            height: pageThickness,
+            bottom: 0,
+            background: "linear-gradient(0deg, #e8e2d4 0%, #f0ead8 30%, #f5f0e0 70%, #ebe5d5 100%)",
+            transform: `rotateX(-90deg) translateZ(${height / 2}px) translateY(${pageThickness / 2}px)`,
+            transformOrigin: "center center",
+            boxShadow: "inset 0 -2px 8px rgba(0,0,0,0.15)",
+            borderLeft: "1px solid rgba(0,0,0,0.2)",
+            borderRight: "1px solid rgba(0,0,0,0.2)",
+          }}
+        />
+
+        {/* Book right edge (fore-edge) - Sealed cream pages texture */}
+        <div
+          className="absolute top-0 h-full"
           style={{
             width: pageThickness,
-            left: spine + width,
-            background: "repeating-linear-gradient(to bottom, #f5f0e0 0px, #f5f0e0 1px, #ebe5d5 1px, #ebe5d5 2px)",
-            transform: `rotateY(90deg) translateZ(${width / 2}px) translateX(-${pageThickness / 2}px)`,
+            right: 0,
+            background: "linear-gradient(90deg, #f5f0e0 0%, #f0ead8 20%, #ebe5d5 50%, #f0ead8 80%, #f5f0e0 100%)",
+            transform: `rotateY(90deg) translateZ(${width / 2 - pageThickness / 2}px)`,
             transformOrigin: "center center",
-            boxShadow: "inset -3px 0 8px rgba(0,0,0,0.2)",
+            boxShadow: "inset -3px 0 8px rgba(0,0,0,0.12)",
+            borderTop: "1px solid rgba(0,0,0,0.15)",
+            borderBottom: "1px solid rgba(0,0,0,0.15)",
           }}
         />
 

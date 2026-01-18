@@ -5,7 +5,7 @@ import {
   Users, Trophy, Medal, Star, Award, Search, Filter, 
   Building2, Crown, TrendingUp, Target, Heart, Briefcase,
   ChevronRight, Globe, Phone, Mail, UserCheck, BarChart3,
-  MessageSquare, Calendar, Sparkles
+  MessageSquare, Calendar, Sparkles, Monitor
 } from "lucide-react";
 import { SEOHead } from "@/components/SEOHead";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
@@ -377,6 +377,75 @@ const EmployeeHub = () => {
                   <p className="text-3xl font-bold text-amber-400">{Object.keys(topPerformers).length}</p>
                   <p className="text-zinc-500 text-sm">Top Performers</p>
                 </div>
+              </div>
+              
+              {/* Department Quick Access */}
+              <div className="flex flex-wrap justify-center gap-3">
+                <Button
+                  onClick={() => navigate('/it-department')}
+                  className="relative bg-gradient-to-r from-white via-[#FDFBF7] to-[#F5F0E6] text-black border-2 border-gold/50 px-6 py-5 font-bold rounded-xl transition-all duration-300 hover:scale-105 transform active:scale-95 group"
+                  style={{
+                    boxShadow: `
+                      0 10px 30px rgba(200,167,102,0.4),
+                      0 6px 15px rgba(0,0,0,0.2),
+                      inset 0 2px 4px rgba(255,255,255,0.9),
+                      inset 0 -2px 4px rgba(200,167,102,0.2),
+                      0 0 20px rgba(200,167,102,0.3)
+                    `,
+                  }}
+                >
+                  <span className="absolute inset-x-0 top-0 h-1/2 rounded-t-xl bg-gradient-to-b from-white/80 to-transparent pointer-events-none" />
+                  <span className="absolute inset-0 rounded-xl opacity-0 group-hover:opacity-100 transition-opacity duration-300 pointer-events-none" style={{ boxShadow: '0 0 40px rgba(200,167,102,0.6)' }} />
+                  <span className="relative flex items-center gap-2">
+                    <Monitor className="w-5 h-5 text-gold" />
+                    <span className="text-gold">IT</span>
+                    <span className="text-black">Department</span>
+                  </span>
+                </Button>
+                
+                <Button
+                  onClick={() => navigate('/hr-agent')}
+                  className="relative bg-gradient-to-r from-white via-[#FDFBF7] to-[#F5F0E6] text-black border-2 border-gold/50 px-6 py-5 font-bold rounded-xl transition-all duration-300 hover:scale-105 transform active:scale-95 group"
+                  style={{
+                    boxShadow: `
+                      0 10px 30px rgba(200,167,102,0.4),
+                      0 6px 15px rgba(0,0,0,0.2),
+                      inset 0 2px 4px rgba(255,255,255,0.9),
+                      inset 0 -2px 4px rgba(200,167,102,0.2),
+                      0 0 20px rgba(200,167,102,0.3)
+                    `,
+                  }}
+                >
+                  <span className="absolute inset-x-0 top-0 h-1/2 rounded-t-xl bg-gradient-to-b from-white/80 to-transparent pointer-events-none" />
+                  <span className="absolute inset-0 rounded-xl opacity-0 group-hover:opacity-100 transition-opacity duration-300 pointer-events-none" style={{ boxShadow: '0 0 40px rgba(200,167,102,0.6)' }} />
+                  <span className="relative flex items-center gap-2">
+                    <UserCheck className="w-5 h-5 text-gold" />
+                    <span className="text-gold">HR</span>
+                    <span className="text-black">Department</span>
+                  </span>
+                </Button>
+                
+                <Button
+                  onClick={() => navigate('/employee-chat')}
+                  className="relative bg-gradient-to-r from-white via-[#FDFBF7] to-[#F5F0E6] text-black border-2 border-gold/50 px-6 py-5 font-bold rounded-xl transition-all duration-300 hover:scale-105 transform active:scale-95 group"
+                  style={{
+                    boxShadow: `
+                      0 10px 30px rgba(200,167,102,0.4),
+                      0 6px 15px rgba(0,0,0,0.2),
+                      inset 0 2px 4px rgba(255,255,255,0.9),
+                      inset 0 -2px 4px rgba(200,167,102,0.2),
+                      0 0 20px rgba(200,167,102,0.3)
+                    `,
+                  }}
+                >
+                  <span className="absolute inset-x-0 top-0 h-1/2 rounded-t-xl bg-gradient-to-b from-white/80 to-transparent pointer-events-none" />
+                  <span className="absolute inset-0 rounded-xl opacity-0 group-hover:opacity-100 transition-opacity duration-300 pointer-events-none" style={{ boxShadow: '0 0 40px rgba(200,167,102,0.6)' }} />
+                  <span className="relative flex items-center gap-2">
+                    <MessageSquare className="w-5 h-5 text-gold" />
+                    <span className="text-gold">Team</span>
+                    <span className="text-black">Chat</span>
+                  </span>
+                </Button>
               </div>
             </div>
           </div>
