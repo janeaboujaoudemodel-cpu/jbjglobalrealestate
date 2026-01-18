@@ -148,14 +148,14 @@ const GlobalHeader = () => {
             </span>
           </Link>
 
-          {/* CENTER: Desktop Navigation - Premium styling with elegant dropdowns */}
-          <nav className="hidden lg:flex items-center justify-center flex-1 mx-4">
-            <div className="flex items-center gap-0.5 bg-gradient-to-r from-white via-[#FDFBF7] to-[#F5F0E6] backdrop-blur-sm rounded-full px-3 py-1.5 border border-gold/30 shadow-lg">
+          {/* CENTER: Desktop Navigation - Premium styling with elegant dropdowns - STRETCHED */}
+          <nav className="hidden lg:flex items-center justify-center flex-1 mx-6">
+            <div className="flex items-center gap-1 bg-gradient-to-r from-white via-[#FDFBF7] to-[#F5F0E6] backdrop-blur-sm rounded-full px-5 py-2 border border-gold/30 shadow-lg">
               {mainNavLinks.slice(0, 1).map((link) => (
                 <Link
                   key={link.href}
                   to={link.href}
-                  className={`px-2 xl:px-2.5 py-1.5 text-[11px] xl:text-[12px] font-semibold whitespace-nowrap transition-all relative group rounded-full ${
+                  className={`px-3 xl:px-4 py-2 text-[12px] xl:text-[13px] font-semibold whitespace-nowrap transition-all relative group rounded-full ${
                     isActive(link.href)
                       ? "text-gold bg-gold/10"
                       : "text-black hover:text-gold hover:bg-gold/10"
@@ -168,11 +168,11 @@ const GlobalHeader = () => {
               {/* Properties Dropdown - Premium styling */}
               <DropdownMenu>
                 <DropdownMenuTrigger asChild>
-                  <button className={`flex items-center gap-0.5 px-2 xl:px-2.5 py-1.5 text-[11px] xl:text-[12px] font-semibold whitespace-nowrap transition-all rounded-full ${
+                  <button className={`flex items-center gap-1 px-3 xl:px-4 py-2 text-[12px] xl:text-[13px] font-semibold whitespace-nowrap transition-all rounded-full ${
                     location.pathname === '/properties' ? 'text-gold bg-gold/10' : 'text-black hover:text-gold hover:bg-gold/10'
                   }`}>
                     {t('nav.properties')}
-                    <ChevronDown className="w-2.5 h-2.5 transition-transform duration-200 group-data-[state=open]:rotate-180" />
+                    <ChevronDown className="w-3 h-3 transition-transform duration-200 group-data-[state=open]:rotate-180" />
                   </button>
                 </DropdownMenuTrigger>
                 <DropdownMenuContent 
@@ -198,7 +198,7 @@ const GlobalHeader = () => {
                 <Link
                   key={link.href}
                   to={link.href}
-                  className={`px-2 xl:px-2.5 py-1.5 text-[11px] xl:text-[12px] font-semibold whitespace-nowrap transition-all relative group rounded-full ${
+                  className={`px-3 xl:px-4 py-2 text-[12px] xl:text-[13px] font-semibold whitespace-nowrap transition-all relative group rounded-full ${
                     isActive(link.href)
                       ? "text-gold bg-gold/10"
                       : "text-black hover:text-gold hover:bg-gold/10"
@@ -211,9 +211,9 @@ const GlobalHeader = () => {
               {/* Guides Dropdown - Premium styling */}
               <DropdownMenu>
                 <DropdownMenuTrigger asChild>
-                  <button className="flex items-center gap-0.5 px-2 xl:px-2.5 py-1.5 text-[11px] xl:text-[12px] font-semibold whitespace-nowrap transition-all text-black hover:text-gold hover:bg-gold/10 rounded-full">
+                  <button className="flex items-center gap-1 px-3 xl:px-4 py-2 text-[12px] xl:text-[13px] font-semibold whitespace-nowrap transition-all text-black hover:text-gold hover:bg-gold/10 rounded-full">
                     Guides
-                    <ChevronDown className="w-2.5 h-2.5" />
+                    <ChevronDown className="w-3 h-3" />
                   </button>
                 </DropdownMenuTrigger>
                 <DropdownMenuContent 
@@ -238,11 +238,11 @@ const GlobalHeader = () => {
               {/* Market Intelligence Dropdown - Premium styling */}
               <DropdownMenu>
                 <DropdownMenuTrigger asChild>
-                  <button className={`flex items-center gap-0.5 px-2 xl:px-2.5 py-1.5 text-[11px] xl:text-[12px] font-semibold whitespace-nowrap transition-all rounded-full ${
+                  <button className={`flex items-center gap-1 px-3 xl:px-4 py-2 text-[12px] xl:text-[13px] font-semibold whitespace-nowrap transition-all rounded-full ${
                     location.pathname.startsWith('/market-intelligence') ? 'text-gold bg-gold/10' : 'text-black hover:text-gold hover:bg-gold/10'
                   }`}>
                     Market
-                    <ChevronDown className="w-2.5 h-2.5" />
+                    <ChevronDown className="w-3 h-3" />
                   </button>
                 </DropdownMenuTrigger>
                 <DropdownMenuContent 
@@ -267,9 +267,9 @@ const GlobalHeader = () => {
               {/* More Dropdown - Premium styling */}
               <DropdownMenu>
                 <DropdownMenuTrigger asChild>
-                  <button className="flex items-center gap-0.5 px-2 xl:px-2.5 py-1.5 text-[11px] xl:text-[12px] font-semibold whitespace-nowrap transition-all text-black hover:text-gold hover:bg-gold/10 rounded-full">
+                  <button className="flex items-center gap-1 px-3 xl:px-4 py-2 text-[12px] xl:text-[13px] font-semibold whitespace-nowrap transition-all text-black hover:text-gold hover:bg-gold/10 rounded-full">
                     More
-                    <ChevronDown className="w-2.5 h-2.5" />
+                    <ChevronDown className="w-3 h-3" />
                   </button>
                 </DropdownMenuTrigger>
                 <DropdownMenuContent 
@@ -294,34 +294,18 @@ const GlobalHeader = () => {
           </nav>
 
           {/* RIGHT: Actions - Smaller premium icon buttons with inverted hover */}
-          <div className="flex items-center gap-1.5 shrink-0 ml-auto">
+          <div className="flex items-center gap-2 shrink-0 ml-auto">
             {/* Search Icon - White bg with gold icon normally, inverted on hover */}
             <Button
               variant="ghost"
               size="sm"
-              className="relative w-8 h-8 p-0 rounded-full bg-white border border-gold/30 hover:bg-transparent hover:border-gold/50 transition-all duration-300 group"
+              className="relative w-9 h-9 p-0 rounded-full bg-white border border-gold/30 hover:bg-transparent hover:border-gold/50 transition-all duration-300 group"
               onClick={() => setSearchOpen(true)}
             >
-              <Search className="w-3.5 h-3.5 text-gold group-hover:text-gold-light transition-colors" />
+              <Search className="w-4 h-4 text-gold group-hover:text-gold-light transition-colors" />
             </Button>
 
-            {/* Favorites - White bg with gold icon normally, inverted on hover */}
-            <Link to="/favorites" className="shrink-0">
-              <Button
-                variant="ghost"
-                size="sm"
-                className="relative w-8 h-8 p-0 rounded-full bg-white border border-gold/30 hover:bg-transparent hover:border-gold/50 transition-all duration-300 group"
-              >
-                <Heart className="w-3.5 h-3.5 text-gold group-hover:text-gold-light transition-colors" />
-                {totalCount > 0 && (
-                  <span className="absolute -top-0.5 -right-0.5 w-4 h-4 bg-gradient-to-br from-gold to-gold-dark text-black rounded-full text-[9px] font-bold flex items-center justify-center shadow-lg shadow-gold/30">
-                    {totalCount}
-                  </span>
-                )}
-              </Button>
-            </Link>
-
-            {/* Language Switcher - Smaller, inverted style */}
+            {/* Language Switcher - Inverted style */}
             <div className="shrink-0">
               <LanguageSwitcher variant="compact" />
             </div>
