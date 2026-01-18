@@ -10823,63 +10823,101 @@ export type Database = {
       }
       crm_leads_secure: {
         Row: {
+          age_range: string | null
           assigned_to_user_id: string | null
           contact_type: Database["public"]["Enums"]["crm_contact_type"] | null
           created_at: string | null
           current_location_city: string | null
           current_location_country: string | null
+          email_lower: string | null
           email_normalized: string | null
           full_name: string | null
+          gender: string | null
           has_full_access: boolean | null
           id: string | null
+          import_batch_id: string | null
+          lead_intent: string | null
           nationality: string | null
           owner_type: Database["public"]["Enums"]["crm_lead_owner_type"] | null
           owner_user_id: string | null
+          phone_e164: string | null
+          phone_normalized: string | null
           phone_raw: string | null
+          pipeline_stage: string | null
+          preferred_language: string | null
           source: string | null
+          source_id: string | null
           tags: string[] | null
           updated_at: string | null
           vip: boolean | null
         }
         Insert: {
+          age_range?: string | null
           assigned_to_user_id?: string | null
           contact_type?: Database["public"]["Enums"]["crm_contact_type"] | null
           created_at?: string | null
           current_location_city?: string | null
           current_location_country?: string | null
+          email_lower?: never
           email_normalized?: never
           full_name?: never
+          gender?: string | null
           has_full_access?: never
           id?: string | null
+          import_batch_id?: string | null
+          lead_intent?: string | null
           nationality?: string | null
           owner_type?: Database["public"]["Enums"]["crm_lead_owner_type"] | null
           owner_user_id?: string | null
+          phone_e164?: never
+          phone_normalized?: never
           phone_raw?: never
+          pipeline_stage?: string | null
+          preferred_language?: string | null
           source?: string | null
+          source_id?: string | null
           tags?: string[] | null
           updated_at?: string | null
           vip?: boolean | null
         }
         Update: {
+          age_range?: string | null
           assigned_to_user_id?: string | null
           contact_type?: Database["public"]["Enums"]["crm_contact_type"] | null
           created_at?: string | null
           current_location_city?: string | null
           current_location_country?: string | null
+          email_lower?: never
           email_normalized?: never
           full_name?: never
+          gender?: string | null
           has_full_access?: never
           id?: string | null
+          import_batch_id?: string | null
+          lead_intent?: string | null
           nationality?: string | null
           owner_type?: Database["public"]["Enums"]["crm_lead_owner_type"] | null
           owner_user_id?: string | null
+          phone_e164?: never
+          phone_normalized?: never
           phone_raw?: never
+          pipeline_stage?: string | null
+          preferred_language?: string | null
           source?: string | null
+          source_id?: string | null
           tags?: string[] | null
           updated_at?: string | null
           vip?: boolean | null
         }
-        Relationships: []
+        Relationships: [
+          {
+            foreignKeyName: "crm_leads_source_id_fkey"
+            columns: ["source_id"]
+            isOneToOne: false
+            referencedRelation: "crm_lead_sources"
+            referencedColumns: ["id"]
+          },
+        ]
       }
       crm_vip_leads: {
         Row: {
