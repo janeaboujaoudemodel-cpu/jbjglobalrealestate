@@ -3386,8 +3386,10 @@ export type Database = {
       }
       crm_users_profile: {
         Row: {
+          company_id: string | null
           created_at: string
           crm_role: Database["public"]["Enums"]["crm_role"]
+          department: string | null
           display_name: string | null
           email: string | null
           first_login_at: string | null
@@ -3395,18 +3397,23 @@ export type Database = {
           id: string
           is_active: boolean
           job_title: string | null
+          languages: string[] | null
           last_password_change: string | null
           login_count: number | null
+          nationality: string | null
           password_changed_at: string | null
           phone: string | null
           photo_url: string | null
           preferred_language: string | null
+          team_member_id: string | null
           updated_at: string
           user_id: string
         }
         Insert: {
+          company_id?: string | null
           created_at?: string
           crm_role?: Database["public"]["Enums"]["crm_role"]
+          department?: string | null
           display_name?: string | null
           email?: string | null
           first_login_at?: string | null
@@ -3414,18 +3421,23 @@ export type Database = {
           id?: string
           is_active?: boolean
           job_title?: string | null
+          languages?: string[] | null
           last_password_change?: string | null
           login_count?: number | null
+          nationality?: string | null
           password_changed_at?: string | null
           phone?: string | null
           photo_url?: string | null
           preferred_language?: string | null
+          team_member_id?: string | null
           updated_at?: string
           user_id: string
         }
         Update: {
+          company_id?: string | null
           created_at?: string
           crm_role?: Database["public"]["Enums"]["crm_role"]
+          department?: string | null
           display_name?: string | null
           email?: string | null
           first_login_at?: string | null
@@ -3433,12 +3445,15 @@ export type Database = {
           id?: string
           is_active?: boolean
           job_title?: string | null
+          languages?: string[] | null
           last_password_change?: string | null
           login_count?: number | null
+          nationality?: string | null
           password_changed_at?: string | null
           phone?: string | null
           photo_url?: string | null
           preferred_language?: string | null
+          team_member_id?: string | null
           updated_at?: string
           user_id?: string
         }
@@ -6681,6 +6696,65 @@ export type Database = {
         }
         Relationships: []
       }
+      it_department_tasks: {
+        Row: {
+          assigned_to: string | null
+          completed_at: string | null
+          created_at: string
+          description: string | null
+          due_date: string | null
+          id: string
+          notes: Json | null
+          priority: string
+          related_application_id: string | null
+          requested_by: string | null
+          status: string
+          task_type: string
+          title: string
+          updated_at: string
+        }
+        Insert: {
+          assigned_to?: string | null
+          completed_at?: string | null
+          created_at?: string
+          description?: string | null
+          due_date?: string | null
+          id?: string
+          notes?: Json | null
+          priority?: string
+          related_application_id?: string | null
+          requested_by?: string | null
+          status?: string
+          task_type: string
+          title: string
+          updated_at?: string
+        }
+        Update: {
+          assigned_to?: string | null
+          completed_at?: string | null
+          created_at?: string
+          description?: string | null
+          due_date?: string | null
+          id?: string
+          notes?: Json | null
+          priority?: string
+          related_application_id?: string | null
+          requested_by?: string | null
+          status?: string
+          task_type?: string
+          title?: string
+          updated_at?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "it_department_tasks_related_application_id_fkey"
+            columns: ["related_application_id"]
+            isOneToOne: false
+            referencedRelation: "new_joiner_applications"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       jbj_activity_logs: {
         Row: {
           action: string
@@ -7914,6 +7988,128 @@ export type Database = {
           user_id?: string
         }
         Relationships: []
+      }
+      new_joiner_applications: {
+        Row: {
+          approved_at: string | null
+          assigned_to_it: string | null
+          assigned_to_webdev: string | null
+          completed_at: string | null
+          created_at: string
+          crm_role: string
+          crm_user_id: string | null
+          department: string
+          documents: Json | null
+          email: string
+          full_name: string
+          generated_company_id: string | null
+          generated_email: string | null
+          id: string
+          it_notes: string | null
+          job_title: string
+          languages: string[] | null
+          nationality: string
+          phone: string | null
+          photo_url: string | null
+          rejection_reason: string | null
+          reports_to: string | null
+          requested_by: string | null
+          status: string
+          updated_at: string
+          webdev_notes: string | null
+        }
+        Insert: {
+          approved_at?: string | null
+          assigned_to_it?: string | null
+          assigned_to_webdev?: string | null
+          completed_at?: string | null
+          created_at?: string
+          crm_role?: string
+          crm_user_id?: string | null
+          department: string
+          documents?: Json | null
+          email: string
+          full_name: string
+          generated_company_id?: string | null
+          generated_email?: string | null
+          id?: string
+          it_notes?: string | null
+          job_title: string
+          languages?: string[] | null
+          nationality: string
+          phone?: string | null
+          photo_url?: string | null
+          rejection_reason?: string | null
+          reports_to?: string | null
+          requested_by?: string | null
+          status?: string
+          updated_at?: string
+          webdev_notes?: string | null
+        }
+        Update: {
+          approved_at?: string | null
+          assigned_to_it?: string | null
+          assigned_to_webdev?: string | null
+          completed_at?: string | null
+          created_at?: string
+          crm_role?: string
+          crm_user_id?: string | null
+          department?: string
+          documents?: Json | null
+          email?: string
+          full_name?: string
+          generated_company_id?: string | null
+          generated_email?: string | null
+          id?: string
+          it_notes?: string | null
+          job_title?: string
+          languages?: string[] | null
+          nationality?: string
+          phone?: string | null
+          photo_url?: string | null
+          rejection_reason?: string | null
+          reports_to?: string | null
+          requested_by?: string | null
+          status?: string
+          updated_at?: string
+          webdev_notes?: string | null
+        }
+        Relationships: []
+      }
+      new_joiner_status_history: {
+        Row: {
+          application_id: string
+          changed_by: string | null
+          created_at: string
+          id: string
+          notes: string | null
+          status: string
+        }
+        Insert: {
+          application_id: string
+          changed_by?: string | null
+          created_at?: string
+          id?: string
+          notes?: string | null
+          status: string
+        }
+        Update: {
+          application_id?: string
+          changed_by?: string | null
+          created_at?: string
+          id?: string
+          notes?: string | null
+          status?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "new_joiner_status_history_application_id_fkey"
+            columns: ["application_id"]
+            isOneToOne: false
+            referencedRelation: "new_joiner_applications"
+            referencedColumns: ["id"]
+          },
+        ]
       }
       note_projects: {
         Row: {
@@ -11099,6 +11295,7 @@ export type Database = {
         Returns: Json
       }
       crm_hard_delete_leads: { Args: { p_lead_ids: string[] }; Returns: Json }
+      generate_company_id: { Args: never; Returns: string }
       generate_referral_code: { Args: never; Returns: string }
       get_all_subscriptions_admin: {
         Args: never
