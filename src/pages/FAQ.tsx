@@ -276,8 +276,17 @@ const FAQ = () => {
       <section id="faq-content" className="py-16 bg-black">
         <div className="container mx-auto px-4">
           <div className="flex flex-col lg:flex-row gap-8">
-            {/* Main Content */}
-            <div className="flex-1 max-w-4xl space-y-16">
+            {/* Sticky Sidebar - Desktop Only - LEFT SIDE */}
+            <div className="hidden lg:block w-80 flex-shrink-0">
+              <FAQTableOfContents 
+                categories={categories}
+                title="FAQ Quick Access"
+                sticky={true}
+              />
+            </div>
+
+            {/* Main Content - FULL WIDTH */}
+            <div className="flex-1 space-y-16">
               {categories.map((category, categoryIndex) => (
                 <motion.div
                   key={categoryIndex}
@@ -299,37 +308,29 @@ const FAQ = () => {
                     <h2 className="text-2xl md:text-3xl font-bold text-white">{category.title}</h2>
                   </motion.div>
 
-                  {/* Questions */}
+                  {/* Questions - FULL WIDTH GRID */}
                   <motion.div variants={fadeInUp}>
-                    <Accordion type="single" collapsible className="space-y-3">
+                    <div className="grid grid-cols-1 lg:grid-cols-2 gap-4">
                       {category.questions.map((faq, faqIndex) => (
-                        <AccordionItem 
-                          key={faqIndex} 
-                          value={`${categoryIndex}-${faqIndex}`}
-                          data-accordion-item={`${categoryIndex}-${faqIndex}`}
-                          className="bg-white border border-zinc-200 rounded-xl px-6 data-[state=open]:border-gold/50 data-[state=open]:shadow-md transition-all"
-                        >
-                          <AccordionTrigger className="text-black text-left hover:text-gold hover:no-underline py-5 text-base font-medium">
-                            {faq.question}
-                          </AccordionTrigger>
-                          <AccordionContent className="text-zinc-600 pb-5 leading-relaxed">
-                            {faq.answer}
-                          </AccordionContent>
-                        </AccordionItem>
+                        <Accordion key={faqIndex} type="single" collapsible>
+                          <AccordionItem 
+                            value={`${categoryIndex}-${faqIndex}`}
+                            data-accordion-item={`${categoryIndex}-${faqIndex}`}
+                            className="bg-white border border-zinc-200 rounded-xl px-6 data-[state=open]:border-gold/50 data-[state=open]:shadow-md transition-all h-full"
+                          >
+                            <AccordionTrigger className="text-black text-left hover:text-gold hover:no-underline py-5 text-base font-medium">
+                              {faq.question}
+                            </AccordionTrigger>
+                            <AccordionContent className="text-zinc-600 pb-5 leading-relaxed">
+                              {faq.answer}
+                            </AccordionContent>
+                          </AccordionItem>
+                        </Accordion>
                       ))}
-                    </Accordion>
+                    </div>
                   </motion.div>
                 </motion.div>
               ))}
-            </div>
-
-            {/* Sticky Sidebar - Desktop Only */}
-            <div className="hidden lg:block w-72 flex-shrink-0">
-              <FAQTableOfContents 
-                categories={categories}
-                title="FAQ Quick Access"
-                sticky={true}
-              />
             </div>
           </div>
         </div>
