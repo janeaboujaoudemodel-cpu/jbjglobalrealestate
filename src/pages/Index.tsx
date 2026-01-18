@@ -438,7 +438,7 @@ const Index = () => {
       </section>
 
       {/* FOUNDER SECTION - Meet The Leadership */}
-      <section className="py-20 md:py-28 bg-premium-bg">
+      <section className="py-20 md:py-28 bg-black">
         <div className="container mx-auto px-4">
           <motion.div
             initial="hidden"
@@ -464,25 +464,25 @@ const Index = () => {
               </p>
             </motion.div>
 
-            {/* Founder Card - Dark (contrast on premium background) */}
+            {/* Founder Card - Premium champagne/gold gradient for photo, dark for content */}
             <motion.div
-              className="bg-premium-card border border-premium-card-border rounded-3xl overflow-hidden shadow-xl"
+              className="rounded-3xl overflow-hidden shadow-2xl border border-gold/30"
               variants={fadeInUp}
             >
               <div className="grid md:grid-cols-2 gap-0">
-                {/* Photo Side - Champagne / Gold frame */}
-                <div className="relative bg-gradient-to-br from-gold/30 via-gold/20 to-gold/25">
+                {/* Photo Side - Bright Champagne/Gold gradient for contrast */}
+                <div className="relative bg-gradient-to-br from-[#FDFBF7] via-[#F5F0E6] to-[#C8A766]">
                   <img
                     src={founderProfessional}
                     alt="Jane Abou Jaoude - Founder & CEO at JBJ Global Real Estate"
                     className="w-full h-full min-h-[400px] md:min-h-[500px]"
-                    style={{ objectFit: "cover", objectPosition: "center 40%" }}
+                    style={{ objectFit: "cover", objectPosition: "center 35%" }}
                   />
-                  <div className="absolute inset-0 bg-gradient-to-r from-transparent to-black/30 md:block hidden pointer-events-none" />
+                  <div className="absolute inset-0 bg-gradient-to-r from-transparent to-zinc-900/40 md:block hidden pointer-events-none" />
                 </div>
 
-                {/* Content Side - Dark */}
-                <div className="p-8 md:p-12 flex flex-col justify-center bg-premium-card">
+                {/* Content Side - Dark for premium contrast */}
+                <div className="p-8 md:p-12 flex flex-col justify-center bg-zinc-950">
                   <h3 className="text-white text-3xl md:text-4xl font-bold mb-2">Jane Abou Jaoude</h3>
                   <p className="text-gold text-xl md:text-2xl font-semibold mb-6">Founder & CEO</p>
 
@@ -493,15 +493,15 @@ const Index = () => {
 
                   {/* Stats Row */}
                   <div className="grid grid-cols-3 gap-4 mb-8">
-                    <div className="text-center p-3 bg-premium-bg border border-premium-card-border rounded-xl">
+                    <div className="text-center p-3 bg-black border border-zinc-800 rounded-xl">
                       <p className="text-gold text-2xl md:text-3xl font-bold">12+</p>
                       <p className="text-zinc-400 text-[10px] uppercase tracking-wider mt-1">Years Exp</p>
                     </div>
-                    <div className="text-center p-3 bg-premium-bg border border-premium-card-border rounded-xl">
+                    <div className="text-center p-3 bg-black border border-zinc-800 rounded-xl">
                       <p className="text-gold text-2xl md:text-3xl font-bold">10+</p>
                       <p className="text-zinc-400 text-[10px] uppercase tracking-wider mt-1">Team Members</p>
                     </div>
-                    <div className="text-center p-3 bg-premium-bg border border-premium-card-border rounded-xl">
+                    <div className="text-center p-3 bg-black border border-zinc-800 rounded-xl">
                       <p className="text-gold text-2xl md:text-3xl font-bold">2.8K+</p>
                       <p className="text-zinc-400 text-[10px] uppercase tracking-wider mt-1">Trained</p>
                     </div>

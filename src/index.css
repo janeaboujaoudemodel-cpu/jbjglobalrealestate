@@ -1099,5 +1099,30 @@ All colors MUST be HSL.
     border: 1px solid hsl(var(--ai-purple) / 0.3);
     color: hsl(var(--ai-purple));
   }
+
+  /* ============================================================
+   * GLOBAL FORM PLACEHOLDER STYLING - GOLD GLOW
+   * All form inputs show glowing gold placeholder text
+   * ============================================================ */
+  .gold-placeholder::placeholder {
+    color: hsl(var(--gold));
+    opacity: 0.9;
+    text-shadow: 0 0 8px hsl(var(--gold) / 0.4);
+  }
+
+  input.gold-placeholder::placeholder,
+  textarea.gold-placeholder::placeholder {
+    color: hsl(var(--gold));
+    opacity: 0.85;
+    text-shadow: 0 0 6px hsl(var(--gold) / 0.3);
+  }
 }
 
+/* Global form placeholder gold styling - applies to all forms */
+@layer utilities {
+  .placeholder-gold::placeholder {
+    color: hsl(42 45% 59%);
+    opacity: 0.9;
+    text-shadow: 0 0 8px hsl(42 45% 59% / 0.4);
+  }
+}
