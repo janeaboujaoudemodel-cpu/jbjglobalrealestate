@@ -3981,6 +3981,48 @@ export type Database = {
         }
         Relationships: []
       }
+      employee_activity_sessions: {
+        Row: {
+          actions_performed: Json | null
+          created_at: string | null
+          duration_minutes: number | null
+          employee_id: string | null
+          id: string
+          ip_address: string | null
+          pages_visited: string[] | null
+          session_end: string | null
+          session_start: string | null
+          user_agent: string | null
+          user_id: string | null
+        }
+        Insert: {
+          actions_performed?: Json | null
+          created_at?: string | null
+          duration_minutes?: number | null
+          employee_id?: string | null
+          id?: string
+          ip_address?: string | null
+          pages_visited?: string[] | null
+          session_end?: string | null
+          session_start?: string | null
+          user_agent?: string | null
+          user_id?: string | null
+        }
+        Update: {
+          actions_performed?: Json | null
+          created_at?: string | null
+          duration_minutes?: number | null
+          employee_id?: string | null
+          id?: string
+          ip_address?: string | null
+          pages_visited?: string[] | null
+          session_end?: string | null
+          session_start?: string | null
+          user_agent?: string | null
+          user_id?: string | null
+        }
+        Relationships: []
+      }
       employee_chat_messages: {
         Row: {
           created_at: string
@@ -4008,6 +4050,63 @@ export type Database = {
           recipient_id?: string
           sender_id?: string
           sender_type?: string
+        }
+        Relationships: []
+      }
+      employee_daily_metrics: {
+        Row: {
+          calls_made: number | null
+          chats_handled: number | null
+          created_at: string | null
+          documents_processed: number | null
+          emails_sent: number | null
+          employee_id: string | null
+          id: string
+          leads_contacted: number | null
+          meetings_attended: number | null
+          metric_date: string | null
+          notes: string | null
+          performance_score: number | null
+          tasks_completed: number | null
+          total_hours_worked: number | null
+          updated_at: string | null
+          user_id: string | null
+        }
+        Insert: {
+          calls_made?: number | null
+          chats_handled?: number | null
+          created_at?: string | null
+          documents_processed?: number | null
+          emails_sent?: number | null
+          employee_id?: string | null
+          id?: string
+          leads_contacted?: number | null
+          meetings_attended?: number | null
+          metric_date?: string | null
+          notes?: string | null
+          performance_score?: number | null
+          tasks_completed?: number | null
+          total_hours_worked?: number | null
+          updated_at?: string | null
+          user_id?: string | null
+        }
+        Update: {
+          calls_made?: number | null
+          chats_handled?: number | null
+          created_at?: string | null
+          documents_processed?: number | null
+          emails_sent?: number | null
+          employee_id?: string | null
+          id?: string
+          leads_contacted?: number | null
+          meetings_attended?: number | null
+          metric_date?: string | null
+          notes?: string | null
+          performance_score?: number | null
+          tasks_completed?: number | null
+          total_hours_worked?: number | null
+          updated_at?: string | null
+          user_id?: string | null
         }
         Relationships: []
       }
@@ -5328,6 +5427,60 @@ export type Database = {
         }
         Relationships: []
       }
+      hr_competitor_tracking: {
+        Row: {
+          company_name: string
+          created_at: string | null
+          employee_count: number | null
+          id: string
+          instagram_url: string | null
+          is_new_company: boolean | null
+          last_checked_at: string | null
+          linkedin_url: string | null
+          notable_achievements: string[] | null
+          notes: string | null
+          registration_date: string | null
+          threat_level: string | null
+          top_brokers: string[] | null
+          updated_at: string | null
+          website_url: string | null
+        }
+        Insert: {
+          company_name: string
+          created_at?: string | null
+          employee_count?: number | null
+          id?: string
+          instagram_url?: string | null
+          is_new_company?: boolean | null
+          last_checked_at?: string | null
+          linkedin_url?: string | null
+          notable_achievements?: string[] | null
+          notes?: string | null
+          registration_date?: string | null
+          threat_level?: string | null
+          top_brokers?: string[] | null
+          updated_at?: string | null
+          website_url?: string | null
+        }
+        Update: {
+          company_name?: string
+          created_at?: string | null
+          employee_count?: number | null
+          id?: string
+          instagram_url?: string | null
+          is_new_company?: boolean | null
+          last_checked_at?: string | null
+          linkedin_url?: string | null
+          notable_achievements?: string[] | null
+          notes?: string | null
+          registration_date?: string | null
+          threat_level?: string | null
+          top_brokers?: string[] | null
+          updated_at?: string | null
+          website_url?: string | null
+        }
+        Relationships: []
+      }
       hr_employees: {
         Row: {
           candidate_id: string | null
@@ -5586,6 +5739,197 @@ export type Database = {
           },
         ]
       }
+      hr_job_applicants: {
+        Row: {
+          assigned_hr_user_id: string | null
+          cover_letter: string | null
+          created_at: string | null
+          current_salary: number | null
+          cv_url: string | null
+          department: string
+          email: string
+          expected_salary: number | null
+          experience_years: number | null
+          full_name: string
+          id: string
+          interview_date: string | null
+          job_offer_id: string | null
+          job_offer_sent_at: string | null
+          job_offer_signed_at: string | null
+          linkedin_url: string | null
+          notes: string | null
+          phone: string | null
+          portfolio_url: string | null
+          signature_data: string | null
+          status: string | null
+          updated_at: string | null
+        }
+        Insert: {
+          assigned_hr_user_id?: string | null
+          cover_letter?: string | null
+          created_at?: string | null
+          current_salary?: number | null
+          cv_url?: string | null
+          department: string
+          email: string
+          expected_salary?: number | null
+          experience_years?: number | null
+          full_name: string
+          id?: string
+          interview_date?: string | null
+          job_offer_id?: string | null
+          job_offer_sent_at?: string | null
+          job_offer_signed_at?: string | null
+          linkedin_url?: string | null
+          notes?: string | null
+          phone?: string | null
+          portfolio_url?: string | null
+          signature_data?: string | null
+          status?: string | null
+          updated_at?: string | null
+        }
+        Update: {
+          assigned_hr_user_id?: string | null
+          cover_letter?: string | null
+          created_at?: string | null
+          current_salary?: number | null
+          cv_url?: string | null
+          department?: string
+          email?: string
+          expected_salary?: number | null
+          experience_years?: number | null
+          full_name?: string
+          id?: string
+          interview_date?: string | null
+          job_offer_id?: string | null
+          job_offer_sent_at?: string | null
+          job_offer_signed_at?: string | null
+          linkedin_url?: string | null
+          notes?: string | null
+          phone?: string | null
+          portfolio_url?: string | null
+          signature_data?: string | null
+          status?: string | null
+          updated_at?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "hr_job_applicants_job_offer_id_fkey"
+            columns: ["job_offer_id"]
+            isOneToOne: false
+            referencedRelation: "hr_job_offers"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      hr_job_offers: {
+        Row: {
+          benefits: string[] | null
+          commission_structure: string | null
+          created_at: string | null
+          created_by: string | null
+          department: string
+          description: string | null
+          document_name: string | null
+          document_url: string | null
+          id: string
+          is_active: boolean | null
+          position_title: string
+          salary_range_max: number | null
+          salary_range_min: number | null
+          updated_at: string | null
+        }
+        Insert: {
+          benefits?: string[] | null
+          commission_structure?: string | null
+          created_at?: string | null
+          created_by?: string | null
+          department: string
+          description?: string | null
+          document_name?: string | null
+          document_url?: string | null
+          id?: string
+          is_active?: boolean | null
+          position_title: string
+          salary_range_max?: number | null
+          salary_range_min?: number | null
+          updated_at?: string | null
+        }
+        Update: {
+          benefits?: string[] | null
+          commission_structure?: string | null
+          created_at?: string | null
+          created_by?: string | null
+          department?: string
+          description?: string | null
+          document_name?: string | null
+          document_url?: string | null
+          id?: string
+          is_active?: boolean | null
+          position_title?: string
+          salary_range_max?: number | null
+          salary_range_min?: number | null
+          updated_at?: string | null
+        }
+        Relationships: []
+      }
+      hr_linkedin_insights: {
+        Row: {
+          action_taken: string | null
+          action_taken_by: string | null
+          company: string | null
+          created_at: string | null
+          fake_indicators: string[] | null
+          id: string
+          insight_type: string
+          is_fake: boolean | null
+          is_verified: boolean | null
+          metadata: Json | null
+          notes: string | null
+          profile_name: string | null
+          profile_title: string | null
+          relevance_score: number | null
+          source_profile_url: string | null
+          updated_at: string | null
+        }
+        Insert: {
+          action_taken?: string | null
+          action_taken_by?: string | null
+          company?: string | null
+          created_at?: string | null
+          fake_indicators?: string[] | null
+          id?: string
+          insight_type: string
+          is_fake?: boolean | null
+          is_verified?: boolean | null
+          metadata?: Json | null
+          notes?: string | null
+          profile_name?: string | null
+          profile_title?: string | null
+          relevance_score?: number | null
+          source_profile_url?: string | null
+          updated_at?: string | null
+        }
+        Update: {
+          action_taken?: string | null
+          action_taken_by?: string | null
+          company?: string | null
+          created_at?: string | null
+          fake_indicators?: string[] | null
+          id?: string
+          insight_type?: string
+          is_fake?: boolean | null
+          is_verified?: boolean | null
+          metadata?: Json | null
+          notes?: string | null
+          profile_name?: string | null
+          profile_title?: string | null
+          relevance_score?: number | null
+          source_profile_url?: string | null
+          updated_at?: string | null
+        }
+        Relationships: []
+      }
       hr_modules: {
         Row: {
           content: string
@@ -5709,6 +6053,57 @@ export type Database = {
             referencedColumns: ["id"]
           },
         ]
+      }
+      hr_salary_benchmarks: {
+        Row: {
+          benefits_standard: string[] | null
+          commission_typical: string | null
+          created_at: string | null
+          data_source: string | null
+          department: string
+          experience_level: string | null
+          id: string
+          last_updated: string | null
+          market_salary_avg: number | null
+          market_salary_max: number | null
+          market_salary_min: number | null
+          notes: string | null
+          position_title: string
+          updated_at: string | null
+        }
+        Insert: {
+          benefits_standard?: string[] | null
+          commission_typical?: string | null
+          created_at?: string | null
+          data_source?: string | null
+          department: string
+          experience_level?: string | null
+          id?: string
+          last_updated?: string | null
+          market_salary_avg?: number | null
+          market_salary_max?: number | null
+          market_salary_min?: number | null
+          notes?: string | null
+          position_title: string
+          updated_at?: string | null
+        }
+        Update: {
+          benefits_standard?: string[] | null
+          commission_typical?: string | null
+          created_at?: string | null
+          data_source?: string | null
+          department?: string
+          experience_level?: string | null
+          id?: string
+          last_updated?: string | null
+          market_salary_avg?: number | null
+          market_salary_max?: number | null
+          market_salary_min?: number | null
+          notes?: string | null
+          position_title?: string
+          updated_at?: string | null
+        }
+        Relationships: []
       }
       hr_settings: {
         Row: {
