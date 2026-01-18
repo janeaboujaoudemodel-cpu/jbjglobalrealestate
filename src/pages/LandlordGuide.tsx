@@ -240,7 +240,14 @@ const LandlordGuide = () => {
 
       {/* Sticky Table of Contents */}
       <div className="hidden lg:block fixed right-8 top-1/3 z-30">
-        <GuideTableOfContents items={tocItems} />
+        <GuideTableOfContents 
+          items={tocItems}
+          ctaAction={{
+            label: "List Your Property Now",
+            href: "/seller-listing",
+            icon: Building
+          }}
+        />
       </div>
 
       {/* Listing Process */}

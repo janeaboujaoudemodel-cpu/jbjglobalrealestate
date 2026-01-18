@@ -65,12 +65,12 @@ const QUIZ_QUESTIONS = [
     question: "How many bedrooms do you need?",
     type: "single" as const,
     options: [
-      { value: "studio", label: "Studio", icon: "1️⃣" },
-      { value: "1br", label: "1 Bedroom", icon: "1️⃣" },
-      { value: "2br", label: "2 Bedrooms", icon: "2️⃣" },
-      { value: "3br", label: "3 Bedrooms", icon: "3️⃣" },
-      { value: "4br", label: "4 Bedrooms", icon: "4️⃣" },
-      { value: "5br", label: "5 Bedrooms", icon: "5️⃣" },
+      { value: "studio", label: "Studio", icon: "🏠" },
+      { value: "1br", label: "1 Bedroom", icon: "🛏️" },
+      { value: "2br", label: "2 Bedrooms", icon: "🛏️" },
+      { value: "3br", label: "3 Bedrooms", icon: "🛏️" },
+      { value: "4br", label: "4 Bedrooms", icon: "🛏️" },
+      { value: "5br", label: "5 Bedrooms", icon: "🛏️" },
       { value: "6br-plus", label: "6+ Bedrooms", icon: "🏰" },
     ],
   },
@@ -548,9 +548,10 @@ const Quiz = () => {
               Save money by choosing the right property the first time
             </p>
 
-            <p className="text-purple-300/80 text-xs mt-8">
-              Software developed by <span className="text-white font-medium">Jane Abou Jaoude</span><br />
-              Powered by{" "}
+            <p className="text-purple-300/80 text-xs mt-8 leading-relaxed">
+              Software developed and implemented by<br />
+              <span className="text-white font-medium">The Founder & CEO, Jane Abou Jaoude</span><br />
+              Designed exclusively for{" "}
               <span className="text-white font-medium">JBJ Global Real Estate</span>
             </p>
           </div>
@@ -695,9 +696,10 @@ const Quiz = () => {
                 </div>
               )}
 
-              <p className="text-purple-300/60 text-xs text-center mt-6">
-                Software developed by <span className="text-white">Jane Abou Jaoude</span><br />
-                Powered by <span className="text-white">JBJ Global Real Estate</span>
+              <p className="text-purple-300/60 text-xs text-center mt-6 leading-relaxed">
+                Software developed and implemented by<br />
+                <span className="text-white">The Founder & CEO, Jane Abou Jaoude</span><br />
+                Designed exclusively for <span className="text-white">JBJ Global Real Estate</span>
               </p>
             </div>
           </div>
@@ -785,19 +787,19 @@ const Quiz = () => {
                   onClick={() => handleAnswer(option.value)}
                   className={`relative p-4 md:p-5 rounded-xl border-2 transition-all text-left group ${
                     isSelected
-                      ? "border-purple-500 bg-purple-500/20 shadow-lg shadow-purple-500/20"
-                      : "border-zinc-700 bg-zinc-900/50 hover:border-zinc-600 hover:bg-zinc-800/50"
+                      ? "border-gold bg-white shadow-lg shadow-gold/30"
+                      : "border-zinc-300 bg-white hover:border-gold/50 hover:shadow-md"
                   }`}
                 >
                   {currentQuestion.type === "multiple" && (
                     <div className={`absolute top-3 right-3 w-5 h-5 rounded border-2 flex items-center justify-center ${
-                      isSelected ? "border-purple-500 bg-purple-500" : "border-zinc-600"
+                      isSelected ? "border-gold bg-gold" : "border-zinc-400"
                     }`}>
-                      {isSelected && <CheckCircle2 className="w-3 h-3 text-white" />}
+                      {isSelected && <CheckCircle2 className="w-3 h-3 text-black" />}
                     </div>
                   )}
                   <span className="text-2xl mb-2 block">{option.icon}</span>
-                  <span className={`font-medium text-sm md:text-base ${isSelected ? "text-white" : "text-zinc-300"}`}>
+                  <span className={`font-medium text-sm md:text-base ${isSelected ? "text-gold" : "text-black"}`}>
                     {option.label}
                   </span>
                 </button>

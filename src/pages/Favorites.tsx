@@ -741,8 +741,9 @@ const Favorites = () => {
               </div>
             </div>
 
-            <p className="text-zinc-500 text-xs text-center">
-              Powered by JBJ Global Real Estate • Jane Abou Jaoude Founder & CEO JBJ Global Real Estate
+            <p className="text-zinc-500 text-xs text-center leading-relaxed">
+              Software developed and implemented by The Founder & CEO, Jane Abou Jaoude<br />
+              Designed exclusively for JBJ Global Real Estate
             </p>
           </div>
         </DialogContent>

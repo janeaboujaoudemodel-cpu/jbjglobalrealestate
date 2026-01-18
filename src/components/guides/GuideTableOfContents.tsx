@@ -1,6 +1,7 @@
 import { motion, AnimatePresence } from "framer-motion";
 import { useState, useEffect } from "react";
-import { LucideIcon, List, X, ChevronDown, ChevronUp, HelpCircle } from "lucide-react";
+import { Link } from "react-router-dom";
+import { LucideIcon, List, X, ChevronDown, ChevronUp, HelpCircle, ArrowUpRight } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { Button } from "@/components/ui/button";
 
@@ -10,10 +11,17 @@ interface TOCItem {
   icon?: LucideIcon;
 }
 
+interface CTAAction {
+  label: string;
+  href: string;
+  icon?: LucideIcon;
+}
+
 interface GuideTableOfContentsProps {
   items: TOCItem[];
   title?: string;
   sticky?: boolean;
+  ctaAction?: CTAAction;
 }
 
 const TOOLTIP_DISMISSED_KEY = "jbj_guide_nav_tooltip_dismissed";
@@ -21,7 +29,8 @@ const TOOLTIP_DISMISSED_KEY = "jbj_guide_nav_tooltip_dismissed";
 export const GuideTableOfContents = ({ 
   items, 
   title = "In This Guide",
-  sticky = true 
+  sticky = true,
+  ctaAction
 }: GuideTableOfContentsProps) => {
   const [activeId, setActiveId] = useState<string | null>(null);
   const [isMinimized, setIsMinimized] = useState(false);
@@ -170,6 +179,19 @@ export const GuideTableOfContents = ({
                   <span className="flex-1">{item.title}</span>
                 </button>
               ))}
+              
+              {/* CTA Action Button */}
+              {ctaAction && (
+                <Link to={ctaAction.href} className="block mt-4">
+                  <Button 
+                    className="w-full bg-gradient-to-r from-gold to-gold-dark text-black font-semibold hover:brightness-110 py-3"
+                  >
+                    {ctaAction.icon && <ctaAction.icon className="w-4 h-4 mr-2" />}
+                    {ctaAction.label}
+                    <ArrowUpRight className="w-4 h-4 ml-2" />
+                  </Button>
+                </Link>
+              )}
             </motion.nav>
           )}
         </AnimatePresence>

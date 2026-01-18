@@ -231,7 +231,14 @@ const RentGuide = () => {
 
       {/* Sticky Table of Contents */}
       <div className="hidden lg:block fixed right-8 top-1/3 z-30">
-        <GuideTableOfContents items={tocItems} />
+        <GuideTableOfContents 
+          items={tocItems}
+          ctaAction={{
+            label: "Find Rentals Now",
+            href: "/properties?transaction=rent",
+            icon: Home
+          }}
+        />
       </div>
 
       {/* How Renting Works in Dubai */}

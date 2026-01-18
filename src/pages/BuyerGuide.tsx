@@ -23,7 +23,8 @@ import {
   Calculator,
   HelpCircle,
   Phone,
-  ArrowDown
+  ArrowDown,
+  Sparkles
 } from "lucide-react";
 import { GuideNavigation, GUIDE_LINKS } from "@/components/guides/GuideNavigation";
 import { GuideHero } from "@/components/guides/GuideHero";
@@ -277,7 +278,14 @@ const BuyerGuide = () => {
 
       {/* Sticky Table of Contents */}
       <div className="hidden lg:block fixed right-8 top-1/3 z-30">
-        <GuideTableOfContents items={tocItems} />
+        <GuideTableOfContents 
+          items={tocItems}
+          ctaAction={{
+            label: "Find Your Property Now",
+            href: "/properties?transaction=buy",
+            icon: Sparkles
+          }}
+        />
       </div>
 
       {/* Introduction - Who This Guide Is For */}
