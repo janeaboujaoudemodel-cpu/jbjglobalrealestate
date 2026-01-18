@@ -590,15 +590,15 @@ const BuyerGuide = () => {
         </div>
       </section>
 
-      {/* Why Work With JBJ */}
-      <section className="py-16 md:py-24 bg-zinc-50">
+      {/* Why Work With JBJ - BLACK BACKGROUND */}
+      <section className="py-16 md:py-24 bg-black">
         <div className="container mx-auto px-4">
           <div className="max-w-4xl mx-auto">
             <div className="text-center mb-12">
-              <h2 className="text-3xl md:text-4xl font-light text-zinc-900 mb-4">
+              <h2 className="text-3xl md:text-4xl font-light text-white mb-4">
                 How JBJ Supports Your Purchase
               </h2>
-              <p className="text-lg text-zinc-600">
+              <p className="text-lg text-zinc-300">
                 As a licensed Dubai brokerage, we guide you through every step of the buying process.
               </p>
             </div>
@@ -607,10 +607,10 @@ const BuyerGuide = () => {
               {whyJBJ.map((item, index) => (
                 <div 
                   key={index}
-                  className="bg-white border border-zinc-200 rounded-xl p-6 hover:border-gold/30 transition-colors"
+                  className="bg-gradient-to-br from-white via-[#FDFBF7] to-[#F5F0E6] border border-gold/30 rounded-xl p-6 hover:border-gold hover:shadow-xl hover:shadow-gold/20 transition-all"
                 >
-                  <h4 className="text-zinc-900 font-medium mb-2">{item.title}</h4>
-                  <p className="text-zinc-500 text-sm">{item.description}</p>
+                  <h4 className="text-black font-semibold mb-2">{item.title}</h4>
+                  <p className="text-zinc-600 text-sm">{item.description}</p>
                 </div>
               ))}
             </div>
