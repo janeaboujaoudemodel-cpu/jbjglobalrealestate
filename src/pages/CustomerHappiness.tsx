@@ -563,7 +563,7 @@ const IdeaBoxForm = () => {
             <Gift className="w-5 h-5 text-purple-400 flex-shrink-0 mt-0.5" />
             <div>
               <p className="text-white font-medium">Monthly Draw</p>
-              <p className="text-zinc-400">Win an iPad or iPhone 17 Pro Max! Draw date announced monthly.</p>
+              <p className="text-zinc-400">Win an iPad Pro or iPhone 16 Pro Max! Draw date announced monthly.</p>
             </div>
           </div>
           <div className="flex items-start gap-2">
