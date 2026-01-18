@@ -228,7 +228,7 @@ export default function FoundersCollaborationPanel() {
                 </div>
               </div>
               <DialogFooter>
-                <Button onClick={handleRouteTask} disabled={isProcessing} className="bg-gold text-black">
+                <Button onClick={handleRouteTask} disabled={isProcessing} variant="dark">
                   {isProcessing ? <RefreshCw className="h-4 w-4 animate-spin mr-2" /> : <ArrowRight className="h-4 w-4 mr-2" />}
                   Route Task
                 </Button>
@@ -289,7 +289,7 @@ export default function FoundersCollaborationPanel() {
                 </div>
               </div>
               <DialogFooter>
-                <Button onClick={handleScheduleMeeting} disabled={isProcessing} className="bg-gold text-black">
+                <Button onClick={handleScheduleMeeting} disabled={isProcessing} variant="dark">
                   <Calendar className="h-4 w-4 mr-2" />
                   Schedule
                 </Button>
@@ -617,12 +617,12 @@ export default function FoundersCollaborationPanel() {
           </div>
           <DialogFooter className="flex gap-2">
             {selectedDepartment ? (
-              <Button onClick={handleSendMessage} className="bg-gold text-black">
+              <Button onClick={handleSendMessage} variant="dark">
                 <Send className="h-4 w-4 mr-2" />
                 Send to {DEPARTMENTS[selectedDepartment]?.shortName}
               </Button>
             ) : (
-              <Button onClick={handleBroadcast} className="bg-gold text-black">
+              <Button onClick={handleBroadcast} variant="dark">
                 <Send className="h-4 w-4 mr-2" />
                 Broadcast to All
               </Button>

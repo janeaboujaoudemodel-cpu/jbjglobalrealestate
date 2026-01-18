@@ -264,7 +264,7 @@ const VIPClientManager = () => {
         </div>
         <Dialog open={showAddDialog} onOpenChange={setShowAddDialog}>
           <DialogTrigger asChild>
-            <Button className="bg-gold hover:bg-gold-dark text-black">
+            <Button variant="dark">
               <UserPlus className="h-4 w-4 mr-2" />
               Add VIP Client
             </Button>

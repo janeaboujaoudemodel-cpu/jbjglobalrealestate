@@ -1,7 +1,9 @@
 import React from "react";
+import { Link } from "react-router-dom";
 import { Shield, Users, Bot, Database, Lock, FileCheck, Building2, Handshake, Eye, Scale, Server, CheckCircle2 } from "lucide-react";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Separator } from "@/components/ui/separator";
+import { Button } from "@/components/ui/button";
 import ComplianceDisclaimer from "@/components/ComplianceDisclaimer";
 
 const TrustAndAuditCenter = () => {
@@ -350,18 +352,16 @@ const TrustAndAuditCenter = () => {
                 financial institutions, and prospective partners. All documentation is available upon request.
               </p>
               <div className="flex flex-wrap justify-center gap-4">
-                <a 
-                  href="/contact" 
-                  className="inline-flex items-center gap-2 px-6 py-3 bg-gold text-black font-semibold rounded-lg hover:bg-gold/90 transition-colors"
-                >
-                  Request Documentation
-                </a>
-                <a 
-                  href="/company-profile" 
-                  className="inline-flex items-center gap-2 px-6 py-3 bg-zinc-800 text-white font-semibold rounded-lg hover:bg-zinc-700 transition-colors"
-                >
-                  View Company Profile
-                </a>
+                <Link to="/contact">
+                  <Button variant="dark" className="px-6 py-3">
+                    Request Documentation
+                  </Button>
+                </Link>
+                <Link to="/company-profile">
+                  <Button variant="secondary" className="px-6 py-3">
+                    View Company Profile
+                  </Button>
+                </Link>
               </div>
             </div>
 

@@ -152,7 +152,7 @@ const ListingAdminManager = () => {
           </div>
           <Dialog open={isAddDialogOpen} onOpenChange={setIsAddDialogOpen}>
             <DialogTrigger asChild>
-              <Button className="bg-gold hover:bg-gold-dark text-black">
+              <Button variant="dark">
                 <Plus className="w-4 h-4 mr-2" />
                 Add Listing Admin
               </Button>

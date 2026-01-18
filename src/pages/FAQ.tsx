@@ -250,7 +250,7 @@ const FAQ = () => {
               <Search className="w-4 h-4 mr-2" />
               Browse FAQs
             </Button>
-            <Button asChild className="bg-gold hover:bg-gold/90 text-black font-medium px-6">
+            <Button asChild variant="dark" className="px-6">
               <Link to="/contact">
                 <Phone className="w-4 h-4 mr-2" />
                 Ask Our Team

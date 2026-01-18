@@ -1127,7 +1127,7 @@ const CRMImportModal = ({ open, onClose, onSuccess, userId }: CRMImportModalProp
               </div>
             )}
 
-            <Button onClick={handleComplete} className="w-full bg-gold text-black hover:bg-gold/90">
+            <Button onClick={handleComplete} variant="dark" className="w-full">
               Done - View Your Leads
             </Button>
           </div>

@@ -154,13 +154,13 @@ const MarketIntelligence = () => {
             variants={fadeInUp}
           >
             <a href="#overview">
-              <Button className="bg-gradient-to-r from-gold to-gold-dark text-black font-semibold px-8 py-6 hover:opacity-90">
+              <Button variant="media" className="px-8 py-6">
                 Explore Dashboard
                 <ArrowUpRight className="w-5 h-5 ml-2" />
               </Button>
             </a>
             <Link to="/market-report">
-              <Button variant="outline" className="border-white/30 text-white hover:bg-white/10 px-8 py-6">
+              <Button variant="secondary" className="border-white text-white hover:bg-white hover:text-gold px-8 py-6">
                 Download Reports
               </Button>
             </Link>

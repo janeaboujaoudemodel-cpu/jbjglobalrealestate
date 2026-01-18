@@ -707,7 +707,7 @@ const EmployeesHub = ({ userId, brokers = [] }: EmployeesHubProps) => {
         </div>
         <div className="flex items-center gap-2">
           <Link to="/video-meeting">
-            <Button className="gap-2 bg-gold text-white hover:bg-gold-dark transition-all duration-200 font-semibold">
+            <Button variant="dark" className="gap-2">
               <Video className="h-4 w-4" />
               JBJ Video Meet
             </Button>

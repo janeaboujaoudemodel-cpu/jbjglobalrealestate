@@ -120,7 +120,7 @@ const JobOfferManager = () => {
           if (!open) resetForm();
         }}>
           <DialogTrigger asChild>
-            <Button className="bg-gold hover:bg-gold/90 text-black">
+            <Button variant="dark">
               <Plus className="w-4 h-4 mr-2" />
               Add Job Offer
             </Button>
