@@ -257,7 +257,9 @@ const Partners = () => {
                 <Link to="/properties">
                   <Button size="lg" variant="dark">
                     Browse Properties
-                    <ArrowRight className="w-4 h-4 ml-2" />
+                    <svg className="w-4 h-4 ml-2" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24">
+                      <path strokeLinecap="round" strokeLinejoin="round" d="M7 17L17 7M17 7H7M17 7V17" />
+                    </svg>
                   </Button>
                 </Link>
                 <Link to="/contact">

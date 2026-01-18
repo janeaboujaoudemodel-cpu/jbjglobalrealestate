@@ -263,7 +263,9 @@ const BuyerGuide = () => {
             <Button asChild className="bg-gold hover:bg-gold/90 text-black font-medium px-6">
               <Link to="/properties">
                 Browse Properties
-                <ArrowRight className="w-4 h-4 ml-2" />
+                <svg className="w-4 h-4 ml-2" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" d="M7 17L17 7M17 7H7M17 7V17" />
+                </svg>
               </Link>
             </Button>
           </>
@@ -656,7 +658,9 @@ const BuyerGuide = () => {
               >
                 <Link to="/properties">
                   Explore Properties
-                  <ArrowRight className="w-4 h-4 ml-2" />
+                  <svg className="w-4 h-4 ml-2" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" d="M7 17L17 7M17 7H7M17 7V17" />
+                  </svg>
                 </Link>
               </Button>
             </div>
@@ -664,18 +668,23 @@ const BuyerGuide = () => {
         </div>
       </section>
 
-      {/* Legal Disclaimer - Premium champagne background */}
-      <section className="py-8 bg-gradient-to-br from-white via-[#FDFBF7] to-[#F5F0E6] border-t border-zinc-200">
+      {/* Legal Disclaimer - Black section with white box */}
+      <section className="py-8 bg-black">
         <div className="container mx-auto px-4">
           <div className="max-w-4xl mx-auto">
-            <p className="text-center text-zinc-500 text-sm leading-relaxed">
-              <span className="text-zinc-600 font-medium">Disclaimer:</span> This guide is provided 
-              for general educational and informational purposes only. It does not constitute legal, 
-              financial, mortgage, or professional advice. JBJ Global Real Estate is a licensed 
-              Real Estate brokerage and does not provide legal or financial advisory services. 
-              Buyers should conduct independent due diligence and consult with qualified 
-              professionals before making any property purchase decisions.
-            </p>
+            <div className="bg-white border border-zinc-200 rounded-lg p-6 shadow-lg">
+              <h4 className="text-black font-semibold mb-3 flex items-center gap-2">
+                <Shield className="w-4 h-4 text-gold" />
+                Important Disclaimer
+              </h4>
+              <p className="text-zinc-600 text-sm leading-relaxed">
+                This guide is provided for general educational and informational purposes only. It does not constitute legal, 
+                financial, mortgage, or professional advice. JBJ Global Real Estate is a licensed 
+                Real Estate brokerage and does not provide legal or financial advisory services. 
+                Buyers should conduct independent due diligence and consult with qualified 
+                professionals before making any property purchase decisions.
+              </p>
+            </div>
           </div>
         </div>
       </section>
