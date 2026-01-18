@@ -24,44 +24,8 @@ export default function MarketReportHeroBook({ className }: MarketReportHeroBook
           const x = e.clientX - rect.left;
           const y = e.clientY - rect.top;
           const rotateY = (x / rect.width - 0.5) * 24;
-          const rotateX = (y / rect.height - 0.5) * -12;
           const translateZ = 20;
           const scale = 1.04;
-
-          e.currentTarget
-            .querySelector<HTMLDivElement>(".book-inner")
-            ?.style.setProperty(
-              "transform",
-              `rotateY(${rotateY}deg) rotateX(3deg) translateZ(${translateZ}px) scale(${scale})`
-            );
-
-          e.currentTarget
-            .querySelector<HTMLDivElement>(".book-inner")
-            ?.style.setProperty(
-              "transform",
-              `rotateY(${rotateY}deg) rotateX(3deg) translateZ(${translateZ}px) scale(${scale})`
-            );
-
-          e.currentTarget
-            .querySelector<HTMLDivElement>(".book-inner")
-            ?.style.setProperty(
-              "transform",
-              `rotateY(${rotateY}deg) rotateX(3deg) translateZ(${translateZ}px) scale(${scale})`
-            );
-
-          e.currentTarget
-            .querySelector<HTMLDivElement>(".book-inner")
-            ?.style.setProperty(
-              "transform",
-              `rotateY(${rotateY}deg) rotateX(3deg) translateZ(${translateZ}px) scale(${scale})`
-            );
-
-          e.currentTarget
-            .querySelector<HTMLDivElement>(".book-inner")
-            ?.style.setProperty(
-              "transform",
-              `rotateY(${rotateY}deg) rotateX(3deg) translateZ(${translateZ}px) scale(${scale})`
-            );
 
           e.currentTarget
             .querySelector<HTMLDivElement>(".book-inner")
