@@ -216,16 +216,15 @@ export function AIBrokerCallDialog({
           {/* Actions */}
           <div className="flex justify-end gap-3 pt-4 border-t border-zinc-800">
             <Button
-              variant="outline"
+              variant="secondary"
               onClick={() => onOpenChange(false)}
-              className="border-zinc-700 text-gray-300"
             >
               Cancel
             </Button>
             <Button
+              variant="primary"
               onClick={handleLogCall}
               disabled={isLogging}
-              className="bg-gold text-black hover:bg-gold/90"
             >
               {isLogging ? (
                 <Loader2 className="h-4 w-4 mr-2 animate-spin" />

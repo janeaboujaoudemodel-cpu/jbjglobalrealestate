@@ -355,8 +355,8 @@ const EmployeeCenter = ({ userId }: EmployeeCenterProps) => {
           <p className="text-muted-foreground mt-1">AI-powered recruitment & employee management</p>
         </div>
         <Button 
+          variant="primary"
           onClick={() => setShowUploadForm(!showUploadForm)}
-          className="bg-gold text-black hover:bg-gold/90 font-semibold"
         >
           <Plus className="h-4 w-4 mr-2" />
           Upload CV

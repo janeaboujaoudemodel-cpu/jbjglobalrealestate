@@ -68,8 +68,8 @@ export default function ProtectedContent({
             Please sign in to access this protected content. Your progress will be saved to your account.
           </p>
           <Button
+            variant="primary"
             onClick={() => navigate("/auth?redirect=/broker-toolkit/dashboard")}
-            className="bg-gold text-black hover:brightness-110"
           >
             Sign In to Continue
           </Button>
@@ -92,8 +92,8 @@ export default function ProtectedContent({
             Each subscription is limited to one active device for security.
           </p>
           <Button
+            variant="primary"
             onClick={checkAuthorization}
-            className="bg-gold text-black hover:brightness-110"
           >
             Refresh Session
           </Button>

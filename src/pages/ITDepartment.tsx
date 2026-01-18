@@ -123,8 +123,8 @@ const ITDepartment: React.FC = () => {
             This area is restricted to IT Department personnel and administrators.
           </p>
           <Button 
+            variant="primary"
             onClick={() => navigate('/')}
-            className="bg-gold text-black hover:bg-gold/90"
           >
             Return to Home
           </Button>
@@ -251,16 +251,15 @@ const ITDepartment: React.FC = () => {
                 />
               </div>
               <Button
+                variant="primary"
                 onClick={() => setShowNewJoinerForm(true)}
-                className="bg-gold text-black hover:bg-gold/90"
               >
                 <Plus className="w-4 h-4 mr-2" />
                 New Joiner Application
               </Button>
               <Button
-                variant="outline"
+                variant="secondary"
                 onClick={() => fetchStats()}
-                className="border-gold/30 text-gold hover:bg-gold/10"
               >
                 <RefreshCw className="w-4 h-4" />
               </Button>

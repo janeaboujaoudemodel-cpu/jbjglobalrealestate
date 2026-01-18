@@ -179,10 +179,9 @@ const InterviewScheduler = ({
                 {timeSlots.map((time) => (
                   <Button
                     key={time}
-                    variant={selectedTime === time ? 'default' : 'outline'}
+                    variant={selectedTime === time ? 'primary' : 'secondary'}
                     size="sm"
                     onClick={() => setSelectedTime(time)}
-                    className={selectedTime === time ? 'bg-gold text-black' : 'text-white border-border hover:bg-muted'}
                   >
                     {time}
                   </Button>
@@ -213,17 +212,17 @@ const InterviewScheduler = ({
 
         {/* Actions */}
         <div className="flex justify-end gap-3 mt-4">
-          <Button variant="outline" onClick={onClose} className="text-white border-border hover:bg-muted">
+          <Button variant="secondary" onClick={onClose}>
             Cancel
           </Button>
           <Button
+            variant="primary"
             onClick={handleSchedule}
             disabled={isSending || !selectedDate}
-            className="bg-gold text-black hover:bg-gold/90 font-semibold"
           >
             {isSending ? (
               <>
-                <div className="w-4 h-4 border-2 border-black/30 border-t-black rounded-full animate-spin mr-2" />
+                <div className="w-4 h-4 border-2 border-gold/30 border-t-gold rounded-full animate-spin mr-2" />
                 Sending Invitations...
               </>
             ) : (

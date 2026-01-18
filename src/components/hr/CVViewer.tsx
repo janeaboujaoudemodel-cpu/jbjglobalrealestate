@@ -389,7 +389,7 @@ const CVViewer = ({
                       {cvUrl ? 'Unable to load CV preview. Try downloading instead.' : 'No CV file has been uploaded.'}
                     </p>
                     {cvUrl && (
-                      <Button onClick={handleDownload} className="bg-gold text-black hover:bg-gold/90">
+                      <Button variant="primary" onClick={handleDownload}>
                         <Download className="h-4 w-4 mr-2" />
                         Download CV
                       </Button>

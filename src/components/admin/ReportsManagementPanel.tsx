@@ -240,25 +240,23 @@ export default function ReportsManagementPanel() {
         </div>
         <div className="flex gap-2">
           <Button
-            variant="outline"
+            variant="secondary"
             onClick={fetchReports}
             disabled={isLoading}
-            className="border-gold/30 text-gold hover:bg-gold/10"
           >
             <RefreshCw className={`h-4 w-4 mr-2 ${isLoading ? 'animate-spin' : ''}`} />
             Refresh
           </Button>
           <Button
+            variant="primary"
             onClick={downloadReports}
-            className="bg-gold text-black hover:bg-gold/90"
           >
             <Download className="h-4 w-4 mr-2" />
             Download CSV
           </Button>
           <Button
-            variant="outline"
+            variant="secondary"
             onClick={downloadAllForms}
-            className="border-gold/30 text-gold hover:bg-gold/10"
           >
             <FileText className="h-4 w-4 mr-2" />
             Download All

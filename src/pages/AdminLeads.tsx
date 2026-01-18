@@ -370,17 +370,15 @@ const AdminLeads = () => {
         {/* Tabs */}
         <div className="flex gap-2 mb-6">
           <Button
-            variant={activeTab === "leads" ? "default" : "outline"}
+            variant={activeTab === "leads" ? "primary" : "secondary"}
             onClick={() => setActiveTab("leads")}
-            className={activeTab === "leads" ? "bg-gold text-black" : "border-zinc-700 text-white"}
           >
             <Users className="w-4 h-4 mr-2" />
             Leads ({leads.length})
           </Button>
           <Button
-            variant={activeTab === "chats" ? "default" : "outline"}
+            variant={activeTab === "chats" ? "primary" : "secondary"}
             onClick={() => setActiveTab("chats")}
-            className={activeTab === "chats" ? "bg-gold text-black" : "border-zinc-700 text-white"}
           >
             <MessageSquare className="w-4 h-4 mr-2" />
             Chat Transcripts ({conversations.length})
