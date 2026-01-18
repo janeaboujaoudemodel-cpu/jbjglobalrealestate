@@ -170,8 +170,8 @@ export function MessageFiltersPanel() {
         <Dialog open={isDialogOpen} onOpenChange={setIsDialogOpen}>
           <DialogTrigger asChild>
             <Button
+              variant="primary"
               onClick={() => setEditingFilter(null)}
-              className="bg-gold text-black hover:bg-gold/90"
             >
               <Plus className="h-4 w-4 mr-2" />
               Add Filter
@@ -423,15 +423,14 @@ function FilterForm({ filter, onSave, onCancel }: FilterFormProps) {
 
       <div className="flex justify-end gap-3 pt-4 border-t border-zinc-800">
         <Button
-          variant="outline"
+          variant="secondary"
           onClick={onCancel}
-          className="border-zinc-700 text-gray-300"
         >
           Cancel
         </Button>
         <Button
+          variant="primary"
           onClick={() => onSave(formData)}
-          className="bg-gold text-black hover:bg-gold/90"
           disabled={!formData.filter_value}
         >
           {filter ? "Update Filter" : "Create Filter"}

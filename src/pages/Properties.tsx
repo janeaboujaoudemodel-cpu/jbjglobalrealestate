@@ -404,7 +404,7 @@ const Properties = () => {
             ].map((option) => (
               <Button
                 key={option.value}
-                variant={filters.transactionType === option.value ? "default" : "outline"}
+                variant={filters.transactionType === option.value ? "primary" : "secondary"}
                 size="sm"
                 onClick={() => {
                   updateFilter("transactionType", option.value as 'buy' | 'rent');
@@ -415,11 +415,7 @@ const Properties = () => {
                     completionStatus: null,
                   }));
                 }}
-                className={`h-9 px-4 rounded-full ${
-                  filters.transactionType === option.value
-                    ? "bg-gradient-to-r from-gold to-gold-light text-foreground border-gold font-semibold"
-                    : "bg-background border-input text-muted-foreground hover:bg-muted hover:text-foreground"
-                }`}
+                className="h-9 px-4 rounded-full"
               >
                 {option.label}
               </Button>
@@ -432,35 +428,27 @@ const Properties = () => {
 
                 {/* All status */}
                 <Button
-                  variant={appliedFilters.completionStatus === null ? "default" : "outline"}
+                  variant={appliedFilters.completionStatus === null ? "primary" : "secondary"}
                   size="sm"
                   onClick={() => {
                     updateFilter("completionStatus", null);
                     setAppliedFilters((prev) => ({ ...prev, completionStatus: null, transactionType: 'buy' }));
                   }}
-                  className={`h-9 px-4 rounded-full ${
-                    appliedFilters.completionStatus === null
-                      ? "bg-gradient-to-r from-gold to-gold-light text-foreground border-gold font-semibold"
-                      : "bg-background border-input text-muted-foreground hover:bg-muted hover:text-foreground"
-                  }`}
+                  className="h-9 px-4 rounded-full"
                 >
                   All
                 </Button>
 
                 {/* Ready */}
                 <Button
-                  variant={appliedFilters.completionStatus === 'ready' ? "default" : "outline"}
+                  variant={appliedFilters.completionStatus === 'ready' ? "primary" : "secondary"}
                   size="sm"
                   onClick={() => {
                     const newStatus = appliedFilters.completionStatus === 'ready' ? null : 'ready';
                     updateFilter("completionStatus", newStatus);
                     setAppliedFilters((prev) => ({ ...prev, completionStatus: newStatus, transactionType: 'buy' }));
                   }}
-                  className={`h-9 px-4 rounded-full flex items-center gap-1.5 ${
-                    appliedFilters.completionStatus === 'ready'
-                      ? "bg-ai-emerald text-white border-ai-emerald font-semibold shadow-md"
-                      : "bg-background border-input text-muted-foreground hover:bg-ai-emerald/10 hover:border-ai-emerald/40 hover:text-foreground"
-                  }`}
+                  className="h-9 px-4 rounded-full flex items-center gap-1.5"
                 >
                   <CheckCircle className="w-3.5 h-3.5" />
                   Ready
@@ -468,18 +456,14 @@ const Properties = () => {
 
                 {/* Off-Plan */}
                 <Button
-                  variant={appliedFilters.completionStatus === 'off-plan' ? "default" : "outline"}
+                  variant={appliedFilters.completionStatus === 'off-plan' ? "primary" : "secondary"}
                   size="sm"
                   onClick={() => {
                     const newStatus = appliedFilters.completionStatus === 'off-plan' ? null : 'off-plan';
                     updateFilter("completionStatus", newStatus);
                     setAppliedFilters((prev) => ({ ...prev, completionStatus: newStatus, transactionType: 'buy' }));
                   }}
-                  className={`h-9 px-4 rounded-full flex items-center gap-1.5 ${
-                    appliedFilters.completionStatus === 'off-plan'
-                      ? "bg-gradient-to-r from-gold to-gold-light text-foreground border-gold font-semibold shadow-md"
-                      : "bg-background border-input text-muted-foreground hover:bg-gold/10 hover:border-gold/50 hover:text-foreground"
-                  }`}
+                  className="h-9 px-4 rounded-full flex items-center gap-1.5"
                 >
                   <Calendar className="w-3.5 h-3.5" />
                   Off-Plan

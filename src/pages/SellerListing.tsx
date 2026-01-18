@@ -974,9 +974,9 @@ Requirements:
                         />
                         <Button 
                           type="button"
+                          variant="primary"
                           onClick={addHighlight}
                           disabled={highlights.length >= 10}
-                          className="bg-gold text-black hover:bg-gold/80"
                         >
                           <Plus className="w-4 h-4" />
                         </Button>
@@ -1474,30 +1474,29 @@ Requirements:
               Note: This is an AI-generated informational estimate only and should not be relied upon for pricing decisions.
             </p>
             <div className="flex gap-3 justify-end">
-              <Button 
-                variant="outline" 
-                onClick={() => setShowEvaluator(false)}
-                className="border-zinc-700 text-white"
-              >
-                Cancel
-              </Button>
-              <Button 
-                onClick={runPropertyEvaluator}
-                disabled={isRunningEvaluator}
-                className="bg-gold text-black hover:bg-gold/80"
-              >
-                {isRunningEvaluator ? (
-                  <>
-                    <Loader2 className="w-4 h-4 mr-2 animate-spin" />
-                    Running...
-                  </>
-                ) : (
-                  <>
-                    <Calculator className="w-4 h-4 mr-2" />
-                    Run Evaluation
-                  </>
-                )}
-              </Button>
+                <Button 
+                  variant="secondary"
+                  onClick={() => setShowEvaluator(false)}
+                >
+                  Cancel
+                </Button>
+                <Button 
+                  variant="primary"
+                  onClick={runPropertyEvaluator}
+                  disabled={isRunningEvaluator}
+                >
+                  {isRunningEvaluator ? (
+                    <>
+                      <Loader2 className="w-4 h-4 mr-2 animate-spin" />
+                      Running...
+                    </>
+                  ) : (
+                    <>
+                      <Calculator className="w-4 h-4 mr-2" />
+                      Run Evaluation
+                    </>
+                  )}
+                </Button>
             </div>
           </div>
         </DialogContent>

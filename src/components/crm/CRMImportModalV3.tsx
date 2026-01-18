@@ -1093,8 +1093,8 @@ const CRMImportModalV3 = ({ open, onClose, onSuccess, userId }: CRMImportModalV3
                   }
                   fileInputRef.current?.click();
                 }} 
-                className="bg-gold text-black hover:bg-gold/90 font-semibold"
                 size="lg"
+                variant="primary"
               >
                 <Upload className="h-5 w-5 mr-2" />
                 Select File

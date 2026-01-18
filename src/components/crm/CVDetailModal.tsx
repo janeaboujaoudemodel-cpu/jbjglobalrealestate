@@ -226,9 +226,9 @@ const CVDetailModal = ({
                   className="bg-background border-border text-white min-h-[100px]"
                 />
                 <Button
+                  variant="primary"
                   onClick={handleSaveNotes}
                   disabled={!notes.trim() || isSaving}
-                  className="bg-gold text-black hover:bg-gold/90"
                 >
                   {isSaving ? 'Saving...' : 'Save Notes'}
                 </Button>

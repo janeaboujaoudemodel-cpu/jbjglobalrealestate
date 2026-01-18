@@ -593,9 +593,9 @@ ${COMPANY_CONTACTS.email}`;
                 disabled={processing}
               />
               <Button 
+                variant="primary"
                 onClick={processCommand} 
                 disabled={processing || !command.trim()}
-                className="bg-gold text-black hover:bg-gold/90"
               >
                 {processing ? (
                   <RefreshCw className="h-4 w-4 animate-spin" />
@@ -644,9 +644,9 @@ ${COMPANY_CONTACTS.email}`;
                   className="flex-1 bg-muted border-border text-white"
                 />
                 <Button 
+                  variant="primary"
                   onClick={addTask} 
                   disabled={!newTaskTitle.trim()}
-                  className="bg-gold text-black hover:bg-gold/90"
                 >
                   <Plus className="h-4 w-4" />
                 </Button>

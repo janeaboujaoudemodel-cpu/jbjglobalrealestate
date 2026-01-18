@@ -115,8 +115,9 @@ const ActiveLeadBanner = ({
         {showAddToShortlist && currentPropertyId && (
           <Button
             size="sm"
+            variant="primary"
             onClick={handleAddToShortlist}
-            className="bg-gold text-black hover:bg-gold/90 h-8"
+            className="h-8"
           >
             <ListPlus className="h-3 w-3 mr-1" />
             Add to Shortlist

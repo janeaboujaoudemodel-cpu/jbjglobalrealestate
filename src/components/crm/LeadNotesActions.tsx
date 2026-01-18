@@ -210,7 +210,7 @@ const LeadNotesActions = ({
               autoFocus
             />
             <div className="flex gap-2">
-              <Button onClick={addNote} size="sm" className="bg-gold text-black hover:bg-gold-light">
+              <Button onClick={addNote} size="sm" variant="primary">
                 <Check className="w-3 h-3 mr-1" />
                 Save Note
               </Button>

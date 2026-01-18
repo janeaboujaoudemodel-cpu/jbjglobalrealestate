@@ -753,8 +753,8 @@ ${note.ai_action_items?.length ? `## Action Items\n${note.ai_action_items.map(a 
                   Download
                 </Button>
                 <Button 
+                  variant="primary"
                   onClick={() => setActiveNote(null)}
-                  className="bg-gold text-black hover:bg-gold/90"
                 >
                   Close
                 </Button>
@@ -817,16 +817,15 @@ ${note.ai_action_items?.length ? `## Action Items\n${note.ai_action_items.map(a 
 
           <DialogFooter className="mt-6">
             <Button 
-              variant="outline" 
+              variant="secondary"
               onClick={() => setShowNoteEditor(false)}
-              className="border-gold/30 text-gray-400"
             >
               Cancel
             </Button>
             <Button 
+              variant="primary"
               onClick={saveNote}
               disabled={isProcessing}
-              className="bg-gold text-black hover:bg-gold/90"
             >
               {isProcessing ? (
                 <>
@@ -894,15 +893,14 @@ ${note.ai_action_items?.length ? `## Action Items\n${note.ai_action_items.map(a 
 
           <DialogFooter className="mt-6">
             <Button 
-              variant="outline" 
+              variant="secondary"
               onClick={() => setShowProjectDialog(false)}
-              className="border-gold/30 text-gray-400"
             >
               Cancel
             </Button>
             <Button 
+              variant="primary"
               onClick={createProject}
-              className="bg-gold text-black hover:bg-gold/90"
             >
               Create Project
             </Button>
@@ -931,7 +929,7 @@ ${note.ai_action_items?.length ? `## Action Items\n${note.ai_action_items.map(a 
                 onChange={handleFileUpload}
                 className="absolute inset-0 opacity-0 cursor-pointer"
               />
-              <Button className="mt-4 bg-gold text-black hover:bg-gold/90 relative">
+              <Button variant="primary" className="mt-4 relative">
                 Choose File
                 <input
                   type="file"

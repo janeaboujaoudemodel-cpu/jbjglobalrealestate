@@ -210,7 +210,7 @@ const QuarterlyMarketReview = () => {
                 })}
               </p>
             </div>
-            <Button className="bg-gold text-black hover:bg-gold/90">
+            <Button variant="primary">
               <Download className="w-4 h-4 mr-2" />
               Download PDF
             </Button>
