@@ -195,19 +195,19 @@ const Index = () => {
             </span>
             <div className="flex flex-wrap justify-center gap-3">
               <Link to="/services/law-firm">
-                <span className="inline-flex items-center gap-2 px-4 py-2.5 bg-gradient-to-r from-black via-zinc-900 to-black border border-gold/40 rounded-full text-gold text-sm hover:border-gold hover:shadow-[0_0_15px_rgba(200,167,102,0.3)] hover:bg-gold/10 transition-all duration-300 shadow-sm">
+                <span className="inline-flex items-center gap-2 px-4 py-2.5 bg-gradient-to-r from-white via-[#FDFBF7] to-[#F5F0E6] border border-gold/40 rounded-full text-black text-sm hover:border-gold hover:shadow-lg hover:shadow-gold/20 transition-all duration-300 shadow-sm">
                   <Scale className="w-4 h-4 text-gold" />
                   Legal Partners
                 </span>
               </Link>
               <Link to="/mortgage-calculator">
-                <span className="inline-flex items-center gap-2 px-4 py-2.5 bg-gradient-to-r from-black via-zinc-900 to-black border border-gold/40 rounded-full text-gold text-sm hover:border-gold hover:shadow-[0_0_15px_rgba(200,167,102,0.3)] hover:bg-gold/10 transition-all duration-300 shadow-sm">
+                <span className="inline-flex items-center gap-2 px-4 py-2.5 bg-gradient-to-r from-white via-[#FDFBF7] to-[#F5F0E6] border border-gold/40 rounded-full text-black text-sm hover:border-gold hover:shadow-lg hover:shadow-gold/20 transition-all duration-300 shadow-sm">
                   <Calculator className="w-4 h-4 text-gold" />
                   Mortgage Partners
                 </span>
               </Link>
               <Link to="/services/design-build">
-                <span className="inline-flex items-center gap-2 px-4 py-2.5 bg-gradient-to-r from-black via-zinc-900 to-black border border-gold/40 rounded-full text-gold text-sm hover:border-gold hover:shadow-[0_0_15px_rgba(200,167,102,0.3)] hover:bg-gold/10 transition-all duration-300 shadow-sm">
+                <span className="inline-flex items-center gap-2 px-4 py-2.5 bg-gradient-to-r from-white via-[#FDFBF7] to-[#F5F0E6] border border-gold/40 rounded-full text-black text-sm hover:border-gold hover:shadow-lg hover:shadow-gold/20 transition-all duration-300 shadow-sm">
                   <Wrench className="w-4 h-4 text-gold" />
                   Design & Build
                 </span>
