@@ -20,7 +20,7 @@ import { useMembership } from "@/hooks/useMembership";
 
 
 
-// Enhanced detailed quiz questions
+// Optimized quiz questions - reduced duplicates, streamlined flow
 const QUIZ_QUESTIONS = [
   {
     id: "property_type",
@@ -40,9 +40,8 @@ const QUIZ_QUESTIONS = [
     question: "What's your primary purpose for this property?",
     type: "single" as const,
     options: [
-      { value: "investment", label: "Investment & ROI", icon: "📈" },
+      { value: "investment", label: "Investment", icon: "📈" },
       { value: "living", label: "Personal Residence", icon: "🏠" },
-      { value: "vacation", label: "Vacation Home", icon: "🏖️" },
       { value: "both", label: "Both Investment & Living", icon: "🎯" },
       { value: "rental", label: "Rental Income", icon: "💵" },
     ],
@@ -56,8 +55,7 @@ const QUIZ_QUESTIONS = [
       { value: "1m-2m", label: "AED 1M - 2M", icon: "💰" },
       { value: "2m-5m", label: "AED 2M - 5M", icon: "💎" },
       { value: "5m-10m", label: "AED 5M - 10M", icon: "💎" },
-      { value: "10m-20m", label: "AED 10M - 20M", icon: "🏆" },
-      { value: "20m-plus", label: "AED 20M+", icon: "👑" },
+      { value: "10m-plus", label: "AED 10M+", icon: "👑" },
     ],
   },
   {
@@ -69,22 +67,7 @@ const QUIZ_QUESTIONS = [
       { value: "1br", label: "1 Bedroom", icon: "🛏️" },
       { value: "2br", label: "2 Bedrooms", icon: "🛏️" },
       { value: "3br", label: "3 Bedrooms", icon: "🛏️" },
-      { value: "4br", label: "4 Bedrooms", icon: "🛏️" },
-      { value: "5br", label: "5 Bedrooms", icon: "🛏️" },
-      { value: "6br-plus", label: "6+ Bedrooms", icon: "🏰" },
-    ],
-  },
-  {
-    id: "size_preference",
-    question: "What size range are you looking for? (in sqft)",
-    type: "single" as const,
-    options: [
-      { value: "under-1000", label: "Under 1,000 sqft", icon: "📏" },
-      { value: "1000-2000", label: "1,000 - 2,000 sqft", icon: "📏" },
-      { value: "2000-3500", label: "2,000 - 3,500 sqft", icon: "📐" },
-      { value: "3500-5000", label: "3,500 - 5,000 sqft", icon: "📐" },
-      { value: "5000-10000", label: "5,000 - 10,000 sqft", icon: "🏡" },
-      { value: "10000-plus", label: "10,000+ sqft", icon: "🏰" },
+      { value: "4br-plus", label: "4+ Bedrooms", icon: "🏰" },
     ],
   },
   {
@@ -96,28 +79,11 @@ const QUIZ_QUESTIONS = [
       { value: "downtown", label: "Downtown Dubai", icon: "🏙️" },
       { value: "marina", label: "Dubai Marina", icon: "⛵" },
       { value: "palm", label: "Palm Jumeirah", icon: "🌴" },
-      { value: "jbr", label: "JBR", icon: "🏖️" },
       { value: "business-bay", label: "Business Bay", icon: "🏢" },
-      { value: "jumeirah", label: "Jumeirah", icon: "🌊" },
       { value: "creek-harbour", label: "Dubai Creek Harbour", icon: "🌅" },
       { value: "hills", label: "Dubai Hills Estate", icon: "⛳" },
-      { value: "emaar-south", label: "Emaar South", icon: "✈️" },
       { value: "arabian-ranches", label: "Arabian Ranches", icon: "🐎" },
-      { value: "meydan", label: "Meydan", icon: "🏇" },
-      { value: "sobha-hartland", label: "Sobha Hartland", icon: "🌳" },
-    ],
-  },
-  {
-    id: "emirate",
-    question: "Which emirate do you prefer?",
-    type: "single" as const,
-    options: [
-      { value: "dubai", label: "Dubai", icon: "🌴" },
-      { value: "abu-dhabi", label: "Abu Dhabi", icon: "🕌" },
-      { value: "rak", label: "Ras Al Khaimah", icon: "⛰️" },
-      { value: "sharjah", label: "Sharjah", icon: "🏛️" },
-      { value: "ajman", label: "Ajman", icon: "🌊" },
-      { value: "any", label: "Open to All", icon: "🗺️" },
+      { value: "other", label: "Other Areas", icon: "🗺️" },
     ],
   },
   {
@@ -129,68 +95,21 @@ const QUIZ_QUESTIONS = [
       { value: "city-center", label: "City Center / Downtown", icon: "🌆" },
       { value: "golf-community", label: "Golf Course Community", icon: "⛳" },
       { value: "suburban", label: "Suburban / Family Area", icon: "🌳" },
-      { value: "island", label: "Island Living", icon: "🏝️" },
+      { value: "flexible", label: "Open to All", icon: "🗺️" },
     ],
   },
   {
-    id: "views",
-    question: "What views are most important to you?",
+    id: "views_and_features",
+    question: "What features matter most to you?",
     type: "multiple" as const,
     hasSelectAll: true,
     options: [
-      { value: "sea", label: "Sea View", icon: "🌊" },
-      { value: "city", label: "City / Skyline", icon: "🏙️" },
-      { value: "golf", label: "Golf Course", icon: "⛳" },
-      { value: "garden", label: "Garden / Park", icon: "🌳" },
-      { value: "marina", label: "Marina", icon: "⛵" },
-      { value: "burj", label: "Burj Khalifa", icon: "🗼" },
-      { value: "creek", label: "Creek View", icon: "🌅" },
-      { value: "pool", label: "Pool View", icon: "🏊" },
-    ],
-  },
-  {
-    id: "features",
-    question: "Do you need any of these special features?",
-    type: "multiple" as const,
-    hasSelectAll: true,
-    options: [
+      { value: "sea-view", label: "Sea / Water View", icon: "🌊" },
+      { value: "city-view", label: "City / Skyline View", icon: "🏙️" },
       { value: "private-pool", label: "Private Pool", icon: "🏊" },
       { value: "private-garden", label: "Private Garden", icon: "🌿" },
-      { value: "driver-room", label: "Driver's Room", icon: "🚗" },
       { value: "maid-room", label: "Maid's Room", icon: "🏠" },
-      { value: "study", label: "Study / Office", icon: "📚" },
-      { value: "storage", label: "Storage Room", icon: "📦" },
       { value: "balcony", label: "Large Balcony / Terrace", icon: "🌇" },
-      { value: "smart-home", label: "Smart Home System", icon: "🤖" },
-    ],
-  },
-  {
-    id: "amenities",
-    question: "Which amenities are must-haves?",
-    type: "multiple" as const,
-    hasSelectAll: true,
-    options: [
-      { value: "pool", label: "Swimming Pool", icon: "🏊" },
-      { value: "gym", label: "Fitness Center", icon: "💪" },
-      { value: "beach", label: "Private Beach", icon: "🏖️" },
-      { value: "spa", label: "Spa & Wellness", icon: "🧖" },
-      { value: "concierge", label: "24/7 Concierge", icon: "🛎️" },
-      { value: "parking", label: "Valet Parking", icon: "🚗" },
-      { value: "security", label: "24/7 Security", icon: "🔐" },
-      { value: "kids", label: "Kids Play Area", icon: "🎠" },
-      { value: "tennis", label: "Tennis Court", icon: "🎾" },
-      { value: "business", label: "Business Center", icon: "💼" },
-    ],
-  },
-  {
-    id: "furnished",
-    question: "What's your furnishing preference?",
-    type: "single" as const,
-    options: [
-      { value: "furnished", label: "Fully Furnished", icon: "🛋️" },
-      { value: "semi-furnished", label: "Semi-Furnished", icon: "🪑" },
-      { value: "unfurnished", label: "Unfurnished", icon: "📦" },
-      { value: "flexible", label: "Flexible", icon: "🤷" },
     ],
   },
   {
@@ -201,8 +120,7 @@ const QUIZ_QUESTIONS = [
       { value: "ready", label: "Ready to Move", icon: "✅" },
       { value: "2025", label: "2025", icon: "📅" },
       { value: "2026", label: "2026", icon: "📅" },
-      { value: "2027", label: "2027", icon: "📅" },
-      { value: "2028-plus", label: "2028 or Later", icon: "🔮" },
+      { value: "2027-plus", label: "2027 or Later", icon: "🔮" },
       { value: "flexible", label: "Flexible", icon: "🤷" },
     ],
   },
@@ -240,7 +158,7 @@ const Quiz = () => {
     nationality: "",
     preferredLanguage: "",
   });
-  const estimatedTime = 60;
+  const estimatedTime = 45; // Reduced from 60 - streamlined quiz
 
   const { data: allProjects } = useQuery({
     queryKey: ["all-projects-quiz"],
@@ -329,8 +247,7 @@ const Quiz = () => {
       if (budget === "1m-2m" && (priceFrom < 1000000 || priceFrom >= 2000000)) return false;
       if (budget === "2m-5m" && (priceFrom < 2000000 || priceFrom >= 5000000)) return false;
       if (budget === "5m-10m" && (priceFrom < 5000000 || priceFrom >= 10000000)) return false;
-      if (budget === "10m-20m" && (priceFrom < 10000000 || priceFrom >= 20000000)) return false;
-      if (budget === "20m-plus" && priceFrom < 20000000) return false;
+      if (budget === "10m-plus" && priceFrom < 10000000) return false;
 
       const bedrooms = answers.bedrooms;
       const minBr = project.bedrooms_min || 0;
@@ -340,20 +257,7 @@ const Quiz = () => {
       if (bedrooms === "1br" && (minBr > 1 || maxBr < 1)) return false;
       if (bedrooms === "2br" && (minBr > 2 || maxBr < 2)) return false;
       if (bedrooms === "3br" && (minBr > 3 || maxBr < 3)) return false;
-      if (bedrooms === "4br" && (minBr > 4 || maxBr < 4)) return false;
-      if (bedrooms === "5br" && (minBr > 5 || maxBr < 5)) return false;
-      if (bedrooms === "6br-plus" && maxBr < 6) return false;
-
-      const emirate = answers.emirate;
-      const projectEmirate = project.emirate?.toLowerCase().trim() || "";
-      
-      if (emirate && emirate !== "any") {
-        if (emirate === "dubai" && projectEmirate !== "dubai") return false;
-        if (emirate === "abu-dhabi" && !projectEmirate.includes("abu dhabi")) return false;
-        if (emirate === "rak" && !projectEmirate.includes("ras al khaimah")) return false;
-        if (emirate === "sharjah" && projectEmirate !== "sharjah") return false;
-        if (emirate === "ajman" && projectEmirate !== "ajman") return false;
-      }
+      if (bedrooms === "4br-plus" && maxBr < 4) return false;
 
       return true;
     });
@@ -368,25 +272,31 @@ const Quiz = () => {
         if (location === "city-center" && projectViews.some((v: string) => v.toLowerCase().includes("city") || v.toLowerCase().includes("skyline"))) score += 20;
         if (location === "golf-community" && projectViews.some((v: string) => v.toLowerCase().includes("golf"))) score += 20;
         if (location === "suburban" && projectViews.some((v: string) => v.toLowerCase().includes("garden"))) score += 20;
+        if (location === "flexible") score += 10;
 
         const timeline = answers.timeline;
         const handover = project.handover_date?.toLowerCase() || "";
         if (timeline === "ready" && handover.includes("ready")) score += 15;
         if (timeline === "2025" && handover.includes("2025")) score += 15;
         if (timeline === "2026" && handover.includes("2026")) score += 15;
-        if (timeline === "2027" && handover.includes("2027")) score += 15;
-        if (timeline === "2028-plus" && (handover.includes("2028") || handover.includes("2029"))) score += 15;
+        if (timeline === "2027-plus" && (handover.includes("2027") || handover.includes("2028") || handover.includes("2029"))) score += 15;
         if (timeline === "flexible") score += 10;
 
-        const preferredViews = answers.views as string[] || [];
-        preferredViews.forEach((pv) => {
-          if (projectViews.some((v: string) => v.toLowerCase().includes(pv))) score += 5;
+        // Score based on views_and_features combined question
+        const preferredFeatures = answers.views_and_features as string[] || [];
+        preferredFeatures.forEach((pf) => {
+          if (pf.includes("view") && projectViews.some((v: string) => v.toLowerCase().includes(pf.replace("-view", "")))) score += 5;
+          const projectAmenities = project.amenities || [];
+          if (projectAmenities.some((a: string) => a.toLowerCase().includes(pf.replace("-", " ")))) score += 3;
         });
 
-        const preferredAmenities = answers.amenities as string[] || [];
-        const projectAmenities = project.amenities || [];
-        preferredAmenities.forEach((pa) => {
-          if (projectAmenities.some((a: string) => a.toLowerCase().includes(pa))) score += 3;
+        // Area matching
+        const preferredAreas = answers.areas as string[] || [];
+        const projectName = (project.name || "").toLowerCase();
+        const projectLocation = (project.location || "").toLowerCase();
+        preferredAreas.forEach((pa) => {
+          const areaName = pa.replace("-", " ");
+          if (projectName.includes(areaName) || projectLocation.includes(areaName)) score += 10;
         });
 
         return { ...project, matchScore: score };
