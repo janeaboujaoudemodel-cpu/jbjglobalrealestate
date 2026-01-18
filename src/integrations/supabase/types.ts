@@ -9719,6 +9719,51 @@ export type Database = {
         }
         Relationships: []
       }
+      security_audit_log: {
+        Row: {
+          action: string
+          created_at: string
+          details: Json | null
+          event_type: string
+          id: string
+          ip_address: unknown
+          resource_id: string | null
+          resource_type: string | null
+          severity: string | null
+          user_agent: string | null
+          user_email: string | null
+          user_id: string | null
+        }
+        Insert: {
+          action: string
+          created_at?: string
+          details?: Json | null
+          event_type: string
+          id?: string
+          ip_address?: unknown
+          resource_id?: string | null
+          resource_type?: string | null
+          severity?: string | null
+          user_agent?: string | null
+          user_email?: string | null
+          user_id?: string | null
+        }
+        Update: {
+          action?: string
+          created_at?: string
+          details?: Json | null
+          event_type?: string
+          id?: string
+          ip_address?: unknown
+          resource_id?: string | null
+          resource_type?: string | null
+          severity?: string | null
+          user_agent?: string | null
+          user_email?: string | null
+          user_id?: string | null
+        }
+        Relationships: []
+      }
       security_events: {
         Row: {
           action_taken: string | null
@@ -12038,17 +12083,29 @@ export type Database = {
         }
         Returns: undefined
       }
-      log_security_event: {
-        Args: {
-          p_action_type: string
-          p_failure_reason?: string
-          p_metadata?: Json
-          p_resource_id?: string
-          p_resource_type: string
-          p_success?: boolean
-        }
-        Returns: string
-      }
+      log_security_event:
+        | {
+            Args: {
+              p_action_type: string
+              p_failure_reason?: string
+              p_metadata?: Json
+              p_resource_id?: string
+              p_resource_type: string
+              p_success?: boolean
+            }
+            Returns: string
+          }
+        | {
+            Args: {
+              p_action: string
+              p_details?: Json
+              p_event_type: string
+              p_resource_id?: string
+              p_resource_type?: string
+              p_severity?: string
+            }
+            Returns: string
+          }
       log_security_event_full: {
         Args: {
           p_action_taken?: string
