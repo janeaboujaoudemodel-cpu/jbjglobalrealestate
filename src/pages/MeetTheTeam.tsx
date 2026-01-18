@@ -463,7 +463,7 @@ const MeetTheTeam: React.FC = () => {
                     className="border-black text-black hover:bg-black hover:text-white"
                   >
                     View Open Positions
-                    <ArrowRight className="w-4 h-4 ml-2" />
+                    <ArrowUpRight className="w-4 h-4 ml-2 text-gold" />
                   </Button>
                 </Link>
               </div>

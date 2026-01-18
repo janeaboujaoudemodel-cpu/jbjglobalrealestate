@@ -7,7 +7,7 @@ import { useFavorites, useShortlist, useToggleShortlist } from "@/hooks/useFavor
 import { useGuestFavorites, useGuestShortlist } from "@/hooks/useGuestFavorites";
 import { useShortlistBadges } from "@/hooks/useShortlistBadges";
 import { CONTACT_INFO, getWhatsAppUrl } from "@/constants/stats";
-import { ChevronLeft, Heart, ListPlus, ArrowRight, Award, X, Mail, Share2, Sparkles, Users, CheckSquare, Download, MessageCircle, Copy } from "lucide-react";
+import { ChevronLeft, Heart, ListPlus, ArrowRight, ArrowUpRight, Award, X, Mail, Share2, Sparkles, Users, CheckSquare, Download, MessageCircle, Copy } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Badge } from "@/components/ui/badge";
@@ -433,7 +433,7 @@ const Favorites = () => {
                     <Link to="/properties">
                       <Button className="bg-gradient-to-r from-gold to-gold-dark text-black hover:opacity-90">
                         Explore Properties
-                        <ArrowRight className="w-4 h-4 ml-2" />
+                        <ArrowUpRight className="w-4 h-4 ml-2 text-gold" />
                       </Button>
                     </Link>
                     <Link to="/quiz">
@@ -587,7 +587,7 @@ const Favorites = () => {
                     <a href={INQUIRY_FORM_URL} target="_blank" rel="noopener noreferrer">
                       <Button className="w-full bg-gradient-to-r from-gold to-gold-dark text-black hover:opacity-90">
                         Request Evaluation
-                        <ArrowRight className="w-4 h-4 ml-2" />
+                        <ArrowUpRight className="w-4 h-4 ml-2 text-gold" />
                       </Button>
                     </a>
                   </div>
@@ -611,7 +611,7 @@ const Favorites = () => {
                     <Link to="/properties">
                       <Button className="bg-gradient-to-r from-gold to-gold-dark text-black hover:opacity-90">
                         Explore Properties
-                        <ArrowRight className="w-4 h-4 ml-2" />
+                        <ArrowUpRight className="w-4 h-4 ml-2 text-gold" />
                       </Button>
                     </Link>
                     {favCount > 0 && (

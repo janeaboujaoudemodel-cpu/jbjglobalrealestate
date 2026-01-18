@@ -8,6 +8,7 @@ import {
   Home, 
   Users,
   ArrowRight,
+  ArrowUpRight,
   Shield,
   Banknote,
   Key,
@@ -230,7 +231,7 @@ const LandlordGuide = () => {
             <Button asChild variant="primary" className="px-6">
               <Link to="/contact">
                 List Your Property
-                <ArrowRight className="w-4 h-4 ml-2" />
+                <ArrowUpRight className="w-4 h-4 ml-2 text-gold" />
               </Link>
             </Button>
           </>
@@ -438,13 +439,13 @@ const LandlordGuide = () => {
             <Button asChild variant="secondary">
               <Link to="/rent-guide">
                 Rent Guide
-                <ArrowRight className="w-4 h-4 ml-2" />
+                <ArrowUpRight className="w-4 h-4 ml-2 text-gold" />
               </Link>
             </Button>
             <Button asChild variant="secondary">
               <Link to="/tenant-guide">
                 Tenant Guide
-                <ArrowRight className="w-4 h-4 ml-2" />
+                <ArrowUpRight className="w-4 h-4 ml-2 text-gold" />
               </Link>
             </Button>
           </div>

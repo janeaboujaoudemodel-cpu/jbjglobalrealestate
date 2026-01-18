@@ -6,7 +6,8 @@ import { Badge } from "@/components/ui/badge";
 import { 
   Star, 
   Sparkles, 
-  ArrowRight, 
+  ArrowRight,
+  ArrowUpRight,
   CheckCircle2,
   Users,
   BookOpen,
@@ -87,7 +88,7 @@ export function BrokerToolkitHero() {
               >
                 <Star className="w-5 h-5 mr-2 fill-current" />
                 Join Free Now
-                <ArrowRight className="w-5 h-5 ml-2" />
+                <ArrowUpRight className="w-5 h-5 ml-2 text-gold" />
               </Button>
             ) : (
               <Button 
@@ -97,7 +98,7 @@ export function BrokerToolkitHero() {
               >
                 <Sparkles className="w-5 h-5 mr-2" />
                 Open My Dashboard
-                <ArrowRight className="w-5 h-5 ml-2" />
+                <ArrowUpRight className="w-5 h-5 ml-2 text-gold" />
               </Button>
             )}
             <Button 
