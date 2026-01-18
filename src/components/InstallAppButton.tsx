@@ -136,7 +136,20 @@ const InstallAppButton = () => {
       return;
     }
 
-    toast.message("Install isn't available on this browser.");
+    // Provide helpful browser-specific instructions instead of error
+    const isChrome = /Chrome/.test(navigator.userAgent) && !/Edg/.test(navigator.userAgent);
+    const isEdge = /Edg/.test(navigator.userAgent);
+    const isFirefox = /Firefox/.test(navigator.userAgent);
+    
+    if (isChrome) {
+      toast.message("Chrome: Tap ⋮ menu (top-right) → 'Install app' or 'Add to Home Screen'");
+    } else if (isEdge) {
+      toast.message("Edge: Tap ⋯ menu → 'Apps' → 'Install this site as an app'");
+    } else if (isFirefox) {
+      toast.message("Firefox: Tap menu → 'Install' or 'Add to Home Screen'");
+    } else {
+      toast.message("Open browser menu → 'Install app' or 'Add to Home Screen'");
+    }
   }, [deferredPrompt, dismiss, isIOS]);
 
   const handleDismiss = useCallback(() => {
