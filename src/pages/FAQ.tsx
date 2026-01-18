@@ -14,13 +14,15 @@ import {
   Clock,
   Landmark,
   Search,
-  Phone
+  Phone,
+  LucideIcon
 } from "lucide-react";
 import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from "@/components/ui/accordion";
 import { Button } from "@/components/ui/button";
 import { Link } from "react-router-dom";
 import { GuideNavigation, GUIDE_LINKS } from "@/components/guides/GuideNavigation";
-import { GuideHero } from "@/components/guides/GuideHero";
+import { FAQHero } from "@/components/faq/FAQHero";
+import { FAQTableOfContents } from "@/components/faq/FAQTableOfContents";
 import Footer from "@/components/Footer";
 
 const fadeInUp = {
@@ -37,14 +39,16 @@ const staggerContainer = {
 };
 
 interface FAQCategory {
+  id: string;
   title: string;
-  icon: typeof HelpCircle;
+  icon: LucideIcon;
   questions: Array<{ question: string; answer: string }>;
 }
 
 const FAQ = () => {
   const categories: FAQCategory[] = [
     {
+      id: "buying",
       title: "Buying Property",
       icon: Home,
       questions: [
@@ -71,6 +75,7 @@ const FAQ = () => {
       ]
     },
     {
+      id: "selling",
       title: "Selling Property",
       icon: Building2,
       questions: [
@@ -97,6 +102,7 @@ const FAQ = () => {
       ]
     },
     {
+      id: "mortgages",
       title: "Mortgages & Financing",
       icon: Banknote,
       questions: [
@@ -119,6 +125,7 @@ const FAQ = () => {
       ]
     },
     {
+      id: "legal",
       title: "Legal & Documentation",
       icon: FileText,
       questions: [
@@ -141,6 +148,7 @@ const FAQ = () => {
       ]
     },
     {
+      id: "offplan",
       title: "Off-Plan Properties",
       icon: Clock,
       questions: [
@@ -163,6 +171,7 @@ const FAQ = () => {
       ]
     },
     {
+      id: "costs",
       title: "Costs & Fees",
       icon: Calculator,
       questions: [
@@ -181,6 +190,7 @@ const FAQ = () => {
       ]
     },
     {
+      id: "international",
       title: "International Buyers",
       icon: Globe,
       questions: [
@@ -199,6 +209,7 @@ const FAQ = () => {
       ]
     },
     {
+      id: "jbj",
       title: "Working with JBJ",
       icon: Users,
       questions: [
@@ -230,8 +241,8 @@ const FAQ = () => {
         keywords="UAE property FAQ, Dubai real estate questions, buying property UAE, selling property Dubai, mortgage UAE, property costs Dubai"
       />
       
-      {/* Hero */}
-      <GuideHero
+      {/* Hero with Video/Image Background */}
+      <FAQHero
         badge="Frequently Asked Questions"
         badgeIcon={HelpCircle}
         title={
@@ -240,11 +251,12 @@ const FAQ = () => {
           </>
         }
         description="Find clear answers to the most common questions about buying, selling, and owning property in the UAE."
+        backgroundImage="https://images.unsplash.com/photo-1512453979798-5ea266f8880c?auto=format&fit=crop&w=2000&q=80"
         actions={
           <>
             <Button 
               variant="outline"
-              className="border-gold/50 text-gold hover:bg-gold/10 px-6"
+              className="border-gold/50 text-gold hover:bg-gold/10 px-6 backdrop-blur-sm"
               onClick={() => document.getElementById('faq-content')?.scrollIntoView({ behavior: 'smooth' })}
             >
               <Search className="w-4 h-4 mr-2" />
@@ -260,70 +272,65 @@ const FAQ = () => {
         }
       />
 
-      {/* Category Quick Links */}
-      <section className="py-8 bg-gradient-to-r from-white via-[#FDFBF7] to-[#F5F0E6] border-y border-gold/20 sticky top-16 z-20 backdrop-blur-sm">
-        <div className="container mx-auto px-4">
-          <div className="flex flex-wrap justify-center gap-2">
-            {categories.map((category, index) => (
-              <button
-                key={index}
-                onClick={() => document.getElementById(`category-${index}`)?.scrollIntoView({ behavior: 'smooth' })}
-                className="flex items-center gap-2 px-4 py-2.5 bg-white hover:bg-black text-black hover:text-gold rounded-lg transition-all text-sm font-medium border border-gold/30 hover:border-gold shadow-[0_2px_10px_rgba(200,167,102,0.15)] hover:shadow-[0_4px_15px_rgba(200,167,102,0.3)]"
-              >
-                <category.icon className="w-4 h-4" />
-                {category.title}
-              </button>
-            ))}
-          </div>
-        </div>
-      </section>
-
-      {/* FAQ Content */}
+      {/* FAQ Content with Sidebar */}
       <section id="faq-content" className="py-16 bg-black">
         <div className="container mx-auto px-4">
-          <div className="max-w-4xl mx-auto space-y-16">
-            {categories.map((category, categoryIndex) => (
-              <motion.div
-                key={categoryIndex}
-                id={`category-${categoryIndex}`}
-                initial="hidden"
-                whileInView="visible"
-                viewport={{ once: true, margin: "-100px" }}
-                variants={staggerContainer}
-                className="scroll-mt-32"
-              >
-                {/* Category Header */}
-                <motion.div 
-                  variants={fadeInUp}
-                  className="flex items-center gap-4 mb-6"
+          <div className="flex flex-col lg:flex-row gap-8">
+            {/* Main Content */}
+            <div className="flex-1 max-w-4xl space-y-16">
+              {categories.map((category, categoryIndex) => (
+                <motion.div
+                  key={categoryIndex}
+                  id={`category-${categoryIndex}`}
+                  initial="hidden"
+                  whileInView="visible"
+                  viewport={{ once: true, margin: "-100px" }}
+                  variants={staggerContainer}
+                  className="scroll-mt-32"
                 >
-                  <div className="w-12 h-12 bg-white rounded-xl flex items-center justify-center">
-                    <category.icon className="w-6 h-6 text-gold" />
-                  </div>
-                  <h2 className="text-2xl md:text-3xl font-bold text-white">{category.title}</h2>
-                </motion.div>
+                  {/* Category Header */}
+                  <motion.div 
+                    variants={fadeInUp}
+                    className="flex items-center gap-4 mb-6"
+                  >
+                    <div className="w-12 h-12 bg-white rounded-xl flex items-center justify-center">
+                      <category.icon className="w-6 h-6 text-gold" />
+                    </div>
+                    <h2 className="text-2xl md:text-3xl font-bold text-white">{category.title}</h2>
+                  </motion.div>
 
-                {/* Questions */}
-                <motion.div variants={fadeInUp}>
-                  <Accordion type="single" collapsible className="space-y-3">
-                    {category.questions.map((faq, faqIndex) => (
-                      <AccordionItem 
-                        key={faqIndex} 
-                        value={`${categoryIndex}-${faqIndex}`}
-                        className="bg-white border border-zinc-200 rounded-xl px-6 data-[state=open]:border-gold/50 data-[state=open]:shadow-md transition-all"
-                      >
-                        <AccordionTrigger className="text-black text-left hover:text-gold hover:no-underline py-5 text-base font-medium">
-                          {faq.question}
-                        </AccordionTrigger>
-                        <AccordionContent className="text-zinc-600 pb-5 leading-relaxed">
-                          {faq.answer}
-                        </AccordionContent>
-                      </AccordionItem>
-                    ))}
-                  </Accordion>
+                  {/* Questions */}
+                  <motion.div variants={fadeInUp}>
+                    <Accordion type="single" collapsible className="space-y-3">
+                      {category.questions.map((faq, faqIndex) => (
+                        <AccordionItem 
+                          key={faqIndex} 
+                          value={`${categoryIndex}-${faqIndex}`}
+                          data-accordion-item={`${categoryIndex}-${faqIndex}`}
+                          className="bg-white border border-zinc-200 rounded-xl px-6 data-[state=open]:border-gold/50 data-[state=open]:shadow-md transition-all"
+                        >
+                          <AccordionTrigger className="text-black text-left hover:text-gold hover:no-underline py-5 text-base font-medium">
+                            {faq.question}
+                          </AccordionTrigger>
+                          <AccordionContent className="text-zinc-600 pb-5 leading-relaxed">
+                            {faq.answer}
+                          </AccordionContent>
+                        </AccordionItem>
+                      ))}
+                    </Accordion>
+                  </motion.div>
                 </motion.div>
-              </motion.div>
-            ))}
+              ))}
+            </div>
+
+            {/* Sticky Sidebar - Desktop Only */}
+            <div className="hidden lg:block w-72 flex-shrink-0">
+              <FAQTableOfContents 
+                categories={categories}
+                title="FAQ Quick Access"
+                sticky={true}
+              />
+            </div>
           </div>
         </div>
       </section>
