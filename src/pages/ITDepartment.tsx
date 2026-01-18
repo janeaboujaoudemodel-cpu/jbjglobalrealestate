@@ -6,7 +6,7 @@ import {
   Settings, CheckCircle, Clock, AlertCircle,
   Users, FileText, Search, Plus, RefreshCw
 } from 'lucide-react';
-import Header from '@/components/Header';
+import GlobalHeader from '@/components/GlobalHeader';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from '@/components/ui/card';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
@@ -115,7 +115,7 @@ const ITDepartment: React.FC = () => {
   if (!isAuthorized) {
     return (
       <div className="min-h-screen bg-black">
-        <Header />
+        <GlobalHeader />
         <div className="container mx-auto px-4 py-20 text-center">
           <Shield className="w-16 h-16 text-gold mx-auto mb-6" />
           <h1 className="text-3xl font-bold text-white mb-4">Access Restricted</h1>
@@ -135,7 +135,7 @@ const ITDepartment: React.FC = () => {
 
   return (
     <div className="min-h-screen bg-black">
-      <Header />
+      <GlobalHeader />
       
       {/* Hero Section */}
       <section className="relative py-20 overflow-hidden">
