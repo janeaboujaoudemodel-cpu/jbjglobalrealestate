@@ -48,40 +48,7 @@ interface AIInsightsPanelProps {
   onToggleCollapse?: () => void;
 }
 
-const defaultInsights: Insight[] = [
-  {
-    id: '1',
-    type: 'prediction',
-    title: '3 leads likely to convert this week',
-    description: 'Based on engagement patterns and lead scoring, Ahmed K., Sarah M., and John D. show high conversion probability.',
-    confidence: 87,
-    trend: 'up',
-    action: { label: 'View Leads', onClick: () => {} },
-  },
-  {
-    id: '2',
-    type: 'alert',
-    title: '5 follow-ups overdue',
-    description: 'These leads haven\'t been contacted in over 48 hours and may need immediate attention.',
-    trend: 'down',
-    action: { label: 'Review Now', onClick: () => {} },
-  },
-  {
-    id: '3',
-    type: 'recommendation',
-    title: 'Best time to call: 10 AM - 12 PM',
-    description: 'AI analysis shows your leads respond 40% better during mid-morning hours.',
-    confidence: 92,
-    trend: 'up',
-  },
-  {
-    id: '4',
-    type: 'achievement',
-    title: 'Response time improved by 23%',
-    description: 'Your average response time this week is 2.3 hours, beating your target of 3 hours.',
-    trend: 'up',
-  },
-];
+const defaultInsights: Insight[] = [];
 
 export const AIInsightsPanel: React.FC<AIInsightsPanelProps> = ({
   insights = defaultInsights,
@@ -185,9 +152,9 @@ export const AIInsightsPanel: React.FC<AIInsightsPanelProps> = ({
       {/* Summary Stats */}
       <div className="grid grid-cols-3 gap-2 p-4 border-b border-gold/10">
         {[
-          { label: 'Score', value: '87%', icon: <Target className="w-3 h-3" />, color: 'text-emerald-600' },
-          { label: 'Tasks', value: '12', icon: <Clock className="w-3 h-3" />, color: 'text-amber-600' },
-          { label: 'Leads', value: '24', icon: <Users className="w-3 h-3" />, color: 'text-blue-600' },
+          { label: 'Score', value: '0%', icon: <Target className="w-3 h-3" />, color: 'text-emerald-600' },
+          { label: 'Tasks', value: '0', icon: <Clock className="w-3 h-3" />, color: 'text-amber-600' },
+          { label: 'Leads', value: '0', icon: <Users className="w-3 h-3" />, color: 'text-blue-600' },
         ].map((stat, i) => (
           <div key={i} className="text-center p-2 rounded-lg bg-zinc-50">
             <div className={cn('flex items-center justify-center gap-1 text-lg font-bold', stat.color)}>
@@ -276,11 +243,7 @@ export const AIInsightsPanel: React.FC<AIInsightsPanelProps> = ({
 
       {/* Footer */}
       <div className="p-4 border-t border-gold/10 bg-gradient-to-r from-[#FDFBF7] to-white">
-        <Button
-          variant="outline"
-          className="w-full border-gold/30 text-gold hover:bg-gold/5"
-          onClick={() => {/* TODO: Open full insights view */}}
-        >
+        <Button variant="primary" className="w-full" onClick={() => {}}>
           <Sparkles className="w-4 h-4 mr-2" />
           View All Insights
         </Button>

@@ -27,7 +27,6 @@ import AutomationRules from "@/components/crm/AutomationRules";
 import EmployeeCenter from "@/components/crm/EmployeeCenter";
 import EmployeesHub from "@/components/crm/EmployeesHub";
 import CRMToolsSidebar from "@/components/crm/CRMToolsSidebar";
-import { AdminTasksPanel } from "@/components/crm/AdminTasksPanel";
 import FlaggedLeadsView from "@/components/crm/FlaggedLeadsView";
 import VIPExportButton from "@/components/crm/VIPExportButton";
 import CRMAssistantPanel from "@/components/crm/CRMAssistantPanel";
@@ -37,6 +36,7 @@ import { useForcePasswordChange } from "@/hooks/useForcePasswordChange";
 import { CommandPalette } from "@/components/ui/command-palette";
 import { FloatingActionBar } from "@/components/ui/floating-action-bar";
 import AIInsightsPanel from "@/components/ui/ai-insights-panel";
+import { SmartNotifications, NotificationBell } from "@/components/ui/smart-notifications";
 
 interface CRMProfile {
   id: string;
@@ -61,6 +61,7 @@ const CRM = () => {
   const [showToolsSidebar, setShowToolsSidebar] = useState(false);
   const [showCommandPalette, setShowCommandPalette] = useState(false);
   const [showAIInsights, setShowAIInsights] = useState(true);
+  const [showNotifications, setShowNotifications] = useState(false);
   
   // Force password change hook
   const { needsPasswordChange, isLoading: passwordCheckLoading, userName, setNeedsPasswordChange } = useForcePasswordChange();
@@ -71,12 +72,8 @@ const CRM = () => {
   const [sourceFilter, setSourceFilter] = useState("all");
   const [statusCounts, setStatusCounts] = useState<Record<string, number>>({});
 
-  // AI Insights mock data
-  const aiInsights = [
-    { id: '1', type: 'prediction' as const, title: 'Hot Lead Alert', description: '3 leads showing high engagement signals', confidence: 94, trend: 'up' as const },
-    { id: '2', type: 'recommendation' as const, title: 'Follow-up Needed', description: '7 leads haven\'t been contacted in 48h', confidence: 87 },
-    { id: '3', type: 'alert' as const, title: 'Deal at Risk', description: 'Premium client showing disengagement', confidence: 78, trend: 'down' as const },
-  ];
+  // AI Insights (no placeholders)
+  const aiInsights = [];
 
   // Show force password change screen if needed
   if (needsPasswordChange && !passwordCheckLoading) {
@@ -306,6 +303,14 @@ const CRM = () => {
     <div className="min-h-screen bg-gradient-to-br from-white via-[#FDFBF7] to-[#F5F0E6] flex">
       {/* Command Palette */}
       <CommandPalette isOpen={showCommandPalette} onClose={() => setShowCommandPalette(false)} />
+
+      {/* Notifications Panel */}
+      <SmartNotifications
+        isOpen={showNotifications}
+        onClose={() => setShowNotifications(false)}
+        notifications={[]}
+        onMarkAllRead={() => {}}
+      />
       
       {/* Tools Sidebar */}
       <CRMToolsSidebar isOpen={showToolsSidebar} onClose={() => setShowToolsSidebar(false)} />
@@ -329,24 +334,21 @@ const CRM = () => {
               </Button>
               
               {/* Role Title - Dynamic based on logged-in user */}
-              <div className="flex flex-col">
-                <span className="text-sm text-gold font-medium">
-                  {getRoleTitle()}
-                </span>
-                <span className="text-base md:text-lg font-bold text-black">
-                  {profile.display_name || 'Team Member'}
-                </span>
+              <div className="min-w-0">
+                <p className="text-sm md:text-base font-bold text-black truncate">
+                  {getRoleTitle()} — {isFounder ? "Jane Abou Jaoude" : (profile.display_name || "Team Member")}
+                </p>
               </div>
             </div>
             
             {/* Search & Quick Actions */}
-            <div className="hidden lg:flex items-center gap-2 flex-1 max-w-md mx-4">
+            <div className="hidden lg:flex items-center gap-2 flex-1 max-w-sm mx-4">
               <button
                 onClick={() => setShowCommandPalette(true)}
                 className="flex items-center gap-2 w-full px-4 py-2 rounded-xl bg-white/80 border-2 border-gold/30 text-zinc-500 hover:border-gold/50 transition-all"
               >
                 <Search className="h-4 w-4 text-gold" />
-                <span className="text-sm">Search leads, tasks...</span>
+                <span className="text-sm">Search leads…</span>
                 <kbd className="ml-auto px-2 py-0.5 bg-gold/10 text-gold text-xs rounded font-mono">⌘K</kbd>
               </button>
             </div>
@@ -362,15 +364,12 @@ const CRM = () => {
                 <Brain className="h-4 w-4" />
               </Button>
               
-              {/* Notifications */}
-              <Button
-                variant="ghost"
-                size="sm"
-                className="text-black hover:text-gold hover:bg-gold/10 relative"
-              >
-                <Bell className="h-4 w-4" />
-                <span className="absolute -top-1 -right-1 w-4 h-4 bg-red-500 rounded-full text-[10px] text-white flex items-center justify-center">3</span>
-              </Button>
+              {/* Notifications (no placeholder counts) */}
+              <NotificationBell
+                count={0}
+                onClick={() => setShowNotifications(true)}
+                className="bg-white/80 border-2 border-gold/30"
+              />
               
               {/* Quick Navigation Buttons */}
               <div className="hidden md:flex items-center gap-1 mr-2">
@@ -478,10 +477,7 @@ const CRM = () => {
                   </CardContent>
                 </Card>
                 
-                {/* Admin Tasks Panel - Only visible to Founder/Owner */}
-                {isFounder && (
-                  <AdminTasksPanel />
-                )}
+                {/* Admin Tasks Panel removed from dashboard to avoid layout gaps */}
               </div>
             </div>
             

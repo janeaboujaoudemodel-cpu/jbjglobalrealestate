@@ -1,4 +1,4 @@
-import { useState, useEffect, useRef, useCallback } from "react";
+import { useState, useEffect, useRef, useCallback, useMemo } from "react";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
@@ -6,6 +6,7 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { ScrollArea } from "@/components/ui/scroll-area";
 import { Input } from "@/components/ui/input";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
+import { HoverCard, HoverCardContent, HoverCardTrigger } from "@/components/ui/hover-card";
 import { 
   MessageSquare, Video, Phone, FileText, Users, 
   Send, Paperclip, ExternalLink, Hash, AtSign,
@@ -20,7 +21,7 @@ import {
   DialogTitle,
   DialogDescription,
 } from "@/components/ui/dialog";
-import { executiveTeam, salesTeam, hrTeam, softwareEngineeringTeam, type TeamMember as ConfigTeamMember } from "@/config/team-members";
+import { allTeamMembers, teamByDepartment, type TeamMember as ConfigTeamMember } from "@/config/team-members";
 
 interface TeamMember {
   id: string;
@@ -70,18 +71,13 @@ const convertTeamMember = (member: ConfigTeamMember): TeamMember => ({
 });
 
 // All team members synced from Employee Hub with real photos
-const ALL_TEAM_MEMBERS: TeamMember[] = [
-  ...executiveTeam.slice(0, 4).map(convertTeamMember),
-  ...salesTeam.slice(0, 8).map(convertTeamMember),
-  ...hrTeam.slice(0, 3).map(convertTeamMember),
-  ...softwareEngineeringTeam.slice(0, 3).map(convertTeamMember),
-];
+const ALL_TEAM_MEMBERS: TeamMember[] = allTeamMembers.map(convertTeamMember);
 
 const DEFAULT_CHANNELS: Channel[] = [
   { id: 'jbj-group', name: 'JBJ Group', unread: 0, type: 'channel', members: ALL_TEAM_MEMBERS.map(m => m.id) },
   { id: 'general', name: 'general', unread: 0, type: 'channel', members: ALL_TEAM_MEMBERS.map(m => m.id) },
-  { id: 'sales', name: 'sales-team', unread: 0, type: 'channel', members: ['1', '5', '6', '10'] },
-  { id: 'leads', name: 'hot-leads', unread: 0, type: 'channel', members: ['1', '5', '6', '10'] },
+  { id: 'sales', name: 'sales-team', unread: 0, type: 'channel', members: ALL_TEAM_MEMBERS.map(m => m.id) },
+  { id: 'leads', name: 'hot-leads', unread: 0, type: 'channel', members: ALL_TEAM_MEMBERS.map(m => m.id) },
   { id: 'announcements', name: 'announcements', unread: 0, type: 'channel', members: ALL_TEAM_MEMBERS.map(m => m.id) },
 ];
 
@@ -160,18 +156,8 @@ const CRMCommunicationPanel = () => {
     }
   }, [selectedChannel]);
 
-  // Simulate incoming messages for demo (remove in production)
-  useEffect(() => {
-    const interval = setInterval(() => {
-      const randomChannel = DEFAULT_CHANNELS[Math.floor(Math.random() * DEFAULT_CHANNELS.length)];
-      if (randomChannel.id !== selectedChannel && Math.random() > 0.8) {
-        setChannels(prev => prev.map(ch => 
-          ch.id === randomChannel.id ? { ...ch, unread: ch.unread + 1 } : ch
-        ));
-      }
-    }, 30000); // Every 30 seconds
-    return () => clearInterval(interval);
-  }, [selectedChannel]);
+  // No placeholder notifications/unread counters in CRM chat
+  // (Real unread tracking will be based on real messages & activity logs.)
 
   // Auto-scroll to bottom when messages change
   const scrollToBottom = useCallback(() => {
@@ -446,6 +432,7 @@ const CRMCommunicationPanel = () => {
                         className="w-full flex items-center gap-2 px-3 py-2 hover:bg-zinc-100 text-left text-xs"
                       >
                         <Avatar className="h-5 w-5">
+                          <AvatarImage src={member.avatar} alt={member.name} />
                           <AvatarFallback className="text-[8px] bg-gold/20 text-gold">
                             {member.name.split(' ').map(n => n[0]).join('')}
                           </AvatarFallback>
@@ -484,69 +471,114 @@ const CRMCommunicationPanel = () => {
             </div>
           </TabsContent>
 
-          {/* Team Tab - All members synced from Employee Hub */}
+          {/* Team Tab - All members (grouped by department) */}
           <TabsContent value="team" className="m-0 p-3">
             <div className="flex justify-between items-center mb-3">
               <p className="text-xs text-zinc-500">All team members ({ALL_TEAM_MEMBERS.length})</p>
-              <Button size="sm" variant="outline" className="h-7 text-xs border-gold/30 text-gold hover:bg-gold/10">
+              <Button size="sm" variant="secondary" className="h-7 text-xs">
                 <UserPlus className="h-3 w-3 mr-1" />
                 Add Member
               </Button>
             </div>
+
             <ScrollArea className="h-[220px]">
-              <div className="space-y-2">
-                {ALL_TEAM_MEMBERS.map(member => (
-                  <div 
-                    key={member.id}
-                    className="flex items-center justify-between p-2.5 rounded-lg bg-zinc-50 hover:bg-zinc-100 transition-colors"
-                  >
-                    <div className="flex items-center gap-3">
-                      <div className="relative">
-                        <Avatar className="h-8 w-8">
-                          <AvatarImage src={member.avatar} alt={member.name} />
-                          <AvatarFallback className="bg-gold/20 text-gold text-xs">
-                            {member.name.split(' ').map(n => n[0]).join('')}
-                          </AvatarFallback>
-                        </Avatar>
-                        <span className={`absolute -bottom-0.5 -right-0.5 w-2.5 h-2.5 rounded-full border-2 border-white ${getStatusColor(member.status)}`} />
+              <div className="space-y-4">
+                {Object.entries(teamByDepartment).map(([department, members]) => {
+                  const deptMembers = (members as ConfigTeamMember[]).map(convertTeamMember);
+                  if (deptMembers.length === 0) return null;
+
+                  return (
+                    <div key={department} className="space-y-2">
+                      <div className="sticky top-0 z-10 bg-white">
+                        <div className="px-2 py-1">
+                          <Badge variant="secondary" className="text-[10px] bg-gold/10 text-gold border-gold/30">
+                            {department} • {deptMembers.length}
+                          </Badge>
+                        </div>
                       </div>
-                      <div>
-                        <p className="text-sm font-medium text-zinc-800">{member.name}</p>
-                        <p className="text-[10px] text-zinc-500">{member.role} • {member.department}</p>
+
+                      <div className="space-y-2">
+                        {deptMembers.map((member) => (
+                          <HoverCard key={member.id} openDelay={200}>
+                            <div className="flex items-center justify-between p-2.5 rounded-lg bg-zinc-50 hover:bg-zinc-100 transition-colors">
+                              <HoverCardTrigger asChild>
+                                <div className="flex items-center gap-3 cursor-default">
+                                  <div className="relative">
+                                    <Avatar className="h-8 w-8">
+                                      <AvatarImage src={member.avatar} alt={member.name} />
+                                      <AvatarFallback className="bg-gold/20 text-gold text-xs">
+                                        {member.name.split(' ').map(n => n[0]).join('')}
+                                      </AvatarFallback>
+                                    </Avatar>
+                                    <span className={`absolute -bottom-0.5 -right-0.5 w-2.5 h-2.5 rounded-full border-2 border-white ${getStatusColor(member.status)}`} />
+                                  </div>
+                                  <div>
+                                    <p className="text-sm font-medium text-zinc-800">{member.name}</p>
+                                    <p className="text-[10px] text-zinc-500">{member.role}</p>
+                                  </div>
+                                </div>
+                              </HoverCardTrigger>
+
+                              <div className="flex items-center gap-2">
+                                <Button size="sm" variant="secondary" className="h-8 px-3" onClick={() => startCall(member, 'voice')}>
+                                  <Phone className="h-3.5 w-3.5 mr-1" />
+                                  Call
+                                </Button>
+                                <Button size="sm" variant="secondary" className="h-8 px-3" onClick={() => startCall(member, 'video')}>
+                                  <Video className="h-3.5 w-3.5 mr-1" />
+                                  Video
+                                </Button>
+                                <Button
+                                  size="sm"
+                                  variant="secondary"
+                                  className="h-8 px-3"
+                                  onClick={() => {
+                                    setSelectedChannel('general');
+                                    setActiveTab('chat');
+                                    toast.info(`Opening chat with ${member.name}`);
+                                  }}
+                                >
+                                  <AtSign className="h-3.5 w-3.5 mr-1" />
+                                  Message
+                                </Button>
+                              </div>
+                            </div>
+
+                            <HoverCardContent side="right" className="w-80">
+                              <div className="space-y-2">
+                                <p className="text-sm font-semibold text-zinc-900">{member.name}</p>
+                                <p className="text-xs text-zinc-600">{member.role}</p>
+
+                                <div className="pt-2 border-t border-zinc-200 space-y-1 text-xs text-zinc-700">
+                                  <div className="flex justify-between gap-3">
+                                    <span className="text-zinc-500">Reports to</span>
+                                    <span className="text-right">{member.reportsTo || '—'}</span>
+                                  </div>
+                                  <div className="flex justify-between gap-3">
+                                    <span className="text-zinc-500">Nationality</span>
+                                    <span className="text-right">{member.nationality || '—'}</span>
+                                  </div>
+                                  <div className="flex justify-between gap-3">
+                                    <span className="text-zinc-500">Languages</span>
+                                    <span className="text-right">{member.languages?.join(', ') || '—'}</span>
+                                  </div>
+                                  <div className="flex justify-between gap-3">
+                                    <span className="text-zinc-500">Join date</span>
+                                    <span className="text-right">{member.joinDate || '—'}</span>
+                                  </div>
+                                  <div className="flex justify-between gap-3">
+                                    <span className="text-zinc-500">Email</span>
+                                    <span className="text-right">{member.email || '—'}</span>
+                                  </div>
+                                </div>
+                              </div>
+                            </HoverCardContent>
+                          </HoverCard>
+                        ))}
                       </div>
                     </div>
-                    <div className="flex items-center gap-2">
-                      <Button 
-                        size="sm"
-                        className="h-8 px-3 bg-gradient-to-r from-green-500 to-emerald-600 hover:from-green-600 hover:to-emerald-700 text-white font-medium shadow-md transition-all duration-200 hover:scale-105"
-                        onClick={() => startCall(member, 'voice')}
-                      >
-                        <Phone className="h-3.5 w-3.5 mr-1" />
-                        Call
-                      </Button>
-                      <Button 
-                        size="sm"
-                        className="h-8 px-3 bg-gradient-to-r from-blue-500 to-indigo-600 hover:from-blue-600 hover:to-indigo-700 text-white font-medium shadow-md transition-all duration-200 hover:scale-105"
-                        onClick={() => startCall(member, 'video')}
-                      >
-                        <Video className="h-3.5 w-3.5 mr-1" />
-                        Video
-                      </Button>
-                      <Button 
-                        size="sm"
-                        className="h-8 px-3 bg-gradient-to-r from-purple-500 to-violet-600 hover:from-purple-600 hover:to-violet-700 text-white font-medium shadow-md transition-all duration-200 hover:scale-105"
-                        onClick={() => {
-                          setSelectedChannel('general');
-                          setActiveTab('chat');
-                          toast.info(`Opening chat with ${member.name}`);
-                        }}
-                      >
-                        <AtSign className="h-3.5 w-3.5 mr-1" />
-                        Message
-                      </Button>
-                    </div>
-                  </div>
-                ))}
+                  );
+                })}
               </div>
             </ScrollArea>
           </TabsContent>
