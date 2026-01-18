@@ -5267,6 +5267,57 @@ export type Database = {
         }
         Relationships: []
       }
+      faq_unanswered_questions: {
+        Row: {
+          answer_added: boolean
+          created_at: string
+          id: string
+          is_reviewed: boolean
+          matched_category: string | null
+          notes: string | null
+          question: string
+          reviewed_at: string | null
+          reviewed_by: string | null
+          search_timestamp: string
+          updated_at: string
+          user_email: string | null
+          user_name: string | null
+          user_phone: string | null
+        }
+        Insert: {
+          answer_added?: boolean
+          created_at?: string
+          id?: string
+          is_reviewed?: boolean
+          matched_category?: string | null
+          notes?: string | null
+          question: string
+          reviewed_at?: string | null
+          reviewed_by?: string | null
+          search_timestamp?: string
+          updated_at?: string
+          user_email?: string | null
+          user_name?: string | null
+          user_phone?: string | null
+        }
+        Update: {
+          answer_added?: boolean
+          created_at?: string
+          id?: string
+          is_reviewed?: boolean
+          matched_category?: string | null
+          notes?: string | null
+          question?: string
+          reviewed_at?: string | null
+          reviewed_by?: string | null
+          search_timestamp?: string
+          updated_at?: string
+          user_email?: string | null
+          user_name?: string | null
+          user_phone?: string | null
+        }
+        Relationships: []
+      }
       favorites: {
         Row: {
           created_at: string
