@@ -82,6 +82,18 @@ const Index = () => {
           animate="visible"
           variants={staggerContainer}
         >
+          {/* AI Home Finder Badge - Purple */}
+          <motion.div
+            variants={fadeInUp}
+            className="mb-6"
+          >
+            <Link to="/quiz" className="inline-flex items-center gap-3 px-6 py-3 bg-purple-600/20 backdrop-blur-md border border-purple-500/50 rounded-full hover:bg-purple-600/30 hover:border-purple-400 hover:shadow-lg hover:shadow-purple-500/30 transition-all duration-300 group">
+              <Sparkles className="w-5 h-5 text-purple-400 group-hover:text-purple-300" />
+              <span className="text-purple-300 text-lg md:text-xl font-bold tracking-wide group-hover:text-purple-200">AI Home Finder</span>
+              <ArrowUpRight className="w-5 h-5 text-purple-400 group-hover:text-purple-300 group-hover:translate-x-0.5 group-hover:-translate-y-0.5 transition-transform" />
+            </Link>
+          </motion.div>
+
           {/* Badge */}
           <motion.span 
             variants={fadeInUp}
