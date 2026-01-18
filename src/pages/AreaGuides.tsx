@@ -1,26 +1,43 @@
+import { useState, useMemo } from "react";
 import { Link } from "react-router-dom";
 import { motion } from "framer-motion";
-import { MapPin, ArrowUpRight, Compass, Building2, Users, Home, TrendingUp } from "lucide-react";
+import { MapPin, ArrowUpRight, Compass, Building2, Users, Home, TrendingUp, Search, X } from "lucide-react";
 import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
 import Footer from "@/components/Footer";
 import { SEOHead } from "@/components/SEOHead";
 import { AREA_GUIDES } from "@/constants/areaGuides";
 import { GuideNavigation, GUIDE_LINKS, GuideHero, GuideCTA } from "@/components/guides";
 
 const fadeInUp = {
-  hidden: { opacity: 0, y: 30 },
-  visible: { opacity: 1, y: 0, transition: { duration: 0.6 } }
+  hidden: { opacity: 0, y: 20 },
+  visible: { opacity: 1, y: 0, transition: { duration: 0.4, ease: "easeOut" } }
 };
 
 const staggerContainer = {
   hidden: { opacity: 0 },
   visible: {
     opacity: 1,
-    transition: { staggerChildren: 0.12, delayChildren: 0.1 }
+    transition: { staggerChildren: 0.08, delayChildren: 0.1 }
   }
 };
 
+// UAE Emirates with their communities (Source: Dubai Land Department, Abu Dhabi Municipality, Government portals)
+const UAE_EMIRATES = [
+  { id: "all", name: "All Emirates" },
+  { id: "dubai", name: "Dubai" },
+  { id: "abu-dhabi", name: "Abu Dhabi" },
+  { id: "sharjah", name: "Sharjah" },
+  { id: "ajman", name: "Ajman" },
+  { id: "ras-al-khaimah", name: "Ras Al Khaimah" },
+  { id: "fujairah", name: "Fujairah" },
+  { id: "umm-al-quwain", name: "Umm Al Quwain" },
+];
+
 const AreaGuides = () => {
+  const [searchQuery, setSearchQuery] = useState("");
+  const [selectedEmirate, setSelectedEmirate] = useState("all");
+
   // Source: Dubai Land Department Annual Report 2024, Dubai Statistics Center
   const highlights = [
     { icon: Building2, value: "80+", label: "Communities" },
@@ -28,6 +45,20 @@ const AreaGuides = () => {
     { icon: Home, value: "226K+", label: "Transactions (2024)" },
     { icon: TrendingUp, value: "7-9%", label: "Avg. Yield" },
   ];
+
+  // Filter guides based on search and emirate
+  const filteredGuides = useMemo(() => {
+    return AREA_GUIDES.filter(area => {
+      const matchesSearch = searchQuery === "" || 
+        area.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
+        area.shortDescription.toLowerCase().includes(searchQuery.toLowerCase());
+      
+      // For now, all guides are Dubai-based
+      const matchesEmirate = selectedEmirate === "all" || selectedEmirate === "dubai";
+      
+      return matchesSearch && matchesEmirate;
+    });
+  }, [searchQuery, selectedEmirate]);
 
   return (
     <div className="min-h-screen bg-black">
@@ -80,7 +111,7 @@ const AreaGuides = () => {
                 initial={{ opacity: 0, y: 20 }}
                 whileInView={{ opacity: 1, y: 0 }}
                 viewport={{ once: true }}
-                transition={{ delay: index * 0.1 }}
+                transition={{ delay: index * 0.1, duration: 0.4, ease: "easeOut" }}
                 className="text-center"
               >
                 <div className="inline-flex items-center justify-center w-12 h-12 bg-black border border-gold/30 rounded-xl mb-3 shadow-md">
@@ -103,14 +134,67 @@ const AreaGuides = () => {
             initial={{ opacity: 0, y: 20 }}
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true }}
+            transition={{ duration: 0.4, ease: "easeOut" }}
             className="text-center mb-12"
           >
             <h2 className="text-3xl md:text-4xl font-light text-white mb-4">
               Featured Communities
             </h2>
-            <p className="text-zinc-400 max-w-2xl mx-auto">
+            <p className="text-zinc-400 max-w-2xl mx-auto mb-8">
               Each area offers a unique lifestyle. Click to explore detailed guides with pricing, amenities, and local insights.
             </p>
+
+            {/* Search & Filter Bar */}
+            <div className="max-w-4xl mx-auto">
+              <div className="bg-gradient-to-r from-white via-[#FDFBF7] to-[#F5F0E6] rounded-2xl p-4 border border-gold/30 shadow-lg">
+                <div className="flex flex-col md:flex-row gap-4">
+                  {/* Search Input */}
+                  <div className="flex-1 relative">
+                    <Search className="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-gold" />
+                    <Input
+                      type="text"
+                      placeholder="Search by community name..."
+                      value={searchQuery}
+                      onChange={(e) => setSearchQuery(e.target.value)}
+                      className="pl-12 pr-10 h-12 bg-white border-gold/30 focus:border-gold text-black placeholder:text-zinc-500"
+                    />
+                    {searchQuery && (
+                      <button
+                        onClick={() => setSearchQuery("")}
+                        className="absolute right-3 top-1/2 -translate-y-1/2 w-6 h-6 rounded-full bg-zinc-200 hover:bg-zinc-300 flex items-center justify-center transition-colors"
+                      >
+                        <X className="w-3 h-3 text-zinc-600" />
+                      </button>
+                    )}
+                  </div>
+
+                  {/* Emirate Filter */}
+                  <div className="flex flex-wrap gap-2">
+                    {UAE_EMIRATES.map((emirate) => (
+                      <button
+                        key={emirate.id}
+                        onClick={() => setSelectedEmirate(emirate.id)}
+                        className={`px-4 py-2 rounded-full text-sm font-medium transition-all ${
+                          selectedEmirate === emirate.id
+                            ? "bg-black text-gold border border-gold/50"
+                            : "bg-white text-zinc-600 border border-zinc-300 hover:border-gold/50 hover:text-gold"
+                        }`}
+                      >
+                        {emirate.name}
+                      </button>
+                    ))}
+                  </div>
+                </div>
+
+                {/* Results Count */}
+                <div className="mt-3 text-sm text-zinc-600">
+                  Showing <span className="font-semibold text-gold">{filteredGuides.length}</span> communities
+                  {selectedEmirate !== "all" && (
+                    <span> in <span className="font-semibold">{UAE_EMIRATES.find(e => e.id === selectedEmirate)?.name}</span></span>
+                  )}
+                </div>
+              </div>
+            </div>
           </motion.div>
 
           <motion.div 
@@ -120,7 +204,7 @@ const AreaGuides = () => {
             viewport={{ once: true }}
             variants={staggerContainer}
           >
-            {AREA_GUIDES.map((area) => (
+            {filteredGuides.map((area) => (
               <motion.div key={area.slug} variants={fadeInUp}>
                 <Link 
                   to={`/area/${area.slug}`}
@@ -176,21 +260,29 @@ const AreaGuides = () => {
             ))}
           </motion.div>
 
-          {/* More Communities Note */}
-          <motion.div 
-            className="text-center mt-16"
-            initial={{ opacity: 0, y: 20 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true }}
-            transition={{ delay: 0.3 }}
-          >
-            <div className="inline-flex items-center gap-2 px-4 py-2 bg-zinc-900 border border-zinc-800 rounded-full">
-              <span className="w-2 h-2 bg-gold rounded-full animate-pulse" />
-              <p className="text-zinc-400 text-sm">
-                More UAE communities coming soon — Abu Dhabi, Sharjah, and other Emirates.
-              </p>
-            </div>
-          </motion.div>
+          {/* No Results */}
+          {filteredGuides.length === 0 && (
+            <motion.div 
+              className="text-center py-16"
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+            >
+              <div className="inline-flex items-center justify-center w-16 h-16 bg-zinc-900 border border-zinc-700 rounded-2xl mb-4">
+                <Search className="w-8 h-8 text-zinc-500" />
+              </div>
+              <h3 className="text-xl text-white mb-2">No communities found</h3>
+              <p className="text-zinc-400 mb-4">Try adjusting your search or filter criteria</p>
+              <button
+                onClick={() => {
+                  setSearchQuery("");
+                  setSelectedEmirate("all");
+                }}
+                className="text-gold hover:underline"
+              >
+                Clear all filters
+              </button>
+            </motion.div>
+          )}
         </div>
       </section>
 

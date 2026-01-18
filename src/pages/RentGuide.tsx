@@ -212,17 +212,16 @@ const RentGuide = () => {
         actions={
           <>
             <Button 
-              variant="outline"
-              className="border-gold/50 text-gold hover:bg-gold/10 px-6"
+              className="relative bg-gradient-to-r from-white via-[#FDFBF7] to-[#F5F0E6] border border-gold/40 px-6 py-3 shadow-[0_4px_20px_rgba(200,167,102,0.3),0_8px_30px_rgba(0,0,0,0.15)] hover:shadow-[0_6px_25px_rgba(200,167,102,0.5),0_10px_40px_rgba(0,0,0,0.2)] hover:scale-[1.02] transition-all duration-300"
               onClick={() => document.getElementById('rental-process')?.scrollIntoView({ behavior: 'smooth' })}
             >
-              <ArrowDown className="w-4 h-4 mr-2" />
-              Read the Full Guide
+              <ArrowDown className="w-4 h-4 mr-2 text-black" />
+              <span className="text-gold font-semibold">Read the Full Guide</span>
             </Button>
-            <Button asChild className="bg-gold hover:bg-gold/90 text-black font-medium px-6">
+            <Button asChild className="relative bg-gradient-to-r from-white via-[#FDFBF7] to-[#F5F0E6] border border-gold/40 px-6 py-3 shadow-[0_4px_20px_rgba(200,167,102,0.3),0_8px_30px_rgba(0,0,0,0.15)] hover:shadow-[0_6px_25px_rgba(200,167,102,0.5),0_10px_40px_rgba(0,0,0,0.2)] hover:scale-[1.02] transition-all duration-300">
               <Link to="/properties?transaction=rent">
-                View Rental Properties
-                <ArrowUpRight className="w-4 h-4 ml-2 text-gold" />
+                <span className="text-gold font-semibold">View Rental Properties</span>
+                <ArrowUpRight className="w-4 h-4 ml-2 text-black" />
               </Link>
             </Button>
           </>
@@ -443,25 +442,27 @@ const RentGuide = () => {
       </section>
 
       {/* Related Guides */}
-      <section className="py-16 md:py-20 bg-white">
+      <section className="py-16 md:py-20 bg-gradient-to-br from-white via-[#FDFBF7] to-[#F5F0E6]">
         <div className="container mx-auto px-4">
           <div className="max-w-4xl mx-auto text-center mb-10">
             <h2 className="text-2xl md:text-3xl font-semibold text-black mb-4">Related Guides</h2>
             <p className="text-zinc-600">Explore more resources for tenants and landlords</p>
           </div>
-          <div className="flex justify-center gap-4">
-            <Button asChild variant="outline" className="border-zinc-300 text-black hover:bg-zinc-100 hover:border-gold/50">
-              <Link to="/tenant-guide">
-                Tenant Guide
-                <ArrowUpRight className="w-4 h-4 ml-2 text-gold" />
-              </Link>
-            </Button>
-            <Button asChild variant="outline" className="border-zinc-300 text-black hover:bg-zinc-100 hover:border-gold/50">
-              <Link to="/landlord-guide">
-                Landlord Guide
-                <ArrowUpRight className="w-4 h-4 ml-2 text-gold" />
-              </Link>
-            </Button>
+          <div className="flex flex-wrap justify-center gap-4">
+            <Link 
+              to="/tenant-guide"
+              className="inline-flex items-center gap-2 bg-gradient-to-r from-white via-[#FDFBF7] to-[#F5F0E6] border border-gold/40 px-6 py-3 rounded-xl shadow-[0_4px_20px_rgba(200,167,102,0.3),0_8px_30px_rgba(0,0,0,0.15)] hover:shadow-[0_6px_25px_rgba(200,167,102,0.5),0_10px_40px_rgba(0,0,0,0.2)] hover:scale-[1.02] transition-all duration-300"
+            >
+              <span className="text-gold font-semibold">Tenant Guide</span>
+              <ArrowUpRight className="w-4 h-4 text-black" />
+            </Link>
+            <Link 
+              to="/landlord-guide"
+              className="inline-flex items-center gap-2 bg-gradient-to-r from-white via-[#FDFBF7] to-[#F5F0E6] border border-gold/40 px-6 py-3 rounded-xl shadow-[0_4px_20px_rgba(200,167,102,0.3),0_8px_30px_rgba(0,0,0,0.15)] hover:shadow-[0_6px_25px_rgba(200,167,102,0.5),0_10px_40px_rgba(0,0,0,0.2)] hover:scale-[1.02] transition-all duration-300"
+            >
+              <span className="text-gold font-semibold">Landlord Guide</span>
+              <ArrowUpRight className="w-4 h-4 text-black" />
+            </Link>
           </div>
         </div>
       </section>

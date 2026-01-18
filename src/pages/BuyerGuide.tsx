@@ -254,17 +254,16 @@ const BuyerGuide = () => {
         actions={
           <>
             <Button 
-              variant="outline"
-              className="border-gold/50 text-gold hover:bg-gold/10 px-6"
+              className="relative bg-gradient-to-r from-white via-[#FDFBF7] to-[#F5F0E6] border border-gold/40 px-6 py-3 shadow-[0_4px_20px_rgba(200,167,102,0.3),0_8px_30px_rgba(0,0,0,0.15)] hover:shadow-[0_6px_25px_rgba(200,167,102,0.5),0_10px_40px_rgba(0,0,0,0.2)] hover:scale-[1.02] transition-all duration-300"
               onClick={() => document.getElementById('buying-process')?.scrollIntoView({ behavior: 'smooth' })}
             >
-              <ArrowDown className="w-4 h-4 mr-2" />
-              Read the Full Guide
+              <ArrowDown className="w-4 h-4 mr-2 text-black" />
+              <span className="text-gold font-semibold">Read the Full Guide</span>
             </Button>
-            <Button asChild className="bg-gold hover:bg-gold/90 text-black font-medium px-6">
+            <Button asChild className="relative bg-gradient-to-r from-white via-[#FDFBF7] to-[#F5F0E6] border border-gold/40 px-6 py-3 shadow-[0_4px_20px_rgba(200,167,102,0.3),0_8px_30px_rgba(0,0,0,0.15)] hover:shadow-[0_6px_25px_rgba(200,167,102,0.5),0_10px_40px_rgba(0,0,0,0.2)] hover:scale-[1.02] transition-all duration-300">
               <Link to="/properties">
-                Browse Properties
-                <svg className="w-4 h-4 ml-2" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24">
+                <span className="text-gold font-semibold">Browse Properties</span>
+                <svg className="w-4 h-4 ml-2 text-black" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24">
                   <path strokeLinecap="round" strokeLinejoin="round" d="M7 17L17 7M17 7H7M17 7V17" />
                 </svg>
               </Link>
