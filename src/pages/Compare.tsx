@@ -11,8 +11,9 @@ import {
   ChevronLeft, Sparkles, Send, Loader2, CheckCircle, Download, Star, 
   Users, Crown, Gift, TrendingUp, MapPin, Building, Home, 
   BadgeCheck, AlertTriangle, Zap, Award, Phone, Mail, BarChart3,
-  ArrowLeft, Heart, ListChecks, Layers
+  ArrowLeft, Heart, ListChecks, Layers, Brain
 } from "lucide-react";
+import AIPropertyAnalyzer from "@/components/ai-tools/AIPropertyAnalyzer";
 import { Button } from "@/components/ui/button";
 import LegalDisclaimer from "@/components/LegalDisclaimer";
 import { Input } from "@/components/ui/input";
@@ -1066,6 +1067,20 @@ const Compare = () => {
                 </a>
               </div>
             )}
+          </div>
+
+          {/* AI Property Analyzer Integration */}
+          <div className="mt-12 border-t border-purple-500/20 pt-12">
+            <div className="flex items-center gap-3 mb-6">
+              <div className="p-2 rounded-lg bg-purple-500/20 border border-purple-500/30">
+                <Brain className="w-6 h-6 text-purple-400" />
+              </div>
+              <div>
+                <h2 className="text-2xl font-bold text-white">Deep Area Analysis</h2>
+                <p className="text-zinc-400 text-sm">Analyze specific areas with government data sources</p>
+              </div>
+            </div>
+            <AIPropertyAnalyzer />
           </div>
 
           {/* AI Tool Disclaimer */}
