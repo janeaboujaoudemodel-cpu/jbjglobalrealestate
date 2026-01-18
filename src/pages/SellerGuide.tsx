@@ -475,10 +475,12 @@ const SellerGuide = () => {
 
                 <motion.div variants={fadeInUp} className="text-center">
                   <Link to="/property-evaluator">
-                    <Button className="bg-gradient-to-r from-gold to-gold-dark text-black font-semibold hover:brightness-110 px-8 py-4">
-                      <Calculator className="w-5 h-5 mr-2" />
+                    <Button className="bg-gradient-to-r from-gold to-gold-dark text-black font-semibold hover:brightness-110 px-10 py-6 text-base shadow-[0_0_25px_rgba(200,167,102,0.4)] hover:shadow-[0_0_35px_rgba(200,167,102,0.6)] transition-all">
+                      <Calculator className="w-5 h-5 mr-2 text-black" />
                       Run Property Evaluator
-                      <ArrowRight className="w-5 h-5 ml-2" />
+                      <svg className="w-5 h-5 ml-2 text-black" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24">
+                        <path strokeLinecap="round" strokeLinejoin="round" d="M7 17L17 7M17 7H7M17 7V17" />
+                      </svg>
                     </Button>
                   </Link>
                   <p className="text-zinc-500 text-sm mt-3">

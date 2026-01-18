@@ -6,15 +6,7 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import { Badge } from "@/components/ui/badge";
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { Checkbox } from "@/components/ui/checkbox";
-import {
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
-} from "@/components/ui/select";
+import { motion } from "framer-motion";
 import {
   Dialog,
   DialogContent,
@@ -29,7 +21,8 @@ import {
   AlertTriangle, 
   Trash2,
   ListTodo,
-  Calendar
+  Calendar,
+  Circle
 } from "lucide-react";
 import { toast } from "sonner";
 import { format } from "date-fns";
@@ -47,18 +40,18 @@ interface AdminTask {
 }
 
 const PRIORITY_COLORS: Record<string, string> = {
-  low: "bg-slate-500/20 text-slate-400",
-  medium: "bg-blue-500/20 text-blue-400",
-  high: "bg-orange-500/20 text-orange-400",
-  urgent: "bg-red-500/20 text-red-400",
+  low: "bg-slate-500/20 text-slate-400 border-slate-500/30",
+  medium: "bg-blue-500/20 text-blue-400 border-blue-500/30",
+  high: "bg-orange-500/20 text-orange-400 border-orange-500/30",
+  urgent: "bg-red-500/20 text-red-400 border-red-500/30",
 };
 
 const CATEGORY_COLORS: Record<string, string> = {
-  general: "bg-gray-500/20 text-gray-400",
-  integration: "bg-purple-500/20 text-purple-400",
-  security: "bg-red-500/20 text-red-400",
-  marketing: "bg-green-500/20 text-green-400",
-  development: "bg-blue-500/20 text-blue-400",
+  general: "bg-zinc-500/20 text-zinc-400 border-zinc-500/30",
+  integration: "bg-purple-500/20 text-purple-400 border-purple-500/30",
+  security: "bg-red-500/20 text-red-400 border-red-500/30",
+  marketing: "bg-green-500/20 text-green-400 border-green-500/30",
+  development: "bg-blue-500/20 text-blue-400 border-blue-500/30",
 };
 
 export function AdminTasksPanel() {
@@ -93,7 +86,6 @@ export function AdminTasksPanel() {
     setLoadError(null);
 
     try {
-      // Fetch ALL tasks for current user (both pending and completed)
       const { data, error } = await supabase
         .from("admin_tasks")
         .select("*")
@@ -189,196 +181,190 @@ export function AdminTasksPanel() {
 
   if (loading) {
     return (
-      <Card className="bg-black/40 border-white/10">
-        <CardContent className="p-6">
-          <div className="flex items-center justify-center py-8">
-            <Clock className="w-6 h-6 animate-spin text-gold" />
-          </div>
-        </CardContent>
-      </Card>
+      <div className="bg-gradient-to-br from-[#FDFBF7] via-[#F5F0E6] to-[#EDE4D3] border border-gold/30 rounded-2xl p-6">
+        <div className="flex items-center justify-center py-8">
+          <Clock className="w-6 h-6 animate-spin text-gold" />
+        </div>
+      </div>
     );
   }
 
   if (loadError) {
     return (
-      <Card className="bg-black/40 border-white/10">
-        <CardHeader>
-          <CardTitle className="flex items-center gap-2 text-white">
-            <AlertTriangle className="w-5 h-5 text-red-400" />
-            My Tasks
-          </CardTitle>
-        </CardHeader>
-        <CardContent>
-          <div className="rounded-lg border border-red-500/30 bg-red-500/10 p-3">
-            <p className="text-sm text-red-200 font-semibold">Failed to load tasks</p>
-            <p className="text-xs text-red-200/80 mt-1">{loadError}</p>
-          </div>
-        </CardContent>
-      </Card>
+      <div className="bg-gradient-to-br from-[#FDFBF7] via-[#F5F0E6] to-[#EDE4D3] border border-gold/30 rounded-2xl p-6">
+        <div className="flex items-center gap-2 mb-4">
+          <AlertTriangle className="w-5 h-5 text-red-500" />
+          <h3 className="font-semibold text-black">My Tasks</h3>
+        </div>
+        <div className="rounded-lg border border-red-300 bg-red-50 p-3">
+          <p className="text-sm text-red-700 font-semibold">Failed to load tasks</p>
+          <p className="text-xs text-red-600 mt-1">{loadError}</p>
+        </div>
+      </div>
     );
   }
 
   return (
-    <Card className="bg-black/40 border-white/10">
-      <CardHeader className="flex flex-row items-center justify-between">
-        <CardTitle className="flex items-center gap-2 text-white">
-          <ListTodo className="w-5 h-5 text-gold" />
-          My Tasks
-          {pendingTasks.length > 0 && (
-            <Badge className="bg-gold/20 text-gold ml-2">
-              {pendingTasks.length} pending
-            </Badge>
-          )}
-        </CardTitle>
+    <div className="bg-gradient-to-br from-[#FDFBF7] via-[#F5F0E6] to-[#EDE4D3] border border-gold/30 rounded-2xl shadow-lg">
+      {/* Header */}
+      <div className="flex items-center justify-between p-5 border-b border-gold/20">
+        <div className="flex items-center gap-3">
+          <div className="p-2 rounded-xl bg-gold/20">
+            <ListTodo className="w-5 h-5 text-gold" />
+          </div>
+          <div>
+            <h3 className="font-semibold text-black">My Tasks</h3>
+            {pendingTasks.length > 0 && (
+              <p className="text-xs text-zinc-500">{pendingTasks.length} pending</p>
+            )}
+          </div>
+        </div>
         
         <Dialog open={isAddingTask} onOpenChange={setIsAddingTask}>
           <DialogTrigger asChild>
-            <Button size="sm" className="bg-gold hover:bg-gold/90 text-black">
+            <Button size="sm" className="bg-gradient-to-r from-gold to-gold-dark text-black font-semibold hover:brightness-110 shadow-md shadow-gold/20">
               <Plus className="w-4 h-4 mr-1" />
-              Add Task
+              Add
             </Button>
           </DialogTrigger>
-          <DialogContent className="bg-black/95 border-white/10">
+          <DialogContent className="bg-white border-gold/30">
             <DialogHeader>
-              <DialogTitle className="text-white">Add New Task</DialogTitle>
+              <DialogTitle className="text-black">Add New Task</DialogTitle>
             </DialogHeader>
             <div className="space-y-4 pt-4">
               <Input
                 placeholder="Task title..."
                 value={newTask.title}
                 onChange={(e) => setNewTask({ ...newTask, title: e.target.value })}
-                className="bg-white/5 border-white/10 text-white"
+                className="border-zinc-300 focus:border-gold"
               />
               <Textarea
                 placeholder="Description (optional)..."
                 value={newTask.description}
                 onChange={(e) => setNewTask({ ...newTask, description: e.target.value })}
-                className="bg-white/5 border-white/10 text-white"
+                className="border-zinc-300 focus:border-gold"
               />
               <div className="grid grid-cols-2 gap-4">
-                {/* Native select for Category */}
                 <select
                   value={newTask.category}
                   onChange={(e) => setNewTask({ ...newTask, category: e.target.value })}
-                  className="h-10 px-3 rounded-md border border-zinc-700 bg-zinc-950 text-white font-medium focus:outline-none focus:ring-2 focus:ring-gold/50"
-                  style={{ backgroundColor: '#09090b', color: '#ffffff' }}
+                  className="h-10 px-3 rounded-md border border-zinc-300 bg-white text-black font-medium focus:outline-none focus:ring-2 focus:ring-gold/50"
                 >
-                  <option value="general" style={{ backgroundColor: '#09090b', color: '#ffffff' }}>General</option>
-                  <option value="integration" style={{ backgroundColor: '#09090b', color: '#ffffff' }}>Integration</option>
-                  <option value="security" style={{ backgroundColor: '#09090b', color: '#ffffff' }}>Security</option>
-                  <option value="marketing" style={{ backgroundColor: '#09090b', color: '#ffffff' }}>Marketing</option>
-                  <option value="development" style={{ backgroundColor: '#09090b', color: '#ffffff' }}>Development</option>
+                  <option value="general">General</option>
+                  <option value="integration">Integration</option>
+                  <option value="security">Security</option>
+                  <option value="marketing">Marketing</option>
+                  <option value="development">Development</option>
                 </select>
                 
-                {/* Native select for Priority */}
                 <select
                   value={newTask.priority}
                   onChange={(e) => setNewTask({ ...newTask, priority: e.target.value })}
-                  className="h-10 px-3 rounded-md border border-zinc-700 bg-zinc-950 text-white font-medium focus:outline-none focus:ring-2 focus:ring-gold/50"
-                  style={{ backgroundColor: '#09090b', color: '#ffffff' }}
+                  className="h-10 px-3 rounded-md border border-zinc-300 bg-white text-black font-medium focus:outline-none focus:ring-2 focus:ring-gold/50"
                 >
-                  <option value="low" style={{ backgroundColor: '#09090b', color: '#ffffff' }}>Low</option>
-                  <option value="medium" style={{ backgroundColor: '#09090b', color: '#ffffff' }}>Medium</option>
-                  <option value="high" style={{ backgroundColor: '#09090b', color: '#ffffff' }}>High</option>
-                  <option value="urgent" style={{ backgroundColor: '#09090b', color: '#ffffff' }}>Urgent</option>
+                  <option value="low">Low</option>
+                  <option value="medium">Medium</option>
+                  <option value="high">High</option>
+                  <option value="urgent">Urgent</option>
                 </select>
               </div>
               <Input
                 type="date"
                 value={newTask.due_date}
                 onChange={(e) => setNewTask({ ...newTask, due_date: e.target.value })}
-                className="bg-white/5 border-white/10 text-white"
+                className="border-zinc-300 focus:border-gold"
               />
-              <Button onClick={addTask} className="w-full bg-gold hover:bg-gold/90 text-black">
+              <Button onClick={addTask} className="w-full bg-gradient-to-r from-gold to-gold-dark text-black font-semibold hover:brightness-110">
                 Add Task
               </Button>
             </div>
           </DialogContent>
         </Dialog>
-      </CardHeader>
+      </div>
       
-      <CardContent className="space-y-4">
-        {/* Pending Tasks */}
+      {/* Task List */}
+      <div className="p-4 space-y-3 max-h-[400px] overflow-y-auto">
         {pendingTasks.length === 0 ? (
-          <div className="text-center py-8 text-white/40">
-            <CheckCircle2 className="w-12 h-12 mx-auto mb-2 opacity-50" />
-            <p>No pending tasks</p>
+          <div className="text-center py-8">
+            <div className="w-12 h-12 bg-gold/10 rounded-full flex items-center justify-center mx-auto mb-3">
+              <CheckCircle2 className="w-6 h-6 text-gold" />
+            </div>
+            <p className="text-zinc-500 text-sm">No pending tasks</p>
           </div>
         ) : (
-          <div className="space-y-2">
-            {pendingTasks.map((task) => (
-              <div
-                key={task.id}
-                className="flex items-start gap-3 p-3 rounded-lg bg-white/5 border border-white/10 hover:border-gold/30 transition-colors"
-              >
-                <Checkbox
-                  checked={task.status === "completed"}
-                  onCheckedChange={() => toggleTaskStatus(task)}
-                  className="mt-1 border-gold data-[state=checked]:bg-gold"
+          pendingTasks.map((task) => (
+            <motion.div
+              key={task.id}
+              initial={{ opacity: 0, y: 5 }}
+              animate={{ opacity: 1, y: 0 }}
+              className="bg-white border border-zinc-200 rounded-xl p-3 hover:border-gold/50 hover:shadow-md transition-all"
+            >
+              <div className="flex items-start gap-3">
+                <button
+                  onClick={() => toggleTaskStatus(task)}
+                  className="mt-0.5 flex-shrink-0 w-5 h-5 rounded-full border-2 border-gold/50 hover:border-gold hover:bg-gold/10 transition-all"
                 />
                 <div className="flex-1 min-w-0">
-                  <div className="flex items-center gap-2 flex-wrap">
-                    <span className="font-medium text-white">{task.title}</span>
-                    <Badge className={CATEGORY_COLORS[task.category] || CATEGORY_COLORS.general}>
+                  <p className="font-medium text-black text-sm">{task.title}</p>
+                  {task.description && (
+                    <p className="text-xs text-zinc-500 mt-0.5 line-clamp-1">{task.description}</p>
+                  )}
+                  <div className="flex items-center gap-1.5 mt-2 flex-wrap">
+                    <Badge variant="outline" className={`text-[10px] px-1.5 py-0 ${CATEGORY_COLORS[task.category] || CATEGORY_COLORS.general}`}>
                       {task.category}
                     </Badge>
-                    <Badge className={PRIORITY_COLORS[task.priority]}>
+                    <Badge variant="outline" className={`text-[10px] px-1.5 py-0 ${PRIORITY_COLORS[task.priority]}`}>
                       {task.priority}
                     </Badge>
+                    {task.due_date && (
+                      <span className="text-[10px] text-zinc-500 flex items-center gap-0.5">
+                        <Calendar className="w-2.5 h-2.5" />
+                        {format(new Date(task.due_date), "MMM d")}
+                      </span>
+                    )}
                   </div>
-                  {task.description && (
-                    <p className="text-sm text-white/60 mt-1">{task.description}</p>
-                  )}
-                  {task.due_date && (
-                    <div className="flex items-center gap-1 mt-2 text-xs text-white/40">
-                      <Calendar className="w-3 h-3" />
-                      Due: {format(new Date(task.due_date), "MMM d, yyyy")}
-                    </div>
-                  )}
                 </div>
-                <Button
-                  variant="ghost"
-                  size="icon"
+                <button
                   onClick={() => deleteTask(task.id)}
-                  className="text-white/40 hover:text-red-400 hover:bg-red-500/10"
+                  className="text-zinc-400 hover:text-red-500 transition-colors p-1"
                 >
-                  <Trash2 className="w-4 h-4" />
-                </Button>
+                  <Trash2 className="w-3.5 h-3.5" />
+                </button>
               </div>
-            ))}
-          </div>
+            </motion.div>
+          ))
         )}
 
         {/* Completed Tasks */}
         {completedTasks.length > 0 && (
-          <div className="pt-4 border-t border-white/10">
-            <p className="text-sm text-white/40 mb-2">Completed ({completedTasks.length})</p>
-            <div className="space-y-2">
-              {completedTasks.slice(0, 5).map((task) => (
-                <div
-                  key={task.id}
-                  className="flex items-center gap-3 p-2 rounded-lg bg-white/5 opacity-60"
+          <div className="pt-3 border-t border-gold/20">
+            <p className="text-xs text-zinc-500 mb-2 flex items-center gap-1">
+              <CheckCircle2 className="w-3 h-3 text-green-500" />
+              Completed ({completedTasks.length})
+            </p>
+            {completedTasks.slice(0, 3).map((task) => (
+              <div
+                key={task.id}
+                className="flex items-center gap-3 p-2 rounded-lg bg-zinc-50 opacity-60 mb-2"
+              >
+                <button
+                  onClick={() => toggleTaskStatus(task)}
+                  className="w-4 h-4 rounded-full bg-gold flex items-center justify-center"
                 >
-                  <Checkbox
-                    checked={true}
-                    onCheckedChange={() => toggleTaskStatus(task)}
-                    className="border-gold data-[state=checked]:bg-gold"
-                  />
-                  <span className="line-through text-white/60 flex-1">{task.title}</span>
-                  <Button
-                    variant="ghost"
-                    size="icon"
-                    onClick={() => deleteTask(task.id)}
-                    className="text-white/40 hover:text-red-400 hover:bg-red-500/10 h-6 w-6"
-                  >
-                    <Trash2 className="w-3 h-3" />
-                  </Button>
-                </div>
-              ))}
-            </div>
+                  <CheckCircle2 className="w-3 h-3 text-black" />
+                </button>
+                <span className="line-through text-zinc-500 text-xs flex-1">{task.title}</span>
+                <button
+                  onClick={() => deleteTask(task.id)}
+                  className="text-zinc-400 hover:text-red-500 transition-colors"
+                >
+                  <Trash2 className="w-3 h-3" />
+                </button>
+              </div>
+            ))}
           </div>
         )}
-      </CardContent>
-    </Card>
+      </div>
+    </div>
   );
 }

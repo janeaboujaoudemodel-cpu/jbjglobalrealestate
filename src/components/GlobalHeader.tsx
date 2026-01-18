@@ -148,10 +148,10 @@ const GlobalHeader = () => {
                 <Link
                   key={link.href}
                   to={link.href}
-                  className={`px-2 xl:px-2.5 py-2 text-[12px] xl:text-[13px] font-medium whitespace-nowrap transition-all relative group ${
+                  className={`px-2 xl:px-2.5 py-2 text-[12px] xl:text-[13px] font-medium whitespace-nowrap transition-all relative group rounded-md ${
                     isActive(link.href) 
                       ? "text-gold" 
-                      : "text-zinc-300 hover:text-black hover:bg-gold/20"
+                      : "text-zinc-300 hover:text-gold hover:bg-gold/10"
                   }`}
                 >
                   {link.label}
@@ -164,17 +164,17 @@ const GlobalHeader = () => {
               {/* Properties Dropdown - Buy / Rent / New Projects */}
               <DropdownMenu>
                 <DropdownMenuTrigger asChild>
-                  <button className={`flex items-center gap-1 px-2 xl:px-2.5 py-2 text-[12px] xl:text-[13px] font-medium whitespace-nowrap transition-all ${
-                    location.pathname === '/properties' ? 'text-gold' : 'text-zinc-300 hover:text-gold'
+                  <button className={`flex items-center gap-1 px-2 xl:px-2.5 py-2 text-[12px] xl:text-[13px] font-medium whitespace-nowrap transition-all rounded-md ${
+                    location.pathname === '/properties' ? 'text-gold' : 'text-zinc-300 hover:text-gold hover:bg-gold/10'
                   }`}>
                     {t('nav.properties')}
                     <ChevronDown className="w-3 h-3" />
                   </button>
                 </DropdownMenuTrigger>
-                <DropdownMenuContent align="center" className="bg-white border-gold/30 min-w-[200px] mt-2 shadow-lg">
+                <DropdownMenuContent align="center" className="bg-white border-gold/30 min-w-[200px] mt-2 shadow-lg py-2">
                   {propertiesLinks.map((link) => (
-                    <DropdownMenuItem key={link.href} asChild>
-                      <Link to={link.href} className="flex items-center gap-2 text-black hover:text-gold hover:bg-gold/10 py-2.5">
+                    <DropdownMenuItem key={link.href} asChild className="py-0 px-0">
+                      <Link to={link.href} className="flex items-center gap-2 text-black hover:text-white hover:bg-black py-3 px-4 transition-all w-full">
                         <link.icon className="w-4 h-4 text-gold" />
                         {link.label}
                       </Link>
@@ -187,10 +187,10 @@ const GlobalHeader = () => {
                 <Link
                   key={link.href}
                   to={link.href}
-                  className={`px-2 xl:px-2.5 py-2 text-[12px] xl:text-[13px] font-medium whitespace-nowrap transition-all relative group ${
+                  className={`px-2 xl:px-2.5 py-2 text-[12px] xl:text-[13px] font-medium whitespace-nowrap transition-all relative group rounded-md ${
                     isActive(link.href) 
                       ? "text-gold" 
-                      : "text-zinc-300 hover:text-black hover:bg-gold/20"
+                      : "text-zinc-300 hover:text-gold hover:bg-gold/10"
                   }`}
                 >
                   {link.label}
@@ -202,15 +202,15 @@ const GlobalHeader = () => {
 
               <DropdownMenu>
                 <DropdownMenuTrigger asChild>
-                  <button className="flex items-center gap-1 px-2 xl:px-2.5 py-2 text-[12px] xl:text-[13px] font-medium whitespace-nowrap transition-all text-zinc-300 hover:text-black hover:bg-gold/20 rounded-md">
+                  <button className="flex items-center gap-1 px-2 xl:px-2.5 py-2 text-[12px] xl:text-[13px] font-medium whitespace-nowrap transition-all text-zinc-300 hover:text-gold hover:bg-gold/10 rounded-md">
                     Guides
                     <ChevronDown className="w-3 h-3" />
                   </button>
                 </DropdownMenuTrigger>
-                <DropdownMenuContent align="center" className="bg-white border-gold/30 min-w-[160px] mt-2 shadow-lg">
+                <DropdownMenuContent align="center" className="bg-white border-gold/30 min-w-[160px] mt-2 shadow-lg py-2">
                   {guidesLinks.map((link) => (
-                    <DropdownMenuItem key={link.href} asChild>
-                      <Link to={link.href} className="flex items-center gap-2 text-black hover:text-gold hover:bg-gold/10 py-2.5">
+                    <DropdownMenuItem key={link.href} asChild className="py-0 px-0">
+                      <Link to={link.href} className="flex items-center gap-2 text-black hover:text-white hover:bg-black py-3 px-4 transition-all w-full">
                         <link.icon className="w-4 h-4 text-gold" />
                         {link.label}
                       </Link>
@@ -222,17 +222,17 @@ const GlobalHeader = () => {
               {/* Market Intelligence Dropdown */}
               <DropdownMenu>
                 <DropdownMenuTrigger asChild>
-                  <button className={`flex items-center gap-1 px-2 xl:px-2.5 py-2 text-[12px] xl:text-[13px] font-medium whitespace-nowrap transition-all ${
-                    location.pathname.startsWith('/market-intelligence') ? 'text-gold' : 'text-zinc-300 hover:text-gold'
+                  <button className={`flex items-center gap-1 px-2 xl:px-2.5 py-2 text-[12px] xl:text-[13px] font-medium whitespace-nowrap transition-all rounded-md ${
+                    location.pathname.startsWith('/market-intelligence') ? 'text-gold' : 'text-zinc-300 hover:text-gold hover:bg-gold/10'
                   }`}>
                     Market Intelligence
                     <ChevronDown className="w-3 h-3" />
                   </button>
                 </DropdownMenuTrigger>
-                <DropdownMenuContent align="center" className="bg-white border-gold/30 min-w-[180px] mt-2 shadow-lg">
+                <DropdownMenuContent align="center" className="bg-white border-gold/30 min-w-[180px] mt-2 shadow-lg py-2">
                   {marketIntelLinks.map((link) => (
-                    <DropdownMenuItem key={link.href} asChild>
-                      <Link to={link.href} className="flex items-center gap-2 text-black hover:text-gold hover:bg-gold/10 py-2.5">
+                    <DropdownMenuItem key={link.href} asChild className="py-0 px-0">
+                      <Link to={link.href} className="flex items-center gap-2 text-black hover:text-white hover:bg-black py-3 px-4 transition-all w-full">
                         <link.icon className="w-4 h-4 text-gold" />
                         {link.label}
                       </Link>
@@ -244,15 +244,15 @@ const GlobalHeader = () => {
               {/* More Dropdown */}
               <DropdownMenu>
                 <DropdownMenuTrigger asChild>
-                  <button className="flex items-center gap-1 px-2 xl:px-2.5 py-2 text-[12px] xl:text-[13px] font-medium whitespace-nowrap transition-all text-zinc-300 hover:text-gold">
+                  <button className="flex items-center gap-1 px-2 xl:px-2.5 py-2 text-[12px] xl:text-[13px] font-medium whitespace-nowrap transition-all text-zinc-300 hover:text-gold hover:bg-gold/10 rounded-md">
                     More
                     <ChevronDown className="w-3 h-3" />
                   </button>
                 </DropdownMenuTrigger>
-                <DropdownMenuContent align="center" className="bg-white border-gold/30 min-w-[160px] mt-2 shadow-lg">
+                <DropdownMenuContent align="center" className="bg-white border-gold/30 min-w-[160px] mt-2 shadow-lg py-2">
                   {moreLinks.map((link) => (
-                    <DropdownMenuItem key={link.href} asChild>
-                      <Link to={link.href} className="flex items-center gap-2 text-black hover:text-gold hover:bg-gold/10 py-2.5">
+                    <DropdownMenuItem key={link.href} asChild className="py-0 px-0">
+                      <Link to={link.href} className="flex items-center gap-2 text-black hover:text-white hover:bg-black py-3 px-4 transition-all w-full">
                         <link.icon className="w-4 h-4 text-gold" />
                         {link.label}
                       </Link>
