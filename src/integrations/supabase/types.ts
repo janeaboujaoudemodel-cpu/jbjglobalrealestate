@@ -11940,6 +11940,10 @@ export type Database = {
         Args: { p_email: string; p_ip_address: string }
         Returns: Json
       }
+      check_idea_submission_rate_limit: {
+        Args: { p_email: string; p_ip?: string }
+        Returns: boolean
+      }
       check_lead_rate_limit: {
         Args: {
           p_email: string
