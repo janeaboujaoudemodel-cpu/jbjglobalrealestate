@@ -9062,7 +9062,7 @@ export type Database = {
           title_deed_url: string | null
           updated_at: string
           upgrade_details: string | null
-          user_id: string | null
+          user_id: string
           video_urls: string[] | null
         }
         Insert: {
@@ -9104,7 +9104,7 @@ export type Database = {
           title_deed_url?: string | null
           updated_at?: string
           upgrade_details?: string | null
-          user_id?: string | null
+          user_id: string
           video_urls?: string[] | null
         }
         Update: {
@@ -9146,7 +9146,7 @@ export type Database = {
           title_deed_url?: string | null
           updated_at?: string
           upgrade_details?: string | null
-          user_id?: string | null
+          user_id?: string
           video_urls?: string[] | null
         }
         Relationships: []
