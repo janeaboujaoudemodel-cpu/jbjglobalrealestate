@@ -1,6 +1,6 @@
 import { useLocation, Link } from "react-router-dom";
 import { useEffect } from "react";
-import { Home, ArrowLeft, Briefcase, Phone, Sparkles, Mail, MessageCircle } from "lucide-react";
+import { Home, ArrowLeft, ArrowUpRight, Briefcase, Phone, Sparkles, Mail, MessageCircle } from "lucide-react";
 import { motion } from "framer-motion";
 import { Button } from "@/components/ui/button";
 import jbjMonogramDark from "@/assets/jbj-monogram-dark-bg.png";
@@ -101,6 +101,7 @@ const NotFound = () => {
             <Button variant="primary" className="px-8 py-5 text-sm w-full sm:w-auto">
               <Home className="w-4 h-4 mr-2" />
               Back to Home
+              <ArrowUpRight className="w-4 h-4 ml-2 text-gold" />
             </Button>
           </Link>
           <Link to="/broker-toolkit">
