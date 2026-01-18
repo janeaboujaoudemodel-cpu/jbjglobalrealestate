@@ -261,13 +261,13 @@ const TenantGuide = () => {
               ))}
             </div>
 
-            {/* Educational Disclaimer */}
-            <div className="mt-8 bg-amber-900/30 border border-amber-600/30 rounded-xl p-6">
+            {/* Educational Disclaimer - Premium White/Gold/Champagne */}
+            <div className="mt-8 bg-gradient-to-r from-white via-[#FDFBF7] to-[#F5F0E6] border-2 border-gold/40 rounded-xl p-6 shadow-[0_4px_20px_rgba(200,167,102,0.15)]">
               <div className="flex items-start gap-4">
-                <AlertTriangle className="w-6 h-6 text-amber-400 flex-shrink-0 mt-0.5" />
+                <AlertTriangle className="w-6 h-6 text-black flex-shrink-0 mt-0.5" />
                 <div>
-                  <h4 className="font-medium text-amber-300 mb-2">Educational Information Only</h4>
-                  <p className="text-sm text-amber-200/80">
+                  <h4 className="font-semibold text-gold mb-2">Educational Information Only</h4>
+                  <p className="text-sm text-black/80">
                     This guide provides educational information about Ejari. JBJ GLOBAL REAL ESTATE does not 
                     directly process Ejari registrations. Your landlord or a licensed service center handles 
                     the official registration process.

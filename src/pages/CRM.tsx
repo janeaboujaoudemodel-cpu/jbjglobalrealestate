@@ -439,7 +439,7 @@ const CRM = () => {
 
         <div className="flex">
           {/* Main Content */}
-          <main className={`flex-1 max-w-[1600px] w-full mx-auto px-4 pt-8 pb-24 space-y-6 ${showAIInsights ? 'pr-80' : ''}`}>
+          <main className={`flex-1 max-w-[1600px] w-full mx-auto px-4 pt-8 pb-24 space-y-6 ${showAIInsights ? 'mr-72' : ''}`}>
             {/* Deal Value Tracker */}
             <DealValueTracker userId={user?.id || ""} />
 
@@ -615,9 +615,9 @@ const CRM = () => {
             </Tabs>
           </main>
 
-          {/* AI Insights Panel */}
+          {/* AI Insights Panel - Fixed positioning adjusted */}
           {showAIInsights && (
-            <aside className="fixed right-0 top-[73px] bottom-0 w-80 border-l-2 border-gold/30 bg-gradient-to-b from-white via-[#FDFBF7] to-[#F5F0E6] overflow-hidden">
+            <aside className="fixed right-0 top-20 bottom-0 w-72 border-l-2 border-gold/30 bg-gradient-to-b from-white via-[#FDFBF7] to-[#F5F0E6] overflow-y-auto z-40">
               <AIInsightsPanel 
                 insights={aiInsights}
                 isLoading={false}

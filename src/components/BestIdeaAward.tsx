@@ -250,7 +250,7 @@ const BestIdeaAward = () => {
                       </Button>
                     </DialogTrigger>
                     
-                    <DialogContent className="bg-white border-gold/30 max-w-lg max-h-[calc(100vh-60px)] z-[100] fixed top-[30px] left-1/2 -translate-x-1/2 translate-y-0 data-[state=open]:animate-in data-[state=closed]:animate-out data-[state=closed]:fade-out-0 data-[state=open]:fade-in-0 overflow-hidden flex flex-col">
+                    <DialogContent className="bg-white border-gold/30 max-w-lg max-h-[85vh] z-[100] mt-20 overflow-hidden flex flex-col">
                       <DialogHeader>
                         <DialogTitle className="text-black text-xl font-bold flex items-center gap-2">
                           <Lightbulb className="w-5 h-5 text-gold" />

@@ -5,7 +5,7 @@ import { Badge } from "@/components/ui/badge";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { ScrollArea } from "@/components/ui/scroll-area";
 import { Input } from "@/components/ui/input";
-import { Avatar, AvatarFallback } from "@/components/ui/avatar";
+import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { 
   MessageSquare, Video, Phone, FileText, Users, 
   Send, Paperclip, ExternalLink, Hash, AtSign,
@@ -20,6 +20,7 @@ import {
   DialogTitle,
   DialogDescription,
 } from "@/components/ui/dialog";
+import { executiveTeam, salesTeam, hrTeam, softwareEngineeringTeam, type TeamMember as ConfigTeamMember } from "@/config/team-members";
 
 interface TeamMember {
   id: string;
@@ -28,6 +29,11 @@ interface TeamMember {
   status: 'online' | 'away' | 'offline';
   avatar?: string;
   department?: string;
+  email?: string;
+  languages?: string[];
+  nationality?: string;
+  joinDate?: string;
+  reportsTo?: string;
 }
 
 interface ChatMessage {
@@ -48,19 +54,27 @@ interface Channel {
   members: string[];
 }
 
-// All team members synced from Employee Hub (Western names for AI employees)
+// Convert config team members to local format with real photos
+const convertTeamMember = (member: ConfigTeamMember): TeamMember => ({
+  id: member.id,
+  name: member.name,
+  role: member.role,
+  status: member.status || 'online',
+  avatar: member.avatar,
+  department: member.department,
+  email: member.email,
+  languages: member.languages,
+  nationality: member.nationality,
+  joinDate: member.joinDate,
+  reportsTo: member.reportsTo,
+});
+
+// All team members synced from Employee Hub with real photos
 const ALL_TEAM_MEMBERS: TeamMember[] = [
-  { id: '1', name: 'Jane Abou Jaoude', role: 'Founder & CEO JBJ Global Real Estate', status: 'online', department: 'Executive' },
-  { id: '2', name: 'Jessica', role: 'HR Manager', status: 'online', department: 'HR' },
-  { id: '3', name: 'David Carter', role: 'Head of Recruitment', status: 'away', department: 'HR' },
-  { id: '4', name: 'Sarah Mitchell', role: 'HR Assistant', status: 'online', department: 'HR' },
-  { id: '5', name: 'James Harrison', role: 'Senior Broker', status: 'online', department: 'Brokers' },
-  { id: '6', name: 'Michael Johnson', role: 'Broker', status: 'away', department: 'Brokers' },
-  { id: '7', name: 'Victoria Sterling', role: 'Marketing Director', status: 'online', department: 'Marketing' },
-  { id: '8', name: 'Thomas Mitchell', role: 'IT Support', status: 'online', department: 'Admin' },
-  { id: '9', name: 'Emily Brown', role: 'Executive Assistant', status: 'online', department: 'Executive' },
-  { id: '10', name: 'Michael Anderson', role: 'AI Broker', status: 'online', department: 'AI Brokers' },
-  { id: '11', name: 'Catherine Brooks', role: 'Financial Manager', status: 'online', department: 'Finance' },
+  ...executiveTeam.slice(0, 4).map(convertTeamMember),
+  ...salesTeam.slice(0, 8).map(convertTeamMember),
+  ...hrTeam.slice(0, 3).map(convertTeamMember),
+  ...softwareEngineeringTeam.slice(0, 3).map(convertTeamMember),
 ];
 
 const DEFAULT_CHANNELS: Channel[] = [
@@ -489,6 +503,7 @@ const CRMCommunicationPanel = () => {
                     <div className="flex items-center gap-3">
                       <div className="relative">
                         <Avatar className="h-8 w-8">
+                          <AvatarImage src={member.avatar} alt={member.name} />
                           <AvatarFallback className="bg-gold/20 text-gold text-xs">
                             {member.name.split(' ').map(n => n[0]).join('')}
                           </AvatarFallback>
