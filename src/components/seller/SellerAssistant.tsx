@@ -4,10 +4,11 @@ import { Input } from "@/components/ui/input";
 import { ScrollArea } from "@/components/ui/scroll-area";
 import { 
   Sparkles, Send, Loader2, X, MessageCircle, 
-  Calculator, FileText, HelpCircle, Lightbulb
+  Calculator, FileText, HelpCircle, Lightbulb, Mic, MicOff
 } from "lucide-react";
 import { supabase } from "@/integrations/supabase/client";
 import { CONTACT_INFO } from "@/constants/stats";
+import { toast } from "sonner";
 import { motion, AnimatePresence } from "framer-motion";
 
 interface Message {
@@ -68,6 +69,7 @@ const SellerAssistant = ({ formData, currentStep, onClose }: SellerAssistantProp
   ]);
   const [input, setInput] = useState("");
   const [isLoading, setIsLoading] = useState(false);
+  const [isListening, setIsListening] = useState(false);
   const scrollRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
@@ -153,6 +155,41 @@ Help the user complete their listing form and answer questions about the selling
     } finally {
       setIsLoading(false);
     }
+  };
+
+  // Voice input handler using Web Speech API
+  const toggleVoiceInput = () => {
+    if (!('webkitSpeechRecognition' in window) && !('SpeechRecognition' in window)) {
+      toast.error('Voice input is not supported in your browser');
+      return;
+    }
+
+    if (isListening) {
+      setIsListening(false);
+      return;
+    }
+
+    const SpeechRecognition = (window as any).SpeechRecognition || (window as any).webkitSpeechRecognition;
+    const recognition = new SpeechRecognition();
+    
+    recognition.continuous = false;
+    recognition.interimResults = false;
+    recognition.lang = 'en-US';
+
+    recognition.onstart = () => setIsListening(true);
+    recognition.onend = () => setIsListening(false);
+    recognition.onerror = () => {
+      setIsListening(false);
+      toast.error('Voice recognition failed. Please try again.');
+    };
+    
+    recognition.onresult = (event: any) => {
+      const transcript = event.results[0][0].transcript;
+      setInput(transcript);
+      setIsListening(false);
+    };
+
+    recognition.start();
   };
 
   const quickActions = [
@@ -263,13 +300,27 @@ Help the user complete their listing form and answer questions about the selling
           }}
           className="flex gap-2"
         >
-          <Input
-            value={input}
-            onChange={(e) => setInput(e.target.value)}
-            placeholder="Ask me anything about selling..."
-            className="bg-zinc-50 border-zinc-300 text-black placeholder:text-zinc-400"
-            disabled={isLoading}
-          />
+          <div className="flex-1 relative">
+            <Input
+              value={input}
+              onChange={(e) => setInput(e.target.value)}
+              placeholder={isListening ? "Listening..." : "Ask me anything about selling..."}
+              className="bg-zinc-50 border-zinc-300 text-black placeholder:text-zinc-400 pr-10"
+              disabled={isLoading || isListening}
+            />
+            <Button
+              type="button"
+              variant="ghost"
+              size="icon"
+              onClick={toggleVoiceInput}
+              className={`absolute right-1 top-1/2 -translate-y-1/2 h-8 w-8 ${
+                isListening ? 'bg-red-500/10 text-red-500 animate-pulse' : 'text-zinc-400 hover:text-gold'
+              }`}
+              disabled={isLoading}
+            >
+              {isListening ? <MicOff className="w-4 h-4" /> : <Mic className="w-4 h-4" />}
+            </Button>
+          </div>
           <Button
             type="submit"
             disabled={!input.trim() || isLoading}

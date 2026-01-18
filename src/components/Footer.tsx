@@ -381,7 +381,7 @@ const Footer = () => {
             
             {/* English Legal Line */}
             <p className="text-zinc-700 text-xs leading-relaxed mb-4 font-medium">
-              Licensed Real Estate Brokerage for Buy, Sell & Rent in Dubai (Mainland). Operated by JBJ Global Real Estate L.L.C S.O.C. Owned & Led by Jane Abou Jaoude Founder & CEO JBJ Global Real Estate.
+              Licensed Real Estate Brokerage for Buy, Sell & Rent in Dubai (Mainland). Operated by <Link to="/about" className="text-gold hover:underline">JBJ Global Real Estate</Link> L.L.C S.O.C. Owned & Led by Jane Abou Jaoude Founder & CEO <Link to="/about" className="text-gold hover:underline">JBJ Global Real Estate</Link>.
             </p>
             
             {/* Arabic Disclaimer */}
@@ -396,7 +396,7 @@ const Footer = () => {
             
             <p className="text-zinc-500 text-xs leading-relaxed mb-4">
               All content, design, and technology on this platform are the intellectual property of 
-              Jane Abou Jaoude Founder & CEO JBJ Global Real Estate. Unauthorized reproduction is strictly prohibited.
+              Jane Abou Jaoude Founder & CEO <Link to="/about" className="text-gold hover:underline">JBJ Global Real Estate</Link>. Unauthorized reproduction is strictly prohibited.
             </p>
             
             <div className="flex flex-wrap items-center justify-center gap-2 text-xs text-zinc-600">
@@ -418,14 +418,14 @@ const Footer = () => {
         <div className="flex flex-col items-center gap-4 text-sm text-zinc-500">
           <div className="text-center space-y-3">
             <p className="font-medium text-white">
-              © {currentYear} JBJ Global Real Estate. All Rights Reserved.
+              © {currentYear} <Link to="/about" className="hover:text-gold transition-colors">JBJ Global Real Estate</Link>. All Rights Reserved.
             </p>
             <div className="space-y-1">
               <p className="text-gold font-medium text-sm">
                 Developed, Created & Implemented by The Founder & CEO, Jane Abou Jaoude
               </p>
               <p className="text-zinc-500 text-xs">
-                Designed exclusively for JBJ Global Real Estate
+                Designed exclusively for <Link to="/about" className="text-gold hover:underline">JBJ Global Real Estate</Link>
               </p>
               <Link to="/about" className="inline-block text-white hover:text-gold transition-colors text-sm font-medium mt-2">
                 First Global Real Estate Platform of Its Kind →

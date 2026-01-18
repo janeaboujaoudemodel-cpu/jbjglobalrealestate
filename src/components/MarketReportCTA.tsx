@@ -96,13 +96,13 @@ const MarketReportCTA = () => {
               </button>
             </Link>
             
-            {/* Powered by - Creative Dubai branding */}
+            {/* Powered by - Creative Dubai branding - JBJ Global Real Estate links to About */}
             <div className="text-center pt-4 border-t border-zinc-200">
               <p className="text-zinc-600 text-sm mb-1">
                 Created by <span className="text-gold font-semibold">The Founder & CEO</span>, <span className="text-zinc-900 font-semibold">Jane Abou Jaoude</span>
               </p>
               <p className="text-zinc-500 text-xs mb-2">
-                Exclusive for <span className="text-gold font-semibold">JBJ Global Real Estate</span>
+                Exclusive for <Link to="/about" className="text-gold font-semibold hover:underline">JBJ Global Real Estate</Link>
               </p>
               <p className="text-zinc-400 text-[10px] uppercase tracking-widest">
                 Real Estate Brokerage • Dubai, UAE

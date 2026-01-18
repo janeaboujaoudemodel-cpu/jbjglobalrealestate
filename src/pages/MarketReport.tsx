@@ -2148,13 +2148,13 @@ const MarketReport = () => {
               </ul>
             </div>
 
-            {/* Brand Box - White/Champagne Theme - REMOVED DUPLICATE FOUNDER CARD */}
+            {/* Brand Box - White/Champagne Theme - JBJ Global Real Estate links to About */}
             <div className="bg-gradient-to-br from-white via-[#FDFBF7] to-[#F5F0E6] border border-gold/30 rounded-2xl p-6 text-center shadow-lg">
               <p className="text-zinc-600 text-xs mb-1">
                 Created by <span className="text-black font-semibold">Jane Abou Jaoude</span>
               </p>
               <p className="text-zinc-700 text-sm">
-                Exclusive for <span className="text-gold font-semibold">JBJ Global Real Estate</span>
+                Exclusive for <a href="/about" className="text-gold font-semibold hover:underline">JBJ Global Real Estate</a>
               </p>
               <p className="text-zinc-500 text-[10px] mt-2 uppercase tracking-widest">
                 Real Estate Brokerage • Dubai, UAE
