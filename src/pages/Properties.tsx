@@ -352,8 +352,8 @@ const Properties = () => {
         </div>
       </section>
 
-      {/* Main Search Bar - Fixed under header */}
-      <section className="sticky top-16 z-40 bg-background backdrop-blur-md border-b border-border py-4 shadow-md">
+      {/* Main Search Bar - Fixed under header (sticky on scroll) */}
+      <section className="sticky top-16 lg:top-[72px] z-40 bg-background backdrop-blur-md border-b border-border py-4 shadow-md">
         <div className="container mx-auto px-4">
           {/* Transaction Type Tabs - Buy / Rent */}
           <div className="flex items-center gap-2 mb-4 flex-wrap">
@@ -892,7 +892,11 @@ const Properties = () => {
                   </p>
                   <div className="flex flex-col sm:flex-row items-center justify-center gap-3">
                     <Button asChild variant="primary" className="h-12 px-8">
-                      <a href={getWhatsAppUrl()} target="_blank" rel="noopener noreferrer">
+                      <a 
+                        href={getWhatsAppUrl(`Hi, I'm interested in properties from ${developers.find(d => d.id === appliedFilters.developerId)?.name}. Please let me know when listings become available.`)}
+                        target="_blank" 
+                        rel="noopener noreferrer"
+                      >
                         <MessageCircle className="w-4 h-4 mr-2" />
                         Register Interest via WhatsApp
                       </a>

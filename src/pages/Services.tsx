@@ -113,42 +113,78 @@ const Services = () => {
     <>
       <SEOHead {...pagesSEO.services} />
       <div className="min-h-screen bg-black">
-      {/* Hero Section */}
-      <section className="relative h-[70vh] flex items-center justify-center overflow-hidden">
+      {/* Premium Hero Section - Cinematic Video */}
+      <section className="relative h-[85vh] flex items-center justify-center overflow-hidden">
         <div className="absolute inset-0">
-          <img 
-            src={luxuryVillaHero} 
-            alt="Luxury Services" 
+          {/* Video Background */}
+          <video
+            autoPlay
+            muted
+            loop
+            playsInline
             className="w-full h-full object-cover"
-          />
-          <div className="absolute inset-0 bg-gradient-to-b from-black/70 via-black/50 to-black" />
+            poster={founderJetInterior}
+          >
+            <source src="https://videos.pexels.com/video-files/3571264/3571264-uhd_2560_1440_30fps.mp4" type="video/mp4" />
+          </video>
+          <div className="absolute inset-0 bg-gradient-to-b from-black/80 via-black/60 to-black" />
         </div>
         
+        {/* Floating gold accent orbs */}
+        <div className="absolute top-1/4 left-10 w-64 h-64 bg-gold/5 rounded-full blur-[100px] pointer-events-none" />
+        <div className="absolute bottom-1/4 right-10 w-96 h-96 bg-gold/10 rounded-full blur-[120px] pointer-events-none" />
+        
         <motion.div 
-          className="relative z-10 text-center px-4 max-w-4xl mx-auto"
+          className="relative z-10 text-center px-4 max-w-5xl mx-auto"
           initial="hidden"
           animate="visible"
           variants={staggerContainer}
         >
           <motion.span 
-            className="inline-block text-gold text-xs uppercase tracking-[0.4em] mb-6"
+            className="inline-block text-gold text-xs md:text-sm uppercase tracking-[0.5em] mb-8 border border-gold/30 px-6 py-2 rounded-full backdrop-blur-sm"
             variants={fadeInUp}
           >
-            Real Estate Brokerage
+            Institutional Real Estate Brokerage
           </motion.span>
           <motion.h1 
-            className="text-white text-4xl md:text-6xl lg:text-7xl font-bold mb-6"
+            className="text-white text-5xl md:text-7xl lg:text-8xl font-bold mb-8 tracking-[-0.02em]"
             style={{ fontFamily: "Poppins, sans-serif" }}
             variants={fadeInUp}
           >
-            Our Services
+            Premium Services
           </motion.h1>
           <motion.p 
-            className="text-zinc-400 text-lg md:text-xl max-w-2xl mx-auto"
+            className="text-zinc-300 text-lg md:text-2xl max-w-3xl mx-auto mb-10 leading-relaxed"
             variants={fadeInUp}
           >
-            Expert brokerage services for property sales, rentals, and holiday homes — plus trusted partner introductions
+            Expert brokerage for property sales, rentals, and holiday homes — 
+            <span className="text-gold"> plus trusted partner introductions</span>
           </motion.p>
+          
+          <motion.div variants={fadeInUp} className="flex flex-col sm:flex-row gap-4 justify-center">
+            <Link to="/properties">
+              <Button variant="primary" size="lg" className="text-base px-8">
+                Browse Properties
+                <ArrowUpRight className="w-5 h-5 ml-2" />
+              </Button>
+            </Link>
+            <Link to="/contact">
+              <Button variant="secondary" size="lg" className="text-base px-8">
+                Speak With Us
+              </Button>
+            </Link>
+          </motion.div>
+        </motion.div>
+        
+        {/* Scroll indicator */}
+        <motion.div 
+          className="absolute bottom-8 left-1/2 -translate-x-1/2 flex flex-col items-center gap-2"
+          initial={{ opacity: 0, y: -20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ delay: 1, duration: 0.6 }}
+        >
+          <span className="text-gold/60 text-xs tracking-widest uppercase">Explore</span>
+          <div className="w-[1px] h-12 bg-gradient-to-b from-gold/60 to-transparent" />
         </motion.div>
       </section>
 
