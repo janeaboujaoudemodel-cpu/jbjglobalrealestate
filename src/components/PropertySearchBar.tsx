@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useMemo, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { Search, MapPin, Building2, DollarSign, Filter } from "lucide-react";
 import { Button } from "@/components/ui/button";
@@ -10,7 +10,7 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
-import { useDevelopers } from "@/hooks/useProjects";
+import { useDevelopers, useProjects } from "@/hooks/useProjects";
 
 interface PropertySearchBarProps {
   className?: string;
@@ -20,7 +20,24 @@ interface PropertySearchBarProps {
 const PropertySearchBar = ({ className = "", compact = false }: PropertySearchBarProps) => {
   const navigate = useNavigate();
   const { data: developers } = useDevelopers();
-  
+  const { data: projects } = useProjects();
+
+  const availableDeveloperIds = useMemo(() => {
+    const ids = new Set<string>();
+    (projects ?? []).forEach((p) => {
+      const developerId = p.developer?.id ?? (p as any).developer_id;
+      if (developerId) ids.add(developerId);
+    });
+    return ids;
+  }, [projects]);
+
+  const availableDevelopers = useMemo(() => {
+    if (!developers) return [];
+    // If we don't have projects yet, or none are published, fall back to full list
+    if (!projects || availableDeveloperIds.size === 0) return developers;
+    return developers.filter((d) => availableDeveloperIds.has(d.id));
+  }, [developers, projects, availableDeveloperIds]);
+
   const [keyword, setKeyword] = useState("");
   const [location, setLocation] = useState<string | null>(null);
   const [developerId, setDeveloperId] = useState<string | null>(null);
@@ -40,7 +57,7 @@ const PropertySearchBar = ({ className = "", compact = false }: PropertySearchBa
     }
     params.append("sizeUnit", sizeUnit);
     params.append("currency", currency);
-    
+
     navigate(`/properties?${params.toString()}`);
   };
 
@@ -57,11 +74,7 @@ const PropertySearchBar = ({ className = "", compact = false }: PropertySearchBa
             className="pl-9 h-10 bg-zinc-900/80 border-zinc-700/50 text-white placeholder:text-zinc-500 focus:border-gold rounded-lg"
           />
         </div>
-        <Button 
-          onClick={handleSearch}
-          variant="primary"
-          className="h-10 px-4 rounded-lg"
-        >
+        <Button onClick={handleSearch} variant="primary" className="h-10 px-4 rounded-lg">
           Search
         </Button>
       </div>
@@ -69,7 +82,9 @@ const PropertySearchBar = ({ className = "", compact = false }: PropertySearchBa
   }
 
   return (
-    <div className={`bg-zinc-950/90 backdrop-blur-md border border-zinc-800/50 rounded-2xl p-4 md:p-6 ${className}`}>
+    <div
+      className={`bg-zinc-950/90 backdrop-blur-md border border-zinc-800/50 rounded-2xl p-4 md:p-6 ${className}`}
+    >
       <div className="flex flex-wrap items-center gap-3">
         {/* Keyword Search */}
         <div className="relative flex-1 min-w-[180px]">
@@ -84,35 +99,41 @@ const PropertySearchBar = ({ className = "", compact = false }: PropertySearchBa
         </div>
 
         {/* Location */}
-        <Select
-          value={location || "all"}
-          onValueChange={(value) => setLocation(value === "all" ? null : value)}
-        >
+        <Select value={location || "all"} onValueChange={(value) => setLocation(value === "all" ? null : value)}>
           <SelectTrigger className="w-[140px] h-12 bg-zinc-900/80 border-zinc-700/50 text-white rounded-lg">
             <MapPin className="w-4 h-4 mr-2 text-zinc-500" />
             <SelectValue placeholder="Location" />
           </SelectTrigger>
           <SelectContent className="bg-zinc-900 border-zinc-700">
-            <SelectItem value="all" className="text-white hover:bg-zinc-800">All Locations</SelectItem>
-            <SelectItem value="Dubai" className="text-white hover:bg-zinc-800">Dubai</SelectItem>
-            <SelectItem value="Abu Dhabi" className="text-white hover:bg-zinc-800">Abu Dhabi</SelectItem>
-            <SelectItem value="Sharjah" className="text-white hover:bg-zinc-800">Sharjah</SelectItem>
-            <SelectItem value="Ras Al Khaimah" className="text-white hover:bg-zinc-800">Ras Al Khaimah</SelectItem>
+            <SelectItem value="all" className="text-white hover:bg-zinc-800">
+              All Locations
+            </SelectItem>
+            <SelectItem value="Dubai" className="text-white hover:bg-zinc-800">
+              Dubai
+            </SelectItem>
+            <SelectItem value="Abu Dhabi" className="text-white hover:bg-zinc-800">
+              Abu Dhabi
+            </SelectItem>
+            <SelectItem value="Sharjah" className="text-white hover:bg-zinc-800">
+              Sharjah
+            </SelectItem>
+            <SelectItem value="Ras Al Khaimah" className="text-white hover:bg-zinc-800">
+              Ras Al Khaimah
+            </SelectItem>
           </SelectContent>
         </Select>
 
-        {/* Developer */}
-        <Select
-          value={developerId || "all"}
-          onValueChange={(value) => setDeveloperId(value === "all" ? null : value)}
-        >
+        {/* Developer (only show developers that have published listings) */}
+        <Select value={developerId || "all"} onValueChange={(value) => setDeveloperId(value === "all" ? null : value)}>
           <SelectTrigger className="w-[140px] h-12 bg-zinc-900/80 border-zinc-700/50 text-white rounded-lg">
             <Building2 className="w-4 h-4 mr-2 text-zinc-500" />
             <SelectValue placeholder="Developer" />
           </SelectTrigger>
           <SelectContent className="bg-zinc-900 border-zinc-700 max-h-60">
-            <SelectItem value="all" className="text-white hover:bg-zinc-800">All Developers</SelectItem>
-            {developers?.slice(0, 10).map((dev) => (
+            <SelectItem value="all" className="text-white hover:bg-zinc-800">
+              All Developers
+            </SelectItem>
+            {availableDevelopers.map((dev) => (
               <SelectItem key={dev.id} value={dev.id} className="text-white hover:bg-zinc-800">
                 {dev.name}
               </SelectItem>
@@ -121,58 +142,75 @@ const PropertySearchBar = ({ className = "", compact = false }: PropertySearchBa
         </Select>
 
         {/* Price Range */}
-        <Select
-          value={priceRange || "all"}
-          onValueChange={(value) => setPriceRange(value === "all" ? null : value)}
-        >
+        <Select value={priceRange || "all"} onValueChange={(value) => setPriceRange(value === "all" ? null : value)}>
           <SelectTrigger className="w-[140px] h-12 bg-zinc-900/80 border-zinc-700/50 text-white rounded-lg">
             <DollarSign className="w-4 h-4 mr-2 text-zinc-500" />
             <SelectValue placeholder="Price Range" />
           </SelectTrigger>
           <SelectContent className="bg-zinc-900 border-zinc-700">
-            <SelectItem value="all" className="text-white hover:bg-zinc-800">Any Price</SelectItem>
-            <SelectItem value="0-1000000" className="text-white hover:bg-zinc-800">Under 1M</SelectItem>
-            <SelectItem value="1000000-3000000" className="text-white hover:bg-zinc-800">1M - 3M</SelectItem>
-            <SelectItem value="3000000-5000000" className="text-white hover:bg-zinc-800">3M - 5M</SelectItem>
-            <SelectItem value="5000000-10000000" className="text-white hover:bg-zinc-800">5M - 10M</SelectItem>
-            <SelectItem value="10000000-500000000" className="text-white hover:bg-zinc-800">10M+</SelectItem>
+            <SelectItem value="all" className="text-white hover:bg-zinc-800">
+              Any Price
+            </SelectItem>
+            <SelectItem value="0-1000000" className="text-white hover:bg-zinc-800">
+              Under 1M
+            </SelectItem>
+            <SelectItem value="1000000-3000000" className="text-white hover:bg-zinc-800">
+              1M - 3M
+            </SelectItem>
+            <SelectItem value="3000000-5000000" className="text-white hover:bg-zinc-800">
+              3M - 5M
+            </SelectItem>
+            <SelectItem value="5000000-10000000" className="text-white hover:bg-zinc-800">
+              5M - 10M
+            </SelectItem>
+            <SelectItem value="10000000-500000000" className="text-white hover:bg-zinc-800">
+              10M+
+            </SelectItem>
           </SelectContent>
         </Select>
 
         {/* Size Unit */}
-        <Select
-          value={sizeUnit}
-          onValueChange={(value) => setSizeUnit(value as "sqft" | "sqm")}
-        >
+        <Select value={sizeUnit} onValueChange={(value) => setSizeUnit(value as "sqft" | "sqm")}>
           <SelectTrigger className="w-[90px] h-12 bg-zinc-900/80 border-zinc-700/50 text-white rounded-lg">
             <SelectValue />
           </SelectTrigger>
           <SelectContent className="bg-zinc-900 border-zinc-700">
-            <SelectItem value="sqft" className="text-white hover:bg-zinc-800">sq ft</SelectItem>
-            <SelectItem value="sqm" className="text-white hover:bg-zinc-800">sq m</SelectItem>
+            <SelectItem value="sqft" className="text-white hover:bg-zinc-800">
+              sq ft
+            </SelectItem>
+            <SelectItem value="sqm" className="text-white hover:bg-zinc-800">
+              sq m
+            </SelectItem>
           </SelectContent>
         </Select>
 
         {/* Currency */}
-        <Select
-          value={currency}
-          onValueChange={(value) => setCurrency(value)}
-        >
+        <Select value={currency} onValueChange={(value) => setCurrency(value)}>
           <SelectTrigger className="w-[90px] h-12 bg-zinc-900/80 border-zinc-700/50 text-white rounded-lg">
             <SelectValue />
           </SelectTrigger>
           <SelectContent className="bg-zinc-900 border-zinc-700">
-            <SelectItem value="AED" className="text-white hover:bg-zinc-800">AED</SelectItem>
-            <SelectItem value="USD" className="text-white hover:bg-zinc-800">USD</SelectItem>
-            <SelectItem value="EUR" className="text-white hover:bg-zinc-800">EUR</SelectItem>
-            <SelectItem value="GBP" className="text-white hover:bg-zinc-800">GBP</SelectItem>
-            <SelectItem value="INR" className="text-white hover:bg-zinc-800">INR</SelectItem>
+            <SelectItem value="AED" className="text-white hover:bg-zinc-800">
+              AED
+            </SelectItem>
+            <SelectItem value="USD" className="text-white hover:bg-zinc-800">
+              USD
+            </SelectItem>
+            <SelectItem value="EUR" className="text-white hover:bg-zinc-800">
+              EUR
+            </SelectItem>
+            <SelectItem value="GBP" className="text-white hover:bg-zinc-800">
+              GBP
+            </SelectItem>
+            <SelectItem value="INR" className="text-white hover:bg-zinc-800">
+              INR
+            </SelectItem>
           </SelectContent>
         </Select>
 
         {/* Advanced Filters Link */}
-        <Button 
-          variant="outline" 
+        <Button
+          variant="outline"
           onClick={() => navigate("/properties")}
           className="h-12 px-4 bg-zinc-900/80 border-zinc-700/50 text-white hover:bg-zinc-800 hover:text-white rounded-lg"
         >
@@ -180,11 +218,7 @@ const PropertySearchBar = ({ className = "", compact = false }: PropertySearchBa
         </Button>
 
         {/* Search Button */}
-        <Button 
-          onClick={handleSearch}
-          variant="primary"
-          className="h-12 px-8 rounded-lg"
-        >
+        <Button onClick={handleSearch} variant="primary" className="h-12 px-8 rounded-lg">
           SEARCH
         </Button>
       </div>
@@ -193,3 +227,4 @@ const PropertySearchBar = ({ className = "", compact = false }: PropertySearchBa
 };
 
 export default PropertySearchBar;
+

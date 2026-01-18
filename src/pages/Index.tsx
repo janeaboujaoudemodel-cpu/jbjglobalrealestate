@@ -306,8 +306,8 @@ const Index = () => {
               </div>
             </Link>
             <Link to="/market-report" className="group">
-              <div className="bg-white border border-zinc-200 rounded-xl p-5 text-center hover:border-gold hover:shadow-xl hover:shadow-gold/20 transition-all duration-300 relative overflow-hidden">
-                <div className="absolute inset-0 bg-gradient-to-br from-gold/5 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
+              <div className="bg-gradient-to-br from-[#FDFBF7] via-[#F5F0E6] to-[#EDE4D3] border border-gold/40 rounded-xl p-5 text-center hover:border-gold hover:shadow-[0_0_25px_rgba(200,167,102,0.4)] transition-all duration-300 relative overflow-hidden shadow-[0_0_15px_rgba(200,167,102,0.2)]">
+                <div className="absolute inset-0 bg-gradient-to-br from-gold/10 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
                 <div className="relative z-10">
                   <div className="w-10 h-10 bg-black rounded-lg flex items-center justify-center mx-auto mb-3 group-hover:bg-zinc-900 transition-colors">
                     <FileText className="w-5 h-5 text-gold" />
@@ -318,8 +318,8 @@ const Index = () => {
               </div>
             </Link>
             <Link to="/ai-hub" className="group">
-              <div className="bg-white border border-zinc-200 rounded-xl p-5 text-center hover:border-gold hover:shadow-xl hover:shadow-gold/20 transition-all duration-300 relative overflow-hidden">
-                <div className="absolute inset-0 bg-gradient-to-br from-gold/5 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
+              <div className="bg-gradient-to-br from-[#FDFBF7] via-[#F5F0E6] to-[#EDE4D3] border border-gold/40 rounded-xl p-5 text-center hover:border-gold hover:shadow-[0_0_25px_rgba(200,167,102,0.4)] transition-all duration-300 relative overflow-hidden shadow-[0_0_15px_rgba(200,167,102,0.2)]">
+                <div className="absolute inset-0 bg-gradient-to-br from-gold/10 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
                 <div className="relative z-10">
                   <div className="w-10 h-10 bg-black rounded-lg flex items-center justify-center mx-auto mb-3 group-hover:bg-zinc-900 transition-colors">
                     <Sparkles className="w-5 h-5 text-gold" />
@@ -353,7 +353,7 @@ const Index = () => {
                     <Calculator className="w-5 h-5 text-gold" />
                   </div>
                   <h4 className="text-black text-sm font-semibold mb-1">Mortgage Partners</h4>
-                  <p className="text-zinc-600 text-xs">Financing options</p>
+                  <p className="text-zinc-600 text-xs">Mortgage Calculator · Through AI & Partners</p>
                 </div>
               </div>
             </Link>
@@ -365,11 +365,12 @@ const Index = () => {
                     <Wrench className="w-5 h-5 text-gold" />
                   </div>
                   <h4 className="text-black text-sm font-semibold mb-1">Design & Build</h4>
-                  <p className="text-zinc-600 text-xs">Interior solutions</p>
+                  <p className="text-zinc-600 text-xs">Through AI & Partners</p>
                 </div>
               </div>
             </Link>
           </div>
+
 
           {/* Resources Grid - Champagne Glowing Cards */}
           <div className="grid md:grid-cols-2 gap-6 max-w-4xl mx-auto">
