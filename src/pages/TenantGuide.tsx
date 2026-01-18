@@ -185,7 +185,7 @@ const TenantGuide = () => {
       </div>
 
       {/* Tenant Responsibilities */}
-      <section id="responsibilities" className="py-16 md:py-24 bg-zinc-900/30 scroll-mt-20">
+      <section id="responsibilities" className="py-16 md:py-24 bg-black scroll-mt-20">
         <div className="container mx-auto px-4">
           <div className="max-w-5xl mx-auto">
             <div className="text-center mb-12">
@@ -200,21 +200,24 @@ const TenantGuide = () => {
             
             <div className="grid md:grid-cols-2 gap-6">
               {tenantResponsibilities.map((resp, index) => (
-                <div key={index} className="bg-zinc-900/60 rounded-xl p-6 border border-zinc-800 hover:border-gold/30 transition-colors">
+                <div
+                  key={index}
+                  className="bg-white rounded-xl p-6 border border-zinc-200 hover:border-gold/30 transition-colors"
+                >
                   <div className="flex items-center gap-4 mb-4">
-                    <div className="w-12 h-12 bg-gold/10 border border-gold/30 rounded-xl flex items-center justify-center">
+                    <div className="w-12 h-12 bg-black border border-gold/30 rounded-xl flex items-center justify-center">
                       <resp.icon className="w-6 h-6 text-gold" />
                     </div>
                     <div>
-                      <h3 className="font-medium text-white">{resp.title}</h3>
-                      <p className="text-sm text-zinc-400">{resp.description}</p>
+                      <h3 className="font-medium text-black">{resp.title}</h3>
+                      <p className="text-sm text-zinc-600">{resp.description}</p>
                     </div>
                   </div>
                   <ul className="space-y-2">
                     {resp.details.map((detail, idx) => (
                       <li key={idx} className="flex items-start gap-3">
                         <CheckCircle2 className="w-4 h-4 text-gold flex-shrink-0 mt-0.5" />
-                        <span className="text-zinc-300 text-sm">{detail}</span>
+                        <span className="text-zinc-700 text-sm">{detail}</span>
                       </li>
                     ))}
                   </ul>
@@ -276,7 +279,7 @@ const TenantGuide = () => {
       </section>
 
       {/* Deposits & Renewals */}
-      <section id="deposits-renewals" className="py-16 md:py-24 bg-zinc-900/50 scroll-mt-20">
+      <section id="deposits-renewals" className="py-16 md:py-24 bg-black scroll-mt-20">
         <div className="container mx-auto px-4">
           <div className="max-w-5xl mx-auto">
             <div className="text-center mb-12">
@@ -294,12 +297,12 @@ const TenantGuide = () => {
                 <Shield className="w-5 h-5 text-gold" />
                 Security Deposit
               </h3>
-              <div className="bg-zinc-800/50 border border-zinc-700 rounded-xl p-6">
+              <div className="bg-white border border-zinc-200 rounded-xl p-6">
                 <ul className="grid md:grid-cols-2 gap-4">
                   {securityDeposit.map((point, index) => (
                     <li key={index} className="flex items-start gap-3">
                       <CheckCircle2 className="w-4 h-4 text-gold flex-shrink-0 mt-1" />
-                      <span className="text-zinc-300 text-sm">{point}</span>
+                      <span className="text-zinc-700 text-sm">{point}</span>
                     </li>
                   ))}
                 </ul>
@@ -314,17 +317,17 @@ const TenantGuide = () => {
               </h3>
               <div className="grid md:grid-cols-2 gap-4">
                 {renewalInfo.map((info, index) => (
-                  <div 
+                  <div
                     key={index}
-                    className="bg-zinc-800/50 border border-zinc-700 rounded-xl p-6 hover:border-gold/30 transition-colors"
+                    className="bg-white border border-zinc-200 rounded-xl p-6 hover:border-gold/30 transition-colors"
                   >
                     <div className="flex items-start gap-4">
-                      <div className="w-10 h-10 bg-gold/10 border border-gold/30 rounded-lg flex items-center justify-center flex-shrink-0">
+                      <div className="w-10 h-10 bg-black border border-gold/30 rounded-lg flex items-center justify-center flex-shrink-0">
                         <info.icon className="w-5 h-5 text-gold" />
                       </div>
                       <div>
-                        <h4 className="font-medium text-white mb-1">{info.title}</h4>
-                        <p className="text-sm text-zinc-400">{info.description}</p>
+                        <h4 className="font-medium text-black mb-1">{info.title}</h4>
+                        <p className="text-sm text-zinc-600">{info.description}</p>
                       </div>
                     </div>
                   </div>
@@ -389,23 +392,23 @@ const TenantGuide = () => {
       </section>
 
       {/* Related Guides */}
-      <section className="py-16 md:py-20 bg-black">
+      <section className="py-16 md:py-20 bg-gradient-to-br from-white via-[#FDFBF7] to-[#F5F0E6]">
         <div className="container mx-auto px-4">
           <div className="max-w-4xl mx-auto text-center mb-10">
-            <h2 className="text-2xl md:text-3xl font-light text-white mb-4">Related Guides</h2>
-            <p className="text-zinc-400">Explore more resources for tenants and landlords</p>
+            <h2 className="text-2xl md:text-3xl font-light text-black mb-4">Related Guides</h2>
+            <p className="text-zinc-600">Explore more resources for tenants and landlords</p>
           </div>
-          <div className="flex justify-center gap-4">
-            <Button asChild variant="outline" className="border-gold/50 text-gold hover:bg-gold/10">
+          <div className="flex flex-wrap justify-center gap-4">
+            <Button asChild variant="primary">
               <Link to="/rent-guide">
                 Rent Guide
-                <ArrowRight className="w-4 h-4 ml-2" />
+                <ArrowUpRight className="w-4 h-4 ml-2" />
               </Link>
             </Button>
-            <Button asChild variant="outline" className="border-gold/50 text-gold hover:bg-gold/10">
+            <Button asChild variant="secondary">
               <Link to="/landlord-guide">
                 Landlord Guide
-                <ArrowRight className="w-4 h-4 ml-2" />
+                <ArrowUpRight className="w-4 h-4 ml-2" />
               </Link>
             </Button>
           </div>

@@ -251,7 +251,7 @@ const LandlordGuide = () => {
       </div>
 
       {/* Listing Process */}
-      <section id="listing-process" className="py-16 md:py-24 bg-zinc-900/30 scroll-mt-20">
+      <section id="listing-process" className="py-16 md:py-24 bg-black scroll-mt-20">
         <div className="container mx-auto px-4">
           <div className="max-w-5xl mx-auto">
             <div className="text-center mb-16">
@@ -265,9 +265,9 @@ const LandlordGuide = () => {
 
             <div className="space-y-6">
               {listingProcess.map((step) => (
-                <div 
+                <div
                   key={step.number}
-                  className="bg-zinc-900/60 rounded-2xl p-6 md:p-8 border border-zinc-800 hover:border-gold/30 transition-all duration-300"
+                  className="bg-white rounded-2xl p-6 md:p-8 border border-zinc-200 hover:border-gold/30 hover:shadow-lg transition-all duration-300"
                 >
                   <div className="flex flex-col md:flex-row md:items-start gap-6">
                     <div className="flex-shrink-0">
@@ -278,16 +278,16 @@ const LandlordGuide = () => {
                     <div className="flex-1">
                       <div className="flex items-center gap-3 mb-3">
                         <step.icon className="w-5 h-5 text-gold" />
-                        <h3 className="text-xl md:text-2xl font-medium text-white">
+                        <h3 className="text-xl md:text-2xl font-medium text-black">
                           {step.title}
                         </h3>
                       </div>
-                      <p className="text-zinc-400 mb-4">{step.description}</p>
+                      <p className="text-zinc-600 mb-4">{step.description}</p>
                       <ul className="grid md:grid-cols-2 gap-3">
                         {step.items.map((item, itemIndex) => (
                           <li key={itemIndex} className="flex items-start gap-3">
                             <CheckCircle2 className="w-4 h-4 text-gold flex-shrink-0 mt-1" />
-                            <span className="text-zinc-300 text-sm">{item}</span>
+                            <span className="text-zinc-700 text-sm">{item}</span>
                           </li>
                         ))}
                       </ul>
@@ -336,7 +336,7 @@ const LandlordGuide = () => {
       </section>
 
       {/* Tenant Screening */}
-      <section id="tenant-screening" className="py-16 md:py-24 bg-zinc-900/50 scroll-mt-20">
+      <section id="tenant-screening" className="py-16 md:py-24 bg-black scroll-mt-20">
         <div className="container mx-auto px-4">
           <div className="max-w-5xl mx-auto">
             <div className="text-center mb-12">
@@ -350,19 +350,19 @@ const LandlordGuide = () => {
 
             <div className="grid md:grid-cols-3 gap-6">
               {tenantScreening.map((item, index) => (
-                <div 
+                <div
                   key={index}
-                  className="bg-zinc-800/50 border border-zinc-700 rounded-xl p-6 hover:border-gold/30 transition-colors"
+                  className="bg-white border border-zinc-200 rounded-xl p-6 hover:border-gold/30 transition-colors"
                 >
-                  <div className="w-12 h-12 bg-gold/10 border border-gold/30 rounded-xl flex items-center justify-center mb-4">
+                  <div className="w-12 h-12 bg-black border border-gold/30 rounded-xl flex items-center justify-center mb-4">
                     <item.icon className="w-6 h-6 text-gold" />
                   </div>
-                  <h3 className="text-lg font-medium text-white mb-4">{item.title}</h3>
+                  <h3 className="text-lg font-medium text-black mb-4">{item.title}</h3>
                   <ul className="space-y-2">
                     {item.points.map((point, idx) => (
                       <li key={idx} className="flex items-start gap-3">
                         <CheckCircle2 className="w-4 h-4 text-gold flex-shrink-0 mt-0.5" />
-                        <span className="text-zinc-300 text-sm">{point}</span>
+                        <span className="text-zinc-700 text-sm">{point}</span>
                       </li>
                     ))}
                   </ul>
@@ -436,23 +436,23 @@ const LandlordGuide = () => {
       </section>
 
       {/* Related Guides */}
-      <section className="py-16 md:py-20 bg-black">
+      <section className="py-16 md:py-20 bg-gradient-to-br from-white via-[#FDFBF7] to-[#F5F0E6]">
         <div className="container mx-auto px-4">
           <div className="max-w-4xl mx-auto text-center mb-10">
-            <h2 className="text-2xl md:text-3xl font-light text-white mb-4">Related Guides</h2>
-            <p className="text-zinc-400">Explore more resources for landlords and tenants</p>
+            <h2 className="text-2xl md:text-3xl font-light text-black mb-4">Related Guides</h2>
+            <p className="text-zinc-600">Explore more resources for landlords and tenants</p>
           </div>
-          <div className="flex justify-center gap-4">
-            <Button asChild variant="secondary">
+          <div className="flex flex-wrap justify-center gap-4">
+            <Button asChild variant="primary">
               <Link to="/rent-guide">
                 Rent Guide
-                <ArrowUpRight className="w-4 h-4 ml-2 text-gold" />
+                <ArrowUpRight className="w-4 h-4 ml-2" />
               </Link>
             </Button>
             <Button asChild variant="secondary">
               <Link to="/tenant-guide">
                 Tenant Guide
-                <ArrowUpRight className="w-4 h-4 ml-2 text-gold" />
+                <ArrowUpRight className="w-4 h-4 ml-2" />
               </Link>
             </Button>
           </div>
