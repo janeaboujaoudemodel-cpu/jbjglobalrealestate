@@ -42,12 +42,17 @@ export const COMPANY_STATS_LEGACY = {
 };
 
 // Contact information - OFFICIAL JBJ GLOBAL REAL ESTATE
+// EMAIL RULE: First letter capitalized, JBJ always in capitals (e.g., Contact@JBJ.ae)
 export const CONTACT_INFO = {
   phone: '+971 56 591 1000',
   phoneRaw: '+971565911000',
   email: 'Contact@JBJ.ae',
   emailCapitalized: 'Contact@JBJ.ae',
   privacyEmail: 'Privacy@JBJ.ae',
+  supportEmail: 'Support@JBJ.ae',
+  careersEmail: 'Careers@JBJ.ae',
+  partnershipsEmail: 'Partnerships@JBJ.ae',
+  securityEmail: 'Security@JBJ.ae',
   whatsappNumber: '971565911000',
   whatsappMessage: "Hi, I'm interested in learning more about property brokerage services with JBJ Global Real Estate.",
   address: 'Downtown Dubai, UAE',

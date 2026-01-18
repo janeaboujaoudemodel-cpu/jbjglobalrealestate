@@ -14,7 +14,9 @@ import {
   Image,
   Video,
   Copy,
-  Check
+  Check,
+  Mic,
+  Plus
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -37,6 +39,8 @@ import {
 import { toast } from "sonner";
 import { supabase } from "@/integrations/supabase/client";
 import { useAuth } from "@/contexts/AuthContext";
+import VoiceNoteRecorder from "@/components/crm/VoiceNoteRecorder";
+import { CONTACT_INFO } from "@/constants/stats";
 
 const SERVICE_CATEGORIES = [
   "Property Listings",
@@ -49,6 +53,16 @@ const SERVICE_CATEGORIES = [
   "Document Management",
   "Communication (Email/WhatsApp)",
   "Technical Bug (Website/App)",
+  "Property Search Issues",
+  "Viewing & Appointments",
+  "Dashboard & Reports",
+  "Notifications & Alerts",
+  "Profile & Settings",
+  "CRM Features",
+  "Marketing Tools",
+  "Analytics & Insights",
+  "Integration Issues",
+  "Performance & Speed",
   "Other"
 ];
 
@@ -71,6 +85,7 @@ const SupportTicketBox = () => {
     email: "",
     phone: "",
     serviceCategory: "",
+    otherCategoryDetail: "",
     subject: "",
     description: "",
     priority: "normal",
@@ -101,6 +116,13 @@ const SupportTicketBox = () => {
     toast.success("Ticket number copied!");
   };
 
+  const handleVoiceTranscript = (text: string, field: 'subject' | 'description') => {
+    setFormData(prev => ({
+      ...prev,
+      [field]: prev[field] ? `${prev[field]} ${text}` : text
+    }));
+  };
+
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
 
@@ -111,6 +133,12 @@ const SupportTicketBox = () => {
 
     if (!formData.fullName || !formData.email) {
       toast.error("Please provide your name and email");
+      return;
+    }
+
+    // Validate "Other" category requires detail
+    if (formData.serviceCategory === "Other" && !formData.otherCategoryDetail.trim()) {
+      toast.error("Please specify the type of issue in the 'Other Issue Details' field");
       return;
     }
 
@@ -137,24 +165,47 @@ const SupportTicketBox = () => {
         }
       }
 
-      // Submit ticket via edge function
-      const { data, error } = await supabase.functions.invoke('submit-support-ticket', {
-        body: {
-          fullName: formData.fullName,
-          email: formData.email,
-          phone: formData.phone || null,
-          serviceCategory: formData.serviceCategory,
-          subject: formData.subject,
-          description: formData.description,
-          priority: formData.priority,
-          escalateToTech: formData.escalateToTech,
-          attachmentUrls
+      // Build category with "Other" detail
+      const fullCategory = formData.serviceCategory === "Other" 
+        ? `Other: ${formData.otherCategoryDetail}`
+        : formData.serviceCategory;
+
+      // Submit ticket via edge function with retry logic
+      let response;
+      let retryCount = 0;
+      const maxRetries = 2;
+
+      while (retryCount <= maxRetries) {
+        try {
+          response = await supabase.functions.invoke('submit-support-ticket', {
+            body: {
+              fullName: formData.fullName,
+              email: formData.email,
+              phone: formData.phone || null,
+              serviceCategory: fullCategory,
+              subject: formData.subject,
+              description: formData.description,
+              priority: formData.priority,
+              escalateToTech: formData.escalateToTech,
+              attachmentUrls
+            }
+          });
+
+          if (!response.error) break;
+          retryCount++;
+          if (retryCount <= maxRetries) {
+            await new Promise(resolve => setTimeout(resolve, 1000));
+          }
+        } catch (fetchError) {
+          retryCount++;
+          if (retryCount > maxRetries) throw fetchError;
+          await new Promise(resolve => setTimeout(resolve, 1000));
         }
-      });
+      }
 
-      if (error) throw error;
+      if (response?.error) throw response.error;
 
-      setTicketNumber(data.ticketNumber);
+      setTicketNumber(response?.data?.ticketNumber || "");
       setIsSubmitted(true);
       toast.success("Support ticket created successfully!");
 
@@ -174,6 +225,7 @@ const SupportTicketBox = () => {
       email: user?.email || "",
       phone: "",
       serviceCategory: "",
+      otherCategoryDetail: "",
       subject: "",
       description: "",
       priority: "normal",
@@ -181,6 +233,23 @@ const SupportTicketBox = () => {
     });
     setAttachments([]);
     setIsOpen(false);
+  };
+
+  const submitAnotherTicket = () => {
+    setIsSubmitted(false);
+    setTicketNumber("");
+    setFormData({
+      fullName: formData.fullName,
+      email: formData.email,
+      phone: formData.phone,
+      serviceCategory: "",
+      otherCategoryDetail: "",
+      subject: "",
+      description: "",
+      priority: "normal",
+      escalateToTech: false,
+    });
+    setAttachments([]);
   };
 
   const getFileIcon = (file: File) => {
@@ -248,6 +317,10 @@ const SupportTicketBox = () => {
                           <span className="text-gold">✓</span>
                           Email confirmation with updates
                         </li>
+                        <li className="flex items-center gap-2">
+                          <span className="text-gold">✓</span>
+                          Voice note support for convenience
+                        </li>
                       </ul>
                     </div>
                   </div>
@@ -262,14 +335,21 @@ const SupportTicketBox = () => {
                   <Dialog open={isOpen} onOpenChange={setIsOpen}>
                     <DialogTrigger asChild>
                       <Button
-                        className="bg-gradient-to-r from-red-500 to-red-600 text-white hover:from-red-600 hover:to-red-700 border-0 px-8 py-6 text-lg font-semibold shadow-[0_0_20px_rgba(239,68,68,0.3)] hover:shadow-[0_0_30px_rgba(239,68,68,0.5)] transition-all duration-300"
+                        className="relative bg-gradient-to-r from-red-500 via-red-600 to-red-500 text-white border-0 px-10 py-7 text-lg font-bold rounded-xl shadow-[0_8px_32px_rgba(239,68,68,0.4),0_4px_12px_rgba(0,0,0,0.3),inset_0_2px_4px_rgba(255,255,255,0.2)] hover:shadow-[0_12px_40px_rgba(239,68,68,0.6),0_6px_16px_rgba(0,0,0,0.4),inset_0_2px_4px_rgba(255,255,255,0.3)] transition-all duration-300 hover:scale-105 transform active:scale-95"
+                        style={{
+                          textShadow: '0 2px 4px rgba(0,0,0,0.3)',
+                          background: 'linear-gradient(145deg, #ef4444, #dc2626, #b91c1c)',
+                        }}
                       >
-                        <Headphones className="w-5 h-5 mr-2" />
-                        Create Support Ticket
+                        <span className="absolute inset-0 rounded-xl bg-gradient-to-b from-white/20 to-transparent opacity-50" />
+                        <span className="relative flex items-center gap-2">
+                          <Headphones className="w-6 h-6" />
+                          Create Support Ticket
+                        </span>
                       </Button>
                     </DialogTrigger>
 
-                    <DialogContent className="bg-white border-zinc-200 max-w-lg max-h-[90vh] overflow-y-auto">
+                    <DialogContent className="bg-white border-zinc-200 max-w-lg max-h-[85vh] overflow-y-auto z-[100]">
                       <DialogHeader>
                         <DialogTitle className="text-black text-xl font-bold flex items-center gap-2">
                           <Headphones className="w-5 h-5 text-red-500" />
@@ -314,16 +394,27 @@ const SupportTicketBox = () => {
                               </div>
                             </div>
 
-                            <p className="text-sm text-zinc-500 mb-4">
+                            <p className="text-sm text-zinc-500 mb-6">
                               A confirmation email has been sent to <strong>{formData.email}</strong>
                             </p>
 
-                            <Button
-                              onClick={resetForm}
-                              className="bg-black text-white hover:bg-zinc-800"
-                            >
-                              Close
-                            </Button>
+                            {/* Action Buttons */}
+                            <div className="space-y-3">
+                              <Button
+                                onClick={submitAnotherTicket}
+                                variant="outline"
+                                className="w-full border-red-200 text-red-600 hover:bg-red-50 hover:border-red-300"
+                              >
+                                <Plus className="w-4 h-4 mr-2" />
+                                Have Another Problem? Submit Another Ticket
+                              </Button>
+                              <Button
+                                onClick={resetForm}
+                                className="w-full bg-black text-white hover:bg-zinc-800"
+                              >
+                                Close
+                              </Button>
+                            </div>
                           </motion.div>
                         ) : (
                           <motion.form
@@ -387,12 +478,12 @@ const SupportTicketBox = () => {
                               </Label>
                               <Select
                                 value={formData.serviceCategory}
-                                onValueChange={(value) => setFormData({ ...formData, serviceCategory: value })}
+                                onValueChange={(value) => setFormData({ ...formData, serviceCategory: value, otherCategoryDetail: value !== "Other" ? "" : formData.otherCategoryDetail })}
                               >
                                 <SelectTrigger className="mt-1 border-zinc-300 focus:border-gold">
                                   <SelectValue placeholder="Select the service" />
                                 </SelectTrigger>
-                                <SelectContent>
+                                <SelectContent className="max-h-60">
                                   {SERVICE_CATEGORIES.map((category) => (
                                     <SelectItem key={category} value={category}>
                                       {category}
@@ -402,19 +493,51 @@ const SupportTicketBox = () => {
                               </Select>
                             </div>
 
-                            {/* Subject */}
+                            {/* Other Category Detail */}
+                            {formData.serviceCategory === "Other" && (
+                              <motion.div
+                                initial={{ opacity: 0, height: 0 }}
+                                animate={{ opacity: 1, height: "auto" }}
+                                exit={{ opacity: 0, height: 0 }}
+                              >
+                                <Label className="text-zinc-700 flex items-center gap-2">
+                                  <FileText className="w-4 h-4 text-gold" />
+                                  Please Specify Your Issue *
+                                </Label>
+                                <Input
+                                  placeholder="Describe what service or feature the issue relates to..."
+                                  value={formData.otherCategoryDetail}
+                                  onChange={(e) => setFormData({ ...formData, otherCategoryDetail: e.target.value })}
+                                  className="mt-1 border-zinc-300 focus:border-gold"
+                                  required
+                                />
+                                <p className="text-xs text-zinc-500 mt-1">
+                                  This helps us route your ticket to the right team.
+                                </p>
+                              </motion.div>
+                            )}
+
+                            {/* Subject with Voice Note */}
                             <div>
                               <Label className="text-zinc-700 flex items-center gap-2">
                                 <FileText className="w-4 h-4 text-gold" />
                                 Subject *
                               </Label>
-                              <Input
-                                placeholder="Brief description of the issue"
-                                value={formData.subject}
-                                onChange={(e) => setFormData({ ...formData, subject: e.target.value })}
-                                className="mt-1 border-zinc-300 focus:border-gold"
-                                required
-                              />
+                              <div className="flex gap-2 mt-1">
+                                <Input
+                                  placeholder="Brief description of the issue"
+                                  value={formData.subject}
+                                  onChange={(e) => setFormData({ ...formData, subject: e.target.value })}
+                                  className="flex-1 border-zinc-300 focus:border-gold"
+                                  required
+                                />
+                                <VoiceNoteRecorder
+                                  onTranscript={(text) => handleVoiceTranscript(text, 'subject')}
+                                />
+                              </div>
+                              <p className="text-xs text-zinc-400 mt-1 flex items-center gap-1">
+                                <Mic className="w-3 h-3" /> Use voice note for convenience
+                              </p>
                             </div>
 
                             {/* Priority Selection */}
@@ -439,12 +562,18 @@ const SupportTicketBox = () => {
                                   ))}
                                 </SelectContent>
                               </Select>
+                              <p className="text-xs text-zinc-400 mt-1">
+                                Our AI will verify and adjust priority based on issue analysis.
+                              </p>
                             </div>
 
-                            {/* Description */}
+                            {/* Description with Voice Note */}
                             <div>
-                              <Label className="text-zinc-700">
-                                Detailed Description *
+                              <Label className="text-zinc-700 flex items-center justify-between">
+                                <span>Detailed Description *</span>
+                                <VoiceNoteRecorder
+                                  onTranscript={(text) => handleVoiceTranscript(text, 'description')}
+                                />
                               </Label>
                               <Textarea
                                 placeholder="Please describe the issue in detail. Include steps to reproduce, expected behavior, and what actually happened..."
@@ -453,6 +582,9 @@ const SupportTicketBox = () => {
                                 className="mt-1 min-h-[120px] border-zinc-300 focus:border-gold"
                                 required
                               />
+                              <p className="text-xs text-zinc-400 mt-1 flex items-center gap-1">
+                                <Mic className="w-3 h-3" /> Click the microphone to dictate your description
+                              </p>
                             </div>
 
                             {/* Escalate to Tech Team Option */}
@@ -533,10 +665,18 @@ const SupportTicketBox = () => {
                               )}
                             </div>
 
+                            {/* Security Notice */}
+                            <div className="p-3 bg-green-50 border border-green-200 rounded-lg">
+                              <p className="text-xs text-green-700 flex items-center gap-2">
+                                <CheckCircle className="w-4 h-4" />
+                                Your information is encrypted and securely stored. Only authorized support staff can access your ticket.
+                              </p>
+                            </div>
+
                             <Button
                               type="submit"
                               disabled={isSubmitting}
-                              className="w-full bg-gradient-to-r from-red-500 to-red-600 text-white hover:from-red-600 hover:to-red-700 border-0 py-6"
+                              className="w-full relative bg-gradient-to-r from-red-500 via-red-600 to-red-500 text-white border-0 py-6 font-bold rounded-lg shadow-[0_6px_24px_rgba(239,68,68,0.4),inset_0_1px_2px_rgba(255,255,255,0.2)] hover:shadow-[0_8px_32px_rgba(239,68,68,0.5)] transition-all duration-300"
                             >
                               {isSubmitting ? (
                                 <>Submitting...</>
@@ -554,7 +694,7 @@ const SupportTicketBox = () => {
                   </Dialog>
 
                   <p className="text-sm text-zinc-500 mt-4">
-                    Email: <span className="text-gold font-medium">Support@JBJ.ae</span>
+                    Email: <span className="text-gold font-medium">{CONTACT_INFO.supportEmail}</span>
                   </p>
                 </div>
               </div>
