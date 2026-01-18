@@ -82,18 +82,6 @@ const Index = () => {
           animate="visible"
           variants={staggerContainer}
         >
-          {/* AI Home Finder Badge - Purple */}
-          <motion.div
-            variants={fadeInUp}
-            className="mb-6"
-          >
-            <Link to="/quiz" className="inline-flex items-center gap-3 px-6 py-3 bg-purple-600/20 backdrop-blur-md border border-purple-500/50 rounded-full hover:bg-purple-600/30 hover:border-purple-400 hover:shadow-lg hover:shadow-purple-500/30 transition-all duration-300 group">
-              <Sparkles className="w-5 h-5 text-purple-400 group-hover:text-purple-300" />
-              <span className="text-purple-300 text-lg md:text-xl font-bold tracking-wide group-hover:text-purple-200">AI Home Finder</span>
-              <ArrowUpRight className="w-5 h-5 text-purple-400 group-hover:text-purple-300 group-hover:translate-x-0.5 group-hover:-translate-y-0.5 transition-transform" />
-            </Link>
-          </motion.div>
-
           {/* Badge */}
           <motion.span 
             variants={fadeInUp}
@@ -162,6 +150,40 @@ const Index = () => {
           <ChevronDown className="w-5 h-5 animate-bounce" />
         </motion.div>
       </div>
+
+      {/* AI HOME FINDER - Premium CTA Section */}
+      <section className="py-10 md:py-14 bg-black">
+        <div className="container mx-auto px-4">
+          <motion.div
+            initial={{ opacity: 0, y: 30 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+            transition={{ duration: 0.6 }}
+            className="max-w-2xl mx-auto"
+          >
+            <Link to="/quiz" className="block group">
+              <div className="relative bg-gradient-to-br from-purple-900/40 via-purple-800/30 to-purple-900/40 backdrop-blur-md border-2 border-purple-500/50 rounded-2xl p-8 md:p-10 text-center hover:border-purple-400 hover:shadow-[0_0_40px_rgba(147,51,234,0.4)] transition-all duration-500 shadow-[0_0_25px_rgba(147,51,234,0.25)]">
+                {/* Glow overlay */}
+                <div className="absolute inset-0 bg-gradient-to-br from-purple-500/10 via-transparent to-purple-600/10 rounded-2xl opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
+                
+                <div className="relative z-10">
+                  <div className="flex items-center justify-center gap-3 mb-4">
+                    <Sparkles className="w-8 h-8 text-purple-400 group-hover:text-purple-300 transition-colors" />
+                    <h2 className="text-purple-300 text-2xl md:text-3xl lg:text-4xl font-bold tracking-wide group-hover:text-purple-200 transition-colors" style={{ fontFamily: "Poppins, sans-serif" }}>
+                      AI Home Finder
+                    </h2>
+                    <ArrowUpRight className="w-7 h-7 text-purple-400 group-hover:text-purple-300 group-hover:translate-x-1 group-hover:-translate-y-1 transition-all duration-300" />
+                  </div>
+                  
+                  <p className="text-purple-200/80 text-base md:text-lg group-hover:text-purple-100 transition-colors">
+                    Take your free test and discover your perfect property match
+                  </p>
+                </div>
+              </div>
+            </Link>
+          </motion.div>
+        </div>
+      </section>
 
       {/* DEVELOPER PARTNERS MARQUEE */}
       <DeveloperPartnersMarquee />
