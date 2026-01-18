@@ -320,9 +320,369 @@ The community has become one of Dubai's most sought-after addresses, attracting 
       description: "Discover Dubai Hills Estate — a premium community with an 18-hole golf course, Dubai Hills Mall, and upscale family living. Explore properties with JBJ Global Real Estate.",
       keywords: "Dubai Hills Estate, golf course villas Dubai, Emaar Dubai Hills, premium community Dubai, Dubai Hills real estate"
     }
+  },
+  {
+    slug: "arabian-ranches",
+    name: "Arabian Ranches",
+    heroImage: "https://images.unsplash.com/photo-1600585154340-be6161a56a0c?w=1920&q=80",
+    shortDescription: "A prestigious gated community offering villa living with desert landscapes and golf courses.",
+    overview: `Arabian Ranches is one of Dubai's most established villa communities, offering a serene desert lifestyle within a secure, family-friendly environment. Developed by Emaar, this master-planned community features spacious villas, championship golf courses, and extensive green spaces.
+
+The community attracts families seeking space, privacy, and a close-knit neighborhood feel while remaining connected to Dubai's urban centers.`,
+    lifestyle: "Life in Arabian Ranches revolves around outdoor activities, family, and community. Residents enjoy horse riding, golf, tennis, and weekend brunches at the community clubhouse. The relaxed pace and strong community bonds make it ideal for families.",
+    location: {
+      landmarks: [
+        "Arabian Ranches Golf Club",
+        "Dubai Polo & Equestrian Club",
+        "JESS Arabian Ranches",
+        "Ranches Souk — Community retail",
+        "Multiple parks and playgrounds"
+      ],
+      connectivity: [
+        "Direct access to Emirates Road",
+        "20 minutes to Downtown Dubai",
+        "25 minutes to Dubai Marina",
+        "30 minutes to Dubai International Airport",
+        "Near Global Village"
+      ]
+    },
+    amenities: {
+      dining: "The Ranches Souk offers various restaurants and cafés catering to families with diverse culinary options.",
+      retail: "Community retail centers provide daily essentials, while larger malls are a short drive away.",
+      leisure: "Golf courses, polo club, tennis courts, swimming pools, and community parks offer recreation.",
+      wellness: "Community gyms, yoga studios, and extensive walking paths support an active lifestyle."
+    },
+    propertyTypes: [
+      "Spacious family villas",
+      "Golf course homes",
+      "Townhouses",
+      "Premium estates"
+    ],
+    residents: [
+      "Established families",
+      "Golf and equestrian enthusiasts",
+      "Those seeking space and privacy",
+      "Executives preferring suburban living"
+    ],
+    seo: {
+      title: "Arabian Ranches Area Guide",
+      description: "Explore Arabian Ranches — Dubai's premier villa community with golf courses, polo club, and family-friendly living. Find properties with JBJ Global Real Estate.",
+      keywords: "Arabian Ranches Dubai, villa community Dubai, Emaar Arabian Ranches, golf course villas, family villas Dubai"
+    }
+  },
+  {
+    slug: "emirates-hills",
+    name: "Emirates Hills",
+    heroImage: "https://images.unsplash.com/photo-1600607687939-ce8a6c25118c?w=1920&q=80",
+    shortDescription: "Dubai's most exclusive gated community offering ultra-luxury mansions and privacy.",
+    overview: `Emirates Hills is Dubai's answer to Beverly Hills — an ultra-exclusive gated community that houses the city's most prestigious addresses. This Emaar development features sprawling mansions, many overlooking the Montgomerie Golf Course, with unparalleled privacy and security.
+
+The community is home to royalty, business titans, and celebrities who value discretion and the finest quality of life.`,
+    lifestyle: "Emirates Hills offers the ultimate in private, luxurious living. Residents enjoy their own pools, gardens, and entertainment spaces while having access to world-class golf and the prestigious Emirates Hills Clubhouse.",
+    location: {
+      landmarks: [
+        "Montgomerie Golf Club",
+        "Emirates Hills Clubhouse",
+        "Emirates Golf Club",
+        "Views of Dubai Marina skyline",
+        "Lakes and landscaped gardens"
+      ],
+      connectivity: [
+        "Adjacent to Sheikh Zayed Road",
+        "10 minutes to Dubai Marina",
+        "15 minutes to Downtown Dubai",
+        "25 minutes to Dubai International Airport",
+        "Close to Media City"
+      ]
+    },
+    amenities: {
+      dining: "Private dining at home with chef services; exclusive restaurants at nearby hotels and Marina.",
+      retail: "Convenient access to Mall of the Emirates and Dubai Marina Mall.",
+      leisure: "Two championship golf courses, private pools, home cinemas, and exclusive clubhouse facilities.",
+      wellness: "Private gyms, spa services, and the tranquility of gated living."
+    },
+    propertyTypes: [
+      "Ultra-luxury mansions",
+      "Golf course estates",
+      "Custom-built villas",
+      "Trophy properties"
+    ],
+    residents: [
+      "Ultra-high-net-worth individuals",
+      "Business leaders and entrepreneurs",
+      "Celebrities and public figures",
+      "Those seeking ultimate privacy"
+    ],
+    seo: {
+      title: "Emirates Hills Area Guide",
+      description: "Discover Emirates Hills — Dubai's most exclusive gated community with ultra-luxury mansions and golf course living. Explore properties with JBJ Global Real Estate.",
+      keywords: "Emirates Hills Dubai, luxury mansions Dubai, gated community Dubai, golf course mansions, ultra-luxury Dubai"
+    }
+  },
+  {
+    slug: "dubai-creek-harbour",
+    name: "Dubai Creek Harbour",
+    heroImage: "https://images.unsplash.com/photo-1580587771525-78b9dba3b914?w=1920&q=80",
+    shortDescription: "A futuristic waterfront development with iconic towers and sustainable design.",
+    overview: `Dubai Creek Harbour is Emaar's visionary waterfront development set to become a new landmark destination. Home to the future Dubai Creek Tower (designed to surpass Burj Khalifa), this master-planned community offers contemporary living with stunning views of the historic Dubai Creek.
+
+The development combines residential, retail, and leisure in a sustainably designed environment that honors Dubai's maritime heritage while embracing its future.`,
+    lifestyle: "Residents enjoy a blend of waterfront living and urban convenience. The Creek promenade, parks, and marinas offer endless recreation, while the proximity to Dubai's historic areas adds cultural richness.",
+    location: {
+      landmarks: [
+        "Dubai Creek Tower (under development)",
+        "Ras Al Khor Wildlife Sanctuary",
+        "Creek Marina",
+        "Retail District",
+        "Historic Dubai Creek"
+      ],
+      connectivity: [
+        "Direct access to Ras Al Khor Road",
+        "15 minutes to Downtown Dubai",
+        "10 minutes to Dubai Festival City",
+        "15 minutes to Dubai International Airport",
+        "Future Metro connection planned"
+      ]
+    },
+    amenities: {
+      dining: "Waterfront restaurants and cafés with views of the Creek and marina.",
+      retail: "Retail district with diverse shopping options from boutiques to major brands.",
+      leisure: "Marinas, promenades, parks, and proximity to the Ras Al Khor flamingo sanctuary.",
+      wellness: "Modern fitness facilities, waterfront jogging paths, and green spaces."
+    },
+    propertyTypes: [
+      "Waterfront apartments",
+      "Creek-view residences",
+      "Premium penthouses",
+      "Branded residences"
+    ],
+    residents: [
+      "Young professionals",
+      "Investors in emerging areas",
+      "Those seeking waterfront living",
+      "Families appreciating nature proximity"
+    ],
+    seo: {
+      title: "Dubai Creek Harbour Area Guide",
+      description: "Explore Dubai Creek Harbour — a futuristic waterfront development with iconic architecture and sustainable living. Find properties with JBJ Global Real Estate.",
+      keywords: "Dubai Creek Harbour, waterfront apartments Dubai, Emaar Creek Harbour, Dubai Creek Tower, new developments Dubai"
+    }
+  },
+  {
+    slug: "jumeirah-beach-residence",
+    name: "Jumeirah Beach Residence (JBR)",
+    heroImage: "https://images.unsplash.com/photo-1512453979798-5ea266f8880c?w=1920&q=80",
+    shortDescription: "Dubai's premier beachfront community with vibrant lifestyle and stunning sea views.",
+    overview: `Jumeirah Beach Residence (JBR) is Dubai's first and most popular beachfront community, featuring 40 residential towers along a stunning stretch of beach. The Walk and Beach promenades create a vibrant atmosphere with endless dining, shopping, and entertainment options.
+
+JBR offers the ultimate beach lifestyle with direct access to pristine sands and views of the Arabian Gulf.`,
+    lifestyle: "JBR is for those who love beach life, outdoor dining, and a vibrant social scene. Morning beach runs, afternoon café hopping on The Walk, and sunset dining define daily life here.",
+    location: {
+      landmarks: [
+        "JBR Beach — Public beach",
+        "The Walk — Outdoor shopping and dining",
+        "The Beach — Entertainment complex",
+        "Ain Dubai views",
+        "Bluewaters Island access"
+      ],
+      connectivity: [
+        "Adjacent to Dubai Marina",
+        "DMCC Metro Station nearby",
+        "25 minutes to Downtown Dubai",
+        "10 minutes to Palm Jumeirah",
+        "Direct access to Sheikh Zayed Road"
+      ]
+    },
+    amenities: {
+      dining: "Over 100 restaurants and cafés along The Walk and Beach promenade.",
+      retail: "The Walk offers extensive shopping from fashion to homeware.",
+      leisure: "Beach activities, water sports, outdoor cinema, and regular markets.",
+      wellness: "Beach fitness classes, yoga sessions, and premium residential gyms."
+    },
+    propertyTypes: [
+      "Beachfront apartments",
+      "Sea-view residences",
+      "Penthouses with terraces",
+      "Studio to 4-bedroom units"
+    ],
+    residents: [
+      "Beach lifestyle enthusiasts",
+      "Young professionals",
+      "Tourists seeking short-term rentals",
+      "Those who value walkability"
+    ],
+    seo: {
+      title: "JBR Area Guide",
+      description: "Discover JBR — Dubai's premier beachfront community with The Walk, stunning beaches, and vibrant lifestyle. Find properties with JBJ Global Real Estate.",
+      keywords: "JBR Dubai, Jumeirah Beach Residence, beachfront apartments Dubai, The Walk JBR, beach living Dubai"
+    }
+  },
+  {
+    slug: "difc",
+    name: "DIFC (Dubai International Financial Centre)",
+    heroImage: "https://images.unsplash.com/photo-1486406146926-c627a92ad1ab?w=1920&q=80",
+    shortDescription: "The Middle East's premier financial hub with luxury living and world-class dining.",
+    overview: `DIFC is the beating heart of the Middle East's financial industry, a purpose-built district that combines prestigious offices with luxury residences. Gate Village offers art galleries, fine dining, and cultural experiences, creating a sophisticated urban environment.
+
+Living in DIFC means being at the center of regional finance, surrounded by the finest restaurants, galleries, and professionals.`,
+    lifestyle: "DIFC attracts ambitious professionals who appreciate the synergy of work and lifestyle. Art exhibitions, fine dining, and networking events define the social scene.",
+    location: {
+      landmarks: [
+        "Gate Building — Iconic landmark",
+        "Gate Village — Art and dining",
+        "DIFC Courts and Registry",
+        "Numerous art galleries",
+        "Premium office towers"
+      ],
+      connectivity: [
+        "DIFC Metro Station",
+        "5 minutes to Downtown Dubai",
+        "15 minutes to Dubai International Airport",
+        "Adjacent to Sheikh Zayed Road",
+        "Walking distance to World Trade Centre"
+      ]
+    },
+    amenities: {
+      dining: "Some of Dubai's finest restaurants including Zuma, La Petite Maison, and Roberto's.",
+      retail: "Boutique shopping in Gate Village with focus on art and luxury goods.",
+      leisure: "Art galleries, cultural events, and proximity to Opera District.",
+      wellness: "Premium fitness centers within residential towers and nearby hotels."
+    },
+    propertyTypes: [
+      "Luxury apartments",
+      "Serviced residences",
+      "Penthouses",
+      "High-end studios for professionals"
+    ],
+    residents: [
+      "Finance professionals",
+      "Legal and consulting experts",
+      "Art enthusiasts",
+      "Those seeking premium urban living"
+    ],
+    seo: {
+      title: "DIFC Area Guide",
+      description: "Explore DIFC — Dubai's premier financial district with luxury residences, fine dining, and art galleries. Find properties with JBJ Global Real Estate.",
+      keywords: "DIFC Dubai, financial centre Dubai, Gate Village, luxury apartments DIFC, Dubai finance district"
+    }
+  },
+  {
+    slug: "mirdif",
+    name: "Mirdif",
+    heroImage: "https://images.unsplash.com/photo-1600596542815-ffad4c1539a9?w=1920&q=80",
+    shortDescription: "A family-friendly freehold community with villas and excellent schools.",
+    overview: `Mirdif is one of Dubai's most established family communities, offering a mix of villas and townhouses in a quiet, residential setting. The area is known for its tree-lined streets, excellent schools, and Mirdif City Centre mall.
+
+Mirdif provides a suburban lifestyle with easy access to the airport and central Dubai, making it popular with families and long-term residents.`,
+    lifestyle: "Mirdif is all about family life — schools, parks, community centers, and weekend outings to Mushrif Park. The pace is relaxed, neighbors know each other, and children play safely in the streets.",
+    location: {
+      landmarks: [
+        "Mirdif City Centre — Major mall",
+        "Mushrif Park — Green oasis",
+        "Uptown Mirdif — Dining and retail",
+        "Multiple international schools",
+        "Community mosques"
+      ],
+      connectivity: [
+        "Close to Dubai International Airport",
+        "Mirdif Metro Station (proposed)",
+        "25 minutes to Downtown Dubai",
+        "20 minutes to Festival City",
+        "Easy access to Al Khawaneej"
+      ]
+    },
+    amenities: {
+      dining: "Mirdif City Centre and Uptown Mirdif offer diverse dining from casual to family restaurants.",
+      retail: "Mirdif City Centre provides comprehensive shopping with Carrefour hypermarket.",
+      leisure: "Mushrif Park, community pools, and family entertainment at the mall.",
+      wellness: "Community gyms, parks with walking paths, and family sports facilities."
+    },
+    propertyTypes: [
+      "Family villas",
+      "Townhouses",
+      "Compound living",
+      "Shorooq community homes"
+    ],
+    residents: [
+      "Established families with children",
+      "Long-term UAE residents",
+      "Those working near the airport",
+      "Families valuing community living"
+    ],
+    seo: {
+      title: "Mirdif Area Guide",
+      description: "Discover Mirdif — a family-friendly villa community near the airport with excellent schools and Mirdif City Centre. Find properties with JBJ Global Real Estate.",
+      keywords: "Mirdif Dubai, family villas Dubai, Mirdif City Centre, residential community Dubai, villas near airport Dubai"
+    }
+  },
+  {
+    slug: "al-barsha",
+    name: "Al Barsha",
+    heroImage: "https://images.unsplash.com/photo-1582672060674-bc2bd808a8b5?w=1920&q=80",
+    shortDescription: "A central residential area with Mall of the Emirates and excellent connectivity.",
+    overview: `Al Barsha is a strategically located residential area centered around Mall of the Emirates, one of Dubai's premier shopping destinations. The area offers a mix of villas and apartments, making it accessible to various budgets while maintaining excellent connectivity.
+
+Its central location makes Al Barsha ideal for those who need quick access to multiple parts of the city.`,
+    lifestyle: "Al Barsha offers convenience-focused living with everything within reach. Residents enjoy easy access to shopping, dining, Ski Dubai, and quick commutes to business hubs.",
+    location: {
+      landmarks: [
+        "Mall of the Emirates",
+        "Ski Dubai",
+        "Al Barsha Pond Park",
+        "Various international schools",
+        "Mix of villas and apartments"
+      ],
+      connectivity: [
+        "Mall of the Emirates Metro Station",
+        "Central location on Sheikh Zayed Road",
+        "15 minutes to Dubai Marina",
+        "15 minutes to Downtown Dubai",
+        "25 minutes to Dubai International Airport"
+      ]
+    },
+    amenities: {
+      dining: "Extensive dining options at Mall of the Emirates and local restaurants throughout.",
+      retail: "Mall of the Emirates offers comprehensive luxury and mainstream shopping.",
+      leisure: "Ski Dubai, VOX Cinemas, and Al Barsha Pond Park for outdoor activities.",
+      wellness: "Multiple gyms, salons, and wellness centers throughout the area."
+    },
+    propertyTypes: [
+      "Apartments",
+      "Villas",
+      "Townhouses",
+      "Hotel apartments"
+    ],
+    residents: [
+      "Professionals seeking central location",
+      "Families with varied budgets",
+      "Those prioritizing connectivity",
+      "Retail and hospitality workers"
+    ],
+    seo: {
+      title: "Al Barsha Area Guide",
+      description: "Explore Al Barsha — a central Dubai community with Mall of the Emirates, Ski Dubai, and excellent connectivity. Find properties with JBJ Global Real Estate.",
+      keywords: "Al Barsha Dubai, Mall of the Emirates area, central apartments Dubai, Al Barsha villas, Dubai residential"
+    }
   }
+];
+
+// Emirates filter for UAE-wide expansion
+export const UAE_EMIRATES = [
+  { id: "dubai", name: "Dubai", areas: ["downtown-dubai", "dubai-marina", "business-bay", "palm-jumeirah", "jumeirah-village-circle", "dubai-hills-estate", "arabian-ranches", "emirates-hills", "dubai-creek-harbour", "jumeirah-beach-residence", "difc", "mirdif", "al-barsha"] },
+  { id: "abu-dhabi", name: "Abu Dhabi", areas: [] },
+  { id: "sharjah", name: "Sharjah", areas: [] },
+  { id: "ajman", name: "Ajman", areas: [] },
+  { id: "ras-al-khaimah", name: "Ras Al Khaimah", areas: [] },
+  { id: "fujairah", name: "Fujairah", areas: [] },
+  { id: "umm-al-quwain", name: "Umm Al Quwain", areas: [] },
 ];
 
 export const getAreaBySlug = (slug: string): AreaGuide | undefined => {
   return AREA_GUIDES.find(area => area.slug === slug);
+};
+
+export const getAreasByEmirate = (emirateId: string): AreaGuide[] => {
+  const emirate = UAE_EMIRATES.find(e => e.id === emirateId);
+  if (!emirate) return [];
+  return AREA_GUIDES.filter(area => emirate.areas.includes(area.slug));
 };

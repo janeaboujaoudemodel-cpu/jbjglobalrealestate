@@ -124,10 +124,10 @@ const AreaGuides = () => {
               <motion.div key={area.slug} variants={fadeInUp}>
                 <Link 
                   to={`/area/${area.slug}`}
-                  className="group block relative overflow-hidden rounded-2xl bg-gradient-to-br from-white via-[#FDFBF7] to-[#F5F0E6] border border-gold/30 hover:border-gold transition-all duration-500 hover:shadow-xl hover:shadow-gold/20"
+                  className="group block relative overflow-hidden rounded-2xl bg-gradient-to-br from-white via-[#FDFBF7] to-[#F5F0E6] border border-gold/30 hover:border-gold transition-all duration-500 hover:shadow-xl hover:shadow-gold/20 h-full flex flex-col"
                 >
-                  {/* Image */}
-                  <div className="relative h-56 overflow-hidden">
+                  {/* Image - Fixed Height */}
+                  <div className="relative h-48 overflow-hidden flex-shrink-0">
                     <img 
                       src={area.heroImage} 
                       alt={area.name}
@@ -149,22 +149,22 @@ const AreaGuides = () => {
                     </div>
                   </div>
                   
-                  {/* Content */}
-                  <div className="p-6">
+                  {/* Content - Flex Grow for Equal Height */}
+                  <div className="p-6 flex flex-col flex-grow">
                     <div className="flex items-center gap-2 mb-3">
                       <MapPin className="w-4 h-4 text-gold" />
                       <span className="text-gold text-sm uppercase tracking-wider font-medium">Dubai, UAE</span>
                     </div>
                     
-                    <h3 className="text-black text-2xl font-bold mb-3 group-hover:text-gold transition-colors">
+                    <h3 className="text-black text-xl font-bold mb-3 group-hover:text-gold transition-colors line-clamp-1">
                       {area.name}
                     </h3>
                     
-                    <p className="text-zinc-600 text-sm leading-relaxed line-clamp-2 mb-4">
+                    <p className="text-zinc-600 text-sm leading-relaxed line-clamp-2 mb-4 flex-grow">
                       {area.shortDescription}
                     </p>
                     
-                    <div className="flex items-center justify-between pt-4 border-t border-zinc-200">
+                    <div className="flex items-center justify-between pt-4 border-t border-zinc-200 mt-auto">
                       <span className="text-gold text-sm font-medium flex items-center gap-2 group-hover:gap-3 transition-all">
                         Read Full Guide
                         <ArrowUpRight className="w-4 h-4" />
@@ -176,7 +176,7 @@ const AreaGuides = () => {
             ))}
           </motion.div>
 
-          {/* Coming Soon Note */}
+          {/* More Communities Note */}
           <motion.div 
             className="text-center mt-16"
             initial={{ opacity: 0, y: 20 }}
@@ -187,7 +187,7 @@ const AreaGuides = () => {
             <div className="inline-flex items-center gap-2 px-4 py-2 bg-zinc-900 border border-zinc-800 rounded-full">
               <span className="w-2 h-2 bg-gold rounded-full animate-pulse" />
               <p className="text-zinc-400 text-sm">
-                More guides coming soon — Palm Jumeirah, JVC, Dubai Hills Estate, and more.
+                More UAE communities coming soon — Abu Dhabi, Sharjah, and other Emirates.
               </p>
             </div>
           </motion.div>
