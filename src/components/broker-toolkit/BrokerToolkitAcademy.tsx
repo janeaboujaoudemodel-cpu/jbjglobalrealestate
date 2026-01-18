@@ -16,50 +16,50 @@ import {
 
 const CERTIFICATIONS = [
   {
-    title: "RERA Fundamentals",
-    duration: "8 hours",
-    modules: 12,
-    description: "UAE real estate regulations, laws, and compliance requirements.",
-    badge: "Official",
-    color: "gold",
-  },
-  {
-    title: "Sales Excellence",
+    title: "Digital Marketing Mastery",
     duration: "6 hours",
-    modules: 8,
-    description: "Advanced selling techniques, negotiation, and closing mastery.",
-    badge: "Professional",
+    modules: 10,
+    description: "Social media strategies, lead generation, content creation, and personal branding for brokers.",
+    badge: "Certified",
     color: "blue",
   },
   {
-    title: "Luxury Property Specialist",
-    duration: "10 hours",
-    modules: 15,
-    description: "Premium market knowledge, VIP client handling, and ultra-luxury sales.",
-    badge: "Elite",
+    title: "Quality & Service Excellence",
+    duration: "5 hours",
+    modules: 8,
+    description: "Delivering 5-star customer experiences, handling complaints, and exceeding expectations.",
+    badge: "Excellence",
+    color: "gold",
+  },
+  {
+    title: "Client Relations & Communication",
+    duration: "6 hours",
+    modules: 9,
+    description: "Building rapport, active listening, negotiation psychology, and maintaining long-term relationships.",
+    badge: "Professional",
     color: "purple",
   },
   {
-    title: "Off-Plan Expert",
-    duration: "5 hours",
-    modules: 7,
-    description: "Developer relations, payment plans, and new project launches.",
-    badge: "Specialist",
+    title: "Luxury Sales Specialist",
+    duration: "8 hours",
+    modules: 12,
+    description: "VIP client handling, high-net-worth psychology, ultra-premium property positioning.",
+    badge: "Elite",
     color: "emerald",
   },
   {
-    title: "Digital Marketing Pro",
-    duration: "4 hours",
-    modules: 6,
-    description: "Social media, lead generation, and personal branding.",
-    badge: "Certified",
+    title: "Business Development Pro",
+    duration: "5 hours",
+    modules: 7,
+    description: "Prospecting strategies, networking techniques, referral systems, and partnership building.",
+    badge: "Advanced",
     color: "orange",
   },
   {
-    title: "Client Relations Master",
-    duration: "5 hours",
-    modules: 8,
-    description: "Building lasting relationships and maximizing referrals.",
+    title: "Time Management & Productivity",
+    duration: "4 hours",
+    modules: 6,
+    description: "Prioritization, goal setting, workflow optimization, and work-life balance for sales professionals.",
     badge: "Master",
     color: "pink",
   },
@@ -92,10 +92,11 @@ export function BrokerToolkitAcademy() {
             JBJ Academy
           </Badge>
           <h2 className="text-3xl md:text-4xl font-bold text-white mb-4">
-            Certification <span className="text-gold">Courses</span>
+            Professional Development <span className="text-gold">Courses</span>
           </h2>
           <p className="text-zinc-400 max-w-2xl mx-auto">
-            Earn industry-recognized certifications and showcase your expertise with verified badges.
+            Complete our internal certification courses and earn verified JBJ badges. 
+            Go beyond real estate with skills in marketing, client relations, and business development.
           </p>
         </motion.div>
 
