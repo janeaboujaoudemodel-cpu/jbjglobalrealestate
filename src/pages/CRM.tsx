@@ -587,6 +587,8 @@ const CRM = () => {
                 <CRMLeadsTableV2 
                   key={refreshKey}
                   userId={user?.id || ""} 
+                  filterType="all"
+                  onRefresh={handleRefresh}
                 />
               </TabsContent>
 
@@ -594,6 +596,7 @@ const CRM = () => {
                 <FlaggedLeadsView 
                   key={refreshKey}
                   userId={user?.id || ""} 
+                  onRefresh={handleRefresh}
                 />
               </TabsContent>
 
@@ -601,6 +604,8 @@ const CRM = () => {
                 <CRMLeadsTableV2 
                   key={refreshKey}
                   userId={user?.id || ""} 
+                  filterType="vip"
+                  onRefresh={handleRefresh}
                 />
               </TabsContent>
 
@@ -633,6 +638,7 @@ const CRM = () => {
             setShowImportModal(false);
             handleRefresh();
           }}
+          userId={user?.id || ""}
         />
 
         <CRMLeadModal
@@ -642,6 +648,7 @@ const CRM = () => {
             setShowLeadModal(false);
             handleRefresh();
           }}
+          userId={user?.id || ""}
         />
 
         <BulkAssignModal
@@ -651,6 +658,7 @@ const CRM = () => {
             setShowBulkAssignModal(false);
             handleRefresh();
           }}
+          selectedLeadIds={[]}
         />
 
         <CRMAssistantPanel 

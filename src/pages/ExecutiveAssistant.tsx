@@ -775,7 +775,7 @@ export default function ExecutiveAssistant() {
 
             {/* Integrations Tab */}
             <TabsContent value="integrations">
-              <SocialMediaGrid />
+              <SocialMediaGrid onConnectPlatform={(platform) => console.log('Connect platform:', platform)} />
             </TabsContent>
           </Tabs>
         </div>
@@ -855,6 +855,11 @@ export default function ExecutiveAssistant() {
         <IntegrationWizard
           isOpen={integrationWizard.isOpen}
           onClose={() => setIntegrationWizard({ isOpen: false, type: 'email' })}
+          integrationType={integrationWizard.type as 'email' | 'phone' | 'whatsapp' | 'social'}
+          onConnected={() => {
+            setIntegrationWizard({ isOpen: false, type: 'email' });
+            toast.success('Integration connected successfully!');
+          }}
         />
       </div>
     </MainLayout>
