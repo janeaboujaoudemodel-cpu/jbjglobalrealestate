@@ -72,11 +72,14 @@ const ChatWelcome = ({ onStartChat }: ChatWelcomeProps) => {
         </div>
       </div>
 
-      {/* Tip at bottom */}
-      <p className="text-zinc-500 text-xs text-center mt-2 px-4">
-        💡 <strong className="text-zinc-400">Tip:</strong> Our team can answer most questions right
-        away. For complex matters, we'll connect you to a specialist!
-      </p>
+      {/* Tip at bottom - Gold luxury styling */}
+      <div className="text-center mt-2 px-4 py-2 bg-gradient-to-r from-[#FDFBF7]/50 via-white/30 to-[#F5F0E6]/50 rounded-lg border border-gold/20">
+        <p className="text-xs flex items-center justify-center gap-2">
+          <span className="text-gold drop-shadow-[0_0_4px_rgba(212,175,55,0.5)]">💡</span>
+          <span className="text-white font-semibold drop-shadow-[0_0_2px_rgba(255,255,255,0.3)]">Tip:</span>
+          <span className="text-gold">Our team can answer most questions right away. For complex matters, we'll connect you to a specialist!</span>
+        </p>
+      </div>
     </div>
   );
 };

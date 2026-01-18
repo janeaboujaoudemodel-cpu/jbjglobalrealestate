@@ -12,6 +12,7 @@ import { ScrollToTopOnMount } from "@/components/ScrollToTop";
 import AdminBypass from "@/components/AdminBypass";
 import MainLayoutWrapper from "@/components/MainLayoutWrapper";
 import RouteErrorBoundary from "@/components/RouteErrorBoundary";
+import GlobalVisitorTracking from "@/components/GlobalVisitorTracking";
 import Index from "./pages/Index";
 import Properties from "./pages/Properties";
 import ProjectDetail from "./pages/ProjectDetail";
@@ -150,6 +151,7 @@ const App = () => (
             <ActiveLeadProvider>
             <PopupCoordinatorProvider>
             <ScrollToTopOnMount />
+            <GlobalVisitorTracking />
             {/* Auth route is always accessible for admin login */}
             <Routes>
               <Route path="/auth" element={<Auth />} />
