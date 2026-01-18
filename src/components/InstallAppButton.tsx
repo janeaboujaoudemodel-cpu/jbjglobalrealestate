@@ -155,7 +155,7 @@ const InstallAppButton = () => {
           initial={{ scale: 0, opacity: 0 }}
           animate={{ scale: 1, opacity: 1 }}
           exit={{ scale: 0, opacity: 0 }}
-          className="fixed bottom-20 left-4 z-[8500] flex items-center gap-1.5 px-3 py-2 rounded-full bg-gradient-to-r from-gold to-gold-light shadow-lg shadow-gold/30 group"
+          className="fixed bottom-20 left-1/2 -translate-x-1/2 sm:left-4 sm:translate-x-0 z-[8500] flex items-center gap-1.5 px-3 py-2 rounded-full bg-gradient-to-r from-gold to-gold-light shadow-lg shadow-gold/30 group max-w-[calc(100vw-2rem)] sm:max-w-none"
           style={{ animation: "bounce-glow 3s ease-in-out infinite" }}
         >
           <button
@@ -163,7 +163,7 @@ const InstallAppButton = () => {
             className="flex items-center gap-2 hover:scale-105 transition-transform"
             aria-label="Install app"
           >
-            <div className="w-8 h-8 rounded-lg overflow-hidden bg-black shadow-inner">
+            <div className="w-8 h-8 rounded-lg overflow-hidden bg-black shadow-inner flex-shrink-0">
               <img
                 src={jbjMonogramDarkBg}
                 alt="JBJ Global Real Estate"
@@ -171,15 +171,15 @@ const InstallAppButton = () => {
                 loading="lazy"
               />
             </div>
-            <span className="text-black font-bold text-xs tracking-wide hidden sm:inline">
+            <span className="text-black font-bold text-xs tracking-wide whitespace-nowrap">
               {isIOS ? "Add to Home" : "Install"}
             </span>
-            <Download className="w-4 h-4 text-black" />
+            <Download className="w-4 h-4 text-black flex-shrink-0" />
           </button>
 
           <button
             onClick={handleDismiss}
-            className="ml-1 p-1 rounded-full hover:bg-black/10 transition-colors"
+            className="ml-1 p-1 rounded-full hover:bg-black/10 transition-colors flex-shrink-0"
             aria-label="Dismiss"
           >
             <X className="w-4 h-4 text-black/60" />
