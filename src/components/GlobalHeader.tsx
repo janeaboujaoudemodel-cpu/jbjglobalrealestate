@@ -178,19 +178,21 @@ const GlobalHeader = () => {
                 <DropdownMenuContent 
                   align="center" 
                   sideOffset={12}
-                  className="bg-gradient-to-b from-white to-zinc-50 border border-gold/30 min-w-[240px] shadow-2xl shadow-black/30 py-3 rounded-xl overflow-hidden"
+                  className="bg-gradient-to-b from-white to-zinc-50 border border-gold/30 min-w-[240px] shadow-2xl shadow-black/30 py-4 rounded-xl overflow-hidden"
                 >
                   <div className="absolute top-0 left-0 right-0 h-[2px] bg-gradient-to-r from-transparent via-gold to-transparent" />
-                  {propertiesLinks.map((link) => (
-                    <DropdownMenuItem key={link.href} asChild className="py-0 px-0 focus:bg-gold/10">
-                      <Link to={link.href} className="flex items-center gap-3 text-zinc-800 hover:text-gold hover:bg-gold/10 py-3.5 px-5 transition-all w-full group">
-                        <div className="w-8 h-8 rounded-lg bg-black flex items-center justify-center group-hover:bg-gold/20 transition-colors">
-                          <link.icon className="w-4 h-4 text-gold" />
-                        </div>
-                        <span className="font-medium">{link.label}</span>
-                      </Link>
-                    </DropdownMenuItem>
-                  ))}
+                  <div className="flex flex-col gap-1.5 px-2">
+                    {propertiesLinks.map((link) => (
+                      <DropdownMenuItem key={link.href} asChild className="p-0 focus:bg-gold/10 rounded-lg">
+                        <Link to={link.href} className="flex items-center gap-3 text-zinc-800 hover:text-gold hover:bg-gold/10 py-3 px-3 transition-all w-full group rounded-lg">
+                          <div className="w-8 h-8 rounded-lg bg-black flex items-center justify-center group-hover:bg-gold/20 transition-colors">
+                            <link.icon className="w-4 h-4 text-gold" />
+                          </div>
+                          <span className="font-medium">{link.label}</span>
+                        </Link>
+                      </DropdownMenuItem>
+                    ))}
+                  </div>
                 </DropdownMenuContent>
               </DropdownMenu>
 
@@ -219,19 +221,21 @@ const GlobalHeader = () => {
                 <DropdownMenuContent 
                   align="center" 
                   sideOffset={12}
-                  className="bg-gradient-to-b from-white to-zinc-50 border border-gold/30 min-w-[220px] shadow-2xl shadow-black/30 py-3 rounded-xl overflow-hidden"
+                  className="bg-gradient-to-b from-white to-zinc-50 border border-gold/30 min-w-[220px] shadow-2xl shadow-black/30 py-4 rounded-xl overflow-hidden"
                 >
                   <div className="absolute top-0 left-0 right-0 h-[2px] bg-gradient-to-r from-transparent via-gold to-transparent" />
-                  {guidesLinks.map((link) => (
-                    <DropdownMenuItem key={link.href} asChild className="py-0 px-0 focus:bg-gold/10">
-                      <Link to={link.href} className="flex items-center gap-3 text-zinc-800 hover:text-gold hover:bg-gold/10 py-3 px-5 transition-all w-full group">
-                        <div className="w-7 h-7 rounded-md bg-black flex items-center justify-center group-hover:bg-gold/20 transition-colors">
-                          <link.icon className="w-3.5 h-3.5 text-gold" />
-                        </div>
-                        <span className="font-medium text-sm">{link.label}</span>
-                      </Link>
-                    </DropdownMenuItem>
-                  ))}
+                  <div className="flex flex-col gap-1.5 px-2">
+                    {guidesLinks.map((link) => (
+                      <DropdownMenuItem key={link.href} asChild className="p-0 focus:bg-gold/10 rounded-lg">
+                        <Link to={link.href} className="flex items-center gap-3 text-zinc-800 hover:text-gold hover:bg-gold/10 py-2.5 px-3 transition-all w-full group rounded-lg">
+                          <div className="w-7 h-7 rounded-md bg-black flex items-center justify-center group-hover:bg-gold/20 transition-colors">
+                            <link.icon className="w-3.5 h-3.5 text-gold" />
+                          </div>
+                          <span className="font-medium text-sm">{link.label}</span>
+                        </Link>
+                      </DropdownMenuItem>
+                    ))}
+                  </div>
                 </DropdownMenuContent>
               </DropdownMenu>
 
@@ -248,19 +252,21 @@ const GlobalHeader = () => {
                 <DropdownMenuContent 
                   align="center" 
                   sideOffset={12}
-                  className="bg-gradient-to-b from-white to-zinc-50 border border-gold/30 min-w-[220px] shadow-2xl shadow-black/30 py-3 rounded-xl overflow-hidden"
+                  className="bg-gradient-to-b from-white to-zinc-50 border border-gold/30 min-w-[220px] shadow-2xl shadow-black/30 py-4 rounded-xl overflow-hidden"
                 >
                   <div className="absolute top-0 left-0 right-0 h-[2px] bg-gradient-to-r from-transparent via-gold to-transparent" />
-                  {marketIntelLinks.map((link) => (
-                    <DropdownMenuItem key={link.href} asChild className="py-0 px-0 focus:bg-gold/10">
-                      <Link to={link.href} className="flex items-center gap-3 text-zinc-800 hover:text-gold hover:bg-gold/10 py-3 px-5 transition-all w-full group">
-                        <div className="w-7 h-7 rounded-md bg-black flex items-center justify-center group-hover:bg-gold/20 transition-colors">
-                          <link.icon className="w-3.5 h-3.5 text-gold" />
-                        </div>
-                        <span className="font-medium text-sm">{link.label}</span>
-                      </Link>
-                    </DropdownMenuItem>
-                  ))}
+                  <div className="flex flex-col gap-1.5 px-2">
+                    {marketIntelLinks.map((link) => (
+                      <DropdownMenuItem key={link.href} asChild className="p-0 focus:bg-gold/10 rounded-lg">
+                        <Link to={link.href} className="flex items-center gap-3 text-zinc-800 hover:text-gold hover:bg-gold/10 py-2.5 px-3 transition-all w-full group rounded-lg">
+                          <div className="w-7 h-7 rounded-md bg-black flex items-center justify-center group-hover:bg-gold/20 transition-colors">
+                            <link.icon className="w-3.5 h-3.5 text-gold" />
+                          </div>
+                          <span className="font-medium text-sm">{link.label}</span>
+                        </Link>
+                      </DropdownMenuItem>
+                    ))}
+                  </div>
                 </DropdownMenuContent>
               </DropdownMenu>
 
@@ -275,19 +281,21 @@ const GlobalHeader = () => {
                 <DropdownMenuContent 
                   align="center" 
                   sideOffset={12}
-                  className="bg-gradient-to-b from-white to-zinc-50 border border-gold/30 min-w-[200px] shadow-2xl shadow-black/30 py-3 rounded-xl overflow-hidden"
+                  className="bg-gradient-to-b from-white to-zinc-50 border border-gold/30 min-w-[200px] shadow-2xl shadow-black/30 py-4 rounded-xl overflow-hidden"
                 >
                   <div className="absolute top-0 left-0 right-0 h-[2px] bg-gradient-to-r from-transparent via-gold to-transparent" />
-                  {moreLinks.map((link) => (
-                    <DropdownMenuItem key={link.href} asChild className="py-0 px-0 focus:bg-gold/10">
-                      <Link to={link.href} className="flex items-center gap-3 text-zinc-800 hover:text-gold hover:bg-gold/10 py-3 px-5 transition-all w-full group">
-                        <div className="w-7 h-7 rounded-md bg-black flex items-center justify-center group-hover:bg-gold/20 transition-colors">
-                          <link.icon className="w-3.5 h-3.5 text-gold" />
-                        </div>
-                        <span className="font-medium text-sm">{link.label}</span>
-                      </Link>
-                    </DropdownMenuItem>
-                  ))}
+                  <div className="flex flex-col gap-1.5 px-2">
+                    {moreLinks.map((link) => (
+                      <DropdownMenuItem key={link.href} asChild className="p-0 focus:bg-gold/10 rounded-lg">
+                        <Link to={link.href} className="flex items-center gap-3 text-zinc-800 hover:text-gold hover:bg-gold/10 py-2.5 px-3 transition-all w-full group rounded-lg">
+                          <div className="w-7 h-7 rounded-md bg-black flex items-center justify-center group-hover:bg-gold/20 transition-colors">
+                            <link.icon className="w-3.5 h-3.5 text-gold" />
+                          </div>
+                          <span className="font-medium text-sm">{link.label}</span>
+                        </Link>
+                      </DropdownMenuItem>
+                    ))}
+                  </div>
                 </DropdownMenuContent>
               </DropdownMenu>
             </div>
