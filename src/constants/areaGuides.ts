@@ -128,7 +128,7 @@ The Marina Walk promenade comes alive day and night with cafés, restaurants, an
   {
     slug: "business-bay",
     name: "Business Bay",
-    heroImage: "https://images.unsplash.com/photo-1546412414-e1885259563a?w=1920&q=80",
+    heroImage: "https://images.unsplash.com/photo-1582672060674-bc2bd808a8b5?w=1920&q=80",
     shortDescription: "Dubai's dynamic business and residential hub along the Dubai Water Canal.",
     overview: `Business Bay represents the new face of Dubai's commercial and residential landscape. This expansive district stretches along the Dubai Water Canal, combining corporate towers with residential developments in a dynamic urban environment. Once purely a business district, it has evolved into a thriving mixed-use community that offers excellent value and modern living.
 
@@ -172,6 +172,153 @@ The area benefits from its strategic location between Downtown Dubai and DIFC, m
       title: "Business Bay Area Guide",
       description: "Explore Business Bay — Dubai's dynamic canal-side district offering modern living near Downtown and DIFC. Find properties with JBJ Global Real Estate.",
       keywords: "Business Bay Dubai, Dubai Water Canal, apartments Business Bay, property Business Bay, Dubai business district"
+    }
+  },
+  {
+    slug: "palm-jumeirah",
+    name: "Palm Jumeirah",
+    heroImage: "https://images.unsplash.com/photo-1512632578888-169bbbc64f33?w=1920&q=80",
+    shortDescription: "The world's most iconic man-made island offering ultra-luxury beachfront living.",
+    overview: `Palm Jumeirah is Dubai's most recognizable landmark, a stunning man-made island shaped like a palm tree that has redefined waterfront living. This exclusive community offers ultra-luxury villas, premium apartments, and world-class hotels along pristine private beaches.
+
+Residents enjoy unparalleled privacy, stunning sea views, and access to some of the world's finest resorts and dining establishments. The Palm represents the pinnacle of Dubai's ambition and remains one of the most sought-after addresses in the world.`,
+    lifestyle: "Life on the Palm is defined by exclusivity and resort-style living. Private beaches, yacht clubs, and five-star amenities create an environment of refined leisure. The community attracts high-net-worth individuals seeking privacy, luxury, and the prestige of an iconic address.",
+    location: {
+      landmarks: [
+        "Atlantis, The Palm — Iconic resort",
+        "The Pointe — Dining and entertainment",
+        "Nakheel Mall — Premium shopping",
+        "Palm West Beach — Beach promenade",
+        "The View at The Palm — Observation deck"
+      ],
+      connectivity: [
+        "Palm Monorail connection",
+        "15 minutes to Dubai Marina",
+        "25 minutes to Downtown Dubai",
+        "30 minutes to Dubai International Airport",
+        "Direct access to Sheikh Zayed Road"
+      ]
+    },
+    amenities: {
+      dining: "World-class restaurants at Atlantis, The Pointe, and exclusive beach clubs offer diverse culinary experiences from celebrity chefs.",
+      retail: "Nakheel Mall provides luxury shopping, while The Pointe offers boutique retail and entertainment options.",
+      leisure: "Private beaches, water parks, yacht clubs, and luxury spa retreats define the leisure experience on the Palm.",
+      wellness: "Five-star hotel spas, private fitness facilities, and beachfront wellness programs cater to health-conscious residents."
+    },
+    propertyTypes: [
+      "Ultra-luxury beachfront villas",
+      "Premium waterfront apartments",
+      "Penthouse residences with panoramic views",
+      "Hotel-branded residences"
+    ],
+    residents: [
+      "High-net-worth individuals and families",
+      "International investors",
+      "Celebrities and public figures",
+      "Those seeking the ultimate in luxury living"
+    ],
+    seo: {
+      title: "Palm Jumeirah Area Guide",
+      description: "Discover Palm Jumeirah — Dubai's iconic island offering ultra-luxury beachfront living, world-class resorts, and exclusive amenities. Explore properties with JBJ Global Real Estate.",
+      keywords: "Palm Jumeirah, Dubai Palm Island, luxury villas Palm Jumeirah, beachfront property Dubai, Palm Jumeirah real estate"
+    }
+  },
+  {
+    slug: "jumeirah-village-circle",
+    name: "Jumeirah Village Circle (JVC)",
+    heroImage: "https://images.unsplash.com/photo-1600596542815-ffad4c1539a9?w=1920&q=80",
+    shortDescription: "A family-friendly community offering affordable luxury with excellent connectivity.",
+    overview: `Jumeirah Village Circle has emerged as one of Dubai's most popular residential communities, offering an exceptional balance of affordability, quality, and lifestyle. This master-planned development features a mix of apartments, townhouses, and villas arranged around landscaped parks and community facilities.
+
+The community attracts families, young professionals, and investors seeking quality living at competitive prices. Its central location provides easy access to major business districts while maintaining a peaceful, suburban atmosphere.`,
+    lifestyle: "JVC offers a relaxed, family-oriented lifestyle with tree-lined streets, parks, and community centers. Residents enjoy a strong sense of community, with regular events, accessible retail, and dining options catering to diverse tastes and budgets.",
+    location: {
+      landmarks: [
+        "Circle Mall — Community shopping center",
+        "JVC Community Park — Green spaces",
+        "Multiple landscaped gardens",
+        "Community sports facilities",
+        "Walking and cycling paths"
+      ],
+      connectivity: [
+        "Central location with highway access",
+        "15 minutes to Dubai Marina",
+        "20 minutes to Downtown Dubai",
+        "25 minutes to Dubai International Airport",
+        "Easy access to Al Khail Road"
+      ]
+    },
+    amenities: {
+      dining: "A growing selection of restaurants, cafés, and fast-food outlets cater to diverse tastes within the community.",
+      retail: "Circle Mall and numerous community retail outlets provide convenient shopping for daily needs.",
+      leisure: "Parks, playgrounds, community pools, and sports courts offer recreation for all ages.",
+      wellness: "Multiple gyms, fitness studios, and jogging tracks support an active lifestyle within the community."
+    },
+    propertyTypes: [
+      "Affordable apartments",
+      "Spacious townhouses",
+      "Family villas",
+      "Studio and one-bedroom units for investors"
+    ],
+    residents: [
+      "Young families seeking space and value",
+      "First-time buyers and renters",
+      "Investors seeking rental yields",
+      "Professionals working in central Dubai"
+    ],
+    seo: {
+      title: "JVC Area Guide",
+      description: "Explore Jumeirah Village Circle — a family-friendly community offering affordable luxury, excellent connectivity, and strong rental yields. Find properties with JBJ Global Real Estate.",
+      keywords: "JVC Dubai, Jumeirah Village Circle, affordable apartments Dubai, family community Dubai, JVC real estate"
+    }
+  },
+  {
+    slug: "dubai-hills-estate",
+    name: "Dubai Hills Estate",
+    heroImage: "https://images.unsplash.com/photo-1613490493576-7fde63acd811?w=1920&q=80",
+    shortDescription: "A premium master-planned community with an 18-hole golf course and upscale amenities.",
+    overview: `Dubai Hills Estate is a prestigious master-planned community developed by Emaar and Meraas, featuring an 18-hole championship golf course at its heart. This expansive development offers a range of premium properties from apartments to mansions, all set within beautifully landscaped surroundings.
+
+The community has become one of Dubai's most sought-after addresses, attracting families and professionals who appreciate quality construction, green spaces, and a complete lifestyle offering including Dubai Hills Mall, international schools, and healthcare facilities.`,
+    lifestyle: "Life in Dubai Hills Estate revolves around outdoor living, with cycling paths, jogging tracks, and the golf course providing endless recreation opportunities. The community offers a refined suburban lifestyle with the convenience of world-class retail and dining at Dubai Hills Mall.",
+    location: {
+      landmarks: [
+        "Dubai Hills Golf Club — Championship course",
+        "Dubai Hills Mall — Premium shopping",
+        "Dubai Hills Park — 180-hectare green space",
+        "International schools",
+        "Healthcare facilities"
+      ],
+      connectivity: [
+        "Direct access to Al Khail Road",
+        "15 minutes to Downtown Dubai",
+        "20 minutes to Dubai Marina",
+        "25 minutes to Dubai International Airport",
+        "Easy access to Umm Suqeim Road"
+      ]
+    },
+    amenities: {
+      dining: "Dubai Hills Mall hosts numerous restaurants and cafés, with additional dining options throughout the community.",
+      retail: "Dubai Hills Mall offers comprehensive shopping from luxury brands to everyday essentials.",
+      leisure: "The 18-hole golf course, parks, and recreational facilities provide diverse leisure options for all ages.",
+      wellness: "Premium fitness centers, wellness spas, and extensive outdoor facilities support healthy living."
+    },
+    propertyTypes: [
+      "Modern apartments",
+      "Golf course villas",
+      "Premium townhouses",
+      "Luxury mansions"
+    ],
+    residents: [
+      "Affluent families",
+      "Golf enthusiasts",
+      "Professionals seeking premium living",
+      "Those who value green spaces and community"
+    ],
+    seo: {
+      title: "Dubai Hills Estate Area Guide",
+      description: "Discover Dubai Hills Estate — a premium community with an 18-hole golf course, Dubai Hills Mall, and upscale family living. Explore properties with JBJ Global Real Estate.",
+      keywords: "Dubai Hills Estate, golf course villas Dubai, Emaar Dubai Hills, premium community Dubai, Dubai Hills real estate"
     }
   }
 ];

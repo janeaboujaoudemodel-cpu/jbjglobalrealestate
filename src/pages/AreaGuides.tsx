@@ -21,11 +21,12 @@ const staggerContainer = {
 };
 
 const AreaGuides = () => {
+  // Source: Dubai Land Department Annual Report 2024, Dubai Statistics Center
   const highlights = [
-    { icon: Building2, value: "50+", label: "Communities" },
+    { icon: Building2, value: "80+", label: "Communities" },
     { icon: Users, value: "200+", label: "Nationalities" },
-    { icon: Home, value: "1M+", label: "Properties" },
-    { icon: TrendingUp, value: "15%", label: "Avg. Yield" },
+    { icon: Home, value: "226K+", label: "Transactions (2024)" },
+    { icon: TrendingUp, value: "7-9%", label: "Avg. Yield" },
   ];
 
   return (
@@ -52,25 +53,25 @@ const AreaGuides = () => {
         actions={
           <div className="flex flex-wrap justify-center gap-4">
             <Button 
-              variant="outline"
-              className="border-gold/50 text-gold hover:bg-gold/10 px-6"
+              className="relative bg-gradient-to-r from-white via-[#FDFBF7] to-[#F5F0E6] border border-gold/40 px-6 py-3 shadow-[0_4px_20px_rgba(200,167,102,0.3),0_8px_30px_rgba(0,0,0,0.15)] hover:shadow-[0_6px_25px_rgba(200,167,102,0.5),0_10px_40px_rgba(0,0,0,0.2)] hover:scale-[1.02] transition-all duration-300"
               onClick={() => document.getElementById('area-grid')?.scrollIntoView({ behavior: 'smooth' })}
             >
-              Explore All Areas
+              <span className="text-gold font-semibold">Explore All Areas</span>
+              <ArrowUpRight className="w-4 h-4 ml-2 text-black" />
             </Button>
             <Link to="/properties">
-              <Button variant="primary" className="px-6">
-                <Building2 className="w-4 h-4 mr-2" />
-                View Properties
-                <ArrowUpRight className="w-4 h-4 ml-2 text-gold" />
+              <Button className="relative bg-gradient-to-r from-white via-[#FDFBF7] to-[#F5F0E6] border border-gold/40 px-6 py-3 shadow-[0_4px_20px_rgba(200,167,102,0.3),0_8px_30px_rgba(0,0,0,0.15)] hover:shadow-[0_6px_25px_rgba(200,167,102,0.5),0_10px_40px_rgba(0,0,0,0.2)] hover:scale-[1.02] transition-all duration-300">
+                <Building2 className="w-4 h-4 mr-2 text-black" />
+                <span className="text-gold font-semibold">View Properties</span>
+                <ArrowUpRight className="w-4 h-4 ml-2 text-black" />
               </Button>
             </Link>
           </div>
         }
       />
 
-      {/* Stats Bar */}
-      <section className="py-8 bg-zinc-900/50 border-y border-zinc-800">
+      {/* Stats Bar - White/Champagne Theme */}
+      <section className="py-10 bg-gradient-to-r from-white via-[#FDFBF7] to-[#F5F0E6] border-y border-gold/20">
         <div className="container mx-auto px-4">
           <div className="grid grid-cols-2 md:grid-cols-4 gap-6">
             {highlights.map((item, index) => (
@@ -82,14 +83,15 @@ const AreaGuides = () => {
                 transition={{ delay: index * 0.1 }}
                 className="text-center"
               >
-                <div className="inline-flex items-center justify-center w-12 h-12 bg-black border border-gold rounded-xl mb-3">
+                <div className="inline-flex items-center justify-center w-12 h-12 bg-black border border-gold/30 rounded-xl mb-3 shadow-md">
                   <item.icon className="w-6 h-6 text-gold" />
                 </div>
-                <div className="text-2xl md:text-3xl font-bold text-white">{item.value}</div>
-                <div className="text-sm text-zinc-400">{item.label}</div>
+                <div className="text-2xl md:text-3xl font-bold text-black">{item.value}</div>
+                <div className="text-sm text-zinc-600">{item.label}</div>
               </motion.div>
             ))}
           </div>
+          <p className="text-center text-xs text-zinc-500 mt-4">Source: Dubai Land Department Annual Report 2024</p>
         </div>
       </section>
 
@@ -122,26 +124,26 @@ const AreaGuides = () => {
               <motion.div key={area.slug} variants={fadeInUp}>
                 <Link 
                   to={`/area/${area.slug}`}
-                  className="group block relative overflow-hidden rounded-2xl bg-zinc-900 border border-zinc-800 hover:border-gold/40 transition-all duration-500 hover:shadow-xl hover:shadow-gold/5"
+                  className="group block relative overflow-hidden rounded-2xl bg-gradient-to-br from-white via-[#FDFBF7] to-[#F5F0E6] border border-gold/30 hover:border-gold transition-all duration-500 hover:shadow-xl hover:shadow-gold/20"
                 >
                   {/* Image */}
-                  <div className="relative h-64 overflow-hidden">
+                  <div className="relative h-56 overflow-hidden">
                     <img 
                       src={area.heroImage} 
                       alt={area.name}
                       loading="lazy"
                       className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110"
                     />
-                    <div className="absolute inset-0 bg-gradient-to-t from-black via-black/50 to-transparent" />
+                    <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-black/30 to-transparent" />
                     
                     {/* Hover Arrow */}
-                    <div className="absolute top-4 right-4 w-10 h-10 rounded-full bg-gold/20 border border-gold/40 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-all duration-300 transform translate-y-2 group-hover:translate-y-0">
-                      <ArrowUpRight className="w-5 h-5 text-gold" />
+                    <div className="absolute top-4 right-4 w-10 h-10 rounded-full bg-white/90 border border-gold/40 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-all duration-300 transform translate-y-2 group-hover:translate-y-0 shadow-lg">
+                      <ArrowUpRight className="w-5 h-5 text-black" />
                     </div>
 
                     {/* Price Range Badge */}
                     <div className="absolute bottom-4 left-4">
-                      <span className="px-3 py-1 bg-black/70 backdrop-blur-sm border border-zinc-700 rounded-full text-xs text-zinc-300">
+                      <span className="px-3 py-1 bg-white/90 backdrop-blur-sm border border-gold/30 rounded-full text-xs text-black font-medium shadow-md">
                         Premium Community
                       </span>
                     </div>
@@ -154,15 +156,15 @@ const AreaGuides = () => {
                       <span className="text-gold text-sm uppercase tracking-wider font-medium">Dubai, UAE</span>
                     </div>
                     
-                    <h3 className="text-white text-2xl font-bold mb-3 group-hover:text-gold transition-colors">
+                    <h3 className="text-black text-2xl font-bold mb-3 group-hover:text-gold transition-colors">
                       {area.name}
                     </h3>
                     
-                    <p className="text-zinc-400 text-sm leading-relaxed line-clamp-2 mb-4">
+                    <p className="text-zinc-600 text-sm leading-relaxed line-clamp-2 mb-4">
                       {area.shortDescription}
                     </p>
                     
-                    <div className="flex items-center justify-between pt-4 border-t border-zinc-800">
+                    <div className="flex items-center justify-between pt-4 border-t border-zinc-200">
                       <span className="text-gold text-sm font-medium flex items-center gap-2 group-hover:gap-3 transition-all">
                         Read Full Guide
                         <ArrowUpRight className="w-4 h-4" />
