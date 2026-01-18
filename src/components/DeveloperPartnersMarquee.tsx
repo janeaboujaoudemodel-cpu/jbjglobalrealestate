@@ -67,7 +67,7 @@ const DeveloperPartnersMarquee = () => {
             >
               {/* Developer name with premium styling - clickable */}
               <Link 
-                to={`/properties?developer=${encodeURIComponent(developer.name)}`}
+                to={`/properties?developer=${encodeURIComponent(developer.slug)}`}
                 className="text-zinc-400 text-sm md:text-base font-medium tracking-wide whitespace-nowrap hover:text-gold transition-colors duration-300 cursor-pointer"
               >
                 {developer.name}
