@@ -458,8 +458,8 @@ export const executiveTeam: TeamMember[] = sortByHierarchy([
     canConductInterviews: false,
   },
   {
-    id: 'olivia-reynolds',
-    name: 'Olivia Reynolds',
+    id: 'victoria-reynolds',
+    name: 'Victoria Reynolds',
     role: 'Executive Assistant to COO',
     department: 'Executive',
     avatar: oliviaExecutiveAssistant, // LOCKED_EXISTING - Do not modify
