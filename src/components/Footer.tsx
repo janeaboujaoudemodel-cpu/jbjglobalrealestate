@@ -117,11 +117,10 @@ const Footer = () => {
     { href: "/contact", label: "Contact" },
   ];
 
-  // Broker Toolkit & Resources
+  // Broker Hub & Resources
   const academyLinks = [
-    { href: "/broker-toolkit", label: "Broker Toolkit" },
-    { href: "/broker-toolkit/dashboard", label: "My Dashboard" },
-    { href: "/tools-guide", label: "Guides & Resources" },
+    { href: "/broker-toolkit", label: "Broker Hub" },
+    { href: "/my-account", label: "My Dashboard" },
     { href: "/jbj-design-studio", label: "Graphic Designer" },
     { href: "/video-builder", label: "Videographer" },
   ];
@@ -257,12 +256,12 @@ const Footer = () => {
               </div>
             </div>
 
-            {/* Broker Toolkit */}
+            {/* Broker Hub */}
             <div className="py-5 lg:py-0 lg:px-5">
               <h4 className="text-gold font-semibold text-sm uppercase tracking-[0.15em] mb-4">
-                Broker Toolkit
+                Broker Hub
               </h4>
-              <p className="text-zinc-500 text-xs mb-3">Guides & Resources</p>
+              <p className="text-zinc-500 text-xs mb-3">Tools, Training & Support</p>
               <ul className="space-y-2">
                 {academyLinks.map((link) => (
                   <li key={link.href}>

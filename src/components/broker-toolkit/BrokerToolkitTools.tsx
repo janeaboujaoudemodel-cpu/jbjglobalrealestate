@@ -91,6 +91,13 @@ const TOOLS = [
     link: '/ai-hub',
     tier: 'member',
   },
+  {
+    name: 'JBJ Design Studio',
+    description: 'Professional graphics & marketing materials',
+    icon: Share2,
+    link: '/jbj-design-studio',
+    tier: 'member',
+  },
 ];
 
 export function BrokerToolkitTools() {
