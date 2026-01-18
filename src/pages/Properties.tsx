@@ -163,8 +163,11 @@ const Properties = () => {
 
       const matchedDeveloper =
         developers.find((d) => d.id === developerParam) ||
-        developers.find((d) => d.slug?.toLowerCase() === normalized) ||
-        developers.find((d) => d.name.toLowerCase() === normalized);
+        developers.find((d) => (d.slug ?? "").toLowerCase() === normalized) ||
+        developers.find((d) => (d.slug ?? "").toLowerCase().includes(normalized)) ||
+        developers.find((d) => normalized.includes((d.slug ?? "").toLowerCase())) ||
+        developers.find((d) => d.name.toLowerCase() === normalized) ||
+        developers.find((d) => d.name.toLowerCase().includes(normalized));
 
       if (matchedDeveloper) {
         developerIdFromUrl = matchedDeveloper.id;
@@ -788,6 +791,7 @@ const Properties = () => {
           <div className="flex items-center justify-center gap-2 mt-5">
             {[
               { value: "newest", label: "Newest" },
+              { value: "oldest", label: "Oldest" },
               { value: "price-low", label: "Low → High" },
               { value: "price-high", label: "High → Low" },
             ].map((option) => (
@@ -796,10 +800,13 @@ const Properties = () => {
                 onClick={() => setSortBy(option.value)}
                 className={`px-4 py-2 rounded-full text-xs font-semibold transition-all border ${
                   sortBy === option.value
-                    ? "bg-black text-gold border-black shadow-lg"
+                    ? "bg-white text-black border-gold shadow-[0_0_18px_rgba(200,167,102,0.25)]"
                     : "bg-black text-gold border-black hover:bg-zinc-800"
                 }`}
               >
+                {option.label}
+              </button>
+            ))}
                 {option.label}
               </button>
             ))}
@@ -866,12 +873,12 @@ const Properties = () => {
                     Register your interest to be notified when listings become available.
                   </p>
                   <div className="flex flex-col sm:flex-row items-center justify-center gap-3">
-                    <a href={getWhatsAppUrl()} target="_blank" rel="noopener noreferrer">
-                      <Button variant="primary" className="h-12 px-8">
+                    <Button asChild variant="primary" className="h-12 px-8">
+                      <a href={getWhatsAppUrl()} target="_blank" rel="noopener noreferrer">
                         <MessageCircle className="w-4 h-4 mr-2" />
                         Register Interest via WhatsApp
-                      </Button>
-                    </a>
+                      </a>
+                    </Button>
                     <Button onClick={clearFilters} variant="outline" className="border-zinc-300 text-black hover:bg-zinc-100 h-12 px-6">
                       Browse All Properties
                     </Button>
@@ -1009,26 +1016,28 @@ const Properties = () => {
       {/* Quick Contact CTA */}
       <section className="py-12 bg-zinc-950 border-t border-zinc-800">
         <div className="container mx-auto px-4">
-          <div className="flex flex-wrap items-center justify-center gap-4">
-            <a href={buildSureFormsUrl()} target="_blank" rel="noopener noreferrer">
-              <Button variant="primary" className="h-12 px-8">
-                <ArrowUpRight className="w-4 h-4 mr-2" />
-                Register Interest
+            <div className="flex flex-wrap items-center justify-center gap-4">
+              <Button asChild variant="primary" className="h-12 px-8">
+                <a href={buildSureFormsUrl()} target="_blank" rel="noopener noreferrer">
+                  <ArrowUpRight className="w-4 h-4 mr-2" />
+                  Register Interest
+                </a>
               </Button>
-            </a>
-            <a href={getWhatsAppUrl()} target="_blank" rel="noopener noreferrer">
-              <Button variant="outline" className="border-green-600 text-green-500 hover:bg-green-600 hover:text-white h-12 px-8">
-                <MessageCircle className="w-4 h-4 mr-2" />
-                WhatsApp
+
+              <Button asChild variant="outline" className="h-12 px-8">
+                <a href={getWhatsAppUrl()} target="_blank" rel="noopener noreferrer">
+                  <MessageCircle className="w-4 h-4 mr-2" />
+                  WhatsApp
+                </a>
               </Button>
-            </a>
-            <a href={`tel:${CONTACT_INFO.phoneRaw}`}>
-              <Button variant="secondary" className="h-12 px-8">
-                <Phone className="w-4 h-4 mr-2" />
-                Call Now
+
+              <Button asChild variant="secondary" className="h-12 px-8">
+                <a href={`tel:${CONTACT_INFO.phoneRaw}`}>
+                  <Phone className="w-4 h-4 mr-2" />
+                  Call Now
+                </a>
               </Button>
-            </a>
-          </div>
+            </div>
         </div>
       </section>
 
