@@ -8,7 +8,7 @@ import { useQuery } from "@tanstack/react-query";
 import { 
   Home, Heart, User, LogOut, Settings, Menu, 
   Phone, Building2, Newspaper, ClipboardCheck, FileText,
-  Sparkles, Search, Users, BookOpen, ChevronDown
+  Sparkles, Search, Users, BookOpen, ChevronDown, Briefcase, UserCircle
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { useState } from "react";
@@ -120,62 +120,73 @@ const GlobalHeader = () => {
   const isActive = (path: string) => location.pathname === path;
 
   return (
-    <header className="fixed top-0 left-0 right-0 z-[9999] bg-gradient-to-b from-black via-black/98 to-black/95 backdrop-blur-xl border-b border-gold/10 shadow-lg shadow-black/30">
-      <div className="container mx-auto px-4 sm:px-6">
-        <div className="flex items-center h-16 lg:h-[72px]">
+    <header className="fixed top-0 left-0 right-0 z-[9999] bg-gradient-to-b from-black via-zinc-950 to-black/98 backdrop-blur-2xl border-b border-gold/20 shadow-2xl shadow-black/50">
+      {/* Premium top accent line */}
+      <div className="absolute top-0 left-0 right-0 h-[2px] bg-gradient-to-r from-transparent via-gold/60 to-transparent" />
+      
+      <div className="container mx-auto px-6 lg:px-8">
+        <div className="flex items-center h-20 lg:h-24">
           
-          {/* LEFT: Brand Logo - Monogram + Text */}
+          {/* LEFT: Brand Logo - Monogram + Text - LOCKED (only size can change) */}
           <Link 
             to="/" 
-            className="flex items-center gap-3 shrink-0 hover:opacity-90 transition-opacity"
+            className="flex items-center gap-4 shrink-0 group transition-all duration-300"
             style={{ fontFamily: "Poppins, sans-serif" }}
             onClick={() => window.scrollTo({ top: 0, behavior: 'smooth' })}
           >
-            <img 
-              src={jbjMonogramDarkBg} 
-              alt="JBJ" 
-              className="w-10 h-10 object-contain"
-            />
-            <span className="text-white font-semibold text-sm sm:text-base lg:text-lg tracking-[0.12em] uppercase whitespace-nowrap hidden sm:inline">
+            <div className="relative">
+              <img 
+                src={jbjMonogramDarkBg} 
+                alt="JBJ" 
+                className="w-12 h-12 lg:w-14 lg:h-14 object-contain transition-transform duration-300 group-hover:scale-105"
+              />
+              {/* Subtle glow on hover */}
+              <div className="absolute inset-0 rounded-full bg-gold/0 group-hover:bg-gold/10 transition-colors duration-300 blur-xl" />
+            </div>
+            <span className="text-white font-semibold text-base lg:text-xl tracking-[0.14em] uppercase whitespace-nowrap hidden sm:inline drop-shadow-sm">
               JBJ Global Real Estate
             </span>
           </Link>
 
-          {/* CENTER: Desktop Navigation - Compact with Properties & Guides dropdowns */}
-          <nav className="hidden lg:flex items-center justify-center flex-1 mx-2">
-            <div className="flex items-center gap-0">
+          {/* CENTER: Desktop Navigation - Premium styling with elegant dropdowns */}
+          <nav className="hidden lg:flex items-center justify-center flex-1 mx-6">
+            <div className="flex items-center gap-1 bg-white/[0.03] backdrop-blur-sm rounded-full px-2 py-1.5 border border-white/[0.06]">
               {mainNavLinks.slice(0, 1).map((link) => (
                 <Link
                   key={link.href}
                   to={link.href}
-                  className={`px-2 xl:px-2.5 py-2 text-[12px] xl:text-[13px] font-medium whitespace-nowrap transition-all relative group rounded-md ${
+                  className={`px-4 xl:px-5 py-2.5 text-[13px] xl:text-sm font-medium whitespace-nowrap transition-all relative group rounded-full ${
                     isActive(link.href)
-                      ? "text-gold"
-                      : "text-zinc-300 hover:text-gold hover:bg-gold/20"
+                      ? "text-gold bg-gold/10"
+                      : "text-zinc-200 hover:text-gold hover:bg-white/5"
                   }`}
                 >
                   {link.label}
-                  <span className={`absolute bottom-0 left-2 right-2 h-[2px] bg-gradient-to-r from-gold/80 to-gold transition-transform origin-left ${
-                    isActive(link.href) ? "scale-x-100" : "scale-x-0 group-hover:scale-x-100"
-                  }`} />
                 </Link>
               ))}
 
-              {/* Properties Dropdown - Buy / Rent / New Projects */}
+              {/* Properties Dropdown - Premium styling */}
               <DropdownMenu>
                 <DropdownMenuTrigger asChild>
-                  <button className={`flex items-center gap-1 px-2 xl:px-2.5 py-2 text-[12px] xl:text-[13px] font-medium whitespace-nowrap transition-all rounded-md ${
-                    location.pathname === '/properties' ? 'text-gold' : 'text-zinc-300 hover:text-gold hover:bg-gold/20'
+                  <button className={`flex items-center gap-1.5 px-4 xl:px-5 py-2.5 text-[13px] xl:text-sm font-medium whitespace-nowrap transition-all rounded-full ${
+                    location.pathname === '/properties' ? 'text-gold bg-gold/10' : 'text-zinc-200 hover:text-gold hover:bg-white/5'
                   }`}>
                     {t('nav.properties')}
-                    <ChevronDown className="w-3 h-3" />
+                    <ChevronDown className="w-3.5 h-3.5 transition-transform duration-200 group-data-[state=open]:rotate-180" />
                   </button>
                 </DropdownMenuTrigger>
-                <DropdownMenuContent align="center" className="bg-white border border-gold/40 min-w-[220px] mt-2 shadow-xl py-2.5 rounded-lg">
+                <DropdownMenuContent 
+                  align="center" 
+                  sideOffset={12}
+                  className="bg-gradient-to-b from-white to-zinc-50 border border-gold/30 min-w-[240px] shadow-2xl shadow-black/30 py-3 rounded-xl overflow-hidden"
+                >
+                  <div className="absolute top-0 left-0 right-0 h-[2px] bg-gradient-to-r from-transparent via-gold to-transparent" />
                   {propertiesLinks.map((link) => (
-                    <DropdownMenuItem key={link.href} asChild className="py-0 px-0 focus:bg-gold/20">
-                      <Link to={link.href} className="flex items-center gap-3 text-black hover:text-gold hover:bg-gold/20 py-3 px-4 transition-all w-full">
-                        <link.icon className="w-4 h-4 text-gold" />
+                    <DropdownMenuItem key={link.href} asChild className="py-0 px-0 focus:bg-gold/10">
+                      <Link to={link.href} className="flex items-center gap-3 text-zinc-800 hover:text-gold hover:bg-gold/10 py-3.5 px-5 transition-all w-full group">
+                        <div className="w-8 h-8 rounded-lg bg-black flex items-center justify-center group-hover:bg-gold/20 transition-colors">
+                          <link.icon className="w-4 h-4 text-gold" />
+                        </div>
                         <span className="font-medium">{link.label}</span>
                       </Link>
                     </DropdownMenuItem>
@@ -187,74 +198,93 @@ const GlobalHeader = () => {
                 <Link
                   key={link.href}
                   to={link.href}
-                  className={`px-2 xl:px-2.5 py-2 text-[12px] xl:text-[13px] font-medium whitespace-nowrap transition-all relative group rounded-md ${
+                  className={`px-4 xl:px-5 py-2.5 text-[13px] xl:text-sm font-medium whitespace-nowrap transition-all relative group rounded-full ${
                     isActive(link.href)
-                      ? "text-gold"
-                      : "text-zinc-300 hover:text-gold hover:bg-gold/20"
+                      ? "text-gold bg-gold/10"
+                      : "text-zinc-200 hover:text-gold hover:bg-white/5"
                   }`}
                 >
                   {link.label}
-                  <span className={`absolute bottom-0 left-2 right-2 h-[2px] bg-gradient-to-r from-gold/80 to-gold transition-transform origin-left ${
-                    isActive(link.href) ? "scale-x-100" : "scale-x-0 group-hover:scale-x-100"
-                  }`} />
                 </Link>
               ))}
 
+              {/* Guides Dropdown - Premium styling */}
               <DropdownMenu>
                 <DropdownMenuTrigger asChild>
-                  <button className="flex items-center gap-1 px-2 xl:px-2.5 py-2 text-[12px] xl:text-[13px] font-medium whitespace-nowrap transition-all text-zinc-300 hover:text-gold hover:bg-gold/20 rounded-md">
+                  <button className="flex items-center gap-1.5 px-4 xl:px-5 py-2.5 text-[13px] xl:text-sm font-medium whitespace-nowrap transition-all text-zinc-200 hover:text-gold hover:bg-white/5 rounded-full">
                     Guides
-                    <ChevronDown className="w-3 h-3" />
+                    <ChevronDown className="w-3.5 h-3.5" />
                   </button>
                 </DropdownMenuTrigger>
-                <DropdownMenuContent align="center" className="bg-white border border-gold/40 min-w-[180px] mt-2 shadow-xl py-2.5 rounded-lg">
+                <DropdownMenuContent 
+                  align="center" 
+                  sideOffset={12}
+                  className="bg-gradient-to-b from-white to-zinc-50 border border-gold/30 min-w-[220px] shadow-2xl shadow-black/30 py-3 rounded-xl overflow-hidden"
+                >
+                  <div className="absolute top-0 left-0 right-0 h-[2px] bg-gradient-to-r from-transparent via-gold to-transparent" />
                   {guidesLinks.map((link) => (
-                    <DropdownMenuItem key={link.href} asChild className="py-0 px-0 focus:bg-gold/20">
-                      <Link to={link.href} className="flex items-center gap-3 text-black hover:text-gold hover:bg-gold/20 py-3 px-4 transition-all w-full">
-                        <link.icon className="w-4 h-4 text-gold" />
-                        <span className="font-medium">{link.label}</span>
-                      </Link>
-                    </DropdownMenuItem>
-                  ))}
-              </DropdownMenuContent>
-              </DropdownMenu>
-
-              {/* Market Intelligence Dropdown */}
-              <DropdownMenu>
-                <DropdownMenuTrigger asChild>
-                  <button className={`flex items-center gap-1 px-2 xl:px-2.5 py-2 text-[12px] xl:text-[13px] font-medium whitespace-nowrap transition-all rounded-md ${
-                    location.pathname.startsWith('/market-intelligence') ? 'text-gold' : 'text-zinc-300 hover:text-gold hover:bg-gold/20'
-                  }`}>
-                    Market Intelligence
-                    <ChevronDown className="w-3 h-3" />
-                  </button>
-                </DropdownMenuTrigger>
-                <DropdownMenuContent align="center" className="bg-white border border-gold/40 min-w-[200px] mt-2 shadow-xl py-2.5 rounded-lg">
-                  {marketIntelLinks.map((link) => (
-                    <DropdownMenuItem key={link.href} asChild className="py-0 px-0 focus:bg-gold/20">
-                      <Link to={link.href} className="flex items-center gap-3 text-black hover:text-gold hover:bg-gold/20 py-3 px-4 transition-all w-full">
-                        <link.icon className="w-4 h-4 text-gold" />
-                        <span className="font-medium">{link.label}</span>
+                    <DropdownMenuItem key={link.href} asChild className="py-0 px-0 focus:bg-gold/10">
+                      <Link to={link.href} className="flex items-center gap-3 text-zinc-800 hover:text-gold hover:bg-gold/10 py-3 px-5 transition-all w-full group">
+                        <div className="w-7 h-7 rounded-md bg-black flex items-center justify-center group-hover:bg-gold/20 transition-colors">
+                          <link.icon className="w-3.5 h-3.5 text-gold" />
+                        </div>
+                        <span className="font-medium text-sm">{link.label}</span>
                       </Link>
                     </DropdownMenuItem>
                   ))}
                 </DropdownMenuContent>
               </DropdownMenu>
 
-              {/* More Dropdown */}
+              {/* Market Intelligence Dropdown - Premium styling */}
               <DropdownMenu>
                 <DropdownMenuTrigger asChild>
-                  <button className="flex items-center gap-1 px-2 xl:px-2.5 py-2 text-[12px] xl:text-[13px] font-medium whitespace-nowrap transition-all text-zinc-300 hover:text-gold hover:bg-gold/20 rounded-md">
-                    More
-                    <ChevronDown className="w-3 h-3" />
+                  <button className={`flex items-center gap-1.5 px-4 xl:px-5 py-2.5 text-[13px] xl:text-sm font-medium whitespace-nowrap transition-all rounded-full ${
+                    location.pathname.startsWith('/market-intelligence') ? 'text-gold bg-gold/10' : 'text-zinc-200 hover:text-gold hover:bg-white/5'
+                  }`}>
+                    Market Intelligence
+                    <ChevronDown className="w-3.5 h-3.5" />
                   </button>
                 </DropdownMenuTrigger>
-                <DropdownMenuContent align="center" className="bg-white border border-gold/40 min-w-[180px] mt-2 shadow-xl py-2.5 rounded-lg">
+                <DropdownMenuContent 
+                  align="center" 
+                  sideOffset={12}
+                  className="bg-gradient-to-b from-white to-zinc-50 border border-gold/30 min-w-[220px] shadow-2xl shadow-black/30 py-3 rounded-xl overflow-hidden"
+                >
+                  <div className="absolute top-0 left-0 right-0 h-[2px] bg-gradient-to-r from-transparent via-gold to-transparent" />
+                  {marketIntelLinks.map((link) => (
+                    <DropdownMenuItem key={link.href} asChild className="py-0 px-0 focus:bg-gold/10">
+                      <Link to={link.href} className="flex items-center gap-3 text-zinc-800 hover:text-gold hover:bg-gold/10 py-3 px-5 transition-all w-full group">
+                        <div className="w-7 h-7 rounded-md bg-black flex items-center justify-center group-hover:bg-gold/20 transition-colors">
+                          <link.icon className="w-3.5 h-3.5 text-gold" />
+                        </div>
+                        <span className="font-medium text-sm">{link.label}</span>
+                      </Link>
+                    </DropdownMenuItem>
+                  ))}
+                </DropdownMenuContent>
+              </DropdownMenu>
+
+              {/* More Dropdown - Premium styling */}
+              <DropdownMenu>
+                <DropdownMenuTrigger asChild>
+                  <button className="flex items-center gap-1.5 px-4 xl:px-5 py-2.5 text-[13px] xl:text-sm font-medium whitespace-nowrap transition-all text-zinc-200 hover:text-gold hover:bg-white/5 rounded-full">
+                    More
+                    <ChevronDown className="w-3.5 h-3.5" />
+                  </button>
+                </DropdownMenuTrigger>
+                <DropdownMenuContent 
+                  align="center" 
+                  sideOffset={12}
+                  className="bg-gradient-to-b from-white to-zinc-50 border border-gold/30 min-w-[200px] shadow-2xl shadow-black/30 py-3 rounded-xl overflow-hidden"
+                >
+                  <div className="absolute top-0 left-0 right-0 h-[2px] bg-gradient-to-r from-transparent via-gold to-transparent" />
                   {moreLinks.map((link) => (
-                    <DropdownMenuItem key={link.href} asChild className="py-0 px-0 focus:bg-gold/20">
-                      <Link to={link.href} className="flex items-center gap-3 text-black hover:text-gold hover:bg-gold/20 py-3 px-4 transition-all w-full">
-                        <link.icon className="w-4 h-4 text-gold" />
-                        <span className="font-medium">{link.label}</span>
+                    <DropdownMenuItem key={link.href} asChild className="py-0 px-0 focus:bg-gold/10">
+                      <Link to={link.href} className="flex items-center gap-3 text-zinc-800 hover:text-gold hover:bg-gold/10 py-3 px-5 transition-all w-full group">
+                        <div className="w-7 h-7 rounded-md bg-black flex items-center justify-center group-hover:bg-gold/20 transition-colors">
+                          <link.icon className="w-3.5 h-3.5 text-gold" />
+                        </div>
+                        <span className="font-medium text-sm">{link.label}</span>
                       </Link>
                     </DropdownMenuItem>
                   ))}
@@ -263,35 +293,35 @@ const GlobalHeader = () => {
             </div>
           </nav>
 
-          {/* RIGHT: Actions (search, favorites, language, menu, user) - Gold themed */}
-          <div className="flex items-center gap-1 shrink-0 ml-auto">
-            {/* Search Icon - Gold */}
+          {/* RIGHT: Actions - Premium icon buttons with gold accents */}
+          <div className="flex items-center gap-2 shrink-0 ml-auto">
+            {/* Search Icon - Premium gold button */}
             <Button
               variant="ghost"
               size="sm"
-              className="text-gold hover:text-gold-light hover:bg-gold/10 shrink-0 w-8 h-8 lg:w-9 lg:h-9 p-0"
+              className="relative text-gold hover:text-gold-light w-10 h-10 lg:w-11 lg:h-11 p-0 rounded-full border border-gold/20 hover:border-gold/50 hover:bg-gold/10 transition-all duration-300 group"
               onClick={() => setSearchOpen(true)}
             >
-              <Search className="w-4 h-4 lg:w-5 lg:h-5" />
+              <Search className="w-4 h-4 lg:w-5 lg:h-5 group-hover:scale-110 transition-transform" />
             </Button>
 
-            {/* Favorites - Gold icon */}
+            {/* Favorites - Premium gold button */}
             <Link to="/favorites" className="shrink-0">
               <Button
                 variant="ghost"
                 size="sm"
-                className="text-gold hover:text-gold-light hover:bg-gold/10 relative w-8 h-8 lg:w-9 lg:h-9 p-0"
+                className="relative text-gold hover:text-gold-light w-10 h-10 lg:w-11 lg:h-11 p-0 rounded-full border border-gold/20 hover:border-gold/50 hover:bg-gold/10 transition-all duration-300 group"
               >
-                <Heart className="w-4 h-4 lg:w-5 lg:h-5" />
+                <Heart className="w-4 h-4 lg:w-5 lg:h-5 group-hover:scale-110 transition-transform" />
                 {totalCount > 0 && (
-                  <span className="absolute -top-1 -right-1 w-4 h-4 bg-gold text-black rounded-full text-[10px] font-semibold flex items-center justify-center">
+                  <span className="absolute -top-0.5 -right-0.5 w-5 h-5 bg-gradient-to-br from-gold to-gold-dark text-black rounded-full text-[10px] font-bold flex items-center justify-center shadow-lg shadow-gold/30">
                     {totalCount}
                   </span>
                 )}
               </Button>
             </Link>
 
-            {/* Language Switcher - Gold themed */}
+            {/* Language Switcher - Premium styled */}
             <div className="shrink-0">
               <LanguageSwitcher />
             </div>
@@ -438,7 +468,7 @@ const GlobalHeader = () => {
               </SheetContent>
             </Sheet>
 
-            {/* User Menu - Desktop (Icon only, no email shown) */}
+            {/* User Menu - Desktop - Premium profile dropdown */}
             <div className="hidden lg:block">
               {user ? (
                 <DropdownMenu>
@@ -446,55 +476,111 @@ const GlobalHeader = () => {
                     <Button 
                       variant="ghost" 
                       size="icon"
-                      className="text-gold hover:text-gold-light hover:bg-gold/10 w-9 h-9"
+                      className="relative text-gold hover:text-gold-light w-10 h-10 lg:w-11 lg:h-11 p-0 rounded-full border border-gold/20 hover:border-gold/50 hover:bg-gold/10 transition-all duration-300 group"
                       aria-label={t('nav.myAccount')}
                     >
-                      <User className="w-5 h-5" />
+                      <User className="w-5 h-5 group-hover:scale-110 transition-transform" />
                     </Button>
                   </DropdownMenuTrigger>
-                  <DropdownMenuContent align="end" className="bg-black border-zinc-800 min-w-[180px]">
-                    <div className="px-3 py-2 text-gold font-semibold border-b border-zinc-800">
-                      {t('nav.myAccount')}
+                  <DropdownMenuContent 
+                    align="end" 
+                    sideOffset={12}
+                    className="bg-gradient-to-b from-zinc-900 to-black border border-gold/30 min-w-[240px] shadow-2xl shadow-black/50 rounded-xl overflow-hidden"
+                  >
+                    {/* Premium header with gold accent */}
+                    <div className="relative px-5 py-4 border-b border-gold/20 bg-gradient-to-r from-gold/5 to-transparent">
+                      <div className="absolute top-0 left-0 right-0 h-[2px] bg-gradient-to-r from-transparent via-gold to-transparent" />
+                      <p className="text-gold font-semibold text-sm tracking-wide">{t('nav.myAccount')}</p>
+                      <p className="text-zinc-500 text-xs mt-1 truncate">{user.email}</p>
                     </div>
-                    <DropdownMenuItem asChild>
-                      <Link to="/my-account" className="flex items-center gap-2 text-zinc-300">
-                        <User className="w-4 h-4" />
-                        Profile
-                      </Link>
-                    </DropdownMenuItem>
-                    <DropdownMenuItem asChild>
-                      <Link to="/favorites" className="flex items-center gap-2 text-zinc-300">
-                        <Heart className="w-4 h-4" />
-                        {t('nav.favorites')}
-                      </Link>
-                    </DropdownMenuItem>
-                    {hasCRMAccess && (
-                      <DropdownMenuItem asChild>
-                        <Link to="/crm" className="flex items-center gap-2 text-zinc-300">
-                          <Users className="w-4 h-4" />
-                          {t('nav.crm') || 'CRM Dashboard'}
+                    
+                    <div className="py-2">
+                      <DropdownMenuItem asChild className="focus:bg-gold/10">
+                        <Link to="/my-account" className="flex items-center gap-3 text-zinc-300 hover:text-gold px-5 py-3 transition-colors">
+                          <div className="w-8 h-8 rounded-lg bg-gold/10 flex items-center justify-center">
+                            <UserCircle className="w-4 h-4 text-gold" />
+                          </div>
+                          <span className="font-medium">Profile</span>
                         </Link>
                       </DropdownMenuItem>
-                    )}
-                    {isAdmin && (
-                      <DropdownMenuItem asChild>
-                        <Link to="/admin" className="flex items-center gap-2 text-zinc-300">
-                          <Settings className="w-4 h-4" />
-                          {t('nav.admin')}
+                      <DropdownMenuItem asChild className="focus:bg-gold/10">
+                        <Link to="/favorites" className="flex items-center gap-3 text-zinc-300 hover:text-gold px-5 py-3 transition-colors">
+                          <div className="w-8 h-8 rounded-lg bg-gold/10 flex items-center justify-center">
+                            <Heart className="w-4 h-4 text-gold" />
+                          </div>
+                          <span className="font-medium">{t('nav.favorites')}</span>
                         </Link>
                       </DropdownMenuItem>
-                    )}
-                    <DropdownMenuSeparator className="bg-zinc-800" />
-                    <DropdownMenuItem onClick={() => signOut()} className="text-zinc-300">
-                      <LogOut className="w-4 h-4 mr-2" />
-                      {t('nav.signOut')}
-                    </DropdownMenuItem>
+                      
+                      {/* Admin/Founder shortcuts */}
+                      {(isAdmin || hasCRMAccess) && (
+                        <>
+                          <DropdownMenuSeparator className="bg-gold/10 my-2" />
+                          <p className="px-5 py-1.5 text-[10px] uppercase tracking-wider text-gold/60 font-medium">Admin Shortcuts</p>
+                          
+                          {/* My Assistant - Always show for admin/founder */}
+                          <DropdownMenuItem asChild className="focus:bg-gold/10">
+                            <Link to="/founder-assistant" className="flex items-center gap-3 text-zinc-300 hover:text-gold px-5 py-3 transition-colors">
+                              <div className="w-8 h-8 rounded-lg bg-gold/10 flex items-center justify-center">
+                                <Sparkles className="w-4 h-4 text-gold" />
+                              </div>
+                              <span className="font-medium">My Assistant</span>
+                            </Link>
+                          </DropdownMenuItem>
+                          
+                          {/* Employee Hub */}
+                          <DropdownMenuItem asChild className="focus:bg-gold/10">
+                            <Link to="/employee-hub" className="flex items-center gap-3 text-zinc-300 hover:text-gold px-5 py-3 transition-colors">
+                              <div className="w-8 h-8 rounded-lg bg-gold/10 flex items-center justify-center">
+                                <Briefcase className="w-4 h-4 text-gold" />
+                              </div>
+                              <span className="font-medium">Employee Hub</span>
+                            </Link>
+                          </DropdownMenuItem>
+                        </>
+                      )}
+                      
+                      {hasCRMAccess && (
+                        <DropdownMenuItem asChild className="focus:bg-gold/10">
+                          <Link to="/crm" className="flex items-center gap-3 text-zinc-300 hover:text-gold px-5 py-3 transition-colors">
+                            <div className="w-8 h-8 rounded-lg bg-gold/10 flex items-center justify-center">
+                              <Users className="w-4 h-4 text-gold" />
+                            </div>
+                            <span className="font-medium">{t('nav.crm') || 'CRM Dashboard'}</span>
+                          </Link>
+                        </DropdownMenuItem>
+                      )}
+                      {isAdmin && (
+                        <DropdownMenuItem asChild className="focus:bg-gold/10">
+                          <Link to="/admin" className="flex items-center gap-3 text-zinc-300 hover:text-gold px-5 py-3 transition-colors">
+                            <div className="w-8 h-8 rounded-lg bg-gold/10 flex items-center justify-center">
+                              <Settings className="w-4 h-4 text-gold" />
+                            </div>
+                            <span className="font-medium">{t('nav.admin')}</span>
+                          </Link>
+                        </DropdownMenuItem>
+                      )}
+                    </div>
+                    
+                    <DropdownMenuSeparator className="bg-gold/10" />
+                    <div className="py-2">
+                      <DropdownMenuItem onClick={() => signOut()} className="flex items-center gap-3 text-zinc-400 hover:text-red-400 px-5 py-3 cursor-pointer focus:bg-red-500/10">
+                        <div className="w-8 h-8 rounded-lg bg-red-500/10 flex items-center justify-center">
+                          <LogOut className="w-4 h-4 text-red-400" />
+                        </div>
+                        <span className="font-medium">{t('nav.signOut')}</span>
+                      </DropdownMenuItem>
+                    </div>
                   </DropdownMenuContent>
                 </DropdownMenu>
               ) : (
                 <Link to="/auth">
-                  <Button variant="ghost" size="icon" className="text-gold hover:text-gold-light hover:bg-gold/10 w-9 h-9">
-                    <User className="w-5 h-5" />
+                  <Button 
+                    variant="ghost" 
+                    size="icon" 
+                    className="relative text-gold hover:text-gold-light w-10 h-10 lg:w-11 lg:h-11 p-0 rounded-full border border-gold/20 hover:border-gold/50 hover:bg-gold/10 transition-all duration-300 group"
+                  >
+                    <User className="w-5 h-5 group-hover:scale-110 transition-transform" />
                   </Button>
                 </Link>
               )}
