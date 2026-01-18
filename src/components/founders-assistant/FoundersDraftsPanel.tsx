@@ -159,7 +159,7 @@ const FoundersDraftsPanel: React.FC = () => {
                 <div className="text-center py-8">
                   <FileEdit className="w-12 h-12 text-gold/30 mx-auto mb-4" />
                   <p className="text-gray-400">No drafts yet</p>
-                  <p className="text-sm text-gray-500 mt-1">Ask Olivia to draft messages for you</p>
+                  <p className="text-sm text-gray-500 mt-1">Ask Amanda to draft messages for you</p>
                 </div>
               ) : (
                 drafts.map((draft) => (
@@ -274,7 +274,7 @@ const FoundersDraftsPanel: React.FC = () => {
               <div>
                 <FileEdit className="w-16 h-16 text-gold/20 mx-auto mb-4" />
                 <p className="text-gray-400">Select a draft to edit</p>
-                <p className="text-sm text-gray-500 mt-1">Or ask Olivia to create a new one</p>
+                <p className="text-sm text-gray-500 mt-1">Or ask Amanda to create a new one</p>
               </div>
             </div>
           )}
