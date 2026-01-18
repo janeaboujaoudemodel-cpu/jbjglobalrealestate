@@ -10,6 +10,7 @@ import MortgageCalculator from "@/components/MortgageCalculator";
 import BrokerOnboardingBanner from "@/components/BrokerOnboardingBanner";
 import InquiryFormModal from "@/components/InquiryFormModal";
 import BestIdeaAward from "@/components/BestIdeaAward";
+import SupportTicketBox from "@/components/SupportTicketBox";
 import { SEOHead, pagesSEO } from "@/components/SEOHead";
 import { useLanguage } from "@/contexts/LanguageContext";
 import { useUserRole } from "@/hooks/useUserRole";
@@ -523,6 +524,9 @@ const Index = () => {
 
       {/* BEST IDEA AWARD */}
       <BestIdeaAward />
+
+      {/* SUPPORT TICKET / COMPLAINT BOX */}
+      <SupportTicketBox />
 
       {/* AI COMPARISON & ANALYZER PREVIEW */}
       <section className="py-16 md:py-20 bg-black">
