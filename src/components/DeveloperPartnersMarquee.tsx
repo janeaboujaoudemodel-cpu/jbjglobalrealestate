@@ -3,20 +3,43 @@ import { motion } from "framer-motion";
 import { Link } from "react-router-dom";
 import { useDevelopers, useProjects } from "@/hooks/useProjects";
 
-// Curated partners list (links become active only when inventory exists)
+// Curated partners list (30 developers - links become active only when inventory exists)
 const CURATED_DEVELOPER_PARTNERS = [
+  // Tier 1 - Master Developers
   { name: "Emaar Properties", slug: "emaar" },
   { name: "Nakheel", slug: "nakheel" },
   { name: "Meraas", slug: "meraas" },
   { name: "DAMAC Properties", slug: "damac" },
   { name: "Sobha Realty", slug: "sobha" },
+  { name: "Aldar Properties", slug: "aldar" },
+  { name: "Dubai Holding", slug: "dubai-holding" },
+  // Tier 2 - Premium Developers
   { name: "Binghatti Developers", slug: "binghatti" },
   { name: "Omniyat", slug: "omniyat" },
   { name: "Dubai Properties", slug: "dubai-properties" },
   { name: "Ellington Properties", slug: "ellington" },
-  { name: "Aldar Properties", slug: "aldar" },
   { name: "Select Group", slug: "select-group" },
   { name: "Azizi Developments", slug: "azizi" },
+  { name: "Imtiaz Developments", slug: "imtiaz" },
+  { name: "Beyond Developments", slug: "beyond" },
+  // Tier 3 - Top Performers
+  { name: "Danube Properties", slug: "danube" },
+  { name: "Samana Developers", slug: "samana" },
+  { name: "Tiger Properties", slug: "tiger" },
+  { name: "Mag Property", slug: "mag" },
+  { name: "Vincitore Real Estate", slug: "vincitore" },
+  // Tier 4 - Emerging Leaders
+  { name: "ORO24 Developments", slug: "oro24" },
+  { name: "Reportage Properties", slug: "reportage" },
+  { name: "Bloom Holding", slug: "bloom" },
+  { name: "Deyaar Development", slug: "deyaar" },
+  { name: "Meydan", slug: "meydan" },
+  // Tier 5 - Specialist Developers
+  { name: "Seven Tides", slug: "seven-tides" },
+  { name: "Arada Developments", slug: "arada" },
+  { name: "Al Habtoor Group", slug: "al-habtoor" },
+  { name: "Majid Al Futtaim", slug: "majid-al-futtaim" },
+  { name: "RAK Properties", slug: "rak-properties" },
 ];
 
 const DeveloperPartnersMarquee = () => {
@@ -58,7 +81,7 @@ const DeveloperPartnersMarquee = () => {
   const duplicatedDevelopers = [...partners, ...partners];
 
   // Distance heuristic based on item count (keeps animation stable)
-  const distance = Math.max(800, partners.length * 220);
+  const distance = Math.max(1200, partners.length * 180);
 
   return (
     <section className="py-8 md:py-12 bg-black border-y border-zinc-800/50 overflow-hidden">
@@ -80,13 +103,13 @@ const DeveloperPartnersMarquee = () => {
 
         {/* Scrolling content */}
         <motion.div
-          className="flex items-center gap-12 md:gap-16"
+          className="flex items-center gap-10 md:gap-14"
           animate={{
             x: [0, -distance],
           }}
           transition={{
             x: {
-              duration: 40,
+              duration: 50,
               repeat: Infinity,
               ease: "linear",
             },
@@ -111,27 +134,25 @@ const DeveloperPartnersMarquee = () => {
                     to={`/properties?developer=${encodeURIComponent(
                       developer.developerId!
                     )}`}
-                    className="text-zinc-400 text-sm md:text-base font-medium tracking-wide whitespace-nowrap hover:text-gold transition-colors duration-300 cursor-pointer"
+                    className="text-gold text-sm md:text-base font-semibold tracking-wide whitespace-nowrap hover:text-gold-light transition-all duration-300 cursor-pointer drop-shadow-[0_0_8px_rgba(200,167,102,0.6)] hover:drop-shadow-[0_0_16px_rgba(200,167,102,0.9)]"
                     title={`${developer.name}`}
+                    style={{ textShadow: '0 0 12px rgba(200,167,102,0.5)' }}
                   >
                     {developer.name}
                   </Link>
                 ) : (
                   <span
-                    className="text-zinc-600 text-sm md:text-base font-medium tracking-wide whitespace-nowrap cursor-default"
-                    title={
-                      hasAnyInventory
-                        ? "No published listings for this developer yet"
-                        : developer.name
-                    }
+                    className="text-gold/70 text-sm md:text-base font-semibold tracking-wide whitespace-nowrap cursor-default drop-shadow-[0_0_6px_rgba(200,167,102,0.4)] hover:text-gold hover:drop-shadow-[0_0_12px_rgba(200,167,102,0.7)] transition-all duration-300"
+                    title={developer.name}
+                    style={{ textShadow: '0 0 8px rgba(200,167,102,0.3)' }}
                   >
                     {developer.name}
                   </span>
                 )}
 
-                {/* Separator diamond */}
+                {/* Separator diamond - glowing */}
                 {index < duplicatedDevelopers.length - 1 && (
-                  <span className="w-1.5 h-1.5 bg-gold/40 rotate-45 flex-shrink-0" />
+                  <span className="w-1.5 h-1.5 bg-gold rotate-45 flex-shrink-0 shadow-[0_0_8px_rgba(200,167,102,0.8)]" />
                 )}
               </div>
             );

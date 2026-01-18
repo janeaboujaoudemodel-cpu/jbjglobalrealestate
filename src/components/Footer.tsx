@@ -192,9 +192,9 @@ const Footer = () => {
             <NewsletterBrevo variant="compact" source="footer" />
           </div>
 
-          {/* Social Links */}
+          {/* Social Links - Gold Glowing */}
           <div className="flex justify-center">
-            <SocialLinks variant="default" iconClassName="w-6 h-6 text-black hover:text-gold transition-colors" />
+            <SocialLinks variant="glow" iconClassName="w-6 h-6" />
           </div>
         </div>
 

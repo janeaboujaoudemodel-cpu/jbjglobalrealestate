@@ -3,7 +3,7 @@ import { Facebook, Instagram, Linkedin, Youtube, Twitter } from 'lucide-react';
 interface SocialLinksProps {
   className?: string;
   iconClassName?: string;
-  variant?: 'default' | 'gold' | 'white';
+  variant?: 'default' | 'gold' | 'white' | 'glow';
 }
 
 const SOCIAL_LINKS = {
@@ -25,6 +25,8 @@ export const SocialLinks = ({
         return 'text-gold hover:text-gold-light';
       case 'white':
         return 'text-white hover:text-gold';
+      case 'glow':
+        return 'text-gold hover:text-black drop-shadow-[0_0_8px_rgba(200,167,102,0.8)] hover:drop-shadow-none transition-all duration-300';
       default:
         return 'text-zinc-400 hover:text-gold';
     }
@@ -38,7 +40,7 @@ export const SocialLinks = ({
         href={SOCIAL_LINKS.facebook}
         target="_blank"
         rel="noopener noreferrer"
-        className={`transition-colors ${colorClasses}`}
+        className={`transition-all duration-300 ${colorClasses}`}
         aria-label="Follow us on Facebook"
       >
         <Facebook className={iconClassName} />
@@ -47,7 +49,7 @@ export const SocialLinks = ({
         href={SOCIAL_LINKS.instagram}
         target="_blank"
         rel="noopener noreferrer"
-        className={`transition-colors ${colorClasses}`}
+        className={`transition-all duration-300 ${colorClasses}`}
         aria-label="Follow us on Instagram"
       >
         <Instagram className={iconClassName} />
@@ -56,7 +58,7 @@ export const SocialLinks = ({
         href={SOCIAL_LINKS.linkedin}
         target="_blank"
         rel="noopener noreferrer"
-        className={`transition-colors ${colorClasses}`}
+        className={`transition-all duration-300 ${colorClasses}`}
         aria-label="Follow us on LinkedIn"
       >
         <Linkedin className={iconClassName} />
@@ -65,7 +67,7 @@ export const SocialLinks = ({
         href={SOCIAL_LINKS.youtube}
         target="_blank"
         rel="noopener noreferrer"
-        className={`transition-colors ${colorClasses}`}
+        className={`transition-all duration-300 ${colorClasses}`}
         aria-label="Subscribe on YouTube"
       >
         <Youtube className={iconClassName} />
@@ -74,7 +76,7 @@ export const SocialLinks = ({
         href={SOCIAL_LINKS.twitter}
         target="_blank"
         rel="noopener noreferrer"
-        className={`transition-colors ${colorClasses}`}
+        className={`transition-all duration-300 ${colorClasses}`}
         aria-label="Follow us on X (Twitter)"
       >
         <Twitter className={iconClassName} />
