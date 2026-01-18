@@ -139,32 +139,40 @@ const Properties = () => {
   const urlTransaction = searchParams.get('transaction') as 'buy' | 'rent' | null;
   const urlStatus = searchParams.get('status');
   
-  const initialFilters: ExtendedFilterState = {
-    ...defaultExtendedFilters,
-    transactionType: urlTransaction || 'all',
-    handoverStatus: urlStatus || null,
-  };
-  
-  const [filters, setFilters] = useState<ExtendedFilterState>(initialFilters);
-  const [appliedFilters, setAppliedFilters] = useState<ExtendedFilterState>(initialFilters);
+  const [filters, setFilters] = useState<ExtendedFilterState>(defaultExtendedFilters);
+  const [appliedFilters, setAppliedFilters] = useState<ExtendedFilterState>(defaultExtendedFilters);
   const [sortBy, setSortBy] = useState<string>("newest");
   const [isAdvancedOpen, setIsAdvancedOpen] = useState(false);
   const [isRequestFormOpen, setIsRequestFormOpen] = useState(false);
   
-  // Update filters when URL params change
+  // Update filters when URL params change (including developer name from marquee)
   useEffect(() => {
     const newTransaction = searchParams.get('transaction') as 'buy' | 'rent' | null;
     const newStatus = searchParams.get('status');
-    if (newTransaction || newStatus) {
+    const developerName = searchParams.get('developer');
+    
+    // Find developer ID by name if developer param exists
+    let developerIdFromUrl: string | null = null;
+    if (developerName && developers) {
+      const matchedDeveloper = developers.find(
+        d => d.name.toLowerCase() === developerName.toLowerCase()
+      );
+      if (matchedDeveloper) {
+        developerIdFromUrl = matchedDeveloper.id;
+      }
+    }
+    
+    if (newTransaction || newStatus || developerIdFromUrl) {
       const updated: ExtendedFilterState = {
-        ...filters,
+        ...defaultExtendedFilters,
         transactionType: newTransaction || 'all' as const,
-        handoverStatus: newStatus || filters.handoverStatus,
+        handoverStatus: newStatus || null,
+        developerId: developerIdFromUrl,
       };
       setFilters(updated);
       setAppliedFilters(updated);
     }
-  }, [searchParams]);
+  }, [searchParams, developers]);
   
   // Convert extended filters to standard FilterState for useFilteredProjects
   // Use appliedFilters instead of filters for actual filtering
