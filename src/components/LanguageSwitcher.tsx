@@ -37,7 +37,7 @@ const LanguageSwitcher = ({ variant = 'default' }: LanguageSwitcherProps) => {
       <DropdownMenuContent 
         align="end" 
         sideOffset={12}
-        className="bg-gradient-to-b from-zinc-900 to-black border border-gold/30 min-w-[200px] rounded-xl shadow-2xl shadow-black/50 p-0 overflow-hidden"
+        className="bg-gradient-to-b from-white via-[#FDFBF7] to-[#F5F0E6] border border-gold/30 min-w-[200px] rounded-xl shadow-2xl shadow-black/20 p-0 overflow-hidden"
       >
         <div className="absolute top-0 left-0 right-0 h-[2px] bg-gradient-to-r from-transparent via-gold to-transparent" />
         <ScrollArea className="h-[320px]">
@@ -46,8 +46,8 @@ const LanguageSwitcher = ({ variant = 'default' }: LanguageSwitcherProps) => {
               <DropdownMenuItem 
                 key={lang.code}
                 onClick={() => setLanguage(lang.code)}
-                className={`flex items-center justify-between hover:bg-gold/15 cursor-pointer transition-all duration-200 rounded-lg px-4 py-3 my-0.5 ${
-                  language === lang.code ? 'bg-gold/10 text-gold border border-gold/20' : 'text-zinc-300 hover:text-gold'
+                className={`flex items-center justify-between hover:bg-[#D4C4A0]/40 cursor-pointer transition-all duration-200 rounded-lg px-4 py-3 my-0.5 ${
+                  language === lang.code ? 'bg-gold/15 text-black border border-gold/30' : 'text-zinc-800 hover:text-black'
                 }`}
               >
                 <span className="flex items-center gap-3">
