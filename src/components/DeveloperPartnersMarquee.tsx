@@ -85,10 +85,10 @@ const DeveloperPartnersMarquee = () => {
 
   return (
     <section className="py-8 md:py-12 bg-black border-y border-zinc-800/50 overflow-hidden">
-      <div className="container mx-auto px-4 mb-6">
-        <p className="text-center text-zinc-500 text-xs uppercase tracking-[0.25em]">
+      <div className="container mx-auto px-4 mb-8">
+        <h3 className="text-center text-lg md:text-xl font-semibold uppercase tracking-[0.3em] bg-gradient-to-r from-[#F5F0E6] via-white to-[#F5F0E6] bg-clip-text text-transparent drop-shadow-[0_0_20px_rgba(255,255,255,0.4)]">
           Partnering with UAE's Premier Developers
-        </p>
+        </h3>
       </div>
 
       {/* Marquee Container */}
@@ -134,7 +134,7 @@ const DeveloperPartnersMarquee = () => {
                     to={`/properties?developer=${encodeURIComponent(
                       developer.developerId!
                     )}`}
-                    className="text-gold text-sm md:text-base font-semibold tracking-wide whitespace-nowrap hover:text-gold-light transition-all duration-300 cursor-pointer drop-shadow-[0_0_8px_rgba(200,167,102,0.6)] hover:drop-shadow-[0_0_16px_rgba(200,167,102,0.9)]"
+                    className="text-gold text-sm md:text-base font-semibold tracking-wide whitespace-nowrap transition-all duration-300 cursor-pointer drop-shadow-[0_0_8px_rgba(200,167,102,0.6)] hover:text-white hover:drop-shadow-[0_0_20px_rgba(255,255,255,0.9)]"
                     title={`${developer.name}`}
                     style={{ textShadow: '0 0 12px rgba(200,167,102,0.5)' }}
                   >
@@ -142,7 +142,7 @@ const DeveloperPartnersMarquee = () => {
                   </Link>
                 ) : (
                   <span
-                    className="text-gold/70 text-sm md:text-base font-semibold tracking-wide whitespace-nowrap cursor-default drop-shadow-[0_0_6px_rgba(200,167,102,0.4)] hover:text-gold hover:drop-shadow-[0_0_12px_rgba(200,167,102,0.7)] transition-all duration-300"
+                    className="text-gold/70 text-sm md:text-base font-semibold tracking-wide whitespace-nowrap cursor-default drop-shadow-[0_0_6px_rgba(200,167,102,0.4)] hover:text-white hover:drop-shadow-[0_0_20px_rgba(255,255,255,0.9)] transition-all duration-300"
                     title={developer.name}
                     style={{ textShadow: '0 0 8px rgba(200,167,102,0.3)' }}
                   >
