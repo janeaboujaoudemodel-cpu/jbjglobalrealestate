@@ -69,7 +69,7 @@ const GlobalHeader = () => {
   const mainNavLinks = [
     { href: "/", label: t('nav.home'), icon: Home },
     { href: "/services", label: t('nav.services'), icon: Building2 },
-    { href: "/ai-hub", label: "Broker Hub", icon: Sparkles },
+    { href: "/broker-toolkit", label: "Broker Hub", icon: Sparkles },
     { href: "/about", label: t('nav.about'), icon: Building2 },
     { href: "/contact", label: t('nav.contact'), icon: Phone },
   ];

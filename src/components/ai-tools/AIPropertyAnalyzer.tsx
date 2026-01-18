@@ -76,6 +76,11 @@ const AIPropertyAnalyzer = () => {
   const [isAnalyzing, setIsAnalyzing] = useState(false);
   const [result, setResult] = useState<AnalysisResult | null>(null);
   const [copied, setCopied] = useState(false);
+  
+  // New options for measurement, currency, and language
+  const [measurementUnit, setMeasurementUnit] = useState<"sqft" | "sqm" | "both">("sqft");
+  const [currency, setCurrency] = useState<"AED" | "USD" | "EUR" | "GBP">("AED");
+  const [language, setLanguage] = useState<"en" | "ar" | "ru" | "zh" | "hi">("en");
 
   const handleAnalyze = async () => {
     const selectedArea = area === "custom" ? customArea : area;
@@ -92,7 +97,10 @@ const AIPropertyAnalyzer = () => {
           area: selectedArea, 
           propertyType,
           analysisType: compareWith.length > 0 ? 'comparison' : 'full',
-          compareWith
+          compareWith,
+          measurementUnit,
+          currency,
+          language
         }
       });
 
@@ -259,7 +267,54 @@ DISCLAIMER: ${result.disclaimer}
             </div>
           </div>
 
-          {/* Analyze Button */}
+          {/* Report Options */}
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-4 pt-4 border-t border-zinc-800">
+            <div>
+              <Label className="text-zinc-300">Measurement Unit</Label>
+              <Select value={measurementUnit} onValueChange={(v: "sqft" | "sqm" | "both") => setMeasurementUnit(v)}>
+                <SelectTrigger className="bg-zinc-800 border-zinc-700 text-white mt-1">
+                  <SelectValue />
+                </SelectTrigger>
+                <SelectContent className="bg-zinc-800 border-zinc-700">
+                  <SelectItem value="sqft" className="text-white hover:bg-zinc-700">Square Feet (sq ft)</SelectItem>
+                  <SelectItem value="sqm" className="text-white hover:bg-zinc-700">Square Meters (m²)</SelectItem>
+                  <SelectItem value="both" className="text-white hover:bg-zinc-700">Both (sq ft & m²)</SelectItem>
+                </SelectContent>
+              </Select>
+            </div>
+
+            <div>
+              <Label className="text-zinc-300">Currency</Label>
+              <Select value={currency} onValueChange={(v: "AED" | "USD" | "EUR" | "GBP") => setCurrency(v)}>
+                <SelectTrigger className="bg-zinc-800 border-zinc-700 text-white mt-1">
+                  <SelectValue />
+                </SelectTrigger>
+                <SelectContent className="bg-zinc-800 border-zinc-700">
+                  <SelectItem value="AED" className="text-white hover:bg-zinc-700">AED (د.إ)</SelectItem>
+                  <SelectItem value="USD" className="text-white hover:bg-zinc-700">USD ($)</SelectItem>
+                  <SelectItem value="EUR" className="text-white hover:bg-zinc-700">EUR (€)</SelectItem>
+                  <SelectItem value="GBP" className="text-white hover:bg-zinc-700">GBP (£)</SelectItem>
+                </SelectContent>
+              </Select>
+            </div>
+
+            <div>
+              <Label className="text-zinc-300">Report Language</Label>
+              <Select value={language} onValueChange={(v: "en" | "ar" | "ru" | "zh" | "hi") => setLanguage(v)}>
+                <SelectTrigger className="bg-zinc-800 border-zinc-700 text-white mt-1">
+                  <SelectValue />
+                </SelectTrigger>
+                <SelectContent className="bg-zinc-800 border-zinc-700">
+                  <SelectItem value="en" className="text-white hover:bg-zinc-700">English</SelectItem>
+                  <SelectItem value="ar" className="text-white hover:bg-zinc-700">العربية (Arabic)</SelectItem>
+                  <SelectItem value="ru" className="text-white hover:bg-zinc-700">Русский (Russian)</SelectItem>
+                  <SelectItem value="zh" className="text-white hover:bg-zinc-700">中文 (Chinese)</SelectItem>
+                  <SelectItem value="hi" className="text-white hover:bg-zinc-700">हिन्दी (Hindi)</SelectItem>
+                </SelectContent>
+              </Select>
+            </div>
+          </div>
+
           <Button
             onClick={handleAnalyze}
             disabled={isAnalyzing || (!area && !customArea)}
