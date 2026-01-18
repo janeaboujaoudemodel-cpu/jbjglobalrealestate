@@ -686,21 +686,21 @@ Requirements:
                     className="space-y-6"
                   >
                     <div>
-                      <h2 className="text-xl font-bold text-crm-text mb-2">Property Details</h2>
-                      <p className="text-crm-text-muted text-sm">Tell us about your property</p>
+                      <h2 className="text-xl font-bold text-black mb-2">Property Details</h2>
+                      <p className="text-zinc-600 text-sm">Tell us about your property</p>
                     </div>
 
                     <div className="grid md:grid-cols-2 gap-4">
                       <div>
-                        <Label className="text-crm-text font-medium">Property Type *</Label>
+                        <Label className="text-black font-medium">Property Type *</Label>
                         <Select
                           value={form.watch("property_type")}
                           onValueChange={(v) => form.setValue("property_type", v)}
                         >
-                          <SelectTrigger className="bg-crm-highlight border-crm-border text-crm-text mt-1">
+                          <SelectTrigger className="bg-zinc-50 border-zinc-300 text-black mt-1">
                             <SelectValue placeholder="Select type" />
                           </SelectTrigger>
-                          <SelectContent className="bg-crm-card border-crm-border text-crm-text z-[9999]">
+                          <SelectContent className="bg-white border-zinc-200">
                             <SelectItem value="apartment">Apartment</SelectItem>
                             <SelectItem value="villa">Villa</SelectItem>
                             <SelectItem value="townhouse">Townhouse</SelectItem>
@@ -712,35 +712,35 @@ Requirements:
                         </Select>
                       </div>
                       <div>
-                        <Label className="text-crm-text font-medium">Location / Area *</Label>
+                        <Label className="text-black font-medium">Location / Area *</Label>
                         <Input
                           {...form.register("property_location")}
                           placeholder="e.g., Downtown Dubai"
-                          className="bg-crm-highlight border-crm-border text-crm-text placeholder:text-crm-text-muted mt-1"
+                          className="bg-zinc-50 border-zinc-300 text-black placeholder:text-zinc-400 mt-1"
                         />
                       </div>
                     </div>
 
                     <div>
-                      <Label className="text-crm-text font-medium">Community / Building Name</Label>
+                      <Label className="text-black font-medium">Community / Building Name</Label>
                       <Input
                         {...form.register("community_building")}
                         placeholder="e.g., Burj Khalifa, Palm Jumeirah"
-                        className="bg-crm-highlight border-crm-border text-crm-text placeholder:text-crm-text-muted mt-1"
+                        className="bg-zinc-50 border-zinc-300 text-black placeholder:text-zinc-400 mt-1"
                       />
                     </div>
 
                     <div className="grid md:grid-cols-2 gap-4">
                       <div>
-                        <Label className="text-crm-text font-medium">Bedrooms</Label>
+                        <Label className="text-black font-medium">Bedrooms</Label>
                         <Select
                           value={form.watch("bedrooms")?.toString()}
                           onValueChange={(v) => form.setValue("bedrooms", parseInt(v))}
                         >
-                          <SelectTrigger className="bg-crm-highlight border-crm-border text-crm-text mt-1">
+                          <SelectTrigger className="bg-zinc-50 border-zinc-300 text-black mt-1">
                             <SelectValue placeholder="Select" />
                           </SelectTrigger>
-                          <SelectContent className="bg-crm-card border-crm-border text-crm-text z-[9999]">
+                          <SelectContent className="bg-white border-zinc-200">
                             <SelectItem value="0">Studio</SelectItem>
                             <SelectItem value="1">1 BR</SelectItem>
                             <SelectItem value="2">2 BR</SelectItem>
@@ -752,18 +752,18 @@ Requirements:
                         </Select>
                       </div>
                       <div>
-                        <Label className="text-crm-text font-medium">Size (sq.ft)</Label>
+                        <Label className="text-black font-medium">Size (sq.ft)</Label>
                         <Input
                           type="number"
                           {...form.register("property_size_sqft", { valueAsNumber: true })}
                           placeholder="e.g., 1500"
-                          className="bg-crm-highlight border-crm-border text-crm-text placeholder:text-crm-text-muted mt-1"
+                          className="bg-zinc-50 border-zinc-300 text-black placeholder:text-zinc-400 mt-1"
                         />
                       </div>
                     </div>
 
                     <div>
-                      <Label className="text-crm-text font-medium mb-3 block">Property Status</Label>
+                      <Label className="text-black font-medium mb-3 block">Property Status</Label>
                       <RadioGroup
                         value={form.watch("property_status")}
                         onValueChange={(v) => form.setValue("property_status", v)}
@@ -779,11 +779,11 @@ Requirements:
                             <RadioGroupItem
                               value={option.value}
                               id={`status-${option.value}`}
-                              className="border-crm-border"
+                              className="border-zinc-400"
                             />
                             <Label
                               htmlFor={`status-${option.value}`}
-                              className="ml-2 text-crm-text-muted cursor-pointer text-sm"
+                              className="ml-2 text-zinc-700 cursor-pointer text-sm"
                             >
                               {option.label}
                             </Label>
@@ -793,11 +793,11 @@ Requirements:
                     </div>
 
                     <div>
-                      <Label className="text-crm-text font-medium">Additional Notes</Label>
+                      <Label className="text-black font-medium">Additional Notes</Label>
                       <Textarea
                         {...form.register("property_notes")}
                         placeholder="Any other details about your property..."
-                        className="bg-crm-highlight border-crm-border text-crm-text placeholder:text-crm-text-muted mt-1 min-h-[100px]"
+                        className="bg-zinc-50 border-zinc-300 text-black placeholder:text-zinc-400 mt-1 min-h-[100px]"
                       />
                     </div>
                   </motion.div>
@@ -813,43 +813,43 @@ Requirements:
                     className="space-y-6"
                   >
                     <div>
-                      <h2 className="text-xl font-bold text-crm-text mb-2">Pricing Information</h2>
-                      <p className="text-crm-text-muted text-sm">Help us understand your pricing expectations</p>
+                      <h2 className="text-xl font-bold text-black mb-2">Pricing Information</h2>
+                      <p className="text-zinc-600 text-sm">Help us understand your pricing expectations</p>
                     </div>
 
                     <div>
-                      <Label className="text-crm-text font-medium">Purchase Price (AED) - Optional</Label>
+                      <Label className="text-black font-medium">Purchase Price (AED) - Optional</Label>
                       <Input
                         type="number"
                         {...form.register("purchase_price", { valueAsNumber: true })}
                         placeholder="Original purchase price"
-                        className="bg-crm-highlight border-crm-border text-crm-text placeholder:text-crm-text-muted mt-1"
+                        className="bg-zinc-50 border-zinc-300 text-black placeholder:text-zinc-400 mt-1"
                       />
-                      <p className="text-crm-text-muted text-xs mt-1">What you paid for the property</p>
+                      <p className="text-zinc-500 text-xs mt-1">What you paid for the property</p>
                     </div>
 
                     <div>
-                      <Label className="text-crm-text font-medium">Target Selling Price (AED) *</Label>
+                      <Label className="text-black font-medium">Target Selling Price (AED) *</Label>
                       <Input
                         type="number"
                         {...form.register("target_selling_price", { valueAsNumber: true })}
                         placeholder="Your desired selling price"
-                        className="bg-crm-highlight border-crm-border text-crm-text placeholder:text-crm-text-muted mt-1"
+                        className="bg-zinc-50 border-zinc-300 text-black placeholder:text-zinc-400 mt-1"
                       />
                     </div>
 
                     <div>
-                      <Label className="text-crm-text font-medium">Minimum Acceptable Price (AED) - Optional</Label>
+                      <Label className="text-black font-medium">Minimum Acceptable Price (AED) - Optional</Label>
                       <Input
                         type="number"
                         {...form.register("minimum_acceptable_price", { valueAsNumber: true })}
                         placeholder="Lowest price you'd accept"
-                        className="bg-crm-highlight border-crm-border text-crm-text placeholder:text-crm-text-muted mt-1"
+                        className="bg-zinc-50 border-zinc-300 text-black placeholder:text-zinc-400 mt-1"
                       />
                     </div>
 
                     <div>
-                      <Label className="text-crm-text font-medium mb-3 block">Selling Urgency</Label>
+                      <Label className="text-black font-medium mb-3 block">Selling Urgency</Label>
                       <RadioGroup
                         value={form.watch("selling_urgency")}
                         onValueChange={(v) => form.setValue("selling_urgency", v)}
@@ -864,11 +864,11 @@ Requirements:
                             <RadioGroupItem
                               value={option.value}
                               id={`urgency-${option.value}`}
-                              className="border-crm-border"
+                              className="border-zinc-400"
                             />
                             <Label
                               htmlFor={`urgency-${option.value}`}
-                              className="ml-2 text-crm-text-muted cursor-pointer text-sm"
+                              className="ml-2 text-zinc-700 cursor-pointer text-sm"
                             >
                               {option.label}
                             </Label>
@@ -878,18 +878,18 @@ Requirements:
                     </div>
 
                     {/* Property Evaluator Integration */}
-                    <div className="bg-crm-highlight border border-crm-border rounded-lg p-4">
+                    <div className="bg-zinc-50 border border-zinc-200 rounded-lg p-4">
                       <div className="flex items-center gap-3 mb-3">
                         <Calculator className="w-5 h-5 text-gold" />
-                        <span className="text-crm-text font-medium">Need help with pricing?</span>
+                        <span className="text-black font-medium">Need help with pricing?</span>
                       </div>
-                      <p className="text-crm-text-muted text-sm mb-3">
+                      <p className="text-zinc-600 text-sm mb-3">
                         Run our Property Evaluator to get an informational estimate based on market data.
                       </p>
                       <Button
                         type="button"
                         variant="outline"
-                        className="border-gold/50 text-gold hover:bg-gold/10"
+                        className="border-gold text-gold hover:bg-gold/10"
                         onClick={() => setShowEvaluator(true)}
                         disabled={!form.getValues("property_type") || !form.getValues("property_location")}
                       >
@@ -901,10 +901,10 @@ Requirements:
                       {form.watch("estimated_range_min") && form.watch("estimated_range_max") && (
                         <div className="mt-4 p-3 bg-gold/10 border border-gold/20 rounded-lg">
                           <p className="text-gold text-sm font-medium mb-1">AI Estimate (Informational Only)</p>
-                          <p className="text-crm-text">
+                          <p className="text-black">
                             AED {form.watch("estimated_range_min")?.toLocaleString()} - AED {form.watch("estimated_range_max")?.toLocaleString()}
                           </p>
-                          <p className="text-crm-text-muted text-xs mt-1">{form.watch("estimated_note")}</p>
+                          <p className="text-zinc-500 text-xs mt-1">{form.watch("estimated_note")}</p>
                         </div>
                       )}
                     </div>
@@ -921,8 +921,8 @@ Requirements:
                     className="space-y-6"
                   >
                     <div>
-                      <h2 className="text-xl font-bold text-white mb-2">Condition & Upgrades</h2>
-                      <p className="text-zinc-400 text-sm">Tell us about the property's condition and any improvements</p>
+                      <h2 className="text-xl font-bold text-black mb-2">Condition & Upgrades</h2>
+                      <p className="text-zinc-600 text-sm">Tell us about the property's condition and any improvements</p>
                     </div>
 
                     <div className="space-y-4">
@@ -931,8 +931,9 @@ Requirements:
                           id="is_furnished"
                           checked={form.watch("is_furnished")}
                           onCheckedChange={(checked) => form.setValue("is_furnished", checked as boolean)}
+                          className="border-zinc-400"
                         />
-                        <Label htmlFor="is_furnished" className="text-white cursor-pointer">
+                        <Label htmlFor="is_furnished" className="text-black cursor-pointer">
                           Property is furnished
                         </Label>
                       </div>
@@ -942,8 +943,9 @@ Requirements:
                           id="has_upgrades"
                           checked={form.watch("has_upgrades")}
                           onCheckedChange={(checked) => form.setValue("has_upgrades", checked as boolean)}
+                          className="border-zinc-400"
                         />
-                        <Label htmlFor="has_upgrades" className="text-white cursor-pointer">
+                        <Label htmlFor="has_upgrades" className="text-black cursor-pointer">
                           Property has upgrades/renovations
                         </Label>
                       </div>
@@ -951,23 +953,23 @@ Requirements:
 
                     {form.watch("has_upgrades") && (
                       <div>
-                        <Label className="text-white">Upgrade Details</Label>
+                        <Label className="text-black font-medium">Upgrade Details</Label>
                         <Textarea
                           {...form.register("upgrade_details")}
                           placeholder="Describe any upgrades, renovations, or improvements..."
-                          className="bg-zinc-800 border-zinc-700 text-white mt-1 min-h-[100px]"
+                          className="bg-zinc-50 border-zinc-300 text-black placeholder:text-zinc-400 mt-1 min-h-[100px]"
                         />
                       </div>
                     )}
 
                     <div>
-                      <Label className="text-white mb-3 block">Key Highlights (up to 10)</Label>
+                      <Label className="text-black font-medium mb-3 block">Key Highlights (up to 10)</Label>
                       <div className="flex gap-2 mb-3">
                         <Input
                           value={newHighlight}
                           onChange={(e) => setNewHighlight(e.target.value)}
                           placeholder="e.g., Sea view, Private pool, Smart home"
-                          className="bg-zinc-800 border-zinc-700 text-white"
+                          className="bg-zinc-50 border-zinc-300 text-black placeholder:text-zinc-400"
                           onKeyPress={(e) => e.key === 'Enter' && (e.preventDefault(), addHighlight())}
                         />
                         <Button 
@@ -989,7 +991,7 @@ Requirements:
                             <button 
                               type="button"
                               onClick={() => removeHighlight(index)}
-                              className="hover:text-red-400"
+                              className="hover:text-red-500"
                             >
                               <X className="w-3 h-3" />
                             </button>
@@ -1001,14 +1003,14 @@ Requirements:
                     {/* Listing Description with AI Generator */}
                     <div>
                       <div className="flex items-center justify-between mb-2">
-                        <Label className="text-white">Listing Description</Label>
+                        <Label className="text-black font-medium">Listing Description</Label>
                         <Button
                           type="button"
                           variant="outline"
                           size="sm"
                           onClick={generateListingDescription}
                           disabled={isGeneratingDescription || !form.getValues("property_type")}
-                          className="border-gold/50 text-gold hover:bg-gold/10 text-xs"
+                          className="border-gold text-gold hover:bg-gold/10 text-xs"
                         >
                           {isGeneratingDescription ? (
                             <Loader2 className="w-3 h-3 mr-1 animate-spin" />
@@ -1021,7 +1023,7 @@ Requirements:
                       <Textarea
                         {...form.register("listing_description")}
                         placeholder="Describe your property or use AI to generate a professional description..."
-                        className="bg-zinc-800 border-zinc-700 text-white mt-1 min-h-[150px]"
+                        className="bg-zinc-50 border-zinc-300 text-black placeholder:text-zinc-400 mt-1 min-h-[150px]"
                       />
                       <p className="text-zinc-500 text-xs mt-1">
                         This description will be used in marketing materials (you can edit it)
@@ -1040,15 +1042,15 @@ Requirements:
                     className="space-y-6"
                   >
                     <div>
-                      <h2 className="text-xl font-bold text-white mb-2">Media Uploads</h2>
-                      <p className="text-zinc-400 text-sm">Upload photos and videos of your property</p>
+                      <h2 className="text-xl font-bold text-black mb-2">Media Uploads</h2>
+                      <p className="text-zinc-600 text-sm">Upload photos and videos of your property</p>
                     </div>
 
                     <div className="space-y-6">
                       {/* Photos */}
                       <div>
-                        <Label className="text-white mb-2 block">Property Photos</Label>
-                        <div className="border-2 border-dashed border-zinc-700 rounded-lg p-6 text-center hover:border-gold/50 transition-colors">
+                        <Label className="text-black font-medium mb-2 block">Property Photos</Label>
+                        <div className="border-2 border-dashed border-zinc-300 rounded-lg p-6 text-center hover:border-gold transition-colors bg-zinc-50">
                           <input
                             type="file"
                             multiple
@@ -1058,9 +1060,9 @@ Requirements:
                             id="photo-upload"
                           />
                           <label htmlFor="photo-upload" className="cursor-pointer">
-                            <Camera className="w-8 h-8 text-zinc-500 mx-auto mb-2" />
-                            <p className="text-zinc-400">Click to upload photos</p>
-                            <p className="text-zinc-500 text-xs mt-1">JPG, PNG up to 10MB each</p>
+                            <Camera className="w-8 h-8 text-zinc-400 mx-auto mb-2" />
+                            <p className="text-zinc-600">Click to upload photos</p>
+                            <p className="text-zinc-400 text-xs mt-1">JPG, PNG up to 10MB each</p>
                           </label>
                         </div>
                         {photoFiles.length > 0 && (
@@ -1070,8 +1072,8 @@ Requirements:
 
                       {/* Videos */}
                       <div>
-                        <Label className="text-white mb-2 block">Property Videos (optional)</Label>
-                        <div className="border-2 border-dashed border-zinc-700 rounded-lg p-6 text-center hover:border-gold/50 transition-colors">
+                        <Label className="text-black font-medium mb-2 block">Property Videos (optional)</Label>
+                        <div className="border-2 border-dashed border-zinc-300 rounded-lg p-6 text-center hover:border-gold transition-colors bg-zinc-50">
                           <input
                             type="file"
                             multiple
@@ -1081,9 +1083,9 @@ Requirements:
                             id="video-upload"
                           />
                           <label htmlFor="video-upload" className="cursor-pointer">
-                            <Upload className="w-8 h-8 text-zinc-500 mx-auto mb-2" />
-                            <p className="text-zinc-400">Click to upload videos</p>
-                            <p className="text-zinc-500 text-xs mt-1">MP4, MOV up to 100MB each</p>
+                            <Upload className="w-8 h-8 text-zinc-400 mx-auto mb-2" />
+                            <p className="text-zinc-600">Click to upload videos</p>
+                            <p className="text-zinc-400 text-xs mt-1">MP4, MOV up to 100MB each</p>
                           </label>
                         </div>
                         {videoFiles.length > 0 && (
@@ -1093,8 +1095,8 @@ Requirements:
 
                       {/* Floor Plans */}
                       <div>
-                        <Label className="text-white mb-2 block">Floor Plans (optional)</Label>
-                        <div className="border-2 border-dashed border-zinc-700 rounded-lg p-6 text-center hover:border-gold/50 transition-colors">
+                        <Label className="text-black font-medium mb-2 block">Floor Plans (optional)</Label>
+                        <div className="border-2 border-dashed border-zinc-300 rounded-lg p-6 text-center hover:border-gold transition-colors bg-zinc-50">
                           <input
                             type="file"
                             multiple
@@ -1104,9 +1106,9 @@ Requirements:
                             id="floorplan-upload"
                           />
                           <label htmlFor="floorplan-upload" className="cursor-pointer">
-                            <FileText className="w-8 h-8 text-zinc-500 mx-auto mb-2" />
-                            <p className="text-zinc-400">Click to upload floor plans</p>
-                            <p className="text-zinc-500 text-xs mt-1">PDF, JPG, PNG</p>
+                            <FileText className="w-8 h-8 text-zinc-400 mx-auto mb-2" />
+                            <p className="text-zinc-600">Click to upload floor plans</p>
+                            <p className="text-zinc-400 text-xs mt-1">PDF, JPG, PNG</p>
                           </label>
                         </div>
                         {floorPlanFiles.length > 0 && (
@@ -1127,13 +1129,13 @@ Requirements:
                     className="space-y-6"
                   >
                     <div>
-                      <h2 className="text-xl font-bold text-white mb-2">Documents Vault</h2>
-                      <p className="text-zinc-400 text-sm">Upload required documents securely. These are only visible to you and our team.</p>
+                      <h2 className="text-xl font-bold text-black mb-2">Documents Vault</h2>
+                      <p className="text-zinc-600 text-sm">Upload required documents securely. These are only visible to you and our team.</p>
                     </div>
 
-                    <div className="bg-gold/10 border border-gold/20 rounded-lg p-4 flex items-start gap-3">
+                    <div className="bg-gold/10 border border-gold/30 rounded-lg p-4 flex items-start gap-3">
                       <Shield className="w-5 h-5 text-gold flex-shrink-0 mt-0.5" />
-                      <p className="text-gold text-sm">
+                      <p className="text-black text-sm">
                         Your documents are encrypted and stored securely. Only authorized team members can access them.
                       </p>
                     </div>
@@ -1141,16 +1143,16 @@ Requirements:
                     <div className="space-y-6">
                       {/* Title Deed - REQUIRED */}
                       <div>
-                        <Label className="text-white mb-2 flex items-center gap-2">
-                          Title Deed <span className="text-red-400">*</span>
+                        <Label className="text-black font-medium mb-2 flex items-center gap-2">
+                          Title Deed <span className="text-red-500">*</span>
                           {!titleDeedFile && (
-                            <span className="text-red-400 text-xs flex items-center gap-1">
+                            <span className="text-red-500 text-xs flex items-center gap-1">
                               <AlertCircle className="w-3 h-3" /> Required
                             </span>
                           )}
                         </Label>
-                        <div className={`border-2 border-dashed rounded-lg p-6 text-center transition-colors ${
-                          titleDeedFile ? 'border-green-500/50' : 'border-zinc-700 hover:border-gold/50'
+                        <div className={`border-2 border-dashed rounded-lg p-6 text-center transition-colors bg-zinc-50 ${
+                          titleDeedFile ? 'border-green-500' : 'border-zinc-300 hover:border-gold'
                         }`}>
                           <input
                             type="file"
@@ -1160,12 +1162,12 @@ Requirements:
                             id="titledeed-upload"
                           />
                           <label htmlFor="titledeed-upload" className="cursor-pointer">
-                            <FileText className="w-8 h-8 text-zinc-500 mx-auto mb-2" />
-                            <p className="text-zinc-400">Upload Title Deed</p>
+                            <FileText className="w-8 h-8 text-zinc-400 mx-auto mb-2" />
+                            <p className="text-zinc-600">Upload Title Deed</p>
                           </label>
                         </div>
                         {titleDeedFile && (
-                          <p className="text-gold text-sm mt-2 flex items-center gap-2">
+                          <p className="text-green-600 text-sm mt-2 flex items-center gap-2">
                             <CheckCircle2 className="w-4 h-4" />
                             {titleDeedFile.name}
                           </p>
@@ -1174,8 +1176,8 @@ Requirements:
 
                       {/* Passport/Emirates ID */}
                       <div>
-                        <Label className="text-white mb-2 block">Passport / Emirates ID</Label>
-                        <div className="border-2 border-dashed border-zinc-700 rounded-lg p-6 text-center hover:border-gold/50 transition-colors">
+                        <Label className="text-black font-medium mb-2 block">Passport / Emirates ID</Label>
+                        <div className="border-2 border-dashed border-zinc-300 rounded-lg p-6 text-center hover:border-gold transition-colors bg-zinc-50">
                           <input
                             type="file"
                             accept="application/pdf,image/*"
@@ -1184,12 +1186,12 @@ Requirements:
                             id="passport-upload"
                           />
                           <label htmlFor="passport-upload" className="cursor-pointer">
-                            <User className="w-8 h-8 text-zinc-500 mx-auto mb-2" />
-                            <p className="text-zinc-400">Upload ID Document</p>
+                            <User className="w-8 h-8 text-zinc-400 mx-auto mb-2" />
+                            <p className="text-zinc-600">Upload ID Document</p>
                           </label>
                         </div>
                         {passportFile && (
-                          <p className="text-gold text-sm mt-2 flex items-center gap-2">
+                          <p className="text-green-600 text-sm mt-2 flex items-center gap-2">
                             <CheckCircle2 className="w-4 h-4" />
                             {passportFile.name}
                           </p>
@@ -1199,16 +1201,16 @@ Requirements:
                       {/* POA (Required if seller type is POA) */}
                       {form.watch("seller_type") === "poa" && (
                         <div>
-                          <Label className="text-white mb-2 flex items-center gap-2">
-                            Power of Attorney <span className="text-red-400">*</span>
+                          <Label className="text-black font-medium mb-2 flex items-center gap-2">
+                            Power of Attorney <span className="text-red-500">*</span>
                             {!poaFile && (
-                              <span className="text-red-400 text-xs flex items-center gap-1">
+                              <span className="text-red-500 text-xs flex items-center gap-1">
                                 <AlertCircle className="w-3 h-3" /> Required for POA
                               </span>
                             )}
                           </Label>
-                          <div className={`border-2 border-dashed rounded-lg p-6 text-center transition-colors ${
-                            poaFile ? 'border-green-500/50' : 'border-zinc-700 hover:border-gold/50'
+                          <div className={`border-2 border-dashed rounded-lg p-6 text-center transition-colors bg-zinc-50 ${
+                            poaFile ? 'border-green-500' : 'border-zinc-300 hover:border-gold'
                           }`}>
                             <input
                               type="file"
@@ -1218,12 +1220,12 @@ Requirements:
                               id="poa-upload"
                             />
                             <label htmlFor="poa-upload" className="cursor-pointer">
-                              <FileText className="w-8 h-8 text-zinc-500 mx-auto mb-2" />
-                              <p className="text-zinc-400">Upload POA Document</p>
+                              <FileText className="w-8 h-8 text-zinc-400 mx-auto mb-2" />
+                              <p className="text-zinc-600">Upload POA Document</p>
                             </label>
                           </div>
                           {poaFile && (
-                            <p className="text-gold text-sm mt-2 flex items-center gap-2">
+                            <p className="text-green-600 text-sm mt-2 flex items-center gap-2">
                               <CheckCircle2 className="w-4 h-4" />
                               {poaFile.name}
                             </p>
@@ -1233,8 +1235,8 @@ Requirements:
 
                       {/* Additional Documents */}
                       <div>
-                        <Label className="text-white mb-2 block">Additional Documents (optional)</Label>
-                        <div className="border-2 border-dashed border-zinc-700 rounded-lg p-6 text-center hover:border-gold/50 transition-colors">
+                        <Label className="text-black font-medium mb-2 block">Additional Documents (optional)</Label>
+                        <div className="border-2 border-dashed border-zinc-300 rounded-lg p-6 text-center hover:border-gold transition-colors bg-zinc-50">
                           <input
                             type="file"
                             multiple
@@ -1244,8 +1246,8 @@ Requirements:
                             id="additional-upload"
                           />
                           <label htmlFor="additional-upload" className="cursor-pointer">
-                            <Upload className="w-8 h-8 text-zinc-500 mx-auto mb-2" />
-                            <p className="text-zinc-400">Upload any other documents</p>
+                            <Upload className="w-8 h-8 text-zinc-400 mx-auto mb-2" />
+                            <p className="text-zinc-600">Upload any other documents</p>
                           </label>
                         </div>
                         {additionalDocs.length > 0 && (
@@ -1266,85 +1268,85 @@ Requirements:
                     className="space-y-6"
                   >
                     <div>
-                      <h2 className="text-xl font-bold text-white mb-2">Review & Submit</h2>
-                      <p className="text-zinc-400 text-sm">Please review your information before submitting</p>
+                      <h2 className="text-xl font-bold text-black mb-2">Review & Submit</h2>
+                      <p className="text-zinc-600 text-sm">Please review your information before submitting</p>
                     </div>
 
                     <div className="space-y-4">
                       {/* Seller Summary */}
-                      <div className="bg-zinc-800/50 border border-zinc-700 rounded-lg p-4">
+                      <div className="bg-zinc-50 border border-zinc-200 rounded-lg p-4">
                         <h3 className="text-gold font-semibold mb-3 flex items-center gap-2">
                           <User className="w-4 h-4" />
                           Seller Details
                         </h3>
                         <div className="grid grid-cols-2 gap-2 text-sm">
-                          <p className="text-zinc-400">Name:</p>
-                          <p className="text-white">{form.getValues("seller_full_name")}</p>
-                          <p className="text-zinc-400">Phone:</p>
-                          <p className="text-white">{form.getValues("seller_phone")}</p>
-                          <p className="text-zinc-400">Email:</p>
-                          <p className="text-white">{form.getValues("seller_email")}</p>
-                          <p className="text-zinc-400">Type:</p>
-                          <p className="text-white capitalize">{form.getValues("seller_type")}</p>
+                          <p className="text-zinc-500">Name:</p>
+                          <p className="text-black">{form.getValues("seller_full_name")}</p>
+                          <p className="text-zinc-500">Phone:</p>
+                          <p className="text-black">{form.getValues("seller_phone")}</p>
+                          <p className="text-zinc-500">Email:</p>
+                          <p className="text-black">{form.getValues("seller_email")}</p>
+                          <p className="text-zinc-500">Type:</p>
+                          <p className="text-black capitalize">{form.getValues("seller_type")}</p>
                         </div>
                       </div>
 
                       {/* Property Summary */}
-                      <div className="bg-zinc-800/50 border border-zinc-700 rounded-lg p-4">
+                      <div className="bg-zinc-50 border border-zinc-200 rounded-lg p-4">
                         <h3 className="text-gold font-semibold mb-3 flex items-center gap-2">
                           <Building2 className="w-4 h-4" />
                           Property Details
                         </h3>
                         <div className="grid grid-cols-2 gap-2 text-sm">
-                          <p className="text-zinc-400">Type:</p>
-                          <p className="text-white capitalize">{form.getValues("property_type")}</p>
-                          <p className="text-zinc-400">Location:</p>
-                          <p className="text-white">{form.getValues("property_location")}</p>
+                          <p className="text-zinc-500">Type:</p>
+                          <p className="text-black capitalize">{form.getValues("property_type")}</p>
+                          <p className="text-zinc-500">Location:</p>
+                          <p className="text-black">{form.getValues("property_location")}</p>
                           {form.getValues("bedrooms") !== undefined && (
                             <>
-                              <p className="text-zinc-400">Bedrooms:</p>
-                              <p className="text-white">{form.getValues("bedrooms") === 0 ? "Studio" : form.getValues("bedrooms")}</p>
+                              <p className="text-zinc-500">Bedrooms:</p>
+                              <p className="text-black">{form.getValues("bedrooms") === 0 ? "Studio" : form.getValues("bedrooms")}</p>
                             </>
                           )}
                           {form.getValues("property_size_sqft") && (
                             <>
-                              <p className="text-zinc-400">Size:</p>
-                              <p className="text-white">{form.getValues("property_size_sqft")?.toLocaleString()} sq.ft</p>
+                              <p className="text-zinc-500">Size:</p>
+                              <p className="text-black">{form.getValues("property_size_sqft")?.toLocaleString()} sq.ft</p>
                             </>
                           )}
                         </div>
                       </div>
 
                       {/* Pricing Summary */}
-                      <div className="bg-zinc-800/50 border border-zinc-700 rounded-lg p-4">
+                      <div className="bg-zinc-50 border border-zinc-200 rounded-lg p-4">
                         <h3 className="text-gold font-semibold mb-3 flex items-center gap-2">
                           <DollarSign className="w-4 h-4" />
                           Pricing
                         </h3>
                         <div className="grid grid-cols-2 gap-2 text-sm">
-                          <p className="text-zinc-400">Target Price:</p>
-                          <p className="text-white">AED {form.getValues("target_selling_price")?.toLocaleString()}</p>
-                          <p className="text-zinc-400">Urgency:</p>
-                          <p className="text-white">{form.getValues("selling_urgency")} days</p>
+                          <p className="text-zinc-500">Target Price:</p>
+                          <p className="text-black">AED {form.getValues("target_selling_price")?.toLocaleString()}</p>
+                          <p className="text-zinc-500">Urgency:</p>
+                          <p className="text-black">{form.getValues("selling_urgency")} days</p>
                         </div>
                       </div>
 
                       {/* Files Summary */}
-                      <div className="bg-zinc-800/50 border border-zinc-700 rounded-lg p-4">
+                      <div className="bg-zinc-50 border border-zinc-200 rounded-lg p-4">
                         <h3 className="text-gold font-semibold mb-3 flex items-center gap-2">
                           <FileText className="w-4 h-4" />
                           Uploaded Files
                         </h3>
                         <div className="text-sm space-y-1">
-                          <p className="text-zinc-300">{photoFiles.length} photos uploaded</p>
-                          <p className="text-zinc-300">{videoFiles.length} videos uploaded</p>
-                          <p className={`flex items-center gap-1 ${titleDeedFile ? 'text-green-400' : 'text-red-400'}`}>
+                          <p className="text-zinc-600">{photoFiles.length} photos uploaded</p>
+                          <p className="text-zinc-600">{videoFiles.length} videos uploaded</p>
+                          <p className={`flex items-center gap-1 ${titleDeedFile ? 'text-green-600' : 'text-red-500'}`}>
                             {titleDeedFile ? <CheckCircle2 className="w-3 h-3" /> : <AlertCircle className="w-3 h-3" />}
                             Title Deed {titleDeedFile ? '✓' : '(Required)'}
                           </p>
-                          <p className="text-zinc-300">{passportFile ? "✓" : "✗"} ID Document</p>
+                          <p className="text-zinc-600">{passportFile ? "✓" : "✗"} ID Document</p>
                           {form.getValues("seller_type") === 'poa' && (
-                            <p className={`flex items-center gap-1 ${poaFile ? 'text-green-400' : 'text-red-400'}`}>
+                            <p className={`flex items-center gap-1 ${poaFile ? 'text-green-600' : 'text-red-500'}`}>
                               {poaFile ? <CheckCircle2 className="w-3 h-3" /> : <AlertCircle className="w-3 h-3" />}
                               POA Document {poaFile ? '✓' : '(Required)'}
                             </p>
@@ -1354,14 +1356,14 @@ Requirements:
                     </div>
 
                     {/* Confirmation Checkbox */}
-                    <div className="flex items-start space-x-3 p-4 bg-gold/5 border border-gold/20 rounded-lg">
+                    <div className="flex items-start space-x-3 p-4 bg-gold/10 border border-gold/30 rounded-lg">
                       <Checkbox
                         id="submission_confirmed"
                         checked={form.watch("submission_confirmed")}
                         onCheckedChange={(checked) => form.setValue("submission_confirmed", checked as boolean)}
-                        className="mt-1"
+                        className="mt-1 border-zinc-400"
                       />
-                      <Label htmlFor="submission_confirmed" className="text-white cursor-pointer text-sm leading-relaxed">
+                      <Label htmlFor="submission_confirmed" className="text-black cursor-pointer text-sm leading-relaxed">
                         I confirm that all the information provided above is accurate and complete. I understand that 
                         JBJ Global Real Estate will review my submission and contact me to discuss next steps.
                       </Label>
@@ -1371,13 +1373,13 @@ Requirements:
               </AnimatePresence>
 
               {/* Navigation Buttons */}
-              <div className="flex justify-between items-center mt-8 pt-6 border-t border-zinc-800">
+              <div className="flex justify-between items-center mt-8 pt-6 border-t border-zinc-200">
                 <Button
                   type="button"
                   variant="outline"
                   onClick={goToPrevStep}
                   disabled={currentStep === 1}
-                  className="border-zinc-700 text-white hover:bg-zinc-800"
+                  className="border-zinc-300 text-black hover:bg-zinc-100"
                 >
                   <ArrowLeft className="w-4 h-4 mr-2" />
                   Previous
