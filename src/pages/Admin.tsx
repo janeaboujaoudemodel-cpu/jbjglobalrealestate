@@ -8,6 +8,8 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
 import { Switch } from "@/components/ui/switch";
+import { Badge } from "@/components/ui/badge";
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import {
   Select,
   SelectContent,
@@ -42,6 +44,10 @@ import {
   Shield,
   ShieldBan,
   Activity,
+  Bell,
+  Settings,
+  Brain,
+  Home,
 } from "lucide-react";
 import { SmartDocumentUploader } from "@/components/SmartDocumentUploader";
 import { RateLimitDashboard } from "@/components/admin/RateLimitDashboard";
@@ -54,7 +60,9 @@ import { AIBrokersDashboard } from "@/components/admin/ai-brokers/AIBrokersDashb
 import MarketingSettingsDashboard from "@/components/admin/MarketingSettingsDashboard";
 import PWAAnalyticsDashboard from "@/components/admin/PWAAnalyticsDashboard";
 import VisitorInsightsDashboard from "@/components/admin/VisitorInsightsDashboard";
-import { ClipboardList, Users, Briefcase, Brain, Megaphone, Smartphone } from "lucide-react";
+import { ClipboardList, Users, Briefcase, Megaphone, Smartphone } from "lucide-react";
+import { CommandPalette } from "@/components/ui/command-palette";
+import { FloatingActionBar } from "@/components/ui/floating-action-bar";
 
 interface ProjectDocument {
   id: string;
@@ -77,6 +85,7 @@ const Admin = () => {
   const [selectedProject, setSelectedProject] = useState<any>(null);
   const [isEditing, setIsEditing] = useState(false);
   const [isSaving, setIsSaving] = useState(false);
+  const [showCommandPalette, setShowCommandPalette] = useState(false);
   
   // Document upload state
   const [projectDocuments, setProjectDocuments] = useState<ProjectDocument[]>([]);
@@ -112,6 +121,18 @@ const Admin = () => {
       navigate("/");
     }
   }, [user, isAdmin, loading, navigate]);
+
+  // Keyboard shortcut for command palette
+  useEffect(() => {
+    const handleKeyDown = (e: KeyboardEvent) => {
+      if ((e.metaKey || e.ctrlKey) && e.key === 'k') {
+        e.preventDefault();
+        setShowCommandPalette(true);
+      }
+    };
+    document.addEventListener('keydown', handleKeyDown);
+    return () => document.removeEventListener('keydown', handleKeyDown);
+  }, []);
 
   const filteredProjects = projects?.filter((project) =>
     project.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
@@ -297,7 +318,7 @@ const Admin = () => {
 
   if (loading) {
     return (
-      <div className="min-h-screen bg-zinc-950 flex items-center justify-center">
+      <div className="min-h-screen bg-gradient-to-br from-white via-[#FDFBF7] to-[#F5F0E6] flex items-center justify-center">
         <div className="animate-spin rounded-full h-8 w-8 border-t-2 border-gold" />
       </div>
     );
@@ -308,33 +329,56 @@ const Admin = () => {
   }
 
   return (
-    <div className="min-h-screen bg-zinc-950">
-      {/* Header */}
-      <header className="border-b border-zinc-800 bg-zinc-950/80 backdrop-blur-sm sticky top-0 z-50">
+    <div className="min-h-screen bg-gradient-to-br from-white via-[#FDFBF7] to-[#F5F0E6]">
+      {/* Command Palette */}
+      <CommandPalette isOpen={showCommandPalette} onClose={() => setShowCommandPalette(false)} />
+      
+      {/* Premium Header */}
+      <header className="border-b-2 border-gold/30 bg-gradient-to-r from-white via-[#FDFBF7] to-[#F5F0E6] sticky top-0 z-50 shadow-[0_4px_20px_rgba(200,167,102,0.1)]">
         <div className="container mx-auto px-4 py-4 flex items-center justify-between">
           <div className="flex items-center gap-4">
-            <h1
-              className="text-white text-2xl font-bold"
-              style={{ fontFamily: "Poppins, sans-serif" }}
-            >
-              Admin Panel
-            </h1>
-            <span className="px-3 py-1 bg-gold/20 text-gold text-sm rounded-full">
-              {user?.email}
-            </span>
+            <div className="w-12 h-12 rounded-xl bg-gradient-to-br from-gold to-amber-600 flex items-center justify-center shadow-lg shadow-gold/20">
+              <Shield className="w-6 h-6 text-black" />
+            </div>
+            <div>
+              <h1 className="text-black text-2xl font-bold">
+                Admin Panel
+              </h1>
+              <p className="text-gold text-sm font-medium">{user?.email}</p>
+            </div>
           </div>
-          <div className="flex items-center gap-4">
+          
+          {/* Search */}
+          <div className="hidden lg:flex items-center gap-2 flex-1 max-w-md mx-8">
+            <button
+              onClick={() => setShowCommandPalette(true)}
+              className="flex items-center gap-2 w-full px-4 py-2 rounded-xl bg-white/80 border-2 border-gold/30 text-zinc-500 hover:border-gold/50 transition-all"
+            >
+              <Search className="h-4 w-4 text-gold" />
+              <span className="text-sm">Search...</span>
+              <kbd className="ml-auto px-2 py-0.5 bg-gold/10 text-gold text-xs rounded font-mono">⌘K</kbd>
+            </button>
+          </div>
+          
+          <div className="flex items-center gap-3">
             <Button
               variant="ghost"
-              onClick={() => navigate("/")}
-              className="text-gray-400 hover:text-white"
+              size="sm"
+              className="text-black hover:text-gold hover:bg-gold/10 relative"
             >
+              <Bell className="h-4 w-4" />
+              <span className="absolute -top-1 -right-1 w-4 h-4 bg-red-500 rounded-full text-[10px] text-white flex items-center justify-center">5</span>
+            </Button>
+            <Button
+              variant="secondary"
+              onClick={() => navigate("/")}
+            >
+              <Home className="w-4 h-4 mr-2" />
               View Site
             </Button>
             <Button
-              variant="outline"
+              variant="secondary"
               onClick={handleSignOut}
-              className="border-zinc-700 text-white hover:bg-zinc-800"
             >
               <LogOut className="w-4 h-4 mr-2" />
               Sign Out
@@ -344,53 +388,53 @@ const Admin = () => {
       </header>
 
       {/* Main Content */}
-      <main className="container mx-auto px-4 py-8">
+      <main className="container mx-auto px-4 py-8 pb-24">
         <Tabs defaultValue="security" className="space-y-6">
           <div className="w-full overflow-x-auto">
-            <TabsList className="w-max min-w-full justify-start bg-zinc-900 border border-zinc-800">
-              <TabsTrigger value="security" className="data-[state=active]:bg-gold data-[state=active]:text-black">
+            <TabsList className="w-max min-w-full justify-start bg-white/80 border-2 border-gold/30 p-1">
+              <TabsTrigger value="security" className="data-[state=active]:bg-gold data-[state=active]:text-black text-black">
                 <Activity className="w-4 h-4 mr-2" />
                 Security
               </TabsTrigger>
-              <TabsTrigger value="properties" className="data-[state=active]:bg-gold data-[state=active]:text-black">
+              <TabsTrigger value="properties" className="data-[state=active]:bg-gold data-[state=active]:text-black text-black">
                 <Building2 className="w-4 h-4 mr-2" />
                 Properties
               </TabsTrigger>
-              <TabsTrigger value="rate-limits" className="data-[state=active]:bg-gold data-[state=active]:text-black">
+              <TabsTrigger value="rate-limits" className="data-[state=active]:bg-gold data-[state=active]:text-black text-black">
                 <Shield className="w-4 h-4 mr-2" />
                 Rate Limits
               </TabsTrigger>
-              <TabsTrigger value="ip-blocklist" className="data-[state=active]:bg-gold data-[state=active]:text-black">
+              <TabsTrigger value="ip-blocklist" className="data-[state=active]:bg-gold data-[state=active]:text-black text-black">
                 <ShieldBan className="w-4 h-4 mr-2" />
                 IP Blocklist
               </TabsTrigger>
-              <TabsTrigger value="audit-logs" className="data-[state=active]:bg-gold data-[state=active]:text-black">
+              <TabsTrigger value="audit-logs" className="data-[state=active]:bg-gold data-[state=active]:text-black text-black">
                 <ClipboardList className="w-4 h-4 mr-2" />
                 Audit Logs
               </TabsTrigger>
-              <TabsTrigger value="brokers" className="data-[state=active]:bg-gold data-[state=active]:text-black">
+              <TabsTrigger value="brokers" className="data-[state=active]:bg-gold data-[state=active]:text-black text-black">
                 <Briefcase className="w-4 h-4 mr-2" />
                 Brokers
               </TabsTrigger>
-              <TabsTrigger value="ai-analytics" className="data-[state=active]:bg-gold data-[state=active]:text-black">
+              <TabsTrigger value="ai-analytics" className="data-[state=active]:bg-gold data-[state=active]:text-black text-black">
                 <Brain className="w-4 h-4 mr-2" />
                 AI Analytics
               </TabsTrigger>
-              <TabsTrigger value="marketing" className="data-[state=active]:bg-gold data-[state=active]:text-black">
+              <TabsTrigger value="marketing" className="data-[state=active]:bg-gold data-[state=active]:text-black text-black">
                 <Megaphone className="w-4 h-4 mr-2" />
                 Marketing
               </TabsTrigger>
-              <TabsTrigger value="pwa-analytics" className="data-[state=active]:bg-gold data-[state=active]:text-black">
+              <TabsTrigger value="pwa-analytics" className="data-[state=active]:bg-gold data-[state=active]:text-black text-black">
                 <Smartphone className="w-4 h-4 mr-2" />
                 PWA Analytics
               </TabsTrigger>
-              <TabsTrigger value="visitor-insights" className="data-[state=active]:bg-gold data-[state=active]:text-black">
+              <TabsTrigger value="visitor-insights" className="data-[state=active]:bg-gold data-[state=active]:text-black text-black">
                 <Activity className="w-4 h-4 mr-2" />
                 Visitors
               </TabsTrigger>
               <TabsTrigger
                 value="leads"
-                className="data-[state=active]:bg-gold data-[state=active]:text-black"
+                className="data-[state=active]:bg-gold data-[state=active]:text-black text-black"
                 onClick={() => navigate("/admin/leads")}
               >
                 <Users className="w-4 h-4 mr-2" />
@@ -428,38 +472,62 @@ const Admin = () => {
           </TabsContent>
 
           <TabsContent value="properties" className="space-y-8">
-            {/* Stats */}
+            {/* Stats - Premium Cards */}
             <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
-              <div className="bg-zinc-900 border border-zinc-800 rounded-xl p-6">
-                <div className="flex items-center gap-3 mb-2">
-                  <Building2 className="w-5 h-5 text-gold" />
-                  <span className="text-gray-400">Total Projects</span>
-                </div>
-                <p className="text-white text-3xl font-bold">{projects?.length || 0}</p>
-              </div>
-              <div className="bg-zinc-900 border border-zinc-800 rounded-xl p-6">
-                <div className="flex items-center gap-3 mb-2">
-                  <Crown className="w-5 h-5 text-gold" />
-                  <span className="text-gray-400">Premium Properties</span>
-                </div>
-                <p className="text-white text-3xl font-bold">
-                  {projects?.filter((p) => p.is_premium).length || 0}
-                </p>
-              </div>
-              <div className="bg-zinc-900 border border-zinc-800 rounded-xl p-6">
-                <div className="flex items-center gap-3 mb-2">
-                  <Building2 className="w-5 h-5 text-gold" />
-                  <span className="text-gray-400">Developers</span>
-                </div>
-                <p className="text-white text-3xl font-bold">{developers?.length || 0}</p>
-              </div>
-              <div className="bg-zinc-900 border border-zinc-800 rounded-xl p-6">
-                <div className="flex items-center gap-3 mb-2">
-                  <FileText className="w-5 h-5 text-gold" />
-                  <span className="text-gray-400">Communities</span>
-                </div>
-                <p className="text-white text-3xl font-bold">{communities?.length || 0}</p>
-              </div>
+              <Card className="bg-white border-2 border-gold/30 shadow-[0_4px_20px_rgba(200,167,102,0.1)]">
+                <CardContent className="pt-6">
+                  <div className="flex items-center gap-3 mb-2">
+                    <div className="w-10 h-10 rounded-lg bg-gold/10 flex items-center justify-center">
+                      <Building2 className="w-5 h-5 text-gold" />
+                    </div>
+                    <div>
+                      <span className="text-zinc-500 text-sm">Total Projects</span>
+                      <p className="text-black text-2xl font-bold">{projects?.length || 0}</p>
+                    </div>
+                  </div>
+                </CardContent>
+              </Card>
+              <Card className="bg-white border-2 border-gold/30 shadow-[0_4px_20px_rgba(200,167,102,0.1)]">
+                <CardContent className="pt-6">
+                  <div className="flex items-center gap-3 mb-2">
+                    <div className="w-10 h-10 rounded-lg bg-gold/10 flex items-center justify-center">
+                      <Crown className="w-5 h-5 text-gold" />
+                    </div>
+                    <div>
+                      <span className="text-zinc-500 text-sm">Premium Properties</span>
+                      <p className="text-black text-2xl font-bold">
+                        {projects?.filter((p) => p.is_premium).length || 0}
+                      </p>
+                    </div>
+                  </div>
+                </CardContent>
+              </Card>
+              <Card className="bg-white border-2 border-gold/30 shadow-[0_4px_20px_rgba(200,167,102,0.1)]">
+                <CardContent className="pt-6">
+                  <div className="flex items-center gap-3 mb-2">
+                    <div className="w-10 h-10 rounded-lg bg-gold/10 flex items-center justify-center">
+                      <Building2 className="w-5 h-5 text-gold" />
+                    </div>
+                    <div>
+                      <span className="text-zinc-500 text-sm">Developers</span>
+                      <p className="text-black text-2xl font-bold">{developers?.length || 0}</p>
+                    </div>
+                  </div>
+                </CardContent>
+              </Card>
+              <Card className="bg-white border-2 border-gold/30 shadow-[0_4px_20px_rgba(200,167,102,0.1)]">
+                <CardContent className="pt-6">
+                  <div className="flex items-center gap-3 mb-2">
+                    <div className="w-10 h-10 rounded-lg bg-gold/10 flex items-center justify-center">
+                      <FileText className="w-5 h-5 text-gold" />
+                    </div>
+                    <div>
+                      <span className="text-zinc-500 text-sm">Communities</span>
+                      <p className="text-black text-2xl font-bold">{communities?.length || 0}</p>
+                    </div>
+                  </div>
+                </CardContent>
+              </Card>
             </div>
 
             {/* Smart Document Uploader */}
@@ -478,423 +546,262 @@ const Admin = () => {
             />
 
             {/* Projects Table */}
-            <div className="bg-zinc-900 border border-zinc-800 rounded-xl overflow-hidden">
-              <div className="p-6 border-b border-zinc-800 flex items-center justify-between">
-                <h2
-                  className="text-white text-xl font-semibold"
-                  style={{ fontFamily: "Poppins, sans-serif" }}
-                >
-                  Property Listings
-                </h2>
-                <div className="flex items-center gap-4">
-                  <div className="relative">
-                    <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-500" />
+            <Card className="bg-white border-2 border-gold/30 shadow-[0_4px_20px_rgba(200,167,102,0.1)]">
+              <CardHeader>
+                <div className="flex items-center justify-between">
+                  <CardTitle className="text-black">All Projects</CardTitle>
+                  <div className="relative w-64">
+                    <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-gold" />
                     <Input
                       placeholder="Search projects..."
                       value={searchQuery}
                       onChange={(e) => setSearchQuery(e.target.value)}
-                      className="pl-9 w-64 bg-zinc-950 border-zinc-700 text-white placeholder:text-gray-500"
+                      className="pl-10 bg-white border-2 border-gold/30 text-black placeholder:text-zinc-400"
                     />
                   </div>
                 </div>
-              </div>
-
-              <ScrollArea className="h-[600px]">
-                <table className="w-full">
-                  <thead className="bg-zinc-950 sticky top-0">
-                    <tr>
-                      <th className="text-left text-gray-400 font-medium px-6 py-4">Project</th>
-                      <th className="text-left text-gray-400 font-medium px-6 py-4">Developer</th>
-                      <th className="text-left text-gray-400 font-medium px-6 py-4">Price</th>
-                      <th className="text-left text-gray-400 font-medium px-6 py-4">Handover</th>
-                      <th className="text-center text-gray-400 font-medium px-6 py-4">Premium</th>
-                      <th className="text-right text-gray-400 font-medium px-6 py-4">Actions</th>
-                    </tr>
-                  </thead>
-                  <tbody>
+              </CardHeader>
+              <CardContent>
+                <ScrollArea className="h-[500px]">
+                  <div className="space-y-2">
                     {filteredProjects?.map((project) => (
-                      <tr
+                      <div
                         key={project.id}
-                        className="border-t border-zinc-800 hover:bg-zinc-950/50"
+                        className="flex items-center justify-between p-4 rounded-xl bg-gradient-to-r from-[#FDFBF7] to-white border border-gold/20 hover:border-gold/40 transition-all"
                       >
-                        <td className="px-6 py-4">
-                          <div className="flex items-center gap-3">
-                            <img
-                              src={
-                                project.images?.[0]?.image_url ||
-                                "https://images.unsplash.com/photo-1512917774080-9991f1c4c750?w=100"
-                              }
-                              alt={project.name}
-                              className="w-12 h-12 rounded-lg object-cover"
-                            />
-                            <div>
-                              <p className="text-white font-medium">{project.name}</p>
-                              <p className="text-gray-500 text-sm">{project.location}</p>
-                            </div>
+                        <div className="flex items-center gap-4">
+                          <div className="w-16 h-16 rounded-lg bg-gold/10 flex items-center justify-center overflow-hidden">
+                            {project.images?.[0] ? (
+                              <img
+                                src={project.images[0]}
+                                alt={project.name}
+                                className="w-full h-full object-cover"
+                              />
+                            ) : (
+                              <Building2 className="w-6 h-6 text-gold" />
+                            )}
                           </div>
-                        </td>
-                        <td className="px-6 py-4 text-gray-300">
-                          {project.developer?.name || "—"}
-                        </td>
-                        <td className="px-6 py-4 text-gold">
-                          {project.price_from
-                            ? `AED ${(project.price_from / 1000000).toFixed(1)}M`
-                            : "—"}
-                        </td>
-                        <td className="px-6 py-4 text-gray-300">
-                          {project.handover_date || "—"}
-                        </td>
-                        <td className="px-6 py-4 text-center">
-                          <button
-                            onClick={() => handleToggleFeatured(project.id, project.is_premium || false)}
-                            className="inline-flex items-center justify-center"
-                          >
-                            <Crown
-                              className={`w-5 h-5 transition-colors ${
-                                project.is_premium
-                                  ? "fill-gold text-gold"
-                                  : "text-gray-600 hover:text-gray-400"
-                              }`}
-                            />
-                          </button>
-                        </td>
-                        <td className="px-6 py-4 text-right">
+                          <div>
+                            <h3 className="font-semibold text-black">{project.name}</h3>
+                            <p className="text-sm text-zinc-500">
+                              {project.developer?.name} • {project.location}
+                            </p>
+                          </div>
+                        </div>
+                        <div className="flex items-center gap-2">
+                          {project.is_premium && (
+                            <Badge className="bg-gold/10 text-gold border-gold/30">
+                              <Crown className="w-3 h-3 mr-1" />
+                              Premium
+                            </Badge>
+                          )}
                           <Button
-                            variant="ghost"
+                            variant="secondary"
+                            size="sm"
+                            onClick={() => handleToggleFeatured(project.id, project.is_premium)}
+                          >
+                            {project.is_premium ? "Remove Premium" : "Make Premium"}
+                          </Button>
+                          <Button
+                            variant="secondary"
                             size="sm"
                             onClick={() => handleEditProject(project)}
-                            className="text-gray-400 hover:text-white"
                           >
-                            <Edit2 className="w-4 h-4" />
+                            <Edit2 className="w-4 h-4 mr-1" />
+                            Edit
                           </Button>
-                        </td>
-                      </tr>
+                        </div>
+                      </div>
                     ))}
-                  </tbody>
-                </table>
-              </ScrollArea>
-            </div>
+                  </div>
+                </ScrollArea>
+              </CardContent>
+            </Card>
           </TabsContent>
 
-          <TabsContent value="rate-limits">
+          <TabsContent value="rate-limits" className="space-y-8">
             <RateLimitDashboard />
           </TabsContent>
 
-          <TabsContent value="ip-blocklist">
+          <TabsContent value="ip-blocklist" className="space-y-8">
             <IPBlocklistDashboard />
           </TabsContent>
         </Tabs>
       </main>
 
-      {/* Edit Dialog */}
+      {/* Floating Action Bar */}
+      <FloatingActionBar />
+
+      {/* Edit Project Dialog */}
       <Dialog open={isEditing} onOpenChange={setIsEditing}>
-        <DialogContent className="bg-zinc-900 border-zinc-800 text-white max-w-2xl max-h-[90vh] overflow-y-auto">
+        <DialogContent className="max-w-4xl max-h-[90vh] overflow-y-auto bg-white border-2 border-gold/30">
           <DialogHeader>
-            <DialogTitle style={{ fontFamily: "Poppins, sans-serif" }}>
-              Edit Property
-            </DialogTitle>
+            <DialogTitle className="text-black">Edit Project: {selectedProject?.name}</DialogTitle>
           </DialogHeader>
 
-          <div className="space-y-6 py-4">
-            <div className="grid grid-cols-2 gap-4">
-              <div className="space-y-2">
-                <Label className="text-gray-300">Project Name</Label>
-                <Input
-                  value={formData.name}
-                  onChange={(e) => setFormData({ ...formData, name: e.target.value })}
-                  className="bg-zinc-950 border-zinc-700 text-white"
-                />
-              </div>
-              <div className="space-y-2">
-                <Label className="text-gray-300">Slug</Label>
-                <Input
-                  value={formData.slug}
-                  onChange={(e) => setFormData({ ...formData, slug: e.target.value })}
-                  className="bg-zinc-950 border-zinc-700 text-white"
-                />
-              </div>
-            </div>
-
+          <div className="grid grid-cols-2 gap-4 mt-4">
             <div className="space-y-2">
-              <Label className="text-gray-300">Description</Label>
+              <Label className="text-black">Name</Label>
+              <Input
+                value={formData.name}
+                onChange={(e) => setFormData({ ...formData, name: e.target.value })}
+                className="bg-white border-gold/30 text-black"
+              />
+            </div>
+            <div className="space-y-2">
+              <Label className="text-black">Slug</Label>
+              <Input
+                value={formData.slug}
+                onChange={(e) => setFormData({ ...formData, slug: e.target.value })}
+                className="bg-white border-gold/30 text-black"
+              />
+            </div>
+            <div className="col-span-2 space-y-2">
+              <Label className="text-black">Description</Label>
               <Textarea
                 value={formData.description}
                 onChange={(e) => setFormData({ ...formData, description: e.target.value })}
-                className="bg-zinc-950 border-zinc-700 text-white min-h-[100px]"
+                className="bg-white border-gold/30 text-black"
+                rows={3}
               />
             </div>
-
-            <div className="grid grid-cols-2 gap-4">
-              <div className="space-y-2">
-                <Label className="text-gray-300">Location</Label>
-                <Input
-                  value={formData.location}
-                  onChange={(e) => setFormData({ ...formData, location: e.target.value })}
-                  className="bg-zinc-950 border-zinc-700 text-white"
-                />
-              </div>
-              <div className="space-y-2">
-                <Label className="text-gray-300">Emirate</Label>
-                <Select
-                  value={formData.emirate}
-                  onValueChange={(value) => setFormData({ ...formData, emirate: value })}
-                >
-                  <SelectTrigger className="bg-zinc-950 border-zinc-700 text-white">
-                    <SelectValue />
-                  </SelectTrigger>
-                  <SelectContent className="bg-zinc-900 border-zinc-700">
-                    {["Dubai", "Abu Dhabi", "Sharjah", "Ras Al Khaimah", "Ajman", "Fujairah", "Umm Al Quwain"].map((e) => (
-                      <SelectItem key={e} value={e} className="text-white hover:bg-zinc-800">
-                        {e}
-                      </SelectItem>
-                    ))}
-                  </SelectContent>
-                </Select>
-              </div>
+            <div className="space-y-2">
+              <Label className="text-black">Location</Label>
+              <Input
+                value={formData.location}
+                onChange={(e) => setFormData({ ...formData, location: e.target.value })}
+                className="bg-white border-gold/30 text-black"
+              />
             </div>
-
-            <div className="grid grid-cols-2 gap-4">
-              <div className="space-y-2">
-                <Label className="text-gray-300">Price From (AED)</Label>
-                <Input
-                  type="number"
-                  value={formData.price_from}
-                  onChange={(e) => setFormData({ ...formData, price_from: e.target.value })}
-                  className="bg-zinc-950 border-zinc-700 text-white"
-                />
-              </div>
-              <div className="space-y-2">
-                <Label className="text-gray-300">Price To (AED)</Label>
-                <Input
-                  type="number"
-                  value={formData.price_to}
-                  onChange={(e) => setFormData({ ...formData, price_to: e.target.value })}
-                  className="bg-zinc-950 border-zinc-700 text-white"
-                />
-              </div>
+            <div className="space-y-2">
+              <Label className="text-black">Emirate</Label>
+              <Select
+                value={formData.emirate}
+                onValueChange={(value) => setFormData({ ...formData, emirate: value })}
+              >
+                <SelectTrigger className="bg-white border-gold/30 text-black">
+                  <SelectValue />
+                </SelectTrigger>
+                <SelectContent className="bg-white border-gold/30">
+                  <SelectItem value="Dubai">Dubai</SelectItem>
+                  <SelectItem value="Abu Dhabi">Abu Dhabi</SelectItem>
+                  <SelectItem value="Sharjah">Sharjah</SelectItem>
+                  <SelectItem value="Ajman">Ajman</SelectItem>
+                  <SelectItem value="Ras Al Khaimah">Ras Al Khaimah</SelectItem>
+                </SelectContent>
+              </Select>
             </div>
-
-            <div className="grid grid-cols-2 gap-4">
-              <div className="space-y-2">
-                <Label className="text-gray-300">Bedrooms Min</Label>
-                <Input
-                  type="number"
-                  value={formData.bedrooms_min}
-                  onChange={(e) => setFormData({ ...formData, bedrooms_min: e.target.value })}
-                  className="bg-zinc-950 border-zinc-700 text-white"
-                />
-              </div>
-              <div className="space-y-2">
-                <Label className="text-gray-300">Bedrooms Max</Label>
-                <Input
-                  type="number"
-                  value={formData.bedrooms_max}
-                  onChange={(e) => setFormData({ ...formData, bedrooms_max: e.target.value })}
-                  className="bg-zinc-950 border-zinc-700 text-white"
-                />
-              </div>
+            <div className="space-y-2">
+              <Label className="text-black">Price From (AED)</Label>
+              <Input
+                type="number"
+                value={formData.price_from}
+                onChange={(e) => setFormData({ ...formData, price_from: e.target.value })}
+                className="bg-white border-gold/30 text-black"
+              />
             </div>
-
-            <div className="grid grid-cols-2 gap-4">
-              <div className="space-y-2">
-                <Label className="text-gray-300">Developer</Label>
-                <Select
-                  value={formData.developer_id}
-                  onValueChange={(value) => setFormData({ ...formData, developer_id: value })}
-                >
-                  <SelectTrigger className="bg-zinc-950 border-zinc-700 text-white">
-                    <SelectValue placeholder="Select developer" />
-                  </SelectTrigger>
-                  <SelectContent className="bg-zinc-900 border-zinc-700 max-h-60">
-                    {developers?.map((dev) => (
-                      <SelectItem key={dev.id} value={dev.id} className="text-white hover:bg-zinc-800">
-                        {dev.name}
-                      </SelectItem>
-                    ))}
-                  </SelectContent>
-                </Select>
-              </div>
-              <div className="space-y-2">
-                <Label className="text-gray-300">Community</Label>
-                <Select
-                  value={formData.community_id}
-                  onValueChange={(value) => setFormData({ ...formData, community_id: value })}
-                >
-                  <SelectTrigger className="bg-zinc-950 border-zinc-700 text-white">
-                    <SelectValue placeholder="Select community" />
-                  </SelectTrigger>
-                  <SelectContent className="bg-zinc-900 border-zinc-700 max-h-60">
-                    {communities?.map((comm) => (
-                      <SelectItem key={comm.id} value={comm.id} className="text-white hover:bg-zinc-800">
-                        {comm.name}
-                      </SelectItem>
-                    ))}
-                  </SelectContent>
-                </Select>
-              </div>
+            <div className="space-y-2">
+              <Label className="text-black">Price To (AED)</Label>
+              <Input
+                type="number"
+                value={formData.price_to}
+                onChange={(e) => setFormData({ ...formData, price_to: e.target.value })}
+                className="bg-white border-gold/30 text-black"
+              />
             </div>
-
-            <div className="grid grid-cols-2 gap-4">
-              <div className="space-y-2">
-                <Label className="text-gray-300">Handover Date</Label>
-                <Input
-                  value={formData.handover_date}
-                  onChange={(e) => setFormData({ ...formData, handover_date: e.target.value })}
-                  placeholder="e.g., Q4 2026"
-                  className="bg-zinc-950 border-zinc-700 text-white"
-                />
-              </div>
-              <div className="space-y-2">
-                <Label className="text-gray-300">Furnished Status</Label>
-                <Select
-                  value={formData.furnished_status}
-                  onValueChange={(value) => setFormData({ ...formData, furnished_status: value })}
-                >
-                  <SelectTrigger className="bg-zinc-950 border-zinc-700 text-white">
-                    <SelectValue />
-                  </SelectTrigger>
-                  <SelectContent className="bg-zinc-900 border-zinc-700">
-                    <SelectItem value="unfurnished" className="text-white hover:bg-zinc-800">
-                      Unfurnished
-                    </SelectItem>
-                    <SelectItem value="semi-furnished" className="text-white hover:bg-zinc-800">
-                      Semi-Furnished
-                    </SelectItem>
-                    <SelectItem value="furnished" className="text-white hover:bg-zinc-800">
-                      Furnished
-                    </SelectItem>
-                  </SelectContent>
-                </Select>
-              </div>
-            </div>
-
-            <div className="flex items-center justify-between p-4 bg-zinc-950 rounded-xl">
+            <div className="col-span-2 flex items-center justify-between bg-gold/5 p-4 rounded-xl border border-gold/20">
               <div>
-                <Label className="text-white font-medium">Premium Property</Label>
-                <p className="text-gray-500 text-sm">
-                  Mark as exclusive residence (Penthouse, Villa, Mansion)
-                </p>
+                <Label className="text-black font-semibold">Premium Property</Label>
+                <p className="text-sm text-zinc-500">Mark as featured/premium listing</p>
               </div>
               <Switch
                 checked={formData.is_premium}
                 onCheckedChange={(checked) => setFormData({ ...formData, is_premium: checked })}
               />
             </div>
+          </div>
 
-            {/* Document Upload Section */}
-            <div className="space-y-4 border-t border-zinc-800 pt-6">
-              <div className="flex items-center justify-between">
-                <div>
-                  <Label className="text-white font-medium text-lg">Documents</Label>
-                  <p className="text-gray-500 text-sm">Upload brochures, floor plans, and payment plans</p>
-                </div>
-              </div>
+          {/* Documents Section */}
+          <div className="mt-6 pt-6 border-t border-gold/20">
+            <h3 className="font-semibold text-black mb-4">Project Documents</h3>
+            <div className="flex items-center gap-3 mb-4">
+              <Select value={selectedDocType} onValueChange={setSelectedDocType}>
+                <SelectTrigger className="w-40 bg-white border-gold/30 text-black">
+                  <SelectValue />
+                </SelectTrigger>
+                <SelectContent className="bg-white border-gold/30">
+                  <SelectItem value="brochure">Brochure</SelectItem>
+                  <SelectItem value="floor_plan">Floor Plan</SelectItem>
+                  <SelectItem value="payment_plan">Payment Plan</SelectItem>
+                  <SelectItem value="factsheet">Factsheet</SelectItem>
+                </SelectContent>
+              </Select>
+              <input
+                type="file"
+                ref={fileInputRef}
+                onChange={handleFileUpload}
+                className="hidden"
+                accept=".pdf,.doc,.docx,.xls,.xlsx,.jpg,.jpeg,.png"
+              />
+              <Button
+                variant="secondary"
+                onClick={() => fileInputRef.current?.click()}
+                disabled={isUploadingDocument}
+              >
+                <Upload className="w-4 h-4 mr-2" />
+                {isUploadingDocument ? "Uploading..." : "Upload"}
+              </Button>
+            </div>
 
-              <div className="flex gap-4">
-                <Select
-                  value={selectedDocType}
-                  onValueChange={setSelectedDocType}
-                >
-                  <SelectTrigger className="w-40 bg-zinc-950 border-zinc-700 text-white">
-                    <SelectValue />
-                  </SelectTrigger>
-                  <SelectContent className="bg-zinc-900 border-zinc-700">
-                    <SelectItem value="brochure" className="text-white hover:bg-zinc-800">
-                      Brochure
-                    </SelectItem>
-                    <SelectItem value="floor_plan" className="text-white hover:bg-zinc-800">
-                      Floor Plan
-                    </SelectItem>
-                    <SelectItem value="payment_plan" className="text-white hover:bg-zinc-800">
-                      Payment Plan
-                    </SelectItem>
-                    <SelectItem value="renders" className="text-white hover:bg-zinc-800">
-                      Renders
-                    </SelectItem>
-                    <SelectItem value="other" className="text-white hover:bg-zinc-800">
-                      Other
-                    </SelectItem>
-                  </SelectContent>
-                </Select>
-                
-                <input
-                  type="file"
-                  ref={fileInputRef}
-                  onChange={handleFileUpload}
-                  accept=".pdf,.doc,.docx,.png,.jpg,.jpeg"
-                  className="hidden"
-                />
-                <Button
-                  onClick={() => fileInputRef.current?.click()}
-                  disabled={isUploadingDocument}
-                  className="bg-gradient-to-r from-gold to-gold-dark hover:opacity-90 text-black"
-                >
-                  <Upload className="w-4 h-4 mr-2" />
-                  {isUploadingDocument ? "Uploading..." : "Upload Document"}
-                </Button>
-              </div>
-
-              {projectDocuments.length > 0 ? (
-                <div className="space-y-2">
-                  {projectDocuments.map((doc) => (
-                    <div
-                      key={doc.id}
-                      className="flex items-center justify-between p-3 bg-zinc-950 rounded-lg border border-zinc-800"
-                    >
-                      <div className="flex items-center gap-3">
-                        <div className="w-10 h-10 bg-zinc-800 rounded-lg flex items-center justify-center">
-                          <File className="w-5 h-5 text-gold" />
-                        </div>
-                        <div>
-                          <p className="text-white text-sm font-medium">{doc.file_name}</p>
-                          <p className="text-gray-500 text-xs">
-                            {doc.document_type.replace('_', ' ')} • {formatFileSize(doc.file_size)}
-                          </p>
-                        </div>
-                      </div>
-                      <div className="flex items-center gap-2">
-                        <a
-                          href={doc.file_url}
-                          target="_blank"
-                          rel="noopener noreferrer"
-                          className="p-2 text-gray-400 hover:text-white transition-colors"
-                        >
-                          <Download className="w-4 h-4" />
-                        </a>
-                        <button
-                          onClick={() => handleDeleteDocument(doc)}
-                          className="p-2 text-gray-400 hover:text-red-500 transition-colors"
-                        >
-                          <Trash2 className="w-4 h-4" />
-                        </button>
+            {projectDocuments.length > 0 ? (
+              <div className="space-y-2">
+                {projectDocuments.map((doc) => (
+                  <div
+                    key={doc.id}
+                    className="flex items-center justify-between p-3 bg-gradient-to-r from-[#FDFBF7] to-white rounded-lg border border-gold/20"
+                  >
+                    <div className="flex items-center gap-3">
+                      <File className="w-5 h-5 text-gold" />
+                      <div>
+                        <p className="text-sm text-black font-medium">{doc.file_name}</p>
+                        <p className="text-xs text-zinc-500">
+                          {doc.document_type} • {formatFileSize(doc.file_size)}
+                        </p>
                       </div>
                     </div>
-                  ))}
-                </div>
-              ) : (
-                <div className="text-center py-8 text-gray-500">
-                  <FileText className="w-12 h-12 mx-auto mb-2 opacity-50" />
-                  <p>No documents uploaded yet</p>
-                </div>
-              )}
-            </div>
+                    <div className="flex items-center gap-2">
+                      <Button
+                        variant="ghost"
+                        size="sm"
+                        onClick={() => window.open(doc.file_url, "_blank")}
+                        className="text-gold hover:text-black hover:bg-gold/10"
+                      >
+                        <Download className="w-4 h-4" />
+                      </Button>
+                      <Button
+                        variant="ghost"
+                        size="sm"
+                        onClick={() => handleDeleteDocument(doc)}
+                        className="text-red-500 hover:text-red-700 hover:bg-red-50"
+                      >
+                        <Trash2 className="w-4 h-4" />
+                      </Button>
+                    </div>
+                  </div>
+                ))}
+              </div>
+            ) : (
+              <p className="text-zinc-500 text-sm">No documents uploaded yet.</p>
+            )}
+          </div>
 
-            <div className="flex justify-end gap-4 pt-4">
-              <Button
-                variant="outline"
-                onClick={() => setIsEditing(false)}
-                className="border-zinc-700 text-white hover:bg-zinc-800"
-              >
-                Cancel
-              </Button>
-              <Button
-                onClick={handleSaveProject}
-                disabled={isSaving}
-                className="bg-gradient-to-r from-gold to-gold-dark text-black"
-              >
-                {isSaving ? "Saving..." : "Save Changes"}
-              </Button>
-            </div>
+          <div className="flex justify-end gap-3 mt-6">
+            <Button variant="secondary" onClick={() => setIsEditing(false)}>
+              Cancel
+            </Button>
+            <Button variant="primary" onClick={handleSaveProject} disabled={isSaving}>
+              {isSaving ? "Saving..." : "Save Changes"}
+            </Button>
           </div>
         </DialogContent>
       </Dialog>
