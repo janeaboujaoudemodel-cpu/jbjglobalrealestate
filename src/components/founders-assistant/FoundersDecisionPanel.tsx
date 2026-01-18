@@ -120,12 +120,12 @@ export function FoundersDecisionPanel() {
       {/* Header */}
       <div className="flex items-center justify-between">
         <div className="flex items-center gap-3">
-          <div className="h-12 w-12 rounded-xl bg-gradient-to-br from-amber-500 to-amber-600 flex items-center justify-center">
-            <Brain className="h-6 w-6 text-white" />
+          <div className="h-12 w-12 rounded-xl bg-gradient-to-br from-gold/30 to-gold/10 border border-gold/30 flex items-center justify-center">
+            <Brain className="h-6 w-6 text-gold" />
           </div>
           <div>
-            <h2 className="text-2xl font-bold">AI Business Intelligence</h2>
-            <p className="text-muted-foreground text-sm">
+            <h2 className="text-2xl font-bold text-white">AI Business Intelligence</h2>
+            <p className="text-zinc-400 text-sm">
               Real-time insights, predictions & strategic recommendations
             </p>
           </div>
@@ -137,7 +137,7 @@ export function FoundersDecisionPanel() {
             </Badge>
           )}
           <Button 
-            variant="outline" 
+            className="bg-white text-black border-2 border-gold/30 hover:bg-black hover:text-gold hover:border-gold transition-all"
             size="sm" 
             onClick={() => setShowSummary(!showSummary)}
           >
@@ -145,7 +145,7 @@ export function FoundersDecisionPanel() {
             Daily Summary
           </Button>
           <Button 
-            variant="outline" 
+            className="bg-white text-black border-2 border-gold/30 hover:bg-black hover:text-gold hover:border-gold transition-all"
             size="sm" 
             onClick={refreshData}
             disabled={isProcessing}
@@ -158,20 +158,20 @@ export function FoundersDecisionPanel() {
 
       {/* Daily Summary Modal */}
       {showSummary && (
-        <Card className="border-amber-500/30 bg-gradient-to-br from-amber-500/5 to-transparent">
+        <Card className="bg-white border-2 border-gold/30 shadow-[0_0_20px_rgba(200,167,102,0.15)]">
           <CardHeader className="pb-2">
             <div className="flex items-center justify-between">
-              <CardTitle className="flex items-center gap-2 text-lg">
-                <Sparkles className="h-5 w-5 text-amber-500" />
+              <CardTitle className="flex items-center gap-2 text-lg text-black">
+                <Sparkles className="h-5 w-5 text-gold" />
                 AI Daily Summary
               </CardTitle>
-              <Button variant="ghost" size="sm" onClick={() => setShowSummary(false)}>
+              <Button variant="ghost" size="sm" onClick={() => setShowSummary(false)} className="text-zinc-500 hover:text-black">
                 ✕
               </Button>
             </div>
           </CardHeader>
           <CardContent>
-            <pre className="whitespace-pre-wrap text-sm font-mono bg-background/50 p-4 rounded-lg">
+            <pre className="whitespace-pre-wrap text-sm font-mono bg-zinc-50 p-4 rounded-lg text-black border border-zinc-200">
               {generateDailySummary()}
             </pre>
           </CardContent>
@@ -179,19 +179,19 @@ export function FoundersDecisionPanel() {
       )}
 
       {/* Natural Language Query */}
-      <Card>
+      <Card className="bg-white border-2 border-gold/30 shadow-[0_0_15px_rgba(200,167,102,0.1)]">
         <CardContent className="pt-4">
           <form onSubmit={handleQuery} className="flex gap-2">
             <div className="relative flex-1">
-              <Brain className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />
+              <Brain className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-gold" />
               <Input
                 placeholder="Ask Olivia anything... (e.g., 'Who's my top broker?' or 'How can I improve revenue?')"
                 value={queryInput}
                 onChange={(e) => setQueryInput(e.target.value)}
-                className="pl-10"
+                className="pl-10 bg-zinc-50 border-zinc-200 text-black placeholder:text-zinc-400"
               />
             </div>
-            <Button type="submit" disabled={isQuerying}>
+            <Button type="submit" disabled={isQuerying} className="bg-black text-gold hover:bg-zinc-900 border border-gold/30">
               {isQuerying ? (
                 <Loader2 className="h-4 w-4 animate-spin" />
               ) : (
@@ -202,20 +202,20 @@ export function FoundersDecisionPanel() {
 
           {/* Query Result */}
           {queryResult && (
-            <div className="mt-4 p-4 bg-muted/30 rounded-lg">
+            <div className="mt-4 p-4 bg-zinc-50 rounded-lg border border-zinc-200">
               <div className="flex items-start gap-3">
-                <div className="h-8 w-8 rounded-full bg-gradient-to-br from-amber-500 to-amber-600 flex items-center justify-center flex-shrink-0">
-                  <Brain className="h-4 w-4 text-white" />
+                <div className="h-8 w-8 rounded-full bg-gradient-to-br from-gold/30 to-gold/10 border border-gold/30 flex items-center justify-center flex-shrink-0">
+                  <Brain className="h-4 w-4 text-gold" />
                 </div>
                 <div className="flex-1">
-                  <p className="text-sm">{queryResult.answer}</p>
+                  <p className="text-sm text-black">{queryResult.answer}</p>
                   {queryResult.suggestions && (
                     <div className="flex flex-wrap gap-2 mt-3">
                       {queryResult.suggestions.map((suggestion, idx) => (
                         <Button 
                           key={idx} 
-                          variant="outline" 
                           size="sm"
+                          className="bg-white text-gold border border-gold/30 hover:bg-black hover:text-gold"
                           onClick={() => {
                             setQueryInput(suggestion);
                             processQuery(suggestion);
