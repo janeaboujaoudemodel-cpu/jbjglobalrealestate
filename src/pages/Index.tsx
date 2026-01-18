@@ -471,7 +471,7 @@ const Index = () => {
             >
               <div className="grid md:grid-cols-2 gap-0">
                 {/* Photo Side - Gold/Champagne Background */}
-                <div className="relative bg-gradient-to-br from-[#C8A766]/30 via-[#D4B970]/20 to-[#C8A766]/30">
+                <div className="relative bg-gradient-to-br from-[#C8A766]/60 via-[#D4B970]/45 to-[#C8A766]/50">
                   {/* GLOBAL IMAGE RULE - LOCKED (FINAL):
                       object-fit: cover + center 15% = max zoom, crop from bottom only */}
                   <img 
