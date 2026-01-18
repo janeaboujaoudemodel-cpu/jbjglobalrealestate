@@ -102,10 +102,12 @@ const AIComparisonWidget = () => {
 
         {/* CTA */}
         <Link to="/compare">
-          <Button variant="dark" className="w-full md:w-auto px-8 py-5 text-base">
+          <button 
+            className="w-full md:w-auto inline-flex items-center justify-center gap-2 px-8 py-5 text-base font-semibold rounded-xl transition-all duration-300 bg-gradient-to-br from-white via-[#FDFBF7] to-[#F5F0E6] text-gold border-2 border-gold/40 shadow-[0_8px_30px_rgba(200,167,102,0.25),inset_0_1px_0_rgba(255,255,255,0.9)] hover:shadow-[0_4px_15px_rgba(200,167,102,0.15)] hover:translate-y-0.5"
+          >
             Start Comparing
-            <ArrowUpRight className="w-5 h-5 ml-2" />
-          </Button>
+            <ArrowUpRight className="w-5 h-5 text-black" />
+          </button>
         </Link>
       </div>
     </motion.div>

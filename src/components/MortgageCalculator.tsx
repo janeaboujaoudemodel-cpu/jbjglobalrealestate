@@ -1,6 +1,6 @@
 import { useState, useMemo } from "react";
 import { Link } from "react-router-dom";
-import { Calculator, TrendingUp, Calendar, Percent, DollarSign, ArrowRight, Info } from "lucide-react";
+import { Calculator, TrendingUp, Calendar, Percent, DollarSign, ArrowRight, ArrowUpRight, Info } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
@@ -112,10 +112,12 @@ const MortgageCalculator = ({ defaultPrice = 2000000, compact = false }: Mortgag
 
         <div className="mt-6 text-center">
           <Link to="/contact">
-            <Button variant="dark" className="px-8 py-5 text-base">
+            <button 
+              className="inline-flex items-center justify-center gap-2 px-8 py-5 text-base font-semibold rounded-xl transition-all duration-300 bg-gradient-to-br from-white via-[#FDFBF7] to-[#F5F0E6] text-gold border-2 border-gold/40 shadow-[0_8px_30px_rgba(200,167,102,0.25),inset_0_1px_0_rgba(255,255,255,0.9)] hover:shadow-[0_4px_15px_rgba(200,167,102,0.15)] hover:translate-y-0.5"
+            >
               Connect with Mortgage Partners
-              <ArrowRight className="w-4 h-4 ml-2" />
-            </Button>
+              <ArrowUpRight className="w-4 h-4 text-black" />
+            </button>
           </Link>
           <p className="text-zinc-500 text-xs mt-3">
             *Estimates based on AED 2M property, 20% down, 4.5% rate, 25 years

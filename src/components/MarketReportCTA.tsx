@@ -1,6 +1,6 @@
 import { Link } from "react-router-dom";
 import { motion } from "framer-motion";
-import { CheckCircle } from "lucide-react";
+import { CheckCircle, ArrowUpRight } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import Book3D from "@/components/Book3D";
 
@@ -73,12 +73,12 @@ const MarketReportCTA = () => {
 
             {/* Download Button */}
             <Link to="/market-report" className="block">
-              <Button 
-                variant="dark"
-                className="w-full px-8 py-7 text-lg rounded-full"
+              <button 
+                className="w-full inline-flex items-center justify-center gap-2 px-8 py-7 text-lg font-semibold rounded-xl transition-all duration-300 bg-gradient-to-br from-white via-[#FDFBF7] to-[#F5F0E6] text-gold border-2 border-gold/40 shadow-[0_8px_30px_rgba(200,167,102,0.25),inset_0_1px_0_rgba(255,255,255,0.9)] hover:shadow-[0_4px_15px_rgba(200,167,102,0.15)] hover:translate-y-0.5"
               >
                 Download Your Free Book Now
-              </Button>
+                <ArrowUpRight className="w-5 h-5 text-black" />
+              </button>
             </Link>
             
             {/* Powered by - Creative Dubai branding */}

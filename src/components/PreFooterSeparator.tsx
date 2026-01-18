@@ -55,16 +55,20 @@ export const PreFooterSeparator = ({
           </p>
           <div className="flex flex-wrap justify-center gap-4">
             <Link to={primaryLink}>
-              <Button variant="dark" className="px-8 py-6 text-base">
+              <button 
+                className="inline-flex items-center justify-center gap-2 px-8 py-5 text-base font-semibold rounded-xl transition-all duration-300 bg-gradient-to-br from-white via-[#FDFBF7] to-[#F5F0E6] text-gold border-2 border-gold/40 shadow-[0_8px_30px_rgba(200,167,102,0.25),inset_0_1px_0_rgba(255,255,255,0.9)] hover:shadow-[0_4px_15px_rgba(200,167,102,0.15)] hover:translate-y-0.5"
+              >
                 {primaryText}
-                <ArrowUpRight className="w-4 h-4 ml-2" />
-              </Button>
+                <ArrowUpRight className="w-4 h-4 text-black" />
+              </button>
             </Link>
             <Link to={secondaryLink}>
-              <Button variant="secondary" className="px-8 py-6 text-base border-black text-black hover:bg-black hover:text-white">
+              <button 
+                className="inline-flex items-center justify-center gap-2 px-8 py-5 text-base font-semibold rounded-xl transition-all duration-300 bg-gradient-to-br from-white via-[#FDFBF7] to-[#F5F0E6] text-gold border-2 border-gold/40 shadow-[0_8px_30px_rgba(200,167,102,0.25),inset_0_1px_0_rgba(255,255,255,0.9)] hover:shadow-[0_4px_15px_rgba(200,167,102,0.15)] hover:translate-y-0.5"
+              >
                 {secondaryText}
-                <ArrowUpRight className="w-4 h-4 ml-2" />
-              </Button>
+                <ArrowUpRight className="w-4 h-4 text-black" />
+              </button>
             </Link>
           </div>
         </div>
