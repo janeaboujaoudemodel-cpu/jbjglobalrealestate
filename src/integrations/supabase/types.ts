@@ -9182,11 +9182,13 @@ export type Database = {
       }
       support_tickets: {
         Row: {
+          ai_analyzed_priority: string | null
           assigned_to: string | null
           attachment_urls: string[] | null
           created_at: string
           description: string
           email: string
+          escalate_to_tech: boolean | null
           full_name: string
           id: string
           internal_notes: string | null
@@ -9199,13 +9201,16 @@ export type Database = {
           ticket_number: string
           updated_at: string
           user_id: string | null
+          user_selected_priority: string | null
         }
         Insert: {
+          ai_analyzed_priority?: string | null
           assigned_to?: string | null
           attachment_urls?: string[] | null
           created_at?: string
           description: string
           email: string
+          escalate_to_tech?: boolean | null
           full_name: string
           id?: string
           internal_notes?: string | null
@@ -9218,13 +9223,16 @@ export type Database = {
           ticket_number: string
           updated_at?: string
           user_id?: string | null
+          user_selected_priority?: string | null
         }
         Update: {
+          ai_analyzed_priority?: string | null
           assigned_to?: string | null
           attachment_urls?: string[] | null
           created_at?: string
           description?: string
           email?: string
+          escalate_to_tech?: boolean | null
           full_name?: string
           id?: string
           internal_notes?: string | null
@@ -9237,6 +9245,7 @@ export type Database = {
           ticket_number?: string
           updated_at?: string
           user_id?: string | null
+          user_selected_priority?: string | null
         }
         Relationships: []
       }

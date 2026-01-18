@@ -9,6 +9,16 @@ const corsHeaders = {
   "Access-Control-Allow-Headers": "authorization, x-client-info, apikey, content-type",
 };
 
+// Email Rule: First letter capitalized, JBJ always in capitals
+const OFFICIAL_EMAILS = {
+  support: 'Support@JBJ.ae',
+  contact: 'Contact@JBJ.ae',
+  privacy: 'Privacy@JBJ.ae',
+  careers: 'Careers@JBJ.ae',
+  partnerships: 'Partnerships@JBJ.ae',
+  security: 'Security@JBJ.ae',
+};
+
 interface TicketRequest {
   fullName: string;
   email: string;
@@ -16,6 +26,8 @@ interface TicketRequest {
   serviceCategory: string;
   subject: string;
   description: string;
+  priority?: string;
+  escalateToTech?: boolean;
   attachmentUrls?: string[];
 }
 
@@ -38,6 +50,8 @@ const handler = async (req: Request): Promise<Response> => {
       serviceCategory,
       subject,
       description,
+      priority = "normal",
+      escalateToTech = false,
       attachmentUrls = []
     }: TicketRequest = await req.json();
 
@@ -59,6 +73,37 @@ const handler = async (req: Request): Promise<Response> => {
       userId = user?.id || null;
     }
 
+    // AI Priority Analysis - detect actual severity based on keywords
+    const analyzePriority = (desc: string, subj: string, userPriority: string): string => {
+      const text = `${desc} ${subj}`.toLowerCase();
+      
+      // Critical keywords
+      const criticalKeywords = ['urgent', 'emergency', 'cannot access', 'locked out', 'security breach', 
+        'data loss', 'payment failed', 'money lost', 'critical', 'immediately', 'down', 'not working at all'];
+      
+      // High priority keywords  
+      const highKeywords = ['important', 'asap', 'broken', 'error', 'failed', 'stuck', 'blocked',
+        'cannot login', 'not loading', 'crash', 'freeze'];
+      
+      // Low priority keywords
+      const lowKeywords = ['suggestion', 'feature request', 'would be nice', 'minor', 'small issue',
+        'when you have time', 'not urgent'];
+      
+      let detectedPriority = userPriority;
+      
+      if (criticalKeywords.some(kw => text.includes(kw))) {
+        detectedPriority = 'critical';
+      } else if (highKeywords.some(kw => text.includes(kw))) {
+        detectedPriority = detectedPriority === 'low' || detectedPriority === 'normal' ? 'high' : detectedPriority;
+      } else if (lowKeywords.some(kw => text.includes(kw))) {
+        detectedPriority = detectedPriority === 'critical' || detectedPriority === 'high' ? 'normal' : 'low';
+      }
+      
+      return detectedPriority;
+    };
+
+    const aiAnalyzedPriority = analyzePriority(description, subject, priority);
+
     // Insert ticket into database
     const { data: ticket, error: insertError } = await supabaseClient
       .from("support_tickets")
@@ -72,7 +117,10 @@ const handler = async (req: Request): Promise<Response> => {
         description: description,
         attachment_urls: attachmentUrls,
         status: "open",
-        priority: "normal"
+        priority: aiAnalyzedPriority,
+        escalate_to_tech: escalateToTech,
+        user_selected_priority: priority,
+        ai_analyzed_priority: aiAnalyzedPriority
       })
       .select()
       .single();
@@ -151,7 +199,7 @@ const handler = async (req: Request): Promise<Response> => {
     try {
       await resend.emails.send({
         from: "JBJ Support <onboarding@resend.dev>",
-        to: ["Support@JBJ.ae"],
+        to: [OFFICIAL_EMAILS.support],
         subject: `[${ticket.ticket_number}] New Support Ticket: ${subject}`,
         html: supportEmailHtml,
       });
