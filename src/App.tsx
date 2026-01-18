@@ -132,6 +132,7 @@ import PartnerLegal from "./pages/partners/PartnerLegal";
 import PartnerCompanySetup from "./pages/partners/PartnerCompanySetup";
 import PartnerVisaServices from "./pages/partners/PartnerVisaServices";
 import TrustAndAuditCenter from "./pages/TrustAndAuditCenter";
+import HRDashboard from "./pages/HRDashboard";
 import ClientPortal from "./pages/client/ClientPortal";
 import PartnerGovernance from "./pages/governance/PartnerGovernance";
 import AIGovernance from "./pages/governance/AIGovernance";
