@@ -151,7 +151,7 @@ const handler = async (req: Request): Promise<Response> => {
     try {
       await resend.emails.send({
         from: "JBJ Support <onboarding@resend.dev>",
-        to: ["support@jbj.ae"],
+        to: ["Support@JBJ.ae"],
         subject: `[${ticket.ticket_number}] New Support Ticket: ${subject}`,
         html: supportEmailHtml,
       });
