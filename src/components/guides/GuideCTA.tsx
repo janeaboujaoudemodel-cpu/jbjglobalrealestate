@@ -1,7 +1,7 @@
 import { motion } from "framer-motion";
 import { Link } from "react-router-dom";
 import { Button } from "@/components/ui/button";
-import { LucideIcon, ArrowRight, Phone, MessageSquare } from "lucide-react";
+import { LucideIcon, ArrowUpRight, Phone, MessageSquare } from "lucide-react";
 import { CONTACT_INFO, getWhatsAppUrl, getCallUrl } from "@/constants/stats";
 
 interface GuideCTAProps {
@@ -56,7 +56,7 @@ export const GuideCTA = ({
             <Button className="bg-gradient-to-r from-gold to-gold-dark text-black font-semibold hover:brightness-110 px-6 py-3">
               {primaryAction.icon && <primaryAction.icon className="w-5 h-5 mr-2" />}
               {primaryAction.label}
-              <ArrowRight className="w-4 h-4 ml-2" />
+              <ArrowUpRight className="w-4 h-4 ml-2 text-gold" />
             </Button>
           </Link>
         )}

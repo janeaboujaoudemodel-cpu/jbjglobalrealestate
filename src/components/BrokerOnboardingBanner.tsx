@@ -4,7 +4,8 @@ import { motion, AnimatePresence } from "framer-motion";
 import { Button } from "@/components/ui/button";
 import { 
   Briefcase, 
-  ArrowRight, 
+  ArrowRight,
+  ArrowUpRight, 
   X, 
   CheckCircle2,
   Circle,
@@ -209,7 +210,7 @@ const BrokerOnboardingBanner = () => {
             <Link to="/join">
               <Button variant="primary" className="px-6">
                 Start Onboarding
-                <ArrowRight className="w-4 h-4 ml-2" />
+                <ArrowUpRight className="w-4 h-4 ml-2" />
               </Button>
             </Link>
           </div>

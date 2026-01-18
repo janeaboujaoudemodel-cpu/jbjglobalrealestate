@@ -14,6 +14,7 @@ import {
   Calendar,
   Bot,
   ArrowRight,
+  ArrowUpRight,
   Star,
   Shield,
   Award,
@@ -274,7 +275,7 @@ const BrokerCircleSection = () => {
               <Button variant="primary" className="gap-2 px-8 py-6 text-lg">
                 <Award className="h-5 w-5" />
                 Join Broker Circle — It's Free
-                <ArrowRight className="h-5 w-5" />
+                <ArrowUpRight className="h-5 w-5 text-gold" />
               </Button>
             </Link>
             <Link to="/ai-hub">
