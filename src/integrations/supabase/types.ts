@@ -3534,6 +3534,312 @@ export type Database = {
         }
         Relationships: []
       }
+      design_assets: {
+        Row: {
+          asset_type: string
+          created_at: string
+          file_url: string
+          id: string
+          metadata: Json | null
+          name: string
+          project_id: string | null
+          thumbnail_url: string | null
+          user_id: string
+        }
+        Insert: {
+          asset_type: string
+          created_at?: string
+          file_url: string
+          id?: string
+          metadata?: Json | null
+          name: string
+          project_id?: string | null
+          thumbnail_url?: string | null
+          user_id: string
+        }
+        Update: {
+          asset_type?: string
+          created_at?: string
+          file_url?: string
+          id?: string
+          metadata?: Json | null
+          name?: string
+          project_id?: string | null
+          thumbnail_url?: string | null
+          user_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "design_assets_project_id_fkey"
+            columns: ["project_id"]
+            isOneToOne: false
+            referencedRelation: "design_studio_projects"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      design_color_palettes: {
+        Row: {
+          colors: Json
+          created_at: string
+          description: string | null
+          id: string
+          is_default: boolean
+          is_public: boolean
+          name: string
+          updated_at: string
+          user_id: string
+        }
+        Insert: {
+          colors?: Json
+          created_at?: string
+          description?: string | null
+          id?: string
+          is_default?: boolean
+          is_public?: boolean
+          name: string
+          updated_at?: string
+          user_id: string
+        }
+        Update: {
+          colors?: Json
+          created_at?: string
+          description?: string | null
+          id?: string
+          is_default?: boolean
+          is_public?: boolean
+          name?: string
+          updated_at?: string
+          user_id?: string
+        }
+        Relationships: []
+      }
+      design_history: {
+        Row: {
+          changes_description: string | null
+          created_at: string
+          design_url: string
+          id: string
+          project_id: string
+          prompt_used: string | null
+          user_id: string
+          version_number: number
+        }
+        Insert: {
+          changes_description?: string | null
+          created_at?: string
+          design_url: string
+          id?: string
+          project_id: string
+          prompt_used?: string | null
+          user_id: string
+          version_number?: number
+        }
+        Update: {
+          changes_description?: string | null
+          created_at?: string
+          design_url?: string
+          id?: string
+          project_id?: string
+          prompt_used?: string | null
+          user_id?: string
+          version_number?: number
+        }
+        Relationships: [
+          {
+            foreignKeyName: "design_history_project_id_fkey"
+            columns: ["project_id"]
+            isOneToOne: false
+            referencedRelation: "design_studio_projects"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      design_project_palettes: {
+        Row: {
+          created_at: string
+          id: string
+          palette_id: string
+          project_id: string
+        }
+        Insert: {
+          created_at?: string
+          id?: string
+          palette_id: string
+          project_id: string
+        }
+        Update: {
+          created_at?: string
+          id?: string
+          palette_id?: string
+          project_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "design_project_palettes_palette_id_fkey"
+            columns: ["palette_id"]
+            isOneToOne: false
+            referencedRelation: "design_color_palettes"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "design_project_palettes_project_id_fkey"
+            columns: ["project_id"]
+            isOneToOne: false
+            referencedRelation: "design_studio_projects"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      design_studio_projects: {
+        Row: {
+          category: string
+          created_at: string
+          description: string | null
+          final_design_url: string | null
+          id: string
+          is_archived: boolean
+          metadata: Json | null
+          name: string
+          status: string
+          template_size: string | null
+          template_type: string | null
+          thumbnail_url: string | null
+          updated_at: string
+          user_id: string
+        }
+        Insert: {
+          category?: string
+          created_at?: string
+          description?: string | null
+          final_design_url?: string | null
+          id?: string
+          is_archived?: boolean
+          metadata?: Json | null
+          name: string
+          status?: string
+          template_size?: string | null
+          template_type?: string | null
+          thumbnail_url?: string | null
+          updated_at?: string
+          user_id: string
+        }
+        Update: {
+          category?: string
+          created_at?: string
+          description?: string | null
+          final_design_url?: string | null
+          id?: string
+          is_archived?: boolean
+          metadata?: Json | null
+          name?: string
+          status?: string
+          template_size?: string | null
+          template_type?: string | null
+          thumbnail_url?: string | null
+          updated_at?: string
+          user_id?: string
+        }
+        Relationships: []
+      }
+      design_templates: {
+        Row: {
+          category: string
+          created_at: string
+          id: string
+          is_public: boolean
+          name: string
+          preview_url: string | null
+          template_data: Json
+          updated_at: string
+          use_count: number
+          user_id: string
+        }
+        Insert: {
+          category: string
+          created_at?: string
+          id?: string
+          is_public?: boolean
+          name: string
+          preview_url?: string | null
+          template_data?: Json
+          updated_at?: string
+          use_count?: number
+          user_id: string
+        }
+        Update: {
+          category?: string
+          created_at?: string
+          id?: string
+          is_public?: boolean
+          name?: string
+          preview_url?: string | null
+          template_data?: Json
+          updated_at?: string
+          use_count?: number
+          user_id?: string
+        }
+        Relationships: []
+      }
+      design_website_requests: {
+        Row: {
+          ai_instructions: string | null
+          created_at: string
+          design_url: string
+          id: string
+          notes: string | null
+          processed_at: string | null
+          processed_by: string | null
+          project_id: string | null
+          request_type: string
+          status: string
+          target_page: string | null
+          target_section: string | null
+          updated_at: string
+          user_id: string
+        }
+        Insert: {
+          ai_instructions?: string | null
+          created_at?: string
+          design_url: string
+          id?: string
+          notes?: string | null
+          processed_at?: string | null
+          processed_by?: string | null
+          project_id?: string | null
+          request_type: string
+          status?: string
+          target_page?: string | null
+          target_section?: string | null
+          updated_at?: string
+          user_id: string
+        }
+        Update: {
+          ai_instructions?: string | null
+          created_at?: string
+          design_url?: string
+          id?: string
+          notes?: string | null
+          processed_at?: string | null
+          processed_by?: string | null
+          project_id?: string | null
+          request_type?: string
+          status?: string
+          target_page?: string | null
+          target_section?: string | null
+          updated_at?: string
+          user_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "design_website_requests_project_id_fkey"
+            columns: ["project_id"]
+            isOneToOne: false
+            referencedRelation: "design_studio_projects"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       developer_pipeline: {
         Row: {
           ai_score: number | null
