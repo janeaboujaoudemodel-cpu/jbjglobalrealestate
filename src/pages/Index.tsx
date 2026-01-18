@@ -438,7 +438,7 @@ const Index = () => {
       </section>
 
       {/* FOUNDER SECTION - Meet The Leadership */}
-      <section className="py-20 md:py-28 bg-gradient-to-b from-white via-[#FDFBF7] to-[#F5F0E6]">
+      <section className="py-20 md:py-28 bg-premium-bg">
         <div className="container mx-auto px-4">
           <motion.div
             initial="hidden"
@@ -453,77 +453,64 @@ const Index = () => {
                 <User className="w-4 h-4" />
                 Leadership
               </span>
-              <h2 
-                className="text-black text-4xl md:text-5xl lg:text-6xl font-bold mt-4 mb-4"
+              <h2
+                className="text-white text-4xl md:text-5xl lg:text-6xl font-bold mt-4 mb-4"
                 style={{ fontFamily: "Poppins, sans-serif" }}
               >
-                Meet the <span className="text-transparent bg-clip-text bg-gradient-to-r from-gold to-gold-light">Founder</span>
+                Meet the <span className="text-gold">Founder</span>
               </h2>
-              <p className="text-zinc-600 text-lg max-w-2xl mx-auto">
+              <p className="text-zinc-300 text-lg max-w-2xl mx-auto">
                 JBJ Global Real Estate is a founder-led brokerage for buying, selling, and renting — built on unwavering standards, discretion, and long-term vision.
               </p>
             </motion.div>
 
-            {/* Founder Card - White/Champagne theme */}
-            <motion.div 
-              className="bg-white border border-zinc-200 rounded-3xl overflow-hidden shadow-xl"
+            {/* Founder Card - Dark (contrast on premium background) */}
+            <motion.div
+              className="bg-premium-card border border-premium-card-border rounded-3xl overflow-hidden shadow-xl"
               variants={fadeInUp}
             >
               <div className="grid md:grid-cols-2 gap-0">
-                {/* Photo Side - Gold/Champagne Background */}
-                <div className="relative bg-gradient-to-br from-[#C8A766]/60 via-[#D4B970]/45 to-[#C8A766]/50">
-                  {/* GLOBAL IMAGE RULE - LOCKED (FINAL):
-                      object-fit: cover + center 15% = max zoom, crop from bottom only */}
-                  <img 
-                    src={founderProfessional} 
+                {/* Photo Side - Champagne / Gold frame */}
+                <div className="relative bg-gradient-to-br from-gold/30 via-gold/20 to-gold/25">
+                  <img
+                    src={founderProfessional}
                     alt="Jane Abou Jaoude - Founder & CEO at JBJ Global Real Estate"
                     className="w-full h-full min-h-[400px] md:min-h-[500px]"
-                    style={{ objectFit: "cover", objectPosition: "center 15%" }}
+                    style={{ objectFit: "cover", objectPosition: "center 40%" }}
                   />
-                  {/* Subtle gradient overlay */}
-                  <div className="absolute inset-0 bg-gradient-to-r from-transparent to-white/20 md:block hidden" />
+                  <div className="absolute inset-0 bg-gradient-to-r from-transparent to-black/30 md:block hidden pointer-events-none" />
                 </div>
-                
-                {/* Content Side - White/Champagne */}
-                <div className="p-8 md:p-12 flex flex-col justify-center bg-gradient-to-br from-white via-[#FDFBF7] to-[#F5F0E6]">
-                  <h3 className="text-black text-3xl md:text-4xl font-bold mb-2">Jane Abou Jaoude</h3>
-                  <p
-                    className="text-xl md:text-2xl font-semibold mb-6"
-                    style={{
-                      background: "linear-gradient(135deg, #CBA64B 0%, #E8D5A3 50%, #CBA64B 100%)",
-                      WebkitBackgroundClip: "text",
-                      WebkitTextFillColor: "transparent",
-                    }}
-                  >
-                    Founder & CEO
-                  </p>
-                  
-                  <p className="text-zinc-700 text-base leading-relaxed mb-8">
-                    With over 12 years of experience and a proven track record of training 2,800+ brokers, 
+
+                {/* Content Side - Dark */}
+                <div className="p-8 md:p-12 flex flex-col justify-center bg-premium-card">
+                  <h3 className="text-white text-3xl md:text-4xl font-bold mb-2">Jane Abou Jaoude</h3>
+                  <p className="text-gold text-xl md:text-2xl font-semibold mb-6">Founder & CEO</p>
+
+                  <p className="text-zinc-300 text-base leading-relaxed mb-8">
+                    With over 12 years of experience and a proven track record of training 2,800+ brokers,
                     Jane leads JBJ Global Real Estate with a commitment to excellence, integrity, and client success.
                   </p>
-                  
-                  {/* Stats Row - Black border with champagne fill */}
+
+                  {/* Stats Row */}
                   <div className="grid grid-cols-3 gap-4 mb-8">
-                    <div className="text-center p-3 bg-gradient-to-br from-white via-[#FDFBF7] to-[#F5F0E6] border border-black rounded-xl">
-                      <p className="text-transparent bg-clip-text bg-gradient-to-r from-gold via-[#C4A962] to-gold text-2xl md:text-3xl font-bold">12+</p>
-                      <p className="text-zinc-600 text-[10px] uppercase tracking-wider mt-1">Years Exp</p>
+                    <div className="text-center p-3 bg-premium-bg border border-premium-card-border rounded-xl">
+                      <p className="text-gold text-2xl md:text-3xl font-bold">12+</p>
+                      <p className="text-zinc-400 text-[10px] uppercase tracking-wider mt-1">Years Exp</p>
                     </div>
-                    <div className="text-center p-3 bg-gradient-to-br from-white via-[#FDFBF7] to-[#F5F0E6] border border-black rounded-xl">
-                      <p className="text-transparent bg-clip-text bg-gradient-to-r from-gold via-[#C4A962] to-gold text-2xl md:text-3xl font-bold">10+</p>
-                      <p className="text-zinc-600 text-[10px] uppercase tracking-wider mt-1">Team Members</p>
+                    <div className="text-center p-3 bg-premium-bg border border-premium-card-border rounded-xl">
+                      <p className="text-gold text-2xl md:text-3xl font-bold">10+</p>
+                      <p className="text-zinc-400 text-[10px] uppercase tracking-wider mt-1">Team Members</p>
                     </div>
-                    <div className="text-center p-3 bg-gradient-to-br from-white via-[#FDFBF7] to-[#F5F0E6] border border-black rounded-xl">
-                      <p className="text-transparent bg-clip-text bg-gradient-to-r from-gold via-[#C4A962] to-gold text-2xl md:text-3xl font-bold">2.8K+</p>
-                      <p className="text-zinc-600 text-[10px] uppercase tracking-wider mt-1">Trained</p>
+                    <div className="text-center p-3 bg-premium-bg border border-premium-card-border rounded-xl">
+                      <p className="text-gold text-2xl md:text-3xl font-bold">2.8K+</p>
+                      <p className="text-zinc-400 text-[10px] uppercase tracking-wider mt-1">Trained</p>
                     </div>
                   </div>
-                  
-                  {/* CTA Button - Champagne gradient with gold text, hover inverts */}
+
                   <Link to="/founder">
-                    <Button className="w-full md:w-auto bg-gradient-to-r from-white via-[#FDFBF7] to-[#F5F0E6] border border-black text-gold hover:bg-transparent hover:border-gold hover:text-gold font-bold px-8 py-6 text-base transition-all duration-300">
+                    <Button variant="primary" className="w-full md:w-auto">
                       Learn More About The Founder
-                      <ArrowUpRight className="w-5 h-5 ml-2 text-black" />
+                      <ArrowUpRight className="w-5 h-5 ml-2" />
                     </Button>
                   </Link>
                 </div>
