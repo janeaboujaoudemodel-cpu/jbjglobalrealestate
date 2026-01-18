@@ -292,6 +292,7 @@ const App = () => (
                 <Route path="/business-card-scanner" element={<BusinessCardScanner />} />
                 <Route path="/jbj-analytics" element={<JBJAnalyticsDashboard />} />
                 <Route path="/jbj-design-studio" element={<JBJDesignStudio />} />
+                <Route path="/design-studio" element={<JBJDesignStudio />} />
                 <Route path="/jbj-broker-admin" element={<JBJBrokerAdmin />} />
                 <Route path="/jbj-broker-dashboard" element={<JBJBrokerDashboard />} />
                 <Route path="/jbj-broker-messages" element={<JBJBrokerMessages />} />

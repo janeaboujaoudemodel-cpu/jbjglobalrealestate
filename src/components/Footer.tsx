@@ -122,7 +122,7 @@ const Footer = () => {
     { href: "/broker-toolkit", label: "Broker Toolkit" },
     { href: "/broker-toolkit/dashboard", label: "My Dashboard" },
     { href: "/tools-guide", label: "Guides & Resources" },
-    { href: "/design-studio", label: "Graphic Designer" },
+    { href: "/jbj-design-studio", label: "Graphic Designer" },
     { href: "/video-builder", label: "Videographer" },
   ];
 
