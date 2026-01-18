@@ -23,6 +23,7 @@ import { Link } from "react-router-dom";
 import { CalendlyEmbed } from "@/components/marketing/CalendlyEmbed";
 import { SEOHead, pagesSEO } from "@/components/SEOHead";
 import { MeetingBookingModal } from "@/components/MeetingBookingModal";
+import SupportTicketBox from "@/components/SupportTicketBox";
 import contactHero from "@/assets/images/contact-hero.jpg";
 
 const consultationSchema = z.object({
@@ -813,6 +814,9 @@ END:VCARD`;
         open={meetingModalOpen} 
         onOpenChange={setMeetingModalOpen} 
       />
+
+      {/* Support Ticket Section */}
+      <SupportTicketBox />
 
       <Footer />
       </div>
