@@ -1,13 +1,9 @@
-import React, { useState, useRef, useCallback, useEffect } from 'react';
+import React, { useState, useRef, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { 
   Palette, 
-  Image, 
-  Type, 
   Download, 
   Share2, 
-  Undo, 
-  Redo,
   Layers,
   Sparkles,
   Instagram,
@@ -18,79 +14,46 @@ import {
   CreditCard as BusinessCard,
   Presentation,
   Plus,
-  Mic,
-  MicOff,
   Send,
   Upload,
-  Camera,
-  MessageSquare,
-  Users,
-  Settings,
-  Link2,
-  Facebook,
-  Twitter,
-  Phone,
-  RefreshCw,
-  Check,
   X,
   Loader2,
-  ArrowUpRight,
-  Globe,
   Wand2,
-  Maximize2,
-  Square,
-  Star,
-  Bookmark,
   LayoutTemplate,
   ImagePlus,
   Video,
   Newspaper,
   Building2,
   Megaphone,
-  Calendar,
-  Gift,
   Crown,
-  Heart,
   FolderOpen,
-  Save,
-  Trash2,
-  Clock,
-  Eye,
-  Lock,
-  Unlock,
-  Grid,
-  List,
-  Filter,
-  Search,
-  Copy,
-  Pencil,
+  RefreshCw,
   ChevronRight,
-  ChevronDown,
-  Zap,
-  Target,
-  Users2,
   GraduationCap,
-  Award,
-  TrendingUp,
-  Map,
-  Wallet
+  Phone,
+  Facebook,
+  Book,
+  FileUp,
+  Globe,
+  Settings,
+  Users
 } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { ScrollArea } from '@/components/ui/scroll-area';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
-import { Textarea } from '@/components/ui/textarea';
 import { Label } from '@/components/ui/label';
 import { supabase } from '@/integrations/supabase/client';
 import { useAuth } from '@/contexts/AuthContext';
 import { toast } from 'sonner';
 import Footer from '@/components/Footer';
 import ReportProblemButton from '@/components/jbj-assistant/ReportProblemButton';
-import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger, DialogDescription } from '@/components/ui/dialog';
+import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from '@/components/ui/dialog';
 import { Badge } from '@/components/ui/badge';
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
-import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
+
+// Import new design studio components
+import { ColorPaletteManager, DesignProjectManager, AIDesignAssistant } from '@/components/design-studio';
 
 // Template categories with icons
 const TEMPLATE_CATEGORIES = [
@@ -109,6 +72,7 @@ const TEMPLATE_CATEGORIES = [
   { id: 'video', label: 'Video Thumbnails', icon: Video, color: 'from-cyan-500 to-cyan-700' },
   { id: 'print', label: 'Print Materials', icon: Newspaper, color: 'from-slate-500 to-slate-700' },
   { id: 'portfolio', label: 'Portfolios', icon: GraduationCap, color: 'from-violet-500 to-violet-700' },
+  { id: 'books', label: 'Books & Reports', icon: Book, color: 'from-amber-600 to-amber-800' },
 ];
 
 // Pre-built templates with real sizes
@@ -175,38 +139,31 @@ const TEMPLATES = [
   { id: 'portfolio-broker', category: 'portfolio', name: 'Broker Portfolio', size: '1920x1080', aspect: '16:9' },
   { id: 'portfolio-modeling', category: 'portfolio', name: 'Modeling Book', size: '1080x1350', aspect: '4:5' },
   { id: 'portfolio-rate-card', category: 'portfolio', name: 'Rate Card', size: '1920x1080', aspect: '16:9' },
+  // Books & Reports
+  { id: 'book-market-report', category: 'books', name: 'Market Report', size: '2480x3508', aspect: 'A4' },
+  { id: 'book-investor-guide', category: 'books', name: 'Investor Guide', size: '2480x3508', aspect: 'A4' },
+  { id: 'book-company-profile', category: 'books', name: 'Company Profile Book', size: '2480x3508', aspect: 'A4' },
+  { id: 'book-area-guide', category: 'books', name: 'Area Guide', size: '2480x3508', aspect: 'A4' },
 ];
 
-// JBJ Brand Colors
-const BRAND_COLORS = [
-  { name: 'Gold', hex: '#D4AF37' },
-  { name: 'Black', hex: '#000000' },
-  { name: 'White', hex: '#FFFFFF' },
-  { name: 'Dark Gray', hex: '#1A1A1A' },
-  { name: 'Champagne', hex: '#F5F0E6' },
-];
-
-interface ConnectedAccount {
+interface SelectedPalette {
   id: string;
-  platform: string;
-  username: string;
-  connected: boolean;
+  name: string;
+  colors: { hex: string; name: string }[];
 }
 
 const JBJDesignStudio: React.FC = () => {
   const { user } = useAuth();
+  const [activeTab, setActiveTab] = useState('create');
   const [selectedCategory, setSelectedCategory] = useState('instagram');
   const [selectedTemplate, setSelectedTemplate] = useState<typeof TEMPLATES[0] | null>(null);
   const [isGenerating, setIsGenerating] = useState(false);
   const [generatedImage, setGeneratedImage] = useState<string | null>(null);
-  const [chatMessage, setChatMessage] = useState('');
-  const [chatHistory, setChatHistory] = useState<{ role: 'user' | 'assistant'; content: string }[]>([]);
-  const [isRecording, setIsRecording] = useState(false);
   const [uploadedImage, setUploadedImage] = useState<string | null>(null);
-  const [activeTab, setActiveTab] = useState('create');
+  const [selectedPalette, setSelectedPalette] = useState<SelectedPalette | null>(null);
+  const [showUploadToWebsite, setShowUploadToWebsite] = useState(false);
+  const [websiteUploadPrompt, setWebsiteUploadPrompt] = useState('');
   const fileInputRef = useRef<HTMLInputElement>(null);
-  const mediaRecorderRef = useRef<MediaRecorder | null>(null);
-  const audioChunksRef = useRef<Blob[]>([]);
   
   // Email signature form
   const [signatureData, setSignatureData] = useState({
@@ -217,18 +174,6 @@ const JBJDesignStudio: React.FC = () => {
     website: 'www.JBJ.ae',
     photoUrl: '',
   });
-
-  // Connected social accounts (mock for now - would need OAuth integration)
-  const [connectedAccounts, setConnectedAccounts] = useState<ConnectedAccount[]>([
-    { id: '1', platform: 'instagram', username: '', connected: false },
-    { id: '2', platform: 'linkedin', username: '', connected: false },
-    { id: '3', platform: 'facebook', username: '', connected: false },
-    { id: '4', platform: 'youtube', username: '', connected: false },
-    { id: '5', platform: 'twitter', username: '', connected: false },
-  ]);
-
-  // Zapier webhook for social publishing
-  const [zapierWebhook, setZapierWebhook] = useState('');
 
   const handleSelectTemplate = (template: typeof TEMPLATES[0]) => {
     setSelectedTemplate(template);
@@ -261,135 +206,6 @@ const JBJDesignStudio: React.FC = () => {
     }
   };
 
-  const handleGenerateDesign = async (prompt: string) => {
-    if (!selectedTemplate) {
-      toast.error('Please select a template first');
-      return;
-    }
-
-    setIsGenerating(true);
-    setChatHistory(prev => [...prev, { role: 'user', content: prompt }]);
-
-    try {
-      const { data, error } = await supabase.functions.invoke('generate-design', {
-        body: {
-          prompt,
-          templateType: selectedTemplate.name,
-          size: selectedTemplate.size,
-          referenceImage: uploadedImage || undefined,
-        },
-      });
-
-      if (error) throw error;
-
-      if (data?.imageUrl) {
-        setGeneratedImage(data.imageUrl);
-        setChatHistory(prev => [...prev, { 
-          role: 'assistant', 
-          content: `I've created your ${selectedTemplate.name} design! ${data.message || 'The design is ready for download or sharing.'}` 
-        }]);
-        toast.success('Design generated successfully!');
-        trackUsage('design_generated', { template: selectedTemplate.name, prompt });
-      } else {
-        throw new Error('No image generated');
-      }
-
-    } catch (error: any) {
-      console.error('Generation error:', error);
-      const errorMessage = error.message || 'Failed to generate design';
-      setChatHistory(prev => [...prev, { role: 'assistant', content: `Sorry, I encountered an error: ${errorMessage}. Please try again.` }]);
-      toast.error(errorMessage);
-    } finally {
-      setIsGenerating(false);
-    }
-  };
-
-  const handleEditDesign = async (editPrompt: string) => {
-    if (!generatedImage) {
-      toast.error('Please generate a design first');
-      return;
-    }
-
-    setIsGenerating(true);
-    setChatHistory(prev => [...prev, { role: 'user', content: editPrompt }]);
-
-    try {
-      const { data, error } = await supabase.functions.invoke('edit-design', {
-        body: {
-          prompt: editPrompt,
-          imageUrl: generatedImage,
-        },
-      });
-
-      if (error) throw error;
-
-      if (data?.imageUrl) {
-        setGeneratedImage(data.imageUrl);
-        setChatHistory(prev => [...prev, { 
-          role: 'assistant', 
-          content: `I've updated the design as requested! ${data.message || ''}` 
-        }]);
-        toast.success('Design updated!');
-        trackUsage('design_edited', { prompt: editPrompt });
-      }
-
-    } catch (error: any) {
-      console.error('Edit error:', error);
-      setChatHistory(prev => [...prev, { role: 'assistant', content: `Sorry, I couldn't make that edit. ${error.message}` }]);
-      toast.error(error.message || 'Failed to edit design');
-    } finally {
-      setIsGenerating(false);
-    }
-  };
-
-  const handleSendMessage = () => {
-    if (!chatMessage.trim()) return;
-    
-    const message = chatMessage.trim();
-    setChatMessage('');
-
-    if (generatedImage) {
-      handleEditDesign(message);
-    } else {
-      handleGenerateDesign(message);
-    }
-  };
-
-  const startVoiceRecording = async () => {
-    try {
-      const stream = await navigator.mediaDevices.getUserMedia({ audio: true });
-      mediaRecorderRef.current = new MediaRecorder(stream);
-      audioChunksRef.current = [];
-
-      mediaRecorderRef.current.ondataavailable = (event) => {
-        audioChunksRef.current.push(event.data);
-      };
-
-      mediaRecorderRef.current.onstop = async () => {
-        const audioBlob = new Blob(audioChunksRef.current, { type: 'audio/webm' });
-        // For now, show a message that voice is recorded
-        // In production, this would be sent to a speech-to-text service
-        toast.info('Voice note recorded. Processing...');
-        setChatMessage(prev => prev + ' [Voice note attached]');
-        stream.getTracks().forEach(track => track.stop());
-      };
-
-      mediaRecorderRef.current.start();
-      setIsRecording(true);
-      toast.info('Recording... Click again to stop');
-    } catch (error) {
-      console.error('Failed to start recording:', error);
-      toast.error('Could not access microphone');
-    }
-  };
-
-  const stopVoiceRecording = () => {
-    if (mediaRecorderRef.current && isRecording) {
-      mediaRecorderRef.current.stop();
-      setIsRecording(false);
-    }
-  };
-
   const handleDownload = () => {
     if (!generatedImage) return;
 
@@ -401,38 +217,6 @@ const JBJDesignStudio: React.FC = () => {
     document.body.removeChild(link);
     toast.success('Design downloaded!');
     trackUsage('design_downloaded', { template: selectedTemplate?.name });
-  };
-
-  const handleShareToSocial = async () => {
-    if (!generatedImage) {
-      toast.error('Please generate a design first');
-      return;
-    }
-
-    if (!zapierWebhook) {
-      toast.info('Connect your Zapier webhook to enable social sharing');
-      return;
-    }
-
-    try {
-      await fetch(zapierWebhook, {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        mode: 'no-cors',
-        body: JSON.stringify({
-          imageUrl: generatedImage,
-          template: selectedTemplate?.name,
-          timestamp: new Date().toISOString(),
-          platform: selectedCategory,
-        }),
-      });
-
-      toast.success('Design sent to social publishing workflow!');
-      trackUsage('social_share_triggered', { platform: selectedCategory });
-    } catch (error) {
-      console.error('Share error:', error);
-      toast.error('Failed to share. Check your webhook URL.');
-    }
   };
 
   const handleGenerateSignature = async () => {
@@ -477,8 +261,45 @@ const JBJDesignStudio: React.FC = () => {
     }
   };
 
+  const handleUploadToWebsite = async () => {
+    if (!generatedImage || !websiteUploadPrompt.trim()) {
+      toast.error('Please generate a design and describe where to place it');
+      return;
+    }
+
+    try {
+      // Save the request to database for admin/developer review
+      const { error } = await supabase.from('design_website_requests').insert({
+        user_id: user?.id as string,
+        design_url: generatedImage,
+        request_type: 'upload_design',
+        ai_instructions: websiteUploadPrompt,
+        target_page: 'homepage',
+        target_section: websiteUploadPrompt,
+        status: 'pending'
+      });
+
+      if (error) throw error;
+
+      toast.success('Website upload request submitted! Your assistant will process this shortly.');
+      setShowUploadToWebsite(false);
+      setWebsiteUploadPrompt('');
+      trackUsage('website_upload_requested', { instructions: websiteUploadPrompt });
+    } catch (error) {
+      console.error('Upload request error:', error);
+      toast.error('Failed to submit upload request');
+    }
+  };
+
+  const handlePaletteGenerated = (colors: { hex: string; name: string }[]) => {
+    setSelectedPalette({
+      id: 'ai-generated',
+      name: 'AI Generated Palette',
+      colors
+    });
+  };
+
   const filteredTemplates = TEMPLATES.filter(t => t.category === selectedCategory);
-  const currentCategory = TEMPLATE_CATEGORIES.find(c => c.id === selectedCategory);
 
   return (
     <div className="min-h-screen bg-black">
@@ -498,46 +319,7 @@ const JBJDesignStudio: React.FC = () => {
               </div>
             </div>
             
-            {/* Quick Actions */}
             <div className="flex items-center gap-3">
-              <Dialog>
-                <DialogTrigger asChild>
-                  <Button variant="outline" size="sm" className="border-zinc-700 text-zinc-300 hover:bg-zinc-800">
-                    <Link2 className="w-4 h-4 mr-2" />
-                    Connect Accounts
-                  </Button>
-                </DialogTrigger>
-                <DialogContent className="bg-zinc-900 border-zinc-800 max-w-md">
-                  <DialogHeader>
-                    <DialogTitle className="text-white">Social Media Integration</DialogTitle>
-                  </DialogHeader>
-                  <div className="space-y-4 pt-4">
-                    <p className="text-zinc-400 text-sm">
-                      Connect your Zapier webhook to automatically publish designs to social media.
-                    </p>
-                    <div>
-                      <Label className="text-zinc-400 text-sm">Zapier Webhook URL</Label>
-                      <Input
-                        value={zapierWebhook}
-                        onChange={(e) => setZapierWebhook(e.target.value)}
-                        placeholder="https://hooks.zapier.com/hooks/catch/..."
-                        className="bg-zinc-800 border-zinc-700 text-white mt-1"
-                      />
-                    </div>
-                    <p className="text-zinc-500 text-xs">
-                      Create a Zap with a webhook trigger to connect to Instagram, Facebook, LinkedIn, etc.
-                    </p>
-                    <Button 
-                      onClick={() => toast.success('Webhook saved!')}
-                      className="w-full bg-gradient-to-r from-purple-600 to-fuchsia-600"
-                      disabled={!zapierWebhook}
-                    >
-                      Save Connection
-                    </Button>
-                  </div>
-                </DialogContent>
-              </Dialog>
-              
               <ReportProblemButton toolName="JBJ Design Studio" />
             </div>
           </div>
@@ -545,355 +327,397 @@ const JBJDesignStudio: React.FC = () => {
       </div>
 
       <main className="container mx-auto px-4 py-6">
-        {/* Category Tabs */}
-        <div className="mb-6">
-          <ScrollArea className="w-full whitespace-nowrap">
-            <div className="flex gap-2 pb-4">
-              {TEMPLATE_CATEGORIES.map(cat => (
-                <button
-                  key={cat.id}
-                  onClick={() => {
-                    setSelectedCategory(cat.id);
-                    setSelectedTemplate(null);
-                    setGeneratedImage(null);
-                  }}
-                  className={`flex items-center gap-2 px-4 py-2.5 rounded-xl transition-all duration-300 whitespace-nowrap ${
-                    selectedCategory === cat.id 
-                      ? `bg-gradient-to-r ${cat.color} text-white shadow-lg` 
-                      : 'bg-zinc-900 text-zinc-400 hover:bg-zinc-800 hover:text-white border border-zinc-800'
-                  }`}
-                >
-                  <cat.icon className="w-4 h-4" />
-                  <span className="text-sm font-medium">{cat.label}</span>
-                </button>
-              ))}
-            </div>
-          </ScrollArea>
-        </div>
+        {/* Main Tabs */}
+        <Tabs value={activeTab} onValueChange={setActiveTab} className="space-y-6">
+          <TabsList className="bg-zinc-900 border border-zinc-800 p-1">
+            <TabsTrigger value="create" className="data-[state=active]:bg-gold data-[state=active]:text-black">
+              <Wand2 className="w-4 h-4 mr-2" />
+              Create Design
+            </TabsTrigger>
+            <TabsTrigger value="projects" className="data-[state=active]:bg-gold data-[state=active]:text-black">
+              <FolderOpen className="w-4 h-4 mr-2" />
+              My Projects
+            </TabsTrigger>
+            <TabsTrigger value="palettes" className="data-[state=active]:bg-gold data-[state=active]:text-black">
+              <Palette className="w-4 h-4 mr-2" />
+              Color Palettes
+            </TabsTrigger>
+            <TabsTrigger value="team" className="data-[state=active]:bg-gold data-[state=active]:text-black">
+              <Users className="w-4 h-4 mr-2" />
+              Design Team
+            </TabsTrigger>
+          </TabsList>
 
-        <div className="grid grid-cols-1 lg:grid-cols-12 gap-6">
-          {/* Left Panel - Templates */}
-          <div className="lg:col-span-3">
-            <Card className="bg-zinc-900 border-zinc-800">
-              <CardHeader className="pb-3">
-                <CardTitle className="text-white text-lg flex items-center gap-2">
-                  <LayoutTemplate className="w-5 h-5 text-gold" />
-                  Templates
-                </CardTitle>
-              </CardHeader>
-              <CardContent>
-                {selectedCategory === 'email-signature' ? (
-                  <div className="space-y-4">
-                    <div>
-                      <Label className="text-zinc-400 text-sm">Full Name *</Label>
-                      <Input
-                        value={signatureData.name}
-                        onChange={(e) => setSignatureData(prev => ({ ...prev, name: e.target.value }))}
-                        placeholder="Jane Abou Jaoude"
-                        className="bg-zinc-800 border-zinc-700 text-white mt-1"
-                      />
-                    </div>
-                    <div>
-                      <Label className="text-zinc-400 text-sm">Title</Label>
-                      <Input
-                        value={signatureData.title}
-                        onChange={(e) => setSignatureData(prev => ({ ...prev, title: e.target.value }))}
-                        placeholder="Senior Consultant"
-                        className="bg-zinc-800 border-zinc-700 text-white mt-1"
-                      />
-                    </div>
-                    <div>
-                      <Label className="text-zinc-400 text-sm">Email *</Label>
-                      <Input
-                        value={signatureData.email}
-                        onChange={(e) => setSignatureData(prev => ({ ...prev, email: e.target.value }))}
-                        placeholder="name@JBJ.ae"
-                        className="bg-zinc-800 border-zinc-700 text-white mt-1"
-                      />
-                    </div>
-                    <div>
-                      <Label className="text-zinc-400 text-sm">Phone</Label>
-                      <Input
-                        value={signatureData.phone}
-                        onChange={(e) => setSignatureData(prev => ({ ...prev, phone: e.target.value }))}
-                        placeholder="+971 56 591 1000"
-                        className="bg-zinc-800 border-zinc-700 text-white mt-1"
-                      />
-                    </div>
-                    <Button 
-                      onClick={handleGenerateSignature}
-                      disabled={isGenerating || !signatureData.name || !signatureData.email}
-                      className="w-full bg-gradient-to-r from-gold to-gold-dark text-black font-semibold"
-                    >
-                      {isGenerating ? (
-                        <Loader2 className="w-4 h-4 animate-spin mr-2" />
-                      ) : (
-                        <Mail className="w-4 h-4 mr-2" />
-                      )}
-                      Generate & Copy to Clipboard
-                    </Button>
-                    <p className="text-zinc-500 text-xs text-center">
-                      HTML will be copied. Share with IT for email implementation.
-                    </p>
-                  </div>
-                ) : (
-                  <ScrollArea className="h-[400px] pr-2">
-                    <div className="grid grid-cols-2 gap-2">
-                      {filteredTemplates.map(template => (
-                        <motion.button
-                          key={template.id}
-                          whileHover={{ scale: 1.03 }}
-                          whileTap={{ scale: 0.97 }}
-                          onClick={() => handleSelectTemplate(template)}
-                          className={`p-3 rounded-lg border-2 transition-all duration-200 text-left ${
-                            selectedTemplate?.id === template.id 
-                              ? 'border-gold bg-gold/10' 
-                              : 'border-zinc-800 bg-zinc-800/50 hover:border-zinc-700'
-                          }`}
-                        >
-                          <div className={`aspect-[${template.aspect.replace(':', '/')}] bg-zinc-700 rounded mb-2 flex items-center justify-center min-h-[60px]`}>
-                            <Layers className="w-6 h-6 text-zinc-500" />
-                          </div>
-                          <p className="text-white text-xs font-medium truncate">{template.name}</p>
-                          <p className="text-zinc-500 text-[10px]">{template.size}</p>
-                        </motion.button>
-                      ))}
-                    </div>
-                  </ScrollArea>
-                )}
-
-                {/* Brand Colors */}
-                <div className="mt-4 pt-4 border-t border-zinc-800">
-                  <h4 className="text-zinc-400 text-xs font-medium mb-2">Brand Colors</h4>
-                  <div className="flex gap-2">
-                    {BRAND_COLORS.map(color => (
-                      <button
-                        key={color.name}
-                        className="w-7 h-7 rounded-full border-2 border-zinc-700 hover:border-gold transition-colors shadow-sm"
-                        style={{ backgroundColor: color.hex }}
-                        title={color.name}
-                        onClick={() => toast.info(`${color.name}: ${color.hex}`)}
-                      />
-                    ))}
-                  </div>
-                </div>
-              </CardContent>
-            </Card>
-          </div>
-
-          {/* Center - Canvas / Preview */}
-          <div className="lg:col-span-6">
-            <Card className="bg-zinc-900 border-zinc-800 h-full">
-              <CardContent className="p-4 h-full flex flex-col">
-                {/* Canvas Area */}
-                <div className="flex-1 bg-zinc-950 rounded-xl border border-zinc-800 flex items-center justify-center min-h-[400px] relative overflow-hidden">
-                  {generatedImage ? (
-                    <motion.img
-                      initial={{ opacity: 0, scale: 0.95 }}
-                      animate={{ opacity: 1, scale: 1 }}
-                      src={generatedImage}
-                      alt="Generated design"
-                      className="max-w-full max-h-full object-contain"
-                    />
-                  ) : selectedTemplate ? (
-                    <div className="text-center p-8">
-                      <div className="w-20 h-20 rounded-2xl bg-gradient-to-br from-purple-500/20 to-fuchsia-500/20 border border-purple-500/30 flex items-center justify-center mx-auto mb-4">
-                        <Wand2 className="w-10 h-10 text-purple-400" />
-                      </div>
-                      <h3 className="text-white font-semibold mb-2">{selectedTemplate.name}</h3>
-                      <p className="text-zinc-500 text-sm mb-4">Size: {selectedTemplate.size}</p>
-                      <p className="text-zinc-400 text-sm max-w-sm mx-auto">
-                        Describe what you want to create in the chat below, or upload a reference image.
-                      </p>
-                    </div>
-                  ) : (
-                    <div className="text-center p-8">
-                      <div className="w-20 h-20 rounded-2xl bg-zinc-800 border border-zinc-700 flex items-center justify-center mx-auto mb-4">
-                        <ImagePlus className="w-10 h-10 text-zinc-600" />
-                      </div>
-                      <h3 className="text-zinc-400 font-medium mb-2">Select a Template</h3>
-                      <p className="text-zinc-500 text-sm">Choose a template from the left panel to get started</p>
-                    </div>
-                  )}
-
-                  {isGenerating && (
-                    <motion.div
-                      initial={{ opacity: 0 }}
-                      animate={{ opacity: 1 }}
-                      className="absolute inset-0 bg-black/80 flex items-center justify-center"
-                    >
-                      <div className="text-center">
-                        <Loader2 className="w-12 h-12 text-gold animate-spin mx-auto mb-4" />
-                        <p className="text-white font-medium">AI is creating your design...</p>
-                        <p className="text-zinc-400 text-sm">This may take a few seconds</p>
-                      </div>
-                    </motion.div>
-                  )}
-                </div>
-
-                {/* Action Buttons */}
-                {generatedImage && (
-                  <div className="flex gap-2 mt-4">
-                    <Button 
-                      onClick={handleDownload}
-                      className="flex-1 bg-gradient-to-r from-emerald-600 to-emerald-700 hover:from-emerald-500 hover:to-emerald-600"
-                    >
-                      <Download className="w-4 h-4 mr-2" />
-                      Download
-                    </Button>
-                    <Button 
-                      onClick={handleShareToSocial}
-                      variant="outline"
-                      className="flex-1 border-zinc-700 text-zinc-300 hover:bg-zinc-800"
-                    >
-                      <Share2 className="w-4 h-4 mr-2" />
-                      Share to Social
-                    </Button>
-                    <Button 
-                      onClick={() => {
-                        setGeneratedImage(null);
-                        setChatHistory([]);
-                      }}
-                      variant="outline"
-                      className="border-zinc-700 text-zinc-300 hover:bg-zinc-800"
-                    >
-                      <RefreshCw className="w-4 h-4" />
-                    </Button>
-                  </div>
-                )}
-              </CardContent>
-            </Card>
-          </div>
-
-          {/* Right Panel - Chat & Upload */}
-          <div className="lg:col-span-3">
-            <Card className="bg-zinc-900 border-zinc-800 h-full flex flex-col">
-              <CardHeader className="pb-3">
-                <CardTitle className="text-white text-lg flex items-center gap-2">
-                  <MessageSquare className="w-5 h-5 text-gold" />
-                  Design Assistant
-                </CardTitle>
-              </CardHeader>
-              <CardContent className="flex-1 flex flex-col">
-                {/* Upload Reference */}
-                <div className="mb-4">
-                  <input
-                    ref={fileInputRef}
-                    type="file"
-                    accept="image/*"
-                    onChange={handleFileUpload}
-                    className="hidden"
-                  />
+          {/* CREATE TAB */}
+          <TabsContent value="create" className="space-y-6">
+            {/* Category Tabs */}
+            <ScrollArea className="w-full whitespace-nowrap">
+              <div className="flex gap-2 pb-4">
+                {TEMPLATE_CATEGORIES.map(cat => (
                   <button
-                    onClick={() => fileInputRef.current?.click()}
-                    className="w-full p-4 border-2 border-dashed border-zinc-700 rounded-xl hover:border-gold/50 transition-colors group"
-                  >
-                    {uploadedImage ? (
-                      <div className="relative">
-                        <img src={uploadedImage} alt="Reference" className="w-full h-24 object-cover rounded-lg" />
-                        <button 
-                          onClick={(e) => { e.stopPropagation(); setUploadedImage(null); }}
-                          className="absolute top-1 right-1 w-6 h-6 bg-red-500 rounded-full flex items-center justify-center"
-                        >
-                          <X className="w-3 h-3 text-white" />
-                        </button>
-                      </div>
-                    ) : (
-                      <div className="text-center">
-                        <Upload className="w-8 h-8 text-zinc-500 mx-auto mb-2 group-hover:text-gold transition-colors" />
-                        <p className="text-zinc-400 text-sm">Upload reference image</p>
-                        <p className="text-zinc-500 text-xs">or template you want to recreate</p>
-                      </div>
-                    )}
-                  </button>
-                </div>
-
-                {/* Chat History */}
-                <ScrollArea className="flex-1 mb-4 pr-2">
-                  <div className="space-y-3">
-                    {chatHistory.length === 0 ? (
-                      <div className="text-center py-8">
-                        <Sparkles className="w-8 h-8 text-gold/50 mx-auto mb-3" />
-                        <p className="text-zinc-500 text-sm">
-                          Tell me what you want to create!
-                        </p>
-                        <p className="text-zinc-600 text-xs mt-1">
-                          E.g., "Create a New Year post with JBJ logo"
-                        </p>
-                      </div>
-                    ) : (
-                      chatHistory.map((msg, i) => (
-                        <motion.div
-                          key={i}
-                          initial={{ opacity: 0, y: 10 }}
-                          animate={{ opacity: 1, y: 0 }}
-                          className={`p-3 rounded-xl text-sm ${
-                            msg.role === 'user' 
-                              ? 'bg-gold/20 text-gold ml-4' 
-                              : 'bg-zinc-800 text-zinc-300 mr-4'
-                          }`}
-                        >
-                          {msg.content}
-                        </motion.div>
-                      ))
-                    )}
-                  </div>
-                </ScrollArea>
-
-                {/* Chat Input */}
-                <div className="flex gap-2">
-                  <button
-                    onClick={isRecording ? stopVoiceRecording : startVoiceRecording}
-                    className={`p-3 rounded-xl transition-colors ${
-                      isRecording 
-                        ? 'bg-red-500 text-white animate-pulse' 
-                        : 'bg-zinc-800 text-zinc-400 hover:bg-zinc-700'
+                    key={cat.id}
+                    onClick={() => {
+                      setSelectedCategory(cat.id);
+                      setSelectedTemplate(null);
+                      setGeneratedImage(null);
+                    }}
+                    className={`flex items-center gap-2 px-4 py-2.5 rounded-xl transition-all duration-300 whitespace-nowrap ${
+                      selectedCategory === cat.id 
+                        ? `bg-gradient-to-r ${cat.color} text-white shadow-lg` 
+                        : 'bg-zinc-900 text-zinc-400 hover:bg-zinc-800 hover:text-white border border-zinc-800'
                     }`}
                   >
-                    {isRecording ? <MicOff className="w-5 h-5" /> : <Mic className="w-5 h-5" />}
+                    <cat.icon className="w-4 h-4" />
+                    <span className="text-sm font-medium">{cat.label}</span>
                   </button>
-                  <Input
-                    value={chatMessage}
-                    onChange={(e) => setChatMessage(e.target.value)}
-                    placeholder="Describe your design..."
-                    className="bg-zinc-800 border-zinc-700 text-white flex-1"
-                    onKeyPress={(e) => e.key === 'Enter' && handleSendMessage()}
-                    disabled={isGenerating}
-                  />
-                  <Button
-                    onClick={handleSendMessage}
-                    disabled={!chatMessage.trim() || isGenerating || (!selectedTemplate && selectedCategory !== 'email-signature')}
-                    className="bg-gradient-to-r from-purple-600 to-fuchsia-600 px-4"
-                  >
-                    <Send className="w-5 h-5" />
-                  </Button>
-                </div>
+                ))}
+              </div>
+            </ScrollArea>
 
-                {/* Quick Prompts */}
-                <div className="mt-4 pt-4 border-t border-zinc-800">
-                  <p className="text-zinc-500 text-xs mb-2">Quick prompts:</p>
-                  <div className="flex flex-wrap gap-1.5">
-                    {[
-                      'New Listing',
-                      'Happy New Year',
-                      'Property Sold',
-                      'Open House',
-                      'Market Update'
-                    ].map(prompt => (
-                      <button
-                        key={prompt}
-                        onClick={() => setChatMessage(`Create a ${prompt} post for JBJ Global Real Estate`)}
-                        className="px-2.5 py-1 text-xs bg-zinc-800 text-zinc-400 rounded-lg hover:bg-zinc-700 hover:text-white transition-colors"
-                      >
-                        {prompt}
-                      </button>
-                    ))}
+            <div className="grid grid-cols-1 lg:grid-cols-12 gap-6">
+              {/* Left Panel - Templates */}
+              <div className="lg:col-span-3">
+                <Card className="bg-zinc-900 border-zinc-800">
+                  <CardHeader className="pb-3">
+                    <CardTitle className="text-white text-lg flex items-center gap-2">
+                      <LayoutTemplate className="w-5 h-5 text-gold" />
+                      Templates
+                    </CardTitle>
+                  </CardHeader>
+                  <CardContent>
+                    {selectedCategory === 'email-signature' ? (
+                      <div className="space-y-4">
+                        <div>
+                          <Label className="text-zinc-400 text-sm">Full Name *</Label>
+                          <Input
+                            value={signatureData.name}
+                            onChange={(e) => setSignatureData(prev => ({ ...prev, name: e.target.value }))}
+                            placeholder="Jane Abou Jaoude"
+                            className="bg-zinc-800 border-zinc-700 text-white mt-1"
+                          />
+                        </div>
+                        <div>
+                          <Label className="text-zinc-400 text-sm">Title</Label>
+                          <Input
+                            value={signatureData.title}
+                            onChange={(e) => setSignatureData(prev => ({ ...prev, title: e.target.value }))}
+                            placeholder="Senior Consultant"
+                            className="bg-zinc-800 border-zinc-700 text-white mt-1"
+                          />
+                        </div>
+                        <div>
+                          <Label className="text-zinc-400 text-sm">Email *</Label>
+                          <Input
+                            value={signatureData.email}
+                            onChange={(e) => setSignatureData(prev => ({ ...prev, email: e.target.value }))}
+                            placeholder="name@JBJ.ae"
+                            className="bg-zinc-800 border-zinc-700 text-white mt-1"
+                          />
+                        </div>
+                        <div>
+                          <Label className="text-zinc-400 text-sm">Phone</Label>
+                          <Input
+                            value={signatureData.phone}
+                            onChange={(e) => setSignatureData(prev => ({ ...prev, phone: e.target.value }))}
+                            placeholder="+971 56 591 1000"
+                            className="bg-zinc-800 border-zinc-700 text-white mt-1"
+                          />
+                        </div>
+                        <Button 
+                          onClick={handleGenerateSignature}
+                          disabled={isGenerating || !signatureData.name || !signatureData.email}
+                          className="w-full bg-gradient-to-r from-gold to-gold-dark text-black font-semibold"
+                        >
+                          {isGenerating ? (
+                            <Loader2 className="w-4 h-4 animate-spin mr-2" />
+                          ) : (
+                            <Mail className="w-4 h-4 mr-2" />
+                          )}
+                          Generate & Copy to Clipboard
+                        </Button>
+                      </div>
+                    ) : (
+                      <ScrollArea className="h-[400px] pr-2">
+                        <div className="grid grid-cols-2 gap-2">
+                          {filteredTemplates.map(template => (
+                            <motion.button
+                              key={template.id}
+                              whileHover={{ scale: 1.03 }}
+                              whileTap={{ scale: 0.97 }}
+                              onClick={() => handleSelectTemplate(template)}
+                              className={`p-3 rounded-lg border-2 transition-all duration-200 text-left ${
+                                selectedTemplate?.id === template.id 
+                                  ? 'border-gold bg-gold/10' 
+                                  : 'border-zinc-800 bg-zinc-800/50 hover:border-zinc-700'
+                              }`}
+                            >
+                              <div className="aspect-video bg-zinc-700 rounded mb-2 flex items-center justify-center min-h-[60px]">
+                                <Layers className="w-6 h-6 text-zinc-500" />
+                              </div>
+                              <p className="text-white text-xs font-medium truncate">{template.name}</p>
+                              <p className="text-zinc-500 text-[10px]">{template.size}</p>
+                            </motion.button>
+                          ))}
+                        </div>
+                      </ScrollArea>
+                    )}
+
+                    {/* Selected Palette Display */}
+                    {selectedPalette && (
+                      <div className="mt-4 pt-4 border-t border-zinc-800">
+                        <div className="flex items-center justify-between mb-2">
+                          <h4 className="text-zinc-400 text-xs font-medium">Active Palette</h4>
+                          <button 
+                            onClick={() => setSelectedPalette(null)}
+                            className="text-zinc-500 hover:text-zinc-400"
+                          >
+                            <X className="w-3 h-3" />
+                          </button>
+                        </div>
+                        <p className="text-white text-sm mb-2">{selectedPalette.name}</p>
+                        <div className="flex gap-1">
+                          {selectedPalette.colors.map((color, idx) => (
+                            <div
+                              key={idx}
+                              className="flex-1 h-6 rounded"
+                              style={{ backgroundColor: color.hex }}
+                              title={`${color.name}: ${color.hex}`}
+                            />
+                          ))}
+                        </div>
+                      </div>
+                    )}
+                  </CardContent>
+                </Card>
+              </div>
+
+              {/* Center - Canvas / Preview */}
+              <div className="lg:col-span-5">
+                <Card className="bg-zinc-900 border-zinc-800 h-full">
+                  <CardContent className="p-4 h-full flex flex-col">
+                    {/* Canvas Area */}
+                    <div className="flex-1 bg-zinc-950 rounded-xl border border-zinc-800 flex items-center justify-center min-h-[400px] relative overflow-hidden">
+                      {generatedImage ? (
+                        <motion.img
+                          initial={{ opacity: 0, scale: 0.95 }}
+                          animate={{ opacity: 1, scale: 1 }}
+                          src={generatedImage}
+                          alt="Generated design"
+                          className="max-w-full max-h-full object-contain"
+                        />
+                      ) : selectedTemplate ? (
+                        <div className="text-center p-8">
+                          <div className="w-20 h-20 rounded-2xl bg-gradient-to-br from-purple-500/20 to-fuchsia-500/20 border border-purple-500/30 flex items-center justify-center mx-auto mb-4">
+                            <Wand2 className="w-10 h-10 text-purple-400" />
+                          </div>
+                          <h3 className="text-white font-semibold mb-2">{selectedTemplate.name}</h3>
+                          <p className="text-zinc-500 text-sm mb-4">Size: {selectedTemplate.size}</p>
+                          <p className="text-zinc-400 text-sm max-w-sm mx-auto">
+                            Describe what you want to create in the AI Assistant panel.
+                          </p>
+                        </div>
+                      ) : (
+                        <div className="text-center p-8">
+                          <div className="w-20 h-20 rounded-2xl bg-zinc-800 border border-zinc-700 flex items-center justify-center mx-auto mb-4">
+                            <ImagePlus className="w-10 h-10 text-zinc-600" />
+                          </div>
+                          <h3 className="text-zinc-400 font-medium mb-2">Select a Template</h3>
+                          <p className="text-zinc-500 text-sm">Choose a template from the left panel to get started</p>
+                        </div>
+                      )}
+
+                      {isGenerating && (
+                        <motion.div
+                          initial={{ opacity: 0 }}
+                          animate={{ opacity: 1 }}
+                          className="absolute inset-0 bg-black/80 flex items-center justify-center"
+                        >
+                          <div className="text-center">
+                            <Loader2 className="w-12 h-12 text-gold animate-spin mx-auto mb-4" />
+                            <p className="text-white font-medium">AI is creating your design...</p>
+                            <p className="text-zinc-400 text-sm">This may take a few seconds</p>
+                          </div>
+                        </motion.div>
+                      )}
+                    </div>
+
+                    {/* Action Buttons */}
+                    {generatedImage && (
+                      <div className="flex gap-2 mt-4">
+                        <Button 
+                          onClick={handleDownload}
+                          className="flex-1 bg-gradient-to-r from-emerald-600 to-emerald-700 hover:from-emerald-500 hover:to-emerald-600"
+                        >
+                          <Download className="w-4 h-4 mr-2" />
+                          Download
+                        </Button>
+                        <Dialog open={showUploadToWebsite} onOpenChange={setShowUploadToWebsite}>
+                          <DialogTrigger asChild>
+                            <Button 
+                              variant="outline"
+                              className="flex-1 border-zinc-700 text-zinc-300 hover:bg-zinc-800"
+                            >
+                              <Globe className="w-4 h-4 mr-2" />
+                              Upload to Website
+                            </Button>
+                          </DialogTrigger>
+                          <DialogContent className="bg-zinc-900 border-zinc-800">
+                            <DialogHeader>
+                              <DialogTitle className="text-white">Upload to Website</DialogTitle>
+                            </DialogHeader>
+                            <div className="space-y-4 pt-4">
+                              <p className="text-zinc-400 text-sm">
+                                Describe where you want this design to appear on the website. Your assistant will process the request.
+                              </p>
+                              <textarea
+                                value={websiteUploadPrompt}
+                                onChange={(e) => setWebsiteUploadPrompt(e.target.value)}
+                                placeholder="e.g., Replace the book in the 'Download Free Market Report' section on the homepage with this new design. Make it 3D style."
+                                className="w-full h-32 px-3 py-2 bg-zinc-800 border border-zinc-700 rounded-lg text-white placeholder:text-zinc-500 resize-none"
+                              />
+                              <Button
+                                onClick={handleUploadToWebsite}
+                                disabled={!websiteUploadPrompt.trim()}
+                                className="w-full bg-gradient-to-r from-gold to-gold-dark text-black font-semibold"
+                              >
+                                <FileUp className="w-4 h-4 mr-2" />
+                                Submit Request
+                              </Button>
+                            </div>
+                          </DialogContent>
+                        </Dialog>
+                        <Button 
+                          onClick={() => {
+                            setGeneratedImage(null);
+                          }}
+                          variant="outline"
+                          className="border-zinc-700 text-zinc-300 hover:bg-zinc-800"
+                        >
+                          <RefreshCw className="w-4 h-4" />
+                        </Button>
+                      </div>
+                    )}
+                  </CardContent>
+                </Card>
+              </div>
+
+              {/* Right Panel - AI Assistant */}
+              <div className="lg:col-span-4">
+                <Card className="bg-zinc-900 border-zinc-800 h-[600px]">
+                  <AIDesignAssistant
+                    selectedTemplate={selectedTemplate ? {
+                      name: selectedTemplate.name,
+                      size: selectedTemplate.size,
+                      category: selectedTemplate.category
+                    } : null}
+                    uploadedImage={uploadedImage}
+                    onImageUploaded={setUploadedImage}
+                    onImageGenerated={setGeneratedImage}
+                    onPaletteGenerated={handlePaletteGenerated}
+                    isGenerating={isGenerating}
+                    setIsGenerating={setIsGenerating}
+                    projectContext={selectedPalette ? {
+                      name: 'Current Project',
+                      description: '',
+                      palette: selectedPalette.colors
+                    } : undefined}
+                  />
+                </Card>
+              </div>
+            </div>
+          </TabsContent>
+
+          {/* PROJECTS TAB */}
+          <TabsContent value="projects">
+            <Card className="bg-zinc-900 border-zinc-800">
+              <CardContent className="p-6">
+                <DesignProjectManager
+                  onSelectProject={(project) => {
+                    toast.info(`Loading project: ${project.name}`);
+                    // Load project data into the editor
+                    if (project.final_design_url) {
+                      setGeneratedImage(project.final_design_url);
+                    }
+                    setActiveTab('create');
+                  }}
+                  onCreateNew={() => {
+                    setActiveTab('create');
+                    setGeneratedImage(null);
+                    setSelectedTemplate(null);
+                  }}
+                />
+              </CardContent>
+            </Card>
+          </TabsContent>
+
+          {/* PALETTES TAB */}
+          <TabsContent value="palettes">
+            <Card className="bg-zinc-900 border-zinc-800">
+              <CardContent className="p-6">
+                <ColorPaletteManager
+                  onSelectPalette={(palette) => {
+                    setSelectedPalette({
+                      id: palette.id,
+                      name: palette.name,
+                      colors: palette.colors
+                    });
+                    toast.success(`Selected palette: ${palette.name}`);
+                  }}
+                  selectedPaletteId={selectedPalette?.id}
+                />
+              </CardContent>
+            </Card>
+          </TabsContent>
+
+          {/* TEAM TAB */}
+          <TabsContent value="team">
+            <Card className="bg-zinc-900 border-zinc-800">
+              <CardContent className="p-6">
+                <div className="text-center py-12">
+                  <div className="w-20 h-20 rounded-full bg-gradient-to-br from-purple-500/20 to-fuchsia-500/20 border border-purple-500/30 flex items-center justify-center mx-auto mb-4">
+                    <Users className="w-10 h-10 text-purple-400" />
+                  </div>
+                  <h3 className="text-white text-xl font-semibold mb-2">Design Team</h3>
+                  <p className="text-zinc-400 max-w-md mx-auto mb-6">
+                    Meet your AI design team members who work together to create stunning visuals for JBJ Global Real Estate.
+                  </p>
+                  
+                  <div className="grid grid-cols-1 md:grid-cols-3 gap-4 max-w-3xl mx-auto">
+                    {/* AI Designer Persona */}
+                    <div className="p-4 rounded-xl bg-zinc-800/50 border border-zinc-700">
+                      <div className="w-16 h-16 rounded-full bg-gradient-to-br from-purple-500 to-fuchsia-500 flex items-center justify-center mx-auto mb-3">
+                        <Sparkles className="w-8 h-8 text-white" />
+                      </div>
+                      <h4 className="text-white font-medium">Maya Chen</h4>
+                      <p className="text-gold text-sm">Lead AI Designer</p>
+                      <p className="text-zinc-500 text-xs mt-2">Specializes in luxury real estate marketing and premium brand aesthetics</p>
+                    </div>
+
+                    {/* Brand Manager Persona */}
+                    <div className="p-4 rounded-xl bg-zinc-800/50 border border-zinc-700">
+                      <div className="w-16 h-16 rounded-full bg-gradient-to-br from-amber-500 to-orange-500 flex items-center justify-center mx-auto mb-3">
+                        <Crown className="w-8 h-8 text-white" />
+                      </div>
+                      <h4 className="text-white font-medium">Victoria Reynolds</h4>
+                      <p className="text-gold text-sm">Brand Director</p>
+                      <p className="text-zinc-500 text-xs mt-2">Ensures all designs align with JBJ's premium brand standards</p>
+                    </div>
+
+                    {/* Content Designer Persona */}
+                    <div className="p-4 rounded-xl bg-zinc-800/50 border border-zinc-700">
+                      <div className="w-16 h-16 rounded-full bg-gradient-to-br from-cyan-500 to-blue-500 flex items-center justify-center mx-auto mb-3">
+                        <Book className="w-8 h-8 text-white" />
+                      </div>
+                      <h4 className="text-white font-medium">James Porter</h4>
+                      <p className="text-gold text-sm">Content Designer</p>
+                      <p className="text-zinc-500 text-xs mt-2">Creates books, reports, and long-form visual content</p>
+                    </div>
                   </div>
                 </div>
               </CardContent>
             </Card>
-          </div>
-        </div>
+          </TabsContent>
+        </Tabs>
       </main>
 
       <Footer />
