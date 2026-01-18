@@ -1,4 +1,6 @@
+import { useState } from "react";
 import { motion } from "framer-motion";
+import { Link } from "react-router-dom";
 
 // Top UAE developers ordered by premium status
 const DEVELOPER_PARTNERS = [
@@ -17,6 +19,8 @@ const DEVELOPER_PARTNERS = [
 ];
 
 const DeveloperPartnersMarquee = () => {
+  const [isPaused, setIsPaused] = useState(false);
+  
   // Duplicate for seamless loop
   const duplicatedDevelopers = [...DEVELOPER_PARTNERS, ...DEVELOPER_PARTNERS];
 
@@ -29,7 +33,11 @@ const DeveloperPartnersMarquee = () => {
       </div>
       
       {/* Marquee Container */}
-      <div className="relative">
+      <div 
+        className="relative"
+        onMouseEnter={() => setIsPaused(true)}
+        onMouseLeave={() => setIsPaused(false)}
+      >
         {/* Gradient fade edges */}
         <div className="absolute left-0 top-0 bottom-0 w-24 md:w-40 bg-gradient-to-r from-black to-transparent z-10 pointer-events-none" />
         <div className="absolute right-0 top-0 bottom-0 w-24 md:w-40 bg-gradient-to-l from-black to-transparent z-10 pointer-events-none" />
@@ -47,16 +55,23 @@ const DeveloperPartnersMarquee = () => {
               ease: "linear",
             },
           }}
+          style={{
+            animationPlayState: isPaused ? "paused" : "running",
+          }}
+          {...(isPaused && { animate: undefined })}
         >
           {duplicatedDevelopers.map((developer, index) => (
             <div
               key={`${developer.slug}-${index}`}
-              className="flex-shrink-0 flex items-center gap-3 group cursor-default"
+              className="flex-shrink-0 flex items-center gap-3 group"
             >
-              {/* Developer name with premium styling */}
-              <span className="text-zinc-400 text-sm md:text-base font-medium tracking-wide whitespace-nowrap group-hover:text-gold transition-colors duration-300">
+              {/* Developer name with premium styling - clickable */}
+              <Link 
+                to={`/properties?developer=${encodeURIComponent(developer.name)}`}
+                className="text-zinc-400 text-sm md:text-base font-medium tracking-wide whitespace-nowrap hover:text-gold transition-colors duration-300 cursor-pointer"
+              >
                 {developer.name}
-              </span>
+              </Link>
               
               {/* Separator diamond */}
               {index < duplicatedDevelopers.length - 1 && (
