@@ -261,14 +261,14 @@ const FAQ = () => {
       />
 
       {/* Category Quick Links */}
-      <section className="py-8 bg-zinc-900 border-y border-zinc-700 sticky top-16 z-20 backdrop-blur-sm">
+      <section className="py-8 bg-gradient-to-r from-white via-[#FDFBF7] to-[#F5F0E6] border-y border-gold/20 sticky top-16 z-20 backdrop-blur-sm">
         <div className="container mx-auto px-4">
           <div className="flex flex-wrap justify-center gap-2">
             {categories.map((category, index) => (
               <button
                 key={index}
                 onClick={() => document.getElementById(`category-${index}`)?.scrollIntoView({ behavior: 'smooth' })}
-                className="flex items-center gap-2 px-4 py-2.5 bg-zinc-800 hover:bg-gold text-zinc-300 hover:text-black rounded-lg transition-all text-sm font-medium border border-zinc-700 hover:border-gold"
+                className="flex items-center gap-2 px-4 py-2.5 bg-white hover:bg-black text-black hover:text-gold rounded-lg transition-all text-sm font-medium border border-gold/30 hover:border-gold shadow-[0_2px_10px_rgba(200,167,102,0.15)] hover:shadow-[0_4px_15px_rgba(200,167,102,0.3)]"
               >
                 <category.icon className="w-4 h-4" />
                 {category.title}
@@ -348,13 +348,13 @@ const FAQ = () => {
               we're happy to provide guidance tailored to your situation.
             </p>
             <div className="flex flex-wrap justify-center gap-4">
-              <Button asChild variant="dark" className="px-6">
+              <Button asChild className="px-6 bg-gradient-to-r from-white via-[#FDFBF7] to-[#F5F0E6] text-gold font-semibold border border-gold/40 shadow-[0_4px_20px_rgba(200,167,102,0.3),0_8px_30px_rgba(0,0,0,0.15)] hover:shadow-[0_6px_25px_rgba(200,167,102,0.5),0_10px_40px_rgba(0,0,0,0.2)] hover:scale-[1.02] transition-all duration-300">
                 <Link to="/contact">
-                  <Phone className="w-4 h-4 mr-2" />
+                  <Phone className="w-4 h-4 mr-2 text-black" />
                   Contact Our Team
                 </Link>
               </Button>
-              <Button asChild variant="secondary" className="border-zinc-300 text-black hover:bg-zinc-100 px-6">
+              <Button asChild className="px-6 bg-gradient-to-r from-white via-[#FDFBF7] to-[#F5F0E6] text-gold font-semibold border border-gold/40 shadow-[0_4px_20px_rgba(200,167,102,0.3),0_8px_30px_rgba(0,0,0,0.15)] hover:shadow-[0_6px_25px_rgba(200,167,102,0.5),0_10px_40px_rgba(0,0,0,0.2)] hover:scale-[1.02] transition-all duration-300">
                 <Link to="/buyer-guide">
                   Read Buyer Guide
                 </Link>
