@@ -228,9 +228,18 @@ const Properties = () => {
       case "price-high":
         sorted.sort((a, b) => (b.price_from || 0) - (a.price_from || 0));
         break;
+      case "oldest":
+        sorted.sort(
+          (a, b) =>
+            new Date(a.created_at).getTime() - new Date(b.created_at).getTime()
+        );
+        break;
       case "newest":
       default:
-        sorted.sort((a, b) => new Date(b.created_at).getTime() - new Date(a.created_at).getTime());
+        sorted.sort(
+          (a, b) =>
+            new Date(b.created_at).getTime() - new Date(a.created_at).getTime()
+        );
     }
     return sorted;
   }, [filteredProjects, sortBy]);
@@ -787,7 +796,6 @@ const Properties = () => {
             </Button>
           </div>
 
-          {/* Sorting Pills - Black fill with gold text */}
           <div className="flex items-center justify-center gap-2 mt-5">
             {[
               { value: "newest", label: "Newest" },
@@ -804,9 +812,6 @@ const Properties = () => {
                     : "bg-black text-gold border-black hover:bg-zinc-800"
                 }`}
               >
-                {option.label}
-              </button>
-            ))}
                 {option.label}
               </button>
             ))}
