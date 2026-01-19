@@ -23,7 +23,16 @@ const SECTIONS = [
 
 export function BrokerToolkitNavigation({ activeSection, onSectionChange }: BrokerToolkitNavigationProps) {
   return (
-    <section id="what-you-get" className="py-8 sticky top-16 z-40 bg-[hsl(var(--premium-bg))]/95 backdrop-blur-lg border-b border-zinc-800">
+    <section id="what-you-get" className="py-8 sticky top-16 z-40 bg-black/95 backdrop-blur-lg relative">
+      {/* Bottom gold glow divider */}
+      <div 
+        className="absolute bottom-0 left-0 right-0 h-1"
+        style={{
+          background: 'linear-gradient(90deg, transparent, rgba(212,175,55,0.6), transparent)',
+          boxShadow: '0 0 20px rgba(212,175,55,0.4), 0 0 40px rgba(212,175,55,0.2)',
+        }}
+      />
+      
       <div className="container mx-auto px-4">
         <div className="flex items-center justify-center gap-2 overflow-x-auto pb-2 scrollbar-hide">
           {SECTIONS.map((section) => (

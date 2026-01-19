@@ -48,7 +48,25 @@ const STATS = [
 
 export function BrokerToolkitStats() {
   return (
-    <section className="py-12 border-y border-zinc-800 bg-black">
+    <section className="py-12 bg-gradient-to-br from-white via-[#FDFBF7] to-[#F5F0E6] relative">
+      {/* Top gold glow divider */}
+      <div 
+        className="absolute top-0 left-0 right-0 h-1"
+        style={{
+          background: 'linear-gradient(90deg, transparent, rgba(212,175,55,0.6), transparent)',
+          boxShadow: '0 0 20px rgba(212,175,55,0.4), 0 0 40px rgba(212,175,55,0.2)',
+        }}
+      />
+      
+      {/* Bottom gold glow divider */}
+      <div 
+        className="absolute bottom-0 left-0 right-0 h-1"
+        style={{
+          background: 'linear-gradient(90deg, transparent, rgba(212,175,55,0.6), transparent)',
+          boxShadow: '0 0 20px rgba(212,175,55,0.4), 0 0 40px rgba(212,175,55,0.2)',
+        }}
+      />
+      
       <div className="container mx-auto px-4">
         <div className="grid grid-cols-2 md:grid-cols-5 gap-6">
           {STATS.map((stat, i) => (
@@ -60,14 +78,14 @@ export function BrokerToolkitStats() {
               viewport={{ once: true }}
               className="text-center group"
             >
-              <div className={`inline-flex items-center justify-center w-12 h-12 rounded-xl bg-zinc-800/50 mb-3 group-hover:scale-110 transition-transform`}>
+              <div className={`inline-flex items-center justify-center w-12 h-12 rounded-xl bg-white/80 border border-gold/20 mb-3 group-hover:scale-110 transition-transform shadow-sm`}>
                 <stat.icon className={`w-6 h-6 ${stat.color}`} />
               </div>
               <div className={`text-3xl md:text-4xl font-bold ${stat.color} mb-1`}>
                 {stat.value}
               </div>
-              <div className="text-white font-medium text-sm mb-1">{stat.label}</div>
-              <div className="text-zinc-500 text-xs hidden md:block">{stat.description}</div>
+              <div className="text-gold font-semibold text-sm mb-1">{stat.label}</div>
+              <div className="text-zinc-600 text-xs hidden md:block">{stat.description}</div>
             </motion.div>
           ))}
         </div>
