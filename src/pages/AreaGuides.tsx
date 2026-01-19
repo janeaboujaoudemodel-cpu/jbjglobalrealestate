@@ -132,19 +132,35 @@ const AreaGuides = () => {
         backgroundImage="https://images.unsplash.com/photo-1512453979798-5ea266f8880c?auto=format&fit=crop&w=2000&q=80"
         actions={
           <div className="flex flex-wrap justify-center gap-4">
-            <Button 
-              className="relative bg-gradient-to-r from-white via-[#FDFBF7] to-[#F5F0E6] border border-gold/40 px-6 py-3 shadow-[0_4px_20px_rgba(200,167,102,0.3),0_8px_30px_rgba(0,0,0,0.15)] hover:shadow-[0_6px_25px_rgba(200,167,102,0.5),0_10px_40px_rgba(0,0,0,0.2)] hover:scale-[1.02] transition-all duration-300"
+            {/* Primary 3D Button */}
+            <button 
+              className="relative inline-flex items-center justify-center gap-2 px-8 py-4 text-base font-bold rounded-xl transition-all duration-300 group overflow-hidden"
               onClick={() => document.getElementById('area-grid')?.scrollIntoView({ behavior: 'smooth' })}
+              style={{
+                background: 'linear-gradient(135deg, #FFFFFF 0%, #FDFBF7 25%, #F5F0E6 50%, #E8DFD0 75%, #C8A766 100%)',
+                boxShadow: `
+                  0 8px 25px rgba(200,167,102,0.4),
+                  0 5px 12px rgba(0,0,0,0.15),
+                  inset 0 2px 4px rgba(255,255,255,0.9),
+                  inset 0 -2px 4px rgba(200,167,102,0.2),
+                  0 0 18px rgba(200,167,102,0.3)
+                `,
+              }}
             >
-              <span className="text-gold font-semibold">Explore All Areas</span>
-              <ArrowUpRight className="w-4 h-4 ml-2 text-black" />
-            </Button>
+              <span className="absolute inset-x-0 top-0 h-1/2 rounded-t-xl bg-gradient-to-b from-white/80 to-transparent pointer-events-none" />
+              <span className="absolute inset-0 rounded-xl opacity-0 group-hover:opacity-100 transition-opacity duration-300 pointer-events-none" style={{ boxShadow: '0 0 35px rgba(200,167,102,0.6), inset 0 0 18px rgba(200,167,102,0.1)' }} />
+              <span className="relative flex items-center gap-2">
+                <span className="text-gold">Explore</span>
+                <span className="text-black">All Areas</span>
+                <ArrowUpRight className="w-4 h-4 text-black" />
+              </span>
+            </button>
+            {/* Secondary Button */}
             <Link to="/properties">
-              <Button className="relative bg-gradient-to-r from-white via-[#FDFBF7] to-[#F5F0E6] border border-gold/40 px-6 py-3 shadow-[0_4px_20px_rgba(200,167,102,0.3),0_8px_30px_rgba(0,0,0,0.15)] hover:shadow-[0_6px_25px_rgba(200,167,102,0.5),0_10px_40px_rgba(0,0,0,0.2)] hover:scale-[1.02] transition-all duration-300">
-                <Building2 className="w-4 h-4 mr-2 text-black" />
-                <span className="text-gold font-semibold">View Properties</span>
-                <ArrowUpRight className="w-4 h-4 ml-2 text-black" />
-              </Button>
+              <button className="inline-flex items-center justify-center gap-2 px-8 py-4 text-base font-bold rounded-xl transition-all duration-300 bg-transparent border-2 border-black text-black hover:bg-black hover:text-white">
+                <Building2 className="w-4 h-4" />
+                View Properties
+              </button>
             </Link>
           </div>
         }

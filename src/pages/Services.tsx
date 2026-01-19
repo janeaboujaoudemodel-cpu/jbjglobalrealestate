@@ -162,6 +162,7 @@ const Services = () => {
           </motion.p>
           
           <motion.div variants={fadeInUp} className="flex flex-col sm:flex-row gap-4 justify-center">
+            {/* Primary 3D Button */}
             <Link to="/properties">
               <button 
                 className="relative inline-flex items-center justify-center gap-2 px-10 py-6 text-base font-bold rounded-xl transition-all duration-300 group overflow-hidden"
@@ -185,9 +186,16 @@ const Services = () => {
                 </span>
               </button>
             </Link>
+            {/* Secondary Button - White/champagne fill for dark background visibility */}
             <Link to="/contact">
-              <button className="relative inline-flex items-center justify-center gap-2 px-10 py-6 text-base font-bold rounded-xl transition-all duration-300 bg-transparent border-2 border-black text-black hover:bg-black hover:text-white">
-                Speak With Us
+              <button 
+                className="relative inline-flex items-center justify-center gap-2 px-10 py-6 text-base font-bold rounded-xl transition-all duration-300 overflow-hidden"
+                style={{
+                  background: 'linear-gradient(135deg, #FFFFFF 0%, #FDFBF7 50%, #F5F0E6 100%)',
+                  border: '2px solid #000',
+                }}
+              >
+                <span className="text-black hover:text-black">Speak With Us</span>
               </button>
             </Link>
           </motion.div>
@@ -258,13 +266,25 @@ const Services = () => {
                   
                   <div className="mt-auto">
                     <Link to={service.link}>
-                      <Button 
-                        variant="dark"
-                        className="w-full"
+                      <button 
+                        className="relative w-full h-10 rounded-lg font-bold transition-all duration-300 group overflow-hidden flex items-center justify-center"
+                        style={{
+                          background: 'linear-gradient(135deg, #FFFFFF 0%, #FDFBF7 25%, #F5F0E6 50%, #E8DFD0 75%, #C8A766 100%)',
+                          boxShadow: `
+                            0 5px 15px rgba(200,167,102,0.35),
+                            0 3px 8px rgba(0,0,0,0.12),
+                            inset 0 1px 3px rgba(255,255,255,0.9),
+                            0 0 12px rgba(200,167,102,0.25)
+                          `,
+                        }}
                       >
-                        Explore
-                        <ArrowUpRight className="w-4 h-4 ml-2" />
-                      </Button>
+                        <span className="absolute inset-x-0 top-0 h-1/2 rounded-t-lg bg-gradient-to-b from-white/70 to-transparent pointer-events-none" />
+                        <span className="absolute inset-0 rounded-lg opacity-0 group-hover:opacity-100 transition-opacity duration-300 pointer-events-none" style={{ boxShadow: '0 0 25px rgba(200,167,102,0.5)' }} />
+                        <span className="relative flex items-center gap-2">
+                          <span className="text-gold">Explore</span>
+                          <ArrowUpRight className="w-4 h-4 text-black" />
+                        </span>
+                      </button>
                     </Link>
                   </div>
                 </div>
@@ -326,13 +346,30 @@ const Services = () => {
             ))}
           </div>
           
-          {/* Explore More Tools Button */}
+          {/* Explore More Tools Button - 3D Premium Style */}
           <div className="text-center">
             <Link to="/ai-hub">
-              <Button variant="secondary" size="lg" className="px-8">
-                Explore More AI Tools
-                <ArrowUpRight className="w-5 h-5 ml-2" />
-              </Button>
+              <button 
+                className="relative inline-flex items-center justify-center gap-2 px-10 py-5 text-base font-bold rounded-xl transition-all duration-300 group overflow-hidden"
+                style={{
+                  background: 'linear-gradient(135deg, #FFFFFF 0%, #FDFBF7 25%, #F5F0E6 50%, #E8DFD0 75%, #C8A766 100%)',
+                  boxShadow: `
+                    0 8px 25px rgba(200,167,102,0.4),
+                    0 5px 12px rgba(0,0,0,0.15),
+                    inset 0 2px 4px rgba(255,255,255,0.9),
+                    inset 0 -2px 4px rgba(200,167,102,0.2),
+                    0 0 18px rgba(200,167,102,0.3)
+                  `,
+                }}
+              >
+                <span className="absolute inset-x-0 top-0 h-1/2 rounded-t-xl bg-gradient-to-b from-white/80 to-transparent pointer-events-none" />
+                <span className="absolute inset-0 rounded-xl opacity-0 group-hover:opacity-100 transition-opacity duration-300 pointer-events-none" style={{ boxShadow: '0 0 35px rgba(200,167,102,0.6), inset 0 0 18px rgba(200,167,102,0.1)' }} />
+                <span className="relative flex items-center gap-2">
+                  <span className="text-gold">Explore More</span>
+                  <span className="text-black">AI Tools</span>
+                  <ArrowUpRight className="w-5 h-5 text-black" />
+                </span>
+              </button>
             </Link>
           </div>
         </div>

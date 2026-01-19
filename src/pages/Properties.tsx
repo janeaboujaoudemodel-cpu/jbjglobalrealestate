@@ -823,14 +823,25 @@ const Properties = () => {
               </DialogContent>
             </Dialog>
 
-            {/* SEARCH Button - Manual trigger */}
-            <Button 
+            {/* SEARCH Button - 3D Premium Style */}
+            <button 
               onClick={handleSearch}
-              variant="primary"
-              className="h-10 px-6 rounded-lg text-sm flex-shrink-0"
+              className="relative h-10 px-6 rounded-lg text-sm flex-shrink-0 font-bold transition-all duration-300 group overflow-hidden"
+              style={{
+                background: 'linear-gradient(135deg, #FFFFFF 0%, #FDFBF7 25%, #F5F0E6 50%, #E8DFD0 75%, #C8A766 100%)',
+                boxShadow: `
+                  0 6px 20px rgba(200,167,102,0.4),
+                  0 4px 10px rgba(0,0,0,0.15),
+                  inset 0 2px 3px rgba(255,255,255,0.9),
+                  inset 0 -2px 3px rgba(200,167,102,0.2),
+                  0 0 15px rgba(200,167,102,0.3)
+                `,
+              }}
             >
-              SEARCH
-            </Button>
+              <span className="absolute inset-x-0 top-0 h-1/2 rounded-t-lg bg-gradient-to-b from-white/80 to-transparent pointer-events-none" />
+              <span className="absolute inset-0 rounded-lg opacity-0 group-hover:opacity-100 transition-opacity duration-300 pointer-events-none" style={{ boxShadow: '0 0 30px rgba(200,167,102,0.6), inset 0 0 15px rgba(200,167,102,0.1)' }} />
+              <span className="relative text-gold font-semibold">SEARCH</span>
+            </button>
           </div>
 
           <div className="flex items-center justify-center gap-2 mt-5">
@@ -1071,30 +1082,55 @@ const Properties = () => {
         </div>
       </section>
 
-      {/* Quick Contact CTA */}
+      {/* Quick Contact CTA - Premium 3D Buttons */}
       <section className="py-12 bg-gradient-to-br from-white via-[#FDFBF7] to-[#F5F0E6] border-t border-gold/20">
         <div className="container mx-auto px-4">
             <div className="flex flex-wrap items-center justify-center gap-4">
-              <Button asChild className="h-12 px-8 bg-black text-gold font-semibold hover:bg-zinc-900 border border-gold/30">
-                <a href={buildSureFormsUrl()} target="_blank" rel="noopener noreferrer">
-                  <ArrowUpRight className="w-4 h-4 mr-2" />
-                  Register Interest
-                </a>
-              </Button>
+              {/* Register Interest - Primary 3D Style */}
+              <a 
+                href={buildSureFormsUrl()} 
+                target="_blank" 
+                rel="noopener noreferrer"
+                className="relative h-12 px-8 rounded-xl font-bold transition-all duration-300 group overflow-hidden inline-flex items-center justify-center"
+                style={{
+                  background: 'linear-gradient(135deg, #FFFFFF 0%, #FDFBF7 25%, #F5F0E6 50%, #E8DFD0 75%, #C8A766 100%)',
+                  boxShadow: `
+                    0 8px 25px rgba(200,167,102,0.4),
+                    0 5px 12px rgba(0,0,0,0.15),
+                    inset 0 2px 4px rgba(255,255,255,0.9),
+                    inset 0 -2px 4px rgba(200,167,102,0.2),
+                    0 0 18px rgba(200,167,102,0.3)
+                  `,
+                }}
+              >
+                <span className="absolute inset-x-0 top-0 h-1/2 rounded-t-xl bg-gradient-to-b from-white/80 to-transparent pointer-events-none" />
+                <span className="absolute inset-0 rounded-xl opacity-0 group-hover:opacity-100 transition-opacity duration-300 pointer-events-none" style={{ boxShadow: '0 0 35px rgba(200,167,102,0.6), inset 0 0 18px rgba(200,167,102,0.1)' }} />
+                <span className="relative flex items-center gap-2">
+                  <ArrowUpRight className="w-4 h-4 text-black" />
+                  <span className="text-gold">Register</span>
+                  <span className="text-black">Interest</span>
+                </span>
+              </a>
 
-              <Button asChild className="h-12 px-8 bg-gradient-to-r from-gold to-gold-dark text-black font-semibold hover:brightness-110">
-                <a href={getWhatsAppUrl()} target="_blank" rel="noopener noreferrer">
-                  <MessageCircle className="w-4 h-4 mr-2" />
-                  WhatsApp
-                </a>
-              </Button>
+              {/* WhatsApp - Secondary Style (transparent with border) */}
+              <a 
+                href={getWhatsAppUrl()} 
+                target="_blank" 
+                rel="noopener noreferrer"
+                className="h-12 px-8 rounded-xl font-bold transition-all duration-300 inline-flex items-center justify-center gap-2 bg-transparent border-2 border-black text-black hover:bg-black hover:text-white"
+              >
+                <MessageCircle className="w-4 h-4" />
+                WhatsApp
+              </a>
 
-              <Button asChild className="h-12 px-8 bg-black text-gold font-semibold hover:bg-zinc-900 border border-gold/30">
-                <a href={`tel:${CONTACT_INFO.phoneRaw}`}>
-                  <Phone className="w-4 h-4 mr-2" />
-                  Call Now
-                </a>
-              </Button>
+              {/* Call Now - Secondary Style (transparent with border) */}
+              <a 
+                href={`tel:${CONTACT_INFO.phoneRaw}`}
+                className="h-12 px-8 rounded-xl font-bold transition-all duration-300 inline-flex items-center justify-center gap-2 bg-transparent border-2 border-black text-black hover:bg-black hover:text-white"
+              >
+                <Phone className="w-4 h-4" />
+                Call Now
+              </a>
             </div>
         </div>
       </section>
