@@ -105,12 +105,12 @@ const CATEGORY_META: Record<
   },
   operations: {
     label: "Operations & CRM",
-    badgeClass: "bg-gold/25 text-gold border-gold/30",
+    badgeClass: "bg-cyan-500/30 text-cyan-200 border-cyan-400/50",
     cardClass:
-      "bg-zinc-900/80 border border-gold/20 hover:border-gold/40 hover:bg-zinc-900 shadow-lg shadow-gold/10 hover:shadow-gold/20",
-    iconWrapClass: "bg-gold/10 border border-gold/30",
-    iconClass: "text-gold",
-    arrowClass: "text-gold",
+      "bg-cyan-900/60 border border-cyan-500/30 hover:border-cyan-400 hover:bg-cyan-900/80 shadow-lg shadow-cyan-500/10 hover:shadow-cyan-400/20",
+    iconWrapClass: "bg-cyan-500/30",
+    iconClass: "text-cyan-200",
+    arrowClass: "text-cyan-300",
   },
 };
 

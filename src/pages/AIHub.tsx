@@ -54,7 +54,7 @@ const staggerContainer = {
   }
 };
 
-// INVESTOR HUB TOOLS - Available to all users
+// INVESTOR HUB TOOLS - Available to all users with theme colors
 const investorTools = [
   {
     id: "ai-home-finder",
@@ -62,6 +62,7 @@ const investorTools = [
     description: "Match buyers to listings with AI-powered filters.",
     icon: Home,
     link: "/quiz",
+    themeColor: "purple", // Purple theme
   },
   {
     id: "property-evaluator",
@@ -69,6 +70,7 @@ const investorTools = [
     description: "AI-driven valuation based on live market data.",
     icon: Calculator,
     link: "/property-evaluator",
+    themeColor: "blue", // Blue theme
   },
   {
     id: "property-comparison",
@@ -76,6 +78,7 @@ const investorTools = [
     description: "Compare properties side-by-side with AI insights.",
     icon: BarChart3,
     link: "/compare",
+    themeColor: "cyan", // Cyan theme
   },
   {
     id: "mortgage-calculator",
@@ -83,6 +86,7 @@ const investorTools = [
     description: "Estimate monthly payments and financing options.",
     icon: Calculator,
     link: "/mortgage-calculator",
+    themeColor: "emerald", // Emerald theme
   },
   {
     id: "rental-index",
@@ -90,6 +94,7 @@ const investorTools = [
     description: "AI-powered rental estimates with market trends.",
     icon: Layers,
     link: "/rental-index",
+    themeColor: "teal", // Teal theme
   },
   {
     id: "interior-design",
@@ -97,6 +102,7 @@ const investorTools = [
     description: "Visualize spaces with AI-generated designs.",
     icon: Image,
     link: "/interior-design-ai",
+    themeColor: "pink", // Pink theme
   },
   {
     id: "business-card-scanner",
@@ -104,6 +110,7 @@ const investorTools = [
     description: "Scan and save business cards into your CRM.",
     icon: CreditCard,
     link: "/business-card-scanner",
+    themeColor: "amber", // Amber theme
   },
   {
     id: "property-coach",
@@ -111,10 +118,11 @@ const investorTools = [
     description: "Scripts, objections, roleplay, deal strategy.",
     icon: Target,
     link: "/broker-toolkit",
+    themeColor: "indigo", // Indigo theme
   },
 ];
 
-// PRODUCTIVITY TOOLS - Available to all users
+// PRODUCTIVITY TOOLS - With theme colors
 const productivityTools = [
   {
     id: "content-tools",
@@ -122,6 +130,7 @@ const productivityTools = [
     description: "Rich text editor and Excel-like tools.",
     icon: FileText,
     link: "/documents",
+    themeColor: "blue",
   },
   {
     id: "video-meeting",
@@ -129,6 +138,7 @@ const productivityTools = [
     description: "Free unlimited video meetings with recording.",
     icon: Video,
     link: "/video-meeting",
+    themeColor: "cyan",
   },
   {
     id: "calendar",
@@ -136,6 +146,7 @@ const productivityTools = [
     description: "Smart scheduling and reminders.",
     icon: Calendar,
     link: "/ai-calendar",
+    themeColor: "indigo",
   },
   {
     id: "scan-sign",
@@ -143,10 +154,11 @@ const productivityTools = [
     description: "Digital document signing and scanning.",
     icon: FileText,
     link: "/documents",
+    themeColor: "emerald",
   },
 ];
 
-// EDUCATION & CAREER - Separate section
+// EDUCATION & CAREER - With theme colors
 const educationCareer = [
   {
     id: "academy",
@@ -154,6 +166,7 @@ const educationCareer = [
     description: "Video tutorials and broker certifications.",
     icon: GraduationCap,
     link: "/broker-toolkit",
+    themeColor: "amber",
   },
   {
     id: "employment-hub",
@@ -161,6 +174,7 @@ const educationCareer = [
     description: "Hire or get hired in Real Estate.",
     icon: Briefcase,
     link: "/join",
+    themeColor: "emerald",
   },
   {
     id: "referral-program",
@@ -168,6 +182,7 @@ const educationCareer = [
     description: "Earn 5% commission on successful referrals.",
     icon: Award,
     link: "/referral-onboarding",
+    themeColor: "gold",
   },
 ];
 
@@ -234,52 +249,136 @@ const AIHub = () => {
   const { user } = useAuth();
   const navigate = useNavigate();
 
-  const renderToolCard = (tool: typeof investorTools[0]) => (
-    <motion.div key={tool.id} variants={fadeInUp}>
-      <Link to={tool.link} className="block group h-full">
-        <Card className="bg-white border border-zinc-200 hover:border-gold shadow-lg shadow-zinc-200/50 hover:shadow-xl hover:shadow-gold/20 transition-all duration-300 h-full group-hover:scale-[1.02]">
-          <CardContent className="p-5">
-            <div className="flex items-start gap-4">
-              <div className="w-12 h-12 bg-black rounded-xl flex items-center justify-center flex-shrink-0 group-hover:scale-110 transition-transform">
-                <tool.icon className="w-6 h-6 text-gold" />
-              </div>
-              <div className="flex-1 min-w-0">
-                <div className="flex items-start gap-2 mb-1 flex-wrap">
-                  <h3 className="text-black font-semibold text-sm leading-tight">{tool.title}</h3>
-                  <Badge className="bg-emerald-50 text-emerald-600 border-emerald-200 text-[10px] px-1.5 py-0 flex-shrink-0">
-                    FREE
-                  </Badge>
+  // Theme color mappings for cards
+  const getThemeClasses = (color: string) => {
+    const themes: Record<string, { card: string; iconWrap: string; icon: string; border: string; arrow: string; glow: string }> = {
+      purple: {
+        card: "bg-gradient-to-br from-purple-900/80 to-purple-950 border-purple-500/40 hover:border-purple-400 shadow-purple-500/20 hover:shadow-purple-400/30",
+        iconWrap: "bg-purple-500/30",
+        icon: "text-purple-200",
+        border: "border-purple-500/40",
+        arrow: "text-purple-300",
+        glow: "shadow-purple-500/20",
+      },
+      blue: {
+        card: "bg-gradient-to-br from-blue-900/80 to-blue-950 border-blue-500/40 hover:border-blue-400 shadow-blue-500/20 hover:shadow-blue-400/30",
+        iconWrap: "bg-blue-500/30",
+        icon: "text-blue-200",
+        border: "border-blue-500/40",
+        arrow: "text-blue-300",
+        glow: "shadow-blue-500/20",
+      },
+      cyan: {
+        card: "bg-gradient-to-br from-cyan-900/80 to-cyan-950 border-cyan-500/40 hover:border-cyan-400 shadow-cyan-500/20 hover:shadow-cyan-400/30",
+        iconWrap: "bg-cyan-500/30",
+        icon: "text-cyan-200",
+        border: "border-cyan-500/40",
+        arrow: "text-cyan-300",
+        glow: "shadow-cyan-500/20",
+      },
+      teal: {
+        card: "bg-gradient-to-br from-teal-900/80 to-teal-950 border-teal-500/40 hover:border-teal-400 shadow-teal-500/20 hover:shadow-teal-400/30",
+        iconWrap: "bg-teal-500/30",
+        icon: "text-teal-200",
+        border: "border-teal-500/40",
+        arrow: "text-teal-300",
+        glow: "shadow-teal-500/20",
+      },
+      emerald: {
+        card: "bg-gradient-to-br from-emerald-900/80 to-emerald-950 border-emerald-500/40 hover:border-emerald-400 shadow-emerald-500/20 hover:shadow-emerald-400/30",
+        iconWrap: "bg-emerald-500/30",
+        icon: "text-emerald-200",
+        border: "border-emerald-500/40",
+        arrow: "text-emerald-300",
+        glow: "shadow-emerald-500/20",
+      },
+      amber: {
+        card: "bg-gradient-to-br from-amber-900/80 to-amber-950 border-amber-500/40 hover:border-amber-400 shadow-amber-500/20 hover:shadow-amber-400/30",
+        iconWrap: "bg-amber-500/30",
+        icon: "text-amber-200",
+        border: "border-amber-500/40",
+        arrow: "text-amber-300",
+        glow: "shadow-amber-500/20",
+      },
+      pink: {
+        card: "bg-gradient-to-br from-pink-900/80 to-pink-950 border-pink-500/40 hover:border-pink-400 shadow-pink-500/20 hover:shadow-pink-400/30",
+        iconWrap: "bg-pink-500/30",
+        icon: "text-pink-200",
+        border: "border-pink-500/40",
+        arrow: "text-pink-300",
+        glow: "shadow-pink-500/20",
+      },
+      indigo: {
+        card: "bg-gradient-to-br from-indigo-900/80 to-indigo-950 border-indigo-500/40 hover:border-indigo-400 shadow-indigo-500/20 hover:shadow-indigo-400/30",
+        iconWrap: "bg-indigo-500/30",
+        icon: "text-indigo-200",
+        border: "border-indigo-500/40",
+        arrow: "text-indigo-300",
+        glow: "shadow-indigo-500/20",
+      },
+      gold: {
+        card: "bg-gradient-to-br from-yellow-900/80 to-yellow-950 border-gold/40 hover:border-gold shadow-gold/20 hover:shadow-gold/30",
+        iconWrap: "bg-gold/30",
+        icon: "text-gold",
+        border: "border-gold/40",
+        arrow: "text-gold",
+        glow: "shadow-gold/20",
+      },
+    };
+    return themes[color] || themes.purple;
+  };
+
+  const renderToolCard = (tool: typeof investorTools[0]) => {
+    const theme = getThemeClasses(tool.themeColor || "purple");
+    
+    return (
+      <motion.div key={tool.id} variants={fadeInUp}>
+        <Link to={tool.link} className="block group h-full">
+          <Card className={`${theme.card} shadow-lg transition-all duration-300 h-full group-hover:scale-[1.02] border`}>
+            <CardContent className="p-5">
+              <div className="flex items-start gap-4">
+                <div className={`w-12 h-12 ${theme.iconWrap} rounded-xl flex items-center justify-center flex-shrink-0 group-hover:scale-110 transition-transform`}>
+                  <tool.icon className={`w-6 h-6 ${theme.icon}`} />
                 </div>
-                <p className="text-zinc-600 text-sm line-clamp-2">{tool.description}</p>
+                <div className="flex-1 min-w-0">
+                  <div className="flex items-start gap-2 mb-1 flex-wrap">
+                    <h3 className="text-white font-semibold text-sm leading-tight">{tool.title}</h3>
+                    <Badge className="bg-emerald-500/30 text-emerald-200 border-emerald-400/50 text-[10px] px-1.5 py-0 flex-shrink-0">
+                      FREE
+                    </Badge>
+                  </div>
+                  <p className="text-white/70 text-sm line-clamp-2">{tool.description}</p>
+                </div>
+                <ArrowUpRight className={`w-5 h-5 ${theme.arrow} opacity-0 group-hover:opacity-100 transition-opacity flex-shrink-0`} />
               </div>
-              <ArrowUpRight className="w-5 h-5 text-gold opacity-0 group-hover:opacity-100 transition-opacity flex-shrink-0" />
-            </div>
-          </CardContent>
-        </Card>
-      </Link>
-    </motion.div>
-  );
+            </CardContent>
+          </Card>
+        </Link>
+      </motion.div>
+    );
+  };
 
   const renderLockedCard = (tool: typeof brokerOnlyTools[0]) => (
     <motion.div key={tool.id} variants={fadeInUp}>
-      <div className="block group h-full cursor-not-allowed">
-        <Card className="bg-zinc-900 border border-zinc-700 shadow-lg h-full relative overflow-hidden opacity-75">
-          <div className="absolute inset-0 bg-gradient-to-br from-zinc-800/50 to-transparent" />
+      <div className="block group h-full cursor-pointer" onClick={() => navigate("/join")}>
+        <Card className="bg-gradient-to-br from-purple-900/80 to-indigo-900/60 border border-purple-500/40 shadow-lg shadow-purple-500/20 h-full relative overflow-hidden hover:border-purple-400 hover:shadow-purple-400/30 transition-all duration-300">
+          <div className="absolute inset-0 bg-gradient-to-br from-purple-500/10 to-transparent" />
           <CardContent className="p-5 relative z-10">
             <div className="flex items-start gap-4">
-              <div className="w-12 h-12 bg-zinc-800 rounded-xl flex items-center justify-center flex-shrink-0">
-                <tool.icon className="w-6 h-6 text-zinc-500" />
+              <div className="w-12 h-12 bg-purple-500/30 rounded-xl flex items-center justify-center flex-shrink-0 group-hover:scale-110 transition-transform">
+                <tool.icon className="w-6 h-6 text-purple-200" />
               </div>
               <div className="flex-1 min-w-0">
                 <div className="flex items-start gap-2 mb-1 flex-wrap">
-                  <h3 className="text-zinc-400 font-semibold text-sm leading-tight">{tool.title}</h3>
-                  <Badge className="bg-zinc-800 text-zinc-500 border-zinc-700 text-[10px] px-1.5 py-0 flex-shrink-0">
+                  <h3 className="text-white font-semibold text-sm leading-tight">{tool.title}</h3>
+                  <Badge className="bg-purple-500/30 text-purple-200 border-purple-400/50 text-[10px] px-1.5 py-0 flex-shrink-0">
                     <Lock className="w-2.5 h-2.5 mr-1" />
                     BROKER ONLY
                   </Badge>
                 </div>
-                <p className="text-zinc-500 text-sm line-clamp-2">{tool.description}</p>
+                <p className="text-purple-100/80 text-sm line-clamp-2">{tool.description}</p>
               </div>
+              <ArrowUpRight className="w-5 h-5 text-purple-300 opacity-0 group-hover:opacity-100 transition-opacity flex-shrink-0" />
             </div>
           </CardContent>
         </Card>
@@ -453,12 +552,12 @@ const AIHub = () => {
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true }}
             >
-              <Badge className="bg-emerald-500/20 text-emerald-400 border-emerald-500/30 mb-4">
+              <Badge className="bg-purple-500/20 text-purple-400 border-purple-500/30 mb-4">
                 <Sparkles className="w-3 h-3 mr-1" />
                 Free AI Tools
               </Badge>
               <h2 className="text-2xl md:text-3xl font-bold text-white mb-2">
-                Investment & Property Tools
+                <span className="text-white">Investment &</span> <span className="text-purple-400">Property Tools</span>
               </h2>
               <p className="text-zinc-400 max-w-2xl mx-auto">
                 Powerful AI tools for property analysis, valuation, and investment decisions.
@@ -489,12 +588,12 @@ const AIHub = () => {
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true }}
             >
-              <Badge className="bg-indigo-500/20 text-indigo-400 border-indigo-500/30 mb-4">
+              <Badge className="bg-blue-500/20 text-blue-400 border-blue-500/30 mb-4">
                 <Calendar className="w-3 h-3 mr-1" />
                 Productivity Suite
               </Badge>
               <h2 className="text-2xl md:text-3xl font-bold text-white mb-2">
-                Productivity Tools
+                <span className="text-white">Productivity</span> <span className="text-blue-400">Tools</span>
               </h2>
               <p className="text-zinc-400 max-w-lg mx-auto">
                 Video meetings, documents, calendar, and signing tools.
@@ -525,12 +624,12 @@ const AIHub = () => {
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true }}
             >
-              <Badge className="bg-gold/20 text-gold border-gold/30 mb-4">
+              <Badge className="bg-amber-500/20 text-amber-400 border-amber-500/30 mb-4">
                 <GraduationCap className="w-3 h-3 mr-1" />
                 Education & Opportunities
               </Badge>
               <h2 className="text-2xl md:text-3xl font-bold text-white mb-2">
-                Learn, Earn & Grow
+                <span className="text-white">Learn, Earn &</span> <span className="text-amber-400">Grow</span>
               </h2>
               <p className="text-zinc-400 max-w-lg mx-auto">
                 Education, career opportunities, and referral rewards.
