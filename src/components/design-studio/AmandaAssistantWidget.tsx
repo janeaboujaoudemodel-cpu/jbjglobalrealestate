@@ -20,7 +20,7 @@ import { useAuth } from '@/contexts/AuthContext';
 import { toast } from 'sonner';
 
 // Import Amanda's photo
-import amandaClarkePhoto from '@/assets/team/amanda-clarke-executive.png';
+import amandaClarkePhoto from '@/assets/team/amanda-clarke-executive-assistant.png';
 
 interface AmandaAssistantWidgetProps {
   toolName: string;
