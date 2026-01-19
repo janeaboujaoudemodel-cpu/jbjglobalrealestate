@@ -140,12 +140,15 @@ const Services = () => {
           animate="visible"
           variants={staggerContainer}
         >
-          <motion.span 
-            className="inline-block text-gold text-xs md:text-sm uppercase tracking-[0.5em] mb-8 border border-gold/30 px-6 py-2 rounded-full backdrop-blur-sm"
+          {/* Premium Label - Same as Broker Hub hero style */}
+          <motion.button 
+            className="group inline-flex items-center gap-2 px-5 py-2.5 bg-gradient-to-r from-white via-[#FDFBF7] to-[#F5F0E6] border border-gold/40 rounded-full mb-8 shadow-md transition-all hover:shadow-lg cursor-default"
             variants={fadeInUp}
           >
-            Institutional Real Estate Brokerage
-          </motion.span>
+            <span className="w-2 h-2 bg-gold rounded-full animate-pulse group-hover:bg-black transition-colors" />
+            <span className="text-gold group-hover:text-black transition-colors font-semibold text-[10px] md:text-xs uppercase tracking-[0.2em]">Institutional</span>
+            <span className="text-black group-hover:text-gold transition-colors font-semibold text-[10px] md:text-xs uppercase tracking-[0.2em]">Real Estate Brokerage</span>
+          </motion.button>
           <motion.h1 
             className="text-white text-5xl md:text-7xl lg:text-8xl font-bold mb-8 tracking-[-0.02em]"
             style={{ fontFamily: "Poppins, sans-serif" }}
@@ -162,10 +165,10 @@ const Services = () => {
           </motion.p>
           
           <motion.div variants={fadeInUp} className="flex flex-col sm:flex-row gap-4 justify-center">
-            {/* Primary 3D Button */}
+            {/* Primary 3D Button - Split text with hover reverse */}
             <Link to="/properties">
               <button 
-                className="relative inline-flex items-center justify-center gap-2 px-10 py-6 text-base font-bold rounded-xl transition-all duration-300 group overflow-hidden"
+                className="group relative inline-flex items-center justify-center gap-2 px-10 py-6 text-base font-bold rounded-xl transition-all duration-300 overflow-hidden"
                 style={{
                   background: 'linear-gradient(135deg, #FFFFFF 0%, #FDFBF7 25%, #F5F0E6 50%, #E8DFD0 75%, #C8A766 100%)',
                   boxShadow: `
@@ -180,22 +183,19 @@ const Services = () => {
                 <span className="absolute inset-x-0 top-0 h-1/2 rounded-t-xl bg-gradient-to-b from-white/80 to-transparent pointer-events-none" />
                 <span className="absolute inset-0 rounded-xl opacity-0 group-hover:opacity-100 transition-opacity duration-300 pointer-events-none" style={{ boxShadow: '0 0 40px rgba(200,167,102,0.6), inset 0 0 20px rgba(200,167,102,0.1)' }} />
                 <span className="relative flex items-center gap-2">
-                  <span className="text-gold">Browse</span>
-                  <span className="text-black">Properties</span>
-                  <ArrowUpRight className="w-5 h-5 text-black" />
+                  <span className="text-black group-hover:text-gold transition-colors">Browse</span>
+                  <span className="text-gold group-hover:text-black transition-colors">Properties</span>
+                  <ArrowUpRight className="w-5 h-5 text-gold group-hover:text-black transition-colors" />
                 </span>
               </button>
             </Link>
-            {/* Secondary Button - White/champagne fill for dark background visibility */}
+            {/* Secondary Button - White/champagne fill for dark background visibility with hover reverse */}
             <Link to="/contact">
               <button 
-                className="relative inline-flex items-center justify-center gap-2 px-10 py-6 text-base font-bold rounded-xl transition-all duration-300 overflow-hidden"
-                style={{
-                  background: 'linear-gradient(135deg, #FFFFFF 0%, #FDFBF7 50%, #F5F0E6 100%)',
-                  border: '2px solid #000',
-                }}
+                className="group relative inline-flex items-center justify-center gap-2 px-10 py-6 text-base font-bold rounded-xl transition-all duration-300 overflow-hidden bg-gradient-to-r from-white via-[#FDFBF7] to-[#F5F0E6] border-2 border-black hover:bg-transparent hover:border-gold"
               >
-                <span className="text-black hover:text-black">Speak With Us</span>
+                <span className="text-black group-hover:text-gold transition-colors">Speak With Us</span>
+                <ArrowUpRight className="w-5 h-5 text-black group-hover:text-gold transition-colors" />
               </button>
             </Link>
           </motion.div>
@@ -242,22 +242,27 @@ const Services = () => {
                 {/* Content - No longer absolute */}
                 <div className="p-6 flex flex-col flex-1">
                   <div className="flex items-center gap-3 mb-3">
-                    <div className="w-12 h-12 rounded-xl bg-black flex items-center justify-center flex-shrink-0">
-                      <service.icon className="w-6 h-6 text-gold" />
+                    {/* REVERSED Icon Box: transparent border black on normal, filled on hover */}
+                    <div className="w-12 h-12 rounded-xl bg-transparent border-2 border-black flex items-center justify-center flex-shrink-0 group-hover:bg-black transition-all duration-300">
+                      <service.icon className="w-6 h-6 text-black group-hover:text-gold transition-colors" />
                     </div>
-                    <h3 className="text-black text-xl font-bold line-clamp-1">{service.title}</h3>
+                    <h3 className="text-gold group-hover:text-black text-xl font-bold line-clamp-1 transition-colors">{service.title}</h3>
                   </div>
                   
                   <p className="text-zinc-600 text-sm mb-4 line-clamp-2 flex-shrink-0">
                     {service.description}
                   </p>
                   
-                  {/* Features */}
+                  {/* Features - Gold text with black border and glow */}
                   <div className="flex flex-wrap gap-2 mb-4 flex-shrink-0">
                     {service.features.slice(0, 3).map((feature) => (
                       <span 
                         key={feature}
-                        className="text-xs text-black bg-zinc-100 px-2 py-1 rounded-full border border-zinc-200"
+                        className="text-xs text-gold px-2 py-1 rounded-lg border-2 border-black"
+                        style={{
+                          textShadow: '0 0 8px rgba(200,167,102,0.4)',
+                          boxShadow: 'inset 0 1px 2px rgba(0,0,0,0.1)',
+                        }}
                       >
                         {feature}
                       </span>
@@ -267,7 +272,7 @@ const Services = () => {
                   <div className="mt-auto">
                     <Link to={service.link}>
                       <button 
-                        className="relative w-full h-10 rounded-lg font-bold transition-all duration-300 group overflow-hidden flex items-center justify-center"
+                        className="relative w-full h-10 rounded-lg font-bold transition-all duration-300 group/btn overflow-hidden flex items-center justify-center"
                         style={{
                           background: 'linear-gradient(135deg, #FFFFFF 0%, #FDFBF7 25%, #F5F0E6 50%, #E8DFD0 75%, #C8A766 100%)',
                           boxShadow: `
@@ -279,10 +284,10 @@ const Services = () => {
                         }}
                       >
                         <span className="absolute inset-x-0 top-0 h-1/2 rounded-t-lg bg-gradient-to-b from-white/70 to-transparent pointer-events-none" />
-                        <span className="absolute inset-0 rounded-lg opacity-0 group-hover:opacity-100 transition-opacity duration-300 pointer-events-none" style={{ boxShadow: '0 0 25px rgba(200,167,102,0.5)' }} />
+                        <span className="absolute inset-0 rounded-lg opacity-0 group-hover/btn:opacity-100 transition-opacity duration-300 pointer-events-none" style={{ boxShadow: '0 0 25px rgba(200,167,102,0.5)' }} />
                         <span className="relative flex items-center gap-2">
-                          <span className="text-gold">Explore</span>
-                          <ArrowUpRight className="w-4 h-4 text-black" />
+                          <span className="text-black group-hover/btn:text-gold transition-colors">Explore</span>
+                          <ArrowUpRight className="w-4 h-4 text-gold group-hover/btn:text-black transition-colors" />
                         </span>
                       </button>
                     </Link>
@@ -322,35 +327,39 @@ const Services = () => {
             </p>
           </motion.div>
 
-          <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
-            {[
-              { name: "AI Property Comparison", icon: FileSearch, link: "/compare" },
-              { name: "AI Interior Design", icon: Palette, link: "/interior-design-ai" },
-              { name: "AI Measurement", icon: Building2, link: "/property-measurement" },
-              { name: "Mortgage Calculator", icon: Calculator, link: "/mortgage-calculator" }
-            ].map((tool) => (
-              <Link key={tool.name} to={tool.link}>
-                <motion.div 
-                  className="p-6 rounded-2xl bg-gradient-to-br from-white via-[#FDFBF7] to-[#F5F0E6] border border-gold/30 hover:border-black hover:shadow-xl transition-all duration-300 group cursor-pointer"
-                  whileHover={{ scale: 1.02 }}
-                >
-                  <div className="w-14 h-14 rounded-xl bg-gradient-to-br from-white via-[#FDFBF7] to-[#F5F0E6] border border-gold/30 flex items-center justify-center mb-4">
-                    <tool.icon className="w-7 h-7 text-black group-hover:text-gold transition-colors" />
-                  </div>
-                  <h4 className="text-gold font-semibold mb-2 group-hover:text-black transition-colors">
-                    {tool.name}
-                  </h4>
-                  <ArrowUpRight className="w-4 h-4 text-black group-hover:text-gold group-hover:translate-x-1 group-hover:-translate-y-1 transition-all" />
-                </motion.div>
-              </Link>
-            ))}
+          {/* White background container for AI tools */}
+          <div className="bg-gradient-to-br from-white via-[#FDFBF7] to-[#F5F0E6] rounded-3xl p-8 mb-8 mx-4 md:mx-8">
+            <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-6">
+              {[
+                { name: "AI Property Comparison", icon: FileSearch, link: "/compare" },
+                { name: "AI Interior Design", icon: Palette, link: "/interior-design-ai" },
+                { name: "AI Measurement", icon: Building2, link: "/property-measurement" },
+                { name: "Mortgage Calculator", icon: Calculator, link: "/mortgage-calculator" }
+              ].map((tool) => (
+                <Link key={tool.name} to={tool.link}>
+                  <motion.div 
+                    className="p-6 rounded-2xl bg-transparent border-2 border-black hover:bg-gradient-to-br hover:from-[#FDFBF7] hover:via-[#F5F0E6] hover:to-[#EDE4D3] hover:border-gold transition-all duration-300 group cursor-pointer"
+                    whileHover={{ scale: 1.02 }}
+                  >
+                    {/* REVERSED Icon Box: transparent border black on normal */}
+                    <div className="w-14 h-14 rounded-xl bg-transparent border-2 border-black flex items-center justify-center mb-4 group-hover:bg-black transition-all duration-300">
+                      <tool.icon className="w-7 h-7 text-black group-hover:text-gold transition-colors" />
+                    </div>
+                    <h4 className="text-gold font-semibold mb-2 group-hover:text-black transition-colors">
+                      {tool.name}
+                    </h4>
+                    <ArrowUpRight className="w-4 h-4 text-gold group-hover:text-black group-hover:translate-x-1 group-hover:-translate-y-1 transition-all" />
+                  </motion.div>
+                </Link>
+              ))}
+            </div>
           </div>
           
-          {/* Explore More Tools Button - 3D Premium Style */}
+          {/* Explore More Tools Button - 3D Premium Style with hover reverse */}
           <div className="text-center">
             <Link to="/ai-hub">
               <button 
-                className="relative inline-flex items-center justify-center gap-2 px-10 py-5 text-base font-bold rounded-xl transition-all duration-300 group overflow-hidden"
+                className="group relative inline-flex items-center justify-center gap-2 px-10 py-5 text-base font-bold rounded-xl transition-all duration-300 overflow-hidden"
                 style={{
                   background: 'linear-gradient(135deg, #FFFFFF 0%, #FDFBF7 25%, #F5F0E6 50%, #E8DFD0 75%, #C8A766 100%)',
                   boxShadow: `
@@ -365,9 +374,9 @@ const Services = () => {
                 <span className="absolute inset-x-0 top-0 h-1/2 rounded-t-xl bg-gradient-to-b from-white/80 to-transparent pointer-events-none" />
                 <span className="absolute inset-0 rounded-xl opacity-0 group-hover:opacity-100 transition-opacity duration-300 pointer-events-none" style={{ boxShadow: '0 0 35px rgba(200,167,102,0.6), inset 0 0 18px rgba(200,167,102,0.1)' }} />
                 <span className="relative flex items-center gap-2">
-                  <span className="text-gold">Explore More</span>
-                  <span className="text-black">AI Tools</span>
-                  <ArrowUpRight className="w-5 h-5 text-black" />
+                  <span className="text-black group-hover:text-gold transition-colors">Explore More</span>
+                  <span className="text-gold group-hover:text-black transition-colors">AI Tools</span>
+                  <ArrowUpRight className="w-5 h-5 text-gold group-hover:text-black transition-colors" />
                 </span>
               </button>
             </Link>

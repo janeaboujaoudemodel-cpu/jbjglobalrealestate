@@ -89,10 +89,11 @@ const Architecture = () => {
           </motion.div>
 
           <motion.div variants={fadeInUp}>
-            <span className="inline-flex items-center gap-2 text-gold text-xs md:text-sm uppercase tracking-[0.4em] mb-6">
-              <Ruler className="w-4 h-4" />
-              Architecture Services
-            </span>
+            <button className="group inline-flex items-center gap-2 px-5 py-2.5 bg-gradient-to-r from-white via-[#FDFBF7] to-[#F5F0E6] border border-gold/40 rounded-full mb-6 shadow-md transition-all hover:shadow-lg cursor-default">
+              <Ruler className="w-4 h-4 text-gold group-hover:text-black transition-colors" />
+              <span className="text-gold group-hover:text-black transition-colors font-semibold text-[10px] md:text-xs uppercase tracking-[0.2em]">Architecture</span>
+              <span className="text-black group-hover:text-gold transition-colors font-semibold text-[10px] md:text-xs uppercase tracking-[0.2em]">Services</span>
+            </button>
           </motion.div>
 
           <motion.h1 

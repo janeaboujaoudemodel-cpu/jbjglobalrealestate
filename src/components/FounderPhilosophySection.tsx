@@ -51,7 +51,8 @@ export const FounderPhilosophySection = () => {
             >
               <Link to="/founder" className="block group">
                 {/* GLOBAL IMAGE RULE - LOCKED (FINAL):
-                    object-fit: cover + center 5% = max zoom, focus on face, never crop head */}
+                    object-fit: cover + center 0% = max zoom, focus on face, never crop head
+                    Zoomed out to show full body while lifting head up */}
                 <div className="w-36 h-36 md:w-44 md:h-44 rounded-full overflow-hidden border-2 border-white/50 group-hover:border-white group-hover:shadow-[0_0_20px_rgba(255,255,255,0.4)] transition-all duration-300 shadow-lg bg-zinc-900">
                   <img 
                     src={founderPremium}
@@ -59,14 +60,14 @@ export const FounderPhilosophySection = () => {
                     className="w-full h-full"
                     style={{
                       objectFit: 'cover',
-                      objectPosition: 'center 0%',
-                      transform: 'scale(1.5)',
+                      objectPosition: 'center 15%',
+                      transform: 'scale(1.2)',
                     }}
                     loading="lazy"
                   />
                 </div>
               </Link>
-              {/* Know More About the Founder - Primary 3D on normal, Secondary on hover */}
+              {/* Know More About the Founder - REVERSED: black text/gold Founder on normal, opposite on hover */}
               <button 
                 onClick={() => window.location.href = '/founder'}
                 className="group/btn mt-4 relative inline-flex items-center justify-center gap-2 px-4 py-2 text-sm font-bold rounded-xl transition-all duration-300 overflow-hidden w-full"
@@ -83,9 +84,9 @@ export const FounderPhilosophySection = () => {
               >
                 <span className="absolute inset-x-0 top-0 h-1/2 rounded-t-xl bg-gradient-to-b from-white/80 to-transparent pointer-events-none" />
                 <span className="relative flex items-center justify-center gap-1">
-                  <span className="text-gold group-hover/btn:text-black transition-colors">Know More About the</span>
-                  <span className="text-black group-hover/btn:text-gold transition-colors">Founder</span>
-                  <span className="text-gold group-hover/btn:text-black transition-colors">↗</span>
+                  <span className="text-black group-hover/btn:text-gold transition-colors">Know More About the</span>
+                  <span className="text-gold group-hover/btn:text-black transition-colors">Founder</span>
+                  <span className="text-black group-hover/btn:text-gold transition-colors">↗</span>
                 </span>
               </button>
             </motion.div>
@@ -95,14 +96,14 @@ export const FounderPhilosophySection = () => {
               variants={fadeInUp}
               className="flex-1"
             >
-              {/* Attribution - Premium styling, no underlines */}
+              {/* Attribution - Premium styling with gold/champagne/pearl glow, no underlines */}
               <p className="text-sm font-medium tracking-wide mb-6">
                 <span className="text-white uppercase tracking-[0.15em] text-lg md:text-xl">Written by Founder & CEO,</span>{" "}
                 <Link 
                   to="/founder" 
-                  className="text-transparent bg-clip-text bg-gradient-to-r from-[#D4AF37] via-[#F5D485] to-[#D4AF37] text-xl md:text-2xl font-bold hover:opacity-80 transition-opacity"
+                  className="text-transparent bg-clip-text bg-gradient-to-r from-[#F5F0E6] via-[#FDFBF7] to-white text-xl md:text-2xl font-bold hover:opacity-80 transition-opacity"
                   style={{
-                    filter: 'drop-shadow(0 0 8px rgba(212,175,55,0.5))',
+                    filter: 'drop-shadow(0 0 12px rgba(255,255,255,0.4)) drop-shadow(0 0 20px rgba(212,175,55,0.3))',
                   }}
                 >
                   Jane Abou Jaoude
@@ -110,14 +111,14 @@ export const FounderPhilosophySection = () => {
                 <span className="block mt-2">
                   <Link 
                     to="/about" 
-                    className="text-transparent bg-clip-text bg-gradient-to-r from-[#D4AF37] via-[#F5D485] to-[#D4AF37] text-lg font-semibold hover:opacity-80 transition-opacity"
+                    className="group/jbj text-transparent bg-clip-text bg-gradient-to-r from-[#F5F0E6] via-[#FDFBF7] to-white text-lg font-semibold hover:opacity-80 transition-all"
                     style={{
-                      filter: 'drop-shadow(0 0 8px rgba(212,175,55,0.5))',
+                      filter: 'drop-shadow(0 0 10px rgba(255,255,255,0.4)) drop-shadow(0 0 18px rgba(212,175,55,0.3))',
                     }}
                   >
                     JBJ Global Real Estate
                   </Link>
-                  <span className="block h-0.5 w-24 bg-gradient-to-r from-[#D4AF37] via-[#F5D485] to-[#D4AF37] mt-2" />
+                  <span className="block h-0.5 w-24 bg-gradient-to-r from-white via-[#FDFBF7] to-[#F5F0E6] mt-2" style={{ boxShadow: '0 0 10px rgba(255,255,255,0.5)' }} />
                 </span>
               </p>
 
@@ -141,10 +142,17 @@ export const FounderPhilosophySection = () => {
                     At{" "}
                     <Link 
                       to="/about" 
-                      className="text-transparent bg-clip-text bg-gradient-to-r from-[#D4AF37] via-[#F5D485] to-[#D4AF37] font-semibold hover:opacity-80 transition-opacity"
-                      style={{ filter: 'drop-shadow(0 0 6px rgba(212,175,55,0.5))' }}
+                      className="group/jbj text-transparent bg-clip-text bg-gradient-to-r from-[#F5F0E6] via-[#FDFBF7] to-white font-semibold hover:opacity-80 transition-all inline-block"
+                      style={{ 
+                        filter: 'drop-shadow(0 0 8px rgba(255,255,255,0.4))',
+                      }}
                     >
-                      JBJ Global Real Estate
+                      <span 
+                        className="transition-transform group-hover/jbj:scale-105"
+                        style={{ textShadow: '0 2px 4px rgba(0,0,0,0.1)' }}
+                      >
+                        JBJ Global Real Estate
+                      </span>
                     </Link>
                     , we work with clients as if we are investing our own capital. We do not treat a client's portfolio as a transaction. We treat it as if it were our own.
                   </p>
@@ -186,13 +194,10 @@ export const FounderPhilosophySection = () => {
                   </p>
                 </div>
 
-                {/* Signature */}
+                {/* Signature - Restored: Jane in black, CEO in gold, JBJ in black */}
                 <div className="pt-8 mt-8 border-t border-zinc-200">
                   <Link to="/founder" className="hover:opacity-80 transition-opacity">
-                    <p 
-                      className="text-transparent bg-clip-text bg-gradient-to-r from-[#D4AF37] via-[#F5D485] to-[#D4AF37] text-lg font-semibold tracking-wide"
-                      style={{ filter: 'drop-shadow(0 0 6px rgba(212,175,55,0.4))' }}
-                    >
+                    <p className="text-black text-lg font-semibold tracking-wide">
                       Jane Abou Jaoude
                     </p>
                   </Link>
@@ -200,10 +205,7 @@ export const FounderPhilosophySection = () => {
                     Founder & CEO
                   </p>
                   <Link to="/about" className="hover:opacity-80 transition-opacity">
-                    <p 
-                      className="text-transparent bg-clip-text bg-gradient-to-r from-[#D4AF37] via-[#F5D485] to-[#D4AF37] text-sm mt-0.5 tracking-wide font-medium"
-                      style={{ filter: 'drop-shadow(0 0 4px rgba(212,175,55,0.3))' }}
-                    >
+                    <p className="text-black text-sm mt-0.5 tracking-wide font-medium">
                       JBJ Global Real Estate
                     </p>
                   </Link>

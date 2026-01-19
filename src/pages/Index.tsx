@@ -508,13 +508,13 @@ const Index = () => {
               variants={fadeInUp}
             >
               <div className="grid md:grid-cols-2 gap-0">
-                {/* Photo Side - Bright Champagne/Gold gradient for contrast */}
+                {/* Photo Side - Bright Champagne/Gold gradient for contrast - Zoomed out to show full body */}
                 <div className="relative bg-gradient-to-br from-[#FDFBF7] via-[#F5F0E6] to-[#C8A766]">
                   <img
                     src={founderProfessional}
                     alt="Jane Abou Jaoude - Founder & CEO at JBJ Global Real Estate"
                     className="w-full h-full min-h-[400px] md:min-h-[500px]"
-                    style={{ objectFit: "cover", objectPosition: "center 35%" }}
+                    style={{ objectFit: "cover", objectPosition: "center 25%" }}
                   />
                   <div className="absolute inset-0 bg-gradient-to-r from-transparent to-zinc-900/40 md:block hidden pointer-events-none" />
                 </div>
