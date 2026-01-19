@@ -1,6 +1,7 @@
 export { default as AIBackgroundGenerator } from './AIBackgroundGenerator';
 export { default as BeautyFiltersPanel } from './BeautyFiltersPanel';
-export { default as ChatWordFilter } from './ChatWordFilter';
+export { filterChatMessage, getViolationWarning } from './ChatWordFilter';
+export type { FilterResult } from './ChatWordFilter';
 export { default as MeetingAIAssistant } from './MeetingAIAssistant';
 export { default as PreJoinForm } from './PreJoinForm';
 export { default as PreJoinScreen } from './PreJoinScreen';
