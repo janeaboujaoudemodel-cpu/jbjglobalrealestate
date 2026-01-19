@@ -472,41 +472,41 @@ ${COMPANY_CONTACTS.email}`;
 
   return (
     <Dialog open={isOpen} onOpenChange={onClose}>
-      <DialogContent className="max-w-2xl max-h-[80vh] bg-card border-border">
+      <DialogContent className="max-w-2xl max-h-[80vh] bg-white border-2 border-gold/30 shadow-[0_10px_40px_rgba(200,167,102,0.2)]">
         <DialogHeader>
-          <DialogTitle className="text-white flex items-center gap-3">
+          <DialogTitle className="text-black flex items-center gap-3">
             <div className="relative">
               {/* GLOBAL IMAGE RULE - LOCKED (FINAL): max zoom, crop from bottom */}
               <img 
                 src={ASSISTANT_IDENTITY.avatar} 
                 alt={ASSISTANT_IDENTITY.name}
-                className="w-10 h-10 rounded-full border-2 border-gold bg-zinc-950"
+                className="w-10 h-10 rounded-full border-2 border-gold bg-white"
                 style={{ objectFit: "cover", objectPosition: "center 15%" }}
               />
-              <span className="absolute -bottom-0.5 -right-0.5 w-3 h-3 bg-green-500 rounded-full border-2 border-card" />
+              <span className="absolute -bottom-0.5 -right-0.5 w-3 h-3 bg-green-500 rounded-full border-2 border-white" />
             </div>
             <div>
-              <span className="text-lg font-bold">{ASSISTANT_IDENTITY.name}</span>
-              <p className="text-xs text-muted-foreground font-normal">{ASSISTANT_IDENTITY.title}</p>
+              <span className="text-lg font-bold text-black">{ASSISTANT_IDENTITY.name}</span>
+              <p className="text-xs text-zinc-500 font-normal">{ASSISTANT_IDENTITY.title}</p>
             </div>
           </DialogTitle>
         </DialogHeader>
 
         <Tabs value={activeTab} onValueChange={setActiveTab}>
-          <TabsList className="w-full bg-muted/50 grid grid-cols-4">
-            <TabsTrigger value="assistant" className="data-[state=active]:bg-gold/20 data-[state=active]:text-gold">
+          <TabsList className="w-full bg-zinc-50 border-2 border-gold/20 grid grid-cols-4">
+            <TabsTrigger value="assistant" className="data-[state=active]:bg-gold data-[state=active]:text-black text-black">
               <Sparkles className="h-4 w-4 mr-1" />
               Assistant
             </TabsTrigger>
-            <TabsTrigger value="tasks" className="data-[state=active]:bg-gold/20 data-[state=active]:text-gold">
+            <TabsTrigger value="tasks" className="data-[state=active]:bg-gold data-[state=active]:text-black text-black">
               <ListTodo className="h-4 w-4 mr-1" />
               Tasks ({tasks.filter(t => !t.completed).length})
             </TabsTrigger>
-            <TabsTrigger value="employees" className="data-[state=active]:bg-gold/20 data-[state=active]:text-gold">
+            <TabsTrigger value="employees" className="data-[state=active]:bg-gold data-[state=active]:text-black text-black">
               <Users className="h-4 w-4 mr-1" />
               Team
             </TabsTrigger>
-            <TabsTrigger value="drafts" className="data-[state=active]:bg-gold/20 data-[state=active]:text-gold">
+            <TabsTrigger value="drafts" className="data-[state=active]:bg-gold data-[state=active]:text-black text-black">
               <FileText className="h-4 w-4 mr-1" />
               Drafts ({drafts.length})
             </TabsTrigger>
@@ -517,36 +517,36 @@ ${COMPANY_CONTACTS.email}`;
             {/* Quick Communication Buttons */}
             <div className="grid grid-cols-4 gap-2">
               <Button
-                variant="outline"
-                className="flex flex-col items-center gap-1 h-auto py-3 border-green-500/30 hover:bg-green-500/10"
+                variant="secondary"
+                className="flex flex-col items-center gap-1 h-auto py-3 border-green-200 hover:bg-green-50"
                 onClick={handleWhatsAppFounder}
               >
-                <MessageSquare className="h-5 w-5 text-green-500" />
-                <span className="text-xs text-green-400">WhatsApp</span>
+                <MessageSquare className="h-5 w-5 text-green-600" />
+                <span className="text-xs text-green-600">WhatsApp</span>
               </Button>
               <Button
-                variant="outline"
-                className="flex flex-col items-center gap-1 h-auto py-3 border-blue-500/30 hover:bg-blue-500/10"
+                variant="secondary"
+                className="flex flex-col items-center gap-1 h-auto py-3 border-blue-200 hover:bg-blue-50"
                 onClick={handleCallFounder}
               >
-                <Phone className="h-5 w-5 text-blue-500" />
-                <span className="text-xs text-blue-400">Call</span>
+                <Phone className="h-5 w-5 text-blue-600" />
+                <span className="text-xs text-blue-600">Call</span>
               </Button>
               <Button
-                variant="outline"
-                className="flex flex-col items-center gap-1 h-auto py-3 border-purple-500/30 hover:bg-purple-500/10"
+                variant="secondary"
+                className="flex flex-col items-center gap-1 h-auto py-3 border-purple-200 hover:bg-purple-50"
                 onClick={handleVideoCall}
               >
-                <Video className="h-5 w-5 text-purple-500" />
-                <span className="text-xs text-purple-400">Video</span>
+                <Video className="h-5 w-5 text-purple-600" />
+                <span className="text-xs text-purple-600">Video</span>
               </Button>
               <Button
-                variant="outline"
-                className="flex flex-col items-center gap-1 h-auto py-3 border-amber-500/30 hover:bg-amber-500/10"
+                variant="secondary"
+                className="flex flex-col items-center gap-1 h-auto py-3 border-amber-200 hover:bg-amber-50"
                 onClick={() => toast.info("Voice note feature coming soon")}
               >
-                <Mic className="h-5 w-5 text-amber-500" />
-                <span className="text-xs text-amber-400">Voice</span>
+                <Mic className="h-5 w-5 text-amber-600" />
+                <span className="text-xs text-amber-600">Voice</span>
               </Button>
             </div>
 

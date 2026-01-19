@@ -172,15 +172,15 @@ const FoundersHotLeadsPanel: React.FC<FoundersHotLeadsPanelProps> = ({ onLeadCli
   return (
     <div className="space-y-6">
       {/* Personal Hot Leads Notice */}
-      <Card className="bg-gradient-to-r from-gold/10 to-orange-500/10 border-gold/30">
+      <Card className="bg-gradient-to-r from-gold/10 to-amber-500/10 border-2 border-gold/30 shadow-[0_4px_20px_rgba(200,167,102,0.1)]">
         <CardContent className="p-4">
           <div className="flex items-start gap-3">
-            <div className="p-2 rounded-lg bg-gold/20">
+            <div className="p-2 rounded-lg bg-gold/20 border border-gold/30">
               <Bell className="w-5 h-5 text-gold" />
             </div>
             <div>
-              <h4 className="text-white font-semibold">Your Personal Hot Leads</h4>
-              <p className="text-sm text-gray-400 mt-1">
+              <h4 className="text-black font-semibold">Your Personal Hot Leads</h4>
+              <p className="text-sm text-zinc-500 mt-1">
                 These are YOUR assigned VIP leads. Follow up within 3 days to maintain ownership.
                 Leads inactive for 72+ hours may be reassigned automatically.
               </p>
@@ -189,34 +189,34 @@ const FoundersHotLeadsPanel: React.FC<FoundersHotLeadsPanelProps> = ({ onLeadCli
         </CardContent>
       </Card>
 
-      {/* Stats Overview */}
+      {/* Stats Overview - White Pearl/Gold Champagne */}
       <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
-        <Card className="bg-[#0E0E0E] border-gold/20">
+        <Card className="bg-white border-2 border-gold/30 shadow-[0_4px_20px_rgba(200,167,102,0.1)]">
           <CardContent className="p-4 text-center">
             <Flame className="w-6 h-6 text-gold mx-auto mb-2" />
             <p className="text-2xl font-bold text-gold">{leads.length}</p>
-            <p className="text-xs text-gray-400">Total Hot Leads</p>
+            <p className="text-xs text-zinc-500">Total Hot Leads</p>
           </CardContent>
         </Card>
-        <Card className="bg-[#0E0E0E] border-red-500/20">
+        <Card className="bg-white border-2 border-red-500/30 shadow-[0_4px_20px_rgba(239,68,68,0.1)]">
           <CardContent className="p-4 text-center">
-            <AlertTriangle className="w-6 h-6 text-red-400 mx-auto mb-2" />
-            <p className="text-2xl font-bold text-red-400">{criticalLeads}</p>
-            <p className="text-xs text-gray-400">Critical (72h+)</p>
+            <AlertTriangle className="w-6 h-6 text-red-600 mx-auto mb-2" />
+            <p className="text-2xl font-bold text-red-600">{criticalLeads}</p>
+            <p className="text-xs text-zinc-500">Critical (72h+)</p>
           </CardContent>
         </Card>
-        <Card className="bg-[#0E0E0E] border-orange-500/20">
+        <Card className="bg-white border-2 border-orange-500/30 shadow-[0_4px_20px_rgba(249,115,22,0.1)]">
           <CardContent className="p-4 text-center">
-            <Timer className="w-6 h-6 text-orange-400 mx-auto mb-2" />
-            <p className="text-2xl font-bold text-orange-400">{highPriorityLeads}</p>
-            <p className="text-xs text-gray-400">High Priority</p>
+            <Timer className="w-6 h-6 text-orange-600 mx-auto mb-2" />
+            <p className="text-2xl font-bold text-orange-600">{highPriorityLeads}</p>
+            <p className="text-xs text-zinc-500">High Priority</p>
           </CardContent>
         </Card>
-        <Card className="bg-[#0E0E0E] border-green-500/20">
+        <Card className="bg-white border-2 border-green-500/30 shadow-[0_4px_20px_rgba(34,197,94,0.1)]">
           <CardContent className="p-4 text-center">
-            <User className="w-6 h-6 text-green-400 mx-auto mb-2" />
-            <p className="text-2xl font-bold text-green-400">{activeLeads}</p>
-            <p className="text-xs text-gray-400">Active</p>
+            <User className="w-6 h-6 text-green-600 mx-auto mb-2" />
+            <p className="text-2xl font-bold text-green-600">{activeLeads}</p>
+            <p className="text-xs text-zinc-500">Active</p>
           </CardContent>
         </Card>
       </div>
@@ -224,18 +224,17 @@ const FoundersHotLeadsPanel: React.FC<FoundersHotLeadsPanelProps> = ({ onLeadCli
       {/* Header with Refresh */}
       <div className="flex items-center justify-between">
         <div>
-          <h3 className="text-lg font-semibold text-white flex items-center gap-2">
-            <Flame className="w-5 h-5 text-orange-400" />
+          <h3 className="text-lg font-semibold text-black flex items-center gap-2">
+            <Flame className="w-5 h-5 text-orange-500" />
             Hot Leads Queue
           </h3>
-          <p className="text-sm text-gray-400">Sorted by urgency - Most critical first</p>
+          <p className="text-sm text-zinc-500">Sorted by urgency - Most critical first</p>
         </div>
         <Button
           size="sm"
-          variant="outline"
+          variant="secondary"
           onClick={handleRefresh}
           disabled={refreshing}
-          className="border-gold/20 text-gold hover:bg-gold/10"
         >
           <RefreshCw className={`w-4 h-4 mr-2 ${refreshing ? 'animate-spin' : ''}`} />
           Refresh
@@ -247,15 +246,15 @@ const FoundersHotLeadsPanel: React.FC<FoundersHotLeadsPanelProps> = ({ onLeadCli
         <motion.div
           initial={{ opacity: 0, scale: 0.95 }}
           animate={{ opacity: 1, scale: 1 }}
-          className="p-4 rounded-lg bg-red-500/10 border border-red-500/30"
+          className="p-4 rounded-lg bg-red-50 border-2 border-red-200 shadow-[0_4px_20px_rgba(239,68,68,0.1)]"
         >
           <div className="flex items-center gap-3">
-            <AlertCircle className="w-6 h-6 text-red-400" />
+            <AlertCircle className="w-6 h-6 text-red-600" />
             <div>
-              <p className="text-red-400 font-semibold">
+              <p className="text-red-700 font-semibold">
                 {criticalLeads} lead{criticalLeads > 1 ? 's' : ''} at risk of reassignment!
               </p>
-              <p className="text-sm text-red-300/70">
+              <p className="text-sm text-red-600/80">
                 Contact these leads immediately to maintain ownership.
               </p>
             </div>
@@ -267,12 +266,12 @@ const FoundersHotLeadsPanel: React.FC<FoundersHotLeadsPanelProps> = ({ onLeadCli
       <ScrollArea className="h-[400px]">
         <div className="space-y-3">
           {leads.length === 0 ? (
-            <Card className="bg-[#0E0E0E] border-gold/20">
+            <Card className="bg-white border-2 border-gold/20 shadow-[0_4px_20px_rgba(200,167,102,0.1)]">
               <CardContent className="p-8 text-center">
                 <Flame className="w-16 h-16 text-gold/30 mx-auto mb-4" />
-                <h4 className="text-white font-semibold mb-2">No Hot Leads</h4>
-                <p className="text-gray-400">No hot leads at the moment</p>
-                <p className="text-sm text-gray-500 mt-1">Great job staying on top of your leads!</p>
+                <h4 className="text-black font-semibold mb-2">No Hot Leads</h4>
+                <p className="text-zinc-500">No hot leads at the moment</p>
+                <p className="text-sm text-zinc-400 mt-1">Great job staying on top of your leads!</p>
               </CardContent>
             </Card>
           ) : (
@@ -295,37 +294,47 @@ const FoundersHotLeadsPanel: React.FC<FoundersHotLeadsPanelProps> = ({ onLeadCli
                     transition={{ delay: index * 0.05 }}
                   >
                     <Card 
-                      className={`bg-[#0E0E0E] border-2 transition-all cursor-pointer hover:scale-[1.01] ${urgencyStyles[urgency.level]}`}
+                      className={`bg-white border-2 transition-all cursor-pointer hover:scale-[1.01] hover:shadow-[0_4px_20px_rgba(200,167,102,0.15)] ${
+                        urgency.level === 'critical' ? 'border-red-300' :
+                        urgency.level === 'high' ? 'border-orange-300' :
+                        urgency.level === 'medium' ? 'border-amber-300' :
+                        'border-green-300'
+                      }`}
                       onClick={() => onLeadClick?.(lead.id)}
                     >
                       <CardContent className="p-4">
                         <div className="flex items-start justify-between mb-3">
                           <div className="flex items-start gap-4 flex-1">
                             <div className={`w-12 h-12 rounded-full flex items-center justify-center ${
-                              urgency.level === 'critical' ? 'bg-red-500/20' :
-                              urgency.level === 'high' ? 'bg-orange-500/20' :
-                              urgency.level === 'medium' ? 'bg-yellow-500/20' :
-                              'bg-green-500/20'
+                              urgency.level === 'critical' ? 'bg-red-50' :
+                              urgency.level === 'high' ? 'bg-orange-50' :
+                              urgency.level === 'medium' ? 'bg-amber-50' :
+                              'bg-green-50'
                             }`}>
                               <User className={`w-6 h-6 ${
-                                urgency.level === 'critical' ? 'text-red-400' :
-                                urgency.level === 'high' ? 'text-orange-400' :
-                                urgency.level === 'medium' ? 'text-yellow-400' :
-                                'text-green-400'
+                                urgency.level === 'critical' ? 'text-red-600' :
+                                urgency.level === 'high' ? 'text-orange-600' :
+                                urgency.level === 'medium' ? 'text-amber-600' :
+                                'text-green-600'
                               }`} />
                             </div>
                             <div className="flex-1 min-w-0">
                               <div className="flex items-center gap-2 flex-wrap">
-                                <h4 className="text-white font-semibold truncate">{lead.full_name || 'Unknown'}</h4>
+                                <h4 className="text-black font-semibold truncate">{lead.full_name || 'Unknown'}</h4>
                                 {lead.vip && (
-                                  <Badge className="bg-gold/10 text-gold border-gold/30">⭐ VIP</Badge>
+                                  <Badge className="bg-gold/10 text-gold border border-gold/30">⭐ VIP</Badge>
                                 )}
-                                <Badge className={urgencyBadgeStyles[urgency.level]}>
+                                <Badge className={`border ${
+                                  urgency.level === 'critical' ? 'bg-red-50 text-red-600 border-red-200' :
+                                  urgency.level === 'high' ? 'bg-orange-50 text-orange-600 border-orange-200' :
+                                  urgency.level === 'medium' ? 'bg-amber-50 text-amber-600 border-amber-200' :
+                                  'bg-green-50 text-green-600 border-green-200'
+                                }`}>
                                   {urgency.level.toUpperCase()}
                                 </Badge>
                               </div>
-                              <p className="text-sm text-gray-400 mt-1">{urgency.message}</p>
-                              <div className="flex items-center gap-4 mt-2 text-sm text-gray-400 flex-wrap">
+                              <p className="text-sm text-zinc-500 mt-1">{urgency.message}</p>
+                              <div className="flex items-center gap-4 mt-2 text-sm text-zinc-400 flex-wrap">
                                 {lead.source && (
                                   <span className="flex items-center gap-1">
                                     <Building className="w-3 h-3" />
@@ -345,11 +354,11 @@ const FoundersHotLeadsPanel: React.FC<FoundersHotLeadsPanelProps> = ({ onLeadCli
                         {urgency.level !== 'low' && (
                           <div className="mb-3">
                             <div className="flex items-center justify-between text-xs mb-1">
-                              <span className="text-gray-500">Time until reassignment risk</span>
+                              <span className="text-zinc-400">Time until reassignment risk</span>
                               <span className={
-                                urgency.level === 'critical' ? 'text-red-400' :
-                                urgency.level === 'high' ? 'text-orange-400' :
-                                'text-yellow-400'
+                                urgency.level === 'critical' ? 'text-red-600' :
+                                urgency.level === 'high' ? 'text-orange-600' :
+                                'text-amber-600'
                               }>
                                 {timeToReassign > 0 ? `${Math.floor(timeToReassign)}h remaining` : 'At risk!'}
                               </span>
@@ -357,9 +366,9 @@ const FoundersHotLeadsPanel: React.FC<FoundersHotLeadsPanelProps> = ({ onLeadCli
                             <Progress 
                               value={progressValue} 
                               className={`h-1.5 ${
-                                urgency.level === 'critical' ? 'bg-red-900' :
-                                urgency.level === 'high' ? 'bg-orange-900' :
-                                'bg-yellow-900'
+                                urgency.level === 'critical' ? 'bg-red-100' :
+                                urgency.level === 'high' ? 'bg-orange-100' :
+                                'bg-amber-100'
                               }`}
                             />
                           </div>
@@ -371,7 +380,7 @@ const FoundersHotLeadsPanel: React.FC<FoundersHotLeadsPanelProps> = ({ onLeadCli
                             <Button
                               size="sm"
                               onClick={(e) => { e.stopPropagation(); handleContact(lead, 'call'); }}
-                              className="bg-green-500/10 text-green-400 hover:bg-green-500/20 border border-green-500/30"
+                              className="bg-green-50 text-green-600 hover:bg-green-100 border border-green-200"
                             >
                               <Phone className="w-4 h-4 mr-1" />
                               Call
@@ -381,7 +390,7 @@ const FoundersHotLeadsPanel: React.FC<FoundersHotLeadsPanelProps> = ({ onLeadCli
                             <Button
                               size="sm"
                               onClick={(e) => { e.stopPropagation(); handleContact(lead, 'email'); }}
-                              className="bg-blue-500/10 text-blue-400 hover:bg-blue-500/20 border border-blue-500/30"
+                              className="bg-blue-50 text-blue-600 hover:bg-blue-100 border border-blue-200"
                             >
                               <Mail className="w-4 h-4 mr-1" />
                               Email
@@ -391,14 +400,14 @@ const FoundersHotLeadsPanel: React.FC<FoundersHotLeadsPanelProps> = ({ onLeadCli
                             <Button
                               size="sm"
                               onClick={(e) => { e.stopPropagation(); handleContact(lead, 'whatsapp'); }}
-                              className="bg-emerald-500/10 text-emerald-400 hover:bg-emerald-500/20 border border-emerald-500/30"
+                              className="bg-emerald-50 text-emerald-600 hover:bg-emerald-100 border border-emerald-200"
                             >
                               <MessageSquare className="w-4 h-4 mr-1" />
                               WhatsApp
                             </Button>
                           )}
                           <div className="flex-1" />
-                          <ChevronRight className="w-5 h-5 text-gray-500" />
+                          <ChevronRight className="w-5 h-5 text-zinc-400" />
                         </div>
                       </CardContent>
                     </Card>
