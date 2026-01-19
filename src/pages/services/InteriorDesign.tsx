@@ -125,10 +125,18 @@ const InteriorDesign = () => {
 
           <motion.div variants={fadeInUp}>
             <a href={CONTACT_INFO.inquiryFormUrl} target="_blank" rel="noopener noreferrer">
-              <Button variant="primary" className="px-8 py-6 text-base">
-                Book a Consultation
-                <ArrowUpRight className="w-5 h-5 ml-2" />
-              </Button>
+              <button 
+                className="group relative inline-flex items-center justify-center gap-2 px-8 py-5 text-base font-bold rounded-xl transition-all duration-300 bg-transparent"
+                style={{
+                  border: '2px solid rgba(255,255,255,0.8)',
+                  boxShadow: 'inset 0 1px 2px rgba(255,255,255,0.2), inset 0 -1px 2px rgba(0,0,0,0.3), 0 4px 15px rgba(0,0,0,0.4)',
+                }}
+              >
+                <span className="text-white group-hover:text-black transition-colors">Book a Consultation</span>
+                <ArrowUpRight className="w-5 h-5 text-gold transition-colors" style={{ filter: 'drop-shadow(0 0 6px rgba(200,167,102,0.8))' }} />
+                {/* Hover fill overlay */}
+                <span className="absolute inset-0 rounded-xl bg-gradient-to-r from-white via-[#FDFBF7] to-[#F5F0E6] opacity-0 group-hover:opacity-100 transition-opacity duration-300 -z-10" style={{ border: '2px solid rgba(200,167,102,0.6)' }} />
+              </button>
             </a>
           </motion.div>
         </motion.div>

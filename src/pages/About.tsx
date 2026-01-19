@@ -171,37 +171,33 @@ const About = () => {
               className="flex flex-wrap justify-center gap-4"
               variants={fadeInUp}
             >
+              {/* Hero CTA Buttons - Transparent bg, white 3D border, white title, gold icon on normal; filled on hover */}
               <Link to="/contact" className="relative z-20">
                 <button 
-                  className="group relative inline-flex items-center justify-center gap-2 px-8 py-5 text-base font-bold rounded-xl transition-all duration-300 overflow-hidden"
+                  className="group inline-flex items-center justify-center gap-2 px-8 py-5 text-base font-bold rounded-xl transition-all duration-300 bg-transparent"
                   style={{
-                    background: 'linear-gradient(135deg, #FFFFFF 0%, #FDFBF7 50%, #F5F0E6 100%)',
-                    border: '2px solid rgba(200,167,102,0.5)',
-                    boxShadow: `
-                      0 10px 30px rgba(200,167,102,0.4),
-                      0 6px 15px rgba(0,0,0,0.2),
-                      inset 0 2px 4px rgba(255,255,255,0.9),
-                      inset 0 -2px 4px rgba(200,167,102,0.2),
-                      0 0 20px rgba(200,167,102,0.3)
-                    `,
+                    border: '2px solid rgba(255,255,255,0.8)',
+                    boxShadow: 'inset 0 1px 2px rgba(255,255,255,0.2), inset 0 -1px 2px rgba(0,0,0,0.3), 0 4px 15px rgba(0,0,0,0.4)',
                   }}
                 >
-                  <span className="absolute inset-x-0 top-0 h-1/2 rounded-t-xl bg-gradient-to-b from-white/80 to-transparent pointer-events-none" />
-                  <span className="absolute inset-x-0 bottom-0 h-1/3 rounded-b-xl bg-gradient-to-t from-gold/10 to-transparent pointer-events-none" />
-                  <span className="absolute inset-0 rounded-xl opacity-0 group-hover:opacity-100 transition-opacity duration-300 pointer-events-none" style={{ boxShadow: '0 0 40px rgba(200,167,102,0.6), inset 0 0 20px rgba(200,167,102,0.1)' }} />
-                  <span className="relative flex items-center justify-center gap-2">
-                    <span className="text-black group-hover:text-gold transition-colors">Contact</span>
-                    <span className="text-gold group-hover:text-black transition-colors">Us</span>
-                    <ArrowUpRight className="w-4 h-4 text-black group-hover:text-gold transition-colors" />
-                  </span>
+                  <span className="text-white group-hover:text-black transition-colors">Contact Us</span>
+                  <ArrowUpRight className="w-4 h-4 text-gold transition-colors" style={{ filter: 'drop-shadow(0 0 6px rgba(200,167,102,0.8))' }} />
+                  {/* Hover fill overlay */}
+                  <span className="absolute inset-0 rounded-xl bg-gradient-to-r from-white via-[#FDFBF7] to-[#F5F0E6] opacity-0 group-hover:opacity-100 transition-opacity duration-300 -z-10" style={{ border: '2px solid rgba(200,167,102,0.6)' }} />
                 </button>
               </Link>
               <Link to="/properties" className="relative z-20">
                 <button 
-                  className="inline-flex items-center justify-center gap-2 px-8 py-5 text-base font-semibold rounded-xl transition-all duration-300 bg-transparent border-2 border-white text-white hover:bg-gradient-to-r hover:from-white hover:via-[#FDFBF7] hover:to-[#F5F0E6] hover:text-gold hover:border-gold"
+                  className="group inline-flex items-center justify-center gap-2 px-8 py-5 text-base font-bold rounded-xl transition-all duration-300 bg-transparent"
+                  style={{
+                    border: '2px solid rgba(255,255,255,0.8)',
+                    boxShadow: 'inset 0 1px 2px rgba(255,255,255,0.2), inset 0 -1px 2px rgba(0,0,0,0.3), 0 4px 15px rgba(0,0,0,0.4)',
+                  }}
                 >
-                  Browse Properties
-                  <ArrowUpRight className="w-4 h-4" />
+                  <span className="text-white group-hover:text-black transition-colors">Browse Properties</span>
+                  <ArrowUpRight className="w-4 h-4 text-gold transition-colors" style={{ filter: 'drop-shadow(0 0 6px rgba(200,167,102,0.8))' }} />
+                  {/* Hover fill overlay */}
+                  <span className="absolute inset-0 rounded-xl bg-gradient-to-r from-white via-[#FDFBF7] to-[#F5F0E6] opacity-0 group-hover:opacity-100 transition-opacity duration-300 -z-10" style={{ border: '2px solid rgba(200,167,102,0.6)' }} />
                 </button>
               </Link>
             </motion.div>
