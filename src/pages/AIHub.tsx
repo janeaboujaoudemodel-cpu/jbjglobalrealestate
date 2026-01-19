@@ -455,30 +455,22 @@ const AIHub = () => {
               variants={staggerContainer}
               className="text-center max-w-4xl mx-auto"
             >
-              {/* Clean Badge */}
+              {/* Premium Badge - White Pearl Gold Champagne Style */}
               <motion.div variants={fadeInUp} className="mb-6">
-                <Badge className="bg-gold/15 text-gold border-gold/30 px-4 py-1.5">
-                  <Sparkles className="w-3.5 h-3.5 mr-1.5" />
-                  Free for All Users
-                </Badge>
+                <span className="inline-flex items-center gap-2 px-5 py-2.5 bg-gradient-to-r from-white via-[#FDFBF7] to-[#F5F0E6] border-2 border-gold/50 rounded-full shadow-[0_0_20px_rgba(200,167,102,0.3)]">
+                  <Sparkles className="w-4 h-4 text-gold" />
+                  <span className="text-gold font-semibold text-sm uppercase tracking-wide">Free for All Users</span>
+                </span>
               </motion.div>
 
-              {/* Main Title - Investor Hub */}
+              {/* Main Title - Premium Black Styling */}
               <motion.h1 
                 className="text-4xl md:text-5xl lg:text-6xl font-bold tracking-tight mb-4"
                 variants={fadeInUp}
                 style={{ fontFamily: "Poppins, sans-serif" }}
               >
                 <span className="text-white">JBJ </span>
-                <span 
-                  style={{ 
-                    background: "linear-gradient(135deg, #CBA64B 0%, #E8D5A3 50%, #CBA64B 100%)",
-                    WebkitBackgroundClip: "text",
-                    WebkitTextFillColor: "transparent",
-                  }}
-                >
-                  Investor Hub
-                </span>
+                <span className="text-white">Investor Hub</span>
               </motion.h1>
 
               {/* Subtitle */}
@@ -496,7 +488,7 @@ const AIHub = () => {
                 Free AI tools • Property analysis • Investment calculators • Productivity suite
               </motion.p>
 
-              {/* Gold divider */}
+              {/* Premium Gold Divider */}
               <motion.div 
                 variants={fadeInUp}
                 className="w-24 h-0.5 bg-gradient-to-r from-transparent via-gold to-transparent mx-auto mb-8"
@@ -507,29 +499,28 @@ const AIHub = () => {
                 {!user ? (
                   <Button 
                     onClick={() => navigate("/auth?redirect=/ai-hub")}
-                    className="relative bg-gradient-to-r from-white via-[#FDFBF7] to-[#F5F0E6] border border-gold/40 px-8 py-6 text-base shadow-[0_4px_20px_rgba(200,167,102,0.3),0_8px_30px_rgba(0,0,0,0.15)] hover:shadow-[0_6px_25px_rgba(200,167,102,0.5),0_10px_40px_rgba(0,0,0,0.2)] hover:scale-[1.02] transition-all duration-300"
+                    className="relative bg-gradient-to-r from-white via-[#FDFBF7] to-[#F5F0E6] border-2 border-gold/50 px-8 py-6 text-base shadow-[0_4px_20px_rgba(200,167,102,0.3),0_8px_30px_rgba(0,0,0,0.15)] hover:shadow-[0_6px_25px_rgba(200,167,102,0.5),0_10px_40px_rgba(0,0,0,0.2)] hover:scale-[1.02] transition-all duration-300"
                   >
                     <LogIn className="w-5 h-5 mr-2 text-black" />
-                    <span className="text-gold font-semibold">Sign In / Create Account</span>
-                    <ArrowUpRight className="w-5 h-5 ml-2 text-gold" />
+                    <span className="text-black font-semibold">Sign In / Create Account</span>
+                    <ArrowUpRight className="w-5 h-5 ml-2 text-black" />
                   </Button>
                 ) : (
                   <Button 
                     onClick={() => navigate("/my-account")}
-                    className="relative bg-gradient-to-r from-white via-[#FDFBF7] to-[#F5F0E6] border border-gold/40 px-8 py-6 text-base shadow-[0_4px_20px_rgba(200,167,102,0.3),0_8px_30px_rgba(0,0,0,0.15)] hover:shadow-[0_6px_25px_rgba(200,167,102,0.5),0_10px_40px_rgba(0,0,0,0.2)] hover:scale-[1.02] transition-all duration-300"
+                    className="relative bg-gradient-to-r from-white via-[#FDFBF7] to-[#F5F0E6] border-2 border-gold/50 px-8 py-6 text-base shadow-[0_4px_20px_rgba(200,167,102,0.3),0_8px_30px_rgba(0,0,0,0.15)] hover:shadow-[0_6px_25px_rgba(200,167,102,0.5),0_10px_40px_rgba(0,0,0,0.2)] hover:scale-[1.02] transition-all duration-300"
                   >
                     <User className="w-5 h-5 mr-2 text-black" />
-                    <span className="text-gold font-semibold">Go to My Dashboard</span>
-                    <ArrowUpRight className="w-5 h-5 ml-2 text-gold" />
+                    <span className="text-black font-semibold">Go to My Dashboard</span>
+                    <ArrowUpRight className="w-5 h-5 ml-2 text-black" />
                   </Button>
                 )}
                 <Button 
-                  variant="secondary"
                   onClick={() => document.getElementById('investor-tools')?.scrollIntoView({ behavior: 'smooth' })}
-                  className="px-8 py-6 text-base"
+                  className="relative bg-gradient-to-r from-white via-[#FDFBF7] to-[#F5F0E6] border-2 border-gold/50 px-8 py-6 text-base shadow-[0_4px_20px_rgba(200,167,102,0.3),0_8px_30px_rgba(0,0,0,0.15)] hover:shadow-[0_6px_25px_rgba(200,167,102,0.5),0_10px_40px_rgba(0,0,0,0.2)] hover:scale-[1.02] transition-all duration-300"
                 >
-                  Explore Free Tools
-                  <ArrowUpRight className="w-5 h-5 ml-2" />
+                  <span className="text-black font-semibold">Explore Free Tools</span>
+                  <ArrowUpRight className="w-5 h-5 ml-2 text-black" />
                 </Button>
               </motion.div>
 
@@ -576,12 +567,12 @@ const AIHub = () => {
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true }}
             >
-              <Badge className="bg-gold/20 text-gold border-gold/30 mb-4">
-                <Sparkles className="w-3 h-3 mr-1" />
-                All Free Tools
-              </Badge>
+              <span className="inline-flex items-center gap-2 px-5 py-2 bg-gradient-to-r from-white via-[#FDFBF7] to-[#F5F0E6] border-2 border-gold/50 rounded-full shadow-[0_0_15px_rgba(200,167,102,0.25)] mb-4">
+                <Sparkles className="w-3.5 h-3.5 text-gold" />
+                <span className="text-black text-xs uppercase tracking-wider font-medium">All Free Tools</span>
+              </span>
               <h2 className="text-3xl md:text-4xl font-bold text-white mb-4">
-                Discover All <span className="text-gold">Free AI Tools</span>
+                Discover All <span className="text-white">Free AI Tools</span>
               </h2>
               <p className="text-zinc-400 max-w-2xl mx-auto">
                 All tools in one place — each with its unique theme. Scroll down to see them organized by category.
@@ -721,12 +712,12 @@ const AIHub = () => {
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true }}
             >
-              <Badge className="bg-gold/20 text-gold border-gold/30 mb-4">
-                <DollarSign className="w-3 h-3 mr-1" />
-                Earn With Us
-              </Badge>
+              <span className="inline-flex items-center gap-2 px-5 py-2 bg-black border-2 border-gold/50 rounded-full shadow-lg mb-4">
+                <DollarSign className="w-3.5 h-3.5 text-gold" />
+                <span className="text-white text-xs uppercase tracking-wider font-medium">Earn With Us</span>
+              </span>
               <h2 className="text-2xl md:text-3xl font-bold text-black mb-2">
-                Make Money by Joining <span className="text-gold">JBJ Global Real Estate Circle</span>
+                Make Money by Joining <span className="text-black">JBJ Global Real Estate Circle</span>
               </h2>
               <p className="text-zinc-600 max-w-3xl mx-auto">
                 From anywhere in the world, you can become a broker with us, or you can become a referral partner and start earning commission on every successful deal.
@@ -827,12 +818,12 @@ const AIHub = () => {
               <Card className="bg-gradient-to-br from-black via-zinc-900 to-black border-2 border-gold/50 shadow-[0_0_40px_rgba(200,167,102,0.2)]">
                 <CardContent className="p-8">
                   <div className="text-center mb-8">
-                    <Badge className="bg-gold/20 text-gold border-gold/30 mb-4">
-                      <Handshake className="w-3 h-3 mr-1" />
-                      How Referral Works
-                    </Badge>
+                    <span className="inline-flex items-center gap-2 px-5 py-2 bg-gradient-to-r from-white via-[#FDFBF7] to-[#F5F0E6] border-2 border-gold/50 rounded-full shadow-lg mb-4">
+                      <Handshake className="w-3.5 h-3.5 text-black" />
+                      <span className="text-black text-xs uppercase tracking-wider font-medium">How Referral Works</span>
+                    </span>
                     <h3 className="text-2xl md:text-3xl font-bold text-white mb-2">
-                      Become a <span className="text-gold">JBJ Referral Partner</span>
+                      Become a <span className="text-white">JBJ Referral Partner</span>
                     </h3>
                     <p className="text-zinc-400">
                       Simple process — start earning within days
