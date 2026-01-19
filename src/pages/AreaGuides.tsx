@@ -171,7 +171,7 @@ const AreaGuides = () => {
               </motion.div>
             ))}
           </div>
-          <p className="text-center text-xs text-zinc-500 mt-4">Source: Dubai Land Department Annual Report 2024</p>
+          <p className="text-center text-xs text-zinc-500 mt-4">Source: Dubai Land Department Annual Report 2025-2026</p>
         </div>
       </section>
 
