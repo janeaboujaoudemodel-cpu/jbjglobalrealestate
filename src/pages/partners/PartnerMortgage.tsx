@@ -4,6 +4,7 @@ import {
   Building2,
   ArrowRight,
   ArrowLeft,
+  ArrowUpRight,
   CheckCircle,
   AlertTriangle,
   Calculator,
@@ -295,19 +296,17 @@ const PartnerMortgage = () => {
                   </Button>
                 </Link>
                 <Link to="/buyer-guide">
-                  <Button variant="outline" size="sm">
-                    <FileText className="w-4 h-4 mr-2" />
+                  <button className="relative inline-flex items-center justify-center gap-2 px-6 py-3 text-sm font-bold rounded-xl transition-all duration-300 bg-transparent border-2 border-black text-black hover:bg-black hover:text-white">
+                    <FileText className="w-4 h-4" />
                     Buyer Guide
-                  </Button>
+                  </button>
                 </Link>
                 <Link to="/properties?transaction_type=buy">
-                  <Button variant="outline" size="sm">
-                    <Building2 className="w-4 h-4 mr-2" />
+                  <button className="relative inline-flex items-center justify-center gap-2 px-6 py-3 text-sm font-bold rounded-xl transition-all duration-300 bg-transparent border-2 border-black text-black hover:bg-black hover:text-white">
+                    <Building2 className="w-4 h-4" />
                     Browse Properties
-                    <svg className="w-3 h-3 ml-2" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24">
-                      <path strokeLinecap="round" strokeLinejoin="round" d="M7 17L17 7M17 7H7M17 7V17" />
-                    </svg>
-                  </Button>
+                    <ArrowUpRight className="w-3 h-3" />
+                  </button>
                 </Link>
               </div>
             </div>

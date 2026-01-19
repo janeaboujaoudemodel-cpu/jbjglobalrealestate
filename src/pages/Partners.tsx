@@ -6,6 +6,7 @@ import {
   Briefcase,
   Plane,
   ArrowRight,
+  ArrowUpRight,
   Shield,
   Users,
   CheckCircle,
@@ -255,17 +256,32 @@ const Partners = () => {
               
               <div className="flex flex-wrap justify-center gap-4">
                 <Link to="/properties">
-                  <Button size="lg" variant="dark">
-                    Browse Properties
-                    <svg className="w-4 h-4 ml-2" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24">
-                      <path strokeLinecap="round" strokeLinejoin="round" d="M7 17L17 7M17 7H7M17 7V17" />
-                    </svg>
-                  </Button>
+                  <button 
+                    className="relative inline-flex items-center justify-center gap-2 px-10 py-6 text-base font-bold rounded-xl transition-all duration-300 group overflow-hidden"
+                    style={{
+                      background: 'linear-gradient(135deg, #FFFFFF 0%, #FDFBF7 25%, #F5F0E6 50%, #E8DFD0 75%, #C8A766 100%)',
+                      boxShadow: `
+                        0 10px 30px rgba(200,167,102,0.4),
+                        0 6px 15px rgba(0,0,0,0.2),
+                        inset 0 2px 4px rgba(255,255,255,0.9),
+                        inset 0 -2px 4px rgba(200,167,102,0.2),
+                        0 0 20px rgba(200,167,102,0.3)
+                      `,
+                    }}
+                  >
+                    <span className="absolute inset-x-0 top-0 h-1/2 rounded-t-xl bg-gradient-to-b from-white/80 to-transparent pointer-events-none" />
+                    <span className="absolute inset-0 rounded-xl opacity-0 group-hover:opacity-100 transition-opacity duration-300 pointer-events-none" style={{ boxShadow: '0 0 40px rgba(200,167,102,0.6), inset 0 0 20px rgba(200,167,102,0.1)' }} />
+                    <span className="relative flex items-center gap-2">
+                      <span className="text-gold">Browse</span>
+                      <span className="text-black">Properties</span>
+                      <ArrowUpRight className="w-5 h-5 text-black" />
+                    </span>
+                  </button>
                 </Link>
                 <Link to="/contact">
-                  <Button size="lg" variant="secondary" className="border-black text-black hover:bg-black hover:text-white">
+                  <button className="relative inline-flex items-center justify-center gap-2 px-10 py-6 text-base font-bold rounded-xl transition-all duration-300 bg-transparent border-2 border-black text-black hover:bg-black hover:text-white group">
                     Contact Us
-                  </Button>
+                  </button>
                 </Link>
               </div>
             </div>
