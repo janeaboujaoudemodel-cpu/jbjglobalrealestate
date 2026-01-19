@@ -585,11 +585,11 @@ const PhoneInput = React.forwardRef<HTMLInputElement, PhoneInputProps>(
               onChange={handleNumberChange}
               disabled={disabled}
               className={cn(
-                "h-12 bg-zinc-900 border-zinc-700 text-white text-base placeholder:text-zinc-500 focus:border-gold pr-10 w-full",
+                "h-12 bg-zinc-900 border-zinc-700 text-white text-base placeholder:text-zinc-500 focus:border-gold pr-10 w-full pl-3",
                 localNumber && validation.isValid && "border-green-500/50",
                 localNumber && !validation.isValid && "border-amber-500/50"
               )}
-              placeholder={placeholder || `Enter your phone number`}
+              placeholder={placeholder || "Phone number"}
             />
             {showValidation && localNumber && validation.isValid && (
               <CheckCircle className="absolute right-3 top-1/2 -translate-y-1/2 h-5 w-5 text-green-500" />
