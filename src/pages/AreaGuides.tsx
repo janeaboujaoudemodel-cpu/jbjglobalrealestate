@@ -226,7 +226,7 @@ const AreaGuides = () => {
                   ))}
                 </div>
 
-                {/* Sort Options */}
+                {/* Sort Options - Using Global Active Color System */}
                 <div className="mt-4 flex flex-wrap items-center justify-center gap-2">
                   <span className="text-sm text-zinc-500 mr-2">Sort by:</span>
                   {[
@@ -240,11 +240,11 @@ const AreaGuides = () => {
                       onClick={() => setSortBy(option.id)}
                       className={`flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-medium transition-all ${
                         sortBy === option.id
-                          ? "bg-gold text-black"
-                          : "bg-zinc-100 text-zinc-600 hover:bg-gold/20 hover:text-gold"
+                          ? "jj-sort-active"
+                          : "jj-sort-inactive"
                       }`}
                     >
-                      <option.icon className="w-3 h-3" />
+                      <option.icon className={`w-3 h-3 ${sortBy === option.id ? "text-black" : ""}`} />
                       {option.label}
                     </button>
                   ))}

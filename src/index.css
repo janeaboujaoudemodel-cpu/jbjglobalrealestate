@@ -499,6 +499,72 @@ All colors MUST be HSL.
     letter-spacing: 0.01em;
   }
 
+  /* ============================================================
+   * GLOBAL ACTIVE STATE SYSTEM - LOCKED
+   * Champagne gradient when active, consistent across platform
+   * Used in: Guides TOC, Filters, Tabs, Nav Items, Sidebars
+   * ============================================================ */
+  
+  /* --- Active Item (Light/White Background Sections) --- */
+  .jj-active-item {
+    @apply bg-gradient-to-r from-[#F5EBD7] via-[#E8DCC8] to-[#D4C4A8] text-black font-medium shadow-md border border-gold/40;
+  }
+
+  .jj-active-item-text {
+    @apply text-black font-medium;
+  }
+
+  .jj-active-item-icon {
+    @apply text-black;
+  }
+
+  .jj-active-item-number {
+    @apply bg-black text-gold;
+  }
+
+  /* --- Inactive/Default Item --- */
+  .jj-inactive-item {
+    @apply text-zinc-600 bg-transparent border border-transparent;
+  }
+
+  .jj-inactive-item:hover {
+    @apply text-black bg-zinc-100 border-zinc-200;
+  }
+
+  .jj-inactive-item-icon {
+    @apply text-gold;
+  }
+
+  .jj-inactive-item-number {
+    @apply bg-gold/10 text-gold;
+  }
+
+  /* --- Tab/Filter Active State (for buttons/pills) --- */
+  .jj-tab-active {
+    @apply bg-gradient-to-r from-[#F5EBD7] via-[#E8DCC8] to-[#D4C4A8] text-black font-medium shadow-sm border border-gold/40;
+  }
+
+  .jj-tab-inactive {
+    @apply bg-white text-zinc-600 border border-zinc-300;
+  }
+
+  .jj-tab-inactive:hover {
+    @apply border-gold/50 text-gold;
+  }
+
+  /* --- Sort Button Active State --- */
+  .jj-sort-active {
+    @apply bg-gradient-to-r from-[#F5EBD7] via-[#E8DCC8] to-[#D4C4A8] text-black font-medium;
+  }
+
+  .jj-sort-inactive {
+    @apply bg-zinc-100 text-zinc-600;
+  }
+
+  .jj-sort-inactive:hover {
+    @apply bg-gold/20 text-gold;
+  }
+
   /* --- User & Employee Names --- */
   .jj-name {
     @apply font-semibold;
