@@ -158,7 +158,7 @@ const productivityTools = [
   },
 ];
 
-// EDUCATION & CAREER - With theme colors
+// EDUCATION & CAREER - With theme colors (pink theme for this section)
 const educationCareer = [
   {
     id: "academy",
@@ -166,7 +166,7 @@ const educationCareer = [
     description: "Video tutorials and broker certifications.",
     icon: GraduationCap,
     link: "/broker-toolkit",
-    themeColor: "amber",
+    themeColor: "pink",
   },
   {
     id: "employment-hub",
@@ -174,7 +174,7 @@ const educationCareer = [
     description: "Hire or get hired in Real Estate.",
     icon: Briefcase,
     link: "/join",
-    themeColor: "emerald",
+    themeColor: "pink",
   },
   {
     id: "referral-program",
@@ -182,7 +182,7 @@ const educationCareer = [
     description: "Earn 5% commission on successful referrals.",
     icon: Award,
     link: "/referral-onboarding",
-    themeColor: "gold",
+    themeColor: "pink",
   },
 ];
 
@@ -624,12 +624,12 @@ const AIHub = () => {
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true }}
             >
-              <Badge className="bg-amber-500/20 text-amber-400 border-amber-500/30 mb-4">
+              <Badge className="bg-pink-500/20 text-pink-400 border-pink-500/30 mb-4">
                 <GraduationCap className="w-3 h-3 mr-1" />
                 Education & Opportunities
               </Badge>
               <h2 className="text-2xl md:text-3xl font-bold text-white mb-2">
-                <span className="text-white">Learn, Earn &</span> <span className="text-amber-400">Grow</span>
+                <span className="text-white">Learn, Earn &</span> <span className="text-pink-400">Grow</span>
               </h2>
               <p className="text-zinc-400 max-w-lg mx-auto">
                 Education, career opportunities, and referral rewards.
@@ -660,12 +660,12 @@ const AIHub = () => {
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true }}
             >
-              <Badge className="bg-purple-500/20 text-purple-400 border-purple-500/30 mb-4">
+              <Badge className="bg-emerald-500/20 text-emerald-400 border-emerald-500/30 mb-4">
                 <Lock className="w-3 h-3 mr-1" />
                 JBJ Broker Hub Exclusive
               </Badge>
               <h2 className="text-2xl md:text-3xl font-bold text-white mb-2">
-                Unlock More with JBJ Broker Hub
+                <span className="text-white">Unlock More with</span> <span className="text-emerald-400">JBJ Broker Hub</span>
               </h2>
               <p className="text-zinc-400 max-w-2xl mx-auto">
                 Registered JBJ brokers get access to additional tools, operation support, creative suite, and marketing automation.
@@ -696,13 +696,10 @@ const AIHub = () => {
                 </p>
                 <div className="flex flex-wrap justify-center gap-3">
                   <Link to="/broker-toolkit">
-                    <Button 
-                      variant="dark"
-                      className="px-8 py-6 text-base"
-                    >
-                      <Sparkles className="w-5 h-5 mr-2" />
-                      Become Part of JBJ Broker Hub
-                      <ArrowUpRight className="w-5 h-5 ml-2" />
+                    <Button className="relative bg-gradient-to-r from-white via-[#FDFBF7] to-[#F5F0E6] border border-gold/40 px-8 py-6 text-base shadow-[0_4px_20px_rgba(200,167,102,0.3),0_8px_30px_rgba(0,0,0,0.15)] hover:shadow-[0_6px_25px_rgba(200,167,102,0.5),0_10px_40px_rgba(0,0,0,0.2)] hover:scale-[1.02] transition-all duration-300">
+                      <Sparkles className="w-5 h-5 mr-2 text-black" />
+                      <span className="text-gold font-semibold">Become Part of JBJ Broker Hub</span>
+                      <ArrowUpRight className="w-5 h-5 ml-2 text-gold" />
                     </Button>
                   </Link>
                 </div>
