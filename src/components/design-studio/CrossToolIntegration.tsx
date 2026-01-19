@@ -1,0 +1,142 @@
+import React from 'react';
+import { motion } from 'framer-motion';
+import { Link } from 'react-router-dom';
+import { 
+  Video, 
+  Image, 
+  FileText, 
+  Presentation, 
+  Mail,
+  Share2,
+  ArrowRight,
+  Sparkles
+} from 'lucide-react';
+import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
+import { Button } from '@/components/ui/button';
+import { Badge } from '@/components/ui/badge';
+
+interface CrossToolIntegrationProps {
+  currentTool: 'design-studio' | 'video-builder' | 'presentations';
+  projectId?: string;
+  projectData?: any;
+}
+
+const CONNECTED_TOOLS = [
+  {
+    id: 'design-studio',
+    name: 'Design Studio',
+    description: 'Create graphics, social posts, and brand materials',
+    icon: Image,
+    path: '/jbj-design-studio',
+    color: 'from-rose-500 to-pink-500',
+    capabilities: ['Social Media', 'Brochures', 'Business Cards'],
+  },
+  {
+    id: 'video-builder',
+    name: 'Video Studio',
+    description: 'Produce property tours and marketing videos',
+    icon: Video,
+    path: '/video-builder',
+    color: 'from-purple-500 to-indigo-500',
+    capabilities: ['Property Tours', 'Reels', 'Testimonials'],
+  },
+  {
+    id: 'presentations',
+    name: 'Presentations',
+    description: 'Create pitch decks and proposals',
+    icon: Presentation,
+    path: '/presentations',
+    color: 'from-blue-500 to-cyan-500',
+    capabilities: ['Pitch Decks', 'Rate Cards', 'Proposals'],
+  },
+  {
+    id: 'documents',
+    name: 'Documents',
+    description: 'Generate contracts and agreements',
+    icon: FileText,
+    path: '/documents',
+    color: 'from-emerald-500 to-teal-500',
+    capabilities: ['Contracts', 'Agreements', 'Forms'],
+  },
+  {
+    id: 'email-client',
+    name: 'Email Studio',
+    description: 'Design email campaigns and signatures',
+    icon: Mail,
+    path: '/email-client',
+    color: 'from-amber-500 to-orange-500',
+    capabilities: ['Campaigns', 'Signatures', 'Newsletters'],
+  },
+];
+
+export const CrossToolIntegration: React.FC<CrossToolIntegrationProps> = ({
+  currentTool,
+  projectId,
+  projectData,
+}) => {
+  const availableTools = CONNECTED_TOOLS.filter(tool => tool.id !== currentTool);
+
+  const handleSendToTool = (toolId: string) => {
+    // In a real implementation, this would pass project data to the target tool
+    console.log(`Sending project ${projectId} to ${toolId}`, projectData);
+  };
+
+  return (
+    <Card className="bg-gradient-to-br from-white via-[#FDFBF7] to-[#F5F0E6] border-gold/20 shadow-lg">
+      <CardHeader className="pb-3">
+        <CardTitle className="text-lg font-semibold text-black flex items-center gap-2">
+          <Share2 className="w-5 h-5 text-gold" />
+          Send Project to Another Tool
+        </CardTitle>
+        <p className="text-sm text-zinc-500">
+          Continue your project workflow with our connected creative tools
+        </p>
+      </CardHeader>
+      <CardContent>
+        <div className="grid gap-3">
+          {availableTools.map((tool, index) => (
+            <motion.div
+              key={tool.id}
+              initial={{ opacity: 0, x: -20 }}
+              animate={{ opacity: 1, x: 0 }}
+              transition={{ delay: index * 0.1 }}
+            >
+              <Link to={tool.path}>
+                <div className="group flex items-center gap-4 p-4 rounded-xl bg-white border border-zinc-200 hover:border-gold/50 hover:shadow-lg hover:shadow-gold/10 transition-all duration-300">
+                  <div className={`w-12 h-12 rounded-xl bg-gradient-to-br ${tool.color} flex items-center justify-center shadow-lg group-hover:scale-110 transition-transform`}>
+                    <tool.icon className="w-6 h-6 text-white" />
+                  </div>
+                  
+                  <div className="flex-1 min-w-0">
+                    <div className="flex items-center gap-2">
+                      <h3 className="font-semibold text-black group-hover:text-gold transition-colors">
+                        {tool.name}
+                      </h3>
+                      <Sparkles className="w-4 h-4 text-gold opacity-0 group-hover:opacity-100 transition-opacity" />
+                    </div>
+                    <p className="text-sm text-zinc-500 truncate">{tool.description}</p>
+                    <div className="flex flex-wrap gap-1 mt-1">
+                      {tool.capabilities.slice(0, 2).map((cap) => (
+                        <Badge 
+                          key={cap} 
+                          variant="outline" 
+                          className="text-xs bg-zinc-50 border-zinc-200 text-zinc-600"
+                        >
+                          {cap}
+                        </Badge>
+                      ))}
+                    </div>
+                  </div>
+                  
+                  <ArrowRight className="w-5 h-5 text-zinc-400 group-hover:text-gold group-hover:translate-x-1 transition-all" />
+                </div>
+              </Link>
+            </motion.div>
+          ))}
+        </div>
+      </CardContent>
+    </Card>
+  );
+};
+
+export default CrossToolIntegration;

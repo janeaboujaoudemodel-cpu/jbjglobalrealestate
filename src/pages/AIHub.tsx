@@ -251,9 +251,9 @@ const brokerOnlyTools = [
     icon: Palette,
   },
   {
-    id: "videographer",
-    title: "JBJ Videographer",
-    description: "HD walkthroughs, marketing videos, social clips.",
+    id: "video-producer",
+    title: "JBJ Video Producer",
+    description: "Cinematic property tours and marketing videos.",
     icon: Film,
   },
   {

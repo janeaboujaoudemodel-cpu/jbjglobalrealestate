@@ -59,8 +59,8 @@ const BROKER_CIRCLE_BENEFITS = [
   },
   {
     icon: Film,
-    title: "JBJ Videographer",
-    description: "HD walkthroughs & marketing videos",
+    title: "JBJ Video Producer",
+    description: "Cinematic property tours & marketing videos",
   },
   {
     icon: Camera,

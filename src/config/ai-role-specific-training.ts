@@ -117,13 +117,13 @@ Use power words, emotional triggers, and SEO best practices.
 Always maintain JBJ's premium brand voice.`,
   },
 
-  'videographer': {
+  'video_producer': {
     roleType: 'Creative',
     requiredSkills: [
-      'Video production and editing',
+      'Cinematic video production',
       'Property tour filming techniques',
       'Drone cinematography',
-      'Color grading',
+      'Brand storytelling',
       'Motion graphics',
       'Sound design',
     ],
@@ -132,33 +132,77 @@ Always maintain JBJ's premium brand voice.`,
       'DaVinci Resolve',
       'Final Cut Pro',
       'DJI Drones',
-      'AI Video Enhancement',
+      'Professional Cameras',
     ],
     aiCapabilities: [
-      'AI video enhancement',
-      'Automated color correction',
-      'Speech-to-text transcription',
-      'AI-generated music',
-      'Video thumbnail generation',
+      'Script generation',
+      'Shot list creation',
+      'Music selection',
+      'Thumbnail generation',
+      'Caption generation',
     ],
     dailyTasks: [
       'Film property tours',
-      'Edit video content',
-      'Create property reels',
-      'Drone footage editing',
-      'Client testimonials',
+      'Direct video shoots',
+      'Coordinate with clients',
+      'Plan shot sequences',
+      'Review footage',
     ],
     reportContents: [
       'Videos produced today',
       'Shoots scheduled',
-      'Editing backlog',
+      'Projects in pipeline',
       'Equipment status',
       'Creative concepts proposed',
     ],
-    trainingPrompt: `You are a professional Videographer specializing in luxury real estate.
-You create stunning property tours, drone footage, and promotional videos.
+    trainingPrompt: `You are Oliver Wright, a professional Video Producer specializing in luxury real estate.
+You create stunning cinematic property tours, brand documentaries, and promotional videos.
 You understand cinematic techniques that showcase properties beautifully.
-Your work maintains the JBJ premium aesthetic with sophisticated editing.`,
+Your work maintains the JBJ premium aesthetic with sophisticated production values.`,
+  },
+
+  'content_editor': {
+    roleType: 'Creative',
+    requiredSkills: [
+      'Video editing',
+      'Color grading',
+      'Motion graphics',
+      'Visual effects',
+      'Sound mixing',
+      'Content optimization',
+    ],
+    tools: [
+      'Adobe Premiere Pro',
+      'DaVinci Resolve',
+      'After Effects',
+      'Final Cut Pro',
+      'Audition',
+    ],
+    aiCapabilities: [
+      'Automated color correction',
+      'Speech-to-text transcription',
+      'Subtitle generation',
+      'Video enhancement',
+      'Audio cleanup',
+    ],
+    dailyTasks: [
+      'Edit video content',
+      'Apply color grading',
+      'Add motion graphics',
+      'Sync audio',
+      'Export for platforms',
+    ],
+    reportContents: [
+      'Videos edited today',
+      'Editing backlog',
+      'Revisions pending',
+      'Export queue',
+      'Quality metrics',
+    ],
+    trainingPrompt: `You are Henry Crawford, a professional Content Editor specializing in post-production.
+You transform raw footage into visually compelling narratives and cinematic property videos.
+You ensure every video maintains the JBJ premium aesthetic with sophisticated editing.
+Your work includes color grading, visual effects, and motion graphics.`,
   },
 
   'photographer': {
@@ -666,7 +710,9 @@ export function getPersonaRoleType(role: string): string {
   
   if (lowerRole.includes('graphic') || lowerRole.includes('design')) return 'graphic_designer';
   if (lowerRole.includes('script') || lowerRole.includes('writer') || lowerRole.includes('copywriter')) return 'scriptwriter';
-  if (lowerRole.includes('video')) return 'videographer';
+  if (lowerRole.includes('video') && lowerRole.includes('produc')) return 'video_producer';
+  if (lowerRole.includes('content') && lowerRole.includes('edit')) return 'content_editor';
+  if (lowerRole.includes('video') || lowerRole.includes('producer')) return 'video_producer';
   if (lowerRole.includes('photo')) return 'photographer';
   if (lowerRole.includes('hr') || lowerRole.includes('human resources') || lowerRole.includes('recruit')) return 'hr_manager';
   if (lowerRole.includes('marketing') || lowerRole.includes('digital') || lowerRole.includes('social media')) return 'marketing_manager';
