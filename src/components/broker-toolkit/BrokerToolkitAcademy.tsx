@@ -84,7 +84,7 @@ export function BrokerToolkitAcademy() {
             JBJ Academy
           </Badge>
           <h2 className="text-3xl md:text-4xl font-bold text-white mb-4">
-            Professional Development <span className="text-gold">Courses</span>
+            Professional Development <span className="text-sky-400">Courses</span>
           </h2>
           <p className="text-zinc-400 max-w-2xl mx-auto">
             Complete our internal certification courses and earn verified JBJ badges. 
@@ -131,14 +131,14 @@ export function BrokerToolkitAcademy() {
           ))}
         </div>
 
-        {/* Benefits Section - White/Gold/Champagne Pearl Box */}
+        {/* Benefits Section - Blue Filled Premium Box */}
         <motion.div
           initial={{ opacity: 0, y: 20 }}
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true }}
-          className="bg-gradient-to-br from-white via-[#FDFBF7] to-[#F5F0E6] border-2 border-gold/50 rounded-2xl p-8 text-center shadow-[0_0_30px_rgba(200,167,102,0.2)]"
+          className="bg-gradient-to-br from-sky-600 via-sky-700 to-sky-800 border-2 border-sky-400/50 rounded-2xl p-8 text-center shadow-[0_0_40px_rgba(56,189,248,0.3)]"
         >
-          <h3 className="text-xl font-semibold text-black mb-4 flex items-center justify-center gap-2">
+          <h3 className="text-xl font-semibold text-white mb-4 flex items-center justify-center gap-2">
             <Star className="w-5 h-5 text-gold" />
             Why Get Certified?
           </h3>
@@ -149,7 +149,7 @@ export function BrokerToolkitAcademy() {
               "Higher commission tiers",
               "Access to VIP training"
             ].map((benefit, i) => (
-              <div key={i} className="flex items-center gap-2 justify-center text-zinc-700 text-sm">
+              <div key={i} className="flex items-center gap-2 justify-center text-white text-sm">
                 <CheckCircle className="w-4 h-4 text-gold flex-shrink-0" />
                 <span>{benefit}</span>
               </div>

@@ -26,9 +26,9 @@ export default function BrokerToolkit() {
         onSectionChange={setActiveSection} 
       />
       <BrokerToolkitTools />
+      <BrokerToolkitSupport />
       <BrokerToolkitEducation />
       <BrokerToolkitAcademy />
-      <BrokerToolkitSupport />
       <BrokerToolkitOperations />
       <BrokerToolkitCRM />
       <BrokerToolkitGrowth />
