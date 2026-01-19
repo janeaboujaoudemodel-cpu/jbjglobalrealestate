@@ -59,8 +59,8 @@ export const FounderPhilosophySection = () => {
                     className="w-full h-full"
                     style={{
                       objectFit: 'cover',
-                      objectPosition: 'center 5%',
-                      transform: 'scale(1.3)',
+                      objectPosition: 'center 0%',
+                      transform: 'scale(1.5)',
                     }}
                     loading="lazy"
                   />
@@ -100,18 +100,24 @@ export const FounderPhilosophySection = () => {
                 <span className="text-white uppercase tracking-[0.15em] text-lg md:text-xl">Written by Founder & CEO,</span>{" "}
                 <Link 
                   to="/founder" 
-                  className="text-gold text-xl md:text-2xl font-bold hover:text-gold-light transition-colors"
+                  className="text-transparent bg-clip-text bg-gradient-to-r from-[#D4AF37] via-[#F5D485] to-[#D4AF37] text-xl md:text-2xl font-bold hover:opacity-80 transition-opacity"
+                  style={{
+                    filter: 'drop-shadow(0 0 8px rgba(212,175,55,0.5))',
+                  }}
                 >
                   Jane Abou Jaoude
                 </Link>
                 <span className="block mt-2">
                   <Link 
                     to="/about" 
-                    className="text-gold text-lg drop-shadow-[0_0_6px_rgba(200,167,102,0.5)] hover:text-gold-light transition-colors font-semibold"
+                    className="text-transparent bg-clip-text bg-gradient-to-r from-[#D4AF37] via-[#F5D485] to-[#D4AF37] text-lg font-semibold hover:opacity-80 transition-opacity"
+                    style={{
+                      filter: 'drop-shadow(0 0 8px rgba(212,175,55,0.5))',
+                    }}
                   >
                     JBJ Global Real Estate
                   </Link>
-                  <span className="block h-0.5 w-24 bg-gold mt-2" />
+                  <span className="block h-0.5 w-24 bg-gradient-to-r from-[#D4AF37] via-[#F5D485] to-[#D4AF37] mt-2" />
                 </span>
               </p>
 
@@ -133,14 +139,18 @@ export const FounderPhilosophySection = () => {
                   
                   <p>
                     At{" "}
-                    <Link to="/about" className="text-gold drop-shadow-[0_0_6px_rgba(200,167,102,0.5)] font-semibold hover:text-gold-light transition-colors">
+                    <Link 
+                      to="/about" 
+                      className="text-transparent bg-clip-text bg-gradient-to-r from-[#D4AF37] via-[#F5D485] to-[#D4AF37] font-semibold hover:opacity-80 transition-opacity"
+                      style={{ filter: 'drop-shadow(0 0 6px rgba(212,175,55,0.5))' }}
+                    >
                       JBJ Global Real Estate
                     </Link>
                     , we work with clients as if we are investing our own capital. We do not treat a client's portfolio as a transaction. We treat it as if it were our own.
                   </p>
                   
                   <p>
-                    For off-plan properties, we do not charge clients any fees. We do not take money from clients to sell them a project. Our role is to protect, guide, and educate — not to push clients toward what benefits us or the company.
+                    For off-plan properties, we do not charge clients any fees. We do not take money from clients to sell them a project. Our role is to protect, guide, and educate not to push clients toward what benefits us or the company.
                   </p>
                   
                   <p>
@@ -148,7 +158,7 @@ export const FounderPhilosophySection = () => {
                   </p>
                   
                   <p>
-                    Our responsibility is to analyze the entire market — across developers, projects, locations, and pricing — and to advise based on data, not personal interest.
+                    Our responsibility is to analyze the entire market across developers, projects, locations, and pricing and to advise based on data, not personal interest.
                   </p>
                   
                   <p>
@@ -156,7 +166,7 @@ export const FounderPhilosophySection = () => {
                   </p>
                   
                   <p>
-                    Based on this analysis, we guide clients toward what aligns with their goals — whether capital appreciation, rental income, long-term holding, or end-use ownership.
+                    Based on this analysis, we guide clients toward what aligns with their goals whether capital appreciation, rental income, long-term holding, or end-use ownership.
                   </p>
                   
                   <p>
@@ -172,22 +182,28 @@ export const FounderPhilosophySection = () => {
                   </p>
                   
                   <p className="text-lg text-black font-medium">
-                    We advise to the best of our knowledge, based on experience, verified data, and integrity — so clients do not regret where their money goes.
+                    We advise to the best of our knowledge, based on experience, verified data, and integrity so clients do not regret where their money goes.
                   </p>
                 </div>
 
                 {/* Signature */}
                 <div className="pt-8 mt-8 border-t border-zinc-200">
-                  <Link to="/founder" className="hover:text-gold transition-colors">
-                    <p className="text-black text-lg font-semibold tracking-wide">
+                  <Link to="/founder" className="hover:opacity-80 transition-opacity">
+                    <p 
+                      className="text-transparent bg-clip-text bg-gradient-to-r from-[#D4AF37] via-[#F5D485] to-[#D4AF37] text-lg font-semibold tracking-wide"
+                      style={{ filter: 'drop-shadow(0 0 6px rgba(212,175,55,0.4))' }}
+                    >
                       Jane Abou Jaoude
                     </p>
                   </Link>
                   <p className="text-gold text-sm font-medium mt-1 tracking-wide">
                     Founder & CEO
                   </p>
-                  <Link to="/about" className="hover:text-gold transition-colors">
-                    <p className="text-zinc-600 text-sm mt-0.5 tracking-wide hover:text-gold transition-colors">
+                  <Link to="/about" className="hover:opacity-80 transition-opacity">
+                    <p 
+                      className="text-transparent bg-clip-text bg-gradient-to-r from-[#D4AF37] via-[#F5D485] to-[#D4AF37] text-sm mt-0.5 tracking-wide font-medium"
+                      style={{ filter: 'drop-shadow(0 0 4px rgba(212,175,55,0.3))' }}
+                    >
                       JBJ Global Real Estate
                     </p>
                   </Link>

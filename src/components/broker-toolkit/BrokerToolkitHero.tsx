@@ -16,13 +16,6 @@ import {
 } from "lucide-react";
 import brokerHubHero from "@/assets/broker-hub-hero.jpg";
 
-const QUICK_BENEFITS = [
-  { icon: Wrench, text: "11+ AI Tools" },
-  { icon: BookOpen, text: "24 Training Modules" },
-  { icon: Users, text: "Dedicated Support Team" },
-  { icon: Trophy, text: "Rewards & Recognition" },
-];
-
 export function BrokerToolkitHero() {
   const navigate = useNavigate();
   const { user } = useAuth();
@@ -37,6 +30,7 @@ export function BrokerToolkitHero() {
           className="w-full h-full object-cover"
           loading="eager"
           decoding="async"
+          fetchPriority="high"
         />
         <div className="absolute inset-0 bg-gradient-to-b from-black/80 via-black/70 to-black" />
       </div>
@@ -57,49 +51,71 @@ export function BrokerToolkitHero() {
 
           {/* Main headline - Clear value prop */}
           <h1 className="text-4xl md:text-5xl lg:text-6xl font-bold text-white mb-6 leading-tight">
-            Your Complete <span className="text-gold">Success System</span>
+            Your Complete{" "}
+            <span 
+              className="text-transparent bg-clip-text bg-gradient-to-r from-[#D4AF37] via-[#F5D485] to-[#D4AF37]"
+              style={{
+                filter: 'drop-shadow(0 0 20px rgba(212,175,55,0.5)) drop-shadow(0 0 40px rgba(212,175,55,0.3))',
+                textShadow: '0 0 30px rgba(212,175,55,0.4)',
+              }}
+            >
+              Success System
+            </span>
           </h1>
           
           {/* Sub-headline - What they get */}
-          <p className="text-xl md:text-2xl text-zinc-300 mb-4 max-w-2xl mx-auto">
+          <p className="text-xl md:text-2xl text-zinc-300 mb-8 max-w-2xl mx-auto">
             AI Tools, Training, CRM, Leads & Rewards — All Free
           </p>
-          
-          {/* Quick benefits strip */}
-          <div className="flex flex-wrap justify-center gap-3 mb-8">
-            {QUICK_BENEFITS.map((benefit, i) => (
-              <div 
-                key={i}
-                className="flex items-center gap-2 bg-zinc-900/60 border border-zinc-800 rounded-full px-4 py-2"
-              >
-                <benefit.icon className="w-4 h-4 text-gold" />
-                <span className="text-sm text-zinc-300">{benefit.text}</span>
-              </div>
-            ))}
-          </div>
 
-          {/* CTA buttons */}
+          {/* CTA buttons - 3D Primary style */}
           <div className="flex flex-wrap justify-center gap-4 mb-8">
             {!user ? (
-              <Button 
-                size="lg"
-                className="bg-gradient-to-r from-gold to-gold-dark text-black hover:brightness-110 px-8 py-6 text-lg font-semibold shadow-lg shadow-gold/20"
+              <button 
                 onClick={() => navigate("/auth?redirect=/my-account")}
+                className="group relative inline-flex items-center justify-center gap-2 px-8 py-4 text-lg font-bold rounded-xl transition-all duration-300 overflow-hidden"
+                style={{
+                  background: 'linear-gradient(135deg, #FFFFFF 0%, #FDFBF7 50%, #F5F0E6 100%)',
+                  border: '2px solid rgba(200,167,102,0.5)',
+                  boxShadow: `
+                    0 8px 24px rgba(200,167,102,0.35),
+                    0 4px 12px rgba(0,0,0,0.15),
+                    inset 0 2px 4px rgba(255,255,255,0.9),
+                    inset 0 -2px 4px rgba(200,167,102,0.2)
+                  `,
+                }}
               >
-                <Star className="w-5 h-5 mr-2 fill-current" />
-                Join Free Now
-                <ArrowUpRight className="w-5 h-5 ml-2 text-gold" />
-              </Button>
+                <span className="absolute inset-x-0 top-0 h-1/2 rounded-t-xl bg-gradient-to-b from-white/80 to-transparent pointer-events-none" />
+                <Star className="w-5 h-5 text-gold fill-current relative z-10" />
+                <span className="relative z-10 flex items-center gap-1">
+                  <span className="text-gold group-hover:text-black transition-colors">Join</span>
+                  <span className="text-black group-hover:text-gold transition-colors">Free Now</span>
+                </span>
+                <ArrowUpRight className="w-5 h-5 text-gold relative z-10" />
+              </button>
             ) : (
-              <Button 
-                size="lg"
-                className="bg-gradient-to-r from-gold to-gold-dark text-black hover:brightness-110 px-8 py-6 text-lg font-semibold shadow-lg shadow-gold/20"
+              <button 
                 onClick={() => navigate('/my-account')}
+                className="group relative inline-flex items-center justify-center gap-2 px-8 py-4 text-lg font-bold rounded-xl transition-all duration-300 overflow-hidden"
+                style={{
+                  background: 'linear-gradient(135deg, #FFFFFF 0%, #FDFBF7 50%, #F5F0E6 100%)',
+                  border: '2px solid rgba(200,167,102,0.5)',
+                  boxShadow: `
+                    0 8px 24px rgba(200,167,102,0.35),
+                    0 4px 12px rgba(0,0,0,0.15),
+                    inset 0 2px 4px rgba(255,255,255,0.9),
+                    inset 0 -2px 4px rgba(200,167,102,0.2)
+                  `,
+                }}
               >
-                <Sparkles className="w-5 h-5 mr-2" />
-                Open My Dashboard
-                <ArrowUpRight className="w-5 h-5 ml-2 text-gold" />
-              </Button>
+                <span className="absolute inset-x-0 top-0 h-1/2 rounded-t-xl bg-gradient-to-b from-white/80 to-transparent pointer-events-none" />
+                <Sparkles className="w-5 h-5 text-gold relative z-10" />
+                <span className="relative z-10 flex items-center gap-1">
+                  <span className="text-gold group-hover:text-black transition-colors">Open My</span>
+                  <span className="text-black group-hover:text-gold transition-colors">Dashboard</span>
+                </span>
+                <ArrowUpRight className="w-5 h-5 text-gold relative z-10" />
+              </button>
             )}
             <Button 
               size="lg"
@@ -111,19 +127,11 @@ export function BrokerToolkitHero() {
             </Button>
           </div>
 
-          {/* Trust indicators */}
+          {/* Trust indicator - only Instant Access */}
           <div className="flex items-center justify-center gap-6 text-sm text-zinc-500">
             <span className="flex items-center gap-1.5">
               <CheckCircle2 className="w-4 h-4 text-green-500" />
-              No Credit Card Required
-            </span>
-            <span className="flex items-center gap-1.5">
-              <CheckCircle2 className="w-4 h-4 text-green-500" />
               Instant Access
-            </span>
-            <span className="flex items-center gap-1.5">
-              <CheckCircle2 className="w-4 h-4 text-green-500" />
-              Cancel Anytime
             </span>
           </div>
         </motion.div>
