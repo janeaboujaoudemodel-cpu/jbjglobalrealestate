@@ -106,7 +106,7 @@ export function BrokerToolkitCRM() {
               CRM & Lead Management
             </Badge>
             <h2 className="text-3xl md:text-4xl font-bold text-white mb-4">
-              Manage Leads Like a <span className="text-emerald-300">Pro</span>
+              Manage Leads <span className="text-emerald-300">Like a Pro</span>
             </h2>
             <p className="text-zinc-400 max-w-2xl mx-auto">
               Our built-in CRM helps you track every lead, automate follow-ups, and close more deals.

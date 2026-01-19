@@ -22,7 +22,7 @@ const filterMessages = {
   returns: {
     title: 'Content Filtered',
     description: 'Return promises or projections cannot be displayed.',
-    alternative: 'Consult a licensed financial advisor for investment guidance.'
+    alternative: 'Consult a licensed investment advisor for guidance.'
   },
   recommendation: {
     title: 'Content Filtered',

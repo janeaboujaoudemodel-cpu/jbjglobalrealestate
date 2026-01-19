@@ -88,7 +88,7 @@ export const AI_OUTPUT_RULES_BY_TIER: Record<IntelligenceTier, AIOutputTierRules
     required_disclaimers: [
       'This analysis is based on historical data and market observations.',
       'Individual circumstances may vary. Consult with our advisors.',
-      `${BRAND_CONSTANTS.COMPANY_NAME} is a licensed brokerage, not a financial institution.`,
+      `${BRAND_CONSTANTS.COMPANY_NAME} is a licensed real estate brokerage providing buying, selling, and rental services.`,
     ],
     output_validation: {
       check_forbidden_content: true,

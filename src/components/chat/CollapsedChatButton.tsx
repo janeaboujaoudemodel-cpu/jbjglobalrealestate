@@ -1,8 +1,7 @@
-import { ChevronLeft, ChevronRight, Sparkles, Minus } from 'lucide-react';
+import { ChevronLeft, ChevronRight, Sparkles } from 'lucide-react';
 import { useLanguage } from '@/contexts/LanguageContext';
 import { motion, AnimatePresence } from 'framer-motion';
 import { SquareChatIcon } from '@/components/ui/SquareChatIcon';
-import { useState } from 'react';
 
 interface CollapsedChatButtonProps {
   onToggle: () => void;
@@ -11,25 +10,12 @@ interface CollapsedChatButtonProps {
 
 const CollapsedChatButton = ({ onToggle, showAttentionPulse = false }: CollapsedChatButtonProps) => {
   const { isRTL } = useLanguage();
-  // Two-step collapse: first to compact, then to icon-only
-  const [isFullyMinimized, setIsFullyMinimized] = useState(false);
-
-  // Handle minimizing the desktop button further to icon-only
-  const handleMinimizeDesktop = (e: React.MouseEvent) => {
-    e.stopPropagation();
-    setIsFullyMinimized(true);
-  };
-
-  // When fully minimized, clicking restores to desktop button
-  const handleRestoreFromMinimized = () => {
-    setIsFullyMinimized(false);
-  };
 
   return (
     <div className={`fixed bottom-24 ${isRTL ? 'left-4' : 'right-4'} z-[9000]`}>
-      {/* Attention-grabbing banner when showAttentionPulse is true (desktop only) - using champagne active color */}
+      {/* Daily attention banner - shows medium rectangle on first daily load */}
       <AnimatePresence>
-        {showAttentionPulse && !isFullyMinimized && (
+        {showAttentionPulse && (
           <motion.div
             initial={{ opacity: 0, y: 10, scale: 0.9 }}
             animate={{ opacity: 1, y: 0, scale: 1 }}
@@ -54,16 +40,16 @@ const CollapsedChatButton = ({ onToggle, showAttentionPulse = false }: Collapsed
         )}
       </AnimatePresence>
 
-      {/* Main button with optional pulse ring - Premium gold border styling */}
+      {/* Main button - single click opens full chat */}
       <div className="relative">
-        {showAttentionPulse && !isFullyMinimized && (
+        {showAttentionPulse && (
           <>
             <span className="absolute inset-0 rounded-xl bg-gold/30 animate-ping pointer-events-none" />
             <span className="absolute inset-0 rounded-xl bg-gold/20 animate-pulse pointer-events-none" />
           </>
         )}
 
-        {/* Mobile: always icon-only button - Premium white square style with gold border */}
+        {/* Mobile: always icon-only button - clicks open full chat */}
         <button
           onClick={onToggle}
           aria-label="Open chat support"
@@ -72,19 +58,9 @@ const CollapsedChatButton = ({ onToggle, showAttentionPulse = false }: Collapsed
           <SquareChatIcon className="w-6 h-6 text-gold" size={24} />
         </button>
 
-        {/* Desktop: Two states - full button or icon-only when fully minimized */}
-        {isFullyMinimized ? (
-          /* Icon-only state - user can click to restore or open chat */
-          <button
-            onClick={handleRestoreFromMinimized}
-            onDoubleClick={onToggle}
-            aria-label="Open chat support"
-            className="relative hidden sm:flex items-center justify-center w-14 h-14 rounded-xl bg-gradient-to-br from-white via-[#FDFBF7] to-[#F5F0E6] border-2 border-gold shadow-2xl shadow-gold/20 hover:shadow-[0_8px_30px_rgba(200,167,102,0.4)] transition-all duration-300 group hover:scale-105"
-          >
-            <SquareChatIcon className="w-6 h-6 text-gold" size={24} />
-          </button>
-        ) : (
-          /* Full desktop button - Premium white/champagne style with gold border */
+        {/* Desktop: Show medium box on first daily load, otherwise small icon */}
+        {showAttentionPulse ? (
+          /* Medium box state - first daily load - click opens full chat */
           <button
             onClick={onToggle}
             aria-label="Open chat support"
@@ -105,14 +81,15 @@ const CollapsedChatButton = ({ onToggle, showAttentionPulse = false }: Collapsed
             ) : (
               <ChevronLeft className="w-5 h-5 text-gold group-hover:-translate-x-1 transition-transform" />
             )}
-            {/* Minimize button to further collapse to icon-only */}
-            <button
-              onClick={handleMinimizeDesktop}
-              className="absolute -top-2 -right-2 w-6 h-6 bg-white border-2 border-gold rounded-full flex items-center justify-center shadow-lg shadow-gold/20 hover:bg-gold/10 transition-colors"
-              aria-label="Minimize to icon"
-            >
-              <Minus className="w-3 h-3 text-gold" />
-            </button>
+          </button>
+        ) : (
+          /* Small icon state - shown after first interaction or subsequent visits same day */
+          <button
+            onClick={onToggle}
+            aria-label="Open chat support"
+            className="relative hidden sm:flex items-center justify-center w-14 h-14 rounded-xl bg-gradient-to-br from-white via-[#FDFBF7] to-[#F5F0E6] border-2 border-gold shadow-2xl shadow-gold/20 hover:shadow-[0_8px_30px_rgba(200,167,102,0.4)] transition-all duration-300 group hover:scale-105"
+          >
+            <SquareChatIcon className="w-6 h-6 text-gold" size={24} />
           </button>
         )}
       </div>

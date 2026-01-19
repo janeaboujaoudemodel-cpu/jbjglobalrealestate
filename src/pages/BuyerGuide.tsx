@@ -686,8 +686,8 @@ const BuyerGuide = () => {
               </h4>
               <p className="text-zinc-600 text-sm leading-relaxed">
                 This guide is provided for general educational and informational purposes only. It does not constitute legal, 
-                financial, mortgage, or professional advice. JBJ Global Real Estate is a licensed 
-                Real Estate brokerage and does not provide legal or financial advisory services. 
+                mortgage, or professional advice. JBJ Global Real Estate is a licensed 
+                real estate brokerage providing buying, selling, and rental services. We do not provide legal or investment advisory services. 
                 Buyers should conduct independent due diligence and consult with qualified 
                 professionals before making any property purchase decisions.
               </p>

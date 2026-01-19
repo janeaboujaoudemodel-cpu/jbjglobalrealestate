@@ -184,7 +184,7 @@ const TrustAndAuditCenter = () => {
                   <p className="text-purple-300 text-sm">
                     <strong>AI Usage Statement:</strong> "I'm an AI assistant for JBJ GLOBAL REAL ESTATE. 
                     I can help you with property information and connect you with our team. 
-                    For legal, financial, or visa matters, I can introduce you to our licensed partners."
+                    For legal, mortgage, or visa matters, I can introduce you to our licensed partners."
                   </p>
                 </div>
               </CardContent>

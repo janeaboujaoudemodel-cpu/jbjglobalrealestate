@@ -623,8 +623,8 @@ const SellerGuide = () => {
                 <motion.div variants={fadeInUp} className="bg-zinc-800/30 border border-zinc-700 rounded-lg p-4 text-center">
                   <p className="text-zinc-400 text-sm">
                     <Shield className="w-4 h-4 inline-block mr-1 text-gold" />
-                    <strong>Note:</strong> JBJ Global Real Estate provides brokerage services only. For legal, mortgage, or 
-                    financial services, we introduce you to licensed partners. You contract directly with those partners.
+                    <strong>Note:</strong> JBJ Global Real Estate provides brokerage services for buying, selling, and renting properties. 
+                    For legal, mortgage, or visa services, we introduce you to licensed partners. You contract directly with those partners.
                   </p>
                 </motion.div>
               </motion.div>

@@ -182,10 +182,10 @@ const MarketReportsPage = () => {
         </div>
       </section>
 
-      {/* Report Archive - Consolidated Monthly & Quarterly Selectors */}
-      <section className="py-16 border-t border-zinc-200 bg-gradient-to-br from-white via-[#FDFBF7] to-[#F5F0E6]">
+      {/* Report Archive - Black background with white title */}
+      <section className="py-16 border-t border-zinc-800 bg-black">
         <div className="container mx-auto px-4">
-          <h2 className="text-black text-2xl font-bold mb-8 text-center" style={{ fontFamily: "Poppins, sans-serif" }}>
+          <h2 className="text-white text-2xl font-bold mb-8 text-center" style={{ fontFamily: "Poppins, sans-serif" }}>
             Report Archive
           </h2>
 

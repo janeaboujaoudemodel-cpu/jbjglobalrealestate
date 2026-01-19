@@ -85,7 +85,7 @@ const SellerAssistant = ({ formData, currentStep, onClose }: SellerAssistantProp
 
 IMPORTANT RULES:
 1. You provide guidance on the UAE property selling process ONLY
-2. You are NOT licensed to give legal, financial, mortgage, or investment advice
+2. You are NOT licensed to give legal, mortgage, or investment advice
 3. For legal/mortgage questions, suggest contacting our licensed partners
 4. Always use the official contact: ${CONTACT_INFO.phone} and ${CONTACT_INFO.email}
 5. NEVER make up phone numbers or email addresses
