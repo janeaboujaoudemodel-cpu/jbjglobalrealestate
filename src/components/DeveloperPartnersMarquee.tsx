@@ -81,9 +81,15 @@ const DeveloperPartnersMarquee = () => {
   const distance = Math.max(1200, partners.length * 180);
 
   return (
-    <section className="py-12 md:py-20 bg-black border-y border-zinc-800/50 overflow-hidden">
-      <div className="container mx-auto px-4 mb-12 md:mb-16">
-        <h3 className="text-center text-xl md:text-2xl lg:text-3xl font-semibold uppercase tracking-[0.3em] bg-gradient-to-r from-[#F5F0E6] via-white to-[#F5F0E6] bg-clip-text text-transparent drop-shadow-[0_0_20px_rgba(255,255,255,0.4)]">
+    <section className="py-10 md:py-16 bg-black border-y border-zinc-800/50 overflow-hidden">
+      <div className="container mx-auto px-4 mb-8 md:mb-12">
+        <h3 
+          className="text-center text-2xl md:text-3xl lg:text-4xl font-bold uppercase tracking-[0.2em] bg-gradient-to-r from-[#F5F0E6] via-white to-[#F5F0E6] bg-clip-text text-transparent"
+          style={{
+            filter: 'drop-shadow(0 0 25px rgba(255,255,255,0.5)) drop-shadow(0 0 40px rgba(200,167,102,0.4))',
+            textShadow: '0 0 30px rgba(255,255,255,0.4)',
+          }}
+        >
           Partnering with UAE's Premier Developers
         </h3>
       </div>
@@ -117,29 +123,25 @@ const DeveloperPartnersMarquee = () => {
           {...(isPaused && { animate: undefined })}
         >
           {duplicatedDevelopers.map((developer, index) => {
-            const isClickable = !!developer.developerId;
             return (
               <div
                 key={`${developer.slug}-${index}`}
-                className="flex-shrink-0 flex items-center gap-3 group"
+                className="flex-shrink-0 flex items-center gap-4 group"
               >
+                {/* Developer Label - Mixed Color Style */}
                 <Link
                   to={`/properties?developer=${encodeURIComponent(
                     developer.developerId ?? developer.slug
                   )}`}
-                  className={
-                    developer.developerId
-                      ? "text-gold text-base md:text-lg lg:text-xl font-semibold tracking-wide whitespace-nowrap transition-all duration-300 cursor-pointer drop-shadow-[0_0_8px_rgba(200,167,102,0.6)] hover:text-white hover:drop-shadow-[0_0_20px_rgba(255,255,255,0.9)]"
-                      : "text-gold/70 text-base md:text-lg lg:text-xl font-semibold tracking-wide whitespace-nowrap transition-all duration-300 cursor-pointer drop-shadow-[0_0_6px_rgba(200,167,102,0.4)] hover:text-white hover:drop-shadow-[0_0_20px_rgba(255,255,255,0.9)]"
-                  }
+                  className="inline-flex items-center gap-2 px-4 py-2 bg-gradient-to-r from-white via-[#FDFBF7] to-[#F5F0E6] border border-gold/40 rounded-full transition-all duration-300 hover:shadow-[0_0_15px_rgba(200,167,102,0.5)] shadow-[0_0_10px_rgba(200,167,102,0.3)]"
                   title={developer.name}
-                  style={{
-                    textShadow: developer.developerId
-                      ? '0 0 12px rgba(200,167,102,0.5)'
-                      : '0 0 8px rgba(200,167,102,0.3)',
-                  }}
                 >
-                  {developer.name}
+                  <span className="text-gold group-hover:text-black transition-colors font-semibold text-sm md:text-base whitespace-nowrap">
+                    {developer.name.split(' ')[0]}
+                  </span>
+                  <span className="text-black group-hover:text-gold transition-colors font-semibold text-sm md:text-base whitespace-nowrap">
+                    {developer.name.split(' ').slice(1).join(' ') || ''}
+                  </span>
                 </Link>
 
                 {/* Separator diamond - glowing */}
