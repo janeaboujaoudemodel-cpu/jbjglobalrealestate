@@ -1,5 +1,5 @@
 import { useCallback, useEffect, useState } from "react";
-import { Download, X } from "lucide-react";
+import { Download, X, ArrowUp } from "lucide-react";
 import { AnimatePresence, motion } from "framer-motion";
 import { toast } from "sonner";
 
@@ -43,6 +43,7 @@ const InstallAppButton = () => {
   const [isIOS, setIsIOS] = useState(false);
   const [isMacSafari, setIsMacSafari] = useState(false);
   const [shouldShow, setShouldShow] = useState(false);
+  const [showArrowIndicator, setShowArrowIndicator] = useState(false);
 
   useEffect(() => {
     const wasInstalled = localStorage.getItem(STORAGE_KEYS.INSTALLED) === "true";
@@ -87,7 +88,11 @@ const InstallAppButton = () => {
       setDeferredPrompt(null);
       localStorage.setItem(STORAGE_KEYS.INSTALLED, "true");
       dismiss();
-      toast.success("App installed.");
+      toast.success("App installed! Look for it in the top-right corner of your browser.");
+      
+      // Show arrow indicator pointing to the installed app location
+      setShowArrowIndicator(true);
+      setTimeout(() => setShowArrowIndicator(false), 8000); // Show for 8 seconds
     };
 
     window.addEventListener("beforeinstallprompt", handleBeforeInstallPrompt);
@@ -156,12 +161,59 @@ const InstallAppButton = () => {
     dismiss();
   }, [dismiss]);
 
-  if (isInstalled || isDismissed || isMacSafari) return null;
-  if (!shouldShow) return null;
+  // Show arrow indicator even if installed (for a short time after install)
+  if ((isInstalled && !showArrowIndicator) || isDismissed || isMacSafari) return null;
+  if (!shouldShow && !showArrowIndicator) return null;
 
   return (
     <AnimatePresence>
-      {isVisible && (
+      {/* Arrow indicator pointing to installed app in Chrome toolbar */}
+      {showArrowIndicator && (
+        <motion.div
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          exit={{ opacity: 0, y: -20 }}
+          className="fixed top-4 right-20 z-[9999] flex flex-col items-center gap-2"
+        >
+          {/* Pulsing arrow pointing up-right toward Chrome extension area */}
+          <motion.div
+            className="flex flex-col items-center"
+            animate={{ y: [0, -10, 0] }}
+            transition={{ duration: 0.6, repeat: Infinity, ease: "easeInOut" }}
+          >
+            <ArrowUp className="w-8 h-8 text-gold rotate-45 drop-shadow-[0_0_10px_rgba(212,175,55,0.8)]" />
+            <ArrowUp className="w-6 h-6 text-gold rotate-45 -mt-3 drop-shadow-[0_0_10px_rgba(212,175,55,0.8)]" />
+          </motion.div>
+          
+          {/* Label */}
+          <motion.div
+            className="bg-black/90 border border-gold/50 rounded-lg px-4 py-2 shadow-xl shadow-gold/20"
+            animate={{ 
+              boxShadow: [
+                "0 0 20px rgba(212,175,55,0.3)",
+                "0 0 40px rgba(212,175,55,0.6)",
+                "0 0 20px rgba(212,175,55,0.3)"
+              ]
+            }}
+            transition={{ duration: 1.5, repeat: Infinity }}
+          >
+            <p className="text-gold font-semibold text-sm whitespace-nowrap">
+              App installed! Find it here →
+            </p>
+          </motion.div>
+          
+          {/* Close button */}
+          <button
+            onClick={() => setShowArrowIndicator(false)}
+            className="absolute -top-2 -right-2 w-6 h-6 bg-black border border-gold/50 rounded-full flex items-center justify-center hover:bg-gold/20 transition-colors"
+          >
+            <X className="w-3 h-3 text-gold" />
+          </button>
+        </motion.div>
+      )}
+
+      {/* Install prompt button */}
+      {isVisible && !showArrowIndicator && (
         <motion.div
           initial={{ scale: 0, opacity: 0 }}
           animate={{ scale: 1, opacity: 1 }}

@@ -121,7 +121,7 @@ const GlobalHeader = () => {
   const isActive = (path: string) => location.pathname === path;
 
   return (
-    <header className="fixed top-0 left-0 right-0 z-[9999] border-b border-gold/20 shadow-2xl shadow-black/50 overflow-hidden">
+    <header className="fixed top-0 left-0 right-0 z-[9999] border-b border-gold/20 shadow-2xl shadow-black/50">
       {/* Solid black background across entire header - no transparency */}
       <div className="absolute inset-0 bg-black" />
       {/* Premium top accent line */}
