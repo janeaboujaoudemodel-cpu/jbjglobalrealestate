@@ -68,6 +68,7 @@ const LANDLORD_GUIDE_STEPS = [
 export default function LandlordRentalPortal() {
   const navigate = useNavigate();
   const [searchParams] = useSearchParams();
+  const { user } = useAuth();
   const isAuthenticated = !!user;
   const { listings, isLoading, getApprovalStatus } = useRentalListings();
   const [activeTab, setActiveTab] = useState(searchParams.get('tab') || 'overview');
