@@ -294,8 +294,8 @@ const FAQ = () => {
             </div>
           </div>
 
-          {/* Main Content - Full Width Below TOC */}
-          <div className="max-w-5xl mx-auto space-y-16 mt-8 lg:mr-72 lg:pr-4">
+          {/* Main Content - Full Width Stretched */}
+          <div className="w-full space-y-16 mt-8">
             {categories.map((category, categoryIndex) => (
               <motion.div
                 key={categoryIndex}

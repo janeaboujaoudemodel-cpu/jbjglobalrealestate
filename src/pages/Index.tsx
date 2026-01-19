@@ -247,9 +247,9 @@ const Index = () => {
                 <div className="absolute inset-0 bg-gradient-to-br from-gold/5 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
                 <div className="relative z-10">
                   <div className="w-7 h-7 md:w-8 md:h-8 bg-black rounded-lg flex items-center justify-center mx-auto mb-1 md:mb-2 group-hover:bg-zinc-900 transition-colors">
-                    <Briefcase className="w-3.5 h-3.5 md:w-4 md:h-4 text-gold" />
+                    <Layers className="w-3.5 h-3.5 md:w-4 md:h-4 text-gold" />
                   </div>
-                  <h4 className="text-black text-[10px] md:text-xs font-semibold">Brokers</h4>
+                  <h4 className="text-black text-[10px] md:text-xs font-semibold">Investors</h4>
                 </div>
               </div>
             </Link>
@@ -331,9 +331,9 @@ const Index = () => {
                 <div className="absolute inset-0 bg-gradient-to-br from-gold/10 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
                 <div className="relative z-10">
                   <div className="w-10 h-10 bg-black rounded-lg flex items-center justify-center mx-auto mb-3 group-hover:bg-zinc-900 transition-colors">
-                    <Sparkles className="w-5 h-5 text-gold" />
+                    <Layers className="w-5 h-5 text-gold" />
                   </div>
-                  <h4 className="text-black text-sm font-semibold mb-1">All Tools</h4>
+                  <h4 className="text-black text-sm font-semibold mb-1">Investor Hub</h4>
                   <p className="text-zinc-600 text-xs">AI-powered tools</p>
                 </div>
               </div>
@@ -371,23 +371,23 @@ const Index = () => {
 
           {/* Resources Grid - Champagne Glowing Cards */}
           <div className="grid md:grid-cols-2 gap-6 max-w-4xl mx-auto">
-            {/* Broker Hub Card - Champagne Glow with Visible Border Glow */}
-            <Link to="/broker-toolkit" className="group">
+            {/* JBJ Employee Hub Card - Champagne Glow with Visible Border Glow */}
+            <Link to="/join" className="group">
               <div className="bg-gradient-to-br from-[#FDFBF7] via-[#F5F0E6] to-[#EDE4D3] border-2 border-gold/60 rounded-2xl p-6 md:p-8 hover:border-white hover:shadow-[0_0_50px_rgba(255,255,255,0.5)] transition-all duration-300 shadow-[0_0_30px_rgba(200,167,102,0.5)]">
                 <div className="flex items-center gap-4 mb-4">
                   <div className="w-12 h-12 bg-black rounded-xl flex items-center justify-center shadow-lg shadow-gold/30">
-                    <GraduationCap className="w-6 h-6 text-gold" />
+                    <Briefcase className="w-6 h-6 text-gold" />
                   </div>
                   <div>
-                    <h3 className="text-black text-lg font-semibold">Broker Hub</h3>
-                    <p className="text-zinc-500 text-xs">Tools, Training & Support</p>
+                    <h3 className="text-black text-lg font-semibold">JBJ Employee Hub</h3>
+                    <p className="text-zinc-500 text-xs">Careers & Opportunities</p>
                   </div>
                 </div>
                 <p className="text-zinc-600 text-sm mb-4">
-                  AI tools, training, HR support & coaching — all free.
+                  Explore career opportunities at JBJ — join our team as a broker, agent, or staff member and grow with us.
                 </p>
                 <span className="text-gold text-sm font-medium group-hover:underline flex items-center gap-1">
-                  Access Broker Hub
+                  View Career Opportunities
                   <svg className="w-3 h-3" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24">
                     <path strokeLinecap="round" strokeLinejoin="round" d="M7 17L17 7M17 7H7M17 7V17" />
                   </svg>
@@ -395,7 +395,7 @@ const Index = () => {
               </div>
             </Link>
 
-            {/* AI Hub Card - Champagne Glow with Visible Border Glow */}
+            {/* Investor Hub Card - Champagne Glow with Visible Border Glow */}
             <Link to="/ai-hub" className="group">
               <div className="bg-gradient-to-br from-[#FDFBF7] via-[#F5F0E6] to-[#EDE4D3] border-2 border-gold/60 rounded-2xl p-6 md:p-8 hover:border-white hover:shadow-[0_0_50px_rgba(255,255,255,0.5)] transition-all duration-300 shadow-[0_0_30px_rgba(200,167,102,0.5)]">
                 <div className="flex items-center gap-4 mb-4">
@@ -403,15 +403,15 @@ const Index = () => {
                     <Layers className="w-6 h-6 text-gold" />
                   </div>
                   <div>
-                    <h3 className="text-black text-lg font-semibold">JBJ AI Hub</h3>
-                    <p className="text-zinc-500 text-xs">20+ Free AI Tools</p>
+                    <h3 className="text-black text-lg font-semibold">JBJ Investor Hub</h3>
+                    <p className="text-zinc-500 text-xs">Free AI Tools for Investors</p>
                   </div>
                 </div>
                 <p className="text-zinc-600 text-sm mb-4">
-                  AI-powered tools for property analysis and productivity.
+                  AI-powered property analysis, comparison, mortgage calculator, and productivity tools — all free for investors and homeowners.
                 </p>
                 <span className="text-gold text-sm font-medium group-hover:underline flex items-center gap-1">
-                  Explore AI Tools
+                  Explore Investor Hub
                   <svg className="w-3 h-3" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24">
                     <path strokeLinecap="round" strokeLinejoin="round" d="M7 17L17 7M17 7H7M17 7V17" />
                   </svg>

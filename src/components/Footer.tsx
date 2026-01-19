@@ -119,6 +119,7 @@ const Footer = () => {
 
   // Broker Hub & Resources
   const academyLinks = [
+    { href: "/ai-hub", label: "Investor Hub" },
     { href: "/broker-toolkit", label: "Broker Hub" },
     { href: "/my-account", label: "My Dashboard" },
     { href: "/jbj-design-studio", label: "Graphic Designer" },
@@ -126,7 +127,7 @@ const Footer = () => {
   ];
 
   const professionalTools = [
-    { href: "/ai-hub", label: "JBJ Broker Hub" },
+    { href: "/ai-hub", label: "JBJ Investor Hub" },
     { href: "/compare", label: "Property Comparison" },
     { href: "/property-evaluator", label: "JBJ Property Evaluator" },
     { href: "/rental-index", label: "JBJ Rental Index" },
