@@ -54,20 +54,37 @@ export const PreFooterSeparator = ({
             {subtitle}
           </p>
           <div className="flex flex-wrap justify-center gap-4">
+            {/* Primary Button - 3D Premium Style */}
             <Link to={primaryLink}>
               <button 
-                className="inline-flex items-center justify-center gap-2 px-8 py-5 text-base font-semibold rounded-xl transition-all duration-300 bg-gradient-to-br from-white via-[#FDFBF7] to-[#F5F0E6] text-gold border-2 border-gold/40 shadow-[0_8px_30px_rgba(200,167,102,0.25),inset_0_1px_0_rgba(255,255,255,0.9)] hover:shadow-[0_4px_15px_rgba(200,167,102,0.15)] hover:translate-y-0.5"
+                className="relative inline-flex items-center justify-center gap-2 px-10 py-5 text-base font-bold rounded-xl transition-all duration-300 group overflow-hidden"
+                style={{
+                  background: 'linear-gradient(135deg, #FFFFFF 0%, #FDFBF7 25%, #F5F0E6 50%, #E8DFD0 75%, #C8A766 100%)',
+                  boxShadow: `
+                    0 10px 30px rgba(200,167,102,0.4),
+                    0 6px 15px rgba(0,0,0,0.2),
+                    inset 0 2px 4px rgba(255,255,255,0.9),
+                    inset 0 -2px 4px rgba(200,167,102,0.2),
+                    0 0 20px rgba(200,167,102,0.3)
+                  `,
+                }}
               >
-                {primaryText}
-                <ArrowUpRight className="w-4 h-4 text-black" />
+                <span className="absolute inset-x-0 top-0 h-1/2 rounded-t-xl bg-gradient-to-b from-white/80 to-transparent pointer-events-none" />
+                <span className="absolute inset-0 rounded-xl opacity-0 group-hover:opacity-100 transition-opacity duration-300 pointer-events-none" style={{ boxShadow: '0 0 40px rgba(200,167,102,0.6), inset 0 0 20px rgba(200,167,102,0.1)' }} />
+                <span className="relative flex items-center gap-2">
+                  <span className="text-gold">{primaryText.split(' ')[0]}</span>
+                  <span className="text-black">{primaryText.split(' ').slice(1).join(' ') || ''}</span>
+                  <ArrowUpRight className="w-5 h-5 text-black" />
+                </span>
               </button>
             </Link>
+            {/* Secondary Button - Transparent with black border */}
             <Link to={secondaryLink}>
               <button 
-                className="inline-flex items-center justify-center gap-2 px-8 py-5 text-base font-semibold rounded-xl transition-all duration-300 bg-gradient-to-br from-white via-[#FDFBF7] to-[#F5F0E6] text-gold border-2 border-gold/40 shadow-[0_8px_30px_rgba(200,167,102,0.25),inset_0_1px_0_rgba(255,255,255,0.9)] hover:shadow-[0_4px_15px_rgba(200,167,102,0.15)] hover:translate-y-0.5"
+                className="relative inline-flex items-center justify-center gap-2 px-10 py-5 text-base font-bold rounded-xl transition-all duration-300 bg-transparent border-2 border-black text-black hover:bg-black hover:text-white group"
               >
                 {secondaryText}
-                <ArrowUpRight className="w-4 h-4 text-black" />
+                <ArrowUpRight className="w-5 h-5" />
               </button>
             </Link>
           </div>

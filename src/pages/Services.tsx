@@ -335,12 +335,12 @@ const Services = () => {
                   whileHover={{ scale: 1.02 }}
                 >
                   <div className="w-14 h-14 rounded-xl bg-gradient-to-br from-white via-[#FDFBF7] to-[#F5F0E6] border border-gold/30 flex items-center justify-center mb-4">
-                    <tool.icon className="w-7 h-7 text-black" />
+                    <tool.icon className="w-7 h-7 text-black group-hover:text-gold transition-colors" />
                   </div>
                   <h4 className="text-gold font-semibold mb-2 group-hover:text-black transition-colors">
                     {tool.name}
                   </h4>
-                  <ArrowUpRight className="w-4 h-4 text-gold group-hover:text-black group-hover:translate-x-1 group-hover:-translate-y-1 transition-all" />
+                  <ArrowUpRight className="w-4 h-4 text-black group-hover:text-gold group-hover:translate-x-1 group-hover:-translate-y-1 transition-all" />
                 </motion.div>
               </Link>
             ))}
