@@ -84,13 +84,17 @@ const DeveloperPartnersMarquee = () => {
     <section className="py-10 md:py-16 bg-black border-y border-zinc-800/50 overflow-hidden">
       <div className="container mx-auto px-4 mb-8 md:mb-10">
         <h3 
-          className="text-center text-xl md:text-2xl lg:text-3xl font-bold uppercase tracking-[0.15em] bg-gradient-to-r from-[#F5F0E6] via-white to-[#F5F0E6] bg-clip-text text-transparent"
+          className="text-center text-xl md:text-2xl lg:text-3xl font-bold uppercase tracking-[0.15em]"
           style={{
-            filter: 'drop-shadow(0 0 25px rgba(255,255,255,0.5)) drop-shadow(0 0 40px rgba(200,167,102,0.4))',
-            textShadow: '0 0 30px rgba(255,255,255,0.4)',
+            filter: 'drop-shadow(0 0 15px rgba(255,255,255,0.3)) drop-shadow(0 0 25px rgba(200,167,102,0.25))',
           }}
         >
-          Partnering with UAE's Premier Developers
+          <span className="bg-gradient-to-r from-white via-[#FDFBF7] to-white bg-clip-text text-transparent">
+            Partnering with UAE's{" "}
+          </span>
+          <span className="bg-gradient-to-r from-[#D4AF37] via-[#E8D59A] to-[#D4AF37] bg-clip-text text-transparent">
+            Premier Developers
+          </span>
         </h3>
       </div>
 
@@ -128,32 +132,37 @@ const DeveloperPartnersMarquee = () => {
                 key={`${developer.slug}-${index}`}
                 className="flex-shrink-0 flex items-center gap-4 group"
               >
-                {/* Developer Label - 3D Frame Style with less rounded borders */}
+                {/* Developer Label - REVERSED: Black text on gold bg on normal, gold text on normal bg on hover */}
                 <Link
                   to={`/properties?developer=${encodeURIComponent(
                     developer.developerId ?? developer.slug
                   )}`}
-                  className="inline-flex items-center gap-2 px-4 py-2.5 bg-gradient-to-r from-white via-[#FDFBF7] to-[#F5F0E6] border-2 border-black rounded-lg transition-all duration-300 hover:scale-105 hover:shadow-[0_8px_25px_rgba(200,167,102,0.5)] shadow-[0_4px_15px_rgba(200,167,102,0.3)]"
+                  className="inline-flex items-center gap-2 px-4 py-2.5 bg-black border-2 border-gold rounded-lg transition-all duration-300 hover:scale-105 hover:bg-gradient-to-r hover:from-white hover:via-[#FDFBF7] hover:to-[#F5F0E6] hover:border-black hover:shadow-[0_8px_25px_rgba(200,167,102,0.5)] shadow-[0_4px_15px_rgba(200,167,102,0.3)]"
                   style={{
                     boxShadow: `
                       0 4px 15px rgba(200,167,102,0.3),
-                      inset 0 2px 4px rgba(255,255,255,0.9),
-                      inset 0 -2px 4px rgba(200,167,102,0.2)
+                      0 0 20px rgba(200,167,102,0.2)
                     `,
                   }}
                   title={developer.name}
                 >
-                  <span className="text-gold group-hover:text-black transition-colors font-semibold text-sm md:text-base whitespace-nowrap">
+                  <span className="text-white group-hover:text-gold transition-colors font-semibold text-sm md:text-base whitespace-nowrap">
                     {developer.name.split(' ')[0]}
                   </span>
-                  <span className="text-black group-hover:text-gold transition-colors font-semibold text-sm md:text-base whitespace-nowrap">
+                  <span className="text-gold group-hover:text-black transition-colors font-semibold text-sm md:text-base whitespace-nowrap">
                     {developer.name.split(' ').slice(1).join(' ') || ''}
                   </span>
                 </Link>
 
-                {/* Separator diamond - glowing */}
+                {/* Separator diamond - half gold, half white with glow */}
                 {index < duplicatedDevelopers.length - 1 && (
-                  <span className="w-1.5 h-1.5 bg-gold rotate-45 flex-shrink-0 shadow-[0_0_8px_rgba(200,167,102,0.8)]" />
+                  <span 
+                    className="w-2 h-2 rotate-45 flex-shrink-0"
+                    style={{
+                      background: 'linear-gradient(135deg, #D4AF37 50%, #FFFFFF 50%)',
+                      boxShadow: '0 0 8px rgba(255,255,255,0.6), 0 0 12px rgba(200,167,102,0.8)',
+                    }}
+                  />
                 )}
               </div>
             );
