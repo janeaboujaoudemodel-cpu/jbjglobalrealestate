@@ -12,6 +12,7 @@ import { supabase } from "@/integrations/supabase/client";
 import { useAuth } from "@/contexts/AuthContext";
 import { useUserRole } from "@/hooks/useUserRole";
 import { AdminTasksPanel } from "@/components/crm/AdminTasksPanel";
+import InvestorDashboard from "@/components/account/InvestorDashboard";
 import {
   User,
   GraduationCap,
@@ -86,8 +87,8 @@ interface ChatLog {
 
 const BrokerAccount = () => {
   const navigate = useNavigate();
-  const { user } = useAuth();
-  const { isBroker } = useUserRole();
+  const { user, loading: authLoading } = useAuth();
+  const { isBroker, isInvestor, isVisitor, role, isLoading: roleLoading } = useUserRole();
   const [modules, setModules] = useState<TrainingModule[]>([]);
   const [progress, setProgress] = useState<TrainingProgress[]>([]);
   const [points, setPoints] = useState<BrokerPoints | null>(null);
@@ -113,22 +114,20 @@ const BrokerAccount = () => {
         setIsEmployee(true);
         setEmployeeProfile(data);
       }
+      setLoading(false);
     };
     
-    checkEmployeeStatus();
-  }, [user?.id]);
-
-  useEffect(() => {
-    // Allow access for both external brokers AND CRM employees
-    if (!isBroker && !isEmployee && !loading) {
-      toast.error("This page is only accessible to team members");
-      navigate('/');
-      return;
+    if (!authLoading && !roleLoading) {
+      checkEmployeeStatus();
     }
-    if (user) {
+  }, [user?.id, authLoading, roleLoading]);
+
+  // Fetch employee/broker data only if they are an employee or broker
+  useEffect(() => {
+    if ((isBroker || isEmployee) && user && !loading) {
       fetchData();
     }
-  }, [isBroker, isEmployee, navigate, user, loading]);
+  }, [isBroker, isEmployee, user, loading]);
 
   const fetchData = async () => {
     if (!user) return;
@@ -183,7 +182,7 @@ const BrokerAccount = () => {
     return `${mins}:${secs.toString().padStart(2, '0')}`;
   };
 
-  if (loading) {
+  if (loading || authLoading || roleLoading) {
     return (
       <MainLayout>
         <div className="min-h-screen flex items-center justify-center">
@@ -191,6 +190,25 @@ const BrokerAccount = () => {
         </div>
       </MainLayout>
     );
+  }
+
+  // Show investor/visitor dashboard if not an employee or broker
+  if (!isEmployee && !isBroker && user) {
+    return (
+      <MainLayout>
+        <div className="min-h-screen bg-gradient-to-br from-white via-[#FDFBF7] to-[#F5F0E6]">
+          <div className="container mx-auto px-4 py-8">
+            <InvestorDashboard />
+          </div>
+        </div>
+      </MainLayout>
+    );
+  }
+
+  // Redirect if not authenticated
+  if (!user) {
+    navigate('/auth?redirect=/my-account');
+    return null;
   }
 
   return (
