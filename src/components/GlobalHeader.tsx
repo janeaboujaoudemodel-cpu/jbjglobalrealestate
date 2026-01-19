@@ -122,14 +122,14 @@ const GlobalHeader = () => {
 
   return (
     <header className="fixed top-0 left-0 right-0 z-[9999] border-b border-gold/20 shadow-2xl shadow-black/50 overflow-hidden">
-      {/* Split background: Black behind monogram logo only, transparent elsewhere */}
+      {/* Split background: Black for upper portion, transparent from nav pill bottom line down */}
       <div className="absolute inset-0">
-        {/* Solid black ONLY behind monogram (narrower area - just around the logo) */}
-        <div className="absolute left-0 top-0 bottom-0 w-20 lg:w-24 bg-black" />
-        {/* Gradient fade from black to transparent after monogram */}
-        <div className="absolute left-20 lg:left-24 top-0 bottom-0 w-16 bg-gradient-to-r from-black to-transparent" />
-        {/* Rest of header is transparent with subtle backdrop blur */}
-        <div className="absolute left-36 lg:left-40 top-0 bottom-0 right-0 bg-black/40 backdrop-blur-xl" />
+        {/* Upper part of header is solid black (above the navigation pill bottom line) */}
+        <div className="absolute left-0 top-0 right-0 h-12 lg:h-14 bg-black" />
+        {/* Gradient fade from black to transparent below that */}
+        <div className="absolute left-0 top-12 lg:top-14 right-0 h-8 bg-gradient-to-b from-black to-transparent" />
+        {/* Rest is transparent with subtle backdrop blur */}
+        <div className="absolute left-0 top-20 lg:top-22 right-0 bottom-0 bg-black/30 backdrop-blur-xl" />
       </div>
       {/* Premium top accent line */}
       <div className="absolute top-0 left-0 right-0 h-[2px] bg-gradient-to-r from-transparent via-gold/60 to-transparent z-10" />

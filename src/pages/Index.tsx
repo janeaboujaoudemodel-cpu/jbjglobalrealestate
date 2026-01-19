@@ -380,23 +380,23 @@ const Index = () => {
 
           {/* Resources Grid - Champagne Glowing Cards */}
           <div className="grid md:grid-cols-2 gap-6 max-w-4xl mx-auto">
-            {/* JBJ Employee Hub Card - Champagne Glow with Visible Border Glow */}
-            <Link to="/join" className="group">
+            {/* JBJ Broker Hub Card - Champagne Glow with Visible Border Glow */}
+            <Link to="/broker-toolkit" className="group">
               <div className="bg-gradient-to-br from-[#FDFBF7] via-[#F5F0E6] to-[#EDE4D3] border-2 border-gold/60 rounded-2xl p-6 md:p-8 hover:border-white hover:shadow-[0_0_50px_rgba(255,255,255,0.5)] transition-all duration-300 shadow-[0_0_30px_rgba(200,167,102,0.5)]">
                 <div className="flex items-center gap-4 mb-4">
                   <div className="w-12 h-12 bg-black rounded-xl flex items-center justify-center shadow-lg shadow-gold/30">
                     <Briefcase className="w-6 h-6 text-gold" />
                   </div>
                   <div>
-                    <h3 className="text-black text-lg font-semibold">JBJ Employee Hub</h3>
-                    <p className="text-zinc-500 text-xs">Careers & Opportunities</p>
+                    <h3 className="text-black text-lg font-semibold">JBJ Broker Hub</h3>
+                    <p className="text-zinc-500 text-xs">Professional Tools & Resources</p>
                   </div>
                 </div>
                 <p className="text-zinc-600 text-sm mb-4">
-                  Explore career opportunities at JBJ — join our team as a broker, agent, or staff member and grow with us.
+                  Access AI-powered broker tools, training modules, CRM, marketing resources, and everything you need to succeed.
                 </p>
                 <span className="text-gold text-sm font-medium group-hover:underline flex items-center gap-1">
-                  View Career Opportunities
+                  Access Broker Hub
                   <svg className="w-3 h-3" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24">
                     <path strokeLinecap="round" strokeLinejoin="round" d="M7 17L17 7M17 7H7M17 7V17" />
                   </svg>
