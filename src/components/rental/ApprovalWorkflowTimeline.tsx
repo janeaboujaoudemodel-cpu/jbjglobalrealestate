@@ -1,6 +1,8 @@
 /**
  * APPROVAL WORKFLOW TIMELINE
- * Visual timeline showing the multi-step approval process with approver details
+ * Visual timeline showing the 4-step unified approval process with approver details
+ * 
+ * Workflow: Admin → Leadership → Executive Assistant → Founder
  */
 
 import { useState } from 'react';
@@ -15,7 +17,7 @@ import {
   HoverCardContent,
   HoverCardTrigger,
 } from '@/components/ui/hover-card';
-import { APPROVAL_WORKFLOW } from '@/hooks/useRentalListings';
+import { UNIFIED_APPROVAL_WORKFLOW } from '@/config/listing-approval-workflow';
 import { format } from 'date-fns';
 
 interface ApprovalStep {
@@ -42,6 +44,7 @@ interface ApprovalWorkflowTimelineProps {
   isLive: boolean;
   isRejected: boolean;
   className?: string;
+  listingType?: 'rental' | 'sale';
 }
 
 export function ApprovalWorkflowTimeline({
@@ -50,8 +53,10 @@ export function ApprovalWorkflowTimeline({
   isLive,
   isRejected,
   className,
+  listingType = 'rental',
 }: ApprovalWorkflowTimelineProps) {
   const [expandedStep, setExpandedStep] = useState<number | null>(null);
+  const workflowConfig = UNIFIED_APPROVAL_WORKFLOW;
 
   const getStepStatus = (step: ApprovalStep, index: number) => {
     if (isRejected) return 'rejected';
@@ -110,7 +115,7 @@ export function ApprovalWorkflowTimeline({
       <div className="relative">
         {steps.map((step, index) => {
           const status = getStepStatus(step, index);
-          const workflowInfo = APPROVAL_WORKFLOW[index];
+          const workflowInfo = workflowConfig[index] || step;
           const isLastStep = index === steps.length - 1;
 
           return (

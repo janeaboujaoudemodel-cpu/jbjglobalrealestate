@@ -8078,6 +8078,99 @@ export type Database = {
         }
         Relationships: []
       }
+      listing_approvals: {
+        Row: {
+          approved_at: string | null
+          approver_department: string | null
+          approver_email: string | null
+          approver_name: string | null
+          approver_photo: string | null
+          approver_role: string
+          approver_title: string | null
+          created_at: string | null
+          id: string
+          listing_id: string
+          listing_type: string
+          notes: string | null
+          status: string
+          step_name: string
+          step_number: number
+        }
+        Insert: {
+          approved_at?: string | null
+          approver_department?: string | null
+          approver_email?: string | null
+          approver_name?: string | null
+          approver_photo?: string | null
+          approver_role: string
+          approver_title?: string | null
+          created_at?: string | null
+          id?: string
+          listing_id: string
+          listing_type: string
+          notes?: string | null
+          status?: string
+          step_name: string
+          step_number: number
+        }
+        Update: {
+          approved_at?: string | null
+          approver_department?: string | null
+          approver_email?: string | null
+          approver_name?: string | null
+          approver_photo?: string | null
+          approver_role?: string
+          approver_title?: string | null
+          created_at?: string | null
+          id?: string
+          listing_id?: string
+          listing_type?: string
+          notes?: string | null
+          status?: string
+          step_name?: string
+          step_number?: number
+        }
+        Relationships: []
+      }
+      listing_notifications: {
+        Row: {
+          created_at: string | null
+          id: string
+          is_read: boolean | null
+          listing_id: string
+          listing_type: string
+          message: string
+          notification_type: string
+          step_completed: string | null
+          title: string
+          user_id: string
+        }
+        Insert: {
+          created_at?: string | null
+          id?: string
+          is_read?: boolean | null
+          listing_id: string
+          listing_type: string
+          message: string
+          notification_type: string
+          step_completed?: string | null
+          title: string
+          user_id: string
+        }
+        Update: {
+          created_at?: string | null
+          id?: string
+          is_read?: boolean | null
+          listing_id?: string
+          listing_type?: string
+          message?: string
+          notification_type?: string
+          step_completed?: string | null
+          title?: string
+          user_id?: string
+        }
+        Relationships: []
+      }
       market_alerts: {
         Row: {
           acknowledged_at: string | null
@@ -10001,6 +10094,8 @@ export type Database = {
           landlord_name: string
           landlord_nationality: string | null
           landlord_phone: string
+          leadership_approved_at: string | null
+          leadership_approved_by: string | null
           ownership_type: string | null
           payment_terms: string | null
           property_title: string
@@ -10039,6 +10134,8 @@ export type Database = {
           landlord_name: string
           landlord_nationality?: string | null
           landlord_phone: string
+          leadership_approved_at?: string | null
+          leadership_approved_by?: string | null
           ownership_type?: string | null
           payment_terms?: string | null
           property_title: string
@@ -10077,6 +10174,8 @@ export type Database = {
           landlord_name?: string
           landlord_nationality?: string | null
           landlord_phone?: string
+          leadership_approved_at?: string | null
+          leadership_approved_by?: string | null
           ownership_type?: string | null
           payment_terms?: string | null
           property_title?: string
@@ -10409,16 +10508,25 @@ export type Database = {
       seller_listings: {
         Row: {
           additional_doc_urls: string[] | null
+          admin_approved_at: string | null
+          admin_approved_by: string | null
           ai_generated_description: string | null
+          assistant_approved_at: string | null
+          assistant_approved_by: string | null
           bedrooms: number | null
           community_building: string | null
           created_at: string
           estimated_value_range: Json | null
           floor_plan_urls: string[] | null
+          founder_approved_at: string | null
+          founder_approved_by: string | null
           has_upgrades: boolean | null
           id: string
           is_furnished: boolean | null
           key_highlights: string[] | null
+          leadership_approved_at: string | null
+          leadership_approved_by: string | null
+          listing_description: string | null
           minimum_acceptable_price: number | null
           passport_url: string | null
           photo_urls: string[] | null
@@ -10431,6 +10539,7 @@ export type Database = {
           property_status: string | null
           property_type: string
           purchase_price: number | null
+          rejection_reason: string | null
           review_notes: string | null
           reviewed_at: string | null
           reviewed_by: string | null
@@ -10448,19 +10557,29 @@ export type Database = {
           upgrade_details: string | null
           user_id: string
           video_urls: string[] | null
+          went_live_at: string | null
         }
         Insert: {
           additional_doc_urls?: string[] | null
+          admin_approved_at?: string | null
+          admin_approved_by?: string | null
           ai_generated_description?: string | null
+          assistant_approved_at?: string | null
+          assistant_approved_by?: string | null
           bedrooms?: number | null
           community_building?: string | null
           created_at?: string
           estimated_value_range?: Json | null
           floor_plan_urls?: string[] | null
+          founder_approved_at?: string | null
+          founder_approved_by?: string | null
           has_upgrades?: boolean | null
           id?: string
           is_furnished?: boolean | null
           key_highlights?: string[] | null
+          leadership_approved_at?: string | null
+          leadership_approved_by?: string | null
+          listing_description?: string | null
           minimum_acceptable_price?: number | null
           passport_url?: string | null
           photo_urls?: string[] | null
@@ -10473,6 +10592,7 @@ export type Database = {
           property_status?: string | null
           property_type: string
           purchase_price?: number | null
+          rejection_reason?: string | null
           review_notes?: string | null
           reviewed_at?: string | null
           reviewed_by?: string | null
@@ -10490,19 +10610,29 @@ export type Database = {
           upgrade_details?: string | null
           user_id: string
           video_urls?: string[] | null
+          went_live_at?: string | null
         }
         Update: {
           additional_doc_urls?: string[] | null
+          admin_approved_at?: string | null
+          admin_approved_by?: string | null
           ai_generated_description?: string | null
+          assistant_approved_at?: string | null
+          assistant_approved_by?: string | null
           bedrooms?: number | null
           community_building?: string | null
           created_at?: string
           estimated_value_range?: Json | null
           floor_plan_urls?: string[] | null
+          founder_approved_at?: string | null
+          founder_approved_by?: string | null
           has_upgrades?: boolean | null
           id?: string
           is_furnished?: boolean | null
           key_highlights?: string[] | null
+          leadership_approved_at?: string | null
+          leadership_approved_by?: string | null
+          listing_description?: string | null
           minimum_acceptable_price?: number | null
           passport_url?: string | null
           photo_urls?: string[] | null
@@ -10515,6 +10645,7 @@ export type Database = {
           property_status?: string | null
           property_type?: string
           purchase_price?: number | null
+          rejection_reason?: string | null
           review_notes?: string | null
           reviewed_at?: string | null
           reviewed_by?: string | null
@@ -10532,6 +10663,7 @@ export type Database = {
           upgrade_details?: string | null
           user_id?: string
           video_urls?: string[] | null
+          went_live_at?: string | null
         }
         Relationships: []
       }
@@ -12535,6 +12667,28 @@ export type Database = {
           name?: string | null
           slug?: string | null
           updated_at?: string | null
+        }
+        Relationships: []
+      }
+      unified_listing_approvals: {
+        Row: {
+          approved_at: string | null
+          approver_department: string | null
+          approver_email: string | null
+          approver_name: string | null
+          approver_photo: string | null
+          approver_role: string | null
+          approver_title: string | null
+          created_at: string | null
+          id: string | null
+          listing_id: string | null
+          listing_type: string | null
+          notes: string | null
+          owner_user_id: string | null
+          property_title: string | null
+          status: string | null
+          step_name: string | null
+          step_number: number | null
         }
         Relationships: []
       }
