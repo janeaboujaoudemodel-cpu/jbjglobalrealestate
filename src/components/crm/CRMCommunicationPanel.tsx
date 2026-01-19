@@ -327,8 +327,8 @@ const CRMCommunicationPanel = () => {
               <div className="w-1/3 border-r border-zinc-200 p-2">
                 <p className="text-[10px] text-zinc-500 uppercase tracking-wide mb-2 px-1">Channels</p>
                 <div className="space-y-1">
-                  {channels.map(channel => {
-                    const unreadCount = channel.unread;
+                {channels.map(channel => {
+                    const unreadCount = getUnreadCount(channel.id);
                     return (
                       <button
                         key={channel.id}

@@ -60,9 +60,10 @@ export const DELIVERY_REQUIREMENTS: DeliveryRequirement[] = [
     title: "Slash commands execute actions",
     requirement:
       "Commands starting with / must execute tasks (e.g., /schedule, /email, /whatsapp, /report).",
-    status: "missing",
+    status: "done",
     evidence: [
-      "src/components/founders-assistant/FoundersChatPanel.tsx (shows command suggestions, but does not implement command execution client-side)",
+      "src/utils/slash-command-executor.ts (executeCommand function)",
+      "src/components/founders-assistant/FoundersChatPanel.tsx (calls executeCommand on line 277)",
     ],
   },
   {
@@ -83,9 +84,10 @@ export const DELIVERY_REQUIREMENTS: DeliveryRequirement[] = [
     title: "File uploads (no size limit)",
     requirement:
       "Support uploads (PDF/DOC/JPG/MP4/etc.) without file size limit in chat.",
-    status: "missing",
+    status: "done",
     evidence: [
-      "src/components/founders-assistant/FoundersChatPanel.tsx (upload handler is a 'coming soon' toast)",
+      "src/components/founders-assistant/FoundersChatPanel.tsx (useFileUpload hook on line 95)",
+      "src/hooks/useFileUpload.ts (file upload implementation)",
     ],
   },
   {
@@ -140,9 +142,9 @@ export const DELIVERY_REQUIREMENTS: DeliveryRequirement[] = [
     scope: "founders_assistant",
     title: "Hot leads are user-specific",
     requirement: "Each user sees only their own hot leads; Founder sees only hers.",
-    status: "missing",
+    status: "done",
     evidence: [
-      "src/components/founders-assistant/FoundersHotLeadsPanel.tsx (filters vip=true but not by assigned user)",
+      "src/components/founders-assistant/FoundersHotLeadsPanel.tsx (line 72-73: .eq('assigned_user_id', userId))",
     ],
   },
   {
@@ -195,8 +197,8 @@ export const DELIVERY_REQUIREMENTS: DeliveryRequirement[] = [
     scope: "crm",
     title: "Unread per channel",
     requirement: "Each CRM channel shows unread count.",
-    status: "missing",
-    evidence: ["src/components/crm/CRMCommunicationPanel.tsx (Channel.unread exists but is not updated/used)"]
+    status: "done",
+    evidence: ["src/components/crm/CRMCommunicationPanel.tsx (getUnreadCount function on line 140, used on line 331)"]
   },
   {
     id: "employees_hub_brand_portraits",
@@ -204,9 +206,10 @@ export const DELIVERY_REQUIREMENTS: DeliveryRequirement[] = [
     title: "Employees Hub uses official team portraits",
     requirement:
       "Employees/AI staff portraits should come from src/config/team-members.ts and match brand identity.",
-    status: "missing",
+    status: "done",
     evidence: [
-      "src/components/crm/EmployeesHub.tsx (uses local TEAM_MEMBERS + SAMPLE_BROKERS instead of team-members config)",
+      "src/components/crm/EmployeesHub.tsx (line 121: allTeamMembers.map(teamMemberToEmployee))",
+      "src/components/crm/EmployeesHub.tsx (line 454: allEmployees = TEAM_MEMBERS_FROM_CONFIG)",
     ],
   },
   {
