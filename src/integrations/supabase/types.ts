@@ -12551,6 +12551,10 @@ export type Database = {
         Args: { _lead_id: string; _user_id: string }
         Returns: boolean
       }
+      check_chat_rate_limit: {
+        Args: { p_session_id: string }
+        Returns: boolean
+      }
       check_contact_form_rate_limit: {
         Args: { p_email: string; p_ip_address: string }
         Returns: Json
@@ -12565,6 +12569,10 @@ export type Database = {
           p_max_submissions?: number
           p_window_hours?: number
         }
+        Returns: boolean
+      }
+      check_lead_submission_rate: {
+        Args: { p_email: string }
         Returns: boolean
       }
       check_message_compliance: {

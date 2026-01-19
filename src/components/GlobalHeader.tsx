@@ -146,7 +146,7 @@ const GlobalHeader = () => {
               {/* Subtle glow on hover */}
               <div className="absolute inset-0 rounded-full bg-gold/0 group-hover:bg-gold/10 transition-colors duration-300 blur-xl" />
             </div>
-            <span className="text-white font-semibold text-base lg:text-xl tracking-[0.14em] uppercase whitespace-nowrap hidden sm:inline drop-shadow-sm">
+            <span className="text-white font-semibold text-xs lg:text-sm tracking-[0.1em] uppercase whitespace-nowrap hidden sm:inline drop-shadow-sm">
               JBJ Global Real Estate
             </span>
           </Link>
@@ -310,10 +310,10 @@ const GlobalHeader = () => {
             <Button
               variant="ghost"
               size="sm"
-              className="relative w-8 h-8 p-0 rounded-full bg-white border border-gold/30 hover:bg-transparent hover:border-gold/50 transition-all duration-300 group"
+              className="relative w-7 h-7 p-0 rounded-full bg-white border border-gold/30 hover:bg-transparent hover:border-gold/50 transition-all duration-300 group"
               onClick={() => setSearchOpen(true)}
             >
-              <Search className="w-3.5 h-3.5 text-gold group-hover:text-gold-light transition-colors" />
+              <Search className="w-3 h-3 text-gold group-hover:text-gold-light transition-colors" />
             </Button>
 
             {/* Language Switcher - Inverted style */}
@@ -471,10 +471,10 @@ const GlobalHeader = () => {
                     <Button 
                       variant="ghost" 
                       size="icon"
-                      className="relative text-gold hover:text-gold-light w-8 h-8 p-0 rounded-full border border-gold/20 hover:border-gold/50 hover:bg-gold/10 transition-all duration-300 group"
+                      className="relative text-gold hover:text-gold-light w-7 h-7 p-0 rounded-full border border-gold/20 hover:border-gold/50 hover:bg-gold/10 transition-all duration-300 group"
                       aria-label={t('nav.myAccount')}
                     >
-                      <User className="w-3.5 h-3.5 group-hover:scale-110 transition-transform" />
+                      <User className="w-3 h-3 group-hover:scale-110 transition-transform" />
                     </Button>
                   </DropdownMenuTrigger>
                   <DropdownMenuContent 

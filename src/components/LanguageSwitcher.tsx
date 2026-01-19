@@ -26,11 +26,11 @@ const LanguageSwitcher = ({ variant = 'default' }: LanguageSwitcherProps) => {
           variant="ghost"
           size="sm"
           className={isCompact 
-            ? "h-8 w-8 p-0 rounded-full bg-white border border-gold/30 hover:bg-transparent hover:border-gold/50 transition-all duration-300 group"
+            ? "h-7 w-7 p-0 rounded-full bg-white border border-gold/30 hover:bg-transparent hover:border-gold/50 transition-all duration-300 group"
             : "h-10 lg:h-11 px-3 text-gold hover:text-gold-light rounded-full border border-gold/20 hover:border-gold/50 hover:bg-gold/10 transition-all duration-300 group gap-2"
           }
         >
-          <Globe className={isCompact ? "w-3.5 h-3.5 text-gold group-hover:text-gold-light" : "w-4 h-4 group-hover:scale-110 transition-transform"} />
+          <Globe className={isCompact ? "w-3 h-3 text-gold group-hover:text-gold-light" : "w-4 h-4 group-hover:scale-110 transition-transform"} />
           {!isCompact && <span className="hidden sm:inline text-xs font-medium tracking-wide">{currentLang.flag} {currentLang.code.toUpperCase()}</span>}
         </Button>
       </DropdownMenuTrigger>
