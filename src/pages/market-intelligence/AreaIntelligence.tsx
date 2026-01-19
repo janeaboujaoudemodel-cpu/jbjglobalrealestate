@@ -68,8 +68,8 @@ const AreaIntelligence = () => {
         </motion.div>
       </section>
 
-      {/* Areas Grid */}
-      <section className="py-16 border-t border-zinc-900">
+      {/* Areas Grid - White Pearl / Champagne Gold Cards */}
+      <section className="py-16 border-t border-zinc-800">
         <div className="container mx-auto px-4">
           <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
             {DUBAI_AREAS_MARKET_DATA.map((area, index) => (
@@ -81,40 +81,40 @@ const AreaIntelligence = () => {
                 transition={{ delay: index * 0.05 }}
               >
                 <Link to={`/market-intelligence/areas/${area.area.toLowerCase().replace(/\s+/g, '-')}`}>
-                  <Card className="bg-zinc-900/50 border-zinc-800 hover:border-gold/30 transition-all h-full group cursor-pointer">
+                  <Card className="bg-gradient-to-br from-white via-[#FDFBF7] to-[#F5F0E6] border border-gold/30 hover:border-gold hover:shadow-lg hover:shadow-gold/10 transition-all h-full group cursor-pointer">
                     <CardContent className="p-6">
                       <div className="flex items-start justify-between mb-4">
                         <div>
-                          <h3 className="text-white font-bold text-lg group-hover:text-gold transition-colors">{area.area}</h3>
+                          <h3 className="text-black font-bold text-lg group-hover:text-gold transition-colors">{area.area}</h3>
                           {getTrendBadge(area.trend)}
                         </div>
                         <div className="text-right">
                           <div className="flex items-center gap-1">
                             {area.yoyChange > 0 ? (
-                              <TrendingUp className="w-4 h-4 text-emerald-400" />
+                              <TrendingUp className="w-4 h-4 text-emerald-500" />
                             ) : (
-                              <TrendingDown className="w-4 h-4 text-red-400" />
+                              <TrendingDown className="w-4 h-4 text-red-500" />
                             )}
-                            <span className={area.yoyChange > 0 ? 'text-emerald-400' : 'text-red-400'}>
+                            <span className={area.yoyChange > 0 ? 'text-emerald-600' : 'text-red-600'}>
                               {area.yoyChange > 0 ? '+' : ''}{area.yoyChange}%
                             </span>
                           </div>
-                          <p className="text-zinc-600 text-xs">YoY</p>
+                          <p className="text-zinc-500 text-xs">YoY</p>
                         </div>
                       </div>
 
                       <div className="grid grid-cols-2 gap-4 mb-4">
-                        <div>
+                        <div className="bg-zinc-100 rounded-lg p-2">
                           <p className="text-zinc-500 text-xs">Price Index</p>
-                          <p className="text-white font-semibold">{area.priceIndex}</p>
+                          <p className="text-black font-semibold">{area.priceIndex}</p>
                         </div>
-                        <div>
+                        <div className="bg-zinc-100 rounded-lg p-2">
                           <p className="text-zinc-500 text-xs">Rental Index</p>
-                          <p className="text-white font-semibold">{area.rentalIndex}</p>
+                          <p className="text-black font-semibold">{area.rentalIndex}</p>
                         </div>
                         <div>
                           <p className="text-zinc-500 text-xs">Demand</p>
-                          <div className="w-full bg-zinc-800 rounded-full h-1.5 mt-1">
+                          <div className="w-full bg-zinc-200 rounded-full h-1.5 mt-1">
                             <div 
                               className="bg-emerald-500 h-1.5 rounded-full" 
                               style={{ width: `${area.demandScore}%` }}
@@ -123,19 +123,19 @@ const AreaIntelligence = () => {
                         </div>
                         <div>
                           <p className="text-zinc-500 text-xs">Supply</p>
-                          <div className="w-full bg-zinc-800 rounded-full h-1.5 mt-1">
+                          <div className="w-full bg-zinc-200 rounded-full h-1.5 mt-1">
                             <div 
-                              className="bg-amber-500 h-1.5 rounded-full" 
+                              className="bg-gold h-1.5 rounded-full" 
                               style={{ width: `${area.supplyScore}%` }}
                             />
                           </div>
                         </div>
                       </div>
 
-                      <div className="border-t border-zinc-800 pt-4">
+                      <div className="border-t border-zinc-200 pt-4">
                         <ul className="space-y-1">
                           {area.highlights.slice(0, 2).map((highlight, i) => (
-                            <li key={i} className="text-zinc-500 text-xs flex items-start gap-2">
+                            <li key={i} className="text-zinc-600 text-xs flex items-start gap-2">
                               <span className="text-gold">•</span>
                               {highlight}
                             </li>
@@ -143,7 +143,7 @@ const AreaIntelligence = () => {
                         </ul>
                       </div>
 
-                      <div className="mt-4 flex items-center justify-between text-gold text-sm">
+                      <div className="mt-4 flex items-center justify-between text-gold text-sm font-medium">
                         <span>View Full Analysis</span>
                         <ArrowRight className="w-4 h-4 group-hover:translate-x-1 transition-transform" />
                       </div>
