@@ -164,22 +164,37 @@ const About = () => {
               variants={fadeInUp}
             >
               <Link to="/contact" className="relative z-20">
-                <Button 
-                  variant="primary"
-                  className="px-8 py-6 text-base"
+                <button 
+                  className="group relative inline-flex items-center justify-center gap-2 px-8 py-5 text-base font-bold rounded-xl transition-all duration-300 overflow-hidden"
+                  style={{
+                    background: 'linear-gradient(135deg, #FFFFFF 0%, #FDFBF7 50%, #F5F0E6 100%)',
+                    border: '2px solid rgba(200,167,102,0.5)',
+                    boxShadow: `
+                      0 10px 30px rgba(200,167,102,0.4),
+                      0 6px 15px rgba(0,0,0,0.2),
+                      inset 0 2px 4px rgba(255,255,255,0.9),
+                      inset 0 -2px 4px rgba(200,167,102,0.2),
+                      0 0 20px rgba(200,167,102,0.3)
+                    `,
+                  }}
                 >
-                  Contact Us
-                  <ArrowUpRight className="w-4 h-4 ml-2" />
-                </Button>
+                  <span className="absolute inset-x-0 top-0 h-1/2 rounded-t-xl bg-gradient-to-b from-white/80 to-transparent pointer-events-none" />
+                  <span className="absolute inset-x-0 bottom-0 h-1/3 rounded-b-xl bg-gradient-to-t from-gold/10 to-transparent pointer-events-none" />
+                  <span className="absolute inset-0 rounded-xl opacity-0 group-hover:opacity-100 transition-opacity duration-300 pointer-events-none" style={{ boxShadow: '0 0 40px rgba(200,167,102,0.6), inset 0 0 20px rgba(200,167,102,0.1)' }} />
+                  <span className="relative flex items-center justify-center gap-2">
+                    <span className="text-gold">Contact</span>
+                    <span className="text-black">Us</span>
+                    <ArrowUpRight className="w-4 h-4 text-black" />
+                  </span>
+                </button>
               </Link>
               <Link to="/properties" className="relative z-20">
-                <Button 
-                  variant="secondary"
-                  className="px-8 py-6 text-base"
+                <button 
+                  className="inline-flex items-center justify-center gap-2 px-8 py-5 text-base font-semibold rounded-xl transition-all duration-300 bg-transparent border-2 border-white text-white hover:bg-gradient-to-r hover:from-white hover:via-[#FDFBF7] hover:to-[#F5F0E6] hover:text-gold hover:border-gold"
                 >
                   Browse Properties
-                  <ArrowUpRight className="w-4 h-4 ml-2" />
-                </Button>
+                  <ArrowUpRight className="w-4 h-4" />
+                </button>
               </Link>
             </motion.div>
           </motion.div>
@@ -203,44 +218,67 @@ const About = () => {
                   {/* Champagne/white background card for premium look */}
                   <div className="absolute inset-0 -m-6 bg-gradient-to-br from-white via-[#faf8f5] to-[#f5f0e8] rounded-2xl border border-gold/30 shadow-lg" />
                   
-                  {/* Circular portrait - GLOBAL PORTRAIT RULE: object-position center 20%, no cropping */}
+                  {/* Circular portrait - GLOBAL PORTRAIT RULE: object-position center 5%, lifted up, no cropping */}
                   <Link to="/founder" className="block group relative z-10">
-                    <div className="w-56 h-56 md:w-64 md:h-64 lg:w-72 lg:h-72 mx-auto rounded-full overflow-hidden border-2 border-gold/50">
+                    <div className="w-56 h-56 md:w-64 md:h-64 lg:w-72 lg:h-72 mx-auto rounded-full overflow-hidden border-2 border-gold/50 group-hover:border-white group-hover:shadow-[0_0_20px_rgba(255,255,255,0.4)] transition-all duration-300">
                       <img 
                         src={founderProfessional}
                         alt="Founder & CEO Jane Abou Jaoude of JBJ GLOBAL REAL ESTATE"
-                        className="w-full h-full object-cover"
-                        style={{ objectPosition: "center 20%" }}
+                        className="w-full h-full"
+                        style={{ 
+                          objectFit: 'cover',
+                          objectPosition: 'center 5%',
+                          transform: 'scale(1.3)',
+                        }}
                         loading="lazy"
                         decoding="async"
                       />
                     </div>
-                    <p className="text-center mt-4 text-gold text-sm font-medium group-hover:text-gold-light transition-colors">
-                      Know More About the Founder →
-                    </p>
+                    {/* Know More About the Founder - Primary 3D on normal, Secondary on hover */}
+                    <button 
+                      className="group/btn mt-4 relative inline-flex items-center justify-center gap-2 px-4 py-2 text-sm font-bold rounded-xl transition-all duration-300 overflow-hidden w-full"
+                      style={{
+                        background: 'linear-gradient(135deg, #FFFFFF 0%, #FDFBF7 50%, #F5F0E6 100%)',
+                        border: '2px solid rgba(200,167,102,0.5)',
+                        boxShadow: `
+                          0 6px 20px rgba(200,167,102,0.3),
+                          0 4px 10px rgba(0,0,0,0.15),
+                          inset 0 2px 4px rgba(255,255,255,0.9),
+                          inset 0 -2px 4px rgba(200,167,102,0.2)
+                        `,
+                      }}
+                    >
+                      <span className="absolute inset-x-0 top-0 h-1/2 rounded-t-xl bg-gradient-to-b from-white/80 to-transparent pointer-events-none" />
+                      <span className="relative flex items-center justify-center gap-1">
+                        <span className="text-gold group-hover/btn:text-black transition-colors">Know More About the</span>
+                        <span className="text-black group-hover/btn:text-gold transition-colors">Founder</span>
+                        <span className="text-gold group-hover/btn:text-black transition-colors">↗</span>
+                      </span>
+                    </button>
                   </Link>
                 </div>
               </motion.div>
 
               {/* RIGHT: Founder Statement */}
               <motion.div variants={fadeInUp} className="mt-8 md:mt-0">
-                <SectionLabel dark={false}>Written by the Founder</SectionLabel>
-                <div className="mb-6">
+                <p className="text-sm font-medium tracking-wide mb-6">
+                  <span className="text-gold uppercase tracking-[0.15em]">Written by Founder & CEO,</span>{" "}
                   <Link 
                     to="/founder" 
-                    className="block group"
+                    className="text-black text-xl md:text-2xl font-semibold hover:text-gold transition-colors"
                   >
-                    <p className="text-black text-xl md:text-2xl font-semibold tracking-wide group-hover:text-gold transition-colors">
-                      Jane Abou Jaoude
-                    </p>
-                    <p className="text-gold text-base font-medium mt-1">
-                      Founder & CEO
-                    </p>
-                    <p className="text-zinc-600 text-sm mt-0.5">
-                      JBJ Global Real Estate
-                    </p>
+                    Jane Abou Jaoude
                   </Link>
-                </div>
+                  <span className="block mt-2">
+                    <Link 
+                      to="/about" 
+                      className="text-white bg-black px-3 py-1 rounded text-sm font-medium hover:text-gold transition-colors inline-block"
+                    >
+                      JBJ Global Real Estate
+                    </Link>
+                    <span className="block h-0.5 w-24 bg-gold mt-2" />
+                  </span>
+                </p>
                 
                 <ContentText light>
                   <p>

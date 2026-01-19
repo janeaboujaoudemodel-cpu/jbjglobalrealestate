@@ -150,7 +150,7 @@ export function BrokerToolkitCRM() {
             viewport={{ once: true }}
             className="max-w-4xl mx-auto"
           >
-            <Card className="bg-gradient-to-br from-emerald-900 via-emerald-800 to-emerald-900 border-2 border-emerald-500/50 shadow-xl shadow-emerald-500/30">
+            <Card className="bg-emerald-300 border-2 border-emerald-400/50 shadow-xl shadow-emerald-400/30">
               <CardContent className="p-8 text-center">
                 <div className="w-16 h-16 bg-emerald-500/40 rounded-full flex items-center justify-center mx-auto mb-4 shadow-[0_0_25px_rgba(16,185,129,0.5)] border-2 border-emerald-400/60">
                   <Lock className="w-8 h-8 text-emerald-100 drop-shadow-[0_0_8px_rgba(16,185,129,0.8)]" />

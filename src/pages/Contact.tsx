@@ -343,7 +343,7 @@ END:VCARD`;
               </div>
             ) : (
               /* Form */
-              <div className="bg-white border border-zinc-200 rounded-2xl p-6 md:p-10 shadow-sm">
+              <div className="bg-white border-2 border-gold rounded-2xl p-6 md:p-10 shadow-sm">
                 <div className="text-center mb-8">
                   <div className="w-14 h-14 bg-black rounded-xl flex items-center justify-center mx-auto mb-4">
                     <Shield className="w-7 h-7 text-gold" />
@@ -369,7 +369,7 @@ END:VCARD`;
                             <FormControl>
                               <Input 
                                 {...field} 
-                                className="h-12 bg-zinc-50 border-zinc-300 text-black placeholder:text-gold/70 placeholder:drop-shadow-[0_0_4px_rgba(200,167,102,0.4)] focus:border-gold focus:bg-white"
+                                className="h-12 bg-gradient-to-br from-white via-[#FDFBF7] to-[#F5F0E6] border-2 border-gold/40 text-black placeholder:text-gold/70 focus:border-gold focus:bg-white"
                                 placeholder="John Doe"
                               />
                             </FormControl>
@@ -389,7 +389,7 @@ END:VCARD`;
                                 <Input 
                                   {...field} 
                                   type="email"
-                                  className="h-12 bg-zinc-50 border-zinc-300 text-black placeholder:text-gold/70 placeholder:drop-shadow-[0_0_4px_rgba(200,167,102,0.4)] focus:border-gold focus:bg-white"
+                                  className="h-12 bg-gradient-to-br from-white via-[#FDFBF7] to-[#F5F0E6] border-2 border-gold/40 text-black placeholder:text-gold/70 focus:border-gold focus:bg-white"
                                   placeholder="email@example.com"
                                 />
                               </FormControl>
@@ -491,7 +491,7 @@ END:VCARD`;
                             <FormControl>
                               <Input 
                                 {...field} 
-                                className="h-12 bg-zinc-50 border-zinc-300 text-black placeholder:text-zinc-400 focus:border-gold focus:bg-white"
+                                className="h-12 bg-gradient-to-br from-white via-[#FDFBF7] to-[#F5F0E6] border-2 border-black text-black placeholder:text-gold/70 focus:border-gold focus:bg-white hover:border-gold"
                                 placeholder="e.g., Dubai, UAE or London, UK"
                               />
                             </FormControl>
@@ -513,7 +513,7 @@ END:VCARD`;
                             <FormLabel className="text-zinc-700 text-sm font-medium">Service Needed *</FormLabel>
                             <Select onValueChange={field.onChange} value={field.value}>
                               <FormControl>
-                                <SelectTrigger className="h-12 bg-zinc-50 border-zinc-300 text-black">
+                                <SelectTrigger className="h-12 bg-gradient-to-br from-white via-[#FDFBF7] to-[#F5F0E6] border-2 border-gold/40 text-black hover:border-gold focus:border-gold">
                                   <SelectValue placeholder="Select a service" />
                                 </SelectTrigger>
                               </FormControl>
@@ -539,7 +539,7 @@ END:VCARD`;
                               <FormLabel className="text-zinc-700 text-sm font-medium">Budget Range (Optional)</FormLabel>
                               <Select onValueChange={field.onChange} value={field.value}>
                                 <FormControl>
-                                  <SelectTrigger className="h-12 bg-zinc-50 border-zinc-300 text-black">
+                                  <SelectTrigger className="h-12 bg-gradient-to-br from-white via-[#FDFBF7] to-[#F5F0E6] border-2 border-gold/40 text-black hover:border-gold focus:border-gold">
                                     <SelectValue placeholder="Select budget" />
                                   </SelectTrigger>
                                 </FormControl>
@@ -563,7 +563,7 @@ END:VCARD`;
                               <FormLabel className="text-zinc-700 text-sm font-medium">Timeline (Optional)</FormLabel>
                               <Select onValueChange={field.onChange} value={field.value}>
                                 <FormControl>
-                                  <SelectTrigger className="h-12 bg-zinc-50 border-zinc-300 text-black">
+                                  <SelectTrigger className="h-12 bg-gradient-to-br from-white via-[#FDFBF7] to-[#F5F0E6] border-2 border-gold/40 text-black hover:border-gold focus:border-gold">
                                     <SelectValue placeholder="Select timeline" />
                                   </SelectTrigger>
                                 </FormControl>
@@ -589,7 +589,7 @@ END:VCARD`;
                             <FormControl>
                               <Textarea 
                                 {...field} 
-                                className="min-h-[100px] bg-zinc-50 border-zinc-300 text-black placeholder:text-zinc-400 focus:border-gold focus:bg-white resize-none"
+                                className="min-h-[100px] bg-gradient-to-br from-white via-[#FDFBF7] to-[#F5F0E6] border-2 border-gold/40 text-black placeholder:text-gold/70 focus:border-gold focus:bg-white resize-none"
                                 placeholder="Tell us more about your requirements..."
                               />
                             </FormControl>
@@ -672,24 +672,41 @@ END:VCARD`;
                       />
                     </div>
 
-                    {/* Submit Button */}
-                    <Button
+                    {/* Submit Button - 3D Premium Primary Style */}
+                    <button
                       type="submit"
                       disabled={isSubmitting}
-                      className="w-full h-14 bg-gradient-to-r from-gold via-gold-light to-gold text-black hover:opacity-90 font-semibold text-base shadow-xl shadow-gold/20 mt-6"
+                      className="group relative w-full inline-flex items-center justify-center gap-2 px-8 py-5 text-base font-bold rounded-xl transition-all duration-300 overflow-hidden disabled:opacity-50 disabled:cursor-not-allowed mt-6"
+                      style={{
+                        background: 'linear-gradient(135deg, #FFFFFF 0%, #FDFBF7 50%, #F5F0E6 100%)',
+                        border: '2px solid rgba(200,167,102,0.5)',
+                        boxShadow: `
+                          0 10px 30px rgba(200,167,102,0.4),
+                          0 6px 15px rgba(0,0,0,0.2),
+                          inset 0 2px 4px rgba(255,255,255,0.9),
+                          inset 0 -2px 4px rgba(200,167,102,0.2),
+                          0 0 20px rgba(200,167,102,0.3)
+                        `,
+                      }}
                     >
-                      {isSubmitting ? (
-                        <>
-                          <Loader2 className="w-5 h-5 mr-2 animate-spin" />
-                          Submitting...
-                        </>
-                      ) : (
-                        <>
-                          <Send className="w-5 h-5 mr-2" />
-                          Start Your Inquiry
-                        </>
-                      )}
-                    </Button>
+                      <span className="absolute inset-x-0 top-0 h-1/2 rounded-t-xl bg-gradient-to-b from-white/80 to-transparent pointer-events-none" />
+                      <span className="absolute inset-x-0 bottom-0 h-1/3 rounded-b-xl bg-gradient-to-t from-gold/10 to-transparent pointer-events-none" />
+                      <span className="absolute inset-0 rounded-xl opacity-0 group-hover:opacity-100 transition-opacity duration-300 pointer-events-none" style={{ boxShadow: '0 0 40px rgba(200,167,102,0.6), inset 0 0 20px rgba(200,167,102,0.1)' }} />
+                      <span className="relative flex items-center justify-center gap-2">
+                        {isSubmitting ? (
+                          <>
+                            <Loader2 className="w-5 h-5 text-gold animate-spin" />
+                            <span className="text-gold">Submitting...</span>
+                          </>
+                        ) : (
+                          <>
+                            <Send className="w-5 h-5 text-gold" />
+                            <span className="text-gold">Start Your</span>
+                            <span className="text-black">Inquiry</span>
+                          </>
+                        )}
+                      </span>
+                    </button>
                   </form>
                 </Form>
               </div>
@@ -701,7 +718,10 @@ END:VCARD`;
       {/* Direct Contact CTAs */}
       <section className="py-12 bg-zinc-900/30">
         <div className="container mx-auto px-4">
-          <p className="text-center text-zinc-500 text-sm mb-6">Prefer to reach us directly?</p>
+          <p className="text-center text-sm mb-6">
+            <span className="text-white">Prefer to Reach Us</span>{" "}
+            <span className="text-gold font-semibold drop-shadow-[0_0_6px_rgba(200,167,102,0.5)]">Directly?</span>
+          </p>
           <div className="grid md:grid-cols-2 gap-4 max-w-2xl mx-auto">
             {/* WhatsApp CTA */}
             <a 
@@ -743,7 +763,7 @@ END:VCARD`;
       {/* Compliance Disclaimer - Premium champagne background */}
       <section className="py-10 bg-gradient-to-br from-white via-[#FDFBF7] to-[#F5F0E6] border-t border-zinc-200">
         <div className="container mx-auto px-4">
-          <div className="max-w-3xl mx-auto bg-zinc-50 border border-zinc-200 rounded-xl p-6 md:p-8">
+          <div className="max-w-3xl mx-auto bg-white border-2 border-gold rounded-xl p-6 md:p-8">
             <div className="flex items-center gap-2 mb-4">
               <div className="w-8 h-8 bg-black rounded-lg flex items-center justify-center">
                 <Shield className="w-4 h-4 text-gold" />
