@@ -114,10 +114,11 @@ export function BrokerToolkitHero() {
             )}
             <button 
               onClick={() => document.getElementById('what-you-get')?.scrollIntoView({ behavior: 'smooth' })}
-              className="inline-flex items-center justify-center gap-2 px-8 py-4 text-lg font-bold rounded-xl transition-all duration-300 bg-transparent border-2 border-white text-white hover:bg-white hover:text-black group"
+              className="group inline-flex items-center justify-center gap-2 px-8 py-4 text-lg font-bold rounded-xl transition-all duration-300 bg-gradient-to-r from-white via-[#FDFBF7] to-[#F5F0E6] border-2 border-black hover:bg-transparent hover:border-gold"
             >
-              See What's Included
-              <ChevronDown className="w-5 h-5 group-hover:translate-y-0.5 transition-transform" />
+              <span className="text-black group-hover:text-gold transition-colors">See What's</span>
+              <span className="text-black group-hover:text-gold transition-colors">Included</span>
+              <ChevronDown className="w-5 h-5 text-black group-hover:text-gold transition-colors" />
             </button>
           </div>
         </motion.div>
