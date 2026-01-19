@@ -251,13 +251,13 @@ export default function ReferralOnboarding() {
           {/* Header */}
           <div className="text-center mb-8">
             <div className="flex justify-center mb-4">
-              <JJLogoImage variant="dark" size="md" />
+              <JJLogoImage variant="light" size="lg" />
             </div>
             <h1 className="text-2xl md:text-3xl font-bold text-foreground mb-2">
               Join the Referral Circle
             </h1>
             <p className="text-muted-foreground">
-              Earn 5% commission on successful property referrals
+              Earn 5% or 2.5% commission on successful property referrals
             </p>
           </div>
 
@@ -552,17 +552,30 @@ export default function ReferralOnboarding() {
                     Back
                   </Button>
                 )}
-                <Button
+                <button
                   onClick={handleNext}
                   disabled={isSubmitting}
-                  className="flex-1 bg-gold hover:bg-gold/90 text-black"
+                  className="flex-1 relative inline-flex items-center justify-center gap-2 px-8 py-4 text-base font-bold rounded-xl transition-all duration-300 group overflow-hidden disabled:opacity-50"
+                  style={{
+                    background: 'linear-gradient(135deg, #FFFFFF 0%, #FDFBF7 25%, #F5F0E6 50%, #E8DFD0 75%, #C8A766 100%)',
+                    border: '2px solid rgba(200,167,102,0.5)',
+                    boxShadow: `
+                      0 10px 30px rgba(200,167,102,0.4),
+                      0 6px 15px rgba(0,0,0,0.2),
+                      inset 0 2px 4px rgba(255,255,255,0.9),
+                      inset 0 -2px 4px rgba(200,167,102,0.2),
+                      0 0 20px rgba(200,167,102,0.3)
+                    `,
+                  }}
                 >
-                  {isSubmitting ? (
-                    <Loader2 className="w-4 h-4 mr-2 animate-spin" />
-                  ) : null}
-                  {currentStep === 3 ? 'Submit Application' : 'Continue'}
-                  {!isSubmitting && <ArrowRight className="w-4 h-4 ml-2" />}
-                </Button>
+                  <span className="absolute inset-x-0 top-0 h-1/2 rounded-t-xl bg-gradient-to-b from-white/80 to-transparent pointer-events-none" />
+                  <span className="absolute inset-0 rounded-xl opacity-0 group-hover:opacity-100 transition-opacity duration-300 pointer-events-none" style={{ boxShadow: '0 0 40px rgba(200,167,102,0.6), inset 0 0 20px rgba(200,167,102,0.1)' }} />
+                  <span className="relative flex items-center justify-center gap-2">
+                    {isSubmitting && <Loader2 className="w-4 h-4 animate-spin text-black" />}
+                    <span className="text-black">{currentStep === 3 ? 'Submit' : 'Continue'}</span>
+                    {!isSubmitting && <ArrowRight className="w-4 h-4 text-gold" />}
+                  </span>
+                </button>
               </div>
             </CardContent>
           </Card>
@@ -605,7 +618,7 @@ export default function ReferralOnboarding() {
                 </div>
                 <div className="flex items-center gap-2 text-sm text-muted-foreground">
                   <Sparkles className="w-4 h-4 text-gold" />
-                  <span>Earn 5% commission on successful referrals</span>
+                  <span>Earn 5% or 2.5% commission on successful referrals</span>
                 </div>
               </div>
 
