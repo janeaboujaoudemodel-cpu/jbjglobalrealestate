@@ -304,16 +304,16 @@ const GlobalHeader = () => {
             </div>
           </nav>
 
-          {/* RIGHT: Actions - Smaller premium icon buttons with inverted hover */}
-          <div className="flex items-center gap-2 shrink-0 ml-auto">
+          {/* RIGHT: Actions - Compact premium icon buttons with inverted hover */}
+          <div className="flex items-center gap-1 lg:gap-1.5 shrink-0 ml-auto">
             {/* Search Icon - White bg with gold icon normally, inverted on hover */}
             <Button
               variant="ghost"
               size="sm"
-              className="relative w-9 h-9 p-0 rounded-full bg-white border border-gold/30 hover:bg-transparent hover:border-gold/50 transition-all duration-300 group"
+              className="relative w-8 h-8 p-0 rounded-full bg-white border border-gold/30 hover:bg-transparent hover:border-gold/50 transition-all duration-300 group"
               onClick={() => setSearchOpen(true)}
             >
-              <Search className="w-4 h-4 text-gold group-hover:text-gold-light transition-colors" />
+              <Search className="w-3.5 h-3.5 text-gold group-hover:text-gold-light transition-colors" />
             </Button>
 
             {/* Language Switcher - Inverted style */}
@@ -471,10 +471,10 @@ const GlobalHeader = () => {
                     <Button 
                       variant="ghost" 
                       size="icon"
-                      className="relative text-gold hover:text-gold-light w-9 h-9 p-0 rounded-full border border-gold/20 hover:border-gold/50 hover:bg-gold/10 transition-all duration-300 group"
+                      className="relative text-gold hover:text-gold-light w-8 h-8 p-0 rounded-full border border-gold/20 hover:border-gold/50 hover:bg-gold/10 transition-all duration-300 group"
                       aria-label={t('nav.myAccount')}
                     >
-                      <User className="w-4 h-4 group-hover:scale-110 transition-transform" />
+                      <User className="w-3.5 h-3.5 group-hover:scale-110 transition-transform" />
                     </Button>
                   </DropdownMenuTrigger>
                   <DropdownMenuContent 
