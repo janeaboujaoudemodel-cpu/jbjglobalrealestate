@@ -15,8 +15,9 @@ import { Dialog, DialogContent, DialogDescription, DialogFooter, DialogHeader, D
 import { Separator } from '@/components/ui/separator';
 import { ScrollArea } from '@/components/ui/scroll-area';
 import { useScheduledReports, ScheduledReport, CreateScheduledReportRequest } from '@/hooks/useScheduledReports';
-import { Calendar, Clock, Mail, Plus, Send, Trash2, Edit, History, CheckCircle, XCircle, Loader2 } from 'lucide-react';
+import { Calendar, Clock, Mail, Plus, Send, Trash2, Edit, History, CheckCircle, XCircle, Loader2, Eye } from 'lucide-react';
 import { format, formatDistanceToNow } from 'date-fns';
+import { EmailReportPreview } from './EmailReportPreview';
 
 export function ScheduledReportsManager() {
   const {
@@ -33,6 +34,7 @@ export function ScheduledReportsManager() {
 
   const [isCreateDialogOpen, setIsCreateDialogOpen] = useState(false);
   const [isHistoryDialogOpen, setIsHistoryDialogOpen] = useState(false);
+  const [isPreviewOpen, setIsPreviewOpen] = useState(false);
   const [selectedReportId, setSelectedReportId] = useState<string | null>(null);
   const [newReport, setNewReport] = useState<CreateScheduledReportRequest>({
     report_name: '',
@@ -164,10 +166,27 @@ export function ScheduledReportsManager() {
                 {isLoading ? <Loader2 className="h-4 w-4 mr-2 animate-spin" /> : null}
                 Create Schedule
               </Button>
+              <Button 
+                variant="outline" 
+                onClick={() => setIsPreviewOpen(true)}
+                disabled={!newReport.report_name || newReport.recipients.length === 0}
+              >
+                <Eye className="h-4 w-4 mr-2" />
+                Preview
+              </Button>
             </DialogFooter>
           </DialogContent>
         </Dialog>
       </div>
+
+      {/* Email Preview Dialog */}
+      <EmailReportPreview
+        open={isPreviewOpen}
+        onOpenChange={setIsPreviewOpen}
+        reportName={newReport.report_name || 'Analytics Report'}
+        frequency={newReport.frequency}
+        recipients={newReport.recipients}
+      />
 
       {/* Reports List */}
       {reports.length === 0 ? (
