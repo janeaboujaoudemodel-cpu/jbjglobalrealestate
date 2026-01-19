@@ -246,18 +246,24 @@ export default function ReferralOnboarding() {
 
   return (
     <MainLayout>
-      <div className="min-h-screen bg-background py-8 px-4">
+      <div className="min-h-screen bg-gradient-to-br from-white via-[#FDFBF7] to-[#F5F0E6] py-8 px-4">
         <div className="max-w-3xl mx-auto">
-          {/* Header */}
-          <div className="text-center mb-8">
-            <div className="flex justify-center mb-4">
-              <JJLogoImage variant="light" size="lg" />
+          {/* Header - Larger logo with breathable spacing */}
+          <div className="text-center mb-10">
+            <div className="flex flex-col items-center justify-center mb-6">
+              <JJLogoImage variant="light" size="lg" className="w-24 h-24 md:w-28 md:h-28 mb-3" />
+              <span 
+                className="text-black font-semibold text-lg md:text-xl tracking-[0.12em] uppercase"
+                style={{ fontFamily: "Poppins, sans-serif" }}
+              >
+                JBJ GLOBAL REAL ESTATE
+              </span>
             </div>
-            <h1 className="text-2xl md:text-3xl font-bold text-foreground mb-2">
-              Join the Referral Circle
+            <h1 className="text-2xl md:text-3xl font-bold mb-2">
+              <span className="text-gold">Join the Referral Circle</span>
             </h1>
-            <p className="text-muted-foreground">
-              Earn 5% or 2.5% commission on successful property referrals
+            <p className="text-black font-semibold text-lg">
+              Earn 5% or 2.5% Commission
             </p>
           </div>
 
@@ -268,30 +274,35 @@ export default function ReferralOnboarding() {
               {STEPS.map((step) => (
                 <div
                   key={step.id}
-                  className={`flex flex-col items-center ${
-                    currentStep >= step.id ? 'text-gold' : 'text-muted-foreground'
-                  }`}
+                  className="flex flex-col items-center"
                 >
-                  <div className={`w-10 h-10 rounded-full flex items-center justify-center mb-2 ${
-                    currentStep >= step.id 
-                      ? 'bg-gold text-black' 
-                      : 'bg-muted text-muted-foreground'
-                  }`}>
+                  {/* Step indicators: white/champagne fill, gold border, transparent bg to show background, black/gold icon */}
+                  <div 
+                    className={`w-10 h-10 rounded-xl flex items-center justify-center mb-2 transition-all duration-300`}
+                    style={{
+                      background: currentStep >= step.id 
+                        ? 'linear-gradient(135deg, #FFFFFF 0%, #FDFBF7 50%, #F5F0E6 100%)'
+                        : 'transparent',
+                      border: currentStep >= step.id 
+                        ? '2px solid rgba(200,167,102,0.6)'
+                        : '2px solid rgba(0,0,0,0.3)',
+                    }}
+                  >
                     {currentStep > step.id ? (
-                      <CheckCircle className="w-5 h-5" />
+                      <CheckCircle className="w-5 h-5 text-gold" />
                     ) : (
-                      <step.icon className="w-5 h-5" />
+                      <step.icon className={`w-5 h-5 ${currentStep >= step.id ? 'text-black' : 'text-muted-foreground'}`} />
                     )}
                   </div>
-                  <span className="text-xs font-medium hidden sm:block">{step.title}</span>
+                  <span className={`text-xs font-medium hidden sm:block ${currentStep >= step.id ? 'text-black' : 'text-muted-foreground'}`}>{step.title}</span>
                   <span className="text-xs text-muted-foreground hidden sm:block">{step.description}</span>
                 </div>
               ))}
             </div>
           </div>
 
-          {/* Steps */}
-          <Card className="border-border">
+          {/* Form Card - White background with gold border */}
+          <Card className="bg-white border-2 border-gold/40 shadow-lg">
             <CardContent className="p-6 md:p-8">
               <AnimatePresence mode="wait">
                 {/* Step 1: Basic Info */}

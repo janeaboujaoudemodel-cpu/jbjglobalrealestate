@@ -9,15 +9,18 @@ import { cn } from "@/lib/utils";
  * GLOBAL BUTTON SYSTEM - JBJ GLOBAL REAL ESTATE (LOCKED)
  * ============================================================
  * ALLOWED BRANDED STYLES:
- * - primary: White bg → transparent on hover
- * - secondary: Transparent bg → white on hover
+ * - primary: 3D Champagne Gold with split text (used for main CTAs)
+ * - secondary: Transparent bg with gold border → champagne fill on hover
+ * - tertiary: White/champagne fill (for dark backgrounds) with black text/border
+ *             On hover: text becomes gold, arrow becomes black
  * - media: For image/video backgrounds (white text → gold on hover)
+ * - dark: Black bg with gold text → champagne on hover
  *
  * ENFORCEMENT:
  * - Any visual overrides passed via className are automatically stripped
  *   (bg-*, gradient from/to/via, shadow-*, scale-*, text/border color overrides).
  * - Legacy/utility variants remain ONLY as aliases to prevent build breaks;
- *   they render as one of the 3 branded styles.
+ *   they render as one of the branded styles.
  * ============================================================
  */
 
@@ -26,6 +29,9 @@ const BRAND_PRIMARY =
   "bg-white text-gold border-2 border-gold hover:bg-gradient-to-r hover:from-white hover:via-[#FDFBF7] hover:to-[#F5F0E6] hover:text-gold";
 const BRAND_SECONDARY =
   "bg-transparent text-gold border-2 border-gold hover:bg-gradient-to-r hover:from-white hover:via-[#FDFBF7] hover:to-[#F5F0E6] hover:text-gold";
+// TERTIARY: For dark backgrounds - white/champagne filled with black text/border, hover: gold text
+const BRAND_TERTIARY =
+  "bg-gradient-to-r from-white via-[#FDFBF7] to-[#F5F0E6] text-black border-2 border-black hover:text-gold hover:border-gold";
 const BRAND_MEDIA =
   "bg-transparent text-white border-2 border-white hover:bg-gradient-to-r hover:from-white hover:via-[#FDFBF7] hover:to-[#F5F0E6] hover:text-gold hover:border-gold";
 const BRAND_DARK =
@@ -39,6 +45,7 @@ const buttonVariants = cva(
         // LOCKED branded variants
         primary: BRAND_PRIMARY,
         secondary: BRAND_SECONDARY,
+        tertiary: BRAND_TERTIARY,
         media: BRAND_MEDIA,
         dark: BRAND_DARK,
 
