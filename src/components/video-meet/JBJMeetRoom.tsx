@@ -67,10 +67,12 @@ const INITIAL_BEAUTY_SETTINGS = {
   brightness: 0,
   contrast: 0,
   warmth: 0,
-  eyeEnhance: 0,
-  faceSlim: 0,
+  faceSlimming: 0,
+  eyeEnlargement: 0,
+  contour: 0,
   lipColor: 'none',
   blush: 0,
+  makeupPreset: 'none',
   hairColor: 'none',
 };
 
