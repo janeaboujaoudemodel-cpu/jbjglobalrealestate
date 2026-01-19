@@ -16,6 +16,40 @@ const tocItems = [
   { id: "navigation", title: "Explore More" },
 ];
 
+// Premium Section Title Component
+const SectionTitle = ({ title, centered = true }: { title: string; centered?: boolean }) => {
+  const words = title.split(' ');
+  const firstWord = words[0];
+  const restWords = words.slice(1).join(' ');
+  
+  return (
+    <h2 
+      className={`text-3xl md:text-4xl font-bold mb-8 ${centered ? 'text-center' : ''}`}
+      style={{ fontFamily: "Poppins, sans-serif" }}
+    >
+      <span 
+        className="inline-block px-3 py-1 rounded-lg mr-2"
+        style={{ 
+          background: 'linear-gradient(135deg, #FFFFFF 0%, #FDFBF7 50%, #F5F0E6 100%)',
+          boxShadow: '0 4px 15px rgba(200,167,102,0.3), inset 0 2px 4px rgba(255,255,255,0.9)',
+        }}
+      >
+        <span 
+          style={{ 
+            background: "linear-gradient(135deg, #C8A766, #E8D5B0, #C8A766)",
+            WebkitBackgroundClip: "text",
+            WebkitTextFillColor: "transparent",
+            filter: "drop-shadow(0 2px 4px rgba(200,167,102,0.3))"
+          }}
+        >
+          {firstWord}
+        </span>
+      </span>
+      <span className="text-white">{restWords}</span>
+    </h2>
+  );
+};
+
 const MarketOverview = () => {
   const stats = [
     {
@@ -74,237 +108,188 @@ const MarketOverview = () => {
         videoPoster="https://images.unsplash.com/photo-1512453979798-5ea266f8880c?w=1920&q=80"
       />
 
-      {/* Gold Glow Divider */}
-      <div className="h-1 bg-gradient-to-r from-transparent via-gold to-transparent shadow-[0_0_20px_rgba(200,167,102,0.5)]" />
+      {/* Gold Glow Divider with White Glow */}
+      <div className="h-1 bg-gradient-to-r from-transparent via-gold to-transparent" style={{ boxShadow: '0 0 20px rgba(200,167,102,0.5), 0 0 40px rgba(255,255,255,0.3)' }} />
 
-      {/* Main Content with TOC Sidebar */}
-      <div className="container mx-auto px-4 py-16">
-        <div className="flex gap-8">
-          {/* Main Content */}
-          <div className="flex-1 space-y-16">
+      {/* Fixed TOC Sidebar */}
+      <MarketIntelligenceTableOfContents 
+        items={tocItems}
+        title="In This Section"
+        ctaAction={{
+          label: "Find Your Property",
+          href: "/properties",
+          icon: Search
+        }}
+      />
+
+      {/* Main Content - Full width edge-to-edge */}
+      <div className="py-16">
+        {/* Key Stats Grid - White Pearl section */}
+        <section id="key-stats" className="scroll-mt-24 px-4 md:px-8 lg:px-16 mb-16">
+          <div className="bg-gradient-to-br from-white via-[#FDFBF7] to-[#F5F0E6] rounded-2xl p-8 border border-gold/30 max-w-6xl mx-auto lg:mr-80">
+            <SectionTitle title="Key Market Statistics" />
             
-            {/* Key Stats Grid - White Pearl section */}
-            <section id="key-stats" className="scroll-mt-24">
-              <div className="bg-gradient-to-br from-white via-[#FDFBF7] to-[#F5F0E6] rounded-2xl p-8 border border-gold/30">
-                <h2 
-                  className="text-3xl md:text-4xl font-bold mb-8 text-center"
+            <div className="grid grid-cols-2 lg:grid-cols-4 gap-6">
+              {stats.map((stat, index) => (
+                <motion.div
+                  key={stat.label}
+                  initial={{ opacity: 0, y: 20 }}
+                  whileInView={{ opacity: 1, y: 0 }}
+                  viewport={{ once: true }}
+                  transition={{ delay: index * 0.1 }}
+                >
+                  <Card className="bg-white border-2 border-black hover:border-gold hover:shadow-[0_0_20px_rgba(200,167,102,0.3)] transition-all text-center p-6">
+                    <CardContent className="p-0">
+                      <p 
+                        className="text-lg font-semibold mb-2"
+                        style={{ 
+                          background: "linear-gradient(135deg, #C8A766, #E8D5B0, #C8A766)",
+                          WebkitBackgroundClip: "text",
+                          WebkitTextFillColor: "transparent",
+                          filter: "drop-shadow(0 1px 2px rgba(200,167,102,0.3))"
+                        }}
+                      >
+                        {stat.label}
+                      </p>
+                      <p className="text-black text-3xl font-bold mb-2">{stat.value}</p>
+                      <div className="flex items-center justify-center gap-2">
+                        {getTrendIcon(stat.change)}
+                        <span className={`text-sm ${stat.change > 0 ? 'text-emerald-500' : stat.change < 0 ? 'text-red-500' : 'text-zinc-400'}`}>
+                          {stat.change > 0 ? '+' : ''}{stat.change}% {stat.period}
+                        </span>
+                      </div>
+                    </CardContent>
+                  </Card>
+                </motion.div>
+              ))}
+            </div>
+
+            {/* Source Attribution - Enhanced */}
+            <div className="text-center mt-8 pt-6 border-t border-gold/30">
+              <p className="text-lg">
+                <span 
+                  className="font-semibold text-xl"
                   style={{ 
-                    fontFamily: "Poppins, sans-serif",
                     background: "linear-gradient(135deg, #C8A766, #E8D5B0, #C8A766)",
                     WebkitBackgroundClip: "text",
-                    WebkitTextFillColor: "transparent",
-                    filter: "drop-shadow(0 2px 4px rgba(200,167,102,0.3))"
+                    WebkitTextFillColor: "transparent"
                   }}
                 >
-                  Key Market Statistics
-                </h2>
-                
-                <div className="grid grid-cols-2 lg:grid-cols-4 gap-6">
-                  {stats.map((stat, index) => (
-                    <motion.div
-                      key={stat.label}
-                      initial={{ opacity: 0, y: 20 }}
-                      whileInView={{ opacity: 1, y: 0 }}
-                      viewport={{ once: true }}
-                      transition={{ delay: index * 0.1 }}
-                    >
-                      <Card className="bg-white border-2 border-black hover:border-gold hover:shadow-[0_0_20px_rgba(200,167,102,0.3)] transition-all text-center p-6">
-                        <CardContent className="p-0">
-                          <p 
-                            className="text-lg font-semibold mb-2"
-                            style={{ 
-                              background: "linear-gradient(135deg, #C8A766, #E8D5B0, #C8A766)",
-                              WebkitBackgroundClip: "text",
-                              WebkitTextFillColor: "transparent",
-                              filter: "drop-shadow(0 1px 2px rgba(200,167,102,0.3))"
-                            }}
-                          >
-                            {stat.label}
-                          </p>
-                          <p className="text-black text-3xl font-bold mb-2">{stat.value}</p>
-                          <div className="flex items-center justify-center gap-2">
-                            {getTrendIcon(stat.change)}
-                            <span className={`text-sm ${stat.change > 0 ? 'text-emerald-500' : stat.change < 0 ? 'text-red-500' : 'text-zinc-400'}`}>
-                              {stat.change > 0 ? '+' : ''}{stat.change}% {stat.period}
-                            </span>
-                          </div>
-                        </CardContent>
-                      </Card>
-                    </motion.div>
-                  ))}
-                </div>
+                  Source:
+                </span>
+                {" "}
+                <span className="text-black font-medium text-lg">{MARKET_OVERVIEW_STATS.dataSource}</span>
+              </p>
+              <p className="text-zinc-500 text-sm mt-1">
+                Last Updated: {MARKET_OVERVIEW_STATS.reportDate}
+              </p>
+            </div>
+          </div>
+        </section>
 
-                {/* Source Attribution - Enhanced */}
-                <div className="text-center mt-8 pt-6 border-t border-gold/30">
-                  <p className="text-lg">
-                    <span 
-                      className="font-semibold"
+        {/* Transaction Trends - White Pearl section */}
+        <section id="quarterly-trends" className="scroll-mt-24 px-4 md:px-8 lg:px-16 mb-16">
+          <div className="bg-gradient-to-br from-white via-[#FDFBF7] to-[#F5F0E6] rounded-2xl p-8 border border-gold/30 max-w-6xl mx-auto lg:mr-80">
+            <SectionTitle title="Quarterly Transaction Trends" />
+            
+            <div className="grid md:grid-cols-4 gap-4 max-w-4xl mx-auto">
+              {QUARTERLY_TRENDS.map((quarter, index) => (
+                <Card key={quarter.quarter} className="bg-white border-2 border-black hover:border-gold hover:shadow-[0_0_20px_rgba(200,167,102,0.3)] transition-all">
+                  <CardHeader className="pb-2">
+                    <CardTitle 
+                      className="text-lg"
                       style={{ 
                         background: "linear-gradient(135deg, #C8A766, #E8D5B0, #C8A766)",
                         WebkitBackgroundClip: "text",
-                        WebkitTextFillColor: "transparent"
+                        WebkitTextFillColor: "transparent",
+                        filter: "drop-shadow(0 1px 2px rgba(200,167,102,0.3))"
                       }}
                     >
-                      Source:
-                    </span>
-                    {" "}
-                    <span className="text-black font-medium">{MARKET_OVERVIEW_STATS.dataSource}</span>
-                  </p>
-                  <p className="text-zinc-500 text-sm mt-1">
-                    Last Updated: {MARKET_OVERVIEW_STATS.reportDate}
-                  </p>
-                </div>
-              </div>
-            </section>
-
-            {/* Gold Glow Divider */}
-            <div className="h-1 bg-gradient-to-r from-transparent via-gold to-transparent shadow-[0_0_20px_rgba(200,167,102,0.5)]" />
-
-            {/* Transaction Trends - White Pearl section */}
-            <section id="quarterly-trends" className="scroll-mt-24">
-              <div className="bg-gradient-to-br from-white via-[#FDFBF7] to-[#F5F0E6] rounded-2xl p-8 border border-gold/30">
-                <h2 
-                  className="text-3xl md:text-4xl font-bold mb-8 text-center"
-                  style={{ 
-                    fontFamily: "Poppins, sans-serif",
-                    background: "linear-gradient(135deg, #C8A766, #E8D5B0, #C8A766)",
-                    WebkitBackgroundClip: "text",
-                    WebkitTextFillColor: "transparent",
-                    filter: "drop-shadow(0 2px 4px rgba(200,167,102,0.3))"
-                  }}
-                >
-                  Quarterly Transaction Trends
-                </h2>
-                
-                <div className="grid md:grid-cols-4 gap-4 max-w-4xl mx-auto">
-                  {QUARTERLY_TRENDS.map((quarter, index) => (
-                    <Card key={quarter.quarter} className="bg-white border-2 border-black hover:border-gold hover:shadow-[0_0_20px_rgba(200,167,102,0.3)] transition-all">
-                      <CardHeader className="pb-2">
-                        <CardTitle 
-                          className="text-lg"
-                          style={{ 
-                            background: "linear-gradient(135deg, #C8A766, #E8D5B0, #C8A766)",
-                            WebkitBackgroundClip: "text",
-                            WebkitTextFillColor: "transparent",
-                            filter: "drop-shadow(0 1px 2px rgba(200,167,102,0.3))"
-                          }}
-                        >
-                          {quarter.quarter}
-                        </CardTitle>
-                      </CardHeader>
-                      <CardContent>
-                        <p className="text-black text-2xl font-bold">{quarter.transactions.toLocaleString()}</p>
-                        <p className="text-zinc-500 text-xs">Transactions</p>
-                        <div className="mt-3 pt-3 border-t border-zinc-200">
-                          <p className="text-zinc-700 text-sm">AED {quarter.avgPrice}/sqft</p>
-                          <div className="w-full bg-zinc-200 rounded-full h-1.5 mt-2">
-                            <div 
-                              className="bg-gradient-to-r from-gold to-gold-light h-1.5 rounded-full" 
-                              style={{ width: `${quarter.index}%` }}
-                            />
-                          </div>
-                          <p className="text-zinc-500 text-xs mt-1">Index: {quarter.index}</p>
-                        </div>
-                      </CardContent>
-                    </Card>
-                  ))}
-                </div>
-              </div>
-            </section>
-
-            {/* Gold Glow Divider */}
-            <div className="h-1 bg-gradient-to-r from-transparent via-gold to-transparent shadow-[0_0_20px_rgba(200,167,102,0.5)]" />
-
-            {/* Property Type Performance - White Pearl section with glow cards */}
-            <section id="property-performance" className="scroll-mt-24">
-              <div className="bg-gradient-to-br from-white via-[#FDFBF7] to-[#F5F0E6] rounded-2xl p-8 border border-gold/30">
-                <h2 
-                  className="text-3xl md:text-4xl font-bold mb-8 text-center"
-                  style={{ 
-                    fontFamily: "Poppins, sans-serif",
-                    background: "linear-gradient(135deg, #C8A766, #E8D5B0, #C8A766)",
-                    WebkitBackgroundClip: "text",
-                    WebkitTextFillColor: "transparent",
-                    filter: "drop-shadow(0 2px 4px rgba(200,167,102,0.3))"
-                  }}
-                >
-                  Performance by Property Type
-                </h2>
-
-                <div className="max-w-3xl mx-auto space-y-4">
-                  {PROPERTY_TYPE_TRENDS.map((type) => (
-                    <motion.div 
-                      key={type.type} 
-                      initial={{ opacity: 0, x: -20 }}
-                      whileInView={{ opacity: 1, x: 0 }}
-                      viewport={{ once: true }}
-                      className="bg-white border-2 border-gold/50 rounded-xl p-5 flex items-center justify-between hover:border-gold hover:shadow-[0_0_25px_rgba(200,167,102,0.4)] transition-all group"
-                    >
-                      <div>
-                        <p 
-                          className="text-xl font-bold mb-1"
-                          style={{ 
-                            background: "linear-gradient(135deg, #C8A766, #E8D5B0, #C8A766)",
-                            WebkitBackgroundClip: "text",
-                            WebkitTextFillColor: "transparent",
-                            filter: "drop-shadow(0 1px 2px rgba(200,167,102,0.3))"
-                          }}
-                        >
-                          {type.type}
-                        </p>
-                        <p className="text-black text-sm">{type.volume.toLocaleString()} transactions</p>
+                      {quarter.quarter}
+                    </CardTitle>
+                  </CardHeader>
+                  <CardContent>
+                    <p className="text-black text-2xl font-bold">{quarter.transactions.toLocaleString()}</p>
+                    <p className="text-zinc-500 text-xs">Transactions</p>
+                    <div className="mt-3 pt-3 border-t border-zinc-200">
+                      <p className="text-zinc-700 text-sm">AED {quarter.avgPrice}/sqft</p>
+                      <div className="w-full bg-zinc-200 rounded-full h-1.5 mt-2">
+                        <div 
+                          className="bg-gradient-to-r from-gold to-gold-light h-1.5 rounded-full" 
+                          style={{ width: `${quarter.index}%` }}
+                        />
                       </div>
-                      <div className="text-right">
-                        <p className="text-black font-bold text-lg">AED {type.avgPrice}/sqft</p>
-                        <div className="flex items-center gap-1 justify-end">
-                          {getTrendIcon(type.change)}
-                          <span className={`text-sm font-medium ${type.change > 0 ? 'text-emerald-500' : 'text-red-500'}`}>
-                            {type.change > 0 ? '+' : ''}{type.change}%
-                          </span>
-                        </div>
-                      </div>
-                    </motion.div>
-                  ))}
-                </div>
-              </div>
-            </section>
-          </div>
-
-          {/* Table of Contents Sidebar */}
-          <div className="hidden lg:block w-72">
-            <MarketIntelligenceTableOfContents 
-              items={tocItems}
-              title="In This Section"
-              ctaAction={{
-                label: "Find Your Property",
-                href: "/properties",
-                icon: Search
-              }}
-            />
-          </div>
-        </div>
-      </div>
-
-      {/* Gold Glow Divider */}
-      <div className="h-1 bg-gradient-to-r from-transparent via-gold to-transparent shadow-[0_0_20px_rgba(200,167,102,0.5)]" />
-
-      {/* Market Intelligence Navigation */}
-      <section id="navigation" className="py-16 bg-gradient-to-br from-white via-[#FDFBF7] to-[#F5F0E6] scroll-mt-24">
-        <div className="container mx-auto px-4">
-          <MarketIntelligenceNavigation current="/market-intelligence/overview" showStartHere={false} />
-          
-          {/* Disclaimer Box - White style */}
-          <div className="max-w-3xl mx-auto mt-8">
-            <div className="bg-white border border-gold/30 rounded-xl p-6 text-center">
-              <div className="flex items-center justify-center gap-4 mb-4">
-                <Database className="w-5 h-5 text-gold" />
-                <Shield className="w-5 h-5 text-gold" />
-              </div>
-              <p className="text-zinc-600 text-sm whitespace-pre-line">{MARKET_DISCLAIMER}</p>
+                      <p className="text-zinc-500 text-xs mt-1">Index: {quarter.index}</p>
+                    </div>
+                  </CardContent>
+                </Card>
+              ))}
             </div>
           </div>
-        </div>
-      </section>
+        </section>
+
+        {/* Property Type Performance - White Pearl section with glow cards */}
+        <section id="property-performance" className="scroll-mt-24 px-4 md:px-8 lg:px-16 mb-16">
+          <div className="bg-gradient-to-br from-white via-[#FDFBF7] to-[#F5F0E6] rounded-2xl p-8 border border-gold/30 max-w-6xl mx-auto lg:mr-80">
+            <SectionTitle title="Performance by Property Type" />
+
+            <div className="max-w-3xl mx-auto space-y-4">
+              {PROPERTY_TYPE_TRENDS.map((type) => (
+                <motion.div 
+                  key={type.type} 
+                  initial={{ opacity: 0, x: -20 }}
+                  whileInView={{ opacity: 1, x: 0 }}
+                  viewport={{ once: true }}
+                  className="bg-white border-2 border-gold/50 rounded-xl p-5 flex items-center justify-between hover:border-gold hover:shadow-[0_0_25px_rgba(200,167,102,0.4)] transition-all group"
+                  style={{ boxShadow: '0 0 15px rgba(200,167,102,0.2)' }}
+                >
+                  <div>
+                    <p 
+                      className="text-2xl font-bold mb-1"
+                      style={{ 
+                        background: "linear-gradient(135deg, #C8A766, #E8D5B0, #C8A766)",
+                        WebkitBackgroundClip: "text",
+                        WebkitTextFillColor: "transparent",
+                        filter: "drop-shadow(0 2px 4px rgba(200,167,102,0.4))"
+                      }}
+                    >
+                      {type.type}
+                    </p>
+                    <p className="text-black text-sm">{type.volume.toLocaleString()} transactions</p>
+                  </div>
+                  <div className="text-right">
+                    <p className="text-black font-bold text-lg">AED {type.avgPrice}/sqft</p>
+                    <div className="flex items-center gap-1 justify-end">
+                      {getTrendIcon(type.change)}
+                      <span className={`text-sm font-medium ${type.change > 0 ? 'text-emerald-500' : 'text-red-500'}`}>
+                        {type.change > 0 ? '+' : ''}{type.change}%
+                      </span>
+                    </div>
+                  </div>
+                </motion.div>
+              ))}
+            </div>
+          </div>
+        </section>
+
+        {/* Market Intelligence Navigation */}
+        <section id="navigation" className="py-16 bg-gradient-to-br from-white via-[#FDFBF7] to-[#F5F0E6] scroll-mt-24">
+          <div className="container mx-auto px-4 lg:pr-80">
+            <MarketIntelligenceNavigation current="/market-intelligence/overview" showStartHere={false} />
+            
+            {/* Disclaimer Box - White style */}
+            <div className="max-w-3xl mx-auto mt-8">
+              <div className="bg-white border border-gold/30 rounded-xl p-6 text-center">
+                <div className="flex items-center justify-center gap-4 mb-4">
+                  <Database className="w-5 h-5 text-gold" />
+                  <Shield className="w-5 h-5 text-gold" />
+                </div>
+                <p className="text-zinc-600 text-sm whitespace-pre-line">{MARKET_DISCLAIMER}</p>
+              </div>
+            </div>
+          </div>
+        </section>
+      </div>
 
       <PreFooterSeparator 
         title="Explore More Market Intelligence"

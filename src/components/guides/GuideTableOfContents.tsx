@@ -1,7 +1,7 @@
 import { motion, AnimatePresence } from "framer-motion";
 import { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
-import { LucideIcon, List, X, ChevronDown, ChevronUp, HelpCircle, ArrowUpRight } from "lucide-react";
+import { LucideIcon, List, ChevronDown, ChevronUp, HelpCircle, ArrowUpRight } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { Button } from "@/components/ui/button";
 
@@ -79,7 +79,7 @@ export const GuideTableOfContents = ({
   };
 
   return (
-    <div className="relative">
+    <div className="fixed right-4 lg:right-8 top-32 z-40 w-64 lg:w-72">
       {/* Tooltip */}
       <AnimatePresence>
         {showTooltip && !isMinimized && (
@@ -115,14 +115,11 @@ export const GuideTableOfContents = ({
         )}
       </AnimatePresence>
 
-      {/* Main TOC Container */}
+      {/* Main TOC Container - Fixed position */}
       <motion.div
         initial={{ opacity: 0, y: 20 }}
         animate={{ opacity: 1, y: 0 }}
-        className={cn(
-          "bg-white border border-gold/30 rounded-xl overflow-hidden shadow-lg max-h-[calc(100vh-200px)] overflow-y-auto",
-          sticky && "sticky top-24"
-        )}
+        className="bg-white border border-gold/30 rounded-xl overflow-hidden shadow-lg max-h-[calc(100vh-200px)] overflow-y-auto"
       >
         {/* Header with minimize button */}
         <div className="flex items-center justify-between p-4 border-b border-zinc-200 bg-gradient-to-r from-gold/5 to-transparent">
@@ -184,11 +181,12 @@ export const GuideTableOfContents = ({
               {ctaAction && (
                 <Link to={ctaAction.href} className="block mt-4">
                   <Button 
-                    className="w-full relative bg-gradient-to-r from-white via-[#FDFBF7] to-[#F5F0E6] text-gold font-semibold py-3 border border-gold/40 shadow-[0_4px_20px_rgba(200,167,102,0.3),0_8px_30px_rgba(0,0,0,0.15)] hover:shadow-[0_6px_25px_rgba(200,167,102,0.5),0_10px_40px_rgba(0,0,0,0.2)] hover:scale-[1.02] transition-all duration-300"
+                    variant="primary"
+                    className="w-full relative py-3 shadow-[0_4px_20px_rgba(200,167,102,0.3),0_8px_30px_rgba(0,0,0,0.15)] hover:shadow-[0_6px_25px_rgba(200,167,102,0.5),0_10px_40px_rgba(0,0,0,0.2)] hover:scale-[1.02] transition-all duration-300"
                   >
-                    {ctaAction.icon && <ctaAction.icon className="w-4 h-4 mr-2 text-black" />}
-                    <span className="text-gold font-semibold">{ctaAction.label}</span>
-                    <ArrowUpRight className="w-4 h-4 ml-2 text-black" />
+                    {ctaAction.icon && <ctaAction.icon className="w-4 h-4 mr-2" />}
+                    <span>{ctaAction.label}</span>
+                    <ArrowUpRight className="w-4 h-4 ml-2" />
                   </Button>
                 </Link>
               )}

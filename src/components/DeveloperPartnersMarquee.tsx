@@ -82,9 +82,9 @@ const DeveloperPartnersMarquee = () => {
 
   return (
     <section className="py-10 md:py-16 bg-black border-y border-zinc-800/50 overflow-hidden">
-      <div className="container mx-auto px-4 mb-8 md:mb-12">
+      <div className="container mx-auto px-4 mb-8 md:mb-10">
         <h3 
-          className="text-center text-2xl md:text-3xl lg:text-4xl font-bold uppercase tracking-[0.2em] bg-gradient-to-r from-[#F5F0E6] via-white to-[#F5F0E6] bg-clip-text text-transparent"
+          className="text-center text-xl md:text-2xl lg:text-3xl font-bold uppercase tracking-[0.15em] bg-gradient-to-r from-[#F5F0E6] via-white to-[#F5F0E6] bg-clip-text text-transparent"
           style={{
             filter: 'drop-shadow(0 0 25px rgba(255,255,255,0.5)) drop-shadow(0 0 40px rgba(200,167,102,0.4))',
             textShadow: '0 0 30px rgba(255,255,255,0.4)',
@@ -106,7 +106,7 @@ const DeveloperPartnersMarquee = () => {
 
         {/* Scrolling content */}
         <motion.div
-          className="flex items-center gap-12 md:gap-16 py-4"
+          className="flex items-center gap-8 md:gap-12 py-4"
           animate={{
             x: [0, -distance],
           }}
@@ -128,12 +128,19 @@ const DeveloperPartnersMarquee = () => {
                 key={`${developer.slug}-${index}`}
                 className="flex-shrink-0 flex items-center gap-4 group"
               >
-                {/* Developer Label - Mixed Color Style */}
+                {/* Developer Label - 3D Frame Style with less rounded borders */}
                 <Link
                   to={`/properties?developer=${encodeURIComponent(
                     developer.developerId ?? developer.slug
                   )}`}
-                  className="inline-flex items-center gap-2 px-4 py-2 bg-gradient-to-r from-white via-[#FDFBF7] to-[#F5F0E6] border border-gold/40 rounded-full transition-all duration-300 hover:shadow-[0_0_15px_rgba(200,167,102,0.5)] shadow-[0_0_10px_rgba(200,167,102,0.3)]"
+                  className="inline-flex items-center gap-2 px-4 py-2.5 bg-gradient-to-r from-white via-[#FDFBF7] to-[#F5F0E6] border-2 border-black rounded-lg transition-all duration-300 hover:scale-105 hover:shadow-[0_8px_25px_rgba(200,167,102,0.5)] shadow-[0_4px_15px_rgba(200,167,102,0.3)]"
+                  style={{
+                    boxShadow: `
+                      0 4px 15px rgba(200,167,102,0.3),
+                      inset 0 2px 4px rgba(255,255,255,0.9),
+                      inset 0 -2px 4px rgba(200,167,102,0.2)
+                    `,
+                  }}
                   title={developer.name}
                 >
                   <span className="text-gold group-hover:text-black transition-colors font-semibold text-sm md:text-base whitespace-nowrap">
@@ -158,4 +165,3 @@ const DeveloperPartnersMarquee = () => {
 };
 
 export default DeveloperPartnersMarquee;
-
