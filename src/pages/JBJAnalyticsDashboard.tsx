@@ -90,12 +90,30 @@ const JBJAnalyticsDashboard: React.FC = () => {
     }
   };
 
+  const getPreviousPeriodRange = () => {
+    const now = new Date();
+    switch (dateRange) {
+      case 'today':
+        return { start: startOfDay(subDays(now, 1)), end: endOfDay(subDays(now, 1)) };
+      case 'week':
+        return { start: startOfDay(subDays(now, 14)), end: endOfDay(subDays(now, 7)) };
+      case 'month':
+        return { start: startOfDay(subDays(now, 60)), end: endOfDay(subDays(now, 30)) };
+    }
+  };
+
+  const calculatePercentChange = (current: number, previous: number): number => {
+    if (previous === 0) return current > 0 ? 100 : 0;
+    return Math.round(((current - previous) / previous) * 100);
+  };
+
   const fetchAnalytics = async () => {
     setIsLoading(true);
     const { start, end } = getDateRange();
+    const { start: prevStart, end: prevEnd } = getPreviousPeriodRange();
 
     try {
-      // Fetch tool usage analytics
+      // Fetch current period tool usage analytics
       const { data: analyticsData, error: analyticsError } = await supabase
         .from('jbj_analytics')
         .select('tool_name, user_id')
@@ -103,6 +121,15 @@ const JBJAnalyticsDashboard: React.FC = () => {
         .lte('created_at', end.toISOString());
 
       if (analyticsError) throw analyticsError;
+
+      // Fetch previous period analytics for comparison
+      const { data: prevAnalyticsData, error: prevAnalyticsError } = await supabase
+        .from('jbj_analytics')
+        .select('tool_name, user_id')
+        .gte('created_at', prevStart.toISOString())
+        .lte('created_at', prevEnd.toISOString());
+
+      if (prevAnalyticsError) throw prevAnalyticsError;
 
       // Process tool usage
       const toolMap = new Map<string, { count: number; users: Set<string> }>();
@@ -133,53 +160,69 @@ const JBJAnalyticsDashboard: React.FC = () => {
       if (issuesError) throw issuesError;
       setIssueReports(issuesData || []);
 
-      // Calculate stats
+      // Fetch previous period issues for comparison
+      const { data: prevIssuesData } = await supabase
+        .from('jbj_issue_reports')
+        .select('status')
+        .gte('created_at', prevStart.toISOString())
+        .lte('created_at', prevEnd.toISOString());
+
+      // Calculate current period stats
       const totalInteractions = analyticsData?.length || 0;
       const uniqueUsers = new Set(analyticsData?.filter(a => a.user_id).map(a => a.user_id)).size;
       const designsCreated = analyticsData?.filter(a => a.tool_name.includes('design')).length || 0;
       const cardsScanned = analyticsData?.filter(a => a.tool_name.includes('card')).length || 0;
+      const aiChats = analyticsData?.filter(a => a.tool_name.includes('chat') || a.tool_name.includes('assistant')).length || 0;
       const pendingIssues = issuesData?.filter(i => i.status === 'pending').length || 0;
+
+      // Calculate previous period stats
+      const prevTotalInteractions = prevAnalyticsData?.length || 0;
+      const prevUniqueUsers = new Set(prevAnalyticsData?.filter(a => a.user_id).map(a => a.user_id)).size;
+      const prevDesignsCreated = prevAnalyticsData?.filter(a => a.tool_name.includes('design')).length || 0;
+      const prevCardsScanned = prevAnalyticsData?.filter(a => a.tool_name.includes('card')).length || 0;
+      const prevAiChats = prevAnalyticsData?.filter(a => a.tool_name.includes('chat') || a.tool_name.includes('assistant')).length || 0;
+      const prevPendingIssues = prevIssuesData?.filter(i => i.status === 'pending').length || 0;
 
       setStats([
         {
           label: 'Total Interactions',
           value: totalInteractions,
-          change: 12,
+          change: calculatePercentChange(totalInteractions, prevTotalInteractions),
           icon: TrendingUp,
           color: 'text-green-400',
         },
         {
           label: 'Active Users',
           value: uniqueUsers,
-          change: 8,
+          change: calculatePercentChange(uniqueUsers, prevUniqueUsers),
           icon: Users,
           color: 'text-blue-400',
         },
         {
           label: 'Designs Created',
           value: designsCreated,
-          change: 15,
+          change: calculatePercentChange(designsCreated, prevDesignsCreated),
           icon: Palette,
           color: 'text-purple-400',
         },
         {
           label: 'Cards Scanned',
           value: cardsScanned,
-          change: 5,
+          change: calculatePercentChange(cardsScanned, prevCardsScanned),
           icon: CreditCard,
           color: 'text-gold',
         },
         {
           label: 'AI Chats',
-          value: analyticsData?.filter(a => a.tool_name.includes('chat') || a.tool_name.includes('assistant')).length || 0,
-          change: 20,
+          value: aiChats,
+          change: calculatePercentChange(aiChats, prevAiChats),
           icon: MessageCircle,
           color: 'text-fuchsia-400',
         },
         {
           label: 'Pending Issues',
           value: pendingIssues,
-          change: -3,
+          change: calculatePercentChange(pendingIssues, prevPendingIssues),
           icon: AlertCircle,
           color: 'text-red-400',
         },
@@ -293,7 +336,7 @@ const JBJAnalyticsDashboard: React.FC = () => {
                   </div>
                   <p className="text-white text-2xl font-bold">{stat.value.toLocaleString()}</p>
                   <p className={`text-xs ${stat.change >= 0 ? 'text-green-400' : 'text-red-400'}`}>
-                    {stat.change >= 0 ? '+' : ''}{stat.change}% vs last period
+                    {stat.change >= 0 ? '↑' : '↓'} {Math.abs(stat.change)}% vs {dateRange === 'today' ? 'yesterday' : dateRange === 'week' ? 'last week' : 'last month'}
                   </p>
                 </CardContent>
               </Card>
