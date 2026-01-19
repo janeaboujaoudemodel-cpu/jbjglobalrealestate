@@ -207,13 +207,13 @@ const Index = () => {
             </p>
           </div>
 
-          {/* Audience Entry Cards - All 7 user categories on ONE line */}
+          {/* Audience Entry Cards - All 7 user categories on ONE line - PREMIUM GLOW */}
           <div className="flex justify-center gap-2 md:gap-3 max-w-5xl mx-auto mb-10 flex-wrap md:flex-nowrap">
             <Link to="/buyer-guide" className="group flex-1 min-w-[70px] max-w-[100px] md:max-w-none">
-              <div className="bg-white border border-zinc-200 rounded-lg p-2 md:p-3 text-center hover:border-gold hover:shadow-lg hover:shadow-gold/20 transition-all duration-300 relative overflow-hidden h-full">
-                <div className="absolute inset-0 bg-gradient-to-br from-gold/5 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
+              <div className="bg-gradient-to-br from-white via-[#FDFBF7] to-[#F5F0E6] border-2 border-gold/50 rounded-lg p-2 md:p-3 text-center hover:border-gold hover:shadow-[0_0_25px_rgba(200,167,102,0.5)] shadow-[0_0_15px_rgba(200,167,102,0.25)] transition-all duration-300 relative overflow-hidden h-full">
+                <div className="absolute inset-0 bg-gradient-to-br from-gold/10 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
                 <div className="relative z-10">
-                  <div className="w-7 h-7 md:w-8 md:h-8 bg-black rounded-lg flex items-center justify-center mx-auto mb-1 md:mb-2 group-hover:bg-zinc-900 transition-colors">
+                  <div className="w-7 h-7 md:w-8 md:h-8 bg-black rounded-lg flex items-center justify-center mx-auto mb-1 md:mb-2 group-hover:bg-zinc-900 transition-colors shadow-lg">
                     <Heart className="w-3.5 h-3.5 md:w-4 md:h-4 text-gold" />
                   </div>
                   <h4 className="text-black text-[10px] md:text-xs font-semibold">Buyers</h4>
@@ -221,10 +221,10 @@ const Index = () => {
               </div>
             </Link>
             <Link to="/seller-guide" className="group flex-1 min-w-[70px] max-w-[100px] md:max-w-none">
-              <div className="bg-white border border-zinc-200 rounded-lg p-2 md:p-3 text-center hover:border-gold hover:shadow-lg hover:shadow-gold/20 transition-all duration-300 relative overflow-hidden h-full">
-                <div className="absolute inset-0 bg-gradient-to-br from-gold/5 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
+              <div className="bg-gradient-to-br from-white via-[#FDFBF7] to-[#F5F0E6] border-2 border-gold/50 rounded-lg p-2 md:p-3 text-center hover:border-gold hover:shadow-[0_0_25px_rgba(200,167,102,0.5)] shadow-[0_0_15px_rgba(200,167,102,0.25)] transition-all duration-300 relative overflow-hidden h-full">
+                <div className="absolute inset-0 bg-gradient-to-br from-gold/10 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
                 <div className="relative z-10">
-                  <div className="w-7 h-7 md:w-8 md:h-8 bg-black rounded-lg flex items-center justify-center mx-auto mb-1 md:mb-2 group-hover:bg-zinc-900 transition-colors">
+                  <div className="w-7 h-7 md:w-8 md:h-8 bg-black rounded-lg flex items-center justify-center mx-auto mb-1 md:mb-2 group-hover:bg-zinc-900 transition-colors shadow-lg">
                     <Target className="w-3.5 h-3.5 md:w-4 md:h-4 text-gold" />
                   </div>
                   <h4 className="text-black text-[10px] md:text-xs font-semibold">Sellers</h4>
@@ -232,21 +232,21 @@ const Index = () => {
               </div>
             </Link>
             <Link to="/rent-guide" className="group flex-1 min-w-[70px] max-w-[100px] md:max-w-none">
-              <div className="bg-white border border-zinc-200 rounded-lg p-2 md:p-3 text-center hover:border-gold hover:shadow-lg hover:shadow-gold/20 transition-all duration-300 relative overflow-hidden h-full">
-                <div className="absolute inset-0 bg-gradient-to-br from-gold/5 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
+              <div className="bg-gradient-to-br from-white via-[#FDFBF7] to-[#F5F0E6] border-2 border-gold/50 rounded-lg p-2 md:p-3 text-center hover:border-gold hover:shadow-[0_0_25px_rgba(200,167,102,0.5)] shadow-[0_0_15px_rgba(200,167,102,0.25)] transition-all duration-300 relative overflow-hidden h-full">
+                <div className="absolute inset-0 bg-gradient-to-br from-gold/10 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
                 <div className="relative z-10">
-                  <div className="w-7 h-7 md:w-8 md:h-8 bg-black rounded-lg flex items-center justify-center mx-auto mb-1 md:mb-2 group-hover:bg-zinc-900 transition-colors">
+                  <div className="w-7 h-7 md:w-8 md:h-8 bg-black rounded-lg flex items-center justify-center mx-auto mb-1 md:mb-2 group-hover:bg-zinc-900 transition-colors shadow-lg">
                     <Key className="w-3.5 h-3.5 md:w-4 md:h-4 text-gold" />
                   </div>
-                  <h4 className="text-black text-[10px] md:text-xs font-semibold">Renters</h4>
+                  <h4 className="text-black text-[10px] md:text-xs font-semibold">Rentals</h4>
                 </div>
               </div>
             </Link>
             <Link to="/ai-hub" className="group flex-1 min-w-[70px] max-w-[100px] md:max-w-none">
-              <div className="bg-white border border-zinc-200 rounded-lg p-2 md:p-3 text-center hover:border-gold hover:shadow-lg hover:shadow-gold/20 transition-all duration-300 relative overflow-hidden h-full">
-                <div className="absolute inset-0 bg-gradient-to-br from-gold/5 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
+              <div className="bg-gradient-to-br from-white via-[#FDFBF7] to-[#F5F0E6] border-2 border-gold/50 rounded-lg p-2 md:p-3 text-center hover:border-gold hover:shadow-[0_0_25px_rgba(200,167,102,0.5)] shadow-[0_0_15px_rgba(200,167,102,0.25)] transition-all duration-300 relative overflow-hidden h-full">
+                <div className="absolute inset-0 bg-gradient-to-br from-gold/10 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
                 <div className="relative z-10">
-                  <div className="w-7 h-7 md:w-8 md:h-8 bg-black rounded-lg flex items-center justify-center mx-auto mb-1 md:mb-2 group-hover:bg-zinc-900 transition-colors">
+                  <div className="w-7 h-7 md:w-8 md:h-8 bg-black rounded-lg flex items-center justify-center mx-auto mb-1 md:mb-2 group-hover:bg-zinc-900 transition-colors shadow-lg">
                     <Layers className="w-3.5 h-3.5 md:w-4 md:h-4 text-gold" />
                   </div>
                   <h4 className="text-black text-[10px] md:text-xs font-semibold">Investors</h4>
@@ -254,10 +254,10 @@ const Index = () => {
               </div>
             </Link>
             <Link to="/quiz" className="group flex-1 min-w-[70px] max-w-[100px] md:max-w-none">
-              <div className="bg-white border border-zinc-200 rounded-lg p-2 md:p-3 text-center hover:border-gold hover:shadow-lg hover:shadow-gold/20 transition-all duration-300 relative overflow-hidden h-full">
-                <div className="absolute inset-0 bg-gradient-to-br from-gold/5 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
+              <div className="bg-gradient-to-br from-white via-[#FDFBF7] to-[#F5F0E6] border-2 border-gold/50 rounded-lg p-2 md:p-3 text-center hover:border-gold hover:shadow-[0_0_25px_rgba(200,167,102,0.5)] shadow-[0_0_15px_rgba(200,167,102,0.25)] transition-all duration-300 relative overflow-hidden h-full">
+                <div className="absolute inset-0 bg-gradient-to-br from-gold/10 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
                 <div className="relative z-10">
-                  <div className="w-7 h-7 md:w-8 md:h-8 bg-black rounded-lg flex items-center justify-center mx-auto mb-1 md:mb-2 group-hover:bg-zinc-900 transition-colors">
+                  <div className="w-7 h-7 md:w-8 md:h-8 bg-black rounded-lg flex items-center justify-center mx-auto mb-1 md:mb-2 group-hover:bg-zinc-900 transition-colors shadow-lg">
                     <Users className="w-3.5 h-3.5 md:w-4 md:h-4 text-gold" />
                   </div>
                   <h4 className="text-black text-[10px] md:text-xs font-semibold">Visitors</h4>
@@ -265,10 +265,10 @@ const Index = () => {
               </div>
             </Link>
             <Link to="/referral" className="group flex-1 min-w-[70px] max-w-[100px] md:max-w-none">
-              <div className="bg-white border border-zinc-200 rounded-lg p-2 md:p-3 text-center hover:border-gold hover:shadow-lg hover:shadow-gold/20 transition-all duration-300 relative overflow-hidden h-full">
-                <div className="absolute inset-0 bg-gradient-to-br from-gold/5 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
+              <div className="bg-gradient-to-br from-white via-[#FDFBF7] to-[#F5F0E6] border-2 border-gold/50 rounded-lg p-2 md:p-3 text-center hover:border-gold hover:shadow-[0_0_25px_rgba(200,167,102,0.5)] shadow-[0_0_15px_rgba(200,167,102,0.25)] transition-all duration-300 relative overflow-hidden h-full">
+                <div className="absolute inset-0 bg-gradient-to-br from-gold/10 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
                 <div className="relative z-10">
-                  <div className="w-7 h-7 md:w-8 md:h-8 bg-black rounded-lg flex items-center justify-center mx-auto mb-1 md:mb-2 group-hover:bg-zinc-900 transition-colors">
+                  <div className="w-7 h-7 md:w-8 md:h-8 bg-black rounded-lg flex items-center justify-center mx-auto mb-1 md:mb-2 group-hover:bg-zinc-900 transition-colors shadow-lg">
                     <Award className="w-3.5 h-3.5 md:w-4 md:h-4 text-gold" />
                   </div>
                   <h4 className="text-black text-[10px] md:text-xs font-semibold">Referral</h4>
@@ -276,10 +276,10 @@ const Index = () => {
               </div>
             </Link>
             <Link to="/join" className="group flex-1 min-w-[70px] max-w-[100px] md:max-w-none">
-              <div className="bg-white border border-zinc-200 rounded-lg p-2 md:p-3 text-center hover:border-gold hover:shadow-lg hover:shadow-gold/20 transition-all duration-300 relative overflow-hidden h-full">
-                <div className="absolute inset-0 bg-gradient-to-br from-gold/5 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
+              <div className="bg-gradient-to-br from-white via-[#FDFBF7] to-[#F5F0E6] border-2 border-gold/50 rounded-lg p-2 md:p-3 text-center hover:border-gold hover:shadow-[0_0_25px_rgba(200,167,102,0.5)] shadow-[0_0_15px_rgba(200,167,102,0.25)] transition-all duration-300 relative overflow-hidden h-full">
+                <div className="absolute inset-0 bg-gradient-to-br from-gold/10 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
                 <div className="relative z-10">
-                  <div className="w-7 h-7 md:w-8 md:h-8 bg-black rounded-lg flex items-center justify-center mx-auto mb-1 md:mb-2 group-hover:bg-zinc-900 transition-colors">
+                  <div className="w-7 h-7 md:w-8 md:h-8 bg-black rounded-lg flex items-center justify-center mx-auto mb-1 md:mb-2 group-hover:bg-zinc-900 transition-colors shadow-lg">
                     <GraduationCap className="w-3.5 h-3.5 md:w-4 md:h-4 text-gold" />
                   </div>
                   <h4 className="text-black text-[10px] md:text-xs font-semibold">Careers</h4>
