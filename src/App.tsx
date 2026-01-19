@@ -109,6 +109,7 @@ import SellerListing from "./pages/SellerListing";
 import RentGuide from "./pages/RentGuide";
 import TenantGuide from "./pages/TenantGuide";
 import LandlordGuide from "./pages/LandlordGuide";
+import LandlordRentalPortal from "./pages/LandlordRentalPortal";
 import FAQ from "./pages/FAQ";
 import JBJAnalyticsDashboard from "./pages/JBJAnalyticsDashboard";
 import JBJDesignStudio from "./pages/JBJDesignStudio";
@@ -188,6 +189,7 @@ const App = () => (
                 <Route path="/rent-guide" element={<RentGuide />} />
                 <Route path="/tenant-guide" element={<TenantGuide />} />
                 <Route path="/landlord-guide" element={<LandlordGuide />} />
+                <Route path="/landlord-portal" element={<LandlordRentalPortal />} />
                 <Route path="/partners" element={<Partners />} />
                 <Route path="/partners/mortgage" element={<PartnerMortgage />} />
                 <Route path="/partners/legal" element={<PartnerLegal />} />
