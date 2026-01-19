@@ -149,10 +149,10 @@ const Install = () => {
             animate={{ opacity: 1, y: 0 }}
             transition={{ delay: 0.1 }}
           >
-            <div className="inline-flex items-center gap-2 px-4 py-2 bg-gold/20 border border-gold/30 rounded-full mb-6">
-              <Sparkles className="w-4 h-4 text-gold" />
-              <span className="text-gold text-sm font-medium">Free Download</span>
-            </div>
+            <button className="group inline-flex items-center gap-2 bg-gradient-to-r from-white via-[#FDFBF7] to-[#F5F0E6] border border-gold/40 rounded-full px-5 py-2.5 mb-6 shadow-sm transition-all hover:shadow-md cursor-default">
+              <Sparkles className="w-4 h-4 text-gold group-hover:text-black transition-colors" />
+              <span className="text-gold group-hover:text-black transition-colors font-semibold">Free Download</span>
+            </button>
 
             <h1 className="text-white text-3xl md:text-4xl lg:text-5xl font-bold mb-4">
               Install{" "}

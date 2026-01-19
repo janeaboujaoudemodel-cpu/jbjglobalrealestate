@@ -75,14 +75,14 @@ export const MarketIntelligenceHero = ({
         variants={staggerContainer}
       >
         <div className="max-w-4xl mx-auto text-center">
-          {/* Badge */}
-          <motion.div 
-            className="inline-flex items-center gap-2 bg-gold/10 border border-gold/30 rounded-full px-4 py-2 mb-6 backdrop-blur-sm"
+          {/* Badge - Mixed Color Label Style (same as Broker Hub) */}
+          <motion.button 
+            className="group inline-flex items-center gap-2 bg-gradient-to-r from-white via-[#FDFBF7] to-[#F5F0E6] border border-gold/40 rounded-full px-5 py-2.5 mb-6 shadow-sm transition-all hover:shadow-md cursor-default"
             variants={fadeInUp}
           >
-            <BadgeIcon className="w-4 h-4 text-gold" />
-            <span className="text-gold text-sm font-medium tracking-wide uppercase">{badge}</span>
-          </motion.div>
+            <BadgeIcon className="w-4 h-4 text-gold group-hover:text-black transition-colors" />
+            <span className="text-gold group-hover:text-black transition-colors font-semibold">{badge}</span>
+          </motion.button>
           
           {/* Title */}
           <motion.h1 

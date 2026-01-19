@@ -20,10 +20,10 @@ const TrustAndAuditCenter = () => {
         <section className="relative py-16 md:py-24 bg-gradient-to-b from-black to-zinc-900">
           <div className="container mx-auto px-4">
             <div className="max-w-4xl mx-auto text-center">
-              <div className="inline-flex items-center gap-2 px-4 py-2 bg-gold/10 border border-gold/30 rounded-full mb-6">
-                <Shield className="w-5 h-5 text-gold" />
-                <span className="text-gold text-sm font-medium tracking-wide">TRUST & COMPLIANCE</span>
-              </div>
+              <button className="group inline-flex items-center gap-2 bg-gradient-to-r from-white via-[#FDFBF7] to-[#F5F0E6] border border-gold/40 rounded-full px-5 py-2.5 mb-6 shadow-sm transition-all hover:shadow-md cursor-default">
+                <Shield className="w-5 h-5 text-gold group-hover:text-black transition-colors" />
+                <span className="text-gold group-hover:text-black transition-colors font-semibold tracking-wide">TRUST & COMPLIANCE</span>
+              </button>
               <h1 className="text-3xl md:text-5xl font-bold text-white mb-6 tracking-tight">
                 Trust, Audit & Compliance Center
               </h1>

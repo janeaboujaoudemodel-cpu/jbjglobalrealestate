@@ -54,10 +54,10 @@ export const PreFooterSeparator = ({
             {subtitle}
           </p>
           <div className="flex flex-wrap justify-center gap-4">
-            {/* Primary Button - 3D Premium Style */}
+            {/* Primary Button - 3D Premium Style with hover reverse */}
             <Link to={primaryLink}>
               <button 
-                className="relative inline-flex items-center justify-center gap-2 px-10 py-5 text-base font-bold rounded-xl transition-all duration-300 group overflow-hidden"
+                className="group relative inline-flex items-center justify-center gap-2 px-10 py-5 text-base font-bold rounded-xl transition-all duration-300 overflow-hidden"
                 style={{
                   background: 'linear-gradient(135deg, #FFFFFF 0%, #FDFBF7 25%, #F5F0E6 50%, #E8DFD0 75%, #C8A766 100%)',
                   boxShadow: `
@@ -71,20 +71,20 @@ export const PreFooterSeparator = ({
               >
                 <span className="absolute inset-x-0 top-0 h-1/2 rounded-t-xl bg-gradient-to-b from-white/80 to-transparent pointer-events-none" />
                 <span className="absolute inset-0 rounded-xl opacity-0 group-hover:opacity-100 transition-opacity duration-300 pointer-events-none" style={{ boxShadow: '0 0 40px rgba(200,167,102,0.6), inset 0 0 20px rgba(200,167,102,0.1)' }} />
-                <span className="relative flex items-center gap-2">
-                  <span className="text-gold">{primaryText.split(' ')[0]}</span>
-                  <span className="text-black">{primaryText.split(' ').slice(1).join(' ') || ''}</span>
-                  <ArrowUpRight className="w-5 h-5 text-black" />
+                <span className="relative flex items-center gap-1">
+                  <span className="text-gold group-hover:text-black transition-colors">{primaryText.split(' ')[0]}</span>
+                  <span className="text-black group-hover:text-gold transition-colors">{primaryText.split(' ').slice(1).join(' ') || ''}</span>
                 </span>
+                <ArrowUpRight className="w-5 h-5 text-gold group-hover:text-black transition-colors relative z-10" />
               </button>
             </Link>
             {/* Secondary Button - Transparent with black border */}
             <Link to={secondaryLink}>
               <button 
-                className="relative inline-flex items-center justify-center gap-2 px-10 py-5 text-base font-bold rounded-xl transition-all duration-300 bg-transparent border-2 border-black text-black hover:bg-black hover:text-white group"
+                className="group inline-flex items-center justify-center gap-2 px-10 py-5 text-base font-bold rounded-xl transition-all duration-300 bg-transparent border-2 border-black text-black hover:bg-black hover:text-white"
               >
                 {secondaryText}
-                <ArrowUpRight className="w-5 h-5" />
+                <ArrowUpRight className="w-5 h-5 group-hover:translate-x-0.5 group-hover:-translate-y-0.5 transition-transform" />
               </button>
             </Link>
           </div>

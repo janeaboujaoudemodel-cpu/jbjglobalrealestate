@@ -9,6 +9,7 @@
 import { motion } from "framer-motion";
 import { Database, Shield, FileCheck, Clock, AlertTriangle, Scale, Bot } from "lucide-react";
 import Footer from "@/components/Footer";
+import PreFooterSeparator from "@/components/PreFooterSeparator";
 import { SEOHead } from "@/components/SEOHead";
 import { MarketIntelligenceSchema } from "@/components/seo/MarketIntelligenceSchema";
 import { APPROVED_DATA_SOURCES, GOVERNMENT_DISCLOSURES } from "@/config/government-cobranding";
@@ -263,6 +264,14 @@ const Methodology = () => {
         </div>
       </section>
 
+      <PreFooterSeparator 
+        title="Explore More Market Intelligence"
+        subtitle="Get a high-level overview or dive into area-specific data."
+        primaryLink="/market-intelligence/overview"
+        primaryText="Market Overview"
+        secondaryLink="/market-intelligence/areas"
+        secondaryText="Area Intelligence"
+      />
       <Footer />
     </div>
   );
