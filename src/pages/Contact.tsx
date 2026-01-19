@@ -719,7 +719,10 @@ END:VCARD`;
         </div>
       </section>
 
-      {/* Direct Contact CTAs */}
+      {/* Support Ticket Section - Above "Prefer to Reach Us Directly" */}
+      <SupportTicketBox />
+
+      {/* Direct Contact CTAs - "Prefer to Reach Us Directly" */}
       <section className="py-12 bg-zinc-900/30">
         <div className="container mx-auto px-4">
           <p className="text-center text-sm mb-6">
@@ -764,7 +767,7 @@ END:VCARD`;
         </div>
       </section>
 
-      {/* Compliance Disclaimer - Premium champagne background */}
+      {/* Important Notice - Directly above Footer */}
       <section className="py-10 bg-gradient-to-br from-white via-[#FDFBF7] to-[#F5F0E6] border-t border-zinc-200">
         <div className="container mx-auto px-4">
           <div className="max-w-3xl mx-auto bg-white border-2 border-gold rounded-xl p-6 md:p-8">
@@ -838,9 +841,6 @@ END:VCARD`;
         open={meetingModalOpen} 
         onOpenChange={setMeetingModalOpen} 
       />
-
-      {/* Support Ticket Section */}
-      <SupportTicketBox />
 
       <Footer />
       </div>
