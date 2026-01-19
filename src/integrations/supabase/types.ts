@@ -9872,6 +9872,47 @@ export type Database = {
         }
         Relationships: []
       }
+      report_delivery_logs: {
+        Row: {
+          error_message: string | null
+          id: string
+          metadata: Json | null
+          pdf_url: string | null
+          recipients: string[]
+          scheduled_report_id: string
+          sent_at: string
+          status: string
+        }
+        Insert: {
+          error_message?: string | null
+          id?: string
+          metadata?: Json | null
+          pdf_url?: string | null
+          recipients: string[]
+          scheduled_report_id: string
+          sent_at?: string
+          status?: string
+        }
+        Update: {
+          error_message?: string | null
+          id?: string
+          metadata?: Json | null
+          pdf_url?: string | null
+          recipients?: string[]
+          scheduled_report_id?: string
+          sent_at?: string
+          status?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "report_delivery_logs_scheduled_report_id_fkey"
+            columns: ["scheduled_report_id"]
+            isOneToOne: false
+            referencedRelation: "scheduled_reports"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       rewards_catalog: {
         Row: {
           created_at: string | null
@@ -9905,6 +9946,51 @@ export type Database = {
           points_required?: number
           quantity_available?: number | null
           reward_type?: Database["public"]["Enums"]["reward_type"] | null
+        }
+        Relationships: []
+      }
+      scheduled_reports: {
+        Row: {
+          created_at: string
+          frequency: string
+          id: string
+          is_active: boolean
+          last_sent_at: string | null
+          next_send_at: string
+          recipients: string[]
+          report_config: Json | null
+          report_name: string
+          report_type: string
+          updated_at: string
+          user_id: string
+        }
+        Insert: {
+          created_at?: string
+          frequency: string
+          id?: string
+          is_active?: boolean
+          last_sent_at?: string | null
+          next_send_at: string
+          recipients?: string[]
+          report_config?: Json | null
+          report_name: string
+          report_type?: string
+          updated_at?: string
+          user_id: string
+        }
+        Update: {
+          created_at?: string
+          frequency?: string
+          id?: string
+          is_active?: boolean
+          last_sent_at?: string | null
+          next_send_at?: string
+          recipients?: string[]
+          report_config?: Json | null
+          report_name?: string
+          report_type?: string
+          updated_at?: string
+          user_id?: string
         }
         Relationships: []
       }
