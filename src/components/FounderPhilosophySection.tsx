@@ -66,14 +66,28 @@ export const FounderPhilosophySection = () => {
                   />
                 </div>
               </Link>
-              {/* Know More About the Founder Link - Different label style with hover */}
-              <Link 
-                to="/founder" 
-                className="flex items-center justify-center gap-2 mt-4 px-4 py-2 rounded-full border border-gold/50 text-gold hover:bg-gold hover:text-black text-sm transition-all duration-300 group"
+              {/* Know More About the Founder - Primary 3D on normal, Secondary on hover */}
+              <button 
+                onClick={() => window.location.href = '/founder'}
+                className="group/btn mt-4 relative inline-flex items-center justify-center gap-2 px-4 py-2 text-sm font-bold rounded-xl transition-all duration-300 overflow-hidden w-full"
+                style={{
+                  background: 'linear-gradient(135deg, #FFFFFF 0%, #FDFBF7 50%, #F5F0E6 100%)',
+                  border: '2px solid rgba(200,167,102,0.5)',
+                  boxShadow: `
+                    0 6px 20px rgba(200,167,102,0.3),
+                    0 4px 10px rgba(0,0,0,0.15),
+                    inset 0 2px 4px rgba(255,255,255,0.9),
+                    inset 0 -2px 4px rgba(200,167,102,0.2)
+                  `,
+                }}
               >
-                <span>Know More About the Founder</span>
-                <span className="group-hover:translate-x-0.5 group-hover:-translate-y-0.5 transition-transform">↗</span>
-              </Link>
+                <span className="absolute inset-x-0 top-0 h-1/2 rounded-t-xl bg-gradient-to-b from-white/80 to-transparent pointer-events-none" />
+                <span className="relative flex items-center justify-center gap-1">
+                  <span className="text-gold group-hover/btn:text-black transition-colors">Know More About the</span>
+                  <span className="text-black group-hover/btn:text-gold transition-colors">Founder</span>
+                  <span className="text-gold group-hover/btn:text-black transition-colors">↗</span>
+                </span>
+              </button>
             </motion.div>
 
             {/* Content */}
@@ -81,23 +95,23 @@ export const FounderPhilosophySection = () => {
               variants={fadeInUp}
               className="flex-1"
             >
-              {/* Attribution */}
+              {/* Attribution - Premium styling, no underlines */}
               <p className="text-sm font-medium tracking-wide mb-6">
-                <span className="text-white uppercase tracking-[0.15em]">Written by Founder & CEO,</span>{" "}
+                <span className="text-white uppercase tracking-[0.15em] text-lg md:text-xl">Written by Founder & CEO,</span>{" "}
                 <Link 
                   to="/founder" 
-                  className="text-gold font-semibold hover:text-gold-light transition-colors underline underline-offset-4"
+                  className="text-gold text-xl md:text-2xl font-bold hover:text-gold-light transition-colors"
                 >
                   Jane Abou Jaoude
                 </Link>
-                <span className="block mt-1 normal-case tracking-normal">
-                  at{" "}
+                <span className="block mt-2">
                   <Link 
                     to="/about" 
-                    className="text-gold drop-shadow-[0_0_6px_rgba(200,167,102,0.5)] hover:text-gold-light transition-colors underline underline-offset-2"
+                    className="text-gold text-lg drop-shadow-[0_0_6px_rgba(200,167,102,0.5)] hover:text-gold-light transition-colors font-semibold"
                   >
                     JBJ Global Real Estate
                   </Link>
+                  <span className="block h-0.5 w-24 bg-gold mt-2" />
                 </span>
               </p>
 
@@ -118,7 +132,11 @@ export const FounderPhilosophySection = () => {
                   </p>
                   
                   <p>
-                    At <strong className="text-black font-semibold">JBJ GLOBAL REAL ESTATE</strong>, we work with clients as if we are investing our own capital. We do not treat a client's portfolio as a transaction. We treat it as if it were our own.
+                    At{" "}
+                    <Link to="/about" className="text-gold drop-shadow-[0_0_6px_rgba(200,167,102,0.5)] font-semibold hover:text-gold-light transition-colors">
+                      JBJ Global Real Estate
+                    </Link>
+                    , we work with clients as if we are investing our own capital. We do not treat a client's portfolio as a transaction. We treat it as if it were our own.
                   </p>
                   
                   <p>
@@ -160,15 +178,19 @@ export const FounderPhilosophySection = () => {
 
                 {/* Signature */}
                 <div className="pt-8 mt-8 border-t border-zinc-200">
-                  <p className="text-black text-lg font-semibold tracking-wide">
-                    Jane Abou Jaoude
-                  </p>
+                  <Link to="/founder" className="hover:text-gold transition-colors">
+                    <p className="text-black text-lg font-semibold tracking-wide">
+                      Jane Abou Jaoude
+                    </p>
+                  </Link>
                   <p className="text-gold text-sm font-medium mt-1 tracking-wide">
                     Founder & CEO
                   </p>
-                  <p className="text-zinc-600 text-sm mt-0.5 tracking-wide">
-                    JBJ Global Real Estate
-                  </p>
+                  <Link to="/about" className="hover:text-gold transition-colors">
+                    <p className="text-zinc-600 text-sm mt-0.5 tracking-wide hover:text-gold transition-colors">
+                      JBJ Global Real Estate
+                    </p>
+                  </Link>
                 </div>
               </div>
             </motion.div>
