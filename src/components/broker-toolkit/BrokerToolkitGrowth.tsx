@@ -165,7 +165,7 @@ export function BrokerToolkitGrowth() {
           </div>
         </motion.div>
 
-        {/* CTA */}
+        {/* CTA - Premium 3D Button Style */}
         <motion.div
           initial={{ opacity: 0, y: 20 }}
           whileInView={{ opacity: 1, y: 0 }}
@@ -173,7 +173,7 @@ export function BrokerToolkitGrowth() {
           className="text-center"
         >
           <button 
-            className="inline-flex items-center justify-center gap-2 bg-transparent border-2 border-gold text-gold hover:bg-gradient-to-r hover:from-white hover:via-[#FDFBF7] hover:to-[#F5F0E6] hover:text-gold px-8 py-4 text-lg font-semibold transition-all rounded-md shadow-[0_0_30px_rgba(200,167,102,0.4)] hover:shadow-[0_0_40px_rgba(200,167,102,0.6)]"
+            className="inline-flex items-center justify-center gap-2 bg-gradient-to-r from-white via-[#FDFBF7] to-[#F5F0E6] text-gold hover:bg-black hover:text-gold border border-gold/40 hover:border-gold px-10 py-4 text-lg font-semibold rounded-md shadow-[0_4px_20px_rgba(200,167,102,0.3),0_8px_30px_rgba(0,0,0,0.15)] hover:shadow-[0_6px_25px_rgba(200,167,102,0.5),0_10px_40px_rgba(0,0,0,0.2)] transition-all duration-300"
             onClick={() => navigate(user ? '/my-account' : '/auth?redirect=/my-account')}
           >
             <Trophy className="w-5 h-5" />

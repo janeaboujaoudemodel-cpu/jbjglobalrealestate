@@ -21,7 +21,6 @@ const CERTIFICATIONS = [
     modules: 10,
     description: "Social media strategies, lead generation, content creation, and personal branding for brokers.",
     badge: "Certified",
-    color: "blue",
   },
   {
     title: "Quality & Service Excellence",
@@ -29,7 +28,6 @@ const CERTIFICATIONS = [
     modules: 8,
     description: "Delivering 5-star customer experiences, handling complaints, and exceeding expectations.",
     badge: "Excellence",
-    color: "gold",
   },
   {
     title: "Client Relations & Communication",
@@ -37,7 +35,6 @@ const CERTIFICATIONS = [
     modules: 9,
     description: "Building rapport, active listening, negotiation psychology, and maintaining long-term relationships.",
     badge: "Professional",
-    color: "purple",
   },
   {
     title: "Luxury Sales Specialist",
@@ -45,7 +42,6 @@ const CERTIFICATIONS = [
     modules: 12,
     description: "VIP client handling, high-net-worth psychology, ultra-premium property positioning.",
     badge: "Elite",
-    color: "emerald",
   },
   {
     title: "Business Development Pro",
@@ -53,7 +49,6 @@ const CERTIFICATIONS = [
     modules: 7,
     description: "Prospecting strategies, networking techniques, referral systems, and partnership building.",
     badge: "Advanced",
-    color: "orange",
   },
   {
     title: "Time Management & Productivity",
@@ -61,20 +56,17 @@ const CERTIFICATIONS = [
     modules: 6,
     description: "Prioritization, goal setting, workflow optimization, and work-life balance for sales professionals.",
     badge: "Master",
-    color: "pink",
   },
 ];
 
-const getColorClasses = (color: string) => {
-  const colors: Record<string, { bg: string; border: string; text: string; badge: string }> = {
-    gold: { bg: "bg-gold/10", border: "border-gold/40", text: "text-gold", badge: "bg-gold/20 text-gold border-gold/30" },
-    blue: { bg: "bg-blue-500/10", border: "border-blue-500/40", text: "text-blue-400", badge: "bg-blue-500/20 text-blue-400 border-blue-500/30" },
-    purple: { bg: "bg-purple-500/10", border: "border-purple-500/40", text: "text-purple-400", badge: "bg-purple-500/20 text-purple-400 border-purple-500/30" },
-    emerald: { bg: "bg-emerald-500/10", border: "border-emerald-500/40", text: "text-emerald-400", badge: "bg-emerald-500/20 text-emerald-400 border-emerald-500/30" },
-    orange: { bg: "bg-orange-500/10", border: "border-orange-500/40", text: "text-orange-400", badge: "bg-orange-500/20 text-orange-400 border-orange-500/30" },
-    pink: { bg: "bg-pink-500/10", border: "border-pink-500/40", text: "text-pink-400", badge: "bg-pink-500/20 text-pink-400 border-pink-500/30" },
-  };
-  return colors[color] || colors.gold;
+// Unified light blue theme for all certification cards with glow effect
+const CARD_THEME = {
+  bg: "bg-black/40 backdrop-blur-sm",
+  border: "border-2 border-sky-400/50 hover:border-sky-300",
+  glow: "shadow-[0_0_20px_rgba(56,189,248,0.2)] hover:shadow-[0_0_30px_rgba(56,189,248,0.4)]",
+  iconBg: "bg-sky-500/20 border border-sky-400/30",
+  iconText: "text-sky-400",
+  badge: "bg-sky-500/20 text-sky-300 border-sky-400/30",
 };
 
 export function BrokerToolkitAcademy() {
@@ -100,56 +92,53 @@ export function BrokerToolkitAcademy() {
           </p>
         </motion.div>
 
-        {/* Certifications Grid */}
+        {/* Certifications Grid - All cards with unified light blue glow theme */}
         <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6 mb-12">
-          {CERTIFICATIONS.map((cert, i) => {
-            const colors = getColorClasses(cert.color);
-            return (
-              <motion.div
-                key={i}
-                initial={{ opacity: 0, y: 20 }}
-                whileInView={{ opacity: 1, y: 0 }}
-                transition={{ delay: i * 0.1 }}
-                viewport={{ once: true }}
-              >
-                <Card className={`bg-zinc-900/80 ${colors.border} hover:border-gold/60 transition-all h-full`}>
-                  <CardContent className="p-6">
-                    <div className="flex items-start justify-between mb-4">
-                      <div className={`w-12 h-12 ${colors.bg} rounded-xl flex items-center justify-center`}>
-                        <Award className={`w-6 h-6 ${colors.text}`} />
-                      </div>
-                      <Badge className={colors.badge}>
-                        <BadgeCheck className="w-3 h-3 mr-1" />
-                        {cert.badge}
-                      </Badge>
+          {CERTIFICATIONS.map((cert, i) => (
+            <motion.div
+              key={i}
+              initial={{ opacity: 0, y: 20 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              transition={{ delay: i * 0.1 }}
+              viewport={{ once: true }}
+            >
+              <Card className={`${CARD_THEME.bg} ${CARD_THEME.border} ${CARD_THEME.glow} transition-all h-full`}>
+                <CardContent className="p-6">
+                  <div className="flex items-start justify-between mb-4">
+                    <div className={`w-12 h-12 ${CARD_THEME.iconBg} rounded-xl flex items-center justify-center`}>
+                      <Award className={`w-6 h-6 ${CARD_THEME.iconText}`} />
                     </div>
-                    <h3 className="text-white font-semibold text-lg mb-2">{cert.title}</h3>
-                    <p className="text-zinc-400 text-sm mb-4">{cert.description}</p>
-                    <div className="flex items-center justify-between text-xs text-zinc-500">
-                      <span className="flex items-center gap-1">
-                        <Clock className="w-3 h-3" />
-                        {cert.duration}
-                      </span>
-                      <span className="flex items-center gap-1">
-                        <FileText className="w-3 h-3" />
-                        {cert.modules} modules
-                      </span>
-                    </div>
-                  </CardContent>
-                </Card>
-              </motion.div>
-            );
-          })}
+                    <Badge className={CARD_THEME.badge}>
+                      <BadgeCheck className="w-3 h-3 mr-1" />
+                      {cert.badge}
+                    </Badge>
+                  </div>
+                  <h3 className="text-sky-300 font-semibold text-lg mb-2">{cert.title}</h3>
+                  <p className="text-zinc-400 text-sm mb-4">{cert.description}</p>
+                  <div className="flex items-center justify-between text-xs text-zinc-500">
+                    <span className="flex items-center gap-1">
+                      <Clock className="w-3 h-3" />
+                      {cert.duration}
+                    </span>
+                    <span className="flex items-center gap-1">
+                      <FileText className="w-3 h-3" />
+                      {cert.modules} modules
+                    </span>
+                  </div>
+                </CardContent>
+              </Card>
+            </motion.div>
+          ))}
         </div>
 
-        {/* Benefits Section */}
+        {/* Benefits Section - White/Gold/Champagne Pearl Box */}
         <motion.div
           initial={{ opacity: 0, y: 20 }}
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true }}
-          className="bg-gradient-to-br from-gold/10 to-gold/5 border border-gold/30 rounded-2xl p-8 text-center"
+          className="bg-gradient-to-br from-white via-[#FDFBF7] to-[#F5F0E6] border-2 border-gold/50 rounded-2xl p-8 text-center shadow-[0_0_30px_rgba(200,167,102,0.2)]"
         >
-          <h3 className="text-xl font-semibold text-white mb-4 flex items-center justify-center gap-2">
+          <h3 className="text-xl font-semibold text-black mb-4 flex items-center justify-center gap-2">
             <Star className="w-5 h-5 text-gold" />
             Why Get Certified?
           </h3>
@@ -160,7 +149,7 @@ export function BrokerToolkitAcademy() {
               "Higher commission tiers",
               "Access to VIP training"
             ].map((benefit, i) => (
-              <div key={i} className="flex items-center gap-2 justify-center text-zinc-300 text-sm">
+              <div key={i} className="flex items-center gap-2 justify-center text-zinc-700 text-sm">
                 <CheckCircle className="w-4 h-4 text-gold flex-shrink-0" />
                 <span>{benefit}</span>
               </div>
