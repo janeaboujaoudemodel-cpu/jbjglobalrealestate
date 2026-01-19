@@ -12133,15 +12133,10 @@ export type Database = {
         Row: {
           ai_credits_limit: number | null
           ai_credits_used: number | null
-          company_name: string | null
           created_at: string | null
-          currency: string | null
-          email: string | null
           expires_at: string | null
-          full_name: string | null
           id: string | null
           pdf_downloads: number | null
-          rera_number: string | null
           selected_addons: string[] | null
           starts_at: string | null
           status: string | null
@@ -12149,20 +12144,14 @@ export type Database = {
           trial_ends_at: string | null
           updated_at: string | null
           user_id: string | null
-          user_role: string | null
         }
         Insert: {
           ai_credits_limit?: number | null
           ai_credits_used?: number | null
-          company_name?: string | null
           created_at?: string | null
-          currency?: string | null
-          email?: string | null
           expires_at?: string | null
-          full_name?: string | null
           id?: string | null
           pdf_downloads?: number | null
-          rera_number?: string | null
           selected_addons?: string[] | null
           starts_at?: string | null
           status?: string | null
@@ -12170,20 +12159,14 @@ export type Database = {
           trial_ends_at?: string | null
           updated_at?: string | null
           user_id?: string | null
-          user_role?: string | null
         }
         Update: {
           ai_credits_limit?: number | null
           ai_credits_used?: number | null
-          company_name?: string | null
           created_at?: string | null
-          currency?: string | null
-          email?: string | null
           expires_at?: string | null
-          full_name?: string | null
           id?: string | null
           pdf_downloads?: number | null
-          rera_number?: string | null
           selected_addons?: string[] | null
           starts_at?: string | null
           status?: string | null
@@ -12191,254 +12174,111 @@ export type Database = {
           trial_ends_at?: string | null
           updated_at?: string | null
           user_id?: string | null
-          user_role?: string | null
         }
         Relationships: []
       }
       crm_leads_secure: {
         Row: {
-          age_range: string | null
-          assigned_to_user_id: string | null
-          contact_type: Database["public"]["Enums"]["crm_contact_type"] | null
+          assigned_broker_id: string | null
           created_at: string | null
-          current_location_city: string | null
-          current_location_country: string | null
-          email_lower: string | null
-          email_normalized: string | null
           full_name: string | null
-          gender: string | null
-          has_full_access: boolean | null
           id: string | null
-          import_batch_id: string | null
-          lead_intent: string | null
-          nationality: string | null
-          owner_type: Database["public"]["Enums"]["crm_lead_owner_type"] | null
-          owner_user_id: string | null
-          phone_e164: string | null
-          phone_normalized: string | null
-          phone_raw: string | null
           pipeline_stage: string | null
-          preferred_language: string | null
+          rental_budget_max: number | null
+          rental_budget_min: number | null
+          rental_preferred_areas: string[] | null
+          rental_property_type: string | null
           source: string | null
-          source_id: string | null
           tags: string[] | null
           updated_at: string | null
-          vip: boolean | null
         }
         Insert: {
-          age_range?: string | null
-          assigned_to_user_id?: string | null
-          contact_type?: Database["public"]["Enums"]["crm_contact_type"] | null
+          assigned_broker_id?: string | null
           created_at?: string | null
-          current_location_city?: string | null
-          current_location_country?: string | null
-          email_lower?: never
-          email_normalized?: never
-          full_name?: never
-          gender?: string | null
-          has_full_access?: never
+          full_name?: string | null
           id?: string | null
-          import_batch_id?: string | null
-          lead_intent?: string | null
-          nationality?: string | null
-          owner_type?: Database["public"]["Enums"]["crm_lead_owner_type"] | null
-          owner_user_id?: string | null
-          phone_e164?: never
-          phone_normalized?: never
-          phone_raw?: never
           pipeline_stage?: string | null
-          preferred_language?: string | null
+          rental_budget_max?: number | null
+          rental_budget_min?: number | null
+          rental_preferred_areas?: string[] | null
+          rental_property_type?: string | null
           source?: string | null
-          source_id?: string | null
           tags?: string[] | null
           updated_at?: string | null
-          vip?: boolean | null
         }
         Update: {
-          age_range?: string | null
-          assigned_to_user_id?: string | null
-          contact_type?: Database["public"]["Enums"]["crm_contact_type"] | null
+          assigned_broker_id?: string | null
           created_at?: string | null
-          current_location_city?: string | null
-          current_location_country?: string | null
-          email_lower?: never
-          email_normalized?: never
-          full_name?: never
-          gender?: string | null
-          has_full_access?: never
+          full_name?: string | null
           id?: string | null
-          import_batch_id?: string | null
-          lead_intent?: string | null
-          nationality?: string | null
-          owner_type?: Database["public"]["Enums"]["crm_lead_owner_type"] | null
-          owner_user_id?: string | null
-          phone_e164?: never
-          phone_normalized?: never
-          phone_raw?: never
           pipeline_stage?: string | null
-          preferred_language?: string | null
+          rental_budget_max?: number | null
+          rental_budget_min?: number | null
+          rental_preferred_areas?: string[] | null
+          rental_property_type?: string | null
           source?: string | null
-          source_id?: string | null
           tags?: string[] | null
           updated_at?: string | null
-          vip?: boolean | null
         }
         Relationships: [
           {
-            foreignKeyName: "crm_leads_source_id_fkey"
-            columns: ["source_id"]
+            foreignKeyName: "crm_leads_assigned_broker_id_fkey"
+            columns: ["assigned_broker_id"]
             isOneToOne: false
-            referencedRelation: "crm_lead_sources"
+            referencedRelation: "ai_brokers"
             referencedColumns: ["id"]
           },
         ]
       }
       crm_vip_leads: {
         Row: {
-          age_range: string | null
-          assigned_ai_employee_id: string | null
-          assigned_to_user_id: string | null
-          auto_detected_type: boolean | null
-          birthday: string | null
-          company_name: string | null
-          contact_type: Database["public"]["Enums"]["crm_contact_type"] | null
+          assigned_broker_id: string | null
           created_at: string | null
-          created_by_user_id: string | null
-          current_location_city: string | null
-          current_location_country: string | null
-          detection_keywords: string[] | null
-          email_lower: string | null
-          email_normalized: string | null
-          flag_reasons: string[] | null
-          flagged: boolean | null
           full_name: string | null
-          gender: string | null
           id: string | null
-          import_approval_status:
-            | Database["public"]["Enums"]["crm_import_approval_status"]
-            | null
-          import_batch_id: string | null
-          imported_at: string | null
-          lead_source_type: string | null
-          nationality: string | null
-          notes: string | null
-          owner_type: Database["public"]["Enums"]["crm_lead_owner_type"] | null
-          owner_user_id: string | null
-          phone_e164: string | null
-          phone_normalized: string | null
-          phone_raw: string | null
-          preferred_language: string | null
-          raw_import: Json | null
+          pipeline_stage: string | null
+          rental_budget_max: number | null
+          rental_budget_min: number | null
+          rental_preferred_areas: string[] | null
+          rental_property_type: string | null
           source: string | null
-          source_id: string | null
-          source_row_index: number | null
           tags: string[] | null
           updated_at: string | null
-          vip: boolean | null
-          vip_tagged_at: string | null
-          vip_tagged_by: string | null
         }
         Insert: {
-          age_range?: string | null
-          assigned_ai_employee_id?: string | null
-          assigned_to_user_id?: string | null
-          auto_detected_type?: boolean | null
-          birthday?: string | null
-          company_name?: string | null
-          contact_type?: Database["public"]["Enums"]["crm_contact_type"] | null
+          assigned_broker_id?: string | null
           created_at?: string | null
-          created_by_user_id?: string | null
-          current_location_city?: string | null
-          current_location_country?: string | null
-          detection_keywords?: string[] | null
-          email_lower?: string | null
-          email_normalized?: string | null
-          flag_reasons?: string[] | null
-          flagged?: boolean | null
           full_name?: string | null
-          gender?: string | null
           id?: string | null
-          import_approval_status?:
-            | Database["public"]["Enums"]["crm_import_approval_status"]
-            | null
-          import_batch_id?: string | null
-          imported_at?: string | null
-          lead_source_type?: string | null
-          nationality?: string | null
-          notes?: string | null
-          owner_type?: Database["public"]["Enums"]["crm_lead_owner_type"] | null
-          owner_user_id?: string | null
-          phone_e164?: string | null
-          phone_normalized?: string | null
-          phone_raw?: string | null
-          preferred_language?: string | null
-          raw_import?: Json | null
+          pipeline_stage?: string | null
+          rental_budget_max?: number | null
+          rental_budget_min?: number | null
+          rental_preferred_areas?: string[] | null
+          rental_property_type?: string | null
           source?: string | null
-          source_id?: string | null
-          source_row_index?: number | null
           tags?: string[] | null
           updated_at?: string | null
-          vip?: boolean | null
-          vip_tagged_at?: string | null
-          vip_tagged_by?: string | null
         }
         Update: {
-          age_range?: string | null
-          assigned_ai_employee_id?: string | null
-          assigned_to_user_id?: string | null
-          auto_detected_type?: boolean | null
-          birthday?: string | null
-          company_name?: string | null
-          contact_type?: Database["public"]["Enums"]["crm_contact_type"] | null
+          assigned_broker_id?: string | null
           created_at?: string | null
-          created_by_user_id?: string | null
-          current_location_city?: string | null
-          current_location_country?: string | null
-          detection_keywords?: string[] | null
-          email_lower?: string | null
-          email_normalized?: string | null
-          flag_reasons?: string[] | null
-          flagged?: boolean | null
           full_name?: string | null
-          gender?: string | null
           id?: string | null
-          import_approval_status?:
-            | Database["public"]["Enums"]["crm_import_approval_status"]
-            | null
-          import_batch_id?: string | null
-          imported_at?: string | null
-          lead_source_type?: string | null
-          nationality?: string | null
-          notes?: string | null
-          owner_type?: Database["public"]["Enums"]["crm_lead_owner_type"] | null
-          owner_user_id?: string | null
-          phone_e164?: string | null
-          phone_normalized?: string | null
-          phone_raw?: string | null
-          preferred_language?: string | null
-          raw_import?: Json | null
+          pipeline_stage?: string | null
+          rental_budget_max?: number | null
+          rental_budget_min?: number | null
+          rental_preferred_areas?: string[] | null
+          rental_property_type?: string | null
           source?: string | null
-          source_id?: string | null
-          source_row_index?: number | null
           tags?: string[] | null
           updated_at?: string | null
-          vip?: boolean | null
-          vip_tagged_at?: string | null
-          vip_tagged_by?: string | null
         }
         Relationships: [
           {
-            foreignKeyName: "crm_leads_assigned_ai_employee_id_fkey"
-            columns: ["assigned_ai_employee_id"]
+            foreignKeyName: "crm_leads_assigned_broker_id_fkey"
+            columns: ["assigned_broker_id"]
             isOneToOne: false
-            referencedRelation: "crm_ai_employees"
-            referencedColumns: ["id"]
-          },
-          {
-            foreignKeyName: "crm_leads_source_id_fkey"
-            columns: ["source_id"]
-            isOneToOne: false
-            referencedRelation: "crm_lead_sources"
+            referencedRelation: "ai_brokers"
             referencedColumns: ["id"]
           },
         ]
@@ -12638,7 +12478,7 @@ export type Database = {
           logo_url: string | null
           name: string | null
           slug: string | null
-          updated_at: string | null
+          website_url: string | null
         }
         Insert: {
           created_at?: string | null
@@ -12652,7 +12492,7 @@ export type Database = {
           logo_url?: string | null
           name?: string | null
           slug?: string | null
-          updated_at?: string | null
+          website_url?: string | null
         }
         Update: {
           created_at?: string | null
@@ -12666,7 +12506,7 @@ export type Database = {
           logo_url?: string | null
           name?: string | null
           slug?: string | null
-          updated_at?: string | null
+          website_url?: string | null
         }
         Relationships: []
       }
