@@ -24,6 +24,13 @@ import { cn } from "@/lib/utils";
  * ============================================================
  */
 
+/**
+ * PRIMARY BUTTON LOGIC (GLOBAL RULE):
+ * - Icon BEFORE text: Gold icon → Black first half → Gold second half
+ * - Icon AFTER text: Black first half → Gold second half → Black icon
+ * - On HOVER: All colors invert
+ */
+
 // Champagne gradient: from-white via-[#FDFBF7] to-[#F5F0E6]
 const BRAND_PRIMARY =
   "bg-white text-gold border-2 border-gold hover:bg-gradient-to-r hover:from-white hover:via-[#FDFBF7] hover:to-[#F5F0E6] hover:text-gold";
