@@ -128,9 +128,9 @@ const MEDIA_MARKETING = [
     borderColor: 'border-amber-500/30',
   },
   {
-    role: 'Videographer',
-    name: 'Media Team',
-    description: 'High-quality property video production and drone footage.',
+    role: 'Video Producer',
+    name: 'Oliver Wright',
+    description: 'Cinematic property tours and brand documentaries.',
     icon: Video,
     color: 'text-purple-400',
     glowColor: 'shadow-purple-500/30',
@@ -139,7 +139,7 @@ const MEDIA_MARKETING = [
   },
   {
     role: 'Graphic Designer',
-    name: 'Creative Studio',
+    name: 'Marcus Bennett',
     description: 'Social media graphics, flyers, and brand materials.',
     icon: Palette,
     color: 'text-rose-400',
@@ -149,7 +149,7 @@ const MEDIA_MARKETING = [
   },
   {
     role: 'Digital Marketing Manager',
-    name: 'Ads & Campaigns',
+    name: 'Ryan Campbell',
     description: 'Google, Meta, and TikTok ads management.',
     icon: Megaphone,
     color: 'text-orange-400',
@@ -168,9 +168,9 @@ const MEDIA_MARKETING = [
     borderColor: 'border-pink-500/30',
   },
   {
-    role: 'Video Editor',
-    name: 'Post-Production',
-    description: 'Editing, color grading, and motion graphics.',
+    role: 'Content Editor',
+    name: 'Henry Crawford',
+    description: 'Post-production editing, color grading, and visual effects.',
     icon: PenTool,
     color: 'text-red-400',
     glowColor: 'shadow-red-500/30',

@@ -122,8 +122,8 @@ const Footer = () => {
     { href: "/ai-hub", label: "Investor Hub" },
     { href: "/broker-toolkit", label: "Broker Hub" },
     { href: "/my-account", label: "My Dashboard" },
-    { href: "/jbj-design-studio", label: "Graphic Designer" },
-    { href: "/video-builder", label: "Videographer" },
+    { href: "/jbj-design-studio", label: "Design Studio" },
+    { href: "/video-builder", label: "Video Studio" },
   ];
 
   const professionalTools = [
