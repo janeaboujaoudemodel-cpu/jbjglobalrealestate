@@ -317,14 +317,14 @@ const Footer = () => {
           </div>
         </div>
 
-        {/* Contact Section - Improved Layout */}
-        <div className="border-t border-zinc-800 pt-8 mb-8">
+        {/* Contact Section - Matching Navigation Card Style */}
+        <div className="bg-white rounded-2xl p-6 md:p-8 border border-zinc-200 shadow-lg mb-10 max-w-6xl mx-auto">
           <h4 className="text-gold font-semibold mb-5 text-sm uppercase tracking-[0.2em] text-center">
             Get in Touch
           </h4>
           
           {/* Location */}
-          <div className="flex items-center justify-center gap-3 text-white text-base mb-4">
+          <div className="flex items-center justify-center gap-3 text-black text-base mb-4">
             <MapPin className="w-5 h-5 text-gold flex-shrink-0" />
             <span>{CONTACT_INFO.address}</span>
           </div>
@@ -333,25 +333,25 @@ const Footer = () => {
           <div className="flex flex-wrap items-center justify-center gap-4 md:gap-8">
             <a
               href={getCallUrl()}
-              className="flex items-center gap-2 text-white hover:text-gold transition-colors text-sm md:text-base"
+              className="flex items-center gap-2 text-black hover:text-gold transition-colors text-sm md:text-base"
             >
               <Phone className="w-4 h-4 text-blue-500 flex-shrink-0" />
               <span>{CONTACT_INFO.phone}</span>
             </a>
-            <span className="text-zinc-600 hidden md:inline">|</span>
+            <span className="text-gold/30 hidden md:inline">|</span>
             <a
               href={getWhatsAppUrl()}
               target="_blank"
               rel="noopener noreferrer"
-              className="flex items-center gap-2 text-white hover:text-gold transition-colors text-sm md:text-base"
+              className="flex items-center gap-2 text-black hover:text-gold transition-colors text-sm md:text-base"
             >
               <MessageCircle className="w-4 h-4 text-green-500 flex-shrink-0" />
               <span>WhatsApp Us</span>
             </a>
-            <span className="text-zinc-600 hidden md:inline">|</span>
+            <span className="text-gold/30 hidden md:inline">|</span>
             <a
               href={getEmailUrl()}
-              className="flex items-center gap-2 text-white hover:text-gold transition-colors text-sm md:text-base"
+              className="flex items-center gap-2 text-black hover:text-gold transition-colors text-sm md:text-base"
             >
               <Mail className="w-4 h-4 text-gold flex-shrink-0" />
               <span>{CONTACT_INFO.emailCapitalized}</span>

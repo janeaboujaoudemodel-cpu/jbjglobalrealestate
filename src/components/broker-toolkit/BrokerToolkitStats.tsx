@@ -67,7 +67,7 @@ export function BrokerToolkitStats() {
       />
       
       <div className="container mx-auto px-4">
-        <div className="grid grid-cols-2 md:grid-cols-5 gap-6">
+        <div className="grid grid-cols-2 md:grid-cols-5 gap-4">
           {STATS.map((stat, i) => (
             <motion.div
               key={i}
@@ -77,16 +77,16 @@ export function BrokerToolkitStats() {
               viewport={{ once: true }}
               className="text-center group"
             >
-              {/* Card with black border, gold on hover */}
-              <div className="bg-white/80 border-2 border-black rounded-xl p-4 transition-all duration-300 group-hover:border-gold group-hover:shadow-lg group-hover:shadow-gold/20">
-                <div className="inline-flex items-center justify-center w-12 h-12 rounded-xl bg-white border-2 border-black mb-3 group-hover:border-gold transition-all">
-                  <stat.icon className={`w-6 h-6 ${stat.color}`} />
+              {/* Card with darker champagne fill, equal sizing */}
+              <div className="bg-gradient-to-br from-[#EDE4D3] via-[#E8DCC8] to-[#D4C4A8] border-2 border-black rounded-xl p-4 h-full flex flex-col items-center justify-center transition-all duration-300 group-hover:border-gold group-hover:shadow-lg group-hover:shadow-gold/20">
+                <div className="inline-flex items-center justify-center w-10 h-10 rounded-lg bg-black mb-2 group-hover:bg-gold transition-all">
+                  <stat.icon className="w-5 h-5 text-gold group-hover:text-black transition-colors" />
                 </div>
-                <div className={`text-3xl md:text-4xl font-bold ${stat.color} mb-1`}>
+                <div className="text-2xl md:text-3xl font-bold text-black mb-0.5">
                   {stat.value}
                 </div>
-                <div className="text-gold font-semibold text-sm mb-1">{stat.label}</div>
-                <div className="text-black text-xs hidden md:block">{stat.description}</div>
+                <div className="text-gold font-semibold text-xs mb-0.5">{stat.label}</div>
+                <div className="text-black/70 text-[10px] hidden md:block leading-tight">{stat.description}</div>
               </div>
             </motion.div>
           ))}
