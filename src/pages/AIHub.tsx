@@ -78,45 +78,45 @@ const CATEGORY_META: Record<ToolCategory, {
     label: "Investment &",
     coloredLabel: "Property Tools",
     badgeClass: "bg-purple-500/30 text-purple-200 border-purple-400/50",
-    // GLOW ON NORMAL LOAD (purple), GOLD GLOW ON HOVER
-    cardClass: "bg-purple-900/80 border-2 border-purple-500/50 shadow-[0_0_25px_rgba(147,51,234,0.4)] hover:border-gold hover:shadow-[0_0_35px_rgba(200,167,102,0.5),0_0_60px_rgba(255,255,255,0.15)]",
+    // GLOW ON NORMAL LOAD (purple), WHITE GLOW ON HOVER
+    cardClass: "bg-purple-900/80 border-2 border-purple-500/50 shadow-[0_0_25px_rgba(147,51,234,0.4)] hover:border-white hover:shadow-[0_0_35px_rgba(255,255,255,0.4),0_0_60px_rgba(255,255,255,0.2)]",
     iconWrapClass: "bg-purple-500/30 border border-purple-400/40",
     iconClass: "text-purple-300",
-    arrowClass: "text-purple-300 group-hover:text-gold",
-    glowClass: "border-purple-500/50 shadow-[0_0_25px_rgba(147,51,234,0.4)] hover:shadow-[0_0_35px_rgba(200,167,102,0.5),0_0_60px_rgba(255,255,255,0.15)] hover:border-gold",
+    arrowClass: "text-purple-300 group-hover:text-white",
+    glowClass: "border-purple-500/50 shadow-[0_0_25px_rgba(147,51,234,0.4)] hover:shadow-[0_0_35px_rgba(255,255,255,0.4),0_0_60px_rgba(255,255,255,0.2)] hover:border-white",
   },
   productivity: {
     label: "Productivity",
     coloredLabel: "Tools",
     badgeClass: "bg-blue-500/30 text-blue-200 border-blue-400/50",
-    // GLOW ON NORMAL LOAD (blue), GOLD GLOW ON HOVER
-    cardClass: "bg-blue-900/80 border-2 border-blue-500/50 shadow-[0_0_25px_rgba(59,130,246,0.4)] hover:border-gold hover:shadow-[0_0_35px_rgba(200,167,102,0.5),0_0_60px_rgba(255,255,255,0.15)]",
+    // GLOW ON NORMAL LOAD (blue), WHITE GLOW ON HOVER
+    cardClass: "bg-blue-900/80 border-2 border-blue-500/50 shadow-[0_0_25px_rgba(59,130,246,0.4)] hover:border-white hover:shadow-[0_0_35px_rgba(255,255,255,0.4),0_0_60px_rgba(255,255,255,0.2)]",
     iconWrapClass: "bg-blue-500/30 border border-blue-400/40",
     iconClass: "text-blue-300",
-    arrowClass: "text-blue-300 group-hover:text-gold",
-    glowClass: "border-blue-500/50 shadow-[0_0_25px_rgba(59,130,246,0.4)] hover:shadow-[0_0_35px_rgba(200,167,102,0.5),0_0_60px_rgba(255,255,255,0.15)] hover:border-gold",
+    arrowClass: "text-blue-300 group-hover:text-white",
+    glowClass: "border-blue-500/50 shadow-[0_0_25px_rgba(59,130,246,0.4)] hover:shadow-[0_0_35px_rgba(255,255,255,0.4),0_0_60px_rgba(255,255,255,0.2)] hover:border-white",
   },
   marketing: {
     label: "Marketing &",
     coloredLabel: "Content",
     badgeClass: "bg-emerald-500/30 text-emerald-200 border-emerald-400/50",
-    // GLOW ON NORMAL LOAD (emerald), GOLD GLOW ON HOVER
-    cardClass: "bg-emerald-900/80 border-2 border-emerald-500/50 shadow-[0_0_25px_rgba(16,185,129,0.4)] hover:border-gold hover:shadow-[0_0_35px_rgba(200,167,102,0.5),0_0_60px_rgba(255,255,255,0.15)]",
+    // GLOW ON NORMAL LOAD (emerald), WHITE GLOW ON HOVER
+    cardClass: "bg-emerald-900/80 border-2 border-emerald-500/50 shadow-[0_0_25px_rgba(16,185,129,0.4)] hover:border-white hover:shadow-[0_0_35px_rgba(255,255,255,0.4),0_0_60px_rgba(255,255,255,0.2)]",
     iconWrapClass: "bg-emerald-500/30 border border-emerald-400/40",
     iconClass: "text-emerald-300",
-    arrowClass: "text-emerald-300 group-hover:text-gold",
-    glowClass: "border-emerald-500/50 shadow-[0_0_25px_rgba(16,185,129,0.4)] hover:shadow-[0_0_35px_rgba(200,167,102,0.5),0_0_60px_rgba(255,255,255,0.15)] hover:border-gold",
+    arrowClass: "text-emerald-300 group-hover:text-white",
+    glowClass: "border-emerald-500/50 shadow-[0_0_25px_rgba(16,185,129,0.4)] hover:shadow-[0_0_35px_rgba(255,255,255,0.4),0_0_60px_rgba(255,255,255,0.2)] hover:border-white",
   },
   design: {
     label: "Design &",
     coloredLabel: "Media",
     badgeClass: "bg-pink-500/30 text-pink-200 border-pink-400/50",
-    // GLOW ON NORMAL LOAD (pink), GOLD GLOW ON HOVER
-    cardClass: "bg-pink-900/80 border-2 border-pink-500/50 shadow-[0_0_25px_rgba(236,72,153,0.4)] hover:border-gold hover:shadow-[0_0_35px_rgba(200,167,102,0.5),0_0_60px_rgba(255,255,255,0.15)]",
+    // GLOW ON NORMAL LOAD (pink), WHITE GLOW ON HOVER
+    cardClass: "bg-pink-900/80 border-2 border-pink-500/50 shadow-[0_0_25px_rgba(236,72,153,0.4)] hover:border-white hover:shadow-[0_0_35px_rgba(255,255,255,0.4),0_0_60px_rgba(255,255,255,0.2)]",
     iconWrapClass: "bg-pink-500/30 border border-pink-400/40",
     iconClass: "text-pink-300",
-    arrowClass: "text-pink-300 group-hover:text-gold",
-    glowClass: "border-pink-500/50 shadow-[0_0_25px_rgba(236,72,153,0.4)] hover:shadow-[0_0_35px_rgba(200,167,102,0.5),0_0_60px_rgba(255,255,255,0.15)] hover:border-gold",
+    arrowClass: "text-pink-300 group-hover:text-white",
+    glowClass: "border-pink-500/50 shadow-[0_0_25px_rgba(236,72,153,0.4)] hover:shadow-[0_0_35px_rgba(255,255,255,0.4),0_0_60px_rgba(255,255,255,0.2)] hover:border-white",
   },
 };
 

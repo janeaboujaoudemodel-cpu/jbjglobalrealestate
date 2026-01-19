@@ -14,11 +14,11 @@ interface BrokerToolkitNavigationProps {
 }
 
 const SECTIONS = [
-  { id: "tools", label: "Tools", icon: Wrench, color: "from-purple-500 to-purple-600" },
-  { id: "education", label: "Education", icon: GraduationCap, color: "from-blue-500 to-blue-600" },
-  { id: "support", label: "Support Team", icon: Users, color: "from-pink-500 to-pink-600" },
-  { id: "crm", label: "CRM & Leads", icon: Target, color: "from-green-500 to-green-600" },
-  { id: "growth", label: "Growth & Rewards", icon: TrendingUp, color: "from-gold to-gold-dark" },
+  { id: "tools", label: "Tools", icon: Wrench, activeColor: "from-purple-500 to-purple-600", activeBg: "bg-gradient-to-r from-purple-500 to-purple-600" },
+  { id: "education", label: "Education", icon: GraduationCap, activeColor: "from-blue-500 to-blue-600", activeBg: "bg-gradient-to-r from-blue-500 to-blue-600" },
+  { id: "support", label: "Support Team", icon: Users, activeColor: "from-pink-500 to-pink-600", activeBg: "bg-gradient-to-r from-pink-500 to-pink-600" },
+  { id: "crm", label: "CRM & Leads", icon: Target, activeColor: "from-emerald-600 to-emerald-700", activeBg: "bg-gradient-to-r from-emerald-600 to-emerald-700" },
+  { id: "growth", label: "Growth & Rewards", icon: TrendingUp, activeColor: "from-[#F5EBD7] to-[#E8DCC8]", activeBg: "bg-gradient-to-r from-[#F5EBD7] via-[#E8DCC8] to-[#D4C4A8]" },
 ];
 
 export function BrokerToolkitNavigation({ activeSection, onSectionChange }: BrokerToolkitNavigationProps) {
@@ -35,23 +35,30 @@ export function BrokerToolkitNavigation({ activeSection, onSectionChange }: Brok
       
       <div className="container mx-auto px-4">
         <div className="flex items-center justify-center gap-2 overflow-x-auto pb-2 scrollbar-hide">
-          {SECTIONS.map((section) => (
-            <button
-              key={section.id}
-              onClick={() => {
-                onSectionChange(section.id);
-                document.getElementById(`section-${section.id}`)?.scrollIntoView({ behavior: 'smooth' });
-              }}
-              className={`flex items-center gap-2 px-4 py-2.5 rounded-full whitespace-nowrap transition-all ${
-                activeSection === section.id
-                  ? `bg-gradient-to-r ${section.color} text-white shadow-lg`
-                  : "bg-zinc-900/60 border border-zinc-800 text-zinc-400 hover:text-white hover:border-zinc-700"
-              }`}
-            >
-              <section.icon className="w-4 h-4" />
-              <span className="text-sm font-medium">{section.label}</span>
-            </button>
-          ))}
+          {SECTIONS.map((section) => {
+            const isActive = activeSection === section.id;
+            const isGrowth = section.id === "growth";
+            
+            return (
+              <button
+                key={section.id}
+                onClick={() => {
+                  onSectionChange(section.id);
+                  document.getElementById(`section-${section.id}`)?.scrollIntoView({ behavior: 'smooth' });
+                }}
+                className={`flex items-center gap-2 px-4 py-2.5 rounded-full whitespace-nowrap transition-all ${
+                  isActive
+                    ? isGrowth
+                      ? "bg-gradient-to-r from-[#F5EBD7] via-[#E8DCC8] to-[#D4C4A8] text-black shadow-lg border border-gold/50"
+                      : `${section.activeBg} text-white shadow-lg`
+                    : "bg-gradient-to-r from-[#F5EBD7] via-[#E8DCC8] to-[#D4C4A8] border border-black text-black hover:border-gold"
+                }`}
+              >
+                <section.icon className={`w-4 h-4 ${isActive && isGrowth ? "text-black" : isActive ? "" : "text-gold"}`} />
+                <span className={`text-sm font-medium ${isActive && isGrowth ? "text-gold" : ""}`}>{section.label}</span>
+              </button>
+            );
+          })}
         </div>
       </div>
     </section>
