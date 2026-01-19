@@ -158,7 +158,7 @@ const productivityTools = [
   },
 ];
 
-// EDUCATION & CAREER - With theme colors (pink theme for this section)
+// EDUCATION & CAREER - With theme colors (silver/slate metallic theme for this section)
 const educationCareer = [
   {
     id: "academy",
@@ -166,7 +166,7 @@ const educationCareer = [
     description: "Video tutorials and broker certifications.",
     icon: GraduationCap,
     link: "/broker-toolkit",
-    themeColor: "pink",
+    themeColor: "slate",
   },
   {
     id: "employment-hub",
@@ -174,7 +174,7 @@ const educationCareer = [
     description: "Hire or get hired in Real Estate.",
     icon: Briefcase,
     link: "/join",
-    themeColor: "pink",
+    themeColor: "slate",
   },
   {
     id: "referral-program",
@@ -182,7 +182,7 @@ const educationCareer = [
     description: "Earn 5% commission on successful referrals.",
     icon: Award,
     link: "/referral-onboarding",
-    themeColor: "pink",
+    themeColor: "slate",
   },
 ];
 
@@ -307,6 +307,14 @@ const AIHub = () => {
         border: "border-pink-500/40",
         arrow: "text-pink-300",
         glow: "shadow-pink-500/20",
+      },
+      slate: {
+        card: "bg-gradient-to-br from-slate-800/80 to-slate-900 border-slate-400/40 hover:border-slate-300 shadow-slate-400/20 hover:shadow-slate-300/30",
+        iconWrap: "bg-slate-400/30",
+        icon: "text-slate-200",
+        border: "border-slate-400/40",
+        arrow: "text-slate-300",
+        glow: "shadow-slate-400/20",
       },
       indigo: {
         card: "bg-gradient-to-br from-indigo-900/80 to-indigo-950 border-indigo-500/40 hover:border-indigo-400 shadow-indigo-500/20 hover:shadow-indigo-400/30",
@@ -622,12 +630,12 @@ const AIHub = () => {
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true }}
             >
-              <Badge className="bg-pink-500/20 text-pink-400 border-pink-500/30 mb-4">
+              <Badge className="bg-slate-500/20 text-slate-300 border-slate-400/30 mb-4">
                 <GraduationCap className="w-3 h-3 mr-1" />
                 Education & Opportunities
               </Badge>
               <h2 className="text-2xl md:text-3xl font-bold text-white mb-2">
-                <span className="text-white">Learn, Earn &</span> <span className="text-pink-400">Grow</span>
+                <span className="text-white">Learn, Earn &</span> <span className="text-slate-300">Grow</span>
               </h2>
               <p className="text-zinc-400 max-w-lg mx-auto">
                 Education, career opportunities, and referral rewards.
@@ -658,12 +666,12 @@ const AIHub = () => {
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true }}
             >
-              <Badge className="bg-emerald-500/20 text-emerald-400 border-emerald-500/30 mb-4">
+              <Badge className="bg-green-500/20 text-green-300 border-green-400/30 mb-4">
                 <Lock className="w-3 h-3 mr-1" />
                 JBJ Broker Hub Exclusive
               </Badge>
               <h2 className="text-2xl md:text-3xl font-bold text-white mb-2">
-                <span className="text-white">Unlock More with</span> <span className="text-emerald-400">JBJ Broker Hub</span>
+                <span className="text-white">Unlock More with</span> <span className="text-green-300">JBJ Broker Hub</span>
               </h2>
               <p className="text-zinc-400 max-w-2xl mx-auto">
                 Registered JBJ brokers get access to additional tools, operation support, creative suite, and marketing automation.
