@@ -51,8 +51,7 @@ export const FounderPhilosophySection = () => {
             >
               <Link to="/founder" className="block group">
                 {/* GLOBAL IMAGE RULE - LOCKED (FINAL):
-                    object-fit: cover + center 0% = max zoom, focus on face, never crop head
-                    Zoomed out to show full body while lifting head up */}
+                    Lift photo up without zooming to show full body, don't crop hair */}
                 <div className="w-36 h-36 md:w-44 md:h-44 rounded-full overflow-hidden border-2 border-white/50 group-hover:border-white group-hover:shadow-[0_0_20px_rgba(255,255,255,0.4)] transition-all duration-300 shadow-lg bg-zinc-900">
                   <img 
                     src={founderPremium}
@@ -60,8 +59,8 @@ export const FounderPhilosophySection = () => {
                     className="w-full h-full"
                     style={{
                       objectFit: 'cover',
-                      objectPosition: 'center 15%',
-                      transform: 'scale(1.2)',
+                      objectPosition: 'center 5%',
+                      transform: 'scale(1.0) translateY(-5%)',
                     }}
                     loading="lazy"
                   />
@@ -101,24 +100,28 @@ export const FounderPhilosophySection = () => {
                 <span className="text-white uppercase tracking-[0.15em] text-lg md:text-xl">Written by Founder & CEO,</span>{" "}
                 <Link 
                   to="/founder" 
-                  className="text-transparent bg-clip-text bg-gradient-to-r from-[#F5F0E6] via-[#FDFBF7] to-white text-xl md:text-2xl font-bold hover:opacity-80 transition-opacity"
+                  className="inline-block hover:opacity-90 transition-opacity"
                   style={{
-                    filter: 'drop-shadow(0 0 12px rgba(255,255,255,0.4)) drop-shadow(0 0 20px rgba(212,175,55,0.3))',
+                    textShadow: '0 0 15px rgba(200,167,102,0.5), 0 0 25px rgba(255,255,255,0.3)',
                   }}
                 >
-                  Jane Abou Jaoude
+                  <span className="text-gold text-xl md:text-2xl font-bold">
+                    Jane Abou Jaoude
+                  </span>
                 </Link>
                 <span className="block mt-2">
                   <Link 
                     to="/about" 
-                    className="group/jbj text-transparent bg-clip-text bg-gradient-to-r from-[#F5F0E6] via-[#FDFBF7] to-white text-lg font-semibold hover:opacity-80 transition-all"
+                    className="group/jbj hover:opacity-90 transition-all"
                     style={{
-                      filter: 'drop-shadow(0 0 10px rgba(255,255,255,0.4)) drop-shadow(0 0 18px rgba(212,175,55,0.3))',
+                      textShadow: '0 0 12px rgba(200,167,102,0.5), 0 0 20px rgba(255,255,255,0.3)',
                     }}
                   >
-                    JBJ Global Real Estate
+                    <span className="text-gold text-lg font-semibold">
+                      JBJ Global Real Estate
+                    </span>
                   </Link>
-                  <span className="block h-0.5 w-24 bg-gradient-to-r from-white via-[#FDFBF7] to-[#F5F0E6] mt-2" style={{ boxShadow: '0 0 10px rgba(255,255,255,0.5)' }} />
+                  <span className="block h-0.5 w-24 bg-gradient-to-r from-gold/80 via-[#D4C4A8] to-gold/40 mt-2" style={{ boxShadow: '0 0 10px rgba(200,167,102,0.5)' }} />
                 </span>
               </p>
 
@@ -142,14 +145,14 @@ export const FounderPhilosophySection = () => {
                     At{" "}
                     <Link 
                       to="/about" 
-                      className="group/jbj text-transparent bg-clip-text bg-gradient-to-r from-[#F5F0E6] via-[#FDFBF7] to-white font-semibold hover:opacity-80 transition-all inline-block"
-                      style={{ 
-                        filter: 'drop-shadow(0 0 8px rgba(255,255,255,0.4))',
-                      }}
+                      className="group/jbj inline-block hover:opacity-90 transition-all"
                     >
                       <span 
-                        className="transition-transform group-hover/jbj:scale-105"
-                        style={{ textShadow: '0 2px 4px rgba(0,0,0,0.1)' }}
+                        className="text-gold font-bold transition-transform group-hover/jbj:scale-105"
+                        style={{ 
+                          textShadow: '0 2px 8px rgba(0,0,0,0.3), 0 0 15px rgba(200,167,102,0.4), 0 0 25px rgba(255,255,255,0.2)',
+                          filter: 'drop-shadow(0 2px 4px rgba(0,0,0,0.2))',
+                        }}
                       >
                         JBJ Global Real Estate
                       </span>

@@ -84,14 +84,19 @@ const Index = () => {
           animate="visible"
           variants={staggerContainer}
         >
-          {/* Badge - Mixed Color Label Style */}
+          {/* Badge - Glass style with gold border, engraved look */}
           <motion.button 
             variants={fadeInUp}
-            className="group inline-flex items-center gap-2 px-5 py-2.5 bg-gradient-to-r from-white via-[#FDFBF7] to-[#F5F0E6] border border-gold/40 rounded-full mb-8 shadow-md transition-all hover:shadow-lg cursor-default"
+            className="group inline-flex items-center gap-2 px-5 py-2.5 rounded-full mb-8 cursor-default"
+            style={{
+              background: 'linear-gradient(135deg, rgba(255,255,255,0.1) 0%, rgba(255,255,255,0.05) 50%, rgba(200,167,102,0.08) 100%)',
+              backdropFilter: 'blur(20px)',
+              border: '1.5px solid rgba(200,167,102,0.6)',
+              boxShadow: 'inset 0 1px 2px rgba(255,255,255,0.1), inset 0 -1px 2px rgba(0,0,0,0.2), 0 4px 20px rgba(0,0,0,0.3)',
+            }}
           >
-            <span className="w-2 h-2 bg-gold rounded-full animate-pulse group-hover:bg-black transition-colors" />
-            <span className="text-gold group-hover:text-black transition-colors font-semibold text-[10px] md:text-xs uppercase tracking-[0.2em]">Licensed</span>
-            <span className="text-black group-hover:text-gold transition-colors font-semibold text-[10px] md:text-xs uppercase tracking-[0.2em]">Real Estate Brokerage</span>
+            <span className="w-2 h-2 bg-gold rounded-full animate-pulse" />
+            <span className="text-gold font-semibold text-[10px] md:text-xs uppercase tracking-[0.2em]">Licensed Real Estate Brokerage</span>
           </motion.button>
           
           {/* H1 - Premium Typography */}
@@ -203,13 +208,13 @@ const Index = () => {
                 <div className="relative z-10">
                   <div className="flex items-center justify-center gap-3 mb-4">
                     <Sparkles className="w-8 h-8 text-purple-400 group-hover:text-purple-300 transition-colors" />
-                    <h2 className="text-white text-2xl md:text-3xl lg:text-4xl font-bold tracking-wide group-hover:text-purple-200 transition-colors" style={{ fontFamily: "Poppins, sans-serif" }}>
+                    <h2 className="text-white text-2xl md:text-3xl lg:text-4xl font-bold tracking-wide" style={{ fontFamily: "Poppins, sans-serif" }}>
                       AI Home Finder
                     </h2>
                     <ArrowUpRight className="w-7 h-7 text-purple-400 group-hover:text-purple-300 group-hover:translate-x-1 group-hover:-translate-y-1 transition-all duration-300" />
                   </div>
                   
-                  <p className="text-white text-base md:text-lg group-hover:text-purple-100 transition-colors">
+                  <p className="text-white text-base md:text-lg">
                     Take your free test and discover your perfect property match
                   </p>
                 </div>

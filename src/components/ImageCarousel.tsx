@@ -102,24 +102,30 @@ const ImageCarousel = ({ images, projectName = "project" }: ImageCarouselProps) 
           </div>
         </div>
 
-        {/* Navigation Arrows */}
+        {/* Navigation Arrows - Premium Gold/White styling */}
         {images.length > 1 && (
           <>
             <Button
               variant="ghost"
               size="icon"
-              className="absolute left-4 top-1/2 -translate-y-1/2 bg-black/50 hover:bg-black/70 text-white rounded-full w-10 h-10"
+              className="absolute left-4 top-1/2 -translate-y-1/2 rounded-full w-12 h-12 border-2 border-gold bg-black/60 hover:bg-gold hover:border-gold transition-all duration-300 group"
+              style={{
+                boxShadow: '0 0 15px rgba(200,167,102,0.4), 0 4px 12px rgba(0,0,0,0.3)',
+              }}
               onClick={goToPrevious}
             >
-              <ChevronLeft className="w-6 h-6" />
+              <ChevronLeft className="w-6 h-6 text-gold group-hover:text-black transition-colors" />
             </Button>
             <Button
               variant="ghost"
               size="icon"
-              className="absolute right-4 top-1/2 -translate-y-1/2 bg-black/50 hover:bg-black/70 text-white rounded-full w-10 h-10"
+              className="absolute right-4 top-1/2 -translate-y-1/2 rounded-full w-12 h-12 border-2 border-gold bg-black/60 hover:bg-gold hover:border-gold transition-all duration-300 group"
+              style={{
+                boxShadow: '0 0 15px rgba(200,167,102,0.4), 0 4px 12px rgba(0,0,0,0.3)',
+              }}
               onClick={goToNext}
             >
-              <ChevronRight className="w-6 h-6" />
+              <ChevronRight className="w-6 h-6 text-gold group-hover:text-black transition-colors" />
             </Button>
           </>
         )}
@@ -205,24 +211,30 @@ const ImageCarousel = ({ images, projectName = "project" }: ImageCarouselProps) 
               <X className="w-6 h-6" />
             </Button>
 
-            {/* Navigation in fullscreen */}
+            {/* Navigation in fullscreen - Premium Gold/White styling */}
             {images.length > 1 && (
               <>
                 <Button
                   variant="ghost"
                   size="icon"
-                  className="absolute left-4 top-1/2 -translate-y-1/2 bg-black/50 hover:bg-black/70 text-white rounded-full w-12 h-12"
+                  className="absolute left-4 top-1/2 -translate-y-1/2 rounded-full w-14 h-14 border-2 border-gold bg-black/60 hover:bg-gold hover:border-gold transition-all duration-300 group"
+                  style={{
+                    boxShadow: '0 0 20px rgba(200,167,102,0.5), 0 4px 15px rgba(0,0,0,0.4)',
+                  }}
                   onClick={goToPrevious}
                 >
-                  <ChevronLeft className="w-8 h-8" />
+                  <ChevronLeft className="w-8 h-8 text-gold group-hover:text-black transition-colors" />
                 </Button>
                 <Button
                   variant="ghost"
                   size="icon"
-                  className="absolute right-4 top-1/2 -translate-y-1/2 bg-black/50 hover:bg-black/70 text-white rounded-full w-12 h-12"
+                  className="absolute right-4 top-1/2 -translate-y-1/2 rounded-full w-14 h-14 border-2 border-gold bg-black/60 hover:bg-gold hover:border-gold transition-all duration-300 group"
+                  style={{
+                    boxShadow: '0 0 20px rgba(200,167,102,0.5), 0 4px 15px rgba(0,0,0,0.4)',
+                  }}
                   onClick={goToNext}
                 >
-                  <ChevronRight className="w-8 h-8" />
+                  <ChevronRight className="w-8 h-8 text-gold group-hover:text-black transition-colors" />
                 </Button>
               </>
             )}
