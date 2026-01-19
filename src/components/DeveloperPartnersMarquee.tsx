@@ -92,7 +92,7 @@ const DeveloperPartnersMarquee = () => {
           <span className="bg-gradient-to-r from-white via-[#FDFBF7] to-white bg-clip-text text-transparent">
             Partnering with UAE's{" "}
           </span>
-          <span className="bg-gradient-to-r from-[#D4AF37] via-[#E8D59A] to-[#D4AF37] bg-clip-text text-transparent">
+          <span className="bg-gradient-to-r from-[#C9B896] via-[#E8DCC8] to-[#D4C4A8] bg-clip-text text-transparent" style={{ filter: 'drop-shadow(0 0 8px rgba(201, 184, 150, 0.3))' }}>
             Premier Developers
           </span>
         </h3>

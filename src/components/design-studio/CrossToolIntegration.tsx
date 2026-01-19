@@ -16,7 +16,7 @@ import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
 
 interface CrossToolIntegrationProps {
-  currentTool: 'design-studio' | 'video-builder' | 'presentations';
+  currentTool: 'design-studio' | 'video-builder' | 'presentations' | 'web-developer' | 'copywriter' | 'content-editor' | 'social-media';
   projectId?: string;
   projectData?: any;
 }
@@ -66,6 +66,42 @@ const CONNECTED_TOOLS = [
     path: '/email-client',
     color: 'from-amber-500 to-orange-500',
     capabilities: ['Campaigns', 'Signatures', 'Newsletters'],
+  },
+  {
+    id: 'web-developer',
+    name: 'Web Developer',
+    description: 'AI-powered website development and updates',
+    icon: FileText,
+    path: '/web-developer',
+    color: 'from-zinc-600 to-zinc-800',
+    capabilities: ['HTML/CSS', 'Components', 'Responsive'],
+  },
+  {
+    id: 'copywriter',
+    name: 'Copywriter',
+    description: 'Create compelling copy and content',
+    icon: FileText,
+    path: '/copywriter',
+    color: 'from-sky-500 to-blue-500',
+    capabilities: ['Headlines', 'Descriptions', 'SEO'],
+  },
+  {
+    id: 'content-editor',
+    name: 'Content Editor',
+    description: 'Edit and refine all content types',
+    icon: FileText,
+    path: '/content-editor',
+    color: 'from-violet-500 to-purple-500',
+    capabilities: ['Proofreading', 'Formatting', 'Publishing'],
+  },
+  {
+    id: 'social-media',
+    name: 'Social Media',
+    description: 'Manage social media presence',
+    icon: Share2,
+    path: '/social-media',
+    color: 'from-pink-500 to-rose-500',
+    capabilities: ['Scheduling', 'Analytics', 'Engagement'],
   },
 ];
 
