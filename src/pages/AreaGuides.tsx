@@ -66,10 +66,12 @@ const AreaGuides = () => {
 
   // Filter and sort guides
   const filteredGuides = useMemo(() => {
-    let filtered = AREA_GUIDES.filter(area => {
-      const matchesSearch = searchQuery === "" || 
-        area.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
-        area.shortDescription.toLowerCase().includes(searchQuery.toLowerCase());
+    let filtered = AREA_GUIDES.filter((area) => {
+      const q = searchQuery.trim().toLowerCase();
+      const matchesSearch =
+        q === "" ||
+        (area.name ?? "").toLowerCase().includes(q) ||
+        (area.shortDescription ?? "").toLowerCase().includes(q);
       
       // Check emirate filter using the EMIRATES_DATA
       if (selectedEmirate === "all") {
@@ -267,10 +269,10 @@ const AreaGuides = () => {
           </motion.div>
 
           <motion.div 
+            key={`${selectedEmirate}-${sortBy}-${searchQuery}`}
             className="grid md:grid-cols-2 lg:grid-cols-3 gap-8"
             initial="hidden"
-            whileInView="visible"
-            viewport={{ once: true }}
+            animate="visible"
             variants={staggerContainer}
           >
             {filteredGuides.map((area) => (
