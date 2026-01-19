@@ -163,60 +163,104 @@ const ProjectCard = ({ project, showFavorite = true, showBadgeButton = true, cur
         </div>
       </Link>
 
-      {/* Action Buttons - Fixed at bottom */}
+      {/* Action Buttons - Fixed at bottom with 3D Premium Style */}
       <div className="p-4 pt-0 mt-auto space-y-3">
-        {/* Download Buttons */}
+        {/* Download Buttons - 3D Premium Style */}
         <div className="grid grid-cols-2 gap-2">
-          <Button
-            variant="outline"
-            size="sm"
+          <button
             onClick={handleDownloadBrochure}
-            className="bg-white/80 border-gold/30 hover:bg-gold/10 hover:border-gold text-zinc-700 hover:text-gold text-xs h-9"
+            className="relative h-9 px-3 rounded-lg text-xs font-semibold transition-all duration-300 group overflow-hidden"
+            style={{
+              background: 'linear-gradient(135deg, #FFFFFF 0%, #FDFBF7 50%, #F5F0E6 100%)',
+              boxShadow: `
+                0 4px 12px rgba(200,167,102,0.3),
+                0 2px 6px rgba(0,0,0,0.1),
+                inset 0 1px 2px rgba(255,255,255,0.9),
+                0 0 10px rgba(200,167,102,0.2)
+              `,
+            }}
           >
-            <FileText className="w-3.5 h-3.5 mr-1.5" />
-            Brochure
-          </Button>
-          <Button
-            variant="outline"
-            size="sm"
+            <span className="absolute inset-x-0 top-0 h-1/2 rounded-t-lg bg-gradient-to-b from-white/70 to-transparent pointer-events-none" />
+            <span className="relative flex items-center justify-center gap-1.5 text-gold">
+              <FileText className="w-3.5 h-3.5" />
+              Brochure
+            </span>
+          </button>
+          <button
             onClick={handleDownloadAll}
-            className="bg-white/80 border-gold/30 hover:bg-gold/10 hover:border-gold text-zinc-700 hover:text-gold text-xs h-9"
+            className="relative h-9 px-3 rounded-lg text-xs font-semibold transition-all duration-300 group overflow-hidden"
+            style={{
+              background: 'linear-gradient(135deg, #FFFFFF 0%, #FDFBF7 50%, #F5F0E6 100%)',
+              boxShadow: `
+                0 4px 12px rgba(200,167,102,0.3),
+                0 2px 6px rgba(0,0,0,0.1),
+                inset 0 1px 2px rgba(255,255,255,0.9),
+                0 0 10px rgba(200,167,102,0.2)
+              `,
+            }}
           >
-            <Download className="w-3.5 h-3.5 mr-1.5" />
-            Materials
-          </Button>
+            <span className="absolute inset-x-0 top-0 h-1/2 rounded-t-lg bg-gradient-to-b from-white/70 to-transparent pointer-events-none" />
+            <span className="relative flex items-center justify-center gap-1.5 text-gold">
+              <Download className="w-3.5 h-3.5" />
+              Materials
+            </span>
+          </button>
         </div>
 
-        {/* Contact Buttons - White fill, transparent on hover */}
+        {/* Contact Buttons - 3D Premium Style */}
         <div className="grid grid-cols-2 gap-2">
-          <Button variant="primary" size="sm" asChild className="text-xs h-9">
-            <a
-              href={whatsappHref}
-              onClick={(e) => {
-                e.preventDefault();
-                e.stopPropagation();
-                navigateExternal(whatsappHref);
-              }}
-              className="inline-flex items-center justify-center gap-2"
-            >
+          <a
+            href={whatsappHref}
+            onClick={(e) => {
+              e.preventDefault();
+              e.stopPropagation();
+              navigateExternal(whatsappHref);
+            }}
+            className="relative h-9 px-3 rounded-lg text-xs font-semibold transition-all duration-300 group overflow-hidden flex items-center justify-center"
+            style={{
+              background: 'linear-gradient(135deg, #FFFFFF 0%, #FDFBF7 25%, #F5F0E6 50%, #E8DFD0 75%, #C8A766 100%)',
+              boxShadow: `
+                0 4px 14px rgba(200,167,102,0.35),
+                0 3px 8px rgba(0,0,0,0.12),
+                inset 0 1px 3px rgba(255,255,255,0.9),
+                inset 0 -1px 3px rgba(200,167,102,0.15),
+                0 0 12px rgba(200,167,102,0.25)
+              `,
+            }}
+          >
+            <span className="absolute inset-x-0 top-0 h-1/2 rounded-t-lg bg-gradient-to-b from-white/75 to-transparent pointer-events-none" />
+            <span className="absolute inset-0 rounded-lg opacity-0 group-hover:opacity-100 transition-opacity duration-300 pointer-events-none" style={{ boxShadow: '0 0 25px rgba(200,167,102,0.5)' }} />
+            <span className="relative flex items-center gap-1.5">
               <MessageCircle className="w-3.5 h-3.5 text-green-600" />
-              WhatsApp
-            </a>
-          </Button>
-          <Button variant="primary" size="sm" asChild className="text-xs h-9">
-            <a
-              href={callHref}
-              onClick={(e) => {
-                e.preventDefault();
-                e.stopPropagation();
-                navigateExternal(callHref);
-              }}
-              className="inline-flex items-center justify-center gap-2"
-            >
+              <span className="text-black">WhatsApp</span>
+            </span>
+          </a>
+          <a
+            href={callHref}
+            onClick={(e) => {
+              e.preventDefault();
+              e.stopPropagation();
+              navigateExternal(callHref);
+            }}
+            className="relative h-9 px-3 rounded-lg text-xs font-semibold transition-all duration-300 group overflow-hidden flex items-center justify-center"
+            style={{
+              background: 'linear-gradient(135deg, #FFFFFF 0%, #FDFBF7 25%, #F5F0E6 50%, #E8DFD0 75%, #C8A766 100%)',
+              boxShadow: `
+                0 4px 14px rgba(200,167,102,0.35),
+                0 3px 8px rgba(0,0,0,0.12),
+                inset 0 1px 3px rgba(255,255,255,0.9),
+                inset 0 -1px 3px rgba(200,167,102,0.15),
+                0 0 12px rgba(200,167,102,0.25)
+              `,
+            }}
+          >
+            <span className="absolute inset-x-0 top-0 h-1/2 rounded-t-lg bg-gradient-to-b from-white/75 to-transparent pointer-events-none" />
+            <span className="absolute inset-0 rounded-lg opacity-0 group-hover:opacity-100 transition-opacity duration-300 pointer-events-none" style={{ boxShadow: '0 0 25px rgba(200,167,102,0.5)' }} />
+            <span className="relative flex items-center gap-1.5">
               <Phone className="w-3.5 h-3.5 text-blue-600" />
-              Call
-            </a>
-          </Button>
+              <span className="text-black">Call</span>
+            </span>
+          </a>
         </div>
       </div>
     </div>

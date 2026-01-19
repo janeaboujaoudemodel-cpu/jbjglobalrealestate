@@ -270,22 +270,38 @@ const ProjectDetail = () => {
 
             {/* Sidebar */}
             <div className="space-y-6">
-              {/* Quick Contact Buttons */}
+              {/* Quick Contact Buttons - 3D Premium Style */}
               <div className="grid grid-cols-2 gap-3">
-                <Button
+                {/* WhatsApp - Primary 3D Style */}
+                <button
                   onClick={handleWhatsApp}
-                  className="bg-green-600 hover:bg-green-700 text-white font-semibold h-12 flex items-center justify-center"
+                  className="relative h-12 rounded-xl font-bold transition-all duration-300 group overflow-hidden flex items-center justify-center"
+                  style={{
+                    background: 'linear-gradient(135deg, #FFFFFF 0%, #FDFBF7 25%, #F5F0E6 50%, #E8DFD0 75%, #C8A766 100%)',
+                    boxShadow: `
+                      0 6px 20px rgba(200,167,102,0.4),
+                      0 4px 10px rgba(0,0,0,0.15),
+                      inset 0 2px 4px rgba(255,255,255,0.9),
+                      inset 0 -2px 4px rgba(200,167,102,0.2),
+                      0 0 15px rgba(200,167,102,0.3)
+                    `,
+                  }}
                 >
-                  <MessageCircle className="w-5 h-5 mr-2 text-white" />
-                  <span>WhatsApp</span>
-                </Button>
-                <Button
+                  <span className="absolute inset-x-0 top-0 h-1/2 rounded-t-xl bg-gradient-to-b from-white/80 to-transparent pointer-events-none" />
+                  <span className="absolute inset-0 rounded-xl opacity-0 group-hover:opacity-100 transition-opacity duration-300 pointer-events-none" style={{ boxShadow: '0 0 30px rgba(200,167,102,0.6), inset 0 0 15px rgba(200,167,102,0.1)' }} />
+                  <span className="relative flex items-center gap-2">
+                    <MessageCircle className="w-5 h-5 text-green-600" />
+                    <span className="text-black">WhatsApp</span>
+                  </span>
+                </button>
+                {/* Call Now - Secondary Style */}
+                <button
                   onClick={handleCall}
-                  className="bg-blue-600 hover:bg-blue-700 text-white font-semibold h-12 flex items-center justify-center"
+                  className="h-12 rounded-xl font-bold transition-all duration-300 flex items-center justify-center gap-2 bg-transparent border-2 border-black text-black hover:bg-black hover:text-white"
                 >
-                  <Phone className="w-5 h-5 mr-2 text-white" />
+                  <Phone className="w-5 h-5" />
                   <span>Call Now</span>
-                </Button>
+                </button>
               </div>
 
               {/* Exclusive Report & Share */}
