@@ -140,14 +140,19 @@ const Services = () => {
           animate="visible"
           variants={staggerContainer}
         >
-          {/* Premium Label - Same as Broker Hub hero style */}
+          {/* Premium Label - Glass style with gold border, engraved look */}
           <motion.button 
-            className="group inline-flex items-center gap-2 px-5 py-2.5 bg-gradient-to-r from-white via-[#FDFBF7] to-[#F5F0E6] border border-gold/40 rounded-full mb-8 shadow-md transition-all hover:shadow-lg cursor-default"
+            className="group inline-flex items-center gap-2 px-5 py-2.5 rounded-full mb-8 cursor-default"
+            style={{
+              background: 'linear-gradient(135deg, rgba(255,255,255,0.1) 0%, rgba(255,255,255,0.05) 50%, rgba(200,167,102,0.08) 100%)',
+              backdropFilter: 'blur(20px)',
+              border: '1.5px solid rgba(200,167,102,0.6)',
+              boxShadow: 'inset 0 1px 2px rgba(255,255,255,0.1), inset 0 -1px 2px rgba(0,0,0,0.2), 0 4px 20px rgba(0,0,0,0.3)',
+            }}
             variants={fadeInUp}
           >
-            <span className="w-2 h-2 bg-gold rounded-full animate-pulse group-hover:bg-black transition-colors" />
-            <span className="text-gold group-hover:text-black transition-colors font-semibold text-[10px] md:text-xs uppercase tracking-[0.2em]">Institutional</span>
-            <span className="text-black group-hover:text-gold transition-colors font-semibold text-[10px] md:text-xs uppercase tracking-[0.2em]">Real Estate Brokerage</span>
+            <span className="w-2 h-2 bg-gold rounded-full animate-pulse" />
+            <span className="text-gold font-semibold text-[10px] md:text-xs uppercase tracking-[0.2em]">Institutional Real Estate Brokerage</span>
           </motion.button>
           <motion.h1 
             className="text-white text-5xl md:text-7xl lg:text-8xl font-bold mb-8 tracking-[-0.02em]"
@@ -213,16 +218,18 @@ const Services = () => {
         </motion.div>
       </section>
 
-      {/* Services Grid */}
-      <section className="py-20 md:py-32">
+      {/* Services Grid - White background container */}
+      <section className="py-20 md:py-32 bg-black">
         <div className="container mx-auto px-4">
-          <motion.div 
-            className="grid md:grid-cols-2 lg:grid-cols-3 gap-6"
-            initial="hidden"
-            whileInView="visible"
-            viewport={{ once: true, margin: "-100px" }}
-            variants={staggerContainer}
-          >
+          {/* White background wrapper for service cards */}
+          <div className="bg-gradient-to-br from-white via-[#FDFBF7] to-[#F5F0E6] rounded-3xl p-6 md:p-10">
+            <motion.div 
+              className="grid md:grid-cols-2 lg:grid-cols-3 gap-6"
+              initial="hidden"
+              whileInView="visible"
+              viewport={{ once: true, margin: "-100px" }}
+              variants={staggerContainer}
+            >
             {services.map((service) => (
               <motion.div
                 key={service.id}
@@ -295,7 +302,8 @@ const Services = () => {
                 </div>
               </motion.div>
             ))}
-          </motion.div>
+            </motion.div>
+          </div>
         </div>
       </section>
 
