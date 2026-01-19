@@ -371,7 +371,7 @@ const Index = () => {
                   <div className="w-8 h-8 md:w-10 md:h-10 bg-black rounded-lg flex items-center justify-center mx-auto mb-2 group-hover:bg-zinc-900 transition-colors">
                     <Wrench className="w-4 h-4 md:w-5 md:h-5 text-gold" />
                   </div>
-                  <h4 className="text-black text-[10px] md:text-xs font-semibold">Design & Build</h4>
+                  <h4 className="text-black text-[10px] md:text-xs font-semibold">Design & Build Partners</h4>
                 </div>
               </div>
             </Link>
