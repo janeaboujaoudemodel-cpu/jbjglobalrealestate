@@ -125,43 +125,7 @@ export function BrokerToolkitOperations() {
           ))}
         </div>
 
-        {/* Contact Operations */}
-        <motion.div
-          initial={{ opacity: 0, y: 20 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true }}
-          className="bg-gradient-to-br from-indigo-950/80 to-indigo-900/40 border border-indigo-500/30 rounded-2xl p-8"
-        >
-          <div className="text-center mb-6">
-            <h3 className="text-xl font-semibold text-white flex items-center justify-center gap-2">
-              <Zap className="w-5 h-5 text-indigo-300" />
-              Contact Operations Team
-            </h3>
-            <p className="text-indigo-200/60 text-sm mt-2">
-              Average response time: Under 2 hours during business hours
-            </p>
-          </div>
-          <div className="grid md:grid-cols-3 gap-4">
-            {SUPPORT_CHANNELS.map((channel, i) => (
-              <a
-                key={i}
-                href={channel.action}
-                target={channel.channel === "WhatsApp" ? "_blank" : undefined}
-                rel={channel.channel === "WhatsApp" ? "noopener noreferrer" : undefined}
-              >
-                <Card className="bg-indigo-900/60 border border-indigo-500/30 hover:border-indigo-400 hover:bg-indigo-800/60 transition-all cursor-pointer">
-                  <CardContent className="p-5 text-center">
-                    <div className="w-12 h-12 bg-indigo-500/30 rounded-full flex items-center justify-center mx-auto mb-3">
-                      <channel.icon className={`w-6 h-6 ${channel.color}`} />
-                    </div>
-                    <h4 className="text-white font-medium mb-1">{channel.channel}</h4>
-                    <p className="text-indigo-200/60 text-xs">{channel.description}</p>
-                  </CardContent>
-                </Card>
-              </a>
-            ))}
-          </div>
-        </motion.div>
+        {/* Contact Operations box removed as per user request */}
       </div>
     </section>
   );

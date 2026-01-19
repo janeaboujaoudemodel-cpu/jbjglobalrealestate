@@ -62,55 +62,55 @@ const CATEGORY_META: Record<
     label: "Property Tools",
     badgeClass: "bg-purple-500/30 text-purple-200 border-purple-400/50",
     cardClass:
-      "bg-purple-900/60 border border-purple-500/30 hover:border-purple-400 hover:bg-purple-900/80 shadow-lg shadow-purple-500/10 hover:shadow-purple-400/20",
-    iconWrapClass: "bg-purple-500/30",
-    iconClass: "text-purple-200",
-    arrowClass: "text-purple-300",
+      "bg-black/40 backdrop-blur-sm border-2 border-purple-500/50 hover:border-purple-400 shadow-[0_0_20px_rgba(147,51,234,0.2)] hover:shadow-[0_0_30px_rgba(147,51,234,0.4)]",
+    iconWrapClass: "bg-purple-500/20 border border-purple-500/30",
+    iconClass: "text-purple-400",
+    arrowClass: "text-purple-400",
   },
   marketing: {
     label: "Marketing",
     badgeClass: "bg-emerald-500/30 text-emerald-200 border-emerald-400/50",
     cardClass:
-      "bg-emerald-900/60 border border-emerald-500/30 hover:border-emerald-400 hover:bg-emerald-900/80 shadow-lg shadow-emerald-500/10 hover:shadow-emerald-400/20",
-    iconWrapClass: "bg-emerald-500/30",
-    iconClass: "text-emerald-200",
-    arrowClass: "text-emerald-300",
+      "bg-black/40 backdrop-blur-sm border-2 border-emerald-500/50 hover:border-emerald-400 shadow-[0_0_20px_rgba(16,185,129,0.2)] hover:shadow-[0_0_30px_rgba(16,185,129,0.4)]",
+    iconWrapClass: "bg-emerald-500/20 border border-emerald-500/30",
+    iconClass: "text-emerald-400",
+    arrowClass: "text-emerald-400",
   },
   documents: {
     label: "Documents",
-    badgeClass: "bg-amber-500/30 text-amber-200 border-amber-400/50",
+    badgeClass: "bg-gold/30 text-gold border-gold/50",
     cardClass:
-      "bg-amber-900/40 border border-amber-500/30 hover:border-amber-400 hover:bg-amber-900/60 shadow-lg shadow-amber-500/10 hover:shadow-amber-400/20",
-    iconWrapClass: "bg-amber-500/30",
-    iconClass: "text-amber-200",
-    arrowClass: "text-amber-200",
+      "bg-black/40 backdrop-blur-sm border-2 border-gold/50 hover:border-gold shadow-[0_0_20px_rgba(200,167,102,0.2)] hover:shadow-[0_0_30px_rgba(200,167,102,0.4)]",
+    iconWrapClass: "bg-gold/20 border border-gold/30",
+    iconClass: "text-gold",
+    arrowClass: "text-gold",
   },
   design: {
     label: "Design & Media",
     badgeClass: "bg-pink-500/30 text-pink-200 border-pink-400/50",
     cardClass:
-      "bg-pink-900/50 border border-pink-500/30 hover:border-pink-400 hover:bg-pink-900/70 shadow-lg shadow-pink-500/10 hover:shadow-pink-400/20",
-    iconWrapClass: "bg-pink-500/30",
-    iconClass: "text-pink-200",
-    arrowClass: "text-pink-200",
+      "bg-black/40 backdrop-blur-sm border-2 border-pink-500/50 hover:border-pink-400 shadow-[0_0_20px_rgba(236,72,153,0.2)] hover:shadow-[0_0_30px_rgba(236,72,153,0.4)]",
+    iconWrapClass: "bg-pink-500/20 border border-pink-500/30",
+    iconClass: "text-pink-400",
+    arrowClass: "text-pink-400",
   },
   productivity: {
     label: "Productivity",
-    badgeClass: "bg-blue-500/30 text-blue-200 border-blue-400/50",
+    badgeClass: "bg-sky-500/30 text-sky-200 border-sky-400/50",
     cardClass:
-      "bg-blue-900/60 border border-blue-500/30 hover:border-blue-400 hover:bg-blue-900/80 shadow-lg shadow-blue-500/10 hover:shadow-blue-400/20",
-    iconWrapClass: "bg-blue-500/30",
-    iconClass: "text-blue-200",
-    arrowClass: "text-blue-200",
+      "bg-black/40 backdrop-blur-sm border-2 border-sky-500/50 hover:border-sky-400 shadow-[0_0_20px_rgba(14,165,233,0.2)] hover:shadow-[0_0_30px_rgba(14,165,233,0.4)]",
+    iconWrapClass: "bg-sky-500/20 border border-sky-500/30",
+    iconClass: "text-sky-400",
+    arrowClass: "text-sky-400",
   },
   operations: {
     label: "Operations & CRM",
     badgeClass: "bg-cyan-500/30 text-cyan-200 border-cyan-400/50",
     cardClass:
-      "bg-cyan-900/60 border border-cyan-500/30 hover:border-cyan-400 hover:bg-cyan-900/80 shadow-lg shadow-cyan-500/10 hover:shadow-cyan-400/20",
-    iconWrapClass: "bg-cyan-500/30",
-    iconClass: "text-cyan-200",
-    arrowClass: "text-cyan-300",
+      "bg-black/40 backdrop-blur-sm border-2 border-cyan-500/50 hover:border-cyan-400 shadow-[0_0_20px_rgba(6,182,212,0.2)] hover:shadow-[0_0_30px_rgba(6,182,212,0.4)]",
+    iconWrapClass: "bg-cyan-500/20 border border-cyan-500/30",
+    iconClass: "text-cyan-400",
+    arrowClass: "text-cyan-400",
   },
 };
 
@@ -322,7 +322,7 @@ export function BrokerToolkitTools() {
                 </div>
                 <div className="flex-1 min-w-0">
                   <div className="flex items-center gap-2 mb-1">
-                    <h3 className="text-white font-semibold truncate">{tool.name}</h3>
+                    <h3 className={`font-semibold truncate ${meta.iconClass}`}>{tool.name}</h3>
                   </div>
                   <p className="text-white/70 text-sm mb-2">{tool.description}</p>
                   <div className="flex items-center gap-2">

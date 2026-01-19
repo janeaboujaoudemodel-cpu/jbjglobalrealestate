@@ -152,8 +152,8 @@ export function BrokerToolkitCRM() {
           >
             <Card className="bg-gradient-to-br from-emerald-800/60 via-emerald-700/50 to-emerald-800/60 border border-emerald-400/40 shadow-xl shadow-emerald-500/20">
               <CardContent className="p-8 text-center">
-                <div className="w-16 h-16 bg-emerald-500/30 rounded-full flex items-center justify-center mx-auto mb-4">
-                  <Lock className="w-8 h-8 text-emerald-200" />
+                <div className="w-16 h-16 bg-emerald-500/30 rounded-full flex items-center justify-center mx-auto mb-4 shadow-[0_0_20px_rgba(16,185,129,0.4)] border border-emerald-400/50">
+                  <Lock className="w-8 h-8 text-emerald-200 drop-shadow-[0_0_8px_rgba(16,185,129,0.6)]" />
                 </div>
                 <h3 className="text-2xl font-bold text-white mb-4">
                   Ready to Organize Your Leads?
@@ -167,7 +167,7 @@ export function BrokerToolkitCRM() {
                 </p>
                 <button 
                   onClick={handleCRMAccess}
-                  className="inline-flex items-center justify-center gap-2 bg-gradient-to-r from-white via-[#FDFBF7] to-[#F5F0E6] text-gold hover:bg-transparent hover:text-white border border-white/20 hover:border-white px-8 py-3 font-semibold shadow-lg transition-all duration-300 rounded-md"
+                  className="inline-flex items-center justify-center gap-2 bg-gradient-to-r from-white via-[#FDFBF7] to-[#F5F0E6] text-gold hover:bg-black hover:text-gold border border-gold/40 hover:border-gold px-8 py-3 font-semibold shadow-[0_4px_20px_rgba(200,167,102,0.3),0_8px_30px_rgba(0,0,0,0.15)] hover:shadow-[0_6px_25px_rgba(200,167,102,0.5),0_10px_40px_rgba(0,0,0,0.2)] transition-all duration-300 rounded-md"
                 >
                   <Target className="w-5 h-5" />
                   Open CRM Dashboard

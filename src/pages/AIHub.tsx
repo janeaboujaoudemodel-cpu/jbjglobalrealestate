@@ -249,88 +249,88 @@ const AIHub = () => {
   const { user } = useAuth();
   const navigate = useNavigate();
 
-  // Theme color mappings for cards
+  // Theme color mappings for cards - GLOW/BORDER ONLY (no filled backgrounds)
   const getThemeClasses = (color: string) => {
     const themes: Record<string, { card: string; iconWrap: string; icon: string; border: string; arrow: string; glow: string }> = {
       purple: {
-        card: "bg-gradient-to-br from-purple-900/80 to-purple-950 border-purple-500/40 hover:border-purple-400 shadow-purple-500/20 hover:shadow-purple-400/30",
-        iconWrap: "bg-purple-500/30",
-        icon: "text-purple-200",
-        border: "border-purple-500/40",
-        arrow: "text-purple-300",
-        glow: "shadow-purple-500/20",
+        card: "bg-black/40 backdrop-blur-sm border-2 border-purple-500/50 hover:border-purple-400 shadow-[0_0_20px_rgba(147,51,234,0.2)] hover:shadow-[0_0_30px_rgba(147,51,234,0.4)]",
+        iconWrap: "bg-purple-500/20 border border-purple-500/30",
+        icon: "text-purple-400",
+        border: "border-purple-500/50",
+        arrow: "text-purple-400",
+        glow: "shadow-purple-500/30",
       },
       blue: {
-        card: "bg-gradient-to-br from-blue-900/80 to-blue-950 border-blue-500/40 hover:border-blue-400 shadow-blue-500/20 hover:shadow-blue-400/30",
-        iconWrap: "bg-blue-500/30",
-        icon: "text-blue-200",
-        border: "border-blue-500/40",
-        arrow: "text-blue-300",
-        glow: "shadow-blue-500/20",
+        card: "bg-black/40 backdrop-blur-sm border-2 border-blue-500/50 hover:border-blue-400 shadow-[0_0_20px_rgba(59,130,246,0.2)] hover:shadow-[0_0_30px_rgba(59,130,246,0.4)]",
+        iconWrap: "bg-blue-500/20 border border-blue-500/30",
+        icon: "text-blue-400",
+        border: "border-blue-500/50",
+        arrow: "text-blue-400",
+        glow: "shadow-blue-500/30",
       },
       cyan: {
-        card: "bg-gradient-to-br from-cyan-900/80 to-cyan-950 border-cyan-500/40 hover:border-cyan-400 shadow-cyan-500/20 hover:shadow-cyan-400/30",
-        iconWrap: "bg-cyan-500/30",
-        icon: "text-cyan-200",
-        border: "border-cyan-500/40",
-        arrow: "text-cyan-300",
-        glow: "shadow-cyan-500/20",
+        card: "bg-black/40 backdrop-blur-sm border-2 border-cyan-500/50 hover:border-cyan-400 shadow-[0_0_20px_rgba(6,182,212,0.2)] hover:shadow-[0_0_30px_rgba(6,182,212,0.4)]",
+        iconWrap: "bg-cyan-500/20 border border-cyan-500/30",
+        icon: "text-cyan-400",
+        border: "border-cyan-500/50",
+        arrow: "text-cyan-400",
+        glow: "shadow-cyan-500/30",
       },
       teal: {
-        card: "bg-gradient-to-br from-teal-900/80 to-teal-950 border-teal-500/40 hover:border-teal-400 shadow-teal-500/20 hover:shadow-teal-400/30",
-        iconWrap: "bg-teal-500/30",
-        icon: "text-teal-200",
-        border: "border-teal-500/40",
-        arrow: "text-teal-300",
-        glow: "shadow-teal-500/20",
+        card: "bg-black/40 backdrop-blur-sm border-2 border-teal-500/50 hover:border-teal-400 shadow-[0_0_20px_rgba(20,184,166,0.2)] hover:shadow-[0_0_30px_rgba(20,184,166,0.4)]",
+        iconWrap: "bg-teal-500/20 border border-teal-500/30",
+        icon: "text-teal-400",
+        border: "border-teal-500/50",
+        arrow: "text-teal-400",
+        glow: "shadow-teal-500/30",
       },
       emerald: {
-        card: "bg-gradient-to-br from-emerald-900/80 to-emerald-950 border-emerald-500/40 hover:border-emerald-400 shadow-emerald-500/20 hover:shadow-emerald-400/30",
-        iconWrap: "bg-emerald-500/30",
-        icon: "text-emerald-200",
-        border: "border-emerald-500/40",
-        arrow: "text-emerald-300",
-        glow: "shadow-emerald-500/20",
+        card: "bg-black/40 backdrop-blur-sm border-2 border-emerald-500/50 hover:border-emerald-400 shadow-[0_0_20px_rgba(16,185,129,0.2)] hover:shadow-[0_0_30px_rgba(16,185,129,0.4)]",
+        iconWrap: "bg-emerald-500/20 border border-emerald-500/30",
+        icon: "text-emerald-400",
+        border: "border-emerald-500/50",
+        arrow: "text-emerald-400",
+        glow: "shadow-emerald-500/30",
       },
       amber: {
-        card: "bg-gradient-to-br from-amber-900/80 to-amber-950 border-amber-500/40 hover:border-amber-400 shadow-amber-500/20 hover:shadow-amber-400/30",
-        iconWrap: "bg-amber-500/30",
-        icon: "text-amber-200",
-        border: "border-amber-500/40",
-        arrow: "text-amber-300",
-        glow: "shadow-amber-500/20",
+        card: "bg-black/40 backdrop-blur-sm border-2 border-amber-500/50 hover:border-amber-400 shadow-[0_0_20px_rgba(245,158,11,0.2)] hover:shadow-[0_0_30px_rgba(245,158,11,0.4)]",
+        iconWrap: "bg-amber-500/20 border border-amber-500/30",
+        icon: "text-amber-400",
+        border: "border-amber-500/50",
+        arrow: "text-amber-400",
+        glow: "shadow-amber-500/30",
       },
       pink: {
-        card: "bg-gradient-to-br from-pink-900/80 to-pink-950 border-pink-500/40 hover:border-pink-400 shadow-pink-500/20 hover:shadow-pink-400/30",
-        iconWrap: "bg-pink-500/30",
-        icon: "text-pink-200",
-        border: "border-pink-500/40",
-        arrow: "text-pink-300",
-        glow: "shadow-pink-500/20",
+        card: "bg-black/40 backdrop-blur-sm border-2 border-pink-500/50 hover:border-pink-400 shadow-[0_0_20px_rgba(236,72,153,0.2)] hover:shadow-[0_0_30px_rgba(236,72,153,0.4)]",
+        iconWrap: "bg-pink-500/20 border border-pink-500/30",
+        icon: "text-pink-400",
+        border: "border-pink-500/50",
+        arrow: "text-pink-400",
+        glow: "shadow-pink-500/30",
       },
       slate: {
-        card: "bg-gradient-to-br from-slate-800/80 to-slate-900 border-slate-400/40 hover:border-slate-300 shadow-slate-400/20 hover:shadow-slate-300/30",
-        iconWrap: "bg-slate-400/30",
-        icon: "text-slate-200",
-        border: "border-slate-400/40",
+        card: "bg-black/40 backdrop-blur-sm border-2 border-slate-400/50 hover:border-slate-300 shadow-[0_0_20px_rgba(148,163,184,0.2)] hover:shadow-[0_0_30px_rgba(148,163,184,0.4)]",
+        iconWrap: "bg-slate-500/20 border border-slate-400/30",
+        icon: "text-slate-300",
+        border: "border-slate-400/50",
         arrow: "text-slate-300",
-        glow: "shadow-slate-400/20",
+        glow: "shadow-slate-400/30",
       },
       indigo: {
-        card: "bg-gradient-to-br from-indigo-900/80 to-indigo-950 border-indigo-500/40 hover:border-indigo-400 shadow-indigo-500/20 hover:shadow-indigo-400/30",
-        iconWrap: "bg-indigo-500/30",
-        icon: "text-indigo-200",
-        border: "border-indigo-500/40",
-        arrow: "text-indigo-300",
-        glow: "shadow-indigo-500/20",
+        card: "bg-black/40 backdrop-blur-sm border-2 border-indigo-500/50 hover:border-indigo-400 shadow-[0_0_20px_rgba(99,102,241,0.2)] hover:shadow-[0_0_30px_rgba(99,102,241,0.4)]",
+        iconWrap: "bg-indigo-500/20 border border-indigo-500/30",
+        icon: "text-indigo-400",
+        border: "border-indigo-500/50",
+        arrow: "text-indigo-400",
+        glow: "shadow-indigo-500/30",
       },
       gold: {
-        card: "bg-gradient-to-br from-yellow-900/80 to-yellow-950 border-gold/40 hover:border-gold shadow-gold/20 hover:shadow-gold/30",
-        iconWrap: "bg-gold/30",
+        card: "bg-black/40 backdrop-blur-sm border-2 border-gold/50 hover:border-gold shadow-[0_0_20px_rgba(200,167,102,0.2)] hover:shadow-[0_0_30px_rgba(200,167,102,0.4)]",
+        iconWrap: "bg-gold/20 border border-gold/30",
         icon: "text-gold",
-        border: "border-gold/40",
+        border: "border-gold/50",
         arrow: "text-gold",
-        glow: "shadow-gold/20",
+        glow: "shadow-gold/30",
       },
     };
     return themes[color] || themes.purple;
@@ -342,7 +342,7 @@ const AIHub = () => {
     return (
       <motion.div key={tool.id} variants={fadeInUp}>
         <Link to={tool.link} className="block group h-full">
-          <Card className={`${theme.card} shadow-lg transition-all duration-300 h-full group-hover:scale-[1.02] border`}>
+          <Card className={`${theme.card} transition-all duration-300 h-full group-hover:scale-[1.02]`}>
             <CardContent className="p-5">
               <div className="flex items-start gap-4">
                 <div className={`w-12 h-12 ${theme.iconWrap} rounded-xl flex items-center justify-center flex-shrink-0 group-hover:scale-110 transition-transform`}>
@@ -350,7 +350,7 @@ const AIHub = () => {
                 </div>
                 <div className="flex-1 min-w-0">
                   <div className="flex items-start gap-2 mb-1 flex-wrap">
-                    <h3 className="text-white font-semibold text-sm leading-tight">{tool.title}</h3>
+                    <h3 className={`font-semibold text-sm leading-tight ${theme.icon}`}>{tool.title}</h3>
                     <Badge className="bg-emerald-500/30 text-emerald-200 border-emerald-400/50 text-[10px] px-1.5 py-0 flex-shrink-0">
                       FREE
                     </Badge>

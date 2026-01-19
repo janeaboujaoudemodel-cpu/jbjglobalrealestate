@@ -28,16 +28,15 @@ const LegalDisclaimer = ({ variant = "compact", className = "" }: LegalDisclaime
             <Building2 className="w-4 h-4 text-gold flex-shrink-0 mt-1" />
             <p>
               <strong className="text-white">Brokerage Services:</strong> JBJ Global Real Estate is a 
-              brokerage providing property sales, rentals, and holiday home services within the UAE.
+              licensed brokerage providing property sales, rentals, and holiday home services within the UAE.
             </p>
           </div>
 
           <div className="flex items-start gap-3">
             <AlertTriangle className="w-4 h-4 text-gold flex-shrink-0 mt-1" />
             <p>
-              <strong className="text-white">No Regulated Advice:</strong> We do not provide legal, mortgage, financial, 
-              or investment advice. For these services, we can introduce you to independent professionals 
-              who contract directly with you.
+              <strong className="text-white">Partner Services:</strong> For legal matters and mortgage services, 
+              we can introduce you to our licensed partners who contract directly with you.
             </p>
           </div>
 
@@ -53,7 +52,7 @@ const LegalDisclaimer = ({ variant = "compact", className = "" }: LegalDisclaime
           <div className="flex items-start gap-3">
             <FileText className="w-4 h-4 text-gold flex-shrink-0 mt-1" />
             <p>
-              <strong className="text-white">Third-Party Services:</strong> Legal, mortgage, and property management 
+              <strong className="text-white">Third-Party Services:</strong> Legal and mortgage 
               services referenced on this platform are provided by independent professionals. Clients 
               contract directly with these providers.
             </p>
@@ -77,11 +76,10 @@ const LegalDisclaimer = ({ variant = "compact", className = "" }: LegalDisclaime
         <div className="flex items-start gap-3">
           <AlertTriangle className="w-5 h-5 text-amber-500 flex-shrink-0 mt-0.5" />
           <div>
-            <p className="text-amber-200 text-sm font-medium mb-1">Brokerage Disclaimer</p>
+            <p className="text-amber-200 text-sm font-medium mb-1">Brokerage Services</p>
             <p className="text-amber-200/70 text-xs leading-relaxed">
-              JBJ Global Real Estate is a real estate brokerage. We do not provide legal, mortgage, 
-              financial, or investment advice. Third-party services are provided by independent 
-              professionals who contract directly with clients.
+              JBJ Global Real Estate is a licensed real estate brokerage. For legal or mortgage services, 
+              we can connect you with our licensed partners.
             </p>
           </div>
         </div>
@@ -99,15 +97,15 @@ const LegalDisclaimer = ({ variant = "compact", className = "" }: LegalDisclaime
           <div>
             <p className="text-gold text-sm font-semibold mb-1">AI Tool Disclaimer</p>
             <p className="text-zinc-400 text-xs leading-relaxed">
-              AI-generated analysis is for informational purposes only and does not constitute legal, 
-              mortgage, financial, or investment advice. Results are estimates and should be verified independently.
+              AI-generated analysis is for informational purposes only. Results are estimates based on 
+              available data and should be verified independently before making any decisions.
             </p>
           </div>
         </div>
         
         <div className="border-t border-zinc-800 pt-4">
           <p className="text-zinc-400 text-xs mb-3">
-            For accurate legal and investment guidance, contact our team to connect you with our licensed partners.
+            For legal or mortgage guidance, contact our team to connect you with our licensed partners.
           </p>
           <div className="flex flex-wrap gap-3">
             <a 
@@ -138,7 +136,7 @@ const LegalDisclaimer = ({ variant = "compact", className = "" }: LegalDisclaime
       <p className="text-zinc-600 text-xs leading-relaxed">
         © {currentYear} JBJ Global Real Estate. All Rights Reserved. 
         <span className="block mt-1">
-          Brokerage services only. Third-party services via independent professionals.
+          Licensed brokerage services. Partner services via independent professionals.
         </span>
       </p>
     </div>

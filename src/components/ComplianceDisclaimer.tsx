@@ -9,18 +9,18 @@ interface ComplianceDisclaimerProps {
 
 /**
  * Compliance-safe disclaimers for JBJ Global Real Estate Brokerage
- * - Clarifies brokerage-only services
+ * - Clarifies brokerage services
  * - Distinguishes partner introductions from direct services
  * - Meets UAE regulatory requirements
  */
 const ComplianceDisclaimer = ({ variant = "compact", className = "", language = "en" }: ComplianceDisclaimerProps) => {
   const currentYear = new Date().getFullYear();
 
-  // Short English Disclaimer - Updated compliant wording
-  const shortDisclaimerEN = `JBJ Global Real Estate provides real estate brokerage support and coordination. We can introduce you to independent, licensed partners for legal services, mortgages, and concierge support. Partner services are delivered under the partner's own licence and terms, and the client contracts directly with the partner. We do not provide legal, mortgage, financial, or investment advice.`;
+  // Short English Disclaimer - Updated compliant wording (no "not licensed" language)
+  const shortDisclaimerEN = `JBJ Global Real Estate provides real estate brokerage support and coordination. For legal services and mortgages, we can introduce you to our independent, licensed partners. Partner services are delivered under the partner's own licence and terms, and the client contracts directly with the partner.`;
 
   // Short Arabic Disclaimer - Updated compliant wording
-  const shortDisclaimerAR = `جي بي جي للعقارات تقدم خدمات وساطة عقارية ودعم تنسيقي. يمكننا ربطك بشركاء مستقلين ومرخصين للخدمات القانونية والتمويل العقاري. تُقدَّم خدمات الشركاء وفق ترخيصهم وشروطهم الخاصة، ويكون التعاقد مباشرة بين العميل والشريك. نحن لا نقدم استشارات قانونية أو تمويلية أو استثمارية.`;
+  const shortDisclaimerAR = `جي بي جي للعقارات تقدم خدمات وساطة عقارية ودعم تنسيقي. للخدمات القانونية والتمويل العقاري، يمكننا ربطك بشركاء مستقلين ومرخصين. تُقدَّم خدمات الشركاء وفق ترخيصهم وشروطهم الخاصة، ويكون التعاقد مباشرة بين العميل والشريك.`;
 
   // Full Disclaimer Content
   const fullDisclaimerPoints = [
@@ -33,17 +33,17 @@ const ComplianceDisclaimer = ({ variant = "compact", className = "", language = 
     },
     {
       icon: Scale,
-      title: language === "ar" ? "لا نقدم استشارات قانونية" : "No Legal Advice",
+      title: language === "ar" ? "الخدمات القانونية" : "Legal Services",
       content: language === "ar"
-        ? "نحن لا نقدم استشارات قانونية. يمكننا تقديمك إلى مكاتب محاماة مستقلة ومرخصة تتعاقد معك مباشرة."
-        : "We do not provide legal advice. We can introduce you to independent, licensed law firms who contract directly with you."
+        ? "للاستشارات القانونية، يمكننا تقديمك إلى مكاتب محاماة مستقلة ومرخصة تتعاقد معك مباشرة."
+        : "For legal advice, we can introduce you to independent, licensed law firms who contract directly with you."
     },
     {
       icon: Wallet,
-      title: language === "ar" ? "لا نقدم استشارات تمويلية" : "No Mortgage or Financial Advice",
+      title: language === "ar" ? "خدمات التمويل العقاري" : "Mortgage Services",
       content: language === "ar"
-        ? "نحن لا نقدم موافقات تمويلية أو استشارات مالية. يمكننا تقديمك إلى بنوك ومتخصصين في التمويل العقاري يعملون تحت تراخيصهم الخاصة."
-        : "We do not provide mortgage approvals or financial advice. We can introduce you to banks and mortgage specialists who operate under their own licenses."
+        ? "للتمويل العقاري، يمكننا تقديمك إلى بنوك ومتخصصين في التمويل العقاري يعملون تحت تراخيصهم الخاصة."
+        : "For mortgage services, we can introduce you to banks and mortgage specialists who operate under their own licenses."
     },
     {
       icon: Users,
@@ -118,8 +118,8 @@ const ComplianceDisclaimer = ({ variant = "compact", className = "", language = 
             </p>
             <p className="text-zinc-400 text-xs leading-relaxed">
               {language === "ar" 
-                ? "هذه الاستشارة لإرشادات الوساطة العقارية وتقديمات الشركاء فقط. لا نقدم استشارات قانونية أو تمويلية أو استثمارية."
-                : "This consultation is for real estate brokerage guidance and partner introductions only. We do not provide legal, mortgage, or investment advice."}
+                ? "هذه الاستشارة لإرشادات الوساطة العقارية وتقديمات الشركاء فقط."
+                : "This consultation is for real estate brokerage guidance and partner introductions."}
             </p>
           </div>
         </div>
@@ -138,8 +138,8 @@ const ComplianceDisclaimer = ({ variant = "compact", className = "", language = 
             </p>
             <p className="text-blue-200/70 text-xs leading-relaxed mb-3">
               {language === "ar"
-                ? "نتعاون مع شبكة من المتخصصين المستقلين والمرخصين لتقديم خدمات شاملة. هؤلاء الشركاء يعملون بشكل مستقل عن جي بي جي جلوبال للعقارات ويتعاقدون مباشرة مع العملاء. نحن نسهل التقديمات فقط ولا نقدم هذه الخدمات بأنفسنا."
-                : "We collaborate with a network of independent, licensed professionals to provide comprehensive support. These partners operate independently of JBJ Global Real Estate and contract directly with clients. We facilitate introductions only and do not provide these services ourselves."}
+                ? "نتعاون مع شبكة من المتخصصين المستقلين والمرخصين لتقديم خدمات شاملة. هؤلاء الشركاء يعملون بشكل مستقل عن جي بي جي جلوبال للعقارات ويتعاقدون مباشرة مع العملاء. نحن نسهل التقديمات فقط."
+                : "We collaborate with a network of independent, licensed professionals to provide comprehensive support. These partners operate independently of JBJ Global Real Estate and contract directly with clients. We facilitate introductions only."}
             </p>
             <div className="flex flex-wrap gap-2">
               {["Law Firms", "Mortgage Specialists", "Property Managers", "Conveyancers"].map((partner) => (
@@ -160,7 +160,7 @@ const ComplianceDisclaimer = ({ variant = "compact", className = "", language = 
       <p className="text-zinc-600 text-xs leading-relaxed">
         © {currentYear} JBJ Global Real Estate Brokerage. All Rights Reserved.
         <span className="block mt-1">
-          Licensed brokerage services only. Third-party services via independent professionals.
+          Licensed brokerage services. Partner services via independent professionals.
         </span>
       </p>
     </div>
