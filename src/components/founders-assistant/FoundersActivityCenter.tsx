@@ -210,34 +210,34 @@ const FoundersActivityCenter: React.FC = () => {
 
   return (
     <div className="space-y-6">
-      {/* Stats Cards */}
+      {/* Stats Cards - White Pearl/Gold Champagne */}
       <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
-        <Card className="bg-[#0E0E0E] border-gold/20">
+        <Card className="bg-white border-2 border-gold/30 shadow-[0_4px_20px_rgba(200,167,102,0.1)]">
           <CardContent className="p-4 text-center">
             <Activity className="w-6 h-6 text-gold mx-auto mb-2" />
             <p className="text-2xl font-bold text-gold">{stats.total}</p>
-            <p className="text-xs text-gray-400">Total Activities</p>
+            <p className="text-xs text-zinc-500">Total Activities</p>
           </CardContent>
         </Card>
-        <Card className="bg-[#0E0E0E] border-green-500/20">
+        <Card className="bg-white border-2 border-green-500/30 shadow-[0_4px_20px_rgba(34,197,94,0.1)]">
           <CardContent className="p-4 text-center">
-            <CheckCircle className="w-6 h-6 text-green-400 mx-auto mb-2" />
-            <p className="text-2xl font-bold text-green-400">{stats.completed}</p>
-            <p className="text-xs text-gray-400">Completed</p>
+            <CheckCircle className="w-6 h-6 text-green-600 mx-auto mb-2" />
+            <p className="text-2xl font-bold text-green-600">{stats.completed}</p>
+            <p className="text-xs text-zinc-500">Completed</p>
           </CardContent>
         </Card>
-        <Card className="bg-[#0E0E0E] border-yellow-500/20">
+        <Card className="bg-white border-2 border-amber-500/30 shadow-[0_4px_20px_rgba(245,158,11,0.1)]">
           <CardContent className="p-4 text-center">
-            <Clock className="w-6 h-6 text-yellow-400 mx-auto mb-2" />
-            <p className="text-2xl font-bold text-yellow-400">{stats.pending}</p>
-            <p className="text-xs text-gray-400">Pending</p>
+            <Clock className="w-6 h-6 text-amber-600 mx-auto mb-2" />
+            <p className="text-2xl font-bold text-amber-600">{stats.pending}</p>
+            <p className="text-xs text-zinc-500">Pending</p>
           </CardContent>
         </Card>
-        <Card className="bg-[#0E0E0E] border-blue-500/20">
+        <Card className="bg-white border-2 border-blue-500/30 shadow-[0_4px_20px_rgba(59,130,246,0.1)]">
           <CardContent className="p-4 text-center">
-            <TrendingUp className="w-6 h-6 text-blue-400 mx-auto mb-2" />
-            <p className="text-2xl font-bold text-blue-400">{stats.today}</p>
-            <p className="text-xs text-gray-400">Today</p>
+            <TrendingUp className="w-6 h-6 text-blue-600 mx-auto mb-2" />
+            <p className="text-2xl font-bold text-blue-600">{stats.today}</p>
+            <p className="text-xs text-zinc-500">Today</p>
           </CardContent>
         </Card>
       </div>
@@ -245,20 +245,19 @@ const FoundersActivityCenter: React.FC = () => {
       {/* Header */}
       <div className="flex items-center justify-between">
         <div className="flex items-center gap-3">
-          <div className="p-2 rounded-lg bg-gold/10">
+          <div className="p-2 rounded-lg bg-gold/10 border border-gold/30">
             <Activity className="w-5 h-5 text-gold" />
           </div>
           <div>
-            <h3 className="text-lg font-semibold text-white">Activity Center</h3>
-            <p className="text-sm text-gray-400">All recent activities across your workspace</p>
+            <h3 className="text-lg font-semibold text-black">Activity Center</h3>
+            <p className="text-sm text-zinc-500">All recent activities across your workspace</p>
           </div>
         </div>
         <Button
           size="sm"
-          variant="outline"
+          variant="secondary"
           onClick={handleRefresh}
           disabled={refreshing}
-          className="border-gold/20 text-gold hover:bg-gold/10"
         >
           <RefreshCw className={`w-4 h-4 mr-2 ${refreshing ? 'animate-spin' : ''}`} />
           Refresh
@@ -271,11 +270,10 @@ const FoundersActivityCenter: React.FC = () => {
           <Button
             key={f}
             size="sm"
-            variant={filter === f ? 'default' : 'outline'}
             onClick={() => setFilter(f)}
             className={filter === f 
-              ? 'bg-gold text-black hover:bg-gold/90 whitespace-nowrap' 
-              : 'border-gold/20 text-gray-400 hover:text-white whitespace-nowrap'
+              ? 'bg-black text-white border-2 border-gold/50 shadow-[0_0_15px_rgba(200,167,102,0.3)] whitespace-nowrap hover:bg-zinc-900' 
+              : 'bg-white text-gold border-2 border-gold/30 hover:bg-transparent hover:border-gold/50 whitespace-nowrap'
             }
           >
             {f === 'all' && '📊 All Activities'}
@@ -291,15 +289,16 @@ const FoundersActivityCenter: React.FC = () => {
       <ScrollArea className="h-[500px]">
         <div className="space-y-6">
           {Object.keys(groupedActivities).length === 0 ? (
-            <Card className="bg-[#0E0E0E] border-gold/20">
+            <Card className="bg-white border-2 border-gold/20 shadow-[0_4px_20px_rgba(200,167,102,0.1)]">
               <CardContent className="p-8 text-center">
                 <Activity className="w-16 h-16 text-gold/30 mx-auto mb-4" />
-                <h4 className="text-white font-semibold mb-2">Activity Center</h4>
-                <p className="text-gray-400">No activities found</p>
-                <p className="text-sm text-gray-500 mt-1">Activities will appear here as you work</p>
+                <h4 className="text-black font-semibold mb-2">Activity Center</h4>
+                <p className="text-zinc-500">No activities found</p>
+                <p className="text-sm text-zinc-400 mt-1">Activities will appear here as you work</p>
                 <Button
                   size="sm"
-                  className="mt-4 bg-gold hover:bg-gold/90 text-black"
+                  variant="primary"
+                  className="mt-4"
                   onClick={handleRefresh}
                 >
                   <RefreshCw className="w-4 h-4 mr-2" />
@@ -312,15 +311,15 @@ const FoundersActivityCenter: React.FC = () => {
               <div key={dateKey}>
                 {/* Date Header */}
                 <div className="flex items-center gap-3 mb-3">
-                  <div className="h-px bg-gold/20 flex-1" />
-                  <span className="text-xs text-gold font-medium px-3 py-1 rounded-full bg-gold/10">
+                  <div className="h-px bg-gold/30 flex-1" />
+                  <span className="text-xs text-gold font-medium px-3 py-1 rounded-full bg-gold/10 border border-gold/30">
                     {format(new Date(dateKey), 'EEEE, MMMM d')}
                   </span>
-                  <div className="h-px bg-gold/20 flex-1" />
+                  <div className="h-px bg-gold/30 flex-1" />
                 </div>
 
                 {/* Activities for this date */}
-                <div className="space-y-2 pl-4 border-l-2 border-gold/20">
+                <div className="space-y-2 pl-4 border-l-2 border-gold/30">
                   {dayActivities.map((activity, index) => (
                     <motion.div
                       key={activity.id}
@@ -330,9 +329,9 @@ const FoundersActivityCenter: React.FC = () => {
                       className="relative"
                     >
                       {/* Timeline dot */}
-                      <div className="absolute -left-[13px] top-4 w-2.5 h-2.5 rounded-full bg-gold border-2 border-[#0A0A0A]" />
+                      <div className="absolute -left-[13px] top-4 w-2.5 h-2.5 rounded-full bg-gold border-2 border-white" />
                       
-                      <Card className="bg-[#0E0E0E] border-gold/10 hover:border-gold/30 transition-all ml-4 group">
+                      <Card className="bg-white border-2 border-gold/20 hover:border-gold/40 hover:shadow-[0_4px_20px_rgba(200,167,102,0.15)] transition-all ml-4 group">
                         <CardContent className="p-3">
                           <div className="flex items-start gap-3">
                             {/* Icon */}
@@ -343,29 +342,29 @@ const FoundersActivityCenter: React.FC = () => {
                             {/* Content */}
                             <div className="flex-1 min-w-0">
                               <div className="flex items-center justify-between gap-2">
-                                <h4 className="text-sm font-medium text-white truncate group-hover:text-gold transition-colors">
+                                <h4 className="text-sm font-medium text-black truncate group-hover:text-gold transition-colors">
                                   {activity.title}
                                 </h4>
-                                <span className="text-xs text-gray-500 flex-shrink-0">
+                                <span className="text-xs text-zinc-400 flex-shrink-0">
                                   {formatDistanceToNow(activity.timestamp, { addSuffix: true })}
                                 </span>
                               </div>
-                              <p className="text-xs text-gray-400 mt-1 line-clamp-1">
+                              <p className="text-xs text-zinc-500 mt-1 line-clamp-1">
                                 {activity.description}
                               </p>
                               <div className="flex items-center gap-2 mt-2">
                                 {activity.actor && (
-                                  <Badge variant="outline" className="text-xs border-gold/20 text-gray-400">
+                                  <Badge variant="outline" className="text-xs border-gold/30 text-zinc-600">
                                     <User className="w-3 h-3 mr-1" />
                                     {activity.actor}
                                   </Badge>
                                 )}
                                 {activity.status && (
-                                  <Badge className={`text-xs ${
-                                    activity.status === 'completed' ? 'bg-green-500/20 text-green-400 border-green-500/30' :
-                                    activity.status === 'pending' ? 'bg-yellow-500/20 text-yellow-400 border-yellow-500/30' :
-                                    activity.status === 'in_progress' ? 'bg-blue-500/20 text-blue-400 border-blue-500/30' :
-                                    'bg-red-500/20 text-red-400 border-red-500/30'
+                                  <Badge className={`text-xs border ${
+                                    activity.status === 'completed' ? 'bg-green-50 text-green-600 border-green-200' :
+                                    activity.status === 'pending' ? 'bg-amber-50 text-amber-600 border-amber-200' :
+                                    activity.status === 'in_progress' ? 'bg-blue-50 text-blue-600 border-blue-200' :
+                                    'bg-red-50 text-red-600 border-red-200'
                                   }`}>
                                     {activity.status === 'completed' && '✅'}
                                     {activity.status === 'pending' && '⏳'}
@@ -375,10 +374,10 @@ const FoundersActivityCenter: React.FC = () => {
                                   </Badge>
                                 )}
                                 {activity.priority && activity.priority !== 'low' && (
-                                  <Badge className={`text-xs ${
-                                    activity.priority === 'urgent' ? 'bg-red-500/20 text-red-400 border-red-500/30' :
-                                    activity.priority === 'high' ? 'bg-orange-500/20 text-orange-400 border-orange-500/30' :
-                                    'bg-yellow-500/20 text-yellow-400 border-yellow-500/30'
+                                  <Badge className={`text-xs border ${
+                                    activity.priority === 'urgent' ? 'bg-red-50 text-red-600 border-red-200' :
+                                    activity.priority === 'high' ? 'bg-orange-50 text-orange-600 border-orange-200' :
+                                    'bg-amber-50 text-amber-600 border-amber-200'
                                   }`}>
                                     {activity.priority}
                                   </Badge>

@@ -144,10 +144,10 @@ const FoundersDraftsPanel: React.FC = () => {
 
   return (
     <div className="grid grid-cols-1 lg:grid-cols-3 gap-6 h-[500px]">
-      {/* Drafts List */}
-      <Card className="bg-[#0E0E0E] border-gold/20 lg:col-span-1">
+      {/* Drafts List - White Pearl Theme */}
+      <Card className="bg-white border-2 border-gold/30 shadow-[0_4px_20px_rgba(200,167,102,0.1)] lg:col-span-1">
         <CardHeader className="pb-3">
-          <CardTitle className="text-white text-lg flex items-center gap-2">
+          <CardTitle className="text-black text-lg flex items-center gap-2">
             <FileEdit className="w-5 h-5 text-gold" />
             Work in Progress
           </CardTitle>
@@ -158,8 +158,8 @@ const FoundersDraftsPanel: React.FC = () => {
               {drafts.length === 0 ? (
                 <div className="text-center py-8">
                   <FileEdit className="w-12 h-12 text-gold/30 mx-auto mb-4" />
-                  <p className="text-gray-400">No drafts yet</p>
-                  <p className="text-sm text-gray-500 mt-1">Ask Amanda to draft messages for you</p>
+                  <p className="text-zinc-500">No drafts yet</p>
+                  <p className="text-sm text-zinc-400 mt-1">Ask Amanda to draft messages for you</p>
                 </div>
               ) : (
                 drafts.map((draft) => (
@@ -167,10 +167,10 @@ const FoundersDraftsPanel: React.FC = () => {
                     key={draft.id}
                     initial={{ opacity: 0, x: -10 }}
                     animate={{ opacity: 1, x: 0 }}
-                    className={`p-3 rounded-lg border cursor-pointer transition-all ${
+                    className={`p-3 rounded-lg border-2 cursor-pointer transition-all ${
                       selectedDraft?.id === draft.id 
                         ? 'bg-gold/10 border-gold/40' 
-                        : 'bg-[#1A1A1A] border-gold/10 hover:border-gold/30'
+                        : 'bg-white border-gold/20 hover:border-gold/40 hover:shadow-[0_4px_15px_rgba(200,167,102,0.1)]'
                     }`}
                     onClick={() => handleSelectDraft(draft)}
                   >
@@ -179,26 +179,26 @@ const FoundersDraftsPanel: React.FC = () => {
                         <Badge className={draftTypeColors[draft.draft_type]}>
                           {draftTypeIcons[draft.draft_type]}
                         </Badge>
-                        <span className="text-sm font-medium text-white capitalize">
+                        <span className="text-sm font-medium text-black capitalize">
                           {draft.draft_type}
                         </span>
                       </div>
                       <Badge 
                         variant="outline" 
-                        className={`text-xs ${
+                        className={`text-xs border ${
                           draft.status === 'sent' 
-                            ? 'border-green-500/30 text-green-400' 
-                            : 'border-gold/30 text-gray-400'
+                            ? 'border-green-200 text-green-600 bg-green-50' 
+                            : 'border-gold/30 text-zinc-500 bg-zinc-50'
                         }`}
                       >
                         {draft.status === 'sent' ? '✅ Sent' : '📝 Draft'}
                       </Badge>
                     </div>
                     {draft.subject && (
-                      <p className="text-sm text-gray-300 mt-2 truncate">{draft.subject}</p>
+                      <p className="text-sm text-zinc-600 mt-2 truncate">{draft.subject}</p>
                     )}
-                    <p className="text-xs text-gray-500 mt-2 line-clamp-2">{draft.content}</p>
-                    <div className="flex items-center gap-1 mt-2 text-xs text-gray-500">
+                    <p className="text-xs text-zinc-400 mt-2 line-clamp-2">{draft.content}</p>
+                    <div className="flex items-center gap-1 mt-2 text-xs text-zinc-400">
                       <Clock className="w-3 h-3" />
                       {format(new Date(draft.created_at), 'MMM d, h:mm a')}
                     </div>
@@ -210,10 +210,10 @@ const FoundersDraftsPanel: React.FC = () => {
         </CardContent>
       </Card>
 
-      {/* Draft Editor */}
-      <Card className="bg-[#0E0E0E] border-gold/20 lg:col-span-2">
+      {/* Draft Editor - White Pearl Theme */}
+      <Card className="bg-white border-2 border-gold/30 shadow-[0_4px_20px_rgba(200,167,102,0.1)] lg:col-span-2">
         <CardHeader className="pb-3">
-          <CardTitle className="text-white text-lg flex items-center justify-between">
+          <CardTitle className="text-black text-lg flex items-center justify-between">
             <span className="flex items-center gap-2">
               <Edit className="w-5 h-5 text-gold" />
               {selectedDraft ? 'Edit Draft' : 'Select a Draft'}
@@ -222,17 +222,17 @@ const FoundersDraftsPanel: React.FC = () => {
               <div className="flex items-center gap-2">
                 <Button
                   size="sm"
-                  variant="outline"
+                  variant="secondary"
                   onClick={() => handleDeleteDraft(selectedDraft.id)}
-                  className="border-red-500/30 text-red-400 hover:bg-red-500/10"
+                  className="border-red-200 text-red-600 hover:bg-red-50"
                 >
                   <Trash2 className="w-4 h-4 mr-1" />
                   Delete
                 </Button>
                 <Button
                   size="sm"
+                  variant="primary"
                   onClick={handleSaveDraft}
-                  className="bg-gold hover:bg-gold/90 text-black"
                 >
                   Save
                 </Button>
@@ -253,18 +253,18 @@ const FoundersDraftsPanel: React.FC = () => {
             <div className="space-y-4">
               {selectedDraft.subject && (
                 <div>
-                  <label className="text-xs text-gray-400 mb-1 block">Subject</label>
-                  <p className="text-white bg-[#1A1A1A] p-3 rounded-lg border border-gold/10">
+                  <label className="text-xs text-zinc-500 mb-1 block">Subject</label>
+                  <p className="text-black bg-zinc-50 p-3 rounded-lg border-2 border-gold/20">
                     {selectedDraft.subject}
                   </p>
                 </div>
               )}
               <div>
-                <label className="text-xs text-gray-400 mb-1 block">Content</label>
+                <label className="text-xs text-zinc-500 mb-1 block">Content</label>
                 <Textarea
                   value={editedContent}
                   onChange={(e) => setEditedContent(e.target.value)}
-                  className="min-h-[300px] bg-[#1A1A1A] border-gold/20 text-white resize-none"
+                  className="min-h-[300px] bg-white border-2 border-gold/30 text-black resize-none placeholder:text-zinc-400"
                   placeholder="Draft content..."
                 />
               </div>
@@ -273,8 +273,8 @@ const FoundersDraftsPanel: React.FC = () => {
             <div className="flex items-center justify-center h-[350px] text-center">
               <div>
                 <FileEdit className="w-16 h-16 text-gold/20 mx-auto mb-4" />
-                <p className="text-gray-400">Select a draft to edit</p>
-                <p className="text-sm text-gray-500 mt-1">Or ask Amanda to create a new one</p>
+                <p className="text-zinc-500">Select a draft to edit</p>
+                <p className="text-sm text-zinc-400 mt-1">Or ask Amanda to create a new one</p>
               </div>
             </div>
           )}
