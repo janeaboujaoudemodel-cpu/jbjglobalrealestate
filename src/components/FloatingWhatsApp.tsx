@@ -80,9 +80,19 @@ const FloatingWhatsApp = () => {
 
   return (
     <div className="fixed bottom-6 right-6 z-50">
-      {/* Pulse ring */}
-      <span className="absolute inset-0 rounded-full bg-green-500/40 animate-ping pointer-events-none" />
-      <span className="absolute inset-0 rounded-full bg-green-500/20 animate-pulse pointer-events-none" />
+      {/* Gold and white pulse rings */}
+      <span 
+        className="absolute inset-0 rounded-full animate-ping pointer-events-none"
+        style={{ 
+          background: 'linear-gradient(135deg, rgba(200,167,102,0.4), rgba(255,255,255,0.3))',
+        }}
+      />
+      <span 
+        className="absolute inset-0 rounded-full animate-pulse pointer-events-none"
+        style={{ 
+          boxShadow: '0 0 20px rgba(200,167,102,0.5), 0 0 40px rgba(255,255,255,0.3)',
+        }}
+      />
       
       {/* Close button */}
       <button
@@ -101,6 +111,9 @@ const FloatingWhatsApp = () => {
           window.location.href = whatsappHref;
         }}
         className="relative flex items-center gap-2 bg-green-500 hover:bg-green-400 text-white px-4 py-3 rounded-full shadow-lg hover:shadow-xl transition-all duration-300 hover:scale-105 group"
+        style={{
+          boxShadow: '0 0 20px rgba(200,167,102,0.4), 0 0 30px rgba(255,255,255,0.2), 0 4px 20px rgba(0,0,0,0.3)',
+        }}
         aria-label="Chat with us on WhatsApp"
       >
         <MessageCircle className="w-6 h-6" />

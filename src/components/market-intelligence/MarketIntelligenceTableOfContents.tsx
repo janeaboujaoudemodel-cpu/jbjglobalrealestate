@@ -77,7 +77,7 @@ export const MarketIntelligenceTableOfContents = ({
   };
 
   return (
-    <div className="relative">
+    <div className="fixed right-4 lg:right-8 top-32 z-40 w-64 lg:w-72">
       {/* Tooltip */}
       <AnimatePresence>
         {showTooltip && !isMinimized && (
@@ -112,14 +112,11 @@ export const MarketIntelligenceTableOfContents = ({
         )}
       </AnimatePresence>
 
-      {/* Main TOC Container */}
+      {/* Main TOC Container - Fixed position */}
       <motion.div
         initial={{ opacity: 0, y: 20 }}
         animate={{ opacity: 1, y: 0 }}
-        className={cn(
-          "bg-white border border-gold/30 rounded-xl overflow-hidden shadow-lg max-h-[calc(100vh-200px)] overflow-y-auto",
-          sticky && "sticky top-24"
-        )}
+        className="bg-white border border-gold/30 rounded-xl overflow-hidden shadow-lg max-h-[calc(100vh-200px)] overflow-y-auto"
       >
         {/* Header with minimize button */}
         <div className="flex items-center justify-between p-4 border-b border-zinc-200 bg-gradient-to-r from-gold/5 to-transparent">
