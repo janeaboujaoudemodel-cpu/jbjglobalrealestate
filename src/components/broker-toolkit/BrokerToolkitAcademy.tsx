@@ -79,7 +79,7 @@ export function BrokerToolkitAcademy() {
           viewport={{ once: true }}
           className="text-center mb-12"
         >
-          <Badge className="bg-gold/20 text-gold border-gold/30 mb-4">
+          <Badge className="bg-sky-500/20 text-sky-300 border-sky-400/30 mb-4">
             <GraduationCap className="w-3 h-3 mr-1" />
             JBJ Academy
           </Badge>

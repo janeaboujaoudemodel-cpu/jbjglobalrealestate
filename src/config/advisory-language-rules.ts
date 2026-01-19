@@ -125,7 +125,7 @@ export const FORBIDDEN_LANGUAGE = {
     risk_free: 'All investments carry risk',
     best_investment: 'Subjective and potentially misleading',
     official_government: 'Cannot claim government endorsement',
-    financial_advice: 'Outside licensed brokerage scope',
+    financial_advice: 'Outside brokerage scope - we provide buying, selling, and rental services only',
     leasing: 'Brand terminology requires "RENT" only',
   },
 } as const;

@@ -446,7 +446,7 @@ const GovernmentMethodology: React.FC = () => {
                     </div>
                     <div>
                       <p className="text-xs font-medium text-muted-foreground mb-1">PROFESSIONAL CONSULTATION</p>
-                      <p className="text-sm">Users should consult licensed professionals for financial, legal, or investment decisions.</p>
+                      <p className="text-sm">Users should consult licensed professionals for legal or investment decisions.</p>
                     </div>
                   </div>
                 </div>
