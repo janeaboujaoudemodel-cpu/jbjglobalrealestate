@@ -494,34 +494,69 @@ const AIHub = () => {
                 className="w-24 h-0.5 bg-gradient-to-r from-transparent via-gold to-transparent mx-auto mb-8"
               />
 
-              {/* Two CTAs - Premium 3D White/Gold Button Style */}
+              {/* Two CTAs - Matching Ready to Get Started Section Style */}
               <motion.div variants={fadeInUp} className="flex flex-wrap justify-center gap-4 mb-8">
                 {!user ? (
-                  <Button 
+                  <button 
                     onClick={() => navigate("/auth?redirect=/ai-hub")}
-                    className="relative bg-gradient-to-r from-white via-[#FDFBF7] to-[#F5F0E6] border-2 border-gold/50 px-8 py-6 text-base shadow-[0_4px_20px_rgba(200,167,102,0.3),0_8px_30px_rgba(0,0,0,0.15)] hover:shadow-[0_6px_25px_rgba(200,167,102,0.5),0_10px_40px_rgba(0,0,0,0.2)] hover:scale-[1.02] transition-all duration-300"
+                    className="group relative inline-flex items-center justify-center gap-2 px-10 py-5 text-base font-bold rounded-xl transition-all duration-300 overflow-hidden"
+                    style={{
+                      background: 'linear-gradient(135deg, #FFFFFF 0%, #FDFBF7 50%, #F5F0E6 100%)',
+                      border: '2px solid rgba(200,167,102,0.5)',
+                      boxShadow: `
+                        0 10px 30px rgba(200,167,102,0.4),
+                        0 6px 15px rgba(0,0,0,0.2),
+                        inset 0 2px 4px rgba(255,255,255,0.9),
+                        inset 0 -2px 4px rgba(200,167,102,0.2),
+                        0 0 20px rgba(200,167,102,0.3)
+                      `,
+                    }}
                   >
-                    <LogIn className="w-5 h-5 mr-2 text-black" />
-                    <span className="text-black font-semibold">Sign In / Create Account</span>
-                    <ArrowUpRight className="w-5 h-5 ml-2 text-black" />
-                  </Button>
+                    <span className="absolute inset-x-0 top-0 h-1/2 rounded-t-xl bg-gradient-to-b from-white/80 to-transparent pointer-events-none" />
+                    <span className="absolute inset-x-0 bottom-0 h-1/3 rounded-b-xl bg-gradient-to-t from-gold/10 to-transparent pointer-events-none" />
+                    <span className="absolute inset-0 rounded-xl opacity-0 group-hover:opacity-100 transition-opacity duration-300 pointer-events-none" style={{ boxShadow: '0 0 40px rgba(200,167,102,0.6), inset 0 0 20px rgba(200,167,102,0.1)' }} />
+                    <span className="relative flex items-center justify-center gap-2">
+                      <LogIn className="w-5 h-5 text-gold" />
+                      <span className="text-gold">Sign In</span>
+                      <span className="text-black">/ Create Account</span>
+                      <ArrowUpRight className="w-5 h-5 text-black" />
+                    </span>
+                  </button>
                 ) : (
-                  <Button 
+                  <button 
                     onClick={() => navigate("/my-account")}
-                    className="relative bg-gradient-to-r from-white via-[#FDFBF7] to-[#F5F0E6] border-2 border-gold/50 px-8 py-6 text-base shadow-[0_4px_20px_rgba(200,167,102,0.3),0_8px_30px_rgba(0,0,0,0.15)] hover:shadow-[0_6px_25px_rgba(200,167,102,0.5),0_10px_40px_rgba(0,0,0,0.2)] hover:scale-[1.02] transition-all duration-300"
+                    className="group relative inline-flex items-center justify-center gap-2 px-10 py-5 text-base font-bold rounded-xl transition-all duration-300 overflow-hidden"
+                    style={{
+                      background: 'linear-gradient(135deg, #FFFFFF 0%, #FDFBF7 50%, #F5F0E6 100%)',
+                      border: '2px solid rgba(200,167,102,0.5)',
+                      boxShadow: `
+                        0 10px 30px rgba(200,167,102,0.4),
+                        0 6px 15px rgba(0,0,0,0.2),
+                        inset 0 2px 4px rgba(255,255,255,0.9),
+                        inset 0 -2px 4px rgba(200,167,102,0.2),
+                        0 0 20px rgba(200,167,102,0.3)
+                      `,
+                    }}
                   >
-                    <User className="w-5 h-5 mr-2 text-black" />
-                    <span className="text-black font-semibold">Go to My Dashboard</span>
-                    <ArrowUpRight className="w-5 h-5 ml-2 text-black" />
-                  </Button>
+                    <span className="absolute inset-x-0 top-0 h-1/2 rounded-t-xl bg-gradient-to-b from-white/80 to-transparent pointer-events-none" />
+                    <span className="absolute inset-x-0 bottom-0 h-1/3 rounded-b-xl bg-gradient-to-t from-gold/10 to-transparent pointer-events-none" />
+                    <span className="absolute inset-0 rounded-xl opacity-0 group-hover:opacity-100 transition-opacity duration-300 pointer-events-none" style={{ boxShadow: '0 0 40px rgba(200,167,102,0.6), inset 0 0 20px rgba(200,167,102,0.1)' }} />
+                    <span className="relative flex items-center justify-center gap-2">
+                      <User className="w-5 h-5 text-gold" />
+                      <span className="text-gold">Go to</span>
+                      <span className="text-black">My Dashboard</span>
+                      <ArrowUpRight className="w-5 h-5 text-black" />
+                    </span>
+                  </button>
                 )}
-                <Button 
+                <button 
                   onClick={() => document.getElementById('investor-tools')?.scrollIntoView({ behavior: 'smooth' })}
-                  className="relative bg-gradient-to-r from-white via-[#FDFBF7] to-[#F5F0E6] border-2 border-gold/50 px-8 py-6 text-base shadow-[0_4px_20px_rgba(200,167,102,0.3),0_8px_30px_rgba(0,0,0,0.15)] hover:shadow-[0_6px_25px_rgba(200,167,102,0.5),0_10px_40px_rgba(0,0,0,0.2)] hover:scale-[1.02] transition-all duration-300"
+                  className="relative inline-flex items-center justify-center gap-2 px-10 py-5 text-base font-bold rounded-xl transition-all duration-300 bg-transparent border-2 border-black text-black hover:bg-black hover:text-white group"
+                  style={{ background: 'transparent' }}
                 >
-                  <span className="text-black font-semibold">Explore Free Tools</span>
-                  <ArrowUpRight className="w-5 h-5 ml-2 text-black" />
-                </Button>
+                  Explore Free Tools
+                  <ArrowUpRight className="w-5 h-5" />
+                </button>
               </motion.div>
 
             </motion.div>
@@ -688,10 +723,29 @@ const AIHub = () => {
                 </p>
                 <div className="flex flex-wrap justify-center gap-3">
                   <Link to="/broker-toolkit">
-                    <button className="relative inline-flex items-center gap-2 bg-gradient-to-r from-white via-[#FDFBF7] to-[#F5F0E6] border-2 border-gold/50 px-8 py-4 rounded-xl text-base font-semibold shadow-[0_8px_30px_rgba(200,167,102,0.4),0_4px_15px_rgba(0,0,0,0.1)] hover:bg-transparent hover:border-gold hover:shadow-[0_0_25px_rgba(200,167,102,0.6)] transition-all duration-300 group">
-                      <Sparkles className="w-5 h-5 text-black group-hover:text-gold transition-colors" />
-                      <span className="text-black group-hover:text-gold transition-colors">Become Part of JBJ Broker Hub</span>
-                      <ArrowUpRight className="w-5 h-5 text-gold" />
+                    <button 
+                      className="group relative inline-flex items-center justify-center gap-2 px-10 py-5 text-base font-bold rounded-xl transition-all duration-300 overflow-hidden"
+                      style={{
+                        background: 'linear-gradient(135deg, #FFFFFF 0%, #FDFBF7 50%, #F5F0E6 100%)',
+                        border: '2px solid rgba(200,167,102,0.5)',
+                        boxShadow: `
+                          0 10px 30px rgba(200,167,102,0.4),
+                          0 6px 15px rgba(0,0,0,0.2),
+                          inset 0 2px 4px rgba(255,255,255,0.9),
+                          inset 0 -2px 4px rgba(200,167,102,0.2),
+                          0 0 20px rgba(200,167,102,0.3)
+                        `,
+                      }}
+                    >
+                      <span className="absolute inset-x-0 top-0 h-1/2 rounded-t-xl bg-gradient-to-b from-white/80 to-transparent pointer-events-none" />
+                      <span className="absolute inset-x-0 bottom-0 h-1/3 rounded-b-xl bg-gradient-to-t from-gold/10 to-transparent pointer-events-none" />
+                      <span className="absolute inset-0 rounded-xl opacity-0 group-hover:opacity-100 transition-opacity duration-300 pointer-events-none" style={{ boxShadow: '0 0 40px rgba(200,167,102,0.6), inset 0 0 20px rgba(200,167,102,0.1)' }} />
+                      <span className="relative flex items-center justify-center gap-2">
+                        <Sparkles className="w-5 h-5 text-gold" />
+                        <span className="text-gold">Become Part</span>
+                        <span className="text-black">of JBJ Broker Hub</span>
+                        <ArrowUpRight className="w-5 h-5 text-black" />
+                      </span>
                     </button>
                   </Link>
                 </div>
@@ -885,13 +939,32 @@ const AIHub = () => {
                     </div>
                   </div>
 
-                  {/* CTA */}
+                  {/* CTA - Matching Ready to Get Started Style */}
                   <div className="text-center">
                     <Link to="/referral-onboarding">
-                      <button className="relative inline-flex items-center gap-2 bg-gradient-to-r from-white via-[#FDFBF7] to-[#F5F0E6] border-2 border-gold/50 px-10 py-4 rounded-xl text-base font-semibold shadow-[0_8px_30px_rgba(200,167,102,0.4),0_4px_15px_rgba(0,0,0,0.1)] hover:bg-transparent hover:border-gold hover:shadow-[0_0_25px_rgba(200,167,102,0.6)] transition-all duration-300 group">
-                        <DollarSign className="w-5 h-5 text-black group-hover:text-gold transition-colors" />
-                        <span className="text-black group-hover:text-gold transition-colors">Become a Referral Partner Now</span>
-                        <ArrowUpRight className="w-5 h-5 text-gold" />
+                      <button 
+                        className="group relative inline-flex items-center justify-center gap-2 px-10 py-5 text-base font-bold rounded-xl transition-all duration-300 overflow-hidden"
+                        style={{
+                          background: 'linear-gradient(135deg, #FFFFFF 0%, #FDFBF7 50%, #F5F0E6 100%)',
+                          border: '2px solid rgba(200,167,102,0.5)',
+                          boxShadow: `
+                            0 10px 30px rgba(200,167,102,0.4),
+                            0 6px 15px rgba(0,0,0,0.2),
+                            inset 0 2px 4px rgba(255,255,255,0.9),
+                            inset 0 -2px 4px rgba(200,167,102,0.2),
+                            0 0 20px rgba(200,167,102,0.3)
+                          `,
+                        }}
+                      >
+                        <span className="absolute inset-x-0 top-0 h-1/2 rounded-t-xl bg-gradient-to-b from-white/80 to-transparent pointer-events-none" />
+                        <span className="absolute inset-x-0 bottom-0 h-1/3 rounded-b-xl bg-gradient-to-t from-gold/10 to-transparent pointer-events-none" />
+                        <span className="absolute inset-0 rounded-xl opacity-0 group-hover:opacity-100 transition-opacity duration-300 pointer-events-none" style={{ boxShadow: '0 0 40px rgba(200,167,102,0.6), inset 0 0 20px rgba(200,167,102,0.1)' }} />
+                        <span className="relative flex items-center justify-center gap-2">
+                          <DollarSign className="w-5 h-5 text-gold" />
+                          <span className="text-gold">Become</span>
+                          <span className="text-black">a Referral Partner Now</span>
+                          <ArrowUpRight className="w-5 h-5 text-black" />
+                        </span>
                       </button>
                     </Link>
                     <p className="text-zinc-400 text-sm mt-4">
@@ -948,25 +1021,59 @@ const AIHub = () => {
                 ))}
               </div>
 
-              {/* CTA */}
+              {/* CTA - Matching Ready to Get Started Style */}
               {user ? (
                 <button 
                   onClick={() => navigate("/my-account")}
-                  className="relative inline-flex items-center gap-2 bg-gradient-to-r from-white via-[#FDFBF7] to-[#F5F0E6] border-2 border-gold/50 px-10 py-4 rounded-xl text-base font-semibold shadow-[0_8px_30px_rgba(200,167,102,0.4),0_4px_15px_rgba(0,0,0,0.1)] hover:bg-black hover:border-gold hover:shadow-[0_0_25px_rgba(200,167,102,0.6)] transition-all duration-300 group"
+                  className="group relative inline-flex items-center justify-center gap-2 px-10 py-5 text-base font-bold rounded-xl transition-all duration-300 overflow-hidden"
+                  style={{
+                    background: 'linear-gradient(135deg, #FFFFFF 0%, #FDFBF7 50%, #F5F0E6 100%)',
+                    border: '2px solid rgba(200,167,102,0.5)',
+                    boxShadow: `
+                      0 10px 30px rgba(200,167,102,0.4),
+                      0 6px 15px rgba(0,0,0,0.2),
+                      inset 0 2px 4px rgba(255,255,255,0.9),
+                      inset 0 -2px 4px rgba(200,167,102,0.2),
+                      0 0 20px rgba(200,167,102,0.3)
+                    `,
+                  }}
                 >
-                  <Sparkles className="w-5 h-5 text-black group-hover:text-gold transition-colors" />
-                  <span className="text-black group-hover:text-gold transition-colors">Access All Tools</span>
-                  <ArrowUpRight className="w-5 h-5 text-gold" />
+                  <span className="absolute inset-x-0 top-0 h-1/2 rounded-t-xl bg-gradient-to-b from-white/80 to-transparent pointer-events-none" />
+                  <span className="absolute inset-x-0 bottom-0 h-1/3 rounded-b-xl bg-gradient-to-t from-gold/10 to-transparent pointer-events-none" />
+                  <span className="absolute inset-0 rounded-xl opacity-0 group-hover:opacity-100 transition-opacity duration-300 pointer-events-none" style={{ boxShadow: '0 0 40px rgba(200,167,102,0.6), inset 0 0 20px rgba(200,167,102,0.1)' }} />
+                  <span className="relative flex items-center justify-center gap-2">
+                    <Sparkles className="w-5 h-5 text-gold" />
+                    <span className="text-gold">Access</span>
+                    <span className="text-black">All Tools</span>
+                    <ArrowUpRight className="w-5 h-5 text-black" />
+                  </span>
                 </button>
               ) : (
                 <div className="space-y-4">
                   <button 
                     onClick={() => navigate("/auth?redirect=/ai-hub")}
-                    className="relative inline-flex items-center gap-2 bg-gradient-to-r from-white via-[#FDFBF7] to-[#F5F0E6] border-2 border-gold/50 px-10 py-4 rounded-xl text-base font-semibold shadow-[0_8px_30px_rgba(200,167,102,0.4),0_4px_15px_rgba(0,0,0,0.1)] hover:bg-black hover:border-gold hover:shadow-[0_0_25px_rgba(200,167,102,0.6)] transition-all duration-300 group"
+                    className="group relative inline-flex items-center justify-center gap-2 px-10 py-5 text-base font-bold rounded-xl transition-all duration-300 overflow-hidden"
+                    style={{
+                      background: 'linear-gradient(135deg, #FFFFFF 0%, #FDFBF7 50%, #F5F0E6 100%)',
+                      border: '2px solid rgba(200,167,102,0.5)',
+                      boxShadow: `
+                        0 10px 30px rgba(200,167,102,0.4),
+                        0 6px 15px rgba(0,0,0,0.2),
+                        inset 0 2px 4px rgba(255,255,255,0.9),
+                        inset 0 -2px 4px rgba(200,167,102,0.2),
+                        0 0 20px rgba(200,167,102,0.3)
+                      `,
+                    }}
                   >
-                    <Gift className="w-5 h-5 text-black group-hover:text-gold transition-colors" />
-                    <span className="text-black group-hover:text-gold transition-colors">Sign In / Create Account</span>
-                    <ArrowUpRight className="w-5 h-5 text-gold" />
+                    <span className="absolute inset-x-0 top-0 h-1/2 rounded-t-xl bg-gradient-to-b from-white/80 to-transparent pointer-events-none" />
+                    <span className="absolute inset-x-0 bottom-0 h-1/3 rounded-b-xl bg-gradient-to-t from-gold/10 to-transparent pointer-events-none" />
+                    <span className="absolute inset-0 rounded-xl opacity-0 group-hover:opacity-100 transition-opacity duration-300 pointer-events-none" style={{ boxShadow: '0 0 40px rgba(200,167,102,0.6), inset 0 0 20px rgba(200,167,102,0.1)' }} />
+                    <span className="relative flex items-center justify-center gap-2">
+                      <Gift className="w-5 h-5 text-gold" />
+                      <span className="text-gold">Sign In</span>
+                      <span className="text-black">/ Create Account</span>
+                      <ArrowUpRight className="w-5 h-5 text-black" />
+                    </span>
                   </button>
                   <p className="text-gold text-sm">
                     100% Free — No Credit Card Required
