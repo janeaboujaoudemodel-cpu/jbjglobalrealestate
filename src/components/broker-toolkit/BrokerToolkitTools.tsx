@@ -305,9 +305,24 @@ const TOOLS: ToolItem[] = [
 ];
 
 export function BrokerToolkitTools() {
+  // Helper to get color-specific glow (category color on normal, gold on hover)
+  const getBulkCardGlow = (category: ToolCategory): string => {
+    const glowMap: Record<ToolCategory, string> = {
+      property: "border-purple-500/50 shadow-[0_0_20px_rgba(147,51,234,0.3)] hover:shadow-[0_0_30px_rgba(200,167,102,0.4)] hover:border-gold",
+      marketing: "border-emerald-500/50 shadow-[0_0_20px_rgba(16,185,129,0.3)] hover:shadow-[0_0_30px_rgba(200,167,102,0.4)] hover:border-gold",
+      documents: "border-teal-500/50 shadow-[0_0_20px_rgba(20,184,166,0.3)] hover:shadow-[0_0_30px_rgba(200,167,102,0.4)] hover:border-gold",
+      design: "border-pink-500/50 shadow-[0_0_20px_rgba(236,72,153,0.3)] hover:shadow-[0_0_30px_rgba(200,167,102,0.4)] hover:border-gold",
+      productivity: "border-indigo-500/50 shadow-[0_0_20px_rgba(99,102,241,0.3)] hover:shadow-[0_0_30px_rgba(200,167,102,0.4)] hover:border-gold",
+      operations: "border-cyan-500/50 shadow-[0_0_20px_rgba(6,182,212,0.3)] hover:shadow-[0_0_30px_rgba(200,167,102,0.4)] hover:border-gold",
+    };
+    return glowMap[category];
+  };
+
   // Render tool card for the ALL TOOLS section (glow/border only with per-tool color)
+  // REVERSED GLOW: Color glow on normal, Gold glow on hover
   const renderBulkToolCard = (tool: ToolItem, i: number) => {
     const meta = CATEGORY_META[tool.category];
+    const glowClass = getBulkCardGlow(tool.category);
 
     return (
       <motion.div
@@ -319,7 +334,7 @@ export function BrokerToolkitTools() {
       >
         <Link to={tool.link}>
           <Card
-            className={`bg-black/40 backdrop-blur-sm border-2 ${meta.cardClass.includes('border-purple') ? 'border-purple-500/50 shadow-[0_0_20px_rgba(147,51,234,0.3)] hover:shadow-[0_0_30px_rgba(200,167,102,0.4)]' : meta.cardClass.includes('border-emerald') ? 'border-emerald-500/50 shadow-[0_0_20px_rgba(16,185,129,0.3)] hover:shadow-[0_0_30px_rgba(200,167,102,0.4)]' : meta.cardClass.includes('border-teal') ? 'border-teal-500/50 shadow-[0_0_20px_rgba(20,184,166,0.3)] hover:shadow-[0_0_30px_rgba(200,167,102,0.4)]' : meta.cardClass.includes('border-pink') ? 'border-pink-500/50 shadow-[0_0_20px_rgba(236,72,153,0.3)] hover:shadow-[0_0_30px_rgba(200,167,102,0.4)]' : meta.cardClass.includes('border-indigo') ? 'border-indigo-500/50 shadow-[0_0_20px_rgba(99,102,241,0.3)] hover:shadow-[0_0_30px_rgba(200,167,102,0.4)]' : 'border-cyan-500/50 shadow-[0_0_20px_rgba(6,182,212,0.3)] hover:shadow-[0_0_30px_rgba(200,167,102,0.4)]'} hover:border-gold transition-all duration-300 h-full group cursor-pointer`}
+            className={`bg-black/40 backdrop-blur-sm border-2 ${glowClass} transition-all duration-300 h-full group cursor-pointer`}
           >
             <CardContent className="p-5">
               <div className="flex items-start gap-4">

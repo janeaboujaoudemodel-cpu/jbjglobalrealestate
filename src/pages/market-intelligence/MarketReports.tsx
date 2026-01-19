@@ -105,10 +105,26 @@ const MarketReportsPage = () => {
         description="Monthly, quarterly, and annual Dubai real estate market reports with clear charts, government Open Data attribution, and editorial analysis for BUY · SELL · RENT decisions."
       />
 
-      {/* Hero */}
+      {/* Hero - Premium Video/Photo Background */}
       <section className="relative min-h-[50vh] flex items-center overflow-hidden">
-        <div className="absolute inset-0 bg-gradient-to-b from-zinc-900/50 via-black to-black" />
-        <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_center,_var(--tw-gradient-stops))] from-gold/5 via-transparent to-transparent" />
+        {/* Video Background */}
+        <div className="absolute inset-0 z-0">
+          <video 
+            autoPlay 
+            loop 
+            muted 
+            playsInline
+            className="w-full h-full object-cover opacity-50"
+            poster="https://images.unsplash.com/photo-1512453979798-5ea266f8880c?w=1920&q=80"
+          >
+            <source 
+              src="https://videos.pexels.com/video-files/3571264/3571264-uhd_2560_1440_30fps.mp4" 
+              type="video/mp4" 
+            />
+          </video>
+          <div className="absolute inset-0 bg-gradient-to-b from-black/60 via-black/70 to-black" />
+        </div>
+        <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_center,_var(--tw-gradient-stops))] from-gold/5 via-transparent to-transparent z-[1]" />
         
         <motion.div 
           className="relative z-10 container mx-auto px-4 py-24 text-center"
@@ -129,7 +145,7 @@ const MarketReportsPage = () => {
             Market Reports
           </motion.h1>
 
-          <motion.p className="text-zinc-400 text-lg md:text-xl max-w-2xl mx-auto" variants={fadeInUp}>
+          <motion.p className="text-zinc-300 text-lg md:text-xl max-w-2xl mx-auto" variants={fadeInUp}>
             Downloadable reports with clear charts, government Open Data attribution, and editorial analysis.
           </motion.p>
         </motion.div>
