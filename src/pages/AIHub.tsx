@@ -549,6 +549,42 @@ const AIHub = () => {
         {/* Gold Divider */}
         <div className="h-px bg-gradient-to-r from-transparent via-gold/40 to-transparent" />
 
+        {/* ALL TOOLS SECTION - Bulk view with individual theme colors */}
+        <section className="py-16 md:py-20 bg-black">
+          <div className="container mx-auto px-4">
+            <motion.div
+              className="text-center mb-12"
+              initial={{ opacity: 0, y: 20 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true }}
+            >
+              <Badge className="bg-gold/20 text-gold border-gold/30 mb-4">
+                <Sparkles className="w-3 h-3 mr-1" />
+                All Free Tools
+              </Badge>
+              <h2 className="text-3xl md:text-4xl font-bold text-white mb-4">
+                Discover All <span className="text-gold">Free AI Tools</span>
+              </h2>
+              <p className="text-zinc-400 max-w-2xl mx-auto">
+                All tools in one place — each with its unique theme. Scroll down to see them organized by category.
+              </p>
+            </motion.div>
+
+            <motion.div 
+              className="grid md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4"
+              initial="hidden"
+              whileInView="visible"
+              viewport={{ once: true }}
+              variants={staggerContainer}
+            >
+              {[...investorTools, ...productivityTools, ...educationCareer].map((tool) => renderToolCard(tool))}
+            </motion.div>
+          </div>
+        </section>
+
+        {/* Gold Divider */}
+        <div className="h-px bg-gradient-to-r from-transparent via-gold/40 to-transparent" />
+
         {/* SECTION 1: INVESTOR TOOLS */}
         <section id="investor-tools" className="py-16 md:py-20 bg-[#0D0D0D]">
           <div className="container mx-auto px-4">
@@ -702,11 +738,11 @@ const AIHub = () => {
                 </p>
                 <div className="flex flex-wrap justify-center gap-3">
                   <Link to="/broker-toolkit">
-                    <Button className="relative bg-gradient-to-r from-white via-[#FDFBF7] to-[#F5F0E6] border border-gold/40 px-8 py-6 text-base shadow-[0_4px_20px_rgba(200,167,102,0.3),0_8px_30px_rgba(0,0,0,0.15)] hover:shadow-[0_6px_25px_rgba(200,167,102,0.5),0_10px_40px_rgba(0,0,0,0.2)] hover:scale-[1.02] transition-all duration-300">
-                      <Sparkles className="w-5 h-5 mr-2 text-black" />
-                      <span className="text-gold font-semibold">Become Part of JBJ Broker Hub</span>
-                      <ArrowUpRight className="w-5 h-5 ml-2 text-gold" />
-                    </Button>
+                    <button className="relative inline-flex items-center gap-2 bg-gradient-to-r from-white via-[#FDFBF7] to-[#F5F0E6] border-2 border-gold/50 px-8 py-4 rounded-xl text-base font-semibold shadow-[0_8px_30px_rgba(200,167,102,0.4),0_4px_15px_rgba(0,0,0,0.1)] hover:bg-transparent hover:border-gold hover:shadow-[0_0_25px_rgba(200,167,102,0.6)] transition-all duration-300 group">
+                      <Sparkles className="w-5 h-5 text-black group-hover:text-gold transition-colors" />
+                      <span className="text-black group-hover:text-gold transition-colors">Become Part of JBJ Broker Hub</span>
+                      <ArrowUpRight className="w-5 h-5 text-gold" />
+                    </button>
                   </Link>
                 </div>
               </div>
@@ -760,26 +796,24 @@ const AIHub = () => {
 
               {/* CTA */}
               {user ? (
-                <Button 
+                <button 
                   onClick={() => navigate("/my-account")}
-                  variant="dark"
-                  className="px-10 py-6 text-base shadow-lg"
+                  className="relative inline-flex items-center gap-2 bg-gradient-to-r from-white via-[#FDFBF7] to-[#F5F0E6] border-2 border-gold/50 px-10 py-4 rounded-xl text-base font-semibold shadow-[0_8px_30px_rgba(200,167,102,0.4),0_4px_15px_rgba(0,0,0,0.1)] hover:bg-black hover:border-gold hover:shadow-[0_0_25px_rgba(200,167,102,0.6)] transition-all duration-300 group"
                 >
-                  <Sparkles className="w-5 h-5 mr-2" />
-                  Access All Tools
-                  <ArrowUpRight className="w-5 h-5 ml-2" />
-                </Button>
+                  <Sparkles className="w-5 h-5 text-black group-hover:text-gold transition-colors" />
+                  <span className="text-black group-hover:text-gold transition-colors">Access All Tools</span>
+                  <ArrowUpRight className="w-5 h-5 text-gold" />
+                </button>
               ) : (
                 <div className="space-y-4">
-                  <Button 
+                  <button 
                     onClick={() => navigate("/auth?redirect=/ai-hub")}
-                    variant="dark"
-                    className="px-10 py-6 text-base shadow-lg"
+                    className="relative inline-flex items-center gap-2 bg-gradient-to-r from-white via-[#FDFBF7] to-[#F5F0E6] border-2 border-gold/50 px-10 py-4 rounded-xl text-base font-semibold shadow-[0_8px_30px_rgba(200,167,102,0.4),0_4px_15px_rgba(0,0,0,0.1)] hover:bg-black hover:border-gold hover:shadow-[0_0_25px_rgba(200,167,102,0.6)] transition-all duration-300 group"
                   >
-                    <Gift className="w-5 h-5 mr-2" />
-                    Sign In / Create Account
-                    <ArrowUpRight className="w-5 h-5 ml-2" />
-                  </Button>
+                    <Gift className="w-5 h-5 text-black group-hover:text-gold transition-colors" />
+                    <span className="text-black group-hover:text-gold transition-colors">Sign In / Create Account</span>
+                    <ArrowUpRight className="w-5 h-5 text-gold" />
+                  </button>
                   <p className="text-gold text-sm">
                     100% Free — No Credit Card Required
                   </p>

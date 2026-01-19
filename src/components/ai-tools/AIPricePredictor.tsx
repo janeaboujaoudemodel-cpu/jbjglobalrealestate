@@ -202,7 +202,7 @@ const AIPricePredictor = ({ onResponse }: AIPricePredictorProps) => {
             </div>
 
             <p className="text-xs text-muted-foreground">
-              * Disclaimer: This is an AI-generated estimate for informational purposes only. Not financial advice.
+              * This is an AI-generated estimate. For legal or mortgage matters, we can connect you with our licensed partners.
             </p>
           </div>
         )}

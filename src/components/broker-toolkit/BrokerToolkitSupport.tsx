@@ -157,10 +157,17 @@ export function BrokerToolkitSupport() {
 
         {/* Media & Marketing Team - Teal theme as a separate section within pink */}
         <div className="bg-teal-950/80 rounded-2xl p-8 border border-teal-500/30">
-          <h3 className="text-xl font-semibold text-white mb-6 flex items-center gap-2">
-            <Camera className="w-5 h-5 text-teal-300" />
-            Media & Marketing Team
-          </h3>
+          <div className="text-center mb-8">
+            <div className="inline-flex items-center justify-center gap-3 mb-2">
+              <Camera className="w-6 h-6 text-teal-300" />
+              <h3 className="text-2xl md:text-3xl font-bold text-white">
+                Media & <span className="text-teal-300">Marketing Team</span>
+              </h3>
+            </div>
+            <p className="text-teal-200/70 text-sm max-w-lg mx-auto">
+              Professional photography, video production, and digital marketing support.
+            </p>
+          </div>
           <div className="grid md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-6 gap-4">
             {MEDIA_TEAM.map((member, i) => (
               <motion.div

@@ -243,7 +243,7 @@ const AIFinancialAdvisor = () => {
             <p className="text-xs text-gold mt-2">Developed by Founder and CEO Jane Abou Jaoude</p>
             <div className="mt-4 p-3 bg-amber-500/10 border border-amber-500/30 rounded-lg max-w-xl mx-auto">
               <p className="text-amber-200 text-xs text-center">
-                <strong>Disclaimer:</strong> AI outputs are informational estimates only and not legal, mortgage, financial, or investment advice.
+                <strong>Disclaimer:</strong> AI outputs are informational estimates. For legal or mortgage matters, we can connect you with our licensed partners.
               </p>
             </div>
           </motion.div>
