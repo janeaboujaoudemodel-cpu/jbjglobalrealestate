@@ -1,6 +1,7 @@
 import { Link, useNavigate } from "react-router-dom";
 import { motion } from "framer-motion";
 import Footer from "@/components/Footer";
+import jbjMonogramDarkBg from "@/assets/jbj-monogram-dark-bg.png";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { Card, CardContent } from "@/components/ui/card";
@@ -551,11 +552,26 @@ const AIHub = () => {
                 )}
                 <button 
                   onClick={() => document.getElementById('investor-tools')?.scrollIntoView({ behavior: 'smooth' })}
-                  className="relative inline-flex items-center justify-center gap-2 px-10 py-5 text-base font-bold rounded-xl transition-all duration-300 bg-transparent border-2 border-black text-black hover:bg-black hover:text-white group"
-                  style={{ background: 'transparent' }}
+                  className="relative inline-flex items-center justify-center gap-2 px-10 py-5 text-base font-bold rounded-xl transition-all duration-300 group overflow-hidden"
+                  style={{
+                    background: 'linear-gradient(135deg, #FFFFFF 0%, #FDFBF7 25%, #F5F0E6 50%, #E8DFD0 75%, #C8A766 100%)',
+                    border: '2px solid rgba(200,167,102,0.5)',
+                    boxShadow: `
+                      0 10px 30px rgba(200,167,102,0.4),
+                      0 6px 15px rgba(0,0,0,0.2),
+                      inset 0 2px 4px rgba(255,255,255,0.9),
+                      inset 0 -2px 4px rgba(200,167,102,0.2),
+                      0 0 20px rgba(200,167,102,0.3)
+                    `,
+                  }}
                 >
-                  Explore Free Tools
-                  <ArrowUpRight className="w-5 h-5" />
+                  <span className="absolute inset-x-0 top-0 h-1/2 rounded-t-xl bg-gradient-to-b from-white/80 to-transparent pointer-events-none" />
+                  <span className="absolute inset-0 rounded-xl opacity-0 group-hover:opacity-100 transition-opacity duration-300 pointer-events-none" style={{ boxShadow: '0 0 40px rgba(200,167,102,0.6), inset 0 0 20px rgba(200,167,102,0.1)' }} />
+                  <span className="relative flex items-center gap-2">
+                    <span className="text-gold">Explore</span>
+                    <span className="text-black">Free Tools</span>
+                    <ArrowUpRight className="w-5 h-5 text-black" />
+                  </span>
                 </button>
               </motion.div>
 
@@ -851,7 +867,7 @@ const AIHub = () => {
                     </Badge>
                     <h3 className="text-black text-xl font-bold mb-2">JBJ Referral Program</h3>
                     <p className="text-zinc-600 mb-4">
-                      Earn up to 5% commission on successful referrals. No license required — anyone from any country can join!
+                      Earn 5% or 2.5% commission on successful referrals. No license required — anyone from any country can join!
                     </p>
                     <Link to="/referral-onboarding" className="inline-flex items-center gap-2 text-gold font-semibold hover:gap-3 transition-all">
                       Start Earning
@@ -872,6 +888,20 @@ const AIHub = () => {
               <Card className="bg-gradient-to-br from-black via-zinc-900 to-black border-2 border-gold/50 shadow-[0_0_40px_rgba(200,167,102,0.2)]">
                 <CardContent className="p-8">
                   <div className="text-center mb-8">
+                    {/* Logo - Dark BG version (white J's) for dark background */}
+                    <div className="flex flex-col items-center justify-center mb-6">
+                      <img 
+                        src={jbjMonogramDarkBg} 
+                        alt="JBJ Global Real Estate"
+                        className="w-20 h-20 md:w-24 md:h-24 object-contain mb-2"
+                      />
+                      <span 
+                        className="text-white font-semibold text-base md:text-lg tracking-[0.12em] uppercase"
+                        style={{ fontFamily: "Poppins, sans-serif" }}
+                      >
+                        JBJ GLOBAL REAL ESTATE
+                      </span>
+                    </div>
                     <span className="inline-flex items-center gap-2 px-5 py-2 bg-gradient-to-r from-white via-[#FDFBF7] to-[#F5F0E6] border-2 border-gold/50 rounded-full shadow-lg mb-4">
                       <Handshake className="w-3.5 h-3.5 text-black" />
                       <span className="text-black text-xs uppercase tracking-wider font-medium">How Referral Works</span>
@@ -891,10 +921,16 @@ const AIHub = () => {
                       { step: 2, title: "Receive Contract", desc: "We'll send you a referral partnership agreement" },
                       { step: 3, title: "Sign & Activate", desc: "Sign digitally and your account is active" },
                       { step: 4, title: "Start Referring", desc: "Refer clients and earn commission on deals" },
-                    ].map((item) => (
+                    ].map((item, idx) => (
                       <div key={item.step} className="text-center">
-                        <div className="w-12 h-12 rounded-full bg-gold/20 border border-gold/40 flex items-center justify-center mx-auto mb-3">
-                          <span className="text-gold font-bold text-lg">{item.step}</span>
+                        <div 
+                          className="w-12 h-12 rounded-xl flex items-center justify-center mx-auto mb-3 shadow-lg"
+                          style={{
+                            background: 'linear-gradient(135deg, #FFFFFF 0%, #FDFBF7 25%, #F5F0E6 50%, #E8DFD0 75%, #C8A766 100%)',
+                            border: '2px solid rgba(200,167,102,0.5)',
+                          }}
+                        >
+                          <span className={`font-bold text-lg ${idx % 2 === 0 ? 'text-black' : 'text-gold'}`}>{item.step}</span>
                         </div>
                         <h4 className="text-white font-semibold mb-1">{item.title}</h4>
                         <p className="text-zinc-400 text-sm">{item.desc}</p>
@@ -905,37 +941,25 @@ const AIHub = () => {
                   {/* Commission Tiers */}
                   <div className="grid md:grid-cols-2 gap-6 mb-8">
                     {/* Passive Referral */}
-                    <div className="bg-zinc-900/50 border border-zinc-700 rounded-xl p-6">
-                      <Badge className="bg-blue-500/20 text-blue-300 border-blue-500/30 mb-3">
+                    <div className="bg-gradient-to-br from-white via-[#FDFBF7] to-[#F5F0E6] border-2 border-gold/40 rounded-xl p-6">
+                      <Badge className="bg-blue-500/20 text-blue-600 border-blue-500/30 mb-3">
                         Passive Referral — 2.5%
                       </Badge>
-                      <h4 className="text-white font-bold text-lg mb-2">Share Contact Details Only</h4>
-                      <p className="text-zinc-400 text-sm mb-4">
+                      <h4 className="text-black font-bold text-lg mb-2">Share Contact Details Only</h4>
+                      <p className="text-zinc-600 text-sm mb-4">
                         Simply provide us with your contact's details. We'll reach out discreetly without mentioning your name. Privacy protected.
                       </p>
-                      <div className="bg-black/50 rounded-lg p-4 border border-zinc-800">
-                        <p className="text-zinc-500 text-xs mb-2">Example: AED 2,000,000 Deal (Min. 4% Developer Commission)</p>
-                        <p className="text-zinc-400 text-sm">Developer Commission: <span className="text-white">AED 80,000</span></p>
-                        <p className="text-gold text-lg font-bold mt-2">Your Earning: AED 2,000 minimum</p>
-                        <p className="text-zinc-500 text-xs mt-1">*Increases with higher developer commission rates</p>
-                      </div>
                     </div>
 
                     {/* Active Referral */}
-                    <div className="bg-zinc-900/50 border border-gold/30 rounded-xl p-6">
-                      <Badge className="bg-emerald-500/20 text-emerald-300 border-emerald-500/30 mb-3">
+                    <div className="bg-gradient-to-br from-white via-[#FDFBF7] to-[#F5F0E6] border-2 border-gold/40 rounded-xl p-6">
+                      <Badge className="bg-emerald-500/20 text-emerald-600 border-emerald-500/30 mb-3">
                         Active Referral — 5%
                       </Badge>
-                      <h4 className="text-white font-bold text-lg mb-2">Facilitate the Introduction</h4>
-                      <p className="text-zinc-400 text-sm mb-4">
+                      <h4 className="text-black font-bold text-lg mb-2">Facilitate the Introduction</h4>
+                      <p className="text-zinc-600 text-sm mb-4">
                         Introduce your contact directly to us. Inform them we'll be in touch. Help convince them to invest — earn double!
                       </p>
-                      <div className="bg-black/50 rounded-lg p-4 border border-gold/20">
-                        <p className="text-zinc-500 text-xs mb-2">Example: AED 2,000,000 Deal (Min. 4% Developer Commission)</p>
-                        <p className="text-zinc-400 text-sm">Developer Commission: <span className="text-white">AED 80,000</span></p>
-                        <p className="text-gold text-lg font-bold mt-2">Your Earning: AED 4,000 minimum</p>
-                        <p className="text-zinc-500 text-xs mt-1">*Increases with higher developer commission rates</p>
-                      </div>
                     </div>
                   </div>
 
