@@ -272,11 +272,11 @@ const FAQ = () => {
         }
       />
 
-      {/* Floating Sidebar Navigation - Like Buyer Guide (Right Side) */}
-      <div className="hidden lg:block fixed right-8 top-1/4 z-[55] max-w-xs">
+      {/* Floating Sidebar Navigation - Like Buyer Guide (Right Side) - Positioned above chat widget */}
+      <div className="hidden lg:block fixed right-8 top-1/4 z-[55] max-w-xs" style={{ marginBottom: '180px' }}>
         <FAQFloatingSidebar 
           categories={categories}
-          title="FAQ Quick Nav"
+          title="Navigator"
         />
       </div>
 
@@ -295,7 +295,7 @@ const FAQ = () => {
           </div>
 
           {/* Main Content - Full Width Below TOC */}
-          <div className="max-w-4xl mx-auto space-y-16 mt-8 lg:mr-80">
+          <div className="max-w-5xl mx-auto space-y-16 mt-8 lg:mr-72 lg:pr-4">
             {categories.map((category, categoryIndex) => (
               <motion.div
                 key={categoryIndex}
@@ -325,7 +325,7 @@ const FAQ = () => {
                         <AccordionItem 
                           value={`${categoryIndex}-${faqIndex}`}
                           data-accordion-item={`${categoryIndex}-${faqIndex}`}
-                          className="bg-white border border-zinc-200 rounded-xl px-6 data-[state=open]:border-gold/50 data-[state=open]:shadow-md transition-all w-full"
+                          className="bg-white border border-zinc-200 rounded-xl px-6 py-2 data-[state=open]:border-gold/50 data-[state=open]:shadow-md transition-all"
                         >
                           <AccordionTrigger className="text-black text-left hover:text-gold hover:no-underline py-5 text-base font-medium">
                             {faq.question}

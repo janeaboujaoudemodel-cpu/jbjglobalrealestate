@@ -530,30 +530,22 @@ Requirements:
                 </div>
               )}
               
-              {/* Seller Assistant CTA - Premium 3D Button */}
+              {/* Seller Assistant CTA - Premium 3D White/Champagne/Gold Button */}
               <div className="mt-6">
                 <Button
                   type="button"
                   onClick={() => setShowAssistant(true)}
-                  className="relative px-8 py-4 text-sm font-bold rounded-xl transition-all duration-300 hover:scale-105 transform active:scale-95 group overflow-hidden"
+                  className="relative px-8 py-4 text-sm font-bold rounded-xl transition-all duration-300 hover:scale-[1.02] transform active:scale-95 group overflow-hidden bg-gradient-to-r from-white via-[#FDFBF7] to-[#F5F0E6] border border-gold/40"
                   style={{
-                    background: 'linear-gradient(135deg, #000 0%, #1a1a1a 50%, #C8A766 100%)',
-                    border: '2px solid rgba(200,167,102,0.5)',
                     boxShadow: `
-                      0 10px 30px rgba(200,167,102,0.4),
-                      0 6px 15px rgba(0,0,0,0.3),
-                      inset 0 2px 4px rgba(255,255,255,0.1),
-                      inset 0 -2px 4px rgba(200,167,102,0.2),
-                      0 0 25px rgba(200,167,102,0.3)
+                      0 4px 20px rgba(200,167,102,0.3),
+                      0 8px 30px rgba(0,0,0,0.15)
                     `,
                   }}
                 >
-                  <span className="absolute inset-x-0 top-0 h-1/2 rounded-t-xl bg-gradient-to-b from-white/10 to-transparent pointer-events-none" />
-                  <span className="absolute inset-0 rounded-xl opacity-0 group-hover:opacity-100 transition-opacity duration-300 pointer-events-none" style={{ boxShadow: '0 0 40px rgba(200,167,102,0.6), inset 0 0 20px rgba(200,167,102,0.1)' }} />
                   <span className="relative flex items-center gap-2">
-                    <Wand2 className="w-5 h-5 text-gold" />
-                    <span className="text-gold font-bold">Get Help</span>
-                    <span className="text-white">with JBJ Seller Assistant</span>
+                    <Wand2 className="w-5 h-5 text-black" />
+                    <span className="text-gold font-bold">Get Help with JBJ Seller Assistant</span>
                   </span>
                 </Button>
               </div>
@@ -562,7 +554,7 @@ Requirements:
         </div>
 
         <div className="container mx-auto px-4 mt-8">
-          {/* Progress Steps */}
+          {/* Progress Steps - Using champagne active color */}
           <div className="max-w-4xl mx-auto mb-8">
             <div className="flex items-center justify-between overflow-x-auto pb-2 gap-2">
               {STEPS.map((step, index) => (
@@ -570,7 +562,7 @@ Requirements:
                   key={step.number}
                   className={`flex flex-col items-center min-w-[80px] cursor-pointer transition-all ${
                     currentStep === step.number 
-                      ? 'text-gold' 
+                      ? 'text-black' 
                       : currentStep > step.number 
                         ? 'text-gold' 
                         : 'text-zinc-500'
@@ -579,7 +571,7 @@ Requirements:
                 >
                   <div className={`w-10 h-10 rounded-full flex items-center justify-center mb-2 border-2 transition-all ${
                     currentStep === step.number 
-                      ? 'bg-gradient-to-br from-gold to-gold-dark border-gold text-black shadow-lg shadow-gold/30' 
+                      ? 'bg-gradient-to-br from-[#F5EBD7] via-[#E8DCC8] to-[#D4C4A8] border-black text-black shadow-lg' 
                       : currentStep > step.number 
                         ? 'bg-white border-gold text-gold'
                         : 'bg-zinc-100 border-zinc-300 text-zinc-500'

@@ -21,7 +21,7 @@ const TOOLTIP_DISMISSED_KEY = "jbj_faq_nav_tooltip_dismissed";
 
 export const FAQFloatingSidebar = ({ 
   categories, 
-  title = "FAQ Quick Nav"
+  title = "Navigator"
 }: FAQFloatingSidebarProps) => {
   const [activeId, setActiveId] = useState<string | null>(null);
   const [isMinimized, setIsMinimized] = useState(false);
