@@ -56,12 +56,12 @@ const AreaGuides = () => {
   const [selectedEmirate, setSelectedEmirate] = useState("all");
   const [sortBy, setSortBy] = useState<SortOption>("featured");
 
-  // Source: Dubai Land Department Annual Report 2024, Dubai Statistics Center
+  // Source: Dubai Land Department 2025-2026 Reports, DXBinteract.com
   const highlights = [
-    { icon: Building2, value: "80+", label: "Communities" },
-    { icon: Users, value: "200+", label: "Nationalities" },
-    { icon: Home, value: "226K+", label: "Transactions (2024)" },
-    { icon: TrendingUp, value: "7-9%", label: "Avg. Yield" },
+    { icon: Building2, value: "90+", label: "Communities", source: "JBJ Database 2026" },
+    { icon: Users, value: "200+", label: "Nationalities", source: "Dubai Statistics Center 2026" },
+    { icon: Home, value: "180K+", label: "Transactions (2025)", source: "DLD Annual Report 2025" },
+    { icon: TrendingUp, value: "5-7%", label: "Avg. Gross Yield", source: "DXBinteract Q4 2025" },
   ];
 
   // Filter and sort guides
