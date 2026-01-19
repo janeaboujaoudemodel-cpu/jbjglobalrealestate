@@ -34,13 +34,18 @@ const UAE_EMIRATES = [
   { id: "umm-al-quwain", name: "Umm Al Quwain" },
 ];
 
-// Trending communities (based on market activity)
+// Trending communities (based on market activity from DLD reports)
 const TRENDING_COMMUNITIES = [
   "downtown-dubai",
   "dubai-marina", 
   "palm-jumeirah",
   "dubai-hills-estate",
-  "dubai-creek-harbour"
+  "dubai-creek-harbour",
+  "business-bay",
+  "jumeirah-village-circle",
+  "mbr-city",
+  "emaar-beachfront",
+  "al-marjan-island"
 ];
 
 // Sort options
