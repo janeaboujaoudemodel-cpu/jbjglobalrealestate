@@ -189,7 +189,7 @@ const Index = () => {
               <div 
                 className="relative bg-gradient-to-br from-purple-900/40 via-purple-800/30 to-purple-900/40 backdrop-blur-md border-2 border-purple-500/50 rounded-2xl p-8 md:p-10 text-center transition-all duration-500"
                 style={{
-                  boxShadow: '0 0 30px rgba(200,167,102,0.4), 0 0 50px rgba(147,51,234,0.25)',
+                  boxShadow: '0 0 35px rgba(255,255,255,0.5), 0 0 60px rgba(255,255,255,0.3), 0 0 80px rgba(147,51,234,0.25)',
                 }}
               >
                 {/* Hover glow overlay - switches to white */}
