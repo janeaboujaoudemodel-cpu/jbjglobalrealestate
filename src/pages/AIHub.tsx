@@ -61,6 +61,7 @@ const staggerContainer = {
 };
 
 // Category definitions with styles - MATCHING BROKER HUB
+// GLOW RULE: Category glow on normal load → Gold glow on hover
 type ToolCategory = 'property' | 'productivity' | 'marketing' | 'design';
 
 const CATEGORY_META: Record<ToolCategory, {
@@ -77,41 +78,45 @@ const CATEGORY_META: Record<ToolCategory, {
     label: "Investment &",
     coloredLabel: "Property Tools",
     badgeClass: "bg-purple-500/30 text-purple-200 border-purple-400/50",
-    cardClass: "bg-purple-900/80 border-2 border-purple-500/50 hover:border-gold hover:shadow-[0_0_30px_rgba(200,167,102,0.4)] shadow-[0_0_20px_rgba(147,51,234,0.3)]",
+    // GLOW ON NORMAL LOAD (purple), GOLD GLOW ON HOVER
+    cardClass: "bg-purple-900/80 border-2 border-purple-500/50 shadow-[0_0_25px_rgba(147,51,234,0.4)] hover:border-gold hover:shadow-[0_0_35px_rgba(200,167,102,0.5),0_0_60px_rgba(255,255,255,0.15)]",
     iconWrapClass: "bg-purple-500/30 border border-purple-400/40",
     iconClass: "text-purple-300",
     arrowClass: "text-purple-300 group-hover:text-gold",
-    glowClass: "border-purple-500/50 shadow-[0_0_20px_rgba(147,51,234,0.3)] hover:shadow-[0_0_30px_rgba(200,167,102,0.4)] hover:border-gold",
+    glowClass: "border-purple-500/50 shadow-[0_0_25px_rgba(147,51,234,0.4)] hover:shadow-[0_0_35px_rgba(200,167,102,0.5),0_0_60px_rgba(255,255,255,0.15)] hover:border-gold",
   },
   productivity: {
     label: "Productivity",
     coloredLabel: "Tools",
     badgeClass: "bg-blue-500/30 text-blue-200 border-blue-400/50",
-    cardClass: "bg-blue-900/80 border-2 border-blue-500/50 hover:border-gold hover:shadow-[0_0_30px_rgba(200,167,102,0.4)] shadow-[0_0_20px_rgba(59,130,246,0.3)]",
+    // GLOW ON NORMAL LOAD (blue), GOLD GLOW ON HOVER
+    cardClass: "bg-blue-900/80 border-2 border-blue-500/50 shadow-[0_0_25px_rgba(59,130,246,0.4)] hover:border-gold hover:shadow-[0_0_35px_rgba(200,167,102,0.5),0_0_60px_rgba(255,255,255,0.15)]",
     iconWrapClass: "bg-blue-500/30 border border-blue-400/40",
     iconClass: "text-blue-300",
     arrowClass: "text-blue-300 group-hover:text-gold",
-    glowClass: "border-blue-500/50 shadow-[0_0_20px_rgba(59,130,246,0.3)] hover:shadow-[0_0_30px_rgba(200,167,102,0.4)] hover:border-gold",
+    glowClass: "border-blue-500/50 shadow-[0_0_25px_rgba(59,130,246,0.4)] hover:shadow-[0_0_35px_rgba(200,167,102,0.5),0_0_60px_rgba(255,255,255,0.15)] hover:border-gold",
   },
   marketing: {
     label: "Marketing &",
     coloredLabel: "Content",
     badgeClass: "bg-emerald-500/30 text-emerald-200 border-emerald-400/50",
-    cardClass: "bg-emerald-900/80 border-2 border-emerald-500/50 hover:border-gold hover:shadow-[0_0_30px_rgba(200,167,102,0.4)] shadow-[0_0_20px_rgba(16,185,129,0.3)]",
+    // GLOW ON NORMAL LOAD (emerald), GOLD GLOW ON HOVER
+    cardClass: "bg-emerald-900/80 border-2 border-emerald-500/50 shadow-[0_0_25px_rgba(16,185,129,0.4)] hover:border-gold hover:shadow-[0_0_35px_rgba(200,167,102,0.5),0_0_60px_rgba(255,255,255,0.15)]",
     iconWrapClass: "bg-emerald-500/30 border border-emerald-400/40",
     iconClass: "text-emerald-300",
     arrowClass: "text-emerald-300 group-hover:text-gold",
-    glowClass: "border-emerald-500/50 shadow-[0_0_20px_rgba(16,185,129,0.3)] hover:shadow-[0_0_30px_rgba(200,167,102,0.4)] hover:border-gold",
+    glowClass: "border-emerald-500/50 shadow-[0_0_25px_rgba(16,185,129,0.4)] hover:shadow-[0_0_35px_rgba(200,167,102,0.5),0_0_60px_rgba(255,255,255,0.15)] hover:border-gold",
   },
   design: {
     label: "Design &",
     coloredLabel: "Media",
     badgeClass: "bg-pink-500/30 text-pink-200 border-pink-400/50",
-    cardClass: "bg-pink-900/80 border-2 border-pink-500/50 hover:border-gold hover:shadow-[0_0_30px_rgba(200,167,102,0.4)] shadow-[0_0_20px_rgba(236,72,153,0.3)]",
+    // GLOW ON NORMAL LOAD (pink), GOLD GLOW ON HOVER
+    cardClass: "bg-pink-900/80 border-2 border-pink-500/50 shadow-[0_0_25px_rgba(236,72,153,0.4)] hover:border-gold hover:shadow-[0_0_35px_rgba(200,167,102,0.5),0_0_60px_rgba(255,255,255,0.15)]",
     iconWrapClass: "bg-pink-500/30 border border-pink-400/40",
     iconClass: "text-pink-300",
     arrowClass: "text-pink-300 group-hover:text-gold",
-    glowClass: "border-pink-500/50 shadow-[0_0_20px_rgba(236,72,153,0.3)] hover:shadow-[0_0_30px_rgba(200,167,102,0.4)] hover:border-gold",
+    glowClass: "border-pink-500/50 shadow-[0_0_25px_rgba(236,72,153,0.4)] hover:shadow-[0_0_35px_rgba(200,167,102,0.5),0_0_60px_rgba(255,255,255,0.15)] hover:border-gold",
   },
 };
 
@@ -550,17 +555,17 @@ const AIHub = () => {
                     </span>
                   </button>
                 )}
-                {/* Explore Free Tools - Secondary button with white/champagne fill for dark background */}
+                {/* Explore Free Tools - TERTIARY button: white/champagne fill, black text/border, hover: gold text + black arrow */}
                 <button 
                   onClick={() => document.getElementById('investor-tools')?.scrollIntoView({ behavior: 'smooth' })}
-                  className="relative inline-flex items-center justify-center gap-2 px-10 py-5 text-base font-bold rounded-xl transition-all duration-300 overflow-hidden border-2 border-black hover:bg-black hover:border-black group"
+                  className="relative inline-flex items-center justify-center gap-2 px-10 py-5 text-base font-bold rounded-xl transition-all duration-300 overflow-hidden border-2 border-black hover:border-gold group"
                   style={{
                     background: 'linear-gradient(135deg, #FFFFFF 0%, #FDFBF7 50%, #F5F0E6 100%)',
                   }}
                 >
                   <span className="relative flex items-center gap-2">
-                    <span className="text-black group-hover:text-white transition-colors">Explore Free Tools</span>
-                    <ArrowUpRight className="w-5 h-5 text-black group-hover:text-white transition-colors" />
+                    <span className="text-black group-hover:text-gold transition-colors">Explore Free Tools</span>
+                    <ArrowUpRight className="w-5 h-5 text-black transition-colors" />
                   </span>
                 </button>
               </motion.div>
@@ -784,7 +789,7 @@ const AIHub = () => {
               </p>
             </motion.div>
 
-            {/* Three Cards */}
+            {/* Three Cards - FLEX with bottom-aligned CTAs */}
             <div className="grid md:grid-cols-3 gap-6 mb-12">
               {/* JBJ Academy - For Employees */}
               <motion.div
@@ -792,19 +797,19 @@ const AIHub = () => {
                 whileInView={{ opacity: 1, y: 0 }}
                 viewport={{ once: true }}
               >
-                <Card className="bg-gradient-to-br from-white via-[#FDFBF7] to-[#F5F0E6] border-2 border-gold/30 hover:border-gold shadow-lg hover:shadow-[0_0_30px_rgba(200,167,102,0.3)] transition-all duration-300 h-full">
-                  <CardContent className="p-6">
+                <Card className="bg-gradient-to-br from-white via-[#FDFBF7] to-[#F5F0E6] border-2 border-gold/30 hover:border-gold shadow-lg hover:shadow-[0_0_30px_rgba(200,167,102,0.3)] transition-all duration-300 h-full flex flex-col">
+                  <CardContent className="p-6 flex flex-col flex-1">
                     <div className="w-14 h-14 rounded-xl bg-black flex items-center justify-center mb-4">
                       <GraduationCap className="w-7 h-7 text-gold" />
                     </div>
-                    <Badge className="bg-blue-500/20 text-blue-600 border-blue-500/30 mb-3">
+                    <Badge className="bg-blue-500/20 text-blue-600 border-blue-500/30 mb-3 w-fit">
                       For JBJ Employees
                     </Badge>
                     <h3 className="text-black text-xl font-bold mb-2">JBJ Academy</h3>
-                    <p className="text-zinc-600 mb-4">
+                    <p className="text-zinc-600 mb-4 flex-1">
                       Professional training, video tutorials, and internal certifications for JBJ Global Real Estate employees.
                     </p>
-                    <Link to="/broker-toolkit" className="inline-flex items-center gap-2 text-gold font-semibold hover:gap-3 transition-all">
+                    <Link to="/broker-toolkit" className="inline-flex items-center gap-2 text-gold font-semibold hover:gap-3 transition-all mt-auto">
                       Access Academy
                       <ArrowRight className="w-4 h-4" />
                     </Link>
@@ -819,19 +824,19 @@ const AIHub = () => {
                 viewport={{ once: true }}
                 transition={{ delay: 0.1 }}
               >
-                <Card className="bg-gradient-to-br from-white via-[#FDFBF7] to-[#F5F0E6] border-2 border-gold/30 hover:border-gold shadow-lg hover:shadow-[0_0_30px_rgba(200,167,102,0.3)] transition-all duration-300 h-full">
-                  <CardContent className="p-6">
+                <Card className="bg-gradient-to-br from-white via-[#FDFBF7] to-[#F5F0E6] border-2 border-gold/30 hover:border-gold shadow-lg hover:shadow-[0_0_30px_rgba(200,167,102,0.3)] transition-all duration-300 h-full flex flex-col">
+                  <CardContent className="p-6 flex flex-col flex-1">
                     <div className="w-14 h-14 rounded-xl bg-black flex items-center justify-center mb-4">
                       <Briefcase className="w-7 h-7 text-gold" />
                     </div>
-                    <Badge className="bg-purple-500/20 text-purple-600 border-purple-500/30 mb-3">
+                    <Badge className="bg-purple-500/20 text-purple-600 border-purple-500/30 mb-3 w-fit">
                       For Job Seekers
                     </Badge>
                     <h3 className="text-black text-xl font-bold mb-2">JBJ Employment Hub</h3>
-                    <p className="text-zinc-600 mb-4">
+                    <p className="text-zinc-600 mb-4 flex-1">
                       Join our team as a licensed broker. We provide training, tools, leads, and support to help you succeed.
                     </p>
-                    <Link to="/join" className="inline-flex items-center gap-2 text-gold font-semibold hover:gap-3 transition-all">
+                    <Link to="/join" className="inline-flex items-center gap-2 text-gold font-semibold hover:gap-3 transition-all mt-auto">
                       Apply Now
                       <ArrowRight className="w-4 h-4" />
                     </Link>
@@ -846,20 +851,20 @@ const AIHub = () => {
                 viewport={{ once: true }}
                 transition={{ delay: 0.2 }}
               >
-                <Card className="bg-gradient-to-br from-white via-[#FDFBF7] to-[#F5F0E6] border-2 border-gold/30 hover:border-gold shadow-lg hover:shadow-[0_0_30px_rgba(200,167,102,0.3)] transition-all duration-300 h-full">
-                  <CardContent className="p-6">
+                <Card className="bg-gradient-to-br from-white via-[#FDFBF7] to-[#F5F0E6] border-2 border-gold/30 hover:border-gold shadow-lg hover:shadow-[0_0_30px_rgba(200,167,102,0.3)] transition-all duration-300 h-full flex flex-col">
+                  <CardContent className="p-6 flex flex-col flex-1">
                     <div className="w-14 h-14 rounded-xl bg-black flex items-center justify-center mb-4">
                       <Award className="w-7 h-7 text-gold" />
                     </div>
-                    <Badge className="bg-emerald-500/20 text-emerald-600 border-emerald-500/30 mb-3">
+                    <Badge className="bg-emerald-500/20 text-emerald-600 border-emerald-500/30 mb-3 w-fit">
                       <Globe className="w-3 h-3 mr-1" />
                       Open to Everyone Worldwide
                     </Badge>
                     <h3 className="text-black text-xl font-bold mb-2">JBJ Referral Program</h3>
-                    <p className="text-zinc-600 mb-4">
+                    <p className="text-zinc-600 mb-4 flex-1">
                       Earn 5% or 2.5% commission on successful referrals. No license required — anyone from any country can join!
                     </p>
-                    <Link to="/referral-onboarding" className="inline-flex items-center gap-2 text-gold font-semibold hover:gap-3 transition-all">
+                    <Link to="/referral-onboarding" className="inline-flex items-center gap-2 text-gold font-semibold hover:gap-3 transition-all mt-auto">
                       Start Earning
                       <ArrowRight className="w-4 h-4" />
                     </Link>
@@ -877,16 +882,16 @@ const AIHub = () => {
             >
               <Card className="bg-gradient-to-br from-black via-zinc-900 to-black border-2 border-gold/50 shadow-[0_0_40px_rgba(200,167,102,0.2)]">
                 <CardContent className="p-8">
-                  <div className="text-center mb-8">
-                    {/* Logo - Dark BG version (white J's) for dark background */}
-                    <div className="flex flex-col items-center justify-center mb-6">
+                  <div className="text-center mb-10">
+                    {/* Logo - Larger size with breathable spacing */}
+                    <div className="flex flex-col items-center justify-center mb-8">
                       <img 
                         src={jbjMonogramDarkBg} 
                         alt="JBJ Global Real Estate"
-                        className="w-20 h-20 md:w-24 md:h-24 object-contain mb-2"
+                        className="w-28 h-28 md:w-32 md:h-32 object-contain mb-3"
                       />
                       <span 
-                        className="text-white font-semibold text-base md:text-lg tracking-[0.12em] uppercase"
+                        className="text-white font-semibold text-lg md:text-xl tracking-[0.12em] uppercase"
                         style={{ fontFamily: "Poppins, sans-serif" }}
                       >
                         JBJ GLOBAL REAL ESTATE
@@ -896,15 +901,15 @@ const AIHub = () => {
                       <Handshake className="w-3.5 h-3.5 text-black" />
                       <span className="text-black text-xs uppercase tracking-wider font-medium">How Referral Works</span>
                     </span>
-                    <h3 className="text-2xl md:text-3xl font-bold text-white mb-2">
-                      Become a <span className="text-white">JBJ Referral Partner</span>
+                    <h3 className="text-2xl md:text-3xl font-bold mb-2">
+                      <span className="text-gold">Join the Referral Circle</span>
                     </h3>
-                    <p className="text-zinc-400">
-                      Simple process — start earning within days
+                    <p className="text-black font-semibold text-lg">
+                      Earn 5% or 2.5% Commission
                     </p>
                   </div>
 
-                  {/* Steps */}
+                  {/* Steps - White/champagne square boxes with gold border, alternating number colors */}
                   <div className="grid md:grid-cols-4 gap-6 mb-10">
                     {[
                       { step: 1, title: "Submit Documents", desc: "Send us your ID and basic information" },
@@ -914,10 +919,10 @@ const AIHub = () => {
                     ].map((item, idx) => (
                       <div key={item.step} className="text-center">
                         <div 
-                          className="w-12 h-12 rounded-xl flex items-center justify-center mx-auto mb-3 shadow-lg"
+                          className="w-12 h-12 rounded-xl flex items-center justify-center mx-auto mb-3"
                           style={{
-                            background: 'linear-gradient(135deg, #FFFFFF 0%, #FDFBF7 25%, #F5F0E6 50%, #E8DFD0 75%, #C8A766 100%)',
-                            border: '2px solid rgba(200,167,102,0.5)',
+                            background: 'linear-gradient(135deg, #FFFFFF 0%, #FDFBF7 50%, #F5F0E6 100%)',
+                            border: '2px solid rgba(200,167,102,0.6)',
                           }}
                         >
                           <span className={`font-bold text-lg ${idx % 2 === 0 ? 'text-black' : 'text-gold'}`}>{item.step}</span>
