@@ -125,41 +125,37 @@ const Index = () => {
             Mortgage, legal & visa services provided through licensed partners.
           </motion.p>
 
-          {/* Two CTAs Only - Primary and Secondary with Premium Styling */}
+          {/* Hero CTA Buttons - Transparent bg, white 3D border, white title, gold icon on normal; filled on hover */}
           <motion.div 
             variants={fadeInUp}
             className="flex flex-col sm:flex-row items-center justify-center gap-4"
           >
             <Link to="/properties">
               <button 
-                className="group relative inline-flex items-center justify-center gap-2 px-10 py-5 text-base font-bold rounded-xl transition-all duration-300 overflow-hidden"
+                className="group relative inline-flex items-center justify-center gap-2 px-10 py-5 text-base font-bold rounded-xl transition-all duration-300 bg-transparent"
                 style={{
-                  background: 'linear-gradient(135deg, #FFFFFF 0%, #FDFBF7 50%, #F5F0E6 100%)',
-                  border: '2px solid rgba(200,167,102,0.5)',
-                  boxShadow: `
-                    0 8px 24px rgba(200,167,102,0.35),
-                    0 4px 12px rgba(0,0,0,0.15),
-                    inset 0 2px 4px rgba(255,255,255,0.9),
-                    inset 0 -2px 4px rgba(200,167,102,0.2),
-                    0 0 20px rgba(200,167,102,0.4)
-                  `,
+                  border: '2px solid rgba(255,255,255,0.8)',
+                  boxShadow: 'inset 0 1px 2px rgba(255,255,255,0.2), inset 0 -1px 2px rgba(0,0,0,0.3), 0 4px 15px rgba(0,0,0,0.4)',
                 }}
               >
-                <span className="absolute inset-x-0 top-0 h-1/2 rounded-t-xl bg-gradient-to-b from-white/80 to-transparent pointer-events-none" />
-                <span className="relative z-10 flex items-center gap-1" style={{ filter: 'drop-shadow(0 0 8px rgba(200,167,102,0.5))' }}>
-                  <span className="text-gold group-hover:text-black transition-colors">Explore</span>
-                  <span className="text-black group-hover:text-gold transition-colors">Properties</span>
-                </span>
-                <ArrowUpRight className="w-5 h-5 text-gold group-hover:text-black transition-colors relative z-10" style={{ filter: 'drop-shadow(0 0 6px rgba(200,167,102,0.6))' }} />
+                <span className="text-white group-hover:text-black transition-colors">Explore Properties</span>
+                <ArrowUpRight className="w-5 h-5 text-gold transition-colors" style={{ filter: 'drop-shadow(0 0 6px rgba(200,167,102,0.8))' }} />
+                {/* Hover fill overlay */}
+                <span className="absolute inset-0 rounded-xl bg-gradient-to-r from-white via-[#FDFBF7] to-[#F5F0E6] opacity-0 group-hover:opacity-100 transition-opacity duration-300 -z-10" style={{ border: '2px solid rgba(200,167,102,0.6)' }} />
               </button>
             </Link>
             <button 
               onClick={() => setIsInquiryOpen(true)}
-              className="group inline-flex items-center justify-center gap-2 px-10 py-5 text-base font-bold rounded-xl transition-all duration-300 bg-gradient-to-r from-white via-[#FDFBF7] to-[#F5F0E6] border-2 border-black hover:bg-transparent hover:border-gold"
+              className="group relative inline-flex items-center justify-center gap-2 px-10 py-5 text-base font-bold rounded-xl transition-all duration-300 bg-transparent"
+              style={{
+                border: '2px solid rgba(255,255,255,0.8)',
+                boxShadow: 'inset 0 1px 2px rgba(255,255,255,0.2), inset 0 -1px 2px rgba(0,0,0,0.3), 0 4px 15px rgba(0,0,0,0.4)',
+              }}
             >
-              <span className="text-black group-hover:text-gold transition-colors">Book</span>
-              <span className="text-black group-hover:text-gold transition-colors">Consultation</span>
-              <ArrowUpRight className="w-5 h-5 text-black group-hover:text-gold transition-colors" />
+              <span className="text-white group-hover:text-black transition-colors">Book Consultation</span>
+              <ArrowUpRight className="w-5 h-5 text-gold transition-colors" style={{ filter: 'drop-shadow(0 0 6px rgba(200,167,102,0.8))' }} />
+              {/* Hover fill overlay */}
+              <span className="absolute inset-0 rounded-xl bg-gradient-to-r from-white via-[#FDFBF7] to-[#F5F0E6] opacity-0 group-hover:opacity-100 transition-opacity duration-300 -z-10" style={{ border: '2px solid rgba(200,167,102,0.6)' }} />
             </button>
           </motion.div>
         </motion.div>
