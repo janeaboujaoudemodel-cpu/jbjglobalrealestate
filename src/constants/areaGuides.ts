@@ -1295,18 +1295,528 @@ Its central location makes Al Barsha ideal for those who need quick access to mu
       description: "Discover Al Salamah — traditional Emirati living in Umm Al Quwain with affordable family housing.",
       keywords: "Al Salamah UAQ, Umm Al Quwain residential, affordable UAE living, UAQ family homes"
     }
+  },
+  // ========== MORE DUBAI COMMUNITIES ==========
+  {
+    slug: "jumeirah-islands",
+    name: "Jumeirah Islands",
+    heroImage: "https://images.unsplash.com/photo-1600607687939-ce8a6c25118c?w=1920&q=80",
+    shortDescription: "A cluster of man-made islands offering luxury villa living in a lakeside setting.",
+    overview: `Jumeirah Islands consists of 46 clusters of man-made islands, each with carefully designed luxury villas overlooking serene lakes. This Nakheel development offers privacy, exclusivity, and family-friendly living in a unique waterfront environment close to Dubai Marina.`,
+    lifestyle: "Quiet, exclusive lakeside living ideal for families seeking space and tranquility while remaining connected to Dubai's entertainment hubs.",
+    location: {
+      landmarks: ["JI Clubhouse", "Lake views", "Close to Jumeirah Lake Towers", "Emirates Hills proximity"],
+      connectivity: ["15 minutes to Dubai Marina", "20 minutes to Downtown Dubai", "Near Sheikh Zayed Road", "Metro access nearby"]
+    },
+    amenities: {
+      dining: "Clubhouse restaurants and nearby JLT dining options.",
+      retail: "JLT retail and Meadows Town Centre nearby.",
+      leisure: "Community clubhouse, pools, lakes, and parks.",
+      wellness: "Fitness facilities, jogging paths around lakes."
+    },
+    propertyTypes: ["Luxury villas", "Lakeside homes", "Family estates"],
+    residents: ["Established families", "Executives", "Those seeking exclusive lakeside living"],
+    seo: {
+      title: "Jumeirah Islands Area Guide",
+      description: "Discover Jumeirah Islands — exclusive lakeside villa living near Dubai Marina.",
+      keywords: "Jumeirah Islands Dubai, lakeside villas, luxury family villas Dubai"
+    }
+  },
+  {
+    slug: "al-barari",
+    name: "Al Barari",
+    heroImage: "https://images.unsplash.com/photo-1600585154340-be6161a56a0c?w=1920&q=80",
+    shortDescription: "Dubai's most exclusive botanical sanctuary with ultra-luxury villas in lush greenery.",
+    overview: `Al Barari is Dubai's greenest community, a botanical sanctuary featuring ultra-luxury villas surrounded by themed gardens, streams, and over 2,500 species of plants. This unique development offers complete privacy and a wellness-focused lifestyle.`,
+    lifestyle: "Wellness, nature, and tranquility define life at Al Barari. Residents enjoy organic farming, spa retreats, and exclusive dining at Heart & Soul, surrounded by lush nature.",
+    location: {
+      landmarks: ["Heart & Soul Restaurant", "Spa", "Botanical gardens", "Streams and water features"],
+      connectivity: ["20 minutes to Downtown Dubai", "25 minutes to Dubai Marina", "Near Al Barsha South", "Easy E311 access"]
+    },
+    amenities: {
+      dining: "Award-winning Heart & Soul restaurant on-site.",
+      retail: "Limited — focus is on nature and wellness.",
+      leisure: "Extensive gardens, nature trails, organic farms, and private pools.",
+      wellness: "Award-winning spa, wellness center, and nature therapy."
+    },
+    propertyTypes: ["Ultra-luxury villas", "Garden estates", "Wellness retreats"],
+    residents: ["Ultra-high-net-worth individuals", "Wellness enthusiasts", "Nature lovers", "Privacy seekers"],
+    seo: {
+      title: "Al Barari Area Guide",
+      description: "Explore Al Barari — Dubai's exclusive botanical sanctuary with ultra-luxury villas.",
+      keywords: "Al Barari Dubai, luxury villas Dubai, botanical community, wellness living Dubai"
+    }
+  },
+  {
+    slug: "dubai-sports-city",
+    name: "Dubai Sports City",
+    heroImage: "https://images.unsplash.com/photo-1600596542815-ffad4c1539a9?w=1920&q=80",
+    shortDescription: "A sports-focused community with world-class facilities and affordable living.",
+    overview: `Dubai Sports City is a master-planned community built around sports excellence. Featuring world-class cricket, football, hockey, and golf facilities, it offers affordable apartments and villas for sports enthusiasts and families.`,
+    lifestyle: "Sports lovers thrive here with professional-grade facilities at their doorstep. Families enjoy community living with extensive outdoor recreation.",
+    location: {
+      landmarks: ["Dubai International Cricket Stadium", "Els Club golf course", "ICC Academy", "Victory Heights villas"],
+      connectivity: ["25 minutes to Dubai Marina", "30 minutes to Downtown Dubai", "Al Khail Road access", "Near Motor City"]
+    },
+    amenities: {
+      dining: "Community restaurants and Golf Club dining.",
+      retail: "Local retail centers and nearby mall access.",
+      leisure: "Cricket stadium, golf course, football pitches, hockey fields, and sports academies.",
+      wellness: "Sports academies, community gyms, and outdoor fitness."
+    },
+    propertyTypes: ["Affordable apartments", "Townhouses", "Golf villas", "Sports-view residences"],
+    residents: ["Sports enthusiasts", "Young families", "Cricket and golf lovers", "Active lifestyle seekers"],
+    seo: {
+      title: "Dubai Sports City Area Guide",
+      description: "Discover Dubai Sports City — world-class sports facilities with affordable family living.",
+      keywords: "Dubai Sports City, cricket stadium Dubai, golf community Dubai, sports community"
+    }
+  },
+  {
+    slug: "motor-city",
+    name: "Motor City",
+    heroImage: "https://images.unsplash.com/photo-1600596542815-ffad4c1539a9?w=1920&q=80",
+    shortDescription: "A motorsports-themed community with the Dubai Autodrome and family amenities.",
+    overview: `Motor City is built around the Dubai Autodrome, the UAE's premier motorsports facility. This affordable community offers apartments and townhouses with a focus on active living, karting, and motorsports experiences.`,
+    lifestyle: "Motorsport enthusiasts and families enjoy the unique Autodrome access, karting facilities, and community events centered around racing culture.",
+    location: {
+      landmarks: ["Dubai Autodrome", "Kartdrome", "First Avenue Mall", "Uptown Motor City"],
+      connectivity: ["25 minutes to Dubai Marina", "30 minutes to Downtown Dubai", "Hessa Street access", "Near Arabian Ranches"]
+    },
+    amenities: {
+      dining: "First Avenue Mall restaurants and community cafés.",
+      retail: "First Avenue Mall and local shops.",
+      leisure: "Autodrome racing experiences, karting, and community parks.",
+      wellness: "Community gyms, swimming pools, and jogging tracks."
+    },
+    propertyTypes: ["Affordable apartments", "Townhouses", "Villas"],
+    residents: ["Motorsport fans", "Young families", "First-time buyers", "Active lifestyle seekers"],
+    seo: {
+      title: "Motor City Area Guide",
+      description: "Explore Motor City — Dubai's motorsports community with Autodrome and family living.",
+      keywords: "Motor City Dubai, Dubai Autodrome, motorsports community Dubai, affordable Dubai"
+    }
+  },
+  {
+    slug: "the-sustainable-city",
+    name: "The Sustainable City",
+    heroImage: "https://images.unsplash.com/photo-1600585154340-be6161a56a0c?w=1920&q=80",
+    shortDescription: "The UAE's first net-zero energy community with eco-friendly living and urban farming.",
+    overview: `The Sustainable City is a pioneering development that produces as much energy as it consumes. This car-free community features solar-powered villas, urban farms, organic restaurants, and a commitment to environmental living.`,
+    lifestyle: "Eco-conscious families and individuals enjoy sustainable living with urban farms, biodome restaurants, and a strong community focused on environmental values.",
+    location: {
+      landmarks: ["Urban Farm", "Biodome Restaurant", "The Sustainable School", "Equestrian Center"],
+      connectivity: ["25 minutes to Downtown Dubai", "30 minutes to Dubai Marina", "Al Qudra Road access", "Near Mudon"]
+    },
+    amenities: {
+      dining: "Organic restaurants, farm-to-table café, and community kitchen.",
+      retail: "Limited eco-friendly retail.",
+      leisure: "Urban farming, equestrian center, parks, and community events.",
+      wellness: "Organic living, fitness, and nature-based wellness."
+    },
+    propertyTypes: ["Solar villas", "Eco townhouses", "Sustainable apartments"],
+    residents: ["Eco-conscious families", "Sustainability advocates", "Those seeking green living"],
+    seo: {
+      title: "The Sustainable City Area Guide",
+      description: "Discover The Sustainable City — UAE's first net-zero energy community with eco-friendly living.",
+      keywords: "Sustainable City Dubai, eco living Dubai, green community UAE, solar villas Dubai"
+    }
+  },
+  {
+    slug: "city-walk",
+    name: "City Walk",
+    heroImage: "https://images.unsplash.com/photo-1582672060674-bc2bd808a8b5?w=1920&q=80",
+    shortDescription: "Dubai's premier urban lifestyle destination with designer retail and contemporary living.",
+    overview: `City Walk by Meraas is a contemporary urban district offering the best in fashion, dining, and entertainment. The low-rise development features stylish apartments above flagship stores, creating a unique urban lifestyle experience.`,
+    lifestyle: "Fashion-forward residents enjoy direct access to designer boutiques, concept stores, and trendy cafés in a vibrant walkable neighborhood.",
+    location: {
+      landmarks: ["Hub Zero", "Mattel Play! Town", "Green Planet", "Designer boutiques"],
+      connectivity: ["5 minutes to Downtown Dubai", "10 minutes to DIFC", "15 minutes to Dubai Marina", "Central location"]
+    },
+    amenities: {
+      dining: "Premium restaurants, concept cafés, and rooftop bars.",
+      retail: "Flagship stores, designer boutiques, and concept shops.",
+      leisure: "Indoor entertainment, Green Planet rainforest, and Hub Zero.",
+      wellness: "Boutique fitness studios and spa facilities."
+    },
+    propertyTypes: ["Contemporary apartments", "Retail residences", "Urban lofts"],
+    residents: ["Fashion enthusiasts", "Young professionals", "Urban lifestyle seekers", "Retail-focused living"],
+    seo: {
+      title: "City Walk Area Guide",
+      description: "Explore City Walk — Dubai's premier urban lifestyle destination with designer living.",
+      keywords: "City Walk Dubai, Meraas development, urban living Dubai, designer district"
+    }
+  },
+  {
+    slug: "jumeirah-golf-estates",
+    name: "Jumeirah Golf Estates",
+    heroImage: "https://images.unsplash.com/photo-1613490493576-7fde63acd811?w=1920&q=80",
+    shortDescription: "Home to the DP World Tour Championship with championship golf courses and luxury villas.",
+    overview: `Jumeirah Golf Estates hosts the annual DP World Tour Championship and features two championship golf courses — Earth and Fire. This prestigious community offers luxury villas and townhouses for golf enthusiasts and families seeking a premium lifestyle.`,
+    lifestyle: "Golf is central to life here, with residents enjoying world-class courses, clubhouse facilities, and a community bonded by the love of the sport.",
+    location: {
+      landmarks: ["Earth Course", "Fire Course", "Clubhouse", "DP World Tour Championship venue"],
+      connectivity: ["25 minutes to Dubai Marina", "30 minutes to Downtown Dubai", "Near Dubai Production City", "E311 access"]
+    },
+    amenities: {
+      dining: "Championship clubhouse dining and community restaurants.",
+      retail: "Community retail and nearby mall access.",
+      leisure: "Two championship golf courses, driving range, and clubhouse facilities.",
+      wellness: "Golf club spa, fitness center, and outdoor activities."
+    },
+    propertyTypes: ["Golf course villas", "Luxury townhouses", "Premium estates", "Golf-view apartments"],
+    residents: ["Golf professionals", "Golf enthusiasts", "Affluent families", "Sports-focused residents"],
+    seo: {
+      title: "Jumeirah Golf Estates Area Guide",
+      description: "Discover Jumeirah Golf Estates — home of the DP World Tour Championship with luxury golf living.",
+      keywords: "Jumeirah Golf Estates, DP World Tour, golf villas Dubai, championship golf Dubai"
+    }
+  },
+  {
+    slug: "damac-hills-2",
+    name: "DAMAC Hills 2",
+    heroImage: "https://images.unsplash.com/photo-1600596542815-ffad4c1539a9?w=1920&q=80",
+    shortDescription: "An affordable family community with themed attractions and extensive amenities.",
+    overview: `DAMAC Hills 2 (formerly AKOYA Oxygen) is a self-contained community offering affordable townhouses and villas. The development features unique themed attractions including a splash park, BMX track, and family entertainment zones.`,
+    lifestyle: "Families enjoy affordable quality living with diverse entertainment options, parks, and community facilities designed for active living.",
+    location: {
+      landmarks: ["Malibu Bay", "Mello Beach", "Crystal Lagoon", "Community parks"],
+      connectivity: ["35 minutes to Dubai Marina", "40 minutes to Downtown Dubai", "Near Al Ain Road", "Growing infrastructure"]
+    },
+    amenities: {
+      dining: "Community restaurants and cafés at retail pavilions.",
+      retail: "Community retail center with daily essentials.",
+      leisure: "Splash parks, BMX tracks, beach clubs, and themed attractions.",
+      wellness: "Community gyms, outdoor fitness, and sports facilities."
+    },
+    propertyTypes: ["Affordable townhouses", "Family villas", "Cluster homes"],
+    residents: ["Young families", "First-time buyers", "Budget-conscious families", "Growing families"],
+    seo: {
+      title: "DAMAC Hills 2 Area Guide",
+      description: "Explore DAMAC Hills 2 — affordable family living with themed attractions and community amenities.",
+      keywords: "DAMAC Hills 2, AKOYA Oxygen, affordable villas Dubai, family community Dubai"
+    }
+  },
+  // ========== MORE ABU DHABI COMMUNITIES ==========
+  {
+    slug: "al-raha-beach",
+    name: "Al Raha Beach",
+    heroImage: "https://images.unsplash.com/photo-1518684079-3c830dcef090?w=1920&q=80",
+    shortDescription: "A waterfront destination with canal living and direct beach access.",
+    overview: `Al Raha Beach is one of Abu Dhabi's premier waterfront developments, featuring a mix of apartments, townhouses, and villas along 11 km of waterfront. The community offers beach access, canal living, and convenient proximity to Yas Island.`,
+    lifestyle: "Beach lovers and families enjoy waterfront living with direct beach access, promenades, and a variety of dining and entertainment options.",
+    location: {
+      landmarks: ["Al Raha Mall", "Beach access", "Al Raha Gardens", "Al Muneera"],
+      connectivity: ["10 minutes to Abu Dhabi Airport", "15 minutes to Yas Island", "25 minutes to Abu Dhabi Downtown"]
+    },
+    amenities: {
+      dining: "Waterfront restaurants, Al Raha Mall dining, and beach cafés.",
+      retail: "Al Raha Mall with comprehensive shopping.",
+      leisure: "Beach access, promenades, water sports, and community parks.",
+      wellness: "Beach fitness, community gyms, and outdoor recreation."
+    },
+    propertyTypes: ["Waterfront apartments", "Beach villas", "Canal townhouses"],
+    residents: ["Beach lovers", "Young families", "Professionals", "Water sports enthusiasts"],
+    seo: {
+      title: "Al Raha Beach Area Guide",
+      description: "Discover Al Raha Beach — Abu Dhabi's premier waterfront community with beach living.",
+      keywords: "Al Raha Beach Abu Dhabi, waterfront property Abu Dhabi, beach villas Abu Dhabi"
+    }
+  },
+  {
+    slug: "khalifa-city",
+    name: "Khalifa City",
+    heroImage: "https://images.unsplash.com/photo-1600585154340-be6161a56a0c?w=1920&q=80",
+    shortDescription: "A well-established residential area with villas and excellent schools.",
+    overview: `Khalifa City is one of Abu Dhabi's most established residential communities, known for spacious villas, excellent schools, and family-friendly amenities. The area attracts families seeking quality education and suburban living.`,
+    lifestyle: "Family-focused living with quality schools, parks, and community facilities in a safe, established neighborhood.",
+    location: {
+      landmarks: ["Khalifa City Schools", "Khalifa Park", "Community centers", "Shopping centers"],
+      connectivity: ["15 minutes to Abu Dhabi Airport", "25 minutes to Abu Dhabi Downtown", "Easy highway access"]
+    },
+    amenities: {
+      dining: "Community restaurants, cafés, and mall dining.",
+      retail: "Shopping centers with everyday essentials.",
+      leisure: "Parks, community centers, and family recreation.",
+      wellness: "Gyms, sports facilities, and outdoor activities."
+    },
+    propertyTypes: ["Family villas", "Compounds", "Spacious apartments"],
+    residents: ["Established families", "Educators", "Long-term expats", "Those seeking quality schools"],
+    seo: {
+      title: "Khalifa City Area Guide",
+      description: "Explore Khalifa City — Abu Dhabi's established residential area with excellent schools.",
+      keywords: "Khalifa City Abu Dhabi, family villas Abu Dhabi, Abu Dhabi schools area"
+    }
+  },
+  {
+    slug: "masdar-city",
+    name: "Masdar City",
+    heroImage: "https://images.unsplash.com/photo-1582672060674-bc2bd808a8b5?w=1920&q=80",
+    shortDescription: "The world's most sustainable eco-city with cutting-edge technology and green living.",
+    overview: `Masdar City is a pioneering sustainable urban development, designed as one of the world's most environmentally friendly cities. Home to Masdar Institute and sustainable businesses, it showcases the future of green urban living.`,
+    lifestyle: "Innovation and sustainability define life in Masdar City. Residents enjoy cutting-edge technology, clean energy, and a commitment to environmental excellence.",
+    location: {
+      landmarks: ["Masdar Institute", "Siemens Headquarters", "IRENA Headquarters", "Sustainable Plaza"],
+      connectivity: ["10 minutes to Abu Dhabi Airport", "20 minutes to Abu Dhabi Downtown", "PRT transit system"]
+    },
+    amenities: {
+      dining: "Sustainable restaurants and organic cafés.",
+      retail: "Eco-friendly retail and technology showcases.",
+      leisure: "Parks, innovation centers, and educational tours.",
+      wellness: "Clean air environment, green spaces, and wellness focus."
+    },
+    propertyTypes: ["Sustainable apartments", "Eco residences", "Innovation housing"],
+    residents: ["Sustainability professionals", "Researchers", "Tech workers", "Eco-conscious residents"],
+    seo: {
+      title: "Masdar City Area Guide",
+      description: "Discover Masdar City — the world's most sustainable eco-city with cutting-edge green living.",
+      keywords: "Masdar City Abu Dhabi, sustainable living UAE, eco city, green technology city"
+    }
+  },
+  // ========== MORE SHARJAH COMMUNITIES ==========
+  {
+    slug: "al-khan",
+    name: "Al Khan",
+    heroImage: "https://images.unsplash.com/photo-1518684079-3c830dcef090?w=1920&q=80",
+    shortDescription: "Sharjah's entertainment hub with Al Khan Lagoon and beach access.",
+    overview: `Al Khan is a vibrant area known for the Al Khan Lagoon, beach access, and proximity to entertainment destinations. The area offers a mix of residential options with stunning lagoon views and beach lifestyle.`,
+    lifestyle: "Beach and lagoon living with entertainment and family attractions nearby. Ideal for those who enjoy water activities and coastal ambiance.",
+    location: {
+      landmarks: ["Al Khan Lagoon", "Sharjah Aquarium", "Beach access", "Entertainment venues"],
+      connectivity: ["20 minutes to Dubai", "15 minutes to Sharjah Downtown", "Corniche Road access"]
+    },
+    amenities: {
+      dining: "Lagoon-view restaurants, beach cafés, and local eateries.",
+      retail: "Nearby malls and local shopping.",
+      leisure: "Aquarium, beach activities, lagoon water sports, and parks.",
+      wellness: "Beach fitness, water activities, and outdoor recreation."
+    },
+    propertyTypes: ["Lagoon-view apartments", "Beach residences", "Family units"],
+    residents: ["Families", "Beach lovers", "Water sports enthusiasts", "Young professionals"],
+    seo: {
+      title: "Al Khan Area Guide",
+      description: "Explore Al Khan — Sharjah's entertainment and lagoon living destination.",
+      keywords: "Al Khan Sharjah, Sharjah lagoon, beach property Sharjah"
+    }
+  },
+  {
+    slug: "al-nahda-sharjah",
+    name: "Al Nahda (Sharjah)",
+    heroImage: "https://images.unsplash.com/photo-1600596542815-ffad4c1539a9?w=1920&q=80",
+    shortDescription: "A popular residential area on the Sharjah-Dubai border with excellent connectivity.",
+    overview: `Al Nahda is strategically located on the Sharjah-Dubai border, making it popular with those working in Dubai who prefer Sharjah's affordable living. The area offers diverse housing and strong commercial activity.`,
+    lifestyle: "Convenient border living for Dubai workers seeking Sharjah's affordability. The area offers busy commercial activity and diverse community.",
+    location: {
+      landmarks: ["Sahara Centre", "Al Nahda Park", "Border crossing to Dubai", "Commercial centers"],
+      connectivity: ["10 minutes to Dubai", "15 minutes to Sharjah Downtown", "Metro access in Dubai Al Nahda"]
+    },
+    amenities: {
+      dining: "Sahara Centre dining, restaurants, and cafeterias.",
+      retail: "Sahara Centre comprehensive shopping.",
+      leisure: "Parks, community centers, and recreational facilities.",
+      wellness: "Gyms, fitness centers, and outdoor activities."
+    },
+    propertyTypes: ["Affordable apartments", "Family units", "Studio accommodations"],
+    residents: ["Dubai workers", "Budget-conscious expats", "Families", "Young professionals"],
+    seo: {
+      title: "Al Nahda Sharjah Area Guide",
+      description: "Discover Al Nahda — affordable Sharjah living with easy Dubai access.",
+      keywords: "Al Nahda Sharjah, Sharjah Dubai border, affordable Sharjah property"
+    }
+  },
+  // ========== MORE AJMAN COMMUNITIES ==========
+  {
+    slug: "al-nuaimia",
+    name: "Al Nuaimia",
+    heroImage: "https://images.unsplash.com/photo-1600596542815-ffad4c1539a9?w=1920&q=80",
+    shortDescription: "A central Ajman district with diverse housing and commercial amenities.",
+    overview: `Al Nuaimia is one of Ajman's most populated areas, offering affordable apartments and diverse amenities. The area features strong commercial activity and convenient access to other emirates.`,
+    lifestyle: "Budget-friendly urban living with essential amenities and diverse community atmosphere.",
+    location: {
+      landmarks: ["Ajman City Centre", "Commercial markets", "Community facilities"],
+      connectivity: ["30 minutes to Dubai", "20 minutes to Sharjah", "Central Ajman location"]
+    },
+    amenities: {
+      dining: "Local restaurants, cafeterias, and mall dining.",
+      retail: "Local markets and shopping centers.",
+      leisure: "Parks and community recreation.",
+      wellness: "Local gyms and fitness facilities."
+    },
+    propertyTypes: ["Affordable apartments", "Studio units", "Family flats"],
+    residents: ["Working professionals", "Budget-conscious families", "Long-term expats"],
+    seo: {
+      title: "Al Nuaimia Area Guide",
+      description: "Explore Al Nuaimia — affordable central Ajman living with commercial amenities.",
+      keywords: "Al Nuaimia Ajman, affordable Ajman apartments, Ajman property"
+    }
+  },
+  {
+    slug: "al-zorah",
+    name: "Al Zorah",
+    heroImage: "https://images.unsplash.com/photo-1613490493576-7fde63acd811?w=1920&q=80",
+    shortDescription: "Ajman's premium waterfront destination with golf, mangroves, and luxury living.",
+    overview: `Al Zorah is Ajman's most ambitious development, featuring a Jack Nicklaus-designed golf course, pristine mangroves, and luxury waterfront living. This eco-tourism destination offers premium residences near nature.`,
+    lifestyle: "Luxury nature living with golf, kayaking through mangroves, and beach club lifestyle. Perfect for those seeking premium living in a natural setting.",
+    location: {
+      landmarks: ["Al Zorah Golf Club", "Mangrove reserves", "Beach access", "Oberoi Beach Resort"],
+      connectivity: ["25 minutes to Dubai", "15 minutes to Sharjah", "Near Ajman Corniche"]
+    },
+    amenities: {
+      dining: "Golf club dining, Oberoi resort restaurants, and beach cafés.",
+      retail: "Limited — focus on nature and resort living.",
+      leisure: "Golf, mangrove kayaking, beach clubs, and nature trails.",
+      wellness: "Oberoi spa, nature therapy, and outdoor activities."
+    },
+    propertyTypes: ["Golf villas", "Waterfront apartments", "Beachfront residences"],
+    residents: ["Golf enthusiasts", "Nature lovers", "Luxury seekers", "Eco-tourists"],
+    seo: {
+      title: "Al Zorah Area Guide",
+      description: "Discover Al Zorah — Ajman's premium eco-destination with golf and mangrove living.",
+      keywords: "Al Zorah Ajman, Ajman golf, luxury property Ajman, mangrove living"
+    }
+  },
+  // ========== MORE RAK COMMUNITIES ==========
+  {
+    slug: "rak-gateway",
+    name: "RAK Gateway",
+    heroImage: "https://images.unsplash.com/photo-1600596542815-ffad4c1539a9?w=1920&q=80",
+    shortDescription: "A strategic residential and commercial hub near RAK's free zones.",
+    overview: `RAK Gateway is a developing area offering affordable housing options near Ras Al Khaimah's free zones and industrial areas. The area attracts professionals working in the emirate's growing business sectors.`,
+    lifestyle: "Practical living for RAK-based professionals with access to commercial facilities and affordable housing options.",
+    location: {
+      landmarks: ["RAK Free Zone", "Industrial areas", "Commercial centers"],
+      connectivity: ["30 minutes to Dubai", "15 minutes to RAK Airport", "Near E11 highway"]
+    },
+    amenities: {
+      dining: "Local restaurants and cafeterias.",
+      retail: "Local shopping centers and markets.",
+      leisure: "Parks and community facilities.",
+      wellness: "Gyms and outdoor activities."
+    },
+    propertyTypes: ["Affordable apartments", "Staff accommodations", "Commercial units"],
+    residents: ["Free zone workers", "Industrial professionals", "Budget-conscious expats"],
+    seo: {
+      title: "RAK Gateway Area Guide",
+      description: "Explore RAK Gateway — affordable living near Ras Al Khaimah's free zones.",
+      keywords: "RAK Gateway, Ras Al Khaimah property, affordable RAK, free zone living"
+    }
+  },
+  // ========== MORE FUJAIRAH COMMUNITIES ==========
+  {
+    slug: "al-faseel",
+    name: "Al Faseel",
+    heroImage: "https://images.unsplash.com/photo-1600585154340-be6161a56a0c?w=1920&q=80",
+    shortDescription: "A developing area near Fujairah's commercial center and port facilities.",
+    overview: `Al Faseel is a growing residential area near Fujairah's commercial hub and port facilities. The area offers affordable housing for those working in the emirate's shipping and commercial sectors.`,
+    lifestyle: "Practical coastal living for Fujairah-based professionals with access to port facilities and commercial areas.",
+    location: {
+      landmarks: ["Fujairah Port", "Commercial areas", "Near City Centre Fujairah"],
+      connectivity: ["Near Fujairah Airport", "Port access", "Highway connectivity"]
+    },
+    amenities: {
+      dining: "Local restaurants and cafeterias.",
+      retail: "City Centre Fujairah nearby.",
+      leisure: "Beach access, parks.",
+      wellness: "Community gyms and outdoor areas."
+    },
+    propertyTypes: ["Apartments", "Affordable villas", "Staff housing"],
+    residents: ["Port workers", "Commercial professionals", "Long-term expats"],
+    seo: {
+      title: "Al Faseel Area Guide",
+      description: "Discover Al Faseel — Fujairah's developing commercial residential area.",
+      keywords: "Al Faseel Fujairah, Fujairah property, east coast UAE living"
+    }
+  },
+  // ========== MORE UAQ COMMUNITIES ==========
+  {
+    slug: "al-raas-uaq",
+    name: "Al Raas (UAQ)",
+    heroImage: "https://images.unsplash.com/photo-1600596542815-ffad4c1539a9?w=1920&q=80",
+    shortDescription: "The historic heart of Umm Al Quwain with traditional charm and modern amenities.",
+    overview: `Al Raas is the historic center of Umm Al Quwain, featuring traditional architecture, the old fort, and the emirate's historic character. The area offers authentic Emirati living with a strong sense of heritage.`,
+    lifestyle: "Traditional Emirati atmosphere with historic charm and strong community values. Perfect for those seeking authentic UAE heritage living.",
+    location: {
+      landmarks: ["UAQ Fort", "Old Town", "Historic buildings", "UAQ Corniche"],
+      connectivity: ["45 minutes to Dubai", "35 minutes to Sharjah", "Central UAQ location"]
+    },
+    amenities: {
+      dining: "Traditional cafés, local restaurants, and heritage dining.",
+      retail: "Traditional souks and local markets.",
+      leisure: "Historic tours, heritage sites, and corniche walks.",
+      wellness: "Peaceful outdoor areas and community spaces."
+    },
+    propertyTypes: ["Traditional houses", "Heritage properties", "Affordable apartments"],
+    residents: ["Emirati families", "Heritage enthusiasts", "Long-term residents"],
+    seo: {
+      title: "Al Raas UAQ Area Guide",
+      description: "Explore Al Raas — the historic heart of Umm Al Quwain with traditional charm.",
+      keywords: "Al Raas UAQ, Umm Al Quwain heritage, traditional UAE living"
+    }
   }
 ];
 
 // Emirates filter for UAE-wide expansion
+// All 7 Emirates with comprehensive community coverage
 export const UAE_EMIRATES = [
-  { id: "dubai", name: "Dubai", areas: ["downtown-dubai", "dubai-marina", "business-bay", "palm-jumeirah", "jumeirah-village-circle", "dubai-hills-estate", "arabian-ranches", "emirates-hills", "dubai-creek-harbour", "jumeirah-beach-residence", "difc", "mirdif", "al-barsha", "jumeirah-lake-towers", "dubai-south", "mbr-city", "meydan", "dubai-islands", "emaar-beachfront", "tilal-al-ghaf", "town-square", "damac-hills", "jabal-ali"] },
-  { id: "abu-dhabi", name: "Abu Dhabi", areas: ["saadiyat-island", "yas-island", "al-reem-island"] },
-  { id: "sharjah", name: "Sharjah", areas: ["al-majaz", "aljada", "muwaileh"] },
-  { id: "ajman", name: "Ajman", areas: ["ajman-corniche", "al-rashidiya-ajman"] },
-  { id: "ras-al-khaimah", name: "Ras Al Khaimah", areas: ["al-hamra-village", "al-marjan-island", "mina-al-arab"] },
-  { id: "fujairah", name: "Fujairah", areas: ["fujairah-corniche", "dibba-fujairah"] },
-  { id: "umm-al-quwain", name: "Umm Al Quwain", areas: ["umm-al-quwain-marina", "al-salamah-uaq"] },
+  { 
+    id: "dubai", 
+    name: "Dubai", 
+    areas: [
+      "downtown-dubai", "dubai-marina", "business-bay", "palm-jumeirah", 
+      "jumeirah-village-circle", "dubai-hills-estate", "arabian-ranches", 
+      "emirates-hills", "dubai-creek-harbour", "jumeirah-beach-residence", 
+      "difc", "mirdif", "al-barsha", "jumeirah-lake-towers", "dubai-south", 
+      "mbr-city", "meydan", "dubai-islands", "emaar-beachfront", "tilal-al-ghaf", 
+      "town-square", "damac-hills", "jabal-ali", "jumeirah-islands", "al-barari",
+      "dubai-sports-city", "motor-city", "the-sustainable-city", "al-quoz",
+      "city-walk", "la-mer", "jumeirah-golf-estates", "damac-hills-2"
+    ] 
+  },
+  { 
+    id: "abu-dhabi", 
+    name: "Abu Dhabi", 
+    areas: [
+      "saadiyat-island", "yas-island", "al-reem-island", "al-raha-beach",
+      "khalifa-city", "masdar-city", "al-maryah-island", "al-bateen"
+    ] 
+  },
+  { 
+    id: "sharjah", 
+    name: "Sharjah", 
+    areas: [
+      "al-majaz", "aljada", "muwaileh", "al-khan", "al-nahda-sharjah",
+      "al-taawun", "sharjah-waterfront-city"
+    ] 
+  },
+  { 
+    id: "ajman", 
+    name: "Ajman", 
+    areas: [
+      "ajman-corniche", "al-rashidiya-ajman", "al-nuaimia", "al-jurf", "al-zorah"
+    ] 
+  },
+  { 
+    id: "ras-al-khaimah", 
+    name: "Ras Al Khaimah", 
+    areas: [
+      "al-hamra-village", "al-marjan-island", "mina-al-arab", "rak-gateway",
+      "al-nakheel-rak", "julphar-towers"
+    ] 
+  },
+  { 
+    id: "fujairah", 
+    name: "Fujairah", 
+    areas: [
+      "fujairah-corniche", "dibba-fujairah", "al-faseel", "merashid"
+    ] 
+  },
+  { 
+    id: "umm-al-quwain", 
+    name: "Umm Al Quwain", 
+    areas: [
+      "umm-al-quwain-marina", "al-salamah-uaq", "al-raas-uaq", "al-aahad"
+    ] 
+  },
 ];
 
 export const getAreaBySlug = (slug: string): AreaGuide | undefined => {
