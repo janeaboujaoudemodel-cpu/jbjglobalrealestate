@@ -91,10 +91,18 @@ const InteriorDesign = () => {
           </motion.div>
 
           <motion.div variants={fadeInUp}>
-            <span className="inline-flex items-center gap-2 text-gold text-xs md:text-sm uppercase tracking-[0.4em] mb-6">
-              <Paintbrush className="w-4 h-4" />
-              Interior Design Services
-            </span>
+            <button 
+              className="group inline-flex items-center gap-2 px-5 py-2.5 rounded-full mb-6 cursor-default"
+              style={{
+                background: 'linear-gradient(135deg, rgba(255,255,255,0.1) 0%, rgba(255,255,255,0.05) 50%, rgba(200,167,102,0.08) 100%)',
+                backdropFilter: 'blur(20px)',
+                border: '1.5px solid rgba(200,167,102,0.6)',
+                boxShadow: 'inset 0 1px 2px rgba(255,255,255,0.1), inset 0 -1px 2px rgba(0,0,0,0.2), 0 4px 20px rgba(0,0,0,0.3)',
+              }}
+            >
+              <span className="w-2 h-2 bg-gold rounded-full animate-pulse" />
+              <span className="text-gold font-semibold text-[10px] md:text-xs uppercase tracking-[0.2em]">Interior Design Services</span>
+            </button>
           </motion.div>
 
           <motion.h1 

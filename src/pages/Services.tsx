@@ -356,7 +356,7 @@ const Services = () => {
                     <h4 className="text-gold font-semibold mb-2 group-hover:text-black transition-colors">
                       {tool.name}
                     </h4>
-                    <ArrowUpRight className="w-4 h-4 text-gold group-hover:text-black group-hover:translate-x-1 group-hover:-translate-y-1 transition-all" />
+                    <ArrowUpRight className="w-4 h-4 text-black group-hover:text-gold group-hover:translate-x-1 group-hover:-translate-y-1 transition-all" />
                   </motion.div>
                 </Link>
               ))}
@@ -384,7 +384,7 @@ const Services = () => {
                 <span className="relative flex items-center gap-2">
                   <span className="text-black group-hover:text-gold transition-colors">Explore More</span>
                   <span className="text-gold group-hover:text-black transition-colors">AI Tools</span>
-                  <ArrowUpRight className="w-5 h-5 text-gold group-hover:text-black transition-colors" />
+                  <ArrowUpRight className="w-5 h-5 text-black group-hover:text-gold transition-colors" />
                 </span>
               </button>
             </Link>

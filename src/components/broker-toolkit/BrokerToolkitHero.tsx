@@ -35,13 +35,18 @@ export function BrokerToolkitHero() {
           animate={{ opacity: 1, y: 0 }}
           className="text-center max-w-4xl mx-auto"
         >
-          {/* Badge - Mixed Color Label Style */}
+          {/* Badge - Glass style with gold border, engraved look (matching Services page) */}
           <button 
-            className="group inline-flex items-center gap-2 bg-gradient-to-r from-white via-[#FDFBF7] to-[#F5F0E6] border border-gold/40 rounded-full px-5 py-2.5 mb-6 shadow-sm transition-all hover:shadow-md cursor-default"
+            className="group inline-flex items-center gap-2 px-5 py-2.5 rounded-full mb-6 cursor-default"
+            style={{
+              background: 'linear-gradient(135deg, rgba(255,255,255,0.1) 0%, rgba(255,255,255,0.05) 50%, rgba(200,167,102,0.08) 100%)',
+              backdropFilter: 'blur(20px)',
+              border: '1.5px solid rgba(200,167,102,0.6)',
+              boxShadow: 'inset 0 1px 2px rgba(255,255,255,0.1), inset 0 -1px 2px rgba(0,0,0,0.2), 0 4px 20px rgba(0,0,0,0.3)',
+            }}
           >
-            <Star className="w-4 h-4 fill-gold text-gold group-hover:fill-black group-hover:text-black transition-colors" />
-            <span className="text-gold group-hover:text-black transition-colors font-semibold">JBJ Broker Circle</span>
-            <span className="text-black group-hover:text-gold transition-colors font-semibold">Free Membership</span>
+            <span className="w-2 h-2 bg-gold rounded-full animate-pulse" />
+            <span className="text-gold font-semibold text-[10px] md:text-xs uppercase tracking-[0.2em]">JBJ Broker Circle • Free Membership</span>
           </button>
 
           {/* Main headline - Clear value prop */}
@@ -83,10 +88,10 @@ export function BrokerToolkitHero() {
                 <span className="absolute inset-x-0 top-0 h-1/2 rounded-t-xl bg-gradient-to-b from-white/80 to-transparent pointer-events-none" />
                 <Star className="w-5 h-5 text-gold group-hover:text-black transition-colors relative z-10" />
                 <span className="relative z-10 flex items-center gap-1">
-                  <span className="text-gold group-hover:text-black transition-colors">Join</span>
-                  <span className="text-black group-hover:text-gold transition-colors">Free Now</span>
+                  <span className="text-black group-hover:text-gold transition-colors">Join</span>
+                  <span className="text-gold group-hover:text-black transition-colors">Free Now</span>
                 </span>
-                <ArrowUpRight className="w-5 h-5 text-gold group-hover:text-black transition-colors relative z-10" />
+                <ArrowUpRight className="w-5 h-5 text-black group-hover:text-gold transition-colors relative z-10" />
               </button>
             ) : (
               <button 
@@ -106,10 +111,10 @@ export function BrokerToolkitHero() {
                 <span className="absolute inset-x-0 top-0 h-1/2 rounded-t-xl bg-gradient-to-b from-white/80 to-transparent pointer-events-none" />
                 <Sparkles className="w-5 h-5 text-gold group-hover:text-black transition-colors relative z-10" />
                 <span className="relative z-10 flex items-center gap-1">
-                  <span className="text-gold group-hover:text-black transition-colors">Open My</span>
-                  <span className="text-black group-hover:text-gold transition-colors">Dashboard</span>
+                  <span className="text-black group-hover:text-gold transition-colors">Open My</span>
+                  <span className="text-gold group-hover:text-black transition-colors">Dashboard</span>
                 </span>
-                <ArrowUpRight className="w-5 h-5 text-gold group-hover:text-black transition-colors relative z-10" />
+                <ArrowUpRight className="w-5 h-5 text-black group-hover:text-gold transition-colors relative z-10" />
               </button>
             )}
             <button 

@@ -461,12 +461,20 @@ const AIHub = () => {
               variants={staggerContainer}
               className="text-center max-w-4xl mx-auto"
             >
-              {/* Premium Badge - White Pearl Gold Champagne Style */}
+              {/* Premium Label - Glass style with gold border, engraved look (matching Services page) */}
               <motion.div variants={fadeInUp} className="mb-6">
-                <span className="inline-flex items-center gap-2 px-5 py-2.5 bg-gradient-to-r from-white via-[#FDFBF7] to-[#F5F0E6] border-2 border-gold/50 rounded-full shadow-[0_0_20px_rgba(200,167,102,0.3)]">
-                  <Sparkles className="w-4 h-4 text-gold" />
-                  <span className="text-gold font-semibold text-sm uppercase tracking-wide">Free for All Users</span>
-                </span>
+                <button 
+                  className="group inline-flex items-center gap-2 px-5 py-2.5 rounded-full cursor-default"
+                  style={{
+                    background: 'linear-gradient(135deg, rgba(255,255,255,0.1) 0%, rgba(255,255,255,0.05) 50%, rgba(200,167,102,0.08) 100%)',
+                    backdropFilter: 'blur(20px)',
+                    border: '1.5px solid rgba(200,167,102,0.6)',
+                    boxShadow: 'inset 0 1px 2px rgba(255,255,255,0.1), inset 0 -1px 2px rgba(0,0,0,0.2), 0 4px 20px rgba(0,0,0,0.3)',
+                  }}
+                >
+                  <span className="w-2 h-2 bg-gold rounded-full animate-pulse" />
+                  <span className="text-gold font-semibold text-[10px] md:text-xs uppercase tracking-[0.2em]">Free for All Users</span>
+                </button>
               </motion.div>
 
               {/* Main Title - Premium Black Styling */}
@@ -522,10 +530,10 @@ const AIHub = () => {
                     <span className="absolute inset-x-0 bottom-0 h-1/3 rounded-b-xl bg-gradient-to-t from-gold/10 to-transparent pointer-events-none" />
                     <span className="absolute inset-0 rounded-xl opacity-0 group-hover:opacity-100 transition-opacity duration-300 pointer-events-none" style={{ boxShadow: '0 0 40px rgba(200,167,102,0.6), inset 0 0 20px rgba(200,167,102,0.1)' }} />
                     <span className="relative flex items-center justify-center gap-2">
-                      <LogIn className="w-5 h-5 text-gold" />
-                      <span className="text-gold">Sign In</span>
-                      <span className="text-black">/ Create Account</span>
-                      <ArrowUpRight className="w-5 h-5 text-black" />
+                      <LogIn className="w-5 h-5 text-gold group-hover:text-black transition-colors" />
+                      <span className="text-black group-hover:text-gold transition-colors">Sign In</span>
+                      <span className="text-gold group-hover:text-black transition-colors">/ Create Account</span>
+                      <ArrowUpRight className="w-5 h-5 text-black group-hover:text-gold transition-colors" />
                     </span>
                   </button>
                 ) : (
@@ -548,10 +556,10 @@ const AIHub = () => {
                     <span className="absolute inset-x-0 bottom-0 h-1/3 rounded-b-xl bg-gradient-to-t from-gold/10 to-transparent pointer-events-none" />
                     <span className="absolute inset-0 rounded-xl opacity-0 group-hover:opacity-100 transition-opacity duration-300 pointer-events-none" style={{ boxShadow: '0 0 40px rgba(200,167,102,0.6), inset 0 0 20px rgba(200,167,102,0.1)' }} />
                     <span className="relative flex items-center justify-center gap-2">
-                      <User className="w-5 h-5 text-gold" />
-                      <span className="text-gold">Go to</span>
-                      <span className="text-black">My Dashboard</span>
-                      <ArrowUpRight className="w-5 h-5 text-black" />
+                      <User className="w-5 h-5 text-gold group-hover:text-black transition-colors" />
+                      <span className="text-black group-hover:text-gold transition-colors">Go to</span>
+                      <span className="text-gold group-hover:text-black transition-colors">My Dashboard</span>
+                      <ArrowUpRight className="w-5 h-5 text-black group-hover:text-gold transition-colors" />
                     </span>
                   </button>
                 )}
@@ -564,8 +572,9 @@ const AIHub = () => {
                   }}
                 >
                   <span className="relative flex items-center gap-2">
-                    <span className="text-black group-hover:text-gold transition-colors">Explore Free Tools</span>
-                    <ArrowUpRight className="w-5 h-5 text-black transition-colors" />
+                    <span className="text-black group-hover:text-gold transition-colors">Explore</span>
+                    <span className="text-gold group-hover:text-black transition-colors">Free Tools</span>
+                    <ArrowUpRight className="w-5 h-5 text-black group-hover:text-gold transition-colors" />
                   </span>
                 </button>
               </motion.div>
