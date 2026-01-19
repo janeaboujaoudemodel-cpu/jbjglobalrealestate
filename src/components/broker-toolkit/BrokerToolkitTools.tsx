@@ -51,6 +51,7 @@ const CATEGORY_META: Record<
   ToolCategory,
   {
     label: string;
+    coloredLabel?: string; // Second word to be colored
     badgeClass: string;
     cardClass: string;
     iconWrapClass: string;
@@ -59,58 +60,64 @@ const CATEGORY_META: Record<
   }
 > = {
   property: {
-    label: "Property Tools",
+    label: "Property",
+    coloredLabel: "Tools",
     badgeClass: "bg-purple-500/30 text-purple-200 border-purple-400/50",
     cardClass:
-      "bg-black/40 backdrop-blur-sm border-2 border-purple-500/50 hover:border-purple-400 shadow-[0_0_20px_rgba(147,51,234,0.2)] hover:shadow-[0_0_30px_rgba(147,51,234,0.4)]",
-    iconWrapClass: "bg-purple-500/20 border border-purple-500/30",
-    iconClass: "text-purple-400",
-    arrowClass: "text-purple-400",
+      "bg-purple-900/80 border-2 border-purple-500/50 hover:border-gold hover:shadow-[0_0_30px_rgba(200,167,102,0.4)] shadow-[0_0_20px_rgba(147,51,234,0.3)]",
+    iconWrapClass: "bg-purple-500/30 border border-purple-400/40",
+    iconClass: "text-purple-300",
+    arrowClass: "text-purple-300",
   },
   marketing: {
     label: "Marketing",
+    coloredLabel: "Tools",
     badgeClass: "bg-emerald-500/30 text-emerald-200 border-emerald-400/50",
     cardClass:
-      "bg-black/40 backdrop-blur-sm border-2 border-emerald-500/50 hover:border-emerald-400 shadow-[0_0_20px_rgba(16,185,129,0.2)] hover:shadow-[0_0_30px_rgba(16,185,129,0.4)]",
-    iconWrapClass: "bg-emerald-500/20 border border-emerald-500/30",
-    iconClass: "text-emerald-400",
-    arrowClass: "text-emerald-400",
+      "bg-emerald-900/80 border-2 border-emerald-500/50 hover:border-gold hover:shadow-[0_0_30px_rgba(200,167,102,0.4)] shadow-[0_0_20px_rgba(16,185,129,0.3)]",
+    iconWrapClass: "bg-emerald-500/30 border border-emerald-400/40",
+    iconClass: "text-emerald-300",
+    arrowClass: "text-emerald-300",
   },
   documents: {
-    label: "Documents",
-    badgeClass: "bg-gold/30 text-gold border-gold/50",
+    label: "Document",
+    coloredLabel: "Center",
+    badgeClass: "bg-teal-500/30 text-teal-200 border-teal-400/50",
     cardClass:
-      "bg-black/40 backdrop-blur-sm border-2 border-gold/50 hover:border-gold shadow-[0_0_20px_rgba(200,167,102,0.2)] hover:shadow-[0_0_30px_rgba(200,167,102,0.4)]",
-    iconWrapClass: "bg-gold/20 border border-gold/30",
-    iconClass: "text-gold",
-    arrowClass: "text-gold",
+      "bg-teal-900/80 border-2 border-teal-500/50 hover:border-gold hover:shadow-[0_0_30px_rgba(200,167,102,0.4)] shadow-[0_0_20px_rgba(20,184,166,0.3)]",
+    iconWrapClass: "bg-teal-500/30 border border-teal-400/40",
+    iconClass: "text-teal-300",
+    arrowClass: "text-teal-300",
   },
   design: {
-    label: "Design & Media",
+    label: "Design &",
+    coloredLabel: "Media",
     badgeClass: "bg-pink-500/30 text-pink-200 border-pink-400/50",
     cardClass:
-      "bg-black/40 backdrop-blur-sm border-2 border-pink-500/50 hover:border-pink-400 shadow-[0_0_20px_rgba(236,72,153,0.2)] hover:shadow-[0_0_30px_rgba(236,72,153,0.4)]",
-    iconWrapClass: "bg-pink-500/20 border border-pink-500/30",
-    iconClass: "text-pink-400",
-    arrowClass: "text-pink-400",
+      "bg-pink-900/80 border-2 border-pink-500/50 hover:border-gold hover:shadow-[0_0_30px_rgba(200,167,102,0.4)] shadow-[0_0_20px_rgba(236,72,153,0.3)]",
+    iconWrapClass: "bg-pink-500/30 border border-pink-400/40",
+    iconClass: "text-pink-300",
+    arrowClass: "text-pink-300",
   },
   productivity: {
     label: "Productivity",
-    badgeClass: "bg-sky-500/30 text-sky-200 border-sky-400/50",
+    coloredLabel: "Tools",
+    badgeClass: "bg-indigo-500/30 text-indigo-200 border-indigo-400/50",
     cardClass:
-      "bg-black/40 backdrop-blur-sm border-2 border-sky-500/50 hover:border-sky-400 shadow-[0_0_20px_rgba(14,165,233,0.2)] hover:shadow-[0_0_30px_rgba(14,165,233,0.4)]",
-    iconWrapClass: "bg-sky-500/20 border border-sky-500/30",
-    iconClass: "text-sky-400",
-    arrowClass: "text-sky-400",
+      "bg-indigo-900/80 border-2 border-indigo-500/50 hover:border-gold hover:shadow-[0_0_30px_rgba(200,167,102,0.4)] shadow-[0_0_20px_rgba(99,102,241,0.3)]",
+    iconWrapClass: "bg-indigo-500/30 border border-indigo-400/40",
+    iconClass: "text-indigo-300",
+    arrowClass: "text-indigo-300",
   },
   operations: {
-    label: "Operations & CRM",
+    label: "Operations &",
+    coloredLabel: "CRM",
     badgeClass: "bg-cyan-500/30 text-cyan-200 border-cyan-400/50",
     cardClass:
-      "bg-black/40 backdrop-blur-sm border-2 border-cyan-500/50 hover:border-cyan-400 shadow-[0_0_20px_rgba(6,182,212,0.2)] hover:shadow-[0_0_30px_rgba(6,182,212,0.4)]",
-    iconWrapClass: "bg-cyan-500/20 border border-cyan-500/30",
-    iconClass: "text-cyan-400",
-    arrowClass: "text-cyan-400",
+      "bg-cyan-900/80 border-2 border-cyan-500/50 hover:border-gold hover:shadow-[0_0_30px_rgba(200,167,102,0.4)] shadow-[0_0_20px_rgba(6,182,212,0.3)]",
+    iconWrapClass: "bg-cyan-500/30 border border-cyan-400/40",
+    iconClass: "text-cyan-300",
+    arrowClass: "text-cyan-300",
   },
 };
 
@@ -298,12 +305,13 @@ const TOOLS: ToolItem[] = [
 ];
 
 export function BrokerToolkitTools() {
-  const renderToolCard = (tool: ToolItem, i: number) => {
+  // Render tool card for the ALL TOOLS section (glow/border only with per-tool color)
+  const renderBulkToolCard = (tool: ToolItem, i: number) => {
     const meta = CATEGORY_META[tool.category];
 
     return (
       <motion.div
-        key={`${tool.category}-${tool.name}`}
+        key={`bulk-${tool.category}-${tool.name}`}
         initial={{ opacity: 0, y: 20 }}
         whileInView={{ opacity: 1, y: 0 }}
         transition={{ delay: i * 0.03 }}
@@ -311,7 +319,7 @@ export function BrokerToolkitTools() {
       >
         <Link to={tool.link}>
           <Card
-            className={`${meta.cardClass} transition-all duration-300 h-full group cursor-pointer`}
+            className={`bg-black/40 backdrop-blur-sm border-2 ${meta.cardClass.includes('border-purple') ? 'border-purple-500/50 shadow-[0_0_20px_rgba(147,51,234,0.3)] hover:shadow-[0_0_30px_rgba(200,167,102,0.4)]' : meta.cardClass.includes('border-emerald') ? 'border-emerald-500/50 shadow-[0_0_20px_rgba(16,185,129,0.3)] hover:shadow-[0_0_30px_rgba(200,167,102,0.4)]' : meta.cardClass.includes('border-teal') ? 'border-teal-500/50 shadow-[0_0_20px_rgba(20,184,166,0.3)] hover:shadow-[0_0_30px_rgba(200,167,102,0.4)]' : meta.cardClass.includes('border-pink') ? 'border-pink-500/50 shadow-[0_0_20px_rgba(236,72,153,0.3)] hover:shadow-[0_0_30px_rgba(200,167,102,0.4)]' : meta.cardClass.includes('border-indigo') ? 'border-indigo-500/50 shadow-[0_0_20px_rgba(99,102,241,0.3)] hover:shadow-[0_0_30px_rgba(200,167,102,0.4)]' : 'border-cyan-500/50 shadow-[0_0_20px_rgba(6,182,212,0.3)] hover:shadow-[0_0_30px_rgba(200,167,102,0.4)]'} hover:border-gold transition-all duration-300 h-full group cursor-pointer`}
           >
             <CardContent className="p-5">
               <div className="flex items-start gap-4">
@@ -340,7 +348,60 @@ export function BrokerToolkitTools() {
                   </div>
                 </div>
                 <ArrowRight
-                  className={`w-5 h-5 ${meta.arrowClass} opacity-0 group-hover:opacity-100 transition-opacity flex-shrink-0`}
+                  className={`w-5 h-5 ${meta.arrowClass} opacity-0 group-hover:opacity-100 group-hover:text-gold transition-all flex-shrink-0`}
+                />
+              </div>
+            </CardContent>
+          </Card>
+        </Link>
+      </motion.div>
+    );
+  };
+
+  // Render tool card for category sections (filled background)
+  const renderCategoryToolCard = (tool: ToolItem, i: number) => {
+    const meta = CATEGORY_META[tool.category];
+
+    return (
+      <motion.div
+        key={`cat-${tool.category}-${tool.name}`}
+        initial={{ opacity: 0, y: 20 }}
+        whileInView={{ opacity: 1, y: 0 }}
+        transition={{ delay: i * 0.03 }}
+        viewport={{ once: true }}
+      >
+        <Link to={tool.link}>
+          <Card
+            className={`${meta.cardClass} transition-all duration-300 h-full group cursor-pointer`}
+          >
+            <CardContent className="p-5">
+              <div className="flex items-start gap-4">
+                <div
+                  className={`w-12 h-12 ${meta.iconWrapClass} rounded-xl flex items-center justify-center flex-shrink-0 group-hover:scale-110 transition-transform`}
+                >
+                  <tool.icon className={`w-6 h-6 ${meta.iconClass}`} />
+                </div>
+                <div className="flex-1 min-w-0">
+                  <div className="flex items-center gap-2 mb-1">
+                    <h3 className="font-semibold truncate text-white">{tool.name}</h3>
+                  </div>
+                  <p className="text-white/70 text-sm mb-2">{tool.description}</p>
+                  <div className="flex items-center gap-2">
+                    {tool.tier === "free" ? (
+                      <span className="flex items-center gap-1 text-xs text-emerald-300">
+                        <Unlock className="w-3 h-3" />
+                        Free Access
+                      </span>
+                    ) : (
+                      <span className="flex items-center gap-1 text-xs text-gold">
+                        <Lock className="w-3 h-3" />
+                        Member Access
+                      </span>
+                    )}
+                  </div>
+                </div>
+                <ArrowRight
+                  className="w-5 h-5 text-white/50 opacity-0 group-hover:opacity-100 group-hover:text-gold transition-all flex-shrink-0"
                 />
               </div>
             </CardContent>
@@ -371,12 +432,12 @@ export function BrokerToolkitTools() {
           </p>
         </motion.div>
 
-        {/* ALL TOOLS (shortcuts) */}
+        {/* ALL TOOLS (shortcuts) - glow/border only with per-tool color */}
         <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-4">
-          {TOOLS.map((tool, i) => renderToolCard(tool, i))}
+          {TOOLS.map((tool, i) => renderBulkToolCard(tool, i))}
         </div>
 
-        {/* CATEGORY BREAKDOWN */}
+        {/* CATEGORY BREAKDOWN - filled cards by category color */}
         <div className="mt-14 space-y-12">
           {CATEGORY_ORDER.map((category) => {
             const meta = CATEGORY_META[category];
@@ -385,14 +446,15 @@ export function BrokerToolkitTools() {
             return (
               <div key={category}>
                 <div className="text-center mb-8">
-                  <Badge className={`${meta.badgeClass} mb-3`}>{meta.label}</Badge>
-                  <h3 className="text-2xl md:text-3xl font-bold text-white">
-                    {meta.label}
+                  <Badge className={`${meta.badgeClass} mb-3`}>{meta.label} {meta.coloredLabel}</Badge>
+                  <h3 className="text-2xl md:text-3xl font-bold">
+                    <span className="text-white">{meta.label} </span>
+                    <span className={meta.iconClass}>{meta.coloredLabel}</span>
                   </h3>
                 </div>
 
                 <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-4">
-                  {items.map((tool, i) => renderToolCard(tool, i))}
+                  {items.map((tool, i) => renderCategoryToolCard(tool, i))}
                 </div>
               </div>
             );

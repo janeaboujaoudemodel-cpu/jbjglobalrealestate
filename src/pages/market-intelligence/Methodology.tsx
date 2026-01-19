@@ -21,7 +21,7 @@ const fadeInUp = {
 
 const Methodology = () => {
   return (
-    <div className="min-h-screen bg-background">
+    <div className="min-h-screen bg-black">
       <SEOHead 
         title="Market Intelligence Methodology & Data Sources | JBJ GLOBAL REAL ESTATE"
         description="Full transparency on how we source, aggregate, and present Dubai real estate market intelligence. Official government Open Data sources, update frequency, and what the data is and is not."
@@ -34,7 +34,7 @@ const Methodology = () => {
       />
 
       {/* Hero - Calm, Institutional */}
-      <section className="relative py-20 border-b border-border/50">
+      <section className="relative py-20 border-b border-gold/20">
         <div className="container mx-auto px-4 max-w-4xl">
           <motion.div 
             className="text-center"
@@ -43,19 +43,19 @@ const Methodology = () => {
             variants={{ visible: { transition: { staggerChildren: 0.1 } } }}
           >
             <motion.div className="flex items-center justify-center gap-2 mb-4" variants={fadeInUp}>
-              <Database className="w-5 h-5 text-muted-foreground" />
-              <span className="text-muted-foreground text-sm uppercase tracking-widest">Market Intelligence</span>
+              <Database className="w-5 h-5 text-gold" />
+              <span className="text-gold text-sm uppercase tracking-widest">Market Intelligence</span>
             </motion.div>
 
             <motion.h1 
-              className="text-foreground text-3xl md:text-4xl font-semibold mb-4"
+              className="text-white text-3xl md:text-4xl font-semibold mb-4"
               variants={fadeInUp}
             >
               Methodology & Data Sources
             </motion.h1>
 
             <motion.p 
-              className="text-muted-foreground text-lg max-w-2xl mx-auto leading-relaxed"
+              className="text-zinc-400 text-lg max-w-2xl mx-auto leading-relaxed"
               variants={fadeInUp}
             >
               Full transparency on how we source, aggregate, and present market intelligence.
@@ -64,7 +64,7 @@ const Methodology = () => {
         </div>
       </section>
 
-      <div className="container mx-auto px-4 max-w-4xl py-16 space-y-0">
+      <div className="container mx-auto px-4 max-w-4xl py-16 space-y-8">
         
         {/* SECTION 1 — Introduction (Authority + Neutral) */}
         <motion.section
@@ -72,20 +72,20 @@ const Methodology = () => {
           whileInView="visible"
           viewport={{ once: true }}
           variants={fadeInUp}
-          className="py-12 bg-zinc-50 rounded-xl px-8 mb-8"
+          className="py-12 bg-gradient-to-br from-white via-[#FDFBF7] to-[#F5F0E6] rounded-xl px-8 border border-gold/30"
         >
           <div className="flex items-center gap-3 mb-6">
             <div className="w-10 h-10 rounded-lg bg-black flex items-center justify-center">
               <Shield className="w-5 h-5 text-gold" />
             </div>
-            <h2 className="text-foreground text-xl font-semibold">Introduction</h2>
+            <h2 className="text-black text-xl font-semibold">Introduction</h2>
           </div>
           
-          <div className="prose prose-neutral dark:prose-invert max-w-none">
-            <p className="text-muted-foreground leading-relaxed">
+          <div className="prose prose-neutral max-w-none">
+            <p className="text-zinc-700 leading-relaxed">
               {MASTER_LOCK.BRAND.COMPANY_NAME} provides market intelligence to support transparency and informed understanding of the UAE real estate market.
             </p>
-            <p className="text-muted-foreground leading-relaxed">
+            <p className="text-zinc-700 leading-relaxed">
               Our insights are derived from aggregated official government Open Data and publicly available statistical sources. This information is presented for informational and educational purposes only.
             </p>
           </div>
@@ -97,17 +97,17 @@ const Methodology = () => {
           whileInView="visible"
           viewport={{ once: true }}
           variants={fadeInUp}
-          className="py-12 bg-zinc-900 rounded-xl px-8 text-white mb-8"
+          className="py-12 bg-gradient-to-br from-white via-[#FDFBF7] to-[#F5F0E6] rounded-xl px-8 border border-gold/30"
         >
           <div className="flex items-center gap-3 mb-6">
-            <div className="w-10 h-10 rounded-lg bg-gold/20 flex items-center justify-center">
+            <div className="w-10 h-10 rounded-lg bg-black flex items-center justify-center">
               <Database className="w-5 h-5 text-gold" />
             </div>
-            <h2 className="text-white text-xl font-semibold">Data Sources</h2>
+            <h2 className="text-black text-xl font-semibold">Data Sources</h2>
           </div>
           
-          <div className="bg-black/30 rounded-lg border border-white/10 p-6">
-            <p className="text-zinc-300 text-sm mb-6">
+          <div className="bg-white/50 rounded-lg border border-gold/20 p-6">
+            <p className="text-zinc-700 text-sm mb-6">
               Our market intelligence draws from the following official government Open Data sources:
             </p>
             
@@ -116,14 +116,14 @@ const Methodology = () => {
                 <li key={source.id} className="flex items-start gap-3">
                   <span className="text-gold mt-1">•</span>
                   <div>
-                    <span className="text-white font-medium">{source.name}</span>
-                    <span className="text-zinc-400"> – {source.dataType.toLowerCase()}</span>
+                    <span className="text-black font-medium">{source.name}</span>
+                    <span className="text-zinc-600"> – {source.dataType.toLowerCase()}</span>
                   </div>
                 </li>
               ))}
             </ul>
             
-            <p className="text-zinc-400 text-xs mt-6 pt-4 border-t border-white/10">
+            <p className="text-zinc-500 text-xs mt-6 pt-4 border-t border-gold/20">
               We name categories and sources, not raw dataset URLs. All data is used in accordance with official open data policies.
             </p>
           </div>
@@ -135,27 +135,27 @@ const Methodology = () => {
           whileInView="visible"
           viewport={{ once: true }}
           variants={fadeInUp}
-          className="py-12 bg-zinc-50 rounded-xl px-8"
+          className="py-12 bg-gradient-to-br from-white via-[#FDFBF7] to-[#F5F0E6] rounded-xl px-8 border border-gold/30"
         >
           <div className="flex items-center gap-3 mb-6">
             <div className="w-10 h-10 rounded-lg bg-black flex items-center justify-center">
               <FileCheck className="w-5 h-5 text-gold" />
             </div>
-            <h2 className="text-foreground text-xl font-semibold">How the Data Is Used</h2>
+            <h2 className="text-black text-xl font-semibold">How the Data Is Used</h2>
           </div>
           
-          <div className="space-y-4 text-muted-foreground leading-relaxed">
+          <div className="space-y-4 text-zinc-700 leading-relaxed">
             <p>
-              Data is <strong className="text-foreground font-medium">aggregated</strong> across time periods and geographic areas to identify descriptive trends and patterns.
+              Data is <strong className="text-black font-medium">aggregated</strong> across time periods and geographic areas to identify descriptive trends and patterns.
             </p>
             <p>
-              Data is <strong className="text-foreground font-medium">summarized</strong> to provide high-level insights without exposing individual transaction details.
+              Data is <strong className="text-black font-medium">summarized</strong> to provide high-level insights without exposing individual transaction details.
             </p>
             <p>
-              Data is <strong className="text-foreground font-medium">contextualized</strong> to help users understand market conditions in plain language.
+              Data is <strong className="text-black font-medium">contextualized</strong> to help users understand market conditions in plain language.
             </p>
             <p>
-              {MASTER_LOCK.BRAND.COMPANY_NAME} does <strong className="text-foreground font-medium">not</strong> publish raw government datasets, individual transaction records, or personally identifiable information.
+              {MASTER_LOCK.BRAND.COMPANY_NAME} does <strong className="text-black font-medium">not</strong> publish raw government datasets, individual transaction records, or personally identifiable information.
             </p>
           </div>
         </motion.section>
@@ -166,21 +166,21 @@ const Methodology = () => {
           whileInView="visible"
           viewport={{ once: true }}
           variants={fadeInUp}
-          className="py-12"
+          className="py-12 bg-gradient-to-br from-white via-[#FDFBF7] to-[#F5F0E6] rounded-xl px-8 border border-gold/30"
         >
           <div className="flex items-center gap-3 mb-6">
             <div className="w-10 h-10 rounded-lg bg-red-100 flex items-center justify-center">
               <AlertTriangle className="w-5 h-5 text-red-600" />
             </div>
-            <h2 className="text-foreground text-xl font-semibold">What We Do NOT Do</h2>
+            <h2 className="text-black text-xl font-semibold">What We Do NOT Do</h2>
           </div>
           
           <div className="bg-red-50 border border-red-200 rounded-lg p-6">
-            <p className="text-foreground leading-relaxed mb-4">
-              {MASTER_LOCK.BRAND.COMPANY_NAME} does not provide price predictions, investment advice, financial recommendations, or guarantees of performance.
+            <p className="text-black leading-relaxed mb-4">
+              {MASTER_LOCK.BRAND.COMPANY_NAME} does not provide price predictions, investment advice, or guarantees of performance. For mortgage or legal matters, we connect you with our licensed partners.
             </p>
-            <p className="text-muted-foreground leading-relaxed">
-              All market intelligence is <strong className="text-foreground font-medium">descriptive and historical</strong> in nature. We explain what has happened, not what will happen.
+            <p className="text-zinc-700 leading-relaxed">
+              All market intelligence is <strong className="text-black font-medium">descriptive and historical</strong> in nature. We explain what has happened, not what will happen.
             </p>
           </div>
         </motion.section>
@@ -191,23 +191,23 @@ const Methodology = () => {
           whileInView="visible"
           viewport={{ once: true }}
           variants={fadeInUp}
-          className="py-12 bg-zinc-50 rounded-xl px-8"
+          className="py-12 bg-gradient-to-br from-white via-[#FDFBF7] to-[#F5F0E6] rounded-xl px-8 border border-gold/30"
         >
           <div className="flex items-center gap-3 mb-6">
             <div className="w-10 h-10 rounded-lg bg-black flex items-center justify-center">
               <Bot className="w-5 h-5 text-gold" />
             </div>
-            <h2 className="text-foreground text-xl font-semibold">AI Usage Disclosure</h2>
+            <h2 className="text-black text-xl font-semibold">AI Usage Disclosure</h2>
           </div>
           
           <div className="space-y-4">
-            <p className="text-muted-foreground leading-relaxed">
+            <p className="text-zinc-700 leading-relaxed">
               Artificial intelligence tools are used to summarize, visualize, and explain aggregated data in plain language.
             </p>
-            <p className="text-muted-foreground leading-relaxed">
-              AI systems do <strong className="text-foreground font-medium">not</strong> make decisions, recommendations, or predictions, and do not replace licensed professionals.
+            <p className="text-zinc-700 leading-relaxed">
+              AI systems do <strong className="text-black font-medium">not</strong> make decisions, recommendations, or predictions, and do not replace licensed professionals.
             </p>
-            <p className="text-muted-foreground text-sm pt-4 border-t border-zinc-200">
+            <p className="text-zinc-500 text-sm pt-4 border-t border-gold/20">
               All AI-generated content is clearly labeled and provides descriptive analysis only.
             </p>
           </div>
@@ -219,17 +219,17 @@ const Methodology = () => {
           whileInView="visible"
           viewport={{ once: true }}
           variants={fadeInUp}
-          className="py-12 bg-zinc-900 rounded-xl px-8 text-white mb-8"
+          className="py-12 bg-gradient-to-br from-white via-[#FDFBF7] to-[#F5F0E6] rounded-xl px-8 border border-gold/30"
         >
           <div className="flex items-center gap-3 mb-6">
-            <div className="w-10 h-10 rounded-lg bg-gold/20 flex items-center justify-center">
+            <div className="w-10 h-10 rounded-lg bg-black flex items-center justify-center">
               <Clock className="w-5 h-5 text-gold" />
             </div>
-            <h2 className="text-white text-xl font-semibold">Update Frequency & Accuracy</h2>
+            <h2 className="text-black text-xl font-semibold">Update Frequency & Accuracy</h2>
           </div>
           
-          <div className="bg-black/30 rounded-lg border border-white/10 p-6">
-            <ul className="space-y-3 text-zinc-300">
+          <div className="bg-white/50 rounded-lg border border-gold/20 p-6">
+            <ul className="space-y-3 text-zinc-700">
               <li className="flex items-start gap-3">
                 <span className="text-gold mt-1">•</span>
                 <span>Data is updated periodically based on availability of official sources</span>
@@ -256,20 +256,20 @@ const Methodology = () => {
           whileInView="visible"
           viewport={{ once: true }}
           variants={fadeInUp}
-          className="py-12 bg-zinc-900 rounded-xl px-8 text-white"
+          className="py-12 bg-gradient-to-br from-white via-[#FDFBF7] to-[#F5F0E6] rounded-xl px-8 border border-gold/30"
         >
           <div className="flex items-center gap-3 mb-6">
-            <div className="w-10 h-10 rounded-lg bg-gold/20 flex items-center justify-center">
+            <div className="w-10 h-10 rounded-lg bg-black flex items-center justify-center">
               <Scale className="w-5 h-5 text-gold" />
             </div>
-            <h2 className="text-white text-xl font-semibold">Legal & Independence Statement</h2>
+            <h2 className="text-black text-xl font-semibold">Legal & Independence Statement</h2>
           </div>
           
           <div>
-            <p className="text-white leading-relaxed mb-4">
-              {MASTER_LOCK.BRAND.COMPANY_NAME} is a private licensed real estate brokerage.
+            <p className="text-black leading-relaxed mb-4">
+              {MASTER_LOCK.BRAND.COMPANY_NAME} is a private licensed real estate brokerage for buying, selling, and renting properties.
             </p>
-            <p className="text-zinc-400 leading-relaxed">
+            <p className="text-zinc-600 leading-relaxed">
               {GOVERNMENT_DISCLOSURES.PRIMARY}
             </p>
           </div>
