@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { motion } from "framer-motion";
-import { FileText, Download, Calendar, Database, Shield, ExternalLink, ArrowRight } from "lucide-react";
+import { FileText, Download, Calendar, Database, Shield, ExternalLink, Search } from "lucide-react";
 import { Link } from "react-router-dom";
 import Footer from "@/components/Footer";
 import PreFooterSeparator from "@/components/PreFooterSeparator";
@@ -10,7 +10,15 @@ import { Card, CardContent } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { MARKET_DISCLAIMER } from "@/config/open-data-config";
-import { MarketIntelligenceHero, MarketIntelligenceNavigation } from "@/components/market-intelligence";
+import { MarketIntelligenceHero, MarketIntelligenceNavigation, MarketIntelligenceTableOfContents } from "@/components/market-intelligence";
+
+// TOC items for the page
+const tocItems = [
+  { id: "latest-reports", title: "Latest Reports" },
+  { id: "report-archive", title: "Report Archive" },
+  { id: "custom-report", title: "Custom Reports" },
+  { id: "navigation", title: "Explore More" },
+];
 
 const reports = [
   {
@@ -112,182 +120,284 @@ const MarketReportsPage = () => {
         videoPoster="https://images.unsplash.com/photo-1512453979798-5ea266f8880c?w=1920&q=80"
       />
 
-      {/* Featured Reports - Premium champagne Cards */}
-      <section className="py-16 border-t border-zinc-200 bg-gradient-to-br from-white via-[#FDFBF7] to-[#F5F0E6]">
-        <div className="container mx-auto px-4">
-          <h2 className="text-black text-2xl font-bold mb-8 text-center" style={{ fontFamily: "Poppins, sans-serif" }}>
-            Latest Reports
-          </h2>
+      {/* Gold Glow Divider */}
+      <div className="h-1 bg-gradient-to-r from-transparent via-gold to-transparent shadow-[0_0_20px_rgba(200,167,102,0.5)]" />
 
-          <div className="grid md:grid-cols-3 gap-6 max-w-5xl mx-auto">
-            {featuredReports.map((report, index) => (
-              <motion.div
-                key={report.id}
-                initial={{ opacity: 0, y: 20 }}
-                whileInView={{ opacity: 1, y: 0 }}
-                viewport={{ once: true }}
-                transition={{ delay: index * 0.1 }}
-              >
-                <Card className="bg-white border-zinc-200 hover:border-gold hover:shadow-xl hover:shadow-gold/10 transition-all h-full group">
-                  <CardContent className="p-6 flex flex-col h-full">
-                    <div className="flex items-start justify-between mb-4">
-                      {getTypeBadge(report.type)}
-                      <span className="text-zinc-400 text-xs bg-zinc-100 px-2 py-1 rounded">{report.pages} pages</span>
-                    </div>
+      {/* Main Content with TOC Sidebar */}
+      <div className="container mx-auto px-4 py-16">
+        <div className="flex gap-8">
+          {/* Main Content */}
+          <div className="flex-1 space-y-16">
 
-                    <h3 className="text-black font-bold text-xl mb-1">{report.title}</h3>
-                    <p className="text-gold font-medium text-sm mb-3">{report.subtitle}</p>
-                    <p className="text-zinc-600 text-sm mb-6 flex-grow leading-relaxed">{report.description}</p>
+            {/* Featured Reports - Premium champagne Cards */}
+            <section id="latest-reports" className="scroll-mt-24">
+              <div className="bg-gradient-to-br from-white via-[#FDFBF7] to-[#F5F0E6] rounded-2xl p-8 border border-gold/30">
+                <h2 
+                  className="text-3xl md:text-4xl font-bold mb-8 text-center"
+                  style={{ 
+                    fontFamily: "Poppins, sans-serif",
+                    background: "linear-gradient(135deg, #C8A766, #E8D5B0, #C8A766)",
+                    WebkitBackgroundClip: "text",
+                    WebkitTextFillColor: "transparent",
+                    filter: "drop-shadow(0 2px 4px rgba(200,167,102,0.3))"
+                  }}
+                >
+                  Latest Reports
+                </h2>
 
-                    <div className="flex items-center justify-between pt-4 border-t border-zinc-200">
-                      <div className="flex items-center gap-2 text-zinc-400 text-xs">
-                        <Calendar className="w-3 h-3" />
-                        {new Date(report.date).toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' })}
+                <div className="grid md:grid-cols-3 gap-6">
+                  {featuredReports.map((report, index) => (
+                    <motion.div
+                      key={report.id}
+                      initial={{ opacity: 0, y: 20 }}
+                      whileInView={{ opacity: 1, y: 0 }}
+                      viewport={{ once: true }}
+                      transition={{ delay: index * 0.1 }}
+                    >
+                      <Card className="bg-white border-2 border-black hover:border-gold hover:shadow-[0_0_25px_rgba(200,167,102,0.4)] transition-all h-full group">
+                        <CardContent className="p-6 flex flex-col h-full">
+                          <div className="flex items-start justify-between mb-4">
+                            {getTypeBadge(report.type)}
+                            <span className="text-zinc-400 text-xs bg-zinc-100 px-2 py-1 rounded">{report.pages} pages</span>
+                          </div>
+
+                          <h3 
+                            className="text-xl font-bold mb-1"
+                            style={{ 
+                              background: "linear-gradient(135deg, #C8A766, #E8D5B0, #C8A766)",
+                              WebkitBackgroundClip: "text",
+                              WebkitTextFillColor: "transparent",
+                              filter: "drop-shadow(0 1px 2px rgba(200,167,102,0.3))"
+                            }}
+                          >
+                            {report.title}
+                          </h3>
+                          <p className="text-black font-medium text-sm mb-3">{report.subtitle}</p>
+                          <p className="text-zinc-600 text-sm mb-6 flex-grow leading-relaxed">{report.description}</p>
+
+                          <div className="flex items-center justify-between pt-4 border-t border-zinc-200">
+                            <div className="flex items-center gap-2 text-zinc-400 text-xs">
+                              <Calendar className="w-3 h-3" />
+                              {new Date(report.date).toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' })}
+                            </div>
+                            <Link to="/market-report">
+                              <Button size="sm" variant="primary">
+                                <Download className="w-4 h-4 mr-2" />
+                                Download
+                              </Button>
+                            </Link>
+                          </div>
+                        </CardContent>
+                      </Card>
+                    </motion.div>
+                  ))}
+                </div>
+              </div>
+            </section>
+
+            {/* Gold Glow Divider */}
+            <div className="h-1 bg-gradient-to-r from-transparent via-gold to-transparent shadow-[0_0_20px_rgba(200,167,102,0.5)]" />
+
+            {/* Report Archive - White Pearl section */}
+            <section id="report-archive" className="scroll-mt-24">
+              <div className="bg-gradient-to-br from-white via-[#FDFBF7] to-[#F5F0E6] rounded-2xl p-8 border border-gold/30">
+                <h2 
+                  className="text-3xl md:text-4xl font-bold mb-8 text-center"
+                  style={{ 
+                    fontFamily: "Poppins, sans-serif",
+                    background: "linear-gradient(135deg, #C8A766, #E8D5B0, #C8A766)",
+                    WebkitBackgroundClip: "text",
+                    WebkitTextFillColor: "transparent",
+                    filter: "drop-shadow(0 2px 4px rgba(200,167,102,0.3))"
+                  }}
+                >
+                  Report Archive
+                </h2>
+
+                <div className="grid md:grid-cols-2 gap-8 max-w-4xl mx-auto">
+                  {/* Monthly Reports Selector */}
+                  <Card className="bg-white border-2 border-black hover:border-gold hover:shadow-[0_0_20px_rgba(200,167,102,0.3)] transition-all">
+                    <CardContent className="p-6">
+                      <div className="flex items-center gap-3 mb-4">
+                        <div className="w-12 h-12 rounded-xl bg-blue-500/10 flex items-center justify-center">
+                          <Calendar className="w-6 h-6 text-blue-500" />
+                        </div>
+                        <div>
+                          <h3 
+                            className="text-lg font-bold"
+                            style={{ 
+                              background: "linear-gradient(135deg, #C8A766, #E8D5B0, #C8A766)",
+                              WebkitBackgroundClip: "text",
+                              WebkitTextFillColor: "transparent"
+                            }}
+                          >
+                            Monthly Snapshots
+                          </h3>
+                          <p className="text-zinc-500 text-sm">Quick monthly market overviews</p>
+                        </div>
                       </div>
+                      <p className="text-zinc-600 text-sm mb-4">
+                        Download any monthly report from our archive. Data sourced from Dubai Government Open Data.
+                      </p>
+                      <select 
+                        className="w-full p-3 border-2 border-black rounded-lg text-black bg-white mb-4 focus:border-gold focus:ring-1 focus:ring-gold"
+                        value={selectedMonthlyDownload || ''}
+                        onChange={(e) => setSelectedMonthlyDownload(e.target.value)}
+                      >
+                        <option value="">Select Month...</option>
+                        {monthlyArchive.map((item) => (
+                          <option key={item.month} value={item.date}>{item.month}</option>
+                        ))}
+                      </select>
                       <Link to="/market-report">
-                        <Button size="sm" className="bg-black text-white hover:bg-zinc-900">
+                        <Button 
+                          variant="primary"
+                          className="w-full"
+                          disabled={!selectedMonthlyDownload}
+                        >
                           <Download className="w-4 h-4 mr-2" />
-                          Download
+                          Download Report
                         </Button>
                       </Link>
-                    </div>
-                  </CardContent>
-                </Card>
-              </motion.div>
-            ))}
-          </div>
-        </div>
-      </section>
+                    </CardContent>
+                  </Card>
 
-      {/* Report Archive - Black background with white title */}
-      <section className="py-16 border-t border-zinc-800 bg-black">
-        <div className="container mx-auto px-4">
-          <h2 className="text-white text-2xl font-bold mb-8 text-center" style={{ fontFamily: "Poppins, sans-serif" }}>
-            Report Archive
-          </h2>
-
-          <div className="grid md:grid-cols-2 gap-8 max-w-4xl mx-auto">
-            {/* Monthly Reports Selector */}
-            <Card className="bg-white border-zinc-200 hover:border-gold/50 hover:shadow-lg transition-all">
-              <CardContent className="p-6">
-                <div className="flex items-center gap-3 mb-4">
-                  <div className="w-12 h-12 rounded-xl bg-blue-500/10 flex items-center justify-center">
-                    <Calendar className="w-6 h-6 text-blue-500" />
-                  </div>
-                  <div>
-                    <h3 className="text-black font-bold text-lg">Monthly Snapshots</h3>
-                    <p className="text-zinc-500 text-sm">Quick monthly market overviews</p>
-                  </div>
+                  {/* Quarterly Reports Selector */}
+                  <Card className="bg-white border-2 border-black hover:border-gold hover:shadow-[0_0_20px_rgba(200,167,102,0.3)] transition-all">
+                    <CardContent className="p-6">
+                      <div className="flex items-center gap-3 mb-4">
+                        <div className="w-12 h-12 rounded-xl bg-purple-500/10 flex items-center justify-center">
+                          <FileText className="w-6 h-6 text-purple-500" />
+                        </div>
+                        <div>
+                          <h3 
+                            className="text-lg font-bold"
+                            style={{ 
+                              background: "linear-gradient(135deg, #C8A766, #E8D5B0, #C8A766)",
+                              WebkitBackgroundClip: "text",
+                              WebkitTextFillColor: "transparent"
+                            }}
+                          >
+                            Quarterly Reviews
+                          </h3>
+                          <p className="text-zinc-500 text-sm">In-depth quarterly analysis</p>
+                        </div>
+                      </div>
+                      <p className="text-zinc-600 text-sm mb-4">
+                        Comprehensive quarterly reports with area breakdowns and property type analysis.
+                      </p>
+                      <select 
+                        className="w-full p-3 border-2 border-black rounded-lg text-black bg-white mb-4 focus:border-gold focus:ring-1 focus:ring-gold"
+                        value={selectedQuarterlyDownload || ''}
+                        onChange={(e) => setSelectedQuarterlyDownload(e.target.value)}
+                      >
+                        <option value="">Select Quarter...</option>
+                        {quarterlyArchive.map((item) => (
+                          <option key={item.quarter} value={item.date}>{item.quarter}</option>
+                        ))}
+                      </select>
+                      <Link to="/market-report">
+                        <Button 
+                          variant="primary"
+                          className="w-full"
+                          disabled={!selectedQuarterlyDownload}
+                        >
+                          <Download className="w-4 h-4 mr-2" />
+                          Download Report
+                        </Button>
+                      </Link>
+                    </CardContent>
+                  </Card>
                 </div>
-                <p className="text-zinc-600 text-sm mb-4">
-                  Download any monthly report from our archive. Data sourced from Dubai Government Open Data.
-                </p>
-                <select 
-                  className="w-full p-3 border border-zinc-300 rounded-lg text-black bg-white mb-4 focus:border-gold focus:ring-1 focus:ring-gold"
-                  value={selectedMonthlyDownload || ''}
-                  onChange={(e) => setSelectedMonthlyDownload(e.target.value)}
-                >
-                  <option value="">Select Month...</option>
-                  {monthlyArchive.map((item) => (
-                    <option key={item.month} value={item.date}>{item.month}</option>
-                  ))}
-                </select>
-                <Link to="/market-report">
-                  <Button 
-                    className="w-full bg-blue-500 text-white hover:bg-blue-600"
-                    disabled={!selectedMonthlyDownload}
-                  >
-                    <Download className="w-4 h-4 mr-2" />
-                    Download Report
-                  </Button>
-                </Link>
-              </CardContent>
-            </Card>
 
-            {/* Quarterly Reports Selector */}
-            <Card className="bg-white border-zinc-200 hover:border-gold/50 hover:shadow-lg transition-all">
-              <CardContent className="p-6">
-                <div className="flex items-center gap-3 mb-4">
-                  <div className="w-12 h-12 rounded-xl bg-purple-500/10 flex items-center justify-center">
-                    <FileText className="w-6 h-6 text-purple-500" />
-                  </div>
-                  <div>
-                    <h3 className="text-black font-bold text-lg">Quarterly Reviews</h3>
-                    <p className="text-zinc-500 text-sm">In-depth quarterly analysis</p>
-                  </div>
+                {/* Data source note */}
+                <div className="text-center mt-8 pt-6 border-t border-gold/30">
+                  <p className="text-lg">
+                    <span 
+                      className="font-semibold"
+                      style={{ 
+                        background: "linear-gradient(135deg, #C8A766, #E8D5B0, #C8A766)",
+                        WebkitBackgroundClip: "text",
+                        WebkitTextFillColor: "transparent"
+                      }}
+                    >
+                      Source:
+                    </span>
+                    {" "}
+                    <span className="text-black font-medium">Dubai Government Open Data</span>
+                  </p>
                 </div>
-                <p className="text-zinc-600 text-sm mb-4">
-                  Comprehensive quarterly reports with area breakdowns and property type analysis.
-                </p>
-                <select 
-                  className="w-full p-3 border border-zinc-300 rounded-lg text-black bg-white mb-4 focus:border-gold focus:ring-1 focus:ring-gold"
-                  value={selectedQuarterlyDownload || ''}
-                  onChange={(e) => setSelectedQuarterlyDownload(e.target.value)}
-                >
-                  <option value="">Select Quarter...</option>
-                  {quarterlyArchive.map((item) => (
-                    <option key={item.quarter} value={item.date}>{item.quarter}</option>
-                  ))}
-                </select>
-                <Link to="/market-report">
-                  <Button 
-                    className="w-full bg-purple-500 text-white hover:bg-purple-600"
-                    disabled={!selectedQuarterlyDownload}
-                  >
-                    <Download className="w-4 h-4 mr-2" />
-                    Download Report
-                  </Button>
-                </Link>
-              </CardContent>
-            </Card>
-          </div>
-
-          {/* Data source note */}
-          <p className="text-center text-zinc-500 text-xs mt-8">
-            All reports are generated from official Dubai Government Open Data sources
-          </p>
-        </div>
-      </section>
-
-      {/* Custom Report CTA - Gold Champagne Theme */}
-      <section className="py-16 border-t border-zinc-200 bg-gradient-to-br from-white via-[#FDFBF7] to-[#F5F0E6]">
-        <div className="container mx-auto px-4">
-          <Card className="bg-gradient-to-br from-gold/10 via-gold/5 to-amber-50 border-gold/30 max-w-3xl mx-auto overflow-hidden">
-            <CardContent className="p-8 md:p-10 text-center relative">
-              {/* Subtle decorative elements */}
-              <div className="absolute top-0 left-0 w-32 h-32 bg-gradient-to-br from-gold/20 to-transparent rounded-full -translate-x-1/2 -translate-y-1/2" />
-              <div className="absolute bottom-0 right-0 w-24 h-24 bg-gradient-to-tl from-gold/15 to-transparent rounded-full translate-x-1/2 translate-y-1/2" />
-              
-              <div className="relative z-10">
-                <div className="w-14 h-14 rounded-xl bg-gold/20 border border-gold/40 flex items-center justify-center mx-auto mb-5">
-                  <FileText className="w-7 h-7 text-gold" />
-                </div>
-                <h3 className="text-black text-2xl md:text-3xl font-bold mb-4" style={{ fontFamily: "Poppins, sans-serif" }}>
-                  Need a Custom Report?
-                </h3>
-                <p className="text-zinc-700 mb-6 max-w-lg mx-auto leading-relaxed">
-                  Our market intelligence team can prepare bespoke analysis for specific areas, property types, or investment scenarios tailored to your requirements.
-                </p>
-                <Link to="/contact">
-                  <Button className="bg-black text-white hover:bg-zinc-900 font-semibold px-8 py-6 text-base">
-                    Request Custom Report
-                    <ExternalLink className="w-4 h-4 ml-2" />
-                  </Button>
-                </Link>
               </div>
-            </CardContent>
-          </Card>
+            </section>
+
+            {/* Gold Glow Divider */}
+            <div className="h-1 bg-gradient-to-r from-transparent via-gold to-transparent shadow-[0_0_20px_rgba(200,167,102,0.5)]" />
+
+            {/* Custom Report CTA */}
+            <section id="custom-report" className="scroll-mt-24">
+              <Card className="bg-gradient-to-br from-white via-[#FDFBF7] to-[#F5F0E6] border-2 border-gold/50 overflow-hidden hover:border-gold hover:shadow-[0_0_30px_rgba(200,167,102,0.4)] transition-all">
+                <CardContent className="p-8 md:p-10 text-center relative">
+                  {/* Subtle decorative elements */}
+                  <div className="absolute top-0 left-0 w-32 h-32 bg-gradient-to-br from-gold/20 to-transparent rounded-full -translate-x-1/2 -translate-y-1/2" />
+                  <div className="absolute bottom-0 right-0 w-24 h-24 bg-gradient-to-tl from-gold/15 to-transparent rounded-full translate-x-1/2 translate-y-1/2" />
+                  
+                  <div className="relative z-10">
+                    <div className="w-14 h-14 rounded-xl bg-black flex items-center justify-center mx-auto mb-5">
+                      <FileText className="w-7 h-7 text-gold" />
+                    </div>
+                    <h3 
+                      className="text-2xl md:text-3xl font-bold mb-4"
+                      style={{ 
+                        fontFamily: "Poppins, sans-serif",
+                        background: "linear-gradient(135deg, #C8A766, #E8D5B0, #C8A766)",
+                        WebkitBackgroundClip: "text",
+                        WebkitTextFillColor: "transparent",
+                        filter: "drop-shadow(0 2px 4px rgba(200,167,102,0.3))"
+                      }}
+                    >
+                      Need a Custom Report?
+                    </h3>
+                    <p className="text-zinc-700 mb-6 max-w-lg mx-auto leading-relaxed">
+                      Our market intelligence team can prepare bespoke analysis for specific areas, property types, or investment scenarios tailored to your requirements.
+                    </p>
+                    <Link to="/contact">
+                      <Button variant="primary" size="lg" className="font-semibold px-8">
+                        Request Custom Report
+                        <ExternalLink className="w-4 h-4 ml-2" />
+                      </Button>
+                    </Link>
+                  </div>
+                </CardContent>
+              </Card>
+            </section>
+          </div>
+
+          {/* Table of Contents Sidebar */}
+          <div className="hidden lg:block w-72">
+            <MarketIntelligenceTableOfContents 
+              items={tocItems}
+              title="In This Section"
+              ctaAction={{
+                label: "Find Your Property",
+                href: "/properties",
+                icon: Search
+              }}
+            />
+          </div>
         </div>
-      </section>
+      </div>
+
+      {/* Gold Glow Divider */}
+      <div className="h-1 bg-gradient-to-r from-transparent via-gold to-transparent shadow-[0_0_20px_rgba(200,167,102,0.5)]" />
 
       {/* Market Intelligence Navigation */}
-      <section className="py-12 border-t border-zinc-900 bg-gradient-to-br from-white via-[#FDFBF7] to-[#F5F0E6]">
+      <section id="navigation" className="py-12 bg-gradient-to-br from-white via-[#FDFBF7] to-[#F5F0E6] scroll-mt-24">
         <div className="container mx-auto px-4">
           <MarketIntelligenceNavigation current="/market-intelligence/reports" />
           
           {/* Disclaimer Box - White style */}
           <div className="max-w-3xl mx-auto mt-8">
-            <div className="bg-white border border-zinc-200 rounded-xl p-6 text-center">
+            <div className="bg-white border border-gold/30 rounded-xl p-6 text-center">
               <div className="flex items-center justify-center gap-4 mb-4">
                 <Database className="w-5 h-5 text-gold" />
                 <Shield className="w-5 h-5 text-gold" />

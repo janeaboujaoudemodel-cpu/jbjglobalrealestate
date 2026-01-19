@@ -1,5 +1,5 @@
 import { motion } from "framer-motion";
-import { MapPin, TrendingUp, TrendingDown, Database, Shield, ArrowRight } from "lucide-react";
+import { MapPin, TrendingUp, TrendingDown, Database, Shield, ArrowRight, Search } from "lucide-react";
 import { Link } from "react-router-dom";
 import Footer from "@/components/Footer";
 import PreFooterSeparator from "@/components/PreFooterSeparator";
@@ -8,7 +8,13 @@ import { MarketIntelligenceSchema } from "@/components/seo/MarketIntelligenceSch
 import { Card, CardContent } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { DUBAI_AREAS_MARKET_DATA, MARKET_DISCLAIMER } from "@/config/open-data-config";
-import { MarketIntelligenceHero, MarketIntelligenceNavigation } from "@/components/market-intelligence";
+import { MarketIntelligenceHero, MarketIntelligenceNavigation, MarketIntelligenceTableOfContents } from "@/components/market-intelligence";
+
+// TOC items for the page
+const tocItems = [
+  { id: "area-grid", title: "Area Intelligence Grid" },
+  { id: "navigation", title: "Explore More" },
+];
 
 const AreaIntelligence = () => {
   const getTrendBadge = (trend: string) => {
@@ -45,102 +51,153 @@ const AreaIntelligence = () => {
         videoPoster="https://images.unsplash.com/photo-1582672060674-bc2bd808a8b5?w=1920&q=80"
       />
 
-      {/* Areas Grid - White Pearl / Champagne Gold Cards */}
-      <section className="py-16 border-t border-zinc-800">
-        <div className="container mx-auto px-4">
-          <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
-            {DUBAI_AREAS_MARKET_DATA.map((area, index) => (
-              <motion.div
-                key={area.area}
-                initial={{ opacity: 0, y: 20 }}
-                whileInView={{ opacity: 1, y: 0 }}
-                viewport={{ once: true }}
-                transition={{ delay: index * 0.05 }}
-              >
-                <Link to={`/market-intelligence/areas/${area.area.toLowerCase().replace(/\s+/g, '-')}`}>
-                  <Card className="bg-gradient-to-br from-white via-[#FDFBF7] to-[#F5F0E6] border border-gold/30 hover:border-gold hover:shadow-lg hover:shadow-gold/10 transition-all h-full group cursor-pointer">
-                    <CardContent className="p-6">
-                      <div className="flex items-start justify-between mb-4">
-                        <div>
-                          <h3 className="text-black font-bold text-lg group-hover:text-gold transition-colors">{area.area}</h3>
-                          {getTrendBadge(area.trend)}
-                        </div>
-                        <div className="text-right">
-                          <div className="flex items-center gap-1">
-                            {area.yoyChange > 0 ? (
-                              <TrendingUp className="w-4 h-4 text-emerald-500" />
-                            ) : (
-                              <TrendingDown className="w-4 h-4 text-red-500" />
-                            )}
-                            <span className={area.yoyChange > 0 ? 'text-emerald-600' : 'text-red-600'}>
-                              {area.yoyChange > 0 ? '+' : ''}{area.yoyChange}%
-                            </span>
-                          </div>
-                          <p className="text-zinc-500 text-xs">YoY</p>
-                        </div>
-                      </div>
+      {/* Gold Glow Divider */}
+      <div className="h-1 bg-gradient-to-r from-transparent via-gold to-transparent shadow-[0_0_20px_rgba(200,167,102,0.5)]" />
 
-                      <div className="grid grid-cols-2 gap-4 mb-4">
-                        <div className="bg-zinc-100 rounded-lg p-2">
-                          <p className="text-zinc-500 text-xs">Price Index</p>
-                          <p className="text-black font-semibold">{area.priceIndex}</p>
-                        </div>
-                        <div className="bg-zinc-100 rounded-lg p-2">
-                          <p className="text-zinc-500 text-xs">Rental Index</p>
-                          <p className="text-black font-semibold">{area.rentalIndex}</p>
-                        </div>
-                        <div>
-                          <p className="text-zinc-500 text-xs">Demand</p>
-                          <div className="w-full bg-zinc-200 rounded-full h-1.5 mt-1">
-                            <div 
-                              className="bg-emerald-500 h-1.5 rounded-full" 
-                              style={{ width: `${area.demandScore}%` }}
-                            />
-                          </div>
-                        </div>
-                        <div>
-                          <p className="text-zinc-500 text-xs">Supply</p>
-                          <div className="w-full bg-zinc-200 rounded-full h-1.5 mt-1">
-                            <div 
-                              className="bg-gold h-1.5 rounded-full" 
-                              style={{ width: `${area.supplyScore}%` }}
-                            />
-                          </div>
-                        </div>
-                      </div>
+      {/* Main Content with TOC Sidebar */}
+      <div className="container mx-auto px-4 py-16">
+        <div className="flex gap-8">
+          {/* Main Content */}
+          <div className="flex-1">
+            
+            {/* Areas Grid - White Pearl / Champagne Gold Cards */}
+            <section id="area-grid" className="scroll-mt-24">
+              <div className="bg-gradient-to-br from-white via-[#FDFBF7] to-[#F5F0E6] rounded-2xl p-8 border border-gold/30">
+                <h2 
+                  className="text-3xl md:text-4xl font-bold mb-8 text-center"
+                  style={{ 
+                    fontFamily: "Poppins, sans-serif",
+                    background: "linear-gradient(135deg, #C8A766, #E8D5B0, #C8A766)",
+                    WebkitBackgroundClip: "text",
+                    WebkitTextFillColor: "transparent",
+                    filter: "drop-shadow(0 2px 4px rgba(200,167,102,0.3))"
+                  }}
+                >
+                  Dubai Neighborhood Analysis
+                </h2>
+                
+                <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
+                  {DUBAI_AREAS_MARKET_DATA.map((area, index) => (
+                    <motion.div
+                      key={area.area}
+                      initial={{ opacity: 0, y: 20 }}
+                      whileInView={{ opacity: 1, y: 0 }}
+                      viewport={{ once: true }}
+                      transition={{ delay: index * 0.05 }}
+                    >
+                      <Link to={`/market-intelligence/areas/${area.area.toLowerCase().replace(/\s+/g, '-')}`}>
+                        <Card className="bg-white border-2 border-black hover:border-gold hover:shadow-[0_0_25px_rgba(200,167,102,0.4)] transition-all h-full group cursor-pointer">
+                          <CardContent className="p-6">
+                            <div className="flex items-start justify-between mb-4">
+                              <div>
+                                <h3 
+                                  className="text-lg font-bold mb-1"
+                                  style={{ 
+                                    background: "linear-gradient(135deg, #C8A766, #E8D5B0, #C8A766)",
+                                    WebkitBackgroundClip: "text",
+                                    WebkitTextFillColor: "transparent",
+                                    filter: "drop-shadow(0 1px 2px rgba(200,167,102,0.3))"
+                                  }}
+                                >
+                                  {area.area}
+                                </h3>
+                                {getTrendBadge(area.trend)}
+                              </div>
+                              <div className="text-right">
+                                <div className="flex items-center gap-1">
+                                  {area.yoyChange > 0 ? (
+                                    <TrendingUp className="w-4 h-4 text-emerald-500" />
+                                  ) : (
+                                    <TrendingDown className="w-4 h-4 text-red-500" />
+                                  )}
+                                  <span className={area.yoyChange > 0 ? 'text-emerald-600 font-medium' : 'text-red-600 font-medium'}>
+                                    {area.yoyChange > 0 ? '+' : ''}{area.yoyChange}%
+                                  </span>
+                                </div>
+                                <p className="text-zinc-500 text-xs">YoY</p>
+                              </div>
+                            </div>
 
-                      <div className="border-t border-zinc-200 pt-4">
-                        <ul className="space-y-1">
-                          {area.highlights.slice(0, 2).map((highlight, i) => (
-                            <li key={i} className="text-zinc-600 text-xs flex items-start gap-2">
-                              <span className="text-gold">•</span>
-                              {highlight}
-                            </li>
-                          ))}
-                        </ul>
-                      </div>
+                            <div className="grid grid-cols-2 gap-4 mb-4">
+                              <div className="bg-zinc-100 rounded-lg p-2">
+                                <p className="text-zinc-500 text-xs">Price Index</p>
+                                <p className="text-black font-semibold">{area.priceIndex}</p>
+                              </div>
+                              <div className="bg-zinc-100 rounded-lg p-2">
+                                <p className="text-zinc-500 text-xs">Rental Index</p>
+                                <p className="text-black font-semibold">{area.rentalIndex}</p>
+                              </div>
+                              <div>
+                                <p className="text-zinc-500 text-xs">Demand</p>
+                                <div className="w-full bg-zinc-200 rounded-full h-1.5 mt-1">
+                                  <div 
+                                    className="bg-emerald-500 h-1.5 rounded-full" 
+                                    style={{ width: `${area.demandScore}%` }}
+                                  />
+                                </div>
+                              </div>
+                              <div>
+                                <p className="text-zinc-500 text-xs">Supply</p>
+                                <div className="w-full bg-zinc-200 rounded-full h-1.5 mt-1">
+                                  <div 
+                                    className="bg-gold h-1.5 rounded-full" 
+                                    style={{ width: `${area.supplyScore}%` }}
+                                  />
+                                </div>
+                              </div>
+                            </div>
 
-                      <div className="mt-4 flex items-center justify-between text-gold text-sm font-medium">
-                        <span>View Full Analysis</span>
-                        <ArrowRight className="w-4 h-4 group-hover:translate-x-1 transition-transform" />
-                      </div>
-                    </CardContent>
-                  </Card>
-                </Link>
-              </motion.div>
-            ))}
+                            <div className="border-t border-zinc-200 pt-4">
+                              <ul className="space-y-1">
+                                {area.highlights.slice(0, 2).map((highlight, i) => (
+                                  <li key={i} className="text-zinc-600 text-xs flex items-start gap-2">
+                                    <span className="text-gold">•</span>
+                                    {highlight}
+                                  </li>
+                                ))}
+                              </ul>
+                            </div>
+
+                            <div className="mt-4 flex items-center justify-between text-gold text-sm font-medium">
+                              <span>View Full Analysis</span>
+                              <ArrowRight className="w-4 h-4 group-hover:translate-x-1 transition-transform" />
+                            </div>
+                          </CardContent>
+                        </Card>
+                      </Link>
+                    </motion.div>
+                  ))}
+                </div>
+              </div>
+            </section>
+          </div>
+
+          {/* Table of Contents Sidebar */}
+          <div className="hidden lg:block w-72">
+            <MarketIntelligenceTableOfContents 
+              items={tocItems}
+              title="In This Section"
+              ctaAction={{
+                label: "Find Your Property",
+                href: "/properties",
+                icon: Search
+              }}
+            />
           </div>
         </div>
-      </section>
+      </div>
+
+      {/* Gold Glow Divider */}
+      <div className="h-1 bg-gradient-to-r from-transparent via-gold to-transparent shadow-[0_0_20px_rgba(200,167,102,0.5)]" />
 
       {/* Market Intelligence Navigation */}
-      <section className="py-12 bg-gradient-to-br from-white via-[#FDFBF7] to-[#F5F0E6] border-t border-zinc-200">
+      <section id="navigation" className="py-12 bg-gradient-to-br from-white via-[#FDFBF7] to-[#F5F0E6] scroll-mt-24">
         <div className="container mx-auto px-4">
           <MarketIntelligenceNavigation current="/market-intelligence/areas" />
           
           {/* Disclaimer Box */}
           <div className="max-w-3xl mx-auto mt-8">
-            <div className="bg-zinc-50 border border-zinc-200 rounded-xl p-6 text-center">
+            <div className="bg-white border border-gold/30 rounded-xl p-6 text-center">
               <div className="flex items-center justify-center gap-4 mb-4">
                 <Database className="w-5 h-5 text-gold" />
                 <Shield className="w-5 h-5 text-gold" />
