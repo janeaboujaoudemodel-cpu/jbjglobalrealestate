@@ -9872,6 +9872,226 @@ export type Database = {
         }
         Relationships: []
       }
+      rental_listing_approvals: {
+        Row: {
+          approved_at: string | null
+          approver_department: string | null
+          approver_email: string | null
+          approver_name: string | null
+          approver_photo: string | null
+          approver_role: string
+          approver_title: string | null
+          created_at: string
+          id: string
+          listing_id: string
+          notes: string | null
+          status: string | null
+          step_name: string
+          step_number: number
+        }
+        Insert: {
+          approved_at?: string | null
+          approver_department?: string | null
+          approver_email?: string | null
+          approver_name?: string | null
+          approver_photo?: string | null
+          approver_role: string
+          approver_title?: string | null
+          created_at?: string
+          id?: string
+          listing_id: string
+          notes?: string | null
+          status?: string | null
+          step_name: string
+          step_number: number
+        }
+        Update: {
+          approved_at?: string | null
+          approver_department?: string | null
+          approver_email?: string | null
+          approver_name?: string | null
+          approver_photo?: string | null
+          approver_role?: string
+          approver_title?: string | null
+          created_at?: string
+          id?: string
+          listing_id?: string
+          notes?: string | null
+          status?: string | null
+          step_name?: string
+          step_number?: number
+        }
+        Relationships: [
+          {
+            foreignKeyName: "rental_listing_approvals_listing_id_fkey"
+            columns: ["listing_id"]
+            isOneToOne: false
+            referencedRelation: "rental_listings"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      rental_listing_notifications: {
+        Row: {
+          created_at: string
+          id: string
+          is_read: boolean | null
+          listing_id: string
+          message: string
+          notification_type: string
+          step_completed: string | null
+          title: string
+          user_id: string
+        }
+        Insert: {
+          created_at?: string
+          id?: string
+          is_read?: boolean | null
+          listing_id: string
+          message: string
+          notification_type: string
+          step_completed?: string | null
+          title: string
+          user_id: string
+        }
+        Update: {
+          created_at?: string
+          id?: string
+          is_read?: boolean | null
+          listing_id?: string
+          message?: string
+          notification_type?: string
+          step_completed?: string | null
+          title?: string
+          user_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "rental_listing_notifications_listing_id_fkey"
+            columns: ["listing_id"]
+            isOneToOne: false
+            referencedRelation: "rental_listings"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      rental_listings: {
+        Row: {
+          address: string | null
+          admin_approved_at: string | null
+          admin_approved_by: string | null
+          amenities: string[] | null
+          annual_rent: number
+          assistant_approved_at: string | null
+          assistant_approved_by: string | null
+          bathrooms: number | null
+          bedrooms: number | null
+          building_name: string | null
+          community: string | null
+          created_at: string
+          description: string | null
+          documents: string[] | null
+          emirate: string
+          founder_approved_at: string | null
+          founder_approved_by: string | null
+          furnished: string | null
+          id: string
+          images: string[] | null
+          landlord_email: string
+          landlord_name: string
+          landlord_nationality: string | null
+          landlord_phone: string
+          ownership_type: string | null
+          payment_terms: string | null
+          property_title: string
+          property_type: string
+          rejection_reason: string | null
+          security_deposit: number | null
+          size_sqft: number | null
+          status: string | null
+          updated_at: string
+          user_id: string
+          video_url: string | null
+          went_live_at: string | null
+        }
+        Insert: {
+          address?: string | null
+          admin_approved_at?: string | null
+          admin_approved_by?: string | null
+          amenities?: string[] | null
+          annual_rent: number
+          assistant_approved_at?: string | null
+          assistant_approved_by?: string | null
+          bathrooms?: number | null
+          bedrooms?: number | null
+          building_name?: string | null
+          community?: string | null
+          created_at?: string
+          description?: string | null
+          documents?: string[] | null
+          emirate: string
+          founder_approved_at?: string | null
+          founder_approved_by?: string | null
+          furnished?: string | null
+          id?: string
+          images?: string[] | null
+          landlord_email: string
+          landlord_name: string
+          landlord_nationality?: string | null
+          landlord_phone: string
+          ownership_type?: string | null
+          payment_terms?: string | null
+          property_title: string
+          property_type: string
+          rejection_reason?: string | null
+          security_deposit?: number | null
+          size_sqft?: number | null
+          status?: string | null
+          updated_at?: string
+          user_id: string
+          video_url?: string | null
+          went_live_at?: string | null
+        }
+        Update: {
+          address?: string | null
+          admin_approved_at?: string | null
+          admin_approved_by?: string | null
+          amenities?: string[] | null
+          annual_rent?: number
+          assistant_approved_at?: string | null
+          assistant_approved_by?: string | null
+          bathrooms?: number | null
+          bedrooms?: number | null
+          building_name?: string | null
+          community?: string | null
+          created_at?: string
+          description?: string | null
+          documents?: string[] | null
+          emirate?: string
+          founder_approved_at?: string | null
+          founder_approved_by?: string | null
+          furnished?: string | null
+          id?: string
+          images?: string[] | null
+          landlord_email?: string
+          landlord_name?: string
+          landlord_nationality?: string | null
+          landlord_phone?: string
+          ownership_type?: string | null
+          payment_terms?: string | null
+          property_title?: string
+          property_type?: string
+          rejection_reason?: string | null
+          security_deposit?: number | null
+          size_sqft?: number | null
+          status?: string | null
+          updated_at?: string
+          user_id?: string
+          video_url?: string | null
+          went_live_at?: string | null
+        }
+        Relationships: []
+      }
       report_delivery_logs: {
         Row: {
           error_message: string | null
