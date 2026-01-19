@@ -284,25 +284,29 @@ END:VCARD`;
         </div>
       </section>
 
-      {/* Contact Cards - Transparent bg, gold borders, on hover: black border/icon */}
+      {/* Contact Cards - Filled champagne cards + gold divider */}
       <section className="py-10 bg-black border-y border-zinc-800">
         <div className="container mx-auto px-4">
+          <div className="mb-8 h-px w-full bg-gradient-to-r from-transparent via-gold/70 to-transparent" />
           <div className="grid grid-cols-2 lg:grid-cols-4 gap-4 md:gap-6">
             {contactCards.map((card) => (
-              <div 
+              <div
                 key={card.title}
                 onClick={() => {
-                  if (card.action === 'phone-actions') setPhoneActionsOpen(true);
-                  else if (card.action === 'meeting') setMeetingModalOpen(true);
+                  if (card.action === "phone-actions") setPhoneActionsOpen(true);
+                  else if (card.action === "meeting") setMeetingModalOpen(true);
                   else if (card.action && card.clickable) window.location.href = card.action;
                 }}
-                className={`group bg-transparent border-2 border-gold rounded-xl p-5 hover:border-black hover:bg-gradient-to-br hover:from-white hover:via-[#FDFBF7] hover:to-[#F5F0E6] transition-all ${card.clickable ? 'cursor-pointer' : ''}`}
+                className={
+                  `group bg-gradient-to-br from-white via-[#FDFBF7] to-[#F5F0E6] border-2 border-gold rounded-xl p-5 transition-all hover:border-black ` +
+                  (card.clickable ? "cursor-pointer" : "")
+                }
               >
-                <div className="w-10 h-10 bg-transparent border-2 border-gold group-hover:border-black rounded-lg flex items-center justify-center mb-3 transition-colors">
-                  <card.icon className="w-5 h-5 text-gold group-hover:text-black transition-colors" />
+                <div className="w-10 h-10 bg-transparent border-2 border-black rounded-lg flex items-center justify-center mb-3 transition-colors">
+                  <card.icon className="w-5 h-5 text-gold transition-colors" />
                 </div>
-                <h3 className="font-semibold text-sm mb-1 text-white group-hover:text-black transition-colors">{card.title}</h3>
-                <p className="text-sm text-gold group-hover:text-gold transition-colors">{card.value}</p>
+                <h3 className="font-semibold text-sm mb-1 text-black transition-colors">{card.title}</h3>
+                <p className="text-sm text-gold transition-colors">{card.value}</p>
               </div>
             ))}
           </div>
