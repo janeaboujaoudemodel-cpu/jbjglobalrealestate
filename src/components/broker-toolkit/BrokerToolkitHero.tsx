@@ -1,18 +1,12 @@
 import { motion } from "framer-motion";
 import { useNavigate } from "react-router-dom";
 import { useAuth } from "@/contexts/AuthContext";
-import { Button } from "@/components/ui/button";
-import { Badge } from "@/components/ui/badge";
 import { 
   Star, 
   Sparkles, 
   ArrowRight,
   ArrowUpRight,
-  CheckCircle2,
-  Users,
-  BookOpen,
-  Wrench,
-  Trophy
+  ChevronDown
 } from "lucide-react";
 import brokerHubHero from "@/assets/broker-hub-hero.jpg";
 
@@ -41,22 +35,23 @@ export function BrokerToolkitHero() {
           animate={{ opacity: 1, y: 0 }}
           className="text-center max-w-4xl mx-auto"
         >
-          {/* Badge */}
-          <Badge className="bg-white text-black border-gold/30 mb-6 px-4 py-1.5 shadow-sm">
-            <Star className="w-3.5 h-3.5 mr-1.5 fill-gold text-gold" />
-            <span className="text-gold">JBJ Broker Circle</span>
-            <span className="text-black mx-1">—</span>
-            <span className="text-black">Free Membership</span>
-          </Badge>
+          {/* Badge - Mixed Color Label Style */}
+          <button 
+            className="group inline-flex items-center gap-2 bg-gradient-to-r from-white via-[#FDFBF7] to-[#F5F0E6] border border-gold/40 rounded-full px-5 py-2.5 mb-6 shadow-sm transition-all hover:shadow-md cursor-default"
+          >
+            <Star className="w-4 h-4 fill-gold text-gold group-hover:fill-black group-hover:text-black transition-colors" />
+            <span className="text-gold group-hover:text-black transition-colors font-semibold">JBJ Broker Circle</span>
+            <span className="text-black group-hover:text-gold transition-colors font-semibold">Free Membership</span>
+          </button>
 
           {/* Main headline - Clear value prop */}
           <h1 className="text-4xl md:text-5xl lg:text-6xl font-bold text-white mb-6 leading-tight">
             Your Complete{" "}
             <span 
-              className="text-transparent bg-clip-text bg-gradient-to-r from-[#D4AF37] via-[#F5D485] to-[#D4AF37]"
+              className="text-transparent bg-clip-text bg-gradient-to-r from-white via-[#FDFBF7] to-[#F5F0E6]"
               style={{
-                filter: 'drop-shadow(0 0 20px rgba(212,175,55,0.5)) drop-shadow(0 0 40px rgba(212,175,55,0.3))',
-                textShadow: '0 0 30px rgba(212,175,55,0.4)',
+                filter: 'drop-shadow(0 0 20px rgba(255,255,255,0.4)) drop-shadow(0 0 40px rgba(212,175,55,0.3))',
+                textShadow: '0 0 30px rgba(255,255,255,0.3)',
               }}
             >
               Success System
@@ -64,12 +59,12 @@ export function BrokerToolkitHero() {
           </h1>
           
           {/* Sub-headline - What they get */}
-          <p className="text-xl md:text-2xl text-zinc-300 mb-8 max-w-2xl mx-auto">
+          <p className="text-xl md:text-2xl text-zinc-300 mb-10 max-w-2xl mx-auto">
             AI Tools, Training, CRM, Leads & Rewards — All Free
           </p>
 
-          {/* CTA buttons - 3D Primary style */}
-          <div className="flex flex-wrap justify-center gap-4 mb-8">
+          {/* CTA buttons - Primary and Secondary matching sizes */}
+          <div className="flex flex-wrap justify-center gap-4">
             {!user ? (
               <button 
                 onClick={() => navigate("/auth?redirect=/my-account")}
@@ -86,12 +81,12 @@ export function BrokerToolkitHero() {
                 }}
               >
                 <span className="absolute inset-x-0 top-0 h-1/2 rounded-t-xl bg-gradient-to-b from-white/80 to-transparent pointer-events-none" />
-                <Star className="w-5 h-5 text-gold fill-current relative z-10" />
+                <Star className="w-5 h-5 text-gold group-hover:text-black transition-colors relative z-10" />
                 <span className="relative z-10 flex items-center gap-1">
                   <span className="text-gold group-hover:text-black transition-colors">Join</span>
                   <span className="text-black group-hover:text-gold transition-colors">Free Now</span>
                 </span>
-                <ArrowUpRight className="w-5 h-5 text-gold relative z-10" />
+                <ArrowUpRight className="w-5 h-5 text-gold group-hover:text-black transition-colors relative z-10" />
               </button>
             ) : (
               <button 
@@ -109,30 +104,21 @@ export function BrokerToolkitHero() {
                 }}
               >
                 <span className="absolute inset-x-0 top-0 h-1/2 rounded-t-xl bg-gradient-to-b from-white/80 to-transparent pointer-events-none" />
-                <Sparkles className="w-5 h-5 text-gold relative z-10" />
+                <Sparkles className="w-5 h-5 text-gold group-hover:text-black transition-colors relative z-10" />
                 <span className="relative z-10 flex items-center gap-1">
                   <span className="text-gold group-hover:text-black transition-colors">Open My</span>
                   <span className="text-black group-hover:text-gold transition-colors">Dashboard</span>
                 </span>
-                <ArrowUpRight className="w-5 h-5 text-gold relative z-10" />
+                <ArrowUpRight className="w-5 h-5 text-gold group-hover:text-black transition-colors relative z-10" />
               </button>
             )}
-            <Button 
-              size="lg"
-              variant="outline"
-              className="border-zinc-700 text-white hover:bg-zinc-800 px-8 py-6 text-lg"
+            <button 
               onClick={() => document.getElementById('what-you-get')?.scrollIntoView({ behavior: 'smooth' })}
+              className="inline-flex items-center justify-center gap-2 px-8 py-4 text-lg font-bold rounded-xl transition-all duration-300 bg-transparent border-2 border-white text-white hover:bg-white hover:text-black group"
             >
               See What's Included
-            </Button>
-          </div>
-
-          {/* Trust indicator - only Instant Access */}
-          <div className="flex items-center justify-center gap-6 text-sm text-zinc-500">
-            <span className="flex items-center gap-1.5">
-              <CheckCircle2 className="w-4 h-4 text-green-500" />
-              Instant Access
-            </span>
+              <ChevronDown className="w-5 h-5 group-hover:translate-y-0.5 transition-transform" />
+            </button>
           </div>
         </motion.div>
       </div>

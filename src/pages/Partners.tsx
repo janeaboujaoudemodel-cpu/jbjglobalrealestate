@@ -89,10 +89,10 @@ const Partners = () => {
               transition={{ duration: 0.6 }}
               className="max-w-4xl mx-auto text-center"
             >
-              <div className="inline-flex items-center gap-2 px-4 py-2 bg-gold/10 border border-gold/30 rounded-full mb-6">
-                <Users className="w-4 h-4 text-gold" />
-                <span className="text-sm font-medium text-gold">Licensed Partner Network</span>
-              </div>
+              <button className="group inline-flex items-center gap-2 bg-gradient-to-r from-white via-[#FDFBF7] to-[#F5F0E6] border border-gold/40 rounded-full px-5 py-2.5 mb-6 shadow-sm transition-all hover:shadow-md cursor-default">
+                <Users className="w-4 h-4 text-gold group-hover:text-black transition-colors" />
+                <span className="text-gold group-hover:text-black transition-colors font-semibold">Licensed Partner Network</span>
+              </button>
               
               <h1 className="text-4xl md:text-5xl lg:text-6xl font-bold mb-6">
                 Partner Services

@@ -4,8 +4,7 @@ import {
   BookOpen, 
   Users, 
   Trophy, 
-  Download,
-  Star
+  Download
 } from "lucide-react";
 
 const STATS = [
@@ -78,14 +77,17 @@ export function BrokerToolkitStats() {
               viewport={{ once: true }}
               className="text-center group"
             >
-              <div className={`inline-flex items-center justify-center w-12 h-12 rounded-xl bg-white/80 border border-gold/20 mb-3 group-hover:scale-110 transition-transform shadow-sm`}>
-                <stat.icon className={`w-6 h-6 ${stat.color}`} />
+              {/* Card with black border, gold on hover */}
+              <div className="bg-white/80 border-2 border-black rounded-xl p-4 transition-all duration-300 group-hover:border-gold group-hover:shadow-lg group-hover:shadow-gold/20">
+                <div className="inline-flex items-center justify-center w-12 h-12 rounded-xl bg-white border-2 border-black mb-3 group-hover:border-gold transition-all">
+                  <stat.icon className={`w-6 h-6 ${stat.color}`} />
+                </div>
+                <div className={`text-3xl md:text-4xl font-bold ${stat.color} mb-1`}>
+                  {stat.value}
+                </div>
+                <div className="text-gold font-semibold text-sm mb-1">{stat.label}</div>
+                <div className="text-black text-xs hidden md:block">{stat.description}</div>
               </div>
-              <div className={`text-3xl md:text-4xl font-bold ${stat.color} mb-1`}>
-                {stat.value}
-              </div>
-              <div className="text-gold font-semibold text-sm mb-1">{stat.label}</div>
-              <div className="text-zinc-600 text-xs hidden md:block">{stat.description}</div>
             </motion.div>
           ))}
         </div>

@@ -2,6 +2,7 @@ import { motion } from "framer-motion";
 import { MapPin, TrendingUp, TrendingDown, Database, Shield, ArrowRight } from "lucide-react";
 import { Link } from "react-router-dom";
 import Footer from "@/components/Footer";
+import PreFooterSeparator from "@/components/PreFooterSeparator";
 import { SEOHead } from "@/components/SEOHead";
 import { MarketIntelligenceSchema } from "@/components/seo/MarketIntelligenceSchema";
 import { Card, CardContent } from "@/components/ui/card";
@@ -150,6 +151,14 @@ const AreaIntelligence = () => {
         </div>
       </section>
 
+      <PreFooterSeparator 
+        title="Explore More Market Intelligence"
+        subtitle="Get a high-level overview of the market or download detailed reports."
+        primaryLink="/market-intelligence/overview"
+        primaryText="Market Overview"
+        secondaryLink="/market-intelligence/reports"
+        secondaryText="Market Reports"
+      />
       <Footer />
     </div>
   );
