@@ -64,7 +64,7 @@ const Methodology = () => {
         </div>
       </section>
 
-      <div className="container mx-auto px-4 max-w-4xl py-16 space-y-8">
+      <div className="container mx-auto px-4 max-w-4xl py-16 space-y-10">
         
         {/* SECTION 1 — Introduction (Authority + Neutral) */}
         <motion.section
