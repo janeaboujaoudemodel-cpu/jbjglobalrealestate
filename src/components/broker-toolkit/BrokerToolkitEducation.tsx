@@ -200,7 +200,7 @@ export function BrokerToolkitEducation() {
               Free PDF Books
             </Badge>
             <h3 className="text-2xl md:text-3xl font-bold text-white mb-2">
-              4 Free Books to <span className="text-emerald-300">Download</span>
+              4 Free Books <span className="text-emerald-300">to Download</span>
             </h3>
             <p className="text-zinc-400">
               Exclusive guides written for UAE real estate professionals.

@@ -677,34 +677,50 @@ const Compare = () => {
               </div>
             </div>
 
-            {/* CTA Buttons - Purple Theme */}
+            {/* CTA Buttons - Matching Ready to Get Started Style */}
             <div className="flex flex-wrap gap-4 mt-8">
-              <Button
+              <button
                 onClick={generateSmartAnalysis}
                 disabled={isGenerating || projects.length < 2}
-                className="bg-gradient-to-r from-purple-600 to-purple-700 text-white hover:from-purple-500 hover:to-purple-600 shadow-lg shadow-purple-500/30 hover:shadow-purple-500/50 transition-all duration-300 px-6 py-5"
+                className="group relative inline-flex items-center justify-center gap-2 px-10 py-5 text-base font-bold rounded-xl transition-all duration-300 overflow-hidden disabled:opacity-50 disabled:cursor-not-allowed"
+                style={{
+                  background: 'linear-gradient(135deg, #FFFFFF 0%, #FDFBF7 50%, #F5F0E6 100%)',
+                  border: '2px solid rgba(200,167,102,0.5)',
+                  boxShadow: `
+                    0 10px 30px rgba(200,167,102,0.4),
+                    0 6px 15px rgba(0,0,0,0.2),
+                    inset 0 2px 4px rgba(255,255,255,0.9),
+                    inset 0 -2px 4px rgba(200,167,102,0.2),
+                    0 0 20px rgba(200,167,102,0.3)
+                  `,
+                }}
               >
-                {isGenerating ? (
-                  <>
-                    <Loader2 className="w-4 h-4 mr-2 animate-spin" />
-                    Analyzing...
-                  </>
-                ) : (
-                  <>
-                    <Sparkles className="w-4 h-4 mr-2" />
-                    Start Comparing
-                  </>
-                )}
-              </Button>
+                <span className="absolute inset-x-0 top-0 h-1/2 rounded-t-xl bg-gradient-to-b from-white/80 to-transparent pointer-events-none" />
+                <span className="absolute inset-x-0 bottom-0 h-1/3 rounded-b-xl bg-gradient-to-t from-gold/10 to-transparent pointer-events-none" />
+                <span className="absolute inset-0 rounded-xl opacity-0 group-hover:opacity-100 transition-opacity duration-300 pointer-events-none" style={{ boxShadow: '0 0 40px rgba(200,167,102,0.6), inset 0 0 20px rgba(200,167,102,0.1)' }} />
+                <span className="relative flex items-center justify-center gap-2">
+                  {isGenerating ? (
+                    <>
+                      <Loader2 className="w-5 h-5 text-gold animate-spin" />
+                      <span className="text-black">Analyzing...</span>
+                    </>
+                  ) : (
+                    <>
+                      <Sparkles className="w-5 h-5 text-gold" />
+                      <span className="text-gold">Start</span>
+                      <span className="text-black">Comparing</span>
+                    </>
+                  )}
+                </span>
+              </button>
               {aiAnalysis && (
-                <Button
+                <button
                   onClick={downloadComprehensiveReport}
-                  variant="outline"
-                  className="border-purple-500/50 text-purple-400 hover:bg-purple-500/20 hover:border-purple-400"
+                  className="relative inline-flex items-center justify-center gap-2 px-10 py-5 text-base font-bold rounded-xl transition-all duration-300 bg-transparent border-2 border-black text-black hover:bg-black hover:text-white group"
                 >
-                  <Download className="w-4 h-4 mr-2" />
+                  <Download className="w-5 h-5" />
                   Download Report
-                </Button>
+                </button>
               )}
             </div>
           </div>

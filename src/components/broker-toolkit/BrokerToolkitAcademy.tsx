@@ -84,7 +84,7 @@ export function BrokerToolkitAcademy() {
             JBJ Academy
           </Badge>
           <h2 className="text-3xl md:text-4xl font-bold text-white mb-4">
-            Professional Development <span className="text-sky-400">Courses</span>
+            Professional <span className="text-sky-400">Development Courses</span>
           </h2>
           <p className="text-zinc-400 max-w-2xl mx-auto">
             Complete our internal certification courses and earn verified JBJ badges. 
@@ -131,18 +131,33 @@ export function BrokerToolkitAcademy() {
           ))}
         </div>
 
-        {/* Benefits Section - Blue Filled Premium Box */}
+        {/* Benefits Section - Premium Blue 3D Box with Blue & White Glow */}
         <motion.div
-          initial={{ opacity: 0, y: 20 }}
-          whileInView={{ opacity: 1, y: 0 }}
+          initial={{ opacity: 0, y: 20, scale: 0.98, rotateX: 2 }}
+          whileInView={{ opacity: 1, y: 0, scale: 1, rotateX: 0 }}
+          whileHover={{ scale: 1.02, rotateX: -2, rotateY: 2 }}
           viewport={{ once: true }}
-          className="bg-gradient-to-br from-sky-600 via-sky-700 to-sky-800 border-2 border-sky-400/50 rounded-2xl p-8 text-center shadow-[0_0_40px_rgba(56,189,248,0.3)]"
+          transition={{ type: "spring", stiffness: 200, damping: 20 }}
+          className="relative bg-gradient-to-br from-sky-600 via-sky-700 to-sky-800 border-2 border-sky-400/60 rounded-2xl p-8 text-center overflow-hidden"
+          style={{
+            boxShadow: `
+              0 0 40px rgba(56,189,248,0.4),
+              0 0 60px rgba(255,255,255,0.15),
+              0 20px 40px rgba(0,0,0,0.3),
+              inset 0 2px 4px rgba(255,255,255,0.2),
+              inset 0 -2px 4px rgba(0,0,0,0.2)
+            `,
+            transform: "perspective(1000px) translateZ(0)",
+          }}
         >
-          <h3 className="text-xl font-semibold text-white mb-4 flex items-center justify-center gap-2">
+          {/* 3D Shine effect */}
+          <span className="absolute inset-x-0 top-0 h-1/3 bg-gradient-to-b from-white/20 to-transparent pointer-events-none rounded-t-2xl" />
+          
+          <h3 className="text-xl font-semibold text-white mb-4 flex items-center justify-center gap-2 relative z-10">
             <Star className="w-5 h-5 text-gold" />
             Why Get Certified?
           </h3>
-          <div className="grid md:grid-cols-4 gap-6">
+          <div className="grid md:grid-cols-4 gap-6 relative z-10">
             {[
               "Verified badge on your profile",
               "Priority lead allocation",

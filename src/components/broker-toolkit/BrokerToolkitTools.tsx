@@ -90,8 +90,8 @@ const CATEGORY_META: Record<
     arrowClass: "text-teal-300",
   },
   design: {
-    label: "Design &",
-    coloredLabel: "Media",
+    label: "Design",
+    coloredLabel: "& Media",
     badgeClass: "bg-pink-500/30 text-pink-200 border-pink-400/50",
     cardClass:
       "bg-pink-900/80 border-2 border-pink-500/50 hover:border-gold hover:shadow-[0_0_30px_rgba(200,167,102,0.4)] shadow-[0_0_20px_rgba(236,72,153,0.3)]",
@@ -110,8 +110,8 @@ const CATEGORY_META: Record<
     arrowClass: "text-indigo-300",
   },
   operations: {
-    label: "Operations &",
-    coloredLabel: "CRM",
+    label: "Operations",
+    coloredLabel: "& CRM",
     badgeClass: "bg-cyan-500/30 text-cyan-200 border-cyan-400/50",
     cardClass:
       "bg-cyan-900/80 border-2 border-cyan-500/50 hover:border-gold hover:shadow-[0_0_30px_rgba(200,167,102,0.4)] shadow-[0_0_20px_rgba(6,182,212,0.3)]",
