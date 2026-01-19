@@ -38,7 +38,12 @@ import {
   Share2,
   CheckCircle2,
   Gift,
-  Lock
+  Lock,
+  DollarSign,
+  Globe,
+  FileSignature,
+  Handshake,
+  ArrowRight
 } from "lucide-react";
 
 const fadeInUp = {
@@ -54,7 +59,62 @@ const staggerContainer = {
   }
 };
 
-// INVESTOR HUB TOOLS - Available to all users with theme colors
+// Category definitions with styles - MATCHING BROKER HUB
+type ToolCategory = 'property' | 'productivity' | 'marketing' | 'design';
+
+const CATEGORY_META: Record<ToolCategory, {
+  label: string;
+  coloredLabel: string;
+  badgeClass: string;
+  cardClass: string;
+  iconWrapClass: string;
+  iconClass: string;
+  arrowClass: string;
+  glowClass: string;
+}> = {
+  property: {
+    label: "Investment &",
+    coloredLabel: "Property Tools",
+    badgeClass: "bg-purple-500/30 text-purple-200 border-purple-400/50",
+    cardClass: "bg-purple-900/80 border-2 border-purple-500/50 hover:border-gold hover:shadow-[0_0_30px_rgba(200,167,102,0.4)] shadow-[0_0_20px_rgba(147,51,234,0.3)]",
+    iconWrapClass: "bg-purple-500/30 border border-purple-400/40",
+    iconClass: "text-purple-300",
+    arrowClass: "text-purple-300 group-hover:text-gold",
+    glowClass: "border-purple-500/50 shadow-[0_0_20px_rgba(147,51,234,0.3)] hover:shadow-[0_0_30px_rgba(200,167,102,0.4)] hover:border-gold",
+  },
+  productivity: {
+    label: "Productivity",
+    coloredLabel: "Tools",
+    badgeClass: "bg-blue-500/30 text-blue-200 border-blue-400/50",
+    cardClass: "bg-blue-900/80 border-2 border-blue-500/50 hover:border-gold hover:shadow-[0_0_30px_rgba(200,167,102,0.4)] shadow-[0_0_20px_rgba(59,130,246,0.3)]",
+    iconWrapClass: "bg-blue-500/30 border border-blue-400/40",
+    iconClass: "text-blue-300",
+    arrowClass: "text-blue-300 group-hover:text-gold",
+    glowClass: "border-blue-500/50 shadow-[0_0_20px_rgba(59,130,246,0.3)] hover:shadow-[0_0_30px_rgba(200,167,102,0.4)] hover:border-gold",
+  },
+  marketing: {
+    label: "Marketing &",
+    coloredLabel: "Content",
+    badgeClass: "bg-emerald-500/30 text-emerald-200 border-emerald-400/50",
+    cardClass: "bg-emerald-900/80 border-2 border-emerald-500/50 hover:border-gold hover:shadow-[0_0_30px_rgba(200,167,102,0.4)] shadow-[0_0_20px_rgba(16,185,129,0.3)]",
+    iconWrapClass: "bg-emerald-500/30 border border-emerald-400/40",
+    iconClass: "text-emerald-300",
+    arrowClass: "text-emerald-300 group-hover:text-gold",
+    glowClass: "border-emerald-500/50 shadow-[0_0_20px_rgba(16,185,129,0.3)] hover:shadow-[0_0_30px_rgba(200,167,102,0.4)] hover:border-gold",
+  },
+  design: {
+    label: "Design &",
+    coloredLabel: "Media",
+    badgeClass: "bg-pink-500/30 text-pink-200 border-pink-400/50",
+    cardClass: "bg-pink-900/80 border-2 border-pink-500/50 hover:border-gold hover:shadow-[0_0_30px_rgba(200,167,102,0.4)] shadow-[0_0_20px_rgba(236,72,153,0.3)]",
+    iconWrapClass: "bg-pink-500/30 border border-pink-400/40",
+    iconClass: "text-pink-300",
+    arrowClass: "text-pink-300 group-hover:text-gold",
+    glowClass: "border-pink-500/50 shadow-[0_0_20px_rgba(236,72,153,0.3)] hover:shadow-[0_0_30px_rgba(200,167,102,0.4)] hover:border-gold",
+  },
+};
+
+// INVESTOR HUB TOOLS - Available to all users with category
 const investorTools = [
   {
     id: "ai-home-finder",
@@ -62,7 +122,7 @@ const investorTools = [
     description: "Match buyers to listings with AI-powered filters.",
     icon: Home,
     link: "/quiz",
-    themeColor: "purple", // Purple theme
+    category: "property" as ToolCategory,
   },
   {
     id: "property-evaluator",
@@ -70,7 +130,7 @@ const investorTools = [
     description: "AI-driven valuation based on live market data.",
     icon: Calculator,
     link: "/property-evaluator",
-    themeColor: "blue", // Blue theme
+    category: "property" as ToolCategory,
   },
   {
     id: "property-comparison",
@@ -78,7 +138,7 @@ const investorTools = [
     description: "Compare properties side-by-side with AI insights.",
     icon: BarChart3,
     link: "/compare",
-    themeColor: "cyan", // Cyan theme
+    category: "property" as ToolCategory,
   },
   {
     id: "mortgage-calculator",
@@ -86,7 +146,7 @@ const investorTools = [
     description: "Estimate monthly payments and financing options.",
     icon: Calculator,
     link: "/mortgage-calculator",
-    themeColor: "emerald", // Emerald theme
+    category: "property" as ToolCategory,
   },
   {
     id: "rental-index",
@@ -94,7 +154,7 @@ const investorTools = [
     description: "AI-powered rental estimates with market trends.",
     icon: Layers,
     link: "/rental-index",
-    themeColor: "teal", // Teal theme
+    category: "property" as ToolCategory,
   },
   {
     id: "interior-design",
@@ -102,7 +162,7 @@ const investorTools = [
     description: "Visualize spaces with AI-generated designs.",
     icon: Image,
     link: "/interior-design-ai",
-    themeColor: "pink", // Pink theme
+    category: "design" as ToolCategory,
   },
   {
     id: "business-card-scanner",
@@ -110,7 +170,7 @@ const investorTools = [
     description: "Scan and save business cards into your CRM.",
     icon: CreditCard,
     link: "/business-card-scanner",
-    themeColor: "amber", // Amber theme
+    category: "productivity" as ToolCategory,
   },
   {
     id: "property-coach",
@@ -118,11 +178,11 @@ const investorTools = [
     description: "Scripts, objections, roleplay, deal strategy.",
     icon: Target,
     link: "/broker-toolkit",
-    themeColor: "indigo", // Indigo theme
+    category: "marketing" as ToolCategory,
   },
 ];
 
-// PRODUCTIVITY TOOLS - With theme colors
+// PRODUCTIVITY TOOLS
 const productivityTools = [
   {
     id: "content-tools",
@@ -130,7 +190,7 @@ const productivityTools = [
     description: "Rich text editor and Excel-like tools.",
     icon: FileText,
     link: "/documents",
-    themeColor: "blue",
+    category: "productivity" as ToolCategory,
   },
   {
     id: "video-meeting",
@@ -138,7 +198,7 @@ const productivityTools = [
     description: "Free unlimited video meetings with recording.",
     icon: Video,
     link: "/video-meeting",
-    themeColor: "cyan",
+    category: "productivity" as ToolCategory,
   },
   {
     id: "calendar",
@@ -146,43 +206,15 @@ const productivityTools = [
     description: "Smart scheduling and reminders.",
     icon: Calendar,
     link: "/ai-calendar",
-    themeColor: "indigo",
+    category: "productivity" as ToolCategory,
   },
   {
     id: "scan-sign",
     title: "JBJ Scan & Sign",
     description: "Digital document signing and scanning.",
-    icon: FileText,
+    icon: FileSignature,
     link: "/documents",
-    themeColor: "emerald",
-  },
-];
-
-// EDUCATION & CAREER - With theme colors (silver/slate metallic theme for this section)
-const educationCareer = [
-  {
-    id: "academy",
-    title: "JBJ Academy",
-    description: "Video tutorials and broker certifications.",
-    icon: GraduationCap,
-    link: "/broker-toolkit",
-    themeColor: "slate",
-  },
-  {
-    id: "employment-hub",
-    title: "JBJ Employment Hub",
-    description: "Hire or get hired in Real Estate.",
-    icon: Briefcase,
-    link: "/join",
-    themeColor: "slate",
-  },
-  {
-    id: "referral-program",
-    title: "JBJ Referral Program",
-    description: "Earn 5% commission on successful referrals.",
-    icon: Award,
-    link: "/referral-onboarding",
-    themeColor: "slate",
+    category: "productivity" as ToolCategory,
   },
 ];
 
@@ -245,120 +277,68 @@ const quickBenefits = [
   { icon: Clock, title: "Save Time", desc: "Automate tedious tasks." },
 ];
 
+// Referral commission examples
+const referralCommissionExamples = {
+  passiveReferral: {
+    rate: 2.5,
+    dealValue: 2000000,
+    developerCommission: 4, // 4% is the minimum
+    get brokerCommission() { return this.dealValue * (this.developerCommission / 100); },
+    get referralEarning() { return this.brokerCommission * (this.rate / 100); },
+  },
+  activeReferral: {
+    rate: 5,
+    dealValue: 2000000,
+    developerCommission: 4,
+    get brokerCommission() { return this.dealValue * (this.developerCommission / 100); },
+    get referralEarning() { return this.brokerCommission * (this.rate / 100); },
+  }
+};
+
 const AIHub = () => {
   const { user } = useAuth();
   const navigate = useNavigate();
 
-  // Theme color mappings for cards - GLOW/BORDER ONLY (no filled backgrounds)
-  // REVERSED GLOW LOGIC: Color glow on normal load, Gold glow on hover
-  const getThemeClasses = (color: string) => {
-    const themes: Record<string, { card: string; iconWrap: string; icon: string; border: string; arrow: string; glow: string }> = {
-      purple: {
-        card: "bg-black/40 backdrop-blur-sm border-2 border-purple-500/50 hover:border-gold shadow-[0_0_20px_rgba(147,51,234,0.3)] hover:shadow-[0_0_30px_rgba(200,167,102,0.4)]",
-        iconWrap: "bg-purple-500/20 border border-purple-500/30",
-        icon: "text-purple-400",
-        border: "border-purple-500/50",
-        arrow: "text-purple-400 group-hover:text-gold",
-        glow: "shadow-purple-500/30",
-      },
-      blue: {
-        card: "bg-black/40 backdrop-blur-sm border-2 border-blue-500/50 hover:border-gold shadow-[0_0_20px_rgba(59,130,246,0.3)] hover:shadow-[0_0_30px_rgba(200,167,102,0.4)]",
-        iconWrap: "bg-blue-500/20 border border-blue-500/30",
-        icon: "text-blue-400",
-        border: "border-blue-500/50",
-        arrow: "text-blue-400 group-hover:text-gold",
-        glow: "shadow-blue-500/30",
-      },
-      cyan: {
-        card: "bg-black/40 backdrop-blur-sm border-2 border-cyan-500/50 hover:border-gold shadow-[0_0_20px_rgba(6,182,212,0.3)] hover:shadow-[0_0_30px_rgba(200,167,102,0.4)]",
-        iconWrap: "bg-cyan-500/20 border border-cyan-500/30",
-        icon: "text-cyan-400",
-        border: "border-cyan-500/50",
-        arrow: "text-cyan-400 group-hover:text-gold",
-        glow: "shadow-cyan-500/30",
-      },
-      teal: {
-        card: "bg-black/40 backdrop-blur-sm border-2 border-teal-500/50 hover:border-gold shadow-[0_0_20px_rgba(20,184,166,0.3)] hover:shadow-[0_0_30px_rgba(200,167,102,0.4)]",
-        iconWrap: "bg-teal-500/20 border border-teal-500/30",
-        icon: "text-teal-400",
-        border: "border-teal-500/50",
-        arrow: "text-teal-400 group-hover:text-gold",
-        glow: "shadow-teal-500/30",
-      },
-      emerald: {
-        card: "bg-black/40 backdrop-blur-sm border-2 border-emerald-500/50 hover:border-gold shadow-[0_0_20px_rgba(16,185,129,0.3)] hover:shadow-[0_0_30px_rgba(200,167,102,0.4)]",
-        iconWrap: "bg-emerald-500/20 border border-emerald-500/30",
-        icon: "text-emerald-400",
-        border: "border-emerald-500/50",
-        arrow: "text-emerald-400 group-hover:text-gold",
-        glow: "shadow-emerald-500/30",
-      },
-      amber: {
-        card: "bg-black/40 backdrop-blur-sm border-2 border-blue-500/50 hover:border-gold shadow-[0_0_20px_rgba(59,130,246,0.3)] hover:shadow-[0_0_30px_rgba(200,167,102,0.4)]",
-        iconWrap: "bg-blue-500/20 border border-blue-500/30",
-        icon: "text-blue-400",
-        border: "border-blue-500/50",
-        arrow: "text-blue-400 group-hover:text-gold",
-        glow: "shadow-blue-500/30",
-      },
-      pink: {
-        card: "bg-black/40 backdrop-blur-sm border-2 border-pink-500/50 hover:border-gold shadow-[0_0_20px_rgba(236,72,153,0.3)] hover:shadow-[0_0_30px_rgba(200,167,102,0.4)]",
-        iconWrap: "bg-pink-500/20 border border-pink-500/30",
-        icon: "text-pink-400",
-        border: "border-pink-500/50",
-        arrow: "text-pink-400 group-hover:text-gold",
-        glow: "shadow-pink-500/30",
-      },
-      slate: {
-        card: "bg-black/40 backdrop-blur-sm border-2 border-slate-400/50 hover:border-gold shadow-[0_0_20px_rgba(148,163,184,0.3)] hover:shadow-[0_0_30px_rgba(200,167,102,0.4)]",
-        iconWrap: "bg-slate-500/20 border border-slate-400/30",
-        icon: "text-slate-300",
-        border: "border-slate-400/50",
-        arrow: "text-slate-300 group-hover:text-gold",
-        glow: "shadow-slate-400/30",
-      },
-      indigo: {
-        card: "bg-black/40 backdrop-blur-sm border-2 border-indigo-500/50 hover:border-gold shadow-[0_0_20px_rgba(99,102,241,0.3)] hover:shadow-[0_0_30px_rgba(200,167,102,0.4)]",
-        iconWrap: "bg-indigo-500/20 border border-indigo-500/30",
-        icon: "text-indigo-400",
-        border: "border-indigo-500/50",
-        arrow: "text-indigo-400 group-hover:text-gold",
-        glow: "shadow-indigo-500/30",
-      },
-      gold: {
-        card: "bg-black/40 backdrop-blur-sm border-2 border-gold/50 hover:border-gold shadow-[0_0_20px_rgba(200,167,102,0.3)] hover:shadow-[0_0_30px_rgba(200,167,102,0.5)]",
-        iconWrap: "bg-gold/20 border border-gold/30",
-        icon: "text-gold",
-        border: "border-gold/50",
-        arrow: "text-gold",
-        glow: "shadow-gold/30",
-      },
-    };
-    return themes[color] || themes.purple;
-  };
+  // Combine all tools
+  const allTools = [...investorTools, ...productivityTools];
 
-  const renderToolCard = (tool: typeof investorTools[0]) => {
-    const theme = getThemeClasses(tool.themeColor || "purple");
+  // Group tools by category
+  const toolsByCategory = allTools.reduce((acc, tool) => {
+    if (!acc[tool.category]) acc[tool.category] = [];
+    acc[tool.category].push(tool);
+    return acc;
+  }, {} as Record<ToolCategory, typeof allTools>);
+
+  // Render tool card for bulk section (glow/border only)
+  const renderBulkToolCard = (tool: typeof investorTools[0], index: number) => {
+    const meta = CATEGORY_META[tool.category];
     
     return (
-      <motion.div key={tool.id} variants={fadeInUp}>
+      <motion.div 
+        key={tool.id} 
+        variants={fadeInUp}
+        initial={{ opacity: 0, y: 20 }}
+        whileInView={{ opacity: 1, y: 0 }}
+        transition={{ delay: index * 0.03 }}
+        viewport={{ once: true }}
+      >
         <Link to={tool.link} className="block group h-full">
-          <Card className={`${theme.card} transition-all duration-300 h-full group-hover:scale-[1.02]`}>
+          <Card className={`bg-black/40 backdrop-blur-sm border-2 ${meta.glowClass} transition-all duration-300 h-full group-hover:scale-[1.02]`}>
             <CardContent className="p-5">
               <div className="flex items-start gap-4">
-                <div className={`w-12 h-12 ${theme.iconWrap} rounded-xl flex items-center justify-center flex-shrink-0 group-hover:scale-110 transition-transform`}>
-                  <tool.icon className={`w-6 h-6 ${theme.icon}`} />
+                <div className={`w-12 h-12 ${meta.iconWrapClass} rounded-xl flex items-center justify-center flex-shrink-0 group-hover:scale-110 transition-transform`}>
+                  <tool.icon className={`w-6 h-6 ${meta.iconClass}`} />
                 </div>
                 <div className="flex-1 min-w-0">
                   <div className="flex items-start gap-2 mb-1 flex-wrap">
-                    <h3 className={`font-semibold text-sm leading-tight ${theme.icon}`}>{tool.title}</h3>
+                    <h3 className={`font-semibold text-sm leading-tight ${meta.iconClass}`}>{tool.title}</h3>
                     <Badge className="bg-emerald-500/30 text-emerald-200 border-emerald-400/50 text-[10px] px-1.5 py-0 flex-shrink-0">
                       FREE
                     </Badge>
                   </div>
                   <p className="text-white/70 text-sm line-clamp-2">{tool.description}</p>
                 </div>
-                <ArrowUpRight className={`w-5 h-5 ${theme.arrow} opacity-0 group-hover:opacity-100 transition-opacity flex-shrink-0`} />
+                <ArrowUpRight className={`w-5 h-5 ${meta.arrowClass} opacity-0 group-hover:opacity-100 transition-opacity flex-shrink-0`} />
               </div>
             </CardContent>
           </Card>
@@ -367,27 +347,64 @@ const AIHub = () => {
     );
   };
 
+  // Render tool card for category sections (FILLED backgrounds - matching Broker Hub)
+  const renderCategoryToolCard = (tool: typeof investorTools[0], index: number) => {
+    const meta = CATEGORY_META[tool.category];
+    
+    return (
+      <motion.div 
+        key={`cat-${tool.id}`} 
+        initial={{ opacity: 0, y: 20 }}
+        whileInView={{ opacity: 1, y: 0 }}
+        transition={{ delay: index * 0.03 }}
+        viewport={{ once: true }}
+      >
+        <Link to={tool.link} className="block group h-full">
+          <Card className={`${meta.cardClass} transition-all duration-300 h-full group-hover:scale-[1.02]`}>
+            <CardContent className="p-5">
+              <div className="flex items-start gap-4">
+                <div className={`w-12 h-12 ${meta.iconWrapClass} rounded-xl flex items-center justify-center flex-shrink-0 group-hover:scale-110 transition-transform`}>
+                  <tool.icon className={`w-6 h-6 ${meta.iconClass}`} />
+                </div>
+                <div className="flex-1 min-w-0">
+                  <div className="flex items-start gap-2 mb-1 flex-wrap">
+                    <h3 className="font-semibold text-sm leading-tight text-white">{tool.title}</h3>
+                    <Badge className="bg-emerald-500/30 text-emerald-200 border-emerald-400/50 text-[10px] px-1.5 py-0 flex-shrink-0">
+                      FREE
+                    </Badge>
+                  </div>
+                  <p className="text-white/70 text-sm line-clamp-2">{tool.description}</p>
+                </div>
+                <ArrowUpRight className="w-5 h-5 text-white/50 opacity-0 group-hover:opacity-100 group-hover:text-gold transition-all flex-shrink-0" />
+              </div>
+            </CardContent>
+          </Card>
+        </Link>
+      </motion.div>
+    );
+  };
+
+  // Render broker-only locked cards (GREEN theme for Broker Hub section)
   const renderLockedCard = (tool: typeof brokerOnlyTools[0]) => (
     <motion.div key={tool.id} variants={fadeInUp}>
       <div className="block group h-full cursor-pointer" onClick={() => navigate("/join")}>
-        <Card className="bg-gradient-to-br from-purple-900/80 to-indigo-900/60 border border-purple-500/40 shadow-lg shadow-purple-500/20 h-full relative overflow-hidden hover:border-purple-400 hover:shadow-purple-400/30 transition-all duration-300">
-          <div className="absolute inset-0 bg-gradient-to-br from-purple-500/10 to-transparent" />
+        <Card className="bg-emerald-900/80 border-2 border-emerald-500/50 hover:border-gold hover:shadow-[0_0_30px_rgba(200,167,102,0.4)] shadow-[0_0_20px_rgba(16,185,129,0.3)] h-full relative overflow-hidden transition-all duration-300">
           <CardContent className="p-5 relative z-10">
             <div className="flex items-start gap-4">
-              <div className="w-12 h-12 bg-purple-500/30 rounded-xl flex items-center justify-center flex-shrink-0 group-hover:scale-110 transition-transform">
-                <tool.icon className="w-6 h-6 text-purple-200" />
+              <div className="w-12 h-12 bg-emerald-500/30 border border-emerald-400/40 rounded-xl flex items-center justify-center flex-shrink-0 group-hover:scale-110 transition-transform">
+                <tool.icon className="w-6 h-6 text-emerald-300" />
               </div>
               <div className="flex-1 min-w-0">
                 <div className="flex items-start gap-2 mb-1 flex-wrap">
                   <h3 className="text-white font-semibold text-sm leading-tight">{tool.title}</h3>
-                  <Badge className="bg-purple-500/30 text-purple-200 border-purple-400/50 text-[10px] px-1.5 py-0 flex-shrink-0">
+                  <Badge className="bg-emerald-500/30 text-emerald-200 border-emerald-400/50 text-[10px] px-1.5 py-0 flex-shrink-0">
                     <Lock className="w-2.5 h-2.5 mr-1" />
                     BROKER ONLY
                   </Badge>
                 </div>
-                <p className="text-purple-100/80 text-sm line-clamp-2">{tool.description}</p>
+                <p className="text-emerald-100/80 text-sm line-clamp-2">{tool.description}</p>
               </div>
-              <ArrowUpRight className="w-5 h-5 text-purple-300 opacity-0 group-hover:opacity-100 transition-opacity flex-shrink-0" />
+              <ArrowUpRight className="w-5 h-5 text-emerald-300 opacity-0 group-hover:opacity-100 group-hover:text-gold transition-all flex-shrink-0" />
             </div>
           </CardContent>
         </Card>
@@ -550,7 +567,7 @@ const AIHub = () => {
         {/* Gold Divider */}
         <div className="h-px bg-gradient-to-r from-transparent via-gold/40 to-transparent" />
 
-        {/* ALL TOOLS SECTION - Bulk view with individual theme colors */}
+        {/* ALL TOOLS SECTION - Bulk view with individual theme colors (glow/border only) */}
         <section className="py-16 md:py-20 bg-black">
           <div className="container mx-auto px-4">
             <motion.div
@@ -578,7 +595,7 @@ const AIHub = () => {
               viewport={{ once: true }}
               variants={staggerContainer}
             >
-              {[...investorTools, ...productivityTools, ...educationCareer].map((tool) => renderToolCard(tool))}
+              {allTools.map((tool, idx) => renderBulkToolCard(tool, idx))}
             </motion.div>
           </div>
         </section>
@@ -586,8 +603,56 @@ const AIHub = () => {
         {/* Gold Divider */}
         <div className="h-px bg-gradient-to-r from-transparent via-gold/40 to-transparent" />
 
-        {/* SECTION 1: INVESTOR TOOLS */}
-        <section id="investor-tools" className="py-16 md:py-20 bg-[#0D0D0D]">
+        {/* CATEGORY SECTIONS - Filled cards matching Broker Hub */}
+        {(['property', 'productivity', 'design', 'marketing'] as ToolCategory[]).map((category) => {
+          const meta = CATEGORY_META[category];
+          const categoryTools = toolsByCategory[category] || [];
+          if (categoryTools.length === 0) return null;
+
+          return (
+            <section key={category} id={category === 'property' ? 'investor-tools' : `${category}-tools`} className="py-16 md:py-20 bg-black">
+              <div className="container mx-auto px-4">
+                <motion.div
+                  className="text-center mb-12"
+                  initial={{ opacity: 0, y: 20 }}
+                  whileInView={{ opacity: 1, y: 0 }}
+                  viewport={{ once: true }}
+                >
+                  <Badge className={`${meta.badgeClass} mb-4`}>
+                    <Sparkles className="w-3 h-3 mr-1" />
+                    {meta.label} {meta.coloredLabel}
+                  </Badge>
+                  <h2 className="text-2xl md:text-3xl font-bold mb-2">
+                    <span className="text-white">{meta.label} </span>
+                    <span className={meta.iconClass}>{meta.coloredLabel}</span>
+                  </h2>
+                  <p className="text-zinc-400 max-w-2xl mx-auto">
+                    {category === 'property' && "Powerful AI tools for property analysis, valuation, and investment decisions."}
+                    {category === 'productivity' && "Video meetings, documents, calendar, and signing tools."}
+                    {category === 'design' && "Creative tools for interior design and visual content."}
+                    {category === 'marketing' && "Marketing and content creation tools."}
+                  </p>
+                </motion.div>
+
+                <motion.div 
+                  className="grid md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4"
+                  initial="hidden"
+                  whileInView="visible"
+                  viewport={{ once: true }}
+                  variants={staggerContainer}
+                >
+                  {categoryTools.map((tool, idx) => renderCategoryToolCard(tool, idx))}
+                </motion.div>
+              </div>
+
+              {/* Gold Divider */}
+              <div className="h-px bg-gradient-to-r from-transparent via-gold/40 to-transparent mt-16" />
+            </section>
+          );
+        })}
+
+        {/* BROKER HUB PREVIEW - GREEN THEME (What you get as a registered broker) */}
+        <section className="py-16 md:py-20 bg-black">
           <div className="container mx-auto px-4">
             <motion.div
               className="text-center mb-12"
@@ -595,120 +660,13 @@ const AIHub = () => {
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true }}
             >
-              <Badge className="bg-purple-500/20 text-purple-400 border-purple-500/30 mb-4">
-                <Sparkles className="w-3 h-3 mr-1" />
-                Free AI Tools
-              </Badge>
-              <h2 className="text-2xl md:text-3xl font-bold text-white mb-2">
-                <span className="text-white">Investment &</span> <span className="text-purple-400">Property Tools</span>
-              </h2>
-              <p className="text-zinc-400 max-w-2xl mx-auto">
-                Powerful AI tools for property analysis, valuation, and investment decisions.
-              </p>
-            </motion.div>
-
-            <motion.div 
-              className="grid md:grid-cols-2 lg:grid-cols-4 gap-4"
-              initial="hidden"
-              whileInView="visible"
-              viewport={{ once: true }}
-              variants={staggerContainer}
-            >
-              {investorTools.map((tool) => renderToolCard(tool))}
-            </motion.div>
-          </div>
-        </section>
-
-        {/* Gold Divider */}
-        <div className="h-px bg-gradient-to-r from-transparent via-gold/40 to-transparent" />
-
-        {/* SECTION 2: PRODUCTIVITY TOOLS */}
-        <section className="py-16 md:py-20 bg-[#0D0D0D]">
-          <div className="container mx-auto px-4">
-            <motion.div
-              className="text-center mb-12"
-              initial={{ opacity: 0, y: 20 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true }}
-            >
-              <Badge className="bg-blue-500/20 text-blue-400 border-blue-500/30 mb-4">
-                <Calendar className="w-3 h-3 mr-1" />
-                Productivity Suite
-              </Badge>
-              <h2 className="text-2xl md:text-3xl font-bold text-white mb-2">
-                <span className="text-white">Productivity</span> <span className="text-blue-400">Tools</span>
-              </h2>
-              <p className="text-zinc-400 max-w-lg mx-auto">
-                Video meetings, documents, calendar, and signing tools.
-              </p>
-            </motion.div>
-
-            <motion.div 
-              className="grid md:grid-cols-2 lg:grid-cols-4 gap-4"
-              initial="hidden"
-              whileInView="visible"
-              viewport={{ once: true }}
-              variants={staggerContainer}
-            >
-              {productivityTools.map((tool) => renderToolCard(tool))}
-            </motion.div>
-          </div>
-        </section>
-
-        {/* Gold Divider */}
-        <div className="h-px bg-gradient-to-r from-transparent via-gold/40 to-transparent" />
-
-        {/* SECTION 3: EDUCATION & CAREER */}
-        <section className="py-16 md:py-20 bg-[#0D0D0D]">
-          <div className="container mx-auto px-4">
-            <motion.div
-              className="text-center mb-12"
-              initial={{ opacity: 0, y: 20 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true }}
-            >
-              <Badge className="bg-slate-500/20 text-slate-300 border-slate-400/30 mb-4">
-                <GraduationCap className="w-3 h-3 mr-1" />
-                Education & Opportunities
-              </Badge>
-              <h2 className="text-2xl md:text-3xl font-bold text-white mb-2">
-                <span className="text-white">Learn, Earn &</span> <span className="text-slate-300">Grow</span>
-              </h2>
-              <p className="text-zinc-400 max-w-lg mx-auto">
-                Education, career opportunities, and referral rewards.
-              </p>
-            </motion.div>
-
-            <motion.div 
-              className="grid md:grid-cols-3 gap-4 max-w-4xl mx-auto"
-              initial="hidden"
-              whileInView="visible"
-              viewport={{ once: true }}
-              variants={staggerContainer}
-            >
-              {educationCareer.map((tool) => renderToolCard(tool))}
-            </motion.div>
-          </div>
-        </section>
-
-        {/* Gold Divider */}
-        <div className="h-px bg-gradient-to-r from-transparent via-gold/40 to-transparent" />
-
-        {/* SECTION 4: BROKER HUB PREVIEW (What you get as a registered broker) */}
-        <section className="py-16 md:py-20 bg-zinc-950">
-          <div className="container mx-auto px-4">
-            <motion.div
-              className="text-center mb-12"
-              initial={{ opacity: 0, y: 20 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true }}
-            >
-              <Badge className="bg-green-500/20 text-green-300 border-green-400/30 mb-4">
+              <Badge className="bg-emerald-500/30 text-emerald-200 border-emerald-400/50 mb-4">
                 <Lock className="w-3 h-3 mr-1" />
                 JBJ Broker Hub Exclusive
               </Badge>
-              <h2 className="text-2xl md:text-3xl font-bold text-white mb-2">
-                <span className="text-white">Unlock More with</span> <span className="text-green-300">JBJ Broker Hub</span>
+              <h2 className="text-2xl md:text-3xl font-bold mb-2">
+                <span className="text-white">Unlock More with </span>
+                <span className="text-emerald-300">JBJ Broker Hub</span>
               </h2>
               <p className="text-zinc-400 max-w-2xl mx-auto">
                 Registered JBJ brokers get access to additional tools, operation support, creative suite, and marketing automation.
@@ -747,6 +705,210 @@ const AIHub = () => {
                   </Link>
                 </div>
               </div>
+            </motion.div>
+          </div>
+        </section>
+
+        {/* Gold Divider */}
+        <div className="h-px bg-gradient-to-r from-transparent via-gold/40 to-transparent" />
+
+        {/* MAKE MONEY SECTION - JBJ Academy, Employment Hub, Referral Program */}
+        <section className="py-16 md:py-20 bg-gradient-to-br from-[#FDFBF7] via-[#F5F0E6] to-[#EDE4D3]">
+          <div className="container mx-auto px-4">
+            <motion.div
+              className="text-center mb-12"
+              initial={{ opacity: 0, y: 20 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true }}
+            >
+              <Badge className="bg-gold/20 text-gold border-gold/30 mb-4">
+                <DollarSign className="w-3 h-3 mr-1" />
+                Earn With Us
+              </Badge>
+              <h2 className="text-2xl md:text-3xl font-bold text-black mb-2">
+                Make Money by Joining <span className="text-gold">JBJ Global Real Estate Circle</span>
+              </h2>
+              <p className="text-zinc-600 max-w-3xl mx-auto">
+                From anywhere in the world, you can become a broker with us, or you can become a referral partner and start earning commission on every successful deal.
+              </p>
+            </motion.div>
+
+            {/* Three Cards */}
+            <div className="grid md:grid-cols-3 gap-6 mb-12">
+              {/* JBJ Academy - For Employees */}
+              <motion.div
+                initial={{ opacity: 0, y: 20 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                viewport={{ once: true }}
+              >
+                <Card className="bg-gradient-to-br from-white via-[#FDFBF7] to-[#F5F0E6] border-2 border-gold/30 hover:border-gold shadow-lg hover:shadow-[0_0_30px_rgba(200,167,102,0.3)] transition-all duration-300 h-full">
+                  <CardContent className="p-6">
+                    <div className="w-14 h-14 rounded-xl bg-black flex items-center justify-center mb-4">
+                      <GraduationCap className="w-7 h-7 text-gold" />
+                    </div>
+                    <Badge className="bg-blue-500/20 text-blue-600 border-blue-500/30 mb-3">
+                      For JBJ Employees
+                    </Badge>
+                    <h3 className="text-black text-xl font-bold mb-2">JBJ Academy</h3>
+                    <p className="text-zinc-600 mb-4">
+                      Professional training, video tutorials, and internal certifications for JBJ Global Real Estate employees.
+                    </p>
+                    <Link to="/broker-toolkit" className="inline-flex items-center gap-2 text-gold font-semibold hover:gap-3 transition-all">
+                      Access Academy
+                      <ArrowRight className="w-4 h-4" />
+                    </Link>
+                  </CardContent>
+                </Card>
+              </motion.div>
+
+              {/* JBJ Employment Hub - For Job Seekers */}
+              <motion.div
+                initial={{ opacity: 0, y: 20 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                viewport={{ once: true }}
+                transition={{ delay: 0.1 }}
+              >
+                <Card className="bg-gradient-to-br from-white via-[#FDFBF7] to-[#F5F0E6] border-2 border-gold/30 hover:border-gold shadow-lg hover:shadow-[0_0_30px_rgba(200,167,102,0.3)] transition-all duration-300 h-full">
+                  <CardContent className="p-6">
+                    <div className="w-14 h-14 rounded-xl bg-black flex items-center justify-center mb-4">
+                      <Briefcase className="w-7 h-7 text-gold" />
+                    </div>
+                    <Badge className="bg-purple-500/20 text-purple-600 border-purple-500/30 mb-3">
+                      For Job Seekers
+                    </Badge>
+                    <h3 className="text-black text-xl font-bold mb-2">JBJ Employment Hub</h3>
+                    <p className="text-zinc-600 mb-4">
+                      Join our team as a licensed broker. We provide training, tools, leads, and support to help you succeed.
+                    </p>
+                    <Link to="/join" className="inline-flex items-center gap-2 text-gold font-semibold hover:gap-3 transition-all">
+                      Apply Now
+                      <ArrowRight className="w-4 h-4" />
+                    </Link>
+                  </CardContent>
+                </Card>
+              </motion.div>
+
+              {/* JBJ Referral Program - For Everyone */}
+              <motion.div
+                initial={{ opacity: 0, y: 20 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                viewport={{ once: true }}
+                transition={{ delay: 0.2 }}
+              >
+                <Card className="bg-gradient-to-br from-white via-[#FDFBF7] to-[#F5F0E6] border-2 border-gold/30 hover:border-gold shadow-lg hover:shadow-[0_0_30px_rgba(200,167,102,0.3)] transition-all duration-300 h-full">
+                  <CardContent className="p-6">
+                    <div className="w-14 h-14 rounded-xl bg-black flex items-center justify-center mb-4">
+                      <Award className="w-7 h-7 text-gold" />
+                    </div>
+                    <Badge className="bg-emerald-500/20 text-emerald-600 border-emerald-500/30 mb-3">
+                      <Globe className="w-3 h-3 mr-1" />
+                      Open to Everyone Worldwide
+                    </Badge>
+                    <h3 className="text-black text-xl font-bold mb-2">JBJ Referral Program</h3>
+                    <p className="text-zinc-600 mb-4">
+                      Earn up to 5% commission on successful referrals. No license required — anyone from any country can join!
+                    </p>
+                    <Link to="/referral-onboarding" className="inline-flex items-center gap-2 text-gold font-semibold hover:gap-3 transition-all">
+                      Start Earning
+                      <ArrowRight className="w-4 h-4" />
+                    </Link>
+                  </CardContent>
+                </Card>
+              </motion.div>
+            </div>
+
+            {/* Referral Program Details */}
+            <motion.div
+              className="max-w-4xl mx-auto"
+              initial={{ opacity: 0, y: 20 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true }}
+            >
+              <Card className="bg-gradient-to-br from-black via-zinc-900 to-black border-2 border-gold/50 shadow-[0_0_40px_rgba(200,167,102,0.2)]">
+                <CardContent className="p-8">
+                  <div className="text-center mb-8">
+                    <Badge className="bg-gold/20 text-gold border-gold/30 mb-4">
+                      <Handshake className="w-3 h-3 mr-1" />
+                      How Referral Works
+                    </Badge>
+                    <h3 className="text-2xl md:text-3xl font-bold text-white mb-2">
+                      Become a <span className="text-gold">JBJ Referral Partner</span>
+                    </h3>
+                    <p className="text-zinc-400">
+                      Simple process — start earning within days
+                    </p>
+                  </div>
+
+                  {/* Steps */}
+                  <div className="grid md:grid-cols-4 gap-6 mb-10">
+                    {[
+                      { step: 1, title: "Submit Documents", desc: "Send us your ID and basic information" },
+                      { step: 2, title: "Receive Contract", desc: "We'll send you a referral partnership agreement" },
+                      { step: 3, title: "Sign & Activate", desc: "Sign digitally and your account is active" },
+                      { step: 4, title: "Start Referring", desc: "Refer clients and earn commission on deals" },
+                    ].map((item) => (
+                      <div key={item.step} className="text-center">
+                        <div className="w-12 h-12 rounded-full bg-gold/20 border border-gold/40 flex items-center justify-center mx-auto mb-3">
+                          <span className="text-gold font-bold text-lg">{item.step}</span>
+                        </div>
+                        <h4 className="text-white font-semibold mb-1">{item.title}</h4>
+                        <p className="text-zinc-400 text-sm">{item.desc}</p>
+                      </div>
+                    ))}
+                  </div>
+
+                  {/* Commission Tiers */}
+                  <div className="grid md:grid-cols-2 gap-6 mb-8">
+                    {/* Passive Referral */}
+                    <div className="bg-zinc-900/50 border border-zinc-700 rounded-xl p-6">
+                      <Badge className="bg-blue-500/20 text-blue-300 border-blue-500/30 mb-3">
+                        Passive Referral — 2.5%
+                      </Badge>
+                      <h4 className="text-white font-bold text-lg mb-2">Share Contact Details Only</h4>
+                      <p className="text-zinc-400 text-sm mb-4">
+                        Simply provide us with your contact's details. We'll reach out discreetly without mentioning your name. Privacy protected.
+                      </p>
+                      <div className="bg-black/50 rounded-lg p-4 border border-zinc-800">
+                        <p className="text-zinc-500 text-xs mb-2">Example: AED 2,000,000 Deal (Min. 4% Developer Commission)</p>
+                        <p className="text-zinc-400 text-sm">Developer Commission: <span className="text-white">AED 80,000</span></p>
+                        <p className="text-gold text-lg font-bold mt-2">Your Earning: AED 2,000 minimum</p>
+                        <p className="text-zinc-500 text-xs mt-1">*Increases with higher developer commission rates</p>
+                      </div>
+                    </div>
+
+                    {/* Active Referral */}
+                    <div className="bg-zinc-900/50 border border-gold/30 rounded-xl p-6">
+                      <Badge className="bg-emerald-500/20 text-emerald-300 border-emerald-500/30 mb-3">
+                        Active Referral — 5%
+                      </Badge>
+                      <h4 className="text-white font-bold text-lg mb-2">Facilitate the Introduction</h4>
+                      <p className="text-zinc-400 text-sm mb-4">
+                        Introduce your contact directly to us. Inform them we'll be in touch. Help convince them to invest — earn double!
+                      </p>
+                      <div className="bg-black/50 rounded-lg p-4 border border-gold/20">
+                        <p className="text-zinc-500 text-xs mb-2">Example: AED 2,000,000 Deal (Min. 4% Developer Commission)</p>
+                        <p className="text-zinc-400 text-sm">Developer Commission: <span className="text-white">AED 80,000</span></p>
+                        <p className="text-gold text-lg font-bold mt-2">Your Earning: AED 4,000 minimum</p>
+                        <p className="text-zinc-500 text-xs mt-1">*Increases with higher developer commission rates</p>
+                      </div>
+                    </div>
+                  </div>
+
+                  {/* CTA */}
+                  <div className="text-center">
+                    <Link to="/referral-onboarding">
+                      <button className="relative inline-flex items-center gap-2 bg-gradient-to-r from-white via-[#FDFBF7] to-[#F5F0E6] border-2 border-gold/50 px-10 py-4 rounded-xl text-base font-semibold shadow-[0_8px_30px_rgba(200,167,102,0.4),0_4px_15px_rgba(0,0,0,0.1)] hover:bg-transparent hover:border-gold hover:shadow-[0_0_25px_rgba(200,167,102,0.6)] transition-all duration-300 group">
+                        <DollarSign className="w-5 h-5 text-black group-hover:text-gold transition-colors" />
+                        <span className="text-black group-hover:text-gold transition-colors">Become a Referral Partner Now</span>
+                        <ArrowUpRight className="w-5 h-5 text-gold" />
+                      </button>
+                    </Link>
+                    <p className="text-zinc-400 text-sm mt-4">
+                      Available worldwide — No license required
+                    </p>
+                  </div>
+                </CardContent>
+              </Card>
             </motion.div>
           </div>
         </section>
