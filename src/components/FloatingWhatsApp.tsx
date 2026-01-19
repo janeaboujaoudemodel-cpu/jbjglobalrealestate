@@ -80,17 +80,24 @@ const FloatingWhatsApp = () => {
 
   return (
     <div className="fixed bottom-6 right-6 z-50">
-      {/* Gold and white pulse rings */}
+      {/* Gold and white pulse rings - Enhanced visibility */}
       <span 
-        className="absolute inset-0 rounded-full animate-ping pointer-events-none"
+        className="absolute -inset-2 rounded-full animate-ping pointer-events-none"
         style={{ 
-          background: 'linear-gradient(135deg, rgba(200,167,102,0.4), rgba(255,255,255,0.3))',
+          background: 'linear-gradient(135deg, rgba(200,167,102,0.5), rgba(255,255,255,0.4))',
         }}
       />
       <span 
-        className="absolute inset-0 rounded-full animate-pulse pointer-events-none"
+        className="absolute -inset-3 rounded-full animate-pulse pointer-events-none"
         style={{ 
-          boxShadow: '0 0 20px rgba(200,167,102,0.5), 0 0 40px rgba(255,255,255,0.3)',
+          boxShadow: '0 0 25px rgba(200,167,102,0.6), 0 0 50px rgba(255,255,255,0.4), 0 0 75px rgba(200,167,102,0.3)',
+        }}
+      />
+      <span 
+        className="absolute -inset-4 rounded-full pointer-events-none"
+        style={{ 
+          animation: 'pulse 2s cubic-bezier(0.4, 0, 0.6, 1) infinite',
+          boxShadow: '0 0 30px rgba(255,255,255,0.5), 0 0 60px rgba(200,167,102,0.4)',
         }}
       />
       
@@ -112,7 +119,7 @@ const FloatingWhatsApp = () => {
         }}
         className="relative flex items-center gap-2 bg-green-500 hover:bg-green-400 text-white px-4 py-3 rounded-full shadow-lg hover:shadow-xl transition-all duration-300 hover:scale-105 group"
         style={{
-          boxShadow: '0 0 20px rgba(200,167,102,0.4), 0 0 30px rgba(255,255,255,0.2), 0 4px 20px rgba(0,0,0,0.3)',
+          boxShadow: '0 0 25px rgba(200,167,102,0.5), 0 0 40px rgba(255,255,255,0.3), 0 4px 20px rgba(0,0,0,0.3)',
         }}
         aria-label="Chat with us on WhatsApp"
       >
