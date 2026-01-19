@@ -30,7 +30,8 @@ export function BrokerToolkitCTA() {
           {/* Inner card in black */}
           <Card className="bg-black border border-gold/30 shadow-xl shadow-gold/10">
             <CardContent className="p-8 md:p-12">
-              <div className="w-16 h-16 bg-gold/20 rounded-full flex items-center justify-center mx-auto mb-4">
+              {/* Icon container with white/gold/champagne pearl fill */}
+              <div className="w-16 h-16 bg-gradient-to-br from-white via-[#FDFBF7] to-[#F5F0E6] rounded-full flex items-center justify-center mx-auto mb-4 border border-gold/30 shadow-md shadow-gold/20">
                 <Shield className="w-8 h-8 text-gold" />
               </div>
               <h2 className="text-2xl md:text-3xl font-bold text-white mb-4">
@@ -44,22 +45,22 @@ export function BrokerToolkitCTA() {
               {!user ? (
                 <Button 
                   size="lg"
-                  className="mb-6 px-8 bg-gradient-to-r from-gold to-gold-dark text-black hover:brightness-110 hover:shadow-lg hover:shadow-gold/40 transition-all"
+                  className="mb-6 px-8 relative bg-gradient-to-r from-white via-[#FDFBF7] to-[#F5F0E6] border border-gold/40 shadow-[0_4px_20px_rgba(200,167,102,0.3),0_8px_30px_rgba(0,0,0,0.15)] hover:shadow-[0_6px_25px_rgba(200,167,102,0.5),0_10px_40px_rgba(0,0,0,0.2)] hover:scale-[1.02] transition-all duration-300"
                   onClick={() => navigate("/auth?redirect=/my-account")}
                 >
-                  <Star className="w-5 h-5 mr-2 fill-current" />
-                  Join Now — Completely Free
-                  <ArrowUpRight className="w-5 h-5 ml-2" />
+                  <Star className="w-5 h-5 mr-2 text-black fill-current" />
+                  <span className="text-gold font-semibold">Join Now — Completely Free</span>
+                  <ArrowUpRight className="w-5 h-5 ml-2 text-gold" />
                 </Button>
               ) : (
                 <Button 
                   size="lg"
-                  className="mb-6 px-8 bg-gradient-to-r from-gold to-gold-dark text-black hover:brightness-110 hover:shadow-lg hover:shadow-gold/40 transition-all"
+                  className="mb-6 px-8 relative bg-gradient-to-r from-white via-[#FDFBF7] to-[#F5F0E6] border border-gold/40 shadow-[0_4px_20px_rgba(200,167,102,0.3),0_8px_30px_rgba(0,0,0,0.15)] hover:shadow-[0_6px_25px_rgba(200,167,102,0.5),0_10px_40px_rgba(0,0,0,0.2)] hover:scale-[1.02] transition-all duration-300"
                   onClick={() => navigate("/my-account")}
                 >
-                  <Sparkles className="w-5 h-5 mr-2" />
-                  Access Your Dashboard
-                  <ArrowUpRight className="w-5 h-5 ml-2" />
+                  <Sparkles className="w-5 h-5 mr-2 text-black" />
+                  <span className="text-gold font-semibold">Access Your Dashboard</span>
+                  <ArrowUpRight className="w-5 h-5 ml-2 text-gold" />
                 </Button>
               )}
 

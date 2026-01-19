@@ -476,33 +476,31 @@ const AIHub = () => {
                 className="w-24 h-0.5 bg-gradient-to-r from-transparent via-gold to-transparent mx-auto mb-8"
               />
 
-              {/* Two CTAs */}
+              {/* Two CTAs - Premium 3D White/Gold Button Style */}
               <motion.div variants={fadeInUp} className="flex flex-wrap justify-center gap-4 mb-8">
                 {!user ? (
                   <Button 
                     onClick={() => navigate("/auth?redirect=/ai-hub")}
-                    className="bg-gradient-to-r from-gold to-gold-dark text-black font-bold px-8 py-6 text-base shadow-lg hover:brightness-110 transition-all"
-                    style={{ boxShadow: "0 0 25px rgba(203, 166, 75, 0.35)" }}
+                    className="relative bg-gradient-to-r from-white via-[#FDFBF7] to-[#F5F0E6] border border-gold/40 px-8 py-6 text-base shadow-[0_4px_20px_rgba(200,167,102,0.3),0_8px_30px_rgba(0,0,0,0.15)] hover:shadow-[0_6px_25px_rgba(200,167,102,0.5),0_10px_40px_rgba(0,0,0,0.2)] hover:scale-[1.02] transition-all duration-300"
                   >
-                    <LogIn className="w-5 h-5 mr-2" />
-                    Sign In / Create Account
-                    <ArrowUpRight className="w-5 h-5 ml-2" />
+                    <LogIn className="w-5 h-5 mr-2 text-black" />
+                    <span className="text-gold font-semibold">Sign In / Create Account</span>
+                    <ArrowUpRight className="w-5 h-5 ml-2 text-gold" />
                   </Button>
                 ) : (
                   <Button 
                     onClick={() => navigate("/my-account")}
-                    className="bg-gradient-to-r from-gold to-gold-dark text-black font-bold px-8 py-6 text-base shadow-lg hover:brightness-110 transition-all"
-                    style={{ boxShadow: "0 0 25px rgba(203, 166, 75, 0.35)" }}
+                    className="relative bg-gradient-to-r from-white via-[#FDFBF7] to-[#F5F0E6] border border-gold/40 px-8 py-6 text-base shadow-[0_4px_20px_rgba(200,167,102,0.3),0_8px_30px_rgba(0,0,0,0.15)] hover:shadow-[0_6px_25px_rgba(200,167,102,0.5),0_10px_40px_rgba(0,0,0,0.2)] hover:scale-[1.02] transition-all duration-300"
                   >
-                    <User className="w-5 h-5 mr-2" />
-                    Go to My Dashboard
-                    <ArrowUpRight className="w-5 h-5 ml-2" />
+                    <User className="w-5 h-5 mr-2 text-black" />
+                    <span className="text-gold font-semibold">Go to My Dashboard</span>
+                    <ArrowUpRight className="w-5 h-5 ml-2 text-gold" />
                   </Button>
                 )}
                 <Button 
-                  variant="outline"
+                  variant="secondary"
                   onClick={() => document.getElementById('investor-tools')?.scrollIntoView({ behavior: 'smooth' })}
-                  className="border-2 border-gold/40 text-gold hover:bg-gold/10 hover:border-gold px-8 py-6 text-base font-semibold"
+                  className="px-8 py-6 text-base"
                 >
                   Explore Free Tools
                   <ArrowUpRight className="w-5 h-5 ml-2" />

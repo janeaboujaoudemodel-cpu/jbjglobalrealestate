@@ -121,11 +121,18 @@ const GlobalHeader = () => {
   const isActive = (path: string) => location.pathname === path;
 
   return (
-    <header className="fixed top-0 left-0 right-0 z-[9999] bg-gradient-to-b from-black via-zinc-950 to-black/98 backdrop-blur-2xl border-b border-gold/20 shadow-2xl shadow-black/50">
+    <header className="fixed top-0 left-0 right-0 z-[9999] border-b border-gold/20 shadow-2xl shadow-black/50 overflow-hidden">
+      {/* Split background: Black behind logo, rest keeps current champagne styling */}
+      <div className="absolute inset-0">
+        {/* Solid black for logo area only (left side) */}
+        <div className="absolute left-0 top-0 bottom-0 w-80 bg-black" />
+        {/* Gradient for rest of header */}
+        <div className="absolute left-80 top-0 bottom-0 right-0 bg-gradient-to-b from-black via-zinc-950 to-black/98 backdrop-blur-2xl" />
+      </div>
       {/* Premium top accent line */}
-      <div className="absolute top-0 left-0 right-0 h-[2px] bg-gradient-to-r from-transparent via-gold/60 to-transparent" />
+      <div className="absolute top-0 left-0 right-0 h-[2px] bg-gradient-to-r from-transparent via-gold/60 to-transparent z-10" />
       
-      <div className="container mx-auto px-6 lg:px-8">
+      <div className="container mx-auto px-6 lg:px-8 relative z-10">
         <div className="flex items-center h-20 lg:h-24">
           
           {/* LEFT: Brand Logo - Monogram + Text - LOCKED (only size can change) */}
