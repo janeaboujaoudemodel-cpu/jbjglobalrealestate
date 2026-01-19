@@ -231,48 +231,56 @@ const brokerOnlyTools = [
     title: "Listing Admin (Sarah)",
     description: "Smart property listing, document parsing, auto-categorization.",
     icon: FolderOpen,
+    link: "/broker-toolkit",
   },
   {
     id: "broker-admin-support",
     title: "Leila — Broker Admin",
     description: "RERA compliance and broker operational support.",
     icon: User,
+    link: "/broker-toolkit",
   },
   {
     id: "hr-manager",
     title: "HR Manager (Jessica)",
     description: "Hiring pipeline, performance tracking, HR policies.",
     icon: Users,
+    link: "/hr-hub",
   },
   {
     id: "graphic-designer",
     title: "JBJ Graphic Designer",
     description: "Create brochures, ads, and marketing materials.",
     icon: Palette,
+    link: "/jbj-design-studio",
   },
   {
     id: "video-producer",
     title: "JBJ Video Producer",
     description: "Cinematic property tours and marketing videos.",
     icon: Film,
+    link: "/video-builder",
   },
   {
     id: "photographer",
     title: "JBJ Photographer",
     description: "Auto-enhance listing photos with AI filters.",
     icon: Camera,
+    link: "/jbj-design-studio",
   },
   {
     id: "digital-marketing",
     title: "JBJ Digital Marketing",
     description: "Automate ads, campaigns, and analytics.",
     icon: Megaphone,
+    link: "/broker-toolkit",
   },
   {
     id: "social-workshop",
     title: "JBJ Social Media Workshop",
     description: "Tutorials and training to grow your brand.",
     icon: Share2,
+    link: "/broker-toolkit",
   },
 ];
 
@@ -391,9 +399,13 @@ const AIHub = () => {
   };
 
   // Render broker-only locked cards (GREEN theme for Broker Hub section)
+  // If user is logged in, they can access these tools directly
   const renderLockedCard = (tool: typeof brokerOnlyTools[0]) => (
     <motion.div key={tool.id} variants={fadeInUp}>
-      <div className="block group h-full cursor-pointer" onClick={() => navigate("/join")}>
+      <div 
+        className="block group h-full cursor-pointer" 
+        onClick={() => navigate(user ? tool.link : "/join")}
+      >
         <Card className="bg-emerald-900/80 border-2 border-emerald-500/50 hover:border-gold hover:shadow-[0_0_30px_rgba(200,167,102,0.4)] shadow-[0_0_20px_rgba(16,185,129,0.3)] h-full relative overflow-hidden transition-all duration-300">
           <CardContent className="p-5 relative z-10">
             <div className="flex items-start gap-4">
@@ -403,10 +415,16 @@ const AIHub = () => {
               <div className="flex-1 min-w-0">
                 <div className="flex items-start gap-2 mb-1 flex-wrap">
                   <h3 className="text-white font-semibold text-sm leading-tight">{tool.title}</h3>
-                  <Badge className="bg-emerald-500/30 text-emerald-200 border-emerald-400/50 text-[10px] px-1.5 py-0 flex-shrink-0">
-                    <Lock className="w-2.5 h-2.5 mr-1" />
-                    BROKER ONLY
-                  </Badge>
+                  {user ? (
+                    <Badge className="bg-emerald-500/30 text-emerald-200 border-emerald-400/50 text-[10px] px-1.5 py-0 flex-shrink-0">
+                      FREE
+                    </Badge>
+                  ) : (
+                    <Badge className="bg-emerald-500/30 text-emerald-200 border-emerald-400/50 text-[10px] px-1.5 py-0 flex-shrink-0">
+                      <Lock className="w-2.5 h-2.5 mr-1" />
+                      BROKER ONLY
+                    </Badge>
+                  )}
                 </div>
                 <p className="text-emerald-100/80 text-sm line-clamp-2">{tool.description}</p>
               </div>
