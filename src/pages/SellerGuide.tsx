@@ -701,10 +701,10 @@ const SellerGuide = () => {
                   </Button>
                 </Link>
                 <Link to="/contact">
-                  <Button variant="secondary" className="px-6 py-4">
-                    <Phone className="w-5 h-5 mr-2" />
+                  <button className="relative inline-flex items-center justify-center gap-2 px-8 py-5 text-base font-bold rounded-xl transition-all duration-300 bg-transparent border-2 border-black text-black hover:bg-black hover:text-white group">
+                    <Phone className="w-5 h-5" />
                     Book Consultation
-                  </Button>
+                  </button>
                 </Link>
               </div>
               
