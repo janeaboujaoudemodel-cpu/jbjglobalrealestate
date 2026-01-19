@@ -749,17 +749,16 @@ const SellerGuide = () => {
                 </h4>
                 <div className="text-zinc-600 text-sm space-y-2">
                   <p>
-                    JBJ Global Real Estate provides real estate brokerage services only. We are not licensed to provide 
-                    legal, financial, mortgage, or investment advice. Information in this guide is for educational purposes 
-                    and may not reflect current regulations.
+                    All property valuations and market estimates provided in this guide are informational only and do not constitute appraisals. 
+                    Actual sale prices depend on market conditions and buyer negotiations.
                   </p>
                   <p>
                     For legal matters, we can introduce you to licensed law firms. For mortgage services, we can connect you 
-                    with licensed mortgage brokers. You contract directly with these partners, not through JBJ Global Real Estate.
+                    with licensed mortgage brokers. Please contact us via the Contact page for partner introductions.
                   </p>
                   <p>
-                    All property valuations and market estimates are informational only and do not constitute appraisals. 
-                    Actual sale prices depend on market conditions and buyer negotiations.
+                    Information provided is based on our company insights and expertise. We always recommend independent verification 
+                    before making any property decisions.
                   </p>
                 </div>
               </div>

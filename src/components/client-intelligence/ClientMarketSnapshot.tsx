@@ -126,7 +126,7 @@ const ClientMarketSnapshot = ({
                 </TooltipTrigger>
                 <TooltipContent className="max-w-xs">
                   <p className="text-xs">
-                    Educational overview based on aggregated official data. Not investment advice.
+                    Educational overview based on aggregated official data.
                   </p>
                 </TooltipContent>
               </Tooltip>

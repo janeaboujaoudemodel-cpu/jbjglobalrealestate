@@ -153,7 +153,7 @@ const AIMarketReport = ({ onResponse }: AIMarketReportProps) => {
             </div>
 
             <p className="text-xs text-muted-foreground">
-              * Disclaimer: This report is AI-generated for informational purposes only. Not investment advice.
+              * This report is AI-generated. For legal or mortgage matters, we can connect you with our licensed partners.
             </p>
           </div>
         )}

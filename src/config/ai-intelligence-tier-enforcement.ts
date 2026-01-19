@@ -56,9 +56,9 @@ export const AI_OUTPUT_RULES_BY_TIER: Record<IntelligenceTier, AIOutputTierRules
       'conversion_rates',
     ],
     required_disclaimers: [
-      'This information is for educational purposes only.',
+      'This information is for educational purposes.',
       'Past performance does not guarantee future results.',
-      `${BRAND_CONSTANTS.COMPANY_NAME} provides advisory services, not financial advice.`,
+      `${BRAND_CONSTANTS.COMPANY_NAME} provides full advisory services. For legal or mortgage matters, contact us for partner introductions.`,
     ],
     output_validation: {
       check_forbidden_content: true,

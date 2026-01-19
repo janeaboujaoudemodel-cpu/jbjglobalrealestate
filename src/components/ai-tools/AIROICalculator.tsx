@@ -200,7 +200,7 @@ const AIROICalculator = ({ onResponse }: AIROICalculatorProps) => {
             </div>
 
             <p className="text-xs text-muted-foreground">
-              * Disclaimer: This is an AI-generated projection for informational purposes only. Not investment advice.
+              * This is an AI-generated projection. For legal or mortgage matters, we can connect you with our licensed partners.
             </p>
           </div>
         )}
