@@ -284,7 +284,7 @@ END:VCARD`;
         </div>
       </section>
 
-      {/* Contact Cards */}
+      {/* Contact Cards - Transparent bg, gold borders, on hover: black border/icon */}
       <section className="py-10 bg-black border-y border-zinc-800">
         <div className="container mx-auto px-4">
           <div className="grid grid-cols-2 lg:grid-cols-4 gap-4 md:gap-6">
@@ -296,21 +296,21 @@ END:VCARD`;
                   else if (card.action === 'meeting') setMeetingModalOpen(true);
                   else if (card.action && card.clickable) window.location.href = card.action;
                 }}
-                className={`bg-white border border-zinc-200 rounded-xl p-5 hover:border-gold/50 hover:shadow-lg transition-all ${card.clickable ? 'cursor-pointer' : ''}`}
+                className={`group bg-transparent border-2 border-gold rounded-xl p-5 hover:border-black hover:bg-gradient-to-br hover:from-white hover:via-[#FDFBF7] hover:to-[#F5F0E6] transition-all ${card.clickable ? 'cursor-pointer' : ''}`}
               >
-                <div className="w-10 h-10 bg-black rounded-lg flex items-center justify-center mb-3">
-                  <card.icon className={`w-5 h-5 ${card.iconColor}`} />
+                <div className="w-10 h-10 bg-transparent border-2 border-gold group-hover:border-black rounded-lg flex items-center justify-center mb-3 transition-colors">
+                  <card.icon className="w-5 h-5 text-gold group-hover:text-black transition-colors" />
                 </div>
-                <h3 className={`font-semibold text-sm mb-1 ${card.titleColor}`}>{card.title}</h3>
-                <p className={`text-sm ${card.valueColor}`}>{card.value}</p>
+                <h3 className="font-semibold text-sm mb-1 text-white group-hover:text-black transition-colors">{card.title}</h3>
+                <p className="text-sm text-gold group-hover:text-gold transition-colors">{card.value}</p>
               </div>
             ))}
           </div>
         </div>
       </section>
 
-      {/* Consultation Form Section */}
-      <section className="py-16 md:py-20 bg-black">
+      {/* Consultation Form Section - White background for brighter page */}
+      <section className="py-16 md:py-20 bg-gradient-to-br from-white via-[#FDFBF7] to-[#F5F0E6]">
         <div className="container mx-auto px-4">
           <div className="max-w-3xl mx-auto">
             {isSuccess ? (
@@ -700,9 +700,9 @@ END:VCARD`;
                           </>
                         ) : (
                           <>
-                            <Send className="w-5 h-5 text-gold" />
-                            <span className="text-gold">Start Your</span>
-                            <span className="text-black">Inquiry</span>
+                            <Send className="w-5 h-5 text-gold group-hover:text-black transition-colors" />
+                            <span className="text-black group-hover:text-gold transition-colors">Start Your</span>
+                            <span className="text-gold group-hover:text-black transition-colors">Inquiry</span>
                           </>
                         )}
                       </span>

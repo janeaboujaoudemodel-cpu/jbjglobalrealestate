@@ -88,44 +88,44 @@ const SupportTicketForm = () => {
     <form onSubmit={handleSubmit} className="space-y-4">
       <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
         <div>
-          <Label htmlFor="fullName" className="text-zinc-300">Full Name *</Label>
+          <Label htmlFor="fullName" className="text-black">Full Name *</Label>
           <Input
             id="fullName"
             value={formData.fullName}
             onChange={(e) => setFormData({ ...formData, fullName: e.target.value })}
             required
-            className="bg-zinc-900 border-zinc-700 text-white"
+            className="bg-gradient-to-br from-white via-[#FDFBF7] to-[#F5F0E6] border-2 border-gold/40 text-black placeholder:text-gold/70 focus:border-gold"
             placeholder="John Smith"
           />
         </div>
         <div>
-          <Label htmlFor="email" className="text-zinc-300">Email *</Label>
+          <Label htmlFor="email" className="text-black">Email *</Label>
           <Input
             id="email"
             type="email"
             value={formData.email}
             onChange={(e) => setFormData({ ...formData, email: e.target.value })}
             required
-            className="bg-zinc-900 border-zinc-700 text-white"
+            className="bg-gradient-to-br from-white via-[#FDFBF7] to-[#F5F0E6] border-2 border-gold/40 text-black placeholder:text-gold/70 focus:border-gold"
             placeholder="john@example.com"
           />
         </div>
       </div>
       <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
         <div>
-          <Label htmlFor="phone" className="text-zinc-300">Phone Number</Label>
+          <Label htmlFor="phone" className="text-black">Phone Number</Label>
           <Input
             id="phone"
             value={formData.phone}
             onChange={(e) => setFormData({ ...formData, phone: e.target.value })}
-            className="bg-zinc-900 border-zinc-700 text-white"
+            className="bg-gradient-to-br from-white via-[#FDFBF7] to-[#F5F0E6] border-2 border-gold/40 text-black placeholder:text-gold/70 focus:border-gold"
             placeholder="+971 50 123 4567"
           />
         </div>
         <div>
-          <Label htmlFor="category" className="text-zinc-300">Category *</Label>
+          <Label htmlFor="category" className="text-black">Category *</Label>
           <Select value={formData.category} onValueChange={(v) => setFormData({ ...formData, category: v })}>
-            <SelectTrigger className="bg-zinc-900 border-zinc-700 text-white">
+            <SelectTrigger className="bg-gradient-to-br from-white via-[#FDFBF7] to-[#F5F0E6] border-2 border-gold/40 text-black">
               <SelectValue placeholder="Select category" />
             </SelectTrigger>
             <SelectContent>
@@ -140,20 +140,20 @@ const SupportTicketForm = () => {
         </div>
       </div>
       <div>
-        <Label htmlFor="subject" className="text-zinc-300">Subject *</Label>
+        <Label htmlFor="subject" className="text-black">Subject *</Label>
         <Input
           id="subject"
           value={formData.subject}
           onChange={(e) => setFormData({ ...formData, subject: e.target.value })}
           required
-          className="bg-zinc-900 border-zinc-700 text-white"
+          className="bg-gradient-to-br from-white via-[#FDFBF7] to-[#F5F0E6] border-2 border-gold/40 text-black placeholder:text-gold/70 focus:border-gold"
           placeholder="Brief description of your inquiry"
         />
       </div>
       <div>
-        <Label htmlFor="priority" className="text-zinc-300">Priority</Label>
+        <Label htmlFor="priority" className="text-black">Priority</Label>
         <Select value={formData.priority} onValueChange={(v) => setFormData({ ...formData, priority: v })}>
-          <SelectTrigger className="bg-zinc-900 border-zinc-700 text-white">
+          <SelectTrigger className="bg-gradient-to-br from-white via-[#FDFBF7] to-[#F5F0E6] border-2 border-gold/40 text-black">
             <SelectValue />
           </SelectTrigger>
           <SelectContent>
@@ -164,21 +164,31 @@ const SupportTicketForm = () => {
         </Select>
       </div>
       <div>
-        <Label htmlFor="description" className="text-zinc-300">Detailed Description *</Label>
+        <Label htmlFor="description" className="text-black">Detailed Description *</Label>
         <Textarea
           id="description"
           value={formData.description}
           onChange={(e) => setFormData({ ...formData, description: e.target.value })}
           required
           rows={5}
-          className="bg-zinc-900 border-zinc-700 text-white"
+          className="bg-gradient-to-br from-white via-[#FDFBF7] to-[#F5F0E6] border-2 border-gold/40 text-black placeholder:text-gold/70 focus:border-gold"
           placeholder="Please describe your inquiry in detail..."
         />
       </div>
-      <Button type="submit" disabled={isSubmitting} className="w-full bg-gold hover:bg-gold-dark text-black font-semibold">
-        {isSubmitting ? "Submitting..." : "Submit Support Ticket"}
-        <Send className="w-4 h-4 ml-2" />
-      </Button>
+      <button 
+        type="submit" 
+        disabled={isSubmitting} 
+        className="group relative w-full inline-flex items-center justify-center gap-2 px-8 py-4 text-base font-bold rounded-xl transition-all duration-300 overflow-hidden disabled:opacity-50"
+        style={{
+          background: 'linear-gradient(135deg, #FFFFFF 0%, #FDFBF7 50%, #F5F0E6 100%)',
+          border: '2px solid rgba(200,167,102,0.5)',
+          boxShadow: '0 10px 30px rgba(200,167,102,0.4), 0 6px 15px rgba(0,0,0,0.2), inset 0 2px 4px rgba(255,255,255,0.9)',
+        }}
+      >
+        <Send className="w-4 h-4 text-gold group-hover:text-black transition-colors" />
+        <span className="text-black group-hover:text-gold transition-colors">{isSubmitting ? "Submitting..." : "Submit Support"}</span>
+        <span className="text-gold group-hover:text-black transition-colors">Ticket</span>
+      </button>
     </form>
   );
 };
@@ -219,30 +229,30 @@ const FeedbackForm = () => {
     <form onSubmit={handleSubmit} className="space-y-4">
       <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
         <div>
-          <Label htmlFor="reviewName" className="text-zinc-300">Your Name *</Label>
+          <Label htmlFor="reviewName" className="text-black">Your Name *</Label>
           <Input
             id="reviewName"
             value={formData.fullName}
             onChange={(e) => setFormData({ ...formData, fullName: e.target.value })}
             required
-            className="bg-zinc-900 border-zinc-700 text-white"
+            className="bg-gradient-to-br from-white via-[#FDFBF7] to-[#F5F0E6] border-2 border-gold/40 text-black"
           />
         </div>
         <div>
-          <Label htmlFor="reviewEmail" className="text-zinc-300">Email *</Label>
+          <Label htmlFor="reviewEmail" className="text-black">Email *</Label>
           <Input
             id="reviewEmail"
             type="email"
             value={formData.email}
             onChange={(e) => setFormData({ ...formData, email: e.target.value })}
             required
-            className="bg-zinc-900 border-zinc-700 text-white"
+            className="bg-gradient-to-br from-white via-[#FDFBF7] to-[#F5F0E6] border-2 border-gold/40 text-black"
           />
         </div>
       </div>
       
       <div>
-        <Label className="text-zinc-300">Your Rating *</Label>
+        <Label className="text-black">Your Rating *</Label>
         <div className="flex gap-2 mt-2">
           {[1, 2, 3, 4, 5].map((star) => (
             <button
@@ -252,7 +262,7 @@ const FeedbackForm = () => {
               className="transition-transform hover:scale-110"
             >
               <Star
-                className={`w-8 h-8 ${star <= rating ? "fill-gold text-gold" : "text-zinc-600"}`}
+                className={`w-8 h-8 ${star <= rating ? "fill-gold text-gold" : "text-zinc-400"}`}
               />
             </button>
           ))}
@@ -260,9 +270,9 @@ const FeedbackForm = () => {
       </div>
 
       <div>
-        <Label htmlFor="serviceType" className="text-zinc-300">Service Used *</Label>
+        <Label htmlFor="serviceType" className="text-black">Service Used *</Label>
         <Select value={formData.serviceType} onValueChange={(v) => setFormData({ ...formData, serviceType: v })}>
-          <SelectTrigger className="bg-zinc-900 border-zinc-700 text-white">
+          <SelectTrigger className="bg-gradient-to-br from-white via-[#FDFBF7] to-[#F5F0E6] border-2 border-gold/40 text-black">
             <SelectValue placeholder="Select service" />
           </SelectTrigger>
           <SelectContent>
@@ -278,22 +288,22 @@ const FeedbackForm = () => {
       </div>
 
       <div>
-        <Label htmlFor="review" className="text-zinc-300">Your Review *</Label>
+        <Label htmlFor="review" className="text-black">Your Review *</Label>
         <Textarea
           id="review"
           value={formData.review}
           onChange={(e) => setFormData({ ...formData, review: e.target.value })}
           required
           rows={5}
-          className="bg-zinc-900 border-zinc-700 text-white"
+          className="bg-gradient-to-br from-white via-[#FDFBF7] to-[#F5F0E6] border-2 border-gold/40 text-black placeholder:text-gold/70"
           placeholder="Share your experience with JBJ Global Real Estate..."
         />
       </div>
 
       <div>
-        <Label htmlFor="recommend" className="text-zinc-300">Would you recommend us?</Label>
+        <Label htmlFor="recommend" className="text-black">Would you recommend us?</Label>
         <Select value={formData.wouldRecommend} onValueChange={(v) => setFormData({ ...formData, wouldRecommend: v })}>
-          <SelectTrigger className="bg-zinc-900 border-zinc-700 text-white">
+          <SelectTrigger className="bg-gradient-to-br from-white via-[#FDFBF7] to-[#F5F0E6] border-2 border-gold/40 text-black">
             <SelectValue placeholder="Select option" />
           </SelectTrigger>
           <SelectContent>
@@ -305,11 +315,21 @@ const FeedbackForm = () => {
         </Select>
       </div>
 
-      <Button type="submit" disabled={isSubmitting} className="w-full bg-gold hover:bg-gold-dark text-black font-semibold">
-        {isSubmitting ? "Submitting..." : "Submit Review"}
-        <MessageSquareHeart className="w-4 h-4 ml-2" />
-      </Button>
-      <p className="text-xs text-zinc-500 text-center">
+      <button 
+        type="submit" 
+        disabled={isSubmitting} 
+        className="group relative w-full inline-flex items-center justify-center gap-2 px-8 py-4 text-base font-bold rounded-xl transition-all duration-300 overflow-hidden disabled:opacity-50"
+        style={{
+          background: 'linear-gradient(135deg, #FFFFFF 0%, #FDFBF7 50%, #F5F0E6 100%)',
+          border: '2px solid rgba(200,167,102,0.5)',
+          boxShadow: '0 10px 30px rgba(200,167,102,0.4), 0 6px 15px rgba(0,0,0,0.2), inset 0 2px 4px rgba(255,255,255,0.9)',
+        }}
+      >
+        <MessageSquareHeart className="w-4 h-4 text-gold group-hover:text-black transition-colors" />
+        <span className="text-black group-hover:text-gold transition-colors">{isSubmitting ? "Submitting..." : "Submit"}</span>
+        <span className="text-gold group-hover:text-black transition-colors">Review</span>
+      </button>
+      <p className="text-xs text-zinc-600 text-center">
         Reviews are moderated before being published on our website.
       </p>
     </form>
@@ -368,42 +388,42 @@ const IssueReportForm = () => {
     <form onSubmit={handleSubmit} className="space-y-4">
       <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
         <div>
-          <Label htmlFor="issueName" className="text-zinc-300">Full Name *</Label>
+          <Label htmlFor="issueName" className="text-black">Full Name *</Label>
           <Input
             id="issueName"
             value={formData.fullName}
             onChange={(e) => setFormData({ ...formData, fullName: e.target.value })}
             required
-            className="bg-zinc-900 border-zinc-700 text-white"
+            className="bg-gradient-to-br from-white via-[#FDFBF7] to-[#F5F0E6] border-2 border-gold/40 text-black"
           />
         </div>
         <div>
-          <Label htmlFor="issueEmail" className="text-zinc-300">Email *</Label>
+          <Label htmlFor="issueEmail" className="text-black">Email *</Label>
           <Input
             id="issueEmail"
             type="email"
             value={formData.email}
             onChange={(e) => setFormData({ ...formData, email: e.target.value })}
             required
-            className="bg-zinc-900 border-zinc-700 text-white"
+            className="bg-gradient-to-br from-white via-[#FDFBF7] to-[#F5F0E6] border-2 border-gold/40 text-black"
           />
         </div>
       </div>
 
       <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
         <div>
-          <Label htmlFor="issuePhone" className="text-zinc-300">Phone Number</Label>
+          <Label htmlFor="issuePhone" className="text-black">Phone Number</Label>
           <Input
             id="issuePhone"
             value={formData.phone}
             onChange={(e) => setFormData({ ...formData, phone: e.target.value })}
-            className="bg-zinc-900 border-zinc-700 text-white"
+            className="bg-gradient-to-br from-white via-[#FDFBF7] to-[#F5F0E6] border-2 border-gold/40 text-black"
           />
         </div>
         <div>
-          <Label htmlFor="browser" className="text-zinc-300">Browser *</Label>
+          <Label htmlFor="browser" className="text-black">Browser *</Label>
           <Select value={formData.browser} onValueChange={(v) => setFormData({ ...formData, browser: v })}>
-            <SelectTrigger className="bg-zinc-900 border-zinc-700 text-white">
+            <SelectTrigger className="bg-gradient-to-br from-white via-[#FDFBF7] to-[#F5F0E6] border-2 border-gold/40 text-black">
               <SelectValue placeholder="Select browser" />
             </SelectTrigger>
             <SelectContent>
@@ -420,9 +440,9 @@ const IssueReportForm = () => {
 
       <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
         <div>
-          <Label htmlFor="device" className="text-zinc-300">Device *</Label>
+          <Label htmlFor="device" className="text-black">Device *</Label>
           <Select value={formData.device} onValueChange={(v) => setFormData({ ...formData, device: v })}>
-            <SelectTrigger className="bg-zinc-900 border-zinc-700 text-white">
+            <SelectTrigger className="bg-gradient-to-br from-white via-[#FDFBF7] to-[#F5F0E6] border-2 border-gold/40 text-black">
               <SelectValue placeholder="Select device" />
             </SelectTrigger>
             <SelectContent>
@@ -437,57 +457,57 @@ const IssueReportForm = () => {
           </Select>
         </div>
         <div>
-          <Label htmlFor="pageUrl" className="text-zinc-300">Page URL *</Label>
+          <Label htmlFor="pageUrl" className="text-black">Page URL *</Label>
           <Input
             id="pageUrl"
             value={formData.pageUrl}
             onChange={(e) => setFormData({ ...formData, pageUrl: e.target.value })}
             required
-            className="bg-zinc-900 border-zinc-700 text-white"
+            className="bg-gradient-to-br from-white via-[#FDFBF7] to-[#F5F0E6] border-2 border-gold/40 text-black placeholder:text-gold/70"
             placeholder="https://jbjglobalrealestate.lovable.app/..."
           />
         </div>
       </div>
 
       <div>
-        <Label htmlFor="errorMessage" className="text-zinc-300">Error Message (if any)</Label>
+        <Label htmlFor="errorMessage" className="text-black">Error Message (if any)</Label>
         <Input
           id="errorMessage"
           value={formData.errorMessage}
           onChange={(e) => setFormData({ ...formData, errorMessage: e.target.value })}
-          className="bg-zinc-900 border-zinc-700 text-white"
+          className="bg-gradient-to-br from-white via-[#FDFBF7] to-[#F5F0E6] border-2 border-gold/40 text-black placeholder:text-gold/70"
           placeholder="Copy and paste any error message you see"
         />
       </div>
 
       <div>
-        <Label htmlFor="description" className="text-zinc-300">Issue Description *</Label>
+        <Label htmlFor="description" className="text-black">Issue Description *</Label>
         <Textarea
           id="description"
           value={formData.description}
           onChange={(e) => setFormData({ ...formData, description: e.target.value })}
           required
           rows={4}
-          className="bg-zinc-900 border-zinc-700 text-white"
+          className="bg-gradient-to-br from-white via-[#FDFBF7] to-[#F5F0E6] border-2 border-gold/40 text-black placeholder:text-gold/70"
           placeholder="Describe what's not working..."
         />
       </div>
 
       <div>
-        <Label htmlFor="steps" className="text-zinc-300">Steps to Reproduce</Label>
+        <Label htmlFor="steps" className="text-black">Steps to Reproduce</Label>
         <Textarea
           id="steps"
           value={formData.stepsToReproduce}
           onChange={(e) => setFormData({ ...formData, stepsToReproduce: e.target.value })}
           rows={3}
-          className="bg-zinc-900 border-zinc-700 text-white"
+          className="bg-gradient-to-br from-white via-[#FDFBF7] to-[#F5F0E6] border-2 border-gold/40 text-black placeholder:text-gold/70"
           placeholder="1. Go to page X&#10;2. Click on Y&#10;3. Error appears"
         />
       </div>
 
       <div>
-        <Label className="text-zinc-300">Screenshot (optional)</Label>
-        <div className="mt-2 border-2 border-dashed border-zinc-700 rounded-lg p-6 text-center hover:border-gold/50 transition-colors">
+        <Label className="text-black">Screenshot (optional)</Label>
+        <div className="mt-2 border-2 border-dashed border-gold/40 rounded-lg p-6 text-center hover:border-gold transition-colors bg-gradient-to-br from-white via-[#FDFBF7] to-[#F5F0E6]">
           <input
             type="file"
             accept="image/*"
@@ -496,18 +516,28 @@ const IssueReportForm = () => {
             id="screenshot-upload"
           />
           <label htmlFor="screenshot-upload" className="cursor-pointer">
-            <Upload className="w-8 h-8 text-zinc-500 mx-auto mb-2" />
-            <p className="text-zinc-400 text-sm">
+            <Upload className="w-8 h-8 text-gold mx-auto mb-2" />
+            <p className="text-zinc-600 text-sm">
               {screenshot ? screenshot.name : "Click to upload a screenshot"}
             </p>
           </label>
         </div>
       </div>
 
-      <Button type="submit" disabled={isSubmitting} className="w-full bg-red-600 hover:bg-red-700 text-white font-semibold">
-        {isSubmitting ? "Submitting..." : "Report Issue"}
-        <AlertCircle className="w-4 h-4 ml-2" />
-      </Button>
+      <button 
+        type="submit" 
+        disabled={isSubmitting} 
+        className="group relative w-full inline-flex items-center justify-center gap-2 px-8 py-4 text-base font-bold rounded-xl transition-all duration-300 overflow-hidden disabled:opacity-50"
+        style={{
+          background: 'linear-gradient(135deg, #FFFFFF 0%, #FDFBF7 50%, #F5F0E6 100%)',
+          border: '2px solid rgba(200,167,102,0.5)',
+          boxShadow: '0 10px 30px rgba(200,167,102,0.4), 0 6px 15px rgba(0,0,0,0.2), inset 0 2px 4px rgba(255,255,255,0.9)',
+        }}
+      >
+        <AlertCircle className="w-4 h-4 text-gold group-hover:text-black transition-colors" />
+        <span className="text-black group-hover:text-gold transition-colors">{isSubmitting ? "Submitting..." : "Report"}</span>
+        <span className="text-gold group-hover:text-black transition-colors">Issue</span>
+      </button>
     </form>
   );
 };
@@ -578,42 +608,42 @@ const IdeaBoxForm = () => {
 
       <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
         <div>
-          <Label htmlFor="ideaName" className="text-zinc-300">Full Name *</Label>
+          <Label htmlFor="ideaName" className="text-black">Full Name *</Label>
           <Input
             id="ideaName"
             value={formData.fullName}
             onChange={(e) => setFormData({ ...formData, fullName: e.target.value })}
             required
-            className="bg-zinc-900 border-zinc-700 text-white"
+            className="bg-gradient-to-br from-white via-[#FDFBF7] to-[#F5F0E6] border-2 border-gold/40 text-black"
           />
         </div>
         <div>
-          <Label htmlFor="ideaEmail" className="text-zinc-300">Email *</Label>
+          <Label htmlFor="ideaEmail" className="text-black">Email *</Label>
           <Input
             id="ideaEmail"
             type="email"
             value={formData.email}
             onChange={(e) => setFormData({ ...formData, email: e.target.value })}
             required
-            className="bg-zinc-900 border-zinc-700 text-white"
+            className="bg-gradient-to-br from-white via-[#FDFBF7] to-[#F5F0E6] border-2 border-gold/40 text-black"
           />
         </div>
       </div>
 
       <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
         <div>
-          <Label htmlFor="ideaPhone" className="text-zinc-300">Phone Number</Label>
+          <Label htmlFor="ideaPhone" className="text-black">Phone Number</Label>
           <Input
             id="ideaPhone"
             value={formData.phone}
             onChange={(e) => setFormData({ ...formData, phone: e.target.value })}
-            className="bg-zinc-900 border-zinc-700 text-white"
+            className="bg-gradient-to-br from-white via-[#FDFBF7] to-[#F5F0E6] border-2 border-gold/40 text-black"
           />
         </div>
         <div>
-          <Label htmlFor="ideaCategory" className="text-zinc-300">Idea Category *</Label>
+          <Label htmlFor="ideaCategory" className="text-black">Idea Category *</Label>
           <Select value={formData.ideaCategory} onValueChange={(v) => setFormData({ ...formData, ideaCategory: v })}>
-            <SelectTrigger className="bg-zinc-900 border-zinc-700 text-white">
+            <SelectTrigger className="bg-gradient-to-br from-white via-[#FDFBF7] to-[#F5F0E6] border-2 border-gold/40 text-black">
               <SelectValue placeholder="Select category" />
             </SelectTrigger>
             <SelectContent>
@@ -630,47 +660,57 @@ const IdeaBoxForm = () => {
       </div>
 
       <div>
-        <Label htmlFor="ideaTitle" className="text-zinc-300">Idea Title *</Label>
+        <Label htmlFor="ideaTitle" className="text-black">Idea Title *</Label>
         <Input
           id="ideaTitle"
           value={formData.ideaTitle}
           onChange={(e) => setFormData({ ...formData, ideaTitle: e.target.value })}
           required
-          className="bg-zinc-900 border-zinc-700 text-white"
+          className="bg-gradient-to-br from-white via-[#FDFBF7] to-[#F5F0E6] border-2 border-gold/40 text-black placeholder:text-gold/70"
           placeholder="Give your idea a catchy title"
         />
       </div>
 
       <div>
-        <Label htmlFor="ideaDescription" className="text-zinc-300">Your Idea *</Label>
+        <Label htmlFor="ideaDescription" className="text-black">Your Idea *</Label>
         <Textarea
           id="ideaDescription"
           value={formData.ideaDescription}
           onChange={(e) => setFormData({ ...formData, ideaDescription: e.target.value })}
           required
           rows={5}
-          className="bg-zinc-900 border-zinc-700 text-white"
+          className="bg-gradient-to-br from-white via-[#FDFBF7] to-[#F5F0E6] border-2 border-gold/40 text-black placeholder:text-gold/70"
           placeholder="Describe your creative idea in detail. Be as specific as possible!"
         />
       </div>
 
       <div>
-        <Label htmlFor="expectedBenefit" className="text-zinc-300">Expected Benefit</Label>
+        <Label htmlFor="expectedBenefit" className="text-black">Expected Benefit</Label>
         <Textarea
           id="expectedBenefit"
           value={formData.expectedBenefit}
           onChange={(e) => setFormData({ ...formData, expectedBenefit: e.target.value })}
           rows={2}
-          className="bg-zinc-900 border-zinc-700 text-white"
+          className="bg-gradient-to-br from-white via-[#FDFBF7] to-[#F5F0E6] border-2 border-gold/40 text-black placeholder:text-gold/70"
           placeholder="How would this idea benefit JBJ Global Real Estate or our clients?"
         />
       </div>
 
-      <Button type="submit" disabled={isSubmitting} className="w-full bg-gradient-to-r from-purple-600 to-gold hover:opacity-90 text-white font-semibold">
-        {isSubmitting ? "Submitting..." : "Submit Idea & Enter Draw"}
-        <Lightbulb className="w-4 h-4 ml-2" />
-      </Button>
-      <p className="text-xs text-zinc-500 text-center">
+      <button 
+        type="submit" 
+        disabled={isSubmitting} 
+        className="group relative w-full inline-flex items-center justify-center gap-2 px-8 py-4 text-base font-bold rounded-xl transition-all duration-300 overflow-hidden disabled:opacity-50"
+        style={{
+          background: 'linear-gradient(135deg, #FFFFFF 0%, #FDFBF7 50%, #F5F0E6 100%)',
+          border: '2px solid rgba(200,167,102,0.5)',
+          boxShadow: '0 10px 30px rgba(200,167,102,0.4), 0 6px 15px rgba(0,0,0,0.2), inset 0 2px 4px rgba(255,255,255,0.9)',
+        }}
+      >
+        <Lightbulb className="w-4 h-4 text-gold group-hover:text-black transition-colors" />
+        <span className="text-black group-hover:text-gold transition-colors">{isSubmitting ? "Submitting..." : "Submit Idea &"}</span>
+        <span className="text-gold group-hover:text-black transition-colors">Enter Draw</span>
+      </button>
+      <p className="text-xs text-zinc-600 text-center">
         By submitting, you agree to enter the monthly draw. Winners will be notified via email.
       </p>
     </form>
