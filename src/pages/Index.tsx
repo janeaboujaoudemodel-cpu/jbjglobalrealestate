@@ -340,30 +340,39 @@ const Index = () => {
             </Link>
           </div>
 
-          {/* Licensed Partner Network - Compact Style */}
+          {/* Licensed Partner Network - Square Style matching audience cards */}
           <div className="flex justify-center gap-3 max-w-2xl mx-auto mb-8 flex-wrap">
             <Link to="/services/law-firm" className="group">
-              <div className="bg-white border border-zinc-200 rounded-lg px-4 py-2 flex items-center gap-2 hover:border-gold hover:shadow-lg hover:shadow-gold/20 transition-all duration-300">
-                <div className="w-7 h-7 bg-black rounded-md flex items-center justify-center">
-                  <Scale className="w-3.5 h-3.5 text-gold" />
+              <div className="bg-white border border-zinc-200 rounded-lg p-3 md:p-4 text-center hover:border-gold hover:shadow-lg hover:shadow-gold/20 transition-all duration-300 relative overflow-hidden min-w-[90px]">
+                <div className="absolute inset-0 bg-gradient-to-br from-gold/5 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
+                <div className="relative z-10">
+                  <div className="w-8 h-8 md:w-10 md:h-10 bg-black rounded-lg flex items-center justify-center mx-auto mb-2 group-hover:bg-zinc-900 transition-colors">
+                    <Scale className="w-4 h-4 md:w-5 md:h-5 text-gold" />
+                  </div>
+                  <h4 className="text-black text-[10px] md:text-xs font-semibold">Legal Partners</h4>
                 </div>
-                <span className="text-black text-xs font-medium">Legal Partners</span>
               </div>
             </Link>
             <Link to="/mortgage-calculator" className="group">
-              <div className="bg-white border border-zinc-200 rounded-lg px-4 py-2 flex items-center gap-2 hover:border-gold hover:shadow-lg hover:shadow-gold/20 transition-all duration-300">
-                <div className="w-7 h-7 bg-black rounded-md flex items-center justify-center">
-                  <Calculator className="w-3.5 h-3.5 text-gold" />
+              <div className="bg-white border border-zinc-200 rounded-lg p-3 md:p-4 text-center hover:border-gold hover:shadow-lg hover:shadow-gold/20 transition-all duration-300 relative overflow-hidden min-w-[90px]">
+                <div className="absolute inset-0 bg-gradient-to-br from-gold/5 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
+                <div className="relative z-10">
+                  <div className="w-8 h-8 md:w-10 md:h-10 bg-black rounded-lg flex items-center justify-center mx-auto mb-2 group-hover:bg-zinc-900 transition-colors">
+                    <Calculator className="w-4 h-4 md:w-5 md:h-5 text-gold" />
+                  </div>
+                  <h4 className="text-black text-[10px] md:text-xs font-semibold">Mortgage Partners</h4>
                 </div>
-                <span className="text-black text-xs font-medium">Mortgage Partners</span>
               </div>
             </Link>
             <Link to="/services/design-build" className="group">
-              <div className="bg-white border border-zinc-200 rounded-lg px-4 py-2 flex items-center gap-2 hover:border-gold hover:shadow-lg hover:shadow-gold/20 transition-all duration-300">
-                <div className="w-7 h-7 bg-black rounded-md flex items-center justify-center">
-                  <Wrench className="w-3.5 h-3.5 text-gold" />
+              <div className="bg-white border border-zinc-200 rounded-lg p-3 md:p-4 text-center hover:border-gold hover:shadow-lg hover:shadow-gold/20 transition-all duration-300 relative overflow-hidden min-w-[90px]">
+                <div className="absolute inset-0 bg-gradient-to-br from-gold/5 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
+                <div className="relative z-10">
+                  <div className="w-8 h-8 md:w-10 md:h-10 bg-black rounded-lg flex items-center justify-center mx-auto mb-2 group-hover:bg-zinc-900 transition-colors">
+                    <Wrench className="w-4 h-4 md:w-5 md:h-5 text-gold" />
+                  </div>
+                  <h4 className="text-black text-[10px] md:text-xs font-semibold">Design & Build</h4>
                 </div>
-                <span className="text-black text-xs font-medium">Design & Build</span>
               </div>
             </Link>
           </div>

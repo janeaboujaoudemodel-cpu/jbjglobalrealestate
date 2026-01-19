@@ -282,10 +282,10 @@ const FAQ = () => {
 
       {/* FAQ Content with Sticky TOC Above */}
       <section id="faq-content" className="py-16 bg-black relative">
-        <div className="container mx-auto px-4">
+        <div className="w-full px-4 sm:px-6 lg:px-8">
           {/* Sticky FAQ Quick Access - Compact & Above Content (Mobile/Tablet Only) */}
           <div className="lg:hidden sticky top-0 z-50 -mx-4 px-4 py-3 bg-black/95 backdrop-blur-sm border-b border-gold/20 shadow-lg">
-            <div className="max-w-5xl mx-auto">
+            <div className="w-full">
               <FAQTableOfContents 
                 categories={categories}
                 title="FAQ Quick Access"
@@ -294,7 +294,7 @@ const FAQ = () => {
             </div>
           </div>
 
-          {/* Main Content - Full Width Stretched */}
+          {/* Main Content - Full Bleed Width Stretched Edge-to-Edge */}
           <div className="w-full space-y-16 mt-8">
             {categories.map((category, categoryIndex) => (
               <motion.div

@@ -1,6 +1,6 @@
 import { MessageCircle } from 'lucide-react';
 import { CONTACT_INFO } from '@/constants/stats';
-import jbjMonogramDarkBg from "@/assets/jbj-monogram-dark-bg.png";
+import jbjMonogramLightBg from "@/assets/jbj-monogram-light-bg.png";
 
 interface ChatWelcomeProps {
   onStartChat: () => void;
@@ -13,7 +13,7 @@ const ChatWelcome = ({ onStartChat }: ChatWelcomeProps) => {
       <div className="text-center">
         <div className="mx-auto">
           <img
-            src={jbjMonogramDarkBg}
+            src={jbjMonogramLightBg}
             alt="JBJ Global Real Estate"
             className="h-28 w-auto mx-auto object-contain"
           />
@@ -72,9 +72,9 @@ const ChatWelcome = ({ onStartChat }: ChatWelcomeProps) => {
         </div>
       </div>
 
-      {/* Tip at bottom - Black text on light bg */}
-      <div className="text-center mt-2 px-4 py-2 bg-white/80 rounded-lg border border-black/10">
-        <p className="text-xs flex items-center justify-center gap-2">
+      {/* Tip at bottom - Black text on light bg - visible on mobile with mb-safe */}
+      <div className="text-center mt-2 mb-4 sm:mb-2 px-4 py-2 bg-white/80 rounded-lg border border-gold/30">
+        <p className="text-xs flex flex-wrap items-center justify-center gap-1 sm:gap-2">
           <span className="text-gold">💡</span>
           <span className="text-black font-semibold">Tip:</span>
           <span className="text-zinc-700">Our team can answer most questions right away. For complex matters, we'll connect you to a specialist!</span>
