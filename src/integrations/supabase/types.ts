@@ -305,6 +305,48 @@ export type Database = {
         }
         Relationships: []
       }
+      ai_outfit_requests: {
+        Row: {
+          completed_at: string | null
+          created_at: string
+          error_message: string | null
+          generated_image_url: string | null
+          id: string
+          metadata: Json | null
+          original_image_url: string | null
+          prompt: string
+          session_id: string | null
+          status: string
+          user_id: string
+        }
+        Insert: {
+          completed_at?: string | null
+          created_at?: string
+          error_message?: string | null
+          generated_image_url?: string | null
+          id?: string
+          metadata?: Json | null
+          original_image_url?: string | null
+          prompt: string
+          session_id?: string | null
+          status?: string
+          user_id: string
+        }
+        Update: {
+          completed_at?: string | null
+          created_at?: string
+          error_message?: string | null
+          generated_image_url?: string | null
+          id?: string
+          metadata?: Json | null
+          original_image_url?: string | null
+          prompt?: string
+          session_id?: string | null
+          status?: string
+          user_id?: string
+        }
+        Relationships: []
+      }
       ai_tool_projects: {
         Row: {
           created_at: string
@@ -3591,6 +3633,75 @@ export type Database = {
           resource_type?: string
           role?: string
           updated_at?: string | null
+        }
+        Relationships: []
+      }
+      decision_records: {
+        Row: {
+          audit_log: Json | null
+          created_at: string
+          created_by_email: string | null
+          created_by_role: string
+          created_by_user_id: string
+          decision_id: string
+          decision_type: string
+          description: string | null
+          finalized_at: string | null
+          finalized_by_email: string | null
+          finalized_by_role: string | null
+          finalized_by_user_id: string | null
+          id: string
+          inputs: Json
+          is_finalized: boolean | null
+          outputs: Json | null
+          reviews: Json | null
+          title: string
+          updated_at: string
+          workflow_state: string
+        }
+        Insert: {
+          audit_log?: Json | null
+          created_at?: string
+          created_by_email?: string | null
+          created_by_role: string
+          created_by_user_id: string
+          decision_id: string
+          decision_type: string
+          description?: string | null
+          finalized_at?: string | null
+          finalized_by_email?: string | null
+          finalized_by_role?: string | null
+          finalized_by_user_id?: string | null
+          id?: string
+          inputs: Json
+          is_finalized?: boolean | null
+          outputs?: Json | null
+          reviews?: Json | null
+          title: string
+          updated_at?: string
+          workflow_state?: string
+        }
+        Update: {
+          audit_log?: Json | null
+          created_at?: string
+          created_by_email?: string | null
+          created_by_role?: string
+          created_by_user_id?: string
+          decision_id?: string
+          decision_type?: string
+          description?: string | null
+          finalized_at?: string | null
+          finalized_by_email?: string | null
+          finalized_by_role?: string | null
+          finalized_by_user_id?: string | null
+          id?: string
+          inputs?: Json
+          is_finalized?: boolean | null
+          outputs?: Json | null
+          reviews?: Json | null
+          title?: string
+          updated_at?: string
+          workflow_state?: string
         }
         Relationships: []
       }
@@ -8773,6 +8884,129 @@ export type Database = {
         }
         Relationships: []
       }
+      payout_audit_logs: {
+        Row: {
+          action_type: string
+          actor_role: string
+          actor_user_id: string
+          audit_id: string
+          created_at: string
+          id: string
+          ip_address: string | null
+          metadata: Json | null
+          new_status: string | null
+          payout_id: string
+          previous_status: string | null
+          result: string
+          result_reason: string | null
+        }
+        Insert: {
+          action_type: string
+          actor_role: string
+          actor_user_id: string
+          audit_id: string
+          created_at?: string
+          id?: string
+          ip_address?: string | null
+          metadata?: Json | null
+          new_status?: string | null
+          payout_id: string
+          previous_status?: string | null
+          result: string
+          result_reason?: string | null
+        }
+        Update: {
+          action_type?: string
+          actor_role?: string
+          actor_user_id?: string
+          audit_id?: string
+          created_at?: string
+          id?: string
+          ip_address?: string | null
+          metadata?: Json | null
+          new_status?: string | null
+          payout_id?: string
+          previous_status?: string | null
+          result?: string
+          result_reason?: string | null
+        }
+        Relationships: []
+      }
+      payout_readiness_records: {
+        Row: {
+          approval_required: boolean | null
+          approval_timestamp: string | null
+          approved_by: string | null
+          approver_role: string | null
+          block_reason: string | null
+          blocked_at: string | null
+          blocked_by: string | null
+          commission_total: number
+          created_at: string
+          currency: string
+          execution_model: string
+          id: string
+          internal_notes: string | null
+          jurisdiction_id: string
+          partner_id: string
+          partner_type: string
+          payout_id: string
+          payout_status: string
+          related_commission_ids: string[] | null
+          related_deal_ids: string[] | null
+          settlement_method: string | null
+          updated_at: string
+        }
+        Insert: {
+          approval_required?: boolean | null
+          approval_timestamp?: string | null
+          approved_by?: string | null
+          approver_role?: string | null
+          block_reason?: string | null
+          blocked_at?: string | null
+          blocked_by?: string | null
+          commission_total?: number
+          created_at?: string
+          currency?: string
+          execution_model: string
+          id?: string
+          internal_notes?: string | null
+          jurisdiction_id: string
+          partner_id: string
+          partner_type: string
+          payout_id: string
+          payout_status?: string
+          related_commission_ids?: string[] | null
+          related_deal_ids?: string[] | null
+          settlement_method?: string | null
+          updated_at?: string
+        }
+        Update: {
+          approval_required?: boolean | null
+          approval_timestamp?: string | null
+          approved_by?: string | null
+          approver_role?: string | null
+          block_reason?: string | null
+          blocked_at?: string | null
+          blocked_by?: string | null
+          commission_total?: number
+          created_at?: string
+          currency?: string
+          execution_model?: string
+          id?: string
+          internal_notes?: string | null
+          jurisdiction_id?: string
+          partner_id?: string
+          partner_type?: string
+          payout_id?: string
+          payout_status?: string
+          related_commission_ids?: string[] | null
+          related_deal_ids?: string[] | null
+          settlement_method?: string | null
+          updated_at?: string
+        }
+        Relationships: []
+      }
       phone_verifications: {
         Row: {
           attempts: number | null
@@ -11332,6 +11566,87 @@ export type Database = {
           user_agent?: string | null
           user_id?: string | null
           visitor_fingerprint?: string | null
+        }
+        Relationships: []
+      }
+      web_developer_tasks: {
+        Row: {
+          approved_at: string | null
+          approved_by_user_id: string | null
+          assigned_by: string
+          assigned_by_user_id: string | null
+          changes: Json | null
+          completed_at: string | null
+          created_at: string
+          description: string | null
+          id: string
+          metadata: Json | null
+          status: string
+          title: string
+          updated_at: string
+          version_id: string | null
+        }
+        Insert: {
+          approved_at?: string | null
+          approved_by_user_id?: string | null
+          assigned_by: string
+          assigned_by_user_id?: string | null
+          changes?: Json | null
+          completed_at?: string | null
+          created_at?: string
+          description?: string | null
+          id?: string
+          metadata?: Json | null
+          status?: string
+          title: string
+          updated_at?: string
+          version_id?: string | null
+        }
+        Update: {
+          approved_at?: string | null
+          approved_by_user_id?: string | null
+          assigned_by?: string
+          assigned_by_user_id?: string | null
+          changes?: Json | null
+          completed_at?: string | null
+          created_at?: string
+          description?: string | null
+          id?: string
+          metadata?: Json | null
+          status?: string
+          title?: string
+          updated_at?: string
+          version_id?: string | null
+        }
+        Relationships: []
+      }
+      web_developer_versions: {
+        Row: {
+          created_at: string
+          created_by_user_id: string | null
+          description: string | null
+          id: string
+          is_current: boolean | null
+          snapshot: Json | null
+          version_id: string
+        }
+        Insert: {
+          created_at?: string
+          created_by_user_id?: string | null
+          description?: string | null
+          id?: string
+          is_current?: boolean | null
+          snapshot?: Json | null
+          version_id: string
+        }
+        Update: {
+          created_at?: string
+          created_by_user_id?: string | null
+          description?: string | null
+          id?: string
+          is_current?: boolean | null
+          snapshot?: Json | null
+          version_id?: string
         }
         Relationships: []
       }
