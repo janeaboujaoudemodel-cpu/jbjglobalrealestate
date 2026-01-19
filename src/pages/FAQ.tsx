@@ -49,29 +49,48 @@ interface FAQCategory {
 const FAQ = () => {
   const categories: FAQCategory[] = [
     {
+      id: "working-with-jbj",
+      title: "Working With JBJ",
+      icon: Users,
+      questions: [
+        {
+          question: "What does JBJ Global Real Estate do?",
+          answer: "JBJ Global Real Estate is a licensed UAE real estate brokerage. We specialize exclusively in buying, selling, and renting residential and commercial property. Our role is to guide clients through the real estate transaction process with structured advice, market insight, negotiation support, and transaction coordination."
+        },
+        {
+          question: "Is JBJ Global Real Estate licensed in the UAE?",
+          answer: "Yes. JBJ Global Real Estate is a licensed mainland brokerage in Dubai. All brokerage activities are conducted in accordance with UAE real estate regulations and authorities."
+        },
+        {
+          question: "Do you provide financial, mortgage, legal, or visa services directly?",
+          answer: "No. JBJ does not provide financial, mortgage, legal, or visa services directly. Where required, we may introduce clients to licensed third-party professionals. Any engagement with those partners is separate and independent from JBJ."
+        },
+        {
+          question: "Who do you typically work with?",
+          answer: "We work with end-users, landlords, tenants, investors, and international clients seeking professional guidance in the UAE real estate market."
+        }
+      ]
+    },
+    {
       id: "buying",
       title: "Buying Property",
       icon: Home,
       questions: [
         {
-          question: "Can foreigners buy property in the UAE?",
-          answer: "Yes, foreigners can purchase property in designated freehold areas across the UAE. Dubai, Abu Dhabi, and other emirates have specific zones where foreign nationals can own property outright with full ownership rights. No UAE residency is required to purchase in these areas."
-        },
-        {
-          question: "What are freehold and leasehold properties?",
-          answer: "Freehold ownership gives you full, permanent ownership of the property and the land it sits on. Leasehold ownership grants you property rights for a fixed period (typically 10-99 years), after which ownership reverts to the landowner. Most international buyers prefer freehold properties."
-        },
-        {
-          question: "What costs should I budget for when buying?",
-          answer: "Key costs include: Dubai Land Department fee (4% of property value), trustee office fee (AED 4,000-5,000), agency commission (typically 2%), NOC fee from developer (AED 500-5,000), and mortgage registration if applicable (0.25% of loan amount). Always factor in these costs beyond the purchase price."
+          question: "Can non-residents buy property in the UAE?",
+          answer: "Yes. Non-residents can purchase property in designated freehold areas across the UAE. Residency is not required to own property."
         },
         {
           question: "How long does the buying process take?",
-          answer: "For ready properties, the process typically takes 4-6 weeks from offer acceptance to completion. This includes due diligence, documentation, obtaining NOC from the developer, and the final transfer at the Land Department. Off-plan purchases have different timelines based on construction progress."
+          answer: "For ready properties, the process typically takes 4–6 weeks from offer acceptance to transfer. Off-plan purchases follow timelines defined by the developer and construction milestones."
         },
         {
-          question: "Do I need a UAE bank account to buy property?",
-          answer: "While not strictly required, having a UAE bank account makes the transaction smoother, especially for paying deposits and transfer fees. Many buyers open accounts during the purchasing process. International bank transfers are also accepted."
+          question: "What costs should buyers expect when purchasing?",
+          answer: "Costs may include government registration fees, transfer fees, brokerage commission, and developer-related charges. Exact costs depend on the property and are always clarified before proceeding."
+        },
+        {
+          question: "Can JBJ help me choose the right property?",
+          answer: "Yes. We assist with property selection based on your objectives, location preferences, budget considerations, and market conditions. We do not provide financial guarantees or investment promises."
         }
       ]
     },
@@ -81,154 +100,92 @@ const FAQ = () => {
       icon: Building2,
       questions: [
         {
-          question: "What documents do I need to sell my property?",
-          answer: "Essential documents include: original Title Deed, valid passport and Emirates ID (if applicable), proof of address, original purchase agreement (SPA), and any mortgage-related documents. If selling via Power of Attorney, you'll need a properly attested POA document."
+          question: "Can JBJ help me sell my property?",
+          answer: "Yes. We represent property owners in resale and leasing transactions, including pricing strategy, market positioning, buyer qualification, negotiation, and transfer coordination."
+        },
+        {
+          question: "What documents are required to sell a property?",
+          answer: "Typical requirements include proof of ownership, identification documents, and developer-related clearances. Requirements may vary depending on the property and developer."
         },
         {
           question: "What is a No Objection Certificate (NOC)?",
-          answer: "An NOC is a document from the developer confirming there are no outstanding service charges or fees on the property. It's required for property transfer and typically costs AED 500-5,000. Processing time varies by developer, usually 3-7 working days."
+          answer: "An NOC is a document issued by the developer confirming there are no outstanding obligations on the property. It is usually required to complete a property transfer."
         },
         {
-          question: "Can I sell my property if I have an existing mortgage?",
-          answer: "Yes, you can sell a mortgaged property. The outstanding mortgage amount will be settled from the sale proceeds, or the buyer can assume the mortgage (with bank approval). Your broker can coordinate with your bank throughout the process."
-        },
-        {
-          question: "How much does it cost to sell a property?",
-          answer: "Typical selling costs include: agency commission (2% + VAT), NOC fee (AED 500-5,000), and potentially mortgage early settlement fees. The 4% transfer fee is usually paid by the buyer, though this can be negotiated."
-        },
-        {
-          question: "Can I sell an off-plan property before handover?",
-          answer: "Yes, most developers allow resale of off-plan units once a certain payment milestone is reached (typically 40-50% of the purchase price). There may be an assignment fee. Check your SPA and developer policies for specific terms."
+          question: "Can I sell a property that has a mortgage?",
+          answer: "Yes. Mortgaged properties can be sold, subject to coordination with the bank and settlement of any outstanding obligations."
         }
       ]
     },
     {
-      id: "mortgages",
-      title: "Mortgages & Financing",
-      icon: Banknote,
+      id: "renting",
+      title: "Renting & Leasing",
+      icon: Key,
       questions: [
         {
-          question: "Can non-residents get a mortgage in the UAE?",
-          answer: "Yes, several UAE banks offer mortgages to non-residents. Typically, non-residents can finance 50-60% of the property value, compared to 75-80% for residents. Requirements and rates vary by bank, so comparing options is advisable."
+          question: "Does JBJ handle rentals?",
+          answer: "Yes. We assist landlords and tenants with residential and commercial leasing transactions."
         },
         {
-          question: "What mortgage rates are available?",
-          answer: "Mortgage rates in the UAE vary based on the lender, your profile, and whether you choose fixed or variable rates. Generally, rates range from 3.5% to 5.5%. We recommend getting quotes from multiple banks to find the best terms for your situation."
+          question: "What is required to rent a property in the UAE?",
+          answer: "Requirements typically include identification documents, rental payments, security deposit, and contract registration in accordance with local regulations."
         },
         {
-          question: "Should I get pre-approved before house hunting?",
-          answer: "Yes, mortgage pre-approval is highly recommended. It clarifies your budget, strengthens your negotiating position, and speeds up the purchase process once you find a property. Pre-approval typically takes 3-5 working days."
-        },
-        {
-          question: "What is the maximum loan-to-value (LTV) ratio?",
-          answer: "For UAE residents, LTV can be up to 80% for properties under AED 5 million and 70% for properties over AED 5 million. Non-residents typically qualify for 50-60% LTV. These are maximums; actual approval depends on your financial profile."
-        }
-      ]
-    },
-    {
-      id: "legal",
-      title: "Legal & Documentation",
-      icon: FileText,
-      questions: [
-        {
-          question: "What is an Ejari and why do I need it?",
-          answer: "Ejari is the official registration system for tenancy contracts in Dubai. It validates your rental agreement with the relevant authority. Landlords must register their rental agreements through Ejari within 30 days of signing."
-        },
-        {
-          question: "What is the role of the Dubai Land Department?",
-          answer: "The Dubai Land Department (DLD) is the government authority responsible for property registration and ownership transfer. All property transactions must be registered with DLD, and they issue the official Title Deed confirming ownership."
-        },
-        {
-          question: "Do I need a lawyer for property transactions?",
-          answer: "While not legally required, engaging a lawyer is recommended for complex transactions, first-time buyers, or international purchasers. A lawyer can review contracts, conduct due diligence, and protect your interests throughout the process."
-        },
-        {
-          question: "What is Power of Attorney (POA) and when is it needed?",
-          answer: "A Power of Attorney authorizes someone to act on your behalf in legal matters, including property transactions. It's essential if you can't be physically present for the transfer. POA documents must be properly notarized and attested."
-        }
-      ]
-    },
-    {
-      id: "offplan",
-      title: "Off-Plan Properties",
-      icon: Clock,
-      questions: [
-        {
-          question: "What are the benefits of buying off-plan?",
-          answer: "Off-plan benefits include: typically lower prices than ready properties, flexible payment plans during construction, potential capital appreciation by handover, and the opportunity to customize finishes in some cases."
-        },
-        {
-          question: "What are the risks of off-plan purchases?",
-          answer: "Risks include: construction delays, final product differing from plans, developer financial issues, and market value changes by handover. Mitigation includes buying from established developers with good track records and understanding your rights under RERA regulations."
-        },
-        {
-          question: "How do off-plan payment plans work?",
-          answer: "Payment plans vary by developer but typically involve: 10-20% on booking, staged payments during construction tied to milestones, and 20-40% on handover. Some developers offer post-handover payment plans. Always review the full payment schedule before committing."
-        },
-        {
-          question: "What happens if the developer delays handover?",
-          answer: "UAE law provides buyer protections for significant delays. You may be entitled to compensation or contract cancellation with refund in certain cases. Review your SPA terms and consult with a legal professional if you experience substantial delays."
-        }
-      ]
-    },
-    {
-      id: "costs",
-      title: "Costs & Fees",
-      icon: Calculator,
-      questions: [
-        {
-          question: "What are service charges?",
-          answer: "Service charges are annual fees paid by property owners to cover building maintenance, common area upkeep, security, and amenities. Rates vary significantly by building and community, typically ranging from AED 10-40 per square foot. Ask about service charges before purchasing."
-        },
-        {
-          question: "Is there property tax in the UAE?",
-          answer: "The UAE has no annual property tax or capital gains tax on property sales. However, there are transaction fees (4% transfer fee to DLD) and operational costs like service charges and municipality fees (typically added to utility bills)."
-        },
-        {
-          question: "What is the housing fee/municipality fee?",
-          answer: "The municipality housing fee is 5% of the annual rental value, billed monthly through DEWA (utility) bills for residential properties. Owners pay this based on the property's rental value, even if they live in the property themselves."
+          question: "Do you assist landlords with tenant placement?",
+          answer: "Yes. We support landlords with pricing guidance, tenant sourcing, contract coordination, and market-aligned leasing strategies."
         }
       ]
     },
     {
       id: "international",
-      title: "International Buyers",
+      title: "International Clients",
       icon: Globe,
       questions: [
         {
-          question: "Can I buy property remotely from abroad?",
-          answer: "Yes, remote purchases are common. You can conduct viewings virtually, sign documents electronically where permitted, and appoint a representative via Power of Attorney for the final transfer. Your broker can coordinate the entire process."
+          question: "Can I buy or sell property remotely?",
+          answer: "Yes. Many transactions are handled remotely through secure documentation and authorized representation when required."
         },
         {
-          question: "Does buying property give me UAE residency?",
-          answer: "Property ownership can qualify you for a UAE residency visa. Properties valued at AED 750,000+ may qualify for a 2-year renewable visa. Properties valued at AED 2 million+ may qualify for a 10-year Golden Visa. Requirements and processing vary."
+          question: "Does buying property guarantee UAE residency?",
+          answer: "No. Property ownership may qualify an individual to apply for certain residency options under UAE regulations, but residency approvals are issued solely by government authorities."
         },
         {
-          question: "What currencies can I use to pay?",
-          answer: "Property transactions are conducted in UAE Dirhams (AED). You can transfer funds from any currency, though exchange rates and transfer fees apply. UAE banks can help with currency conversion and international transfers."
+          question: "Can transactions be completed if I am outside the UAE?",
+          answer: "Yes. With proper documentation and authorization, transactions can be coordinated while you are abroad."
         }
       ]
     },
     {
-      id: "jbj",
-      title: "Working with JBJ",
-      icon: Users,
+      id: "compliance",
+      title: "Compliance & Transparency",
+      icon: Shield,
       questions: [
         {
-          question: "What services does JBJ Global Real Estate provide?",
-          answer: "JBJ provides real estate brokerage services including: property search and shortlisting, viewing coordination, market insights and guidance, negotiation support, and transaction management. We can also introduce you to licensed partners for legal and mortgage services."
+          question: "Does JBJ provide investment guarantees or ROI promises?",
+          answer: "No. JBJ does not offer guaranteed returns, financial promises, or investment assurances. Real estate values are subject to market conditions and external factors."
         },
         {
-          question: "How does the partner introduction work?",
-          answer: "When you need legal, mortgage, or other specialized services, we can introduce you to licensed professionals in our network. You contract directly with these partners — JBJ facilitates the introduction but is not a party to those service agreements."
+          question: "How does JBJ ensure transparency?",
+          answer: "We provide clear communication, documented processes, and full disclosure throughout every transaction."
         },
         {
-          question: "Is JBJ licensed in the UAE?",
-          answer: "Yes, JBJ Global Real Estate is a fully licensed Dubai mainland brokerage, registered with the Department of Economic Development (DED). Our agents are RERA-registered and authorized to conduct real estate transactions in Dubai."
+          question: "Who is responsible for third-party services introduced by JBJ?",
+          answer: "Any third-party services are provided independently by licensed partners. JBJ is not responsible for the performance, advice, or outcomes of third-party services."
+        }
+      ]
+    },
+    {
+      id: "contact",
+      title: "Contact & Next Steps",
+      icon: Phone,
+      questions: [
+        {
+          question: "How can I start working with JBJ?",
+          answer: "You can contact our team directly to discuss your buying, selling, or renting requirements and receive professional guidance tailored to your situation."
         },
         {
-          question: "What areas do you cover?",
-          answer: "We operate across the UAE with a focus on Dubai's most sought-after communities including Downtown Dubai, Dubai Marina, Palm Jumeirah, Business Bay, JBR, and emerging areas. We can also assist with properties in other emirates upon request."
+          question: "Is there an obligation to proceed after an initial consultation?",
+          answer: "No. Initial discussions are exploratory and carry no obligation to proceed with a transaction."
         }
       ]
     }
