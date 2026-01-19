@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { motion } from "framer-motion";
-import { FileText, Download, Calendar, Database, Shield, ExternalLink, ArrowRight, ChevronDown } from "lucide-react";
+import { FileText, Download, Calendar, Database, Shield, ExternalLink, ArrowRight } from "lucide-react";
 import { Link } from "react-router-dom";
 import Footer from "@/components/Footer";
 import { SEOHead } from "@/components/SEOHead";
@@ -9,11 +9,7 @@ import { Card, CardContent } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { MARKET_DISCLAIMER } from "@/config/open-data-config";
-
-const fadeInUp = {
-  hidden: { opacity: 0, y: 30 },
-  visible: { opacity: 1, y: 0, transition: { duration: 0.6 } }
-};
+import { MarketIntelligenceHero, MarketIntelligenceNavigation } from "@/components/market-intelligence";
 
 const reports = [
   {
@@ -105,51 +101,15 @@ const MarketReportsPage = () => {
         description="Monthly, quarterly, and annual Dubai real estate market reports with clear charts, government Open Data attribution, and editorial analysis for BUY · SELL · RENT decisions."
       />
 
-      {/* Hero - Premium Video/Photo Background */}
-      <section className="relative min-h-[50vh] flex items-center overflow-hidden">
-        {/* Video Background */}
-        <div className="absolute inset-0 z-0">
-          <video 
-            autoPlay 
-            loop 
-            muted 
-            playsInline
-            className="w-full h-full object-cover opacity-50"
-            poster="https://images.unsplash.com/photo-1512453979798-5ea266f8880c?w=1920&q=80"
-          >
-            <source 
-              src="https://videos.pexels.com/video-files/3571264/3571264-uhd_2560_1440_30fps.mp4" 
-              type="video/mp4" 
-            />
-          </video>
-          <div className="absolute inset-0 bg-gradient-to-b from-black/60 via-black/70 to-black" />
-        </div>
-        <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_center,_var(--tw-gradient-stops))] from-gold/5 via-transparent to-transparent z-[1]" />
-        
-        <motion.div 
-          className="relative z-10 container mx-auto px-4 py-24 text-center"
-          initial="hidden"
-          animate="visible"
-          variants={{ visible: { transition: { staggerChildren: 0.15 } } }}
-        >
-          <motion.div className="flex items-center justify-center gap-2 mb-6" variants={fadeInUp}>
-            <FileText className="w-6 h-6 text-gold" />
-            <span className="text-gold text-sm uppercase tracking-[0.3em]">Market Intelligence</span>
-          </motion.div>
-
-          <motion.h1 
-            className="text-white text-4xl md:text-5xl lg:text-6xl font-bold mb-6"
-            style={{ fontFamily: "Poppins, sans-serif" }}
-            variants={fadeInUp}
-          >
-            Market Reports
-          </motion.h1>
-
-          <motion.p className="text-zinc-300 text-lg md:text-xl max-w-2xl mx-auto" variants={fadeInUp}>
-            Downloadable reports with clear charts, government Open Data attribution, and editorial analysis.
-          </motion.p>
-        </motion.div>
-      </section>
+      {/* Premium Hero with Video */}
+      <MarketIntelligenceHero
+        badge="Market Intelligence"
+        badgeIcon={FileText}
+        title="Market Reports"
+        description="Downloadable reports with clear charts, government Open Data attribution, and editorial analysis for informed decisions."
+        videoSrc="https://videos.pexels.com/video-files/3571264/3571264-uhd_2560_1440_30fps.mp4"
+        videoPoster="https://images.unsplash.com/photo-1512453979798-5ea266f8880c?w=1920&q=80"
+      />
 
       {/* Featured Reports - Premium champagne Cards */}
       <section className="py-16 border-t border-zinc-200 bg-gradient-to-br from-white via-[#FDFBF7] to-[#F5F0E6]">
@@ -319,35 +279,10 @@ const MarketReportsPage = () => {
         </div>
       </section>
 
-      {/* Internal Links */}
-      <section className="py-12 border-t border-zinc-900">
+      {/* Market Intelligence Navigation */}
+      <section className="py-12 border-t border-zinc-900 bg-gradient-to-br from-white via-[#FDFBF7] to-[#F5F0E6]">
         <div className="container mx-auto px-4">
-          <div className="grid md:grid-cols-3 gap-4 max-w-3xl mx-auto">
-            <Link to="/market-intelligence/overview" className="group">
-              <Card className="bg-gradient-to-r from-white via-[#FDFBF7] to-[#F5F0E6] border-gold/30 hover:border-gold/50 hover:shadow-lg transition-all shadow-sm">
-                <CardContent className="p-4 flex items-center justify-between">
-                  <span className="text-gold font-medium group-hover:text-gold-dark transition-colors">Market Overview</span>
-                  <ArrowRight className="w-4 h-4 text-black" />
-                </CardContent>
-              </Card>
-            </Link>
-            <Link to="/market-intelligence/areas" className="group">
-              <Card className="bg-gradient-to-r from-white via-[#FDFBF7] to-[#F5F0E6] border-gold/30 hover:border-gold/50 hover:shadow-lg transition-all shadow-sm">
-                <CardContent className="p-4 flex items-center justify-between">
-                  <span className="text-gold font-medium group-hover:text-gold-dark transition-colors">Area Intelligence</span>
-                  <ArrowRight className="w-4 h-4 text-black" />
-                </CardContent>
-              </Card>
-            </Link>
-            <Link to="/market-intelligence/methodology" className="group">
-              <Card className="bg-gradient-to-r from-white via-[#FDFBF7] to-[#F5F0E6] border-gold/30 hover:border-gold/50 hover:shadow-lg transition-all shadow-sm">
-                <CardContent className="p-4 flex items-center justify-between">
-                  <span className="text-gold font-medium group-hover:text-gold-dark transition-colors">Methodology</span>
-                  <ArrowRight className="w-4 h-4 text-black" />
-                </CardContent>
-              </Card>
-            </Link>
-          </div>
+          <MarketIntelligenceNavigation current="/market-intelligence/reports" />
           
           {/* Disclaimer Box - White style */}
           <div className="max-w-3xl mx-auto mt-8">

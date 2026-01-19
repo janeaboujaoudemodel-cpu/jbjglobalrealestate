@@ -13,6 +13,7 @@ import { SEOHead } from "@/components/SEOHead";
 import { MarketIntelligenceSchema } from "@/components/seo/MarketIntelligenceSchema";
 import { APPROVED_DATA_SOURCES, GOVERNMENT_DISCLOSURES } from "@/config/government-cobranding";
 import { MASTER_LOCK } from "@/config/master-lock";
+import { MarketIntelligenceHero, MarketIntelligenceNavigation } from "@/components/market-intelligence";
 
 const fadeInUp = {
   hidden: { opacity: 0, y: 20 },
@@ -33,36 +34,14 @@ const Methodology = () => {
         description="Full transparency on data sources, update frequency, and aggregation methodology for Dubai real estate market intelligence."
       />
 
-      {/* Hero - Calm, Institutional */}
-      <section className="relative py-20 border-b border-gold/20">
-        <div className="container mx-auto px-4 max-w-4xl">
-          <motion.div 
-            className="text-center"
-            initial="hidden"
-            animate="visible"
-            variants={{ visible: { transition: { staggerChildren: 0.1 } } }}
-          >
-            <motion.div className="flex items-center justify-center gap-2 mb-4" variants={fadeInUp}>
-              <Database className="w-5 h-5 text-gold" />
-              <span className="text-gold text-sm uppercase tracking-widest">Market Intelligence</span>
-            </motion.div>
-
-            <motion.h1 
-              className="text-white text-3xl md:text-4xl font-semibold mb-4"
-              variants={fadeInUp}
-            >
-              Methodology & Data Sources
-            </motion.h1>
-
-            <motion.p 
-              className="text-zinc-400 text-lg max-w-2xl mx-auto leading-relaxed"
-              variants={fadeInUp}
-            >
-              Full transparency on how we source, aggregate, and present market intelligence.
-            </motion.p>
-          </motion.div>
-        </div>
-      </section>
+      {/* Premium Hero with Image */}
+      <MarketIntelligenceHero
+        badge="Market Intelligence"
+        badgeIcon={Database}
+        title="Methodology & Data Sources"
+        description="Full transparency on how we source, aggregate, and present market intelligence. Our commitment to data integrity and institutional standards."
+        backgroundImage="https://images.unsplash.com/photo-1486406146926-c627a92ad1ab?w=1920&q=80"
+      />
 
       <div className="container mx-auto px-4 max-w-4xl py-16 space-y-10">
         
@@ -276,6 +255,13 @@ const Methodology = () => {
         </motion.section>
 
       </div>
+
+      {/* Market Intelligence Navigation */}
+      <section className="py-12 bg-gradient-to-br from-white via-[#FDFBF7] to-[#F5F0E6]">
+        <div className="container mx-auto px-4">
+          <MarketIntelligenceNavigation current="/market-intelligence/methodology" />
+        </div>
+      </section>
 
       <Footer />
     </div>

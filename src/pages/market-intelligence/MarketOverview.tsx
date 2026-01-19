@@ -1,18 +1,13 @@
 import { motion } from "framer-motion";
-import { BarChart3, TrendingUp, TrendingDown, Minus, Database, Shield, ArrowUpRight, ArrowRight } from "lucide-react";
+import { BarChart3, TrendingUp, TrendingDown, Minus, Database, Shield, ArrowRight } from "lucide-react";
 import { Link } from "react-router-dom";
 import Footer from "@/components/Footer";
 import PreFooterSeparator from "@/components/PreFooterSeparator";
 import { SEOHead } from "@/components/SEOHead";
 import { MarketIntelligenceSchema } from "@/components/seo/MarketIntelligenceSchema";
-import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { MARKET_OVERVIEW_STATS, QUARTERLY_TRENDS, PROPERTY_TYPE_TRENDS, MARKET_DISCLAIMER } from "@/config/open-data-config";
-
-const fadeInUp = {
-  hidden: { opacity: 0, y: 30 },
-  visible: { opacity: 1, y: 0, transition: { duration: 0.6 } }
-};
+import { MarketIntelligenceHero, MarketIntelligenceNavigation } from "@/components/market-intelligence";
 
 const MarketOverview = () => {
   const stats = [
@@ -62,35 +57,15 @@ const MarketOverview = () => {
         description="UAE & Dubai real estate macro snapshot with high-level transaction trends, price movements, and rent analysis powered by official government Open Data."
       />
 
-      {/* Hero - Dark for brand consistency */}
-      <section className="relative min-h-[50vh] flex items-center overflow-hidden bg-black">
-        <div className="absolute inset-0 bg-gradient-to-b from-zinc-900/50 via-black to-black" />
-        <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_center,_var(--tw-gradient-stops))] from-gold/5 via-transparent to-transparent" />
-        
-        <motion.div 
-          className="relative z-10 container mx-auto px-4 py-24 text-center"
-          initial="hidden"
-          animate="visible"
-          variants={{ visible: { transition: { staggerChildren: 0.15 } } }}
-        >
-          <motion.div className="flex items-center justify-center gap-2 mb-6" variants={fadeInUp}>
-            <BarChart3 className="w-6 h-6 text-gold" />
-            <span className="text-gold text-sm uppercase tracking-[0.3em]">Market Intelligence</span>
-          </motion.div>
-
-          <motion.h1 
-            className="text-white text-4xl md:text-5xl lg:text-6xl font-bold mb-6"
-            style={{ fontFamily: "Poppins, sans-serif" }}
-            variants={fadeInUp}
-          >
-            Market Overview
-          </motion.h1>
-
-          <motion.p className="text-zinc-400 text-lg md:text-xl max-w-2xl mx-auto" variants={fadeInUp}>
-            UAE & Dubai macro snapshot with high-level transaction trends and price movements.
-          </motion.p>
-        </motion.div>
-      </section>
+      {/* Premium Hero with Video */}
+      <MarketIntelligenceHero
+        badge="Market Intelligence"
+        badgeIcon={BarChart3}
+        title="Market Overview"
+        description="UAE & Dubai macro snapshot with high-level transaction trends, price movements, and rent analysis powered by official government Open Data."
+        videoSrc="https://videos.pexels.com/video-files/3571264/3571264-uhd_2560_1440_30fps.mp4"
+        videoPoster="https://images.unsplash.com/photo-1512453979798-5ea266f8880c?w=1920&q=80"
+      />
 
       {/* Key Stats Grid - Black background with white cards */}
       <section className="py-16 border-t border-zinc-800 bg-black">
@@ -188,35 +163,10 @@ const MarketOverview = () => {
         </div>
       </section>
 
-      {/* Navigation Links - Premium champagne background */}
+      {/* Market Intelligence Navigation */}
       <section className="py-16 border-t border-zinc-200 bg-gradient-to-br from-white via-[#FDFBF7] to-[#F5F0E6]">
         <div className="container mx-auto px-4">
-          <div className="grid md:grid-cols-3 gap-4 max-w-3xl mx-auto">
-            <Link to="/market-intelligence/areas" className="group">
-              <Card className="bg-white border-zinc-200 hover:border-gold/50 hover:shadow-lg transition-all">
-                <CardContent className="p-4 flex items-center justify-between">
-                  <span className="text-black font-medium group-hover:text-gold transition-colors">Area Intelligence</span>
-                  <ArrowRight className="w-4 h-4 text-gold" />
-                </CardContent>
-              </Card>
-            </Link>
-            <Link to="/market-intelligence/reports" className="group">
-              <Card className="bg-white border-zinc-200 hover:border-gold/50 hover:shadow-lg transition-all">
-                <CardContent className="p-4 flex items-center justify-between">
-                  <span className="text-black font-medium group-hover:text-gold transition-colors">Market Reports</span>
-                  <ArrowRight className="w-4 h-4 text-gold" />
-                </CardContent>
-              </Card>
-            </Link>
-            <Link to="/market-intelligence/methodology" className="group">
-              <Card className="bg-white border-zinc-200 hover:border-gold/50 hover:shadow-lg transition-all">
-                <CardContent className="p-4 flex items-center justify-between">
-                  <span className="text-black font-medium group-hover:text-gold transition-colors">Methodology</span>
-                  <ArrowRight className="w-4 h-4 text-gold" />
-                </CardContent>
-              </Card>
-            </Link>
-          </div>
+          <MarketIntelligenceNavigation current="/market-intelligence/overview" showStartHere={false} />
           
           {/* Disclaimer Box - White style */}
           <div className="max-w-3xl mx-auto mt-8">
