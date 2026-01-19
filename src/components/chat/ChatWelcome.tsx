@@ -23,10 +23,10 @@ const ChatWelcome = ({ onStartChat }: ChatWelcomeProps) => {
       {/* Centered content: Welcome text + buttons */}
       <div className="flex-1 flex flex-col justify-center">
         <div className="text-center mb-4">
-          <h4 className="text-white text-lg font-semibold mb-1">
+          <h4 className="text-black text-lg font-semibold mb-1">
             Welcome to JBJ Global Real Estate 👋
           </h4>
-          <p className="text-zinc-400 text-sm">Your premium Real Estate partner in Dubai</p>
+          <p className="text-zinc-600 text-sm">Your premium Real Estate partner in Dubai</p>
         </div>
 
         <div className="space-y-3">
@@ -61,9 +61,9 @@ const ChatWelcome = ({ onStartChat }: ChatWelcomeProps) => {
                 <MessageCircle className="w-6 h-6 text-white" />
               </div>
               <div className="flex-1">
-                <h5 className="text-white text-sm font-semibold mb-1">📱 Chat on WhatsApp</h5>
-                <p className="text-green-400 text-xs font-medium">Talk directly with our team</p>
-                <p className="text-zinc-400 text-xs mt-1">
+                <h5 className="text-black text-sm font-semibold mb-1">📱 Chat on WhatsApp</h5>
+                <p className="text-green-600 text-xs font-medium">Talk directly with our team</p>
+                <p className="text-zinc-600 text-xs mt-1">
                   For urgent matters or personalized consultation
                 </p>
               </div>
@@ -72,12 +72,12 @@ const ChatWelcome = ({ onStartChat }: ChatWelcomeProps) => {
         </div>
       </div>
 
-      {/* Tip at bottom - Gold luxury styling */}
-      <div className="text-center mt-2 px-4 py-2 bg-gradient-to-r from-[#FDFBF7]/50 via-white/30 to-[#F5F0E6]/50 rounded-lg border border-gold/20">
+      {/* Tip at bottom - Black text on light bg */}
+      <div className="text-center mt-2 px-4 py-2 bg-white/80 rounded-lg border border-black/10">
         <p className="text-xs flex items-center justify-center gap-2">
-          <span className="text-gold drop-shadow-[0_0_4px_rgba(212,175,55,0.5)]">💡</span>
-          <span className="text-white font-semibold drop-shadow-[0_0_2px_rgba(255,255,255,0.3)]">Tip:</span>
-          <span className="text-gold">Our team can answer most questions right away. For complex matters, we'll connect you to a specialist!</span>
+          <span className="text-gold">💡</span>
+          <span className="text-black font-semibold">Tip:</span>
+          <span className="text-zinc-700">Our team can answer most questions right away. For complex matters, we'll connect you to a specialist!</span>
         </p>
       </div>
     </div>

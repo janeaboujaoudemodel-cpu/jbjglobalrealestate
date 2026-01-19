@@ -1,5 +1,5 @@
 import { Button } from '@/components/ui/button';
-import { ChevronLeft, PanelRightClose, PanelRightOpen, MessageCircle } from 'lucide-react';
+import { ChevronLeft, X, MessageCircle } from 'lucide-react';
 import { useLanguage } from '@/contexts/LanguageContext';
 import { ChatStep, getRandomAgent } from './types';
 import { useMemo } from 'react';
@@ -34,20 +34,20 @@ const ChatHeader = ({ step, isExistingUser, onBack, onToggleCollapse }: ChatHead
   const showAgentPhoto = step === 'chatting';
 
   return (
-    <div className="flex items-center justify-between p-4 border-b border-gold/40 bg-gradient-to-r from-black via-zinc-950 to-black">
+    <div className="flex items-center justify-between p-4 border-b-2 border-black bg-gradient-to-r from-white via-[#FDFBF7] to-[#F5F0E6]">
       <div className="flex items-center gap-3">
         {showBackButton && (
           <Button
             variant="ghost"
             size="icon"
             onClick={onBack}
-            className="text-gold/80 hover:text-gold hover:bg-gold/10 mr-1"
+            className="text-black hover:text-gold hover:bg-black/5 mr-1"
           >
             <ChevronLeft className="w-5 h-5" />
           </Button>
         )}
         {showAgentPhoto ? (
-          <div className="w-10 h-10 rounded-full overflow-hidden border-2 border-gold shadow-lg shadow-gold/20">
+          <div className="w-10 h-10 rounded-full overflow-hidden border-2 border-black shadow-lg">
             <img 
               src={agent.photo} 
               alt={agent.name}
@@ -55,30 +55,30 @@ const ChatHeader = ({ step, isExistingUser, onBack, onToggleCollapse }: ChatHead
             />
           </div>
         ) : (
-          <div className="w-10 h-10 rounded-lg bg-white border border-gold/30 flex items-center justify-center shadow-lg">
-            <MessageCircle className="w-5 h-5 text-gold" />
+          <div className="w-10 h-10 rounded-lg bg-white border-2 border-black flex items-center justify-center shadow-lg">
+            <MessageCircle className="w-5 h-5 text-black" />
           </div>
         )}
         <div>
-          <h3 className="text-gold font-bold text-sm flex items-center gap-1.5">
+          <h3 className="text-black font-bold text-sm flex items-center gap-1.5">
             {showAgentPhoto ? agent.name : 'JBJ Support'}
           </h3>
-          <p className="text-white/70 text-xs font-medium">{getStatusText()}</p>
+          <p className="text-zinc-600 text-xs font-medium">{getStatusText()}</p>
         </div>
       </div>
       <div className="flex items-center gap-2">
-        <div className="hidden sm:flex items-center gap-1.5 px-2 py-1 bg-green-500/10 rounded-full border border-green-500/30">
-          <div className="w-2 h-2 rounded-full bg-green-500 animate-pulse" />
-          <span className="text-green-400 text-[10px] font-semibold">Available 24/7</span>
+        <div className="hidden sm:flex items-center gap-1.5 px-2 py-1 bg-gold/10 rounded-full border border-gold/40">
+          <div className="w-2 h-2 rounded-full bg-gold animate-pulse" />
+          <span className="text-gold text-[10px] font-semibold">Available 24/7</span>
         </div>
         <Button
           variant="ghost"
           size="icon"
           onClick={onToggleCollapse}
-          className="w-10 h-10 rounded-lg bg-gradient-to-br from-white via-[#FDFBF7] to-[#F5F0E6] border border-gold/40 text-gold hover:border-gold hover:shadow-lg hover:shadow-gold/20 transition-all"
-          title="Minimize chat"
+          className="w-10 h-10 rounded-lg bg-white border-2 border-black text-black hover:bg-zinc-100 hover:shadow-lg transition-all"
+          title="Close chat"
         >
-          {isRTL ? <PanelRightOpen className="w-5 h-5" /> : <PanelRightClose className="w-5 h-5" />}
+          <X className="w-5 h-5" />
         </Button>
       </div>
     </div>

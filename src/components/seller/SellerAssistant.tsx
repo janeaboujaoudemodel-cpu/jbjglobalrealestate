@@ -193,9 +193,9 @@ Help the user complete their listing form and answer questions about the selling
   };
 
   const quickActions = [
-    { icon: Calculator, label: "Run Evaluator", action: () => window.open("/property-evaluator", "_blank"), iconClass: "text-gold" },
-    { icon: FileText, label: "Seller Guide", action: () => window.open("/seller-guide", "_blank"), iconClass: "text-gold" },
-    { icon: MessageCircle, label: "WhatsApp", action: () => window.open(`https://wa.me/${CONTACT_INFO.whatsappNumber}`, "_blank"), iconClass: "text-green-500" },
+    { icon: Calculator, label: "Run Evaluator", action: () => window.open("/property-evaluator", "_self"), iconClass: "text-gold" },
+    { icon: FileText, label: "Seller Guide", action: () => window.open("/seller-guide", "_self"), iconClass: "text-gold" },
+    { icon: MessageCircle, label: "WhatsApp", action: () => window.open(`https://wa.me/${CONTACT_INFO.whatsappNumber.replace(/\D/g, '')}?text=${encodeURIComponent("Hi, I need help with listing my property for sale.")}`, "_blank"), iconClass: "text-green-500" },
   ];
 
   return (
