@@ -19,12 +19,12 @@ import { MarketIntelligenceHero, MarketIntelligenceNavigation, MarketIntelligenc
 // TOC items for the page
 const tocItems = [
   { id: "introduction", title: "Introduction" },
-  { id: "data-sources", title: "Data Sources" },
-  { id: "data-usage", title: "How Data Is Used" },
-  { id: "what-we-dont-do", title: "What We Do NOT Do" },
-  { id: "ai-disclosure", title: "AI Usage Disclosure" },
+  { id: "data-selection", title: "Data Selection Principles" },
+  { id: "primary-sources", title: "Primary Official Sources" },
+  { id: "validation-process", title: "Data Validation Process" },
+  { id: "presentation-standards", title: "Presentation Standards" },
   { id: "update-frequency", title: "Update Frequency" },
-  { id: "legal-statement", title: "Legal Statement" },
+  { id: "compliance", title: "Compliance & Use" },
   { id: "navigation", title: "Explore More" },
 ];
 
@@ -51,8 +51,8 @@ const Methodology = () => {
       <MarketIntelligenceHero
         badge="Market Intelligence"
         badgeIcon={Database}
-        title="Methodology & Data Sources"
-        description="Full transparency on how we source, aggregate, and present market intelligence. Our commitment to data integrity and institutional standards."
+        title="Methodology & Sources"
+        description="Full transparency on how market data is selected, verified, and presented across all Market Intelligence pages."
         backgroundImage="https://images.unsplash.com/photo-1486406146926-c627a92ad1ab?w=1920&q=80"
       />
 
@@ -65,7 +65,7 @@ const Methodology = () => {
           {/* Main Content */}
           <div className="flex-1 max-w-4xl space-y-10">
         
-            {/* SECTION 1 — Introduction (Authority + Neutral) */}
+            {/* SECTION 1 — Introduction */}
             <motion.section
               id="introduction"
               initial="hidden"
@@ -87,81 +87,23 @@ const Methodology = () => {
                     filter: "drop-shadow(0 1px 2px rgba(200,167,102,0.3))"
                   }}
                 >
-                  Introduction
+                  Methodology & Sources
                 </h2>
               </div>
               
               <div className="prose prose-neutral max-w-none">
                 <p className="text-black leading-relaxed">
-                  {MASTER_LOCK.BRAND.COMPANY_NAME} provides market intelligence to support transparency and informed understanding of the UAE real estate market.
+                  This section explains how market data is selected, verified, and presented across JBJ Global Real Estate's Market Intelligence pages. The objective is transparency, consistency, and regulatory alignment.
                 </p>
                 <p className="text-zinc-700 leading-relaxed mt-4">
-                  Our insights are derived from aggregated official government Open Data and publicly available statistical sources. This information is presented for informational and educational purposes only.
+                  All methodology is fixed and repeatable. The same standards apply to every market overview, area intelligence page, and market report.
                 </p>
               </div>
             </motion.section>
 
-            {/* SECTION 2 — Data Sources (Transparency) */}
+            {/* SECTION 2 — Data Selection Principles */}
             <motion.section
-              id="data-sources"
-              initial="hidden"
-              whileInView="visible"
-              viewport={{ once: true }}
-              variants={fadeInUp}
-              className="scroll-mt-24 py-12 bg-gradient-to-br from-white via-[#FDFBF7] to-[#F5F0E6] rounded-xl px-8 border-2 border-black hover:border-gold hover:shadow-[0_0_20px_rgba(200,167,102,0.3)] transition-all"
-            >
-              <div className="flex items-center gap-3 mb-6">
-                <div className="w-10 h-10 rounded-lg bg-black flex items-center justify-center">
-                  <Database className="w-5 h-5 text-gold" />
-                </div>
-                <h2 
-                  className="text-2xl font-bold"
-                  style={{ 
-                    background: "linear-gradient(135deg, #C8A766, #E8D5B0, #C8A766)",
-                    WebkitBackgroundClip: "text",
-                    WebkitTextFillColor: "transparent",
-                    filter: "drop-shadow(0 1px 2px rgba(200,167,102,0.3))"
-                  }}
-                >
-                  Data Sources
-                </h2>
-              </div>
-              
-              <div className="bg-white rounded-lg border-2 border-gold/50 p-6">
-                <p className="text-black text-sm mb-6">
-                  Our market intelligence draws from the following official government Open Data sources:
-                </p>
-                
-                <ul className="space-y-4">
-                  {APPROVED_DATA_SOURCES.map((source) => (
-                    <li key={source.id} className="flex items-start gap-3">
-                      <span className="text-gold mt-1">•</span>
-                      <div>
-                        <span 
-                          className="font-semibold"
-                          style={{ 
-                            background: "linear-gradient(135deg, #C8A766, #E8D5B0, #C8A766)",
-                            WebkitBackgroundClip: "text",
-                            WebkitTextFillColor: "transparent"
-                          }}
-                        >
-                          {source.name}
-                        </span>
-                        <span className="text-black"> – {source.dataType.toLowerCase()}</span>
-                      </div>
-                    </li>
-                  ))}
-                </ul>
-                
-                <p className="text-zinc-500 text-xs mt-6 pt-4 border-t border-gold/30">
-                  We name categories and sources, not raw dataset URLs. All data is used in accordance with official open data policies.
-                </p>
-              </div>
-            </motion.section>
-
-            {/* SECTION 3 — How the Data Is Used (Critical Section) */}
-            <motion.section
-              id="data-usage"
+              id="data-selection"
               initial="hidden"
               whileInView="visible"
               viewport={{ once: true }}
@@ -174,36 +116,209 @@ const Methodology = () => {
                 </div>
                 <h2 
                   className="text-2xl font-bold"
-                  style={{ 
+                  style={{ fontFamily: "Poppins, sans-serif" }}
+                >
+                  <span style={{ 
                     background: "linear-gradient(135deg, #C8A766, #E8D5B0, #C8A766)",
                     WebkitBackgroundClip: "text",
                     WebkitTextFillColor: "transparent",
                     filter: "drop-shadow(0 1px 2px rgba(200,167,102,0.3))"
-                  }}
-                >
-                  How the Data Is Used
+                  }}>Data</span>{" "}
+                  <span className="text-black">Selection Principles</span>
                 </h2>
               </div>
               
-              <div className="space-y-4 text-black leading-relaxed">
-                <p>
-                  Data is <strong className="font-semibold">aggregated</strong> across time periods and geographic areas to identify descriptive trends and patterns.
+              <div className="space-y-4">
+                <p className="text-black leading-relaxed">
+                  Only official, government-published or regulator-recognized data is used. Data is selected based on the following criteria:
                 </p>
-                <p>
-                  Data is <strong className="font-semibold">summarized</strong> to provide high-level insights without exposing individual transaction details.
-                </p>
-                <p>
-                  Data is <strong className="font-semibold">contextualized</strong> to help users understand market conditions in plain language.
-                </p>
-                <p>
-                  {MASTER_LOCK.BRAND.COMPANY_NAME} does <strong className="font-semibold">not</strong> publish raw government datasets, individual transaction records, or personally identifiable information.
+                <ul className="space-y-3 text-black">
+                  <li className="flex items-start gap-3">
+                    <span className="text-gold mt-1">•</span>
+                    <span>Public availability</span>
+                  </li>
+                  <li className="flex items-start gap-3">
+                    <span className="text-gold mt-1">•</span>
+                    <span>Regulatory recognition</span>
+                  </li>
+                  <li className="flex items-start gap-3">
+                    <span className="text-gold mt-1">•</span>
+                    <span>Direct publication by the relevant authority</span>
+                  </li>
+                  <li className="flex items-start gap-3">
+                    <span className="text-gold mt-1">•</span>
+                    <span>Clear scope and definition</span>
+                  </li>
+                </ul>
+                <p className="text-zinc-700 leading-relaxed mt-4 pt-4 border-t border-gold/30">
+                  No assumptions, estimates, or third-party projections are included.
                 </p>
               </div>
             </motion.section>
 
-            {/* SECTION 4 — What We Do NOT Do (VERY IMPORTANT) */}
+            {/* SECTION 3 — Primary Official Sources */}
             <motion.section
-              id="what-we-dont-do"
+              id="primary-sources"
+              initial="hidden"
+              whileInView="visible"
+              viewport={{ once: true }}
+              variants={fadeInUp}
+              className="scroll-mt-24 py-12 bg-gradient-to-br from-white via-[#FDFBF7] to-[#F5F0E6] rounded-xl px-8 border-2 border-black hover:border-gold hover:shadow-[0_0_20px_rgba(200,167,102,0.3)] transition-all"
+            >
+              <div className="flex items-center gap-3 mb-6">
+                <div className="w-10 h-10 rounded-lg bg-black flex items-center justify-center">
+                  <Database className="w-5 h-5 text-gold" />
+                </div>
+                <h2 
+                  className="text-2xl font-bold"
+                  style={{ fontFamily: "Poppins, sans-serif" }}
+                >
+                  <span style={{ 
+                    background: "linear-gradient(135deg, #C8A766, #E8D5B0, #C8A766)",
+                    WebkitBackgroundClip: "text",
+                    WebkitTextFillColor: "transparent",
+                    filter: "drop-shadow(0 1px 2px rgba(200,167,102,0.3))"
+                  }}>Primary</span>{" "}
+                  <span className="text-black">Official Sources</span>
+                </h2>
+              </div>
+              
+              <div className="bg-white rounded-lg border-2 border-gold/50 p-6">
+                <p className="text-black text-sm mb-6">
+                  All market intelligence content is derived exclusively from the following sources:
+                </p>
+                
+                <div className="space-y-5">
+                  <div className="border-l-4 border-gold pl-4">
+                    <h3 className="font-semibold text-black">Dubai Land Department (DLD) – Open Data</h3>
+                    <p className="text-zinc-600 text-sm mt-1">Registered sales transactions, rental contracts, and property records</p>
+                    <a 
+                      href="https://dubailand.gov.ae/en/open-data/real-estate-data/" 
+                      target="_blank" 
+                      rel="noopener noreferrer"
+                      className="text-gold text-sm hover:underline mt-1 inline-block"
+                    >
+                      dubailand.gov.ae/en/open-data/real-estate-data/ →
+                    </a>
+                  </div>
+                  
+                  <div className="border-l-4 border-gold pl-4">
+                    <h3 className="font-semibold text-black">Dubai Land Department – Research & Reports</h3>
+                    <p className="text-zinc-600 text-sm mt-1">Official market studies and sector publications</p>
+                    <a 
+                      href="https://dubailand.gov.ae/en/open-data/research/" 
+                      target="_blank" 
+                      rel="noopener noreferrer"
+                      className="text-gold text-sm hover:underline mt-1 inline-block"
+                    >
+                      dubailand.gov.ae/en/open-data/research/ →
+                    </a>
+                  </div>
+                  
+                  <div className="border-l-4 border-gold pl-4">
+                    <h3 className="font-semibold text-black">RERA Rental Index</h3>
+                    <p className="text-zinc-600 text-sm mt-1">Legally recognized rental benchmarks and adjustment limits</p>
+                    <a 
+                      href="https://dubailand.gov.ae/en/eservices/rental-index/" 
+                      target="_blank" 
+                      rel="noopener noreferrer"
+                      className="text-gold text-sm hover:underline mt-1 inline-block"
+                    >
+                      dubailand.gov.ae/en/eservices/rental-index/ →
+                    </a>
+                  </div>
+                  
+                  <div className="border-l-4 border-gold pl-4">
+                    <h3 className="font-semibold text-black">RERA Service Charge Index</h3>
+                    <p className="text-zinc-600 text-sm mt-1">Approved annual service charges by project</p>
+                    <a 
+                      href="https://dubailand.gov.ae/en/eservices/service-charge-index-overview/" 
+                      target="_blank" 
+                      rel="noopener noreferrer"
+                      className="text-gold text-sm hover:underline mt-1 inline-block"
+                    >
+                      dubailand.gov.ae/en/eservices/service-charge-index-overview/ →
+                    </a>
+                  </div>
+                  
+                  <div className="border-l-4 border-gold pl-4">
+                    <h3 className="font-semibold text-black">Dubai Government Strategic Publications</h3>
+                    <p className="text-zinc-600 text-sm mt-1">Economic frameworks and development agendas</p>
+                    <a 
+                      href="https://www.protocol.dubai.ae/en/" 
+                      target="_blank" 
+                      rel="noopener noreferrer"
+                      className="text-gold text-sm hover:underline mt-1 inline-block"
+                    >
+                      protocol.dubai.ae/en/ →
+                    </a>
+                  </div>
+                </div>
+                
+                <p className="text-zinc-500 text-xs mt-6 pt-4 border-t border-gold/30">
+                  No data is sourced from private platforms, promotional materials, or unofficial aggregators.
+                </p>
+              </div>
+            </motion.section>
+
+            {/* SECTION 4 — Data Validation Process */}
+            <motion.section
+              id="validation-process"
+              initial="hidden"
+              whileInView="visible"
+              viewport={{ once: true }}
+              variants={fadeInUp}
+              className="scroll-mt-24 py-12 bg-gradient-to-br from-white via-[#FDFBF7] to-[#F5F0E6] rounded-xl px-8 border-2 border-black hover:border-gold hover:shadow-[0_0_20px_rgba(200,167,102,0.3)] transition-all"
+            >
+              <div className="flex items-center gap-3 mb-6">
+                <div className="w-10 h-10 rounded-lg bg-black flex items-center justify-center">
+                  <FileCheck className="w-5 h-5 text-gold" />
+                </div>
+                <h2 
+                  className="text-2xl font-bold"
+                  style={{ fontFamily: "Poppins, sans-serif" }}
+                >
+                  <span style={{ 
+                    background: "linear-gradient(135deg, #C8A766, #E8D5B0, #C8A766)",
+                    WebkitBackgroundClip: "text",
+                    WebkitTextFillColor: "transparent",
+                    filter: "drop-shadow(0 1px 2px rgba(200,167,102,0.3))"
+                  }}>Data</span>{" "}
+                  <span className="text-black">Validation Process</span>
+                </h2>
+              </div>
+              
+              <div className="space-y-4">
+                <p className="text-black leading-relaxed mb-4">
+                  Before inclusion, data is:
+                </p>
+                <ol className="space-y-4">
+                  <li className="flex items-start gap-4">
+                    <span className="flex-shrink-0 w-8 h-8 rounded-full bg-gold/20 text-gold font-bold flex items-center justify-center text-sm">1</span>
+                    <span className="text-black pt-1">Cross-checked against its original government source</span>
+                  </li>
+                  <li className="flex items-start gap-4">
+                    <span className="flex-shrink-0 w-8 h-8 rounded-full bg-gold/20 text-gold font-bold flex items-center justify-center text-sm">2</span>
+                    <span className="text-black pt-1">Verified for publication date and scope</span>
+                  </li>
+                  <li className="flex items-start gap-4">
+                    <span className="flex-shrink-0 w-8 h-8 rounded-full bg-gold/20 text-gold font-bold flex items-center justify-center text-sm">3</span>
+                    <span className="text-black pt-1">Reviewed for consistency with regulatory definitions</span>
+                  </li>
+                  <li className="flex items-start gap-4">
+                    <span className="flex-shrink-0 w-8 h-8 rounded-full bg-gold/20 text-gold font-bold flex items-center justify-center text-sm">4</span>
+                    <span className="text-black pt-1">Used exactly as published, without reinterpretation</span>
+                  </li>
+                </ol>
+                <p className="text-zinc-700 leading-relaxed mt-6 pt-4 border-t border-gold/30">
+                  If data cannot be verified from an official source, it is excluded.
+                </p>
+              </div>
+            </motion.section>
+
+            {/* SECTION 5 — Presentation Standards */}
+            <motion.section
+              id="presentation-standards"
               initial="hidden"
               whileInView="visible"
               viewport={{ once: true }}
@@ -216,67 +331,47 @@ const Methodology = () => {
                 </div>
                 <h2 
                   className="text-2xl font-bold"
-                  style={{ 
+                  style={{ fontFamily: "Poppins, sans-serif" }}
+                >
+                  <span style={{ 
                     background: "linear-gradient(135deg, #C8A766, #E8D5B0, #C8A766)",
                     WebkitBackgroundClip: "text",
                     WebkitTextFillColor: "transparent",
                     filter: "drop-shadow(0 1px 2px rgba(200,167,102,0.3))"
-                  }}
-                >
-                  What We Do NOT Do
+                  }}>Presentation</span>{" "}
+                  <span className="text-black">Standards</span>
                 </h2>
               </div>
               
               <div className="bg-red-50 border-2 border-red-300 rounded-lg p-6">
                 <p className="text-black leading-relaxed mb-4">
-                  {MASTER_LOCK.BRAND.COMPANY_NAME} does not provide price predictions, investment advice, or guarantees of performance. For mortgage or legal matters, we connect you with our licensed partners.
+                  Market intelligence content follows these fixed rules:
                 </p>
-                <p className="text-zinc-700 leading-relaxed">
-                  All market intelligence is <strong className="text-black font-semibold">descriptive and historical</strong> in nature. We explain what has happened, not what will happen.
-                </p>
-              </div>
-            </motion.section>
-
-            {/* SECTION 5 — AI Usage Disclosure (MANDATORY) */}
-            <motion.section
-              id="ai-disclosure"
-              initial="hidden"
-              whileInView="visible"
-              viewport={{ once: true }}
-              variants={fadeInUp}
-              className="scroll-mt-24 py-12 bg-gradient-to-br from-white via-[#FDFBF7] to-[#F5F0E6] rounded-xl px-8 border-2 border-black hover:border-gold hover:shadow-[0_0_20px_rgba(200,167,102,0.3)] transition-all"
-            >
-              <div className="flex items-center gap-3 mb-6">
-                <div className="w-10 h-10 rounded-lg bg-black flex items-center justify-center">
-                  <Bot className="w-5 h-5 text-gold" />
-                </div>
-                <h2 
-                  className="text-2xl font-bold"
-                  style={{ 
-                    background: "linear-gradient(135deg, #C8A766, #E8D5B0, #C8A766)",
-                    WebkitBackgroundClip: "text",
-                    WebkitTextFillColor: "transparent",
-                    filter: "drop-shadow(0 1px 2px rgba(200,167,102,0.3))"
-                  }}
-                >
-                  AI Usage Disclosure
-                </h2>
-              </div>
-              
-              <div className="space-y-4">
-                <p className="text-black leading-relaxed">
-                  Artificial intelligence tools are used to summarize, visualize, and explain aggregated data in plain language.
-                </p>
-                <p className="text-black leading-relaxed">
-                  AI systems do <strong className="font-semibold">not</strong> make decisions, recommendations, or predictions, and do not replace licensed professionals.
-                </p>
-                <p className="text-zinc-500 text-sm pt-4 border-t border-gold/30">
-                  All AI-generated content is clearly labeled and provides descriptive analysis only.
+                <ul className="space-y-3 text-black">
+                  <li className="flex items-start gap-3">
+                    <span className="text-gold mt-1">•</span>
+                    <span>Historical and descriptive language only</span>
+                  </li>
+                  <li className="flex items-start gap-3">
+                    <span className="text-gold mt-1">•</span>
+                    <span>No forecasts, targets, or predictions</span>
+                  </li>
+                  <li className="flex items-start gap-3">
+                    <span className="text-gold mt-1">•</span>
+                    <span>No performance ratings or rankings</span>
+                  </li>
+                  <li className="flex items-start gap-3">
+                    <span className="text-gold mt-1">•</span>
+                    <span>No guaranteed outcomes or implied returns</span>
+                  </li>
+                </ul>
+                <p className="text-zinc-700 leading-relaxed mt-4 pt-4 border-t border-red-200">
+                  Charts, summaries, and explanations reflect recorded activity, not future expectations.
                 </p>
               </div>
             </motion.section>
 
-            {/* SECTION 6 — Update Frequency & Accuracy */}
+            {/* SECTION 6 — Update Frequency */}
             <motion.section
               id="update-frequency"
               initial="hidden"
@@ -291,42 +386,60 @@ const Methodology = () => {
                 </div>
                 <h2 
                   className="text-2xl font-bold"
-                  style={{ 
+                  style={{ fontFamily: "Poppins, sans-serif" }}
+                >
+                  <span style={{ 
                     background: "linear-gradient(135deg, #C8A766, #E8D5B0, #C8A766)",
                     WebkitBackgroundClip: "text",
                     WebkitTextFillColor: "transparent",
                     filter: "drop-shadow(0 1px 2px rgba(200,167,102,0.3))"
-                  }}
-                >
-                  Update Frequency & Accuracy
+                  }}>Update</span>{" "}
+                  <span className="text-black">Frequency</span>
                 </h2>
               </div>
               
-              <div className="bg-white rounded-lg border-2 border-gold/50 p-6">
+              <div className="space-y-6">
+                <p className="text-black leading-relaxed">
+                  Market Intelligence pages are reviewed and updated based on:
+                </p>
                 <ul className="space-y-3 text-black">
                   <li className="flex items-start gap-3">
                     <span className="text-gold mt-1">•</span>
-                    <span>Data is updated periodically based on availability of official sources</span>
+                    <span>New official data releases</span>
                   </li>
                   <li className="flex items-start gap-3">
                     <span className="text-gold mt-1">•</span>
-                    <span>Update frequency varies by dataset (monthly, quarterly, or as published)</span>
+                    <span>Updated regulatory indices</span>
                   </li>
                   <li className="flex items-start gap-3">
                     <span className="text-gold mt-1">•</span>
-                    <span>"Last updated" timestamps are displayed where applicable</span>
-                  </li>
-                  <li className="flex items-start gap-3">
-                    <span className="text-gold mt-1">•</span>
-                    <span>This is not real-time data</span>
+                    <span>Newly published government research</span>
                   </li>
                 </ul>
+                
+                <div className="bg-white rounded-lg border-2 border-gold/50 p-6 mt-6">
+                  <h3 className="font-semibold text-black mb-4">Typical review cycles:</h3>
+                  <ul className="space-y-3 text-black">
+                    <li className="flex items-start gap-3">
+                      <span className="text-gold mt-1">•</span>
+                      <span><strong>Market Overview:</strong> quarterly</span>
+                    </li>
+                    <li className="flex items-start gap-3">
+                      <span className="text-gold mt-1">•</span>
+                      <span><strong>Area Intelligence:</strong> quarterly or upon major data updates</span>
+                    </li>
+                    <li className="flex items-start gap-3">
+                      <span className="text-gold mt-1">•</span>
+                      <span><strong>Market Reports:</strong> monthly or quarterly, aligned with DLD releases</span>
+                    </li>
+                  </ul>
+                </div>
               </div>
             </motion.section>
 
-            {/* SECTION 7 — Legal & Independence Statement (FINAL SHIELD) */}
+            {/* SECTION 7 — Compliance & Use of Information */}
             <motion.section
-              id="legal-statement"
+              id="compliance"
               initial="hidden"
               whileInView="visible"
               viewport={{ once: true }}
@@ -339,23 +452,27 @@ const Methodology = () => {
                 </div>
                 <h2 
                   className="text-2xl font-bold"
-                  style={{ 
+                  style={{ fontFamily: "Poppins, sans-serif" }}
+                >
+                  <span style={{ 
                     background: "linear-gradient(135deg, #C8A766, #E8D5B0, #C8A766)",
                     WebkitBackgroundClip: "text",
                     WebkitTextFillColor: "transparent",
                     filter: "drop-shadow(0 1px 2px rgba(200,167,102,0.3))"
-                  }}
-                >
-                  Legal & Independence Statement
+                  }}>Compliance</span>{" "}
+                  <span className="text-black">& Use of Information</span>
                 </h2>
               </div>
               
-              <div>
-                <p className="text-black leading-relaxed mb-4">
-                  {MASTER_LOCK.BRAND.COMPANY_NAME} is a private licensed real estate brokerage for buying, selling, and renting properties.
+              <div className="space-y-4">
+                <p className="text-black leading-relaxed">
+                  Market intelligence content is provided for informational and educational purposes within the scope of licensed real estate brokerage activity. It supports informed decision-making without replacing client judgment or regulatory processes.
                 </p>
-                <p className="text-zinc-600 leading-relaxed">
-                  {GOVERNMENT_DISCLOSURES.PRIMARY}
+                <p className="text-black leading-relaxed">
+                  JBJ Global Real Estate maintains full alignment with UAE real estate laws and data publication standards.
+                </p>
+                <p className="text-zinc-600 leading-relaxed mt-6 pt-4 border-t border-gold/30 italic">
+                  This methodology applies uniformly across all Market Intelligence content and is locked unless official data standards change.
                 </p>
               </div>
             </motion.section>
