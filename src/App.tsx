@@ -252,6 +252,7 @@ const App = () => (
                 <Route path="/property-evaluator" element={<PropertyEvaluator />} />
                 <Route path="/document-scanner" element={<ScanSignDocuments />} />
                 <Route path="/scan-sign" element={<Navigate to="/document-scanner" replace />} />
+                <Route path="/scan-sign-documents" element={<Navigate to="/document-scanner" replace />} />
                 <Route path="/property-measurement" element={<PropertyMeasurement />} />
                 <Route path="/rental-index" element={<RentalIndex />} />
                 <Route path="/ai-calendar" element={<AICalendar />} />
@@ -266,6 +267,7 @@ const App = () => (
                 <Route path="/services/design-build" element={<DesignBuild />} />
                 <Route path="/services/law-firm" element={<LawFirm />} />
                 <Route path="/referral-partner" element={<ReferralPartner />} />
+                <Route path="/referral" element={<Navigate to="/referral-onboarding" replace />} />
                 <Route path="/install" element={<Install />} />
                 <Route path="/crm" element={(
                   <RouteErrorBoundary routeName="CRM">
@@ -336,6 +338,9 @@ const App = () => (
                 <Route path="/sitemap" element={<Sitemap />} />
                 <Route path="/security-console" element={<SecurityConsole />} />
                 <Route path="/it-department" element={<ITDepartment />} />
+                <Route path="/hr-dashboard" element={<HRDashboard />} />
+                <Route path="/hr-hub" element={<Navigate to="/hr-dashboard" replace />} />
+                <Route path="/interior-design-studio" element={<Navigate to="/interior-design-ai" replace />} />
                 
                 <Route path="*" element={<NotFound />} />
               </Route>
