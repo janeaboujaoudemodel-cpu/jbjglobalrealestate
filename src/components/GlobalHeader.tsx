@@ -8,7 +8,8 @@ import { useQuery } from "@tanstack/react-query";
 import { 
   Home, Heart, User, LogOut, Settings, Menu, 
   Phone, Building2, Newspaper, ClipboardCheck, FileText,
-  Sparkles, Search, Users, BookOpen, ChevronDown, Briefcase, UserCircle, FolderOpen, Monitor
+  Sparkles, Search, Users, BookOpen, ChevronDown, Briefcase, UserCircle, FolderOpen, Monitor,
+  GraduationCap, BarChart3, MapPin, Award, UserPlus
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { useState } from "react";
@@ -65,64 +66,97 @@ const GlobalHeader = () => {
   const hasCRMAccess = crmProfile?.is_active && 
     ['owner_admin', 'broker_member', 'sales_director', 'admin', 'founder'].includes(crmProfile?.crm_role || '');
 
-  // Simplified navigation with Guides dropdown
-  const mainNavLinks = [
-    { href: "/", label: t('nav.home'), icon: Home },
-    { href: "/services", label: t('nav.services'), icon: Building2 },
-    { href: "/ai-hub", label: "Investor Hub", icon: Sparkles },
-    { href: "/broker-toolkit", label: "Broker Hub", icon: Briefcase },
-    { href: "/about", label: t('nav.about'), icon: Building2 },
-    { href: "/contact", label: t('nav.contact'), icon: Phone },
-  ];
-
-  // Properties submenu items for Buy / Rent / List Property
+  // Properties dropdown
   const propertiesLinks = [
     { href: "/properties?transaction=buy", label: "Buy Properties", icon: Home },
-    { href: "/seller-listing", label: "List Your Property", icon: ClipboardCheck },
     { href: "/properties?transaction=rent", label: "Rent Properties", icon: Building2 },
+    { href: "/seller-listing", label: "List Your Property", icon: ClipboardCheck },
   ];
 
-  // Guides submenu items - INCLUDES ALL GUIDES
+  // Services dropdown
+  const servicesLinks = [
+    { href: "/services/buyer-advisory", label: "Buyer Advisory", icon: UserCircle },
+    { href: "/services/seller-advisory", label: "Seller Advisory", icon: ClipboardCheck },
+    { href: "/services/leasing-advisory", label: "Leasing Advisory", icon: Building2 },
+    { href: "/services/investment-advisory", label: "Investment Advisory", icon: BarChart3 },
+  ];
+
+  // Investor Hub dropdown
+  const investorHubLinks = [
+    { href: "/investor-education", label: "Investor Education", icon: GraduationCap },
+    { href: "/investor-faq", label: "Investor FAQs", icon: ClipboardCheck },
+    { href: "/investment-playbooks", label: "Investment Playbooks", icon: FileText },
+  ];
+
+  // Broker Hub dropdown
+  const brokerHubLinks = [
+    { href: "/broker-toolkit", label: "Broker Tools", icon: Briefcase },
+    { href: "/broker-education", label: "Broker Education", icon: GraduationCap },
+    { href: "/broker-faq", label: "Broker FAQs", icon: ClipboardCheck },
+  ];
+
+  // Guides dropdown (CLEANED - no investor/broker content)
   const guidesLinks = [
-    { href: "/buyer-guide", label: t('nav.buyerGuide') || 'Buyer Guide', icon: FileText },
-    { href: "/seller-guide", label: t('nav.sellerGuide') || 'Seller Guide', icon: FileText },
-    { href: "/rent-guide", label: 'Rent Guide', icon: FileText },
-    { href: "/tenant-guide", label: 'Tenant Guide', icon: FileText },
-    { href: "/landlord-guide", label: 'Landlord Guide', icon: FileText },
-    { href: "/areas", label: t('nav.areaGuides') || 'Area Guides', icon: Building2 },
-    { href: "/investor-education", label: 'Investor Education', icon: FileText },
-    { href: "/investor-faq", label: 'Investor FAQ', icon: ClipboardCheck },
-    { href: "/broker-education", label: 'Broker Education', icon: FileText },
-    { href: "/broker-faq", label: 'Broker FAQ', icon: ClipboardCheck },
-    { href: "/faq", label: 'FAQ', icon: ClipboardCheck },
+    { href: "/buyer-guide", label: "Buyer Guide", icon: FileText },
+    { href: "/seller-guide", label: "Seller Guide", icon: FileText },
+    { href: "/landlord-guide", label: "Landlord Guide", icon: FileText },
+    { href: "/tenant-guide", label: "Tenant Guide", icon: FileText },
+    { href: "/areas", label: "Area Guides", icon: MapPin },
+    { href: "/faq", label: "General FAQs", icon: ClipboardCheck },
   ];
 
-  // Market Intelligence submenu
+  // Market Intelligence dropdown
   const marketIntelLinks = [
-    { href: "/market-intelligence/overview", label: 'Market Overview', icon: Building2 },
-    { href: "/market-intelligence/areas", label: 'Area Intelligence', icon: Building2 },
-    { href: "/market-intelligence/reports", label: 'Market Reports', icon: FileText },
-    { href: "/market-intelligence/methodology", label: 'Methodology', icon: ClipboardCheck },
+    { href: "/market-intelligence/overview", label: "Market Overview", icon: BarChart3 },
+    { href: "/market-intelligence/areas", label: "Area Intelligence", icon: MapPin },
+    { href: "/market-intelligence/reports", label: "Market Reports", icon: FileText },
+    { href: "/market-intelligence/methodology", label: "Methodology & Data Sources", icon: ClipboardCheck },
   ];
 
-  // More links for dropdown
-  const moreLinks = [
+  // About dropdown
+  const aboutLinks = [
+    { href: "/about", label: "About JBJ", icon: Building2 },
+    { href: "/founder", label: "Founder & Leadership", icon: UserCircle },
     { href: "/team", label: "Meet the Team", icon: Users },
-    { href: "/founder", label: t('nav.founder'), icon: User },
-    { href: "/awards", label: t('nav.awards'), icon: Building2 },
-    { href: "/news", label: t('nav.news'), icon: Newspaper },
-    { href: "/join", label: t('nav.join') || 'Join Our Team', icon: User },
-  ];
-
-  // Property shortcuts for quick access
-  const propertyShortcuts = [
-    { href: "/properties?status=off-plan", label: "Off-Plan", icon: Building2 },
-    { href: "/properties?status=ready", label: "Ready to Move", icon: ClipboardCheck },
-    { href: "/quiz", label: "JBJ AI Home Finder", icon: Sparkles },
-    { href: "/market-report", label: "Market Report", icon: FileText },
+    { href: "/awards", label: "Awards & Recognition", icon: Award },
+    { href: "/news", label: "News & Insights", icon: Newspaper },
+    { href: "/join", label: "Careers", icon: UserPlus },
   ];
 
   const isActive = (path: string) => location.pathname === path;
+
+  // Render dropdown menu helper
+  const renderDropdown = (label: string, links: typeof propertiesLinks, isActiveCheck?: () => boolean) => (
+    <DropdownMenu>
+      <DropdownMenuTrigger asChild>
+        <button className={`flex items-center gap-0.5 px-2.5 xl:px-3 py-1.5 text-[12px] xl:text-[13px] font-semibold whitespace-nowrap transition-all rounded-full ${
+          isActiveCheck?.() ? 'text-gold bg-gold/10' : 'text-black hover:text-gold hover:bg-gold/10'
+        }`}>
+          {label}
+          <ChevronDown className="w-3 h-3 transition-transform duration-200 group-data-[state=open]:rotate-180" />
+        </button>
+      </DropdownMenuTrigger>
+      <DropdownMenuContent 
+        align="center" 
+        sideOffset={12}
+        className="bg-gradient-to-b from-white to-zinc-50 border border-gold/30 min-w-[240px] shadow-2xl shadow-black/30 py-4 rounded-xl overflow-hidden"
+      >
+        <div className="absolute top-0 left-0 right-0 h-[2px] bg-gradient-to-r from-transparent via-gold to-transparent" />
+        <div className="flex flex-col gap-1.5 px-2">
+          {links.map((link) => (
+            <DropdownMenuItem key={link.href} asChild className="p-0 focus:bg-gold/10 rounded-lg">
+              <Link to={link.href} className="flex items-center gap-3 text-gold hover:text-zinc-800 hover:bg-gold/10 py-2.5 px-3 transition-all w-full group rounded-lg">
+                <div className="w-7 h-7 rounded-md bg-transparent border border-black group-hover:bg-black flex items-center justify-center transition-colors">
+                  <link.icon className="w-3.5 h-3.5 text-black group-hover:text-gold transition-colors" />
+                </div>
+                <span className="font-medium text-sm">{link.label}</span>
+              </Link>
+            </DropdownMenuItem>
+          ))}
+        </div>
+      </DropdownMenuContent>
+    </DropdownMenu>
+  );
 
   return (
     <header className="fixed top-0 left-0 right-0 z-[9999] border-b border-gold/20 shadow-2xl shadow-black/50">
@@ -158,153 +192,61 @@ const GlobalHeader = () => {
           {/* CENTER: Desktop Navigation - Premium styling with elegant dropdowns - STRETCHED */}
           <nav className="hidden lg:flex items-center justify-center flex-1 mx-1">
             <div className="flex items-center gap-0.5 bg-gradient-to-r from-white via-[#FDFBF7] to-[#F5F0E6] backdrop-blur-sm rounded-full px-3 xl:px-4 py-1.5 border border-gold/30 shadow-lg">
-              {mainNavLinks.slice(0, 1).map((link) => (
-                <Link
-                  key={link.href}
-                  to={link.href}
-                  className={`px-2.5 xl:px-3 py-1.5 text-[12px] xl:text-[13px] font-semibold whitespace-nowrap transition-all relative group rounded-full ${
-                    isActive(link.href)
-                      ? "text-gold bg-gold/10"
-                      : "text-black hover:text-gold hover:bg-gold/10"
-                  }`}
-                >
-                  {link.label}
-                </Link>
-              ))}
+              
+              {/* 1. Home - No dropdown */}
+              <Link
+                to="/"
+                className={`px-2.5 xl:px-3 py-1.5 text-[12px] xl:text-[13px] font-semibold whitespace-nowrap transition-all relative group rounded-full ${
+                  isActive("/")
+                    ? "text-gold bg-gold/10"
+                    : "text-black hover:text-gold hover:bg-gold/10"
+                }`}
+              >
+                Home
+              </Link>
 
-              {/* Properties Dropdown - Premium styling */}
-              <DropdownMenu>
-                <DropdownMenuTrigger asChild>
-                  <button className={`flex items-center gap-0.5 px-2.5 xl:px-3 py-1.5 text-[12px] xl:text-[13px] font-semibold whitespace-nowrap transition-all rounded-full ${
-                    location.pathname === '/properties' ? 'text-gold bg-gold/10' : 'text-black hover:text-gold hover:bg-gold/10'
-                  }`}>
-                    {t('nav.properties')}
-                    <ChevronDown className="w-3 h-3 transition-transform duration-200 group-data-[state=open]:rotate-180" />
-                  </button>
-                </DropdownMenuTrigger>
-                <DropdownMenuContent 
-                  align="center" 
-                  sideOffset={12}
-                  className="bg-gradient-to-b from-white to-zinc-50 border border-gold/30 min-w-[240px] shadow-2xl shadow-black/30 py-4 rounded-xl overflow-hidden"
-                >
-                  <div className="absolute top-0 left-0 right-0 h-[2px] bg-gradient-to-r from-transparent via-gold to-transparent" />
-                  <div className="flex flex-col gap-1.5 px-2">
-                    {propertiesLinks.map((link) => (
-                      <DropdownMenuItem key={link.href} asChild className="p-0 focus:bg-gold/10 rounded-lg">
-                        <Link to={link.href} className="flex items-center gap-3 text-gold hover:text-zinc-800 hover:bg-gold/10 py-3 px-3 transition-all w-full group rounded-lg">
-                          <div className="w-8 h-8 rounded-lg bg-transparent border border-black group-hover:bg-black flex items-center justify-center transition-colors">
-                            <link.icon className="w-4 h-4 text-black group-hover:text-gold transition-colors" />
-                          </div>
-                          <span className="font-medium">{link.label}</span>
-                        </Link>
-                      </DropdownMenuItem>
-                    ))}
-                  </div>
-                </DropdownMenuContent>
-              </DropdownMenu>
+              {/* 2. Properties Dropdown */}
+              {renderDropdown("Properties", propertiesLinks, () => location.pathname === '/properties')}
 
-              {mainNavLinks.slice(1).map((link) => (
-                <Link
-                  key={link.href}
-                  to={link.href}
-                  className={`px-2.5 xl:px-3 py-1.5 text-[12px] xl:text-[13px] font-semibold whitespace-nowrap transition-all relative group rounded-full ${
-                    isActive(link.href)
-                      ? "text-gold bg-gold/10"
-                      : "text-black hover:text-gold hover:bg-gold/10"
-                  }`}
-                >
-                  {link.label}
-                </Link>
-              ))}
+              {/* 3. Services Dropdown */}
+              {renderDropdown("Services", servicesLinks, () => location.pathname.startsWith('/services'))}
 
-              {/* Guides Dropdown - Premium styling */}
-              <DropdownMenu>
-                <DropdownMenuTrigger asChild>
-                  <button className="flex items-center gap-0.5 px-2.5 xl:px-3 py-1.5 text-[12px] xl:text-[13px] font-semibold whitespace-nowrap transition-all text-black hover:text-gold hover:bg-gold/10 rounded-full">
-                    Guides
-                    <ChevronDown className="w-3 h-3" />
-                  </button>
-                </DropdownMenuTrigger>
-                <DropdownMenuContent 
-                  align="center" 
-                  sideOffset={12}
-                  className="bg-gradient-to-b from-white to-zinc-50 border border-gold/30 min-w-[220px] shadow-2xl shadow-black/30 py-4 rounded-xl overflow-hidden"
-                >
-                  <div className="absolute top-0 left-0 right-0 h-[2px] bg-gradient-to-r from-transparent via-gold to-transparent" />
-                  <div className="flex flex-col gap-1.5 px-2">
-                    {guidesLinks.map((link) => (
-                      <DropdownMenuItem key={link.href} asChild className="p-0 focus:bg-gold/10 rounded-lg">
-                        <Link to={link.href} className="flex items-center gap-3 text-gold hover:text-zinc-800 hover:bg-gold/10 py-2.5 px-3 transition-all w-full group rounded-lg">
-                          <div className="w-7 h-7 rounded-md bg-transparent border border-black group-hover:bg-black flex items-center justify-center transition-colors">
-                            <link.icon className="w-3.5 h-3.5 text-black group-hover:text-gold transition-colors" />
-                          </div>
-                          <span className="font-medium text-sm">{link.label}</span>
-                        </Link>
-                      </DropdownMenuItem>
-                    ))}
-                  </div>
-                </DropdownMenuContent>
-              </DropdownMenu>
+              {/* 4. Investor Hub Dropdown */}
+              {renderDropdown("Investor Hub", investorHubLinks, () => 
+                location.pathname.includes('investor') || location.pathname === '/ai-hub'
+              )}
 
-              {/* Market Intelligence Dropdown - Premium styling */}
-              <DropdownMenu>
-                <DropdownMenuTrigger asChild>
-                  <button className={`flex items-center gap-0.5 px-2.5 xl:px-3 py-1.5 text-[12px] xl:text-[13px] font-semibold whitespace-nowrap transition-all rounded-full ${
-                    location.pathname.startsWith('/market-intelligence') ? 'text-gold bg-gold/10' : 'text-black hover:text-gold hover:bg-gold/10'
-                  }`}>
-                    Market Report
-                    <ChevronDown className="w-3 h-3" />
-                  </button>
-                </DropdownMenuTrigger>
-                <DropdownMenuContent 
-                  align="center" 
-                  sideOffset={12}
-                  className="bg-gradient-to-b from-white to-zinc-50 border border-gold/30 min-w-[220px] shadow-2xl shadow-black/30 py-4 rounded-xl overflow-hidden"
-                >
-                  <div className="absolute top-0 left-0 right-0 h-[2px] bg-gradient-to-r from-transparent via-gold to-transparent" />
-                  <div className="flex flex-col gap-1.5 px-2">
-                    {marketIntelLinks.map((link) => (
-                      <DropdownMenuItem key={link.href} asChild className="p-0 focus:bg-gold/10 rounded-lg">
-                        <Link to={link.href} className="flex items-center gap-3 text-gold hover:text-zinc-800 hover:bg-gold/10 py-2.5 px-3 transition-all w-full group rounded-lg">
-                          <div className="w-7 h-7 rounded-md bg-transparent border border-black group-hover:bg-black flex items-center justify-center transition-colors">
-                            <link.icon className="w-3.5 h-3.5 text-black group-hover:text-gold transition-colors" />
-                          </div>
-                          <span className="font-medium text-sm">{link.label}</span>
-                        </Link>
-                      </DropdownMenuItem>
-                    ))}
-                  </div>
-                </DropdownMenuContent>
-              </DropdownMenu>
+              {/* 5. Broker Hub Dropdown */}
+              {renderDropdown("Broker Hub", brokerHubLinks, () => 
+                location.pathname.includes('broker') && !location.pathname.includes('faq') && !location.pathname.includes('education')
+              )}
 
-              {/* More Dropdown - Premium styling */}
-              <DropdownMenu>
-                <DropdownMenuTrigger asChild>
-                  <button className="flex items-center gap-0.5 px-2.5 xl:px-3 py-1.5 text-[12px] xl:text-[13px] font-semibold whitespace-nowrap transition-all text-black hover:text-gold hover:bg-gold/10 rounded-full">
-                    More
-                    <ChevronDown className="w-3 h-3" />
-                  </button>
-                </DropdownMenuTrigger>
-                <DropdownMenuContent 
-                  align="center" 
-                  sideOffset={12}
-                  className="bg-gradient-to-b from-white to-zinc-50 border border-gold/30 min-w-[200px] shadow-2xl shadow-black/30 py-4 rounded-xl overflow-hidden"
-                >
-                  <div className="absolute top-0 left-0 right-0 h-[2px] bg-gradient-to-r from-transparent via-gold to-transparent" />
-                  <div className="flex flex-col gap-1.5 px-2">
-                    {moreLinks.map((link) => (
-                      <DropdownMenuItem key={link.href} asChild className="p-0 focus:bg-gold/10 rounded-lg">
-                        <Link to={link.href} className="flex items-center gap-3 text-gold hover:text-zinc-800 hover:bg-gold/10 py-2.5 px-3 transition-all w-full group rounded-lg">
-                          <div className="w-7 h-7 rounded-md bg-transparent border border-black group-hover:bg-black flex items-center justify-center transition-colors">
-                            <link.icon className="w-3.5 h-3.5 text-black group-hover:text-gold transition-colors" />
-                          </div>
-                          <span className="font-medium text-sm">{link.label}</span>
-                        </Link>
-                      </DropdownMenuItem>
-                    ))}
-                  </div>
-                </DropdownMenuContent>
-              </DropdownMenu>
+              {/* 6. Guides Dropdown */}
+              {renderDropdown("Guides", guidesLinks, () => 
+                ['/buyer-guide', '/seller-guide', '/landlord-guide', '/tenant-guide', '/areas', '/faq'].some(p => location.pathname.startsWith(p))
+              )}
+
+              {/* 7. Market Intelligence Dropdown */}
+              {renderDropdown("Market Intelligence", marketIntelLinks, () => 
+                location.pathname.startsWith('/market-intelligence') || location.pathname === '/market-report'
+              )}
+
+              {/* 8. About Dropdown */}
+              {renderDropdown("About", aboutLinks, () => 
+                ['/about', '/founder', '/team', '/awards', '/news', '/join'].some(p => location.pathname.startsWith(p))
+              )}
+
+              {/* 9. Contact - No dropdown */}
+              <Link
+                to="/contact"
+                className={`px-2.5 xl:px-3 py-1.5 text-[12px] xl:text-[13px] font-semibold whitespace-nowrap transition-all relative group rounded-full ${
+                  isActive("/contact")
+                    ? "text-gold bg-gold/10"
+                    : "text-black hover:text-gold hover:bg-gold/10"
+                }`}
+              >
+                Contact
+              </Link>
             </div>
           </nav>
 
@@ -349,52 +291,146 @@ const GlobalHeader = () => {
                 {/* Scrollable Navigation */}
                 <ScrollArea className="flex-1">
                   <nav className="flex flex-col p-4">
-                    {/* Main Navigation */}
-                    {mainNavLinks.map((link) => (
+                    {/* 1. Home */}
+                    <Link
+                      to="/"
+                      onClick={() => setMobileMenuOpen(false)}
+                      className={`flex items-center gap-3 px-4 py-3 border-l-2 transition-all ${
+                        isActive("/")
+                          ? "text-gold border-gold bg-gold/10"
+                          : "text-zinc-300 border-transparent hover:text-white hover:bg-zinc-900/80 hover:border-gold/50"
+                      }`}
+                    >
+                      Home
+                    </Link>
+
+                    <div className="h-px bg-zinc-800 my-2" />
+                    
+                    {/* 2. Properties */}
+                    <p className="px-4 py-2 text-xs text-gold/60 uppercase tracking-wider">Properties</p>
+                    {propertiesLinks.map((link) => (
                       <Link
                         key={link.href}
                         to={link.href}
                         onClick={() => setMobileMenuOpen(false)}
-                        className={`flex items-center gap-3 px-4 py-3 border-l-2 transition-all ${
-                          isActive(link.href)
-                            ? "text-gold border-gold bg-gold/10"
-                            : "text-zinc-300 border-transparent hover:text-white hover:bg-zinc-900/80 hover:border-gold/50"
-                        }`}
+                        className="flex items-center gap-3 px-4 py-2.5 text-sm text-zinc-400 hover:text-white hover:bg-zinc-900/80 transition-colors"
                       >
+                        <link.icon className="w-4 h-4 text-gold/70" />
                         {link.label}
                       </Link>
                     ))}
 
-                    <div className="h-px bg-zinc-800 my-4" />
+                    <div className="h-px bg-zinc-800 my-2" />
 
-                    {/* AI Home Finder CTA */}
-                    <Link
-                      to="/quiz"
-                      onClick={() => setMobileMenuOpen(false)}
-                      className="flex items-center gap-3 px-4 py-4 bg-gradient-to-r from-gold/10 to-gold/5 border border-gold/30 rounded-lg mb-4 text-white hover:from-gold/15 transition-all backdrop-blur-sm"
-                    >
-                      <div className="w-8 h-8 bg-gradient-to-br from-gold to-gold-light rounded-lg flex items-center justify-center">
-                        <Sparkles className="w-4 h-4 text-black" />
-                      </div>
-                      <div>
-                        <p className="font-semibold text-sm">AI Home Finder</p>
-                        <p className="text-gold/80 text-xs">Complimentary</p>
-                      </div>
-                    </Link>
-
-                    {/* Property Shortcuts */}
-                    <p className="px-4 py-2 text-xs text-gold/60 uppercase tracking-wider">Quick Access</p>
-                    {propertyShortcuts.filter((s) => s.href !== "/quiz").map((shortcut) => (
+                    {/* 3. Services */}
+                    <p className="px-4 py-2 text-xs text-gold/60 uppercase tracking-wider">Services</p>
+                    {servicesLinks.map((link) => (
                       <Link
-                        key={shortcut.href}
-                        to={shortcut.href}
+                        key={link.href}
+                        to={link.href}
                         onClick={() => setMobileMenuOpen(false)}
                         className="flex items-center gap-3 px-4 py-2.5 text-sm text-zinc-400 hover:text-white hover:bg-zinc-900/80 transition-colors"
                       >
-                        <shortcut.icon className="w-4 h-4 text-gold/70" />
-                        {shortcut.label}
+                        <link.icon className="w-4 h-4 text-gold/70" />
+                        {link.label}
                       </Link>
                     ))}
+
+                    <div className="h-px bg-zinc-800 my-2" />
+
+                    {/* 4. Investor Hub */}
+                    <p className="px-4 py-2 text-xs text-gold/60 uppercase tracking-wider">Investor Hub</p>
+                    {investorHubLinks.map((link) => (
+                      <Link
+                        key={link.href}
+                        to={link.href}
+                        onClick={() => setMobileMenuOpen(false)}
+                        className="flex items-center gap-3 px-4 py-2.5 text-sm text-zinc-400 hover:text-white hover:bg-zinc-900/80 transition-colors"
+                      >
+                        <link.icon className="w-4 h-4 text-gold/70" />
+                        {link.label}
+                      </Link>
+                    ))}
+
+                    <div className="h-px bg-zinc-800 my-2" />
+
+                    {/* 5. Broker Hub */}
+                    <p className="px-4 py-2 text-xs text-gold/60 uppercase tracking-wider">Broker Hub</p>
+                    {brokerHubLinks.map((link) => (
+                      <Link
+                        key={link.href}
+                        to={link.href}
+                        onClick={() => setMobileMenuOpen(false)}
+                        className="flex items-center gap-3 px-4 py-2.5 text-sm text-zinc-400 hover:text-white hover:bg-zinc-900/80 transition-colors"
+                      >
+                        <link.icon className="w-4 h-4 text-gold/70" />
+                        {link.label}
+                      </Link>
+                    ))}
+
+                    <div className="h-px bg-zinc-800 my-2" />
+
+                    {/* 6. Guides */}
+                    <p className="px-4 py-2 text-xs text-gold/60 uppercase tracking-wider">Guides</p>
+                    {guidesLinks.map((link) => (
+                      <Link
+                        key={link.href}
+                        to={link.href}
+                        onClick={() => setMobileMenuOpen(false)}
+                        className="flex items-center gap-3 px-4 py-2.5 text-sm text-zinc-400 hover:text-white hover:bg-zinc-900/80 transition-colors"
+                      >
+                        <link.icon className="w-4 h-4 text-gold/70" />
+                        {link.label}
+                      </Link>
+                    ))}
+
+                    <div className="h-px bg-zinc-800 my-2" />
+
+                    {/* 7. Market Intelligence */}
+                    <p className="px-4 py-2 text-xs text-gold/60 uppercase tracking-wider">Market Intelligence</p>
+                    {marketIntelLinks.map((link) => (
+                      <Link
+                        key={link.href}
+                        to={link.href}
+                        onClick={() => setMobileMenuOpen(false)}
+                        className="flex items-center gap-3 px-4 py-2.5 text-sm text-zinc-400 hover:text-white hover:bg-zinc-900/80 transition-colors"
+                      >
+                        <link.icon className="w-4 h-4 text-gold/70" />
+                        {link.label}
+                      </Link>
+                    ))}
+
+                    <div className="h-px bg-zinc-800 my-2" />
+
+                    {/* 8. About */}
+                    <p className="px-4 py-2 text-xs text-gold/60 uppercase tracking-wider">About</p>
+                    {aboutLinks.map((link) => (
+                      <Link
+                        key={link.href}
+                        to={link.href}
+                        onClick={() => setMobileMenuOpen(false)}
+                        className="flex items-center gap-3 px-4 py-2.5 text-sm text-zinc-400 hover:text-white hover:bg-zinc-900/80 transition-colors"
+                      >
+                        <link.icon className="w-4 h-4 text-gold/70" />
+                        {link.label}
+                      </Link>
+                    ))}
+
+                    <div className="h-px bg-zinc-800 my-2" />
+
+                    {/* 9. Contact */}
+                    <Link
+                      to="/contact"
+                      onClick={() => setMobileMenuOpen(false)}
+                      className={`flex items-center gap-3 px-4 py-3 border-l-2 transition-all ${
+                        isActive("/contact")
+                          ? "text-gold border-gold bg-gold/10"
+                          : "text-zinc-300 border-transparent hover:text-white hover:bg-zinc-900/80 hover:border-gold/50"
+                      }`}
+                    >
+                      <Phone className="w-4 h-4 text-gold/70" />
+                      Contact
+                    </Link>
 
                     <div className="h-px bg-zinc-800 my-4" />
 

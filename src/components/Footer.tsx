@@ -67,70 +67,65 @@ const DivisionAccordion = ({
 const Footer = () => {
   const currentYear = new Date().getFullYear();
 
-  // Our Services — required hierarchy with working pages
-  const serviceLinks = [
-    {
-      title: "Buy, Sell & Rent Brokerage",
-      href: "/properties",
-      items: [
-        { label: "Off-Plan Properties", href: "/properties?status=off-plan" },
-        { label: "Ready Properties", href: "/properties?status=ready" },
-        { label: "Rentals", href: "/properties?type=rent" },
-        { label: "Property Search", href: "/quiz" },
-      ],
-    },
-    { 
-      title: "Design & Build Partners", 
-      href: "/services/design-build", 
-      items: [
-        { label: "Architecture", href: "/services/architecture" },
-        { label: "Interior Design", href: "/services/interior-design" },
-        { label: "Fit-Out", href: "/services/fit-out" },
-      ],
-    },
-    {
-      title: "Legal Partners",
-      href: "/services/law-firm",
-      items: [],
-    },
-    {
-      title: "Mortgage Partners",
-      href: "/mortgage-calculator",
-      items: [],
-    },
+  // Properties
+  const propertiesLinks = [
+    { label: "Buy Properties", href: "/properties?transaction=buy" },
+    { label: "Rent Properties", href: "/properties?transaction=rent" },
+    { label: "List Your Property", href: "/seller-listing" },
   ];
 
-  // Menu — required order
-  const menuLinks = [
-    { href: "/", label: "Home" },
-    { href: "/founder", label: "Founder & Leadership" },
-    { href: "/about", label: "About Us" },
-    { href: "/company-profile", label: "Company Profile" },
-    { href: "/press-kit", label: "Press Kit" },
-    { href: "/properties", label: "Properties" },
-    { href: "/areas", label: "Area Guides" },
-    { href: "/market-intelligence", label: "Market Intelligence" },
-    { href: "/buyer-guide", label: "Buyer Guide" },
-    { href: "/investor-education", label: "Investor Education" },
-    { href: "/broker-education", label: "Broker Education" },
-    { href: "/broker-faq", label: "Broker FAQ" },
-    { href: "/services", label: "Services" },
-    { href: "/awards", label: "Awards" },
-    { href: "/news", label: "News & Insights" },
-    { href: "/contact", label: "Contact" },
+  // Services
+  const servicesLinks = [
+    { label: "Buyer Advisory", href: "/services/buyer-advisory" },
+    { label: "Seller Advisory", href: "/services/seller-advisory" },
+    { label: "Leasing Advisory", href: "/services/leasing-advisory" },
+    { label: "Investment Advisory", href: "/services/investment-advisory" },
   ];
 
-  // Broker Hub & Resources
-  const academyLinks = [
-    { href: "/ai-hub", label: "Investor Hub" },
-    { href: "/broker-toolkit", label: "Broker Hub" },
-    { href: "/my-account", label: "My Dashboard" },
-    { href: "/jbj-design-studio", label: "Design Studio" },
-    { href: "/video-builder", label: "Video Studio" },
+  // Investor Hub
+  const investorHubLinks = [
+    { label: "Investor Education", href: "/investor-education" },
+    { label: "Investor FAQs", href: "/investor-faq" },
+    { label: "Investment Playbooks", href: "/investment-playbooks" },
   ];
 
+  // Broker Hub
+  const brokerHubLinks = [
+    { label: "Broker Tools", href: "/broker-toolkit" },
+    { label: "Broker Education", href: "/broker-education" },
+    { label: "Broker FAQs", href: "/broker-faq" },
+  ];
+
+  // Guides (CLEANED)
+  const guidesLinks = [
+    { label: "Buyer Guide", href: "/buyer-guide" },
+    { label: "Seller Guide", href: "/seller-guide" },
+    { label: "Landlord Guide", href: "/landlord-guide" },
+    { label: "Tenant Guide", href: "/tenant-guide" },
+    { label: "Area Guides", href: "/areas" },
+    { label: "General FAQs", href: "/faq" },
+  ];
+
+  // Market Intelligence
+  const marketIntelLinks = [
+    { label: "Market Overview", href: "/market-intelligence/overview" },
+    { label: "Area Intelligence", href: "/market-intelligence/areas" },
+    { label: "Market Reports", href: "/market-intelligence/reports" },
+    { label: "Methodology & Data Sources", href: "/market-intelligence/methodology" },
+  ];
+
+  // About
+  const aboutLinks = [
+    { label: "About JBJ", href: "/about" },
+    { label: "Founder & Leadership", href: "/founder" },
+    { label: "Meet the Team", href: "/team" },
+    { label: "Awards & Recognition", href: "/awards" },
+    { label: "News & Insights", href: "/news" },
+    { label: "Careers", href: "/join" },
+  ];
+
+  // Professional Tools
   const professionalTools = [
-    { href: "/ai-hub", label: "JBJ Investor Hub" },
     { href: "/compare", label: "Property Comparison" },
     { href: "/property-evaluator", label: "JBJ Property Evaluator" },
     { href: "/rental-index", label: "JBJ Rental Index" },
@@ -204,16 +199,33 @@ const Footer = () => {
         {/* Divider */}
         <div className="h-px bg-gradient-to-r from-transparent via-zinc-700 to-transparent mb-10" />
 
-        {/* Menu + Services + Toolkit Grid - Unified Premium White Section */}
+        {/* Navigation Grid - Updated Structure */}
         <div className="bg-white rounded-2xl p-6 md:p-8 border border-zinc-200 shadow-lg mb-10 max-w-6xl mx-auto">
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-6 lg:gap-0 lg:divide-x divide-gold/20">
-            {/* Menu */}
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 lg:gap-0 lg:divide-x divide-gold/20">
+            
+            {/* Column 1: Properties + Services */}
             <div className="lg:px-5 lg:first:pl-0">
               <h4 className="text-gold font-semibold text-sm uppercase tracking-[0.15em] mb-4 pb-2 border-b border-gold/20 lg:border-b-0">
-                Menu
+                Properties
+              </h4>
+              <ul className="space-y-2 mb-6">
+                {propertiesLinks.map((link) => (
+                  <li key={link.href}>
+                    <Link
+                      to={link.href}
+                      className="text-black hover:text-gold transition-colors text-sm inline-block"
+                    >
+                      {link.label}
+                    </Link>
+                  </li>
+                ))}
+              </ul>
+              
+              <h4 className="text-gold font-semibold text-sm uppercase tracking-[0.15em] mb-4 pb-2 border-b border-gold/20 lg:border-b-0">
+                Services
               </h4>
               <ul className="space-y-2">
-                {menuLinks.map((link) => (
+                {servicesLinks.map((link) => (
                   <li key={link.href}>
                     <Link
                       to={link.href}
@@ -226,46 +238,29 @@ const Footer = () => {
               </ul>
             </div>
             
-            {/* Our Services */}
+            {/* Column 2: Investor Hub + Broker Hub */}
             <div className="lg:px-5">
               <h4 className="text-gold font-semibold text-sm uppercase tracking-[0.15em] mb-4 pb-2 border-b border-gold/20 lg:border-b-0">
-                Our Services
+                Investor Hub
               </h4>
-              <div className="space-y-3">
-                {serviceLinks.map((svc) => (
-                  <div key={svc.title}>
-                    <Link 
-                      to={svc.href}
-                      className="text-black hover:text-gold transition-colors text-sm font-medium block"
+              <ul className="space-y-2 mb-6">
+                {investorHubLinks.map((link) => (
+                  <li key={link.href}>
+                    <Link
+                      to={link.href}
+                      className="text-black hover:text-gold transition-colors text-sm inline-block"
                     >
-                      {svc.title}
+                      {link.label}
                     </Link>
-                    {svc.items.length > 0 && (
-                      <div className="pl-3 mt-1.5 space-y-1.5 border-l-2 border-gold/30">
-                        {svc.items.map((item) => (
-                          <Link
-                            key={item.label}
-                            to={item.href}
-                            className="block text-gold hover:text-gold-dark transition-colors text-xs"
-                          >
-                            {item.label}
-                          </Link>
-                        ))}
-                      </div>
-                    )}
-                  </div>
+                  </li>
                 ))}
-              </div>
-            </div>
-
-            {/* Broker Hub */}
-            <div className="lg:px-5">
+              </ul>
+              
               <h4 className="text-gold font-semibold text-sm uppercase tracking-[0.15em] mb-4 pb-2 border-b border-gold/20 lg:border-b-0">
                 Broker Hub
               </h4>
-              <p className="text-zinc-500 text-xs mb-3 italic">Tools, Training & Support</p>
               <ul className="space-y-2">
-                {academyLinks.map((link) => (
+                {brokerHubLinks.map((link) => (
                   <li key={link.href}>
                     <Link
                       to={link.href}
@@ -278,14 +273,29 @@ const Footer = () => {
               </ul>
             </div>
 
-            {/* Professional Tools */}
+            {/* Column 3: Guides + Market Intelligence */}
             <div className="lg:px-5">
               <h4 className="text-gold font-semibold text-sm uppercase tracking-[0.15em] mb-4 pb-2 border-b border-gold/20 lg:border-b-0">
-                Professional Tools
+                Guides
               </h4>
-              <p className="text-zinc-500 text-xs mb-3 italic">AI-Powered Assistants</p>
+              <ul className="space-y-2 mb-6">
+                {guidesLinks.map((link) => (
+                  <li key={link.href}>
+                    <Link
+                      to={link.href}
+                      className="text-black hover:text-gold transition-colors text-sm inline-block"
+                    >
+                      {link.label}
+                    </Link>
+                  </li>
+                ))}
+              </ul>
+              
+              <h4 className="text-gold font-semibold text-sm uppercase tracking-[0.15em] mb-4 pb-2 border-b border-gold/20 lg:border-b-0">
+                Market Intelligence
+              </h4>
               <ul className="space-y-2">
-                {professionalTools.map((link) => (
+                {marketIntelLinks.map((link) => (
                   <li key={link.href}>
                     <Link
                       to={link.href}
@@ -298,12 +308,27 @@ const Footer = () => {
               </ul>
             </div>
 
-            {/* Careers */}
+            {/* Column 4: About + Careers */}
             <div className="lg:px-5 lg:last:pr-0">
+              <h4 className="text-gold font-semibold text-sm uppercase tracking-[0.15em] mb-4 pb-2 border-b border-gold/20 lg:border-b-0">
+                About
+              </h4>
+              <ul className="space-y-2 mb-6">
+                {aboutLinks.map((link) => (
+                  <li key={link.href}>
+                    <Link
+                      to={link.href}
+                      className="text-black hover:text-gold transition-colors text-sm inline-block"
+                    >
+                      {link.label}
+                    </Link>
+                  </li>
+                ))}
+              </ul>
+              
               <h4 className="text-gold font-semibold text-sm uppercase tracking-[0.15em] mb-4 pb-2 border-b border-gold/20 lg:border-b-0">
                 Careers
               </h4>
-              <p className="text-zinc-500 text-xs mb-3 italic">Join Our Team</p>
               <ul className="space-y-2">
                 {careerLinks.map((link) => (
                   <li key={link.href}>
@@ -317,6 +342,25 @@ const Footer = () => {
                 ))}
               </ul>
             </div>
+          </div>
+        </div>
+
+        {/* Professional Tools Section */}
+        <div className="bg-white rounded-2xl p-6 md:p-8 border border-zinc-200 shadow-lg mb-10 max-w-6xl mx-auto">
+          <h4 className="text-gold font-semibold text-sm uppercase tracking-[0.15em] mb-4 text-center">
+            Professional Tools
+          </h4>
+          <p className="text-zinc-500 text-xs mb-4 italic text-center">AI-Powered Assistants</p>
+          <div className="flex flex-wrap justify-center gap-3">
+            {professionalTools.map((link) => (
+              <Link
+                key={link.href}
+                to={link.href}
+                className="text-black hover:text-gold transition-colors text-sm px-3 py-1.5 border border-zinc-200 rounded-lg hover:border-gold/30"
+              >
+                {link.label}
+              </Link>
+            ))}
           </div>
         </div>
 
@@ -411,46 +455,9 @@ const Footer = () => {
           </div>
         </div>
 
-        {/* Trust Signals */}
-        <div className="flex flex-wrap justify-center gap-4 mb-8">
-          <GoogleMyBusinessLink variant="badge" />
-        </div>
-
-        {/* Bottom - Copyright & Legal with Founder Attribution */}
-        <div className="flex flex-col items-center gap-4 text-sm text-zinc-500">
-          <div className="text-center space-y-3">
-            <p className="font-medium text-white">
-              © {currentYear} <Link to="/about" className="hover:text-gold transition-colors">JBJ Global Real Estate</Link>. All Rights Reserved.
-            </p>
-            <div className="space-y-1">
-              <p className="text-gold font-medium text-sm">
-                Developed, Created & Implemented by The Founder & CEO, Jane Abou Jaoude
-              </p>
-              <p className="text-zinc-500 text-xs">
-                Designed exclusively for <Link to="/about" className="text-gold hover:underline">JBJ Global Real Estate</Link>
-              </p>
-              <Link to="/about" className="inline-block text-white hover:text-gold transition-colors text-sm font-medium mt-2">
-                First Global Real Estate Platform of Its Kind →
-              </Link>
-            </div>
-          </div>
-          <div className="flex flex-wrap items-center justify-center gap-3 md:gap-5">
-            <Link to="/trust-and-audit-center" className="hover:text-gold transition-colors">
-              Trust & Compliance
-            </Link>
-            <Link to="/privacy" className="hover:text-gold transition-colors">
-              Privacy Policy
-            </Link>
-            <Link to="/terms" className="hover:text-gold transition-colors">
-              Terms of Service
-            </Link>
-            <Link to="/cookies" className="hover:text-gold transition-colors">
-              Cookies
-            </Link>
-            <Link to="/intellectual-property" className="hover:text-gold transition-colors">
-              Intellectual Property
-            </Link>
-          </div>
+        {/* Google My Business Link - Keep if exists */}
+        <div className="text-center">
+          <GoogleMyBusinessLink />
         </div>
       </div>
     </footer>
