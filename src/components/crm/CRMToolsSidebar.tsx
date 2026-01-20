@@ -22,7 +22,7 @@ const toolCategories = [
     name: "CRM Modules",
     tools: [
       { name: "Dashboard", href: "/crm", icon: LayoutDashboard, color: "text-gold" },
-      { name: "Automations", href: "/crm/automations", icon: Zap, color: "text-amber-400", adminOnly: true },
+      { name: "Automations", href: "/automations", icon: Zap, color: "text-amber-400", adminOnly: true },
       { name: "My Tasks", href: "/crm/tasks", icon: CheckSquare, color: "text-emerald-400" },
       { name: "Calendar", href: "/crm/calendar", icon: Calendar, color: "text-blue-400" },
       { name: "Notes", href: "/crm/notes", icon: StickyNote, color: "text-purple-400" },
