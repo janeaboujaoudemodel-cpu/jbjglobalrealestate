@@ -5,6 +5,7 @@ import { Button } from "@/components/ui/button";
 import { SEOHead, pagesSEO } from "@/components/SEOHead";
 import { FounderPhilosophySection } from "@/components/FounderPhilosophySection";
 import { PreFooterSeparator } from "@/components/PreFooterSeparator";
+import { useLanguage } from "@/contexts/LanguageContext";
 import { 
   Building2, 
   Scale, 
@@ -109,6 +110,8 @@ const services = [
 
 
 const Services = () => {
+  const { t } = useLanguage();
+  
   return (
     <>
       <SEOHead {...pagesSEO.services} />

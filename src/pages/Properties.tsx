@@ -43,6 +43,7 @@ import {
 import { ScrollArea } from "@/components/ui/scroll-area";
 import { Slider } from "@/components/ui/slider";
 import { Checkbox } from "@/components/ui/checkbox";
+import { useLanguage } from "@/contexts/LanguageContext";
 
 import Footer from "@/components/Footer";
 import ProjectCard from "@/components/ProjectCard";
@@ -137,6 +138,7 @@ const Properties = () => {
   const { data: projects, isLoading } = useProjects();
   const { data: communities } = useCommunities();
   const { data: developers } = useDevelopers();
+  const { t } = useLanguage();
   
   const [filters, setFilters] = useState<ExtendedFilterState>(defaultExtendedFilters);
   const [appliedFilters, setAppliedFilters] = useState<ExtendedFilterState>(defaultExtendedFilters);
