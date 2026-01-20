@@ -90,14 +90,16 @@ const Index = () => {
           animate="visible"
           variants={staggerContainer}
         >
-          {/* H1 - Responsive Typography */}
+          {/* H1 - Responsive Typography with proper word wrap */}
           <motion.h1 
             variants={fadeInUp} 
-            className="text-white text-2xl sm:text-3xl md:text-5xl lg:text-6xl font-bold tracking-tight leading-[1.15] mb-3 md:mb-5"
+            className="text-white text-2xl sm:text-3xl md:text-5xl lg:text-6xl font-bold tracking-tight leading-[1.15] mb-3 md:mb-5 px-2 sm:px-0"
             style={{ fontFamily: "Poppins, sans-serif" }}
           >
             Buy. Sell. Rent.<br />
-            <span className="text-transparent bg-clip-text bg-gradient-to-r from-gold via-[#C4A962] to-gold">Delivered with Intelligence.</span>
+            <span className="text-transparent bg-clip-text bg-gradient-to-r from-gold via-[#C4A962] to-gold break-words">
+              Delivered with Intelligence.
+            </span>
           </motion.h1>
           
           {/* Subline - Compact */}

@@ -185,12 +185,12 @@ const AppDownloadPopup = ({
           animate={{ opacity: 1, y: 0 }}
           exit={{ opacity: 0, y: 16 }}
           transition={{ type: "spring", damping: 26, stiffness: 260 }}
-          className="fixed bottom-4 left-1/2 -translate-x-1/2 z-[10000] w-[min(420px,calc(100vw-32px))]"
+          className="fixed bottom-20 right-4 left-4 sm:left-auto sm:right-4 z-[10000] sm:w-[360px]"
           style={{ paddingBottom: "max(0px, env(safe-area-inset-bottom))" }}
         >
-          <div className="pointer-events-auto rounded-2xl border border-border bg-background shadow-lg">
+          <div className="pointer-events-auto rounded-2xl border border-gold/30 bg-gradient-to-r from-white via-[#FDFBF7] to-[#F5F0E6] shadow-xl shadow-black/20">
             <div className="flex items-center gap-3 p-3">
-              <div className="w-10 h-10 rounded-xl overflow-hidden bg-foreground/5 border border-border">
+              <div className="w-10 h-10 rounded-xl overflow-hidden bg-black border border-gold/30 shrink-0">
                 <img
                   src={jbjMonogramLightBg}
                   alt="JBJ Global Real Estate"
@@ -200,23 +200,27 @@ const AppDownloadPopup = ({
               </div>
 
               <div className="min-w-0 flex-1">
-                <p className="text-sm font-semibold text-foreground leading-tight">Install JBJ Global Real Estate</p>
-                <p className="text-xs text-muted-foreground leading-tight truncate">
+                <p className="text-sm font-semibold text-black leading-tight">Install JBJ Global Real Estate</p>
+                <p className="text-xs text-zinc-600 leading-tight">
                   One tap install where supported.
                 </p>
               </div>
 
-              <div className="flex items-center gap-2">
-                <Button onClick={handleInstall} disabled={isInstalling} className="h-9 rounded-xl px-3">
+              <div className="flex items-center gap-2 shrink-0">
+                <Button 
+                  onClick={handleInstall} 
+                  disabled={isInstalling || (!deferredPrompt && !isIOS)} 
+                  className="h-9 rounded-xl px-3 bg-gold hover:bg-gold-dark text-black"
+                >
                   <span className="flex items-center gap-2">
                     <Download className="w-4 h-4" />
-                    <span className="text-sm">Install</span>
+                    <span className="text-sm">{isInstalling ? "..." : "Install"}</span>
                   </span>
                 </Button>
 
                 <button
                   onClick={handleDismiss}
-                  className="h-9 w-9 inline-flex items-center justify-center rounded-xl border border-border bg-background text-muted-foreground hover:text-foreground"
+                  className="h-9 w-9 inline-flex items-center justify-center rounded-xl border border-gold/30 bg-white text-zinc-600 hover:text-black"
                   aria-label="Dismiss install prompt"
                 >
                   <X className="w-4 h-4" />
