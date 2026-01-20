@@ -14,6 +14,13 @@ import { MarketIntelligenceHero, MarketIntelligenceNavigation, MarketIntelligenc
 
 // TOC items for the page
 const tocItems = [
+  { id: "introduction", title: "Introduction" },
+  { id: "purpose", title: "Purpose of Market Reports" },
+  { id: "data-sources", title: "Data Sources Used" },
+  { id: "report-structure", title: "What a Report Covers" },
+  { id: "exclusions", title: "What Reports Do Not Include" },
+  { id: "frequency", title: "Reporting Frequency" },
+  { id: "jbj-approach", title: "How JBJ Uses Reports" },
   { id: "latest-reports", title: "Latest Reports" },
   { id: "report-archive", title: "Report Archive" },
   { id: "custom-report", title: "Custom Reports" },
@@ -128,6 +135,336 @@ const MarketReportsPage = () => {
         <div className="flex gap-8">
           {/* Main Content */}
           <div className="flex-1 space-y-16">
+
+            {/* Introduction Section */}
+            <section id="introduction" className="scroll-mt-24">
+              <div className="bg-gradient-to-br from-white via-[#FDFBF7] to-[#F5F0E6] rounded-2xl p-8 border border-gold/30">
+                <h2 
+                  className="text-3xl md:text-4xl font-bold mb-6"
+                  style={{ 
+                    fontFamily: "Poppins, sans-serif",
+                    background: "linear-gradient(135deg, #C8A766, #E8D5B0, #C8A766)",
+                    WebkitBackgroundClip: "text",
+                    WebkitTextFillColor: "transparent",
+                    filter: "drop-shadow(0 2px 4px rgba(200,167,102,0.3))"
+                  }}
+                >
+                  Market Reports
+                </h2>
+                <p className="text-black text-lg leading-relaxed mb-4">
+                  Market Reports consolidate officially published government data into structured summaries that explain what has already occurred in the Dubai real estate market. These reports are factual, historical, and descriptive. They do not contain predictions, targets, or guarantees.
+                </p>
+                <p className="text-zinc-700 leading-relaxed">
+                  All figures and statements are derived from Dubai Land Department (DLD) and RERA-recognized sources only.
+                </p>
+              </div>
+            </section>
+
+            {/* Gold Glow Divider */}
+            <div className="h-1 bg-gradient-to-r from-transparent via-gold to-transparent shadow-[0_0_20px_rgba(200,167,102,0.5)]" />
+
+            {/* Purpose Section */}
+            <section id="purpose" className="scroll-mt-24">
+              <div className="bg-gradient-to-br from-white via-[#FDFBF7] to-[#F5F0E6] rounded-2xl p-8 border border-gold/30">
+                <h2 
+                  className="text-3xl md:text-4xl font-bold mb-6"
+                  style={{ 
+                    fontFamily: "Poppins, sans-serif"
+                  }}
+                >
+                  <span style={{ 
+                    background: "linear-gradient(135deg, #C8A766, #E8D5B0, #C8A766)",
+                    WebkitBackgroundClip: "text",
+                    WebkitTextFillColor: "transparent",
+                    filter: "drop-shadow(0 2px 4px rgba(200,167,102,0.3))"
+                  }}>Purpose</span>{" "}
+                  <span className="text-black">of Market Reports</span>
+                </h2>
+                <p className="text-black text-lg leading-relaxed mb-6">
+                  Market Reports exist to:
+                </p>
+                <ul className="space-y-3 text-black">
+                  <li className="flex items-start gap-3">
+                    <span className="text-gold mt-1">•</span>
+                    <span>Summarize registered market activity</span>
+                  </li>
+                  <li className="flex items-start gap-3">
+                    <span className="text-gold mt-1">•</span>
+                    <span>Present verified transaction trends</span>
+                  </li>
+                  <li className="flex items-start gap-3">
+                    <span className="text-gold mt-1">•</span>
+                    <span>Explain rental and ownership behavior</span>
+                  </li>
+                  <li className="flex items-start gap-3">
+                    <span className="text-gold mt-1">•</span>
+                    <span>Provide regulatory context for decisions</span>
+                  </li>
+                </ul>
+                <p className="text-zinc-700 leading-relaxed mt-6">
+                  They are designed to help readers understand market movement, not to speculate on outcomes.
+                </p>
+              </div>
+            </section>
+
+            {/* Gold Glow Divider */}
+            <div className="h-1 bg-gradient-to-r from-transparent via-gold to-transparent shadow-[0_0_20px_rgba(200,167,102,0.5)]" />
+
+            {/* Data Sources Section */}
+            <section id="data-sources" className="scroll-mt-24">
+              <div className="bg-gradient-to-br from-white via-[#FDFBF7] to-[#F5F0E6] rounded-2xl p-8 border border-gold/30">
+                <h2 
+                  className="text-3xl md:text-4xl font-bold mb-6"
+                  style={{ 
+                    fontFamily: "Poppins, sans-serif"
+                  }}
+                >
+                  <span style={{ 
+                    background: "linear-gradient(135deg, #C8A766, #E8D5B0, #C8A766)",
+                    WebkitBackgroundClip: "text",
+                    WebkitTextFillColor: "transparent",
+                    filter: "drop-shadow(0 2px 4px rgba(200,167,102,0.3))"
+                  }}>Data</span>{" "}
+                  <span className="text-black">Sources Used in Market Reports</span>
+                </h2>
+                <p className="text-black text-lg leading-relaxed mb-6">
+                  Every Market Report is compiled using the following official sources:
+                </p>
+                <div className="space-y-4">
+                  <a 
+                    href="https://dubailand.gov.ae/en/open-data/real-estate-data/" 
+                    target="_blank" 
+                    rel="noopener noreferrer"
+                    className="flex items-center gap-3 text-black hover:text-gold transition-colors group"
+                  >
+                    <ExternalLink className="w-5 h-5 text-gold group-hover:scale-110 transition-transform" />
+                    <span className="font-medium">Dubai Land Department – Open Data</span>
+                  </a>
+                  <a 
+                    href="https://dubailand.gov.ae/en/open-data/research/" 
+                    target="_blank" 
+                    rel="noopener noreferrer"
+                    className="flex items-center gap-3 text-black hover:text-gold transition-colors group"
+                  >
+                    <ExternalLink className="w-5 h-5 text-gold group-hover:scale-110 transition-transform" />
+                    <span className="font-medium">Dubai Land Department – Research & Market Studies</span>
+                  </a>
+                  <a 
+                    href="https://dubailand.gov.ae/en/eservices/rental-index/" 
+                    target="_blank" 
+                    rel="noopener noreferrer"
+                    className="flex items-center gap-3 text-black hover:text-gold transition-colors group"
+                  >
+                    <ExternalLink className="w-5 h-5 text-gold group-hover:scale-110 transition-transform" />
+                    <span className="font-medium">RERA Rental Index</span>
+                  </a>
+                  <a 
+                    href="https://dubailand.gov.ae/en/eservices/service-charge-index-overview/" 
+                    target="_blank" 
+                    rel="noopener noreferrer"
+                    className="flex items-center gap-3 text-black hover:text-gold transition-colors group"
+                  >
+                    <ExternalLink className="w-5 h-5 text-gold group-hover:scale-110 transition-transform" />
+                    <span className="font-medium">RERA Service Charge Index</span>
+                  </a>
+                </div>
+                <p className="text-zinc-700 leading-relaxed mt-6 pt-4 border-t border-gold/20">
+                  No private dashboards, promotional statistics, or third-party estimations are used.
+                </p>
+              </div>
+            </section>
+
+            {/* Gold Glow Divider */}
+            <div className="h-1 bg-gradient-to-r from-transparent via-gold to-transparent shadow-[0_0_20px_rgba(200,167,102,0.5)]" />
+
+            {/* Report Structure Section */}
+            <section id="report-structure" className="scroll-mt-24">
+              <div className="bg-gradient-to-br from-white via-[#FDFBF7] to-[#F5F0E6] rounded-2xl p-8 border border-gold/30">
+                <h2 
+                  className="text-3xl md:text-4xl font-bold mb-6"
+                  style={{ 
+                    fontFamily: "Poppins, sans-serif"
+                  }}
+                >
+                  <span style={{ 
+                    background: "linear-gradient(135deg, #C8A766, #E8D5B0, #C8A766)",
+                    WebkitBackgroundClip: "text",
+                    WebkitTextFillColor: "transparent",
+                    filter: "drop-shadow(0 2px 4px rgba(200,167,102,0.3))"
+                  }}>What</span>{" "}
+                  <span className="text-black">a Market Report Covers</span>
+                </h2>
+                <p className="text-black text-lg leading-relaxed mb-6">
+                  Each report follows the same fixed structure:
+                </p>
+                <div className="space-y-6">
+                  <div className="border-l-4 border-gold pl-6">
+                    <h3 className="text-xl font-bold text-black mb-2">1. Transaction Volume Overview</h3>
+                    <p className="text-zinc-700">Summary of registered sales transactions during the reporting period, including volume and value ranges as recorded by DLD.</p>
+                  </div>
+                  <div className="border-l-4 border-gold pl-6">
+                    <h3 className="text-xl font-bold text-black mb-2">2. Rental Market Activity</h3>
+                    <p className="text-zinc-700">Overview of registered tenancy contracts, rental ranges, and compliance with official rental index benchmarks.</p>
+                  </div>
+                  <div className="border-l-4 border-gold pl-6">
+                    <h3 className="text-xl font-bold text-black mb-2">3. Property Type Distribution</h3>
+                    <p className="text-zinc-700">Breakdown of activity across apartments, villas, townhouses, and commercial units based on registered classifications.</p>
+                  </div>
+                  <div className="border-l-4 border-gold pl-6">
+                    <h3 className="text-xl font-bold text-black mb-2">4. Area-Level Highlights</h3>
+                    <p className="text-zinc-700">Identification of areas with notable transaction concentration or rental activity, based solely on recorded data.</p>
+                  </div>
+                  <div className="border-l-4 border-gold pl-6">
+                    <h3 className="text-xl font-bold text-black mb-2">5. Ownership Cost Context</h3>
+                    <p className="text-zinc-700">Reference to approved service charges and their role in total ownership cost during the period.</p>
+                  </div>
+                </div>
+              </div>
+            </section>
+
+            {/* Gold Glow Divider */}
+            <div className="h-1 bg-gradient-to-r from-transparent via-gold to-transparent shadow-[0_0_20px_rgba(200,167,102,0.5)]" />
+
+            {/* Exclusions Section */}
+            <section id="exclusions" className="scroll-mt-24">
+              <div className="bg-gradient-to-br from-white via-[#FDFBF7] to-[#F5F0E6] rounded-2xl p-8 border border-gold/30">
+                <h2 
+                  className="text-3xl md:text-4xl font-bold mb-6"
+                  style={{ 
+                    fontFamily: "Poppins, sans-serif"
+                  }}
+                >
+                  <span style={{ 
+                    background: "linear-gradient(135deg, #C8A766, #E8D5B0, #C8A766)",
+                    WebkitBackgroundClip: "text",
+                    WebkitTextFillColor: "transparent",
+                    filter: "drop-shadow(0 2px 4px rgba(200,167,102,0.3))"
+                  }}>What</span>{" "}
+                  <span className="text-black">Market Reports Do Not Include</span>
+                </h2>
+                <p className="text-black text-lg leading-relaxed mb-6">
+                  Market Reports do not:
+                </p>
+                <ul className="space-y-3 text-black">
+                  <li className="flex items-start gap-3">
+                    <span className="text-gold mt-1">•</span>
+                    <span>Forecast prices or rents</span>
+                  </li>
+                  <li className="flex items-start gap-3">
+                    <span className="text-gold mt-1">•</span>
+                    <span>Assign performance scores</span>
+                  </li>
+                  <li className="flex items-start gap-3">
+                    <span className="text-gold mt-1">•</span>
+                    <span>Rank developers or projects</span>
+                  </li>
+                  <li className="flex items-start gap-3">
+                    <span className="text-gold mt-1">•</span>
+                    <span>Provide investment guarantees</span>
+                  </li>
+                  <li className="flex items-start gap-3">
+                    <span className="text-gold mt-1">•</span>
+                    <span>Suggest expected returns</span>
+                  </li>
+                </ul>
+                <p className="text-zinc-700 leading-relaxed mt-6 pt-4 border-t border-gold/20">
+                  Any interpretation remains grounded in past and current registered activity only.
+                </p>
+              </div>
+            </section>
+
+            {/* Gold Glow Divider */}
+            <div className="h-1 bg-gradient-to-r from-transparent via-gold to-transparent shadow-[0_0_20px_rgba(200,167,102,0.5)]" />
+
+            {/* Reporting Frequency Section */}
+            <section id="frequency" className="scroll-mt-24">
+              <div className="bg-gradient-to-br from-white via-[#FDFBF7] to-[#F5F0E6] rounded-2xl p-8 border border-gold/30">
+                <h2 
+                  className="text-3xl md:text-4xl font-bold mb-6"
+                  style={{ 
+                    fontFamily: "Poppins, sans-serif"
+                  }}
+                >
+                  <span style={{ 
+                    background: "linear-gradient(135deg, #C8A766, #E8D5B0, #C8A766)",
+                    WebkitBackgroundClip: "text",
+                    WebkitTextFillColor: "transparent",
+                    filter: "drop-shadow(0 2px 4px rgba(200,167,102,0.3))"
+                  }}>Reporting</span>{" "}
+                  <span className="text-black">Frequency</span>
+                </h2>
+                <p className="text-black text-lg leading-relaxed mb-6">
+                  Market Reports are issued based on data availability and official publication cycles. Updates align with:
+                </p>
+                <ul className="space-y-3 text-black">
+                  <li className="flex items-start gap-3">
+                    <span className="text-gold mt-1">•</span>
+                    <span>Monthly or quarterly DLD releases</span>
+                  </li>
+                  <li className="flex items-start gap-3">
+                    <span className="text-gold mt-1">•</span>
+                    <span>Official research publications</span>
+                  </li>
+                  <li className="flex items-start gap-3">
+                    <span className="text-gold mt-1">•</span>
+                    <span>Regulatory updates impacting the sector</span>
+                  </li>
+                </ul>
+              </div>
+            </section>
+
+            {/* Gold Glow Divider */}
+            <div className="h-1 bg-gradient-to-r from-transparent via-gold to-transparent shadow-[0_0_20px_rgba(200,167,102,0.5)]" />
+
+            {/* JBJ Approach Section */}
+            <section id="jbj-approach" className="scroll-mt-24">
+              <div className="bg-gradient-to-br from-white via-[#FDFBF7] to-[#F5F0E6] rounded-2xl p-8 border border-gold/30">
+                <h2 
+                  className="text-3xl md:text-4xl font-bold mb-6"
+                  style={{ 
+                    fontFamily: "Poppins, sans-serif"
+                  }}
+                >
+                  <span style={{ 
+                    background: "linear-gradient(135deg, #C8A766, #E8D5B0, #C8A766)",
+                    WebkitBackgroundClip: "text",
+                    WebkitTextFillColor: "transparent",
+                    filter: "drop-shadow(0 2px 4px rgba(200,167,102,0.3))"
+                  }}>How</span>{" "}
+                  <span className="text-black">JBJ Global Real Estate Uses Market Reports</span>
+                </h2>
+                <p className="text-black text-lg leading-relaxed mb-6">
+                  JBJ Global Real Estate uses Market Reports to:
+                </p>
+                <ul className="space-y-3 text-black">
+                  <li className="flex items-start gap-3">
+                    <span className="text-gold mt-1">•</span>
+                    <span>Support factual market explanations</span>
+                  </li>
+                  <li className="flex items-start gap-3">
+                    <span className="text-gold mt-1">•</span>
+                    <span>Provide context during advisory discussions</span>
+                  </li>
+                  <li className="flex items-start gap-3">
+                    <span className="text-gold mt-1">•</span>
+                    <span>Align property selection with verified market behavior</span>
+                  </li>
+                  <li className="flex items-start gap-3">
+                    <span className="text-gold mt-1">•</span>
+                    <span>Maintain compliance with UAE real estate regulations</span>
+                  </li>
+                </ul>
+                <p className="text-zinc-700 leading-relaxed mt-6 pt-4 border-t border-gold/20">
+                  All guidance references published data rather than assumptions.
+                </p>
+                <p className="text-zinc-600 leading-relaxed mt-4 text-sm italic">
+                  Market Reports are supported by Methodology & Sources, which explain how data is selected, validated, and presented.
+                </p>
+              </div>
+            </section>
+
+            {/* Gold Glow Divider */}
+            <div className="h-1 bg-gradient-to-r from-transparent via-gold to-transparent shadow-[0_0_20px_rgba(200,167,102,0.5)]" />
 
             {/* Featured Reports - Premium champagne Cards */}
             <section id="latest-reports" className="scroll-mt-24">
