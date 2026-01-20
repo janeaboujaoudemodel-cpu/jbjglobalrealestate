@@ -130,6 +130,7 @@ export const GUIDE_LINKS: GuideLink[] = [
   { title: "Investor Education", path: "/investor-education", description: "Investment framework" },
   { title: "Investor FAQ", path: "/investor-faq", description: "Investment questions answered" },
   { title: "Broker Education", path: "/broker-education", description: "Professional broker training" },
+  { title: "Broker FAQ", path: "/broker-faq", description: "Professional broker questions answered" },
   { title: "FAQ", path: "/faq", description: "Common questions answered" },
 ];
 
