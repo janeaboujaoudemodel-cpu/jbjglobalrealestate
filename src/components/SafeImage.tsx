@@ -4,15 +4,42 @@ type SafeImageProps = React.ImgHTMLAttributes<HTMLImageElement> & {
   fallbackSrc?: string;
 };
 
+const APP_ASSET_URLS = import.meta.glob(
+  "../assets/**/*.{png,jpg,jpeg,webp,avif,gif,svg}",
+  { eager: true, import: "default" }
+) as Record<string, string>;
+
+function resolveAppAssetUrl(src?: string): string | undefined {
+  if (!src) return src;
+
+  // Database currently stores some images as "/src/assets/..." which is not a public URL.
+  // Convert those paths into bundled asset URLs via Vite's import.meta.glob.
+  if (src.startsWith("/src/assets/")) {
+    const key = "../assets" + src.slice("/src/assets".length);
+    return APP_ASSET_URLS[key] ?? src;
+  }
+
+  if (src.startsWith("src/assets/")) {
+    const key = "../assets" + src.slice("src/assets".length);
+    return APP_ASSET_URLS[key] ?? src;
+  }
+
+  return src;
+}
+
 export function SafeImage({ fallbackSrc, onError, ...props }: SafeImageProps) {
+  const resolvedSrc = typeof props.src === "string" ? resolveAppAssetUrl(props.src) : props.src;
+  const resolvedFallback = resolveAppAssetUrl(fallbackSrc);
+
   return (
     <img
       {...props}
+      src={resolvedSrc}
       loading={props.loading ?? "lazy"}
       decoding={props.decoding ?? "async"}
       onError={(e) => {
-        if (fallbackSrc && e.currentTarget.src !== fallbackSrc) {
-          e.currentTarget.src = fallbackSrc;
+        if (resolvedFallback && e.currentTarget.src !== resolvedFallback) {
+          e.currentTarget.src = resolvedFallback;
         }
         onError?.(e);
       }}
