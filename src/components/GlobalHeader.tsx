@@ -66,51 +66,58 @@ const GlobalHeader = () => {
   const hasCRMAccess = crmProfile?.is_active && 
     ['owner_admin', 'broker_member', 'sales_director', 'admin', 'founder'].includes(crmProfile?.crm_role || '');
 
-  // Properties dropdown
+  // Properties dropdown (execution-only)
   const propertiesLinks = [
     { href: "/properties?transaction=buy", label: "Buy Properties", icon: Home },
     { href: "/properties?transaction=rent", label: "Rent Properties", icon: Building2 },
     { href: "/seller-listing", label: "List Your Property", icon: ClipboardCheck },
   ];
 
-  // Services dropdown
+  // Services dropdown (execution + advisory)
   const servicesLinks = [
-    { href: "/services/buyer-advisory", label: "Buyer Advisory", icon: UserCircle },
-    { href: "/services/seller-advisory", label: "Seller Advisory", icon: ClipboardCheck },
-    { href: "/services/leasing-advisory", label: "Leasing Advisory", icon: Building2 },
+    { href: "/services/buyer-advisory", label: "Buying Advisory", icon: UserCircle },
+    { href: "/services/seller-advisory", label: "Selling Advisory", icon: ClipboardCheck },
+    { href: "/services/leasing-advisory", label: "Rental Advisory", icon: Building2 },
     { href: "/services/investment-advisory", label: "Investment Advisory", icon: BarChart3 },
+    { href: "/services/partners", label: "Partner Introductions", icon: Users },
   ];
 
-  // Investor Hub dropdown
-  const investorHubLinks = [
-    { href: "/investor-education", label: "Investor Education", icon: GraduationCap },
-    { href: "/investor-faq", label: "Investor FAQs", icon: ClipboardCheck },
-    { href: "/investment-playbooks", label: "Investment Playbooks", icon: FileText },
-  ];
-
-  // Broker Hub dropdown
-  const brokerHubLinks = [
-    { href: "/broker-toolkit", label: "Broker Tools", icon: Briefcase },
-    { href: "/broker-education", label: "Broker Education", icon: GraduationCap },
-    { href: "/broker-faq", label: "Broker FAQs", icon: ClipboardCheck },
-  ];
-
-  // Guides dropdown (CLEANED - no investor/broker content)
+  // Guides dropdown (education-only, client-facing)
   const guidesLinks = [
     { href: "/buyer-guide", label: "Buyer Guide", icon: FileText },
     { href: "/seller-guide", label: "Seller Guide", icon: FileText },
     { href: "/landlord-guide", label: "Landlord Guide", icon: FileText },
     { href: "/tenant-guide", label: "Tenant Guide", icon: FileText },
     { href: "/areas", label: "Area Guides", icon: MapPin },
-    { href: "/faq", label: "General FAQs", icon: ClipboardCheck },
+    { href: "/investor-education", label: "Investor Education", icon: GraduationCap },
+    { href: "/faq", label: "General FAQ", icon: ClipboardCheck },
+    { href: "/investor-faq", label: "Investor FAQ", icon: ClipboardCheck },
+    { href: "/broker-faq", label: "Broker FAQ", icon: ClipboardCheck },
   ];
 
-  // Market Intelligence dropdown
+  // Market Intelligence dropdown (data-led, descriptive)
   const marketIntelLinks = [
     { href: "/market-intelligence/overview", label: "Market Overview", icon: BarChart3 },
     { href: "/market-intelligence/areas", label: "Area Intelligence", icon: MapPin },
     { href: "/market-intelligence/reports", label: "Market Reports", icon: FileText },
-    { href: "/market-intelligence/methodology", label: "Methodology & Data Sources", icon: ClipboardCheck },
+    { href: "/market-intelligence/methodology", label: "Methodology & Sources", icon: ClipboardCheck },
+  ];
+
+  // Investor Hub dropdown (tools + dashboard)
+  const investorHubLinks = [
+    { href: "/my-account", label: "Investor Dashboard", icon: UserCircle },
+    { href: "/investment-playbooks", label: "Investor Tools", icon: Briefcase },
+    { href: "/favorites", label: "Portfolio Views", icon: Heart },
+    { href: "/market-intelligence/reports", label: "Reports Access", icon: FileText },
+  ];
+
+  // Broker Hub dropdown (internal)
+  const brokerHubLinks = [
+    { href: "/broker-toolkit", label: "Broker Dashboard", icon: UserCircle },
+    { href: "/broker-toolkit#tools", label: "Broker Tools", icon: Briefcase },
+    { href: "/broker-education", label: "Broker Education", icon: GraduationCap },
+    { href: "/broker-toolkit#resources", label: "Broker Resources", icon: FolderOpen },
+    { href: "/broker-faq", label: "Broker FAQ", icon: ClipboardCheck },
   ];
 
   // About dropdown
@@ -119,8 +126,12 @@ const GlobalHeader = () => {
     { href: "/founder", label: "Founder & Leadership", icon: UserCircle },
     { href: "/team", label: "Meet the Team", icon: Users },
     { href: "/awards", label: "Awards & Recognition", icon: Award },
+  ];
+
+  // More dropdown
+  const moreLinks = [
     { href: "/news", label: "News & Insights", icon: Newspaper },
-    { href: "/join", label: "Careers", icon: UserPlus },
+    { href: "/join", label: "Join Our Team", icon: UserPlus },
   ];
 
   const isActive = (path: string) => location.pathname === path;
@@ -211,29 +222,29 @@ const GlobalHeader = () => {
               {/* 3. Services Dropdown */}
               {renderDropdown("Services", servicesLinks, () => location.pathname.startsWith('/services'))}
 
-              {/* 4. Investor Hub Dropdown */}
-              {renderDropdown("Investor Hub", investorHubLinks, () => 
-                location.pathname.includes('investor') || location.pathname === '/ai-hub'
-              )}
-
-              {/* 5. Broker Hub Dropdown */}
-              {renderDropdown("Broker Hub", brokerHubLinks, () => 
-                location.pathname.includes('broker') && !location.pathname.includes('faq') && !location.pathname.includes('education')
-              )}
-
-              {/* 6. Guides Dropdown */}
+              {/* 4. Guides Dropdown */}
               {renderDropdown("Guides", guidesLinks, () => 
-                ['/buyer-guide', '/seller-guide', '/landlord-guide', '/tenant-guide', '/areas', '/faq'].some(p => location.pathname.startsWith(p))
+                ['/buyer-guide', '/seller-guide', '/landlord-guide', '/tenant-guide', '/areas', '/faq', '/investor-education', '/investor-faq', '/broker-faq'].some(p => location.pathname.startsWith(p))
               )}
 
-              {/* 7. Market Intelligence Dropdown */}
+              {/* 5. Market Intelligence Dropdown */}
               {renderDropdown("Market Intelligence", marketIntelLinks, () => 
                 location.pathname.startsWith('/market-intelligence') || location.pathname === '/market-report'
               )}
 
+              {/* 6. Investor Hub Dropdown */}
+              {renderDropdown("Investor Hub", investorHubLinks, () => 
+                location.pathname.includes('investment-playbooks') || location.pathname === '/favorites'
+              )}
+
+              {/* 7. Broker Hub Dropdown */}
+              {renderDropdown("Broker Hub", brokerHubLinks, () => 
+                location.pathname.includes('broker-toolkit') || location.pathname.includes('broker-education')
+              )}
+
               {/* 8. About Dropdown */}
               {renderDropdown("About", aboutLinks, () => 
-                ['/about', '/founder', '/team', '/awards', '/news', '/join'].some(p => location.pathname.startsWith(p))
+                ['/about', '/founder', '/team', '/awards'].some(p => location.pathname.startsWith(p))
               )}
 
               {/* 9. Contact - No dropdown */}
@@ -247,6 +258,11 @@ const GlobalHeader = () => {
               >
                 Contact
               </Link>
+
+              {/* 10. More Dropdown */}
+              {renderDropdown("More", moreLinks, () => 
+                ['/news', '/join'].some(p => location.pathname.startsWith(p))
+              )}
             </div>
           </nav>
 
@@ -338,39 +354,7 @@ const GlobalHeader = () => {
 
                     <div className="h-px bg-zinc-800 my-2" />
 
-                    {/* 4. Investor Hub */}
-                    <p className="px-4 py-2 text-xs text-gold/60 uppercase tracking-wider">Investor Hub</p>
-                    {investorHubLinks.map((link) => (
-                      <Link
-                        key={link.href}
-                        to={link.href}
-                        onClick={() => setMobileMenuOpen(false)}
-                        className="flex items-center gap-3 px-4 py-2.5 text-sm text-zinc-400 hover:text-white hover:bg-zinc-900/80 transition-colors"
-                      >
-                        <link.icon className="w-4 h-4 text-gold/70" />
-                        {link.label}
-                      </Link>
-                    ))}
-
-                    <div className="h-px bg-zinc-800 my-2" />
-
-                    {/* 5. Broker Hub */}
-                    <p className="px-4 py-2 text-xs text-gold/60 uppercase tracking-wider">Broker Hub</p>
-                    {brokerHubLinks.map((link) => (
-                      <Link
-                        key={link.href}
-                        to={link.href}
-                        onClick={() => setMobileMenuOpen(false)}
-                        className="flex items-center gap-3 px-4 py-2.5 text-sm text-zinc-400 hover:text-white hover:bg-zinc-900/80 transition-colors"
-                      >
-                        <link.icon className="w-4 h-4 text-gold/70" />
-                        {link.label}
-                      </Link>
-                    ))}
-
-                    <div className="h-px bg-zinc-800 my-2" />
-
-                    {/* 6. Guides */}
+                    {/* 4. Guides */}
                     <p className="px-4 py-2 text-xs text-gold/60 uppercase tracking-wider">Guides</p>
                     {guidesLinks.map((link) => (
                       <Link
@@ -386,9 +370,41 @@ const GlobalHeader = () => {
 
                     <div className="h-px bg-zinc-800 my-2" />
 
-                    {/* 7. Market Intelligence */}
+                    {/* 5. Market Intelligence */}
                     <p className="px-4 py-2 text-xs text-gold/60 uppercase tracking-wider">Market Intelligence</p>
                     {marketIntelLinks.map((link) => (
+                      <Link
+                        key={link.href}
+                        to={link.href}
+                        onClick={() => setMobileMenuOpen(false)}
+                        className="flex items-center gap-3 px-4 py-2.5 text-sm text-zinc-400 hover:text-white hover:bg-zinc-900/80 transition-colors"
+                      >
+                        <link.icon className="w-4 h-4 text-gold/70" />
+                        {link.label}
+                      </Link>
+                    ))}
+
+                    <div className="h-px bg-zinc-800 my-2" />
+
+                    {/* 6. Investor Hub */}
+                    <p className="px-4 py-2 text-xs text-gold/60 uppercase tracking-wider">Investor Hub</p>
+                    {investorHubLinks.map((link) => (
+                      <Link
+                        key={link.href}
+                        to={link.href}
+                        onClick={() => setMobileMenuOpen(false)}
+                        className="flex items-center gap-3 px-4 py-2.5 text-sm text-zinc-400 hover:text-white hover:bg-zinc-900/80 transition-colors"
+                      >
+                        <link.icon className="w-4 h-4 text-gold/70" />
+                        {link.label}
+                      </Link>
+                    ))}
+
+                    <div className="h-px bg-zinc-800 my-2" />
+
+                    {/* 7. Broker Hub */}
+                    <p className="px-4 py-2 text-xs text-gold/60 uppercase tracking-wider">Broker Hub</p>
+                    {brokerHubLinks.map((link) => (
                       <Link
                         key={link.href}
                         to={link.href}
@@ -431,6 +447,22 @@ const GlobalHeader = () => {
                       <Phone className="w-4 h-4 text-gold/70" />
                       Contact
                     </Link>
+
+                    <div className="h-px bg-zinc-800 my-2" />
+
+                    {/* 10. More */}
+                    <p className="px-4 py-2 text-xs text-gold/60 uppercase tracking-wider">More</p>
+                    {moreLinks.map((link) => (
+                      <Link
+                        key={link.href}
+                        to={link.href}
+                        onClick={() => setMobileMenuOpen(false)}
+                        className="flex items-center gap-3 px-4 py-2.5 text-sm text-zinc-400 hover:text-white hover:bg-zinc-900/80 transition-colors"
+                      >
+                        <link.icon className="w-4 h-4 text-gold/70" />
+                        {link.label}
+                      </Link>
+                    ))}
 
                     <div className="h-px bg-zinc-800 my-4" />
 
