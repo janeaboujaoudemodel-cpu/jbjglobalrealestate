@@ -50,13 +50,19 @@ const Index = () => {
       {isBroker && <BrokerOnboardingBanner />}
       {/* HERO SECTION - LUXURY CINEMATIC VIDEO */}
       <div className="relative min-h-screen flex items-center justify-center overflow-hidden">
-        {/* Video Background - Luxury Dubai Drone Footage Concept */}
+        {/* Video Background - Luxury Dubai Drone Footage */}
         <div className="absolute inset-0">
-          {/* Using villa hero as fallback - Video would show: Burj Khalifa, JBR coastline, Palm Jumeirah, Burj Al Arab */}
-          <div 
-            className="absolute inset-0 bg-cover bg-center bg-no-repeat"
-            style={{ backgroundImage: `url(${luxuryVillaHero})` }}
-          />
+          <video 
+            autoPlay 
+            loop 
+            muted 
+            playsInline
+            className="absolute inset-0 w-full h-full object-cover"
+            poster={luxuryVillaHero}
+          >
+            <source src="/videos/hero-video.mp4" type="video/mp4" />
+            {/* Fallback image if video doesn't load */}
+          </video>
           {/* Video overlay gradient */}
           <div className="absolute inset-0 bg-gradient-to-b from-black/50 via-black/40 to-black/80" />
           {/* Additional cinematic vignette */}
