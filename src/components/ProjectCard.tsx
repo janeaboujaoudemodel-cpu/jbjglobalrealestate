@@ -5,6 +5,7 @@ import ShortlistBadgeButton from "./ShortlistBadgeButton";
 import { FileText, Download, Phone, MessageCircle, Crown } from "lucide-react";
 import { Button } from "./ui/button";
 import { CONTACT_INFO, getWhatsAppUrl, getCallUrl } from "@/constants/stats";
+import { SafeImage } from "@/components/SafeImage";
 
 interface ProjectCardProps {
   project: Project;
@@ -102,9 +103,10 @@ const ProjectCard = ({ project, showFavorite = true, showBadgeButton = true, cur
       <Link to={`/project/${project.slug}`} className="flex-1">
         {/* Image */}
         <div className="aspect-[4/3] overflow-hidden relative">
-          <img
+          <SafeImage
             src={project.images?.[0]?.image_url || "https://images.unsplash.com/photo-1512917774080-9991f1c4c750?w=800"}
-            alt={project.name}
+            fallbackSrc="https://images.unsplash.com/photo-1512917774080-9991f1c4c750?w=800"
+            alt={project.images?.[0]?.alt_text || project.name}
             className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
           />
           {/* Premium Badge - Hidden by default, admin controls via is_premium flag in admin panel */}
