@@ -90,21 +90,6 @@ const Index = () => {
           animate="visible"
           variants={staggerContainer}
         >
-          {/* Badge - Glass style with gold border, engraved look */}
-          <motion.button 
-            variants={fadeInUp}
-            className="group inline-flex items-center gap-1.5 md:gap-2 px-3 md:px-5 py-1.5 md:py-2.5 rounded-full mb-4 md:mb-6 cursor-default"
-            style={{
-              background: 'linear-gradient(135deg, rgba(255,255,255,0.1) 0%, rgba(255,255,255,0.05) 50%, rgba(200,167,102,0.08) 100%)',
-              backdropFilter: 'blur(20px)',
-              border: '1.5px solid rgba(200,167,102,0.6)',
-              boxShadow: 'inset 0 1px 2px rgba(255,255,255,0.1), inset 0 -1px 2px rgba(0,0,0,0.2), 0 4px 20px rgba(0,0,0,0.3)',
-            }}
-          >
-            <span className="w-1.5 h-1.5 md:w-2 md:h-2 bg-gold rounded-full animate-pulse" />
-            <span className="text-gold font-semibold text-[8px] md:text-[10px] lg:text-xs uppercase tracking-[0.15em] md:tracking-[0.2em]">Licensed Real Estate Brokerage</span>
-          </motion.button>
-          
           {/* H1 - Responsive Typography */}
           <motion.h1 
             variants={fadeInUp} 
@@ -120,7 +105,7 @@ const Index = () => {
             variants={fadeInUp}
             className="text-zinc-300 text-sm md:text-base lg:text-lg max-w-xl mx-auto leading-relaxed mb-2 md:mb-3"
           >
-            Luxury real estate brokerage for buying, selling & renting in the UAE.
+            Luxury Licensed Real Estate Brokerage for buying, selling & renting in the UAE.
           </motion.p>
 
           {/* Partner microline - Hidden on smallest screens */}
@@ -131,37 +116,37 @@ const Index = () => {
             Mortgage, legal & visa services provided through licensed partners.
           </motion.p>
 
-          {/* Hero CTA Buttons - Compact on mobile */}
+          {/* Hero CTA Buttons - Smaller on phone, current size on tablet/desktop */}
           <motion.div 
             variants={fadeInUp}
             className="flex flex-row items-center justify-center gap-2 sm:gap-3 md:gap-4 mt-4 sm:mt-0"
           >
             <Link to="/properties">
               <button 
-                className="group relative inline-flex items-center justify-center gap-1.5 md:gap-2 px-4 sm:px-6 md:px-8 lg:px-10 py-2.5 sm:py-3 md:py-4 text-xs sm:text-sm md:text-base font-bold rounded-lg md:rounded-xl transition-all duration-300 bg-transparent"
+                className="group relative inline-flex items-center justify-center gap-1 sm:gap-1.5 md:gap-2 px-3 sm:px-6 md:px-8 lg:px-10 py-2 sm:py-3 md:py-4 text-[10px] sm:text-sm md:text-base font-bold rounded-md sm:rounded-lg md:rounded-xl transition-all duration-300 bg-transparent"
                 style={{
                   border: '2px solid rgba(255,255,255,0.8)',
                   boxShadow: 'inset 0 1px 2px rgba(255,255,255,0.2), inset 0 -1px 2px rgba(0,0,0,0.3), 0 4px 15px rgba(0,0,0,0.4)',
                 }}
               >
                 <span className="text-white group-hover:text-black transition-colors">Explore</span>
-                <ArrowUpRight className="w-3.5 h-3.5 md:w-5 md:h-5 text-gold transition-colors" style={{ filter: 'drop-shadow(0 0 6px rgba(200,167,102,0.8))' }} />
+                <ArrowUpRight className="w-3 h-3 sm:w-3.5 sm:h-3.5 md:w-5 md:h-5 text-gold transition-colors" style={{ filter: 'drop-shadow(0 0 6px rgba(200,167,102,0.8))' }} />
                 {/* Hover fill overlay */}
-                <span className="absolute inset-0 rounded-lg md:rounded-xl bg-gradient-to-r from-white via-[#FDFBF7] to-[#F5F0E6] opacity-0 group-hover:opacity-100 transition-opacity duration-300 -z-10" style={{ border: '2px solid rgba(200,167,102,0.6)' }} />
+                <span className="absolute inset-0 rounded-md sm:rounded-lg md:rounded-xl bg-gradient-to-r from-white via-[#FDFBF7] to-[#F5F0E6] opacity-0 group-hover:opacity-100 transition-opacity duration-300 -z-10" style={{ border: '2px solid rgba(200,167,102,0.6)' }} />
               </button>
             </Link>
             <button 
               onClick={() => setIsInquiryOpen(true)}
-              className="group relative inline-flex items-center justify-center gap-1.5 md:gap-2 px-4 sm:px-6 md:px-8 lg:px-10 py-2.5 sm:py-3 md:py-4 text-xs sm:text-sm md:text-base font-bold rounded-lg md:rounded-xl transition-all duration-300 bg-transparent"
+              className="group relative inline-flex items-center justify-center gap-1 sm:gap-1.5 md:gap-2 px-3 sm:px-6 md:px-8 lg:px-10 py-2 sm:py-3 md:py-4 text-[10px] sm:text-sm md:text-base font-bold rounded-md sm:rounded-lg md:rounded-xl transition-all duration-300 bg-transparent"
               style={{
                 border: '2px solid rgba(255,255,255,0.8)',
                 boxShadow: 'inset 0 1px 2px rgba(255,255,255,0.2), inset 0 -1px 2px rgba(0,0,0,0.3), 0 4px 15px rgba(0,0,0,0.4)',
               }}
             >
               <span className="text-white group-hover:text-black transition-colors">Consult</span>
-              <ArrowUpRight className="w-3.5 h-3.5 md:w-5 md:h-5 text-gold transition-colors" style={{ filter: 'drop-shadow(0 0 6px rgba(200,167,102,0.8))' }} />
+              <ArrowUpRight className="w-3 h-3 sm:w-3.5 sm:h-3.5 md:w-5 md:h-5 text-gold transition-colors" style={{ filter: 'drop-shadow(0 0 6px rgba(200,167,102,0.8))' }} />
               {/* Hover fill overlay */}
-              <span className="absolute inset-0 rounded-lg md:rounded-xl bg-gradient-to-r from-white via-[#FDFBF7] to-[#F5F0E6] opacity-0 group-hover:opacity-100 transition-opacity duration-300 -z-10" style={{ border: '2px solid rgba(200,167,102,0.6)' }} />
+              <span className="absolute inset-0 rounded-md sm:rounded-lg md:rounded-xl bg-gradient-to-r from-white via-[#FDFBF7] to-[#F5F0E6] opacity-0 group-hover:opacity-100 transition-opacity duration-300 -z-10" style={{ border: '2px solid rgba(200,167,102,0.6)' }} />
             </button>
           </motion.div>
         </motion.div>
