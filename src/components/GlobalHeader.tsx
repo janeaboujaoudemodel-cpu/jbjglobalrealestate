@@ -93,6 +93,7 @@ const GlobalHeader = () => {
     { href: "/investor-education", label: 'Investor Education', icon: FileText },
     { href: "/investor-faq", label: 'Investor FAQ', icon: ClipboardCheck },
     { href: "/broker-education", label: 'Broker Education', icon: FileText },
+    { href: "/broker-faq", label: 'Broker FAQ', icon: ClipboardCheck },
     { href: "/faq", label: 'FAQ', icon: ClipboardCheck },
   ];
 

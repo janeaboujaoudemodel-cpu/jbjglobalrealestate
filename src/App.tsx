@@ -114,6 +114,7 @@ import FAQ from "./pages/FAQ";
 import InvestorEducation from "./pages/InvestorEducation";
 import InvestorFAQ from "./pages/InvestorFAQ";
 import BrokerEducation from "./pages/BrokerEducation";
+import BrokerFAQ from "./pages/BrokerFAQ";
 import JBJAnalyticsDashboard from "./pages/JBJAnalyticsDashboard";
 import JBJDesignStudio from "./pages/JBJDesignStudio";
 import AIBrokerWorkspace from "./pages/AIBrokerWorkspace";
@@ -202,6 +203,7 @@ const App = () => (
                 <Route path="/investor-education" element={<InvestorEducation />} />
                 <Route path="/investor-faq" element={<InvestorFAQ />} />
                 <Route path="/broker-education" element={<BrokerEducation />} />
+                <Route path="/broker-faq" element={<BrokerFAQ />} />
                 <Route path="/quiz" element={<Quiz />} />
                 <Route path="/quiz-results" element={<QuizResults />} />
                 <Route path="/contact" element={<Contact />} />
