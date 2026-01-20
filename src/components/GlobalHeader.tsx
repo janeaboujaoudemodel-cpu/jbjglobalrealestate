@@ -179,7 +179,7 @@ const GlobalHeader = () => {
       <div className="container mx-auto px-4 lg:px-6 relative z-10">
         <div className="flex items-center h-20 lg:h-24">
           
-          {/* LEFT: Brand Logo - Monogram + Text - LOCKED (only size can change) */}
+          {/* LEFT: Brand Logo - Monogram only on mobile */}
           <Link 
             to="/" 
             className="flex items-center gap-3 shrink-0 group transition-all duration-300"
@@ -190,109 +190,43 @@ const GlobalHeader = () => {
               <img 
                 src={jbjMonogramDarkBg} 
                 alt="JBJ" 
-                className="w-11 h-11 lg:w-12 lg:h-12 object-contain transition-transform duration-300 group-hover:scale-105"
+                className="w-10 h-10 lg:w-12 lg:h-12 object-contain transition-transform duration-300 group-hover:scale-105"
               />
               {/* Subtle glow on hover */}
               <div className="absolute inset-0 rounded-full bg-gold/0 group-hover:bg-gold/10 transition-colors duration-300 blur-xl" />
             </div>
-            <span className="text-white font-semibold text-xs lg:text-sm tracking-[0.1em] uppercase whitespace-nowrap hidden sm:inline drop-shadow-sm">
+            <span className="text-white font-semibold text-xs lg:text-sm tracking-[0.1em] uppercase whitespace-nowrap hidden lg:inline drop-shadow-sm">
               JBJ Global Real Estate
             </span>
           </Link>
 
-          {/* CENTER: Desktop Navigation - Premium styling with elegant dropdowns - STRETCHED */}
-          <nav className="hidden lg:flex items-center justify-center flex-1 mx-2">
-            <div className="flex items-center gap-0 bg-gradient-to-r from-white via-[#FDFBF7] to-[#F5F0E6] backdrop-blur-sm rounded-full px-2 xl:px-3 py-1.5 border border-gold/30 shadow-lg">
-              
-              {/* 1. Home - No dropdown */}
-              <Link
-                to="/"
-                className={`px-2.5 xl:px-3 py-1.5 text-[12px] xl:text-[13px] font-semibold whitespace-nowrap transition-all relative group rounded-full ${
-                  isActive("/")
-                    ? "text-gold bg-gold/10"
-                    : "text-black hover:text-gold hover:bg-gold/10"
-                }`}
-              >
-                Home
-              </Link>
-
-              {/* 2. Properties Dropdown */}
-              {renderDropdown("Properties", propertiesLinks, () => location.pathname === '/properties')}
-
-              {/* 3. Services Dropdown */}
-              {renderDropdown("Services", servicesLinks, () => location.pathname.startsWith('/services'))}
-
-              {/* 4. Guides Dropdown */}
-              {renderDropdown("Guides", guidesLinks, () => 
-                ['/buyer-guide', '/seller-guide', '/landlord-guide', '/tenant-guide', '/areas', '/faq', '/investor-education', '/investor-faq', '/broker-faq'].some(p => location.pathname.startsWith(p))
-              )}
-
-              {/* 5. Market Intelligence Dropdown */}
-              {renderDropdown("Market Intelligence", marketIntelLinks, () => 
-                location.pathname.startsWith('/market-intelligence') || location.pathname === '/market-report'
-              )}
-
-              {/* 6. Investor Hub Dropdown */}
-              {renderDropdown("Investor Hub", investorHubLinks, () => 
-                location.pathname.includes('investment-playbooks') || location.pathname === '/favorites'
-              )}
-
-              {/* 7. Broker Hub Dropdown */}
-              {renderDropdown("Broker Hub", brokerHubLinks, () => 
-                location.pathname.includes('broker-toolkit') || location.pathname.includes('broker-education')
-              )}
-
-              {/* 8. About Dropdown */}
-              {renderDropdown("About", aboutLinks, () => 
-                ['/about', '/founder', '/team', '/awards'].some(p => location.pathname.startsWith(p))
-              )}
-
-              {/* 9. Contact - No dropdown */}
-              <Link
-                to="/contact"
-                className={`px-2.5 xl:px-3 py-1.5 text-[12px] xl:text-[13px] font-semibold whitespace-nowrap transition-all relative group rounded-full ${
-                  isActive("/contact")
-                    ? "text-gold bg-gold/10"
-                    : "text-black hover:text-gold hover:bg-gold/10"
-                }`}
-              >
-                Contact
-              </Link>
-
-              {/* 10. More Dropdown */}
-              {renderDropdown("More", moreLinks, () => 
-                ['/news', '/join'].some(p => location.pathname.startsWith(p))
-              )}
-            </div>
-          </nav>
-
-          {/* RIGHT: Actions - Compact premium icon buttons with inverted hover */}
-          <div className="flex items-center gap-1 shrink-0 ml-2">
-            {/* Search Icon - White bg with gold icon normally, inverted on hover */}
+          {/* MOBILE RIGHT ICONS: Search, Language, Menu - visible on mobile only */}
+          <div className="flex items-center gap-1.5 ml-auto lg:hidden">
+            {/* Search Icon */}
             <Button
               variant="ghost"
               size="sm"
-              className="relative w-8 h-8 p-0 rounded-full bg-white border border-gold/30 hover:bg-transparent hover:border-gold/50 transition-all duration-300 group"
+              className="relative w-9 h-9 p-0 rounded-full bg-white border border-gold/30 hover:bg-transparent hover:border-gold/50 transition-all duration-300 group"
               onClick={() => setSearchOpen(true)}
             >
-              <Search className="w-3.5 h-3.5 text-gold group-hover:text-gold-light transition-colors" />
+              <Search className="w-4 h-4 text-gold group-hover:text-gold-light transition-colors" />
             </Button>
 
-            {/* Language Switcher - Inverted style */}
+            {/* Language Switcher */}
             <div className="shrink-0">
               <LanguageSwitcher variant="compact" />
             </div>
 
-            {/* Mobile Menu Trigger (visible under lg) */}
+            {/* Mobile Menu Trigger */}
             <Sheet open={mobileMenuOpen} onOpenChange={setMobileMenuOpen}>
-              <SheetTrigger asChild className="lg:hidden">
+              <SheetTrigger asChild>
                 <Button
                   variant="ghost"
                   size="sm"
-                  className="text-gold hover:text-gold-light hover:bg-gold/10 shrink-0 w-10 h-10 p-0"
+                  className="relative w-9 h-9 p-0 rounded-full bg-white border border-gold/30 hover:bg-transparent hover:border-gold/50 transition-all duration-300 group"
                   aria-label="Open menu"
                 >
-                  <Menu className="w-5 h-5" />
+                  <Menu className="w-4 h-4 text-gold group-hover:text-gold-light transition-colors" />
                 </Button>
               </SheetTrigger>
               <SheetContent
@@ -384,11 +318,7 @@ const GlobalHeader = () => {
                     <div className="h-px bg-gold/20 my-2" />
                     
                     {/* 2. Properties */}
-                    <p className="px-4 py-2 text-xs uppercase tracking-wider font-semibold" style={{ 
-                      background: "linear-gradient(135deg, #C8A766, #E8D5B0, #C8A766)",
-                      WebkitBackgroundClip: "text",
-                      WebkitTextFillColor: "transparent"
-                    }}>Properties</p>
+                    <p className="px-4 py-2 text-xs uppercase tracking-wider font-semibold text-gold">Properties</p>
                     {propertiesLinks.map((link) => (
                       <Link
                         key={link.href}
@@ -406,11 +336,7 @@ const GlobalHeader = () => {
                     <div className="h-px bg-gold/20 my-2" />
 
                     {/* 3. Services */}
-                    <p className="px-4 py-2 text-xs uppercase tracking-wider font-semibold" style={{ 
-                      background: "linear-gradient(135deg, #C8A766, #E8D5B0, #C8A766)",
-                      WebkitBackgroundClip: "text",
-                      WebkitTextFillColor: "transparent"
-                    }}>Services</p>
+                    <p className="px-4 py-2 text-xs uppercase tracking-wider font-semibold text-gold">Services</p>
                     {servicesLinks.map((link) => (
                       <Link
                         key={link.href}
@@ -428,11 +354,7 @@ const GlobalHeader = () => {
                     <div className="h-px bg-gold/20 my-2" />
 
                     {/* 4. Guides */}
-                    <p className="px-4 py-2 text-xs uppercase tracking-wider font-semibold" style={{ 
-                      background: "linear-gradient(135deg, #C8A766, #E8D5B0, #C8A766)",
-                      WebkitBackgroundClip: "text",
-                      WebkitTextFillColor: "transparent"
-                    }}>Guides</p>
+                    <p className="px-4 py-2 text-xs uppercase tracking-wider font-semibold text-gold">Guides</p>
                     {guidesLinks.map((link) => (
                       <Link
                         key={link.href}
@@ -450,11 +372,7 @@ const GlobalHeader = () => {
                     <div className="h-px bg-gold/20 my-2" />
 
                     {/* 5. Market Intelligence */}
-                    <p className="px-4 py-2 text-xs uppercase tracking-wider font-semibold" style={{ 
-                      background: "linear-gradient(135deg, #C8A766, #E8D5B0, #C8A766)",
-                      WebkitBackgroundClip: "text",
-                      WebkitTextFillColor: "transparent"
-                    }}>Market Intelligence</p>
+                    <p className="px-4 py-2 text-xs uppercase tracking-wider font-semibold text-gold">Market Intelligence</p>
                     {marketIntelLinks.map((link) => (
                       <Link
                         key={link.href}
@@ -472,11 +390,7 @@ const GlobalHeader = () => {
                     <div className="h-px bg-gold/20 my-2" />
 
                     {/* 6. Investor Hub */}
-                    <p className="px-4 py-2 text-xs uppercase tracking-wider font-semibold" style={{ 
-                      background: "linear-gradient(135deg, #C8A766, #E8D5B0, #C8A766)",
-                      WebkitBackgroundClip: "text",
-                      WebkitTextFillColor: "transparent"
-                    }}>Investor Hub</p>
+                    <p className="px-4 py-2 text-xs uppercase tracking-wider font-semibold text-gold">Investor Hub</p>
                     {investorHubLinks.map((link) => (
                       <Link
                         key={link.href}
@@ -494,11 +408,7 @@ const GlobalHeader = () => {
                     <div className="h-px bg-gold/20 my-2" />
 
                     {/* 7. Broker Hub */}
-                    <p className="px-4 py-2 text-xs uppercase tracking-wider font-semibold" style={{ 
-                      background: "linear-gradient(135deg, #C8A766, #E8D5B0, #C8A766)",
-                      WebkitBackgroundClip: "text",
-                      WebkitTextFillColor: "transparent"
-                    }}>Broker Hub</p>
+                    <p className="px-4 py-2 text-xs uppercase tracking-wider font-semibold text-gold">Broker Hub</p>
                     {brokerHubLinks.map((link) => (
                       <Link
                         key={link.href}
@@ -516,11 +426,7 @@ const GlobalHeader = () => {
                     <div className="h-px bg-gold/20 my-2" />
 
                     {/* 8. About */}
-                    <p className="px-4 py-2 text-xs uppercase tracking-wider font-semibold" style={{ 
-                      background: "linear-gradient(135deg, #C8A766, #E8D5B0, #C8A766)",
-                      WebkitBackgroundClip: "text",
-                      WebkitTextFillColor: "transparent"
-                    }}>About</p>
+                    <p className="px-4 py-2 text-xs uppercase tracking-wider font-semibold text-gold">About</p>
                     {aboutLinks.map((link) => (
                       <Link
                         key={link.href}
@@ -547,20 +453,14 @@ const GlobalHeader = () => {
                           : "text-black border-transparent hover:text-gold hover:bg-gold/5 hover:border-gold/50"
                       }`}
                     >
-                      <div className="w-7 h-7 rounded-md bg-transparent border border-gold/50 flex items-center justify-center">
-                        <Phone className="w-3.5 h-3.5 text-gold" />
-                      </div>
+                      <Phone className="w-4 h-4" />
                       Contact
                     </Link>
 
                     <div className="h-px bg-gold/20 my-2" />
 
                     {/* 10. More */}
-                    <p className="px-4 py-2 text-xs uppercase tracking-wider font-semibold" style={{ 
-                      background: "linear-gradient(135deg, #C8A766, #E8D5B0, #C8A766)",
-                      WebkitBackgroundClip: "text",
-                      WebkitTextFillColor: "transparent"
-                    }}>More</p>
+                    <p className="px-4 py-2 text-xs uppercase tracking-wider font-semibold text-gold">More</p>
                     {moreLinks.map((link) => (
                       <Link
                         key={link.href}
@@ -580,9 +480,9 @@ const GlobalHeader = () => {
                     {/* User Section */}
                     {user ? (
                       <>
-                        <div className="px-4 py-3 rounded-lg bg-gold/10 border border-gold/30">
-                          <p className="font-semibold text-black">{t('nav.myAccount')}</p>
-                          <p className="text-zinc-600 text-sm">{user.email?.split("@")[0]}</p>
+                        <div className="px-4 py-3 bg-gold/5 rounded-lg mb-2">
+                          <p className="text-xs text-zinc-500 uppercase tracking-wider">Signed in as</p>
+                          <p className="text-sm font-medium text-black truncate">{user.email}</p>
                         </div>
                         {hasCRMAccess && (
                           <Link
@@ -629,6 +529,90 @@ const GlobalHeader = () => {
                 </ScrollArea>
               </SheetContent>
             </Sheet>
+          </div>
+
+          {/* CENTER: Desktop Navigation - Premium styling with elegant dropdowns - STRETCHED */}
+          <nav className="hidden lg:flex items-center justify-center flex-1 mx-2">
+            <div className="flex items-center gap-0 bg-gradient-to-r from-white via-[#FDFBF7] to-[#F5F0E6] backdrop-blur-sm rounded-full px-2 xl:px-3 py-1.5 border border-gold/30 shadow-lg">
+              
+              {/* 1. Home - No dropdown */}
+              <Link
+                to="/"
+                className={`px-2.5 xl:px-3 py-1.5 text-[12px] xl:text-[13px] font-semibold whitespace-nowrap transition-all relative group rounded-full ${
+                  isActive("/")
+                    ? "text-gold bg-gold/10"
+                    : "text-black hover:text-gold hover:bg-gold/10"
+                }`}
+              >
+                Home
+              </Link>
+
+              {/* 2. Properties Dropdown */}
+              {renderDropdown("Properties", propertiesLinks, () => location.pathname === '/properties')}
+
+              {/* 3. Services Dropdown */}
+              {renderDropdown("Services", servicesLinks, () => location.pathname.startsWith('/services'))}
+
+              {/* 4. Guides Dropdown */}
+              {renderDropdown("Guides", guidesLinks, () => 
+                ['/buyer-guide', '/seller-guide', '/landlord-guide', '/tenant-guide', '/areas', '/faq', '/investor-education', '/investor-faq', '/broker-faq'].some(p => location.pathname.startsWith(p))
+              )}
+
+              {/* 5. Market Intelligence Dropdown */}
+              {renderDropdown("Market Intelligence", marketIntelLinks, () => 
+                location.pathname.startsWith('/market-intelligence') || location.pathname === '/market-report'
+              )}
+
+              {/* 6. Investor Hub Dropdown */}
+              {renderDropdown("Investor Hub", investorHubLinks, () => 
+                location.pathname.includes('investment-playbooks') || location.pathname === '/favorites'
+              )}
+
+              {/* 7. Broker Hub Dropdown */}
+              {renderDropdown("Broker Hub", brokerHubLinks, () => 
+                location.pathname.includes('broker-toolkit') || location.pathname.includes('broker-education')
+              )}
+
+              {/* 8. About Dropdown */}
+              {renderDropdown("About", aboutLinks, () => 
+                ['/about', '/founder', '/team', '/awards'].some(p => location.pathname.startsWith(p))
+              )}
+
+              {/* 9. Contact - No dropdown */}
+              <Link
+                to="/contact"
+                className={`px-2.5 xl:px-3 py-1.5 text-[12px] xl:text-[13px] font-semibold whitespace-nowrap transition-all relative group rounded-full ${
+                  isActive("/contact")
+                    ? "text-gold bg-gold/10"
+                    : "text-black hover:text-gold hover:bg-gold/10"
+                }`}
+              >
+                Contact
+              </Link>
+
+              {/* 10. More Dropdown */}
+              {renderDropdown("More", moreLinks, () => 
+                ['/news', '/join'].some(p => location.pathname.startsWith(p))
+              )}
+            </div>
+          </nav>
+
+          {/* RIGHT: Actions - Desktop only - Compact premium icon buttons with inverted hover */}
+          <div className="hidden lg:flex items-center gap-1 shrink-0 ml-2">
+            {/* Search Icon - White bg with gold icon normally, inverted on hover */}
+            <Button
+              variant="ghost"
+              size="sm"
+              className="relative w-8 h-8 p-0 rounded-full bg-white border border-gold/30 hover:bg-transparent hover:border-gold/50 transition-all duration-300 group"
+              onClick={() => setSearchOpen(true)}
+            >
+              <Search className="w-3.5 h-3.5 text-gold group-hover:text-gold-light transition-colors" />
+            </Button>
+
+            {/* Language Switcher - Inverted style */}
+            <div className="shrink-0">
+              <LanguageSwitcher variant="compact" />
+            </div>
 
             {/* User Menu - Desktop - Premium profile dropdown matching nav style */}
             <div className="hidden lg:block">
