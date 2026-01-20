@@ -45,147 +45,106 @@ interface FAQCategory {
 const BrokerFAQ = () => {
   const categories: FAQCategory[] = [
     {
-      id: "licensing-legal",
-      title: "Licensing & Legal Scope",
-      icon: Scale,
-      questions: [
-        {
-          question: "Who can legally work as a real estate broker in Dubai?",
-          answer: "Only individuals registered with RERA and working under a licensed real estate brokerage can legally conduct brokerage activities in Dubai. Brokers must operate strictly within the scope of their license."
-        },
-        {
-          question: "Can a broker provide financial or investment guarantees?",
-          answer: "No. Brokers are not licensed to provide financial guarantees, promise returns, or offer regulated financial advice. Any such claims are misleading and not permitted."
-        },
-        {
-          question: "What activities fall outside a broker's legal scope?",
-          answer: "Brokers cannot provide financial advisory services, portfolio management, or guaranteed ROI projections. These activities require separate regulatory licenses."
-        },
-        {
-          question: "Are verbal promises legally binding?",
-          answer: "No. Only written agreements registered through official channels (such as DLD or Ejari) are legally recognized. Verbal assurances should never replace documented terms."
-        }
-      ]
-    },
-    {
-      id: "professional-conduct",
-      title: "Professional Conduct & Ethics",
-      icon: Shield,
-      questions: [
-        {
-          question: "Is it acceptable to promote a project based on commission incentives?",
-          answer: "No. Property recommendations must be based on client objectives and suitability, not commission structures or personal relationships with developers."
-        },
-        {
-          question: "How should brokers handle conflicts of interest?",
-          answer: "Any potential conflict must be disclosed transparently. Client interest must always take priority over personal or commercial incentives."
-        },
-        {
-          question: "Is pressure selling acceptable in real estate brokerage?",
-          answer: "No. Ethical brokerage requires informed decision-making. Clients must never be rushed, manipulated, or pressured into transactions."
-        },
-        {
-          question: "What defines ethical brokerage?",
-          answer: "Transparency, accuracy, regulatory compliance, and a client-first mindset define ethical brokerage practice."
-        }
-      ]
-    },
-    {
-      id: "client-education",
-      title: "Client Education & Communication",
-      icon: MessageSquare,
-      questions: [
-        {
-          question: "What is the broker's role in client education?",
-          answer: "Brokers are expected to explain processes, timelines, risks, and market conditions clearly so clients can make informed decisions."
-        },
-        {
-          question: "Should brokers simplify market information?",
-          answer: "Yes, but without distortion. Simplification must not remove critical context or risks. Accuracy is always more important than persuasion."
-        },
-        {
-          question: "How should brokers discuss market expectations?",
-          answer: "Expectations should be framed using historical data, current market conditions, and official benchmarks — never speculation or hype."
-        }
-      ]
-    },
-    {
-      id: "off-plan-representation",
-      title: "Off-Plan Representation",
-      icon: Building,
-      questions: [
-        {
-          question: "Can brokers predict appreciation on off-plan projects?",
-          answer: "No. Brokers may explain historical trends and project fundamentals but must not predict or promise appreciation outcomes."
-        },
-        {
-          question: "What must be disclosed in off-plan sales?",
-          answer: "Payment schedules, construction timelines, handover risks, service charges, and developer track record must be clearly disclosed."
-        },
-        {
-          question: "Are all off-plan projects suitable for all buyers?",
-          answer: "No. Suitability depends on the client's timeline, risk tolerance, and financial objectives."
-        }
-      ]
-    },
-    {
-      id: "ready-property",
-      title: "Ready Property Transactions",
-      icon: Home,
-      questions: [
-        {
-          question: "What information must be disclosed to buyers or tenants?",
-          answer: "Service charges, maintenance responsibilities, community rules, and realistic rental or resale expectations must be disclosed."
-        },
-        {
-          question: "Can brokers influence valuation outcomes?",
-          answer: "No. Valuations must reflect market data and comparable transactions, not desired pricing."
-        },
-        {
-          question: "What is the broker's role during transfer or lease registration?",
-          answer: "Brokers coordinate documentation, ensure accuracy, and guide parties through official registration processes."
-        }
-      ]
-    },
-    {
-      id: "data-market-intelligence",
-      title: "Data, Market Intelligence & Claims",
-      icon: Database,
-      questions: [
-        {
-          question: "What data sources should brokers rely on?",
-          answer: "Official government data, registered transaction records, rental index benchmarks, and verified market reports."
-        },
-        {
-          question: "Can brokers reference social media market claims?",
-          answer: "No. Social media content is not a reliable or regulated data source and should not be used to advise clients."
-        },
-        {
-          question: "How should brokers present market insights?",
-          answer: "As contextual guidance, not predictions. Data should inform — not persuade."
-        }
-      ]
-    },
-    {
-      id: "working-with-jbj",
-      title: "Working With JBJ Global Real Estate",
+      id: "joining-jbj",
+      title: "Joining JBJ",
       icon: Users,
       questions: [
         {
-          question: "What is JBJ's approach to brokerage?",
-          answer: "JBJ operates on an education-first, compliance-driven model focused on long-term trust rather than transaction volume."
+          question: "Who can join as a broker with JBJ Global Real Estate?",
+          answer: "Brokers must be legally eligible to operate in Dubai and meet JBJ's internal standards. JBJ works only with professionals who respect compliance, documentation, transparency, and client-first conduct."
         },
         {
-          question: "Does JBJ provide financial or investment guarantees?",
-          answer: "No. JBJ does not provide financial guarantees or regulated financial advisory services."
+          question: "Is this Broker FAQ public or internal?",
+          answer: "This is professional guidance aligned with JBJ standards. Broker tools and internal training are accessed through the Broker Hub by registered brokers."
+        }
+      ]
+    },
+    {
+      id: "philosophy-ethics",
+      title: "Philosophy & Ethics",
+      icon: Shield,
+      questions: [
+        {
+          question: "What is JBJ's brokerage philosophy?",
+          answer: "JBJ operates on a client-first, data-driven advisory model. Brokers are expected to guide clients based on suitability and market reality, not pressure selling or commission motivation."
         },
         {
-          question: "How does JBJ support brokers professionally?",
-          answer: "Through structured education, market guidance, ethical frameworks, and operational systems aligned with UAE regulations."
+          question: "Are brokers allowed to promise ROI or guaranteed returns?",
+          answer: "No. Guaranteed ROI does not exist in real estate. Brokers must never promise outcomes, returns, rental guarantees, or market certainty. Communication must remain factual and compliant."
+        }
+      ]
+    },
+    {
+      id: "client-advising",
+      title: "Client Advising",
+      icon: MessageSquare,
+      questions: [
+        {
+          question: "What is required from brokers when advising clients?",
+          answer: "Brokers must:\n\n• Document communication properly\n• Provide accurate information\n• Present realistic timelines\n• Explain risks clearly\n• Avoid exaggeration or marketing manipulation\n• Respect legal boundaries at all times"
         },
         {
-          question: "Are brokers trained on regulatory boundaries?",
-          answer: "Yes. Compliance and licensing awareness are core components of JBJ's professional standards."
+          question: "What are JBJ's expectations for client handling?",
+          answer: "Brokers must:\n\n• Respect client capital and trust\n• Maintain transparency about costs and process\n• Avoid emotional pressure tactics\n• Focus on long-term relationship building\n\nRepeat clients and referrals are the priority, not volume transactions."
+        }
+      ]
+    },
+    {
+      id: "partner-services",
+      title: "Partner Services",
+      icon: Building,
+      questions: [
+        {
+          question: "How does JBJ handle partner services (mortgage, legal, visa)?",
+          answer: "JBJ may introduce clients to licensed third-party partners when needed. Brokers must never imply these services are provided directly by JBJ. The client contracts directly with the licensed provider."
+        }
+      ]
+    },
+    {
+      id: "documentation",
+      title: "Documentation",
+      icon: Database,
+      questions: [
+        {
+          question: "What documentation is essential in brokerage workflow?",
+          answer: "Brokers must keep a clear record of:\n\n• Client objectives\n• Property options presented\n• Risks explained\n• Negotiation notes\n• Transaction steps\n• Final decision confirmation\n\nProper documentation protects both the client and the brokerage."
+        }
+      ]
+    },
+    {
+      id: "market-communication",
+      title: "Market Communication",
+      icon: Scale,
+      questions: [
+        {
+          question: "How should brokers speak about market outlook?",
+          answer: "Market discussions must be descriptive and data-based. Brokers may reference historical patterns and published information, but must never present forecasts as certainty."
+        }
+      ]
+    },
+    {
+      id: "tools-systems",
+      title: "Tools & Systems",
+      icon: Home,
+      questions: [
+        {
+          question: "How do brokers access tools and internal systems?",
+          answer: "Registered brokers access:\n\n• CRM and lead management\n• Broker tools and templates\n• Internal training modules\n• Performance tracking\n\nthrough the Broker Hub."
+        }
+      ]
+    },
+    {
+      id: "compliance-growth",
+      title: "Compliance & Growth",
+      icon: Shield,
+      questions: [
+        {
+          question: "What happens if a broker violates JBJ standards?",
+          answer: "Violations of compliance, transparency, or ethical conduct are taken seriously. JBJ may suspend access, terminate collaboration, or escalate issues depending on severity."
+        },
+        {
+          question: "How can a broker grow within JBJ?",
+          answer: "Growth is based on:\n\n• Consistency and professionalism\n• Compliance discipline\n• Client satisfaction\n• Documentation quality\n• Long-term results\n\nnot aggressive selling."
         }
       ]
     }
