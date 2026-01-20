@@ -297,10 +297,10 @@ const GlobalHeader = () => {
               </SheetTrigger>
               <SheetContent
                 side="right"
-                className="bg-gradient-to-b from-white via-[#FDFBF7] to-[#F5F0E6] border-l border-gold/30 w-[320px] p-0 flex flex-col h-full"
+                className="bg-gradient-to-b from-white via-[#FDFBF7] to-[#F5F0E6] border-l border-gold/30 w-[320px] p-0 flex flex-col h-full pt-20"
               >
                 {/* Menu Header with white pearl styling */}
-                <div className="relative h-28 bg-gradient-to-b from-white to-[#FDFBF7] border-b border-gold/30 flex items-end p-5 shrink-0">
+                <div className="relative h-20 bg-gradient-to-b from-white to-[#FDFBF7] border-b border-gold/30 flex items-center px-5 shrink-0">
                   <div className="absolute top-0 left-0 right-0 h-[2px] bg-gradient-to-r from-transparent via-gold to-transparent" />
                   <BrandMonogram variant="light" size="sm" layout="horizontal" />
                 </div>
