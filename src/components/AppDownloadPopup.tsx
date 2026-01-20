@@ -209,8 +209,8 @@ const AppDownloadPopup = ({
               <div className="flex items-center gap-2 shrink-0">
                 <Button 
                   onClick={handleInstall} 
-                  disabled={isInstalling || (!deferredPrompt && !isIOS)} 
-                  className="h-9 rounded-xl px-3 bg-gold hover:bg-gold-dark text-black"
+                  disabled={isInstalling} 
+                  className="h-9 rounded-xl px-3 bg-gold hover:bg-gold-dark text-black cursor-pointer"
                 >
                   <span className="flex items-center gap-2">
                     <Download className="w-4 h-4" />

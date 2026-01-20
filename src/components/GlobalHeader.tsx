@@ -176,8 +176,8 @@ const GlobalHeader = () => {
       {/* Premium top accent line */}
       <div className="absolute top-0 left-0 right-0 h-[2px] bg-gradient-to-r from-transparent via-gold/60 to-transparent z-10" />
       
-      <div className="container mx-auto px-4 lg:px-6 relative z-10">
-        <div className="flex items-center h-20 lg:h-24">
+      <div className="container mx-auto px-2 sm:px-4 lg:px-6 relative z-10">
+        <div className="flex items-center justify-between h-20 lg:h-24 w-full overflow-visible">
           
           {/* LEFT: Brand Logo - Monogram only on mobile */}
           <Link 

@@ -52,27 +52,33 @@ const Index = () => {
       <div className="relative min-h-screen flex items-center justify-center overflow-hidden">
         {/* Video Background - Luxury Dubai Drone Footage */}
         <div className="absolute inset-0">
+          {/* Fallback image - always visible as base layer */}
+          <img 
+            src={luxuryVillaHero} 
+            alt="Luxury Dubai Real Estate" 
+            className="absolute inset-0 w-full h-full object-cover"
+          />
+          {/* Video overlays the image when it loads/plays */}
           <video 
             autoPlay 
             loop 
             muted 
             playsInline
             preload="auto"
-            className="absolute inset-0 w-full h-full object-cover"
-            style={{ WebkitTransform: 'translateZ(0)' }}
+            webkit-playsinline="true"
+            x-webkit-airplay="allow"
+            className="absolute inset-0 w-full h-full object-cover z-[1]"
+            style={{ 
+              WebkitTransform: 'translateZ(0)',
+              backfaceVisibility: 'hidden',
+            }}
           >
             <source src="/videos/hero-video.mp4" type="video/mp4" />
           </video>
-          {/* Fallback image for video loading */}
-          <img 
-            src={luxuryVillaHero} 
-            alt="Luxury Dubai Real Estate" 
-            className="absolute inset-0 w-full h-full object-cover -z-10"
-          />
-          {/* Video overlay gradient */}
-          <div className="absolute inset-0 bg-gradient-to-b from-black/50 via-black/40 to-black/80" />
+          {/* Video overlay gradient - above video */}
+          <div className="absolute inset-0 bg-gradient-to-b from-black/50 via-black/40 to-black/80 z-[2]" />
           {/* Additional cinematic vignette */}
-          <div className="absolute inset-0 bg-gradient-to-r from-black/60 via-transparent to-black/60" />
+          <div className="absolute inset-0 bg-gradient-to-r from-black/60 via-transparent to-black/60 z-[2]" />
         </div>
         
         {/* Animated gold accent lines */}
