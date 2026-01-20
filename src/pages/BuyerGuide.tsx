@@ -24,215 +24,285 @@ import {
   HelpCircle,
   Phone,
   ArrowDown,
-  Sparkles
+  Sparkles,
+  Target,
+  Wallet,
+  HandshakeIcon,
+  Scale,
+  CreditCard,
+  Briefcase
 } from "lucide-react";
 import { GuideNavigation, GUIDE_LINKS } from "@/components/guides/GuideNavigation";
 import { GuideHero } from "@/components/guides/GuideHero";
 import { GuideTableOfContents } from "@/components/guides/GuideTableOfContents";
 import Footer from "@/components/Footer";
+import {
+  Accordion,
+  AccordionContent,
+  AccordionItem,
+  AccordionTrigger,
+} from "@/components/ui/accordion";
 
 const BuyerGuide = () => {
-  const steps = [
+  const audienceTypes = [
+    { icon: Users, label: "First-time buyers in Dubai", desc: "New to UAE Real Estate" },
+    { icon: Globe, label: "International investors", desc: "Purchasing from abroad" },
+    { icon: Home, label: "End-users purchasing a primary residence", desc: "Buying for personal use" },
+    { icon: Building2, label: "Buyers considering off-plan or ready properties", desc: "Exploring all options" }
+  ];
+
+  const buyingSteps = [
     {
       number: 1,
-      title: "Define Your Requirements",
-      icon: Search,
-      description: "Start by clarifying what you're looking for. This saves time and helps your broker find the right match.",
+      title: "Define Your Objective",
+      icon: Target,
+      description: "Before viewing properties, determine:",
       items: [
-        "Establish your budget range and explore financing options if needed",
-        "Identify preferred areas, communities, and proximity to key locations",
-        "Determine property type: apartment, villa, townhouse, or penthouse",
-        "Clarify your purpose — primary residence, family home, or future planning"
+        "Purpose: end-use or investment",
+        "Budget range (including fees)",
+        "Preferred locations",
+        "Property type (apartment, villa, townhouse)",
+        "Timeline (immediate move-in vs future delivery)"
       ]
     },
     {
       number: 2,
-      title: "Explore Available Properties",
+      title: "Choose Between Off-Plan & Ready Properties",
       icon: Building2,
-      description: "With clear requirements, you can now explore options that truly match your needs.",
-      items: [
-        "Browse ready properties and off-plan developments across Dubai",
-        "Research communities, amenities, and neighborhood lifestyle",
-        "Review developer track records, handover timelines, and build quality",
-        "Create a shortlist of 3–5 properties that fit your criteria"
-      ]
+      description: "Understanding your options:",
+      isComparison: true,
+      offPlan: {
+        title: "Off-Plan Properties",
+        points: [
+          "Purchased directly from developers",
+          "Flexible payment plans",
+          "Lower entry price compared to ready units",
+          "Completion depends on construction timeline"
+        ]
+      },
+      ready: {
+        title: "Ready Properties",
+        points: [
+          "Immediate handover",
+          "Existing rental income (if tenanted)",
+          "Clear market valuation",
+          "Higher upfront capital required"
+        ]
+      }
     },
     {
       number: 3,
-      title: "Property Viewings",
+      title: "Viewing & Property Selection",
       icon: Eye,
-      description: "Nothing replaces seeing a property in person. This is where you make confident decisions.",
+      description: "Property selection process:",
       items: [
-        "Schedule physical viewings or virtual tours for overseas buyers",
-        "Assess layout, natural lighting, ventilation, and finishing quality",
-        "Evaluate building amenities: gym, pool, parking, security",
-        "Ask about service charges, maintenance fees, and handover conditions"
+        "Shortlisted properties based on your criteria",
+        "Physical or virtual viewings",
+        "Comparative market analysis provided",
+        "Clear explanation of pros, risks, and exit scenarios"
       ]
     },
     {
       number: 4,
       title: "Making an Offer",
       icon: FileText,
-      description: "Once you've found the right property, your broker will help you submit a formal offer.",
-      items: [
-        "Submit a written offer through your broker to the seller or developer",
-        "Negotiate price, payment terms, and any included furnishings",
-        "Receive formal acceptance confirmation from the seller",
-        "Agree on timeline for next steps and documentation"
-      ]
+      description: "Formalizing your interest:",
+      isOfferComparison: true,
+      readyOffer: {
+        title: "Ready Property",
+        points: [
+          "Offer submitted in writing",
+          "Negotiation handled on your behalf",
+          "Memorandum of Understanding (Form F) issued",
+          "Deposit typically 10%"
+        ]
+      },
+      offPlanOffer: {
+        title: "Off-Plan",
+        points: [
+          "Unit reservation with booking form",
+          "Initial payment as per developer plan",
+          "Sales Purchase Agreement (SPA) issued"
+        ]
+      }
     },
     {
       number: 5,
-      title: "Documentation & Contracts",
+      title: "Legal & Regulatory Protection",
       icon: Shield,
-      description: "This stage formalizes the agreement. Ensure all documents are reviewed carefully.",
+      description: "Your transaction is protected:",
       items: [
-        "Sign a Memorandum of Understanding (MOU) outlining agreed terms",
-        "Provide valid identification: passport and Emirates ID (if applicable)",
-        "Pay the agreed deposit (typically 10% for resale properties)",
-        "Consider engaging independent legal counsel for contract review"
+        "All transactions registered with Dubai Land Department",
+        "Escrow accounts mandatory for off-plan projects",
+        "Developers regulated by RERA",
+        "Ownership protected under UAE property law"
       ]
     },
     {
       number: 6,
       title: "Transfer & Completion",
-      icon: Home,
-      description: "The final step where ownership is officially transferred to you.",
-      items: [
-        "Obtain a No Objection Certificate (NOC) from the developer",
-        "Attend the transfer at a Dubai Land Department trustee office",
-        "Pay remaining balance and all applicable transfer fees",
-        "Receive your title deed and collect your keys"
-      ]
-    }
-  ];
-
-  const ownershipTypes = [
-    {
-      title: "Freehold Ownership",
       icon: Key,
-      description: "Full ownership of property and land with no time restrictions.",
-      points: [
-        "Available to all nationalities in designated freehold areas",
-        "Popular areas: Dubai Marina, Downtown, Palm Jumeirah, JBR, Business Bay",
-        "You own the property outright — can sell, rent out, or pass to heirs",
-        "Most common choice for international and local buyers"
-      ]
-    },
-    {
-      title: "Leasehold Ownership",
-      icon: Clock,
-      description: "Long-term tenure rights, typically 10 to 99 years depending on the area.",
-      points: [
-        "Property rights for a fixed period, then reverts to landowner",
-        "Common in certain older or non-freehold areas",
-        "Often more affordable than freehold options",
-        "Terms and renewal conditions vary by development"
-      ]
+      description: "Final steps to ownership:",
+      isTransferComparison: true,
+      readyTransfer: {
+        title: "Ready Property",
+        points: [
+          "NOC obtained from developer",
+          "Transfer completed at trustee office",
+          "Title deed issued same day"
+        ]
+      },
+      offPlanTransfer: {
+        title: "Off-Plan Property",
+        points: [
+          "Payments follow construction milestones",
+          "Handover upon project completion",
+          "Title deed issued after final payment"
+        ]
+      }
     }
   ];
 
-  const costs = [
+  const offPlanCosts = [
+    "No agency fees are paid by the buyer",
+    "Developers pay the brokerage commission",
+    "Buyer pays only: Unit price as per payment plan",
+    "Dubai Land Department (DLD) registration fees",
+    "Oqood registration (for off-plan)"
+  ];
+
+  const readyCosts = [
+    "Buyer pays agency commission",
+    "Standard market rate: 2% + VAT",
+    "This fee covers: Property sourcing & shortlisting",
+    "Negotiation support",
+    "Transaction coordination",
+    "Legal & transfer guidance"
+  ];
+
+  const governmentFees = [
     {
-      title: "Dubai Land Department Fee",
-      description: "4% of the property purchase price, paid at transfer",
+      title: "Dubai Land Department fee",
+      description: "4% of purchase price",
       icon: Landmark
     },
     {
-      title: "Trustee Office Fee",
-      description: "Approximately AED 4,000 – 5,000 for the transfer process",
+      title: "Trustee office fee",
+      description: "Required for transfer process",
       icon: FileText
     },
     {
-      title: "Agency Commission",
-      description: "Typically 2% of the purchase price, paid to the brokerage",
-      icon: Users
-    },
-    {
-      title: "NOC Fee",
-      description: "Varies by developer, usually AED 500 – 5,000",
+      title: "Title deed issuance",
+      description: "Official ownership document",
       icon: Shield
     },
     {
-      title: "Mortgage Registration (if applicable)",
-      description: "0.25% of the loan amount plus admin fees",
+      title: "Oqood registration",
+      description: "For off-plan purchases",
+      icon: FileText
+    }
+  ];
+
+  const additionalCosts = [
+    {
+      title: "Mortgage registration",
+      description: "If financing",
       icon: Calculator
     },
     {
-      title: "Conveyancing / Legal Fees",
-      description: "If you engage a lawyer, fees vary based on complexity",
-      icon: FileText
+      title: "Bank valuation fees",
+      description: "Required by lenders",
+      icon: Banknote
+    },
+    {
+      title: "Conveyancing or legal support",
+      description: "Optional",
+      icon: Scale
+    },
+    {
+      title: "Service charges",
+      description: "Annual, building-dependent",
+      icon: Wallet
     }
   ];
 
   const mortgagePoints = [
-    "UAE residents and non-residents can both apply for mortgages in Dubai",
-    "Banks typically finance 50–80% of the property value depending on buyer profile",
-    "Non-residents usually qualify for lower loan-to-value ratios",
-    "Pre-approval is recommended before starting your property search",
-    "Interest rates and terms vary between banks — compare multiple offers",
-    "JBJ can introduce you to independent licensed mortgage advisors"
+    "Available for residents & non-residents",
+    "Loan-to-value varies by residency status",
+    "Pre-approval recommended before committing",
+    "Bank coordination supported through licensed partners"
   ];
 
-  const commonMistakes = [
+  const jbjSupport = [
     {
-      title: "Not Defining a Clear Budget",
-      description: "Failing to account for all costs (fees, furnishing, service charges) can lead to unexpected financial pressure.",
-      icon: Banknote
+      title: "Market-driven property selection",
+      description: "Properties matched to your objectives and market conditions"
     },
     {
-      title: "Skipping Due Diligence",
-      description: "Not verifying developer track records, handover history, or property condition before committing.",
-      icon: Search
+      title: "Transparent pricing guidance",
+      description: "Clear breakdown of all costs with no hidden fees"
     },
     {
-      title: "Rushing the Decision",
-      description: "Feeling pressured to buy quickly without viewing enough options or understanding the area.",
-      icon: Clock
+      title: "No pressure selling",
+      description: "Objective advice focused on your best interests"
     },
     {
-      title: "Ignoring Service Charges",
-      description: "Annual service charges vary significantly between buildings and can impact long-term costs.",
-      icon: Calculator
+      title: "Risk explanation before commitment",
+      description: "Full disclosure of potential risks and considerations"
     },
     {
-      title: "Not Using a Licensed Broker",
-      description: "Working with unlicensed agents puts you at risk of fraud and poor service with no recourse.",
-      icon: Shield
+      title: "Coordination with developers, trustees, and partners",
+      description: "End-to-end transaction management"
     },
     {
-      title: "Overlooking Legal Review",
-      description: "Signing contracts without professional legal review can lead to unfavorable terms.",
-      icon: FileText
+      title: "Post-purchase support where applicable",
+      description: "Ongoing assistance after completion"
     }
   ];
 
-  const whyJBJ = [
+  const faqs = [
     {
-      title: "Licensed Dubai Brokerage",
-      description: "Fully licensed under Dubai's DED mainland regulations with RERA-registered agents."
+      question: "Do I pay agency fees when buying off-plan?",
+      answer: "No. Off-plan buyers do not pay agency fees. The developer pays the brokerage commission."
     },
     {
-      title: "Market Expertise",
-      description: "Deep knowledge of Dubai's communities, developers, and market dynamics."
+      question: "Do I pay agency fees when buying a ready property?",
+      answer: "Yes. Buyers typically pay 2% + VAT as agency commission for ready properties."
     },
     {
-      title: "Transparent Process",
-      description: "Clear communication at every step with no hidden agendas or pressure tactics."
+      question: "Can foreigners buy property in Dubai?",
+      answer: "Yes. Foreign buyers can own freehold property in designated areas."
     },
     {
-      title: "Partner Network",
-      description: "Introductions to independent licensed professionals for legal and mortgage services."
+      question: "Is buying off-plan risky?",
+      answer: "Dubai law regulates developers and escrow accounts. Risk depends on developer credibility, which is assessed before recommendation."
+    },
+    {
+      question: "Do I need residency to buy property?",
+      answer: "No residency is required to purchase property."
+    },
+    {
+      question: "Can I buy remotely from abroad?",
+      answer: "Yes. Purchases can be completed remotely via Power of Attorney."
+    },
+    {
+      question: "Does buying property give me residency?",
+      answer: "Certain property values may qualify for UAE residency visas under government programs."
+    },
+    {
+      question: "How long does the buying process take?",
+      answer: "Ready properties: approx. 4–6 weeks. Off-plan: depends on construction timeline."
     }
   ];
 
   const tocItems = [
     { id: 'who-this-guide-for', title: 'Who Is This For', icon: Users },
-    { id: 'ownership-types', title: 'Ownership Types', icon: Key },
     { id: 'buying-process', title: 'Buying Process', icon: FileText },
-    { id: 'costs-fees', title: 'Costs & Fees', icon: Calculator },
+    { id: 'agency-fees', title: 'Agency Fees & Costs', icon: Wallet },
+    { id: 'buyer-costs', title: 'Buyer Costs Overview', icon: Calculator },
     { id: 'mortgages', title: 'Mortgages', icon: Landmark },
-    { id: 'common-mistakes', title: 'Common Mistakes', icon: AlertTriangle },
+    { id: 'jbj-support', title: 'How JBJ Supports You', icon: HandshakeIcon },
+    { id: 'faqs', title: 'FAQs', icon: HelpCircle },
   ];
 
   return (
@@ -245,11 +315,11 @@ const BuyerGuide = () => {
         badgeIcon={FileText}
         title={
           <>
-            Your Complete Guide to{" "}
-            <span className="text-gold">Buying Property in Dubai</span>
+            Buying Property in Dubai —{" "}
+            <span className="text-gold">A Clear, Confident Guide for Buyers</span>
           </>
         }
-        description="A clear, educational resource to help you understand the property buying process in Dubai. Whether you're a first-time buyer or an experienced purchaser, this guide covers everything you need to make informed decisions."
+        description="Buying property in Dubai is a structured, regulated process designed to protect buyers, investors, and end-users. This guide explains how to buy, what to expect, what you pay, and how JBJ Global Real Estate supports you at every step — with clarity, transparency, and compliance."
         backgroundImage="https://images.unsplash.com/photo-1512453979798-5ea266f8880c?auto=format&fit=crop&w=2000&q=80"
         actions={
           <>
@@ -295,20 +365,10 @@ const BuyerGuide = () => {
               <h2 className="text-3xl md:text-4xl font-light text-white mb-6">
                 Who This Guide Is For
               </h2>
-              <p className="text-lg text-zinc-300 leading-relaxed max-w-3xl mx-auto">
-                Dubai's property market welcomes buyers from all over the world. Whether you're planning 
-                to make Dubai your home, securing a property for your family, or exploring options for 
-                the future, this guide provides the foundational knowledge you need.
-              </p>
             </div>
             
             <div className="grid grid-cols-2 md:grid-cols-4 gap-4 md:gap-6">
-              {[
-                { icon: Users, label: "First-Time Buyers", desc: "New to UAE Real Estate" },
-                { icon: Home, label: "Homeowners", desc: "Buying for personal use" },
-                { icon: Globe, label: "International Buyers", desc: "Purchasing from abroad" },
-                { icon: MapPin, label: "Relocators", desc: "Moving to Dubai" }
-              ].map((item, index) => (
+              {audienceTypes.map((item, index) => (
                 <div key={index} className="bg-white rounded-xl p-6 border border-zinc-200 text-center hover:border-gold/50 hover:shadow-lg transition-all">
                   <div className="w-12 h-12 bg-black rounded-xl flex items-center justify-center mx-auto mb-4">
                     <item.icon className="w-6 h-6 text-gold" />
@@ -322,66 +382,18 @@ const BuyerGuide = () => {
         </div>
       </section>
 
-      {/* Ownership Types */}
-      <section id="ownership-types" className="py-16 md:py-24 bg-black scroll-mt-20">
-        <div className="container mx-auto px-4">
-          <div className="max-w-5xl mx-auto">
-            <div className="text-center mb-12">
-              <h2 className="text-3xl md:text-4xl font-semibold text-white mb-4">
-                Understanding Ownership Types
-              </h2>
-              <p className="text-lg text-zinc-400 max-w-2xl mx-auto leading-relaxed">
-                Dubai offers two main ownership structures. Understanding the difference helps you 
-                choose what's right for your situation.
-              </p>
-            </div>
-
-            <div className="grid md:grid-cols-2 gap-6">
-              {ownershipTypes.map((type, index) => (
-                <div 
-                  key={index}
-                  className="bg-white rounded-2xl p-8 border border-zinc-200 hover:border-gold/50 hover:shadow-lg transition-all h-full flex flex-col"
-                >
-                  <div className="flex items-center gap-4 mb-6">
-                    <div className="w-12 h-12 bg-black rounded-xl flex items-center justify-center flex-shrink-0">
-                      <type.icon className="w-6 h-6 text-gold" />
-                    </div>
-                    <div>
-                      <h3 className="text-xl font-semibold text-black">{type.title}</h3>
-                      <p className="text-sm text-zinc-600">{type.description}</p>
-                    </div>
-                  </div>
-                  <ul className="space-y-3 flex-1">
-                    {type.points.map((point, pointIndex) => (
-                      <li key={pointIndex} className="flex items-start gap-3 min-h-[48px]">
-                        <CheckCircle2 className="w-5 h-5 text-gold flex-shrink-0 mt-0.5" />
-                        <span className="text-zinc-700 text-sm leading-relaxed">{point}</span>
-                      </li>
-                    ))}
-                  </ul>
-                </div>
-              ))}
-            </div>
-          </div>
-        </div>
-      </section>
-
       {/* Step-by-Step Buying Process */}
       <section id="buying-process" className="py-16 md:py-24 bg-black scroll-mt-20">
         <div className="container mx-auto px-4">
           <div className="max-w-5xl mx-auto">
             <div className="text-center mb-16">
               <h2 className="text-3xl md:text-4xl font-semibold text-white mb-4">
-                The 6-Step Buying Process
+                Step-by-Step Buying Process
               </h2>
-              <p className="text-lg text-zinc-400 max-w-2xl mx-auto leading-relaxed">
-                A clear roadmap from defining your requirements to receiving your keys. 
-                Each step is designed to keep you informed and confident.
-              </p>
             </div>
 
             <div className="space-y-6">
-              {steps.map((step) => (
+              {buyingSteps.map((step) => (
                 <div 
                   key={step.number}
                   className="bg-white rounded-2xl p-6 md:p-8 border border-zinc-200 hover:border-gold/30 hover:shadow-lg transition-all duration-300"
@@ -400,14 +412,98 @@ const BuyerGuide = () => {
                         </h3>
                       </div>
                       <p className="text-zinc-500 mb-4">{step.description}</p>
-                      <ul className="grid md:grid-cols-2 gap-3">
-                        {step.items.map((item, itemIndex) => (
-                          <li key={itemIndex} className="flex items-start gap-3">
-                            <CheckCircle2 className="w-4 h-4 text-gold flex-shrink-0 mt-1" />
-                            <span className="text-zinc-600 text-sm">{item}</span>
-                          </li>
-                        ))}
-                      </ul>
+                      
+                      {step.items && (
+                        <ul className="grid md:grid-cols-2 gap-3">
+                          {step.items.map((item, itemIndex) => (
+                            <li key={itemIndex} className="flex items-start gap-3">
+                              <CheckCircle2 className="w-4 h-4 text-gold flex-shrink-0 mt-1" />
+                              <span className="text-zinc-600 text-sm">{item}</span>
+                            </li>
+                          ))}
+                        </ul>
+                      )}
+
+                      {step.isComparison && (
+                        <div className="grid md:grid-cols-2 gap-4 mt-4">
+                          <div className="bg-zinc-50 rounded-xl p-5 border border-zinc-200">
+                            <h4 className="font-semibold text-black mb-3">{step.offPlan?.title}</h4>
+                            <ul className="space-y-2">
+                              {step.offPlan?.points.map((point, idx) => (
+                                <li key={idx} className="flex items-start gap-2">
+                                  <CheckCircle2 className="w-4 h-4 text-gold flex-shrink-0 mt-0.5" />
+                                  <span className="text-zinc-600 text-sm">{point}</span>
+                                </li>
+                              ))}
+                            </ul>
+                          </div>
+                          <div className="bg-zinc-50 rounded-xl p-5 border border-zinc-200">
+                            <h4 className="font-semibold text-black mb-3">{step.ready?.title}</h4>
+                            <ul className="space-y-2">
+                              {step.ready?.points.map((point, idx) => (
+                                <li key={idx} className="flex items-start gap-2">
+                                  <CheckCircle2 className="w-4 h-4 text-gold flex-shrink-0 mt-0.5" />
+                                  <span className="text-zinc-600 text-sm">{point}</span>
+                                </li>
+                              ))}
+                            </ul>
+                          </div>
+                        </div>
+                      )}
+
+                      {step.isOfferComparison && (
+                        <div className="grid md:grid-cols-2 gap-4 mt-4">
+                          <div className="bg-zinc-50 rounded-xl p-5 border border-zinc-200">
+                            <h4 className="font-semibold text-black mb-3">{step.readyOffer?.title}</h4>
+                            <ul className="space-y-2">
+                              {step.readyOffer?.points.map((point, idx) => (
+                                <li key={idx} className="flex items-start gap-2">
+                                  <CheckCircle2 className="w-4 h-4 text-gold flex-shrink-0 mt-0.5" />
+                                  <span className="text-zinc-600 text-sm">{point}</span>
+                                </li>
+                              ))}
+                            </ul>
+                          </div>
+                          <div className="bg-zinc-50 rounded-xl p-5 border border-zinc-200">
+                            <h4 className="font-semibold text-black mb-3">{step.offPlanOffer?.title}</h4>
+                            <ul className="space-y-2">
+                              {step.offPlanOffer?.points.map((point, idx) => (
+                                <li key={idx} className="flex items-start gap-2">
+                                  <CheckCircle2 className="w-4 h-4 text-gold flex-shrink-0 mt-0.5" />
+                                  <span className="text-zinc-600 text-sm">{point}</span>
+                                </li>
+                              ))}
+                            </ul>
+                          </div>
+                        </div>
+                      )}
+
+                      {step.isTransferComparison && (
+                        <div className="grid md:grid-cols-2 gap-4 mt-4">
+                          <div className="bg-zinc-50 rounded-xl p-5 border border-zinc-200">
+                            <h4 className="font-semibold text-black mb-3">{step.readyTransfer?.title}</h4>
+                            <ul className="space-y-2">
+                              {step.readyTransfer?.points.map((point, idx) => (
+                                <li key={idx} className="flex items-start gap-2">
+                                  <CheckCircle2 className="w-4 h-4 text-gold flex-shrink-0 mt-0.5" />
+                                  <span className="text-zinc-600 text-sm">{point}</span>
+                                </li>
+                              ))}
+                            </ul>
+                          </div>
+                          <div className="bg-zinc-50 rounded-xl p-5 border border-zinc-200">
+                            <h4 className="font-semibold text-black mb-3">{step.offPlanTransfer?.title}</h4>
+                            <ul className="space-y-2">
+                              {step.offPlanTransfer?.points.map((point, idx) => (
+                                <li key={idx} className="flex items-start gap-2">
+                                  <CheckCircle2 className="w-4 h-4 text-gold flex-shrink-0 mt-0.5" />
+                                  <span className="text-zinc-600 text-sm">{point}</span>
+                                </li>
+                              ))}
+                            </ul>
+                          </div>
+                        </div>
+                      )}
                     </div>
                   </div>
                 </div>
@@ -417,62 +513,164 @@ const BuyerGuide = () => {
         </div>
       </section>
 
-      {/* Divider between Six-Step Process and Costs & Fees */}
+      {/* Divider */}
       <div className="h-px bg-black" />
 
-      {/* Costs & Fees */}
-      <section id="costs-fees" className="py-16 md:py-24 bg-black scroll-mt-20">
+      {/* Agency Fees & Buyer Costs (Important) */}
+      <section id="agency-fees" className="py-16 md:py-24 bg-black scroll-mt-20">
         <div className="container mx-auto px-4">
           <div className="max-w-5xl mx-auto">
             <div className="text-center mb-12">
               <h2 className="text-3xl md:text-4xl font-semibold text-white mb-4">
-                Costs & Fees Overview
+                Agency Fees & Buyer Costs (Important)
               </h2>
-              <p className="text-lg text-zinc-200 max-w-2xl mx-auto leading-relaxed">
-                Transparency is essential. Here are the key costs you should budget for 
-                when purchasing property in Dubai.
-              </p>
             </div>
 
-            <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-4">
-              {costs.map((cost, index) => (
-                <div 
-                  key={index}
-                  className="bg-white border border-zinc-200 rounded-xl p-6 hover:border-gold/50 hover:shadow-lg transition-all"
-                >
-                  <div className="flex items-start gap-4">
-                    <div className="w-10 h-10 bg-black rounded-lg flex items-center justify-center flex-shrink-0">
-                      <cost.icon className="w-5 h-5 text-gold" />
-                    </div>
-                    <div>
-                      <h4 className="text-black font-semibold mb-1">{cost.title}</h4>
-                      <p className="text-zinc-600 text-sm leading-relaxed">{cost.description}</p>
-                    </div>
+            <div className="grid md:grid-cols-2 gap-6 mb-8">
+              {/* Off-Plan Purchases */}
+              <div className="bg-white rounded-2xl p-8 border border-zinc-200 hover:border-gold/50 hover:shadow-lg transition-all">
+                <div className="flex items-center gap-4 mb-6">
+                  <div className="w-12 h-12 bg-black rounded-xl flex items-center justify-center">
+                    <Building2 className="w-6 h-6 text-gold" />
                   </div>
+                  <h3 className="text-xl font-semibold text-black">Off-Plan Purchases</h3>
                 </div>
-              ))}
-            </div>
+                <ul className="space-y-3 mb-6">
+                  <li className="flex items-start gap-3">
+                    <CheckCircle2 className="w-5 h-5 text-gold flex-shrink-0 mt-0.5" />
+                    <span className="text-zinc-700 text-sm">No agency fees are paid by the buyer</span>
+                  </li>
+                  <li className="flex items-start gap-3">
+                    <CheckCircle2 className="w-5 h-5 text-gold flex-shrink-0 mt-0.5" />
+                    <span className="text-zinc-700 text-sm">Developers pay the brokerage commission</span>
+                  </li>
+                  <li className="flex items-start gap-3">
+                    <CheckCircle2 className="w-5 h-5 text-gold flex-shrink-0 mt-0.5" />
+                    <span className="text-zinc-700 text-sm">Buyer pays only: Unit price as per payment plan</span>
+                  </li>
+                  <li className="flex items-start gap-3">
+                    <CheckCircle2 className="w-5 h-5 text-gold flex-shrink-0 mt-0.5" />
+                    <span className="text-zinc-700 text-sm">Dubai Land Department (DLD) registration fees</span>
+                  </li>
+                  <li className="flex items-start gap-3">
+                    <CheckCircle2 className="w-5 h-5 text-gold flex-shrink-0 mt-0.5" />
+                    <span className="text-zinc-700 text-sm">Oqood registration (for off-plan)</span>
+                  </li>
+                </ul>
+                <div className="bg-gold/10 border border-gold/30 rounded-lg p-4">
+                  <p className="text-black text-sm font-medium flex items-center gap-2">
+                    <ArrowRight className="w-4 h-4 text-gold" />
+                    You do not pay JBJ Global Real Estate any commission when purchasing off-plan.
+                  </p>
+                </div>
+              </div>
 
-            <div className="mt-8 bg-white border border-zinc-200 rounded-xl p-6 shadow-sm">
-              <div className="flex items-start gap-3">
-                <div className="w-8 h-8 bg-black rounded-lg flex items-center justify-center flex-shrink-0">
-                  <HelpCircle className="w-4 h-4 text-gold" />
+              {/* Ready Property Purchases */}
+              <div className="bg-white rounded-2xl p-8 border border-zinc-200 hover:border-gold/50 hover:shadow-lg transition-all">
+                <div className="flex items-center gap-4 mb-6">
+                  <div className="w-12 h-12 bg-black rounded-xl flex items-center justify-center">
+                    <Home className="w-6 h-6 text-gold" />
+                  </div>
+                  <h3 className="text-xl font-semibold text-black">Ready Property Purchases</h3>
                 </div>
-                <p className="text-zinc-700 text-sm leading-relaxed">
-                  <span className="text-black font-semibold">Note:</span> Exact amounts vary based on property value, 
-                  transaction type, and specific circumstances. Your broker will provide detailed cost estimates 
-                  based on your specific purchase.
-                </p>
+                <ul className="space-y-3">
+                  <li className="flex items-start gap-3">
+                    <CheckCircle2 className="w-5 h-5 text-gold flex-shrink-0 mt-0.5" />
+                    <span className="text-zinc-700 text-sm">Buyer pays agency commission</span>
+                  </li>
+                  <li className="flex items-start gap-3">
+                    <CheckCircle2 className="w-5 h-5 text-gold flex-shrink-0 mt-0.5" />
+                    <span className="text-zinc-700 text-sm">Standard market rate: 2% + VAT</span>
+                  </li>
+                  <li className="flex items-start gap-3">
+                    <CheckCircle2 className="w-5 h-5 text-gold flex-shrink-0 mt-0.5" />
+                    <span className="text-zinc-700 text-sm">This fee covers: Property sourcing & shortlisting</span>
+                  </li>
+                  <li className="flex items-start gap-3">
+                    <CheckCircle2 className="w-5 h-5 text-gold flex-shrink-0 mt-0.5" />
+                    <span className="text-zinc-700 text-sm">Negotiation support</span>
+                  </li>
+                  <li className="flex items-start gap-3">
+                    <CheckCircle2 className="w-5 h-5 text-gold flex-shrink-0 mt-0.5" />
+                    <span className="text-zinc-700 text-sm">Transaction coordination</span>
+                  </li>
+                  <li className="flex items-start gap-3">
+                    <CheckCircle2 className="w-5 h-5 text-gold flex-shrink-0 mt-0.5" />
+                    <span className="text-zinc-700 text-sm">Legal & transfer guidance</span>
+                  </li>
+                </ul>
               </div>
             </div>
           </div>
         </div>
       </section>
 
-      {/* Divider between Costs & Fees and Mortgages */}
+      {/* Divider */}
       <div className="h-px bg-black" />
 
-      {/* Mortgages Explained */}
+      {/* Buyer Costs Overview */}
+      <section id="buyer-costs" className="py-16 md:py-24 bg-black scroll-mt-20">
+        <div className="container mx-auto px-4">
+          <div className="max-w-5xl mx-auto">
+            <div className="text-center mb-12">
+              <h2 className="text-3xl md:text-4xl font-semibold text-white mb-4">
+                Buyer Costs Overview
+              </h2>
+            </div>
+
+            {/* Mandatory Government Fees */}
+            <div className="mb-8">
+              <h3 className="text-xl font-semibold text-white mb-6">Mandatory Government Fees</h3>
+              <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-4">
+                {governmentFees.map((fee, index) => (
+                  <div 
+                    key={index}
+                    className="bg-white border border-zinc-200 rounded-xl p-6 hover:border-gold/50 hover:shadow-lg transition-all"
+                  >
+                    <div className="flex items-start gap-4">
+                      <div className="w-10 h-10 bg-black rounded-lg flex items-center justify-center flex-shrink-0">
+                        <fee.icon className="w-5 h-5 text-gold" />
+                      </div>
+                      <div>
+                        <h4 className="text-black font-semibold mb-1">{fee.title}</h4>
+                        <p className="text-zinc-600 text-sm leading-relaxed">{fee.description}</p>
+                      </div>
+                    </div>
+                  </div>
+                ))}
+              </div>
+            </div>
+
+            {/* Additional Costs */}
+            <div>
+              <h3 className="text-xl font-semibold text-white mb-6">Additional Costs (If Applicable)</h3>
+              <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-4">
+                {additionalCosts.map((cost, index) => (
+                  <div 
+                    key={index}
+                    className="bg-white border border-zinc-200 rounded-xl p-6 hover:border-gold/50 hover:shadow-lg transition-all"
+                  >
+                    <div className="flex items-start gap-4">
+                      <div className="w-10 h-10 bg-black rounded-lg flex items-center justify-center flex-shrink-0">
+                        <cost.icon className="w-5 h-5 text-gold" />
+                      </div>
+                      <div>
+                        <h4 className="text-black font-semibold mb-1">{cost.title}</h4>
+                        <p className="text-zinc-600 text-sm leading-relaxed">{cost.description}</p>
+                      </div>
+                    </div>
+                  </div>
+                ))}
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      {/* Divider */}
+      <div className="h-px bg-black" />
+
+      {/* Mortgages & Financing */}
       <section id="mortgages" className="py-16 md:py-24 bg-black scroll-mt-20">
         <div className="container mx-auto px-4">
           <div className="max-w-4xl mx-auto">
@@ -482,15 +680,9 @@ const BuyerGuide = () => {
                   <Landmark className="w-6 h-6 text-gold" />
                 </div>
                 <h2 className="text-3xl md:text-4xl font-semibold text-black">
-                  Mortgages in Dubai
+                  Mortgages & Financing (If Applicable)
                 </h2>
               </div>
-              
-              <p className="text-lg text-zinc-700 leading-relaxed mb-8">
-                If you're considering financing your purchase, here's what you need to know about 
-                mortgages in Dubai. Many banks offer competitive mortgage products for both 
-                residents and non-residents.
-              </p>
               
               <div className="grid md:grid-cols-2 gap-4 mb-8">
                 {mortgagePoints.map((point, index) => (
@@ -500,120 +692,23 @@ const BuyerGuide = () => {
                   </div>
                 ))}
               </div>
-
-              <div className="bg-zinc-50 border border-zinc-200 rounded-xl p-5">
-                <p className="text-zinc-700 text-sm leading-relaxed">
-                  <span className="text-black font-semibold">Important:</span> JBJ Global Real Estate 
-                  does not provide mortgage or financial advice. We can introduce you to independent 
-                  licensed mortgage advisors who can assess your situation and provide tailored guidance.
-                </p>
-              </div>
             </div>
           </div>
         </div>
       </section>
 
-      {/* Common Buyer Mistakes */}
-      <section id="common-mistakes" className="py-16 md:py-24 bg-black scroll-mt-20">
-        <div className="container mx-auto px-4">
-          <div className="max-w-5xl mx-auto">
-            <div className="text-center mb-12">
-              <div className="inline-flex items-center gap-2 bg-red-500/10 border border-red-500/30 rounded-full px-4 py-2 mb-4">
-                <AlertTriangle className="w-4 h-4 text-red-400" />
-                <span className="text-red-400 text-sm font-semibold">Avoid These Pitfalls</span>
-              </div>
-              <h2 className="text-3xl md:text-4xl font-semibold text-white mb-4">
-                Common Buyer Mistakes
-              </h2>
-              <p className="text-lg text-zinc-400 max-w-2xl mx-auto leading-relaxed">
-                Learning from others' mistakes can save you time, money, and stress. 
-                Here are the most common pitfalls to avoid.
-              </p>
-            </div>
-
-            <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-4">
-              {commonMistakes.map((mistake, index) => (
-                <div 
-                  key={index}
-                  className="bg-white rounded-xl p-6 border border-zinc-200 hover:border-red-300 hover:shadow-lg transition-all"
-                >
-                  <div className="flex items-start gap-4">
-                    <div className="w-10 h-10 bg-red-50 border border-red-200 rounded-lg flex items-center justify-center flex-shrink-0">
-                      <XCircle className="w-5 h-5 text-red-500" />
-                    </div>
-                    <div>
-                      <h4 className="text-black font-semibold mb-2">{mistake.title}</h4>
-                      <p className="text-zinc-600 text-sm leading-relaxed">{mistake.description}</p>
-                    </div>
-                  </div>
-                </div>
-              ))}
-            </div>
-          </div>
-        </div>
-      </section>
-
-      {/* Buying as a Non-Resident - BLACK BACKGROUND with WHITE BOX */}
-      <section className="py-16 md:py-24 bg-black">
-        <div className="container mx-auto px-4">
-          <div className="max-w-4xl mx-auto">
-            <div className="bg-white rounded-2xl p-8 md:p-12 relative overflow-hidden border border-zinc-200 shadow-lg">
-              
-              <div className="relative z-10">
-                <div className="flex items-center gap-3 mb-6">
-                  <div className="w-12 h-12 bg-black rounded-xl flex items-center justify-center">
-                    <Globe className="w-6 h-6 text-gold" />
-                  </div>
-                  <h2 className="text-3xl md:text-4xl font-light text-black">
-                    Buying as a Non-Resident
-                  </h2>
-                </div>
-                
-                <p className="text-lg text-zinc-700 leading-relaxed mb-6">
-                  Dubai welcomes international buyers. Non-residents can purchase property in 
-                  designated freehold areas without needing UAE residency. This has made Dubai 
-                  one of the most accessible property markets in the world.
-                </p>
-                
-                <div className="grid md:grid-cols-2 gap-4 mb-6">
-                  {[
-                    "No residency requirement for freehold purchases",
-                    "Popular with buyers from Europe, Asia, and the Americas",
-                    "Same buying process as resident purchasers",
-                    "Remote viewing and purchase options available"
-                  ].map((point, index) => (
-                    <div key={index} className="flex items-start gap-3">
-                      <CheckCircle2 className="w-5 h-5 text-gold flex-shrink-0 mt-0.5" />
-                      <span className="text-zinc-700 text-sm">{point}</span>
-                    </div>
-                  ))}
-                </div>
-                
-                <p className="text-zinc-600">
-                  Your broker can guide you through the specific requirements and connect you 
-                  with appropriate legal support if needed for your situation.
-                </p>
-              </div>
-            </div>
-          </div>
-        </div>
-      </section>
-
-      {/* Why Work With JBJ - BLACK BACKGROUND */}
-      <section className="py-16 md:py-24 bg-black">
+      {/* How JBJ Global Real Estate Supports Buyers */}
+      <section id="jbj-support" className="py-16 md:py-24 bg-black scroll-mt-20">
         <div className="container mx-auto px-4">
           <div className="max-w-4xl mx-auto">
             <div className="text-center mb-12">
               <h2 className="text-3xl md:text-4xl font-light text-white mb-4">
-                How JBJ Supports Your Purchase
+                How JBJ Global Real Estate Supports Buyers
               </h2>
-              <p className="text-lg text-zinc-300">
-                As a licensed Dubai brokerage, we guide you through every step of the buying process.
-              </p>
             </div>
 
-            <div className="grid md:grid-cols-2 gap-4">
-              {whyJBJ.map((item, index) => (
+            <div className="grid md:grid-cols-2 gap-4 mb-8">
+              {jbjSupport.map((item, index) => (
                 <div 
                   key={index}
                   className="bg-gradient-to-br from-white via-[#FDFBF7] to-[#F5F0E6] border border-gold/30 rounded-xl p-6 hover:border-gold hover:shadow-xl hover:shadow-gold/20 transition-all"
@@ -623,6 +718,40 @@ const BuyerGuide = () => {
                 </div>
               ))}
             </div>
+
+            <div className="bg-white border border-zinc-200 rounded-xl p-6">
+              <p className="text-zinc-700 text-sm leading-relaxed">
+                <span className="text-black font-semibold">JBJ Global Real Estate</span> is licensed for buying, selling, and renting property in Dubai. Mortgage, legal, and advisory services are introduced through licensed third-party partners.
+              </p>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      {/* FAQs */}
+      <section id="faqs" className="py-16 md:py-24 bg-black scroll-mt-20">
+        <div className="container mx-auto px-4">
+          <div className="max-w-4xl mx-auto">
+            <div className="text-center mb-12">
+              <h2 className="text-3xl md:text-4xl font-semibold text-white mb-4">
+                Buyer Guide – FAQs
+              </h2>
+            </div>
+
+            <div className="bg-white rounded-2xl p-6 md:p-8 border border-zinc-200">
+              <Accordion type="single" collapsible className="w-full">
+                {faqs.map((faq, index) => (
+                  <AccordionItem key={index} value={`faq-${index}`} className="border-b border-zinc-200 last:border-0">
+                    <AccordionTrigger className="text-left text-black font-medium hover:text-gold py-4">
+                      {faq.question}
+                    </AccordionTrigger>
+                    <AccordionContent className="text-zinc-600 pb-4">
+                      {faq.answer}
+                    </AccordionContent>
+                  </AccordionItem>
+                ))}
+              </Accordion>
+            </div>
           </div>
         </div>
       </section>
@@ -630,7 +759,7 @@ const BuyerGuide = () => {
       {/* Founder-Led Philosophy & Advisory Positioning */}
       <FounderPhilosophySection />
 
-      {/* Final CTA - Book Consultation */}
+      {/* Final CTA - Next Step */}
       <section className="py-20 md:py-28 bg-gradient-to-b from-zinc-900 to-black relative overflow-hidden">
         <div className="absolute inset-0 bg-[url('https://images.unsplash.com/photo-1518684079-3c830dcef090?auto=format&fit=crop&w=2000&q=80')] bg-cover bg-center opacity-10" />
         <div className="absolute inset-0 bg-gradient-to-t from-black via-black/80 to-transparent" />
@@ -638,11 +767,10 @@ const BuyerGuide = () => {
         <div className="container mx-auto px-4 relative z-10">
           <div className="max-w-3xl mx-auto text-center">
             <h2 className="text-3xl md:text-4xl lg:text-5xl font-light text-white mb-6">
-              Ready to Start Your Property Journey?
+              Next Step
             </h2>
             <p className="text-lg text-zinc-400 mb-10 max-w-2xl mx-auto">
-              Speak with our team to discuss your requirements, explore available properties, 
-              or get answers to your questions. No pressure — just expert guidance.
+              If you are considering purchasing property in Dubai, the next step is a structured consultation to align your objective, budget, and market opportunities.
             </p>
             
             <div className="flex flex-col sm:flex-row gap-4 justify-center">
