@@ -240,7 +240,7 @@ const GlobalHeader = () => {
 
                 {/* AI Home Finder Banner - Purple & White */}
                 <Link
-                  to="/ai-home-finder"
+                  to="/quiz"
                   onClick={() => setMobileMenuOpen(false)}
                   className="mx-4 mt-4 p-4 rounded-xl bg-gradient-to-r from-purple-600 via-purple-500 to-purple-600 border border-purple-400/50 shadow-lg hover:shadow-purple-500/30 transition-all group"
                 >
