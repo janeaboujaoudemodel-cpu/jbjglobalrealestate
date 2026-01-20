@@ -1,5 +1,5 @@
 import { motion } from "framer-motion";
-import { MapPin, TrendingUp, TrendingDown, Database, Shield, ArrowRight, Search } from "lucide-react";
+import { MapPin, TrendingUp, TrendingDown, Database, Shield, ArrowRight, Search, FileText, Building2, BarChart3, AlertTriangle, CheckCircle2, ExternalLink } from "lucide-react";
 import { Link } from "react-router-dom";
 import Footer from "@/components/Footer";
 import PreFooterSeparator from "@/components/PreFooterSeparator";
@@ -12,9 +12,21 @@ import { MarketIntelligenceHero, MarketIntelligenceNavigation, MarketIntelligenc
 
 // TOC items for the page
 const tocItems = [
+  { id: "introduction", title: "Introduction" },
+  { id: "what-area-intelligence-means", title: "What Area Intelligence Means" },
+  { id: "official-data-sources", title: "Official Data Sources" },
+  { id: "how-area-evaluated", title: "How an Area Is Evaluated" },
+  { id: "what-it-does-not-do", title: "What It Does Not Do" },
+  { id: "why-it-matters", title: "Why It Matters" },
+  { id: "how-jbj-uses", title: "How JBJ Uses Area Intelligence" },
   { id: "area-grid", title: "Area Intelligence Grid" },
   { id: "navigation", title: "Explore More" },
 ];
+
+const fadeInUp = {
+  hidden: { opacity: 0, y: 20 },
+  visible: { opacity: 1, y: 0, transition: { duration: 0.5 } }
+};
 
 const AreaIntelligence = () => {
   const getTrendBadge = (trend: string) => {
@@ -46,7 +58,7 @@ const AreaIntelligence = () => {
         badge="Market Intelligence"
         badgeIcon={MapPin}
         title="Area Intelligence"
-        description="Deep dive into Dubai's prime neighborhoods with historical trends, demand vs supply indicators, and market analysis powered by official Open Data."
+        description="Area Intelligence explains how individual locations in Dubai are evaluated using official, location-specific government data. This page shows how to read areas, not how to speculate on them. All insights are descriptive and based on registered activity."
         videoSrc="https://videos.pexels.com/video-files/5529539/5529539-uhd_2560_1440_30fps.mp4"
         videoPoster="https://images.unsplash.com/photo-1582672060674-bc2bd808a8b5?w=1920&q=80"
       />
@@ -58,10 +70,313 @@ const AreaIntelligence = () => {
       <div className="container mx-auto px-4 py-16">
         <div className="flex gap-8">
           {/* Main Content */}
-          <div className="flex-1">
+          <div className="flex-1 space-y-8">
+            
+            {/* Introduction Section */}
+            <motion.section 
+              id="introduction" 
+              className="scroll-mt-24"
+              initial="hidden"
+              whileInView="visible"
+              viewport={{ once: true }}
+              variants={fadeInUp}
+            >
+              <div className="bg-gradient-to-br from-white via-[#FDFBF7] to-[#F5F0E6] rounded-2xl p-8 border border-gold/30">
+                <div className="flex items-center gap-3 mb-6">
+                  <div className="w-12 h-12 rounded-xl bg-black flex items-center justify-center">
+                    <AlertTriangle className="w-6 h-6 text-gold" />
+                  </div>
+                  <h2 className="text-2xl md:text-3xl font-bold text-black" style={{ fontFamily: "Poppins, sans-serif" }}>
+                    <span className="text-gold">No</span> Assumptions, Projections, or Guarantees
+                  </h2>
+                </div>
+                <p className="text-zinc-700 text-lg leading-relaxed">
+                  No assumptions, projections, or guarantees are used. All insights are descriptive and based on registered activity from official government sources.
+                </p>
+              </div>
+            </motion.section>
+
+            {/* What Area Intelligence Means */}
+            <motion.section 
+              id="what-area-intelligence-means" 
+              className="scroll-mt-24"
+              initial="hidden"
+              whileInView="visible"
+              viewport={{ once: true }}
+              variants={fadeInUp}
+            >
+              <div className="bg-gradient-to-br from-white via-[#FDFBF7] to-[#F5F0E6] rounded-2xl p-8 border border-gold/30">
+                <div className="flex items-center gap-3 mb-6">
+                  <div className="w-12 h-12 rounded-xl bg-black flex items-center justify-center">
+                    <MapPin className="w-6 h-6 text-gold" />
+                  </div>
+                  <h2 className="text-2xl md:text-3xl font-bold text-black" style={{ fontFamily: "Poppins, sans-serif" }}>
+                    <span className="text-gold">What</span> "Area Intelligence" Means
+                  </h2>
+                </div>
+                <p className="text-zinc-700 text-lg leading-relaxed mb-6">
+                  Area Intelligence refers to the structured analysis of a specific location based on:
+                </p>
+                <ul className="grid md:grid-cols-2 gap-3">
+                  {[
+                    "Registered sales transactions",
+                    "Registered rental contracts",
+                    "Property type distribution",
+                    "Supply and handover activity",
+                    "Approved service charges",
+                    "Official rental benchmarks"
+                  ].map((item, idx) => (
+                    <li key={idx} className="flex items-center gap-3 text-zinc-700">
+                      <CheckCircle2 className="w-5 h-5 text-gold flex-shrink-0" />
+                      <span>{item}</span>
+                    </li>
+                  ))}
+                </ul>
+                <div className="mt-6 p-4 bg-black/5 rounded-xl border border-gold/20">
+                  <p className="text-zinc-600 text-sm italic">
+                    Each area is assessed independently. No two locations behave the same, even within the same district.
+                  </p>
+                </div>
+              </div>
+            </motion.section>
+
+            {/* Official Data Sources */}
+            <motion.section 
+              id="official-data-sources" 
+              className="scroll-mt-24"
+              initial="hidden"
+              whileInView="visible"
+              viewport={{ once: true }}
+              variants={fadeInUp}
+            >
+              <div className="bg-gradient-to-br from-white via-[#FDFBF7] to-[#F5F0E6] rounded-2xl p-8 border border-gold/30">
+                <div className="flex items-center gap-3 mb-6">
+                  <div className="w-12 h-12 rounded-xl bg-black flex items-center justify-center">
+                    <Database className="w-6 h-6 text-gold" />
+                  </div>
+                  <h2 className="text-2xl md:text-3xl font-bold text-black" style={{ fontFamily: "Poppins, sans-serif" }}>
+                    <span className="text-gold">Official</span> Data Sources Used Per Area
+                  </h2>
+                </div>
+                <p className="text-zinc-700 text-lg leading-relaxed mb-6">
+                  All area-level analysis relies only on data published or recognized by the Dubai Land Department (DLD) and RERA, including:
+                </p>
+                <div className="grid md:grid-cols-2 gap-4">
+                  {[
+                    { title: "DLD Open Data", desc: "Sales & rental transactions by area", url: "https://dubailand.gov.ae/en/open-data/real-estate-data/" },
+                    { title: "DLD Market Research & Reports", desc: "Official research publications", url: "https://dubailand.gov.ae/en/open-data/research/" },
+                    { title: "RERA Rental Index", desc: "Area-specific rent benchmarks", url: "https://dubailand.gov.ae/en/eservices/rental-index/" },
+                    { title: "RERA Service Charge Index", desc: "Project-specific costs", url: "https://dubailand.gov.ae/en/eservices/service-charge-index-overview/" }
+                  ].map((source, idx) => (
+                    <a 
+                      key={idx}
+                      href={source.url}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="block p-4 bg-white border-2 border-black hover:border-gold rounded-xl transition-all group"
+                    >
+                      <div className="flex items-start justify-between">
+                        <div>
+                          <h4 className="font-semibold text-black group-hover:text-gold transition-colors">{source.title}</h4>
+                          <p className="text-zinc-500 text-sm mt-1">{source.desc}</p>
+                        </div>
+                        <ExternalLink className="w-4 h-4 text-gold opacity-0 group-hover:opacity-100 transition-opacity" />
+                      </div>
+                    </a>
+                  ))}
+                </div>
+              </div>
+            </motion.section>
+
+            {/* How an Area Is Evaluated */}
+            <motion.section 
+              id="how-area-evaluated" 
+              className="scroll-mt-24"
+              initial="hidden"
+              whileInView="visible"
+              viewport={{ once: true }}
+              variants={fadeInUp}
+            >
+              <div className="bg-gradient-to-br from-white via-[#FDFBF7] to-[#F5F0E6] rounded-2xl p-8 border border-gold/30">
+                <div className="flex items-center gap-3 mb-6">
+                  <div className="w-12 h-12 rounded-xl bg-black flex items-center justify-center">
+                    <BarChart3 className="w-6 h-6 text-gold" />
+                  </div>
+                  <h2 className="text-2xl md:text-3xl font-bold text-black" style={{ fontFamily: "Poppins, sans-serif" }}>
+                    <span className="text-gold">How</span> an Area Is Evaluated
+                  </h2>
+                </div>
+                <p className="text-zinc-700 text-lg leading-relaxed mb-6">
+                  Each area is reviewed using the same structured framework:
+                </p>
+                <div className="space-y-4">
+                  {[
+                    { num: "1", title: "Transaction Activity", desc: "Registered sale volumes, value ranges, and frequency of transactions recorded with DLD." },
+                    { num: "2", title: "Rental Activity", desc: "Number of registered tenancy contracts, average rental ranges, and compliance with the official rental index." },
+                    { num: "3", title: "Property Mix", desc: "Distribution between apartments, villas, townhouses, and commercial units, based on registered property types." },
+                    { num: "4", title: "Supply Status", desc: "Existing stock versus registered handovers and newly delivered units, as published by DLD." },
+                    { num: "5", title: "Cost Structure", desc: "Approved service charges and municipality fees applicable to properties within the area." }
+                  ].map((item, idx) => (
+                    <div key={idx} className="flex gap-4 p-4 bg-white border-2 border-black rounded-xl">
+                      <div className="w-10 h-10 rounded-full bg-gold/20 flex items-center justify-center flex-shrink-0">
+                        <span className="text-gold font-bold">{item.num}</span>
+                      </div>
+                      <div>
+                        <h4 className="font-semibold text-black">{item.title}</h4>
+                        <p className="text-zinc-600 text-sm mt-1">{item.desc}</p>
+                      </div>
+                    </div>
+                  ))}
+                </div>
+              </div>
+            </motion.section>
+
+            {/* What Area Intelligence Does Not Do */}
+            <motion.section 
+              id="what-it-does-not-do" 
+              className="scroll-mt-24"
+              initial="hidden"
+              whileInView="visible"
+              viewport={{ once: true }}
+              variants={fadeInUp}
+            >
+              <div className="bg-gradient-to-br from-white via-[#FDFBF7] to-[#F5F0E6] rounded-2xl p-8 border border-gold/30">
+                <div className="flex items-center gap-3 mb-6">
+                  <div className="w-12 h-12 rounded-xl bg-black flex items-center justify-center">
+                    <Shield className="w-6 h-6 text-gold" />
+                  </div>
+                  <h2 className="text-2xl md:text-3xl font-bold text-black" style={{ fontFamily: "Poppins, sans-serif" }}>
+                    <span className="text-gold">What</span> Area Intelligence Does Not Do
+                  </h2>
+                </div>
+                <p className="text-zinc-700 text-lg leading-relaxed mb-6">
+                  Area Intelligence does not:
+                </p>
+                <ul className="space-y-3 mb-6">
+                  {[
+                    "Rank areas by \"best ROI\"",
+                    "Predict future price movements",
+                    "Assign scores or ratings",
+                    "Provide guarantees or forecasts"
+                  ].map((item, idx) => (
+                    <li key={idx} className="flex items-center gap-3 text-zinc-700">
+                      <div className="w-6 h-6 rounded-full bg-red-500/10 flex items-center justify-center flex-shrink-0">
+                        <span className="text-red-500 text-xs font-bold">✕</span>
+                      </div>
+                      <span>{item}</span>
+                    </li>
+                  ))}
+                </ul>
+                <div className="p-4 bg-red-500/5 rounded-xl border border-red-500/20">
+                  <p className="text-zinc-700 text-sm font-medium">
+                    Any area discussion that promises returns or future appreciation is not compliant with Dubai real estate regulations.
+                  </p>
+                </div>
+              </div>
+            </motion.section>
+
+            {/* Why Area-Level Analysis Matters */}
+            <motion.section 
+              id="why-it-matters" 
+              className="scroll-mt-24"
+              initial="hidden"
+              whileInView="visible"
+              viewport={{ once: true }}
+              variants={fadeInUp}
+            >
+              <div className="bg-gradient-to-br from-white via-[#FDFBF7] to-[#F5F0E6] rounded-2xl p-8 border border-gold/30">
+                <div className="flex items-center gap-3 mb-6">
+                  <div className="w-12 h-12 rounded-xl bg-black flex items-center justify-center">
+                    <Building2 className="w-6 h-6 text-gold" />
+                  </div>
+                  <h2 className="text-2xl md:text-3xl font-bold text-black" style={{ fontFamily: "Poppins, sans-serif" }}>
+                    <span className="text-gold">Why</span> Area-Level Analysis Matters
+                  </h2>
+                </div>
+                <p className="text-zinc-700 text-lg leading-relaxed mb-6">
+                  Dubai's real estate market is not uniform. Performance, demand, and tenant behavior vary significantly between areas due to:
+                </p>
+                <ul className="grid md:grid-cols-2 gap-3 mb-6">
+                  {[
+                    "Zoning regulations",
+                    "Property age and density",
+                    "Infrastructure maturity",
+                    "Tenant profiles",
+                    "Approved pricing benchmarks"
+                  ].map((item, idx) => (
+                    <li key={idx} className="flex items-center gap-3 text-zinc-700">
+                      <CheckCircle2 className="w-5 h-5 text-gold flex-shrink-0" />
+                      <span>{item}</span>
+                    </li>
+                  ))}
+                </ul>
+                <div className="p-4 bg-black/5 rounded-xl border border-gold/20">
+                  <p className="text-zinc-600 text-sm">
+                    Understanding these differences helps buyers, sellers, landlords, and tenants make informed decisions based on where a property is located—not just the property itself.
+                  </p>
+                </div>
+              </div>
+            </motion.section>
+
+            {/* How JBJ Uses Area Intelligence */}
+            <motion.section 
+              id="how-jbj-uses" 
+              className="scroll-mt-24"
+              initial="hidden"
+              whileInView="visible"
+              viewport={{ once: true }}
+              variants={fadeInUp}
+            >
+              <div className="bg-gradient-to-br from-white via-[#FDFBF7] to-[#F5F0E6] rounded-2xl p-8 border border-gold/30">
+                <div className="flex items-center gap-3 mb-6">
+                  <div className="w-12 h-12 rounded-xl bg-black flex items-center justify-center">
+                    <FileText className="w-6 h-6 text-gold" />
+                  </div>
+                  <h2 className="text-2xl md:text-3xl font-bold text-black" style={{ fontFamily: "Poppins, sans-serif" }}>
+                    <span className="text-gold">How</span> JBJ Global Real Estate Uses Area Intelligence
+                  </h2>
+                </div>
+                <p className="text-zinc-700 text-lg leading-relaxed mb-6">
+                  JBJ Global Real Estate uses area intelligence to:
+                </p>
+                <ul className="space-y-3 mb-6">
+                  {[
+                    "Compare locations objectively",
+                    "Explain pricing differences clearly",
+                    "Align properties with client objectives",
+                    "Avoid misrepresentation or over-marketing"
+                  ].map((item, idx) => (
+                    <li key={idx} className="flex items-center gap-3 text-zinc-700">
+                      <CheckCircle2 className="w-5 h-5 text-gold flex-shrink-0" />
+                      <span>{item}</span>
+                    </li>
+                  ))}
+                </ul>
+                <div className="p-4 bg-gold/10 rounded-xl border border-gold/30">
+                  <p className="text-zinc-700 text-sm font-medium">
+                    All explanations are grounded in registered data and official benchmarks.
+                  </p>
+                </div>
+                <div className="mt-6 p-4 bg-black rounded-xl">
+                  <p className="text-zinc-300 text-sm">
+                    Area Intelligence feeds directly into <Link to="/market-intelligence/reports" className="text-gold hover:underline">Market Reports</Link>, where trends are summarized at a broader market level using the same official datasets.
+                  </p>
+                </div>
+              </div>
+            </motion.section>
+
+            {/* Gold Divider */}
+            <div className="h-1 bg-gradient-to-r from-transparent via-gold to-transparent shadow-[0_0_20px_rgba(200,167,102,0.5)] rounded-full" />
             
             {/* Areas Grid - White Pearl / Champagne Gold Cards */}
-            <section id="area-grid" className="scroll-mt-24">
+            <motion.section 
+              id="area-grid" 
+              className="scroll-mt-24"
+              initial="hidden"
+              whileInView="visible"
+              viewport={{ once: true }}
+              variants={fadeInUp}
+            >
               <div className="bg-gradient-to-br from-white via-[#FDFBF7] to-[#F5F0E6] rounded-2xl p-8 border border-gold/30">
                 <h2 
                   className="text-3xl md:text-4xl font-bold mb-8 text-center"
@@ -169,7 +484,7 @@ const AreaIntelligence = () => {
                   ))}
                 </div>
               </div>
-            </section>
+            </motion.section>
           </div>
 
           {/* Table of Contents Sidebar */}
