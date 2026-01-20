@@ -11,6 +11,7 @@ import { fa } from '@/translations/fa';
 import { tr } from '@/translations/tr';
 import { de } from '@/translations/de';
 import { it } from '@/translations/it';
+import { nl } from '@/translations/nl';
 import { supabase } from '@/integrations/supabase/client';
 
 interface LanguageContextType {
@@ -21,7 +22,7 @@ interface LanguageContextType {
 }
 
 const translations: Record<Language, Record<string, string>> = {
-  en, ar, es, fr, ru, zh, hi, fa, tr, de, it
+  en, ar, es, fr, ru, zh, hi, fa, tr, de, it, nl
 };
 
 const LanguageContext = createContext<LanguageContextType | undefined>(undefined);
