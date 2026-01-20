@@ -194,14 +194,14 @@ const Index = () => {
               <div 
                 className="relative bg-gradient-to-br from-purple-900/40 via-purple-800/30 to-purple-900/40 backdrop-blur-md border-2 border-purple-500/50 rounded-2xl p-8 md:p-10 text-center transition-all duration-500"
                 style={{
-                  boxShadow: '0 0 35px rgba(255,255,255,0.5), 0 0 60px rgba(255,255,255,0.3), 0 0 80px rgba(147,51,234,0.25)',
+                  boxShadow: '0 0 15px rgba(255,255,255,0.15), 0 0 30px rgba(147,51,234,0.2)',
                 }}
               >
                 {/* Hover glow overlay - switches to white */}
                 <div 
                   className="absolute inset-0 rounded-2xl opacity-0 group-hover:opacity-100 transition-opacity duration-500 pointer-events-none"
                   style={{
-                    boxShadow: '0 0 40px rgba(255,255,255,0.5), 0 0 60px rgba(255,255,255,0.3)',
+                    boxShadow: '0 0 20px rgba(255,255,255,0.25), 0 0 40px rgba(147,51,234,0.2)',
                   }}
                 />
                 <div className="absolute inset-0 bg-gradient-to-br from-purple-500/10 via-transparent to-purple-600/10 rounded-2xl opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
