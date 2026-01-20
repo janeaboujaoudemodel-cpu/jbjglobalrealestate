@@ -1,5 +1,5 @@
 import { motion } from "framer-motion";
-import { BarChart3, TrendingUp, TrendingDown, Minus, Database, Shield, Search } from "lucide-react";
+import { BarChart3, TrendingUp, TrendingDown, Minus, Database, Shield, Search, Building2, FileText, Landmark, Scale, ExternalLink, Users } from "lucide-react";
 import Footer from "@/components/Footer";
 import PreFooterSeparator from "@/components/PreFooterSeparator";
 import { SEOHead } from "@/components/SEOHead";
@@ -7,12 +7,21 @@ import { MarketIntelligenceSchema } from "@/components/seo/MarketIntelligenceSch
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { MARKET_OVERVIEW_STATS, QUARTERLY_TRENDS, PROPERTY_TYPE_TRENDS, MARKET_DISCLAIMER } from "@/config/open-data-config";
 import { MarketIntelligenceHero, MarketIntelligenceNavigation, MarketIntelligenceTableOfContents } from "@/components/market-intelligence";
+import { Button } from "@/components/ui/button";
+import { Link } from "react-router-dom";
 
 // TOC items for the page
 const tocItems = [
+  { id: "introduction", title: "Introduction" },
+  { id: "market-structure", title: "Market Structure & Regulation" },
+  { id: "activity-measurement", title: "How Activity Is Measured" },
+  { id: "rent-benchmarking", title: "Rent Benchmarking" },
+  { id: "ownership-costs", title: "Ownership Costs" },
+  { id: "government-planning", title: "Government Planning" },
+  { id: "how-jbj-uses-data", title: "How JBJ Uses Data" },
   { id: "key-stats", title: "Key Statistics" },
-  { id: "quarterly-trends", title: "Quarterly Transaction Trends" },
-  { id: "property-performance", title: "Performance by Property Type" },
+  { id: "quarterly-trends", title: "Quarterly Trends" },
+  { id: "property-performance", title: "Property Performance" },
   { id: "navigation", title: "Explore More" },
 ];
 
@@ -47,6 +56,73 @@ const SectionTitle = ({ title, centered = true }: { title: string; centered?: bo
       </span>
       <span className="text-white">{restWords}</span>
     </h2>
+  );
+};
+
+// Content Section Component for educational content
+const ContentSection = ({ 
+  id, 
+  icon: Icon, 
+  title, 
+  children,
+  links
+}: { 
+  id: string; 
+  icon: React.ElementType; 
+  title: string; 
+  children: React.ReactNode;
+  links?: Array<{ label: string; url: string }>;
+}) => {
+  const words = title.split(' ');
+  const firstWord = words[0];
+  const restWords = words.slice(1).join(' ');
+
+  return (
+    <section id={id} className="scroll-mt-24 px-4 md:px-8 lg:px-16 mb-12">
+      <motion.div
+        initial={{ opacity: 0, y: 20 }}
+        whileInView={{ opacity: 1, y: 0 }}
+        viewport={{ once: true }}
+        className="bg-gradient-to-br from-white via-[#FDFBF7] to-[#F5F0E6] rounded-2xl p-8 border border-gold/30 max-w-6xl mx-auto lg:mr-80"
+      >
+        <div className="flex items-start gap-4 mb-6">
+          <div className="w-12 h-12 bg-black rounded-xl flex items-center justify-center flex-shrink-0">
+            <Icon className="w-6 h-6 text-gold" />
+          </div>
+          <h2 className="text-2xl md:text-3xl font-bold" style={{ fontFamily: "Poppins, sans-serif" }}>
+            <span 
+              style={{ 
+                background: "linear-gradient(135deg, #C8A766, #E8D5B0, #C8A766)",
+                WebkitBackgroundClip: "text",
+                WebkitTextFillColor: "transparent",
+              }}
+            >
+              {firstWord}
+            </span>
+            <span className="text-black ml-2">{restWords}</span>
+          </h2>
+        </div>
+        <div className="text-zinc-700 leading-relaxed space-y-4">
+          {children}
+        </div>
+        {links && links.length > 0 && (
+          <div className="mt-6 pt-6 border-t border-gold/20 space-y-2">
+            {links.map((link, idx) => (
+              <a 
+                key={idx}
+                href={link.url}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="flex items-center gap-2 text-gold hover:text-gold-dark transition-colors text-sm font-medium"
+              >
+                <ExternalLink className="w-4 h-4" />
+                {link.label}
+              </a>
+            ))}
+          </div>
+        )}
+      </motion.div>
+    </section>
   );
 };
 
@@ -103,7 +179,7 @@ const MarketOverview = () => {
         badge="Market Intelligence"
         badgeIcon={BarChart3}
         title="Market Overview"
-        description="UAE & Dubai macro snapshot with high-level transaction trends, price movements, and rent analysis powered by official government Open Data."
+        description="Dubai's real estate market operates within a regulated framework led by the Dubai Land Department (DLD) and RERA. This overview presents how the market functions, how activity is measured, and how pricing, rent, and ownership costs are officially determined—using government sources only, without speculation or projections."
         videoSrc="https://videos.pexels.com/video-files/3571264/3571264-uhd_2560_1440_30fps.mp4"
         videoPoster="https://images.unsplash.com/photo-1512453979798-5ea266f8880c?w=1920&q=80"
       />
@@ -124,6 +200,116 @@ const MarketOverview = () => {
 
       {/* Main Content - Full width edge-to-edge */}
       <div className="py-16">
+        {/* Introduction */}
+        <ContentSection id="introduction" icon={FileText} title="About This Page">
+          <p>
+            This page is descriptive, not predictive. It explains how the market works today and how official data should be read.
+          </p>
+        </ContentSection>
+
+        {/* Market Structure & Regulation */}
+        <ContentSection 
+          id="market-structure" 
+          icon={Landmark} 
+          title="Market Structure & Regulation"
+          links={[
+            { label: "DLD Real Estate Data Portal", url: "https://dubailand.gov.ae/en/open-data/real-estate-data/" },
+            { label: "DLD Research Portal", url: "https://dubailand.gov.ae/en/open-data/research/" }
+          ]}
+        >
+          <p>
+            All real estate transactions, rental registrations, and ownership records in Dubai are governed and recorded by the Dubai Land Department (DLD). Regulatory oversight, rent controls, service charge approvals, and brokerage licensing fall under RERA.
+          </p>
+          <p>
+            Official real estate data, transaction records, rental benchmarks, and sector research are published directly by DLD through its open data and research portals.
+          </p>
+        </ContentSection>
+
+        {/* How Market Activity Is Measured */}
+        <ContentSection id="activity-measurement" icon={BarChart3} title="How Market Activity Is Measured">
+          <p>Dubai's market activity is measured through:</p>
+          <ul className="list-disc list-inside space-y-2 ml-4">
+            <li>Registered sales transactions</li>
+            <li>Registered rental contracts</li>
+            <li>Project registrations and handovers</li>
+            <li>Official service charge approvals</li>
+            <li>Rental index benchmarks</li>
+          </ul>
+          <p className="mt-4">
+            There is no unofficial or parallel system. Any credible market interpretation must align with these recorded datasets.
+          </p>
+        </ContentSection>
+
+        {/* Rent Benchmarking & Adjustments */}
+        <ContentSection 
+          id="rent-benchmarking" 
+          icon={Scale} 
+          title="Rent Benchmarking & Adjustments"
+          links={[
+            { label: "Official DLD Rental Index", url: "https://dubailand.gov.ae/en/eservices/rental-index/" },
+            { label: "DLD How-Do-I Guide", url: "https://dubailand.gov.ae/en/how-do-i/" }
+          ]}
+        >
+          <p>
+            Rent changes in Dubai are regulated and assessed through the official DLD Rental Index. This tool defines whether a rent increase is permitted and by how much, based on location, unit type, and current market benchmarks.
+          </p>
+          <p>
+            Rent discussions, renewals, and disputes are evaluated against this index—not market sentiment or private estimates.
+          </p>
+        </ContentSection>
+
+        {/* Ownership Costs & Service Charges */}
+        <ContentSection 
+          id="ownership-costs" 
+          icon={Building2} 
+          title="Ownership Costs & Service Charges"
+          links={[
+            { label: "Official Service Charge Index", url: "https://dubailand.gov.ae/en/eservices/service-charge-index-overview/" }
+          ]}
+        >
+          <p>
+            Beyond purchase price or rent, ownership cost includes annual service charges approved by RERA. These charges vary by project and directly affect long-term holding costs.
+          </p>
+          <p>
+            The official Service Charge Index allows buyers, investors, and landlords to verify approved service charges before committing to a property.
+          </p>
+        </ContentSection>
+
+        {/* Market Context & Government Planning */}
+        <ContentSection 
+          id="government-planning" 
+          icon={TrendingUp} 
+          title="Market Context & Government Planning"
+          links={[
+            { label: "Dubai Economic Agenda D33", url: "https://www.protocol.dubai.ae/en/media-listing/news-events/mohammed-bin-rashid-launches-dubai-economic-agenda-d33-with-total-economic-targets-of-aed-32-trillion-over-next-10-years/" }
+          ]}
+        >
+          <p>
+            Dubai's real estate sector operates within broader government economic planning. Long-term infrastructure, population growth, and business expansion policies influence demand patterns over time.
+          </p>
+          <p>
+            Dubai's Economic Agenda D33 outlines official economic objectives and growth targets over the coming decade. This agenda provides strategic context, not market guarantees.
+          </p>
+        </ContentSection>
+
+        {/* How JBJ Uses Market Data */}
+        <ContentSection id="how-jbj-uses-data" icon={Users} title="How JBJ Global Real Estate Uses Market Data">
+          <p>JBJ Global Real Estate relies exclusively on:</p>
+          <ul className="list-disc list-inside space-y-2 ml-4">
+            <li>DLD-registered transaction data</li>
+            <li>Official rental and service charge indices</li>
+            <li>Government-published research and reports</li>
+          </ul>
+          <p className="mt-4">
+            We do not base guidance on unverified dashboards, social media claims, or guaranteed-return statements. Market interpretation is grounded in officially published information and location-specific evaluation.
+          </p>
+          <div className="mt-6 p-4 bg-black/5 rounded-xl border border-gold/20">
+            <p className="text-sm text-zinc-600 italic">
+              This Market Overview serves as the foundation for deeper analysis in Area Intelligence, where performance is examined at a location and project level using the same official sources.
+            </p>
+          </div>
+        </ContentSection>
+
         {/* Key Stats Grid - White Pearl section */}
         <section id="key-stats" className="scroll-mt-24 px-4 md:px-8 lg:px-16 mb-16">
           <div className="bg-gradient-to-br from-white via-[#FDFBF7] to-[#F5F0E6] rounded-2xl p-8 border border-gold/30 max-w-6xl mx-auto lg:mr-80">
