@@ -297,11 +297,71 @@ const GlobalHeader = () => {
               </SheetTrigger>
               <SheetContent
                 side="right"
-                className="bg-black/95 backdrop-blur-xl border-zinc-800/50 w-[300px] p-0 flex flex-col h-full"
+                className="bg-gradient-to-b from-white via-[#FDFBF7] to-[#F5F0E6] border-l border-gold/30 w-[320px] p-0 flex flex-col h-full"
               >
-                {/* Menu Header with glassmorphism */}
-                <div className="relative h-28 bg-gradient-to-b from-zinc-900/80 to-black/90 border-b border-gold/20 flex items-end p-5 shrink-0 backdrop-blur-sm">
-                  <BrandMonogram variant="dark" size="sm" layout="horizontal" />
+                {/* Menu Header with white pearl styling */}
+                <div className="relative h-28 bg-gradient-to-b from-white to-[#FDFBF7] border-b border-gold/30 flex items-end p-5 shrink-0">
+                  <div className="absolute top-0 left-0 right-0 h-[2px] bg-gradient-to-r from-transparent via-gold to-transparent" />
+                  <BrandMonogram variant="light" size="sm" layout="horizontal" />
+                </div>
+
+                {/* AI Home Finder Banner - Purple & White */}
+                <Link
+                  to="/ai-home-finder"
+                  onClick={() => setMobileMenuOpen(false)}
+                  className="mx-4 mt-4 p-4 rounded-xl bg-gradient-to-r from-purple-600 via-purple-500 to-purple-600 border border-purple-400/50 shadow-lg hover:shadow-purple-500/30 transition-all group"
+                >
+                  <div className="flex items-center gap-3">
+                    <div className="w-10 h-10 rounded-full bg-white/20 flex items-center justify-center backdrop-blur-sm">
+                      <Sparkles className="w-5 h-5 text-white" />
+                    </div>
+                    <div>
+                      <p className="text-white font-semibold text-sm">AI Home Finder</p>
+                      <p className="text-purple-200 text-xs">Find your perfect match</p>
+                    </div>
+                  </div>
+                </Link>
+
+                {/* Quick Actions Row */}
+                <div className="flex items-center justify-around px-4 py-3 mt-3 border-b border-gold/20">
+                  <Button
+                    variant="ghost"
+                    size="sm"
+                    className="flex flex-col items-center gap-1 text-black hover:text-gold h-auto py-2 px-3"
+                    onClick={() => {
+                      setMobileMenuOpen(false);
+                      setSearchOpen(true);
+                    }}
+                  >
+                    <Search className="w-5 h-5" />
+                    <span className="text-[10px]">Search</span>
+                  </Button>
+                  <Link
+                    to="/favorites"
+                    onClick={() => setMobileMenuOpen(false)}
+                    className="flex flex-col items-center gap-1 text-black hover:text-gold py-2 px-3"
+                  >
+                    <div className="relative">
+                      <Heart className="w-5 h-5" />
+                      {totalCount > 0 && (
+                        <span className="absolute -top-1 -right-1 bg-gold text-black text-[9px] w-4 h-4 rounded-full flex items-center justify-center font-bold">
+                          {totalCount}
+                        </span>
+                      )}
+                    </div>
+                    <span className="text-[10px]">Favorites</span>
+                  </Link>
+                  <Link
+                    to={user ? "/my-account" : "/auth"}
+                    onClick={() => setMobileMenuOpen(false)}
+                    className="flex flex-col items-center gap-1 text-black hover:text-gold py-2 px-3"
+                  >
+                    <User className="w-5 h-5" />
+                    <span className="text-[10px]">{user ? "Account" : "Sign In"}</span>
+                  </Link>
+                  <div className="shrink-0">
+                    <LanguageSwitcher variant="compact" />
+                  </div>
                 </div>
 
                 {/* Scrollable Navigation */}
@@ -311,189 +371,224 @@ const GlobalHeader = () => {
                     <Link
                       to="/"
                       onClick={() => setMobileMenuOpen(false)}
-                      className={`flex items-center gap-3 px-4 py-3 border-l-2 transition-all ${
+                      className={`flex items-center gap-3 px-4 py-3 rounded-lg border-l-2 transition-all ${
                         isActive("/")
                           ? "text-gold border-gold bg-gold/10"
-                          : "text-zinc-300 border-transparent hover:text-white hover:bg-zinc-900/80 hover:border-gold/50"
+                          : "text-black border-transparent hover:text-gold hover:bg-gold/5 hover:border-gold/50"
                       }`}
                     >
+                      <Home className="w-4 h-4" />
                       Home
                     </Link>
 
-                    <div className="h-px bg-zinc-800 my-2" />
+                    <div className="h-px bg-gold/20 my-2" />
                     
                     {/* 2. Properties */}
-                    <p className="px-4 py-2 text-xs text-gold/60 uppercase tracking-wider">Properties</p>
+                    <p className="px-4 py-2 text-xs uppercase tracking-wider font-semibold" style={{ 
+                      background: "linear-gradient(135deg, #C8A766, #E8D5B0, #C8A766)",
+                      WebkitBackgroundClip: "text",
+                      WebkitTextFillColor: "transparent"
+                    }}>Properties</p>
                     {propertiesLinks.map((link) => (
                       <Link
                         key={link.href}
                         to={link.href}
                         onClick={() => setMobileMenuOpen(false)}
-                        className="flex items-center gap-3 px-4 py-2.5 text-sm text-zinc-400 hover:text-white hover:bg-zinc-900/80 transition-colors"
+                        className="flex items-center gap-3 px-4 py-2.5 text-sm text-zinc-700 hover:text-gold hover:bg-gold/5 transition-colors rounded-lg"
                       >
-                        <link.icon className="w-4 h-4 text-gold/70" />
+                        <div className="w-7 h-7 rounded-md bg-transparent border border-gold/50 flex items-center justify-center">
+                          <link.icon className="w-3.5 h-3.5 text-gold" />
+                        </div>
                         {link.label}
                       </Link>
                     ))}
 
-                    <div className="h-px bg-zinc-800 my-2" />
+                    <div className="h-px bg-gold/20 my-2" />
 
                     {/* 3. Services */}
-                    <p className="px-4 py-2 text-xs text-gold/60 uppercase tracking-wider">Services</p>
+                    <p className="px-4 py-2 text-xs uppercase tracking-wider font-semibold" style={{ 
+                      background: "linear-gradient(135deg, #C8A766, #E8D5B0, #C8A766)",
+                      WebkitBackgroundClip: "text",
+                      WebkitTextFillColor: "transparent"
+                    }}>Services</p>
                     {servicesLinks.map((link) => (
                       <Link
                         key={link.href}
                         to={link.href}
                         onClick={() => setMobileMenuOpen(false)}
-                        className="flex items-center gap-3 px-4 py-2.5 text-sm text-zinc-400 hover:text-white hover:bg-zinc-900/80 transition-colors"
+                        className="flex items-center gap-3 px-4 py-2.5 text-sm text-zinc-700 hover:text-gold hover:bg-gold/5 transition-colors rounded-lg"
                       >
-                        <link.icon className="w-4 h-4 text-gold/70" />
+                        <div className="w-7 h-7 rounded-md bg-transparent border border-gold/50 flex items-center justify-center">
+                          <link.icon className="w-3.5 h-3.5 text-gold" />
+                        </div>
                         {link.label}
                       </Link>
                     ))}
 
-                    <div className="h-px bg-zinc-800 my-2" />
+                    <div className="h-px bg-gold/20 my-2" />
 
                     {/* 4. Guides */}
-                    <p className="px-4 py-2 text-xs text-gold/60 uppercase tracking-wider">Guides</p>
+                    <p className="px-4 py-2 text-xs uppercase tracking-wider font-semibold" style={{ 
+                      background: "linear-gradient(135deg, #C8A766, #E8D5B0, #C8A766)",
+                      WebkitBackgroundClip: "text",
+                      WebkitTextFillColor: "transparent"
+                    }}>Guides</p>
                     {guidesLinks.map((link) => (
                       <Link
                         key={link.href}
                         to={link.href}
                         onClick={() => setMobileMenuOpen(false)}
-                        className="flex items-center gap-3 px-4 py-2.5 text-sm text-zinc-400 hover:text-white hover:bg-zinc-900/80 transition-colors"
+                        className="flex items-center gap-3 px-4 py-2.5 text-sm text-zinc-700 hover:text-gold hover:bg-gold/5 transition-colors rounded-lg"
                       >
-                        <link.icon className="w-4 h-4 text-gold/70" />
+                        <div className="w-7 h-7 rounded-md bg-transparent border border-gold/50 flex items-center justify-center">
+                          <link.icon className="w-3.5 h-3.5 text-gold" />
+                        </div>
                         {link.label}
                       </Link>
                     ))}
 
-                    <div className="h-px bg-zinc-800 my-2" />
+                    <div className="h-px bg-gold/20 my-2" />
 
                     {/* 5. Market Intelligence */}
-                    <p className="px-4 py-2 text-xs text-gold/60 uppercase tracking-wider">Market Intelligence</p>
+                    <p className="px-4 py-2 text-xs uppercase tracking-wider font-semibold" style={{ 
+                      background: "linear-gradient(135deg, #C8A766, #E8D5B0, #C8A766)",
+                      WebkitBackgroundClip: "text",
+                      WebkitTextFillColor: "transparent"
+                    }}>Market Intelligence</p>
                     {marketIntelLinks.map((link) => (
                       <Link
                         key={link.href}
                         to={link.href}
                         onClick={() => setMobileMenuOpen(false)}
-                        className="flex items-center gap-3 px-4 py-2.5 text-sm text-zinc-400 hover:text-white hover:bg-zinc-900/80 transition-colors"
+                        className="flex items-center gap-3 px-4 py-2.5 text-sm text-zinc-700 hover:text-gold hover:bg-gold/5 transition-colors rounded-lg"
                       >
-                        <link.icon className="w-4 h-4 text-gold/70" />
+                        <div className="w-7 h-7 rounded-md bg-transparent border border-gold/50 flex items-center justify-center">
+                          <link.icon className="w-3.5 h-3.5 text-gold" />
+                        </div>
                         {link.label}
                       </Link>
                     ))}
 
-                    <div className="h-px bg-zinc-800 my-2" />
+                    <div className="h-px bg-gold/20 my-2" />
 
                     {/* 6. Investor Hub */}
-                    <p className="px-4 py-2 text-xs text-gold/60 uppercase tracking-wider">Investor Hub</p>
+                    <p className="px-4 py-2 text-xs uppercase tracking-wider font-semibold" style={{ 
+                      background: "linear-gradient(135deg, #C8A766, #E8D5B0, #C8A766)",
+                      WebkitBackgroundClip: "text",
+                      WebkitTextFillColor: "transparent"
+                    }}>Investor Hub</p>
                     {investorHubLinks.map((link) => (
                       <Link
                         key={link.href}
                         to={link.href}
                         onClick={() => setMobileMenuOpen(false)}
-                        className="flex items-center gap-3 px-4 py-2.5 text-sm text-zinc-400 hover:text-white hover:bg-zinc-900/80 transition-colors"
+                        className="flex items-center gap-3 px-4 py-2.5 text-sm text-zinc-700 hover:text-gold hover:bg-gold/5 transition-colors rounded-lg"
                       >
-                        <link.icon className="w-4 h-4 text-gold/70" />
+                        <div className="w-7 h-7 rounded-md bg-transparent border border-gold/50 flex items-center justify-center">
+                          <link.icon className="w-3.5 h-3.5 text-gold" />
+                        </div>
                         {link.label}
                       </Link>
                     ))}
 
-                    <div className="h-px bg-zinc-800 my-2" />
+                    <div className="h-px bg-gold/20 my-2" />
 
                     {/* 7. Broker Hub */}
-                    <p className="px-4 py-2 text-xs text-gold/60 uppercase tracking-wider">Broker Hub</p>
+                    <p className="px-4 py-2 text-xs uppercase tracking-wider font-semibold" style={{ 
+                      background: "linear-gradient(135deg, #C8A766, #E8D5B0, #C8A766)",
+                      WebkitBackgroundClip: "text",
+                      WebkitTextFillColor: "transparent"
+                    }}>Broker Hub</p>
                     {brokerHubLinks.map((link) => (
                       <Link
                         key={link.href}
                         to={link.href}
                         onClick={() => setMobileMenuOpen(false)}
-                        className="flex items-center gap-3 px-4 py-2.5 text-sm text-zinc-400 hover:text-white hover:bg-zinc-900/80 transition-colors"
+                        className="flex items-center gap-3 px-4 py-2.5 text-sm text-zinc-700 hover:text-gold hover:bg-gold/5 transition-colors rounded-lg"
                       >
-                        <link.icon className="w-4 h-4 text-gold/70" />
+                        <div className="w-7 h-7 rounded-md bg-transparent border border-gold/50 flex items-center justify-center">
+                          <link.icon className="w-3.5 h-3.5 text-gold" />
+                        </div>
                         {link.label}
                       </Link>
                     ))}
 
-                    <div className="h-px bg-zinc-800 my-2" />
+                    <div className="h-px bg-gold/20 my-2" />
 
                     {/* 8. About */}
-                    <p className="px-4 py-2 text-xs text-gold/60 uppercase tracking-wider">About</p>
+                    <p className="px-4 py-2 text-xs uppercase tracking-wider font-semibold" style={{ 
+                      background: "linear-gradient(135deg, #C8A766, #E8D5B0, #C8A766)",
+                      WebkitBackgroundClip: "text",
+                      WebkitTextFillColor: "transparent"
+                    }}>About</p>
                     {aboutLinks.map((link) => (
                       <Link
                         key={link.href}
                         to={link.href}
                         onClick={() => setMobileMenuOpen(false)}
-                        className="flex items-center gap-3 px-4 py-2.5 text-sm text-zinc-400 hover:text-white hover:bg-zinc-900/80 transition-colors"
+                        className="flex items-center gap-3 px-4 py-2.5 text-sm text-zinc-700 hover:text-gold hover:bg-gold/5 transition-colors rounded-lg"
                       >
-                        <link.icon className="w-4 h-4 text-gold/70" />
+                        <div className="w-7 h-7 rounded-md bg-transparent border border-gold/50 flex items-center justify-center">
+                          <link.icon className="w-3.5 h-3.5 text-gold" />
+                        </div>
                         {link.label}
                       </Link>
                     ))}
 
-                    <div className="h-px bg-zinc-800 my-2" />
+                    <div className="h-px bg-gold/20 my-2" />
 
                     {/* 9. Contact */}
                     <Link
                       to="/contact"
                       onClick={() => setMobileMenuOpen(false)}
-                      className={`flex items-center gap-3 px-4 py-3 border-l-2 transition-all ${
+                      className={`flex items-center gap-3 px-4 py-3 rounded-lg border-l-2 transition-all ${
                         isActive("/contact")
                           ? "text-gold border-gold bg-gold/10"
-                          : "text-zinc-300 border-transparent hover:text-white hover:bg-zinc-900/80 hover:border-gold/50"
+                          : "text-black border-transparent hover:text-gold hover:bg-gold/5 hover:border-gold/50"
                       }`}
                     >
-                      <Phone className="w-4 h-4 text-gold/70" />
+                      <div className="w-7 h-7 rounded-md bg-transparent border border-gold/50 flex items-center justify-center">
+                        <Phone className="w-3.5 h-3.5 text-gold" />
+                      </div>
                       Contact
                     </Link>
 
-                    <div className="h-px bg-zinc-800 my-2" />
+                    <div className="h-px bg-gold/20 my-2" />
 
                     {/* 10. More */}
-                    <p className="px-4 py-2 text-xs text-gold/60 uppercase tracking-wider">More</p>
+                    <p className="px-4 py-2 text-xs uppercase tracking-wider font-semibold" style={{ 
+                      background: "linear-gradient(135deg, #C8A766, #E8D5B0, #C8A766)",
+                      WebkitBackgroundClip: "text",
+                      WebkitTextFillColor: "transparent"
+                    }}>More</p>
                     {moreLinks.map((link) => (
                       <Link
                         key={link.href}
                         to={link.href}
                         onClick={() => setMobileMenuOpen(false)}
-                        className="flex items-center gap-3 px-4 py-2.5 text-sm text-zinc-400 hover:text-white hover:bg-zinc-900/80 transition-colors"
+                        className="flex items-center gap-3 px-4 py-2.5 text-sm text-zinc-700 hover:text-gold hover:bg-gold/5 transition-colors rounded-lg"
                       >
-                        <link.icon className="w-4 h-4 text-gold/70" />
+                        <div className="w-7 h-7 rounded-md bg-transparent border border-gold/50 flex items-center justify-center">
+                          <link.icon className="w-3.5 h-3.5 text-gold" />
+                        </div>
                         {link.label}
                       </Link>
                     ))}
 
-                    <div className="h-px bg-zinc-800 my-4" />
+                    <div className="h-px bg-gold/20 my-4" />
 
-                    {/* Favorites & Shortlist */}
-                    <Link
-                      to="/favorites"
-                      onClick={() => setMobileMenuOpen(false)}
-                      className="flex items-center gap-3 px-4 py-3 text-zinc-300 hover:text-white hover:bg-zinc-900/80 transition-colors"
-                    >
-                      <Heart className="w-5 h-5" />
-                      <span>{t('nav.favorites')}</span>
-                      {totalCount > 0 && (
-                        <span className="ml-auto bg-gold text-black text-xs px-2 py-0.5 rounded-full font-medium">
-                          {totalCount}
-                        </span>
-                      )}
-                    </Link>
-
-                    <div className="h-px bg-zinc-800 my-4" />
-
+                    {/* User Section */}
                     {user ? (
                       <>
-                        <div className="px-4 py-3 text-gold font-medium border-l-2 border-gold bg-gold/5">
-                          {t('nav.myAccount')}
+                        <div className="px-4 py-3 rounded-lg bg-gold/10 border border-gold/30">
+                          <p className="font-semibold text-black">{t('nav.myAccount')}</p>
+                          <p className="text-zinc-600 text-sm">{user.email?.split("@")[0]}</p>
                         </div>
-                        <div className="px-4 py-2 text-zinc-500 text-sm">{user.email?.split("@")[0]}</div>
                         {hasCRMAccess && (
                           <Link
                             to="/crm"
                             onClick={() => setMobileMenuOpen(false)}
-                            className="flex items-center gap-3 px-4 py-3 text-gold hover:text-gold/80 hover:bg-gold/10 transition-colors"
+                            className="flex items-center gap-3 px-4 py-3 mt-2 text-gold hover:bg-gold/10 transition-colors rounded-lg"
                           >
                             <Users className="w-5 h-5" />
                             {t('nav.crm') || 'CRM Dashboard'}
@@ -503,7 +598,7 @@ const GlobalHeader = () => {
                           <Link
                             to="/admin"
                             onClick={() => setMobileMenuOpen(false)}
-                            className="flex items-center gap-3 px-4 py-3 text-zinc-300 hover:text-white hover:bg-zinc-900 transition-colors"
+                            className="flex items-center gap-3 px-4 py-3 text-zinc-700 hover:text-gold hover:bg-gold/5 transition-colors rounded-lg"
                           >
                             <Settings className="w-5 h-5" />
                             {t('nav.admin')}
@@ -514,7 +609,7 @@ const GlobalHeader = () => {
                             signOut();
                             setMobileMenuOpen(false);
                           }}
-                          className="flex items-center gap-3 px-4 py-3 text-zinc-300 hover:text-white hover:bg-zinc-900 transition-colors w-full text-left"
+                          className="flex items-center gap-3 px-4 py-3 text-zinc-700 hover:text-red-600 hover:bg-red-50 transition-colors w-full text-left rounded-lg"
                         >
                           <LogOut className="w-5 h-5" />
                           {t('nav.signOut')}
@@ -524,7 +619,7 @@ const GlobalHeader = () => {
                       <Link
                         to="/auth"
                         onClick={() => setMobileMenuOpen(false)}
-                        className="flex items-center gap-3 px-4 py-3 text-gold hover:text-gold/80 hover:bg-gold/10 transition-colors"
+                        className="flex items-center gap-3 px-4 py-3 text-gold hover:bg-gold/10 transition-colors rounded-lg"
                       >
                         <User className="w-5 h-5" />
                         {t('nav.signIn')}
