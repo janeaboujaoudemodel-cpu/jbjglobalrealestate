@@ -90,6 +90,9 @@ const GlobalHeader = () => {
     { href: "/tenant-guide", label: 'Tenant Guide', icon: FileText },
     { href: "/landlord-guide", label: 'Landlord Guide', icon: FileText },
     { href: "/areas", label: t('nav.areaGuides') || 'Area Guides', icon: Building2 },
+    { href: "/investor-education", label: 'Investor Education', icon: FileText },
+    { href: "/investor-faq", label: 'Investor FAQ', icon: ClipboardCheck },
+    { href: "/broker-education", label: 'Broker Education', icon: FileText },
     { href: "/faq", label: 'FAQ', icon: ClipboardCheck },
   ];
 

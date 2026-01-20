@@ -127,6 +127,9 @@ export const GUIDE_LINKS: GuideLink[] = [
   { title: "Tenant Guide", path: "/tenant-guide", description: "Tenant rights & responsibilities" },
   { title: "Landlord Guide", path: "/landlord-guide", description: "List your property for rent" },
   { title: "Area Guides", path: "/areas", description: "Explore Dubai's communities" },
+  { title: "Investor Education", path: "/investor-education", description: "Investment framework" },
+  { title: "Investor FAQ", path: "/investor-faq", description: "Investment questions answered" },
+  { title: "Broker Education", path: "/broker-education", description: "Professional broker training" },
   { title: "FAQ", path: "/faq", description: "Common questions answered" },
 ];
 

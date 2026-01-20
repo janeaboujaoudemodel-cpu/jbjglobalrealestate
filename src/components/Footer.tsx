@@ -111,6 +111,8 @@ const Footer = () => {
     { href: "/areas", label: "Area Guides" },
     { href: "/market-intelligence", label: "Market Intelligence" },
     { href: "/buyer-guide", label: "Buyer Guide" },
+    { href: "/investor-education", label: "Investor Education" },
+    { href: "/broker-education", label: "Broker Education" },
     { href: "/services", label: "Services" },
     { href: "/awards", label: "Awards" },
     { href: "/news", label: "News & Insights" },
