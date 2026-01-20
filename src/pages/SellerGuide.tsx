@@ -34,15 +34,16 @@ import {
   Target,
   TrendingUp,
   Eye,
-  HelpCircle
+  HelpCircle,
+  XCircle,
+  Search,
+  Megaphone,
+  UserCheck,
+  Scale
 } from "lucide-react";
 import { CONTACT_INFO, getWhatsAppUrl, getCallUrl, getEmailUrl } from "@/constants/stats";
 import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from "@/components/ui/accordion";
 import { GuideNavigation, GUIDE_LINKS } from "@/components/guides/GuideNavigation";
-import { GuideHero } from "@/components/guides/GuideHero";
-import { GuideSection } from "@/components/guides/GuideSection";
-import { GuideCard } from "@/components/guides/GuideCard";
-import { GuideCTA } from "@/components/guides/GuideCTA";
 import { GuideTableOfContents } from "@/components/guides/GuideTableOfContents";
 import Footer from "@/components/Footer";
 
@@ -63,163 +64,182 @@ const SellerGuide = () => {
   const whoIsThisFor = [
     {
       icon: Home,
-      title: "Property Owner",
-      description: "You own a residential or commercial property in the UAE and want to sell for the best price."
+      title: "Property owners planning to sell",
+      description: "Ready to exit your investment"
     },
     {
       icon: Briefcase,
-      title: "Landlord",
-      description: "You have a tenanted property and want to explore your selling options while protecting tenant rights."
+      title: "Investors exiting an asset",
+      description: "Strategic portfolio decisions"
     },
     {
       icon: Building2,
-      title: "Off-Plan Seller",
-      description: "You purchased off-plan and want to resell your unit before or after handover."
+      title: "Owners of ready or off-plan resale units",
+      description: "Any property type"
     },
     {
-      icon: Plane,
-      title: "Overseas Owner",
-      description: "You live abroad and need professional representation to handle the sale remotely."
+      icon: Globe,
+      title: "Local and international sellers",
+      description: "Worldwide support"
     }
   ];
 
   const steps = [
     {
       number: 1,
-      title: "Initial Consultation",
-      icon: MessageCircle,
-      description: "We begin with a comprehensive discussion about your property and selling objectives.",
+      title: "Property Review & Market Positioning",
+      icon: Search,
+      description: "Before listing, your property is reviewed based on:",
       items: [
-        "Understand your timeline and financial expectations",
-        "Discuss market conditions and recent comparable sales",
-        "Explain the selling process and documentation requirements",
-        "Answer any questions about fees, timelines, and procedures"
-      ]
+        "Location and building performance",
+        "Recent transaction data",
+        "Current supply and demand",
+        "Rental yield (if applicable)",
+        "Remaining mortgage or developer balance"
+      ],
+      note: "Pricing is set according to real market evidence, not aspirational figures."
     },
     {
       number: 2,
-      title: "Property Valuation",
-      icon: BarChart3,
-      description: "Accurate pricing is crucial. We provide data-driven market insights to help you set the right price.",
+      title: "Pricing Strategy (Critical Step)",
+      icon: Target,
+      description: "Correct pricing determines:",
       items: [
-        "Comparative Market Analysis (CMA) using recent transactions",
-        "Assessment of property condition, upgrades, and unique features",
-        "Consideration of market trends and buyer demand",
-        "Transparent discussion of pricing strategy options"
-      ]
+        "Speed of sale",
+        "Buyer quality",
+        "Negotiation leverage"
+      ],
+      warning: {
+        title: "Overpricing leads to:",
+        items: [
+          "Low enquiry",
+          "Longer market time",
+          "Forced price reductions later"
+        ]
+      }
     },
     {
       number: 3,
-      title: "Prepare Your Property",
-      icon: Home,
-      description: "First impressions matter. We guide you on preparing your property for maximum appeal.",
+      title: "Marketing & Exposure",
+      icon: Megaphone,
+      description: "Your property is marketed through:",
       items: [
-        "Declutter and depersonalize living spaces",
-        "Complete minor repairs and touch-ups",
-        "Professional cleaning and staging recommendations",
-        "Prepare all required documentation in advance"
-      ]
+        "Major UAE property portals",
+        "Direct buyer networks",
+        "Qualified investor channels",
+        "Private client matching (where applicable)"
+      ],
+      note: "Only serious, qualified buyers are engaged to protect your time and price."
     },
     {
       number: 4,
-      title: "Professional Marketing",
-      icon: Camera,
-      description: "We showcase your property to the widest possible audience of qualified buyers.",
+      title: "Viewings & Buyer Screening",
+      icon: UserCheck,
+      description: "Professional viewing management:",
       items: [
-        "Professional photography and videography",
-        "Listing on major UAE property portals",
-        "Targeted social media campaigns",
-        "Virtual tours for international buyers"
-      ]
+        "Viewings coordinated professionally",
+        "Buyer intent and financial readiness verified",
+        "Offers filtered before presentation"
+      ],
+      note: "You receive real feedback, not noise."
     },
     {
       number: 5,
-      title: "Viewings & Feedback",
-      icon: Eye,
-      description: "We manage all viewings and provide regular updates on buyer interest.",
+      title: "Offer, Negotiation & Agreement",
+      icon: Handshake,
+      description: "Securing the best terms:",
       items: [
-        "Coordinate viewing schedules that work for you",
-        "Accompany buyers and present property professionally",
-        "Collect and share feedback after each viewing",
-        "Adjust strategy based on market response"
+        "Written offers reviewed with market context",
+        "Negotiation handled objectively",
+        "Memorandum of Understanding (Form F) issued",
+        "Buyer deposit secured"
       ]
     },
     {
       number: 6,
-      title: "Offer Negotiation",
-      icon: Handshake,
-      description: "We negotiate on your behalf to secure the best possible terms.",
-      items: [
-        "Present all offers with our professional assessment",
-        "Negotiate price, payment terms, and conditions",
-        "Advise on counter-offers and deal structure",
-        "Ensure your interests are protected throughout"
-      ]
-    },
-    {
-      number: 7,
-      title: "Documentation & NOC",
-      icon: FileCheck,
-      description: "We guide you through all paperwork and regulatory requirements.",
-      items: [
-        "Prepare and review the Memorandum of Understanding (MOU)",
-        "Coordinate NOC application with the developer",
-        "Ensure all documents are complete and accurate",
-        "Liaise with all parties to prevent delays"
-      ]
-    },
-    {
-      number: 8,
-      title: "Transfer & Handover",
+      title: "Transfer & Completion",
       icon: Key,
-      description: "The final step: ownership transfer and receiving your funds.",
+      description: "Final steps to sale completion:",
       items: [
-        "Schedule transfer at Dubai Land Department or trustee office",
-        "Coordinate with buyer's bank if mortgage involved",
-        "Ensure funds are cleared before transfer",
-        "Complete handover and key exchange"
+        "Developer NOC obtained",
+        "Trustee office transfer scheduled",
+        "Ownership transferred at Dubai Land Department",
+        "Funds released upon completion"
       ]
     }
   ];
 
-  const preparationChecklist = [
-    { icon: Camera, title: "Professional Photos", description: "Clean, bright, high-quality images of every room" },
-    { icon: PenTool, title: "Minor Repairs", description: "Fix leaks, scratches, broken handles, and paint touch-ups" },
-    { icon: Home, title: "Deep Cleaning", description: "Professional cleaning including carpets and windows" },
-    { icon: FileText, title: "Documents Ready", description: "Title deed, passport, Emirates ID, utility bills" }
+  const agencyCommission = {
+    rate: "2% + VAT",
+    paidBy: "Paid by the seller (unless agreed otherwise)",
+    covers: [
+      "Market pricing strategy",
+      "Professional marketing",
+      "Buyer screening",
+      "Negotiation & deal structuring",
+      "Transaction coordination"
+    ]
+  };
+
+  const governmentFees = [
+    { title: "NOC fee (developer)", description: "Varies by project" },
+    { title: "Mortgage release fee", description: "If applicable" },
+    { title: "Trustee office fees", description: "Required for transfer" },
+    { title: "Title deed issuance", description: "Official documentation" }
   ];
 
-  const costs = [
-    { label: "Agency Commission", value: "2% + VAT", note: "Standard market rate, paid on completion" },
-    { label: "NOC Fee", value: "AED 500-5,000", note: "Varies by developer" },
-    { label: "Transfer Fee", value: "4% of sale price", note: "Typically paid by buyer (negotiable)" },
-    { label: "Mortgage Settlement", value: "Varies", note: "Early settlement fees if applicable" }
+  const mortgagedPropertySteps = [
+    "Outstanding balance must be cleared before transfer",
+    "Settlement coordinated with the bank",
+    "Sale proceeds can be used for settlement"
+  ];
+
+  const offPlanResaleConditions = [
+    "Developer approval",
+    "Minimum payment completion (usually 40–50%)",
+    "Assignment or transfer fee (developer-specific)"
+  ];
+
+  const jbjSupport = [
+    { title: "Data-driven pricing advice", description: "Based on real market evidence" },
+    { title: "Professional listing presentation", description: "Maximum market exposure" },
+    { title: "Buyer qualification & negotiation", description: "Protect your interests" },
+    { title: "Mortgage and developer coordination", description: "End-to-end management" },
+    { title: "End-to-end transaction management", description: "From listing to completion" }
   ];
 
   const faqs = [
     {
-      question: "How long does it take to sell a property in the UAE?",
-      answer: "On average, a well-priced property in a desirable location can sell within 1-3 months. However, this varies based on market conditions, property type, location, and pricing strategy. Off-plan resales may take longer depending on developer policies."
+      question: "Who pays the agency commission?",
+      answer: "The seller typically pays 2% + VAT, unless otherwise agreed."
     },
     {
-      question: "Can I sell if I still have a mortgage?",
-      answer: "Yes, you can sell with an existing mortgage. The mortgage will be settled from the sale proceeds. Alternatively, the buyer may take over the mortgage with bank approval (liability transfer). We can coordinate with your bank throughout the process."
+      question: "Can I sell with an existing tenant?",
+      answer: "Yes. Tenanted properties can be sold subject to tenancy terms."
     },
     {
-      question: "Do I need to be in the UAE for the sale?",
-      answer: "Not necessarily. You can grant Power of Attorney (POA) to a trusted representative to handle the sale on your behalf. The POA must be properly attested and notarized. We can guide you through this process."
+      question: "Can I sell an off-plan unit before handover?",
+      answer: "Yes, if developer conditions are met."
     },
     {
-      question: "What is a No Objection Certificate (NOC)?",
-      answer: "An NOC is a document from the developer confirming no outstanding service charges or fees on the property. It's required for transfer and typically costs AED 500-5,000. Processing time varies by developer."
+      question: "How long does it take to sell?",
+      answer: "Timing depends on pricing, market demand, and property type."
     },
     {
-      question: "Can I sell an off-plan property before handover?",
-      answer: "Yes, but it depends on the developer's policy. Most developers allow resale after a certain payment milestone (typically 40-50% paid). There may be an assignment fee. We can check the specific terms with your developer."
+      question: "Can I sell while abroad?",
+      answer: "Yes. Sales can be completed via Power of Attorney."
     },
     {
-      question: "What documents do I need to sell?",
-      answer: "Essential documents include: Title Deed (original), valid passport and Emirates ID, proof of address, original purchase agreement (SPA), and any mortgage-related documents. For POA sales, attested Power of Attorney is required."
+      question: "Do I need a lawyer to sell?",
+      answer: "Not mandatory, but legal support may be used for complex cases."
+    },
+    {
+      question: "What happens if my property is mortgaged?",
+      answer: "The mortgage must be settled prior to transfer."
+    },
+    {
+      question: "Can I reject offers below my asking price?",
+      answer: "Yes. All offers are presented; acceptance is your decision."
     }
   ];
 
@@ -230,16 +250,18 @@ const SellerGuide = () => {
   const tocItems = [
     { id: 'who-is-this-for', title: 'Who Is This For', icon: Users },
     { id: 'selling-process', title: 'Selling Process', icon: ClipboardCheck },
-    { id: 'preparation', title: 'Preparation', icon: Home },
     { id: 'costs', title: 'Costs & Fees', icon: Calculator },
+    { id: 'mortgaged-properties', title: 'Mortgaged Properties', icon: Landmark },
+    { id: 'off-plan-resale', title: 'Off-Plan Resale', icon: Building2 },
+    { id: 'jbj-support', title: 'How JBJ Supports You', icon: Handshake },
     { id: 'faqs', title: 'FAQs', icon: HelpCircle },
   ];
 
   return (
     <>
       <SEOHead 
-        title="Seller Guide | How to Sell Property in the UAE | JBJ Global Real Estate"
-        description="Complete guide to selling property in the UAE. Learn about pricing, documentation, marketing, and the transfer process with JBJ Global Real Estate. Expert brokerage services for sellers."
+        title="Seller Guide | How to Sell Property in Dubai | JBJ Global Real Estate"
+        description="Complete guide to selling property in Dubai. Learn about pricing, documentation, marketing, and the transfer process with JBJ Global Real Estate. Expert brokerage services for sellers."
       />
       
       <main className="min-h-screen bg-black">
@@ -278,8 +300,8 @@ const SellerGuide = () => {
                 className="text-4xl md:text-5xl lg:text-6xl font-light text-white mb-6 leading-tight"
                 variants={fadeInUp}
               >
-                How to Sell Property in the{" "}
-                <span className="text-gold">UAE</span>
+                Selling Property in Dubai —{" "}
+                <span className="text-gold">A Structured, Transparent Guide for Owners</span>
               </motion.h1>
               
               {/* Description */}
@@ -287,7 +309,14 @@ const SellerGuide = () => {
                 className="text-lg md:text-xl text-zinc-300 font-light leading-relaxed max-w-3xl mx-auto mb-10"
                 variants={fadeInUp}
               >
-                Your comprehensive guide to selling property successfully in the UAE market. From preparation to handover, we're with you every step of the way.
+                Selling property in Dubai is a regulated, process-driven transaction. Whether you are selling an investment unit or an end-user property, understanding pricing, timing, costs, and legal steps is essential to protect your value and close efficiently.
+              </motion.p>
+
+              <motion.p 
+                className="text-base text-zinc-400 font-light leading-relaxed max-w-3xl mx-auto mb-10"
+                variants={fadeInUp}
+              >
+                This guide explains how to sell, what you pay, how pricing works, and how JBJ Global Real Estate manages the process from listing to transfer.
               </motion.p>
               
               {/* Actions */}
@@ -339,9 +368,6 @@ const SellerGuide = () => {
                 <motion.h2 variants={fadeInUp} className="text-3xl font-bold text-white mb-4">
                   Who This Guide Is For
                 </motion.h2>
-                <motion.p variants={fadeInUp} className="text-zinc-400 max-w-2xl mx-auto">
-                  Whether you're a first-time seller or experienced property owner, this guide covers everything you need to know.
-                </motion.p>
               </motion.div>
               
               <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-6">
@@ -380,9 +406,6 @@ const SellerGuide = () => {
                 <motion.h2 variants={fadeInUp} className="text-3xl font-bold text-white mb-4">
                   Step-by-Step Selling Process
                 </motion.h2>
-                <motion.p variants={fadeInUp} className="text-zinc-400 max-w-2xl mx-auto">
-                  Our proven 8-step process ensures a smooth and successful sale
-                </motion.p>
               </motion.div>
               
               <div className="space-y-6">
@@ -405,7 +428,7 @@ const SellerGuide = () => {
                           <h3 className="text-xl font-bold text-black">{step.title}</h3>
                         </div>
                         <p className="text-zinc-600 mb-4">{step.description}</p>
-                        <ul className="grid md:grid-cols-2 gap-2">
+                        <ul className="grid md:grid-cols-2 gap-2 mb-4">
                           {step.items.map((item, i) => (
                             <li key={i} className="flex items-start gap-2 text-zinc-700 text-sm">
                               <CheckCircle2 className="w-4 h-4 text-gold flex-shrink-0 mt-0.5" />
@@ -413,6 +436,25 @@ const SellerGuide = () => {
                             </li>
                           ))}
                         </ul>
+                        {step.note && (
+                          <p className="text-zinc-500 text-sm italic">{step.note}</p>
+                        )}
+                        {step.warning && (
+                          <div className="mt-4 bg-red-50 border border-red-200 rounded-lg p-4">
+                            <p className="text-red-800 font-semibold text-sm mb-2 flex items-center gap-2">
+                              <XCircle className="w-4 h-4" />
+                              {step.warning.title}
+                            </p>
+                            <ul className="space-y-1">
+                              {step.warning.items.map((item, i) => (
+                                <li key={i} className="flex items-start gap-2 text-red-700 text-sm">
+                                  <span>•</span>
+                                  <span>{item}</span>
+                                </li>
+                              ))}
+                            </ul>
+                          </div>
+                        )}
                       </div>
                     </div>
                   </motion.div>
@@ -422,8 +464,8 @@ const SellerGuide = () => {
           </div>
         </section>
 
-        {/* Preparing Your Property */}
-        <section id="preparation" className="py-16 bg-zinc-900/30 scroll-mt-20">
+        {/* Selling Costs & Fees */}
+        <section id="costs" className="py-16 bg-zinc-900/30 scroll-mt-20">
           <div className="container mx-auto px-4">
             <div className="max-w-5xl mx-auto">
               <motion.div
@@ -431,114 +473,60 @@ const SellerGuide = () => {
                 whileInView="visible"
                 viewport={{ once: true }}
                 variants={staggerContainer}
-                className="text-center mb-12"
-              >
-                <motion.h2 variants={fadeInUp} className="text-3xl font-bold text-white mb-4">
-                  <ClipboardCheck className="w-8 h-8 text-gold inline-block mr-2 align-middle" />
-                  Preparing Your Property
-                </motion.h2>
-                <motion.p variants={fadeInUp} className="text-zinc-400 max-w-2xl mx-auto">
-                  A well-prepared property sells faster and often at a higher price
-                </motion.p>
-              </motion.div>
-              
-              <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-6">
-                {preparationChecklist.map((item, index) => (
-                  <motion.div
-                    key={index}
-                    initial={{ opacity: 0, y: 20 }}
-                    whileInView={{ opacity: 1, y: 0 }}
-                    viewport={{ once: true }}
-                    transition={{ delay: index * 0.1 }}
-                    className="bg-white border border-zinc-200 rounded-xl p-6 text-center hover:border-gold hover:shadow-xl hover:shadow-gold/20 transition-all"
-                  >
-                    <div className="w-12 h-12 bg-gold/10 rounded-xl flex items-center justify-center mx-auto mb-4">
-                      <item.icon className="w-6 h-6 text-gold" />
-                    </div>
-                    <h3 className="text-black font-semibold mb-2">{item.title}</h3>
-                    <p className="text-zinc-600 text-sm">{item.description}</p>
-                  </motion.div>
-                ))}
-              </div>
-            </div>
-          </div>
-        </section>
-
-        {/* Pricing & Strategy */}
-        <section className="py-16">
-          <div className="container mx-auto px-4">
-            <div className="max-w-4xl mx-auto">
-              <motion.div
-                initial="hidden"
-                whileInView="visible"
-                viewport={{ once: true }}
-                variants={staggerContainer}
               >
                 <motion.div variants={fadeInUp} className="text-center mb-12">
                   <h2 className="text-3xl font-bold text-white mb-4">
-                    <Target className="w-8 h-8 text-gold inline-block mr-2 align-middle" />
-                    Pricing Strategy
+                    Selling Costs & Fees (Important)
                   </h2>
-                  <p className="text-zinc-400 max-w-2xl mx-auto">
-                    Setting the right price is critical. Too high and you'll deter buyers; too low and you'll leave money on the table.
-                  </p>
                 </motion.div>
 
-                <motion.div variants={fadeInUp} className="bg-white border border-zinc-200 rounded-xl p-6 md:p-8 mb-8 hover:border-gold hover:shadow-xl hover:shadow-gold/20 transition-all">
-                  <h3 className="text-xl font-bold text-black mb-4">Factors That Influence Your Property Value</h3>
-                  <div className="grid md:grid-cols-2 gap-4">
-                    <div className="flex items-start gap-3">
-                      <TrendingUp className="w-5 h-5 text-gold mt-1" />
-                      <div>
-                        <p className="text-black font-medium">Market Conditions</p>
-                        <p className="text-zinc-600 text-sm">Current supply, demand, and recent transaction data</p>
-                      </div>
+                {/* Agency Commission */}
+                <motion.div variants={fadeInUp} className="bg-white border border-zinc-200 rounded-xl p-6 md:p-8 mb-6 hover:border-gold hover:shadow-xl hover:shadow-gold/20 transition-all">
+                  <div className="flex items-center gap-4 mb-6">
+                    <div className="w-12 h-12 bg-black rounded-xl flex items-center justify-center">
+                      <Banknote className="w-6 h-6 text-gold" />
                     </div>
-                    <div className="flex items-start gap-3">
-                      <Building2 className="w-5 h-5 text-gold mt-1" />
-                      <div>
-                        <p className="text-black font-medium">Location & Community</p>
-                        <p className="text-zinc-600 text-sm">Area desirability, amenities, and accessibility</p>
-                      </div>
-                    </div>
-                    <div className="flex items-start gap-3">
-                      <Home className="w-5 h-5 text-gold mt-1" />
-                      <div>
-                        <p className="text-black font-medium">Property Condition</p>
-                        <p className="text-zinc-600 text-sm">Upgrades, maintenance, and overall appeal</p>
-                      </div>
-                    </div>
-                    <div className="flex items-start gap-3">
-                      <Eye className="w-5 h-5 text-gold mt-1" />
-                      <div>
-                        <p className="text-black font-medium">Views & Floor</p>
-                        <p className="text-zinc-600 text-sm">Sea/city views, floor level, and unit position</p>
-                      </div>
+                    <div>
+                      <h3 className="text-xl font-bold text-black">Agency Commission</h3>
+                      <p className="text-zinc-600">Standard market rate: {agencyCommission.rate}</p>
                     </div>
                   </div>
+                  <p className="text-zinc-700 mb-4">{agencyCommission.paidBy}</p>
+                  <p className="text-black font-semibold mb-3">This covers:</p>
+                  <ul className="grid md:grid-cols-2 gap-2">
+                    {agencyCommission.covers.map((item, index) => (
+                      <li key={index} className="flex items-start gap-2 text-zinc-700 text-sm">
+                        <CheckCircle2 className="w-4 h-4 text-gold flex-shrink-0 mt-0.5" />
+                        <span>{item}</span>
+                      </li>
+                    ))}
+                  </ul>
                 </motion.div>
 
-                <motion.div variants={fadeInUp} className="text-center">
-                  <Link to="/property-evaluator">
-                    <Button className="bg-gradient-to-r from-gold to-gold-dark text-black font-semibold hover:brightness-110 px-10 py-6 text-base shadow-[0_0_25px_rgba(200,167,102,0.4)] hover:shadow-[0_0_35px_rgba(200,167,102,0.6)] transition-all">
-                      <Calculator className="w-5 h-5 mr-2 text-black" />
-                      Run Property Evaluator
-                      <svg className="w-5 h-5 ml-2 text-black" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24">
-                        <path strokeLinecap="round" strokeLinejoin="round" d="M7 17L17 7M17 7H7M17 7V17" />
-                      </svg>
-                    </Button>
-                  </Link>
-                  <p className="text-zinc-500 text-sm mt-3">
-                    Get an informational estimate based on market data
-                  </p>
+                {/* Government & Developer Fees */}
+                <motion.div variants={fadeInUp} className="bg-white border border-zinc-200 rounded-xl p-6 md:p-8 hover:border-gold hover:shadow-xl hover:shadow-gold/20 transition-all">
+                  <div className="flex items-center gap-4 mb-6">
+                    <div className="w-12 h-12 bg-black rounded-xl flex items-center justify-center">
+                      <Landmark className="w-6 h-6 text-gold" />
+                    </div>
+                    <h3 className="text-xl font-bold text-black">Government & Developer Fees</h3>
+                  </div>
+                  <div className="grid md:grid-cols-2 gap-4">
+                    {governmentFees.map((fee, index) => (
+                      <div key={index} className="bg-zinc-50 rounded-lg p-4">
+                        <p className="text-black font-medium">{fee.title}</p>
+                        <p className="text-zinc-600 text-sm">{fee.description}</p>
+                      </div>
+                    ))}
+                  </div>
                 </motion.div>
               </motion.div>
             </div>
           </div>
         </section>
 
-        {/* Selling Costs */}
-        <section id="costs" className="py-16 bg-zinc-900/30 scroll-mt-20">
+        {/* Selling Mortgaged Properties */}
+        <section id="mortgaged-properties" className="py-16 scroll-mt-20">
           <div className="container mx-auto px-4">
             <div className="max-w-4xl mx-auto">
               <motion.div
@@ -547,38 +535,64 @@ const SellerGuide = () => {
                 viewport={{ once: true }}
                 variants={staggerContainer}
               >
-                <motion.div variants={fadeInUp} className="text-center mb-12">
-                  <h2 className="text-3xl font-bold text-white mb-4">
-                    <Banknote className="w-8 h-8 text-gold inline-block mr-2 align-middle" />
-                    Understanding Selling Costs
-                  </h2>
-                  <p className="text-zinc-400 max-w-2xl mx-auto">
-                    Factor these costs into your expectations for net proceeds
-                  </p>
+                <motion.div variants={fadeInUp} className="bg-white border border-zinc-200 rounded-xl p-6 md:p-8 hover:border-gold hover:shadow-xl hover:shadow-gold/20 transition-all">
+                  <div className="flex items-center gap-4 mb-6">
+                    <div className="w-12 h-12 bg-black rounded-xl flex items-center justify-center">
+                      <Landmark className="w-6 h-6 text-gold" />
+                    </div>
+                    <h3 className="text-xl font-bold text-black">Selling Mortgaged Properties</h3>
+                  </div>
+                  <p className="text-zinc-700 mb-4">If your property has an existing mortgage:</p>
+                  <ul className="space-y-3 mb-4">
+                    {mortgagedPropertySteps.map((step, index) => (
+                      <li key={index} className="flex items-start gap-3 text-zinc-700">
+                        <CheckCircle2 className="w-5 h-5 text-gold flex-shrink-0 mt-0.5" />
+                        <span>{step}</span>
+                      </li>
+                    ))}
+                  </ul>
+                  <p className="text-zinc-500 text-sm italic">This process is handled step-by-step to avoid delays.</p>
                 </motion.div>
-                
-                <div className="grid md:grid-cols-2 gap-4">
-                  {costs.map((cost, index) => (
-                    <motion.div 
-                      key={index} 
-                      variants={fadeInUp}
-                      className="bg-white border border-zinc-200 rounded-xl p-5 hover:border-gold hover:shadow-xl hover:shadow-gold/20 transition-all"
-                    >
-                      <div className="flex justify-between items-start mb-2">
-                        <span className="text-black font-medium">{cost.label}</span>
-                        <span className="text-gold font-bold">{cost.value}</span>
-                      </div>
-                      <p className="text-zinc-600 text-sm">{cost.note}</p>
-                    </motion.div>
-                  ))}
-                </div>
               </motion.div>
             </div>
           </div>
         </section>
 
-        {/* How JBJ Supports Sellers */}
-        <section className="py-16">
+        {/* Selling Off-Plan Properties (Resale) */}
+        <section id="off-plan-resale" className="py-16 bg-zinc-900/30 scroll-mt-20">
+          <div className="container mx-auto px-4">
+            <div className="max-w-4xl mx-auto">
+              <motion.div
+                initial="hidden"
+                whileInView="visible"
+                viewport={{ once: true }}
+                variants={staggerContainer}
+              >
+                <motion.div variants={fadeInUp} className="bg-white border border-zinc-200 rounded-xl p-6 md:p-8 hover:border-gold hover:shadow-xl hover:shadow-gold/20 transition-all">
+                  <div className="flex items-center gap-4 mb-6">
+                    <div className="w-12 h-12 bg-black rounded-xl flex items-center justify-center">
+                      <Building2 className="w-6 h-6 text-gold" />
+                    </div>
+                    <h3 className="text-xl font-bold text-black">Selling Off-Plan Properties (Resale)</h3>
+                  </div>
+                  <p className="text-zinc-700 mb-4">Off-plan resale depends on:</p>
+                  <ul className="space-y-3 mb-4">
+                    {offPlanResaleConditions.map((condition, index) => (
+                      <li key={index} className="flex items-start gap-3 text-zinc-700">
+                        <CheckCircle2 className="w-5 h-5 text-gold flex-shrink-0 mt-0.5" />
+                        <span>{condition}</span>
+                      </li>
+                    ))}
+                  </ul>
+                  <p className="text-zinc-500 text-sm italic">Not all off-plan units are immediately resellable — eligibility is verified before listing.</p>
+                </motion.div>
+              </motion.div>
+            </div>
+          </div>
+        </section>
+
+        {/* How JBJ Global Real Estate Supports Sellers */}
+        <section id="jbj-support" className="py-16 scroll-mt-20">
           <div className="container mx-auto px-4">
             <div className="max-w-4xl mx-auto">
               <motion.div
@@ -591,40 +605,23 @@ const SellerGuide = () => {
                   <h2 className="text-3xl font-bold text-white mb-4">
                     How JBJ Global Real Estate Supports Sellers
                   </h2>
-                  <p className="text-zinc-400 max-w-2xl mx-auto">
-                    Professional brokerage services with partner introductions where needed
-                  </p>
                 </motion.div>
 
-                <motion.div variants={fadeInUp} className="grid md:grid-cols-3 gap-6 mb-8">
-                  <div className="bg-white border border-zinc-200 rounded-xl p-6 text-center hover:border-gold hover:shadow-xl hover:shadow-gold/20 transition-all">
-                    <div className="w-12 h-12 bg-gold/10 rounded-xl flex items-center justify-center mx-auto mb-4">
-                      <Target className="w-6 h-6 text-gold" />
+                <motion.div variants={fadeInUp} className="grid md:grid-cols-2 gap-4 mb-8">
+                  {jbjSupport.map((item, index) => (
+                    <div 
+                      key={index}
+                      className="bg-gradient-to-br from-white via-[#FDFBF7] to-[#F5F0E6] border border-gold/30 rounded-xl p-6 hover:border-gold hover:shadow-xl hover:shadow-gold/20 transition-all"
+                    >
+                      <h4 className="text-black font-semibold mb-2">{item.title}</h4>
+                      <p className="text-zinc-600 text-sm">{item.description}</p>
                     </div>
-                    <h3 className="text-black font-semibold mb-2">Expert Brokerage</h3>
-                    <p className="text-zinc-600 text-sm">RERA-licensed brokers with deep UAE market knowledge</p>
-                  </div>
-                  <div className="bg-white border border-zinc-200 rounded-xl p-6 text-center hover:border-gold hover:shadow-xl hover:shadow-gold/20 transition-all">
-                    <div className="w-12 h-12 bg-gold/10 rounded-xl flex items-center justify-center mx-auto mb-4">
-                      <Globe className="w-6 h-6 text-gold" />
-                    </div>
-                    <h3 className="text-black font-semibold mb-2">Global Reach</h3>
-                    <p className="text-zinc-600 text-sm">Access to international buyers through our network</p>
-                  </div>
-                  <div className="bg-white border border-zinc-200 rounded-xl p-6 text-center hover:border-gold hover:shadow-xl hover:shadow-gold/20 transition-all">
-                    <div className="w-12 h-12 bg-gold/10 rounded-xl flex items-center justify-center mx-auto mb-4">
-                      <Users className="w-6 h-6 text-gold" />
-                    </div>
-                    <h3 className="text-black font-semibold mb-2">Partner Network</h3>
-                    <p className="text-zinc-600 text-sm">Introductions to legal and mortgage partners when needed</p>
-                  </div>
+                  ))}
                 </motion.div>
 
-                <motion.div variants={fadeInUp} className="bg-zinc-800/30 border border-zinc-700 rounded-lg p-4 text-center">
-                  <p className="text-zinc-400 text-sm">
-                    <Shield className="w-4 h-4 inline-block mr-1 text-gold" />
-                    <strong>Note:</strong> JBJ Global Real Estate provides brokerage services for buying, selling, and renting properties. 
-                    For legal, mortgage, or visa services, we introduce you to licensed partners. You contract directly with those partners.
+                <motion.div variants={fadeInUp} className="bg-white border border-zinc-200 rounded-xl p-6">
+                  <p className="text-zinc-700 text-sm leading-relaxed">
+                    <span className="text-black font-semibold">JBJ Global Real Estate</span> is licensed for buying, selling, and renting property in Dubai. Legal and banking services are coordinated through licensed third-party partners where required.
                   </p>
                 </motion.div>
               </motion.div>
@@ -644,8 +641,7 @@ const SellerGuide = () => {
               >
                 <motion.div variants={fadeInUp} className="text-center mb-12">
                   <h2 className="text-3xl font-bold text-white mb-4">
-                    <HelpCircle className="w-8 h-8 text-gold inline-block mr-2 align-middle" />
-                    Frequently Asked Questions
+                    Seller Guide – FAQs
                   </h2>
                 </motion.div>
                 
@@ -675,7 +671,7 @@ const SellerGuide = () => {
         {/* Founder-Led Philosophy & Advisory Positioning */}
         <FounderPhilosophySection />
 
-        {/* Final CTA Section - White Box */}
+        {/* Final CTA Section - Next Step */}
         <section className="py-20 bg-black">
           <div className="container mx-auto px-4">
             <motion.div 
@@ -686,11 +682,10 @@ const SellerGuide = () => {
             >
               <Sparkles className="w-12 h-12 text-gold mx-auto mb-4" />
               <h2 className="text-2xl md:text-3xl font-bold text-black mb-4">
-                Ready to List Your Property?
+                Next Step
               </h2>
               <p className="text-zinc-600 mb-8 max-w-xl mx-auto">
-                Start your selling journey with JBJ Global Real Estate. Our expert team is ready to help you 
-                achieve the best outcome for your property sale.
+                If you are considering selling your property, the next step is a structured pricing and market review to determine the correct exit strategy.
               </p>
               <div className="flex flex-wrap justify-center gap-4 mb-8">
                 <Link to="/seller-listing">
@@ -711,7 +706,7 @@ const SellerGuide = () => {
               {/* Quick Contact Actions */}
               <div className="flex flex-wrap justify-center gap-4 text-sm">
                 <a 
-                  href={getWhatsAppUrl("Hi, I'd like to discuss selling my property in the UAE.")}
+                  href={getWhatsAppUrl("Hi, I'd like to discuss selling my property in Dubai.")}
                   target="_blank"
                   rel="noopener noreferrer"
                   className="flex items-center gap-2 text-zinc-600 hover:text-gold transition-colors"
@@ -749,16 +744,11 @@ const SellerGuide = () => {
                 </h4>
                 <div className="text-zinc-600 text-sm space-y-2">
                   <p>
-                    All property valuations and market estimates provided in this guide are informational only and do not constitute appraisals. 
-                    Actual sale prices depend on market conditions and buyer negotiations.
-                  </p>
-                  <p>
-                    For legal matters, we can introduce you to licensed law firms. For mortgage services, we can connect you 
-                    with licensed mortgage brokers. Please contact us via the Contact page for partner introductions.
-                  </p>
-                  <p>
-                    Information provided is based on our company insights and expertise. We always recommend independent verification 
-                    before making any property decisions.
+                    This guide is provided for general educational and informational purposes only. It does not constitute legal, 
+                    mortgage, or professional advice. JBJ Global Real Estate is a licensed 
+                    real estate brokerage providing buying, selling, and rental services. We do not provide legal or investment advisory services. 
+                    Sellers should conduct independent due diligence and consult with qualified 
+                    professionals before making any property sale decisions.
                   </p>
                 </div>
               </div>
@@ -766,10 +756,10 @@ const SellerGuide = () => {
           </div>
         </section>
 
-        {/* Guide Navigation - Premium champagne background */}
+        {/* Guide Navigation */}
         <section className="py-12 bg-gradient-to-br from-white via-[#FDFBF7] to-[#F5F0E6] border-t border-zinc-200">
           <div className="container mx-auto px-4">
-            <GuideNavigation current="/seller-guide" guides={GUIDE_LINKS} />
+            <GuideNavigation current="/seller-guide" guides={GUIDE_LINKS} showStartHere={false} />
           </div>
         </section>
 
