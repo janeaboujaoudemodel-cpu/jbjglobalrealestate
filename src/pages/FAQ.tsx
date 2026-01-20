@@ -49,143 +49,88 @@ interface FAQCategory {
 const FAQ = () => {
   const categories: FAQCategory[] = [
     {
-      id: "working-with-jbj",
-      title: "Working With JBJ",
-      icon: Users,
-      questions: [
-        {
-          question: "What does JBJ Global Real Estate do?",
-          answer: "JBJ Global Real Estate is a licensed UAE real estate brokerage. We specialize exclusively in buying, selling, and renting residential and commercial property. Our role is to guide clients through the real estate transaction process with structured advice, market insight, negotiation support, and transaction coordination."
-        },
-        {
-          question: "Is JBJ Global Real Estate licensed in the UAE?",
-          answer: "Yes. JBJ Global Real Estate is a licensed mainland brokerage in Dubai. All brokerage activities are conducted in accordance with UAE real estate regulations and authorities."
-        },
-        {
-          question: "Do you provide financial, mortgage, legal, or visa services directly?",
-          answer: "No. JBJ does not provide financial, mortgage, legal, or visa services directly. Where required, we may introduce clients to licensed third-party professionals. Any engagement with those partners is separate and independent from JBJ."
-        },
-        {
-          question: "Who do you typically work with?",
-          answer: "We work with end-users, landlords, tenants, investors, and international clients seeking professional guidance in the UAE real estate market."
-        }
-      ]
-    },
-    {
-      id: "buying",
-      title: "Buying Property",
-      icon: Home,
-      questions: [
-        {
-          question: "Can non-residents buy property in the UAE?",
-          answer: "Yes. Non-residents can purchase property in designated freehold areas across the UAE. Residency is not required to own property."
-        },
-        {
-          question: "How long does the buying process take?",
-          answer: "For ready properties, the process typically takes 4–6 weeks from offer acceptance to transfer. Off-plan purchases follow timelines defined by the developer and construction milestones."
-        },
-        {
-          question: "What costs should buyers expect when purchasing?",
-          answer: "Costs may include government registration fees, transfer fees, brokerage commission, and developer-related charges. Exact costs depend on the property and are always clarified before proceeding."
-        },
-        {
-          question: "Can JBJ help me choose the right property?",
-          answer: "Yes. We assist with property selection based on your objectives, location preferences, budget considerations, and market conditions. We do not provide financial guarantees or investment promises."
-        }
-      ]
-    },
-    {
-      id: "selling",
-      title: "Selling Property",
+      id: "about-jbj",
+      title: "About JBJ Global Real Estate",
       icon: Building2,
       questions: [
         {
-          question: "Can JBJ help me sell my property?",
-          answer: "Yes. We represent property owners in resale and leasing transactions, including pricing strategy, market positioning, buyer qualification, negotiation, and transfer coordination."
+          question: "Who is JBJ Global Real Estate?",
+          answer: "JBJ Global Real Estate is a licensed real estate brokerage operating in the UAE, specializing in buying, selling, and renting residential and investment properties. We work with local and international clients and operate within UAE real estate regulations."
         },
         {
-          question: "What documents are required to sell a property?",
-          answer: "Typical requirements include proof of ownership, identification documents, and developer-related clearances. Requirements may vary depending on the property and developer."
+          question: "Is JBJ Global Real Estate a developer?",
+          answer: "No. JBJ Global Real Estate is an independent brokerage. We do not develop properties. Our role is to analyze the market, compare opportunities, and guide clients objectively across multiple developers, locations, and property types."
         },
         {
-          question: "What is a No Objection Certificate (NOC)?",
-          answer: "An NOC is a document issued by the developer confirming there are no outstanding obligations on the property. It is usually required to complete a property transfer."
-        },
-        {
-          question: "Can I sell a property that has a mortgage?",
-          answer: "Yes. Mortgaged properties can be sold, subject to coordination with the bank and settlement of any outstanding obligations."
+          question: "Are you licensed in the UAE?",
+          answer: "Yes. JBJ Global Real Estate is fully licensed to operate in the UAE for real estate brokerage activities, including buying, selling, and renting properties. All transactions are conducted in compliance with local laws and regulations."
         }
       ]
     },
     {
-      id: "renting",
-      title: "Renting & Leasing",
-      icon: Key,
+      id: "fees-services",
+      title: "Fees & Services",
+      icon: Banknote,
       questions: [
         {
-          question: "Does JBJ handle rentals?",
-          answer: "Yes. We assist landlords and tenants with residential and commercial leasing transactions."
+          question: "Do you charge clients for your services?",
+          answer: "This depends on the type of transaction:\n\n• Off-plan purchases: Buyers do not pay agency fees. Brokerages are compensated directly by developers.\n• Ready property purchases or sales: Agency fees apply as per UAE regulations and are disclosed clearly before proceeding.\n• Leasing services: Fees follow Dubai's regulated brokerage commission structure."
         },
         {
-          question: "What is required to rent a property in the UAE?",
-          answer: "Requirements typically include identification documents, rental payments, security deposit, and contract registration in accordance with local regulations."
-        },
-        {
-          question: "Do you assist landlords with tenant placement?",
-          answer: "Yes. We support landlords with pricing guidance, tenant sourcing, contract coordination, and market-aligned leasing strategies."
+          question: "Do you guarantee returns on investment?",
+          answer: "No. There are no guaranteed returns in real estate. Any company claiming guaranteed ROI is misrepresenting market reality. We provide data-driven analysis and guidance, but all investment outcomes depend on market conditions and individual decisions."
         }
       ]
     },
     {
-      id: "international",
+      id: "property-selection",
+      title: "Property Selection",
+      icon: Home,
+      questions: [
+        {
+          question: "How do you select properties to recommend?",
+          answer: "Recommendations are based on:\n\n• Official government and regulatory data\n• Market supply and demand trends\n• Location fundamentals\n• Developer track records\n• Alignment with the client's stated objectives\n\nWe do not promote properties based on commissions or personal interests."
+        }
+      ]
+    },
+    {
+      id: "international-clients",
       title: "International Clients",
       icon: Globe,
       questions: [
         {
-          question: "Can I buy or sell property remotely?",
-          answer: "Yes. Many transactions are handled remotely through secure documentation and authorized representation when required."
+          question: "Can international clients buy property through JBJ Global Real Estate?",
+          answer: "Yes. International buyers can purchase property in designated freehold areas across the UAE. We regularly assist overseas clients with remote viewings, documentation coordination, and transaction support."
         },
         {
-          question: "Does buying property guarantee UAE residency?",
-          answer: "No. Property ownership may qualify an individual to apply for certain residency options under UAE regulations, but residency approvals are issued solely by government authorities."
-        },
-        {
-          question: "Can transactions be completed if I am outside the UAE?",
-          answer: "Yes. With proper documentation and authorization, transactions can be coordinated while you are abroad."
+          question: "Do I need to be physically present in the UAE to buy property?",
+          answer: "Not necessarily. Many transactions are completed remotely using secure documentation processes. Power of Attorney arrangements can be used when physical presence is not possible."
         }
       ]
     },
     {
-      id: "compliance",
-      title: "Compliance & Transparency",
+      id: "additional-services",
+      title: "Additional Services & Coverage",
       icon: Shield,
       questions: [
         {
-          question: "Does JBJ provide investment guarantees or ROI promises?",
-          answer: "No. JBJ does not offer guaranteed returns, financial promises, or investment assurances. Real estate values are subject to market conditions and external factors."
+          question: "Do you provide legal or financial services?",
+          answer: "JBJ Global Real Estate does not provide legal or financial services. When required, we may introduce clients to licensed third-party professionals. Any engagement with third parties is contracted directly between the client and the service provider."
         },
         {
-          question: "How does JBJ ensure transparency?",
-          answer: "We provide clear communication, documented processes, and full disclosure throughout every transaction."
-        },
-        {
-          question: "Who is responsible for third-party services introduced by JBJ?",
-          answer: "Any third-party services are provided independently by licensed partners. JBJ is not responsible for the performance, advice, or outcomes of third-party services."
+          question: "What areas do you cover?",
+          answer: "We operate across the UAE, with a primary focus on Dubai's established and emerging residential and investment communities. Assistance in other emirates is available upon request."
         }
       ]
     },
     {
-      id: "contact",
-      title: "Contact & Next Steps",
+      id: "getting-started",
+      title: "Getting Started",
       icon: Phone,
       questions: [
         {
-          question: "How can I start working with JBJ?",
-          answer: "You can contact our team directly to discuss your buying, selling, or renting requirements and receive professional guidance tailored to your situation."
-        },
-        {
-          question: "Is there an obligation to proceed after an initial consultation?",
-          answer: "No. Initial discussions are exploratory and carry no obligation to proceed with a transaction."
+          question: "How do I start working with JBJ Global Real Estate?",
+          answer: "You can contact us through the website to discuss your objectives. From there, we provide structured guidance, market insights, and next steps based on your goals."
         }
       ]
     }
