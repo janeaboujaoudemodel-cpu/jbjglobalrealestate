@@ -111,6 +111,8 @@ import TenantGuide from "./pages/TenantGuide";
 import LandlordGuide from "./pages/LandlordGuide";
 import LandlordRentalPortal from "./pages/LandlordRentalPortal";
 import FAQ from "./pages/FAQ";
+import InvestorEducation from "./pages/InvestorEducation";
+import InvestorFAQ from "./pages/InvestorFAQ";
 import JBJAnalyticsDashboard from "./pages/JBJAnalyticsDashboard";
 import JBJDesignStudio from "./pages/JBJDesignStudio";
 import AIBrokerWorkspace from "./pages/AIBrokerWorkspace";
@@ -196,6 +198,8 @@ const App = () => (
                 <Route path="/partners/company-setup" element={<PartnerCompanySetup />} />
                 <Route path="/partners/visa-services" element={<PartnerVisaServices />} />
                 <Route path="/faq" element={<FAQ />} />
+                <Route path="/investor-education" element={<InvestorEducation />} />
+                <Route path="/investor-faq" element={<InvestorFAQ />} />
                 <Route path="/quiz" element={<Quiz />} />
                 <Route path="/quiz-results" element={<QuizResults />} />
                 <Route path="/contact" element={<Contact />} />
