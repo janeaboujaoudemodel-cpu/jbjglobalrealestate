@@ -176,13 +176,13 @@ const GlobalHeader = () => {
       {/* Premium top accent line */}
       <div className="absolute top-0 left-0 right-0 h-[2px] bg-gradient-to-r from-transparent via-gold/60 to-transparent z-10" />
       
-      <div className="container mx-auto px-6 lg:px-8 relative z-10">
+      <div className="container mx-auto px-4 lg:px-6 relative z-10">
         <div className="flex items-center h-20 lg:h-24">
           
           {/* LEFT: Brand Logo - Monogram + Text - LOCKED (only size can change) */}
           <Link 
             to="/" 
-            className="flex items-center gap-4 shrink-0 group transition-all duration-300"
+            className="flex items-center gap-3 shrink-0 group transition-all duration-300"
             style={{ fontFamily: "Poppins, sans-serif" }}
             onClick={() => window.scrollTo({ top: 0, behavior: 'smooth' })}
           >
@@ -190,7 +190,7 @@ const GlobalHeader = () => {
               <img 
                 src={jbjMonogramDarkBg} 
                 alt="JBJ" 
-                className="w-12 h-12 lg:w-14 lg:h-14 object-contain transition-transform duration-300 group-hover:scale-105"
+                className="w-11 h-11 lg:w-12 lg:h-12 object-contain transition-transform duration-300 group-hover:scale-105"
               />
               {/* Subtle glow on hover */}
               <div className="absolute inset-0 rounded-full bg-gold/0 group-hover:bg-gold/10 transition-colors duration-300 blur-xl" />
@@ -201,8 +201,8 @@ const GlobalHeader = () => {
           </Link>
 
           {/* CENTER: Desktop Navigation - Premium styling with elegant dropdowns - STRETCHED */}
-          <nav className="hidden lg:flex items-center justify-center flex-1 mx-1">
-            <div className="flex items-center gap-0.5 bg-gradient-to-r from-white via-[#FDFBF7] to-[#F5F0E6] backdrop-blur-sm rounded-full px-3 xl:px-4 py-1.5 border border-gold/30 shadow-lg">
+          <nav className="hidden lg:flex items-center justify-center flex-1 mx-2">
+            <div className="flex items-center gap-0 bg-gradient-to-r from-white via-[#FDFBF7] to-[#F5F0E6] backdrop-blur-sm rounded-full px-2 xl:px-3 py-1.5 border border-gold/30 shadow-lg">
               
               {/* 1. Home - No dropdown */}
               <Link
@@ -267,15 +267,15 @@ const GlobalHeader = () => {
           </nav>
 
           {/* RIGHT: Actions - Compact premium icon buttons with inverted hover */}
-          <div className="flex items-center gap-1 lg:gap-1.5 shrink-0 ml-auto">
+          <div className="flex items-center gap-1 shrink-0 ml-2">
             {/* Search Icon - White bg with gold icon normally, inverted on hover */}
             <Button
               variant="ghost"
               size="sm"
-              className="relative w-7 h-7 p-0 rounded-full bg-white border border-gold/30 hover:bg-transparent hover:border-gold/50 transition-all duration-300 group"
+              className="relative w-8 h-8 p-0 rounded-full bg-white border border-gold/30 hover:bg-transparent hover:border-gold/50 transition-all duration-300 group"
               onClick={() => setSearchOpen(true)}
             >
-              <Search className="w-3 h-3 text-gold group-hover:text-gold-light transition-colors" />
+              <Search className="w-3.5 h-3.5 text-gold group-hover:text-gold-light transition-colors" />
             </Button>
 
             {/* Language Switcher - Inverted style */}
