@@ -176,9 +176,8 @@ const GlobalHeader = () => {
       {/* Premium top accent line */}
       <div className="absolute top-0 left-0 right-0 h-[2px] bg-gradient-to-r from-transparent via-gold/60 to-transparent z-10" />
       
-      <div className="w-full px-2 sm:px-4 lg:px-6 relative z-10">
+      <div className="relative z-10 mx-auto w-full max-w-7xl px-2 sm:px-4 lg:px-6">
         <div className="flex items-center justify-between h-20 lg:h-24 w-full">
-          
           {/* LEFT: Brand Logo - Monogram only on mobile */}
           <Link 
             to="/" 
@@ -532,8 +531,8 @@ const GlobalHeader = () => {
           </div>
 
           {/* CENTER: Desktop Navigation - Premium styling with elegant dropdowns - STRETCHED */}
-          <nav className="hidden lg:flex items-center justify-center flex-1 mx-2">
-            <div className="flex items-center gap-0 bg-gradient-to-r from-white via-[#FDFBF7] to-[#F5F0E6] backdrop-blur-sm rounded-full px-2 xl:px-3 py-1.5 border border-gold/30 shadow-lg">
+          <nav className="hidden lg:flex items-center justify-center flex-1 min-w-0 mx-2">
+            <div className="flex items-center gap-0 min-w-0 max-w-full overflow-x-auto bg-gradient-to-r from-white via-[#FDFBF7] to-[#F5F0E6] backdrop-blur-sm rounded-full px-2 xl:px-3 py-1.5 border border-gold/30 shadow-lg [scrollbar-width:none] [-ms-overflow-style:none] [&::-webkit-scrollbar]:hidden">
               
               {/* 1. Home - No dropdown */}
               <Link
