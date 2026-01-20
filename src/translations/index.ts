@@ -1,9 +1,9 @@
-// Translation system with 11 core languages
-// English, Arabic, Spanish, French, Russian, Chinese (Simplified), Hindi, Persian, Turkish, German, Italian
+// Translation system with 12 core languages
+// English, Arabic, Spanish, French, Russian, Chinese (Simplified), Hindi, Persian, Turkish, German, Italian, Dutch
 
 export type Language = 
   | 'en' | 'ar' | 'es' | 'fr' | 'ru' 
-  | 'zh' | 'hi' | 'fa' | 'tr' | 'de' | 'it';
+  | 'zh' | 'hi' | 'fa' | 'tr' | 'de' | 'it' | 'nl';
 
 export interface LanguageInfo {
   code: Language;
@@ -25,6 +25,7 @@ export const SUPPORTED_LANGUAGES: LanguageInfo[] = [
   { code: 'tr', name: 'Turkish', nativeName: 'Türkçe', flag: '🇹🇷', rtl: false },
   { code: 'de', name: 'German', nativeName: 'Deutsch', flag: '🇩🇪', rtl: false },
   { code: 'it', name: 'Italian', nativeName: 'Italiano', flag: '🇮🇹', rtl: false },
+  { code: 'nl', name: 'Dutch', nativeName: 'Nederlands', flag: '🇳🇱', rtl: false },
 ];
 
 export const RTL_LANGUAGES: Language[] = ['ar', 'fa'];
