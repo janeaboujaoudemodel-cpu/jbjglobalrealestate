@@ -57,12 +57,18 @@ const Index = () => {
             loop 
             muted 
             playsInline
+            preload="auto"
             className="absolute inset-0 w-full h-full object-cover"
-            poster={luxuryVillaHero}
+            style={{ WebkitTransform: 'translateZ(0)' }}
           >
             <source src="/videos/hero-video.mp4" type="video/mp4" />
-            {/* Fallback image if video doesn't load */}
           </video>
+          {/* Fallback image for video loading */}
+          <img 
+            src={luxuryVillaHero} 
+            alt="Luxury Dubai Real Estate" 
+            className="absolute inset-0 w-full h-full object-cover -z-10"
+          />
           {/* Video overlay gradient */}
           <div className="absolute inset-0 bg-gradient-to-b from-black/50 via-black/40 to-black/80" />
           {/* Additional cinematic vignette */}
