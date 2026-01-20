@@ -21,8 +21,10 @@ import {
   Wrench,
   Phone,
   Scale,
-  BookOpen
+  BookOpen,
+  XCircle
 } from "lucide-react";
+import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from "@/components/ui/accordion";
 import { GuideNavigation, GUIDE_LINKS } from "@/components/guides/GuideNavigation";
 import { GuideHero } from "@/components/guides/GuideHero";
 import { GuideTableOfContents } from "@/components/guides/GuideTableOfContents";
@@ -128,11 +130,55 @@ const TenantGuide = () => {
     "If disputes arise, RERA's Rental Dispute Settlement Centre can arbitrate"
   ];
 
+  const tenantFAQs = [
+    {
+      question: "How much security deposit is required?",
+      answer: "Security deposits are typically 5% of annual rent for unfurnished properties. The deposit is refundable at the end of tenancy, subject to property condition."
+    },
+    {
+      question: "How many cheques are standard in Dubai?",
+      answer: "Payment structures vary from 1 to 12 cheques. Fewer cheques (1-2) may secure better rental rates, while more cheques (4-12) offer flexibility but may come at a premium."
+    },
+    {
+      question: "What is Ejari and is it mandatory?",
+      answer: "Ejari is Dubai's official tenancy registration system. It is mandatory for all residential tenancies and required for visa applications, utility connections, and legal protection."
+    },
+    {
+      question: "Can my landlord increase rent at any time?",
+      answer: "No. Rent increases are regulated by RERA's rental index. Landlords must provide 90 days notice and any increase must comply with permitted thresholds."
+    },
+    {
+      question: "What happens if my landlord wants to sell the property?",
+      answer: "Your tenancy typically transfers to the new owner unless otherwise agreed. You have the right to complete your lease term."
+    },
+    {
+      question: "Who pays for maintenance and repairs?",
+      answer: "Minor maintenance is typically the tenant's responsibility. Major repairs (structural, appliances, AC units) are generally the landlord's responsibility unless otherwise stated in the contract."
+    },
+    {
+      question: "Can I terminate my lease early?",
+      answer: "Early termination terms depend on your tenancy contract. Penalties typically apply as agreed in the contract. Some contracts include early termination clauses."
+    },
+    {
+      question: "What documents do I need to rent a property?",
+      answer: "Typically required: valid passport, Emirates ID (if resident), proof of income or employment, and post-dated cheques for rental payments."
+    },
+    {
+      question: "How do I set up DEWA in my name?",
+      answer: "After signing your tenancy contract, visit DEWA with your Ejari certificate, passport, Emirates ID, and tenancy contract to transfer or open a new account."
+    },
+    {
+      question: "What if I have a dispute with my landlord?",
+      answer: "Disputes can be referred to RERA's Rental Dispute Settlement Centre, which provides arbitration services for tenants and landlords."
+    }
+  ];
+
   const tocItems = [
     { id: 'responsibilities', title: 'Tenant Responsibilities', icon: Users },
     { id: 'ejari', title: 'Understanding Ejari', icon: Shield },
     { id: 'deposits-renewals', title: 'Deposits & Renewals', icon: Banknote },
     { id: 'rights', title: 'Your Rights', icon: Scale },
+    { id: 'faq', title: 'FAQ', icon: HelpCircle },
   ];
 
   return (
@@ -392,6 +438,45 @@ const TenantGuide = () => {
         </div>
       </section>
 
+      {/* Tenant FAQ Section */}
+      <section id="faq" className="py-16 md:py-24 bg-black scroll-mt-20">
+        <div className="container mx-auto px-4">
+          <div className="max-w-5xl mx-auto">
+            <div className="text-center mb-12">
+              <div className="flex items-center justify-center gap-3 mb-4">
+                <div className="w-12 h-12 bg-white rounded-xl flex items-center justify-center">
+                  <HelpCircle className="w-6 h-6 text-gold" />
+                </div>
+              </div>
+              <h2 className="text-3xl md:text-4xl font-light text-white mb-4">
+                Tenant FAQs
+              </h2>
+              <p className="text-lg text-zinc-400 max-w-2xl mx-auto">
+                Common questions about renting property in Dubai.
+              </p>
+            </div>
+
+            <div className="space-y-4">
+              {tenantFAQs.map((faq, index) => (
+                <Accordion key={index} type="single" collapsible className="w-full">
+                  <AccordionItem 
+                    value={`faq-${index}`}
+                    className="bg-white border border-zinc-200 rounded-xl px-6 py-2 data-[state=open]:border-gold/50 data-[state=open]:shadow-md transition-all"
+                  >
+                    <AccordionTrigger className="text-black text-left hover:text-gold hover:no-underline py-5 text-base font-medium">
+                      {faq.question}
+                    </AccordionTrigger>
+                    <AccordionContent className="text-zinc-600 pb-5 leading-relaxed">
+                      {faq.answer}
+                    </AccordionContent>
+                  </AccordionItem>
+                </Accordion>
+              ))}
+            </div>
+          </div>
+        </div>
+      </section>
+
       {/* Related Guides */}
       <section className="py-16 md:py-20 bg-gradient-to-br from-white via-[#FDFBF7] to-[#F5F0E6]">
         <div className="container mx-auto px-4">
@@ -400,16 +485,16 @@ const TenantGuide = () => {
             <p className="text-zinc-600">Explore more resources for tenants and landlords</p>
           </div>
           <div className="flex flex-wrap justify-center gap-4">
-            <Button asChild variant="primary">
+            <Button asChild className="relative bg-gradient-to-r from-white via-[#FDFBF7] to-[#F5F0E6] border border-gold/40 px-6 py-3 shadow-[0_4px_20px_rgba(200,167,102,0.3)] hover:shadow-[0_6px_25px_rgba(200,167,102,0.5)] hover:scale-[1.02] transition-all duration-300">
               <Link to="/rent-guide">
-                Rent Guide
-                <ArrowUpRight className="w-4 h-4 ml-2" />
+                <span className="text-gold font-semibold">Rent Guide</span>
+                <ArrowUpRight className="w-4 h-4 ml-2 text-black" />
               </Link>
             </Button>
-            <Button asChild variant="secondary">
+            <Button asChild className="relative bg-gradient-to-r from-white via-[#FDFBF7] to-[#F5F0E6] border border-gold/40 px-6 py-3 shadow-[0_4px_20px_rgba(200,167,102,0.3)] hover:shadow-[0_6px_25px_rgba(200,167,102,0.5)] hover:scale-[1.02] transition-all duration-300">
               <Link to="/landlord-guide">
-                Landlord Guide
-                <ArrowUpRight className="w-4 h-4 ml-2" />
+                <span className="text-gold font-semibold">Landlord Guide</span>
+                <ArrowUpRight className="w-4 h-4 ml-2 text-black" />
               </Link>
             </Button>
           </div>

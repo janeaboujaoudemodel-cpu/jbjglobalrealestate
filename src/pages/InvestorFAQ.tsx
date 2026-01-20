@@ -45,91 +45,154 @@ const InvestorFAQ = () => {
   const categories: FAQCategory[] = [
     {
       id: "investing-uae",
-      title: "Investing in the UAE",
+      title: "Investing in UAE Real Estate",
       icon: Globe,
       questions: [
         {
-          question: "Is real estate investment in the UAE regulated?",
-          answer: "Yes. The UAE property market is governed by official authorities such as the Dubai Land Department and RERA, providing transparency and legal structure. Regulation does not eliminate market risk."
+          question: "Can anyone invest in real estate in the UAE?",
+          answer: "Yes. UAE nationals and foreign investors can invest in real estate within designated freehold zones, subject to local regulations."
         },
         {
-          question: "Can international investors own property?",
-          answer: "Yes. Foreign nationals can purchase property in designated freehold areas without residency requirements."
+          question: "Is real estate considered a guaranteed investment?",
+          answer: "No. Real estate, like any asset class, carries risk. No investment outcome is guaranteed under any market condition."
+        },
+        {
+          question: "What makes the UAE attractive for property investors?",
+          answer: "Regulatory transparency, absence of annual property tax, strong infrastructure, population growth, and long-term government planning."
+        },
+        {
+          question: "Is property investment suitable for short-term goals?",
+          answer: "It depends on the asset type, market cycle, and exit strategy. Real estate generally performs best when aligned with medium- to long-term planning."
         }
       ]
     },
     {
       id: "returns-expectations",
-      title: "Returns & Expectations",
+      title: "Returns, Risk & Expectations",
       icon: TrendingUp,
       questions: [
         {
-          question: "Do you offer guaranteed returns?",
-          answer: "No. Guaranteed returns do not exist in real estate. We provide guidance based on data, market behavior, and historical performance — not assurances."
+          question: "Can ROI or appreciation be guaranteed?",
+          answer: "No. Any claim of guaranteed ROI or fixed appreciation is misleading and should be avoided."
         },
         {
-          question: "How should returns be evaluated?",
-          answer: "Returns should be assessed holistically, considering rental income, long-term value trends, holding costs, and market timing."
+          question: "How should investors evaluate potential returns?",
+          answer: "By reviewing historical data, rental demand, location fundamentals, supply pipelines, and comparable transactions — not assumptions."
+        },
+        {
+          question: "What risks should investors consider?",
+          answer: "Market cycles, liquidity timelines, construction delays (off-plan), regulatory changes, and holding costs."
+        },
+        {
+          question: "Does past performance predict future results?",
+          answer: "No. Historical data provides context, not certainty."
         }
       ]
     },
     {
-      id: "off-plan",
-      title: "Off-Plan Investment",
+      id: "off-plan-vs-ready",
+      title: "Off-Plan vs Ready Properties",
       icon: Building,
       questions: [
         {
-          question: "Is off-plan investment suitable for all investors?",
-          answer: "Off-plan investments involve construction, timing, and market-cycle risk. Suitability depends on individual objectives and risk tolerance."
+          question: "Are off-plan properties better for investors?",
+          answer: "Off-plan and ready properties serve different objectives. Suitability depends on timeline, cash flow expectations, and risk tolerance."
         },
         {
-          question: "Can off-plan properties be resold before completion?",
-          answer: "In many cases, yes — subject to developer policies, payment milestones, and assignment fees."
+          question: "What are the risks of off-plan investing?",
+          answer: "Construction delays, market shifts, and dependency on developer performance."
+        },
+        {
+          question: "What are the advantages of ready properties?",
+          answer: "Immediate rental potential, clearer valuation benchmarks, and reduced execution risk."
+        },
+        {
+          question: "Can off-plan units be resold before handover?",
+          answer: "In many cases yes, subject to developer terms and payment milestones outlined in the SPA."
         }
       ]
     },
     {
-      id: "rental-performance",
-      title: "Rental Performance",
-      icon: Banknote,
+      id: "market-data",
+      title: "Market Data & Decision Making",
+      icon: Shield,
       questions: [
         {
-          question: "How is rental demand assessed?",
-          answer: "Through rental index data, transaction volumes, tenant demographics, and supply analysis within specific communities."
+          question: "What data should investors rely on?",
+          answer: "Official government data, registered transaction records, rental index benchmarks, and verified market reports."
         },
         {
-          question: "Does JBJ manage properties directly?",
-          answer: "JBJ provides brokerage and advisory services. Property management may be introduced through licensed partners where appropriate."
+          question: "Are social media investment claims reliable?",
+          answer: "No. Social media content is not regulated and should not be used as a decision-making basis."
+        },
+        {
+          question: "How should market trends be interpreted?",
+          answer: "As directional indicators, not predictions. Data should inform judgment, not replace it."
         }
       ]
     },
     {
-      id: "costs-structure",
-      title: "Costs & Structure",
+      id: "fees-costs",
+      title: "Fees, Costs & Ownership Structure",
       icon: Banknote,
       questions: [
         {
-          question: "What costs should investors plan for?",
-          answer: "Transaction fees, service charges, maintenance, vacancy periods, and operational costs should be factored into any strategy."
+          question: "What costs should investors budget for?",
+          answer: "Transfer fees, registration fees, service charges, maintenance, and holding costs."
         },
         {
-          question: "Are there property taxes?",
-          answer: "The UAE does not impose annual property or capital gains taxes, though transaction and operational fees apply."
+          question: "Are there annual property taxes in the UAE?",
+          answer: "No annual property tax applies. However, service charges and municipality fees may apply."
+        },
+        {
+          question: "Who pays the 4% DLD transfer fee?",
+          answer: "Typically the buyer, unless otherwise agreed between parties."
+        },
+        {
+          question: "Are service charges fixed?",
+          answer: "No. They vary by building and community and should be reviewed carefully before purchase."
+        }
+      ]
+    },
+    {
+      id: "advisory-vs-brokerage",
+      title: "Role of Advisory vs Brokerage",
+      icon: Users,
+      questions: [
+        {
+          question: "What is the difference between brokerage and investment advisory?",
+          answer: "Brokerage facilitates transactions. Investment advisory (non-regulated) focuses on education, market context, and strategic guidance — not financial management."
+        },
+        {
+          question: "Does JBJ provide regulated financial advice?",
+          answer: "No. JBJ provides real estate brokerage and non-regulated advisory guidance only."
+        },
+        {
+          question: "Who makes the final investment decision?",
+          answer: "Always the investor. Advisory support does not replace personal judgment or independent financial advice."
         }
       ]
     },
     {
       id: "working-with-jbj",
-      title: "Working With JBJ",
+      title: "Working With JBJ Global Real Estate",
       icon: Users,
       questions: [
         {
-          question: "What is JBJ's role?",
-          answer: "We provide education, analysis, market guidance, and transactional support. Investment decisions always remain with the client."
+          question: "How does JBJ approach investor guidance?",
+          answer: "JBJ operates on a data-driven, education-first model focused on protecting decision quality rather than promoting specific outcomes."
         },
         {
-          question: "Are legal or mortgage services provided directly?",
-          answer: "These services are introduced through licensed third-party partners. Clients contract directly with those providers."
+          question: "Does JBJ prioritize certain developers or projects?",
+          answer: "No. Recommendations are based on suitability, not commissions or affiliations."
+        },
+        {
+          question: "Are advisory services charged separately?",
+          answer: "Brokerage commissions apply as regulated. Advisory guidance is provided as part of the overall service model where applicable."
+        },
+        {
+          question: "Is JBJ licensed in the UAE?",
+          answer: "Yes. JBJ Global Real Estate is a licensed UAE brokerage authorized for buy, sell, and rent activities."
         }
       ]
     }
