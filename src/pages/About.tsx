@@ -5,11 +5,11 @@ import Footer from "@/components/Footer";
 import { Button } from "@/components/ui/button";
 import { SEOHead, pagesSEO } from "@/components/SEOHead";
 import { PortraitImage } from "@/components/ui/portrait-image";
+import { useLanguage } from "@/contexts/LanguageContext";
 import founderProfessional from "@/assets/founder-professional.jpeg";
 import luxuryVillaHero from "@/assets/luxury-villa-hero.jpeg";
 import luxuryVilla1 from "@/assets/luxury-villa-1.jpeg";
 import luxuryVilla2 from "@/assets/luxury-villa-2.jpeg";
-
 const fadeInUp = {
   hidden: { opacity: 0, y: 20 },
   visible: { opacity: 1, y: 0, transition: { duration: 0.6, ease: "easeOut" } }
@@ -114,6 +114,8 @@ const FeatureCard = ({
 );
 
 const About = () => {
+  const { t } = useLanguage();
+  
   return (
     <>
       <SEOHead {...pagesSEO.about} />
