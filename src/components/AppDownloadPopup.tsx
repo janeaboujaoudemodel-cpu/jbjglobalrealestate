@@ -6,7 +6,7 @@ import { toast } from "sonner";
 
 import { Button } from "@/components/ui/button";
 import { usePopupVisibility } from "@/contexts/PopupCoordinatorContext";
-import jbjMonogramLightBg from "@/assets/jbj-monogram-light-bg.png";
+import jbjMonogramDarkBg from "@/assets/jbj-monogram-dark-bg.png";
 
 interface BeforeInstallPromptEvent extends Event {
   prompt: () => Promise<void>;
@@ -192,7 +192,7 @@ const AppDownloadPopup = ({
             <div className="flex items-center gap-3 p-3">
               <div className="w-10 h-10 rounded-xl overflow-hidden bg-black border border-gold/30 shrink-0">
                 <img
-                  src={jbjMonogramLightBg}
+                  src={jbjMonogramDarkBg}
                   alt="JBJ Global Real Estate"
                   className="w-full h-full object-contain p-1"
                   loading="lazy"
@@ -265,7 +265,7 @@ const AppDownloadPopup = ({
                 <div className="flex items-center gap-4">
                   <div className="w-14 h-14 rounded-2xl overflow-hidden bg-foreground/5 border border-border">
                     <img
-                      src={jbjMonogramLightBg}
+                      src={jbjMonogramDarkBg}
                       alt="JBJ Global Real Estate"
                       className="w-full h-full object-contain p-2"
                       loading="lazy"
