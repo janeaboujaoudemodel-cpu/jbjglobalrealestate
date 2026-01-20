@@ -35,180 +35,137 @@ import { GuideCTA } from "@/components/guides/GuideCTA";
 import Footer from "@/components/Footer";
 
 const LandlordGuide = () => {
-  const whoThisGuideIsFor = [
-    "Property owners renting in Dubai for the first time",
-    "Overseas owners who cannot manage rentals directly",
-    "Investors seeking long-term, compliant rental income",
-    "Landlords who value transparency over unrealistic promises"
+  // Section 1: Understanding the Rental Market
+  const rentalMarketPoints = [
+    "Rental pricing must align with market comparables and RERA guidelines.",
+    "Demand fluctuates seasonally and by community.",
+    "Cheque structure (1–2 vs 4–6 cheques) directly impacts achievable rent."
   ];
 
-  const listingProcess = [
-    {
-      number: 1,
-      title: "Property Preparation",
-      icon: Home,
-      description: "Before listing, the property must be legally and physically ready:",
-      items: [
-        "Functional AC, plumbing, and electrical systems",
-        "Clean, well-maintained condition",
-        "Appliances tested and operational",
-        "Furnished or unfurnished decision confirmed"
-      ]
-    },
-    {
-      number: 2,
-      title: "Market-Aligned Rental Pricing",
-      icon: TrendingUp,
-      description: "Rental pricing must reflect real market data:",
-      items: [
-        "Comparable units in the same building or community",
-        "Layout, view, condition, and amenities",
-        "Current tenant demand and cheque structure",
-        "Compliance with RERA rental index guidelines"
-      ],
-      note: "Overpricing leads to vacancy. Underpricing reduces long-term yield."
-    },
-    {
-      number: 3,
-      title: "Professional Presentation",
-      icon: Camera,
-      description: "Correct presentation improves tenant quality:",
-      items: [
-        "Professional photography",
-        "Accurate property descriptions",
-        "Transparent disclosure of features and limitations"
-      ]
-    },
-    {
-      number: 4,
-      title: "Marketing & Exposure",
-      icon: Megaphone,
-      description: "Effective rental marketing includes:",
-      items: [
-        "Listing on major UAE property portals",
-        "Managed enquiries and viewings",
-        "Clear communication of rental terms"
-      ]
-    },
-    {
-      number: 5,
-      title: "Tenant Selection",
-      icon: UserCheck,
-      description: "Tenant selection is a risk-management process:",
-      items: [
-        "Identification and residency verification",
-        "Income and affordability assessment",
-        "Review of rental history (where available)"
-      ],
-      note: "Landlords retain final approval of the tenant."
-    },
-    {
-      number: 6,
-      title: "Contract, Ejari & Handover",
-      icon: FileText,
-      description: "Legal requirements include:",
-      items: [
-        "Agreed tenancy contract",
-        "Mandatory Ejari registration",
-        "Documented move-in inspection",
-        "Formal handover of keys and access"
-      ]
-    }
+  // Section 2: Preparing Your Property for Rent
+  const propertyPreparationChecklist = [
+    "Ensure the property is clean, functional, and move-in ready",
+    "Service AC, plumbing, and electrical systems",
+    "Decide furnished vs unfurnished (based on area demand)",
+    "Photograph the unit professionally",
+    "Confirm service charges and outstanding balances are cleared"
   ];
 
-  const pricingPoints = [
-    "Based on verified market data",
-    "Adjusted according to enquiry feedback",
-    "Aligned with cheque structure preferences",
-    "Reviewed periodically, not emotionally"
+  // Section 3: Rental Pricing & Strategy
+  const pricingFactors = [
+    "Location and building reputation",
+    "Unit layout, view, floor level",
+    "Furnishing quality",
+    "Cheque structure",
+    "Market supply vs demand"
   ];
 
-  const landlordResponsibilities = [
-    {
-      title: "Maintaining the property in habitable condition",
-      icon: Home
-    },
-    {
-      title: "Major maintenance unless otherwise agreed",
-      icon: Wrench
-    },
-    {
-      title: "Ejari registration",
-      icon: Shield
-    },
-    {
-      title: "Observing legal notice periods",
-      icon: Calendar
-    },
-    {
-      title: "Following RERA rental increase rules",
-      icon: Banknote
-    }
+  // Section 4: Marketing & Exposure
+  const marketingIncludes = [
+    "Listing on major UAE portals",
+    "Professional photos and clear descriptions",
+    "Agent-led viewings and enquiry screening",
+    "Market feedback and price adjustment if required"
   ];
 
-  const jbjServices = [
-    "Providing market-aligned rental guidance",
-    "Positioning properties correctly in the market",
-    "Managing listings and enquiries",
-    "Coordinating viewings and negotiations",
-    "Supporting tenancy documentation and Ejari registration",
-    "Assisting with handover coordination"
+  // Section 5: Tenant Screening
+  const tenantScreeningPoints = [
+    "Passport, visa, and Emirates ID",
+    "Employment and income documentation",
+    "Payment capability and cheque structure",
+    "Intended use (family / individual / company)"
   ];
 
-  const weDoNotPromise = [
-    "Guarantee rental income",
-    "Guarantee tenant behavior",
-    "Guarantee future market conditions",
-    "Guarantee capital appreciation"
+  // Section 6: Legal Framework & Ejari
+  const legalPoints = [
+    "Ejari registration is mandatory",
+    "Contract terms must be clear and compliant",
+    "Security deposit is typically 5% (unfurnished) or 10% (furnished)",
+    "Rent increases must follow RERA index guidelines"
+  ];
+
+  // Section 7: Costs Landlords Should Expect
+  const landlordCosts = [
+    "Agency commission (usually 5% + VAT of annual rent)",
+    "Ejari registration fee",
+    "Maintenance (as per contract terms)",
+    "Service charges (paid annually to the developer)"
+  ];
+
+  // Section 8: Handover & Move-In
+  const handoverProcess = [
+    "Contract signing",
+    "Ejari registration",
+    "Security deposit & cheque collection",
+    "Key, access card, and parking handover",
+    "Move-in date confirmation"
+  ];
+
+  // Section 9: Renewals, Rent Increases & Notices
+  const renewalRules = [
+    "90-day notice required for changes at renewal",
+    "Rent increases must follow RERA calculator",
+    "Eviction requires legal grounds and 12-month notice (where applicable)"
+  ];
+
+  // Section 10: How JBJ Global Real Estate Supports Landlords
+  const jbjSupport = [
+    "Rental valuation & pricing guidance",
+    "Marketing & tenant sourcing",
+    "Screening & negotiation",
+    "Contract & Ejari coordination",
+    "Renewal and compliance guidance"
   ];
 
   const faqItems = [
     {
       question: "Do I need to be in Dubai to rent my property?",
-      answer: "No. Rentals can be managed remotely with proper documentation and coordination."
+      answer: "No. The process can be handled remotely with proper documentation."
     },
     {
-      question: "Can I approve the tenant myself?",
-      answer: "Yes. Final tenant approval always remains with the landlord."
+      question: "Who pays the agency commission?",
+      answer: "The landlord typically pays the rental commission unless otherwise agreed."
     },
     {
-      question: "Who pays for maintenance?",
-      answer: "Minor maintenance is typically tenant responsibility; major maintenance is the landlord's responsibility unless otherwise agreed."
+      question: "Can I increase rent every year?",
+      answer: "Only if permitted by the RERA Rental Index."
     },
     {
-      question: "How many cheques should I accept?",
-      answer: "Fewer cheques often attract higher rent, but this depends on market demand and tenant profile."
+      question: "How long does it take to rent a property?",
+      answer: "This depends on pricing, condition, and demand. Correctly priced units rent faster."
     },
     {
-      question: "Can I increase rent at renewal?",
-      answer: "Rent increases must comply with the RERA rental index. Increases outside permitted limits are not enforceable."
+      question: "What happens if a tenant pays late?",
+      answer: "This depends on contract terms. Clear clauses reduce disputes."
     },
     {
-      question: "What happens if a tenant leaves early?",
-      answer: "Early termination terms depend on the tenancy contract. Penalties must align with agreed clauses."
+      question: "Can I rent my property furnished?",
+      answer: "Yes, if the building and community allow it."
+    },
+    {
+      question: "Who handles maintenance?",
+      answer: "Minor maintenance is typically tenant responsibility; major maintenance is usually landlord responsibility (as per contract)."
+    },
+    {
+      question: "Is Ejari mandatory?",
+      answer: "Yes. Ejari registration is required by law."
     },
     {
       question: "Can I sell my property while it is rented?",
-      answer: "Yes. The tenancy usually transfers to the new owner unless otherwise agreed."
-    },
-    {
-      question: "Who registers Ejari?",
-      answer: "Ejari registration is mandatory and coordinated as part of the rental process."
+      answer: "Yes, subject to tenancy laws and notice periods."
     }
   ];
 
-  const afterHandover = [
-    "Lease renewals",
-    "Market-aligned rent reviews",
-    "Re-listing strategies",
-    "Long-term asset planning (hold vs sell)"
-  ];
-
   const tocItems = [
-    { id: 'who-this-guide-is-for', title: 'Who This Guide Is For', icon: Users },
-    { id: 'listing-process', title: 'Listing Process', icon: Home },
-    { id: 'pricing', title: 'Pricing Strategy', icon: TrendingUp },
-    { id: 'responsibilities', title: 'Your Responsibilities', icon: Scale },
+    { id: 'rental-market', title: 'Understanding the Market', icon: TrendingUp },
+    { id: 'property-preparation', title: 'Property Preparation', icon: Home },
+    { id: 'pricing-strategy', title: 'Pricing & Strategy', icon: Target },
+    { id: 'marketing', title: 'Marketing & Exposure', icon: Megaphone },
+    { id: 'tenant-screening', title: 'Tenant Screening', icon: UserCheck },
+    { id: 'legal-framework', title: 'Legal Framework & Ejari', icon: Scale },
+    { id: 'costs', title: 'Landlord Costs', icon: Banknote },
+    { id: 'handover', title: 'Handover & Move-In', icon: Key },
+    { id: 'renewals', title: 'Renewals & Notices', icon: RefreshCw },
     { id: 'jbj-support', title: 'JBJ Support', icon: Building },
     { id: 'faq', title: 'FAQ', icon: HelpCircle },
   ];
@@ -217,7 +174,7 @@ const LandlordGuide = () => {
     <div className="min-h-screen bg-black">
       <SEOHead 
         title="Landlord Guide Dubai | How to Rent Out Your Property | JBJ GLOBAL REAL ESTATE"
-        description="A clear, transparent, and regulation-aligned guide to renting your property in Dubai — designed to protect landlords, set correct expectations, and support informed decision-making."
+        description="This guide is designed for property owners who want to rent their property in Dubai efficiently, compliantly, and with minimal risk."
       />
 
       <GuideHero
@@ -225,32 +182,32 @@ const LandlordGuide = () => {
         badgeIcon={Building}
         title={
           <>
-            A Complete Guide for{" "}
-            <span className="text-gold">Landlords in Dubai</span>
+            Renting Your Property in Dubai —{" "}
+            <span className="text-gold">A Practical, Owner-First Guide</span>
           </>
         }
-        description="A clear, transparent, and regulation-aligned guide to renting your property in Dubai — designed to protect landlords, set correct expectations, and support informed decision-making."
+        description="This guide is designed for property owners who want to rent their property in Dubai efficiently, compliantly, and with minimal risk. It explains pricing, tenant selection, legal obligations, costs, timelines, and how JBJ Global Real Estate supports landlords from listing to handover."
         backgroundImage="https://images.unsplash.com/photo-1600596542815-ffad4c1539a9?auto=format&fit=crop&w=2000&q=80"
         actions={
           <>
-            <Button 
-              className="relative bg-gradient-to-r from-white via-[#FDFBF7] to-[#F5F0E6] border border-gold/40 px-6 py-3 shadow-[0_4px_20px_rgba(200,167,102,0.3),0_8px_30px_rgba(0,0,0,0.15)] hover:shadow-[0_6px_25px_rgba(200,167,102,0.5),0_10px_40px_rgba(0,0,0,0.2)] hover:scale-[1.02] transition-all duration-300"
-              onClick={() => document.getElementById('listing-process')?.scrollIntoView({ behavior: 'smooth' })}
-            >
-              <ArrowDown className="w-4 h-4 mr-2 text-black" />
-              <span className="text-gold font-semibold">Read the Full Guide</span>
-            </Button>
             <Button asChild className="relative bg-gradient-to-r from-white via-[#FDFBF7] to-[#F5F0E6] border border-gold/40 px-6 py-3 shadow-[0_4px_20px_rgba(200,167,102,0.3),0_8px_30px_rgba(0,0,0,0.15)] hover:shadow-[0_6px_25px_rgba(200,167,102,0.5),0_10px_40px_rgba(0,0,0,0.2)] hover:scale-[1.02] transition-all duration-300">
               <Link to="/landlord-portal">
                 <span className="text-gold font-semibold">List Your Property</span>
                 <ArrowUpRight className="w-4 h-4 ml-2 text-black" />
               </Link>
             </Button>
+            <Button 
+              className="relative bg-gradient-to-r from-white via-[#FDFBF7] to-[#F5F0E6] border border-gold/40 px-6 py-3 shadow-[0_4px_20px_rgba(200,167,102,0.3),0_8px_30px_rgba(0,0,0,0.15)] hover:shadow-[0_6px_25px_rgba(200,167,102,0.5),0_10px_40px_rgba(0,0,0,0.2)] hover:scale-[1.02] transition-all duration-300"
+              onClick={() => document.getElementById('rental-market')?.scrollIntoView({ behavior: 'smooth' })}
+            >
+              <ArrowDown className="w-4 h-4 mr-2 text-black" />
+              <span className="text-gold font-semibold">Speak to a Rental Advisor</span>
+            </Button>
           </>
         }
       />
 
-      {/* Sticky Table of Contents - z-[60] to appear above JBJ support widget */}
+      {/* Sticky Table of Contents */}
       <div className="hidden lg:block fixed right-8 top-1/4 z-[60] max-w-xs">
         <GuideTableOfContents 
           items={tocItems}
@@ -262,23 +219,23 @@ const LandlordGuide = () => {
         />
       </div>
 
-      {/* Who This Guide Is For */}
-      <section id="who-this-guide-is-for" className="py-16 md:py-24 bg-black scroll-mt-20">
+      {/* Section 1: Understanding the Rental Market */}
+      <section id="rental-market" className="py-16 md:py-24 bg-black scroll-mt-20">
         <div className="container mx-auto px-4">
           <div className="max-w-5xl mx-auto">
             <div className="text-center mb-12">
               <h2 className="text-3xl md:text-4xl font-light text-white mb-4">
-                Who This Guide Is For
+                Section 1: Understanding the Rental Market
               </h2>
               <p className="text-lg text-zinc-400 max-w-2xl mx-auto">
-                This guide is educational and reflects standard rental practices under UAE law.
+                Dubai's rental market is regulated and data-driven. Rental values vary by area, building quality, unit size, furnishing level, and cheque structure.
               </p>
             </div>
 
             <div className="bg-white rounded-2xl p-6 md:p-8 border border-zinc-200">
-              <p className="text-zinc-700 mb-6">This guide is designed for:</p>
+              <p className="text-zinc-700 mb-6 font-medium">Key points:</p>
               <ul className="space-y-3">
-                {whoThisGuideIsFor.map((item, index) => (
+                {rentalMarketPoints.map((item, index) => (
                   <li key={index} className="flex items-start gap-3">
                     <CheckCircle2 className="w-5 h-5 text-gold flex-shrink-0 mt-0.5" />
                     <span className="text-zinc-700">{item}</span>
@@ -290,104 +247,26 @@ const LandlordGuide = () => {
         </div>
       </section>
 
-      {/* Listing Process */}
-      <section id="listing-process" className="py-16 md:py-24 bg-black scroll-mt-20">
-        <div className="container mx-auto px-4">
-          <div className="max-w-5xl mx-auto">
-            <div className="text-center mb-16">
-              <h2 className="text-3xl md:text-4xl font-light text-white mb-4">
-                How Renting a Property in Dubai Works (Step-by-Step)
-              </h2>
-            </div>
-
-            <div className="space-y-6">
-              {listingProcess.map((step) => (
-                <div
-                  key={step.number}
-                  className="bg-white rounded-2xl p-6 md:p-8 border border-zinc-200 hover:border-gold/30 hover:shadow-lg transition-all duration-300"
-                >
-                  <div className="flex flex-col md:flex-row md:items-start gap-6">
-                    <div className="flex-shrink-0">
-                      <div className="w-16 h-16 bg-gradient-to-br from-gold/20 to-gold/5 border border-gold/30 rounded-2xl flex items-center justify-center">
-                        <span className="text-gold text-2xl font-semibold">{step.number}</span>
-                      </div>
-                    </div>
-                    <div className="flex-1">
-                      <div className="flex items-center gap-3 mb-3">
-                        <step.icon className="w-5 h-5 text-gold" />
-                        <h3 className="text-xl md:text-2xl font-medium text-black">
-                          {step.title}
-                        </h3>
-                      </div>
-                      <p className="text-zinc-600 mb-4">{step.description}</p>
-                      <ul className="grid md:grid-cols-2 gap-3">
-                        {step.items.map((item, itemIndex) => (
-                          <li key={itemIndex} className="flex items-start gap-3">
-                            <CheckCircle2 className="w-4 h-4 text-gold flex-shrink-0 mt-1" />
-                            <span className="text-zinc-700 text-sm">{item}</span>
-                          </li>
-                        ))}
-                      </ul>
-                      {step.note && (
-                        <p className="mt-4 text-sm text-zinc-500 italic">{step.note}</p>
-                      )}
-                    </div>
-                  </div>
-                </div>
-              ))}
-            </div>
-          </div>
-        </div>
-      </section>
-
-      {/* Pricing Strategy */}
-      <section id="pricing" className="py-16 md:py-24 bg-black scroll-mt-20">
+      {/* Section 2: Preparing Your Property for Rent */}
+      <section id="property-preparation" className="py-16 md:py-24 bg-black scroll-mt-20">
         <div className="container mx-auto px-4">
           <div className="max-w-5xl mx-auto">
             <div className="text-center mb-12">
               <h2 className="text-3xl md:text-4xl font-light text-white mb-4">
-                Rental Pricing & Market Positioning
-              </h2>
-            </div>
-
-            <div className="bg-white border border-zinc-200 rounded-xl p-6 md:p-8">
-              <p className="text-zinc-700 mb-6">Rental pricing should be:</p>
-              <ul className="space-y-3 mb-6">
-                {pricingPoints.map((point, index) => (
-                  <li key={index} className="flex items-start gap-3">
-                    <CheckCircle2 className="w-5 h-5 text-gold flex-shrink-0 mt-0.5" />
-                    <span className="text-zinc-700">{point}</span>
-                  </li>
-                ))}
-              </ul>
-              <p className="text-sm text-zinc-500 italic">Rental prices must comply with Dubai regulations.</p>
-            </div>
-          </div>
-        </div>
-      </section>
-
-      {/* Landlord Responsibilities */}
-      <section id="responsibilities" className="py-16 md:py-24 bg-black scroll-mt-20">
-        <div className="container mx-auto px-4">
-          <div className="max-w-5xl mx-auto">
-            <div className="text-center mb-12">
-              <h2 className="text-3xl md:text-4xl font-light text-white mb-4">
-                Landlord Responsibilities Under UAE Law
+                Section 2: Preparing Your Property for Rent
               </h2>
               <p className="text-lg text-zinc-400 max-w-2xl mx-auto">
-                Understanding these responsibilities reduces disputes.
+                A well-prepared unit rents faster and attracts higher-quality tenants.
               </p>
             </div>
 
-            <div className="bg-white border border-zinc-200 rounded-xl p-6 md:p-8">
-              <p className="text-zinc-700 mb-6">Landlords are legally responsible for:</p>
-              <ul className="space-y-4">
-                {landlordResponsibilities.map((resp, index) => (
-                  <li key={index} className="flex items-start gap-4">
-                    <div className="w-10 h-10 bg-black border border-gold/30 rounded-lg flex items-center justify-center flex-shrink-0">
-                      <resp.icon className="w-5 h-5 text-gold" />
-                    </div>
-                    <span className="text-zinc-700 pt-2">{resp.title}</span>
+            <div className="bg-white rounded-2xl p-6 md:p-8 border border-zinc-200">
+              <p className="text-zinc-700 mb-6 font-medium">Checklist:</p>
+              <ul className="space-y-3">
+                {propertyPreparationChecklist.map((item, index) => (
+                  <li key={index} className="flex items-start gap-3">
+                    <CheckCircle2 className="w-5 h-5 text-gold flex-shrink-0 mt-0.5" />
+                    <span className="text-zinc-700">{item}</span>
                   </li>
                 ))}
               </ul>
@@ -396,53 +275,236 @@ const LandlordGuide = () => {
         </div>
       </section>
 
-      {/* JBJ Services */}
-      <section id="jbj-support" className="py-16 md:py-24 bg-gradient-to-br from-white via-[#FDFBF7] to-[#F5F0E6]">
+      {/* Section 3: Rental Pricing & Strategy */}
+      <section id="pricing-strategy" className="py-16 md:py-24 bg-black scroll-mt-20">
+        <div className="container mx-auto px-4">
+          <div className="max-w-5xl mx-auto">
+            <div className="text-center mb-12">
+              <h2 className="text-3xl md:text-4xl font-light text-white mb-4">
+                Section 3: Rental Pricing & Strategy
+              </h2>
+              <p className="text-lg text-zinc-400 max-w-2xl mx-auto">
+                Correct pricing reduces vacancy and protects yield.
+              </p>
+            </div>
+
+            <div className="bg-white rounded-2xl p-6 md:p-8 border border-zinc-200">
+              <p className="text-zinc-700 mb-6 font-medium">What affects rent:</p>
+              <ul className="space-y-3 mb-6">
+                {pricingFactors.map((item, index) => (
+                  <li key={index} className="flex items-start gap-3">
+                    <CheckCircle2 className="w-5 h-5 text-gold flex-shrink-0 mt-0.5" />
+                    <span className="text-zinc-700">{item}</span>
+                  </li>
+                ))}
+              </ul>
+              <p className="text-sm text-zinc-600 italic border-t border-zinc-200 pt-4">
+                JBJ provides rental pricing guidance based on live market data and comparable listings — not guesswork.
+              </p>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      {/* Section 4: Marketing & Exposure */}
+      <section id="marketing" className="py-16 md:py-24 bg-black scroll-mt-20">
+        <div className="container mx-auto px-4">
+          <div className="max-w-5xl mx-auto">
+            <div className="text-center mb-12">
+              <h2 className="text-3xl md:text-4xl font-light text-white mb-4">
+                Section 4: Marketing & Exposure
+              </h2>
+              <p className="text-lg text-zinc-400 max-w-2xl mx-auto">
+                Your property should be marketed where qualified tenants search.
+              </p>
+            </div>
+
+            <div className="bg-white rounded-2xl p-6 md:p-8 border border-zinc-200">
+              <p className="text-zinc-700 mb-6 font-medium">Marketing includes:</p>
+              <ul className="space-y-3">
+                {marketingIncludes.map((item, index) => (
+                  <li key={index} className="flex items-start gap-3">
+                    <CheckCircle2 className="w-5 h-5 text-gold flex-shrink-0 mt-0.5" />
+                    <span className="text-zinc-700">{item}</span>
+                  </li>
+                ))}
+              </ul>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      {/* Section 5: Tenant Screening */}
+      <section id="tenant-screening" className="py-16 md:py-24 bg-black scroll-mt-20">
+        <div className="container mx-auto px-4">
+          <div className="max-w-5xl mx-auto">
+            <div className="text-center mb-12">
+              <h2 className="text-3xl md:text-4xl font-light text-white mb-4">
+                Section 5: Tenant Screening (Critical Step)
+              </h2>
+              <p className="text-lg text-zinc-400 max-w-2xl mx-auto">
+                Choosing the right tenant protects your asset.
+              </p>
+            </div>
+
+            <div className="bg-white rounded-2xl p-6 md:p-8 border border-zinc-200">
+              <p className="text-zinc-700 mb-6 font-medium">What is verified:</p>
+              <ul className="space-y-3 mb-6">
+                {tenantScreeningPoints.map((item, index) => (
+                  <li key={index} className="flex items-start gap-3">
+                    <CheckCircle2 className="w-5 h-5 text-gold flex-shrink-0 mt-0.5" />
+                    <span className="text-zinc-700">{item}</span>
+                  </li>
+                ))}
+              </ul>
+              <p className="text-sm text-zinc-600 italic border-t border-zinc-200 pt-4">
+                JBJ focuses on risk reduction, not just speed.
+              </p>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      {/* Section 6: Legal Framework & Ejari */}
+      <section id="legal-framework" className="py-16 md:py-24 bg-black scroll-mt-20">
+        <div className="container mx-auto px-4">
+          <div className="max-w-5xl mx-auto">
+            <div className="text-center mb-12">
+              <h2 className="text-3xl md:text-4xl font-light text-white mb-4">
+                Section 6: Legal Framework & Ejari
+              </h2>
+              <p className="text-lg text-zinc-400 max-w-2xl mx-auto">
+                Dubai tenancy contracts must comply with local regulations.
+              </p>
+            </div>
+
+            <div className="bg-white rounded-2xl p-6 md:p-8 border border-zinc-200">
+              <p className="text-zinc-700 mb-6 font-medium">Key legal points:</p>
+              <ul className="space-y-3">
+                {legalPoints.map((item, index) => (
+                  <li key={index} className="flex items-start gap-3">
+                    <CheckCircle2 className="w-5 h-5 text-gold flex-shrink-0 mt-0.5" />
+                    <span className="text-zinc-700">{item}</span>
+                  </li>
+                ))}
+              </ul>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      {/* Section 7: Costs Landlords Should Expect */}
+      <section id="costs" className="py-16 md:py-24 bg-black scroll-mt-20">
+        <div className="container mx-auto px-4">
+          <div className="max-w-5xl mx-auto">
+            <div className="text-center mb-12">
+              <h2 className="text-3xl md:text-4xl font-light text-white mb-4">
+                Section 7: Costs Landlords Should Expect
+              </h2>
+              <p className="text-lg text-zinc-400 max-w-2xl mx-auto">
+                Understanding costs avoids surprises.
+              </p>
+            </div>
+
+            <div className="bg-white rounded-2xl p-6 md:p-8 border border-zinc-200">
+              <p className="text-zinc-700 mb-6 font-medium">Typical costs:</p>
+              <ul className="space-y-3 mb-6">
+                {landlordCosts.map((item, index) => (
+                  <li key={index} className="flex items-start gap-3">
+                    <Banknote className="w-5 h-5 text-gold flex-shrink-0 mt-0.5" />
+                    <span className="text-zinc-700">{item}</span>
+                  </li>
+                ))}
+              </ul>
+              <p className="text-sm text-zinc-600 italic border-t border-zinc-200 pt-4">
+                JBJ does not charge hidden fees.
+              </p>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      {/* Section 8: Handover & Move-In */}
+      <section id="handover" className="py-16 md:py-24 bg-black scroll-mt-20">
+        <div className="container mx-auto px-4">
+          <div className="max-w-5xl mx-auto">
+            <div className="text-center mb-12">
+              <h2 className="text-3xl md:text-4xl font-light text-white mb-4">
+                Section 8: Handover & Move-In
+              </h2>
+              <p className="text-lg text-zinc-400 max-w-2xl mx-auto">
+                Once terms are agreed:
+              </p>
+            </div>
+
+            <div className="bg-white rounded-2xl p-6 md:p-8 border border-zinc-200">
+              <p className="text-zinc-700 mb-6 font-medium">Process includes:</p>
+              <ul className="space-y-3">
+                {handoverProcess.map((item, index) => (
+                  <li key={index} className="flex items-start gap-3">
+                    <Key className="w-5 h-5 text-gold flex-shrink-0 mt-0.5" />
+                    <span className="text-zinc-700">{item}</span>
+                  </li>
+                ))}
+              </ul>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      {/* Section 9: Renewals, Rent Increases & Notices */}
+      <section id="renewals" className="py-16 md:py-24 bg-black scroll-mt-20">
+        <div className="container mx-auto px-4">
+          <div className="max-w-5xl mx-auto">
+            <div className="text-center mb-12">
+              <h2 className="text-3xl md:text-4xl font-light text-white mb-4">
+                Section 9: Renewals, Rent Increases & Notices
+              </h2>
+              <p className="text-lg text-zinc-400 max-w-2xl mx-auto">
+                Landlord rights and obligations are regulated.
+              </p>
+            </div>
+
+            <div className="bg-white rounded-2xl p-6 md:p-8 border border-zinc-200">
+              <p className="text-zinc-700 mb-6 font-medium">Important rules:</p>
+              <ul className="space-y-3">
+                {renewalRules.map((item, index) => (
+                  <li key={index} className="flex items-start gap-3">
+                    <Calendar className="w-5 h-5 text-gold flex-shrink-0 mt-0.5" />
+                    <span className="text-zinc-700">{item}</span>
+                  </li>
+                ))}
+              </ul>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      {/* Section 10: How JBJ Global Real Estate Supports Landlords */}
+      <section id="jbj-support" className="py-16 md:py-24 bg-gradient-to-br from-white via-[#FDFBF7] to-[#F5F0E6] scroll-mt-20">
         <div className="container mx-auto px-4">
           <div className="max-w-4xl mx-auto">
             <div className="text-center mb-12">
               <h2 className="text-3xl md:text-4xl font-light text-black mb-4">
-                How <span className="text-gold">JBJ GLOBAL REAL ESTATE</span> Supports Landlords
+                Section 10: How <span className="text-gold">JBJ Global Real Estate</span> Supports Landlords
               </h2>
               <p className="text-lg text-zinc-600 max-w-2xl mx-auto">
-                JBJ GLOBAL REAL ESTATE is licensed for BUY · SELL · RENT in Dubai.
+                JBJ is licensed for Rent, Buy & Sell and operates with a landlord-first approach.
               </p>
             </div>
 
-            <div className="bg-white border border-gold/30 rounded-2xl p-8 shadow-lg mb-8">
-              <p className="text-zinc-700 mb-6">We support landlords by:</p>
-              <div className="grid md:grid-cols-2 gap-4">
-                {jbjServices.map((service, index) => (
-                  <div key={index} className="flex items-start gap-3">
-                    <CheckCircle2 className="w-5 h-5 text-gold flex-shrink-0 mt-0.5" />
-                    <span className="text-zinc-700">{service}</span>
-                  </div>
-                ))}
-              </div>
-              <p className="mt-6 text-sm text-zinc-500 italic">
-                JBJ does not provide rental guarantees, fixed returns, or income assurances.
-              </p>
-            </div>
-
-            {/* What We Do Not Promise */}
-            <div className="bg-white border border-zinc-300 rounded-2xl p-8">
-              <div className="flex items-center gap-3 mb-6">
-                <div className="w-10 h-10 bg-black border border-gold/30 rounded-lg flex items-center justify-center">
-                  <XCircle className="w-5 h-5 text-gold" />
-                </div>
-                <h3 className="text-xl font-medium text-black">What We Do Not Promise (Important)</h3>
-              </div>
-              <p className="text-zinc-700 mb-4">We do not:</p>
+            <div className="bg-white border border-gold/30 rounded-2xl p-8 shadow-lg">
+              <p className="text-zinc-700 mb-6 font-medium">Our role includes:</p>
               <ul className="space-y-3 mb-6">
-                {weDoNotPromise.map((item, index) => (
+                {jbjSupport.map((item, index) => (
                   <li key={index} className="flex items-start gap-3">
-                    <XCircle className="w-4 h-4 text-zinc-400 flex-shrink-0 mt-0.5" />
+                    <CheckCircle2 className="w-5 h-5 text-gold flex-shrink-0 mt-0.5" />
                     <span className="text-zinc-700">{item}</span>
                   </li>
                 ))}
               </ul>
-              <p className="text-sm text-zinc-500 italic">
-                Real estate outcomes depend on market conditions, tenant behavior, and regulatory frameworks.
+              <p className="text-sm text-zinc-600 italic border-t border-zinc-200 pt-4">
+                We act to protect your property, income, and legal position.
               </p>
             </div>
           </div>
@@ -455,7 +517,7 @@ const LandlordGuide = () => {
           <div className="max-w-5xl mx-auto">
             <div className="text-center mb-12">
               <h2 className="text-3xl md:text-4xl font-light text-white mb-4">
-                Landlord-Specific FAQ
+                Landlord FAQ
               </h2>
             </div>
 
@@ -474,85 +536,13 @@ const LandlordGuide = () => {
         </div>
       </section>
 
-      {/* After Handover & Renewals */}
-      <section className="py-16 md:py-24 bg-black scroll-mt-20">
-        <div className="container mx-auto px-4">
-          <div className="max-w-5xl mx-auto">
-            <div className="text-center mb-12">
-              <h2 className="text-3xl md:text-4xl font-light text-white mb-4">
-                After Handover & Renewals
-              </h2>
-              <p className="text-lg text-zinc-400 max-w-2xl mx-auto">
-                A rental strategy should evolve with the market.
-              </p>
-            </div>
-
-            <div className="bg-white border border-zinc-200 rounded-xl p-6 md:p-8">
-              <p className="text-zinc-700 mb-6">Landlords should plan for:</p>
-              <ul className="space-y-3">
-                {afterHandover.map((item, index) => (
-                  <li key={index} className="flex items-start gap-3">
-                    <RefreshCw className="w-5 h-5 text-gold flex-shrink-0 mt-0.5" />
-                    <span className="text-zinc-700">{item}</span>
-                  </li>
-                ))}
-              </ul>
-            </div>
-          </div>
-        </div>
-      </section>
-
-      {/* Final Statement */}
-      <section className="py-16 md:py-24 bg-gradient-to-br from-white via-[#FDFBF7] to-[#F5F0E6]">
-        <div className="container mx-auto px-4">
-          <div className="max-w-4xl mx-auto text-center">
-            <div className="bg-white border border-gold/30 rounded-2xl p-8 md:p-12 shadow-lg">
-              <AlertTriangle className="w-12 h-12 text-gold mx-auto mb-6" />
-              <p className="text-lg text-zinc-700 mb-4">
-                This guide is provided for educational purposes only.
-              </p>
-              <p className="text-zinc-600 mb-6">
-                All rental decisions remain the responsibility of the property owner and must comply with UAE law.
-              </p>
-              <p className="text-lg font-medium text-black">
-                <span className="text-gold">JBJ GLOBAL REAL ESTATE</span> supports landlords through transparency, market knowledge, and compliant processes — not promises.
-              </p>
-            </div>
-          </div>
-        </div>
-      </section>
-
-      {/* Related Guides */}
-      <section className="py-16 md:py-20 bg-gradient-to-br from-white via-[#FDFBF7] to-[#F5F0E6]">
-        <div className="container mx-auto px-4">
-          <div className="max-w-4xl mx-auto text-center mb-10">
-            <h2 className="text-2xl md:text-3xl font-light text-black mb-4">Related Guides</h2>
-            <p className="text-zinc-600">Explore more resources for landlords and tenants</p>
-          </div>
-          <div className="flex flex-wrap justify-center gap-4">
-            <Button asChild variant="primary">
-              <Link to="/rent-guide">
-                Rent Guide
-                <ArrowUpRight className="w-4 h-4 ml-2" />
-              </Link>
-            </Button>
-            <Button asChild variant="secondary">
-              <Link to="/tenant-guide">
-                Tenant Guide
-                <ArrowUpRight className="w-4 h-4 ml-2" />
-              </Link>
-            </Button>
-          </div>
-        </div>
-      </section>
-
       {/* Founder-Led Philosophy & Advisory Positioning */}
       <FounderPhilosophySection />
 
       {/* CTA */}
       <GuideCTA
         title="Ready to List Your Property?"
-        description="Our rental team can help you market, screen tenants, and manage your rental property."
+        description="If you are considering renting your property in Dubai, the next step is a structured consultation to align your objective, pricing, and tenant strategy."
         primaryAction={{
           label: "List Your Property for Rent",
           href: "/landlord-portal",
@@ -561,7 +551,7 @@ const LandlordGuide = () => {
         showContactOptions
       />
 
-      {/* Guide Navigation - White background to separate from footer */}
+      {/* Guide Navigation */}
       <div className="bg-white py-12 border-t border-zinc-200">
         <div className="container mx-auto px-4">
           <GuideNavigation current="/landlord-guide" guides={GUIDE_LINKS} />
