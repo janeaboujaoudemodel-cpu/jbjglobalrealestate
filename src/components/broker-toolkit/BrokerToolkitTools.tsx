@@ -25,6 +25,8 @@ import {
   Film,
   Briefcase,
   Camera,
+  Ruler,
+  Newspaper,
   LucideIcon,
 } from "lucide-react";
 
@@ -180,8 +182,24 @@ const TOOLS: ToolItem[] = [
     tier: "free",
     category: "property",
   },
+  {
+    name: "JBJ Property Measurement",
+    description: "Verify property sizes with AI precision",
+    icon: Ruler,
+    link: "/property-measurement",
+    tier: "free",
+    category: "property",
+  },
 
   // Marketing
+  {
+    name: "JBJ News Reporter",
+    description: "Latest UAE real estate news from government sources",
+    icon: Newspaper,
+    link: "/news",
+    tier: "free",
+    category: "marketing",
+  },
   {
     name: "JBJ Content Generator",
     description: "AI-powered marketing content creation",

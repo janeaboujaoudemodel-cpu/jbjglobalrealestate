@@ -44,7 +44,9 @@ import {
   Globe,
   FileSignature,
   Handshake,
-  ArrowRight
+  ArrowRight,
+  Ruler,
+  Newspaper
 } from "lucide-react";
 
 const fadeInUp = {
@@ -177,6 +179,22 @@ const investorTools = [
     icon: CreditCard,
     link: "/business-card-scanner",
     category: "productivity" as ToolCategory,
+  },
+  {
+    id: "property-measurement",
+    title: "JBJ Property Measurement",
+    description: "Verify property sizes with AI precision.",
+    icon: Ruler,
+    link: "/property-measurement",
+    category: "property" as ToolCategory,
+  },
+  {
+    id: "news-reporter",
+    title: "JBJ News Reporter",
+    description: "Latest UAE real estate news from government sources.",
+    icon: Newspaper,
+    link: "/news",
+    category: "marketing" as ToolCategory,
   },
   {
     id: "property-coach",

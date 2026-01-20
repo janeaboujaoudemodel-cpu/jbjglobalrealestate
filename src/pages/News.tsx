@@ -204,8 +204,7 @@ const News = () => {
                 </h1>
                 <div className="flex items-center gap-2 mt-1">
                   <Badge variant="outline" className="text-gold border-gold/30 text-xs">
-                    <Bot className="w-3 h-3 mr-1" />
-                    AI-Powered Updates
+                    Government Sources
                   </Badge>
                 </div>
               </div>
@@ -228,7 +227,7 @@ const News = () => {
           </div>
           <p className="text-zinc-400 text-lg max-w-2xl">
             Stay informed about the latest UAE real estate market updates, economic developments, and investment opportunities. 
-            <span className="text-gold/80"> Our AI News Reporter collects news from official government sources daily.</span>
+            <span className="text-gold/80"> Curated by Victoria Hayes, our News Reporter, from official government sources daily.</span>
           </p>
         </div>
       </div>
@@ -453,22 +452,27 @@ const News = () => {
             </p>
           </div>
 
-          {/* AI News Reporter Info */}
-          <div className="mt-8 bg-gradient-to-br from-purple-950/30 to-zinc-900 border border-purple-500/20 rounded-2xl p-6 md:p-8">
+          {/* News Reporter Info - Victoria Hayes */}
+          <div className="mt-8 bg-gradient-to-br from-gold/10 to-zinc-900 border border-gold/20 rounded-2xl p-6 md:p-8">
             <div className="flex items-start gap-4">
-              <div className="w-14 h-14 rounded-xl bg-gradient-to-br from-purple-500/30 to-purple-600/20 border border-purple-500/30 flex items-center justify-center flex-shrink-0">
-                <Bot className="w-7 h-7 text-purple-400" />
+              <div className="w-16 h-16 rounded-full bg-gradient-to-br from-gold/30 to-gold/10 border-2 border-gold/40 flex items-center justify-center flex-shrink-0 overflow-hidden">
+                <img 
+                  src="https://images.unsplash.com/photo-1573496359142-b8d87734a5a2?w=200&h=200&fit=crop&crop=face" 
+                  alt="Victoria Hayes - News Reporter"
+                  className="w-full h-full object-cover"
+                />
               </div>
               <div>
-                <h3 className="text-white font-semibold text-lg mb-2">AI News Reporter</h3>
+                <h3 className="text-white font-semibold text-lg mb-1">Victoria Hayes</h3>
+                <p className="text-gold text-sm mb-3">Senior News Reporter, JBJ Global Real Estate</p>
                 <p className="text-zinc-400 text-sm mb-3">
-                  Our AI News Reporter automatically collects and curates real estate news from official UAE government sources 
+                  Victoria curates the latest real estate news from official UAE government sources 
                   including Dubai Media Office, Dubai Land Department, Abu Dhabi Media Office, and Ministry of Economy. 
-                  News is updated daily to keep you informed of the latest market developments.
+                  With over 12 years of experience in financial journalism, she ensures you stay informed of the latest market developments.
                 </p>
                 <div className="flex flex-wrap gap-2">
                   {["Dubai Media Office", "Dubai Land Dept", "Abu Dhabi Media", "Ministry of Economy", "RERA"].map((source) => (
-                    <Badge key={source} variant="outline" className="text-purple-400 border-purple-500/30 text-xs">
+                    <Badge key={source} variant="outline" className="text-gold border-gold/30 text-xs">
                       {source}
                     </Badge>
                   ))}
