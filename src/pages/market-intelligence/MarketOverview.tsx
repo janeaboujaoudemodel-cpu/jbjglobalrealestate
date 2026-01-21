@@ -54,7 +54,7 @@ const SectionTitle = ({ title, centered = true }: { title: string; centered?: bo
           {firstWord}
         </span>
       </span>
-      <span className="text-white">{restWords}</span>
+      <span className="text-black font-bold">{restWords}</span>
     </h2>
   );
 };
