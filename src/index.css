@@ -245,10 +245,29 @@ All colors MUST be HSL.
    * champagne boxes inside. Replaces all white backgrounds.
    * ============================================================ */
 
-  /* Full-width champagne section background (edge-to-edge) */
+  /* ============================================================
+   * GLOBAL EDGE-TO-EDGE SECTION SYSTEM (LOCKED)
+   * Rule: All Guide, Market Intelligence, Services sections must
+   * be full-width edge-to-edge, passing behind TOC navigator
+   * ============================================================ */
+
+  /* Full-width champagne section background (edge-to-edge, no container limits) */
   .jj-section-champagne {
-    @apply w-full;
+    @apply w-screen relative;
+    left: 50%;
+    right: 50%;
+    margin-left: -50vw;
+    margin-right: -50vw;
     background: linear-gradient(to bottom right, #FDFBF7, #F5F0E6, #EDE4D3);
+  }
+
+  /* Edge-to-edge section on black background */
+  .jj-section-edge {
+    @apply w-screen relative;
+    left: 50%;
+    right: 50%;
+    margin-left: -50vw;
+    margin-right: -50vw;
   }
 
   /* Active champagne card/box inside sections */
@@ -265,9 +284,9 @@ All colors MUST be HSL.
     @apply border-gold;
   }
 
-  /* Active champagne with black border (for inner boxes) */
+  /* Active champagne with minimal black border (for inner boxes) */
   .jj-box-active {
-    @apply rounded-xl border-2 border-black;
+    @apply rounded-xl border border-black/20;
     background: linear-gradient(to bottom right, 
       hsl(var(--champagne-1)), 
       hsl(var(--champagne-2)), 
@@ -277,6 +296,15 @@ All colors MUST be HSL.
 
   .jj-box-active:hover {
     @apply border-gold;
+  }
+
+  /* Title styling: First word gold, rest black (Guides & Market Intelligence) */
+  .jj-title-split span:first-child {
+    @apply text-gold;
+  }
+  
+  .jj-title-split span:not(:first-child) {
+    @apply text-black;
   }
 
   /* ============================================================

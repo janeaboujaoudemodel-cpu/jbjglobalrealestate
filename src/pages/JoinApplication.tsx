@@ -227,7 +227,7 @@ export default function JoinApplication() {
 
   if (checkingExisting) {
     return (
-      <div className="min-h-screen bg-background flex items-center justify-center">
+      <div className="min-h-screen bg-black flex items-center justify-center">
         <Loader2 className="h-8 w-8 animate-spin text-gold" />
       </div>
     );
@@ -236,79 +236,90 @@ export default function JoinApplication() {
   // If user already has an application, redirect to onboarding
   if (existingApplication) {
     return (
-      <div className="min-h-screen bg-background py-16 px-4">
-        <div className="max-w-lg mx-auto">
-          <Card className="bg-card border-border">
-            <CardHeader className="text-center">
-              <CheckCircle className="h-16 w-16 text-green-500 mx-auto mb-4" />
-              <CardTitle className="text-2xl text-foreground">Application Already Submitted</CardTitle>
-              <CardDescription>
-                Your application is currently <span className="font-semibold text-gold">{existingApplication.status}</span>
-              </CardDescription>
-            </CardHeader>
-            <CardContent className="text-center">
-              <p className="text-muted-foreground mb-6">
-                You can track your application status and access training materials (once approved) from your onboarding dashboard.
-              </p>
-              <Button asChild className="bg-gold hover:bg-gold/90 text-black">
-                <Link to="/onboarding">Go to Onboarding Dashboard</Link>
-              </Button>
-            </CardContent>
-          </Card>
-        </div>
+      <div className="min-h-screen bg-black">
+        {/* Full-width champagne section */}
+        <section className="jj-section-champagne py-16 px-4">
+          <div className="max-w-lg mx-auto">
+            <Card className="jj-box-active">
+              <CardHeader className="text-center">
+                <CheckCircle className="h-16 w-16 text-emerald-600 mx-auto mb-4" />
+                <CardTitle className="text-2xl text-black">Application Already Submitted</CardTitle>
+                <CardDescription className="text-black/70">
+                  Your application is currently <span className="font-semibold text-gold">{existingApplication.status}</span>
+                </CardDescription>
+              </CardHeader>
+              <CardContent className="text-center">
+                <p className="text-black/60 mb-6">
+                  You can track your application status and access training materials (once approved) from your onboarding dashboard.
+                </p>
+                <Button variant="primary" asChild>
+                  <Link to="/onboarding">
+                    <span className="text-black">Go to</span><span className="text-gold"> Onboarding Dashboard</span>
+                  </Link>
+                </Button>
+              </CardContent>
+            </Card>
+          </div>
+        </section>
       </div>
     );
   }
 
   return (
-    <div className="min-h-screen bg-background py-16 px-4">
-      <div className="max-w-2xl mx-auto">
-        <div className="text-center mb-8">
-          <h1 className="text-3xl font-bold text-foreground mb-2">Join JBJ Global Real Estate</h1>
-          <p className="text-muted-foreground">
-            Apply to become a broker partner. Complete the form below to start your journey.
-          </p>
-        </div>
+    <div className="min-h-screen bg-black">
+      {/* Full-width champagne section */}
+      <section className="jj-section-champagne py-16 px-4">
+        <div className="max-w-2xl mx-auto">
+          <div className="text-center mb-8">
+            <h1 className="text-3xl font-bold text-black mb-2">
+              <span className="text-gold">Join</span> JBJ Global Real Estate
+            </h1>
+            <p className="text-black/70">
+              Apply to become a broker partner. Complete the form below to start your journey.
+            </p>
+          </div>
 
-        {/* HR Agent CTA - Meet Jessica */}
-        <Card className="bg-gradient-to-r from-primary/10 to-gold/10 border-gold/30 mb-8">
-          <CardContent className="pt-6">
-            <div className="flex flex-col sm:flex-row items-center gap-4">
-              <div className="w-16 h-16 rounded-full bg-gold/20 flex items-center justify-center flex-shrink-0">
-                <Bot className="w-8 h-8 text-gold" />
-              </div>
-              <div className="text-center sm:text-left flex-1">
-                <h3 className="text-lg font-semibold text-foreground mb-1">Prefer a Conversation?</h3>
-                <p className="text-sm text-muted-foreground">
-                  Meet Jessica — available 24/7 to support you. She'll collect your CV, qualify you, and conduct your interview.
-                </p>
-              </div>
-              <Button asChild className="bg-gold hover:bg-gold/90 text-black font-semibold">
-                <Link to="/hr-agent">
-                  <MessageCircle className="w-4 h-4 mr-2" />
-                  Contact Our HR · Jessica
-                </Link>
-              </Button>
-            </div>
-          </CardContent>
-        </Card>
-
-        {!user && (
-          <Card className="bg-card border-border mb-6">
+          {/* HR Agent CTA - Meet Jessica */}
+          <Card className="jj-box-active mb-8">
             <CardContent className="pt-6">
-              <p className="text-center text-muted-foreground mb-4">
-                You need to sign in or create an account to submit your application.
-              </p>
-              <div className="flex justify-center">
-                <Button asChild className="bg-gold hover:bg-gold/90 text-black">
-                  <Link to="/auth?redirect=/join">Sign In / Create Account</Link>
+              <div className="flex flex-col sm:flex-row items-center gap-4">
+                <div className="w-16 h-16 rounded-full bg-black flex items-center justify-center flex-shrink-0">
+                  <Bot className="w-8 h-8 text-gold" />
+                </div>
+                <div className="text-center sm:text-left flex-1">
+                  <h3 className="text-lg font-semibold text-black mb-1">Prefer a Conversation?</h3>
+                  <p className="text-sm text-black/70">
+                    Meet Jessica — available 24/7 to support you. She'll collect your CV, qualify you, and conduct your interview.
+                  </p>
+                </div>
+                <Button variant="primary" asChild>
+                  <Link to="/hr-agent">
+                    <MessageCircle className="w-4 h-4 mr-2" />
+                    <span className="text-black">Contact</span><span className="text-gold"> Our HR · Jessica</span>
+                  </Link>
                 </Button>
               </div>
             </CardContent>
           </Card>
-        )}
 
-        <Card className="bg-card border-border">
+          {!user && (
+            <Card className="jj-box-active mb-6">
+              <CardContent className="pt-6">
+                <p className="text-center text-black/70 mb-4">
+                  You need to sign in or create an account to submit your application.
+                </p>
+                <div className="flex justify-center">
+                  <Button variant="primary" asChild>
+                    <Link to="/auth?redirect=/join">
+                      <span className="text-black">Sign In /</span><span className="text-gold"> Create Account</span>
+                    </Link>
+                  </Button>
+                </div>
+              </CardContent>
+            </Card>
+          )}
+
+          <Card className="jj-box-active">
           <CardHeader>
             <CardTitle>Application Form</CardTitle>
             <CardDescription>All fields are required</CardDescription>
@@ -546,13 +557,14 @@ export default function JoinApplication() {
           </CardContent>
         </Card>
 
-        <p className="text-center text-sm text-muted-foreground mt-6">
-          Questions? Contact us at{" "}
-          <a href="mailto:contact@JBJ.ae" className="text-gold hover:underline">
-            contact@JBJ.ae
-          </a>
-        </p>
-      </div>
+          <p className="text-center text-sm text-black/70 mt-6">
+            Questions? Contact us at{" "}
+            <a href="mailto:contact@JBJ.ae" className="text-gold hover:underline">
+              contact@JBJ.ae
+            </a>
+          </p>
+        </div>
+      </section>
     </div>
   );
 }

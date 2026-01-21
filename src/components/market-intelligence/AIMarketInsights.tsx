@@ -2,7 +2,8 @@ import { useState } from "react";
 import { motion } from "framer-motion";
 import { 
   Sparkles, Brain, MessageSquare, RefreshCw, 
-  TrendingUp, Building2, Users, AlertCircle, Info
+  TrendingUp, Building2, Users, AlertCircle, Info,
+  ChevronRight
 } from "lucide-react";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
@@ -23,6 +24,19 @@ interface InsightCard {
   insight: string;
   category: 'trend' | 'demand' | 'supply' | 'opportunity';
 }
+
+// Split title helper
+const SplitTitle = ({ text }: { text: string }) => {
+  const words = text.split(' ');
+  const firstWord = words[0];
+  const restWords = words.slice(1).join(' ');
+  
+  return (
+    <span className="jj-title-split">
+      <span>{firstWord}</span>{restWords && <span> {restWords}</span>}
+    </span>
+  );
+};
 
 // Pre-set educational insights (public authority content)
 const PRESET_INSIGHTS: InsightCard[] = [
@@ -113,7 +127,7 @@ export const AIMarketInsights = () => {
   };
 
   return (
-    <section className="py-16">
+    <section className="jj-section-champagne py-16">
       <div className="container mx-auto px-4">
         <motion.div
           initial="hidden"
@@ -128,10 +142,10 @@ export const AIMarketInsights = () => {
             <span className="text-gold text-xs uppercase tracking-[0.3em] mb-4 block">
               AI-Powered Insights
             </span>
-            <h2 className="text-white text-3xl md:text-4xl font-bold mb-4" style={{ fontFamily: "Poppins, sans-serif" }}>
-              Understanding the Market
+            <h2 className="text-3xl md:text-4xl font-bold mb-4" style={{ fontFamily: "Poppins, sans-serif" }}>
+              <SplitTitle text="Understanding the Market" />
             </h2>
-            <p className="text-zinc-400 max-w-2xl mx-auto">
+            <p className="text-black/70 max-w-2xl mx-auto">
               AI-generated explanations of market trends based on official government data. 
               These insights help contextualize the "why" behind the numbers.
             </p>
@@ -141,7 +155,7 @@ export const AIMarketInsights = () => {
           <div className="grid md:grid-cols-2 gap-6 mb-12">
             {PRESET_INSIGHTS.map((insight) => (
               <motion.div key={insight.id} variants={fadeInUp}>
-                <Card className="bg-white border-zinc-200 hover:border-gold/50 hover:shadow-lg transition-all h-full">
+                <Card className="jj-box-active hover:border-gold/50 hover:shadow-lg transition-all h-full">
                   <CardHeader className="pb-3">
                     <div className="flex items-start gap-3">
                       <div className="w-10 h-10 rounded-lg bg-black flex items-center justify-center shrink-0">
@@ -154,7 +168,7 @@ export const AIMarketInsights = () => {
                     </div>
                   </CardHeader>
                   <CardContent>
-                    <p className="text-zinc-600 text-sm leading-relaxed">
+                    <p className="text-black/70 text-sm leading-relaxed">
                       {insight.insight}
                     </p>
                   </CardContent>
@@ -165,7 +179,7 @@ export const AIMarketInsights = () => {
 
           {/* AI Narrative Generator */}
           <motion.div variants={fadeInUp}>
-            <Card className="bg-white border-zinc-200 shadow-lg">
+            <Card className="jj-box-active shadow-lg">
               <CardContent className="p-8">
                 <div className="flex flex-col md:flex-row items-start gap-6 mb-6">
                   <div className="w-16 h-16 rounded-2xl bg-black flex items-center justify-center shrink-0">
@@ -173,9 +187,9 @@ export const AIMarketInsights = () => {
                   </div>
                   <div className="flex-1">
                     <h3 className="text-black text-xl font-bold mb-2">
-                      Generate Market Narrative
+                      <SplitTitle text="Generate Market Narrative" />
                     </h3>
-                    <p className="text-zinc-600 text-sm mb-4">
+                    <p className="text-black/70 text-sm mb-4">
                       Get an AI-generated analysis based on official government Open Data. 
                       Select a topic below to generate educational market insights.
                     </p>
@@ -183,7 +197,7 @@ export const AIMarketInsights = () => {
                 </div>
 
                 <Tabs value={activeNarrativeType} onValueChange={(v) => setActiveNarrativeType(v as NarrativeType)}>
-                  <TabsList className="bg-zinc-100 border border-zinc-200 mb-6">
+                  <TabsList className="bg-white/50 border border-black/10 mb-6">
                     {narrativeOptions.map((opt) => (
                       <TabsTrigger
                         key={opt.id}
@@ -200,30 +214,31 @@ export const AIMarketInsights = () => {
                     <TabsContent key={opt.id} value={opt.id}>
                       <div className="space-y-4">
                         <Button
+                          variant="primary"
                           onClick={() => generatePublicNarrative(opt.id)}
                           disabled={isGenerating}
-                          className="bg-black text-white font-semibold hover:bg-zinc-800"
                         >
                           {isGenerating && activeNarrativeType === opt.id ? (
                             <>
                               <RefreshCw className="w-4 h-4 mr-2 animate-spin" />
-                              Generating...
+                              <span className="text-black">Gener</span><span className="text-gold">ating...</span>
                             </>
                           ) : (
                             <>
                               <Sparkles className="w-4 h-4 mr-2" />
-                              Generate {opt.label}
+                              <span className="text-black">Generate</span><span className="text-gold"> {opt.label}</span>
+                              <ChevronRight className="w-4 h-4 ml-1" />
                             </>
                           )}
                         </Button>
 
                         {generatedNarratives[opt.id] && (
-                          <div className="p-6 bg-zinc-100 rounded-xl border border-zinc-200">
+                          <div className="p-6 bg-white/50 rounded-xl border border-black/10">
                             <div className="flex items-center gap-2 text-gold text-sm mb-3">
                               <MessageSquare className="w-4 h-4" />
                               AI Market Analysis
                             </div>
-                            <div className="text-zinc-700 text-sm leading-relaxed whitespace-pre-wrap">
+                            <div className="text-black/80 text-sm leading-relaxed whitespace-pre-wrap">
                               {generatedNarratives[opt.id]}
                             </div>
                           </div>
@@ -238,11 +253,11 @@ export const AIMarketInsights = () => {
 
           {/* Disclaimer */}
           <motion.div 
-            className="mt-8 flex items-start gap-3 p-4 bg-white border border-zinc-200 rounded-xl max-w-3xl mx-auto"
+            className="mt-8 flex items-start gap-3 p-4 jj-box-active max-w-3xl mx-auto"
             variants={fadeInUp}
           >
             <Info className="w-5 h-5 text-gold shrink-0 mt-0.5" />
-            <p className="text-zinc-600 text-xs leading-relaxed">
+            <p className="text-black/70 text-xs leading-relaxed">
               AI-generated insights are based on aggregated government Open Data and are provided for informational purposes only. 
               They do not constitute financial, investment, or legal advice. 
               AI explains data but does not predict prices or provide specific investment recommendations.

@@ -15,6 +15,19 @@ const fadeInUp = {
   visible: { opacity: 1, y: 0, transition: { duration: 0.5 } }
 };
 
+// Split title helper
+const SplitTitle = ({ text }: { text: string }) => {
+  const words = text.split(' ');
+  const firstWord = words[0];
+  const restWords = words.slice(1).join(' ');
+  
+  return (
+    <span className="jj-title-split">
+      <span>{firstWord}</span>{restWords && <span> {restWords}</span>}
+    </span>
+  );
+};
+
 const StatCard = ({ 
   title, 
   value, 
@@ -34,20 +47,20 @@ const StatCard = ({
   
   return (
     <motion.div variants={fadeInUp}>
-      <Card className="bg-zinc-900/50 border-zinc-800 hover:border-gold/30 transition-all">
+      <Card className="jj-box-active hover:border-gold/50 transition-all">
         <CardContent className="p-6">
           <div className="flex items-start justify-between">
-            <div className="w-12 h-12 rounded-xl bg-gold/10 border border-gold/30 flex items-center justify-center">
+            <div className="w-12 h-12 rounded-xl bg-black flex items-center justify-center">
               <Icon className="w-6 h-6 text-gold" />
             </div>
-            <div className={`flex items-center gap-1 text-sm ${isPositive ? 'text-emerald-400' : 'text-red-400'}`}>
+            <div className={`flex items-center gap-1 text-sm ${isPositive ? 'text-emerald-600' : 'text-red-600'}`}>
               {isPositive ? <TrendingUp className="w-4 h-4" /> : <TrendingDown className="w-4 h-4" />}
               <span>{isPositive ? '+' : ''}{change}%</span>
             </div>
           </div>
           <div className="mt-4">
-            <p className="text-zinc-400 text-sm mb-1">{title}</p>
-            <p className="text-white text-2xl font-bold">
+            <p className="text-black/60 text-sm mb-1">{title}</p>
+            <p className="text-black text-2xl font-bold">
               {prefix}{typeof value === 'number' ? value.toLocaleString() : value}{suffix}
             </p>
           </div>
@@ -59,7 +72,7 @@ const StatCard = ({
 
 export const MarketOverviewDashboard = () => {
   return (
-    <section className="py-16">
+    <section className="jj-section-champagne py-16">
       <div className="container mx-auto px-4">
         <motion.div
           initial="hidden"
@@ -74,10 +87,10 @@ export const MarketOverviewDashboard = () => {
             <span className="text-gold text-xs uppercase tracking-[0.3em] mb-4 block">
               Market Overview
             </span>
-            <h2 className="text-white text-3xl md:text-4xl font-bold mb-4" style={{ fontFamily: "Poppins, sans-serif" }}>
-              Dubai Real Estate Dashboard
+            <h2 className="text-3xl md:text-4xl font-bold mb-4" style={{ fontFamily: "Poppins, sans-serif" }}>
+              <SplitTitle text="Dubai Real Estate Dashboard" />
             </h2>
-            <p className="text-zinc-400 max-w-2xl mx-auto">
+            <p className="text-black/70 max-w-2xl mx-auto">
               High-level market metrics aggregated from official government Open Data sources.
             </p>
           </motion.div>
@@ -117,19 +130,19 @@ export const MarketOverviewDashboard = () => {
           <div className="grid lg:grid-cols-2 gap-8">
             {/* Quarterly Trends */}
             <motion.div variants={fadeInUp}>
-              <Card className="bg-zinc-900/50 border-zinc-800">
+              <Card className="jj-box-active">
                 <CardHeader>
-                  <CardTitle className="text-white flex items-center gap-2">
+                  <CardTitle className="text-black flex items-center gap-2">
                     <BarChart3 className="w-5 h-5 text-gold" />
-                    Quarterly Transaction Trends
+                    <SplitTitle text="Quarterly Transaction Trends" />
                   </CardTitle>
                 </CardHeader>
                 <CardContent>
                   <div className="space-y-4">
                     {QUARTERLY_TRENDS.map((quarter, idx) => (
                       <div key={quarter.quarter} className="flex items-center gap-4">
-                        <span className="text-zinc-400 text-sm w-20">{quarter.quarter}</span>
-                        <div className="flex-1 h-8 bg-zinc-800 rounded-lg overflow-hidden relative">
+                        <span className="text-black/60 text-sm w-20">{quarter.quarter}</span>
+                        <div className="flex-1 h-8 bg-white/50 rounded-lg overflow-hidden relative">
                           <motion.div
                             className="h-full bg-gradient-to-r from-gold/80 to-gold"
                             initial={{ width: 0 }}
@@ -137,14 +150,14 @@ export const MarketOverviewDashboard = () => {
                             viewport={{ once: true }}
                             transition={{ duration: 0.8, delay: idx * 0.1 }}
                           />
-                          <span className="absolute right-3 top-1/2 -translate-y-1/2 text-white text-xs font-medium">
+                          <span className="absolute right-3 top-1/2 -translate-y-1/2 text-black text-xs font-medium">
                             {quarter.transactions.toLocaleString()}
                           </span>
                         </div>
                       </div>
                     ))}
                   </div>
-                  <p className="text-zinc-500 text-xs mt-4">
+                  <p className="text-black/50 text-xs mt-4">
                     Source: Dubai Government Open Data
                   </p>
                 </CardContent>
@@ -153,24 +166,24 @@ export const MarketOverviewDashboard = () => {
 
             {/* Property Type Breakdown */}
             <motion.div variants={fadeInUp}>
-              <Card className="bg-zinc-900/50 border-zinc-800">
+              <Card className="jj-box-active">
                 <CardHeader>
-                  <CardTitle className="text-white flex items-center gap-2">
+                  <CardTitle className="text-black flex items-center gap-2">
                     <Building2 className="w-5 h-5 text-gold" />
-                    Price by Property Type
+                    <SplitTitle text="Price by Property Type" />
                   </CardTitle>
                 </CardHeader>
                 <CardContent>
                   <div className="space-y-4">
                     {PROPERTY_TYPE_TRENDS.map((prop) => (
-                      <div key={prop.type} className="flex items-center justify-between py-3 border-b border-zinc-800 last:border-0">
+                      <div key={prop.type} className="flex items-center justify-between py-3 border-b border-black/10 last:border-0">
                         <div>
-                          <p className="text-white font-medium">{prop.type}</p>
-                          <p className="text-zinc-500 text-sm">{prop.volume.toLocaleString()} transactions</p>
+                          <p className="text-black font-medium">{prop.type}</p>
+                          <p className="text-black/50 text-sm">{prop.volume.toLocaleString()} transactions</p>
                         </div>
                         <div className="text-right">
-                          <p className="text-white font-bold">AED {prop.avgPrice.toLocaleString()}/sqft</p>
-                          <p className={`text-sm ${prop.change >= 0 ? 'text-emerald-400' : 'text-red-400'}`}>
+                          <p className="text-black font-bold">AED {prop.avgPrice.toLocaleString()}/sqft</p>
+                          <p className={`text-sm ${prop.change >= 0 ? 'text-emerald-600' : 'text-red-600'}`}>
                             {prop.change >= 0 ? '+' : ''}{prop.change}% YoY
                           </p>
                         </div>
@@ -187,13 +200,13 @@ export const MarketOverviewDashboard = () => {
             className="mt-8 text-center"
             variants={fadeInUp}
           >
-            <div className="inline-flex items-center gap-2 px-4 py-2 bg-zinc-900/50 border border-zinc-800 rounded-full">
+            <div className="inline-flex items-center gap-2 px-4 py-2 jj-box-active rounded-full">
               <Calendar className="w-4 h-4 text-gold" />
-              <span className="text-zinc-400 text-sm">
+              <span className="text-black/70 text-sm">
                 Last updated: {new Date(MARKET_OVERVIEW_STATS.reportDate).toLocaleDateString('en-GB', { day: 'numeric', month: 'long', year: 'numeric' })}
               </span>
-              <span className="text-zinc-600">•</span>
-              <span className="text-zinc-500 text-sm">
+              <span className="text-black/40">•</span>
+              <span className="text-black/50 text-sm">
                 {MARKET_OVERVIEW_STATS.dataSource}
               </span>
             </div>
