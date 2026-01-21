@@ -530,12 +530,21 @@ Requirements:
                 </div>
               )}
               
-              {/* Seller Assistant CTA - Premium 3D Primary Button */}
+              {/* Seller Assistant CTA - Premium 3D Primary Button - Scrolls to section */}
               <div className="mt-6">
                 <Button
                   type="button"
                   variant="primary"
-                  onClick={() => setShowAssistant(true)}
+                  onClick={() => {
+                    setShowAssistant(true);
+                    // Scroll to the assistant section after a brief delay
+                    setTimeout(() => {
+                      document.getElementById('seller-assistant-panel')?.scrollIntoView({ 
+                        behavior: 'smooth', 
+                        block: 'center' 
+                      });
+                    }, 100);
+                  }}
                   className="px-8 py-4 text-sm"
                 >
                   <Wand2 className="w-5 h-5" />

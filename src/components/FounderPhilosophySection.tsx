@@ -91,11 +91,12 @@ export const FounderPhilosophySection = () => {
               </h2>
             </div>
             
-            <div className="bg-gradient-to-br from-zinc-900/80 to-zinc-950/90 border border-gold/20 rounded-2xl p-6 md:p-8">
-              <p className="text-zinc-300 text-base leading-relaxed mb-4">
+            {/* Card with ACTIVE COLOR */}
+            <div className="bg-gradient-to-br from-[#F5EBD7] via-[#E8DCC8] to-[#D4C4A8] border-2 border-gold/40 rounded-2xl p-6 md:p-8">
+              <p className="text-zinc-800 text-base leading-relaxed mb-4">
                 <Link to="/about" className="text-gold hover:underline">JBJ Global Real Estate</Link> is a founder-led brokerage built on unwavering standards, discretion, and long-term vision.
               </p>
-              <p className="text-zinc-400 text-sm leading-relaxed">
+              <p className="text-zinc-600 text-sm leading-relaxed">
                 Founded by <Link to="/founder" className="text-gold hover:underline">Jane Abou Jaoude</Link>, our approach combines deep market expertise with personalized service, ensuring every client receives the attention and insight they deserve.
               </p>
             </div>

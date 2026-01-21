@@ -157,10 +157,10 @@ Help the user complete their listing form and answer questions about the selling
     }
   };
 
-  // Voice input handler using Web Speech API
+  // Voice input handler using Web Speech API - Improved behavior
   const toggleVoiceInput = () => {
     if (!('webkitSpeechRecognition' in window) && !('SpeechRecognition' in window)) {
-      toast.error('Voice input is not supported in your browser');
+      toast.error('Voice input is not supported in your browser. Please use Chrome or Edge.');
       return;
     }
 
@@ -172,21 +172,51 @@ Help the user complete their listing form and answer questions about the selling
     const SpeechRecognition = (window as any).SpeechRecognition || (window as any).webkitSpeechRecognition;
     const recognition = new SpeechRecognition();
     
-    recognition.continuous = false;
-    recognition.interimResults = false;
+    recognition.continuous = true;
+    recognition.interimResults = true;
     recognition.lang = 'en-US';
 
-    recognition.onstart = () => setIsListening(true);
-    recognition.onend = () => setIsListening(false);
-    recognition.onerror = () => {
+    recognition.onstart = () => {
+      setIsListening(true);
+      toast.info('🎤 Listening... Speak now');
+    };
+    
+    recognition.onend = () => {
       setIsListening(false);
-      toast.error('Voice recognition failed. Please try again.');
+    };
+    
+    recognition.onerror = (event: any) => {
+      setIsListening(false);
+      if (event.error === 'no-speech') {
+        toast.info('No speech detected. Please try again.');
+      } else if (event.error === 'audio-capture') {
+        toast.error('Microphone not found. Please check your device.');
+      } else if (event.error === 'not-allowed') {
+        toast.error('Microphone access denied. Please allow access in browser settings.');
+      } else {
+        toast.error('Voice recognition error. Please try again.');
+      }
     };
     
     recognition.onresult = (event: any) => {
-      const transcript = event.results[0][0].transcript;
-      setInput(transcript);
-      setIsListening(false);
+      let finalTranscript = '';
+      let interimTranscript = '';
+      
+      for (let i = event.resultIndex; i < event.results.length; i++) {
+        const transcript = event.results[i][0].transcript;
+        if (event.results[i].isFinal) {
+          finalTranscript += transcript;
+        } else {
+          interimTranscript += transcript;
+        }
+      }
+      
+      if (finalTranscript) {
+        setInput(prev => prev + finalTranscript);
+      } else if (interimTranscript) {
+        // Show interim results in a lighter way
+        setInput(interimTranscript);
+      }
     };
 
     recognition.start();
@@ -203,38 +233,39 @@ Help the user complete their listing form and answer questions about the selling
       initial={{ opacity: 0, y: 20 }}
       animate={{ opacity: 1, y: 0 }}
       exit={{ opacity: 0, y: 20 }}
-      className="bg-white border border-gold/30 rounded-xl overflow-hidden shadow-xl"
+      className="bg-gradient-to-br from-[#F5EBD7] via-[#E8DCC8] to-[#D4C4A8] border-2 border-gold/40 rounded-xl overflow-hidden shadow-xl"
+      id="seller-assistant-panel"
     >
-      {/* Header */}
-      <div className="bg-gradient-to-r from-gold/20 to-gold/5 border-b border-gold/20 px-4 py-3 flex items-center justify-between">
+      {/* Header - ACTIVE COLOR */}
+      <div className="bg-gradient-to-br from-[#F5EBD7] via-[#E8DCC8] to-[#D4C4A8] border-b-2 border-gold/40 px-4 py-3 flex items-center justify-between">
         <div className="flex items-center gap-3">
-          <div className="w-8 h-8 bg-gold/20 rounded-full flex items-center justify-center">
+          <div className="w-8 h-8 bg-white border border-gold/30 rounded-full flex items-center justify-center">
             <Sparkles className="w-4 h-4 text-gold" />
           </div>
           <div>
             <h3 className="text-black font-semibold text-sm">JBJ Seller Assistant</h3>
-            <p className="text-gold/70 text-xs">Here to help you list your property</p>
+            <p className="text-zinc-600 text-xs">Here to help you list your property</p>
           </div>
         </div>
         <Button
           variant="ghost"
           size="icon"
           onClick={onClose}
-          className="text-zinc-500 hover:text-black hover:bg-zinc-100"
+          className="text-zinc-500 hover:text-black hover:bg-white/50"
         >
           <X className="w-4 h-4" />
         </Button>
       </div>
 
-      {/* Quick Actions */}
-      <div className="px-4 py-2 border-b border-zinc-200 flex gap-2 overflow-x-auto bg-zinc-50">
+      {/* Quick Actions - Champagne BG */}
+      <div className="px-4 py-2 border-b border-gold/30 flex gap-2 overflow-x-auto bg-gradient-to-r from-[#FDFBF7] via-white to-[#F5F0E6]">
         {quickActions.map((action, index) => (
           <Button
             key={index}
             variant="outline"
             size="sm"
             onClick={action.action}
-            className="border-zinc-300 text-zinc-700 hover:text-gold hover:border-gold/50 whitespace-nowrap text-xs bg-white"
+            className="border-gold/40 text-zinc-700 hover:text-gold hover:border-gold whitespace-nowrap text-xs bg-white"
           >
             <action.icon className={`w-3 h-3 mr-1 ${action.iconClass}`} />
             {action.label}
@@ -242,8 +273,8 @@ Help the user complete their listing form and answer questions about the selling
         ))}
       </div>
 
-      {/* Messages */}
-      <ScrollArea className="h-[300px] p-4 bg-white" ref={scrollRef}>
+      {/* Messages - Champagne BG */}
+      <ScrollArea className="h-[300px] p-4 bg-gradient-to-br from-[#FDFBF7] via-white to-[#F5F0E6]" ref={scrollRef}>
         <div className="space-y-4">
           {messages.map((message, index) => (
             <div
@@ -254,7 +285,7 @@ Help the user complete their listing form and answer questions about the selling
                 className={`max-w-[85%] rounded-lg px-4 py-2.5 ${
                   message.role === "user"
                     ? "bg-gold text-black"
-                    : "bg-zinc-100 text-zinc-800 border border-zinc-200"
+                    : "bg-gradient-to-br from-[#FDFBF7] via-white to-[#F5F0E6] text-zinc-800 border border-gold/30"
                 }`}
               >
                 <p className="text-sm whitespace-pre-wrap">{message.content}</p>
@@ -263,7 +294,7 @@ Help the user complete their listing form and answer questions about the selling
           ))}
           {isLoading && (
             <div className="flex justify-start">
-              <div className="bg-zinc-100 border border-zinc-200 rounded-lg px-4 py-2.5">
+              <div className="bg-gradient-to-br from-[#FDFBF7] via-white to-[#F5F0E6] border border-gold/30 rounded-lg px-4 py-2.5">
                 <Loader2 className="w-4 h-4 animate-spin text-gold" />
               </div>
             </div>
@@ -271,10 +302,10 @@ Help the user complete their listing form and answer questions about the selling
         </div>
       </ScrollArea>
 
-      {/* Suggested Questions */}
-      <div className="px-4 py-2 border-t border-zinc-200 bg-zinc-50">
-        <p className="text-zinc-500 text-xs mb-2 flex items-center gap-1">
-          <Lightbulb className="w-3 h-3" />
+      {/* Suggested Questions - Champagne BG */}
+      <div className="px-4 py-2 border-t border-gold/30 bg-gradient-to-r from-[#FDFBF7] via-white to-[#F5F0E6]">
+        <p className="text-zinc-600 text-xs mb-2 flex items-center gap-1">
+          <Lightbulb className="w-3 h-3 text-gold" />
           Suggested questions:
         </p>
         <div className="flex flex-wrap gap-2">
@@ -283,7 +314,7 @@ Help the user complete their listing form and answer questions about the selling
               key={index}
               onClick={() => sendMessage(question)}
               disabled={isLoading}
-              className="text-xs px-3 py-1.5 bg-white text-zinc-700 border border-zinc-300 rounded-full hover:bg-gold/10 hover:text-gold hover:border-gold/50 transition-colors disabled:opacity-50"
+              className="text-xs px-3 py-1.5 bg-white text-zinc-700 border border-gold/30 rounded-full hover:bg-gold/10 hover:text-gold hover:border-gold transition-colors disabled:opacity-50"
             >
               {question}
             </button>
@@ -291,8 +322,8 @@ Help the user complete their listing form and answer questions about the selling
         </div>
       </div>
 
-      {/* Input */}
-      <div className="p-4 border-t border-zinc-200 bg-white">
+      {/* Input - Champagne BG */}
+      <div className="p-4 border-t border-gold/30 bg-gradient-to-r from-[#FDFBF7] via-white to-[#F5F0E6]">
         <form
           onSubmit={(e) => {
             e.preventDefault();
@@ -304,9 +335,9 @@ Help the user complete their listing form and answer questions about the selling
             <Input
               value={input}
               onChange={(e) => setInput(e.target.value)}
-              placeholder={isListening ? "Listening..." : "Ask me anything about selling..."}
-              className="bg-zinc-50 border-zinc-300 text-black placeholder:text-zinc-400 pr-10"
-              disabled={isLoading || isListening}
+              placeholder={isListening ? "🎤 Listening..." : "Ask me anything about selling..."}
+              className="bg-white border-gold/30 text-black placeholder:text-zinc-400 pr-10 focus:border-gold"
+              disabled={isLoading}
             />
             <Button
               type="button"
@@ -314,17 +345,17 @@ Help the user complete their listing form and answer questions about the selling
               size="icon"
               onClick={toggleVoiceInput}
               className={`absolute right-1 top-1/2 -translate-y-1/2 h-8 w-8 ${
-                isListening ? 'bg-red-500/10 text-red-500 animate-pulse' : 'text-zinc-400 hover:text-gold'
+                isListening ? 'bg-gold/20 text-gold animate-pulse' : 'text-gold hover:text-gold hover:bg-gold/10'
               }`}
               disabled={isLoading}
             >
-              {isListening ? <MicOff className="w-4 h-4" /> : <Mic className="w-4 h-4" />}
+              <Mic className="w-4 h-4" />
             </Button>
           </div>
           <Button
             type="submit"
             disabled={!input.trim() || isLoading}
-            className="bg-gold text-black hover:bg-gold/80"
+            variant="primary"
           >
             {isLoading ? (
               <Loader2 className="w-4 h-4 animate-spin" />

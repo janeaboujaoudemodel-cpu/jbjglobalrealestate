@@ -34,7 +34,7 @@ const ChatHeader = ({ step, isExistingUser, onBack, onToggleCollapse }: ChatHead
   const showAgentPhoto = step === 'chatting';
 
   return (
-    <div className="flex items-center justify-between p-4 border-b-2 border-gold/60 bg-gradient-to-r from-white via-[#FDFBF7] to-[#F5F0E6] shadow-[0_2px_10px_rgba(200,167,102,0.2)]">
+    <div className="flex items-center justify-between p-4 border-b-2 border-gold/60 bg-gradient-to-br from-[#F5EBD7] via-[#E8DCC8] to-[#D4C4A8] shadow-[0_2px_10px_rgba(200,167,102,0.3)]">
       <div className="flex items-center gap-3">
         {showBackButton && (
           <Button

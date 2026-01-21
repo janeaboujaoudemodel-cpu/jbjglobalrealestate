@@ -82,97 +82,77 @@ const DeveloperPartnersMarquee = () => {
 
   return (
     <section className="py-10 md:py-16 bg-black border-y border-zinc-800/50 overflow-hidden">
-      <div className="container mx-auto px-4 mb-8 md:mb-10">
-        <h3 
-          className="text-center text-xl md:text-2xl lg:text-3xl font-bold uppercase tracking-[0.15em]"
-          style={{
-            filter: 'drop-shadow(0 0 15px rgba(255,255,255,0.3)) drop-shadow(0 0 25px rgba(200,167,102,0.25))',
-          }}
-        >
-          <span className="bg-gradient-to-r from-white via-[#FDFBF7] to-white bg-clip-text text-transparent">
-            Partnering with UAE's{" "}
-          </span>
-          <span className="bg-gradient-to-r from-[#C9B896] via-[#E8DCC8] to-[#D4C4A8] bg-clip-text text-transparent" style={{ filter: 'drop-shadow(0 0 8px rgba(201, 184, 150, 0.3))' }}>
-            Premier Developers
-          </span>
-        </h3>
-      </div>
+      {/* Champagne Layer */}
+      <div className="mx-4 md:mx-8 lg:mx-16 py-8 bg-gradient-to-br from-[#F5EBD7] via-[#E8DCC8] to-[#D4C4A8] rounded-2xl border border-gold/30 shadow-lg">
+        <div className="mb-8 md:mb-10">
+          <h3 className="text-center text-xl md:text-2xl lg:text-3xl font-bold uppercase tracking-[0.15em]">
+            <span className="text-black">Partnering with UAE's </span>
+            <span className="text-gold">Premier Developers</span>
+          </h3>
+        </div>
 
-      {/* Marquee Container */}
-      <div
-        className="relative"
-        onMouseEnter={() => setIsPaused(true)}
-        onMouseLeave={() => setIsPaused(false)}
-      >
-        {/* Gradient fade edges */}
-        <div className="absolute left-0 top-0 bottom-0 w-24 md:w-40 bg-gradient-to-r from-black to-transparent z-10 pointer-events-none" />
-        <div className="absolute right-0 top-0 bottom-0 w-24 md:w-40 bg-gradient-to-l from-black to-transparent z-10 pointer-events-none" />
-
-        {/* Scrolling content */}
-        <motion.div
-          className="flex items-center gap-8 md:gap-12 py-4"
-          animate={{
-            x: [0, -distance],
-          }}
-          transition={{
-            x: {
-              duration: 50,
-              repeat: Infinity,
-              ease: "linear",
-            },
-          }}
-          style={{
-            animationPlayState: isPaused ? "paused" : "running",
-          }}
-          {...(isPaused && { animate: undefined })}
+        {/* Marquee Container */}
+        <div
+          className="relative overflow-hidden"
+          onMouseEnter={() => setIsPaused(true)}
+          onMouseLeave={() => setIsPaused(false)}
         >
-          {duplicatedDevelopers.map((developer, index) => {
-            return (
-              <div
-                key={`${developer.slug}-${index}`}
-                className="flex-shrink-0 flex items-center gap-4 group"
-              >
-                {/* Developer Label - REVERSED: Black text on gold bg on normal, gold text on normal bg on hover */}
-                <Link
-                  to={`/properties?developer=${encodeURIComponent(
-                    developer.developerId ?? developer.slug
-                  )}`}
-                  className="inline-flex items-center gap-2 px-4 py-2.5 bg-gradient-to-br from-zinc-900 via-black to-zinc-900 border-2 border-gold rounded-lg transition-all duration-300 hover:scale-105 hover:bg-gradient-to-r hover:from-white hover:via-[#FDFBF7] hover:to-[#F5F0E6] hover:border-black group"
-                  style={{
-                    boxShadow: `
-                      inset 0 2px 4px rgba(255,255,255,0.1),
-                      inset 0 -2px 4px rgba(0,0,0,0.3),
-                      0 4px 15px rgba(200,167,102,0.3),
-                      0 0 20px rgba(200,167,102,0.2),
-                      0 8px 25px rgba(0,0,0,0.4)
-                    `,
-                  }}
-                  title={developer.name}
+          {/* Gradient fade edges - using champagne to blend */}
+          <div className="absolute left-0 top-0 bottom-0 w-16 md:w-24 bg-gradient-to-r from-[#E8DCC8] to-transparent z-10 pointer-events-none" />
+          <div className="absolute right-0 top-0 bottom-0 w-16 md:w-24 bg-gradient-to-l from-[#E8DCC8] to-transparent z-10 pointer-events-none" />
+
+          {/* Scrolling content */}
+          <motion.div
+            className="flex items-center gap-6 md:gap-10 py-4 px-4"
+            animate={{
+              x: [0, -distance],
+            }}
+            transition={{
+              x: {
+                duration: 50,
+                repeat: Infinity,
+                ease: "linear",
+              },
+            }}
+            style={{
+              animationPlayState: isPaused ? "paused" : "running",
+            }}
+            {...(isPaused && { animate: undefined })}
+          >
+            {duplicatedDevelopers.map((developer, index) => {
+              return (
+                <div
+                  key={`${developer.slug}-${index}`}
+                  className="flex-shrink-0 flex items-center gap-4 group"
                 >
-                  {/* Normal state: White first word, Gold remaining - no shadow issues */}
-                  <span className="text-white group-hover:text-black transition-colors font-semibold text-sm md:text-base whitespace-nowrap" style={{ textShadow: '0 1px 2px rgba(0,0,0,0.5)' }}>
-                    {developer.name.split(' ')[0]}
-                  </span>
-                  {/* Hover: Gold text becomes black for readability - no shadow on hover */}
-                  <span className="font-semibold text-sm md:text-base whitespace-nowrap transition-all">
-                    <span className="text-gold group-hover:text-gold" style={{ textShadow: 'none' }}>{developer.name.split(' ').slice(1).join(' ') || ''}</span>
-                  </span>
-                </Link>
+                  {/* Developer Label - WHITE bg with split text */}
+                  <Link
+                    to={`/properties?developer=${encodeURIComponent(
+                      developer.developerId ?? developer.slug
+                    )}`}
+                    className="inline-flex items-center gap-1 px-4 py-2.5 bg-white border-2 border-gold/50 rounded-lg transition-all duration-300 hover:scale-105 hover:border-black hover:shadow-lg group"
+                    title={developer.name}
+                  >
+                    {/* Normal: First half black, second half gold. Hover: Invert */}
+                    <span className="text-black group-hover:text-gold transition-colors font-semibold text-sm md:text-base whitespace-nowrap">
+                      {developer.name.split(' ')[0]}
+                    </span>
+                    {developer.name.split(' ').slice(1).join(' ') && (
+                      <span className="text-gold group-hover:text-black transition-colors font-semibold text-sm md:text-base whitespace-nowrap">
+                        {developer.name.split(' ').slice(1).join(' ')}
+                      </span>
+                    )}
+                  </Link>
 
-                {/* Separator diamond - half gold, half white with glow */}
-                {index < duplicatedDevelopers.length - 1 && (
-                  <span 
-                    className="w-2 h-2 rotate-45 flex-shrink-0"
-                    style={{
-                      background: 'linear-gradient(135deg, #D4AF37 50%, #FFFFFF 50%)',
-                      boxShadow: '0 0 8px rgba(255,255,255,0.6), 0 0 12px rgba(200,167,102,0.8)',
-                    }}
-                  />
-                )}
-              </div>
-            );
-          })}
-        </motion.div>
+                  {/* Separator diamond */}
+                  {index < duplicatedDevelopers.length - 1 && (
+                    <span className="w-2 h-2 rotate-45 flex-shrink-0 bg-gold" />
+                  )}
+                </div>
+              );
+            })}
+          </motion.div>
+        </div>
       </div>
     </section>
   );

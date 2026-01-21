@@ -30,10 +30,10 @@ const ChatWelcome = ({ onStartChat }: ChatWelcomeProps) => {
         </div>
 
         <div className="space-y-3">
-          {/* Chat with Team Option - Human Team, NOT AI */}
+          {/* Chat with Team Option - ACTIVE COLOR */}
           <button
             onClick={onStartChat}
-            className="w-full p-4 bg-gradient-to-r from-[#FDFBF7] via-white to-[#F5F0E6] border border-gold/40 hover:border-gold rounded-xl text-left transition-all duration-300 group shadow-sm"
+            className="w-full p-4 bg-gradient-to-br from-[#F5EBD7] via-[#E8DCC8] to-[#D4C4A8] border-2 border-gold/40 hover:border-gold rounded-xl text-left transition-all duration-300 group shadow-md shadow-gold/20"
           >
             <div className="flex items-center gap-4">
               <div className="w-12 h-12 rounded-lg bg-white border border-gold/30 flex items-center justify-center shadow-sm">
@@ -47,14 +47,14 @@ const ChatWelcome = ({ onStartChat }: ChatWelcomeProps) => {
             </div>
           </button>
 
-          {/* WhatsApp Option - Matching styling with Chat with Team but green accents */}
+          {/* WhatsApp Option - ACTIVE COLOR */}
           <a
             href={`https://wa.me/${CONTACT_INFO.whatsappNumber}?text=${encodeURIComponent(
               "Hi! I'd like to speak with someone about property in Dubai."
             )}`}
             target="_blank"
             rel="noopener noreferrer"
-            className="w-full p-4 bg-gradient-to-r from-[#FDFBF7] via-white to-[#F5F0E6] border border-gold/40 hover:border-gold rounded-xl text-left transition-all duration-300 group block shadow-sm"
+            className="w-full p-4 bg-gradient-to-br from-[#F5EBD7] via-[#E8DCC8] to-[#D4C4A8] border-2 border-gold/40 hover:border-gold rounded-xl text-left transition-all duration-300 group block shadow-md shadow-gold/20"
           >
             <div className="flex items-center gap-4">
               <div className="w-12 h-12 rounded-lg bg-white border border-gold/30 flex items-center justify-center shadow-sm">
