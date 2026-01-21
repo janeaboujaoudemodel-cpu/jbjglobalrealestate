@@ -181,7 +181,7 @@ const GlobalHeader = () => {
           {/* LEFT: Brand Logo - Monogram only on mobile */}
           <Link 
             to="/" 
-            className="flex items-center gap-2 sm:gap-2.5 shrink-0 group transition-all duration-300"
+            className="flex items-center gap-2 sm:gap-3 shrink-0 group transition-all duration-300"
             style={{ fontFamily: "Poppins, sans-serif" }}
             onClick={() => window.scrollTo({ top: 0, behavior: 'smooth' })}
           >
@@ -189,12 +189,12 @@ const GlobalHeader = () => {
               <img 
                 src={jbjMonogramDarkBg} 
                 alt="JBJ" 
-                className="w-9 h-9 sm:w-10 sm:h-10 lg:w-9 lg:h-9 object-contain transition-transform duration-300 group-hover:scale-105"
+                className="w-11 h-11 sm:w-12 sm:h-12 lg:w-10 lg:h-10 object-contain transition-transform duration-300 group-hover:scale-105"
               />
               {/* Subtle glow on hover */}
               <div className="absolute inset-0 rounded-full bg-gold/0 group-hover:bg-gold/10 transition-colors duration-300 blur-xl" />
             </div>
-            <span className="text-white font-bold text-xs sm:text-sm lg:text-[11px] tracking-[0.08em] uppercase whitespace-nowrap drop-shadow-sm">
+            <span className="text-white font-bold text-[11px] sm:text-sm lg:text-[11px] tracking-[0.06em] uppercase whitespace-nowrap drop-shadow-sm leading-none">
               JBJ Global Real Estate
             </span>
           </Link>
