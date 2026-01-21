@@ -25,10 +25,10 @@ const LanguageSwitcher = ({ variant = 'default' }: LanguageSwitcherProps) => {
       <DropdownMenuTrigger asChild>
         {isIconOnly ? (
           <button
-            className="w-7 h-7 flex items-center justify-center transition-all duration-200 group"
+            className="w-6 h-6 flex items-center justify-center transition-all duration-200 group"
             style={{ filter: 'drop-shadow(0 1px 2px rgba(0,0,0,0.3))' }}
           >
-            <Globe className="w-4 h-4 text-white group-hover:text-gold transition-colors duration-200" style={{ filter: 'drop-shadow(0 1px 1px rgba(0,0,0,0.3))' }} />
+            <Globe className="w-3.5 h-3.5 text-gold group-hover:text-white transition-colors duration-200" style={{ filter: 'drop-shadow(0 1px 1px rgba(0,0,0,0.3))' }} />
           </button>
         ) : (
           <Button
