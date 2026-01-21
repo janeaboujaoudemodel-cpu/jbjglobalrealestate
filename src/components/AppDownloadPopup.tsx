@@ -188,7 +188,7 @@ const AppDownloadPopup = ({
           className="fixed bottom-20 right-4 left-4 sm:left-auto sm:right-4 z-[10000] sm:w-[360px]"
           style={{ paddingBottom: "max(0px, env(safe-area-inset-bottom))" }}
         >
-          <div className="pointer-events-auto rounded-2xl border border-gold/30 bg-gradient-to-r from-white via-[#FDFBF7] to-[#F5F0E6] shadow-xl shadow-black/20">
+          <div className="pointer-events-auto rounded-2xl border border-gold/40 bg-gradient-to-r from-[#FDFBF7] via-[#F5F0E6] to-[#EDE4D3] shadow-xl shadow-black/20">
             <div className="flex items-center gap-3 p-3">
               <div className="w-10 h-10 rounded-xl overflow-hidden bg-black border border-gold/30 shrink-0">
                 <img
@@ -200,9 +200,9 @@ const AppDownloadPopup = ({
               </div>
 
               <div className="min-w-0 flex-1">
-                <p className="text-sm font-semibold text-black leading-tight">Install JBJ Global Real Estate</p>
+                <p className="text-sm font-semibold text-black leading-tight">JBJ Global Real Estate</p>
                 <p className="text-xs text-zinc-600 leading-tight">
-                  One tap install where supported.
+                  Tap to install the app
                 </p>
               </div>
 
@@ -220,7 +220,7 @@ const AppDownloadPopup = ({
 
                 <button
                   onClick={handleDismiss}
-                  className="h-9 w-9 inline-flex items-center justify-center rounded-xl border border-gold/30 bg-white text-zinc-600 hover:text-black"
+                  className="h-9 w-9 inline-flex items-center justify-center rounded-xl border border-gold/30 bg-[#FDFBF7] text-zinc-600 hover:text-black"
                   aria-label="Dismiss install prompt"
                 >
                   <X className="w-4 h-4" />

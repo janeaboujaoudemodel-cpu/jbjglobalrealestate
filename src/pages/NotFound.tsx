@@ -5,6 +5,7 @@ import { motion } from "framer-motion";
 import { Button } from "@/components/ui/button";
 import jbjMonogramDark from "@/assets/jbj-monogram-dark-bg.png";
 import { CONTACT_INFO, getWhatsAppUrl } from "@/constants/stats";
+import Footer from "@/components/Footer";
 
 const fadeInUp = {
   hidden: { opacity: 0, y: 30 },
@@ -27,6 +28,7 @@ const NotFound = () => {
   }, [location.pathname]);
 
   return (
+    <>
     <div className="min-h-screen bg-black flex items-center justify-center relative overflow-hidden">
       {/* Decorative background elements */}
       <div className="absolute inset-0">
@@ -111,9 +113,10 @@ const NotFound = () => {
             </Button>
           </Link>
           <Link to="/contact">
-            <Button variant="secondary" className="px-8 py-5 text-sm w-full sm:w-auto">
+            <Button variant="primary" className="px-8 py-5 text-sm w-full sm:w-auto">
               <Phone className="w-4 h-4 mr-2" />
               Contact Support
+              <ArrowUpRight className="w-4 h-4 ml-2 text-gold" />
             </Button>
           </Link>
         </motion.div>
@@ -121,9 +124,9 @@ const NotFound = () => {
         {/* Go Back Button */}
         <motion.div variants={fadeInUp}>
           <Button 
-            variant="ghost"
+            variant="secondary"
             onClick={() => window.history.back()}
-            className="text-zinc-500 hover:text-gold transition-colors"
+            className="px-8 py-5 text-sm"
           >
             <ArrowLeft className="w-4 h-4 mr-2" />
             Go Back
@@ -164,6 +167,10 @@ const NotFound = () => {
         </motion.div>
       </motion.div>
     </div>
+    
+    {/* Footer Section */}
+    <Footer />
+    </>
   );
 };
 
