@@ -220,7 +220,14 @@ const Index = () => {
                 <div className="relative z-10">
                   <div className="flex items-center justify-center gap-3 mb-4">
                     <Sparkles className="w-8 h-8 text-purple-400 group-hover:text-purple-300 transition-colors" />
-                    <h2 className="text-white text-2xl md:text-3xl lg:text-4xl font-bold tracking-wide" style={{ fontFamily: "Poppins, sans-serif" }}>
+                    <h2 
+                      className="text-white text-2xl md:text-3xl lg:text-4xl font-bold tracking-wide" 
+                      style={{ 
+                        fontFamily: "Poppins, sans-serif",
+                        textShadow: '0 0 10px rgba(255,255,255,0.4), 0 0 20px rgba(255,255,255,0.2), 0 2px 4px rgba(0,0,0,0.3)',
+                        filter: 'drop-shadow(0 4px 6px rgba(0,0,0,0.3))',
+                      }}
+                    >
                       AI Home Finder
                     </h2>
                     <ArrowUpRight className="w-7 h-7 text-purple-400 group-hover:text-purple-300 group-hover:translate-x-1 group-hover:-translate-y-1 transition-all duration-300" />
@@ -321,86 +328,82 @@ const Index = () => {
             </Link>
           </div>
 
-          {/* Quick Actions - FILLED with white pearl gold champagne, gold border icon box, black icon, gold title, black subtitle */}
-          <div className="grid grid-cols-2 md:grid-cols-4 gap-4 max-w-4xl mx-auto mb-12">
-            <Link to="/properties" className="group">
-              <div className="bg-gradient-to-br from-white via-[#FDFBF7] to-[#F5F0E6] border-2 border-gold/40 rounded-xl p-5 text-center hover:border-gold hover:shadow-[0_0_25px_rgba(200,167,102,0.4)] transition-all duration-300 relative overflow-hidden shadow-[0_0_15px_rgba(200,167,102,0.2)]">
+          {/* Quick Actions + Partner Network - All 7 cards on one line */}
+          <div className="flex justify-center gap-2 md:gap-3 max-w-6xl mx-auto mb-12 flex-wrap lg:flex-nowrap">
+            <Link to="/properties" className="group flex-1 min-w-[100px] max-w-[140px]">
+              <div className="bg-gradient-to-br from-white via-[#FDFBF7] to-[#F5F0E6] border-2 border-gold/40 rounded-xl p-3 md:p-4 text-center hover:border-gold hover:shadow-[0_0_25px_rgba(200,167,102,0.4)] transition-all duration-300 relative overflow-hidden shadow-[0_0_15px_rgba(200,167,102,0.2)] h-full">
                 <div className="relative z-10">
-                  <div className="w-10 h-10 bg-transparent border-2 border-gold group-hover:border-black rounded-lg flex items-center justify-center mx-auto mb-3 transition-colors">
-                    <Home className="w-5 h-5 text-black group-hover:text-gold transition-colors" />
+                  <div className="w-8 h-8 md:w-9 md:h-9 bg-transparent border-2 border-gold group-hover:border-black rounded-lg flex items-center justify-center mx-auto mb-2 transition-colors">
+                    <Home className="w-4 h-4 md:w-4.5 md:h-4.5 text-black group-hover:text-gold transition-colors" />
                   </div>
-                  <h4 className="text-gold group-hover:text-black text-sm font-semibold mb-1 transition-colors">Explore Properties</h4>
-                  <p className="text-black group-hover:text-gold text-xs transition-colors">Browse listings</p>
+                  <h4 className="text-gold group-hover:text-black text-[10px] md:text-xs font-semibold mb-0.5 transition-colors">Explore Properties</h4>
+                  <p className="text-black group-hover:text-gold text-[9px] md:text-[10px] transition-colors hidden md:block">Browse listings</p>
                 </div>
               </div>
             </Link>
-            <Link to="/seller-listing" className="group">
-              <div className="bg-gradient-to-br from-white via-[#FDFBF7] to-[#F5F0E6] border-2 border-gold/40 rounded-xl p-5 text-center hover:border-gold hover:shadow-[0_0_25px_rgba(200,167,102,0.4)] transition-all duration-300 relative overflow-hidden shadow-[0_0_15px_rgba(200,167,102,0.2)]">
+            <Link to="/seller-listing" className="group flex-1 min-w-[100px] max-w-[140px]">
+              <div className="bg-gradient-to-br from-white via-[#FDFBF7] to-[#F5F0E6] border-2 border-gold/40 rounded-xl p-3 md:p-4 text-center hover:border-gold hover:shadow-[0_0_25px_rgba(200,167,102,0.4)] transition-all duration-300 relative overflow-hidden shadow-[0_0_15px_rgba(200,167,102,0.2)] h-full">
                 <div className="relative z-10">
-                  <div className="w-10 h-10 bg-transparent border-2 border-gold group-hover:border-black rounded-lg flex items-center justify-center mx-auto mb-3 transition-colors">
-                    <Target className="w-5 h-5 text-black group-hover:text-gold transition-colors" />
+                  <div className="w-8 h-8 md:w-9 md:h-9 bg-transparent border-2 border-gold group-hover:border-black rounded-lg flex items-center justify-center mx-auto mb-2 transition-colors">
+                    <Target className="w-4 h-4 md:w-4.5 md:h-4.5 text-black group-hover:text-gold transition-colors" />
                   </div>
-                  <h4 className="text-gold group-hover:text-black text-sm font-semibold mb-1 transition-colors">List Your Property</h4>
-                  <p className="text-black group-hover:text-gold text-xs transition-colors">Sell or rent</p>
+                  <h4 className="text-gold group-hover:text-black text-[10px] md:text-xs font-semibold mb-0.5 transition-colors">List Your Property</h4>
+                  <p className="text-black group-hover:text-gold text-[9px] md:text-[10px] transition-colors hidden md:block">Sell or rent</p>
                 </div>
               </div>
             </Link>
-            <Link to="/market-report" className="group">
-              <div className="bg-gradient-to-br from-white via-[#FDFBF7] to-[#F5F0E6] border-2 border-gold/40 rounded-xl p-5 text-center hover:border-gold hover:shadow-[0_0_25px_rgba(200,167,102,0.4)] transition-all duration-300 relative overflow-hidden shadow-[0_0_15px_rgba(200,167,102,0.2)]">
+            <Link to="/market-report" className="group flex-1 min-w-[100px] max-w-[140px]">
+              <div className="bg-gradient-to-br from-white via-[#FDFBF7] to-[#F5F0E6] border-2 border-gold/40 rounded-xl p-3 md:p-4 text-center hover:border-gold hover:shadow-[0_0_25px_rgba(200,167,102,0.4)] transition-all duration-300 relative overflow-hidden shadow-[0_0_15px_rgba(200,167,102,0.2)] h-full">
                 <div className="relative z-10">
-                  <div className="w-10 h-10 bg-transparent border-2 border-gold group-hover:border-black rounded-lg flex items-center justify-center mx-auto mb-3 transition-colors">
-                    <FileText className="w-5 h-5 text-black group-hover:text-gold transition-colors" />
+                  <div className="w-8 h-8 md:w-9 md:h-9 bg-transparent border-2 border-gold group-hover:border-black rounded-lg flex items-center justify-center mx-auto mb-2 transition-colors">
+                    <FileText className="w-4 h-4 md:w-4.5 md:h-4.5 text-black group-hover:text-gold transition-colors" />
                   </div>
-                  <h4 className="text-gold group-hover:text-black text-sm font-semibold mb-1 transition-colors">Market Report</h4>
-                  <p className="text-black group-hover:text-gold text-xs transition-colors">Latest insights</p>
+                  <h4 className="text-gold group-hover:text-black text-[10px] md:text-xs font-semibold mb-0.5 transition-colors">Market Report</h4>
+                  <p className="text-black group-hover:text-gold text-[9px] md:text-[10px] transition-colors hidden md:block">Latest insights</p>
                 </div>
               </div>
             </Link>
-            <Link to="/ai-hub" className="group">
-              <div className="bg-gradient-to-br from-white via-[#FDFBF7] to-[#F5F0E6] border-2 border-gold/40 rounded-xl p-5 text-center hover:border-gold hover:shadow-[0_0_25px_rgba(200,167,102,0.4)] transition-all duration-300 relative overflow-hidden shadow-[0_0_15px_rgba(200,167,102,0.2)]">
+            <Link to="/ai-hub" className="group flex-1 min-w-[100px] max-w-[140px]">
+              <div className="bg-gradient-to-br from-white via-[#FDFBF7] to-[#F5F0E6] border-2 border-gold/40 rounded-xl p-3 md:p-4 text-center hover:border-gold hover:shadow-[0_0_25px_rgba(200,167,102,0.4)] transition-all duration-300 relative overflow-hidden shadow-[0_0_15px_rgba(200,167,102,0.2)] h-full">
                 <div className="relative z-10">
-                  <div className="w-10 h-10 bg-transparent border-2 border-gold group-hover:border-black rounded-lg flex items-center justify-center mx-auto mb-3 transition-colors">
-                    <Layers className="w-5 h-5 text-black group-hover:text-gold transition-colors" />
+                  <div className="w-8 h-8 md:w-9 md:h-9 bg-transparent border-2 border-gold group-hover:border-black rounded-lg flex items-center justify-center mx-auto mb-2 transition-colors">
+                    <Layers className="w-4 h-4 md:w-4.5 md:h-4.5 text-black group-hover:text-gold transition-colors" />
                   </div>
-                  <h4 className="text-gold group-hover:text-black text-sm font-semibold mb-1 transition-colors">Investor Hub</h4>
-                  <p className="text-black group-hover:text-gold text-xs transition-colors">AI-powered tools</p>
+                  <h4 className="text-gold group-hover:text-black text-[10px] md:text-xs font-semibold mb-0.5 transition-colors">Investor Hub</h4>
+                  <p className="text-black group-hover:text-gold text-[9px] md:text-[10px] transition-colors hidden md:block">AI-powered tools</p>
                 </div>
               </div>
             </Link>
-          </div>
-
-          {/* Licensed Partner Network - FILLED with white pearl gold champagne, gold border icon box, black icon, gold title, black subtitle */}
-          <div className="grid grid-cols-3 gap-6 max-w-3xl mx-auto mb-8">
-            <Link to="/services/law-firm" className="group">
-              <div className="bg-gradient-to-br from-white via-[#FDFBF7] to-[#F5F0E6] border-2 border-gold/40 rounded-xl p-5 text-center hover:border-gold hover:shadow-[0_0_25px_rgba(200,167,102,0.4)] transition-all duration-300 relative overflow-hidden shadow-[0_0_15px_rgba(200,167,102,0.2)] h-full">
+            <Link to="/services/law-firm" className="group flex-1 min-w-[100px] max-w-[140px]">
+              <div className="bg-gradient-to-br from-white via-[#FDFBF7] to-[#F5F0E6] border-2 border-gold/40 rounded-xl p-3 md:p-4 text-center hover:border-gold hover:shadow-[0_0_25px_rgba(200,167,102,0.4)] transition-all duration-300 relative overflow-hidden shadow-[0_0_15px_rgba(200,167,102,0.2)] h-full">
                 <div className="relative z-10">
-                  <div className="w-10 h-10 bg-transparent border-2 border-gold group-hover:border-black rounded-lg flex items-center justify-center mx-auto mb-3 transition-colors">
-                    <Scale className="w-5 h-5 text-black group-hover:text-gold transition-colors" />
+                  <div className="w-8 h-8 md:w-9 md:h-9 bg-transparent border-2 border-gold group-hover:border-black rounded-lg flex items-center justify-center mx-auto mb-2 transition-colors">
+                    <Scale className="w-4 h-4 md:w-4.5 md:h-4.5 text-black group-hover:text-gold transition-colors" />
                   </div>
-                  <h4 className="text-gold group-hover:text-black text-sm font-semibold mb-1 transition-colors">Legal Partners</h4>
-                  <p className="text-black group-hover:text-gold text-xs transition-colors">Legal services</p>
+                  <h4 className="text-gold group-hover:text-black text-[10px] md:text-xs font-semibold mb-0.5 transition-colors">Legal Partners</h4>
+                  <p className="text-black group-hover:text-gold text-[9px] md:text-[10px] transition-colors hidden md:block">Legal services</p>
                 </div>
               </div>
             </Link>
-            <Link to="/mortgage-calculator" className="group">
-              <div className="bg-gradient-to-br from-white via-[#FDFBF7] to-[#F5F0E6] border-2 border-gold/40 rounded-xl p-5 text-center hover:border-gold hover:shadow-[0_0_25px_rgba(200,167,102,0.4)] transition-all duration-300 relative overflow-hidden shadow-[0_0_15px_rgba(200,167,102,0.2)] h-full">
+            <Link to="/mortgage-calculator" className="group flex-1 min-w-[100px] max-w-[140px]">
+              <div className="bg-gradient-to-br from-white via-[#FDFBF7] to-[#F5F0E6] border-2 border-gold/40 rounded-xl p-3 md:p-4 text-center hover:border-gold hover:shadow-[0_0_25px_rgba(200,167,102,0.4)] transition-all duration-300 relative overflow-hidden shadow-[0_0_15px_rgba(200,167,102,0.2)] h-full">
                 <div className="relative z-10">
-                  <div className="w-10 h-10 bg-transparent border-2 border-gold group-hover:border-black rounded-lg flex items-center justify-center mx-auto mb-3 transition-colors">
-                    <Calculator className="w-5 h-5 text-black group-hover:text-gold transition-colors" />
+                  <div className="w-8 h-8 md:w-9 md:h-9 bg-transparent border-2 border-gold group-hover:border-black rounded-lg flex items-center justify-center mx-auto mb-2 transition-colors">
+                    <Calculator className="w-4 h-4 md:w-4.5 md:h-4.5 text-black group-hover:text-gold transition-colors" />
                   </div>
-                  <h4 className="text-gold group-hover:text-black text-sm font-semibold mb-1 transition-colors">Mortgage Partners</h4>
-                  <p className="text-black group-hover:text-gold text-xs transition-colors">Financing options</p>
+                  <h4 className="text-gold group-hover:text-black text-[10px] md:text-xs font-semibold mb-0.5 transition-colors">Mortgage Partners</h4>
+                  <p className="text-black group-hover:text-gold text-[9px] md:text-[10px] transition-colors hidden md:block">Financing options</p>
                 </div>
               </div>
             </Link>
-            <Link to="/services/design-build" className="group">
-              <div className="bg-gradient-to-br from-white via-[#FDFBF7] to-[#F5F0E6] border-2 border-gold/40 rounded-xl p-5 text-center hover:border-gold hover:shadow-[0_0_25px_rgba(200,167,102,0.4)] transition-all duration-300 relative overflow-hidden shadow-[0_0_15px_rgba(200,167,102,0.2)] h-full">
+            <Link to="/services/design-build" className="group flex-1 min-w-[100px] max-w-[140px]">
+              <div className="bg-gradient-to-br from-white via-[#FDFBF7] to-[#F5F0E6] border-2 border-gold/40 rounded-xl p-3 md:p-4 text-center hover:border-gold hover:shadow-[0_0_25px_rgba(200,167,102,0.4)] transition-all duration-300 relative overflow-hidden shadow-[0_0_15px_rgba(200,167,102,0.2)] h-full">
                 <div className="relative z-10">
-                  <div className="w-10 h-10 bg-transparent border-2 border-gold group-hover:border-black rounded-lg flex items-center justify-center mx-auto mb-3 transition-colors">
-                    <Wrench className="w-5 h-5 text-black group-hover:text-gold transition-colors" />
+                  <div className="w-8 h-8 md:w-9 md:h-9 bg-transparent border-2 border-gold group-hover:border-black rounded-lg flex items-center justify-center mx-auto mb-2 transition-colors">
+                    <Wrench className="w-4 h-4 md:w-4.5 md:h-4.5 text-black group-hover:text-gold transition-colors" />
                   </div>
-                  <h4 className="text-gold group-hover:text-black text-sm font-semibold mb-1 transition-colors">Design & Build Partners</h4>
-                  <p className="text-black group-hover:text-gold text-xs transition-colors">Construction & fit-out</p>
+                  <h4 className="text-gold group-hover:text-black text-[10px] md:text-xs font-semibold mb-0.5 transition-colors">Design & Build</h4>
+                  <p className="text-black group-hover:text-gold text-[9px] md:text-[10px] transition-colors hidden md:block">Construction & fit-out</p>
                 </div>
               </div>
             </Link>
