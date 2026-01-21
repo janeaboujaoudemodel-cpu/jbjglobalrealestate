@@ -356,68 +356,65 @@ const SellerGuide = () => {
 
         {/* Who This Guide Is For */}
         <section id="who-is-this-for" className="py-16 jj-section-champagne scroll-mt-20">
-          <div className="container mx-auto px-4">
-            <div className="max-w-5xl mx-auto">
-              <motion.div
-                initial="hidden"
-                whileInView="visible"
-                viewport={{ once: true }}
-                variants={staggerContainer}
-                className="text-center mb-12"
-              >
-                <motion.h2 variants={fadeInUp} className="text-3xl font-bold text-black mb-4">
-                  Who This Guide Is For
-                </motion.h2>
-              </motion.div>
-              
-              <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-6">
-                {whoIsThisFor.map((item, index) => (
-                  <motion.div
-                    key={index}
-                    initial={{ opacity: 0, y: 20 }}
-                    whileInView={{ opacity: 1, y: 0 }}
-                    viewport={{ once: true }}
-                    transition={{ delay: index * 0.1 }}
-                    className="jj-box-active p-6 hover:border-gold hover:shadow-xl hover:shadow-gold/20 transition-all"
-                  >
-                    <div className="w-12 h-12 bg-gold/10 rounded-xl flex items-center justify-center mb-4 group-hover:bg-gold/20 transition-colors">
-                      <item.icon className="w-6 h-6 text-gold" />
-                    </div>
-                    <h3 className="text-lg font-bold text-black mb-2">{item.title}</h3>
-                    <p className="text-zinc-600 text-sm">{item.description}</p>
-                  </motion.div>
-                ))}
-              </div>
+          <div className="max-w-5xl mx-auto px-4">
+            <motion.div
+              initial="hidden"
+              whileInView="visible"
+              viewport={{ once: true }}
+              variants={staggerContainer}
+              className="text-center mb-12"
+            >
+              <motion.h2 variants={fadeInUp} className="text-3xl font-bold text-black mb-4">
+                <span className="text-gold">Who</span> This Guide Is For
+              </motion.h2>
+            </motion.div>
+            
+            <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-6">
+              {whoIsThisFor.map((item, index) => (
+                <motion.div
+                  key={index}
+                  initial={{ opacity: 0, y: 20 }}
+                  whileInView={{ opacity: 1, y: 0 }}
+                  viewport={{ once: true }}
+                  transition={{ delay: index * 0.1 }}
+                  className="jj-box-active p-6 hover:border-gold hover:shadow-xl hover:shadow-gold/20 transition-all"
+                >
+                  <div className="w-12 h-12 bg-gold/10 rounded-xl flex items-center justify-center mb-4 group-hover:bg-gold/20 transition-colors">
+                    <item.icon className="w-6 h-6 text-gold" />
+                  </div>
+                  <h3 className="text-lg font-bold text-black mb-2">{item.title}</h3>
+                  <p className="text-zinc-600 text-sm">{item.description}</p>
+                </motion.div>
+              ))}
             </div>
           </div>
         </section>
 
         {/* Step-by-Step Selling Process */}
         <section id="selling-process" className="py-16 jj-section-champagne scroll-mt-20">
-          <div className="container mx-auto px-4">
-            <div className="max-w-4xl mx-auto">
-              <motion.div
-                initial="hidden"
-                whileInView="visible"
-                viewport={{ once: true }}
-                variants={staggerContainer}
-                className="text-center mb-12"
-              >
-                <motion.h2 variants={fadeInUp} className="text-3xl font-bold text-black mb-4">
-                  Step-by-Step Selling Process
-                </motion.h2>
-              </motion.div>
-              
-              <div className="space-y-6">
-                {steps.map((step, index) => (
-                  <motion.div 
-                    key={step.number}
-                    initial={{ opacity: 0, x: -20 }}
-                    whileInView={{ opacity: 1, x: 0 }}
-                    viewport={{ once: true }}
-                    transition={{ delay: index * 0.05 }}
-                    className="jj-box-active p-6 md:p-8 hover:border-gold hover:shadow-xl hover:shadow-gold/20 transition-all"
-                  >
+          <div className="max-w-5xl mx-auto px-4">
+            <motion.div
+              initial="hidden"
+              whileInView="visible"
+              viewport={{ once: true }}
+              variants={staggerContainer}
+              className="text-center mb-12"
+            >
+              <motion.h2 variants={fadeInUp} className="text-3xl font-bold text-black mb-4">
+                <span className="text-gold">Step-by-Step</span> Selling Process
+              </motion.h2>
+            </motion.div>
+            
+            <div className="space-y-6">
+              {steps.map((step, index) => (
+                <motion.div 
+                  key={step.number}
+                  initial={{ opacity: 0, x: -20 }}
+                  whileInView={{ opacity: 1, x: 0 }}
+                  viewport={{ once: true }}
+                  transition={{ delay: index * 0.05 }}
+                  className="jj-box-active p-6 md:p-8 hover:border-gold hover:shadow-xl hover:shadow-gold/20 transition-all"
+                >
                     <div className="flex items-start gap-4">
                       <div className="flex-shrink-0 w-14 h-14 bg-gradient-to-br from-gold/20 to-gold/5 rounded-xl flex items-center justify-center border border-gold/20">
                         <step.icon className="w-6 h-6 text-gold" />
@@ -459,7 +456,6 @@ const SellerGuide = () => {
                     </div>
                   </motion.div>
                 ))}
-              </div>
             </div>
           </div>
         </section>

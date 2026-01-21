@@ -230,59 +230,55 @@ const TenantGuide = () => {
 
       {/* Section 1: Understanding the Rental Market */}
       <section id="rental-market" className="jj-section-champagne py-16 md:py-24 scroll-mt-20">
-        <div className="container mx-auto px-4">
-          <div className="max-w-5xl mx-auto">
-            <div className="text-center mb-12">
-              <h2 className="text-3xl md:text-4xl font-light text-black mb-4">
-                Section 1: <span className="text-gold">Understanding</span> the Rental Market
-              </h2>
-              <p className="text-lg text-zinc-600 max-w-2xl mx-auto">
-                Dubai's rental market is regulated and transparent, with clear rules governing pricing, contracts, and tenant rights.
-              </p>
-            </div>
+        <div className="max-w-5xl mx-auto px-4">
+          <div className="text-center mb-12">
+            <h2 className="text-3xl md:text-4xl font-light text-black mb-4">
+              <span className="text-gold">Understanding</span> the Rental Market
+            </h2>
+            <p className="text-lg text-zinc-600 max-w-2xl mx-auto">
+              Dubai's rental market is regulated and transparent, with clear rules governing pricing, contracts, and tenant rights.
+            </p>
+          </div>
 
-            <div className="jj-box-active p-6 md:p-8">
-              <p className="text-zinc-700 mb-6 font-medium">What to know:</p>
-              <ul className="space-y-3">
-                {rentalMarketPoints.map((item, index) => (
-                  <li key={index} className="flex items-start gap-3">
-                    <CheckCircle2 className="w-5 h-5 text-gold flex-shrink-0 mt-0.5" />
-                    <span className="text-zinc-700">{item}</span>
-                  </li>
-                ))}
-              </ul>
-            </div>
+          <div className="jj-box-active p-6 md:p-8">
+            <p className="text-zinc-700 mb-6 font-medium">What to know:</p>
+            <ul className="space-y-3">
+              {rentalMarketPoints.map((item, index) => (
+                <li key={index} className="flex items-start gap-3">
+                  <CheckCircle2 className="w-5 h-5 text-gold flex-shrink-0 mt-0.5" />
+                  <span className="text-zinc-700">{item}</span>
+                </li>
+              ))}
+            </ul>
           </div>
         </div>
       </section>
 
       {/* Section 2: Budgeting for Rent */}
       <section id="budgeting" className="jj-section-champagne py-16 md:py-24 scroll-mt-20">
-        <div className="container mx-auto px-4">
-          <div className="max-w-5xl mx-auto">
-            <div className="text-center mb-12">
-              <h2 className="text-3xl md:text-4xl font-light text-black mb-4">
-                Section 2: <span className="text-gold">Budgeting</span> for Rent
-              </h2>
-              <p className="text-lg text-zinc-600 max-w-2xl mx-auto">
-                Before searching, tenants should understand the full cost of renting.
-              </p>
-            </div>
+        <div className="max-w-5xl mx-auto px-4">
+          <div className="text-center mb-12">
+            <h2 className="text-3xl md:text-4xl font-light text-black mb-4">
+              <span className="text-gold">Budgeting</span> for Rent
+            </h2>
+            <p className="text-lg text-zinc-600 max-w-2xl mx-auto">
+              Before searching, tenants should understand the full cost of renting.
+            </p>
+          </div>
 
-            <div className="jj-box-active p-6 md:p-8">
-              <p className="text-zinc-700 mb-6 font-medium">Typical costs include:</p>
-              <ul className="space-y-3 mb-6">
-                {budgetCosts.map((item, index) => (
-                  <li key={index} className="flex items-start gap-3">
-                    <Banknote className="w-5 h-5 text-gold flex-shrink-0 mt-0.5" />
-                    <span className="text-zinc-700">{item}</span>
-                  </li>
-                ))}
-              </ul>
-              <p className="text-sm text-zinc-600 italic border-t border-gold/30 pt-4">
-                Rent is usually paid in post-dated cheques.
-              </p>
-            </div>
+          <div className="jj-box-active p-6 md:p-8">
+            <p className="text-zinc-700 mb-6 font-medium">Typical costs include:</p>
+            <ul className="space-y-3 mb-6">
+              {budgetCosts.map((item, index) => (
+                <li key={index} className="flex items-start gap-3">
+                  <Banknote className="w-5 h-5 text-gold flex-shrink-0 mt-0.5" />
+                  <span className="text-zinc-700">{item}</span>
+                </li>
+              ))}
+            </ul>
+            <p className="text-sm text-zinc-600 italic border-t border-gold/30 pt-4">
+              Rent is usually paid in post-dated cheques.
+            </p>
           </div>
         </div>
       </section>

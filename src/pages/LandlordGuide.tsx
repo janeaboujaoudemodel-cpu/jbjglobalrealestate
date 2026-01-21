@@ -221,56 +221,52 @@ const LandlordGuide = () => {
 
       {/* Section 1: Understanding the Rental Market */}
       <section id="rental-market" className="jj-section-champagne py-16 md:py-24 scroll-mt-20">
-        <div className="container mx-auto px-4">
-          <div className="max-w-5xl mx-auto">
-            <div className="text-center mb-12">
-              <h2 className="text-3xl md:text-4xl font-light text-black mb-4">
-                Section 1: <span className="text-gold">Understanding</span> the Rental Market
-              </h2>
-              <p className="text-lg text-zinc-600 max-w-2xl mx-auto">
-                Dubai's rental market is regulated and data-driven. Rental values vary by area, building quality, unit size, furnishing level, and cheque structure.
-              </p>
-            </div>
+        <div className="max-w-5xl mx-auto px-4">
+          <div className="text-center mb-12">
+            <h2 className="text-3xl md:text-4xl font-light text-black mb-4">
+              <span className="text-gold">Understanding</span> the Rental Market
+            </h2>
+            <p className="text-lg text-zinc-600 max-w-2xl mx-auto">
+              Dubai's rental market is regulated and data-driven. Rental values vary by area, building quality, unit size, furnishing level, and cheque structure.
+            </p>
+          </div>
 
-            <div className="jj-box-active p-6 md:p-8">
-              <p className="text-zinc-700 mb-6 font-medium">Key points:</p>
-              <ul className="space-y-3">
-                {rentalMarketPoints.map((item, index) => (
-                  <li key={index} className="flex items-start gap-3">
-                    <CheckCircle2 className="w-5 h-5 text-gold flex-shrink-0 mt-0.5" />
-                    <span className="text-zinc-700">{item}</span>
-                  </li>
-                ))}
-              </ul>
-            </div>
+          <div className="jj-box-active p-6 md:p-8">
+            <p className="text-zinc-700 mb-6 font-medium">Key points:</p>
+            <ul className="space-y-3">
+              {rentalMarketPoints.map((item, index) => (
+                <li key={index} className="flex items-start gap-3">
+                  <CheckCircle2 className="w-5 h-5 text-gold flex-shrink-0 mt-0.5" />
+                  <span className="text-zinc-700">{item}</span>
+                </li>
+              ))}
+            </ul>
           </div>
         </div>
       </section>
 
       {/* Section 2: Preparing Your Property for Rent */}
       <section id="property-preparation" className="jj-section-champagne py-16 md:py-24 scroll-mt-20">
-        <div className="container mx-auto px-4">
-          <div className="max-w-5xl mx-auto">
-            <div className="text-center mb-12">
-              <h2 className="text-3xl md:text-4xl font-light text-black mb-4">
-                Section 2: <span className="text-gold">Preparing</span> Your Property for Rent
-              </h2>
-              <p className="text-lg text-zinc-600 max-w-2xl mx-auto">
-                A well-prepared unit rents faster and attracts higher-quality tenants.
-              </p>
-            </div>
+        <div className="max-w-5xl mx-auto px-4">
+          <div className="text-center mb-12">
+            <h2 className="text-3xl md:text-4xl font-light text-black mb-4">
+              <span className="text-gold">Preparing</span> Your Property for Rent
+            </h2>
+            <p className="text-lg text-zinc-600 max-w-2xl mx-auto">
+              A well-prepared unit rents faster and attracts higher-quality tenants.
+            </p>
+          </div>
 
-            <div className="jj-box-active p-6 md:p-8">
-              <p className="text-zinc-700 mb-6 font-medium">Checklist:</p>
-              <ul className="space-y-3">
-                {propertyPreparationChecklist.map((item, index) => (
-                  <li key={index} className="flex items-start gap-3">
-                    <CheckCircle2 className="w-5 h-5 text-gold flex-shrink-0 mt-0.5" />
-                    <span className="text-zinc-700">{item}</span>
-                  </li>
-                ))}
-              </ul>
-            </div>
+          <div className="jj-box-active p-6 md:p-8">
+            <p className="text-zinc-700 mb-6 font-medium">Checklist:</p>
+            <ul className="space-y-3">
+              {propertyPreparationChecklist.map((item, index) => (
+                <li key={index} className="flex items-start gap-3">
+                  <CheckCircle2 className="w-5 h-5 text-gold flex-shrink-0 mt-0.5" />
+                  <span className="text-zinc-700">{item}</span>
+                </li>
+              ))}
+            </ul>
           </div>
         </div>
       </section>
