@@ -528,6 +528,7 @@ const InquiryFormModal = ({
                             }}
                             showValidation={true}
                             className="w-full"
+                            variant="light"
                           />
                         </FormControl>
                         {/* Only show form error if PhoneInput has no local number (empty field) */}
