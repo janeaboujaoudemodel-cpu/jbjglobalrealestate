@@ -30,17 +30,22 @@ const LanguageSwitcher = ({ variant = 'default' }: LanguageSwitcherProps) => {
           >
             <Globe className="w-3.5 h-3.5 text-gold group-hover:text-white transition-colors duration-200" style={{ filter: 'drop-shadow(0 1px 1px rgba(0,0,0,0.3))' }} />
           </button>
+        ) : isCompact ? (
+          <button
+            type="button"
+            className="inline-flex h-7 w-7 items-center justify-center p-0 bg-transparent border-0 rounded-none appearance-none transition-colors duration-300 focus:outline-none focus-visible:outline-none focus-visible:ring-0 group"
+            aria-label={t('header.language')}
+          >
+            <Globe className="w-3 h-3 text-gold group-hover:text-gold-light transition-colors duration-200" />
+          </button>
         ) : (
           <Button
             variant="ghost"
             size="sm"
-            className={isCompact 
-              ? "h-7 w-7 p-0 rounded-none bg-transparent hover:bg-white/10 transition-all duration-300 group"
-              : "h-10 lg:h-11 px-3 text-gold hover:text-gold-light rounded-full border border-gold/20 hover:border-gold/50 hover:bg-gold/10 transition-all duration-300 group gap-2"
-            }
+            className="h-10 lg:h-11 px-3 text-gold hover:text-gold-light rounded-full border border-gold/20 hover:border-gold/50 hover:bg-gold/10 transition-all duration-300 group gap-2"
           >
-            <Globe className={isCompact ? "w-3 h-3 text-gold group-hover:text-gold-light" : "w-4 h-4 group-hover:scale-110 transition-transform"} />
-            {!isCompact && <span className="hidden sm:inline text-xs font-medium tracking-wide">{currentLang.flag} {currentLang.code.toUpperCase()}</span>}
+            <Globe className="w-4 h-4 group-hover:scale-110 transition-transform" />
+            <span className="hidden sm:inline text-xs font-medium tracking-wide">{currentLang.flag} {currentLang.code.toUpperCase()}</span>
           </Button>
         )}
       </DropdownMenuTrigger>
