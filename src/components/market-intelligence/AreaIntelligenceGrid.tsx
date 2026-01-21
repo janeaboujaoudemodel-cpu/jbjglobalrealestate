@@ -2,10 +2,11 @@ import { Link } from "react-router-dom";
 import { motion } from "framer-motion";
 import { 
   TrendingUp, TrendingDown, Minus, MapPin, 
-  ArrowUpRight, BarChart2, Home, Building2
+  ArrowUpRight, BarChart2, Home, Building2, ChevronRight
 } from "lucide-react";
 import { Card, CardContent } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
+import { Button } from "@/components/ui/button";
 import { DUBAI_AREAS_MARKET_DATA, type AreaMarketSnapshot } from "@/config/open-data-config";
 
 const fadeInUp = {
@@ -14,16 +15,16 @@ const fadeInUp = {
 };
 
 const TrendIcon = ({ trend }: { trend: 'bullish' | 'bearish' | 'neutral' }) => {
-  if (trend === 'bullish') return <TrendingUp className="w-4 h-4 text-emerald-400" />;
-  if (trend === 'bearish') return <TrendingDown className="w-4 h-4 text-red-400" />;
-  return <Minus className="w-4 h-4 text-yellow-400" />;
+  if (trend === 'bullish') return <TrendingUp className="w-4 h-4 text-emerald-600" />;
+  if (trend === 'bearish') return <TrendingDown className="w-4 h-4 text-red-600" />;
+  return <Minus className="w-4 h-4 text-amber-600" />;
 };
 
 const TrendBadge = ({ trend }: { trend: 'bullish' | 'bearish' | 'neutral' }) => {
   const colors = {
-    bullish: 'bg-emerald-500/10 text-emerald-400 border-emerald-500/30',
-    bearish: 'bg-red-500/10 text-red-400 border-red-500/30',
-    neutral: 'bg-yellow-500/10 text-yellow-400 border-yellow-500/30',
+    bullish: 'bg-emerald-100 text-emerald-700 border-emerald-300',
+    bearish: 'bg-red-100 text-red-700 border-red-300',
+    neutral: 'bg-amber-100 text-amber-700 border-amber-300',
   };
   
   return (
@@ -34,12 +35,25 @@ const TrendBadge = ({ trend }: { trend: 'bullish' | 'bearish' | 'neutral' }) => 
   );
 };
 
+// Split title helper
+const SplitTitle = ({ text }: { text: string }) => {
+  const words = text.split(' ');
+  const firstWord = words[0];
+  const restWords = words.slice(1).join(' ');
+  
+  return (
+    <span className="jj-title-split">
+      <span>{firstWord}</span>{restWords && <span> {restWords}</span>}
+    </span>
+  );
+};
+
 const AreaCard = ({ area }: { area: AreaMarketSnapshot }) => {
   const slugify = (text: string) => text.toLowerCase().replace(/\s+/g, '-');
   
   return (
     <motion.div variants={fadeInUp}>
-      <Card className="bg-white border-zinc-200 hover:border-gold/50 hover:shadow-lg transition-all group h-full">
+      <Card className="jj-box-active hover:border-gold/50 hover:shadow-lg transition-all group h-full">
         <CardContent className="p-6">
           {/* Header */}
           <div className="flex items-start justify-between mb-4">
@@ -51,7 +65,7 @@ const AreaCard = ({ area }: { area: AreaMarketSnapshot }) => {
                 <h3 className="text-black font-semibold group-hover:text-gold transition-colors">
                   {area.area}
                 </h3>
-                <p className="text-zinc-500 text-xs">Dubai, UAE</p>
+                <p className="text-black/50 text-xs">Dubai, UAE</p>
               </div>
             </div>
             <TrendBadge trend={area.trend} />
@@ -59,15 +73,15 @@ const AreaCard = ({ area }: { area: AreaMarketSnapshot }) => {
 
           {/* Metrics */}
           <div className="grid grid-cols-2 gap-4 mb-4">
-            <div className="bg-zinc-100 rounded-lg p-3">
-              <div className="flex items-center gap-1 text-zinc-500 text-xs mb-1">
+            <div className="bg-white/50 rounded-lg p-3">
+              <div className="flex items-center gap-1 text-black/60 text-xs mb-1">
                 <Home className="w-3 h-3" />
                 Price Index
               </div>
               <p className="text-black font-bold text-lg">{area.priceIndex}</p>
             </div>
-            <div className="bg-zinc-100 rounded-lg p-3">
-              <div className="flex items-center gap-1 text-zinc-500 text-xs mb-1">
+            <div className="bg-white/50 rounded-lg p-3">
+              <div className="flex items-center gap-1 text-black/60 text-xs mb-1">
                 <Building2 className="w-3 h-3" />
                 Rental Index
               </div>
@@ -79,10 +93,10 @@ const AreaCard = ({ area }: { area: AreaMarketSnapshot }) => {
           <div className="space-y-3 mb-4">
             <div>
               <div className="flex justify-between text-xs mb-1">
-                <span className="text-zinc-500">Demand Score</span>
+                <span className="text-black/60">Demand Score</span>
                 <span className="text-black">{area.demandScore}/100</span>
               </div>
-              <div className="h-2 bg-zinc-200 rounded-full overflow-hidden">
+              <div className="h-2 bg-white/50 rounded-full overflow-hidden">
                 <div 
                   className="h-full bg-gradient-to-r from-gold/80 to-gold rounded-full"
                   style={{ width: `${area.demandScore}%` }}
@@ -91,12 +105,12 @@ const AreaCard = ({ area }: { area: AreaMarketSnapshot }) => {
             </div>
             <div>
               <div className="flex justify-between text-xs mb-1">
-                <span className="text-zinc-500">Supply Score</span>
+                <span className="text-black/60">Supply Score</span>
                 <span className="text-black">{area.supplyScore}/100</span>
               </div>
-              <div className="h-2 bg-zinc-200 rounded-full overflow-hidden">
+              <div className="h-2 bg-white/50 rounded-full overflow-hidden">
                 <div 
-                  className="h-full bg-gradient-to-r from-zinc-500 to-zinc-400 rounded-full"
+                  className="h-full bg-gradient-to-r from-black/50 to-black/40 rounded-full"
                   style={{ width: `${area.supplyScore}%` }}
                 />
               </div>
@@ -104,9 +118,9 @@ const AreaCard = ({ area }: { area: AreaMarketSnapshot }) => {
           </div>
 
           {/* YoY Change */}
-          <div className="flex items-center justify-between py-3 border-t border-zinc-200">
-            <span className="text-zinc-500 text-sm">Year-over-Year</span>
-            <span className={`font-bold ${area.yoyChange >= 0 ? 'text-emerald-500' : 'text-red-500'}`}>
+          <div className="flex items-center justify-between py-3 border-t border-black/10">
+            <span className="text-black/60 text-sm">Year-over-Year</span>
+            <span className={`font-bold ${area.yoyChange >= 0 ? 'text-emerald-600' : 'text-red-600'}`}>
               {area.yoyChange >= 0 ? '+' : ''}{area.yoyChange}%
             </span>
           </div>
@@ -114,7 +128,7 @@ const AreaCard = ({ area }: { area: AreaMarketSnapshot }) => {
           {/* Highlights */}
           <div className="space-y-2 mb-4">
             {area.highlights.slice(0, 2).map((highlight, idx) => (
-              <p key={idx} className="text-zinc-600 text-xs flex items-start gap-2">
+              <p key={idx} className="text-black/70 text-xs flex items-start gap-2">
                 <span className="text-gold mt-0.5">•</span>
                 {highlight}
               </p>
@@ -124,7 +138,7 @@ const AreaCard = ({ area }: { area: AreaMarketSnapshot }) => {
           {/* Link */}
           <Link 
             to={`/area/${slugify(area.area)}`}
-            className="flex items-center justify-center gap-2 w-full py-2 text-gold hover:text-gold-light text-sm font-medium transition-colors"
+            className="flex items-center justify-center gap-2 w-full py-2 text-gold hover:text-black text-sm font-medium transition-colors"
           >
             View Area Details
             <ArrowUpRight className="w-4 h-4" />
@@ -137,7 +151,7 @@ const AreaCard = ({ area }: { area: AreaMarketSnapshot }) => {
 
 export const AreaIntelligenceGrid = () => {
   return (
-    <section className="py-16 bg-black">
+    <section className="jj-section-champagne py-16">
       <div className="container mx-auto px-4">
         <motion.div
           initial="hidden"
@@ -152,10 +166,10 @@ export const AreaIntelligenceGrid = () => {
             <span className="text-gold text-xs uppercase tracking-[0.3em] mb-4 block">
               Area Intelligence
             </span>
-            <h2 className="text-white text-3xl md:text-4xl font-bold mb-4" style={{ fontFamily: "Poppins, sans-serif" }}>
-              Market Snapshot by Location
+            <h2 className="text-3xl md:text-4xl font-bold mb-4" style={{ fontFamily: "Poppins, sans-serif" }}>
+              <SplitTitle text="Market Snapshot by Location" />
             </h2>
-            <p className="text-zinc-400 max-w-2xl mx-auto">
+            <p className="text-black/70 max-w-2xl mx-auto">
               Explore aggregated market data for Dubai's most sought-after communities. 
               Data derived from official government Open Data sources.
             </p>
@@ -170,14 +184,13 @@ export const AreaIntelligenceGrid = () => {
 
           {/* View All Link */}
           <motion.div className="text-center mt-10" variants={fadeInUp}>
-            <Link 
-              to="/areas"
-              className="inline-flex items-center gap-2 text-gold hover:text-gold-light transition-colors"
-            >
-              <BarChart2 className="w-5 h-5" />
-              Explore All Area Guides
-              <ArrowUpRight className="w-4 h-4" />
-            </Link>
+            <Button variant="primary" asChild>
+              <Link to="/areas">
+                <BarChart2 className="w-5 h-5 mr-2" />
+                <span className="text-black">Explore All</span><span className="text-gold"> Area Guides</span>
+                <ChevronRight className="w-4 h-4 ml-1" />
+              </Link>
+            </Button>
           </motion.div>
         </motion.div>
       </div>
