@@ -29,7 +29,7 @@ import TeamMemberDetailDialog from "@/components/TeamMemberDetailDialog";
 import CEOLeadershipShowcase from "@/components/CEOLeadershipShowcase";
 import DepartmentInfoSection from "@/components/DepartmentInfoSection";
 import { companySummary } from "@/config/department-metadata";
-import teamHeroImage from "@/assets/team-hero-image.jpg";
+import TeamHeroCollage from "@/components/TeamHeroCollage";
 
 const fadeInUp = {
   hidden: { opacity: 0, y: 30 },
@@ -264,23 +264,13 @@ const MeetTheTeam: React.FC = () => {
       />
 
       <div className="min-h-screen bg-black">
-        {/* Hero Section with Premium Team Image */}
-        <section className="relative min-h-[70vh] overflow-hidden">
-          {/* Hero Background Image */}
-          <div className="absolute inset-0">
-            <img
-              src={teamHeroImage}
-              alt="JBJ Global Real Estate Professional Team"
-              className="w-full h-full object-cover"
-            />
-            {/* Overlay gradient */}
-            <div className="absolute inset-0 bg-gradient-to-b from-black/60 via-black/40 to-black" />
-          </div>
-
+        {/* Hero Section with Premium Animated Team Collage */}
+        <section className="relative min-h-[85vh] overflow-hidden bg-gradient-to-b from-black via-zinc-950 to-black">
           {/* Background effects */}
           <div className="absolute inset-0 overflow-hidden pointer-events-none">
             <div className="absolute top-0 left-1/4 w-[500px] h-[500px] bg-gold/10 rounded-full blur-[120px]" />
             <div className="absolute bottom-0 right-1/4 w-[400px] h-[400px] bg-gold/5 rounded-full blur-[100px]" />
+            <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[800px] h-[600px] bg-gold/5 rounded-full blur-[150px]" />
           </div>
 
           <div className="container mx-auto px-4 relative z-10 py-24 md:py-32">
@@ -341,6 +331,16 @@ const MeetTheTeam: React.FC = () => {
                   Contact Us
                 </Button>
               </motion.div>
+            </motion.div>
+
+            {/* Premium Animated Team Collage */}
+            <motion.div
+              initial={{ opacity: 0, y: 40 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ delay: 0.5, duration: 0.8 }}
+              className="mt-12"
+            >
+              <TeamHeroCollage />
             </motion.div>
           </div>
         </section>
